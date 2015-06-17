@@ -1,8 +1,8 @@
 <div class="content618" style="background-color:#d74d4d; margin-bottom: 50px;">
     <div class="good" style="margin: 0;">
         <div class="xq" style="position: relative; width: 100%;">
-            <div class="coupon10_icon"><a href="/shortmessages/get_618_coupons/24385.html"><img style="max-width: 100%;" src="{{$this->Html->assetUrl('/img/618/10.png?v1')}}"></a></div>
-            <div class="coupon20_icon"><a href="/shortmessages/get_618_coupons/24384.html"><img style="max-width: 100%;" src="{{$this->Html->assetUrl('/img/618/20.png?v1')}}"></a></div>
+            <div class="coupon10_icon"><a id="get_10_coupon" href="#"><img style="max-width: 100%;" src="{{$this->Html->assetUrl('/img/618/10.png?v1')}}"></a></div>
+            <div class="coupon20_icon"><a id="get_20_coupon" href="#"><img style="max-width: 100%;" src="{{$this->Html->assetUrl('/img/618/20.png?v1')}}"></a></div>
             <img style="max-width: 100%;" src="{{$this->Html->assetUrl('/img/618/banner618-2.png?v1')}}">
         </div>
     </div>
@@ -21,7 +21,7 @@
                     <img src="{{$this->Html->assetUrl($item['Product']['listimg'])}}"/>
                     <div class="title clearfix">
                         <a href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brands[$item['Product']['brand_id']]['Brand']['created'])).'/'.$brands[$item['brand_id']]['Brand']['slug'].'.html')}}" class="phead"><img src="{{$this->Html->assetUrl(small_thumb_link($brands[$item['Product']['brand_id']]['Brand']['coverimg']))}}" /></a>
-                        <a href="{{product_link2($item['Product'])}}" class="txt"><b>{{usubstr($item['Product']['name'],0, 9,'')}}<i class="manjian_icon">满减</i></b></a>
+                        <a href="{{product_link2($item['Product'])}}" class="txt"><b>{{$item['Product']['name']}}<i class="manjian_icon">满减</i></b></a>
                     </div>
                 </a>
                 <ul class="clearfix">
@@ -36,7 +36,46 @@
     <?php } ?>
     <?php } ?>
 </div>
-
+<script>
+    $(document).ready(function(){
+        var $get_10_coupon = $('#get_10_coupon');
+        var $get_20_coupon = $('#get_20_coupon');
+        var $tipInfoPanel = $('<div class="comment_tip_layer radius10" style="width:60%; left:50%; top:30%; margin-left:-30%; display: none;"></div>');
+        $('body').append($tipInfoPanel);
+        $get_10_coupon.on('click',function(){
+            ///shortmessages/get_618_coupons/24385.html
+            $.getJSON('/shortmessages/get_618_coupon_json/24385',function(data){
+                handleData(data);
+            });
+        });
+        $get_20_coupon.on('click',function(){
+            ///shortmessages/get_618_coupons/24384.html
+            $.getJSON('/shortmessages/get_618_coupon_json/24384',function(data){
+                handleData(data);
+            });
+        });
+        function handleData(data){
+            if(data['success']){
+                showTipInfo('领取成功');
+            }else{
+                if(data['reason']=='no_login'){
+                    if(!sso.check_userlogin({'referer':href})){
+                        return false;
+                    }
+                }else{
+                    showTipInfo('领取失败');
+                }
+            }
+        }
+        function showTipInfo(msg){
+            $tipInfoPanel.text(msg);
+            $tipInfoPanel.show();
+            setTimeout(function(){
+                $tipInfoPanel.hide();
+            },3000);
+        }
+    });
+</script>
 {{if $is_weixin}}
 <script>
     wx.ready(function () {
