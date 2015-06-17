@@ -42,6 +42,7 @@
                                         </div>
                                     </a>
                                 </li>
+                                <span style="display: none;" class="item-price" id="price-{{$cart['id']}}">{{$this->Number->precision($cart['price']*$cart['num'], 2)}}</span>
                             </ul>
                             {{/if}}
                         {{/loop}}
