@@ -1708,17 +1708,22 @@ class OrdersController extends AppController {
                     //这里必须安店面去限定
                     //要把没有查询到的couponItem去掉
                     if ($curr_coupon_item['Coupon']['type'] == COUPON_TYPE_TYPE_SHARE_OFFER
-                        && !empty($cart->brandItems[$brand_id]) && count($couponsByShared) <= $cart->brandItems[$brand_id]->total_num()) {
+                        && !empty($cart->brandItems[$brand_id]) && count($couponsByShared) <= $cart->brandItems[$brand_id]->total_num()
+                    ) {
                         //            if($cart->could_apply($brand_id, $cou)){
                         //TODO: 需要考虑券是否满足可用性等等
                         $this->_brand_apply_coupon($brand_id, $coupon_item_id);
                         $changed = true;
-                    } else if (count($couponItems) == 1) {
+                    }else if($curr_coupon_item['Coupon']['type'] == COUPON_TYPE_TYPE_MAN_JIAN&&count($all_applied_coupons)<1){
                         $this->_brand_apply_coupon(0, $coupon_item_id);
                         $changed = true;
-                    } else {
+                    }else {
                         $reason = 'share_type_coupon_exceed';
                     }
+//                    else if (count($couponItems) == 1) {
+//                        $this->_brand_apply_coupon(0, $coupon_item_id);
+//                        $changed = true;
+//                    }
                 }
 //            }
             }
