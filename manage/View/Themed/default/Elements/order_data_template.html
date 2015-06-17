@@ -55,7 +55,24 @@
                         <input type="hidden" value="{{$order['Order']['id']}}" name="offline_order_ids" disabled="disabled">
                         {{/if}}
                     </td>
-                    <td>{{$order['Order']['id']}}</td>
+                    <td>
+                        {{$order['Order']['id']}}
+                        <br/>
+                        {{if $order['Order']['status']==0}}
+                        待支付
+                        {{elseif $order['Order']['status']==1}}
+                        待发货
+                        {{elseif $order['Order']['status']==2}}已发货
+                        {{elseif $order['Order']['status']==3}}已收货
+                        {{elseif $order['Order']['status']==4}}已退款
+                        {{elseif $order['Order']['status']==9}}已完成
+                        {{elseif $order['Order']['status']==10}}已作废
+                        {{elseif $order['Order']['status']==11}}待支付
+                        {{elseif $order['Order']['status']==14}}退款中
+                        {{/if}}
+                        <br/>
+                        <a href="/manage/admin/orders/edit2/{{$order['Order']['id']}}.html" class="btn btn-default modify-button">修改订单</a>
+                    </td>
                     {{if $index == 0}}
                         <td mark-print="no-print"><a href="/manage/admin/tuan/query_by_user?con_creator={{$order['Order']['creator']}}">{{$order['Order']['creator']}}</a></td>
                         <td mark-print="no-print" data-value="{{$order['Order']['total_all_price']}}">{{$order['Order']['total_all_price']}}</td>
@@ -167,18 +184,13 @@
                         {{$order['Order']['remark']}}
                     </td>
                     <td mark-print="no-print" data-offline-store-type="{{$offline_store['OfflineStore']['type']}}">
-                        {{if $index == 0}}
-                            {{if empty($offline_store) && ($order['Order']['status']== 1||$order['Order']['status']== 2) && $order['Order']['type'] != 1}}
-                            <button type="button" class="input-ship-code btn btn-primary">回填快递单号</button>
-                            {{/if}}
-                            {{if in_array($order['Order']['status'],array(1,2,3,9,16,4,14))}}
-                            <button type="button" class="btn btn-default refund-button"  data-order_id="{{$order['Order']['id']}}" data-order_creator="{{$order['Order']['creator']}}"  data-total_price = "{{$order['Order']['total_all_price']}}">退款</button>
-                            {{/if}}
-                            <a href="/manage/admin/orders/edit2/{{$order['Order']['id']}}.html" class="btn btn-default modify-button">修改订单</a>
-                            <a href="/manage/admin/carts/edit2/{{$cart['Cart']['id']}}.html" class="btn btn-default modify-button">修改发货单</a>
-                        {{else}}
-                            同上
+                        {{if empty($offline_store) && ($order['Order']['status']== 1||$order['Order']['status']== 2) && $order['Order']['type'] != 1}}
+                        <button type="button" class="input-ship-code btn btn-primary">回填快递单号</button>
                         {{/if}}
+                        {{if in_array($order['Order']['status'],array(1,2,3,9,16,4,14))}}
+                        <button type="button" class="btn btn-default refund-button"  data-order_id="{{$order['Order']['id']}}" data-order_creator="{{$order['Order']['creator']}}"  data-total_price = "{{$order['Order']['total_all_price']}}">退款</button>
+                        {{/if}}
+                        <a href="/manage/admin/carts/edit2/{{$cart['Cart']['id']}}.html" class="btn btn-default modify-button">修改发货单</a>
                     </td>
                 </tr>
             {{/loop}}

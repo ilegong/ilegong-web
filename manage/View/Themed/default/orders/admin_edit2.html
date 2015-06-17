@@ -51,7 +51,7 @@
         <label class="col-sm-2 control-label">状态</label>
 
         <div class="col-sm-10">
-            <select name="status" data-value="{{$order['Order']['status']}}" class="form-control status">
+            <select name="status" data-value="{{$order['Order']['status']}}" class="form-control order-status">
                 <option value="0"
                 {{if $order['Order']['status']==0}}selected='selected'{{/if}}>待支付</option>
                 <option value="1"
@@ -70,7 +70,7 @@
                 {{if $order['Order']['status']==14}}selected='selected'{{/if}}>退款中</option>
             </select>
 
-            <div class='help-block with-errors'>请谨慎修改订单状态</div>
+            <div class='help-block with-errors'>对订单，只能从待支付修改为待发货!!!</div>
         </div>
     </div>
 
@@ -80,6 +80,7 @@
         <div class="col-sm-10">
             <input type="text" name="send_date" class="form-control send-date"
                    value="{{$carts[0]['Cart']['send_date']}}" data-value="{{$carts[0]['Cart']['send_date']}}"/>
+            <div class='help-block with-errors'>请谨慎修改，会修改所有发货单的发货时间!!!</div>
         </div>
     </div>
 
