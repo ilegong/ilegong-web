@@ -44,6 +44,8 @@ class OrdersController extends AppController
                 'order_id' => $id
             )
         ));
+
+        $this->set('ship_types', Hash::combine(ShipAddress::ship_types(), '{n}.id', '{n}.name'));
         $this->set('order', $order);
         $this->set('carts', $carts);
     }
@@ -63,30 +65,33 @@ class OrdersController extends AppController
             return;
         }
 
+        // 检查权限
         if(!has_permission_to_modify_order($this->data['modify_user'])){
             echo json_encode(array('success' => false, 'reason' => 'no_permission'));
             return;
         }
 
         $send_date = $this->data['send_date'];
+        $modify_user = $this->data['modify_user'];
         unset($this->data['send_date']);
-
-        $remark = (empty($order['Order']['remark']) ? '' : $order['Order']['remark'] . ', ') . $this->data['modify_reason'] . '(' . $this->data['modify_user'] . ')';
-        unset($this->data['modify_reason']);
         unset($this->data['modify_user']);
 
+        // 必须修改至少一个字段
         if(empty($send_date) && empty($this->data)){
             echo json_encode(array('success' => false, 'reason' => 'fields_are_empty'));
             return;
         }
 
-        if(isset($this->data['status']) && !in_array($this->data['status'], array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY))){
+        $new_order_status = $this->data['status'];
+        // 只能修改到指定状态
+        if(!empty($new_order_status) && !in_array($new_order_status, array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY))){
             echo json_encode(array('success' => false, 'reason' => 'invalid_order_status'));
             return;
         }
 
         if(!empty($this->data['ship_mark'])){
             if($this->data['ship_mark'] == 'ziti'){
+                // 修改为自提，需有自提点
                 if(empty($this->data['consignee_id']) || $this->data['consignee_id'] == 0){
                     echo json_encode(array('success' => false, 'reason' => 'missed_consignee_id'));
                     return;
@@ -97,24 +102,19 @@ class OrdersController extends AppController
             }
         }
 
-        $cart_data = array();
-        if(($order['Order']['status'] == 0) && ($this->data['status'] == 1)){
-            $this->data['pay_time'] = date("Y-m-d H:i:s");
-            $this->_insert_pay_notifies($order);
-        }
-        if(isset($this->data['status'])){
-            $cart_data['status'] = "'" . $this->data['status'] . "'";
-        }
+        // 检查发货时间
         if (!empty($send_date)) {
             if(strtotime($send_date) <= strtotime('yesterday')){
                 echo json_encode(array('success' => false, 'reason' => 'invalid_send_date'));
                 return;
             }
-
-            $cart_data['send_date'] = "'" . $send_date . "'";
         }
 
-        $this->data['remark'] = $remark;
+        // 添加备注，而不是直接修改
+        if(!empty($this->data['remark'])){
+            $remark = (empty($order['Order']['remark']) ? '' : $order['Order']['remark'] . ', ') . $this->data['remark'] . '(' . $modify_user . ')';
+            $this->data['remark'] = $remark;
+        }
         foreach($this->data as $key => $value){
             $this->data[$key] = "'".$value."'";
         }
@@ -125,13 +125,39 @@ class OrdersController extends AppController
             return;
         }
 
+        // 如果修改了状态
+        $message_sent = false;
+        if(isset($this->data['status'])){
+            if($new_order_status == ORDER_STATUS_PAID){
+                $this->_on_order_paid($order);
+            }
+            else if($new_order_status == ORDER_STATUS_SHIPPED){
+                $message_sent = $this->_on_order_shipped($order, $this->data);
+            }
+            else if($new_order_status == ORDER_STATUS_RETURNING_MONEY){
+                $this->_on_order_returning_money($order);
+            }
+            else if($new_order_status == ORDER_STATUS_RETURN_MONEY){
+                $this->_on_order_return_money($order);
+            }
+        }
+
+        // 如有必要，修改购物车的状态、发货时间
+        $cart_data = array();
+        if(isset($this->data['status'])){
+            $cart_data['status'] = "'" . $new_order_status . "'";
+        }
+        if (!empty($send_date)) {
+            $cart_data['send_date'] = "'" . $send_date . "'";
+        }
+
         if(!empty($cart_data)){
             $this->loadModel('Cart');
             $this->log('update carts of order ' . $id . ': '.json_encode($cart_data));
             $this->Cart->updateAll($cart_data, array('order_id' => $id));
         }
 
-        echo json_encode(array('success' => true));
+        echo json_encode(array('success' => true, 'message_sent' => $message_sent));
     }
 
     public function admin_trash($ids)
@@ -746,4 +772,68 @@ class OrdersController extends AppController
             }
         }
     }
-}
+
+    private function _on_order_paid($order){
+        $this->Order->updateAll(array('pay_time'=>"'".date("Y-m-d H:i:s")."'"), array('id' => $order['Order']['id']));
+        $this->_insert_pay_notifies($order);
+    }
+
+    private function _on_order_returning_money($order){
+
+    }
+    private function _on_order_return_money($order){
+
+    }
+
+    private function _on_order_shipped($order, $data){
+        $this->loadModel('Oauthbind');
+        $oauth_bind = $this->Oauthbind->find('first', array(
+            'conditions' => array( 'user_id' => $order['Order']['creator'], 'source' => oauth_wx_source()),
+            'fields' => array('user_id', 'oauth_openid')
+        ));
+        if(empty($oauth_bind)){
+            return false;
+        }
+        if(empty($data['ship_type']) || !empty($data['ship_code'])){
+            return false;
+        }
+
+        $good = $this->_get_order_good_info($order['Order']['id']);
+        $ship_type_list = ShipAddress::ship_type_list();
+        $post_data = array(
+            "touser" => $oauth_bind['Oauthbind']['oauth_openid'],
+            "template_id" => '87uu4CmlZT-xlZGO45T_XTHiFYAWHQaLv94iGuH-Ke4',
+            "url" => WX_HOST . '/orders/detail/' . $order['Order']['id'],
+            "topcolor" => "#FF0000",
+            "data" => array(
+                "first" => array("value" => "亲，您的特产已经从家乡启程啦。"),
+                "keyword1" => array("value" => $ship_type_list[$order['Order']['ship_type']]),
+                "keyword2" => array("value" => $order['Order']['ship_code']),
+                "keyword3" => array("value" => $good['good_info']),
+                "keyword4" => array("value" => $good['good_number']),
+                "remark" => array("value" => "点击查看订单详情。", "color" => "#FF8800")
+            )
+        );
+        if(send_weixin_message($post_data)){
+            return true;
+        }else{
+            $this->log("ship code B2C: failed to send weixin message for order ".$order['Order']['id']);
+            return false;
+        }
+    }
+
+    private function _get_order_good_info($order_id){
+        $info ='';
+        $number =0;
+        $this->loadModel('Cart');
+        $carts = $this->Cart->find('all',array(
+            'conditions'=>array('order_id' => $order_id)));
+        foreach($carts as $cart){
+            $info = $info.$cart['Cart']['name'].':'.$cart['Cart']['num'].'件、';
+            $number +=$cart['Cart']['num'];
+        }
+
+        $info = substr($info,0,strlen($info)-2);
+        return array("good_info"=>$info,"good_number"=>$number);
+    }
+    }
