@@ -1,0 +1,101 @@
+<ol class="breadcrumb">
+    <li><a href="/manage/admin/tuan/tuan_func_list">团购后台</a></li>
+    <li><a href="#" onclick="window.history.go(-1); return false;">团购订单</a></li>
+    <li class="active">编辑发货单</li>
+</ol>
+
+<h1>编辑发货单</h1>
+
+<?php
+  $date = $consign_dates[$cart['Cart']['consignment_date']];
+  $consign_time = empty($date)?'': date('m-d', strtotime($date));
+  $brand = $brands[$cart['Cart']['product_id']];
+?>
+
+<ul>
+    <li>订单：{{$cart['Cart']['id']}}</li>
+    <li>用户：{{$cart['Cart']['creator']}}</li>
+    <li>总价：{{$cart['Cart']['total_all_price']}}</li>
+    <li>创建：{{$cart['Cart']['created']}}</li>
+    <li>类型：{{if $cart['Cart']['type'] == 5}}
+        团购
+        {{elseif $cart['Cart']['type'] == 6}}
+        秒杀
+        {{else}}
+        普通
+        {{/if}}
+    </li>
+    <li>
+        付款：{{$cart['Cart']['pay_time']}}
+        {{if $cart['Cart']['status'] != 0 && $cart['Cart']['status'] != 1}}
+        ({{if $order['Pay']['trade_type']=='JSAPI'}}
+        微信支付
+        {{elseif $order['Pay']['trade_type']=='ZFB'}}
+        支付宝
+        {{elseif $order['Pay']['trade_type']=='OFFLINE'}}
+        线下交易
+        {{else}}
+        未知
+        {{/if}}, {{$order['Pay']['out_trade_no']}})
+        {{/if}}
+    </li>
+    <li>备注：{{$cart['Cart']['remark']}}</li>
+    <li>商品：{{$cart['Cart']['name']}} * {{$cart['Cart']['num']}}</li>
+</ul>
+
+<form action="" class="form-horizontal cart-form">
+    <input type="hidden" name="cart_id" class="cart-id" value="{{$cart['Cart']['id']}}"/>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">状态</label>
+
+        <div class="col-sm-10">
+            <select name="status" data-value="{{$cart['Cart']['status']}}" class="form-control status">
+                <option value="0"
+                {{if $cart['Cart']['status']==0}}selected='selected'{{/if}}>待支付</option>
+                <option value="1"
+                {{if $cart['Cart']['status']==1}}selected='selected'{{/if}}>待发货</option>
+                <option value="2"
+                {{if $cart['Cart']['status']==2}}selected='selected'{{/if}}>已发货</option>
+                <option value="3"
+                {{if $cart['Cart']['status']==3}}selected='selected'{{/if}}>已收货</option>
+                <option value="4"
+                {{if $cart['Cart']['status']==4}}selected='selected'{{/if}}>已退款</option>
+                <option value="9"
+                {{if $cart['Cart']['status']==9}}selected='selected'{{/if}}>已完成</option>
+                <option value="10"
+                {{if $cart['Cart']['status']==10}}selected='selected'{{/if}}>已作废</option>
+                <option value="14"
+                {{if $cart['Cart']['status']==14}}selected='selected'{{/if}}>退款中</option>
+            </select>
+
+            <div class='help-block with-errors'>请谨慎修改发货单状态</div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">发货时间</label>
+
+        <div class="col-sm-10">
+            <input type="text" name="send_date" class="form-control send-date"
+                   value="{{$carts[0]['Cart']['send_date']}}" data-value="{{$carts[0]['Cart']['send_date']}}"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">修改人员</label>
+
+        <div class="col-sm-10">
+            <input type="text" name="modify_user" class="form-control modify-user"
+                   value="" data-value="{{$cart['Cart']['remark_address']}}" placeholder="请输入修改人"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <div class="pull-right">
+                <button type="button" class="btn btn-primary save-btn">保存</button>
+            </div>
+        </div>
+    </div>
+</form>
+{{$this->Html->script(array('manage/carts/edit.js'))}}
