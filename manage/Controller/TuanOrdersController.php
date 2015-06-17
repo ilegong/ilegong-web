@@ -55,6 +55,8 @@ class TuanOrdersController extends AppController{
 
         $this->log('ship to pys stores: set status to shipped for orders: '.json_encode($order_ids));
         $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED),array('id' => $order_ids));
+        $this->loadModel('Cart');
+        $this->Cart->updateAll(array('status' => ORDER_STATUS_SHIPPED),array('order_id' => $order_ids));
         $success = array();
         foreach($orders as &$order){
             if(in_array($order['Order']['id'], $arrived_order_ids)){
