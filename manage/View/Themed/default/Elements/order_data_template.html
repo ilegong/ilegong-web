@@ -57,21 +57,23 @@
                     </td>
                     <td>
                         {{$order['Order']['id']}}
-                        <br/>
-                        {{if $order['Order']['status']==0}}
-                        待支付
-                        {{elseif $order['Order']['status']==1}}
-                        待发货
-                        {{elseif $order['Order']['status']==2}}已发货
-                        {{elseif $order['Order']['status']==3}}已收货
-                        {{elseif $order['Order']['status']==4}}已退款
-                        {{elseif $order['Order']['status']==9}}已完成
-                        {{elseif $order['Order']['status']==10}}已作废
-                        {{elseif $order['Order']['status']==11}}待支付
-                        {{elseif $order['Order']['status']==14}}退款中
+                        {{if $index == 0}}
+                            <br/>
+                            {{if $order['Order']['status']==0}}
+                            待支付
+                            {{elseif $order['Order']['status']==1}}
+                            待发货
+                            {{elseif $order['Order']['status']==2}}已发货
+                            {{elseif $order['Order']['status']==3}}已收货
+                            {{elseif $order['Order']['status']==4}}已退款
+                            {{elseif $order['Order']['status']==9}}已完成
+                            {{elseif $order['Order']['status']==10}}已作废
+                            {{elseif $order['Order']['status']==11}}待支付
+                            {{elseif $order['Order']['status']==14}}退款中
+                            {{/if}}
+                            <br/>
+                            <a href="/manage/admin/orders/edit2/{{$order['Order']['id']}}.html" class="btn btn-default modify-button">修改订单</a>
                         {{/if}}
-                        <br/>
-                        <a href="/manage/admin/orders/edit2/{{$order['Order']['id']}}.html" class="btn btn-default modify-button">修改订单</a>
                     </td>
                     {{if $index == 0}}
                         <td mark-print="no-print"><a href="/manage/admin/tuan/query_by_user?con_creator={{$order['Order']['creator']}}">{{$order['Order']['creator']}}</a></td>

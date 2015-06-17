@@ -58,7 +58,7 @@ class CartsController extends AppController{
             return;
         }
 
-        if(!in_array($this->data['modify_user'], array('miaoyue', 'xiaoguang', 'xiaoqing', 'xinyu', 'jingge'))){
+        if(!has_permission_to_modify_order($this->data['modify_user'])){
             echo json_encode(array('success' => false, 'reason' => 'no_permission'));
             return;
         }
