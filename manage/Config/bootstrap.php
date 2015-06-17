@@ -428,3 +428,7 @@ function hlj_ziti_filter($var){
     return $var['OfflineStore']['type']==0;
 }
 
+function has_permission_to_modify_order($user){
+    return in_array($user, array('miaoyue', 'xiaoguang', 'xiaoqing', 'xinyu', 'jingge', 'huiyan'));
+}
+

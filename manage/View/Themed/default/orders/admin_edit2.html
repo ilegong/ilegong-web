@@ -70,7 +70,7 @@
                 {{if $order['Order']['status']==14}}selected='selected'{{/if}}>退款中</option>
             </select>
 
-            <div class='help-block with-errors'>对订单，只能从待支付修改为待发货!!!</div>
+            <div class='help-block with-errors'>支持待发货、已发货、退款中、已退款，会修改所有发货单!!!</div>
         </div>
     </div>
 
@@ -80,7 +80,7 @@
         <div class="col-sm-10">
             <input type="text" name="send_date" class="form-control send-date"
                    value="{{$carts[0]['Cart']['send_date']}}" data-value="{{$carts[0]['Cart']['send_date']}}"/>
-            <div class='help-block with-errors'>请谨慎修改，会修改所有发货单的发货时间!!!</div>
+            <div class='help-block with-errors'>会修改所有发货单!!!</div>
         </div>
     </div>
 

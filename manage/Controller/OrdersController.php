@@ -24,6 +24,9 @@ class OrdersController extends AppController
     public function admin_edit($id = null, $copy = NULL)
     {
         parent::admin_edit($id, $copy);
+
+        $this->log('edit order: '.json_encode($this->data));
+
         $username = $this->currentUser['username'];
         $user_agent = $this->request->header('User-Agent');
         $user_ip = $this->request->clientIp(true);
@@ -60,7 +63,7 @@ class OrdersController extends AppController
             return;
         }
 
-        if(!in_array($this->data['modify_user'], array('miaoyue', 'xiaoguang', 'xiaoqing', 'xinyu', 'jingge'))){
+        if(!has_permission_to_modify_order($this->data['modify_user'])){
             echo json_encode(array('success' => false, 'reason' => 'no_permission'));
             return;
         }
@@ -77,7 +80,7 @@ class OrdersController extends AppController
             return;
         }
 
-        if(isset($this->data['status']) && ($order['Order']['status'] != 0 || $this->data['status'] == 1)){
+        if(isset($this->data['status']) && !in_array($this->data['status'], array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY))){
             echo json_encode(array('success' => false, 'reason' => 'invalid_order_status'));
             return;
         }
@@ -98,6 +101,8 @@ class OrdersController extends AppController
         if(($order['Order']['status'] == 0) && ($this->data['status'] == 1)){
             $this->data['pay_time'] = date("Y-m-d H:i:s");
             $this->_insert_pay_notifies($order);
+        }
+        if(isset($this->data['status'])){
             $cart_data['status'] = "'" . $this->data['status'] . "'";
         }
         if (!empty($send_date)) {
