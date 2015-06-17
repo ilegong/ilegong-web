@@ -2035,7 +2035,7 @@ function _is_after_deadline_time($now, $deadline_time)
 function get_pure_product_consignment_date($pid){
     $ProductConsignmentDate = ClassRegistry::init('ProductConsignmentDate');
     $product_consignment_date = $ProductConsignmentDate->find('first',array('conditions' => array(
-        'published' => 1,
+        'published' => PUBLISH_YES,
         'product_id' => $pid
     )));
     if(empty($product_consignment_date)){
