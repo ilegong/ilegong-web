@@ -161,6 +161,15 @@ class Order extends AppModel {
             if (!empty($cartItems)) {
                 $pid_list = Hash::extract($cartItems, '{n}.Cart.product_id');
             }
+            $TuanBuyingM = ClassRegistry::init('TuanBuying');
+            foreach($cartItems as $item){
+                $tuan_buy_id = $item['Cart']['tuan_buy_id'];
+                $cartNum = $item['Cart']['num'];
+                if($tuan_buy_id){
+                    //update tuan buying sold num
+                    $TuanBuyingM->updateAll(array('sold_num' => 'sold_num + '.$cartNum),array('id' => $tuan_buy_id));
+                }
+            }
             if (!empty($pid_list)) {
                 $this->set_cart_send_date($cartItems);
                 if ($isTry) {
