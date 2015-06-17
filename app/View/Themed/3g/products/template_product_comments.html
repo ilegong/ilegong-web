@@ -7,7 +7,7 @@
 <div class="more" id="view_all_comments"><a href="#">查看全部评价</a></div>
 {{/if}}
 <script>
-    var openPhotoSwipe = function(items) {
+    var openPhotoSwipe = function(items,index) {
         var pswpElement = document.querySelectorAll('.pswp')[0];
 
         // define options (if needed)
@@ -22,7 +22,8 @@
             closeOnVerticalDrag: true,
             clickToCloseNonZoomable: true,
             tapToClose: true,
-            showHideOpacity: true
+            showHideOpacity: true,
+            index: index
         };
         var gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
         gallery.init();
@@ -39,7 +40,8 @@
                 data['h']=$(item)[0].naturalHeight;
                 items.push(data);
             });
-            openPhotoSwipe(items);
+            var index = $('li',me.parent()).index(me)||0;
+            openPhotoSwipe(items,index);
         });
     }
 </script>
