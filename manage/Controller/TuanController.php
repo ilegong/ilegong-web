@@ -439,7 +439,6 @@ class TuanController extends AppController
         $conditions = array();
         $order_by = 'Cart.product_id, Order.consignee_id DESC';
         if($product_id != -1 || $store_id != -1 || !empty($send_date)){
-            $conditions['Order.type'] = array(ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC);
             if ($cart_status != -1) {
                 $conditions['Cart.status'] = $cart_status;
             }
