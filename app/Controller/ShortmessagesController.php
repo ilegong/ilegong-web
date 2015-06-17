@@ -159,7 +159,7 @@ class ShortmessagesController extends AppController {
 
     public function get_618_coupon_json($couponid){
         $this->autoRender=false;
-        if (empty($this->currentUser['id']) && $this->is_weixin()) {
+        if (empty($this->currentUser['id'])) {
             echo json_encode(array('success' => false,'reason' => 'no_login'));
             return;
         }
