@@ -8,7 +8,8 @@ $(document).ready(function () {
     var $consigneeAddress = $('.consignee-address');
     var $remarkAddress = $('.remark-address');
     var $sendDate = $('.send-date');
-    var $modifyReason = $('.modify-reason');
+    var $shipType = $('.ship-type');
+    var $shipCode = $('.ship-code');
     var $modifyUser = $('.modify-user');
     var yesterday = function(){
         var date = new Date();
@@ -24,7 +25,7 @@ $(document).ready(function () {
     $saveBtn.on('click', function(){
         var invalidFields = [];
         if($orderStatus.data('value') != $orderStatus.val()){
-            if($orderStatus.data('value') != 0 && $orderStatus.val() != 1){
+            if($orderStatus.val() != 1 && $orderStatus.val() != 2 && $orderStatus.val() != 14 && $orderStatus.val() != 4){
                 invalidFields.push($orderStatus);
             }
         }
@@ -44,9 +45,6 @@ $(document).ready(function () {
             if(_.isEmpty($consigneeId.val())){
                 invalidFields.push($consigneeId);
             }
-        }
-        if(_.isEmpty($modifyReason.val())){
-            invalidFields.push($modifyReason);
         }
         if(_.isEmpty($modifyUser.val())){
             invalidFields.push($modifyUser);
@@ -81,7 +79,7 @@ $(document).ready(function () {
         var orderId = $('.order-id').val();
         $.post('/manage/admin/orders/update2/' + orderId + ".json", json, function(data){
             if(data.success){
-                alert('修改成功: 订单号' + orderId);
+                alert('修改成功, ' + (data.message_sent ? '同时发送了模板消息': '没有发送模板消息'));
             }
             else{
                 alert('修改失败: ' + reasons[data.reason]);
