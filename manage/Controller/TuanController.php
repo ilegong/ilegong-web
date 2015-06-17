@@ -560,6 +560,7 @@ class TuanController extends AppController
         $this->log('status'.json_encode($order_status));
         if(!empty($order_id)){
             if($this->Order->updateAll(array('status' => $order_status),array('id' => $order_id))){
+                $this->Cart->updateAll(array('status' => $order_status),array('order_id' => $order_id));
                 $returnInfo  = array('success' => true,'msg' => '订单状态修改成功');
             }else{
                 $returnInfo  = array('success' => false,'msg' =>'订单状态修改失败，请重试');
