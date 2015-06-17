@@ -422,9 +422,9 @@ class TuanController extends AppController
     }
 
     public function admin_advanced_query(){
-        $product_id = !empty($_REQUEST['product_id']) ? $_REQUEST['product_id'] : -1;
-        $store_id = !empty($_REQUEST['store_id']) ? $_REQUEST['store_id'] : -1;
-        $cart_status = !empty($_REQUEST['cart_status']) ? $_REQUEST['cart_status'] : -1;
+        $product_id = isset($_REQUEST['product_id']) ? $_REQUEST['product_id'] : -1;
+        $store_id = isset($_REQUEST['store_id']) ? $_REQUEST['store_id'] : -1;
+        $cart_status = isset($_REQUEST['cart_status']) ? $_REQUEST['cart_status'] : -1;
         $send_date = $_REQUEST['send_date'];
         $end_stat_date = $_REQUEST['end_stat_date'];
         $conditions = array();
@@ -459,6 +459,7 @@ class TuanController extends AppController
         }
         $this->_query_orders($conditions, $order_by);
         $this->set('store_id', $store_id);
+        $this->set('product_id', $product_id);
         $this->set(compact('send_date', 'end_stat_date'));
         $this->set('cart_status', $cart_status);
         $this->set('query_type', 'advancedQuery');
