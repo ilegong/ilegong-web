@@ -355,8 +355,8 @@ class Order extends AppModel {
         $result = $this->updateAll(array('status' => $toStatus, 'lastupdator' => $operator), array('id' => $order_id, 'status' => $origStatus));
 
         if ($result) {
-            $this->loadModel('Cart');
-            $this->Cart->updateAll(array('status'=>$toStatus), array('order_id'=>$order_id, 'status' => $origStatus));
+            $cartM = ClassRegistry::init('Cart');
+            $cartM->updateAll(array('status'=>$toStatus), array('order_id'=>$order_id, 'status' => $origStatus));
 
             $affectedRows = $this->getAffectedRows();
             if ($origStatus == ORDER_STATUS_SHIPPED && $toStatus == ORDER_STATUS_RECEIVED) {
