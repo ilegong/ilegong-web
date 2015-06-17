@@ -5,6 +5,9 @@ class ShortmessagesController extends AppController {
     var $name = 'Shortmessages';
     var $components  = array('Weixin');
 
+    const coupon_30_10 = 24246;
+    const coupon_50_20 = 24245;
+
 	function admin_add()
 	{
 		if (!empty($this->data) ) {
@@ -130,7 +133,7 @@ class ShortmessagesController extends AppController {
         $specialPids = Hash::extract($specialProduct,'{n}.ProductSpecial.product_id');
         $specialPidsStr = json_encode($specialPids);
         $specialPidsStr = str_replace('"','',$specialPidsStr);
-        $this->Coupon->updateAll(array('product_list' => "'".$specialPidsStr."'"),array('id' => array(24245,24246)));
+        $this->Coupon->updateAll(array('product_list' => "'".$specialPidsStr."'"),array('id' => array(self::coupon_30_10,self::coupon_50_20)));
         echo json_encode(array('success' => true));
     }
 
@@ -138,14 +141,14 @@ class ShortmessagesController extends AppController {
     //24246 30-10
     public function get_618_coupons($couponid){
         $this->check_login();
-        if($couponid!=24245&&$couponid!=24246){
+        if($couponid!=self::coupon_50_20&&$couponid!=self::coupon_30_10){
             //error
             $this->redirect('/');
         }
-        if($couponid==24245){
+        if($couponid==self::coupon_50_20){
             $descs = "满50元减20";
         }
-        if($couponid==24246){
+        if($couponid==self::coupon_30_10){
             $descs = " 满30元减10元";
         }
         $weixinC = $this->Components->load('Weixin');
