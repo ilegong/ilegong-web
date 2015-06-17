@@ -152,11 +152,18 @@ class TuanController extends AppController
 
     public function admin_query_c2c_paid_not_send()
     {
-        $conditions['OR'] = array('DATE(Order.pay_time) <'=>date('Y-m-d'),'Order.pay_time' => null);
-        $conditions['Order.brand_id !='] = b2c_brands();
+        $brand_id = isset($_REQUEST['team_id']) ? $_REQUEST['team_id'] : -1;
+
         $conditions['Cart.status'] = ORDER_STATUS_PAID;
+        if($brand_id != -1){
+            $conditions['Order.brand_id'] = $brand_id;
+        }
+        else{
+            $conditions['Order.brand_id !='] = b2c_brands();
+        }
         $this->_query_orders($conditions, 'Order.updated');
 
+        $this->set('brand_id', $brand_id);
         $this->set('query_type', 'c2cPaidNotSend');
         $this->render("admin_tuan_orders");
     }
@@ -479,7 +486,7 @@ class TuanController extends AppController
 
     public function _query_c2c_paid_not_send_count(){
         $b2c_brand_ids = implode(",", b2c_brands());
-        $c2c_paid_not_sent_count = $this->Order->query('select count(distinct c.id) as ct from cake_orders o inner join cake_carts c on o.id = c.order_id where o.brand_id not in ('.$b2c_brand_ids.') and c.status = 1 and (o.pay_time < CURDATE() or o.pay_time is null)');
+        $c2c_paid_not_sent_count = $this->Order->query('select count(distinct c.id) as ct from cake_orders o inner join cake_carts c on o.id = c.order_id where o.brand_id not in ('.$b2c_brand_ids.') and c.status = 1');
         return $c2c_paid_not_sent_count[0][0]['ct'];
     }
 

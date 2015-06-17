@@ -128,6 +128,17 @@
         </div>
         <div id="c2cPaidNotSend" class="tab-pane">
             <strong class="text-danger lead">C2C未发货的订单，请及时清零</strong>
+            <form class="form-inline" method="post" action="/manage/admin/tuan/query_orders_today" data-noajax="true">
+                <div style="padding-bottom: 10px;padding-top: 10px;">
+                    <div class="form-group">
+                        <input type="text" class="form-control brand-id" value="{{$brand_id}}"
+                               placeholder="请输入商家id" name="brand_id">
+                    </div>
+                    <br/>
+                    <br/>
+                    <button type="submit" class="btn btn-primary text-center">查看订单</button>
+                </div>
+            </form>
         </div>
         <div id="dailyOrders" class="tab-pane">
             <strong class="text-danger lead">按支付时间，查看某天的订单（团、秒、普通）</strong>
