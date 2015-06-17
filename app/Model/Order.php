@@ -173,7 +173,7 @@ class Order extends AppModel {
                 }
             }
             if (!empty($pid_list)) {
-                $this->set_cart_send_date($cartItems);
+                //$this->set_cart_send_date($cartItems);
                 if ($isTry) {
                     $shichiM = ClassRegistry::init('OrderShichi');
                     foreach ($pid_list as $pid) {
