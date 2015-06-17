@@ -1,10 +1,10 @@
 <div class="content618" style="background-color:#d74d4d; margin-bottom: 50px;">
     <div class="good" style="margin: 0;">
-        <a class="xq" style="position: relative; width: 100%;">
-            <div href="/shortmessages/get_618_coupons/24246" class="coupon10_icon"><img src="{{$this->Html->assetUrl('/img/618/10.png?v1')}}" ></div>
-            <div href="/shortmessages/get_618_coupons/24245" class="coupon20_icon"><img src="{{$this->Html->assetUrl('/img/618/20.png?v1')}}" ></div>
-            <img src="{{$this->Html->assetUrl('/img/618/banner618-2.png?v1')}}">
-        </a>
+        <div class="xq" style="position: relative; width: 100%;">
+            <div class="coupon10_icon"><a href="/shortmessages/get_618_coupons/24246.html"><img style="max-width: 100%;" src="{{$this->Html->assetUrl('/img/618/10.png?v1')}}"></a></div>
+            <div class="coupon20_icon"><a href="/shortmessages/get_618_coupons/24245.html"><img style="max-width: 100%;" src="{{$this->Html->assetUrl('/img/618/20.png?v1')}}"></a></div>
+            <img style="max-width: 100%;" src="{{$this->Html->assetUrl('/img/618/banner618-2.png?v1')}}">
+        </div>
     </div>
     <?PHP if($total>0){ ?>
     <?PHP foreach($data_list as $item) {
@@ -40,12 +40,12 @@
 {{if $is_weixin}}
 <script>
     wx.ready(function () {
-        var share_string = '{{$share_string ? $share_string :"happy_618"}}';
+        var share_string = 'happy_618';
         var to_timeline_title = "朋友说-618年中大促";
         var to_friend_title = "朋友说-618年中大促";
         var to_friend_link = document.URL.split('?')[0]+'?trstr='+ share_string + '&share_type=appMsg';
         var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
-        var imgUrl = "";
+        var imgUrl = "http://51daifan.sinaapp.com/img/618/1.png";
         var desc = "满30立减10元，满50立减20元";
         wx.onMenuShareAppMessage({
             title: to_friend_title,
