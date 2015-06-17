@@ -1,9 +1,7 @@
-<div class="classlist_v2" style="z-index: 999">
-    <ul class="clearfix">
-        <li id="go_back"><a href="#X" class="back"></a></li>
-        <li class="line"></li>
-        <li>购物车</li>
-    </ul>
+<div class="classlist">
+    <a id="go_back" href="#X" class="back"></a>
+    购物车
+    <a href="/" class="home"></a>
 </div>
 <form action="{{$this->Html->url('/orders/info?from=list_cart')}}" method="post" id="order_info_form">
     <div class="cart">
@@ -19,25 +17,31 @@
                     {{loop $product_brand_map[$key] $p_id}}
                         {{loop $Carts $c_id $cart}}
                             {{if $cart['product_id']==$p_id}}
+                            {{if pid_in_special($p_id,7)}}
+                                <a href="/categories/happy_618.html" class="clearfix cart_manjian">
+                                    <div class="fl"><i class="manjian_icon">满减</i>&nbsp;满50减20，领取优惠券，享受满减优惠</div>
+                                </a>
+                            {{/if}}
                             <ul class="clearfix" style="margin-bottom: 0;">
                                 <li class="fl {{if $product_published_map[$p_id]==1}}cart_select{{else}}cart_no_select{{/if}}" data-published="{{$product_published_map[$p_id]}}" name="{{if $product_published_map[$p_id]==1}}product_select{{else}}product_no_select{{/if}}" data-cart="{{$cart['id']}}" data-product="{{$cart['name']}}" data-productid="{{$cart['product_id']}}" data-limit="{{$cart['limit_ship']}}"><span></span></li>
                                 <li class="fl"><a style="float: left;" href="{{product_link($p_id, 'javascript:;')}}"><img src="{{Router::url(small_thumb_link($cart['coverimg']))}}" border="0" /></a></li>
-                                <li style="overflow: hidden; display: block; padding-right: 35px; padding-left: 10px;">
+                                <li style="overflow: hidden; display: block; padding-left: 8px;">
                                     <a href="#X">
-                                        <p style="margin-bottom: 0;">{{$cart['name']}}</p>
+                                        <p>{{$cart['name']}}</p>
+                                        <a href="{{Router::url('/carts/delete/'.$cart['id'])}}" class="cart_delete_a">删除</a>
                                         <s>单价:￥{{$this->Number->precision($cart['price'], 2)}}</s>
-                                        <div class="clearfix">
+                                        {{if !empty($cart['send_date'])}}<s>预计{{date('n月d日', strtotime($cart['send_date']))}}({{day_of_week($cart['send_date'])}})到货</s>{{/if}}
+                                        <div class="clearfix cart_num">
                                             <a onclick="cart_edit_amount.reduce('#pamount-{{$cart['id']}}')" class="cartnumreduce fl"></a>
                                             <input style="height: 1.7em;text-align: center;" type="text" disabled="disabled" size="3" id="pamount-{{$cart['id']}}"
                                                    data-id="{{$cart['id']}}"
                                                    data-price="{{$cart['price']}}" class="cart-num-input"
                                                    name="data[Cart][{{$cart['id']}}][num]" value="{{$cart['num']}}"/>
                                             <a onclick="cart_edit_amount.add('#pamount-{{$cart['id']}}')" class="cartnumadd fl"></a>
+                                            <div class="fr">小计: ￥{{$this->Number->precision($cart['price']*$cart['num'], 2)}}</div>
                                         </div>
                                     </a>
                                 </li>
-                                <span style="display: none;" class="item-price" id="price-{{$cart['id']}}">{{$this->Number->precision($cart['price']*$cart['num'], 2)}}</span>
-                                <li><a href="{{Router::url('/carts/delete/'.$cart['id'])}}" class="cart_delete_a">删除</a></li>
                             </ul>
                             {{/if}}
                         {{/loop}}
