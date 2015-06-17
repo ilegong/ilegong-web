@@ -645,9 +645,9 @@ class OrdersController extends AppController {
                     $tuan_expired = $tuan_buying_item['TuanBuying']['status'];
                     if($tuan_expired!=0){
                         $this->set('tuan_expired',true);
+                        $tuan_buy_available = false;
+                        break;
                     }
-                    $tuan_buy_available = false;
-                    break;
                 }
                 if($consignment_id){
                     $consignment_date = $this->ConsignmentDate->find('first', array(
