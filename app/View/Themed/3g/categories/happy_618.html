@@ -59,7 +59,7 @@
                 showTipInfo('领取成功');
             }else{
                 if(data['reason']=='no_login'){
-                    if(!sso.check_userlogin({'referer':href})){
+                    if(!sso.check_userlogin({'referer':'/categories/happy_618.html'})){
                         return false;
                     }
                 }else{
