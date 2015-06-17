@@ -5,8 +5,8 @@ class ShortmessagesController extends AppController {
     var $name = 'Shortmessages';
     var $components  = array('Weixin');
 
-    const coupon_30_10 = 24246;
-    const coupon_50_20 = 24245;
+    const coupon_30_10 = 24385;
+    const coupon_50_20 = 24384;
 
 	function admin_add()
 	{
