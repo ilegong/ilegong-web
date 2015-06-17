@@ -23,6 +23,9 @@ const WX_OAUTH_BASE = 'snsapi_base';
 
 const ADD_SCORE_TUAN_LEADER=99;
 
+const CART_ITEM_STATUS_NEW = -1;
+const CART_ITEM_STATUS_BALANCED = 0;
+
 const ORDER_STATUS_WAITING_PAY=0; //待支付
 const ORDER_STATUS_PAID=1; // 已支付
 const ORDER_STATUS_SHIPPED=2; // 已发货
