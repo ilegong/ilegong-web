@@ -155,7 +155,8 @@ class Order extends AppModel {
         $cartM = ClassRegistry::init('Cart');
         $cartM->updateAll(array('status'=>ORDER_STATUS_PAID), array('order_id'=>$orderId, 'status' => ORDER_STATUS_WAITING_PAY));
 
-        $sold = $rtn && $this->getAffectedRows() >= 1;
+        //$sold = $rtn && $this->getAffectedRows() >= 1;
+        $sold = $rtn;
         if ($sold) {
             $cartItems = $cartM->find_balanced_items($orderId);
             if (!empty($cartItems)) {
