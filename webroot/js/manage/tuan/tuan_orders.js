@@ -176,22 +176,20 @@ $(document).ready(function () {
 
     function setupByTuanTeamForm() {
         var form = $('.tab-pane.active');
-        var commonBox = $('.search-label', form);
         var tuanBuyingsbox = $('.tuan-buyings', form);
         var sendDateStart = $('.send-date-start', form);
         var sendDateEnd = $('.send-date-end', form);
         sendDateEnd.attr('disabled', 'disabled');
-        commonBox.on('change', function () {
+        $('.search-label', form).on('change', function () {
             if (tuanBuyingsbox.length > 0) {
                 updateTuanBuyingSelectBox($("option:selected", $(this)));
             }
-            updateSendDateInput();
+            updateSendDateInput($(this).val() || '');
         });
         tuanBuyingsbox.on('change', function () {
-            updateSendDateInput();
+            updateSendDateInput($(this).val() || '');
         });
-        function updateSendDateInput() {
-            var commonBoxVal = commonBox.val() || '';
+        function updateSendDateInput(commonBoxVal) {
             if (commonBoxVal == -1 || commonBoxVal.indexOf(',') > 0) {
                 sendDateStart.removeAttr('disabled');
                 sendDateEnd.val('');
