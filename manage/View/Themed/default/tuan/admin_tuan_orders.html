@@ -158,7 +158,13 @@
     </div>
     <hr/>
     <div>
-        <h1>订单总计<span style="color: red">{{count($orders)}}</span>个，金额<span style="color: red">{{$total_order_money}}</span></h1>
+        <?php
+            $carts_count = 0;
+            foreach($order_carts as $order=>$carts){
+                $carts_count = $carts_count + count($carts);
+            }
+        ?>
+        <h1>发货单总计<span style="color: red">{{$carts_count}}</span>个，金额<span style="color: red">{{$total_order_money}}</span></h1>
         {{if $should_count_nums}}
         <br/>
 
