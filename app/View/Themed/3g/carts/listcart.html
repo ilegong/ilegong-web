@@ -225,7 +225,7 @@
             $('.item-price',$('li.cart_select_cur').parent('ul')).each(function () {
                 total_price += parseFloat($(this).html());
             });
-            $('#total-price').html(utils.toFixed(total_price, 2));
+            $('#total-price').html('￥'+utils.toFixed(total_price, 2));
         }
 
         function editCartNum(id, num) {
