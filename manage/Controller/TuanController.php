@@ -64,59 +64,6 @@ class TuanController extends AppController
         $this->render("admin_tuan_orders");
     }
 
-    public function admin_query_by_product()
-    {
-        $product_id = !empty($_REQUEST['product_id']) ? $_REQUEST['product_id'] : -1;
-        $cart_status = empty($_REQUEST['cart_status']) ? -1 : $_REQUEST['cart_status'];
-        $order_type = empty($_REQUEST['order_type']) ? -1 : $_REQUEST['order_type'];
-        $send_date_start = $_REQUEST['send_date_start'];
-        $send_date_end = $_REQUEST['send_date_end'];
-
-        $conditions = array();
-        if ($product_id != -1 || !empty($send_date_start)) {
-            if($product_id != -1){
-                $conditions['Cart.product_id'] = $product_id;
-            }
-            if ($order_type == -1) {
-                $conditions['Order.type'] = array(ORDER_TYPE_DEF, ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC);
-            } else {
-                $conditions['Order.type'] = $order_type;
-            }
-            if ($cart_status != -1) {
-                $conditions['Cart.status'] = $cart_status;
-            }
-            if (!empty($send_date_start) && !empty($send_date_end)) {
-                $conditions['DATE(Cart.send_date) >= '] = $send_date_start;
-                $conditions['DATE(Cart.send_date) <= '] = $send_date_end;
-            }elseif(!empty($send_date_start)){
-                $conditions['DATE(Cart.send_date)'] = $send_date_start;
-                if($product_id != -1){
-                    $send_date_end = $send_date_start;
-                }
-            }elseif(!empty($send_date_end)){
-                $conditions['DATE(Cart.send_date)'] = $send_date_end;
-                $send_date_start = $send_date_end;
-            }else{
-                $send_date = date("Y-m-d", time());
-                $conditions['DATE(Cart.send_date)'] = $send_date;
-                $send_date_start = $send_date;
-                if($product_id != -1){
-                    $send_date_end = $send_date_start;
-                }
-            }
-        }
-
-        $this->_query_orders($conditions, 'Order.created DESC');
-
-        $this->set('product_id', $product_id);
-        $this->set('send_date_start', $send_date_start);
-        $this->set('send_date_end', $send_date_end);
-        $this->set('cart_status', $cart_status);
-        $this->set('order_type', $order_type);
-        $this->set('query_type', 'byProduct');
-        $this->render("admin_tuan_orders");
-    }
-
     public function admin_query_by_tuan_team()
     {
         $team_id = !empty($_REQUEST['team_id']) ? $_REQUEST['team_id'] : -1;
