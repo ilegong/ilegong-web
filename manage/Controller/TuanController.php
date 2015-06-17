@@ -152,7 +152,7 @@ class TuanController extends AppController
 
     public function admin_query_c2c_paid_not_send()
     {
-        $brand_id = isset($_REQUEST['team_id']) ? $_REQUEST['team_id'] : -1;
+        $brand_id = isset($_REQUEST['brand_id']) ? $_REQUEST['brand_id'] : -1;
 
         $conditions['Cart.status'] = ORDER_STATUS_PAID;
         if($brand_id != -1){
@@ -163,7 +163,9 @@ class TuanController extends AppController
         }
         $this->_query_orders($conditions, 'Order.updated');
 
-        $this->set('brand_id', $brand_id);
+        if($brand_id != -1){
+            $this->set('brand_id', $brand_id);
+        }
         $this->set('query_type', 'c2cPaidNotSend');
         $this->render("admin_tuan_orders");
     }
