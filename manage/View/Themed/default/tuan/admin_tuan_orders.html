@@ -8,6 +8,7 @@
     <ul class="nav nav-tabs" data-query-type="{{$query_type}}">
         <li role="presentation"><a data-tab="quickQuery">快速查询</a></li>
         <li role="presentation"><a data-tab="advancedQuery">高级查询</a></li>
+        <li role="presentation"><a data-tab="dailyOrders">每日订单</a></li>
         <li role="presentation">
             <a data-tab="abnormalOrder" href="/manage/admin/tuan/query_abnormal_order">
                 !!!异常订单
@@ -24,11 +25,6 @@
             <a data-tab="c2cPaidNotSend" href="/manage/admin/tuan/query_c2c_paid_not_send">
                 !!!C2C未发货
                 <span {{if $c2c_paid_not_sent_count> 0}}class="text-danger"{{/if}}>({{$c2c_paid_not_sent_count}})</span>
-            </a>
-        </li>
-        <li role="presentation">
-            <a data-tab="dailyOrders" href="/manage/admin/tuan/query_daily_orders">
-                !!!每日订单
             </a>
         </li>
     </ul>

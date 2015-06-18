@@ -188,14 +188,15 @@ class TuanController extends AppController
 
     public function admin_query_daily_orders()
     {
-        $pay_date = !empty($_REQUEST['pay_date']) ? $_REQUEST['pay_date'] : date('Y-m-d');
-
-        $conditions = array('DATE(Order.pay_time)'=>$pay_date);
+        $conditions = array();
+        if(isset($_REQUEST['pay_date'])){
+            $conditions['DATE(Order.pay_time)'] = $_REQUEST['pay_date'];
+        }
 
         $this->_query_orders($conditions, 'Order.updated');
 
         $this->set('query_type', 'dailyOrders');
-        $this->set('pay_date', $pay_date);
+        $this->set('pay_date', $_REQUEST['pay_date']);
         $this->render("admin_tuan_orders");
     }
 
