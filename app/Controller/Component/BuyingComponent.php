@@ -308,9 +308,8 @@ class BuyingComponent extends Component {
                 $published = false;
             }
             $price = $result[cart_dict_key($pid, $cartItem['specId'])][0];
-
-            list($itemPrice,) = calculate_price($pid, $price, $uid, $num, $cartItem['id'], $pp);
-
+            $tuanBuyId = $cartItem['tuan_buy_id'];
+            list($itemPrice,) = calculate_price($pid, $price, $uid, $num, $cartItem['id'], $pp,array('tuan_buy_id'=>$tuanBuyId));
             $totalPrices[$brand_id] += ($itemPrice * $num);
             $cart->add_product_item($brand_id, $cartItem, $itemPrice, $num, $cartItem['used_coupons'], $published);
         }
