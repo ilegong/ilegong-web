@@ -165,7 +165,7 @@
 </div>
 <div class="cart_pay" style="z-index: 101;">
     <ul class="clearfix">
-        <li class="fl">共<span class="total_num_info">{{$total_num}}</span>件商品，总金额<strong class="total_price_info" data-ship-fee="{{$shipFee}}" data-total-price="{{($cart->total_price()+$shipFee)}}">￥{{$this->Number->precision($cart->total_price() + ($shipFee > 0?$shipFee:0), 2)}}</strong></li>
+        <li class="fl">总金额<strong class="total_price_info" data-ship-fee="{{$shipFee}}" data-total-price="{{($cart->total_price()+$shipFee)}}">￥{{$this->Number->precision($cart->total_price() + ($shipFee > 0?$shipFee:0), 2)}}</strong></li>
         <li class="fr"><a href="{{$this->Html->url('/orders/balance/'.($specialShipPromotionId?'?ship_promotion='.$specialShipPromotionId:''))}}">提交订单</a></li>
     </ul>
 </div>
