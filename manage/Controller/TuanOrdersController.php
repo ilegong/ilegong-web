@@ -26,10 +26,6 @@ class TuanOrdersController extends AppController{
                 echo json_encode(array('success' => false, 'res' => 'order '.$order['Order']['id'].' status is '.$order['Order']['status']));
                 return;
             }
-            if($order['Order']['type'] != 5 && $order['Order']['type'] != 6){
-                echo json_encode(array('success' => false, 'res' => 'order '.$order['Order']['id'].' is of type '.$order['Order']['type']));
-                return;
-            }
         }
 
         $validate_res = $this->_validate_py_store($orders);
@@ -275,10 +271,6 @@ class TuanOrdersController extends AppController{
         // all orders must be paid
         if($order['Order']['status'] != ORDER_STATUS_PAID){
             echo json_encode(array('success' => false, 'res' => 'order '.$order['Order']['id'].' status is '.$order['Order']['status']));
-            return;
-        }
-        if($order['Order']['type'] != 5 && $order['Order']['type'] != 6){
-            echo json_encode(array('success' => false, 'res' => 'order '.$order['Order']['id'].' is of type '.$order['Order']['type']));
             return;
         }
 
