@@ -68,7 +68,11 @@ class PlanHelperController extends AppController
         }
         foreach($orders as $order){
             if ($order['Order']['brand_id'] != 92) {
-                echo json_encode(array('result'=>false, 'reason' => 'not pyshuo products'));
+                echo json_encode(array('result'=>false, 'reason' => 'order '.$order['Order']['id'].' is not a pyshuo product'));
+                return;
+            }
+            if ($order['Order']['status'] != ORDER_STATUS_PAID) {
+                echo json_encode(array('result'=>false, 'reason' => 'order '.$order['Order']['id'].' is not in paid status'));
                 return;
             }
             if (!$this->_is_user_valid($order['Order']['creator'])) {
