@@ -649,16 +649,16 @@ class OrdersController extends AppController {
                         break;
                     }
                 }
-                if($consignment_id){
-                    $consignment_date = $this->ConsignmentDate->find('first', array(
-                        'conditions' => array('id'=>$consignment_id )
-                    ));
-                    if($consignment_date['ConsignmentDate']['published'] == PUBLISH_NO){
-                        $consignment_date_available = false;
-                        $this->set('consignment_date_not_available',true);
-                        break;
-                    }
-                }
+//                if($consignment_id){
+//                    $consignment_date = $this->ConsignmentDate->find('first', array(
+//                        'conditions' => array('id'=>$consignment_id )
+//                    ));
+//                    if($consignment_date['ConsignmentDate']['published'] == PUBLISH_NO){
+//                        $consignment_date_available = false;
+//                        $this->set('consignment_date_not_available',true);
+//                        break;
+//                    }
+//                }
             }
 
 //            $this->set('show_pay', ($orderinfo['Order']['type'] == ORDER_TYPE_DEF || $orderinfo['Order']['type']==ORDER_TYPE_TUAN || $orderinfo['Order']['type']==ORDER_TYPE_TUAN_SEC)
