@@ -128,31 +128,33 @@
                     </div>
                     <div class="usecoupon">
                         {{loop $coupons $coupon}}
-                            <a data-coupon_item_id="{{$coupon['CouponItem']['id']}}" data-brandId="{{$brandItem->id}}" class="coupon" href="javascript:">
+                            <a data-coupon_item_id="{{$coupon['CouponItem']['id']}}" data-brandId="{{$brandItem->id}}" class="coupon" href="javascript:" data-coupon-name="{{$coupon['Coupon']['name']}}">
                                 <b><input type="radio" name="radiobutton-{{$coupon['CouponItem']['id']}}" value="radiobutton"></b>
                                 <label>{{$coupon['Coupon']['name']}}{{if $coupon['Coupon']['type'] == COUPON_TYPE_TYPE_SHARE_OFFER}}(红包券，每件商品可使一张，本单本店共{{$brandItem->total_num()}}件){{/if}} <span>{{$this->Number->precision($coupon['Coupon']['reduced_price']/100, 2)}}</span></label>
                             </a>
                         {{/loop}}
                     </div>
                 </div>
-
-                <a href="#TB_inline?&inlineId=hiddenModalContent_{{$brandItem->id}}&modal=true" class="favor thickbox" style="position:relative;">
-                    <span style="display:block;" class="fl">商品优惠&nbsp;&nbsp;<span class="moreicon" style="right:10px;" href="#X"></span></span>
-                    <span style="overflow:hidden; display:block; color: #acacac;">您有优惠券可使用({{count($coupons)}})</span>
+                <a href="#TB_inline?&inlineId=hiddenModalContent_{{$brandItem->id}}&modal=true" class="favor clearfix thickbox" style="position:relative;">
+                    <label class="fl">优惠券</label>
+                    <i class="moreicon" href="#X"></i>
+                    <span style="display: block; padding-right: 25px;" class="fr" id="coupon-tip-info" data-coupon-count="{{count($coupons)}}">您有{{count($coupons)}}张可使用优惠券</span>
                 </a>
             {{/if}}
+            <a href="#X" class="favor clearfix">
+                <label class="fl">配送方式<strong>[自营商品满99包邮]</strong></label>
+                {{if $shipFee>0}}
+                    <span style="display:block;" class="fr ship_fee_re"  data-ship-fee="{{$shipFee}}">快递{{$shipFee}}元</span>
+                {{else}}
+                    <span style="display:block;" class="fr ship_fee_re" data-ship-fee="0">包邮</span>
+                {{/if}}
+            </a>
             <div class="clearfix leave_words">
                 <input name={{"remark_".$brandItem->id}} type="text" placeholder="给卖家留言:" />
             </div>
             <!--<p class="conordertuan_total" data-brand-id="{{$brandItem->id}}">共<span data-brand-num="{{$brand_goods_num}}">{{$brand_goods_num}}</span>件商品，合计:-->
                 <!--<strong data-brand-price="{{$brand_price}}">￥{{$this->Number->precision($brand_price,2)}}</strong></p>-->
         {{/loop}}
-        {{if $shipFee>0}}
-        <a href="#X" class="favor" style="position:relative;">
-            <span style="display:block;" class="fl">运费&nbsp;&nbsp;<span class="moreicon" style="right:10px;" href="#X"></span></span>
-            <span style="overflow:hidden; display:block; color:#999999;" class="ship_fee_re" data-ship-fee="{{$shipFee}}">{{$this->Number->precision($shipFee, 2)}}元</span>
-        </a>
-        {{/if}}
     </div>
 </div>
 <div class="shop_jifen" style="margin-bottom: 35px;margin-top: 10px;">
@@ -161,12 +163,10 @@
         <li class="fr shop_jifen_used radius10"></li>
     </ul>
 </div>
-<div class="cart_pay" style="z-index: 101;">
-    <ul class="clearfix">
-        <li class="fl">总金额<strong class="total_price_info" data-ship-fee="{{$shipFee}}" data-total-price="{{($cart->total_price()+$shipFee)}}">￥{{$this->Number->precision($cart->total_price() + ($shipFee > 0?$shipFee:0), 2)}}</strong></li>
-        <li class="fr"><a href="{{$this->Html->url('/orders/balance/'.($specialShipPromotionId?'?ship_promotion='.$specialShipPromotionId:''))}}">提交订单</a></li>
-    </ul>
-</div>
+<ul class="clearfix order_submit">
+    <li class="fr"><a href="{{$this->Html->url('/orders/balance/'.($specialShipPromotionId?'?ship_promotion='.$specialShipPromotionId:''))}}">提交订单</a></li>
+    <li class="fr">实付款:<label class="total_price_info" data-ship-fee="{{$shipFee}}" data-total-price="{{($cart->total_price()+$shipFee)}}">￥{{$this->Number->precision($cart->total_price() + ($shipFee > 0?$shipFee:0), 2)}}</label></li>
+</ul>
 <div class="xq_standard_layer pickup_layer" style="top:0;display: none; z-index: 102">
     <div class="classlist_v2">
         <ul class="clearfix">
@@ -330,9 +330,9 @@
             var totalPrice = parseFloat($totalPriceDom.data('totalPrice'));
             if($addressDom.hasClass('kuaidi_choose')){
                 $('.ziti_choose').show();$('.kuaidi_choose').hide();
-                $shipFeeDom.text('0.00元');
                 var shipFee = 0;
                 if($shipFeeDom.length>0){
+                    $shipFeeDom.text('自提');
                     shipFee = parseFloat($shipFeeDom.data('shipFee'));
                 }
                 var afterChangePrice = utils.toFixed(totalPrice-shipFee,2);
@@ -344,9 +344,13 @@
                 var shipFee = 0;
                 if($shipFeeDom.length>0){
                     shipFee = parseFloat($shipFeeDom.data('shipFee'));
+                    if(shipFee==0){
+                        $shipFeeDom.text('包邮');
+                    }else{
+                        $shipFeeDom.text('快递'+shipFee+'元');
+                    }
                 }
                 var afterChangePrice = utils.toFixed(totalPrice+shipFee,2);
-                $shipFeeDom.text(utils.toFixed(shipFee,2) + '元');
                 $totalPriceDom.text('￥' +afterChangePrice);
                 $totalPriceDom.data('shipFee',shipFee);
                 $totalPriceDom.data('totalPrice',afterChangePrice);
