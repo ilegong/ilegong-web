@@ -110,19 +110,14 @@ $('.shop_jifen_used').click(function(){
         }
     }, 'json');
 });
-//use coupon
-$('li > a.coupon > input[type=checkbox]').on('click',function(e){
-    e.preventDefault();
-    var me = $(this);
-    me.parent().trigger('click');
-});
-$('li > a.coupon').on('click',function (e) {
+
+$('div.usecoupon > a').on('click',function (e) {
     e.preventDefault();
     $('#promotion_code').val("");
     var that = $(this);
     var brandId = that.attr('data-brandId');
     var coupon_item_id = that.attr('data-coupon_item_id');
-    var checkbox = $("[data-coupon_item_id='" + coupon_item_id + "'] > input[type=checkbox]");
+    var checkbox = $('input[type=radio]',that);
     checkbox.prop("checked", !checkbox.prop("checked"));
     var action = (checkbox.prop("checked") == false )? 'unapply' : 'apply';
     $.post('/orders/apply_coupon.json', {'brand_id': brandId, 'coupon_item_id': coupon_item_id, 'action': action}, function (data) {
@@ -141,7 +136,9 @@ $('li > a.coupon').on('click',function (e) {
                     });
                 } else if (data.reason == 'share_type_coupon_exceed') {
                     checkbox.prop("checked", !checkbox.prop("checked"));
-                    utils.alert('优惠券使用超出限制');
+                    utils.alert('优惠券使用超出限制',function(){
+                        tb_remove();
+                    });
                 }
             }
         }
