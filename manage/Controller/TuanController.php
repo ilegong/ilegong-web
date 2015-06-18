@@ -65,6 +65,9 @@ class TuanController extends AppController
         $this->set('con_creator', $con_creator);
         $this->set('cart_status', $cart_status);
         $this->set('query_type', 'quickQuery');
+        if($flag > 0){
+            $this->set('flag', $flag);
+        }
         $this->render("admin_tuan_orders");
     }
 
