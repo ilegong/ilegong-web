@@ -290,6 +290,30 @@ $(document).ready(function () {
         });
     }
 
+    function initQuickQuery(){
+        var quickQueryClickedCount = 0;
+        var $formGroupFlags = $('.form-group-flag');
+        var showFlags = function(){
+            $formGroupFlags.toggleClass('hide');
+            if($formGroupFlags.hasClass('hide')){
+                $('.form-control', $formGroupFlags).attr('disabled', 'disabled');
+            }
+            else{
+                $('.form-control', $formGroupFlags).removeAttr('disabled');
+            }
+        };
+        $("a[data-tab='quickQuery']").on('click', function(e){
+            quickQueryClickedCount += 1;
+            if(quickQueryClickedCount >= 5){
+                quickQueryClickedCount = 0;
+                showFlags();
+            }
+        });
+        $("a[data-tab='advancedQuery']").on('click', function(e){
+            quickQueryClickedCount = 0;
+        });
+    }
+
     (function () {
         var shipTypeSelect = $('.ship-type-select');
         var shipCodeInput = $("input[name=order-ship-code]");
@@ -594,5 +618,8 @@ $(document).ready(function () {
     $('.print-orders').on('click', function(e){
         window.print();
     });
+
     initSetOrder();
+
+    initQuickQuery();
 });

@@ -32,8 +32,8 @@ class TuanController extends AppController
         $con_name = $_REQUEST['con_name'];
         $con_phone = $_REQUEST['con_phone'];
         $con_creator = $_REQUEST['con_creator'];
-        $cart_status = !isset($_REQUEST['cart_status']) ? -1 : $_REQUEST['cart_status'];
-        $flag = !isset($_REQUEST['flag']) ? -1 : $_REQUEST['flag'];
+        $cart_status = isset($_REQUEST['cart_status']) ? -1 : $_REQUEST['cart_status'];
+        $flag = isset($_REQUEST['flag']) ? $_REQUEST['flag'] : -1;
 
         $conditions = array();
         if (!empty($con_name)) {
@@ -53,8 +53,17 @@ class TuanController extends AppController
                 $conditions['Cart.status'] = $cart_status;
             }
         }
-        if($flag > 0){
+        if($flag == 7){
             $conditions['Order.flag'] = $flag;
+            if(isset($_REQUEST['pay_date_start']) && !isset($_REQUEST['pay_date_end'])){
+                $conditions['DATE(Order.pay_time)'] = $_REQUEST['pay_date_start'];
+            }
+            if(!isset($_REQUEST['pay_date_start']) && isset($_REQUEST['pay_date_end'])){
+                $conditions['DATE(Order.pay_time)'] = $_REQUEST['pay_date_end'];
+            }
+            if(!isset($_REQUEST['pay_date_start']) && !isset($_REQUEST['pay_date_end'])){
+                $conditions["DATE(Order.pay_time) BETWEEN '".$_REQUEST['pay_date_start']."' AND '".$_REQUEST['pay_date_end']."'"];
+            }
         }
 
         $this->_query_orders($conditions, 'Order.created DESC');
@@ -65,9 +74,9 @@ class TuanController extends AppController
         $this->set('con_creator', $con_creator);
         $this->set('cart_status', $cart_status);
         $this->set('query_type', 'quickQuery');
-        if($flag > 0){
-            $this->set('flag', $flag);
-        }
+        $this->set('flag', $flag);
+        $this->set('pay_date_start', $_REQUEST['pay_date_start']);
+        $this->set('pay_date_end', $_REQUEST['pay_date_end']);
         $this->render("admin_tuan_orders");
     }
 
