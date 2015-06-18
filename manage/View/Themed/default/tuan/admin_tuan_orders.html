@@ -59,23 +59,16 @@
                         </select>
                     </div>
                     <div class="form-group form-group-flag {{if $flag != 7}}hide{{/if}}">
-                        <input type="text" class="form-control  pay-date-start" data-date-format="yyyy-mmm-dd"
+                        <input type="text" class="form-control pay-date-start" data-date-format="yyyy-mmm-dd"
                                value="{{$pay_date_start}}" placeholder="支付开始时间(如2015-5-1)" name="pay_date_start">
                     </div>
                     <div class="form-group form-group-flag {{if $flag != 7}}hide{{/if}}">
                         <input type="text" class="form-control pay-date-end" data-date-format="yyyy-mm-dd"
                                value="{{$pay_date_end}}" placeholder="支付结束时间(如2015-5-1)" name="pay_date_end">
                     </div>
-                    <!--<div class="form-group form-group-flag {{if $flag != 7}}hide{{/if}}">-->
-                        <!--<select class="form-control flag" data-value="{{$flag}}" name="flag">-->
-                            <!--<option value="1" selected="selected">正常订单</option>-->
-                            <!--<option value="7">特殊订单</option>-->
-                        <!--</select>-->
-                    <!--</div>-->
-                    <div class="form-group form-group-flag">
+                    <div class="form-group form-group-flag hide">
                         <select class="form-control flag" data-value="{{$flag}}" name="flag">
-                            <option value="1" selected="selected">正常订单</option>
-                            <option value="7">特殊订单</option>
+                            <option value="7" selected='selected'>特殊订单</option>
                         </select>
                     </div>
                     <br/>
@@ -347,4 +340,4 @@
 {{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js',
 '/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js',
 '/js/manage-lib/tableExport.jquery.plugin/tablesToExcel.js?v2.5'))}}
-{{$this->Html->script(array('manage/tuan/tuan_orders.js?v7.0'))}}
+{{$this->Html->script(array('manage/tuan/tuan_orders.js?v7.1'))}}
