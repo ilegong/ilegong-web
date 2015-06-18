@@ -293,25 +293,32 @@ $(document).ready(function () {
     function initQuickQuery(){
         var quickQueryClickedCount = 0;
         var $formGroupFlags = $('.form-group-flag');
-        var showFlags = function(){
-            $formGroupFlags.toggleClass('hide');
+        var enableOrDisableInputs = function(){
             if($formGroupFlags.hasClass('hide')){
                 $('.form-control', $formGroupFlags).attr('disabled', 'disabled');
             }
             else{
                 $('.form-control', $formGroupFlags).removeAttr('disabled');
             }
+        }
+        var toggleFlagsInput = function(){
+            $formGroupFlags.toggleClass('hide');
+            enableOrDisableInputs();
         };
         $("a[data-tab='quickQuery']").on('click', function(e){
             quickQueryClickedCount += 1;
             if(quickQueryClickedCount >= 5){
                 quickQueryClickedCount = 0;
-                showFlags();
+                toggleFlagsInput();
             }
         });
         $("a[data-tab='advancedQuery']").on('click', function(e){
             quickQueryClickedCount = 0;
         });
+        $("a[data-tab='dailyOrders']").on('click', function(e){
+            quickQueryClickedCount = 0;
+        });
+        enableOrDisableInputs();
     }
 
     (function () {
