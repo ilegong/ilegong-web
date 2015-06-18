@@ -26,8 +26,8 @@
                 <span {{if $c2c_paid_not_sent_count> 0}}class="text-danger"{{/if}}>({{$c2c_paid_not_sent_count}})</span>
             </a>
         </li>
-        <li role="presentation" {{if $query_type != 'dailyOrders'}}class="hide"{{/if}}>
-            <a data-tab="dailyOrders" href="/manage/admin/tuan/query_orders_today">
+        <li role="presentation">
+            <a data-tab="dailyOrders" href="/manage/admin/tuan/query_daily_orders">
                 !!!每日订单
             </a>
         </li>
@@ -143,22 +143,11 @@
         <div id="dailyOrders" class="tab-pane">
             <strong class="text-danger lead">按支付时间，查看某天的订单（团、秒、普通）</strong>
 
-            <form class="form-inline" method="post" action="/manage/admin/tuan/query_orders_today" data-noajax="true">
+            <form class="form-inline" method="post" action="/manage/admin/tuan/query_daily_orders" data-noajax="true">
                 <div style="padding-bottom: 10px;padding-top: 10px;">
                     <div class="form-group">
                         <input type="text" class="form-control pay-date" data-date-format="yyyy-mmm-dd" value="{{$pay_date}}"
                                placeholder="支付日期(如2015-5-1)" name="pay_date">
-                    </div>
-                    <div class="form-group">
-                        <select class="form-control cart-status" data-value="{{$cart_status}}" name="cart_status">
-                            <option value="-1">发货单状态</option>
-                            <option value="0">待支付</option>
-                            <option value="1">待发货</option>
-                            <option value="2">已发货</option>
-                            <option value="14">退款中</option>
-                            <option value="4">已退款</option>
-                            <option value="10">已取消</option>
-                        </select>
                     </div>
                     <br/>
                     <br/>
