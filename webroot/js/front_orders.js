@@ -610,7 +610,7 @@ var infoToBalance = function(){
                     that.html("<i></i>");
                 }
                 var balance_use_score = $(".balance_use_score");
-                var totalPrice = parseFloat(totalPriceDom.text()) || 0;
+                var totalPrice = parseFloat(totalPriceDom.data('totalPrice')) || 0;
                 $.post('/orders/apply_score.json', {'use' : that.html()=="<i></i>", 'score':totalPrice*100/2}, function(data){
                     if (data && data.success) {
                         var scoreMoney = data.score_money;
@@ -619,7 +619,9 @@ var infoToBalance = function(){
                         }
                         balance_use_score.text(data.score_usable);
                         balance_use_score.next('span').text(utils.toFixed(data.score_money,2));
-                        totalPriceDom.text(utils.toFixed(totalPrice + scoreMoney, 2));
+                        var afterChangePrice = utils.toFixed(totalPrice + scoreMoney, 2);
+                        totalPriceDom.data('totalPrice',afterChangePrice);
+                        totalPriceDom.text('￥'+afterChangePrice);
                     } else {
                         utils.alert('使用积分失败', function(){}, 1000);
                     }
@@ -634,11 +636,24 @@ var infoToBalance = function(){
                 var checkbox = $("[data-coupon_item_id='" + coupon_item_id + "'] > input[type=checkbox]");
                 checkbox.prop("checked", !checkbox.prop("checked"));
                 var action = (checkbox.prop("checked") == false )? 'unapply' : 'apply';
+                var totalPrice = parseFloat(totalPriceDom.data('totalPrice')) || 0;
                 $.post('/orders/apply_coupon.json', {'brand_id': brandId, 'coupon_item_id': coupon_item_id, 'action': action}, function (data) {
                     if (data) {
                         //console.log(data);
                         if (data.changed) {
-                            totalPriceDom.text(utils.toFixed(data.total_price, 2));
+                            var reducedPrice = data.total_reduced;
+                            if(reducedPrice>0){
+                                var afterChangePrice = utils.toFixed(totalPrice-reducedPrice,2);
+                                totalPriceDom.data('totalPrice',afterChangePrice);
+                                totalPriceDom.text('￥'+afterChangePrice);
+                            }else{
+                                var shipFee = parseFloat(totalPriceDom.data('shipFee'));
+                                if(shipFee<0){
+                                    var afterChangePrice = utils.toFixed(data.total_price+shipFee,2);
+                                    totalPriceDom.data('totalPrice',afterChangePrice);
+                                    totalPriceDom.text('￥'+afterChangePrice);
+                                }
+                            }
                         } else {
                             if (data.reason == 'not_login') {
                                 utils.alert('您长时间未操作，请重新登录', function () {
