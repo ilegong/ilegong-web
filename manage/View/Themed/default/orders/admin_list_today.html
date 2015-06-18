@@ -79,6 +79,7 @@
     </tr>
     <tbody>
     {{loop $orders $order}}
+    {{if $order['Order']['flag'] != 7}}
     {{loop  $order_carts[$order['Order']['id']] $index $cart}}
     <tr>
         {{if $order_groupon_link}}
@@ -159,6 +160,7 @@
         <td>{{$order['Order']['remark']}}</td>
     </tr>
     {{/loop}}
+    {{/if}}
     {{/loop}}
     </tbody>
 </table>
