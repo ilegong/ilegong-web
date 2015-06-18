@@ -199,7 +199,7 @@
     <div class="conorder_btn clearfix">
         {{if $ziti_support}}
             <div class="fl" style="width: 47%;">
-                <a href="#X" class="weixin" onclick="javascript:$('.ziti_choose').show();$('.kuaidi_choose').hide();$('.tipslayer,.tipslayer_bg').hide();$('.order_selectbtn').parent().hide();">自提</a>
+                <a href="#X" class="weixin" id="panel-select-ziti">自提</a>
                 <label>自提可省邮费</label>
             </div>
             <div class="fr" style="width: 47%;">
@@ -221,6 +221,8 @@
         var bigBuy = zitiObj(zitiAddressData.getBeijingAreas,$(window).height() + 5, $(window).width());
         var elements = bigBuy.generateZitiArea();
         var boxSize = $(window).height() + 5+ "&width=" + $(window).width();
+        var $shipFeeDom = $('.ship_fee_re');
+        var $totalPriceDom = $('.total_price_info');
         $(".conordertuan_adress").html(elements);
         bigBuy.bindThickbox();
         bigBuy.bindChildAddress();
@@ -323,37 +325,49 @@
                 }
             },'json');
         });
+        $('#panel-select-ziti').on('click',function(){
+            $('.ziti_choose').show();
+            $('.kuaidi_choose').hide();
+            $('.tipslayer,.tipslayer_bg').hide();
+            $('.order_selectbtn').parent().hide();
+            choiceZitiFeeChange();
+        });
+        function choiceZitiFeeChange(){
+            var totalPrice = parseFloat($totalPriceDom.data('totalPrice'));
+            var shipFee = 0;
+            if($shipFeeDom.length>0){
+                $shipFeeDom.text('自提');
+                shipFee = parseFloat($shipFeeDom.data('shipFee'));
+            }
+            var afterChangePrice = utils.toFixed(totalPrice-shipFee,2);
+            $totalPriceDom.data('totalPrice',afterChangePrice);
+            $totalPriceDom.data('shipFee',-shipFee);
+            $totalPriceDom.text('￥' +afterChangePrice);
+        }
+        function choiceKuaiDiFeeChange(){
+            var totalPrice = parseFloat($totalPriceDom.data('totalPrice'));
+            var shipFee = 0;
+            if($shipFeeDom.length>0){
+                shipFee = parseFloat($shipFeeDom.data('shipFee'));
+                if(shipFee==0){
+                    $shipFeeDom.text('包邮');
+                }else{
+                    $shipFeeDom.text('快递'+shipFee+'元');
+                }
+            }
+            var afterChangePrice = utils.toFixed(totalPrice+shipFee,2);
+            $totalPriceDom.text('￥' +afterChangePrice);
+            $totalPriceDom.data('shipFee',shipFee);
+            $totalPriceDom.data('totalPrice',afterChangePrice);
+        }
         $('.address_addbtn').click(function(){
             var $addressDom = $('.address:visible');
-            var $shipFeeDom = $('.ship_fee_re');
-            var $totalPriceDom = $('.total_price_info');
-            var totalPrice = parseFloat($totalPriceDom.data('totalPrice'));
             if($addressDom.hasClass('kuaidi_choose')){
                 $('.ziti_choose').show();$('.kuaidi_choose').hide();
-                var shipFee = 0;
-                if($shipFeeDom.length>0){
-                    $shipFeeDom.text('自提');
-                    shipFee = parseFloat($shipFeeDom.data('shipFee'));
-                }
-                var afterChangePrice = utils.toFixed(totalPrice-shipFee,2);
-                $totalPriceDom.data('totalPrice',afterChangePrice);
-                $totalPriceDom.data('shipFee',-shipFee);
-                $totalPriceDom.text('￥' +afterChangePrice);
+                choiceZitiFeeChange();
             }else{
                 $('.ziti_choose').hide();$('.kuaidi_choose').show();
-                var shipFee = 0;
-                if($shipFeeDom.length>0){
-                    shipFee = parseFloat($shipFeeDom.data('shipFee'));
-                    if(shipFee==0){
-                        $shipFeeDom.text('包邮');
-                    }else{
-                        $shipFeeDom.text('快递'+shipFee+'元');
-                    }
-                }
-                var afterChangePrice = utils.toFixed(totalPrice+shipFee,2);
-                $totalPriceDom.text('￥' +afterChangePrice);
-                $totalPriceDom.data('shipFee',shipFee);
-                $totalPriceDom.data('totalPrice',afterChangePrice);
+                choiceKuaiDiFeeChange();
             }
         })
     })
