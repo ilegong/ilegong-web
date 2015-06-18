@@ -144,8 +144,8 @@
             <div class="clearfix leave_words">
                 <input name={{"remark_".$brandItem->id}} type="text" placeholder="给卖家留言:" />
             </div>
-            <p class="conordertuan_total" data-brand-id="{{$brandItem->id}}">共<span data-brand-num="{{$brand_goods_num}}">{{$brand_goods_num}}</span>件商品，合计:
-                <strong data-brand-price="{{$brand_price}}">￥{{$this->Number->precision($brand_price,2)}}</strong></p>
+            <!--<p class="conordertuan_total" data-brand-id="{{$brandItem->id}}">共<span data-brand-num="{{$brand_goods_num}}">{{$brand_goods_num}}</span>件商品，合计:-->
+                <!--<strong data-brand-price="{{$brand_price}}">￥{{$this->Number->precision($brand_price,2)}}</strong></p>-->
         {{/loop}}
         {{if $shipFee>0}}
         <a href="#X" class="favor" style="position:relative;">
