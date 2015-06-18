@@ -61,8 +61,8 @@ class TuanController extends AppController
             if(!isset($_REQUEST['pay_date_start']) && isset($_REQUEST['pay_date_end'])){
                 $conditions['DATE(Order.pay_time)'] = $_REQUEST['pay_date_end'];
             }
-            if(!isset($_REQUEST['pay_date_start']) && !isset($_REQUEST['pay_date_end'])){
-                $conditions["DATE(Order.pay_time) BETWEEN '".$_REQUEST['pay_date_start']."' AND '".$_REQUEST['pay_date_end']."'"];
+            if(isset($_REQUEST['pay_date_start']) && isset($_REQUEST['pay_date_end'])){
+                $conditions[] = "DATE(Order.pay_time) BETWEEN '".$_REQUEST['pay_date_start']."' AND '".$_REQUEST['pay_date_end']."'";
             }
         }
 
