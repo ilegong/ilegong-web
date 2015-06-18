@@ -542,6 +542,7 @@ a:hover, a:focus {
 .order_shop_head img{ width: 1.7em; height: 1.7em; margin-right: 5px; border-radius: 3px;}
 .order_shop_head span{ display: block; float: left;}
 .favor{ display: block; text-decoration: none; font-size: 1em; border-bottom: 1px #eeeeee solid; color: #333333; padding: 12px 10px; background-color: #ffffff;}
+.favor label strong{ color: #CC0000; font-weight: normal;}
 .favor:hover {
     text-decoration: none;
     color: #333333;

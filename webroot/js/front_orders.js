@@ -634,6 +634,9 @@ var infoToBalance = function(){
                 var brandId = that.attr('data-brandId');
                 var coupon_item_id = that.attr('data-coupon_item_id');
                 var checkbox = $('input[type=radio]',that);
+                var couponName = that.data('coupon-name');
+                var couponTipInfo = $('#coupon-tip-info');
+                var useCouponCount = couponTipInfo.data('coupon-count');
                 checkbox.prop("checked", !checkbox.prop("checked"));
                 var action = (checkbox.prop("checked") == false )? 'unapply' : 'apply';
                 var totalPrice = parseFloat(totalPriceDom.data('totalPrice')) || 0;
@@ -646,6 +649,7 @@ var infoToBalance = function(){
                                 var afterChangePrice = utils.toFixed(totalPrice-reducedPrice,2);
                                 totalPriceDom.data('totalPrice',afterChangePrice);
                                 totalPriceDom.text('￥'+afterChangePrice);
+                                couponTipInfo.text(couponName);
                             }else{
                                 var shipFee = parseFloat(totalPriceDom.data('shipFee'));
                                 if(shipFee<0){
@@ -653,6 +657,7 @@ var infoToBalance = function(){
                                     totalPriceDom.data('totalPrice',afterChangePrice);
                                     totalPriceDom.text('￥'+afterChangePrice);
                                 }
+                                couponTipInfo.text("您有"+useCouponCount+"张可使用优惠券");
                             }
                             tb_remove();
                         } else {
