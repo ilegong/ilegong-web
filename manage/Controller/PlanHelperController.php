@@ -4,7 +4,7 @@ class PlanHelperController extends AppController
 
     var $name = 'PlanHelper';
 
-    var $uses = array('User', 'TuanTeam', 'TuanBuying', 'Order', 'Cart', 'Product', 'OfflineStore', 'ConsignmentDate');
+    var $uses = array('User', 'Order', 'Cart', 'Product', 'OfflineStore');
 
     public function admin_order()
     {
@@ -17,7 +17,7 @@ class PlanHelperController extends AppController
         $spec_id = isset($_REQUEST['spec_id']) ? $_REQUEST['spec_id'] : 0;
         $num = isset($_REQUEST['num']) ? $_REQUEST['num'] : 1;
 
-        if (!($user_id >= 810163 && $user_id <= 810223) && !($user_id >= 810096 && $user_id <= 810158)) {
+        if (!_is_user_valid($user_id)) {
             echo json_encode(array('result'=>false, 'reason' => "invalid user id ".$user_id));
             return;
         }
@@ -25,7 +25,7 @@ class PlanHelperController extends AppController
 
         $product = $this->Product->findById($product_id);
         if ($product['Product']['brand_id'] != 92) {
-            echo json_encode(array('result'=>false, 'reason' => 'only pyshuo/tage products are supported'));
+            echo json_encode(array('result'=>false, 'reason' => 'not pyshuo products'));
             return;
         }
 
@@ -39,42 +39,71 @@ class PlanHelperController extends AppController
             return;
         }
 
-        $tuan_buying = $this->TuanBuying->find('first', array(
-            'conditions' => array(
-                'tuan_id' => PYS_M_TUAN,
-                'pid' => $product_id
-            ),
-            'order' => 'id DESC'
-        ));
-
-        $member_id = 0;
-        $ship_mark = null;
-        if (!empty($tuan_buying)) {
-            $ship_mark = 'ziti';
-            $member_id = $tuan_buying['TuanBuying']['id'];
-        }
         $this->log("plan helper is to create order for " . $user_id . " and product " .$product_id. " with num " . $num);
 
-        $order_id = $this->_insert_order($user, $product, $num, $member_id, $ship_mark, $offline_store);
+        $order_id = $this->_insert_order($user, $product, $num, $offline_store);
         $cart_id = $this->_insert_cart($user, $product, $num, $spec_id, $send_date, $order_id);
         $this->log("plan helper create order successfully: " . $order_id . ", " . $cart_id);
 
         echo json_encode(array("order_id" => $order_id, "cart_id" => $cart_id));
     }
 
-    function _insert_order($user, $product, $num, $member_id, $ship_mark, $offline_store)
+    public function admin_order_shipped(){
+        $this->autoRender = false;
+
+        $order_ids = explode(",", $_REQUEST['order_ids']);
+        if(empty($order_ids)){
+            echo json_encode(array('result'=>false, 'reason' => 'please provide order ids'));
+            return;
+        }
+
+        $orders = $this->Order->find('all', array(
+            "conditions" => array(
+                'id'=>$order_ids
+            )
+        ));
+        if(empty($orders)){
+            echo json_encode(array('result'=>false, 'reason' => 'orders does not exist'));
+            return;
+        }
+        foreach($orders as $order){
+            if ($order['Order']['brand_id'] != 92) {
+                echo json_encode(array('result'=>false, 'reason' => 'not pyshuo products'));
+                return;
+            }
+            if (!$this->_is_user_valid($order['Order']['creator'])) {
+                echo json_encode(array('result'=>false, 'reason' => 'invalid user id '.$order['Order']['creator']));
+                return;
+            }
+        }
+
+        $users = $this->User->find('all', array(
+            "conditions" => array(
+                "id NOT IN (SELECT DISTINCT creator FROM cake_orders WHERE creator IS NOT NULL AND status > 0)",
+                "nickname IS NOT NULL"
+            ),
+            'limit' => count($orders)
+        ));
+
+        foreach($orders as $index => &$order){
+            $user = $users[$index];
+            $this->log('update user to '.$user['User']['id']);
+            $this->Order->updateAll(array('creator'=>$user['User']['id'], 'consignee_name'=>$user['User']['nickname'], 'status'=>ORDER_STATUS_SHIPPED), array('id' => $order['Order']['id']));
+            $this->Cart->updateAll(array('status'=>ORDER_STATUS_SHIPPED), array('order_id' => $order['Order']['id']));
+        }
+        echo json_encode(array("order_ids" => $order_ids));
+    }
+
+    function _insert_order($user, $product, $num, $offline_store)
     {
         $date = date('Y-m-d H:i:s', strtotime("+17 seconds"));
 
         $data = array();
         $data['Order']['creator'] = $user['User']['id'];
         $data['Order']['status'] = 0;
-        if(!empty($ship_mark)){
-            $data['Order']['ship_mark'] = $ship_mark;
-        }
+        $data['Order']['ship_mark'] = 'ziti';
         $data['Order']['created'] = $date;
         $data['Order']['updated'] = $date;
-//        $data['Order']['pay_time'] = date('Y-m-d H:i:s', strtotime("+59 seconds"));
         $data['Order']['consignee_name'] = empty($user['User']['nickname']) ? '李嘉' : $user['User']['nickname'];
         $data['Order']['consignee_mobilephone'] = empty($user['User']['mobilephone']) ? '17910808972' : $user['User']['mobilephone'];
         $data['Order']['consignee_id'] = $offline_store['OfflineStore']['id'];
@@ -83,7 +112,6 @@ class PlanHelperController extends AppController
         $data['Order']['total_price'] = $product['Product']['price'] * $num;
         $data['Order']['total_all_price'] = $product['Product']['price'] * $num;
         $data['Order']['brand_id'] = $product['Product']['brand_id'];
-        $data['Order']['member_id'] = $member_id;
         $data['Order']['type'] = 1;
         $data['Order']['flag'] = 7;
 
@@ -125,5 +153,9 @@ class PlanHelperController extends AppController
             $this->log($this->Cart->validationErrors); //show validationErrors
             throw new Exception("plan helper create cart failed");
         }
+    }
+
+    private function _is_user_valid($user_id){
+        return ($user_id >= 810163 && $user_id <= 810223) || ($user_id >= 810096 && $user_id <= 810158);
     }
 }
