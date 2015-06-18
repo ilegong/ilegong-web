@@ -661,7 +661,7 @@ var infoToBalance = function(){
                                 });
                             } else if (data.reason == 'share_type_coupon_exceed') {
                                 checkbox.prop("checked", !checkbox.prop("checked"));
-                                utils.alert('优惠券使用超出限制');
+                                utils.alert('优惠券使用超出限制,取消后重新选择');
                             }
                         }
                     }
