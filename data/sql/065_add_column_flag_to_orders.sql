@@ -1,0 +1,1 @@
+ALTER TABLE `cake_orders` ADD COLUMN `flag` INT NOT NULL DEFAULT 0;
