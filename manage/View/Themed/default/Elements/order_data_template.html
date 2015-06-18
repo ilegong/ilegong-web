@@ -32,6 +32,7 @@
     </thead>
     <tbody>
         {{loop $current_orders $order}}
+        {{if $order['Order']['flag'] != 7}}
             <?php
               $has_paid = $order['Order']['status']!=0 && $order['Order']['status']!=10;
               $tuan_buying = $tuan_buys[$order['Order']['member_id']];
@@ -200,6 +201,7 @@
                     </td>
                 </tr>
             {{/loop}}
+        {{/if}}
         {{/loop}}
   </tbody>
 </table>
