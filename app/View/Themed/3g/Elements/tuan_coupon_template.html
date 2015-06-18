@@ -1,23 +1,22 @@
 <?php $coupons = $coupons_of_products[$brandItem->id];?>
 {{if !empty($coupons)}}
-<div id="hiddenModalContent_{{$brandItem->id}}" style="display:none">
-    <div class="classlist_v2">
-        <ul class="clearfix">
-            <li><a onclick="tb_remove()" class="back"></a></li>
-            <li class="line"></li>
-            <li><strong>返回</strong></li>
-        </ul>
+<div id="hiddenModalContent_{{$brandItem->id}}" style="display:none;background-color:#f5f5f5;">
+    <div class="classlist">
+        <a href="#X" onclick="tb_remove();" class="back"></a>
+        选择优惠券
+        <a href="/" class="home"></a>
     </div>
-    <ul style="padding-top: 60px;">
+    <div class="usecoupon">
         {{loop $coupons $coupon}}
-        <li><a data-coupon_item_id="{{$coupon['CouponItem']['id']}}" data-brandId="{{$brandItem->id}}" class="coupon" href="javascript:"><input type="checkbox" readonly>
-            {{$coupon['Coupon']['name']}} <span style="color: red">{{$this->Number->precision($coupon['Coupon']['reduced_price']/100, 2)}}</span> {{if $coupon['Coupon']['type'] == COUPON_TYPE_TYPE_SHARE_OFFER}}(红包券，每件商品可使一张，本单本店共{{$brandItem->total_num()}}件){{/if}}
-            <span class="glyphicon glyphicon-ok" style="display: none"></span></a><span class="applied_result"></span>
-        </li>
+        <a data-coupon_item_id="{{$coupon['CouponItem']['id']}}" data-brandId="{{$brandItem->id}}" class="coupon" href="javascript:">
+            <b><input type="radio" name="radiobutton-{{$coupon['CouponItem']['id']}}" value="radiobutton"></b>
+            <label>{{$coupon['Coupon']['name']}}{{if $coupon['Coupon']['type'] == COUPON_TYPE_TYPE_SHARE_OFFER}}(红包券，每件商品可使一张，本单本店共{{$brandItem->total_num()}}件){{/if}} <span>{{$this->Number->precision($coupon['Coupon']['reduced_price']/100, 2)}}</span></label>
+        </a>
         {{/loop}}
-    </ul>
+    </div>
 </div>
-<a href="#TB_inline?&inlineId=hiddenModalContent_{{$brandItem->id}}&modal=true" class="favor thickbox use-coupon" style="position:relative;">
+
+<a href="#TB_inline?&inlineId=hiddenModalContent_{{$brandItem->id}}&modal=true" class="favor thickbox" style="position:relative;">
     <span style="display:block;" class="fl">商品优惠&nbsp;&nbsp;<span class="moreicon" style="right:10px;" href="#X"></span></span>
     <span style="overflow:hidden; display:block; color: #acacac;">您有优惠券可使用({{count($coupons)}})</span>
 </a>
