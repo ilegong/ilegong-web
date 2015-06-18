@@ -132,7 +132,7 @@ class OrdersController extends AppController
                 $this->_on_order_paid($order);
             }
             else if($new_order_status == ORDER_STATUS_SHIPPED){
-                $message_sent = $this->_on_order_shipped($order, $this->data);
+//                $message_sent = $this->_on_order_shipped($order, $this->data);
             }
             else if($new_order_status == ORDER_STATUS_RETURNING_MONEY){
                 $this->_on_order_returning_money($order);
