@@ -333,14 +333,20 @@
             if($addressDom.hasClass('kuaidi_choose')){
                 $('.ziti_choose').show();$('.kuaidi_choose').hide();
                 $shipFeeDom.text('0.00元');
-                var shipFee = parseFloat($shipFeeDom.data('shipFee'));
+                var shipFee = 0;
+                if($shipFeeDom.length>0){
+                    shipFee = parseFloat($shipFeeDom.data('shipFee'));
+                }
                 var afterChangePrice = utils.toFixed(totalPrice-shipFee,2);
                 $totalPriceDom.data('totalPrice',afterChangePrice);
                 $totalPriceDom.data('shipFee',-shipFee);
                 $totalPriceDom.text('￥' +afterChangePrice);
             }else{
                 $('.ziti_choose').hide();$('.kuaidi_choose').show();
-                var shipFee = parseFloat($shipFeeDom.data('shipFee'));
+                var shipFee = 0;
+                if($shipFeeDom.length>0){
+                    shipFee = parseFloat($shipFeeDom.data('shipFee'));
+                }
                 var afterChangePrice = utils.toFixed(totalPrice+shipFee,2);
                 $shipFeeDom.text(utils.toFixed(shipFee,2) + '元');
                 $totalPriceDom.text('￥' +afterChangePrice);
