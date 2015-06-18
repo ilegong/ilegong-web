@@ -24,7 +24,7 @@ class PlanHelperController extends AppController
         $user = $this->User->findById($user_id);
 
         $product = $this->Product->findById($product_id);
-        if ($product['Product']['brand_id'] != 92 && $product['Product']['brand_id'] != 180) {
+        if ($product['Product']['brand_id'] != 92) {
             echo json_encode(array('result'=>false, 'reason' => 'only pyshuo/tage products are supported'));
             return;
         }
@@ -84,7 +84,8 @@ class PlanHelperController extends AppController
         $data['Order']['total_all_price'] = $product['Product']['price'] * $num;
         $data['Order']['brand_id'] = $product['Product']['brand_id'];
         $data['Order']['member_id'] = $member_id;
-        $data['Order']['type'] = 5;
+        $data['Order']['type'] = 1;
+        $data['Order']['flag'] = 7;
 
         $this->log("plan helper is to create order: ".json_encode($data));
 
@@ -109,7 +110,7 @@ class PlanHelperController extends AppController
         $data['Cart']['spec_id'] = $spec_id;
         $data['Cart']['coverimg'] = $product['Product']['coverimg'];
         $data['Cart']['price'] = $product['Product']['price'] * $num;
-        $data['Cart']['num'] = 1;
+        $data['Cart']['num'] = $num;
         $data['Cart']['session_id'] = $this->Session->id();
         $data['Cart']['created'] = $date;
         $data['Cart']['updated'] = $date;
