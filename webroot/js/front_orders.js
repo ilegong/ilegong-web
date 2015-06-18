@@ -629,11 +629,11 @@ var infoToBalance = function(){
             });
         },
         couponUse: function(){
-            $('li > a.coupon').click(function () {
+            $('div.usecoupon > a').click(function () {
                 var that = $(this);
                 var brandId = that.attr('data-brandId');
                 var coupon_item_id = that.attr('data-coupon_item_id');
-                var checkbox = $("[data-coupon_item_id='" + coupon_item_id + "'] > input[type=checkbox]");
+                var checkbox = $('input[type=radio]',that);
                 checkbox.prop("checked", !checkbox.prop("checked"));
                 var action = (checkbox.prop("checked") == false )? 'unapply' : 'apply';
                 var totalPrice = parseFloat(totalPriceDom.data('totalPrice')) || 0;
@@ -654,6 +654,7 @@ var infoToBalance = function(){
                                     totalPriceDom.text('￥'+afterChangePrice);
                                 }
                             }
+                            tb_remove();
                         } else {
                             if (data.reason == 'not_login') {
                                 utils.alert('您长时间未操作，请重新登录', function () {
@@ -661,7 +662,9 @@ var infoToBalance = function(){
                                 });
                             } else if (data.reason == 'share_type_coupon_exceed') {
                                 checkbox.prop("checked", !checkbox.prop("checked"));
-                                utils.alert('优惠券使用超出限制,取消后重新选择');
+                                utils.alert('优惠券使用超出限制,取消后重新选择',function(){
+                                    tb_remove();
+                                });
                             }
                         }
                     }

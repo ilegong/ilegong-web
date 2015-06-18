@@ -566,3 +566,14 @@ ul li{ list-style:none;}
 .cart dl dd{ line-height: 24px;}
 .cart_none{ text-align: center; position: absolute; top: 50%; font-size: 1em; color: #666666; width: 100%;}
 .cart_none a{ color: #ffa200;}
+
+/*使用优惠券*/
+.usecoupon{ margin-top: 54px; border-top: 1px #eeeeee solid;}
+.usecoupon a{ color: #333333; background-color: #ffffff; border-bottom: 1px #eeeeee solid; display: block; height: 44px; padding: 0 10px;}
+.usecoupon a label{line-height: 44px; display: block; float: left; padding-left: 10px;}
+.usecoupon a label span{ color: #cc0000;}
+.usecoupon a b {
+    display: block;
+    float: left;
+    padding-top: 8px;
+}

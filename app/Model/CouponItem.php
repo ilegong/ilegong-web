@@ -458,7 +458,8 @@ class CouponItem extends AppModel {
             'conditions' => $cond,
             'joins' => $this->joins_link,
             'fields' => array('Coupon.*', 'CouponItem.*'),
-            'order' => 'CouponItem.created desc'
+            'order' => 'CouponItem.created desc',
+            'group' => array('CouponItem.coupon_id')
         ));
 
         $this->pid_list_to_array($items);
