@@ -33,6 +33,7 @@ class TuanController extends AppController
         $con_phone = $_REQUEST['con_phone'];
         $con_creator = $_REQUEST['con_creator'];
         $cart_status = !isset($_REQUEST['cart_status']) ? -1 : $_REQUEST['cart_status'];
+        $flag = !isset($_REQUEST['flag']) ? -1 : $_REQUEST['flag'];
 
         $conditions = array();
         if (!empty($con_name)) {
@@ -51,6 +52,9 @@ class TuanController extends AppController
             if ($cart_status != -1) {
                 $conditions['Cart.status'] = $cart_status;
             }
+        }
+        if($flag > 0){
+            $conditions['Order.flag'] = $flag;
         }
 
         $this->_query_orders($conditions, 'Order.created DESC');
