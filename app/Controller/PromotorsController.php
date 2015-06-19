@@ -60,16 +60,17 @@ class PromotorsController extends AppController
         $orders = $this->Order->find('all', array(
             'conditions' => array(
                 'Order.status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED),
-                'Order.type' => 5
+                'Order.type' => 5,
+                'TuanTeam.id' => $tuan_team_ids
             ),
             'joins' => array(
                 array(
                     'table' => 'tuan_buyings',
                     'alias' => 'TuanBuying',
                     'conditions' => array(
-                        'TuanBuying.tuan_id'=>$tuan_team_ids
+                        'TuanBuying.id = Order.member_id'
                     ),
-                    'type' => 'LEFT',
+                    'type' => 'INNER',
                 ),
                 array(
                     'table' => 'tuan_teams',
@@ -77,7 +78,7 @@ class PromotorsController extends AppController
                     'conditions' => array(
                         'TuanTeam.id = TuanBuying.tuan_id'
                     ),
-                    'type' => 'LEFT',
+                    'type' => 'INNER',
                 )
             ),
             'fields' => array('Order.id', 'Order.pay_time', 'Order.creator', 'Order.total_all_price', 'Order.consignee_name', 'Order.consignee_mobilephone', 'TuanBuying.tuan_id', 'TuanTeam.id', 'TuanTeam.tuan_name'),
