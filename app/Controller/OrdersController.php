@@ -1868,6 +1868,7 @@ class OrdersController extends AppController {
         }
         $name = trim($_POST['name']);
         $mobile = $_POST['mobile'];
+        $remarkAddress = $_POST['remark_address'];
         $shop_id = intval($_POST['shop_id']);
         if(!$name || !$mobile || !$shop_id){
             $res['reason'] = 'invalid_data';
@@ -1897,7 +1898,8 @@ class OrdersController extends AppController {
             'mobilephone' => $mobile,
             'area' => $pickup['OfflineStore']['area_id'],
             'ziti_id' => $shop_id,
-            'ziti_type' => $pickup['OfflineStore']['type']
+            'ziti_type' => $pickup['OfflineStore']['type'],
+            'remark_address' => $remarkAddress
         );
         if(empty($old_pickup)){
             $data = $this->OrderConsignee->save($data);

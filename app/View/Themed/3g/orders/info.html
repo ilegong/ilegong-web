@@ -163,7 +163,7 @@
         <li class="fr shop_jifen_used radius10"></li>
     </ul>
 </div>
-<ul class="clearfix order_submit">
+<ul class="clearfix cart_pay order_submit">
     <li class="fr"><a href="{{$this->Html->url('/orders/balance/'.($specialShipPromotionId?'?ship_promotion='.$specialShipPromotionId:''))}}">提交订单</a></li>
     <li class="fr">实付款:<label class="total_price_info" data-ship-fee="{{$shipFee}}" data-total-price="{{($cart->total_price()+$shipFee)}}">￥{{$this->Number->precision($cart->total_price() + ($shipFee > 0?$shipFee:0), 2)}}</label></li>
 </ul>
@@ -305,6 +305,10 @@
             var shopId = $('#chose_address').data('shopId');
             var name = $("input[name='consignee_name']").val();
             var mobile = $("input[name='consignee_mobilephone']").val().replace(/\s+$/,"");
+            var remarkAddress = '';
+            if($('#remark_address').is(":visible")){
+                remarkAddress = $("input[name='consignee_remark_address']").val();
+            }
             if(shopId.length <= 0){
                 utils.alert("请选择自提点");
                 return false
@@ -315,7 +319,7 @@
                 utils.alert("请填写手机号码");
                 return false
             }
-            $.post('/orders/chose_pickup',{"name": name, "mobile":mobile,"shop_id": shopId},function(res){
+            $.post('/orders/chose_pickup',{"name": name, "mobile":mobile,"shop_id": shopId,"remark_address":remarkAddress},function(res){
                 if(res.status){
                     $('.pickup_layer').hide();
                     $('.pickup_address').html("<strong>"+ res.data.name + res.data.mobilephone+ "</strong><br /><strong>自提点信息：</strong><br />"+
