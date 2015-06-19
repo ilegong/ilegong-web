@@ -1,7 +1,6 @@
 $(document).ready(function () {
     var $saveBtn = $('.save-btn');
     var $sendDate = $('.send-date');
-    var $modifyReason = $('.modify-reason');
     var $modifyUser = $('.modify-user');
     var yesterday = function(){
         var date = new Date();
@@ -13,9 +12,6 @@ $(document).ready(function () {
         var invalidFields = [];
         if($sendDate.data('value') != $sendDate.val() && new Date($sendDate.val()) <= yesterday()){
             invalidFields.push($sendDate);
-        }
-        if(_.isEmpty($modifyReason.val())){
-            invalidFields.push($modifyReason);
         }
         if(_.isEmpty($modifyUser.val())){
             invalidFields.push($modifyUser);
