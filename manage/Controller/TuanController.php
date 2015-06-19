@@ -328,14 +328,16 @@ class TuanController extends AppController
             if (!isset($order_carts[$order_id])) {
                 $order_carts[$order_id] = array();
             }
-            $order_carts[$order_id][] = $cart;
-            if(!$cart['Cart']['matched']){
-                continue;
+            if($cart['Cart']['matched']){
+                array_unshift($order_carts, $cart);
+                if(isset($product_detail[$cart['Cart']['product_id']])){
+                    $product_detail[$cart['Cart']['product_id']] +=  $cart['Cart']['num'];
+                }else{
+                    $product_detail[$cart['Cart']['product_id']] =  $cart['Cart']['num'];
+                }
             }
-            if(isset($product_detail[$cart['Cart']['product_id']])){
-                $product_detail[$cart['Cart']['product_id']] +=  $cart['Cart']['num'];
-            }else{
-                $product_detail[$cart['Cart']['product_id']] =  $cart['Cart']['num'];
+            else{
+                $order_carts[$order_id][] = $cart;
             }
         }
 
