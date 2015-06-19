@@ -510,7 +510,7 @@ class OrdersController extends AppController {
         $ziti_consignees = array_filter($all_consignees, function($v) { return $v['OrderConsignee']['status'] == STATUS_CONSIGNEES_TUAN_ZITI; });
         if(!empty($ziti_consignees) && $ziti_support){
             $ziti_id = $ziti_consignees[0]['OrderConsignee']['ziti_id'];
-
+            $ziti_consign_id = $ziti_consignees[0]['OrderConsignee']['id'];
             $this->loadModel('OfflineStore');
             $ziti_info = $this->OfflineStore->find('first', array(
                 'conditions' => array('id' => $ziti_id,'deleted' => DELETED_NO)
@@ -519,8 +519,13 @@ class OrdersController extends AppController {
                 $ziti_info = array('consignee' => $ziti_consignees[0]['OrderConsignee'], 'ziti' => $ziti_info['OfflineStore']);
                 $this->set('ziti_info', $ziti_info);
                 $this->Session->write('pickupConsignee',$ziti_consignees[0]['OrderConsignee']);
+            }else{
+                $this->OrderConsignee->delete($ziti_consign_id);
+                unset($ziti_consignees);
+                $ziti_consignees = array();
             }
         }
+
         $this->set('ziti_exist',$this->ziti_exist($ziti_support,$ziti_consignees));
         $this->set('should_show_ziti',$this->should_show_ziti_address($ziti_support,$current_consignee,$ziti_consignees[0]['OrderConsignee']));
         $this->set('should_show_kuaidi',$this->should_show_normal_address($ziti_support,$current_consignee,$ziti_consignees[0]['OrderConsignee']));
