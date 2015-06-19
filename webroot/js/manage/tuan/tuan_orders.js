@@ -293,23 +293,35 @@ $(document).ready(function () {
     function initQuickQuery(){
         var quickQueryClickedCount = 0;
         var $formGroupFlags = $('.form-group-flag');
+        var $payDateStart = $('.pay-date-start');
+        var $payDateEnd = $('.pay-date-end');
+        var $flag = $('.flag');
+        var showPayDates = $payDateStart.data('show-pay-dates');
         var enableOrDisableInputs = function(){
-            if($formGroupFlags.hasClass('hide')){
-                $('.form-control', $formGroupFlags).attr('disabled', 'disabled');
+            if($payDateStart.data('show-pay-dates')){
+                $payDateStart.parents('.form-group').show();
+                $payDateStart.removeAttr('disabled');
+                $payDateEnd.parents('.form-group').show();
+                $payDateEnd.removeAttr('disabled');
+                $flag.removeAttr('disabled');
             }
             else{
-                $('.form-control', $formGroupFlags).removeAttr('disabled');
+                $payDateStart.parents('.form-group').hide();
+                $payDateStart.attr('disabled', 'disabled');
+                $payDateEnd.parents('.form-group').hide();
+                $payDateEnd.attr('disabled', 'disabled');
+                $flag.attr('disabled', 'disabled');
             }
         }
-        var toggleFlagsInput = function(){
-            $formGroupFlags.toggleClass('hide');
+        var togglePayDateInputs = function(){
+            $payDateStart.data('show-pay-dates', !$payDateStart.data('show-pay-dates'));
             enableOrDisableInputs();
         };
         $("a[data-tab='quickQuery']").on('click', function(e){
             quickQueryClickedCount += 1;
             if(quickQueryClickedCount >= 5){
                 quickQueryClickedCount = 0;
-                toggleFlagsInput();
+                togglePayDateInputs();
             }
         });
         $("a[data-tab='advancedQuery']").on('click', function(e){
@@ -628,5 +640,5 @@ $(document).ready(function () {
 
     initSetOrder();
 
-    initQuickQuery();
+//    initQuickQuery();
 });
