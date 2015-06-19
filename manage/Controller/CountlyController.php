@@ -127,7 +127,7 @@ class CountlyController extends AppController{
         $orderCond = array(
             'created >=' =>$start_date,
             'created <' => $end_date,
-            'status' => array(1,2,3),
+            'status' => array(1,2,3,9,16,14,9),
             'type' => array(5,6),
             'ship_mark' => 'ziti'
         );
@@ -153,7 +153,7 @@ class CountlyController extends AppController{
         $orderCond = array(
             'created >=' =>$start_date,
             'created <' => $end_date,
-            'status' => array(1,2,3),
+            'status' => array(1,2,3,9,16,14,9),
             'type' => array(5,6),
             'ship_mark' => 'ziti',
             'consignee_id' => $store_id
@@ -169,7 +169,7 @@ class CountlyController extends AppController{
         //$this->log('uids '.$uids);
         $new_user_buy_count = $this->ziti_new_buy_user_count($store_id,$uids,$start_date);
         //$this->log('new_user_buy_count '.$new_user_buy_count);
-        $weekMaxOrderCount = $this->Order->query('select * from (select count(id) as order_count, date(created) as created from cake_orders where ship_mark=\'ziti\' and consignee_id='.$store_id.' and status in (1,2,3) and created BETWEEN \''.$start_date.'\' and \''.$end_date.'\' group by date(created)) as orders order by order_count DESC limit 1');
+        $weekMaxOrderCount = $this->Order->query('select * from (select count(id) as order_count, date(created) as created from cake_orders where ship_mark=\'ziti\' and consignee_id='.$store_id.' and status in (1,2,3,9,16,14,9) and created BETWEEN \''.$start_date.'\' and \''.$end_date.'\' group by date(created)) as orders order by order_count DESC limit 1');
         //$this->log('$weekMaxOrderCount '.json_encode($weekMaxOrderCount));
         $repeat_buy_user_count = $this->repeat_ziti_user_count($store_id,$start_date,$end_date);
         //$this->log('$repeat_buy_user_count'.$repeat_buy_user_count);
@@ -197,7 +197,7 @@ class CountlyController extends AppController{
         $orderCond = array(
             'created >=' =>$start_date,
             'created <' => $end_date,
-            'status' => array(1,2,3)
+            'status' => array(1,2,3,9,16,14,9)
         );
 
         $weekAllOrderCount = $this->Order->find('count',array(
@@ -210,7 +210,7 @@ class CountlyController extends AppController{
 
         $uids = Hash::extract($orders,'{n}.Order.creator');
         $uids = array_unique($uids);
-        $weekMaxOrderCount = $this->Order->query('select * from (select count(id) as order_count, date(created) as created from cake_orders where status in (1,2,3) and created BETWEEN \''.$start_date.'\' and \''.$end_date.'\' group by date(created)) as orders  order by order_count DESC limit 1');
+        $weekMaxOrderCount = $this->Order->query('select * from (select count(id) as order_count, date(created) as created from cake_orders where status in (1,2,3,9,16,14,9) and created BETWEEN \''.$start_date.'\' and \''.$end_date.'\' group by date(created)) as orders  order by order_count DESC limit 1');
         $orderCond['type']=array(5,6);
         $tuanOrderCount = $this->Order->find('count',array(
             'conditions' => $orderCond
@@ -241,12 +241,12 @@ class CountlyController extends AppController{
     }
 
     private function repeat_ziti_user_count($store_id,$start_date,$end_date){
-        $result = $this->Order->query('select order_count from (select count(id) as order_count, creator from cake_orders where ship_mark=\'ziti\' and consignee_id='.$store_id.' and created BETWEEN \''.$start_date.'\' and \''.$end_date.'\' and status in (1,2,3) group by creator) as orders where order_count>1');
+        $result = $this->Order->query('select order_count from (select count(id) as order_count, creator from cake_orders where ship_mark=\'ziti\' and consignee_id='.$store_id.' and created BETWEEN \''.$start_date.'\' and \''.$end_date.'\' and status in (1,2,3,9,16,14,9) group by creator) as orders where order_count>1');
         return count($result);
     }
 
     private function repeat_buy_user_count($start_date,$end_date){
-        $result = $this->Order->query('select order_count from (select count(id) as order_count, creator from cake_orders where created BETWEEN \''.$start_date.'\' and \''.$end_date.'\' and status in (1,2,3) group by creator) as orders where order_count>1');
+        $result = $this->Order->query('select order_count from (select count(id) as order_count, creator from cake_orders where created BETWEEN \''.$start_date.'\' and \''.$end_date.'\' and status in (1,2,3,9,16,14,9) group by creator) as orders where order_count>1');
         return count($result);
     }
 
