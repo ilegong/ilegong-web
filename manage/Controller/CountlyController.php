@@ -85,20 +85,19 @@ class CountlyController extends AppController{
 
     public function admin_cron_gen_data(){
         $this->autoRender = false;
-        $dateTime = new DateTime();
-        $start_date = clone $dateTime->modify(('Sunday' == $dateTime->format('l')) ? 'Sunday this week' : 'Sunday last week');
-        $start_date = $start_date->format('Y-m-d');
-        $end_date = date('Y-m-d');
-        if($start_date!=$end_date){
-            $queue = new SaeTaskQueue('chaopeng');
-            //添加单个任务
-            $queue->addTask("/manage/admin/countly/process_gen_data/".$start_date."/".$end_date);
-            //将任务推入队列
-            $ret = $queue->push();
-            //任务添加失败时输出错误码和错误信息
-            if ($ret === false){
-                $this->log('gen statics data queue errno '.($queue->errno()).' err msg '.($queue->errmsg()));
-            }
+        $previous_week = strtotime("-1 week +1 day");
+        $start_week = strtotime("last sunday midnight",$previous_week);
+        $end_week = strtotime("next sunday",$start_week);
+        $start_date = date("Y-m-d",$start_week);
+        $end_date = date("Y-m-d",$end_week);
+        $queue = new SaeTaskQueue('chaopeng');
+        //添加单个任务
+        $queue->addTask("/manage/admin/countly/process_gen_data/".$start_date."/".$end_date);
+        //将任务推入队列
+        $ret = $queue->push();
+        //任务添加失败时输出错误码和错误信息
+        if ($ret === false){
+            $this->log('gen statics data queue errno '.($queue->errno()).' err msg '.($queue->errmsg()));
         }
         echo json_encode(array('success'=>true));
         return;
