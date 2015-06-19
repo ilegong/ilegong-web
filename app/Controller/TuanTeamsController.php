@@ -54,6 +54,11 @@ class TuanTeamsController extends AppController{
     }
 
     public function info($tuan_id){
+
+        if (empty($this->currentUser) && $this->is_weixin() && !in_array($this->request->params['controller'], array('users', 'check'))) {
+            $this->redirect($this->login_link());
+        }
+
         $tuan_team = $this->TuanTeam->find('first', array(
             'conditions' =>array(
                 'id'=> $tuan_id,

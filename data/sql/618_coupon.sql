@@ -40,3 +40,8 @@ INSERT INTO `cake_product_specials` (`recommend`, `product_id`, `special_id`, `p
 INSERT INTO `cake_product_specials` (`recommend`, `product_id`, `special_id`, `published`, `show_count`, `limit_total`, `limit_per_user`, `show_day`, `least_num`) VALUES ('50', '1057', '7', '1', '100', '0', '0', '0000-00-00', '0');
 
 INSERT INTO `cake_product_specials` (`recommend`, `product_id`, `special_id`, `published`, `show_count`, `limit_total`, `limit_per_user`, `show_day`, `least_num`) VALUES ('50', '852', '7', '1', '100', '0', '0', '0000-00-00', '0');
+
+
+INSERT INTO `cake_product_specials` (`recommend`, `product_id`, `special_id`, `published`, `show_count`, `limit_total`, `limit_per_user`, `show_day`, `least_num`) VALUES ('50', '954', '7', '1', '100', '0', '0', '0000-00-00', '0');
+INSERT INTO `cake_product_specials` (`recommend`, `product_id`, `special_id`, `published`, `show_count`, `limit_total`, `limit_per_user`, `show_day`, `least_num`) VALUES ('50', '787', '7', '1', '100', '0', '0', '0000-00-00', '0');
+INSERT INTO `cake_product_specials` (`recommend`, `product_id`, `special_id`, `published`, `show_count`, `limit_total`, `limit_per_user`, `show_day`, `least_num`) VALUES ('50', '785', '7', '1', '100', '0', '0', '0000-00-00', '0');
