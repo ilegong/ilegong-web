@@ -73,10 +73,6 @@ class CartsController extends AppController{
         }
 
         $new_cart_status = $this->data['status'];
-        if(!empty($new_cart_status) && !in_array($new_cart_status, array(ORDER_STATUS_SHIPPED, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY))){
-            echo json_encode(array('success' => false, 'reason' => 'invalid_status'));
-            return;
-        }
 
         foreach($this->data as $key => $value){
             $this->data[$key] = "'".$value."'";

@@ -83,11 +83,6 @@ class OrdersController extends AppController
         }
 
         $new_order_status = $this->data['status'];
-        // 只能修改到指定状态
-        if(!empty($new_order_status) && !in_array($new_order_status, array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY))){
-            echo json_encode(array('success' => false, 'reason' => 'invalid_order_status'));
-            return;
-        }
 
         if(!empty($this->data['ship_mark'])){
             if($this->data['ship_mark'] == 'ziti'){
