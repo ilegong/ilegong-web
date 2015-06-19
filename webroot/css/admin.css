@@ -252,6 +252,9 @@ div.breadcrumb { margin: 0px 0px 20px 0px; }
 
 /* tuan orders
 */
+tr.muted td{
+    background-color: #808080;
+}
 table.table-collect-data{
     display: none;
 }

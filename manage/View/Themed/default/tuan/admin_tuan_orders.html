@@ -123,9 +123,6 @@
                     <br/>
                     <br/>
                     <button type="submit" class="btn btn-primary text-center">查看订单</button>
-                    {{loop $brands $index $brand}}
-                    <div><span>{{$brand['Product']['name']}}:</span><strong style="color: red; font-size: large">{{$product_detail[$index]}} </strong></div>
-                    {{/loop}}
                 </div>
             </form>
         </div>
@@ -167,8 +164,10 @@
     </div>
     <hr/>
     <div>
+        {{loop $brands $index $brand}}
+        <div><span>{{$brand['Product']['name']}}:</span><strong style="color: red; font-size: large">{{$product_detail[$index]}} </strong></div>
+        {{/loop}}
         <h1>发货单总计<span style="color: red">{{count($order_carts)}}</span>个，金额<span style="color: red">{{$total_order_money}}</span></h1>
-        {{if $should_count_nums}}
         <br/>
 
         <h1>份数<span style="color: red">{{$product_count}}</span>
@@ -177,7 +176,6 @@
                     style="color: red">{{$spec_map['0']['sum(num)']}}</span>
             {{/loop}}
         </h1>
-        {{/if}}
         <button class="btn btn-success export-excel">导出订单</button>
         <button class="btn btn-primary toggle-orders" data-show-all='0'>只显示统计</button>
         <button class="btn btn-primary print-orders">打印订单</button>

@@ -276,15 +276,6 @@ class TuanController extends AppController
             }
         }
 
-        $carts = array();
-        if (!empty($cart_ids)) {
-            $carts = $this->Cart->find('all', array(
-                'conditions' => array(
-                    'id' => $cart_ids
-                ),
-            ));
-        }
-
         $tuan_buys = array();
         $tuan_buying_ids = array_diff(Hash::extract($orders, "{n}.Order.member_id"), array(0));
         if (!empty($tuan_buying_ids)) {
@@ -307,6 +298,15 @@ class TuanController extends AppController
             $tuan_teams = Hash::combine($tuan_teams, '{n}.TuanTeam.id', '{n}.TuanTeam');
         }
 
+        $carts = array();
+        if (!empty($cart_ids)) {
+            $carts = $this->Cart->find('all', array(
+                'conditions' => array(
+                    'order_id' => $order_ids
+                ),
+            ));
+        }
+
         $p_ids = Hash::extract($carts, '{n}.Cart.product_id');
         $spec_groups = array();
         if (!empty($p_ids)) {
@@ -324,10 +324,14 @@ class TuanController extends AppController
             $order_id = $cart['Cart']['order_id'];
             $specId = $cart['Cart']['specId'];
             $cart['Cart']['spec_name'] = $spec_groups[$specId];
+            $cart['Cart']['matched'] = in_array($cart['Cart']['id'], $cart_ids);
             if (!isset($order_carts[$order_id])) {
                 $order_carts[$order_id] = array();
             }
             $order_carts[$order_id][] = $cart;
+            if(!$cart['Cart']['matched']){
+                continue;
+            }
             if(isset($product_detail[$cart['Cart']['product_id']])){
                 $product_detail[$cart['Cart']['product_id']] +=  $cart['Cart']['num'];
             }else{
@@ -389,16 +393,15 @@ class TuanController extends AppController
             $brands = Hash::combine($brands, '{n}.Product.id', '{n}');
         }
 
-        $ship_mark_enum = array('ziti'=>array('name'=>'自提','style'=>'active'),'sfby'=>array('name'=>'顺丰包邮','style'=>'success'),'sfdf'=>array('name'=>'顺丰到付','style'=>'warning'),'kuaidi'=>array('name'=>'快递','style'=>'danger'),'c2c'=>array('name'=>'c2c订单','style'=>'info'),'none'=>array('name'=>'没有标注','style'=>'info'),'manbaoyou' => array('name'=>'满包邮订单','style'=>'success'));
+        $ship_mark_enum = array('ziti'=>array('name'=>'自提','style'=>'active'),'sfdf'=>array('name'=>'顺丰到付','style'=>'warning'),'kuaidi'=>array('name'=>'快递','style'=>'danger'),'c2c'=>array('name'=>'c2c订单','style'=>'info'),'none'=>array('name'=>'没有标注','style'=>'info'));
         $this->set('ship_mark_enum',$ship_mark_enum);
 
         $ziti_orders = array_filter($orders,'ziti_order_filter');
-        $sfby_orders = array_filter($orders,'sfby_order_filter');
         $sfdf_orders = array_filter($orders,'sfdf_order_filter');
         $kuaidi_orders = array_filter($orders,'kuaidi_order_filter');
         $c2c_orders = array_filter($orders,'c2c_order_filter');
         $none_orders = array_filter($orders,'none_order_filter');
-        $map_other_orders = array('sfby' => $sfby_orders,'sfdf'=> $sfdf_orders,'kuaidi' => $kuaidi_orders,'none'=> $none_orders,'c2c'=> $c2c_orders);
+        $map_other_orders = array('sfdf'=> $sfdf_orders,'kuaidi' => $kuaidi_orders,'none'=> $none_orders,'c2c'=> $c2c_orders);
         $map_ziti_orders = array();
 
         foreach($ziti_orders as $item){
@@ -437,7 +440,6 @@ class TuanController extends AppController
         $this->set('b2c_paid_not_sent_count', $this->_query_b2c_paid_not_send_count());
         $this->set('c2c_paid_not_sent_count', $this->_query_c2c_paid_not_send_count());
 
-        $this->set('should_count_nums', true);
         $this->set('product_count', $product_count);
         $this->set('orders', $orders);
         $this->set('tuan_buys', $tuan_buys);
@@ -447,7 +449,6 @@ class TuanController extends AppController
         $this->set('brands', $brands);
         $this->set('product_detail', $product_detail);
         $this->set('consign_dates', $consign_dates);
-        return $c;
     }
 
     public function admin_advanced_query(){
