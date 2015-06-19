@@ -206,6 +206,7 @@
             </div>
         </div>
     </a>
+
     <ul class="clearfix fr">
         {{if $is_limit}}
         <li class="fr" style="width:100%;">
@@ -225,12 +226,18 @@
                     <a href="javascript:void(0)" class="btn_b cart_btn_soldout">该团已截止</a>
                 </li>
             {{elseif $tuan_buy_status == 0}}
-                <li class="fl" style="width:50%;">
-                    <a id="btn_add_cart"  item-id="{{$pid}}" href="javascript:;" class="btn_b shopping_bg" data-send-date="{{$consign_time}}" data-tuanbuy-id="{{$tuan_buy_id}}">加入购物车</a>
-                </li>
-                <li class="fr" style="width:50%;">
-                    <a id="tuan_buy" item-id="{{$pid}}" href="javascript:;" class="btn_b pay_bg" data-send-date="{{$consign_time}}">立即购买</a>
-                </li>
+                {{if $pid==229}}
+                    <li class="fr" style="width:100%;">
+                        <a id="tuan_buy" item-id="{{$pid}}" href="javascript:;" class="btn_b pay_bg" data-send-date="{{$consign_time}}">立即购买</a>
+                    </li>
+                {{else}}
+                    <li class="fl" style="width:50%;">
+                        <a id="btn_add_cart"  item-id="{{$pid}}" href="javascript:;" class="btn_b shopping_bg" data-send-date="{{$consign_time}}" data-tuanbuy-id="{{$tuan_buy_id}}">加入购物车</a>
+                    </li>
+                    <li class="fr" style="width:50%;">
+                        <a id="tuan_buy" item-id="{{$pid}}" href="javascript:;" class="btn_b pay_bg" data-send-date="{{$consign_time}}">立即购买</a>
+                    </li>
+                {{/if}}
             {{/if}}
         {{/if}}
     </ul>
