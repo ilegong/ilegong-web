@@ -272,7 +272,7 @@ class OrdersController extends AppController {
                 $data['ship_mark'] = ZITI_TAG;
             }
 			if(empty($data['consignee_name']) || empty($data['consignee_address']) || empty($data['consignee_mobilephone']) ){
-				$this->__message('请填写收货人信息','/orders/mine');
+				$this->__message('请填写收货人信息','/orders/info?from=list_cart');
 			}
 			$this->Order->create();
 
