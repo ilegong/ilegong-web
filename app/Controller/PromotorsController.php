@@ -6,7 +6,9 @@ class PromotorsController extends AppController
 
     public function summary($tuan_team_id)
     {
-
+        if(!in_array($tuan_team_id, array(170, 171, 172, 173, 174))){
+            throw new Exception('permission forbidden');
+        }
         $this->loadModel('TuanTeam');
         $tuan_team = $this->TuanTeam->findById($tuan_team_id);
         if (empty($tuan_team)) {
