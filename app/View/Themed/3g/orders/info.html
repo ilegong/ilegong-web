@@ -51,7 +51,7 @@
 {{/if}}
 <?php $ziti_consignee_info = $ziti_info['consignee'] ?>
 {{if !$limit_ship}}
-    {{if !$kuaidi_consignee_exist}}
+    {{if !$kuaidi_consignee_exist&&!ziti_exist}}
 <!--未选择配送方式-->
     <div class="address clearfix" style="position:relative;">
         <a class="moreicon" href="javascript:void(0)"></a>
@@ -77,6 +77,7 @@
         {{if $ziti_support}}<a class="address_addbtn" data-has-info="{{!empty($ziti_info)}}">选择自提省邮费</a>{{/if}}
     </div>
 {{/if}}
+
 {{if $flash_msg}}<div class="alert alert-danger" role="alert">{{$flash_msg}}</div>{{/if}}
 <div class="cart" style="margin-top: 0; padding-top: 0;">
     <div>
@@ -212,9 +213,10 @@
                 <label>自营商品满98包邮</label>
             </div>
         {{/if}}
-
     </div>
 </div>
+<input type="hidden" id="should_show_ziti" value="{{$should_show_ziti}}">
+<input type="hidden" id="should_show_kuaidi" value="{{$should_show_kuaidi}}">
 <div class="tipslayer_bg" style="display: none"></div>
 <script>
     $(document).ready(function(){
@@ -224,6 +226,8 @@
         var $shipFeeDom = $('.ship_fee_re');
         var $totalPriceDom = $('.total_price_info');
         $(".conordertuan_adress").html(elements);
+        var $shouldShowZiti = $('#should_show_ziti');
+        var $shouldShowKuaidi = $('#should_show_kuaidi');
         bigBuy.bindThickbox();
         bigBuy.bindChildAddress();
 
@@ -374,6 +378,7 @@
             $totalPriceDom.data('shipFee',shipFee);
             $totalPriceDom.data('totalPrice',afterChangePrice);
         }
+
         $('.address_addbtn').click(function(){
             var $addressDom = $('.address:visible');
             var $me = $(this);
@@ -392,6 +397,19 @@
                 }
                 choiceKuaiDiFeeChange();
             }
-        })
-    })
+        });
+
+        var shoudShowZitiVal = $shouldShowZiti.val();
+        var shouldShowKuaidi = $shouldShowKuaidi.val();
+        if(shoudShowZitiVal==1){
+            $('.ziti_choose').show();
+            $('.kuaidi_choose').hide();
+            choiceZitiFeeChange();
+        }
+        if(shouldShowKuaidi==1){
+            $('.ziti_choose').hide();
+            $('.kuaidi_choose').show();
+            choiceKuaiDiFeeChange();
+        }
+    });
 </script>
