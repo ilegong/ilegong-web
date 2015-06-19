@@ -32,7 +32,7 @@ class TuanController extends AppController
         $con_name = $_REQUEST['con_name'];
         $con_phone = $_REQUEST['con_phone'];
         $con_creator = $_REQUEST['con_creator'];
-        $cart_status = isset($_REQUEST['cart_status']) ? -1 : $_REQUEST['cart_status'];
+        $cart_status = isset($_REQUEST['cart_status']) ? $_REQUEST['cart_status'] : -1;
         $flag = isset($_REQUEST['flag']) ? $_REQUEST['flag'] : -1;
 
         $conditions = array();
@@ -254,8 +254,7 @@ class TuanController extends AppController
             $params = array(
                 'conditions' => $conditions,
                 'joins' => $join_conditions,
-                'fields' => array('Order.*', 'Pay.trade_type', 'Pay.out_trade_no', 'Cart.product_id', 'Cart.try_id', 'Cart.send_date'),
-                'group' => 'Order.id',
+                'fields' => array('Order.*', 'Pay.trade_type', 'Pay.out_trade_no', 'Cart.id', 'Cart.product_id', 'Cart.send_date'),
                 'order' => $order_by
             );
             if (!empty($limit)) {
@@ -266,13 +265,22 @@ class TuanController extends AppController
         } else {
             $this->log('order condition is empty: ' . json_encode($conditions));
         }
+
         $order_ids = array_unique(Hash::extract($all_orders, "{n}.Order.id"));
-        $orders = $all_orders;
+        $cart_ids = array_unique(Hash::extract($all_orders, "{n}.Cart.id"));
+
+        $orders = array();
+        foreach($all_orders as $order){
+            if(!isset($orders[$order['Order']['id']])){
+                $orders[$order['Order']['id']] = $order;
+            }
+        }
+
         $carts = array();
-        if (!empty($order_ids)) {
+        if (!empty($cart_ids)) {
             $carts = $this->Cart->find('all', array(
                 'conditions' => array(
-                    'order_id' => $order_ids
+                    'id' => $cart_ids
                 ),
             ));
         }
@@ -312,18 +320,18 @@ class TuanController extends AppController
 
         $order_carts = array();
         $product_detail = array();
-        foreach ($carts as &$c) {
-            $c_order_id = $c['Cart']['order_id'];
-            $specId = $c['Cart']['specId'];
-            $c['Cart']['spec_name'] = $spec_groups[$specId];
-            if (!isset($order_carts[$c_order_id])) {
-                $order_carts[$c_order_id] = array();
+        foreach ($carts as &$cart) {
+            $order_id = $cart['Cart']['order_id'];
+            $specId = $cart['Cart']['specId'];
+            $cart['Cart']['spec_name'] = $spec_groups[$specId];
+            if (!isset($order_carts[$order_id])) {
+                $order_carts[$order_id] = array();
             }
-            $order_carts[$c_order_id][] = $c;
-            if(isset($product_detail[$c['Cart']['product_id']])){
-                $product_detail[$c['Cart']['product_id']] +=  $c['Cart']['num'];
+            $order_carts[$order_id][] = $cart;
+            if(isset($product_detail[$cart['Cart']['product_id']])){
+                $product_detail[$cart['Cart']['product_id']] +=  $cart['Cart']['num'];
             }else{
-                $product_detail[$c['Cart']['product_id']] =  $c['Cart']['num'];
+                $product_detail[$cart['Cart']['product_id']] =  $cart['Cart']['num'];
             }
         }
 
