@@ -19,7 +19,7 @@ class CountlyController extends AppController{
     public function admin_get_week_order(){
         $statisticsOrderDatas = $this->StatisticsOrderData->find('all',array(
             'limit'=>100,
-            'order' => array('id DESC')
+            'order' => array('start_date DESC')
         ));
         $this->set('datas',$statisticsOrderDatas);
     }
