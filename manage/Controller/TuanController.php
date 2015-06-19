@@ -330,7 +330,7 @@ class TuanController extends AppController
                 $order_carts[$order_id] = array();
             }
             if($cart['Cart']['matched']){
-                array_unshift($order_carts, $cart);
+                array_unshift($order_carts[$order_id], $cart);
                 if(isset($product_detail[$cart['Cart']['product_id']])){
                     $product_detail[$cart['Cart']['product_id']] +=  $cart['Cart']['num'];
                 }else{
