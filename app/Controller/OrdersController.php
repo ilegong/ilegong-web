@@ -185,6 +185,7 @@ class OrdersController extends AppController {
         if (empty($address)) {
             $this->log('orders_balance: cannot find address:' . $addressId . ', uid=' . $uid);
         } else {
+            //update use time
             $this->OrderConsignee->updateAll(array('updated'=>"'".date('Y-m-d H:i:s')."'"),array('id'=>$addressId));
             $provinceId = $address['OrderConsignee']['province_id'];
         }
@@ -435,6 +436,9 @@ class OrdersController extends AppController {
                 $flash_msg = __('输入的地址不对');
             }
         } else {
+            if($total_consignee==0){
+                $this->Session->write('OrderConsignee', array());
+            }
             $current_consignee = $this->Session->read('OrderConsignee');
             if (empty($current_consignee)) {
                 $first_consignees = current($consignees);
@@ -517,6 +521,9 @@ class OrdersController extends AppController {
                 $this->Session->write('pickupConsignee',$ziti_consignees[0]['OrderConsignee']);
             }
         }
+        $this->set('ziti_exist',$this->ziti_exist($ziti_support,$ziti_consignees));
+        $this->set('should_show_ziti',$this->should_show_ziti_address($ziti_support,$current_consignee,$ziti_consignees[0]['OrderConsignee']));
+        $this->set('should_show_kuaidi',$this->should_show_normal_address($ziti_support,$current_consignee,$ziti_consignees[0]['OrderConsignee']));
         $this->set('ziti_support',$ziti_support);
         $this->pageTitle = __('订单确认');
         $this->set('op_cate', OP_CATE_CATEGORIES);
@@ -1913,14 +1920,36 @@ class OrdersController extends AppController {
         echo json_encode($res);
     }
 
-    private function set_pys_ship_fee($brand_id,$ship_fee,$total_price){
-        //set pys product ship fee
-        $fee = $ship_fee;
-        if($brand_id==PYS_BRAND_ID){
-            if($ship_fee>0&&$total_price<PYS_BY_PRICE){
-                $fee = PYS_SHIP_FEE;
-            }
+    private function should_show_ziti_address($zitiSupport,$normalConsign,$zitiConsign){
+        if(!$zitiSupport||empty($zitiConsign)){
+            return false;
         }
-        return $fee;
+        if(empty($normalConsign)){
+            return true;
+        }
+        if(strtotime($zitiConsign['updated']) > strtotime($normalConsign['updated'])){
+            return true;
+        }
+        return false;
+    }
+
+    private function should_show_normal_address($zitiSupport,$normalConsign,$zitiConsign){
+        if(!$zitiSupport||empty($zitiConsign)){
+            return true;
+        }
+        if(empty($normalConsign)){
+            return false;
+        }
+        if(strtotime($zitiConsign['updated']) < strtotime($normalConsign['updated'])){
+            return true;
+        }
+        return false;
+    }
+
+    private function ziti_exist($zitiSupport,$zitiConsigns){
+        if($zitiSupport&&count($zitiConsigns)>0){
+            return true;
+        }
+        return false;
     }
 }
