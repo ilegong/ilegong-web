@@ -520,7 +520,6 @@ var infoToBalance = function(){
             }
         });
         params += 'ship_type=' + $('.address:visible').data('ship');
-        //params=params.substring(0,params.length-1);
         self.attr("href",link+params);
     };
     var checkAddress = function(){
