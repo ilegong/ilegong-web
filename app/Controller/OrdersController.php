@@ -185,6 +185,7 @@ class OrdersController extends AppController {
         if (empty($address)) {
             $this->log('orders_balance: cannot find address:' . $addressId . ', uid=' . $uid);
         } else {
+            //$this->OrderConsignee->updateAll(array('updated'=>"'".date('Y-m-d H:i:s')."'"),array());
             $provinceId = $address['OrderConsignee']['province_id'];
         }
 
@@ -499,7 +500,7 @@ class OrdersController extends AppController {
             $this->set('is_mobile',true);
         }
         $ziti_support = false;
-        if(array_key_exists(92,$brands)){
+        if(array_key_exists(PYS_BRAND_ID,$brands)){
             $ziti_support = true;
         }
         $ziti_consignees = array_filter($all_consignees, function($v) { return $v['OrderConsignee']['status'] == STATUS_CONSIGNEES_TUAN_ZITI; });
