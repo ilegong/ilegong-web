@@ -140,7 +140,7 @@ class TuanController extends AppController
 
         $conditions = array(
             'OR' => array (
-                array('Cart.send_date is null', 'o.brand_id in ('.$b2c_brand_ids.')'),    // 无发货时间
+                array('Cart.send_date is null', 'Order.brand_id in ('.$b2c_brand_ids.')'),    // 无发货时间
                 array("Order.consignee_id = 0", "Order.consignee_address = ''"), // 无自提点，送货地址为空
                 array('Order.pay_time  is null', 'Order.ship_mark != "sfdf"'), // 非顺丰到付，但无付款时间
                 array('Order.ship_mark = ""'), // 无配送方式
@@ -330,7 +330,7 @@ class TuanController extends AppController
                 $order_carts[$order_id] = array();
             }
             if($cart['Cart']['matched']){
-                array_unshift($order_carts[$order_id], $cart);
+                array_unshift($order_carts, $cart);
                 if(isset($product_detail[$cart['Cart']['product_id']])){
                     $product_detail[$cart['Cart']['product_id']] +=  $cart['Cart']['num'];
                 }else{
