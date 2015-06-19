@@ -91,9 +91,8 @@ class PlanHelperController extends AppController
 
         foreach($orders as $index => &$order){
             $user = $users[$index];
-            $this->log('update user to '.$user['User']['id']);
-            $this->Order->updateAll(array('creator'=>$user['User']['id'], 'consignee_name'=>$user['User']['nickname'], 'status'=>ORDER_STATUS_SHIPPED), array('id' => $order['Order']['id']));
-            $this->Cart->updateAll(array('status'=>ORDER_STATUS_SHIPPED), array('order_id' => $order['Order']['id']));
+            $this->Order->updateAll(array("creator"=>"'".$user['User']['id']."'", 'consignee_name'=>"'".$user['User']['nickname']."'", 'status'=>"'".ORDER_STATUS_SHIPPED."'"), array('id' => $order['Order']['id']));
+            $this->Cart->updateAll(array('status'=>"'".ORDER_STATUS_SHIPPED."'"), array('order_id' => $order['Order']['id']));
         }
         echo json_encode(array("order_ids" => $order_ids));
     }
