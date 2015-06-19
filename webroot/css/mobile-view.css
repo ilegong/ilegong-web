@@ -315,7 +315,17 @@ ul li{ list-style:none;}
 
 .cart_delete_a{ color: #999999; position: absolute; top: 15px; right: 10px; text-decoration: none;}
 .cartnumreduce{ width: 1.7em; height: 1.7em; background: url(/img/mobile/pyshuo_icon.png?v1) -15.667em -3em; background-size: 20em 20em; display: block;}
-.cart ul li input{ float: left; height: 22px; width: 40px; border: 0; border-radius:0; border-top: 1px #dddddd solid; border-bottom: 1px #dddddd solid; text-align: center; font-size: 1em;}
+.cart ul li input {
+    float: left;
+    height: 22px;
+    width: 40px;
+    border: 0;
+    border-radius: 0;
+    border-top: 1px #dddddd solid;
+    border-bottom: 1px #dddddd solid;
+    text-align: center;
+    font-size: 1em;
+}
 .cartnumadd{ width: 1.75em; height: 1.7em; background: url(/img/mobile/pyshuo_icon.png?v1) -17.833em -3em; background-size: 20em 20em; display: block;}
 .cart_pay {
     background-color: #f5f5f5;
@@ -328,7 +338,18 @@ ul li{ list-style:none;}
 }
 .cart_pay ul{ padding-left: 10px; color: #333333; font-size: 1.1em;}
 .cart_pay ul li strong{ color: #ffa93a;}
-.cart_pay ul li a{ display: block; height: 44px; line-height: 44px; width: 90px; text-align: center; font-size: 1.1em; font-weight: bold; background-color: #ffa531; color: #ffffff; text-decoration: none;}
+.cart_pay ul li a {
+    margin-left: 10px;
+    display: block;
+    height: 44px;
+    line-height: 44px;
+    width: 90px;
+    text-align: center;
+    font-size: 1.15em;
+    background-color: #29ac0e;
+    color: #ffffff;
+    text-decoration: none;
+}
 .cart_select{ width: 1.5em; height: 1.5em; border-radius: 1.5em; border: 1px #cccccc solid; margin-right: 10px;}
 .cart a{ text-decoration: none;}
 .cart_select_cur{ border-color: #29ac0e; background-color: #29ac0e; position: relative;}
