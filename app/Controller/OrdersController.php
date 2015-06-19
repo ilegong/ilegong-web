@@ -185,7 +185,7 @@ class OrdersController extends AppController {
         if (empty($address)) {
             $this->log('orders_balance: cannot find address:' . $addressId . ', uid=' . $uid);
         } else {
-            //$this->OrderConsignee->updateAll(array('updated'=>"'".date('Y-m-d H:i:s')."'"),array());
+            $this->OrderConsignee->updateAll(array('updated'=>"'".date('Y-m-d H:i:s')."'"),array('id'=>$addressId));
             $provinceId = $address['OrderConsignee']['province_id'];
         }
 
