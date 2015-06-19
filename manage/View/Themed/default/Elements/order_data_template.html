@@ -50,7 +50,7 @@
                   $is_b2c = is_b2c($brand['Brand']['id']);
                 ?>
 
-                <tr data-order-id="{{$order[Order][id]}}" data-cart-id="{{$cart[Cart][id]}}" data-order-creator="{{$order['Order']['creator']}}" data-total-price = "{{$order['Order']['total_all_price']}}" data-offline-store-id="{{$offline_store[OfflineStore][id]}}" class="order" data-mark-tag="{{$cart['Cart']['product_id']}}-{{$cart['Cart']['specId']}}" data-mark-tag-name="{{$cart['Cart']['name']}}" data-mark-tag-spec="{{$cart['Cart']['spec_name']}}" data-mark-tag-num="{{$cart['Cart']['num']}}" data-order-scores="{{$order['Order']['applied_score']}}">
+                <tr class="order {{if !$cart['Cart']['matched']}}muted no-print{{/if}}" data-order-id="{{$order[Order][id]}}" data-cart-id="{{$cart[Cart][id]}}" data-order-creator="{{$order['Order']['creator']}}" data-total-price = "{{$order['Order']['total_all_price']}}" data-offline-store-id="{{$offline_store[OfflineStore][id]}}" data-mark-tag="{{$cart['Cart']['product_id']}}-{{$cart['Cart']['specId']}}" data-mark-tag-name="{{$cart['Cart']['name']}}" data-mark-tag-spec="{{$cart['Cart']['spec_name']}}" data-mark-tag-num="{{$cart['Cart']['num']}}" data-order-scores="{{$order['Order']['applied_score']}}">
                     <td mark-print="no-print">
                         {{if ($order['Order']['ship_mark'] == 'ziti') && ($order['Order']['status']== 1|| $order['Order']['status'] == 2)}}
                         <input type="checkbox" value="{{$order['Order']['id']}}" name="offline_order_ids">
