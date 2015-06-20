@@ -70,6 +70,8 @@ $('#use_promotion_code').on('click',function(){
                     utils.alert('请登录',function(){window.location.href = '/users/login.html?referer=' + encodeURIComponent("/");},1000);
                 }else if(data['reason']=='cart_empty'){
                     utils.alert('优惠码使用失败,请重新购买');
+                }else if(data['reason']=='has_used'){
+                    utils.alert('你已经使用过优惠码');
                 }else{
                     utils.alert('优惠码使用失败');
                 }

@@ -849,6 +849,12 @@ class OrdersController extends AppController {
             return;
         }
         $this->loadModel('PromotionCode');
+        //has use
+        $usedCode = $this->PromotionCode->find('first',array('conditions' => array('user_id'=>$uid,'available' => 0)));
+        if(!empty($usedCode)){
+            echo json_encode(array('success' => false,'reason' => 'has_used'));
+            return;
+        }
         $reducePrice = 0;
         foreach($cartsByIds as $cartId=>$cart){
             $pid = $cart['product_id'];

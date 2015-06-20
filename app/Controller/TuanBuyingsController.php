@@ -692,7 +692,7 @@ class TuanBuyingsController extends AppController{
                 'fields' => array('brand_id')
             ));
             $this->order_use_score_and_coupon($order_id,$uid,$productBrand['Product']['brand_id'],$total_price);
-            $this->order_use_promotion_code($cart_info,$order_id);
+            $this->order_use_promotion_code($cart_info,$order_id,$uid);
             if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
                 $res = array('success'=> false, 'info'=> '你已经支付过了');
             }else{
@@ -962,7 +962,7 @@ class TuanBuyingsController extends AppController{
         $this->Session->write(OrdersController::key_balanced_conpons(), '[]');
     }
 
-    private function order_use_promotion_code($cart,$orderId){
+    private function order_use_promotion_code($cart,$orderId,$userId){
         //use coupon
         App::uses('OrdersController','Controller');
         $code = $this->Session->read(OrdersController::key_balanced_promotion_code());
@@ -984,7 +984,7 @@ class TuanBuyingsController extends AppController{
             $toUpdate = array('total_all_price' => 'if(total_all_price - ' . $reducePrice .' < 0, 0, total_all_price - ' . $reducePrice .')');
             if($this->Order->updateAll($toUpdate, array('id' => $orderId, 'status' => ORDER_STATUS_WAITING_PAY))){
                 $useTime = date('Y-m-d H:i:s',time());
-                $this->PromotionCode->updateAll(array('available' => 0, 'use_time' => "'".$useTime."'"), array('code' => $code,'product_id' => $productId,'id'=>$promotion_code['PromotionCode']['id']));
+                $this->PromotionCode->updateAll(array('available' => 0, 'use_time' => "'" . $useTime . "'", 'user_id' => $userId), array('code' => $code, 'product_id' => $productId, 'id' => $promotion_code['PromotionCode']['id']));
             }
         }
         $this->Session->write(OrdersController::key_balanced_promotion_code(), '');
