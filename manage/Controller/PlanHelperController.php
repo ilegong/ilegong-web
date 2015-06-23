@@ -126,6 +126,7 @@ class PlanHelperController extends AppController
         $data['Order']['brand_id'] = $product['Product']['brand_id'];
         $data['Order']['type'] = 1;
         $data['Order']['flag'] = 7;
+        $data['Order']['published'] = PUBLISH_NO;
 
         $this->log("plan helper is to create order: ".json_encode($data));
 
