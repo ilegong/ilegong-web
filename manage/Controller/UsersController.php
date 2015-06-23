@@ -145,7 +145,6 @@ class UsersController extends AppController {
                 'recursive' => 1
             ));
             $totalScore = $user['User']['score'];
-            $totalScore += $score_change;
             $click_url = !empty($click_url) ? $click_url : 'http://' . WX_HOST . '/scores/more_score.html';
             $oauthBindModel = ClassRegistry::init('Oauthbind');
             $user_weixin = $oauthBindModel->find('first',array(
