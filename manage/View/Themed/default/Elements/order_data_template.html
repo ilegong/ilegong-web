@@ -54,6 +54,8 @@
                     <td mark-print="no-print">
                         {{if ($order['Order']['ship_mark'] == 'ziti') && ($order['Order']['status']== 1|| $order['Order']['status'] == 2)}}
                         <input type="checkbox" value="{{$order['Order']['id']}}" name="offline_order_ids">
+                        {{elseif ($order['Order']['ship_mark'] == 'kuaidi') && ($order['Order']['status']== 1|| $order['Order']['status'] == 2)}}
+                        <input type="checkbox" value="{{$order['Order']['id']}}" name="kuaidi_order_ids">
                         {{else}}
                         <input type="hidden" value="{{$order['Order']['id']}}" name="offline_order_ids" disabled="disabled">
                         {{/if}}

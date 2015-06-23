@@ -592,4 +592,27 @@ class TuanController extends AppController
         $send_outOrderIds = Hash::extract($send_outOrders,'{n}.OrderMessage.order_id');
         return array(array_unique($reachOrderIds),array_unique($send_outOrderIds));
     }
+    public function admin_batch_update_order_status(){
+        $this->autoRender = false;
+        $order_ids = $_REQUEST['orderId'];
+        $success = array();
+        $fail = array();
+        if(!empty($order_ids)){
+            foreach($order_ids as $orderId){
+                $order_info = $this->Order->find('first',array('conditions' => array('id' => $orderId)));
+                $ship_mark = $order_info['Order']['ship_mark'];
+                $order_status = $order_info['Order']['status'];
+                if(($ship_mark == 'kuaidi') && ($order_status != ORDER_STATUS_SHIPPED)){
+                    if($this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED),array('id' => $orderId))){
+                        $this->Cart->updateAll(array('status' => ORDER_STATUS_SHIPPED),array('order_id' => $orderId));
+                        $success[] = $orderId;
+                    }
+                }else{
+                    $fail[] = $orderId;
+                }
+            }
+            $returnInfo  = array('success' => true,'res' => $success,'fail' => $fail);
+            echo json_encode($returnInfo);
+        }
+    }
 }

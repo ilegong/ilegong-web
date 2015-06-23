@@ -497,6 +497,30 @@ $(document).ready(function () {
         shipToOurStoreDialog.dialog("open");
     });
 
+    $('.batch-update-order-status').click(function(){
+        var orderIds = getCheckedOrderIds();
+        if (orderIds.length == 0) {
+            utils.alert('请先选择快递的待发货订单');
+            return;
+        }else{
+            if(confirm('共选中'+orderIds.length+'个订单，'+'确认全部更改为已发货吗？')){
+            batch_update_order_status(orderIds);
+            }
+        }
+    });
+    function batch_update_order_status(orders){
+        $.post('/manage/admin/tuan/batch_update_order_status',{
+            'orderId':orders
+        },function(data){
+            var res = JSON.parse(data);
+            if(res.fail.length){
+                bootbox.alert('有'+res.fail.length+'个非快递订单或已发货状态订单,未修改状态,'+'有'+res.res.length+'个待发货快递订单，修改状态成功');
+            }else{
+                bootbox.alert('有'+res.res.length+'个待发货快递订单,修改状态成功');
+            }
+            location.reload();
+        });
+    }
     function sendRefundOrderDialog() {
         var refundMoney = $('#refund_money');
         var refundOrder = $('#refund_order');
