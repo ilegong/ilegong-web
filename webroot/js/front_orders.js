@@ -612,6 +612,11 @@ var infoToBalance = function(){
                 var totalPrice = parseFloat(totalPriceDom.data('totalPrice')) || 0;
                 $.post('/orders/apply_score.json', {'use' : that.html()=="<i></i>", 'score':totalPrice*100/2}, function(data){
                     if (data && data.success) {
+                        var shipType = $('.address:visible').data('ship');
+                        if(shipType == 'ziti'){
+                            data.score_money -= 7.5;
+                            data.score_usable -= 750;
+                        }
                         var scoreMoney = data.score_money;
                         if(data.score_used){
                             scoreMoney = - data.score_money;

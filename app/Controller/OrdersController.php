@@ -909,7 +909,7 @@ class OrdersController extends AppController {
             }
             $this->Session->write(self::key_balanced_scores(), $score_num);
             $total_reduced = $this->_cal_total_reduced($uid);
-            $total_price = $cart->total_price() - $total_reduced / 100 + $shipFee;
+//            $total_price = $cart->total_price() - $total_reduced / 100 + $shipFee;
         } else {
             $this->Session->write(self::key_balanced_scores(), '');
         }
