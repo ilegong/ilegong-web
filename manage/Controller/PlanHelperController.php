@@ -41,7 +41,7 @@ class PlanHelperController extends AppController
 
         $this->log("plan helper is to create order for " . $user_id . " and product " .$product_id. " with num " . $num);
 
-        $order_id = $this->_insert_order($user, $product, $num, $offline_store);
+        $order_id = $this->_insert_order($user, $product, $num, $spec_id, $offline_store);
         $cart_id = $this->_insert_cart($user, $product, $num, $spec_id, $send_date, $order_id);
         $this->log("plan helper create order successfully: " . $order_id . ", " . $cart_id);
 
@@ -97,9 +97,18 @@ class PlanHelperController extends AppController
         echo json_encode(array("order_ids" => $order_ids));
     }
 
-    function _insert_order($user, $product, $num, $offline_store)
+    function _insert_order($user, $product, $num, $spec_id, $offline_store)
     {
         $date = date('Y-m-d H:i:s', strtotime("+17 seconds"));
+        $price = $product['Product']['price'];
+        if(!empty($spec_id)){
+            $this->loadModel('ProductSpecGroup');
+            $product_spec_group = $this->ProductSpecGroup->findById($spec_id);
+            if(!empty($product_spec_group)){
+                $price = $product_spec_group['ProductSpecGroup']['price'];
+            }
+        }
+        $total_price= $price * $num;
 
         $data = array();
         $data['Order']['creator'] = $user['User']['id'];
@@ -112,8 +121,8 @@ class PlanHelperController extends AppController
         $data['Order']['consignee_id'] = $offline_store['OfflineStore']['id'];
         $data['Order']['consignee_address'] = $offline_store['OfflineStore']['name'];
         $data['Order']['coverimg'] = $product['Product']['coverimg'];
-        $data['Order']['total_price'] = $product['Product']['price'] * $num;
-        $data['Order']['total_all_price'] = $product['Product']['price'] * $num;
+        $data['Order']['total_price'] = $total_price;
+        $data['Order']['total_all_price'] = $total_price;
         $data['Order']['brand_id'] = $product['Product']['brand_id'];
         $data['Order']['type'] = 1;
         $data['Order']['flag'] = 7;
