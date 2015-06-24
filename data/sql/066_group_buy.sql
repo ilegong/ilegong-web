@@ -14,6 +14,6 @@ CREATE TABLE `cake_group_buy_records` (
 ALTER TABLE `cake_group_buy_records`
 ADD UNIQUE INDEX `order_id_UNIQUE` (`order_id` ASC);
 
-ALTER TABLE `cake_group_buy_records`
-ADD UNIQUE INDEX `group_buy_tag_UNIQUE` (`group_buy_tag` ASC);
 
+ALTER TABLE `cake_group_buy_records`
+ADD COLUMN `is_send_msg` TINYINT(4) NOT NULL DEFAULT 0 AFTER `is_paid`;

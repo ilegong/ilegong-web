@@ -506,7 +506,8 @@ class WeixinComponent extends Component
             }  else {
                 $this->send_order_paid_message($open_id, $price, $good_info, $ship_info, $order_id, $order);
             }
-
+            //check group buy is complete
+            $this->check_group_buy_complete($order_id);
         }
 
         if($seller_weixin != false){
@@ -639,6 +640,86 @@ class WeixinComponent extends Component
         }
         return false;
     }
+
+    public function check_group_buy_complete($orderId){
+        $groupBuyRecordM = ClassRegistry::init('GroupBuyRecord');
+        $groupBuyM = ClassRegistry::init('GroupBuy');
+        $thisGroupRecord = $groupBuyRecordM->find('first',array(
+            'conditions' => array(
+                'order_id' => $orderId,
+                'is_paid' => 1
+            )
+        ));
+        if (!empty($thisGroupRecord)) {
+            $product_id = $thisGroupRecord['GroupBuyRecord']['product_id'];
+            $groupRecords = $groupBuyRecordM->find('all', array(
+                'conditions' => array(
+                    'group_buy_tag' => $thisGroupRecord['GroupBuyRecord']['group_buy_tag'],
+                    'is_paid' => 1,
+                    'product_id' => $product_id
+                )
+            ));
+            $groupBuyInfo = $groupBuyM->getGroupBuyProductInfo($product_id);
+            $group_buy_num = $groupBuyInfo['group_buy_num'];
+            $send_record_id = array();
+            if(count($groupRecords)>=$group_buy_num){
+                $title = '您参加的团购成功';
+                $product_name = $groupBuyInfo['name'];
+                $remark = '点击查看详情';
+                $detailurl = 'www.tongshijia.com/group_buy/to_group_buy_detail/'.$groupBuyInfo['id'];
+                foreach($groupRecords as $record){
+                    if($record['GroupBuyRecord']['is_send_msg']==0){
+                        $user_id = $record['GroupBuyRecord']['user_id'];
+                        $result = $this->send_group_buy_complete_msg($user_id,$title,$product_name,'pyshuo@2015',$remark,$detailurl);
+                        if($result){
+                           $send_record_id[] = $record['GroupBuyRecord']['id'];
+                        }
+                    }
+                }
+            }
+            if(!empty($send_record_id)){
+                $groupBuyRecordM->updateAll(array('is_send_msg'=>1),array('id' => $send_record_id));
+            }
+        }
+    }
+
+    /**
+     * @param $user_id
+     * @param $title
+     * @param $product_name
+     * @param $tuan_leader_wx
+     * @param $remark
+     * @param $deatil_url
+     * @return bool
+     * 团购提示信息
+     */
+    public function send_group_buy_complete_msg($user_id,$title,$product_name,$tuan_leader_wx='pyshuo@2015',$remark,$deatil_url){
+        $oauthBindModel = ClassRegistry::init('Oauthbind');
+        $r = $oauthBindModel->find('first', array('conditions' => array('user_id' => $user_id, 'source' => oauth_wx_source(),)));
+        if(empty($r)){
+            $user_weixin = false;
+        }else{
+            $user_weixin = $r['Oauthbind'];
+        }
+        if ($user_weixin != false) {
+            $open_id = $user_weixin['oauth_openid'];
+            $post_data = array(
+                "touser" => $open_id,
+                "template_id" => $this->wx_message_template_ids["TUAN_TIP"],
+                "url" =>$deatil_url,
+                "topcolor" => "#FF0000",
+                "data" => array(
+                    "first" => array("value" => $title),
+                    "Pingou_ProductName" => array("value" => $product_name),
+                    "Weixin_ID" => array("value" => $tuan_leader_wx),
+                    "Remark" => array("value" => $remark, "color" => "#FF8800")
+                )
+            );
+            return $this->send_weixin_message($post_data);
+        }
+        return false;
+    }
+
 
     public function send_tuan_paid_msg($open_id, $price, $good_info, $ship_info, $order_no, $order = null, $send_date) {
         $ship_way = $order['Order']['ship_mark'];
