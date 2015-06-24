@@ -614,7 +614,13 @@ ul li{ list-style:none;}
 .group_buying span ul{ padding-top: 5px;}
 .group_buying span ul li.fl i{ font-style: normal; color: #999999;}
 .group_buying span ul li.fr{ color: #999999;}
-.group_buying_operate{position: fixed; bottom:10px; left: 0; width: 100%;}
+.group_buying_operate {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #f5f5f5;
+}
 .group_buying_btn {
     margin: 0 10px;
     height: 38px;
@@ -636,6 +642,7 @@ ul li{ list-style:none;}
     display: block;
     color: #29AC0E;
     margin-top: 10px;
+    margin-bottom: 10px;
 }
 .detailed_rules:hover{color: #29AC0E;text-decoration: none}
 .detailed_rules:visited{color: #29AC0E;text-decoration: none}
