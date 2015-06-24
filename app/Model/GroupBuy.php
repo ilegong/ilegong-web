@@ -16,15 +16,15 @@ class GroupBuy extends AppModel{
      * custom group by product
      */
     var $allGroupBuyProducts = array(
-        '883' => array(
-            'id' => 883,
-            'name' => '海南椰子冻',
-            'group_price' => 10,
-            'market_price' => 30,
-            'closing_date' => '2015-06-24 18:00:00',
+        '1069' => array(
+            'id' => 1069,
+            'name' => '顺平水蜜桃-顺丰包邮 果汁四溢 绿色无农药 国家地理标志保护产品 4.5斤装',
+            'group_price' => 76.6,
+            'market_price' => 128,
+            'closing_date' => '2015-06-25 18:00:00',
             'send_date' => '2015-06-26',
-            'group_buy_num' => 5,
-            'desc' => '满5人购买享受10元团购价'
+            'group_buy_num' => 3,
+            'desc' => '满3人团购价76.6'
         )
     );
 
