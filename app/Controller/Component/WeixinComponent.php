@@ -666,7 +666,7 @@ class WeixinComponent extends Component
                 $title = '您参加的'.$groupBuyInfo['product_alias'].'团购成功';
                 $product_name = $groupBuyInfo['name'];
                 $remark = '点击查看详情';
-                $detailurl = 'www.tongshijia.com/group_buy/to_group_buy_detail/'.$groupBuyInfo['id'];
+                $detailurl = WX_HOST.'/group_buy/my_group_buy/'.$groupBuyInfo['id'];
                 foreach($groupRecords as $record){
                     if($record['GroupBuyRecord']['is_send_msg']==0){
                         $user_id = $record['GroupBuyRecord']['user_id'];
