@@ -100,7 +100,9 @@ class GroupBuyController extends AppController{
         $this->set('group_buy_num',$groupBuyNum);
         $history = '/group_buy/my_group_buy/'.$pid;
         $this->set('history',$history);
+        $this->set('hideNav',true);
         $this->set('hideFooter',true);
+
     }
 
     private function check_login(){
