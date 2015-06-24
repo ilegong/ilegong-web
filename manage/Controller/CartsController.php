@@ -64,7 +64,7 @@ class CartsController extends AppController{
         }
 
         $remark = (empty($order['Order']['remark']) ? '' : $order['Order']['remark'] . ', ') . $this->data['modify_reason'] . '(' . $this->data['modify_user'] . ')';
-        unset($this->data['modify_reason']);
+        unset($this->data['remark']);
         unset($this->data['modify_user']);
 
         if(empty($this->data)){
