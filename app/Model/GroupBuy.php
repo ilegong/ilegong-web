@@ -25,7 +25,7 @@ class GroupBuy extends AppModel{
             'spec_name' => '2.4kg 左右',
             'closing_date' => '2015-06-25 17:00:00',
             'send_date' => null,
-            'group_buy_num' => 5,
+            'group_buy_num' => 3,
             'product_alias' => '顺平水蜜桃',
             'desc' => '满5人享受团购价88！果汁四溢久久的挑逗你的口腔和舌尖'
         ),
