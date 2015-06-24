@@ -7,7 +7,8 @@
             if(array_key_exists($collect_key,$collect_result)){
                 $collect_result[$collect_key]['num'] = intval($collect_result[$collect_key]['num'])+intval($cart['Cart']['num']);
             }else{
-                $collect_result[$collect_key] = array('name'=>$product['Product']['product_alias'],'spec_name'=>$cart['Cart']['spec_name'],'num'=>$cart['Cart']['num']);
+                $name = empty($product['Product']['product_alias']) ? $cart['Cart']['name'] : $product['Product']['product_alias'];
+                $collect_result[$collect_key] = array('name'=>$name,'spec_name'=>$cart['Cart']['spec_name'],'num'=>$cart['Cart']['num']);
             }
         }
     }
