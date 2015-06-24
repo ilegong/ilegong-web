@@ -624,7 +624,7 @@ ul li{ list-style:none;}
 .group_buying_num{ background-color: #dddddd; color: #333333; line-height: 25px; display: block; border-radius: 3px; text-align: center; margin-top: 30px;}
 .group_buying dl dd{ width: 50%; line-height: 30px;}
 /*确定取消提示层样式*/
-.tipslayer{ position: fixed; top: 40%; width: 80%; left: 50%; margin-left: -40%; background-color: #ffffff; z-index: 99; border-radius: 5px;}
+.tipslayer{ position: fixed; top: 30%; width: 80%; left: 50%; margin-left: -40%; background-color: #ffffff; z-index: 99; border-radius: 5px;}
 .tipslayer_word { font-size: 1em; color: #333333; padding: 20px 10px; text-align: center; line-height: 24px;}
 .tipslayer_word strong{ color: #555555; line-height: 35px;}
 .tipslayer ul li { width: 50%; float: left; text-align: center; line-height: 44px; border-top: 1px #dddddd solid; }

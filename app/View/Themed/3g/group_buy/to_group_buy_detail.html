@@ -7,7 +7,7 @@
     <div class="group_buying">
         <img src="{{$product_info['Product']['listimg']}}" border="0"/>
     <span>
-        <div><em>团购</em>&nbsp;{{$product_info['Product']['name']}}</div>
+        <div><em>团购</em>&nbsp;{{$product_info['Product']['name']}}&nbsp;{{$group_buy_info['spec_name']}}</div>
         <b>满{{$group_buy_info['group_buy_num']}}人团购价：¥{{$group_buy_info['group_price']}}</b>
         <ul class="clearfix">
             <li class="fl">售价: ¥{{$product_info['Product']['price']}}<i>(市场价¥{{$group_buy_info['market_price']}})</i></li>
@@ -44,7 +44,7 @@
         {{if $not_available}}
             本次团购已经结束
         {{else}}
-            参团时按售价支付，参团人数达到上限，为您返现，如不满团无法取消订单，快呼朋唤友参团吧！<br/>详见活动细则
+            参团时按售价支付，参团人数达到上限，为您返现，如不满团无法取消订单，快呼朋唤友参团吧！详见活动细则
         {{/if}}
     </p>
     {{if !$not_available}}
