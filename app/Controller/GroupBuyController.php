@@ -64,6 +64,9 @@ class GroupBuyController extends AppController{
         $this->set('product_info',$productInfo);
         $this->set('hideFooter',true);
         $this->set('hideNav',true);
+        if(parent::is_weixin()){
+            $this->set('is_weixin',true);
+        }
     }
 
     public function group_buy($pid,$group_buy_tag=null){
