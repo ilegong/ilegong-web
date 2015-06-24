@@ -84,7 +84,7 @@ class PlanHelperController extends AppController
         $users = $this->User->find('all', array(
             "conditions" => array(
                 "id NOT IN (SELECT DISTINCT creator FROM cake_orders WHERE creator IS NOT NULL AND status > 0)",
-                "nickname IS NOT NULL"
+                "nickname IS NOT NULL and nickname != ''"
             ),
             'limit' => count($orders)
         ));
