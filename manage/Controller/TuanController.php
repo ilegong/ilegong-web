@@ -4,7 +4,7 @@ class TuanController extends AppController
 
     var $name = 'Tuan';
 
-    var $uses = array('TuanTeam', 'TuanBuying', 'Order', 'Cart', 'TuanBuyingMessages', 'TuanProduct', 'ConsignmentDate', 'ProductTry', 'Brand', 'ProductSpecGroup', 'PayNotify', 'OfflineStore','OrderMessage');
+    var $uses = array('TuanTeam', 'TuanBuying', 'Order', 'Cart', 'Product', 'ConsignmentDate', 'Brand', 'ProductSpecGroup', 'PayNotify', 'OfflineStore','OrderMessage');
 
     /**
      * query tuan orders
@@ -156,6 +156,7 @@ class TuanController extends AppController
         $this->set('query_type', 'abnormalOrder');
         $this->render("admin_tuan_orders");
     }
+
     public function admin_query_b2c_paid_not_send()
     {
         $conditions['Order.brand_id'] = b2c_brands();
@@ -208,8 +209,12 @@ class TuanController extends AppController
     {
         $brand_count = $this->Brand->query('select count(*) as c from cake_brands where deleted = 0');
         $this->set('brand_count', $brand_count[0][0]['c']);
+
+        $this->loadModel('TuanProduct');
         $tuan_product_count = $this->TuanProduct->query('select count(*) as c from cake_tuan_products where deleted = 0');
         $this->set('tuan_product_count', $tuan_product_count[0][0]['c']);
+
+        $this->loadModel('ProductTry');
         $seckill_product_count = $this->ProductTry->query('select count(*) as c from cake_product_tries where deleted = 0');
         $this->set('seckill_product_count', $seckill_product_count[0][0]['c']);
 
@@ -310,6 +315,7 @@ class TuanController extends AppController
 
         $p_ids = Hash::extract($carts, '{n}.Cart.product_id');
         $spec_groups = array();
+        $products = array();
         if (!empty($p_ids)) {
             $spec_groups = $this->ProductSpecGroup->find('all', array(
                 'conditions' => array(
@@ -317,6 +323,12 @@ class TuanController extends AppController
                 )
             ));
             $spec_groups = Hash::combine($spec_groups, '{n}.ProductSpecGroup.id', '{n}.ProductSpecGroup.spec_names');
+
+            $products = $this->Product->find('all', array(
+                'conditions' => array(
+                    'id' => $p_ids
+                )
+            ));
         }
 
         $order_carts = array();
@@ -451,6 +463,7 @@ class TuanController extends AppController
         $this->set('order_carts', $order_carts);
         $this->set('brands', $brands);
         $this->set('product_detail', $product_detail);
+        $this->set('products', $products);
         $this->set('consign_dates', $consign_dates);
     }
 

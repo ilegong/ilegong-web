@@ -20,6 +20,7 @@
             <td>备注地址</td>
 
             <td mark-print="no-print">店家</td>
+            <td mark-print="no-print">全称</td>
             <td>商品</td>
             <td>规格</td>
             <td>份数</td>
@@ -48,6 +49,7 @@
                   $consign_time = empty($date)?'': date('m-d', strtotime($date));
                   $brand = $brands[$cart['Cart']['product_id']];
                   $is_b2c = is_b2c($brand['Brand']['id']);
+                  $product = $products[$cart['Cart']['product_id']];
                 ?>
 
                 <tr class="order {{if !$cart['Cart']['matched']}}muted no-print{{/if}}" data-order-id="{{$order[Order][id]}}" data-cart-id="{{$cart[Cart][id]}}" data-order-creator="{{$order['Order']['creator']}}" data-total-price = "{{$order['Order']['total_all_price']}}" data-offline-store-id="{{$offline_store[OfflineStore][id]}}" data-mark-tag="{{$cart['Cart']['product_id']}}-{{$cart['Cart']['specId']}}" data-mark-tag-name="{{$cart['Cart']['name']}}" data-mark-tag-spec="{{$cart['Cart']['spec_name']}}" data-mark-tag-num="{{$cart['Cart']['num']}}" data-order-scores="{{$order['Order']['applied_score']}}">
@@ -142,8 +144,15 @@
                     </td>
 
                     <td mark-print="no-print">{{$brand['Brand']['name']}}({{$brand['Brand']['id']}})</td>
-                    <td>
+                    <td mark-print="no-print">
                         {{$cart['Cart']['name']}}
+                    </td>
+                    <td>
+                        {{if empty($product['Product']['product_alias'])}}
+                            {{$cart['Cart']['name']}}
+                        {{else}}
+                            {{$product['Product']['product_alias']}}
+                        {{/if}}
                     </td>
                     <td>
                         {{$cart['Cart']['spec_name']}}
