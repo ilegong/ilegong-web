@@ -620,6 +620,7 @@ ul li{ list-style:none;}
 .group_buying_btn:hover{background-color: #ffa200; color: #ffffff;}
 .group_buying_btn:visited{background-color: #ffa200; color: #ffffff;}
 .detailed_rules{ width: 100px; margin: 0 auto; text-align: center; display: block; line-height: 50px; color: #29AC0E;}
-
+.detailed_rules:hover{color: #29AC0E;text-decoration: none}
+.detailed_rules:visited{color: #29AC0E;text-decoration: none}
 .group_buying_num{ background-color: #dddddd; color: #333333; line-height: 25px; display: block; border-radius: 3px; text-align: center; margin-top: 30px;}
 .group_buying dl dd{ width: 50%; line-height: 30px;}

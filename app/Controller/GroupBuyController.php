@@ -11,6 +11,11 @@ class GroupBuyController extends AppController{
 
     var $uses = array('Product', 'GroupBuy','Cart','GroupBuyRecord','User');
 
+    /**
+     * @param $pid
+     *
+     * user 入口页面
+     */
     public function my_group_buy($pid){
         $this->check_login();
         $uid = $this->currentUser['id'];
@@ -27,6 +32,13 @@ class GroupBuyController extends AppController{
         $this->redirect('/group_buy/to_group_buy_detail/'.$pid);
     }
 
+    /**
+     * @param $pid
+     * @param null $uid
+     * @param null $group_buy_tag
+     * 
+     * 用户团购跳转到这个页面
+     */
     public function to_group_buy_detail($pid,$uid=null,$group_buy_tag=null){
         $this->check_login();
         $groupBuyInfo = $this->GroupBuy->getGroupBuyProductInfo($pid);
