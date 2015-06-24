@@ -663,7 +663,7 @@ class WeixinComponent extends Component
             $group_buy_num = $groupBuyInfo['group_buy_num'];
             $send_record_id = array();
             if(count($groupRecords)>=$group_buy_num){
-                $title = '您参加的团购成功';
+                $title = '您参加的'.$groupBuyInfo['product_alias'].'团购成功';
                 $product_name = $groupBuyInfo['name'];
                 $remark = '点击查看详情';
                 $detailurl = 'www.tongshijia.com/group_buy/to_group_buy_detail/'.$groupBuyInfo['id'];

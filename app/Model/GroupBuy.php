@@ -26,7 +26,8 @@ class GroupBuy extends AppModel{
             'closing_date' => '2015-06-25 18:00:00',
             'send_date' => null,
             'group_buy_num' => 5,
-            'desc' => '满5人团购价88'
+            'product_alias' => '顺平水蜜桃',
+            'desc' => '满5人享受团购价88'
         )
     );
 
