@@ -1,0 +1,38 @@
+<div style="margin-top: 44px;">
+    <div class="classlist">
+        <a href="javascript:history.go(-1)" class="back"></a>
+        {{$group_buy_info['name']}}
+        <a href="/" class="home"></a>
+    </div>
+    <div class="group_buying">
+        <img src="{{$product_info['Product']['listimg']}}" border="0"/>
+    <span>
+        <div><em>团购</em>&nbsp;{{$product_info['Product']['name']}}</div>
+        <b>满{{$group_buy_info['group_buy_num']}}人团购价：¥{{$group_buy_info['group_price']}}</b>
+        <ul class="clearfix">
+            <li class="fl">售价: ¥{{$product_info['Product']['price']}}<i>(市场价¥{{$group_buy_info['market_price']}})</i></li>
+            <li class="fr">预计{{$consignment_date}}发货</li>
+        </ul>
+        {{if !empty($group_tag)&&!empty(group_members)}}
+        <div class="group_buying_num">已有1/5人参团</div>
+        <dl class="clearfix">
+            {{loop $group_members $member}}
+                <dd class="fl">{{$member['User']['nickname']}}已参团</dd>
+            {{/loop}}
+        </dl>
+        {{/if}}
+        <div class="group_buying_operate">
+            {{if empty($group_tag)}}
+                <a href="/group_buy/group_buy/{{$group_buy_info['id']}}" class="group_buying_btn">发起我的团购</a>
+            {{else}}
+                {{if $invite}}
+                    <a href="" class="group_buying_btn">邀请好友参团</a>
+                {{else}}
+                    <a href="/group_buy/group_buy/{{$group_buy_info['id']}}/{{$group_tag}}" class="group_buying_btn">立即参团</a>
+                {{/if}}
+            {{/if}}
+            <a href="#X" class="detailed_rules">活动细则</a>
+        </div>
+    </span>
+    </div>
+</div>

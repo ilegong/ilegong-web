@@ -606,3 +606,20 @@ ul li{ list-style:none;}
     float: left;
     padding-top: 8px;
 }
+
+/*group buy*/
+.group_buying img{ width: 100%;}
+.group_buying span{ display: block; padding: 10px; font-size: 14px; color: #333333;}
+.group_buying span em{ background-color: #29AC0E; border-radius: 2px; color: #ffffff; font-style: normal; font-size: 14px; padding: 0 3px;}
+.group_buying span b{ color: #ffa200; font-size: 16px; font-style: normal; padding-top: 5px; display: block;}
+.group_buying span ul{ padding-top: 5px;}
+.group_buying span ul li.fl i{ font-style: normal; color: #999999;}
+.group_buying span ul li.fr{ color: #999999;}
+.group_buying_operate{position: fixed; bottom:10px; left: 0; width: 100%;}
+.group_buying_btn{ margin: 0 10px; height: 38px; line-height: 38px; background-color: #ffa200; color: #ffffff; font-style: 14px; text-decoration: none; display: block; text-align: center; border-radius: 5px; font-weight: bold; margin-top: 50px;}
+.group_buying_btn:hover{background-color: #ffa200; color: #ffffff;}
+.group_buying_btn:visited{background-color: #ffa200; color: #ffffff;}
+.detailed_rules{ width: 100px; margin: 0 auto; text-align: center; display: block; line-height: 50px; color: #29AC0E;}
+
+.group_buying_num{ background-color: #dddddd; color: #333333; line-height: 25px; display: block; border-radius: 3px; text-align: center; margin-top: 30px;}
+.group_buying dl dd{ width: 50%; line-height: 30px;}

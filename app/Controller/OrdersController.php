@@ -69,6 +69,7 @@ class OrdersController extends AppController {
         $this->loadModel('Product');
         $product_ids = array();
         $shipPromotionId = intval($_REQUEST['ship_promotion']);
+        $group_tag = $_REQUEST['group_tag'];
         $ship_type = $_REQUEST['ship_type'];
         if (!$shipPromotionId) {
             $shipPromotionId = intval($this->Session->read(self::key_balanced_ship_promotion_id()));
@@ -282,6 +283,11 @@ class OrdersController extends AppController {
 				$order_id = $this->Order->getLastInsertID();
                 if ($order_id) {
                     $order_results[$brand_id] = array($order_id, $total_all_price);
+                    //TODO
+                    if($group_tag){
+                        $this->loadModel('GroupBuyRecord');
+                        $this->GroupBuyRecord->save(array('id'=>null,'user_id' => $uid,'order_id'=>$order_id,'product_id'=>$product_ids[0],'group_buy_tag'=>$group_tag,'created'=>date('Y-m-d H:i:s')));
+                    }
                 }
                 foreach($products as $pro){
                     $pid = $pro['id'];
@@ -357,12 +363,16 @@ class OrdersController extends AppController {
 	function info($order_id=''){
 
         $cidAttr = array();
-        if ($_GET['from'] == 'list_cart' || $_GET['from'] == 'quick_buy' || $_GET['from'] == 'try') {
+        if ($_GET['from'] == 'list_cart' || $_GET['from'] == 'quick_buy' || $_GET['from'] == 'try' || $_GET['from'] == 'group') {
             $pidList = $_REQUEST['pid_list'];
             if(!empty($pidList)){
                 $cidAttr = preg_split('/,/', $pidList);
                 if ($_GET['from'] == 'try') {
                     $cidAttr['try'] = $_GET['try'];
+                }
+                if($_GET['from'] == 'group'){
+                    //TODO
+                    $groupTag = $_GET['group_tag'];
                 }
             }else{
                 $cidAttr = json_decode($this->Session->read(self::key_balance_pids()), true);
@@ -525,7 +535,20 @@ class OrdersController extends AppController {
                 $ziti_consignees = array();
             }
         }
-
+        $param = '';
+        if($shipPromotionId||$groupTag){
+            if($shipPromotionId){
+                $param=$param.'?ship_promotion='.$shipPromotionId;
+                if($groupTag){
+                    $param = $param.'&group_tag='.$groupTag;
+                }
+            }else{
+                if($groupTag){
+                    $param = $param.'?group_tag='.$groupTag;
+                }
+            }
+        }
+        $this->set('extra_param',$param);
         $this->set('ziti_exist',$this->ziti_exist($ziti_support,$ziti_consignees));
         $this->set('should_show_ziti',$this->should_show_ziti_address($ziti_support,$current_consignee,$ziti_consignees[0]['OrderConsignee']));
         $this->set('should_show_kuaidi',$this->should_show_normal_address($ziti_support,$current_consignee,$ziti_consignees[0]['OrderConsignee']));

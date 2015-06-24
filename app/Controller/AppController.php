@@ -748,6 +748,10 @@ class AppController extends Controller {
         if(empty($consignment_date)){
             return null;
         }
+        return $this->format_consignment_date($consignment_date);
+    }
+
+    protected function format_consignment_date($consignment_date){
         $product_consignment_date = date('m月d日',strtotime($consignment_date));
         $product_consignment_date = $product_consignment_date.'('.day_of_week($consignment_date).')';
         return $product_consignment_date;

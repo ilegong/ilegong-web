@@ -165,7 +165,7 @@
     </ul>
 </div>
 <ul class="clearfix cart_pay order_submit">
-    <li class="fr"><a href="{{$this->Html->url('/orders/balance/'.($specialShipPromotionId?'?ship_promotion='.$specialShipPromotionId:''))}}">提交订单</a></li>
+    <li class="fr"><a href="{{$this->Html->url('/orders/balance'.$extra_param)}}">提交订单</a></li>
     <li class="fr">实付款:<label class="total_price_info" data-ship-fee="{{$shipFee}}" data-total-price="{{($cart->total_price()+$shipFee)}}">￥{{$this->Number->precision($cart->total_price() + ($shipFee > 0?$shipFee:0), 2)}}</label></li>
 </ul>
 <div class="xq_standard_layer pickup_layer" style="top:0;display: none; z-index: 102">
