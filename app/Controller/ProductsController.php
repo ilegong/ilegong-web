@@ -131,9 +131,9 @@ class ProductsController extends AppController{
 
     function product_detail($slug){
         $this->setHistory();
-        $fields = array('id','slug','name','content','created');
-        $this->set('hideNav',true);
-        parent::view($slug,$fields);
+        $fields = array('id', 'slug', 'name', 'content', 'created', 'product_alias');
+        $this->set('hideNav', true);
+        parent::view($slug, $fields);
         $pid = $this->current_data_id;
         $currUid = $this->currentUser['id'];
         //$this->calculate_price_limitation($pid, $currUid);
@@ -145,33 +145,31 @@ class ProductsController extends AppController{
 
     function view_shichi_comment($slug){
         $this->setHistory();
-        $fields = array('id','slug','name','created');
-        $this->set('hideNav',true);
-        parent::view($slug,$fields);
+        $fields = array('id', 'slug', 'name', 'created', 'product_alias');
+        $this->set('hideNav', true);
+        parent::view($slug, $fields);
         $currUid = $this->currentUser['id'];
         $pid = $this->current_data_id;
         $this->loadModel('OrderShichi');
         $order_shichi = $this->OrderShichi->find('first', array('conditions' => array('creator' => $currUid, 'data_id' => $pid))); //查找是否有试吃订单
-        $is_product_has_shichi = $this->OrderShichi->find('first',array('conditions' => array('data_id' => $pid)));
-        $this->set('is_product_has_shichi',$is_product_has_shichi);
+        $is_product_has_shichi = $this->OrderShichi->find('first', array('conditions' => array('data_id' => $pid)));
+        $this->set('is_product_has_shichi', $is_product_has_shichi);
         $this->set('order_shichi', $order_shichi);
-
         $this->loadModel('Order');
         if (!empty($order_shichi)) {
             $order_id = $order_shichi['OrderShichi']['order_id'];
-            $order = $this->Order->find('first',array('conditions' => array('id' => $order_id)));
+            $order = $this->Order->find('first', array('conditions' => array('id' => $order_id)));
             $order_shichi_status = $order['Order']['status'];
-            $this->set('order_shichi_status',$order_shichi_status);
+            $this->set('order_shichi_status', $order_shichi_status);
         }
-
     }
 
-    function piece_product_comments($slug){
-        $fields = array('id','slug','name', 'created');
-        parent::view($slug,$fields);
-        $this->set('hideNav',true);
-        if(!empty($_REQUEST['init_count'])){
-            $this->set('limitCommentCount',$_REQUEST['init_count']);
+    function piece_product_comments($slug) {
+        $fields = array('id', 'slug', 'name', 'created', 'product_alias');
+        parent::view($slug, $fields);
+        $this->set('hideNav', true);
+        if (!empty($_REQUEST['init_count'])) {
+            $this->set('limitCommentCount', $_REQUEST['init_count']);
         }
     }
 
@@ -181,14 +179,14 @@ class ProductsController extends AppController{
         parent::view($slug,$fields);
     }
 
-    function product_comments($slug){
+    function product_comments($slug) {
         $this->setHistory();
-        $fields = array('id','slug','name','content','created');
-        $this->set('hideNav',true);
-        parent::view($slug,$fields);
+        $fields = array('id', 'slug', 'name', 'content', 'created', 'product_alias');
+        $this->set('hideNav', true);
+        parent::view($slug, $fields);
         $this->setFrom();
-        if(!empty($_REQUEST['init_count'])){
-            $this->set('limitCommentCount',$_REQUEST['init_count']);
+        if (!empty($_REQUEST['init_count'])) {
+            $this->set('limitCommentCount', $_REQUEST['init_count']);
         }
         $pid = $this->current_data_id;
         $currUid = $this->currentUser['id'];

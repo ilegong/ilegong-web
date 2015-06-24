@@ -1,9 +1,7 @@
-<div class="classlist_v2" style="z-index:1">
-    <ul class="clearfix" onclick="back()">
-        <li><a class="back"></a></li>
-        <li class="line"></li>
-        <li><strong>口碑评价</strong></li>
-    </ul>
+<div class="classlist">
+    <a href="javascript:void(0);" onclick="back()" class="back"></a>
+    {{$Product['Product']['product_alias']}}
+    <a href="/" class="home"></a>
 </div>
 <div class="container-comment" style="margin-top: 41px;background-color: #ffffff;border-bottom: 1px #dddddd solid;padding: 0 0 5em;">
     {{template products/template_product_comments}}
