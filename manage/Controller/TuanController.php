@@ -17,6 +17,7 @@ class TuanController extends AppController
         $this->set('reach_order',implode(',',$reach_order));
         $this->set('send_out_order',implode(',',$send_out_order));
     }
+
     public function admin_tuan_orders()
     {
         $this->set('abnormal_order_count', $this->_query_abnormal_order());
@@ -329,6 +330,7 @@ class TuanController extends AppController
                     'id' => $p_ids
                 )
             ));
+            $products = Hash::combine($products, '{n}.Product.id', '{n}');
         }
 
         $order_carts = array();
