@@ -2,11 +2,12 @@
     $collect_result = array();
     foreach($current_orders as $order){
         foreach($order_carts[$order['Order']['id']] as $cart){
+            $product = $products[$cart['Cart']['product_id']];
             $collect_key = $cart['Cart']['product_id'].'_'.$cart['Cart']['specId'];
             if(array_key_exists($collect_key,$collect_result)){
                 $collect_result[$collect_key]['num'] = intval($collect_result[$collect_key]['num'])+intval($cart['Cart']['num']);
             }else{
-                $collect_result[$collect_key] = array('name'=>$cart['Cart']['name'],'spec_name'=>$cart['Cart']['spec_name'],'num'=>$cart['Cart']['num']);
+                $collect_result[$collect_key] = array('name'=>$product['Product']['product_alias'],'spec_name'=>$cart['Cart']['spec_name'],'num'=>$cart['Cart']['num']);
             }
         }
     }
