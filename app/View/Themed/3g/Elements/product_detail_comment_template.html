@@ -1,3 +1,4 @@
+{{if $from!='group'}}
 <!--底部购买-->
 <div class="bottom_bg">
     <ul class="clearfix" style="width: 100%">
@@ -16,6 +17,7 @@
         </li>
     </ul>
 </div>
+{{/if}}
 <?php
     if($from=='product'){
         $back_url = url_colored(url_append(product_link($data_id,'/'), 'history', $history), 'h5.product_de.buy');
