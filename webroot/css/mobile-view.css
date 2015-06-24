@@ -624,3 +624,22 @@ ul li{ list-style:none;}
 .detailed_rules:visited{color: #29AC0E;text-decoration: none}
 .group_buying_num{ background-color: #dddddd; color: #333333; line-height: 25px; display: block; border-radius: 3px; text-align: center; margin-top: 30px;}
 .group_buying dl dd{ width: 50%; line-height: 30px;}
+/*确定取消提示层样式*/
+.tipslayer{ position: fixed; top: 40%; width: 80%; left: 50%; margin-left: -40%; background-color: #ffffff; z-index: 99; border-radius: 5px;}
+.tipslayer_word { font-size: 1em; color: #333333; padding: 20px 10px; text-align: center; line-height: 24px;}
+.tipslayer_word strong{ color: #555555; line-height: 35px;}
+.tipslayer ul li { width: 50%; float: left; text-align: center; line-height: 44px; border-top: 1px #dddddd solid; }
+.tipslayer ul li a { display: block; text-decoration: none; color: #29ac0e; text-align: center; font-size: 1.1em; }
+.tipslayer_bg{ width: 100%; height: 100%; background-attachment: fixed; background-color: #000000;filter:alpha(opacity=25);-moz-opacity:0.25; opacity:0.25; position: fixed; z-index: 4; top: 0; left: 0;}
+
+
+.tipslayer_h1{ font-size: 14px; text-align: center; line-height: 40px; border-bottom: 1px #eeeeee solid;}
+.tipslayer_content{ font-size: 14px; line-height: 24px; color: #333333; padding: 8px 15px 15px 15px;}
+.paybtn{ padding: 0 15px 15px 15px;}
+.paybtn a{ display: block; text-decoration: none; width: 48%; text-align: center; height: 44px; line-height: 44px;}
+.paybtn a.fl{ border: 1px #cccccc solid; color: #333333;}
+.paybtn a.fr{ background-color: #ffa200; color: #ffffff;}
+/*规则说明*/
+.group_buying_rules{ padding-top: 54px; padding-bottom: 15px; font-size: 14px; color: #666666; line-height: 24px;}
+.group_buying_rules p{ padding:5px 15px 0 15px;}
+.tipslayer_share{ width: 100%; background-color: #ffffff; color:#c73c3c; position: fixed; z-index: 99; left: 0; top: 0; text-align: center; font-weight: bold; padding: 40px 0;}

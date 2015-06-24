@@ -36,7 +36,7 @@ class GroupBuyController extends AppController{
      * @param $pid
      * @param null $uid
      * @param null $group_buy_tag
-     * 
+     *
      * 用户团购跳转到这个页面
      */
     public function to_group_buy_detail($pid,$uid=null,$group_buy_tag=null){
@@ -79,13 +79,20 @@ class GroupBuyController extends AppController{
                 $cartM->updateAll(array('send_date' => "'".$send_date."'"), array('id' => $cart_id));
             }
         }else{
-            $this->redirect('/group_buy/to_group_buy_detail/'.$pid);
+            $this->redirect('/group_buy/my_group_buy/'.$pid);
         }
         if(empty($group_buy_tag)){
             $group_buy_tag = md5(uniqid(rand(), true));
         }
         //to make order
         $this->redirect('/orders/info/?from=group&pid_list='.$cart_id.'&group_tag='.$group_buy_tag);
+    }
+
+    public function group_buy_rules($pid){
+        $this->pageTitle='团购规则说明';
+        $history = '/group_buy/my_group_buy/'.$pid;
+        $this->set('history',$history);
+        $this->set('hideFooter',true);
     }
 
     private function check_login(){
