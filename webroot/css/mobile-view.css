@@ -615,10 +615,28 @@ ul li{ list-style:none;}
 .group_buying span ul li.fl i{ font-style: normal; color: #999999;}
 .group_buying span ul li.fr{ color: #999999;}
 .group_buying_operate{position: fixed; bottom:10px; left: 0; width: 100%;}
-.group_buying_btn{ margin: 0 10px; height: 38px; line-height: 38px; background-color: #ffa200; color: #ffffff; font-style: 14px; text-decoration: none; display: block; text-align: center; border-radius: 5px; font-weight: bold; margin-top: 50px;}
+.group_buying_btn {
+    margin: 0 10px;
+    height: 38px;
+    line-height: 38px;
+    background-color: #ffa200;
+    color: #ffffff;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    border-radius: 5px;
+    font-weight: bold;
+}
 .group_buying_btn:hover{background-color: #ffa200; color: #ffffff;}
 .group_buying_btn:visited{background-color: #ffa200; color: #ffffff;}
-.detailed_rules{ width: 100px; margin: 0 auto; text-align: center; display: block; line-height: 50px; color: #29AC0E;}
+.detailed_rules {
+    width: 100px;
+    margin: 0 auto;
+    text-align: center;
+    display: block;
+    color: #29AC0E;
+    margin-top: 10px;
+}
 .detailed_rules:hover{color: #29AC0E;text-decoration: none}
 .detailed_rules:visited{color: #29AC0E;text-decoration: none}
 .group_buying_num{ background-color: #dddddd; color: #333333; line-height: 25px; display: block; border-radius: 3px; text-align: center; margin-top: 30px;}
@@ -665,3 +683,5 @@ ul li{ list-style:none;}
 /*alice add css*/
 .tuandetail_seckill p,.content .good em{ font-style: normal; display: block; position: absolute; background-color:#c73c3c; color: #ffffff; width: 45px; height: 45px; border-radius: 45px; line-height: 45px; font-weight: bold; font-size: 1em; text-align:center; left: 0; top: 0;}
 .content .good ul li s{ color: #acacac;}
+
+.group_buying span dl{ padding-bottom:70px;}
