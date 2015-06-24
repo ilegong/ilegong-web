@@ -63,34 +63,27 @@
         var $tipslayerBg = $('div.tipslayer_bg');
         var $tipslayer = $('div.tipslayer');
         var $tipslayerShare = $('div.tipslayer_share');
-
         $inviteFriendBuy.on('click',function(){
             $tipslayerBg.show();
             $tipslayerShare.show();
         });
-
         $tipslayerBg.on('click', function () {
             hide_layer();
         });
-
         $cancelJoinGroup.on('click', function () {
             hide_layer();
         });
-
         $originateGroupBuy.on('click', function () {
             join_group();
         });
-
         $joinGroupBuy.on('click', function () {
             join_group();
         });
-
         function hide_layer() {
             $tipslayerBg.hide();
             $tipslayer.hide();
             $tipslayerShare.hide();
         }
-
         function join_group() {
             $tipslayerBg.show();
             $tipslayer.show();
