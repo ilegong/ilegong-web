@@ -432,3 +432,37 @@ function has_permission_to_modify_order($user){
     return in_array($user, array('miaoyue', 'xiaoguang', 'xiaoqing', 'xinyu', 'jingge', 'huiyan'));
 }
 
+
+
+/**
+ * @param $before_day
+ * @param $week_days
+ * @param $time
+ * @return bool|string
+ */
+function get_send_date($deadline_day, $deadline_time, $week_days)
+{
+    $week_days = explode(',', $week_days);
+    $interval_one_day = new DateInterval('P1D');
+
+    $send_date = new DateTime();
+    if(_is_after_deadline_time($send_date, $deadline_time)){
+        $deadline_day = $deadline_day + 1;
+    }
+    $send_date->add(new DateInterval('P'.$deadline_day.'D'));
+
+    while (!in_array($send_date->format('N'), $week_days)) {
+        $send_date->add($interval_one_day);
+    }
+
+    return $send_date;
+}
+
+function _is_after_deadline_time($now, $deadline_time)
+{
+    $deadline_time = explode(':', $deadline_time);
+    $limit_time = new DateTime('now');
+    $limit_time->setTime($deadline_time[0], $deadline_time[1], $deadline_time[2]);
+
+    return $now > $limit_time;
+}

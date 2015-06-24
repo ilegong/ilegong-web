@@ -6,6 +6,35 @@ class PlanHelperController extends AppController
 
     var $uses = array('User', 'Order', 'Cart', 'Product', 'OfflineStore');
 
+    public function admin_orders()
+    {
+        $order_count = $_REQUEST['order_count'];
+
+        $this->loadModel("Product");
+
+        $product_ids = array(1004, 1020, 231, 852, 940, 883, 954, 971, 973);
+        $products = $this->Product->find('all', array(
+            'conditions' => array(
+                'id' => $product_ids
+            )
+        ));
+
+        $this->loadModel('ProductSpecGroup');
+        $product_spec_groups = $this->ProductSpecGroup->find('all', array(
+            'conditions' => array(
+                'product_id' => $product_ids
+            )
+        ));
+        $product_spec_groups = Hash::extract($product_spec_groups, '{n}.ProductSpecGroup.product_id', '{n}');
+
+        $offline_stores = $this->OfflineStore->find('all', array(
+            'conditions' => array(
+                'type' => 1,
+                'deleted' => DELETED_YES
+            )
+        ));
+    }
+
     public function admin_order()
     {
         $this->autoRender = false;
@@ -13,70 +42,48 @@ class PlanHelperController extends AppController
         $user_id = $_REQUEST['user_id'];
         $product_id = $_REQUEST['product_id'];
         $offline_store_id = $_REQUEST['offline_store_id'];
-        $send_date = $_REQUEST['send_date'];
         $spec_id = isset($_REQUEST['spec_id']) ? $_REQUEST['spec_id'] : 0;
         $num = isset($_REQUEST['num']) ? $_REQUEST['num'] : 1;
 
-        if (!$this->_is_user_valid($user_id)) {
-            echo json_encode(array('result'=>false, 'reason' => "invalid user id ".$user_id));
-            return;
+        try{
+            $order_id = $this->_try_to_create_order($user_id, $product_id, $offline_store_id, $num, $spec_id);
+            echo json_encode(array('result' => true, "order_id" => $order_id));
         }
-        $user = $this->User->findById($user_id);
-
-        $product = $this->Product->findById($product_id);
-        if ($product['Product']['brand_id'] != 92) {
-            echo json_encode(array('result'=>false, 'reason' => 'not pyshuo products'));
-            return;
+        catch(Exception $e){
+            echo json_encode(array('result' => false, 'reason' => $e->getMessage()));
         }
-
-        if ($offline_store_id != 54 && $offline_store_id != 55) {
-            echo json_encode(array('result'=>false, 'reason' => 'only offline store 54 or 55 is supported'));
-            return;
-        }
-        $offline_store = $this->OfflineStore->findById($offline_store_id);
-        if (empty($offline_store)) {
-            echo json_encode(array('result'=>false, 'reason' => 'offline store does not exist: ' . $offline_store_id));
-            return;
-        }
-
-        $this->log("plan helper is to create order for " . $user_id . " and product " .$product_id. " with num " . $num);
-
-        $order_id = $this->_insert_order($user, $product, $num, $spec_id, $offline_store);
-        $cart_id = $this->_insert_cart($user, $product, $num, $spec_id, $send_date, $order_id);
-        $this->log("plan helper create order successfully: " . $order_id . ", " . $cart_id);
-
-        echo json_encode(array("order_id" => $order_id, "cart_id" => $cart_id));
     }
 
-    public function admin_order_shipped(){
+    public function admin_order_shipped()
+    {
         $this->autoRender = false;
 
         $order_ids = explode(",", $_REQUEST['order_ids']);
-        if(empty($order_ids)){
-            echo json_encode(array('result'=>false, 'reason' => 'please provide order ids'));
+        if (empty($order_ids)) {
+            echo json_encode(array('result' => false, 'reason' => 'please provide order ids'));
             return;
         }
 
         $orders = $this->Order->find('all', array(
             "conditions" => array(
-                'id'=>$order_ids
+                'id' => $order_ids
             )
         ));
-        if(empty($orders)){
-            echo json_encode(array('result'=>false, 'reason' => 'orders does not exist'));
+        if (empty($orders)) {
+            echo json_encode(array('result' => false, 'reason' => 'orders does not exist'));
             return;
         }
-        foreach($orders as $order){
+        foreach ($orders as $order) {
             if ($order['Order']['brand_id'] != 92) {
-                echo json_encode(array('result'=>false, 'reason' => 'order '.$order['Order']['id'].' is not a pyshuo product'));
+                echo json_encode(array('result' => false, 'reason' => 'order ' . $order['Order']['id'] . ' is not a pyshuo product'));
                 return;
             }
             if ($order['Order']['status'] != ORDER_STATUS_PAID) {
-                echo json_encode(array('result'=>false, 'reason' => 'order '.$order['Order']['id'].' is not in paid status'));
+                echo json_encode(array('result' => false, 'reason' => 'order ' . $order['Order']['id'] . ' is not in paid status'));
                 return;
             }
             if (!$this->_is_user_valid($order['Order']['creator'])) {
-                echo json_encode(array('result'=>false, 'reason' => 'invalid user id '.$order['Order']['creator']));
+                echo json_encode(array('result' => false, 'reason' => 'invalid user id ' . $order['Order']['creator']));
                 return;
             }
         }
@@ -89,26 +96,58 @@ class PlanHelperController extends AppController
             'limit' => count($orders)
         ));
 
-        foreach($orders as $index => &$order){
+        foreach ($orders as $index => &$order) {
             $user = $users[$index];
-            $this->Order->updateAll(array("creator"=>"'".$user['User']['id']."'", 'consignee_name'=>"'".$user['User']['nickname']."'", 'status'=>"'".ORDER_STATUS_SHIPPED."'"), array('id' => $order['Order']['id']));
-            $this->Cart->updateAll(array('status'=>"'".ORDER_STATUS_SHIPPED."'"), array('order_id' => $order['Order']['id']));
+            $this->Order->updateAll(array("creator" => "'" . $user['User']['id'] . "'", 'consignee_name' => "'" . $user['User']['nickname'] . "'", 'status' => "'" . ORDER_STATUS_SHIPPED . "'"), array('id' => $order['Order']['id']));
+            $this->Cart->updateAll(array('status' => "'" . ORDER_STATUS_SHIPPED . "'"), array('order_id' => $order['Order']['id']));
         }
         echo json_encode(array("order_ids" => $order_ids));
+    }
+
+    private function _try_to_create_order($user_id, $product_id, $offline_store_id, $num, $spec_id)
+    {
+        if (!$this->_is_user_valid($user_id)) {
+            throw new Exception("invalid user id " . $user_id);
+        }
+        $user = $this->User->findById($user_id);
+
+        $product = $this->Product->findById($product_id);
+        if ($product['Product']['brand_id'] != 92) {
+            throw new Exception('not pyshuo products');
+        }
+
+        if ($offline_store_id != 54 && $offline_store_id != 55) {
+            throw new Exception('not pyshuo products');
+            return;
+        }
+        $offline_store = $this->OfflineStore->findById($offline_store_id);
+        if (empty($offline_store)) {
+            throw new Exception('offline store does not exist: ' . $offline_store_id);
+            return;
+        }
+
+        $this->log("plan helper is to create order for " . $user_id . " and product " . $product_id . " with num " . $num);
+
+        $send_date = get_send_date(10, "23:59:59", '2,4,6');
+        $order_id = $this->_insert_order($user, $product, $num, $spec_id, $offline_store);
+        $cart_id = $this->_insert_cart($user, $product, $num, $spec_id, $send_date, $order_id);
+        $this->log("plan helper create order successfully: " . $order_id . ", " . $cart_id);
+
+        return $order_id;
     }
 
     function _insert_order($user, $product, $num, $spec_id, $offline_store)
     {
         $date = date('Y-m-d H:i:s', strtotime("+17 seconds"));
         $price = $product['Product']['price'];
-        if(!empty($spec_id)){
+        if (!empty($spec_id)) {
             $this->loadModel('ProductSpecGroup');
             $product_spec_group = $this->ProductSpecGroup->findById($spec_id);
-            if(!empty($product_spec_group)){
+            if (!empty($product_spec_group)) {
                 $price = $product_spec_group['ProductSpecGroup']['price'];
             }
         }
-        $total_price= $price * $num;
+        $total_price = $price * $num;
 
         $data = array();
         $data['Order']['creator'] = $user['User']['id'];
@@ -128,7 +167,7 @@ class PlanHelperController extends AppController
         $data['Order']['flag'] = 7;
         $data['Order']['published'] = PUBLISH_NO;
 
-        $this->log("plan helper is to create order: ".json_encode($data));
+        $this->log("plan helper is to create order: " . json_encode($data));
 
         if ($this->Order->save($data)) {
             return $this->Order->getLastInsertID();
@@ -158,7 +197,7 @@ class PlanHelperController extends AppController
         $data['Cart']['modified'] = $date;
         $data['Cart']['send_date'] = $send_date;
 
-        $this->log("plan helper is to create cart: ".json_encode($data));
+        $this->log("plan helper is to create cart: " . json_encode($data));
 
         if ($this->Cart->save($data)) {
             return $this->Cart->getLastInsertID();
@@ -168,7 +207,8 @@ class PlanHelperController extends AppController
         }
     }
 
-    private function _is_user_valid($user_id){
+    private function _is_user_valid($user_id)
+    {
         return ($user_id >= 810163 && $user_id <= 810223) || ($user_id >= 810096 && $user_id <= 810158);
     }
 }
