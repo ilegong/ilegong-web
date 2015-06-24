@@ -372,6 +372,7 @@ class OrdersController extends AppController {
                 }
                 if($_GET['from'] == 'group'){
                     //TODO
+                    $this->set('hideShipTipInfo',true);
                     $groupTag = $_GET['group_tag'];
                 }
             }else{

@@ -143,7 +143,7 @@
                 </a>
             {{/if}}
             <a href="#X" class="favor clearfix">
-                <label class="fl">配送方式<strong>[自营商品满99包邮]</strong></label>
+                <label class="fl">配送方式{{if !$hideShipTipInfo}}<strong>[自营商品满99包邮]</strong>{{/if}}</label>
                 {{if $shipFee>0}}
                     <span style="display:block;" class="fr ship_fee_re"  data-ship-fee="{{$shipFee}}">快递{{$shipFee}}元</span>
                 {{else}}
@@ -201,16 +201,22 @@
         {{if $ziti_support}}
             <div class="fl" style="width: 47%;">
                 <a href="#X" class="weixin" data-has-info="{{!empty($ziti_info)}}" id="panel-select-ziti">自提</a>
-                <label>自提可省邮费</label>
+                {{if !$hideShipTipInfo}}
+                    <label>自提可省邮费</label>
+                {{/if}}
             </div>
             <div class="fr" style="width: 47%;">
                 <a class="alipay new_address thickbox" href="/orders/edit_consignee?modal=true">快递</a>
-                <label>自营商品满98包邮</label>
+                {{if !$hideShipTipInfo}}
+                    <label>自营商品满98包邮</label>
+                {{/if}}
             </div>
         {{else}}
             <div class="fr" style="width: 94%;">
                 <a class="alipay new_address thickbox" style="width: 94%;" href="/orders/edit_consignee?modal=true">快递</a>
-                <label>自营商品满98包邮</label>
+                {{if !$hideShipTipInfo}}
+                    <label>自营商品满98包邮</label>
+                {{/if}}
             </div>
         {{/if}}
     </div>
