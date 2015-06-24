@@ -23,7 +23,7 @@ class GroupBuy extends AppModel{
             'market_price' => 128,
             'spec' => 0,
             'spec_name' => '2.4kg 左右',
-            'closing_date' => '2015-06-25 18:00:00',
+            'closing_date' => '2015-06-25 17:00:00',
             'send_date' => null,
             'group_buy_num' => 5,
             'product_alias' => '顺平水蜜桃',
