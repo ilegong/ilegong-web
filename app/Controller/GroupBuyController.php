@@ -96,6 +96,8 @@ class GroupBuyController extends AppController{
 
     public function group_buy_rules($pid){
         $this->pageTitle='团购规则说明';
+        $groupBuyNum = $this->GroupBuy->getProductGroupBuyNum($pid);
+        $this->set('group_buy_num',$groupBuyNum);
         $history = '/group_buy/my_group_buy/'.$pid;
         $this->set('history',$history);
         $this->set('hideFooter',true);

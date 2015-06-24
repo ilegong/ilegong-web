@@ -11,7 +11,7 @@
         <b>满{{$group_buy_info['group_buy_num']}}人团购价：¥{{$group_buy_info['group_price']}}</b>
         <ul class="clearfix">
             <li class="fl">售价: ¥{{$product_info['Product']['price']}}<i>(市场价¥{{$group_buy_info['market_price']}})</i></li>
-            <li class="fr">预计{{$consignment_date}}发货</li>
+            <li class="fr" style="display: none;">预计{{$consignment_date}}发货</li>
         </ul>
         {{if !empty($group_tag)&&!empty($group_members)}}
         <div class="group_buying_num">已有{{count($group_members)}}/{{$group_buy_info['group_buy_num']}}人参团</div>
