@@ -29,9 +29,6 @@ $(document).ready(function () {
                 invalidFields.push($orderStatus);
             }
         }
-        if($sendDate.data('value') != $sendDate.val() && new Date($sendDate.val()) <= yesterday()){
-            invalidFields.push($sendDate);
-        }
         if(_.isEmpty($consigneeName.val())){
             invalidFields.push($consigneeName);
         }
