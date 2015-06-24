@@ -158,6 +158,7 @@ class Order extends AppModel {
         //$sold = $rtn && $this->getAffectedRows() >= 1;
         $sold = $rtn;
         if ($sold) {
+            $this->update_group_buy_record($orderId);
             $cartItems = $cartM->find_balanced_items($orderId);
             if (!empty($cartItems)) {
                 $pid_list = Hash::extract($cartItems, '{n}.Cart.product_id');
@@ -446,5 +447,10 @@ class Order extends AppModel {
                 }
             }
         }
+    }
+
+    function update_group_buy_record($orderId){
+        $groupBuyRecordM = ClassRegistry::init('GroupBuyRecord');
+        $groupBuyRecordM->updateAll(array('is_paid'=>1),array('order_id'=>$orderId));
     }
 }

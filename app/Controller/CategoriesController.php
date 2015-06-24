@@ -78,7 +78,7 @@ class CategoriesController extends AppController {
             $val['Product']['brand_name'] = $brand['Brand']['name'];
             $val['Product']['brand_img'] = $brand['Brand']['coverimg'];
             $val['Product']['good_url'] = product_link2($val);
-            $val['Product']['is_618'] = pid_in_special($product_id,7);
+            //$val['Product']['is_618'] = pid_in_special($product_id,7);
             if(array_key_exists($product_id, $tuan_products) && $tuan_products[$product_id]['TuanProduct']['general_show'] == 0){
                 $this->loadModel('TuanBuying');
                 $tuan_buying = $this->TuanBuying->find('first', array(
