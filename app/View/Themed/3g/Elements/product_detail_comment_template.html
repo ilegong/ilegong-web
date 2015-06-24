@@ -23,6 +23,8 @@
         $back_url = url_colored(url_append('/tuan_buyings/detail/'.$data_id, 'history', $history),'h5.product_de.buy');
     }elseif($from=='sec'){
         $back_url = url_colored(url_append('/tuan_buyings/sec_detail/'.$data_id, 'history', $history),'h5.product_de.buy');
+    }elseif($from=='group'){
+        $back_url = url_colored(url_append('/group_buy/to_group_buy_detail/'.$data_id, 'history', $history),'h5.product_de.buy');
     }else{
         $back_url = '/';
     }

@@ -1,9 +1,7 @@
-<div class="classlist_v2" style="z-index:1">
-    <ul class="clearfix" onclick="back()">
-        <li><a class="back"></a></li>
-        <li class="line"></li>
-        <li style="text-overflow: ellipsis;"><strong><?php echo mb_substr($Product['Product']['name'],0,13); ?></strong></li>
-    </ul>
+<div class="classlist">
+    <a href="javascript:void(0);" onclick="back()" class="back"></a>
+    <?php echo mb_substr($Product['Product']['name'],0,13); ?>
+    <a href="/" class="home"></a>
 </div>
 <div class="container-detail" style="margin-top: 50px;padding-bottom:5em;padding-left: 10px;padding-right: 10px;">
     <div class="Content-body">
