@@ -98,7 +98,7 @@ class PlanHelperController extends AppController
 
         foreach ($orders as $index => &$order) {
             $user = $users[$index];
-            $this->Order->updateAll(array("creator" => "'" . $user['User']['id'] . "'", 'consignee_name' => "'" . $user['User']['nickname'] . "'", 'status' => "'" . ORDER_STATUS_SHIPPED . "'"), array('id' => $order['Order']['id']));
+            $this->Order->updateAll(array("creator" => "'" . $user['User']['id'] . "'", 'consignee_name' => "'" . $user['User']['nickname'] . "'", 'status' => "'" . ORDER_STATUS_SHIPPED . "'", 'published' => "'".PUBLISH_NO."'"), array('id' => $order['Order']['id']));
             $this->Cart->updateAll(array('status' => "'" . ORDER_STATUS_SHIPPED . "'"), array('order_id' => $order['Order']['id']));
         }
         echo json_encode(array("order_ids" => $order_ids));
@@ -165,7 +165,7 @@ class PlanHelperController extends AppController
         $data['Order']['brand_id'] = $product['Product']['brand_id'];
         $data['Order']['type'] = 1;
         $data['Order']['flag'] = 7;
-        $data['Order']['published'] = PUBLISH_NO;
+        $data['Order']['published'] = PUBLISH_YES;
 
         $this->log("plan helper is to create order: " . json_encode($data));
 
