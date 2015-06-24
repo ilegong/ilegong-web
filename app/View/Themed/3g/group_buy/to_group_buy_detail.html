@@ -40,17 +40,25 @@
 <div class="tipslayer_share" style="display: none;"><div style="width: 90%; margin: 0 auto; font-size: 1.3em;">点击右上角“…”，分享给好友或朋友圈。</div></div>
 <div class="tipslayer" style="display: none;">
     <h1 class="tipslayer_h1">温馨提示</h1>
-    <p class="tipslayer_content">参团时按售价支付，参团人数达到上限，为您返现，如不满团无法取消订单，快呼朋唤友参团吧！详见活动细则</p>
-    <div class="clearfix paybtn">
-        <a href="#X" class="fl" id="cancel_join_group">取消</a>
-        {{if empty($group_tag)}}
-            <a href="/group_buy/group_buy/{{$group_buy_info['id']}}" class="fr">继续支付</a>
+    <p class="tipslayer_content">
+        {{if $not_available}}
+            本次团购已经结束
         {{else}}
-            {{if !$invite}}
-                <a href="/group_buy/group_buy/{{$group_buy_info['id']}}/{{$group_tag}}" class="fr">继续支付</a>
-            {{/if}}
+            参团时按售价支付，参团人数达到上限，为您返现，如不满团无法取消订单，快呼朋唤友参团吧！<br/>详见活动细则
         {{/if}}
-    </div>
+    </p>
+    {{if !$not_available}}
+        <div class="clearfix paybtn">
+            <a href="#X" class="fl" id="cancel_join_group">取消</a>
+            {{if empty($group_tag)}}
+                <a href="/group_buy/group_buy/{{$group_buy_info['id']}}" class="fr">继续支付</a>
+            {{else}}
+                {{if !$invite}}
+                    <a href="/group_buy/group_buy/{{$group_buy_info['id']}}/{{$group_tag}}" class="fr">继续支付</a>
+                {{/if}}
+            {{/if}}
+        </div>
+    {{/if}}
 </div>
 <div class="tipslayer_bg" style="display: none;"></div>
 
