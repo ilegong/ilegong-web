@@ -81,7 +81,7 @@ class GroupBuyController extends AppController{
         $returnInfo = $buyingCom->check_and_add($cartM, 1, 0, $uid, 1, $pid, 0, $sessionId);
         if (!empty($returnInfo) && $returnInfo['success']) {
             $cart_id = $returnInfo['id'];
-            if ($cart_id) {
+            if ($cart_id&&$send_date) {
                 $cartM->updateAll(array('send_date' => "'".$send_date."'"), array('id' => $cart_id));
             }
         }else{
