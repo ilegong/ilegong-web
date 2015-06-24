@@ -2,6 +2,9 @@
     $collect_result = array();
     foreach($current_orders as $order){
         foreach($order_carts[$order['Order']['id']] as $cart){
+            if(!$cart['Cart']['matched']){
+                continue;
+            }
             $product = $products[$cart['Cart']['product_id']];
             $collect_key = $cart['Cart']['product_id'].'_'.$cart['Cart']['specId'];
             if(array_key_exists($collect_key,$collect_result)){
