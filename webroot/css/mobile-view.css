@@ -634,7 +634,7 @@ ul li{ list-style:none;}
 
 
 .tipslayer_h1{ font-size: 14px; text-align: center; line-height: 40px; border-bottom: 1px #eeeeee solid;}
-.tipslayer_content{ font-size: 14px; line-height: 24px; color: #333333; padding: 8px 15px 15px 15px;}
+.tipslayer_content{ font-size: 14px; line-height: 24px; color: #333333; padding: 8px 15px 15px 15px; text-align: center;}
 .paybtn{ padding: 0 15px 15px 15px;}
 .paybtn a{ display: block; text-decoration: none; width: 48%; text-align: center; height: 44px; line-height: 44px;}
 .paybtn a.fl{ border: 1px #cccccc solid; color: #333333;}

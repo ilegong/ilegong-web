@@ -57,6 +57,9 @@ class GroupBuyController extends AppController{
             $this->set('group_tag',$group_buy_tag);
             $this->load_group_member($pid,$group_buy_tag);
         }
+        if(time()>strtotime($groupBuyInfo['closing_date'])){
+            $this->set('not_available',true);
+        }
         $this->set('group_buy_info',$groupBuyInfo);
         $this->set('product_info',$productInfo);
         $this->set('hideFooter',true);
