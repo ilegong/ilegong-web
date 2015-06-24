@@ -10,9 +10,6 @@ $(document).ready(function () {
 
     $saveBtn.on('click', function(){
         var invalidFields = [];
-        if($sendDate.data('value') != $sendDate.val() && new Date($sendDate.val()) <= yesterday()){
-            invalidFields.push($sendDate);
-        }
         if(_.isEmpty($modifyUser.val())){
             invalidFields.push($modifyUser);
         }
