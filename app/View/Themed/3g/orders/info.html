@@ -52,14 +52,14 @@
 <?php $ziti_consignee_info = $ziti_info['consignee'] ?>
 {{if !$limit_ship}}
     {{if !$kuaidi_consignee_exist&&!$ziti_exist}}
-<!--未选择配送方式-->
+    <!--未选择配送方式-->
     <div class="address clearfix" style="position:relative;">
         <a class="moreicon" href="javascript:void(0)"></a>
         <a href="javascript:$('.tipslayer,.tipslayer_bg').show();" class="order_selectbtn">选择发货地址</a>
     </div>
     {{/if}}
     {{if $ziti_support}}
-<!--自提配送-->
+    <!--自提配送-->
     <div class="address clearfix ziti_choose" style="position:relative; display: none;" data-on="{{!empty($ziti_info)}}" data-ship="ziti">
         <span style="display:block;" class="fl">自提&nbsp;&nbsp;<a class="moreicon pickupinto"></a></span>
         <a href="#X" style="overflow:hidden; display:block; margin-right:1em; color:#666666;" class="pickup_address pickupinto">
