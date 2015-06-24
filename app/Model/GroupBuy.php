@@ -19,7 +19,8 @@ class GroupBuy extends AppModel{
             'market_price' => 30,
             'closing_date' => '2015-06-25',
             'send_date' => '2015-06-26',
-            'group_buy_num' => 5
+            'group_buy_num' => 5,
+            'desc' => '满5人购买享受10元团购价'
         )
     );
 
