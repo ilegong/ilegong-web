@@ -5,7 +5,9 @@
         <a href="/" class="home"></a>
     </div>
     <div class="group_buying">
-        <img src="{{$product_info['Product']['listimg']}}" border="0"/>
+        <a href="/products/product_detail/{{$product_info['Product']['slug']}}.html?history=/group_buy/to_group_buy_detail/{{$group_buy_info['id']}}&from=group&data_id={{$group_buy_info['id']}}">
+            <img src="{{$product_info['Product']['listimg']}}" border="0"/>
+        </a>
     <span>
         <div><em>团购</em>&nbsp;{{$product_info['Product']['name']}}&nbsp;{{$group_buy_info['spec_name']}}</div>
         <b>满{{$group_buy_info['group_buy_num']}}人团购价：¥{{$group_buy_info['group_price']}}</b>
