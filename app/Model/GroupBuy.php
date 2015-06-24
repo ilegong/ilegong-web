@@ -27,7 +27,7 @@ class GroupBuy extends AppModel{
             'send_date' => null,
             'group_buy_num' => 5,
             'product_alias' => '顺平水蜜桃',
-            'desc' => '满5人享受团购价88'
+            'desc' => '满5人享受团购价88！果汁四溢久久的挑逗你的口腔和舌尖'
         ),
     );
 
