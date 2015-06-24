@@ -85,9 +85,8 @@ class CountlyController extends AppController{
 
     public function admin_cron_gen_data(){
         $this->autoRender = false;
-        $previous_week = strtotime("-1 week +1 day");
-        $start_week = strtotime("last sunday midnight",$previous_week);
-        $end_week = strtotime("next sunday",$start_week);
+        $start_week = strtotime("last sunday midnight",time());
+        $end_week = strtotime("next sunday");
         $start_date = date("Y-m-d",$start_week);
         $end_date = date("Y-m-d",$end_week);
         $queue = new SaeTaskQueue('chaopeng');
