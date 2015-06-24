@@ -66,6 +66,7 @@ class CategoriesController extends AppController {
             return;
         }
         $list = $this->load_products_by_tagid($tagId);
+        $this->loadModel('GroupBuy');
         $brandIds = Hash::extract($list,'{n}.Product.brand_id');
         $mappedBrands = $this->findBrandsKeyedId($brandIds, $mappedBrands);
         $productList = array();
@@ -74,11 +75,13 @@ class CategoriesController extends AppController {
         foreach ($list as &$val) {
             $product_id = $val['Product']['id'];
             $brand = $mappedBrands[$val['Product']['brand_id']];
+            $groupBuyInfo = $this->GroupBuy->getGroupBuyProductInfo($product_id);
             $val['Product']['brand_link'] = $this->brand_link($brand);
             $val['Product']['brand_name'] = $brand['Brand']['name'];
             $val['Product']['brand_img'] = $brand['Brand']['coverimg'];
             $val['Product']['good_url'] = product_link2($val);
             //$val['Product']['is_618'] = pid_in_special($product_id,7);
+            $val['Product']['group_buy'] = $groupBuyInfo;
             if(array_key_exists($product_id, $tuan_products) && $tuan_products[$product_id]['TuanProduct']['general_show'] == 0){
                 $this->loadModel('TuanBuying');
                 $tuan_buying = $this->TuanBuying->find('first', array(

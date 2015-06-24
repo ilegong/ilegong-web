@@ -52,6 +52,7 @@ $(document).ready(function () {
 
     var secKillTemplate = '<div class="tuandetail_seckill clearfix"> <p>秒杀</p> <span><a href="<%this.good_url%>"><img src="<%this.listimg%>"></a></span> <span> <h1><b><%this.name%><%if(this.is_618) {%><i class="manjian_icon">满减</i><%}%></b></h1> <em>秒杀价：<strong>¥<%this.price%></strong></em> <div class="tuan_bar clearfix"> <div class="fl" style="width: 50%;margin-right: 5px;"> <div class="bar"><div class="bar_buy" style="width:<%this.sold_percent%>%;"></div> </div> <ul class="clearfix"> <li class="fl">已秒<span style=" display:inline;"><%this.TuanBuying.sold_num%></span>份</li> <li class="fr">共<%this.TuanBuying.target_num%>份</li> </ul> </div> <div> <a class="tuandetail_seckill_btn radius5 fr" href="<%this.good_url%>">去秒杀</a>  </div> </div> </span> </div>'
     var goodTemplate = '<div class="good"> <a href="<%this.good_url%>" class="xq"><%if(this.limit_area==1) {%><p>仅限<br>北京</p><%}%><img src="<%this.listimg%>"> </a> <div class="title clearfix"> <a href="<%this.brand_link%>" class="phead"><img src="<%this.brand_img%>"></a> <a href="<%this.good_url%>" class="txt"><b><%this.name%><%if(this.is_618) {%><i class="manjian_icon">满减</i><%}%></b></a> </div> <ul class="clearfix"> <li class="price fl"><strong>￥<%this.price%></strong><%if(this.original_price>0) {%>&nbsp;<label>￥<%this.original_price%></label><%}%></li><li class="fr"><a href="<%this.good_url%>" class="btn radius5">立即购买</a></li> </ul> </div>';
+    var groupBuyTemplate = '<div class="good"><a href="<%this.good_url%>" class="xq"> <em>团购</em> <img src="<%this.listimg%>"/> <div class="title clearfix"> <a href="<%this.brand_link%>" class="phead"><img src="<%this.brand_img%>" /></a> <a href="#X" class="txt"><b><%this.name%></b></a> </div> </a> <ul class="clearfix"> <li class="price fl" style="line-height: 18px; padding:5px 0 10px 10px; color: #ffa200;">满<%this.group_buy.group_buy_num%>团购价:<strong>￥<%this.group_buy.group_price%></strong><br/>售价: ¥<%this.price%>  <s>¥<%this.group_buy.market_price%></s></li> <li class="fr" style="display: none;"><a href="<%this.good_url%>" class="btn radius5">立即购买</a></li> </ul> </div>';
     //draw dom
     function drawToDOM(datas) {
         var data_list = datas['data_list'];
@@ -63,6 +64,7 @@ $(document).ready(function () {
     function genGoodItemDom(good) {
         var price = good['price'];
         var tuanBuying = good['TuanBuying'];
+        var groupBuy = good['group_buy'];
         price = parseFloat(price).format(2);
         var originPrice = good['original_price'];
         var goodUrl = '';
@@ -71,32 +73,39 @@ $(document).ready(function () {
         } else {
             originPrice = 0;
         }
-        if(!tuanBuying){
+        if(!tuanBuying&&!groupBuy){
             goodUrl = good['good_url']+'?history=/&amp;_sl=h5.cate.list&amp;tagId='+currentTagId;
             good['good_url'] = goodUrl;
             good['price'] = price;
             good['original_price'] = originPrice;
             return TemplateEngine(goodTemplate,good);
         }else{
-            goodUrl = '/tuan_buyings/detail/'+tuanBuying['id']+'?history=/&amp;_sl=h5.cate.list&amp;tagId='+currentTagId;
-            var sold_num = parseInt(tuanBuying['sold_num']);
-            var target_num = parseInt(tuanBuying['target_num']);
-            if(sold_num > target_num){
-                sold_num = target_num;
-                tuanBuying['sold_num'] = sold_num;
+            if(tuanBuying){
+                goodUrl = '/tuan_buyings/detail/'+tuanBuying['id']+'?history=/&amp;_sl=h5.cate.list&amp;tagId='+currentTagId;
+                var sold_num = parseInt(tuanBuying['sold_num']);
+                var target_num = parseInt(tuanBuying['target_num']);
+                if(sold_num > target_num){
+                    sold_num = target_num;
+                    tuanBuying['sold_num'] = sold_num;
+                }
+                var sold_percent = (sold_num/target_num)*100;
+                if(sold_percent>100){
+                    sold_percent=100;
+                }
+                good['sold_percent'] = sold_percent;
+                if(tuanBuying['tuan_price']!=-1){
+                    price = tuanBuying['tuan_price'];
+                }
+                good['good_url'] = goodUrl;
+                good['price'] = price;
+                good['original_price'] = originPrice;
+                return TemplateEngine(secKillTemplate,good);
             }
-            var sold_percent = (sold_num/target_num)*100;
-            if(sold_percent>100){
-                sold_percent=100;
+            if(groupBuy){
+                goodUrl = '/group_buy/my_group_buy/'+good['id'];
+                good['good_url'] = goodUrl;
+                return TemplateEngine(groupBuyTemplate,good);
             }
-            good['sold_percent'] = sold_percent;
-            if(tuanBuying['tuan_price']!=-1){
-                price = tuanBuying['tuan_price'];
-            }
-            good['good_url'] = goodUrl;
-            good['price'] = price;
-            good['original_price'] = originPrice;
-            return TemplateEngine(secKillTemplate,good);
         }
     }
     initView();

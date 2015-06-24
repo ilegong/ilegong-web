@@ -661,3 +661,7 @@ ul li{ list-style:none;}
 .group_buying_rules{ padding-top: 54px; padding-bottom: 15px; font-size: 14px; color: #666666; line-height: 24px;}
 .group_buying_rules p{ padding:5px 15px 0 15px;}
 .tipslayer_share{ width: 100%; background-color: #ffffff; color:#c73c3c; position: fixed; z-index: 99; left: 0; top: 0; text-align: center; font-weight: bold; padding: 40px 0;}
+
+/*alice add css*/
+.tuandetail_seckill p,.content .good em{ font-style: normal; display: block; position: absolute; background-color:#c73c3c; color: #ffffff; width: 45px; height: 45px; border-radius: 45px; line-height: 45px; font-weight: bold; font-size: 1em; text-align:center; left: 0; top: 0;}
+.content .good ul li s{ color: #acacac;}
