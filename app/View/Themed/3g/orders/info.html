@@ -55,7 +55,12 @@
     <!--未选择配送方式-->
     <div class="address clearfix" style="position:relative;">
         <a class="moreicon" href="javascript:void(0)"></a>
+        {{if $ziti_support}}
         <a href="javascript:$('.tipslayer,.tipslayer_bg').show();" class="order_selectbtn">选择发货地址</a>
+        {{else}}
+        <a href="/orders/edit_consignee?modal=true" class="order_selectbtn new_address thickbox">选择发货地址</a>
+        {{/if}}
+
     </div>
     {{/if}}
     {{if $ziti_support}}
