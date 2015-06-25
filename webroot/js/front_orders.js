@@ -612,13 +612,10 @@ var infoToBalance = function(){
                 var totalPrice = parseFloat(totalPriceDom.data('totalPrice')) || 0;
                 $.post('/orders/apply_score.json', {'use' : that.html()=="<i></i>", 'score':totalPrice*100/2}, function(data){
                     if (data && data.success) {
-                        var scoreMoney = data.score_money;
-                        if(data.score_used){
-                            scoreMoney = - data.score_money;
-                        }
+                        var reducedPrice  = data.total_reduced;
                         balance_use_score.text(data.score_usable);
                         balance_use_score.next('span').text(utils.toFixed(data.score_money,2));
-                        var afterChangePrice = utils.toFixed(totalPrice + scoreMoney, 2);
+                        var afterChangePrice = utils.toFixed(totalPrice - reducedPrice, 2);
                         totalPriceDom.text('￥'+afterChangePrice);
                     } else {
                         utils.alert('使用积分失败', function(){}, 1000);
@@ -643,11 +640,10 @@ var infoToBalance = function(){
                         //console.log(data);
                         if (data.changed) {
                             var reducedPrice = data.total_reduced;
-                            if(reducedPrice>0){
-                                var afterChangePrice = utils.toFixed(totalPrice-reducedPrice,2);
-                                totalPriceDom.text('￥'+afterChangePrice);
-                                couponTipInfo.text(couponName);
-                            }else{
+                            var afterChangePrice = utils.toFixed(totalPrice-reducedPrice,2);
+                            totalPriceDom.text('￥'+afterChangePrice);
+                            couponTipInfo.text(couponName);
+                            if(reducedPrice==0){
                                 couponTipInfo.text("您有"+useCouponCount+"张可使用优惠券");
                             }
                             tb_remove();

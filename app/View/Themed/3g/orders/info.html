@@ -53,17 +53,17 @@
 {{if !$limit_ship}}
     {{if !$kuaidi_consignee_exist&&!$ziti_exist}}
     <!--未选择配送方式-->
-    <div class="address clearfix" style="position:relative;">
-        <a class="moreicon" href="javascript:void(0)"></a>
-        {{if $ziti_support}}
-        <a href="javascript:$('.tipslayer,.tipslayer_bg').show();" class="order_selectbtn">选择发货地址</a>
-        {{else}}
-        <a href="/orders/edit_consignee?modal=true" class="order_selectbtn new_address thickbox">选择发货地址</a>
-        {{/if}}
+        <div class="address clearfix" style="position:relative;">
+            <a class="moreicon" href="javascript:void(0)"></a>
+            {{if $ziti_support}}
+            <a href="javascript:$('.tipslayer,.tipslayer_bg').show();" class="order_selectbtn">选择发货地址</a>
+            {{else}}
+            <a href="/orders/edit_consignee?modal=true" class="order_selectbtn new_address thickbox">选择发货地址</a>
+            {{/if}}
 
-    </div>
-    {{else}}
-        {{if $ziti_support}}
+        </div>
+    {{/if}}
+    {{if $ziti_support}}
         <!--自提配送-->
         <div class="address clearfix ziti_choose" style="position:relative; display: none;" data-on="{{!empty($ziti_info)}}" data-ship="ziti">
             <span style="display:block;" class="fl">自提&nbsp;&nbsp;<a class="moreicon pickupinto"></a></span>
@@ -73,15 +73,14 @@
             </a>
             <a class="address_addbtn" data-has-info="{{$kuaidi_consignee_exist}}">选择快递配送到家</a>
         </div>
-        {{/if}}
-        <!--快递配送-->
-        <div class="address clearfix kuaidi_choose" style="position:relative;{{if !$kuaidi_consignee_exist}}display: none;{{/if}}"  data-on="{{$kuaidi_consignee_exist}}" data-ship="kuaidi">
-            <span style="display:block;" class="fl">快递&nbsp;&nbsp;<a class="moreicon new_address thickbox" href="/orders/edit_consignee?modal=true"></a></span>
-            <a href="/orders/edit_consignee?modal=true" class="new_address thickbox" style="overflow:hidden; display:block; margin-right:1em; color:#666666;"><strong>{{$this->Session->read('OrderConsignee.name')}} {{$this->Session->read('OrderConsignee.mobilephone')}}
-            </strong><br />{{$this->Session->read('OrderConsignee.area')}}{{$this->Session->read('OrderConsignee.address')}}</a>
-            {{if $ziti_support}}<a class="address_addbtn" data-has-info="{{!empty($ziti_info)}}">选择自提省邮费</a>{{/if}}
-        </div>
     {{/if}}
+    <!--快递配送-->
+    <div class="address clearfix kuaidi_choose" style="position:relative;display: none;"  data-on="{{$kuaidi_consignee_exist}}" data-ship="kuaidi">
+        <span style="display:block;" class="fl">快递&nbsp;&nbsp;<a class="moreicon new_address thickbox" href="/orders/edit_consignee?modal=true"></a></span>
+        <a href="/orders/edit_consignee?modal=true" class="new_address thickbox" style="overflow:hidden; display:block; margin-right:1em; color:#666666;"><strong>{{$this->Session->read('OrderConsignee.name')}} {{$this->Session->read('OrderConsignee.mobilephone')}}
+        </strong><br />{{$this->Session->read('OrderConsignee.area')}}{{$this->Session->read('OrderConsignee.address')}}</a>
+        {{if $ziti_support}}<a class="address_addbtn" data-has-info="{{!empty($ziti_info)}}">选择自提省邮费</a>{{/if}}
+    </div>
 {{/if}}
 
 {{if $flash_msg}}<div class="alert alert-danger" role="alert">{{$flash_msg}}</div>{{/if}}
@@ -386,7 +385,7 @@
                     $shipFeeDom.text('快递'+shipFee+'元');
                 }
             }
-            $.getJSON('/orders/apply_ship_change.json',{"ziti":"true"},function(data){
+            $.getJSON('/orders/apply_ship_change.json',{"ziti":"false"},function(data){
                 var allReducedPrice = data["total_reduced"];
                 var afterChangePrice = utils.toFixed(totalPrice-allReducedPrice,2);
                 $totalPriceDom.text('￥' +afterChangePrice);

@@ -927,12 +927,14 @@ class OrdersController extends AppController {
         $total_price = $cart->total_price() - $total_reduced / 100 + $shipFee;
         if($ziti){
             $this->Session->write(self::key_balanced_ship_type(),ZITI_TAG);
-            $total_reduced = $this->_cal_total_reduced($uid);
         }else{
             $this->Session->write(self::key_balanced_ship_type(),'');
         }
+        $total_reduced = $this->_cal_total_reduced($uid);
         $resp['total_reduced'] = $total_reduced/100;
         $resp['total_price'] = $total_price;
+
+        echo json_encode($resp);
     }
 
     public function apply_score() {
@@ -1992,27 +1994,29 @@ class OrdersController extends AppController {
     }
 
     private function should_show_ziti_address($zitiSupport,$normalConsign,$zitiConsign){
-        if(!$zitiSupport||empty($zitiConsign)){
-            return false;
-        }
-        if(empty($normalConsign)){
-            return true;
-        }
-        if(strtotime($zitiConsign['updated']) > strtotime($normalConsign['updated'])){
-            return true;
+        if($zitiSupport&&!empty($zitiConsign)){
+            if(empty($normalConsign)){
+                return true;
+            }
+            if(strtotime($zitiConsign['updated']) > strtotime($normalConsign['updated'])){
+                return true;
+            }
         }
         return false;
     }
 
     private function should_show_normal_address($zitiSupport,$normalConsign,$zitiConsign){
-        if(!$zitiSupport||empty($zitiConsign)){
-            return true;
-        }
-        if(empty($normalConsign)){
-            return false;
-        }
-        if(strtotime($zitiConsign['updated']) < strtotime($normalConsign['updated'])){
-            return true;
+        if(!empty($normalConsign)){
+            if(!$zitiSupport){
+                return true;
+            }else{
+                if(empty($zitiConsign)){
+                    return true;
+                }
+                if(strtotime($zitiConsign['updated']) < strtotime($normalConsign['updated'])){
+                    return true;
+                }
+            }
         }
         return false;
     }
