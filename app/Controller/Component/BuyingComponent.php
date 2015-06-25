@@ -356,7 +356,7 @@ class BuyingComponent extends Component {
             $shipFee += $ship;
         }
 
-        return array($cart, $shipFee, $shipFees,$productByIds );
+        return array($cart, $shipFee, $shipFees, $productByIds);
     }
 
     function confirm_receive($uid, $order_id){

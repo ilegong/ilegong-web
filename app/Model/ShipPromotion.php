@@ -371,7 +371,7 @@ class ShipPromotion extends AppModel {
         //set pys product ship fee
         $fee = 0;
         if($brandId==PYS_BRAND_ID){
-            if($ship_fee>0&&$total_price<PYS_BY_PRICE){
+            if($total_price<PYS_BY_PRICE){
                 $fee = PYS_SHIP_FEE;
             }
             return $fee;
