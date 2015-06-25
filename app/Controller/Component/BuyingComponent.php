@@ -139,8 +139,6 @@ class BuyingComponent extends Component {
         $shipFee = $ziti['shipFee'];
         if($isZiti==ZITI_TAG){
             $total_reduce += intval($shipFee)*100;
-        }else{
-            $total_reduce += -intval($shipFee)*100;
         }
         return $total_reduce;
     }
