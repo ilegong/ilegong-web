@@ -10,6 +10,8 @@ class GroupBuy extends AppModel{
 
     public $useTable = false;
 
+    static $not_available_group_label = array('1069-1');
+
     /**
      * @var array
      *
@@ -23,11 +25,12 @@ class GroupBuy extends AppModel{
             'market_price' => 128,
             'spec' => 0,
             'spec_name' => '2.4kg 左右',
-            'closing_date' => '2015-06-25 17:00:00',
+            'closing_date' => '2015-06-26 19:00:00',
             'send_date' => null,
             'group_buy_num' => 3,
             'product_alias' => '顺平水蜜桃',
-            'desc' => '满5人享受团购价88！果汁四溢久久的挑逗你的口腔和舌尖'
+            'desc' => '满5人享受团购价88！果汁四溢久久的挑逗你的口腔和舌尖',
+            'group_buy_label' => '1069-2'
         ),
     );
 
@@ -39,4 +42,7 @@ class GroupBuy extends AppModel{
         return $this->allGroupBuyProducts[$pid]['group_buy_num'];
     }
 
+    public static function group_buy_is_available($group_buy_label){
+        return in_array($group_buy_label,self::$not_available_group_label);
+    }
 }

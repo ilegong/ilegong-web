@@ -647,38 +647,43 @@ class WeixinComponent extends Component
         $thisGroupRecord = $groupBuyRecordM->find('first',array(
             'conditions' => array(
                 'order_id' => $orderId,
-                'is_paid' => 1
+                'is_paid' => 1,
+                'deleted' => DELETED_NO
             )
         ));
         if (!empty($thisGroupRecord)) {
-            $product_id = $thisGroupRecord['GroupBuyRecord']['product_id'];
-            $groupRecords = $groupBuyRecordM->find('all', array(
-                'conditions' => array(
-                    'group_buy_tag' => $thisGroupRecord['GroupBuyRecord']['group_buy_tag'],
-                    'is_paid' => 1,
-                    'product_id' => $product_id
-                )
-            ));
-            $groupBuyInfo = $groupBuyM->getGroupBuyProductInfo($product_id);
-            $group_buy_num = $groupBuyInfo['group_buy_num'];
-            $send_record_id = array();
-            if(count($groupRecords)>=$group_buy_num){
-                $title = '您参加的'.$groupBuyInfo['product_alias'].'团购成功';
-                $product_name = $groupBuyInfo['name'];
-                $remark = '点击查看详情';
-                $detailurl = WX_HOST.'/group_buy/my_group_buy/'.$groupBuyInfo['id'];
-                foreach($groupRecords as $record){
-                    if($record['GroupBuyRecord']['is_send_msg']==0){
-                        $user_id = $record['GroupBuyRecord']['user_id'];
-                        $result = $this->send_group_buy_complete_msg($user_id,$title,$product_name,'pyshuo@2015',$remark,$detailurl);
-                        if($result){
-                           $send_record_id[] = $record['GroupBuyRecord']['id'];
+            $group_buy_label = $thisGroupRecord['GroupBuyRecord']['group_buy_label'];
+            //check group buy is available
+            if(GroupBuy::group_buy_is_available($group_buy_label)){
+                $product_id = $thisGroupRecord['GroupBuyRecord']['product_id'];
+                $groupRecords = $groupBuyRecordM->find('all', array(
+                    'conditions' => array(
+                        'group_buy_tag' => $thisGroupRecord['GroupBuyRecord']['group_buy_tag'],
+                        'is_paid' => 1,
+                        'product_id' => $product_id
+                    )
+                ));
+                $groupBuyInfo = $groupBuyM->getGroupBuyProductInfo($product_id);
+                $group_buy_num = $groupBuyInfo['group_buy_num'];
+                $send_record_id = array();
+                if(count($groupRecords)>=$group_buy_num){
+                    $title = '您参加的'.$groupBuyInfo['product_alias'].'团购成功';
+                    $product_name = $groupBuyInfo['name'];
+                    $remark = '点击查看详情';
+                    $detailurl = WX_HOST.'/group_buy/my_group_buy/'.$groupBuyInfo['id'];
+                    foreach($groupRecords as $record){
+                        if($record['GroupBuyRecord']['is_send_msg']==0){
+                            $user_id = $record['GroupBuyRecord']['user_id'];
+                            $result = $this->send_group_buy_complete_msg($user_id,$title,$product_name,'pyshuo@2015',$remark,$detailurl);
+                            if($result){
+                                $send_record_id[] = $record['GroupBuyRecord']['id'];
+                            }
                         }
                     }
                 }
-            }
-            if(!empty($send_record_id)){
-                $groupBuyRecordM->updateAll(array('is_send_msg'=>1),array('id' => $send_record_id));
+                if(!empty($send_record_id)){
+                    $groupBuyRecordM->updateAll(array('is_send_msg'=>1),array('id' => $send_record_id));
+                }
             }
         }
     }

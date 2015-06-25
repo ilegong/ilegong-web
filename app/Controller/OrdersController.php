@@ -292,10 +292,14 @@ class OrdersController extends AppController {
 				$order_id = $this->Order->getLastInsertID();
                 if ($order_id) {
                     $order_results[$brand_id] = array($order_id, $total_all_price);
-                    //TODO
-                    if($group_tag){
+                    //add group buy record
+                    if ($group_tag) {
+                        $group_product_id = $product_ids[0];
+                        $this->loadModel('GroupBuy');
+                        $groupBuyInfo = $this->GroupBuy->getGroupBuyProductInfo($group_product_id);
+                        $group_buy_label = $groupBuyInfo['group_buy_label'];
                         $this->loadModel('GroupBuyRecord');
-                        $this->GroupBuyRecord->save(array('id'=>null,'user_id' => $uid,'order_id'=>$order_id,'product_id'=>$product_ids[0],'group_buy_tag'=>$group_tag,'created'=>date('Y-m-d H:i:s')));
+                        $this->GroupBuyRecord->save(array('id' => null, 'group_buy_label' => $group_buy_label, 'user_id' => $uid, 'order_id' => $order_id, 'product_id' => $group_product_id, 'group_buy_tag' => $group_tag, 'created' => date('Y-m-d H:i:s')));
                     }
                 }
                 foreach($products as $pro){
