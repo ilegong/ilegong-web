@@ -10,10 +10,38 @@ class CountlyController extends AppController{
 
     var $name = 'Countly';
 
-    var $uses = array('User','OfflineStore','Order','StatisticsZitiData','StatisticsOrderData');
+    var $uses = array('User','OfflineStore','Order','StatisticsZitiData','StatisticsOrderData','Cart');
 
     public function admin_index(){
         $this->set('active','gen-data');
+    }
+
+    public function admin_query_product_buy_num(){
+
+    }
+
+    public function admin_get_product_buy_num($pid, $start_date, $end_date) {
+        $this->autoRender=false;
+        $carts = $this->Cart->find('all',array(
+            'conditions' => array(
+                'product_id' => $pid,
+                'created >=' => $start_date,
+                'created <=' => $end_date,
+                'not' => array('order_id' => null)
+            )
+        ));
+        $order_ids = Hash::extract($carts,'{n}.Cart.order_id');
+        $orders = $this->Order->find('all',array(
+            'conditions' => array(
+                'id' => $order_ids,
+                'status' => array(1,2,3,9,16)
+            ),
+            'fields' => array('id')
+        ));
+        $order_ids = Hash::extract($orders,'{n}.Order.id');
+        $sumData = $this->Cart->query('select sum(num) from cake_carts where order_id in ('.implode(',',$order_ids).')');
+        echo json_encode(array('sum_count'=>$sumData[0][0]['sum(num)']));
+        return;
     }
 
     public function admin_get_week_order(){
