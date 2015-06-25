@@ -368,10 +368,10 @@
                 $shipFeeDom.text('自提');
                 shipFee = parseFloat($shipFeeDom.data('shipFee'));
             }
-            clearScoreCoupon();
             $.getJSON('/orders/apply_ship_change.json',{"ziti":"true"},function(data){
                 var allReducedPrice = data["total_reduced"];
                 var afterChangePrice = utils.toFixed(totalPrice-allReducedPrice,2);
+                clearScoreCoupon(data['score_money']);
                 $totalPriceDom.text('￥' +afterChangePrice);
             });
         }
@@ -386,9 +386,9 @@
                     $shipFeeDom.text('快递'+shipFee+'元');
                 }
             }
-            clearScoreCoupon();
             $.getJSON('/orders/apply_ship_change.json',{"ziti":"false"},function(data){
                 var allReducedPrice = data["total_reduced"];
+                clearScoreCoupon(data['score_money']);
                 var afterChangePrice = utils.toFixed(totalPrice-allReducedPrice,2);
                 $totalPriceDom.text('￥' +afterChangePrice);
             });
@@ -427,8 +427,11 @@
             choiceKuaiDiFeeChange();
         }
 
-        function clearScoreCoupon(){
+        function clearScoreCoupon(score_money){
             $('.shop_jifen_used').html('');
+            var balance_use_score = $(".balance_use_score");
+            balance_use_score.text(score_money*100);
+            balance_use_score.next('span').text(utils.toFixed(score_money,2));
             var couponTipInfo = $('#coupon-tip-info');
             var useCouponCount = couponTipInfo.data('coupon-count');
             $("div.usecoupon input:radio").prop('checked',false);
