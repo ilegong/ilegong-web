@@ -47,17 +47,15 @@ class TuanOrdersController extends AppController{
             'conditions' => array('order_id' => $order_ids, 'status' => 0, 'type' => 'py-reach')
         ));
         $arrived_order_ids = Hash::extract($arrived_log, '{n}.OrderMessage.order_id');
-        $order_ids = array_diff($order_ids, $arrived_order_ids);
 
         $this->log('ship to pys stores: set status to shipped for orders: '.json_encode($order_ids));
         $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED),array('id' => $order_ids));
         $this->loadModel('Cart');
         $this->Cart->updateAll(array('status' => ORDER_STATUS_SHIPPED),array('order_id' => $order_ids));
 
-        $this->loadModel('Cart');
         $carts = $this->Cart->find('all', array(
             'conditions' => array(
-                'order_id' => $order_ids
+                'order_id' => array_diff($order_ids, $arrived_order_ids)
             ),
             'fields' => array('id', 'order_id', 'product_id', 'status', 'send_date')
         ));
