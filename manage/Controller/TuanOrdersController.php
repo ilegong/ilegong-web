@@ -138,6 +138,11 @@ class TuanOrdersController extends AppController{
                 'status' => ORDER_STATUS_PAID
             ),
         ));
+        if(empty($orders)){
+            echo json_encode(array('success' => true, 'res' => array()));
+            return;
+        }
+
         $order_ids = Hash::extract($orders, '{n}.Order.id');
         // validate goods should be shipped to pys stores
         $validate_res = $this->_validate_py_store($orders);
@@ -151,21 +156,36 @@ class TuanOrdersController extends AppController{
             'conditions' => array( 'user_id' => $user_ids, 'source' => oauth_wx_source()),
             'fields' => array('user_id', 'oauth_openid')
         ));
-        $order_products = $this->_find_product_alias($orders);
-        $tuan_products = $order_products['tuan_products'];
-        $try_products = $order_products['try_products'];
+
         $this->log('ship to pys stores: set status to shipped for orders: '.json_encode($order_ids));
         $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED),array('id' => $order_ids));
+
+        $this->loadModel('Cart');
+        $carts = $this->Cart->find('all', array(
+            'conditions' => array(
+                'order_id' => $order_ids
+            ),
+            'fields' => array('id', 'order_id', 'product_id', 'status', 'send_date')
+        ));
+
+        $this->loadModel('Product');
+        $products = $this->Product->find('all', array(
+            'conditions' => array(
+                'id' => array_unique(Hash::extract($carts, '{n}.Cart.product_id'))
+            ),
+            'fields' => array('id', 'name', 'product_alias')
+        ));
+        $products = Hash::combine($products, '{n}.Product.id', '{n}');
+
         $success = array();
         $fail = array();
         foreach($orders as &$order){
             $offline_store = $offline_stores[$order['Order']['consignee_id']];
-            if($order['Order']['type']==5){
-                $product_name = $tuan_products[$order['Order']['member_id']]['alias'];
-            }
-            if($order['Order']['type']==6){
-                $product_name = $try_products[$order['Order']['try_id']]['product_name'].$try_products[$order['Order']['try_id']]['spec'];
-            }
+            $order_carts = array_filter($carts, function($cart) use ($order){
+                return $cart['Cart']['order_id'] == $order['Order']['id'];
+            });
+            $product_name = $this->_get_product_name($order_carts, $products);
+
             $post_data = array(
                 "touser" => $oauth_binds[$order['Order']['creator']],
                 "template_id" => 'UJvs1MAnfA7ATAiXVN0w122E53BauMSw8iCt0M2mSBQ',
@@ -195,34 +215,7 @@ class TuanOrdersController extends AppController{
         }
         echo json_encode(array('success' => true, 'res' => $success, 'fail' => $fail));
     }
-    public function _find_product_alias($orders){
-        //Sec product query sec product name
-        //Tuan product query product name
-        $data_ids = $this->_extract_tryid_tuanbuyid($orders);
-        $tuan_buy_ids = $data_ids['tuanbuyids'];
-        $try_ids = $data_ids['tryids'];
-        $tuan_products = $this->TuanBuying->find('all', array(
-            'conditions' => array('TuanBuying.id'=>$tuan_buy_ids),
-            'joins' =>array(
-                array(
-                    'table' => 'tuan_products',
-                    'alias' => 'TuanProduct',
-                    'type' => 'inner',
-                    'conditions' => array(
-                        'TuanProduct.product_id = TuanBuying.pid',
-                    )
-                )
-            ),
-            'fields' => array('TuanBuying.id', 'TuanProduct.alias')
-        ));
-        $try_products = $this->ProductTry->find('all',array(
-            'conditions' => array('id' => $try_ids),
-            'fields' => array('id','product_name','spec')
-        ));
-        $try_products = Hash::combine($try_products,'{n}.ProductTry.id','{n}.ProductTry');
-        $tuan_products = Hash::combine($tuan_products, '{n}.TuanBuying.id', '{n}.TuanProduct');
-        return array('try_products' => $try_products,'tuan_products'=>$tuan_products);
-    }
+
     public function _extract_tryid_tuanbuyid($orders){
         $tryids = array();
         $tuanbuyids = array();
@@ -303,22 +296,23 @@ class TuanOrdersController extends AppController{
             return;
         }
 
-        $tuan_product = $this->TuanBuying->find('first', array(
-            'conditions' => array('TuanBuying.id'=>$order['Order']['member_id']),
-            'joins' =>array(
-                array(
-                    'table' => 'tuan_products',
-                    'alias' => 'TuanProduct',
-                    'type' => 'inner',
-                    'conditions' => array(
-                        'TuanProduct.product_id = TuanBuying.pid',
-                    )
-                )
+        $this->loadModel('Cart');
+        $carts = $this->Cart->find('all', array(
+            'conditions' => array(
+                'order_id' => $order_id
             ),
-            'fields' => array('TuanProduct.alias')
+            'fields' => array('id', 'order_id', 'product_id', 'status', 'send_date')
         ));
-        $this->log("tuan products: ".json_encode($tuan_product));
 
+        $this->loadModel('Product');
+        $products = $this->Product->find('all', array(
+            'conditions' => array(
+                'id' => array_unique(Hash::extract($carts, '{n}.Cart.product_id'))
+            ),
+            'fields' => array('id', 'name', 'product_alias')
+        ));
+        $products = Hash::combine($products, '{n}.Product.id', '{n}');
+        $product_name = $this->_get_product_name($carts, $products);
 
         $oauth_bind = $this->Oauthbind->find('first', array(
             'conditions' => array( 'user_id' => $order['Order']['creator'], 'source' => oauth_wx_source()),
@@ -335,7 +329,7 @@ class TuanOrdersController extends AppController{
                 "url" => WX_HOST . '/orders/detail/'.$order['Order']['id'],
                 "topcolor" => "#FF0000",
                 "data" =>  array(
-                    "first" => array("value" => "亲，您订购的".$tuan_product['TuanProduct']['alias']."已经到达自提点，提货码：".$haolinju_code."，生鲜娇贵，请尽快取货哈。"),
+                    "first" => array("value" => "亲，您订购的".$product_name."已经到达自提点，提货码：".$haolinju_code."，生鲜娇贵，请尽快取货哈。"),
                     "keyword1" => array("value" => $order['Order']['id']),
                     "keyword2" => array("value" => $offline_store['OfflineStore']['alias']),
                     "keyword3" => array("value" => $order['Order']['consignee_address']),
@@ -351,7 +345,7 @@ class TuanOrdersController extends AppController{
                 $this->log("ship to haolinju store: failed to send weixin message for order ".$order['Order']['id']);
                 echo json_encode(array('success' => true, 'res' => ''));
             }
-            $msg = "亲，您订购的".$tuan_product['TuanProduct']['alias']."已经到达".$offline_store['OfflineStore']['alias']."自提点，提货码：".$haolinju_code.",生鲜娇贵，请尽快取货。";
+            $msg = "亲，您订购的".$product_name."已经到达".$offline_store['OfflineStore']['alias']."自提点，提货码：".$haolinju_code.",生鲜娇贵，请尽快取货。";
             $this->_send_phone_msg($order['Order']['creator'], $order['Order']['consignee_mobilephone'], $msg, false);
         }
         else{
