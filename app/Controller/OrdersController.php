@@ -238,28 +238,29 @@ class OrdersController extends AppController {
                 $pid = $pro['id'];
                 $pidShipSettings = array();
                 //TODO: 自提运费设置动态化
-                if($ship_type != 'ziti'){
-                    foreach($shipSettings as $val){
-                        if($val['ShipSetting']['product_id'] == $pid){
-                            $pidShipSettings[] = $val;
-                        }
+                foreach($shipSettings as $val){
+                    if($val['ShipSetting']['product_id'] == $pid){
+                        $pidShipSettings[] = $val;
                     }
-                    $num = $nums[$pid];
-                    if ($tryId) {
-                        $ship_fees[$pid] = 0;
-                    } else {
-                        $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($pid, $shipPromotionId) : array();
-                        $singleShipFee = empty($pp) ? $pro['ship_fee'] : $pp['ship_price'];
-                        $ship_fees[$pid] = ShipPromotion::calculateShipFee($total_price, $singleShipFee, $num, $pidShipSettings, $shipFeeContext);
-                    }
-                    $ship_fee += $ship_fees[$pid];
                 }
+                $num = $nums[$pid];
+                if ($tryId) {
+                    $ship_fees[$pid] = 0;
+                } else {
+                    $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($pid, $shipPromotionId) : array();
+                    $singleShipFee = empty($pp) ? $pro['ship_fee'] : $pp['ship_price'];
+                    $ship_fees[$pid] = ShipPromotion::calculateShipFee($total_price, $singleShipFee, $num, $pidShipSettings, $shipFeeContext);
+                }
+                $ship_fee += $ship_fees[$pid];
             }
 			$data = array();
             if($tryId){
                 $data['try_id'] = $tryId;
             }
             $ship_fee = ShipPromotion::calculateBrandShipFee($brand_id,$ship_fee,$total_price);
+            if($ship_type==ZITI_TAG){
+                $ship_fee = 0;
+            }
 			$data['total_price'] = $total_price;
             $total_all_price = $total_price + $ship_fee;
             $all_order_total += $total_all_price;
