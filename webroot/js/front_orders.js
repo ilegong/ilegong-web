@@ -571,7 +571,7 @@ var infoToBalance = function(){
             $.post('/orders/apply_coupon.json', {'brand_id': brandId, 'coupon_item_id': couponItemId, 'action': 'unapply'}, function (data){
                 if (data.changed) {
                     totalPriceDom.text(utils.toFixed(data.total_price, 2));
-                    couponDom.children(':checkbox').prop("checked", !couponDom.children(':checkbox').prop("checked"));
+                    couponDom.children('input:radio').prop("checked", !couponDom.children('input:radio').prop("checked"));
                 }
             }, 'json');
         }
