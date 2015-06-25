@@ -616,10 +616,10 @@ class TuanController extends AppController
             echo json_encode(array('success' => false, 'reason' => 'Order is null ,please choose orders again '));
             return;
         }
-//        $carts = $this->Cart->find('all', array(
-//            'conditions'=>array('order_id' => $order_ids),
-//            'fields' =>array('order_id', 'send_date')
-//        ));
+        $carts = $this->Cart->find('all', array(
+            'conditions'=>array('order_id' => $order_ids),
+            'fields' =>array('order_id', 'send_date')
+        ));
 
         foreach($orders as $order){
             if($order['Order']['ship_mark'] != 'kuaidi'){
@@ -631,13 +631,13 @@ class TuanController extends AppController
                 return;
             }
             // TODO: validate cart send_date is same?
-//            $order_carts = array_filter($carts, function($cart) use($order){
-//                if ($cart['Cart']['order_id'] == $order['Order']['id']){
-//                    return true;
-//                }
-//                return false;
-//            });
-            if(!$this->_get_cart_info($order['Order']['id'])){
+            $order_carts = array_filter($carts, function($cart) use($order){
+                if ($cart['Cart']['order_id'] == $order['Order']['id']){
+                    return true;
+                }
+                return false;
+            });
+            if(!$this->_get_cart_info($order_carts)){
                 echo json_encode(array('success' => false, 'reason' => 'Order '.$order['Order']['id'].' send_date  is not the same,can not update order status'));
                 return;
             }
@@ -649,8 +649,7 @@ class TuanController extends AppController
         $this->Cart->updateAll(array('status' => ORDER_STATUS_SHIPPED),array('order_id' => $order_ids));
         echo json_encode(array('success' => true));
     }
-    public function _get_cart_info($order_id){
-        $cart_info = $this->Cart->find('all',array('conditions' => array('order_id' => $order_id)));
+    public function _get_cart_info($cart_info){
         $send_date = array_unique(Hash::extract($cart_info,'{n}.Cart.send_date'));
         if(count($send_date) == 1){
             return true;
