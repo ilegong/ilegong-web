@@ -136,7 +136,7 @@
                     <div class="usecoupon">
                         {{loop $coupons $coupon}}
                             <a data-coupon_item_id="{{$coupon['CouponItem']['id']}}" data-brandId="{{$brandItem->id}}" class="coupon" href="javascript:" data-coupon-name="{{$coupon['Coupon']['name']}}">
-                                <b><input type="radio" name="radiobutton-{{$coupon['CouponItem']['id']}}" value="radiobutton"></b>
+                                <b><input type="radio" name="radiobutton-{{$coupon['CouponItem']['id']}}"></b>
                                 <label>{{$coupon['Coupon']['name']}}{{if $coupon['Coupon']['type'] == COUPON_TYPE_TYPE_SHARE_OFFER}}(红包券，每件商品可使一张，本单本店共{{$brandItem->total_num()}}件){{/if}} <span>{{$this->Number->precision($coupon['Coupon']['reduced_price']/100, 2)}}</span></label>
                             </a>
                         {{/loop}}
@@ -177,7 +177,7 @@
 <div class="xq_standard_layer pickup_layer" style="top:0;display: none; z-index: 102">
     <div class="classlist_v2">
         <ul class="clearfix">
-            <li><a onclick="javascript:$('.pickup_layer').hide()" class="back"></a></li>
+            <li><a onclick="javascript:$('.pickup_layer').hide();" class="back"></a></li>
             <li class="line"></li>
             <li><strong>地址</strong></li>
         </ul>
@@ -302,7 +302,7 @@
                 return false;
             }
         });
-        lists.click(function (e) {
+        lists.click(function () {
             lists.filter('.active').removeClass('active');
             var $this = $(this);
             $this.toggleClass('active');
@@ -369,10 +369,11 @@
                 $shipFeeDom.text('自提');
                 shipFee = parseFloat($shipFeeDom.data('shipFee'));
             }
-            var afterChangePrice = utils.toFixed(totalPrice-shipFee,2);
-            $totalPriceDom.data('totalPrice',afterChangePrice);
-            $totalPriceDom.data('shipFee',-shipFee);
-            $totalPriceDom.text('￥' +afterChangePrice);
+            $.getJSON('/orders/apply_ship_change.json',{"ziti":"true"},function(data){
+                var allReducedPrice = data["total_reduced"];
+                var afterChangePrice = utils.toFixed(totalPrice-allReducedPrice,2);
+                $totalPriceDom.text('￥' +afterChangePrice);
+            });
         }
         function choiceKuaiDiFeeChange(){
             var totalPrice = parseFloat($totalPriceDom.data('totalPrice'));
@@ -385,10 +386,11 @@
                     $shipFeeDom.text('快递'+shipFee+'元');
                 }
             }
-            var afterChangePrice = utils.toFixed(totalPrice+shipFee,2);
-            $totalPriceDom.text('￥' +afterChangePrice);
-            $totalPriceDom.data('shipFee',shipFee);
-            $totalPriceDom.data('totalPrice',afterChangePrice);
+            $.getJSON('/orders/apply_ship_change.json',{"ziti":"true"},function(data){
+                var allReducedPrice = data["total_reduced"];
+                var afterChangePrice = utils.toFixed(totalPrice-allReducedPrice,2);
+                $totalPriceDom.text('￥' +afterChangePrice);
+            });
         }
 
         $('.address_addbtn').click(function(){
@@ -421,7 +423,7 @@
         if(shouldShowKuaidi==1){
             $('.ziti_choose').hide();
             $('.kuaidi_choose').show();
-            //choiceKuaiDiFeeChange();
+            choiceKuaiDiFeeChange();
         }
     });
 </script>

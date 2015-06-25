@@ -563,7 +563,7 @@ var infoToBalance = function(){
             }
         }, {'id': id, 'num': num});
         if(proNum > intnum){
-            var couponDom = $(".coupon :checked").first().parent('a');
+            var couponDom = $("div.usecoupon input:checked").first().parent('a');
             if(couponDom.length <= 0){
                 return false;
             }
@@ -612,11 +612,6 @@ var infoToBalance = function(){
                 var totalPrice = parseFloat(totalPriceDom.data('totalPrice')) || 0;
                 $.post('/orders/apply_score.json', {'use' : that.html()=="<i></i>", 'score':totalPrice*100/2}, function(data){
                     if (data && data.success) {
-                        var shipType = $('.address:visible').data('ship');
-                        if(shipType == 'ziti'){
-                            data.score_money -= 7.5;
-                            data.score_usable -= 750;
-                        }
                         var scoreMoney = data.score_money;
                         if(data.score_used){
                             scoreMoney = - data.score_money;
@@ -624,7 +619,6 @@ var infoToBalance = function(){
                         balance_use_score.text(data.score_usable);
                         balance_use_score.next('span').text(utils.toFixed(data.score_money,2));
                         var afterChangePrice = utils.toFixed(totalPrice + scoreMoney, 2);
-                        totalPriceDom.data('totalPrice',afterChangePrice);
                         totalPriceDom.text('￥'+afterChangePrice);
                     } else {
                         utils.alert('使用积分失败', function(){}, 1000);
@@ -651,16 +645,9 @@ var infoToBalance = function(){
                             var reducedPrice = data.total_reduced;
                             if(reducedPrice>0){
                                 var afterChangePrice = utils.toFixed(totalPrice-reducedPrice,2);
-                                totalPriceDom.data('totalPrice',afterChangePrice);
                                 totalPriceDom.text('￥'+afterChangePrice);
                                 couponTipInfo.text(couponName);
                             }else{
-                                var shipFee = parseFloat(totalPriceDom.data('shipFee'));
-                                if(shipFee<0){
-                                    var afterChangePrice = utils.toFixed(data.total_price+shipFee,2);
-                                    totalPriceDom.data('totalPrice',afterChangePrice);
-                                    totalPriceDom.text('￥'+afterChangePrice);
-                                }
                                 couponTipInfo.text("您有"+useCouponCount+"张可使用优惠券");
                             }
                             tb_remove();

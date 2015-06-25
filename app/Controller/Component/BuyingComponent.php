@@ -124,7 +124,7 @@ class BuyingComponent extends Component {
         return $returnInfo;
     }
 
-    public function total_reduced($uid, $applied_coupons, $applied_code, $score_num) {
+    public function total_reduced($uid, $applied_coupons, $applied_code, $score_num, $ziti=array()) {
         $itemM = ClassRegistry::init('CouponItem');
         $total_reduce = $itemM->compute_total_reduced($uid, $applied_coupons);
         //TODO: fix coupon code!!!
@@ -134,6 +134,13 @@ class BuyingComponent extends Component {
 
         if (!empty($score_num)) {
             $total_reduce += intval($score_num);
+        }
+        $isZiti = $ziti['ziti'];
+        $shipFee = $ziti['shipFee'];
+        if($isZiti==ZITI_TAG){
+            $total_reduce += intval($shipFee)*100;
+        }else{
+            $total_reduce += -intval($shipFee)*100;
         }
         return $total_reduce;
     }
