@@ -453,9 +453,9 @@ class TuanOrdersController extends AppController{
     }
 
     private function _get_product_name($order_carts, $products){
-        return implode(array_map(function($cart) use ($products){
+        return implode(array_unique(array_map(function($cart) use ($products){
             $product = $products[$cart['Cart']['product_id']];
             return empty($product['Product']['product_alias']) ? $product['Product']['name'] : $product['Product']['product_alias'];
-        }, $order_carts), ', ');
+        }, $order_carts)), ', ');
     }
 }
