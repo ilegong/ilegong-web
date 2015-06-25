@@ -19,10 +19,12 @@ class GroupBuyController extends AppController{
     public function my_group_buy($pid){
         $this->check_login();
         $uid = $this->currentUser['id'];
+        $groupBuyInfo = $this->GroupBuy->getGroupBuyProductInfo($pid);
         $record = $this->GroupBuyRecord->find('first',array('conditions' => array(
             'user_id' => $uid,
             'product_id' => $pid,
             'is_paid' => 1,
+            'group_buy_label' => $groupBuyInfo['group_buy_label'],
             'deleted' => DELETED_NO
         )));
         if(!empty($record)){
@@ -55,7 +57,7 @@ class GroupBuyController extends AppController{
             $myid = $this->currentUser['id'];
             $this->set('invite',$myid==$uid);
             $this->set('group_tag',$group_buy_tag);
-            $this->load_group_member($pid,$group_buy_tag);
+            $this->load_group_member($pid,$group_buy_tag,$groupBuyInfo['group_buy_label']);
         }
         if(time()>strtotime($groupBuyInfo['closing_date'])){
             $this->set('not_available',true);
@@ -112,12 +114,13 @@ class GroupBuyController extends AppController{
         }
     }
 
-    private function load_group_member($pid,$group_tag){
+    private function load_group_member($pid,$group_tag,$group_buy_label){
         $group_records = $this->GroupBuyRecord->find('all',array(
             'conditions' => array(
                 'product_id' => $pid,
                 'group_buy_tag' => $group_tag,
                 'is_paid' => 1,
+                'group_buy_label' => $group_buy_label,
                 'deleted' => DELETED_NO
             )
         ));

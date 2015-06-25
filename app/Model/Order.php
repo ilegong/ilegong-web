@@ -449,8 +449,21 @@ class Order extends AppModel {
         }
     }
 
-    function update_group_buy_record($orderId){
+    function update_group_buy_record($orderId) {
         $groupBuyRecordM = ClassRegistry::init('GroupBuyRecord');
-        $groupBuyRecordM->updateAll(array('is_paid'=>1),array('order_id'=>$orderId));
+        $groupBuyRecord = $groupBuyRecordM->find('first', array(
+            'conditions' => array(
+                'order_id' => $orderId
+            )
+        ));
+        if (!empty($groupBuyRecord)) {
+            $group_buy_label = $groupBuyRecord['GroupBuyRecord']['group_buy_label'];
+            if (GroupBuy::group_buy_is_available($group_buy_label)) {
+                $groupBuyRecordM->updateAll(array('is_paid' => 1), array('order_id' => $orderId));
+            } else {
+                //set deleted for this record
+                $groupBuyRecordM->updateAll(array('is_paid' => 1, 'deleted' => DELETED_YES), array('order_id' => $orderId));
+            }
+        }
     }
 }
