@@ -924,17 +924,19 @@ class OrdersController extends AppController {
         $cartsByIds = $this->Buying->cartsByIds($specifiedCartIds, $uid, $this->Session->id());
         list($cart, $shipFee) = $this->Buying->applyPromoToCart($cartsByIds, $shipPromotionId, $uid);
         $this->clear_score_and_coupon();
-        $total_reduced = $this->_cal_total_reduced($uid);
-        $total_price = $cart->total_price() - $total_reduced / 100 + $shipFee;
         if($ziti){
             $this->Session->write(self::key_balanced_ship_type(),ZITI_TAG);
         }else{
             $this->Session->write(self::key_balanced_ship_type(),'');
         }
         $total_reduced = $this->_cal_total_reduced($uid);
+        $total_price = $cart->total_price() - $total_reduced / 100 + $shipFee;
         $resp['total_reduced'] = $total_reduced/100;
         $resp['total_price'] = $total_price;
-
+        $this->loadModel('User');
+        $score = $this->User->get_score($uid, true);
+        $could_score_money = cal_score_money($score, $total_price);
+        $resp['score_money'] = $could_score_money;
         echo json_encode($resp);
     }
 
