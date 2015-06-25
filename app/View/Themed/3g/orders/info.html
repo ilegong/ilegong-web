@@ -430,7 +430,7 @@
         function clearScoreCoupon(score_money){
             $('.shop_jifen_used').html('');
             var balance_use_score = $(".balance_use_score");
-            balance_use_score.text(score_money*100);
+            balance_use_score.text(utils.toFixed(score_money,2)*100);
             balance_use_score.next('span').text(utils.toFixed(score_money,2));
             var couponTipInfo = $('#coupon-tip-info');
             var useCouponCount = couponTipInfo.data('coupon-count');
