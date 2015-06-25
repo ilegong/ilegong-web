@@ -383,10 +383,10 @@ $(document).ready(function () {
     iUtils.initSelectBox($('.order-types'));
     setupByTuanTeamForm();
     setupHaolinjuStoreDialog();
-    $('#check_all_tb').click(function (e) {
+    $('.check_all_tb').click(function (e) {
         var table = $(e.target).closest('table');
         var checked = $(this).is(':checked');
-        $('.order input:checkbox', $('.orders')).each(function () {
+        $('.order input:checkbox',table).each(function () {
             if (checked && !$(this).is(':disabled')) {
                 $(this).attr('checked', 'checked');
             }
