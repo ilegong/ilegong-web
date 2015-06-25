@@ -48,6 +48,14 @@ class OrdersController extends AppController {
         return "Balance.apply_promotion_codes";
     }
 
+    public static function key_balanced_ship_type(){
+        return "Balance.apply_ship_type";
+    }
+
+    public static function key_balanced_ship_fee(){
+        return "Balance.apply_ship_fee";
+    }
+
     function beforeFilter() {
         parent::beforeFilter();
         if (empty($this->currentUser['id']) && array_search($this->request->params['action'], $this->customized_not_logged) === false) {
@@ -486,6 +494,7 @@ class OrdersController extends AppController {
 		$total_price = $cart->total_price();
 
         $this->set(compact('total_price', 'shipFee', 'coupons_of_products', 'cart', 'brands', 'flash_msg', 'total_reduced', 'product_info'));
+        $this->Session->write(self::key_balanced_ship_fee(),$shipFee);
 		$this->set('kuaidi_consignee_exist', $kuaidi_consignee_exist);
 		$this->set('total_consignee', $total_consignee);
 		$this->set('consignees', $consignees);
@@ -899,6 +908,31 @@ class OrdersController extends AppController {
         }
         echo json_encode(array('success' => true,'reducePrice' => $reducePrice));
         return;
+    }
+
+    public function apply_ship_change(){
+        $this->autoRender = false;
+        $resp = array();
+        $uid = $this->currentUser['id'];
+        if (empty($uid)) {
+            echo json_encode(array('changed' => false, 'reason' => 'not_login'));
+            return;
+        }
+        $ziti = ("true" == $_REQUEST['ziti']);
+        $shipPromotionId = intval($_REQUEST['ship_promotion']);
+        $specifiedCartIds = $this->specified_balance_pids();
+        $cartsByIds = $this->Buying->cartsByIds($specifiedCartIds, $uid, $this->Session->id());
+        list($cart, $shipFee) = $this->Buying->applyPromoToCart($cartsByIds, $shipPromotionId, $uid);
+        $total_reduced = $this->_cal_total_reduced($uid);
+        $total_price = $cart->total_price() - $total_reduced / 100 + $shipFee;
+        if($ziti){
+            $this->Session->write(self::key_balanced_ship_type(),ZITI_TAG);
+            $total_reduced = $this->_cal_total_reduced($uid);
+        }else{
+            $this->Session->write(self::key_balanced_ship_type(),'');
+        }
+        $resp['total_reduced'] = $total_reduced/100;
+        $resp['total_price'] = $total_price;
     }
 
     public function apply_score() {
@@ -1788,7 +1822,9 @@ class OrdersController extends AppController {
         $applied_coupons = $this->_applied_coupons();
         $coupon_code = $this->_applied_couon_code();
         $score_num = $this->Session->read(self::key_balanced_scores());
-        return $this->Buying->total_reduced($uid, $applied_coupons, $coupon_code, $score_num);
+        $ziti = $this->Session->read(self::key_balanced_ship_type());
+        $shipfee = $this->Session->read(self::key_balanced_ship_fee());
+        return $this->Buying->total_reduced($uid, $applied_coupons, $coupon_code, $score_num,array('ziti'=>$ziti,'shipFee'=>$shipfee));
     }
 
 
