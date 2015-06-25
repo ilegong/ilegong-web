@@ -22,11 +22,13 @@ class TuanOrdersController extends AppController{
         ));
         // all orders must be paid or
         foreach($orders as &$order){
-            if($order['Order']['status'] != ORDER_STATUS_PAID && $order['Order']['status'] != ORDER_STATUS_SHIPPED){
+            if(!in_array($order['Order']['status'], array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED))){
                 echo json_encode(array('success' => false, 'res' => 'order '.$order['Order']['id'].' status is '.$order['Order']['status']));
                 return;
             }
         }
+
+        // TODO: validate send_date of carts should be the same day
 
         $validate_res = $this->_validate_py_store($orders);
         if($validate_res['success']){
@@ -34,9 +36,7 @@ class TuanOrdersController extends AppController{
         }else{
             return $validate_res;
         }
-        $order_products = $this->_find_product_alias($orders);
-        $tuan_products = $order_products['tuan_products'];
-        $try_products = $order_products['try_products'];
+
         $user_ids = Hash::extract($orders, '{n}.Order.creator');
         $oauth_binds = $this->Oauthbind->find('list', array(
             'conditions' => array( 'user_id' => $user_ids, 'source' => oauth_wx_source()),
@@ -53,17 +53,33 @@ class TuanOrdersController extends AppController{
         $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED),array('id' => $order_ids));
         $this->loadModel('Cart');
         $this->Cart->updateAll(array('status' => ORDER_STATUS_SHIPPED),array('order_id' => $order_ids));
+
+        $this->loadModel('Cart');
+        $carts = $this->Cart->find('all', array(
+            'conditions' => array(
+                'order_id' => $order_ids
+            ),
+            'fields' => array('id', 'order_id', 'product_id', 'status', 'send_date')
+        ));
+
+        $this->loadModel('Product');
+        $products = $this->Product->find('all', array(
+            'conditions' => array(
+                'id' => array_unique(Hash::extract($carts, '{n}.Cart.product_id'))
+            ),
+            'fields' => array('id', 'name', 'product_alias')
+        ));
+        $products = Hash::combine($products, '{n}.Product.id', '{n}');
+
         $success = array();
         foreach($orders as &$order){
             if(in_array($order['Order']['id'], $arrived_order_ids)){
                 continue;
             }
-            if($order['Order']['type']==5){
-                $product_name = $tuan_products[$order['Order']['member_id']]['alias'];
-            }
-            if($order['Order']['type']==6){
-                $product_name = $try_products[$order['Order']['try_id']]['product_name'].$try_products[$order['Order']['try_id']]['spec'];
-            }
+            $order_carts = array_filter($carts, function($cart) use ($order){
+                return $cart['Cart']['order_id'] == $order['Order']['id'];
+            });
+            $product_name = $this->_get_product_name($order_carts, $products);
             $offline_store = $offline_stores[$order['Order']['consignee_id']];
             $tipMsg = '已经到达自提点，生鲜娇贵，请尽快取货哈。';
             if($offline_store['OfflineStore']['can_remark_address']==1){
@@ -72,7 +88,7 @@ class TuanOrdersController extends AppController{
                 $tipMsg = '已经到达自提点，自提点将尽快为您配货。';
             }
             if($offline_store['OfflineStore']['owner_phone']){
-                $tipMsg = $tipMsg.'自提点联系电话：'.$offline_store['OfflineStore']['owner_phone'];
+                $tipMsg = $tipMsg.'自提点联系电话: '.$offline_store['OfflineStore']['owner_phone'];
             }
             $post_data = array(
                 "touser" => $oauth_binds[$order['Order']['creator']],
@@ -434,5 +450,12 @@ class TuanOrdersController extends AppController{
         if(!empty($mobilephone)){
             message_send($msg, $mobilephone);
         }
+    }
+
+    private function _get_product_name($order_carts, $products){
+        return implode(array_map(function($cart) use ($products){
+            $product = $products[$cart['Cart']['product_id']];
+            return empty($product['Product']['product_alias']) ? $product['Product']['name'] : $product['Product']['product_alias'];
+        }, $order_carts), ', ');
     }
 }
