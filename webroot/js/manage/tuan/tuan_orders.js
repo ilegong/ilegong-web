@@ -504,21 +504,21 @@ $(document).ready(function () {
             return;
         }else{
             if(confirm('共选中'+orderIds.length+'个订单，'+'确认全部更改为已发货吗？')){
-            batch_update_order_status(orderIds);
+            batch_update_order_status_to_shipped(orderIds);
             }
         }
     });
-    function batch_update_order_status(orders){
-        $.post('/manage/admin/tuan/batch_update_order_status',{
+    function batch_update_order_status_to_shipped(orders){
+        $.post('/manage/admin/tuan/batch_update_order_status_to_shipped',{
             'orderId':orders
         },function(data){
             var res = JSON.parse(data);
-            if(res.fail.length){
-                bootbox.alert('有'+res.fail.length+'个非快递订单或已发货状态订单,未修改状态,'+'有'+res.res.length+'个待发货快递订单，修改状态成功');
+            if(res.success){
+                bootbox.alert('快递订单状态修改成功');
+                location.reload();
             }else{
-                bootbox.alert('有'+res.res.length+'个待发货快递订单,修改状态成功');
+                bootbox.alert(res.reason);
             }
-            location.reload();
         });
     }
     function sendRefundOrderDialog() {
