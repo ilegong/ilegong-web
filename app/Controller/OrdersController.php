@@ -923,6 +923,7 @@ class OrdersController extends AppController {
         $specifiedCartIds = $this->specified_balance_pids();
         $cartsByIds = $this->Buying->cartsByIds($specifiedCartIds, $uid, $this->Session->id());
         list($cart, $shipFee) = $this->Buying->applyPromoToCart($cartsByIds, $shipPromotionId, $uid);
+        $this->clear_score_and_coupon();
         $total_reduced = $this->_cal_total_reduced($uid);
         $total_price = $cart->total_price() - $total_reduced / 100 + $shipFee;
         if($ziti){
@@ -2026,5 +2027,12 @@ class OrdersController extends AppController {
             return true;
         }
         return false;
+    }
+
+    private function clear_score_and_coupon() {
+        $this->Session->write(self::key_balanced_scores(), '');
+        $this->Session->write(self::key_balanced_conpon_global(), '[]');
+        $this->Session->write(self::key_balanced_conpons(), '[]');
+        $this->Session->write(self::key_balanced_promotion_code(),'');
     }
 }
