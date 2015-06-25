@@ -180,7 +180,6 @@
         <button class="btn btn-primary toggle-orders" data-show-all='0'>只显示统计</button>
         <button class="btn btn-primary print-orders">打印订单</button>
         <button  class="btn btn-primary pull-right ship-to-pys-stores">朋友说自提点发货</button>
-        <button class="btn btn-primary pull-right batch-update-order-status"  style="margin-right:10px;">批量修改订单状态</button>
     </div>
     <hr/>
 </div>
@@ -192,6 +191,9 @@
             $data_tag_name = $item['name'];
         ?>
         <h1 class="no-print"><span class="label no-print label-{{$item['style']}}">{{$item['name']}}</span></h1>
+        {{if $data_tag == 'kuaidi'}}
+        <button class="btn btn-primary pull-right batch-update-order-status no-print">批量修改订单状态</button>
+        {{/if}}
         <hr class="no-print" />
         <h3 {{if !empty($current_orders)}}class="ship-type new-page"{{else}}class="no-print"{{/if}}><span class="label no-print label-{{$item['style']}}">{{$item['name']}}</span></h3>
         <hr class="no-print"/>
@@ -333,4 +335,4 @@
 {{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js',
 '/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js',
 '/js/manage-lib/tableExport.jquery.plugin/tablesToExcel.js?v2.5'))}}
-{{$this->Html->script(array('manage/tuan/tuan_orders.js?v7.2'))}}
+{{$this->Html->script(array('manage/tuan/tuan_orders.js?v7.3'))}}
