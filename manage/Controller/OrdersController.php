@@ -87,9 +87,19 @@ class OrdersController extends AppController
         if(!empty($this->data['ship_mark'])){
             if($this->data['ship_mark'] == 'ziti'){
                 // 修改为自提，需有自提点
-                if(empty($this->data['consignee_id']) || $this->data['consignee_id'] == 0){
+                if (empty($this->data['consignee_id']) || $this->data['consignee_id'] == 0) {
                     echo json_encode(array('success' => false, 'reason' => 'missed_consignee_id'));
                     return;
+                }
+                $this->data['consignee_area'] = null;
+                $this->loadModel('OfflineStore');
+                $offlineStore = $this->OfflineStore->find('first', array(
+                    'conditions' => array(
+                        'id' => $this->data['consignee_id'],
+                    )
+                ));
+                if (!empty($offlineStore)) {
+                    $this->data['consignee_address'] = get_address(null, $offlineStore);
                 }
             }
             else{

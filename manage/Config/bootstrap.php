@@ -274,6 +274,7 @@ function get_address($tuan_team, $offline_store){
     return $tuan_address;
 }
 
+
 class TuanShip{
     public static function get_all_tuan_ships(){
         $shipTypesJson = Cache::read('_tuanshiptypes');
