@@ -128,7 +128,7 @@ class PlanHelperController extends AppController
 
         $this->log("plan helper is to create order for " . $user_id . " and product " . $product_id . " with num " . $num);
 
-        $send_date = get_send_date(10, "23:59:59", '2,4,6');
+        $send_date = date_format(get_send_date(10, "23:59:59", '2,4,6'), 'Y-m-d');
         $order_id = $this->_insert_order($user, $product, $num, $spec_id, $offline_store);
         $cart_id = $this->_insert_cart($user, $product, $num, $spec_id, $send_date, $order_id);
         $this->log("plan helper create order successfully: " . $order_id . ", " . $cart_id);
