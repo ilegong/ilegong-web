@@ -235,7 +235,6 @@ class TuanOrdersController extends AppController{
 
         // validate goods should be shipped to pys stores
         $offline_store_ids = array_unique(Hash::extract($orders, '{n}.Order.consignee_id'));
-        $this->log('will query offline stores: '.json_encode($offline_store_ids));
         if(!empty($offline_store_ids)){
             $offline_stores = $this->OfflineStore->find('all', array(
                 'conditions' => array('id'=>$offline_store_ids)
