@@ -2039,6 +2039,14 @@ class OrdersController extends AppController {
         $this->Session->write(self::key_balanced_promotion_code(),'');
     }
 
+    /**
+     * @param $shipFee
+     * @return float
+     * 由于团购的流程 计算邮费在另一个系统中 所以计算 使用积分和优惠券的时候要 重新计算邮费
+     *
+     * 以后使用要注意
+     * TODO 统一方法
+     */
     private function get_custom_ship_fee($shipFee){
         //tuan buy can use custom ship fee when use custom ship fee
         if($_REQUEST['ship_fee']!=null){
