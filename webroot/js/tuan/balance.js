@@ -55,9 +55,9 @@ $('#use_promotion_code').on('click',function(){
             if(data && data['success']){
                 if(data['reducePrice']>0){
                     var totalPrice = parseFloat(orginTotalPrice)-parseFloat(data['reducePrice']);
-                    priceDom.data("goodsPrice", totalPrice);
+                    //priceDom.data("goodsPrice", totalPrice);
                     totalPriceDom.data("totalPrice", totalPrice);
-                    priceDom.text("￥"+ utils.toFixed(priceDom.data("goodsPrice"), 2));
+                    //priceDom.text("￥"+ utils.toFixed(priceDom.data("goodsPrice"), 2));
                     totalPriceDom.text("￥"+ utils.toFixed(totalPriceDom.data("totalPrice"), 2));
                     $('.shop_jifen_used').html('');
                     var checkbox = $("[data-coupon_item_id] > input[type=checkbox]");
@@ -107,9 +107,9 @@ $('.shop_jifen_used').click(function(){
             }
             var goodsPrice = parseFloat(priceDom.data("goodsPrice"));
             var totalPrice = parseFloat(totalPriceDom.data("totalPrice"));
-            priceDom.data("goodsPrice", goodsPrice + scoreMoney);
+            //priceDom.data("goodsPrice", goodsPrice + scoreMoney);
             totalPriceDom.data("totalPrice", totalPrice + scoreMoney);
-            priceDom.text("￥"+ utils.toFixed(priceDom.data("goodsPrice"), 2));
+            //priceDom.text("￥"+ utils.toFixed(priceDom.data("goodsPrice"), 2));
             totalPriceDom.text("￥"+ utils.toFixed(totalPriceDom.data("totalPrice"), 2));
             balance_use_score.text(data.score_usable);
             balance_use_score.next('span').text(utils.toFixed(data.score_money,2));
