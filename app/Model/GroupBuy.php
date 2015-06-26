@@ -43,6 +43,6 @@ class GroupBuy extends AppModel{
     }
 
     public static function group_buy_is_available($group_buy_label){
-        return in_array($group_buy_label,self::$not_available_group_label);
+        return !in_array($group_buy_label,self::$not_available_group_label);
     }
 }
