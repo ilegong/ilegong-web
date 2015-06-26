@@ -654,7 +654,7 @@ class WeixinComponent extends Component
         if (!empty($thisGroupRecord)) {
             $group_buy_label = $thisGroupRecord['GroupBuyRecord']['group_buy_label'];
             //check group buy is available
-            if(GroupBuy::group_buy_is_available($group_buy_label)){
+            if(group_buy_is_available($group_buy_label)){
                 $product_id = $thisGroupRecord['GroupBuyRecord']['product_id'];
                 $groupRecords = $groupBuyRecordM->find('all', array(
                     'conditions' => array(

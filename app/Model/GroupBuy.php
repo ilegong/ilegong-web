@@ -10,8 +10,6 @@ class GroupBuy extends AppModel{
 
     public $useTable = false;
 
-    static $not_available_group_label = array('1069-1');
-
     /**
      * @var array
      *
@@ -40,9 +38,5 @@ class GroupBuy extends AppModel{
 
     public function getProductGroupBuyNum($pid){
         return $this->allGroupBuyProducts[$pid]['group_buy_num'];
-    }
-
-    public static function group_buy_is_available($group_buy_label){
-        return !in_array($group_buy_label,self::$not_available_group_label);
     }
 }

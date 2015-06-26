@@ -458,7 +458,7 @@ class Order extends AppModel {
         ));
         if (!empty($groupBuyRecord)) {
             $group_buy_label = $groupBuyRecord['GroupBuyRecord']['group_buy_label'];
-            if (GroupBuy::group_buy_is_available($group_buy_label)) {
+            if (group_buy_is_available($group_buy_label)) {
                 $groupBuyRecordM->updateAll(array('is_paid' => 1), array('order_id' => $orderId));
             } else {
                 //set deleted for this record
