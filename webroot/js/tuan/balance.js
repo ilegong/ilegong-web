@@ -4,6 +4,8 @@
 var priceDom = $(".conordertuan_total strong");
 var totalPriceDom = $(".cart_pay .fl strong");
 var CartDomName = "input[name='shopCart']";
+var balanceShipFeeDom = $('#balance_ship_fee');
+var balanceShipFee = balanceShipFeeDom.val()||0;
 var orginTotalPrice = totalPriceDom.data('totalPrice');
 function editCartNum(id, num) {
     $('.shop_jifen_used').html("");
@@ -91,7 +93,11 @@ $('.shop_jifen_used').click(function(){
     }
     var balance_use_score = $(".balance_use_score");
     $('#promotion_code').val("");
-    $.post('/orders/apply_score.json', {'use' : that.html()=="<i></i>", 'score':totalPriceDom.data("totalPrice")*100/2}, function(data){
+    $.post('/orders/apply_score.json', {
+        'use': that.html() == "<i></i>",
+        'score': totalPriceDom.data("totalPrice") * 100 / 2,
+        'ship_fee': balanceShipFee
+    }, function (data) {
         if (data && data.success) {
             console.log(data);
             $('#promotion_code').val();
@@ -122,7 +128,12 @@ $('div.usecoupon > a').on('click',function (e) {
     var checkbox = $('input[type=radio]',that);
     checkbox.prop("checked", !checkbox.prop("checked"));
     var action = (checkbox.prop("checked") == false )? 'unapply' : 'apply';
-    $.post('/orders/apply_coupon.json', {'brand_id': brandId, 'coupon_item_id': coupon_item_id, 'action': action}, function (data) {
+    $.post('/orders/apply_coupon.json', {
+        'brand_id': brandId,
+        'coupon_item_id': coupon_item_id,
+        'action': action,
+        'ship_fee': balanceShipFee
+    }, function (data) {
         if (data) {
             console.log(data);
             $('#promotion_code').val();

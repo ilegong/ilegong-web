@@ -789,8 +789,8 @@ class OrdersController extends AppController {
         $specifiedPids = $this->specified_balance_pids();
         $cartsByPid = $this->Buying->cartsByIds($specifiedPids, $uid, $this->Session->id());
         list($cart, $shipFee) = $this->Buying->applyPromoToCart($cartsByPid, $shipPromotionId, $uid);
+        $shipFee = $this->get_custom_ship_fee($shipFee);
         $applied_coupon_code = $this->_applied_couon_code();
-
         $success = false;
         $error = '';
         if (!empty($code)) {
@@ -851,22 +851,18 @@ class OrdersController extends AppController {
         $specifiedCartIds = $this->specified_balance_pids();
         $cartsByIds = $this->Buying->cartsByIds($specifiedCartIds, $uid, $this->Session->id());
         list($cart, $shipFee) = $this->Buying->applyPromoToCart($cartsByIds, $shipPromotionId, $uid);
-
+        $shipFee = $this->get_custom_ship_fee($shipFee);
         $this->loadModel('CouponItem');
-
         list($changed, $reason) = $this->_try_apply_coupon_item($brand_id, $applying, $coupon_item_id, $uid, $cart);
-
         $resp = array('changed' => $changed);
         if ($changed) {
             $total_reduced = $this->_cal_total_reduced($uid);
             $resp['total_reduced'] = $total_reduced/100;
             $resp['total_price'] = $cart->total_price() - $total_reduced/100 + $shipFee;
         }
-
         if ($reason) {
             $resp['reason'] = $reason;
         }
-
         echo json_encode($resp);
     }
 
@@ -964,8 +960,8 @@ class OrdersController extends AppController {
         $this->Session->write(self::key_balanced_promotion_code(),'');
         $this->Session->write(self::key_balanced_scores(), '');
         $total_reduced = $this->_cal_total_reduced($uid);
+        $shipFee = $this->get_custom_ship_fee($shipFee);
         $total_price = $cart->total_price() - $total_reduced / 100 + $shipFee;
-
         $this->loadModel('User');
         $score = $this->User->get_score($uid, true);
         $could_score_money = cal_score_money($score, $total_price);
@@ -2041,5 +2037,13 @@ class OrdersController extends AppController {
         $this->Session->write(self::key_balanced_conpon_global(), '[]');
         $this->Session->write(self::key_balanced_conpons(), '[]');
         $this->Session->write(self::key_balanced_promotion_code(),'');
+    }
+
+    private function get_custom_ship_fee($shipFee){
+        //tuan buy can use custom ship fee when use custom ship fee
+        if($_REQUEST['ship_fee']!=null){
+            $shipFee = floatval($_REQUEST['ship_fee']);
+        }
+        return $shipFee;
     }
 }

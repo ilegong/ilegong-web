@@ -18,6 +18,7 @@
             <li class="fr"><a id="confirm_next" href="#X" data-disable="false">提交订单</a></li>
         </ul>
     </div>
+    <input type="hidden" id="balance_ship_fee" value="{{$ship_fee}}">
 </div>
 <div id="hiddenModalContent" style="display:none" data-ziti-type="{{$ship_type}}">
     <div class="classlist_v2">
@@ -30,7 +31,7 @@
     <div id="area_list" class="tuanadresslist"></div>
 </div>
 
-{{$this->Html->script(array('/js/tuan/balance.js?v16.6'));}}
+{{$this->Html->script(array('/js/tuan/balance.js?v16.7'));}}
 <script>
     $(document).ready(function () {
         var bigBuy = zitiObj(zitiAddressData.getBeijingAreas,$(window).height() + 5, $(window).width());
