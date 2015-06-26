@@ -126,4 +126,15 @@ class TuanProductsController extends AppController{
 
         echo json_encode($products);
     }
+
+    public function admin_api_pys_products(){
+        $this->autoRender=false;
+        $products = $this->Product->find('all',array(
+            'conditions' => array(
+                'brand_id' => PYS_BRAND_ID
+            )
+        ));
+
+        echo json_encode($products);
+    }
 }
