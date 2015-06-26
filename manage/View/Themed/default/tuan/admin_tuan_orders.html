@@ -179,7 +179,6 @@
         <button class="btn btn-success export-excel">导出订单</button>
         <button class="btn btn-primary toggle-orders" data-show-all='0'>只显示统计</button>
         <button class="btn btn-primary print-orders">打印订单</button>
-        <button  class="btn btn-primary pull-right ship-to-pys-stores">朋友说自提点发货</button>
     </div>
     <hr/>
 </div>
@@ -201,7 +200,10 @@
     {{else}}
         <h2 class="no-print"><span class="label label-primary no-print">{{$item['name']}}</span></h2>
         <hr class="no-print" />
-        <h2 class="no-print"><span class="label label-warning no-print">朋友说自提</span></h2>
+        <h2 class="no-print">
+            <span class="label label-warning no-print">朋友说自提</span>
+            <button  class="btn btn-primary pull-right ship-to-pys-stores">朋友说自提点发货</button>
+        </h2>
         <hr class="no-print" />
         <div class="hidden" id="send_order_msg" data-reach="{{$reach_order}}" data-send_out="{{$send_out_order}}"></div>
         {{loop $pys_ziti_point $point}}
