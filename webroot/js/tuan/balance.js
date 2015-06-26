@@ -51,7 +51,7 @@ $('#use_promotion_code').on('click',function(){
     var promotionCode = $promotionCode.val();
     if(promotionCode){
         $.post('/orders/apply_promotion_code/'+promotionCode,{},function(data){
-            console.log(data);
+            //console.log(data);
             if(data && data['success']){
                 if(data['reducePrice']>0){
                     var totalPrice = parseFloat(orginTotalPrice)-parseFloat(data['reducePrice']);
@@ -99,7 +99,7 @@ $('.shop_jifen_used').click(function(){
         'ship_fee': balanceShipFee
     }, function (data) {
         if (data && data.success) {
-            console.log(data);
+            //console.log(data);
             $('#promotion_code').val();
             var scoreMoney = data.score_money;
             if(data.score_used){
@@ -135,7 +135,7 @@ $('div.usecoupon > a').on('click',function (e) {
         'ship_fee': balanceShipFee
     }, function (data) {
         if (data) {
-            console.log(data);
+            //console.log(data);
             $('#promotion_code').val();
             if (data.changed) {
                 var totalPrice = utils.toFixed(parseFloat(data.total_price), 2);

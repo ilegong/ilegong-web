@@ -249,7 +249,7 @@ function mark_order(order_id){
         return false;
     }
     function callback(request){
-        console.log(request);
+        //console.log(request);
         alert(request.msg);
     }
     return ajaxAction(BASEURL+"/orders/set_mark_order",{'order_id':order_id, 'mark_date':$('#mark-date-'+order_id).val(),'mark_tip':$('#mark-tip-'+order_id).val()},null,'callback');
