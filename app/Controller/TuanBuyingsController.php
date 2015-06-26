@@ -696,18 +696,6 @@ class TuanBuyingsController extends AppController{
             if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
                 $res = array('success'=> false, 'info'=> '你已经支付过了');
             }else{
-                //$consign_time = friendlyDateFromStr($tuanBuy['TuanBuying']['consign_time'], FFDATE_CH_MD);
-//                $cart_name = $cart_info['Cart']['name'];
-//                //to set mark
-//                if($tuan_info['TuanTeam']['type'] == IS_BIG_TUAN ){
-//                    if(empty($shipSetting)){
-//                        //default
-//                        $cart_name = $cart_name.'(自提)';
-//                    }else{
-//                        $cart_name = $cart_name.'('.TuanShip::get_ship_name($shipTypeId).')';
-//                    }
-//                }
-//                $this->Cart->update(array('name' => '\'' . $cart_name . '\'' ), array('id' => $cart_id));
                 $res = array('success'=> true, 'order_id'=>$order['Order']['id']);
             }
         }
@@ -960,6 +948,16 @@ class TuanBuyingsController extends AppController{
         $this->Session->write(OrdersController::key_balanced_scores(), '');
         $this->Session->write(OrdersController::key_balanced_conpon_global(), '[]');
         $this->Session->write(OrdersController::key_balanced_conpons(), '[]');
+    }
+
+    private function clear_session_ziti_tag() {
+        App::uses('OrdersController', 'Controller');
+        $this->Session->write(OrdersController::key_balanced_ship_type(), '');
+    }
+
+    private function set_session_ziti_tag() {
+        App::uses('OrdersController', 'Controller');
+        $this->Session->write(OrdersController::key_balanced_ship_type(), ZITI_TAG);
     }
 
     private function order_use_promotion_code($cart,$orderId,$userId){
