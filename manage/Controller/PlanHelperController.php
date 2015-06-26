@@ -8,11 +8,40 @@ class PlanHelperController extends AppController
 
     public function admin_orders()
     {
+        $this->autoRender = false;
+
         $order_count = $_REQUEST['order_count'];
 
-        $this->loadModel("Product");
+        $user_ids = array(810165, 810166, 810167, 810168, 810169, 810170, 810171, 810172, 810173, 810174, 810175, 810176);
+        $product_specs = array(
+            138 => array(),
+            231 => array(),
+            784 => array(),
+            785 => array(),
+            787 => array(),
+            852 => array(),
+            881 => array(),
+            883 => array(),
+            911 => array(),
+            940 => array(),
+            943 => array(),
+            944 => array(),
+            953 => array(),
+            954 => array(),
+            971 => array(),
+            1004 => array(),
+            1020 => array(),
+            1073 => array(),
+            973 => array(430, 431, 432, 433, 434, 435, 436, 437)
+        );
 
-        $product_ids = array(1004, 1020, 231, 852, 940, 883, 954, 971, 973);
+        $users = $this->User->find('all', array(
+            'conditions' => array(
+                'id' => $user_ids
+            )
+        ));
+        $product_ids = array_keys($product_specs);
+        $this->loadModel("Product");
         $products = $this->Product->find('all', array(
             'conditions' => array(
                 'id' => $product_ids
@@ -33,6 +62,24 @@ class PlanHelperController extends AppController
                 'deleted' => DELETED_YES
             )
         ));
+
+        $order_ids = array();
+        for ($i = 1; $i <= $order_count; $i++) {
+            $product = $products[array_rand($products)];
+            $spec_groups = $product_spec_groups[$product['Product']['id']];
+
+            $product_spec_group = array();
+            if (!empty($spec_groups)) {
+                $product_spec_group = $spec_groups[array_rand($spec_groups)];
+            }
+            $user = $users[array_rand($users)];
+            $offline_store = $offline_stores[array_rand($offline_stores)];
+            $num = $this->_get_random_num();
+
+            $order_ids[] = $this->_try_to_create_order($user, $product, $num, $product_spec_group, $offline_store);
+        }
+
+        echo json_encode(array('order_ids: '=>$order_ids));
     }
 
     public function admin_order()
@@ -45,11 +92,38 @@ class PlanHelperController extends AppController
         $spec_id = isset($_REQUEST['spec_id']) ? $_REQUEST['spec_id'] : 0;
         $num = isset($_REQUEST['num']) ? $_REQUEST['num'] : 1;
 
-        try{
-            $order_id = $this->_try_to_create_order($user_id, $product_id, $offline_store_id, $num, $spec_id);
-            echo json_encode(array('result' => true, "order_id" => $order_id));
+        $user = $this->User->findById($user_id);
+        if(empty($user) || !$this->_is_user_valid($user_id)){
+            echo json_encode(array('result' => false, 'reason' => 'user is invalid'));
+            return;
         }
-        catch(Exception $e){
+
+        $product = $this->Product->findById($product_id);
+        if ($product['Product']['brand_id'] != 92) {
+            echo json_encode(array('result' => false, 'reason' => 'not pyshuo product'));
+            return;
+        }
+
+        $product_spec_group = array();
+        if(!empty($spec_id)){
+            $this->loadModel('ProductSpecGroup');
+            $product_spec_group = $this->ProductSpecGroup->findById($spec_id);
+        }
+
+        $offline_store = $this->OfflineStore->findById($offline_store_id);
+        if(empty($offline_store)){
+            echo json_encode(array('result' => false, 'reason' => 'offline store does not exist'));
+            return;
+        }
+        if($offline_store['OfflineStore']['deleted'] == DELETED_NO){
+            echo json_encode(array('result' => false, 'reason' => 'offline store is not deleted'));
+            return;
+        }
+
+        try {
+            $order_id = $this->_try_to_create_order($user_id, $product, $num, $product_spec_group, $offline_store);
+            echo json_encode(array('result' => true, "order_id" => $order_id));
+        } catch (Exception $e) {
             echo json_encode(array('result' => false, 'reason' => $e->getMessage()));
         }
     }
@@ -98,54 +172,27 @@ class PlanHelperController extends AppController
 
         foreach ($orders as $index => &$order) {
             $user = $users[$index];
-            $this->Order->updateAll(array("creator" => "'" . $user['User']['id'] . "'", 'consignee_name' => "'" . $user['User']['nickname'] . "'", 'status' => "'" . ORDER_STATUS_SHIPPED . "'", 'published' => "'".PUBLISH_NO."'"), array('id' => $order['Order']['id']));
+            $this->Order->updateAll(array("creator" => "'" . $user['User']['id'] . "'", 'consignee_name' => "'" . $user['User']['nickname'] . "'", 'status' => "'" . ORDER_STATUS_SHIPPED . "'", 'published' => "'" . PUBLISH_NO . "'"), array('id' => $order['Order']['id']));
             $this->Cart->updateAll(array('status' => "'" . ORDER_STATUS_SHIPPED . "'"), array('order_id' => $order['Order']['id']));
         }
         echo json_encode(array("order_ids" => $order_ids));
     }
 
-    private function _try_to_create_order($user_id, $product_id, $offline_store_id, $num, $spec_id)
+    private function _try_to_create_order($user, $product, $num, $product_spec_group, $offline_store)
     {
-        if (!$this->_is_user_valid($user_id)) {
-            throw new Exception("invalid user id " . $user_id);
-        }
-        $user = $this->User->findById($user_id);
-
-        $product = $this->Product->findById($product_id);
-        if ($product['Product']['brand_id'] != 92) {
-            throw new Exception('not pyshuo products');
-        }
-
-        if ($offline_store_id != 54 && $offline_store_id != 55) {
-            throw new Exception('not pyshuo products');
-            return;
-        }
-        $offline_store = $this->OfflineStore->findById($offline_store_id);
-        if (empty($offline_store)) {
-            throw new Exception('offline store does not exist: ' . $offline_store_id);
-            return;
-        }
-
-        $this->log("plan helper is to create order for " . $user_id . " and product " . $product_id . " with num " . $num);
-
         $send_date = date_format(get_send_date(10, "23:59:59", '2,4,6'), 'Y-m-d');
-        $order_id = $this->_insert_order($user, $product, $num, $spec_id, $offline_store);
-        $cart_id = $this->_insert_cart($user, $product, $num, $spec_id, $send_date, $order_id);
-        $this->log("plan helper create order successfully: " . $order_id . ", " . $cart_id);
+        $order_id = $this->_insert_order($user, $product, $num, $product_spec_group, $offline_store);
+        $cart_id = $this->_insert_cart($user, $product, $num, $product_spec_group, $send_date, $order_id);
 
         return $order_id;
     }
 
-    function _insert_order($user, $product, $num, $spec_id, $offline_store)
+    function _insert_order($user, $product, $num, $product_spec_group, $offline_store)
     {
         $date = date('Y-m-d H:i:s', strtotime("+17 seconds"));
         $price = $product['Product']['price'];
-        if (!empty($spec_id)) {
-            $this->loadModel('ProductSpecGroup');
-            $product_spec_group = $this->ProductSpecGroup->findById($spec_id);
-            if (!empty($product_spec_group)) {
-                $price = $product_spec_group['ProductSpecGroup']['price'];
-            }
+        if (!empty($product_spec_group)) {
+            $price = $product_spec_group['ProductSpecGroup']['price'];
         }
         $total_price = $price * $num;
 
@@ -167,17 +214,18 @@ class PlanHelperController extends AppController
         $data['Order']['flag'] = 7;
         $data['Order']['published'] = PUBLISH_YES;
 
-        $this->log("plan helper is to create order: " . json_encode($data));
-
+        $this->Order->id = null;
         if ($this->Order->save($data)) {
-            return $this->Order->getLastInsertID();
+            $order_id = $this->Order->getLastInsertID();
+            $this->log("plan helper create order successfully: " . $order_id);
+            return $order_id;
         } else {
             $this->log($this->Order->validationErrors); //show validationErrors
             throw new Exception("plan helper create order failed");
         }
     }
 
-    function _insert_cart($user, $product, $num, $spec_id, $send_date, $order_id)
+    function _insert_cart($user, $product, $num, $product_spec_group, $send_date, $order_id)
     {
         $date = date('Y-m-d H:i:s');
         $data = array();
@@ -187,7 +235,7 @@ class PlanHelperController extends AppController
         $data['Cart']['type'] = 5;
         $data['Cart']['status'] = 0;
         $data['Cart']['product_id'] = $product['Product']['id'];
-        $data['Cart']['spec_id'] = $spec_id;
+        $data['Cart']['spec_id'] = $product_spec_group['ProductSpecGroup']['id'];
         $data['Cart']['coverimg'] = $product['Product']['coverimg'];
         $data['Cart']['price'] = $product['Product']['price'] * $num;
         $data['Cart']['num'] = $num;
@@ -197,10 +245,11 @@ class PlanHelperController extends AppController
         $data['Cart']['modified'] = $date;
         $data['Cart']['send_date'] = $send_date;
 
-        $this->log("plan helper is to create cart: " . json_encode($data));
-
+        $this->Cart->id = null;
         if ($this->Cart->save($data)) {
-            return $this->Cart->getLastInsertID();
+            $cart_id = $this->Cart->getLastInsertID();
+            $this->log("plan helper create cart successfully: " .$cart_id);
+            return $cart_id;
         } else {
             $this->log($this->Cart->validationErrors); //show validationErrors
             throw new Exception("plan helper create cart failed");
@@ -210,5 +259,21 @@ class PlanHelperController extends AppController
     private function _is_user_valid($user_id)
     {
         return ($user_id >= 810163 && $user_id <= 810223) || ($user_id >= 810096 && $user_id <= 810158);
+    }
+
+    private function _get_random_num()
+    {
+        $rand_num = rand(1, 1000);
+        $num = 1;
+        if ($rand_num > 900) {
+            $num = 5;
+        } else if ($rand_num > 800) {
+            $num = 4;
+        } else if ($rand_num > 700) {
+            $num = 3;
+        } else if ($rand_num > 500) {
+            $num = 2;
+        }
+        return $num;
     }
 }
