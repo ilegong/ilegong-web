@@ -3,7 +3,7 @@ class TuanOrdersController extends AppController{
 
     var $name = 'TuanOrders';
 
-    var $uses = array('Order', 'TuanTeam', 'TuanBuying', 'Location', 'TuanProduct', 'OfflineStore', 'Oauthbind', 'OrderMessage', 'User','ProductTry');
+    var $uses = array('Order', 'TuanTeam', 'TuanBuying', 'Location', 'TuanProduct', 'OfflineStore', 'Oauthbind', 'OrderMessage', 'User','ProductTry','Cart');
 
     public function admin_ship_to_pys_stores(){
         $this->autoRender = false;
@@ -460,5 +460,64 @@ class TuanOrdersController extends AppController{
             $product = $products[$cart['Cart']['product_id']];
             return empty($product['Product']['product_alias']) ? $product['Product']['name'] : $product['Product']['product_alias'];
         }, $order_carts)), ', ');
+    }
+
+    public function admin_on_order_status_change($orders=null){
+        $this->send_msg($orders);
+    }
+
+    public function send_msg($orders){
+        $user_ids = Hash::extract($orders, '{n}.Order.creator');
+        $order_ids = Hash::extract($orders, '{n}.Order.id');
+        $oauth_binds = $this->Oauthbind->find('list', array(
+            'conditions' => array( 'user_id' => $user_ids, 'source' => oauth_wx_source()),
+            'fields' => array('user_id', 'oauth_openid')
+        ));
+        $arrived_log = $this->OrderMessage->find('all', array(
+            'conditions' => array('order_id' => $order_ids, 'status' => 0, 'type' => 'py-reach')
+        ));
+        $arrived_order_ids = Hash::extract($arrived_log, '{n}.OrderMessage.order_id');
+        $join_conditions = array(
+            array(
+                'table' => 'products',
+                'alias' => 'Product',
+                'conditions' => array(
+                    'Cart.product_id = Product.id',
+                ),
+                'type' => 'LEFT',
+            )
+        );
+        $carts = $this->Cart->find('all', array(
+            'conditions' => array('order_id' => $order_ids),
+            'joins' => $join_conditions,
+            'fields' => array('Cart.id','Cart.num','Cart.order_id','Cart.send_date','Product.product_alias'),
+        ));
+        foreach($orders as $order){
+            $openid = $oauth_binds[$order['Order']['id']];
+            $this->send_wx_msg($openid,$order, $carts,$arrived_order_ids);
+            $this->send_sms($order,$carts);
+        }
+    }
+    public function send_wx_msg($openid,$order, $carts,$arrived_order_ids = null){
+        if($order['Order']['status'] == ORDER_STATUS_PAID){
+            $this->_pay_done_wx_msg($order,$openid);
+        }elseif($order['Order']['status'] ==ORDER_STATUS_SHIPPED){
+            $this->_goods_shipped_wx_msg($order,$openid,$arrived_order_ids);
+        }elseif($order['Order']['status'] == ORDER_STATUS_RETURN_MONEY){
+            $this->_order_refund_wx_msg($order,$openid);
+        }else{
+            $this->log('invalid order status change, order_id:' . $order['Order']['id'].',status:'. $order['Order']['status']);
+        }
+    }
+    public function send_sms($orders){
+    }
+    public function _pay_done_wx_msg($order,$openid){
+
+    }
+    public function _goods_shipped_wx_msg($order,$openid,$arrived_order_ids){
+
+    }
+    public function _order_refund_wx_msg($order,$openid){
+
     }
 }
