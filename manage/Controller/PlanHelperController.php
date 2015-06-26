@@ -11,8 +11,8 @@ class PlanHelperController extends AppController
         $this->autoRender = false;
 
         $order_count = $_REQUEST['order_count'];
+        $user_ids = explode(',', $_REQUEST['user_ids']);
 
-        $user_ids = array(810165, 810166, 810167, 810168, 810169, 810170, 810171, 810172, 810173, 810174, 810175, 810176);
         $product_specs = array(
             138 => array(),
             231 => array(),
@@ -40,6 +40,16 @@ class PlanHelperController extends AppController
                 'id' => $user_ids
             )
         ));
+        if(empty($users)){
+            echo json_encode(array('result' => false, 'reason' => 'please provide at least 1 user'));
+            return;
+        }
+        foreach($users as $user){
+            if(!$this->_is_user_valid($user['User']['id'])){
+                echo json_encode(array('result' => false, 'reason' => 'invalid user '.$user['User']['id']));
+                return;
+            }
+        }
         $product_ids = array_keys($product_specs);
         $this->loadModel("Product");
         $products = $this->Product->find('all', array(
@@ -63,7 +73,7 @@ class PlanHelperController extends AppController
             )
         ));
 
-        $order_ids = array();
+        $results = array();
         for ($i = 1; $i <= $order_count; $i++) {
             $product = $products[array_rand($products)];
             $spec_groups = $product_spec_groups[$product['Product']['id']];
@@ -76,10 +86,15 @@ class PlanHelperController extends AppController
             $offline_store = $offline_stores[array_rand($offline_stores)];
             $num = $this->_get_random_num();
 
-            $order_ids[] = $this->_try_to_create_order($user, $product, $num, $product_spec_group, $offline_store);
+            $order_id = $this->_try_to_create_order($user, $product, $num, $product_spec_group, $offline_store);
+
+            if(!isset($results[$user['User']['id']])){
+                $results[$user['User']['id']] = array();
+            }
+            $results[$user['User']['id']][] = $order_id;
         }
 
-        echo json_encode(array('order_ids: '=>$order_ids));
+        echo json_encode($results);
     }
 
     public function admin_order()
