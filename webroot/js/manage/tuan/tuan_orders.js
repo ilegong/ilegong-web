@@ -52,22 +52,13 @@ $(document).ready(function () {
         iUtils.initSelectBox($('.tuan-products'));
         initSearchBox($('.tuan-product-search'), values);
     });
-    $.getJSON('/manage/admin/tuanProducts/api_products', function (data) {
+    $.getJSON('/manage/admin/tuanProducts/api_pys_products', function (data) {
         var values = [{'val': -1, 'name': '请选择商品'}];
         $.each(data, function (productId, item) {
-            var name = item['isTuanProduct'] ? item['TuanProduct']['alias'] : item['ProductTry']['product_name'] + '(' + item['ProductTry']['spec'] + ')';
-            if (item['isTuanProduct'] && item['isProductTry']) {
-                name = name + "[团，秒]";
-            }
-            else if (item['isTuanProduct']) {
-                name = name + "[团]";
-            }
-            else if (item['isProductTry']) {
-                name = name + "[秒]";
-            }
-
-            $('<option value="' + productId + '">' + name + '</option>').appendTo(products);
-            values.push({'val': productId, 'name': name});
+            var product = item['Product'];
+            var name = _.isEmpty(product['product_alias']) ?  product['name'] : product['product_alias'];
+            $('<option value="' + product['id'] + '">' + name + '</option>').appendTo(products);
+            values.push({'val': product['id'], 'name': name});
         });
 
         iUtils.initSelectBox(products);

@@ -58,6 +58,8 @@ const SHIP_TYPE_SFDF = 5;
 const SHIP_TYPE_KUAIDI = 6;
 const ZITI_TAG = 'ziti';
 
+const PYS_BRAND_ID = 92;
+
 define('MSG_API_KEY', 'api:key-fdb14217a00065ca1a47b8fcb597de0d'); //发短信密钥
 
 
