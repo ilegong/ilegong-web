@@ -41,4 +41,8 @@ class TestController extends AppController{
         echo json_encode(array('success' => true,'data' => $date));
         return;
     }
+
+    public function test_wx_location(){
+        $this->set('jWeixinOn', true);
+    }
 }

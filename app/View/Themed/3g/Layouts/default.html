@@ -78,7 +78,7 @@
         var wx_jssdk_timestamp = {{$signPackage["timestamp"]?$signPackage["timestamp"]:1}};
         var wx_jssdk_nonceStr = '{{$signPackage["nonceStr"]}}';
         var wx_jssdk_signature = '{{$signPackage["signature"]}}';
-        var jsApiList = ['checkJsApi','onMenuShareTimeline','onMenuShareAppMessage','chooseImage', 'previewImage', 'uploadImage', 'downloadImage',];
+        var jsApiList = ['checkJsApi', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseImage', 'previewImage', 'uploadImage', 'downloadImage', 'openLocation', 'getLocation'];
         wx.config({
             debug: false,
             appId: wx_jssdk_appId,

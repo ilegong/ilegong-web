@@ -1,0 +1,25 @@
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span10">
+            <div class="alert alert-success" id="location_result">
+                {{$jWeixinOn}}
+            </div>
+        </div>
+    </div>
+</div>
+{{if $jWeixinOn}}
+<script>
+    wx.ready(function () {
+        wx.getLocation({
+            success: function (res) {
+                //$('#location_result').text(JSON.stringify(res));
+                alert(JSON.stringify(res));
+            },
+            cancel: function (res) {
+                alert(res);
+                alert('用户拒绝授权获取地理位置');
+            }
+        });
+    });
+</script>
+{{/if}}
