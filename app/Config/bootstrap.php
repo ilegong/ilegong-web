@@ -2131,3 +2131,8 @@ function pid_in_special($pid,$specialId){
     $pids = get_special_pid_list($specialId);
     return in_array($pid,$pids);
 }
+
+function group_buy_is_available($group_buy_label){
+    $not_available_group_label = array('1069-1');
+    return !in_array($group_buy_label,$not_available_group_label);
+}
