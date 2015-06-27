@@ -13,28 +13,6 @@ class PlanHelperController extends AppController
         $order_count = $_REQUEST['order_count'];
         $user_ids = explode(',', $_REQUEST['user_ids']);
 
-        $product_specs = array(
-            138 => array(),
-            231 => array(),
-            784 => array(),
-            785 => array(),
-            787 => array(),
-            852 => array(),
-            881 => array(),
-            883 => array(),
-            911 => array(),
-            940 => array(),
-            943 => array(),
-            944 => array(),
-            953 => array(),
-            954 => array(),
-            971 => array(),
-            1004 => array(),
-            1020 => array(),
-            1073 => array(),
-            973 => array(430, 431, 432, 433, 434, 435, 436, 437)
-        );
-
         $users = $this->User->find('all', array(
             'conditions' => array(
                 'id' => $user_ids
@@ -50,18 +28,18 @@ class PlanHelperController extends AppController
                 return;
             }
         }
-        $product_ids = array_keys($product_specs);
-        $this->loadModel("Product");
+
         $products = $this->Product->find('all', array(
             'conditions' => array(
-                'id' => $product_ids
+                'brand_id' => PYS_BRAND_ID,
+                'published' => PUBLISH_YES
             )
         ));
 
         $this->loadModel('ProductSpecGroup');
         $product_spec_groups = $this->ProductSpecGroup->find('all', array(
             'conditions' => array(
-                'product_id' => $product_ids
+                'product_id' => Hash::extract($products, '{n}.Product.id')
             )
         ));
         $product_spec_groups = Hash::extract($product_spec_groups, '{n}.ProductSpecGroup.product_id', '{n}');
