@@ -70,7 +70,18 @@
         <div class="text-warning"><a href="http://api.map.baidu.com/lbsapi/getpoint/index.html" target="_blank">点击查询经纬度</a></div>
       </div>
     </div>
-
+    <div class="form-group shop-account">
+       <label class="col-sm-2 control-label">自取点银行账号</label>
+       <div class="col-sm-9 controls">
+         <input type="text" class="form-control" name="data[OfflineStore][account]" value="{{$offline_store[OfflineStore][account]}}" placeholder="请输入自提点银行账号"/>
+       </div>
+    </div>
+    <div class="form-group shop-account-name">
+        <label class="col-sm-2 control-label">自提点开户名</label>
+        <div class="col-sm-9 controles">
+            <input type="text" class="form-control" name="data[OfflineStore][account_name]" value="{{$offline_store[OfflineStore][account_name]}}" placeholder="请输入自提点银行开户名"/>
+        </div>
+    </div>
     <div class="form-group">
       <div class="col-sm-12 col-sm-offset-2">
         <a href="/manage/admin/offline_stores/index" class="btn btn-default">取消</a>
@@ -78,4 +89,4 @@
     </div>
   </form>
 </div>
-{{$this->Html->script(array('/js/tuan-area.js?v4.3', 'manage/offline_stores/edit.js?v1.1'))}}
+{{$this->Html->script(array('/js/tuan-area.js?v4.3', 'manage/offline_stores/edit.js?v1.2'))}}

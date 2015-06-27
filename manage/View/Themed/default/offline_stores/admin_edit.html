@@ -69,6 +69,18 @@
         <input type="text" class="form-control" name="data[OfflineStore][location_lat]" value="{{$offline_store[OfflineStore][location_lat]}}"/>
       </div>
     </div>
+      <div class="form-group shop-account">
+          <label class="col-sm-2 control-label">自取点银行账号</label>
+          <div class="col-sm-9 controls">
+              <input type="text" class="form-control" name="data[OfflineStore][account]" value="{{$offline_store[OfflineStore][account]}}" placeholder="请输入自提点银行账号"/>
+          </div>
+      </div>
+      <div class="form-group shop-account-name">
+          <label class="col-sm-2 control-label">自提点开户名</label>
+          <div class="col-sm-9 controles">
+              <input type="text" class="form-control" name="data[OfflineStore][account_name]" value="{{$offline_store[OfflineStore][account_name]}}" placeholder="请输入自提点银行开户名"/>
+          </div>
+      </div>
     <div class="form-group">
         <label class="col-sm-2 control-label">是否支持备注地址</label>
         <label class="col-sm-9">
@@ -98,4 +110,4 @@
     </div>
   </form>
 </div>
-{{$this->Html->script(array('/js/tuan-area.js?v4.4', 'manage/offline_stores/edit.js?v1.1'))}}
+{{$this->Html->script(array('/js/tuan-area.js?v4.4', 'manage/offline_stores/edit.js?v1.2'))}}

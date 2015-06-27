@@ -3,11 +3,19 @@ $(function () {
     var type = $('.type');
     var shopNo = $('.shop-no');
     var childArea = $('.child-area-id');
+    var shopAccount = $('.shop-account');
+    var shopAccountName = $('.shop-account-name');
     var initShopNo = function(){
         shopNo.toggleClass('hidden', type.val() != 0);
     };
     var initChildArea = function(){
         childArea.toggleClass('hidden',areaId.data('value') !=110114);
+    };
+    var initShopAccount = function(){
+        shopAccount.toggleClass('hidden',type.val() == 0);
+    };
+    var initShopAccountName = function(){
+      shopAccountName.toggleClass('hidden',type.val() == 0);
     };
 //    var zitiAddress = zitiAddress('');
 //    var areas = zitiAddress.getBeijingAreas;
@@ -22,6 +30,8 @@ $(function () {
     });
     type.on('change', function(){
         initShopNo();
+        initShopAccount();
+        initShopAccountName();
     });
     areaId.on('change',function(){
        var parentId = $(this).val();
@@ -32,6 +42,8 @@ $(function () {
     iUtils.initSelectBox(childArea);
     initShopNo();
     initChildArea();
+    initShopAccount();
+    initShopAccountName();
 
     $('.offline-store').submit(function(){
        if(!shopNo.hasClass('hidden')){
