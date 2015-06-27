@@ -658,7 +658,7 @@ class WeixinComponent extends Component
         }
     }
     public function send_wx_msg_sms($openid,$order, $good){
-        if($order['Order']['status'] == ORDER_STATUS_PAID){
+        if($order['Order']['status'] == ORDER_STATUS_PAID && !empty($openid)){
             $this->send_order_paid_message($openid, $order, $good);
             if($order['Order']['brand_id'] == PYS_BRAND_ID){
                 $this->send_pay_done_sms($order);
