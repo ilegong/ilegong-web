@@ -6,6 +6,7 @@
  * Time: 11:27
  */
 
+
 class TestController extends AppController{
 
     public $components = array('Weixin');
@@ -43,6 +44,14 @@ class TestController extends AppController{
     }
 
     public function test_wx_location(){
-        $this->set('jWeixinOn', true);
+        App::import('Vendor', 'Location', array('file' => 'Location/Coordinate.php'));
+        App::import('Vendor', 'Location', array('file' => 'Location/Distance/Vincenty.php'));
+        $coordinate1 = new Location\Coordinate(19.820664, -155.468066); // Mauna Kea Summit
+        $coordinate2 = new Location\Coordinate(20.709722, -156.253333); // Haleakala Summit
+        $calculator = new Location\Distance\Vincenty();
+        $this->set('distance',$calculator->getDistance($coordinate1, $coordinate2));
+        //echo $calculator->getDistance($coordinate1, $coordinate2);
+        // returns 128130.850 (meters; ≈128 kilometers)
     }
+
 }
