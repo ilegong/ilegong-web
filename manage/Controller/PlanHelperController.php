@@ -52,7 +52,7 @@ class PlanHelperController extends AppController
         ));
 
         $results = array();
-        for ($i = 1; $i <= $order_count; $i++) {
+        for ($i = 0; $i < $order_count; $i++) {
             $product = $products[array_rand($products)];
             $spec_groups = $product_spec_groups[$product['Product']['id']];
 
@@ -64,7 +64,7 @@ class PlanHelperController extends AppController
             $offline_store = $offline_stores[array_rand($offline_stores)];
             $num = $this->_get_random_num();
 
-            $order_id = $this->_try_to_create_order($user, $product, $num, $product_spec_group, $offline_store);
+            $order_id = $this->_try_to_create_order($i, $user, $product, $num, $product_spec_group, $offline_store);
 
             if(!isset($results[$user['User']['id']])){
                 $results[$user['User']['id']] = array();
@@ -114,7 +114,7 @@ class PlanHelperController extends AppController
         }
 
         try {
-            $order_id = $this->_try_to_create_order($user_id, $product, $num, $product_spec_group, $offline_store);
+            $order_id = $this->_try_to_create_order(0, $user_id, $product, $num, $product_spec_group, $offline_store);
             echo json_encode(array('result' => true, "order_id" => $order_id));
         } catch (Exception $e) {
             echo json_encode(array('result' => false, 'reason' => $e->getMessage()));
@@ -172,18 +172,20 @@ class PlanHelperController extends AppController
         echo json_encode(array("order_ids" => $order_ids));
     }
 
-    private function _try_to_create_order($user, $product, $num, $product_spec_group, $offline_store)
+    private function _try_to_create_order($index, $user, $product, $num, $product_spec_group, $offline_store)
     {
         $send_date = date_format(get_send_date(10, "23:59:59", '2,4,6'), 'Y-m-d');
-        $order_id = $this->_insert_order($user, $product, $num, $product_spec_group, $offline_store);
-        $cart_id = $this->_insert_cart($user, $product, $num, $product_spec_group, $send_date, $order_id);
+        $seconds = $index * 60 + rand(0, 59);
+        $date = date('Y-m-d H:i:s', strtotime('+'.$seconds.' seconds'));
+
+        $order_id = $this->_insert_order($user, $product, $num, $product_spec_group, $offline_store, $date);
+        $cart_id = $this->_insert_cart($user, $product, $num, $product_spec_group, $send_date, $order_id, $date);
 
         return $order_id;
     }
 
-    function _insert_order($user, $product, $num, $product_spec_group, $offline_store)
+    function _insert_order($user, $product, $num, $product_spec_group, $offline_store, $date)
     {
-        $date = date('Y-m-d H:i:s', strtotime("+17 seconds"));
         $price = $product['Product']['price'];
         if (!empty($product_spec_group)) {
             $price = $product_spec_group['ProductSpecGroup']['price'];
@@ -219,9 +221,8 @@ class PlanHelperController extends AppController
         }
     }
 
-    function _insert_cart($user, $product, $num, $product_spec_group, $send_date, $order_id)
+    function _insert_cart($user, $product, $num, $product_spec_group, $send_date, $order_id, $date)
     {
-        $date = date('Y-m-d H:i:s');
         $data = array();
         $data['Cart']['name'] = $product['Product']['name'];
         $data['Cart']['order_id'] = $order_id;
