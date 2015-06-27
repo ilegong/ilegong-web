@@ -62,7 +62,7 @@ class PlanHelperController extends AppController
             }
             $user = $users[array_rand($users)];
             $offline_store = $offline_stores[array_rand($offline_stores)];
-            $num = $this->_get_random_num();
+            $num = $this->_get_random_num(empty($product_spec_group) ? $product['Product']['price'] : $product_spec_group['ProductSpecGroup']['price']);
 
             $order_id = $this->_try_to_create_order($i, $user, $product, $num, $product_spec_group, $offline_store);
 
@@ -256,9 +256,9 @@ class PlanHelperController extends AppController
         return ($user_id >= 810163 && $user_id <= 810223) || ($user_id >= 810096 && $user_id <= 810158);
     }
 
-    private function _get_random_num()
+    private function _get_random_num($price)
     {
-        $rand_num = rand(1, 1000);
+        $rand_num = rand(1, max(1000 - 3 * $price, 1));
         $num = 1;
         if ($rand_num > 900) {
             $num = 5;
