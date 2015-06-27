@@ -43,6 +43,8 @@ class Coordinate
      */
     protected $ellipsoid;
 
+    static  $EARTH_RADIUS = 6371;//地球半径，平均半径为6371km
+
     /**
      * @param float     $lat       -90.0 .. +90.0
      * @param float     $lng       -180.0 .. +180.0
@@ -116,6 +118,27 @@ class Coordinate
     public function format(FormatterInterface $formatter)
     {
         return $formatter->format($this);
+    }
+
+    /**
+     * @param Coordinate $coordinate
+     * @param float $distance
+     * @return array
+     */
+    public function getSquarePoint(Coordinate $coordinate, $distance = 0.5) {
+        $lat = $coordinate->getLat();
+        $lng = $coordinate->getLng();
+        $dlng = 2 * asin(sin($distance / (2 * self::$EARTH_RADIUS)) / cos(deg2rad($lat)));
+        $dlng = rad2deg($dlng);
+        $dlat = $distance / self::$EARTH_RADIUS;
+        $dlat = rad2deg($dlat);
+        return array(
+            'left-top' => array('lat' => $lat + $dlat, 'lng' => $lng - $dlng),
+            'right-top' => array('lat' => $lat + $dlat, 'lng' => $lng + $dlng),
+            'left-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng - $dlng),
+            'right-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng + $dlng)
+        );
+
     }
 
     /**
