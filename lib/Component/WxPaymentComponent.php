@@ -162,6 +162,7 @@ class WxPaymentComponent extends Component {
                     $updatedResult = $orderModel->set_order_to_paid($orderId, $order['Order']['try_id'], $order['Order']['creator'], $order['Order']['type'], $order['Order']['member_id']);
                     $this->log('set_order_to_paid:'.$orderId.', updatedResult='.$updatedResult);
                     $status = PAYNOTIFY_STATUS_ORDER_UPDATED;
+                    $order = $updatedResult;
                 }
             }
         }
