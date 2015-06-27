@@ -10,12 +10,7 @@ class GroupBuy extends AppModel{
 
     public $useTable = false;
 
-    /**
-     * @var array
-     *
-     * custom group by product
-     */
-    var $allGroupBuyProducts = array(
+    var $historyGroupBuyProducts = array(
         '1069' => array(
             'id' => 1069,
             'name' => '顺平水蜜桃-顺丰包邮 果汁四溢 绿色无农药 国家地理标志保护产品',
@@ -30,6 +25,15 @@ class GroupBuy extends AppModel{
             'desc' => '满5人享受团购价88！果汁四溢久久的挑逗你的口腔和舌尖',
             'group_buy_label' => '1069-2'
         ),
+    );
+
+    /**
+     * @var array
+     *
+     * custom group by product
+     */
+    var $allGroupBuyProducts = array(
+
     );
 
     public function getGroupBuyProductInfo($pid){
