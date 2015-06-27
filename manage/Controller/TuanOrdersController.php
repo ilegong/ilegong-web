@@ -3,8 +3,7 @@ class TuanOrdersController extends AppController{
 
     var $name = 'TuanOrders';
 
-    var $uses = array('Order', 'TuanTeam', 'TuanBuying', 'Location', 'TuanProduct', 'OfflineStore', 'Oauthbind', 'OrderMessage', 'User','ProductTry','Cart');
-    var $order_msg_log = array(1=>"paid", 2 => 'py-reach');
+    var $uses = array('Order', 'TuanTeam', 'TuanBuying', 'Location', 'TuanProduct', 'OfflineStore', 'Oauthbind', 'OrderMessage', 'User','ProductTry');
     public function admin_ship_to_pys_stores(){
         $this->autoRender = false;
 
@@ -461,99 +460,4 @@ class TuanOrdersController extends AppController{
         }, $order_carts)), ', ');
     }
 
-    public function admin_on_order_status_change($orders=null){
-        $this->send_msg($orders);
-    }
-
-    public function send_msg($orders){
-        $user_ids = Hash::extract($orders, '{n}.Order.creator');
-        $order_ids = Hash::extract($orders, '{n}.Order.id');
-        $oauth_binds = $this->Oauthbind->find('list', array(
-            'conditions' => array( 'user_id' => $user_ids, 'source' => oauth_wx_source()),
-            'fields' => array('user_id', 'oauth_openid')
-        ));
-        $arrived_log = $this->OrderMessage->find('all', array(
-            'conditions' => array('order_id' => $order_ids, 'status' => 0)
-        ));
-        $join_conditions = array(
-            array(
-                'table' => 'products',
-                'alias' => 'Product',
-                'conditions' => array(
-                    'Cart.product_id = Product.id',
-                ),
-                'type' => 'LEFT',
-            )
-        );
-        $carts = $this->Cart->find('all', array(
-            'conditions' => array('order_id' => $order_ids),
-            'joins' => $join_conditions,
-            'fields' => array('Cart.id','Cart.num','Cart.order_id','Cart.send_date','Product.product_alias', 'Product.name'),
-        ));
-        foreach($orders as $order){
-            $openid = $oauth_binds[$order['Order']['id']];
-            if(!$this->in_arrived_log($order['Order']['id'], $arrived_log,$order['Order']['status'])){
-                $this->send_wx_msg_sms($openid,$order, $carts);
-            }
-        }
-    }
-    public function send_wx_msg_sms($openid,$order, $carts){
-        if($order['Order']['status'] == ORDER_STATUS_PAID){
-            $this->_pay_done_wx_msg($order,$openid);
-            $this->_pay_done_sms($order);
-        }elseif($order['Order']['status'] ==ORDER_STATUS_SHIPPED){
-            $this->_goods_shipped_wx_msg($order,$openid);
-        }else{
-            $this->log('invalid order status change, order_id:' . $order['Order']['id'].',status:'. $order['Order']['status']);
-        }
-    }
-    private function in_arrived_log($order_id,$arrived_log,$status){
-        foreach($arrived_log as $log){
-            if($log['OrderMessage']['id'] == $order_id && $log['OrderMessage']['type'] == $this->order_msg_log[$status]){
-                return true;
-            }
-        }
-        return false;
-    }
-    public function _wx_msg_send_and_log($post_data,$order,$type){
-        $this->OrderMessage->create();
-        if(send_weixin_message($post_data)){
-            $this->OrderMessage->save(array('order_id' => $order['Order']['id'], 'status' => 0, 'type'=>$type));
-        }else{
-            $this->OrderMessage->save(array('order_id' => $order['Order']['id'], 'status' => 1, 'type'=>$type));
-        }
-    }
-    public function _pay_done_wx_msg($order,$openid){
-        $product_name ="";
-        $post_data = array(
-            "touser" => $openid,
-            "template_id" => 'UJvs1MAnfA7ATAiXVN0w122E53BauMSw8iCt0M2mSBQ',
-            "url" => WX_HOST . '/orders/detail/'.$order['Order']['id'],
-            "topcolor" => "#FF0000",
-            "data" =>  array(
-                "first" => array("value" => "您的订单支付成功，我们会按照订单中预计的时间为你发货"),
-                "orderProductPrice" => array("value" => $order['Order']['total_price']),
-                "orderProductName" => array("value" => $product_name),
-                "orderAddress" => array("value" => $order['Order']['consignee_address']),
-                "orderName" => array("value" => $order['Order']['id']),
-                "remark" => array("value" => "点击查看订单详情", "color" => "#FF8800")
-            )
-        );
-        $this->_wx_msg_send_and_log($post_data, $order, "paid");
-    }
-    public function _goods_shipped_wx_msg($order,$openid){
-
-    }
-    public function _pay_done_sms($order){
-        $msg = "";
-        $mobilephone = $order['Order']['consignee_mobilephone'];
-        if($order['Order']['ship_mark'] == "ziti"){
-
-        }elseif($order['Order']['ship_mark'] == "kuaidi"){
-            $msg = "【朋友说】您的订单付款成功，订单号".$order['Order']['id']."，我们会按照订单中预计的时间为您发货！";
-        }else{
-            return false;
-        }
-        message_send($msg, $mobilephone);
-    }
 }
