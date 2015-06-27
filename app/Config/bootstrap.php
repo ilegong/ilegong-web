@@ -2136,3 +2136,18 @@ function group_buy_is_available($group_buy_label){
     $not_available_group_label = array('1069-1');
     return !in_array($group_buy_label,$not_available_group_label);
 }
+
+/**
+ * auto load spl lib
+ */
+
+// PHP5.3 namespace loader for Cake2.x
+spl_autoload_register(function ($class) {
+    foreach (App::path('Vendor') as $base) {
+        $path = $base . str_replace('\\', DS, $class) . '.php';
+        if (file_exists($path)) {
+            include $path;
+            return;
+        }
+    }
+});

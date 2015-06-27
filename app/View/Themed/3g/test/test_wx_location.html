@@ -2,18 +2,26 @@
     <div class="row-fluid">
         <div class="span10">
             <div class="alert alert-success" id="location_result">
-                {{$jWeixinOn}}
+                {{$distance}}
             </div>
         </div>
     </div>
 </div>
 {{if $jWeixinOn}}
 <script>
+    var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+    var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+    var speed = res.speed; // 速度，以米/每秒计
+    var accuracy = res.accuracy; // 位置精度
     wx.ready(function () {
         wx.getLocation({
             success: function (res) {
-                //$('#location_result').text(JSON.stringify(res));
+                $('#location_result').text(JSON.stringify(res));
                 alert(JSON.stringify(res));
+                latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+                longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+                speed = res.speed; // 速度，以米/每秒计
+                accuracy = res.accuracy; // 位置精度
             },
             cancel: function (res) {
                 alert(res);
