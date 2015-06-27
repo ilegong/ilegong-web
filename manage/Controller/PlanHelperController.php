@@ -23,7 +23,7 @@ class PlanHelperController extends AppController
             return;
         }
         foreach($users as $user){
-            if(!$this->_is_user_valid($user['User']['id'])){
+            if(!$this->_is_user_valid($user)){
                 echo json_encode(array('result' => false, 'reason' => 'invalid user '.$user['User']['id']));
                 return;
             }
@@ -47,7 +47,8 @@ class PlanHelperController extends AppController
         $offline_stores = $this->OfflineStore->find('all', array(
             'conditions' => array(
                 'type' => 1,
-                'deleted' => DELETED_YES
+                'deleted' => DELETED_YES,
+                'id' => array(54, 55)
             )
         ));
 
@@ -86,7 +87,7 @@ class PlanHelperController extends AppController
         $num = isset($_REQUEST['num']) ? $_REQUEST['num'] : 1;
 
         $user = $this->User->findById($user_id);
-        if(empty($user) || !$this->_is_user_valid($user_id)){
+        if(empty($user) || !$this->_is_user_valid($user)){
             echo json_encode(array('result' => false, 'reason' => 'user is invalid'));
             return;
         }
@@ -140,6 +141,14 @@ class PlanHelperController extends AppController
             echo json_encode(array('result' => false, 'reason' => 'orders does not exist'));
             return;
         }
+
+        $users = $this->User->find('all', array(
+            'conditions' => array(
+                'id' => array_unique(Hash::extract($orders, '{n}.Order.creator'))
+            )
+        ));
+        $users = Hash::combine($users, '{n}.User.id', '{n}');
+
         foreach ($orders as $order) {
             if ($order['Order']['brand_id'] != 92) {
                 echo json_encode(array('result' => false, 'reason' => 'order ' . $order['Order']['id'] . ' is not a pyshuo product'));
@@ -149,7 +158,8 @@ class PlanHelperController extends AppController
                 echo json_encode(array('result' => false, 'reason' => 'order ' . $order['Order']['id'] . ' is not in paid status'));
                 return;
             }
-            if (!$this->_is_user_valid($order['Order']['creator'])) {
+            $user = $users[$order['Order']['creator']];
+            if (!$this->_is_user_valid($user)) {
                 echo json_encode(array('result' => false, 'reason' => 'invalid user id ' . $order['Order']['creator']));
                 return;
             }
@@ -251,9 +261,10 @@ class PlanHelperController extends AppController
         }
     }
 
-    private function _is_user_valid($user_id)
+    private function _is_user_valid($user)
     {
-        return ($user_id >= 810163 && $user_id <= 810223) || ($user_id >= 810096 && $user_id <= 810158);
+
+        return !empty($user) && $user['User']['username'];
     }
 
     private function _get_random_num($price)
