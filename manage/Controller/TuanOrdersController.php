@@ -69,7 +69,7 @@ class TuanOrdersController extends AppController{
         ));
         $products = Hash::combine($products, '{n}.Product.id', '{n}');
 
-        $success = array();
+        $success = array();$fail = array();
         foreach($orders as &$order){
             if(in_array($order['Order']['id'], $arrived_order_ids)){
                 continue;
@@ -120,7 +120,7 @@ class TuanOrdersController extends AppController{
             $this->_send_phone_msg($order['Order']['creator'], $order['Order']['consignee_mobilephone'], $msg, false);
         }
 
-        echo json_encode(array('success' => true, 'res' => $success, 'already'=> $arrived_order_ids));
+        echo json_encode(array('success' => true, 'res' => $success, 'already'=> $arrived_order_ids,'fail' => $fail));
     }
     public function admin_send_by_pys_stores(){
         $this->autoRender = false;

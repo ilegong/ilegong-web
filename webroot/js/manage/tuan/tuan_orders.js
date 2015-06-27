@@ -426,17 +426,15 @@ $(document).ready(function () {
             $.post('/manage/admin/tuan_orders/ship_to_pys_stores', {"ids": orderIds}, function (data) {
                 if (data.success) {
                     var msg;
-                    if (orderIds.length == (data.res.length + data.already.length)) {
+                    if (data.fail.length == 0) {
                         msg = '订单状态修改成功，并全部发送了到达提醒';
                         setSuccessArrivedOrder(orderIds,1);
-                    }
-                    else {
-                        msg = '订单状态修改成功，但有' + (orderIds.length - data.res.length - data.already.length) + '个未发送到达提醒';
+                    }else {
+                        msg = '订单状态修改成功，但有'+data.fail.length+'个订单发送到货提醒失败,id为：'+ data.fail.toString()+'';
                         var orderId = $.merge(data.res,data.already);
                         setSuccessArrivedOrder($.unique(orderId),1);
                     }
                     utils.alert(msg);
-//                    location.reload();
                     setCheckedOrderStatus();
                     shipToOurStoreDialog.dialog('close');
                 }
@@ -453,11 +451,10 @@ $(document).ready(function () {
                         setSuccessArrivedOrder(orderIds,0);
                     }
                     else {
-                        msg = '订单状态修改成功，但有' + data.fail.length + '个未发送发货提醒';
+                        msg = '订单状态修改成功，但有'+data.fail.length+'个订单发送发货提醒失败,id为：'+ data.fail.toString()+'';
                         setSuccessArrivedOrder(data.res,0);
                     }
                     utils.alert(msg);
-//                    location.reload();
                     setCheckedOrderStatus();
                     shipToOurStoreDialog.dialog('close');
                 }
