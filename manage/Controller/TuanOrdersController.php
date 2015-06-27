@@ -4,7 +4,6 @@ class TuanOrdersController extends AppController{
     var $name = 'TuanOrders';
 
     var $uses = array('Order', 'TuanTeam', 'TuanBuying', 'Location', 'TuanProduct', 'OfflineStore', 'Oauthbind', 'OrderMessage', 'User','ProductTry','Cart');
-    var $order_msg_log = array(1=>"paid", 2 => 'py-reach');
     public function admin_ship_to_pys_stores(){
         $this->autoRender = false;
 
@@ -15,7 +14,6 @@ class TuanOrdersController extends AppController{
         }
 
         $order_ids = $data['ids'];
-
 
         try{
             $orders = $this->_validate_orders($order_ids);
@@ -40,7 +38,6 @@ class TuanOrdersController extends AppController{
 
         $this->log('ship to pys stores: set status to shipped for orders: '.json_encode($order_ids));
         $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED),array('id' => $order_ids));
-        $this->loadModel('Cart');
         $this->Cart->updateAll(array('status' => ORDER_STATUS_SHIPPED),array('order_id' => $order_ids));
 
         $this->loadModel('Product');
@@ -61,17 +58,15 @@ class TuanOrdersController extends AppController{
             $order_carts = $this->_get_order_carts($carts, $order);
             $product_name = $this->_get_product_name($order_carts, $products);
             $offline_store = $offline_stores[$order['Order']['consignee_id']];
-            $tipMsg = $offline_store['OfflineStore']['can_remark_address']==1 ? '已经到达自提点，自提点将尽快为您配货。' : '已经到达自提点，生鲜娇贵，请尽快取货哈。';
-            if($offline_store['OfflineStore']['owner_phone']){
-                $tipMsg = $tipMsg.'自提点联系电话: '.$offline_store['OfflineStore']['owner_phone'];
-            }
+            $wx_message = $this->_get_wx_message($product_name, $offline_store);
+
             $post_data = array(
                 "touser" => $oauth_binds[$order['Order']['creator']],
                 "template_id" => '3uA5ShDuM6amaaorl6899yMj9QvBmIiIAl7T9_JfR54',
                 "url" => WX_HOST . '/orders/detail/'.$order['Order']['id'],
                 "topcolor" => "#FF0000",
                 "data" =>  array(
-                    "first" => array("value" => "亲，您订购的".$product_name.$tipMsg),
+                    "first" => array("value" => $wx_message),
                     "keyword1" => array("value" => $order['Order']['id']),
                     "keyword2" => array("value" => $offline_store['OfflineStore']['alias']),
                     "keyword3" => array("value" => $order['Order']['consignee_address']),
@@ -89,12 +84,8 @@ class TuanOrdersController extends AppController{
                 $fail[] = $order['Order']['id'];
                 $this->OrderMessage->save(array('order_id' => $order['Order']['id'], 'status' => 1, 'type'=>'py-reach'));
             }
-            if($offline_store['OfflineStore']['can_remark_address']==1){
-                $msg = "亲，您订购的".$product_name."已经到达".$offline_store['OfflineStore']['alias']."自提点(".$offline_store['OfflineStore']['owner_phone'].")，自提点将尽快为您配货。确认收货可得积分。";
-            }else{
-                $msg = "亲，您订购的".$product_name."已经到达".$offline_store['OfflineStore']['alias']."自提点(".$offline_store['OfflineStore']['owner_phone'].")，生鲜娇贵，请尽快取货。确认收货可得积分。";
-            }
-            $this->_send_phone_msg($order['Order']['creator'], $order['Order']['consignee_mobilephone'], $msg, false);
+            $sms_message = $this->_get_sms_message($product_name, $offline_store);
+            $this->_send_phone_msg($order['Order']['creator'], $order['Order']['consignee_mobilephone'], $sms_message, false);
         }
 
         echo json_encode(array('success' => true, 'res' => $success, 'already'=> $arrived_order_ids,'fail' => $fail));
@@ -135,7 +126,6 @@ class TuanOrdersController extends AppController{
         $this->log('ship to pys stores: set status to shipped for orders: '.json_encode($order_ids));
         $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED),array('id' => $order_ids));
 
-        $this->loadModel('Cart');
         $carts = $this->Cart->find('all', array(
             'conditions' => array(
                 'order_id' => $order_ids
@@ -249,7 +239,6 @@ class TuanOrdersController extends AppController{
             return;
         }
 
-        $this->loadModel('Cart');
         $carts = $this->Cart->find('all', array(
             'conditions' => array(
                 'order_id' => $order_id
@@ -330,7 +319,6 @@ class TuanOrdersController extends AppController{
         }
         echo json_encode(array('success' => true, 'res' => '订单状态已更新'));
 
-        $this->loadModel('Cart');
         $this->Cart->updateAll(array('status'=> ORDER_STATUS_SHIPPED), array('order_id'=>$order_id));
 
         $oauth_bind = $this->Oauthbind->find('first', array(
@@ -435,7 +423,6 @@ class TuanOrdersController extends AppController{
     private function _get_order_good_info($order_id){
         $info ='';
         $number =0;
-        $this->loadModel('Cart');
         $carts = $this->Cart->find('all',array('conditions'=>array('order_id' => $order_id)));
         $this->loadModel('Product');
         $products = $this->Product->find('all', array('conditions'=>array('id' => array_unique(Hash::extract($carts, '{n}.Cart.product_id')))));
@@ -484,4 +471,30 @@ class TuanOrdersController extends AppController{
         }, $order_carts)), ', ');
     }
 
+    private function _get_wx_message($product_name, $offline_store){
+        $message = "亲，您订购的".$product_name.'已经到达自提点';
+        if($offline_store['OfflineStore']['can_remark_address']==1){
+            $message = $message.'，自提点将尽快为您配货。';
+        } else{
+            $message = $message.'，生鲜娇贵，请尽快取货哈。';
+        }
+        if(!empty($offline_store['OfflineStore']['owner_phone'])){
+            $message = $message.'自提点联系电话: '.$offline_store['OfflineStore']['owner_phone'];
+        }
+        return $message;
+    }
+
+    private function _get_sms_message($product_name, $offline_store){
+        $message =  "亲，您订购的".$product_name."已经到达".$offline_store['OfflineStore']['alias']."自提点";
+        if(!empty($offline_store['OfflineStore']['owner_phone'])){
+            $message = $message.'('.$offline_store['OfflineStore']['owner_phone'].')';
+        }
+
+        if($offline_store['OfflineStore']['can_remark_address']==1){
+            $message = $message."，自提点将尽快为您配货。";
+        }else{
+            $message = $message."，为了保证您吃到最新鲜的美味，请尽快接它回家吧！。";
+        }
+        return $message;
+    }
 }

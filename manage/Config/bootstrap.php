@@ -255,22 +255,24 @@ function message_send($msg = null, $mobilephone = null) {
 
 function get_address($tuan_team, $offline_store){
     if(empty($offline_store)){
-        $tuan_address = $tuan_team['TuanTeam']['tuan_addr'];
+        return $tuan_team['TuanTeam']['tuan_addr'];
+    }
+
+    return get_offline_store_address($offline_store);
+}
+function get_offline_store_address($offline_store){
+    $tuan_address = $offline_store['OfflineStore']['name'];
+    if(empty($offline_store['OfflineStore']['owner_name'])){
+        if(!empty($offline_store['OfflineStore']['owner_phone'])){
+            $tuan_address .= "(联系电话: ".$offline_store['OfflineStore']['owner_phone'].")";
+        }
     }
     else{
-        $tuan_address = $offline_store['OfflineStore']['name'];
-        if(empty($offline_store['OfflineStore']['owner_name'])){
-            if(!empty($offline_store['OfflineStore']['owner_phone'])){
-                $tuan_address .= "(联系电话: ".$offline_store['OfflineStore']['owner_phone'].")";
-            }
+        $tuan_address .= "(联系人: ".$offline_store['OfflineStore']['owner_name'];
+        if(!empty($offline_store['OfflineStore']['owner_phone'])){
+            $tuan_address .= " ".$offline_store['OfflineStore']['owner_phone'];
         }
-        else{
-            $tuan_address .= "(联系人: ".$offline_store['OfflineStore']['owner_name'];
-            if(!empty($offline_store['OfflineStore']['owner_phone'])){
-                $tuan_address .= " ".$offline_store['OfflineStore']['owner_phone'];
-            }
-            $tuan_address .= ")";
-        }
+        $tuan_address .= ")";
     }
 
     return $tuan_address;
