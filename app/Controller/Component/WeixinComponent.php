@@ -673,7 +673,7 @@ class WeixinComponent extends Component
     public function send_pay_done_sms($order){
         $mobilephone = $order['Order']['consignee_mobilephone'];
         if($order['Order']['ship_mark'] == "ziti"){
-            $ziti_address = $this->get_ziti_info($order['Order']['member_id']);
+            $ziti_address = $this->get_ziti_info($order['Order']['consignee_id']);
             $msg = "您的订单付款成功，订单号".$order['Order']['id']."，我们会按照订单中预计的时间将商品送达".$ziti_address['alias']."自提点(".$ziti_address['owner_phone'].")，商品到达自提点后，将再次通知您！";
         }elseif($order['Order']['ship_mark'] == "kuaidi"){
             $msg = "您的订单付款成功，订单号".$order['Order']['id']."，我们会按照订单中预计的时间为您发货！";
