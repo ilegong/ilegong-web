@@ -32,4 +32,16 @@ $(function () {
     iUtils.initSelectBox(childArea);
     initShopNo();
     initChildArea();
+
+    $('.offline-store').submit(function(){
+       if(!shopNo.hasClass('hidden')){
+          var shopNum = shopNo.val()==''|| shopNo.val()==0;
+          shopNo.parents('.form-group').toggleClass('has-error',shopNum);
+           if(shopNum){
+              return false;
+           }
+       }
+
+       return true;
+    });
 });
