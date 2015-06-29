@@ -428,12 +428,12 @@ $(document).ready(function () {
         $.post('/manage/admin/tuan_orders/orders_shipped', {"ids": orderIds, 'sendMessage': sendMessage}, function (data) {
             if (data.success) {
                 var msg;
-                if(!sendMessageFlag){
-                    msg = '订单状态修改成功，未发送模板消息和短信';
+                if(!sendMessage){
+                    msg = '订单状态修改成功, 无需发送提醒';
                 }
                 else{
                     if (data.fail_sms.length == 0) {
-                        msg = '订单状态修改成功，并全部发送了到达提醒';
+                        msg = '订单状态修改成功，并全部发送了提醒';
                     }else {
                         msg = '订单状态修改成功，但以下订单发送提醒失败：'+ data.fail_sms.toString();
                     }
@@ -461,15 +461,15 @@ $(document).ready(function () {
     });
     $('.batch-ship-orders').click(function(){
         var type = $(this).data('type');
-        $('.type', $batchShipDialog).val(type);
-        batchShipDialog.dialog("open");
-    });
-    $('.pys-stores-arrived').click(function () {
-        var orderIds = getCheckedOrderIds($('.orders-pys-stores'));
+        var orderIds = getCheckedOrderIds($('.orders-' + type));
         if (orderIds.length == 0) {
-            utils.alert('请先选择自有自提点的待发货订单');
+            utils.alert('请选择至少一个订单');
             return;
         }
+
+        $('.type', $batchShipDialog).val(type);
+        $('input:checkbox', $batchShipDialog).attr('checked', 'checked');
+
         batchShipDialog.dialog("open");
     });
     function batch_update_order_status_to_shipped(orders){
