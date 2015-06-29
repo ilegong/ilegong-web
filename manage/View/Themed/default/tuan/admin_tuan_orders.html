@@ -191,7 +191,7 @@
         ?>
         <h1 class="no-print"><span class="label no-print label-{{$item['style']}}">{{$item['name']}}</span></h1>
         {{if $data_tag == 'kuaidi'}}
-        <button class="btn btn-primary pull-right batch-update-order-status no-print">批量修改订单状态</button>
+        <button class="btn btn-primary pull-right batch-update-order-status no-print">快递批量发货</button>
         {{/if}}
         <hr class="no-print" />
         <h3 {{if !empty($current_orders)}}class="ship-type new-page"{{else}}class="no-print"{{/if}}><span class="label no-print label-{{$item['style']}}">{{$item['name']}}</span></h3>
@@ -202,7 +202,7 @@
         <hr class="no-print" />
         <h2 class="no-print">
             <span class="label label-warning no-print">朋友说自提</span>
-            <button  class="btn btn-primary pull-right ship-to-pys-stores">朋友说自提点发货</button>
+            <button  class="btn btn-primary pull-right ship-to-pys-stores">自提点批量发货</button>
         </h2>
         <hr class="no-print" />
         <div class="hidden" id="send_order_msg" data-reach="{{$reach_order}}" data-send_out="{{$send_out_order}}"></div>
