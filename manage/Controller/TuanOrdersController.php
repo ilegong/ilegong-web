@@ -32,8 +32,9 @@ class TuanOrdersController extends AppController{
         $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED),array('id' => $order_ids));
         $this->Cart->updateAll(array('status' => ORDER_STATUS_SHIPPED),array('order_id' => $order_ids));
 
-        $success = array();
-        $fail = array();
+//        $success = array();
+        $fail_wx = array();
+        $fail_sms = array();
         foreach($orders as &$order){
             if(in_array($order['Order']['id'], $arrived_order_ids)){
                 continue;
@@ -60,18 +61,21 @@ class TuanOrdersController extends AppController{
             $wx_send_status = send_weixin_message($post_data);
             $this->OrderMessage->create();
             if($wx_send_status){
-                $success[] = $order['Order']['id'];
+//                $success[] = $order['Order']['id'];
                 $this->OrderMessage->save(array('order_id' => $order['Order']['id'], 'status' => 0, 'type'=>'py-reach'));
             }else{
                 $this->log("goods arrived at pys stores: failed to send weixin message for order ".$order['Order']['id']);
-                $fail[] = $order['Order']['id'];
+                $fail_wx[] = $order['Order']['id'];
                 $this->OrderMessage->save(array('order_id' => $order['Order']['id'], 'status' => 1, 'type'=>'py-reach'));
             }
             $sms_message = $this->_get_sms_message($product_name, $offline_store);
-            $this->_send_phone_msg($order['Order']['creator'], $order['Order']['consignee_mobilephone'], $sms_message, false);
+            $sms_send_status = $this->_send_phone_msg($order['Order']['creator'], $order['Order']['consignee_mobilephone'], $sms_message, false);
+            if(!$sms_send_status){
+                $fail_sms[] = $order['Order']['id'];
+            }
         }
 
-        echo json_encode(array('success' => true, 'res' => $success, 'already'=> $arrived_order_ids,'fail' => $fail));
+        echo json_encode(array('success' => true, 'fail_wx' => $fail_wx,'fail_sms' => $fail_sms));
     }
 
     public function admin_send_by_pys_stores(){
@@ -101,7 +105,8 @@ class TuanOrdersController extends AppController{
         $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED),array('id' => $order_ids));
 
         $success = array();
-        $fail = array();
+        $fail_wx = array();
+        $fail_sms = array();
         foreach($orders as &$order){
             if(in_array($order['Order']['id'], $arrived_order_ids)){
                 continue;
@@ -135,12 +140,15 @@ class TuanOrdersController extends AppController{
                 $this->OrderMessage->save(array('order_id' => $order['Order']['id'], 'status' => 0, 'type'=>'py-send-out'));
             }else{
                 $this->log("ship to pys stores: failed to send weixin message for order ".$order['Order']['id']);
-                $fail[] = $order['Order']['id'];
+                $fail_wx[] = $order['Order']['id'];
             }
             $msg = "亲，您订购的".$product_name."已经出库，请留意到店短信。";
-            $this->_send_phone_msg($order['Order']['creator'], $order['Order']['consignee_mobilephone'], $msg, false);
+            $sms_send_status = $this->_send_phone_msg($order['Order']['creator'], $order['Order']['consignee_mobilephone'], $msg, false);
+            if(!$sms_send_status){
+                $fail_sms[] = $order['Order']['id'];
+            }
         }
-        echo json_encode(array('success' => true, 'res' => $success, 'fail' => $fail));
+        echo json_encode(array('success' => true,'fail_wx' => $fail_wx,'fail_sms' => $fail_sms));
     }
 
     public function _extract_tryid_tuanbuyid($orders){
@@ -394,7 +402,11 @@ class TuanOrdersController extends AppController{
         }
 
         if(!empty($consignee_mobilephone)){
-            message_send($msg, $consignee_mobilephone);
+            $return_info = json_decode(message_send($msg, $consignee_mobilephone),true);
+            if($return_info['error'] < 0){
+                $this->log('send message failure , the error code is '.$return_info['error'].' and the msg is '.$return_info['msg'].'and the wrong words is '.$return_info['hit']);
+                return false;
+            }return true;
         }
     }
 

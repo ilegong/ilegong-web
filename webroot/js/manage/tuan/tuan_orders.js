@@ -425,13 +425,16 @@ $(document).ready(function () {
         if (val == '1') {
             $.post('/manage/admin/tuan_orders/ship_to_pys_stores', {"ids": orderIds}, function (data) {
                 if (data.success) {
-                    var msg;
-                    if (data.fail.length == 0) {
-                        msg = '订单状态修改成功，并全部发送了到达提醒';
+                    var msg;var msg_wx;var msg_sms;
+                    if ((data.fail_wx.length == 0)&&(data.fail_sms.length == 0)) {
+                        msg = '订单状态修改成功，并全部发送了到达提醒及短信提醒';
                         setSuccessArrivedOrder(orderIds,1);
-                    }else {
-                        msg = '订单状态修改成功，但有'+data.fail.length+'个订单发送到货提醒失败,id为：'+ data.fail.toString()+'';
-                        var orderId = $.merge(data.res,data.already);
+                    }else{
+                        msg_wx = data.fail_wx.length>0 ?',但有'+data.fail_wx.length+'个订单发送到货提醒失败,id为：'+ data.fail_wx.toString():'';
+                        msg_sms = data.fail_sms.length>0?',但有'+data.fail_sms.length+'个订单发送短信提醒失败，id 为：'+data.fail_sms.toString():'';
+                        msg = '订单状态修改成功' + msg_wx + msg_sms;
+//                        var orderId = $.merge(data.res,data.already);
+                        var orderId = $(orderIds).not($.merge(data.fail_wx,data.fail_sms)).get();
                         setSuccessArrivedOrder($.unique(orderId),1);
                     }
                     utils.alert(msg);
@@ -445,14 +448,18 @@ $(document).ready(function () {
         } else {
             $.post('/manage/admin/tuan_orders/send_by_pys_stores', {"ids": orderIds}, function (data) {
                 if (data.success) {
-                    var msg;
-                    if (orderIds.length == data.res.length) {
+                    var msg;var msg_wx;var msg_sms;
+                    if ((data.fail_wx.length == 0)&&(data.fail_sms.length == 0)) {
                         msg = '订单状态修改成功，并全部发送了发货提醒';
                         setSuccessArrivedOrder(orderIds,0);
                     }
                     else {
-                        msg = '订单状态修改成功，但有'+data.fail.length+'个订单发送发货提醒失败,id为：'+ data.fail.toString()+'';
-                        setSuccessArrivedOrder(data.res,0);
+//                        msg = '订单状态修改成功，但有'+data.fail.length+'个订单发送发货提醒失败,id为：'+ data.fail.toString()+'';
+                        msg_wx = data.fail_wx.length>0 ?',但有'+data.fail_wx.length+'个订单发送发货提醒失败,id为：'+ data.fail_wx.toString():'';
+                        msg_sms = data.fail_sms.length>0?',但有'+data.fail_sms.length+'个订单发送短信提醒失败，id 为：'+data.fail_sms.toString():'';
+                        msg = '订单状态修改成功' + msg_wx + msg_sms;
+                        var orderId = $(orderIds).not($.merge(data.fail_wx,data.fail_sms)).get();
+                        setSuccessArrivedOrder(orderId,0);
                     }
                     utils.alert(msg);
                     setCheckedOrderStatus();
