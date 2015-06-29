@@ -3,7 +3,7 @@ class TuanOrdersController extends AppController{
 
     var $name = 'TuanOrders';
 
-    var $uses = array('Order', 'TuanTeam', 'TuanBuying', 'Location', 'TuanProduct', 'OfflineStore', 'Oauthbind', 'OrderMessage', 'User','ProductTry','Cart');
+    var $uses = array('Order', 'Cart', 'Product', 'TuanTeam', 'TuanBuying', 'Location', 'TuanProduct', 'OfflineStore', 'Oauthbind', 'OrderMessage', 'User','ProductTry');
     public function admin_ship_to_pys_stores(){
         $this->autoRender = false;
 
@@ -13,41 +13,24 @@ class TuanOrdersController extends AppController{
             return;
         }
 
-        $order_ids = $data['ids'];
-
         try{
-            $orders = $this->_validate_orders($order_ids);
-            $carts = $this->_validate_carts($orders);
+            $orders = $this->_get_orders($data['ids'], array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED));
+            $order_ids = Hash::extract($orders, '{n}.Order.id');
+            $carts = $this->_get_carts_of_orders($orders);
             $offline_stores = $this->_validate_offline_stores($orders, OFFLINE_STORE_PYS);
+            $products = $this->_get_products($carts);
+            $oauth_binds = $this->_get_oauth_binds($orders);
+            $arrived_logs = $this->_get_arrived_logs($order_ids, 'py-reach');
+            $arrived_order_ids = Hash::extract($arrived_logs, '{n}.OrderMessage.order_id');
         }
         catch(Exception $e){
             echo json_encode(array('success' => false, 'res' => $e->getMessage()));
             return;
         }
 
-        $user_ids = Hash::extract($orders, '{n}.Order.creator');
-        $oauth_binds = $this->Oauthbind->find('list', array(
-            'conditions' => array( 'user_id' => $user_ids, 'source' => oauth_wx_source()),
-            'fields' => array('user_id', 'oauth_openid')
-        ));
-
-        $arrived_log = $this->OrderMessage->find('all', array(
-            'conditions' => array('order_id' => $order_ids, 'status' => 0, 'type' => 'py-reach')
-        ));
-        $arrived_order_ids = Hash::extract($arrived_log, '{n}.OrderMessage.order_id');
-
-        $this->log('ship to pys stores: set status to shipped for orders: '.json_encode($order_ids));
+        $this->log('goods arrived at pys stores: set status to shipped for orders: '.json_encode($order_ids));
         $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED),array('id' => $order_ids));
         $this->Cart->updateAll(array('status' => ORDER_STATUS_SHIPPED),array('order_id' => $order_ids));
-
-        $this->loadModel('Product');
-        $products = $this->Product->find('all', array(
-            'conditions' => array(
-                'id' => array_unique(Hash::extract($carts, '{n}.Cart.product_id'))
-            ),
-            'fields' => array('id', 'name', 'product_alias')
-        ));
-        $products = Hash::combine($products, '{n}.Product.id', '{n}');
 
         $success = array();
         $fail = array();
@@ -73,14 +56,14 @@ class TuanOrdersController extends AppController{
                     "remark" => array("value" => "感谢您的支持".$offline_store['OfflineStore']['owner_phone'], "color" => "#FF8800")
                 )
             );
-            $this->log('ship to pys stores: send weixin message for order: '.$order['Order']['id'].': '.json_encode($post_data));
+            $this->log('goods arrived at pys stores: send weixin message for order: '.$order['Order']['id'].': '.json_encode($post_data));
             $wx_send_status = send_weixin_message($post_data);
             $this->OrderMessage->create();
             if($wx_send_status){
                 $success[] = $order['Order']['id'];
                 $this->OrderMessage->save(array('order_id' => $order['Order']['id'], 'status' => 0, 'type'=>'py-reach'));
             }else{
-                $this->log("ship to pys stores: failed to send weixin message for order ".$order['Order']['id']);
+                $this->log("goods arrived at pys stores: failed to send weixin message for order ".$order['Order']['id']);
                 $fail[] = $order['Order']['id'];
                 $this->OrderMessage->save(array('order_id' => $order['Order']['id'], 'status' => 1, 'type'=>'py-reach'));
             }
@@ -90,6 +73,7 @@ class TuanOrdersController extends AppController{
 
         echo json_encode(array('success' => true, 'res' => $success, 'already'=> $arrived_order_ids,'fail' => $fail));
     }
+
     public function admin_send_by_pys_stores(){
         $this->autoRender = false;
         $data=$_POST;
@@ -97,54 +81,32 @@ class TuanOrdersController extends AppController{
             echo json_encode(array('success' => true, 'res' => array()));
             return;
         }
-        $order_ids = $data['ids'];
-        $orders = $this->Order->find('all', array(
-            'conditions' => array(
-                'id'=> $order_ids,
-                'status' => ORDER_STATUS_PAID
-            ),
-        ));
-        if(empty($orders)){
-            echo json_encode(array('success' => true, 'res' => array()));
+
+        try{
+            $orders = $this->_get_orders($data['ids'], array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED));
+            $order_ids = Hash::extract($orders, '{n}.Order.id');
+            $offline_stores = $this->_validate_offline_stores($orders, OFFLINE_STORE_PYS);
+            $carts = $this->_get_carts_of_orders($orders);
+            $products = $this->_get_products($carts);
+            $oauth_binds = $this->_get_oauth_binds($orders);
+            $arrived_logs = $this->_get_arrived_logs($order_ids, 'py-send-out');
+            $arrived_order_ids = Hash::extract($arrived_logs, '{n}.OrderMessage.order_id');
+        }
+        catch(Exception $e){
+            echo json_encode(array('success' => false, 'res' => $e->getMessage()));
             return;
         }
 
-        $order_ids = Hash::extract($orders, '{n}.Order.id');
-        // validate goods should be shipped to pys stores
-        $validate_res = $this->_validate_offline_stores($orders);
-        if($validate_res['success']){
-            $offline_stores = $validate_res['data'];
-        }else{
-            return $validate_res;
-        }
-        $user_ids = Hash::extract($orders, '{n}.Order.creator');
-        $oauth_binds = $this->Oauthbind->find('list', array(
-            'conditions' => array( 'user_id' => $user_ids, 'source' => oauth_wx_source()),
-            'fields' => array('user_id', 'oauth_openid')
-        ));
-
-        $this->log('ship to pys stores: set status to shipped for orders: '.json_encode($order_ids));
+        $this->log('goods shipped to pys stores: set status to shipped for orders: '.json_encode($order_ids));
         $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED),array('id' => $order_ids));
-
-        $carts = $this->Cart->find('all', array(
-            'conditions' => array(
-                'order_id' => $order_ids
-            ),
-            'fields' => array('id', 'order_id', 'product_id', 'status', 'send_date')
-        ));
-
-        $this->loadModel('Product');
-        $products = $this->Product->find('all', array(
-            'conditions' => array(
-                'id' => array_unique(Hash::extract($carts, '{n}.Cart.product_id'))
-            ),
-            'fields' => array('id', 'name', 'product_alias')
-        ));
-        $products = Hash::combine($products, '{n}.Product.id', '{n}');
 
         $success = array();
         $fail = array();
         foreach($orders as &$order){
+            if(in_array($order['Order']['id'], $arrived_order_ids)){
+                continue;
+            }
+
             $offline_store = $offline_stores[$order['Order']['consignee_id']];
             $order_carts = array_filter($carts, function($cart) use ($order){
                 return $cart['Cart']['order_id'] == $order['Order']['id'];
@@ -227,33 +189,12 @@ class TuanOrdersController extends AppController{
         }
 
         // validate goods should be shipped to pys stores
-        $offline_store = $this->OfflineStore->find('first', array(
-            'conditions' => array('id'=>$order['Order']['consignee_id'])
-        ));
-        if(empty($offline_store)){
-            echo json_encode(array('success' => false, 'res' => 'order '.$order['Order']['id'].' has no offline store'));
-            return;
-        }
-        if($offline_store['OfflineStore']['type'] != OFFLINE_STORE_HAOLINJU){
-            echo json_encode(array('success' => false, 'res' => 'order '.$order['Order']['id'].' is not sent to haolinju'));
-            return;
-        }
+        $offline_stores = $this->_validate_offline_stores(array($order), OFFLINE_STORE_HAOLINJU);
+        $offline_store = $offline_stores[0];
 
-        $carts = $this->Cart->find('all', array(
-            'conditions' => array(
-                'order_id' => $order_id
-            ),
-            'fields' => array('id', 'order_id', 'product_id', 'status', 'send_date')
-        ));
+        $carts = $this->_get_carts_of_orders(array($order), false);
 
-        $this->loadModel('Product');
-        $products = $this->Product->find('all', array(
-            'conditions' => array(
-                'id' => array_unique(Hash::extract($carts, '{n}.Cart.product_id'))
-            ),
-            'fields' => array('id', 'name', 'product_alias')
-        ));
-        $products = Hash::combine($products, '{n}.Product.id', '{n}');
+        $products = $this->_get_products($carts);
         $product_name = $this->_get_product_name($carts, $products);
 
         $oauth_bind = $this->Oauthbind->find('first', array(
@@ -304,12 +245,18 @@ class TuanOrdersController extends AppController{
 			echo json_encode(array('success'=>false,'res'=>'参数错误'));
 			exit;
 		}
-        $order = $this->Order->findById($order_id);
 
-		if($order['Order']['status'] != ORDER_STATUS_PAID){
-			echo json_encode(array('success'=>false,'res'=>'订单状态不正确'));
-			exit;
-		}
+        try{
+            $orders = $this->_get_orders(array($order_id), array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED));
+            $order = $orders[0];
+            $carts = $this->_get_carts_of_orders(array($order), false);
+            $products = $this->_get_products($carts);
+        }
+        catch(Exception $e){
+            echo json_encode(array('success' => false, 'res' => $e->getMessage()));
+            return;
+        }
+
         $update_status =  $this->Order->updateAll(array('status'=> ORDER_STATUS_SHIPPED,'ship_code'=>"'".addslashes($ship_code)."'",'ship_type'=>$ship_type,
             'lastupdator'=> 0),array('id'=>$order_id));
         //add weixin message
@@ -317,7 +264,6 @@ class TuanOrdersController extends AppController{
             echo json_encode(array('success'=>false,'res'=>'更新订单状态失败'));
             return;
         }
-        echo json_encode(array('success' => true, 'res' => '订单状态已更新'));
 
         $this->Cart->updateAll(array('status'=> ORDER_STATUS_SHIPPED), array('order_id'=>$order_id));
 
@@ -330,7 +276,15 @@ class TuanOrdersController extends AppController{
             return;
         }
 
-        $good = $this->_get_order_good_info($order_id);
+        $number =0;
+        $info ='';
+        foreach($carts as $cart){
+            $product = $products[$cart['Cart']['product_id']];
+            $product_name = empty($product['Product']['product_alias']) ? $product['Product']['name'] : $product['Product']['product_alias'];
+            $info = $info.$product_name.'x'.$cart['Cart']['num'];
+            $number +=$cart['Cart']['num'];
+        }
+
         $ship_type_list = ShipAddress::ship_type_list();
         $post_data = array(
             "touser" => $oauth_bind['Oauthbind']['oauth_openid'],
@@ -341,8 +295,8 @@ class TuanOrdersController extends AppController{
                 "first" => array("value" => "亲，您的特产已经从家乡启程啦。"),
                 "keyword1" => array("value" => $ship_type_list[$ship_type]),
                 "keyword2" => array("value" => $ship_code),
-                "keyword3" => array("value" => $good['good_info']),
-                "keyword4" => array("value" => $good['good_number']),
+                "keyword3" => array("value" => $info),
+                "keyword4" => array("value" => $number),
                 "remark" => array("value" => "点击查看订单详情。", "color" => "#FF8800")
             )
         );
@@ -353,28 +307,31 @@ class TuanOrdersController extends AppController{
             echo json_encode(array('success' => true, 'res' => '订单状态已更新，模版消息发送失败'));
         }
 	}
-    private function _validate_offline_stores($orders, $type){
+
+    private function _validate_offline_stores($orders, $expected_type){
+        if(empty($orders)){
+            return array();
+        }
+
         // validate goods should be shipped to pys stores
         $offline_store_ids = array_unique(Hash::extract($orders, '{n}.Order.consignee_id'));
-        if(!empty($offline_store_ids)){
-            $offline_stores = $this->OfflineStore->find('all', array(
-                'conditions' => array('id'=>$offline_store_ids)
-            ));
-            $offline_stores = Hash::combine($offline_stores, '{n}.OfflineStore.id', '{n}');
-        }
+        $offline_stores = $this->OfflineStore->find('all', array(
+            'conditions' => array('id'=>$offline_store_ids)
+        ));
+        $offline_stores = Hash::combine($offline_stores, '{n}.OfflineStore.id', '{n}');
 
         foreach($orders as &$order){
             $offline_store = $offline_stores[$order['Order']['consignee_id']];
             if(empty($offline_store)){
-                return array('success' => false, 'res' => 'order '.$order['Order']['id'].' has no offline store');
+                throw new Exception('order '.$order['Order']['id'].' has no offline store');
             }
-            if($offline_store['OfflineStore']['type'] != $type){
-                return array('success' => false, 'res' => 'order '.$order['Order']['id'].' is sent to invalid offline store');
+            if($offline_store['OfflineStore']['type'] != $expected_type){
+                throw new Exception('order '.$order['Order']['id'].' is sent to invalid offline store');
             }
         }
         return $offline_stores;
     }
-    private function _validate_carts($orders){
+    private function _get_carts_of_orders($orders, $validate_send_date = true){
         if(empty($orders)){
             return array();
         }
@@ -386,19 +343,21 @@ class TuanOrdersController extends AppController{
             'fields' => array('id', 'order_id', 'product_id', 'status', 'send_date')
         ));
 
-        foreach($orders as &$order){
-            $order_carts = $this->_get_order_carts($carts, $order);
-            $order_carts_send_dates = array_unique(Hash::extract($order_carts, '{n}.Cart.send_date'));
-            if(count($order_carts_send_dates) > 1){
-                throw new Exception('order '.$order['Order']['id'].' has various send dates');
+        if($validate_send_date){
+            foreach($orders as &$order){
+                $order_carts = $this->_get_order_carts($carts, $order);
+                $order_carts_send_dates = array_unique(Hash::extract($order_carts, '{n}.Cart.send_date'));
+                if(count($order_carts_send_dates) > 1){
+                    throw new Exception('order '.$order['Order']['id'].' has various send dates');
+                }
             }
         }
         return $carts;
     }
 
-    private function _validate_orders($order_ids){
+    private function _get_orders($order_ids, $expected_status){
         if(empty($order_ids)){
-            return array();
+            throw new Exception('orders are empty');
         }
 
         $orders = $this->Order->find('all', array(
@@ -406,10 +365,15 @@ class TuanOrdersController extends AppController{
                 'id'=> $order_ids
             ),
         ));
+
+        if(empty($orders)){
+            throw new Exception('orders are empty');
+        }
+
         // all orders must be paid or shipped
         foreach($orders as &$order){
-            if(!in_array($order['Order']['status'], array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED))){
-                throw new Exception('order '.$order['Order']['id'].' status is '.$order['Order']['status']);
+            if(!in_array($order['Order']['status'], $expected_status)){
+                throw new Exception('order '.$order['Order']['id'].' status is not expected: '.$order['Order']['status']);
             }
         }
         return $orders;
@@ -420,47 +384,17 @@ class TuanOrdersController extends AppController{
             return $cart['Cart']['order_id'] == $order['Order']['id'];
         });
     }
-    private function _get_order_good_info($order_id){
-        $info ='';
-        $number =0;
-        $carts = $this->Cart->find('all',array('conditions'=>array('order_id' => $order_id)));
-        $this->loadModel('Product');
-        $products = $this->Product->find('all', array('conditions'=>array('id' => array_unique(Hash::extract($carts, '{n}.Cart.product_id')))));
-        $products = Hash::combine($products, '{n}.Product.id', '{n}');
-        foreach($carts as $cart){
-            $product = $products[$cart['Cart']['product_id']];
-            $product_name = empty($product['Product']['product_alias']) ? $product['Product']['name'] : $product['Product']['product_alias'];
-            $info = $info.$product_name.'x'.$cart['Cart']['num'];
-            $number +=$cart['Cart']['num'];
-        }
-        return array("good_info"=>$info,"good_number"=>$number);
-    }
     public function _send_phone_msg($order_creator, $consignee_mobilephone, $msg, $wx_send_status = true){
-        $mobilephone = '';
-        $user_info = $this->User->find('first', array(
-            'conditions' => array('id' => $order_creator),
-            'fields' => array('id','mobilephone')
-        ));
-        $user_mobilephone = $user_info['User']['mobilephone'];
         if(empty($consignee_mobilephone)){
-            if(!empty($user_mobilephone) && !$wx_send_status ){
-                $mobilephone = $user_mobilephone;
-            }
-        }else{
-            if($consignee_mobilephone == $user_mobilephone){
-                if(!$wx_send_status){
-                    $mobilephone = $consignee_mobilephone;
-                }
-            }else{
-                if($wx_send_status){
-                    $mobilephone = $consignee_mobilephone;
-                }else{
-                    $mobilephone = $user_mobilephone;
-                }
-            }
+            $user_info = $this->User->find('first', array(
+                'conditions' => array('id' => $order_creator),
+                'fields' => array('id','mobilephone')
+            ));
+            $consignee_mobilephone = $user_info['User']['mobilephone'];
         }
-        if(!empty($mobilephone)){
-            message_send($msg, $mobilephone);
+
+        if(!empty($consignee_mobilephone)){
+            message_send($msg, $consignee_mobilephone);
         }
     }
 
@@ -496,5 +430,38 @@ class TuanOrdersController extends AppController{
             $message = $message."，为了保证您吃到最新鲜的美味，请尽快接它回家吧！。";
         }
         return $message;
+    }
+
+    private function _get_products($carts){
+        $product_ids = array_unique(Hash::extract($carts, '{n}.Cart.product_id'));
+        if(empty($product_ids)){
+            return array();
+        }
+        $products = $this->Product->find('all', array(
+            'conditions' => array(
+                'id' => $product_ids
+            ),
+            'fields' => array('id', 'name', 'product_alias')
+        ));
+        return Hash::combine($products, '{n}.Product.id', '{n}');
+    }
+
+    private function _get_oauth_binds($orders){
+        if(empty($orders)){
+            return array();
+        }
+        return $this->Oauthbind->find('list', array(
+            'conditions' => array( 'user_id' => array_unique(Hash::extract($orders, '{n}.Order.creator')), 'source' => oauth_wx_source()),
+            'fields' => array('user_id', 'oauth_openid')
+        ));
+    }
+
+    private function _get_arrived_logs($order_ids, $type){
+        if(empty($order_ids)){
+            return array();
+        }
+        return $this->OrderMessage->find('all', array(
+            'conditions' => array('order_id' => $order_ids, 'status' => 0, 'type' => $type)
+        ));
     }
 }
