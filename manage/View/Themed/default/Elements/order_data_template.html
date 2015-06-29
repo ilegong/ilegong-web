@@ -1,6 +1,6 @@
 {{if !empty($current_orders)}}
 {{template Elements/order_collect_data_template}}
-<table class="table table-bordered orders" name="order-data-table" id="{{$data_tag}}" data-table-name="{{$data_tag_name}}">
+<table class="table table-bordered orders orders-{{$delivery_type}}" name="order-data-table" id="{{$data_tag}}" data-table-name="{{$data_tag_name}}">
     <thead>
         <tr>
             <td mark-print="no-print"><input type="checkbox" value="0" class="check_all_tb"></td>

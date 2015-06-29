@@ -9,6 +9,7 @@ $(document).ready(function () {
     var $currentOperateOrder = null;
     var sendOrderMsg = $('#send_order_msg');
     var refundLog = $('#refund_logs');
+    var $batchShipDialog = $('.batch-ship-dialog');
     mainContent.height(250);
 
     start_stat_date.datetimepicker({
@@ -386,9 +387,9 @@ $(document).ready(function () {
             }
         })
     });
-    function getCheckedOrderIds() {
+    function getCheckedOrderIds(parentSelector) {
         var $tb_ids = [];
-        $.each($('.order input:checkbox:checked', $('.orders')), function (index, item) {
+        $.each($('.order input:checkbox:checked', parentSelector), function (index, item) {
             $tb_ids.push($(this).val());
         });
         return $tb_ids;
@@ -419,89 +420,57 @@ $(document).ready(function () {
             that.parents('tr').children('td').eq(13).children('span').eq(1).removeClass('hidden');
         });
     }
-    var ourAddressSend = function () {
-        var orderIds = getCheckedOrderIds();
-        var val = $('input:radio[name="optionsRadios"]:checked').val();
-        if (val == '1') {
-            $.post('/manage/admin/tuan_orders/ship_to_pys_stores', {"ids": orderIds}, function (data) {
-                if (data.success) {
-                    var msg;var msg_wx;var msg_sms;
-                    if ((data.fail_wx.length == 0)&&(data.fail_sms.length == 0)) {
-                        msg = '订单状态修改成功，并全部发送了到达提醒及短信提醒';
-                        setSuccessArrivedOrder(orderIds,1);
-                    }else{
-                        msg_wx = data.fail_wx.length>0 ?',但有'+data.fail_wx.length+'个订单发送到货提醒失败,id为：'+ data.fail_wx.toString():'';
-                        msg_sms = data.fail_sms.length>0?',但有'+data.fail_sms.length+'个订单发送短信提醒失败，id 为：'+data.fail_sms.toString():'';
-                        msg = '订单状态修改成功' + msg_wx + msg_sms;
-//                        var orderId = $.merge(data.res,data.already);
-                        var orderId = $(orderIds).not($.merge(data.fail_wx,data.fail_sms)).get();
-                        setSuccessArrivedOrder($.unique(orderId),1);
-                    }
-                    utils.alert(msg);
-                    setCheckedOrderStatus();
-                    shipToOurStoreDialog.dialog('close');
-                }
-                else {
-                    utils.alert(data.res);
-                }
-            }, 'json');
-        } else {
-            $.post('/manage/admin/tuan_orders/send_by_pys_stores', {"ids": orderIds}, function (data) {
-                if (data.success) {
-                    var msg;var msg_wx;var msg_sms;
-                    if ((data.fail_wx.length == 0)&&(data.fail_sms.length == 0)) {
-                        msg = '订单状态修改成功，并全部发送了发货提醒';
-                        setSuccessArrivedOrder(orderIds,0);
-                    }
-                    else {
-//                        msg = '订单状态修改成功，但有'+data.fail.length+'个订单发送发货提醒失败,id为：'+ data.fail.toString()+'';
-                        msg_wx = data.fail_wx.length>0 ?',但有'+data.fail_wx.length+'个订单发送发货提醒失败,id为：'+ data.fail_wx.toString():'';
-                        msg_sms = data.fail_sms.length>0?',但有'+data.fail_sms.length+'个订单发送短信提醒失败，id 为：'+data.fail_sms.toString():'';
-                        msg = '订单状态修改成功' + msg_wx + msg_sms;
-                        var orderId = $(orderIds).not($.merge(data.fail_wx,data.fail_sms)).get();
-                        setSuccessArrivedOrder(orderId,0);
-                    }
-                    utils.alert(msg);
-                    setCheckedOrderStatus();
-                    shipToOurStoreDialog.dialog('close');
-                }
-                else {
-                    utils.alert(data.res);
-                }
-            }, 'json');
-        }
 
+    var ordersShipped = function() {
+        var type = $('.type', $batchShipDialog).val();
+        var orderIds = getCheckedOrderIds($(".orders-" + type));
+        var sendMessage = $('input:checkbox', $batchShipDialog).is(':checked');
+        $.post('/manage/admin/tuan_orders/orders_shipped', {"ids": orderIds, 'sendMessage': sendMessage}, function (data) {
+            if (data.success) {
+                var msg;
+                if(!sendMessageFlag){
+                    msg = '订单状态修改成功，未发送模板消息和短信';
+                }
+                else{
+                    if (data.fail_sms.length == 0) {
+                        msg = '订单状态修改成功，并全部发送了到达提醒';
+                    }else {
+                        msg = '订单状态修改成功，但以下订单发送提醒失败：'+ data.fail_sms.toString();
+                    }
+                }
+                setSuccessArrivedOrder(_.difference(orderIds, data.fail),1);
+                utils.alert(msg);
+                setCheckedOrderStatus();
+                batchShipDialog.dialog('close');
+            }
+            else {
+                utils.alert(data.res);
+            }
+        }, 'json');
     };
-    var shipToOurStoreDialog = $(".ship-to-our-store-dialog").dialog({
+    var batchShipDialog = $batchShipDialog.dialog({
         autoOpen: false,
         height: 300,
         width: 350,
         modal: true,
         buttons: {
-            "取消": function() {shipToOurStoreDialog.dialog( "close" );},
-            "确认": function(){ourAddressSend();}
+            "取消": function() {batchShipDialog.dialog( "close" );},
+            "确认": function(){ordersShipped();}
         },
         close:function(){}
     });
-    $('.ship-to-pys-stores').click(function () {
-        var orderIds = getCheckedOrderIds();
+    $('.batch-ship-orders').click(function(){
+        var type = $(this).data('type');
+        $('.type', $batchShipDialog).val(type);
+        batchShipDialog.dialog("open");
+    });
+    $('.pys-stores-arrived').click(function () {
+        var orderIds = getCheckedOrderIds($('.orders-pys-stores'));
         if (orderIds.length == 0) {
             utils.alert('请先选择自有自提点的待发货订单');
             return;
         }
-        shipToOurStoreDialog.dialog("open");
-    });
-
-    $('.batch-update-order-status').click(function(){
-        var orderIds = getCheckedOrderIds();
-        if (orderIds.length == 0) {
-            utils.alert('请先选择快递的待发货订单');
-            return;
-        }else{
-            if(confirm('共选中'+orderIds.length+'个订单，'+'确认全部更改为已发货吗？')){
-            batch_update_order_status_to_shipped(orderIds);
-            }
-        }
+        batchShipDialog.dialog("open");
     });
     function batch_update_order_status_to_shipped(orders){
         $.post('/manage/admin/tuan/batch_update_order_status_to_shipped',{

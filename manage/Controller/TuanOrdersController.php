@@ -4,7 +4,8 @@ class TuanOrdersController extends AppController{
     var $name = 'TuanOrders';
 
     var $uses = array('Order', 'Cart', 'Product', 'TuanTeam', 'TuanBuying', 'Location', 'TuanProduct', 'OfflineStore', 'Oauthbind', 'OrderMessage', 'User','ProductTry');
-    public function admin_ship_to_pys_stores(){
+
+    public function admin_orders_shipped(){
         $this->autoRender = false;
 
         $data=$_POST;
@@ -17,7 +18,6 @@ class TuanOrdersController extends AppController{
             $orders = $this->_get_orders($data['ids'], array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED));
             $order_ids = Hash::extract($orders, '{n}.Order.id');
             $carts = $this->_get_carts_of_orders($orders);
-            $offline_stores = $this->_validate_offline_stores($orders, OFFLINE_STORE_PYS);
             $products = $this->_get_products($carts);
             $oauth_binds = $this->_get_oauth_binds($orders);
             $arrived_logs = $this->_get_arrived_logs($order_ids, 'py-reach');
@@ -32,50 +32,22 @@ class TuanOrdersController extends AppController{
         $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED),array('id' => $order_ids));
         $this->Cart->updateAll(array('status' => ORDER_STATUS_SHIPPED),array('order_id' => $order_ids));
 
-//        $success = array();
-        $fail_wx = array();
+        if(!$data['sendMessage']){
+            echo json_encode(array('success' => true, 'fail' => array()));
+        }
+
         $fail_sms = array();
         foreach($orders as &$order){
             if(in_array($order['Order']['id'], $arrived_order_ids)){
                 continue;
             }
-            $order_carts = $this->_get_order_carts($carts, $order);
-            $product_name = $this->_get_product_name($order_carts, $products);
-            $offline_store = $offline_stores[$order['Order']['consignee_id']];
-            $wx_message = $this->_get_wx_message($product_name, $offline_store);
-
-            $post_data = array(
-                "touser" => $oauth_binds[$order['Order']['creator']],
-                "template_id" => '3uA5ShDuM6amaaorl6899yMj9QvBmIiIAl7T9_JfR54',
-                "url" => WX_HOST . '/orders/detail/'.$order['Order']['id'],
-                "topcolor" => "#FF0000",
-                "data" =>  array(
-                    "first" => array("value" => $wx_message),
-                    "keyword1" => array("value" => $order['Order']['id']),
-                    "keyword2" => array("value" => $offline_store['OfflineStore']['alias']),
-                    "keyword3" => array("value" => $order['Order']['consignee_address']),
-                    "remark" => array("value" => "感谢您的支持".$offline_store['OfflineStore']['owner_phone'], "color" => "#FF8800")
-                )
-            );
-            $this->log('goods arrived at pys stores: send weixin message for order: '.$order['Order']['id'].': '.json_encode($post_data));
-            $wx_send_status = send_weixin_message($post_data);
-            $this->OrderMessage->create();
-            if($wx_send_status){
-//                $success[] = $order['Order']['id'];
-                $this->OrderMessage->save(array('order_id' => $order['Order']['id'], 'status' => 0, 'type'=>'py-reach'));
-            }else{
-                $this->log("goods arrived at pys stores: failed to send weixin message for order ".$order['Order']['id']);
-                $fail_wx[] = $order['Order']['id'];
-                $this->OrderMessage->save(array('order_id' => $order['Order']['id'], 'status' => 1, 'type'=>'py-reach'));
-            }
-            $sms_message = $this->_get_sms_message($product_name, $offline_store);
-            $sms_send_status = $this->_send_phone_msg($order['Order']['creator'], $order['Order']['consignee_mobilephone'], $sms_message, false);
-            if(!$sms_send_status){
+            $result = $this->_order_shipped($order, $oauth_binds[$order['Order']['creator']], $carts, $products);
+            if(!$result){
                 $fail_sms[] = $order['Order']['id'];
             }
         }
 
-        echo json_encode(array('success' => true, 'fail_wx' => $fail_wx,'fail_sms' => $fail_sms));
+        echo json_encode(array('success' => true, 'fail_sms' => $fail_sms));
     }
 
     public function admin_send_by_pys_stores(){
@@ -89,7 +61,7 @@ class TuanOrdersController extends AppController{
         try{
             $orders = $this->_get_orders($data['ids'], array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED));
             $order_ids = Hash::extract($orders, '{n}.Order.id');
-            $offline_stores = $this->_validate_offline_stores($orders, OFFLINE_STORE_PYS);
+            $offline_stores = $this->_validate_offline_stores($orders);
             $carts = $this->_get_carts_of_orders($orders);
             $products = $this->_get_products($carts);
             $oauth_binds = $this->_get_oauth_binds($orders);
@@ -151,24 +123,6 @@ class TuanOrdersController extends AppController{
         echo json_encode(array('success' => true,'fail_wx' => $fail_wx,'fail_sms' => $fail_sms));
     }
 
-    public function _extract_tryid_tuanbuyid($orders){
-        $tryids = array();
-        $tuanbuyids = array();
-        foreach ($orders as $order) {
-            if($order['Order']['type']==5){
-                //tuan buy product
-                $tuanbuyids[] = $order['Order']['member_id'];
-            }
-            if($order['Order']['type']==6){
-                //sec kill product
-                $tryids[] = $order['Order']['try_id'];
-            }
-        }
-        $tryids = array_unique($tryids);
-        $tuanbuyids = array_unique($tuanbuyids);
-        return array('tuanbuyids'=>$tuanbuyids,'tryids'=>$tryids);
-    }
-
     public function admin_ship_to_haolinju_store(){
         $this->autoRender = false;
 
@@ -197,7 +151,7 @@ class TuanOrdersController extends AppController{
         }
 
         // validate goods should be shipped to pys stores
-        $offline_stores = $this->_validate_offline_stores(array($order), OFFLINE_STORE_HAOLINJU);
+        $offline_stores = $this->_validate_offline_stores(array($order));
         $offline_store = $offline_stores[0];
 
         $carts = $this->_get_carts_of_orders(array($order), false);
@@ -316,7 +270,7 @@ class TuanOrdersController extends AppController{
         }
 	}
 
-    private function _validate_offline_stores($orders, $expected_type){
+    private function _validate_offline_stores($orders){
         if(empty($orders)){
             return array();
         }
@@ -326,18 +280,8 @@ class TuanOrdersController extends AppController{
         $offline_stores = $this->OfflineStore->find('all', array(
             'conditions' => array('id'=>$offline_store_ids)
         ));
-        $offline_stores = Hash::combine($offline_stores, '{n}.OfflineStore.id', '{n}');
 
-        foreach($orders as &$order){
-            $offline_store = $offline_stores[$order['Order']['consignee_id']];
-            if(empty($offline_store)){
-                throw new Exception('order '.$order['Order']['id'].' has no offline store');
-            }
-            if($offline_store['OfflineStore']['type'] != $expected_type){
-                throw new Exception('order '.$order['Order']['id'].' is sent to invalid offline store');
-            }
-        }
-        return $offline_stores;
+        return Hash::combine($offline_stores, '{n}.OfflineStore.id', '{n}');
     }
     private function _get_carts_of_orders($orders, $validate_send_date = true){
         if(empty($orders)){
@@ -384,14 +328,14 @@ class TuanOrdersController extends AppController{
                 throw new Exception('order '.$order['Order']['id'].' status is not expected: '.$order['Order']['status']);
             }
         }
+
+        $order_ship_marks = array_unique(Hash::extract($orders, '{n}.Order.ship_mark'));
+        if(count($order_ship_marks) > 1){
+            throw new Exception('orders has various ship_marks: '.json_encode($order_ship_marks));
+        }
         return $orders;
     }
 
-    private function _get_order_carts($carts, $order){
-        return array_filter($carts, function($cart) use ($order){
-            return $cart['Cart']['order_id'] == $order['Order']['id'];
-        });
-    }
     public function _send_phone_msg($order_creator, $consignee_mobilephone, $msg, $wx_send_status = true){
         if(empty($consignee_mobilephone)){
             $user_info = $this->User->find('first', array(
@@ -401,33 +345,16 @@ class TuanOrdersController extends AppController{
             $consignee_mobilephone = $user_info['User']['mobilephone'];
         }
 
-        if(!empty($consignee_mobilephone)){
-            $return_info = json_decode(message_send($msg, $consignee_mobilephone),true);
-            if($return_info['error'] < 0){
-                $this->log('send message failure , the error code is '.$return_info['error'].' and the msg is '.$return_info['msg'].'and the wrong words is '.$return_info['hit']);
-                return false;
-            }return true;
+        if(empty($consignee_mobilephone)){
+            return false;
         }
-    }
 
-    private function _get_product_name($order_carts, $products){
-        return implode(array_unique(array_map(function($cart) use ($products){
-            $product = $products[$cart['Cart']['product_id']];
-            return empty($product['Product']['product_alias']) ? $product['Product']['name'] : $product['Product']['product_alias'];
-        }, $order_carts)), ', ');
-    }
-
-    private function _get_wx_message($product_name, $offline_store){
-        $message = "亲，您订购的".$product_name.'已经到达自提点';
-        if($offline_store['OfflineStore']['can_remark_address']==1){
-            $message = $message.'，自提点将尽快为您配货。';
-        } else{
-            $message = $message.'，生鲜娇贵，请尽快取货哈。';
+        $return_info = json_decode(message_send($msg, $consignee_mobilephone),true);
+        if($return_info['error'] < 0){
+            $this->log('send message failure: '.$return_info['msg'].', hit: '.$return_info['hit']);
+            return false;
         }
-        if(!empty($offline_store['OfflineStore']['owner_phone'])){
-            $message = $message.'自提点联系电话: '.$offline_store['OfflineStore']['owner_phone'];
-        }
-        return $message;
+        return true;
     }
 
     private function _get_sms_message($product_name, $offline_store){
@@ -475,5 +402,67 @@ class TuanOrdersController extends AppController{
         return $this->OrderMessage->find('all', array(
             'conditions' => array('order_id' => $order_ids, 'status' => 0, 'type' => $type)
         ));
+    }
+
+    private function _order_shipped($order, $oauth_bind, $carts, $products){
+        if($order['Order']['ship_mark'] != 'ziti'){
+            return;
+        }
+
+        $order_carts = $this->_get_order_carts($carts, $order);
+        $product_name = $this->_get_product_name($order_carts, $products);
+        $offline_store = $this->OfflineStore->findById([$order['Order']['consignee_id']]);
+        $wx_message = $this->_get_wx_message($product_name, $offline_store);
+
+        $post_data = array(
+            "touser" => $oauth_bind,
+            "template_id" => '3uA5ShDuM6amaaorl6899yMj9QvBmIiIAl7T9_JfR54',
+            "url" => WX_HOST . '/orders/detail/'.$order['Order']['id'],
+            "topcolor" => "#FF0000",
+            "data" =>  array(
+                "first" => array("value" => $wx_message),
+                "keyword1" => array("value" => $order['Order']['id']),
+                "keyword2" => array("value" => $offline_store['OfflineStore']['alias']),
+                "keyword3" => array("value" => $order['Order']['consignee_address']),
+                "remark" => array("value" => "感谢您的支持".$offline_store['OfflineStore']['owner_phone'], "color" => "#FF8800")
+            )
+        );
+        $this->log('order shipped: send weixin message for order: '.$order['Order']['id'].': '.json_encode($post_data));
+        send_weixin_message($post_data);
+        $this->OrderMessage->create();
+
+        $sms_message = $this->_get_sms_message($product_name, $offline_store);
+        $sms_send_status = $this->_send_phone_msg($order['Order']['creator'], $order['Order']['consignee_mobilephone'], $sms_message, false);
+        if($sms_send_status){
+            $this->OrderMessage->save(array('order_id' => $order['Order']['id'], 'status' => 0, 'type'=>'py-reach'));
+            $fail_sms[] = $order['Order']['id'];
+        }
+        else{
+            $this->OrderMessage->save(array('order_id' => $order['Order']['id'], 'status' => 1, 'type'=>'py-reach'));
+        }
+        return $sms_send_status;
+    }
+    private function _get_order_carts($carts, $order){
+        return array_filter($carts, function($cart) use ($order){
+            return $cart['Cart']['order_id'] == $order['Order']['id'];
+        });
+    }
+    private function _get_product_name($order_carts, $products){
+        return implode(array_unique(array_map(function($cart) use ($products){
+            $product = $products[$cart['Cart']['product_id']];
+            return empty($product['Product']['product_alias']) ? $product['Product']['name'] : $product['Product']['product_alias'];
+        }, $order_carts)), ', ');
+    }
+    private function _get_wx_message($product_name, $offline_store){
+        $message = "亲，您订购的".$product_name.'已经到达自提点';
+        if($offline_store['OfflineStore']['can_remark_address']==1){
+            $message = $message.'，自提点将尽快为您配货。';
+        } else{
+            $message = $message.'，生鲜娇贵，请尽快取货哈。';
+        }
+        if(!empty($offline_store['OfflineStore']['owner_phone'])){
+            $message = $message.'自提点联系电话: '.$offline_store['OfflineStore']['owner_phone'];
+        }
+        return $message;
     }
 }

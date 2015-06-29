@@ -188,10 +188,11 @@
             $current_orders=$map_other_orders[$code];
             $data_tag = $code;
             $data_tag_name = $item['name'];
+            $delivery_type = $code;
         ?>
         <h1 class="no-print"><span class="label no-print label-{{$item['style']}}">{{$item['name']}}</span></h1>
         {{if $data_tag == 'kuaidi'}}
-        <button class="btn btn-primary pull-right batch-update-order-status no-print">快递批量发货</button>
+        <button class="btn btn-primary pull-right batch-ship-orders no-print" data-type='kuaidi'>快递批量发货</button>
         {{/if}}
         <hr class="no-print" />
         <h3 {{if !empty($current_orders)}}class="ship-type new-page"{{else}}class="no-print"{{/if}}><span class="label no-print label-{{$item['style']}}">{{$item['name']}}</span></h3>
@@ -202,7 +203,8 @@
         <hr class="no-print" />
         <h2 class="no-print">
             <span class="label label-warning no-print">朋友说自提</span>
-            <button  class="btn btn-primary pull-right ship-to-pys-stores">自提点批量发货</button>
+            <button  class="btn pull-right" data-type='pys-stores' disabled='disabled'>自提点批量发货</button>
+            <button  class="btn btn-primary pull-right batch-ship-orders margin-right-10">自提点批量到货</button>
         </h2>
         <hr class="no-print" />
         <div class="hidden" id="send_order_msg" data-reach="{{$reach_order}}" data-send_out="{{$send_out_order}}"></div>
@@ -211,6 +213,7 @@
                     $current_orders=$map_ziti_orders[$point['OfflineStore']['id']];
                     $data_tag = 'ziti-'.$point['OfflineStore']['id'];
                     $data_tag_name = $point['OfflineStore']['alias'];
+                    $delivery_type = 'pys-stores';
                 ?>
             <h3 {{if !empty($current_orders)}}class="ship-type new-page"{{else}}class="no-print"{{/if}}><span class="label label-success">{{get_address(null,$point)}}</span></h3>
             <hr class="no-print"/>
@@ -224,6 +227,7 @@
                     $current_orders=$map_ziti_orders[$point['OfflineStore']['id']];
                     $data_tag = 'ziti-'.$point['OfflineStore']['id'];
                     $data_tag_name = $point['OfflineStore']['alias'];
+                    $delivery_type = 'haolinju-stores';
                 ?>
                  <h3 {{if !empty($current_orders)}}class="ship-type new-page"{{else}}class="no-print"{{/if}}><span class="label label-success">{{get_address(null,$point)}}</span></h3>
                 <hr class="no-print"/>
@@ -234,6 +238,7 @@
             <?php
                 $data_tag='none-tag';
                 $data_tag_name = '未知自提点';
+                $delivery_type = 'unknown-stores';
             ?>
             <h2 class="no-print"><span class="label label-danger">未知自提点</span></h2>
             <hr class="no-print"/>
@@ -307,18 +312,12 @@
     <input type="hidden" value="" id="order-creator">
     <input type="hidden" value="" id="order-totalprice">
 </div>
-<div class="dialog ship-to-our-store-dialog" title="自有自提点发货">
-    <p class="text-warning">发消息的同时会修改状态，不会重复发送消息</p>
-    <form class="ship-to-our-store-form form-inline">
-        <div>
-            <input type="radio" name="optionsRadios" id="optionsRadios1" value="0" checked>
-            发送发货提醒
-        </div>
-        <br />
-        <div>
-            <input type="radio" name="optionsRadios" id="optionsRadios2" value="1">
-            发送到货提醒
-        </div>
+<div class="dialog batch-ship-dialog" title="批量发货">
+    <p class="text-warning"></p>
+    <form class="form-inline">
+        <input type="hidden" name='type' value="" class="type"/>
+        <input type="checkbox" name="sendMessageFlag" id="sendMessageFlag" value="1" checked='checked'>
+        <label for="sendMessageFlag">同时发送模板消息和短信提醒</label>
     </form>
 </div>
 <div class="dialog input-ship-code-dialog" title="回填快递单号">
