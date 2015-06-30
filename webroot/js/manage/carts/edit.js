@@ -6,7 +6,17 @@ $(document).ready(function () {
         var date = new Date();
         date.setDate(date.getDate() - 1);
         return date ;
-    }
+    };
+    $('.all_goods_shipped').on('click',function(){
+        $('.status').each(function(){
+            $(this).val("2")
+        })
+    });
+    $('.status').on('change',function(){
+        if($(this).val() != "2"){
+           $('.all_goods_shipped').prop("checked", false);
+        }
+    });
 
     $saveBtn.on('click', function(){
         var invalidFields = [];
@@ -22,14 +32,24 @@ $(document).ready(function () {
             return false;
         }
 
-        var json = {};
+        var json = {"carts":[], "modify_user":$modifyUser.val()};
+        var cart_id = 0;
+        var carts = {};
         $('.form-group .form-control').each(function(){
             var $field = $(this);
+            if($field.attr('name') == 'id'){
+                cart_id = $field.val();
+                carts[cart_id] = {};
+            }
             if($field.val() != $field.data('value')){
-                json[$field.attr('name')] = $field.val();
+                carts[cart_id][$field.attr('name')] = $field.val();
             }
         });
-
+        for(var id in carts){
+            if(Object.keys(carts[id]).length > 1){
+                json.carts.push(carts[id]);
+            }
+        }
         var reasons = {
             'order_not_exists': '订单不存在',
             'cart_not_exists': '发货单不存在',
@@ -40,11 +60,10 @@ $(document).ready(function () {
             'failed_to_save_send_date': '保存发货时间失败',
             'missed_consignee_id': '请输入自提点',
             'failed_to_save_cart': '保存发货失败'
-        }
-        var cartId = $('.cart-id').val();
-        $.post('/manage/admin/carts/update2/' + cartId + ".json", json, function(data){
+        };
+        $.post('/manage/admin/carts/multi_update.json', json, function(data){
             if(data.success){
-                alert('修改成功: 发货单号' + cartId);
+                alert('修改成功: 发货单号');
             }
             else{
                 alert('修改失败: ' + reasons[data.reason]);

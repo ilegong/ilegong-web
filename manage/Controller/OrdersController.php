@@ -830,9 +830,7 @@ class OrdersController extends AppController
     private function _get_order_good_info($order_id){
         $info ='';
         $number =0;
-        $this->loadModel('Cart');
-        $carts = $this->Cart->find('all',array(
-            'conditions'=>array('order_id' => $order_id)));
+        $carts = $this->_get_carts_on_one_order($order_id);
         foreach($carts as $cart){
             $info = $info.$cart['Cart']['name'].':'.$cart['Cart']['num'].'件、';
             $number +=$cart['Cart']['num'];
@@ -841,4 +839,14 @@ class OrdersController extends AppController
         $info = substr($info,0,strlen($info)-2);
         return array("good_info"=>$info,"good_number"=>$number);
     }
+    public function _get_carts_on_one_order($order_id){
+        $this->loadModel('Cart');
+        $carts = $this->Cart->find('all',array(
+            'conditions'=>array('order_id' => $order_id)));
+        return $carts;
     }
+    public function admin_carts_edit($order_id){
+        $carts = $this->_get_carts_on_one_order($order_id);
+        $this->set('carts', $carts);
+    }
+}

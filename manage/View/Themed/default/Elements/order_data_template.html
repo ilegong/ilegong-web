@@ -199,6 +199,7 @@
                             {{/if}}
                             <br/>
                             <a href="/manage/admin/orders/edit2/{{$order['Order']['id']}}.html" class="btn btn-default modify-button">修改订单</a>
+                            <a href="/manage/admin/orders/carts_edit/{{$order['Order']['id']}}.html" class="btn btn-default modify-button">修改状态</a>
                         {{/if}}
                         {{if ($order['Order']['status']== 1||$order['Order']['status']== 2) && $order['Order']['ship_mark'] == 'kuaidi'}}
                             <button type="button" class="input-ship-code btn btn-primary">回填快递单号</button>
