@@ -44,13 +44,7 @@ class PlanHelperController extends AppController
         ));
         $product_spec_groups = Hash::extract($product_spec_groups, '{n}.ProductSpecGroup.product_id', '{n}');
 
-        $offline_stores = $this->OfflineStore->find('all', array(
-            'conditions' => array(
-                'type' => 1,
-                'deleted' => DELETED_YES,
-                'id' => array(54, 55)
-            )
-        ));
+        $offline_store = $this->OfflineStore->findById(54);
 
         $results = array();
         for ($i = 0; $i < $order_count; $i++) {
@@ -62,7 +56,6 @@ class PlanHelperController extends AppController
                 $product_spec_group = $spec_groups[array_rand($spec_groups)];
             }
             $user = $users[array_rand($users)];
-            $offline_store = $offline_stores[array_rand($offline_stores)];
             $num = $this->_get_random_num(empty($product_spec_group) ? $product['Product']['price'] : $product_spec_group['ProductSpecGroup']['price']);
 
             $order_id = $this->_try_to_create_order($i, $user, $product, $num, $product_spec_group, $offline_store);
@@ -269,15 +262,44 @@ class PlanHelperController extends AppController
 
     private function _get_random_num($price)
     {
-        $rand_num = rand(1, max(1000 - 3 * $price, 1));
+        if($price < 10){
+            $rand_num = rand(7, 12);
+        }
+        else if($price < 20){
+            $rand_num = rand(6, 12);
+        }
+        else if($price < 30){
+            $rand_num = rand(5, 11);
+        }
+        else if($price < 50){
+            $rand_num = rand(4, 10);
+        }
+        else if($price < 60){
+            $rand_num = rand(1, 10);
+        }
+        else if($price < 70){
+            $rand_num = rand(1, 9);
+        }
+        else if($price < 80){
+            $rand_num = rand(1, 8);
+        }
+        else if($price < 90){
+            $rand_num = rand(1, 7);
+        }
+        else{
+            $rand_num = rand(1, 6);
+        }
+
         $num = 1;
-        if ($rand_num > 900) {
+        if ($rand_num > 10) {
+            $num = 10;
+        } else if ($rand_num > 9) {
             $num = 5;
-        } else if ($rand_num > 800) {
+        } else if ($rand_num > 8) {
             $num = 4;
-        } else if ($rand_num > 700) {
+        } else if ($rand_num > 7) {
             $num = 3;
-        } else if ($rand_num > 500) {
+        } else if ($rand_num > 5) {
             $num = 2;
         }
         return $num;
