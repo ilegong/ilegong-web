@@ -1577,17 +1577,17 @@ function setData(area_id,parent_id){
     });
     var $chose_item = '';
     $.each(chose_address,function(index,item){
-        $chose_item +=' <p data-shop-id="'+ item['id'] +'" data-can-remark-address="'+item['can_remark_address']+'" data-shop-name="'+item['alias']+'">'+item['name']+'<br/>';
+        $chose_item+='<s data-shop-id="'+ item['id'] +'" data-can-remark-address="'+item['can_remark_address']+'" data-shop-name="'+item['alias']+'"> <h1>'+item['alias']+'</h1> <label>'+item['name']+'<br/>';
         if(item['owner_phone']){
-            $chose_item+='联系电话:'+item['owner_phone'];
+            $chose_item+='联系电话: '+item['owner_phone']+'   ';
         }
         if(item['owner_name']){
             $chose_item+=' 联系人: '+item['owner_name'];
         }
-        $chose_item+='</p>';
+        $chose_item+='</label> </s>'
     });
     $("#area_list").html($chose_item);
-    $("#area_list p").each(function(){
+    $("#area_list s").each(function(){
         var that =$(this);
         that.on("click",function(){
             that.css("background-color","#eeeeee");
@@ -1599,7 +1599,7 @@ function setData(area_id,parent_id){
             }else{
                 remarkAddress.hide();
             }
-            $("#chose_address").html(that.text()).data('shopId', shopId);
+            $("#chose_address").html($('label',that).text()).data('shopId', shopId);
             tb_remove();
         })
     });

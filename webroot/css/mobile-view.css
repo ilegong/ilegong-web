@@ -697,3 +697,8 @@ ul li{ list-style:none;}
 .confirm_btn:hover{background-color: #ffa200; color: #ffffff;text-decoration: none;}
 .confirm_btn:visited{background-color: #ffa200; color: #ffffff;text-decoration: none;}
 .confirm_btn:focus{background-color: #ffa200; color: #ffffff;text-decoration: none;}
+
+/*alice add css 0630*/
+.tuanadresslist s{ font-style: normal; text-decoration: none; display: block; line-height: 18px; color: #555555; padding: 15px 10px; border-bottom: 1px #eeeeee solid; background-color: #ffffff;}
+.tuanadresslist h1{ font-size: 18px; line-height: 30px; color: #333333;margin: 0;}
+.tuanadresslist s label{ display: block; color: #999999; font-size: 12px;font-weight: normal}
