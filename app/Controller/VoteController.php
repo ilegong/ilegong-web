@@ -21,7 +21,6 @@ class VoteController extends AppController {
         $this->set('hideFooter',true);
     }
 
-
     /**
      * @param $eventId
      * 根据投票的事件ID到特定的投票页面
@@ -51,6 +50,7 @@ class VoteController extends AppController {
     public function sign_up($eventId){
         $this->pageTitle='报名';
         $this->set('event_id',$eventId);
+
     }
 
     /**
