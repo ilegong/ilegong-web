@@ -1490,17 +1490,16 @@ function zitiAddress(){
     };
     //崇文并入东城区， 宣武并入西城区
     var ship_address = {};
-    var area = [];
     var child_address = {};
-    $.getJSON('/tuan_buyings/get_offline_address?type=1',function(data){
+    $.getJSON('/tuan_buyings/get_offline_address?type=-1',function(data){
         ship_address = data.address;
         child_address = data.child_address;
-        $.each(ship_address,function(index,item){
-            $("[area-id="+index+"]").show().addClass('parent_area');
-        });
-        $.each(child_address,function(index,item){
-            $("[area-id="+index+"]").addClass('children_area');
-        });
+        //$.each(ship_address,function(index,item){
+        //    $("[area-id="+index+"]").show().addClass('parent_area');
+        //});
+        //$.each(child_address,function(index,item){
+        //    $("[area-id="+index+"]").addClass('children_area');
+        //});
     });
     var getShipAddress = function(areaId){
         return ship_address[areaId];
@@ -1521,12 +1520,12 @@ var zitiObj = function(area,height, width){
         generateZitiArea: function(){
             for(var addr in area){
                 if (area[addr].children_area){
-                    choose_area += '<ul><li><a style="displOay: none" href="#" class="child_area" area-id="' +addr + '">' + area[addr].name + '</a></li> </ul>';
+                    choose_area += '<ul><li><a href="#" class="child_area" area-id="' +addr + '">' + area[addr].name + '</a></li> </ul>';
                     $.each(area[addr].children_area,function(index,item){
-                        choose_area += '<ul><li><a style="display: none" href="'+ conorder_url +'" class="thickbox" parent-id ="'+addr+'" area-id="' +index + '">' + item.name + '</a></li> </ul>';
+                        choose_area += '<ul><li><a style="display: none" href="'+ conorder_url +'" class="thickbox children_area" parent-id ="'+addr+'" area-id="' +index + '">' + item.name + '</a></li> </ul>';
                     });
                 }else{
-                    choose_area += '<ul><li><a style="display: none" href="'+ conorder_url +'" class="thickbox" area-id="' +addr + '">' + area[addr].name + '</a></li> </ul>';
+                    choose_area += '<ul><li><a href="'+ conorder_url +'" class="thickbox parent_area" area-id="' +addr + '">' + area[addr].name + '</a></li> </ul>';
                 }
             }
             return choose_area;
