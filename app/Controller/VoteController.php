@@ -11,6 +11,17 @@ class VoteController extends AppController {
 
     var $uses = array('VoteEvent', 'Candidate', 'Vote', 'CandidateEvent');
 
+    public function beforeFilter(){
+        parent::beforeFilter();
+    }
+
+    public function beforeRender(){
+        parent::beforeRender();
+        $this->set('hideNav',true);
+        $this->set('hideFooter',true);
+    }
+
+
     /**
      * @param $eventId
      * 根据投票的事件ID到特定的投票页面
@@ -38,9 +49,8 @@ class VoteController extends AppController {
     }
 
     public function sign_up($eventId){
+        $this->pageTitle='报名';
         $this->set('event_id',$eventId);
-
-
     }
 
     /**

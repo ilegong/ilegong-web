@@ -24,7 +24,7 @@ ul li { list-style: none; }
 .babylist ul li dl dd a{ margin-right: 0; display: block; text-decoration: none; color: #ffffff; background-color: #ff7c6e; padding: 0 10px; line-height: 46px;}
 .babylist ul li dl dd a.cur{ background-color: #999999;}
 .babylist ul li dl dd.fl{ padding: 5px 0 5px 10px;}
-.babylist ul li b{ display: block; width: 4.2em; height: 2.083em; background: url("../images/iconbg.png"); background-size: 4.2em 2.083em; font-weight: normal; color: #ffffff; text-align: center; line-height: 20px; position: absolute; right: 10px; top: 0;}
+.babylist ul li b{ display: block; width: 4.2em; height: 2.083em; background: url("/img/vote/iconbg.png"); background-size: 4.2em 2.083em; font-weight: normal; color: #ffffff; text-align: center; line-height: 20px; position: absolute; right: 10px; top: 0;}
 .babylist_page a{ display: block; text-decoration: none; float: left; margin-right: 10px; margin-top: 10px; width: 32px; height: 32px; line-height: 32px; background-color: #ff7c6e; color: #ffffff; text-align: center; font-size: 14px;}
 .babylist_page a.cur{ background-color: #ffffff; color: #ff7c6e;}
 .babyrule{ padding: 20px 10px 20px 10px;}
@@ -33,7 +33,7 @@ ul li { list-style: none; }
 .baby_bottom{ height: 49px; background-color: #ffffff; position: fixed; left: 0; bottom: 0; width: 100%;}
 .baby_bottom ul li{ float: left; width: 25%; text-align: center; color: #666666;}
 .baby_bottom ul li a{ text-decoration: none; display: block;}
-.baby_bottom ul li i{ display: block; background: url("../images/bottomicon.png"); background-size: 11.75em 3.417em; width: 1.833em; height: 1.5em; margin: 0 auto; margin-top: 8px;}
+.baby_bottom ul li i{ display: block; background: url("/img/vote/bottomicon.png"); background-size: 11.75em 3.417em; width: 1.833em; height: 1.5em; margin: 0 auto; margin-top: 8px;}
 .baby_bottom ul li i.home{ background-position: 0 0;}
 .baby_bottom ul li i.ranking{ background-position: -3.167em 0;}
 .baby_bottom ul li i.apply{ background-position: -6.29em 0;}
@@ -66,7 +66,7 @@ ul li { list-style: none; }
 .tipslayer ul li { width: 50%; float: left; text-align: center; line-height: 44px; border-top: 1px #dddddd solid; }
 .tipslayer ul li a { display: block; text-decoration: none; color: #29ac0e; text-align: center; font-size: 1.1em; }
 .tipslayer_bg{ width: 100%; height: 100%; background-attachment: fixed; background-color: #000000;filter:alpha(opacity=25);-moz-opacity:0.25; opacity:0.25; position: fixed; z-index: 4; top: 0; left: 0;}
-.tipslayer_close{ position: absolute; top: 10px; right: 10px; width: 1.5em; height: 1.5em; background: url(../images/pyshuo_icon.png) -23.5em -14.5em no-repeat; background-size: 30em 30em; text-decoration: none;}
+.tipslayer_close{ position: absolute; top: 10px; right: 10px; width: 1.5em; height: 1.5em; background: url("/img/vote/pyshuo_icon.png") -23.5em -14.5em no-repeat; background-size: 30em 30em; text-decoration: none;}
 .babydetaillayer{ font-size: 14px; padding: 20px; line-height: 20px;}
 .babydetaillayer h1{ font-size: 16px; color: #333333; text-align: center; padding-bottom: 20px;}
 .babydetaillayer p{ color: #666666;}

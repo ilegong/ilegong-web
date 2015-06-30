@@ -1,6 +1,6 @@
 {{$this->Html->css(array('vote.css'));}}
 <div style="background-color:#c54134;">
-    <div class="baby_banner"><img src="images/banner.png"/></div>
+    <div class="baby_banner"><img src="{{$this->Html->assetUrl('/img/vote/banner.png')}}"/></div>
     <div class="apply_bg">
         <ul class="clearfix">
             <li class="fl" style="width: 25%;">萌宝姓名</li>
@@ -12,8 +12,8 @@
         </ul>
         <ul class="clearfix">
             <li class="fl" style="width: 25%;">上传照片&nbsp;&nbsp;&nbsp;</li>
-            <li class="fl" style="width: 75%;"><a href="#X"><img src="images/addpc.png"/></a><a href="#X"><img
-                    src="images/addpc.png"/></a><a href="#X"><img src="images/addpc.png"/></a></li>
+            <li class="fl" style="width: 75%;"><a href="#X"><img src="{{$this->Html->assetUrl('/img/vote/addpc.png')}}"/></a><a href="#X"><img
+                    src="{{$this->Html->assetUrl('/img/vote/addpc.png')}}"/></a><a href="#X"><img src="{{$this->Html->assetUrl('/img/vote/addpc.png')}}"/></a></li>
         </ul>
         <ul class="clearfix">
             <li class="fl" style="width: 25%;">萌宝描述&nbsp;&nbsp;&nbsp;</li>
@@ -38,7 +38,7 @@
         <p>3、参与活动的朋友们需对自己发送照片的真实性负责，若被举报并证实有虚假照片现象，将被取消资格，票数无效；</p>
 
         <p>4、每个微信号每天只能投票5次，每天对一个萌娃照片只能投1次票，多投将不计入总票数；投票方式：长按并识别下面二维码关注朋友说，在公众号中回复“投票”之后即可在页面投票。<br/><img
-                src="images/weixin.png"/></p>
+                src="{{$this->Html->assetUrl('/img/vote/weixin.png')}}"/></p>
 
         <p>5、如果有诋毁他人或用软件恶意刷票的现象，将直接取消参赛资格；</p>
 
