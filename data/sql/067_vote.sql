@@ -5,7 +5,7 @@ CREATE TABLE cake_vote_events(
   end_time DATETIME NOT NULL,
   place VARCHAR (300),
   published tinyint(4) NOT NULL DEFAULT '0',
-	deleted tinyint(4) NOT NULL DEFAULT '0',
+	deleted tinyint(4) NOT NULL DEFAULT '0'
 );
 
 CREATE TABLE cake_candidates (
