@@ -692,3 +692,8 @@ ul li{ list-style:none;}
 .content .good ul li s{ color: #acacac;}
 
 .group_buying span dl{ padding-bottom:70px;}
+
+.confirm_btn{ display: block; line-height: 44px; text-decoration: none; margin: 0 10px; border-radius: 3px; text-align: center; background-color: #ffa200; color: #ffffff; font-weight: bold;}
+.confirm_btn:hover{background-color: #ffa200; color: #ffffff;text-decoration: none;}
+.confirm_btn:visited{background-color: #ffa200; color: #ffffff;text-decoration: none;}
+.confirm_btn:focus{background-color: #ffa200; color: #ffffff;text-decoration: none;}
