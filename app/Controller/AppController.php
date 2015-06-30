@@ -102,10 +102,7 @@ class AppController extends Controller {
     	}
 
     	$this->currentUser = $this->Session->read('Auth.User');
-        //remove  auto login
-        if (empty($this->currentUser) && $this->is_weixin() && !in_array($this->request->params['controller'], array('users', 'check'))) {
-            $this->redirect($this->login_link());
-        }
+
     	$this->theme = Configure::read('Site.theme');
 
     	if($this->RequestHandler->isMobile()){
@@ -138,6 +135,12 @@ class AppController extends Controller {
 	    		exit;
     		}
     	}
+
+        if($this->is_weixin()){
+            if (empty($this->currentUser) && $this->is_weixin() && !in_array($this->request->params['controller'], array('users', 'check'))) {
+                $this->redirect($this->login_link());
+            }
+        }
 
         if ($this->is_weixin() && !empty($this->currentUser['id'])) {
             $this->set('jWeixinOn', true);
