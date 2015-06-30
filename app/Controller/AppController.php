@@ -102,10 +102,10 @@ class AppController extends Controller {
     	}
 
     	$this->currentUser = $this->Session->read('Auth.User');
-//      remove  auto login
-//        if (empty($this->currentUser) && $this->is_weixin() && !in_array($this->request->params['controller'], array('users', 'check'))) {
-//            $this->redirect($this->login_link());
-//        }
+        //remove  auto login
+        if (empty($this->currentUser) && $this->is_weixin() && !in_array($this->request->params['controller'], array('users', 'check'))) {
+            $this->redirect($this->login_link());
+        }
     	$this->theme = Configure::read('Site.theme');
 
     	if($this->RequestHandler->isMobile()){
