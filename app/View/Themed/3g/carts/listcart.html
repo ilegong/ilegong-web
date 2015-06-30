@@ -17,6 +17,11 @@
                     {{loop $product_brand_map[$key] $p_id}}
                         {{loop $Carts $c_id $cart}}
                             {{if $cart['product_id']==$p_id}}
+                            {{if pid_in_special($p_id,7)}}
+                                <a href="/categories/happy_618.html" class="clearfix cart_manjian">
+                                    <div class="fl"><i class="manjian_icon">满减</i>&nbsp;满50减20，领取优惠券，享受满减优惠</div>
+                                </a>
+                            {{/if}}
                             <ul class="clearfix" style="margin-bottom: 0;">
                                 <li class="fl {{if $product_published_map[$p_id]==1}}cart_select{{else}}cart_no_select{{/if}}" data-published="{{$product_published_map[$p_id]}}" name="{{if $product_published_map[$p_id]==1}}product_select{{else}}product_no_select{{/if}}" data-cart="{{$cart['id']}}" data-product="{{$cart['name']}}" data-productid="{{$cart['product_id']}}" data-limit="{{$cart['limit_ship']}}"><span></span></li>
                                 <li class="fl"><a style="float: left;" href="{{product_link($p_id, 'javascript:;')}}"><img src="{{Router::url(small_thumb_link($cart['coverimg']))}}" border="0" /></a></li>
