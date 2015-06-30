@@ -11,6 +11,7 @@ CREATE TABLE cake_vote_events(
 CREATE TABLE cake_candidates (
 	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	tag INT (11),
+	user_id INT NOT NULL,
 	title VARCHAR(50),
 	description TEXT DEFAULT NULL,
 	images VARCHAR (300),
@@ -25,3 +26,10 @@ CREATE TABLE cake_votes (
 	user_id INT UNSIGNED,
 	created DATETIME DEFAULT NULL
 );
+
+CREATE TABLE cake_candidate_events (
+  id INT NOT NULL AUTO_INCREMENT,
+  event_id INT NOT NULL,
+  candidate_id INT NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE INDEX `un-index` (event_id ASC, candidate_id ASC));
