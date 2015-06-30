@@ -27,6 +27,24 @@ class VoteController extends AppController {
      */
     public function vote_event_view($eventId) {
 
+        $this->pageTitle = '萌宝';
+        $event_info = $this->VoteEvent->find('first',array('conditions' => array('id'=>$eventId),'fields' => array('start_time','end_time')));
+        $candidators = $this->CandidateEvent->find('all',array('conditions' => array('event_id' => $eventId)));
+        $candidator_ids = Hash::extract($candidators,'{n}.CandidateEvent.candidate_id');
+        $candidators_info = $this->Candidate->find('all',array('conditions' => array('id' => $candidator_ids)));
+        if(!empty($candidators_info)){
+            foreach($candidators_info as &$candidator){
+                $conditions = array();
+                $conditions['candidate_id'] = $candidator['Candidate']['id'];
+                $conditions['Vote.created >= '] = $event_info['VoteEvent']['start_time'];
+                $conditions['Vote.created <= '] = $event_info['VoteEvent']['end_time'];
+                $candidator_vote= $this->Vote->find('count',array('conditions' => $conditions));
+                $candidator['vote_num'] = $candidator_vote;
+            }
+        }
+        $this->set('candidators',$candidators);
+        $this->set('candidators_info',$candidators_info);
+        $this->set('event_id',$eventId);
     }
 
     /**
