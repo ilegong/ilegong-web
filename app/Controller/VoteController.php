@@ -37,6 +37,11 @@ class VoteController extends AppController {
 
     }
 
+    public function sign_up($eventId){
+        $this->set('event_id',$eventId);
+
+    }
+
     /**
      * 添加候选人
      * 主要是图片的处理 类似评论的上传图片(使用微信的js上传)
