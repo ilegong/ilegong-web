@@ -35,7 +35,7 @@ $(function () {
     });
     areaId.on('change',function(){
        var parentId = $(this).val();
-         childArea.toggleClass('hidden',parentId != 110114);
+         childArea.toggleClass('hidden',parentId != 110114).val('null');
     });
     iUtils.initSelectBox(areaId);
     iUtils.initSelectBox(type);

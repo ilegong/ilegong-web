@@ -82,7 +82,9 @@ class OfflineStoresController extends AppController{
             $this->data['OfflineStore']['shop_no'] = 0;
         }
         $this->log('update offline store '.$id.': '.json_encode($this->data));
-
+        if($this->data['OfflineStore']['area_id'] != 110114){
+            $this->data['OfflineStore']['child_area_id'] = null;
+        }
         $this->autoRender = false;
         if($this->OfflineStore->save($this->data)){
             $this->redirect(array('controller' => 'offline_stores','action' => 'index'));
