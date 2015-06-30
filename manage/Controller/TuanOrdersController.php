@@ -411,7 +411,7 @@ class TuanOrdersController extends AppController{
 
         $order_carts = $this->_get_order_carts($carts, $order);
         $product_name = $this->_get_product_name($order_carts, $products);
-        $offline_store = $this->OfflineStore->findById([$order['Order']['consignee_id']]);
+        $offline_store = $this->OfflineStore->findById($order['Order']['consignee_id']);
         $wx_message = $this->_get_wx_message($product_name, $offline_store);
 
         $post_data = array(
