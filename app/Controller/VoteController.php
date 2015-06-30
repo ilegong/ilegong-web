@@ -40,6 +40,7 @@ class VoteController extends AppController {
     public function sign_up($eventId){
         $this->set('event_id',$eventId);
 
+
     }
 
     /**

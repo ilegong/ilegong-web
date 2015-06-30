@@ -1,13 +1,14 @@
+{{$this->Html->css(array('vote.css'));}}
 <div style="background-color:#c54134;">
     <div class="baby_banner"><img src="images/banner.png"/></div>
     <div class="apply_bg">
         <ul class="clearfix">
             <li class="fl" style="width: 25%;">萌宝姓名</li>
-            <li class="fl" style="width: 75%;"><input type="text" name="" id=""/></li>
+            <li class="fl" style="width: 75%;"><input type="text" name="" id="candidate_title"/></li>
         </ul>
         <ul class="clearfix">
             <li class="fl" style="width: 25%;">联系电话&nbsp;&nbsp;&nbsp;</li>
-            <li class="fl" style="width: 75%;"><input type="text" name=""/></li>
+            <li class="fl" style="width: 75%;"><input type="text" name="" id="candidate_mobile_phone"/></li>
         </ul>
         <ul class="clearfix">
             <li class="fl" style="width: 25%;">上传照片&nbsp;&nbsp;&nbsp;</li>
@@ -16,7 +17,7 @@
         </ul>
         <ul class="clearfix">
             <li class="fl" style="width: 25%;">萌宝描述&nbsp;&nbsp;&nbsp;</li>
-            <li class="fl" style="width: 75%; height: 90px; overflow:hidden;"><textarea></textarea></li>
+            <li class="fl" style="width: 75%; height: 90px; overflow:hidden;"><textarea id="candidate_description"></textarea></li>
         </ul>
         <a href="#X" class="apply_btn">确认报名</a>
 
@@ -79,7 +80,7 @@
         </ul>
     </div>
     <!--弹出层-->
-    <div class="tipslayer" style="display: ;">
+    <div class="tipslayer" style="display: none;">
         <a href="#X" class="tipslayer_close"></a>
 
         <div class="babydetaillayer">
@@ -89,5 +90,14 @@
             <a href="#X" class="babydetaillayer_btn">去关注</a>
         </div>
     </div>
-    <div class="tipslayer_bg" style="display: ;"></div>
+    <div class="tipslayer_bg" style="display: none;"></div>
 </div>
+
+<script>
+    $(document).ready(function(){
+
+
+
+
+    });
+</script>
