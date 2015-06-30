@@ -33,7 +33,7 @@ class VoteController extends AppController {
      * @param $eventId
      * 特定的人加入到特定的投票事件中 加入成功跳转到 vote_event_view
      */
-    public function join_event($candidateId, $eventId){
+    public function join_event($candidateId, $eventId) {
 
     }
 
@@ -41,7 +41,7 @@ class VoteController extends AppController {
      * 添加候选人
      * 主要是图片的处理 类似评论的上传图片(使用微信的js上传)
      */
-    public function upload_candidate(){
+    public function upload_candidate() {
 
     }
 

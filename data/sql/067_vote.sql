@@ -24,6 +24,7 @@ CREATE TABLE cake_votes (
 	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	candidate_id INT UNSIGNED,
 	user_id INT UNSIGNED,
+	event_id INT,
 	created DATETIME DEFAULT NULL
 );
 
