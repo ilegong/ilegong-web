@@ -14,7 +14,7 @@ class VoteController extends AppController {
     var $paginate = array(
         'Candidate' => array(
             'order' => 'Candidate.created DESC',
-            'limit' => 1,
+            'limit' => 2,
         )
     );
 
@@ -34,6 +34,7 @@ class VoteController extends AppController {
      */
     public function vote_event_view($eventId) {
         $this->pageTitle = '萌宝';
+        $uid = $this->currentUser['id'];
         $event_info = $this->VoteEvent->find('first',array(
             'conditions' => array(
                 'id'=>$eventId
@@ -59,7 +60,7 @@ class VoteController extends AppController {
                 $conditions['Vote.created <= '] = $event_info['VoteEvent']['end_time'];
                 $candidator_vote= $this->Vote->find('count',array('conditions' => $conditions));
                 $candidator['vote_num'] = $candidator_vote;
-                list($uvote,$is_vote) = $this->is_already_vote($candidator['Candidate']['id'],$eventId);
+                list($uvote,$is_vote) = $this->is_already_vote($candidator['Candidate']['id'],$eventId,$uid);
                 unset($uvote);
                 $candidator['is_vote'] = $is_vote;
             }
@@ -85,14 +86,13 @@ class VoteController extends AppController {
             echo json_encode(array('success' => false, 'reason' => 'Not subscribed'));
             return;
         }
-        $uvote = $this->today_vote_count($eventId,$uid);
-        $already_vote_candidate = Hash::extract($uvote, '{n}.Vote.candidate_id');
+        list($uvote,$is_vote) = $this->is_already_vote($candidateId,$eventId,$uid);
         if(count($uvote)>= 5){
             echo json_encode(array('success' => false, 'reason' => 'more than five'));
             return;
         }
         //has vote for this baby
-        if(in_array($candidateId,$already_vote_candidate)){
+        if($is_vote){
             echo json_encode(array('success' => false, 'reason' => 'already vote'));
             return;
         }
@@ -165,8 +165,6 @@ class VoteController extends AppController {
         return;
     }
 
-    }
-
     /**
      * 萌宝详情
      */
@@ -191,9 +189,8 @@ class VoteController extends AppController {
 
     }
 
-    public function is_already_vote($candidateId,$eventId){
+    private function is_already_vote($candidateId,$eventId,$uid){
 
-        $uid = $this->currentUser['id'];
         $uvote = $this->Vote->find('all', array(
             'conditions' => array(
                 'user_id' => $uid,
@@ -205,16 +202,6 @@ class VoteController extends AppController {
         $already_vote_candidate = Hash::extract($uvote, '{n}.Vote.candidate_id');
         $is_vote = in_array($candidateId,$already_vote_candidate);
         return array($uvote,$is_vote);
-    private function today_vote_count($eventId,$userId){
-        $votes = $this->Vote->find('all', array(
-            'conditions' => array(
-                'user_id' => $userId,
-                'event_id' => $eventId,
-                'created >'=> date('Y-m-d', time()),
-                'created <'=> date('Y-m-d', strtotime('+1 day')),
-            )
-        ));
-        return $votes;
     }
 
 }
