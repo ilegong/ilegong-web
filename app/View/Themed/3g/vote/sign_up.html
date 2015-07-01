@@ -197,24 +197,28 @@
 
             function bindChoseImgEvent(){
                 $('a[name="upload_image"]', $el).unbind('click');
-                $('a[name="upload_image"]', $el).on('click', function () {
-                    wx.chooseImage({
-                        success: function (res) {
-                            tempImage.localId = res.localIds;
-                            setTimeout(wxUploadFile, 10);
-                        }
+                $('a[name="upload_image"]', $el).each(function(index,item){
+                    $(item).on('click', function () {
+                        wx.chooseImage({
+                            success: function (res) {
+                                tempImage.localId = res.localIds;
+                                setTimeout(wxUploadFile, 10);
+                            }
+                        });
                     });
                 });
             }
 
             function bindRemovePicEvent(){
                 $('a[name="remove_img"]',$el).unbind('click');
-                $('a[name="remove_img"]',$el).on('click',function(){
-                    var $me = $(this);
-                    $me.html('');
-                    $me.append('<img name="no_img" src="'+noImgHolder+'"/>');
-                    $me.attr('name','upload_image');
-                    bindChoseImgEvent();
+                $('a[name="remove_img"]',$el).each(function(index,item){
+                    $(item).on('click',function(){
+                        var $me = $(this);
+                        $me.html('');
+                        $me.append('<img name="no_img" src="'+noImgHolder+'"/>');
+                        $me.attr('name','upload_image');
+                        bindChoseImgEvent();
+                    });
                 });
             }
 
