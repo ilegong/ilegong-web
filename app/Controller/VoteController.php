@@ -63,20 +63,13 @@ class VoteController extends AppController {
             echo json_encode(array('success' => false, 'reason' => 'Not subscribed'));
             return;
         }
-        $uvote = $this->Vote->find('all', array(
-            'conditions' => array(
-                'user_id' => $uid,
-                'event_id' => $eventId,
-                'created >'=> date('Y-m-d', time()),
-                'created <'=> date('Y-m-d', strtotime('+1 day')),
-            )
-        ));
-        $already_vote_candidate = Hash::extract($uvote, '{n}.Vote.candidate_id');
-        if(count($uvote) >= 5){
+        //$already_vote_candidate = Hash::extract($uvote, '{n}.Vote.candidate_id');
+        if($this->today_vote_count($eventId,$uid)>= 5){
             echo json_encode(array('success' => false, 'reason' => 'more than five'));
             return;
         }
-        if(in_array($candidateId, $already_vote_candidate)){
+        //has vote for this baby
+        if($this->has_vote($candidateId,$eventId,$uid)){
             echo json_encode(array('success' => false, 'reason' => 'already vote'));
             return;
         }
@@ -147,5 +140,28 @@ class VoteController extends AppController {
         }
         echo json_encode(array('success' => false, 'reason' => 'server error'));
         return;
+    }
+
+    private function today_vote_count($eventId,$userId){
+        $count = $this->Vote->find('all', array(
+            'conditions' => array(
+                'user_id' => $userId,
+                'event_id' => $eventId,
+                'created >'=> date('Y-m-d', time()),
+                'created <'=> date('Y-m-d', strtotime('+1 day')),
+            )
+        ));
+        return $count;
+    }
+
+    private function has_vote($candidateId,$eventId,$userId){
+        $count = $this->Vote->find('count',array(
+           'conditions' => array(
+               'candidate_id' => $candidateId,
+               'user_id' => $userId,
+               'event_id' => $eventId
+           )
+        ));
+        return $count > 0;
     }
 }
