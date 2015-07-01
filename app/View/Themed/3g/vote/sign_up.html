@@ -81,18 +81,20 @@
             </li>
         </ul>
     </div>
-    <!--弹出层-->
-    <div class="tipslayer" style="display: none;">
-        <a href="#X" class="tipslayer_close"></a>
+    {{if $not_login||$not_weixin}}
+        <!--弹出层-->
+        <div class="tipslayer" style="display: none;">
+            <a href="#X" class="tipslayer_close"></a>
 
-        <div class="babydetaillayer">
-            <h1>如何参与活动</h1>
+            <div class="babydetaillayer">
+                <h1>如何参与活动</h1>
 
-            <p>请先关于微信公众号“pyshuo2014”如您已关注，请进入公众号回复“投票”进入活动页面报名或投票！</p>
-            <a href="#X" class="babydetaillayer_btn">去关注</a>
+                <p>请先关于微信公众号“pyshuo2014”如您已关注，请进入公众号回复“投票”进入活动页面报名或投票！</p>
+                <a href="#X" class="babydetaillayer_btn">去关注</a>
+            </div>
         </div>
-    </div>
-    <div class="tipslayer_bg" style="display: none;"></div>
+        <div class="tipslayer_bg" style="display: none;"></div>
+    {{/if}}
 </div>
 
 <script>
@@ -107,7 +109,6 @@
                 localId: [],
                 serverId: []
             };
-
             //post data
             $('#sign_up', $el).on('click', function () {
                 var images = $('img[name="full_img"]', $el);
@@ -138,14 +139,23 @@
                 images.each(function(index,item){
                     imageStr+=$(item).attr('src')+'|';
                 });
-                $.post('/vote/upload_candidate', {
+                $.post('/vote/upload_candidate/{{$event_id}}', {
                     "title": title,
                     "mobileNum": mobileNum,
                     "description": description,
                     'images': imageStr
                 }, function (data) {
-
-                });
+                    if(data['success']){
+                        utils.alert('报名成功',function(){window.location.href='/vote/vote_event_view/{{$event_id}}'});
+                    }else{
+                        if(data['reason']=='not login'){
+                            utils.alert('请登录',function(){window.location.href = '/users/login.html?referer=' + encodeURIComponent("/vote/sign_up/{{$event_id}}");},1000);
+                        }
+                        if(data['reason']=='server error'){
+                            utils.alert('上传失败请联系客服');
+                        }
+                    }
+                }, 'json');
             });
 
             $('#preview_pic', $el).on('click', function () {
@@ -159,7 +169,6 @@
                         urls: showImages
                     });
                 }
-
             });
 
             $('a[name="upload_image"]', $el).on('click', function () {

@@ -101,20 +101,46 @@ class VoteController extends AppController {
         //check login
         $this->pageTitle='报名';
         $this->set('event_id',$eventId);
+        $uid = $this->currentUser['id'];
+        if(empty($uid)){
+            $this->set('not_login',true);
+        }
+        if(!$this->is_weixin()){
+            $this->set('not_weixin',true);
+        }
     }
 
     /**
      * 添加候选人
      * 主要是图片的处理 类似评论的上传图片(使用微信的js上传)
      */
-    public function upload_candidate() {
+    public function upload_candidate($eventId) {
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        if (empty($uid)) {
+            echo array('successs' => false, 'reason' => 'not login');
+            return;
+        }
         $title = $_POST['title'];
         $mobileNum = $_POST['mobileNum'];
         $description = $_POST['description'];
         $images = $_POST['images'];
         $saveData = array(
-            
+            'mobile_num' => $mobileNum,
+            'description' => $description,
+            'images' => $images,
+            'title' => $title,
+            'created' => date('Y-m-d H:i:s'),
+            'user_id' => $uid
         );
+        if ($this->Candidate->save($saveData)) {
+            $candidate_id = $this->Candidate->id;
+            $eventCandidateData = array('event_id' => $eventId, 'candidate_id' => $candidate_id);
+            $this->CandidateEvent->save($eventCandidateData);
+            echo array('successs' => true);
+            return;
+        }
+        echo array('successs' => false, 'reason' => 'server error');
+        return;
     }
-
 }

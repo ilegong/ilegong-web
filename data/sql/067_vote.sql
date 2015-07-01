@@ -11,7 +11,7 @@ CREATE TABLE cake_vote_events(
 CREATE TABLE cake_candidates (
 	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	tag INT (11),
-	mobile_phone VARCHAR (20),
+	mobile_num VARCHAR (20),
 	user_id INT NOT NULL,
 	title VARCHAR(50),
 	description TEXT DEFAULT NULL,
