@@ -3,13 +3,13 @@
     <div class="babydetail">
         <dl class="clearfix">
             <dd class="fl">{{$candidate_id}}号  {{$candidate_info['Candidate']['title']}}</dd>
-            <dd class="fr">{{$vote_num}}票</dd>
+            <dd class="fr">{{$all_count}}票</dd>
         </dl>
         <p>描述：{{$candidate_info['Candidate']['description']}}</p>
         {{loop $images $img}}
         <img src="{{$img}}">
         {{/loop}}
-        {{if $is_vote}}
+        {{if $has_vote>0}}
         <a href="#X" style="background-color: #999999;">已投票</a>
         {{else}}
         <a href="#X" class="vote_baby" data-candidate_id="{{$candidate_id}}" data-event_id="{{$event_id}}">我要投票</a>

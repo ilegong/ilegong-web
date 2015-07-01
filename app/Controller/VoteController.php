@@ -176,10 +176,15 @@ class VoteController extends AppController {
      * 萌宝详情
      */
     public function candidate_detail($candidateId,$eventId) {
-        //TODO check login
-       $vote_num = $_GET['vote_num']? $_GET['vote_num']:0;
-       $is_vote = $_GET['is_vote'];
        $this->pageTitle = '萌宝详情';
+       $uid = $this->currentUser['id'];
+        if(empty($uid)){
+            $ref = Router::url($_SERVER['REQUEST_URI']);
+            $this->redirect('/users/login.html?force_login=1&auto_weixin='.$this->is_weixin().'&referer=' . urlencode($ref));
+            return;
+        }
+       $candidate_data = $this->set_candidate_data($candidateId,$eventId,$uid);
+       $this->set($candidate_data);
        $candidate_info = $this->Candidate->find('first',array(
           'conditions' => array(
               'id' => $candidateId
@@ -188,12 +193,10 @@ class VoteController extends AppController {
        $images = array_filter(explode('|',$candidate_info['Candidate']['images']));
        $event_info = $this->get_event_info($eventId);
        $this->set('event_info',$event_info);
-       $this->set('vote_num',$vote_num);
        $this->set('candidate_id',$candidateId);
        $this->set('event_id',$eventId);
        $this->set('images',$images);
        $this->set('candidate_info',$candidate_info);
-       $this->set('is_vote',$is_vote);
        $this->set_wx_data($this->currentUser['id'],$eventId);
 
     }
@@ -239,6 +242,27 @@ class VoteController extends AppController {
     private function set_wx_data($uid,$eventId){
         $weixinJs = prepare_wx_share_log($uid, 'voteEventId', $eventId);
         $this->set($weixinJs);
+    }
+
+    private function set_candidate_data($candaidateId,$eventId,$uid){
+        $allCount = $this->Vote->find('count', array(
+            'conditions' => array(
+                'user_id' => $uid,
+                'event_id' => $eventId,
+                'candidate_id' => $candaidateId
+            )
+        ));
+        $hasVote = $this->Vote->find('count', array(
+            'conditions' => array(
+                'user_id' => $uid,
+                'event_id' => $eventId,
+                'candidate_id' => $candaidateId,
+                'created >'=> date('Y-m-d', time()),
+                'created <'=> date('Y-m-d', strtotime('+1 day'))
+            )
+        ));
+
+        return array('all_count' => $allCount, 'has_vote' => $hasVote);
     }
 
 }
