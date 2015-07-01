@@ -91,6 +91,7 @@ class VoteController extends AppController {
     /**
      * @param $candidateId
      * @param $eventId
+     * 暂时不用
      * 特定的人加入到特定的投票事件中 加入成功跳转到 vote_event_view
      */
     public function join_event($candidateId, $eventId) {
