@@ -1,4 +1,4 @@
-{{$this->Html->css(array('vote.css'));}}
+{{$this->Html->css(array('vote.css?v1'));}}
 <div style="background-color:#c54134;" id="baby_sign_up">
     <div class="baby_banner"><img src="{{$this->Html->assetUrl('/img/vote/banner.png')}}"/></div>
     <div class="apply_bg">
@@ -19,8 +19,8 @@
             <li class="fl" style="width: 25%;">萌宝描述&nbsp;&nbsp;&nbsp;</li>
             <li class="fl" style="width: 75%; height: 90px; overflow:hidden;"><textarea id="candidate_description"></textarea></li>
         </ul>
-        <a href="#X" class="apply_btn" id="preview_pic">预览图片</a>
-        <br/><br/>
+        <!--<a href="#X" class="apply_btn" id="preview_pic">预览图片</a>-->
+        <!--<br/><br/>-->
         <a href="#X" class="apply_btn" id="sign_up">确认报名</a>
 
         <p>若在线报名失败，可以将报名信息：姓名+联系方式+描述+宝贝照片(2-3张)发给我们微信号：pyshuo2015</p>
@@ -252,6 +252,8 @@
                                         utils.alert(failCount + '张图片上传失败。请重新上传。');
                                     }
                                 }
+                                bindChoseImgEvent();
+                                bindRemovePicEvent();
                             });
                         },
                         fail: function () {
@@ -260,7 +262,6 @@
                     });
                 }
                 doUpload(i);
-                bindRemovePicEvent();
             }
         });
     });
