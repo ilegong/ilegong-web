@@ -247,7 +247,6 @@ class VoteController extends AppController {
     private function set_candidate_data($candaidateId,$eventId,$uid){
         $allCount = $this->Vote->find('count', array(
             'conditions' => array(
-                'user_id' => $uid,
                 'event_id' => $eventId,
                 'candidate_id' => $candaidateId
             )
