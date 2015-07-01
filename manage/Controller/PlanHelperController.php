@@ -302,11 +302,11 @@ class PlanHelperController extends AppController
     private function _get_random_num($price)
     {
         if ($price < 10) {
-            $rand_num = rand(5, 11);
+            $rand_num = rand(3, 10);
         } else if ($price < 20) {
-            $rand_num = rand(4, 10);
+            $rand_num = rand(2, 10);
         } else if ($price < 30) {
-            $rand_num = rand(2, 9);
+            $rand_num = rand(1, 9);
         } else if ($price < 50) {
             $rand_num = rand(1, 9);
         } else if ($price < 60) {
