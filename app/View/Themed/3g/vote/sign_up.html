@@ -142,6 +142,7 @@
                     imageArray.push($(item).attr('src'));
                 });
                 if($me.attr('on_post')=='true'){
+                    utils.alert('正在提交请稍等');
                     return false;
                 }
                 $me.attr('on_post','true');
@@ -151,6 +152,7 @@
                     "description": description,
                     'images': imageArray.join('|')
                 }, function (data) {
+                    $me.attr('on_post','');
                     if(data['success']){
                         utils.alert('报名成功',function(){window.location.href='/vote/vote_event_view/{{$event_id}}'});
                     }else{
