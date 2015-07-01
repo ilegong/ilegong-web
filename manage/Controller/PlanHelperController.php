@@ -178,7 +178,13 @@ class PlanHelperController extends AppController
     function _insert_order($user, $products, $offline_store, $date)
     {
         if(empty($user['User']['mobilephone'])){
-            $this->User->updateAll(array('mobilephone'=>$this->_get_random_mobilephone()), array('id'=>$user['User']['id']));
+            $mobilephone = $this->_get_random_mobilephone();
+            $res = $this->User->updateAll(array('mobilephone'=>$mobilephone), array('User.id'=>$user['User']['id']));
+            if(!$res){
+                $this->log('failed to update user: '.$this->User->validationErrors);
+                throw new Exception($this->User->validationErrors);
+            }
+            $user['User']['mobilephone'] = $mobilephone;
         }
         $total_price = 0;
         foreach($products as $product){
@@ -338,8 +344,7 @@ class PlanHelperController extends AppController
         return $num;
     }
     private function _get_random_mobilephone(){
-        $second = array(3, 5, 6, 8);
-        $mobilephone = '1'.$second[array_rand($second)].rand(0,9).rand(0,9999).rand(0,9999);
-        return $mobilephone;
+        $second = array(3, 5, 8);
+        return sprintf('1%d%d%04d%04d', $second[array_rand($second)], rand(0,9), rand(0,9999), rand(0,9999));
     }
 }
