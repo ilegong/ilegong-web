@@ -65,6 +65,7 @@ class VoteController extends AppController {
                 $candidator['is_vote'] = $is_vote;
             }
         }
+        $this->set('event_info',$event_info);
         $this->set('candidators',$candidators);
         $this->set('candidators_info',$candidators_info);
         $this->set('event_id',$eventId);
@@ -178,7 +179,7 @@ class VoteController extends AppController {
               'id' => $candidateId
           )
        ));
-       $images = explode('|',$candidate_info['Candidate']['images']);
+       $images = array_filter(explode('|',$candidate_info['Candidate']['images']));
        $this->set('vote_num',$vote_num);
        $this->set('candidate_id',$candidateId);
        $this->set('event_id',$eventId);

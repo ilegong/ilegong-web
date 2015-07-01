@@ -5,9 +5,13 @@
     <div class="babylist">
         <ul class="clearfix">
             {{loop $candidators_info $candidator}}
+            <?php
+            $img = array_filter(explode('|',$candidator['Candidate']['images']));
+            $cover_img = $img[0];
+            ?>
             <li>
                 <b>{{$candidator['Candidate']['id']}}号</b>
-                <a href="/vote/candidate_detail/{{$candidator['Candidate']['id']}}/{{$event_id}}?vote_num={{$candidator['vote_num']}}&is_vote={{$candidator['is_vote']}}"><img src="/img/vote/baby.jpg"></a>
+                <a href="/vote/candidate_detail/{{$candidator['Candidate']['id']}}/{{$event_id}}?vote_num={{$candidator['vote_num']}}&is_vote={{$candidator['is_vote']}}"><img src="{{$cover_img}}"></a>
                 <dl class="clearfix">
                     <dd class="fl">{{$candidator['Candidate']['title']}}<br>{{$candidator['vote_num']}}票</dd>
                     {{if $candidator['is_vote']}}
@@ -19,15 +23,17 @@
             </li>
             {{/loop}}
         </ul>
+        {{if !empty($candidators_info)}}
         <div class="babylist_page clearfix">
               {{$this->Paginator->prev('&lt;', array( 'tag' => 'span','escape' => false), null, array('class' => 'prev disabled prv' ,'tag' => 'a', 'escape' => false));}}
               {{$this->Paginator->numbers(array('separator' => '', 'tag' => 'span' , 'currentClass' => 'active', 'currentTag' => 'a' , 'escape' => false));}}
               {{$this->Paginator->next('&gt;', array( 'tag' => 'span','escape' => false), null, array('class' => 'next disabled nxt' ,'tag' => 'a', 'escape' => false));}}
         </div>
+        {{/if}}
     </div>
     <div class="babyrule">
         <h1>活动规则</h1>
-        <p>活动时间：2015年6月14日～2015年6月21日</p>
+        <p>活动时间：{{Date('Y年m月d日',strtotime($event_info['VoteEvent']['start_time']))}}～{{Date('Y年m月d日',strtotime($event_info['VoteEvent']['end_time']))}}</p>
         <p>活动规则：</p>
         <p>1、萌娃的年龄0-10岁；</p>
         <p>2、每个萌娃只能报名一次，每次报名可展示2-3张图片，请慎重选择后发送。本次比赛不可重复参与，如发现重复参与，将视票数最高的那一次参赛为最终比赛结果，重复投票以票数高者为准。</p>
