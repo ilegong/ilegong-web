@@ -63,13 +63,14 @@ class VoteController extends AppController {
             echo json_encode(array('success' => false, 'reason' => 'Not subscribed'));
             return;
         }
-        //$already_vote_candidate = Hash::extract($uvote, '{n}.Vote.candidate_id');
-        if($this->today_vote_count($eventId,$uid)>= 5){
+        $uvote = $this->today_vote_count($eventId,$uid);
+        $already_vote_candidate = Hash::extract($uvote, '{n}.Vote.candidate_id');
+        if(count($uvote)>= 5){
             echo json_encode(array('success' => false, 'reason' => 'more than five'));
             return;
         }
         //has vote for this baby
-        if($this->has_vote($candidateId,$eventId,$uid)){
+        if(in_array($candidateId,$already_vote_candidate)){
             echo json_encode(array('success' => false, 'reason' => 'already vote'));
             return;
         }
@@ -143,7 +144,7 @@ class VoteController extends AppController {
     }
 
     private function today_vote_count($eventId,$userId){
-        $count = $this->Vote->find('all', array(
+        $votes = $this->Vote->find('all', array(
             'conditions' => array(
                 'user_id' => $userId,
                 'event_id' => $eventId,
@@ -151,17 +152,7 @@ class VoteController extends AppController {
                 'created <'=> date('Y-m-d', strtotime('+1 day')),
             )
         ));
-        return $count;
+        return $votes;
     }
 
-    private function has_vote($candidateId,$eventId,$userId){
-        $count = $this->Vote->find('count',array(
-           'conditions' => array(
-               'candidate_id' => $candidateId,
-               'user_id' => $userId,
-               'event_id' => $eventId
-           )
-        ));
-        return $count > 0;
-    }
 }
