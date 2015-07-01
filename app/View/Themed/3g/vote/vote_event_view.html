@@ -4,7 +4,7 @@
     {{if !$is_sign_up}}
     <a href="/vote/sign_up/{{$event_id}}" class="apply_btn">我要报名</a>
     {{else}}
-    <a href="/vote/candidate_detail/{{$is_sign_up['CandidateEvent']['candidate_id']}}/{{$event_id}}" class="apply_btn">查看报名信息</a>
+    <a href="/vote/candidate_detail/{{$is_sign_up['CandidateEvent']['candidate_id']}}/{{$event_id}}?vote_num={{$candidator['vote_num']}}&is_vote={{$candidator['is_vote']}}" class="apply_btn">查看报名信息</a>
     {{/if}}
     <div class="babylist">
         <ul class="clearfix">
@@ -72,7 +72,7 @@
                     <label>报名</label>
                 </a>
                 {{else}}
-                <a href="/vote/candidate_detail/{{$is_sign_up['CandidateEvent']['candidate_id']}}/{{$event_id}}">
+                <a href="/vote/candidate_detail/{{$is_sign_up['CandidateEvent']['candidate_id']}}/{{$event_id}}?vote_num={{$candidator['vote_num']}}&is_vote={{$candidator['is_vote']}}">
                     <i class="apply"></i>
                     <label>我的宝宝</label>
                 </a>
