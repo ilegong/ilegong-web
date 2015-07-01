@@ -163,6 +163,10 @@
                         if(data['reason']=='not subscribed'){
                             utils.alert('请先关注我们微信服务号',window.location.href='');
                         }
+                        if(data['reason']=='has sign'){
+                            var candidateId= data['candidate_id'];
+                            utils.alert('已经报过名了',window.location.href='/vote/candidate_detail/'+candidateId+'/{{$event_id}}');
+                        }
                     }
                 }, 'json');
             });

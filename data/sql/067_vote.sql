@@ -33,5 +33,6 @@ CREATE TABLE cake_candidate_events (
   id INT NOT NULL AUTO_INCREMENT,
   event_id INT NOT NULL,
   candidate_id INT NOT NULL,
+  user_id INT NOT NULL,
   PRIMARY KEY (id),
   UNIQUE INDEX `un-index` (event_id ASC, candidate_id ASC));

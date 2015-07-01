@@ -110,9 +110,9 @@ class VoteController extends AppController {
 
     public function sign_up($eventId){
         //check login
+        $this->pageTitle='萌宝报名';
         $event_info = $this->get_event_info($eventId);
         $this->set('event_info',$event_info);
-        $this->pageTitle='报名';
         $this->set('event_id',$eventId);
         $uid = $this->currentUser['id'];
         if(empty($uid)){
@@ -134,8 +134,13 @@ class VoteController extends AppController {
             echo json_encode(array('success' => false, 'reason' => 'not login'));
             return;
         }
-        if(user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED){
+        if (user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED) {
             echo json_encode(array('success' => false, 'reason' => 'not subscribed'));
+            return;
+        }
+        $signUpRecord = $this->has_sign_up($eventId,$uid);
+        if(!empty($signUpRecord)){
+            echo json_encode(array('success' => false,'reason' => 'has sign', 'candidate_id' => $signUpRecord[CandidateEvent]['candidate_id']));
             return;
         }
         $title = $_POST['title'];
@@ -148,11 +153,12 @@ class VoteController extends AppController {
             'images' => $images,
             'title' => $title,
             'created' => date('Y-m-d H:i:s'),
-            'user_id' => $uid
+            'user_id' => $uid,
+            'event_id' => $eventId
         );
         if ($this->Candidate->save($saveData)) {
             $candidate_id = $this->Candidate->id;
-            $eventCandidateData = array('event_id' => $eventId, 'candidate_id' => $candidate_id);
+            $eventCandidateData = array('event_id' => $eventId, 'candidate_id' => $candidate_id, 'user_id' => $uid);
             $this->CandidateEvent->save($eventCandidateData);
             echo json_encode(array('success' => true));
             return;
@@ -185,6 +191,16 @@ class VoteController extends AppController {
        $this->set('is_vote',$is_vote);
 
 
+    }
+
+    private function has_sign_up($eventId,$userId){
+        $record = $this->CandidateEvent->find('first',array(
+            'conditions' => array(
+                'user_id'  => $userId,
+                'event_id' => $eventId
+            )
+        ));
+        return $record;
     }
 
     private function is_already_vote($candidateId,$eventId,$uid){
