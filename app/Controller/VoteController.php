@@ -14,7 +14,7 @@ class VoteController extends AppController {
     var $paginate = array(
         'Candidate' => array(
             'order' => 'Candidate.created DESC',
-            'limit' => 2,
+            'limit' => 10,
         )
     );
 
@@ -58,6 +58,7 @@ class VoteController extends AppController {
                 $candidator['is_vote'] = $is_vote;
             }
         }
+        $this->set('candidator_ids',$candidator_ids);
         $this->set('event_info',$event_info);
         $this->set('candidators',$candidators);
         $this->set('candidators_info',$candidators_info);

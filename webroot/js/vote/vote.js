@@ -5,7 +5,7 @@ $(function(){
     var voteBaby = $('.vote_baby');
     var reasons = {
         'Not logged':'请先登录哦',
-        'Not subscribed':'请先关注朋友说公众号进行投票哦',
+        'Not subscribed':'请先关注[朋友说]公众号进行投票哦',
         'more than five':'每个微信号每天投票不能超过5次哦',
         'already vote':'您已经投过票啦',
         'save wrong':'投票失败，请重试哦'

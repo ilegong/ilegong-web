@@ -23,10 +23,10 @@
             </li>
             {{/loop}}
         </ul>
-        {{if !empty($candidators_info)}}
+        {{if count($candidators_info)>10}}
         <div class="babylist_page clearfix">
               {{$this->Paginator->prev('&lt;', array( 'tag' => 'span','escape' => false), null, array('class' => 'prev disabled prv' ,'tag' => 'a', 'escape' => false));}}
-              {{$this->Paginator->numbers(array('separator' => '', 'tag' => 'span' , 'currentClass' => 'active', 'currentTag' => 'a' , 'escape' => false));}}
+              {{$this->Paginator->numbers(array('separator' => '', 'tag' => 'span' , 'currentClass' => 'active', 'currentTag' => 'a' , 'escape' => false , 'modulus' => 2));}}
               {{$this->Paginator->next('&gt;', array( 'tag' => 'span','escape' => false), null, array('class' => 'next disabled nxt' ,'tag' => 'a', 'escape' => false));}}
         </div>
         {{/if}}
@@ -76,4 +76,4 @@
         </ul>
     </div>
 </div>
-{{$this->Html->script(array('/js/vote/vote.js?v1.0','/js/common.js'));}}
+{{$this->Html->script(array('/js/vote/vote.js?v1.1','/js/common.js'));}}
