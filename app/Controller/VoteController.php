@@ -65,6 +65,7 @@ class VoteController extends AppController {
         $this->set('candidators',$candidators);
         $this->set('candidators_info',$candidators_info);
         $this->set('event_id',$eventId);
+        $this->set_wx_data($uid,$eventId);
     }
 
     /**
@@ -124,6 +125,7 @@ class VoteController extends AppController {
         if(!$this->is_weixin()||user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED){
             $this->set('not_weixin',true);
         }
+        $this->set_wx_data($uid,$eventId);
     }
 
     /**
@@ -174,7 +176,7 @@ class VoteController extends AppController {
      * 萌宝详情
      */
     public function candidate_detail($candidateId,$eventId) {
-
+        //TODO check login
        $vote_num = $_GET['vote_num']? $_GET['vote_num']:0;
        $is_vote = $_GET['is_vote'];
        $this->pageTitle = '萌宝详情';
@@ -192,7 +194,7 @@ class VoteController extends AppController {
        $this->set('images',$images);
        $this->set('candidate_info',$candidate_info);
        $this->set('is_vote',$is_vote);
-
+       $this->set_wx_data($this->currentUser['id'],$eventId);
 
     }
 
@@ -232,6 +234,11 @@ class VoteController extends AppController {
             )
         ));
         return $event_info;
+    }
+
+    private function set_wx_data($uid,$eventId){
+        $weixinJs = prepare_wx_share_log($uid, 'voteEventId', $eventId);
+        $this->set($weixinJs);
     }
 
 }
