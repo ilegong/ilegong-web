@@ -33,6 +33,11 @@ class WxSharesController extends AppController{
                 $this->WxShare->save($data);
                 exit();
             }
+            if($share_string=='baby_vote'){
+                $data = array('sharer' => 0, 'created' => 0, 'data_type' => 'baby_vote', 'data_id' => 0, 'share_type' => $type);
+                $this->WxShare->save($data);
+                exit();
+            }
             $decode_string = authcode($share_string, 'DECODE', 'SHARE_TID');
             $str = explode('-', $decode_string);
             $data_str = explode('_', $str[3]);
@@ -51,6 +56,8 @@ class WxSharesController extends AppController{
                 $data_type = 'indexTry';
             } elseif ($data_str[0] == 'indexproduct') {
                 $data_type = 'indexProduct';
+            }elseif($data_str[0]=='voteEventId'){
+                $data_type = 'voteEvent';
             } else {
                 $data_type = substr(trim($data_str[0]), 0, 12);
             }
