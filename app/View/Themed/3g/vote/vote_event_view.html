@@ -1,4 +1,4 @@
-{{$this->Html->css('vote.css')}}
+{{$this->Html->css(array('vote.css'))}}
 <div class="container" style="background-color:#c54134;">
     <div class="baby_banner"><img src="/img/vote/banner.png"></div>
     <a href="/vote/sign_up/{{$event_id}}" class="apply_btn">我要报名</a>
@@ -7,20 +7,22 @@
             {{loop $candidators_info $candidator}}
             <li>
                 <b>{{$candidator['Candidate']['id']}}号</b>
-                <a href="/vote/vote/{{$candidator['Candidate']['id']}}/{{$event_id}}"><img src="/img/vote/baby.jpg"></a>
+                <a href="/vote/candidate_detail/{{$candidator['Candidate']['id']}}/{{$event_id}}?vote_num={{$candidator['vote_num']}}&is_vote={{$candidator['is_vote']}}"><img src="/img/vote/baby.jpg"></a>
                 <dl class="clearfix">
                     <dd class="fl">{{$candidator['Candidate']['title']}}<br>{{$candidator['vote_num']}}票</dd>
-                    <dd class="fr"><a href="#X">&nbsp;投票&nbsp;</a></dd>
+                    {{if $candidator['is_vote']}}
+                    <dd class="fr"><a href="#X" class="cur">已投票</a></dd>
+                    {{else}}
+                    <dd class="fr"><a href="#X" class="vote_baby" data-candidate_id="{{$candidator['Candidate']['id']}}" data-event_id="{{$event_id}}">&nbsp;投票&nbsp;</a></dd>
+                    {{/if}}
                 </dl>
             </li>
             {{/loop}}
         </ul>
         <div class="babylist_page clearfix">
-            <a href="#X">&lt;</a>
-            <a href="#X">1</a>
-            <a class="cur" href="#X">2</a>
-            <a href="#X">3</a>
-            <a href="#X">&gt;</a>
+              {{$this->Paginator->prev('&lt;', array( 'tag' => 'span','escape' => false), null, array('class' => 'prev disabled prv' ,'tag' => 'a', 'escape' => false));}}
+              {{$this->Paginator->numbers(array('separator' => '', 'tag' => 'span' , 'currentClass' => 'active', 'currentTag' => 'a' , 'escape' => false));}}
+              {{$this->Paginator->next('&gt;', array( 'tag' => 'span','escape' => false), null, array('class' => 'next disabled nxt' ,'tag' => 'a', 'escape' => false));}}
         </div>
     </div>
     <div class="babyrule">
@@ -42,7 +44,7 @@
     <div class="baby_bottom">
         <ul class="clearfix">
             <li class="cur">
-                <a href="/img/">
+                <a href="#X">
                     <i class="home"></i>
                     <label>首页</label>
                 </a>
@@ -54,7 +56,7 @@
                 </a>
             </li>
             <li>
-                <a href="#X">
+                <a href="/vote/sign_up/{{$event_id}}">
                     <i class="apply"></i>
                     <label>报名</label>
                 </a>
@@ -68,3 +70,4 @@
         </ul>
     </div>
 </div>
+{{$this->Html->script(array('/js/vote/vote.js?v1.0','/js/common.js'));}}

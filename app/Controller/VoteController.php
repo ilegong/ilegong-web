@@ -10,6 +10,13 @@ class VoteController extends AppController {
 
 
     var $uses = array('VoteEvent', 'Candidate', 'Vote', 'CandidateEvent');
+    var $components = array('Paginator');
+    var $paginate = array(
+        'Candidate' => array(
+            'order' => 'Candidate.created DESC',
+            'limit' => 1,
+        )
+    );
 
     public function beforeFilter(){
         parent::beforeFilter();
@@ -26,12 +33,24 @@ class VoteController extends AppController {
      * 根据投票的事件ID到特定的投票页面
      */
     public function vote_event_view($eventId) {
-
         $this->pageTitle = '萌宝';
-        $event_info = $this->VoteEvent->find('first',array('conditions' => array('id'=>$eventId),'fields' => array('start_time','end_time')));
-        $candidators = $this->CandidateEvent->find('all',array('conditions' => array('event_id' => $eventId)));
+        $event_info = $this->VoteEvent->find('first',array(
+            'conditions' => array(
+                'id'=>$eventId
+            ),
+            'fields' => array(
+                'start_time','end_time'
+            )
+        ));
+        $candidators = $this->CandidateEvent->find('all',array(
+            'conditions' => array(
+                'event_id' => $eventId
+            )
+        ));
         $candidator_ids = Hash::extract($candidators,'{n}.CandidateEvent.candidate_id');
-        $candidators_info = $this->Candidate->find('all',array('conditions' => array('id' => $candidator_ids)));
+        $this->Paginator->settings = $this->paginate;
+        $candidators_info = $this->Paginator->paginate('Candidate',array('Candidate.id' => $candidator_ids));
+
         if(!empty($candidators_info)){
             foreach($candidators_info as &$candidator){
                 $conditions = array();
@@ -40,6 +59,9 @@ class VoteController extends AppController {
                 $conditions['Vote.created <= '] = $event_info['VoteEvent']['end_time'];
                 $candidator_vote= $this->Vote->find('count',array('conditions' => $conditions));
                 $candidator['vote_num'] = $candidator_vote;
+                list($uvote,$is_vote) = $this->is_already_vote($candidator['Candidate']['id'],$eventId);
+                unset($uvote);
+                $candidator['is_vote'] = $is_vote;
             }
         }
         $this->set('candidators',$candidators);
@@ -143,6 +165,46 @@ class VoteController extends AppController {
         return;
     }
 
+    }
+
+    /**
+     * 萌宝详情
+     */
+    public function candidate_detail($candidateId,$eventId) {
+
+       $vote_num = $_GET['vote_num']? $_GET['vote_num']:0;
+       $is_vote = $_GET['is_vote'];
+       $this->pageTitle = '萌宝详情';
+       $candidate_info = $this->Candidate->find('first',array(
+          'conditions' => array(
+              'id' => $candidateId
+          )
+       ));
+       $images = explode('|',$candidate_info['Candidate']['images']);
+       $this->set('vote_num',$vote_num);
+       $this->set('candidate_id',$candidateId);
+       $this->set('event_id',$eventId);
+       $this->set('images',$images);
+       $this->set('candidate_info',$candidate_info);
+       $this->set('is_vote',$is_vote);
+
+
+    }
+
+    public function is_already_vote($candidateId,$eventId){
+
+        $uid = $this->currentUser['id'];
+        $uvote = $this->Vote->find('all', array(
+            'conditions' => array(
+                'user_id' => $uid,
+                'event_id' => $eventId,
+                'created >'=> date('Y-m-d', time()),
+                'created <'=> date('Y-m-d', strtotime('+1 day')),
+            )
+        ));
+        $already_vote_candidate = Hash::extract($uvote, '{n}.Vote.candidate_id');
+        $is_vote = in_array($candidateId,$already_vote_candidate);
+        return array($uvote,$is_vote);
     private function today_vote_count($eventId,$userId){
         $votes = $this->Vote->find('all', array(
             'conditions' => array(

@@ -1,14 +1,19 @@
-{{$this->Html->css('vote.css')}}
+{{$this->Html->css(array('vote.css'))}}
 <div class="container" style="background-color:#c54134;">
     <div class="babydetail">
         <dl class="clearfix">
-            <dd class="fl">28号  马心童</dd>
-            <dd class="fr">4票</dd>
+            <dd class="fl">{{$candidate_id}}号  {{$candidate_info['Candidate']['title']}}</dd>
+            <dd class="fr">{{$event_id}}票</dd>
         </dl>
-        <p>描述：多变的女汉子</p>
-        <img src="/img/vote/baby.jpg">
-        <img src="/img/vote/baby.jpg">
-        <a href="#X">我要投票</a>
+        <p>描述：{{$candidate_info['Candidate']['description']}}</p>
+        {{loop $images $img}}
+        <img src="{{$img}}">
+        {{/loop}}
+        {{if $is_vote}}
+        <a href="#X" style="background-color: #999999;">已投票</a>
+        {{else}}
+        <a href="#X" class="vote_baby" data-candidate_id="{{$candidate_id}}" data-event_id="{{$event_id}}">我要投票</a>
+        {{/if}}
     </div>
     <div class="babyrule">
         <h1>活动规则</h1>
@@ -29,7 +34,7 @@
     <div class="baby_bottom">
         <ul class="clearfix">
             <li>
-                <a href="#X">
+                <a href="/vote/vote_event_view/{{$event_id}}">
                     <i class="home"></i>
                     <label>首页</label>
                 </a>
@@ -55,3 +60,4 @@
         </ul>
     </div>
 </div>
+{{$this->Html->script(array('/js/vote/vote.js?v1.0','/js/common.js'));}}
