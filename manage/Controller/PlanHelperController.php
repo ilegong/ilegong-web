@@ -80,8 +80,7 @@ class PlanHelperController extends AppController
             'conditions' => array(
                 'brand_id' => PYS_BRAND_ID,
                 'published' => PUBLISH_YES
-            ),
-            'fields' => array('id', 'price')
+            )
         ));
         $product_spec_groups = $this->ProductSpecGroup->find('all', array(
             'conditions' => array(
@@ -163,7 +162,7 @@ class PlanHelperController extends AppController
 
     private function _try_to_create_order($index, $user, $products, $offline_store)
     {
-        $send_date = date_format(get_send_date(10, "23:59:59", '2,4,6'), 'Y-m-d');
+        $send_date = date_format(get_send_date(6, "23:59:59", '2,4,6'), 'Y-m-d');
         $seconds = $index * 60 + rand(0, 59);
         $date = date('Y-m-d H:i:s', strtotime('+' . $seconds . ' seconds'));
 
