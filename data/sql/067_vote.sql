@@ -21,6 +21,10 @@ CREATE TABLE cake_candidates (
 	created DATETIME DEFAULT NULL
 );
 
+ALTER TABLE cake_candidates
+ADD COLUMN vote_num INT NOT NULL DEFAULT 0 AFTER created;
+
+
 CREATE TABLE cake_votes (
 	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	candidate_id INT UNSIGNED,

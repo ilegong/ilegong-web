@@ -18,6 +18,13 @@ class VoteController extends AppController {
         )
     );
 
+    var $sortPaginate = array(
+        'Candidate' => array(
+            'order' => 'Candidate.vote_num DESC',
+            'limit' => 10
+        )
+    );
+
     public function beforeFilter(){
         parent::beforeFilter();
     }
@@ -32,7 +39,7 @@ class VoteController extends AppController {
      * @param $eventId
      * 根据投票的事件ID到特定的投票页面
      */
-    public function vote_event_view($eventId) {
+    public function vote_event_view($eventId,$sort=0) {
         $this->pageTitle = '萌宝';
         $uid = $this->currentUser['id'];
         $event_info = $this->get_event_info($eventId);
@@ -41,8 +48,13 @@ class VoteController extends AppController {
                 'event_id' => $eventId
             )
         ));
+
         $candidator_ids = Hash::extract($candidators,'{n}.CandidateEvent.candidate_id');
-        $this->Paginator->settings = $this->paginate;
+        if($sort==1){
+            $this->Paginator->settings = $this->sortPaginate;
+        }else{
+            $this->Paginator->settings = $this->paginate;
+        }
         $candidators_info = $this->Paginator->paginate('Candidate',array('Candidate.id' => $candidator_ids));
 
         if(!empty($candidators_info)){
@@ -96,6 +108,8 @@ class VoteController extends AppController {
         }
         $vote = $this->Vote->save(array('candidate_id' => $candidateId, 'user_id'=>$uid, 'event_id'=>$eventId));
         if(empty($vote)) {
+            //update vote num
+            $this->update_candidate_vote_num($candidateId,$eventId);
             echo json_encode(array('success' => false, 'reason' => 'save wrong'));
             return;
         }
@@ -262,6 +276,16 @@ class VoteController extends AppController {
         ));
 
         return array('all_count' => $allCount, 'has_vote' => $hasVote);
+    }
+
+    private function update_candidate_vote_num($candidateId,$eventId){
+        $count = $this->Vote->find('count',array(
+            'conditions' => array(
+                'candidate_id' => $candidateId,
+                'event_id' => $eventId
+            )
+        ));
+        $this->Candidate->updateAll(array('vote_num' => $count), array('id' => $candidateId));
     }
 
 }
