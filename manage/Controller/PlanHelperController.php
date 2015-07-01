@@ -4,7 +4,7 @@ class PlanHelperController extends AppController
 
     var $name = 'PlanHelper';
 
-    var $uses = array('User', 'Order', 'Cart', 'Product', 'OfflineStore');
+    var $uses = array('User', 'Order', 'Cart', 'Product', 'ProductSpecGroup', 'OfflineStore');
 
     public function admin_orders()
     {
@@ -18,28 +18,29 @@ class PlanHelperController extends AppController
                 'id' => $user_ids
             )
         ));
-        if(empty($users)){
+        if (empty($users)) {
             echo json_encode(array('result' => false, 'reason' => 'please provide at least 1 user'));
             return;
         }
-        foreach($users as $user){
-            if(!$this->_is_user_valid($user)){
-                echo json_encode(array('result' => false, 'reason' => 'invalid user '.$user['User']['id']));
+        foreach ($users as $user) {
+            if (!$this->_is_user_valid($user)) {
+                echo json_encode(array('result' => false, 'reason' => 'invalid user ' . $user['User']['id']));
                 return;
             }
         }
 
-        $products = $this->Product->find('all', array(
+        $pys_products = $this->Product->find('all', array(
             'conditions' => array(
                 'brand_id' => PYS_BRAND_ID,
                 'published' => PUBLISH_YES
             )
         ));
+        $pys_products = Hash::combine($pys_products, '{n}.Product.id', '{n}');
 
         $this->loadModel('ProductSpecGroup');
         $product_spec_groups = $this->ProductSpecGroup->find('all', array(
             'conditions' => array(
-                'product_id' => Hash::extract($products, '{n}.Product.id')
+                'product_id' => Hash::extract($pys_products, '{n}.Product.id')
             )
         ));
         $product_spec_groups = Hash::extract($product_spec_groups, '{n}.ProductSpecGroup.product_id', '{n}');
@@ -48,19 +49,12 @@ class PlanHelperController extends AppController
 
         $results = array();
         for ($i = 0; $i < $order_count; $i++) {
-            $product = $products[array_rand($products)];
-            $spec_groups = $product_spec_groups[$product['Product']['id']];
-
-            $product_spec_group = array();
-            if (!empty($spec_groups)) {
-                $product_spec_group = $spec_groups[array_rand($spec_groups)];
-            }
+            $count = $this->_get_random_product_count();
+            $products = $this->_get_random_products($pys_products, $product_spec_groups, $count);
             $user = $users[array_rand($users)];
-            $num = $this->_get_random_num(empty($product_spec_group) ? $product['Product']['price'] : $product_spec_group['ProductSpecGroup']['price']);
+            $order_id = $this->_try_to_create_order($i, $user, $products, $offline_store);
 
-            $order_id = $this->_try_to_create_order($i, $user, $product, $num, $product_spec_group, $offline_store);
-
-            if(!isset($results[$user['User']['id']])){
+            if (!isset($results[$user['User']['id']])) {
                 $results[$user['User']['id']] = array();
             }
             $results[$user['User']['id']][] = $order_id;
@@ -74,41 +68,33 @@ class PlanHelperController extends AppController
         $this->autoRender = false;
 
         $user_id = $_REQUEST['user_id'];
-        $product_id = $_REQUEST['product_id'];
-        $offline_store_id = $_REQUEST['offline_store_id'];
-        $spec_id = isset($_REQUEST['spec_id']) ? $_REQUEST['spec_id'] : 0;
-        $num = isset($_REQUEST['num']) ? $_REQUEST['num'] : 1;
 
         $user = $this->User->findById($user_id);
-        if(empty($user) || !$this->_is_user_valid($user)){
+        if (empty($user) || !$this->_is_user_valid($user)) {
             echo json_encode(array('result' => false, 'reason' => 'user is invalid'));
             return;
         }
 
-        $product = $this->Product->findById($product_id);
-        if ($product['Product']['brand_id'] != 92) {
-            echo json_encode(array('result' => false, 'reason' => 'not pyshuo product'));
-            return;
-        }
+        $count = $this->_get_random_product_count();
+        $products = $this->Product->find('all', array(
+            'conditions' => array(
+                'brand_id' => PYS_BRAND_ID,
+                'published' => PUBLISH_YES
+            ),
+            'fields' => array('id', 'price')
+        ));
+        $product_spec_groups = $this->ProductSpecGroup->find('all', array(
+            'conditions' => array(
+                'product_id' => Hash::extract($products, '{n}.Product.id')
+            )
+        ));
+        $product_spec_groups = Hash::combine($product_spec_groups, '{n}.ProductSpecGroup.product_id', '{n}');
 
-        $product_spec_group = array();
-        if(!empty($spec_id)){
-            $this->loadModel('ProductSpecGroup');
-            $product_spec_group = $this->ProductSpecGroup->findById($spec_id);
-        }
+        $products = $this->_get_random_products($products, $product_spec_groups, $count);
 
-        $offline_store = $this->OfflineStore->findById($offline_store_id);
-        if(empty($offline_store)){
-            echo json_encode(array('result' => false, 'reason' => 'offline store does not exist'));
-            return;
-        }
-        if($offline_store['OfflineStore']['deleted'] == DELETED_NO){
-            echo json_encode(array('result' => false, 'reason' => 'offline store is not deleted'));
-            return;
-        }
-
+        $offline_store = $this->_get_random_offline_store($user_id);
         try {
-            $order_id = $this->_try_to_create_order(0, $user_id, $product, $num, $product_spec_group, $offline_store);
+            $order_id = $this->_try_to_create_order(0, $user, $products, $offline_store);
             echo json_encode(array('result' => true, "order_id" => $order_id));
         } catch (Exception $e) {
             echo json_encode(array('result' => false, 'reason' => $e->getMessage()));
@@ -175,25 +161,27 @@ class PlanHelperController extends AppController
         echo json_encode(array("order_ids" => $order_ids));
     }
 
-    private function _try_to_create_order($index, $user, $product, $num, $product_spec_group, $offline_store)
+    private function _try_to_create_order($index, $user, $products, $offline_store)
     {
         $send_date = date_format(get_send_date(10, "23:59:59", '2,4,6'), 'Y-m-d');
         $seconds = $index * 60 + rand(0, 59);
-        $date = date('Y-m-d H:i:s', strtotime('+'.$seconds.' seconds'));
+        $date = date('Y-m-d H:i:s', strtotime('+' . $seconds . ' seconds'));
 
-        $order_id = $this->_insert_order($user, $product, $num, $product_spec_group, $offline_store, $date);
-        $cart_id = $this->_insert_cart($user, $product, $num, $product_spec_group, $send_date, $order_id, $date);
+        $order_id = $this->_insert_order($user, $products, $offline_store, $date);
+        foreach($products as &$product){
+            $this->_insert_cart($user, $product, $send_date, $order_id, $date);
+        }
 
         return $order_id;
     }
 
-    function _insert_order($user, $product, $num, $product_spec_group, $offline_store, $date)
+    function _insert_order($user, $products, $offline_store, $date)
     {
-        $price = $product['Product']['price'];
-        if (!empty($product_spec_group)) {
-            $price = $product_spec_group['ProductSpecGroup']['price'];
+        $total_price = 0;
+        foreach($products as $product){
+            $price = empty($product['ProductSpecGroup']['price']) ? $products['Product']['price'] : $product['ProductSpecGroup']['price'];
+            $total_price = $total_price + $price * $product['Product']['num'];
         }
-        $total_price = $price * $num;
 
         $data = array();
         $data['Order']['creator'] = $user['User']['id'];
@@ -210,7 +198,6 @@ class PlanHelperController extends AppController
         $data['Order']['total_all_price'] = $total_price;
         $data['Order']['brand_id'] = $product['Product']['brand_id'];
         $data['Order']['type'] = 1;
-        $data['Order']['flag'] = 7;
         $data['Order']['published'] = PUBLISH_YES;
 
         $this->Order->id = null;
@@ -224,8 +211,10 @@ class PlanHelperController extends AppController
         }
     }
 
-    function _insert_cart($user, $product, $num, $product_spec_group, $send_date, $order_id, $date)
+    function _insert_cart($user, $product, $send_date, $order_id, $date)
     {
+        $price = empty($product['ProductSpecGroup']['price']) ? $product['Product']['price'] : $product['ProductSpecGroup']['price'];
+
         $data = array();
         $data['Cart']['name'] = $product['Product']['name'];
         $data['Cart']['order_id'] = $order_id;
@@ -233,10 +222,10 @@ class PlanHelperController extends AppController
         $data['Cart']['type'] = 5;
         $data['Cart']['status'] = 0;
         $data['Cart']['product_id'] = $product['Product']['id'];
-        $data['Cart']['spec_id'] = $product_spec_group['ProductSpecGroup']['id'];
+        $data['Cart']['spec_id'] = $product['ProductSpecGroup']['id'];
         $data['Cart']['coverimg'] = $product['Product']['coverimg'];
-        $data['Cart']['price'] = $product['Product']['price'] * $num;
-        $data['Cart']['num'] = $num;
+        $data['Cart']['price'] = $price * $product['Product']['num'];
+        $data['Cart']['num'] = $product['Product']['num'];
         $data['Cart']['session_id'] = $this->Session->id();
         $data['Cart']['created'] = $date;
         $data['Cart']['updated'] = $date;
@@ -246,7 +235,7 @@ class PlanHelperController extends AppController
         $this->Cart->id = null;
         if ($this->Cart->save($data)) {
             $cart_id = $this->Cart->getLastInsertID();
-            $this->log("plan helper create cart successfully: " .$cart_id);
+            $this->log("plan helper create cart successfully: " . $cart_id);
             return $cart_id;
         } else {
             $this->log($this->Cart->validationErrors); //show validationErrors
@@ -260,33 +249,76 @@ class PlanHelperController extends AppController
         return !empty($user) && $user['User']['username'];
     }
 
+    private function _get_random_product_count(){
+        $random_num = rand(1, 10);
+        if ($random_num > 9) {
+            $count = 4;
+        } else if ($random_num > 7) {
+            $count = 3;
+        } else if ($random_num > 4) {
+            $count = 2;
+        } else {
+            $count = 1;
+        }
+        return $count;
+    }
+    private function _get_random_products($pys_products, $product_spec_groups, $count)
+    {
+        $products = array();
+        for ($i = 0; $i < $count; $i++) {
+            $product = $pys_products[array_rand($pys_products)];
+            $product_id = $product['Product']['id'];
+            $spec_group = $this->_get_random_spec_group($product_spec_groups, $product_id);
+            $price = empty($spec_group) ? $product['Product']['price'] : $spec_group['ProductSpecGroup']['price'];
+
+            $products[$product_id] = $product;
+            $products[$product['Product']['id']]['Product']['num'] = $this->_get_random_num($price);
+            $products[$product['Product']['id']]['ProductSpecGroup'] = $spec_group['ProductSpecGroup'];
+        }
+        return $products;
+    }
+
+    private function _get_random_spec_group($product_spec_groups, $product_id)
+    {
+        $spec_groups = array_filter($product_spec_groups, function ($spec_group) use ($product_id) {
+            return $spec_group['ProductSpecGroup']['product_id'] = $product_id;
+        });
+        $spec_groups = Hash::combine($spec_groups, '{n}.ProductSpecGroup.id', '{n}');
+
+        if (empty($spec_groups)) {
+            return array();
+        }
+        return $spec_groups[array_rand($spec_groups)];
+    }
+
+    private function _get_random_offline_store($user_id){
+        $offline_stores = $this->OfflineStore->find('all', array(
+            'conditions' => array(
+            'deleted' => DELETED_NO
+            )
+        ));
+        $offline_stores = Hash::combine($offline_stores, '{n}.OfflineStore.id', '{n}');
+        return $offline_stores[array_rand($offline_stores)];
+    }
     private function _get_random_num($price)
     {
-        if($price < 10){
+        if ($price < 10) {
             $rand_num = rand(7, 12);
-        }
-        else if($price < 20){
+        } else if ($price < 20) {
             $rand_num = rand(6, 12);
-        }
-        else if($price < 30){
+        } else if ($price < 30) {
             $rand_num = rand(5, 11);
-        }
-        else if($price < 50){
+        } else if ($price < 50) {
             $rand_num = rand(4, 10);
-        }
-        else if($price < 60){
+        } else if ($price < 60) {
             $rand_num = rand(1, 10);
-        }
-        else if($price < 70){
+        } else if ($price < 70) {
             $rand_num = rand(1, 9);
-        }
-        else if($price < 80){
+        } else if ($price < 80) {
             $rand_num = rand(1, 8);
-        }
-        else if($price < 90){
+        } else if ($price < 90) {
             $rand_num = rand(1, 7);
-        }
-        else{
+        } else {
             $rand_num = rand(1, 6);
         }
 
