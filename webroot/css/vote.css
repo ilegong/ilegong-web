@@ -23,7 +23,7 @@ ul li { list-style: none; }
 .babylist ul li dl{ overflow: hidden; margin-right: 10px; background-color: #ffffff;}
 .babylist ul li dl dd a{ margin-right: 0; display: block; text-decoration: none; color: #ffffff; background-color: #ff7c6e; padding: 0 10px; line-height: 46px;}
 .babylist ul li dl dd a.cur{ background-color: #999999;}
-.babylist ul li dl dd.fl{ padding: 5px 0 5px 10px;}
+.babylist ul li dl dd.fl {padding: 5px 0 5px 10px;line-height: 18px;}
 .babylist ul li b{ display: block; width: 4.2em; height: 2.083em; background: url("/img/vote/iconbg.png"); background-size: 4.2em 2.083em; font-weight: normal; color: #ffffff; text-align: center; line-height: 20px; position: absolute; right: 10px; top: 0;}
 .babylist_page a{ display: block; text-decoration: none; float: left; margin-right: 10px; margin-top: 10px; width: 32px; height: 32px; line-height: 32px; background-color: #ff7c6e; color: #ffffff; text-align: center; font-size: 14px;}
 .babylist_page a.cur{ background-color: #ffffff; color: #ff7c6e;}
