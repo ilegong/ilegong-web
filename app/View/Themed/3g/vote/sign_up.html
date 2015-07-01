@@ -136,9 +136,9 @@
                     utils.alert('宝宝描述要大于20字');
                     return false;
                 }
-                var imageStr = '';
+                var imageArray = [];
                 images.each(function(index,item){
-                    imageStr+=$(item).attr('src')+'|';
+                    imageArray.push($(item).attr('src'));
                 });
                 if($me.attr('on_post')=='true'){
                     return false;
@@ -148,7 +148,7 @@
                     "title": title,
                     "mobileNum": mobileNum,
                     "description": description,
-                    'images': imageStr
+                    'images': imageArray.join('|')
                 }, function (data) {
                     if(data['success']){
                         utils.alert('报名成功',function(){window.location.href='/vote/vote_event_view/{{$event_id}}'});
