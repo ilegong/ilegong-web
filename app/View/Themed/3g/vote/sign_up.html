@@ -113,26 +113,26 @@
             $('#sign_up', $el).on('click', function () {
                 var images = $('img[name="full_img"]', $el);
                 if (images.length == 0) {
-                    alert('请上传图片');
+                    utils.alert('请上传图片');
                     return false;
                 }
                 var title = $candidateTitle.val();
                 var mobileNum = $candidateMobilePhone.val();
                 var description = $candidateDescription.val();
                 if (isBlank(title)) {
-                    alert('请输入宝宝名字');
+                    utils.alert('请输入宝宝名字');
                     return false;
                 }
                 if (!isPhoneNum(mobileNum)) {
-                    alert('请输入手机号码');
+                    utils.alert('请输入手机号码');
                     return false;
                 }
                 if (isBlank(description)) {
-                    alert('请输入宝宝描述');
+                    utils.alert('请输入宝宝描述');
                     return false;
                 }
                 if (description.length < 20) {
-                    alert('宝宝描述要大于20字');
+                    utils.alert('宝宝描述要大于20字');
                     return false;
                 }
                 var imageStr = '';
