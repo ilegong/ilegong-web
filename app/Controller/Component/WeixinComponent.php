@@ -637,10 +637,16 @@ class WeixinComponent extends Component
         $oauthBindModel = ClassRegistry::init('Oauthbind');
         $cartModel = ClassRegistry::init('Cart');
         $productModel = ClassRegistry::init('Product');
+        $userModel = ClassRegistry::init('User');
         $oauth_binds = $oauthBindModel->find('list', array(
             'conditions' => array( 'user_id' => $user_ids, 'source' => oauth_wx_source()),
             'fields' => array('user_id', 'oauth_openid')
         ));
+        $users = $userModel->find('all', array(
+            'conditions' => array( 'id' => $user_ids),
+            'fields' => array('id', 'username')
+        ));
+        $users = Hash::combine($users, '{n}.User.id', '{n}');
         $carts = $cartModel->find('all', array(
             'conditions' => array('order_id' => $order_ids),
             'fields' => array('Cart.id','Cart.num','Cart.order_id','Cart.send_date','Cart.product_id'),
@@ -654,10 +660,14 @@ class WeixinComponent extends Component
         foreach($orders as $order){
             $openid = $oauth_binds[$order['Order']['creator']];
             $good = self::get_order_good_info($order, $carts, $products);
-            $this->send_wx_msg_sms($openid,$order, $good);
+            $user = $users[$order['Order']['creator']];
+            $this->send_wx_msg_sms($openid,$order, $good, $user);
         }
     }
-    public function send_wx_msg_sms($openid,$order, $good){
+    public function send_wx_msg_sms($openid,$order, $good, $user){
+        if(empty($user) || substr( $user['User']['username'], 0, 4 ) === "pys_"){
+            return;
+        }
         if($order['Order']['status'] == ORDER_STATUS_PAID && !empty($openid)){
             $this->send_order_paid_message($openid, $order, $good);
             if($order['Order']['brand_id'] == PYS_BRAND_ID){

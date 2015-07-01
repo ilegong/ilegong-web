@@ -79,7 +79,8 @@ class PlanHelperController extends AppController
         $products = $this->Product->find('all', array(
             'conditions' => array(
                 'brand_id' => PYS_BRAND_ID,
-                'published' => PUBLISH_YES
+                'published' => PUBLISH_YES,
+                'deleted' => DELETED_NO
             )
         ));
         $product_spec_groups = $this->ProductSpecGroup->find('all', array(
@@ -176,6 +177,9 @@ class PlanHelperController extends AppController
 
     function _insert_order($user, $products, $offline_store, $date)
     {
+        if(empty($user['User']['mobilephone'])){
+            $this->User->updateAll(array('mobilephone'=>$this->_get_random_mobilephone()), array('id'=>$user['User']['id']));
+        }
         $total_price = 0;
         foreach($products as $product){
             $price = empty($product['ProductSpecGroup']['price']) ? $products['Product']['price'] : $product['ProductSpecGroup']['price'];
@@ -189,7 +193,7 @@ class PlanHelperController extends AppController
         $data['Order']['created'] = $date;
         $data['Order']['updated'] = $date;
         $data['Order']['consignee_name'] = empty($user['User']['nickname']) ? '李嘉' : $user['User']['nickname'];
-        $data['Order']['consignee_mobilephone'] = empty($user['User']['mobilephone']) ? '17910808972' : $user['User']['mobilephone'];
+        $data['Order']['consignee_mobilephone'] = $user['User']['mobilephone'];
         $data['Order']['consignee_id'] = $offline_store['OfflineStore']['id'];
         $data['Order']['consignee_address'] = $offline_store['OfflineStore']['name'];
         $data['Order']['coverimg'] = $product['Product']['coverimg'];
@@ -332,5 +336,10 @@ class PlanHelperController extends AppController
             $num = 2;
         }
         return $num;
+    }
+    private function _get_random_mobilephone(){
+        $second = array(3, 5, 6, 8);
+        $mobilephone = '1'.$second[array_rand($second)].rand(0,9).rand(0,9999).rand(0,9999);
+        return $mobilephone;
     }
 }
