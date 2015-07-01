@@ -50,7 +50,7 @@ ul li { list-style: none; }
 .apply_bg input{ padding: 10px 15px; line-height: 18px; color: #666666; font-size: 14px; border: 0; outline: none; width: 80%; border-radius: 0; font-size: 14px; color: #666666;}
 .apply_bg ul{ margin-bottom: 20px;}
 .apply_bg textarea{ border: 0; border-radius: 0; height: 60px; width: 80%; padding: 10px 15px; font-size: 14px; color: #666666; resize:none;}
-.apply_bg a{ display: block; margin-right: 10px; float: left; width: 25%;}
+.apply_bg a{ display: block; margin-right: 10px; float: left; width: 25%; position: relative;}
 .apply_bg a img{ width: 52.5px; height: 53px;}
 .apply_bg a.apply_btn{ display: block; width: 100%; height: 44px; line-height: 44px; text-align: center; color: #c54134; background-color: #ffeb63; font-size: 14px; font-weight: bold; text-decoration: none;}
 .apply_bg p{ color: #ffffff; font-size: 14px; line-height: 20px; padding: 10px 0;}
@@ -72,6 +72,7 @@ ul li { list-style: none; }
 .babydetaillayer p{ color: #666666;}
 .babydetaillayer_btn{ display: block; text-decoration: none; width: 100px; margin: 0 auto; line-height: 38px; color: #ffffff; background-color: #ff7b6e; text-align: center; font-weight: bold; margin-top: 15px;}
 
+.icon_delete { width: 1.48em; height: 1.47em; background: url("/img/vote/pyshuo_icon.png") -7.083em -20.417em; background-size: 25em 25em; position: absolute; right: -0.5em; top: -0.5em; }
 
 
 

@@ -12,7 +12,7 @@
         </ul>
         <ul class="clearfix">
             <li class="fl" style="width: 25%;">上传照片&nbsp;&nbsp;&nbsp;</li>
-            <li class="fl" style="width: 75%;"><a href="#X" name="upload_image"><div class="img_delete"></div><img name="no_img" src="{{$this->Html->assetUrl('/img/vote/addpc.png')}}"/></a><a href="#X"><img name="no_img"
+            <li class="fl" style="width: 75%;"><a href="#X" name="upload_image"><img name="no_img" src="{{$this->Html->assetUrl('/img/vote/addpc.png')}}"/></a><a href="#X"><img name="no_img"
                     src="{{$this->Html->assetUrl('/img/vote/addpc.png')}}"/></a><a href="#X"><img name="no_img" src="{{$this->Html->assetUrl('/img/vote/addpc.png')}}"/></a></li>
         </ul>
         <ul class="clearfix">
@@ -101,6 +101,7 @@
     wx.ready(function () {
         $(document).ready(function () {
             var $el = $('#baby_sign_up');
+            var noImgHolder = '{{$this->Html->assetUrl("/img/vote/addpc.png")}}';
             var $candidateTitle = $('#candidate_title', $el);
             var $candidateMobilePhone = $('#candidate_mobile_phone', $el);
             var $candidateDescription = $('#candidate_description', $el);
@@ -179,14 +180,8 @@
                 }
             });
 
-            $('a[name="upload_image"]', $el).on('click', function () {
-                wx.chooseImage({
-                    success: function (res) {
-                        tempImage.localId = res.localIds;
-                        setTimeout(wxUploadFile, 30);
-                    }
-                });
-            });
+            //init chose img event
+            bindChoseImgEvent();
 
             function getNoImageHolderLen() {
                 return $('img[name="no_img"]', $el).length;
@@ -194,6 +189,29 @@
 
             function getNoImageHolder() {
                 return $('img[name="no_img"]', $el);
+            }
+
+            function bindChoseImgEvent(){
+                $('a[name="upload_image"]', $el).unbind('click');
+                $('a[name="upload_image"]', $el).on('click', function () {
+                    wx.chooseImage({
+                        success: function (res) {
+                            tempImage.localId = res.localIds;
+                            setTimeout(wxUploadFile, 10);
+                        }
+                    });
+                });
+            }
+
+            function bindRemovePicEvent(){
+                $('a[name="remove_img"]',$el).unbind('click');
+                $('a[name="remove_img"]',$el).on('click',function(){
+                    var $me = $(this);
+                    $me.html('');
+                    $me.append('<img name="no_img" src="'+noImgHolder+'"/>');
+                    $me.attr('name','upload_image');
+                    bindChoseImgEvent();
+                });
             }
 
             //process upload file
@@ -205,7 +223,6 @@
                 //防止上传失败图片显示位置错位
                 var toShowIndex = 0;
                 var toShowHolder = getNoImageHolder();
-
                 function doUpload(index) {
                     wx.uploadImage({
                         localId: tempImage.localId[index],
@@ -221,7 +238,8 @@
                                     var $imgDom = $(toShowHolder[toShowIndex]);
                                     $imgDom.attr('src', imageUrl);
                                     $imgDom.attr('name', 'full_img');
-                                    $imgDom.parent().append('<div class="comment_delete"></div>');
+                                    $imgDom.parent().attr('name','remove_img');
+                                    $imgDom.parent().append('<div class="icon_delete"></div>');
                                     toShowIndex++;
                                 } else {
                                     failCount++;
@@ -241,8 +259,8 @@
                         }
                     });
                 }
-
                 doUpload(i);
+                bindRemovePicEvent();
             }
         });
     });
