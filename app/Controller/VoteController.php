@@ -98,9 +98,9 @@ class VoteController extends AppController {
     }
 
     public function sign_up($eventId){
+        //check login
         $this->pageTitle='报名';
         $this->set('event_id',$eventId);
-
     }
 
     /**
@@ -108,7 +108,13 @@ class VoteController extends AppController {
      * 主要是图片的处理 类似评论的上传图片(使用微信的js上传)
      */
     public function upload_candidate() {
-
+        $title = $_POST['title'];
+        $mobileNum = $_POST['mobileNum'];
+        $description = $_POST['description'];
+        $images = $_POST['images'];
+        $saveData = array(
+            
+        );
     }
 
 }

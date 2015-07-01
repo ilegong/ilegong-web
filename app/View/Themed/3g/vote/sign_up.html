@@ -19,9 +19,6 @@
             <li class="fl" style="width: 25%;">萌宝描述&nbsp;&nbsp;&nbsp;</li>
             <li class="fl" style="width: 75%; height: 90px; overflow:hidden;"><textarea id="candidate_description"></textarea></li>
         </ul>
-
-        <input type="hidden" id="candidate_imgs" value="">
-
         <a href="#X" class="apply_btn" id="preview_pic">预览图片</a>
         <br/><br/>
         <a href="#X" class="apply_btn" id="sign_up">确认报名</a>
@@ -99,21 +96,64 @@
 </div>
 
 <script>
-    wx.ready(function(){
-        $(document).ready(function(){
+    wx.ready(function () {
+        $(document).ready(function () {
             var $el = $('#baby_sign_up');
+            var $candidateTitle = $('#candidate_title', $el);
+            var $candidateMobilePhone = $('#candidate_mobile_phone', $el);
+            var $candidateDescription = $('#candidate_description', $el);
             //upload file
             var tempImage = {
-                localId:[],
-                serverId:[]
+                localId: [],
+                serverId: []
             };
 
-            $('#preview_pic',$el).on('click',function(){
+            //post data
+            $('#sign_up', $el).on('click', function () {
+                var images = $('img[name="full_img"]', $el);
+                if (images.length == 0) {
+                    alert('请上传图片');
+                    return false;
+                }
+                var title = $candidateTitle.val();
+                var mobileNum = $candidateMobilePhone.val();
+                var description = $candidateDescription.val();
+                if (isBlank(title)) {
+                    alert('请输入宝宝名字');
+                    return false;
+                }
+                if (!isPhoneNum(mobileNum)) {
+                    alert('请输入手机号码');
+                    return false;
+                }
+                if (isBlank(description)) {
+                    alert('请输入宝宝描述');
+                    return false;
+                }
+                if (description.length < 20) {
+                    alert('宝宝描述要大于20字');
+                    return false;
+                }
+                var imageStr = '';
+                images.each(function(index,item){
+                    imageStr+=$(item).attr('src')+'|';
+                });
+                $.post('/vote/upload_candidate', {
+                    "title": title,
+                    "mobileNum": mobileNum,
+                    "description": description,
+                    'images': imageStr
+                }, function (data) {
+
+                });
+            });
+
+            $('#preview_pic', $el).on('click', function () {
                 var showImages = [];
-                $('img[name="full_img"]',$el).each(function(index,item){
+                $('img[name="full_img"]', $el).each(function (index, item) {
                     showImages.push($(item).attr('src'));
                 });
-                if(showImages.length>0){
+                if (showImages.length > 0) {
                     wx.previewImage({
                         current: showImages[0],
                         urls: showImages
@@ -122,65 +162,69 @@
 
             });
 
-            $('a[name="upload_image"]',$el).on('click',function(){
+            $('a[name="upload_image"]', $el).on('click', function () {
                 wx.chooseImage({
                     success: function (res) {
                         tempImage.localId = res.localIds;
-                        setTimeout(wxUploadFile,30);
+                        setTimeout(wxUploadFile, 30);
                     }
                 });
             });
 
-            function getNoImageHolderLen(){
-                return $('img[name="no_img"]',$el).length;
+            function getNoImageHolderLen() {
+                return $('img[name="no_img"]', $el).length;
             }
-            function getNoImageHolder(){
-                return $('img[name="no_img"]',$el);
+
+            function getNoImageHolder() {
+                return $('img[name="no_img"]', $el);
             }
+
             //process upload file
-            function wxUploadFile(){
-                tempImage.localId = tempImage.localId.slice(0,getNoImageHolderLen());
-                var i=0;
+            function wxUploadFile() {
+                tempImage.localId = tempImage.localId.slice(0, getNoImageHolderLen());
+                var i = 0;
                 var len = tempImage.localId.length;
                 var failCount = 0;
                 //防止上传失败图片显示位置错位
-                var toShowIndex=0;
+                var toShowIndex = 0;
                 var toShowHolder = getNoImageHolder();
-                function doUpload(index){
+
+                function doUpload(index) {
                     wx.uploadImage({
                         localId: tempImage.localId[index],
-                        isShowProgressTips:1,
-                        success : function(res){
+                        isShowProgressTips: 1,
+                        success: function (res) {
                             //server download and return url
                             tempImage.serverId.push(res.serverId);
-                            $.getJSON('/downloads/download_wx_img?media_id='+res.serverId,function(data){
+                            $.getJSON('/downloads/download_wx_img?media_id=' + res.serverId, function (data) {
                                 //download url
                                 var imageUrl = data['download_url'];
                                 //先显示图片和添加数据
-                                if(imageUrl&&imageUrl!='false'){
-                                    var $imgDom  = $(toShowHolder[toShowIndex]);
-                                    $imgDom.attr('src',imageUrl);
-                                    $imgDom.attr('name','full_img');
+                                if (imageUrl && imageUrl != 'false') {
+                                    var $imgDom = $(toShowHolder[toShowIndex]);
+                                    $imgDom.attr('src', imageUrl);
+                                    $imgDom.attr('name', 'full_img');
                                     $imgDom.parent().append('<div class="comment_delete"></div>');
                                     toShowIndex++;
-                                }else{
+                                } else {
                                     failCount++;
                                 }
                                 i++;
-                                if(i<len){
+                                if (i < len) {
                                     doUpload(i);
-                                }else{
-                                    if(failCount>0){
-                                        utils.alert(failCount+'张图片上传失败。请重新上传。');
+                                } else {
+                                    if (failCount > 0) {
+                                        utils.alert(failCount + '张图片上传失败。请重新上传。');
                                     }
                                 }
                             });
                         },
-                        fail: function(){
+                        fail: function () {
                             failCount++;
                         }
                     });
                 }
+
                 doUpload(i);
             }
         });

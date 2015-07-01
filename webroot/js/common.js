@@ -1605,3 +1605,16 @@ function setData(area_id,parent_id){
 }
 var zitiAddressData = zitiAddress($('#hiddenModalContent').data('zitiType'));
 
+function isBlank(str) {
+    return (!str || /^\s*$/.test(str));
+}
+
+function isPhoneNum(val){
+    //var pattern=/(^(([0\+]\d{2,3}-)?(0\d{2,3})-)(\d{7,8})(-(\d{3,}))?$)|(^0{0,1}1[3|4|5|6|7|8|9][0-9]{9}$)/;
+    var pattern = /^[0-9]+$/;
+    if((val.length=11)&&pattern.test(val)) {
+        return true;
+    }else{
+        return false;
+    }
+}
