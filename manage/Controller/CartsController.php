@@ -135,14 +135,14 @@ class CartsController extends AppController{
             return;
         }
         unset($this->data['modify_user']);
-        $new_cart_status = $this->data['carts'][0]['status'];
+        $new_cart_status = $carts[0]['Cart']['status'];
         $this->log('update cart ' . $ids . ': '.json_encode($this->data));
         $save_res = $this->Cart->saveMany($this->data['carts']);
         if(empty($save_res)){
             echo json_encode(array('success' => false, 'reason' => 'failed_to_save_cart'));
         }
         if($this->_need_to_update_order_status($order['Order']['id'], $new_cart_status)){
-            $order_data['status'] = "'".$new_cart_status."'";
+            $this->Order->update(array('status'=> "'".$new_cart_status."'"), array('id' =>$order['Order']['id']));
         }
         $this->log('update order ' . $order['Order']['id'] . ': '.$new_cart_status);
         echo json_encode(array('success' => true));

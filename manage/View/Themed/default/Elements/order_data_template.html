@@ -28,7 +28,6 @@
             <td mark-print="no-print">状态</td>
             <td mark-print="no-print">备注</td>
             <td mark-print="no-print">订单操作</td>
-            <td mark-print="no-print">发货单操作</td>
         </tr>
     </thead>
     <tbody>
@@ -198,18 +197,15 @@
                             {{elseif $order['Order']['status']==14}}退款中
                             {{/if}}
                             <br/>
-                            <a href="/manage/admin/orders/edit2/{{$order['Order']['id']}}.html" class="btn btn-default modify-button">修改订单</a>
-                            <a href="/manage/admin/orders/carts_edit/{{$order['Order']['id']}}.html" class="btn btn-default modify-button">修改状态</a>
+                            <a href="/manage/admin/orders/edit2/{{$order['Order']['id']}}.html" class="btn btn-default modify-button">改订单</a>
+                            <a href="/manage/admin/orders/carts_edit/{{$order['Order']['id']}}.html" class="btn btn-default modify-button">改发货单</a>
                         {{/if}}
                         {{if ($order['Order']['status']== 1||$order['Order']['status']== 2) && $order['Order']['ship_mark'] == 'kuaidi'}}
-                            <button type="button" class="input-ship-code btn btn-primary">回填快递单号</button>
+                            <button type="button" class="input-ship-code btn btn-primary">回填快递单</button>
                         {{/if}}
                         {{if in_array($order['Order']['status'],array(1,2,3,9,16,4,14))}}
                             <button type="button" class="btn btn-default refund-button"  data-order_id="{{$order['Order']['id']}}" data-order_creator="{{$order['Order']['creator']}}"  data-total_price = "{{$order['Order']['total_all_price']}}">退款</button>
                         {{/if}}
-                    </td>
-                    <td mark-print="no-print" data-offline-store-type="{{$offline_store['OfflineStore']['type']}}">
-                        <a href="/manage/admin/carts/edit2/{{$cart['Cart']['id']}}.html" class="btn btn-default modify-button">修改发货单</a>
                     </td>
                 </tr>
             {{/loop}}
