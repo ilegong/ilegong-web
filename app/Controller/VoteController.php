@@ -58,6 +58,8 @@ class VoteController extends AppController {
                 $candidator['is_vote'] = $is_vote;
             }
         }
+        $is_sign_up = $this->has_sign_up($eventId,$uid);
+        $this->set('is_sign_up',$is_sign_up);
         $this->set('candidator_ids',$candidator_ids);
         $this->set('event_info',$event_info);
         $this->set('candidators',$candidators);
