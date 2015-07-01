@@ -35,14 +35,7 @@ class VoteController extends AppController {
     public function vote_event_view($eventId) {
         $this->pageTitle = '萌宝';
         $uid = $this->currentUser['id'];
-        $event_info = $this->VoteEvent->find('first',array(
-            'conditions' => array(
-                'id'=>$eventId
-            ),
-            'fields' => array(
-                'start_time','end_time'
-            )
-        ));
+        $event_info = $this->get_event_info($eventId);
         $candidators = $this->CandidateEvent->find('all',array(
             'conditions' => array(
                 'event_id' => $eventId
@@ -117,6 +110,8 @@ class VoteController extends AppController {
 
     public function sign_up($eventId){
         //check login
+        $event_info = $this->get_event_info($eventId);
+        $this->set('event_info',$event_info);
         $this->pageTitle='报名';
         $this->set('event_id',$eventId);
         $uid = $this->currentUser['id'];
@@ -180,6 +175,8 @@ class VoteController extends AppController {
           )
        ));
        $images = array_filter(explode('|',$candidate_info['Candidate']['images']));
+       $event_info = $this->get_event_info($eventId);
+       $this->set('event_info',$event_info);
        $this->set('vote_num',$vote_num);
        $this->set('candidate_id',$candidateId);
        $this->set('event_id',$eventId);
@@ -203,6 +200,19 @@ class VoteController extends AppController {
         $already_vote_candidate = Hash::extract($uvote, '{n}.Vote.candidate_id');
         $is_vote = in_array($candidateId,$already_vote_candidate);
         return array($uvote,$is_vote);
+    }
+
+    private function get_event_info($eventId){
+
+        $event_info = $this->VoteEvent->find('first',array(
+            'conditions' => array(
+                'id'=>$eventId
+            ),
+            'fields' => array(
+                'start_time','end_time'
+            )
+        ));
+        return $event_info;
     }
 
 }

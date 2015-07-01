@@ -29,7 +29,7 @@
     <div class="babyrule">
         <h1>活动规则</h1>
 
-        <p>活动时间：2015年6月14日～2015年6月21日</p>
+        <p>活动时间：{{Date('Y年m月d日',strtotime($event_info['VoteEvent']['start_time']))}}～{{Date('Y年m月d日',strtotime($event_info['VoteEvent']['end_time']))}}</p>
 
         <p>活动规则：</p>
 
