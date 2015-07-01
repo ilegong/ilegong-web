@@ -56,7 +56,7 @@
     <div class="baby_bottom">
         <ul class="clearfix">
             <li>
-                <a href="#X">
+                <a href="/">
                     <i class="home"></i>
                     <label>首页</label>
                 </a>
@@ -111,6 +111,7 @@
             };
             //post data
             $('#sign_up', $el).on('click', function () {
+                var $me = $(this);
                 var images = $('img[name="full_img"]', $el);
                 if (images.length == 0) {
                     utils.alert('请上传图片');
@@ -139,7 +140,11 @@
                 images.each(function(index,item){
                     imageStr+=$(item).attr('src')+'|';
                 });
-                $.post('/vote/upload_candidate/{{$event_id}}', {
+                if($me.attr('on_post')=='true'){
+                    return false;
+                }
+                $me.attr('on_post','true');
+                $.post('/vote/upload_candidate/{{$event_id}}.json', {
                     "title": title,
                     "mobileNum": mobileNum,
                     "description": description,
@@ -153,6 +158,9 @@
                         }
                         if(data['reason']=='server error'){
                             utils.alert('上传失败请联系客服');
+                        }
+                        if(data['reason']=='not subscribed'){
+                            utils.alert('请先关注我们微信服务号',window.location.href='');
                         }
                     }
                 }, 'json');

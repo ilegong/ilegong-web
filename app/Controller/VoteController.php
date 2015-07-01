@@ -118,11 +118,11 @@ class VoteController extends AppController {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
-            echo json_encode(array('successs' => false, 'reason' => 'not login'));
+            echo json_encode(array('success' => false, 'reason' => 'not login'));
             return;
         }
         if(user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED){
-            echo json_encode(array('successs' => false, 'reason' => 'not subscribed'));
+            echo json_encode(array('success' => false, 'reason' => 'not subscribed'));
             return;
         }
         $title = $_POST['title'];
@@ -141,10 +141,10 @@ class VoteController extends AppController {
             $candidate_id = $this->Candidate->id;
             $eventCandidateData = array('event_id' => $eventId, 'candidate_id' => $candidate_id);
             $this->CandidateEvent->save($eventCandidateData);
-            echo json_encode(array('successs' => true));
+            echo json_encode(array('success' => true));
             return;
         }
-        echo json_encode(array('successs' => false, 'reason' => 'server error'));
+        echo json_encode(array('success' => false, 'reason' => 'server error'));
         return;
     }
 }
