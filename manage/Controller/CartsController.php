@@ -95,13 +95,11 @@ class CartsController extends AppController{
     }
 
     private function _need_to_update_order_status($order_id, $new_cart_status){
-        if(empty($new_cart_status)){
-            return false;
-        }
         $carts = $this->Cart->find('all', array(
             'conditions'=>array(
                 'order_id' => $order_id
-            )
+            ),
+            'fields' => array('status')
         ));
         foreach($carts as &$cart){
             if($cart['Cart']['status'] != $new_cart_status){
@@ -115,11 +113,15 @@ class CartsController extends AppController{
         $username = $this->currentUser['username'];
         $user_agent = $this->request->header('User-Agent');
         $user_ip = $this->request->clientIp(true);
-        if(empty($this->data['carts'])){
+        if(!has_permission_to_modify_order($this->data['modify_user'])){
+            echo json_encode(array('success' => false, 'reason' => 'no_permission'));
+            return;
+        }
+        if(empty($this->data['cart'])){
             echo json_encode(array('success' => false, 'reason' => 'fields_are_empty'));
             return;
         }
-        $ids = Hash::extract($this->data['carts'], '{n}.id');
+        $ids = array_keys($this->data['cart']);
         $this->log('user ' . $username . ' is to update cart ' . $ids . ', request ip ' . $user_ip . ', user_agent ' . $user_agent);
         list($carts,$order) = $this->_get_order_cart_info($ids);
         if (empty($carts)) {
@@ -130,14 +132,14 @@ class CartsController extends AppController{
             echo json_encode(array('success' => false, 'reason' => 'order_not_exists'));
             return;
         }
-        if(!has_permission_to_modify_order($this->data['modify_user'])){
-            echo json_encode(array('success' => false, 'reason' => 'no_permission'));
-            return;
+        $this->log('update cart ' . $ids . ': '.json_encode($this->data['cart']));
+        $save_data = array();
+        foreach($this->data['cart'] as $id => $data){
+            $data['id'] =  $id;
+            $save_data[] = $data;
         }
-        unset($this->data['modify_user']);
-        $new_cart_status = $carts[0]['Cart']['status'];
-        $this->log('update cart ' . $ids . ': '.json_encode($this->data));
-        $save_res = $this->Cart->saveMany($this->data['carts']);
+        $save_res = $this->Cart->saveMany($save_data);
+        $new_cart_status = $save_data[0]['status'];
         if(empty($save_res)){
             echo json_encode(array('success' => false, 'reason' => 'failed_to_save_cart'));
         }

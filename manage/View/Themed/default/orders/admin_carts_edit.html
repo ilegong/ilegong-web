@@ -17,10 +17,9 @@
     </div>
 {{loop $carts $cart}}
     <div class="form-group row">
-        <input type="hidden" name="id" class="form-control" value="{{$cart['Cart']['id']}}" data-value="" >
         <span class="col-sm-4 control-label">{{$cart['Cart']['id']}}&nbsp;&nbsp; {{$cart['Cart']['name']}}<strong> X </strong>{{$cart['Cart']['num']}}</span>
         <div class="col-sm-2">
-            <select name="status" data-value="{{$cart['Cart']['status']}}" class="form-control status">
+            <select name="cart[{{$cart['Cart']['id']}}][status]" data-value="{{$cart['Cart']['status']}}" class="form-control status">
                 <option value="0"
                         {{if $cart['Cart']['status']==0}}selected='selected'{{/if}}>待支付</option>
                 <option value="1"
@@ -40,7 +39,7 @@
             </select>
         </div>
         <div class="col-sm-4">
-            <input type="text" name="send_date" class="form-control" placeholder="2015-01-01" value="{{$cart['Cart']['send_date']}}" data-value="{{$cart['Cart']['send_date']}}">
+            <input type="text" name="cart[{{$cart['Cart']['id']}}][send_date]" class="form-control" placeholder="2015-01-01" value="{{$cart['Cart']['send_date']}}" data-value="{{$cart['Cart']['send_date']}}">
         </div>
     </div>
 {{/loop}}
@@ -61,4 +60,4 @@
         </div>
     </div>
 </div>
-{{$this->Html->script(array('manage/carts/edit.js'))}}
+{{$this->Html->script(array('manage/carts/edit.js?v1.0'))}}

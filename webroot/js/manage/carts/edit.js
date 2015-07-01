@@ -31,25 +31,13 @@ $(document).ready(function () {
         if(!_.isEmpty(invalidFields)){
             return false;
         }
-
-        var json = {"carts":[], "modify_user":$modifyUser.val()};
-        var cart_id = 0;
-        var carts = {};
+        var json = {"modify_user":$modifyUser.val()};
         $('.form-group .form-control').each(function(){
             var $field = $(this);
-            if($field.attr('name') == 'id'){
-                cart_id = $field.val();
-                carts[cart_id] = {};
-            }
             if($field.val() != $field.data('value')){
-                carts[cart_id][$field.attr('name')] = $field.val();
+                json[$field.attr('name')] = $field.val();
             }
         });
-        for(var id in carts){
-            if(Object.keys(carts[id]).length > 1){
-                json.carts.push(carts[id]);
-            }
-        }
         var reasons = {
             'order_not_exists': '订单不存在',
             'cart_not_exists': '发货单不存在',
