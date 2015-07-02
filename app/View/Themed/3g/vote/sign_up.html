@@ -53,34 +53,7 @@
 
         <p>朋友说、XX幼儿园</p>
     </div>
-    <div class="baby_bottom">
-        <ul class="clearfix">
-            <li>
-                <a href="/vote/vote_event_view/{{$event_id}}">
-                    <i class="home"></i>
-                    <label>首页</label>
-                </a>
-            </li>
-            <li>
-                <a href="#X">
-                    <i class="ranking"></i>
-                    <label>排名</label>
-                </a>
-            </li>
-            <li class="cur">
-                <a href="/vote/sign_up/{{$event_id}}">
-                    <i class="apply"></i>
-                    <label>报名</label>
-                </a>
-            </li>
-            <li>
-                <a href="#X">
-                    <i class="award"></i>
-                    <label>奖品</label>
-                </a>
-            </li>
-        </ul>
-    </div>
+    {{template vote/baby_bottom_template}}
     {{if $not_login||$not_weixin}}
         <!--弹出层-->
         <div class="tipslayer">

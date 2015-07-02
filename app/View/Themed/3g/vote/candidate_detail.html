@@ -31,34 +31,7 @@
         <h1>活动举办方</h1>
         <p>朋友说、XX幼儿园</p>
     </div>
-    <div class="baby_bottom">
-        <ul class="clearfix">
-            <li>
-                <a href="/vote/vote_event_view/{{$event_id}}">
-                    <i class="home"></i>
-                    <label>首页</label>
-                </a>
-            </li>
-            <li>
-                <a href="#X">
-                    <i class="ranking"></i>
-                    <label>排名</label>
-                </a>
-            </li>
-            <li class="cur">
-                <a href="#X">
-                    <i class="apply"></i>
-                    <label>我的宝宝</label>
-                </a>
-            </li>
-            <li>
-                <a href="#X">
-                    <i class="award"></i>
-                    <label>奖品</label>
-                </a>
-            </li>
-        </ul>
-    </div>
+    {{template vote/baby_bottom_template}}
 </div>
 {{$this->Html->script(array('/js/vote/vote.js','/js/common.js'));}}
 {{template vote/wexin_share_template}}
