@@ -48,43 +48,6 @@
 <form action="" class="form-horizontal order-form">
     <input type="hidden" name="order_id" class="order-id" value="{{$order['Order']['id']}}"/>
     <div class="form-group">
-        <label class="col-sm-2 control-label">状态</label>
-
-        <div class="col-sm-10">
-            <select name="status" data-value="{{$order['Order']['status']}}" class="form-control order-status">
-                <option value="0"
-                {{if $order['Order']['status']==0}}selected='selected'{{/if}}>待支付</option>
-                <option value="1"
-                {{if $order['Order']['status']==1}}selected='selected'{{/if}}>待发货</option>
-                <option value="2"
-                {{if $order['Order']['status']==2}}selected='selected'{{/if}}>已发货</option>
-                <option value="3"
-                {{if $order['Order']['status']==3}}selected='selected'{{/if}}>已收货</option>
-                <option value="4"
-                {{if $order['Order']['status']==4}}selected='selected'{{/if}}>已退款</option>
-                <option value="9"
-                {{if $order['Order']['status']==9}}selected='selected'{{/if}}>已完成</option>
-                <option value="10"
-                {{if $order['Order']['status']==10}}selected='selected'{{/if}}>已作废</option>
-                <option value="14"
-                {{if $order['Order']['status']==14}}selected='selected'{{/if}}>退款中</option>
-            </select>
-
-            <div class='help-block with-errors'>请谨慎修改，会修改所有发货单!!!</div>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label class="col-sm-2 control-label">发货时间</label>
-
-        <div class="col-sm-10">
-            <input type="text" name="send_date" class="form-control send-date"
-                   value="{{$carts[0]['Cart']['send_date']}}" data-value="{{$carts[0]['Cart']['send_date']}}"/>
-            <div class='help-block with-errors'>会修改所有发货单!!!</div>
-        </div>
-    </div>
-
-    <div class="form-group">
         <label class="col-sm-2 control-label">快递方式</label>
 
         <div class="col-sm-10">

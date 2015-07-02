@@ -71,13 +71,12 @@ class OrdersController extends AppController
             return;
         }
 
-        $send_date = $this->data['send_date'];
         $modify_user = $this->data['modify_user'];
         unset($this->data['send_date']);
         unset($this->data['modify_user']);
 
         // 必须修改至少一个字段
-        if(empty($send_date) && empty($this->data)){
+        if(empty($this->data)){
             echo json_encode(array('success' => false, 'reason' => 'fields_are_empty'));
             return;
         }
@@ -107,14 +106,6 @@ class OrdersController extends AppController
             }
         }
 
-        // 检查发货时间
-        if (!empty($send_date)) {
-            if(strtotime($send_date) <= strtotime('yesterday')){
-                echo json_encode(array('success' => false, 'reason' => 'invalid_send_date'));
-                return;
-            }
-        }
-
         // 添加备注，而不是直接修改
         if(!empty($this->data['remark'])){
             $remark = (empty($order['Order']['remark']) ? '' : $order['Order']['remark'] . ', ') . $this->data['remark'] . '(' . $modify_user . ')';
@@ -130,39 +121,7 @@ class OrdersController extends AppController
             return;
         }
 
-        // 如果修改了状态
-        $message_sent = false;
-        if(isset($this->data['status'])){
-            if($new_order_status == ORDER_STATUS_PAID){
-                $this->_on_order_paid($order);
-            }
-            else if($new_order_status == ORDER_STATUS_SHIPPED){
-//                $message_sent = $this->_on_order_shipped($order, $this->data);
-            }
-            else if($new_order_status == ORDER_STATUS_RETURNING_MONEY){
-                $this->_on_order_returning_money($order);
-            }
-            else if($new_order_status == ORDER_STATUS_RETURN_MONEY){
-                $this->_on_order_return_money($order);
-            }
-        }
-
-        // 如有必要，修改购物车的状态、发货时间
-        $cart_data = array();
-        if(isset($this->data['status'])){
-            $cart_data['status'] = "'" . $new_order_status . "'";
-        }
-        if (!empty($send_date)) {
-            $cart_data['send_date'] = "'" . $send_date . "'";
-        }
-
-        if(!empty($cart_data)){
-            $this->loadModel('Cart');
-            $this->log('update carts of order ' . $id . ': '.json_encode($cart_data));
-            $this->Cart->updateAll($cart_data, array('order_id' => $id));
-        }
-
-        echo json_encode(array('success' => true, 'message_sent' => $message_sent));
+        echo json_encode(array('success' => true, 'message_sent' => false));
     }
 
     public function admin_trash($ids)
@@ -749,32 +708,6 @@ class OrdersController extends AppController
             return $this->Order->getLastInsertID();
         } else {
             $this->log($this->Order->validationErrors);
-        }
-    }
-
-    private function _save_order_carts($order_id, $data, $send_date){
-        $cart_data = array();
-
-        if (isset($data['status'])) {
-            $cart_data['status'] = "'" . $data['status'] . "'";
-        }
-
-        if (!empty($send_date)) {
-            if(strtotime($send_date) <= strtotime('yesterday')){
-                echo json_encode(array('success' => false, 'reason' => 'invalid_send_date'));
-                return;
-            }
-
-            $cart_data['send_date'] = "'" . $send_date . "'";
-        }
-
-        if(!empty($cart_data)){
-            $this->loadModel('Cart');
-            $this->log('update order ' . $order_id . ': '.json_encode($cart_data));
-            if (!$this->Cart->updateAll($cart_data, array('order_id' => $order_id))) {
-                echo json_encode(array('success' => false, 'reason' => 'failed_to_save_send_date'));
-                return;
-            }
         }
     }
 

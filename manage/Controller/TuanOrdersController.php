@@ -54,7 +54,7 @@ class TuanOrdersController extends AppController{
             if(in_array($order['Order']['id'], $arrived_order_ids)){
                 continue;
             }
-            $result = $this->_order_shipped($order, $oauth_binds[$order['Order']['creator']], $carts, $products);
+            $result = $this->_order_shipped($order, $oauth_binds[$order['Order']['creator']], $carts, $products, $data['sendDate']);
             if(!$result){
                 $fail_sms[] = $order['Order']['id'];
             }
@@ -68,6 +68,10 @@ class TuanOrdersController extends AppController{
         $data=$_POST;
         if(empty($data)){
             echo json_encode(array('success' => true, 'res' => array()));
+            return;
+        }
+        if(empty($data['sendDate'])){
+            echo json_encode(array('success' => false, 'res' => 'please input send date'));
             return;
         }
 
@@ -89,6 +93,7 @@ class TuanOrdersController extends AppController{
         $this->log('goods shipped to pys stores: set status to shipped for orders: '.json_encode($order_ids));
         $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED),array('id' => $order_ids));
 
+        $send_date = $data['sendDate'];
         $success = array();
         $fail_wx = array();
         $fail_sms = array();
@@ -98,8 +103,9 @@ class TuanOrdersController extends AppController{
             }
 
             $offline_store = $offline_stores[$order['Order']['consignee_id']];
-            $order_carts = array_filter($carts, function($cart) use ($order){
-                return $cart['Cart']['order_id'] == $order['Order']['id'];
+            $order_carts = $this->_get_order_carts($carts, $order, $send_date);
+            $order_carts = array_filter($order_carts, function($cart) use ($send_date){
+                return $cart['Cart']['send_date'] == $send_date;
             });
             $product_name = $this->_get_product_name($order_carts, $products);
 
@@ -408,12 +414,16 @@ class TuanOrdersController extends AppController{
         ));
     }
 
-    private function _order_shipped($order, $oauth_bind, $carts, $products){
+    private function _order_shipped($order, $oauth_bind, $carts, $products, $send_date){
         if($order['Order']['ship_mark'] != 'ziti'){
             return;
         }
 
-        $order_carts = $this->_get_order_carts($carts, $order);
+        $order_carts = $this->_get_order_carts($carts, $order, $send_date);
+        $order_carts = array_filter($order_carts, function($cart) use ($send_date){
+            return $cart['Cart']['send_date'] == $send_date;
+        });
+
         $product_name = $this->_get_product_name($order_carts, $products);
         $offline_store = $this->OfflineStore->findById($order['Order']['consignee_id']);
         $wx_message = $this->_get_wx_message($product_name, $offline_store);
