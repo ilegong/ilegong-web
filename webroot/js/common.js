@@ -1293,14 +1293,18 @@ $(document).ready(function () {
 	});
     $("#btn_add_cart").click(function (e) {
         var button_status = $('#button-status');
-        if (!$('.sure_btn').attr('value')) {
-            $('.tuan_buy_ship_list').hide();
-            $('.xq_standard_layer,.tipslayer_bg').show();
-            button_status.attr('data-status', '2');
-            return;
+        if($('.sure_btn').length>0){
+            if (!$('.sure_btn').attr('value')) {
+                $('.tuan_buy_ship_list').hide();
+                $('.xq_standard_layer,.tipslayer_bg').show();
+                button_status.attr('data-status', '2');
+                return;
+            }
+            $('.sure_btn').attr('value','');
         }
-        $('.tuan_buy_ship_list').hide();
-        $('.sure_btn').attr('value','');
+        if($('.tuan_buy_ship_list').length>0){
+            $('.tuan_buy_ship_list').hide();
+        }
         button_status.attr('data-status', '1');
         var $this = $(this);
         if ($this.hasClass('cart_btn_soldout')) {
@@ -1322,10 +1326,12 @@ $(document).ready(function () {
 		return false;
 	});
 	$('#btn_quick_buy').click(function(){
-        if (!$('.sure_btn').attr('value')){
-            $('.xq_standard_layer,.tipslayer_bg').show();
-            $('#button-status').attr('data-status','3');
-            return;
+        if($('.sure_btn').length>0){
+            if (!$('.sure_btn').attr('value')){
+                $('.xq_standard_layer,.tipslayer_bg').show();
+                $('#button-status').attr('data-status','3');
+                return;
+            }
         }
 		var $this = $(this);
 		if ($this.hasClass('cart_btn_soldout')) {
@@ -1345,10 +1351,12 @@ $(document).ready(function () {
 	});
 	$('a[name="btn_quick_buy"]').on('click',function(e){
 		e.preventDefault();
-        if (!$('.sure_btn').attr('value')){
-            $('.xq_standard_layer,.tipslayer_bg').show();
-            $('#button-status').attr('data-status','3');
-            return;
+        if($('.sure_btn').length>0){
+            if (!$('.sure_btn').attr('value')){
+                $('.xq_standard_layer,.tipslayer_bg').show();
+                $('#button-status').attr('data-status','3');
+                return;
+            }
         }
 		var $this = $(this);
 		if ($this.hasClass('cart_btn_soldout')) {
