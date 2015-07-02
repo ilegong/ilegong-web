@@ -1499,7 +1499,7 @@ function zitiAddress(){
     //崇文并入东城区， 宣武并入西城区
     var ship_address = {};
     var child_address = {};
-    $.getJSON('/tuan_buyings/get_offline_address?type=-1',function(data){
+    $.getJSON('/tuan_buyings/get_offline_address?type=0',function(data){
         ship_address = data.address;
         child_address = data.child_address;
         //$.each(ship_address,function(index,item){
