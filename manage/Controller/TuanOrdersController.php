@@ -14,11 +14,14 @@ class TuanOrdersController extends AppController{
             return;
         }
 
+        if(empty($data['sendDate'])){
+            echo json_encode(array('success' => false, 'res' => 'please input send date'));
+            return;
+        }
+
         try{
             $orders = $this->_get_orders($data['ids'], array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED));
             $order_ids = Hash::extract($orders, '{n}.Order.id');
-            $carts = $this->_get_carts_of_orders($orders);
-            $products = $this->_get_products($carts);
             $oauth_binds = $this->_get_oauth_binds($orders);
             $arrived_logs = $this->_get_arrived_logs($order_ids, 'py-reach');
             $arrived_order_ids = Hash::extract($arrived_logs, '{n}.OrderMessage.order_id');
@@ -29,9 +32,19 @@ class TuanOrdersController extends AppController{
         }
 
         $this->log('goods arrived at pys stores: set status to shipped for orders: '.json_encode($order_ids));
-        $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED),array('id' => $order_ids));
-        $this->Cart->updateAll(array('status' => ORDER_STATUS_SHIPPED),array('order_id' => $order_ids));
+        $cart_data = array('status' => ORDER_STATUS_SHIPPED);
+        $this->Cart->updateAll($cart_data,array('order_id' => $order_ids, 'send_date'=>$data['sendDate']));
 
+        $carts = $this->_get_carts_of_orders($orders);
+        $products = $this->_get_products($carts);
+        foreach($orders as &$order){
+            $order_carts = $this->_get_order_carts($carts, $order);
+            $order_carts_send_dates = array_unique(Hash::extract($order_carts, '{n}.Cart.send_date'));
+            if(count($order_carts_send_dates) != 1){
+                continue;
+            }
+            $this->Order->updateAll(array('status' => $order_carts['Cart']['status']),array('id' => $order_ids));
+        }
         if(!$data['sendMessage']){
             echo json_encode(array('success' => true, 'fail' => array()));
         }
@@ -154,7 +167,7 @@ class TuanOrdersController extends AppController{
         $offline_stores = $this->_validate_offline_stores(array($order));
         $offline_store = $offline_stores[0];
 
-        $carts = $this->_get_carts_of_orders(array($order), false);
+        $carts = $this->_get_carts_of_orders(array($order));
 
         $products = $this->_get_products($carts);
         $product_name = $this->_get_product_name($carts, $products);
@@ -211,7 +224,7 @@ class TuanOrdersController extends AppController{
         try{
             $orders = $this->_get_orders(array($order_id), array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED));
             $order = $orders[0];
-            $carts = $this->_get_carts_of_orders(array($order), false);
+            $carts = $this->_get_carts_of_orders(array($order));
             $products = $this->_get_products($carts);
         }
         catch(Exception $e){
@@ -283,7 +296,7 @@ class TuanOrdersController extends AppController{
 
         return Hash::combine($offline_stores, '{n}.OfflineStore.id', '{n}');
     }
-    private function _get_carts_of_orders($orders, $validate_send_date = true){
+    private function _get_carts_of_orders($orders){
         if(empty($orders)){
             return array();
         }
@@ -295,15 +308,6 @@ class TuanOrdersController extends AppController{
             'fields' => array('id', 'order_id', 'product_id', 'status', 'send_date')
         ));
 
-        if($validate_send_date){
-            foreach($orders as &$order){
-                $order_carts = $this->_get_order_carts($carts, $order);
-                $order_carts_send_dates = array_unique(Hash::extract($order_carts, '{n}.Cart.send_date'));
-                if(count($order_carts_send_dates) > 1){
-                    throw new Exception('order '.$order['Order']['id'].' has various send dates');
-                }
-            }
-        }
         return $carts;
     }
 

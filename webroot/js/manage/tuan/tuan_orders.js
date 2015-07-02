@@ -423,9 +423,10 @@ $(document).ready(function () {
 
     var ordersShipped = function() {
         var type = $('.type', $batchShipDialog).val();
+        var sendDate = $('.send-date', $batchShipDialog).val();
         var orderIds = getCheckedOrderIds($(".orders-" + type));
         var sendMessage = $('input:checkbox', $batchShipDialog).is(':checked');
-        $.post('/manage/admin/tuan_orders/orders_shipped', {"ids": orderIds, 'sendMessage': sendMessage}, function (data) {
+        $.post('/manage/admin/tuan_orders/orders_shipped', {"ids": orderIds, 'sendMessage': sendMessage, 'sendDate': sendDate}, function (data) {
             if (data.success) {
                 var msg;
                 if(!sendMessage){
@@ -472,19 +473,6 @@ $(document).ready(function () {
 
         batchShipDialog.dialog("open");
     });
-    function batch_update_order_status_to_shipped(orders){
-        $.post('/manage/admin/tuan/batch_update_order_status_to_shipped',{
-            'orderId':orders
-        },function(data){
-            var res = JSON.parse(data);
-            if(res.success){
-                bootbox.alert('快递订单状态修改成功');
-                location.reload();
-            }else{
-                bootbox.alert(res.reason);
-            }
-        });
-    }
     function sendRefundOrderDialog() {
         var refundMoney = $('#refund_money');
         var refundOrder = $('#refund_order');

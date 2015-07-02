@@ -608,47 +608,6 @@ class TuanController extends AppController
         return array(array_unique($reachOrderIds),array_unique($send_outOrderIds));
     }
 
-    public function admin_batch_update_order_status_to_shipped(){
-        $this->autoRender = false;
-        $order_ids = array_unique($_REQUEST['orderId']);
-        $orders = $this->Order->find('all',array('conditions' => array('id' => $order_ids)));
-        if(empty($orders)){
-            echo json_encode(array('success' => false, 'reason' => 'Order is null ,please choose orders again '));
-            return;
-        }
-        $carts = $this->Cart->find('all', array(
-            'conditions'=>array('order_id' => $order_ids),
-            'fields' =>array('order_id', 'send_date')
-        ));
-
-        foreach($orders as $order){
-            if($order['Order']['ship_mark'] != 'kuaidi'){
-                echo json_encode(array('success' => false, 'reason' => 'Order '.$order['Order']['id'].' ship mark is '.$order['Order']['ship_mark'].',can not update order status'));
-                return;
-            }
-            if ($order['Order']['status'] != ORDER_STATUS_PAID){
-                echo json_encode(array('success' => false, 'reason' => 'Order '.$order['Order']['id'].' status  is '.$order['Order']['status'].',can not update order status'));
-                return;
-            }
-            // TODO: validate cart send_date is same?
-            $order_carts = array_filter($carts, function($cart) use($order){
-                if ($cart['Cart']['order_id'] == $order['Order']['id']){
-                    return true;
-                }
-                return false;
-            });
-            if(!$this->_get_cart_info($order_carts)){
-                echo json_encode(array('success' => false, 'reason' => 'Order '.$order['Order']['id'].' send_date  is not the same,can not update order status'));
-                return;
-            }
-        }
-        if(!$this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED),array('id' => $order_ids))){
-            echo json_encode(array('success' => false, 'reason' => 'update order status to shipped failed'));
-            return;
-        }
-        $this->Cart->updateAll(array('status' => ORDER_STATUS_SHIPPED),array('order_id' => $order_ids));
-        echo json_encode(array('success' => true));
-    }
     public function _get_cart_info($cart_info){
         $send_date = array_unique(Hash::extract($cart_info,'{n}.Cart.send_date'));
         if(count($send_date) == 1){
