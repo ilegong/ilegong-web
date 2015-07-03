@@ -18,7 +18,7 @@ PYS.storage = {
         return jsonData;
     },
     load : function(key){
-        if (!Modernizr.localstorage){return false;}
+        //if (!Modernizr.localstorage){return false;}
         var record = JSON.parse(localStorage.getItem(key));
         if (!record){return false;}
         return (new Date().getTime() < record.timestamp && JSON.parse(record.value));
