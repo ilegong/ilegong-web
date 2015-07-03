@@ -17,7 +17,7 @@
                 <b>{{$candidator['Candidate']['id']}}号</b>
                 <a href="/vote/candidate_detail/{{$candidator['Candidate']['id']}}/{{$event_id}}?vote_num={{$candidator['vote_num']}}&is_vote={{$candidator['is_vote']}}"><img src="{{$cover_img}}"></a>
                 <dl class="clearfix">
-                    <dd class="fl">{{$candidator['Candidate']['title']}}<br>{{$candidator['vote_num']}}票</dd>
+                    <dd class="fl">{{$candidator['Candidate']['title']}}<br>{{$candidator['Candidate']['vote_num']}}票</dd>
                     {{if $candidator['is_vote']}}
                     <dd class="fr"><a href="#X" class="cur">已投票</a></dd>
                     {{else}}
