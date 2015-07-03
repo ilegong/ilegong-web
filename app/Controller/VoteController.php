@@ -59,12 +59,12 @@ class VoteController extends AppController {
 
         if(!empty($candidators_info)){
             foreach($candidators_info as &$candidator){
-                $conditions = array();
-                $conditions['candidate_id'] = $candidator['Candidate']['id'];
-                $conditions['Vote.created >= '] = $event_info['VoteEvent']['start_time'];
-                $conditions['Vote.created <= '] = $event_info['VoteEvent']['end_time'];
-                $candidator_vote= $this->Vote->find('count',array('conditions' => $conditions));
-                $candidator['vote_num'] = $candidator_vote;
+                //$conditions = array();
+                //$conditions['candidate_id'] = $candidator['Candidate']['id'];
+                //$conditions['Vote.created >= '] = $event_info['VoteEvent']['start_time'];
+                //$conditions['Vote.created <= '] = $event_info['VoteEvent']['end_time'];
+                //$candidator_vote= $this->Vote->find('count',array('conditions' => $conditions));
+                //$candidator['vote_num'] = $candidator_vote;
                 list($uvote,$is_vote) = $this->is_already_vote($candidator['Candidate']['id'],$eventId,$uid);
                 unset($uvote);
                 $candidator['is_vote'] = $is_vote;
@@ -279,13 +279,15 @@ class VoteController extends AppController {
     }
 
     private function update_candidate_vote_num($candidateId,$eventId){
-        $count = $this->Vote->find('count',array(
-            'conditions' => array(
-                'candidate_id' => $candidateId,
-                'event_id' => $eventId
-            )
-        ));
-        $this->Candidate->updateAll(array('vote_num' => $count), array('id' => $candidateId));
+//        $count = $this->Vote->find('count',array(
+//            'conditions' => array(
+//                'candidate_id' => $candidateId,
+//                'event_id' => $eventId
+//            )
+//        ));
+        $this->Candidate->updateAll(array('vote_num' => 'vote_num + 1'), array('id' => $candidateId));
     }
+
+
 
 }
