@@ -11,7 +11,7 @@ var form_submit_obj_for_swfupload = null;
 PYS={};
 PYS.storage = {
     save : function(key, jsonData, expirationHour){
-        if (!Modernizr.localstorage){return false;}
+        //if (!Modernizr.localstorage){return false;}
         var expirationMS = expirationHour * 60 * 60 * 1000;
         var record = {value: JSON.stringify(jsonData), timestamp: new Date().getTime() + expirationMS}
         localStorage.setItem(key, JSON.stringify(record));
