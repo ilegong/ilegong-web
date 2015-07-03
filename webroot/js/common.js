@@ -7,6 +7,23 @@ var last_open_dialog = null; // 记录最后一次打开的dialog
 var jqgrid_scrollOffset = null; // 记录jqgrid的滚动条位置； // 触发更新事件时，自动滚动到先前滚动条所在的位置。
 var form_submit_flag_for_swfupload = false;  // 表单提交标记，表单提交时，检测文件是否上传完。文件上传完时，自动提交表单
 var form_submit_obj_for_swfupload = null;
+//Pys common name space
+PYS={};
+PYS.storage = {
+    save : function(key, jsonData, expirationHour){
+        if (!Modernizr.localstorage){return false;}
+        var expirationMS = expirationHour * 60 * 60 * 1000;
+        var record = {value: JSON.stringify(jsonData), timestamp: new Date().getTime() + expirationMS}
+        localStorage.setItem(key, JSON.stringify(record));
+        return jsonData;
+    },
+    load : function(key){
+        if (!Modernizr.localstorage){return false;}
+        var record = JSON.parse(localStorage.getItem(key));
+        if (!record){return false;}
+        return (new Date().getTime() < record.timestamp && JSON.parse(record.value));
+    }
+}
 // 进行Digg操作,单一选项投票提交
 function singleSubmitDigg(model,data_id,question_id,option_id,callback)
 {
@@ -1627,20 +1644,4 @@ function isPhoneNum(val){
         return false;
     }
 }
-//Pys common name space
-PYS={};
-PYS.storage = {
-    save : function(key, jsonData, expirationHour){
-        if (!Modernizr.localstorage){return false;}
-        var expirationMS = expirationHour * 60 * 60 * 1000;
-        var record = {value: JSON.stringify(jsonData), timestamp: new Date().getTime() + expirationMS}
-        localStorage.setItem(key, JSON.stringify(record));
-        return jsonData;
-    },
-    load : function(key){
-        if (!Modernizr.localstorage){return false;}
-        var record = JSON.parse(localStorage.getItem(key));
-        if (!record){return false;}
-        return (new Date().getTime() < record.timestamp && JSON.parse(record.value));
-    }
-}
+
