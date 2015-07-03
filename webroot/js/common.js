@@ -1499,16 +1499,17 @@ function zitiAddress(){
     //崇文并入东城区， 宣武并入西城区
     var ship_address = {};
     var child_address = {};
-    $.getJSON('/tuan_buyings/get_offline_address?type=0',function(data){
+    if(PYS.storage.load('offline_stores')){
+        var data = PYS.storage.load('offline_stores');
         ship_address = data.address;
         child_address = data.child_address;
-        //$.each(ship_address,function(index,item){
-        //    $("[area-id="+index+"]").show().addClass('parent_area');
-        //});
-        //$.each(child_address,function(index,item){
-        //    $("[area-id="+index+"]").addClass('children_area');
-        //});
-    });
+    }else{
+        $.getJSON('/tuan_buyings/get_offline_address?type=0',function(data){
+            ship_address = data.address;
+            child_address = data.child_address;
+            PYS.storage.save('offline_stores',data,48);
+        });
+    }
     var getShipAddress = function(areaId){
         return ship_address[areaId];
     };
@@ -1624,5 +1625,22 @@ function isPhoneNum(val){
         return true;
     }else{
         return false;
+    }
+}
+//Pys common name space
+PYS={};
+PYS.storage = {
+    save : function(key, jsonData, expirationHour){
+        if (!Modernizr.localstorage){return false;}
+        var expirationMS = expirationHour * 60 * 60 * 1000;
+        var record = {value: JSON.stringify(jsonData), timestamp: new Date().getTime() + expirationMS}
+        localStorage.setItem(key, JSON.stringify(record));
+        return jsonData;
+    },
+    load : function(key){
+        if (!Modernizr.localstorage){return false;}
+        var record = JSON.parse(localStorage.getItem(key));
+        if (!record){return false;}
+        return (new Date().getTime() < record.timestamp && JSON.parse(record.value));
     }
 }
