@@ -13,8 +13,8 @@
     <div class="babylist">
         <div class="clearfix">
             <ul class="fl">
-                {{loop $candidators_info $index $candidator}}
-                    {{if $index&1}}
+                {{loop $candidators_info $fl $candidator}}
+                    {{if $fl&1}}
                         <?php
                             $img = array_filter(explode('|',$candidator['Candidate']['images']));
                             $cover_img = $img[0];
@@ -39,8 +39,8 @@
                 {{/loop}}
             </ul>
             <ul class="fr">
-                {{loop $candidators_info $index $candidator}}
-                    {{if !$index&1}}
+                {{loop $candidators_info $fr $candidator}}
+                    {{if !($fr&1)}}
                         <?php
                             $img = array_filter(explode('|',$candidator['Candidate']['images']));
                             $cover_img = $img[0];
