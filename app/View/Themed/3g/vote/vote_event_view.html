@@ -14,7 +14,7 @@
         <div class="clearfix">
             <ul class="fl">
                 {{loop $candidators_info $fl $candidator}}
-                    {{if $fl&1}}
+                    {{if !($fl&1)}}
                         <?php
                             $img = array_filter(explode('|',$candidator['Candidate']['images']));
                             $cover_img = $img[0];
@@ -40,7 +40,7 @@
             </ul>
             <ul class="fr">
                 {{loop $candidators_info $fr $candidator}}
-                    {{if !($fr&1)}}
+                    {{if $fr&1}}
                         <?php
                             $img = array_filter(explode('|',$candidator['Candidate']['images']));
                             $cover_img = $img[0];
