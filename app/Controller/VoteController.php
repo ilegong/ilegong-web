@@ -102,11 +102,11 @@ class VoteController extends AppController {
         }
         $vote = $this->Vote->save(array('candidate_id' => $candidateId, 'user_id'=>$uid, 'event_id'=>$eventId));
         if(empty($vote)) {
-            //update vote num
-            $this->update_candidate_vote_num($candidateId,$eventId);
             echo json_encode(array('success' => false, 'reason' => 'save wrong'));
             return;
         }
+        //update vote num
+        $this->update_candidate_vote_num($candidateId);
         echo json_encode(array('success' => true));
     }
 
@@ -272,7 +272,7 @@ class VoteController extends AppController {
         return array('all_count' => $allCount, 'has_vote' => $hasVote);
     }
 
-    private function update_candidate_vote_num($candidateId,$eventId){
+    private function update_candidate_vote_num($candidateId){
 //        $count = $this->Vote->find('count',array(
 //            'conditions' => array(
 //                'candidate_id' => $candidateId,
