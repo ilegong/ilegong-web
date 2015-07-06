@@ -1,4 +1,4 @@
-{{$this->Html->css(array('vote.css?v1.2'));}}
+{{template vote/vote_css_template}}
 <div style="background-color:#c54134;" id="baby_sign_up">
     <div class="baby_banner"><img src="{{$this->Html->assetUrl('/img/vote/banner.png')}}"/></div>
     <div class="apply_bg">
@@ -54,7 +54,7 @@
         <p>朋友说、XX幼儿园</p>
     </div>
     {{template vote/baby_bottom_template}}
-    {{if $not_login||$not_weixin}}
+    {{if $not_login || $not_weixin}}
         <!--弹出层-->
         <div class="tipslayer">
             <a href="#X" class="tipslayer_close"></a>

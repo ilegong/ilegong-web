@@ -54,8 +54,10 @@ class VoteController extends AppController {
         $candidator_ids = Hash::extract($candidators,'{n}.CandidateEvent.candidate_id');
         if($sort==1){
             $this->Paginator->settings = $this->sortPaginate;
+            $this->set('op_cate','sort');
         }else{
             $this->Paginator->settings = $this->paginate;
+            $this->set('op_cate','index');
         }
         $candidators_info = $this->Paginator->paginate('Candidate',array('Candidate.id' => $candidator_ids));
 
@@ -74,6 +76,7 @@ class VoteController extends AppController {
         $this->set('candidators_info',$candidators_info);
         $this->set('event_id',$eventId);
         $this->set('event_available',$this->check_event_is_available($event_info));
+
         $this->set_wx_data($uid,$eventId);
     }
 
@@ -137,6 +140,7 @@ class VoteController extends AppController {
             $this->set('not_weixin',true);
         }
         $this->set_wx_data($uid,$eventId);
+        $this->set('op_cate','sign_up');
     }
 
     /**
@@ -209,7 +213,7 @@ class VoteController extends AppController {
        $this->set('images',$images);
        $this->set('candidate_info',$candidate_info);
        $this->set_wx_data($this->currentUser['id'],$eventId);
-
+       $this->set('op_cate','detail');
     }
 
     private function has_sign_up($eventId,$userId){
