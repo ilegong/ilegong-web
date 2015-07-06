@@ -16,6 +16,9 @@ ul li { list-style: none; }
 
 .baby_banner img{ width: 100%;}
 .apply_btn{ display: block; text-decoration: none; width: 50%; margin: 0 auto; font-weight: bold; height: 38px; line-height: 38px; text-align: center; font-size: 14px; background-color: #ffeb63; color: #c54134;}
+.apply_btn:hover{ display: block; text-decoration: none; width: 50%; margin: 0 auto; font-weight: bold; height: 38px; line-height: 38px; text-align: center; font-size: 14px; background-color: #ffeb63; color: #c54134;}
+.apply_btn:focus{ display: block; text-decoration: none; width: 50%; margin: 0 auto; font-weight: bold; height: 38px; line-height: 38px; text-align: center; font-size: 14px; background-color: #ffeb63; color: #c54134;}
+.apply_btn:visited{ display: block; text-decoration: none; width: 50%; margin: 0 auto; font-weight: bold; height: 38px; line-height: 38px; text-align: center; font-size: 14px; background-color: #ffeb63; color: #c54134;}
 .babylist{ padding: 20px 0 20px 10px;}
 .babylist ul{ width: 50%;}
 .babylist ul li{ position: relative; margin-bottom: 10px;}
