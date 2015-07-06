@@ -84,9 +84,9 @@ ul li { list-style: none; }
 .babydetaillayer h1{ font-size: 16px; color: #333333; text-align: center; padding-bottom: 20px;}
 .babydetaillayer p{ color: #666666;}
 .babydetaillayer_btn{ display: block; text-decoration: none; width: 100px; margin: 0 auto; line-height: 38px; color: #ffffff; background-color: #ff7b6e; text-align: center; font-weight: bold; margin-top: 15px;}
-.babydetaillayer_btn:hover{text-decoration: none; width: 100px; margin: 0 auto; line-height: 38px; color: #ffffff; background-color: #ff7b6e;}
-.babydetaillayer_btn:visited{text-decoration: none; width: 100px; margin: 0 auto; line-height: 38px; color: #ffffff; background-color: #ff7b6e;}
-.babydetaillayer_btn:focus{text-decoration: none; width: 100px; margin: 0 auto; line-height: 38px; color: #ffffff; background-color: #ff7b6e;}
+.babydetaillayer_btn:hover{display: block; text-decoration: none; width: 100px; margin: 0 auto; line-height: 38px; color: #ffffff; background-color: #ff7b6e; text-align: center; font-weight: bold; margin-top: 15px;}
+.babydetaillayer_btn:visited{display: block; text-decoration: none; width: 100px; margin: 0 auto; line-height: 38px; color: #ffffff; background-color: #ff7b6e; text-align: center; font-weight: bold; margin-top: 15px;}
+.babydetaillayer_btn:focus{display: block; text-decoration: none; width: 100px; margin: 0 auto; line-height: 38px; color: #ffffff; background-color: #ff7b6e; text-align: center; font-weight: bold; margin-top: 15px;}
 .icon_delete { width: 1.48em; height: 1.47em; background: url("/img/vote/pyshuo_icon.png") -7.083em -20.417em; background-size: 25em 25em; position: absolute; right: -0.5em; top: -0.5em; }
 
 
