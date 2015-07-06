@@ -342,7 +342,7 @@ class WeixinController extends AppController {
                     $content = array(
                         array('title' => '[投票] 评选第三届朋友说吃货宝贝，当吃货宝贝，赢美的烤箱！', 'description' => '',
                             'picUrl' => 'http://51daifan.sinaapp.com/img/imgstore/child.jpg',
-                            'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=209212050&idx=1&sn=e3424554b76499f30e3effcbd7a148ae#rd'),
+                            'url' => 'http://www.tongshijia.com/vote/vote_event_view/4'),
                     );
                     echo $this->newArticleMsg($user, $me, $content);
                     break;
