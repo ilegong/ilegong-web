@@ -11,6 +11,60 @@
         <a href="#" class="apply_btn">活动已经结束</a>
     {{/if}}
     <div class="babylist">
+        <div class="clearfix">
+            <ul class="fl">
+                {{loop $candidators_info $index $candidator}}
+                <?php
+                    $img = array_filter(explode('|',$candidator['Candidate']['images']));
+                    $cover_img = $img[0];
+                ?>
+                    {{if $index%2==0}}
+                        <li>
+                            <b>{{$candidator['Candidate']['id']}}号</b>
+                            <a href="/vote/candidate_detail/{{$candidator['Candidate']['id']}}/{{$event_id}}?vote_num={{$candidator['vote_num']}}&is_vote={{$candidator['is_vote']}}"><img src="{{$cover_img}}"></a>
+                            <dl class="clearfix">
+                                <dd class="fl">{{$candidator['Candidate']['title']}}<br>{{$candidator['Candidate']['vote_num']}}票</dd>
+                                {{if $event_available}}
+                                {{if $candidator['is_vote']}}
+                                <dd class="fr"><a href="#X" class="cur">已投票</a></dd>
+                                {{else}}
+                                <dd class="fr"><a href="#X" class="vote_baby" data-candidate_id="{{$candidator['Candidate']['id']}}" data-event_id="{{$event_id}}">&nbsp;投票&nbsp;</a></dd>
+                                {{/if}}
+                                {{else}}
+                                <dd class="fr"><a href="#X" class="cur">已结束</a></dd>
+                                {{/if}}
+                            </dl>
+                        </li>
+                    {{/if}}
+                {{/loop}}
+            </ul>
+            <ul class="fr">
+                {{loop $candidators_info $index $candidator}}
+                <?php
+                    $img = array_filter(explode('|',$candidator['Candidate']['images']));
+                    $cover_img = $img[0];
+                ?>
+                {{if $index%2!=0}}
+                <li>
+                    <b>{{$candidator['Candidate']['id']}}号</b>
+                    <a href="/vote/candidate_detail/{{$candidator['Candidate']['id']}}/{{$event_id}}?vote_num={{$candidator['vote_num']}}&is_vote={{$candidator['is_vote']}}"><img src="{{$cover_img}}"></a>
+                    <dl class="clearfix">
+                        <dd class="fl">{{$candidator['Candidate']['title']}}<br>{{$candidator['Candidate']['vote_num']}}票</dd>
+                        {{if $event_available}}
+                        {{if $candidator['is_vote']}}
+                        <dd class="fr"><a href="#X" class="cur">已投票</a></dd>
+                        {{else}}
+                        <dd class="fr"><a href="#X" class="vote_baby" data-candidate_id="{{$candidator['Candidate']['id']}}" data-event_id="{{$event_id}}">&nbsp;投票&nbsp;</a></dd>
+                        {{/if}}
+                        {{else}}
+                        <dd class="fr"><a href="#X" class="cur">已结束</a></dd>
+                        {{/if}}
+                    </dl>
+                </li>
+                {{/if}}
+                {{/loop}}
+            </ul>
+        </div>
         <ul class="clearfix">
             {{loop $candidators_info $candidator}}
             <?php

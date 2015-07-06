@@ -17,14 +17,15 @@ ul li { list-style: none; }
 .baby_banner img{ width: 100%;}
 .apply_btn{ display: block; text-decoration: none; width: 50%; margin: 0 auto; font-weight: bold; height: 38px; line-height: 38px; text-align: center; font-size: 14px; background-color: #ffeb63; color: #c54134;}
 .babylist{ padding: 20px 0 20px 10px;}
-.babylist ul li{ position: relative; float: left; width: 50%; margin-bottom: 10px;}
+.babylist ul{ width: 50%;}
+.babylist ul li{ position: relative; margin-bottom: 10px;}
 .babylist ul li a{ margin-right: 10px; display: block;}
 .babylist ul li a img{ width: 100%;}
 .babylist ul li dl{ overflow: hidden; margin-right: 10px; background-color: #ffffff;}
 .babylist ul li dl dd a{ margin-right: 0; display: block; text-decoration: none; color: #ffffff; background-color: #ff7c6e; padding: 0 10px; line-height: 46px;}
 .babylist ul li dl dd a.cur{ background-color: #999999;}
-.babylist ul li dl dd.fl {padding: 5px 0 5px 10px;line-height: 18px;}
-.babylist ul li b{ display: block; width: 4.2em; height: 2.083em; background: url("/img/vote/iconbg.png"); background-size: 4.2em 2.083em; font-weight: normal; color: #ffffff; text-align: center; line-height: 20px; position: absolute; right: 10px; top: 0;}
+.babylist ul li dl dd.fl{ padding: 5px 0 5px 10px;}
+.babylist ul li b{ display: block; width: 4.2em; height: 2.083em; background: url("../images/iconbg.png"); background-size: 4.2em 2.083em; font-weight: normal; color: #ffffff; text-align: center; line-height: 20px; position: absolute; right: 10px; top: 0;}
 .babylist_page a{ display: block; text-decoration: none; float: left; margin-right: 10px; margin-top: 10px; width: 32px; height: 32px; line-height: 32px; background-color: #ff7c6e; color: #ffffff; text-align: center; font-size: 14px;}
 .babylist_page a.cur{ background-color: #ffffff; color: #ff7c6e;}
 .babyrule{ padding: 20px 10px 20px 10px;}
@@ -33,7 +34,7 @@ ul li { list-style: none; }
 .baby_bottom{ height: 49px; background-color: #ffffff; position: fixed; left: 0; bottom: 0; width: 100%;}
 .baby_bottom ul li{ float: left; width: 25%; text-align: center; color: #666666;}
 .baby_bottom ul li a{ text-decoration: none; display: block;}
-.baby_bottom ul li i{ display: block; background: url("/img/vote/bottomicon.png"); background-size: 11.75em 3.417em; width: 1.833em; height: 1.5em; margin: 0 auto; margin-top: 8px;}
+.baby_bottom ul li i{ display: block; background: url("../images/bottomicon.png"); background-size: 11.75em 3.417em; width: 1.833em; height: 1.5em; margin: 0 auto; margin-top: 8px;}
 .baby_bottom ul li i.home{ background-position: 0 0;}
 .baby_bottom ul li i.ranking{ background-position: -3.167em 0;}
 .baby_bottom ul li i.apply{ background-position: -6.29em 0;}
