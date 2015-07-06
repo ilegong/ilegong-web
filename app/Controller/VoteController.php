@@ -37,6 +37,8 @@ class VoteController extends AppController {
 
     /**
      * @param $eventId
+     * @param $sort
+     * 可以排序
      * 根据投票的事件ID到特定的投票页面
      */
     public function vote_event_view($eventId,$sort=0) {
@@ -71,6 +73,7 @@ class VoteController extends AppController {
         $this->set('candidators',$candidators);
         $this->set('candidators_info',$candidators_info);
         $this->set('event_id',$eventId);
+        $this->set('event_available',$this->check_event_is_available($event_info));
         $this->set_wx_data($uid,$eventId);
     }
 
@@ -241,7 +244,7 @@ class VoteController extends AppController {
                 'id'=>$eventId
             ),
             'fields' => array(
-                'start_time','end_time'
+                'start_time','end_time', 'deleted', 'published', 'place'
             )
         ));
         return $event_info;
@@ -282,6 +285,17 @@ class VoteController extends AppController {
         $this->Candidate->updateAll(array('vote_num' => 'vote_num + 1'), array('id' => $candidateId));
     }
 
-
+    private function check_event_is_available($eventInfo) {
+        if (empty($eventInfo)) {
+            return false;
+        }
+        if ($eventInfo['VoteEvent']['deleted'] == 1 || $eventInfo['VoteEvent']['published'] == 0) {
+            return false;
+        }
+        if (time() < strtotime($eventInfo['VoteEvent']['start_time']) || time() > strtotime($eventInfo['VoteEvent']['end_time'])) {
+            return false;
+        }
+        return true;
+    }
 
 }

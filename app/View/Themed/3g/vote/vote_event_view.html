@@ -1,10 +1,14 @@
 {{$this->Html->css(array('vote.css?v1.2'))}}
 <div class="container" style="background-color:#c54134;">
     <div class="baby_banner"><img src="/img/vote/banner.png"></div>
-    {{if !$is_sign_up}}
-    <a href="/vote/sign_up/{{$event_id}}" class="apply_btn">我要报名</a>
+    {{if $event_available}}
+        {{if !$is_sign_up}}
+            <a href="/vote/sign_up/{{$event_id}}" class="apply_btn">我要报名</a>
+        {{else}}
+            <a href="/vote/candidate_detail/{{$is_sign_up['CandidateEvent']['candidate_id']}}/{{$event_id}}?vote_num={{$candidator['vote_num']}}&is_vote={{$candidator['is_vote']}}" class="apply_btn">查看报名信息</a>
+        {{/if}}
     {{else}}
-    <a href="/vote/candidate_detail/{{$is_sign_up['CandidateEvent']['candidate_id']}}/{{$event_id}}?vote_num={{$candidator['vote_num']}}&is_vote={{$candidator['is_vote']}}" class="apply_btn">查看报名信息</a>
+        <a href="#" class="apply_btn">活动已经结束</a>
     {{/if}}
     <div class="babylist">
         <ul class="clearfix">
@@ -18,10 +22,14 @@
                 <a href="/vote/candidate_detail/{{$candidator['Candidate']['id']}}/{{$event_id}}?vote_num={{$candidator['vote_num']}}&is_vote={{$candidator['is_vote']}}"><img src="{{$cover_img}}"></a>
                 <dl class="clearfix">
                     <dd class="fl">{{$candidator['Candidate']['title']}}<br>{{$candidator['Candidate']['vote_num']}}票</dd>
-                    {{if $candidator['is_vote']}}
-                    <dd class="fr"><a href="#X" class="cur">已投票</a></dd>
+                    {{if $event_available}}
+                        {{if $candidator['is_vote']}}
+                            <dd class="fr"><a href="#X" class="cur">已投票</a></dd>
+                        {{else}}
+                            <dd class="fr"><a href="#X" class="vote_baby" data-candidate_id="{{$candidator['Candidate']['id']}}" data-event_id="{{$event_id}}">&nbsp;投票&nbsp;</a></dd>
+                        {{/if}}
                     {{else}}
-                    <dd class="fr"><a href="#X" class="vote_baby" data-candidate_id="{{$candidator['Candidate']['id']}}" data-event_id="{{$event_id}}">&nbsp;投票&nbsp;</a></dd>
+                        <dd class="fr"><a href="#X" class="cur">已结束</a></dd>
                     {{/if}}
                 </dl>
             </li>
