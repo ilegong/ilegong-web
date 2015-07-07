@@ -10,9 +10,9 @@
         <img src="{{$img}}">
         {{/loop}}
         {{if $has_vote>0}}
-        <a href="#X" style="background-color: #999999;">已投票</a>
+            <a href="#X" style="background-color: #999999;">已投票</a>
         {{else}}
-        <a href="#X" class="vote_baby" data-candidate_id="{{$candidate_id}}" data-event_id="{{$event_id}}">我要投票</a>
+            <a href="#X" class="vote_baby" data-candidate_id="{{$candidate_id}}" data-event_id="{{$event_id}}">我要投票</a>
         {{/if}}
     </div>
     {{template vote/vote_rule_template}}

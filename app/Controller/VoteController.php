@@ -42,7 +42,7 @@ class VoteController extends AppController {
      * 根据投票的事件ID到特定的投票页面
      */
     public function vote_event_view($eventId,$sort=0) {
-        $this->pageTitle = '萌宝';
+        $this->pageTitle = '朋友说第5届萌娃大赛';
         $uid = $this->currentUser['id'];
         $event_info = $this->get_event_info($eventId);
         $candidators = $this->CandidateEvent->find('all',array(
@@ -128,7 +128,7 @@ class VoteController extends AppController {
 
     public function sign_up($eventId){
         //check login
-        $this->pageTitle='萌宝报名';
+        $this->pageTitle='朋友说第5届萌娃大赛报名';
         $event_info = $this->get_event_info($eventId);
         $this->set('event_info',$event_info);
         $this->set('event_id',$eventId);
@@ -191,7 +191,6 @@ class VoteController extends AppController {
      * 萌宝详情
      */
     public function candidate_detail($candidateId,$eventId) {
-       $this->pageTitle = '萌宝详情';
        $uid = $this->currentUser['id'];
         if(empty($uid)){
             $ref = Router::url($_SERVER['REQUEST_URI']);
@@ -212,7 +211,10 @@ class VoteController extends AppController {
        $this->set('event_id',$eventId);
        $this->set('images',$images);
        $this->set('candidate_info',$candidate_info);
+       $this->set('share_baby_info',true);
+       $this->set('weixin_share_title','我是第'.$candidateId.'号萌娃'.$candidate_info['Candidate']['title'].'，叔叔阿姨快来支持我一票啦');
        $this->set_wx_data($this->currentUser['id'],$eventId);
+       $this->pageTitle = '我是'.$candidateId.'号萌娃,'.$candidate_info['Candidate']['title'];
        $this->set('op_cate','detail');
     }
 

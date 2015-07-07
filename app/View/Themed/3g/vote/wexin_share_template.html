@@ -2,12 +2,17 @@
 <script>
     wx.ready(function () {
         var share_string = '{{$share_string ? $share_string :"baby_vote"}}';
-        var to_timeline_title = "吃货萌宝"+"@朋友说";
-        var to_friend_title = "吃货萌宝"+"@朋友说";
+        {{if $share_baby_info}}
+            var to_timeline_title = "{{$weixin_share_title}}";
+            var to_friend_title = "{{$weixin_share_title}}";
+        {{else}}
+            var to_timeline_title = "晒萌娃，亲子箱包儿童安全手表等你拿.";
+            var to_friend_title = "晒萌娃，亲子箱包儿童安全手表等你拿.";
+        {{/if}}
+        var desc = "朋友说第5届萌娃大赛开始啦，寻找吃货宝宝，记录小天使美好的瞬间。";
         var to_friend_link = document.URL.split('?')[0]+'?trstr='+ share_string + '&share_type=appMsg';
         var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
         var imgUrl = "http://51daifan.sinaapp.com/img/vote/banner.png";
-        var desc = "朋友说，寻找萌吃货宝宝！";
         wx.onMenuShareAppMessage({
             title: to_friend_title,
             desc: desc,
