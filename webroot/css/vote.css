@@ -37,7 +37,15 @@ ul li { list-style: none; }
 .baby_bottom{ height: 49px; background-color: #ffffff; position: fixed; left: 0; bottom: 0; width: 100%;}
 .baby_bottom ul li{ float: left; width: 25%; text-align: center; color: #666666;}
 .baby_bottom ul li a{ text-decoration: none; display: block;}
-.baby_bottom ul li i{ display: block; background: url("/img/vote/bottomicon.png"); background-size: 11.75em 3.417em; width: 1.833em; height: 1.5em; margin: 0 auto; margin-top: 8px;}
+.baby_bottom ul li i {
+    display: block;
+    background: url("/img/vote/bottomicon.png");
+    background-size: 11.75em 3.417em;
+    width: 1.833em;
+    height: 1.5em;
+    margin: 0 auto;
+    margin-top: 6px;
+}
 .baby_bottom ul li i.home{ background-position: 0 0;}
 .baby_bottom ul li i.ranking{ background-position: -3.167em 0;}
 .baby_bottom ul li i.apply{ background-position: -6.29em 0;}
