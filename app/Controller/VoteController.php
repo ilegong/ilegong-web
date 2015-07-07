@@ -280,12 +280,6 @@ class VoteController extends AppController {
     }
 
     private function update_candidate_vote_num($candidateId){
-//        $count = $this->Vote->find('count',array(
-//            'conditions' => array(
-//                'candidate_id' => $candidateId,
-//                'event_id' => $eventId
-//            )
-//        ));
         $this->Candidate->updateAll(array('vote_num' => 'vote_num + 1'), array('id' => $candidateId));
     }
 
