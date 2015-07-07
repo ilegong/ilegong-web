@@ -129,6 +129,17 @@ class VoteController extends AppController {
 
     public function sign_up($eventId){
         //check login
+        $uid = $this->currentUser['id'];
+        if(empty($uid)){
+            $ref = Router::url($_SERVER['REQUEST_URI']);
+            $this->redirect('/users/login.html?force_login=1&auto_weixin='.$this->is_weixin().'&referer=' . urlencode($ref));
+            return;
+        }
+        $sign_up_info = $this->has_sign_up($eventId,$uid);
+        if(!empty($sign_up_info)){
+            $this->redirect('/vote/candidate_detail/'.$sign_up_info['CandidateEvent']['candidate_id'].'/'.$eventId);
+            return;
+        }
         $this->pageTitle='朋友说第5届萌娃大赛报名';
         $event_info = $this->get_event_info($eventId);
         $this->set('event_info',$event_info);
