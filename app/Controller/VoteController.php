@@ -21,7 +21,7 @@ class VoteController extends AppController {
     var $sortPaginate = array(
         'Candidate' => array(
             'order' => 'Candidate.vote_num DESC',
-            'limit' => 10
+            'limit' => 10,
         )
     );
 
@@ -52,6 +52,7 @@ class VoteController extends AppController {
         ));
 
         $candidator_ids = Hash::extract($candidators,'{n}.CandidateEvent.candidate_id');
+        $this->set('total_count',count($candidator_ids));
         if($sort==1){
             $this->Paginator->settings = $this->sortPaginate;
             $this->set('op_cate','sort');

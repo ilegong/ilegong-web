@@ -65,7 +65,7 @@
                 {{/loop}}
             </ul>
         </div>
-        {{if count($candidators_info)>10}}
+        {{if $total_count>10}}
         <div class="babylist_page clearfix">
               {{$this->Paginator->prev('&lt;', array( 'tag' => 'span','escape' => false), null, array('class' => 'prev disabled prv' ,'tag' => 'a', 'escape' => false));}}
               {{$this->Paginator->numbers(array('separator' => '', 'tag' => 'span' , 'currentClass' => 'active', 'currentTag' => 'a' , 'escape' => false , 'modulus' => 2));}}

@@ -340,7 +340,7 @@ class WeixinController extends AppController {
                     break;
                 case '投票':
                     $content = array(
-                        array('title' => '晒吃货宝贝，赢368元的亲子旅行包/299元的360度儿童安全卫士/99元的几米漫画……', 'description' => '',
+                        array('title' => '晒吃货宝贝，赢500元的亲子旅行包/299元的360度儿童安全卫士/99元的几米漫画……', 'description' => '',
                             'picUrl' => 'http://51daifan.sinaapp.com/img/imgstore/1.jpg',
                             'url' => 'http://www.tongshijia.com/vote/vote_event_view/4'),
                     );
