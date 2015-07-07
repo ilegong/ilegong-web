@@ -60,7 +60,7 @@ class VoteController extends AppController {
             $this->Paginator->settings = $this->paginate;
             $this->set('op_cate','index');
         }
-        $candidators_info = $this->Paginator->paginate('Candidate',array('Candidate.id' => $candidator_ids));
+        $candidators_info = $this->Paginator->paginate('Candidate',array('Candidate.id' => $candidator_ids, 'Candidate.deleted' => DELETED_NO));
 
         if(!empty($candidators_info)){
             foreach($candidators_info as &$candidator){
