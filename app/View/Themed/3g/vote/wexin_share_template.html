@@ -5,14 +5,17 @@
         {{if $share_baby_info}}
             var to_timeline_title = "{{$weixin_share_title}}";
             var to_friend_title = "{{$weixin_share_title}}";
+            var desc = "{{$candidate_info['Candidate']['description']}}";
+            var imgUrl = "{{$images[0]}}";
         {{else}}
             var to_timeline_title = "晒萌娃，亲子箱包儿童安全手表等你拿.";
             var to_friend_title = "晒萌娃，亲子箱包儿童安全手表等你拿.";
+            var desc = "朋友说第5届萌娃大赛开始啦，寻找吃货宝宝，记录小天使美好的瞬间。";
+            var imgUrl = "http://51daifan.sinaapp.com/img/vote/banner.png";
         {{/if}}
-        var desc = "朋友说第5届萌娃大赛开始啦，寻找吃货宝宝，记录小天使美好的瞬间。";
         var to_friend_link = document.URL.split('?')[0]+'?trstr='+ share_string + '&share_type=appMsg';
         var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
-        var imgUrl = "http://51daifan.sinaapp.com/img/vote/banner.png";
+
         wx.onMenuShareAppMessage({
             title: to_friend_title,
             desc: desc,

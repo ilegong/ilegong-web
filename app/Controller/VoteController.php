@@ -205,6 +205,8 @@ class VoteController extends AppController {
           )
        ));
        $images = array_filter(explode('|',$candidate_info['Candidate']['images']));
+       $is_sign_up = $this->has_sign_up($eventId,$uid);
+       $this->set('is_sign_up',$is_sign_up);
        $event_info = $this->get_event_info($eventId);
        $this->set('event_info',$event_info);
        $this->set('candidate_id',$candidateId);
@@ -215,6 +217,7 @@ class VoteController extends AppController {
        $this->set('weixin_share_title','我是第'.$candidateId.'号萌娃'.$candidate_info['Candidate']['title'].'，叔叔阿姨快来支持我一票啦');
        $this->set_wx_data($this->currentUser['id'],$eventId);
        $this->pageTitle = '我是'.$candidateId.'号萌娃,'.$candidate_info['Candidate']['title'];
+        $this->set('event_available',$this->check_event_is_available($event_info));
        $this->set('op_cate','detail');
     }
 
