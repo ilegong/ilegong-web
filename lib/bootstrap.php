@@ -10,6 +10,7 @@ const ORDER_TYPE_GROUP = 2;
 const ORDER_TYPE_GROUP_FILL = 4; //团购补充素有剩下的
 const ORDER_TYPE_PARENT = 3;
 const ORDER_TYPE_TUAN = 5; //团长团购
+const ORDER_TYPE_TINY_BUY = 9;
 //change milk order to tuan sec kill
 const ORDER_TYPE_TUAN_SEC = 6;
 

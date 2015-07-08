@@ -160,6 +160,7 @@ define('IN_SHICHI', 3); //试吃中
 define('SHICHI_AND_NO_CHECK', 4); //试吃／审核不通过
 
 
+
 //Product 表里设置是这个产品，不论多少都是同一邮费
 const TYPE_ORDER_PRICE = 1; //订单总价满多少包邮
 const TYPE_REDUCE_BY_NUMS = 2; //同一商品满几件包邮
