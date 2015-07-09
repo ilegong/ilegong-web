@@ -33,7 +33,7 @@ class TinyBuyController extends AppController {
     }
 
     public function detail($tinyBuyId) {
-        
+
     }
 
     public function buy() {
