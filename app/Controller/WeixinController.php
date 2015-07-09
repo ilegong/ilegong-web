@@ -180,7 +180,7 @@ class WeixinController extends AppController {
 				} else if ($req['Event'] == 'CLICK') {
                     $input = $req['EventKey'];
                 } else if ($req['Event'] == 'unsubscribe') {
-
+                    $this->log('unsubscribe'.$from.trim($req['FromUserName']));
                     if ($from == FROM_WX_SERVICE) {
                         $uid = $this->Oauthbind->findUidByWx(trim($req['FromUserName']));
                         if ($uid) {
