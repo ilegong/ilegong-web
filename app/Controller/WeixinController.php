@@ -12,7 +12,7 @@ class WeixinController extends AppController {
 
 	var $name = 'Weixin';
 
-    var $uses = array('Oauthbind', 'User');
+    var $uses = array('Oauthbind', 'User', 'UserSubReason');
 	
 	public function beforeFilter(){
 		parent::beforeFilter();
@@ -79,7 +79,11 @@ class WeixinController extends AppController {
 
 				if($req['Event']=='subscribe'){ //订阅
                     if ($from == FROM_WX_SERVICE) {
-                        $content = array(
+                        $reason = $this->UserSubReason->find('first',array('conditions' => array(
+                            'user_id' => $uid,
+                            'used' => 0
+                        )));
+                        $default_content = array(
                             array('title' => '朋友说是什么？看完你就懂了！', 'description' => '',
                                 'picUrl' => 'https://mmbiz.qlogo.cn/mmbiz/qpxHrxLKdR0A6F8hWz04wVpntT9Jiao8XZn7as5FuHch5zFzFnvibjUGYU3J4ibxRyLicytfdd9qDQoqV1ODOp3Rjg/0',
                                 'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=201694178&idx=1&sn=8dea494e02c96dc21e51931604771748#rd'),
@@ -90,7 +94,19 @@ class WeixinController extends AppController {
                                 'picUrl' => 'https://mmbiz.qlogo.cn/mmbiz/qpxHrxLKdR0A6F8hWz04wVpntT9Jiao8XYT9A69hTUYIomNtyJMbLnMibbSHO3NO5UaEics7OwEo9qLHfqmHas8zQ/0',
                                 'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=201694178&idx=3&sn=75c4b8f32c29e1c088c7de4ee2e22719#rd')
                         );
-
+                        if(!empty($reason)){
+                            if($reason['UserSubReason']['type']=='Vote'){
+                                $content = array(
+                                    array('title' => '晒吃货宝贝，赢500元的亲子旅行包/299元的360度儿童安全卫士/99元的几米漫画……', 'description' => '',
+                                        'picUrl' => 'http://51daifan.sinaapp.com/img/imgstore/1.jpg',
+                                        'url' => $reason['UserSubReason']['url']),
+                                );
+                            }else{
+                                $content = $default_content;
+                            }
+                        }else{
+                            $content = $default_content;
+                        }
                         if ($uid) {
                             Cache::write(key_cache_sub($uid), WX_STATUS_SUBSCRIBED);
                         } else {

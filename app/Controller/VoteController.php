@@ -9,7 +9,7 @@
 class VoteController extends AppController {
 
 
-    var $uses = array('VoteEvent', 'Candidate', 'Vote', 'CandidateEvent');
+    var $uses = array('VoteEvent', 'Candidate', 'Vote', 'CandidateEvent', 'UserSubReason');
     var $components = array('Paginator');
     var $paginate = array(
         'Candidate' => array(
@@ -94,6 +94,7 @@ class VoteController extends AppController {
             return;
         }
         if(user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED ){
+            $this->UserSubReason->save(array('type'=>'Vote','url'=>WX_HOST.'/vote/candidate_detail/'.$candidateId.'/'.$eventId,'user_id'=>$uid));
             echo json_encode(array('success' => false, 'reason' => 'Not subscribed'));
             return;
         }
