@@ -2,7 +2,7 @@ name: 51daifan
 version: 3
 
 handle:
-  - rewrite: if (path ~ "^(js|css|img|files|api|cache|fonts)/(.*)$") goto "webroot/$1/$2"
+  - rewrite: if (path ~ "^(static|js|css|img|files|api|cache|fonts)/(.*)$") goto "webroot/$1/$2"
   - rewrite: if (path ~ "^manage/(js|css|img|files|fonts)/(.*)$") goto "webroot/$1/$2"
   - rewrite: if (!is_file() && !is_dir() && path ~ "^webroot/cache/(.*)$") goto "saekv.php?k=$1"
   

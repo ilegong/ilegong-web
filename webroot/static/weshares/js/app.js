@@ -20,7 +20,7 @@
 	/* @ngInject */
 	function configStates($stateProvider, $urlRouterProvider, $locationProvider) {
 		$stateProvider
-			.state('add', {url: '/add', templateUrl: '/weshares/templates/add.html',controller: 'WesharesAddCtrl as vm'});
+			.state('add', {url: '/add', templateUrl: '/static/weshares/templates/add.html',controller: 'WesharesAddCtrl as vm'});
 
 		$urlRouterProvider.otherwise('/add');
 		$locationProvider.hashPrefix('!').html5Mode(false);
@@ -33,13 +33,13 @@
 	function WesharesAddCtrl($scope, $rootScope, $log) {
 		var vm = this;
 		vm.submit = submit;
-		vm.deleteProduct = deleteProduct;
+		vm.toggleProduct = toggleProduct;
 
 		activate();
 
 		function activate() {
 			vm.showShippmentInfo = false;
-			vm.products = [{}, {}, {},{}, {}];
+			vm.products = [{}];
 		}
 
 		function toggleProduct(product, isLast){
