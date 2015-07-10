@@ -81,6 +81,22 @@ class VoteController extends AppController {
         $this->set_wx_data($uid,$eventId);
     }
 
+    private function save_sub_reason($candidateId, $eventId, $uid) {
+        $candidate_info = $this->Candidate->find('first',array(
+            'conditions' => array(
+                'id' => $candidateId
+            )
+        ));
+        $title = '我是第'.$candidateId.'号萌娃'.$candidate_info['Candidate']['title'].'，叔叔阿姨快来支持我一票啦...';
+        $this->UserSubReason->save(array('type' => 'Vote', 'url' => WX_HOST . '/vote/candidate_detail/' . $candidateId . '/' . $eventId, 'user_id' => $uid, 'title' => $title));
+    }
+
+    public function to_sub($candidateId, $eventId) {
+        $uid = $this->currentUser['id'];
+        $this->save_sub_reason($candidateId, $eventId, $uid);
+        $this->redirect('http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=209556231&idx=1&sn=2a60e7f060180c9ecd0792f89694defb#rd');
+    }
+
     /**
      * @param $candidateId
      * @param $eventId
@@ -94,13 +110,7 @@ class VoteController extends AppController {
             return;
         }
         if (user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED) {
-            $candidate_info = $this->Candidate->find('first',array(
-                'conditions' => array(
-                    'id' => $candidateId
-                )
-            ));
-            $title = '我是第'.$candidateId.'号萌娃'.$candidate_info['Candidate']['title'].'，叔叔阿姨快来支持我一票啦';
-            $this->UserSubReason->save(array('type' => 'Vote', 'url' => WX_HOST . '/vote/candidate_detail/' . $candidateId . '/' . $eventId, 'user_id' => $uid, 'title' => $title));
+            $this->save_sub_reason($candidateId, $eventId, $uid);
             echo json_encode(array('success' => false, 'reason' => 'Not subscribed'));
             return;
         }
@@ -215,6 +225,9 @@ class VoteController extends AppController {
             $ref = Router::url($_SERVER['REQUEST_URI']);
             $this->redirect('/users/login.html?force_login=1&auto_weixin='.$this->is_weixin().'&referer=' . urlencode($ref));
             return;
+        }
+        if (user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED) {
+            $this->set('not_sub',true);
         }
        $candidate_data = $this->set_candidate_data($candidateId,$eventId,$uid);
        $this->set($candidate_data);

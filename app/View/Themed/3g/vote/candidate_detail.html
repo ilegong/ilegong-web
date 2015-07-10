@@ -13,7 +13,11 @@
             {{if $has_vote>0}}
                 <a href="#X" style="background-color: #999999;">已投票</a>
             {{else}}
-                <a href="#X" class="vote_baby" data-candidate_id="{{$candidate_id}}" data-event_id="{{$event_id}}">我要投票</a>
+                {{if $not_sub}}
+                    <a href="/vote/to_sub/{{$candidate_id}}/{{$event_id}}">关注微信去投票</a>
+                {{else}}
+                    <a href="#X" class="vote_baby" data-candidate_id="{{$candidate_id}}" data-event_id="{{$event_id}}">我要投票</a>
+                {{/if}}
             {{/if}}
             {{if !$is_sign_up}}
                 <br/>
