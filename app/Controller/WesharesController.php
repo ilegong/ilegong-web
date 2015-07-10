@@ -18,13 +18,21 @@ class WesharesController extends AppController {
      *   "weshare":{
             "title":"",
      *      "description": "",
-     *      "images":""
+     *      "images":"",
+     *      "send_date": ""
      *    },
      *    "weshareProduct":[
      *          {
-
+                    "name":
+     *              "price":
      *          }
      *     ]
+     *
+     *     "weshareAddress":[
+     *          {
+                    "address":"",
+     *          }
+     *      ]
      *
      *
      * }
