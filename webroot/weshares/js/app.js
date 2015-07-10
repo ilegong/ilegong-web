@@ -26,14 +26,16 @@
 
 	function WesharesAddCtrl($scope, $rootScope, $log) {
 		var vm = this;
-		vm.click=click;
+		vm.submit = submit;
+
 		activate();
 
 		function activate() {
 			vm.userId = 1;
+			vm.showShippmentInfo = false;
 		}
-		function click(){
-			$log.log('clicked');
+		function submit(){
+			$log.log('submitted');
 		}
 	}
 })(window, window.angular);

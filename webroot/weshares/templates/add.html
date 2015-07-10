@@ -1,22 +1,47 @@
-<div>
-    <div class="classlist">
-        <a href="#X" class="back"></a>
-        微吉分
-        <a href="#X" class="home"></a>
-    </div>
-    <div class="upload_infor">
-        <h1>设置取货信息</h1>
+<div class="weshare">
+    <div class='share-info' ng-show="!vm.showShippmentInfo">
+        <h1>分享描述</h1>
 
-        <div class="tuanname"><input placeholder="填写取货时间" value="{{vm.userId}}"/></div>
+        <div class="input-wrapper"><input placeholder="给分享起个响亮的名字"/></div>
         <div class="clearfix">
-            <div class="tuanname fl" style="width: 80%; margin-right: 10px;"><input placeholder="填写取货地点，联系人信息"/></div>
+            <div class="input-wrapper fl" style="width: 50%; margin-right: 10px;"><input placeholder="填写描述和规格"/></div>
+            <div class="input-wrapper fl" style="width: 25%; margin-right: 10px;"><input placeholder="填写价格"/></div>
             <a href="#X" class="delatebtn fr"></a>
         </div>
         <div class="clearfix">
-            <div class="tuanname fl" style="width: 80%; margin-right: 10px;"><input placeholder="填写取货地点，联系人信息"/></div>
+            <div class="input-wrapper fl" style="width: 50%; margin-right: 10px;"><input placeholder="填写描述和规格"/></div>
+            <div class="input-wrapper fl" style="width: 25%; margin-right: 10px;"><input placeholder="填写价格"/></div>
             <a href="#X" class="addbtn fr"></a>
         </div>
-        <a href="#X" class="next_btn" ng-click="vm.click()">好了，团起来</a>
-        <a href="#X" class="back_btn">返回修改</a>
+        <div class="input-wrapper"><textarea rows="" cols="" placeholder="描述下分享的详细内容，让大家更好的了解。"></textarea></div>
+        <ul class="clearfix">
+            <li>
+                <a href="#X"></a>
+                <img src="images/good.jpg"/>
+            </li>
+            <li><img src="images/good.jpg"/></li>
+            <li><img src="images/good.jpg"/></li>
+            <li><img src="images/good.jpg"/></li>
+        </ul>
+        <a href="#X" class="upload_btn">点击上传图片</a>
+        <a class="next_btn" ng-click="vm.showShippmentInfo=true">下一步，设置取货信息</a>
+    </div>
+
+    <div class="shippment-info" ng-show='vm.showShippmentInfo'>
+        <h1>设置取货信息</h1>
+
+        <div class="input-wrapper"><input placeholder="填写取货时间" value="{{vm.userId}}"/></div>
+        <div class="clearfix">
+            <div class="input-wrapper fl" style="width: 80%; margin-right: 10px;"><input placeholder="填写取货地点，联系人信息"/>
+            </div>
+            <a href="#X" class="delatebtn fr"></a>
+        </div>
+        <div class="clearfix">
+            <div class="input-wrapper fl" style="width: 80%; margin-right: 10px;"><input placeholder="填写取货地点，联系人信息"/>
+            </div>
+            <a href="#X" class="addbtn fr"></a>
+        </div>
+        <a class="next_btn" ng-click="vm.submit()">oh，搞定了！</a>
+        <a class="back_btn" ng-click="vm.showShippmentInfo=false">返回修改</a>
     </div>
 </div>
