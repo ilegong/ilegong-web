@@ -1,0 +1,42 @@
+@charset "utf-8";
+/* CSS Document */
+
+* { padding: 0; margin: 0; font-family: Helvetica, STHeiti STXihei, Microsoft JhengHei, Microsoft YaHei, Arial;}
+body { min-width: 320px; font-size: 14px; }
+ul li { list-style: none; }
+.fl { float: left; }
+.fr { float: right; }
+.clearfix { zoom: 1; }
+.clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+.radius10 { -moz-border-radius: 0.417em; /* Gecko browsers */ -webkit-border-radius: 0.417em; /* Webkit browsers */ border-radius: 0.417em; /* W3C syntax */ }
+.radius5 { border-radius: 5px; }
+.border_b { border-bottom: 1px #dddddd solid;}
+.gray { color: #999999; }
+
+
+
+/*返回*/
+.classlist { height: 44px; line-height: 44px; width: 100%; text-align: center; color: #ffffff; font-size: 20px; background-color: #29ac0e; position: fixed; top: 0; z-index: 999; overflow: hidden;}
+.classlist a.back { display: block; position: absolute; top: 10px; left: 10px; width: 1.167em; height: 1.133em; background: url(../images/pyshuo_icon.png) no-repeat -15.667em -5.333em; background-size: 20em 20em;}
+.classlist a.home{ display: block; position: absolute; top: 10px; right: 10px; width: 1.2em; height: 1.133em; background: url(../images/pyshuo_icon.png) no-repeat -17.667em -5.333em; background-size: 20em 20em;}
+
+
+/*上传信息页面*/
+.upload_infor{ padding: 10px; padding-top: 54px; line-height: 30px;}
+.upload_infor h1{ color: #29ac0e; font-size: 18px; padding-bottom: 10px;}
+.upload_infor .tuanname{ border: 1px #eeeeee solid; background-color: #ffffff; margin-bottom: 15px; overflow: hidden;}
+.upload_infor .tuanname input{ box-shadow: none; height:20px; font-size: 14px; color: #666666; padding: 10px 0; line-height: 20px; border: 0; outline: none; margin:0 10px;}
+.upload_infor a.delatebtn{ margin-top: 8px; margin-right: 10px; background: url(../images/weifxicon.png) no-repeat 0 0; background-size: 100px 100px; width: 25px; height: 25px;}
+.upload_infor a{ display: block;}
+.upload_infor a.addbtn{ margin-top: 8px; margin-right: 10px; background: url(../images/weifxicon.png) no-repeat 0 -35px; background-size: 100px 100px; width: 25px; height: 25px;}
+.upload_infor .tuanname textarea{ border-radius: 0; border: 0; box-shadow: none; outline: none; margin: 10px; width: 100%; font-size: 14px; color: #666666; height: 60px;}
+.upload_infor ul li{ float: left; margin-right: 15px; position: relative; width: 20%;}
+.upload_infor ul li img{ width: 100%;}
+.upload_infor ul li a{ position: absolute; top: -7px; right: -7px; background: url(../images/weifxicon.png) no-repeat -30px 0; background-size: 100px 100px; width: 25px; height: 25px;}
+.upload_btn{ line-height: 38px; text-align: center; border: 1px #29AC0E solid; display: block; font-size: 16px; color: #29AC0E; text-decoration: none;}
+.next_btn{ line-height: 38px; text-align: center; border: 1px #29AC0E solid; display: block; font-size: 16px; background-color: #29AC0E; color: #ffffff; text-decoration: none; margin-bottom: 20px; margin-top: 40px;}
+.back_btn{ text-align: center; color: #29AC0E; display: block; width: 80px; margin: 0 auto; margin-top: -15px; margin-bottom: 30px;}
+
+
+
+
