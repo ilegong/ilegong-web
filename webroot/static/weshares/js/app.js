@@ -4,6 +4,7 @@
 		.config(configCompileProvider)
 		.config(configHttpProvider)
 		.config(configStates)
+		.config(extendLog)
 		.controller('WesharesAddCtrl', WesharesAddCtrl)
 		.run(initApp);
 
@@ -25,6 +26,33 @@
 		$urlRouterProvider.otherwise('/add');
 		$locationProvider.hashPrefix('!').html5Mode(false);
 	}
+	/* @ngInject */
+	function extendLog($provide){
+		$provide.decorator('$log', function($delegate, $injector){
+			var _log = $delegate.log;
+			var _warn = $delegate.warn;
+			var _info = $delegate.info;
+			var _debug = $delegate.debug;
+			var _error = $delegate.error;
+			var addMessage = function(message, forceLog){
+				var $rootScope = $injector.get("$rootScope");
+				$rootScope.config = $rootScope.config || {logMode: false};
+				if($rootScope.config.logMode || forceLog){
+					$rootScope.messages = $rootScope.messages || [];
+					$rootScope.messages.push(message);
+				}
+				return message;
+			}
+
+			$delegate.log = function(msg, forceLog){_log(addMessage(msg, forceLog || false)); return this;};
+			$delegate.warn = function(msg, forceLog){_warn(addMessage(msg, forceLog || false)); return this;};
+			$delegate.info = function(msg, forceLog){_info(addMessage(msg, forceLog || false)); return this;};
+			$delegate.debug = function(msg, forceLog){_debug(addMessage(msg, forceLog || false)); return this;};
+			$delegate.error = function(msg, forceLog){_error(addMessage(msg, forceLog || false)); return this;};
+
+			return $delegate;
+		});
+	}
 
 	function initApp($rootScope){
 		$rootScope._ = _;
@@ -39,19 +67,23 @@
 
 		function activate() {
 			vm.showShippmentInfo = false;
-			vm.products = [{}];
+			vm.weshare = {
+				name: '',
+				products: [{name: 'fdaf', price: 100}],
+				shippment: {send_date: ''}
+			}
 		}
 
 		function toggleProduct(product, isLast){
 			if(isLast){
-				vm.products.push({});
+				vm.products.push({name: 'fdaf', price: 100});
 			}
 			else{
 				vm.products = _.without(vm.products, product);
 			}
 		}
 		function submit(){
-			$log.log('submitted');
+			$log.log('submitted').log(vm.weshare);
 		}
 	}
 })(window, window.angular);
