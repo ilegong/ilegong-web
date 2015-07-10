@@ -94,7 +94,13 @@ class VoteController extends AppController {
             return;
         }
         if (user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED) {
-            $this->UserSubReason->save(array('type' => 'Vote', 'url' => WX_HOST . '/vote/candidate_detail/' . $candidateId . '/' . $eventId, 'user_id' => $uid));
+            $candidate_info = $this->Candidate->find('first',array(
+                'conditions' => array(
+                    'id' => $candidateId
+                )
+            ));
+            $title = '我是第'.$candidateId.'号萌娃'.$candidate_info['Candidate']['title'].'，叔叔阿姨快来支持我一票啦';
+            $this->UserSubReason->save(array('type' => 'Vote', 'url' => WX_HOST . '/vote/candidate_detail/' . $candidateId . '/' . $eventId, 'user_id' => $uid, 'title' => $title));
             echo json_encode(array('success' => false, 'reason' => 'Not subscribed'));
             return;
         }

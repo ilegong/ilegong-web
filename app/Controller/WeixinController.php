@@ -95,14 +95,14 @@ class WeixinController extends AppController {
                                 'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=201694178&idx=3&sn=75c4b8f32c29e1c088c7de4ee2e22719#rd')
                         );
                         if(!empty($reason)){
-                            if($reason['UserSubReason']['type']=='Vote'){
+                            if ($reason['UserSubReason']['type'] == 'Vote') {
                                 $content = array(
-                                    array('title' => '晒吃货宝贝，赢500元的亲子旅行包/299元的360度儿童安全卫士/99元的几米漫画……', 'description' => '',
+                                    array('title' => $reason['UserReason']['title'], 'description' => '',
                                         'picUrl' => 'http://51daifan.sinaapp.com/img/imgstore/1.jpg',
                                         'url' => $reason['UserSubReason']['url']),
                                 );
                                 $this->UserSubReason->updateAll(array('used' => 1), array('id' => $reason['UserSubReason']['id']));
-                            }else{
+                            } else {
                                 $content = $default_content;
                             }
                         }else{
