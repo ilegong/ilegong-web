@@ -16,17 +16,17 @@ class TinyBuyController extends AppController {
 
     public function create() {
         $postData = $_POST['postData'];
-        $postDataArray = json_decode($postData,true);
+        $postDataArray = json_decode($postData, true);
         $tinyBuyData = $postDataArray['tinyBuy'];
         $tinyBuyProductData = $postDataArray['tinyBuyProduct'];
         $tinyBuyAddressData = $postDataArray['tinyBuyAddress'];
         $saveBuyFlag = $tinyBuy = $this->TinyBuy->save($tinyBuyData);
-        $saveProductFlag = $this->saveTinyBuyProducts($tinyBuy['TinyBuy']['id'],$tinyBuyProductData);
-        $saveAddressFlag = $this->saveTinyBuyAddresses($tinyBuy['TinyBuy']['id'],$tinyBuyAddressData);
-        if($saveBuyFlag&&$saveProductFlag&&$saveAddressFlag){
+        $saveProductFlag = $this->saveTinyBuyProducts($tinyBuy['TinyBuy']['id'], $tinyBuyProductData);
+        $saveAddressFlag = $this->saveTinyBuyAddresses($tinyBuy['TinyBuy']['id'], $tinyBuyAddressData);
+        if ($saveBuyFlag && $saveProductFlag && $saveAddressFlag) {
             echo json_encode(array('success' => true, 'id' => $tinyBuy['TinyBuy']['id']));
             return;
-        }else{
+        } else {
             echo json_encode(array('success' => false));
             return;
         }
@@ -40,11 +40,11 @@ class TinyBuyController extends AppController {
 
     }
 
-    public function pay($orderId){
+    public function pay($orderId) {
 
     }
 
-    public function makeOrder(){
+    public function makeOrder() {
         $uid = $this->currentUser['id'];
         $postData = $_POST['postData'];
         $postDataArray = json_decode($postData, true);
@@ -53,14 +53,14 @@ class TinyBuyController extends AppController {
         $addressId = $postDataArray['addressId'];
         $cart = array();
         $tinyBuyProductIds = Hash::extract($products, '{n}.id');
-        $productIdNumMap = Hash::combine($products, '{n}.id','{n}.num');
+        $productIdNumMap = Hash::combine($products, '{n}.id', '{n}.num');
         $tinyProducts = $this->TinyBuyProduct->find('all', array(
             'conditions' => array(
                 'id' => $tinyBuyProductIds,
                 'tiny_buy_id' => $tinyBuyId
             )
         ));
-        $order = $this->Order->save(array('creator' => $uid ,'member_id' => $tinyBuyId, 'type' => ORDER_TYPE_TINY_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId));
+        $order = $this->Order->save(array('creator' => $uid, 'member_id' => $tinyBuyId, 'type' => ORDER_TYPE_TINY_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId));
         $orderId = $order['Order']['id'];
         $totalPrice = 0;
         foreach ($tinyProducts as $p) {
@@ -79,23 +79,23 @@ class TinyBuyController extends AppController {
             $item['order_id'] = $orderId;
             $item['tuan_buy_id'] = $tinyBuyId;
             $cart[] = $item;
-            $totalPrice+= $num*$price;
+            $totalPrice += $num * $price;
         }
         $this->Cart->saveAll($cart);
-        $this->Order->updateAll(array('total_all_price' => $totalPrice/100, 'total_price' => $totalPrice/100, 'ship_fee' => 0), array('id' => $orderId));
+        $this->Order->updateAll(array('total_all_price' => $totalPrice / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => 0), array('id' => $orderId));
         echo json_encode(array('success' => true, 'orderId' => $orderId));
         return;
     }
 
-    private function saveTinyBuyProducts($tinyBuyId,$tinyBuyProductData) {
-        foreach($tinyBuyProductData as &$product){
+    private function saveTinyBuyProducts($tinyBuyId, $tinyBuyProductData) {
+        foreach ($tinyBuyProductData as &$product) {
             $product['tiny_buy_id'] = $tinyBuyId;
         }
         return $this->TinyBuyProduct->saveAll($tinyBuyProductData);
     }
 
-    private function saveTinyBuyAddresses($tinyBuyId,$tinyBuyAddressData) {
-        foreach($tinyBuyAddressData as &$address){
+    private function saveTinyBuyAddresses($tinyBuyId, $tinyBuyAddressData) {
+        foreach ($tinyBuyAddressData as &$address) {
             $address['tiny_buy_id'] = $tinyBuyId;
         }
         return $this->TinyBuyProduct->saveAll($tinyBuyAddressData);
