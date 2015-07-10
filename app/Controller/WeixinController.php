@@ -96,8 +96,9 @@ class WeixinController extends AppController {
                         );
                         if(!empty($reason)){
                             if ($reason['UserSubReason']['type'] == 'Vote') {
+                                $title = $reason['UserSubReason']['title'];
                                 $content = array(
-                                    array('title' => $reason['UserSubReason']['title'], 'description' => '',
+                                    array('title' => $title, 'description' => '快来支持我吧...',
                                         'picUrl' => 'http://51daifan.sinaapp.com/img/imgstore/1.jpg',
                                         'url' => $reason['UserSubReason']['url']),
                                 );
