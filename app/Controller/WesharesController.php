@@ -74,8 +74,12 @@ class WesharesController extends AppController {
 
     public function makeOrder() {
         $uid = $this->currentUser['id'];
-        $postData = $_POST['postData'];
-        $postDataArray = json_decode($postData, true);
+        if(empty($uid)){
+            echo json_encode(array('success' => false, 'reason' => 'not_login'));
+            return;
+        }
+        $postStr = file_get_contents('php://input');
+        $postDataArray = json_decode($postStr, true);
         $products = $postDataArray['products'];
         $weshareId = $postDataArray['weshareId'];
         $addressId = $postDataArray['addressId'];
