@@ -77,12 +77,12 @@ class TinyBuyController extends AppController {
             $item['updated'] = date('Y-m-d H:i:s');
             $item['creator'] = $uid;
             $item['order_id'] = $orderId;
+            $item['tuan_buy_id'] = $tinyBuyId;
             $cart[] = $item;
             $totalPrice+= $num*$price;
         }
         $this->Cart->saveAll($cart);
         $this->Order->updateAll(array('total_all_price' => $totalPrice/100, 'total_price' => $totalPrice/100, 'ship_fee' => 0), array('id' => $orderId));
-
         echo json_encode(array('success' => true, 'orderId' => $orderId));
         return;
     }

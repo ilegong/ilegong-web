@@ -42,6 +42,11 @@ class WeixinComponent extends Component
         return $this->kuaidi100_url . '?type=' . $this->kuaidi100_ship_type[$ship_type] . '&postid=' . $ship_code;
     }
 
+    public function get_tiny_buy_detail($tiny_buy_id)
+    {
+        return WX_HOST . 'tiny_buy/detail/'.$tiny_buy_id;
+    }
+
     public function get_order_query_url($order_no)
     {
 
@@ -363,6 +368,33 @@ class WeixinComponent extends Component
         return send_weixin_message($post_data, $this);
     }
 
+    public static function get_order_tiny_product_info($order_info, $carts, $products){
+        $good_info ='';$number = 0;
+        $send_date='';
+        $ship_info = $order_info['Order']['consignee_name'];
+        $tinyBuyId = $order_info['Order']['member_id'];
+        if(!empty($order_info['Order']['consignee_mobilephone'])){
+            $ship_info .= ' '.$order_info['Order']['consignee_mobilephone'];
+        }
+        $ship_info .= ', '.$order_info['Order']['consignee_address'];
+        $order_id = $order_info['Order']['id'];
+        foreach($carts as $cart){
+            if($cart['Cart']['order_id'] == $order_id){
+                $product = $products[$cart['Cart']['product_id']];
+                $name = $product['name'];
+                $good_info = $good_info.$name.'x'.$cart['Cart']['num'].';';
+                $number +=$cart['Cart']['num'];
+            }
+        }
+        $tinyBuyModel = ClassRegistry::init('TinyBuy');
+        $tinyBuy = $tinyBuyModel->find('first',array(
+            'conditions' => array(
+                'id' => $tinyBuyId
+            )
+        ));
+        return array("good_info"=>$good_info,"ship_info"=>$ship_info,'tiny_buy_info' => $tinyBuy, 'good_num' => $number, "send_date"=>$send_date);
+    }
+
     public static function get_order_good_info($order_info, $carts, $products){
         $good_info ='';$number = 0;
         $send_date='';
@@ -397,6 +429,10 @@ class WeixinComponent extends Component
      * @param $order
      */
     public function notifyPaidDone($order) {
+        if($order['Order']['type']==ORDER_TYPE_TINY_BUY){
+            $this->tiny_buy_order_paid($order);
+            return;
+        }
         $this->on_order_status_change($order);
     }
 
@@ -626,6 +662,107 @@ class WeixinComponent extends Component
             )
         );
         return $this->send_weixin_message($post_data) && $this->send_share_offer_msg($open_id, $order_no);
+    }
+
+    public function tiny_buy_order_paid($orders){
+        if(count($orders) == 1){
+            $orders = array($orders);
+        }
+        $user_ids = Hash::extract($orders, '{n}.Order.creator');
+        $order_ids = Hash::extract($orders, '{n}.Order.id');
+        $oauthBindModel = ClassRegistry::init('Oauthbind');
+        $cartModel = ClassRegistry::init('Cart');
+        $productModel = ClassRegistry::init('TinyBuyProduct');
+        $userModel = ClassRegistry::init('User');
+        $oauth_binds = $oauthBindModel->find('list', array(
+            'conditions' => array( 'user_id' => $user_ids, 'source' => oauth_wx_source()),
+            'fields' => array('user_id', 'oauth_openid')
+        ));
+        $users = $userModel->find('all', array(
+            'conditions' => array( 'id' => $user_ids),
+            'fields' => array('id', 'username')
+        ));
+        $users = Hash::combine($users, '{n}.User.id', '{n}');
+        $carts = $cartModel->find('all', array(
+            'conditions' => array('order_id' => $order_ids),
+            'fields' => array('Cart.id','Cart.num','Cart.order_id','Cart.send_date','Cart.product_id'),
+        ));
+        $product_ids = Hash::extract($carts, '{n}.Cart.product_id');
+        $products_info = $productModel->find('all', array(
+            'conditions' => array('id' => $product_ids),
+            'fields' => array('id','name', 'price')
+        ));
+        $products = Hash::combine($products_info, '{n}.Product.id', '{n}.Product');
+        foreach($orders as $order){
+            $openid = $oauth_binds[$order['Order']['creator']];
+            $good = self::get_order_tiny_product_info($order, $carts, $products);
+            $user = $users[$order['Order']['creator']];
+            $this->send_tiny_buy_wx_msg($openid,$order, $good, $user);
+        }
+    }
+
+    public function send_tiny_buy_wx_msg($openid,$order, $good, $user){
+        if(empty($user) || substr( $user['User']['username'], 0, 4 ) === "pys_"){
+            return;
+        }
+        if($order['Order']['status'] == ORDER_STATUS_PAID && !empty($openid)){
+            $this->send_order_paid_message($openid, $order, $good);
+            $this->notify_tiny_buy_creator($order,$good);
+        }
+    }
+
+    public function send_tiny_buy_order_paid_msg($open_id, $order, $good){
+        $tiny_buy_info = $good['tiny_buy_info'];
+        $title = $tiny_buy_info['TinyBuy']['title'];
+        $org_msg = "亲，您参加的[".$title."]的活动已完成付款。";
+        $post_data = array(
+            "touser" => $open_id,
+            "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
+            "url" => $this->get_tiny_buy_detail($order['Order']['member_id']),
+            "topcolor" => "#FF0000",
+            "data" => array(
+                "first" => array("value" => $org_msg),
+                "orderProductPrice" => array("value" => $order['Order']['total_all_price']),
+                "orderProductName" => array("value" => $good['good_info']),
+                "orderAddress" => array("value" => empty($good['ship_info'])?'':$good['ship_info']),
+                "orderName" => array("value" => $order['Order']['id']),
+                "remark" => array("value" => "点击查看详情.", "color" => "#FF8800")
+            )
+        );
+        return $this->send_weixin_message($post_data) && $this->send_share_offer_msg($open_id, $order['Order']['id']);
+    }
+
+    public function notify_tiny_buy_creator($order,$good){
+        $oauthBindModel = ClassRegistry::init('Oauthbind');
+        $seller_weixin = $oauthBindModel->findWxServiceBindByUid($good['tiny_buy_info']['TinyBuy']['creator']);
+        $price = $order['Order']['total_all_price'];
+        $good_info = $good['good_info'];
+        $ship_info = $good['ship_info'];
+        $order_id = $order['Order']['id'];
+        if($seller_weixin != false){
+            $this->send_tiny_buy_paid_msg_for_creator($seller_weixin['oauth_openid'], $price, $good_info, $ship_info, $order_id);
+        }
+    }
+
+    public function send_tiny_buy_paid_msg_for_creator($seller_open_id, $price, $good_info, $ship_info, $order_no)
+    {
+        $title = $good_info['tiny_buy_info']['TinyBuy']['title'];
+        $tiny_buy_id = $good_info['tiny_buy_info']['TinyBuy']['id'];
+        $post_data = array(
+            "touser" => $seller_open_id,
+            "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
+            "url" => $this->get_tiny_buy_detail($tiny_buy_id),
+            "topcolor" => "#FF0000",
+            "data" => array(
+                "first" => array("value" => "亲，有用户加入了您发起的".$title."的活动。"),
+                "orderProductPrice" => array("value" => $price),
+                "orderProductName" => array("value" => $good_info),
+                "orderAddress" => array("value" => empty($ship_info)?'':$ship_info),
+                "orderName" => array("value" => $order_no),
+                "remark" => array("value" => "点击详情", "color" => "#FF8800")
+            )
+        );
+        return $this->send_weixin_message($post_data);
     }
 
     public function on_order_status_change($orders){
