@@ -13,9 +13,30 @@ class WesharesController extends AppController {
 
     }
 
+    /**
+     * {
+     *   "weshare":{
+            "title":"",
+     *      "description": "",
+     *      "images":""
+     *    },
+     *    "weshareProduct":[
+     *          {
+
+     *          }
+     *     ]
+     *
+     *
+     * }
+     */
     public function create() {
-        $postData = $_POST['postData'];
-        $postDataArray = json_decode($postData, true);
+        $uid = $this->currentUser['id'];
+        if(empty($uid)){
+            echo json_encode(array('success' => false, 'reason' => 'not_login'));
+            return;
+        }
+        $postStr = file_get_contents('php://input');
+        $postDataArray = json_decode($postStr, true);
         $weshareData = $postDataArray['weshare'];
         $weshareProductData = $postDataArray['weshareProduct'];
         $weshareAddressData = $postDataArray['weshareAddress'];
