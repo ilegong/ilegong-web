@@ -42,9 +42,9 @@ class WeixinComponent extends Component
         return $this->kuaidi100_url . '?type=' . $this->kuaidi100_ship_type[$ship_type] . '&postid=' . $ship_code;
     }
 
-    public function get_tiny_buy_detail($tiny_buy_id)
+    public function get_weshare_buy_detail($weshare_id)
     {
-        return WX_HOST . 'tiny_buy/detail/'.$tiny_buy_id;
+        return WX_HOST . 'weshare/detail/'.$weshare_id;
     }
 
     public function get_order_query_url($order_no)
@@ -368,11 +368,11 @@ class WeixinComponent extends Component
         return send_weixin_message($post_data, $this);
     }
 
-    public static function get_order_tiny_product_info($order_info, $carts, $products){
+    public static function get_order_weshare_product_info($order_info, $carts, $products){
         $good_info ='';$number = 0;
         $send_date='';
         $ship_info = $order_info['Order']['consignee_name'];
-        $tinyBuyId = $order_info['Order']['member_id'];
+        $weshareId = $order_info['Order']['member_id'];
         if(!empty($order_info['Order']['consignee_mobilephone'])){
             $ship_info .= ' '.$order_info['Order']['consignee_mobilephone'];
         }
@@ -386,13 +386,13 @@ class WeixinComponent extends Component
                 $number +=$cart['Cart']['num'];
             }
         }
-        $tinyBuyModel = ClassRegistry::init('TinyBuy');
-        $tinyBuy = $tinyBuyModel->find('first',array(
+        $weshareModel = ClassRegistry::init('Weshare');
+        $weshare = $weshareModel->find('first',array(
             'conditions' => array(
-                'id' => $tinyBuyId
+                'id' => $weshareId
             )
         ));
-        return array("good_info"=>$good_info,"ship_info"=>$ship_info,'tiny_buy_info' => $tinyBuy, 'good_num' => $number, "send_date"=>$send_date);
+        return array("good_info"=>$good_info,"ship_info"=>$ship_info,'weshare_info' => $weshare, 'good_num' => $number, "send_date"=>$send_date);
     }
 
     public static function get_order_good_info($order_info, $carts, $products){
@@ -429,8 +429,8 @@ class WeixinComponent extends Component
      * @param $order
      */
     public function notifyPaidDone($order) {
-        if($order['Order']['type']==ORDER_TYPE_TINY_BUY){
-            $this->tiny_buy_order_paid($order);
+        if($order['Order']['type']==ORDER_TYPE_WESHARE_BUY){
+            $this->weshare_buy_order_paid($order);
             return;
         }
         $this->on_order_status_change($order);
@@ -664,7 +664,7 @@ class WeixinComponent extends Component
         return $this->send_weixin_message($post_data) && $this->send_share_offer_msg($open_id, $order_no);
     }
 
-    public function tiny_buy_order_paid($orders){
+    public function weshare_buy_order_paid($orders){
         if(count($orders) == 1){
             $orders = array($orders);
         }
@@ -672,7 +672,7 @@ class WeixinComponent extends Component
         $order_ids = Hash::extract($orders, '{n}.Order.id');
         $oauthBindModel = ClassRegistry::init('Oauthbind');
         $cartModel = ClassRegistry::init('Cart');
-        $productModel = ClassRegistry::init('TinyBuyProduct');
+        $productModel = ClassRegistry::init('WeshareProduct');
         $userModel = ClassRegistry::init('User');
         $oauth_binds = $oauthBindModel->find('list', array(
             'conditions' => array( 'user_id' => $user_ids, 'source' => oauth_wx_source()),
@@ -695,30 +695,30 @@ class WeixinComponent extends Component
         $products = Hash::combine($products_info, '{n}.Product.id', '{n}.Product');
         foreach($orders as $order){
             $openid = $oauth_binds[$order['Order']['creator']];
-            $good = self::get_order_tiny_product_info($order, $carts, $products);
+            $good = self::get_order_weshare_product_info($order, $carts, $products);
             $user = $users[$order['Order']['creator']];
-            $this->send_tiny_buy_wx_msg($openid,$order, $good, $user);
+            $this->send_weshare_buy_wx_msg($openid,$order, $good, $user);
         }
     }
 
-    public function send_tiny_buy_wx_msg($openid,$order, $good, $user){
+    public function send_weshare_buy_wx_msg($openid,$order, $good, $user){
         if(empty($user) || substr( $user['User']['username'], 0, 4 ) === "pys_"){
             return;
         }
         if($order['Order']['status'] == ORDER_STATUS_PAID && !empty($openid)){
-            $this->send_order_paid_message($openid, $order, $good);
-            $this->notify_tiny_buy_creator($order,$good);
+            $this->send_weshare_buy_order_paid_msg($openid, $order, $good);
+            $this->notify_weshare_buy_creator($order,$good);
         }
     }
 
-    public function send_tiny_buy_order_paid_msg($open_id, $order, $good){
-        $tiny_buy_info = $good['tiny_buy_info'];
-        $title = $tiny_buy_info['TinyBuy']['title'];
+    public function send_weshare_buy_order_paid_msg($open_id, $order, $good){
+        $weshare_info = $good['weshare_info'];
+        $title = $weshare_info['Weshare']['title'];
         $org_msg = "亲，您参加的[".$title."]的活动已完成付款。";
         $post_data = array(
             "touser" => $open_id,
             "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
-            "url" => $this->get_tiny_buy_detail($order['Order']['member_id']),
+            "url" => $this->get_weshare_buy_detail($order['Order']['member_id']),
             "topcolor" => "#FF0000",
             "data" => array(
                 "first" => array("value" => $org_msg),
@@ -732,26 +732,26 @@ class WeixinComponent extends Component
         return $this->send_weixin_message($post_data) && $this->send_share_offer_msg($open_id, $order['Order']['id']);
     }
 
-    public function notify_tiny_buy_creator($order,$good){
+    public function notify_weshare_buy_creator($order,$good){
         $oauthBindModel = ClassRegistry::init('Oauthbind');
-        $seller_weixin = $oauthBindModel->findWxServiceBindByUid($good['tiny_buy_info']['TinyBuy']['creator']);
+        $seller_weixin = $oauthBindModel->findWxServiceBindByUid($good['weshare_info']['Weshare']['creator']);
         $price = $order['Order']['total_all_price'];
         $good_info = $good['good_info'];
         $ship_info = $good['ship_info'];
         $order_id = $order['Order']['id'];
         if($seller_weixin != false){
-            $this->send_tiny_buy_paid_msg_for_creator($seller_weixin['oauth_openid'], $price, $good_info, $ship_info, $order_id);
+            $this->send_weshare_buy_paid_msg_for_creator($seller_weixin['oauth_openid'], $price, $good_info, $ship_info, $order_id);
         }
     }
 
-    public function send_tiny_buy_paid_msg_for_creator($seller_open_id, $price, $good_info, $ship_info, $order_no)
+    public function send_weshare_buy_paid_msg_for_creator($seller_open_id, $price, $good_info, $ship_info, $order_no)
     {
-        $title = $good_info['tiny_buy_info']['TinyBuy']['title'];
-        $tiny_buy_id = $good_info['tiny_buy_info']['TinyBuy']['id'];
+        $title = $good_info['weshare_info']['Weshare']['title'];
+        $weshare_id = $good_info['weshare_info']['Weshare']['id'];
         $post_data = array(
             "touser" => $seller_open_id,
             "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
-            "url" => $this->get_tiny_buy_detail($tiny_buy_id),
+            "url" => $this->get_weshare_buy_detail($weshare_id),
             "topcolor" => "#FF0000",
             "data" => array(
                 "first" => array("value" => "亲，有用户加入了您发起的".$title."的活动。"),
