@@ -101,6 +101,7 @@ class WeixinController extends AppController {
                                         'picUrl' => 'http://51daifan.sinaapp.com/img/imgstore/1.jpg',
                                         'url' => $reason['UserSubReason']['url']),
                                 );
+                                $this->UserSubReason->updateAll(array('used' => 1), array('id' => $reason['UserSubReason']['id']));
                             }else{
                                 $content = $default_content;
                             }

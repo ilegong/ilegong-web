@@ -93,8 +93,8 @@ class VoteController extends AppController {
             echo json_encode(array('success' => false, 'reason' => 'Not logged'));
             return;
         }
-        if(user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED ){
-            $this->UserSubReason->save(array('type'=>'Vote','url'=>WX_HOST.'/vote/candidate_detail/'.$candidateId.'/'.$eventId,'user_id'=>$uid));
+        if (user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED) {
+            $this->UserSubReason->save(array('type' => 'Vote', 'url' => WX_HOST . '/vote/candidate_detail/' . $candidateId . '/' . $eventId, 'user_id' => $uid));
             echo json_encode(array('success' => false, 'reason' => 'Not subscribed'));
             return;
         }
