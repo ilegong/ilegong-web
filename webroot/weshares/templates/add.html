@@ -3,15 +3,10 @@
         <h1>分享描述</h1>
 
         <div class="input-wrapper"><input placeholder="给分享起个响亮的名字"/></div>
-        <div class="clearfix">
+        <div class="clearfix" ng-repeat="product in vm.products">
             <div class="input-wrapper fl" style="width: 50%; margin-right: 10px;"><input placeholder="填写描述和规格"/></div>
             <div class="input-wrapper fl" style="width: 25%; margin-right: 10px;"><input placeholder="填写价格"/></div>
-            <a href="#X" class="delatebtn fr"></a>
-        </div>
-        <div class="clearfix">
-            <div class="input-wrapper fl" style="width: 50%; margin-right: 10px;"><input placeholder="填写描述和规格"/></div>
-            <div class="input-wrapper fl" style="width: 25%; margin-right: 10px;"><input placeholder="填写价格"/></div>
-            <a href="#X" class="addbtn fr"></a>
+            <a class="fr" ng-class="{'delete-btn': !$last,'add-btn': $last}" ng-click="vm.toggleProduct(product, $last)"></a>
         </div>
         <div class="input-wrapper"><textarea rows="" cols="" placeholder="描述下分享的详细内容，让大家更好的了解。"></textarea></div>
         <ul class="clearfix">

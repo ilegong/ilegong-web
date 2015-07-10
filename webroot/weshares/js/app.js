@@ -1,9 +1,11 @@
 (function (window, angular) {
 	angular.module('weshares', ['ui.router'])
+		.constant('_', window._)
 		.config(configCompileProvider)
 		.config(configHttpProvider)
 		.config(configStates)
-		.controller('WesharesAddCtrl', WesharesAddCtrl);
+		.controller('WesharesAddCtrl', WesharesAddCtrl)
+		.run(initApp);
 
 	/* @ngInject */
 	function configCompileProvider($compileProvider) {
@@ -24,15 +26,29 @@
 		$locationProvider.hashPrefix('!').html5Mode(false);
 	}
 
+	function initApp($rootScope){
+		$rootScope._ = _;
+	}
+
 	function WesharesAddCtrl($scope, $rootScope, $log) {
 		var vm = this;
 		vm.submit = submit;
+		vm.deleteProduct = deleteProduct;
 
 		activate();
 
 		function activate() {
-			vm.userId = 1;
 			vm.showShippmentInfo = false;
+			vm.products = [{}, {}, {},{}, {}];
+		}
+
+		function toggleProduct(product, isLast){
+			if(isLast){
+				vm.products.push({});
+			}
+			else{
+				vm.products = _.without(vm.products, product);
+			}
 		}
 		function submit(){
 			$log.log('submitted');
