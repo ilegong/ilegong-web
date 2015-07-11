@@ -15,9 +15,9 @@
 
     function getAllAddress(){
       var addresses = [];
-      for(item in vm.weshare.addresses){
-        addresses.push(item['address']);
-      }
+      addresses = _.map(vm.weshare.addresses,function(item){
+        return item['address'];
+      });
       return addresses.join(',');
     }
 
