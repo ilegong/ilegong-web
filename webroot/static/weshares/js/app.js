@@ -81,7 +81,7 @@
 		var vm = this;
 		vm.chooseAndUploadImage = chooseAndUploadImage;
 		vm.uploadImage = uploadImage;
-		//vm.uploadImageToWXSucceeded = uploadImageToWXSucceeded;
+		vm.deleteImage = deleteImage;
 
 		vm.toggleProduct = toggleProduct;
 		vm.toggleAddress = toggleAddress;
@@ -110,37 +110,30 @@
 		function chooseAndUploadImage() {
 			wx.chooseImage({
 				success: function (res) {
-					$log.log('choose image succeeded: ').log(res);
 					$timeout(function(){
-						_.each(res.localIds, function(localId){
-							var image = {localId: localId};
-							vm.weshare.images.push(localId);
-							vm.uploadImage(image);
-						})
+						_.each(res.localIds, vm.uploadImage);
 					}, 30);
 				}
 			});
 		}
-		function uploadImage(image){
+		function uploadImage(localId){
 			wx.uploadImage({
-				localId: image.localId,
+				localId: localId,
 				isShowProgressTips:1,
 				success : function(res){
-					image.serverId = res.serverId;
-					$http.get('/downloads/download_wx_img?media_id='+image.serverId).success(function(data, status, headers, config){
+					$http.get('/downloads/download_wx_img?media_id='+res.serverId).success(function(data, status, headers, config){
 						var imageUrl = data['download_url'];
 						if(!imageUrl || imageUrl=='false'){
 							return;
 						}
-						image.url = imageUrl;
-					}).error(function(data, status, headers, config){
-						//TODO: 怎么处理?
-					});
+						vm.images.push({url: imageUrl});
+					}).error(function(){});
 				},
-				fail: function(){
-					vm.weshare.images = _.without(vm.weshare.images, image);
-				}
+				fail: function(){}
 			});
+		}
+		function deleteImage(image){
+			vm.weshare.images = _.without(vm.weshare.images, image);
 		}
 
 		function toggleProduct(product, isLast) {
@@ -163,7 +156,6 @@
 
 		function nextStep() {
 			if (_.isEmpty(vm.weshare.title)) {
-
 				return false;
 			}
 

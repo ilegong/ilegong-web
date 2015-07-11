@@ -18,8 +18,8 @@
         </div>
         <ul class="clearfix">
             <li ng-repeat="image in vm.weshare.images">
-                <a class='delete-badge' data-src="{{image.src}}" ng-class="{'delete-badge': image.src == 'dafa', 'add-badge': image.src != ''}"></a>
-                <img ng-src="{{image.src}}"/>
+                <a class='delete-badge' ng-click='vm.deleteImage(image)'></a>
+                <img ng-src="{{image.url}}"/>
             </li>
         </ul>
         <a class="upload-btn" ng-click="vm.chooseAndUploadImage()">点击上传图片</a>
