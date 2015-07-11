@@ -24,7 +24,7 @@
 	function configStates($stateProvider, $urlRouterProvider, $locationProvider) {
 		$stateProvider
 			.state('add', {url: '/add', templateUrl: '/static/weshares/templates/add.html',controller: 'WesharesAddCtrl as vm'})
-			.state('view', {url: '/view', templateUrl: '/static/weshares/templates/view.html',controller: 'WesharesViewCtrl as vm'});
+			.state('view', {url: '/view/:id', templateUrl: '/static/weshares/templates/view.html',controller: 'WesharesViewCtrl as vm'});
 
 		$urlRouterProvider.otherwise('/add');
 		$locationProvider.hashPrefix('!').html5Mode(false);
@@ -77,7 +77,7 @@
 		$rootScope._ = _;
 	}
 
-	function WesharesAddCtrl($scope, $rootScope, $log, $http, $timeout, wx) {
+	function WesharesAddCtrl($state,$scope, $rootScope, $log, $http, $timeout, wx) {
 		var vm = this;
 		vm.chooseAndUploadImage = chooseAndUploadImage;
 		vm.uploadImage = uploadImage;
@@ -185,6 +185,7 @@
 			$http.post('/weshares/create', vm.weshare).success(function (data, status, headers, config) {
 				if (status == 200) {
 					$log.log('post succeeded, data: ').log(data);
+          $state.go('view',{id:data['id']});
 				}
 				else {
 					$log.log("failed with status: " + status + ", data: ").log(data);

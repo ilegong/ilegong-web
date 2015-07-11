@@ -12,9 +12,9 @@
         <h1>{{vm.weshare.title}}</h1>
         <s>取货时间：{{vm.weshare.send_date | date: 'MM-dd'}}<br/>取货地点：<p ng-repeat="item in vm.wesahre.addresses">{{item.address}}</p></s>
         <p>{{vm.weshare.description}}</p>
-        <a href="#X">更多</a>
+        <a>更多</a>
         <dl class="clearfix" ng-repeat="item in vm.weshare.images">
-            <dt><a href="#X"><img src="{{item}}" /></a></dt>
+            <dt><a ng-click="vm.viewImage(item)"><img src="{{item}}"/></a></dt>
         </dl>
         <div class="weshare_view_detail" ng-repeat="item in vm.weshare.products">
             <dl class="clearfix">
