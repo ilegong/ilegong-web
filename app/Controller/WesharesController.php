@@ -21,16 +21,16 @@ class WesharesController extends AppController {
      *      "images":"",
      *      "send_date": ""
      *    },
-     *    "weshareProduct":[
+     *    "products":[
      *          {
                     "name":
      *              "price":
      *          }
      *     ]
      *
-     *     "weshareAddress":[
+     *     "address":[
      *          {
-                    "address":"",
+                    "addresses":"",
      *          }
      *      ]
      *
@@ -46,11 +46,11 @@ class WesharesController extends AppController {
         $postStr = file_get_contents('php://input');
         $postDataArray = json_decode($postStr, true);
         $weshareData = $postDataArray['weshare'];
-        $weshareProductData = $postDataArray['weshareProduct'];
-        $weshareAddressData = $postDataArray['weshareAddress'];
+        $productsData = $postDataArray['products'];
+        $addressesData = $postDataArray['addresses'];
         $saveBuyFlag = $weshare = $this->Weshare->save($weshareData);
-        $saveProductFlag = $this->saveWeshareProducts($weshare['Weshare']['id'], $weshareProductData);
-        $saveAddressFlag = $this->saveWeshareAddresses($weshare['Weshare']['id'], $weshareAddressData);
+        $saveProductFlag = $this->saveWeshareProducts($weshare['Weshare']['id'], $productsData);
+        $saveAddressFlag = $this->saveWeshareAddresses($weshare['Weshare']['id'], $addressesData);
         if ($saveBuyFlag && $saveProductFlag && $saveAddressFlag) {
             echo json_encode(array('success' => true, 'id' => $weshare['Weshare']['id']));
             return;
