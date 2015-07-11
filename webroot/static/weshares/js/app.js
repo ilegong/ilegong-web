@@ -81,7 +81,7 @@
 		var vm = this;
 		vm.chooseAndUploadImage = chooseAndUploadImage;
 		vm.uploadImage = uploadImage;
-		vm.uploadImageToWXSucceeded = uploadImageToWXSucceeded;
+		//vm.uploadImageToWXSucceeded = uploadImageToWXSucceeded;
 
 		vm.toggleProduct = toggleProduct;
 		vm.toggleAddress = toggleAddress;

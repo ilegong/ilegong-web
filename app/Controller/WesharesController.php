@@ -164,4 +164,8 @@ class WesharesController extends AppController {
         }
         return $this->WeshareAddress->saveAll($weshareAddressData);
     }
+
+    private function get_wesahre_buy_info(){
+
+    }
 }
