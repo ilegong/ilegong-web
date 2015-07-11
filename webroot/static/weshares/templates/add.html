@@ -33,11 +33,11 @@
         <h1>设置取货信息</h1>
 
         <div class="input-wrapper">
-            <input placeholder="填写取货时间" ng-model="vm.weshare.send_date"/>
+            <input placeholder="填写取货时间信息" ng-model="vm.weshare.send_info"/>
         </div>
         <div class="clearfix" ng-repeat="address in vm.weshare.addresses">
             <div class="input-wrapper fl" style="width: 80%; margin-right: 10px;">
-                <input placeholder="填写取货地点，联系人信息" ng-model="address.name"/>
+                <input placeholder="填写取货地点，联系人信息" ng-model="address.address"/>
             </div>
             <a class="fr" ng-class="{'delete-btn': !$last,'add-btn': $last}"
                ng-click="vm.toggleAddress(address, $last)"></a>

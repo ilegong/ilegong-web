@@ -11,28 +11,7 @@ class WesharesController extends AppController {
 
     public function index() {}
 
-    /**
-     * {
-     *      "title":"",
-     *      "description": "",
-     *      "images":"",
-     *      "send_date": ""
-     *    "products":[
-     *          {
-                    "name":
-     *              "price":
-     *          }
-     *     ]
-     *
-     *     "address":[
-     *          {
-                    "addresses":"",
-     *          }
-     *      ]
-     *
-     *
-     * }
-     */
+
     public function create() {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
@@ -96,8 +75,6 @@ class WesharesController extends AppController {
         $weshareInfo['creator'] = $creatorInfo['User'];
         $ordersDetail = $this->get_weshare_buy_info($weshareId);
         $weshareInfo['images'] = array_filter(explode('|',$weshareInfo['images']));
-        $weshareInfo['created'] = strtotime($weshareInfo['created']);
-        $weshareInfo['send_date'] = strtotime($weshareInfo['send_date']);
         echo json_encode(array('weshare' => $weshareInfo, 'ordersDetail' => $ordersDetail));
         return;
     }

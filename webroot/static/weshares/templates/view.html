@@ -3,14 +3,14 @@
         <li><img src="{{vm.weshare.creator.image}}" /></li>
         <li>
             <label>{{vm.weshare.creator.nickname}}</label>
-            <s>已有{{vm.ordersDetail.users.length}}人参团  &nbsp;|&nbsp;  {{vm.weshare.created | date:'MM-dd HH:mm'}}</s>
+            <s>已有{{vm.ordersDetail.users.length}}人参团  &nbsp;|&nbsp;  {{vm.weshare.created}}</s>
         </li>
     </ul>
     <div class="weshare_view_introduce">
         <b></b>
         <div class="weshare_view_state">{{vm.statusMap[vm.weshare.status]}}</div>
         <h1>{{vm.weshare.title}}</h1>
-        <s>取货时间：{{vm.weshare.send_date | date: 'MM-dd'}}<br/>取货地点：<p ng-repeat="item in vm.wesahre.addresses">{{item.address}}</p></s>
+        <s>取货时间：{{vm.weshare.send_date}}<br/>取货地点：<p ng-repeat="item in vm.wesahre.addresses">{{item.address}}</p></s>
         <p>{{vm.weshare.description}}</p>
         <a>更多</a>
         <dl class="clearfix" ng-repeat="item in vm.weshare.images">

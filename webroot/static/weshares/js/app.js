@@ -105,7 +105,7 @@
 				products: [
 					{name: ''}
 				],
-				send_date: '',
+				send_info: '',
 				addresses: [
 					{address: ''}
 				]
@@ -159,7 +159,7 @@
 
 		function toggleAddress(address, isLast) {
 			if (isLast) {
-				vm.weshare.addresses.push({name: ''});
+				vm.weshare.addresses.push({address: ''});
 			}
 			else {
 				vm.weshare.addresses = _.without(vm.weshare.addresses, address);
