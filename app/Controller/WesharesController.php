@@ -9,13 +9,7 @@ class WesharesController extends AppController {
         $this->layout = 'weshare';
     }
 
-    public function add() {
-
-    }
-
-    public function view(){
-
-    }
+    public function index() {}
 
     /**
      * {
