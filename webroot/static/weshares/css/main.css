@@ -22,7 +22,9 @@ ul li { list-style: none; }
 
 
 /*上传信息页面*/
+.mb15{ margin-bottom: 15px;}
 .weshare{ padding: 10px; line-height: 30px;}
+.weshare p{ font-size: 12px; color: #c62a35; line-height: 16px; padding-top: 5px;}
 .weshare h1{ color: #29ac0e; font-size: 18px; padding-bottom: 10px;}
 .weshare .input-wrapper{ border: 1px #eeeeee solid; background-color: #ffffff; margin-bottom: 15px; overflow: hidden;}
 .weshare .input-wrapper.has-error{ border-color: #e94442;}
