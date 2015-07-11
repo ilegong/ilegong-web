@@ -10,6 +10,10 @@
             $http({method: 'GET', url: '/weshares/detail/3', cache: $templateCache}).
                 success(function(data, status) {
                     $log.log(data);
+                    vm.addresses = data['addresses'];
+                    vm.creator =data['creator'];
+                    vm.info = data['info'];
+                    vm.products = data['products'];
                 }).
                 error(function(data, status) {
                     $log.log(data);
