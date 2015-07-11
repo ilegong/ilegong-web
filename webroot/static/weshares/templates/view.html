@@ -1,34 +1,26 @@
 <div class="weshare_view">
     <ul class="clearfix">
-        <li><img src="images/head.png" /></li>
+        <li><img src="{{vm.weshare.creator.image}}" /></li>
         <li>
-            <label>小宝妈</label>
-            <s>已有10人参团  &nbsp;|&nbsp;  07-07 13:00</s>
+            <label>{{vm.weshare.creator.nickname}}</label>
+            <s>已有{{vm.ordersDetail.users.length}}人参团  &nbsp;|&nbsp;  {{vm.weshare.created | date:'MM-dd HH:mm'}}</s>
         </li>
     </ul>
     <div class="weshare_view_introduce">
         <b></b>
-        <div class="weshare_view_state">{{vm.info.Weshare.status}}</div>
-        <h1>{{vm.info.Weshare.title}}</h1>
-        <s>取货时间：本周六7月9日上午11点<br/>取货地点：育新小区门口超市，广通小区</s>
-        <p>{{vm.info.Weshare.description}}</p>
+        <div class="weshare_view_state">{{vm.statusMap[vm.weshare.status]}}</div>
+        <h1>{{vm.weshare.title}}</h1>
+        <s>取货时间：{{vm.weshare.send_date | date: 'MM-dd'}}<br/>取货地点：<p ng-repeat="item in vm.wesahre.addresses">{{item.address}}</p></s>
+        <p>{{vm.weshare.description}}</p>
         <a href="#X">更多</a>
-        <dl class="clearfix">
-            <dt><a href="#X"><img src="images/good.jpg" /></a></dt>
-            <dt><a href="#X"><img src="images/good.jpg" /></a></dt>
-            <dt><a href="#X"><img src="images/good.jpg" /></a></dt>
-            <dt><a href="#X"><img src="images/good.jpg" /></a></dt>
+        <dl class="clearfix" ng-repeat="item in vm.weshare.images">
+            <dt><a href="#X"><img src="{{item}}" /></a></dt>
         </dl>
-        <div class="weshare_view_detail">
+        <div class="weshare_view_detail" ng-repeat="item in vm.weshare.products">
             <dl class="clearfix">
-                <dd class="fl">完全散养鸡一只</dd>
-                <dd class="fr">团20份</dd>
-                <dd class="fr" style="color: #29AC0E;">¥80.00</dd>
-            </dl>
-            <dl class="clearfix">
-                <dd class="fl">完全散养鸡一只</dd>
-                <dd class="fr">团20份</dd>
-                <dd class="fr" style="color: #29AC0E;">¥80.00</dd>
+                <dd class="fl">{{item.name}}</dd>
+                <dd class="fr">团{{vm.ordersDetail.summery[item.id]||0}}份</dd>
+                <dd class="fr" style="color: #29AC0E;">{{item.price}}</dd>
             </dl>
         </div>
     </div>

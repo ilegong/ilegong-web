@@ -47,6 +47,10 @@ class WesharesController extends AppController {
         $weshareData['description'] = $postDataArray['description'];
         $weshareData['send_date'] = $postDataArray['send_date'];
         $weshareData['creator'] = $uid;
+        $weshareData['created'] = date('Y-m-d H:i:s');
+        $images = $postDataArray['images'];
+        $images  = Hash::extract($images,'{n}.url');
+        $weshareData['images'] = implode('|',$images);
         $productsData = $postDataArray['products'];
         $addressesData = $postDataArray['addresses'];
         $weshareData['creator'] = $uid;
@@ -86,9 +90,18 @@ class WesharesController extends AppController {
             'recursive' => 1, //int
             'fields' => array('id', 'nickname', 'image', 'wx_subscribe_status'),
         ));
-        echo json_encode(array('info' => $weshareInfo, 'products' => $weshareProducts, 'addresses' => $weshareAddresses, 'creator' => $creatorInfo));
+        $weshareInfo = $weshareInfo['Weshare'];
+        $weshareInfo['addresses'] = Hash::extract($weshareAddresses, '{n}.WeshareAddress');
+        $weshareInfo['products'] = Hash::extract($weshareProducts, '{n}.WeshareProduct');
+        $weshareInfo['creator'] = $creatorInfo['User'];
+        $ordersDetail = $this->get_weshare_buy_info($weshareId);
+        $weshareInfo['images'] = array_filter(explode('|',$weshareInfo['images']));
+        $weshareInfo['created'] = strtotime($weshareInfo['created']);
+        $weshareInfo['send_date'] = strtotime($weshareInfo['send_date']);
+        echo json_encode(array('weshare' => $weshareInfo, 'ordersDetail' => $ordersDetail));
         return;
     }
+
 
     public function buy() {
 
@@ -159,7 +172,46 @@ class WesharesController extends AppController {
         return $this->WeshareAddress->saveAll($weshareAddressData);
     }
 
-    private function get_wesahre_buy_info(){
-
+    private function get_weshare_buy_info($weshareId) {
+        $product_buy_num = array();
+        $orders = $this->Order->find('all', array(
+            'conditions' => array(
+                'member_id' => $weshareId,
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'status' => ORDER_STATUS_PAID
+            ),
+            'fields' => array('id', 'creator', 'created', 'consignee_name', 'consignee_address'),
+            'order' => array('created ASC')
+        ));
+        $orderIds = Hash::extract($orders, '{n}.Order.id');
+        $userIds = Hash::extract($orders, '{n}.Order.creator');
+        $users = $this->User->find('all', array(
+            'conditions' => array(
+                'id' => $userIds
+            ),
+            'recursive' => 1, //int
+            'fields' => array('id', 'nickname', 'image', 'wx_subscribe_status'),
+        ));
+        $orders = Hash::combine($orders, '{n}.Order.id', '{n}.Order');
+        $orders = usort($orders, function ($a, $b) {
+            return ($a['id'] < $b['id']) ? -1 : 1;
+        });
+        $carts = $this->Cart->find('all', array(
+            'conditions' => array(
+                'order_id' => $orderIds,
+                'type' => ORDER_TYPE_WESHARE_BUY
+            )
+        ));
+        foreach ($carts as $item) {
+            $order_id = $item['Cart']['order_id'];
+            $product_id = $item['Cart']['product_id'];
+            $cart_num = $item['Cart']['num'];
+            if (!isset($product_buy_num[$product_id])) $product_buy_num[$product_buy_num] = 0;
+            if (!isset($orders[$order_id]['carts'])) $orders[$order_id]['carts'] = array();
+            $product_buy_num[$product_buy_num] = $product_buy_num[$product_buy_num] + $cart_num;
+            $orders[$order_id]['carts'][] = $item;
+        }
+        $users = Hash::combine($users, '{n}.User.id', '{n}.User');
+        return array('users' => $users, 'orders' => $orders, 'summery' => $product_buy_num);
     }
 }
