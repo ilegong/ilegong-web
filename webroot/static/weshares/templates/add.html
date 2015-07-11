@@ -2,13 +2,19 @@
     <div class='share-info' ng-show="!vm.showShippmentInfo">
         <h1>分享描述</h1>
 
-        <div class="input-wrapper"><input placeholder="给分享起个响亮的名字" ng-model='vm.weshare.name'/></div>
+        <div class="input-wrapper"><input placeholder="给分享起个响亮的名字" ng-model='vm.weshare.title'/></div>
         <div class="clearfix" ng-repeat="product in vm.weshare.products">
-            <div class="input-wrapper fl" style="width: 50%; margin-right: 10px;"><input placeholder="填写描述和规格" ng-model="product.name"/></div>
-            <div class="input-wrapper fl" style="width: 25%; margin-right: 10px;"><input placeholder="填写价格" ng-model="product.price"/></div>
-            <a class="fr" ng-class="{'delete-btn': !$last,'add-btn': $last}" ng-click="vm.toggleProduct(product, $last)"></a>
+            <div class="input-wrapper fl" style="width: 50%; margin-right: 10px;">
+                <input placeholder="填写描述和规格" ng-model="product.name"/>
+            </div>
+            <div class="input-wrapper fl" style="width: 25%; margin-right: 10px;">
+                <input placeholder="填写价格" ng-model="product.price"/>
+            </div>
+            <a class="fr" ng-class="{'delete-btn': !$last,'add-btn': $last}"
+               ng-click="vm.toggleProduct(product, $last)"></a>
         </div>
-        <div class="input-wrapper"><textarea rows="" cols="" placeholder="描述下分享的详细内容，让大家更好的了解。" ng-model="vm.weshare.description"></textarea></div>
+        <div class="input-wrapper"><textarea rows="" cols="" placeholder="描述下分享的详细内容，让大家更好的了解。"
+                                             ng-model="vm.weshare.description"></textarea></div>
         <ul class="clearfix">
             <li>
                 <a href="#X"></a>
@@ -25,16 +31,15 @@
     <div class="shippment-info" ng-show='vm.showShippmentInfo'>
         <h1>设置取货信息</h1>
 
-        <div class="input-wrapper"><input placeholder="填写取货时间" ng-model="vm.weshare.shippment.send_date"/></div>
-        <div class="clearfix">
-            <div class="input-wrapper fl" style="width: 80%; margin-right: 10px;"><input placeholder="填写取货地点，联系人信息" ng-model="vm.weshare.shippment.send_date"/>
-            </div>
-            <a href="#X" class="delatebtn fr"></a>
+        <div class="input-wrapper">
+            <input placeholder="填写取货时间" ng-model="vm.weshare.send_date"/>
         </div>
-        <div class="clearfix">
-            <div class="input-wrapper fl" style="width: 80%; margin-right: 10px;"><input placeholder="填写取货地点，联系人信息" ng-model="vm.weshare.shippment.send_date"/>
+        <div class="clearfix" ng-repeat="address in vm.weshare.addresses">
+            <div class="input-wrapper fl" style="width: 80%; margin-right: 10px;">
+                <input placeholder="填写取货地点，联系人信息" ng-model="address.name"/>
             </div>
-            <a href="#X" class="addbtn fr"></a>
+            <a class="fr" ng-class="{'delete-btn': !$last,'add-btn': $last}"
+               ng-click="vm.toggleAddress(address, $last)"></a>
         </div>
         <a class="next_btn" ng-click="vm.submit()">oh，搞定了！</a>
         <a class="back_btn" ng-click="vm.showShippmentInfo=false">返回修改</a>

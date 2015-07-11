@@ -58,32 +58,54 @@
 		$rootScope._ = _;
 	}
 
-	function WesharesAddCtrl($scope, $rootScope, $log) {
+	function WesharesAddCtrl($scope, $rootScope, $log, $http) {
 		var vm = this;
 		vm.submit = submit;
 		vm.toggleProduct = toggleProduct;
+		vm.toggleAddress = toggleAddress;
 
 		activate();
 
 		function activate() {
 			vm.showShippmentInfo = false;
 			vm.weshare = {
-				name: '',
-				products: [{name: 'fdaf', price: 100}],
-				shippment: {send_date: ''}
+				title: '',
+				description: '',
+				images: [],
+				products: [{name: '', price: 0}],
+				send_date: '',
+				addresses: [{name: ''}]
 			}
 		}
 
 		function toggleProduct(product, isLast){
 			if(isLast){
-				vm.products.push({name: 'fdaf', price: 100});
+				vm.weshare.products.push({name: 'fdaf', price: 100});
 			}
 			else{
-				vm.products = _.without(vm.products, product);
+				vm.weshare.products = _.without(vm.weshare.products, product);
+			}
+		}
+		function toggleAddress(address, isLast){
+			if(isLast){
+				vm.weshare.addresses.push({name: ''});
+			}
+			else{
+				vm.weshare.addresses = _.without(vm.weshare.addresses, address);
 			}
 		}
 		function submit(){
 			$log.log('submitted').log(vm.weshare);
+			$http.post('/weshares/create', vm.weshare).success(function(data, status, headers, config){
+				if(status == 200){
+					$log.log('post succeeded, data: ').log(data);
+				}
+				else{
+					$log.log("failed with status: " + status +", data: ").log(data);
+				}
+			}).error(function(data, status, headers, config){
+					$log.log("failed with status :" + status + ", data: ").log(data).log(', and config').log(config);
+				});
 		}
 	}
 })(window, window.angular);
