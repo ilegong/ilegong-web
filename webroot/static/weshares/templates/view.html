@@ -10,7 +10,7 @@
         <b></b>
         <div class="weshare_view_state">{{vm.statusMap[vm.weshare.status]}}</div>
         <h1>{{vm.weshare.title}}</h1>
-        <s>取货时间：{{vm.weshare.send_date}}<br/>取货地点：<p ng-repeat="item in vm.wesahre.addresses">{{item.address}}</p></s>
+        <s>取货时间：{{vm.weshare.send_info}}<br/>取货地点：<p ng-repeat="item in vm.weshare.addresses">{{item.address}}</p></s>
         <p>{{vm.weshare.description}}</p>
         <a>更多</a>
         <dl class="clearfix" ng-repeat="item in vm.weshare.images">

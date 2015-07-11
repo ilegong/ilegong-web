@@ -24,7 +24,7 @@ class WesharesController extends AppController {
         $weshareData = array();
         $weshareData['title'] = $postDataArray['title'];
         $weshareData['description'] = $postDataArray['description'];
-        $weshareData['send_date'] = $postDataArray['send_date'];
+        $weshareData['send_info'] = $postDataArray['send_info'];
         $weshareData['creator'] = $uid;
         $weshareData['created'] = date('Y-m-d H:i:s');
         $images = $postDataArray['images'];
