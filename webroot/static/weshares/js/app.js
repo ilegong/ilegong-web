@@ -60,9 +60,11 @@
 
 	function WesharesAddCtrl($scope, $rootScope, $log, $http) {
 		var vm = this;
+		vm.nextStep = nextStep;
 		vm.submit = submit;
 		vm.toggleProduct = toggleProduct;
 		vm.toggleAddress = toggleAddress;
+		vm.getImageSource = getImageSource;
 
 		activate();
 
@@ -93,6 +95,20 @@
 			else{
 				vm.weshare.addresses = _.without(vm.weshare.addresses, address);
 			}
+		}
+		function getImageSource(image){
+			if(image.src == ''){
+				return '/weshares/images/good.jpg';
+			}
+			return image.src;
+		}
+		function nextStep(){
+			if(_.isEmpty(vm.weshare.title)){
+
+				return false;
+			}
+
+			vm.showShippmentInfo=true;
 		}
 		function submit(){
 			$log.log('submitted').log(vm.weshare);

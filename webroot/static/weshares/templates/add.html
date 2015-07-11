@@ -13,19 +13,17 @@
             <a class="fr" ng-class="{'delete-btn': !$last,'add-btn': $last}"
                ng-click="vm.toggleProduct(product, $last)"></a>
         </div>
-        <div class="input-wrapper"><textarea rows="" cols="" placeholder="描述下分享的详细内容，让大家更好的了解。"
-                                             ng-model="vm.weshare.description"></textarea></div>
+        <div class="input-wrapper">
+            <textarea rows="" cols="" placeholder="描述下分享的详细内容，让大家更好的了解。" ng-model="vm.weshare.description"></textarea>
+        </div>
         <ul class="clearfix">
-            <li>
-                <a href="#X"></a>
-                <img src="images/good.jpg"/>
+            <li ng-repeat="image in vm.weshare.images">
+                <a class='delete-badge' data-src="{{image.src}}" ng-class="{'delete-badge': image.src == 'dafa', 'add-badge': image.src != ''}"></a>
+                <img ng-src="{{image.src}}"/>
             </li>
-            <li><img src="images/good.jpg"/></li>
-            <li><img src="images/good.jpg"/></li>
-            <li><img src="images/good.jpg"/></li>
         </ul>
-        <a href="#X" class="upload_btn">点击上传图片</a>
-        <a class="next_btn" ng-click="vm.showShippmentInfo=true">下一步，设置取货信息</a>
+        <a class="upload-btn">点击上传图片</a>
+        <a class="next-btn" ng-click="vm.nextStep()">下一步，设置取货信息</a>
     </div>
 
     <div class="shippment-info" ng-show='vm.showShippmentInfo'>
@@ -41,7 +39,7 @@
             <a class="fr" ng-class="{'delete-btn': !$last,'add-btn': $last}"
                ng-click="vm.toggleAddress(address, $last)"></a>
         </div>
-        <a class="next_btn" ng-click="vm.submit()">oh，搞定了！</a>
-        <a class="back_btn" ng-click="vm.showShippmentInfo=false">返回修改</a>
+        <a class="next-btn" ng-click="vm.submit()">oh，搞定了！</a>
+        <a class="back-btn" ng-click="vm.showShippmentInfo=false">返回修改</a>
     </div>
 </div>
