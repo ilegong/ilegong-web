@@ -5,8 +5,10 @@ CREATE TABLE `cake_weshares` (
   `images` varchar(500) DEFAULT NULL,
   `status` int(2) NOT NULL DEFAULT '0',
   `creator` int(11) NOT NULL,
+  `send_date` datetime NOT NULL,
+  `created` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `cake_weshare_products` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -20,6 +22,5 @@ CREATE TABLE `cake_weshare_addresses` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `weshare_id` int(11) NOT NULL,
   `address` varchar(100) NOT NULL,
-  `get_date` date NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
