@@ -16,8 +16,8 @@
         <div class="input-wrapper">
             <textarea rows="" cols="" placeholder="描述下分享的详细内容，让大家更好的了解。" ng-model="vm.weshare.description"></textarea>
         </div>
-        <ul class="clearfix">
-            <li ng-repeat="image in vm.weshare.images">
+        <ul class="clearfix images">
+            <li class='image' ng-repeat="image in vm.weshare.images">
                 <a class='delete-badge' ng-click='vm.deleteImage(image)'></a>
                 <img ng-src="{{image.url}}"/>
             </li>
@@ -42,4 +42,11 @@
         <a class="next-btn" ng-click="vm.submit()">oh，搞定了！</a>
         <a class="back-btn" ng-click="vm.showShippmentInfo=false">返回修改</a>
     </div>
+
+    <ul>
+        <li ng-repeat="message in vm.messages">
+            <span>{{message.name}}: </span>
+            <span>{{message.detail}}</span>
+        </li>
+    </ul>
 </div>

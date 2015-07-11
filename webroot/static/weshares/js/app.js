@@ -98,21 +98,23 @@
 				description: '',
 				images: [],
 				products: [
-					{name: '', price: 0}
+					{name: ''}
 				],
 				send_date: '',
 				addresses: [
 					{address: ''}
 				]
 			}
+			vm.messages = [];
 		}
 
 		function chooseAndUploadImage() {
 			wx.chooseImage({
 				success: function (res) {
-					$timeout(function(){
-						_.each(res.localIds, vm.uploadImage);
-					}, 30);
+					_.each(res.localIds, vm.uploadImage);
+				},
+				fail: function(res){
+					vm.messages.push({name: 'choose image failed', detail: res});
 				}
 			});
 		}
@@ -122,14 +124,19 @@
 				isShowProgressTips:1,
 				success : function(res){
 					$http.get('/downloads/download_wx_img?media_id='+res.serverId).success(function(data, status, headers, config){
+						vm.messages.push({name: 'download image success', detail: data});
 						var imageUrl = data['download_url'];
 						if(!imageUrl || imageUrl=='false'){
 							return;
 						}
-						vm.images.push({url: imageUrl});
-					}).error(function(){});
+						vm.weshare.images.push({url: imageUrl});
+					}).error(function(data, status, headers, config){
+							vm.messages.push({name: 'download image failed', detail: data});
+					});
 				},
-				fail: function(){}
+				fail: function(res){
+					vm.messages.push({name: 'upload image failed', detail: res});
+				}
 			});
 		}
 		function deleteImage(image){
