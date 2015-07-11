@@ -2,13 +2,13 @@
     <div class='share-info' ng-show="!vm.showShippmentInfo">
         <h1>分享描述</h1>
 
-        <div class="input-wrapper"><input placeholder="给分享起个响亮的名字" ng-model='vm.weshare.title'/></div>
+        <div class="input-wrapper" ng-class="{'has-error': vm.weshareTitleHasError}"><input placeholder="给分享起个响亮的名字" ng-model='vm.weshare.title' ng-change='vm.validateTitle()' ng-blur='vm.validateTitle()'/></div>
         <div class="clearfix" ng-repeat="product in vm.weshare.products">
-            <div class="input-wrapper fl" style="width: 50%; margin-right: 10px;">
-                <input placeholder="填写描述和规格" ng-model="product.name"/>
+            <div class="input-wrapper fl" ng-class="{'has-error': product.nameHasError}" style="width: 50%; margin-right: 10px;">
+                <input placeholder="填写描述和规格" ng-model="product.name" ng-change='vm.validateProductName(product)' ng-blur='vm.validateProductName(product)'/>
             </div>
-            <div class="input-wrapper fl" style="width: 25%; margin-right: 10px;">
-                <input placeholder="填写价格" ng-model="product.price"/>
+            <div class="input-wrapper fl" ng-class="{'has-error': product.priceHasError}" style="width: 25%; margin-right: 10px;">
+                <input placeholder="填写价格" ng-model="product.price" ng-change='vm.validateProductPrice(product)' ng-blur='vm.validateProductPrice(product)'/>
             </div>
             <a class="fr" ng-class="{'delete-btn': !$last,'add-btn': $last}"
                ng-click="vm.toggleProduct(product, $last)"></a>

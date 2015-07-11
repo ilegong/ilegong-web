@@ -25,6 +25,7 @@ ul li { list-style: none; }
 .weshare{ padding: 10px; line-height: 30px;}
 .weshare h1{ color: #29ac0e; font-size: 18px; padding-bottom: 10px;}
 .weshare .input-wrapper{ border: 1px #eeeeee solid; background-color: #ffffff; margin-bottom: 15px; overflow: hidden;}
+.weshare .input-wrapper.has-error{ border-color: #e94442;}
 .weshare .input-wrapper input{ box-shadow: none; height:20px; width:100%; font-size: 14px; color: #666666; padding: 10px 0; line-height: 20px; border: 0; outline: none; margin:0 10px;}
 .weshare a.delete-btn{ margin-top: 8px; margin-right: 10px; background: url(../images/weifxicon.png) no-repeat 0 0; background-size: 100px 100px; width: 25px; height: 25px;}
 .weshare a{ display: block;}

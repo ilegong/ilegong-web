@@ -89,6 +89,11 @@
 		vm.nextStep = nextStep;
 		vm.submit = submit;
 
+		vm.validateTitle = validateTitle;
+		vm.validateProductName = validateProductName;
+		vm.validateProductPrice = validateProductPrice;
+		vm.isNumber = isNumber;
+
 		activate();
 
 		function activate() {
@@ -145,7 +150,7 @@
 
 		function toggleProduct(product, isLast) {
 			if (isLast) {
-				vm.weshare.products.push({name: '产品描述', price: 0});
+				vm.weshare.products.push({name: ''});
 			}
 			else {
 				vm.weshare.products = _.without(vm.weshare.products, product);
@@ -162,8 +167,14 @@
 		}
 
 		function nextStep() {
-			if (_.isEmpty(vm.weshare.title)) {
-				return false;
+			var titleHasError = vm.validateTitle();
+			var productHasError = _.any(vm.weshare.products, function(product){
+				var nameHasError = vm.validateProductName(product);
+				var priceHasError = vm.validateProductPrice(product);
+				return nameHasError || priceHasError;
+			});
+			if(titleHasError || productHasError){
+				return;
 			}
 
 			vm.showShippmentInfo = true;
@@ -181,6 +192,22 @@
 			}).error(function (data, status, headers, config) {
 					$log.log("failed with status :" + status + ", data: ").log(data).log(', and config').log(config);
 				});
+		}
+
+		function validateTitle(){
+			vm.weshareTitleHasError = _.isEmpty(vm.weshare.title) || vm.weshare.title.length > 30;
+			return vm.weshareTitleHasError;
+		}
+		function validateProductName(product){
+			product.nameHasError = _.isEmpty(product.name) || product.name.length > 9;
+			return product.nameHasError;
+		}
+		function validateProductPrice(product){
+			product.priceHasError = _.isEmpty(product.price) || !vm.isNumber(product.price);
+			return product.priceHasError;
+		}
+		function isNumber(n){
+			return Number(n) == n && (n %1 === 0);
 		}
 	}
 })(window, window.angular, window.wx);
