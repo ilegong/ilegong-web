@@ -37,6 +37,26 @@ ul li { list-style: none; }
 .next-btn{ line-height: 38px; text-align: center; border: 1px #29AC0E solid; display: block; font-size: 16px; background-color: #29AC0E; color: #ffffff; text-decoration: none; margin-bottom: 20px; margin-top: 40px;}
 .back-btn{ text-align: center; color: #29AC0E; display: block; width: 80px; margin: 0 auto; margin-top: -15px; margin-bottom: 30px;}
 
-
+/*分享参团*/
+.weshare_view{ padding: 54px 10px;}
+.weshare_view ul img{ width:50px; border-radius: 50px;}
+.weshare_view ul li{ float: left;}
+.weshare_view ul li label{ font-weight: bold; display: block; padding-left: 10px; color: #29AC0E; font-size: 16px; padding-top: 5px;}
+.weshare_view ul li s{ font-size: 14px; color: #999999; text-decoration: none; display: block; padding-left: 10px; padding-top: 3px;}
+.weshare_view_introduce{ background-color: #ffffff; border: 1px #eaeaea solid; border-radius: 5px; margin-top: 10px; padding: 15px; position: relative;}
+.weshare_view_introduce b{ display: block; position: absolute; top: -6px; left: 15px; background: url(../images/weifxicon.png) no-repeat -25px -25px; background-size: 100px 100px; width: 12px; height: 6px;}
+.weshare_view_state{ display: block; position: absolute; z-index: 3; top: 8px; left: -5px; background: url(../images/weifxicon.png) no-repeat -62px 0; background-size: 100px 100px; width: 40px; height: 23px; font-size: 12px; text-align:center; color: #ffffff; line-height: 18px;}
+.weshare_view_introduce h1{ font-size: 18px; color: #29AC0E; padding-top: 15px;}
+.weshare_view_introduce s{ text-decoration: none; font-size: 14px; color: #999999; line-height: 18px; padding:5px 0 10px 0; display: block;}
+.weshare_view_introduce p{ color: #333333; padding-top: 5px;}
+.weshare_view_introduce a{ color: #29AC0E; display: block; width: 30px; padding: 5px 0;}
+.weshare_view_introduce dl dt{ float: left; margin-right: 10px; position: relative; width: 20%;}
+.weshare_view_introduce dl dt img{ width: 100%;}
+.weshare_view_introduce dl dt a{ width: 100%;}
+.weshare_view_detail{ background-color: #f5f5f5; padding: 10px; padding-bottom: 5px; margin-top: 10px;}
+.weshare_view_detail dl dd{ line-height: 20px; padding-bottom: 5px;}
+.weshare_view_detail dl dd.fr{ padding-left: 5px;}
+.weshare_view_order{ padding-top: 15px;}
+.weshare_view_order ul li img{ width:40px; border-radius: 40px;}
 
 

@@ -13,6 +13,10 @@ class WesharesController extends AppController {
 
     }
 
+    public function view(){
+
+    }
+
     /**
      * {
      *      "title":"",

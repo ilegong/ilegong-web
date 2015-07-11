@@ -21,7 +21,8 @@
 	/* @ngInject */
 	function configStates($stateProvider, $urlRouterProvider, $locationProvider) {
 		$stateProvider
-			.state('add', {url: '/add', templateUrl: '/static/weshares/templates/add.html',controller: 'WesharesAddCtrl as vm'});
+			.state('add', {url: '/add', templateUrl: '/static/weshares/templates/add.html',controller: 'WesharesAddCtrl as vm'})
+            .state('view', {url: '/view', templateUrl: '/static/weshares/templates/view.html',controller: 'WesharesViewCtrl as vm'});
 
 		$urlRouterProvider.otherwise('/add');
 		$locationProvider.hashPrefix('!').html5Mode(false);
