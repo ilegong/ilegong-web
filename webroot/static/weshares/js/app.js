@@ -74,7 +74,7 @@
 				images: [],
 				products: [{name: '', price: 0}],
 				send_date: '',
-				addresses: [{name: ''}]
+				addresses: [{address: ''}]
 			}
 		}
 

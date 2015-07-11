@@ -15,12 +15,10 @@ class WesharesController extends AppController {
 
     /**
      * {
-     *   "weshare":{
-            "title":"",
+     *      "title":"",
      *      "description": "",
      *      "images":"",
      *      "send_date": ""
-     *    },
      *    "products":[
      *          {
                     "name":
@@ -38,6 +36,7 @@ class WesharesController extends AppController {
      * }
      */
     public function create() {
+        $this->autoRender = false;
         $uid = $this->currentUser['id'];
         if(empty($uid)){
             echo json_encode(array('success' => false, 'reason' => 'not_login'));
@@ -45,9 +44,14 @@ class WesharesController extends AppController {
         }
         $postStr = file_get_contents('php://input');
         $postDataArray = json_decode($postStr, true);
-        $weshareData = $postDataArray['weshare'];
+        $weshareData = array();
+        $weshareData['title'] = $postDataArray['title'];
+        $weshareData['description'] = $postDataArray['description'];
+        $weshareData['send_date'] = $postDataArray['send_date'];
+        $weshareData['creator'] = $uid;
         $productsData = $postDataArray['products'];
         $addressesData = $postDataArray['addresses'];
+        $weshareData['creator'] = $uid;
         $saveBuyFlag = $weshare = $this->Weshare->save($weshareData);
         $saveProductFlag = $this->saveWeshareProducts($weshare['Weshare']['id'], $productsData);
         $saveAddressFlag = $this->saveWeshareAddresses($weshare['Weshare']['id'], $addressesData);
