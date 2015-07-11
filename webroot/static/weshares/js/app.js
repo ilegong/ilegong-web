@@ -145,7 +145,7 @@
 
 		function toggleProduct(product, isLast) {
 			if (isLast) {
-				vm.weshare.products.push({name: 'fdaf', price: 100});
+				vm.weshare.products.push({name: '产品描述', price: 0});
 			}
 			else {
 				vm.weshare.products = _.without(vm.weshare.products, product);
