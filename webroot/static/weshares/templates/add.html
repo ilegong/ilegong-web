@@ -22,7 +22,7 @@
                 <img ng-src="{{image.src}}"/>
             </li>
         </ul>
-        <a class="upload-btn">点击上传图片</a>
+        <a class="upload-btn" ng-click="vm.chooseAndUploadImage()">点击上传图片</a>
         <a class="next-btn" ng-click="vm.nextStep()">下一步，设置取货信息</a>
     </div>
 
