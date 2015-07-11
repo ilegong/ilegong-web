@@ -2,7 +2,7 @@
 
 class WesharesController extends AppController {
 
-    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart');
+    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User');
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -68,8 +68,32 @@ class WesharesController extends AppController {
         }
     }
 
-    public function detail($tinyBuyId) {
-
+    public function detail($weshareId) {
+        $this->autoRender = false;
+        $weshareInfo = $this->Weshare->find('first', array(
+            'conditions' => array(
+                'id' => $weshareId
+            )
+        ));
+        $weshareProducts = $this->WeshareProduct->find('all', array(
+            'conditions' => array(
+                'weshare_id' => $weshareId
+            )
+        ));
+        $weshareAddresses = $this->WeshareAddress->find('all', array(
+            'conditions' => array(
+                'weshare_id' => $weshareId
+            )
+        ));
+        $creatorInfo = $this->User->find('first', array(
+            'conditions' => array(
+                'id' => $weshareInfo['Weshare']['creator']
+            ),
+            'recursive' => 1, //int
+            'fields' => array('id', 'nickname', 'image', 'wx_subscribe_status'),
+        ));
+        echo json_encode(array('info' => $weshareInfo, 'products' => $weshareProducts, 'addresses' => $weshareAddresses, 'creator' => $creatorInfo));
+        return;
     }
 
     public function buy() {

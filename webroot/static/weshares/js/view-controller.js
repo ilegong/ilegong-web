@@ -1,13 +1,19 @@
 (function (window, angular) {
     angular.module('weshares')
-        .controller('WesharesViewCtrl', YourCtrl);
+        .controller('WesharesViewCtrl', WesharesViewCtrl);
 
-    function YourCtrl($scope, $rootScope, $log, $http) {
+    function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache) {
         var vm = this;
         vm.nextStep = nextStep;
         activate();
         function activate() {
-            vm.showShippmentInfo = false;
+            $http({method: 'GET', url: '/weshares/detail/3', cache: $templateCache}).
+                success(function(data, status) {
+                    $log.log(data);
+                }).
+                error(function(data, status) {
+                    $log.log(data);
+                });
         }
         function nextStep() {
             if (_.isEmpty(vm.weshare.title)) {
