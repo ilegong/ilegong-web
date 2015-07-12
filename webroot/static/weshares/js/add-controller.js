@@ -1,11 +1,11 @@
 (function (window, angular, wx) {
 
 	angular.module('weshares')
-		.constant('Wechat', wx)
+		.constant('wx', wx)
 		.controller('WesharesAddCtrl', WesharesAddCtrl);
 
 
-	function WesharesAddCtrl($state, $scope, $rootScope, $log, $http, Wechat, Utils) {
+	function WesharesAddCtrl($state, $scope, $rootScope, $log, $http, wx, Utils) {
 		var vm = this;
 		vm.chooseAndUploadImage = chooseAndUploadImage;
 		vm.uploadImage = uploadImage;
@@ -41,7 +41,7 @@
 		}
 
 		function chooseAndUploadImage() {
-			Wechat.chooseImage({
+			wx.chooseImage({
 				success: function (res) {
 					_.each(res.localIds, vm.uploadImage);
 				},
@@ -52,7 +52,7 @@
 		}
 
 		function uploadImage(localId) {
-			Wechat.uploadImage({
+			wx.uploadImage({
 				localId: localId,
 				isShowProgressTips: 1,
 				success: function (res) {

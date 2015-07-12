@@ -1,11 +1,45 @@
 (function (window, angular) {
-	angular.module('weshares', ['ui.router'])
+	angular.module('module.filters', []);
+})(window, window.angular);
+
+(function (window, angular) {
+	angular.module('module.directives', []);
+})(window, window.angular);
+
+(function (window, angular) {
+	angular.module('module.services', [])
+		.service('Utils', Utils);
+
+	function Utils(){
+		return {
+			isBlank: isBlank,
+			isMobileValid: isMobileValid,
+			isNumber: isNumber,
+			toPercent: toPercent
+		}
+		function isMobileValid(mobile){
+			return /^1\d{10}$/.test(mobile);
+		}
+
+		function isBlank(str){
+			return (!str || /^\s*$/.test(str));
+		}
+		function isNumber(n){
+			return Number(n) === n && (n %1 === 0);
+		}
+		function toPercent(value){
+			return Math.min(Math.round(value * 10000) / 100, 100);
+		}
+	}
+})(window, window.angular);
+
+(function (window, angular) {
+	angular.module('weshares', ['ui.router', 'module.services', 'module.filters', 'module.directives'])
 		.constant('_', window._)
 		.config(configCompileProvider)
 		.config(configHttpProvider)
 		.config(configStates)
 		.config(extendLog)
-		.service('Utils', Utils)
 		.run(initApp);
 
 	/* @ngInject */
@@ -70,28 +104,6 @@
 
 			return $delegate;
 		});
-	}
-
-	function Utils(){
-		return {
-			isBlank: isBlank,
-			isMobileValid: isMobileValid,
-			isNumber: isNumber,
-			toPercent: toPercent
-		}
-		function isMobileValid(mobile){
-			return /^1\d{10}$/.test(mobile);
-		}
-
-		function isBlank(str){
-			return (!str || /^\s*$/.test(str));
-		}
-		function isNumber(n){
-			return Number(n) === n && (n %1 === 0);
-		}
-		function toPercent(value){
-			return Math.min(Math.round(value * 10000) / 100, 100);
-		}
 	}
 	function initApp($rootScope) {
 		$rootScope._ = _;
