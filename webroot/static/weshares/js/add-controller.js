@@ -153,12 +153,10 @@
 		function validateProductPrice(product) {
 			product.priceHasError = _.isEmpty(product.price) || !Utils.isNumber(product.price);
 			if (product.priceHasError) {
-				if (_.isEmpty(product.price)) {
-					product.priceErrorMsg = '价格不能为空喔！';
-				}
-				if (!vm.isNumber(product.price)) {
-					product.priceErrorMsg = '请填写数字！';
-				}
+				product.priceErrorMsg = '请填写数字';
+			}
+			else{
+				product.priceErrorMsg = '';
 			}
 			return product.priceHasError;
 		}

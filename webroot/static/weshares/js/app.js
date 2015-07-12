@@ -25,7 +25,7 @@
 			return (!str || /^\s*$/.test(str));
 		}
 		function isNumber(n){
-			return Number(n) === n && (n %1 === 0);
+			return Number(n) == n && (n %1 === 0);
 		}
 		function toPercent(value){
 			return Math.min(Math.round(value * 10000) / 100, 100);
