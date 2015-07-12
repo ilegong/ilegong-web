@@ -1,4 +1,4 @@
-<div class="weshare">
+<div class="weshare-add">
     <div class='share-info' ng-show="!vm.showShippmentInfo">
         <h1>分享描述</h1>
 
@@ -16,7 +16,7 @@
                 <input class='form-control' placeholder="填写价格" ng-model="product.price" ng-change='vm.validateProductPrice(product)' ng-blur='vm.validateProductPrice(product)'/>
                 <p class='tips'>请输入数字</p>
             </div>
-            <a class="fr" ng-class="{'delete-btn': !$last,'add-btn': $last}"
+            <a class="fr btn" ng-class="{'delete-btn': !$last,'add-btn': $last}"
                ng-click="vm.toggleProduct(product, $last)"></a>
         </div>
         <div class="form-group">
@@ -28,8 +28,8 @@
                 <img ng-src="{{image.url}}"/>
             </li>
         </ul>
-        <a class="upload-btn" ng-click="vm.chooseAndUploadImage()">点击上传图片</a>
-        <a class="next-btn" ng-click="vm.nextStep()">下一步，设置取货信息</a>
+        <a class="btn upload-btn" ng-click="vm.chooseAndUploadImage()">点击上传图片</a>
+        <a class="btn next-btn" ng-click="vm.nextStep()">下一步，设置取货信息</a>
     </div>
 
     <div class="shippment-info" ng-show='vm.showShippmentInfo'>
@@ -42,11 +42,11 @@
             <div class="form-group fl" style="width: 80%; margin-right: 10px;">
                 <input class='form-control' placeholder="填写取货地点，联系人信息" ng-model="address.address"/>
             </div>
-            <a class="fr" ng-class="{'delete-btn': !$last,'add-btn': $last}"
+            <a class="fr btn" ng-class="{'delete-btn': !$last,'add-btn': $last}"
                ng-click="vm.toggleAddress(address, $last)"></a>
         </div>
-        <a class="next-btn" ng-click="vm.submit()">oh，搞定了！</a>
-        <a class="back-btn" ng-click="vm.showShippmentInfo=false">返回修改</a>
+        <a class="btn next-btn" ng-click="vm.submit()">oh，搞定了！</a>
+        <a class="btn back-btn" ng-click="vm.showShippmentInfo=false">返回修改</a>
     </div>
 
     <ul>

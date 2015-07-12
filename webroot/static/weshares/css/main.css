@@ -23,44 +23,45 @@ ul li { list-style: none; }
 
 /*上传信息页面*/
 .mb15{ margin-bottom: 15px;}
-.weshare{ padding: 10px; line-height: 30px;}
-.weshare p{ font-size: 12px; color: #c62a35; line-height: 16px; padding-top: 5px;}
-.weshare h1{ color: #29ac0e; font-size: 18px; padding-bottom: 10px;}
-.weshare .form-group{margin-bottom: 15px;}
-.weshare .form-group .form-control{box-shadow: none; width:100%; font-size: 14px; color: #666; padding: 10px; line-height: 1.42857143; border: 1px #eee solid;-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;}
-.weshare .form-group.has-error .form-control{ border-color: #a94442;}
-.weshare .form-group .tips{display: none;}
-.weshare .form-group.has-error .tips{display: block;}
-.weshare .delete-btn{ margin-top: 8px; margin-right: 10px; background: url(../images/weifxicon.png) no-repeat 0 0; background-size: 100px 100px; width: 25px; height: 25px;}
-.weshare .add-btn{ margin-top: 8px; margin-right: 10px; background: url(../images/weifxicon.png) no-repeat 0 -35px; background-size: 100px 100px; width: 25px; height: 25px;}
-.weshare .form-group textarea{ border-radius: 0; border: 1px #eeeeee solid; box-shadow: none; outline: none;}
-.weshare .images .image{ float: left; margin-right: 15px; position: relative; width: 20%;}
-.weshare .images .image img{ width: 100%;}
-.delete-badge{ position: absolute; top: -7px; right: -7px; background: url(../images/weifxicon.png) no-repeat -30px 0; background-size: 100px 100px; width: 25px; height: 25px;}
-.upload-btn{ line-height: 38px; text-align: center; border: 1px #29AC0E solid; display: block; font-size: 16px; color: #29AC0E; text-decoration: none;}
-.next-btn{ line-height: 38px; text-align: center; border: 1px #29AC0E solid; display: block; font-size: 16px; background-color: #29AC0E; color: #ffffff; text-decoration: none; margin-bottom: 20px; margin-top: 40px;}
-.back-btn{ text-align: center; color: #29AC0E; display: block; width: 80px; margin: 0 auto; margin-top: -15px; margin-bottom: 30px;}
+.weshare-add{ padding: 10px; line-height: 30px;}
+.weshare-add p{ font-size: 12px; color: #c62a35; line-height: 16px; padding-top: 5px;}
+.weshare-add h1{ color: #29ac0e; font-size: 18px; padding-bottom: 10px;}
+.weshare-add .form-group{margin-bottom: 15px;}
+.weshare-add .form-group .form-control{box-shadow: none; width:100%; font-size: 14px; color: #666; padding: 10px; line-height: 1.42857143; border: 1px #eee solid;-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;}
+.weshare-add .form-group.has-error .form-control{ border-color: #a94442;}
+.weshare-add .form-group .tips{display: none;}
+.weshare-add .form-group.has-error .tips{display: block;}
+.weshare-add .images .image{ float: left; margin-right: 15px; position: relative; width: 20%;}
+.weshare-add .images .image img{ width: 100%;}
+.weshare-add .btn{text-align: center; line-height: 38px;}
+.weshare-add .upload-btn{ border: 1px #29AC0E solid; display: block; font-size: 16px; color: #29AC0E; text-decoration: none;}
+.weshare-add .delete-btn{ margin-top: 8px; margin-right: 10px; background: url(../images/weifxicon.png) no-repeat 0 0; background-size: 100px 100px; width: 25px; height: 25px;}
+.weshare-add .add-btn{ margin-top: 8px; margin-right: 10px; background: url(../images/weifxicon.png) no-repeat 0 -35px; background-size: 100px 100px; width: 25px; height: 25px;}
+.weshare-add .delete-badge{ position: absolute; top: -7px; right: -7px; background: url(../images/weifxicon.png) no-repeat -30px 0; background-size: 100px 100px; width: 25px; height: 25px;}
+.weshare-add .next-btn{ border: 1px #29AC0E solid; display: block; font-size: 16px; background-color: #29AC0E; color: #ffffff; text-decoration: none; margin-bottom: 20px; margin-top: 40px;}
+.weshare-add .back-btn{ color: #29AC0E; display: block; width: 80px; margin: 0 auto; margin-top: -15px; margin-bottom: 30px;}
 
 /*分享参团*/
-.weshare_view{ padding: 30px 10px;}
-.weshare_view ul img{ width:50px; border-radius: 50px;}
-.weshare_view ul li{ float: left;}
-.weshare_view ul li label{ font-weight: bold; display: block; padding-left: 10px; color: #29AC0E; font-size: 16px; padding-top: 5px;}
-.weshare_view ul li s{ font-size: 14px; color: #999999; text-decoration: none; display: block; padding-left: 10px; padding-top: 3px;}
-.weshare_view_introduce{ background-color: #ffffff; border: 1px #eaeaea solid; border-radius: 5px; margin-top: 10px; padding: 15px; position: relative;}
-.weshare_view_introduce b{ display: block; position: absolute; top: -6px; left: 15px; background: url(../images/weifxicon.png) no-repeat -25px -25px; background-size: 100px 100px; width: 12px; height: 6px;}
-.weshare_view_state{ display: block; position: absolute; z-index: 3; top: 8px; left: -5px; background: url(../images/weifxicon.png) no-repeat -62px 0; background-size: 100px 100px; width: 40px; height: 23px; font-size: 12px; text-align:center; color: #ffffff; line-height: 18px;}
-.weshare_view_introduce h1{ font-size: 18px; color: #29AC0E; padding-top: 15px;}
-.weshare_view_introduce s{ text-decoration: none; font-size: 14px; color: #999999; line-height: 18px; padding:5px 0 10px 0; display: block;}
-.weshare_view_introduce p{ color: #333333; padding-top: 5px;}
-.weshare_view_introduce a{ color: #29AC0E; display: block; width: 30px; padding: 5px 0;}
-.weshare_view_introduce dl dt{ float: left; margin-right: 10px; position: relative; width: 20%;}
-.weshare_view_introduce dl dt img{ width: 100%;}
-.weshare_view_introduce dl dt a{ width: 100%;}
-.weshare_view_detail{ background-color: #f5f5f5; padding: 10px; padding-bottom: 5px; margin-top: 10px;}
-.weshare_view_detail dl dd{ line-height: 20px; padding-bottom: 5px;}
-.weshare_view_detail dl dd.fr{ padding-left: 5px;}
-.weshare_view_order{ padding-top: 15px;}
-.weshare_view_order ul li img{ width:40px; border-radius: 40px;}
+.weshare-view{ padding: 30px 10px;}
+.weshare-view .pull-left{ float: left;}
+.weshare-view .pull-right{ float: right;}
+.weshare-view .profile .avatar{ width:50px; border-radius: 50px;}
+.weshare-view .profile .name{ font-weight: bold; display: block; padding-left: 10px; color: #29AC0E; font-size: 16px; padding-top: 5px;}
+.weshare-view .profile .weshare-summary{ font-size: 14px; color: #999999; text-decoration: none; display: block; padding-left: 10px; padding-top: 3px;}
+.weshare-view .detail{ background-color: #ffffff; border: 1px #eaeaea solid; border-radius: 5px; margin-top: 10px; padding: 15px; position: relative;}
+.weshare-view .detail b{ display: block; position: absolute; top: -6px; left: 15px; background: url(../images/weifxicon.png) no-repeat -25px -25px; background-size: 100px 100px; width: 12px; height: 6px;}
+.weshare-view .detail .status{ display: block; position: absolute; z-index: 3; top: 8px; left: -5px; background: url(../images/weifxicon.png) no-repeat -62px 0; background-size: 100px 100px; width: 40px; height: 23px; font-size: 12px; text-align:center; color: #ffffff; line-height: 18px;}
+.weshare-view .detail .title{ font-size: 18px; color: #29AC0E; padding-top: 15px;}
+.weshare-view .detail .send-date{ text-decoration: none; font-size: 14px; color: #999999; line-height: 18px; padding:5px 0 10px 0; display: block;}
+.weshare-view .detail .description{ color: #333333; padding-top: 5px;}
+.weshare-view .detail a{ color: #29AC0E; display: block; width: 30px; padding: 5px 0;}
+.weshare-view .detail dl dt{ float: left; margin-right: 10px; position: relative; width: 20%;}
+.weshare-view .detail dl dt img{ width: 100%;}
+.weshare-view .detail dl dt a{ width: 100%;}
+.weshare_view .detail .product{ background-color: #f5f5f5; padding: 10px; padding-bottom: 5px; margin-top: 10px;}
+.weshare_view .detail .product dl dd{ line-height: 20px; padding-bottom: 5px;}
+.weshare_view .detail .product dl dd.fr{ padding-left: 5px;}
+.weshare-view .orders{ padding-top: 15px;}
+.weshare-view .orders ul li img{ width:40px; border-radius: 40px;}
 
 

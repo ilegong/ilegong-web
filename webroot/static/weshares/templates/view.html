@@ -1,22 +1,24 @@
-<div class="weshare_view">
-    <ul class="clearfix">
-        <li><img src="{{vm.weshare.creator.image}}" /></li>
-        <li>
-            <label>{{vm.weshare.creator.nickname}}</label>
-            <s>已有{{vm.ordersDetail.users.length}}人参团  &nbsp;|&nbsp;  {{vm.weshare.created}}</s>
+<div class="weshare-view">
+    <ul class="clearfix profile">
+        <li class='pull-left'>
+            <img class='avatar' ng-src="{{vm.weshare.creator.image}}" />
+        </li>
+        <li class='pull-left'>
+            <label class='name'>{{vm.weshare.creator.nickname}}</label>
+            <s class='weshare-summary'>已有{{vm.ordersDetail.users.length}}人参团  &nbsp;|&nbsp;  {{vm.weshare.created}}</s>
         </li>
     </ul>
-    <div class="weshare_view_introduce">
+    <div class="detail">
         <b></b>
-        <div class="weshare_view_state">{{vm.statusMap[vm.weshare.status]}}</div>
-        <h1>{{vm.weshare.title}}</h1>
-        <s>取货时间：{{vm.weshare.send_info}}<br/>取货地点：{{vm.weshare.showAddresses}}</s>
-        <p>{{vm.weshare.description}}</p>
+        <div class="status">{{vm.statusMap[vm.weshare.status]}}</div>
+        <h1 class='title'>{{vm.weshare.title}}</h1>
+        <s class='send-date'>取货时间：{{vm.weshare.send_info}}<br/>取货地点：{{vm.weshare.showAddresses}}</s>
+        <p class='description'>{{vm.weshare.description}}</p>
         <a>更多</a>
-        <dl class="clearfix" ng-repeat="item in vm.weshare.images">
+        <dl class="clearfix image" ng-repeat="item in vm.weshare.images">
             <dt><a ng-click="vm.viewImage(item)"><img src="{{item}}"/></a></dt>
         </dl>
-        <div class="weshare_view_detail" ng-repeat="item in vm.weshare.products">
+        <div class="products" ng-repeat="item in vm.weshare.products">
             <dl class="clearfix">
                 <dd class="fl">{{item.name}}</dd>
                 <dd class="fr">团{{vm.ordersDetail.summery[item.id]||0}}份</dd>
@@ -24,10 +26,10 @@
             </dl>
         </div>
     </div>
-    <div class="weshare_view_order">
+    <div class="orders">
         <ul class="clearfix">
-            <li><img src="images/head.png" /></li>
-            <li></li>
+            <li class='pull-left'><img src="images/head.png" /></li>
+            <li class='pull-left'></li>
         </ul>
     </div>
 </div>
