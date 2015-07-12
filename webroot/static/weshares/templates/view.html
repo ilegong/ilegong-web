@@ -22,7 +22,7 @@
         <dl class="clearfix image" ng-repeat="image in vm.weshare.images">
             <dt><a ng-click="vm.viewImage(image)"><img ng-src="{{image}}"/></a></dt>
         </dl>
-        <div class="products" ng-repeat="product in vm.weshare.products">
+        <div class="product" ng-repeat="product in vm.weshare.products">
             <dl class="clearfix">
                 <dd class="fl" ng-bind="product.name"></dd>
                 <dd class="fr">团{{vm.ordersDetail.summery[product.id]||0}}份</dd>
