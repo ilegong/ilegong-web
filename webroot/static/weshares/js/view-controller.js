@@ -14,8 +14,7 @@
     vm.getAllAddress = getAllAddress;
 
     function getAllAddress(){
-      var addresses = [];
-      addresses = _.map(vm.weshare.addresses,function(item){
+      var addresses = _.map(vm.weshare.addresses,function(item){
         return item['address'];
       });
       return addresses.join(',');
