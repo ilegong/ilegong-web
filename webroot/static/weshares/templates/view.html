@@ -1,35 +1,39 @@
 <div class="weshare-view">
     <ul class="clearfix profile">
-        <li class='pull-left'>
+        <li class='fl'>
             <img class='avatar' ng-src="{{vm.weshare.creator.image}}" />
         </li>
-        <li class='pull-left'>
-            <label class='name'>{{vm.weshare.creator.nickname}}</label>
-            <s class='weshare-summary'>已有{{vm.ordersDetail.users.length}}人参团  &nbsp;|&nbsp;  {{vm.weshare.created}}</s>
+        <li class='fl'>
+            <label class='name' ng-bind="vm.weshare.creator.nickname"></label>
+            <s class='weshare-summary'>已有<span ng-bind='vm.ordersDetail.users.length'></span>人参团  &nbsp;|&nbsp;  <span ng-bind='vm.weshare.created'></span></s>
         </li>
     </ul>
     <div class="detail">
         <b></b>
-        <div class="status">{{vm.statusMap[vm.weshare.status]}}</div>
-        <h1 class='title'>{{vm.weshare.title}}</h1>
-        <s class='send-date'>取货时间：{{vm.weshare.send_info}}<br/>取货地点：{{vm.weshare.showAddresses}}</s>
-        <p class='description'>{{vm.weshare.description}}</p>
+        <div class="status" ng-bind="vm.statusMap[vm.weshare.status]"></div>
+        <h1 class='title' ng-bind="vm.weshare.title"></h1>
+        <s class='send-date'>
+            取货时间: <span ng-bind='vm.weshare.send_info'></span>
+            <br/>
+            取货地点：<span ng-bind='vm.weshare.showAddresses'></span>
+        </s>
+        <p class='description' ng-bind='vm.weshare.description'></p>
         <a>更多</a>
-        <dl class="clearfix image" ng-repeat="item in vm.weshare.images">
-            <dt><a ng-click="vm.viewImage(item)"><img src="{{item}}"/></a></dt>
+        <dl class="clearfix image" ng-repeat="image in vm.weshare.images">
+            <dt><a ng-click="vm.viewImage(image)"><img ng-src="{{image}}"/></a></dt>
         </dl>
-        <div class="products" ng-repeat="item in vm.weshare.products">
+        <div class="products" ng-repeat="product in vm.weshare.products">
             <dl class="clearfix">
-                <dd class="fl">{{item.name}}</dd>
-                <dd class="fr">团{{vm.ordersDetail.summery[item.id]||0}}份</dd>
-                <dd class="fr" style="color: #29AC0E;">¥{{item.price}}</dd>
+                <dd class="fl" ng-bind="product.name"></dd>
+                <dd class="fr">团{{vm.ordersDetail.summery[product.id]||0}}份</dd>
+                <dd class="fr" style="color: #29AC0E;" ng-bind="product.price | currency:'￥'"></dd>
             </dl>
         </div>
     </div>
     <div class="orders">
         <ul class="clearfix">
-            <li class='pull-left'><img src="images/head.png" /></li>
-            <li class='pull-left'></li>
+            <li class='fl'><img src="images/head.png" /></li>
+            <li class='fl'></li>
         </ul>
     </div>
 </div>

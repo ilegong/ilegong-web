@@ -43,8 +43,6 @@ ul li { list-style: none; }
 
 /*分享参团*/
 .weshare-view{ padding: 30px 10px;}
-.weshare-view .pull-left{ float: left;}
-.weshare-view .pull-right{ float: right;}
 .weshare-view .profile .avatar{ width:50px; border-radius: 50px;}
 .weshare-view .profile .name{ font-weight: bold; display: block; padding-left: 10px; color: #29AC0E; font-size: 16px; padding-top: 5px;}
 .weshare-view .profile .weshare-summary{ font-size: 14px; color: #999999; text-decoration: none; display: block; padding-left: 10px; padding-top: 3px;}
