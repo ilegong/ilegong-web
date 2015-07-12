@@ -1,12 +1,11 @@
-(function (window, angular, wx) {
+(function (window, angular) {
 	angular.module('weshares', ['ui.router'])
 		.constant('_', window._)
-		.constant('wx', wx)
 		.config(configCompileProvider)
 		.config(configHttpProvider)
 		.config(configStates)
 		.config(extendLog)
-		.controller('WesharesAddCtrl', WesharesAddCtrl)
+		.service('Utils', Utils)
 		.run(initApp);
 
 	/* @ngInject */
@@ -73,7 +72,28 @@
 		});
 	}
 
+	function Utils(){
+		return {
+			isBlank: isBlank,
+			isMobileValid: isMobileValid,
+			isNumber: isNumber,
+			toPercent: toPercent
+		}
+		function isMobileValid(mobile){
+			return /^1\d{10}$/.test(mobile);
+		}
+
+		function isBlank(str){
+			return (!str || /^\s*$/.test(str));
+		}
+		function isNumber(n){
+			return Number(n) === n && (n %1 === 0);
+		}
+		function toPercent(value){
+			return Math.min(Math.round(value * 10000) / 100, 100);
+		}
+	}
 	function initApp($rootScope) {
 		$rootScope._ = _;
 	}
-})(window, window.angular, window.wx);
+})(window, window.angular);

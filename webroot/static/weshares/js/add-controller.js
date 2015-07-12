@@ -1,10 +1,11 @@
-(function (window, angular) {
+(function (window, angular, wx) {
 
 	angular.module('weshares')
+		.constant('Wechat', wx)
 		.controller('WesharesAddCtrl', WesharesAddCtrl);
 
 
-	function WesharesAddCtrl($state, $scope, $rootScope, $log, $http, $timeout, wx) {
+	function WesharesAddCtrl($state, $scope, $rootScope, $log, $http, Wechat, Utils) {
 		var vm = this;
 		vm.chooseAndUploadImage = chooseAndUploadImage;
 		vm.uploadImage = uploadImage;
@@ -19,7 +20,6 @@
 		vm.validateTitle = validateTitle;
 		vm.validateProductName = validateProductName;
 		vm.validateProductPrice = validateProductPrice;
-		vm.isNumber = isNumber;
 
 		activate();
 
@@ -41,7 +41,7 @@
 		}
 
 		function chooseAndUploadImage() {
-			wx.chooseImage({
+			Wechat.chooseImage({
 				success: function (res) {
 					_.each(res.localIds, vm.uploadImage);
 				},
@@ -52,7 +52,7 @@
 		}
 
 		function uploadImage(localId) {
-			wx.uploadImage({
+			Wechat.uploadImage({
 				localId: localId,
 				isShowProgressTips: 1,
 				success: function (res) {
@@ -151,7 +151,7 @@
 		}
 
 		function validateProductPrice(product) {
-			product.priceHasError = _.isEmpty(product.price) || !vm.isNumber(product.price);
+			product.priceHasError = _.isEmpty(product.price) || !Utils.isNumber(product.price);
 			if (product.priceHasError) {
 				if (_.isEmpty(product.price)) {
 					product.priceErrorMsg = '价格不能为空喔！';
@@ -162,9 +162,5 @@
 			}
 			return product.priceHasError;
 		}
-
-		function isNumber(n) {
-			return Number(n) == n && (n % 1 === 0);
-		}
 	}
-})(window, window.angular);
+})(window, window.angular, window.wx);

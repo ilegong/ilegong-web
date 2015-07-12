@@ -2,7 +2,10 @@
     <div class='share-info' ng-show="!vm.showShippmentInfo">
         <h1>分享描述</h1>
 
-        <div class="input-wrapper mb15" ng-class="{'has-error': vm.weshareTitleHasError}"><input placeholder="给分享起个响亮的名字" ng-model='vm.weshare.title' ng-change='vm.validateTitle()' ng-blur='vm.validateTitle()'/><p ng-show="vm.weshareTitleHasError">{{vm.titleErrorMsg}}</p></div>
+        <div class="input-wrapper mb15" ng-class="{'has-error': vm.weshareTitleHasError}">
+            <input placeholder="给分享起个响亮的名字" ng-model='vm.weshare.title' ng-change='vm.validateTitle()' ng-blur='vm.validateTitle()'/>
+            <p ng-show="vm.weshareTitleHasError" ng-bind="vm.titleErrorMsg"></p>
+        </div>
         <div class="clearfix" ng-repeat="product in vm.weshare.products">
             <div class="input-wrapper fl mb15" style="width: 50%; margin-right: 10px;" ng-class="{'has-error': product.nameHasError}">
                 <input placeholder="填写描述和规格" ng-model="product.name" ng-change='vm.validateProductName(product)' ng-blur='vm.validateProductName(product)'/>
