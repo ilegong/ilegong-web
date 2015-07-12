@@ -26,14 +26,14 @@ ul li { list-style: none; }
 .weshare{ padding: 10px; line-height: 30px;}
 .weshare p{ font-size: 12px; color: #c62a35; line-height: 16px; padding-top: 5px;}
 .weshare h1{ color: #29ac0e; font-size: 18px; padding-bottom: 10px;}
-.weshare .input-wrapper{ border: 1px #eeeeee solid; background-color: #ffffff; margin-bottom: 15px; overflow: hidden;}
-.weshare .input-wrapper.has-error{ border-color: #e94442;}
-.weshare .input-wrapper input{ box-shadow: none; height:20px; width:100%; font-size: 14px; color: #666666; padding: 10px 12px; line-height: 20px; border: 0; outline: none;}
-.weshare .input-wrapper.has-feedback input{padding-right: 42.5px;}
-.weshare a.delete-btn{ margin-top: 8px; margin-right: 10px; background: url(../images/weifxicon.png) no-repeat 0 0; background-size: 100px 100px; width: 25px; height: 25px;}
-.weshare a{ display: block;}
-.weshare a.add-btn{ margin-top: 8px; margin-right: 10px; background: url(../images/weifxicon.png) no-repeat 0 -35px; background-size: 100px 100px; width: 25px; height: 25px;}
-.weshare .input-wrapper textarea{ border-radius: 0; border: 0; box-shadow: none; outline: none; margin: 10px; width: 100%; font-size: 14px; color: #666666; height: 60px;}
+.weshare .form-group{margin-bottom: 15px;}
+.weshare .form-group .form-control{box-shadow: none; width:100%; font-size: 14px; color: #666; padding: 10px; line-height: 1.42857143; border: 1px #eee solid;-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;}
+.weshare .form-group.has-error .form-control{ border-color: #a94442;}
+.weshare .form-group .tips{display: none;}
+.weshare .form-group.has-error .tips{display: block;}
+.weshare .delete-btn{ margin-top: 8px; margin-right: 10px; background: url(../images/weifxicon.png) no-repeat 0 0; background-size: 100px 100px; width: 25px; height: 25px;}
+.weshare .add-btn{ margin-top: 8px; margin-right: 10px; background: url(../images/weifxicon.png) no-repeat 0 -35px; background-size: 100px 100px; width: 25px; height: 25px;}
+.weshare .form-group textarea{ border-radius: 0; border: 1px #eeeeee solid; box-shadow: none; outline: none;}
 .weshare .images .image{ float: left; margin-right: 15px; position: relative; width: 20%;}
 .weshare .images .image img{ width: 100%;}
 .delete-badge{ position: absolute; top: -7px; right: -7px; background: url(../images/weifxicon.png) no-repeat -30px 0; background-size: 100px 100px; width: 25px; height: 25px;}

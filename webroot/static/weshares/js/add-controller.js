@@ -126,38 +126,16 @@
 
 		function validateTitle() {
 			vm.weshareTitleHasError = _.isEmpty(vm.weshare.title) || vm.weshare.title.length > 30;
-			if (vm.weshareTitleHasError) {
-				if (_.isEmpty(vm.weshare.title)) {
-					vm.titleErrorMsg = '分享标题不能为空';
-				}
-				if (vm.weshare.title.length > 30) {
-					vm.titleErrorMsg = '标题太长喽，最多输入30个字喔！';
-				}
-			}
 			return vm.weshareTitleHasError;
 		}
 
 		function validateProductName(product) {
 			product.nameHasError = _.isEmpty(product.name) || product.name.length > 9;
-			if (product.nameHasError) {
-				if (_.isEmpty(product.name)) {
-					product.nameErrorMsg = '描述不能为空喔！';
-				}
-				if (product.name.length > 9) {
-					product.nameErrorMsg = '描述太长喽，最多输入9个字喔！';
-				}
-			}
 			return product.nameHasError;
 		}
 
 		function validateProductPrice(product) {
 			product.priceHasError = _.isEmpty(product.price) || !Utils.isNumber(product.price);
-			if (product.priceHasError) {
-				product.priceErrorMsg = '请填写数字';
-			}
-			else{
-				product.priceErrorMsg = '';
-			}
 			return product.priceHasError;
 		}
 	}
