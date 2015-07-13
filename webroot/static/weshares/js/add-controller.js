@@ -111,6 +111,10 @@
 		}
 
 		function submit() {
+			vm.weshare.addresses = _.filter(vm.weshare.addresses, function(address){
+				return !_.isEmpty(address.address);
+			});
+
 			$log.log('submitted').log(vm.weshare);
 			$http.post('/weshares/create', vm.weshare).success(function (data, status, headers, config) {
 				if (status == 200) {
