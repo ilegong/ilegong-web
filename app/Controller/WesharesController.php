@@ -143,10 +143,11 @@ class WesharesController extends AppController {
     }
 
     private function saveWeshareAddresses($weshareId, $weshareAddressData) {
-        foreach ($weshareAddressData as &$address) {
-            $address['weshare_id'] = $weshareId;
+        $saveData = array();
+        foreach ($weshareAddressData as $address) {
+            $saveData[] = array('address' => $address, 'weshare_id' => $weshareId);
         }
-        return $this->WeshareAddress->saveAll($weshareAddressData);
+        return $this->WeshareAddress->saveAll($saveData);
     }
 
     private function get_weshare_buy_info($weshareId) {
