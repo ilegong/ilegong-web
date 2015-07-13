@@ -201,7 +201,7 @@ class WesharesController extends AppController {
                 'order_id' => $orderIds,
                 'type' => ORDER_TYPE_WESHARE_BUY
             ),
-            'fields' => array('id', 'name', 'order_id', 'num')
+            'fields' => array('id', 'name', 'order_id', 'num', 'product_id  ')
         ));
         foreach ($carts as $item) {
             $order_id = $item['Cart']['order_id'];
