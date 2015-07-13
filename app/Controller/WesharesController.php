@@ -100,6 +100,7 @@ class WesharesController extends AppController {
      * {weshare_id: 1, address_id: 1, products: [{id: 1, num:2}, {id: 2, num: 10}], buyer: {name: 'Zhang San', mobilephone: 13521112222}}
      */
     public function makeOrder() {
+        $this->autoRender=false;
         $uid = $this->currentUser['id'];
         if(empty($uid)){
             echo json_encode(array('success' => false, 'reason' => 'not_login'));
@@ -123,7 +124,7 @@ class WesharesController extends AppController {
         $tinyProducts = $this->WeshareProduct->find('all', array(
             'conditions' => array(
                 'id' => $tinyBuyProductIds,
-                'wesahre_id' => $weshareId
+                'weshare_id' => $weshareId
             )
         ));
         $order = $this->Order->save(array('creator' => $uid, 'consignee_address' => $tinyAddress['WeshareAddress']['address'] ,'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $buyerData['name'], 'consignee_mobilephone' => $buyerData['mobilephone']));
@@ -137,7 +138,7 @@ class WesharesController extends AppController {
             $item['name'] = $p['WeshareProduct']['name'];
             $item['num'] = $num;
             $item['price'] = $price;
-            $item['type'] = ORDER_TYPE_TINY_BUY;
+            $item['type'] = ORDER_TYPE_WESHARE_BUY;
             $item['product_id'] = $p['TinyBuyProduct']['id'];
             $item['created'] = date('Y-m-d H:i:s');
             $item['updated'] = date('Y-m-d H:i:s');
@@ -156,6 +157,7 @@ class WesharesController extends AppController {
     private function saveWeshareProducts($weshareId, $weshareProductData) {
         foreach ($weshareProductData as &$product) {
             $product['weshare_id'] = $weshareId;
+            $product['price'] = ($product['price']*100);
         }
         return $this->WeshareProduct->saveAll($weshareProductData);
     }

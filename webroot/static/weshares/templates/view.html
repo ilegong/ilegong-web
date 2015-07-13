@@ -20,17 +20,17 @@
             <dl class="clearfix" ng-repeat="product in vm.weshare.products">
                 <dd class="fl" ng-bind="product.name"></dd>
                 <dd class="fr">
-                    <a style="background-position: 0 -65px"></a>
-                    <label>0</label>
-                    <a style="background-position: -35px -65px"></a>
+                    <a ng-click="vm.decreaseProductNum(product)" style="background-position: 0 -65px"></a>
+                    <label ng-bind="product.num||0"></label>
+                    <a ng-click="vm.increaseProductNum(product)" style="background-position: -35px -65px"></a>
                 </dd>
-                <dd class="fr" style="color: #29AC0E;" ng-bind="product.price | currency:'￥'"></dd>
+                <dd class="fr" style="color: #29AC0E;" ng-bind="product.price/100 | currency:'￥'"></dd>
             </dl>
             <div class="share_tuan_select">
                 <select ng-model='vm.weshare.selectedAddressId'>
                     <option ng-repeat="address in vm.weshare.addresses" value="{{address.id}}">{{address.address}}</option>
                 </select>
-                <font>总金额：￥129.00</font>
+                <font>总金额：<span ng-bind="vm.orderTotalPrice | currency:'￥'"></span></font>
             </div>
         </div>
     </div>
@@ -62,10 +62,10 @@
         <input placeholder="输入姓名" ng-model='vm.buyerName'/>
         <input placeholder="输入手机号" ng-model='vm.buyerMobilePhone'/>
     </div>
-    <font>支付金额：￥129.00</font>
+    <font>支付金额：<span ng-bind="vm.orderTotalPrice | currency:'￥'"></span></font>
     <div class="clearfix starttuan_btn">
         <a ng-click='vm.submitOrder(0);' style="background-color: #29ac0e;">微信支付</a>
-        <a href="#X" style="background-color: #ffa200;">支付宝</a>
+        <a ng-click='vm.submitOrder(1);' style="background-color: #ffa200;">支付宝</a>
     </div>
 </div>
 <div class="tipslayer_bg" ng-show="vm.showLayer"></div>
