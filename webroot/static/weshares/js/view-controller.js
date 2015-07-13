@@ -56,7 +56,7 @@
       _.each(products,function(product){
         totalPrice+=product.price*product.num;
       });
-      vm.orderTotalPrice = totalPrice;
+      vm.orderTotalPrice = totalPrice/100;
     }
 
     function increaseProductNum(product) {
