@@ -14,6 +14,7 @@
     vm.submitOrder = submitOrder;
     vm.increaseProductNum = increaseProductNum;
     vm.decreaseProductNum =decreaseProductNum;
+    vm.getOrderDisplayName = getOrderDisplayName;
 
     activate();
     function activate() {
@@ -32,6 +33,15 @@
         error(function (data, status) {
           $log.log(data);
         });
+    }
+
+    function getOrderDisplayName(orderId){
+      var carts = vm.ordersDetail.order_cart_map[orderId];
+      var showName = '';
+      _.each(carts,function(cart){
+        showName+=cart.name+'X'+cart.num+' ';
+      });
+      return showName;
     }
 
     function getShowAddress() {

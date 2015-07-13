@@ -40,7 +40,7 @@
             <li class="detail">
                 <b></b>
                 <p><strong ng-bind="vm.ordersDetail.users[order.creator]['nickname']"></strong> 参加了团购</p>
-                <q ng-bind="vm.getOrderDisplayName(order)"></q>
+                <q ng-bind="vm.getOrderDisplayName(order.id)"></q>
                 <c ng-bind="order.created"></c>
             </li>
         </ul>
