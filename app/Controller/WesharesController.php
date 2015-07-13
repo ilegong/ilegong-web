@@ -113,7 +113,7 @@ class WesharesController extends AppController {
         $addressId = $postDataArray['address_id'];
         $buyerData = $postDataArray['buyer'];
         $cart = array();
-        $tinyBuyProductIds = Hash::extract($products, '{n}.id');
+        $weshareProductIds = Hash::extract($products, '{n}.id');
         $productIdNumMap = Hash::combine($products, '{n}.id', '{n}.num');
         $tinyAddress = $this->WeshareAddress->find('first', array(
             'conditions' => array(
@@ -121,16 +121,16 @@ class WesharesController extends AppController {
                 'weshare_id' => $weshareId
             )
         ));
-        $tinyProducts = $this->WeshareProduct->find('all', array(
+        $weshareProducts = $this->WeshareProduct->find('all', array(
             'conditions' => array(
-                'id' => $tinyBuyProductIds,
+                'id' => $weshareProductIds,
                 'weshare_id' => $weshareId
             )
         ));
         $order = $this->Order->save(array('creator' => $uid, 'consignee_address' => $tinyAddress['WeshareAddress']['address'] ,'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $buyerData['name'], 'consignee_mobilephone' => $buyerData['mobilephone']));
         $orderId = $order['Order']['id'];
         $totalPrice = 0;
-        foreach ($tinyProducts as $p) {
+        foreach ($weshareProducts as $p) {
             $item = array();
             $pid = $p['WeshareProduct']['id'];
             $num = $productIdNumMap[$pid];
@@ -139,7 +139,7 @@ class WesharesController extends AppController {
             $item['num'] = $num;
             $item['price'] = $price;
             $item['type'] = ORDER_TYPE_WESHARE_BUY;
-            $item['product_id'] = $p['TinyBuyProduct']['id'];
+            $item['product_id'] = $p['WeshareProduct']['id'];
             $item['created'] = date('Y-m-d H:i:s');
             $item['updated'] = date('Y-m-d H:i:s');
             $item['creator'] = $uid;
