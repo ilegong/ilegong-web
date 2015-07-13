@@ -1,39 +1,71 @@
-<div class="weshare-view">
-    <ul class="clearfix profile">
-        <li class='fl'>
-            <img class='avatar' ng-src="{{vm.weshare.creator.image}}" />
-        </li>
-        <li class='fl'>
-            <label class='name' ng-bind="vm.weshare.creator.nickname"></label>
-            <s class='weshare-summary'>已有<span ng-bind='vm.ordersDetail.users.length'></span>人参团  &nbsp;|&nbsp;  <span ng-bind='vm.weshare.created'></span></s>
+<div class="share_tuan">
+    <ul class="clearfix">
+        <li><img ng-src="{{vm.weshare.creator.image}}" /></li>
+        <li>
+            <label ng-bind="vm.weshare.creator.nickname"></label>
+            <s>已有<span ng-bind='vm.ordersDetail.users.length'></span>人参团  &nbsp;|&nbsp;  <span ng-bind='vm.weshare.created'></span></s>
         </li>
     </ul>
-    <div class="detail">
+    <div class="share_tuan_introduce">
         <b></b>
-        <div class="status" ng-bind="vm.statusMap[vm.weshare.status]"></div>
-        <h1 class='title' ng-bind="vm.weshare.title"></h1>
-        <s class='send-date'>
-            取货时间: <span ng-bind='vm.weshare.send_info'></span>
-            <br/>
-            取货地点：<span ng-bind='vm.weshare.showAddresses'></span>
-        </s>
-        <p class='description' ng-bind='vm.weshare.description'></p>
-        <a>更多</a>
-        <dl class="clearfix image" ng-repeat="image in vm.weshare.images">
+        <div class="share_tuan_state" ng-bind="vm.statusMap[vm.weshare.status]"></div>
+        <h1 ng-bind="vm.weshare.title"></h1>
+        <s>取货时间: <span ng-bind='vm.weshare.send_info'></span><br/>取货地点：<span ng-bind='vm.weshare.showAddresses'></span></s>
+        <p ng-bind='vm.weshare.description'></p>
+        <!--<a href="#X">更多</a>-->
+        <dl class="clearfix" ng-repeat="image in vm.weshare.images">
             <dt><a ng-click="vm.viewImage(image)"><img ng-src="{{image}}"/></a></dt>
         </dl>
-        <div class="product" ng-repeat="product in vm.weshare.products">
-            <dl class="clearfix">
+        <div class="share_tuan_detail">
+            <dl class="clearfix" ng-repeat="product in vm.weshare.products">
                 <dd class="fl" ng-bind="product.name"></dd>
-                <dd class="fr">团{{vm.ordersDetail.summery[product.id]||0}}份</dd>
+                <dd class="fr">
+                    <a style="background-position: 0 -65px"></a>
+                    <label>0</label>
+                    <a style="background-position: -35px -65px"></a>
+                </dd>
                 <dd class="fr" style="color: #29AC0E;" ng-bind="product.price | currency:'￥'"></dd>
             </dl>
+            <div class="share_tuan_select">
+                <select>
+                    <option ng-repeat="address in vm.weshare.addresses" value="address.id">{{address.address}}</option>
+                </select>
+                <font>总金额：￥129.00</font>
+            </div>
         </div>
     </div>
-    <div class="orders">
-        <ul class="clearfix">
-            <li class='fl'><img src="images/head.png" /></li>
-            <li class='fl'></li>
+    <div class="share_tuan_order" ng-repeat="order in vm.ordersDetail.orders">
+        <ul class="clearfix" ng-class="{'mine_order': vm.currentUser==order.creator}">
+            <li><img ng-src="{{vm.ordersDetail.users[order.creator]['image']}}"/></li>
+            <li class="detail">
+                <b></b>
+                <p><strong ng-bind="vm.ordersDetail.users[order.creator]['nickname']"></strong> 参加了团购</p>
+                <q ng-bind="vm.getOrderDisplayName(order)"></q>
+                <c ng-bind="order.created"></c>
+            </li>
         </ul>
     </div>
 </div>
+<a class="tuan_stopbtn" style="display: none;">已截团</a>
+<a class="tuan_btn" style="display: none;">截团</a>
+<div class="clearfix starttuan_btn">
+    <a ng-click="vm.showBuyingDialog=true;vm.showLayer=true;" style="background-color: #ffa200;">我要参团</a>
+    <a href="#X" style="background-color: #29ac0e;">分享给好友一起团</a>
+</div>
+<!--支付层-->
+<div class="share_tuan_pay" ng-show="vm.showBuyingDialog">
+    <div class="clearfix" style="padding: 5px 10px 0px 10px;">
+        <label>输入联系信息</label>
+        <a ng-click="vm.showBuyingDialog=false;vm.showLayer=false;" class="closebtn fr"></a>
+    </div>
+    <div class="clearfix">
+        <input placeholder="输入姓名"/>
+        <input placeholder="输入手机号"/>
+    </div>
+    <font>支付金额：￥129.00</font>
+    <div class="clearfix starttuan_btn">
+        <a href="#X" style="background-color: #29ac0e;">微信支付</a>
+        <a href="#X" style="background-color: #ffa200;">支付宝</a>
+    </div>
+</div>
+<div class="tipslayer_bg" ng-show="vm.showLayer"></div>

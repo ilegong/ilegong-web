@@ -47,6 +47,7 @@ class WesharesController extends AppController {
 
     public function detail($weshareId) {
         $this->autoRender = false;
+        $uid = $this->currentUser['id'];
         $weshareInfo = $this->Weshare->find('first', array(
             'conditions' => array(
                 'id' => $weshareId
@@ -75,7 +76,7 @@ class WesharesController extends AppController {
         $weshareInfo['creator'] = $creatorInfo['User'];
         $ordersDetail = $this->get_weshare_buy_info($weshareId);
         $weshareInfo['images'] = array_filter(explode('|',$weshareInfo['images']));
-        echo json_encode(array('weshare' => $weshareInfo, 'ordersDetail' => $ordersDetail));
+        echo json_encode(array('weshare' => $weshareInfo, 'ordersDetail' => $ordersDetail, 'current_user' => $uid));
         return;
     }
 
@@ -187,9 +188,11 @@ class WesharesController extends AppController {
             'fields' => array('id', 'nickname', 'image', 'wx_subscribe_status'),
         ));
         $orders = Hash::combine($orders, '{n}.Order.id', '{n}.Order');
-        $orders = usort($orders, function ($a, $b) {
-            return ($a['id'] < $b['id']) ? -1 : 1;
-        });
+        if($orders){
+            $orders = usort($orders, function ($a, $b) {
+                return ($a['id'] < $b['id']) ? -1 : 1;
+            });
+        }
         $carts = $this->Cart->find('all', array(
             'conditions' => array(
                 'order_id' => $orderIds,

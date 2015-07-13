@@ -11,13 +11,13 @@
     };
     vm.viewImage = viewImage;
 
-    vm.getAllAddress = getAllAddress;
+    vm.getShowAddress = getShowAddress;
 
-    function getAllAddress(){
+    function getShowAddress(){
       var addresses = _.map(vm.weshare.addresses,function(item){
         return item['address'];
       });
-      return addresses.join(',');
+      return addresses.join('  ');
     }
 
     function viewImage(url){
@@ -32,8 +32,9 @@
         success(function (data, status) {
           $log.log(data);
           vm.weshare = data['weshare'];
-          vm.weshare.showAddresses = vm.getAllAddress();
+          vm.weshare.showAddresses = vm.getShowAddress();
           vm.ordersDetail = data['ordersDetail'];
+          vm.currentUser = data['current_user'];
         }).
         error(function (data, status) {
           $log.log(data);
