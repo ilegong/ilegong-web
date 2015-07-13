@@ -208,7 +208,7 @@ class WesharesController extends AppController {
             $product_id = $item['Cart']['product_id'];
             $cart_num = $item['Cart']['num'];
             if (!isset($product_buy_num[$product_id])) $product_buy_num[$product_id] = 0;
-            if (!isset($orders[$order_id]['carts'])) $orders[$order_id]['carts'] = array();
+            if (!isset($orders[$order_id]['carts']))  $order_cart_map[$order_id] = array();
             $product_buy_num[$product_id] = $product_buy_num[$product_id] + $cart_num;
             $order_cart_map[$order_id][] = $item['Cart'];
         }
