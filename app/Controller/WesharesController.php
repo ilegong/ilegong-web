@@ -191,7 +191,7 @@ class WesharesController extends AppController {
         ));
         $orders = Hash::combine($orders, '{n}.Order.id', '{n}.Order');
         if($orders){
-            $orders = usort($orders, function ($a, $b) {
+            usort($orders, function ($a, $b) {
                 return ($a['id'] < $b['id']) ? -1 : 1;
             });
         }
