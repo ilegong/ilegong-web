@@ -110,7 +110,7 @@ class WesharesController extends AppController {
         $postDataArray = json_decode($postStr, true);
         $products = $postDataArray['products'];
         $weshareId = $postDataArray['weshare_id'];
-        $addressId = $postDataArray['addressId'];
+        $addressId = $postDataArray['address_id'];
         $buyerData = $postDataArray['buyer'];
         $cart = array();
         $tinyBuyProductIds = Hash::extract($products, '{n}.id');
@@ -171,6 +171,7 @@ class WesharesController extends AppController {
 
     private function get_weshare_buy_info($weshareId) {
         $product_buy_num = array();
+        $order_cart_map = array();
         $orders = $this->Order->find('all', array(
             'conditions' => array(
                 'member_id' => $weshareId,
@@ -199,18 +200,19 @@ class WesharesController extends AppController {
             'conditions' => array(
                 'order_id' => $orderIds,
                 'type' => ORDER_TYPE_WESHARE_BUY
-            )
+            ),
+            'fields' => array('id', 'name', 'order_id', 'num')
         ));
         foreach ($carts as $item) {
             $order_id = $item['Cart']['order_id'];
             $product_id = $item['Cart']['product_id'];
             $cart_num = $item['Cart']['num'];
-            if (!isset($product_buy_num[$product_id])) $product_buy_num[$product_buy_num] = 0;
+            if (!isset($product_buy_num[$product_id])) $product_buy_num[$product_id] = 0;
             if (!isset($orders[$order_id]['carts'])) $orders[$order_id]['carts'] = array();
-            $product_buy_num[$product_buy_num] = $product_buy_num[$product_buy_num] + $cart_num;
-            $orders[$order_id]['carts'][] = $item;
+            $product_buy_num[$product_id] = $product_buy_num[$product_id] + $cart_num;
+            $order_cart_map[$order_id][] = $item;
         }
         $users = Hash::combine($users, '{n}.User.id', '{n}.User');
-        return array('users' => $users, 'orders' => $orders, 'summery' => $product_buy_num);
+        return array('users' => $users, 'orders' => $orders, 'order_cart_map'=> $order_cart_map ,'summery' => $product_buy_num);
     }
 }
