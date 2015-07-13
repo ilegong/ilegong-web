@@ -97,10 +97,11 @@
 
 		function nextStep() {
 			var titleHasError = vm.validateTitle();
-			var productHasError = _.any(vm.weshare.products, function (product) {
+			var productHasError = false;
+			_.each(vm.weshare.products, function (product) {
 				var nameHasError = vm.validateProductName(product);
 				var priceHasError = vm.validateProductPrice(product);
-				return nameHasError || priceHasError;
+				productHasError = productHasError || nameHasError || priceHasError;
 			});
 			if (titleHasError || productHasError) {
 				return;
