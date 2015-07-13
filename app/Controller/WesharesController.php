@@ -210,7 +210,7 @@ class WesharesController extends AppController {
             if (!isset($product_buy_num[$product_id])) $product_buy_num[$product_id] = 0;
             if (!isset($orders[$order_id]['carts'])) $orders[$order_id]['carts'] = array();
             $product_buy_num[$product_id] = $product_buy_num[$product_id] + $cart_num;
-            $order_cart_map[$order_id][] = $item;
+            $order_cart_map[$order_id][] = $item['Cart'];
         }
         $users = Hash::combine($users, '{n}.User.id', '{n}.User');
         return array('users' => $users, 'orders' => $orders, 'order_cart_map'=> $order_cart_map ,'summery' => $product_buy_num);
