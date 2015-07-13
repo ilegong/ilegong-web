@@ -27,8 +27,8 @@
                 <dd class="fr" style="color: #29AC0E;" ng-bind="product.price | currency:'￥'"></dd>
             </dl>
             <div class="share_tuan_select">
-                <select>
-                    <option ng-repeat="address in vm.weshare.addresses" value="address.id">{{address.address}}</option>
+                <select ng-model='vm.weshare.selectedAddressId'>
+                    <option ng-repeat="address in vm.weshare.addresses" value="{{address.id}}">{{address.address}}</option>
                 </select>
                 <font>总金额：￥129.00</font>
             </div>
@@ -59,12 +59,12 @@
         <a ng-click="vm.showBuyingDialog=false;vm.showLayer=false;" class="closebtn fr"></a>
     </div>
     <div class="clearfix">
-        <input placeholder="输入姓名"/>
-        <input placeholder="输入手机号"/>
+        <input placeholder="输入姓名" ng-model='vm.buyerName'/>
+        <input placeholder="输入手机号" ng-model='vm.buyerMobilePhone'/>
     </div>
     <font>支付金额：￥129.00</font>
     <div class="clearfix starttuan_btn">
-        <a href="#X" style="background-color: #29ac0e;">微信支付</a>
+        <a ng-click='vm.submitOrder(0);' style="background-color: #29ac0e;">微信支付</a>
         <a href="#X" style="background-color: #ffa200;">支付宝</a>
     </div>
 </div>
