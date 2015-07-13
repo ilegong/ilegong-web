@@ -84,10 +84,20 @@ class WesharesController extends AppController {
 
     }
 
-    public function pay($orderId) {
-
+    public function pay($orderId,$type) {
+        if($type==0){
+            $this->redirect('/wxPay/jsApiPay/'.$orderId);
+            return;
+        }
+        if($type==1){
+            $this->redirect('/ali_pay/wap_to_alipay/'.$orderId);
+            return;
+        }
     }
 
+    /**
+     * {weshare_id: 1, address_id: 1, products: [{id: 1, num:2}, {id: 2, num: 10}], buyer: {name: 'Zhang San', mobilephone: 13521112222}}
+     */
     public function makeOrder() {
         $uid = $this->currentUser['id'];
         if(empty($uid)){
@@ -97,18 +107,25 @@ class WesharesController extends AppController {
         $postStr = file_get_contents('php://input');
         $postDataArray = json_decode($postStr, true);
         $products = $postDataArray['products'];
-        $weshareId = $postDataArray['weshareId'];
+        $weshareId = $postDataArray['weshare_id'];
         $addressId = $postDataArray['addressId'];
+        $buyerData = $postDataArray['buyer'];
         $cart = array();
         $tinyBuyProductIds = Hash::extract($products, '{n}.id');
         $productIdNumMap = Hash::combine($products, '{n}.id', '{n}.num');
+        $tinyAddress = $this->WeshareAddress->find('first', array(
+            'conditions' => array(
+                'id' => $addressId,
+                'weshare_id' => $weshareId
+            )
+        ));
         $tinyProducts = $this->WeshareProduct->find('all', array(
             'conditions' => array(
                 'id' => $tinyBuyProductIds,
                 'wesahre_id' => $weshareId
             )
         ));
-        $order = $this->Order->save(array('creator' => $uid, 'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId));
+        $order = $this->Order->save(array('creator' => $uid, 'consignee_address' => $tinyAddress['WeshareAddress']['address'] ,'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $buyerData['name'], 'consignee_mobilephone' => $buyerData['mobilephone']));
         $orderId = $order['Order']['id'];
         $totalPrice = 0;
         foreach ($tinyProducts as $p) {
