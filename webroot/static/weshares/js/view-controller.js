@@ -108,7 +108,7 @@
     }
 
     function validateUserName(){
-      vm.usernameHasError =  _.empty(vm.buyerName);
+      vm.usernameHasError =  _.isEmpty(vm.buyerName);
       return vm.usernameHasError;
     }
 
