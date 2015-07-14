@@ -104,7 +104,12 @@ class AliPayController extends AppController {
         } else {
             $uid = $this->currentUser['id'];
             if(empty($uid)){
+                if($_GET['from']=='share'){
+                    $this->redirect('/users/login?referer='.Router::url('/weshares/pay/'.$order_id));
+                    return;
+                }
                 $this->redirect('/users/login?referer='.Router::url('/orders/detail/'.$order_id));
+                return;
             }
             $type=ALI_PAY_TYPE_WAP;
         }
@@ -127,6 +132,7 @@ class AliPayController extends AppController {
                     'limit_time'=>$limit_time,
                     'form'=>$form,
                     'status'=>1,
+                    'from' => $from,
                 ));
             }else{
                 $cache_form = $AlipayCacheForm->save(array(
@@ -136,6 +142,7 @@ class AliPayController extends AppController {
                     'order_id'=>$order_id,
                     'created'=>$create_time,
                     'status'=>1,
+                    'from' => $from,
                 ));
             }
             if(!empty($cache_form)){
@@ -143,7 +150,8 @@ class AliPayController extends AppController {
                 $this->redirect(array('action' => 'pay_short_url', $uuid));
             }
         }else{
-            $this->set('form', $form);
+            //标记来源
+            $this->set('from', $from);
             $this->pageTitle = '支付宝支付';
         }
     }
@@ -335,9 +343,16 @@ class AliPayController extends AppController {
 
         if($pay_uuid){
             if($isSuccess){
-                $this->redirect(array('action'=>'pay_short_url',$pay_uuid,'?'=>array(
-                    'paid_msg' => $msg, 'display_status' => $display_status, 'msg' => 'ok','callback'=>true
-                )));
+                if($order['Order']['type']==ORDER_TYPE_WESHARE_BUY){
+                    $weshareId = $order['Order']['member_id'];
+                    $this->redirect('/weshares/index#!/view/'.$weshareId);
+                    return;
+                }else{
+                    $this->redirect(array('action'=>'pay_short_url',$pay_uuid,'?'=>array(
+                        'paid_msg' => $msg, 'display_status' => $display_status, 'msg' => 'ok','callback'=>true
+                    )));
+                    return;
+                }
             }else{
                 $this->redirect(array('action'=>'pay_short_url',$pay_uuid,'?'=>array(
                     'paid_msg' => $msg, 'display_status' => $display_status,'callback'=>true
@@ -355,14 +370,17 @@ class AliPayController extends AppController {
                 }
                 $this->redirect($group_url);
             } else {
+                if($order['Order']['type']==ORDER_TYPE_WESHARE_BUY){
+                    $weshareId = $order['Order']['member_id'];
+                    $this->redirect('/weshares/index#!/view/'.$weshareId);
+                    return;
+                }
                 if($isSuccess){
                     $this->redirect(array('controller' => 'Orders', 'action' => 'detail', $order_id, 'pay', '?' => array('paid_msg' => $msg, 'display_status' => $display_status, 'msg' => 'ok')));
-
                 }else{
                     $this->redirect(array('controller' => 'Orders', 'action' => 'detail', $order_id, 'pay', '?' => array('paid_msg' => $msg, 'display_status' => $display_status)));
                 }
             }
-
             $this->autoRender = false;
         } else {
             $this->set('paid_msg', $msg);

@@ -3,7 +3,7 @@
     //调用微信JS api 支付
     function jsApiCall()
     {
-        var doneUrlPrefix = '/orders/detail/' + {{$orderId}} + '/paid?tradeNo={{urlencode($tradeNo)}}&msg=';
+        var doneUrlPrefix = '{{$paid_done_url}}';
         WeixinJSBridge.invoke(
                 'getBrandWCPayRequest',
                 {{$jsApiParameters}},

@@ -136,11 +136,18 @@ class WxPayController extends AppController {
 
         $uid = $this->currentUser['id'];
         $error_pay_redirect = '/orders/detail/' . $orderId . '/pay';
+        $paid_done_url = '/orders/detail/'.$orderId.'/paid';
         $this->pageTitle = '微信支付';
-
         $order = $this->WxPayment->findOrderAndCheckStatus($orderId, $uid);
-
+        if($_GET['from']=='share'){
+            $shareId = $order['Order']['member_id'];
+            $this->set('shareId',$shareId);
+            $paid_done_url = '/weshares/index#!/view/'.$shareId;
+            $error_pay_redirect = '/weshares/index#!/view/'.$shareId;
+        }
         list($jsapi_param, $out_trade_no, $productDesc) = $this->__prepareWXPay($error_pay_redirect, $orderId, $uid, $order);
+        $paid_done_url = $paid_done_url.'?tradeNo='.$out_trade_no.'&msg=';
+        $this->set('paid_done_url',$paid_done_url);
         $this->set('jsApiParameters', $jsapi_param);
         $this->set('totalFee', $order['Order']['total_all_price']);
         $this->set('tradeNo', $out_trade_no);

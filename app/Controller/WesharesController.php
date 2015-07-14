@@ -87,11 +87,11 @@ class WesharesController extends AppController {
 
     public function pay($orderId,$type) {
         if($type==0){
-            $this->redirect('/wxPay/jsApiPay/'.$orderId);
+            $this->redirect('/wxPay/jsApiPay/'.$orderId.'?from=share');
             return;
         }
         if($type==1){
-            $this->redirect('/ali_pay/wap_to_alipay/'.$orderId);
+            $this->redirect('/ali_pay/wap_to_alipay/'.$orderId.'?from=share');
             return;
         }
     }
