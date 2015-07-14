@@ -41,7 +41,7 @@ ul li { list-style: none; }
 .weshare-add .back-btn{ color: #29AC0E; display: block; width: 80px; margin: 0 auto; margin-top: -15px; margin-bottom: 30px;}
 
 /*分享参团*/
-.weshare-view{ padding: 54px 10px;}
+.weshare-view{ padding: 10px;}
 .weshare-view ul img{ width:50px; border-radius: 50px;}
 .weshare-view ul li{ float: left;}
 .weshare-view ul li label{ font-weight: bold; display: block; padding-left: 10px; color: #29AC0E; font-size: 16px; padding-top: 5px;}
