@@ -70,8 +70,6 @@ class WesharesController extends AppController {
             'recursive' => 1, //int
             'fields' => array('id', 'nickname', 'image', 'wx_subscribe_status'),
         ));
-        $createDate = $weshareInfo['Weshare']['created'];
-        $weshareInfo['Weshare']['created'] = date('Y-m-d',strtotime($createDate));
         $weshareInfo = $weshareInfo['Weshare'];
         $weshareInfo['addresses'] = Hash::extract($weshareAddresses, '{n}.WeshareAddress');
         $weshareInfo['products'] = Hash::extract($weshareProducts, '{n}.WeshareProduct');
