@@ -16,6 +16,10 @@
     vm.decreaseProductNum =decreaseProductNum;
     vm.getOrderDisplayName = getOrderDisplayName;
 
+		vm.validateAddress = validateAddress;
+		vm.validateProducts = validateProducts;
+		vm.buyProducts = buyProducts;
+
     activate();
     function activate() {
       var weshareId = $stateParams.id;
@@ -25,7 +29,13 @@
         success(function (data, status) {
           $log.log(data);
           vm.weshare = data['weshare'];
-          vm.weshare.selectedAddressId = vm.weshare.addresses.length > 1 ? vm.weshare.addresses[0].id : -1;
+					if(vm.weshare.addresses.length == 1){
+						vm.weshare.selectedAddressId = vm.weshare.addresses[0].id;
+					}
+					else{
+						vm.weshare.addresses.unshift({id: - 1, address: '请选择收货地址'});
+						vm.weshare.selectedAddressId = -1;
+					}
           vm.weshare.showAddresses = vm.getShowAddress();
           vm.ordersDetail = data['ordersDetail'];
           vm.currentUser = data['current_user'];
@@ -98,6 +108,29 @@
       }
       calOrderTotalPrice();
     }
+
+		function validateAddress(){
+			vm.addressHasError = vm.weshare.selectedAddressId == -1;
+			return vm.addressHasError;
+		}
+
+		function validateProducts(){
+			vm.productsHasError = _.all(vm.weshare.products, function(product){
+			 	product.num <= 0;
+			});
+			return vm.productsHasError;
+		}
+
+		function buyProducts(){
+			var addressHasError = vm.validateAddress();
+			var productsHasError = vm.validateProducts();
+			if(addressHasError || productsHasError){
+				return;
+			}
+
+			vm.showBuyingDialog=true;
+			vm.showLayer=true;
+		}
 
     function submitOrder(paymentType) {
       var products = _.filter(vm.weshare.products, function (product) {

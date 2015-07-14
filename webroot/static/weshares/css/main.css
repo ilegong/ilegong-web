@@ -14,7 +14,6 @@ ul li { list-style: none; }
 .gray { color: #999999; }
 
 
-
 /*返回*/
 .classlist { height: 44px; line-height: 44px; width: 100%; text-align: center; color: #ffffff; font-size: 20px; background-color: #29ac0e; position: fixed; top: 0; z-index: 999; overflow: hidden;}
 .classlist a.back { display: block; position: absolute; top: 10px; left: 10px; width: 1.167em; height: 1.133em; background: url(../images/pyshuo_icon.png) no-repeat -15.667em -5.333em; background-size: 20em 20em;}
@@ -23,8 +22,8 @@ ul li { list-style: none; }
 .form-group{margin-bottom: 15px;}
 .form-group .form-control{box-shadow: none; width:100%; font-size: 14px; color: #666; padding: 10px; line-height: 1.42857143; border: 1px #eee solid;-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;}
 .form-group.has-error .form-control{ border-color: #a94442;}
-.form-group select.form-control{background-color: white;}
-.form-group .tips{display: none;}
+.form-group select.form-control{background-color: white; height: 38px;}
+.form-group .tips{display: none; color: #c62a35;}
 .form-group.has-error .tips{display: block;}
 
 /*上传信息页面*/
@@ -98,7 +97,9 @@ ul li { list-style: none; }
 .tipslayer_bg{ width: 100%; height: 100%; background-attachment: fixed; background-color: #000000;filter:alpha(opacity=70);-moz-opacity:0.70; opacity:0.70; position: fixed; z-index: 4; top: 0; left: 0;}
 .tuan_statistics{ color: #ffffff; margin: 0 auto; font-size: 16px; line-height: 35px; position: fixed; top: 80px; left: 0; width: 100%; z-index: 6;}
 .tuan_statistics ul{ width: 80%; margin: 0 auto;}
-.tuan_statistics ul li strong{ color: #ffa200;}
+.tuan_statistics ul li strong {
+    color: #ffa200;
+}
 .tipslayer_share {
     width: 100%;
     background-color: #ffffff;
