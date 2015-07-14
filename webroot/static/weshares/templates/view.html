@@ -57,17 +57,19 @@
 </div>
 <!--支付层-->
 <div class="buying-dialog" ng-show="vm.showBuyingDialog">
-    <div class="clearfix" style="padding: 5px 10px 0px 10px;">
+    <div class="clearfix title">
         <label>输入联系信息</label>
         <a ng-click="vm.showBuyingDialog=false;vm.showLayer=false;" class="closebtn fr"></a>
     </div>
-    <div class="clearfix">
-        <div class="form-group fl" ng-class="{'has-error': vm.usernameHasError}" style='width: 50%;'>
-            <input placeholder="输入姓名" ng-model='vm.buyerName' ng-change='vm.validateUserName()'/>
+    <div class="clearfix" style="padding: 0 10px;">
+        <div class="form-group" ng-class="{'has-error': vm.usernameHasError}">
+            <input class='form-control' placeholder="输入姓名" ng-model='vm.buyerName' ng-change='vm.validateUserName()'/>
             <p class='tips'>请输入收货人</p>
         </div>
-        <div class="form-group fl" ng-class="{'has-error': vm.buyerMobilePhoneHasError}" style='width: 50%;'>
-            <input placeholder="输入手机号" ng-model='vm.buyerMobilePhone' ng-change='vm.validateMobile()'/>
+    </div>
+    <div class="clearfix" style="padding: 0 10px;">
+        <div class="form-group" ng-class="{'has-error': vm.buyerMobilePhoneHasError}">
+            <input class='form-control' placeholder="输入手机号" ng-model='vm.buyerMobilePhone' ng-change='vm.validateMobile()'/>
             <p class='tips'>请输入手机号</p>
         </div>
     </div>
