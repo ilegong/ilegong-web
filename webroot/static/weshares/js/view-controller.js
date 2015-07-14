@@ -42,7 +42,9 @@
       to_friend_title = vm.weshare.title;;
       imgUrl = vm.weshare.images[0]||'http://51daifan-images.stor.sinaapp.com/files/201503/thumb_m/f6b318ac5a5_0318.jpg';
       desc = vm.weshare.description;
-      share_string = vm.weixinInfo.share_string;
+      if(vm.weixinInfo){
+        share_string = vm.weixinInfo.share_string;
+      }
     }
 
     function getOrderDisplayName(orderId){

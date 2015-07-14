@@ -88,7 +88,7 @@ class WesharesController extends AppController {
             $weixinJs = prepare_wx_share_log($uid, 'wsid', $weshareId);
             return $weixinJs;
         }
-        return array();
+        return null;
     }
 
     public function buy() {
