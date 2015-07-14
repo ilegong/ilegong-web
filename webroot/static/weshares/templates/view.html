@@ -3,9 +3,9 @@
         <li><img ng-src="{{vm.weshare.creator.image}}" /></li>
         <li>
             <label ng-bind="vm.weshare.creator.nickname"></label>
-            <s>已有<span ng-bind='vm.ordersDetail.orders.length'></span>人参团  &nbsp;|&nbsp;  <span ng-bind='vm.weshare.created'></span></s>
+            <s>已有<span ng-bind='vm.ordersDetail.orders.length'></span>人参团</s>
         </li>
-        <li style="float: right;"><a ng-click="vm.showStaticsDialog=true;vm.showLayer=true;">购买统计</a></li>
+        <li style="float: right;"><a class="statistics-btn" ng-click="vm.showStaticsDialog=true;vm.showLayer=true;">购买统计</a></li>
     </ul>
     <div class="introduction">
         <b></b>
