@@ -14,8 +14,8 @@
         <s>取货时间: <span ng-bind='vm.weshare.send_info'></span></s>
         <p ng-bind='vm.weshare.description'></p>
         <!--<a href="#X">更多</a>-->
-        <dl class="clearfix" ng-repeat="image in vm.weshare.images">
-            <dt><a ng-click="vm.viewImage(image)"><img ng-src="{{image}}"/></a></dt>
+        <dl class="clearfix images">
+            <dt ng-repeat="image in vm.weshare.images"><a ng-click="vm.viewImage(image)"><img ng-src="{{image}}"/></a></dt>
         </dl>
         <div class="share_tuan_detail products form-group" ng-class="{'has-error':vm.productsHasError}">
             <dl class="clearfix product form-control" ng-repeat="product in vm.weshare.products">
