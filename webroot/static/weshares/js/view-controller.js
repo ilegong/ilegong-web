@@ -117,7 +117,6 @@
 			return vm.addressHasError;
 		}
 
-
 		function validateProducts() {
 			vm.productsHasError = _.all(vm.weshare.products, function (product) {
 				return !product.num || product.num <= 0;
@@ -137,12 +136,13 @@
 		}
 
 		function submitOrder(paymentType) {
-      if(vm.buyerMobilePhoneHasError){
+			vm.validateUserName();
+			vm.validateMobile();
+
+      if(vm.buyerMobilePhoneHasError || vm.usernameHasError){
         return false;
       }
-      if(vm.usernameHasError){
-        return false;
-      }
+
 			var products = _.filter(vm.weshare.products, function (product) {
 				return product.num && (product.num > 0);
 			});
@@ -155,7 +155,7 @@
 				products: products,
 				buyer: {name: vm.buyerName, mobilephone: vm.buyerMobilePhone}
 			};
-			$log.log(orderData);
+
 			$http.post('/weshares/makeOrder/', orderData).success(function (data) {
 				$log.log(data);
 				if (data.success) {
@@ -163,8 +163,7 @@
 					window.location.href = '/weshares/pay/' + data.orderId + '/' + paymentType;
 				}
 			}).error(function () {
-
-				});
+			});
 		}
 	}
 })(window, window.angular);
