@@ -1,4 +1,4 @@
-<div class="share-tuan">
+<div class="weshare-view">
     <ul class="clearfix">
         <li><img ng-src="{{vm.weshare.creator.image}}" /></li>
         <li>
@@ -7,9 +7,9 @@
         </li>
         <li style="float: right;"><a ng-click="vm.showStaticsDialog=true;vm.showLayer=true;">购买统计</a></li>
     </ul>
-    <div class="share_tuan_introduce">
+    <div class="introduction">
         <b></b>
-        <div class="share_tuan_state" ng-bind="vm.statusMap[vm.weshare.status]"></div>
+        <div class="status" ng-bind="vm.statusMap[vm.weshare.status]"></div>
         <h1 ng-bind="vm.weshare.title"></h1>
         <s>取货时间: <span ng-bind='vm.weshare.send_info'></span></s>
         <p ng-bind='vm.weshare.description'></p>
@@ -17,45 +17,46 @@
         <dl class="clearfix" ng-repeat="image in vm.weshare.images">
             <dt><a ng-click="vm.viewImage(image)"><img ng-src="{{image}}"/></a></dt>
         </dl>
-        <div class="share_tuan_detail">
-            <dl class="form-group clearfix" ng-repeat="product in vm.weshare.products">
+        <div class="share_tuan_detail products form-group" ng-class="{'has-error':vm.productsHasError}">
+            <dl class="clearfix product form-control" ng-repeat="product in vm.weshare.products">
                 <dd class="fl" ng-bind="product.name"></dd>
                 <dd class="fr">
-                    <a ng-click="vm.decreaseProductNum(product)" style="background-position: 0 -65px"></a>
-                    <label ng-bind="product.num||0"></label>
-                    <a ng-click="vm.increaseProductNum(product)" style="background-position: -35px -65px"></a>
+                    <a class='btn decrease-btn' ng-click="vm.decreaseProductNum(product)"></a>
+                    <span class='num' ng-bind="product.num||0"></span>
+                    <a class='btn increase-btn' ng-click="vm.increaseProductNum(product)"></a>
                 </dd>
                 <dd class="fr" style="color: #29AC0E;" ng-bind="product.price/100 | currency:'￥'"></dd>
             </dl>
-            <div class="form-group" ng-class="{'has-error': vm.addressHasError}">
-                <select class='form-control' ng-model='vm.weshare.selectedAddressId' ng-options="address.id as address.address for address in vm.weshare.addresses" ng-change='vm.validateAddress()'>
-                    <option value="-1">请选择地址</option>
-                </select>
-                <div class='tips'>请选择收货地址</div>
-            </div>
+            <p class='tips'>请输入至少一个商品的数量</p>
+        </div>
+        <div class="form-group" ng-class="{'has-error': vm.addressHasError}">
+            <select class='form-control' ng-model='vm.weshare.selectedAddressId' ng-options="address.id as address.address for address in vm.weshare.addresses" ng-change='vm.validateAddress()'>
+                <option value="-1">请选择地址</option>
+            </select>
+            <p class='tips'>请选择收货地址</p>
         </div>
         <div class='total-fee'>总金额：<span ng-bind="vm.orderTotalPrice | currency:'￥'"></span></div>
     </div>
     <div class="orders">
-        <ul class="order clearfix" ng-class="{'mine_order': vm.currentUser==order.creator}" ng-repeat="order in vm.ordersDetail.orders">
-            <li><img ng-src="{{vm.ordersDetail.users[order.creator]['image']}}"/></li>
+        <ul class="order clearfix" ng-class="{'my-order': vm.currentUser==order.creator}" ng-repeat="order in vm.ordersDetail.orders">
+            <li><img class='buyer-image' ng-src="{{vm.ordersDetail.users[order.creator]['image']}}"/></li>
             <li class="detail">
-                <b></b>
-                <p><strong ng-bind="vm.ordersDetail.users[order.creator]['nickname']"></strong> 参加了团购</p>
+                <p><strong class='buyer-name' ng-bind="vm.ordersDetail.users[order.creator]['nickname']"></strong> 参加了团购</p>
                 <q>{{vm.getOrderDisplayName(order.id)}}</q>
-                <c ng-bind="order.created"></c>
+                <span class='created-at' ng-bind="order.created"></span>
             </li>
         </ul>
     </div>
 </div>
-<a class="tuan_stopbtn" style="display: none;">已截团</a>
-<a class="tuan_btn" style="display: none;">截团</a>
+
+<a class="btn stop-btn" style="display: none;">已截团</a>
+<a class="btn tuan-btn" style="display: none;">截团</a>
 <div class="clearfix starttuan_btn">
     <a ng-click="vm.buyProducts()" style="background-color: #ffa200;">我要参团</a>
     <a ng-click="vm.showShareDialog=true;vm.showLayer=true;" style="background-color: #29ac0e;">分享给好友一起团</a>
 </div>
 <!--支付层-->
-<div class="share_tuan_pay" ng-show="vm.showBuyingDialog">
+<div class="buying-dialog" ng-show="vm.showBuyingDialog">
     <div class="clearfix" style="padding: 5px 10px 0px 10px;">
         <label>输入联系信息</label>
         <a ng-click="vm.showBuyingDialog=false;vm.showLayer=false;" class="closebtn fr"></a>
@@ -71,7 +72,7 @@
     </div>
 </div>
 <!--购买统计-->
-<div class="tuan_statistics" ng-show="vm.showStaticsDialog">
+<div class="statistics-dialog" ng-show="vm.showStaticsDialog">
     <div ng-repeat="item in vm.ordersDetail.summery.details">
         <ul class="clearfix">
             <li class="fl" ng-bind="item.name"></li>
@@ -83,8 +84,8 @@
         <li class="fr"><strong>金额合计：{{vm.ordersDetail.summery.all_total_price/100 | currency:'￥'}}</strong></li>
     </ul>
 </div>
-<div class="tipslayer_share" ng-show="vm.showShareDialog">
+<div class="share-dialog" ng-show="vm.showShareDialog">
     <div style="width: 90%; margin: 0 auto; font-size: 1.3em;">点击右上角“…”，分享给好友或朋友圈。</div>
 </div>
 
-<div class="tipslayer_bg" ng-show="vm.showLayer" ng-click="vm.showLayer=false;vm.showStaticsDialog=false;vm.showBuyingDialog=false;vm.showShareDialog=false;"></div>
+<div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showLayer=false;vm.showStaticsDialog=false;vm.showBuyingDialog=false;vm.showShareDialog=false;"></div>
