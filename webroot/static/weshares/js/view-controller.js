@@ -119,7 +119,7 @@
 
 		function validateProducts() {
 			vm.productsHasError = _.all(vm.weshare.products, function (product) {
-				return _.isEmpty(product.num) || product.num <= 0;
+				return !product.num || product.num <= 0;
 			});
 			return vm.productsHasError;
 		}

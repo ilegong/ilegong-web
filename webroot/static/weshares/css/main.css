@@ -47,6 +47,7 @@ ul li { list-style: none; }
 .weshare-view ul li{ float: left;}
 .weshare-view ul li label{ font-weight: bold; display: block; padding-left: 10px; color: #29AC0E; font-size: 16px; padding-top: 5px;}
 .weshare-view ul li s{ font-size: 14px; color: #999999; text-decoration: none; display: block; padding-left: 10px; padding-top: 3px;}
+.weshare-view .statistics-btn{ display: block;background-color: #ffa200;color: #ffffff;text-decoration: none;text-align: center;width: 85px;line-height: 35px;margin-top: 10px;}
 
 .weshare-view .introduction{ background-color: #ffffff; border: 1px #eaeaea solid; border-radius: 5px; margin-top: 10px; padding: 15px; position: relative;}
 .weshare-view .introduction b{ display: block; position: absolute; top: -6px; left: 15px; background: url(../images/weifxicon.png) no-repeat -25px -25px; background-size: 100px 100px; width: 12px; height: 6px;}
