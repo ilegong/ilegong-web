@@ -64,6 +64,8 @@ class WxSharesController extends AppController{
                 $data_type = 'indexProduct';
             }elseif($data_str[0]=='voteEventId'){
                 $data_type = 'voteEvent';
+            }elseif($data_str[0]=='wxid'){
+                $data_type = 'we_share';
             } else {
                 $data_type = substr(trim($data_str[0]), 0, 12);
             }
