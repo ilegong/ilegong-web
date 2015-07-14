@@ -203,7 +203,7 @@ class WesharesController extends AppController {
             ),
             'fields' => array('id', 'name', 'order_id', 'num', 'product_id  ')
         ));
-        $summeryTotalprice = 0;
+        $summeryTotalPrice = 0;
         foreach ($carts as $item) {
             $order_id = $item['Cart']['order_id'];
             $product_id = $item['Cart']['product_id'];
@@ -213,10 +213,11 @@ class WesharesController extends AppController {
             if (!isset($orders[$order_id]['carts'])) $order_cart_map[$order_id] = array();
             $product_buy_num[$product_id] = $product_buy_num[$product_id]['num'] + $cart_num;
             $totalPrice = $cart_num * $cart_price;
-            $summeryTotalprice += $totalPrice;
+            $summeryTotalPrice += $totalPrice;
             $product_buy_num[$product_id] = $product_buy_num[$product_id]['total_price'] + $totalPrice;
             $order_cart_map[$order_id][] = $item['Cart'];
         }
+        $product_buy_num['all_total_price'] = $summeryTotalPrice;
         $users = Hash::combine($users, '{n}.User.id', '{n}.User');
         return array('users' => $users, 'orders' => $orders, 'order_cart_map' => $order_cart_map, 'summery' => $product_buy_num);
     }
