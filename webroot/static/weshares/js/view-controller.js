@@ -19,6 +19,8 @@
 		vm.validateAddress = validateAddress;
 		vm.validateProducts = validateProducts;
 		vm.buyProducts = buyProducts;
+    vm.validateMobile = validateMobile;
+    vm.validateUserName = validateUserName;
 
 		activate();
 		function activate() {
@@ -112,10 +114,21 @@
 			vm.validateProducts();
 		}
 
+    function validateMobile(){
+      vm.buyerMobilePhoneHasError =  !Utils.isMobileValid(vm.buyerMobilePhone);
+      return vm.buyerMobilePhoneHasError;
+    }
+
+    function validateUserName(){
+      vm.usernameHasError =  _.empty(vm.buyerName);
+      return vm.usernameHasError;
+    }
+
 		function validateAddress() {
 			vm.addressHasError = vm.weshare.selectedAddressId == -1;
 			return vm.addressHasError;
 		}
+
 
 		function validateProducts() {
 			vm.productsHasError = _.all(vm.weshare.products, function (product) {
@@ -136,6 +149,12 @@
 		}
 
 		function submitOrder(paymentType) {
+      if(vm.buyerMobilePhoneHasError){
+        return false;
+      }
+      if(vm.usernameHasError){
+        return false;
+      }
 			var products = _.filter(vm.weshare.products, function (product) {
 				return product.num && (product.num > 0);
 			});
