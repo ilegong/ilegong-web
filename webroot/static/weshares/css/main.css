@@ -61,6 +61,7 @@ ul li { list-style: none; }
 .weshare-view .introduction dl dt a{ width: 100%;}
 .weshare-view .introduction .total-fee{display: block;text-align: center;color: #ffa200;font-size: 16px;line-height: 35px;}
 
+.weshare-view .products .product { padding-bottom: 0; margin-bottom: 10px;}
 .weshare-view .products .product dd.fr{ padding-left: 5px;}
 .weshare-view .products .product .btn{ display: block; margin-top: -4px; float: left; width: 30px; height: 25px; background: url(../images/weifxicon.png) no-repeat; background-size: 100px 100px;}
 .weshare-view .products .product .btn.increase-btn{background-position: -35px -65px;}
