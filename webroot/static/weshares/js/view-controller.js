@@ -25,7 +25,7 @@
         success(function (data, status) {
           $log.log(data);
           vm.weshare = data['weshare'];
-          vm.weshare.selectedAddressId = vm.weshare.addresses[0].id;
+          vm.weshare.selectedAddressId = vm.weshare.addresses.length > 1 ? vm.weshare.addresses[0].id : -1;
           vm.weshare.showAddresses = vm.getShowAddress();
           vm.ordersDetail = data['ordersDetail'];
           vm.currentUser = data['current_user'];

@@ -20,17 +20,18 @@ ul li { list-style: none; }
 .classlist a.back { display: block; position: absolute; top: 10px; left: 10px; width: 1.167em; height: 1.133em; background: url(../images/pyshuo_icon.png) no-repeat -15.667em -5.333em; background-size: 20em 20em;}
 .classlist a.home{ display: block; position: absolute; top: 10px; right: 10px; width: 1.2em; height: 1.133em; background: url(../images/pyshuo_icon.png) no-repeat -17.667em -5.333em; background-size: 20em 20em;}
 
+.form-group{margin-bottom: 15px;}
+.form-group .form-control{box-shadow: none; width:100%; font-size: 14px; color: #666; padding: 10px; line-height: 1.42857143; border: 1px #eee solid;-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;}
+.form-group.has-error .form-control{ border-color: #a94442;}
+.form-group select.form-control{background-color: white;}
+.form-group .tips{display: none;}
+.form-group.has-error .tips{display: block;}
 
 /*上传信息页面*/
 .mb15{ margin-bottom: 15px;}
 .weshare-add{ padding: 10px; line-height: 30px;}
 .weshare-add p{ font-size: 12px; color: #c62a35; line-height: 16px; padding-top: 5px;}
 .weshare-add h1{ color: #29ac0e; font-size: 18px; padding-bottom: 10px;}
-.weshare-add .form-group{margin-bottom: 15px;}
-.weshare-add .form-group .form-control{box-shadow: none; width:100%; font-size: 14px; color: #666; padding: 10px; line-height: 1.42857143; border: 1px #eee solid;-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;}
-.weshare-add .form-group.has-error .form-control{ border-color: #a94442;}
-.weshare-add .form-group .tips{display: none;}
-.weshare-add .form-group.has-error .tips{display: block;}
 .weshare-add .images .image{ float: left; margin-right: 15px; position: relative; width: 20%;}
 .weshare-add .images .image img{ width: 100%;}
 .weshare-add .btn{text-align: center; line-height: 38px;}

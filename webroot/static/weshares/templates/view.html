@@ -10,7 +10,7 @@
         <b></b>
         <div class="share_tuan_state" ng-bind="vm.statusMap[vm.weshare.status]"></div>
         <h1 ng-bind="vm.weshare.title"></h1>
-        <s>取货时间: <span ng-bind='vm.weshare.send_info'></span><br/>取货地点：<span ng-bind='vm.weshare.showAddresses'></span></s>
+        <s>取货时间: <span ng-bind='vm.weshare.send_info'></span></s>
         <p ng-bind='vm.weshare.description'></p>
         <!--<a href="#X">更多</a>-->
         <dl class="clearfix" ng-repeat="image in vm.weshare.images">
@@ -26,8 +26,9 @@
                 </dd>
                 <dd class="fr" style="color: #29AC0E;" ng-bind="product.price/100 | currency:'￥'"></dd>
             </dl>
-            <div class="share_tuan_select">
-                <select ng-model='vm.weshare.selectedAddressId'>
+            <div class="form-group share_tuan_select">
+                <select class='form-control' ng-model='vm.weshare.selectedAddressId'>
+                    <option value='-1' ng-if='vm.weshare.addresses.length > 1'>请选择收货地址</option>
                     <option ng-repeat="address in vm.weshare.addresses" value="{{address.id}}">{{address.address}}</option>
                 </select>
                 <font>总金额：<span ng-bind="vm.orderTotalPrice | currency:'￥'"></span></font>
