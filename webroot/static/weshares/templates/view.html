@@ -72,15 +72,15 @@
 </div>
 <!--购买统计-->
 <div class="tuan_statistics" ng-show="vm.showStaticsDialog">
-    <div ng-repeat="(key, value) in vm.ordersDetail.summery">
+    <div ng-repeat="item in vm.ordersDetail.summery.details">
         <ul class="clearfix">
-            <li class="fl" ng-bind="vm."></li>
-            <li class="fr">已卖20份</li>
+            <li class="fl" ng-bind="item.name"></li>
+            <li class="fr">已卖{{item.num}}份</li>
         </ul>
     </div>
     <ul class="clearfix">
         <li class="fl">&nbsp;</li>
-        <li class="fr"><strong>金额合计：¥ 158.00</strong></li>
+        <li class="fr"><strong>金额合计：{{vm.ordersDetail.summery.all_total_price/100 | currency:'￥'}}</strong></li>
     </ul>
 </div>
 <div class="tipslayer_share" ng-show="vm.showShareDialog">
