@@ -52,7 +52,7 @@
 <a class="tuan_btn" style="display: none;">截团</a>
 <div class="clearfix starttuan_btn">
     <a ng-click="vm.showBuyingDialog=true;vm.showLayer=true;" style="background-color: #ffa200;">我要参团</a>
-    <a href="#X" style="background-color: #29ac0e;">分享给好友一起团</a>
+    <a ng-click="vm.showShareDialog=true;vm.showLayer=true;" style="background-color: #29ac0e;">分享给好友一起团</a>
 </div>
 <!--支付层-->
 <div class="share_tuan_pay" ng-show="vm.showBuyingDialog">
@@ -72,21 +72,19 @@
 </div>
 <!--购买统计-->
 <div class="tuan_statistics" ng-show="vm.showStaticsDialog">
-    <ul class="clearfix">
-        <li class="fl">完全散养鸡一只</li>
-        <li class="fr">已卖20份</li>
-    </ul>
-    <ul class="clearfix">
-        <li class="fl">完全散养鸡一只</li>
-        <li class="fr">已卖20份</li>
-    </ul>
-    <ul class="clearfix">
-        <li class="fl">完全散养鸡一只</li>
-        <li class="fr">已卖20份</li>
-    </ul>
+    <div ng-repeat="(key, value) in vm.ordersDetail.summery">
+        <ul class="clearfix">
+            <li class="fl" ng-bind="vm."></li>
+            <li class="fr">已卖20份</li>
+        </ul>
+    </div>
     <ul class="clearfix">
         <li class="fl">&nbsp;</li>
         <li class="fr"><strong>金额合计：¥ 158.00</strong></li>
     </ul>
 </div>
-<div class="tipslayer_bg" ng-show="vm.showLayer" ng-click="vm.showLayer=false;vm.showStaticsDialog=false;vm.showBuyingDialog=false; "></div>
+<div class="tipslayer_share" ng-show="vm.showShareDialog">
+    <div style="width: 90%; margin: 0 auto; font-size: 1.3em;">点击右上角“…”，分享给好友或朋友圈。</div>
+</div>
+
+<div class="tipslayer_bg" ng-show="vm.showLayer" ng-click="vm.showLayer=false;vm.showStaticsDialog=false;vm.showBuyingDialog=false;vm.showShareDialog=false;"></div>

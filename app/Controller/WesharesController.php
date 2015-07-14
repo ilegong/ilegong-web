@@ -203,16 +203,21 @@ class WesharesController extends AppController {
             ),
             'fields' => array('id', 'name', 'order_id', 'num', 'product_id  ')
         ));
+        $summeryTotalprice = 0;
         foreach ($carts as $item) {
             $order_id = $item['Cart']['order_id'];
             $product_id = $item['Cart']['product_id'];
             $cart_num = $item['Cart']['num'];
-            if (!isset($product_buy_num[$product_id])) $product_buy_num[$product_id] = 0;
-            if (!isset($orders[$order_id]['carts']))  $order_cart_map[$order_id] = array();
-            $product_buy_num[$product_id] = $product_buy_num[$product_id] + $cart_num;
+            $cart_price = $item['Cart']['price'];
+            if (!isset($product_buy_num[$product_id])) $product_buy_num[$product_id] = array('num' => 0, 'total_price' => 0);
+            if (!isset($orders[$order_id]['carts'])) $order_cart_map[$order_id] = array();
+            $product_buy_num[$product_id] = $product_buy_num[$product_id]['num'] + $cart_num;
+            $totalPrice = $cart_num * $cart_price;
+            $summeryTotalprice += $totalPrice;
+            $product_buy_num[$product_id] = $product_buy_num[$product_id]['total_price'] + $totalPrice;
             $order_cart_map[$order_id][] = $item['Cart'];
         }
         $users = Hash::combine($users, '{n}.User.id', '{n}.User');
-        return array('users' => $users, 'orders' => $orders, 'order_cart_map'=> $order_cart_map ,'summery' => $product_buy_num);
+        return array('users' => $users, 'orders' => $orders, 'order_cart_map' => $order_cart_map, 'summery' => $product_buy_num);
     }
 }
