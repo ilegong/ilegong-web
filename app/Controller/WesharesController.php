@@ -201,7 +201,7 @@ class WesharesController extends AppController {
                 'order_id' => $orderIds,
                 'type' => ORDER_TYPE_WESHARE_BUY
             ),
-            'fields' => array('id', 'name', 'order_id', 'num', 'product_id  ')
+            'fields' => array('id', 'name', 'order_id', 'num', 'product_id', 'price')
         ));
         $summeryTotalPrice = 0;
         foreach ($carts as $item) {
@@ -209,7 +209,8 @@ class WesharesController extends AppController {
             $product_id = $item['Cart']['product_id'];
             $cart_num = $item['Cart']['num'];
             $cart_price = $item['Cart']['price'];
-            if (!isset($product_buy_num[$product_id])) $product_buy_num[$product_id] = array('num' => 0, 'total_price' => 0);
+            $cart_name = $item['Cart']['name'];
+            if (!isset($product_buy_num[$product_id])) $product_buy_num[$product_id] = array('num' => 0, 'total_price' => 0, 'name' => $cart_name);
             if (!isset($orders[$order_id]['carts'])) $order_cart_map[$order_id] = array();
             $product_buy_num[$product_id]['num'] = $product_buy_num[$product_id]['num'] + $cart_num;
             $totalPrice = $cart_num * $cart_price;
