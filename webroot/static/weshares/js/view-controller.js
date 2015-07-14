@@ -10,7 +10,6 @@
 			1: '已截止'
 		};
 		vm.viewImage = viewImage;
-		vm.getShowAddress = getShowAddress;
 		vm.submitOrder = submitOrder;
 		vm.increaseProductNum = increaseProductNum;
 		vm.decreaseProductNum = decreaseProductNum;
@@ -34,11 +33,10 @@
 					if (vm.weshare.addresses.length == 1) {
 						vm.weshare.selectedAddressId = vm.weshare.addresses[0].id;
 					}
-					else {
+					else if (vm.weshare.addresses.length > 1) {
 						vm.weshare.addresses.unshift({id: -1, address: '请选择收货地址'});
 						vm.weshare.selectedAddressId = -1;
 					}
-					vm.weshare.showAddresses = vm.getShowAddress();
 					vm.ordersDetail = data['ordersDetail'];
 					vm.currentUser = data['current_user'];
 					vm.weixinInfo = data['weixininfo'];
@@ -52,7 +50,6 @@
 		function setWeiXinShareParams() {
 			to_timeline_title = vm.weshare.title;
 			to_friend_title = vm.weshare.title;
-			;
 			imgUrl = vm.weshare.images[0] || 'http://51daifan-images.stor.sinaapp.com/files/201503/thumb_m/f6b318ac5a5_0318.jpg';
 			desc = vm.weshare.description;
 			if (vm.weixinInfo) {
@@ -62,18 +59,9 @@
 
 		function getOrderDisplayName(orderId) {
 			var carts = vm.ordersDetail.order_cart_map[orderId];
-			var showName = '';
-			_.each(carts, function (cart) {
-				showName += cart.name + 'X' + cart.num + ' ';
-			});
-			return showName;
-		}
-
-		function getShowAddress() {
-			var addresses = _.map(vm.weshare.addresses, function (item) {
-				return item['address'];
-			});
-			return addresses.join('  ');
+			return _.map(carts, function (cart) {
+				return cart.name + 'X' + cart.num;
+			}).join(', ');
 		}
 
 		function viewImage(url) {
@@ -125,7 +113,7 @@
     }
 
 		function validateAddress() {
-			vm.addressHasError = vm.weshare.selectedAddressId == -1;
+			vm.addressHasError = vm.weshare.addresses.length > 0 && vm.weshare.selectedAddressId == -1;
 			return vm.addressHasError;
 		}
 
