@@ -38,6 +38,12 @@ class WxSharesController extends AppController{
                 $this->WxShare->save($data);
                 exit();
             }
+            if($share_string=='we_share'){
+                $data = array('sharer' => 0, 'created' => 0, 'data_type' => 'we_share', 'data_id' => 0, 'share_type' => $type);
+                $this->WxShare->save($data);
+                exit();
+            }
+
             $decode_string = authcode($share_string, 'DECODE', 'SHARE_TID');
             $str = explode('-', $decode_string);
             $data_str = explode('_', $str[3]);
