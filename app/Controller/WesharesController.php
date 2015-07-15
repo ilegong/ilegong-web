@@ -16,13 +16,17 @@ class WesharesController extends AppController {
                     $this->redirect($this->login_link());
                 }
             }
-            $this->redirect('/weshares/index/#!/view/'.$weshareId);
+            $this->redirect(array(
+                'controllers' => 'weshares',
+                'action' => 'index',
+                '#' => '!/view/'.$weshareId
+            ));
         }
     }
 
     public function add(){}
 
-    public function view(){}
+    public function view($weshareId){}
 
 
     public function create() {
