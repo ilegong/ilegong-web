@@ -158,7 +158,6 @@
 
     function setWeiXinShareParams() {
       var url = document.URL;
-      alert(url);
       if(wx){
         //creator
         var to_timeline_title = '';
