@@ -158,6 +158,7 @@
 
     function setWeiXinShareParams() {
       var url = document.URL;
+      alert(url);
       if(wx){
         //creator
         var to_timeline_title = '';
@@ -165,9 +166,6 @@
         var imgUrl = '';
         var desc = '';
         var share_string = 'we_share';
-        var splitArray = url.split('?');
-        var weixinParams = splitArray[1].split('#!');
-        url = splitArray[0]+ vm.weshare.id+'/?'+weixinParams[0];
         var to_friend_link = url;
         var to_timeline_link = url;
         //member
