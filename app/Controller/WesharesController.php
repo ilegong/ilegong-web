@@ -17,7 +17,9 @@ class WesharesController extends AppController {
 
     public function add(){}
 
-    public function view($weshareId){}
+    public function view($weshare_id){
+        $this->set('weshare_id', $weshare_id);
+    }
 
     public function create() {
         $this->autoRender = false;

@@ -38,7 +38,6 @@
 		.constant('_', window._)
 		.config(configCompileProvider)
 		.config(configHttpProvider)
-		.config(configStates)
 		.config(extendLog)
 		.run(initApp);
 
@@ -51,16 +50,6 @@
 	function configHttpProvider($httpProvider) {
 		$httpProvider.defaults.headers.common['Content-Type'] = 'application/json';
 		$httpProvider.defaults.headers.post['Content-Type'] = 'application/json';
-	}
-
-	/* @ngInject */
-	function configStates($stateProvider, $urlRouterProvider, $locationProvider) {
-		$stateProvider
-			.state('add', {url: '/add', templateUrl: '/static/weshares/templates/add.html',controller: 'WesharesAddCtrl as vm'})
-			.state('view', {url: '/view/:id', templateUrl: '/static/weshares/templates/view.html',controller: 'WesharesViewCtrl as vm'});
-
-		$urlRouterProvider.otherwise('/add');
-		$locationProvider.hashPrefix('!').html5Mode(false);
 	}
 
 	/* @ngInject */

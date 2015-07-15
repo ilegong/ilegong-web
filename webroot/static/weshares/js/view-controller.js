@@ -3,7 +3,7 @@
 	angular.module('weshares')
 		.controller('WesharesViewCtrl', WesharesViewCtrl);
 
-	function WesharesViewCtrl($state, $scope, $rootScope, $log, $http, $templateCache, $stateParams, Utils) {
+	function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, Utils) {
 		var vm = this;
 		vm.statusMap = {
 			0: '进行中',
@@ -29,7 +29,7 @@
 
 		activate();
 		function activate() {
-			var weshareId = $stateParams.id;
+			var weshareId = angular.element(document.getElementById('weshareView')).attr('data-weshare-id');
 			vm.weshare = {};
 			vm.orderTotalPrice = 0;
 			$http({method: 'GET', url: '/weshares/detail/' + weshareId, cache: $templateCache}).

@@ -5,7 +5,7 @@
 		.controller('WesharesAddCtrl', WesharesAddCtrl);
 
 
-	function WesharesAddCtrl($state, $scope, $rootScope, $log, $http, wx, Utils) {
+	function WesharesAddCtrl($scope, $rootScope, $log, $http, wx, Utils) {
 		var vm = this;
 		vm.chooseAndUploadImage = chooseAndUploadImage;
 		vm.uploadImage = uploadImage;
@@ -15,7 +15,7 @@
 		vm.toggleAddress = toggleAddress;
 
 		vm.nextStep = nextStep;
-		vm.submit = submit;
+		vm.createWeshare = createWeshare;
 
 		vm.validateTitle = validateTitle;
 		vm.validateProductName = validateProductName;
@@ -110,16 +110,16 @@
 			vm.showShippmentInfo = true;
 		}
 
-		function submit() {
+		function createWeshare() {
 			vm.weshare.addresses = _.filter(vm.weshare.addresses, function(address){
 				return !_.isEmpty(address.address);
 			});
 
 			$log.log('submitted').log(vm.weshare);
 			$http.post('/weshares/create', vm.weshare).success(function (data, status, headers, config) {
-				if (status == 200) {
+				if (data.success) {
 					$log.log('post succeeded, data: ').log(data);
-					$state.go('view', {id: data['id']});
+					window.location.href = '/weshares/view/' + data['id'];
 				}
 				else {
 					$log.log("failed with status: " + status + ", data: ").log(data);
