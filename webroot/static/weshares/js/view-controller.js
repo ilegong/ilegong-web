@@ -178,6 +178,7 @@
 					window.location.href = '/weshares/pay/' + data.orderId + '/' + paymentType;
 				}
 			}).error(function () {
+
 			});
 		}
 
@@ -198,42 +199,42 @@
 
     function setWeiXinShareParams() {
       var url =document.URL;
+      //creator
+      var to_timeline_title = '';
+      var to_friend_title = '';
+      var imgUrl = '';
+      var desc = '';
+      var share_string = 'we_share';
+      var urlSplitArr = url.split('?');
+      url = urlSplitArr[0]+'/'+vm.weshare.id+'?'+urlSplitArr[1];
+      var to_friend_link = url;
+      var to_timeline_link = url;
+      //member
+      var userInfo =vm.ordersDetail.users[vm.currentUser.id];
+      if(vm.currentUser.id==vm.weshare.creator.id){
+        to_timeline_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
+        to_friend_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
+        imgUrl = vm.weshare.images[0] || vm.weshare.creator.image;
+        if(vm.ordersDetail.summery.all_buy_user_count>=5){
+          desc+='已经有'+vm.ordersDetail.summery.all_buy_user_count+'人报名，';
+        }
+        desc += vm.weshare.description;
+      }else if(userInfo){
+        to_timeline_title =userInfo.nickname+'报名'+vm.weshare.creator.nickname+'分享'+vm.weshare.title;
+        to_friend_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
+        imgUrl = vm.weshare.images[0] || userInfo.image;
+        desc = vm.weshare.creator.nickname+'是我的好朋友，我很信赖TA，很靠谱，'+vm.weshare.description;
+      }else{
+        //default custom
+        to_timeline_title =vm.currentUser.nickname+'推荐'+vm.creator.nickname+'分享'+vm.weshare.title;
+        to_friend_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
+        imgUrl = vm.weshare.images[0] || vm.currentUser.image;
+        desc = vm.weshare.creator.nickname+'是我的好朋友，我很信赖TA，很靠谱，'+vm.weshare.description;;
+      }
+      if (vm.weixinInfo) {
+        share_string = vm.weixinInfo.share_string;
+      }
       if(wx){
-        //creator
-        var to_timeline_title = '';
-        var to_friend_title = '';
-        var imgUrl = '';
-        var desc = '';
-        var share_string = 'we_share';
-        var urlSplitArr = url.split('?');
-        url = urlSplitArr[0]+'/'+vm.weshare.id+'?'+urlSplitArr[1];
-        var to_friend_link = url;
-        var to_timeline_link = url;
-        //member
-        var userInfo =vm.ordersDetail.users[vm.currentUser.id];
-        if(vm.currentUser.id==vm.weshare.creator.id){
-          to_timeline_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
-          to_friend_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
-          imgUrl = vm.weshare.images[0] || vm.weshare.creator.image;
-          if(vm.ordersDetail.summery.all_buy_user_count>=5){
-            desc+='已经有'+vm.ordersDetail.summery.all_buy_user_count+'人报名，';
-          }
-          desc += vm.weshare.description;
-        }else if(userInfo){
-          to_timeline_title =userInfo.nickname+'报名'+vm.weshare.creator.nickname+'分享'+vm.weshare.title;
-          to_friend_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
-          imgUrl = vm.weshare.images[0] || userInfo.image;
-          desc = vm.weshare.creator.nickname+'是我的好朋友，我很信赖TA，很靠谱，'+vm.weshare.description;
-        }else{
-          //default custom
-          to_timeline_title =vm.currentUser.nickname+'推荐'+vm.creator.nickname+'分享'+vm.weshare.title;
-          to_friend_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
-          imgUrl = vm.weshare.images[0] || vm.currentUser.image;
-          desc = vm.weshare.creator.nickname+'是我的好朋友，我很信赖TA，很靠谱，'+vm.weshare.description;;
-        }
-        if (vm.weixinInfo) {
-          share_string = vm.weixinInfo.share_string;
-        }
         wx.ready(function () {
           wx.onMenuShareAppMessage({
             title: to_friend_title,
