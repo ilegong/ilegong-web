@@ -11,6 +11,11 @@ class WesharesController extends AppController {
 
     public function index($weshareId=null) {
         if($weshareId){
+            if($this->is_weixin()){
+                if (empty($this->currentUser) && $this->is_weixin() && !in_array($this->request->params['controller'], array('users', 'check'))) {
+                    $this->redirect($this->login_link());
+                }
+            }
             $this->redirect('/weshares/index/#!/view/'.$weshareId);
         }
     }

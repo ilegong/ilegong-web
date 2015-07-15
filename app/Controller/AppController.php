@@ -281,11 +281,6 @@ class AppController extends Controller {
      * @return string
      */
     protected function login_link() {
-        $parsed_url = parse_url($_SERVER['REQUEST_URI']);
-        $fragment = isset($parsed_url['fragment']) ? '#' . $parsed_url['fragment'] : '';
-        if(!empty($fragment)){
-            $this->Session->write('fragment',$fragment);
-        }
         return '/users/login?force_login=1&auto_weixin=' . $this->is_weixin() . '&referer=' . urlencode($_SERVER['REQUEST_URI']);
     }
 
