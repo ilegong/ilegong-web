@@ -86,8 +86,8 @@
           share_string = vm.weixinInfo.share_string;
         }
         wx.ready(function () {
-          var to_friend_link = document.URL;
-          var to_timeline_link = document.URL;
+          var to_friend_link = document.URL+'/'+vm.weshare.id;
+          var to_timeline_link = document.URL +'/'+vm.weshare.id;
           wx.onMenuShareAppMessage({
             title: to_friend_title,
             desc: desc,

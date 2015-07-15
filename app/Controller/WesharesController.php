@@ -9,7 +9,11 @@ class WesharesController extends AppController {
         $this->layout = 'weshare';
     }
 
-    public function index() {}
+    public function index($weshareId=null) {
+        if($weshareId){
+            $this->redirect('/weshares/index/#!/view/'.$weshareId);
+        }
+    }
 
 
     public function create() {
