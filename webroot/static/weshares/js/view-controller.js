@@ -20,6 +20,7 @@
 		vm.buyProducts = buyProducts;
     vm.validateMobile = validateMobile;
     vm.validateUserName = validateUserName;
+    vm.getJoinUsercount=getJoinUserCount;
 
 		activate();
 		function activate() {
@@ -47,11 +48,18 @@
 				});
 		}
 
+    function getJoinUserCount(){
+      return Object.keys(vm.ordersDetail.users).length;
+    }
+
 		function setWeiXinShareParams() {
-			to_timeline_title = vm.weshare.title;
-			to_friend_title = vm.weshare.title;
-			imgUrl = vm.weshare.images[0] || 'http://51daifan-images.stor.sinaapp.com/files/201503/thumb_m/f6b318ac5a5_0318.jpg';
-			desc = vm.weshare.description;
+			to_timeline_title = vm.creator.nickname+'分享'+vm.weshare.title;
+			to_friend_title = vm.creator.nickname+'分享'+vm.weshare.title;
+			imgUrl = vm.weshare.images[0] || vm.creator.image;
+      if(vm.getJoinUsercount()>=5){
+        desc+='已经有'+vm.getJoinUsercount()+'人报名，';
+      }
+			desc += vm.weshare.description;
 			if (vm.weixinInfo) {
 				share_string = vm.weixinInfo.share_string;
 			}
