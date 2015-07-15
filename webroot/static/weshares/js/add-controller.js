@@ -130,7 +130,7 @@
 		}
 
 		function validateTitle() {
-			vm.weshareTitleHasError = _.isEmpty(vm.weshare.title) || vm.weshare.title.length > 30;
+			vm.weshareTitleHasError = _.isEmpty(vm.weshare.title) || vm.weshare.title.length > 50;
 			return vm.weshareTitleHasError;
 		}
 
