@@ -60,8 +60,10 @@
         var imgUrl = '';
         var desc = '';
         var share_string = 'we_share';
-        var to_friend_link = document.URL+ vm.weshare.id+'/';
-        var to_timeline_link = document.URL + vm.weshare.id+'/';
+        var url = document.URL;
+        url = url.split('#!')[0]+ vm.weshare.id+'/';
+        var to_friend_link = url;
+        var to_timeline_link = url;
         //member
         var userInfo =vm.ordersDetail.users[vm.currentUser.id];
         if(vm.currentUser.id==vm.weshare.creator.id){
