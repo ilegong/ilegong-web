@@ -39,7 +39,7 @@
 						vm.weshare.selectedAddressId = -1;
 					}
 					vm.ordersDetail = data['ordersDetail'];
-					vm.currentUser = data['current_user'];
+					vm.currentUser = data['current_user']||{};
 					vm.weixinInfo = data['weixininfo'];
 					setWeiXinShareParams();
 				}).
@@ -97,7 +97,7 @@
               // 用户确认分享后执行的回调函数
               if(share_string != '0'){
                 setTimeout(function(){
-                  $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "appMsg" });
+                  $http.post('/wx_shares/log_share',{ trstr: share_string, share_type: "appMsg" });
                 }, 500);
               }
             }
@@ -109,7 +109,7 @@
             success: function () {
               if(share_string != '0'){
                 setTimeout(function(){
-                  $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "timeline" });
+                  $http.post('/wx_shares/log_share',{ trstr: share_string, share_type: "timeline" });
                 }, 500);
               }
             }
