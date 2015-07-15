@@ -19,7 +19,6 @@ class WesharesController extends AppController {
 
     public function view($weshareId){}
 
-
     public function create() {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
