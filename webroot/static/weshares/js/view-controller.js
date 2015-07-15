@@ -20,7 +20,6 @@
 		vm.buyProducts = buyProducts;
     vm.validateMobile = validateMobile;
     vm.validateUserName = validateUserName;
-    vm.getJoinUsercount=getJoinUserCount;
 
 		activate();
 		function activate() {
@@ -46,80 +45,6 @@
 				error(function (data, status) {
 					$log.log(data);
 				});
-		}
-
-    function getJoinUserCount(){
-      return Object.keys(vm.ordersDetail.users).length;
-    }
-
-		function setWeiXinShareParams() {
-      var url = document.URL;
-      if(wx){
-        //creator
-        var to_timeline_title = '';
-        var to_friend_title = '';
-        var imgUrl = '';
-        var desc = '';
-        var share_string = 'we_share';
-        var splitArray = url.split('?');
-        url = splitArray[0]+ vm.weshare.id+'/?='+splitArray[1];
-        var to_friend_link = url;
-        var to_timeline_link = url;
-        //member
-        var userInfo =vm.ordersDetail.users[vm.currentUser.id];
-        if(vm.currentUser.id==vm.weshare.creator.id){
-          to_timeline_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
-          to_friend_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
-          imgUrl = vm.weshare.images[0] || vm.weshare.creator.image;
-          if(vm.getJoinUsercount()>=5){
-            desc+='已经有'+vm.getJoinUsercount()+'人报名，';
-          }
-          desc += vm.weshare.description;
-        }else if(userInfo){
-          to_timeline_title =userInfo.nickname+'报名'+vm.weshare.creator.nickname+'分享'+vm.weshare.title;
-          to_friend_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
-          imgUrl = vm.weshare.images[0] || userInfo.image;
-          desc = vm.weshare.creator.nickname+'是我的好朋友，我很信赖TA，很靠谱，'+vm.weshare.description;
-        }else{
-          //default custom
-          to_timeline_title =vm.currentUser.nickname+'推荐'+vm.creator.nickname+'分享'+vm.weshare.title;
-          to_friend_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
-          imgUrl = vm.weshare.images[0] || vm.currentUser.image;
-          desc = vm.weshare.creator.nickname+'是我的好朋友，我很信赖TA，很靠谱，'+vm.weshare.description;;
-        }
-        if (vm.weixinInfo) {
-          share_string = vm.weixinInfo.share_string;
-        }
-        wx.ready(function () {
-          wx.onMenuShareAppMessage({
-            title: to_friend_title,
-            desc: desc,
-            link: to_friend_link,
-            imgUrl: imgUrl,
-            success: function () {
-              // 用户确认分享后执行的回调函数
-              if(share_string != '0'){
-                setTimeout(function(){
-                  $http.post('/wx_shares/log_share',{ trstr: share_string, share_type: "appMsg" }).success().error();
-                }, 500);
-              }
-            }
-          });
-          wx.onMenuShareTimeline({
-            title: to_timeline_title,
-            link: to_timeline_link,
-            imgUrl: imgUrl,
-            success: function () {
-              if(share_string != '0'){
-                setTimeout(function(){
-                  $http.post('/wx_shares/log_share',{ trstr: share_string, share_type: "timeline" }).success().error();
-                }, 500);
-              }
-            }
-          });
-        });
-      }
-      return;
 		}
 
 		function getOrderDisplayName(orderId) {
@@ -230,5 +155,75 @@
 			}).error(function () {
 			});
 		}
+
+    function setWeiXinShareParams() {
+      var url = document.URL;
+      if(wx){
+        //creator
+        var to_timeline_title = '';
+        var to_friend_title = '';
+        var imgUrl = '';
+        var desc = '';
+        var share_string = 'we_share';
+        var splitArray = url.split('?');
+        url = splitArray[0]+ vm.weshare.id+'/?='+splitArray[1];
+        var to_friend_link = url;
+        var to_timeline_link = url;
+        //member
+        var userInfo =vm.ordersDetail.users[vm.currentUser.id];
+        if(vm.currentUser.id==vm.weshare.creator.id){
+          to_timeline_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
+          to_friend_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
+          imgUrl = vm.weshare.images[0] || vm.weshare.creator.image;
+          if(vm.weshare.ordersDetail.summery.all_buy_user_count>=5){
+            desc+='已经有'+vm.weshare.ordersDetail.summery.all_buy_user_count+'人报名，';
+          }
+          desc += vm.weshare.description;
+        }else if(userInfo){
+          to_timeline_title =userInfo.nickname+'报名'+vm.weshare.creator.nickname+'分享'+vm.weshare.title;
+          to_friend_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
+          imgUrl = vm.weshare.images[0] || userInfo.image;
+          desc = vm.weshare.creator.nickname+'是我的好朋友，我很信赖TA，很靠谱，'+vm.weshare.description;
+        }else{
+          //default custom
+          to_timeline_title =vm.currentUser.nickname+'推荐'+vm.creator.nickname+'分享'+vm.weshare.title;
+          to_friend_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
+          imgUrl = vm.weshare.images[0] || vm.currentUser.image;
+          desc = vm.weshare.creator.nickname+'是我的好朋友，我很信赖TA，很靠谱，'+vm.weshare.description;;
+        }
+        if (vm.weixinInfo) {
+          share_string = vm.weixinInfo.share_string;
+        }
+        wx.ready(function () {
+          wx.onMenuShareAppMessage({
+            title: to_friend_title,
+            desc: desc,
+            link: to_friend_link,
+            imgUrl: imgUrl,
+            success: function () {
+              // 用户确认分享后执行的回调函数
+              if(share_string != '0'){
+                setTimeout(function(){
+                  $http.post('/wx_shares/log_share',{ trstr: share_string, share_type: "appMsg" }).success().error();
+                }, 500);
+              }
+            }
+          });
+          wx.onMenuShareTimeline({
+            title: to_timeline_title,
+            link: to_timeline_link,
+            imgUrl: imgUrl,
+            success: function () {
+              if(share_string != '0'){
+                setTimeout(function(){
+                  $http.post('/wx_shares/log_share',{ trstr: share_string, share_type: "timeline" }).success().error();
+                }, 500);
+              }
+            }
+          });
+        });
+      }
+      return;
+    }
 	}
 })(window, window.angular);
