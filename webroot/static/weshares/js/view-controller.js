@@ -97,7 +97,7 @@
               // 用户确认分享后执行的回调函数
               if(share_string != '0'){
                 setTimeout(function(){
-                  $http.post('/wx_shares/log_share',{ trstr: share_string, share_type: "appMsg" });
+                  $http.post('/wx_shares/log_share',{ trstr: share_string, share_type: "appMsg" }).success().error();
                 }, 500);
               }
             }
@@ -109,7 +109,7 @@
             success: function () {
               if(share_string != '0'){
                 setTimeout(function(){
-                  $http.post('/wx_shares/log_share',{ trstr: share_string, share_type: "timeline" });
+                  $http.post('/wx_shares/log_share',{ trstr: share_string, share_type: "timeline" }).success().error();
                 }, 500);
               }
             }
