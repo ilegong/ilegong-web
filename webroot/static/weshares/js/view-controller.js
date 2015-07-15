@@ -60,6 +60,8 @@
         var imgUrl = '';
         var desc = '';
         var share_string = 'we_share';
+        var to_friend_link = document.URL+ vm.weshare.id;
+        var to_timeline_link = document.URL + vm.weshare.id;
         //member
         var userInfo =vm.ordersDetail.users[vm.currentUser.id];
         if(vm.currentUser.id==vm.weshare.creator.id){
@@ -86,8 +88,6 @@
           share_string = vm.weixinInfo.share_string;
         }
         wx.ready(function () {
-          var to_friend_link = document.URL+ vm.weshare.id;
-          var to_timeline_link = document.URL + vm.weshare.id;
           wx.onMenuShareAppMessage({
             title: to_friend_title,
             desc: desc,
