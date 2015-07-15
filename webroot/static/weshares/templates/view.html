@@ -5,7 +5,7 @@
             <label ng-bind="vm.weshare.creator.nickname"></label>
             <s>已有<span ng-bind='vm.ordersDetail.orders.length'></span>人参团</s>
         </li>
-        <li style="float: right;"><a class="statistics-btn" ng-click="vm.showStaticsDialog=true;vm.showLayer=true;">购买统计</a></li>
+        <li style="float: right;" ng-show="vm.weshare.creator==vm.currentUser"><a class="statistics-btn" ng-click="vm.showStaticsDialog=true;vm.showLayer=true;">购买统计</a></li>
     </ul>
     <div class="introduction">
         <b></b>
