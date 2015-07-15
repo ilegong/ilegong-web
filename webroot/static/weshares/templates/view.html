@@ -3,9 +3,10 @@
         <li><img ng-src="{{vm.weshare.creator.image}}" /></li>
         <li>
             <label ng-bind="vm.weshare.creator.nickname"></label>
-            <s>已有<span>{{vm.getJoinUserCount()}}</span>人报名</s>
+            <s>已有<span ng-bind="vm.weshare.ordersDetail.summery.all_buy_user_count"></span>人报名</s>
         </li>
-        <li style="float: right;" ng-show="vm.weshare.creator.id==vm.currentUser.id"><a class="statistics-btn" ng-click="vm.showStaticsDialog=true;vm.showLayer=true;">购买统计</a></li>
+        <li style="float: right;" ng-if="vm.weshare.creator.id==vm.currentUser.id"><a class="statistics-btn" ng-click="vm.showStaticsDialog=true;vm.showLayer=true;">购买统计</a></li>
+        <li style="float: right;" ng-if="vm.weshare.creator.id!=vm.currentUser.id"><a class="statistics-btn" ui-sref="/add">我也要分享</a></li>
     </ul>
     <div class="introduction">
         <div class="status" ng-bind="vm.statusMap[vm.weshare.status]"></div>
