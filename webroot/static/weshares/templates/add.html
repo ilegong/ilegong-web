@@ -3,24 +3,24 @@
         <h1>分享描述</h1>
 
         <div class="form-group mb15" ng-class="{'has-error': vm.weshareTitleHasError}">
-            <input class='form-control' placeholder="朋友说，分享家乡/身边的靠谱特产，您想分享什么：）" ng-model='vm.weshare.title' ng-change='vm.validateTitle()' ng-blur='vm.validateTitle()'/>
+            <input class='form-control' placeholder="给分享起个响亮的名字" ng-model='vm.weshare.title' ng-change='vm.validateTitle()' ng-blur='vm.validateTitle()'/>
             <p class='tips'>请输入标题, 不超过30个字</p>
         </div>
         <div class="clearfix" ng-repeat="product in vm.weshare.products">
             <div class="form-group fl mb15" style="width: 50%; margin-right: 10px;" ng-class="{'has-error': product.nameHasError}">
-                <input class='form-control' placeholder="分享的特产规格" ng-model="product.name" ng-change='vm.validateProductName(product)' ng-blur='vm.validateProductName(product)'/>
+                <input class='form-control' placeholder="填写描述和规格" ng-model="product.name" ng-change='vm.validateProductName(product)' ng-blur='vm.validateProductName(product)'/>
                 <p class='tips'>请输入描述, 不超过9个字</p>
             </div>
 
             <div class="form-group fl mb15" ng-class="{'has-error': product.priceHasError}" style="width: 30%; margin-right: 10px;">
-                <input class='form-control' placeholder="分享的价格/元" ng-model="product.price" ng-change='vm.validateProductPrice(product)' ng-blur='vm.validateProductPrice(product)'/>
+                <input class='form-control' placeholder="填写价格" ng-model="product.price" ng-change='vm.validateProductPrice(product)' ng-blur='vm.validateProductPrice(product)'/>
                 <p class='tips'>请输入数字</p>
             </div>
             <a class="fr btn" ng-class="{'delete-btn': !$last,'add-btn': $last}"
                ng-click="vm.toggleProduct(product, $last)"></a>
         </div>
         <div class="form-group">
-            <textarea class='form-control' rows="3" cols="" placeholder="分享的快乐远大于金钱，介绍下我们要分享的特产，越详细大家越了解呢。" ng-model="vm.weshare.description"></textarea>
+            <textarea class='form-control' rows="3" cols="" placeholder="描述下分享的详细内容，让大家更好的了解。" ng-model="vm.weshare.description"></textarea>
         </div>
         <ul class="clearfix images">
             <li class='image' ng-repeat="image in vm.weshare.images">
@@ -36,11 +36,11 @@
         <h1>设置取货信息</h1>
 
         <div class="form-group">
-            <input class='form-control' placeholder="填入取货时间，方便大家取货" ng-model="vm.weshare.send_info"/>
+            <input class='form-control' placeholder="填写取货时间信息" ng-model="vm.weshare.send_info"/>
         </div>
         <div class="clearfix" ng-repeat="address in vm.weshare.addresses">
             <div class="form-group fl" style="width: 80%; margin-right: 10px;">
-                <input class='form-control' placeholder="填入取货地点/联系人信息，如果快递填写快递" ng-model="address.address"/>
+                <input class='form-control' placeholder="填写取货地点，联系人信息" ng-model="address.address"/>
             </div>
             <a class="fr btn" ng-class="{'delete-btn': !$last,'add-btn': $last}"
                ng-click="vm.toggleAddress(address, $last)"></a>

@@ -49,9 +49,9 @@ ul li { list-style: none; }
 .weshare-view .statistics-btn{ display: block;background-color: #ffa200;color: #ffffff;text-decoration: none;text-align: center;width: 85px;line-height: 35px;margin-top: 10px;}
 
 .weshare-view .introduction{ background-color: #ffffff; border: 1px #eaeaea solid; border-radius: 5px; margin-top: 10px; padding: 15px; position: relative;}
-.weshare-view .introduction b{ display: block; position: absolute; top: -6px; left: 15px; background: url(../images/weifxicon.png?v0.01) no-repeat -25px -25px; background-size: 100px 100px; width: 12px; height: 6px;}
+.weshare-view .introduction .row{ padding: 0 0 15px;}
 .weshare-view .introduction .status{ display: block; position: absolute; z-index: 3; top: 8px; left: -5px; background: url(../images/weifxicon.png?v0.01) no-repeat -62px 0; background-size: 100px 100px; width: 40px; height: 23px; font-size: 12px; text-align:center; color: #ffffff; line-height: 18px;}
-.weshare-view .introduction h1{ font-size: 18px; color: #29AC0E; padding-top: 15px;}
+.weshare-view .introduction .title{ font-size: 18px; color: #29AC0E; padding-top: 15px;}
 .weshare-view .introduction s{ text-decoration: none; font-size: 14px; color: #999999; line-height: 18px; padding:5px 0 10px 0; display: block;}
 .weshare-view .introduction p{padding-top: 5px;}
 .weshare-view .introduction a{ color: #29AC0E; display: block; width: 30px; padding: 5px 0;}
