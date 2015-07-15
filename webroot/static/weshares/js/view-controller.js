@@ -55,9 +55,9 @@
 		function setWeiXinShareParams() {
       //creator
       if(vm.currentUser.id==vm.weshare.creator.id){
-        to_timeline_title = vm.creator.nickname+'分享'+vm.weshare.title;
-        to_friend_title = vm.creator.nickname+'分享'+vm.weshare.title;
-        imgUrl = vm.weshare.images[0] || vm.creator.image;
+        to_timeline_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
+        to_friend_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
+        imgUrl = vm.weshare.images[0] || vm.weshare.creator.image;
         if(vm.getJoinUsercount()>=5){
           desc+='已经有'+vm.getJoinUsercount()+'人报名，';
         }
@@ -70,8 +70,8 @@
       //member
       var userInfo =vm.ordersDetail.users[vm.currentUser.id];
       if(userInfo){
-        to_timeline_title =userInfo.nickname+'报名'+vm.creator.nickname+'分享'+vm.weshare.title;
-        to_friend_title = vm.creator.nickname+'分享'+vm.weshare.title;
+        to_timeline_title =userInfo.nickname+'报名'+vm.weshare.creator.nickname+'分享'+vm.weshare.title;
+        to_friend_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
         imgUrl = vm.weshare.images[0] || userInfo.image;
         desc = vm.weshare.creator.nickname+'是我的好朋友，我很信赖TA，很靠谱，'+vm.weshare.description;
         if (vm.weixinInfo) {
@@ -81,7 +81,7 @@
       }
       //default custom
       to_timeline_title =vm.currentUser.nickname+'推荐'+vm.creator.nickname+'分享'+vm.weshare.title;
-      to_friend_title = vm.creator.nickname+'分享'+vm.weshare.title;
+      to_friend_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
       imgUrl = vm.weshare.images[0] || vm.currentUser.image;
       desc = vm.weshare.creator.nickname+'是我的好朋友，我很信赖TA，很靠谱，'+vm.weshare.description;;
       if (vm.weixinInfo) {
