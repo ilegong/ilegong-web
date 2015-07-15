@@ -20,6 +20,10 @@ class WesharesController extends AppController {
         }
     }
 
+    public function add(){}
+
+    public function view(){}
+
 
     public function create() {
         $this->autoRender = false;
