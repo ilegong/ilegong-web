@@ -176,6 +176,41 @@ class WesharesController extends AppController {
         return;
     }
 
+    function confirmReceived($order_id){
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        if(empty($uid)){
+            echo json_encode(array('success' => false, 'reason' => 'not_login'));
+            return;
+        }
+
+        $order = $this->Order->findById($order_id);
+        if(empty($order)){
+            echo json_encode(array(success => false, reason => 'order does not exist'));
+        }
+        if($order['Order']['type'] != ORDER_TYPE_WESHARE_BUY){
+            echo json_encode(array(success => false, reason => 'invalid order'));
+        }
+        $weshare_id = $order['Order']['member_id'];
+        $weshare = $this->Weshare->findById($weshare_id);
+        if(empty($weshare)){
+            echo json_encode(array(success => false, reason => 'invalid weshare'));
+        }
+        $is_owner = $uid == $order['Order']['creator'];
+        $is_creator = $uid == $weshare['Weshare']['creator'];
+        if(!$is_owner && !$is_creator){
+            echo json_encode(array(success => false, reason => 'only owner or creator '));
+        }
+
+        $result = $this->Order->updateAll(array('status' => 2), array('id' => $order['Order']['id']));
+        $this->Cart->updateAll(array('status' => 2), array('order_id' => $order['Order']['id']));
+        if(!$result){
+            echo json_encode(array(success => false, reason=>"failed to update order status"));
+        }
+
+        echo json_encode(array(success => true));
+    }
+
     private function saveWeshareProducts($weshareId, $weshareProductData) {
         foreach ($weshareProductData as &$product) {
             $product['weshare_id'] = $weshareId;
@@ -198,9 +233,9 @@ class WesharesController extends AppController {
             'conditions' => array(
                 'member_id' => $weshareId,
                 'type' => ORDER_TYPE_WESHARE_BUY,
-                'status' => ORDER_STATUS_PAID
+                'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED)
             ),
-            'fields' => array('id', 'creator', 'created', 'consignee_name', 'consignee_address'),
+            'fields' => array('id', 'creator', 'created', 'consignee_name', 'consignee_address', 'status'),
             'order' => array('created DESC')
         ));
         $orderIds = Hash::extract($orders, '{n}.Order.id');

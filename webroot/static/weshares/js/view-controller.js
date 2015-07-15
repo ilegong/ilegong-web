@@ -10,12 +10,12 @@
 			1: '已截止'
 		};
 		vm.viewImage = viewImage;
-		vm.submitOrder = submitOrder;
 		vm.increaseProductNum = increaseProductNum;
 		vm.decreaseProductNum = decreaseProductNum;
 		vm.getOrderDisplayName = getOrderDisplayName;
 		vm.isCreator = isCreator;
 		vm.isOwner = isOwner;
+		vm.isOrderReceived = isOrderReceived;
 		vm.getOrderSendInfo = getOrderSendInfo;
 
 		vm.validateAddress = validateAddress;
@@ -23,6 +23,9 @@
 		vm.buyProducts = buyProducts;
     vm.validateMobile = validateMobile;
     vm.validateUserName = validateUserName;
+
+		vm.submitOrder = submitOrder;
+		vm.confirmReceived = confirmReceived;
 
 		activate();
 		function activate() {
@@ -56,6 +59,10 @@
 
 		function isOwner(order){
 			return !_.isEmpty(vm.currentUser) && !_.isEmpty(order) && vm.currentUser.id== order.creator;
+		}
+
+		function isOrderReceived(order){
+			return !_.isEmpty(order) && order.status == 2;
 		}
 
 		function getOrderDisplayName(orderId) {
@@ -171,6 +178,21 @@
 					window.location.href = '/weshares/pay/' + data.orderId + '/' + paymentType;
 				}
 			}).error(function () {
+			});
+		}
+
+		function confirmReceived(order){
+			if(_.isEmpty(order) || vm.isOrderReceived(order)){
+				return;
+			}
+			$http.post('/weshares/confirmReceived/' + order.id).success(function (data) {
+				if(data.success){
+					order.status = 2;
+				}
+				else{
+				}
+			}).error(function (e) {
+					$log.log(e);
 			});
 		}
 

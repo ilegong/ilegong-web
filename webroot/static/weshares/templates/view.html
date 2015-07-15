@@ -49,7 +49,8 @@
                 <span class='created-at' ng-bind="order.created"></span>
                 <div class="send-info" ng-if="vm.isOwner(order) || vm.isCreator()">
                     <div ng-bind="vm.getOrderSendInfo(order)"></div>
-                    <!--<a href="#X" class="btn confirm-btn">确认取货</a>-->
+                    <a class="btn confirm-btn" ng-click="vm.confirmReceived(order)" ng-show="!vm.isOrderReceived(order)">确认收货</a>
+                    <a class="btn order-confirmed-btn" ng-show="vm.isOrderReceived(order)">已取货</a>
                 </div>
             </li>
         </ul>
