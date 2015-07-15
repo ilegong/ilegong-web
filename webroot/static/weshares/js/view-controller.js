@@ -166,7 +166,7 @@
         var desc = '';
         var share_string = 'we_share';
         var splitArray = url.split('?');
-        url = splitArray[0]+ vm.weshare.id+'/?='+splitArray[1];
+        url = splitArray[0]+ vm.weshare.id+'/';
         var to_friend_link = url;
         var to_timeline_link = url;
         //member
