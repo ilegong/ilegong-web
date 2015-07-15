@@ -53,40 +53,68 @@
     }
 
 		function setWeiXinShareParams() {
-      //creator
-      if(vm.currentUser.id==vm.weshare.creator.id){
-        to_timeline_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
-        to_friend_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
-        imgUrl = vm.weshare.images[0] || vm.weshare.creator.image;
-        desc='';
-        if(vm.getJoinUsercount()>=5){
-          desc+='已经有'+vm.getJoinUsercount()+'人报名，';
+      if(wx){
+        //creator
+        var to_timeline_title = '';
+        var to_friend_title = '';
+        var imgUrl = '';
+        var desc = '';
+        var share_string = 'we_share';
+        //member
+        var userInfo =vm.ordersDetail.users[vm.currentUser.id];
+        if(vm.currentUser.id==vm.weshare.creator.id){
+          to_timeline_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
+          to_friend_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
+          imgUrl = vm.weshare.images[0] || vm.weshare.creator.image;
+          if(vm.getJoinUsercount()>=5){
+            desc+='已经有'+vm.getJoinUsercount()+'人报名，';
+          }
+          desc += vm.weshare.description;
+        }else if(userInfo){
+          to_timeline_title =userInfo.nickname+'报名'+vm.weshare.creator.nickname+'分享'+vm.weshare.title;
+          to_friend_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
+          imgUrl = vm.weshare.images[0] || userInfo.image;
+          desc = vm.weshare.creator.nickname+'是我的好朋友，我很信赖TA，很靠谱，'+vm.weshare.description;
+        }else{
+          //default custom
+          to_timeline_title =vm.currentUser.nickname+'推荐'+vm.creator.nickname+'分享'+vm.weshare.title;
+          to_friend_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
+          imgUrl = vm.weshare.images[0] || vm.currentUser.image;
+          desc = vm.weshare.creator.nickname+'是我的好朋友，我很信赖TA，很靠谱，'+vm.weshare.description;;
         }
-        desc += vm.weshare.description;
         if (vm.weixinInfo) {
           share_string = vm.weixinInfo.share_string;
         }
-        return;
-      }
-      //member
-      var userInfo =vm.ordersDetail.users[vm.currentUser.id];
-      if(userInfo){
-        to_timeline_title =userInfo.nickname+'报名'+vm.weshare.creator.nickname+'分享'+vm.weshare.title;
-        to_friend_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
-        imgUrl = vm.weshare.images[0] || userInfo.image;
-        desc = vm.weshare.creator.nickname+'是我的好朋友，我很信赖TA，很靠谱，'+vm.weshare.description;
-        if (vm.weixinInfo) {
-          share_string = vm.weixinInfo.share_string;
-        }
-        return;
-      }
-      //default custom
-      to_timeline_title =vm.currentUser.nickname+'推荐'+vm.creator.nickname+'分享'+vm.weshare.title;
-      to_friend_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
-      imgUrl = vm.weshare.images[0] || vm.currentUser.image;
-      desc = vm.weshare.creator.nickname+'是我的好朋友，我很信赖TA，很靠谱，'+vm.weshare.description;;
-      if (vm.weixinInfo) {
-        share_string = vm.weixinInfo.share_string;
+        wx.ready(function () {
+          var to_friend_link = document.URL;
+          var to_timeline_link = document.URL;
+          wx.onMenuShareAppMessage({
+            title: to_friend_title,
+            desc: desc,
+            link: to_friend_link,
+            imgUrl: imgUrl,
+            success: function () {
+              // 用户确认分享后执行的回调函数
+              if(share_string != '0'){
+                setTimeout(function(){
+                  $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "appMsg" });
+                }, 500);
+              }
+            }
+          });
+          wx.onMenuShareTimeline({
+            title: to_timeline_title,
+            link: to_timeline_link,
+            imgUrl: imgUrl,
+            success: function () {
+              if(share_string != '0'){
+                setTimeout(function(){
+                  $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "timeline" });
+                }, 500);
+              }
+            }
+          });
+        });
       }
       return;
 		}

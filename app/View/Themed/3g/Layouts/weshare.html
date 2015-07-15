@@ -32,42 +32,7 @@
     </script>
     <script type="text/javascript" src="/static/weshares/js/app.js?v0.0.92"></script>
     <script type="text/javascript" src="/static/weshares/js/add-controller.js?v0.0.92"></script>
-    <script type="text/javascript" src="/static/weshares/js/view-controller.js?v0.0.92"></script>
-    <script>
-        if(wx){
-            wx.ready(function () {
-                share_string = "we_share";
-                var to_friend_link = document.URL;
-                var to_timeline_link = document.URL;
-                wx.onMenuShareAppMessage({
-                    title: to_friend_title,
-                    desc: desc,
-                    link: to_friend_link,
-                    imgUrl: imgUrl,
-                    success: function () {
-                        // 用户确认分享后执行的回调函数
-                        if(share_string != '0'){
-                            setTimeout(function(){
-                                $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "appMsg" });
-                            }, 500);
-                        }
-                    }
-                });
-                wx.onMenuShareTimeline({
-                    title: to_timeline_title,
-                    link: to_timeline_link,
-                    imgUrl: imgUrl,
-                    success: function () {
-                        if(share_string != '0'){
-                            setTimeout(function(){
-                                $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "timeline" });
-                            }, 500);
-                        }
-                    }
-                });
-            });
-        }
-    </script>
+    <script type="text/javascript" src="/static/weshares/js/view-controller.js?v0.0.93"></script>
 </body>
 
 </html>
