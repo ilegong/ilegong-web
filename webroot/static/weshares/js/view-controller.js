@@ -14,6 +14,9 @@
 		vm.increaseProductNum = increaseProductNum;
 		vm.decreaseProductNum = decreaseProductNum;
 		vm.getOrderDisplayName = getOrderDisplayName;
+		vm.isCreator = isCreator;
+		vm.isOwner = isOwner;
+		vm.getOrderSendInfo = getOrderSendInfo;
 
 		vm.validateAddress = validateAddress;
 		vm.validateProducts = validateProducts;
@@ -47,6 +50,14 @@
 				});
 		}
 
+		function isCreator(){
+			return !_.isEmpty(vm.currentUser) && vm.currentUser.id == vm.weshare.creator.id;
+		}
+
+		function isOwner(order){
+			return !_.isEmpty(vm.currentUser) && !_.isEmpty(order) && vm.currentUser.id== order.creator;
+		}
+
 		function getOrderDisplayName(orderId) {
 			var carts = vm.ordersDetail.order_cart_map[orderId];
 			return _.map(carts, function (cart) {
@@ -59,6 +70,13 @@
 				current: url,
 				urls: vm.weshare.images
 			});
+		}
+
+		function getOrderSendInfo(order){
+			if(_.isEmpty(order)){
+				return '';
+			}
+			return _.reject([order.consignee_address, order.consignee_mobilephone], function(e){return _.isEmpty(e)}).join(',');
 		}
 
 		function calOrderTotalPrice() {
