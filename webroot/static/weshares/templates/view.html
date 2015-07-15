@@ -1,5 +1,5 @@
 <div class="weshare-view">
-    <ul class="clearfix header">
+    <ul class="clearfix header margin-bottom-12">
         <li><img ng-src="{{vm.weshare.creator.image}}" /></li>
         <li>
             <label ng-bind="vm.weshare.creator.nickname"></label>
@@ -8,13 +8,13 @@
         <li style="float: right;" ng-if="vm.weshare.creator.id==vm.currentUser.id"><a class="statistics-btn" ng-click="vm.showStaticsDialog=true;vm.showLayer=true;">购买统计</a></li>
         <li style="float: right;" ng-if="vm.weshare.creator.id!=vm.currentUser.id"><a class="statistics-btn" ui-sref="/add">我也要分享</a></li>
     </ul>
-    <div class="introduction">
+    <div class="introduction margin-bottom-12">
         <div class="status" ng-bind="vm.statusMap[vm.weshare.status]"></div>
-        <h1 class='row title' ng-bind="vm.weshare.title"></h1>
-        <s class='row' ng-hide='_.isEmpty(vm.weshare.send_info)'>取货时间: <span ng-bind='vm.weshare.send_info'></span></s>
-        <p class="row" ng-hide='_.isEmpty(vm.weshare.description)' ng-bind='vm.weshare.description'></p>
+        <h1 class='title margin-bottom-12' ng-bind="vm.weshare.title"></h1>
+        <s class='margin-bottom-12' ng-hide='_.isEmpty(vm.weshare.send_info)'>取货时间: <span ng-bind='vm.weshare.send_info'></span></s>
+        <p class="margin-bottom-12" ng-hide='_.isEmpty(vm.weshare.description)' ng-bind='vm.weshare.description'></p>
         <!--<a href="#X">更多</a>-->
-        <dl class="clearfix row images">
+        <dl class="clearfix images margin-bottom-12">
             <dt ng-repeat="image in vm.weshare.images"><a ng-click="vm.viewImage(image)"><img ng-src="{{image}}"/></a></dt>
         </dl>
         <div class="products form-group" ng-class="{'has-error':vm.productsHasError}">
@@ -38,7 +38,7 @@
         <div class='total-fee'>总金额：<span ng-bind="vm.orderTotalPrice | currency:'￥'"></span></div>
     </div>
     <div class="orders">
-        <ul class="order clearfix" ng-class="{'my-order': vm.currentUser.id==order.creator}" ng-repeat="order in vm.ordersDetail.orders">
+        <ul class="order clearfix margin-bottom-12" ng-class="{'my-order': vm.currentUser.id==order.creator}" ng-repeat="order in vm.ordersDetail.orders">
             <li class='buyer-image'><img ng-src="{{vm.ordersDetail.users[order.creator]['image']}}"/></li>
             <li class="detail">
                 <b></b>
