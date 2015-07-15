@@ -5,7 +5,7 @@
             <label ng-bind="vm.weshare.creator.nickname"></label>
             <s>已有<span>{{vm.getJoinUserCount()}}</span>人参团</s>
         </li>
-        <li style="float: right;" ng-show="vm.weshare.creator.id==vm.currentUser"><a class="statistics-btn" ng-click="vm.showStaticsDialog=true;vm.showLayer=true;">购买统计</a></li>
+        <li style="float: right;" ng-show="vm.weshare.creator.id==vm.currentUser.id"><a class="statistics-btn" ng-click="vm.showStaticsDialog=true;vm.showLayer=true;">购买统计</a></li>
     </ul>
     <div class="introduction">
         <b></b>
@@ -38,7 +38,7 @@
         <div class='total-fee'>总金额：<span ng-bind="vm.orderTotalPrice | currency:'￥'"></span></div>
     </div>
     <div class="orders">
-        <ul class="order clearfix" ng-class="{'my-order': vm.currentUser==order.creator}" ng-repeat="order in vm.ordersDetail.orders">
+        <ul class="order clearfix" ng-class="{'my-order': vm.currentUser.id==order.creator}" ng-repeat="order in vm.ordersDetail.orders">
             <li><img class='buyer-image' ng-src="{{vm.ordersDetail.users[order.creator]['image']}}"/></li>
             <li class="detail">
                 <p><strong class='buyer-name' ng-bind="vm.ordersDetail.users[order.creator]['nickname']"></strong> 参加了团购</p>
@@ -63,13 +63,13 @@
     </div>
     <div class="clearfix" style="padding: 0 10px;">
         <div class="form-group" ng-class="{'has-error': vm.usernameHasError}">
-            <input class='form-control' placeholder="输入姓名" ng-model='vm.buyerName' ng-change='vm.validateUserName()'/>
-            <p class='tips'>请输入收货人</p>
+            <input class='form-control' placeholder="写入姓名/地址如果是快递方便联系您" ng-model='vm.buyerName' ng-change='vm.validateUserName()'/>
+            <p class='tips'>请输入收货人信息</p>
         </div>
     </div>
     <div class="clearfix" style="padding: 0 10px;">
         <div class="form-group" ng-class="{'has-error': vm.buyerMobilePhoneHasError}">
-            <input class='form-control' placeholder="输入手机号" ng-model='vm.buyerMobilePhone' ng-change='vm.validateMobile()'/>
+            <input class='form-control' placeholder="写入手机号方便联系您" ng-model='vm.buyerMobilePhone' ng-change='vm.validateMobile()'/>
             <p class='tips'>请输入手机号</p>
         </div>
     </div>

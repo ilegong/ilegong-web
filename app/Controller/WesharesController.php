@@ -77,7 +77,14 @@ class WesharesController extends AppController {
         $ordersDetail = $this->get_weshare_buy_info($weshareId);
         $weshareInfo['images'] = array_filter(explode('|',$weshareInfo['images']));
         $weixinInfo = $this->set_weixin_share_data($uid,$weshareId);
-        echo json_encode(array('weshare' => $weshareInfo, 'ordersDetail' => $ordersDetail, 'current_user' => $uid, 'weixininfo' => $weixinInfo));
+        $current_user = $this->User->find('all', array(
+            'conditions' => array(
+                'id' => $uid
+            ),
+            'recursive' => 1, //int
+            'fields' => array('id', 'nickname', 'image', 'wx_subscribe_status'),
+        ));
+        echo json_encode(array('weshare' => $weshareInfo, 'ordersDetail' => $ordersDetail, 'current_user' => $current_user['User'], 'weixininfo' => $weixinInfo));
         return;
     }
 
