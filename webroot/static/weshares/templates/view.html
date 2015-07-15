@@ -1,5 +1,5 @@
 <div class="weshare-view">
-    <ul class="clearfix">
+    <ul class="clearfix header">
         <li><img ng-src="{{vm.weshare.creator.image}}" /></li>
         <li>
             <label ng-bind="vm.weshare.creator.nickname"></label>
@@ -38,8 +38,9 @@
     </div>
     <div class="orders">
         <ul class="order clearfix" ng-class="{'my-order': vm.currentUser.id==order.creator}" ng-repeat="order in vm.ordersDetail.orders">
-            <li><img class='buyer-image' ng-src="{{vm.ordersDetail.users[order.creator]['image']}}"/></li>
+            <li class='buyer-image'><img ng-src="{{vm.ordersDetail.users[order.creator]['image']}}"/></li>
             <li class="detail">
+                <b></b>
                 <p><strong class='buyer-name' ng-bind="vm.ordersDetail.users[order.creator]['nickname']"></strong> 已经报名</p>
                 <q>{{vm.getOrderDisplayName(order.id)}}</q>
                 <span class='created-at' ng-bind="order.created"></span>
