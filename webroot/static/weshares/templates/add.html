@@ -4,7 +4,7 @@
 
         <div class="form-group" ng-class="{'has-error': vm.weshareTitleHasError}">
             <input class='form-control' placeholder="给分享起个响亮的名字" ng-model='vm.weshare.title' ng-change='vm.validateTitle()' ng-blur='vm.validateTitle()'/>
-            <p class='tips'>请输入标题, 不超过30个字</p>
+            <p class='tips'>请输入标题, 不超过50个字</p>
         </div>
         <div class="clearfix" ng-repeat="product in vm.weshare.products">
             <div class="form-group fl" style="width: 50%; margin-right: 10px;" ng-class="{'has-error': product.nameHasError}">
