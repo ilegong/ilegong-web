@@ -77,7 +77,7 @@ class WesharesController extends AppController {
         $ordersDetail = $this->get_weshare_buy_info($weshareId);
         $weshareInfo['images'] = array_filter(explode('|',$weshareInfo['images']));
         $weixinInfo = $this->set_weixin_share_data($uid,$weshareId);
-        $current_user = $this->User->find('all', array(
+        $current_user = $this->User->find('first', array(
             'conditions' => array(
                 'id' => $uid
             ),
