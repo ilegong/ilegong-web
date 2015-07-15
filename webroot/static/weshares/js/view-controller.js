@@ -175,8 +175,8 @@
           to_timeline_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
           to_friend_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
           imgUrl = vm.weshare.images[0] || vm.weshare.creator.image;
-          if(vm.weshare.ordersDetail.summery.all_buy_user_count>=5){
-            desc+='已经有'+vm.weshare.ordersDetail.summery.all_buy_user_count+'人报名，';
+          if(vm.ordersDetail.summery.all_buy_user_count>=5){
+            desc+='已经有'+vm.ordersDetail.summery.all_buy_user_count+'人报名，';
           }
           desc += vm.weshare.description;
         }else if(userInfo){
