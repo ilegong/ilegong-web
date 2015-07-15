@@ -11,7 +11,7 @@ class WesharesController extends AppController {
 
     public function index($weshareId=null) {
         if($weshareId){
-            $this->redirect(array('action' => 'index', '#' => '!/view/'.$weshareId));
+            $this->redirect('/weshares/index/'.'#!/view/'.$weshareId);
         }
     }
 

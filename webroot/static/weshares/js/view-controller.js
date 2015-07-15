@@ -175,7 +175,7 @@
 		}
 
     function setWeiXinShareParams() {
-      var url = document.URL;
+      var url =document.URL;
       if(wx){
         //creator
         var to_timeline_title = '';
@@ -183,6 +183,8 @@
         var imgUrl = '';
         var desc = '';
         var share_string = 'we_share';
+        var urlSplitArr = url.split('?');
+        url = urlSplitArr[0]+'/'+vm.weshare.id+'?'+urlSplitArr[1];
         var to_friend_link = url;
         var to_timeline_link = url;
         //member
