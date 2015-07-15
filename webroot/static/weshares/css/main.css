@@ -13,6 +13,7 @@ ul li { list-style: none; }
 .border_b { border-bottom: 1px #dddddd solid;}
 .gray { color: #999999; }
 .margin-bottom-12{margin-bottom: 12px !important;}
+.text-center{text-align: center;}
 
 /*返回*/
 .classlist { height: 44px; line-height: 44px; width: 100%; text-align: center; color: #ffffff; font-size: 20px; background-color: #29ac0e; position: fixed; top: 0; z-index: 999; overflow: hidden;}
@@ -53,11 +54,11 @@ ul li { list-style: none; }
 .weshare-view .introduction .row{ padding: 0 0 10px;}
 .weshare-view .introduction .status{ display: block; position: absolute; z-index: 3; top: 8px; left: -5px; background: url(../images/weifxicon.png?v0.01) no-repeat -62px 0; background-size: 100px 100px; width: 40px; height: 23px; font-size: 12px; text-align:center; color: #ffffff; line-height: 18px;}
 .weshare-view .introduction .title{ font-size: 18px; color: #29AC0E; padding-top: 15px;}
-.weshare-view .introduction s{ text-decoration: none; font-size: 14px; color: #999999; line-height: 18px; padding:5px 0 10px 0; display: block;}
 .weshare-view .introduction dl dt{ float: left; margin-right: 10px; position: relative; width: 20%;}
 .weshare-view .introduction dl dt img{ width: 100%;}
 .weshare-view .introduction dl dt a{ width: 100%;}
-.weshare-view .introduction .total-fee{display: block;text-align: center;color: #ffa200;font-size: 16px;}
+.weshare-view .introduction .send-info{ color: #999999;}
+.weshare-view .introduction .total-fee{display: block;color: #ffa200;font-size: 16px;}
 
 .weshare-view .products {border: 1px solid #eee; padding-top: 5px;}
 .weshare-view .products .product { padding-bottom: 0; margin-bottom: 10px; border: 0;}
