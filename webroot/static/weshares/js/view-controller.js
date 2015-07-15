@@ -58,6 +58,7 @@
         to_timeline_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
         to_friend_title = vm.weshare.creator.nickname+'分享'+vm.weshare.title;
         imgUrl = vm.weshare.images[0] || vm.weshare.creator.image;
+        desc='';
         if(vm.getJoinUsercount()>=5){
           desc+='已经有'+vm.getJoinUsercount()+'人报名，';
         }
