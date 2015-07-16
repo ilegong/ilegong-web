@@ -222,11 +222,16 @@
         to_friend_title = userInfo.nickname+'报名'+vm.weshare.creator.nickname+'分享的'+vm.weshare.title;
         imgUrl = vm.weshare.images[0] || userInfo.image;
         desc = vm.weshare.creator.nickname+'是我的好朋友，我很信赖TA，很靠谱，'+vm.weshare.description;
-      }else{
+      }else if(vm.currentUser){
         //default custom
         to_timeline_title =vm.currentUser.nickname+'推荐'+vm.creator.nickname+'分享的'+vm.weshare.title;
         to_friend_title = vm.currentUser.nickname+'推荐'+vm.creator.nickname+'分享的'+vm.weshare.title;
         imgUrl = vm.weshare.images[0] || vm.currentUser.image;
+        desc = vm.weshare.creator.nickname+'是我的好朋友，我很信赖TA，很靠谱，'+vm.weshare.description;
+      }else{
+        to_timeline_title =vm.creator.nickname+'分享的'+vm.weshare.title;
+        to_friend_title = vm.creator.nickname+'分享的'+vm.weshare.title;
+        imgUrl = vm.weshare.images[0] || vm.weshare.creator.image;
         desc = vm.weshare.creator.nickname+'是我的好朋友，我很信赖TA，很靠谱，'+vm.weshare.description;
       }
       if (vm.weixinInfo) {
