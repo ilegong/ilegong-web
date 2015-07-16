@@ -16,6 +16,30 @@ class WxSendMsgController extends AppController{
         //$this->getZitiOrderUserIds();
     }
 
+
+    public function admin_send_wx_msg_for_tea(){
+        $this->autoRender=false;
+        $now = date('Y-m-d');
+        $startDate = date('Y-m-d',strtotime('-50 day'.$now));
+        $users = $this->Order->query('SELECT DISTINCT creator,consignee_id FROM cake_orders WHERE ship_mark = "ziti" AND created > \''.$startDate.'\' AND created < \''.$now.'\'');
+        $userIds = Hash::extract($users,'{n}.cake_orders.creator');
+        //$userIds = array(633345,544307);
+        $openIds = $this->Oauthbind->find('all',array(
+            'conditions' => array(
+                'user_id' => $userIds,
+            ),
+            'fields' => array(
+                'oauth_openid','user_id'
+            )
+        ));
+        $openIds = Hash::combine($openIds,'{n}.Oauthbind.user_id','{n}.Oauthbind.oauth_openid');
+        foreach($openIds as $uid => $openId){
+            $leader_name = '朱晓宇';
+            send_tuan_tip_msg($openId,'参加朋友说发起的蒲城塬上品酥梨29.9包邮的','蒲城塬上品酥梨',$leader_name,'点击查看详情','www.tongshijia.com/weshares/view/16');
+        }
+        echo json_encode(array('success' => true));
+    }
+
     public function admin_send_wx_msg(){
         $this->autoRender=false;
         $data_id = $_POST['data_id'];
@@ -55,7 +79,7 @@ class WxSendMsgController extends AppController{
         if($data_type==PRODUCT_TUAN_TYPE){
             $product = $this->TuanProduct->find('first',array('conditions' => array('id' => $data_id)));
             $productName = $product['TuanProduct']['alias'];
-            $title = '参加'.$productName.'的';
+            $title = '参加'.$productName.'的团购';
             $remark = '点击立即购买';
             $detail_url = product_link($product['TuanProduct']['product_id'],WX_HOST);
             $detail_url = $detail_url.'?_sl=wx_tpl';
