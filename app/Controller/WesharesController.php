@@ -278,7 +278,7 @@ class WesharesController extends AppController {
             $order_cart_map[$order_id][] = $item['Cart'];
         }
         $product_buy_num['all_buy_user_count'] = count($users);
-        $product_buy_num['all_total_price'] = $summeryTotalPrice;
+        $product_buy_num['all_total_price'] = $summeryTotalPrice/100;
         $users = Hash::combine($users, '{n}.User.id', '{n}.User');
         return array('users' => $users, 'orders' => $orders, 'order_cart_map' => $order_cart_map, 'summery' => $product_buy_num);
     }
