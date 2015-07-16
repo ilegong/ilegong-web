@@ -23,9 +23,19 @@
         ]
     },
     {
-        "type":"view",
-        "name":"美食团",
-        "url":"http://www.tongshijia.com/tuan_teams/mei_shi_tuan.html?_sl=wx.sv.mst"
+        "name":"我要分享",
+        "sub_button":[
+          {
+            "type":"view",
+            "name":"我要分享",
+            "url":"http://www.tongshijia.com/weshares/add"
+          },
+          {
+            "type":"view",
+            "name":"我的分享",
+            "url":"http://www.tongshijia.com/weshares/user_share_info/"
+          }
+        ]
     },
     {
         "name":"线上活动",

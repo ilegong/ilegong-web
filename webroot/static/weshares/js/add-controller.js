@@ -111,6 +111,10 @@
 		}
 
 		function createWeshare() {
+      if(vm.isInProcess){
+        return;
+      }
+      vm.isInProcess = true;
 			vm.weshare.addresses = _.filter(vm.weshare.addresses, function(address){
 				return !_.isEmpty(address.address);
 			});
@@ -122,9 +126,11 @@
 					window.location.href = '/weshares/view/' + data['id'];
 				}
 				else {
+          vm.isInProcess = false;
 					$log.log("failed with status: " + status + ", data: ").log(data);
 				}
 			}).error(function (data, status, headers, config) {
+          vm.isInProcess = false;
 					$log.log("failed with status :" + status + ", data: ").log(data).log(', and config').log(config);
 				});
 		}
