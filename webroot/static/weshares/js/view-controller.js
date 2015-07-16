@@ -27,6 +27,8 @@
 		vm.submitOrder = submitOrder;
 		vm.confirmReceived = confirmReceived;
 
+    vm.stopShare = stopShare;
+
 		activate();
 		function activate() {
 			var weshareId = angular.element(document.getElementById('weshareView')).attr('data-weshare-id');
@@ -46,6 +48,11 @@
 					vm.ordersDetail = data['ordersDetail'];
 					vm.currentUser = data['current_user']||{};
 					vm.weixinInfo = data['weixininfo'];
+          vm.consignee = data['consignee'];
+          if(vm.consignee){
+            vm.buyerName = vm.consignee.name;
+            vm.buyerMobilePhone = vm.consignee.mobilephone;
+          }
 					setWeiXinShareParams();
 				}).
 				error(function (data, status) {
@@ -197,6 +204,16 @@
 					$log.log(e);
 			});
 		}
+
+    function stopShare(){
+      $http.post('/weshares/stopShare/' + vm.weshare.id).success(function (data) {
+        if(data.success){
+          vm.weshare.status = 1;
+        }
+      }).error(function (e) {
+        $log.log(e);
+      });
+    }
 
     function setWeiXinShareParams() {
       var url =document.URL;

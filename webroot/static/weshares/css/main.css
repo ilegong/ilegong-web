@@ -84,7 +84,7 @@ ul li { list-style: none; }
 .weshare-view .orders .order.my-order .detail b{ background-position: -35px -35px;right: -6px;left: inherit;}
 .weshare-view .orders .order.my-order .send-info{ background-color: #a3d997;border-top: 1px #a3d997 solid;}
 
-.tuan_stopbtn{ width: 100%; line-height: 44px; text-align: center; background-color: #cccccc; color: #ffffff; font-size: 18px; text-decoration: none; display: block; position: fixed;bottom: 0; left: 0;}
+.stop-btn{ width: 100%; line-height: 44px; text-align: center; background-color: #cccccc; color: #ffffff; font-size: 18px; text-decoration: none; display: block; position: fixed;bottom: 0; left: 0;}
 .tuan_btn{ width: 100%; line-height: 44px; text-align: center; background-color: #29AC0E; color: #ffffff; font-size: 18px; text-decoration: none; display: block; position: fixed;bottom: 0; left: 0;}
 .starttuan_btn{ position: fixed; left: 0; bottom: 0; width: 100%;}
 .starttuan_btn a{ width: 50%; float: left; display: block; line-height: 44px; text-align: center; text-decoration: none; color: #ffffff; font-size: 16px; display: block;}

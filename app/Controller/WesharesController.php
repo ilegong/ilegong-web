@@ -2,7 +2,7 @@
 
 class WesharesController extends AppController {
 
-    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User');
+    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees');
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -11,7 +11,7 @@ class WesharesController extends AppController {
 
     public function index($weshareId=null) {
         if($weshareId){
-            $this->redirect('/weshares/index/'.'#!/view/'.$weshareId);
+            $this->redirect('/weshares/view/'.$weshareId);
         }
     }
 
@@ -93,7 +93,8 @@ class WesharesController extends AppController {
             'recursive' => 1, //int
             'fields' => array('id', 'nickname', 'image', 'wx_subscribe_status'),
         ));
-        echo json_encode(array('weshare' => $weshareInfo, 'ordersDetail' => $ordersDetail, 'current_user' => $current_user['User'], 'weixininfo' => $weixinInfo));
+        $consignee = $this->getShareConsignees($uid);
+        echo json_encode(array('weshare' => $weshareInfo, 'ordersDetail' => $ordersDetail, 'current_user' => $current_user['User'], 'weixininfo' => $weixinInfo, 'consignee' => $consignee));
         return;
     }
 
@@ -103,10 +104,6 @@ class WesharesController extends AppController {
             return $weixinJs;
         }
         return null;
-    }
-
-    public function buy() {
-
     }
 
     public function pay($orderId,$type) {
@@ -151,6 +148,7 @@ class WesharesController extends AppController {
                 'weshare_id' => $weshareId
             )
         ));
+        $this->setShareConsignees($buyerData['name'], $buyerData['mobilephone'], $uid);
         $order = $this->Order->save(array('creator' => $uid, 'consignee_address' => $tinyAddress['WeshareAddress']['address'] ,'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $buyerData['name'], 'consignee_mobilephone' => $buyerData['mobilephone']));
         $orderId = $order['Order']['id'];
         $totalPrice = 0;
@@ -211,6 +209,12 @@ class WesharesController extends AppController {
         }
 
         echo json_encode(array(success => true));
+    }
+
+    public function stopShare($weShareId){
+        $this->autoRender = false;
+        $this->Weshare->updateAll(array('status' => WESHARE_STOP_STATUS),array('id' => $weShareId));
+        echo json_encode(array('success' => true));
     }
 
     private function saveWeshareProducts($weshareId, $weshareProductData) {
@@ -281,5 +285,33 @@ class WesharesController extends AppController {
         $product_buy_num['all_total_price'] = $summeryTotalPrice;
         $users = Hash::combine($users, '{n}.User.id', '{n}.User');
         return array('users' => $users, 'orders' => $orders, 'order_cart_map' => $order_cart_map, 'summery' => $product_buy_num);
+    }
+
+    private function setShareConsignees($userInfo, $mobileNum, $uid) {
+        $consignee = $this->OrderConsignees->find('first', array(
+            'conditions' => array(
+                'creator' => $uid,
+                'status' => STATUS_CONSIGNEES_SHARE
+            ),
+            'fields' => array('name', 'mobilephone')
+        ));
+        //update
+        if(!empty($consignee)){
+            $this->OrderConsignees->updateAll(array('name' => $userInfo, 'mobilephone' => $mobileNum),array('id' => $consignee['OrderConsignees']['id']));
+            return;
+        }
+        //save
+        $this->OrderConsignees->save(array('creator' => $uid, 'status' => STATUS_CONSIGNEES_SHARE, 'name' => $userInfo, 'mobilephone' => $mobileNum));
+    }
+
+    private function getShareConsignees($uid){
+        $consignee = $this->OrderConsignees->find('first', array(
+            'conditions' => array(
+                'creator' => $uid,
+                'status' => STATUS_CONSIGNEES_SHARE
+            ),
+            'fields' => array('name', 'mobilephone')
+        ));
+        return $consignee;
     }
 }

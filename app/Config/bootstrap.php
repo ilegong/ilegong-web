@@ -132,6 +132,10 @@ const PYS_BY_PRICE = 99;
 
 const PYS_SHIP_FEE = 15;
 
+const WESHARE_NORMAL_STATUS = 0;
+
+const WESHARE_STOP_STATUS = 1;
+
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
 define('FORMAT_DATE_YUE_RI_HAN', 'n月j日');
@@ -173,6 +177,8 @@ const STATUS_GROUP_REACHED = 1;
 const STATUS_CONSIGNEES_TUAN = 2;
 //自提地址
 const STATUS_CONSIGNEES_TUAN_ZITI = 3;
+//分享地址
+const STATUS_CONSIGNEES_SHARE = 4;
 
 define('CATEGORY_ID_TECHAN', 114);
 
