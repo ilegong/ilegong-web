@@ -44,7 +44,7 @@ class WeixinComponent extends Component
 
     public function get_weshare_buy_detail($weshare_id)
     {
-        return WX_HOST . '/weshare/view/'.$weshare_id;
+        return WX_HOST . '/weshares/view/'.$weshare_id;
     }
 
     public function get_order_query_url($order_no)
