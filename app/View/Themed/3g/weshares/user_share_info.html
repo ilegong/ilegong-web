@@ -43,7 +43,7 @@
                                                 <div class="media-body">
 
                                                     <h4 class="media-heading user_name">{{$share['Weshare']['title']}}</h4>
-                                                    {{$share['Weshare']['description']}}
+                                                    {{mb_substr($share['Weshare']['description'],0,30)}}...
                                                     <p>
                                                         <small><a href="/weshares/view/{{$share['Weshare']['id']}}">查看</a></small>
                                                     </p>
