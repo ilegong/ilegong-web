@@ -217,6 +217,43 @@ class WesharesController extends AppController {
         echo json_encode(array('success' => true));
     }
 
+    public function user_share_info(){
+        $this->layout = null;
+        $uid = $this->currentUser['id'];
+        $myCreateShares = $this->Weshare->find('all', array(
+            'conditions' => array(
+                'creator' => $uid
+            )
+        ));
+        $joinShareOrder = $this->Order->find('all',array(
+            'conditions' => array(
+                'creator' => $uid,
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED)
+            ),
+            'fields' => array('member_id', 'id')
+        ));
+        $joinShareIds = Hash::extract($joinShareOrder,'{n}.Order.member_id');
+        $joinShareIds = array_unique($joinShareIds);
+        $myJoinShares = $this->Weshare->find('all', array(
+            'conditions' => array(
+                'id' => $joinShareIds
+            )
+        ));
+        $creatorIds = Hash::extract($myJoinShares, '{n}.Weshare.creator');
+        $creatorIds[] = $uid;
+        $creators = $this->User->find('all',array(
+            'conditions' => array(
+                'id' => $creatorIds
+            ),
+            'fields' => array('id', 'nickname', 'image', 'wx_subscribe_status')
+        ));
+        $creators = Hash::combine($creators,'{n}.User.id','{n}.User');
+        $this->set('creators',$creators);
+        $this->set('my_create_shares',$myCreateShares);
+        $this->set('my_join_shares',$myJoinShares);
+    }
+
     private function saveWeshareProducts($weshareId, $weshareProductData) {
         foreach ($weshareProductData as &$product) {
             $product['weshare_id'] = $weshareId;

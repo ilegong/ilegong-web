@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>微分享</title>
+    <!-- Bootstrap -->
+    <link href="/static/weshares/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/weshares/css/share-info.css" rel="stylesheet">
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>我的分享信息</h3>
+
+            <div class="tabbable-panel">
+                <div class="tabbable-line">
+                    <ul class="nav nav-tabs ">
+                        <li class="active">
+                            <a href="#tab_default_1" data-toggle="tab">我发起的分享</a>
+                        </li>
+                        <li>
+                            <a href="#tab_default_2" data-toggle="tab">我参加的分享</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_default_1">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="comments-list">
+                                        {{loop $my_create_shares $share}}
+                                            <div class="media">
+                                                <p class="pull-right">
+                                                    <small>{{$share['Weshare']['created']}}</small>
+                                                </p>
+                                                <a class="media-left" href="#">
+                                                    <img src="{{$creators[$share['Weshare']['creator']]['image']}}" style="width: 40px;height: 40px;">
+                                                </a>
+
+                                                <div class="media-body">
+
+                                                    <h4 class="media-heading user_name">{{$share['Weshare']['title']}}</h4>
+                                                    {{$share['Weshare']['description']}}
+                                                    <p>
+                                                        <small><a href="/weshares/view/{{$share['Weshare']['id']}}">查看</a></small>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        {{/loop}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab_default_2">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="comments-list">
+                                        {{loop $my_join_shares $share}}
+                                            <div class="media">
+                                                <p class="pull-right">
+                                                    <small>{{$share['Weshare']['created']}}</small>
+                                                </p>
+                                                <a class="media-left" href="#">
+                                                    <img src="{{$creators[$share['Weshare']['creator']]['image']}}" style="width: 40px;height: 40px;">
+                                                </a>
+
+                                                <div class="media-body">
+
+                                                    <h4 class="media-heading user_name">{{$share['Weshare']['title']}}</h4>
+                                                    {{$share['Weshare']['description']}}
+                                                    <p>
+                                                        <small><a href="/weshares/view/{{$share['Weshare']['id']}}">查看</a></small>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        {{/loop}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
+</body>
+</html>
