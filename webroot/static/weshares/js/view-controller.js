@@ -16,7 +16,7 @@
 		vm.isCreator = isCreator;
 		vm.isOwner = isOwner;
 		vm.isOrderReceived = isOrderReceived;
-		vm.getOrderSendInfo = getOrderSendInfo;
+		vm.getConsigneeInfo = getConsigneeInfo;
 
 		vm.validateAddress = validateAddress;
 		vm.validateProducts = validateProducts;
@@ -86,11 +86,11 @@
 			});
 		}
 
-		function getOrderSendInfo(order){
+		function getConsigneeInfo(order){
 			if(_.isEmpty(order)){
 				return '';
 			}
-			return _.reject([order.consignee_address, order.consignee_mobilephone], function(e){return _.isEmpty(e)}).join(',');
+			return _.reject([order.consignee_name, order.consignee_mobilephone], function(e){return _.isEmpty(e)}).join(',');
 		}
 
 		function calOrderTotalPrice() {
