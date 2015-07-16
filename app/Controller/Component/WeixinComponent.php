@@ -368,7 +368,7 @@ class WeixinComponent extends Component
         return send_weixin_message($post_data, $this);
     }
 
-    public static function get_order_weshare_product_info($order_info, $carts, $products){
+    public static function get_order_weshare_product_info($order_info, $carts){
         $good_info ='';$number = 0;
         $send_date='';
         $ship_info = $order_info['Order']['consignee_name'];
@@ -380,9 +380,7 @@ class WeixinComponent extends Component
         $order_id = $order_info['Order']['id'];
         foreach($carts as $cart){
             if($cart['Cart']['order_id'] == $order_id){
-                $product = $products[$cart['Cart']['product_id']];
-                $name = $product['name'];
-                $good_info = $good_info.$name.'x'.$cart['Cart']['num'].';';
+                $good_info = $good_info.$cart['Cart']['name'].'x'.$cart['Cart']['num'].';';
                 $number +=$cart['Cart']['num'];
             }
         }
@@ -672,7 +670,6 @@ class WeixinComponent extends Component
         $order_ids = Hash::extract($orders, '{n}.Order.id');
         $oauthBindModel = ClassRegistry::init('Oauthbind');
         $cartModel = ClassRegistry::init('Cart');
-        $productModel = ClassRegistry::init('WeshareProduct');
         $userModel = ClassRegistry::init('User');
         $oauth_binds = $oauthBindModel->find('list', array(
             'conditions' => array( 'user_id' => $user_ids, 'source' => oauth_wx_source()),
@@ -687,15 +684,9 @@ class WeixinComponent extends Component
             'conditions' => array('order_id' => $order_ids),
             'fields' => array('Cart.id','Cart.num','Cart.order_id','Cart.send_date','Cart.product_id'),
         ));
-        $product_ids = Hash::extract($carts, '{n}.Cart.product_id');
-        $products_info = $productModel->find('all', array(
-            'conditions' => array('id' => $product_ids),
-            'fields' => array('id','name', 'price')
-        ));
-        $products = Hash::combine($products_info, '{n}.Product.id', '{n}.Product');
         foreach($orders as $order){
             $openid = $oauth_binds[$order['Order']['creator']];
-            $good = self::get_order_weshare_product_info($order, $carts, $products);
+            $good = self::get_order_weshare_product_info($order, $carts);
             $user = $users[$order['Order']['creator']];
             $this->send_weshare_buy_wx_msg($openid,$order, $good, $user);
         }
