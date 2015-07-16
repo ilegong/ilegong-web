@@ -241,7 +241,7 @@ class WesharesController extends AppController {
                 'type' => ORDER_TYPE_WESHARE_BUY,
                 'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED)
             ),
-            'fields' => array('id', 'creator', 'created', 'consignee_name', 'consignee_address', 'status'),
+            'fields' => array('id', 'creator', 'created', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status'),
             'order' => array('created DESC')
         ));
         $orderIds = Hash::extract($orders, '{n}.Order.id');
