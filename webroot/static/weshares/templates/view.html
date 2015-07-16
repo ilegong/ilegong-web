@@ -1,6 +1,6 @@
 <div class="weshare-view">
     <ul class="clearfix header margin-bottom-12">
-        <li><img onerror="this.src='/img/default_user_icon.jpg'" ng-src="{{vm.weshare.creator.image}}" ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/></li>
+        <li><img ng-src="{{vm.weshare.creator.image||'/img/default_user_icon.jpg'}}" ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/></li>
         <li>
             <label ng-bind="vm.weshare.creator.nickname"></label>
             <s>已有<span ng-bind="vm.ordersDetail.summery.all_buy_user_count"></span>人报名</s>
@@ -41,7 +41,7 @@
     </div>
     <div class="orders">
         <ul class="order clearfix margin-bottom-12" ng-class="{'my-order': vm.isOwner(order)}" ng-repeat="order in vm.ordersDetail.orders">
-            <li class='buyer-image'><img onerror="this.src='/img/default_user_icon.jpg'" ng-click="vm.toUserShareInfo(order.creator)" ng-src="{{vm.ordersDetail.users[order.creator]['image']}}"/></li>
+            <li class='buyer-image'><img ng-click="vm.toUserShareInfo(order.creator)" ng-src="{{vm.ordersDetail.users[order.creator]['image']||'/img/default_user_icon.jpg'}}"/></li>
             <li class="detail">
                 <b></b>
                 <p><strong class='buyer-name' ng-bind="vm.ordersDetail.users[order.creator]['nickname']"></strong> 已经报名</p>
