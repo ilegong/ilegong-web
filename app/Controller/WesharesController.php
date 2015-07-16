@@ -217,9 +217,11 @@ class WesharesController extends AppController {
         echo json_encode(array('success' => true));
     }
 
-    public function user_share_info(){
+    public function user_share_info($uid=null){
         $this->layout = null;
-        $uid = $this->currentUser['id'];
+        if(empty($uid)){
+            $uid = $this->currentUser['id'];
+        }
         $myCreateShares = $this->Weshare->find('all', array(
             'conditions' => array(
                 'creator' => $uid

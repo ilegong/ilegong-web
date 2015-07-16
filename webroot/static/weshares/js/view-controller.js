@@ -26,6 +26,7 @@
 
 		vm.submitOrder = submitOrder;
 		vm.confirmReceived = confirmReceived;
+    vm.toUserShareInfo = toUserShareInfo;
 
     vm.stopShare = stopShare;
 
@@ -78,6 +79,10 @@
 				return cart.name + 'X' + cart.num;
 			}).join(', ');
 		}
+
+    function toUserShareInfo($uid){
+      window.location.href='/weshares/user_share_info/'+$uid;
+    }
 
 		function viewImage(url) {
 			wx.previewImage({
