@@ -147,7 +147,7 @@ class WesharesController extends AppController {
                     'weshare_id' => $weshareId
                 )
             ));
-            //$this->setShareConsignees($buyerData['name'], $buyerData['mobilephone'], $uid);
+            $this->setShareConsignees($buyerData['name'], $buyerData['mobilephone'], $uid);
             $order = $this->Order->save(array('creator' => $uid, 'consignee_address' => $tinyAddress['WeshareAddress']['address'] ,'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $buyerData['name'], 'consignee_mobilephone' => $buyerData['mobilephone']));
             $orderId = $order['Order']['id'];
             $totalPrice = 0;
@@ -174,7 +174,7 @@ class WesharesController extends AppController {
             echo json_encode(array('success' => true, 'orderId' => $orderId));
             return;
         } catch (Exception $e) {
-            $this->log($e);
+            $this->log($uid.'buy share '.$weshareId.$e);
             echo json_encode(array('success' => false, 'msg' => $e->getMessage()));
             return;
         }
@@ -342,11 +342,11 @@ class WesharesController extends AppController {
                 'creator' => $uid,
                 'status' => STATUS_CONSIGNEES_SHARE
             ),
-            'fields' => array('name', 'mobilephone')
+            'fields' => array('id', 'name', 'mobilephone')
         ));
         //update
         if(!empty($consignee)){
-            $this->OrderConsignees->updateAll(array('name' => $userInfo, 'mobilephone' => $mobileNum),array('id' => $consignee['OrderConsignees']['id']));
+            $this->OrderConsignees->updateAll(array('name' => "'".$userInfo."'", 'mobilephone' => "'".$mobileNum."'"), array('id' => $consignee['OrderConsignees']['id']));
             return;
         }
         //save
@@ -361,7 +361,7 @@ class WesharesController extends AppController {
             ),
             'fields' => array('name', 'mobilephone')
         ));
-        return $consignee;
+        return $consignee['OrderConsignees'];
     }
 
     private function getUserShareSummery($uid){
