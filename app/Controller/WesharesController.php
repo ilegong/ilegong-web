@@ -246,7 +246,8 @@ class WesharesController extends AppController {
         $myCreateShares = $this->Weshare->find('all', array(
             'conditions' => array(
                 'creator' => $uid
-            )
+            ),
+            'order' => array('created DESC')
         ));
         $joinShareOrder = $this->Order->find('all',array(
             'conditions' => array(
@@ -261,7 +262,8 @@ class WesharesController extends AppController {
         $myJoinShares = $this->Weshare->find('all', array(
             'conditions' => array(
                 'id' => $joinShareIds
-            )
+            ),
+            'order' => array('created DESC')
         ));
         $creatorIds = Hash::extract($myJoinShares, '{n}.Weshare.creator');
         $creatorIds[] = $uid;
