@@ -167,11 +167,9 @@
 		function submitOrder(paymentType) {
 			vm.validateUserName();
 			vm.validateMobile();
-
       if(vm.buyerMobilePhoneHasError || vm.usernameHasError){
         return false;
       }
-
 			var products = _.filter(vm.weshare.products, function (product) {
 				return product.num && (product.num > 0);
 			});
@@ -185,14 +183,19 @@
 				buyer: {name: vm.buyerName, mobilephone: vm.buyerMobilePhone}
 			};
 
+      if(vm.submitProcessing){
+        return;
+      }
+      vm.submitProcessing = true;
 			$http.post('/weshares/makeOrder/', orderData).success(function (data) {
-				$log.log(data);
 				if (data.success) {
 					//pay
 					window.location.href = '/weshares/pay/' + data.orderId + '/' + paymentType;
-				}
+				}else{
+          vm.submitProcessing = false;
+        }
 			}).error(function () {
-
+        vm.submitProcessing = false;
 			});
 		}
 
