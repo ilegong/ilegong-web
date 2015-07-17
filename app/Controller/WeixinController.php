@@ -12,7 +12,7 @@ class WeixinController extends AppController {
 
 	var $name = 'Weixin';
 
-    var $uses = array('Oauthbind', 'User', 'UserSubReason');
+    var $uses = array('Oauthbind', 'User', 'UserSubReason', 'Candidate', 'CandidateEvent',);
 	
 	public function beforeFilter(){
 		parent::beforeFilter();
@@ -357,10 +357,24 @@ class WeixinController extends AppController {
                     echo $this->newTextMsg($user, $me,  "您的用户id为(test2):".$uid);
                     break;
                 case '投票':
+                    $detail_url = 'http://www.tongshijia.com/vote/vote_event_view/4';
+                    $event_candidate = $this->CandidateEvent->find('first',array('conditions' => array(
+                        'user_id' => $uid,
+                        'event_id' => 4
+                    )));
+                    $candidate_id = $event_candidate['CandidateEvent']['CandidateEvent'];
+                    $candidate = $this->Candidate->find('first',array(
+                        'conditions' => array(
+                            'id' => $candidate_id
+                        )
+                    ));
+                    if($candidate['Candidate']['deleted']==DELETED_NO){
+                        $detail_url = 'http://www.tongshijia.com/vote/candidate_detail/'.$candidate_id.'/4';
+                    }
                     $content = array(
                         array('title' => '晒吃货宝贝，赢亲子旅行包/360儿童安全卫士，满100票，领五常稻花香大米...', 'description' => '',
                             'picUrl' => 'http://51daifan.sinaapp.com/img/imgstore/1.jpg',
-                            'url' => 'http://www.tongshijia.com/vote/vote_event_view/4'),
+                            'url' => $detail_url),
                     );
                     echo $this->newArticleMsg($user, $me, $content);
                     break;
