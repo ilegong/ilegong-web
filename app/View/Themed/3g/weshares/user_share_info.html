@@ -20,7 +20,7 @@
             <div class="user-info-block">
                 <div class="user-heading">
                     <h3>{{$current_user['nickname']}}</h3>
-                    <span class="help-block">分享 <span class="badge">{{$share_count}}</span> &nbsp;&nbsp;&nbsp;&nbsp; 粉丝 <span class="badge">{{$follower_count}}</span></span>
+                    <span class="help-block"><strong style="color: #ffa200">{{$share_count}}</strong>&nbsp;&nbsp;分享&nbsp;&nbsp;<strong style="color: #ffa200">{{$follower_count}}</strong>&nbsp;&nbsp;粉丝 </span>
                 </div>
             </div>
         </div>
@@ -66,6 +66,14 @@
             </div>
         </div>
     </div>
+    <br/>
+    <footer class="footer">
+        <div class="container">
+            <div style="text-align: center;">
+                <a href="/"><img src="/img/logo_footer.jpg" border="0" style="width: 4.625em;height: 1.583em;"/></a><br/>朋友说—朋友间最真挚的分享
+            </div>
+        </div>
+    </footer>
 </div>
 <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
 <script src="http://cdn.staticfile.org/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
