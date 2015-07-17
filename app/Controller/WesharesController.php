@@ -26,6 +26,7 @@ class WesharesController extends AppController {
             $this->set('title', $title);
             $this->set('image', $image);
             $this->set('desc', $desc);
+            $this->set('add_view',true);
         }
     }
 
