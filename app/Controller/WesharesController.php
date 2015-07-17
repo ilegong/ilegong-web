@@ -147,7 +147,7 @@ class WesharesController extends AppController {
                     'weshare_id' => $weshareId
                 )
             ));
-            $this->setShareConsignees($buyerData['name'], $buyerData['mobilephone'], $uid);
+            //$this->setShareConsignees($buyerData['name'], $buyerData['mobilephone'], $uid);
             $order = $this->Order->save(array('creator' => $uid, 'consignee_address' => $tinyAddress['WeshareAddress']['address'] ,'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $buyerData['name'], 'consignee_mobilephone' => $buyerData['mobilephone']));
             $orderId = $order['Order']['id'];
             $totalPrice = 0;
