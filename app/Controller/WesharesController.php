@@ -93,8 +93,8 @@ class WesharesController extends AppController {
             'recursive' => 1, //int
             'fields' => array('id', 'nickname', 'image', 'wx_subscribe_status'),
         ));
-        $consignee = $this->getShareConsignees($creatorInfo['User']['id']);
-        $user_share_summery = $this->getUserShareSummery($uid);
+        $consignee = $this->getShareConsignees($uid);
+        $user_share_summery = $this->getUserShareSummery($creatorInfo['User']['id']);
         echo json_encode(array('weshare' => $weshareInfo, 'ordersDetail' => $ordersDetail, 'current_user' => $current_user['User'], 'weixininfo' => $weixinInfo, 'consignee' => $consignee, 'user_share_summery' => $user_share_summery));
         return;
     }
