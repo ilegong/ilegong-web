@@ -362,7 +362,7 @@ class WeixinController extends AppController {
                         'user_id' => $uid,
                         'event_id' => 4
                     )));
-                    $candidate_id = $event_candidate['CandidateEvent']['CandidateEvent'];
+                    $candidate_id = $event_candidate['CandidateEvent']['candidate_id'];
                     $candidate = $this->Candidate->find('first',array(
                         'conditions' => array(
                             'id' => $candidate_id
