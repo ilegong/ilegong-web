@@ -251,6 +251,8 @@ class WesharesController extends AppController {
             'fields' => array('id', 'nickname', 'image', 'wx_subscribe_status')
         ));
         $creators = Hash::combine($creators,'{n}.User.id','{n}.User');
+        $currentUser = $creators[$uid];
+        $this->set('current_user',$currentUser);
         $this->set('creators',$creators);
         $this->set('my_create_shares',$myCreateShares);
         $this->set('my_join_shares',$myJoinShares);

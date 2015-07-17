@@ -8,14 +8,26 @@
     <title>微分享</title>
     <!-- Bootstrap -->
     <link href="/static/weshares/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/static/weshares/css/share-info.css" rel="stylesheet">
+    <link href="/static/weshares/css/share-info.css?v0.0.1" rel="stylesheet">
 </head>
 <body>
 <div class="container-fluid">
     <div class="row">
+        <div class="col-sm-4 col-md-4 user-details">
+            <div class="user-image">
+                <img style="width: 100px;height: 100px;" src="{{$current_user['image']}}" alt="{{$current_user['nickname']}}" title="{{$current_user['nickname']}}" class="img-circle">
+            </div>
+            <div class="user-info-block">
+                <div class="user-heading">
+                    <h3>{{$current_user['nickname']}}</h3>
+                    <!--<span class="help-block">Chandigarh, IN</span>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/><br/>
+    <div class="row">
         <div class="col-md-12">
-            <h3>我的分享信息</h3>
-
             <div class="tabbable-panel">
                 <div class="tabbable-line">
                     <ul class="nav nav-tabs ">
