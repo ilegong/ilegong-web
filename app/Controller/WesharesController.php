@@ -219,8 +219,9 @@ class WesharesController extends AppController {
 
     public function user_share_info($uid=null){
         $this->layout = null;
+        $current_uid = $this->currentUser['id'];
         if(empty($uid)){
-            $uid = $this->currentUser['id'];
+            $uid = $current_uid;
         }
         $myCreateShares = $this->Weshare->find('all', array(
             'conditions' => array(
@@ -252,6 +253,7 @@ class WesharesController extends AppController {
         ));
         $creators = Hash::combine($creators,'{n}.User.id','{n}.User');
         $currentUser = $creators[$uid];
+        $this->set('is_me',$uid==$current_uid);
         $this->set('current_user',$currentUser);
         $this->set('creators',$creators);
         $this->set('my_create_shares',$myCreateShares);
