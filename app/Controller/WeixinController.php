@@ -356,7 +356,7 @@ class WeixinController extends AppController {
                     echo $this->newTextMsg($user, $me,  "您的用户id为".$uid);
                     echo $this->newTextMsg($user, $me,  "您的用户id为(test2):".$uid);
                     break;
-                case '宝宝福利':
+                case '宝宝':
                 case '投票':
                     $detail_url = 'http://www.tongshijia.com/vote/vote_event_view/4';
                     $event_candidate = $this->CandidateEvent->find('first',array('conditions' => array(
