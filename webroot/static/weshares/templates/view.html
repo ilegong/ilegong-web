@@ -2,7 +2,8 @@
     <ul class="clearfix header margin-bottom-12">
         <li><img ng-src="{{vm.weshare.creator.image||'/img/default_user_icon.jpg'}}" ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/></li>
         <li>
-            <label ng-bind="vm.weshare.creator.nickname"></label>
+            <label ng-click="vm.toUserShareInfo(vm.weshare.creator.id)" ng-bind="vm.weshare.creator.nickname"></label>
+            <s>分享<b style="color: #ffa200" ng-bind="vm.userShareSummery.share_count">0</b>&nbsp;&nbsp;&nbsp;粉丝<b style="color: #ffa200" ng-bind="vm.userShareSummery.follower_count">0</b></s>
             <s>已有<span ng-bind="vm.ordersDetail.summery.all_buy_user_count"></span>人报名</s>
         </li>
         <li style="float: right;" ng-if="vm.isCreator()"><a class="statistics-btn" ng-click="vm.showStaticsDialog=true;vm.showLayer=true;">购买统计</a></li>

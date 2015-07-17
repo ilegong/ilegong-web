@@ -50,6 +50,7 @@
 					vm.currentUser = data['current_user']||{};
 					vm.weixinInfo = data['weixininfo'];
           vm.consignee = data['consignee'];
+          vm.userShareSummery = data['user_share_summery'];
           if(vm.consignee){
             vm.buyerName = vm.consignee.name;
             vm.buyerMobilePhone = vm.consignee.mobilephone;

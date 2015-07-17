@@ -94,7 +94,8 @@ class WesharesController extends AppController {
             'fields' => array('id', 'nickname', 'image', 'wx_subscribe_status'),
         ));
         $consignee = $this->getShareConsignees($uid);
-        echo json_encode(array('weshare' => $weshareInfo, 'ordersDetail' => $ordersDetail, 'current_user' => $current_user['User'], 'weixininfo' => $weixinInfo, 'consignee' => $consignee));
+        $user_share_summery = $this->getUserShareSummery($uid);
+        echo json_encode(array('weshare' => $weshareInfo, 'ordersDetail' => $ordersDetail, 'current_user' => $current_user['User'], 'weixininfo' => $weixinInfo, 'consignee' => $consignee, 'user_share_summery' => $user_share_summery));
         return;
     }
 
@@ -252,6 +253,8 @@ class WesharesController extends AppController {
             'fields' => array('id', 'nickname', 'image', 'wx_subscribe_status')
         ));
         $creators = Hash::combine($creators,'{n}.User.id','{n}.User');
+        $userShareSummery = $this->getUserShareSummery($uid);
+        $this->set($userShareSummery);
         $currentUser = $creators[$uid];
         $this->set('is_me',$uid==$current_uid);
         $this->set('current_user',$currentUser);
@@ -356,5 +359,24 @@ class WesharesController extends AppController {
             'fields' => array('name', 'mobilephone')
         ));
         return $consignee;
+    }
+
+    private function getUserShareSummery($uid){
+        $weshares = $this->Weshare->find('all',array(
+            'conditions' => array(
+                'creator' => $uid
+            ),
+            'fields' => array('id')
+        ));
+        $weshare_ids = Hash::extract($weshares, '{n}.Weshare.id');
+        $follower_count = $this->Order->find('count',array(
+            'conditions' => array(
+                'member_id' => $weshare_ids,
+                'status' => array(ORDER_STATUS_SHIPPED,ORDER_STATUS_PAID),
+                'type' => ORDER_TYPE_WESHARE_BUY
+            ),
+            'fileds' => array('DISTINCT creator')
+        ));
+        return array('share_count' => count($weshares), 'follower_count' => $follower_count);
     }
 }
