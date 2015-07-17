@@ -44,23 +44,7 @@
                                 <div class="col-md-8">
                                     <div class="comments-list">
                                         {{loop $my_create_shares $share}}
-                                            <div class="media">
-                                                <p class="pull-right">
-                                                    <small>{{$share['Weshare']['created']}}</small>
-                                                </p>
-                                                <a class="media-left" href="#">
-                                                    <img onerror="this.src='/img/default_user_icon.jpg'" src="{{$creators[$share['Weshare']['creator']]['image']}}" style="width: 40px;height: 40px;">
-                                                </a>
-
-                                                <div class="media-body">
-
-                                                    <h4 class="media-heading user_name">{{$share['Weshare']['title']}}</h4>
-                                                    {{mb_substr($share['Weshare']['description'],0,30)}}...
-                                                    <p>
-                                                        <small><a href="/weshares/view/{{$share['Weshare']['id']}}">查看</a></small>
-                                                    </p>
-                                                </div>
-                                            </div>
+                                            {{template weshares/user_share_item_template}}
                                         {{/loop}}
                                     </div>
                                 </div>
@@ -71,23 +55,7 @@
                                 <div class="col-md-8">
                                     <div class="comments-list">
                                         {{loop $my_join_shares $share}}
-                                            <div class="media">
-                                                <p class="pull-right">
-                                                    <small>{{$share['Weshare']['created']}}</small>
-                                                </p>
-                                                <a class="media-left" href="#">
-                                                    <img onerror="this.src='/img/default_user_icon.jpg'" src="{{$creators[$share['Weshare']['creator']]['image']}}" style="width: 40px;height: 40px;">
-                                                </a>
-
-                                                <div class="media-body">
-
-                                                    <h4 class="media-heading user_name">{{$share['Weshare']['title']}}</h4>
-                                                    {{mb_substr($share['Weshare']['description'],0,30)}}...
-                                                    <p>
-                                                        <small><a href="/weshares/view/{{$share['Weshare']['id']}}">查看</a></small>
-                                                    </p>
-                                                </div>
-                                            </div>
+                                            {{template weshares/user_share_item_template}}
                                         {{/loop}}
                                     </div>
                                 </div>
