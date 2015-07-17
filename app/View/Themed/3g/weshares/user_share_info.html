@@ -15,7 +15,7 @@
     <div class="row" style="background: #EAEAEA;">
         <div class="col-sm-4 col-md-4 user-details">
             <div class="user-image">
-                <img style="width: 100px;height: 100px;" src="{{$current_user['image']}}" alt="{{$current_user['nickname']}}" title="{{$current_user['nickname']}}" class="img-circle">
+                <img style="width: 100px;height: 100px;" onerror="this.src='/img/default_user_icon.jpg'" src="{{$current_user['image']}}" alt="{{$current_user['nickname']}}" title="{{$current_user['nickname']}}" class="img-circle">
             </div>
             <div class="user-info-block">
                 <div class="user-heading">
