@@ -135,46 +135,51 @@ class WesharesController extends AppController {
         $addressId = $postDataArray['address_id'];
         $buyerData = $postDataArray['buyer'];
         $cart = array();
-        $weshareProductIds = Hash::extract($products, '{n}.id');
-        $productIdNumMap = Hash::combine($products, '{n}.id', '{n}.num');
-        $tinyAddress = $this->WeshareAddress->find('first', array(
-            'conditions' => array(
-                'id' => $addressId,
-                'weshare_id' => $weshareId
-            )
-        ));
-        $weshareProducts = $this->WeshareProduct->find('all', array(
-            'conditions' => array(
-                'id' => $weshareProductIds,
-                'weshare_id' => $weshareId
-            )
-        ));
-        $this->setShareConsignees($buyerData['name'], $buyerData['mobilephone'], $uid);
-        $order = $this->Order->save(array('creator' => $uid, 'consignee_address' => $tinyAddress['WeshareAddress']['address'] ,'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $buyerData['name'], 'consignee_mobilephone' => $buyerData['mobilephone']));
-        $orderId = $order['Order']['id'];
-        $totalPrice = 0;
-        foreach ($weshareProducts as $p) {
-            $item = array();
-            $pid = $p['WeshareProduct']['id'];
-            $num = $productIdNumMap[$pid];
-            $price = $p['WeshareProduct']['price'];
-            $item['name'] = $p['WeshareProduct']['name'];
-            $item['num'] = $num;
-            $item['price'] = $price;
-            $item['type'] = ORDER_TYPE_WESHARE_BUY;
-            $item['product_id'] = $p['WeshareProduct']['id'];
-            $item['created'] = date('Y-m-d H:i:s');
-            $item['updated'] = date('Y-m-d H:i:s');
-            $item['creator'] = $uid;
-            $item['order_id'] = $orderId;
-            $item['tuan_buy_id'] = $weshareId;
-            $cart[] = $item;
-            $totalPrice += $num * $price;
+        try {
+            $weshareProductIds = Hash::extract($products, '{n}.id');
+            $productIdNumMap = Hash::combine($products, '{n}.id', '{n}.num');
+            $tinyAddress = $this->WeshareAddress->find('first', array(
+                'conditions' => array(
+                    'id' => $addressId,
+                    'weshare_id' => $weshareId
+                )
+            ));
+            $weshareProducts = $this->WeshareProduct->find('all', array(
+                'conditions' => array(
+                    'id' => $weshareProductIds,
+                    'weshare_id' => $weshareId
+                )
+            ));
+            $this->setShareConsignees($buyerData['name'], $buyerData['mobilephone'], $uid);
+            $order = $this->Order->save(array('creator' => $uid, 'consignee_address' => $tinyAddress['WeshareAddress']['address'] ,'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $buyerData['name'], 'consignee_mobilephone' => $buyerData['mobilephone']));
+            $orderId = $order['Order']['id'];
+            $totalPrice = 0;
+            foreach ($weshareProducts as $p) {
+                $item = array();
+                $pid = $p['WeshareProduct']['id'];
+                $num = $productIdNumMap[$pid];
+                $price = $p['WeshareProduct']['price'];
+                $item['name'] = $p['WeshareProduct']['name'];
+                $item['num'] = $num;
+                $item['price'] = $price;
+                $item['type'] = ORDER_TYPE_WESHARE_BUY;
+                $item['product_id'] = $p['WeshareProduct']['id'];
+                $item['created'] = date('Y-m-d H:i:s');
+                $item['updated'] = date('Y-m-d H:i:s');
+                $item['creator'] = $uid;
+                $item['order_id'] = $orderId;
+                $item['tuan_buy_id'] = $weshareId;
+                $cart[] = $item;
+                $totalPrice += $num * $price;
+            }
+            $this->Cart->saveAll($cart);
+            $this->Order->updateAll(array('total_all_price' => $totalPrice / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => 0), array('id' => $orderId));
+            echo json_encode(array('success' => true, 'orderId' => $orderId));
+            return;
+        } catch (Exception $e) {
+            echo json_encode(array('success' => false, 'msg' => $e->getMessage()));
+            return;
         }
-        $this->Cart->saveAll($cart);
-        $this->Order->updateAll(array('total_all_price' => $totalPrice / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => 0), array('id' => $orderId));
-        echo json_encode(array('success' => true, 'orderId' => $orderId));
-        return;
     }
 
     function confirmReceived($order_id){
