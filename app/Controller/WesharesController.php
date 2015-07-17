@@ -15,7 +15,19 @@ class WesharesController extends AppController {
         }
     }
 
-    public function add(){}
+    public function add(){
+        if(parent::is_weixin()){
+            $currentUser = $this->currentUser;
+            $wexin_params = $this->set_weixin_share_data($currentUser['id'],0);
+            $this->set($wexin_params);
+            $title = $currentUser['nickname'].'邀请你一起来加入分享';
+            $image = $currentUser['image'] || 'http://dev.tongshijia.com/img/logo_footer.jpg';
+            $desc = '朋友说是一个有人情味的分享社区，这里你不但可以吃到各地的特产，还能认识有趣的人。';
+            $this->set('title', $title);
+            $this->set('image', $image);
+            $this->set('desc', $desc);
+        }
+    }
 
     public function view($weshare_id){
         $this->set('weshare_id', $weshare_id);
