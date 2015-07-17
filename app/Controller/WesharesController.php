@@ -274,11 +274,32 @@ class WesharesController extends AppController {
             'fields' => array('id', 'nickname', 'image', 'wx_subscribe_status')
         ));
         $creators = Hash::combine($creators,'{n}.User.id','{n}.User');
+        $shareUser = $creators[$uid];
+        if(parent::is_weixin()){
+            $wexin_params = $this->set_weixin_share_data($uid,-1);
+            $this->set($wexin_params);
+            if($uid==$current_uid){
+                $title = $shareUser['nickname'].'的微分享，和我一起来分享吧';
+                $image = $shareUser['image'];
+                $desc = '朋友说是一个有人情味的分享社区，这里你不但可以吃到各地的特产，还能认识有趣的人。';
+            }else{
+                $current_user = $this->currentUser;
+                $title = $current_user['nickname'].'推荐了'.$shareUser['nickname'].'和我一起来分享吧';
+                $image = $shareUser['image'];
+                $desc = $shareUser['nickname'].'是我的朋友，很靠谱。朋友说是一个有人情味的分享社区，这里你不但可以吃到各地的特产，还能认识有趣的人。';
+            }
+            if(!$image){
+                $image = 'http://dev.tongshijia.com/img/logo_footer.jpg';
+            }
+            $this->set('title', $title);
+            $this->set('image', $image);
+            $this->set('desc', $desc);
+            $this->set('add_view',true);
+        }
         $userShareSummery = $this->getUserShareSummery($uid);
         $this->set($userShareSummery);
-        $currentUser = $creators[$uid];
         $this->set('is_me',$uid==$current_uid);
-        $this->set('current_user',$currentUser);
+        $this->set('share_user',$shareUser);
         $this->set('creators',$creators);
         $this->set('my_create_shares',$myCreateShares);
         $this->set('my_join_shares',$myJoinShares);
