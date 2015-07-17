@@ -118,9 +118,6 @@ class WesharesController extends AppController {
         }
     }
 
-    /**
-     * {weshare_id: 1, address_id: 1, products: [{id: 1, num:2}, {id: 2, num: 10}], buyer: {name: 'Zhang San', mobilephone: 13521112222}}
-     */
     public function makeOrder() {
         $this->autoRender=false;
         $uid = $this->currentUser['id'];
@@ -177,6 +174,7 @@ class WesharesController extends AppController {
             echo json_encode(array('success' => true, 'orderId' => $orderId));
             return;
         } catch (Exception $e) {
+            $this->log($e);
             echo json_encode(array('success' => false, 'msg' => $e->getMessage()));
             return;
         }
