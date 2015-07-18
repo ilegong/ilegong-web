@@ -4,7 +4,7 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>微分享</title>
-    <link rel="stylesheet" href="/static/weshares/css/main.css?v0.3.6"/>
+    <link rel="stylesheet" href="/static/weshares/css/main.css?v0.3.7"/>
 </head>
 
 <body style="background-color:#f5f5f5;">
@@ -13,6 +13,28 @@
     <script type="text/javascript" src="/static/weshares/js/angular-ui-router.min.js"></script>
     <script type="text/javascript" src="/static/weshares/js/underscore-min.js"></script>
     <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script>
+        //Pys common name space
+        PYS={};
+        PYS.storage = {
+            save : function(key, jsonData, expirationHour){
+                //if (!Modernizr.localstorage){return false;}
+                var expirationMS = expirationHour * 60 * 60 * 1000;
+                var record = {value: JSON.stringify(jsonData), timestamp: new Date().getTime() + expirationMS}
+                localStorage.setItem(key, JSON.stringify(record));
+                return jsonData;
+            },
+            load : function(key){
+                //if (!Modernizr.localstorage){return false;}
+                var record = JSON.parse(localStorage.getItem(key));
+                if (!record){return false;}
+                return (new Date().getTime() < record.timestamp && JSON.parse(record.value));
+            },
+            clear : function(){
+                localStorage.clear();
+            }
+        }
+    </script>
     <script>
         if(wx){
             var wx_jssdk_appId = '{{$signPackage["appId"]}}';
@@ -30,49 +52,48 @@
             });
         }
     </script>
-    <script type="text/javascript" src="/static/weshares/js/app.js?v0.3.6"></script>
-    <script type="text/javascript" src="/static/weshares/js/edit-controller.js?v0.3.6"></script>
-    <script type="text/javascript" src="/static/weshares/js/view-controller.js?v0.3.6"></script>
+    <script type="text/javascript" src="/static/weshares/js/app.js?v0.3.7"></script>
+    <script type="text/javascript" src="/static/weshares/js/edit-controller.js?v0.3.7"></script>
+    <script type="text/javascript" src="/static/weshares/js/view-controller.js?v0.3.7"></script>
+
+    {{if $jWeixinOn&&$add_view}}
+    <script>
+        wx.ready(function () {
+            var share_string = '{{$share_string ? $share_string :"0"}}';
+            var to_timeline_title = "{{$title}}";
+            var to_friend_title = "{{$title}}";
+            var to_friend_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=appMsg';
+            var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
+            var imgUrl = "{{$this->Html->assetUrl($image)}}";
+            var desc = "{{$desc}}";
+            wx.onMenuShareAppMessage({
+                title: to_friend_title,
+                desc: desc,
+                link: to_friend_link,
+                imgUrl: imgUrl,
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                    if(share_string != '0'){
+                        setTimeout(function(){
+                            $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "appMsg" });
+                        }, 500);
+                    }
+                }
+            });
+            wx.onMenuShareTimeline({
+                title: to_timeline_title,
+                link: to_timeline_link,
+                imgUrl: imgUrl,
+                success: function () {
+                    if(share_string != '0'){
+                        setTimeout(function(){
+                            $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "timeline" });
+                        }, 500);
+                    }
+                }
+            });
+        });
+    </script>
+    {{/if}}
 </body>
-
-{{if $jWeixinOn&&$add_view}}
-<script>
-    wx.ready(function () {
-        var share_string = '{{$share_string ? $share_string :"0"}}';
-        var to_timeline_title = "{{$title}}";
-        var to_friend_title = "{{$title}}";
-        var to_friend_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=appMsg';
-        var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
-        var imgUrl = "{{$this->Html->assetUrl($image)}}";
-        var desc = "{{$desc}}";
-        wx.onMenuShareAppMessage({
-            title: to_friend_title,
-            desc: desc,
-            link: to_friend_link,
-            imgUrl: imgUrl,
-            success: function () {
-                // 用户确认分享后执行的回调函数
-                if(share_string != '0'){
-                    setTimeout(function(){
-                        $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "appMsg" });
-                    }, 500);
-                }
-            }
-        });
-        wx.onMenuShareTimeline({
-            title: to_timeline_title,
-            link: to_timeline_link,
-            imgUrl: imgUrl,
-            success: function () {
-                if(share_string != '0'){
-                    setTimeout(function(){
-                        $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "timeline" });
-                    }, 500);
-                }
-            }
-        });
-    });
-</script>
-{{/if}}
-
 </html>

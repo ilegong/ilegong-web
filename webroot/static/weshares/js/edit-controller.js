@@ -20,8 +20,12 @@
 		vm.validateTitle = validateTitle;
 		vm.validateProductName = validateProductName;
 		vm.validateProductPrice = validateProductPrice;
+    vm.saveCacheData = saveCacheData;
+    vm.dataCacheKey = 'cache_share_data';
 
 		activate();
+
+    $scope.$watch('vm.weshare', vm.saveCacheData);
 
 		function activate() {
 			vm.showShippmentInfo = false;
@@ -39,15 +43,16 @@
         addresses: [
           {address: ''}
         ]
-      }
+      };
       if(weshareId){
         //update
         $http.get('/weshares/get_share_info/'+weshareId).success(function(data){
           $log.log(data);
           vm.weshare = data;
         }).error(function(data){
-
         });
+      }else{
+        vm.weshare = PYS.storage.load(vm.dataCacheKey);
       }
 			vm.messages = [];
 		}
@@ -62,6 +67,10 @@
 				}
 			});
 		}
+
+    function saveCacheData(){
+      PYS.storage.save(vm.dataCacheKey,vm.weshare,4);
+    }
 
 		function uploadImage(localId) {
 			wx.uploadImage({
@@ -135,6 +144,7 @@
 			$http.post('/weshares/save', vm.weshare).success(function (data, status, headers, config) {
 				if (data.success) {
 					$log.log('post succeeded, data: ').log(data);
+          PYS.storage.clear();
 					window.location.href = '/weshares/view/' + data['id'];
 				}
 				else {
