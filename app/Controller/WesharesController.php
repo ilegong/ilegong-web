@@ -62,7 +62,7 @@ class WesharesController extends AppController {
         $postStr = file_get_contents('php://input');
         $postDataArray = json_decode($postStr, true);
         $weshareData = array();
-        $weshare_id = $postDataArray['id'];
+        $weshareData['id'] = $postDataArray['id'];
         $weshareData['title'] = $postDataArray['title'];
         $weshareData['description'] = $postDataArray['description'];
         $weshareData['send_info'] = $postDataArray['send_info'];
@@ -74,9 +74,6 @@ class WesharesController extends AppController {
         $productsData = $postDataArray['products'];
         $addressesData = $postDataArray['addresses'];
         $weshareData['creator'] = $uid;
-        if($weshare_id){
-            $this->Weshare->id=$weshare_id;
-        }
         $saveBuyFlag = $weshare = $this->Weshare->save($weshareData);
         $saveProductFlag = $this->saveWeshareProducts($weshare['Weshare']['id'], $productsData);
         $saveAddressFlag = $this->saveWeshareAddresses($weshare['Weshare']['id'], $addressesData);
