@@ -83,8 +83,16 @@ class TestController extends AppController{
         return $calculator->getDistance($p1, $p2);
     }
 
-    private function test_send_msg_for_creator($orderId, $creator){
-
+    public function test_send_msg_for_creator($orderId){
+        $this->autoRender = false;
+        $order = $this->Order->find('first',array(
+            'conditions' => array(
+                'id' => $orderId
+            )
+        ));
+        $this->Weixin->weshare_buy_order_paid($order);
+        echo json_encode(array('success' => true));
+        return;
     }
 
 }
