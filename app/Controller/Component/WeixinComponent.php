@@ -723,32 +723,32 @@ class WeixinComponent extends Component
         return $this->send_weixin_message($post_data) && $this->send_share_offer_msg($open_id, $order['Order']['id']);
     }
 
-    public function notify_weshare_buy_creator($order,$good){
+    public function notify_weshare_buy_creator($order, $good) {
         $oauthBindModel = ClassRegistry::init('Oauthbind');
-        $seller_weixin = $oauthBindModel->findWxServiceBindByUid($good['weshare_info']['Weshare']['creator']);
+        $weshare_info = $good['weshare_info'];
+        $seller_weixin = $oauthBindModel->findWxServiceBindByUid($weshare_info['Weshare']['creator']);
         $price = $order['Order']['total_all_price'];
         $good_info = $good['good_info'];
         $ship_info = $good['ship_info'];
         $order_id = $order['Order']['id'];
-        if($seller_weixin != false){
-            $this->send_weshare_buy_paid_msg_for_creator($seller_weixin['oauth_openid'], $price, $good_info, $ship_info, $order_id);
+        if ($seller_weixin != false) {
+            $this->send_weshare_buy_paid_msg_for_creator($seller_weixin['oauth_openid'], $price, $good_info, $ship_info, $order_id, $weshare_info);
         }
     }
 
-    public function send_weshare_buy_paid_msg_for_creator($seller_open_id, $price, $good_info, $ship_info, $order_no)
-    {
-        $title = $good_info['weshare_info']['Weshare']['title'];
-        $weshare_id = $good_info['weshare_info']['Weshare']['id'];
+    public function send_weshare_buy_paid_msg_for_creator($seller_open_id, $price, $good_info, $ship_info, $order_no, $weshare_info) {
+        $title = $weshare_info['Weshare']['title'];
+        $weshare_id = $weshare_info['Weshare']['id'];
         $post_data = array(
             "touser" => $seller_open_id,
             "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
             "url" => $this->get_weshare_buy_detail($weshare_id),
             "topcolor" => "#FF0000",
             "data" => array(
-                "first" => array("value" => "亲，有用户加入了您发起的".$title."的活动。"),
+                "first" => array("value" => "亲，有用户加入了您发起的" . $title . "的活动。"),
                 "orderProductPrice" => array("value" => $price),
                 "orderProductName" => array("value" => $good_info),
-                "orderAddress" => array("value" => empty($ship_info)?'':$ship_info),
+                "orderAddress" => array("value" => empty($ship_info) ? '' : $ship_info),
                 "orderName" => array("value" => $order_no),
                 "remark" => array("value" => "点击详情", "color" => "#FF8800")
             )
