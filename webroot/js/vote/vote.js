@@ -12,8 +12,9 @@ $(function(){
     }
     $('.active').children('a').addClass('cur');
     voteBaby.on('click',function(){
-        var candidateId = voteBaby.data('candidate_id');
-        var eventId = voteBaby.data('event_id');
+        var $me = $(this);
+        var candidateId = $me.data('candidate_id');
+        var eventId = $me.data('event_id');
         $.post('/vote/vote/' + candidateId + '/' + eventId,function(data){
            if(data.success){
                voteBaby.text('已投票').removeClass('vote_baby').addClass('cur');
