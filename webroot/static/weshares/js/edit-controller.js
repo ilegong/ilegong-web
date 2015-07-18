@@ -2,10 +2,10 @@
 
 	angular.module('weshares')
 		.constant('wx', wx)
-		.controller('WesharesAddCtrl', WesharesAddCtrl);
+		.controller('WesharesEditCtrl', WesharesEditCtrl);
 
 
-	function WesharesAddCtrl($scope, $rootScope, $log, $http, wx, Utils) {
+	function WesharesEditCtrl($scope, $rootScope, $log, $http, wx, Utils) {
 		var vm = this;
 		vm.chooseAndUploadImage = chooseAndUploadImage;
 		vm.uploadImage = uploadImage;
@@ -25,18 +25,30 @@
 
 		function activate() {
 			vm.showShippmentInfo = false;
-			vm.weshare = {
-				title: '',
-				description: '',
-				images: [],
-				products: [
-					{name: ''}
-				],
-				send_info: '',
-				addresses: [
-					{address: ''}
-				]
-			}
+      var weshareId = angular.element(document.getElementById('weshareEditView')).attr('data-id');
+      $log.log(weshareId);
+      //add
+      vm.weshare = {
+        title: '',
+        description: '',
+        images: [],
+        products: [
+          {name: ''}
+        ],
+        send_info: '',
+        addresses: [
+          {address: ''}
+        ]
+      }
+      if(weshareId){
+        //update
+        $http.get('/weshares/get_share_info/'+weshareId).success(function(data){
+          $log.log(data);
+          vm.weshare = data;
+        }).error(function(data){
+
+        });
+      }
 			vm.messages = [];
 		}
 
@@ -120,7 +132,7 @@
 			});
 
 			$log.log('submitted').log(vm.weshare);
-			$http.post('/weshares/create', vm.weshare).success(function (data, status, headers, config) {
+			$http.post('/weshares/save', vm.weshare).success(function (data, status, headers, config) {
 				if (data.success) {
 					$log.log('post succeeded, data: ').log(data);
 					window.location.href = '/weshares/view/' + data['id'];
@@ -146,7 +158,7 @@
 		}
 
 		function validateProductPrice(product) {
-			product.priceHasError = _.isEmpty(product.price) || !Utils.isNumber(product.price);
+			product.priceHasError = !product.price || !Utils.isNumber(product.price);
 			return product.priceHasError;
 		}
 	}

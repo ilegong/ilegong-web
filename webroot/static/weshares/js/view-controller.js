@@ -28,6 +28,8 @@
 		vm.confirmReceived = confirmReceived;
     vm.toUserShareInfo = toUserShareInfo;
 
+    vm.toUpdate = toUpdate;
+
     vm.stopShare = stopShare;
 
 		activate();
@@ -222,6 +224,10 @@
       }).error(function (e) {
         $log.log(e);
       });
+    }
+
+    function toUpdate(){
+      window.location.href = '/weshares/update/'+vm.weshare.id;
     }
 
     function setWeiXinShareParams() {

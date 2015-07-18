@@ -6,7 +6,8 @@
             <s><b style="color: #ffa200" ng-bind="vm.userShareSummery.share_count">0</b>&nbsp; <small>分享</small>&nbsp;&nbsp;&nbsp;<b style="color: #ffa200" ng-bind="vm.userShareSummery.follower_count">0</b>&nbsp;<small>粉丝</small></s>
             <s>已有<span ng-bind="vm.ordersDetail.summery.all_buy_user_count"></span>人报名</s>
         </li>
-        <li style="float: right;" ng-if="vm.isCreator()"><a class="statistics-btn" ng-click="vm.showStaticsDialog=true;vm.showLayer=true;">购买统计</a></li>
+
+        <li style="float: right;" ng-if="vm.isCreator()"><a class="statistics-btn" ng-click="vm.showStaticsDialog=true;vm.showLayer=true;">购买统计</a><a class="statistics-btn" ng-click="vm.toUpdate()">修改</a></li>
         <li style="float: right;" ng-if="!vm.isCreator()"><a class="statistics-btn" href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=209712305&idx=1&sn=ddb8431d97100d7e6305c2bc46d9ae75#rd">我也要分享</a></li>
     </ul>
     <div class="introduction margin-bottom-12">

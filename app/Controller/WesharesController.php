@@ -15,6 +15,21 @@ class WesharesController extends AppController {
         }
     }
 
+    public function update($weshareId){
+        $this->set('weshare_id',$weshareId);
+    }
+
+    public function get_share_info($weshareId){
+        $this->autoRender =false;
+        $shareInfo = $this->get_weshare_detail($weshareId);
+        $products = &$shareInfo['products'];
+        foreach($products as &$p){
+            $p['price'] = $p['price']/100;
+        }
+        echo json_encode($shareInfo);
+        return;
+    }
+
     public function add(){
         if(parent::is_weixin()){
             $currentUser = $this->currentUser;
@@ -37,10 +52,10 @@ class WesharesController extends AppController {
         $this->set('weshare_id', $weshare_id);
     }
 
-    public function create() {
+    public function save() {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
-        if(empty($uid)){
+        if (empty($uid)) {
             echo json_encode(array('success' => false, 'reason' => 'not_login'));
             return;
         }
@@ -53,8 +68,8 @@ class WesharesController extends AppController {
         $weshareData['creator'] = $uid;
         $weshareData['created'] = date('Y-m-d H:i:s');
         $images = $postDataArray['images'];
-        $images  = Hash::extract($images,'{n}.url');
-        $weshareData['images'] = implode('|',$images);
+        $images = Hash::extract($images, '{n}.url');
+        $weshareData['images'] = implode('|', $images);
         $productsData = $postDataArray['products'];
         $addressesData = $postDataArray['addresses'];
         $weshareData['creator'] = $uid;
@@ -73,34 +88,8 @@ class WesharesController extends AppController {
     public function detail($weshareId) {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
-        $weshareInfo = $this->Weshare->find('first', array(
-            'conditions' => array(
-                'id' => $weshareId
-            )
-        ));
-        $weshareProducts = $this->WeshareProduct->find('all', array(
-            'conditions' => array(
-                'weshare_id' => $weshareId
-            )
-        ));
-        $weshareAddresses = $this->WeshareAddress->find('all', array(
-            'conditions' => array(
-                'weshare_id' => $weshareId
-            )
-        ));
-        $creatorInfo = $this->User->find('first', array(
-            'conditions' => array(
-                'id' => $weshareInfo['Weshare']['creator']
-            ),
-            'recursive' => 1, //int
-            'fields' => array('id', 'nickname', 'image', 'wx_subscribe_status'),
-        ));
-        $weshareInfo = $weshareInfo['Weshare'];
-        $weshareInfo['addresses'] = Hash::extract($weshareAddresses, '{n}.WeshareAddress');
-        $weshareInfo['products'] = Hash::extract($weshareProducts, '{n}.WeshareProduct');
-        $weshareInfo['creator'] = $creatorInfo['User'];
+        $weshareInfo = $this->get_weshare_detail($weshareId);
         $ordersDetail = $this->get_weshare_buy_info($weshareId);
-        $weshareInfo['images'] = array_filter(explode('|',$weshareInfo['images']));
         $weixinInfo = $this->set_weixin_share_data($uid,$weshareId);
         $current_user = $this->User->find('first', array(
             'conditions' => array(
@@ -110,7 +99,8 @@ class WesharesController extends AppController {
             'fields' => array('id', 'nickname', 'image', 'wx_subscribe_status'),
         ));
         $consignee = $this->getShareConsignees($uid);
-        $user_share_summery = $this->getUserShareSummery($creatorInfo['User']['id']);
+        $creatorId = $weshareInfo['creator']['id'];
+        $user_share_summery = $this->getUserShareSummery($creatorId);
         echo json_encode(array('weshare' => $weshareInfo, 'ordersDetail' => $ordersDetail, 'current_user' => $current_user['User'], 'weixininfo' => $weixinInfo, 'consignee' => $consignee, 'user_share_summery' => $user_share_summery));
         return;
     }
@@ -373,6 +363,38 @@ class WesharesController extends AppController {
         $product_buy_num['all_total_price'] = $summeryTotalPrice;
         $users = Hash::combine($users, '{n}.User.id', '{n}.User');
         return array('users' => $users, 'orders' => $orders, 'order_cart_map' => $order_cart_map, 'summery' => $product_buy_num);
+    }
+
+    private function get_weshare_detail($weshareId){
+        $weshareInfo = $this->Weshare->find('first', array(
+            'conditions' => array(
+                'id' => $weshareId
+            )
+        ));
+        $weshareProducts = $this->WeshareProduct->find('all', array(
+            'conditions' => array(
+                'weshare_id' => $weshareId
+            )
+        ));
+        $weshareAddresses = $this->WeshareAddress->find('all', array(
+            'conditions' => array(
+                'weshare_id' => $weshareId
+            )
+        ));
+        $creatorInfo = $this->User->find('first', array(
+            'conditions' => array(
+                'id' => $weshareInfo['Weshare']['creator']
+            ),
+            'recursive' => 1, //int
+            'fields' => array('id', 'nickname', 'image', 'wx_subscribe_status'),
+        ));
+        $weshareInfo = $weshareInfo['Weshare'];
+        $weshareInfo['addresses'] = Hash::extract($weshareAddresses, '{n}.WeshareAddress');
+        $weshareInfo['products'] = Hash::extract($weshareProducts, '{n}.WeshareProduct');
+        $weshareInfo['creator'] = $creatorInfo['User'];
+        $weshareInfo['images'] = array_filter(explode('|',$weshareInfo['images']));
+        return $weshareInfo;
+
     }
 
     private function setShareConsignees($userInfo, $mobileNum, $uid) {
