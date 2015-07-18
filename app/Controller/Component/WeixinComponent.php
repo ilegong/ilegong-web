@@ -732,6 +732,7 @@ class WeixinComponent extends Component
         $ship_info = $good['ship_info'];
         $order_id = $order['Order']['id'];
         if ($seller_weixin != false) {
+            $this->log('weshare paid send for creator '.$seller_weixin['oauth_openid'].' order id '.$order_id.' weshare id '.$weshare_info['Weshare']['id']);
             $this->send_weshare_buy_paid_msg_for_creator($seller_weixin['oauth_openid'], $price, $good_info, $ship_info, $order_id, $weshare_info);
         }
     }

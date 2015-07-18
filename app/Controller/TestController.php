@@ -83,4 +83,8 @@ class TestController extends AppController{
         return $calculator->getDistance($p1, $p2);
     }
 
+    private function test_send_msg_for_creator($orderId, $creator){
+
+    }
+
 }
