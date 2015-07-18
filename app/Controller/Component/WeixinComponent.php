@@ -682,7 +682,7 @@ class WeixinComponent extends Component
         $users = Hash::combine($users, '{n}.User.id', '{n}');
         $carts = $cartModel->find('all', array(
             'conditions' => array('order_id' => $order_ids),
-            'fields' => array('Cart.id','Cart.num','Cart.order_id','Cart.send_date','Cart.product_id'),
+            'fields' => array('Cart.id','Cart.num','Cart.order_id','Cart.send_date','Cart.product_id', 'Cart.name'),
         ));
         foreach($orders as $order){
             $openid = $oauth_binds[$order['Order']['creator']];
