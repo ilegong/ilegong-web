@@ -22,11 +22,8 @@
 		vm.validateProductPrice = validateProductPrice;
     vm.saveCacheData = saveCacheData;
     vm.dataCacheKey = 'cache_share_data';
-
 		activate();
-
-    $scope.$watch('vm.weshare', vm.saveCacheData);
-
+    $scope.$watchCollection('vm.weshare', vm.saveCacheData);
 		function activate() {
 			vm.showShippmentInfo = false;
       var weshareId = angular.element(document.getElementById('weshareEditView')).attr('data-id');
@@ -44,6 +41,10 @@
           {address: ''}
         ]
       };
+      var $cacheData = PYS.storage.load(vm.dataCacheKey);
+      if($cacheData){
+        vm.weshare = $cacheData;
+      }
       if(weshareId){
         //update
         $http.get('/weshares/get_share_info/'+weshareId).success(function(data){
@@ -51,8 +52,6 @@
           vm.weshare = data;
         }).error(function(data){
         });
-      }else{
-        vm.weshare = PYS.storage.load(vm.dataCacheKey);
       }
 			vm.messages = [];
 		}
