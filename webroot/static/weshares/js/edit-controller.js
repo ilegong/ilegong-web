@@ -68,7 +68,7 @@
 		}
 
     function saveCacheData(){
-      PYS.storage.save(vm.dataCacheKey,vm.weshare,4);
+      PYS.storage.save(vm.dataCacheKey,vm.weshare,1);
     }
 
 		function uploadImage(localId) {
