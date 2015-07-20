@@ -30,8 +30,8 @@ ul li { list-style: none; }
 /*上传信息页面*/
 .weshare-add{ padding: 10px; line-height: 30px;}
 .weshare-add h1{ color: #29ac0e; font-size: 18px;}
-.weshare-add .images .image{ float: left; margin-right: 15px; position: relative; width: 20%;}
-.weshare-add .images .image img{ width: 100%;}
+.weshare-add .images .image{ float: left; margin-right: 15px; position: relative; width: 50px;}
+.weshare-add .images .image img{ width: 50px; height: 50px;}
 .weshare-add .btn{text-align: center; line-height: 38px;}
 .weshare-add .upload-btn{ border: 1px #29AC0E solid; display: block; font-size: 16px; color: #29AC0E; text-decoration: none;}
 .weshare-add .delete-btn{ margin-top: 8px; margin-right: 10px; background: url(../images/weifxicon.png?v0.01) no-repeat 0 0; background-size: 100px 100px; width: 25px; height: 25px;}
