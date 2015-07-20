@@ -7,12 +7,18 @@
             <div class="user-heading">
                 <h3>{{$share_user['nickname']}}</h3>
                 <span class="help-block"><strong style="color: #ffa200">{{$share_count}}</strong>&nbsp;&nbsp; <small>分享</small>&nbsp;&nbsp;<strong style="color: #ffa200">{{$follower_count}}</strong>&nbsp;&nbsp; <small>粉丝</small></span>
-                <span class="help-block">{{mb_substr($share_user['description'],0,150)}}...</span>
+                {{if $share_user['description']}}
+                    <span class="help-block">{{mb_substr($share_user['description'],0,150)}}...</span>
+                {{/if}}
             </div>
         </div>
     </div>
 </div>
-<br/><br/><br/><br/><br/><br/><br/><br/><br/>
+<br/><br/>
+{{if $share_user['description']}}
+<br/><br/>
+<br/><br/><br/><br/><br/>
+{{/if}}
 <div class="row">
     <div class="col-md-12">
         <div class="tabbable-panel">
