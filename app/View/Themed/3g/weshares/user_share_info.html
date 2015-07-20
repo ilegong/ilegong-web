@@ -1,4 +1,4 @@
-<div class="row" style="background: #EAEAEA;margin-bottom: 130px;">
+<div class="row" style="background: #EAEAEA;">
     <div class="col-md-12 user-details">
         <div class="user-image">
             <img style="width: 100px;height: 100px;" onerror="this.src='/img/default_user_icon.jpg'" src="{{$share_user['image']}}" alt="{{$share_user['nickname']}}" title="{{$share_user['nickname']}}" class="img-circle">
@@ -7,11 +7,12 @@
             <div class="user-heading">
                 <h3>{{$share_user['nickname']}}</h3>
                 <span class="help-block"><strong style="color: #ffa200">{{$share_count}}</strong>&nbsp;&nbsp; <small>分享</small>&nbsp;&nbsp;<strong style="color: #ffa200">{{$follower_count}}</strong>&nbsp;&nbsp; <small>粉丝</small></span>
-                <span class="help-block">{{mb_substr($share_user['description'],0,100)}}...</span>
+                <span class="help-block">{{mb_substr($share_user['description'],0,150)}}...</span>
             </div>
         </div>
     </div>
 </div>
+<br/><br/><br/><br/><br/><br/><br/>
 <div class="row">
     <div class="col-md-12">
         <div class="tabbable-panel">
