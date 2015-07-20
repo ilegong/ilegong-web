@@ -467,7 +467,7 @@ class WesharesController extends AppController {
 
     private function explode_share_imgs(&$shares){
         foreach($shares as &$item){
-            $item['images'] = explode('|',$item['images']);
+            $item['Weshare']['images'] = explode('|',$item['Weshare']['images']);
         }
     }
 }
