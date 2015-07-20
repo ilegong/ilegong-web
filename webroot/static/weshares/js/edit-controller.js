@@ -71,27 +71,27 @@
       PYS.storage.save(vm.dataCacheKey,vm.weshare,1);
     }
 
-		function uploadImage(localId) {
-			wx.uploadImage({
-				localId: localId,
-				isShowProgressTips: 1,
-				success: function (res) {
-					$http.get('/downloads/download_wx_img?media_id=' + res.serverId).success(function (data, status, headers, config) {
-						vm.messages.push({name: 'download image success', detail: data});
-						var imageUrl = data['download_url'];
-						if (!imageUrl || imageUrl == 'false') {
-							return;
-						}
-						vm.weshare.images.push({url: imageUrl});
-					}).error(function (data, status, headers, config) {
-							vm.messages.push({name: 'download image failed', detail: data});
-						});
-				},
-				fail: function (res) {
-					vm.messages.push({name: 'upload image failed', detail: res});
-				}
-			});
-		}
+    function uploadImage(localId) {
+      wx.uploadImage({
+        localId: localId,
+        isShowProgressTips: 1,
+        success: function (res) {
+          $http.get('/downloads/download_wx_img?media_id=' + res.serverId).success(function (data, status, headers, config) {
+            vm.messages.push({name: 'download image success', detail: data});
+            var imageUrl = data['download_url'];
+            if (!imageUrl || imageUrl == 'false') {
+              return;
+            }
+            vm.weshare.images.push({url: imageUrl});
+          }).error(function (data, status, headers, config) {
+            vm.messages.push({name: 'download image failed', detail: data});
+          });
+        },
+        fail: function (res) {
+          vm.messages.push({name: 'upload image failed', detail: res});
+        }
+      });
+    }
 
 		function deleteImage(image) {
 			vm.weshare.images = _.without(vm.weshare.images, image);
