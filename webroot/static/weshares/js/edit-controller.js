@@ -79,31 +79,29 @@
     function uploadImage(localIds) {
       var i = 0, len = localIds.length;
       function upload(){
-        setTimeout(function(){
-          wx.uploadImage({
-            localId: localIds[i],
-            isShowProgressTips: 1,
-            success: function (res) {
-              i++;
-              $http.get('/downloads/download_wx_img?media_id=' + res.serverId).success(function (data, status, headers, config) {
-                vm.messages.push({name: 'download image success', detail: data});
-                var imageUrl = data['download_url'];
-                if (!imageUrl || imageUrl == 'false') {
-                  return;
-                }
-                vm.weshare.images.push({url: imageUrl});
-              }).error(function (data, status, headers, config) {
-                vm.messages.push({name: 'download image failed', detail: data});
-              });
-              if(i<len){
-                upload();
+        wx.uploadImage({
+          localId: localIds[i],
+          isShowProgressTips: 1,
+          success: function (res) {
+            i++;
+            $http.get('/downloads/download_wx_img?media_id=' + res.serverId).success(function (data, status, headers, config) {
+              vm.messages.push({name: 'download image success', detail: data});
+              var imageUrl = data['download_url'];
+              if (!imageUrl || imageUrl == 'false') {
+                return;
               }
-            },
-            fail: function (res) {
-              vm.messages.push({name: 'upload image failed', detail: res});
+              vm.weshare.images.push({url: imageUrl});
+            }).error(function (data, status, headers, config) {
+              vm.messages.push({name: 'download image failed', detail: data});
+            });
+            if(i<len){
+              upload();
             }
-          });
-        },10);
+          },
+          fail: function (res) {
+            vm.messages.push({name: 'upload image failed', detail: res});
+          }
+        });
       }
       upload();
     }
