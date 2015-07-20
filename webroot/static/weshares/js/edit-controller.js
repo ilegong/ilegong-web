@@ -59,7 +59,12 @@
 		function chooseAndUploadImage() {
 			wx.chooseImage({
 				success: function (res) {
-					_.each(res.localIds, vm.uploadImage);
+					//_.each(res.localIds, vm.uploadImage);
+          //alert(res.localIds);
+          //for(var local_id in res.localIds){
+          //  vm.uploadImage(local_id);
+          //}
+          vm.uploadImage(res.localIds);
 				},
 				fail: function (res) {
 					vm.messages.push({name: 'choose image failed', detail: res});
@@ -71,26 +76,36 @@
       PYS.storage.save(vm.dataCacheKey,vm.weshare,1);
     }
 
-    function uploadImage(localId) {
-      wx.uploadImage({
-        localId: localId,
-        isShowProgressTips: 1,
-        success: function (res) {
-          $http.get('/downloads/download_wx_img?media_id=' + res.serverId).success(function (data, status, headers, config) {
-            vm.messages.push({name: 'download image success', detail: data});
-            var imageUrl = data['download_url'];
-            if (!imageUrl || imageUrl == 'false') {
-              return;
+    function uploadImage(localIds) {
+      var i = 0, len = localIds.length;
+      function upload(){
+        setTimeout(function(){
+          wx.uploadImage({
+            localId: localIds[i],
+            isShowProgressTips: 1,
+            success: function (res) {
+              i++;
+              $http.get('/downloads/download_wx_img?media_id=' + res.serverId).success(function (data, status, headers, config) {
+                vm.messages.push({name: 'download image success', detail: data});
+                var imageUrl = data['download_url'];
+                if (!imageUrl || imageUrl == 'false') {
+                  return;
+                }
+                vm.weshare.images.push({url: imageUrl});
+              }).error(function (data, status, headers, config) {
+                vm.messages.push({name: 'download image failed', detail: data});
+              });
+              if(i<len){
+                upload();
+              }
+            },
+            fail: function (res) {
+              vm.messages.push({name: 'upload image failed', detail: res});
             }
-            vm.weshare.images.push({url: imageUrl});
-          }).error(function (data, status, headers, config) {
-            vm.messages.push({name: 'download image failed', detail: data});
           });
-        },
-        fail: function (res) {
-          vm.messages.push({name: 'upload image failed', detail: res});
-        }
-      });
+        },10);
+      }
+      upload();
     }
 
 		function deleteImage(image) {
