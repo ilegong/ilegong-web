@@ -4,6 +4,8 @@ class WesharesController extends AppController {
 
     var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees');
 
+    var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description');
+
     public function beforeFilter() {
         parent::beforeFilter();
         $this->layout = 'weshare';
@@ -97,7 +99,7 @@ class WesharesController extends AppController {
                 'id' => $uid
             ),
             'recursive' => 1, //int
-            'fields' => array('id', 'nickname', 'image', 'wx_subscribe_status'),
+            'fields' => $this->query_user_fileds,
         ));
         $consignee = $this->getShareConsignees($uid);
         $creatorId = $weshareInfo['creator']['id'];
@@ -239,9 +241,7 @@ class WesharesController extends AppController {
             'conditions' => array(
                 'id' => $weshares_creator
             ),
-            'fields' => array(
-                'id', 'nickname', 'image', 'wx_subscribe_status'
-            )
+            'fields' => $this->query_user_fileds
         ));
 
     }
@@ -280,7 +280,7 @@ class WesharesController extends AppController {
             'conditions' => array(
                 'id' => $creatorIds
             ),
-            'fields' => array('id', 'nickname', 'image', 'wx_subscribe_status')
+            'fields' => $this->query_user_fileds
         ));
         $creators = Hash::combine($creators,'{n}.User.id','{n}.User');
         $shareUser = $creators[$uid];
@@ -348,7 +348,7 @@ class WesharesController extends AppController {
                 'id' => $userIds
             ),
             'recursive' => 1, //int
-            'fields' => array('id', 'nickname', 'image', 'wx_subscribe_status'),
+            'fields' => $this->query_user_fileds,
         ));
         $orders = Hash::combine($orders, '{n}.Order.id', '{n}.Order');
         if($orders){
@@ -405,7 +405,7 @@ class WesharesController extends AppController {
                 'id' => $weshareInfo['Weshare']['creator']
             ),
             'recursive' => 1, //int
-            'fields' => array('id', 'nickname', 'image', 'wx_subscribe_status'),
+            'fields' => $this->query_user_fileds,
         ));
         $weshareInfo = $weshareInfo['Weshare'];
         $weshareInfo['addresses'] = Hash::extract($weshareAddresses, '{n}.WeshareAddress');
