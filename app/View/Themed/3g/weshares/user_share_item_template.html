@@ -7,8 +7,14 @@
         <span class="label label-danger">已结束</span>
         {{/if}}
     </p>
+    <?php
+        $show_img = $share['Weshare']['images'][0];
+        if(!$show_img){
+            $show_img = $creators[$share['Weshare']['creator']]['image'];
+        }
+    ?>
     <a class="media-left" href="#">
-        <img onerror="this.src='/img/default_user_icon.jpg'" src="{{$creators[$share['Weshare']['creator']]['image']}}" style="width: 40px;height: 40px;">
+        <img onerror="this.src='/img/default_user_icon.jpg'" src="{{$show_img}}" style="width: 40px;height: 40px;">
     </a>
 
     <div class="media-body" data-id="{{$share['Weshare']['id']}}">

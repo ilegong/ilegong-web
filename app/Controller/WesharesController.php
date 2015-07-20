@@ -306,6 +306,8 @@ class WesharesController extends AppController {
             $this->set('add_view',true);
         }
         $userShareSummery = $this->getUserShareSummery($uid);
+        $this->explode_share_imgs($myCreateShares);
+        $this->explode_share_imgs($myJoinShares);
         $this->set($userShareSummery);
         $this->set('is_me',$uid==$current_uid);
         $this->set('share_user',$shareUser);
@@ -461,5 +463,11 @@ class WesharesController extends AppController {
             'fileds' => array('DISTINCT creator')
         ));
         return array('share_count' => count($weshares), 'follower_count' => $follower_count);
+    }
+
+    private function explode_share_imgs(&$shares){
+        foreach($shares as &$item){
+            $item['images'] = explode('|',$item['images']);
+        }
     }
 }
