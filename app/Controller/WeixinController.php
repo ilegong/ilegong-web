@@ -359,18 +359,19 @@ class WeixinController extends AppController {
                 case '宝宝':
                 case '投票':
                     $detail_url = 'http://www.tongshijia.com/vote/vote_event_view/4';
-                    $event_candidate = $this->CandidateEvent->find('first',array('conditions' => array(
-                        'user_id' => $uid,
-                        'event_id' => 4
-                    )));
-                    $candidate_id = $event_candidate['CandidateEvent']['candidate_id'];
-                    $candidate = $this->Candidate->find('first',array(
-                        'conditions' => array(
-                            'id' => $candidate_id
-                        )
-                    ));
-                    if($candidate['Candidate']['deleted']==DELETED_NO){
-                        $detail_url = 'http://www.tongshijia.com/vote/candidate_detail/'.$candidate_id.'/4';
+                    if($uid){
+                        $event_candidate = $this->CandidateEvent->find('first',array(
+                            'conditions' => array('user_id' => $uid, 'event_id' => 4)
+                        ));
+                        $candidate_id = $event_candidate['CandidateEvent']['candidate_id'];
+                        $candidate = $this->Candidate->find('first',array(
+                            'conditions' => array(
+                                'id' => $candidate_id
+                            )
+                        ));
+                        if($candidate['Candidate']['deleted']==DELETED_NO){
+                            $detail_url = 'http://www.tongshijia.com/vote/candidate_detail/'.$candidate_id.'/4';
+                        }
                     }
                     $content = array(
                         array('title' => '晒吃货宝贝，赢亲子旅行包/360儿童安全卫士，满100票，领五常稻花香大米...', 'description' => '',
