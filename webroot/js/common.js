@@ -1206,6 +1206,7 @@ var utils = {
 
 //js for cart
 $(document).ready(function () {
+  localStorage.clear();
 	var numInput = $('#input_pamount');
 	var cart_edit_amount = {
 		reduce: function() {
