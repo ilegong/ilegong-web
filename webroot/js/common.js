@@ -1521,7 +1521,7 @@ function zitiAddress(){
         ship_address = data.address;
         child_address = data.child_address;
     }else{
-        $.getJSON('/tuan_buyings/get_offline_address?type=0',function(data){
+        $.getJSON('/tuan_buyings/get_offline_address?type=-1',function(data){
             ship_address = data.address;
             child_address = data.child_address;
             PYS.storage.save('offline_stores',data,48);
