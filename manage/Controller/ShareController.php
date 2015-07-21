@@ -82,7 +82,7 @@ class ShareController extends AppController{
             if(!isset($order_cart_map[$order_id])){
                 $order_cart_map[$order_id] = array();
             }
-            $order_cart_map[$order_id] = $item['Cart'];
+            $order_cart_map[$order_id][] = $item['Cart'];
         }
         $this->set('orders',$orders);
         $this->set('order_cart_map',$order_cart_map);
