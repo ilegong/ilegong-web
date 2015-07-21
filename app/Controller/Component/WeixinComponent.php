@@ -725,20 +725,33 @@ class WeixinComponent extends Component
 
     public function notify_weshare_buy_creator($order, $good) {
         $oauthBindModel = ClassRegistry::init('Oauthbind');
+        $userModel = ClassRegistry::init('User');
         $weshare_info = $good['weshare_info'];
         $seller_weixin = $oauthBindModel->findWxServiceBindByUid($weshare_info['Weshare']['creator']);
         $price = $order['Order']['total_all_price'];
+        $order_creator = $order['Order']['creator'];
+        $order_user = $userModel->find('first',array(
+            'conditions' => array(
+                'id' => $order_creator
+            ),
+            'fields' => array('nickname')
+        ));
+        $order_creator_name = $order_user['User']['nickname'];
         $good_info = $good['good_info'];
         $ship_info = $good['ship_info'];
         $order_id = $order['Order']['id'];
         if ($seller_weixin != false) {
             $this->log('weshare paid send for creator '.$seller_weixin['oauth_openid'].' order id '.$order_id.' weshare id '.$weshare_info['Weshare']['id']);
-            $this->send_weshare_buy_paid_msg_for_creator($seller_weixin['oauth_openid'], $price, $good_info, $ship_info, $order_id, $weshare_info);
+            $this->send_weshare_buy_paid_msg_for_creator($seller_weixin['oauth_openid'], $price, $good_info, $ship_info, $order_id, $weshare_info, $order_creator_name);
         }
     }
 
-    public function send_weshare_buy_paid_msg_for_creator($seller_open_id, $price, $good_info, $ship_info, $order_no, $weshare_info) {
+    public function send_weshare_buy_paid_msg_for_creator($seller_open_id, $price, $good_info, $ship_info, $order_no, $weshare_info,$order_creator_name=null) {
         $title = $weshare_info['Weshare']['title'];
+        $show_tile =  "亲，有用户加入了您发起的" . $title . "的活动。";
+        if(!empty($order_creator_name)){
+            $show_tile =  "亲，".$order_creator_name."加入了您发起的" . $title . "的活动。";
+        }
         $weshare_id = $weshare_info['Weshare']['id'];
         $post_data = array(
             "touser" => $seller_open_id,
@@ -746,7 +759,7 @@ class WeixinComponent extends Component
             "url" => $this->get_weshare_buy_detail($weshare_id),
             "topcolor" => "#FF0000",
             "data" => array(
-                "first" => array("value" => "亲，有用户加入了您发起的" . $title . "的活动。"),
+                "first" => array("value" => $show_tile),
                 "orderProductPrice" => array("value" => $price),
                 "orderProductName" => array("value" => $good_info),
                 "orderAddress" => array("value" => empty($ship_info) ? '' : $ship_info),
