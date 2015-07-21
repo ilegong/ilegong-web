@@ -1,0 +1,67 @@
+<style>
+    .hero-widget { text-align: center; padding-top: 20px; padding-bottom: 20px; }
+    .hero-widget .icon { display: block; font-size: 96px; line-height: 96px; margin-bottom: 10px; text-align: center; }
+    .hero-widget var { display: block; height: 64px; font-size: 64px; line-height: 64px; font-style: normal; }
+    .hero-widget label { font-size: 17px; }
+    .hero-widget .options { margin-top: 10px; }
+</style>
+<br/>
+<br/>
+<div class="row">
+    <div class="col-sm-3">
+        <div class="hero-widget well well-sm">
+            <div class="icon">
+                <i class="glyphicon glyphicon-user"></i>
+            </div>
+            <div class="text">
+                <var>{{$share_creator_count}}</var>
+                <label class="text-muted">分享人</label>
+            </div>
+            <div class="options">
+                <a href="javascript:;" class="btn btn-primary btn-lg"><i class="glyphicon glyphicon-plus"></i>查看</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="hero-widget well well-sm">
+            <div class="icon">
+                <i class="glyphicon glyphicon-star"></i>
+            </div>
+            <div class="text">
+                <var>{{$share_count}}</var>
+                <label class="text-muted">分享</label>
+            </div>
+            <div class="options">
+                <a href="/manage/admin/share/all_shares" class="btn btn-default btn-lg"><i class="glyphicon glyphicon-search"></i>查看</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="hero-widget well well-sm">
+            <div class="icon">
+                <i class="glyphicon glyphicon-tags"></i>
+            </div>
+            <div class="text">
+                <var>{{$today_order_count}}</var>
+                <label class="text-muted">分享订单</label>
+            </div>
+            <div class="options">
+                <a href="/manage/admin/share/share_orders" class="btn btn-default btn-lg"><i class="glyphicon glyphicon-search"></i>查看订单</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="hero-widget well well-sm">
+            <div class="icon">
+                <i class="glyphicon glyphicon-cog"></i>
+            </div>
+            <div class="text">
+                <var>{{$join_share_count}}</var>
+                <label class="text-muted">参加分享人数</label>
+            </div>
+            <div class="options">
+                <a href="javascript:;" class="btn btn-default btn-lg"><i class="glyphicon glyphicon-wrench"></i>查看详情</a>
+            </div>
+        </div>
+    </div>
+</div>

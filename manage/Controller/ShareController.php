@@ -18,7 +18,35 @@ class ShareController extends AppController{
     }
 
     public function admin_index(){
+        $weshare_count = $this->Weshare->find('count', array(
+            'limit' => 5000
+        ));
 
+        $weshare_creator_count = $this->Weshare->find('count', array(
+            'limit' => 5000,
+            'fields' => 'DISTINCT creator'
+        ));
+
+        $join_weshare_count = $this->Order->find('count', array(
+            'conditions' => array(
+                'type' => 9,
+                'DATE(created)' => date('Y-m-d'),
+            ),
+            'limit' => 15000,
+            'fields' => array('DISTINCT creator')
+        ));
+
+        $order_count = $this->Order->find('count', array(
+            'conditions' => array(
+                'type' => 9,
+                'DATE(created)' => date('Y-m-d'),
+            )
+        ));
+
+        $this->set('share_count', $weshare_count);
+        $this->set('share_creator_count', $weshare_creator_count);
+        $this->set('join_share_count', $join_weshare_count);
+        $this->set('today_order_count', $order_count);
     }
 
     public function admin_all_shares() {
