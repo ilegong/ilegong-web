@@ -530,7 +530,7 @@ class WesharesController extends AppController {
             $order_user_id = $order['Order']['creator'];
             $open_id = $userOauthBinds[$order_user_id];
             $order_user_name = $users[$order_user_id]['nickname'];
-            $title = $order_user_name.$msg;
+            $title = $order_user_name.'你好，'.$msg;
             $conginess_name = $order['Order']['consignee_name'];
             $conginess_address = $order['Order']['consignee_address'];
             $this->Weixin->send_share_product_arrival($open_id, $detail_url, $title, $order_id, $conginess_address, $conginess_name, $desc);

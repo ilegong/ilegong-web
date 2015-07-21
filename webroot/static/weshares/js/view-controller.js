@@ -36,7 +36,7 @@
 
 		activate();
 		function activate() {
-      vm.sendMsgInfoTxt='你好，我们团的产品已经到啦，速度来取哈。';
+      vm.sendMsgInfoTxt='我们团的产品已经到啦，速度来取哈。';
 			var weshareId = angular.element(document.getElementById('weshareView')).attr('data-weshare-id');
 			vm.weshare = {};
 			vm.orderTotalPrice = 0;
@@ -177,13 +177,15 @@
           }else{
             alert('发送失败');
           }
-          vm.showLayer=false;vm.showShareDialog=false;
+          vm.showLayer=false;
+          vm.showSendMsgDialog=false;
         }).
         error(function(data, status, headers, config) {
           // called asynchronously if an error occurs
           // or server returns response with an error status.
           alert('发送失败');
-          vm.showLayer=false;vm.showShareDialog=false;
+          vm.showLayer=false;
+          vm.showSendMsgDialog=false;
         });
     }
 
