@@ -231,7 +231,7 @@
     }
 
     function setWeiXinShareParams() {
-      var url =document.URL;
+      var url ='http://www.tongshijia.com/weshares/view/'+vm.weshare.id;
       //creator
       var to_timeline_title = '';
       var to_friend_title = '';
