@@ -136,6 +136,8 @@ const WESHARE_NORMAL_STATUS = 0;
 
 const WESHARE_STOP_STATUS = 1;
 
+const WESHARE_DELETE_STATUS = -1;
+
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
 define('FORMAT_DATE_YUE_RI_HAN', 'n月j日');
