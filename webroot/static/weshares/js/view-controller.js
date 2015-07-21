@@ -27,13 +27,16 @@
 		vm.submitOrder = submitOrder;
 		vm.confirmReceived = confirmReceived;
     vm.toUserShareInfo = toUserShareInfo;
+    vm.validateSendMsgInfo = validateSendMsgInfo;
+
+    vm.sendMsgInfo = sendMsgInfo;
 
     vm.toUpdate = toUpdate;
-
     vm.stopShare = stopShare;
 
 		activate();
 		function activate() {
+      vm.sendMsgInfoTxt='你好，我们团的产品已经到啦，速度来取哈。';
 			var weshareId = angular.element(document.getElementById('weshareView')).attr('data-weshare-id');
 			vm.weshare = {};
 			vm.orderTotalPrice = 0;
@@ -153,6 +156,36 @@
 			});
 			return vm.productsHasError;
 		}
+
+    function validateSendMsgInfo(){
+      vm.sendMsgHasError =  _.isEmpty(vm.sendMsgInfoTxt);
+      return vm.sendMsgHasError;
+    }
+
+    function sendMsgInfo(){
+      if(vm.validateSendMsgInfo()){
+        return false;
+      }
+      //send_arrival_msg
+      $http.post('/weshares/send_arrival_msg', {msg: vm.sendMsgInfoTxt, share_id: vm.weshare.id }).
+        success(function(data, status, headers, config) {
+          // this callback will be called asynchronously
+          // when the response is available
+          if(data.success){
+            vm.weshare.status = 2;
+            alert('发送成功');
+          }else{
+            alert('发送失败');
+          }
+          vm.showLayer=false;vm.showShareDialog=false;
+        }).
+        error(function(data, status, headers, config) {
+          // called asynchronously if an error occurs
+          // or server returns response with an error status.
+          alert('发送失败');
+          vm.showLayer=false;vm.showShareDialog=false;
+        });
+    }
 
 		function buyProducts() {
 			var addressHasError = vm.validateAddress();
@@ -281,7 +314,15 @@
               // 用户确认分享后执行的回调函数
               if(share_string != '0'){
                 setTimeout(function(){
-                  $http.post('/wx_shares/log_share',{ trstr: share_string, share_type: "appMsg" }).success().error();
+                  $http.post('/wx_shares/log_share', {trstr: share_string, share_type: "appMsg" }).
+                    success(function(data, status, headers, config) {
+                      // this callback will be called asynchronously
+                      // when the response is available
+                    }).
+                    error(function(data, status, headers, config) {
+                      // called asynchronously if an error occurs
+                      // or server returns response with an error status.
+                    });
                 }, 500);
               }
             }
@@ -293,7 +334,15 @@
             success: function () {
               if(share_string != '0'){
                 setTimeout(function(){
-                  $http.post('/wx_shares/log_share',{ trstr: share_string, share_type: "timeline" }).success().error();
+                  $http.post('/wx_shares/log_share', {trstr: share_string, share_type: "timeline"}).
+                    success(function(data, status, headers, config) {
+                      // this callback will be called asynchronously
+                      // when the response is available
+                    }).
+                    error(function(data, status, headers, config) {
+                      // called asynchronously if an error occurs
+                      // or server returns response with an error status.
+                    });
                 }, 500);
               }
             }

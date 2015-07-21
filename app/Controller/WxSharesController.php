@@ -11,8 +11,15 @@ class WxSharesController extends AppController{
     public function log_share(){
         $this->autoRender = false;
         if ($this->is_weixin()) {
-            $share_string = urldecode($_POST['trstr']);
-            $share_type = $_POST['share_type'];
+            if(!$_POST['share_type']){
+                $post_params = json_decode(file_get_contents('php://input'),true);
+                $share_string = urldecode($post_params['trstr']);
+                $share_type = $post_params['share_type'];
+            }else{
+                $share_string = urldecode($_POST['trstr']);
+                $share_type = $_POST['share_type'];
+            }
+
             if ($share_type != 'timeline' && $share_type != 'appMsg') {
                 $this->log("WxShare: type wrong");
                 exit();

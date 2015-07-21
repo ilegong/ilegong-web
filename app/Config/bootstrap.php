@@ -136,6 +136,8 @@ const WESHARE_NORMAL_STATUS = 0;
 
 const WESHARE_STOP_STATUS = 1;
 
+const WESHARE_MSG_SEND = 2;
+
 const WESHARE_DELETE_STATUS = -1;
 
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
@@ -158,6 +160,7 @@ define('ORDER_STATUS_COMMENT', 16); //待评价
 define('ORDER_STATUS_RETURNING_MONEY', 14); //退款中
 
 define('ORDER_STATUS_SPLIT',20);
+define('ORDER_STATUS_virtual', 21);
 
 define('ON_SHELVE', PUBLISH_YES); //已上架
 define('OFF_SHELVE', PUBLISH_NO); //下架

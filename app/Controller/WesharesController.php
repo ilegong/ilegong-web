@@ -2,9 +2,11 @@
 
 class WesharesController extends AppController {
 
-    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees');
+    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind');
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description');
+
+    public $components = array('Weixin');
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -226,7 +228,8 @@ class WesharesController extends AppController {
 
     public function stopShare($weShareId){
         $this->autoRender = false;
-        $this->Weshare->updateAll(array('status' => WESHARE_STOP_STATUS),array('id' => $weShareId));
+        $uid = $this->currentUser['id'];
+        $this->Weshare->updateAll(array('status' => WESHARE_STOP_STATUS),array('id' => $weShareId,'creator' => $uid, 'status' => WESHARE_NORMAL_STATUS));
         echo json_encode(array('success' => true));
     }
 
@@ -243,7 +246,6 @@ class WesharesController extends AppController {
             ),
             'fields' => $this->query_user_fileds
         ));
-
     }
 
     public function user_share_info($uid=null){
@@ -314,6 +316,27 @@ class WesharesController extends AppController {
         $this->set('creators',$creators);
         $this->set('my_create_shares',$myCreateShares);
         $this->set('my_join_shares',$myJoinShares);
+    }
+
+    public function send_arrival_msg() {
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        $params = json_decode(file_get_contents('php://input'),true);
+        $msg = $params['msg'];
+        $weshare_id = $params['share_id'];
+        $share_info = $this->Weshare->find('first', array(
+            'conditions' => array(
+                'id' => $weshare_id
+            )
+        ));
+        if ($uid != $share_info['Weshare']['creator'] || $share_info['Weshare']['status'] != 1) {
+            echo json_encode(array('success' => false, 'reason' => 'invalid'));
+            return;
+        }
+        $this->process_send_msg($share_info,$msg);
+        $this->Weshare->updateAll(array('status' => WESHARE_MSG_SEND),array('id' => $weshare_id,'creator' => $uid, 'status' => WESHARE_STOP_STATUS));
+        echo json_encode(array('success' => true));
+        return;
     }
 
     private function saveWeshareProducts($weshareId, $weshareProductData) {
@@ -468,6 +491,49 @@ class WesharesController extends AppController {
     private function explode_share_imgs(&$shares){
         foreach($shares as &$item){
             $item['Weshare']['images'] = explode('|',$item['Weshare']['images']);
+        }
+    }
+
+    private function process_send_msg($shareInfo, $msg) {
+        $share_id = $shareInfo['Weshare']['id'];
+        $share_creator = $shareInfo['Weshare']['creator'];
+        $orders = $this->Order->find('all', array(
+            'conditions' => array(
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'member_id' => $share_id,
+                'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED)
+            ),
+            'fields' => array(
+                'id', 'consignee_name', 'consignee_address', 'creator'
+            )
+        ));
+        $order_user_ids = Hash::extract($orders, '{n}.Order.creator');
+        $order_user_ids[] = $share_creator;
+        $users = $this->User->find('all', array(
+            'conditions' => array(
+                'id' => $order_user_ids
+            ),
+            'fields' => array('id', 'nickname')
+        ));
+        $users = Hash::combine($users, '{n}.User.id', '{n}.User');
+        $userOauthBinds = $this->Oauthbind->find('all', array(
+            'conditions' => array(
+                'user_id' => $order_user_ids
+            ),
+            'fields' => array('user_id', 'oauth_openid')
+        ));
+        $userOauthBinds = Hash::combine($userOauthBinds, '{n}.Oauthbind.user_id','{n}.Oauthbind.oauth_openid');
+        $desc = '感谢大家对'.$users[$share_creator]['nickname'].'的支持，分享快乐。';
+        $detail_url = WX_HOST.'/weshares/view/'.$share_id;
+        foreach($orders as $order){
+            $order_id = $order['Order']['id'];
+            $order_user_id = $order['Order']['creator'];
+            $open_id = $userOauthBinds[$order_user_id];
+            $order_user_name = $users[$order_user_id]['nickname'];
+            $title = $order_user_name.$msg;
+            $conginess_name = $order['Order']['consignee_name'];
+            $conginess_address = $order['Order']['consignee_address'];
+            $this->Weixin->send_share_product_arrival($open_id, $detail_url, $title, $order_id, $conginess_address, $conginess_name, $desc);
         }
     }
 }

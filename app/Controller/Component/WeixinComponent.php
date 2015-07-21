@@ -866,4 +866,21 @@ class WeixinComponent extends Component
         $this->log('brand_creator:'.json_encode($brand_creator).'bussiness_info'.json_encode($bussiness_info).'bussiness_mobilephone'.json_encode($bussiness_mobilephone).'msg'.$msg);
         message_send($msg, $bussiness_mobilephone);
     }
+
+    public function send_share_product_arrival($user_open_id, $detail_url, $title, $order_id, $address, $user_info, $desc) {
+        $post_data = array(
+            "touser" => $user_open_id,
+            "template_id" => '3uA5ShDuM6amaaorl6899yMj9QvBmIiIAl7T9_JfR54',
+            "url" => $detail_url,
+            "topcolor" => "#FF0000",
+            "data" => array(
+                "first" => array("value" => $title),
+                "keyword1" => array("value" => $order_id),
+                "keyword2" => array("value" => $address),
+                "keyword3" => array("value" => $user_info),
+                "remark" => array("value" => $desc, "color" => "#FF8800")
+            )
+        );
+        $this->send_weixin_message($post_data);
+    }
 }
