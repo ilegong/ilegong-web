@@ -34,7 +34,7 @@
         description: '',
         images: [],
         products: [
-          {name: ''}
+          {name: '', store: 0}
         ],
         send_info: '',
         addresses: [
