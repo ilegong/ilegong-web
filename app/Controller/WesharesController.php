@@ -94,7 +94,8 @@ class WesharesController extends AppController {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
         $weshareInfo = $this->get_weshare_detail($weshareId);
-        $ordersDetail = $this->get_weshare_buy_info($weshareId);
+        $is_me = $uid==$weshareInfo['creator']['id'];
+        $ordersDetail = $this->get_weshare_buy_info($weshareId,$is_me);
         $weixinInfo = $this->set_weixin_share_data($uid,$weshareId);
         $current_user = $this->User->find('first', array(
             'conditions' => array(
@@ -354,14 +355,18 @@ class WesharesController extends AppController {
         return $this->WeshareAddress->saveAll($weshareAddressData);
     }
 
-    private function get_weshare_buy_info($weshareId) {
+    private function get_weshare_buy_info($weshareId, $is_me) {
         $product_buy_num = array('details'=> array());
         $order_cart_map = array();
+        $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED);
+        if(!$is_me){
+            $order_status[] = ORDER_STATUS_VIRTUAL;
+        }
         $orders = $this->Order->find('all', array(
             'conditions' => array(
                 'member_id' => $weshareId,
                 'type' => ORDER_TYPE_WESHARE_BUY,
-                'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED)
+                'status' => $order_status
             ),
             'fields' => array('id', 'creator', 'created', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status'),
             'order' => array('created DESC')

@@ -160,7 +160,7 @@ define('ORDER_STATUS_COMMENT', 16); //待评价
 define('ORDER_STATUS_RETURNING_MONEY', 14); //退款中
 
 define('ORDER_STATUS_SPLIT',20);
-define('ORDER_STATUS_virtual', 21);
+define('ORDER_STATUS_VIRTUAL', 21);
 
 define('ON_SHELVE', PUBLISH_YES); //已上架
 define('OFF_SHELVE', PUBLISH_NO); //下架

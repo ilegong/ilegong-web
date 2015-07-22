@@ -94,6 +94,17 @@ class User extends AppModel {
         return $userlist;
     }
 
+    function get_virtual_users($num){
+        $this->recursive = -1;
+        $users = $this->find('all',array(
+            'conditions' => array('status' => 9),
+            'limit' => $num,
+            'page'=>1,
+            'fields' => array('id', 'nickname', 'status', 'username')
+        ));
+        return $users;
+    }
+
     function add_score($uid, $changed) {
         $old_score = $this->get_score($uid, true);
         $updated = $this->updateAll(array('score' => $old_score + $changed), array('User.score' => $old_score, 'User.id' => $uid));
