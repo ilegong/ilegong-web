@@ -359,10 +359,12 @@ class WeixinController extends AppController {
                 case '宝宝':
                 case '投票':
                     $detail_url = 'http://www.tongshijia.com/vote/vote_event_view/5 ';
+                    $this->log('vote uid '.$uid);
                     if($uid){
                         $event_candidate = $this->CandidateEvent->find('first',array(
                             'conditions' => array('user_id' => $uid, 'event_id' => 5)
                         ));
+                        $this->log('event candidate '.json_encode($event_candidate));
                         if(!empty($event_candidate)){
                             $candidate_id = $event_candidate['CandidateEvent']['candidate_id'];
                             $candidate = $this->Candidate->find('first',array(
