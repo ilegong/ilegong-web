@@ -345,7 +345,7 @@ class AliPayController extends AppController {
             if($isSuccess){
                 if($order['Order']['type']==ORDER_TYPE_WESHARE_BUY){
                     $weshareId = $order['Order']['member_id'];
-                    $this->redirect('/weshares/view/'.$weshareId);
+                    $this->redirect('/weshares/view/'.$weshareId.'/1');
                     return;
                 }else{
                     $this->redirect(array('action'=>'pay_short_url',$pay_uuid,'?'=>array(
@@ -372,7 +372,7 @@ class AliPayController extends AppController {
             } else {
                 if($order['Order']['type']==ORDER_TYPE_WESHARE_BUY){
                     $weshareId = $order['Order']['member_id'];
-                    $this->redirect('/weshares/'.$weshareId);
+                    $this->redirect('/weshares/view/'.$weshareId.'/1');
                     return;
                 }
                 if($isSuccess){

@@ -38,6 +38,11 @@
 		function activate() {
       vm.sendMsgInfoTxt='我们团的产品已经到啦，速度来取哈。';
 			var weshareId = angular.element(document.getElementById('weshareView')).attr('data-weshare-id');
+      var fromType = angular.element(document.getElementById('weshareView')).attr('data-from-type');
+      if(fromType==1){
+        vm.showNotifyShareDialog = true;
+        vm.showLayer = true;
+      }
 			vm.weshare = {};
 			vm.orderTotalPrice = 0;
 			$http({method: 'GET', url: '/weshares/detail/' + weshareId, cache: $templateCache}).

@@ -52,8 +52,9 @@ class WesharesController extends AppController {
         }
     }
 
-    public function view($weshare_id){
+    public function view($weshare_id,$from=0){
         $this->set('weshare_id', $weshare_id);
+        $this->set('from',$from);
     }
 
     public function save() {

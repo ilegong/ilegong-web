@@ -143,7 +143,7 @@ class WxPayController extends AppController {
         if($from=='share'){
             $shareId = $order['Order']['member_id'];
             $this->set('shareId',$shareId);
-            $paid_done_url = '/weshares/view/'.$shareId;
+            $paid_done_url = '/weshares/view/'.$shareId.'/1';
             $error_pay_redirect = '/weshares/view/'.$shareId;
         }
         list($jsapi_param, $out_trade_no, $productDesc) = $this->__prepareWXPay($error_pay_redirect, $orderId, $uid, $order);
