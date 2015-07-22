@@ -99,7 +99,7 @@ class WeixinController extends AppController {
                                 $title = $reason['UserSubReason']['title'];
                                 $content = array(
                                     array('title' => $title, 'description' => '快来支持我吧...',
-                                        'picUrl' => 'http://51daifan.sinaapp.com/img/imgstore/1.jpg',
+                                        'picUrl' => 'http://51daifan.sinaapp.com/img/imgstore/prize.jpg',
                                         'url' => $reason['UserSubReason']['url']),
                                 );
                                 $this->UserSubReason->updateAll(array('used' => 1), array('id' => $reason['UserSubReason']['id']));
@@ -358,10 +358,10 @@ class WeixinController extends AppController {
                     break;
                 case '宝宝':
                 case '投票':
-                    $detail_url = 'http://www.tongshijia.com/vote/vote_event_view/4';
+                    $detail_url = 'http://www.tongshijia.com/vote/vote_event_view/5 ';
                     if($uid){
                         $event_candidate = $this->CandidateEvent->find('first',array(
-                            'conditions' => array('user_id' => $uid, 'event_id' => 4)
+                            'conditions' => array('user_id' => $uid, 'event_id' => 5)
                         ));
                         $candidate_id = $event_candidate['CandidateEvent']['candidate_id'];
                         $candidate = $this->Candidate->find('first',array(
@@ -370,12 +370,12 @@ class WeixinController extends AppController {
                             )
                         ));
                         if($candidate['Candidate']['deleted']==DELETED_NO){
-                            $detail_url = 'http://www.tongshijia.com/vote/candidate_detail/'.$candidate_id.'/4';
+                            $detail_url = 'http://www.tongshijia.com/vote/candidate_detail/'.$candidate_id.'/5';
                         }
                     }
                     $content = array(
                         array('title' => '晒萌宝作品，赢高级珐琅锅/儿童自行车，满100票，领钟祥特产米茶...', 'description' => '',
-                            'picUrl' => 'http://51daifan.sinaapp.com/img/imgstore/1.jpg',
+                            'picUrl' => 'http://51daifan.sinaapp.com/img/imgstore/prize.jpg',
                             'url' => $detail_url),
                     );
                     echo $this->newArticleMsg($user, $me, $content);
