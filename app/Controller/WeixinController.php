@@ -363,14 +363,18 @@ class WeixinController extends AppController {
                         $event_candidate = $this->CandidateEvent->find('first',array(
                             'conditions' => array('user_id' => $uid, 'event_id' => 5)
                         ));
-                        $candidate_id = $event_candidate['CandidateEvent']['candidate_id'];
-                        $candidate = $this->Candidate->find('first',array(
-                            'conditions' => array(
-                                'id' => $candidate_id
-                            )
-                        ));
-                        if($candidate['Candidate']['deleted']==DELETED_NO){
-                            $detail_url = 'http://www.tongshijia.com/vote/candidate_detail/'.$candidate_id.'/5';
+                        if(!empty($event_candidate)){
+                            $candidate_id = $event_candidate['CandidateEvent']['candidate_id'];
+                            $candidate = $this->Candidate->find('first',array(
+                                'conditions' => array(
+                                    'id' => $candidate_id
+                                )
+                            ));
+                            if(!empty($candidate)){
+                                if($candidate['Candidate']['deleted']==DELETED_NO){
+                                    $detail_url = 'http://www.tongshijia.com/vote/candidate_detail/'.$candidate_id.'/5';
+                                }
+                            }
                         }
                     }
                     $content = array(
