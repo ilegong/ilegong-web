@@ -84,9 +84,930 @@ var all_name = name_str_array.concat(name_array);
 
 var all_imgs = img_str_array.concat(images_array);
 
+var datas = [
+  {
+    "name": "CharlesRobinson",
+    "province": "华中",
+    "city": "山东省",
+    "created": "1986-06-02 06:30:29"
+  },
+  {
+    "name": "DavidMartin",
+    "province": "华南",
+    "city": "天津市",
+    "created": "1986-06-16 07:46:13"
+  },
+  {
+    "name": "BarbaraRobinson",
+    "province": "华北",
+    "city": "黑龙江省",
+    "created": "1976-03-22 02:47:50"
+  },
+  {
+    "name": "JasonMoore",
+    "province": "华北",
+    "city": "新疆维吾尔自治区",
+    "created": "1994-11-06 01:12:50"
+  },
+  {
+    "name": "AmyWilson",
+    "province": "西北",
+    "city": "山西省",
+    "created": "1997-09-15 06:45:14"
+  },
+  {
+    "name": "KimberlyJackson",
+    "province": "东北",
+    "city": "河北省",
+    "created": "1976-05-28 04:56:04"
+  },
+  {
+    "name": "AngelaRodriguez",
+    "province": "西南",
+    "city": "广东省",
+    "created": "2002-05-10 00:00:25"
+  },
+  {
+    "name": "ThomasWalker",
+    "province": "华南",
+    "city": "上海市",
+    "created": "2012-01-15 07:24:21"
+  },
+  {
+    "name": "StevenPerez",
+    "province": "东北",
+    "city": "青海省",
+    "created": "1996-07-26 04:56:10"
+  },
+  {
+    "name": "ChristopherAnderson",
+    "province": "东北",
+    "city": "青海省",
+    "created": "2002-12-22 00:24:57"
+  },
+  {
+    "name": "DavidLee",
+    "province": "华南",
+    "city": "上海市",
+    "created": "1972-05-29 05:25:45"
+  },
+  {
+    "name": "KennethWilson",
+    "province": "华中",
+    "city": "山东省",
+    "created": "1972-04-09 05:16:05"
+  },
+  {
+    "name": "DorothyPerez",
+    "province": "西南",
+    "city": "澳门特别行政区",
+    "created": "2002-06-01 09:05:19"
+  },
+  {
+    "name": "ScottDavis",
+    "province": "华北",
+    "city": "西藏自治区",
+    "created": "2014-04-30 06:45:18"
+  },
+  {
+    "name": "JessicaWilliams",
+    "province": "华中",
+    "city": "宁夏回族自治区",
+    "created": "1971-09-12 07:09:54"
+  },
+  {
+    "name": "BrendaHall",
+    "province": "华北",
+    "city": "云南省",
+    "created": "1989-03-26 06:46:56"
+  },
+  {
+    "name": "BarbaraDavis",
+    "province": "西北",
+    "city": "江西省",
+    "created": "1975-09-04 03:12:29"
+  },
+  {
+    "name": "MariaLee",
+    "province": "华南",
+    "city": "安徽省",
+    "created": "1976-07-31 02:01:09"
+  },
+  {
+    "name": "RuthMartin",
+    "province": "东北",
+    "city": "广西壮族自治区",
+    "created": "1990-05-01 02:05:19"
+  },
+  {
+    "name": "CynthiaWalker",
+    "province": "华南",
+    "city": "福建省",
+    "created": "2002-01-06 08:22:01"
+  },
+  {
+    "name": "LisaDavis",
+    "province": "东北",
+    "city": "河北省",
+    "created": "2014-12-18 08:34:54"
+  },
+  {
+    "name": "DanielJackson",
+    "province": "西南",
+    "city": "陕西省",
+    "created": "1997-08-11 00:15:08"
+  },
+  {
+    "name": "MichelleClark",
+    "province": "西北",
+    "city": "海南省",
+    "created": "2009-04-28 06:40:05"
+  },
+  {
+    "name": "JohnRobinson",
+    "province": "华东",
+    "city": "香港特别行政区",
+    "created": "1975-06-30 02:52:07"
+  },
+  {
+    "name": "KarenPerez",
+    "province": "西南",
+    "city": "黑龙江省",
+    "created": "1976-05-18 07:08:01"
+  },
+  {
+    "name": "KarenMartin",
+    "province": "华中",
+    "city": "新疆维吾尔自治区",
+    "created": "1991-10-20 10:01:14"
+  },
+  {
+    "name": "ChristopherRodriguez",
+    "province": "华南",
+    "city": "天津市",
+    "created": "2001-04-11 09:49:54"
+  },
+  {
+    "name": "JosephThomas",
+    "province": "华东",
+    "city": "福建省",
+    "created": "1997-05-10 00:33:28"
+  },
+  {
+    "name": "JohnAllen",
+    "province": "华东",
+    "city": "天津市",
+    "created": "2006-09-02 07:12:31"
+  },
+  {
+    "name": "DonnaAnderson",
+    "province": "华南",
+    "city": "黑龙江省",
+    "created": "1992-03-05 09:40:05"
+  },
+  {
+    "name": "LindaLee",
+    "province": "西南",
+    "city": "澳门特别行政区",
+    "created": "1991-12-02 00:51:27"
+  },
+  {
+    "name": "MelissaYoung",
+    "province": "华中",
+    "city": "辽宁省",
+    "created": "1970-02-24 06:27:05"
+  },
+  {
+    "name": "ShirleyWilliams",
+    "province": "华北",
+    "city": "福建省",
+    "created": "2011-12-22 05:15:48"
+  },
+  {
+    "name": "ChristopherRodriguez",
+    "province": "华中",
+    "city": "海南省",
+    "created": "1978-02-01 09:49:36"
+  },
+  {
+    "name": "RobertMartinez",
+    "province": "西南",
+    "city": "山东省",
+    "created": "1994-10-11 11:49:44"
+  },
+  {
+    "name": "DavidWhite",
+    "province": "华南",
+    "city": "重庆市",
+    "created": "1973-08-06 09:51:11"
+  },
+  {
+    "name": "WilliamJohnson",
+    "province": "华南",
+    "city": "澳门特别行政区",
+    "created": "1993-03-29 06:15:40"
+  },
+  {
+    "name": "GeorgeWilliams",
+    "province": "西南",
+    "city": "宁夏回族自治区",
+    "created": "1996-11-28 07:24:16"
+  },
+  {
+    "name": "SharonJohnson",
+    "province": "华北",
+    "city": "安徽省",
+    "created": "1987-01-20 04:19:17"
+  },
+  {
+    "name": "KarenMoore",
+    "province": "华中",
+    "city": "江西省",
+    "created": "1978-08-14 05:21:02"
+  },
+  {
+    "name": "HelenAnderson",
+    "province": "华北",
+    "city": "海南省",
+    "created": "1993-10-23 02:14:19"
+  },
+  {
+    "name": "ChristopherClark",
+    "province": "西北",
+    "city": "黑龙江省",
+    "created": "1986-03-20 06:18:38"
+  },
+  {
+    "name": "ThomasSmith",
+    "province": "华南",
+    "city": "新疆维吾尔自治区",
+    "created": "1970-07-24 09:20:34"
+  },
+  {
+    "name": "BettyYoung",
+    "province": "华中",
+    "city": "河北省",
+    "created": "1994-12-22 09:09:32"
+  },
+  {
+    "name": "GaryTaylor",
+    "province": "华北",
+    "city": "甘肃省",
+    "created": "2003-03-26 00:00:17"
+  },
+  {
+    "name": "JoseGarcia",
+    "province": "华中",
+    "city": "贵州省",
+    "created": "1973-02-15 01:49:02"
+  },
+  {
+    "name": "EdwardWilson",
+    "province": "华南",
+    "city": "广西壮族自治区",
+    "created": "2001-05-11 00:57:43"
+  },
+  {
+    "name": "PaulThomas",
+    "province": "华南",
+    "city": "湖南省",
+    "created": "1999-08-13 03:08:13"
+  },
+  {
+    "name": "PaulHernandez",
+    "province": "华东",
+    "city": "陕西省",
+    "created": "1971-09-01 05:00:37"
+  },
+  {
+    "name": "GaryDavis",
+    "province": "华南",
+    "city": "湖北省",
+    "created": "1988-10-01 08:27:18"
+  },
+  {
+    "name": "LauraThompson",
+    "province": "华东",
+    "city": "上海市",
+    "created": "1999-10-04 03:16:38"
+  },
+  {
+    "name": "MaryLopez",
+    "province": "华北",
+    "city": "江苏省",
+    "created": "1981-04-17 09:23:25"
+  },
+  {
+    "name": "SusanYoung",
+    "province": "华中",
+    "city": "上海市",
+    "created": "1988-04-11 02:40:14"
+  },
+  {
+    "name": "KarenJones",
+    "province": "西南",
+    "city": "湖南省",
+    "created": "1989-03-08 00:22:43"
+  },
+  {
+    "name": "KarenTaylor",
+    "province": "东北",
+    "city": "河北省",
+    "created": "1997-12-29 04:59:59"
+  },
+  {
+    "name": "ScottLee",
+    "province": "西北",
+    "city": "香港特别行政区",
+    "created": "1973-07-11 01:48:35"
+  },
+  {
+    "name": "BarbaraYoung",
+    "province": "华北",
+    "city": "江西省",
+    "created": "1974-11-08 06:28:01"
+  },
+  {
+    "name": "KarenLewis",
+    "province": "华东",
+    "city": "新疆维吾尔自治区",
+    "created": "1994-03-06 05:30:44"
+  },
+  {
+    "name": "CarolHernandez",
+    "province": "西北",
+    "city": "新疆维吾尔自治区",
+    "created": "1989-01-11 07:02:32"
+  },
+  {
+    "name": "CharlesRodriguez",
+    "province": "西南",
+    "city": "四川省",
+    "created": "1976-09-10 07:17:12"
+  },
+  {
+    "name": "AnnaTaylor",
+    "province": "西北",
+    "city": "辽宁省",
+    "created": "2005-09-12 08:52:08"
+  },
+  {
+    "name": "SusanWalker",
+    "province": "华中",
+    "city": "青海省",
+    "created": "1990-11-16 02:11:51"
+  },
+  {
+    "name": "GeorgeTaylor",
+    "province": "西南",
+    "city": "浙江省",
+    "created": "2011-06-03 02:13:49"
+  },
+  {
+    "name": "ThomasMartinez",
+    "province": "西南",
+    "city": "海南省",
+    "created": "1976-06-20 09:50:27"
+  },
+  {
+    "name": "JosephWilson",
+    "province": "华北",
+    "city": "江西省",
+    "created": "1987-03-04 00:25:40"
+  },
+  {
+    "name": "SandraMartin",
+    "province": "华南",
+    "city": "安徽省",
+    "created": "2007-06-23 11:28:09"
+  },
+  {
+    "name": "ThomasWilliams",
+    "province": "华南",
+    "city": "山西省",
+    "created": "2015-01-18 11:14:08"
+  },
+  {
+    "name": "FrankWilson",
+    "province": "华中",
+    "city": "台湾省",
+    "created": "1984-12-26 07:24:41"
+  },
+  {
+    "name": "AngelaJohnson",
+    "province": "华南",
+    "city": "新疆维吾尔自治区",
+    "created": "1985-11-28 09:50:38"
+  },
+  {
+    "name": "MichelleLopez",
+    "province": "华东",
+    "city": "福建省",
+    "created": "2001-02-28 05:39:05"
+  },
+  {
+    "name": "BarbaraThomas",
+    "province": "华东",
+    "city": "四川省",
+    "created": "2013-02-15 05:41:26"
+  },
+  {
+    "name": "DorothyRobinson",
+    "province": "西北",
+    "city": "陕西省",
+    "created": "1971-01-01 04:14:55"
+  },
+  {
+    "name": "BarbaraThomas",
+    "province": "华南",
+    "city": "湖南省",
+    "created": "2014-02-26 07:51:13"
+  },
+  {
+    "name": "MariaGarcia",
+    "province": "华东",
+    "city": "西藏自治区",
+    "created": "2015-01-21 04:27:04"
+  },
+  {
+    "name": "AngelaBrown",
+    "province": "西南",
+    "city": "广西壮族自治区",
+    "created": "2014-12-12 11:32:25"
+  },
+  {
+    "name": "AmyTaylor",
+    "province": "华东",
+    "city": "海南省",
+    "created": "1987-07-11 02:57:38"
+  },
+  {
+    "name": "BarbaraWilson",
+    "province": "华北",
+    "city": "湖南省",
+    "created": "2002-06-05 04:30:00"
+  },
+  {
+    "name": "ScottClark",
+    "province": "西北",
+    "city": "湖北省",
+    "created": "1998-10-31 08:41:26"
+  },
+  {
+    "name": "SarahJohnson",
+    "province": "华东",
+    "city": "新疆维吾尔自治区",
+    "created": "1974-08-21 09:11:30"
+  },
+  {
+    "name": "EdwardWilson",
+    "province": "华北",
+    "city": "安徽省",
+    "created": "1981-02-14 06:28:35"
+  },
+  {
+    "name": "NancyThomas",
+    "province": "华北",
+    "city": "广西壮族自治区",
+    "created": "1980-01-28 11:48:19"
+  },
+  {
+    "name": "KimberlyLee",
+    "province": "华东",
+    "city": "香港特别行政区",
+    "created": "1980-11-09 05:35:06"
+  },
+  {
+    "name": "RonaldWhite",
+    "province": "华中",
+    "city": "新疆维吾尔自治区",
+    "created": "1974-01-08 08:22:54"
+  },
+  {
+    "name": "BrendaThompson",
+    "province": "华南",
+    "city": "重庆市",
+    "created": "1977-04-14 10:26:10"
+  },
+  {
+    "name": "BarbaraClark",
+    "province": "西南",
+    "city": "安徽省",
+    "created": "2002-04-19 02:16:13"
+  },
+  {
+    "name": "PatriciaWilliams",
+    "province": "华中",
+    "city": "河北省",
+    "created": "2002-10-29 06:00:24"
+  },
+  {
+    "name": "MichelleThompson",
+    "province": "华中",
+    "city": "江西省",
+    "created": "1978-05-02 09:57:46"
+  },
+  {
+    "name": "MarkPerez",
+    "province": "西南",
+    "city": "江苏省",
+    "created": "2001-11-18 07:20:41"
+  },
+  {
+    "name": "LindaMoore",
+    "province": "华中",
+    "city": "四川省",
+    "created": "2000-04-14 05:35:49"
+  },
+  {
+    "name": "ChristopherGonzalez",
+    "province": "华南",
+    "city": "辽宁省",
+    "created": "1993-12-09 02:04:18"
+  },
+  {
+    "name": "ScottGonzalez",
+    "province": "东北",
+    "city": "云南省",
+    "created": "1984-10-04 05:53:28"
+  },
+  {
+    "name": "ShirleyJohnson",
+    "province": "华南",
+    "city": "甘肃省",
+    "created": "2011-04-16 00:13:07"
+  },
+  {
+    "name": "EdwardPerez",
+    "province": "华东",
+    "city": "陕西省",
+    "created": "1989-01-29 04:00:40"
+  },
+  {
+    "name": "CarolGonzalez",
+    "province": "华南",
+    "city": "云南省",
+    "created": "1992-02-10 06:05:05"
+  },
+  {
+    "name": "LindaWilliams",
+    "province": "华北",
+    "city": "青海省",
+    "created": "1992-06-24 02:27:33"
+  },
+  {
+    "name": "LisaYoung",
+    "province": "华中",
+    "city": "云南省",
+    "created": "1973-01-03 05:41:41"
+  },
+  {
+    "name": "KevinRobinson",
+    "province": "西南",
+    "city": "天津市",
+    "created": "1981-03-05 09:53:18"
+  },
+  {
+    "name": "DonaldTaylor",
+    "province": "华东",
+    "city": "福建省",
+    "created": "2007-03-27 07:51:19"
+  },
+  {
+    "name": "JoseBrown",
+    "province": "东北",
+    "city": "河北省",
+    "created": "1992-04-09 02:50:39"
+  },
+  {
+    "name": "SandraMartinez",
+    "province": "东北",
+    "city": "四川省",
+    "created": "1974-03-28 09:55:47"
+  },
+  {
+    "name": "FrankWalker",
+    "province": "东北",
+    "city": "广东省",
+    "created": "2014-11-15 10:42:44"
+  },
+  {
+    "name": "LindaRobinson",
+    "province": "西南",
+    "city": "新疆维吾尔自治区",
+    "created": "2003-02-22 08:39:14"
+  },
+  {
+    "name": "CarolJones",
+    "province": "华南",
+    "city": "澳门特别行政区",
+    "created": "1996-06-23 05:33:58"
+  },
+  {
+    "name": "JessicaSmith",
+    "province": "华南",
+    "city": "浙江省",
+    "created": "2009-09-10 10:30:58"
+  },
+  {
+    "name": "RonaldWhite",
+    "province": "西南",
+    "city": "江苏省",
+    "created": "1997-08-25 09:08:19"
+  },
+  {
+    "name": "JasonWalker",
+    "province": "华东",
+    "city": "云南省",
+    "created": "2010-02-03 02:29:52"
+  },
+  {
+    "name": "AnthonyWilliams",
+    "province": "华中",
+    "city": "香港特别行政区",
+    "created": "1980-04-22 09:28:54"
+  },
+  {
+    "name": "NancyWilson",
+    "province": "华南",
+    "city": "重庆市",
+    "created": "1997-11-18 07:28:35"
+  },
+  {
+    "name": "SharonGarcia",
+    "province": "华北",
+    "city": "山西省",
+    "created": "1972-10-06 11:07:39"
+  },
+  {
+    "name": "DeborahJones",
+    "province": "西北",
+    "city": "山西省",
+    "created": "1988-02-27 00:24:36"
+  },
+  {
+    "name": "CarolMiller",
+    "province": "西北",
+    "city": "江西省",
+    "created": "2013-06-06 00:01:35"
+  },
+  {
+    "name": "DavidPerez",
+    "province": "华中",
+    "city": "云南省",
+    "created": "2009-03-01 07:15:06"
+  },
+  {
+    "name": "MaryGarcia",
+    "province": "西北",
+    "city": "江西省",
+    "created": "1979-04-17 00:59:38"
+  },
+  {
+    "name": "RobertHernandez",
+    "province": "华中",
+    "city": "西藏自治区",
+    "created": "1993-01-20 10:35:04"
+  },
+  {
+    "name": "BrendaThompson",
+    "province": "西北",
+    "city": "吉林省",
+    "created": "1995-10-09 07:50:17"
+  },
+  {
+    "name": "ChristopherRodriguez",
+    "province": "华中",
+    "city": "内蒙古自治区",
+    "created": "2013-12-13 07:15:38"
+  },
+  {
+    "name": "MaryJackson",
+    "province": "西北",
+    "city": "香港特别行政区",
+    "created": "1993-05-25 03:31:57"
+  },
+  {
+    "name": "TimothyRobinson",
+    "province": "西南",
+    "city": "青海省",
+    "created": "1975-03-07 06:18:05"
+  },
+  {
+    "name": "BrianRobinson",
+    "province": "西南",
+    "city": "新疆维吾尔自治区",
+    "created": "2005-11-29 03:15:14"
+  },
+  {
+    "name": "ElizabethWalker",
+    "province": "华中",
+    "city": "河北省",
+    "created": "1989-06-22 07:28:30"
+  },
+  {
+    "name": "GaryBrown",
+    "province": "华北",
+    "city": "新疆维吾尔自治区",
+    "created": "1999-12-01 03:13:32"
+  },
+  {
+    "name": "KimberlyGarcia",
+    "province": "华东",
+    "city": "青海省",
+    "created": "2008-11-21 11:13:28"
+  },
+  {
+    "name": "JoseMoore",
+    "province": "华北",
+    "city": "湖南省",
+    "created": "1989-08-07 07:26:13"
+  },
+  {
+    "name": "DonnaThompson",
+    "province": "华中",
+    "city": "四川省",
+    "created": "2012-01-23 03:51:29"
+  },
+  {
+    "name": "JeffreyRodriguez",
+    "province": "华北",
+    "city": "山东省",
+    "created": "2014-09-20 02:05:07"
+  },
+  {
+    "name": "LarryAnderson",
+    "province": "西南",
+    "city": "湖南省",
+    "created": "1982-10-11 06:39:46"
+  },
+  {
+    "name": "DonaldThompson",
+    "province": "华北",
+    "city": "湖南省",
+    "created": "1984-02-18 07:05:10"
+  },
+  {
+    "name": "KarenLewis",
+    "province": "华东",
+    "city": "浙江省",
+    "created": "2005-01-16 04:39:01"
+  },
+  {
+    "name": "EricJohnson",
+    "province": "华北",
+    "city": "陕西省",
+    "created": "1981-04-27 09:28:06"
+  },
+  {
+    "name": "CynthiaAnderson",
+    "province": "华北",
+    "city": "台湾省",
+    "created": "2007-10-26 04:15:16"
+  },
+  {
+    "name": "TimothyThomas",
+    "province": "华北",
+    "city": "辽宁省",
+    "created": "2003-06-15 01:57:11"
+  },
+  {
+    "name": "HelenGonzalez",
+    "province": "华南",
+    "city": "上海市",
+    "created": "1987-07-30 01:23:40"
+  },
+  {
+    "name": "BarbaraMartinez",
+    "province": "华中",
+    "city": "内蒙古自治区",
+    "created": "2010-10-23 07:09:38"
+  },
+  {
+    "name": "MatthewHarris",
+    "province": "华北",
+    "city": "四川省",
+    "created": "1981-05-14 04:23:09"
+  },
+  {
+    "name": "MariaBrown",
+    "province": "西北",
+    "city": "台湾省",
+    "created": "1996-08-17 04:37:22"
+  },
+  {
+    "name": "ElizabethLewis",
+    "province": "华北",
+    "city": "新疆维吾尔自治区",
+    "created": "1994-02-19 08:23:13"
+  },
+  {
+    "name": "CharlesBrown",
+    "province": "华中",
+    "city": "海南省",
+    "created": "1989-01-06 07:24:19"
+  },
+  {
+    "name": "MaryLee",
+    "province": "华北",
+    "city": "新疆维吾尔自治区",
+    "created": "1990-09-15 10:32:19"
+  },
+  {
+    "name": "TimothyWhite",
+    "province": "华南",
+    "city": "天津市",
+    "created": "1975-11-23 02:20:54"
+  },
+  {
+    "name": "SusanHarris",
+    "province": "华中",
+    "city": "河北省",
+    "created": "2015-04-07 03:42:42"
+  },
+  {
+    "name": "BrianMoore",
+    "province": "东北",
+    "city": "台湾省",
+    "created": "1995-09-20 09:44:06"
+  },
+  {
+    "name": "AnnaThompson",
+    "province": "华东",
+    "city": "河北省",
+    "created": "2009-05-20 11:41:30"
+  },
+  {
+    "name": "MichelleWilliams",
+    "province": "西南",
+    "city": "贵州省",
+    "created": "2009-06-02 09:32:18"
+  },
+  {
+    "name": "FrankMartinez",
+    "province": "华北",
+    "city": "江苏省",
+    "created": "2011-06-26 06:30:23"
+  },
+  {
+    "name": "HelenLee",
+    "province": "东北",
+    "city": "河南省",
+    "created": "2002-03-13 04:09:17"
+  },
+  {
+    "name": "AngelaLee",
+    "province": "华南",
+    "city": "贵州省",
+    "created": "1971-11-29 11:50:56"
+  },
+  {
+    "name": "DorothyGarcia",
+    "province": "华东",
+    "city": "江苏省",
+    "created": "2008-11-14 11:04:06"
+  },
+  {
+    "name": "CharlesYoung",
+    "province": "华中",
+    "city": "青海省",
+    "created": "2000-11-14 11:44:10"
+  },
+  {
+    "name": "MelissaLewis",
+    "province": "华东",
+    "city": "黑龙江省",
+    "created": "1981-03-10 00:05:52"
+  },
+  {
+    "name": "CarolWhite",
+    "province": "华北",
+    "city": "云南省",
+    "created": "2000-10-28 08:07:16"
+  },
+  {
+    "name": "ScottGonzalez",
+    "province": "东北",
+    "city": "台湾省",
+    "created": "1976-04-21 00:25:05"
+  }
+];
 
 var sqlStr = '';
 $.each(datas,function(index,item){
-  sqlStr += "INSERT INTO cake_users (uc_id ,status, username, nickname, image, created, city, province) VALUES ('0', '9', '"+item['name']+"', '"+all_name[index+5]+"', '"+item['picture']+"', '"+item['registered']+"', '"+item['city']+"', '"+item['province']+"');";
+  sqlStr += "INSERT INTO cake_users (uc_id ,status, username, nickname, image, created, city, province) VALUES ('0', '9', '"+item['name']+"', '"+all_name[index+5]+"', '"+all_imgs[index+5]+"', '"+item['created']+"', '"+item['city']+"', '"+item['province']+"');";
 });
+
+/**
+ *
+ [
+ "{{repeat(2, 4)}}",
+ {
+     "name": "{{firstName}}{{surname}}",
+     "province": "{{area}}",
+      "city":"{{city}}"
+     "created": "{{date(yyyy-MM-dd hh:mm:ss)}}",
+ }
+ ]
+ */
 
