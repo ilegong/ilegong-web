@@ -24,7 +24,7 @@ class ShareController extends AppController{
          *
          * select id, nickname, status, username from cake_users where status=9 limit 0,10
          */
-        $users = $this->User->query('SELECT user.id, user.nickname, user.username FROM cake_users  AS user JOIN (SELECT CEIL(RAND() * (SELECT MAX(id) FROM cake_users)) AS id) AS r2 WHERE user.id >= r2.id ORDER BY user.id ASC LIMIT '.$num);
+        $users = $this->User->query('SELECT user.id, user.nickname, user.username FROM cake_users  AS user JOIN (SELECT CEIL(RAND() * (SELECT MAX(id) FROM cake_users)) AS id) AS r2 WHERE user.id >= r2.id and user.nickname not like "微信用户%" ORDER BY user.id ASC LIMIT '.$num);
         $weshare = $this->Weshare->find('first', array(
             'conditions' => array(
                 'id' => $weshare_id
@@ -164,9 +164,6 @@ class ShareController extends AppController{
             $weshare_id = $weshare['Weshare']['id'];
             $user = $user['user'];
             $user_name = $user['nickname'];
-            if(0==strpos($user_name, '微信用户')){
-                $user_name = $this->getName(2);
-            }
             $this->Order->id = null;
             $order = $this->Order->save(array('creator' => $user['id'], 'consignee_address' => $tinyAddress['WeshareAddress']['address'] ,'member_id' => $weshare['Weshare']['id'], 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $user_name, 'consignee_mobilephone' => $mobile_phone[0]));
             $orderId = $order['Order']['id'];
