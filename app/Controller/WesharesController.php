@@ -551,4 +551,11 @@ class WesharesController extends AppController {
             $this->Weixin->send_share_product_arrival($open_id, $detail_url, $title, $order_id, $conginess_address, $conginess_name, $desc);
         }
     }
+
+    private function check_product_num($weshareId,$weshareProductId){
+
+
+
+
+    }
 }
