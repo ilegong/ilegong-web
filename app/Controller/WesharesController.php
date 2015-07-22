@@ -366,7 +366,8 @@ class WesharesController extends AppController {
             'conditions' => array(
                 'member_id' => $weshareId,
                 'type' => ORDER_TYPE_WESHARE_BUY,
-                'status' => $order_status
+                'status' => $order_status,
+                'deleted' => DELETED_NO
             ),
             'fields' => array('id', 'creator', 'created', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status'),
             'order' => array('created DESC')
