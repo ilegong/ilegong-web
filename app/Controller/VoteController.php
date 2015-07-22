@@ -42,7 +42,7 @@ class VoteController extends AppController {
      * 根据投票的事件ID到特定的投票页面
      */
     public function vote_event_view($eventId,$sort=0) {
-        $this->pageTitle = '朋友说第5届萌娃大赛';
+        $this->pageTitle = '朋友说第6届萌娃作品大赛';
         $uid = $this->currentUser['id'];
         $event_info = $this->get_event_info($eventId);
         $candidators = $this->CandidateEvent->find('all',array(
@@ -157,7 +157,7 @@ class VoteController extends AppController {
             $this->redirect('/vote/candidate_detail/'.$sign_up_info['CandidateEvent']['candidate_id'].'/'.$eventId);
             return;
         }
-        $this->pageTitle='朋友说第5届萌娃大赛报名';
+        $this->pageTitle='朋友说第6届萌娃作品大赛报名';
         $event_info = $this->get_event_info($eventId);
         $this->set('event_info',$event_info);
         $this->set('event_id',$eventId);
