@@ -106,7 +106,7 @@ class WesharesController extends AppController {
         ));
         $consignee = $this->getShareConsignees($uid);
         $creatorId = $weshareInfo['creator']['id'];
-        $user_share_summery = $this->getUserShareSummery($creatorId);
+        $user_share_summery = $this->getUserShareSummery($creatorId,$uid==$creatorId);
         echo json_encode(array('weshare' => $weshareInfo, 'ordersDetail' => $ordersDetail, 'current_user' => $current_user['User'], 'weixininfo' => $weixinInfo, 'consignee' => $consignee, 'user_share_summery' => $user_share_summery));
         return;
     }
@@ -308,7 +308,7 @@ class WesharesController extends AppController {
             $this->set('desc', $desc);
             $this->set('add_view',true);
         }
-        $userShareSummery = $this->getUserShareSummery($uid);
+        $userShareSummery = $this->getUserShareSummery($uid,$uid = $current_uid);
         $this->explode_share_imgs($myCreateShares);
         $this->explode_share_imgs($myJoinShares);
         $this->set($userShareSummery);
@@ -475,7 +475,7 @@ class WesharesController extends AppController {
         return $consignee['OrderConsignees'];
     }
 
-    private function getUserShareSummery($uid){
+    private function getUserShareSummery($uid,$is_me=false){
         $weshares = $this->Weshare->find('all',array(
             'conditions' => array(
                 'creator' => $uid
@@ -483,10 +483,14 @@ class WesharesController extends AppController {
             'fields' => array('id')
         ));
         $weshare_ids = Hash::extract($weshares, '{n}.Weshare.id');
+        $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED);
+        if(!$is_me){
+            $order_status[] = ORDER_STATUS_VIRTUAL;
+        }
         $follower_count = $this->Order->find('count',array(
             'conditions' => array(
                 'member_id' => $weshare_ids,
-                'status' => array(ORDER_STATUS_SHIPPED,ORDER_STATUS_PAID),
+                'status' => $order_status,
                 'type' => ORDER_TYPE_WESHARE_BUY
             ),
             'fileds' => array('DISTINCT creator')
