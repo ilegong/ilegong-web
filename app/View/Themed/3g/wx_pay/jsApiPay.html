@@ -18,7 +18,7 @@
             } else if(res.err_msg == "system:access_denied" || res.err_msg == "access_control:not_allow" || res.err_msg == 'getBrandWCPayRequest:fail_invalid appid'){
                 $msg = 'denied';
                 utils.alert('<div class="alert-warning">请搜索{{WX_SERVICE_ID_NO}}关注我们的服务号，在『个人中心』->『我的订单』完成支付。</div>', function(){
-                    window.location.href = doneUrlPrefix + encodeURIComponent($msg);
+                    window.location.href = doneUrlPrefix +'?msg='+ encodeURIComponent($msg);
                 });
                 not_redirect = true;
             } else {
@@ -27,7 +27,7 @@
             }
 
             if (!not_redirect) {
-                window.location.href = doneUrlPrefix + encodeURIComponent($msg);
+                window.location.href = doneUrlPrefix +'?msg='+ encodeURIComponent($msg);
             }
         }
     );
