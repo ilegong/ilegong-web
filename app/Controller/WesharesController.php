@@ -308,7 +308,7 @@ class WesharesController extends AppController {
             $this->set('desc', $desc);
             $this->set('add_view',true);
         }
-        $userShareSummery = $this->getUserShareSummery($uid,$uid = $current_uid);
+        $userShareSummery = $this->getUserShareSummery($uid,$uid == $current_uid);
         $this->explode_share_imgs($myCreateShares);
         $this->explode_share_imgs($myJoinShares);
         $this->set($userShareSummery);
