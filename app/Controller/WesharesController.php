@@ -261,11 +261,15 @@ class WesharesController extends AppController {
             ),
             'order' => array('created DESC')
         ));
+        $orderStatus = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED);
+        if($uid!=$current_uid){
+            $orderStatus[] = ORDER_STATUS_VIRTUAL;
+        }
         $joinShareOrder = $this->Order->find('all',array(
             'conditions' => array(
                 'creator' => $uid,
                 'type' => ORDER_TYPE_WESHARE_BUY,
-                'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED)
+                'status' => $orderStatus
             ),
             'fields' => array('member_id', 'id')
         ));
