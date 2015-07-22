@@ -374,7 +374,7 @@ class WeixinController extends AppController {
                         }
                     }
                     $content = array(
-                        array('title' => '晒吃货宝贝，赢亲子旅行包/360儿童安全卫士，满100票，领五常稻花香大米...', 'description' => '',
+                        array('title' => '晒萌宝作品，赢高级珐琅锅/儿童自行车，满100票，领钟祥特产米茶...', 'description' => '',
                             'picUrl' => 'http://51daifan.sinaapp.com/img/imgstore/1.jpg',
                             'url' => $detail_url),
                     );
