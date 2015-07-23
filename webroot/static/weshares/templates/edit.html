@@ -16,7 +16,7 @@
                 <p class='tips'>请输入数字</p>
             </div>
             <div class="form-group fl" ng-class="{'has-error': product.storeHasError}" style="width: 40%; margin-right: 10px;">
-                <input class='form-control' placeholder="库存/件" ng-model="product.store" ng-change='vm.validateProductStore(product)' ng-blur='vm.validateProductStore(product)'/>
+                <input class='form-control' placeholder="库存/件,默认不限制" ng-model="product.store" ng-change='vm.validateProductStore(product)' ng-blur='vm.validateProductStore(product)'/>
                 <p class='tips'>请输入数字</p>
             </div>
             <a class="fr btn" ng-class="{'delete-btn': !$last,'add-btn': $last}"
