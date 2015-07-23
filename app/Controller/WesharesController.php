@@ -160,6 +160,22 @@ class WesharesController extends AppController {
                     'weshare_id' => $weshareId
                 )
             ));
+            foreach ($weshareProducts as $p) {
+                $product_id = $p['WeshareProduct']['id'];
+                $cart_num = $productIdNumMap[$product_id];
+                $check_num_result = $this->check_product_num($weshareId, $p, $cart_num);
+                if(!$check_num_result['result']){
+                    if($check_num_result['type'] == 0){
+                        $reason = $p['WeshareProduct']['name'].'已经售罄';
+                    }
+                    if($check_num_result['type'] ==1 ){
+                        $reason = $p['WeshareProduct']['name'].'超量'.$check_num_result['num'].'件';
+                    }
+                    echo json_encode(array('success' => false, 'reason'=>$reason));
+                    return;
+                    break;
+                }
+            }
             $this->setShareConsignees($buyerData['name'], $buyerData['mobilephone'], $uid);
             $order = $this->Order->save(array('creator' => $uid, 'consignee_address' => $tinyAddress['WeshareAddress']['address'] ,'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $buyerData['name'], 'consignee_mobilephone' => $buyerData['mobilephone']));
             $orderId = $order['Order']['id'];
@@ -204,25 +220,30 @@ class WesharesController extends AppController {
         $order = $this->Order->findById($order_id);
         if(empty($order)){
             echo json_encode(array(success => false, reason => 'order does not exist'));
+            return;
         }
         if($order['Order']['type'] != ORDER_TYPE_WESHARE_BUY){
             echo json_encode(array(success => false, reason => 'invalid order'));
+            return;
         }
         $weshare_id = $order['Order']['member_id'];
         $weshare = $this->Weshare->findById($weshare_id);
         if(empty($weshare)){
             echo json_encode(array(success => false, reason => 'invalid weshare'));
+            return;
         }
         $is_owner = $uid == $order['Order']['creator'];
         $is_creator = $uid == $weshare['Weshare']['creator'];
         if(!$is_owner && !$is_creator){
             echo json_encode(array(success => false, reason => 'only owner or creator '));
+            return;
         }
 
         $result = $this->Order->updateAll(array('status' => 2), array('id' => $order['Order']['id']));
         $this->Cart->updateAll(array('status' => 2), array('order_id' => $order['Order']['id']));
         if(!$result){
             echo json_encode(array(success => false, reason=>"failed to update order status"));
+            return;
         }
 
         echo json_encode(array(success => true));
@@ -407,7 +428,7 @@ class WesharesController extends AppController {
             $cart_price = $item['Cart']['price'];
             $cart_name = $item['Cart']['name'];
             if (!isset($product_buy_num['details'][$product_id])) $product_buy_num['details'][$product_id] = array('num' => 0, 'total_price' => 0, 'name' => $cart_name);
-            if (!isset($orders[$order_id]['carts'])) $order_cart_map[$order_id] = array();
+            if (!isset($order_cart_map[$order_id])) $order_cart_map[$order_id] = array();
             $product_buy_num['details'][$product_id]['num'] = $product_buy_num['details'][$product_id]['num'] + $cart_num;
             $totalPrice = $cart_num * $cart_price;
             $summeryTotalPrice += $totalPrice;
@@ -550,5 +571,38 @@ class WesharesController extends AppController {
             $conginess_address = $order['Order']['consignee_address'];
             $this->Weixin->send_share_product_arrival($open_id, $detail_url, $title, $order_id, $conginess_address, $conginess_name, $desc);
         }
+    }
+
+    private function check_product_num($weshareId,$weshareProduct,$num){
+        $store_num = $weshareProduct['WeshareProduct']['store'];
+        if($store_num == 0){
+            return array('result' => true);
+        }
+        $orders = $this->Order->find('all', array(
+            'conditions' => array('type' => ORDER_TYPE_WESHARE_BUY, 'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED), 'member_id' => $weshareId),
+            'fields' => array('id')
+        ));
+        //$total = $this->RequestedItem->find('all', array(array('fields' => array('sum(Model.cost * Model.quantity)   AS ctotal'), 'conditions'=>array('RequestedItem.purchase_request_id'=>$this->params['named']['po_id']));
+        $order_ids = Hash::extract($orders, '{n}.Order.id');
+        $product_id = $weshareProduct['WeshareProduct']['id'];
+        if (!empty($order_ids)) {
+            $sum_data = $this->Cart->find('all', array(
+                'fields' => array('sum(num) AS total'),
+                'conditions' => array(
+                    'product_id' => $product_id,
+                    'order_id' => $order_ids
+                )
+            ));
+            $buy_num = $sum_data[0][0]['total'];
+            if (($buy_num + $buy_num) > $store_num) {
+                //买完了
+                if ($buy_num >= $store_num) {
+                    return array('result' => false, 'type' => 0);
+                }
+                $over_num = $buy_num + $buy_num - $store_num;
+                return array('result' => false, 'type' => 1, 'num' => $over_num);
+            }
+        }
+        return array('result' => true);
     }
 }

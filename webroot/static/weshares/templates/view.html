@@ -22,7 +22,10 @@
         <div class="products form-group" ng-class="{'has-error':vm.productsHasError}">
             <dl class="clearfix product form-control" ng-repeat="product in vm.weshare.products">
                 <dd class="fl" ng-bind="product.name"></dd>
-                <dd class="fr">
+                <dd class="fr" ng-if="!vm.checkProductNum(product)">
+                    <span style="margin-left: 40px;">已经售罄</span>
+                </dd>
+                <dd class="fr" ng-if="vm.checkProductNum(product)">
                     <a class='btn decrease-btn' ng-click="vm.decreaseProductNum(product)"></a>
                     <span class='num' ng-bind="product.num||0"></span>
                     <a class='btn increase-btn' ng-click="vm.increaseProductNum(product)"></a>

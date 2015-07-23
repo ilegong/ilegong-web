@@ -31,6 +31,8 @@
 
     vm.sendMsgInfo = sendMsgInfo;
 
+    vm.checkProductNum = checkProductNum;
+
     vm.toUpdate = toUpdate;
     vm.stopShare = stopShare;
 
@@ -167,6 +169,15 @@
       return vm.sendMsgHasError;
     }
 
+    function checkProductNum(product) {
+      if(vm.ordersDetail.summery.details[product.id]){
+        var product_buy_num = vm.ordersDetail.summery.details[product.id]['num'];
+        var store_num = product.store;
+        return product_buy_num<store_num;
+      }
+      return true;
+    }
+
     function sendMsgInfo(){
       if(vm.validateSendMsgInfo()){
         return false;
@@ -198,7 +209,11 @@
 			var addressHasError = vm.validateAddress();
 			var productsHasError = vm.validateProducts();
 			if (addressHasError || productsHasError) {
-        alert('请输入商品数量');
+        if(addressHasError){
+          alert('请选择地址');
+        }else if(productsHasError){
+          alert('请输入商品数量');
+        }
 				return;
 			}
 
@@ -235,6 +250,13 @@
 					window.location.href = '/weshares/pay/' + data.orderId + '/' + paymentType;
 				}else{
           vm.submitProcessing = false;
+          vm.showBuyingDialog = false;
+          vm.showLayer=false;
+          if(data['reason']){
+            alert(data['reason']);
+          }else{
+            alert('提交失败');
+          }
         }
 			}).error(function () {
         vm.submitProcessing = false;

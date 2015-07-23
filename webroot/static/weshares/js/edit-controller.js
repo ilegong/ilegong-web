@@ -34,7 +34,7 @@
         description: '',
         images: [],
         products: [
-          {name: ''}
+          {name: '', store: ''}
         ],
         send_info: '',
         addresses: [
@@ -112,7 +112,7 @@
 
 		function toggleProduct(product, isLast) {
 			if (isLast) {
-				vm.weshare.products.push({name: ''});
+				vm.weshare.products.push({name: '',store: ''});
 			}
 			else {
 				vm.weshare.products = _.without(vm.weshare.products, product);
