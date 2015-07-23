@@ -81,7 +81,8 @@ class WeixinController extends AppController {
                     if ($from == FROM_WX_SERVICE) {
                         $reason = $this->UserSubReason->find('first',array('conditions' => array(
                             'user_id' => $uid,
-                            'used' => 0
+                            'used' => 0,
+                            'type' => 'Vote6'
                         )));
                         $default_content = array(
                             array('title' => '朋友说是什么？看完你就懂了！', 'description' => '',
@@ -95,11 +96,11 @@ class WeixinController extends AppController {
                                 'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=201694178&idx=3&sn=75c4b8f32c29e1c088c7de4ee2e22719#rd')
                         );
                         if(!empty($reason)){
-                            if ($reason['UserSubReason']['type'] == 'Vote') {
+                            if ($reason['UserSubReason']['type'] == 'Vote6') {
                                 $title = $reason['UserSubReason']['title'];
                                 $content = array(
                                     array('title' => $title, 'description' => '快来支持我吧...',
-                                        'picUrl' => 'http://51daifan.sinaapp.com/img/imgstore/1.jpg',
+                                        'picUrl' => 'http://51daifan.sinaapp.com/img/imgstore/prize.jpg',
                                         'url' => $reason['UserSubReason']['url']),
                                 );
                                 $this->UserSubReason->updateAll(array('used' => 1), array('id' => $reason['UserSubReason']['id']));
@@ -238,7 +239,7 @@ class WeixinController extends AppController {
 			if( isset($req["Location_X"])){ //location message
 				$msg = $msg."*位置信息,我在{$req["Label"]}({$req["Location_X"]}, {$req["Location_Y"]})*";
 			}
-			
+
 			if( isset($req["Recognition"])){ //location message
 				$msg = $msg."*语音信息：{$req['Recognition']}*";
 			}
@@ -361,21 +362,26 @@ class WeixinController extends AppController {
                     $detail_url = 'http://www.tongshijia.com/vote/vote_event_view/5';
                     if($uid){
                         $event_candidate = $this->CandidateEvent->find('first',array(
-                            'conditions' => array('user_id' => $uid, 'event_id' => 4)
+                            'conditions' => array('user_id' => $uid, 'event_id' => 5)
                         ));
-                        $candidate_id = $event_candidate['CandidateEvent']['candidate_id'];
-                        $candidate = $this->Candidate->find('first',array(
-                            'conditions' => array(
-                                'id' => $candidate_id
-                            )
-                        ));
-                        if($candidate['Candidate']['deleted']==DELETED_NO){
-                            $detail_url = 'http://www.tongshijia.com/vote/candidate_detail/'.$candidate_id.'/4';
+                        $this->log('event candidate '.json_encode($event_candidate));
+                        if(!empty($event_candidate)){
+                            $candidate_id = $event_candidate['CandidateEvent']['candidate_id'];
+                            $candidate = $this->Candidate->find('first',array(
+                                'conditions' => array(
+                                    'id' => $candidate_id
+                                )
+                            ));
+                            if(!empty($candidate)){
+                                if($candidate['Candidate']['deleted']==DELETED_NO){
+                                    $detail_url = 'http://www.tongshijia.com/vote/candidate_detail/'.$candidate_id.'/5';
+                                }
+                            }
                         }
                     }
                     $content = array(
-                        array('title' => '晒吃货宝贝，赢亲子旅行包/360儿童安全卫士，满100票，领五常稻花香大米...', 'description' => '',
-                            'picUrl' => 'http://51daifan.sinaapp.com/img/imgstore/1.jpg',
+                        array('title' => '晒萌宝作品，赢高级珐琅锅/儿童自行车，满100票，领钟祥特产米茶...', 'description' => '',
+                            'picUrl' => 'http://51daifan.sinaapp.com/img/imgstore/prize.jpg',
                             'url' => $detail_url),
                     );
                     echo $this->newArticleMsg($user, $me, $content);
