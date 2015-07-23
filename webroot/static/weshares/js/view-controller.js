@@ -251,7 +251,7 @@
 				weshare_id: vm.weshare.id,
 				address_id: vm.weshare.selectedAddressId,
 				products: products,
-				buyer: {name: vm.buyerName, mobilephone: vm.buyerMobilePhone}
+				buyer: {name: vm.buyerName, mobilephone: vm.buyerMobilePhone, address: vm.buyerAddress}
 			};
 
       if(vm.submitProcessing){
