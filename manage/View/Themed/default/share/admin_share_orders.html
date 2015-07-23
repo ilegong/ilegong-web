@@ -57,6 +57,7 @@
                     <th><input type="text" class="form-control" placeholder="分享人" disabled></th>
                     <th><input type="text" class="form-control" placeholder="分享人联系方式" disabled></th>
                     <th><input type="text" class="form-control" placeholder="商品" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="商品份数" disabled></th>
                     <th><input type="text" class="form-control" placeholder="商品总价" disabled></th>
                     <th><input type="text" class="form-control" placeholder="订单总价" disabled></th>
                     <th><input type="text" class="form-control" placeholder="创建时间" disabled></th>
@@ -83,6 +84,7 @@
                             <td>{{$current_share_creator['nickname']}}</td>
                             <td>{{$current_share_creator['mobilephone']}}</td>
                             <td>{{$cart['name']}}</td>
+                            <td>{{$cart['num']}}</td>
                             <td>{{$cart['price']*$cart['num']/100}}</td>
                             <td>{{$current_order['total_all_price']}}</td>
                             <td>{{$current_order['created']}}</td>
