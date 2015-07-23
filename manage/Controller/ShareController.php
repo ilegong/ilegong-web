@@ -116,6 +116,9 @@ class ShareController extends AppController{
         if($query_date!='all'){
             $cond['DATE(created)'] = $query_date;
         }
+        if($query_date=='all'){
+            $cond['status'] = array(ORDER_STATUS_PAID,ORDER_STATUS_RECEIVED,ORDER_STATUS_SHIPPED);
+        }
         if($query_share_id){
            $cond['member_id'] = $query_share_id;
         }
