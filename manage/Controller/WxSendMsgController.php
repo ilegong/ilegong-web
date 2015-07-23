@@ -34,6 +34,7 @@ class WxSendMsgController extends AppController{
         $openIds = Hash::combine($openIds, '{n}.Oauthbind.user_id', '{n}.Oauthbind.oauth_openid');
         $detail_url = WX_HOST . '/tuan_buyings/detail/2869';
         foreach ($openIds as $uid => $openId) {
+            $this->log('send rice prize open id '.$openId);
             send_rice_prize_msg($openId, $detail_url);
         }
         echo json_encode(array('success' => true));
