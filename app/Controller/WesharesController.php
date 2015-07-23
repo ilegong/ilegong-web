@@ -160,21 +160,23 @@ class WesharesController extends AppController {
                     'weshare_id' => $weshareId
                 )
             ));
+            $reason  = '';
             foreach ($weshareProducts as $p) {
                 $product_id = $p['WeshareProduct']['id'];
                 $cart_num = $productIdNumMap[$product_id];
                 $check_num_result = $this->check_product_num($weshareId, $p, $cart_num);
                 if(!$check_num_result['result']){
                     if($check_num_result['type'] == 0){
-                        $reason = $p['WeshareProduct']['name'].'已经售罄';
+                        $reason =$reason.' '.$p['WeshareProduct']['name'].'已经售罄';
                     }
                     if($check_num_result['type'] ==1 ){
-                        $reason = $p['WeshareProduct']['name'].'超量'.$check_num_result['num'].'件';
+                        $reason = $reason.' '.$p['WeshareProduct']['name'].'超量'.$check_num_result['num'].'件';
                     }
-                    echo json_encode(array('success' => false, 'reason'=>$reason));
-                    return;
-                    break;
                 }
+            }
+            if(strlen($reason)>0){
+                echo json_encode(array('success' => false, 'reason'=>$reason));
+                return;
             }
             $this->setShareConsignees($buyerData['name'], $buyerData['mobilephone'], $uid);
             $order = $this->Order->save(array('creator' => $uid, 'consignee_address' => $tinyAddress['WeshareAddress']['address'] ,'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $buyerData['name'], 'consignee_mobilephone' => $buyerData['mobilephone']));
