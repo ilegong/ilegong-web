@@ -21,18 +21,20 @@ class WxSendMsgController extends AppController{
         $this->autoRender = false;
         $query_sql = 'SELECT user_id,mobile_num FROM  cake_candidates WHERE id IN ( SELECT candidate_id FROM cake_candidate_events WHERE event_id=4) AND vote_num >=100 ORDER BY  vote_num DESC LIMIT 0,100';
         $query_data = $this->Order->query($query_sql);
-        $user_ids = Hash::extract($query_data,'{n}.cake_candidates.user_id');
-        $openIds = $this->Oauthbind->find('all',array(
+        //$user_ids = Hash::extract($query_data, '{n}.cake_candidates.user_id');
+        $user_ids = array(633345,544307);
+        $openIds = $this->Oauthbind->find('all', array(
             'conditions' => array(
                 'user_id' => $user_ids,
             ),
             'fields' => array(
-                'oauth_openid','user_id'
+                'oauth_openid', 'user_id'
             )
         ));
-        $openIds = Hash::combine($openIds,'{n}.Oauthbind.user_id','{n}.Oauthbind.oauth_openid');
-        foreach($openIds as $uid=>$openId){
-            send_rice_prize_msg($openId,'');
+        $openIds = Hash::combine($openIds, '{n}.Oauthbind.user_id', '{n}.Oauthbind.oauth_openid');
+        $detail_url = WX_HOST . '/tuan_buyings/detail/2869';
+        foreach ($openIds as $uid => $openId) {
+            send_rice_prize_msg($openId, $detail_url);
         }
         echo json_encode(array('success' => true));
         return;
