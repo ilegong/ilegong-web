@@ -111,9 +111,11 @@ class ShareController extends AppController{
             $query_share_id = $_REQUEST['weshare_id'];
         }
         $cond = array(
-            'DATE(created)' => $query_date,
             'type' => 9,
         );
+        if($query_date!='all'){
+            $cond['DATE(created)'] = $query_date;
+        }
         if($query_share_id){
            $cond['member_id'] = $query_share_id;
         }
