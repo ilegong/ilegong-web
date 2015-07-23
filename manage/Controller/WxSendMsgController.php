@@ -21,8 +21,8 @@ class WxSendMsgController extends AppController{
         $this->autoRender = false;
         $query_sql = 'SELECT user_id,mobile_num FROM  cake_candidates WHERE id IN ( SELECT candidate_id FROM cake_candidate_events WHERE event_id=4) AND vote_num >=100 ORDER BY  vote_num DESC LIMIT 0,100';
         $query_data = $this->Order->query($query_sql);
-        //$user_ids = Hash::extract($query_data, '{n}.cake_candidates.user_id');
-        $user_ids = array(633345,544307);
+        $user_ids = Hash::extract($query_data, '{n}.cake_candidates.user_id');
+        //$user_ids = array(633345,544307);
         $openIds = $this->Oauthbind->find('all', array(
             'conditions' => array(
                 'user_id' => $user_ids,
