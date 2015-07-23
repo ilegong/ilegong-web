@@ -182,7 +182,7 @@ class WesharesController extends AppController {
             if($buyerData['address']){
                 $address = $address.'--'.$buyerData['address'];
             }
-            $this->setShareConsignees($buyerData['name'], $buyerData['mobilephone'], $uid);
+            $this->setShareConsignees($buyerData['name'], $buyerData['mobilephone'], $buyerData['address'] , $uid);
             $order = $this->Order->save(array('creator' => $uid, 'consignee_address' => $address ,'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $buyerData['name'], 'consignee_mobilephone' => $buyerData['mobilephone']));
             $orderId = $order['Order']['id'];
             $totalPrice = 0;
@@ -479,7 +479,7 @@ class WesharesController extends AppController {
 
     }
 
-    private function setShareConsignees($userInfo, $mobileNum, $uid) {
+    private function setShareConsignees($userInfo, $mobileNum, $address, $uid) {
         $consignee = $this->OrderConsignees->find('first', array(
             'conditions' => array(
                 'creator' => $uid,
@@ -489,11 +489,11 @@ class WesharesController extends AppController {
         ));
         //update
         if(!empty($consignee)){
-            $this->OrderConsignees->updateAll(array('name' => "'".$userInfo."'", 'mobilephone' => "'".$mobileNum."'"), array('id' => $consignee['OrderConsignees']['id']));
+            $this->OrderConsignees->updateAll(array('name' => "'".$userInfo."'", 'mobilephone' => "'".$mobileNum."'", 'address' => "'".$address."'"), array('id' => $consignee['OrderConsignees']['id']));
             return;
         }
         //save
-        $this->OrderConsignees->save(array('creator' => $uid, 'status' => STATUS_CONSIGNEES_SHARE, 'name' => $userInfo, 'mobilephone' => $mobileNum));
+        $this->OrderConsignees->save(array('creator' => $uid, 'status' => STATUS_CONSIGNEES_SHARE, 'name' => $userInfo, 'mobilephone' => $mobileNum, 'address' => $address));
     }
 
     private function getShareConsignees($uid){
@@ -502,7 +502,7 @@ class WesharesController extends AppController {
                 'creator' => $uid,
                 'status' => STATUS_CONSIGNEES_SHARE
             ),
-            'fields' => array('name', 'mobilephone')
+            'fields' => array('name', 'mobilephone', 'address')
         ));
         return $consignee['OrderConsignees'];
     }

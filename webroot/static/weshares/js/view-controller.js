@@ -68,6 +68,7 @@
           if(vm.consignee){
             vm.buyerName = vm.consignee.name;
             vm.buyerMobilePhone = vm.consignee.mobilephone;
+            vm.buyerAddress = vm.consignee.address;
           }
 					setWeiXinShareParams();
 				}).
