@@ -107,11 +107,18 @@ class ShareController extends AppController{
         if($_REQUEST['date']){
             $query_date = $_REQUEST['date'];
         }
+        if($_REQUEST['weshare_id']){
+            $query_share_id = $_REQUEST['weshare_id'];
+        }
+        $cond = array(
+            'DATE(created)' => $query_date,
+            'type' => 9,
+        );
+        if($query_share_id){
+           $cond['member_id'] = $query_share_id;
+        }
         $orders = $this->Order->find('all',array(
-            'conditions' => array(
-                'DATE(created)' => $query_date,
-                'type' => 9,
-            ),
+            'conditions' => $cond,
             'order' => array('created DESC')
         ));
         $order_ids = Hash::extract($orders, '{n}.Order.id');
