@@ -181,9 +181,12 @@
     }
 
     function checkProductNum(product) {
+      var store_num = product.store;
+      if(store_num==0){
+        return true;
+      }
       if(vm.ordersDetail.summery.details[product.id]){
         var product_buy_num = vm.ordersDetail.summery.details[product.id]['num'];
-        var store_num = product.store;
         return product_buy_num<store_num;
       }
       return true;
