@@ -81,7 +81,8 @@ class WeixinController extends AppController {
                     if ($from == FROM_WX_SERVICE) {
                         $reason = $this->UserSubReason->find('first',array('conditions' => array(
                             'user_id' => $uid,
-                            'used' => 0
+                            'used' => 0,
+                            'type' => 'Vote6'
                         )));
                         $default_content = array(
                             array('title' => '朋友说是什么？看完你就懂了！', 'description' => '',
@@ -95,7 +96,7 @@ class WeixinController extends AppController {
                                 'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=201694178&idx=3&sn=75c4b8f32c29e1c088c7de4ee2e22719#rd')
                         );
                         if(!empty($reason)){
-                            if ($reason['UserSubReason']['type'] == 'Vote') {
+                            if ($reason['UserSubReason']['type'] == 'Vote6') {
                                 $title = $reason['UserSubReason']['title'];
                                 $content = array(
                                     array('title' => $title, 'description' => '快来支持我吧...',
