@@ -3,7 +3,7 @@
     <div class="babydetail">
         <dl class="clearfix">
             <dd class="fl">{{$candidate_id}}号  {{$candidate_info['Candidate']['title']}}</dd>
-            <dd class="fr">{{$all_count}}票</dd>
+            <dd class="fr">{{$all_count}}&nbsp;票&nbsp;&nbsp;排名&nbsp;{{$rank}}</dd>
         </dl>
         <p>描述：{{$candidate_info['Candidate']['description']}}</p>
         {{loop $images $img}}

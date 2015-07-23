@@ -236,9 +236,11 @@ class VoteController extends AppController {
               'id' => $candidateId
           )
        ));
+       $rank_data = $this->get_candidate_rank($candidateId,$eventId);
        $images = array_filter(explode('|',$candidate_info['Candidate']['images']));
        $is_sign_up = $this->has_sign_up($eventId,$uid);
        $this->set('is_sign_up',$is_sign_up);
+       $this->set('rank', $rank_data[0][0]['Rank']);
        $event_info = $this->get_event_info($eventId);
        $this->set('event_info',$event_info);
        $this->set('candidate_id',$candidateId);
@@ -331,6 +333,18 @@ class VoteController extends AppController {
             return false;
         }
         return true;
+    }
+
+    private function get_candidate_rank($candidate_id,$event_id){
+        $query_sql = 'SELECT (SELECT COUNT(rank.id) FROM cake_candidates rank WHERE rank.id IN (SELECT candidate_id from cake_candidate_events WHERE event_id='.$event_id.') AND c.vote_num <= rank.vote_num) AS Rank, c.id AS Id, c.vote_num AS Roll FROM cake_candidates c WHERE c.id='.$candidate_id.' ORDER BY c.vote_num ASC';
+        $rank_data = $this->Candidate->query($query_sql);
+        return $rank_data;
+    }
+
+    private function get_all_candidate_rank_data($event_id){
+        $query_sql = 'SELECT (SELECT COUNT(rank.id) FROM cake_candidates rank WHERE rank.id IN (SELECT candidate_id from cake_candidate_events WHERE event_id='.$event_id.') AND c.vote_num <= rank.vote_num) AS Rank, c.id AS Id, c.vote_num AS Roll, c.title AS Title FROM cake_candidates c WHERE c.id IN (SELECT candidate_id from cake_candidate_events WHERE event_id='.$event_id.') ORDER BY c.vote_num ASC';
+        $all_rank_data = $this->Candidate->query($query_sql);
+        return $all_rank_data;
     }
 
 }
