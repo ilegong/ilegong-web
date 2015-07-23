@@ -578,6 +578,10 @@ class WesharesController extends AppController {
         if($store_num == 0){
             return array('result' => true);
         }
+        if($num > $store_num){
+            $over_num = $num - $store_num;
+            return array('result' => false, 'type' => 1, 'num' => $over_num);
+        }
         $orders = $this->Order->find('all', array(
             'conditions' => array('type' => ORDER_TYPE_WESHARE_BUY, 'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED), 'member_id' => $weshareId),
             'fields' => array('id')
@@ -594,7 +598,7 @@ class WesharesController extends AppController {
                 )
             ));
             $buy_num = $sum_data[0][0]['total'];
-            if (($buy_num + $buy_num) > $store_num) {
+            if (($buy_num + $num) > $store_num) {
                 //买完了
                 if ($buy_num >= $store_num) {
                     return array('result' => false, 'type' => 0);

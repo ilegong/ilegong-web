@@ -9,7 +9,7 @@
         <div class="clearfix" ng-repeat="product in vm.weshare.products">
             <div class="form-group fl" style="width: 100%; margin-right: 10px;" ng-class="{'has-error': product.nameHasError}">
                 <input class='form-control' placeholder="产品名称/规格" ng-model="product.name" ng-change='vm.validateProductName(product)' ng-blur='vm.validateProductName(product)'/>
-                <p class='tips'>请输入描述, 不超过9个字</p>
+                <p class='tips'>请输入描述, 不超过20个字</p>
             </div>
             <div class="form-group fl" ng-class="{'has-error': product.priceHasError}" style="width: 40%; margin-right: 10px;">
                 <input class='form-control' placeholder="价格/元" ng-model="product.price" ng-change='vm.validateProductPrice(product)' ng-blur='vm.validateProductPrice(product)'/>

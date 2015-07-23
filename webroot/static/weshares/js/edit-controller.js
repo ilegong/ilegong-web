@@ -175,7 +175,7 @@
 		}
 
 		function validateProductName(product) {
-			product.nameHasError = _.isEmpty(product.name) || product.name.length > 9;
+			product.nameHasError = _.isEmpty(product.name) || product.name.length > 20;
 			return product.nameHasError;
 		}
 
