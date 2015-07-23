@@ -17,6 +17,28 @@ class WxSendMsgController extends AppController{
     }
 
 
+    public function admin_send_wx_msg_for_rice() {
+        $this->autoRender = false;
+        $query_sql = 'SELECT user_id,mobile_num FROM  cake_candidates WHERE id IN ( SELECT candidate_id FROM cake_candidate_events WHERE event_id=4) AND vote_num >=100 ORDER BY  vote_num DESC LIMIT 0,100';
+        $query_data = $this->Order->query($query_sql);
+        $user_ids = Hash::extract($query_data,'{n}.cake_candidates.user_id');
+        $openIds = $this->Oauthbind->find('all',array(
+            'conditions' => array(
+                'user_id' => $user_ids,
+            ),
+            'fields' => array(
+                'oauth_openid','user_id'
+            )
+        ));
+        $openIds = Hash::combine($openIds,'{n}.Oauthbind.user_id','{n}.Oauthbind.oauth_openid');
+        foreach($openIds as $uid=>$openId){
+            send_rice_prize_msg($openId,'');
+        }
+        echo json_encode(array('success' => true));
+        return;
+    }
+
+
     public function admin_send_wx_msg_for_tea(){
         $this->autoRender=false;
         $now = date('Y-m-d');

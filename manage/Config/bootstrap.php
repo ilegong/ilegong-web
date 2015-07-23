@@ -377,6 +377,29 @@ function send_tuan_tip_msg($open_id,$title,$product_name,$tuan_leader_wx,$remark
 }
 
 /**
+ * @param $open_id
+ * @param $deatil_url
+ * @return bool
+ *
+ * 发送中奖消息
+ */
+function send_rice_prize_msg($open_id,$deatil_url){
+    $post_data = array(
+        "touser" => $open_id,
+        "template_id" => 'vffIekz48NrxDRNbiGP5_xTvCqBHusA_W5pidHhGaHs',
+        "url" =>$deatil_url,
+        "topcolor" => "#FF0000",
+        "data" => array(
+            "first" => array("value" => "朋友说萌娃比赛领取奖品啦！"),
+            "keyword1" => array("value" => "五常稻花香大米1元领"),
+            "keyword2" => array("value" => "价值15元的五常稻花香大米1份"),
+            "remark" => array("value" => "点击链接马上领取。", "color" => "#FF8800")
+        )
+    );
+    return send_weixin_message($post_data);
+}
+
+/**
  * @param $pid
  * @param $defUri
  * @return string

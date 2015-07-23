@@ -329,7 +329,7 @@ class WeixinComponent extends Component
             "template_id" => $this->wx_message_template_ids["PACKET_RECEIVED"],
             "url" => $this->get_packet_url(),
             "topcolor" => "#FF0000",
-            "data" => array(
+             "data" => array(
                 "first" => array("value" => "亲，恭喜您获得朋友说红包！"),
                 "keyword1" => array("value" => $packet_name . "红包"),
                 "keyword2" => array("value" => $packet_money . "元"),
