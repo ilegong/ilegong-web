@@ -376,6 +376,10 @@ class WesharesController extends AppController {
         foreach ($weshareProductData as &$product) {
             $product['weshare_id'] = $weshareId;
             $product['price'] = ($product['price']*100);
+            $store = $product['store'];
+            if(empty($store)){
+                $product['store'] = 0;
+            }
         }
         return $this->WeshareProduct->saveAll($weshareProductData);
     }
