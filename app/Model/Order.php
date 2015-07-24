@@ -315,12 +315,12 @@ class Order extends AppModel {
     }
 
     public function count_to_confirm_received($uid) {
-        $result = $this->query('select count(1) as cnt, ifnull(sum(floor(total_all_price)), 0) as total_price from cake_orders where type!=9 and status='.ORDER_STATUS_SHIPPED.' and creator='.$uid.' and deleted='.DELETED_NO.' and published='.PUBLISH_YES);
+        $result = $this->query('select count(1) as cnt, ifnull(sum(floor(total_all_price)), 0) as total_price from cake_orders where type != 9 and status='.ORDER_STATUS_SHIPPED.' and creator='.$uid.' and deleted='.DELETED_NO.' and published='.PUBLISH_YES);
         return array($result[0][0]['cnt'], $result[0][0]['total_price']);
     }
 
     public function count_by_status($uid) {
-        $rtn = $this->query('select count(1) as cnt, status from cake_orders where type!=9 and consignee_name is not null and creator='.$uid.' and deleted='.DELETED_NO.' and published='.PUBLISH_YES.' group by status');
+        $rtn = $this->query('select count(1) as cnt, status from cake_orders where type != 9 and consignee_name is not null and creator='.$uid.' and deleted='.DELETED_NO.' and published='.PUBLISH_YES.' group by status');
         $count = array();
         foreach($rtn as $row) {
             $count[$row['cake_orders']['status']] = $row[0]['cnt'];
