@@ -372,6 +372,13 @@ class WesharesController extends AppController {
         return;
     }
 
+    public function share_order_list($weshareId){
+        $this->layout = 'weshare_bootstrap';
+        $statics_data = $this->get_weshare_buy_info($weshareId,true);
+        $this->set($statics_data);
+        $this->set('weshareId',$weshareId);
+    }
+
     private function saveWeshareProducts($weshareId, $weshareProductData) {
         foreach ($weshareProductData as &$product) {
             $product['weshare_id'] = $weshareId;
@@ -405,7 +412,7 @@ class WesharesController extends AppController {
                 'status' => $order_status,
                 'deleted' => DELETED_NO
             ),
-            'fields' => array('id', 'creator', 'created', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status'),
+            'fields' => array('id', 'creator', 'created', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price'),
             'order' => array('created DESC')
         ));
         $orderIds = Hash::extract($orders, '{n}.Order.id');
@@ -544,11 +551,12 @@ class WesharesController extends AppController {
     private function process_send_msg($shareInfo, $msg) {
         $share_id = $shareInfo['Weshare']['id'];
         $share_creator = $shareInfo['Weshare']['creator'];
+        //select order paid to send msg
         $orders = $this->Order->find('all', array(
             'conditions' => array(
                 'type' => ORDER_TYPE_WESHARE_BUY,
                 'member_id' => $share_id,
-                'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED)
+                'status' => array(ORDER_STATUS_PAID)
             ),
             'fields' => array(
                 'id', 'consignee_name', 'consignee_address', 'creator'

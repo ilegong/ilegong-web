@@ -2149,6 +2149,14 @@ function group_buy_is_available($group_buy_label){
     return !in_array($group_buy_label,$not_available_group_label);
 }
 
+function get_share_order_cart_display_name($carts){
+    $product_names = array();
+    foreach($carts as $item){
+        $product_names[] = $item['name'];
+    }
+    return implode(', ',$product_names);
+}
+
 /**
  * auto load spl lib
  */
