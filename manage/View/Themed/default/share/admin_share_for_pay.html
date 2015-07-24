@@ -24,49 +24,51 @@
 <h1>点击查询
     <small>(<i class="glyphicon glyphicon-filter"></i>)</small>
 </h1>
-<div class="row">
-    <div class="col-md-10">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title">Developers</h3>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">待打款</h3>
 
-                <div class="pull-right">
-							<span class="clickable filter" data-toggle="tooltip" title="Toggle table filter"
+                    <div class="pull-right">
+							<span class="clickable filter" data-toggle="tooltip" title="查询"
                                   data-container="body">
 								<i class="glyphicon glyphicon-filter"></i>
 							</span>
+                    </div>
                 </div>
-            </div>
-            <div class="panel-body">
-                <input type="text" class="form-control" id="dev-table-filter" data-action="filter"
-                       data-filters="#dev-table" placeholder="Filter Developers"/>
-            </div>
-            <table class="table table-hover" id="dev-table">
-                <thead>
-                <tr>
-                    <th>分享ID</th>
-                    <th>分享人</th>
-                    <th>分享人手机号码</th>
-                    <th>分享名称</th>
-                    <th>应该结算金额</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                {{loop $weshares $share}}
+                <div class="panel-body">
+                    <input type="text" class="form-control" id="dev-table-filter" data-action="filter"
+                           data-filters="#dev-table" placeholder="查询"/>
+                </div>
+                <table class="table table-hover" id="dev-table">
+                    <thead>
+                    <tr>
+                        <th>分享ID</th>
+                        <th>分享人</th>
+                        <th>分享人手机号码</th>
+                        <th>分享名称</th>
+                        <th>应该结算金额</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{loop $weshares $share}}
                     <tr>
                         <td>{{$share['id']}}</td>
                         <td>{{$creators[$share['creator']]['nickname']}}</td>
                         <td>{{$creators[$share['creator']]['mobilephone']}}</td>
                         <td>{{$share['title']}}</td>
-                        <td>{{$weshare_summery[$share['id']]['total_price']}}</td>
+                        <td>{{$weshare_summery[$share['id']]['total_price']||0}}</td>
                         <td><!-- Indicates a successful or positive action -->
-                            <button type="button" class="btn btn-success set-share-paid">置为已付款</button>
+                            <a href="/manage/admin/share/set_share_paid/{{$share['id']}}" type="button" class="btn btn-success set-share-paid">置为已付款</a>
                         </td>
                     </tr>
-                {{/loop}}
-                </tbody>
-            </table>
+                    {{/loop}}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -117,7 +119,6 @@
     $(function () {
         // attach table filter plugin to inputs
         $('[data-action="filter"]').filterTable();
-
         $('.container').on('click', '.panel-heading span.filter', function (e) {
             var $this = $(this),
                     $panel = $this.parents('.panel');
@@ -128,5 +129,6 @@
             }
         });
         $('[data-toggle="tooltip"]').tooltip();
+
     })
 </script>

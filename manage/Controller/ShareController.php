@@ -17,6 +17,11 @@ class ShareController extends AppController{
         $this->layout='bootstrap_layout';
     }
 
+    public function admin_set_share_paid($shareId) {
+        $this->Weshare->updateAll(array('settlement' => 1), array('id' => $shareId, 'status' => array(1, 2)));
+        $this->redirect(array('action' => 'admin_share_for_pay'));
+    }
+
     public function admin_share_for_pay(){
         $weshares = $this->Weshare->find('all',array(
             'conditions' => array(
