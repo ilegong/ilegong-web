@@ -25,6 +25,16 @@ class ShareController extends AppController{
             )
         ));
         $weshare_ids = Hash::extract($weshares, '{n}.Weshare.id');
+        $weshare_creator_ids = Hash::extract($weshares, '{n}.Weshare.creator');
+        $creators = $this->User->find('all', array(
+            'conditions' => array(
+                'id' => $weshare_creator_ids
+            ),
+            'fields' => array(
+                'id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'mobilephone'
+            )
+        ));
+        $creators = Hash::combine($creators, '{n}.User.id','{n}.User');
         $weshares = Hash::combine($weshares,'{n}.Weshare.id', '{n}.Weshare');
         $orders = $this->Order->find('all', array(
             'conditions' => array(
@@ -33,7 +43,18 @@ class ShareController extends AppController{
                 'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED)
             )
         ));
-
+        $summery_data = array();
+        foreach($orders as $item){
+            $member_id = $item['Order']['member_id'];
+            $order_total_price = $item['Order']['total_all_price'];
+            if(!isset($summery_data[$member_id])){
+                $summery_data[$member_id] = array('total_price' => 0);
+            }
+            $summery_data[$member_id]['total_price'] = $summery_data[$member_id]['total_price']+$order_total_price;
+        }
+        $this->set('weshares',$weshares);
+        $this->set('weshare_summery',$summery_data);
+        $this->set('creators', $creators);
     }
 
     public function admin_make_order($num=1,$weshare_id){
@@ -92,7 +113,13 @@ class ShareController extends AppController{
                 'DATE(created)' => date('Y-m-d'),
             )
         ));
-
+        $share_pay_count = $this->Weshare->find('count',array(
+            'conditions' => array(
+                'status' => array(1,2),
+                'settlement' => 0
+            )
+        ));
+        $this->set('share_pay_count', $share_pay_count);
         $this->set('share_count', $weshare_count);
         $this->set('share_creator_count', $weshare_creator_count);
         $this->set('join_share_count', $join_weshare_count);
