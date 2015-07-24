@@ -46,6 +46,7 @@
                     <thead>
                     <tr>
                         <th>分享ID</th>
+                        <th>分享人Id</th>
                         <th>分享人</th>
                         <th>分享人手机号码</th>
                         <th>分享名称</th>
@@ -58,6 +59,7 @@
                     {{loop $weshares $share}}
                     <tr>
                         <td>{{$share['id']}}</td>
+                        <td>{{$creators[$share['creator']]['id']}}</td>
                         <td>{{$creators[$share['creator']]['nickname']}}</td>
                         <td>{{$creators[$share['creator']]['mobilephone']}}</td>
                         <td>{{$share['title']}}</td>
