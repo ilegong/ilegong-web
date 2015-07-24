@@ -10,12 +10,64 @@ class WxSendMsgController extends AppController{
 
     var $name = 'WxSendMsg';
 
-    var $uses = array('Order','Oauthbind','TuanTeam','TuanProduct','ProductTry');
+    var $uses = array('Order','Oauthbind','TuanTeam','TuanProduct','ProductTry','Weshare', 'WeshareAddress', 'User');
+
+    public $components = array('Weixin');
 
     public function admin_to_send_wx_msg(){
         //$this->getZitiOrderUserIds();
     }
 
+
+    public function admin_send_wx_msg_for_share($weshareId){
+        $msg = '今天早上九点顶秀青溪西门取鸡蛋啦';
+        $shareInfo = $this->Weshare->find('first',array(
+            'conditions' => array(
+                'id' => $weshareId
+            )
+        ));
+        $share_id = $shareInfo['Weshare']['id'];
+        $share_creator = $shareInfo['Weshare']['creator'];
+        $orders = $this->Order->find('all', array(
+            'conditions' => array(
+                'type' => 9,
+                'member_id' => $share_id,
+                'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED)
+            ),
+            'fields' => array(
+                'id', 'consignee_name', 'consignee_address', 'creator'
+            )
+        ));
+        //$order_user_ids = Hash::extract($orders, '{n}.Order.creator');
+        //$order_user_ids[] = $share_creator;
+        $order_user_ids = array(633345);
+        $users = $this->User->find('all', array(
+            'conditions' => array(
+                'id' => $order_user_ids
+            ),
+            'fields' => array('id', 'nickname')
+        ));
+        $users = Hash::combine($users, '{n}.User.id', '{n}.User');
+        $userOauthBinds = $this->Oauthbind->find('all', array(
+            'conditions' => array(
+                'user_id' => $order_user_ids
+            ),
+            'fields' => array('user_id', 'oauth_openid')
+        ));
+        $userOauthBinds = Hash::combine($userOauthBinds, '{n}.Oauthbind.user_id','{n}.Oauthbind.oauth_openid');
+        $desc = '感谢大家对'.$users[$share_creator]['nickname'].'的支持，分享快乐。';
+        $detail_url = WX_HOST.'/weshares/view/'.$share_id;
+        foreach($orders as $order){
+            $order_id = $order['Order']['id'];
+            $order_user_id = $order['Order']['creator'];
+            $open_id = $userOauthBinds[$order_user_id];
+            $order_user_name = $users[$order_user_id]['nickname'];
+            $title = $order_user_name.'你好，'.$msg;
+            $conginess_name = $order['Order']['consignee_name'];
+            $conginess_address = $order['Order']['consignee_address'];
+            $this->Weixin->send_share_product_arrival($open_id, $detail_url, $title, $order_id, $conginess_address, $conginess_name, $desc);
+        }
+    }
 
     public function admin_send_wx_msg_for_rice() {
         $this->autoRender = false;

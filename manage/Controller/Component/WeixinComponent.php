@@ -126,4 +126,21 @@ class WeixinComponent extends Component
     public function send_weixin_message($post_data) {
         return send_weixin_message($post_data, $this);
     }
+
+    public function send_share_product_arrival($user_open_id, $detail_url, $title, $order_id, $address, $user_info, $desc) {
+        $post_data = array(
+            "touser" => $user_open_id,
+            "template_id" => '3uA5ShDuM6amaaorl6899yMj9QvBmIiIAl7T9_JfR54',
+            "url" => $detail_url,
+            "topcolor" => "#FF0000",
+            "data" => array(
+                "first" => array("value" => $title),
+                "keyword1" => array("value" => $order_id),
+                "keyword2" => array("value" => $address),
+                "keyword3" => array("value" => $user_info),
+                "remark" => array("value" => $desc, "color" => "#FF8800")
+            )
+        );
+        $this->send_weixin_message($post_data);
+    }
 }
