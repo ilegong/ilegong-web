@@ -60,7 +60,11 @@
                         <td>{{$creators[$share['creator']]['nickname']}}</td>
                         <td>{{$creators[$share['creator']]['mobilephone']}}</td>
                         <td>{{$share['title']}}</td>
-                        <td>{{$weshare_summery[$share['id']]['total_price']||0}}</td>
+                        {{if $$summery_data[$share['id']]}}
+                        <td>{{$weshare_summery[$share['id']]['total_price']}}</td>
+                        {{else}}
+                        <td>0</td>
+                        {{/if}}
                         <td><!-- Indicates a successful or positive action -->
                             <a href="/manage/admin/share/set_share_paid/{{$share['id']}}" type="button" class="btn btn-success set-share-paid">置为已付款</a>
                         </td>
