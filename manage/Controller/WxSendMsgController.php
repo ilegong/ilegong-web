@@ -20,6 +20,7 @@ class WxSendMsgController extends AppController{
 
 
     public function admin_send_wx_msg_for_share($weshareId){
+        $this->autoRender = false;
         $msg = '今天早上九点顶秀青溪西门取鸡蛋啦';
         $shareInfo = $this->Weshare->find('first',array(
             'conditions' => array(
@@ -38,9 +39,9 @@ class WxSendMsgController extends AppController{
                 'id', 'consignee_name', 'consignee_address', 'creator'
             )
         ));
-        //$order_user_ids = Hash::extract($orders, '{n}.Order.creator');
-        //$order_user_ids[] = $share_creator;
-        $order_user_ids = array(633345);
+        $order_user_ids = Hash::extract($orders, '{n}.Order.creator');
+        $order_user_ids[] = $share_creator;
+        //$order_user_ids = array(633345);
         $users = $this->User->find('all', array(
             'conditions' => array(
                 'id' => $order_user_ids
@@ -67,6 +68,8 @@ class WxSendMsgController extends AppController{
             $conginess_address = $order['Order']['consignee_address'];
             $this->Weixin->send_share_product_arrival($open_id, $detail_url, $title, $order_id, $conginess_address, $conginess_name, $desc);
         }
+        echo json_encode(array('result' => true));
+        return;
     }
 
     public function admin_send_wx_msg_for_rice() {
