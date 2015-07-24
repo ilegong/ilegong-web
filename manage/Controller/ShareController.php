@@ -36,7 +36,7 @@ class ShareController extends AppController{
                 'id' => $weshare_creator_ids
             ),
             'fields' => array(
-                'id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'mobilephone'
+                'id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'mobilephone', 'payment'
             )
         ));
         $creators = Hash::combine($creators, '{n}.User.id','{n}.User');
