@@ -66,7 +66,7 @@
                         <td>0</td>
                         {{/if}}
                         <td><!-- Indicates a successful or positive action -->
-                            <a href="/manage/admin/share/set_share_paid/{{$share['id']}}" type="button" class="btn btn-success set-share-paid">置为已付款</a>
+                            <a data-name="{{$share['title']}}" data-id="{{$share['id']}}" type="button" class="btn btn-success set-share-paid">置为已付款</a>
                         </td>
                     </tr>
                     {{/loop}}
@@ -122,6 +122,15 @@
 
     $(function () {
         // attach table filter plugin to inputs
+        $('a.set-share-paid').on('click',function(){
+            var $me = $(this);
+            var title = $me.data('name');
+            var shareId = $me.data('id');
+            var r = confirm("确认"+title+"为已付款");
+            if(r){
+                window.location.href='/manage/admin/share/set_share_paid/'+shareId;
+            }
+        });
         $('[data-action="filter"]').filterTable();
         $('.container').on('click', '.panel-heading span.filter', function (e) {
             var $this = $(this),
