@@ -427,7 +427,7 @@ class WesharesController extends AppController {
             'conditions' => array(
                 'order_id' => $orderIds,
                 'type' => ORDER_TYPE_WESHARE_BUY,
-                'not' => array('order_id' => null)
+                'not' => array('order_id' => null, 'order_id' => '')
             ),
             'fields' => array('id', 'name', 'order_id', 'num', 'product_id', 'price')
         ));
