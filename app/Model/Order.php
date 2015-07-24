@@ -292,30 +292,30 @@ class Order extends AppModel {
 
     public function find_all_my_order_byId($orderIds, $uid) {
         return $this->find('all', array(
-            'conditions' => array('id' => $orderIds, 'creator' => $uid),
+            'conditions' => array('not' => array('type' => ORDER_TYPE_WESHARE_BUY),'id' => $orderIds, 'creator' => $uid),
         ));
     }
 
     public function count_to_comments($uid) {
         return $this->find('count', array(
-            'conditions' => array('creator' => $uid, 'status' => array(ORDER_STATUS_RECEIVED, ORDER_STATUS_SHIPPED), 'is_comment != '.ORDER_COMMENTED),
+            'conditions' => array('not' => array('type' => ORDER_TYPE_WESHARE_BUY),'creator' => $uid, 'status' => array(ORDER_STATUS_RECEIVED, ORDER_STATUS_SHIPPED), 'is_comment != '.ORDER_COMMENTED),
         ));
     }
 
     public function count_received_order($uid) {
         return $this->find('count', array(
-            'conditions' => array('creator' => $uid, 'status' => array(ORDER_STATUS_RECEIVED)),
+            'conditions' => array('not' => array('type' => ORDER_TYPE_WESHARE_BUY),'creator' => $uid, 'status' => array(ORDER_STATUS_RECEIVED)),
         ));
     }
 
     public function count_paid_order($uid) {
         return $this->find('count', array(
-            'conditions' => array('creator' => $uid, 'status' => array(ORDER_STATUS_PAID,ORDER_STATUS_RECEIVED,ORDER_STATUS_SHIPPED,ORDER_STATUS_DONE,ORDER_STATUS_COMMENT)),
+            'conditions' => array('not' => array('type' => ORDER_TYPE_WESHARE_BUY),'creator' => $uid, 'status' => array(ORDER_STATUS_PAID,ORDER_STATUS_RECEIVED,ORDER_STATUS_SHIPPED,ORDER_STATUS_DONE,ORDER_STATUS_COMMENT)),
         ));
     }
 
     public function count_to_confirm_received($uid) {
-        $result = $this->query('select count(1) as cnt, ifnull(sum(floor(total_all_price)), 0) as total_price from cake_orders where status='.ORDER_STATUS_SHIPPED.' and creator='.$uid.' and deleted='.DELETED_NO.' and published='.PUBLISH_YES);
+        $result = $this->query('select count(1) as cnt, ifnull(sum(floor(total_all_price)), 0) as total_price from cake_orders where type!=9 and status='.ORDER_STATUS_SHIPPED.' and creator='.$uid.' and deleted='.DELETED_NO.' and published='.PUBLISH_YES);
         return array($result[0][0]['cnt'], $result[0][0]['total_price']);
     }
 
