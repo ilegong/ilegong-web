@@ -17,6 +17,25 @@ class ShareController extends AppController{
         $this->layout='bootstrap_layout';
     }
 
+    public function admin_share_for_pay(){
+        $weshares = $this->Weshare->find('all',array(
+            'conditions' => array(
+                'status' => array(1,2),
+                'settlement' => 0
+            )
+        ));
+        $weshare_ids = Hash::extract($weshares, '{n}.Weshare.id');
+        $weshares = Hash::combine($weshares,'{n}.Weshare.id', '{n}.Weshare');
+        $orders = $this->Order->find('all', array(
+            'conditions' => array(
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'member_id' => $weshare_ids,
+                'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED)
+            )
+        ));
+
+    }
+
     public function admin_make_order($num=1,$weshare_id){
         $this->autoRender=false;
         /**
