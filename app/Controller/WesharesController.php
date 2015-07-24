@@ -426,7 +426,8 @@ class WesharesController extends AppController {
         $carts = $this->Cart->find('all', array(
             'conditions' => array(
                 'order_id' => $orderIds,
-                'type' => ORDER_TYPE_WESHARE_BUY
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'not' => array('order_id' => null)
             ),
             'fields' => array('id', 'name', 'order_id', 'num', 'product_id', 'price')
         ));
