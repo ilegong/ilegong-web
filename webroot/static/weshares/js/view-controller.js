@@ -23,6 +23,7 @@
 		vm.buyProducts = buyProducts;
     vm.validateMobile = validateMobile;
     vm.validateUserName = validateUserName;
+    vm.validateUserAddress = validateUserAddress;
 
 		vm.submitOrder = submitOrder;
 		vm.confirmReceived = confirmReceived;
@@ -172,6 +173,11 @@
       return vm.sendMsgHasError;
     }
 
+    function validateUserAddress(){
+      vm.userAddressHasError =  _.isEmpty(vm.buyerAddress);
+      return vm.userAddressHasError;
+    }
+
     function getProductLeftNum(product){
       if(vm.ordersDetail.summery.details[product.id]){
         var product_buy_num = vm.ordersDetail.summery.details[product.id]['num'];
@@ -223,11 +229,14 @@
 		function buyProducts() {
 			var addressHasError = vm.validateAddress();
 			var productsHasError = vm.validateProducts();
-			if (addressHasError || productsHasError) {
+      var userAddress = vm.validateUserAddress();
+			if (addressHasError || productsHasError || userAddress) {
         if(addressHasError){
           alert('请选择地址');
         }else if(productsHasError){
           alert('请输入商品数量');
+        }else if(userAddress){
+          alert('请输入地址');
         }
 				return;
 			}

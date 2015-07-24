@@ -96,8 +96,8 @@
         </div>
     </div>
     <div class="clearfix" style="padding: 0 10px;">
-        <div class="form-group">
-            <input class='form-control' placeholder="输入地址" ng-model='vm.buyerAddress'/>
+        <div class="form-group" ng-class="{'has-error': vm.userAddressHasError}">
+            <input class='form-control' placeholder="输入地址" ng-model='vm.buyerAddress' ng-change='vm.validateUserAddress()'/>
             <p class='tips'>请输入收货人地址</p>
         </div>
     </div>
