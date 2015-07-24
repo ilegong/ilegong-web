@@ -60,7 +60,7 @@
                         <td>{{$creators[$share['creator']]['nickname']}}</td>
                         <td>{{$creators[$share['creator']]['mobilephone']}}</td>
                         <td>{{$share['title']}}</td>
-                        {{if $$summery_data[$share['id']]}}
+                        {{if $weshare_summery[$share['id']]}}
                         <td>{{$weshare_summery[$share['id']]['total_price']}}</td>
                         {{else}}
                         <td>0</td>
