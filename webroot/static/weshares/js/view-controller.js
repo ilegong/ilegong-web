@@ -268,17 +268,16 @@
 		}
 
     function stopShare(){
-      bootbox.confirm("是否截止分享?", function(result) {
-        if(!result){
-          return;
+      var confirmResult = window.confirm('是否截止分享?');
+      if(!confirmResult){
+        return false;
+      }
+      $http.post('/weshares/stopShare/' + vm.weshare.id).success(function (data) {
+        if(data.success){
+          vm.weshare.status = 1;
         }
-        $http.post('/weshares/stopShare/' + vm.weshare.id).success(function (data) {
-          if(data.success){
-            vm.weshare.status = 1;
-          }
-        }).error(function (e) {
-          $log.log(e);
-        });
+      }).error(function (e) {
+        $log.log(e);
       });
     }
 
