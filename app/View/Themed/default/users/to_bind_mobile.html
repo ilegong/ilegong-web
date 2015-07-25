@@ -1,4 +1,12 @@
 {{$this->Html->css(array('mobile-view.css?v=1.5',))}}
+<div class="classlist_v2" style="z-index:100">
+    <ul class="clearfix">
+        <li><a href="{{empty($_GET['history']) ? 'javascript:history.back(-1);':$_GET['history']}}" class="back"></a></li>
+        <li class="line"></li>
+        <li><strong>绑定手机号码</strong></li>
+    </ul>
+</div>
+<br><br>
 <div class="mobile_custom" style="background-color: #f5f5f5;margin-top: 10px;">
     <input type="hidden" id="order_id" value="{{$orderId}}"/>
     <input type="hidden" id="bind_from" value="{{$from}}"/>

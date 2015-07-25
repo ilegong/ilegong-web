@@ -45,17 +45,14 @@
                         </div>
                     </div>
                     <div class="offer-content">
-                        <h3 class="lead">
-                            序号:&nbsp;&nbsp;{{$order_index}}
-                        </h3>
-                        <h3 class="lead">
-                            产品:{{get_share_order_cart_display_name($order_cart_map[$item_order['id']])}}
-                        </h3>
                         <p>
-                            联系方式:&nbsp;&nbsp;{{$item_order['consignee_name']}}&nbsp;&nbsp;{{$item_order['consignee_address']}}&nbsp;&nbsp;{{$item_order['consignee_mobilephone']}}
-                            <br>金额:&nbsp;&nbsp;{{$item_order['total_all_price']}}
-                            <br>
-                            <button type="button" data-id="{{$item_order['id']}}" class="btn btn-info btn-sm pull-left" name="set_order_shipped">发货</button>
+                            <strong>序号:</strong>&nbsp;&nbsp;<font color="red">{{$order_index}}</font><br>
+                            <strong>商品:</strong>&nbsp;&nbsp;{{get_share_order_cart_display_name($order_cart_map[$item_order['id']])}}<br>
+                            <strong>微信昵称:</strong>&nbsp;&nbsp;{{$users[$item_order['creator']]['nickname']}}<br>
+                            <strong>收货人:</strong>&nbsp;&nbsp;{{$item_order['consignee_name']}}&nbsp;&nbsp;手机:&nbsp;&nbsp;{{$item_order['consignee_mobilephone']}}<br>
+                            <strong>地址:</strong>&nbsp;&nbsp;{{$item_order['consignee_address']}}<br>
+                            <strong>金额:</strong>&nbsp;&nbsp;{{$item_order['total_all_price']}}<br>
+                            <button type="button" data-id="{{$item_order['id']}}" class="btn btn-info btn-sm pull-left" name="set_order_shipped">已发货</button>
                             <br>
                         </p>
                     </div>
@@ -70,15 +67,13 @@
                         </div>
                     </div>
                     <div class="offer-content">
-                        <h3 class="lead">
-                            序号:&nbsp;&nbsp;{{$order_index}}
-                        </h3>
-                        <h3 class="lead">
-                            产品:{{get_share_order_cart_display_name($order_cart_map[$item_order['id']])}}
-                        </h3>
                         <p>
-                            联系方式:&nbsp;&nbsp;{{$item_order['consignee_name']}}&nbsp;&nbsp;{{$item_order['consignee_address']}}&nbsp;&nbsp;{{$item_order['consignee_mobilephone']}}
-                            <br>金额:&nbsp;&nbsp;{{$item_order['total_all_price']}}
+                            <strong>序号:</strong>&nbsp;&nbsp;<font color="red">{{$order_index}}</font><br>
+                            <strong>商品:</strong>&nbsp;&nbsp;{{get_share_order_cart_display_name($order_cart_map[$item_order['id']])}}<br>
+                            <strong>微信昵称:</strong>&nbsp;&nbsp;{{$users[$item_order['creator']]['nickname']}}<br>
+                            <strong>收货人:</strong>&nbsp;&nbsp;{{$item_order['consignee_name']}}&nbsp;&nbsp;手机:&nbsp;&nbsp;{{$item_order['consignee_mobilephone']}}<br>
+                            <strong>地址:</strong>&nbsp;&nbsp;{{$item_order['consignee_address']}}<br>
+                            <strong>金额:</strong>&nbsp;&nbsp;{{$item_order['total_all_price']}}<br>
                         </p>
                     </div>
                 </div>
@@ -86,7 +81,7 @@
         {{/if}}
     {{/loop}}
 </div>
-<div class="row" style="margin-bottom: 20px;">
+<div class="row" style="margin-bottom: 30px;">
 
 </div>
 <div class="row" style="position: fixed;height: 46px;bottom: 0;width: 100%;">
@@ -118,21 +113,25 @@
 </div>
 <script>
     $(document).ready(function(){
-        $('button[name="set_order_shipped"]').on('click',function(e){
+        $('button[name="set_order_shipped"]').on('click', function (e) {
             e.preventDefault();
             var $me = $(this);
-            var order_id = $me.data('id');
-            var $parent = $me.parentsUntil('div.col-xs-12');
-            $.getJSON('/weshares/confirmReceived/'+order_id,function(data){
-                if(data['success']){
-                    $parent.removeClass('offer-success').addClass('offer-default');
-                    $('div.shape-text', $parent).text('已发货');
-                    $me.prev().remove();
-                    $me.next().remove();
-                    $me.remove();
-                }else{
-                    alert('修改失败');
+            bootbox.confirm("确定已发货?", function (result) {
+                if (!result) {
+                    return;
                 }
+                var order_id = $me.data('id');
+                var $parent = $me.parentsUntil('div.col-xs-12');
+                $.getJSON('/weshares/confirmReceived/' + order_id, function (data) {
+                    if (data['success']) {
+                        $parent.removeClass('offer-success').addClass('offer-default');
+                        $('div.shape-text', $parent).text('已发货');
+                        $me.next().remove();
+                        $me.remove();
+                    } else {
+                        alert('修改失败');
+                    }
+                });
             });
         });
         $('button[name="send_product_arrival_msg"]').on('click', function (e) {
