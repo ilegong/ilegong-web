@@ -13,6 +13,13 @@
     </dl>
     <div class="comment comment_bg" style="padding: 0.5em;">
         <div style="position:relative;" name="comment-place">
+            <input type="radio" value="1" name="paymentType" checked="checked">支付宝
+            &nbsp;&nbsp;&nbsp;
+            <input type="radio" value="2" name="paymentType">银行卡
+        </div>
+    </div>
+    <div class="comment comment_bg" style="padding: 0.5em;">
+        <div style="position:relative;" name="comment-place">
             <textarea name="userPayment" cols="" rows="2" placeholder="您的支付宝或银行卡信息,方便系统给您转账,截团后三个工作日内打款" style="height: auto;">{{$user['User']['payment']}}</textarea>
         </div>
     </div>
@@ -78,6 +85,12 @@
         }
 
         function handleSaveInfo(payment,description){
+            var paymentType = $('input[name=paymentType]:checked').val();
+            if(paymentType==1){
+                payment = '支付宝: '+payment;
+            }else{
+                payment = '银行卡: '+payment;
+            }
             $.post('/users/complete',{payment:payment,description:description},function(data){
                 if(data['success']){
                     if(!fromVal) {
