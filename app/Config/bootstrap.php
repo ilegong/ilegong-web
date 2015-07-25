@@ -2152,7 +2152,7 @@ function group_buy_is_available($group_buy_label){
 function get_share_order_cart_display_name($carts){
     $product_names = array();
     foreach($carts as $item){
-        $product_names[] = $item['name'];
+        $product_names[] = $item['name'].'X'.$item['num'];
     }
     return implode(', ',$product_names);
 }

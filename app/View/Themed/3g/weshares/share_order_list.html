@@ -1,26 +1,19 @@
 <link href="/static/weshares/css/order-list.css?v0.0.1" rel="stylesheet">
-<div class="row">
-    <div class="btn-group btn-group-justified" role="group">
-        <div class="btn-group" role="group">
-            <a href="/weshares/view/{{$weshareId}}" class="btn btn-info">返回分享</a>
-        </div>
-        <div class="btn-group" role="group">
-            <a href="#" type="button" class="btn btn-success">订单列表</a>
-        </div>
-        <div class="btn-group" role="group">
-            <button type="button" class="btn btn-warning">取货提醒</button>
-        </div>
-    </div>
+<div class="row" style="position: fixed;height: 46px;top: 0;width: 100%;z-index: 999;">
+    <ol class="breadcrumb">
+        <li><a href="/weshares/view/{{$weshareId}}">< 返回分享</a></li>
+    </ol>
 </div>
+<br><br>
 {{if !empty($summery['details'])}}
 <div class="row">
-    <h3>总计</h3>
+    <h4>总计</h4>
     <table class="table">
         <thead>
             <tr>
                 <td>商品</td>
                 <td>数量</td>
-                <td>合计</td>
+                <td>金额</td>
             </tr>
         </thead>
         <tbody>
@@ -33,14 +26,16 @@
             {{/loop}}
         </tbody>
         <tr>
-            <td colspan="3">总金额:{{$summery['all_total_price']/100}}&nbsp;&nbsp;&nbsp;总购买人数:{{$summery['all_buy_user_count']}}</td>
+            <td colspan="3">总金额:&nbsp;<font color="red">{{$summery['all_total_price']/100}}</font>&nbsp;&nbsp;&nbsp;总购买人数:&nbsp;<font color="red">{{$summery['all_buy_user_count']}}</font></td>
         </tr>
     </table>
 </div>
 {{/if}}
 <div class="row">
-    <h3>订单列表</h3>
+    <h4>订单列表</h4>
+    <?php $order_index=0 ?>
     {{loop $orders $item_order}}
+        <?php $order_index = $order_index+1; ?>
         {{if $item_order['status']==1}}
             <div class="col-xs-12">
                 <div class="offer offer-success">
@@ -51,13 +46,16 @@
                     </div>
                     <div class="offer-content">
                         <h3 class="lead">
+                            序号:&nbsp;&nbsp;{{$order_index}}
+                        </h3>
+                        <h3 class="lead">
                             产品:{{get_share_order_cart_display_name($order_cart_map[$item_order['id']])}}
                         </h3>
                         <p>
                             联系方式:&nbsp;&nbsp;{{$item_order['consignee_name']}}&nbsp;&nbsp;{{$item_order['consignee_address']}}&nbsp;&nbsp;{{$item_order['consignee_mobilephone']}}
                             <br>金额:&nbsp;&nbsp;{{$item_order['total_all_price']}}
                             <br>
-                            <button type="button" class="btn btn-info btn-sm pull-left">发货</button>
+                            <button type="button" data-id="{{$item_order['id']}}" class="btn btn-info btn-sm pull-left" name="set_order_shipped">发货</button>
                             <br>
                         </p>
                     </div>
@@ -73,6 +71,9 @@
                     </div>
                     <div class="offer-content">
                         <h3 class="lead">
+                            序号:&nbsp;&nbsp;{{$order_index}}
+                        </h3>
+                        <h3 class="lead">
                             产品:{{get_share_order_cart_display_name($order_cart_map[$item_order['id']])}}
                         </h3>
                         <p>
@@ -85,3 +86,48 @@
         {{/if}}
     {{/loop}}
 </div>
+<div class="row" style="position: fixed;height: 46px;bottom: 0;width: 100%;">
+    <button data-id="{{$weshareId}}" name="send_product_arrival_msg" type="button" class="btn btn-warning btn-lg btn-block" style="border-radius:0px;">取货提醒</button>
+</div>
+<script>
+    $(document).ready(function(){
+        $('button[name="set_order_shipped"]').on('click',function(e){
+            e.preventDefault();
+            var $me = $(this);
+            var order_id = $me.data('id');
+            var $parent = $me.parentsUntil('div.col-xs-12');
+            $.getJSON('/weshares/confirmReceived/'+order_id,function(data){
+                if(data['success']){
+                    $parent.removeClass('offer-success').addClass('offer-default');
+                    $('div.shape-text', $parent).text('已发货');
+                    $me.prev().remove();
+                    $me.next().remove();
+                    $me.remove();
+                }else{
+                    alert('修改失败');
+                }
+            });
+        });
+        $('button[name="send_product_arrival_msg"]').on('click', function (e) {
+            e.preventDefault();
+            var msg = prompt("请输入到货提醒信息");
+            if(!msg||!msg.trim()){
+                return;
+            }
+            var id = $(this).data('id');
+            var postData = {msg: msg, share_id: id};
+            $.ajax({
+                type: 'POST',
+                url: '/weshares/send_arrival_msg',
+                data: JSON.stringify(postData), // or JSON.stringify ({name: 'jonas'}),
+                success: function (data) {
+                    if(data['success']){
+                        alert('发送成功');
+                    }
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+        });
+    });
+</script>
