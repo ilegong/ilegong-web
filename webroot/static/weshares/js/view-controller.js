@@ -35,6 +35,8 @@
 
     vm.toShareOrderList = toShareOrderList;
 
+    vm.createMyShare = createMyShare;
+
     vm.toUpdate = toUpdate;
     vm.stopShare = stopShare;
 
@@ -279,6 +281,15 @@
       }).error(function (e) {
         $log.log(e);
       });
+    }
+
+    function createMyShare(){
+      var wx_article = 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=209712305&idx=1&sn=ddb8431d97100d7e6305c2bc46d9ae75#rd';
+      if(vm.currentUser['mobile']&&vm.currentUser['payment']){
+        window.location.href='/weshares/add';
+      }else{
+        window.location.href = wx_article;
+      }
     }
 
     function toShareOrderList(){

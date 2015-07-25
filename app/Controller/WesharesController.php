@@ -40,8 +40,27 @@ class WesharesController extends AppController {
     }
 
     public function add(){
+        $currentUser = $this->currentUser;
+        $uid = $currentUser['id'];
+        $user_fields = $this->query_user_fileds;
+        $user_fields[] = 'mobilephone';
+        $user_fields[] = 'payment';
+        $current_user = $this->User->find('first', array(
+            'conditions' => array(
+                'id' => $uid
+            ),
+            'recursive' => 1, //int
+            'fields' => $user_fields,
+        ));
+        if(empty($current_user['User']['mobile'])){
+            $this->redirect('/users/to_bind_mobile?from=share');
+            return;
+        }
+        if(empty($current_user['User']['payment'])){
+            $this->redirect('/users/complete_user_info?from=share');
+            return;
+        }
         if(parent::is_weixin()){
-            $currentUser = $this->currentUser;
             $wexin_params = $this->set_weixin_share_data($currentUser['id'],0);
             $this->set($wexin_params);
             $title = $currentUser['nickname'].'邀请你一起来加入分享';
@@ -102,12 +121,15 @@ class WesharesController extends AppController {
         $is_me = $uid==$weshareInfo['creator']['id'];
         $ordersDetail = $this->get_weshare_buy_info($weshareId,$is_me);
         $weixinInfo = $this->set_weixin_share_data($uid,$weshareId);
+        $user_fields = $this->query_user_fileds;
+        $user_fields[] = 'mobilephone';
+        $user_fields[] = 'payment';
         $current_user = $this->User->find('first', array(
             'conditions' => array(
                 'id' => $uid
             ),
             'recursive' => 1, //int
-            'fields' => $this->query_user_fileds,
+            'fields' => $user_fields,
         ));
         $consignee = $this->getShareConsignees($uid);
         $creatorId = $weshareInfo['creator']['id'];

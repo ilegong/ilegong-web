@@ -141,15 +141,22 @@
             $.post('/users/mobile_bind', {'mobile': mobile, 'code': code, 'from':from_value}, function (data) {
                 var result = JSON.parse(data);
                 if(!result['code']){
+                    if(from_value=='share'){
+                        ref_url = '/users/complete_user_info?from=share'
+                    }
                     showTip(result['msg'],function(){
                         window.location.href = ref_url;
                     });
                 }else{
                     if (result['code'] === 2) {
                         if(from_value&&from_value!='null'){
-                            showTip('该手机号已经被注册',function(){
-                                window.location.href = ref_url;
-                            });
+                            if(from_value=='share'){
+                                showTip('该手机号已经被注册,请联系管理员');
+                            }else{
+                                showTip('该手机号已经被注册',function(){
+                                    window.location.href = ref_url;
+                                });
+                            }
                         }else{
                             $bindUserName = result['username'];
                             if($bindUserName&&$bindUserName!="null"){

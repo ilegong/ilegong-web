@@ -1176,7 +1176,10 @@ class UsersController extends AppController {
 
     function complete_user_info(){
         $this->pageTitle="完善用户信息";
+        $from = $_REQUEST['from'];
+        $this->set('from',$from);
         $this->set('hideNav',true);
+
     }
 
     function complete(){

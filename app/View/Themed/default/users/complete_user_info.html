@@ -7,6 +7,7 @@
     </ul>
 </div>
 <div class="mobile_custom" style="background-color: #f5f5f5;margin-top: 40px;">
+    <input type="hidden" name="fromType" value="{{$from}}">
     <dl class="clearfix raty" style="margin-bottom: 10px">
         <dt class="comment_star fl">支付方式:</dt>
     </dl>
@@ -40,6 +41,8 @@
         var $addDescriptionEl = $('#to_add_description');
         var $tipsLayerEl = $('div.tipslayer');
         var $tipslayerBgEl = $('div.tipslayer_bg');
+        var $fromTypeEl = $('input[name="fromType"]');
+        var fromVal = $fromTypeEl.val();
         $('a[name="saveUserInfo"]').on('click',function(){
             var payment = $userPaymentEl.val();
             var description = $userDescriptionEl.val();
@@ -77,7 +80,11 @@
         function handleSaveInfo(payment,description){
             $.post('/users/complete',{payment:payment,description:description},function(data){
                 if(data['success']){
-                    
+                    if(!fromVal) {
+                        window.location.href = document.referrer;
+                    }else if(fromVal=='share'){
+                        window.location.href = '/weshares/add';
+                    }
                 }else{
                     alert('保存失败');
                 }
