@@ -51,7 +51,9 @@
         $http.get('/weshares/get_share_info/'+weshareId).success(function(data){
           $log.log(data);
           vm.weshare = data;
-          vm.weshare.addresses = vm.weshare.addresses||[{address: ''}];
+          if(!vm.weshare.addresses||vm.weshare.addresses.length==0){
+            vm.weshare.addresses = [{address: ''}];
+          }
         }).error(function(data){
         });
       }
