@@ -54,11 +54,14 @@
                 <span class='display-name' ng-hide="_.isEmpty(vm.getOrderDisplayName(order.id))" ng-bind="vm.getOrderDisplayName(order.id)"></span>
                 <span class='created-at' ng-bind="order.created"></span>
                 <div class="send-info" ng-if="vm.isOwner(order) || vm.isCreator()">
-                    <span>取货地址: </span>
+                    <span>姓名:</span>
+                    <span ng-bind="order.consignee_name"></span>
+                    <br>
+                    <span>手机:</span>
+                    <span ng-bind="order.consignee_mobilephone"></span>
+                    <br>
+                    <span>地址: </span>
                     <span ng-bind="order.consignee_address"></span>
-                    <br/>
-                    <span>联系方式: </span>
-                    <span ng-bind="vm.getConsigneeInfo(order)"></span>
                     <br/>
                     <a class="btn confirm-btn" ng-click="vm.confirmReceived(order)" ng-show="!vm.isOrderReceived(order)">确认收货</a>
                     <a class="btn order-confirmed-btn" ng-show="vm.isOrderReceived(order)">已取货</a>
