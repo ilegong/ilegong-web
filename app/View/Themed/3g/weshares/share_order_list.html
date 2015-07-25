@@ -1,4 +1,4 @@
-<link href="/static/weshares/css/order-list.css?v0.0.2" rel="stylesheet">
+<link href="/static/weshares/css/order-list.css?v0.0.3" rel="stylesheet">
 <div class="row">
     <div class="classlist">
         <a href="/weshares/view/{{$weshareId}}" class="back"></a>
@@ -51,7 +51,7 @@
                             <strong>序号:</strong>&nbsp;&nbsp;<font color="red">{{$order_index}}</font><br>
                             <strong>商品:</strong>&nbsp;&nbsp;{{get_share_order_cart_display_name($order_cart_map[$item_order['id']])}}<br>
                             <strong>微信昵称:</strong>&nbsp;&nbsp;{{$users[$item_order['creator']]['nickname']}}<br>
-                            <strong>收货人:</strong>&nbsp;&nbsp;{{$item_order['consignee_name']}}&nbsp;&nbsp;手机:&nbsp;&nbsp;{{$item_order['consignee_mobilephone']}}<br>
+                            <strong>收货人:</strong>&nbsp;&nbsp;{{$item_order['consignee_name']}}&nbsp;&nbsp;<strong>手机:</strong>&nbsp;&nbsp;{{$item_order['consignee_mobilephone']}}<br>
                             <strong>地址:</strong>&nbsp;&nbsp;{{$item_order['consignee_address']}}<br>
                             <strong>金额:</strong>&nbsp;&nbsp;{{$item_order['total_all_price']}}<br>
                             <button type="button" data-id="{{$item_order['id']}}" class="btn btn-info btn-sm pull-left" name="set_order_shipped">已发货</button>
@@ -73,7 +73,7 @@
                             <strong>序号:</strong>&nbsp;&nbsp;<font color="red">{{$order_index}}</font><br>
                             <strong>商品:</strong>&nbsp;&nbsp;{{get_share_order_cart_display_name($order_cart_map[$item_order['id']])}}<br>
                             <strong>微信昵称:</strong>&nbsp;&nbsp;{{$users[$item_order['creator']]['nickname']}}<br>
-                            <strong>收货人:</strong>&nbsp;&nbsp;{{$item_order['consignee_name']}}&nbsp;&nbsp;手机:&nbsp;&nbsp;{{$item_order['consignee_mobilephone']}}<br>
+                            <strong>收货人:</strong>&nbsp;&nbsp;{{$item_order['consignee_name']}}&nbsp;&nbsp;<strong>手机:</strong>&nbsp;&nbsp;{{$item_order['consignee_mobilephone']}}<br>
                             <strong>地址:</strong>&nbsp;&nbsp;{{$item_order['consignee_address']}}<br>
                             <strong>金额:</strong>&nbsp;&nbsp;{{$item_order['total_all_price']}}<br>
                         </p>
