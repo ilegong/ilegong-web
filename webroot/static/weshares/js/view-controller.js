@@ -268,12 +268,17 @@
 		}
 
     function stopShare(){
-      $http.post('/weshares/stopShare/' + vm.weshare.id).success(function (data) {
-        if(data.success){
-          vm.weshare.status = 1;
+      bootbox.confirm("是否截止分享?", function(result) {
+        if(!result){
+          return;
         }
-      }).error(function (e) {
-        $log.log(e);
+        $http.post('/weshares/stopShare/' + vm.weshare.id).success(function (data) {
+          if(data.success){
+            vm.weshare.status = 1;
+          }
+        }).error(function (e) {
+          $log.log(e);
+        });
       });
     }
 
