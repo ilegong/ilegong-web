@@ -74,7 +74,6 @@ class WesharesController extends AppController {
         $weshareData['creator'] = $uid;
         $weshareData['created'] = date('Y-m-d H:i:s');
         $images = $postDataArray['images'];
-        $images = Hash::extract($images, '{n}.url');
         $weshareData['images'] = implode('|', $images);
         $productsData = $postDataArray['products'];
         $addressesData = $postDataArray['addresses'];

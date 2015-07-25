@@ -28,7 +28,7 @@
         <ul class="clearfix images">
             <li class='image' ng-repeat="image in vm.weshare.images">
                 <a class='delete-badge' ng-click='vm.deleteImage(image)'></a>
-                <img ng-src="{{image.url}}"/>
+                <img ng-src="{{image}}"/>
             </li>
         </ul>
         <a class="btn upload-btn" ng-click="vm.chooseAndUploadImage()">点击上传图片</a>

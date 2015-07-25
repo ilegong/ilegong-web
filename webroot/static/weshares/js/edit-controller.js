@@ -24,6 +24,7 @@
     vm.dataCacheKey = 'cache_share_data';
 		activate();
     $scope.$watchCollection('vm.weshare', vm.saveCacheData);
+
 		function activate() {
 			vm.showShippmentInfo = false;
       var weshareId = angular.element(document.getElementById('weshareEditView')).attr('data-id');
@@ -90,7 +91,7 @@
               if (!imageUrl || imageUrl == 'false') {
                 return;
               }
-              vm.weshare.images.push({url: imageUrl});
+              vm.weshare.images.push(imageUrl);
             }).error(function (data, status, headers, config) {
               vm.messages.push({name: 'download image failed', detail: data});
             });
