@@ -1,8 +1,10 @@
-<link href="/static/weshares/css/order-list.css?v0.0.1" rel="stylesheet">
-<div class="row" style="position: fixed;height: 46px;top: 0;width: 100%;z-index: 999;">
-    <ol class="breadcrumb">
-        <li><a href="/weshares/view/{{$weshareId}}">< 返回分享</a></li>
-    </ol>
+<link href="/static/weshares/css/order-list.css?v0.0.2" rel="stylesheet">
+<div class="row">
+    <div class="classlist">
+        <a href="/weshares/view/{{$weshareId}}" class="back"></a>
+        订单统计
+        <a href="/weshares/user_share_info/{{$user_id}}" class="home"></a>
+    </div>
 </div>
 <br><br>
 {{if !empty($summery['details'])}}

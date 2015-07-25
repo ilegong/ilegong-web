@@ -373,9 +373,11 @@ class WesharesController extends AppController {
 
     public function share_order_list($weshareId){
         $this->layout = 'weshare_bootstrap';
+        $user_id = $this->currentUser['id'];
         $statics_data = $this->get_weshare_buy_info($weshareId,true);
         $this->set($statics_data);
         $this->set('hide_footer',true);
+        $this->set('user_id',$user_id);
         $this->set('weshareId',$weshareId);
     }
 
