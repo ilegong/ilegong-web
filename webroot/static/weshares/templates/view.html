@@ -7,7 +7,7 @@
             <s>已有<span ng-bind="vm.ordersDetail.summery.all_buy_user_count"></span>人报名</s>
         </li>
 
-        <li style="float: right;" ng-if="vm.isCreator()"><a class="statistics-btn" ng-click="vm.showStaticsDialog=true;vm.showLayer=true;">购买统计</a><a class="statistics-btn" ng-click="vm.toUpdate()">修改</a></li>
+        <li style="float: right;" ng-if="vm.isCreator()"><a class="statistics-btn" ng-click="vm.toShareOrderList()">购买统计</a><a class="statistics-btn" ng-click="vm.toUpdate()">修改</a></li>
         <li style="float: right;" ng-if="!vm.isCreator()"><a class="statistics-btn" href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=209712305&idx=1&sn=ddb8431d97100d7e6305c2bc46d9ae75#rd">我也要分享</a></li>
     </ul>
     <div class="introduction margin-bottom-12">
@@ -71,12 +71,7 @@
     </div>
 </div>
 
-<div ng-if="vm.weshare.status == 1">
-    <a ng-if="!vm.isCreator()" class="btn stop-btn">报名已截止</a>
-    <a ng-if="vm.isCreator()" class="btn normal-btn" ng-click="vm.showSendMsgDialog=true;vm.showLayer=true;">发送到货提醒</a>
-</div>
-
-<a ng-if="vm.weshare.status == 2" class="btn stop-btn">报名已截止</a>
+<a ng-if="vm.weshare.status == 2||vm.weshare.status == 1" class="btn stop-btn">报名已截止</a>
 
 <div ng-if="vm.weshare.status==0" class="clearfix starttuan_btn">
     <a ng-if="vm.isCreator()" ng-click="vm.stopShare()" style="background-color: #ffa200;">截止报名</a>
@@ -113,35 +108,7 @@
         <a ng-click='vm.submitOrder(1);' style="background-color: #ffa200;">支付宝</a>
     </div>
 </div>
-<!--支付层-->
-<div class="send-msg-dialog" ng-show="vm.showSendMsgDialog">
-    <div class="clearfix title">
-        <label>输入到货提醒信息</label>
-        <a ng-click="vm.showSendMsgDialog=false;vm.showLayer=false;" class="closebtn fr"></a>
-    </div>
-    <div class="clearfix" style="padding: 0 10px; margin-bottom: 40px;">
-        <div class="form-group" ng-class="{'has-error': vm.sendMsgHasError}">
-            <input class='form-control' placeholder="到货提醒信息" ng-model='vm.sendMsgInfoTxt' ng-change='vm.validateSendMsgInfo()'/>
-            <p class='tips'>请输入到货提醒信息</p>
-        </div>
-    </div>
-    <div class="clearfix starttuan_btn">
-        <a ng-click='vm.sendMsgInfo();' style="background-color: #ffa200; width: 100%;">发送到货提醒</a>
-    </div>
-</div>
-<!--购买统计-->
-<div class="statistics-dialog" ng-show="vm.showStaticsDialog">
-    <div ng-repeat="item in vm.ordersDetail.summery.details">
-        <ul class="clearfix">
-            <li class="fl" ng-bind="item.name"></li>
-            <li class="fr">已卖{{item.num}}份</li>
-        </ul>
-    </div>
-    <ul class="clearfix">
-        <li class="fl">&nbsp;</li>
-        <li class="fr"><strong>金额合计：{{vm.ordersDetail.summery.all_total_price/100 | currency:'￥'}}</strong></li>
-    </ul>
-</div>
+
 <div class="share-dialog" ng-show="vm.showShareDialog">
     <div style="width: 90%; margin: 0 auto; font-size: 1.3em;">点击右上角“…”，分享给好友或朋友圈。</div>
 </div>
@@ -149,4 +116,4 @@
     <div style="width: 90%; margin: 0 auto; font-size: 1.3em;">点击右上角“…”，告诉{{vm.weshare.creator.nickname}}我团好了。</div>
 </div>
 
-<div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showLayer=false;vm.showStaticsDialog=false;vm.showBuyingDialog=false;vm.showShareDialog=false;vm.showSendMsgDialog=false;vm.showNotifyShareDialog=false;"></div>
+<div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showLayer=false;vm.showBuyingDialog=false;vm.showShareDialog=false;vm.showNotifyShareDialog=false;"></div>

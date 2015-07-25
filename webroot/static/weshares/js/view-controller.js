@@ -28,20 +28,18 @@
 		vm.submitOrder = submitOrder;
 		vm.confirmReceived = confirmReceived;
     vm.toUserShareInfo = toUserShareInfo;
-    vm.validateSendMsgInfo = validateSendMsgInfo;
-
-    vm.sendMsgInfo = sendMsgInfo;
 
     vm.checkProductNum = checkProductNum;
 
     vm.getProductLeftNum = getProductLeftNum;
+
+    vm.toShareOrderList = toShareOrderList;
 
     vm.toUpdate = toUpdate;
     vm.stopShare = stopShare;
 
 		activate();
 		function activate() {
-      vm.sendMsgInfoTxt='我们团的产品已经到啦，速度来取哈。';
 			var weshareId = angular.element(document.getElementById('weshareView')).attr('data-weshare-id');
       var fromType = angular.element(document.getElementById('weshareView')).attr('data-from-type');
       if(fromType==1){
@@ -168,10 +166,6 @@
 			return vm.productsHasError;
 		}
 
-    function validateSendMsgInfo(){
-      vm.sendMsgHasError =  _.isEmpty(vm.sendMsgInfoTxt);
-      return vm.sendMsgHasError;
-    }
 
     function validateUserAddress(){
       vm.userAddressHasError =  _.isEmpty(vm.buyerAddress);
@@ -197,33 +191,6 @@
         return product_buy_num<store_num;
       }
       return true;
-    }
-
-    function sendMsgInfo(){
-      if(vm.validateSendMsgInfo()){
-        return false;
-      }
-      //send_arrival_msg
-      $http.post('/weshares/send_arrival_msg', {msg: vm.sendMsgInfoTxt, share_id: vm.weshare.id }).
-        success(function(data, status, headers, config) {
-          // this callback will be called asynchronously
-          // when the response is available
-          if(data.success){
-            vm.weshare.status = 2;
-            alert('发送成功');
-          }else{
-            alert('发送失败');
-          }
-          vm.showLayer=false;
-          vm.showSendMsgDialog=false;
-        }).
-        error(function(data, status, headers, config) {
-          // called asynchronously if an error occurs
-          // or server returns response with an error status.
-          alert('发送失败');
-          vm.showLayer=false;
-          vm.showSendMsgDialog=false;
-        });
     }
 
 		function buyProducts() {
@@ -308,6 +275,10 @@
       }).error(function (e) {
         $log.log(e);
       });
+    }
+
+    function toShareOrderList(){
+      window.location.href='/weshares/share_order_list/'+vm.weshare.id;
     }
 
     function toUpdate(){

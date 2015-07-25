@@ -362,12 +362,11 @@ class WesharesController extends AppController {
                 'id' => $weshare_id
             )
         ));
-        if ($uid != $share_info['Weshare']['creator'] || $share_info['Weshare']['status'] != 1) {
+        if ($uid != $share_info['Weshare']['creator']) {
             echo json_encode(array('success' => false, 'reason' => 'invalid'));
             return;
         }
         $this->process_send_msg($share_info,$msg);
-        $this->Weshare->updateAll(array('status' => WESHARE_MSG_SEND),array('id' => $weshare_id,'creator' => $uid, 'status' => WESHARE_STOP_STATUS));
         echo json_encode(array('success' => true));
         return;
     }
@@ -376,6 +375,7 @@ class WesharesController extends AppController {
         $this->layout = 'weshare_bootstrap';
         $statics_data = $this->get_weshare_buy_info($weshareId,true);
         $this->set($statics_data);
+        $this->set('hide_footer',true);
         $this->set('weshareId',$weshareId);
     }
 

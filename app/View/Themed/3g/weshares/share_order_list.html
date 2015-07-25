@@ -86,8 +86,35 @@
         {{/if}}
     {{/loop}}
 </div>
+<div class="row" style="margin-bottom: 20px;">
+
+</div>
 <div class="row" style="position: fixed;height: 46px;bottom: 0;width: 100%;">
-    <button data-id="{{$weshareId}}" name="send_product_arrival_msg" type="button" class="btn btn-warning btn-lg btn-block" style="border-radius:0px;">取货提醒</button>
+    <div class="modal fade bs-example-modal-sm send-msg-dialog" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">发送到货提醒</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="arrival_msg" class="col-sm-2 control-label">到货提示</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" rows="3" id="arrival_msg">我们团的产品已经到啦，速度来取哈。</textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" data-id="{{$weshareId}}" name="send_product_arrival_msg">发送</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button data-toggle="modal" data-target=".send-msg-dialog" type="button" class="btn btn-warning btn-lg btn-block" style="border-radius:0px;">取货提醒</button>
 </div>
 <script>
     $(document).ready(function(){
@@ -110,7 +137,8 @@
         });
         $('button[name="send_product_arrival_msg"]').on('click', function (e) {
             e.preventDefault();
-            var msg = prompt("请输入到货提醒信息");
+            var $msgInput = $('#arrival_msg');
+            var msg = $msgInput.val();
             if(!msg||!msg.trim()){
                 return;
             }
@@ -121,8 +149,11 @@
                 url: '/weshares/send_arrival_msg',
                 data: JSON.stringify(postData), // or JSON.stringify ({name: 'jonas'}),
                 success: function (data) {
+                    $('div.send-msg-dialog').modal('hide');
                     if(data['success']){
                         alert('发送成功');
+                    }else{
+                        alert('发送失败,检查是否截单，是否登录');
                     }
                 },
                 contentType: "application/json",
