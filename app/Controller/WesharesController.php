@@ -52,7 +52,7 @@ class WesharesController extends AppController {
             'recursive' => 1, //int
             'fields' => $user_fields,
         ));
-        if(empty($current_user['User']['mobile'])){
+        if(empty($current_user['User']['mobilephone'])){
             $this->redirect('/users/to_bind_mobile?from=share');
             return;
         }
