@@ -229,14 +229,11 @@
 		function buyProducts() {
 			var addressHasError = vm.validateAddress();
 			var productsHasError = vm.validateProducts();
-      var userAddress = vm.validateUserAddress();
-			if (addressHasError || productsHasError || userAddress) {
+			if (addressHasError || productsHasError) {
         if(addressHasError){
           alert('请选择地址');
         }else if(productsHasError){
           alert('请输入商品数量');
-        }else if(userAddress){
-          alert('请输入地址');
         }
 				return;
 			}
@@ -248,7 +245,8 @@
 		function submitOrder(paymentType) {
 			vm.validateUserName();
 			vm.validateMobile();
-      if(vm.buyerMobilePhoneHasError || vm.usernameHasError){
+      vm.validateUserAddress();
+      if(vm.buyerMobilePhoneHasError || vm.usernameHasError || vm.userAddressHasError){
         return false;
       }
 			var products = _.filter(vm.weshare.products, function (product) {
