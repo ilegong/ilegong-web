@@ -1179,7 +1179,15 @@ class UsersController extends AppController {
         $from = $_REQUEST['from'];
         $this->set('from',$from);
         $this->set('hideNav',true);
-
+        $uid = $this->currentUser['id'];
+        $current_user = $this->User->find('first', array(
+            'conditions' => array(
+                'id' => $uid
+            ),
+            'fields' => array('payment','description'),
+            'recursive' => 1, //int
+        ));
+        $this->set('user',$current_user);
     }
 
     function complete(){
