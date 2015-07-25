@@ -20,6 +20,11 @@ class WesharesController extends AppController {
     }
 
     public function update($weshareId){
+        $uid = $this->currentUser['id'];
+        $weshareInfo = $this->get_weshare_detail($weshareId);
+        if($uid!=$weshareInfo['creator']['id']){
+            $this->redirect('/weshares/view/'.$weshareId.'/0');
+        }
         $this->set('weshare_id',$weshareId);
     }
 
