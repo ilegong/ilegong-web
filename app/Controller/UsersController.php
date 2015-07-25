@@ -1174,6 +1174,26 @@ class UsersController extends AppController {
         return ($nickname == '' ? '用户_' . mt_rand(10, 1000) : $nickname);
     }
 
+    function complete_user_info(){
+        $this->pageTitle="完善用户信息";
+        $this->set('hideNav',true);
+    }
+
+    function complete(){
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        if(empty($uid)){
+            echo json_encode(array('success' => false, 'reason' => 'not_login'));
+            return;
+        }
+        $payment = $_REQUEST['payment'];
+        $description = $_REQUEST['description'];
+        $user_info = array('payment' => $payment, 'description' => $description, 'id' => $uid);
+        $this->User->saveAll($user_info);
+        echo json_encode(array('success' => true));
+        return;
+    }
+
     function to_bind_mobile(){
         $userId = $this->Session->read('Auth.User.id');
         $userNickName = $this->Session->read('Auth.User.nickname');
