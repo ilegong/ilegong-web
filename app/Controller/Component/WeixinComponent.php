@@ -526,11 +526,6 @@ class WeixinComponent extends Component
 //                return $offer;
 //            }
 //        }
-
-        //check is share when is share gen type share offer
-        if($orderInfo['Order']['type'] = ORDER_TYPE_WESHARE_BUY){
-            
-        }
         $offer = $so->query_gen_offer($orderInfo, $orderInfo['Order']['creator']);
         return $offer;
     }
@@ -542,9 +537,13 @@ class WeixinComponent extends Component
         if(!empty($offer)) {
             $number = $offer['number'];
             $name = $offer['name'];
+            $sharer_id = $offer['sharer_id'];
         }
         if($number>0){
-           return $this->send_packet_received_message_by_openid($open_id, $number/100, $name);
+           if(empty($sharer_id)){
+               return $this->send_packet_received_message_by_openid($open_id, $number/100, $name);
+           }
+
         }
         return false;
     }

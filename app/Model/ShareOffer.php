@@ -15,6 +15,10 @@ class ShareOffer extends AppModel {
         return $this->_find_by_brandId($brandId, false, null, $limitDef, $shareOfferId);
     }
 
+    public function findBySharerId($sharerId, $limitDef = true, $shareOfferId = null) {
+        return $this->_find_by_sharerId($sharerId, false, null, $limitDef, $shareOfferId);
+    }
+
     /**
      * @param $brandId
      * @param $actionTime
@@ -68,6 +72,7 @@ class ShareOffer extends AppModel {
         $brandId = $order['Order']['brand_id'];
         $payTime = $order['Order']['pay_time'];
         $total_all_price = $order['Order']['total_all_price'];
+        $orderType = $order['Order']['type'];
         if ( ($status == ORDER_STATUS_DONE
                 || $status == ORDER_STATUS_PAID
                 || $status == ORDER_STATUS_RECEIVED
@@ -76,9 +81,24 @@ class ShareOffer extends AppModel {
             && !empty($brandId)
             && $total_all_price > 0
         ) {
-            $orderCreator = $order['Order']['creator'];
             $soModel = ClassRegistry::init('ShareOffer');
-            $so = $soModel->findByBrandId($brandId, true, $shareOfferId);
+            //check is share when is share gen type share offer
+            if ($orderType == ORDER_TYPE_WESHARE_BUY) {
+                $share_id = $order['Order']['member_id'];
+                $weshareM = ClassRegistry::init('Weshare');
+                $weshare = $weshareM->find('first', array(
+                    'conditions' => array(
+                        'id' => $share_id
+                    )
+                ));
+                if ($weshare) {
+                    $share_creator = $weshare['Weshare']['creator'];
+                    $so = $soModel->findBySharerId($share_creator, true, $shareOfferId);
+                }
+            } else {
+                $so = $soModel->findByBrandId($brandId, true, $shareOfferId);
+            }
+            $orderCreator = $order['Order']['creator'];
             if (!empty($so)) {
                 $usModel = ClassRegistry::init('SharedOffer');
                 $orderId = $order['Order']['id'];
@@ -103,6 +123,28 @@ class ShareOffer extends AppModel {
         }
 
         return null;
+    }
+
+    private function _find_by_sharerId($sharerId, $onlyValid , $actionTime, $limitDef = null,$shareOfferId=null){
+        $cond = array(
+            'sharer_id' => $sharerId,
+            'published' => 1,
+            'deleted' => 0,
+        );
+        //指定发放红包
+        if($shareOfferId!==null){
+            $cond['id'] = $shareOfferId;
+        }
+        if ($limitDef !== null) {
+            $cond['is_default'] = $limitDef;
+        }
+
+        if ($onlyValid && $actionTime != null) {
+            $cond['start <'] = $actionTime;
+            $cond['end > '] = $actionTime;
+        }
+
+        return $this->find("first", array('conditions' => $cond));
     }
 
     private function _find_by_brandId($brandId, $onlyValid , $actionTime, $limitDef = null,$shareOfferId=null) {
