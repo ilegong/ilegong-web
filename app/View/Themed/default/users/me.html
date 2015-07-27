@@ -47,7 +47,7 @@
         <br/>{{$CurrentUser['nickname']}}
     </a>
     <ul class="clearfix">
-        <li><a href="/orders/mine.html?tab=waiting_pay"><span {{if $order_count[ORDER_STATUS_WAITING_PAY]>0}}class="mine_ordersum"{{/if}}>{{$order_count[ORDER_STATUS_WAITING_PAY]}}</span><p>待付款</p></a></li>
+        <li><a href="/orders/mine.html?tab=waiting_pay"><span {{if $order_count[ORDER_STATUS_WAITING_PAY]>0}}class="mine_ordersum"{{/if}}>{{$order_count[ORDER_STATUS_WAITING_PAY]?$order_count[ORDER_STATUS_WAITING_PAY]:0}}</span><p>待付款</p></a></li>
         <li><a href="/orders/mine.html?tab=paid"><span {{if intval($order_count[ORDER_STATUS_PAID])>0}}class="mine_ordersum"{{/if}}}>{{intval($order_count[ORDER_STATUS_PAID])}}</span><p>待发货</p></a></li>
         <li><a href="/orders/mine.html?tab=shipped"><span {{if intval($order_count[ORDER_STATUS_SHIPPED])>0}}class="mine_ordersum"{{/if}}>{{intval($order_count[ORDER_STATUS_SHIPPED])}}</span><p>待收货</p></a></li>
         <li><a href="/orders/mine.html?tab=comment"><span {{if $order_count[ORDER_STATUS_COMMENT]}}class="mine_ordersum"{{/if}}>{{$order_count[ORDER_STATUS_COMMENT]}}</span><p>待评价</p></a></li>
