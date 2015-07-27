@@ -512,20 +512,25 @@ class WeixinComponent extends Component
         ));
         //TODO set offer id
         //check is spec product pengyoushuo brand
-        if($orderInfo['Order']['brand_id']==PYS_BRAND_ID){
-            $cartM = ClassRegistry::init('Cart');
-            $coconutCartInfo = $cartM->find('first',array('conditions' => array('order_id' => $order_id,'product_id' => 883)));
-            if(!empty($coconutCartInfo)){
-                $offer = $so->query_gen_offer($orderInfo, $orderInfo['Order']['creator'],44);
-                return $offer;
-            }
-            $cherryCartInfo = $cartM->find('first',array('conditions' => array('order_id'=>$order_id,'product_id'=>1020)));
-            if(!empty($cherryCartInfo)){
-                $offer = $so->query_gen_offer($orderInfo, $orderInfo['Order']['creator'],45);
-                return $offer;
-            }
-        }
+        //send spec packet
+//        if($orderInfo['Order']['brand_id']==PYS_BRAND_ID){
+//            $cartM = ClassRegistry::init('Cart');
+//            $coconutCartInfo = $cartM->find('first',array('conditions' => array('order_id' => $order_id,'product_id' => 883)));
+//            if(!empty($coconutCartInfo)){
+//                $offer = $so->query_gen_offer($orderInfo, $orderInfo['Order']['creator'],44);
+//                return $offer;
+//            }
+//            $cherryCartInfo = $cartM->find('first',array('conditions' => array('order_id'=>$order_id,'product_id'=>1020)));
+//            if(!empty($cherryCartInfo)){
+//                $offer = $so->query_gen_offer($orderInfo, $orderInfo['Order']['creator'],45);
+//                return $offer;
+//            }
+//        }
 
+        //check is share when is share gen type share offer
+        if($orderInfo['Order']['type'] = ORDER_TYPE_WESHARE_BUY){
+            
+        }
         $offer = $so->query_gen_offer($orderInfo, $orderInfo['Order']['creator']);
         return $offer;
     }
