@@ -1635,20 +1635,21 @@ class OrdersController extends AppController {
         foreach ($orders as $o) {
             $ids[] = $o['Order']['id'];
         }
-        $this->loadModel('Cart');
-        $Carts = $this->Cart->find('all', array(
-            'conditions' => array(
-                'order_id' => $ids,
-            )));
         $order_carts = array();
-        foreach ($Carts as $c) {
-            $order_id = $c['Cart']['order_id'];
-            if (!isset($order_carts[$order_id])) {
-                $order_carts[$order_id] = array();
+        if(!empty($ids)){
+            $this->loadModel('Cart');
+            $Carts = $this->Cart->find('all', array(
+                'conditions' => array(
+                    'order_id' => $ids,
+                )));
+            foreach ($Carts as $c) {
+                $order_id = $c['Cart']['order_id'];
+                if (!isset($order_carts[$order_id])) {
+                    $order_carts[$order_id] = array();
+                }
+                $order_carts[$order_id][] = $c;
             }
-            $order_carts[$order_id][] = $c;
         }
-
         $this->set('orders', $orders);
         $this->set('order_carts', $order_carts);
         $this->set('ship_type', ShipAddress::ship_type_list());
