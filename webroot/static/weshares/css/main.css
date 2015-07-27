@@ -1,6 +1,10 @@
 @charset "utf-8";
 /* CSS Document */
 
+@import url("normalize.css");
+@import url("mikeBase.css");
+@import url("responsive.css");
+
 * { padding: 0; margin: 0; font-family: Helvetica, STHeiti STXihei, Microsoft JhengHei, Microsoft YaHei, Arial;}
 body { min-width: 320px; font-size: 14px; }
 ul li { list-style: none; }
@@ -107,3 +111,76 @@ ul li { list-style: none; }
 .statistics-dialog ul{ width: 80%; margin: 0 auto;}
 .statistics-dialog ul li strong {color: #ffa200;}
 .share-dialog {width: 100%;background-color: #ffffff;color: #c73c3c;position: fixed;z-index: 5;left: 0;top: 0;text-align: center;font-weight: bold;padding: 40px 0;}
+
+.red-packet{
+    background: url("/static/weshares/images/body_background.jpg") no-repeat scroll 0 0 / 100% auto #ff6543;
+    position: relative;
+    font-family: "微软雅黑",arial,"宋体",sans-serif;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 20000;
+}
+.red-packet input{
+    width: 100%;
+    box-sizing:border-box;
+    text-align: center;
+    padding:0.6rem 0;
+    border: 0.3rem solid #c30600;
+    border-radius: 1rem;
+    margin-top: 13.2%;
+    font-size: 1.5rem;
+}
+
+.red-packet .sumWrapper{
+    position: relative;
+    background: url("../images/sum_background.jpg") no-repeat scroll 0 0 / 100% auto transparent;
+    padding: 27.9% 0;
+}
+.red-packet .sumWrapper p{
+    position: absolute;
+    width: 1em;
+    top:23%;
+    left: 11%;
+    font-size: 1.5rem;
+    color: #b87b00;
+}
+.red-packet .sumWrapper span{
+    position: absolute;
+    top:16.3%;
+    right: 11%;
+    font-size: 1.8rem;
+    color: #e02900;
+}
+.red-packet .sumWrapper em{
+    font-size: 6rem;
+}
+.red-packet .wrapper{
+    margin: 45.6% auto 0;
+    width: 59.4%;
+}
+
+.red-packet .detailLinkWrapper{
+    text-align: right;
+    margin-top: 28.7%;
+    color: #701602;
+    font-size: 1.3rem;
+}
+.red-packet .submitBtn{
+    background: #ffdd58;
+    color: #e02900;
+    border: none;
+    box-shadow: 0.3rem 0.5rem 0.2rem #b80b00;
+}
+.red-packet .servicePhone{
+    background: #c30600;
+    border-radius: 0.5rem;
+    text-align: center;
+    margin: 15.8% auto 0;
+    width: 90%;
+    padding: 0.450rem 0;
+    font-size: 1.3rem;
+    color: #ffdd58;
+}
