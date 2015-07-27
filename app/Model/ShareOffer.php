@@ -84,6 +84,7 @@ class ShareOffer extends AppModel {
                 $orderId = $order['Order']['id'];
                 $userShared = $usModel->find_user_shared_offer($uid, $orderId, $so['ShareOffer']['id']);
                 if (empty($userShared)){
+                    //ratio_percent 生成红包的返点数
                     $toShareNum = round( ($so['ShareOffer']['ratio_percent'] * $total_all_price * 100)/100, 0, PHP_ROUND_HALF_DOWN);
                     if ($toShareNum <= 0) {
                         return null;
