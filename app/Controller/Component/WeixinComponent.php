@@ -511,7 +511,7 @@ class WeixinComponent extends Component
             )
         ));
         //TODO set offer id
-        //check is spec product pengyoushuo brand
+        //TODO check is spec product pengyoushuo brand send spec red packet
         //send spec packet
 //        if($orderInfo['Order']['brand_id']==PYS_BRAND_ID){
 //            $cartM = ClassRegistry::init('Cart');
@@ -543,7 +543,6 @@ class WeixinComponent extends Component
            if(empty($sharer_id)){
                return $this->send_packet_received_message_by_openid($open_id, $number/100, $name);
            }
-
         }
         return false;
     }
