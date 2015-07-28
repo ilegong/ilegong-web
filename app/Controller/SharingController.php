@@ -108,8 +108,17 @@ class SharingController extends AppController{
                                 $couponId = $this->CouponItem->add_coupon_type($brandNames[$brandId], 0, $now, $valid_end, $slice['SharedSlice']['number'], PUBLISH_YES,
                                     COUPON_TYPE_TYPE_SHARE_OFFER, $uid, COUPON_STATUS_VALID, 1020);//指定商品id
                             }else{
-                                $couponId = $this->CouponItem->add_coupon_type($brandNames[$brandId], $brandId, $now, $valid_end, $slice['SharedSlice']['number'], PUBLISH_YES,
+                                //todo set name
+                                $brandName = $brandNames[$brandId];
+                                if($brandId==0){
+                                    $brandName = '朋友说';
+                                }
+                                if($brandId ==-1){
+                                    $brandName = '微分享红包';
+                                }
+                                $couponId = $this->CouponItem->add_coupon_type($brandName, $brandId, $now, $valid_end, $slice['SharedSlice']['number'], PUBLISH_YES,
                                     COUPON_TYPE_TYPE_SHARE_OFFER, $uid, COUPON_STATUS_VALID);
+
                             }
                             if ($couponId) {
                                 $this->CouponItem->addCoupon($uid, $couponId, $uid, 'shared_offer'.$shared_offer_id);
