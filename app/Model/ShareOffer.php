@@ -78,7 +78,7 @@ class ShareOffer extends AppModel {
                 || $status == ORDER_STATUS_RECEIVED
                 || $status == ORDER_STATUS_SHIPPED)
             && !empty($payTime)
-            && !empty($brandId)
+            && (!empty($brandId) || $orderType==ORDER_TYPE_WESHARE_BUY)
             && $total_all_price > 0
         ) {
             $soModel = ClassRegistry::init('ShareOffer');
@@ -103,6 +103,7 @@ class ShareOffer extends AppModel {
                 $usModel = ClassRegistry::init('SharedOffer');
                 $orderId = $order['Order']['id'];
                 $userShared = $usModel->find_user_shared_offer($uid, $orderId, $so['ShareOffer']['id']);
+                //没有领取过
                 if (empty($userShared)){
                     //ratio_percent 生成红包的返点数
                     $toShareNum = round( ($so['ShareOffer']['ratio_percent'] * $total_all_price * 100)/100, 0, PHP_ROUND_HALF_DOWN);
@@ -112,6 +113,7 @@ class ShareOffer extends AppModel {
                     return $this->genSharedSlices($orderCreator, $orderId, $usModel, $so, $toShareNum);
                 }
                 else {
+                    //已经领取过直接返回数据
                     return array(
                         'name' => $so['ShareOffer']['name'],
                         'number' => $userShared['SharedOffer']['total_number'],

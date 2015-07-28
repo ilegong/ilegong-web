@@ -2,11 +2,11 @@
 
 class WesharesController extends AppController {
 
-    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind');
+    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer');
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description');
 
-    public $components = array('Weixin', 'WeshareBuy');
+    public $components = array('Weixin', 'WeshareBuy', 'Buying');
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -77,11 +77,19 @@ class WesharesController extends AppController {
     }
 
     public function view($weshare_id,$from=0){
+        $uid = $this->currentUser['id'];
         $this->set('weshare_id', $weshare_id);
-        //form paid done
-        if($from==1){
+        $coupon_id = $_REQUEST['coupon'];
+        if(empty($coupon_id)){
+            //check has sharer has red packet
             //领取红包
-
+            $weshare = $this->Weshare->find('first', array('conditions' => array('id' => $weshare_id)));
+            $weshare_creator = $weshare['Weshare']['creator'];
+            $coupon = $this->SharedOffer->find_my_offers_by_weshare_creator($uid, $weshare_creator);
+            //get first
+            if(!empty($coupon)){
+                $this->set('coupon', $coupon[0]);
+            }
         }
         $this->set('from',$from);
     }
@@ -139,6 +147,7 @@ class WesharesController extends AppController {
         $consignee = $this->getShareConsignees($uid);
         $creatorId = $weshareInfo['creator']['id'];
         $user_share_summery = $this->getUserShareSummery($creatorId,$uid==$creatorId);
+        //TODO return coupon
         echo json_encode(array('weshare' => $weshareInfo, 'ordersDetail' => $ordersDetail, 'current_user' => $current_user['User'], 'weixininfo' => $weixinInfo, 'consignee' => $consignee, 'user_share_summery' => $user_share_summery));
         return;
     }
@@ -236,8 +245,18 @@ class WesharesController extends AppController {
                 $totalPrice += $num * $price;
             }
             $this->Cart->saveAll($cart);
-            $this->Order->updateAll(array('total_all_price' => $totalPrice / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => 0), array('id' => $orderId));
-            echo json_encode(array('success' => true, 'orderId' => $orderId));
+            if($this->Order->updateAll(array('total_all_price' => $totalPrice / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => 0), array('id' => $orderId))){
+                $coupon_id = $postDataArray['coupon_id'];
+                //check coupon
+                if(!empty($coupon_id)){
+                    App::uses('OrdersController','Controller');
+                    $this->Session->write(OrdersController::key_balanced_conpons(), json_encode(array($coupon_id)));
+                    $this->order_use_score_and_coupon($orderId,$uid,PYS_BRAND_ID,$totalPrice/100);
+                }
+                echo json_encode(array('success' => true, 'orderId' => $orderId));
+                return;
+            }
+            echo json_encode(array('success' => false, 'orderId' => $orderId));
             return;
         } catch (Exception $e) {
             $this->log($uid.'buy share '.$weshareId.$e);
@@ -660,5 +679,19 @@ class WesharesController extends AppController {
             }
         }
         return array('result' => true);
+    }
+
+    private function order_use_score_and_coupon($order_id,$uid,$brand_id,$total_all_price){
+        //use coupon
+        App::uses('OrdersController','Controller');
+        $ordersController = new OrdersController();
+        $ordersController->Session = $this->Session;
+        $order_results = array();
+        $order_results[$brand_id] = array($order_id, $total_all_price);
+        foreach($order_results as $brand_id => $order_val) {
+            $order_id = $order_val[0];
+            $ordersController->apply_coupons_to_order($brand_id, $uid, $order_id, $order_results);
+        }
+        $ordersController->clean_score_and_coupon();
     }
 }

@@ -56,6 +56,13 @@ class OrdersController extends AppController {
         return "Balance.apply_ship_fee";
     }
 
+    public function clean_score_and_coupon(){
+        // 注意必须清除key_balanced_scores
+        $this->Session->write(self::key_balanced_scores(), '');
+        $this->Session->write(self::key_balanced_conpon_global(), '[]');
+        $this->Session->write(self::key_balanced_conpons(), '[]');
+    }
+
     function beforeFilter() {
         parent::beforeFilter();
         if (empty($this->currentUser['id']) && array_search($this->request->params['action'], $this->customized_not_logged) === false) {
@@ -835,9 +842,7 @@ class OrdersController extends AppController {
     }
 
     public function apply_coupon() {
-
         $this->autoRender = false;
-
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
             echo json_encode(array('changed' => false, 'reason' => 'not_login'));
@@ -847,7 +852,12 @@ class OrdersController extends AppController {
         $coupon_item_id = $_POST['coupon_item_id'];
         $brand_id = $_POST['brand_id'];
         $applying = $_POST['action'] == 'apply';
-        $this->Session->write(self::key_balanced_promotion_code(),'');
+        $resp = $this->process_apply_coupon($uid, $shipPromotionId, $coupon_item_id, $brand_id, $applying);
+        echo json_encode($resp);
+    }
+
+    public function process_apply_coupon($uid, $shipPromotionId, $coupon_item_id, $brand_id, $applying) {
+        $this->Session->write(self::key_balanced_promotion_code(), '');
         $specifiedCartIds = $this->specified_balance_pids();
         $cartsByIds = $this->Buying->cartsByIds($specifiedCartIds, $uid, $this->Session->id());
         list($cart, $shipFee) = $this->Buying->applyPromoToCart($cartsByIds, $shipPromotionId, $uid);
@@ -857,13 +867,13 @@ class OrdersController extends AppController {
         $resp = array('changed' => $changed);
         if ($changed) {
             $total_reduced = $this->_cal_total_reduced($uid);
-            $resp['total_reduced'] = $total_reduced/100;
-            $resp['total_price'] = $cart->total_price() - $total_reduced/100 + $shipFee;
+            $resp['total_reduced'] = $total_reduced / 100;
+            $resp['total_price'] = $cart->total_price() - $total_reduced / 100 + $shipFee;
         }
         if ($reason) {
             $resp['reason'] = $reason;
         }
-        echo json_encode($resp);
+        return $resp;
     }
 
     public function apply_promotion_code($code){
@@ -988,6 +998,7 @@ class OrdersController extends AppController {
         $resp['total_price'] = $total_price;
         echo json_encode($resp);
     }
+
 
 	function mine(){
         $uid = $this->currentUser['id'];

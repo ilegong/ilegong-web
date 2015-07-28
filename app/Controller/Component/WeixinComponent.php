@@ -692,6 +692,7 @@ class WeixinComponent extends Component
             $good = self::get_order_weshare_product_info($order, $carts);
             $user = $users[$order['Order']['creator']];
             $this->send_weshare_buy_wx_msg($openid,$order, $good, $user);
+            $this->send_share_offer_msg($openid, $order['Order']['id']);
         }
     }
 

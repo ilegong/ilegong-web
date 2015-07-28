@@ -27,8 +27,12 @@ class SharedOffer extends AppModel {
         return $noLeft;
     }
 
+    public function find_my_offers_by_weshare_creator($uid, $shareCreator) {
+        return $this->find('all', array('conditions' => array('SharedOffer.uid' => $uid, 'ShareOffer.sharer_id' => $shareCreator, 'SharedOffer.status' => array(SHARED_OFFER_STATUS_NEW, SHARED_OFFER_STATUS_GOING)), 'order' => 'SharedOffer.created desc'));
+    }
+
     public function find_my_all_offers($uid) {
-        return $this->find('all', array('conditions' => array('uid' => $uid), 'order' => 'SharedOffer.created desc'));
+        return $this->find('all', array('conditions' => array('SharedOffer.uid' => $uid), 'order' => 'SharedOffer.created desc'));
     }
 
     public function find_user_shared_offer($userId, $orderId, $offerId) {
