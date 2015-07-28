@@ -435,8 +435,16 @@ class CouponItem extends AppModel {
         ));
     }
 
-    public function find_my_valid_share_coupons($user_id, $limit_non_used = true){
-        if (!$user_id) { return false; }
+    public function find_my_valid_share_coupons($user_id, $sharer,$limit_non_used = true) {
+        if (!$user_id||!$sharer) {
+            return false;
+        }
+        $SharedOfferM = ClassRegistry::init('SharedOffer');
+        $sharedOffers = $SharedOfferM->find_offers_by_weshare_creator($sharer);
+        $sharerSource = Hash::extract($sharedOffers, '{n}.SharedOffer.id');
+        array_walk($sharerSource,function(&$item1){
+            $item1 = 'shared_offer'.$item1;
+        });
         $dt = new DateTime();
         $cond = array('CouponItem.bind_user' => $user_id,
             'CouponItem.status' => COUPONITEM_STATUS_TO_USE,
@@ -445,16 +453,18 @@ class CouponItem extends AppModel {
             'Coupon.status' => COUPON_STATUS_VALID,
             'Coupon.valid_begin <= ' => $dt->format(FORMAT_DATETIME),
             'Coupon.valid_end >= ' => $dt->format(FORMAT_DATETIME),
-            'Coupon.brand_id' => SHARE_COUPON_OFFER_TYPE
+            'Coupon.brand_id' => SHARE_COUPON_OFFER_TYPE,
+            'CouponItem.source' => $sharerSource
         );
         if ($limit_non_used) {
             $cond[] = '(CouponItem.applied_order is null or CouponItem.applied_order = 0)';
         }
+        //order by reduced default use first
         $items = $this->find('all', array(
             'conditions' => $cond,
             'joins' => $this->joins_link,
             'fields' => array('Coupon.*', 'CouponItem.*'),
-            'order' => 'CouponItem.created desc',
+            'order' => 'Coupon.reduced_price desc',
             'group' => array('CouponItem.coupon_id')
         ));
         $this->pid_list_to_array($items);

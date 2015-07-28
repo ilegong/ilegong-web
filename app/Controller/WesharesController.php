@@ -2,7 +2,7 @@
 
 class WesharesController extends AppController {
 
-    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer');
+    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem');
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description');
 
@@ -148,7 +148,8 @@ class WesharesController extends AppController {
         $creatorId = $weshareInfo['creator']['id'];
         $user_share_summery = $this->getUserShareSummery($creatorId,$uid==$creatorId);
         //TODO return coupon
-        echo json_encode(array('weshare' => $weshareInfo, 'ordersDetail' => $ordersDetail, 'current_user' => $current_user['User'], 'weixininfo' => $weixinInfo, 'consignee' => $consignee, 'user_share_summery' => $user_share_summery));
+        $my_coupon_items = $this->get_can_used_coupons($uid,$weshareInfo['creator']['id']);
+        echo json_encode(array('weshare' => $weshareInfo, 'ordersDetail' => $ordersDetail, 'current_user' => $current_user['User'], 'weixininfo' => $weixinInfo, 'consignee' => $consignee, 'user_share_summery' => $user_share_summery, 'my_coupons' => $my_coupon_items));
         return;
     }
 
@@ -681,8 +682,8 @@ class WesharesController extends AppController {
         return array('result' => true);
     }
 
-    private function get_can_used_coupons($uid, $weshare_id) {
-
+    private function get_can_used_coupons($uid,$sharer) {
+       return $this->CouponItem->find_my_valid_share_coupons($uid,$sharer);
     }
 
     private function order_use_score_and_coupon($order_id,$uid,$brand_id,$total_all_price){

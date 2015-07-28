@@ -92,7 +92,6 @@ class SharingController extends AppController{
             if (!$accepted && !$noMore) {
                 foreach ($slices as &$slice) {
                     if (empty($slice['SharedSlice']['accept_user'])) {
-
                         $dt = new DateTime();
                         $now = $dt->format(FORMAT_DATETIME);
                         $dt->add(new DateInterval('P'.$addDays.'D'));
@@ -100,7 +99,9 @@ class SharingController extends AppController{
 
                         $updated = $this->SharedSlice->updateAll(array('accept_user' => $uid, 'accept_time' => '\'' . addslashes($now) . '\''),
                             array('id' => $slice['SharedSlice']['id'], 'accept_user' => 0));
-                        if($updated && $this->SharedSlice->getAffectedRows() == 1) {
+                        //TODO check getAffectedRows has error
+                        //if($updated && $this->SharedSlice->getAffectedRows() == 1) {
+                        if($updated) {
                             if($sharedOffer['SharedOffer']['share_offer_id'] == 44){ //朋友说指定商品优惠券
                                 $couponId = $this->CouponItem->add_coupon_type($brandNames[$brandId], 0, $now, $valid_end, $slice['SharedSlice']['number'], PUBLISH_YES,
                                     COUPON_TYPE_TYPE_SHARE_OFFER, $uid, COUPON_STATUS_VALID, 883);//指定商品id
@@ -134,13 +135,10 @@ class SharingController extends AppController{
                                 $this->SharedOffer->updateAll(array('status' => SHARED_OFFER_STATUS_OUT)
                                     , array('id' => $shared_offer_id, 'status' => SHARED_OFFER_STATUS_GOING));
                             }
-
                             $slice['SharedSlice']['accept_user'] = $uid;
                             $slice['SharedSlice']['accept_time'] = $now;
                             $accepted = true;
                             $just_accepted = $slice['SharedSlice']['number'];
-
-
                             break;
                         }
                     }
