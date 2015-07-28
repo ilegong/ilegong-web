@@ -250,8 +250,8 @@ class WesharesController extends AppController {
                 //check coupon
                 if(!empty($coupon_id)){
                     App::uses('OrdersController','Controller');
-                    $this->Session->write(OrdersController::key_balanced_conpons(), json_encode(array($coupon_id)));
-                    $this->order_use_score_and_coupon($orderId,$uid,PYS_BRAND_ID,$totalPrice/100);
+                    $this->Session->write(OrdersController::key_balanced_conpons(), json_encode(array(0 => array($coupon_id))));
+                    $this->order_use_score_and_coupon($orderId,$uid,0,$totalPrice/100);
                 }
                 echo json_encode(array('success' => true, 'orderId' => $orderId));
                 return;
@@ -679,6 +679,10 @@ class WesharesController extends AppController {
             }
         }
         return array('result' => true);
+    }
+
+    private function get_can_used_coupons($uid, $weshare_id) {
+
     }
 
     private function order_use_score_and_coupon($order_id,$uid,$brand_id,$total_all_price){

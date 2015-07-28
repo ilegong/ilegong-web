@@ -227,6 +227,7 @@
 			var orderData = {
 				weshare_id: vm.weshare.id,
 				address_id: vm.weshare.selectedAddressId,
+        coupon_id: 53021,//todo
 				products: products,
 				buyer: {name: vm.buyerName, mobilephone: vm.buyerMobilePhone, address: vm.buyerAddress}
 			};

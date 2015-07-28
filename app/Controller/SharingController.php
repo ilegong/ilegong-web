@@ -74,10 +74,12 @@ class SharingController extends AppController{
         }
 
         $brandId = $sharedOffer['ShareOffer']['brand_id'];
-        $brandNames = $this->Brand->find('list', array(
-            'conditions' => array('id' => $brandId),
-            'fields' => array('id', 'name')
-        ));
+        if($brandId!=-1&&$brandId!=0){
+            $brandNames = $this->Brand->find('list', array(
+                'conditions' => array('id' => $brandId),
+                'fields' => array('id', 'name')
+            ));
+        }
         $total_slice = count($slices);
         $valuesCounts = array_count_values($accepted_users);
         $left_slice = empty($valuesCounts[0])? 0 : $valuesCounts[0];

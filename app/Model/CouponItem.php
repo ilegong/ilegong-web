@@ -435,6 +435,32 @@ class CouponItem extends AppModel {
         ));
     }
 
+    public function find_my_valid_share_coupons($user_id, $limit_non_used = true){
+        if (!$user_id) { return false; }
+        $dt = new DateTime();
+        $cond = array('CouponItem.bind_user' => $user_id,
+            'CouponItem.status' => COUPONITEM_STATUS_TO_USE,
+            'CouponItem.deleted = 0',
+            'Coupon.published' => 1,
+            'Coupon.status' => COUPON_STATUS_VALID,
+            'Coupon.valid_begin <= ' => $dt->format(FORMAT_DATETIME),
+            'Coupon.valid_end >= ' => $dt->format(FORMAT_DATETIME),
+            'Coupon.brand_id' => SHARE_COUPON_OFFER_TYPE
+        );
+        if ($limit_non_used) {
+            $cond[] = '(CouponItem.applied_order is null or CouponItem.applied_order = 0)';
+        }
+        $items = $this->find('all', array(
+            'conditions' => $cond,
+            'joins' => $this->joins_link,
+            'fields' => array('Coupon.*', 'CouponItem.*'),
+            'order' => 'CouponItem.created desc',
+            'group' => array('CouponItem.coupon_id')
+        ));
+        $this->pid_list_to_array($items);
+        return $items;
+    }
+
     public function find_my_valid_coupons($user_id, $brandId = null, $limit_non_used = true) {
         if (!$user_id) { return false; }
 
