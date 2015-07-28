@@ -6,7 +6,7 @@ class WesharesController extends AppController {
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description');
 
-    public $components = array('Weixin');
+    public $components = array('Weixin', 'WeshareBuy');
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -78,6 +78,11 @@ class WesharesController extends AppController {
 
     public function view($weshare_id,$from=0){
         $this->set('weshare_id', $weshare_id);
+        //form paid done
+        if($from==1){
+            //领取红包
+
+        }
         $this->set('from',$from);
     }
 
