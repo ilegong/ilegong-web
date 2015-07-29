@@ -69,6 +69,11 @@
           vm.currentUser = data['current_user'] || {};
           vm.weixinInfo = data['weixininfo'];
           vm.consignee = data['consignee'];
+          vm.myCoupons = data['my_coupons'];
+          if(vm.myCoupons){
+            vm.useCouponId = vm.myCoupons.CouponItem.id;
+            vm.userCouponReduce = vm.myCoupons.Coupon.reduced_price/100;
+          }
           vm.userShareSummery = data['user_share_summery'];
           if (vm.consignee) {
             vm.buyerName = vm.consignee.name;
@@ -102,6 +107,7 @@
               vm.sharedOfferMsg = '谢谢你对' + vm.weshare.creator.nickname + '的支持!送你一个'+followSharedNum+'红包,报名直接抵现金呢:)';
               vm.sharedOfferId = followSharedOfferId;
             }
+            vm.showLayer = true;
           }
         }).
         error(function (data, status) {
@@ -146,16 +152,19 @@
 			return _.reject([order.consignee_name, order.consignee_mobilephone], function(e){return _.isEmpty(e)}).join(',');
 		}
 
-		function calOrderTotalPrice() {
-			var products = _.filter(vm.weshare.products, function (product) {
-				return product.num > 0;
-			});
-			var totalPrice = 0;
-			_.each(products, function (product) {
-				totalPrice += product.price * product.num;
-			});
-			vm.orderTotalPrice = totalPrice / 100;
-		}
+    function calOrderTotalPrice() {
+      var products = _.filter(vm.weshare.products, function (product) {
+        return product.num > 0;
+      });
+      var totalPrice = 0;
+      _.each(products, function (product) {
+        totalPrice += product.price * product.num;
+      });
+      if (vm.userCouponReduce) {
+        totalPrice -= vm.userCouponReduce;
+      }
+      vm.orderTotalPrice = totalPrice / 100;
+    }
 
 		function increaseProductNum(product) {
 			if (!Utils.isNumber(product.num)) {
@@ -258,11 +267,12 @@
 			var orderData = {
 				weshare_id: vm.weshare.id,
 				address_id: vm.weshare.selectedAddressId,
-        coupon_id: 53021,//todo
 				products: products,
 				buyer: {name: vm.buyerName, mobilephone: vm.buyerMobilePhone, address: vm.buyerAddress}
 			};
-
+      if(vm.useCouponId){
+        orderData['coupon_id'] = vm.useCouponId;
+      }
       if(vm.submitProcessing){
         return;
       }
