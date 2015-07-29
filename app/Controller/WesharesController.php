@@ -38,6 +38,7 @@ class WesharesController extends AppController {
                 //bind user default get coupon
                 $this->get_coupon_with_shared_id($shared_offers[0]['SharedOffer']['id']);
             }
+            $this->set('from', $this->pay_type);
         }
         //has share offer id user open share
         $shared_offer_id = $_REQUEST['shared_offer_id'];
@@ -45,7 +46,6 @@ class WesharesController extends AppController {
             //process
             $this->process_shared_offer($shared_offer_id);
         }
-        $this->set('from', $from);
     }
 
     public function update($weshareId) {
