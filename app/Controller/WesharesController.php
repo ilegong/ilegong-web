@@ -159,7 +159,7 @@ class WesharesController extends AppController {
         $creatorId = $weshareInfo['creator']['id'];
         $user_share_summery = $this->getUserShareSummery($creatorId, $uid == $creatorId);
         //TODO return coupon
-        $my_coupon_items = $this->get_can_used_coupons($uid, $weshareInfo['creator']['id']);
+        $my_coupon_items = $this->get_can_used_coupons($uid, $creatorId);
 
         echo json_encode(array('weshare' => $weshareInfo, 'ordersDetail' => $ordersDetail, 'current_user' => $current_user['User'], 'weixininfo' => $weixinInfo, 'consignee' => $consignee, 'user_share_summery' => $user_share_summery, 'my_coupons' => $my_coupon_items[0]));
         return;

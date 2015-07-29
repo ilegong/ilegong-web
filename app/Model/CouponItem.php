@@ -435,15 +435,15 @@ class CouponItem extends AppModel {
         ));
     }
 
-    public function find_my_valid_share_coupons($user_id, $sharer,$limit_non_used = true) {
-        if (!$user_id||!$sharer) {
+    public function find_my_valid_share_coupons($user_id, $sharer, $limit_non_used = true) {
+        if (!$user_id || !$sharer) {
             return false;
         }
         $SharedOfferM = ClassRegistry::init('SharedOffer');
         $sharedOffers = $SharedOfferM->find_offers_by_weshare_creator($sharer);
         $sharerSource = Hash::extract($sharedOffers, '{n}.SharedOffer.id');
-        array_walk($sharerSource,function(&$item1){
-            $item1 = 'shared_offer'.$item1;
+        array_walk($sharerSource, function (&$item1) {
+            $item1 = 'shared_offer' . $item1;
         });
         $dt = new DateTime();
         $cond = array('CouponItem.bind_user' => $user_id,
