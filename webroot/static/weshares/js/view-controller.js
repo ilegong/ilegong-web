@@ -52,6 +52,9 @@
       var followSharedNum = angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-coupon-num');
 
       vm.sharedOfferId = initSharedOfferId;
+      if(initSharedOfferId){
+        vm.isSharePacket = true;
+      }
       vm.weshare = {};
       vm.orderTotalPrice = 0;
       $http({method: 'GET', url: '/weshares/detail/' + weshareId, cache: $templateCache}).
@@ -354,9 +357,6 @@
       var to_timeline_link = url;
       //member
       var sub_title = '';
-      if(!_.isEmpty(vm.sharedOfferId)){
-        sub_title = ','+vm.weshare.creator.nickname+'送我一个红包大家一起抢!';
-      }
       var userInfo =vm.ordersDetail.users[vm.currentUser.id];
       if(vm.currentUser.id==vm.weshare.creator.id){
         to_timeline_title = vm.weshare.creator.nickname+'分享:'+vm.weshare.title;
@@ -386,8 +386,12 @@
       if (vm.weixinInfo) {
         share_string = vm.weixinInfo.share_string;
       }
-      if(!_.isEmpty(vm.sharedOfferId)){
+      //share packet
+      if(vm.isSharePacket){
         imgUrl = 'http://51daifan.sinaapp.com/img/sharing/packet1.png';
+        var title = vm.currentUser.nickname+'报名了'+vm.weshare.creator.nickname+'的分享,'+vm.weshare.creator.nickname+'送我一个红包大家一起抢!';
+        to_timeline_title = title;
+        to_friend_title = title;
       }
       to_friend_title = to_friend_title+sub_title;
       to_timeline_title = to_timeline_title+sub_title;
