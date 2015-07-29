@@ -42,7 +42,7 @@
             <p class='tips'>请选择收货地址</p>
         </div>
         <div class='send-info text-center margin-bottom-12' ng-hide='_.isEmpty(vm.weshare.send_info)'>取货时间: <span ng-bind='vm.weshare.send_info'></span></div>
-        <div class='total-fee text-center' ng-if="vm.myCoupons">&nbsp;&nbsp;&nbsp;红包：<span ng-bind="vm.userCouponReduce | currency:'￥'"></span></div>
+        <div class='total-fee text-center' ng-if="vm.myCoupons">&nbsp;&nbsp;&nbsp;红包：<span ng-bind="vm.userCouponReduce/100 | currency:'￥'"></span></div>
         <div class='total-fee text-center'>总金额：<span ng-bind="vm.orderTotalPrice | currency:'￥'"></span></div>
     </div>
     <div class="orders">

@@ -72,7 +72,7 @@
           vm.myCoupons = data['my_coupons'];
           if(vm.myCoupons){
             vm.useCouponId = vm.myCoupons.CouponItem.id;
-            vm.userCouponReduce = vm.myCoupons.Coupon.reduced_price/100;
+            vm.userCouponReduce = vm.myCoupons.Coupon.reduced_price;
           }
           vm.userShareSummery = data['user_share_summery'];
           if (vm.consignee) {
