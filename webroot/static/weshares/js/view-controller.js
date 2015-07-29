@@ -386,6 +386,9 @@
       if (vm.weixinInfo) {
         share_string = vm.weixinInfo.share_string;
       }
+      if(!_.isEmpty(vm.sharedOfferId)){
+        imgUrl = 'http://51daifan.sinaapp.com/img/sharing/packet1.png';
+      }
       to_friend_title = to_friend_title+sub_title;
       to_timeline_title = to_timeline_title+sub_title;
       if(wx){
