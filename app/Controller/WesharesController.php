@@ -694,7 +694,7 @@ class WesharesController extends AppController {
 
     private function get_coupon_with_shared_id($share_offer_id) {
         $uid = $this->currentUser['id'];
-        return $this->RedPacket->process_receive($share_offer_id, $uid);
+        return $this->RedPacket->process_receive($share_offer_id, $uid,$this->is_weixin());
     }
 
     private function get_can_used_coupons($uid, $sharer) {

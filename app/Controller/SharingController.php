@@ -25,7 +25,7 @@ class SharingController extends AppController{
 
     public function receive($shared_offer_id) {
         $uid = $this->currentUser['id'];
-        $result = $this->RedPacket->process_receive($shared_offer_id,$uid);
+        $result = $this->RedPacket->process_receive($shared_offer_id,$uid,$this->is_weixin());
         if(!$result['success']){
             $this-> __message($result['msg'], $result['redirect_url']);
             return;

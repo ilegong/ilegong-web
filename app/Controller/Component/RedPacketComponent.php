@@ -8,7 +8,7 @@
 
 class RedPacketComponent extends Component{
     public $components = array('Weixin');
-    public function process_receive($shared_offer_id,$uid){
+    public function process_receive($shared_offer_id,$uid,$is_weixin=true){
         //update sharing slices
         //add to coupon
         //display success (ajax)
@@ -33,7 +33,7 @@ class RedPacketComponent extends Component{
             if ($sharedOffer['SharedOffer']['status'] == SHARED_OFFER_STATUS_NEW) {
                 return array('success' => $success, 'reason' => 'not_open', 'msg' => '红包尚未开封，请等待红包所有人开封后发出邀请', 'redirect_url' => '/');
             }
-            if ($this->is_weixin() && notWeixinAuthUserInfo($uid, $this->currentUser['nickname'])) {
+            if ($is_weixin && notWeixinAuthUserInfo($uid, $this->currentUser['nickname'])) {
                 return array('success' => $success, 'reason' => 'not_auth', 'msg' => '为让朋友知道是谁领了她/他发的红包，请授权我们获取您的微信昵称','redirect_url' => '/users/login.html?force_login=true&referer=' . urlencode($_SERVER['REQUEST_URI']));
             }
         }
