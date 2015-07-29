@@ -445,6 +445,7 @@ class CouponItem extends AppModel {
         array_walk($sharerSource, function (&$item1) {
             $item1 = 'shared_offer' . $item1;
         });
+        $this->log('query coupon item source '.json_encode($sharerSource));
         $dt = new DateTime();
         $cond = array('CouponItem.bind_user' => $user_id,
             'CouponItem.status' => COUPONITEM_STATUS_TO_USE,
@@ -468,6 +469,7 @@ class CouponItem extends AppModel {
             'group' => array('CouponItem.coupon_id')
         ));
         $this->pid_list_to_array($items);
+        $this->log('fetch share coupon '.json_encode($items));
         return $items;
     }
 
