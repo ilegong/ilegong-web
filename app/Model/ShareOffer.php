@@ -92,9 +92,11 @@ class ShareOffer extends AppModel {
                         'id' => $share_id
                     )
                 ));
+                $this->log('offer weshare'.json_encode($weshare));
                 if ($weshare) {
                     $share_creator = $weshare['Weshare']['creator'];
                     $so = $soModel->findBySharerId($share_creator, true, $shareOfferId);
+                    $this->log('offer so '.json_encode($so));
                 }
             } else {
                 $so = $soModel->findByBrandId($brandId, true, $shareOfferId);
