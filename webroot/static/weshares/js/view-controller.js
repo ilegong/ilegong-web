@@ -41,42 +41,73 @@
     vm.stopShare = stopShare;
 
 		activate();
-		function activate() {
-			var weshareId = angular.element(document.getElementById('weshareView')).attr('data-weshare-id');
+    function activate() {
+      var weshareId = angular.element(document.getElementById('weshareView')).attr('data-weshare-id');
       var fromType = angular.element(document.getElementById('weshareView')).attr('data-from-type');
-      if(fromType==1){
-        vm.showNotifyShareDialog = true;
-        vm.showLayer = true;
-      }
-			vm.weshare = {};
-			vm.orderTotalPrice = 0;
-			$http({method: 'GET', url: '/weshares/detail/' + weshareId, cache: $templateCache}).
-				success(function (data, status) {
-					$log.log(data);
-					vm.weshare = data['weshare'];
-					if (vm.weshare.addresses.length == 1) {
-						vm.weshare.selectedAddressId = vm.weshare.addresses[0].id;
-					}
-					else if (vm.weshare.addresses.length > 1) {
-						vm.weshare.addresses.unshift({id: -1, address: '请选择收货地址'});
-						vm.weshare.selectedAddressId = -1;
-					}
-					vm.ordersDetail = data['ordersDetail'];
-					vm.currentUser = data['current_user']||{};
-					vm.weixinInfo = data['weixininfo'];
+      //first share
+      var initSharedOfferId = angular.element(document.getElementById('weshareView')).attr('data-shared-offer');
+
+      var followSharedOfferId = angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-offer');
+      var followSharedType = angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-type');
+      var followSharedNum = angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-coupon-num');
+
+      vm.sharedOfferId = initSharedOfferId;
+      vm.weshare = {};
+      vm.orderTotalPrice = 0;
+      $http({method: 'GET', url: '/weshares/detail/' + weshareId, cache: $templateCache}).
+        success(function (data, status) {
+          $log.log(data);
+          vm.weshare = data['weshare'];
+          if (vm.weshare.addresses.length == 1) {
+            vm.weshare.selectedAddressId = vm.weshare.addresses[0].id;
+          }
+          else if (vm.weshare.addresses.length > 1) {
+            vm.weshare.addresses.unshift({id: -1, address: '请选择收货地址'});
+            vm.weshare.selectedAddressId = -1;
+          }
+          vm.ordersDetail = data['ordersDetail'];
+          vm.currentUser = data['current_user'] || {};
+          vm.weixinInfo = data['weixininfo'];
           vm.consignee = data['consignee'];
           vm.userShareSummery = data['user_share_summery'];
-          if(vm.consignee){
+          if (vm.consignee) {
             vm.buyerName = vm.consignee.name;
             vm.buyerMobilePhone = vm.consignee.mobilephone;
             vm.buyerAddress = vm.consignee.address;
           }
-					setWeiXinShareParams();
-				}).
-				error(function (data, status) {
-					$log.log(data);
-				});
-		}
+          setWeiXinShareParams();
+          //from paid done
+          if (fromType == 1) {
+            if (_.isEmpty(initSharedOfferId)) {
+              vm.showNotifyShareDialog = true;
+            } else {
+              vm.showNotifyShareOfferDialog = true;
+              vm.sharedOfferMsg = '谢谢你对' + vm.weshare.creator.nickname + '的支持!送你一个红包,点击右上角“…”分享给大家一起抢:)';
+            }
+            vm.showLayer = true;
+          }
+          //follow share
+          if (followSharedType) {
+            if (followSharedType == 'fail' || followSharedType == 'no_more') {
+              vm.showNotifyShareOfferDialog = true;
+              vm.sharedOfferMsg = '红包已经抢完，报名就有红包:)';
+            }
+            if(followSharedType == 'accepted'){
+              vm.showNotifyShareOfferDialog = true;
+              vm.sharedOfferMsg = '你已经抢过这个红包了,点击右上角“…”分享给大家一起抢:)';
+              vm.sharedOfferId = followSharedOfferId;
+            }
+            if(followSharedType == 'got'){
+              vm.showNotifyShareOfferDialog = true;
+              vm.sharedOfferMsg = '谢谢你对' + vm.weshare.creator.nickname + '的支持!送你一个'+followSharedNum+'红包,报名直接抵现金呢:)';
+              vm.sharedOfferId = followSharedOfferId;
+            }
+          }
+        }).
+        error(function (data, status) {
+          $log.log(data);
+        });
+    }
 
 		function isCreator(){
 			return !_.isEmpty(vm.currentUser) && vm.currentUser.id == vm.weshare.creator.id;
@@ -302,7 +333,7 @@
     }
 
     function setWeiXinShareParams() {
-      var url ='http://www.tongshijia.com/weshares/view/'+vm.weshare.id;
+      var url ='http://www.tongshijia.com/weshares/view/'+vm.weshare.id+'?shared_offer_id='+vm.sharedOfferId;
       //creator
       var to_timeline_title = '';
       var to_friend_title = '';
@@ -312,6 +343,10 @@
       var to_friend_link = url;
       var to_timeline_link = url;
       //member
+      var sub_title = '';
+      if(!_.isEmpty(vm.sharedOfferId)){
+        sub_title = ','+vm.weshare.creator.nickname+'送我一个红包大家一起抢!';
+      }
       var userInfo =vm.ordersDetail.users[vm.currentUser.id];
       if(vm.currentUser.id==vm.weshare.creator.id){
         to_timeline_title = vm.weshare.creator.nickname+'分享:'+vm.weshare.title;
@@ -341,6 +376,8 @@
       if (vm.weixinInfo) {
         share_string = vm.weixinInfo.share_string;
       }
+      to_friend_title = to_friend_title+sub_title;
+      to_timeline_title = to_timeline_title+sub_title;
       if(wx){
         wx.ready(function () {
           wx.onMenuShareAppMessage({

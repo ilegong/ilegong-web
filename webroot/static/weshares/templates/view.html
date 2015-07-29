@@ -120,22 +120,18 @@
     <div style="width: 90%; margin: 0 auto; font-size: 1.3em;">点击右上角“…”，告诉{{vm.weshare.creator.nickname}}我团好了。</div>
 </div>
 <!--paid done has red packet-->
-<div style="position: fixed;top: 0;left: 0;width: 100%;height: 100%;z-index: 20000; display: none">
-    <img style="width: 100%;height: auto;z-index: 20001;" src="/static/weshares/images/share.png"/>
-</div>
-<!--got packet-->
-<div class="red-packet" style="display:none;">
-    <div class="wrapper">
-        <div class="sumWrapper">
-            <p>代金券</p>
-            <span>
-                <em>15</em>元
-            </span>
-        </div>
-        <input class="submitBtn" type="submit" value="马上使用红包">
-
-        <p class="servicePhone">客服电话 : 010-56245991</p>
+<div class="weshare-view" style="position: fixed;top: 0px;left: 0; z-index: 999;background: #FFFFFF;padding: 10px 10px 10px;" ng-show="vm.showNotifyShareOfferDialog">
+    <div class="orders">
+        <ul class="order clearfix margin-bottom-12">
+            <li class='buyer-image'><img ng-src="{{vm.weshare.creator.image||'/img/default_user_icon.jpg'}}"/></li>
+            <li class="detail">
+                <b></b>
+                <p><strong class='buyer-name' ng-bind="vm.weshare.creator.nickname"></strong></p>
+                <span class='display-name' ng-bind="vm.sharedOfferMsg"></span>
+            </li>
+        </ul>
     </div>
 </div>
 
-<div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showLayer=false;vm.showBuyingDialog=false;vm.showShareDialog=false;vm.showNotifyShareDialog=false;"></div>
+
+<div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showLayer=false;vm.showBuyingDialog=false;vm.showShareDialog=false;vm.showNotifyShareDialog=false;vm.showNotifyShareOfferDialog=false;"></div>
