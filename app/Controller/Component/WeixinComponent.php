@@ -544,6 +544,7 @@ class WeixinComponent extends Component
 //                return $offer;
 //            }
 //        }
+        $this->log('gen offer order info'.json_encode($orderInfo));
         $offer = $so->query_gen_offer($orderInfo, $orderInfo['Order']['creator']);
         return $offer;
     }
