@@ -36,7 +36,7 @@ class SharedOffer extends AppModel {
     }
 
     public function find_offers_by_weshare_creator($shareCreator) {
-        return $this->find('all', array('conditions' => array('ShareOffer.sharer_id' => $shareCreator, 'SharedOffer.status' => array(SHARED_OFFER_STATUS_NEW, SHARED_OFFER_STATUS_GOING)), 'order' => 'SharedOffer.created desc'));
+        return $this->find('all', array('conditions' => array('ShareOffer.sharer_id' => $shareCreator), 'order' => 'SharedOffer.created desc'));
     }
 
     public function find_my_all_offers($uid) {
