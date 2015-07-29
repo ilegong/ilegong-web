@@ -327,6 +327,7 @@ class WeixinComponent extends Component
     }
 
     public function send_packet_received_message_by_openid($open_id, $packet_money, $packet_name, $title = null, $detail_url = null, $keyword1 = null, $desc = null) {
+        $this->log('send msg title'.$title.' detail url '.$detail_url);
         if (empty($detail_url)) {
             $detail_url = $this->get_packet_url();
         }
@@ -551,7 +552,6 @@ class WeixinComponent extends Component
 
     private function send_share_offer_msg($open_id, $order_id, $title = null, $detail_url = null) {
         $offer = $this->gen_offer($order_id);
-        $this->log('send msg title'.$title.' detail url '.$detail_url);
         $number = 0;
         $name = '';
         if (!empty($offer)) {
