@@ -550,19 +550,15 @@ class WeixinComponent extends Component
 
     private function send_share_offer_msg($open_id, $order_id, $title = null, $detail_url = null) {
         $offer = $this->gen_offer($order_id);
+        $this->log('send msg offer'.json_encode($offer));
         $number = 0;
         $name = '';
         if (!empty($offer)) {
             $number = $offer['number'];
             $name = $offer['name'];
-            $sharer_id = $offer['sharer_id'];
         }
         if ($number > 0) {
-            if (empty($sharer_id)) {
-                //check is share
-
-                return $this->send_packet_received_message_by_openid($open_id, $number / 100, $name, $title, $detail_url);
-            }
+            return $this->send_packet_received_message_by_openid($open_id, $number / 100, $name, $title, $detail_url);
         }
         return false;
     }
