@@ -80,7 +80,7 @@ class WeixinComponent extends Component
     }
 
     public function get_weshare_packet_url($weshareId){
-        return WX_HOST.'/weshares/view/'.$weshareId.'?from=template_msg';
+        return WX_HOST.'/weshares/view/'.$weshareId.'?mark=template_msg';
     }
 
 
