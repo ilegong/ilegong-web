@@ -79,6 +79,10 @@ class WeixinComponent extends Component
         return WX_HOST . '/users/my_offers.html';
     }
 
+    public function get_weshare_packet_url($weshareId){
+        return WX_HOST.'/weshares/view/'.$weshareId.'?from=template_msg';
+    }
+
 
     public function get_access_token()
     {
@@ -312,28 +316,39 @@ class WeixinComponent extends Component
 
 
     //领取红包
-    public function send_packet_received_message($user_id, $packet_money, $packet_name="眉县有机猕猴桃红包")
-    {
+    public function send_packet_received_message($user_id, $packet_money, $packet_name = "眉县有机猕猴桃红包", $title = null, $detail_url = null, $keyword1 = null, $desc = null) {
         $oauthBindModel = ClassRegistry::init('Oauthbind');
         $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
         if ($user_weixin != false) {
             $open_id = $user_weixin['oauth_openid'];
-            return $this->send_packet_received_message_by_openid($open_id,$packet_money,$packet_name);
+            return $this->send_packet_received_message_by_openid($open_id, $packet_money, $packet_name, $title, $detail_url, $keyword1, $desc);
         }
         return false;
     }
 
-    public function send_packet_received_message_by_openid($open_id, $packet_money, $packet_name) {
+    public function send_packet_received_message_by_openid($open_id, $packet_money, $packet_name, $title = null, $detail_url = null, $keyword1 = null, $desc = null) {
+        if (empty($detail_url)) {
+            $detail_url = $this->get_packet_url();
+        }
+        if (empty($title)) {
+            $title = '亲，恭喜您获得朋友说红包！';
+        }
+        if (empty($keyword1)) {
+            $keyword1 = $packet_name . "红包";
+        }
+        if (empty($desc)) {
+            $desc = '红包可以发送给朋友一起抢，点击详情，分享红包。';
+        }
         $post_data = array(
             "touser" => $open_id,
             "template_id" => $this->wx_message_template_ids["PACKET_RECEIVED"],
-            "url" => $this->get_packet_url(),
+            "url" => $detail_url,
             "topcolor" => "#FF0000",
-             "data" => array(
-                "first" => array("value" => "亲，恭喜您获得朋友说红包！"),
-                "keyword1" => array("value" => $packet_name . "红包"),
+            "data" => array(
+                "first" => array("value" => $title),
+                "keyword1" => array("value" => $keyword1),
                 "keyword2" => array("value" => $packet_money . "元"),
-                "remark" => array("value" => "红包可以发送给朋友一起抢，点击详情，分享红包。", "color" => "#FF8800")
+                "remark" => array("value" => $desc, "color" => "#FF8800")
             )
         );
         return $this->send_weixin_message($post_data);
@@ -341,19 +356,22 @@ class WeixinComponent extends Component
 
 
     //红包被领取
-    public function send_packet_be_got_message($user_id, $got_packet_user_name, $got_packet_money, $packet_name="眉县有机猕猴桃红包")
+    public function send_packet_be_got_message($user_id, $got_packet_user_name, $got_packet_money, $packet_name="眉县有机猕猴桃红包",$detail_url = null)
     {
         $oauthBindModel = ClassRegistry::init('Oauthbind');
         $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
+        if(empty($detail_url)){
+            $detail_url = $this->get_packet_url();
+        }
         if ($user_weixin != false) {
             $open_id = $user_weixin['oauth_openid'];
             $post_data = array(
                 "touser" => $open_id,
                 "template_id" => $this->wx_message_template_ids["PACKET_BE_GOT"],
-                "url" => $this->get_packet_url(),
+                "url" => $detail_url,
                 "topcolor" => "#FF0000",
                 "data" => array(
-                    "first" => array("value" => $got_packet_user_name."领走了您分享的".$packet_name."，恭喜发财！"),
+                    "first" => array("value" => $got_packet_user_name."领走了您分享的".$packet_name."！"),
                     "keyword1" => array("value" => $got_packet_money."元"),
                     "keyword2" => array("value" => date('Y-m-d H:i:s')),
                     "remark" => array("value" => "点击详情，查看红包。", "color" => "#FF8800")
@@ -530,19 +548,21 @@ class WeixinComponent extends Component
         return $offer;
     }
 
-    private function send_share_offer_msg($open_id,$order_id){
+    private function send_share_offer_msg($open_id, $order_id, $title = null, $detail_url = null) {
         $offer = $this->gen_offer($order_id);
         $number = 0;
         $name = '';
-        if(!empty($offer)) {
+        if (!empty($offer)) {
             $number = $offer['number'];
             $name = $offer['name'];
             $sharer_id = $offer['sharer_id'];
         }
-        if($number>0){
-           if(empty($sharer_id)){
-               return $this->send_packet_received_message_by_openid($open_id, $number/100, $name);
-           }
+        if ($number > 0) {
+            if (empty($sharer_id)) {
+                //check is share
+
+                return $this->send_packet_received_message_by_openid($open_id, $number / 100, $name, $title, $detail_url);
+            }
         }
         return false;
     }
@@ -706,10 +726,10 @@ class WeixinComponent extends Component
         }
     }
 
-    public function send_weshare_buy_order_paid_msg($open_id, $order, $good){
+    public function send_weshare_buy_order_paid_msg($open_id, $order, $good) {
         $weshare_info = $good['weshare_info'];
         $title = $weshare_info['Weshare']['title'];
-        $org_msg = "亲，您参加的[".$title."]的活动已完成付款。";
+        $org_msg = "亲，您参加的[" . $title . "]的活动已完成付款。";
         $post_data = array(
             "touser" => $open_id,
             "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
@@ -719,12 +739,16 @@ class WeixinComponent extends Component
                 "first" => array("value" => $org_msg),
                 "orderProductPrice" => array("value" => $order['Order']['total_all_price']),
                 "orderProductName" => array("value" => $good['good_info']),
-                "orderAddress" => array("value" => empty($good['ship_info'])?'':$good['ship_info']),
+                "orderAddress" => array("value" => empty($good['ship_info']) ? '' : $good['ship_info']),
                 "orderName" => array("value" => $order['Order']['id']),
                 "remark" => array("value" => "点击查看详情.", "color" => "#FF8800")
             )
         );
-        return $this->send_weixin_message($post_data) && $this->send_share_offer_msg($open_id, $order['Order']['id']);
+        $userM = ClassRegistry::init('User');
+        $creatorNickName = $userM->findNicknamesOfUid($weshare_info['Weshare']['creator']);
+        $title = '亲，恭喜您获得' . $creatorNickName . '红包！';
+        $detail_url = $this->get_weshare_packet_url($weshare_info['Weshare']['id']);
+        return $this->send_weixin_message($post_data) && $this->send_share_offer_msg($open_id, $order['Order']['id'], $title, $detail_url);
     }
 
     public function notify_weshare_buy_creator($order, $good) {
