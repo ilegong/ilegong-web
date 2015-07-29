@@ -25,6 +25,7 @@ class WesharesController extends AppController {
         $uid = $this->currentUser['id'];
         $this->set('weshare_id', $weshare_id);
         //form paid done
+        $this->log('weshare view mark '.$_REQUEST['mark']);
         if ($from == $this->pay_type||$_REQUEST['mark'] == 'template_msg') {
             //check has sharer has red packet
             //领取红包
