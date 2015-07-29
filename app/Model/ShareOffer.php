@@ -73,6 +73,7 @@ class ShareOffer extends AppModel {
         $payTime = $order['Order']['pay_time'];
         $total_all_price = $order['Order']['total_all_price'];
         $orderType = $order['Order']['type'];
+        $this->log('query_gen_offer order info '.json_encode($order));
         if ( ($status == ORDER_STATUS_DONE
                 || $status == ORDER_STATUS_PAID
                 || $status == ORDER_STATUS_RECEIVED
