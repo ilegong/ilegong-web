@@ -551,7 +551,7 @@ class WeixinComponent extends Component
 
     private function send_share_offer_msg($open_id, $order_id, $title = null, $detail_url = null) {
         $offer = $this->gen_offer($order_id);
-        $this->log('send msg offer'.json_encode($offer));
+        $this->log('send msg title'.$title.' detail url '.$detail_url);
         $number = 0;
         $name = '';
         if (!empty($offer)) {
