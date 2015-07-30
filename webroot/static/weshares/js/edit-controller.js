@@ -1,34 +1,35 @@
 (function (window, angular, wx) {
 
-	angular.module('weshares')
-		.constant('wx', wx)
-		.controller('WesharesEditCtrl', WesharesEditCtrl);
+  angular.module('weshares')
+    .constant('wx', wx)
+    .controller('WesharesEditCtrl', WesharesEditCtrl);
 
 
-	function WesharesEditCtrl($scope, $rootScope, $log, $http, wx, Utils) {
-		var vm = this;
-		vm.chooseAndUploadImage = chooseAndUploadImage;
-		vm.uploadImage = uploadImage;
-		vm.deleteImage = deleteImage;
+  function WesharesEditCtrl($scope, $rootScope, $log, $http, wx, Utils) {
+    var vm = this;
+    vm.chooseAndUploadImage = chooseAndUploadImage;
+    vm.uploadImage = uploadImage;
+    vm.deleteImage = deleteImage;
 
-		vm.toggleProduct = toggleProduct;
-		vm.toggleAddress = toggleAddress;
+    vm.toggleProduct = toggleProduct;
+    vm.toggleAddress = toggleAddress;
 
-		vm.nextStep = nextStep;
-		vm.createWeshare = createWeshare;
+    vm.nextStep = nextStep;
+    vm.saveWeshare = saveWeshare;
 
-		vm.validateTitle = validateTitle;
-		vm.validateProductName = validateProductName;
-		vm.validateProductPrice = validateProductPrice;
+    vm.validateTitle = validateTitle;
+    vm.validateProductName = validateProductName;
+    vm.validateProductPrice = validateProductPrice;
     vm.saveCacheData = saveCacheData;
     vm.dataCacheKey = 'cache_share_data';
-		activate();
+    activate();
     $scope.$watchCollection('vm.weshare', vm.saveCacheData);
 
-		function activate() {
-			vm.showShippmentInfo = false;
+    function activate() {
+      vm.showShippmentInfo = false;
       var weshareId = angular.element(document.getElementById('weshareEditView')).attr('data-id');
-      $log.log(weshareId);
+      var sharerShipType = angular.element(document.getElementById('weshareEditView')).attr('data-ship-type');
+      vm.sharerShipType = sharerShipType;
       //add
       vm.weshare = {
         title: '',
@@ -40,49 +41,55 @@
         send_info: '',
         addresses: [
           {address: ''}
-        ]
+        ],
+        ship_type: {
+          'self_ziti': -1,
+          'kuai_di': -1,
+          'pys_ziti': -1
+        }
       };
       var $cacheData = PYS.storage.load(vm.dataCacheKey);
-      if($cacheData){
+      if ($cacheData) {
         vm.weshare = $cacheData;
       }
-      if(weshareId){
+      if (weshareId) {
         //update
-        $http.get('/weshares/get_share_info/'+weshareId).success(function(data){
+        $http.get('/weshares/get_share_info/' + weshareId).success(function (data) {
           $log.log(data);
           vm.weshare = data;
-          if(!vm.weshare.addresses||vm.weshare.addresses.length==0){
+          if (!vm.weshare.addresses || vm.weshare.addresses.length == 0) {
             vm.weshare.addresses = [{address: ''}];
           }
-        }).error(function(data){
+        }).error(function (data) {
         });
       }
-			vm.messages = [];
-		}
+      vm.messages = [];
+    }
 
-		function chooseAndUploadImage() {
-			wx.chooseImage({
-				success: function (res) {
-					//_.each(res.localIds, vm.uploadImage);
+    function chooseAndUploadImage() {
+      wx.chooseImage({
+        success: function (res) {
+          //_.each(res.localIds, vm.uploadImage);
           //alert(res.localIds);
           //for(var local_id in res.localIds){
           //  vm.uploadImage(local_id);
           //}
           vm.uploadImage(res.localIds);
-				},
-				fail: function (res) {
-					vm.messages.push({name: 'choose image failed', detail: res});
-				}
-			});
-		}
+        },
+        fail: function (res) {
+          vm.messages.push({name: 'choose image failed', detail: res});
+        }
+      });
+    }
 
-    function saveCacheData(){
-      PYS.storage.save(vm.dataCacheKey,vm.weshare,1);
+    function saveCacheData() {
+      PYS.storage.save(vm.dataCacheKey, vm.weshare, 1);
     }
 
     function uploadImage(localIds) {
       var i = 0, len = localIds.length;
-      function upload(){
+
+      function upload() {
         wx.uploadImage({
           localId: localIds[i],
           isShowProgressTips: 1,
@@ -98,7 +105,7 @@
             }).error(function (data, status, headers, config) {
               vm.messages.push({name: 'download image failed', detail: data});
             });
-            if(i<len){
+            if (i < len) {
               upload();
             }
           },
@@ -107,85 +114,86 @@
           }
         });
       }
+
       upload();
     }
 
-		function deleteImage(image) {
-			vm.weshare.images = _.without(vm.weshare.images, image);
-		}
+    function deleteImage(image) {
+      vm.weshare.images = _.without(vm.weshare.images, image);
+    }
 
-		function toggleProduct(product, isLast) {
-			if (isLast) {
-				vm.weshare.products.push({name: '',store: ''});
-			}
-			else {
-				vm.weshare.products = _.without(vm.weshare.products, product);
-			}
-		}
+    function toggleProduct(product, isLast) {
+      if (isLast) {
+        vm.weshare.products.push({name: '', store: ''});
+      }
+      else {
+        vm.weshare.products = _.without(vm.weshare.products, product);
+      }
+    }
 
-		function toggleAddress(address, isLast) {
-			if (isLast) {
-				vm.weshare.addresses.push({address: ''});
-			}
-			else {
-				vm.weshare.addresses = _.without(vm.weshare.addresses, address);
-			}
-		}
+    function toggleAddress(address, isLast) {
+      if (isLast) {
+        vm.weshare.addresses.push({address: ''});
+      }
+      else {
+        vm.weshare.addresses = _.without(vm.weshare.addresses, address);
+      }
+    }
 
-		function nextStep() {
-			var titleHasError = vm.validateTitle();
-			var productHasError = false;
-			_.each(vm.weshare.products, function (product) {
-				var nameHasError = vm.validateProductName(product);
-				var priceHasError = vm.validateProductPrice(product);
-				productHasError = productHasError || nameHasError || priceHasError;
-			});
-			if (titleHasError || productHasError) {
-				return;
-			}
+    function nextStep() {
+      var titleHasError = vm.validateTitle();
+      var productHasError = false;
+      _.each(vm.weshare.products, function (product) {
+        var nameHasError = vm.validateProductName(product);
+        var priceHasError = vm.validateProductPrice(product);
+        productHasError = productHasError || nameHasError || priceHasError;
+      });
+      if (titleHasError || productHasError) {
+        return;
+      }
 
-			vm.showShippmentInfo = true;
-		}
+      vm.showShippmentInfo = true;
+    }
 
-		function createWeshare() {
-      if(vm.isInProcess){
+    function saveWeshare() {
+      if (vm.isInProcess) {
         return;
       }
       vm.isInProcess = true;
-			vm.weshare.addresses = _.filter(vm.weshare.addresses, function(address){
-				return !_.isEmpty(address.address);
-			});
+      vm.weshare.addresses = _.filter(vm.weshare.addresses, function (address) {
+        return !_.isEmpty(address.address);
+      });
 
-			$log.log('submitted').log(vm.weshare);
-			$http.post('/weshares/save', vm.weshare).success(function (data, status, headers, config) {
-				if (data.success) {
-					$log.log('post succeeded, data: ').log(data);
+      $log.log('submitted').log(vm.weshare);
+      $http.post('/weshares/save', vm.weshare).success(function (data, status, headers, config) {
+        if (data.success) {
+          $log.log('post succeeded, data: ').log(data);
           PYS.storage.clear();
-					window.location.href = '/weshares/view/' + data['id'];
-				}
-				else {
+          window.location.href = '/weshares/view/' + data['id'];
+        }
+        else {
           vm.isInProcess = false;
-					$log.log("failed with status: " + status + ", data: ").log(data);
-				}
-			}).error(function (data, status, headers, config) {
-          vm.isInProcess = false;
-					$log.log("failed with status :" + status + ", data: ").log(data).log(', and config').log(config);
-				});
-		}
+          $log.log("failed with status: " + status + ", data: ").log(data);
+        }
+      }).error(function (data, status, headers, config) {
+        vm.isInProcess = false;
+        $log.log("failed with status :" + status + ", data: ").log(data).log(', and config').log(config);
+      });
+    }
 
-		function validateTitle() {
-			vm.weshareTitleHasError = _.isEmpty(vm.weshare.title) || vm.weshare.title.length > 50;
-			return vm.weshareTitleHasError;
-		}
+    function validateTitle() {
+      vm.weshareTitleHasError = _.isEmpty(vm.weshare.title) || vm.weshare.title.length > 50;
+      return vm.weshareTitleHasError;
+    }
 
-		function validateProductName(product) {
-			product.nameHasError = _.isEmpty(product.name) || product.name.length > 20;
-			return product.nameHasError;
-		}
+    function validateProductName(product) {
+      product.nameHasError = _.isEmpty(product.name) || product.name.length > 20;
+      return product.nameHasError;
+    }
 
-		function validateProductPrice(product) {
-			product.priceHasError = !product.price || !Utils.isNumber(product.price);
-			return product.priceHasError;
-		}
-	}
+    function validateProductPrice(product) {
+      product.priceHasError = !product.price || !Utils.isNumber(product.price);
+      return product.priceHasError;
+    }
+  }
 })(window, window.angular, window.wx);

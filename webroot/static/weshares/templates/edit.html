@@ -41,6 +41,12 @@
         <div class="form-group">
             <input class='form-control' placeholder="到货/发货时间" ng-model="vm.weshare.send_info"/>
         </div>
+        <div class="clearfix">
+            <div class="form-group fl">
+                <input type="checkbox" ng-model="vm.weshare.ship_type.self_ziti" ng-true-value="1" ng-false-value="0">
+            </div>
+            &nbsp;&nbsp;&nbsp;自己的自提点
+        </div>
         <div class="clearfix" ng-repeat="address in vm.weshare.addresses">
             <div class="form-group fl" style="width: 80%; margin-right: 10px;">
                 <input class='form-control' placeholder="取货地点，联系人，联系电话" ng-model="address.address"/>
@@ -48,7 +54,22 @@
             <a class="fr btn" ng-class="{'delete-btn': !$last,'add-btn': $last}"
                ng-click="vm.toggleAddress(address, $last)"></a>
         </div>
-        <a class="btn next-btn" ng-click="vm.createWeshare()">oh，搞定了！</a>
+
+        <div class="clearfix">
+            <div class="form-group fl">
+                <input type="checkbox" ng-model="vm.weshare.ship_type.kuai_di" ng-true-value="1" ng-false-value="0">
+            </div>
+            &nbsp;&nbsp;&nbsp;快递
+        </div>
+
+        <div class="clearfix" ng-if="vm.sharerShipType!=0">
+            <div class="form-group fl">
+                <input type="checkbox" disabled="{{vm.sharerShipType==0}}" ng-model="vm.weshare.ship_type.pys_ziti" ng-true-value="1" ng-false-value="0">
+            </div>
+            &nbsp;&nbsp;&nbsp;朋友说自提点
+        </div>
+
+        <a class="btn next-btn" ng-click="vm.saveWeshare()">oh，搞定了！</a>
         <a class="btn back-btn" ng-click="vm.showShippmentInfo=false">返回修改</a>
     </div>
 </div>

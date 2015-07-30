@@ -2,7 +2,7 @@
 
 class WesharesController extends AppController {
 
-    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem');
+    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem', 'SharerShipOption');
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description');
 
@@ -25,8 +25,8 @@ class WesharesController extends AppController {
         $uid = $this->currentUser['id'];
         $this->set('weshare_id', $weshare_id);
         //form paid done
-        $this->log('weshare view mark '.$_REQUEST['mark']);
-        if ($from == $this->pay_type||$_REQUEST['mark'] == 'template_msg') {
+        $this->log('weshare view mark ' . $_REQUEST['mark']);
+        if ($from == $this->pay_type || $_REQUEST['mark'] == 'template_msg') {
             //check has sharer has red packet
             //领取红包
             $weshare = $this->Weshare->find('first', array('conditions' => array('id' => $weshare_id)));
@@ -72,6 +72,7 @@ class WesharesController extends AppController {
     public function add() {
         $currentUser = $this->currentUser;
         $uid = $currentUser['id'];
+        //check user has bind mobile and payment
         $user_fields = $this->query_user_fileds;
         $user_fields[] = 'mobilephone';
         $user_fields[] = 'payment';
@@ -90,6 +91,9 @@ class WesharesController extends AppController {
             $this->redirect('/users/complete_user_info?from=share');
             return;
         }
+        $share_ship_set = $this->sharer_can_use_we_ship($uid);
+        $this->set('ship_type', $share_ship_set);
+        //设置微信分享参数
         if (parent::is_weixin()) {
             $wexin_params = $this->set_weixin_share_data($currentUser['id'], 0);
             $this->set($wexin_params);
@@ -697,7 +701,7 @@ class WesharesController extends AppController {
 
     private function get_coupon_with_shared_id($share_offer_id) {
         $uid = $this->currentUser['id'];
-        return $this->RedPacket->process_receive($share_offer_id, $uid,$this->is_weixin());
+        return $this->RedPacket->process_receive($share_offer_id, $uid, $this->is_weixin());
     }
 
     private function get_can_used_coupons($uid, $sharer) {
@@ -739,5 +743,18 @@ class WesharesController extends AppController {
         }
         $this->set('get_coupon_type', 'got');
         $this->set('couponNum', $get_coupon_result['couponNum']);
+    }
+
+    private function sharer_can_use_we_ship($sharer) {
+        $ship_setting = $this->SharerShipOption->find('first', array(
+            'conditions' => array(
+                'sharer_id' => $sharer
+            )
+        ));
+        if (empty($ship_setting)) {
+            return 0;
+        }
+        $ship_set_type = $ship_setting['WeshareShipOption']['type'];
+        return $ship_set_type;
     }
 }
