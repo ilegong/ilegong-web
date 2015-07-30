@@ -41,6 +41,7 @@ class WesharesController extends AppController {
             $this->set('from', $this->pay_type);
         }
         //has share offer id user open share
+        //用户抢红包
         $shared_offer_id = $_REQUEST['shared_offer_id'];
         if (!empty($shared_offer_id)) {
             //process
