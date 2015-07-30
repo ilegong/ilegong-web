@@ -143,6 +143,8 @@
                 if(!result['code']){
                     if(from_value=='share'){
                         ref_url = '/users/complete_user_info?from=share'
+                        window.location.href = ref_url;
+                        return;
                     }
                     showTip(result['msg'],function(){
                         window.location.href = ref_url;
@@ -219,8 +221,9 @@
             //$tipInfo.text(msg).fadeIn(1000).fadeOut(2000,callback);
             $tipInfo.text(msg).show();
             setTimeout(function(){
+                callback();
                 $tipInfo.hide();
-            },5000);
+            },3000);
         }
 
         function isPhone(aPhone) {
