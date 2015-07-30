@@ -721,6 +721,7 @@ class WesharesController extends AppController {
     private function process_shared_offer($shared_offer_id) {
         //to do check offer status
         $get_coupon_result = $this->get_coupon_with_shared_id($shared_offer_id);
+        $this->log('share user get red packet result ' . json_encode($get_coupon_result));
         if (!$get_coupon_result['success']) {
             $this->set('get_coupon_type', 'fail');
             return;
