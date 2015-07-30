@@ -42,10 +42,6 @@
 
     activate();
     function activate() {
-      //test code
-      vm.showLayer = true;
-      vm.showNotifyShareOfferDialog = true;
-
       var weshareId = angular.element(document.getElementById('weshareView')).attr('data-weshare-id');
       var fromType = angular.element(document.getElementById('weshareView')).attr('data-from-type');
       //first share
