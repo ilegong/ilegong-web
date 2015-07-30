@@ -45,19 +45,26 @@
       var $cacheData = PYS.storage.load(vm.dataCacheKey);
       if($cacheData){
         vm.weshare = $cacheData;
+        setDefaultData();
       }
       if(weshareId){
         //update
         $http.get('/weshares/get_share_info/'+weshareId).success(function(data){
           $log.log(data);
           vm.weshare = data;
-          if(!vm.weshare.addresses||vm.weshare.addresses.length==0){
-            vm.weshare.addresses = [{address: ''}];
-          }
+          setDefaultData();
         }).error(function(data){
         });
       }
 			vm.messages = [];
+      function setDefaultData(){
+        if(!vm.weshare.addresses||vm.weshare.addresses.length==0){
+          vm.weshare.addresses = [{address: ''}];
+        }
+        if(!vm.weshare.send_info){
+          vm.weshare.send_info = '';
+        }
+      }
 		}
 
 		function chooseAndUploadImage() {
