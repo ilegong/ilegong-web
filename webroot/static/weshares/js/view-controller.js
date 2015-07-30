@@ -3,7 +3,7 @@
   angular.module('weshares')
     .controller('WesharesViewCtrl', WesharesViewCtrl);
 
-  function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, Utils) {
+  function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, Utils) {
     var vm = this;
     vm.statusMap = {
       0: '进行中',
@@ -50,7 +50,7 @@
       var followSharedType = angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-type');
       var followSharedNum = angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-coupon-num');
       vm.sharedOfferId = initSharedOfferId;
-      if (initSharedOfferId) {
+      if (initSharedOfferId && followSharedNum && (followSharedNum > 0)) {
         vm.isSharePacket = true;
       }
       vm.weshare = {};
@@ -88,7 +88,7 @@
               vm.showNotifyShareDialog = true;
             } else {
               vm.showNotifyShareOfferDialog = true;
-              vm.sharedOfferMsg = '谢谢你对' + vm.weshare.creator.nickname + '的支持!送你一个红包,点击右上角“…”分享给大家一起抢:)';
+              vm.sharedOfferMsg = '谢谢你对' + vm.weshare.creator.nickname + '的支持!送你一个红包,点击右上角分享给大家一起抢:)';
             }
             vm.showLayer = true;
           }
@@ -99,6 +99,10 @@
               vm.sharedOfferMsg = '谢谢你对' + vm.weshare.creator.nickname + '的支持!送你一个' + followSharedNum + '红包,报名直接抵现金呢:)';
               vm.sharedOfferId = followSharedOfferId;
               vm.showLayer = true;
+              $timeout(function(){
+                vm.showLayer = false;
+                vm.showNotifyShareOfferDialog = false;
+              },5000);
             }
           }
         }).

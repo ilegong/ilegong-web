@@ -477,7 +477,7 @@ class WesharesController extends AppController {
                 'status' => $order_status,
                 'deleted' => DELETED_NO
             ),
-            'fields' => array('id', 'creator', 'created', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price'),
+            'fields' => array('id', 'creator', 'created', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total'),
             'order' => array('created DESC')
         ));
         $orderIds = Hash::extract($orders, '{n}.Order.id');
@@ -503,6 +503,10 @@ class WesharesController extends AppController {
             ),
             'fields' => array('id', 'name', 'order_id', 'num', 'product_id', 'price')
         ));
+        $realTotalPrice = 0;
+        foreach($orders as $item){
+            $realTotalPrice = $realTotalPrice+$item['total_all_price'];
+        }
         $summeryTotalPrice = 0;
         foreach ($carts as $item) {
             $order_id = $item['Cart']['order_id'];
@@ -520,6 +524,7 @@ class WesharesController extends AppController {
         }
         $product_buy_num['all_buy_user_count'] = count($users);
         $product_buy_num['all_total_price'] = $summeryTotalPrice;
+        $product_buy_num['real_total_price'] = $realTotalPrice;
         $users = Hash::combine($users, '{n}.User.id', '{n}.User');
         return array('users' => $users, 'orders' => $orders, 'order_cart_map' => $order_cart_map, 'summery' => $product_buy_num);
     }
