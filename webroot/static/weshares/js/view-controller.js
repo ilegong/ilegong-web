@@ -50,7 +50,7 @@
       var followSharedType = angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-type');
       var followSharedNum = angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-coupon-num');
       vm.sharedOfferId = initSharedOfferId;
-      if (initSharedOfferId && followSharedNum && (followSharedNum > 0)) {
+      if (initSharedOfferId) {
         vm.isSharePacket = true;
       }
       vm.weshare = {};
