@@ -2,11 +2,13 @@
 
 class WesharesController extends AppController {
 
-    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem', 'SharerShipOption');
+    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem', 'SharerShipOption', 'WeshareShipSetting');
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description');
 
-    public $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket');
+    var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket');
+
+    var $share_ship_type = array('self_ziti', 'kuai)di', 'pys_ziti');
 
     var $pay_type = 1;
 
@@ -130,11 +132,13 @@ class WesharesController extends AppController {
         $weshareData['images'] = implode('|', $images);
         $productsData = $postDataArray['products'];
         $addressesData = $postDataArray['addresses'];
+        $shipSetData = $postDataArray['ship_type'];
         $weshareData['creator'] = $uid;
         $saveBuyFlag = $weshare = $this->Weshare->save($weshareData);
         $saveProductFlag = $this->saveWeshareProducts($weshare['Weshare']['id'], $productsData);
         $saveAddressFlag = $this->saveWeshareAddresses($weshare['Weshare']['id'], $addressesData);
-        if ($saveBuyFlag && $saveProductFlag && $saveAddressFlag) {
+        $saveShipTypeFlag = $this->saevWeshareShipType($weshare['Weshare']['id'], $shipSetData);
+        if ($saveBuyFlag && $saveProductFlag && $saveAddressFlag && $saveShipTypeFlag) {
             echo json_encode(array('success' => true, 'id' => $weshare['Weshare']['id']));
             return;
         } else {
@@ -461,6 +465,13 @@ class WesharesController extends AppController {
         return $this->WeshareProduct->saveAll($weshareProductData);
     }
 
+    private function saevWeshareShipType($weshareId, $weshareShipData){
+        foreach($weshareShipData as &$item){
+            $item['weshare_id'] = $weshareId;
+        }
+        return $this->WeshareShipSetting->saveAll($weshareShipData);
+    }
+
     private function saveWeshareAddresses($weshareId, $weshareAddressData) {
         foreach ($weshareAddressData as &$address) {
             $address['weshare_id'] = $weshareId;
@@ -545,6 +556,12 @@ class WesharesController extends AppController {
                 'weshare_id' => $weshareId
             )
         ));
+        $weshareShipSettings = $this->WeshareShipSetting->find('all', array(
+            'conditions' => array(
+                'weshare_id' => $weshareId
+            )
+        ));
+        $weshareShipSettings = Hash::combine($weshareShipSettings,'{n}.WeshareShipSetting.tag', '{n}.WeshareShipSetting');
         $creatorInfo = $this->User->find('first', array(
             'conditions' => array(
                 'id' => $weshareInfo['Weshare']['creator']
@@ -556,6 +573,7 @@ class WesharesController extends AppController {
         $weshareInfo['addresses'] = Hash::extract($weshareAddresses, '{n}.WeshareAddress');
         $weshareInfo['products'] = Hash::extract($weshareProducts, '{n}.WeshareProduct');
         $weshareInfo['creator'] = $creatorInfo['User'];
+        $weshareInfo['ship_type'] = $weshareShipSettings;
         $weshareInfo['images'] = array_filter(explode('|', $weshareInfo['images']));
         return $weshareInfo;
 

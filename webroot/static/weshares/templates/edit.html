@@ -43,7 +43,7 @@
         </div>
         <div class="clearfix">
             <div class="form-group fl">
-                <input type="checkbox" ng-model="vm.weshare.ship_type.self_ziti" ng-true-value="1" ng-false-value="0">
+                <input type="checkbox" ng-model="vm.self_ziti_data.status" ng-true-value="1" ng-false-value="-1" ng-checked="vm.self_ziti_data.status==1">
             </div>
             &nbsp;&nbsp;&nbsp;自己的自提点
         </div>
@@ -57,14 +57,14 @@
 
         <div class="clearfix">
             <div class="form-group fl">
-                <input type="checkbox" ng-model="vm.weshare.ship_type.kuai_di" ng-true-value="1" ng-false-value="0">
+                <input type="checkbox" ng-model="vm.kuai_di.status" ng-true-value="1" ng-false-value="-1" ng-checked="vm.kuai_di.status==1">
             </div>
             &nbsp;&nbsp;&nbsp;快递
         </div>
 
         <div class="clearfix" ng-if="vm.sharerShipType!=0">
             <div class="form-group fl">
-                <input type="checkbox" disabled="{{vm.sharerShipType==0}}" ng-model="vm.weshare.ship_type.pys_ziti" ng-true-value="1" ng-false-value="0">
+                <input type="checkbox" disabled="{{vm.sharerShipType==0}}" ng-model="vm.pys_ziti.status" ng-true-value="1" ng-false-value="-1" ng-checked="vm.pys_ziti.status==1">
             </div>
             &nbsp;&nbsp;&nbsp;朋友说自提点
         </div>

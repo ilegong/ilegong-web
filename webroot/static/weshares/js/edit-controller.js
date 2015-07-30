@@ -30,6 +30,9 @@
       var weshareId = angular.element(document.getElementById('weshareEditView')).attr('data-id');
       var sharerShipType = angular.element(document.getElementById('weshareEditView')).attr('data-ship-type');
       vm.sharerShipType = sharerShipType;
+      vm.self_ziti_data = {status: -1, ship_fee: 0, tag: 'self_ziti'};
+      vm.kuai_di_data = {status: -1, ship_fee: 0, tag: 'kuai_di'};
+      vm.pys_ziti_data = {status: -1, ship_fee: 0, tag: 'pys_ziti'};
       //add
       vm.weshare = {
         title: '',
@@ -41,12 +44,7 @@
         send_info: '',
         addresses: [
           {address: ''}
-        ],
-        ship_type: {
-          'self_ziti': -1,
-          'kuai_di': -1,
-          'pys_ziti': -1
-        }
+        ]
       };
       var $cacheData = PYS.storage.load(vm.dataCacheKey);
       if ($cacheData) {
@@ -60,6 +58,9 @@
           if (!vm.weshare.addresses || vm.weshare.addresses.length == 0) {
             vm.weshare.addresses = [{address: ''}];
           }
+          vm.self_ziti_data = data['ship_type']['self_ziti'] || vm.self_ziti_data;
+          vm.kuai_di_data = data['ship_type']['kuai_di'] || vm.kuai_di_data;
+          vm.pys_ziti_data = data['ship_type']['pys_ziti'] || vm.pys_ziti_data;
         }).error(function (data) {
         });
       }
@@ -163,7 +164,7 @@
       vm.weshare.addresses = _.filter(vm.weshare.addresses, function (address) {
         return !_.isEmpty(address.address);
       });
-
+      vm.weshare.ship_type = [vm.self_ziti_data,vm.kuai_di_data,vm.pys_ziti_data];
       $log.log('submitted').log(vm.weshare);
       $http.post('/weshares/save', vm.weshare).success(function (data, status, headers, config) {
         if (data.success) {
