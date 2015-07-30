@@ -94,21 +94,12 @@
           }
           //follow share
           if (followSharedType) {
-            if (followSharedType == 'fail' || followSharedType == 'no_more') {
-              vm.showNotifyShareOfferDialog = true;
-              vm.sharedOfferMsg = '红包已经抢完，报名就有红包:)';
-            }
-            if (followSharedType == 'accepted') {
-              vm.showNotifyShareOfferDialog = true;
-              vm.sharedOfferMsg = '你已经抢过这个红包了,点击右上角“…”分享给大家一起抢:)';
-              vm.sharedOfferId = followSharedOfferId;
-            }
             if (followSharedType == 'got') {
               vm.showNotifyShareOfferDialog = true;
               vm.sharedOfferMsg = '谢谢你对' + vm.weshare.creator.nickname + '的支持!送你一个' + followSharedNum + '红包,报名直接抵现金呢:)';
               vm.sharedOfferId = followSharedOfferId;
+              vm.showLayer = true;
             }
-            vm.showLayer = true;
           }
         }).
         error(function (data, status) {

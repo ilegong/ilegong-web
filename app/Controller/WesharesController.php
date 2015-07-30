@@ -35,8 +35,6 @@ class WesharesController extends AppController {
             //get first
             if (!empty($shared_offers)) {
                 $this->set('shared_offer_id', $shared_offers[0]['SharedOffer']['id']);
-                //bind user default get coupon
-                $this->get_coupon_with_shared_id($shared_offers[0]['SharedOffer']['id']);
             }
             $this->set('from', $this->pay_type);
         }
@@ -733,7 +731,7 @@ class WesharesController extends AppController {
         }
         //accepted
         $this->set('follow_shared_offer_id', $shared_offer_id);
-        if ($get_coupon_result['accepted']) {
+        if ($get_coupon_result['accepted']&&$get_coupon_result['just_accepted'] == 0) {
             $this->set('get_coupon_type', 'accepted');
             return;
         }
