@@ -337,7 +337,7 @@
     }
 
     function setWeiXinShareParams() {
-      var url = 'http://www.tongshijia.com/weshares/view/' + vm.weshare.id + '?shared_offer_id=' + vm.sharedOfferId;
+      var url = 'http://www.tongshijia.com/weshares/view/' + vm.weshare.id;
       //creator
       var to_timeline_title = '';
       var to_friend_title = '';
@@ -383,9 +383,10 @@
         var title = vm.currentUser.nickname + '报名了' + vm.weshare.creator.nickname + '的分享,' + vm.weshare.creator.nickname + '送我一个红包大家一起抢!';
         to_timeline_title = title;
         to_friend_title = title;
+        url = url+ '?shared_offer_id=' + vm.sharedOfferId;
+        to_friend_link = url;
+        to_timeline_link = url;
       }
-      to_friend_title = to_friend_title + sub_title;
-      to_timeline_title = to_timeline_title + sub_title;
       if (wx) {
         wx.ready(function () {
           wx.onMenuShareAppMessage({

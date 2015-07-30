@@ -26,16 +26,17 @@ class WesharesController extends AppController {
         $this->set('weshare_id', $weshare_id);
         //form paid done
         $this->log('weshare view mark '.$_REQUEST['mark']);
-        if ($from == $this->pay_type||$_REQUEST['mark'] == 'template_msg') {
-            //check has sharer has red packet
-            //领取红包
-            $weshare = $this->Weshare->find('first', array('conditions' => array('id' => $weshare_id)));
-            $weshare_creator = $weshare['Weshare']['creator'];
-            $shared_offers = $this->SharedOffer->find_new_offers_by_weshare_creator($uid, $weshare_creator);
-            //get first
-            if (!empty($shared_offers)) {
-                $this->set('shared_offer_id', $shared_offers[0]['SharedOffer']['id']);
-            }
+        //check has sharer has red packet
+        //领取红包
+        $weshare = $this->Weshare->find('first', array('conditions' => array('id' => $weshare_id)));
+        $weshare_creator = $weshare['Weshare']['creator'];
+        $shared_offers = $this->SharedOffer->find_new_offers_by_weshare_creator($uid, $weshare_creator);
+        //get first
+        if (!empty($shared_offers)) {
+            $this->set('shared_offer_id', $shared_offers[0]['SharedOffer']['id']);
+            $this->set('from', $this->pay_type);
+        }
+        if($from==1){
             $this->set('from', $this->pay_type);
         }
         //has share offer id user open share
