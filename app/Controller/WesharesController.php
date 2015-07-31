@@ -25,7 +25,7 @@ class WesharesController extends AppController {
         $uid = $this->currentUser['id'];
         $this->set('weshare_id', $weshare_id);
         //form paid done
-        $this->log('weshare view mark '.$_REQUEST['mark']);
+        $this->log('weshare view mark ' . $_REQUEST['mark']);
         //check has sharer has red packet
         //领取红包
         $weshare = $this->Weshare->find('first', array('conditions' => array('id' => $weshare_id)));
@@ -36,7 +36,7 @@ class WesharesController extends AppController {
             $this->set('shared_offer_id', $shared_offers[0]['SharedOffer']['id']);
             $this->set('from', $this->pay_type);
         }
-        if($from==1){
+        if ($from == 1) {
             $this->set('from', $this->pay_type);
         }
         //has share offer id user open share
@@ -127,13 +127,13 @@ class WesharesController extends AppController {
         $addressesData = $postDataArray['addresses'];
         $weshareData['creator'] = $uid;
         $saveBuyFlag = $weshare = $this->Weshare->save($weshareData);
-        $saveProductFlag = $this->saveWeshareProducts($weshare['Weshare']['id'], $productsData);
-        $saveAddressFlag = $this->saveWeshareAddresses($weshare['Weshare']['id'], $addressesData);
-        if ($saveBuyFlag && $saveProductFlag && $saveAddressFlag) {
+        $this->saveWeshareProducts($weshare['Weshare']['id'], $productsData);
+        $this->saveWeshareAddresses($weshare['Weshare']['id'], $addressesData);
+        if ($saveBuyFlag) {
             echo json_encode(array('success' => true, 'id' => $weshare['Weshare']['id']));
             return;
         } else {
-            echo json_encode(array('success' => false));
+            echo json_encode(array('success' => false,'uid' => $uid));
             return;
         }
     }
@@ -445,6 +445,9 @@ class WesharesController extends AppController {
     }
 
     private function saveWeshareProducts($weshareId, $weshareProductData) {
+        if(empty($weshareProductData)){
+            return;
+        }
         foreach ($weshareProductData as &$product) {
             $product['weshare_id'] = $weshareId;
             $product['price'] = ($product['price'] * 100);
@@ -457,6 +460,9 @@ class WesharesController extends AppController {
     }
 
     private function saveWeshareAddresses($weshareId, $weshareAddressData) {
+        if(empty($weshareAddressData)){
+            return;
+        }
         foreach ($weshareAddressData as &$address) {
             $address['weshare_id'] = $weshareId;
         }
@@ -504,8 +510,8 @@ class WesharesController extends AppController {
             'fields' => array('id', 'name', 'order_id', 'num', 'product_id', 'price')
         ));
         $realTotalPrice = 0;
-        foreach($orders as $item){
-            $realTotalPrice = $realTotalPrice+$item['total_all_price'];
+        foreach ($orders as $item) {
+            $realTotalPrice = $realTotalPrice + $item['total_all_price'];
         }
         $summeryTotalPrice = 0;
         foreach ($carts as $item) {
@@ -701,7 +707,7 @@ class WesharesController extends AppController {
 
     private function get_coupon_with_shared_id($share_offer_id) {
         $uid = $this->currentUser['id'];
-        return $this->RedPacket->process_receive($share_offer_id, $uid,$this->is_weixin());
+        return $this->RedPacket->process_receive($share_offer_id, $uid, $this->is_weixin());
     }
 
     private function get_can_used_coupons($uid, $sharer) {
@@ -737,7 +743,7 @@ class WesharesController extends AppController {
         }
         //accepted
         $this->set('follow_shared_offer_id', $shared_offer_id);
-        if ($get_coupon_result['accepted']&&$get_coupon_result['just_accepted'] == 0) {
+        if ($get_coupon_result['accepted'] && $get_coupon_result['just_accepted'] == 0) {
             $this->set('get_coupon_type', 'accepted');
             return;
         }

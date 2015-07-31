@@ -169,13 +169,13 @@
 					$log.log('post succeeded, data: ').log(data);
           PYS.storage.clear();
 					window.location.href = '/weshares/view/' + data['id'];
-				}
-				else {
-          vm.isInProcess = false;
+				}else {
+          var uid = data['uid'];
+          window.location.href = '/weshares/user_share_info/'+uid;
 					$log.log("failed with status: " + status + ", data: ").log(data);
 				}
 			}).error(function (data, status, headers, config) {
-          vm.isInProcess = false;
+          window.location.href = '/weshares/add';
 					$log.log("failed with status :" + status + ", data: ").log(data).log(', and config').log(config);
 				});
 		}
