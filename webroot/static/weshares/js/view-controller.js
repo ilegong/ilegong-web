@@ -101,7 +101,7 @@
               $timeout(function(){
                 vm.showLayer = false;
                 vm.showNotifyGetPacketDialog = false;
-              },6000);
+              },10000);
             }
           }
         }).
