@@ -613,7 +613,7 @@ class WesharesController extends AppController {
                 'status' => $order_status,
                 'type' => ORDER_TYPE_WESHARE_BUY
             ),
-            'fileds' => array('DISTINCT creator')
+            'fields' => array('DISTINCT creator')
         ));
         return array('share_count' => count($weshares), 'follower_count' => $follower_count);
     }
