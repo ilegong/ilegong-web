@@ -95,7 +95,7 @@ class TestController extends AppController{
         return;
     }
 
-    public function test_send_wehshare_new_msg($weshareId){
+    public function test_send_weshare_new_msg($weshareId){
         $this->autoRender = false;
         $this->WeshareBuy->send_new_share_msg($weshareId);
         echo json_encode(array('success' => true));
