@@ -119,20 +119,36 @@
 <div class="share-dialog" ng-show="vm.showNotifyShareDialog">
     <div style="width: 90%; margin: 0 auto; font-size: 1.3em;">点击右上角“…”，告诉{{vm.weshare.creator.nickname}}我团好了。</div>
 </div>
+<div class="redpacket" ng-show="vm.showNotifyGetPacketDialog">
+    <div class="first-box">
+        <img class="body" src="/static/weshares/images/redpacket//fools_1.png">
+        <img class="user-headimg" src="/static/weshares/images/redpacket/hbss_icon.jpg">
+        <div class="hot-click">
+            <div style="color:#FFFFFF;font-size:14pt; display: inline-block;margin-top: 40%;margin-left: 30%;" ng-bind="vm.getPacketNum"></div>
+        </div>
+        <div class="nickname" ng-bind="vm.weshare.creator.nickname"></div>
+    </div>
+</div>
 <!--paid done has red packet-->
 <img src="/static/weshares/images/shareto.png" style="top:0;right: 0;position: fixed;z-index: 9999;" ng-show="vm.showNotifyShareOfferDialog"/>
-<div class="weshare-view" style="position: fixed;top: 67px;left: 0; z-index: 999;background: #FFFFFF;padding: 10px 10px 10px;width: 100%;" ng-show="vm.showNotifyShareOfferDialog">
-    <div class="orders">
-        <ul class="order clearfix margin-bottom-12">
-            <li class='buyer-image'><img ng-src="{{vm.weshare.creator.image||'/img/default_user_icon.jpg'}}"/></li>
-            <li class="detail">
-                <b></b>
-                <p><strong class='buyer-name' ng-bind="vm.weshare.creator.nickname"></strong></p>
-                <span class='display-name' ng-bind="vm.sharedOfferMsg"></span>
-            </li>
-        </ul>
+<div ng-show="vm.showNotifyShareOfferDialog" style="border: white;position: fixed;top: 58px;left: 8%; z-index: 999;padding: 10px 10px 10px;width: 80%;border-radius: 15px;">
+    <div style="background: #ff9426; border-radius: 5px 5px 0px 0px;">
+        <div style="display: inline-block; margin-left: 10px;margin-bottom: 10px;margin-top: 10px;">
+            <img style="width: 40px;height: 40px;" ng-src="/static/weshares/images/redpacket/hbicon.png"/>
+            <div style="color: #FFFFFF;margin-left:10px;display: inline-block;">
+                <div style="font-size: small; margin-bottom: 10px;">
+                    恭喜发财，大吉大利！
+                </div>
+                <div style="font-size: small;">
+                    分享领取红包
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="background: #FFFFFF;color: darkgray;font-size: smaller;border-radius:0px 0px 5px 5px;">
+        &nbsp;&nbsp;&nbsp;{{vm.weshare.creator.nickname}}的红包
     </div>
 </div>
 
 
-<div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showLayer=false;vm.showBuyingDialog=false;vm.showShareDialog=false;vm.showNotifyShareDialog=false;vm.showNotifyShareOfferDialog=false;"></div>
+<div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showLayer=false;vm.showBuyingDialog=false;vm.showShareDialog=false;vm.showNotifyShareDialog=false;vm.showNotifyShareOfferDialog=false;vm.showNotifyGetPacketDialog=false;"></div>

@@ -88,20 +88,19 @@
               vm.showNotifyShareDialog = true;
             } else {
               vm.showNotifyShareOfferDialog = true;
-              vm.sharedOfferMsg = '谢谢你对' + vm.weshare.creator.nickname + '的支持!送你一个红包,点击右上角分享给大家一起抢:)';
+              vm.sharedOfferMsg = '恭喜发财，大吉大利！';
             }
             vm.showLayer = true;
           }
           //follow share
           if (followSharedType) {
             if (followSharedType == 'got') {
-              vm.showNotifyShareOfferDialog = true;
-              vm.sharedOfferMsg = '谢谢你对' + vm.weshare.creator.nickname + '的支持!送你一个' + followSharedNum + '红包,报名直接抵现金呢:)';
-              vm.sharedOfferId = followSharedOfferId;
+              vm.showNotifyGetPacketDialog = true;
+              vm.getPacketNum = followSharedNum;
               vm.showLayer = true;
               $timeout(function(){
                 vm.showLayer = false;
-                vm.showNotifyShareOfferDialog = false;
+                vm.showNotifyGetPacketDialog = false;
               },5000);
             }
           }
@@ -384,12 +383,13 @@
       //share packet
       if (vm.isSharePacket) {
         imgUrl = 'http://51daifan.sinaapp.com/img/sharing/packet1.png';
-        var title = vm.currentUser.nickname + '报名了' + vm.weshare.creator.nickname + '的分享,' + vm.weshare.creator.nickname + '送我一个红包大家一起抢!';
+        var title = '恭喜发财，大吉大利！';
         to_timeline_title = title;
         to_friend_title = title;
         url = url+ '?shared_offer_id=' + vm.sharedOfferId;
         to_friend_link = url;
         to_timeline_link = url;
+        desc = '点击领取红包';
       }
       if (wx) {
         wx.ready(function () {
