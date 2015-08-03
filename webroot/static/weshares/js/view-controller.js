@@ -55,6 +55,11 @@
       }
       vm.weshare = {};
       vm.orderTotalPrice = 0;
+      $scope.$watch('vm.selectShipType', function (val) {
+        if(val!=-1){
+          vm.chooseShipType = false;
+        }
+      });
       $http({method: 'GET', url: '/weshares/detail/' + weshareId, cache: $templateCache}).
         success(function (data, status) {
           $log.log(data);
@@ -71,6 +76,8 @@
           vm.weixinInfo = data['weixininfo'];
           vm.consignee = data['consignee'];
           vm.myCoupons = data['my_coupons'];
+          vm.weshareSettings = data['weshare_ship_settings'];
+          vm.selectShipType = -1;
           if (vm.myCoupons) {
             vm.useCouponId = vm.myCoupons.CouponItem.id;
             vm.userCouponReduce = vm.myCoupons.Coupon.reduced_price;
@@ -239,17 +246,17 @@
     }
 
     function buyProducts() {
-      var addressHasError = vm.validateAddress();
       var productsHasError = vm.validateProducts();
-      if (addressHasError || productsHasError) {
-        if (addressHasError) {
-          alert('请选择地址');
-        } else if (productsHasError) {
-          alert('请输入商品数量');
-        }
+      if (productsHasError) {
+        alert('请输入商品数量');
         return;
       }
-
+      if(vm.selectShipType==-1){
+        alert('请选择快递方式');
+        vm.chooseShipType = true;
+        return;
+      }
+      vm.chooseShipType = false;
       vm.showBuyingDialog = true;
       vm.showLayer = true;
     }

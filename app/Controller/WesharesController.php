@@ -171,8 +171,8 @@ class WesharesController extends AppController {
         $user_share_summery = $this->getUserShareSummery($creatorId, $uid == $creatorId);
         //TODO return coupon
         $my_coupon_items = $this->get_can_used_coupons($uid, $creatorId);
-
-        echo json_encode(array('weshare' => $weshareInfo, 'ordersDetail' => $ordersDetail, 'current_user' => $current_user['User'], 'weixininfo' => $weixinInfo, 'consignee' => $consignee, 'user_share_summery' => $user_share_summery, 'my_coupons' => $my_coupon_items[0]));
+        $weshare_ship_settings = $this->getWeshareShipSettings($weshareId);
+        echo json_encode(array('weshare' => $weshareInfo, 'ordersDetail' => $ordersDetail, 'current_user' => $current_user['User'], 'weixininfo' => $weixinInfo, 'weshare_ship_settings' => $weshare_ship_settings , 'consignee' => $consignee, 'user_share_summery' => $user_share_summery, 'my_coupons' => $my_coupon_items[0]));
         return;
     }
 
@@ -630,6 +630,16 @@ class WesharesController extends AppController {
             'fileds' => array('DISTINCT creator')
         ));
         return array('share_count' => count($weshares), 'follower_count' => $follower_count);
+    }
+
+    private function getWeshareShipSettings($weshareId){
+        $shareShipSettings =$this->WeshareShipSetting->find('all', array(
+            'conditions' => array(
+                'weshare_id' => $weshareId
+            )
+        ));
+        $shareShipSettings = Hash::combine($shareShipSettings,'{n}.WeshareShipSetting.tag','{n}.WeshareShipSetting');
+        return $shareShipSettings;
     }
 
     private function explode_share_imgs(&$shares) {
