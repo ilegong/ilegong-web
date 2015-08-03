@@ -264,9 +264,20 @@
     function submitOrder(paymentType) {
       vm.validateUserName();
       vm.validateMobile();
-      vm.validateUserAddress();
-      if (vm.buyerMobilePhoneHasError || vm.usernameHasError || vm.userAddressHasError) {
+      if (vm.buyerMobilePhoneHasError || vm.usernameHasError) {
         return false;
+      }
+      //kuai di
+      if (vm.selectShipType == 0) {
+        vm.validateUserAddress();
+        return false;
+      }
+      //self ziti
+      if (vm.selectShipType == 1) {
+        var addressHasError = vm.validateAddress();
+        if (addressHasError) {
+          return false;
+        }
       }
       var products = _.filter(vm.weshare.products, function (product) {
         return product.num && (product.num > 0);
