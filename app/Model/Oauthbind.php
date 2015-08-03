@@ -29,10 +29,21 @@ class Oauthbind extends AppModel {
         }
     }
 
+    public function findWxServiceBindsByUids($uids){
+        $r = $this->find('all', array('conditions' => array('user_id' => $uids)));
+        if (!empty($r)) {
+            $r = Hash::extract($r,'{n}.Oauthbind.oauth_openid');
+            return $r;
+        } else {
+            return false;
+        }
+    }
+
     public function update_wx_bind_uid($openid, $oldUid, $newUid) {
         if ($this->updateAll(array('user_id' => $newUid), array('user_id' => $oldUid, 'oauth_openid' => $openid, 'source' => oauth_wx_source(),))) {
             return $this->getAffectedRows();
         }
         return 0;
     }
+
 }

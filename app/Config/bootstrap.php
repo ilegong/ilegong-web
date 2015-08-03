@@ -1790,30 +1790,36 @@ function get_tuan_msg_element($tuan_buy_id)
  * @param $tuan_leader_wx
  * @param $remark
  * @param $deatil_url
+ * @param $open_id
  * @return bool
  * 加入一个团购
  */
-function send_join_tuan_buy_msg($user_id, $title, $product_name, $tuan_leader_wx, $remark, $deatil_url)
+function send_join_tuan_buy_msg($user_id, $title, $product_name, $tuan_leader_wx, $remark, $deatil_url, $open_id=null)
 {
-    $oauthBindModel = ClassRegistry::init('Oauthbind');
-    $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
-    if ($user_weixin != false) {
+    if(empty($open_id)){
+        $oauthBindModel = ClassRegistry::init('Oauthbind');
+        $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
+        if ($user_weixin == false) {
+            return false;
+        }
         $open_id = $user_weixin['oauth_openid'];
-        $post_data = array(
-            "touser" => $open_id,
-            "template_id" => 'P4iCqkiG7_s0SVwCSKyEuJ0NnLDgVNVCm2VQgSGdl-U',
-            "url" => $deatil_url,
-            "topcolor" => "#FF0000",
-            "data" => array(
-                "first" => array("value" => $title),
-                "Pingou_ProductName" => array("value" => $product_name),
-                "Weixin_ID" => array("value" => $tuan_leader_wx),
-                "Remark" => array("value" => $remark, "color" => "#FF8800")
-            )
-        );
-        return send_weixin_message($post_data);
     }
-    return false;
+    if(empty($open_id)){
+       return false;
+    }
+    $post_data = array(
+        "touser" => $open_id,
+        "template_id" => 'P4iCqkiG7_s0SVwCSKyEuJ0NnLDgVNVCm2VQgSGdl-U',
+        "url" => $deatil_url,
+        "topcolor" => "#FF0000",
+        "data" => array(
+            "Pingou_Action" => array("value" => $title),
+            "Pingou_ProductName" => array("value" => $product_name),
+            "Weixin_ID" => array("value" => $tuan_leader_wx),
+            "Remark" => array("value" => $remark, "color" => "#FF8800")
+        )
+    );
+    return send_weixin_message($post_data);
 }
 
 /**
