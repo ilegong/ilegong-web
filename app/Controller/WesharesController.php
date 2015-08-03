@@ -28,23 +28,24 @@ class WesharesController extends AppController {
         $this->log('weshare view mark ' . $_REQUEST['mark']);
         //check has sharer has red packet
         //领取红包
-        $weshare = $this->Weshare->find('first', array('conditions' => array('id' => $weshare_id)));
-        $weshare_creator = $weshare['Weshare']['creator'];
-        $shared_offers = $this->SharedOffer->find_new_offers_by_weshare_creator($uid, $weshare_creator);
-        //get first
-        if (!empty($shared_offers)) {
-            $this->set('shared_offer_id', $shared_offers[0]['SharedOffer']['id']);
-            $this->set('from', $this->pay_type);
-        }
-        if ($from == 1) {
-            $this->set('from', $this->pay_type);
-        }
+        $shared_offer_id = $_REQUEST['shared_offer_id'];
         //has share offer id user open share
         //用户抢红包
-        $shared_offer_id = $_REQUEST['shared_offer_id'];
         if (!empty($shared_offer_id)) {
             //process
             $this->process_shared_offer($shared_offer_id);
+        }else{
+            $weshare = $this->Weshare->find('first', array('conditions' => array('id' => $weshare_id)));
+            $weshare_creator = $weshare['Weshare']['creator'];
+            $shared_offers = $this->SharedOffer->find_new_offers_by_weshare_creator($uid, $weshare_creator);
+            //get first
+            if (!empty($shared_offers)) {
+                $this->set('shared_offer_id', $shared_offers[0]['SharedOffer']['id']);
+                $this->set('from', $this->pay_type);
+            }
+            if ($from == 1) {
+                $this->set('from', $this->pay_type);
+            }
         }
     }
 

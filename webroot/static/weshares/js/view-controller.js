@@ -46,7 +46,7 @@
       var fromType = angular.element(document.getElementById('weshareView')).attr('data-from-type');
       //first share
       var initSharedOfferId = angular.element(document.getElementById('weshareView')).attr('data-shared-offer');
-      var followSharedOfferId = angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-offer');
+      //var followSharedOfferId = angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-offer');
       var followSharedType = angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-type');
       var followSharedNum = angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-coupon-num');
       vm.sharedOfferId = initSharedOfferId;
@@ -350,7 +350,6 @@
       var to_friend_link = url;
       var to_timeline_link = url;
       //member
-      var sub_title = '';
       var userInfo = vm.ordersDetail.users[vm.currentUser.id];
       if (vm.currentUser.id == vm.weshare.creator.id) {
         to_timeline_title = vm.weshare.creator.nickname + '分享:' + vm.weshare.title;
@@ -382,7 +381,7 @@
       }
       //share packet
       if (vm.isSharePacket) {
-        imgUrl = 'http://51daifan.sinaapp.com/img/sharing/packet1.png';
+        imgUrl = 'http://www.tongshijia.com/static/weshares/images/redpacket/hbss_icon.jpg';
         var title = '恭喜发财，大吉大利！';
         to_timeline_title = title;
         to_friend_title = title;
