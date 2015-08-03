@@ -135,10 +135,10 @@ class WesharesController extends AppController {
         $shipSetData = $postDataArray['ship_type'];
         $weshareData['creator'] = $uid;
         $saveBuyFlag = $weshare = $this->Weshare->save($weshareData);
-        $saveProductFlag = $this->saveWeshareProducts($weshare['Weshare']['id'], $productsData);
-        $saveAddressFlag = $this->saveWeshareAddresses($weshare['Weshare']['id'], $addressesData);
-        $saveShipTypeFlag = $this->saevWeshareShipType($weshare['Weshare']['id'], $shipSetData);
-        if ($saveBuyFlag && $saveProductFlag && $saveAddressFlag && $saveShipTypeFlag) {
+        $this->saveWeshareProducts($weshare['Weshare']['id'], $productsData);
+        $this->saveWeshareAddresses($weshare['Weshare']['id'], $addressesData);
+        $this->saevWeshareShipType($weshare['Weshare']['id'], $shipSetData);
+        if ($saveBuyFlag) {
             echo json_encode(array('success' => true, 'id' => $weshare['Weshare']['id']));
             return;
         } else {
