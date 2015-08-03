@@ -44,17 +44,20 @@ class WeshareBuyComponent extends Component {
         $product_name = implode(', ',$weshare_product_names);
         $title = '关注的'.$sharer_name.'发起了';
         $remark = '点击详情，赶快加入'.$sharer_name.'的分享！';
-        $followers = $this->load_fans_buy_sharer($weshare['Weshare']['creator']);
+        $followers = $this->load_fans_buy_sharer($weshare['Weshare']['creator'],$weshareId);
         $openIds = $this->Oauthbind->findWxServiceBindsByUids($followers);
         foreach($openIds as $openId){
             $this->process_send_share_msg($openId,$title,$product_name,$detail_url,$sharer_name,$remark);
         }
     }
 
-    public function load_fans_buy_sharer($sharerId) {
+    public function load_fans_buy_sharer($sharerId, $weshareId) {
         $weshares = $this->Weshare->find('all', array(
             'conditions' => array(
-                'creator' => $sharerId
+                'creator' => $sharerId,
+                'not' => array(
+                    'id' => array($weshareId)
+                )
             ),
             'fields' => array('id')
         ));
@@ -65,7 +68,7 @@ class WeshareBuyComponent extends Component {
             'conditions' => array(
                 'member_id' => $weshare_ids,
                 'status' => $order_status,
-                'type' => ORDER_TYPE_WESHARE_BUY
+                'type' => ORDER_TYPE_WESHARE_BUY,
             ),
             'fields' => array('DISTINCT creator'),
             'limit' => 2000

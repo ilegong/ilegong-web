@@ -6,7 +6,7 @@ class WesharesController extends AppController {
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description');
 
-    public $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket');
+    public $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'WeshareBuy');
 
     var $pay_type = 1;
 
@@ -130,6 +130,7 @@ class WesharesController extends AppController {
         $this->saveWeshareProducts($weshare['Weshare']['id'], $productsData);
         $this->saveWeshareAddresses($weshare['Weshare']['id'], $addressesData);
         if ($saveBuyFlag) {
+            $this->WeshareBuy->send_new_share_msg($weshare['Weshare']['id']);
             echo json_encode(array('success' => true, 'id' => $weshare['Weshare']['id']));
             return;
         } else {
