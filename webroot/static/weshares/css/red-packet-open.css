@@ -1,14 +1,15 @@
 @charset "gb2312";
 /* CSS Document */
 
-.redpacket { font:normal 14px Tahoma, "Lucida Grande", Verdana, "Microsoft Yahei", STXihei, hei; background:#080808; background-size:100%; color:#353535; }
+.redpacket { font:normal 14px Tahoma, "Lucida Grande", Verdana, "Microsoft Yahei", STXihei, hei; background:#080808; background-size:100%; color:#353535; z-index: 9999;}
 .redpacket, div, a, ul, li, p, span { padding:0; margin:0; }
 a { text-decoration:none; color:#000; }
-.first-box { width:81.67%; position:absolute; left:9.165%; top:10%; }
+.first-box { width:81.67%; position:absolute; left:9.165%; top:10%; z-index: 999;}
 img.body { width:100%; }
 .user-headimg { position:absolute; border-radius:10000px; left:50%; top:9.75%; width:20.65%; margin-left:-10.5%; }
 .hot-click { position:absolute; border-radius:10000px; left:50%; top:61%; width:36%; height:26%; margin-left:-18%; }
-.nickname { width:100%; position:absolute; text-align:center; color:#FFF; top:28.5%; font-size:1.15em; }
+.redpacket .nickname { width:100%; position:absolute; text-align:center; color:#FFF; top:28.5%; font-size:1.15em; }
+.redpacket .tips { width:100%; position:absolute; text-align:center; color:darkgray; top:90.5%; font-size:0.78em; }
 .second-box { width:100%; height:auto; top: 10%;position: fixed;}
 .second-wrapper { overflow:hidden; width:auto; position:relative; }
 .second-bg { width:100%; }

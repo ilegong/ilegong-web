@@ -96,7 +96,7 @@
           if (followSharedType) {
             if (followSharedType == 'got') {
               vm.showNotifyGetPacketDialog = true;
-              vm.getPacketNum = followSharedNum;
+              vm.getPacketNum = followSharedNum+'元';
               vm.showLayer = true;
               $timeout(function(){
                 vm.showLayer = false;

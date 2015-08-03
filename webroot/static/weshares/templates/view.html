@@ -120,13 +120,14 @@
     <div style="width: 90%; margin: 0 auto; font-size: 1.3em;">点击右上角“…”，告诉{{vm.weshare.creator.nickname}}我团好了。</div>
 </div>
 <div class="redpacket" ng-show="vm.showNotifyGetPacketDialog">
-    <div class="first-box">
+    <div class="first-box" ng-click="vm.showNotifyGetPacketDialog=false;vm.showLayer=false;">
         <img class="body" src="/static/weshares/images/redpacket/fools_1.png">
-        <img class="user-headimg" src="/static/weshares/images/redpacket/hbss_icon.jpg">
+        <img class="user-headimg" ng-src="{{vm.weshare.creator.image||'/static/weshares/images/redpacket/hbss_icon.jpg'}}">
         <div class="hot-click">
-            <div style="color:#FFFFFF;font-size:14pt; display: inline-block;margin-top: 40%;margin-left: 30%;" ng-bind="vm.getPacketNum"></div>
+            <div style="color:#FFFFFF;font-size:20pt; display: inline-block;margin-top: 40%;margin-left: 10%;" ng-bind="vm.getPacketNum"></div>
         </div>
         <div class="nickname" ng-bind="vm.weshare.creator.nickname"></div>
+        <div class="tips">报名时直接抵现金</div>
     </div>
 </div>
 <!--paid done has red packet-->
