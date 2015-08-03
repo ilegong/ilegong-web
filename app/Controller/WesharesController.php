@@ -57,6 +57,8 @@ class WesharesController extends AppController {
         if ($uid != $weshareInfo['creator']['id']) {
             $this->redirect('/weshares/view/' . $weshareId . '/0');
         }
+        $share_ship_set = $this->sharer_can_use_we_ship($uid);
+        $this->set('ship_type', $share_ship_set);
         $this->set('weshare_id', $weshareId);
     }
 
