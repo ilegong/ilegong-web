@@ -206,7 +206,6 @@ class WesharesController extends AppController {
         $postDataArray = json_decode($postStr, true);
         $products = $postDataArray['products'];
         $weshareId = $postDataArray['weshare_id'];
-        $addressId = $postDataArray['address_id'];
         $buyerData = $postDataArray['buyer'];
         $cart = array();
         try {
@@ -219,28 +218,26 @@ class WesharesController extends AppController {
                     'weshare_id' => $weshareId
                 )
             ));
-            $reason = '';
-            foreach ($weshareProducts as $p) {
-                $product_id = $p['WeshareProduct']['id'];
-                $cart_num = $productIdNumMap[$product_id];
-                $check_num_result = $this->check_product_num($weshareId, $p, $cart_num);
-                if (!$check_num_result['result']) {
-                    if ($check_num_result['type'] == 0) {
-                        $reason = $reason . ' ' . $p['WeshareProduct']['name'] . '已经售罄';
-                    }
-                    if ($check_num_result['type'] == 1) {
-                        $reason = $reason . ' ' . $p['WeshareProduct']['name'] . '超量' . $check_num_result['num'] . '件';
-                    }
-                }
-            }
-            if (strlen($reason) > 0) {
-                echo json_encode(array('success' => false, 'reason' => $reason));
+            $checkProductStoreResult = $this->check_product_store($weshareProducts,$weshareId,$productIdNumMap);
+            if(!empty($checkProductStoreResult)){
+                echo json_encode($checkProductStoreResult);
                 return;
             }
             $shipInfo = $postDataArray['ship_info'];
+            $addressId = $shipInfo['address_id'];
+            $shipType = $shipInfo['ship_type'];
             $address = $this->get_order_address($weshareId,$shipInfo,$buyerData,$uid);
-
-            $order = $this->Order->save(array('creator' => $uid, 'consignee_address' => $address, 'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $buyerData['name'], 'consignee_mobilephone' => $buyerData['mobilephone']));
+            $orderData = array('creator' => $uid, 'consignee_address' => $address, 'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $buyerData['name'], 'consignee_mobilephone' => $buyerData['mobilephone']);
+            if($shipType == SHARE_SHIP_PYS_ZITI){
+                $orderData['ship_mark'] = 'psy_zi_ti';
+            }
+            if($shipType == SHARE_SHIP_SELF_ZITI){
+                $orderData['ship_mark'] = 'self_zi_ti';
+            }
+            if($shipType == SHARE_SHIP_KUAIDI){
+                $orderData['ship_mark'] = 'kuai_di';
+            }
+            $order = $this->Order->save($orderData);
             $orderId = $order['Order']['id'];
             $totalPrice = 0;
             foreach ($weshareProducts as $p) {
@@ -805,7 +802,7 @@ class WesharesController extends AppController {
 
     //check order ship type gen order address
     private function get_order_address($weshareId,$shipInfo,$buyerData,$uid){
-        $shipType = $shipInfo['shipType'];
+        $shipType = $shipInfo['ship_type'];
         $addressId = $shipInfo['address_id'];
         $customAddress = $buyerData['address'];
         if ($shipType == SHARE_SHIP_PYS_ZITI) {
@@ -836,5 +833,26 @@ class WesharesController extends AppController {
             }
             return $address;
         }
+    }
+
+    private function check_product_store($weshareProducts, $weshareId, $productIdNumMap) {
+        $reason = '';
+        foreach ($weshareProducts as $p) {
+            $product_id = $p['WeshareProduct']['id'];
+            $cart_num = $productIdNumMap[$product_id];
+            $check_num_result = $this->check_product_num($weshareId, $p, $cart_num);
+            if (!$check_num_result['result']) {
+                if ($check_num_result['type'] == 0) {
+                    $reason = $reason . ' ' . $p['WeshareProduct']['name'] . '已经售罄';
+                }
+                if ($check_num_result['type'] == 1) {
+                    $reason = $reason . ' ' . $p['WeshareProduct']['name'] . '超量' . $check_num_result['num'] . '件';
+                }
+            }
+        }
+        if (strlen($reason) > 0) {
+           return array('success' => false, 'reason' => $reason);
+        }
+        return null;
     }
 }

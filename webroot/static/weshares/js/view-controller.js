@@ -362,7 +362,7 @@
         return {id: product.id, num: product.num};
       });
       var ship_info = {
-        shipType : vm.selectShipType,
+        ship_type : vm.selectShipType,
         address_id: vm.weshare.selectedAddressId
       };
       var orderData = {
