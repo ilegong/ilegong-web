@@ -611,8 +611,16 @@ class WesharesController extends AppController {
                 'creator' => $uid,
                 'status' => STATUS_CONSIGNEES_SHARE
             ),
-            'fields' => array('name', 'mobilephone', 'address')
+            'fields' => array('name', 'mobilephone', 'address', 'ziti_id')
         ));
+        //load remember offline store id
+        $ziti_id = $consignee['OrderConsignees']['ziti_id'];
+        if($ziti_id){
+            $offlineStore  = $this->OfflineStore->findById($ziti_id);
+            if(!empty($offlineStore)){
+                $consignee['OrderConsignees']['offlineStore'] = $offlineStore['OfflineStore'];
+            }
+        }
         return $consignee['OrderConsignees'];
     }
 

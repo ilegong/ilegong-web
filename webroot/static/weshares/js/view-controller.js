@@ -34,8 +34,7 @@
       }
     };
     $vm.currentAreaCode = '110101';
-    $http({method: 'GET', url: '/tuan_buyings/get_offline_address?type=-1', cache: $templateCache}).success(function(data) {
-      $log.log(data);
+    $http({method: 'GET', url: '/tuan_buyings/get_offline_address.json?type=-1', cache: $templateCache}).success(function(data) {
       $vm.offlineStores = data['address'];
     });
     $vm.changeOfflineStoreArea = changeOfflineStoreArea;
@@ -140,7 +139,6 @@
       });
       $http({method: 'GET', url: '/weshares/detail/' + weshareId, cache: $templateCache}).
         success(function (data, status) {
-          $log.log(data);
           vm.weshare = data['weshare'];
           if (vm.weshare.addresses.length == 1) {
             vm.weshare.selectedAddressId = vm.weshare.addresses[0].id;
@@ -155,6 +153,7 @@
           vm.consignee = data['consignee'];
           vm.myCoupons = data['my_coupons'];
           vm.weshareSettings = data['weshare_ship_settings'];
+          vm.checkedOfflineStore = vm.consignee.offlineStore;
           vm.selectShipType = -1;
           if (vm.myCoupons) {
             vm.useCouponId = vm.myCoupons.CouponItem.id;
