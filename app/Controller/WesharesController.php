@@ -455,6 +455,7 @@ class WesharesController extends AppController {
         $this->set('weshareId', $weshareId);
     }
 
+    //TODO delete not use product
     private function saveWeshareProducts($weshareId, $weshareProductData) {
         if(empty($weshareProductData)){
             return;
@@ -470,6 +471,7 @@ class WesharesController extends AppController {
         return $this->WeshareProduct->saveAll($weshareProductData);
     }
 
+
     private function saevWeshareShipType($weshareId, $weshareShipData){
         foreach($weshareShipData as &$item){
             $item['weshare_id'] = $weshareId;
@@ -477,6 +479,7 @@ class WesharesController extends AppController {
         return $this->WeshareShipSetting->saveAll($weshareShipData);
     }
 
+    //TODO delete not use address
     private function saveWeshareAddresses($weshareId, $weshareAddressData) {
         if(empty($weshareAddressData)){
             return;

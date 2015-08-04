@@ -41,7 +41,7 @@
     $vm.changeOfflineStoreArea = changeOfflineStoreArea;
     $vm.showOfflineStoreDetail = showOfflineStoreDetail;
     $vm.chooseOfflineStore = chooseOfflineStore;
-    $vm.backChooseOfflineStoreView  = backChooseOfflineStoreView;
+    $vm.showChooseOfflineStoreView  = showChooseOfflineStoreView;
     $vm.backShareDetailView = backShareDetailView;
 
     function backShareDetailView(){
@@ -50,7 +50,7 @@
       $vm.showShareDetailView = true;
     }
 
-    function backChooseOfflineStoreView(){
+    function showChooseOfflineStoreView(){
       $vm.showOfflineStoreDetailView = false;
       $vm.chooseOfflineStoreView = true;
       $vm.showShareDetailView = false;
@@ -60,6 +60,7 @@
       $vm.showOfflineStoreDetailView = false;
       $vm.chooseOfflineStoreView = false;
       $vm.showShareDetailView = true;
+      $vm.checkedOfflineStore=offlineStore;
     }
 
     function showOfflineStoreDetail(offlineStore){
@@ -75,8 +76,7 @@
 
   function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, Utils) {
     var vm = this;
-    vm.showShareDetailView = false;
-    vm.chooseOfflineStoreView = true;
+    vm.showShareDetailView = true;
     ChooseOfflineStore(vm, $log, $http, $templateCache);
     vm.statusMap = {
       0: '进行中',

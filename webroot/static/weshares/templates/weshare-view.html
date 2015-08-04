@@ -52,6 +52,16 @@
             </div>
             <p class="tips">请选择物流方式</p>
         </div>
+        <div class="form-group" ng-show="vm.selectShipType==2" ng-class="{'has-error' : vm.chooseOfflineStoreError}" style="margin-top: 60px;">
+            <div class="form-control" ng-if="vm.checkedOfflineStore!=null">
+                <span ng-bind="vm.checkedOfflineStore.alias"></span>&nbsp;<span ng-bind="vm.checkedOfflineStore.owner_name"></span>&nbsp;<span ng-bind="vm.checkedOfflineStore.owner_phone"></span>
+                <a style="text-decoration: underline;font-size: 1em;color: #ffa200;margin-left: 70%;" ng-click="vm.showChooseOfflineStoreView()">选择自提点</a>
+            </div>
+            <div class="form-control" ng-if="vm.checkedOfflineStore==null">
+                <a style="text-decoration: underline;font-size: 1em;color: #ffa200;margin-left: 70%;" ng-click="vm.showChooseOfflineStoreView()">选择自提点</a>
+            </div>
+            <p class="tips">请选择自提点</p>
+        </div>
         <div class='send-info text-center margin-bottom-12' ng-hide='_.isEmpty(vm.weshare.send_info)'>取货时间: <span ng-bind='vm.weshare.send_info'></span></div>
         <div class='total-fee text-center' ng-if="vm.myCoupons">&nbsp;&nbsp;&nbsp;红包：<span ng-bind="vm.userCouponReduce/100 | currency:'￥'"></span></div>
         <div class='total-fee text-center'>总金额：<span ng-bind="vm.orderTotalPrice | currency:'￥'"></span></div>
