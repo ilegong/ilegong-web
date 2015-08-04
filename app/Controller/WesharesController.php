@@ -2,7 +2,7 @@
 
 class WesharesController extends AppController {
 
-    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem', 'SharerShipOption', 'WeshareShipSetting');
+    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem', 'SharerShipOption', 'WeshareShipSetting', 'OfflineStore');
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description');
 
@@ -212,12 +212,7 @@ class WesharesController extends AppController {
         try {
             $weshareProductIds = Hash::extract($products, '{n}.id');
             $productIdNumMap = Hash::combine($products, '{n}.id', '{n}.num');
-            $tinyAddress = $this->WeshareAddress->find('first', array(
-                'conditions' => array(
-                    'id' => $addressId,
-                    'weshare_id' => $weshareId
-                )
-            ));
+
             $weshareProducts = $this->WeshareProduct->find('all', array(
                 'conditions' => array(
                     'id' => $weshareProductIds,
@@ -242,11 +237,9 @@ class WesharesController extends AppController {
                 echo json_encode(array('success' => false, 'reason' => $reason));
                 return;
             }
-            $address = $tinyAddress['WeshareAddress']['address'];
-            if ($buyerData['address']) {
-                $address = $address . '--' . $buyerData['address'];
-            }
-            $this->setShareConsignees($buyerData['name'], $buyerData['mobilephone'], $buyerData['address'], $uid);
+            $shipInfo = $postDataArray['ship_info'];
+            $address = $this->get_order_address($weshareId,$shipInfo,$buyerData,$uid);
+
             $order = $this->Order->save(array('creator' => $uid, 'consignee_address' => $address, 'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $buyerData['name'], 'consignee_mobilephone' => $buyerData['mobilephone']));
             $orderId = $order['Order']['id'];
             $totalPrice = 0;
@@ -595,7 +588,7 @@ class WesharesController extends AppController {
 
     }
 
-    private function setShareConsignees($userInfo, $mobileNum, $address, $uid) {
+    private function setShareConsignees($userInfo, $mobileNum, $address, $uid, $offlineStoreId = 0) {
         $consignee = $this->OrderConsignees->find('first', array(
             'conditions' => array(
                 'creator' => $uid,
@@ -605,11 +598,11 @@ class WesharesController extends AppController {
         ));
         //update
         if (!empty($consignee)) {
-            $this->OrderConsignees->updateAll(array('name' => "'" . $userInfo . "'", 'mobilephone' => "'" . $mobileNum . "'", 'address' => "'" . $address . "'"), array('id' => $consignee['OrderConsignees']['id']));
+            $this->OrderConsignees->updateAll(array('name' => "'" . $userInfo . "'", 'mobilephone' => "'" . $mobileNum . "'", 'address' => "'" . $address . "'", 'ziti_id' => "'" . $offlineStoreId . "'"), array('id' => $consignee['OrderConsignees']['id']));
             return;
         }
         //save
-        $this->OrderConsignees->save(array('creator' => $uid, 'status' => STATUS_CONSIGNEES_SHARE, 'name' => $userInfo, 'mobilephone' => $mobileNum, 'address' => $address));
+        $this->OrderConsignees->save(array('creator' => $uid, 'status' => STATUS_CONSIGNEES_SHARE, 'name' => $userInfo, 'mobilephone' => $mobileNum, 'address' => $address, 'ziti_id' => $offlineStoreId));
     }
 
     private function getShareConsignees($uid) {
@@ -800,5 +793,40 @@ class WesharesController extends AppController {
         }
         $ship_set_type = $ship_setting['WeshareShipOption']['type'];
         return $ship_set_type;
+    }
+
+    //check order ship type gen order address
+    private function get_order_address($weshareId,$shipInfo,$buyerData,$uid){
+        $shipType = $shipInfo['shipType'];
+        $addressId = $shipInfo['address_id'];
+        $customAddress = $buyerData['address'];
+        if ($shipType == SHARE_SHIP_PYS_ZITI) {
+            $offline_store_id = $addressId;
+        }
+        $this->setShareConsignees($buyerData['name'], $buyerData['mobilephone'], $buyerData['address'], $uid, $offline_store_id);
+        if($shipType==SHARE_SHIP_KUAIDI){
+            return $customAddress;
+        }
+        if($shipType == SHARE_SHIP_SELF_ZITI){
+            $tinyAddress = $this->WeshareAddress->find('first', array(
+                'conditions' => array(
+                    'id' => $addressId,
+                    'weshare_id' => $weshareId
+                )
+            ));
+            $address = $tinyAddress['WeshareAddress']['address'];
+            if ($customAddress) {
+                $address = $address . '--' . $customAddress;
+            }
+            return $address;
+        }
+        if($shipType == SHARE_SHIP_PYS_ZITI){
+            $offline_store = $this->OfflineStore->findById($addressId);
+            $address = $offline_store['OfflineStore']['name'];
+            if ($customAddress) {
+                $address = $address . '--' . $customAddress;
+            }
+            return $address;
+        }
     }
 }

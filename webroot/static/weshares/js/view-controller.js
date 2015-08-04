@@ -42,9 +42,9 @@
     $vm.showOfflineStoreDetail = showOfflineStoreDetail;
     $vm.chooseOfflineStore = chooseOfflineStore;
     $vm.showChooseOfflineStoreView  = showChooseOfflineStoreView;
-    $vm.backShareDetailView = backShareDetailView;
+    $vm.showShareDetailView = showShareDetailView;
 
-    function backShareDetailView(){
+    function showShareDetailView(){
       $vm.showOfflineStoreDetailView = false;
       $vm.chooseOfflineStoreView = false;
       $vm.showShareDetailView = true;
@@ -131,6 +131,11 @@
       $scope.$watch('vm.selectShipType', function (val) {
         if(val!=-1){
           vm.chooseShipType = false;
+        }
+      });
+      $scope.$watchCollection('vm.checkedOfflineStore',function(val){
+        if(val){
+          vm.chooseOfflineStoreError = false;
         }
       });
       $http({method: 'GET', url: '/weshares/detail/' + weshareId, cache: $templateCache}).
@@ -323,6 +328,11 @@
         vm.chooseShipType = true;
         return;
       }
+      if(vm.selectShipType==2&&!vm.checkedOfflineStore){
+        alert('请选择自提点');
+        vm.chooseOfflineStoreError = true;
+        return;
+      }
       vm.chooseShipType = false;
       vm.showBuyingDialog = true;
       vm.showLayer = true;
@@ -352,10 +362,14 @@
       products = _.map(products, function (product) {
         return {id: product.id, num: product.num};
       });
+      var ship_info = {
+        shipType : vm.selectShipType,
+        address_id: vm.weshare.selectedAddressId
+      };
       var orderData = {
         weshare_id: vm.weshare.id,
-        address_id: vm.weshare.selectedAddressId,
         products: products,
+        ship_info : ship_info,
         buyer: {name: vm.buyerName, mobilephone: vm.buyerMobilePhone, address: vm.buyerAddress}
       };
       if (vm.useCouponId) {
