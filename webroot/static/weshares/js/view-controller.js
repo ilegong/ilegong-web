@@ -1,7 +1,46 @@
 (function (window, angular) {
 
   angular.module('weshares')
-    .controller('WesharesViewCtrl', WesharesViewCtrl);
+    .controller('WesharesViewCtrl', WesharesViewCtrl)
+
+  function ChooseOfflineStore($scope, $log, $http, $templateCache){
+    $scope.areas = {
+      110101: {
+        'name': "东城区"
+      },
+      110108: {
+        'name': "海淀区"
+      },
+      110102: {
+        'name': "西城区"
+      },
+      110105: {
+        'name': "朝阳区"
+      },
+      110106: {
+        'name': "丰台区"
+      },
+      110114: {
+        'name': "昌平区"
+      },
+      110113: {
+        'name': "顺义区"
+      },
+      110115: {
+        'name': "大兴区"
+      },
+      110112: {
+        'name': "通州区"
+      }
+    };
+    $http({method: 'GET', url: '/tuan_buyings/get_offline_address?type=-1', cache: $templateCache}).success(function(data) {
+      $log.log(data);
+      $scope.offlineStores = data['address'];
+    });
+    return {
+      templateUrl: '/static/weshares/templates/offline-store.html'
+    };
+  }
 
   function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, Utils) {
     var vm = this;

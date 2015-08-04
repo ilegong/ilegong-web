@@ -113,3 +113,25 @@ ul li { list-style: none; }
 .statistics-dialog ul{ width: 80%; margin: 0 auto;}
 .statistics-dialog ul li strong {color: #ffa200;}
 .share-dialog {width: 100%;background-color: #ffffff;color: #c73c3c;position: fixed;z-index: 5;left: 0;top: 0;text-align: center;font-weight: bold;padding: 40px 0;}
+
+
+.moreicon { position: absolute; top: 50%; margin-top: -0.7em; right: 0.6em; display: block; width: 0.667em; height: 1.334em; background: url(../images/pyshuo_icon.png) 0 -16.875em no-repeat; background-size: 25em 25em;}
+/*自提点详情alice add css 0627*/
+.logistics_ziti{ padding: 44px 10px 10px 10px;}
+.logistics_ziti h1{ display: block; font-size: 18px; line-height: 24px; color: #333333; padding: 15px 0; border-bottom: 1px #eeeeee solid;}
+.logistics_ziti p{ padding: 15px 0; line-height: 24px; font-size: 14px; border-bottom: 1px #eeeeee solid;}
+.logistics_ziti p i{ display: block; color: #999999; font-style: normal;}
+.logistics_ziti p em{ display: block; color: #333333; font-style: normal;}
+.logistics_ziti p a{ display: block; text-decoration: none; font-size: 14px; color: #29AC0E; margin-top: 5px; width: 100px;}
+.logistics_ziti p a b{ display: block; float: left; width: 21px; height: 21px; margin:0 auto;}
+.logistics_ziti p a b img{ width: 100%;}
+.logistics_ziti p a label{ display: block; float: left; padding-left: 5px; line-height: 21px;}
+
+/*选择自提点alice add css 0627*/
+.zitilist{ padding-right: 10px; position: relative; padding-top: 44px;}
+.zitilist li.fl{ background-color: #ffffff; position:fixed; top: 44px; left: 0; overflow-x: hidden; width: 20%;}
+.zitilist li.fr{ width: 80%;}
+.zitilist h1{ line-height: 44px; text-align: center; font-size: 14px; color: #333333;}
+.zitilist h1.cur{ background-color: #f5f5f5;}
+.zitilist h2{ line-height: 44px; border-bottom: 1px #eeeeee solid; margin-left: 15px;}
+.zitilist h2 a{ font-size: 14px; color: #333333; text-align: left; text-decoration: none;}
