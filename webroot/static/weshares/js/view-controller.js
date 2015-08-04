@@ -3,8 +3,8 @@
   angular.module('weshares')
     .controller('WesharesViewCtrl', WesharesViewCtrl)
 
-  function ChooseOfflineStore($scope, $log, $http, $templateCache){
-    $scope.areas = {
+  function ChooseOfflineStore($vm, $log, $http, $templateCache){
+    $vm.areas = {
       110101: {
         'name': "东城区"
       },
@@ -33,17 +33,51 @@
         'name': "通州区"
       }
     };
+    $vm.currentAreaCode = '110101';
     $http({method: 'GET', url: '/tuan_buyings/get_offline_address?type=-1', cache: $templateCache}).success(function(data) {
       $log.log(data);
-      $scope.offlineStores = data['address'];
+      $vm.offlineStores = data['address'];
     });
-    return {
-      templateUrl: '/static/weshares/templates/offline-store.html'
-    };
+    $vm.changeOfflineStoreArea = changeOfflineStoreArea;
+    $vm.showOfflineStoreDetail = showOfflineStoreDetail;
+    $vm.chooseOfflineStore = chooseOfflineStore;
+    $vm.backChooseOfflineStoreView  = backChooseOfflineStoreView;
+    $vm.backShareDetailView = backShareDetailView;
+
+    function backShareDetailView(){
+      $vm.showOfflineStoreDetailView = false;
+      $vm.chooseOfflineStoreView = false;
+      $vm.showShareDetailView = true;
+    }
+
+    function backChooseOfflineStoreView(){
+      $vm.showOfflineStoreDetailView = false;
+      $vm.chooseOfflineStoreView = true;
+      $vm.showShareDetailView = false;
+    }
+
+    function chooseOfflineStore(offlineStore){
+      $vm.showOfflineStoreDetailView = false;
+      $vm.chooseOfflineStoreView = false;
+      $vm.showShareDetailView = true;
+    }
+
+    function showOfflineStoreDetail(offlineStore){
+      $vm.currentOfflineStore = offlineStore;
+      $vm.showOfflineStoreDetailView = true;
+      $vm.chooseOfflineStoreView = false;
+      $vm.showShareDetailView = false;
+    }
+    function changeOfflineStoreArea(code){
+      $vm.currentAreaCode = code;
+    }
   }
 
   function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, Utils) {
     var vm = this;
+    vm.showShareDetailView = false;
+    vm.chooseOfflineStoreView = true;
+    ChooseOfflineStore(vm, $log, $http, $templateCache);
     vm.statusMap = {
       0: '进行中',
       1: '已截止'

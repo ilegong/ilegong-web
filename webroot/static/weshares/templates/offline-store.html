@@ -6,110 +6,18 @@
     </div>
     <ul class="clearfix zitilist">
         <li class="fl">
-            <h1 class="cur">昌平区</h1>
-
-            <h1>昌平县城</h1>
-
-            <h1>海淀区</h1>
-
-            <h1>朝阳区</h1>
-
-            <h1>顺义区</h1>
-
-            <h1>东城区</h1>
-
-            <h1>西城区</h1>
-
-            <h1>大兴区</h1>
-
-            <h1>海淀区</h1>
-
-            <h1>朝阳区</h1>
-
-            <h1>顺义区</h1>
-
-            <h1>东城区</h1>
-
-            <h1>西城区</h1>
-
-            <h1>大兴区</h1>
-
+            <h1 ng-repeat="(code, area) in vm.areas" ng-bind="area.name" ng-click="vm.changeOfflineStoreArea(code)" ng-class="{'cur': vm.currentAreaCode == code}"></h1>
             <h1>&nbsp;</h1>
-
             <h1>&nbsp;</h1>
-
             <h1>&nbsp;</h1>
-
             <h1>&nbsp;</h1>
-
             <h1>&nbsp;</h1>
-
             <h1>&nbsp;</h1>
         </li>
-        <li class="fr">
-            <h2 class="clearfix" style="position: relative;">
-                <a href="#X">领秀慧谷自提点</a>
-                <a href="#X" class="moreicon"></a>
-            </h2>
-
-            <h2 class="clearfix" style="position: relative;">
-                <a href="#X">京龙禧超市自提点</a>
-                <a href="#X" class="moreicon"></a>
-            </h2>
-
-            <h2 class="clearfix" style="position: relative;">
-                <a href="#X">新龙城小区自提点</a>
-                <a href="#X" class="moreicon"></a>
-            </h2>
-
-            <h2 class="clearfix" style="position: relative;">
-                <a href="#X">世涛天朗小区自提点</a>
-                <a href="#X" class="moreicon"></a>
-            </h2>
-
-            <h2 class="clearfix" style="position: relative;">
-                <a href="#X">天露园自提点</a>
-                <a href="#X" class="moreicon"></a>
-            </h2>
-
-            <h2 class="clearfix" style="position: relative;">
-                <a href="#X">清秀园北区自提点</a>
-                <a href="#X" class="moreicon"></a>
-            </h2>
-
-            <h2 class="clearfix" style="position: relative;">
-                <a href="#X">紫新家园自提点</a>
-                <a href="#X" class="moreicon"></a>
-            </h2>
-
-            <h2 class="clearfix" style="position: relative;">
-                <a href="#X">世涛天朗自提点</a>
-                <a href="#X" class="moreicon"></a>
-            </h2>
-
-            <h2 class="clearfix" style="position: relative;">
-                <a href="#X">爱松兰商店自提点</a>
-                <a href="#X" class="moreicon"></a>
-            </h2>
-
-            <h2 class="clearfix" style="position: relative;">
-                <a href="#X">清秀园北区自提点</a>
-                <a href="#X" class="moreicon"></a>
-            </h2>
-
-            <h2 class="clearfix" style="position: relative;">
-                <a href="#X">紫新家园自提点</a>
-                <a href="#X" class="moreicon"></a>
-            </h2>
-
-            <h2 class="clearfix" style="position: relative;">
-                <a href="#X">世涛天朗自提点</a>
-                <a href="#X" class="moreicon"></a>
-            </h2>
-
-            <h2 class="clearfix" style="position: relative;">
-                <a href="#X">爱松兰商店自提点</a>
-                <a href="#X" class="moreicon"></a>
+        <li class="fr" ng-repeat="(code, offlineStores) in vm.offlineStores" ng-show="vm.currentAreaCode == code">
+            <h2 class="clearfix" style="position: relative;" ng-repeat="(id, offlineStore) in offlineStores">
+                <a ng-bind="offlineStore.alias" ng-click="vm.chooseOfflineStore(offlineStore)"></a>
+                <a class="moreicon" ng-click="vm.showOfflineStoreDetail(offlineStore)"></a>
             </h2>
         </li>
     </ul>

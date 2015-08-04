@@ -5,18 +5,18 @@
         <a href="#X" class="home"></a>
     </div>
     <div class="logistics_ziti">
-        <h1>育新小区自提点</h1>
+        <h1 ng-bind="vm.currentOfflineStore.alias" ng-click="vm.chooseOfflineStore(vm.currentOfflineStore)"></h1>
         <p>
             <i>自提点地址</i>
-            <em>海淀区，西三旗，育新小区北门超市</em>
-            <a href="#X" class="clearfix">
-                <b><img src="images/adress.png"></b>
+            <em ng-bind="vm.currentOfflineStore.name"></em>
+            <a href="" class="clearfix">
+                <b><img src="/static/weshares/images/adress.png"></b>
                 <label>查看地图</label>
             </a>
         </p>
         <p>
             <i>联系信息</i>
-            <em>大川 13285746890</em>
+            <em><span ng-bind="vm.currentOfflineStore.owner_name"></span> <span ng-bind="vm.currentOfflineStore.owner_phone"></span></em>
         </p>
     </div>
 </div>
