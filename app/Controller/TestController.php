@@ -12,7 +12,7 @@ App::import('Vendor', 'Location', array('file' => 'Location/Distance/Haversine.p
 
 class TestController extends AppController{
 
-    public $components = array('Weixin');
+    public $components = array('Weixin', 'WeshareBuy');
     public $uses = array('Order');
 
 
@@ -93,6 +93,12 @@ class TestController extends AppController{
         $this->Weixin->weshare_buy_order_paid($order);
         echo json_encode(array('success' => true));
         return;
+    }
+
+    public function test_send_weshare_new_msg($weshareId){
+        $this->autoRender = false;
+        $this->WeshareBuy->send_new_share_msg($weshareId);
+        echo json_encode(array('success' => true));
     }
 
 }

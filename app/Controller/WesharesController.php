@@ -28,26 +28,26 @@ class WesharesController extends AppController {
         $this->set('weshare_id', $weshare_id);
         //form paid done
         $this->log('weshare view mark ' . $_REQUEST['mark']);
-        if ($from == $this->pay_type || $_REQUEST['mark'] == 'template_msg') {
-            //check has sharer has red packet
-            //领取红包
+        //check has sharer has red packet
+        //领取红包
+        $shared_offer_id = $_REQUEST['shared_offer_id'];
+        //has share offer id user open share
+        //用户抢红包
+        if (!empty($shared_offer_id)) {
+            //process
+            $this->process_shared_offer($shared_offer_id);
+        }else{
             $weshare = $this->Weshare->find('first', array('conditions' => array('id' => $weshare_id)));
             $weshare_creator = $weshare['Weshare']['creator'];
             $shared_offers = $this->SharedOffer->find_new_offers_by_weshare_creator($uid, $weshare_creator);
             //get first
             if (!empty($shared_offers)) {
                 $this->set('shared_offer_id', $shared_offers[0]['SharedOffer']['id']);
-                //bind user default get coupon
-                $this->get_coupon_with_shared_id($shared_offers[0]['SharedOffer']['id']);
+                $this->set('from', $this->pay_type);
             }
-            $this->set('from', $this->pay_type);
-        }
-        //has share offer id user open share
-        //用户抢红包
-        $shared_offer_id = $_REQUEST['shared_offer_id'];
-        if (!empty($shared_offer_id)) {
-            //process
-            $this->process_shared_offer($shared_offer_id);
+            if ($from == 1) {
+                $this->set('from', $this->pay_type);
+            }
         }
     }
 
@@ -144,7 +144,7 @@ class WesharesController extends AppController {
             echo json_encode(array('success' => true, 'id' => $weshare['Weshare']['id']));
             return;
         } else {
-            echo json_encode(array('success' => false));
+            echo json_encode(array('success' => false,'uid' => $uid));
             return;
         }
     }
@@ -456,6 +456,9 @@ class WesharesController extends AppController {
     }
 
     private function saveWeshareProducts($weshareId, $weshareProductData) {
+        if(empty($weshareProductData)){
+            return;
+        }
         foreach ($weshareProductData as &$product) {
             $product['weshare_id'] = $weshareId;
             $product['price'] = ($product['price'] * 100);
@@ -475,6 +478,9 @@ class WesharesController extends AppController {
     }
 
     private function saveWeshareAddresses($weshareId, $weshareAddressData) {
+        if(empty($weshareAddressData)){
+            return;
+        }
         foreach ($weshareAddressData as &$address) {
             $address['weshare_id'] = $weshareId;
         }
@@ -495,7 +501,7 @@ class WesharesController extends AppController {
                 'status' => $order_status,
                 'deleted' => DELETED_NO
             ),
-            'fields' => array('id', 'creator', 'created', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price'),
+            'fields' => array('id', 'creator', 'created', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total'),
             'order' => array('created DESC')
         ));
         $orderIds = Hash::extract($orders, '{n}.Order.id');
@@ -521,6 +527,10 @@ class WesharesController extends AppController {
             ),
             'fields' => array('id', 'name', 'order_id', 'num', 'product_id', 'price')
         ));
+        $realTotalPrice = 0;
+        foreach ($orders as $item) {
+            $realTotalPrice = $realTotalPrice + $item['total_all_price'];
+        }
         $summeryTotalPrice = 0;
         foreach ($carts as $item) {
             $order_id = $item['Cart']['order_id'];
@@ -538,6 +548,7 @@ class WesharesController extends AppController {
         }
         $product_buy_num['all_buy_user_count'] = count($users);
         $product_buy_num['all_total_price'] = $summeryTotalPrice;
+        $product_buy_num['real_total_price'] = $realTotalPrice;
         $users = Hash::combine($users, '{n}.User.id', '{n}.User');
         return array('users' => $users, 'orders' => $orders, 'order_cart_map' => $order_cart_map, 'summery' => $product_buy_num);
     }
@@ -627,7 +638,7 @@ class WesharesController extends AppController {
                 'status' => $order_status,
                 'type' => ORDER_TYPE_WESHARE_BUY
             ),
-            'fileds' => array('DISTINCT creator')
+            'fields' => array('DISTINCT creator')
         ));
         return array('share_count' => count($weshares), 'follower_count' => $follower_count);
     }
@@ -767,7 +778,7 @@ class WesharesController extends AppController {
         }
         //accepted
         $this->set('follow_shared_offer_id', $shared_offer_id);
-        if ($get_coupon_result['accepted']) {
+        if ($get_coupon_result['accepted'] && $get_coupon_result['just_accepted'] == 0) {
             $this->set('get_coupon_type', 'accepted');
             return;
         }

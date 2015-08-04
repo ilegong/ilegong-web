@@ -49,23 +49,31 @@
       var $cacheData = PYS.storage.load(vm.dataCacheKey);
       if ($cacheData) {
         vm.weshare = $cacheData;
+        setDefaultData();
       }
       if (weshareId) {
         //update
         $http.get('/weshares/get_share_info/' + weshareId).success(function (data) {
           $log.log(data);
           vm.weshare = data;
-          if (!vm.weshare.addresses || vm.weshare.addresses.length == 0) {
-            vm.weshare.addresses = [{address: ''}];
-          }
+          setDefaultData();
           vm.self_ziti_data = data['ship_type']['self_ziti'] || vm.self_ziti_data;
           vm.kuai_di_data = data['ship_type']['kuai_di'] || vm.kuai_di_data;
           vm.pys_ziti_data = data['ship_type']['pys_ziti'] || vm.pys_ziti_data;
-        }).error(function (data) {
+        }).error(function(data){
         });
       }
       vm.messages = [];
+      function setDefaultData(){
+        if(!vm.weshare.addresses||vm.weshare.addresses.length==0){
+          vm.weshare.addresses = [{address: ''}];
+        }
+        if(!vm.weshare.send_info){
+          vm.weshare.send_info = '';
+        }
+      }
     }
+			
 
     function chooseAndUploadImage() {
       wx.chooseImage({
@@ -171,16 +179,17 @@
           $log.log('post succeeded, data: ').log(data);
           PYS.storage.clear();
           window.location.href = '/weshares/view/' + data['id'];
-        }
-        else {
-          vm.isInProcess = false;
+        }else {
+          var uid = data['uid'];
+          window.location.href = '/weshares/user_share_info/'+uid;
           $log.log("failed with status: " + status + ", data: ").log(data);
         }
       }).error(function (data, status, headers, config) {
-        vm.isInProcess = false;
+        window.location.href = '/weshares/add';
         $log.log("failed with status :" + status + ", data: ").log(data).log(', and config').log(config);
       });
     }
+					
 
     function validateTitle() {
       vm.weshareTitleHasError = _.isEmpty(vm.weshare.title) || vm.weshare.title.length > 50;

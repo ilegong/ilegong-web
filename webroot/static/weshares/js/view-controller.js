@@ -3,7 +3,7 @@
   angular.module('weshares')
     .controller('WesharesViewCtrl', WesharesViewCtrl);
 
-  function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, Utils) {
+  function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, Utils) {
     var vm = this;
     vm.statusMap = {
       0: '进行中',
@@ -46,7 +46,7 @@
       var fromType = angular.element(document.getElementById('weshareView')).attr('data-from-type');
       //first share
       var initSharedOfferId = angular.element(document.getElementById('weshareView')).attr('data-shared-offer');
-      var followSharedOfferId = angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-offer');
+      //var followSharedOfferId = angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-offer');
       var followSharedType = angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-type');
       var followSharedNum = angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-coupon-num');
       vm.sharedOfferId = initSharedOfferId;
@@ -95,27 +95,21 @@
               vm.showNotifyShareDialog = true;
             } else {
               vm.showNotifyShareOfferDialog = true;
-              vm.sharedOfferMsg = '谢谢你对' + vm.weshare.creator.nickname + '的支持!送你一个红包,点击右上角“…”分享给大家一起抢:)';
+              vm.sharedOfferMsg = '恭喜发财，大吉大利！';
             }
             vm.showLayer = true;
           }
           //follow share
           if (followSharedType) {
-            if (followSharedType == 'fail' || followSharedType == 'no_more') {
-              vm.showNotifyShareOfferDialog = true;
-              vm.sharedOfferMsg = '红包已经抢完，报名就有红包:)';
-            }
-            if (followSharedType == 'accepted') {
-              vm.showNotifyShareOfferDialog = true;
-              vm.sharedOfferMsg = '你已经抢过这个红包了,点击右上角“…”分享给大家一起抢:)';
-              vm.sharedOfferId = followSharedOfferId;
-            }
             if (followSharedType == 'got') {
-              vm.showNotifyShareOfferDialog = true;
-              vm.sharedOfferMsg = '谢谢你对' + vm.weshare.creator.nickname + '的支持!送你一个' + followSharedNum + '红包,报名直接抵现金呢:)';
-              vm.sharedOfferId = followSharedOfferId;
+              vm.showNotifyGetPacketDialog = true;
+              vm.getPacketNum = followSharedNum+'元';
+              vm.showLayer = true;
+              $timeout(function(){
+                vm.showLayer = false;
+                vm.showNotifyGetPacketDialog = false;
+              },10000);
             }
-            vm.showLayer = true;
           }
         }).
         error(function (data, status) {
@@ -364,7 +358,7 @@
     }
 
     function setWeiXinShareParams() {
-      var url = 'http://www.tongshijia.com/weshares/view/' + vm.weshare.id + '?shared_offer_id=' + vm.sharedOfferId;
+      var url = 'http://www.tongshijia.com/weshares/view/' + vm.weshare.id;
       //creator
       var to_timeline_title = '';
       var to_friend_title = '';
@@ -374,7 +368,6 @@
       var to_friend_link = url;
       var to_timeline_link = url;
       //member
-      var sub_title = '';
       var userInfo = vm.ordersDetail.users[vm.currentUser.id];
       if (vm.currentUser.id == vm.weshare.creator.id) {
         to_timeline_title = vm.weshare.creator.nickname + '分享:' + vm.weshare.title;
@@ -406,13 +399,15 @@
       }
       //share packet
       if (vm.isSharePacket) {
-        imgUrl = 'http://51daifan.sinaapp.com/img/sharing/packet1.png';
-        var title = vm.currentUser.nickname + '报名了' + vm.weshare.creator.nickname + '的分享,' + vm.weshare.creator.nickname + '送我一个红包大家一起抢!';
+        imgUrl = 'http://www.tongshijia.com/static/weshares/images/redpacket/hbss_icon.jpg';
+        var title = '恭喜发财，大吉大利！';
         to_timeline_title = title;
         to_friend_title = title;
+        url = url+ '?shared_offer_id=' + vm.sharedOfferId;
+        to_friend_link = url;
+        to_timeline_link = url;
+        desc = '点击领取红包';
       }
-      to_friend_title = to_friend_title + sub_title;
-      to_timeline_title = to_timeline_title + sub_title;
       if (wx) {
         wx.ready(function () {
           wx.onMenuShareAppMessage({

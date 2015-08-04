@@ -113,7 +113,7 @@ class ShareOffer extends AppModel {
                     if ($toShareNum <= 0) {
                         return null;
                     }
-                    return $this->genSharedSlices($orderCreator, $orderId, $usModel, $so, $toShareNum);
+                    return $this->genSharedSlices($orderCreator, $orderId, $usModel, $so, $toShareNum,$orderType == ORDER_TYPE_WESHARE_BUY);
                 }
                 else {
                     //已经领取过直接返回数据
@@ -221,16 +221,20 @@ class ShareOffer extends AppModel {
      * @internal param $order
      * @return array|null
      */
-    private function genSharedSlices($uid, $orderId, $userSharedModel, $shareOffer, $toShareNum) {
+    private function genSharedSlices($uid, $orderId, $userSharedModel, $shareOffer, $toShareNum, $is_default_open = false) {
         //订单Id和UID无法唯一！！！
         $userSharedModel->create();
-        if ($userSharedModel->save(array(
+        $saveData = array(
             'share_offer_id' => $shareOffer['ShareOffer']['id'],
             'total_number' => $toShareNum,
             'start' => date(FORMAT_DATETIME, mktime()), //use db time
             'uid' => $uid,
             'order_id' => $orderId,
-        ))
+        );
+        if($is_default_open){
+            $saveData['status'] = SHARED_OFFER_STATUS_GOING;
+        }
+        if ($userSharedModel->save($saveData)
         ) {
             $avg = $shareOffer['ShareOffer']['avg_number'];
             $split_num = round($toShareNum/$avg, 0, PHP_ROUND_HALF_UP);

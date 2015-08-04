@@ -216,7 +216,7 @@ class ShareController extends AppController{
         return $items[array_rand($items)];
     }
 
-    private function gen_order($weshare,$user, $weshare_products, $weshare_address){
+    private function gen_order($weshare, $user, $weshare_products, $weshare_address) {
         $weshareProducts = array();
         $weshareProducts[] = $this->get_random_item($weshare_products);
         $tinyAddress = $this->get_random_item($weshare_address);
@@ -228,20 +228,24 @@ class ShareController extends AppController{
             $user = $user['user'];
             $user_name = $user['nickname'];
             $this->Order->id = null;
-            $order = $this->Order->save(array('creator' => $user['id'], 'consignee_address' => $tinyAddress['WeshareAddress']['address'] ,'member_id' => $weshare['Weshare']['id'], 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $user_name, 'consignee_mobilephone' => $mobile_phone[0]));
+            $order = $this->Order->save(array('creator' => $user['id'], 'consignee_address' => $tinyAddress['WeshareAddress']['address'], 'member_id' => $weshare['Weshare']['id'], 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $user_name, 'consignee_mobilephone' => $mobile_phone[0]));
             $orderId = $order['Order']['id'];
             $totalPrice = 0;
+            $current_date = date('Y-m-d H:i:s');
+            $rand_start = strtotime($current_date . ' -3 day');
+            $rand_end = strtotime($current_date);
+            $order_date = mt_rand($rand_start, $rand_end);
             foreach ($weshareProducts as $p) {
                 $item = array();
-                $num = rand (1 , 5);
+                $num = rand(1, 5);
                 $price = $p['WeshareProduct']['price'];
                 $item['name'] = $p['WeshareProduct']['name'];
                 $item['num'] = $num;
                 $item['price'] = $price;
                 $item['type'] = ORDER_TYPE_WESHARE_BUY;
                 $item['product_id'] = $p['WeshareProduct']['id'];
-                $item['created'] = date('Y-m-d H:i:s');
-                $item['updated'] = date('Y-m-d H:i:s');
+                $item['created'] = date('Y-m-d H:i:s', $order_date);
+                $item['updated'] = date('Y-m-d H:i:s', $order_date);
                 $item['creator'] = $user['id'];
                 $item['order_id'] = $orderId;
                 $item['tuan_buy_id'] = $weshare_id;
@@ -254,7 +258,7 @@ class ShareController extends AppController{
             //echo json_encode(array('success' => true, 'orderId' => $orderId));
             return array('success' => true, 'orderId' => $orderId);
         } catch (Exception $e) {
-            $this->log($user['id'].'buy share '.$weshare_id.$e);
+            $this->log($user['id'] . 'buy share ' . $weshare_id . $e);
             //echo json_encode(array('success' => false, 'msg' => $e->getMessage()));
             return array('success' => false, 'msg' => $e->getMessage());
         }
