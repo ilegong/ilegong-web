@@ -10,7 +10,7 @@ class ShareController extends AppController{
 
     var $name = 'Share';
 
-    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees');
+    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'WeshareShipSetting');
 
     public function beforeFilter(){
         parent::beforeFilter();
@@ -60,6 +60,30 @@ class ShareController extends AppController{
         $this->set('weshares',$weshares);
         $this->set('weshare_summery',$summery_data);
         $this->set('creators', $creators);
+    }
+
+    public function admin_merge_ship_setting_data() {
+        $this->autoRender = false;
+        $shares = $this->Weshare->find('all', array(
+            'limit' => 200
+        ));
+        $saveData = array();
+        foreach ($shares as $share) {
+            $share_id = $share['Weshare']['id'];
+            $historyData = $this->WeshareShipSetting->find('first', array(
+                'conditions' => array(
+                    'weshare_id' => $share_id
+                )
+            ));
+            if (empty($historyData)) {
+                $saveData[] = array('weshare_id' => $share_id, 'status' => 1, 'ship_fee' => 0, 'tag' => 'kuai_di');
+                $saveData[] = array('weshare_id' => $share_id, 'status' => 1, 'ship_fee' => 0, 'tag' => 'self_ziti');
+                $saveData[] = array('weshare_id' => $share_id, 'status' => -1, 'ship_fee' => 0, 'tag' => 'pys_ziti');
+            }
+        }
+        $this->WeshareShipSetting->saveAll($saveData);
+        echo json_encode(array('success' => true));
+        return;
     }
 
     public function admin_make_order($num=1,$weshare_id){
