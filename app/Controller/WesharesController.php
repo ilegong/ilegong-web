@@ -8,7 +8,7 @@ class WesharesController extends AppController {
 
     var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket');
 
-    var $share_ship_type = array('self_ziti', 'kuai)di', 'pys_ziti');
+    var $share_ship_type = array('self_ziti', 'kuaidi', 'pys_ziti');
 
     var $pay_type = 1;
 
