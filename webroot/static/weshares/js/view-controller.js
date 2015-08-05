@@ -40,16 +40,16 @@
     $vm.changeOfflineStoreArea = changeOfflineStoreArea;
     $vm.showOfflineStoreDetail = showOfflineStoreDetail;
     $vm.chooseOfflineStore = chooseOfflineStore;
-    $vm.showChooseOfflineStoreView  = showChooseOfflineStoreView;
-    $vm.showShareDetailView = showShareDetailView;
+    $vm.showChooseOfflineStore  = showChooseOfflineStore;
+    $vm.showShareDetail = showShareDetail;
 
-    function showShareDetailView(){
+    function showShareDetail(){
       $vm.showOfflineStoreDetailView = false;
       $vm.chooseOfflineStoreView = false;
       $vm.showShareDetailView = true;
     }
 
-    function showChooseOfflineStoreView(){
+    function showChooseOfflineStore(){
       $vm.showOfflineStoreDetailView = false;
       $vm.chooseOfflineStoreView = true;
       $vm.showShareDetailView = false;
@@ -89,26 +89,19 @@
     vm.isOwner = isOwner;
     vm.isOrderReceived = isOrderReceived;
     vm.getConsigneeInfo = getConsigneeInfo;
-
     vm.validateAddress = validateAddress;
     vm.validateProducts = validateProducts;
     vm.buyProducts = buyProducts;
     vm.validateMobile = validateMobile;
     vm.validateUserName = validateUserName;
     vm.validateUserAddress = validateUserAddress;
-
     vm.submitOrder = submitOrder;
     vm.confirmReceived = confirmReceived;
     vm.toUserShareInfo = toUserShareInfo;
-
     vm.checkProductNum = checkProductNum;
-
     vm.getProductLeftNum = getProductLeftNum;
-
     vm.toShareOrderList = toShareOrderList;
-
     vm.createMyShare = createMyShare;
-
     vm.toUpdate = toUpdate;
     vm.stopShare = stopShare;
 
