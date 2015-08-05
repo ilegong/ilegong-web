@@ -345,8 +345,9 @@
       }
       //kuai di
       if (vm.selectShipType == 0) {
-        vm.validateUserAddress();
-        return false;
+        if (vm.validateUserAddress()) {
+          return false;
+        }
       }
       //self ziti
       if (vm.selectShipType == 1) {
@@ -362,9 +363,14 @@
         return {id: product.id, num: product.num};
       });
       var ship_info = {
-        ship_type : vm.selectShipType,
-        address_id: vm.weshare.selectedAddressId
+        ship_type: vm.selectShipType
       };
+      if (vm.selectShipType == 1) {
+        ship_info['address_id'] = vm.weshare.selectedAddressId;
+      }
+      if (vm.selectShipType == 2) {
+        ship_info['address_id'] = vm.checkedOfflineStore.id;
+      }
       var orderData = {
         weshare_id: vm.weshare.id,
         products: products,

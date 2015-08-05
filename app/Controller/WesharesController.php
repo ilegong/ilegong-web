@@ -593,9 +593,13 @@ class WesharesController extends AppController {
             ),
             'fields' => array('id', 'name', 'mobilephone')
         ));
-        //update
         if (!empty($consignee)) {
-            $this->OrderConsignees->updateAll(array('name' => "'" . $userInfo . "'", 'mobilephone' => "'" . $mobileNum . "'", 'address' => "'" . $address . "'", 'ziti_id' => "'" . $offlineStoreId . "'"), array('id' => $consignee['OrderConsignees']['id']));
+            //update
+            $saveData = array('name' => "'" . $userInfo . "'", 'mobilephone' => "'" . $mobileNum . "'", 'address' => "'" . $address . "'");
+            if($offlineStoreId!=0){
+                $saveData['ziti_id'] =  $offlineStoreId;
+            }
+            $this->OrderConsignees->updateAll($saveData, array('id' => $consignee['OrderConsignees']['id']));
             return;
         }
         //save
@@ -821,7 +825,7 @@ class WesharesController extends AppController {
             ));
             $address = $tinyAddress['WeshareAddress']['address'];
             if ($customAddress) {
-                $address = $address . '--' . $customAddress;
+                $address = $address;
             }
             return $address;
         }
@@ -829,7 +833,7 @@ class WesharesController extends AppController {
             $offline_store = $this->OfflineStore->findById($addressId);
             $address = $offline_store['OfflineStore']['name'];
             if ($customAddress) {
-                $address = $address . '--' . $customAddress;
+                $address = $address;
             }
             return $address;
         }
