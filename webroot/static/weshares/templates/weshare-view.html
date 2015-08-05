@@ -35,36 +35,7 @@
             </dl>
             <p class='tips'>请输入商品数量</p>
         </div>
-        <div class="form-group" ng-class="{'has-error' : vm.chooseShipType}">
-            <div class="form-control radio-group">
-                <div ng-show="vm.weshareSettings.kuai_di.status==1">
-                    <input type="radio" class="radio" ng-model="vm.selectShipType" value="0" id="kuaidi"/>
-                    <label for="kuaidi">快递</label>
-                </div>
-                <div ng-show="vm.weshareSettings.self_ziti.status==1">
-                    <input type="radio" class="radio" ng-model="vm.selectShipType" value="1" id="ziti"/>
-                    <label for="ziti">自提</label>
-                </div>
-                <div ng-show="vm.weshareSettings.pys_ziti.status==1">
-                    <input type="radio" class="radio" ng-model="vm.selectShipType" value="2" id="pys_ziti"/>
-                    <label for="pys_ziti">朋友说自提</label>
-                </div>
-            </div>
-            <p class="tips">请选择物流方式</p>
-        </div>
-        <div class="form-group" ng-show="vm.selectShipType==2" ng-class="{'has-error' : vm.chooseOfflineStoreError}" style="margin-top: 60px;">
-            <div class="form-control" ng-if="vm.checkedOfflineStore!=null">
-                <span ng-bind="vm.checkedOfflineStore.alias"></span>&nbsp;<span ng-bind="vm.checkedOfflineStore.owner_name"></span>&nbsp;<span ng-bind="vm.checkedOfflineStore.owner_phone"></span>
-                <a style="text-decoration: underline;font-size: 1em;color: #ffa200;margin-left: 70%;" ng-click="vm.showChooseOfflineStoreView()">选择自提点</a>
-            </div>
-            <div class="form-control" ng-if="vm.checkedOfflineStore==null">
-                <a style="text-decoration: underline;font-size: 1em;color: #ffa200;margin-left: 70%;" ng-click="vm.showChooseOfflineStore()">选择自提点</a>
-            </div>
-            <p class="tips">请选择自提点</p>
-        </div>
         <div class='send-info text-center margin-bottom-12' ng-hide='_.isEmpty(vm.weshare.send_info)'>取货时间: <span ng-bind='vm.weshare.send_info'></span></div>
-        <div class='total-fee text-center' ng-if="vm.myCoupons">&nbsp;&nbsp;&nbsp;红包：<span ng-bind="vm.userCouponReduce/100 | currency:'￥'"></span></div>
-        <div class='total-fee text-center'>总金额：<span ng-bind="vm.orderTotalPrice | currency:'￥'"></span></div>
     </div>
     <div class="orders">
         <ul class="order clearfix margin-bottom-12" ng-class="{'my-order': vm.isOwner(order)}" ng-repeat="order in vm.ordersDetail.orders">
@@ -101,44 +72,6 @@
     <a ng-if="vm.isCreator()" ng-click="vm.stopShare()" style="background-color: #ffa200;">截止报名</a>
     <a ng-if="!vm.isCreator()" ng-click="vm.buyProducts()" style="background-color: #ffa200;">我要报名</a>
     <a ng-click="vm.showShareDialog=true;vm.showLayer=true;" style="background-color: #29ac0e;">分享给好友一起报名</a>
-</div>
-<!--支付层-->
-<div class="buying-dialog" ng-show="vm.showBuyingDialog">
-    <div class="clearfix title">
-        <label>输入联系信息</label>
-        <a ng-click="vm.showBuyingDialog=false;vm.showLayer=false;" class="closebtn fr"></a>
-    </div>
-    <div class="clearfix" style="padding: 0 10px;">
-        <div class="form-group" ng-class="{'has-error': vm.addressHasError}" ng-if="vm.selectShipType==1">
-            <select class='form-control' ng-model='vm.weshare.selectedAddressId' ng-options="address.id as address.address for address in vm.weshare.addresses" ng-change='vm.validateAddress()'>
-                <option value="-1">请选择地址</option>
-            </select>
-            <p class='tips'>请选择收货地址</p>
-        </div>
-    </div>
-    <div class="clearfix" style="padding: 0 10px;">
-        <div class="form-group" ng-class="{'has-error': vm.userAddressHasError}" ng-if="vm.selectShipType==0">
-            <input class='form-control' placeholder="输入地址" ng-model='vm.buyerAddress' ng-change='vm.validateUserAddress()'/>
-            <p class='tips'>请输入收货人地址</p>
-        </div>
-    </div>
-    <div class="clearfix" style="padding: 0 10px;">
-        <div class="form-group" ng-class="{'has-error': vm.usernameHasError}">
-            <input class='form-control' placeholder="输入姓名" ng-model='vm.buyerName' ng-change='vm.validateUserName()'/>
-            <p class='tips'>请输入收货人信息</p>
-        </div>
-    </div>
-    <div class="clearfix" style="padding: 0 10px;">
-        <div class="form-group" ng-class="{'has-error': vm.buyerMobilePhoneHasError}">
-            <input class='form-control' placeholder="输入手机号" ng-model='vm.buyerMobilePhone' ng-change='vm.validateMobile()'/>
-            <p class='tips'>请输入手机号</p>
-        </div>
-    </div>
-    <font>支付金额：<span ng-bind="vm.orderTotalPrice | currency:'￥'"></span></font>
-    <div class="clearfix starttuan_btn">
-        <a ng-click='vm.submitOrder(0);' style="background-color: #29ac0e;">微信支付</a>
-        <a ng-click='vm.submitOrder(1);' style="background-color: #ffa200;">支付宝</a>
-    </div>
 </div>
 
 <div class="share-dialog" ng-show="vm.showShareDialog">

@@ -28,7 +28,7 @@ ul li { list-style: none; }
 .form-group .tips{display: none; font-size: 12px; color: #c62a35; line-height: 16px; padding-top: 5px;}
 .form-group.has-error .tips{display: block;}
 
-.radio-group { float:left; clear:none; overflow: hidden;}
+.radio-group { clear:none; overflow: hidden;}
 .radio-group label { float:left; clear:none; display:block; padding: 0 10px; }
 .radio-group input[type=radio], input.radio { float:left; clear:none; margin: 2px 0 0 2px; }
 
@@ -102,6 +102,7 @@ ul li { list-style: none; }
 .buying-dialog .closebtn{ margin-top: 3px; display: block; background: url(../images/weifxicon.png?v0.01) no-repeat -70px -65px; width: 15px; height: 15px; background-size: 100px 100px;}
 .buying-dialog label{ display: block; float: left; color: #29AC0E; font-size: 16px; font-weight: bold;}
 .buying-dialog font{ display: block; text-align: center; color: #ffa200; font-size: 16px; line-height: 35px; padding-bottom: 50px;}
+.price{display: block; text-align: center; color: #ffa200; font-size: 16px; line-height: 35px; padding-bottom: 50px;}
 
 .send-msg-dialog{ background-color: #ffffff; padding: 15px 0; position: fixed; bottom: 0; left: 0; width: 100%; z-index: 5;}
 .send-msg-dialog .title{padding: 0px 10px; margin-bottom: 15px;}
