@@ -3,7 +3,7 @@
   angular.module('weshares')
     .controller('WesharesViewCtrl', WesharesViewCtrl)
 
-  function ChooseOfflineStore($vm, $log, $http, $templateCache){
+  function ChooseOfflineStore($vm, $log, $http, $templateCache) {
     $vm.areas = {
       110101: {
         'name': "东城区"
@@ -34,41 +34,42 @@
       }
     };
     $vm.currentAreaCode = '110101';
-    $http({method: 'GET', url: '/tuan_buyings/get_offline_address.json?type=-1', cache: $templateCache}).success(function(data) {
+    $http({
+      method: 'GET',
+      url: '/tuan_buyings/get_offline_address.json?type=-1',
+      cache: $templateCache
+    }).success(function (data) {
       $vm.offlineStores = data['address'];
     });
     $vm.changeOfflineStoreArea = changeOfflineStoreArea;
     $vm.showOfflineStoreDetail = showOfflineStoreDetail;
     $vm.chooseOfflineStore = chooseOfflineStore;
-    $vm.showChooseOfflineStore  = showChooseOfflineStore;
-    $vm.showShareDetail = showShareDetail;
+    $vm.showChooseOfflineStore = showChooseOfflineStore;
 
-    function showShareDetail(){
-      $vm.showOfflineStoreDetailView = false;
-      $vm.chooseOfflineStoreView = false;
-      $vm.showShareDetailView = true;
-    }
-
-    function showChooseOfflineStore(){
+    function showChooseOfflineStore() {
       $vm.showOfflineStoreDetailView = false;
       $vm.chooseOfflineStoreView = true;
       $vm.showShareDetailView = false;
+      $vm.showBalanceView = false;
     }
 
-    function chooseOfflineStore(offlineStore){
+    function chooseOfflineStore(offlineStore) {
       $vm.showOfflineStoreDetailView = false;
       $vm.chooseOfflineStoreView = false;
-      $vm.showShareDetailView = true;
-      $vm.checkedOfflineStore=offlineStore;
+      $vm.showShareDetailView = false;
+      $vm.showBalanceView = true;
+      $vm.checkedOfflineStore = offlineStore;
     }
 
-    function showOfflineStoreDetail(offlineStore){
+    function showOfflineStoreDetail(offlineStore) {
       $vm.currentOfflineStore = offlineStore;
       $vm.showOfflineStoreDetailView = true;
       $vm.chooseOfflineStoreView = false;
       $vm.showShareDetailView = false;
+      $vm.showBalanceView = false;
     }
-    function changeOfflineStoreArea(code){
+
+    function changeOfflineStoreArea(code) {
       $vm.currentAreaCode = code;
     }
   }
@@ -95,6 +96,7 @@
     vm.validateMobile = validateMobile;
     vm.validateUserName = validateUserName;
     vm.validateUserAddress = validateUserAddress;
+    vm.validateOrderData = validateOrderData;
     vm.submitOrder = submitOrder;
     vm.confirmReceived = confirmReceived;
     vm.toUserShareInfo = toUserShareInfo;
@@ -104,6 +106,7 @@
     vm.createMyShare = createMyShare;
     vm.toUpdate = toUpdate;
     vm.stopShare = stopShare;
+    vm.showShareDetail = showShareDetail;
 
     activate();
     function activate() {
@@ -121,12 +124,12 @@
       vm.weshare = {};
       vm.orderTotalPrice = 0;
       $scope.$watch('vm.selectShipType', function (val) {
-        if(val!=-1){
+        if (val != -1) {
           vm.chooseShipType = false;
         }
       });
-      $scope.$watchCollection('vm.checkedOfflineStore',function(val){
-        if(val){
+      $scope.$watchCollection('vm.checkedOfflineStore', function (val) {
+        if (val) {
           vm.chooseOfflineStoreError = false;
         }
       });
@@ -146,10 +149,10 @@
           vm.consignee = data['consignee'];
           vm.myCoupons = data['my_coupons'];
           vm.weshareSettings = data['weshare_ship_settings'];
-          if(vm.consignee&&vm.consignee.offlineStore){
+          vm.selectShipType = getSelectTypeDefaultVal(vm.weshareSettings);
+          if (vm.consignee && vm.consignee.offlineStore) {
             vm.checkedOfflineStore = vm.consignee.offlineStore;
           }
-          vm.selectShipType = -1;
           if (vm.myCoupons) {
             vm.useCouponId = vm.myCoupons.CouponItem.id;
             vm.userCouponReduce = vm.myCoupons.Coupon.reduced_price;
@@ -175,18 +178,31 @@
           if (followSharedType) {
             if (followSharedType == 'got') {
               vm.showNotifyGetPacketDialog = true;
-              vm.getPacketNum = followSharedNum+'元';
+              vm.getPacketNum = followSharedNum + '元';
               vm.showLayer = true;
-              $timeout(function(){
+              $timeout(function () {
                 vm.showLayer = false;
                 vm.showNotifyGetPacketDialog = false;
-              },10000);
+              }, 10000);
             }
           }
         }).
         error(function (data, status) {
           $log.log(data);
         });
+    }
+
+    function getSelectTypeDefaultVal(shipSettings){
+      if(vm.weshareSettings.kuai_di.status==1){
+        return 0;
+      }
+      if(vm.weshareSettings.self_ziti.status==1){
+        return 1;
+      }
+      if(vm.weshareSettings.pys_ziti.status==1){
+        return 2;
+      }
+      return -1;
     }
 
     function isCreator() {
@@ -206,6 +222,13 @@
       return _.map(carts, function (cart) {
         return cart.name + 'X' + cart.num;
       }).join(', ');
+    }
+
+    function showShareDetail() {
+      vm.showOfflineStoreDetailView = false;
+      vm.chooseOfflineStoreView = false;
+      vm.showBalanceView = false;
+      vm.showShareDetailView = true;
     }
 
     function toUserShareInfo($uid) {
@@ -323,33 +346,8 @@
     }
 
     function submitOrder(paymentType) {
-      if(vm.selectShipType==-1){
-        alert('请选择快递方式');
-        vm.chooseShipType = true;
-        return;
-      }
-      if(vm.selectShipType==2&&!vm.checkedOfflineStore){
-        alert('请选择自提点');
-        vm.chooseOfflineStoreError = true;
-        return;
-      }
-      vm.validateUserName();
-      vm.validateMobile();
-      if (vm.buyerMobilePhoneHasError || vm.usernameHasError) {
+      if (!vm.validateOrderData()) {
         return false;
-      }
-      //kuai di
-      if (vm.selectShipType == 0) {
-        if (vm.validateUserAddress()) {
-          return false;
-        }
-      }
-      //self ziti
-      if (vm.selectShipType == 1) {
-        var addressHasError = vm.validateAddress();
-        if (addressHasError) {
-          return false;
-        }
       }
       var products = _.filter(vm.weshare.products, function (product) {
         return product.num && (product.num > 0);
@@ -369,7 +367,7 @@
       var orderData = {
         weshare_id: vm.weshare.id,
         products: products,
-        ship_info : ship_info,
+        ship_info: ship_info,
         buyer: {name: vm.buyerName, mobilephone: vm.buyerMobilePhone, address: vm.buyerAddress}
       };
       if (vm.useCouponId) {
@@ -396,6 +394,38 @@
       }).error(function () {
         vm.submitProcessing = false;
       });
+    }
+
+    function validateOrderData() {
+      if (vm.selectShipType == -1) {
+        alert('请选择快递方式');
+        vm.chooseShipType = true;
+        return false;
+      }
+      if (vm.selectShipType == 2 && !vm.checkedOfflineStore) {
+        alert('请选择自提点');
+        vm.chooseOfflineStoreError = true;
+        return false;
+      }
+      vm.validateUserName();
+      vm.validateMobile();
+      if (vm.buyerMobilePhoneHasError || vm.usernameHasError) {
+        return false;
+      }
+      //kuai di
+      if (vm.selectShipType == 0) {
+        if (vm.validateUserAddress()) {
+          return false;
+        }
+      }
+      //self ziti
+      if (vm.selectShipType == 1) {
+        var addressHasError = vm.validateAddress();
+        if (addressHasError) {
+          return false;
+        }
+      }
+      return true;
     }
 
     function confirmReceived(order) {
@@ -487,13 +517,13 @@
       //share packet
       if (vm.isSharePacket) {
         imgUrl = 'http://www.tongshijia.com/static/weshares/images/redpacket/hbss_icon.jpg';
-        var title = vm.weshare.creator.nickname+'给我一个红包大家一起抢';
+        var title = vm.weshare.creator.nickname + '给我一个红包大家一起抢';
         to_timeline_title = title;
         to_friend_title = title;
-        url = url+ '?shared_offer_id=' + vm.sharedOfferId;
+        url = url + '?shared_offer_id=' + vm.sharedOfferId;
         to_friend_link = url;
         to_timeline_link = url;
-        desc = vm.currentUser.nickname+'报名了小宝妈分享的鸡蛋。小宝妈我认识，很靠谱';
+        desc = vm.currentUser.nickname + '报名了小宝妈分享的鸡蛋。小宝妈我认识，很靠谱';
       }
       if (wx) {
         wx.ready(function () {

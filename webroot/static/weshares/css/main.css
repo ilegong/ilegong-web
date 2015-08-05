@@ -57,7 +57,7 @@ ul li { list-style: none; }
 
 .weshare-view .header{ margin-bottom: 10px;}
 
-.weshare-view .introduction{ background-color: #ffffff; border: 1px #eaeaea solid; border-radius: 5px; padding: 15px; position: relative;}
+.weshare-view .introduction{ background-color: #ffffff; border: 1px #eaeaea solid; border-radius: 5px; padding: 15px 15px 0px 15px; position: relative;}
 .weshare-view .introduction b{display: block;position: absolute;top: -6px;left: 15px;background: url(../images/weifxicon.png) no-repeat -25px -25px;background-size: 100px 100px;width: 12px;height: 6px;}
 .weshare-view .introduction .row{ padding: 0 0 10px;}
 .weshare-view .introduction .status{ display: block; position: absolute; z-index: 3; top: 8px; left: -5px; background: url(../images/weifxicon.png?v0.01) no-repeat -62px 0; background-size: 100px 100px; width: 40px; height: 23px; font-size: 12px; text-align:center; color: #ffffff; line-height: 18px;}
@@ -135,5 +135,5 @@ ul li { list-style: none; }
 .zitilist li.fr{ width: 80%;}
 .zitilist h1{ line-height: 44px; text-align: center; font-size: 14px; color: #333333;}
 .zitilist h1.cur{ background-color: #f5f5f5;}
-.zitilist h2{ line-height: 44px; border-bottom: 1px #eeeeee solid; margin-left: 15px;}
+.zitilist h2{ padding: 12px 20px 12px 0; border-bottom: 1px #eeeeee solid; margin-left: 15px;}
 .zitilist h2 a{ font-size: 14px; color: #333333; text-align: left; text-decoration: none;}
