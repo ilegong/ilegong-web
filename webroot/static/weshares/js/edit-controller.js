@@ -20,6 +20,7 @@
     vm.validateTitle = validateTitle;
     vm.validateProductName = validateProductName;
     vm.validateProductPrice = validateProductPrice;
+    vm.validateAddress = validateAddress;
     vm.saveCacheData = saveCacheData;
     vm.dataCacheKey = 'cache_share_data';
     activate();
@@ -172,6 +173,12 @@
       vm.weshare.addresses = _.filter(vm.weshare.addresses, function (address) {
         return !_.isEmpty(address.address);
       });
+      if(vm.validateAddress()){
+        vm.weshare.addresses= [
+          {address: ''}
+        ];
+        return false;
+      }
       vm.weshare.ship_type = [vm.self_ziti_data,vm.kuai_di_data,vm.pys_ziti_data];
       $log.log('submitted').log(vm.weshare);
       $http.post('/weshares/save', vm.weshare).success(function (data, status, headers, config) {
@@ -204,6 +211,11 @@
     function validateProductPrice(product) {
       product.priceHasError = !product.price || !Utils.isNumber(product.price);
       return product.priceHasError;
+    }
+
+    function validateAddress(){
+      vm.addressError = vm.self_ziti_data.status==1&& _.isEmpty(vm.weshare.addresses)
+      return vm.addressError;
     }
   }
 })(window, window.angular, window.wx);

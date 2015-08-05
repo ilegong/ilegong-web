@@ -44,6 +44,7 @@ ul li { list-style: none; }
 .weshare-add .delete-badge{ position: absolute; top: -7px; right: -7px; background: url(../images/weifxicon.png?v0.01) no-repeat -33px 0; background-size: 100px 100px; width: 25px; height: 25px;}
 .weshare-add .next-btn{ border: 1px #29AC0E solid; display: block; font-size: 16px; background-color: #29AC0E; color: #ffffff; text-decoration: none; margin-bottom: 20px; margin-top: 40px;}
 .weshare-add .back-btn{ color: #29AC0E; display: block; width: 80px; margin: 0 auto; margin-top: -15px; margin-bottom: 30px;}
+.weshare-add .checkbox-disable{color: #a9a9a9}
 
 
 /*分享参团*/

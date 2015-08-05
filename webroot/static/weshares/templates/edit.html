@@ -43,18 +43,20 @@
         </div>
         <div class="clearfix">
             <div class="form-group fl">
-                <input type="checkbox" ng-model="vm.self_ziti_data.status" ng-true-value="1" ng-false-value="-1" ng-checked="vm.self_ziti_data.status==1">
+                <input type="checkbox" ng-model="vm.self_ziti_data.status" ng-true-value="1" ng-false-value="-1" ng-checked="vm.self_ziti_data.status==1" ng-change='vm.validateAddress()'>
             </div>
             &nbsp;&nbsp;&nbsp;自己的自提点
         </div>
-        <div class="clearfix" ng-repeat="address in vm.weshare.addresses">
-            <div class="form-group fl" style="width: 80%; margin-right: 10px;">
-                <input class='form-control' placeholder="取货地点，联系人，联系电话" ng-model="address.address"/>
+        <div class="form-group" ng-class="{'has-error': vm.addressError}">
+            <div class="clearfix" ng-repeat="address in vm.weshare.addresses">
+                <div class="form-group fl" style="width: 80%; margin-right: 10px;">
+                    <input class='form-control' placeholder="取货地点，联系人，联系电话" ng-model="address.address" ng-blur='vm.validateAddress()'/>
+                </div>
+                <a class="fr btn" ng-class="{'delete-btn': !$last,'add-btn': $last}"
+                   ng-click="vm.toggleAddress(address, $last)"></a>
             </div>
-            <a class="fr btn" ng-class="{'delete-btn': !$last,'add-btn': $last}"
-               ng-click="vm.toggleAddress(address, $last)"></a>
+            <p class='tips'>请输入取货地址</p>
         </div>
-
         <div class="clearfix">
             <div class="form-group fl">
                 <input type="checkbox" ng-model="vm.kuai_di_data.status" ng-true-value="1" ng-false-value="-1" ng-checked="vm.kuai_di_data.status==1">
@@ -62,11 +64,11 @@
             &nbsp;&nbsp;&nbsp;快递
         </div>
 
-        <div class="clearfix" ng-if="vm.sharerShipType!=0">
+        <div class="clearfix" ng-class="{'checkbox-disable' : vm.sharerShipType==0}">
             <div class="form-group fl">
                 <input type="checkbox" disabled="{{vm.sharerShipType==0}}" ng-model="vm.pys_ziti_data.status" ng-true-value="1" ng-false-value="-1" ng-checked="vm.pys_ziti_data.status==1">
             </div>
-            &nbsp;&nbsp;&nbsp;朋友说自提点
+            &nbsp;&nbsp;&nbsp;朋友说自提点(分享达人开放)
         </div>
 
         <a class="btn next-btn" ng-click="vm.saveWeshare()">oh，搞定了！</a>
