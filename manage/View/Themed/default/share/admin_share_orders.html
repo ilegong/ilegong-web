@@ -89,6 +89,15 @@
                             <td>{{$current_order['total_all_price']}}</td>
                             <td>{{$current_order['created']}}</td>
                             <td>{{$current_order['status']}}</td>
+                            <td>
+                                {{if $current_order['ship_mark'] == 'psy_zi_ti'}}
+                                    朋友说自提
+                                {{elseif $current_order['ship_mark'] == 'self_zi_ti'}}
+                                    自有自提
+                                {{else}}
+                                    快递
+                                {{/if}}
+                            </td>
                         </tr>
                     {{/loop}}
                 {{/loop}}
