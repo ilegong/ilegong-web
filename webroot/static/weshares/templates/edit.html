@@ -66,7 +66,7 @@
 
         <div class="clearfix" ng-class="{'checkbox-disable' : vm.sharerShipType==0}">
             <div class="form-group fl">
-                <input type="checkbox" disabled="{{vm.sharerShipType==0}}" ng-model="vm.pys_ziti_data.status" ng-true-value="1" ng-false-value="-1" ng-checked="vm.pys_ziti_data.status==1">
+                <input type="checkbox"  ng-disabled="vm.sharerShipType==0" ng-model="vm.pys_ziti_data.status" ng-true-value="1" ng-false-value="-1" ng-checked="vm.pys_ziti_data.status==1">
             </div>
             &nbsp;&nbsp;&nbsp;朋友说自提点(分享达人开放)
         </div>

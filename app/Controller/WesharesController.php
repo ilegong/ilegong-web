@@ -800,7 +800,7 @@ class WesharesController extends AppController {
         if (empty($ship_setting)) {
             return 0;
         }
-        $ship_set_type = $ship_setting['WeshareShipOption']['type'];
+        $ship_set_type = $ship_setting['SharerShipOption']['type'];
         return $ship_set_type;
     }
 
