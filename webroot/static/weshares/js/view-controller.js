@@ -153,7 +153,7 @@
           vm.consignee = data['consignee'];
           vm.myCoupons = data['my_coupons'];
           vm.weshareSettings = data['weshare_ship_settings'];
-          if(vm.consignee.offlineStore){
+          if(vm.consignee&&vm.consignee.offlineStore){
             vm.checkedOfflineStore = vm.consignee.offlineStore;
           }
           vm.selectShipType = -1;
