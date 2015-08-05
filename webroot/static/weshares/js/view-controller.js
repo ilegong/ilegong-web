@@ -486,13 +486,13 @@
       //share packet
       if (vm.isSharePacket) {
         imgUrl = 'http://www.tongshijia.com/static/weshares/images/redpacket/hbss_icon.jpg';
-        var title = '恭喜发财，大吉大利！';
+        var title = vm.weshare.creator.nickname+'给我一个红包大家一起抢';
         to_timeline_title = title;
         to_friend_title = title;
         url = url+ '?shared_offer_id=' + vm.sharedOfferId;
         to_friend_link = url;
         to_timeline_link = url;
-        desc = '点击领取红包';
+        desc = vm.currentUser.nickname+'报名了小宝妈分享的鸡蛋。小宝妈我认识，很靠谱';
       }
       if (wx) {
         wx.ready(function () {
