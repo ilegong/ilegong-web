@@ -524,8 +524,8 @@ class WesharesController extends AppController {
             'fields' => array('id', 'name', 'order_id', 'num', 'product_id', 'price')
         ));
         $realTotalPrice = 0;
-        foreach ($orders as $item) {
-            $realTotalPrice = $realTotalPrice + $item['total_all_price'];
+        foreach ($orders as $order_item) {
+            $realTotalPrice = $realTotalPrice + $order_item['total_all_price'];
         }
         $summeryTotalPrice = 0;
         foreach ($carts as $item) {
