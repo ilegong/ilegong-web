@@ -517,13 +517,13 @@
       //share packet
       if (vm.isSharePacket) {
         imgUrl = 'http://www.tongshijia.com/static/weshares/images/redpacket/hbss_icon.jpg';
-        var title = vm.weshare.creator.nickname + '给我一个红包大家一起抢';
+        var title = userInfo.nickname + '报名了' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
         to_timeline_title = title;
         to_friend_title = title;
         url = url + '?shared_offer_id=' + vm.sharedOfferId;
         to_friend_link = url;
         to_timeline_link = url;
-        desc = vm.currentUser.nickname + '报名了小宝妈分享的鸡蛋。小宝妈我认识，很靠谱';
+        desc = vm.weshare.creator.nickname + '我认识，很靠谱！送你一张分享代金券，一起来报名。';
       }
       if (wx) {
         wx.ready(function () {
