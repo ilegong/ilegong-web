@@ -182,14 +182,14 @@ class ShareController extends AppController{
         if($_REQUEST['date']){
             $query_date = $_REQUEST['date'];
         }
-        if($_REQUEST['weshare_id']){
-            $query_share_id = $_REQUEST['weshare_id'];
-        }
         $cond = array(
             'type' => 9,
         );
         if($query_date!='all'){
             $cond['DATE(created)'] = $query_date;
+        }
+        if($_REQUEST['weshare_id']){
+            $query_share_id = $_REQUEST['weshare_id'];
         }
         if($query_date=='all'){
             $cond['status'] = array(ORDER_STATUS_PAID,ORDER_STATUS_RECEIVED,ORDER_STATUS_SHIPPED);
@@ -201,39 +201,41 @@ class ShareController extends AppController{
             'conditions' => $cond,
             'order' => array('created DESC')
         ));
-        $order_ids = Hash::extract($orders, '{n}.Order.id');
-        $member_ids = Hash::extract($orders, '{n}.Order.member_id');
-        $weshares = $this->Weshare->find('all', array(
-            'conditions' => array(
-                'id' => $member_ids
-            )
-        ));
-        $creatorIds = Hash::extract($weshares,'{n}.Weshare.creator');
-        $creators = $this->User->find('all',array(
-            'conditions' => array(
-                'id' => $creatorIds
-            ),
-            'fields' => array('id', 'nickname', 'mobilephone')
-        ));
-        $creators = Hash::combine($creators,'{n}.User.id','{n}.User');
-        $weshares = Hash::combine($weshares, '{n}.Weshare.id', '{n}.Weshare');
-        $carts = $this->Cart->find('all',array(
-            'conditions' => array(
-                'order_id' => $order_ids
-            )
-        ));
-        $order_cart_map = array();
-        foreach($carts as $item){
-            $order_id = $item['Cart']['order_id'];
-            if(!isset($order_cart_map[$order_id])){
-                $order_cart_map[$order_id] = array();
+        if(!empty($orders)){
+            $order_ids = Hash::extract($orders, '{n}.Order.id');
+            $member_ids = Hash::extract($orders, '{n}.Order.member_id');
+            $weshares = $this->Weshare->find('all', array(
+                'conditions' => array(
+                    'id' => $member_ids
+                )
+            ));
+            $creatorIds = Hash::extract($weshares,'{n}.Weshare.creator');
+            $creators = $this->User->find('all',array(
+                'conditions' => array(
+                    'id' => $creatorIds
+                ),
+                'fields' => array('id', 'nickname', 'mobilephone')
+            ));
+            $creators = Hash::combine($creators,'{n}.User.id','{n}.User');
+            $weshares = Hash::combine($weshares, '{n}.Weshare.id', '{n}.Weshare');
+            $carts = $this->Cart->find('all',array(
+                'conditions' => array(
+                    'order_id' => $order_ids
+                )
+            ));
+            $order_cart_map = array();
+            foreach($carts as $item){
+                $order_id = $item['Cart']['order_id'];
+                if(!isset($order_cart_map[$order_id])){
+                    $order_cart_map[$order_id] = array();
+                }
+                $order_cart_map[$order_id][] = $item['Cart'];
             }
-            $order_cart_map[$order_id][] = $item['Cart'];
+            $this->set('orders',$orders);
+            $this->set('order_cart_map',$order_cart_map);
+            $this->set('weshares',$weshares);
+            $this->set('weshare_creators',$creators);
         }
-        $this->set('orders',$orders);
-        $this->set('order_cart_map',$order_cart_map);
-        $this->set('weshares',$weshares);
-        $this->set('weshare_creators',$creators);
     }
 
     private function get_random_item($items){

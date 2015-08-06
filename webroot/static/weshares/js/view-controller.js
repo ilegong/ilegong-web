@@ -559,7 +559,7 @@
         url = url + '?shared_offer_id=' + vm.sharedOfferId;
         to_friend_link = url;
         to_timeline_link = url;
-        desc = vm.weshare.creator.nickname + '我认识，很靠谱！送你一张分享代金券，一起来报名。';
+        desc = vm.weshare.creator.nickname + '我认识，很靠谱！送你一个分享礼包，礼包金额可以抵现金，一起来报名。';
       }
       if (wx) {
         wx.ready(function () {
