@@ -193,6 +193,11 @@ const SHARE_SHIP_SELF_ZITI = 1;
 
 const SHARE_SHIP_PYS_ZITI = 2;
 
+const SHARE_SHIP_PYS_ZITI_TAG = 'psy_zi_ti';
+
+const SHARE_SHIP_SELF_ZITI_TAG = 'self_zi_ti';
+
+const SHARE_SHIP_KUAIDI_TAG = 'kuai_di';
 
 define('CATEGORY_ID_TECHAN', 114);
 

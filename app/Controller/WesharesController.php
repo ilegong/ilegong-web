@@ -221,24 +221,31 @@ class WesharesController extends AppController {
                     'weshare_id' => $weshareId
                 )
             ));
-            $checkProductStoreResult = $this->check_product_store($weshareProducts,$weshareId,$productIdNumMap);
-            if(!empty($checkProductStoreResult)){
+            $checkProductStoreResult = $this->check_product_store($weshareProducts, $weshareId, $productIdNumMap);
+            if (!empty($checkProductStoreResult)) {
                 echo json_encode($checkProductStoreResult);
                 return;
             }
             $shipInfo = $postDataArray['ship_info'];
             $addressId = $shipInfo['address_id'];
             $shipType = $shipInfo['ship_type'];
-            $address = $this->get_order_address($weshareId,$shipInfo,$buyerData,$uid);
+            $shipSetId = $shipInfo['ship_set_id'];
+            $shipSetting = $this->get_ship_set($shipSetId, $weshareId);
+            if(empty($shipSetting)){
+                echo json_encode(array('success' => false, 'msg' => '物流方式选择错误'));
+                return;
+            }
+            $shipFee = $shipSetting['WeshareShipSetting']['ship_fee'];
+            $address = $this->get_order_address($weshareId, $shipInfo, $buyerData, $uid);
             $orderData = array('creator' => $uid, 'consignee_address' => $address, 'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $buyerData['name'], 'consignee_mobilephone' => $buyerData['mobilephone']);
-            if($shipType == SHARE_SHIP_PYS_ZITI){
-                $orderData['ship_mark'] = 'psy_zi_ti';
+            if ($shipType == SHARE_SHIP_PYS_ZITI) {
+                $orderData['ship_mark'] = SHARE_SHIP_PYS_ZITI_TAG;
             }
-            if($shipType == SHARE_SHIP_SELF_ZITI){
-                $orderData['ship_mark'] = 'self_zi_ti';
+            if ($shipType == SHARE_SHIP_SELF_ZITI) {
+                $orderData['ship_mark'] = SHARE_SHIP_SELF_ZITI_TAG;
             }
-            if($shipType == SHARE_SHIP_KUAIDI){
-                $orderData['ship_mark'] = 'kuai_di';
+            if ($shipType == SHARE_SHIP_KUAIDI) {
+                $orderData['ship_mark'] = SHARE_SHIP_KUAIDI_TAG;
             }
             $order = $this->Order->save($orderData);
             $orderId = $order['Order']['id'];
@@ -262,7 +269,8 @@ class WesharesController extends AppController {
                 $totalPrice += $num * $price;
             }
             $this->Cart->saveAll($cart);
-            if ($this->Order->updateAll(array('total_all_price' => $totalPrice / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => 0), array('id' => $orderId))) {
+            $totalPrice += $shipFee;
+            if ($this->Order->updateAll(array('total_all_price' => $totalPrice / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => $shipFee), array('id' => $orderId))) {
                 $coupon_id = $postDataArray['coupon_id'];
                 //check coupon
                 if (!empty($coupon_id)) {
@@ -840,6 +848,15 @@ class WesharesController extends AppController {
             }
             return $address;
         }
+    }
+
+    private function get_ship_set($id, $weshareId){
+        return $this->WeshareShipSetting->find('first', array(
+            'conditions' => array(
+                'id' => $id,
+                'weshare_id' => $weshareId
+            )
+        ));
     }
 
     private function check_product_store($weshareProducts, $weshareId, $productIdNumMap) {

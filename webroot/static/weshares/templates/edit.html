@@ -62,8 +62,11 @@
                 <input type="checkbox" ng-model="vm.kuai_di_data.status" ng-true-value="1" ng-false-value="-1" ng-checked="vm.kuai_di_data.status==1">
             </div>
             &nbsp;&nbsp;&nbsp;快递
+            <div class="form-group fr" ng-class="{'has-error': vm.shipFeeHasError}" style="width: 60%; margin-right: 80px;" ng-show="vm.kuai_di_data.status==1">
+                <input class='form-control' placeholder="快递费/元 (默认为0)" ng-model="vm.kuai_di_data.ship_fee" ng-change='vm.validateShipFee()' ng-blur='vm.validateShipFee()'/>
+                <p class='tips'>请输入数字</p>
+            </div>
         </div>
-
         <div class="clearfix" ng-class="{'checkbox-disable' : vm.sharerShipType==0}">
             <div class="form-group fl">
                 <input type="checkbox"  ng-disabled="vm.sharerShipType==0" ng-model="vm.pys_ziti_data.status" ng-true-value="1" ng-false-value="-1" ng-checked="vm.pys_ziti_data.status==1">

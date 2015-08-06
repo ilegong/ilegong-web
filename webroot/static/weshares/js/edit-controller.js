@@ -22,6 +22,7 @@
     vm.validateProductPrice = validateProductPrice;
     vm.validateAddress = validateAddress;
     vm.saveCacheData = saveCacheData;
+    vm.validateShipFee = validateShipFee;
     vm.dataCacheKey = 'cache_share_data';
     activate();
     $scope.$watchCollection('vm.weshare', vm.saveCacheData);
@@ -32,7 +33,7 @@
       var sharerShipType = angular.element(document.getElementById('weshareEditView')).attr('data-ship-type');
       vm.sharerShipType = sharerShipType;
       vm.self_ziti_data = {status: -1, ship_fee: 0, tag: 'self_ziti'};
-      vm.kuai_di_data = {status: -1, ship_fee: 0, tag: 'kuai_di'};
+      vm.kuai_di_data = {status: -1, ship_fee: '', tag: 'kuai_di'};
       vm.pys_ziti_data = {status: -1, ship_fee: 0, tag: 'pys_ziti'};
       //add
       vm.weshare = {
@@ -179,6 +180,11 @@
         ];
         return false;
       }
+      vm.kuai_di_data.ship_fee = vm.kuai_di_data.ship_fee || 0;
+      if(vm.validateShipFee(vm.kuai_di_data.ship_fee)){
+        return false;
+      }
+      vm.kuai_di_data.ship_fee = vm.kuai_di_data.ship_fee*100;
       vm.weshare.ship_type = [vm.self_ziti_data,vm.kuai_di_data,vm.pys_ziti_data];
       $log.log('submitted').log(vm.weshare);
       $http.post('/weshares/save', vm.weshare).success(function (data, status, headers, config) {
@@ -196,7 +202,15 @@
         $log.log("failed with status :" + status + ", data: ").log(data).log(', and config').log(config);
       });
     }
-					
+
+    function validateShipFee(){
+      if(!Utils.isNumber(vm.kuai_di_data.ship_fee)&&vm.kuai_di_data.status==1){
+        vm.shipFeeHasError = true;
+      }else{
+        vm.shipFeeHasError = false;
+      }
+      return vm.shipFeeHasError;
+    }
 
     function validateTitle() {
       vm.weshareTitleHasError = _.isEmpty(vm.weshare.title) || vm.weshare.title.length > 50;

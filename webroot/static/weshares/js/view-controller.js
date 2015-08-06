@@ -107,6 +107,7 @@
     vm.toUpdate = toUpdate;
     vm.stopShare = stopShare;
     vm.showShareDetail = showShareDetail;
+    vm.calOrderTotalPrice = calOrderTotalPrice;
 
     activate();
     function activate() {
@@ -168,11 +169,16 @@
           if (fromType == 1) {
             if (_.isEmpty(initSharedOfferId)) {
               vm.showNotifyShareDialog = true;
+              vm.showLayer = true;
             } else {
-              vm.showNotifyShareOfferDialog = true;
-              vm.sharedOfferMsg = '恭喜发财，大吉大利！';
+              //check is new user buy it
+              var userInfo = vm.ordersDetail.users[vm.currentUser.id];
+              if(userInfo){
+                vm.showNotifyShareOfferDialog = true;
+                vm.sharedOfferMsg = '恭喜发财，大吉大利！';
+                vm.showLayer = true;
+              }
             }
-            vm.showLayer = true;
           }
           //follow share
           if (followSharedType) {
@@ -262,7 +268,34 @@
       if (vm.userCouponReduce) {
         totalPrice -= vm.userCouponReduce;
       }
+      vm.shipFee = parseInt(getShipFee());
+      vm.shipSetId = getShipSetId();
+      totalPrice += vm.shipFee;
       vm.orderTotalPrice = totalPrice / 100;
+    }
+
+    function getShipSetId(){
+      if(vm.selectShipType==0){
+        return vm.weshareSettings.kuai_di.id;
+      }
+      if(vm.selectShipType==1){
+        return vm.weshareSettings.self_ziti.id;
+      }
+      if(vm.selectShipType==2){
+        return vm.weshareSettings.pys_ziti.id;
+      }
+    }
+
+    function getShipFee(){
+      if(vm.selectShipType==0){
+        return vm.weshareSettings.kuai_di.ship_fee;
+      }
+      if(vm.selectShipType==1){
+        return vm.weshareSettings.self_ziti.ship_fee;
+      }
+      if(vm.selectShipType==2){
+        return vm.weshareSettings.pys_ziti.ship_fee;
+      }
     }
 
     function increaseProductNum(product) {
@@ -355,8 +388,11 @@
       products = _.map(products, function (product) {
         return {id: product.id, num: product.num};
       });
+      vm.shipFee = vm.shipFee || 0;
       var ship_info = {
-        ship_type: vm.selectShipType
+        ship_type: vm.selectShipType,
+        ship_fee: vm.shipFee,
+        ship_set_id: vm.shipSetId
       };
       if (vm.selectShipType == 1) {
         ship_info['address_id'] = vm.weshare.selectedAddressId;
@@ -515,7 +551,7 @@
         share_string = vm.weixinInfo.share_string;
       }
       //share packet
-      if (vm.isSharePacket) {
+      if (vm.isSharePacket&&userInfo) {
         imgUrl = 'http://www.tongshijia.com/static/weshares/images/redpacket/hbss_icon.jpg';
         var title = userInfo.nickname + '报名了' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
         to_timeline_title = title;

@@ -32,7 +32,9 @@
                 <p class='tips'>请输入商品数量</p>
             </div>
             <div class='total-fee text-center'>总金额：<span ng-bind="vm.orderTotalPrice | currency:'￥'"></span></div>
+
             <div style="text-align: center" ng-if="vm.myCoupons">(已减去红包<span ng-bind="vm.userCouponReduce/100" style="color: #ffa200;"></span>元)</div>
+            <div style="text-align: center" ng-if="vm.shipFee>0">(快递费用<span ng-bind="vm.shipFee/100" style="color: #ffa200;"></span>元)</div>
         </div>
     </div>
     <div style="background-color: #ffffff;padding-top: 1px;padding-bottom: 40px;">
@@ -40,15 +42,15 @@
             <div class="form-group" ng-class="{'has-error' : vm.chooseShipType}">
                 <div class="form-control radio-group">
                     <div ng-show="vm.weshareSettings.kuai_di.status==1">
-                        <input type="radio" class="radio" ng-model="vm.selectShipType" value="0" id="kuaidi"/>
+                        <input type="radio" class="radio" ng-model="vm.selectShipType" value="0" id="kuaidi" ng-change='vm.calOrderTotalPrice()'/>
                         <label for="kuaidi">快递</label>
                     </div>
                     <div ng-show="vm.weshareSettings.self_ziti.status==1">
-                        <input type="radio" class="radio" ng-model="vm.selectShipType" value="1" id="ziti"/>
+                        <input type="radio" class="radio" ng-model="vm.selectShipType" value="1" id="ziti" ng-change='vm.calOrderTotalPrice()'/>
                         <label for="ziti">自提</label>
                     </div>
                     <div ng-show="vm.weshareSettings.pys_ziti.status==1">
-                        <input type="radio" class="radio" ng-model="vm.selectShipType" value="2" id="pys_ziti"/>
+                        <input type="radio" class="radio" ng-model="vm.selectShipType" value="2" id="pys_ziti" ng-change='vm.calOrderTotalPrice()'/>
                         <label for="pys_ziti">好邻居自提</label>
                     </div>
                 </div>
