@@ -76,7 +76,7 @@ ul li { list-style: none; }
 .weshare-view .products .product .btn.decrease-btn{background-position: 0 -65px;}
 .weshare-view .products .product .num{ display: block; margin-top: -4px; float: left; font-size: 14px; color: #333333; width: 35px; text-align: center; line-height: 25px;}
 
-.weshare-view .orders .order .buyer-image img{ width:40px; border-radius: 40px;}
+.weshare-view .orders .order .buyer-image img{ width:40px; border-radius: 40px; height: 40px;}
 .weshare-view .orders .order .buyer-name{ color: #29AC0E;}
 .weshare-view .orders .order .detail{ width: 80%; border-radius: 5px; margin-left: 10px; border: 1px #eaeaea solid; background-color: #ffffff; position: relative;}
 .weshare-view .orders .order .detail b{ display: block;width: 6px;height: 12px;position: absolute;left: -6px;top: 12px;background: url(../images/weifxicon.png) no-repeat -25px -35px;background-size: 100px 100px;}
