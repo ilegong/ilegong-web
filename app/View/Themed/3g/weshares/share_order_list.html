@@ -121,6 +121,24 @@
                 $('#send_product_arrive_msg').hide();
             }
         });
+        $('button.set-order-ship-code').on('click', function () {
+            var $me = $(this);
+            var $from = $me.parent('form');
+            var $shipCompany = $('select[name=ship_company_code]', $from);
+            var $shipCode = $('input[name=ship_code]', $from);
+            var orderId = $me.data('order-id');
+            var shipCompayId = $shipCompany.val();
+            var shipCode = $shipCode.val();
+            $.post('/weshares/set_order_ship_code', {
+                order_id: orderId,
+                company_id: shipCompayId,
+                ship_code: shipCode
+            }, function (data) {
+                if(data['success']){
+                    
+                }
+            }, 'json');
+        });
         $('button[name="set_order_shipped"]').on('click', function (e) {
             e.preventDefault();
             var $me = $(this);

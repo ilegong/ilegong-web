@@ -424,12 +424,12 @@ class WesharesController extends AppController {
         $this->set('my_join_shares', $myJoinShares);
     }
 
-    public function set_order_ship_code(){
+    public function set_order_ship_code() {
         $this->autoRender = false;
         $order_id = $_REQUEST['order_id'];
         $ship_company_id = $_REQUEST['company_id'];
         $ship_code = $_REQUEST['ship_code'];
-        $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED),array());
+        $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'ship_type' => $ship_company_id, 'ship_code' => "'" . $ship_code . "'"), array('id' => $order_id, 'status' => ORDER_STATUS_PAID));
         echo json_encode(array('success' => true));
         return;
     }
