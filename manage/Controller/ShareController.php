@@ -86,6 +86,25 @@ class ShareController extends AppController{
         return;
     }
 
+    function rand_date($min_date, $max_date) {
+        /* Gets 2 dates as string, earlier and later date.
+           Returns date in between them.
+        */
+        $min_epoch = strtotime($min_date);
+        $max_epoch = strtotime($max_date);
+        $is_valid = true;
+        $gen_date = '';
+        while ($is_valid) {
+            $rand_epoch = mt_rand($min_epoch, $max_epoch);
+            $gen_date = date('Y-m-d H:i:s', $rand_epoch);
+            $yh = getdate($gen_date);
+            if ($yh['hours'] >= 6 && $yh['hours'] < 12) {
+                $is_valid = false;
+            }
+        }
+        return $gen_date;
+    }
+
     public function admin_make_order($num=1,$weshare_id){
         $this->autoRender=false;
         /**
@@ -113,7 +132,7 @@ class ShareController extends AppController{
         $rand_start = strtotime($current_date . ' -3 day');
         $rand_end = strtotime($current_date);
         foreach($users as $user){
-            $order_date = mt_rand($rand_start, $rand_end);
+            $order_date = $this->rand_date($rand_start,$rand_end);
             $this->gen_order($weshare, $user, $weshare_products, $weshare_addresses, $order_date);
         }
         echo json_encode(array('success' => true));
@@ -257,20 +276,20 @@ class ShareController extends AppController{
             $user = $user['user'];
             $user_name = $user['nickname'];
             $this->Order->id = null;
-            $order = $this->Order->save(array('creator' => $user['id'], 'consignee_address' => $tinyAddress['WeshareAddress']['address'], 'member_id' => $weshare['Weshare']['id'], 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $user_name, 'consignee_mobilephone' => $mobile_phone[0]));
+            $order = $this->Order->save(array('creator' => $user['id'], 'consignee_address' => $tinyAddress['WeshareAddress']['address'], 'member_id' => $weshare['Weshare']['id'], 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => $order_date, 'updated' => $order_date, 'consignee_id' => $addressId, 'consignee_name' => $user_name, 'consignee_mobilephone' => $mobile_phone[0]));
             $orderId = $order['Order']['id'];
             $totalPrice = 0;
             foreach ($weshareProducts as $p) {
                 $item = array();
-                $num = rand(1, 6);
+                $num = rand(1, 2);
                 $price = $p['WeshareProduct']['price'];
                 $item['name'] = $p['WeshareProduct']['name'];
                 $item['num'] = $num;
                 $item['price'] = $price;
                 $item['type'] = ORDER_TYPE_WESHARE_BUY;
                 $item['product_id'] = $p['WeshareProduct']['id'];
-                $item['created'] = date('Y-m-d H:i:s', $order_date);
-                $item['updated'] = date('Y-m-d H:i:s', $order_date);
+                $item['created'] =$order_date;
+                $item['updated'] = $order_date;
                 $item['creator'] = $user['id'];
                 $item['order_id'] = $orderId;
                 $item['tuan_buy_id'] = $weshare_id;
