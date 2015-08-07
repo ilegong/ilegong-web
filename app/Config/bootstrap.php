@@ -2177,6 +2177,18 @@ function get_share_order_cart_display_name($carts){
     return implode(', ',$product_names);
 }
 
+function share_kuaidi_order_filter($var) {
+    return empty($var['ship_mark']) || $var['ship_mark'] == SHARE_SHIP_KUAIDI_TAG;
+}
+
+function share_self_ziti_order_filter($var) {
+    return $var['ship_mark'] = SHARE_SHIP_SELF_ZITI_TAG;
+}
+
+function share_pys_ziti_order_filter($var) {
+    return $var['ship_mark'] = SHARE_SHIP_PYS_ZITI_TAG;
+}
+
 /**
  * auto load spl lib
  */

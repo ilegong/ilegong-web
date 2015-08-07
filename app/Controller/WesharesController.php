@@ -489,70 +489,8 @@ class WesharesController extends AppController {
         return $this->WeshareAddress->saveAll($weshareAddressData);
     }
 
-    private function get_weshare_buy_info($weshareId, $is_me) {
-        $product_buy_num = array('details' => array());
-        $order_cart_map = array();
-        $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED);
-        if (!$is_me) {
-            $order_status[] = ORDER_STATUS_VIRTUAL;
-        }
-        $orders = $this->Order->find('all', array(
-            'conditions' => array(
-                'member_id' => $weshareId,
-                'type' => ORDER_TYPE_WESHARE_BUY,
-                'status' => $order_status,
-                'deleted' => DELETED_NO
-            ),
-            'fields' => array('id', 'creator', 'created', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total'),
-            'order' => array('created DESC')
-        ));
-        $orderIds = Hash::extract($orders, '{n}.Order.id');
-        $userIds = Hash::extract($orders, '{n}.Order.creator');
-        $users = $this->User->find('all', array(
-            'conditions' => array(
-                'id' => $userIds
-            ),
-            'recursive' => 1, //int
-            'fields' => $this->query_user_fileds,
-        ));
-        $orders = Hash::combine($orders, '{n}.Order.id', '{n}.Order');
-        if ($orders) {
-            usort($orders, function ($a, $b) {
-                return ($a['id'] < $b['id']) ? -1 : 1;
-            });
-        }
-        $carts = $this->Cart->find('all', array(
-            'conditions' => array(
-                'order_id' => $orderIds,
-                'type' => ORDER_TYPE_WESHARE_BUY,
-                'not' => array('order_id' => null, 'order_id' => '')
-            ),
-            'fields' => array('id', 'name', 'order_id', 'num', 'product_id', 'price')
-        ));
-        $realTotalPrice = 0;
-        foreach ($orders as $order_item) {
-            $realTotalPrice = $realTotalPrice + $order_item['total_all_price'];
-        }
-        $summeryTotalPrice = 0;
-        foreach ($carts as $item) {
-            $order_id = $item['Cart']['order_id'];
-            $product_id = $item['Cart']['product_id'];
-            $cart_num = $item['Cart']['num'];
-            $cart_price = $item['Cart']['price'];
-            $cart_name = $item['Cart']['name'];
-            if (!isset($product_buy_num['details'][$product_id])) $product_buy_num['details'][$product_id] = array('num' => 0, 'total_price' => 0, 'name' => $cart_name);
-            if (!isset($order_cart_map[$order_id])) $order_cart_map[$order_id] = array();
-            $product_buy_num['details'][$product_id]['num'] = $product_buy_num['details'][$product_id]['num'] + $cart_num;
-            $totalPrice = $cart_num * $cart_price;
-            $summeryTotalPrice += $totalPrice;
-            $product_buy_num['details'][$product_id]['total_price'] = $product_buy_num['details'][$product_id]['total_price'] + $totalPrice;
-            $order_cart_map[$order_id][] = $item['Cart'];
-        }
-        $product_buy_num['all_buy_user_count'] = count($users);
-        $product_buy_num['all_total_price'] = $summeryTotalPrice;
-        $product_buy_num['real_total_price'] = $realTotalPrice;
-        $users = Hash::combine($users, '{n}.User.id', '{n}.User');
-        return array('users' => $users, 'orders' => $orders, 'order_cart_map' => $order_cart_map, 'summery' => $product_buy_num);
+    private function get_weshare_buy_info($weshareId, $is_me, $division = false) {
+        return $this->WeshareBuy->get_share_order_for_show($weshareId, $is_me, $division);
     }
 
     private function get_weshare_detail($weshareId) {
