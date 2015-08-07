@@ -123,6 +123,7 @@
         });
         $('button.set-order-ship-code').on('click', function () {
             var $me = $(this);
+            var $parent = $me.parentsUntil('div.col-xs-12');
             var $from = $me.parent('form');
             var $shipCompany = $('select[name=ship_company_code]', $from);
             var $shipCode = $('input[name=ship_code]', $from);
@@ -135,7 +136,8 @@
                 ship_code: shipCode
             }, function (data) {
                 if(data['success']){
-
+                    $parent.removeClass('offer-success').addClass('offer-warning');
+                    $('div.shape-text', $parent).text('已发货');
                 }
             }, 'json');
         });
@@ -150,7 +152,7 @@
                 var $parent = $me.parentsUntil('div.col-xs-12');
                 $.getJSON('/weshares/confirmReceived/' + order_id, function (data) {
                     if (data['success']) {
-                        $parent.removeClass('offer-success').addClass('offer-default');
+                        $parent.removeClass('offer-success').addClass('offer-warning');
                         $('div.shape-text', $parent).text('已发货');
                         $me.next().remove();
                         $me.remove();
