@@ -78,6 +78,12 @@
     var vm = this;
     vm.showShareDetailView = true;
     ChooseOfflineStore(vm, $log, $http, $templateCache);
+    vm.orderStatusMap = {
+      1: '待发货',
+      2: '已发货',
+      3: '已取货',
+      9: '已评价'
+    };
     vm.statusMap = {
       0: '进行中',
       1: '已截止'
@@ -220,7 +226,7 @@
     }
 
     function isOrderReceived(order) {
-      return !_.isEmpty(order) && order.status == 2;
+      return !_.isEmpty(order) && order.status == 3;
     }
 
     function getOrderDisplayName(orderId) {
