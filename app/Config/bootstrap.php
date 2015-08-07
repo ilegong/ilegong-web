@@ -2182,11 +2182,11 @@ function share_kuaidi_order_filter($var) {
 }
 
 function share_self_ziti_order_filter($var) {
-    return $var['ship_mark'] = SHARE_SHIP_SELF_ZITI_TAG;
+    return $var['ship_mark'] == SHARE_SHIP_SELF_ZITI_TAG;
 }
 
 function share_pys_ziti_order_filter($var) {
-    return $var['ship_mark'] = SHARE_SHIP_PYS_ZITI_TAG;
+    return $var['ship_mark'] == SHARE_SHIP_PYS_ZITI_TAG;
 }
 
 /**
