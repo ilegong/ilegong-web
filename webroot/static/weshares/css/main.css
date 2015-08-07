@@ -49,7 +49,7 @@ ul li { list-style: none; }
 
 /*分享参团*/
 .weshare-view{ padding: 10px 10px 60px;}
-.weshare-view ul img{ width:50px; border-radius: 50px;}
+.weshare-view ul img{ width:50px; border-radius: 50px; height: 50px;}
 .weshare-view ul li{ float: left;}
 .weshare-view ul li label{ font-weight: bold; display: block; padding-left: 10px; color: #29AC0E; font-size: 16px; padding-top: 5px;}
 .weshare-view ul li s{ font-size: 14px; color: #999999; text-decoration: none; display: block; padding-left: 10px; padding-top: 3px;}
