@@ -109,9 +109,12 @@ class ShareController extends AppController{
                 'weshare_id' => $weshare_id
             )
         ));
-
+        $current_date = date('Y-m-d H:i:s');
+        $rand_start = strtotime($current_date . ' -3 day');
+        $rand_end = strtotime($current_date);
         foreach($users as $user){
-            $this->gen_order($weshare,$user,$weshare_products,$weshare_addresses);
+            $order_date = mt_rand($rand_start, $rand_end);
+            $this->gen_order($weshare, $user, $weshare_products, $weshare_addresses, $order_date);
         }
         echo json_encode(array('success' => true));
         return;
@@ -242,7 +245,7 @@ class ShareController extends AppController{
         return $items[array_rand($items)];
     }
 
-    private function gen_order($weshare, $user, $weshare_products, $weshare_address) {
+    private function gen_order($weshare, $user, $weshare_products, $weshare_address, $order_date) {
         $weshareProducts = array();
         $weshareProducts[] = $this->get_random_item($weshare_products);
         $tinyAddress = $this->get_random_item($weshare_address);
@@ -257,13 +260,9 @@ class ShareController extends AppController{
             $order = $this->Order->save(array('creator' => $user['id'], 'consignee_address' => $tinyAddress['WeshareAddress']['address'], 'member_id' => $weshare['Weshare']['id'], 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $user_name, 'consignee_mobilephone' => $mobile_phone[0]));
             $orderId = $order['Order']['id'];
             $totalPrice = 0;
-            $current_date = date('Y-m-d H:i:s');
-            $rand_start = strtotime($current_date . ' -3 day');
-            $rand_end = strtotime($current_date);
-            $order_date = mt_rand($rand_start, $rand_end);
             foreach ($weshareProducts as $p) {
                 $item = array();
-                $num = rand(1, 5);
+                $num = rand(1, 6);
                 $price = $p['WeshareProduct']['price'];
                 $item['name'] = $p['WeshareProduct']['name'];
                 $item['num'] = $num;
