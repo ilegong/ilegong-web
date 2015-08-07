@@ -90,12 +90,10 @@ class ShareController extends AppController{
         /* Gets 2 dates as string, earlier and later date.
            Returns date in between them.
         */
-        $min_epoch = strtotime($min_date);
-        $max_epoch = strtotime($max_date);
         $is_valid = true;
         $gen_date = '';
         while ($is_valid) {
-            $rand_epoch = mt_rand($min_epoch, $max_epoch);
+            $rand_epoch = mt_rand($min_date, $max_date);
             $gen_date = date('Y-m-d H:i:s', $rand_epoch);
             $yh = getdate($gen_date);
             if ($yh['hours'] >= 6 && $yh['hours'] < 12) {
