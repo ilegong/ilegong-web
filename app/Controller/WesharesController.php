@@ -449,6 +449,7 @@ class WesharesController extends AppController {
         $user_id = $this->currentUser['id'];
         $statics_data = $this->get_weshare_buy_info($weshareId, true, true);
         $this->set($statics_data);
+        $this->set('ship_type_list',ShipAddress::ship_type_list());
         $this->set('hide_footer', true);
         $this->set('user_id', $user_id);
         $this->set('weshareId', $weshareId);

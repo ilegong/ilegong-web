@@ -29,19 +29,21 @@
                 <strong>金额:</strong>&nbsp;&nbsp;{{$item_order['total_all_price']}}
             </p>
             {{if $item_order['status'] == ORDER_STATUS_PAID&&$current_tag == SHARE_SHIP_KUAIDI_TAG}}
-            <form class="form" style="display: inline;">
-                <div class="form-group" style="display: inline-block;width: 25%;">
-                    <select class="form-control" name="ship_company_code">
-                        <option>
-                            圆通
-                        </option>
-                    </select>
-                </div>
-                <div class="form-group" style="display: inline-block;width: 45%;">
-                    <input type="text" class="form-control" name="ship_code" placeholder="快递单号">
-                </div>
-                <button class="btn btn-primary">已发货</button>
-            </form>
+                <form class="form" style="display: inline;">
+                    <div class="form-group" style="display: inline-block;width: 30%;">
+                        <select class="form-control" name="ship_company_code">
+                            {{loop $ship_type_list $company_id $company_name}}
+                                <option value="{{$company_id}}">
+                                    {{$company_name}}
+                                </option>
+                            {{/loop}}
+                        </select>
+                    </div>
+                    <div class="form-group" style="display: inline-block;width: 45%;">
+                        <input type="text" class="form-control" name="ship_code" placeholder="快递单号">
+                    </div>
+                    <button class="btn btn-primary">已发货</button>
+                </form>
             {{/if}}
         </div>
     </div>
