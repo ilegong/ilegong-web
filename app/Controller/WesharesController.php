@@ -141,9 +141,7 @@ class WesharesController extends AppController {
         $this->saveWeshareAddresses($weshare['Weshare']['id'], $addressesData);
         $this->saevWeshareShipType($weshare['Weshare']['id'], $shipSetData);
         if ($saveBuyFlag) {
-            if($uid!=544307){
-                $this->WeshareBuy->send_new_share_msg($weshare['Weshare']['id']);
-            }
+            $this->WeshareBuy->send_new_share_msg($weshare['Weshare']['id']);
             echo json_encode(array('success' => true, 'id' => $weshare['Weshare']['id']));
             return;
         } else {
