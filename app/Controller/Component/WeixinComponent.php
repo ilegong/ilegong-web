@@ -725,7 +725,9 @@ class WeixinComponent extends Component
     public function send_weshare_buy_order_paid_msg($open_id, $order, $good) {
         $weshare_info = $good['weshare_info'];
         $title = $weshare_info['Weshare']['title'];
-        $org_msg = "亲，您参加的[" . $title . "]的活动已完成付款。";
+        $userM = ClassRegistry::init('User');
+        $creatorNickName = $userM->findNicknamesOfUid($weshare_info['Weshare']['creator']);
+        $org_msg = "亲，您报名了".$creatorNickName."分享的".$title."，请留意当天的取货提醒哈。";
         $post_data = array(
             "touser" => $open_id,
             "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
@@ -737,11 +739,9 @@ class WeixinComponent extends Component
                 "orderProductName" => array("value" => $good['good_info']),
                 "orderAddress" => array("value" => empty($good['ship_info']) ? '' : $good['ship_info']),
                 "orderName" => array("value" => $order['Order']['id']),
-                "remark" => array("value" => "点击查看详情.", "color" => "#FF8800")
+                "remark" => array("value" => "分享，让生活更美。点击查看详情。", "color" => "#FF8800")
             )
         );
-        $userM = ClassRegistry::init('User');
-        $creatorNickName = $userM->findNicknamesOfUid($weshare_info['Weshare']['creator']);
         $title = '亲，恭喜您获得' . $creatorNickName . '红包！';
         $detail_url = $this->get_weshare_packet_url($weshare_info['Weshare']['id']);
         return $this->send_weixin_message($post_data) && $this->send_share_offer_msg($open_id, $order['Order']['id'], $title, $detail_url);
@@ -772,9 +772,9 @@ class WeixinComponent extends Component
 
     public function send_weshare_buy_paid_msg_for_creator($seller_open_id, $price, $good_info, $ship_info, $order_no, $weshare_info,$order_creator_name=null) {
         $title = $weshare_info['Weshare']['title'];
-        $show_tile =  "亲，有用户加入了您发起的" . $title . "的活动。";
+        $show_tile = "亲，有人报名了您分享的".$title."。";
         if(!empty($order_creator_name)){
-            $show_tile =  "亲，".$order_creator_name."加入了您发起的" . $title . "的活动。";
+            $show_tile = "亲，".$order_creator_name."报名了您分享的".$title."。";
         }
         $weshare_id = $weshare_info['Weshare']['id'];
         $post_data = array(
@@ -788,7 +788,7 @@ class WeixinComponent extends Component
                 "orderProductName" => array("value" => $good_info),
                 "orderAddress" => array("value" => empty($ship_info) ? '' : $ship_info),
                 "orderName" => array("value" => $order_no),
-                "remark" => array("value" => "点击详情", "color" => "#FF8800")
+                "remark" => array("value" => "分享，让生活更美。点击查看详情。", "color" => "#FF8800")
             )
         );
         return $this->send_weixin_message($post_data);

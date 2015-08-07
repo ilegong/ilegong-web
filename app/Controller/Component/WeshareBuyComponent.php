@@ -51,6 +51,50 @@ class WeshareBuyComponent extends Component {
         }
     }
 
+    public function send_share_product_arrive_msg($shareInfo, $msg){
+        $share_id = $shareInfo['Weshare']['id'];
+        $share_creator = $shareInfo['Weshare']['creator'];
+        //select order paid to send msg
+        $orders = $this->Order->find('all', array(
+            'conditions' => array(
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'member_id' => $share_id,
+                'status' => array(ORDER_STATUS_PAID)
+            ),
+            'fields' => array(
+                'id', 'consignee_name', 'consignee_address', 'creator'
+            )
+        ));
+        $order_user_ids = Hash::extract($orders, '{n}.Order.creator');
+        $order_user_ids[] = $share_creator;
+        $users = $this->User->find('all', array(
+            'conditions' => array(
+                'id' => $order_user_ids
+            ),
+            'fields' => array('id', 'nickname')
+        ));
+        $users = Hash::combine($users, '{n}.User.id', '{n}.User');
+        $userOauthBinds = $this->Oauthbind->find('all', array(
+            'conditions' => array(
+                'user_id' => $order_user_ids
+            ),
+            'fields' => array('user_id', 'oauth_openid')
+        ));
+        $userOauthBinds = Hash::combine($userOauthBinds, '{n}.Oauthbind.user_id', '{n}.Oauthbind.oauth_openid');
+        $desc = '感谢大家对' . $users[$share_creator]['nickname'] . '的支持，分享快乐。';
+        $detail_url = WX_HOST . '/weshares/view/' . $share_id;
+        foreach ($orders as $order) {
+            $order_id = $order['Order']['id'];
+            $order_user_id = $order['Order']['creator'];
+            $open_id = $userOauthBinds[$order_user_id];
+            $order_user_name = $users[$order_user_id]['nickname'];
+            $title = $order_user_name . '你好，' . $msg;
+            $conginess_name = $order['Order']['consignee_name'];
+            $conginess_address = $order['Order']['consignee_address'];
+            $this->Weixin->send_share_product_arrival($open_id, $detail_url, $title, $order_id, $conginess_address, $conginess_name, $desc);
+        }
+    }
+
     public function load_fans_buy_sharer($sharerId, $weshareId) {
         $weshares = $this->Weshare->find('all', array(
             'conditions' => array(
