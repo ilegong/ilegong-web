@@ -78,12 +78,7 @@
     var vm = this;
     vm.showShareDetailView = true;
     ChooseOfflineStore(vm, $log, $http, $templateCache);
-    vm.orderStatusMap = {
-      1: '待发货',
-      2: '已发货',
-      3: '已取货',
-      9: '已评价'
-    };
+
     vm.statusMap = {
       0: '进行中',
       1: '已截止'
@@ -114,6 +109,7 @@
     vm.stopShare = stopShare;
     vm.showShareDetail = showShareDetail;
     vm.calOrderTotalPrice = calOrderTotalPrice;
+    vm.getStatusName = getStatusName;
 
     activate();
     function activate() {
@@ -436,6 +432,29 @@
       }).error(function () {
         vm.submitProcessing = false;
       });
+    }
+
+    function getStatusName(status,orderType){
+      if(status == 1){
+        return '待发货';
+      }
+      if(status == 2){
+        if(orderType == 'kuai_di'){
+          return '待签收';
+        }
+        if(orderType == 'psy_zi_ti' || orderType == 'self_zi_ti'){
+          return '待取货';
+        }
+      }
+      if(status == 3){
+        if(orderType == 'kuai_di'){
+          return '已签收';
+        }
+        if(orderType == 'psy_zi_ti' || orderType == 'self_zi_ti'){
+          return '已取货';
+        }
+      }
+      return '已完成';
     }
 
     function validateOrderData() {

@@ -318,8 +318,8 @@ class WesharesController extends AppController {
             return;
         }
 
-        $result = $this->Order->updateAll(array('status' => 2), array('id' => $order['Order']['id']));
-        $this->Cart->updateAll(array('status' => 2), array('order_id' => $order['Order']['id']));
+        $result = $this->Order->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('id' => $order['Order']['id']));
+        $this->Cart->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order['Order']['id']));
         if (!$result) {
             echo json_encode(array(success => false, reason => "failed to update order status"));
             return;
@@ -430,6 +430,8 @@ class WesharesController extends AppController {
         $ship_company_id = $_REQUEST['company_id'];
         $ship_code = $_REQUEST['ship_code'];
         $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'ship_type' => $ship_company_id, 'ship_code' => "'" . $ship_code . "'"), array('id' => $order_id, 'status' => ORDER_STATUS_PAID));
+        $this->Cart->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order_id));
+        //TODO send msg for user
         echo json_encode(array('success' => true));
         return;
     }
@@ -450,7 +452,13 @@ class WesharesController extends AppController {
             return;
         }
         //update order status
-        $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED), array('status' => ORDER_STATUS_PAID, 'type' => ORDER_TYPE_WESHARE_BUY, 'ship_mark' => SHARE_SHIP_SELF_ZITI_TAG));
+        $prepare_update_orders = $this->Order->find('all', array(
+            'conditions' => array('status' => ORDER_STATUS_PAID, 'type' => ORDER_TYPE_WESHARE_BUY, 'ship_mark' => SHARE_SHIP_SELF_ZITI_TAG, 'member_id' => $weshare_id),
+            'fields' => array('id')
+        ));
+        $prepare_update_order_ids = Hash::extract($prepare_update_orders, '{n}.Order.id');
+        $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED), array('id' => $prepare_update_order_ids));
+        $this->Cart->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $prepare_update_order_ids));
         $this->process_send_msg($share_info, $msg);
         echo json_encode(array('success' => true));
         return;
