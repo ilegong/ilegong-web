@@ -61,7 +61,7 @@
             <div class="form-group" ng-class="{'has-error' : vm.chooseShipType}">
                 <div class="form-control" ng-if="vm.checkedOfflineStore!=null">
                     <span ng-bind="vm.checkedOfflineStore.alias"></span>&nbsp;<span ng-bind="vm.checkedOfflineStore.owner_name"></span>&nbsp;<span ng-bind="vm.checkedOfflineStore.owner_phone"></span>
-                    <a style="text-decoration: underline;font-size: 1em;color: #ffa200;margin-left: 70%;" ng-click="vm.showChooseOfflineStoreView()">选择自提点</a>
+                    <a style="text-decoration: underline;font-size: 1em;color: #ffa200;margin-left: 70%;" ng-click="vm.showChooseOfflineStore()">选择自提点</a>
                 </div>
                 <div class="form-control" ng-if="vm.checkedOfflineStore==null">
                     <a style="text-decoration: underline;font-size: 1em;color: #ffa200;margin-left: 70%;" ng-click="vm.showChooseOfflineStore()">选择自提点</a>

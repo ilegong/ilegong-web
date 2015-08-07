@@ -35,6 +35,7 @@
       vm.self_ziti_data = {status: -1, ship_fee: 0, tag: 'self_ziti'};
       vm.kuai_di_data = {status: -1, ship_fee: '', tag: 'kuai_di'};
       vm.pys_ziti_data = {status: -1, ship_fee: 0, tag: 'pys_ziti'};
+      vm.kuaidi_show_ship_fee = '';
       //add
       vm.weshare = {
         title: '',
@@ -62,6 +63,7 @@
           vm.self_ziti_data = data['ship_type']['self_ziti'] || vm.self_ziti_data;
           vm.kuai_di_data = data['ship_type']['kuai_di'] || vm.kuai_di_data;
           vm.pys_ziti_data = data['ship_type']['pys_ziti'] || vm.pys_ziti_data;
+          vm.kuaidi_show_ship_fee = vm.kuai_di_data.ship_fee/100;
         }).error(function(data){
         });
       }
@@ -184,7 +186,7 @@
       if(vm.validateShipFee(vm.kuai_di_data.ship_fee)){
         return false;
       }
-      vm.kuai_di_data.ship_fee = vm.kuai_di_data.ship_fee*100;
+      vm.kuai_di_data.ship_fee = vm.kuai_di_data.ship_fee;
       vm.weshare.ship_type = [vm.self_ziti_data,vm.kuai_di_data,vm.pys_ziti_data];
       $log.log('submitted').log(vm.weshare);
       $http.post('/weshares/save', vm.weshare).success(function (data, status, headers, config) {
@@ -204,6 +206,9 @@
     }
 
     function validateShipFee(){
+      if(Utils.isNumber(vm.kuaidi_show_ship_fee)){
+        vm.kuai_di_data.ship_fee = vm.kuaidi_show_ship_fee*100;
+      }
       if(!Utils.isNumber(vm.kuai_di_data.ship_fee)&&vm.kuai_di_data.status==1){
         vm.shipFeeHasError = true;
       }else{
