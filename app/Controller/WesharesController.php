@@ -424,6 +424,16 @@ class WesharesController extends AppController {
         $this->set('my_join_shares', $myJoinShares);
     }
 
+    public function set_order_ship_code(){
+        $this->autoRender = false;
+        $order_id = $_REQUEST['order_id'];
+        $ship_company_id = $_REQUEST['company_id'];
+        $ship_code = $_REQUEST['ship_code'];
+        $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED),array());
+        echo json_encode(array('success' => true));
+        return;
+    }
+
     public function send_arrival_msg() {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
@@ -439,6 +449,8 @@ class WesharesController extends AppController {
             echo json_encode(array('success' => false, 'reason' => 'invalid'));
             return;
         }
+        //update order status
+        $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED), array('status' => ORDER_STATUS_PAID, 'type' => ORDER_TYPE_WESHARE_BUY, 'ship_mark' => SHARE_SHIP_SELF_ZITI_TAG));
         $this->process_send_msg($share_info, $msg);
         echo json_encode(array('success' => true));
         return;
