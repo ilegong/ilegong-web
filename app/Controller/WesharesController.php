@@ -141,7 +141,7 @@ class WesharesController extends AppController {
         $this->saveWeshareAddresses($weshare['Weshare']['id'], $addressesData);
         $this->saevWeshareShipType($weshare['Weshare']['id'], $shipSetData);
         if ($saveBuyFlag) {
-            if($uid!=544307&&empty($weshareData['id'])){
+            if(empty($weshareData['id'])){
                 $this->WeshareBuy->send_new_share_msg($weshare['Weshare']['id']);
             }
             echo json_encode(array('success' => true, 'id' => $weshare['Weshare']['id']));
@@ -449,6 +449,12 @@ class WesharesController extends AppController {
     public function share_order_list($weshareId) {
         $this->layout = 'weshare_bootstrap';
         $user_id = $this->currentUser['id'];
+        $weshare = $this->Weshare->find('first', array(
+            'conditions' => array('id' => $weshareId, 'creator' => $weshareId)
+        ));
+        if(empty($weshare)){
+            $this->redirect("/weshares/view/".$weshareId);
+        }
         $statics_data = $this->get_weshare_buy_info($weshareId, true);
         $this->set($statics_data);
         $this->set('hide_footer', true);
