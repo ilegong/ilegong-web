@@ -28,10 +28,17 @@
                 <strong>地址:</strong>&nbsp;&nbsp;{{$item_order['consignee_address']}}<br>
                 <strong>金额:</strong>&nbsp;&nbsp;{{$item_order['total_all_price']}}
             </p>
-            {{if $item_order['status'] == ORDER_STATUS_SHIPPED&&$current_tag == SHARE_SHIP_KUAIDI_TAG}}
-                <p>
-                    <strong>{{$ship_type_list[$item_order['ship_type']]}}:</strong><strong>{{$item_order['ship_code']}}</strong>
-                </p>
+            {{if $item_order['status'] == ORDER_STATUS_SHIPPED}}
+                {{if $current_tag == SHARE_SHIP_KUAIDI_TAG}}
+                    <p>
+                        <strong>{{$ship_type_list[$item_order['ship_type']]}}:</strong><strong>{{$item_order['ship_code']}}</strong>
+                    </p>
+                {{/if}}
+                {{if $current_tag == SHARE_SHIP_PYS_ZITI_TAG}}
+                    <p>
+                        <strong>提货码:</strong><strong>{{$item_order['ship_code']}}</strong>
+                    </p>
+                {{/if}}
             {{/if}}
             {{if $item_order['status'] == ORDER_STATUS_PAID&&$current_tag == SHARE_SHIP_KUAIDI_TAG}}
                 <div class="form" style="display: inline;">
