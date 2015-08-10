@@ -128,11 +128,20 @@ class WeixinComponent extends Component
     }
 
 
-    public function send_order_ship_info_msg($user_id,$msg,$order_id,$ship_company,$good_info,$good_number){
+    public function send_order_ship_info_msg($user_id, $msg, $order_id, $ship_company, $good_info, $good_number, $title = null, $product_num = null, $desc = null) {
         $oauthBindModel = ClassRegistry::init('Oauthbind');
         $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
         if ($user_weixin != false) {
             $open_id = $user_weixin['oauth_openid'];
+            if (empty($title)) {
+                $title = "亲，您的订单号为" . $order_id . "的最新物流信息: " . $msg . "如果你已经收货,请点击详情确认收货,可以获取积分(积分可以抵现)。";
+            }
+            if(empty($product_num)){
+                $product_num = '总数' . $good_number;
+            }
+            if(empty($desc)){
+                $desc = "点此查看详情";
+            }
             $post_data = array(
                 "touser" => $open_id,
                 "template_id" => $this->wx_message_template_ids["ORDER_SHIPPED"],
@@ -140,12 +149,12 @@ class WeixinComponent extends Component
                 "url" => $this->get_order_query_url($order_id),
                 "topcolor" => "#FF0000",
                 "data" => array(
-                    "first" => array("value" => "亲，您的订单号为".$order_id."的最新物流信息: ".$msg."如果你已经收货,请点击详情确认收货,可以获取积分(积分可以抵现)。"),
+                    "first" => array("value" => $title),
                     "keyword1" => array("value" => $ship_company),
                     "keyword2" => array("value" => $order_id),
                     "keyword3" => array("value" => $good_info),
-                    "keyword4" => array("value" => '总数'.$good_number),
-                    "remark" => array("value" => "点此查看详情", "color" => "#FF8800")
+                    "keyword4" => array("value" => $product_num),
+                    "remark" => array("value" => $desc, "color" => "#FF8800")
                 )
             );
             return $this->send_weixin_message($post_data);
@@ -727,7 +736,12 @@ class WeixinComponent extends Component
         $title = $weshare_info['Weshare']['title'];
         $userM = ClassRegistry::init('User');
         $creatorNickName = $userM->findNicknamesOfUid($weshare_info['Weshare']['creator']);
-        $org_msg = "亲，您报名了".$creatorNickName."分享的".$title."，请留意当天的取货提醒哈。";
+        $org_msg = "亲，您报名了".$creatorNickName."分享的".$title;
+        if($order['Order']['ship_mark'] == SHARE_SHIP_KUAIDI_TAG){
+            $org_msg = $org_msg.'，请留意后续的发货通知。';
+        }else{
+            $org_msg = $org_msg.'，请留意当天的取货提醒哈。';
+        }
         $post_data = array(
             "touser" => $open_id,
             "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
@@ -770,11 +784,20 @@ class WeixinComponent extends Component
         }
     }
 
-    public function send_weshare_buy_paid_msg_for_creator($seller_open_id, $price, $good_info, $ship_info, $order_no, $weshare_info,$order_creator_name=null) {
+    public function send_weshare_buy_paid_msg_for_creator($seller_open_id, $price, $good_info, $ship_info, $order_no, $weshare_info,$order_creator_name=null, $shipType = '') {
         $title = $weshare_info['Weshare']['title'];
         $show_tile = "亲，有人报名了您分享的".$title."。";
         if(!empty($order_creator_name)){
-            $show_tile = "亲，".$order_creator_name."报名了您分享的".$title."。";
+            $show_tile = "亲，".$order_creator_name."报名了您分享的".$title."，";
+        }
+        if($shipType == SHARE_SHIP_KUAIDI_TAG){
+            $show_tile = $show_tile.'需要快递。';
+        }
+        if($shipType == SHARE_SHIP_SELF_ZITI_TAG){
+            $show_tile = $show_tile.'自提点自提。';
+        }
+        if($shipType == SHARE_SHIP_PYS_ZITI_TAG){
+            $show_tile = $show_tile.'好邻居自提。';
         }
         $weshare_id = $weshare_info['Weshare']['id'];
         $post_data = array(

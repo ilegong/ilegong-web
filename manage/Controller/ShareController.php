@@ -10,11 +10,66 @@ class ShareController extends AppController{
 
     var $name = 'Share';
 
-    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'WeshareShipSetting');
+    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'WeshareShipSetting', 'OfflineStore', 'Oauthbind');
+
+    var $components = array('Weixin');
 
     public function beforeFilter(){
         parent::beforeFilter();
         $this->layout='bootstrap_layout';
+    }
+
+    public function admin_set_offline_store_code() {
+        $this->autoRender = false;
+        $order_id = $_REQUEST['order_id'];
+        $code = $_REQUEST['ship_code'];
+        //select order paid to send msg
+        $order = $this->Order->find('first', array(
+            'conditions' => array(
+                'id' => $order_id,
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'status' => array(ORDER_STATUS_PAID),
+                'ship_mark' => 'psy_zi_ti'
+            ),
+            'fields' => array(
+                'id', 'consignee_name', 'consignee_address', 'creator', 'member_id', 'consignee_id'
+            )
+        ));
+        $weshare_id = $order['Order']['member_id'];
+        $weshare = $this->Weshare->find('first', array(
+            'conditions' => array(
+                'id' => $weshare_id
+            )
+        ));
+        $order_user_ids = Hash::extract($order, 'Order.creator');
+        $share_creator = $weshare['Weshare']['creator'];
+        $order_user_ids[] = $share_creator;
+        $users = $this->User->find('all', array(
+            'conditions' => array(
+                'id' => $order_user_ids
+            ),
+            'fields' => array('id', 'nickname')
+        ));
+        $users = Hash::combine($users, '{n}.User.id', '{n}.User');
+        $userOauthBinds = $this->Oauthbind->find('all', array(
+            'conditions' => array(
+                'user_id' => $order_user_ids
+            ),
+            'fields' => array('user_id', 'oauth_openid')
+        ));
+        $cart_info = $this->get_cart_name_and_num($order_id);
+        $userOauthBinds = Hash::combine($userOauthBinds, '{n}.Oauthbind.user_id', '{n}.Oauthbind.oauth_openid');
+        $desc = '感谢大家对' . $users[$share_creator]['nickname'] . '的支持，分享快乐。';
+        $detail_url = WX_HOST . '/weshares/view/' . $weshare_id;
+        $order_id = $order['Order']['id'];
+        $order_user_id = $order['Order']['creator'];
+        $open_id = $userOauthBinds[$order_user_id];
+        $order_user_name = $users[$order_user_id]['nickname'];
+        $title = $order_user_name . '你好，您订购的' . $cart_info['cart_name'] . '已经到达自提点，提货码：' . $code . '，生鲜娇贵，请尽快取货哈。';
+        $offlineStore = $this->get_offline_store($order['Order']['consignee_id']);
+        $this->Weixin->send_share_product_arrival($open_id, $detail_url, $title, $order_id, $offlineStore['OfflineStore']['alias'], $offlineStore['OfflineStore']['name'], $desc);
+        $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'ship_code' => "'" . $code . "'"), array('id' => $order_id));
+        echo json_encode(array('success' => true));
     }
 
     public function admin_set_share_paid($shareId) {
@@ -304,6 +359,36 @@ class ShareController extends AppController{
             //echo json_encode(array('success' => false, 'msg' => $e->getMessage()));
             return array('success' => false, 'msg' => $e->getMessage());
         }
+    }
+
+    private function findCarts($orderId){
+        $carts = $this->Cart->find('all', array(
+            'conditions' => array(
+                'order_id' => $orderId
+            ),
+            'fields' => array('id', 'order_id', 'name', 'product_id', 'num')
+        ));
+        return $carts;
+    }
+
+    private function get_cart_name_and_num($orderId) {
+        $carts = $this->findCarts($orderId);
+        $num = 0;
+        $cart_name = array();
+        foreach ($carts as $cart_item) {
+            $num += $cart_item['Cart']['num'];
+            $cart_name[] = $cart_item['Cart']['name'] . 'X' . $cart_item['Cart']['num'];
+        }
+        return array('num' => $num, 'cart_name' => implode(',', $cart_name));
+    }
+
+    private function get_offline_store($offlineStoreId){
+        $offlineStore = $this->OfflineStore->find('first',array(
+            'conditions' => array(
+                'id' => $offlineStoreId
+            )
+        ));
+        return $offlineStore;
     }
 
     /**

@@ -35,55 +35,48 @@
 {{/if}}
 <div class="row">
     <h4>订单列表</h4>
-    <?php $order_index=0 ?>
-    {{loop $orders $item_order}}
-        <?php $order_index = $order_index+1; ?>
-        {{if $item_order['status']==1}}
-            <div class="col-xs-12">
-                <div class="offer offer-success">
-                    <div class="shape">
-                        <div class="shape-text">
-                            待发货
-                        </div>
-                    </div>
-                    <div class="offer-content">
-                        <p>
-                            <strong>序号:</strong>&nbsp;&nbsp;<font color="red">{{$order_index}}</font><br>
-                            <strong>商品:</strong>&nbsp;&nbsp;{{get_share_order_cart_display_name($order_cart_map[$item_order['id']])}}<br>
-                            <strong>微信昵称:</strong>&nbsp;&nbsp;{{$users[$item_order['creator']]['nickname']}}<br>
-                            <strong>收货人:</strong>&nbsp;&nbsp;{{$item_order['consignee_name']}}<br>
-                            <strong>手机:</strong>&nbsp;&nbsp;{{$item_order['consignee_mobilephone']}}<br>
-                            <strong>地址:</strong>&nbsp;&nbsp;{{$item_order['consignee_address']}}<br>
-                            <strong>金额:</strong>&nbsp;&nbsp;{{$item_order['total_all_price']}}<br>
-                            <button type="button" data-id="{{$item_order['id']}}" class="btn btn-info btn-sm pull-left" name="set_order_shipped">已发货</button>
-                            <br>
-                        </p>
+
+    <div class="col-md-12">
+        <!-- Nav tabs category -->
+        <ul class="nav nav-tabs">
+            {{if count($orders[SHARE_SHIP_SELF_ZITI_TAG]) > 0}}
+                <li class="active"><a href="#self-ziti-orders" data-toggle="tab" data-order-type="self_ziti">自提&nbsp;&nbsp;<font color="red">{{count($orders[SHARE_SHIP_SELF_ZITI_TAG])}}</font></a></li>
+            {{/if}}
+            {{if count($orders[SHARE_SHIP_KUAIDI_TAG]) > 0}}
+                <li><a href="#kuaidi-orders" data-toggle="tab" data-order-type="kuaidi">快递&nbsp;&nbsp;<font color="red">{{count($orders[SHARE_SHIP_KUAIDI_TAG])}}</font></a></li>
+            {{/if}}
+            {{if count($orders[SHARE_SHIP_PYS_ZITI_TAG]) > 0}}
+                <li><a href="#pys-ziti-orders" data-toggle="tab" data-order-type="pys_ziti">好邻居&nbsp;&nbsp;<font color="red">{{count($orders[SHARE_SHIP_PYS_ZITI_TAG])}}</font></a></li>
+            {{/if}}
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            {{if count($orders[SHARE_SHIP_SELF_ZITI_TAG]) > 0}}
+                <div class="tab-pane fade" id="self-ziti-orders">
+                    <div class="panel-group">
+                        <?php $current_orders=$orders[SHARE_SHIP_SELF_ZITI_TAG]; $current_tag = SHARE_SHIP_SELF_ZITI_TAG; ?>
+                        {{template weshares/share_order_list_template}}
                     </div>
                 </div>
-            </div>
-        {{else}}
-            <div class="col-xs-12">
-                <div class="offer offer-default">
-                    <div class="shape">
-                        <div class="shape-text">
-                            已发货
-                        </div>
-                    </div>
-                    <div class="offer-content">
-                        <p>
-                            <strong>序号:</strong>&nbsp;&nbsp;<font color="red">{{$order_index}}</font><br>
-                            <strong>商品:</strong>&nbsp;&nbsp;{{get_share_order_cart_display_name($order_cart_map[$item_order['id']])}}<br>
-                            <strong>微信昵称:</strong>&nbsp;&nbsp;{{$users[$item_order['creator']]['nickname']}}<br>
-                            <strong>收货人:</strong>&nbsp;&nbsp;{{$item_order['consignee_name']}}<br>
-                            <strong>手机:</strong>&nbsp;&nbsp;{{$item_order['consignee_mobilephone']}}<br>
-                            <strong>地址:</strong>&nbsp;&nbsp;{{$item_order['consignee_address']}}<br>
-                            <strong>金额:</strong>&nbsp;&nbsp;{{$item_order['total_all_price']}}<br>
-                        </p>
+            {{/if}}
+            {{if count($orders[SHARE_SHIP_KUAIDI_TAG]) > 0}}
+                <div class="tab-pane fade" id="kuaidi-orders">
+                    <div class="panel-group">
+                        <?php $current_orders=$orders[SHARE_SHIP_KUAIDI_TAG]; $current_tag = SHARE_SHIP_KUAIDI_TAG; ?>
+                        {{template weshares/share_order_list_template}}
                     </div>
                 </div>
-            </div>
-        {{/if}}
-    {{/loop}}
+            {{/if}}
+            {{if count($orders[SHARE_SHIP_PYS_ZITI_TAG]) > 0}}
+                <div class="tab-pane fade" id="pys-ziti-orders">
+                    <div class="panel-group">
+                        <?php $current_orders=$orders[SHARE_SHIP_PYS_ZITI_TAG]; $current_tag = SHARE_SHIP_PYS_ZITI_TAG; ?>
+                        {{template weshares/share_order_list_template}}
+                    </div>
+                </div>
+            {{/if}}
+        </div>
+    </div>
 </div>
 <div class="row" style="margin-bottom: 30px;">
 
@@ -113,10 +106,43 @@
             </div>
         </div>
     </div>
-    <button data-toggle="modal" data-target=".send-msg-dialog" type="button" class="btn btn-warning btn-lg btn-block" style="border-radius:0px;">取货提醒</button>
+    <button data-toggle="modal" data-target=".send-msg-dialog" type="button" class="btn btn-warning btn-lg btn-block" id="send_product_arrive_msg" style="border-radius:0px; display: none;">取货提醒</button>
 </div>
 <script>
     $(document).ready(function(){
+        var orderType = '';
+        $('ul.nav li:first a').trigger('click');
+        $('ul.nav li a').on('click', function(){
+            var  $me = $(this);
+            orderType = $me.data('order-type');
+            if(orderType=='self_ziti'){
+                $('#send_product_arrive_msg').show();
+            }else{
+                $('#send_product_arrive_msg').hide();
+            }
+        });
+        $('button.set-order-ship-code').on('click', function () {
+            var $me = $(this);
+            var $parent = $me.parentsUntil('div.col-xs-12');
+            var $from = $me.parent('div');
+            var $shipCompany = $('select[name=ship_company_code]', $from);
+            var $shipCode = $('input[name=ship_code]', $from);
+            var orderId = $me.data('order-id');
+            var shipCompayId = $shipCompany.val();
+            var shipCode = $shipCode.val();
+            $.post('/weshares/set_order_ship_code', {
+                order_id: orderId,
+                company_id: shipCompayId,
+                ship_code: shipCode,
+                weshare_id:'{{$weshareId}}'
+            }, function (data) {
+                if(data['success']){
+                    $parent.removeClass('offer-success').addClass('offer-warning');
+                    $('div.shape-text', $parent).text('已发货');
+                    $from.remove();
+                }
+            }, 'json');
+        });
         $('button[name="set_order_shipped"]').on('click', function (e) {
             e.preventDefault();
             var $me = $(this);
@@ -128,7 +154,7 @@
                 var $parent = $me.parentsUntil('div.col-xs-12');
                 $.getJSON('/weshares/confirmReceived/' + order_id, function (data) {
                     if (data['success']) {
-                        $parent.removeClass('offer-success').addClass('offer-default');
+                        $parent.removeClass('offer-success').addClass('offer-warning');
                         $('div.shape-text', $parent).text('已发货');
                         $me.next().remove();
                         $me.remove();

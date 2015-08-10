@@ -42,22 +42,23 @@
             <li class='buyer-image'><img ng-click="vm.toUserShareInfo(order.creator)" ng-src="{{vm.ordersDetail.users[order.creator]['image']||'/img/default_user_icon.jpg'}}"/></li>
             <li class="detail">
                 <b></b>
-                <p><strong class='buyer-name' ng-bind="vm.ordersDetail.users[order.creator]['nickname']"></strong> 已经报名</p>
+                <p><strong class='buyer-name' ng-bind="vm.ordersDetail.users[order.creator]['nickname']"></strong> 已经报名 <strong ng-if="order.status==2" class="shipped-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong><strong ng-if="order.status==3" class="received-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong><strong ng-if="order.status==1" class="paid-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong></p>
                 <span class='display-name' ng-hide="_.isEmpty(vm.getOrderDisplayName(order.id))" ng-bind="vm.getOrderDisplayName(order.id)"></span>
                 <span class='created-at' ng-bind="order.created"></span>
-                <div class="send-info" ng-if="vm.isOwner(order) || vm.isCreator()">
+                <div class="send-info" ng-if="vm.isOwner(order)">
                     <span>姓名:</span>
                     <span ng-bind="order.consignee_name"></span>
                     <br>
                     <span>手机:</span>
                     <span ng-bind="order.consignee_mobilephone"></span>
                     <br>
-                    <span>地址: </span>
+                    <span>地址:</span>
                     <span ng-bind="order.consignee_address"></span>
                     <br/>
-                    <a class="btn confirm-btn" ng-click="vm.confirmReceived(order)" ng-show="!vm.isOrderReceived(order)">确认收货</a>
-                    <a class="btn order-confirmed-btn" ng-show="vm.isOrderReceived(order)">已取货</a>
+                    <a class="btn confirm-btn" ng-click="vm.confirmReceived(order)" ng-show="order.status==2"><span ng-if="order.ship_mark=='psy_zi_ti' || order.ship_mark=='self_zi_ti'">已收货</span><span ng-if="order.ship_mark=='kuai_di'">已签收</span></a>
+                    <a class="btn order-confirmed-btn" ng-show="order.status==3"><span ng-if="order.ship_mark=='psy_zi_ti' || order.ship_mark=='self_zi_ti'">已收货</span><span ng-if="order.ship_mark=='kuai_di'">已签收</span></a>
                 </div>
+                <span ng-if="order.ship_mark=='kuai_di'&&order.status==2&&vm.isOwner(order)" class='display-name' style="background: darkgray;">{{vm.shipTypes[order.ship_type]}}:&nbsp;&nbsp;{{order.ship_code}}</span>
             </li>
         </ul>
     </div>

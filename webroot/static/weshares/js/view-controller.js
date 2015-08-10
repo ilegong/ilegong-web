@@ -78,6 +78,7 @@
     var vm = this;
     vm.showShareDetailView = true;
     ChooseOfflineStore(vm, $log, $http, $templateCache);
+
     vm.statusMap = {
       0: '进行中',
       1: '已截止'
@@ -108,6 +109,7 @@
     vm.stopShare = stopShare;
     vm.showShareDetail = showShareDetail;
     vm.calOrderTotalPrice = calOrderTotalPrice;
+    vm.getStatusName = getStatusName;
 
     activate();
     function activate() {
@@ -145,6 +147,7 @@
             vm.weshare.selectedAddressId = -1;
           }
           vm.ordersDetail = data['ordersDetail'];
+          vm.shipTypes = data['ordersDetail']['ship_types'];
           vm.currentUser = data['current_user'] || {};
           vm.weixinInfo = data['weixininfo'];
           vm.consignee = data['consignee'];
@@ -220,7 +223,7 @@
     }
 
     function isOrderReceived(order) {
-      return !_.isEmpty(order) && order.status == 2;
+      return !_.isEmpty(order) && order.status == 3;
     }
 
     function getOrderDisplayName(orderId) {
@@ -430,6 +433,25 @@
       }).error(function () {
         vm.submitProcessing = false;
       });
+    }
+
+    function getStatusName(status,orderType){
+      if(status == 1){
+        return '待发货';
+      }
+      if(status == 2){
+        if(orderType == 'kuai_di'){
+          return '待签收';
+        }
+        return '待取货';
+      }
+      if(status == 3){
+        if(orderType == 'kuai_di'){
+          return '已签收';
+        }
+        return '已取货';
+      }
+      return '已完成';
     }
 
     function validateOrderData() {

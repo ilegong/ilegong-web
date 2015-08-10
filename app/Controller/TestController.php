@@ -48,6 +48,12 @@ class TestController extends AppController{
         return;
     }
 
+    public function test_send_ship_code(){
+        $this->autoRender = false;
+        $this->WeshareBuy->send_share_product_ship_msg(32,22);
+        echo json_encode(array('success' => true));
+    }
+
     public function test_get_match_location(){
         $this->autoRender=false;
         $this->loadModel('OfflineStore');
