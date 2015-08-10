@@ -124,7 +124,7 @@
         $('button.set-order-ship-code').on('click', function () {
             var $me = $(this);
             var $parent = $me.parentsUntil('div.col-xs-12');
-            var $from = $me.parent('form');
+            var $from = $me.parent('div');
             var $shipCompany = $('select[name=ship_company_code]', $from);
             var $shipCode = $('input[name=ship_code]', $from);
             var orderId = $me.data('order-id');
@@ -138,6 +138,7 @@
                 if(data['success']){
                     $parent.removeClass('offer-success').addClass('offer-warning');
                     $('div.shape-text', $parent).text('已发货');
+                    $from.remove();
                 }
             }, 'json');
         });

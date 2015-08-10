@@ -141,7 +141,7 @@ class WeshareBuyComponent extends Component {
                 'status' => $order_status,
                 'deleted' => DELETED_NO
             ),
-            'fields' => array('id', 'creator', 'created', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark'),
+            'fields' => array('id', 'creator', 'created', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type'),
             'order' => array('created DESC')
         ));
         $orderIds = Hash::extract($orders, '{n}.Order.id');
@@ -196,6 +196,8 @@ class WeshareBuyComponent extends Component {
             $pys_ziti_orders = array_filter($orders, "share_pys_ziti_order_filter");
             $orders = array(SHARE_SHIP_KUAIDI_TAG => $kuaidi_orders, SHARE_SHIP_SELF_ZITI_TAG => $self_ziti_orders, SHARE_SHIP_PYS_ZITI_TAG => $pys_ziti_orders);
         }
-        return array('users' => $users, 'orders' => $orders, 'order_cart_map' => $order_cart_map, 'summery' => $product_buy_num);
+        //show order ship type name
+        $shipTypes = ShipAddress::ship_type_list();
+        return array('users' => $users, 'orders' => $orders, 'order_cart_map' => $order_cart_map, 'summery' => $product_buy_num, 'ship_types' => $shipTypes);
     }
 }

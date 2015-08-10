@@ -147,6 +147,7 @@
             vm.weshare.selectedAddressId = -1;
           }
           vm.ordersDetail = data['ordersDetail'];
+          vm.shipTypes = data['ordersDetail']['ship_types'];
           vm.currentUser = data['current_user'] || {};
           vm.weixinInfo = data['weixininfo'];
           vm.consignee = data['consignee'];

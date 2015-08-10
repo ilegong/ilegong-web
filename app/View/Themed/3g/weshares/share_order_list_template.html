@@ -29,7 +29,7 @@
                 <strong>金额:</strong>&nbsp;&nbsp;{{$item_order['total_all_price']}}
             </p>
             {{if $item_order['status'] == ORDER_STATUS_PAID&&$current_tag == SHARE_SHIP_KUAIDI_TAG}}
-                <form class="form" style="display: inline;">
+                <div class="form" style="display: inline;">
                     <div class="form-group" style="display: inline-block;width: 30%;">
                         <select class="form-control" name="ship_company_code">
                             {{loop $ship_type_list $company_id $company_name}}
@@ -43,7 +43,7 @@
                         <input type="text" class="form-control" name="ship_code" placeholder="快递单号">
                     </div>
                     <button class="btn btn-primary set-order-ship-code" data-order-id="{{$item_order['id']}}">已发货</button>
-                </form>
+                </div>
             {{/if}}
         </div>
     </div>
