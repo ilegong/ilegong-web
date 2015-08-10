@@ -42,7 +42,7 @@
             <li class='buyer-image'><img ng-click="vm.toUserShareInfo(order.creator)" ng-src="{{vm.ordersDetail.users[order.creator]['image']||'/img/default_user_icon.jpg'}}"/></li>
             <li class="detail">
                 <b></b>
-                <p><strong class='buyer-name' ng-bind="vm.ordersDetail.users[order.creator]['nickname']"></strong> 已经报名 <strong class="paid-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong></p>
+                <p><strong class='buyer-name' ng-bind="vm.ordersDetail.users[order.creator]['nickname']"></strong> 已经报名 <strong ng-if="order.status==2" class="shipped-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong><strong ng-if="order.status==3" class="received-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong><strong ng-if="order.status==1" class="paid-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong></p>
                 <span class='display-name' ng-hide="_.isEmpty(vm.getOrderDisplayName(order.id))" ng-bind="vm.getOrderDisplayName(order.id)"></span>
                 <span class='created-at' ng-bind="order.created"></span>
                 <div class="send-info" ng-if="vm.isOwner(order)">
@@ -58,6 +58,7 @@
                     <a class="btn confirm-btn" ng-click="vm.confirmReceived(order)" ng-show="order.status==2"><span ng-if="order.ship_mark=='psy_zi_ti' || order.ship_mark=='self_zi_ti'">已收货</span><span ng-if="order.ship_mark=='kuai_di'">已签收</span></a>
                     <a class="btn order-confirmed-btn" ng-show="order.status==3"><span ng-if="order.ship_mark=='psy_zi_ti' || order.ship_mark=='self_zi_ti'">已收货</span><span ng-if="order.ship_mark=='kuai_di'">已签收</span></a>
                 </div>
+                <span ng-if="order.ship_mark==kuai_di&&order.status==2" class='display-name' style="background: darkgray;"></span>
             </li>
         </ul>
     </div>
