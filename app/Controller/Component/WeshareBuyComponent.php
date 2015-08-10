@@ -1,29 +1,24 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: shichaopeng
- * Date: 7/8/15
- * Time: 14:37
- */
+
 class WeshareBuyComponent extends Component {
     //TODO 重构 weshare controller
     var $name = 'WeshareBuyComponent';
 
-    var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description');
+    var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description');
 
-    public $components = array('Session', 'Weixin');
+    var $query_order_fields = array('id', 'creator', 'created', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type');
 
-    public function __construct() {
-        $this->Weshare = ClassRegistry::init('Weshare');
-        $this->Order = ClassRegistry::init('Order');
-        $this->User = ClassRegistry::init('User');
-        $this->Cart = ClassRegistry::init('Cart');
-        $this->Oauthbind = ClassRegistry::init('Oauthbind');
-        $this->WeshareProduct = ClassRegistry::init('WeshareProduct');
-    }
+    var $query_cart_fields = array('id', 'order_id', 'name', 'product_id', 'num');
+
+    var $components = array('Session', 'Weixin');
 
     public function send_new_share_msg($weshareId) {
+        $this->Weshare = ClassRegistry::init('Weshare');
+        $this->User = ClassRegistry::init('User');
+        $this->Oauthbind = ClassRegistry::init('Oauthbind');
+        $this->WeshareProduct = ClassRegistry::init('WeshareProduct');
+
         $weshare = $this->Weshare->find('first', array(
             'conditions' => array(
                 'id' => $weshareId
@@ -50,6 +45,40 @@ class WeshareBuyComponent extends Component {
         $openIds = $this->Oauthbind->findWxServiceBindsByUids($followers);
         foreach($openIds as $openId){
             $this->process_send_share_msg($openId,$title,$product_name,$detail_url,$sharer_name,$remark);
+        }
+    }
+
+    public function send_share_product_ship_msg($order_id, $weshare_id) {
+        $this->Weshare = ClassRegistry::init('Weshare');
+        $this->Order = ClassRegistry::init('Order');
+        $this->User = ClassRegistry::init('User');
+        $order_info = $this->Order->find('first', array(
+            'conditions' => array(
+                'id' => $order_id,
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'member_id' => $weshare_id
+            ),
+            'fields' => $this->query_order_fields
+        ));
+        if (!empty($order_info)) {
+            $order_user_id = $order_info['Order']['creator'];
+            $weshare_info = $this->Weshare->find('first', array(
+                'conditions' => array(
+                    'id' => $weshare_id
+                )
+            ));
+            $share_creator = $weshare_info['Weshare']['creator'];
+            $nick_name_map = $this->User->findNicknamesMap(array($share_creator, $order_user_id));
+            $order_user_nickname = $nick_name_map[$order_user_id];
+            $share_creator_nickname = $nick_name_map[$share_creator];
+            $title = $order_user_nickname . '你好，' . $share_creator_nickname . '分享的' . $weshare_info['Weshare']['title'] . '寄出了，请注意查收。';
+            $shipTypesList = ShipAddress::ship_type_list();
+            $ship_company_name = $shipTypesList[$order_info['Order']['ship_type']];
+            $ship_code = $order_info['Order']['ship_code'];
+            $desc = '感谢您对' . $share_creator_nickname . '的支持，分享快乐！';
+            $cart_info = $this->get_cart_name_and_num($order_id);
+            $this->Weixin->send_order_ship_info_msg($order_user_id, null, $ship_code, $ship_company_name, $cart_info['cart_name'], null, $title, $cart_info['num'], $desc);
+            //send_order_ship_info_msg
         }
     }
 
@@ -98,6 +127,9 @@ class WeshareBuyComponent extends Component {
     }
 
     public function load_fans_buy_sharer($sharerId, $weshareId) {
+        $this->Weshare = ClassRegistry::init('Weshare');
+        $this->Order = ClassRegistry::init('Order');
+        $this->User = ClassRegistry::init('User');
         $weshares = $this->Weshare->find('all', array(
             'conditions' => array(
                 'creator' => $sharerId,
@@ -128,6 +160,12 @@ class WeshareBuyComponent extends Component {
     }
 
     public function get_share_order_for_show($weshareId, $is_me, $division = false){
+        $this->Weshare = ClassRegistry::init('Weshare');
+        $this->Order = ClassRegistry::init('Order');
+        $this->User = ClassRegistry::init('User');
+        $this->Cart = ClassRegistry::init('Cart');
+        $this->Oauthbind = ClassRegistry::init('Oauthbind');
+        $this->WeshareProduct = ClassRegistry::init('WeshareProduct');
         $product_buy_num = array('details' => array());
         $order_cart_map = array();
         $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED);
@@ -151,7 +189,7 @@ class WeshareBuyComponent extends Component {
                 'id' => $userIds
             ),
             'recursive' => 1, //int
-            'fields' => $this->query_user_fileds,
+            'fields' => $this->query_user_fields,
         ));
         $orders = Hash::combine($orders, '{n}.Order.id', '{n}.Order');
         if ($orders) {
@@ -199,5 +237,27 @@ class WeshareBuyComponent extends Component {
         //show order ship type name
         $shipTypes = ShipAddress::ship_type_list();
         return array('users' => $users, 'orders' => $orders, 'order_cart_map' => $order_cart_map, 'summery' => $product_buy_num, 'ship_types' => $shipTypes);
+    }
+
+    private function findCarts($orderId){
+        $this->Cart = ClassRegistry::init('Cart');
+        $carts = $this->Cart->find('all', array(
+            'conditions' => array(
+                'order_id' => $orderId
+            ),
+            'fields' => $this->query_cart_fields
+        ));
+        return $carts;
+    }
+
+    private function get_cart_name_and_num($orderId) {
+        $carts = $this->findCarts($orderId);
+        $num = 0;
+        $cart_name = array();
+        foreach ($carts as $cart_item) {
+            $num += $cart_item['Cart']['num'];
+            $cart_name[] = $cart_item['Cart']['name'] . 'X' . $cart_item['Cart']['num'];
+        }
+        return array('num' => $num, 'cart_name' => implode(',', $cart_name));
     }
 }

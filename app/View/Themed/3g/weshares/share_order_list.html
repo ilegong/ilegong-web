@@ -133,7 +133,8 @@
             $.post('/weshares/set_order_ship_code', {
                 order_id: orderId,
                 company_id: shipCompayId,
-                ship_code: shipCode
+                ship_code: shipCode,
+                weshare_id:'{{$weshareId}}'
             }, function (data) {
                 if(data['success']){
                     $parent.removeClass('offer-success').addClass('offer-warning');

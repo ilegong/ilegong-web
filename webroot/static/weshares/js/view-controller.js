@@ -443,17 +443,13 @@
         if(orderType == 'kuai_di'){
           return '待签收';
         }
-        if(orderType == 'psy_zi_ti' || orderType == 'self_zi_ti'){
-          return '待取货';
-        }
+        return '待取货';
       }
       if(status == 3){
         if(orderType == 'kuai_di'){
           return '已签收';
         }
-        if(orderType == 'psy_zi_ti' || orderType == 'self_zi_ti'){
-          return '已取货';
-        }
+        return '已取货';
       }
       return '已完成';
     }
