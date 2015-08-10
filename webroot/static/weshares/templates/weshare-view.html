@@ -59,6 +59,7 @@
                     <a class="btn order-confirmed-btn" ng-show="order.status==3"><span ng-if="order.ship_mark=='psy_zi_ti' || order.ship_mark=='self_zi_ti'">已收货</span><span ng-if="order.ship_mark=='kuai_di'">已签收</span></a>
                 </div>
                 <span ng-if="order.ship_mark=='kuai_di'&&order.status==2&&vm.isOwner(order)" class='display-name' style="background: darkgray;">{{vm.shipTypes[order.ship_type]}}:&nbsp;&nbsp;{{order.ship_code}}</span>
+                <span ng-if="order.ship_mark=='pys_zi_ti'&&order.status==2&&vm.isOwner(order)" class='display-name' style="background: darkgray;">提货码:&nbsp;&nbsp;{{order.ship_code}}</span>
             </li>
         </ul>
     </div>
