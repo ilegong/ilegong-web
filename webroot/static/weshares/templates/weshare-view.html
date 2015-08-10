@@ -6,9 +6,22 @@
             <s><b style="color: #ffa200" ng-bind="vm.userShareSummery.share_count">0</b>&nbsp; <small>分享</small>&nbsp;&nbsp;&nbsp;<b style="color: #ffa200" ng-bind="vm.userShareSummery.follower_count">0</b>&nbsp;<small>粉丝</small></s>
             <s>已有<span ng-bind="vm.ordersDetail.summery.all_buy_user_count"></span>人报名</s>
         </li>
-
-        <li style="float: right;" ng-if="vm.isCreator()"><a class="statistics-btn" ng-click="vm.toShareOrderList()">订单统计</a><a class="statistics-btn" ng-click="vm.toUpdate()">修改</a></li>
-        <li style="float: right;" ng-if="!vm.isCreator()"><a class="statistics-btn" ng-click="vm.createMyShare()">我也要分享</a></li>
+        <li ng-if="vm.userShareSummery.follower_count>=50" style="margin-left: 5px;"><label style="font-size: 13px;color: #ffa200; height: 20px;padding-left: 0;">分享达人</label></li>
+        <li ng-if="vm.supportPysZiti>0" style="margin-left: 5px;"><img src="/static/weshares/images/hlj.jpg" style="width: 20px;height: 20px;"/></li>
+        <li ng-if="vm.supportPysZiti>0" style="margin-left: 5px;"><label style="font-size: 13px;color: #ffa200;height: 20px;padding-left: 0;">好邻居支持</label></li>
+        <ul class="clearfix header margin-bottom-12" style="display: inline-flex;margin-left: 5px;">
+            <li style="margin-right: 5px; float: right;" ng-if="vm.isCreator()"><a style="margin-top: 0px;width: 65px;"
+                                                                                   class="statistics-btn"
+                                                                                   ng-click="vm.toShareOrderList()">订单统计</a>
+            </li>
+            <li style="margin-right: 5px; float: right;" ng-if="vm.isCreator()"><a style="margin-top: 0px;width: 65px;"
+                                                                                   class="statistics-btn"
+                                                                                   ng-click="vm.toUpdate()">修改</a></li>
+            <li style="margin-right: 5px; float: right;" ng-if="!vm.isCreator()"><a style="margin-top: 0px;width: 65px;"
+                                                                                    class="statistics-btn"
+                                                                                    ng-click="vm.createMyShare()">我也要分享</a>
+            </li>
+        </ul>
     </ul>
     <div class="introduction margin-bottom-12">
         <b></b>

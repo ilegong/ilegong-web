@@ -153,6 +153,7 @@
           vm.consignee = data['consignee'];
           vm.myCoupons = data['my_coupons'];
           vm.weshareSettings = data['weshare_ship_settings'];
+          vm.supportPysZiti = data['support_pys_ziti'];
           vm.selectShipType = getSelectTypeDefaultVal(vm.weshareSettings);
           if (vm.consignee && vm.consignee.offlineStore) {
             vm.checkedOfflineStore = vm.consignee.offlineStore;
