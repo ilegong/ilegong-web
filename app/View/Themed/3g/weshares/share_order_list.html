@@ -40,7 +40,7 @@
         <!-- Nav tabs category -->
         <ul class="nav nav-tabs">
             {{if count($orders[SHARE_SHIP_SELF_ZITI_TAG]) > 0}}
-                <li class="active"><a href="#self-ziti-orders" data-toggle="tab" data-order-type="self_ziti">自提&nbsp;&nbsp;<font color="red">{{count($orders[SHARE_SHIP_SELF_ZITI_TAG])}}</font></a></li>
+                <li><a href="#self-ziti-orders" data-toggle="tab" data-order-type="self_ziti">自提&nbsp;&nbsp;<font color="red">{{count($orders[SHARE_SHIP_SELF_ZITI_TAG])}}</font></a></li>
             {{/if}}
             {{if count($orders[SHARE_SHIP_KUAIDI_TAG]) > 0}}
                 <li><a href="#kuaidi-orders" data-toggle="tab" data-order-type="kuaidi">快递&nbsp;&nbsp;<font color="red">{{count($orders[SHARE_SHIP_KUAIDI_TAG])}}</font></a></li>
@@ -111,7 +111,6 @@
 <script>
     $(document).ready(function(){
         var orderType = '';
-        $('ul.nav li:first a').trigger('click');
         $('ul.nav li a').on('click', function(){
             var  $me = $(this);
             orderType = $me.data('order-type');
@@ -121,6 +120,7 @@
                 $('#send_product_arrive_msg').hide();
             }
         });
+        $('ul.nav li:first a').trigger('click');
         $('button.set-order-ship-code').on('click', function () {
             var $me = $(this);
             var $parent = $me.parentsUntil('div.col-xs-12');
@@ -130,6 +130,7 @@
             var orderId = $me.data('order-id');
             var shipCompayId = $shipCompany.val();
             var shipCode = $shipCode.val();
+            var companyName  = $("option:selected",$shipCompany).text();
             $.post('/weshares/set_order_ship_code', {
                 order_id: orderId,
                 company_id: shipCompayId,
@@ -139,6 +140,7 @@
                 if(data['success']){
                     $parent.removeClass('offer-success').addClass('offer-warning');
                     $('div.shape-text', $parent).text('已发货');
+                    $form.parent('div.offer-content').append('<p><strong>'+companyName+':</strong><strong>'+shipCode+'</strong> </p>');
                     $from.remove();
                 }
             }, 'json');
