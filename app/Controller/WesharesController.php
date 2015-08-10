@@ -450,7 +450,7 @@ class WesharesController extends AppController {
         $this->layout = 'weshare_bootstrap';
         $user_id = $this->currentUser['id'];
         $weshare = $this->Weshare->find('first', array(
-            'conditions' => array('id' => $weshareId, 'creator' => $weshareId)
+            'conditions' => array('id' => $weshareId, 'creator' => $user_id)
         ));
         if(empty($weshare)){
             $this->redirect("/weshares/view/".$weshareId);
