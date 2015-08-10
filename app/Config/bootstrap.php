@@ -193,7 +193,7 @@ const SHARE_SHIP_SELF_ZITI = 1;
 
 const SHARE_SHIP_PYS_ZITI = 2;
 
-const SHARE_SHIP_PYS_ZITI_TAG = 'psy_zi_ti';
+const SHARE_SHIP_PYS_ZITI_TAG = 'pys_zi_ti';
 
 const SHARE_SHIP_SELF_ZITI_TAG = 'self_zi_ti';
 

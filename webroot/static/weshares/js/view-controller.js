@@ -110,6 +110,8 @@
     vm.showShareDetail = showShareDetail;
     vm.calOrderTotalPrice = calOrderTotalPrice;
     vm.getStatusName = getStatusName;
+    vm.getShipCode = getShipCode;
+    vm.isShowShipCode = isShowShipCode;
 
     activate();
     function activate() {
@@ -531,6 +533,28 @@
 
     function toUpdate() {
       window.location.href = '/weshares/update/' + vm.weshare.id;
+    }
+
+    function getShipCode(order) {
+      var shipMark = order['ship_mark'];
+      var code = order['ship_code'];
+      if (shipMark == 'kuai_di') {
+        var ship_company = order['ship_type'];
+        return vm.shipTypes[ship_company] + ': ' + code;
+      }
+      if (shipMark == 'pys_zi_ti') {
+        return '提货码: ' + code;
+      }
+      return '';
+    }
+
+    function isShowShipCode(order) {
+      if (order['ship_mark'] == 'kuai_di' || order['ship_mark'] == 'pys_zi_ti') {
+        if (order.status == 2 && vm.isOwner(order)) {
+          return true;
+        }
+      }
+      return false;
     }
 
     function setWeiXinShareParams() {

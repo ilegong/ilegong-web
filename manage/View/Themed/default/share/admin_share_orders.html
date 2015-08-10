@@ -92,7 +92,7 @@
                             <td>{{$current_order['created']}}</td>
                             <td>{{$current_order['status']}}</td>
                             <td>
-                                {{if $current_order['ship_mark'] == 'psy_zi_ti'}}
+                                {{if $current_order['ship_mark'] == 'pys_zi_ti'}}
                                     朋友说自提
                                 {{elseif $current_order['ship_mark'] == 'self_zi_ti'}}
                                     自有自提
@@ -101,7 +101,7 @@
                                 {{/if}}
                             </td>
                             <td>
-                                {{if $current_order['ship_mark']=='psy_zi_ti'&&$current_order['status']==1}}
+                                {{if $current_order['ship_mark']=='pys_zi_ti'&&$current_order['status']==1}}
                                 <button type="button" class="btn btn-danger send-offline-store-msg"
                                         data-id="{{$current_order['id']}}" data-toggle="modal">发货
                                 </button>

@@ -477,7 +477,7 @@ class WesharesController extends AppController {
         if(empty($weshare)){
             $this->redirect("/weshares/view/".$weshareId);
         }
-        $statics_data = $this->get_weshare_buy_info($weshareId, true);
+        $statics_data = $this->get_weshare_buy_info($weshareId, true, true);
         $this->set($statics_data);
         $this->set('ship_type_list',ShipAddress::ship_type_list());
         $this->set('hide_footer', true);

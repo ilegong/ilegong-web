@@ -9,7 +9,7 @@
         <li ng-if="vm.userShareSummery.follower_count>=50" style="margin-left: 5px;"><label style="font-size: 13px;color: #ffa200; height: 20px;padding-left: 0;">分享达人</label></li>
         <li ng-if="vm.supportPysZiti>0" style="margin-left: 5px;"><img src="/static/weshares/images/hlj.jpg" style="width: 20px;height: 20px;"/></li>
         <li ng-if="vm.supportPysZiti>0" style="margin-left: 5px;"><label style="font-size: 13px;color: #ffa200;height: 20px;padding-left: 0;">好邻居支持</label></li>
-        <ul class="clearfix header margin-bottom-12" style="display: inline-flex;margin-left: 5px;">
+        <ul class="clearfix header margin-bottom-12" style="display: inline-flex;margin-left: 5px;float: right;">
             <li style="margin-right: 5px; float: right;" ng-if="vm.isCreator()"><a style="margin-top: 0px;width: 65px;"
                                                                                    class="statistics-btn"
                                                                                    ng-click="vm.toShareOrderList()">订单统计</a>
@@ -17,7 +17,7 @@
             <li style="margin-right: 5px; float: right;" ng-if="vm.isCreator()"><a style="margin-top: 0px;width: 65px;"
                                                                                    class="statistics-btn"
                                                                                    ng-click="vm.toUpdate()">修改</a></li>
-            <li style="margin-right: 5px; float: right;" ng-if="!vm.isCreator()"><a style="margin-top: 0px;width: 65px;"
+            <li style="margin-right: 5px; float: right;" ng-if="!vm.isCreator()"><a style="margin-top: 0px;width: 75px;"
                                                                                     class="statistics-btn"
                                                                                     ng-click="vm.createMyShare()">我也要分享</a>
             </li>
@@ -68,11 +68,10 @@
                     <span>地址:</span>
                     <span ng-bind="order.consignee_address"></span>
                     <br/>
-                    <a class="btn confirm-btn" ng-click="vm.confirmReceived(order)" ng-show="order.status==2"><span ng-if="order.ship_mark=='psy_zi_ti' || order.ship_mark=='self_zi_ti'">已收货</span><span ng-if="order.ship_mark=='kuai_di'">已签收</span></a>
-                    <a class="btn order-confirmed-btn" ng-show="order.status==3"><span ng-if="order.ship_mark=='psy_zi_ti' || order.ship_mark=='self_zi_ti'">已收货</span><span ng-if="order.ship_mark=='kuai_di'">已签收</span></a>
+                    <a class="btn confirm-btn" ng-click="vm.confirmReceived(order)" ng-show="order.status==2"><span ng-if="order.ship_mark=='pys_zi_ti' || order.ship_mark=='self_zi_ti'">已收货</span><span ng-if="order.ship_mark=='kuai_di'">已签收</span></a>
+                    <a class="btn order-confirmed-btn" ng-show="order.status==3"><span ng-if="order.ship_mark=='pys_zi_ti' || order.ship_mark=='self_zi_ti'">已收货</span><span ng-if="order.ship_mark=='kuai_di'">已签收</span></a>
                 </div>
-                <span ng-if="order.ship_mark=='kuai_di'&&order.status==2&&vm.isOwner(order)" class='display-name' style="background: darkgray;">{{vm.shipTypes[order.ship_type]}}:&nbsp;&nbsp;{{order.ship_code}}</span>
-                <span ng-if="order.ship_mark=='pys_zi_ti'&&order.status==2&&vm.isOwner(order)" class='display-name' style="background: darkgray;">提货码:&nbsp;&nbsp;{{order.ship_code}}</span>
+                <span ng-if='vm.isShowShipCode(order);' class="display-name" style="background: darkgray;" ng-bind="vm.getShipCode(order);"></span>
             </li>
         </ul>
     </div>
