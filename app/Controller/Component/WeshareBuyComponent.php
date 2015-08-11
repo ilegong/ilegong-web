@@ -173,6 +173,10 @@ class WeshareBuyComponent extends Component {
         if (!$is_me) {
             $order_status[] = ORDER_STATUS_VIRTUAL;
         }
+        $sort =  array('created DESC');
+        if($division){
+            $sort[]='status ASC';
+        }
         $orders = $this->Order->find('all', array(
             'conditions' => array(
                 'member_id' => $weshareId,
@@ -181,7 +185,7 @@ class WeshareBuyComponent extends Component {
                 'deleted' => DELETED_NO
             ),
             'fields' => array('id', 'creator', 'created', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type'),
-            'order' => array('created DESC')
+            'order' => $sort
         ));
         $orderIds = Hash::extract($orders, '{n}.Order.id');
         $userIds = Hash::extract($orders, '{n}.Order.creator');
