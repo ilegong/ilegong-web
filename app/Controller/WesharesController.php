@@ -457,12 +457,12 @@ class WesharesController extends AppController {
         }
         //update order status
         $prepare_update_orders = $this->Order->find('all', array(
-            'conditions' => array('status' => ORDER_STATUS_PAID, 'type' => ORDER_TYPE_WESHARE_BUY, 'ship_mark' => SHARE_SHIP_SELF_ZITI_TAG, 'member_id' => $weshare_id),
+            'conditions' => array('status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED), 'type' => ORDER_TYPE_WESHARE_BUY, 'ship_mark' => SHARE_SHIP_SELF_ZITI_TAG, 'member_id' => $weshare_id),
             'fields' => array('id')
         ));
         $prepare_update_order_ids = Hash::extract($prepare_update_orders, '{n}.Order.id');
         $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED), array('id' => $prepare_update_order_ids));
-        $this->Cart->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $prepare_update_order_ids));
+        $this->Cart->updateAll(array('status' => ORDER_STATUS_SHIPPED), array('order_id' => $prepare_update_order_ids));
         $this->process_send_msg($share_info, $msg);
         echo json_encode(array('success' => true));
         return;

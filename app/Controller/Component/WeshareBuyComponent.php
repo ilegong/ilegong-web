@@ -24,10 +24,7 @@ class WeshareBuyComponent extends Component {
                 'id' => $weshareId
             )
         ));
-        $wesahre_products = $this->WeshareProduct->find('all', array(
-            'conditions' => array('weshare_id' => $weshareId)
-        ));
-        $weshare_product_names = Hash::extract($wesahre_products, '{n}.WeshareProduct.name');
+
         $sharer_user_info = $this->User->find('first', array(
             'conditions' => array(
                 'id' => $weshare['Weshare']['creator']
@@ -38,7 +35,7 @@ class WeshareBuyComponent extends Component {
         ));
         $detail_url = WX_HOST.'/weshares/view/'.$weshareId;
         $sharer_name = $sharer_user_info['User']['nickname'];
-        $product_name = implode(', ',$weshare_product_names);
+        $product_name = $weshare['Weshare']['title'];
         $title = '关注的'.$sharer_name.'发起了';
         $remark = '点击详情，赶快加入'.$sharer_name.'的分享！';
         $followers = $this->load_fans_buy_sharer($weshare['Weshare']['creator'],$weshareId);
@@ -84,6 +81,9 @@ class WeshareBuyComponent extends Component {
     }
 
     public function send_share_product_arrive_msg($shareInfo, $msg){
+        $this->Order = ClassRegistry::init('Order');
+        $this->User = ClassRegistry::init('User');
+        $this->Oauthbind = ClassRegistry::init('Oauthbind');
         $share_id = $shareInfo['Weshare']['id'];
         $share_creator = $shareInfo['Weshare']['creator'];
         //select order paid to send msg

@@ -93,7 +93,18 @@
                             <td>{{$cart['price']*$cart['num']/100}}</td>
                             <td>{{$current_order['total_all_price']}}</td>
                             <td>{{$current_order['created']}}</td>
-                            <td>{{$current_order['status']}}</td>
+                            <td>
+                                {{if $current_order['status']==ORDER_STATUS_PAID}}
+                                已付款
+                                {{elseif $current_order['status'] == ORDER_STATUS_SHIPPED}}
+                                已发货
+                                {{elseif $current_order['status'] == ORDER_STATUS_RECEIVED}}
+                                已收货
+                                {{else}}
+                                已完成
+                                {{/if}}
+                                {{$current_order['status']}}
+                            </td>
                             <td>
                                 {{if $current_order['ship_mark'] == 'pys_zi_ti'}}
                                     朋友说自提

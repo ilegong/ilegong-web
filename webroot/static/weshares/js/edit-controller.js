@@ -32,7 +32,7 @@
       var weshareId = angular.element(document.getElementById('weshareEditView')).attr('data-id');
       var sharerShipType = angular.element(document.getElementById('weshareEditView')).attr('data-ship-type');
       vm.sharerShipType = sharerShipType;
-      vm.self_ziti_data = {status: -1, ship_fee: 0, tag: 'self_ziti'};
+      vm.self_ziti_data = {status: 1, ship_fee: 0, tag: 'self_ziti'};
       vm.kuai_di_data = {status: -1, ship_fee: '', tag: 'kuai_di'};
       vm.pys_ziti_data = {status: -1, ship_fee: 0, tag: 'pys_ziti'};
       vm.kuaidi_show_ship_fee = '';
