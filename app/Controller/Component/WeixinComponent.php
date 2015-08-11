@@ -128,7 +128,7 @@ class WeixinComponent extends Component
     }
 
 
-    public function send_order_ship_info_msg($user_id, $msg, $order_id, $ship_company, $good_info, $good_number, $title = null, $product_num = null, $desc = null) {
+    public function send_order_ship_info_msg($user_id, $msg, $order_id, $ship_company, $good_info, $good_number, $title = null, $product_num = null, $desc = null,$url = null) {
         $oauthBindModel = ClassRegistry::init('Oauthbind');
         $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
         if ($user_weixin != false) {
@@ -142,11 +142,14 @@ class WeixinComponent extends Component
             if(empty($desc)){
                 $desc = "点此查看详情";
             }
+            if(empty($url)){
+                $url = $this->get_order_query_url($order_id);
+            }
             $post_data = array(
                 "touser" => $open_id,
                 "template_id" => $this->wx_message_template_ids["ORDER_SHIPPED"],
 //            "url" => $this->get_kuaidi_query_url($ship_type, $ship_code),
-                "url" => $this->get_order_query_url($order_id),
+                "url" => $url,
                 "topcolor" => "#FF0000",
                 "data" => array(
                     "first" => array("value" => $title),

@@ -77,7 +77,8 @@ class WeshareBuyComponent extends Component {
             $ship_code = $order_info['Order']['ship_code'];
             $desc = '感谢您对' . $share_creator_nickname . '的支持，分享快乐！';
             $cart_info = $this->get_cart_name_and_num($order_id);
-            $this->Weixin->send_order_ship_info_msg($order_user_id, null, $ship_code, $ship_company_name, $cart_info['cart_name'], null, $title, $cart_info['num'], $desc);
+            $deatail_url = WX_HOST . '/weshares/view/' . $weshare_id;
+            $this->Weixin->send_order_ship_info_msg($order_user_id, null, $ship_code, $ship_company_name, $cart_info['cart_name'], null, $title, $cart_info['num'], $desc, $deatail_url);
             //send_order_ship_info_msg
         }
     }
