@@ -63,6 +63,9 @@
 
     function showOfflineStoreDetail(offlineStore) {
       $vm.currentOfflineStore = offlineStore;
+      //var map = new BMap.Map("baidu-map");
+      //var point = new BMap.Point(offlineStore.location_long, offlineStore.location_lat);
+      //map.centerAndZoom(point, 15);
       $vm.showOfflineStoreDetailView = true;
       $vm.chooseOfflineStoreView = false;
       $vm.showShareDetailView = false;
