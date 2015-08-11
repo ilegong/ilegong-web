@@ -254,25 +254,27 @@ class ShareController extends AppController{
 
     public function admin_share_orders(){
         $query_date = date('Y-m-d');
-        $start_date = $end_date = date('Y-m-d');
+        $start_date  = $query_date;
+        $end_date = $query_date;
         if($_REQUEST['start_date']){
             $start_date = $_REQUEST['start_date'];
         }
         if($_REQUEST['end_date']){
             $end_date = $_REQUEST['end_date'];
         }
-
         $cond = array(
             'type' => 9,
-            'created >=' => $start_date,
-            'created <=' => $end_date
         );
+        if($start_date==$end_date){
+            $cond['created'] = $query_date;
+        }else{
+            $cond['created >='] = $start_date;
+            $cond['created <='] =$end_date;
+        }
         if($_REQUEST['weshare_id']){
             $query_share_id = $_REQUEST['weshare_id'];
         }
-        if($query_date=='all'){
-            $cond['status'] = array(ORDER_STATUS_PAID,ORDER_STATUS_RECEIVED,ORDER_STATUS_SHIPPED);
-        }
+        $cond['status'] = array(ORDER_STATUS_PAID,ORDER_STATUS_RECEIVED,ORDER_STATUS_SHIPPED);
         if($query_share_id){
            $cond['member_id'] = $query_share_id;
         }
