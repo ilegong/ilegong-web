@@ -154,6 +154,13 @@
                         if(from_value&&from_value!='null'){
                             if(from_value=='share'){
                                 showTip('该手机号已经被注册,请联系管理员');
+                                $bindUserName = result['username'];
+                                if($bindUserName&&$bindUserName!="null"){
+                                    $('#bind_to_user').text($bindUserName);
+                                }else{
+                                    $('#bind_to_user').text('匿名用户');
+                                }
+                                $mergeInfo.show();
                             }else{
                                 showTip('该手机号已经被注册',function(){
                                     window.location.href = ref_url;
