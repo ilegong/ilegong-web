@@ -174,9 +174,6 @@ class WeshareBuyComponent extends Component {
             $order_status[] = ORDER_STATUS_VIRTUAL;
         }
         $sort =  array('created DESC');
-        if($division){
-            $sort[]='status ASC';
-        }
         $orders = $this->Order->find('all', array(
             'conditions' => array(
                 'member_id' => $weshareId,
@@ -235,6 +232,11 @@ class WeshareBuyComponent extends Component {
         $users = Hash::combine($users, '{n}.User.id', '{n}.User');
         if($division){
             $kuaidi_orders = array_filter($orders, "share_kuaidi_order_filter");
+            if ($kuaidi_orders) {
+                usort($kuaidi_orders, function ($a, $b) {
+                    return ($a['status'] < $b['status']) ? -1 : 1;
+                });
+            }
             $self_ziti_orders = array_filter($orders, "share_self_ziti_order_filter");
             $pys_ziti_orders = array_filter($orders, "share_pys_ziti_order_filter");
             $orders = array(SHARE_SHIP_KUAIDI_TAG => $kuaidi_orders, SHARE_SHIP_SELF_ZITI_TAG => $self_ziti_orders, SHARE_SHIP_PYS_ZITI_TAG => $pys_ziti_orders);
