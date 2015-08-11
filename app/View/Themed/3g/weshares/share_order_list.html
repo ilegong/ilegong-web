@@ -112,6 +112,10 @@
     $(document).ready(function(){
         var orderType = '';
         var $selfZitiOrder = $('#self-ziti-orders');
+        $('select[name="ship_company_code"]').on('change', function(){
+            var valueSelected = this.value;
+            $("option[value='" + valueSelected + "']").prop("selected", true);
+        });
         $('ul.nav li a').on('click', function(){
             var  $me = $(this);
             orderType = $me.data('order-type');
