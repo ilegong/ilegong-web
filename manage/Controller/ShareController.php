@@ -266,10 +266,10 @@ class ShareController extends AppController{
             'type' => 9,
         );
         if($start_date==$end_date){
-            $cond['created'] = $query_date;
+            $cond['DATE(created)'] = $query_date;
         }else{
-            $cond['created >='] = $start_date;
-            $cond['created <='] =$end_date;
+            $cond['DATE(created) >='] = $start_date;
+            $cond['DATE(created) <='] = $end_date;
         }
         if($_REQUEST['weshare_id']){
             $query_share_id = $_REQUEST['weshare_id'];
