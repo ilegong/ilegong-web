@@ -124,9 +124,9 @@
         $('button.set-order-ship-code').on('click', function () {
             var $me = $(this);
             var $parent = $me.parentsUntil('div.col-xs-12');
-            var $from = $me.parent('div');
-            var $shipCompany = $('select[name=ship_company_code]', $from);
-            var $shipCode = $('input[name=ship_code]', $from);
+            var $form = $me.parent('div');
+            var $shipCompany = $('select[name=ship_company_code]', $form);
+            var $shipCode = $('input[name=ship_code]', $form);
             var orderId = $me.data('order-id');
             var shipCompayId = $shipCompany.val();
             var shipCode = $shipCode.val();
@@ -141,7 +141,7 @@
                     $parent.removeClass('offer-success').addClass('offer-warning');
                     $('div.shape-text', $parent).text('已发货');
                     $form.parent('div.offer-content').append('<p><strong>'+companyName+':</strong><strong>'+shipCode+'</strong> </p>');
-                    $from.remove();
+                    $form.remove();
                 }
             }, 'json');
         });
