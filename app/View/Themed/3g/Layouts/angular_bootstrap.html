@@ -9,12 +9,30 @@
     <title>分享圈</title>
 </head>
 <body>
-<script type="text/javascript" src="http://cdn.staticfile.org/angular.js/1.2.20/angular.min.js"></script>
-<script type="text/javascript"
-        src="http://cdn.staticfile.org/angular-ui-router/0.2.11/angular-ui-router.min.js"></script>
-<script type="text/javascript"
-        src="http://cdn.staticfile.org/angular-ui-bootstrap/0.11.2/ui-bootstrap-tpls.min.js"></script>
-<script type="text/javascript" src="/static/weshares/js/pys-storge.js"></script>
-{{$content_for_layout}}
+    <script type="text/javascript" src="http://cdn.staticfile.org/angular.js/1.2.20/angular.min.js"></script>
+    <script type="text/javascript"
+            src="http://cdn.staticfile.org/angular-ui-router/0.2.11/angular-ui-router.min.js"></script>
+    <script type="text/javascript"
+            src="http://cdn.staticfile.org/angular-ui-bootstrap/0.11.2/ui-bootstrap-tpls.min.js"></script>
+    <script type="text/javascript" src="/static/weshares/js/pys-storge.js"></script>
+    {{$content_for_layout}}
+    <script>
+        if(wx){
+            var wx_jssdk_appId = '{{$signPackage["appId"]}}';
+            var wx_jssdk_timestamp = '{{$signPackage["timestamp"]?$signPackage["timestamp"]:1}}';
+            var wx_jssdk_nonceStr = '{{$signPackage["nonceStr"]}}';
+            var wx_jssdk_signature = '{{$signPackage["signature"]}}';
+            var jsApiList = ['checkJsApi', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseImage', 'previewImage', 'uploadImage', 'downloadImage', 'openLocation', 'getLocation'];
+            wx.config({
+                debug: false,
+                appId: wx_jssdk_appId,
+                timestamp: wx_jssdk_timestamp,
+                nonceStr: wx_jssdk_nonceStr,
+                signature: wx_jssdk_signature,
+                jsApiList: jsApiList
+            });
+        }
+    </script>
+    <script type="text/javascript" src="/static/weshares/js/app.js?v0.0.1"></script>
 </body>
 </html>
