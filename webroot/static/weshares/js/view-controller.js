@@ -63,13 +63,15 @@
 
     function showOfflineStoreDetail(offlineStore) {
       $vm.currentOfflineStore = offlineStore;
-      //var map = new BMap.Map("baidu-map");
-      //var point = new BMap.Point(offlineStore.location_long, offlineStore.location_lat);
-      //map.centerAndZoom(point, 15);
       $vm.showOfflineStoreDetailView = true;
       $vm.chooseOfflineStoreView = false;
       $vm.showShareDetailView = false;
       $vm.showBalanceView = false;
+      var map = new BMap.Map("offline-store-map");
+      var point = new BMap.Point(offlineStore.location_long, offlineStore.location_lat);
+      map.centerAndZoom(point, 15);
+      var marker = new BMap.Marker(point);        // 创建标注
+      map.addOverlay(marker);                     // 将标注添加到地图中
     }
 
     function changeOfflineStoreArea(code) {
