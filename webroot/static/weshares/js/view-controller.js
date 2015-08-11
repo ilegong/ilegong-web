@@ -495,7 +495,7 @@
       }
       $http.post('/weshares/confirmReceived/' + order.id).success(function (data) {
         if (data.success) {
-          order.status = 2;
+          order.status = 3;
         }
         else {
         }
@@ -550,7 +550,7 @@
 
     function isShowShipCode(order) {
       if (order['ship_mark'] == 'kuai_di' || order['ship_mark'] == 'pys_zi_ti') {
-        if (order.status == 2 && vm.isOwner(order)) {
+        if (order.status != 1 && vm.isOwner(order)) {
           return true;
         }
       }
