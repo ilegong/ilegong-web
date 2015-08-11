@@ -312,6 +312,8 @@ class ShareController extends AppController{
                 }
                 $order_cart_map[$order_id][] = $item['Cart'];
             }
+            $this->set('start_date', $start_date);
+            $this->set('end_date', $end_date);
             $this->set('orders',$orders);
             $this->set('order_cart_map',$order_cart_map);
             $this->set('weshares',$weshares);
