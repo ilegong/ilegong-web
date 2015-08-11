@@ -91,7 +91,7 @@ class WeshareBuyComponent extends Component {
             'conditions' => array(
                 'type' => ORDER_TYPE_WESHARE_BUY,
                 'member_id' => $share_id,
-                'status' => array(ORDER_STATUS_PAID)
+                'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED)
             ),
             'fields' => array(
                 'id', 'consignee_name', 'consignee_address', 'creator'
