@@ -3,7 +3,7 @@
   angular.module('weshares')
     .controller('WesharesViewCtrl', WesharesViewCtrl)
 
-  function ChooseOfflineStore($vm, $log, $http, $templateCache) {
+  function ChooseOfflineStore($vm, $log, $http, $templateCache,$timeout) {
     $vm.areas = {
       110101: {
         'name': "东城区"
@@ -45,6 +45,7 @@
     $vm.showOfflineStoreDetail = showOfflineStoreDetail;
     $vm.chooseOfflineStore = chooseOfflineStore;
     $vm.showChooseOfflineStore = showChooseOfflineStore;
+    $vm.mapPanTo = mapPanTo;
     function showChooseOfflineStore() {
       $vm.showOfflineStoreDetailView = false;
       $vm.chooseOfflineStoreView = true;
@@ -60,6 +61,11 @@
       $vm.checkedOfflineStore = offlineStore;
     }
 
+    function mapPanTo(offlineStore){
+      var point = new BMap.Point(offlineStore.location_long, offlineStore.location_lat);
+      $vm.offlineStoreMap.panTo(point);
+    }
+
     function showMap(offlineStore){
       //angular.element(document.querySelector('div[name="offlineStoreMap"]')).remove();
       //var offlineStoreDetailEl = angular.element(document.querySelector('#offline-store-detail'));
@@ -68,14 +74,13 @@
       var point = new BMap.Point(offlineStore.location_long, offlineStore.location_lat);
       if($vm.offlineStoreMap == null){
         $vm.offlineStoreMap = new BMap.Map("offline-store-map");
-        $vm.offlineStoreMap.centerAndZoom(point, 13);
+        $vm.offlineStoreMap.centerAndZoom(point, 15);
       }else{
-        $vm.offlineStoreMap.clearOverlays();
-        $vm.offlineStoreMap.setZoom(7);
-        $vm.offlineStoreMap.panTo(point);
-        $vm.offlineStoreMap.setCenter(point);
-        $vm.offlineStoreMap.setZoom(13);
+        $timeout(function(){
+          $vm.mapPanTo(offlineStore);
+        }, 200);
       }
+      $vm.offlineStoreMap.clearOverlays();
       var marker = new BMap.Marker(point);        // 创建标注
       $vm.offlineStoreMap.addOverlay(marker);
     }
@@ -97,7 +102,7 @@
   function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, Utils) {
     var vm = this;
     vm.showShareDetailView = true;
-    ChooseOfflineStore(vm, $log, $http, $templateCache);
+    ChooseOfflineStore(vm, $log, $http, $templateCache,$timeout);
 
     vm.statusMap = {
       0: '进行中',
