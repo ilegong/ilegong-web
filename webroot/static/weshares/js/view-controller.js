@@ -71,7 +71,7 @@
         $vm.offlineStoreMap.centerAndZoom(point, 13);
       }else{
         $vm.offlineStoreMap.clearOverlays();
-        $vm.offlineStoreMap.setZoom(10);
+        $vm.offlineStoreMap.setZoom(7);
         $vm.offlineStoreMap.panTo(point);
         $vm.offlineStoreMap.setCenter(point);
         $vm.offlineStoreMap.setZoom(13);
