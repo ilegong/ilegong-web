@@ -64,6 +64,7 @@
       if($vm.offlineStoreMap==null){
         $vm.offlineStoreMap = new BMap.Map("offline-store-map");
       }
+      $vm.offlineStoreMap.clearOverlays();
       var point = new BMap.Point(offlineStore.location_long, offlineStore.location_lat);
       $vm.offlineStoreMap.centerAndZoom(point, 15);
       var marker = new BMap.Marker(point);        // 创建标注
