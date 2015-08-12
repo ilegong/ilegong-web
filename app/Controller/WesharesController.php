@@ -434,7 +434,6 @@ class WesharesController extends AppController {
         $ship_code = $_REQUEST['ship_code'];
         $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'ship_type' => $ship_company_id, 'ship_code' => "'" . $ship_code . "'"), array('id' => $order_id, 'status' => ORDER_STATUS_PAID));
         $this->Cart->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order_id));
-        //TODO send msg for user
         $this->WeshareBuy->send_share_product_ship_msg($order_id, $weshare_id);
         echo json_encode(array('success' => true));
         return;
