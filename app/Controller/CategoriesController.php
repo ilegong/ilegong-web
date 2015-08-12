@@ -259,6 +259,8 @@ class CategoriesController extends AppController {
     }
 
     public function mobileIndex(){
+        $this->redirect('/weshares/index.html');
+        return;
         $this->pageTitle='首页';
         //add sec kill
         $this->loadModel('ProductTry');
