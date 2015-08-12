@@ -347,11 +347,12 @@ class CategoriesController extends AppController {
 
         if (!$disableAutoRedirect) {
             if ($this->RequestHandler->isMobile()) {
-                $tagId = RECOMMEND_TAG_ID;
-                if($_REQUEST['tagId']){
-                    $tagId = $_REQUEST['tagId'];
-                }
-                $this->redirect('/categories/mobileIndex.html?tagId='.$tagId);
+//                $tagId = RECOMMEND_TAG_ID;
+//                if($_REQUEST['tagId']){
+//                    $tagId = $_REQUEST['tagId'];
+//                }
+//                $this->redirect('/categories/mobileIndex.html?tagId='.$tagId);
+                $this->redirect('/weshares/index.html');
                 return;
             }
         }
@@ -476,11 +477,12 @@ class CategoriesController extends AppController {
             //change mobile index view
             $redirectUrl = '/categories/productsHome.html';
             if($this->RequestHandler->isMobile()){
-                $tagId = RECOMMEND_TAG_ID;
-                if($_REQUEST['tagId']){
-                    $tagId = $_REQUEST['tagId'];
-                }
-                $redirectUrl = '/categories/mobileIndex.html?tagId='.$tagId;
+//                $tagId = RECOMMEND_TAG_ID;
+//                if($_REQUEST['tagId']){
+//                    $tagId = $_REQUEST['tagId'];
+//                }
+//                $redirectUrl = '/weshares/index.html?tagId='.$tagId;
+                $redirectUrl = '/weshares/index.html';
             }
             $this->redirect($redirectUrl);
             return;
