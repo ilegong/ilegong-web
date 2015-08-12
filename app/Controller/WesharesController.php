@@ -17,10 +17,10 @@ class WesharesController extends AppController {
         $this->layout = 'weshare';
     }
 
-    public function index($weshareId = null) {
-        if ($weshareId) {
-            $this->redirect('/weshares/view/' . $weshareId);
-        }
+    public function index() {
+        $this->layout = null;
+        $uid = $this->currentUser['id'];
+        $this->set('uid', $uid);
     }
 
     public function view($weshare_id, $from = 0) {
