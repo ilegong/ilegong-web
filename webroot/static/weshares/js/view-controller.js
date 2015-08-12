@@ -61,15 +61,23 @@
     }
 
     function showMap(offlineStore){
-      if($vm.offlineStoreMap==null){
-        $vm.offlineStoreMap = new BMap.Map("offline-store-map");
-      }
-      $vm.offlineStoreMap.clearOverlays();
+      //angular.element(document.querySelector('div[name="offlineStoreMap"]')).remove();
+      //var offlineStoreDetailEl = angular.element(document.querySelector('#offline-store-detail'));
+      //offlineStoreDetailEl.append('<div name="offlineStoreMap" style="width: 100%;height: 400px;" id="offline-store-map-'+offlineStore.id+'"></div>');
+      //$vm.offlineStoreMap = new BMap.Map("offline-store-map-"+offlineStore.id);
       var point = new BMap.Point(offlineStore.location_long, offlineStore.location_lat);
-      $vm.offlineStoreMap.centerAndZoom(point, 15);
+      if($vm.offlineStoreMap == null){
+        $vm.offlineStoreMap = new BMap.Map("offline-store-map");
+        $vm.offlineStoreMap.centerAndZoom(point, 13);
+      }else{
+        $vm.offlineStoreMap.clearOverlays();
+        $vm.offlineStoreMap.setZoom(10);
+        $vm.offlineStoreMap.panTo(point);
+        $vm.offlineStoreMap.setCenter(point);
+        $vm.offlineStoreMap.setZoom(13);
+      }
       var marker = new BMap.Marker(point);        // 创建标注
       $vm.offlineStoreMap.addOverlay(marker);
-      $vm.offlineStoreMap.setCenter(point);
     }
 
     function showOfflineStoreDetail(offlineStore) {
