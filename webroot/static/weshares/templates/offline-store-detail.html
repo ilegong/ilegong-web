@@ -4,7 +4,7 @@
         自提点详情
         <a ng-click="vm.showShareDetail()" class="home"></a>
     </div>
-    <div class="logistics_ziti">
+    <div class="logistics_ziti" id="offline-store-detail">
         <h1 ng-bind="vm.currentOfflineStore.alias" ng-click="vm.chooseOfflineStore(vm.currentOfflineStore)"></h1>
         <p>
             <i>自提点地址</i>
@@ -18,8 +18,6 @@
             <i>联系信息</i>
             <em><span ng-bind="vm.currentOfflineStore.owner_name"></span> <span ng-bind="vm.currentOfflineStore.owner_phone"></span></em>
         </p>
-        <div style="width: 100%;height: 400px;" id="offline-store-map">
-
-        </div>
+        <div style="width: 100%;height: 400px;" id="offline-store-map"></div>
     </div>
 </div>

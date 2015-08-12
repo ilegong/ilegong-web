@@ -45,7 +45,6 @@
     $vm.showOfflineStoreDetail = showOfflineStoreDetail;
     $vm.chooseOfflineStore = chooseOfflineStore;
     $vm.showChooseOfflineStore = showChooseOfflineStore;
-
     function showChooseOfflineStore() {
       $vm.showOfflineStoreDetailView = false;
       $vm.chooseOfflineStoreView = true;
@@ -61,17 +60,24 @@
       $vm.checkedOfflineStore = offlineStore;
     }
 
+    function showMap(offlineStore){
+      if($vm.offlineStoreMap==null){
+        $vm.offlineStoreMap = new BMap.Map("offline-store-map");
+      }
+      var point = new BMap.Point(offlineStore.location_long, offlineStore.location_lat);
+      $vm.offlineStoreMap.centerAndZoom(point, 15);
+      var marker = new BMap.Marker(point);        // 创建标注
+      $vm.offlineStoreMap.addOverlay(marker);
+      $vm.offlineStoreMap.setCenter(point);
+    }
+
     function showOfflineStoreDetail(offlineStore) {
       $vm.currentOfflineStore = offlineStore;
       $vm.showOfflineStoreDetailView = true;
       $vm.chooseOfflineStoreView = false;
       $vm.showShareDetailView = false;
       $vm.showBalanceView = false;
-      var map = new BMap.Map("offline-store-map");
-      var point = new BMap.Point(offlineStore.location_long, offlineStore.location_lat);
-      map.centerAndZoom(point, 15);
-      var marker = new BMap.Marker(point);        // 创建标注
-      map.addOverlay(marker);                     // 将标注添加到地图中
+      showMap($vm.currentOfflineStore);
     }
 
     function changeOfflineStoreArea(code) {
