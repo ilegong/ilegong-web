@@ -334,7 +334,7 @@ class ShareController extends AppController{
             $mobile_phone = $this->randMobile(1);
             $addressId = 0;
             $order_consignee_address = '虚拟订单';
-            if(empty($tinyAddress)){
+            if(!empty($tinyAddress)){
                 $addressId = $tinyAddress['WeshareAddress']['id'];
                 $order_consignee_address = $tinyAddress['WeshareAddress']['address'];
             }
