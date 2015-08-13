@@ -348,7 +348,7 @@ class ShareController extends AppController{
                 $totalPrice = 0;
                 foreach ($weshareProducts as $p) {
                     $item = array();
-                    $num = rand(1, 2);
+                    $num = 1;
                     $price = $p['WeshareProduct']['price'];
                     $item['name'] = $p['WeshareProduct']['name'];
                     $item['num'] = $num;
