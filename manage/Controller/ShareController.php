@@ -343,8 +343,8 @@ class ShareController extends AppController{
             $user_name = $user['nickname'];
             $this->Order->id = null;
             $order = $this->Order->save(array('creator' => $user['id'], 'consignee_address' => $order_consignee_address, 'member_id' => $weshare['Weshare']['id'], 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => $order_date, 'updated' => $order_date, 'consignee_id' => $addressId, 'consignee_name' => $user_name, 'consignee_mobilephone' => $mobile_phone[0]));
-            if(!empty($order)){
-                $orderId = $order['Order']['id'];
+            $orderId = $order['Order']['id'];
+            if(!empty($orderId)){
                 $totalPrice = 0;
                 foreach ($weshareProducts as $p) {
                     $item = array();
