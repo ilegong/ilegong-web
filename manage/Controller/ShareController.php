@@ -338,36 +338,38 @@ class ShareController extends AppController{
                 $addressId = $tinyAddress['WeshareAddress']['id'];
                 $order_consignee_address = $tinyAddress['WeshareAddress']['address'];
             }
-
             $weshare_id = $weshare['Weshare']['id'];
             $user = $user['user'];
             $user_name = $user['nickname'];
             $this->Order->id = null;
             $order = $this->Order->save(array('creator' => $user['id'], 'consignee_address' => $order_consignee_address, 'member_id' => $weshare['Weshare']['id'], 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => $order_date, 'updated' => $order_date, 'consignee_id' => $addressId, 'consignee_name' => $user_name, 'consignee_mobilephone' => $mobile_phone[0]));
-            $orderId = $order['Order']['id'];
-            $totalPrice = 0;
-            foreach ($weshareProducts as $p) {
-                $item = array();
-                $num = rand(1, 2);
-                $price = $p['WeshareProduct']['price'];
-                $item['name'] = $p['WeshareProduct']['name'];
-                $item['num'] = $num;
-                $item['price'] = $price;
-                $item['type'] = ORDER_TYPE_WESHARE_BUY;
-                $item['product_id'] = $p['WeshareProduct']['id'];
-                $item['created'] =$order_date;
-                $item['updated'] = $order_date;
-                $item['creator'] = $user['id'];
-                $item['order_id'] = $orderId;
-                $item['tuan_buy_id'] = $weshare_id;
-                $cart[] = $item;
-                $totalPrice += $num * $price;
+            if(!empty($order)){
+                $orderId = $order['Order']['id'];
+                $totalPrice = 0;
+                foreach ($weshareProducts as $p) {
+                    $item = array();
+                    $num = rand(1, 2);
+                    $price = $p['WeshareProduct']['price'];
+                    $item['name'] = $p['WeshareProduct']['name'];
+                    $item['num'] = $num;
+                    $item['price'] = $price;
+                    $item['type'] = ORDER_TYPE_WESHARE_BUY;
+                    $item['product_id'] = $p['WeshareProduct']['id'];
+                    $item['created'] =$order_date;
+                    $item['updated'] = $order_date;
+                    $item['creator'] = $user['id'];
+                    $item['order_id'] = $orderId;
+                    $item['tuan_buy_id'] = $weshare_id;
+                    $cart[] = $item;
+                    $totalPrice += $num * $price;
+                }
+                $this->Cart->id = null;
+                $this->Cart->saveAll($cart);
+                $this->Order->updateAll(array('total_all_price' => $totalPrice / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => 0, 'status' => ORDER_STATUS_VIRTUAL), array('id' => $orderId));
+                //echo json_encode(array('success' => true, 'orderId' => $orderId));
+                return array('success' => true, 'orderId' => $orderId);
             }
-            $this->Cart->id = null;
-            $this->Cart->saveAll($cart);
-            $this->Order->updateAll(array('total_all_price' => $totalPrice / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => 0, 'status' => ORDER_STATUS_VIRTUAL), array('id' => $orderId));
-            //echo json_encode(array('success' => true, 'orderId' => $orderId));
-            return array('success' => true, 'orderId' => $orderId);
+            return array('success' => false, 'msg' => 'order empty');
         } catch (Exception $e) {
             $this->log($user['id'] . 'buy share ' . $weshare_id . $e);
             //echo json_encode(array('success' => false, 'msg' => $e->getMessage()));
