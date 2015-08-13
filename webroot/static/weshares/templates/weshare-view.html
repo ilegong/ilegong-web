@@ -55,9 +55,16 @@
             <li class='buyer-image'><img ng-click="vm.toUserShareInfo(order.creator)" ng-src="{{vm.ordersDetail.users[order.creator]['image']||'/img/default_user_icon.jpg'}}"/></li>
             <li class="detail">
                 <b></b>
-                <p><strong class='buyer-name' ng-bind="vm.ordersDetail.users[order.creator]['nickname']"></strong> 已经报名 <strong ng-if="order.status==2" class="shipped-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong><strong ng-if="order.status==3" class="received-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong><strong ng-if="order.status==1" class="paid-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong></p>
+                <p><strong class='buyer-name' ng-bind="vm.ordersDetail.users[order.creator]['nickname']"></strong> 已经报名
+                    <strong ng-if="order.status==2" class="shipped-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong>
+                    <strong ng-if="order.status==3" class="received-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong>
+                    <strong ng-if="order.status==1" class="paid-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong>
+                </p>
                 <span class='display-name' ng-hide="_.isEmpty(vm.getOrderDisplayName(order.id))" ng-bind="vm.getOrderDisplayName(order.id)"></span>
-                <span class='created-at' ng-bind="order.created"></span>
+                <div style="display: inline-flex;width: 100%;">
+                    <div><span class='created-at' ng-bind="order.created"></span></div>
+                    <div style="float: right;margin-left: 25%;" ng-if="order.status==3" ng-click="vm.showCommentDialog()">去评价<div style="margin-top: -20px;float: right;"><i class="fa fa-commenting-o fa-2x"></i></div></div>
+                </div>
                 <div class="send-info" ng-if="vm.isOwner(order)">
                     <span>姓名:</span>
                     <span ng-bind="order.consignee_name"></span>
@@ -127,3 +134,12 @@
     </div>
 </div>
 <div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showLayer=false;vm.showBuyingDialog=false;vm.showShareDialog=false;vm.showNotifyShareDialog=false;vm.showNotifyShareOfferDialog=false;vm.showNotifyGetPacketDialog=false;"></div>
+<script type="text/ng-template" id="commentDialog">
+    <div class="ngdialog-message">
+        <h3>填写评论</h3>
+        <textarea style='width: 100%;height: 70px;'></textarea>
+    </div>
+    <div class="ngdialog-buttons mt">
+        <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="">提交</button>
+    </div>
+</script>

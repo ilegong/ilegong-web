@@ -133,6 +133,7 @@
     vm.getStatusName = getStatusName;
     vm.getShipCode = getShipCode;
     vm.isShowShipCode = isShowShipCode;
+    vm.showCommentDialog = showCommentDialog;
 
     activate();
 
@@ -460,6 +461,10 @@
       });
     }
 
+    function showCommentDialog(){
+      ngDialog.open({ template: 'commentDialog'});
+    }
+
     function getStatusName(status,orderType){
       if(status == 1){
         return '待发货';
@@ -471,10 +476,7 @@
         return '待取货';
       }
       if(status == 3){
-        if(orderType == 'kuai_di'){
-          return '已签收';
-        }
-        return '已取货';
+        return '待评价';
       }
       return '已完成';
     }
