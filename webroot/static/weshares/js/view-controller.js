@@ -67,10 +67,6 @@
     }
 
     function showMap(offlineStore){
-      //angular.element(document.querySelector('div[name="offlineStoreMap"]')).remove();
-      //var offlineStoreDetailEl = angular.element(document.querySelector('#offline-store-detail'));
-      //offlineStoreDetailEl.append('<div name="offlineStoreMap" style="width: 100%;height: 400px;" id="offline-store-map-'+offlineStore.id+'"></div>');
-      //$vm.offlineStoreMap = new BMap.Map("offline-store-map-"+offlineStore.id);
       var point = new BMap.Point(offlineStore.location_long, offlineStore.location_lat);
       if($vm.offlineStoreMap == null){
         $vm.offlineStoreMap = new BMap.Map("offline-store-map");
@@ -99,7 +95,7 @@
     }
   }
 
-  function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, Utils) {
+  function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, Utils, ngDialog) {
     var vm = this;
     vm.showShareDetailView = true;
     ChooseOfflineStore(vm, $log, $http, $templateCache,$timeout);
@@ -139,6 +135,7 @@
     vm.isShowShipCode = isShowShipCode;
 
     activate();
+
     function activate() {
       var weshareId = angular.element(document.getElementById('weshareView')).attr('data-weshare-id');
       var fromType = angular.element(document.getElementById('weshareView')).attr('data-from-type');
