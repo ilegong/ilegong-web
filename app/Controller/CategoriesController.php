@@ -258,9 +258,11 @@ class CategoriesController extends AppController {
         $this->pageTitle = __('分类');
     }
 
-    public function mobileIndex(){
-        $this->redirect('/weshares/index.html');
-        return;
+    public function mobileIndex($type=0){
+        if($type==0){
+            $this->redirect('/weshares/index.html');
+            return;
+        }
         $this->pageTitle='首页';
         //add sec kill
         $this->loadModel('ProductTry');
