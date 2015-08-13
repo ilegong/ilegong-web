@@ -332,12 +332,18 @@ class ShareController extends AppController{
         $cart = array();
         try {
             $mobile_phone = $this->randMobile(1);
-            $addressId = $tinyAddress['WeshareAddress']['id'];
+            $addressId = 0;
+            $order_consignee_address = '虚拟订单';
+            if(empty($tinyAddress)){
+                $addressId = $tinyAddress['WeshareAddress']['id'];
+                $order_consignee_address = $tinyAddress['WeshareAddress']['address'];
+            }
+
             $weshare_id = $weshare['Weshare']['id'];
             $user = $user['user'];
             $user_name = $user['nickname'];
             $this->Order->id = null;
-            $order = $this->Order->save(array('creator' => $user['id'], 'consignee_address' => $tinyAddress['WeshareAddress']['address'], 'member_id' => $weshare['Weshare']['id'], 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => $order_date, 'updated' => $order_date, 'consignee_id' => $addressId, 'consignee_name' => $user_name, 'consignee_mobilephone' => $mobile_phone[0]));
+            $order = $this->Order->save(array('creator' => $user['id'], 'consignee_address' => $order_consignee_address, 'member_id' => $weshare['Weshare']['id'], 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => $order_date, 'updated' => $order_date, 'consignee_id' => $addressId, 'consignee_name' => $user_name, 'consignee_mobilephone' => $mobile_phone[0]));
             $orderId = $order['Order']['id'];
             $totalPrice = 0;
             foreach ($weshareProducts as $p) {
