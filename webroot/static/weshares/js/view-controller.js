@@ -104,6 +104,7 @@
       0: '进行中',
       1: '已截止'
     };
+    vm.commentData = {};
     vm.viewImage = viewImage;
     vm.increaseProductNum = increaseProductNum;
     vm.decreaseProductNum = decreaseProductNum;
@@ -463,10 +464,33 @@
     }
 
     function submitComment(){
-
+      if(vm.submitCommentProcessing){
+        return;
+      }
+      vm.submitCommentProcessing = true;
+      $http.post('/weshares/comment/', vm.commentData).success(function (data) {
+        $log.log(data);
+        if (data.success) {
+        } else {
+          vm.submitCommentProcessing = false;
+        }
+      }).error(function () {
+        vm.submitCommentProcessing = false;
+      });
     }
 
-    function showCommentDialog(){
+    function showCommentDialog(order,comment_id){
+      /**
+       $order_id = $params['order_id'];
+       $comment_content = $params['comment_content'];
+       $reply_comment_id = $params['reply_comment_id'];
+       $comment_uid = $params['user_id'];
+       $share_id = $params['share_id'];
+       */
+      vm.commentData.order_id = order.id;
+      vm.commentData.reply_comment_id = comment_id||0;
+      vm.commentData.comment_uid = vm.currentUser.id;
+      vm.commentData.share_id=vm.weshare.id;
       ngDialog.open({template: 'commentDialog', scope: $scope});
     }
 

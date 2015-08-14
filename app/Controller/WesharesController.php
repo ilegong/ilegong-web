@@ -489,10 +489,10 @@ class WesharesController extends AppController {
         $params = json_decode(file_get_contents('php://input'), true);
         $order_id = $params['order_id'];
         $comment_content = $params['comment_content'];
-        $replay_comment_id = $params['replay_comment_id'];
+        $reply_comment_id = $params['reply_comment_id'];
         $comment_uid = $params['user_id'];
         $share_id = $params['share_id'];
-        $result = $this->WeshareBuy->create_share_comment($order_id, $comment_content, $replay_comment_id, $comment_uid, $share_id);
+        $result = $this->WeshareBuy->create_share_comment($order_id, $comment_content, $reply_comment_id, $comment_uid, $share_id);
         echo json_encode($result);
         return;
     }
