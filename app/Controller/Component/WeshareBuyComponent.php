@@ -11,7 +11,38 @@ class WeshareBuyComponent extends Component {
 
     var $query_cart_fields = array('id', 'order_id', 'name', 'product_id', 'num');
 
+    var $query_comment_fields = array('id', 'username', 'user_id', 'data_id', 'type', 'body', 'order_id', 'parent_id');
+
     var $components = array('Session', 'Weixin');
+
+    public function load_comment_by_share_id($weshare_id) {
+        $commentM = ClassRegistry::init('Comment');
+        $commentReplyM = ClassRegistry::init('CommentReply');
+        $comments = $commentM->find('all', array(
+            'conditions' => array(
+                'type' => COMMENT_SHARE_TYPE,
+                'data_id' => $weshare_id,
+                'status' => COMMENT_SHOW_STATUS
+            ),
+            'fields' => $this->$query_comment_fields
+        ));
+        //$comments = Hash::combine($comments,'{n}.Comment.id', '{n}.Comment', '{n}.Comment.order_id');
+        $order_comments = array_filter($comments, 'order_comment_filter');
+        $order_comments = Hash::combine($order_comments, '{n}.Comment.order_id', '{n}.Comment');
+        $reply_comments = array_filter($comments, 'order_reply_comment_filter');
+        $reply_comments = Hash::combine($reply_comments, '{n}.Comment.id', '{n}.Comment');
+        usort($reply_comments, function ($a, $b) {
+            return ($a['id'] > $b['id']) ? 1 : -1;
+        }); 
+        $commentReplys = $commentReplyM->find('all', array(
+            'conditions' => array(
+                'data_id' => $weshare_id,
+                'data_type' => COMMENT_SHARE_TYPE
+            )
+        ));
+        $commentReplyRelation = Hash::combine($commentReplys, '{n}.CommentReply.comment_id', '{n}.CommentReply.reply_id');
+        return array('order_comments' => $order_comments, 'comment_replys' => $commentReplys, 'comment_reply_relation' => $commentReplyRelation);
+    }
 
     public function create_share_comment($order_id, $comment_content, $reply_comment_id, $comment_uid, $share_id) {
         $commentM = ClassRegistry::init('Comment');
@@ -21,7 +52,7 @@ class WeshareBuyComponent extends Component {
         $order_info = $orderM->findOrderByConditionsAndFields(array('id' => $order_id), array('created'));
         $date_time = date('Y-m-d H:i:s');
         $buy_date_time = $order_info['Order']['created'];
-        $commentData = array('parent_id' => $reply_comment_id, 'user_id' => $comment_uid, 'username' => $user_nickname, 'body' => $comment_content, 'data_id' => $share_id, 'type' => COMMENT_SHARE_TYPE, 'created' => $date_time, 'updated' => $date_time, 'buy_time' => $buy_date_time, 'order_id' => $order_id);
+        $commentData = array('parent_id' => $reply_comment_id, 'user_id' => $comment_uid, 'username' => $user_nickname, 'body' => $comment_content, 'data_id' => $share_id, 'type' => COMMENT_SHARE_TYPE, 'created' => $date_time, 'updated' => $date_time, 'buy_time' => $buy_date_time, 'order_id' => $order_id, 'status' => COMMENT_SHOW_STATUS);
         $comment = $commentM->save($commentData);
         if (empty($comment)) {
             $this->log('save comment fail order id ' . $order_id . ' uid ' . $comment_uid . ' share id ' . $share_id);

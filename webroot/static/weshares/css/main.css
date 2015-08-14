@@ -80,12 +80,14 @@ ul li { list-style: none; }
 .weshare-view .orders .order .buyer-name{ color: #29AC0E;}
 .weshare-view .orders .order .paid-status{color: #5BC0DE; float: right;}
 .weshare-view .orders .order .shipped-status{color: #29AC0E; float: right;}
+.weshare-view .orders .order .done-status{float: right;}
 .weshare-view .orders .order .received-status{color: #EC971F; float: right;}
 .weshare-view .orders .order .detail{ width: 80%; border-radius: 5px; margin-left: 10px; border: 1px #eaeaea solid; background-color: #ffffff; position: relative;}
 .weshare-view .orders .order .detail b{ display: block;width: 6px;height: 12px;position: absolute;left: -6px;top: 12px;background: url(../images/weifxicon.png) no-repeat -25px -35px;background-size: 100px 100px;}
 .weshare-view .orders .order .detail p{ padding: 10px; text-decoration: none; color: #bbbbbb; font-size: 14px;}
 .weshare-view .orders .order .detail .display-name{ display: block; padding: 0 10px 10px 10px; line-height: 18px; color: #333333; font-style: normal;}
 .weshare-view .orders .order .created-at{ font-size: 12px; color: #bbbbbb; padding: 0 10px 10px; display: block;}
+.weshare-view .orders .order .small-order-info{ font-size: 12px; color: #bbbbbb; padding: 0 0 10px 10px; display: block;}
 .weshare-view .orders .order .send-info {background-color: #f8f8f8;border-top: 1px #eaeaea solid;padding: 10px;}
 .weshare-view .orders .order .send-info .confirm-btn {display: block;text-decoration: none;border-radius: 3px;border: 1px #29AC0E solid;background-color: #ffffff;color: #29AC0E;font-size: 14px;text-align: center;line-height: 26px;width: 70px;margin-top: 10px;}
 .weshare-view .orders .order .send-info .order-confirmed-btn {display: block;text-decoration: none;border-radius: 3px;border: 1px #eeeeee solid;background-color: #eeeeee;color: #999999;font-size: 14px;text-align: center;line-height: 26px;width: 70px;margin-top: 10px;}

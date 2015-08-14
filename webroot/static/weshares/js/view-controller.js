@@ -489,7 +489,6 @@
        */
       vm.commentData.order_id = order.id;
       vm.commentData.reply_comment_id = comment_id||0;
-      vm.commentData.comment_uid = vm.currentUser.id;
       vm.commentData.share_id=vm.weshare.id;
       ngDialog.open({template: 'commentDialog', scope: $scope});
     }

@@ -175,7 +175,18 @@ class WesharesController extends AppController {
         $share_ship_set = $this->sharer_can_use_we_ship($weshareInfo['creator']['id']);
         $my_coupon_items = $this->get_can_used_coupons($uid, $creatorId);
         $weshare_ship_settings = $this->getWeshareShipSettings($weshareId);
-        echo json_encode(array('support_pys_ziti' => $share_ship_set, 'weshare' => $weshareInfo, 'ordersDetail' => $ordersDetail, 'current_user' => $current_user['User'], 'weixininfo' => $weixinInfo, 'weshare_ship_settings' => $weshare_ship_settings , 'consignee' => $consignee, 'user_share_summery' => $user_share_summery, 'my_coupons' => $my_coupon_items[0]));
+        $comment_data = $this->WeshareBuy->load_comment_by_share_id($weshareId);
+        echo json_encode(array('support_pys_ziti' => $share_ship_set,
+            'weshare' => $weshareInfo,
+            'ordersDetail' => $ordersDetail,
+            'current_user' => $current_user['User'],
+            'weixininfo' => $weixinInfo,
+            'weshare_ship_settings' => $weshare_ship_settings,
+            'consignee' => $consignee,
+            'user_share_summery' => $user_share_summery,
+            'my_coupons' => $my_coupon_items[0],
+            'comment_data' => $comment_data
+        ));
         return;
     }
 
@@ -484,15 +495,26 @@ class WesharesController extends AppController {
         $this->set('weshareId', $weshareId);
     }
 
+    public function loadComment($weshareId) {
+        $this->autoRender = false;
+        $comment_data = $this->WeshareBuy->load_comment_by_share_id($weshareId);
+        echo json_encode($comment_data);
+        return;
+    }
+
     public function comment() {
         $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        if (empty($uid)) {
+            echo json_encode(array('success' => false, 'reason' => 'not_login'));
+            return;
+        }
         $params = json_decode(file_get_contents('php://input'), true);
         $order_id = $params['order_id'];
         $comment_content = $params['comment_content'];
         $reply_comment_id = $params['reply_comment_id'];
-        $comment_uid = $params['user_id'];
         $share_id = $params['share_id'];
-        $result = $this->WeshareBuy->create_share_comment($order_id, $comment_content, $reply_comment_id, $comment_uid, $share_id);
+        $result = $this->WeshareBuy->create_share_comment($order_id, $comment_content, $reply_comment_id, $uid, $share_id);
         echo json_encode($result);
         return;
     }

@@ -2191,6 +2191,14 @@ function share_pys_ziti_order_filter($var) {
     return $var['ship_mark'] == SHARE_SHIP_PYS_ZITI_TAG;
 }
 
+function order_comment_filter($var) {
+    return $var['Comment']['parent_id'] == 0;
+}
+
+function order_reply_comment_filter($var) {
+    return $var['Comment']['parent_id'] != 0;
+}
+
 /**
  * auto load spl lib
  */
