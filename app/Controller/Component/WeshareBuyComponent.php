@@ -15,6 +15,7 @@ class WeshareBuyComponent extends Component {
 
     var $components = array('Session', 'Weixin');
 
+
     public function load_comment_by_share_id($weshare_id) {
         $commentM = ClassRegistry::init('Comment');
         $commentReplyM = ClassRegistry::init('CommentReply');
@@ -33,15 +34,56 @@ class WeshareBuyComponent extends Component {
         $reply_comments = Hash::combine($reply_comments, '{n}.Comment.id', '{n}.Comment');
         usort($reply_comments, function ($a, $b) {
             return ($a['id'] > $b['id']) ? 1 : -1;
-        }); 
-        $commentReplys = $commentReplyM->find('all', array(
+        });
+        $commentReplies = $commentReplyM->find('all', array(
             'conditions' => array(
                 'data_id' => $weshare_id,
                 'data_type' => COMMENT_SHARE_TYPE
-            )
+            ),
+            'order' => array('id desc')
         ));
-        $commentReplyRelation = Hash::combine($commentReplys, '{n}.CommentReply.comment_id', '{n}.CommentReply.reply_id');
-        return array('order_comments' => $order_comments, 'comment_replys' => $commentReplys, 'comment_reply_relation' => $commentReplyRelation);
+        $comment_reply_relation = array();
+        foreach($commentReplies as $commentReply){
+            $comment_id = $commentReply['CommentReply']['comment_id'];
+            $replay_id = $commentReply['CommentReply']['replay_id'];
+            if(!isset($comment_reply_relation[$comment_id])){
+                $comment_reply_relation[$comment_id] = array();
+            }
+            $comment_reply_relation[] = $replay_id;
+        }
+        $comment_replies = $this->recursionReply($order_comments, $reply_comments, $comment_reply_relation);
+        return array('order_comments' => $order_comments, 'comment_replies' => $comment_replies);
+    }
+
+    private function recursionReply($order_comments, $reply_comments, $comment_replay_relation) {
+        $comment_reply_format_result = array();
+        foreach($order_comments as $comment){
+            $comment_id = $comment['id'];
+            $comment_reply_result = array();
+            $this->processRecursionReply($reply_comments, $comment_reply_result, $comment_replay_relation, $comment_id, $level = 0);
+            $comment_reply_format_result[$comment_id] = $comment_reply_result;
+        }
+        return $comment_reply_format_result;
+    }
+
+    private function processRecursionReply($reply_comments, &$comment_replay_format_result, $comment_replay_relation, $comment_id, $level = 1) {
+        $comment_replay_relation = $comment_replay_relation[$comment_id];
+        if (!empty($comment_replay_relation)) {
+            foreach ($comment_replay_relation as $comment_id => $reply_id) {
+                $reply = $reply_comments[$reply_id];
+                $username = $reply['username'];
+                if($level == 0){
+                    $parent_comment = $reply_comments[$comment_id];
+                    $username = $reply['username'].'回复'.$parent_comment['username'];
+                }
+                $comment_replay_format_result[] = array('username' => $username, 'id' => $reply['id'], 'body' => $reply['body']);
+                $reply_reply_relation = $comment_replay_relation[$reply_id];
+                if(!empty($reply_reply_relation)){
+                    $this->processRecursionReply($reply_comments, $comment_replay_format_result, $comment_replay_relation, $comment_id, $level = 1);
+                }
+            }
+        }
+        return $comment_replay_format_result;
     }
 
     public function create_share_comment($order_id, $comment_content, $reply_comment_id, $comment_uid, $share_id) {

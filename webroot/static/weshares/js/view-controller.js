@@ -136,6 +136,9 @@
     vm.isShowShipCode = isShowShipCode;
     vm.showCommentDialog = showCommentDialog;
     vm.submitComment = submitComment;
+    vm.getOrderComment = getOrderComment;
+    vm.getReplyComments = getReplyComments;
+    vm.showReplies = showReplies;
 
     activate();
 
@@ -165,11 +168,13 @@
       });
       $http({method: 'GET', url: '/weshares/detail/' + weshareId, cache: $templateCache}).
         success(function (data, status) {
+          $log.log(data);
           vm.weshare = data['weshare'];
-          if (vm.weshare.addresses.length == 1) {
+          vm.commentData = data['comment_data'];
+          if (vm.weshare.addresses&&vm.weshare.addresses.length == 1) {
             vm.weshare.selectedAddressId = vm.weshare.addresses[0].id;
           }
-          else if (vm.weshare.addresses.length > 1) {
+          else if (vm.weshare.addresses&&vm.weshare.addresses.length > 1) {
             vm.weshare.addresses.unshift({id: -1, address: '请选择收货地址'});
             vm.weshare.selectedAddressId = -1;
           }
@@ -303,6 +308,22 @@
       vm.shipSetId = getShipSetId();
       totalPrice += vm.shipFee;
       vm.orderTotalPrice = totalPrice / 100;
+    }
+
+    function getOrderComment(order_id){
+      return vm.commentData['order_comments'][order_id];
+    }
+
+    function getReplyComments(comment_id){
+      return vm.commentData['comment_replies'][comment_id];
+    }
+
+    function showReplies(comment_id){
+      var replies = vm.commentData['comment_replies'][comment_id];
+      if(!replies||replies.length==0){
+        return false;
+      }
+      return true;
     }
 
     function getShipSetId(){

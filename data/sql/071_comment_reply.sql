@@ -1,4 +1,4 @@
-CREATE TABLE `cake_comment_replys` (
+CREATE TABLE `cake_comment_replies` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `comment_id` int(11) NOT NULL DEFAULT '0',
   `reply_id` int(11) NOT NULL DEFAULT '0',
