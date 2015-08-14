@@ -134,6 +134,7 @@
     vm.getShipCode = getShipCode;
     vm.isShowShipCode = isShowShipCode;
     vm.showCommentDialog = showCommentDialog;
+    vm.submitComment = submitComment;
 
     activate();
 
@@ -461,8 +462,12 @@
       });
     }
 
+    function submitComment(){
+      
+    }
+
     function showCommentDialog(){
-      ngDialog.open({ template: 'commentDialog'});
+      ngDialog.open({template: 'commentDialog', scope: $scope});
     }
 
     function getStatusName(status,orderType){

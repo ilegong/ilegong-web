@@ -13,6 +13,35 @@ class WeshareBuyComponent extends Component {
 
     var $components = array('Session', 'Weixin');
 
+    public function create_share_comment($order_id, $comment_content, $replay_comment_id, $comment_uid, $share_id) {
+        $commentM = ClassRegistry::init('Comment');
+        $userM = ClassRegistry::init('User');
+        $orderM = ClassRegistry::init('Order');
+        $user_nickname = $userM->findNicknamesOfUid($comment_uid);
+        $order_info = $orderM->findOrderByConditionsAndFields(array('id' => $order_id), array('created'));
+        $date_time = date('Y-m-d H:i:s');
+        $buy_date_time = $order_info['Order']['created'];
+        $commentData = array('parent_id' => $replay_comment_id, 'user_id' => $comment_uid, 'username' => $user_nickname, 'body' => $comment_content, 'data_id' => $share_id, 'type' => COMMENT_SHARE_TYPE, 'created' => $date_time, 'updated' => $date_time, 'buy_time' => $buy_date_time, 'order_id' => $order_id);
+        $comment = $commentM->save($commentData);
+        if (empty($comment)) {
+            $this->log('save comment fail order id ' . $order_id . ' uid ' . $comment_uid . ' share id ' . $share_id);
+            return array('success' => false);
+        }
+        if ($replay_comment_id != 0) {
+            //save replay relation
+            $commentReplayM = ClassRegistry::init('CommentReplay');
+            $commentReplayData = array('comment_id' => $replay_comment_id, 'replay_id' => $comment['Comment']['id']);
+            $commentReplay = $commentReplayM->save($commentReplayData);
+            if (empty($commentReplay)) {
+                $this->log('save comment replay fail order id ' . $order_id . ' uid ' . $comment_uid . ' share id ' . $share_id . ' comment id ' . $comment['Comment']['id']);
+                return array('success' => false);
+            }
+        }
+        //update order status
+        $orderM->updateAll(array('status' => ORDER_STATUS_DONE), array('id' => $order_id));
+        return array('success' => true, 'comment' => $comment['Comment'], 'comment_replay' => $commentReplay['CommentReplay']);
+    }
+
     public function send_new_share_msg($weshareId) {
         $this->Weshare = ClassRegistry::init('Weshare');
         $this->User = ClassRegistry::init('User');

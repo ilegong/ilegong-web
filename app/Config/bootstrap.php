@@ -140,6 +140,8 @@ const WESHARE_MSG_SEND = 2;
 
 const WESHARE_DELETE_STATUS = -1;
 
+const COMMENT_SHARE_TYPE = 'Share';
+
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
 define('FORMAT_DATE_YUE_RI_HAN', 'n月j日');
