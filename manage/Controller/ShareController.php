@@ -282,7 +282,11 @@ class ShareController extends AppController{
             'conditions' => $cond,
             'order' => array('created DESC')
         ));
+        $total_price = 0;
         if(!empty($orders)){
+            foreach($orders as $order){
+                $total_price += $order['Order']['total_all_price'];
+            }
             $order_ids = Hash::extract($orders, '{n}.Order.id');
             $member_ids = Hash::extract($orders, '{n}.Order.member_id');
             $weshares = $this->Weshare->find('all', array(
@@ -312,6 +316,8 @@ class ShareController extends AppController{
                 }
                 $order_cart_map[$order_id][] = $item['Cart'];
             }
+            $summery_result = array('order_count' => count($orders), 'total_all_price' => $total_price);
+            $this->set('summery',$summery_result);
             $this->set('start_date', $start_date);
             $this->set('end_date', $end_date);
             $this->set('orders',$orders);

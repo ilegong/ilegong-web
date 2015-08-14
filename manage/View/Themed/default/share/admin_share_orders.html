@@ -26,6 +26,11 @@
 <h3>分享用户产生的订单</h3>
 <hr>
 <div class="row">
+    <div class="col-lg-6">
+        <a href="#">订单数&nbsp;&nbsp;<span style="color: #ff0000">{{$summery['order_count']}}</span></a>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="#">总金额&nbsp;&nbsp;<span style="color: #ff0000">{{$summery['total_all_price']}}</span></a>
+    </div>
     <div class="col-lg-6 pull-right">
         <form action="/manage/admin/share/share_orders" method="get" class="form-inline">
             <div class="form-group">
