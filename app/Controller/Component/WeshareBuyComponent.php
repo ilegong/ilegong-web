@@ -32,9 +32,6 @@ class WeshareBuyComponent extends Component {
         $order_comments = Hash::combine($order_comments, '{n}.Comment.order_id', '{n}.Comment');
         $reply_comments = array_filter($comments, 'order_reply_comment_filter');
         $reply_comments = Hash::combine($reply_comments, '{n}.Comment.id', '{n}.Comment');
-        usort($reply_comments, function ($a, $b) {
-            return ($a['id'] > $b['id']) ? 1 : -1;
-        });
         $commentReplies = $commentReplyM->find('all', array(
             'conditions' => array(
                 'data_id' => $weshare_id,
@@ -45,11 +42,11 @@ class WeshareBuyComponent extends Component {
         $comment_reply_relation = array();
         foreach($commentReplies as $commentReply){
             $comment_id = $commentReply['CommentReply']['comment_id'];
-            $replay_id = $commentReply['CommentReply']['replay_id'];
+            $reply_id = $commentReply['CommentReply']['reply_id'];
             if(!isset($comment_reply_relation[$comment_id])){
                 $comment_reply_relation[$comment_id] = array();
             }
-            $comment_reply_relation[] = $replay_id;
+            $comment_reply_relation[$comment_id][] = $reply_id;
         }
         $comment_replies = $this->recursionReply($order_comments, $reply_comments, $comment_reply_relation);
         return array('order_comments' => $order_comments, 'comment_replies' => $comment_replies);
@@ -67,19 +64,19 @@ class WeshareBuyComponent extends Component {
     }
 
     private function processRecursionReply($reply_comments, &$comment_replay_format_result, $comment_replay_relation, $comment_id, $level = 1) {
-        $comment_replay_relation = $comment_replay_relation[$comment_id];
-        if (!empty($comment_replay_relation)) {
-            foreach ($comment_replay_relation as $comment_id => $reply_id) {
+        $current_comment_replay_relation = $comment_replay_relation[$comment_id];
+        if (!empty($current_comment_replay_relation)) {
+            foreach ($current_comment_replay_relation as $reply_id) {
                 $reply = $reply_comments[$reply_id];
-                $username = $reply['username'];
-                if($level == 0){
+                $username = $reply['username'].': ';
+                if($level == 1){
                     $parent_comment = $reply_comments[$comment_id];
-                    $username = $reply['username'].'回复'.$parent_comment['username'];
+                    $username = $reply['username'].'回复'.$parent_comment['username'].': ';
                 }
                 $comment_replay_format_result[] = array('username' => $username, 'id' => $reply['id'], 'body' => $reply['body']);
                 $reply_reply_relation = $comment_replay_relation[$reply_id];
                 if(!empty($reply_reply_relation)){
-                    $this->processRecursionReply($reply_comments, $comment_replay_format_result, $comment_replay_relation, $comment_id, $level = 1);
+                    $this->processRecursionReply($reply_comments, $comment_replay_format_result, $comment_replay_relation, $reply_id, $level = 1);
                 }
             }
         }
@@ -94,7 +91,7 @@ class WeshareBuyComponent extends Component {
         $order_info = $orderM->findOrderByConditionsAndFields(array('id' => $order_id), array('created'));
         $date_time = date('Y-m-d H:i:s');
         $buy_date_time = $order_info['Order']['created'];
-        $commentData = array('parent_id' => $reply_comment_id, 'user_id' => $comment_uid, 'username' => $user_nickname, 'body' => $comment_content, 'data_id' => $share_id, 'type' => COMMENT_SHARE_TYPE, 'created' => $date_time, 'updated' => $date_time, 'buy_time' => $buy_date_time, 'order_id' => $order_id, 'status' => COMMENT_SHOW_STATUS);
+        $commentData = array('parent_id' => $reply_comment_id, 'user_id' => $comment_uid, 'username' => $user_nickname, 'body' => $comment_content, 'data_id' => $share_id, 'type' => COMMENT_SHARE_TYPE,'publish_time' => $date_time ,'created' => $date_time, 'updated' => $date_time, 'buy_time' => $buy_date_time, 'order_id' => $order_id, 'status' => COMMENT_SHOW_STATUS);
         $comment = $commentM->save($commentData);
         if (empty($comment)) {
             $this->log('save comment fail order id ' . $order_id . ' uid ' . $comment_uid . ' share id ' . $share_id);
@@ -103,7 +100,7 @@ class WeshareBuyComponent extends Component {
         if ($reply_comment_id != 0) {
             //save replay relation
             $commentReplyM = ClassRegistry::init('CommentReply');
-            $commentReplyData = array('comment_id' => $reply_comment_id, 'reply_id' => $comment['Comment']['id']);
+            $commentReplyData = array('comment_id' => $reply_comment_id, 'reply_id' => $comment['Comment']['id'], 'data_id' => $share_id, 'data_type' => COMMENT_SHARE_TYPE);
             $commentReply = $commentReplyM->save($commentReplyData);
             if (empty($commentReply)) {
                 $this->log('save comment reply fail order id ' . $order_id . ' uid ' . $comment_uid . ' share id ' . $share_id . ' comment id ' . $comment['Comment']['id']);

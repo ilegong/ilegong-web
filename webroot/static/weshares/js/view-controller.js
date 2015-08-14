@@ -139,6 +139,7 @@
     vm.getOrderComment = getOrderComment;
     vm.getReplyComments = getReplyComments;
     vm.showReplies = showReplies;
+    vm.reloadCommentData = reloadCommentData;
 
     activate();
 
@@ -484,14 +485,26 @@
       });
     }
 
-    function submitComment(){
-      if(vm.submitCommentProcessing){
+    function reloadCommentData() {
+      $http({method: 'GET', url: '/weshares/loadComment/' + vm.weshare.id, cache: $templateCache}).
+        success(function (data) {
+          vm.commentData = data;
+        }).
+        error(function (data) {
+          $log.log(data);
+        });
+    }
+
+    function submitComment() {
+      if (vm.submitCommentProcessing) {
         return;
       }
       vm.submitCommentProcessing = true;
       $http.post('/weshares/comment/', vm.commentData).success(function (data) {
         $log.log(data);
         if (data.success) {
+          vm.submitCommentProcessing = false;
+          vm.reloadCommentData();
         } else {
           vm.submitCommentProcessing = false;
         }

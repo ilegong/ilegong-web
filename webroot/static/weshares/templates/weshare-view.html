@@ -93,7 +93,7 @@
                 </div>
                 <div class="send-info" ng-if="vm.showReplies(comment.id)">
                     <div ng-repeat="reply in vm.getReplyComments(comment.id)" ng-click="vm.showCommentDialog(order,reply.id)">
-                        <span ng-bind="reply.username"></span>
+                        <span ng-bind="reply.username" style="font-size: 16px;"></span>
                         <span ng-bind="reply.body"></span>
                     </div>
                 </div>
@@ -155,7 +155,7 @@
 <script type="text/ng-template" id="commentDialog">
     <div class="ngdialog-message">
         <h3>填写评论</h3>
-        <textarea style='width: 100%;height: 70px;' ng-model="vm.commentData.comment_content"></textarea>
+        <textarea style='width: 100%;height: 70px;font-size: medium;' ng-model="vm.commentData.comment_content"></textarea>
     </div>
     <div class="ngdialog-buttons mt">
         <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="vm.submitComment();closeThisDialog();">提交</button>
