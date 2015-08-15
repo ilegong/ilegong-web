@@ -556,11 +556,19 @@
        */
       var reply_comment_id = 0;
       var comment_tip_info = '';
-      if(comment){
-        reply_comment_id = comment.id||0;
-        comment_tip_info = vm.currentUser.nickname+'对'+comment.username+'说：'
-      }else{
-        comment_tip_info = vm.currentUser.nickname+'对'+vm.weshare.creator.nickname+'说：'
+      if (comment) {
+        reply_comment_id = comment.id || 0;
+        var reply_username = comment.username;
+        if (comment.plain_username) {
+          reply_username = comment.plain_username;
+        }
+        if (reply_username == vm.currentUser.nickname) {
+          comment_tip_info = '呵呵';
+        } else {
+          comment_tip_info = vm.currentUser.nickname + '对' + comment.username + '说：';
+        }
+      } else {
+        comment_tip_info = vm.currentUser.nickname + '对' + vm.weshare.creator.nickname + '说：';
       }
       vm.commentTipInfo = comment_tip_info;
       vm.commentOrder = order;

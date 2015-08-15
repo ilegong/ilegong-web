@@ -111,7 +111,7 @@ class WeshareBuyComponent extends Component {
                     $parent_comment = $reply_comments[$comment_id];
                     $username = $reply['username'].'回复'.$parent_comment['username'].': ';
                 }
-                $comment_replay_format_result[] = array('username' => $username, 'id' => $reply['id'], 'body' => $reply['body']);
+                $comment_replay_format_result[] = array('username' => $username, 'id' => $reply['id'], 'body' => $reply['body'],'plain_username' => $reply['username']);
                 $reply_reply_relation = $comment_replay_relation[$reply_id];
                 if(!empty($reply_reply_relation)){
                     $this->processRecursionReply($reply_comments, $comment_replay_format_result, $comment_replay_relation, $reply_id, $level = 1);
