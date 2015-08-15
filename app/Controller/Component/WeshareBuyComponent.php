@@ -16,6 +16,44 @@ class WeshareBuyComponent extends Component {
     var $components = array('Session', 'Weixin');
 
 
+    public function load_sharer_comment_data($weshare_ids, $sharer_id) {
+        $commentM = ClassRegistry::init('Comment');
+        $userM = ClassRegistry::init('User');
+        $comments = $commentM->find('all', array(
+            'conditions' => array(
+                'data_id' => $weshare_ids,
+                'type' => COMMENT_SHARE_TYPE,
+                'parent_id' => 0,
+                'status' => COMMENT_SHOW_STATUS
+            )
+        ));
+        $comment_ids = Hash::extract($comments, '{n}.Comment.id');
+        $comment_uids = Hash::extract($comments, '{n}.Comment.user_id');
+        $comment_users = $userM->find('all', array(
+            'conditions' => array(
+                'id' => $comment_uids
+            ),
+            'fields' => $this->query_user_fields
+        ));
+        $comment_users  = Hash::combine($comment_users, '{n}.User.id', '{n}.User');
+        $replay_count = $commentM->find('count', array(
+            'fields' => 'DISTINCT parent_id',
+            'conditions' => array(
+                'parent_id' => $comment_ids,
+                'status' => COMMENT_SHOW_STATUS,
+                'user_id' => $sharer_id,
+                'data_id' => $weshare_ids,
+                'type' => COMMENT_SHARE_TYPE,
+            )
+        ));
+        $comment_count = count($comments);
+        $reply_percent = 0;
+        if ($comment_count > 0) {
+            $reply_percent = $replay_count / $comment_count * 100;
+        }
+        return array('comment_count' => $comment_count, 'comments' => $comments, 'comment_users' => $comment_users, 'reply_percent' => $reply_percent);
+    }
+
     public function load_comment_by_share_id($weshare_id) {
         $commentM = ClassRegistry::init('Comment');
         $commentReplyM = ClassRegistry::init('CommentReply');
