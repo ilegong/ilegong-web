@@ -104,6 +104,7 @@
       0: '进行中',
       1: '已截止'
     };
+    vm.commentData = {};
     vm.viewImage = viewImage;
     vm.increaseProductNum = increaseProductNum;
     vm.decreaseProductNum = decreaseProductNum;
@@ -133,7 +134,14 @@
     vm.getStatusName = getStatusName;
     vm.getShipCode = getShipCode;
     vm.isShowShipCode = isShowShipCode;
-
+    vm.showCommentDialog = showCommentDialog;
+    vm.submitComment = submitComment;
+    vm.getOrderComment = getOrderComment;
+    vm.getReplyComments = getReplyComments;
+    vm.showReplies = showReplies;
+    vm.reloadCommentData = reloadCommentData;
+    vm.showCommentListDialog = showCommentListDialog;
+    vm.getOrderCommentLength = getOrderCommentLength;
     activate();
 
     function activate() {
@@ -163,10 +171,12 @@
       $http({method: 'GET', url: '/weshares/detail/' + weshareId, cache: $templateCache}).
         success(function (data, status) {
           vm.weshare = data['weshare'];
-          if (vm.weshare.addresses.length == 1) {
+          vm.commentData = data['comment_data'];
+          vm.orderComments = vm.commentData['order_comments'];
+          if (vm.weshare.addresses&&vm.weshare.addresses.length == 1) {
             vm.weshare.selectedAddressId = vm.weshare.addresses[0].id;
           }
-          else if (vm.weshare.addresses.length > 1) {
+          else if (vm.weshare.addresses&&vm.weshare.addresses.length > 1) {
             vm.weshare.addresses.unshift({id: -1, address: '请选择收货地址'});
             vm.weshare.selectedAddressId = -1;
           }
@@ -300,6 +310,29 @@
       vm.shipSetId = getShipSetId();
       totalPrice += vm.shipFee;
       vm.orderTotalPrice = totalPrice / 100;
+    }
+
+    function getOrderComment(order_id){
+      return vm.commentData['order_comments'][order_id];
+    }
+
+    function getOrderCommentLength(){
+      if(vm.commentData['order_comments']){
+        return Object.keys(vm.commentData['order_comments']).length;
+      }
+      return 0;
+    }
+
+    function getReplyComments(comment_id){
+      return vm.commentData['comment_replies'][comment_id];
+    }
+
+    function showReplies(comment_id){
+      var replies = vm.commentData['comment_replies'][comment_id];
+      if(!replies||replies.length==0){
+        return false;
+      }
+      return true;
     }
 
     function getShipSetId(){
@@ -460,6 +493,51 @@
       });
     }
 
+    function reloadCommentData() {
+      $http({method: 'GET', url: '/weshares/loadComment/' + vm.weshare.id, cache: $templateCache}).
+        success(function (data) {
+          vm.commentData = data;
+        }).
+        error(function (data) {
+          $log.log(data);
+        });
+    }
+
+    function submitComment() {
+      if (vm.submitCommentProcessing) {
+        return;
+      }
+      vm.submitCommentProcessing = true;
+      $http.post('/weshares/comment/', vm.commentData).success(function (data) {
+        if (data.success) {
+          vm.submitCommentProcessing = false;
+          vm.reloadCommentData();
+        } else {
+          vm.submitCommentProcessing = false;
+        }
+      }).error(function () {
+        vm.submitCommentProcessing = false;
+      });
+    }
+
+    function showCommentListDialog(){
+      ngDialog.open({template: 'commentListDialog', scope: $scope});
+    }
+
+    function showCommentDialog(order,comment_id){
+      /**
+       $order_id = $params['order_id'];
+       $comment_content = $params['comment_content'];
+       $reply_comment_id = $params['reply_comment_id'];
+       $comment_uid = $params['user_id'];
+       $share_id = $params['share_id'];
+       */
+      vm.commentData.order_id = order.id;
+      vm.commentData.reply_comment_id = comment_id||0;
+      vm.commentData.share_id=vm.weshare.id;
+      ngDialog.open({template: 'commentDialog', scope: $scope});
+    }
+
     function getStatusName(status,orderType){
       if(status == 1){
         return '待发货';
@@ -471,10 +549,7 @@
         return '待取货';
       }
       if(status == 3){
-        if(orderType == 'kuai_di'){
-          return '已签收';
-        }
-        return '已取货';
+        return '待评价';
       }
       return '已完成';
     }

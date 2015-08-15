@@ -3,7 +3,8 @@
         <li><img ng-src="{{vm.weshare.creator.image||'/img/default_user_icon.jpg'}}" ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/></li>
         <li>
             <label ng-click="vm.toUserShareInfo(vm.weshare.creator.id)" ng-bind="vm.weshare.creator.nickname"></label>
-            <s><b style="color: #ffa200" ng-bind="vm.userShareSummery.share_count">0</b>&nbsp; <small>分享</small>&nbsp;&nbsp;&nbsp;<b style="color: #ffa200" ng-bind="vm.userShareSummery.follower_count">0</b>&nbsp;<small>粉丝</small></s>
+            <s ng-if="vm.getOrderCommentLength()<15"><b style="color: #ffa200" ng-bind="vm.userShareSummery.share_count">0</b>&nbsp; <small>分享</small>&nbsp;&nbsp;&nbsp;<b style="color: #ffa200" ng-bind="vm.userShareSummery.follower_count">0</b>&nbsp;<small>粉丝</small></s>
+            <s ng-if="vm.getOrderCommentLength()>=15"><b style="color: #ffa200" ng-bind="vm.getOrderCommentLength()">0</b>&nbsp; <small>爱心评价</small><a style="margin-top: 0px;width: 65px;line-height: 0;margin-left: 10px;display: inline;" class="statistics-btn" ng-click="vm.showCommentListDialog()">点击查看</a></s>
             <s>已有<span ng-bind="vm.ordersDetail.summery.all_buy_user_count"></span>人报名</s>
         </li>
         <li ng-if="vm.userShareSummery.follower_count>=50" style="margin-left: 5px;"><label style="font-size: 13px;color: #ffa200; height: 20px;padding-left: 0;">分享达人</label></li>
@@ -53,16 +54,20 @@
     <div class="orders">
         <ul class="order clearfix margin-bottom-12" ng-class="{'my-order': vm.isOwner(order)}" ng-repeat="order in vm.ordersDetail.orders">
             <li class='buyer-image'><img ng-click="vm.toUserShareInfo(order.creator)" ng-src="{{vm.ordersDetail.users[order.creator]['image']||'/img/default_user_icon.jpg'}}"/></li>
-            <li class="detail">
+            <li class="detail" ng-if='order.status!=9'>
                 <b></b>
                 <p><strong class='buyer-name' ng-bind="vm.ordersDetail.users[order.creator]['nickname']"></strong> 已经报名
+                    <span ng-if="order.status==9" class="done-status"><i class="fa fa-heart fa-2x"></i></span>
+                    <strong ng-if="order.status==21" class="paid-status">待发货</strong>
                     <strong ng-if="order.status==2" class="shipped-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong>
                     <strong ng-if="order.status==3" class="received-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong>
                     <strong ng-if="order.status==1" class="paid-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong>
-                    <strong ng-if="order.status==21" class="paid-status">待发货</strong>
                 </p>
                 <span class='display-name' ng-hide="_.isEmpty(vm.getOrderDisplayName(order.id))" ng-bind="vm.getOrderDisplayName(order.id)"></span>
-                <span class='created-at' ng-bind="order.created"></span>
+                <div style="display: inline-flex;width: 100%;">
+                    <div><span class='created-at' ng-bind="order.created"></span></div>
+                    <div style="float: right;margin-left: 40%;" ng-if="order.status==3&&vm.isOwner(order)" ng-click="vm.showCommentDialog(order)"><div class="commenting-o"><i class="fa fa-commenting-o fa-2x"></i></div></div>
+                </div>
                 <div class="send-info" ng-if="vm.isOwner(order)">
                     <span>姓名:</span>
                     <span ng-bind="order.consignee_name"></span>
@@ -77,6 +82,23 @@
                     <a class="btn order-confirmed-btn" ng-show="order.status==3"><span ng-if="order.ship_mark=='pys_zi_ti' || order.ship_mark=='self_zi_ti'">已收货</span><span ng-if="order.ship_mark=='kuai_di'">已签收</span></a>
                 </div>
                 <span ng-if='vm.isShowShipCode(order);' class="display-name" style="background: darkgray;" ng-bind="vm.getShipCode(order);"></span>
+            </li>
+            <li class="detail" ng-if='order.status==9' ng-init='comment = vm.getOrderComment(order.id)'>
+                <b></b>
+                <p><strong class='buyer-name' ng-bind="vm.ordersDetail.users[order.creator]['nickname']"></strong>
+                    <span class="done-status"><i class="fa fa-heart fa-2x"></i></span>
+                </p>
+                <span class='display-name' ng-hide="_.isEmpty(comment.body)" ng-bind="comment.body"></span>
+                <div style="display: inline-flex;width: 97%;">
+                    <div style="display: inline-flex;width: 100%;"><span class="small-order-info" ng-bind="vm.getOrderDisplayName(order.id)"></span><span class='created-at' ng-bind="order.created"></span></div>
+                    <div style="float: right;" ng-if="order.status==9" ng-click="vm.showCommentDialog(order,comment.id)"><div class="commenting-o"><i class="fa fa-commenting-o fa-2x"></i></div></div>
+                </div>
+                <div class="send-info" ng-if="vm.showReplies(comment.id)">
+                    <div ng-repeat="reply in vm.getReplyComments(comment.id)" ng-click="vm.showCommentDialog(order,reply.id)" style="margin-bottom: 8px;">
+                        <span ng-bind="reply.username" style="font-size: 16px;color:#6EAFD5;"></span>
+                        <span ng-bind="reply.body" style="word-break: break-all;"></span>
+                    </div>
+                </div>
             </li>
         </ul>
     </div>
@@ -132,3 +154,29 @@
     </div>
 </div>
 <div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showLayer=false;vm.showBuyingDialog=false;vm.showShareDialog=false;vm.showNotifyShareDialog=false;vm.showNotifyShareOfferDialog=false;vm.showNotifyGetPacketDialog=false;"></div>
+<script type="text/ng-template" id="commentDialog">
+    <div class="ngdialog-message">
+        <h3>填写评论</h3>
+        <textarea style='width: 100%;height: 70px;font-size: medium;' ng-model="vm.commentData.comment_content"></textarea>
+    </div>
+    <div class="ngdialog-buttons mt">
+        <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="vm.submitComment();closeThisDialog();">提交</button>
+    </div>
+</script>
+<script type="text/ng-template" id="commentListDialog">
+    <div class="comment_list_box">
+        <div id="box_title"><span ng-bind="vm.getOrderCommentLength()"></span>爱心评价</div>
+        <div id="con">
+            <div class="bottomcover" style="z-index:2;"></div>
+            <ul>
+                <li ng-repeat="orderComment in vm.orderComments">
+                    <div class="div_left"><img ng-src="{{vm.ordersDetail.users[orderComment.user_id]['image']}}"></div>
+                    <div class="div_right">
+                        <span ng-bind="orderComment.username"></span>：<p ng-bind="orderComment.body" style="word-break: break-all;display: inline;"></p>
+                        <div class="twit_item_time" ng-bind="orderComment.created"></div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</script>

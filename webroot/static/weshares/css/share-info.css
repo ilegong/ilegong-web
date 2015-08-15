@@ -1,8 +1,9 @@
-.user_name{
-    font-size:14px;
+.user_name {
+    font-size: 14px;
     font-weight: bold;
 }
-.comments-list .media{
+
+.comments-list .media {
     border-bottom: 1px dotted #ccc;
 }
 
@@ -14,7 +15,6 @@ Licensed under MIT
 
 /* Tabs panel */
 .tabbable-panel {
-    border:1px solid #eee;
     padding: 10px;
 }
 
@@ -23,42 +23,53 @@ Licensed under MIT
     border: none;
     margin: 0px;
 }
+
 .tabbable-line > .nav-tabs > li {
     margin-right: 2px;
 }
+
 .tabbable-line > .nav-tabs > li > a {
     border: 0;
     margin-right: 0;
     color: #737373;
 }
+
 .tabbable-line > .nav-tabs > li > a > i {
     color: #a6a6a6;
 }
+
 .tabbable-line > .nav-tabs > li.open, .tabbable-line > .nav-tabs > li:hover {
     border-bottom: 4px solid #fbcdcf;
 }
+
 .tabbable-line > .nav-tabs > li.open > a, .tabbable-line > .nav-tabs > li:hover > a {
     border: 0;
     background: none !important;
     color: #333333;
 }
+
 .tabbable-line > .nav-tabs > li.open > a > i, .tabbable-line > .nav-tabs > li:hover > a > i {
     color: #a6a6a6;
 }
+
 .tabbable-line > .nav-tabs > li.open .dropdown-menu, .tabbable-line > .nav-tabs > li:hover .dropdown-menu {
     margin-top: 0px;
 }
+
 .tabbable-line > .nav-tabs > li.active {
     border-bottom: 4px solid #f3565d;
     position: relative;
 }
+
 .tabbable-line > .nav-tabs > li.active > a {
     border: 0;
     color: #333333;
 }
+
 .tabbable-line > .nav-tabs > li.active > a > i {
     color: #404040;
 }
+
 .tabbable-line > .tab-content {
     margin-top: -3px;
     background-color: #fff;
@@ -66,6 +77,7 @@ Licensed under MIT
     border-top: 1px solid #eee;
     padding: 15px 0;
 }
+
 .portlet .tabbable-line > .tab-content {
     padding-bottom: 0;
 }
@@ -75,36 +87,79 @@ Licensed under MIT
 .tabbable-line.tabs-below > .nav-tabs > li {
     border-top: 4px solid transparent;
 }
+
 .tabbable-line.tabs-below > .nav-tabs > li > a {
     margin-top: 0;
 }
+
 .tabbable-line.tabs-below > .nav-tabs > li:hover {
     border-bottom: 0;
     border-top: 4px solid #fbcdcf;
 }
+
 .tabbable-line.tabs-below > .nav-tabs > li.active {
     margin-bottom: -2px;
     border-bottom: 0;
     border-top: 4px solid #f3565d;
 }
+
 .tabbable-line.tabs-below > .tab-content {
     margin-top: -10px;
     border-top: 0;
     border-bottom: 1px solid #eee;
     padding-bottom: 15px;
 }
-.user-details {position: relative; padding: 0;}
-.user-details .user-image {position: relative;  z-index: 1; width: 100%; text-align: center;}
-.user-image img { clear: both; margin: auto; position: relative;}
-.user-details .user-info-block {width: 100%; position: absolute; top: 55px; background: rgb(255, 255, 255); z-index: 0; padding-top: 35px;}
-.user-info-block .user-heading {width: 100%; text-align: center; margin: 10px 0 0;}
-.user-info-block .navigation {float: left; width: 100%; margin: 0; padding: 0; list-style: none; border-bottom: 1px solid #428BCA; border-top: 1px solid #428BCA;}
+
+.user-details {
+    position: relative;
+    padding: 0;
+    margin-bottom: 10px;
+}
+
+.user-details .user-image {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    text-align: center;
+}
+
+.user-image img {
+    clear: both;
+    margin: auto;
+    position: relative;
+}
+
+.user-details .user-info-block {
+    width: 100%;
+    margin-top: -55px;
+    background: rgb(255, 255, 255);
+    z-index: 0;
+    padding-top: 35px;
+}
+
+.user-info-block .user-heading {
+    width: 100%;
+    text-align: center;
+    margin: 10px 0 0;
+    padding-bottom: 10px;
+}
+
+.user-info-block .navigation {
+    float: left;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-bottom: 1px solid #428BCA;
+    border-top: 1px solid #428BCA;
+}
 
 .qa-message-list .message-item {
     margin-bottom: 25px;
     margin-left: 40px;
     position: relative;
 }
+
 .qa-message-list .message-item .message-inner {
     background: #fff;
     border: 1px solid #ddd;
@@ -112,11 +167,12 @@ Licensed under MIT
     padding: 10px;
     position: relative;
 }
+
 .qa-message-list .message-item .message-inner:before {
     border-right: 10px solid #ddd;
     border-style: solid;
     border-width: 10px;
-    color: rgba(0,0,0,0);
+    color: rgba(0, 0, 0, 0);
     content: "";
     display: block;
     height: 0;
@@ -125,11 +181,12 @@ Licensed under MIT
     top: 6px;
     width: 0;
 }
+
 .qa-message-list .message-item .message-inner:after {
     border-right: 10px solid #fff;
     border-style: solid;
     border-width: 10px;
-    color: rgba(0,0,0,0);
+    color: rgba(0, 0, 0, 0);
     content: "";
     display: block;
     height: 0;
@@ -138,22 +195,24 @@ Licensed under MIT
     top: 6px;
     width: 0;
 }
+
 .qa-message-list .message-item:before {
     background: #fff;
     border-radius: 2px;
     bottom: -30px;
-    box-shadow: 0 0 3px rgba(0,0,0,0.2);
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
     content: "";
     height: 100%;
     left: -30px;
     position: absolute;
     width: 3px;
 }
+
 .qa-message-list .message-item:after {
     background: #fff;
     border: 2px solid #ccc;
     border-radius: 50%;
-    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     content: "";
     height: 15px;
     left: -36px;
@@ -161,51 +220,121 @@ Licensed under MIT
     top: 10px;
     width: 15px;
 }
+
 .qa-message-list .clearfix:before, .clearfix:after {
     content: " ";
     display: table;
 }
+
 .qa-message-list .message-item .message-head {
     border-bottom: 1px solid #eee;
     margin-bottom: 8px;
     padding-bottom: 8px;
 }
+
 .qa-message-list .message-item .message-head .avatar {
     margin-right: 20px;
 }
+
 .qa-message-list .message-item .message-head .user-detail {
     overflow: hidden;
 }
+
 .qa-message-list .message-item .message-head .user-detail h5 {
     font-size: 16px;
     font-weight: bold;
     margin: 0;
 }
+
 .qa-message-list .message-item .message-head .post-meta {
     float: left;
     padding: 0 15px 0 0;
 }
-.qa-message-list .message-item .message-head .post-meta >div {
+
+.qa-message-list .message-item .message-head .post-meta > div {
     color: #333;
     font-weight: bold;
     text-align: right;
 }
+
 .qa-message-list .post-meta > div {
     color: #777;
     font-size: 12px;
     line-height: 22px;
 }
-.qa-message-list .message-item .message-head .post-meta >div {
+
+.qa-message-list .message-item .message-head .post-meta > div {
     color: #333;
     font-weight: bold;
     text-align: right;
 }
+
 .qa-message-list .post-meta > div {
     color: #777;
     font-size: 12px;
     line-height: 22px;
 }
+
 .qa-message-list img {
     min-height: 40px;
     max-height: 40px;
+}
+
+/* Testimonials */
+.testimonials blockquote {
+    background: #f8f8f8 none repeat scroll 0 0;
+    border: medium none;
+    color: #666;
+    display: block;
+    font-size: 14px;
+    line-height: 20px;
+    padding: 15px;
+    position: relative;
+}
+
+.testimonials blockquote::before {
+    width: 0;
+    height: 0;
+    right: 0;
+    bottom: 0;
+    content: " ";
+    display: block;
+    position: absolute;
+    border-bottom: 20px solid #fff;
+    border-right: 0 solid transparent;
+    border-left: 15px solid transparent;
+    border-left-style: inset; /*FF fixes*/
+    border-bottom-style: inset; /*FF fixes*/
+}
+
+.testimonials blockquote::after {
+    width: 0;
+    height: 0;
+    right: 0;
+    bottom: 0;
+    content: " ";
+    display: block;
+    position: absolute;
+    border-style: solid;
+    border-width: 20px 20px 0 0;
+    border-color: #e63f0c transparent transparent transparent;
+}
+
+.message-wrap {
+    box-shadow: 0 0 3px #ddd;
+    padding: 0;
+
+}
+
+.msg {
+    padding: 5px;
+    /*border-bottom:1px solid #ddd;*/
+    margin: 0;
+}
+
+.msg-wrap {
+    padding: 10px;
+    max-height: 400px;
+    overflow: auto;
+
 }

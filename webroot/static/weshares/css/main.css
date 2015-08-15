@@ -80,19 +80,23 @@ ul li { list-style: none; }
 .weshare-view .orders .order .buyer-name{ color: #29AC0E;}
 .weshare-view .orders .order .paid-status{color: #5BC0DE; float: right;}
 .weshare-view .orders .order .shipped-status{color: #29AC0E; float: right;}
+.weshare-view .orders .order .done-status{float: right;color: #E86C27;}
 .weshare-view .orders .order .received-status{color: #EC971F; float: right;}
 .weshare-view .orders .order .detail{ width: 80%; border-radius: 5px; margin-left: 10px; border: 1px #eaeaea solid; background-color: #ffffff; position: relative;}
 .weshare-view .orders .order .detail b{ display: block;width: 6px;height: 12px;position: absolute;left: -6px;top: 12px;background: url(../images/weifxicon.png) no-repeat -25px -35px;background-size: 100px 100px;}
 .weshare-view .orders .order .detail p{ padding: 10px; text-decoration: none; color: #bbbbbb; font-size: 14px;}
-.weshare-view .orders .order .detail .display-name{ display: block; padding: 0 10px 10px 10px; line-height: 18px; color: #333333; font-style: normal;}
+.weshare-view .orders .order .detail .display-name{ display: block; padding: 0 10px 10px 10px; line-height: 18px; color: #333333; font-style: normal;word-break: break-all;}
 .weshare-view .orders .order .created-at{ font-size: 12px; color: #bbbbbb; padding: 0 10px 10px; display: block;}
+.weshare-view .orders .order .small-order-info{ font-size: 12px; color: #bbbbbb; padding: 0 0 10px 10px; display: block;}
 .weshare-view .orders .order .send-info {background-color: #f8f8f8;border-top: 1px #eaeaea solid;padding: 10px;}
 .weshare-view .orders .order .send-info .confirm-btn {display: block;text-decoration: none;border-radius: 3px;border: 1px #29AC0E solid;background-color: #ffffff;color: #29AC0E;font-size: 14px;text-align: center;line-height: 26px;width: 70px;margin-top: 10px;}
 .weshare-view .orders .order .send-info .order-confirmed-btn {display: block;text-decoration: none;border-radius: 3px;border: 1px #eeeeee solid;background-color: #eeeeee;color: #999999;font-size: 14px;text-align: center;line-height: 26px;width: 70px;margin-top: 10px;}
+.weshare-view .orders .order .commenting-o{margin-top: -15px;float: right; color: #263A40;}
 .weshare-view .orders .order.my-order .buyer-image, .weshare-view .orders .order.my-order .detail{ float: right;}
 .weshare-view .orders .order.my-order .detail{ margin-left: 0; margin-right: 10px; background-color: #c9edc1; border: 1px #b3e1aa solid;}
 .weshare-view .orders .order.my-order .detail b{ background-position: -35px -35px;right: -6px;left: inherit;}
 .weshare-view .orders .order.my-order .send-info{ background-color: #a3d997;border-top: 1px #a3d997 solid;}
+
 
 .normal-btn{ width: 100%; line-height: 44px; text-align: center; background-color: #ffa200; color: #ffffff; font-size: 18px; text-decoration: none; display: block; position: fixed;bottom: 0; left: 0;}
 .stop-btn{ width: 100%; line-height: 44px; text-align: center; background-color: #cccccc; color: #ffffff; font-size: 18px; text-decoration: none; display: block; position: fixed;bottom: 0; left: 0;}
@@ -118,6 +122,19 @@ ul li { list-style: none; }
 .statistics-dialog ul{ width: 80%; margin: 0 auto;}
 .statistics-dialog ul li strong {color: #ffa200;}
 .share-dialog {width: 100%;background-color: #ffffff;color: #c73c3c;position: fixed;z-index: 5;left: 0;top: 0;text-align: center;font-weight: bold;padding: 40px 0;}
+
+.comment_list_box #box_title{width:100%;font-weight:bold;line-height:28px;font-size:20px;text-align: center;}
+.comment_list_box #box_title span{color: #ff0000}
+/* con */
+.comment_list_box #con{margin:0px auto;position:relative;border-top:1px solid #d6d6d6;background-color:#FFF;overflow:hidden;}
+.comment_list_box #con .bottomcover{position:absolute;bottom:0;background:url("../images/halftransp.png") no-repeat 0 -5px;height:35px;width:394px;_background:none;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/halftransp.png', sizingMethod='crop');pointer-events:none;}
+.comment_list_box #con ul{position:relative;margin:0px 10px 0px 10px;top:0;left:0;padding:0;}
+.comment_list_box #con ul li{width:100%;border-top:1px dotted #d6d6d6;padding:10px 0;_padding:8px 0;overflow:hidden;line-height:1.5;}
+.comment_list_box #con ul li .div_left{float:left;width: 20%;height: 50px;}
+.comment_list_box #con ul li .div_left img{width: 50px;height: 50px;}
+.comment_list_box #con ul li .div_right{float:right;width: 80%;}
+.comment_list_box #con ul li .div_right span{color:#6EAFD5;padding:0px;}
+.comment_list_box #con ul li .div_right .twit_item_time{color:#999;padding:0px;}
 
 
 .moreicon { position: absolute; top: 50%; margin-top: -0.7em; right: 0.6em; display: block; width: 0.667em; height: 1.334em; background: url(../images/pyshuo_icon.png) 0 -16.875em no-repeat; background-size: 25em 25em;}

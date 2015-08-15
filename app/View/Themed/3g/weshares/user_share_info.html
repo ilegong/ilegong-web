@@ -2,24 +2,53 @@
 <div class="row" style="background: #EAEAEA;">
     <div class="col-md-12 user-details">
         <div class="user-image">
-            <img style="width: 100px;height: 100px;" onerror="this.src='/img/default_user_icon.jpg'" src="{{$share_user['image']}}" alt="{{$share_user['nickname']}}" title="{{$share_user['nickname']}}" class="img-circle">
+            <img style="width: 100px;height: 100px;" onerror="this.src='/img/default_user_icon.jpg'"
+                 src="{{$share_user['image']}}" alt="{{$share_user['nickname']}}" title="{{$share_user['nickname']}}"
+                 class="img-circle">
         </div>
         <div class="user-info-block">
             <div class="user-heading">
                 <h3>{{$share_user['nickname']}}</h3>
-                <span class="help-block"><strong style="color: #ffa200">{{$share_count}}</strong>&nbsp;&nbsp; <small>分享</small>&nbsp;&nbsp;<strong style="color: #ffa200">{{$follower_count}}</strong>&nbsp;&nbsp; <small>粉丝</small></span>
-                {{if $share_user['description']}}
-                    <span class="help-block">{{mb_substr($share_user['description'],0,150)}}...</span>
+                <span class="label label-warning">官方认证</span>
+                <span class="label label-info">好邻居支持</span>
+                {{if $sharer_comment_data['comment_count']>0}}
+                    <div style="margin-top: 10px;margin-bottom: 10px;">
+                        <span>{{$sharer_comment_data['comment_count']}}条爱心评价</span>
+                        <button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#commentListModal">点击查看</button>
+                    </div>
                 {{/if}}
-                <a class="btn btn-info" href="/weshares/add" role="button">我要分享</a>
+                {{if $sharer_comment_data['comment_count']>0}}
+                <hr style="margin: 0;">
+                <div style="text-align: left;">
+                    <h4>回复率</h4>
+                    <div class="testimonials">
+                        <div class="active item">
+                            <blockquote><p>{{$this->Number->precision($sharer_comment_data['reply_percent'], 2);}}%</p></blockquote>
+                        </div>
+                    </div>
+                </div>
+                {{/if}}
+                <hr style="margin: 0;">
+                <div style="text-align: left;">
+                    <h4>关于</h4>
+                    {{if $share_user['description']}}
+                    <div class="testimonials">
+                        <div class="active item">
+                            <blockquote><p>{{mb_substr($share_user['description'],0,200)}}</p></blockquote>
+                        </div>
+                    </div>
+                    {{/if}}
+                </div>
+                <hr style="margin: 0;">
+                <span class="help-block"><strong style="color: #ffa200">{{$share_count}}</strong>&nbsp;&nbsp; <small>
+                    分享
+                </small>&nbsp;&nbsp;<strong style="color: #ffa200">{{$follower_count}}</strong>&nbsp;&nbsp; <small>粉丝
+                </small></span>
+                <!--<a class="btn btn-info" href="/weshares/add" role="button">我要分享</a>-->
             </div>
         </div>
     </div>
 </div>
-<br/><br/><br/><br/>
-{{if $share_user['description']}}
-<br/><br/><br/><br/><br/><br/><br/>
-{{/if}}
 <div class="row">
     <div class="col-md-12">
         <div class="tabbable-panel">
@@ -60,12 +89,46 @@
         </div>
     </div>
 </div>
+{{if $sharer_comment_data['comment_count']>0}}
+<div class="modal fade" id="commentListModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">{{$sharer_comment_data['comment_count']}}爱心评价</h4>
+            </div>
+            <div class="modal-body">
+                <div class="message-wrap">
+                    <div class="msg-wrap">
+                        {{loop $sharer_comment_data['comments'] $comment}}
+                        <div class="media msg">
+                            <a class="pull-left" href="#">
+                                <img class="media-object" data-src="holder.js/64x64" alt="64x64" style="width: 32px; height: 32px;" src="{{$sharer_comment_data['comment_users'][$comment['Comment']['user_id']]['image']}}">
+                            </a>
+                            <div class="media-body">
+                                <small class="pull-right time"><i class="fa fa-clock-o"></i>{{friendlyDateFromStr($comment['Comment']['created'], FFDATE_CH_MD);}}</small>
+
+                                <h5 class="media-heading">{{$comment['Comment']['username']}}</h5>
+                                <small class="col-lg-10">{{$comment['Comment']['body']}}</small>
+                            </div>
+                        </div>
+                        {{/loop}}
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+{{/if}}
 <script>
-    $(document).ready(function(){
-        $('div.media-body').on('click',function(){
+    $(document).ready(function () {
+        $('div.media-body').on('click', function () {
             var $me = $(this);
             var id = $me.data('id');
-            window.location.href='/weshares/view/'+id;
+            window.location.href = '/weshares/view/' + id;
         });
     });
 </script>

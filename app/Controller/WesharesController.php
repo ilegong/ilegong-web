@@ -36,7 +36,7 @@ class WesharesController extends AppController {
         if (!empty($shared_offer_id)) {
             //process
             $this->process_shared_offer($shared_offer_id);
-        }else{
+        } else {
             $weshare = $this->Weshare->find('first', array('conditions' => array('id' => $weshare_id)));
             $weshare_creator = $weshare['Weshare']['creator'];
             $shared_offers = $this->SharedOffer->find_new_offers_by_weshare_creator($uid, $weshare_creator);
@@ -141,13 +141,13 @@ class WesharesController extends AppController {
         $this->saveWeshareAddresses($weshare['Weshare']['id'], $addressesData);
         $this->saevWeshareShipType($weshare['Weshare']['id'], $shipSetData);
         if ($saveBuyFlag) {
-            if(empty($weshareData['id'])){
+            if (empty($weshareData['id'])) {
                 $this->WeshareBuy->send_new_share_msg($weshare['Weshare']['id']);
             }
             echo json_encode(array('success' => true, 'id' => $weshare['Weshare']['id']));
             return;
         } else {
-            echo json_encode(array('success' => false,'uid' => $uid));
+            echo json_encode(array('success' => false, 'uid' => $uid));
             return;
         }
     }
@@ -175,7 +175,18 @@ class WesharesController extends AppController {
         $share_ship_set = $this->sharer_can_use_we_ship($weshareInfo['creator']['id']);
         $my_coupon_items = $this->get_can_used_coupons($uid, $creatorId);
         $weshare_ship_settings = $this->getWeshareShipSettings($weshareId);
-        echo json_encode(array('support_pys_ziti' => $share_ship_set, 'weshare' => $weshareInfo, 'ordersDetail' => $ordersDetail, 'current_user' => $current_user['User'], 'weixininfo' => $weixinInfo, 'weshare_ship_settings' => $weshare_ship_settings , 'consignee' => $consignee, 'user_share_summery' => $user_share_summery, 'my_coupons' => $my_coupon_items[0]));
+        $comment_data = $this->WeshareBuy->load_comment_by_share_id($weshareId);
+        echo json_encode(array('support_pys_ziti' => $share_ship_set,
+            'weshare' => $weshareInfo,
+            'ordersDetail' => $ordersDetail,
+            'current_user' => $current_user['User'],
+            'weixininfo' => $weixinInfo,
+            'weshare_ship_settings' => $weshare_ship_settings,
+            'consignee' => $consignee,
+            'user_share_summery' => $user_share_summery,
+            'my_coupons' => $my_coupon_items[0],
+            'comment_data' => $comment_data
+        ));
         return;
     }
 
@@ -231,7 +242,7 @@ class WesharesController extends AppController {
             $shipType = $shipInfo['ship_type'];
             $shipSetId = $shipInfo['ship_set_id'];
             $shipSetting = $this->get_ship_set($shipSetId, $weshareId);
-            if(empty($shipSetting)){
+            if (empty($shipSetting)) {
                 echo json_encode(array('success' => false, 'msg' => '物流方式选择错误'));
                 return;
             }
@@ -319,8 +330,7 @@ class WesharesController extends AppController {
             echo json_encode(array(success => false, reason => 'only owner or creator '));
             return;
         }
-
-        $result = $this->Order->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('id' => $order['Order']['id']));
+        $result = $this->Order->updateAll(array('status' => ORDER_STATUS_RECEIVED, 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order['Order']['id']));
         $this->Cart->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order['Order']['id']));
         if (!$result) {
             echo json_encode(array(success => false, reason => "failed to update order status"));
@@ -337,21 +347,6 @@ class WesharesController extends AppController {
         echo json_encode(array('success' => true));
     }
 
-    public function share_list() {
-        $this->layout = 'weshare_bootstrap';
-        $weshares = $this->Weshare->find('all', array(
-            'fields' => array('DISTINCT creator'),
-            'limit' => 100
-        ));
-        $weshares_creator = Hash::extract($weshares, '{n}.Weshare.creator');
-        $share_users = $this->User->find('all', array(
-            'conditions' => array(
-                'id' => $weshares_creator
-            ),
-            'fields' => $this->query_user_fileds
-        ));
-    }
-
     public function user_share_info($uid = null) {
         $this->layout = 'weshare_bootstrap';
         $current_uid = $this->currentUser['id'];
@@ -364,6 +359,7 @@ class WesharesController extends AppController {
             ),
             'order' => array('created DESC')
         ));
+        $my_create_share_ids = Hash::extract($myCreateShares, '{n}.Weshare.id');
         $orderStatus = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED);
         if ($uid != $current_uid) {
             $orderStatus[] = ORDER_STATUS_VIRTUAL;
@@ -416,6 +412,7 @@ class WesharesController extends AppController {
             $this->set('add_view', true);
         }
         $userShareSummery = $this->getUserShareSummery($uid, $uid == $current_uid);
+        $shareCommentData = $this->getSharerCommentData($my_create_share_ids, $uid);
         $this->explode_share_imgs($myCreateShares);
         $this->explode_share_imgs($myJoinShares);
         $this->set($userShareSummery);
@@ -424,6 +421,7 @@ class WesharesController extends AppController {
         $this->set('creators', $creators);
         $this->set('my_create_shares', $myCreateShares);
         $this->set('my_join_shares', $myJoinShares);
+        $this->set('sharer_comment_data', $shareCommentData);
     }
 
     public function set_order_ship_code() {
@@ -432,7 +430,7 @@ class WesharesController extends AppController {
         $ship_company_id = $_REQUEST['company_id'];
         $weshare_id = $_REQUEST['weshare_id'];
         $ship_code = $_REQUEST['ship_code'];
-        $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'ship_type' => $ship_company_id, 'ship_code' => "'" . $ship_code . "'"), array('id' => $order_id, 'status' => ORDER_STATUS_PAID));
+        $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'ship_type' => $ship_company_id, 'ship_code' => "'" . $ship_code . "'", 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order_id, 'status' => ORDER_STATUS_PAID));
         $this->Cart->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order_id));
         $this->WeshareBuy->send_share_product_ship_msg($order_id, $weshare_id);
         echo json_encode(array('success' => true));
@@ -460,7 +458,7 @@ class WesharesController extends AppController {
             'fields' => array('id')
         ));
         $prepare_update_order_ids = Hash::extract($prepare_update_orders, '{n}.Order.id');
-        $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED), array('id' => $prepare_update_order_ids));
+        $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $prepare_update_order_ids));
         $this->Cart->updateAll(array('status' => ORDER_STATUS_SHIPPED), array('order_id' => $prepare_update_order_ids));
         $this->process_send_msg($share_info, $msg);
         echo json_encode(array('success' => true));
@@ -473,20 +471,44 @@ class WesharesController extends AppController {
         $weshare = $this->Weshare->find('first', array(
             'conditions' => array('id' => $weshareId, 'creator' => $user_id)
         ));
-        if(empty($weshare)){
-            $this->redirect("/weshares/view/".$weshareId);
+        if (empty($weshare)) {
+            $this->redirect("/weshares/view/" . $weshareId);
         }
         $statics_data = $this->get_weshare_buy_info($weshareId, true, true);
         $this->set($statics_data);
-        $this->set('ship_type_list',ShipAddress::ship_type_list());
+        $this->set('ship_type_list', ShipAddress::ship_type_list());
         $this->set('hide_footer', true);
         $this->set('user_id', $user_id);
         $this->set('weshareId', $weshareId);
     }
 
+    public function loadComment($weshareId) {
+        $this->autoRender = false;
+        $comment_data = $this->WeshareBuy->load_comment_by_share_id($weshareId);
+        echo json_encode($comment_data);
+        return;
+    }
+
+    public function comment() {
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        if (empty($uid)) {
+            echo json_encode(array('success' => false, 'reason' => 'not_login'));
+            return;
+        }
+        $params = json_decode(file_get_contents('php://input'), true);
+        $order_id = $params['order_id'];
+        $comment_content = $params['comment_content'];
+        $reply_comment_id = $params['reply_comment_id'];
+        $share_id = $params['share_id'];
+        $result = $this->WeshareBuy->create_share_comment($order_id, $comment_content, $reply_comment_id, $uid, $share_id);
+        echo json_encode($result);
+        return;
+    }
+
     //TODO delete not use product
     private function saveWeshareProducts($weshareId, $weshareProductData) {
-        if(empty($weshareProductData)){
+        if (empty($weshareProductData)) {
             return;
         }
         foreach ($weshareProductData as &$product) {
@@ -501,8 +523,8 @@ class WesharesController extends AppController {
     }
 
 
-    private function saevWeshareShipType($weshareId, $weshareShipData){
-        foreach($weshareShipData as &$item){
+    private function saevWeshareShipType($weshareId, $weshareShipData) {
+        foreach ($weshareShipData as &$item) {
             $item['weshare_id'] = $weshareId;
         }
         return $this->WeshareShipSetting->saveAll($weshareShipData);
@@ -510,7 +532,7 @@ class WesharesController extends AppController {
 
     //TODO delete not use address
     private function saveWeshareAddresses($weshareId, $weshareAddressData) {
-        if(empty($weshareAddressData)){
+        if (empty($weshareAddressData)) {
             return;
         }
         foreach ($weshareAddressData as &$address) {
@@ -544,7 +566,7 @@ class WesharesController extends AppController {
                 'weshare_id' => $weshareId
             )
         ));
-        $weshareShipSettings = Hash::combine($weshareShipSettings,'{n}.WeshareShipSetting.tag', '{n}.WeshareShipSetting');
+        $weshareShipSettings = Hash::combine($weshareShipSettings, '{n}.WeshareShipSetting.tag', '{n}.WeshareShipSetting');
         $creatorInfo = $this->User->find('first', array(
             'conditions' => array(
                 'id' => $weshareInfo['Weshare']['creator']
@@ -573,8 +595,8 @@ class WesharesController extends AppController {
         if (!empty($consignee)) {
             //update
             $saveData = array('name' => "'" . $userInfo . "'", 'mobilephone' => "'" . $mobileNum . "'", 'address' => "'" . $address . "'");
-            if($offlineStoreId!=0){
-                $saveData['ziti_id'] =  $offlineStoreId;
+            if ($offlineStoreId != 0) {
+                $saveData['ziti_id'] = $offlineStoreId;
             }
             $this->OrderConsignees->updateAll($saveData, array('id' => $consignee['OrderConsignees']['id']));
             return;
@@ -593,13 +615,17 @@ class WesharesController extends AppController {
         ));
         //load remember offline store id
         $ziti_id = $consignee['OrderConsignees']['ziti_id'];
-        if($ziti_id){
-            $offlineStore  = $this->OfflineStore->findById($ziti_id);
-            if(!empty($offlineStore)){
+        if ($ziti_id) {
+            $offlineStore = $this->OfflineStore->findById($ziti_id);
+            if (!empty($offlineStore)) {
                 $consignee['OrderConsignees']['offlineStore'] = $offlineStore['OfflineStore'];
             }
         }
         return $consignee['OrderConsignees'];
+    }
+
+    private function getSharerCommentData($weshare_ids, $sharer_id) {
+        return $this->WeshareBuy->load_sharer_comment_data($weshare_ids, $sharer_id);
     }
 
     private function getUserShareSummery($uid, $is_me = false) {
@@ -625,13 +651,13 @@ class WesharesController extends AppController {
         return array('share_count' => count($weshares), 'follower_count' => $follower_count);
     }
 
-    private function getWeshareShipSettings($weshareId){
-        $shareShipSettings =$this->WeshareShipSetting->find('all', array(
+    private function getWeshareShipSettings($weshareId) {
+        $shareShipSettings = $this->WeshareShipSetting->find('all', array(
             'conditions' => array(
                 'weshare_id' => $weshareId
             )
         ));
-        $shareShipSettings = Hash::combine($shareShipSettings,'{n}.WeshareShipSetting.tag','{n}.WeshareShipSetting');
+        $shareShipSettings = Hash::combine($shareShipSettings, '{n}.WeshareShipSetting.tag', '{n}.WeshareShipSetting');
         return $shareShipSettings;
     }
 
@@ -742,7 +768,7 @@ class WesharesController extends AppController {
     }
 
     //check order ship type gen order address
-    private function get_order_address($weshareId,$shipInfo,$buyerData,$uid){
+    private function get_order_address($weshareId, $shipInfo, $buyerData, $uid) {
         $shipType = $shipInfo['ship_type'];
         $addressId = $shipInfo['address_id'];
         $customAddress = $buyerData['address'];
@@ -750,10 +776,10 @@ class WesharesController extends AppController {
             $offline_store_id = $addressId;
         }
         $this->setShareConsignees($buyerData['name'], $buyerData['mobilephone'], $buyerData['address'], $uid, $offline_store_id);
-        if($shipType==SHARE_SHIP_KUAIDI){
+        if ($shipType == SHARE_SHIP_KUAIDI) {
             return $customAddress;
         }
-        if($shipType == SHARE_SHIP_SELF_ZITI){
+        if ($shipType == SHARE_SHIP_SELF_ZITI) {
             $tinyAddress = $this->WeshareAddress->find('first', array(
                 'conditions' => array(
                     'id' => $addressId,
@@ -766,7 +792,7 @@ class WesharesController extends AppController {
             }
             return $address;
         }
-        if($shipType == SHARE_SHIP_PYS_ZITI){
+        if ($shipType == SHARE_SHIP_PYS_ZITI) {
             $offline_store = $this->OfflineStore->findById($addressId);
             $address = $offline_store['OfflineStore']['name'];
             if ($customAddress) {
@@ -776,7 +802,7 @@ class WesharesController extends AppController {
         }
     }
 
-    private function get_ship_set($id, $weshareId){
+    private function get_ship_set($id, $weshareId) {
         return $this->WeshareShipSetting->find('first', array(
             'conditions' => array(
                 'id' => $id,
@@ -801,7 +827,7 @@ class WesharesController extends AppController {
             }
         }
         if (strlen($reason) > 0) {
-           return array('success' => false, 'reason' => $reason);
+            return array('success' => false, 'reason' => $reason);
         }
         return null;
     }

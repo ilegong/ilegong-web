@@ -140,6 +140,8 @@ const WESHARE_MSG_SEND = 2;
 
 const WESHARE_DELETE_STATUS = -1;
 
+const COMMENT_SHARE_TYPE = 'Share';
+
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
 define('FORMAT_DATE_YUE_RI_HAN', 'n月j日');
@@ -2187,6 +2189,14 @@ function share_self_ziti_order_filter($var) {
 
 function share_pys_ziti_order_filter($var) {
     return $var['ship_mark'] == SHARE_SHIP_PYS_ZITI_TAG;
+}
+
+function order_comment_filter($var) {
+    return $var['Comment']['parent_id'] == 0;
+}
+
+function order_reply_comment_filter($var) {
+    return $var['Comment']['parent_id'] != 0;
 }
 
 /**

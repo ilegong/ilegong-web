@@ -8,6 +8,14 @@
 
 class Order extends AppModel {
 
+    public function findOrderByConditionsAndFields($cond, $fields) {
+        $order_info = $this->find('first', array(
+            'conditions' => $cond,
+            'fields' => $fields
+        ));
+        return $order_info;
+    }
+
     public function createOrFindGrouponOrder($memberId, $uid, $fee, $product_id, $type = ORDER_TYPE_GROUP, $area='', $address='', $mobile='', $name='') {
         if ($type != ORDER_TYPE_GROUP && $type != ORDER_TYPE_GROUP_FILL) {
             throw new CakeException("error order type:".$type);
@@ -466,4 +474,5 @@ class Order extends AppModel {
             }
         }
     }
+
 }
