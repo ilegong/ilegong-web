@@ -546,7 +546,7 @@
       ngDialog.open({template: 'commentListDialog', scope: $scope});
     }
 
-    function showCommentDialog(order, comment_id) {
+    function showCommentDialog(order, comment) {
       /**
        $order_id = $params['order_id'];
        $comment_content = $params['comment_content'];
@@ -554,9 +554,18 @@
        $comment_uid = $params['user_id'];
        $share_id = $params['share_id'];
        */
+      var reply_comment_id = 0;
+      var comment_tip_info = '';
+      if(comment){
+        reply_comment_id = comment.id||0;
+        comment_tip_info = vm.currentUser.nickname+'对'+comment.username+'说：'
+      }else{
+        comment_tip_info = vm.currentUser.nickname+'对'+vm.weshare.creator.nickname+'说：'
+      }
+      vm.commentTipInfo = comment_tip_info;
       vm.commentOrder = order;
       vm.commentData.order_id = order.id;
-      vm.commentData.reply_comment_id = comment_id || 0;
+      vm.commentData.reply_comment_id = reply_comment_id;
       vm.commentData.share_id = vm.weshare.id;
       vm.submitCommentProcessing = false;
       ngDialog.open({template: 'commentDialog', scope: $scope});
