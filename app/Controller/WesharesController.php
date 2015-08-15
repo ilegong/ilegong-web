@@ -348,21 +348,6 @@ class WesharesController extends AppController {
         echo json_encode(array('success' => true));
     }
 
-    public function share_list() {
-        $this->layout = 'weshare_bootstrap';
-        $weshares = $this->Weshare->find('all', array(
-            'fields' => array('DISTINCT creator'),
-            'limit' => 100
-        ));
-        $weshares_creator = Hash::extract($weshares, '{n}.Weshare.creator');
-        $share_users = $this->User->find('all', array(
-            'conditions' => array(
-                'id' => $weshares_creator
-            ),
-            'fields' => $this->query_user_fileds
-        ));
-    }
-
     public function user_share_info($uid = null) {
         $this->layout = 'weshare_bootstrap';
         $current_uid = $this->currentUser['id'];
