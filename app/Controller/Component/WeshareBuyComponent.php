@@ -415,7 +415,7 @@ class WeshareBuyComponent extends Component {
         if (!empty($weshareId)) {
             $cond['member_id'] = $weshareId;
         }
-        $orders = $orderM->find('first', array(
+        $orders = $orderM->find('all', array(
             'conditions' => $cond
         ));
         $this->process_send_to_comment_msg($orders);
@@ -433,7 +433,7 @@ class WeshareBuyComponent extends Component {
         if (!empty($weshareId)) {
             $cond['member_id'] = $weshareId;
         }
-        $orders = $orderM->find('first', array(
+        $orders = $orderM->find('all', array(
             'conditions' => $cond
         ));
         $order_ids = Hash::extract($orders, '{n}.Order.id');
