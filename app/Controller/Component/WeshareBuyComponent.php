@@ -147,8 +147,19 @@ class WeshareBuyComponent extends Component {
             }
             //send share creator reply msg
             $weshare_info = $this->get_weshare_info($share_id);
-            if ($comment_uid == $weshare_info['creator']) {
+            $reply_comment = $commentM->find('first',array(
+                'conditions' => array(
+                    'id' => $reply_comment_id
+                )
+            ));
+            $reply_comment_uid = $reply_comment['user_id'];
+            $order_uid = $order_info['Order']['creator'];
+            if ($comment_uid == $weshare_info['creator'] && $reply_comment_uid == $order_uid) {
                 $this->send_comment_reply_notify($order_id, $share_id, $comment_content);
+            } elseif ($reply_comment_id == $weshare_info['creator'] && $order_uid == $comment_uid) {
+                $this->send_comment_notify($order_id, $share_id, $comment_content);
+            } else {
+                $this->send_comment_mutual_msg($comment_uid, $reply_comment_uid, $comment_content, $share_id, $order_id);
             }
         }else{
             //update order status
@@ -433,6 +444,19 @@ class WeshareBuyComponent extends Component {
             $order_id = $order_info['Order']['id'];
             $this->Weixin->send_comment_template_msg($open_id, $detail_url, $msg_title, $order_id, $order_date, $desc);
         }
+    }
+
+    public function send_comment_mutual_msg($comment_uid,$reply_id,$content, $share_id,$order_id){
+        $uid_name_map = $this->get_users_nickname(array($comment_uid, $reply_id));
+        $title = $uid_name_map[$reply_id].'你好，'.$uid_name_map[$comment_uid].'对你说：'.$content;
+        $desc = '分享，让生活更美。点击查看。';
+        $detail_url = $this->get_weshares_detail_url($share_id);
+        $order_info = $this->get_order_info($order_id);
+        $order_id = $order_info['id'];
+        $order_date = $order_info['created'];
+        $open_id_map = $this->get_open_ids(array($reply_id));
+        $open_id = $open_id_map[$reply_id];
+        $this->Weixin->send_comment_template_msg($open_id, $detail_url, $title, $order_id, $order_date, $desc);
     }
 
     public function send_comment_notify($order_id, $weshare_id, $comment_content) {
