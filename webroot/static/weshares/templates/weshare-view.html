@@ -3,7 +3,8 @@
         <li><img ng-src="{{vm.weshare.creator.image||'/img/default_user_icon.jpg'}}" ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/></li>
         <li>
             <label ng-click="vm.toUserShareInfo(vm.weshare.creator.id)" ng-bind="vm.weshare.creator.nickname"></label>
-            <s><b style="color: #ffa200" ng-bind="vm.userShareSummery.share_count">0</b>&nbsp; <small>分享</small>&nbsp;&nbsp;&nbsp;<b style="color: #ffa200" ng-bind="vm.userShareSummery.follower_count">0</b>&nbsp;<small>粉丝</small></s>
+            <s ng-if="vm.getOrderCommentLength()<15"><b style="color: #ffa200" ng-bind="vm.userShareSummery.share_count">0</b>&nbsp; <small>分享</small>&nbsp;&nbsp;&nbsp;<b style="color: #ffa200" ng-bind="vm.userShareSummery.follower_count">0</b>&nbsp;<small>粉丝</small></s>
+            <s ng-if="vm.getOrderCommentLength()>=15"><b style="color: #ffa200" ng-bind="vm.getOrderCommentLength()">0</b>&nbsp; <small>爱心评价</small><a style="margin-top: 0px;width: 65px;line-height: 0;margin-left: 10px;display: inline;" class="statistics-btn" ng-click="vm.showCommentListDialog()">点击查看</a></s>
             <s>已有<span ng-bind="vm.ordersDetail.summery.all_buy_user_count"></span>人报名</s>
         </li>
         <li ng-if="vm.userShareSummery.follower_count>=50" style="margin-left: 5px;"><label style="font-size: 13px;color: #ffa200; height: 20px;padding-left: 0;">分享达人</label></li>
@@ -64,7 +65,7 @@
                 <span class='display-name' ng-hide="_.isEmpty(vm.getOrderDisplayName(order.id))" ng-bind="vm.getOrderDisplayName(order.id)"></span>
                 <div style="display: inline-flex;width: 100%;">
                     <div><span class='created-at' ng-bind="order.created"></span></div>
-                    <div style="float: right;margin-left: 40%;" ng-if="order.status==3&&vm.isOwner(order)" ng-click="vm.showCommentDialog(order)"><div style="margin-top: -15px;float: right;"><i class="fa fa-comments-o fa-2x"></i></div></div>
+                    <div style="float: right;margin-left: 40%;" ng-if="order.status==3&&vm.isOwner(order)" ng-click="vm.showCommentDialog(order)"><div class="commenting-o"><i class="fa fa-commenting-o fa-2x"></i></div></div>
                 </div>
                 <div class="send-info" ng-if="vm.isOwner(order)">
                     <span>姓名:</span>
@@ -89,12 +90,12 @@
                 <span class='display-name' ng-hide="_.isEmpty(comment.body)" ng-bind="comment.body"></span>
                 <div style="display: inline-flex;width: 97%;">
                     <div style="display: inline-flex;width: 100%;"><span class="small-order-info" ng-bind="vm.getOrderDisplayName(order.id)"></span><span class='created-at' ng-bind="order.created"></span></div>
-                    <div style="float: right;" ng-if="order.status==9" ng-click="vm.showCommentDialog(order,comment.id)"><div style="margin-top: -15px;float: right;"><i class="fa fa-comments-o fa-2x"></i></div></div>
+                    <div style="float: right;" ng-if="order.status==9" ng-click="vm.showCommentDialog(order,comment.id)"><div class="commenting-o"><i class="fa fa-commenting-o fa-2x"></i></div></div>
                 </div>
                 <div class="send-info" ng-if="vm.showReplies(comment.id)">
-                    <div ng-repeat="reply in vm.getReplyComments(comment.id)" ng-click="vm.showCommentDialog(order,reply.id)">
-                        <span ng-bind="reply.username" style="font-size: 16px;"></span>
-                        <span ng-bind="reply.body"></span>
+                    <div ng-repeat="reply in vm.getReplyComments(comment.id)" ng-click="vm.showCommentDialog(order,reply.id)" style="margin-bottom: 8px;">
+                        <span ng-bind="reply.username" style="font-size: 16px;color:#6EAFD5;"></span>
+                        <span ng-bind="reply.body" style="word-break: break-all;"></span>
                     </div>
                 </div>
             </li>
@@ -163,22 +164,15 @@
 </script>
 <script type="text/ng-template" id="commentListDialog">
     <div class="comment_list_box">
-        <div id="box_title">爱心评价</div>
+        <div id="box_title"><span ng-bind="vm.getOrderCommentLength()"></span>爱心评价</div>
         <div id="con">
             <div class="bottomcover" style="z-index:2;"></div>
             <ul>
-                <li>
-                    <div class="div_left"><img src="http://tp4.sinaimg.cn/1777258407/50/5627346616/1" title="Jarvis_风"></div>
+                <li ng-repeat="orderComment in vm.orderComments">
+                    <div class="div_left"><img ng-src="{{vm.ordersDetail.users[orderComment.user_id]['image']}}"></div>
                     <div class="div_right">
-                        <span>Jarvis_风</span>：唉，总是在越忙的时候事情越多。。。我的神曲你在哪里呀~~~亲耐滴&middot;你再不出来你就木有人疼了！！#248#
-                        <div class="twit_item_time">3分钟前</div>
-                    </div>
-                </li>
-                <li>
-                    <div class="div_left"><img src="http://tp4.sinaimg.cn/1777258407/50/5627346616/1" title="Jarvis_风"></div>
-                    <div class="div_right">
-                        <span>Jarvis_风</span>：唉，总是在越忙的时候事情越多。。。我的神曲你在哪里呀~~~亲耐滴&middot;你再不出来你就木有人疼了！！#248#
-                        <div class="twit_item_time">3分钟前</div>
+                        <span ng-bind="orderComment.username"></span>：<p ng-bind="orderComment.body" style="word-break: break-all;display: inline;"></p>
+                        <div class="twit_item_time" ng-bind="orderComment.created"></div>
                     </div>
                 </li>
             </ul>

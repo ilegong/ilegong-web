@@ -141,13 +141,8 @@
     vm.showReplies = showReplies;
     vm.reloadCommentData = reloadCommentData;
     vm.showCommentListDialog = showCommentListDialog;
+    vm.getOrderCommentLength = getOrderCommentLength;
     activate();
-
-    //test code
-
-    setTimeout(function(){
-      vm.showCommentListDialog();
-    },500);
 
     function activate() {
       var weshareId = angular.element(document.getElementById('weshareView')).attr('data-weshare-id');
@@ -175,9 +170,9 @@
       });
       $http({method: 'GET', url: '/weshares/detail/' + weshareId, cache: $templateCache}).
         success(function (data, status) {
-          $log.log(data);
           vm.weshare = data['weshare'];
           vm.commentData = data['comment_data'];
+          vm.orderComments = vm.commentData['order_comments'];
           if (vm.weshare.addresses&&vm.weshare.addresses.length == 1) {
             vm.weshare.selectedAddressId = vm.weshare.addresses[0].id;
           }
@@ -319,6 +314,13 @@
 
     function getOrderComment(order_id){
       return vm.commentData['order_comments'][order_id];
+    }
+
+    function getOrderCommentLength(){
+      if(vm.commentData['order_comments']){
+        return Object.keys(vm.commentData['order_comments']).length;
+      }
+      return 0;
     }
 
     function getReplyComments(comment_id){
@@ -507,7 +509,6 @@
       }
       vm.submitCommentProcessing = true;
       $http.post('/weshares/comment/', vm.commentData).success(function (data) {
-        $log.log(data);
         if (data.success) {
           vm.submitCommentProcessing = false;
           vm.reloadCommentData();
