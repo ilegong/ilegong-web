@@ -523,6 +523,8 @@
     }
 
     function submitComment() {
+      alert('submit comment');
+      alert(JSON.stringify(vm.submitTempCommentData));
       $http.post('/weshares/comment/', vm.submitTempCommentData).success(function (data) {
         ngDialog.closeAll();
         if (data.success) {
@@ -577,8 +579,7 @@
       ngDialog.open({
         template: 'commentDialog',
         scope: $scope,
-        controllerAs: 'WesharesViewCtrl as vm',
-        preCloseCallback: function (value) {
+        preCloseCallback: function () {
           vm.submitTempCommentData = {};
         }
       });
