@@ -143,6 +143,7 @@
     vm.showCommentListDialog = showCommentListDialog;
     vm.getOrderCommentLength = getOrderCommentLength;
     vm.initWeshareData = initWeshareData;
+    vm.sortOrders = sortOrders;
     activate();
     function activate() {
       vm.initWeshareData();
@@ -193,6 +194,7 @@
           vm.weshareSettings = data['weshare_ship_settings'];
           vm.supportPysZiti = data['support_pys_ziti'];
           vm.selectShipType = getSelectTypeDefaultVal(vm.weshareSettings);
+          vm.sortOrders();
           if (vm.consignee && vm.consignee.offlineStore) {
             vm.checkedOfflineStore = vm.consignee.offlineStore;
           }
@@ -238,6 +240,16 @@
         error(function (data, status) {
           $log.log(data);
         });
+    }
+
+    function sortOrders() {
+      vm.ordersDetail.orders = _.sortBy(vm.ordersDetail.orders, function (order) {
+        if (order.status == 9 && order.creator == vm.currentUser.id) {
+          return Number.MAX_VALUE;
+        } else {
+          return order.id;
+        }
+      });
     }
 
     function getSelectTypeDefaultVal(shipSettings) {
