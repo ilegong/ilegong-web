@@ -565,7 +565,7 @@
         if (reply_username == vm.currentUser.nickname) {
           comment_tip_info = '呵呵';
         } else {
-          comment_tip_info = vm.currentUser.nickname + '对' + comment.username + '说：';
+          comment_tip_info = vm.currentUser.nickname + '对' + reply_username + '说：';
         }
       } else {
         comment_tip_info = vm.currentUser.nickname + '对' + vm.weshare.creator.nickname + '说：';
