@@ -18,7 +18,7 @@ cron:
       schedule: */30 8-22 * * *
       timezone: Beijing
     - description: gen statics order data
-      url: /manage/admin/countly/cron_gen_data
+      url: /manage/admin/countly/cron_gen_data  
       schedule: 0 3 * * *
       timezone: Beijing
 #    - description: send to comment msg
