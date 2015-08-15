@@ -167,7 +167,7 @@ class WeshareBuyComponent extends Component {
             $cartM->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order_id));
             $this->send_comment_notify($order_id,$share_id,$comment_content);
         }
-        return array('success' => true, 'comment' => $comment['Comment'], 'comment_reply' => $commentReply['CommentReply']);
+        return array('success' => true, 'comment' => $comment['Comment'], 'comment_reply' => $commentReply['CommentReply'], 'order_id' => $order_id);
     }
 
     public function send_new_share_msg($weshareId) {

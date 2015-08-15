@@ -3,7 +3,7 @@
   angular.module('weshares')
     .controller('WesharesViewCtrl', WesharesViewCtrl)
 
-  function ChooseOfflineStore($vm, $log, $http, $templateCache,$timeout) {
+  function ChooseOfflineStore($vm, $log, $http, $templateCache, $timeout) {
     $vm.areas = {
       110101: {
         'name': "东城区"
@@ -61,18 +61,18 @@
       $vm.checkedOfflineStore = offlineStore;
     }
 
-    function mapPanTo(offlineStore){
+    function mapPanTo(offlineStore) {
       var point = new BMap.Point(offlineStore.location_long, offlineStore.location_lat);
       $vm.offlineStoreMap.panTo(point);
     }
 
-    function showMap(offlineStore){
+    function showMap(offlineStore) {
       var point = new BMap.Point(offlineStore.location_long, offlineStore.location_lat);
-      if($vm.offlineStoreMap == null){
+      if ($vm.offlineStoreMap == null) {
         $vm.offlineStoreMap = new BMap.Map("offline-store-map");
         $vm.offlineStoreMap.centerAndZoom(point, 15);
-      }else{
-        $timeout(function(){
+      } else {
+        $timeout(function () {
           $vm.mapPanTo(offlineStore);
         }, 200);
       }
@@ -95,10 +95,10 @@
     }
   }
 
-  function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, Utils, ngDialog) {
+  function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, $state, Utils, ngDialog) {
     var vm = this;
     vm.showShareDetailView = true;
-    ChooseOfflineStore(vm, $log, $http, $templateCache,$timeout);
+    ChooseOfflineStore(vm, $log, $http, $templateCache, $timeout);
 
     vm.statusMap = {
       0: '进行中',
@@ -142,9 +142,13 @@
     vm.reloadCommentData = reloadCommentData;
     vm.showCommentListDialog = showCommentListDialog;
     vm.getOrderCommentLength = getOrderCommentLength;
+    vm.initWeshareData = initWeshareData;
     activate();
-
     function activate() {
+      vm.initWeshareData();
+    }
+
+    function initWeshareData() {
       var weshareId = angular.element(document.getElementById('weshareView')).attr('data-weshare-id');
       var fromType = angular.element(document.getElementById('weshareView')).attr('data-from-type');
       //first share
@@ -173,10 +177,10 @@
           vm.weshare = data['weshare'];
           vm.commentData = data['comment_data'];
           vm.orderComments = vm.commentData['order_comments'];
-          if (vm.weshare.addresses&&vm.weshare.addresses.length == 1) {
+          if (vm.weshare.addresses && vm.weshare.addresses.length == 1) {
             vm.weshare.selectedAddressId = vm.weshare.addresses[0].id;
           }
-          else if (vm.weshare.addresses&&vm.weshare.addresses.length > 1) {
+          else if (vm.weshare.addresses && vm.weshare.addresses.length > 1) {
             vm.weshare.addresses.unshift({id: -1, address: '请选择收货地址'});
             vm.weshare.selectedAddressId = -1;
           }
@@ -211,7 +215,7 @@
             } else {
               //check is new user buy it
               var userInfo = vm.ordersDetail.users[vm.currentUser.id];
-              if(userInfo){
+              if (userInfo) {
                 vm.showNotifyShareOfferDialog = true;
                 vm.sharedOfferMsg = '恭喜发财，大吉大利！';
                 vm.showLayer = true;
@@ -236,14 +240,14 @@
         });
     }
 
-    function getSelectTypeDefaultVal(shipSettings){
-      if(vm.weshareSettings.kuai_di.status==1){
+    function getSelectTypeDefaultVal(shipSettings) {
+      if (vm.weshareSettings.kuai_di.status == 1) {
         return 0;
       }
-      if(vm.weshareSettings.self_ziti.status==1){
+      if (vm.weshareSettings.self_ziti.status == 1) {
         return 1;
       }
-      if(vm.weshareSettings.pys_ziti.status==1){
+      if (vm.weshareSettings.pys_ziti.status == 1) {
         return 2;
       }
       return -1;
@@ -312,49 +316,49 @@
       vm.orderTotalPrice = totalPrice / 100;
     }
 
-    function getOrderComment(order_id){
+    function getOrderComment(order_id) {
       return vm.commentData['order_comments'][order_id];
     }
 
-    function getOrderCommentLength(){
-      if(vm.commentData['order_comments']){
+    function getOrderCommentLength() {
+      if (vm.commentData['order_comments']) {
         return Object.keys(vm.commentData['order_comments']).length;
       }
       return 0;
     }
 
-    function getReplyComments(comment_id){
+    function getReplyComments(comment_id) {
       return vm.commentData['comment_replies'][comment_id];
     }
 
-    function showReplies(comment_id){
+    function showReplies(comment_id) {
       var replies = vm.commentData['comment_replies'][comment_id];
-      if(!replies||replies.length==0){
+      if (!replies || replies.length == 0) {
         return false;
       }
       return true;
     }
 
-    function getShipSetId(){
-      if(vm.selectShipType==0){
+    function getShipSetId() {
+      if (vm.selectShipType == 0) {
         return vm.weshareSettings.kuai_di.id;
       }
-      if(vm.selectShipType==1){
+      if (vm.selectShipType == 1) {
         return vm.weshareSettings.self_ziti.id;
       }
-      if(vm.selectShipType==2){
+      if (vm.selectShipType == 2) {
         return vm.weshareSettings.pys_ziti.id;
       }
     }
 
-    function getShipFee(){
-      if(vm.selectShipType==0){
+    function getShipFee() {
+      if (vm.selectShipType == 0) {
         return vm.weshareSettings.kuai_di.ship_fee;
       }
-      if(vm.selectShipType==1){
+      if (vm.selectShipType == 1) {
         return vm.weshareSettings.self_ziti.ship_fee;
       }
-      if(vm.selectShipType==2){
+      if (vm.selectShipType == 2) {
         return vm.weshareSettings.pys_ziti.ship_fee;
       }
     }
@@ -511,7 +515,11 @@
       $http.post('/weshares/comment/', vm.commentData).success(function (data) {
         if (data.success) {
           vm.submitCommentProcessing = false;
+          var order_id = data['order_id'];
           vm.reloadCommentData();
+          if (vm.commentOrder.id == order_id && vm.commentOrder.status == 3) {
+            vm.commentOrder.status = 9;
+          }
         } else {
           vm.submitCommentProcessing = false;
         }
@@ -520,11 +528,11 @@
       });
     }
 
-    function showCommentListDialog(){
+    function showCommentListDialog() {
       ngDialog.open({template: 'commentListDialog', scope: $scope});
     }
 
-    function showCommentDialog(order,comment_id){
+    function showCommentDialog(order, comment_id) {
       /**
        $order_id = $params['order_id'];
        $comment_content = $params['comment_content'];
@@ -532,23 +540,25 @@
        $comment_uid = $params['user_id'];
        $share_id = $params['share_id'];
        */
+      vm.commentOrder = order;
       vm.commentData.order_id = order.id;
-      vm.commentData.reply_comment_id = comment_id||0;
-      vm.commentData.share_id=vm.weshare.id;
+      vm.commentData.reply_comment_id = comment_id || 0;
+      vm.commentData.share_id = vm.weshare.id;
+      vm.submitCommentProcessing = false;
       ngDialog.open({template: 'commentDialog', scope: $scope});
     }
 
-    function getStatusName(status,orderType){
-      if(status == 1){
+    function getStatusName(status, orderType) {
+      if (status == 1) {
         return '待发货';
       }
-      if(status == 2){
-        if(orderType == 'kuai_di'){
+      if (status == 2) {
+        if (orderType == 'kuai_di') {
           return '待签收';
         }
         return '待取货';
       }
-      if(status == 3){
+      if (status == 3) {
         return '待评价';
       }
       return '已完成';
@@ -695,7 +705,7 @@
         share_string = vm.weixinInfo.share_string;
       }
       //share packet
-      if (vm.isSharePacket&&userInfo) {
+      if (vm.isSharePacket && userInfo) {
         imgUrl = 'http://www.tongshijia.com/static/weshares/images/redpacket/hbss_icon.jpg';
         var title = userInfo.nickname + '报名了' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
         to_timeline_title = title;
