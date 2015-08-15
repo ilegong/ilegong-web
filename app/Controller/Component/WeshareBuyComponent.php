@@ -508,7 +508,7 @@ class WeshareBuyComponent extends Component {
         $share_creator = $share_info['creator'];
         $uid_name_map = $this->get_users_nickname(array($order_creator, $share_creator));
         $open_id_map = $this->get_open_ids(array($share_creator));
-        $open_id = $open_id_map[$share_creator];
+        $open_id = $open_id_map[$order_creator];
         $title = $uid_name_map[$order_creator].'你好，'.$uid_name_map[$share_creator].'说，谢谢你对我的支持，'.$reply_content.'。';
         $order_id = $order_info['id'];
         $order_date = $order_info['created'];
