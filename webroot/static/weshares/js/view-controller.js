@@ -140,8 +140,14 @@
     vm.getReplyComments = getReplyComments;
     vm.showReplies = showReplies;
     vm.reloadCommentData = reloadCommentData;
-
+    vm.showCommentListDialog = showCommentListDialog;
     activate();
+
+    //test code
+
+    setTimeout(function(){
+      vm.showCommentListDialog();
+    },500);
 
     function activate() {
       var weshareId = angular.element(document.getElementById('weshareView')).attr('data-weshare-id');
@@ -511,6 +517,10 @@
       }).error(function () {
         vm.submitCommentProcessing = false;
       });
+    }
+
+    function showCommentListDialog(){
+      ngDialog.open({template: 'commentListDialog', scope: $scope});
     }
 
     function showCommentDialog(order,comment_id){

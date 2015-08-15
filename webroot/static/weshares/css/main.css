@@ -121,6 +121,18 @@ ul li { list-style: none; }
 .statistics-dialog ul li strong {color: #ffa200;}
 .share-dialog {width: 100%;background-color: #ffffff;color: #c73c3c;position: fixed;z-index: 5;left: 0;top: 0;text-align: center;font-weight: bold;padding: 40px 0;}
 
+.comment_list_box #box_title{width:100%;font-weight:bold;line-height:28px;font-size:20px;text-align: center;}
+/* con */
+.comment_list_box #con{margin:0px auto;position:relative;border-top:1px solid #d6d6d6;background-color:#FFF;overflow:hidden;}
+.comment_list_box #con .bottomcover{position:absolute;bottom:0;background:url("../images/halftransp.png") no-repeat 0 -5px;height:35px;width:394px;_background:none;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/halftransp.png', sizingMethod='crop');pointer-events:none;}
+.comment_list_box #con ul{position:relative;margin:0px 10px 0px 10px;top:0;left:0;padding:0;}
+.comment_list_box #con ul li{width:100%;border-top:1px dotted #d6d6d6;padding:10px 0;_padding:8px 0;overflow:hidden;line-height:1.5;}
+.comment_list_box #con ul li .div_left{float:left;width: 20%;height: 50px;}
+.comment_list_box #con ul li .div_left img{width: 50px;height: 50px;}
+.comment_list_box #con ul li .div_right{float:right;width: 80%;}
+.comment_list_box #con ul li .div_right span{color:#6EAFD5;padding:0px;}
+.comment_list_box #con ul li .div_right .twit_item_time{color:#999;padding:0px;}
+
 
 .moreicon { position: absolute; top: 50%; margin-top: -0.7em; right: 0.6em; display: block; width: 0.667em; height: 1.334em; background: url(../images/pyshuo_icon.png) 0 -16.875em no-repeat; background-size: 25em 25em;}
 /*自提点详情alice add css 0627*/
