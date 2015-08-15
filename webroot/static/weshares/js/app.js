@@ -46,7 +46,7 @@
       showClose: true,
       closeByDocument: true,
       closeByEscape: true,
-      cache: false
+      cache: true
     });
   }]);
 
