@@ -127,7 +127,7 @@ class WeshareBuyComponent extends Component {
         $orderM = ClassRegistry::init('Order');
         $cartM = ClassRegistry::init('Cart');
         $user_nickname = $userM->findNicknamesOfUid($comment_uid);
-        $order_info = $orderM->findOrderByConditionsAndFields(array('id' => $order_id), array('created'));
+        $order_info = $orderM->findOrderByConditionsAndFields(array('id' => $order_id), array('created','creator'));
         $date_time = date('Y-m-d H:i:s');
         $buy_date_time = $order_info['Order']['created'];
         $commentData = array('parent_id' => $reply_comment_id, 'user_id' => $comment_uid, 'username' => $user_nickname, 'body' => $comment_content, 'data_id' => $share_id, 'type' => COMMENT_SHARE_TYPE,'publish_time' => $date_time ,'created' => $date_time, 'updated' => $date_time, 'buy_time' => $buy_date_time, 'order_id' => $order_id, 'status' => COMMENT_SHOW_STATUS);
@@ -152,7 +152,7 @@ class WeshareBuyComponent extends Component {
                     'id' => $reply_comment_id
                 )
             ));
-            $reply_comment_uid = $reply_comment['user_id'];
+            $reply_comment_uid = $reply_comment['Comment']['user_id'];
             $order_uid = $order_info['Order']['creator'];
             if ($comment_uid == $weshare_info['creator'] && $reply_comment_uid == $order_uid) {
                 $this->send_comment_reply_notify($order_id, $share_id, $comment_content);
