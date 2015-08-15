@@ -45,7 +45,8 @@
     ngDialogProvider.setDefaults({
       showClose: true,
       closeByDocument: true,
-      closeByEscape: true
+      closeByEscape: true,
+      cache: false
     });
   }]);
 
