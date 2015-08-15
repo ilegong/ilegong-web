@@ -158,7 +158,7 @@ class WeshareBuyComponent extends Component {
                 $this->send_comment_reply_notify($order_id, $share_id, $comment_content);
             } elseif ($reply_comment_id == $weshare_info['creator'] && $order_uid == $comment_uid) {
                 $this->send_comment_notify($order_id, $share_id, $comment_content);
-            } else {
+            } elseif ($comment_uid != $reply_comment_uid) {
                 $this->send_comment_mutual_msg($comment_uid, $reply_comment_uid, $comment_content, $share_id, $order_id);
             }
         }else{
