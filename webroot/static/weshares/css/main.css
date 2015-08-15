@@ -91,7 +91,7 @@ ul li { list-style: none; }
 .weshare-view .orders .order .send-info {background-color: #f8f8f8;border-top: 1px #eaeaea solid;padding: 10px;}
 .weshare-view .orders .order .send-info .confirm-btn {display: block;text-decoration: none;border-radius: 3px;border: 1px #29AC0E solid;background-color: #ffffff;color: #29AC0E;font-size: 14px;text-align: center;line-height: 26px;width: 70px;margin-top: 10px;}
 .weshare-view .orders .order .send-info .order-confirmed-btn {display: block;text-decoration: none;border-radius: 3px;border: 1px #eeeeee solid;background-color: #eeeeee;color: #999999;font-size: 14px;text-align: center;line-height: 26px;width: 70px;margin-top: 10px;}
-.weshare-view .orders .order .commenting-o{margin-top: -20px;float: right; color: #263A40;}
+.weshare-view .orders .order .commenting-o{margin-top: -30px;float: right; color: #263A40;}
 .weshare-view .orders .order.my-order .buyer-image, .weshare-view .orders .order.my-order .detail{ float: right;}
 .weshare-view .orders .order.my-order .detail{ margin-left: 0; margin-right: 10px; background-color: #c9edc1; border: 1px #b3e1aa solid;}
 .weshare-view .orders .order.my-order .detail b{ background-position: -35px -35px;right: -6px;left: inherit;}
