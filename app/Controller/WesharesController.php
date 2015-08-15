@@ -330,8 +330,7 @@ class WesharesController extends AppController {
             echo json_encode(array(success => false, reason => 'only owner or creator '));
             return;
         }
-
-        $result = $this->Order->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('id' => $order['Order']['id']));
+        $result = $this->Order->updateAll(array('status' => ORDER_STATUS_RECEIVED, 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order['Order']['id']));
         $this->Cart->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order['Order']['id']));
         if (!$result) {
             echo json_encode(array(success => false, reason => "failed to update order status"));
@@ -431,7 +430,7 @@ class WesharesController extends AppController {
         $ship_company_id = $_REQUEST['company_id'];
         $weshare_id = $_REQUEST['weshare_id'];
         $ship_code = $_REQUEST['ship_code'];
-        $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'ship_type' => $ship_company_id, 'ship_code' => "'" . $ship_code . "'"), array('id' => $order_id, 'status' => ORDER_STATUS_PAID));
+        $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'ship_type' => $ship_company_id, 'ship_code' => "'" . $ship_code . "'", 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order_id, 'status' => ORDER_STATUS_PAID));
         $this->Cart->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order_id));
         $this->WeshareBuy->send_share_product_ship_msg($order_id, $weshare_id);
         echo json_encode(array('success' => true));
@@ -459,7 +458,7 @@ class WesharesController extends AppController {
             'fields' => array('id')
         ));
         $prepare_update_order_ids = Hash::extract($prepare_update_orders, '{n}.Order.id');
-        $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED), array('id' => $prepare_update_order_ids));
+        $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $prepare_update_order_ids));
         $this->Cart->updateAll(array('status' => ORDER_STATUS_SHIPPED), array('order_id' => $prepare_update_order_ids));
         $this->process_send_msg($share_info, $msg);
         echo json_encode(array('success' => true));
