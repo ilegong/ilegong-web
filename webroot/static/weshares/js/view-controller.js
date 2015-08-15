@@ -246,6 +246,8 @@
       vm.ordersDetail.orders = _.sortBy(vm.ordersDetail.orders, function (order) {
         if (order.status == 9 && order.creator == vm.currentUser.id) {
           return Number.MAX_VALUE;
+        } else if (order.creator == vm.currentUser.id) {
+          return Number.MAX_VALUE - 1;
         } else {
           return order.id;
         }
