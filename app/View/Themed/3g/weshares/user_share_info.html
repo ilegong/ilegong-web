@@ -9,8 +9,12 @@
         <div class="user-info-block">
             <div class="user-heading">
                 <h3>{{$share_user['nickname']}}</h3>
-                <!--<span class="label label-warning">官方认证</span>-->
-                <!--<span class="label label-info">好邻居支持</span>-->
+                {{if $is_verify_user}}
+                <span class="label label-warning">官方认证</span>
+                {{/if}}
+                {{if $is_support_offline_store}}
+                <span class="label label-info">好邻居支持</span>
+                {{/if}}
                 {{if $sharer_comment_data['comment_count']>0}}
                     <div style="margin-top: 10px;margin-bottom: 10px;">
                         <span>{{$sharer_comment_data['comment_count']}}条爱心评价</span>

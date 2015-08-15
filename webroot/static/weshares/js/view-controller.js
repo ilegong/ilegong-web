@@ -245,9 +245,9 @@
     function sortOrders() {
       vm.ordersDetail.orders = _.sortBy(vm.ordersDetail.orders, function (order) {
         if (order.status == 9 && order.creator == vm.currentUser.id) {
-          return 2147483647;
+          return -2147483646;
         } else if (order.creator == vm.currentUser.id) {
-          return 2147483646;
+          return -2147483647;
         } else {
           return order.id;
         }

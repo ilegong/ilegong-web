@@ -422,6 +422,9 @@ class WesharesController extends AppController {
         $this->set('my_create_shares', $myCreateShares);
         $this->set('my_join_shares', $myJoinShares);
         $this->set('sharer_comment_data', $shareCommentData);
+        $this->set('is_verify_user',$this->is_verify_sharer($uid));
+        $canSupportOfflineStore = $this->sharer_can_use_we_ship($uid);
+        $this->set('is_support_offline_store', $canSupportOfflineStore > 0);
     }
 
     public function set_order_ship_code() {
@@ -830,5 +833,10 @@ class WesharesController extends AppController {
             return array('success' => false, 'reason' => $reason);
         }
         return null;
+    }
+
+    private function is_verify_sharer($uid){
+        $uids = array(633345,802852,544307,811917);
+        return in_array($uid,$uids);
     }
 }
