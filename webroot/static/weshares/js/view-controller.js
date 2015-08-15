@@ -577,6 +577,7 @@
       ngDialog.open({
         template: 'commentDialog',
         scope: $scope,
+        controllerAs: 'WesharesViewCtrl as vm',
         preCloseCallback: function (value) {
           vm.submitTempCommentData = {};
         }
