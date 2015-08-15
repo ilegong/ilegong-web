@@ -405,7 +405,6 @@ class WeshareBuyComponent extends Component {
     }
 
     public function send_to_comment_msg($weshareId = null) {
-        $oauthBindM = ClassRegistry::init('Oauthbind');
         $orderM = ClassRegistry::init('Order');
         $limit_date = date('Y-m-d', strtotime("-4 days"));
         $cond = array(
@@ -419,6 +418,33 @@ class WeshareBuyComponent extends Component {
         $orders = $orderM->find('first', array(
             'conditions' => $cond
         ));
+        $this->process_send_to_comment_msg($orders);
+    }
+
+    public function chage_status_and_send_to_comment_msg() {
+        $orderM = ClassRegistry::init('Order');
+        $cartM = ClassRegistry::init('Cart');
+        $limit_date = date('Y-m-d', strtotime("-7 days"));
+        $cond = array(
+            'DATE(updated)' => $limit_date,
+            'status' => ORDER_STATUS_SHIPPED,
+            'type' => ORDER_TYPE_WESHARE_BUY
+        );
+        if (!empty($weshareId)) {
+            $cond['member_id'] = $weshareId;
+        }
+        $orders = $orderM->find('first', array(
+            'conditions' => $cond
+        ));
+        $order_ids = Hash::extract($orders, '{n}.Order.id');
+        //update order status to received
+        $orderM->updateAll(array('status' => ORDER_STATUS_RECEIVED, 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order_ids));
+        $cartM->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order_ids));
+        $this->process_send_to_comment_msg($orders);
+    }
+
+    private function process_send_to_comment_msg($orders){
+        $oauthBindM = ClassRegistry::init('Oauthbind');
         $order_uids = Hash::extract($orders, '{n}.Order.creator');
         $order_member_ids = Hash::extract($orders, '{n}.Order.member_id');
         $uid_openid_map = $oauthBindM->findWxServiceBindMapsByUids($order_uids);
