@@ -512,7 +512,7 @@
     }
 
     function reloadCommentData() {
-      $http({method: 'GET', url: '/weshares/loadComment/' + vm.weshare.id, cache: $templateCache}).
+      $http({method: 'GET', url: '/weshares/loadComment/' + vm.weshare.id}).
         success(function (data) {
           vm.commentData = data;
         }).
@@ -525,11 +525,11 @@
       $http.post('/weshares/comment/', vm.commentData).success(function (data) {
         if (data.success) {
           var order_id = data['order_id'];
-          //vm.reloadCommentData();
-          //if (vm.commentOrder.id == order_id && vm.commentOrder.status == 3) {
-          //  vm.commentOrder.status = 9;
-          //}
-          window.location.reload();
+          vm.reloadCommentData();
+          if (vm.commentOrder.id == order_id && vm.commentOrder.status == 3) {
+            vm.commentOrder.status = 9;
+          }
+          //window.location.reload();
         } else {
           alert('提交失败');
         }
