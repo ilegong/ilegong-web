@@ -21,11 +21,11 @@ cron:
       url: /manage/admin/countly/cron_gen_data
       schedule: 0 3 * * *
       timezone: Beijing
-    - description: send to comment msg
-      url: /cron/send_weshare_order_to_comment_msg
-      schedule: 0 12 * * *
-      timezone: Beijing
-    - description: change order status send comment msg
-      url: /cron/change_share_order_status_and_send_msg
-      schedule: 0 12 * * *
-      timezone: Beijing
+#    - description: send to comment msg
+#      url: /cron/send_weshare_order_to_comment_msg
+#      schedule: 0 12 * * *
+#      timezone: Beijing
+#    - description: change order status send comment msg
+#      url: /cron/change_share_order_status_and_send_msg
+#      schedule: 0 12 * * *
+#      timezone: Beijing

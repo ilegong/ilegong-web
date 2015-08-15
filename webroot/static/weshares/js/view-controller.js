@@ -523,10 +523,7 @@
     }
 
     function submitComment() {
-      alert('submit comment');
-      alert(JSON.stringify(vm.submitTempCommentData));
       $http.post('/weshares/comment/', vm.submitTempCommentData).success(function (data) {
-        ngDialog.closeAll();
         if (data.success) {
           var order_id = data['order_id'];
           vm.reloadCommentData();
@@ -540,6 +537,7 @@
         ngDialog.closeAll();
         alert('提交失败');
       });
+      ngDialog.closeAll();
     }
 
     function showCommentListDialog() {
