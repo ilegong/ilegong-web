@@ -522,6 +522,7 @@
     }
 
     function submitComment() {
+      ngDialog.closeAll();
       $http.post('/weshares/comment/', vm.commentData).success(function (data) {
         if (data.success) {
           var order_id = data['order_id'];
@@ -529,7 +530,6 @@
           if (vm.commentOrder.id == order_id && vm.commentOrder.status == 3) {
             vm.commentOrder.status = 9;
           }
-          //window.location.reload();
         } else {
           alert('提交失败');
         }
