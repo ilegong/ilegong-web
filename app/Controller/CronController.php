@@ -13,7 +13,20 @@ class CronController extends AppController
 
     public $uses = array('CouponItem');
 
-    public $components = array('Weixin');
+    public $components = array('Weixin','WeshareBuy');
+
+
+    function send_weshare_order_to_comment_msg($weshareId = null) {
+        $this->autoRender = false;
+        $this->WeshareBuy->send_to_comment_msg($weshareId);
+        echo json_encode(array('success' => true));
+    }
+
+    function change_share_order_status_and_send_msg(){
+        $this->autoRender = false;
+        $this->WeshareBuy->chage_status_and_send_to_comment_msg();
+        echo json_encode(array('success' => true));
+    }
 
     function send_coupon_timeout_message()
     {
