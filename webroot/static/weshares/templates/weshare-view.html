@@ -157,7 +157,7 @@
 <script type="text/ng-template" id="commentDialog">
     <div class="ngdialog-message">
         <h3 style="text-align: center;">填写评论</h3>
-        <textarea style='width: 100%;height: 70px;font-size: medium;margin-top: 10px;' ng-model="vm.commentData.comment_content" placeholder="{{vm.commentTipInfo}}"></textarea>
+        <textarea style='width: 100%;height: 70px;font-size: medium;margin-top: 10px;' ng-model="vm.submitTempCommentData.comment_content" placeholder="{{vm.commentTipInfo}}"></textarea>
     </div>
     <div class="ngdialog-buttons mt">
         <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="vm.submitComment()">提交</button>

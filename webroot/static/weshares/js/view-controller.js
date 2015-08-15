@@ -105,6 +105,7 @@
       1: '已截止'
     };
     vm.commentData = {};
+    vm.submitTempCommentData = {};
     vm.viewImage = viewImage;
     vm.increaseProductNum = increaseProductNum;
     vm.decreaseProductNum = decreaseProductNum;
@@ -522,7 +523,7 @@
     }
 
     function submitComment() {
-      $http.post('/weshares/comment/', vm.commentData).success(function (data) {
+      $http.post('/weshares/comment/', vm.submitTempCommentData).success(function (data) {
         ngDialog.closeAll();
         if (data.success) {
           var order_id = data['order_id'];
@@ -560,23 +561,24 @@
           reply_username = comment.plain_username;
         }
         if (reply_username == vm.currentUser.nickname) {
-          comment_tip_info = '呵呵';
+          comment_tip_info = '爱心评价';
         } else {
           comment_tip_info = vm.currentUser.nickname + '对' + reply_username + '说：';
         }
       } else {
         comment_tip_info = vm.currentUser.nickname + '对' + vm.weshare.creator.nickname + '说：';
       }
-      vm.commentData = {};
+      vm.submitTempCommentData = {};
       vm.commentTipInfo = comment_tip_info;
       vm.commentOrder = order;
-      vm.commentData.order_id = order.id;
-      vm.commentData.reply_comment_id = reply_comment_id;
-      vm.commentData.share_id = vm.weshare.id;
+      vm.submitTempCommentData.order_id = order.id;
+      vm.submitTempCommentData.reply_comment_id = reply_comment_id;
+      vm.submitTempCommentData.share_id = vm.weshare.id;
       ngDialog.open({
         template: 'commentDialog',
+        scope: $scope,
         preCloseCallback: function (value) {
-          vm.commentData = {};
+          vm.submitTempCommentData = {};
         }
       });
     }
