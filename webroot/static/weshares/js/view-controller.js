@@ -522,23 +522,20 @@
     }
 
     function submitComment() {
-      if (vm.submitCommentProcessing) {
-        return;
-      }
-      vm.submitCommentProcessing = true;
       $http.post('/weshares/comment/', vm.commentData).success(function (data) {
         if (data.success) {
-          vm.submitCommentProcessing = false;
           var order_id = data['order_id'];
-          vm.reloadCommentData();
-          if (vm.commentOrder.id == order_id && vm.commentOrder.status == 3) {
-            vm.commentOrder.status = 9;
-          }
+          $timeout(function () {
+            vm.reloadCommentData();
+            if (vm.commentOrder.id == order_id && vm.commentOrder.status == 3) {
+              vm.commentOrder.status = 9;
+            }
+          }, 50);
         } else {
-          vm.submitCommentProcessing = false;
+          alert('提交失败');
         }
       }).error(function () {
-        vm.submitCommentProcessing = false;
+        alert('提交失败');
       });
     }
 
@@ -575,7 +572,6 @@
       vm.commentData.order_id = order.id;
       vm.commentData.reply_comment_id = reply_comment_id;
       vm.commentData.share_id = vm.weshare.id;
-      vm.submitCommentProcessing = false;
       ngDialog.open({template: 'commentDialog', scope: $scope});
     }
 
