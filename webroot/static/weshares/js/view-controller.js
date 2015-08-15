@@ -522,8 +522,8 @@
     }
 
     function submitComment() {
-      ngDialog.closeAll();
       $http.post('/weshares/comment/', vm.commentData).success(function (data) {
+        ngDialog.closeAll();
         if (data.success) {
           var order_id = data['order_id'];
           vm.reloadCommentData();
@@ -534,6 +534,7 @@
           alert('提交失败');
         }
       }).error(function () {
+        ngDialog.closeAll();
         alert('提交失败');
       });
     }
@@ -566,12 +567,18 @@
       } else {
         comment_tip_info = vm.currentUser.nickname + '对' + vm.weshare.creator.nickname + '说：';
       }
+      vm.commentData = {};
       vm.commentTipInfo = comment_tip_info;
       vm.commentOrder = order;
       vm.commentData.order_id = order.id;
       vm.commentData.reply_comment_id = reply_comment_id;
       vm.commentData.share_id = vm.weshare.id;
-      ngDialog.open({template: 'commentDialog', scope: $scope});
+      ngDialog.open({
+        template: 'commentDialog',
+        preCloseCallback: function (value) {
+          vm.commentData = {};
+        }
+      });
     }
 
     function getStatusName(status, orderType) {
