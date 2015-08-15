@@ -360,7 +360,7 @@ class WesharesController extends AppController {
             'order' => array('created DESC')
         ));
         $my_create_share_ids = Hash::extract($myCreateShares, '{n}.Weshare.id');
-        $orderStatus = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED);
+        $orderStatus = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE);
         if ($uid != $current_uid) {
             $orderStatus[] = ORDER_STATUS_VIRTUAL;
         }
