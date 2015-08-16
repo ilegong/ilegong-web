@@ -44,9 +44,11 @@
   app.config(['ngDialogProvider', function (ngDialogProvider) {
     ngDialogProvider.setDefaults({
       showClose: true,
-      closeByDocument: false,
+      closeByDocument: true,
       closeByEscape: false,
-      cache: true
+      cache: true,
+      disableAnimation:true,
+      animationEndSupport: false
     });
   }]);
 

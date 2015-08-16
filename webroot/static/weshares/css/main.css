@@ -111,6 +111,12 @@ ul li { list-style: none; }
 .buying-dialog font{ display: block; text-align: center; color: #ffa200; font-size: 16px; line-height: 35px; padding-bottom: 50px;}
 .price{display: block; text-align: center; color: #ffa200; font-size: 16px; line-height: 35px; padding-bottom: 50px;}
 
+.commenting-dialog{ background-color: #ffffff; padding: 15px 0; position: fixed; bottom: 0; left: 0; width: 100%; z-index: 5;}
+.commenting-dialog .title{padding: 0px 10px; margin-bottom: 15px;}
+.commenting-dialog .closebtn{ margin-top: 3px; display: block; background: url(../images/weifxicon.png?v0.01) no-repeat -70px -65px; width: 15px; height: 15px; background-size: 100px 100px;}
+.commenting-dialog label{ display: block; float: left; color: #29AC0E; font-size: 16px; font-weight: bold;}
+.commenting-dialog font{ display: block; text-align: center; color: #ffa200; font-size: 16px; line-height: 35px; padding-bottom: 50px;}
+
 .send-msg-dialog{ background-color: #ffffff; padding: 15px 0; position: fixed; bottom: 0; left: 0; width: 100%; z-index: 5;}
 .send-msg-dialog .title{padding: 0px 10px; margin-bottom: 15px;}
 .send-msg-dialog .closebtn{ margin-top: 3px; display: block; background: url(../images/weifxicon.png?v0.01) no-repeat -70px -65px; width: 15px; height: 15px; background-size: 100px 100px;}

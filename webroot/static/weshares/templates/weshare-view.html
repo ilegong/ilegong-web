@@ -153,16 +153,32 @@
         &nbsp;&nbsp;&nbsp;{{vm.weshare.creator.nickname}}的红包
     </div>
 </div>
-<div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showLayer=false;vm.showBuyingDialog=false;vm.showShareDialog=false;vm.showNotifyShareDialog=false;vm.showNotifyShareOfferDialog=false;vm.showNotifyGetPacketDialog=false;"></div>
-<script type="text/ng-template" id="commentDialog">
-    <div class="ngdialog-message">
-        <h3 style="text-align: center;">爱心评价</h3>
-        <textarea style='width: 100%;height: 70px;font-size: medium;margin-top: 10px;' ng-model="vm.submitTempCommentData.comment_content" placeholder="{{vm.commentTipInfo}}"></textarea>
+<!--评价层-->
+<div class="commenting-dialog" ng-show="vm.showCommentingDialog">
+    <div class="clearfix title">
+        <label>爱心评价</label>
+        <a ng-click="vm.closeCommentDialog();" class="closebtn fr"></a>
     </div>
-    <div class="ngdialog-buttons mt">
-        <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="closeThisDialog('submit')">提交</button>
+    <div class="clearfix" style="padding: 0 10px;margin-bottom: 30px;">
+        <div class="form-group" ng-class="{'has-error': vm.usernameHasError}">
+            <textarea id="commentContentDom" class='form-control' placeholder="{{vm.commentTipInfo}}" ng-model='vm.submitTempCommentData.comment_content' ng-change=''></textarea>
+            <p class='tips'>请输入评价信息</p>
+        </div>
     </div>
-</script>
+    <div class="clearfix starttuan_btn">
+        <a ng-click='vm.submitComment()' style="background-color: #ffa200; width: 100%;">评价</a>
+    </div>
+</div>
+<div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showLayer=false;vm.closeCommentDialog();vm.showBuyingDialog=false;vm.showShareDialog=false;vm.showNotifyShareDialog=false;vm.showNotifyShareOfferDialog=false;vm.showNotifyGetPacketDialog=false;"></div>
+<!--<script type="text/ng-template" id="commentDialog">-->
+    <!--<div class="ngdialog-message">-->
+        <!--<h3 style="text-align: center;">爱心评价</h3>-->
+        <!--<textarea style='width: 100%;height: 70px;font-size: medium;margin-top: 10px;' ng-blur="" ng-model="vm.submitTempCommentData.comment_content" placeholder="{{vm.commentTipInfo}}"></textarea>-->
+    <!--</div>-->
+    <!--<div class="ngdialog-buttons mt">-->
+        <!--<a type="button" class="ngdialog-button ngdialog-button-primary" ng-click="vm.closeCommentFormDialog('test');">提交</a>-->
+    <!--</div>-->
+<!--</script>-->
 <script type="text/ng-template" id="commentListDialog">
     <div class="comment_list_box">
         <div id="box_title"><span ng-bind="vm.getOrderCommentLength()"></span>爱心评价</div>
@@ -180,7 +196,7 @@
         </div>
     </div>
 </script>
-<div id="commentFormDialog">
-</div>
-<div id="commentListViewDialog">
+<!--<div id="commentFormDialog" style="z-index: 999999;">-->
+<!--</div>-->
+<div id="commentListViewDialog" style="z-index: 99999;">
 </div>

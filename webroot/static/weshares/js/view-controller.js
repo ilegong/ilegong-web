@@ -145,6 +145,7 @@
     vm.getOrderCommentLength = getOrderCommentLength;
     vm.initWeshareData = initWeshareData;
     vm.sortOrders = sortOrders;
+    vm.closeCommentDialog = closeCommentDialog;
     activate();
     function activate() {
       vm.initWeshareData();
@@ -536,20 +537,22 @@
       }).error(function () {
         alert('提交失败');
       });
+      vm.closeCommentDialog();
     }
 
     function showCommentListDialog() {
-      ngDialog.open({template: 'commentListDialog', scope: $scope, appendTo:'#commentListViewDialog'});
+      ngDialog.open({template: 'commentListDialog', scope: $scope, appendTo: '#commentListViewDialog'});
+    }
+
+    function closeCommentDialog() {
+      vm.showCommentingDialog = false;
+      vm.showLayer=false;
+      vm.submitTempCommentData = {};
     }
 
     function showCommentDialog(order, comment) {
-      /**
-       $order_id = $params['order_id'];
-       $comment_content = $params['comment_content'];
-       $reply_comment_id = $params['reply_comment_id'];
-       $comment_uid = $params['user_id'];
-       $share_id = $params['share_id'];
-       */
+      vm.showCommentingDialog = true;
+      vm.showLayer = true;
       var reply_comment_id = 0;
       var comment_tip_info = '';
       if (comment) {
@@ -572,17 +575,6 @@
       vm.submitTempCommentData.order_id = order.id;
       vm.submitTempCommentData.reply_comment_id = reply_comment_id;
       vm.submitTempCommentData.share_id = vm.weshare.id;
-      ngDialog.open({
-        template: 'commentDialog',
-        scope: $scope,
-        appendTo:'#commentFormDialog',
-        preCloseCallback: function (val) {
-          if(val=='submit'){
-            vm.submitComment();
-          }
-          vm.submitTempCommentData = {};
-        }
-      });
     }
 
     function getStatusName(status, orderType) {
