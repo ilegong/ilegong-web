@@ -564,10 +564,10 @@
         if (reply_username == vm.currentUser.nickname) {
           comment_tip_info = '爱心评价';
         } else {
-          comment_tip_info = vm.currentUser.nickname + '对' + reply_username + '说：';
+          comment_tip_info = '回复' + reply_username + '：';
         }
       } else {
-        comment_tip_info = vm.currentUser.nickname + '对' + vm.weshare.creator.nickname + '说：';
+        comment_tip_info = '回复' + vm.weshare.creator.nickname + '说：';
       }
       vm.submitTempCommentData = {};
       vm.commentTipInfo = comment_tip_info;

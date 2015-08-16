@@ -106,12 +106,22 @@ class WeshareBuyComponent extends Component {
         if (!empty($current_comment_replay_relation)) {
             foreach ($current_comment_replay_relation as $reply_id) {
                 $reply = $reply_comments[$reply_id];
-                $username = $reply['username'].': ';
+                $username = $reply['username'];
+                $user_id = $reply['user_id'];
+                $item_reply_data = array( 'id' => $reply['id'], 'body' => $reply['body'],'plain_username' => $username);
+                $item_reply_data['username'] = $username;
+                $item_reply_data['user_id'] = $user_id;
+                $item_reply_data['is_reply'] = 0;
                 if($level == 1){
                     $parent_comment = $reply_comments[$comment_id];
-                    $username = $reply['username'].'回复'.$parent_comment['username'].': ';
+                    $reply_user_id = $parent_comment['user_id'];
+                    if($user_id!=$reply_user_id){
+                        $item_reply_data['reply_username'] = $parent_comment['username'];
+                        $item_reply_data['reply_user_id'] = $reply_user_id;
+                        $item_reply_data['is_reply'] = 1;
+                    }
                 }
-                $comment_replay_format_result[] = array('username' => $username, 'id' => $reply['id'], 'body' => $reply['body'],'plain_username' => $reply['username']);
+                $comment_replay_format_result[] = $item_reply_data;
                 $reply_reply_relation = $comment_replay_relation[$reply_id];
                 if(!empty($reply_reply_relation)){
                     $this->processRecursionReply($reply_comments, $comment_replay_format_result, $comment_replay_relation, $reply_id, $level = 1);

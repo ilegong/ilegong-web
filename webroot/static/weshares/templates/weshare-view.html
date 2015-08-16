@@ -94,9 +94,14 @@
                     <div style="float: right;" ng-if="order.status==9" ng-click="vm.showCommentDialog(order,vm.getOrderComment(order.id))"><div class="commenting-o"><i class="fa fa-commenting-o fa-lg"></i></div></div>
                 </div>
                 <div class="send-info" ng-if="vm.showReplies(vm.getOrderComment(order.id).id)">
-                    <div ng-repeat="reply in vm.getReplyComments(vm.getOrderComment(order.id).id)" ng-click="vm.showCommentDialog(order,reply)" style="margin-bottom: 8px;">
-                        <span ng-bind="reply.username" style="font-size: 16px;color:#6EAFD5;"></span>
-                        <span ng-bind="reply.body" style="word-break: break-all;"></span>
+                    <div ng-repeat="reply in vm.getReplyComments(vm.getOrderComment(order.id).id)" style="margin-bottom: 8px;">
+                        <div ng-if="reply.is_reply==0" style="display: inline-table;">
+                            <a ng-bind="reply.username" style="color:#6EAFD5;" ng-click="vm.toUserShareInfo(reply.user_id)"></a><span>:&nbsp;</span>
+                        </div>
+                        <div ng-if="reply.is_reply==1" style="display: inline-table;">
+                            <a ng-bind="reply.username" style="color:#6EAFD5;" ng-click="vm.toUserShareInfo(reply.user_id)"></a><span>回复</span><a ng-bind="reply.reply_username" style="color:#6EAFD5;" ng-click="vm.toUserShareInfo(reply.reply_user_id)"></a><span>:&nbsp;</span>
+                        </div>
+                        <span ng-bind="reply.body" style="word-break: break-all;" ng-click="vm.showCommentDialog(order,reply)"></span>
                     </div>
                 </div>
             </li>
@@ -170,15 +175,6 @@
     </div>
 </div>
 <div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showLayer=false;vm.closeCommentDialog();vm.showBuyingDialog=false;vm.showShareDialog=false;vm.showNotifyShareDialog=false;vm.showNotifyShareOfferDialog=false;vm.showNotifyGetPacketDialog=false;"></div>
-<!--<script type="text/ng-template" id="commentDialog">-->
-    <!--<div class="ngdialog-message">-->
-        <!--<h3 style="text-align: center;">爱心评价</h3>-->
-        <!--<textarea style='width: 100%;height: 70px;font-size: medium;margin-top: 10px;' ng-blur="" ng-model="vm.submitTempCommentData.comment_content" placeholder="{{vm.commentTipInfo}}"></textarea>-->
-    <!--</div>-->
-    <!--<div class="ngdialog-buttons mt">-->
-        <!--<a type="button" class="ngdialog-button ngdialog-button-primary" ng-click="vm.closeCommentFormDialog('test');">提交</a>-->
-    <!--</div>-->
-<!--</script>-->
 <script type="text/ng-template" id="commentListDialog">
     <div class="comment_list_box">
         <div id="box_title"><span ng-bind="vm.getOrderCommentLength()"></span>爱心评价</div>
@@ -196,7 +192,5 @@
         </div>
     </div>
 </script>
-<!--<div id="commentFormDialog" style="z-index: 999999;">-->
-<!--</div>-->
 <div id="commentListViewDialog" style="z-index: 99999;">
 </div>
