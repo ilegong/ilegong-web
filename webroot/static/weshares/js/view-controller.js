@@ -541,7 +541,7 @@
     }
 
     function showCommentListDialog() {
-      ngDialog.open({template: 'commentListDialog', scope: $scope});
+      ngDialog.open({template: 'commentListDialog', scope: $scope, appendTo:'#commentListViewDialog'});
     }
 
     function showCommentDialog(order, comment) {
@@ -577,6 +577,7 @@
       ngDialog.open({
         template: 'commentDialog',
         scope: $scope,
+        appendTo:'#commentFormDialog',
         preCloseCallback: function () {
           vm.submitTempCommentData = {};
         }
