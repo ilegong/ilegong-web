@@ -534,10 +534,8 @@
           alert('提交失败');
         }
       }).error(function () {
-        ngDialog.closeAll();
         alert('提交失败');
       });
-      ngDialog.closeAll();
     }
 
     function showCommentListDialog() {
@@ -578,7 +576,10 @@
         template: 'commentDialog',
         scope: $scope,
         appendTo:'#commentFormDialog',
-        preCloseCallback: function () {
+        preCloseCallback: function (val) {
+          if(val=='submit'){
+            vm.submitComment();
+          }
           vm.submitTempCommentData = {};
         }
       });
