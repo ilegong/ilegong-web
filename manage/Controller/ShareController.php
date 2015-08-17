@@ -10,7 +10,7 @@ class ShareController extends AppController{
 
     var $name = 'Share';
 
-    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'WeshareShipSetting', 'OfflineStore', 'Oauthbind');
+    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'WeshareShipSetting', 'OfflineStore', 'Oauthbind', 'Comment');
 
     var $components = array('Weixin');
 
@@ -158,7 +158,46 @@ class ShareController extends AppController{
         return $gen_date;
     }
 
-    public function admin_make_order($num=1,$weshare_id){
+    public function admin_make_comment($num, $product_id, $weshare_id) {
+        $this->autoRender = false;
+        $old_product_comments = $this->Comment->find('all', array(
+            'conditions' => array(
+                'data_id' => $product_id,
+                'data_type' => 'Product',
+                'not' => array('order_id' => null)
+            ),
+            'limit' => $num
+        ));
+        $order_ids = Hash::extract($old_product_comments, '{n}.Comment.order_id');
+        $user_ids = Hash::extract($old_product_comments,'{n}.Comment.user_id');
+        $user_infos = $this->User->find('all', array(
+            'conditions' => array(
+                'id' => $user_ids
+            )
+        ));
+        $order_infos = $this->Order->find('all', array(
+            'conditions' => array(
+                'id' => $order_ids
+            )
+        ));
+        $user_infos = Hash::combine($user_infos,'{n}.User.id', '{n}.User');
+        $order_infos = Hash::combine($order_infos, '{n}.Order.id', '{n}.Order');
+        $weshare_products = $this->WeshareProduct->find('all', array(
+            'conditions' => array(
+                'weshare_id' => $weshare_id
+            )
+        ));
+        foreach ($old_product_comments as $comment_item) {
+            $comment_info = $comment_item['Comment'];
+            $item_order_id = $comment_info['order_id'];
+            $item_user_id = $comment_info['user_id'];
+            $user_info = $user_infos[$item_user_id];
+            $order_info = $order_infos[$item_order_id];
+            $this->gen_order_has_comment($comment_info, $order_info, $weshare_id, $user_info, $weshare_id);
+        }
+    }
+
+    public function admin_make_order($num = 1, $weshare_id) {
         $this->autoRender=false;
         /**
          * SELECT name FROM random AS r1 JOIN (SELECT CEIL(RAND() * (SELECT MAX(id) FROM random)) AS id) AS r2 WHERE r1.id >= r2.id ORDER BY r1.id ASC LIMIT 1
@@ -331,7 +370,53 @@ class ShareController extends AppController{
         return $items[array_rand($items)];
     }
 
-    private function gen_order($weshare, $user, $weshare_products, $weshare_address, $order_date) {
+    private function gen_order_has_comment($comment_info,$order_info,$weshare_products,$user_info,$weshare_id){
+        $this->Order->id = null;
+        $order_info['id'] = null;
+        $order_info['member_id'] = $weshare_id;
+        $order_info['creator'] = $user_info['id'];
+        $order['type'] = ORDER_TYPE_WESHARE_BUY;
+        $order = $this->Order->save($order_info);
+        $weshareProducts[] = $this->get_random_item($weshare_products);
+        $order_date = $order['Order']['created'];
+        $creator = $order['Order']['creator'];
+        $weshare_id = $order['Order']['member_id'];
+        $orderId = $order['Order']['id'];
+        if(!empty($orderId)){
+            $totalPrice = 0;
+            foreach ($weshareProducts as $p) {
+                $item = array();
+                $num = 1;
+                $price = $p['WeshareProduct']['price'];
+                $item['name'] = $p['WeshareProduct']['name'];
+                $item['num'] = $num;
+                $item['price'] = $price;
+                $item['type'] = ORDER_TYPE_WESHARE_BUY;
+                $item['product_id'] = $p['WeshareProduct']['id'];
+                $item['created'] =$order_date;
+                $item['updated'] = $order_date;
+                $item['creator'] = $creator;
+                $item['order_id'] = $orderId;
+                $item['tuan_buy_id'] = $weshare_id;
+                $cart[] = $item;
+                $totalPrice += $num * $price;
+            }
+            $this->Cart->id = null;
+            $this->Cart->saveAll($cart);
+            $this->Order->updateAll(array('total_all_price' => $totalPrice / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => 0, 'status' => ORDER_STATUS_VIRTUAL), array('id' => $orderId));
+            $comment_info['user_id'] = $creator;
+            $comment_info['username'] = $user_info['User']['nickname'];
+            $comment_info['data_id'] = $weshare_id;
+            $comment_info['type'] = 'Share';
+            $comment_info['order_id'] = $orderId;
+            $comment_info['id'] = null;
+            $this->Comment->id = null;
+            $this->Comment->save($comment_info);
+            return array('success' => true, 'orderId' => $orderId);
+        }
+    }
+
+    private function gen_order($weshare, $user, $weshare_products, $weshare_address, $order_date, $address=null) {
         $weshareProducts = array();
         $weshareProducts[] = $this->get_random_item($weshare_products);
         $tinyAddress = $this->get_random_item($weshare_address);
@@ -339,7 +424,11 @@ class ShareController extends AppController{
         try {
             $mobile_phone = $this->randMobile(1);
             $addressId = 0;
-            $order_consignee_address = '虚拟订单';
+            if($address){
+                $order_consignee_address = $address;
+            }else{
+                $order_consignee_address = '虚拟订单';
+            }
             if(!empty($tinyAddress)){
                 $addressId = $tinyAddress['WeshareAddress']['id'];
                 $order_consignee_address = $tinyAddress['WeshareAddress']['address'];

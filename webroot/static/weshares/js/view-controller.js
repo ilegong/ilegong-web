@@ -535,7 +535,7 @@
     function submitComment() {
       $http.post('/weshares/comment/', vm.submitTempCommentData).success(function (data) {
         if (data.success) {
-          if(data.type='notify'){
+          if(data.type=='notify'){
             $window.alert('已经通知TA');
             return true;
           }
