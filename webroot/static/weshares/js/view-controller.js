@@ -95,7 +95,7 @@
     }
   }
 
-  function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, $window, Utils, ngDialog) {
+  function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, $filter, $window, Utils, ngDialog) {
     var vm = this;
     vm.showShareDetailView = true;
     ChooseOfflineStore(vm, $log, $http, $templateCache, $timeout);
@@ -148,9 +148,16 @@
     vm.closeCommentDialog = closeCommentDialog;
     vm.notifyUserToComment = notifyUserToComment;
     vm.loadSharerAllComments = loadSharerAllComments;
+    vm.getFormatDate = getFormatDate;
     activate();
     function activate() {
       vm.initWeshareData();
+    }
+
+
+    function getFormatDate(date){
+      var formatedDate = $filter('date')(new Date(date), 'MM-dd H:ss');
+      return formatedDate;
     }
 
     function loadSharerAllComments(sharer_id){

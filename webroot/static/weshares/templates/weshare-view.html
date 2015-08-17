@@ -65,7 +65,7 @@
                 </p>
                 <span class='display-name' ng-hide="_.isEmpty(vm.getOrderDisplayName(order.id))" ng-bind="vm.getOrderDisplayName(order.id)"></span>
                 <div style="display: inline-flex;width: 100%;">
-                    <div><span class='created-at' ng-bind="order.created"></span></div>
+                    <div><span class='created-at' ng-bind="vm.getFormatDate(order.created)"></span></div>
                     <div style="float: right;margin-left: 35%;" ng-if="order.status==3&&vm.isOwner(order)" ng-click="vm.showCommentDialog(order)"><div class="commenting-o"><i class="fa fa-commenting-o fa-lg"></i></div></div>
                     <div style="float: right;margin-left: 20%;" ng-if="order.status==3&&vm.isCreator()&&!order.notify" ng-click="vm.notifyUserToComment(order)"><div class="commenting-o"><a style="margin-top: 0px;width: 65px;line-height: 0;margin-left: 10px;display: inline;" class="statistics-btn">求评价</a></div></div>
                 </div>
@@ -91,11 +91,11 @@
                 </p>
                 <span class='display-name' ng-hide="_.isEmpty(vm.getOrderComment(order.id).body)" ng-bind="vm.getOrderComment(order.id).body"></span>
                 <div style="display: inline-flex;width: 97%;">
-                    <div style="display: inline-flex;width: 100%;"><span class="small-order-info" ng-bind="vm.getOrderDisplayName(order.id)"></span><span class='created-at' ng-bind="order.created"></span></div>
+                    <div style="display: inline-flex;width: 100%;"><span class="small-order-info" ng-bind="vm.getOrderDisplayName(order.id)"></span><span class='created-at' ng-bind="vm.getFormatDate(order.created)"></span></div>
                     <div style="float: right;" ng-if="order.status==9" ng-click="vm.showCommentDialog(order,vm.getOrderComment(order.id))"><div class="commenting-o"><i class="fa fa-commenting-o fa-lg"></i></div></div>
                 </div>
                 <div class="send-info" ng-if="vm.showReplies(vm.getOrderComment(order.id).id)">
-                    <div ng-repeat="reply in vm.getReplyComments(vm.getOrderComment(order.id).id)" style="margin-bottom: 8px;">
+                    <div ng-repeat="reply in vm.getReplyComments(vm.getOrderComment(order.id).id)" style="margin-bottom: 8px;" ng-click="vm.showCommentDialog(order,reply)">
                         <div ng-if="reply.is_reply==0" style="display: inline-table;">
                             <a ng-bind="reply.username" style="color:#6EAFD5;" ng-click="vm.toUserShareInfo(reply.user_id)"></a><span>:&nbsp;</span>
                         </div>
@@ -186,7 +186,7 @@
                     <div class="div_left"><img ng-src="{{vm.sharerAllCommntesUser[orderComment.user_id]['image']}}"></div>
                     <div class="div_right">
                         <span ng-bind="orderComment.username"></span>：<p ng-bind="orderComment.body" style="word-break: break-all;display: inline;"></p>
-                        <div class="twit_item_time" ng-bind="orderComment.created"></div>
+                        <div class="twit_item_time" ng-bind="vm.getFormatDate(orderComment.created)"></div>
                     </div>
                 </li>
             </ul>
