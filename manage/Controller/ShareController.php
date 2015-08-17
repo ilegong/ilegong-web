@@ -160,16 +160,24 @@ class ShareController extends AppController{
 
     public function admin_make_comment($num, $product_id, $weshare_id) {
         $this->autoRender = false;
-        $old_product_comments = $this->Comment->find('all', array(
+        //$old_comment_distinct_comment = $this->Comment->query("select id , DISTINCT(user_id) from cake_comments where type='Product' and data_id=".$product_id." and order_id is not null limit 0,".$num);
+        $old_comment_distinct_comment = $this->Comment->find('all', array(
             'conditions' => array(
                 'data_id' => $product_id,
                 'type' => 'Product',
                 'not' => array('order_id' => null)
             ),
-            'limit' => $num
+            'group' => 'user_id',
+            'limit' => $num,
+        ));
+        $old_comment_ids = Hash::extract($old_comment_distinct_comment, '{n}.Comment.id');
+        $old_product_comments = $this->Comment->find('all', array(
+            'conditions' => array(
+                'id' => $old_comment_ids
+            ),
         ));
         $order_ids = Hash::extract($old_product_comments, '{n}.Comment.order_id');
-        $user_ids = Hash::extract($old_product_comments,'{n}.Comment.user_id');
+        $user_ids = Hash::extract($old_product_comments, '{n}.Comment.user_id');
         $user_infos = $this->User->find('all', array(
             'conditions' => array(
                 'id' => $user_ids
@@ -180,7 +188,7 @@ class ShareController extends AppController{
                 'id' => $order_ids
             )
         ));
-        $user_infos = Hash::combine($user_infos,'{n}.User.id', '{n}.User');
+        $user_infos = Hash::combine($user_infos, '{n}.User.id', '{n}.User');
         $order_infos = Hash::combine($order_infos, '{n}.Order.id', '{n}.Order');
         $weshare_products = $this->WeshareProduct->find('all', array(
             'conditions' => array(
