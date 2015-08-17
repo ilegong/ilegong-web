@@ -371,7 +371,7 @@ class WesharesController extends AppController {
                 'type' => ORDER_TYPE_WESHARE_BUY,
                 'status' => $orderStatus
             ),
-            'fields' => array('member_id', 'id')
+            'fields' => array('member_id', 'id', 'status')
         ));
         $joinShareOrderStatus = Hash::combine($joinShareOrder, '{n}.Order.member_id', '{n}.Order.status');
         $joinShareIds = Hash::extract($joinShareOrder, '{n}.Order.member_id');
