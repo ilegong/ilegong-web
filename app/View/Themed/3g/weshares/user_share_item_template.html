@@ -10,7 +10,7 @@
             {{elseif $join_share_order_status[$current_share_id]==ORDER_STATUS_RECEIVED}}
                 <span class="label label-danger">待评价</span>
             {{else}}
-                <span class="label label-success">已完成</span>
+                <span class="label label-success">已评价</span>
             {{/if}}
         {{else}}
             {{if $share['Weshare']['status']==0}}
