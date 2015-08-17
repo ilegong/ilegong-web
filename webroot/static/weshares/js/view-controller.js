@@ -147,9 +147,21 @@
     vm.sortOrders = sortOrders;
     vm.closeCommentDialog = closeCommentDialog;
     vm.notifyUserToComment = notifyUserToComment;
+    vm.loadSharerAllComments = loadSharerAllComments;
     activate();
     function activate() {
       vm.initWeshareData();
+    }
+
+    function loadSharerAllComments(sharer_id){
+      $http({method: 'GET', url: '/weshares/load_share_comments/' + sharer_id, cache: $templateCache}).
+        success(function (data, status) {
+          vm.sharerAllComments = data['share_all_comments'];
+          vm.sharerAllCommntesUser = data['share_comment_all_users'];
+        }).
+        error(function (data, status) {
+          $log.log(data);
+        });
     }
 
     function initWeshareData() {
@@ -211,6 +223,7 @@
             vm.buyerMobilePhone = vm.consignee.mobilephone;
             vm.buyerAddress = vm.consignee.address;
           }
+          vm.loadSharerAllComments(vm.weshare.creator.id);
           setWeiXinShareParams();
           //from paid done
           if (fromType == 1) {
@@ -338,8 +351,8 @@
     }
 
     function getOrderCommentLength() {
-      if (vm.commentData['order_comments']) {
-        return Object.keys(vm.commentData['order_comments']).length;
+      if (vm.sharerAllComments) {
+        return vm.sharerAllComments.length;
       }
       return 0;
     }

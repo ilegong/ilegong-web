@@ -152,6 +152,13 @@ class WesharesController extends AppController {
         }
     }
 
+    public function load_share_comments($sharer_id) {
+        $this->autoRender = false;
+        $share_all_comments = $this->WeshareBuy->load_sharer_comments($sharer_id);
+        echo json_encode($share_all_comments);
+        return;
+    }
+
     public function detail($weshareId) {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];

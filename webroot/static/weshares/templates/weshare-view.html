@@ -182,8 +182,8 @@
         <div id="con">
             <div class="bottomcover" style="z-index:2;"></div>
             <ul>
-                <li ng-repeat="orderComment in vm.orderComments">
-                    <div class="div_left"><img ng-src="{{vm.ordersDetail.users[orderComment.user_id]['image']}}"></div>
+                <li ng-repeat="orderComment in vm.sharerAllComments">
+                    <div class="div_left"><img ng-src="{{vm.sharerAllCommntesUser[orderComment.user_id]['image']}}"></div>
                     <div class="div_right">
                         <span ng-bind="orderComment.username"></span>：<p ng-bind="orderComment.body" style="word-break: break-all;display: inline;"></p>
                         <div class="twit_item_time" ng-bind="orderComment.created"></div>

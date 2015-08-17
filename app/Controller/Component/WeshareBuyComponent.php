@@ -54,6 +54,37 @@ class WeshareBuyComponent extends Component {
         return array('comment_count' => $comment_count, 'comments' => $comments, 'comment_users' => $comment_users, 'reply_percent' => $reply_percent);
     }
 
+    public function load_sharer_comments($sharer_id) {
+        $weshareM = ClassRegistry::init('Weshare');
+        $commentM = ClassRegistry::init('Comment');
+        $userM = ClassRegistry::init('User');
+        $allShares = $weshareM->find('all', array(
+            'conditions' => array(
+                'creator' => $sharer_id,
+                'status' => array(0, 1)
+            )
+        ));
+        $share_ids = Hash::extract($allShares, '{n}.Weshare.id');
+        $share_all_comments = $commentM->find('all', array(
+            'conditions' => array(
+                'type' => COMMENT_SHARE_TYPE,
+                'data_id' => $share_ids,
+                'status' => COMMENT_SHOW_STATUS,
+                'not' => array('order_id' => null)
+            )
+        ));
+        $comment_user_ids = Hash::extract($share_all_comments, '{n}.Comment.user_id');
+        $share_all_comments = Hash::extract($share_all_comments, '{n}.Comment');
+        $all_users = $userM->find('all', array(
+            'conditions' => array(
+                'id' => $comment_user_ids
+            ),
+            'fields' => $this->query_user_fields
+        ));
+        $all_users = Hash::combine($all_users, '{n}.User.id', '{n}.User');
+        return array('share_all_comments' => $share_all_comments, 'share_comment_all_users' => $all_users);
+    }
+
     public function load_comment_by_share_id($weshare_id) {
         $commentM = ClassRegistry::init('Comment');
         $commentReplyM = ClassRegistry::init('CommentReply');
