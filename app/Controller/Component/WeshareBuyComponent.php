@@ -61,6 +61,7 @@ class WeshareBuyComponent extends Component {
         $allShares = $weshareM->find('all', array(
             'conditions' => array(
                 'creator' => $sharer_id,
+                'parent_id' => 0,
                 'status' => array(0, 1)
             )
         ));
