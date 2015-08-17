@@ -3,8 +3,8 @@
         <li><img ng-src="{{vm.weshare.creator.image||'/img/default_user_icon.jpg'}}" ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/></li>
         <li>
             <label ng-click="vm.toUserShareInfo(vm.weshare.creator.id)" ng-bind="vm.weshare.creator.nickname"></label>
-            <s ng-if="vm.getOrderCommentLength()<15"><b style="color: #ffa200" ng-bind="vm.userShareSummery.share_count">0</b>&nbsp; <small>分享</small>&nbsp;&nbsp;&nbsp;<b style="color: #ffa200" ng-bind="vm.userShareSummery.follower_count">0</b>&nbsp;<small>粉丝</small></s>
-            <s ng-if="vm.getOrderCommentLength()>=15"><b style="color: #ffa200" ng-bind="vm.getOrderCommentLength()">0</b>&nbsp; <small>爱心评价</small><a style="margin-top: 0px;width: 65px;line-height: 0;margin-left: 10px;display: inline;" class="statistics-btn" ng-click="vm.showCommentListDialog()">点击查看</a></s>
+            <s ng-if="vm.getOrderCommentLength()<1"><b style="color: #ffa200" ng-bind="vm.userShareSummery.share_count">0</b>&nbsp; <small>分享</small>&nbsp;&nbsp;&nbsp;<b style="color: #ffa200" ng-bind="vm.userShareSummery.follower_count">0</b>&nbsp;<small>粉丝</small></s>
+            <s ng-if="vm.getOrderCommentLength()>=1"><b style="color: #ffa200" ng-bind="vm.getOrderCommentLength()">0</b>&nbsp; <small>爱心评价</small><a style="margin-top: 0px;width: 65px;line-height: 0;margin-left: 10px;display: inline;" class="statistics-btn" ng-click="vm.showCommentListDialog()">点击查看</a></s>
             <s>已有<span ng-bind="vm.ordersDetail.summery.all_buy_user_count"></span>人报名</s>
         </li>
         <li ng-if="vm.userShareSummery.follower_count>=50" style="margin-left: 5px;"><label style="font-size: 13px;color: #ffa200; height: 20px;padding-left: 0;">分享达人</label></li>
