@@ -372,6 +372,7 @@ class WesharesController extends AppController {
             ),
             'fields' => array('member_id', 'id')
         ));
+        $joinShareOrderStatus = Hash::combine($joinShareOrder, '{n}.Order.member_id', '{n}.Order.status');
         $joinShareIds = Hash::extract($joinShareOrder, '{n}.Order.member_id');
         $joinShareIds = array_unique($joinShareIds);
         $myJoinShares = $this->Weshare->find('all', array(
@@ -422,9 +423,10 @@ class WesharesController extends AppController {
         $this->set('my_create_shares', $myCreateShares);
         $this->set('my_join_shares', $myJoinShares);
         $this->set('sharer_comment_data', $shareCommentData);
-        $this->set('is_verify_user',$this->is_verify_sharer($uid));
+        $this->set('is_verify_user', $this->is_verify_sharer($uid));
         $canSupportOfflineStore = $this->sharer_can_use_we_ship($uid);
         $this->set('is_support_offline_store', $canSupportOfflineStore > 0);
+        $this->set('join_share_order_status', $joinShareOrderStatus);
     }
 
     public function set_order_ship_code() {
