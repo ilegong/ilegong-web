@@ -446,12 +446,13 @@ class WeshareBuyComponent extends Component {
         $orderM = ClassRegistry::init('Order');
         $limit_date = date('Y-m-d', strtotime("-4 days"));
         $cond = array(
-            'DATE(updated)' => $limit_date,
             'status' => ORDER_STATUS_RECEIVED,
             'type' => ORDER_TYPE_WESHARE_BUY
         );
         if (!empty($weshareId)) {
             $cond['member_id'] = $weshareId;
+        }else{
+            $cond['DATE(updated)'] = $limit_date;
         }
         $orders = $orderM->find('all', array(
             'conditions' => $cond

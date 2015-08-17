@@ -34,6 +34,7 @@ class CronController extends AppController
         echo json_encode(array('success' => true));
     }
 
+
     function send_coupon_timeout_message()
     {
         $this->autoRender = false;
