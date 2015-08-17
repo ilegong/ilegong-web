@@ -61,7 +61,6 @@ class WeshareBuyComponent extends Component {
         $allShares = $weshareM->find('all', array(
             'conditions' => array(
                 'creator' => $sharer_id,
-                'parent_id' => 0,
                 'status' => array(0, 1)
             )
         ));
@@ -71,6 +70,7 @@ class WeshareBuyComponent extends Component {
                 'type' => COMMENT_SHARE_TYPE,
                 'data_id' => $share_ids,
                 'status' => COMMENT_SHOW_STATUS,
+                'parent_id' => 0,
                 'not' => array('order_id' => null)
             )
         ));
