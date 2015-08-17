@@ -641,7 +641,7 @@ class WesharesController extends AppController {
             'fields' => array('id')
         ));
         $weshare_ids = Hash::extract($weshares, '{n}.Weshare.id');
-        $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED);
+        $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_DONE, ORDER_STATUS_RECEIVED);
         if (!$is_me) {
             $order_status[] = ORDER_STATUS_VIRTUAL;
         }
