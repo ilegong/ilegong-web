@@ -422,6 +422,26 @@ class WeshareBuyComponent extends Component {
         return array('users' => $users, 'orders' => $orders, 'order_cart_map' => $order_cart_map, 'summery' => $product_buy_num, 'ship_types' => $shipTypes);
     }
 
+    public function batch_update_order_status($weshareId) {
+        $orderM = ClassRegistry::init('Order');
+        $cartM = ClassRegistry::init('Cart');
+        $cond = array(
+            'status' => array(ORDER_STATUS_RECEIVED, ORDER_STATUS_SHIPPED, ORDER_STATUS_PAID),
+            'type' => ORDER_TYPE_WESHARE_BUY
+        );
+        if (!empty($weshareId)) {
+            $cond['member_id'] = $weshareId;
+        }
+        $orders = $orderM->find('all', array(
+            'conditions' => $cond
+        ));
+        $order_ids = Hash::extract($orders, '{n}.Order.id');
+        //update order status
+        $orderM->updateAll(array('status' => ORDER_STATUS_RECEIVED, 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order_ids));
+        $cartM->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order_ids));
+        $this->process_send_to_comment_msg($orders);
+    }
+
     public function send_to_comment_msg($weshareId = null) {
         $orderM = ClassRegistry::init('Order');
         $limit_date = date('Y-m-d', strtotime("-4 days"));
