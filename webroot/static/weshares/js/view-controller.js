@@ -95,7 +95,7 @@
     }
   }
 
-  function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, $state, Utils, ngDialog) {
+  function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, $window, Utils, ngDialog) {
     var vm = this;
     vm.showShareDetailView = true;
     ChooseOfflineStore(vm, $log, $http, $templateCache, $timeout);
@@ -146,6 +146,7 @@
     vm.initWeshareData = initWeshareData;
     vm.sortOrders = sortOrders;
     vm.closeCommentDialog = closeCommentDialog;
+    vm.notifyUserToComment = notifyUserToComment;
     activate();
     function activate() {
       vm.initWeshareData();
@@ -523,9 +524,21 @@
         });
     }
 
+    function notifyUserToComment(order) {
+      vm.submitTempCommentData.order_id = order.id;
+      vm.submitTempCommentData.reply_comment_id = 0;
+      vm.submitTempCommentData.share_id = vm.weshare.id;
+      vm.submitComment();
+      order.notify = true;
+    }
+
     function submitComment() {
       $http.post('/weshares/comment/', vm.submitTempCommentData).success(function (data) {
         if (data.success) {
+          if(data.type='notify'){
+            $window.alert('已经通知TA');
+            return true;
+          }
           var order_id = data['order_id'];
           vm.reloadCommentData();
           if (vm.commentOrder.id == order_id && vm.commentOrder.status == 3) {

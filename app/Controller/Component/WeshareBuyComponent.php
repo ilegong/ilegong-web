@@ -136,6 +136,12 @@ class WeshareBuyComponent extends Component {
         $userM = ClassRegistry::init('User');
         $orderM = ClassRegistry::init('Order');
         $cartM = ClassRegistry::init('Cart');
+        $weshare_info = $this->get_weshare_info($share_id);
+        if ($weshare_info['creator'] == $comment_uid) {
+            //seller send to buyer
+            $this->send_comment_notify_buyer($order_id, $share_id, $comment_content);
+            return array('success' => true, 'type' => 'notify');
+        }
         $user_nickname = $userM->findNicknamesOfUid($comment_uid);
         $order_info = $orderM->findOrderByConditionsAndFields(array('id' => $order_id), array('created', 'creator'));
         $date_time = date('Y-m-d H:i:s');
@@ -146,7 +152,6 @@ class WeshareBuyComponent extends Component {
             $this->log('save comment fail order id ' . $order_id . ' uid ' . $comment_uid . ' share id ' . $share_id);
             return array('success' => false);
         }
-        $weshare_info = $this->get_weshare_info($share_id);
         if ($reply_comment_id != 0) {
             //save replay relation
             $commentReplyM = ClassRegistry::init('CommentReply');
@@ -178,10 +183,6 @@ class WeshareBuyComponent extends Component {
             if ($comment_uid == $order_info['Order']['creator']) {
                 //send to seller
                 $this->send_comment_notify($order_id, $share_id, $comment_content);
-            }
-            if ($weshare_info['creator'] == $comment_uid) {
-                //seller send to buyer
-                $this->send_comment_notify_buyer($order_id, $share_id, $comment_content);
             }
         }
         return array('success' => true, 'comment' => $comment['Comment'], 'comment_reply' => $commentReply['CommentReply'], 'order_id' => $order_id);
@@ -518,15 +519,15 @@ class WeshareBuyComponent extends Component {
         $this->Weixin->send_comment_template_msg($open_id, $detail_url, $title, $order_id, $order_date, $desc);
     }
 
-    public function send_comment_notify_buyer($order_id, $weshare_id, $comment_content){
+    public function send_comment_notify_buyer($order_id, $weshare_id){
         $order_info = $this->get_order_info($order_id);
         $order_creator = $order_info['creator'];
         $share_info = $this->get_weshare_info($weshare_id);
         $share_creator = $share_info['creator'];
         $uid_name_map = $this->get_users_nickname(array($order_creator, $share_creator));
-        $open_id_map = $this->get_open_ids(array($share_creator));
+        $open_id_map = $this->get_open_ids(array($order_creator));
         $open_id = $open_id_map[$order_creator];
-        $title = $uid_name_map[$order_creator].'你好，'.$uid_name_map[$share_creator].'说，' . $comment_content . '。';
+        $title = $uid_name_map[$order_creator].'你好，'.$uid_name_map[$share_creator].'说，商品收到了吧，怎么样，还好吗？';
         $order_id = $order_info['id'];
         $order_date = $order_info['created'];
         $desc = '分享，让生活更美。点击回复' . $uid_name_map[$share_creator] . '。';
