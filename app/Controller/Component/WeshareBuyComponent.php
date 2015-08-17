@@ -460,17 +460,18 @@ class WeshareBuyComponent extends Component {
         $this->process_send_to_comment_msg($orders);
     }
 
-    public function chage_status_and_send_to_comment_msg() {
+    public function chage_status_and_send_to_comment_msg($weshareId=null) {
         $orderM = ClassRegistry::init('Order');
         $cartM = ClassRegistry::init('Cart');
         $limit_date = date('Y-m-d', strtotime("-7 days"));
         $cond = array(
-            'DATE(updated)' => $limit_date,
             'status' => ORDER_STATUS_SHIPPED,
             'type' => ORDER_TYPE_WESHARE_BUY
         );
         if (!empty($weshareId)) {
             $cond['member_id'] = $weshareId;
+        } else {
+            $cond['DATE(updated)'] = $limit_date;
         }
         $orders = $orderM->find('all', array(
             'conditions' => $cond

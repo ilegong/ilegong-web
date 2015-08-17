@@ -28,9 +28,9 @@ class CronController extends AppController
         echo json_encode(array('success' => true));
     }
 
-    function change_share_order_status_and_send_msg(){
+    function change_share_order_status_and_send_msg($weshareId = null){
         $this->autoRender = false;
-        $this->WeshareBuy->chage_status_and_send_to_comment_msg();
+        $this->WeshareBuy->chage_status_and_send_to_comment_msg($weshareId);
         echo json_encode(array('success' => true));
     }
 
