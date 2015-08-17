@@ -415,7 +415,7 @@ class ShareController extends AppController{
             $this->Cart->saveAll($cart);
             $this->Order->updateAll(array('total_all_price' => $totalPrice / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => 0, 'status' => ORDER_STATUS_DONE), array('id' => $orderId));
             $comment_info['user_id'] = $creator;
-            $comment_info['username'] = $user_info['User']['nickname'];
+            $comment_info['username'] = $user_info['nickname'];
             $comment_info['data_id'] = $weshare_id;
             $comment_info['type'] = 'Share';
             $comment_info['order_id'] = $orderId;
