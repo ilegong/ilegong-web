@@ -137,15 +137,16 @@ class WeshareBuyComponent extends Component {
         $orderM = ClassRegistry::init('Order');
         $cartM = ClassRegistry::init('Cart');
         $user_nickname = $userM->findNicknamesOfUid($comment_uid);
-        $order_info = $orderM->findOrderByConditionsAndFields(array('id' => $order_id), array('created','creator'));
+        $order_info = $orderM->findOrderByConditionsAndFields(array('id' => $order_id), array('created', 'creator'));
         $date_time = date('Y-m-d H:i:s');
         $buy_date_time = $order_info['Order']['created'];
-        $commentData = array('parent_id' => $reply_comment_id, 'user_id' => $comment_uid, 'username' => $user_nickname, 'body' => $comment_content, 'data_id' => $share_id, 'type' => COMMENT_SHARE_TYPE,'publish_time' => $date_time ,'created' => $date_time, 'updated' => $date_time, 'buy_time' => $buy_date_time, 'order_id' => $order_id, 'status' => COMMENT_SHOW_STATUS);
+        $commentData = array('parent_id' => $reply_comment_id, 'user_id' => $comment_uid, 'username' => $user_nickname, 'body' => $comment_content, 'data_id' => $share_id, 'type' => COMMENT_SHARE_TYPE, 'publish_time' => $date_time, 'created' => $date_time, 'updated' => $date_time, 'buy_time' => $buy_date_time, 'order_id' => $order_id, 'status' => COMMENT_SHOW_STATUS);
         $comment = $commentM->save($commentData);
         if (empty($comment)) {
             $this->log('save comment fail order id ' . $order_id . ' uid ' . $comment_uid . ' share id ' . $share_id);
             return array('success' => false);
         }
+        $weshare_info = $this->get_weshare_info($share_id);
         if ($reply_comment_id != 0) {
             //save replay relation
             $commentReplyM = ClassRegistry::init('CommentReply');
@@ -156,8 +157,7 @@ class WeshareBuyComponent extends Component {
                 return array('success' => false);
             }
             //send share creator reply msg
-            $weshare_info = $this->get_weshare_info($share_id);
-            $reply_comment = $commentM->find('first',array(
+            $reply_comment = $commentM->find('first', array(
                 'conditions' => array(
                     'id' => $reply_comment_id
                 )
@@ -171,11 +171,18 @@ class WeshareBuyComponent extends Component {
             } elseif ($comment_uid != $reply_comment_uid) {
                 $this->send_comment_mutual_msg($comment_uid, $reply_comment_uid, $comment_content, $share_id, $order_id);
             }
-        }else{
+        } else {
             //update order status
             $orderM->updateAll(array('status' => ORDER_STATUS_DONE, 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order_id));
             $cartM->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order_id));
-            $this->send_comment_notify($order_id,$share_id,$comment_content);
+            if ($comment_uid == $order_info['Order']['creator']) {
+                //send to seller
+                $this->send_comment_notify($order_id, $share_id, $comment_content);
+            }
+            if ($weshare_info['creator'] == $comment_uid) {
+                //seller send to buyer
+                $this->send_comment_notify_buyer($order_id, $share_id, $comment_content);
+            }
         }
         return array('success' => true, 'comment' => $comment['Comment'], 'comment_reply' => $commentReply['CommentReply'], 'order_id' => $order_id);
     }
@@ -507,6 +514,22 @@ class WeshareBuyComponent extends Component {
         $order_id = $order_info['id'];
         $order_date = $order_info['created'];
         $desc = '分享，让生活更美。点击回复' . $uid_name_map[$order_creator] . '。';
+        $detail_url = $this->get_weshares_detail_url($weshare_id);
+        $this->Weixin->send_comment_template_msg($open_id, $detail_url, $title, $order_id, $order_date, $desc);
+    }
+
+    public function send_comment_notify_buyer($order_id, $weshare_id, $comment_content){
+        $order_info = $this->get_order_info($order_id);
+        $order_creator = $order_info['creator'];
+        $share_info = $this->get_weshare_info($weshare_id);
+        $share_creator = $share_info['creator'];
+        $uid_name_map = $this->get_users_nickname(array($order_creator, $share_creator));
+        $open_id_map = $this->get_open_ids(array($share_creator));
+        $open_id = $open_id_map[$order_creator];
+        $title = $uid_name_map[$order_creator].'你好，'.$uid_name_map[$share_creator].'说，' . $comment_content . '。';
+        $order_id = $order_info['id'];
+        $order_date = $order_info['created'];
+        $desc = '分享，让生活更美。点击回复' . $uid_name_map[$share_creator] . '。';
         $detail_url = $this->get_weshares_detail_url($weshare_id);
         $this->Weixin->send_comment_template_msg($open_id, $detail_url, $title, $order_id, $order_date, $desc);
     }

@@ -567,7 +567,13 @@
           comment_tip_info = '回复' + reply_username + '：';
         }
       } else {
-        comment_tip_info = '回复' + vm.weshare.creator.nickname + '说：';
+        //check is creator
+        if(vm.currentUser.id == vm.weshare.creator.id){
+          var order_username = vm.ordersDetail.users[order.creator]['nickname'];
+          comment_tip_info = '回复' + order_username + '说：';
+        }else{
+          comment_tip_info = '回复' + vm.weshare.creator.nickname + '说：';
+        }
       }
       vm.submitTempCommentData = {};
       vm.commentTipInfo = comment_tip_info;

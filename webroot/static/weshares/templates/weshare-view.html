@@ -66,7 +66,7 @@
                 <span class='display-name' ng-hide="_.isEmpty(vm.getOrderDisplayName(order.id))" ng-bind="vm.getOrderDisplayName(order.id)"></span>
                 <div style="display: inline-flex;width: 100%;">
                     <div><span class='created-at' ng-bind="order.created"></span></div>
-                    <div style="float: right;margin-left: 35%;" ng-if="order.status==3&&vm.isOwner(order)" ng-click="vm.showCommentDialog(order)"><div class="commenting-o"><i class="fa fa-commenting-o fa-lg"></i></div></div>
+                    <div style="float: right;margin-left: 35%;" ng-if="order.status==3&&(vm.isOwner(order)||vm.isCreator())" ng-click="vm.showCommentDialog(order)"><div class="commenting-o"><i class="fa fa-commenting-o fa-lg"></i></div></div>
                 </div>
                 <div class="send-info" ng-if="vm.isOwner(order)">
                     <span>姓名:</span>
