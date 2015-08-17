@@ -107,7 +107,7 @@ class WeshareBuyComponent extends Component {
                 'data_id' => $weshare_id,
                 'data_type' => COMMENT_SHARE_TYPE
             ),
-            'order' => array('id desc')
+            'order' => array('id ASC')
         ));
         $comment_reply_relation = array();
         foreach($commentReplies as $commentReply){
