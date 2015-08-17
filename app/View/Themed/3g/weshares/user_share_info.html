@@ -99,8 +99,8 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">{{$sharer_comment_data['comment_count']}}爱心评价</h4>
+                <button type="button" style="float: left;" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" style="text-align: center;">{{$sharer_comment_data['comment_count']}}爱心评价</h4>
             </div>
             <div class="modal-body">
                 <div class="message-wrap">
@@ -108,11 +108,10 @@
                         {{loop $sharer_comment_data['comments'] $comment}}
                         <div class="media msg">
                             <a class="pull-left" href="#">
-                                <img class="media-object" data-src="holder.js/64x64" alt="64x64" style="width: 32px; height: 32px;" src="{{$sharer_comment_data['comment_users'][$comment['Comment']['user_id']]['image']}}">
+                                <img class="img-circle" alt="64x64" style="width: 32px; height: 32px;" src="{{$sharer_comment_data['comment_users'][$comment['Comment']['user_id']]['image']}}">
                             </a>
                             <div class="media-body">
                                 <small class="pull-right time"><i class="fa fa-clock-o"></i>{{friendlyDateFromStr($comment['Comment']['created'], FFDATE_CH_MD);}}</small>
-
                                 <h5 class="media-heading">{{$comment['Comment']['username']}}</h5>
                                 <small class="col-lg-10">{{$comment['Comment']['body']}}</small>
                             </div>
@@ -120,9 +119,6 @@
                         {{/loop}}
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
