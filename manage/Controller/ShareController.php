@@ -163,7 +163,7 @@ class ShareController extends AppController{
         $old_product_comments = $this->Comment->find('all', array(
             'conditions' => array(
                 'data_id' => $product_id,
-                'data_type' => 'Product',
+                'type' => 'Product',
                 'not' => array('order_id' => null)
             ),
             'limit' => $num
@@ -193,8 +193,9 @@ class ShareController extends AppController{
             $item_user_id = $comment_info['user_id'];
             $user_info = $user_infos[$item_user_id];
             $order_info = $order_infos[$item_order_id];
-            $this->gen_order_has_comment($comment_info, $order_info, $weshare_id, $user_info, $weshare_id);
+            $this->gen_order_has_comment($comment_info, $order_info, $weshare_products, $user_info, $weshare_id);
         }
+        echo json_encode(array('success' => true));
     }
 
     public function admin_make_order($num = 1, $weshare_id) {
@@ -370,19 +371,20 @@ class ShareController extends AppController{
         return $items[array_rand($items)];
     }
 
-    private function gen_order_has_comment($comment_info,$order_info,$weshare_products,$user_info,$weshare_id){
+    private function gen_order_has_comment($comment_info, $order_info, $weshare_products, $user_info, $weshare_id) {
         $this->Order->id = null;
         $order_info['id'] = null;
         $order_info['member_id'] = $weshare_id;
         $order_info['creator'] = $user_info['id'];
-        $order['type'] = ORDER_TYPE_WESHARE_BUY;
+        $order_info['type'] = ORDER_TYPE_WESHARE_BUY;
+        $order_info['status'] = ORDER_STATUS_DONE;
         $order = $this->Order->save($order_info);
         $weshareProducts[] = $this->get_random_item($weshare_products);
         $order_date = $order['Order']['created'];
         $creator = $order['Order']['creator'];
         $weshare_id = $order['Order']['member_id'];
         $orderId = $order['Order']['id'];
-        if(!empty($orderId)){
+        if (!empty($orderId)) {
             $totalPrice = 0;
             foreach ($weshareProducts as $p) {
                 $item = array();
@@ -393,7 +395,7 @@ class ShareController extends AppController{
                 $item['price'] = $price;
                 $item['type'] = ORDER_TYPE_WESHARE_BUY;
                 $item['product_id'] = $p['WeshareProduct']['id'];
-                $item['created'] =$order_date;
+                $item['created'] = $order_date;
                 $item['updated'] = $order_date;
                 $item['creator'] = $creator;
                 $item['order_id'] = $orderId;
