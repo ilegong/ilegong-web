@@ -103,8 +103,8 @@
                 <h4 class="modal-title" style="text-align: center;">{{$sharer_comment_data['comment_count']}}爱心评价</h4>
             </div>
             <div class="modal-body">
-                <div class="message-wrap">
-                    <div class="msg-wrap">
+                <div class="">
+                    <div class="msg-wrap" style="padding: 0;">
                         {{loop $sharer_comment_data['comments'] $comment}}
                         <div class="media msg">
                             <a class="pull-left" href="#">
@@ -126,7 +126,7 @@
 {{/if}}
 <script>
     $(document).ready(function () {
-        $('div.media-body').on('click', function () {
+        $('div[name="share_item"]').on('click', function () {
             var $me = $(this);
             var id = $me.data('id');
             window.location.href = '/weshares/view/' + id;
