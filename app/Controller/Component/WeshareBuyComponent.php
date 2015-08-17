@@ -137,7 +137,7 @@ class WeshareBuyComponent extends Component {
         $orderM = ClassRegistry::init('Order');
         $cartM = ClassRegistry::init('Cart');
         $weshare_info = $this->get_weshare_info($share_id);
-        if ($weshare_info['creator'] == $comment_uid) {
+        if (($weshare_info['creator'] == $comment_uid) && $reply_comment_id == 0 && empty($comment_content)) {
             //seller send to buyer
             $this->send_comment_notify_buyer($order_id, $share_id, $comment_content);
             return array('success' => true, 'type' => 'notify');
