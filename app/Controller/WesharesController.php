@@ -355,7 +355,8 @@ class WesharesController extends AppController {
         }
         $myCreateShares = $this->Weshare->find('all', array(
             'conditions' => array(
-                'creator' => $uid
+                'creator' => $uid,
+                'status' => array(0, 1)
             ),
             'order' => array('created DESC')
         ));
@@ -377,7 +378,8 @@ class WesharesController extends AppController {
         $joinShareIds = array_unique($joinShareIds);
         $myJoinShares = $this->Weshare->find('all', array(
             'conditions' => array(
-                'id' => $joinShareIds
+                'id' => $joinShareIds,
+                'status' => array(0, 1)
             ),
             'order' => array('created DESC')
         ));
