@@ -520,7 +520,7 @@ class WeshareBuyComponent extends Component {
         if (!empty($weshareId)) {
             $cond['member_id'] = $weshareId;
         } else {
-            $cond['DATE(updated)'] = $limit_date;
+            $cond['DATE(updated) <= '] = $limit_date;
         }
         $orders = $orderM->find('all', array(
             'conditions' => $cond
