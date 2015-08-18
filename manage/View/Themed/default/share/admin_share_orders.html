@@ -34,16 +34,34 @@
     <div class="col-lg-6 pull-right">
         <form action="/manage/admin/share/share_orders" method="get" class="form-inline">
             <div class="form-group">
+                <label for="order_id">订单编号</label>
+                <input type="text" class="form-control" id="order_id" name="order_id" placeholder=""
+                       value="{{$order_id}}">
+            </div>
+            <div class="form-group">
                 <label for="start_date">开始日期</label>
-                <input type="text" class="form-control" id="start_date" name="start_date" placeholder="2015-07-21" value="{{$start_date}}">
+                <input type="text" class="form-control" id="start_date" name="start_date" placeholder="2015-07-21"
+                       value="{{$start_date}}">
             </div>
             <div class="form-group">
                 <label for="end_date">结束日期</label>
-                <input type="text" class="form-control" id="end_date" name="end_date" placeholder="2015-07-21" value="{{$end_date}}">
+                <input type="text" class="form-control" id="end_date" name="end_date" placeholder="2015-07-21"
+                       value="{{$end_date}}">
+            </div>
+            <div class="form-group">
+                <label for="order_status">订单状态</label>
+                <select class="form-control" id="order_status" name="order_status" value="{{$order_status}}">
+                    <option value="1">已支付</option>
+                    <option value="2">已发货</option>
+                    <option value="3">已收货</option>
+                    <option value="14">退款中</option>
+                    <option value="4">已退款</option>
+                </select>
             </div>
             <button type="submit" class="btn btn-default">查询</button>
         </form>
-    </div><!-- /.col-lg-6 -->
+    </div>
+    <!-- /.col-lg-6 -->
 </div><!-- /.row -->
 <div class="row">
     <div class="panel panel-primary filterable">
@@ -84,7 +102,7 @@
                     $current_share_creator = $weshare_creators[$current_share['creator']];
                     ?>
                     {{loop $current_order_carts $cart}}
-                        <tr>
+                        <tr data-id="{{$current_order['id']}}">
                             <td>{{$current_order['id']}}</td>
                             <td>{{$current_order['creator']}}</td>
                             <td>{{$current_order['consignee_name']}}</td>
@@ -98,13 +116,17 @@
                             <td>{{$cart['price']*$cart['num']/100}}</td>
                             <td>{{$current_order['total_all_price']}}</td>
                             <td>{{$current_order['created']}}</td>
-                            <td>
+                            <td name="status">
                                 {{if $current_order['status']==ORDER_STATUS_PAID}}
                                 已付款
                                 {{elseif $current_order['status'] == ORDER_STATUS_SHIPPED}}
                                 已发货
                                 {{elseif $current_order['status'] == ORDER_STATUS_RECEIVED}}
                                 已收货
+                                {{elseif $current_order['status'] == 14}}
+                                退款中
+                                {{elseif $current_order['status'] == 4}}
+                                已退款
                                 {{else}}
                                 已完成
                                 {{/if}}
@@ -120,9 +142,12 @@
                             </td>
                             <td>
                                 {{if $current_order['ship_mark']=='pys_zi_ti'&&$current_order['status']==1}}
-                                <button type="button" class="btn btn-danger send-offline-store-msg"
-                                        data-id="{{$current_order['id']}}" data-toggle="modal">发货
-                                </button>
+                                    <button type="button" class="btn btn-danger send-offline-store-msg"
+                                            data-id="{{$current_order['id']}}" data-toggle="modal">发货
+                                    </button>
+                                {{/if}}
+                                {{if $current_order['status']!=4}}
+                                <button type="button" class="btn btn-info refund-order" data-share-id="{{$current_order['member_id']}}" data-id="{{$current_order['id']}}">{{if $current_order['status']!=14}}退款{{else}}退款完成{{/if}}</button>
                                 {{/if}}
                             </td>
                         </tr>
@@ -132,12 +157,55 @@
         </table>
     </div>
 </div>
+<div class="modal" id="refundModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">订单退款操作</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="refund-money" class="col-sm-2 control-label">退款金额</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" id="refund-money" placeholder="金额/元">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="refund-reason" class="col-sm-2 control-label">退款描述</label>
+                        <div class="col-sm-10">
+                            <textarea id="refund-reason" class="form-control" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">退款状态</label>
+                        <div class="col-sm-10">
+                            <div class="checkbox">
+                                <label class="radio-inline">
+                                    <input type="radio" name="refund-status" value="0" checked="checked"> 退款中
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="refund-status" value="1"> 已退款
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary set-order-refund">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal" id="offlineStoreModal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">好邻居发送到货提醒</h4>
+                <h4 class="modal-title">好邻居发送到货提醒</h4>
             </div>
             <div class="modal-body">
                 <form>
@@ -160,9 +228,68 @@
      */
     $(document).ready(function(){
 
+        var order_status = '{{$order_status}}';
         var $offlineStoreDialog = $('#offlineStoreModal');
         var $offlineCodeInput = $('#offline-store-code');
+        var $refundDialog = $('#refundModal');
         var currentOrderId = '';
+        var currentRefundOrderId = '';
+        var $refundMoney = $('#refund-money');
+        var $refundReason = $('#refund-reason');
+        function setOption(selectElement, value) {
+            var options = selectElement.options;
+            for (var i = 0, optionsLength = options.length; i < optionsLength; i++) {
+                if (options[i].value == value) {
+                    selectElement.selectedIndex = i;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        setOption(document.getElementById('order_status'), order_status);
+
+        //process refund
+        $('button.refund-order').on('click', function(){
+            var $me = $(this);
+            currentRefundOrderId = $me.data('id');
+            //load refund data
+            $.getJSON('/manage/admin/orders/get_share_refund_log/'+currentRefundOrderId,function(data){
+                $refundDialog.modal('show');
+                $('div.modal-backdrop').css('z-index', 99);
+                if(data['id']){
+                    $refundMoney.val(data['refund_fee']/100);
+                    $refundReason.val(data['remark']);
+                }
+            });
+        });
+
+        $('button.set-order-refund').on('click', function () {
+            var $refundStatus = $('input[name=refund-status]:checked');
+            var refundMoney = $refundMoney.val();
+            var refundReason = $refundReason.val();
+            var refundStatus = $refundStatus.val();
+            $.post('/manage/admin/orders/process_share_refund', {
+                orderId: currentRefundOrderId,
+                refundMoney: refundMoney,
+                refundMark: refundReason,
+                refundStatus: refundStatus
+            }, function (data) {
+                console.log(data);
+                $refundDialog.modal('hide');
+                var $currentTr = $('tr[data-id="' + currentRefundOrderId + '"]');
+                var $statusTd = $('td[name="status"]', $currentTr);
+                var $refundBtn = $('button.refund-order', $currentTr);
+                if (refundStatus == 0) {
+                    $statusTd.text('退款中');
+                    $refundBtn.text('退款完成');
+                }
+                if (refundStatus == 1) {
+                    $statusTd.text('已退款');
+                    $refundBtn.remove();
+                }
+            });
+        });
 
         $('button.send-offline-store-code-msg').on('click', function () {
             var offlineStoreCode = $offlineCodeInput.val();

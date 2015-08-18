@@ -5,9 +5,9 @@ class AppController extends Controller {
     var $theme = 'default';//charisma,default,desktop
     var $viewClass = 'Miao';
     var $helpers = array(
-        'Html','Paginator', 'Section', 'Session', 'Form', 'Js','Layout', 'MForm',
-    	'Hook'=>array(),'Swfupload','Combinator',
-    		// 'Cache',// @todo. 将cache的操作集成到DzstyleView中，参考cachehelp但数据仍通过动态执行，缓存中不包含数据。相当于整合模版缓存的二级缓存
+        'Html', 'Paginator', 'Section', 'Session', 'Form', 'Js', 'Layout', 'MForm',
+        'Hook' => array(), 'Swfupload', 'Combinator', 'Number'
+        // 'Cache',// @todo. 将cache的操作集成到DzstyleView中，参考cachehelp但数据仍通过动态执行，缓存中不包含数据。相当于整合模版缓存的二级缓存
     );
     var $__viewFileName = '';
     var $components = array(

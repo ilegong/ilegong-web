@@ -567,6 +567,94 @@ class OrdersController extends AppController
         111 => '宅急送'
     );
 
+    public function admin_get_share_refund_log($order_id) {
+        $this->autoRender = false;
+        $this->loadModel('RefundLog');
+        $refundLog = $this->RefundLog->find('first', array(
+            'conditions' => array(
+                'order_id' => $order_id
+            )
+        ));
+        echo json_encode($refundLog['RefundLog']);
+        return;
+    }
+
+    public function admin_process_share_refund() {
+        $this->autoRender = false;
+        $this->loadModel('User');
+        $this->loadModel('Weshare');
+        $this->loadModel('RefundLog');
+        $this->loadModel('PayLog');
+        $this->loadModel('Order');
+        $orderId = $_REQUEST['orderId'];
+        $refundMoney = $_REQUEST['refundMoney'];
+        $refundMoney = intval(intval($refundMoney) * 1000 / 10);
+        App::uses('CakeNumber', 'Utility');
+        $showRefundMoney = CakeNumber::precision($refundMoney / 100, 2);
+        $refundMark = $_REQUEST['refundMark'];
+        $refundStatus = $_REQUEST['refundStatus'];
+        $refundLog = $this->RefundLog->find('first', array(
+            'conditions' => array(
+                'order_id' => $orderId
+            )
+        ));
+        if (empty($refundLog)) {
+            $PayLogInfo = $this->PayLog->find('first', array(
+                'conditions' => array(
+                    'order_id' => $orderId,
+                    'status' => 2
+                )
+            ));
+            $trade_type = $PayLogInfo['PayLog']['trade_type'];
+            if (empty($trade_type)) {
+                $trade_type = 'JSAPI';
+            }
+            $saveRefundLogData = array(
+                'order_id' => $orderId,
+                'refund_fee' => $refundMoney,
+                'created' => date('Y-m-d H:i:s'),
+                'trade_type' => $trade_type,
+                'remark' => $refundMark
+            );
+            $this->RefundLog->save($saveRefundLogData);
+        } else {
+            $refundLogId = $refundLog['RefundLog']['id'];
+            $this->RefundLog->updateAll(array('refund_fee' => $refundMoney, 'remark' => "'" . $refundMark . "'"), array('id' => $refundLogId));
+        }
+        $orderInfo = $this->Order->find('first', array(
+            'conditions' => array('id' => $orderId)
+        ));
+        $weshareId = $orderInfo['Order']['member_id'];
+        //refund processing
+        $weshareInfo = $this->Weshare->find('first', array(
+            'conditions' => array('id' => $weshareId)
+        ));
+        $order_creator_id = $orderInfo['Order']['creator'];
+        $order_creator_info = $this->User->find('first', array(
+            'conditions' => array(
+                'User.id' => $order_creator_id
+            ),
+            'recursive' => 0, //int
+            'fields' => array('User.id', 'User.nickname')
+        ));
+        $weshareTitle = $weshareInfo['Weshare']['title'];
+        $remark = '点击查看详情';
+        $detail_url = WX_HOST . '/weshares/view/' . $weshareId;
+        if ($refundStatus == 0) {
+            $this->Order->updateAll(array('status' => ORDER_STATUS_RETURNING_MONEY), array('id' => $orderId));
+            $title = $order_creator_info['User']['nickname'] . '，你好，我们已经为你申请退款，会在3-5个工作日内完成退款。';
+            $this->Weixin->send_refunding_order_notify($order_creator_id, $title, $weshareTitle, $showRefundMoney, $detail_url, $orderId, $remark);
+        }
+        //refund complete
+        if ($refundStatus == 1) {
+            $this->Order->updateAll(array('status' => ORDER_STATUS_RETURN_MONEY), array('id' => $orderId));
+            $title = $order_creator_info['User']['nickname'] . '，你好，我们已经为你退款，会在3个工作日内到账，请注意查收。';
+            $this->Weixin->send_refund_order_notify($order_creator_id, $title, $weshareTitle, $showRefundMoney, $detail_url, $orderId, $remark);
+        }
+        echo json_encode(array('success' => true));
+        return;
+    }
+
 
     public function admin_send_refund_notify()
     {

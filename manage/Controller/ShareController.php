@@ -313,16 +313,26 @@ class ShareController extends AppController{
         $cond = array(
             'type' => 9,
         );
-        if($start_date==$end_date){
-            $cond['DATE(created)'] = $query_date;
+        $request_order_id = $_REQUEST['order_id'];
+        if($request_order_id){
+                $cond['id'] = $request_order_id;
         }else{
-            $cond['DATE(created) >='] = $start_date;
-            $cond['DATE(created) <='] = $end_date;
+            if($start_date==$end_date){
+                $cond['DATE(created)'] = $query_date;
+            }else{
+                $cond['DATE(created) >='] = $start_date;
+                $cond['DATE(created) <='] = $end_date;
+            }
         }
         if($_REQUEST['weshare_id']){
             $query_share_id = $_REQUEST['weshare_id'];
         }
-        $cond['status'] = array(ORDER_STATUS_PAID,ORDER_STATUS_RECEIVED,ORDER_STATUS_SHIPPED);
+        $order_status = $_REQUEST['order_status'];
+        if($order_status){
+            $cond['status'] = array($order_status);
+        }else{
+            $cond['status'] = array(ORDER_STATUS_PAID,ORDER_STATUS_RECEIVED,ORDER_STATUS_SHIPPED);
+        }
         if($query_share_id){
            $cond['member_id'] = $query_share_id;
         }
@@ -366,13 +376,15 @@ class ShareController extends AppController{
             }
             $summery_result = array('order_count' => count($orders), 'total_all_price' => $total_price);
             $this->set('summery',$summery_result);
-            $this->set('start_date', $start_date);
-            $this->set('end_date', $end_date);
+            $this->set('start_date', $_REQUEST['start_date']);
+            $this->set('end_date', $_REQUEST['end_date']);
             $this->set('orders',$orders);
             $this->set('order_cart_map',$order_cart_map);
             $this->set('weshares',$weshares);
             $this->set('weshare_creators',$creators);
         }
+        $this->set('order_status',$order_status);
+        $this->set('order_id', $request_order_id);
     }
 
     private function get_random_item($items){
