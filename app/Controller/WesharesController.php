@@ -489,7 +489,9 @@ class WesharesController extends AppController {
             $this->redirect("/weshares/view/" . $weshareId);
         }
         $statics_data = $this->get_weshare_buy_info($weshareId, true, true);
+        $refund_money = $this->WeshareBuy->get_refund_money_by_weshare($weshareId);
         $this->set($statics_data);
+        $this->set('refund_money', $refund_money);
         $this->set('ship_type_list', ShipAddress::ship_type_list());
         $this->set('hide_footer', true);
         $this->set('user_id', $user_id);

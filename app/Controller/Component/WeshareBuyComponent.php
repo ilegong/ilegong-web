@@ -375,6 +375,30 @@ class WeshareBuyComponent extends Component {
         send_join_tuan_buy_msg(null,$title,$productName,$sharerName,$remark,$detailUrl,$openId);
     }
 
+    public function get_refund_money_by_weshare($weshareId) {
+        $orderM = ClassRegistry::init('Order');
+        $refundLogM = ClassRegistry::init('RefundLog');
+        $refund_orders = $orderM->find('all', array(
+            'conditions' => array(
+                'member_id' => $weshareId,
+                'status' => array(ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY),
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'deleted' => DELETED_NO
+            )
+        ));
+        $refund_order_ids = Hash::extract($refund_orders, '{n}.Order.id');
+        $refund_logs = $refundLogM->find('all', array(
+            'conditions' => array(
+                'order_id' => $refund_order_ids
+            )
+        ));
+        $refund_money = 0;
+        foreach ($refund_logs as $item_log) {
+            $refund_money = $refund_money + $item_log['RefundLog']['refund_fee'];
+        }
+        return $refund_money / 100;
+    }
+
     public function get_share_order_for_show($weshareId, $is_me, $division = false){
         $this->Weshare = ClassRegistry::init('Weshare');
         $this->Order = ClassRegistry::init('Order');

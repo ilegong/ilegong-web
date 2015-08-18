@@ -63,14 +63,19 @@
                         <td>{{$creators[$share['creator']]['nickname']}}</td>
                         <td>{{$creators[$share['creator']]['mobilephone']}}</td>
                         <td>{{$share['title']}}</td>
-                        {{if $weshare_summery[$share['id']]}}
-                        <td>{{$weshare_summery[$share['id']]['total_price']}}</td>
-                        {{else}}
-                        <td>0</td>
-                        {{/if}}
+                            {{if $weshare_summery[$share['id']]}}
+                                {{if $weshare_refund_map[$share['id']]}}
+                                    <td>{{$weshare_summery[$share['id']]['total_price'] - $weshare_refund_map[$share['id']]}}</td>
+                                {{else}}
+                                    <td>{{$weshare_summery[$share['id']]['total_price']}}</td>
+                                {{/if}}
+                            {{else}}
+                                <td>0</td>
+                            {{/if}}
                         <td>{{$creators[$share['creator']]['payment']}}</td>
                         <td><!-- Indicates a successful or positive action -->
-                            <a data-name="{{$share['title']}}" data-id="{{$share['id']}}" type="button" class="btn btn-success set-share-paid">置为已付款</a>
+                            <a data-name="{{$share['title']}}" data-id="{{$share['id']}}" type="button"
+                               class="btn btn-success set-share-paid">置为已付款</a>
                         </td>
                     </tr>
                     {{/loop}}

@@ -10,7 +10,7 @@ class ShareController extends AppController{
 
     var $name = 'Share';
 
-    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'WeshareShipSetting', 'OfflineStore', 'Oauthbind', 'Comment');
+    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'WeshareShipSetting', 'OfflineStore', 'Oauthbind', 'Comment', 'RefundLog');
 
     var $components = array('Weixin');
 
@@ -78,9 +78,9 @@ class ShareController extends AppController{
     }
 
     public function admin_share_for_pay(){
-        $weshares = $this->Weshare->find('all',array(
+        $weshares = $this->Weshare->find('all', array(
             'conditions' => array(
-                'status' => array(1,2),
+                'status' => array(1, 2),
                 'settlement' => 0
             )
         ));
@@ -94,26 +94,49 @@ class ShareController extends AppController{
                 'id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'mobilephone', 'payment'
             )
         ));
-        $creators = Hash::combine($creators, '{n}.User.id','{n}.User');
-        $weshares = Hash::combine($weshares,'{n}.Weshare.id', '{n}.Weshare');
+        $creators = Hash::combine($creators, '{n}.User.id', '{n}.User');
+        $weshares = Hash::combine($weshares, '{n}.Weshare.id', '{n}.Weshare');
         $orders = $this->Order->find('all', array(
             'conditions' => array(
                 'type' => ORDER_TYPE_WESHARE_BUY,
                 'member_id' => $weshare_ids,
-                'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED)
+                'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY)
             )
         ));
+        $refund_orders = array();
+        $refund_order_ids = array();
         $summery_data = array();
-        foreach($orders as $item){
+        foreach ($orders as $item) {
             $member_id = $item['Order']['member_id'];
             $order_total_price = $item['Order']['total_all_price'];
-            if(!isset($summery_data[$member_id])){
+            if ($item['Order']['status'] == ORDER_STATUS_RETURN_MONEY || $item['Order']['status'] == ORDER_STATUS_RETURNING_MONEY) {
+                $refund_order_ids[] = $item['Order']['id'];
+                if (!isset($refund_orders[$member_id])) {
+                    $refund_orders[$member_id] = array();
+                }
+                $refund_orders[$member_id][] = $item;
+            }
+            if (!isset($summery_data[$member_id])) {
                 $summery_data[$member_id] = array('total_price' => 0);
             }
-            $summery_data[$member_id]['total_price'] = $summery_data[$member_id]['total_price']+$order_total_price;
+            $summery_data[$member_id]['total_price'] = $summery_data[$member_id]['total_price'] + $order_total_price;
         }
-        $this->set('weshares',$weshares);
-        $this->set('weshare_summery',$summery_data);
+        $refund_logs = $this->RefundLog->find('all', array(
+            'order_id' => $refund_order_ids
+        ));
+        $refund_logs = Hash::combine($refund_logs,'{n}.RefundLog.order_id', '{n}.RefundLog.refund_fee');
+        $weshare_refund_money_map = array();
+        foreach ($refund_orders as $item_share_id => $item_orders) {
+            $share_refund_money = 0;
+            foreach ($item_orders as $refund_order_item) {
+                $order_id = $refund_order_item['Order']['id'];
+                $share_refund_money = $share_refund_money + $refund_logs[$order_id];
+            }
+            $weshare_refund_money_map[$item_share_id] = $share_refund_money/100;
+        }
+        $this->set('weshare_refund_map',$weshare_refund_money_map);
+        $this->set('weshares', $weshares);
+        $this->set('weshare_summery', $summery_data);
         $this->set('creators', $creators);
     }
 

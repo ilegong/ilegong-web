@@ -15,7 +15,13 @@
                     {{else}}
                         已取货
                     {{/if}}
-                {{else}}已完成{{/if}}
+                {{elseif $item_order['status']==ORDER_STATUS_RETURN_MONEY}}
+                已退款
+                {{elseif $item_order['status']==ORDER_STATUS_RETURNING_MONEY}}
+                退款中
+                {{else}}
+                    已完成
+                {{/if}}
             </div>
         </div>
         <div class="offer-content">
