@@ -412,9 +412,9 @@ class WeshareBuyComponent extends Component {
         if ($orders) {
             if($is_me){
                 usort($orders, function ($a, $b) {
-                    $a_update_date = $a['update'];
+                    $a_update_date = $a['updated'];
                     $a_update_date_time = strtotime($a_update_date);
-                    $b_update_date = $b['update'];
+                    $b_update_date = $b['updated'];
                     $b_update_date_time = strtotime($b_update_date);
                     return ($a_update_date_time < $b_update_date_time) ? 1 : -1;
                 });
