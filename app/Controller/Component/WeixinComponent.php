@@ -738,13 +738,16 @@ class WeixinComponent extends Component
         $weshare_info = $good['weshare_info'];
         $title = $weshare_info['Weshare']['title'];
         $userM = ClassRegistry::init('User');
-        $creatorNickName = $userM->findNicknamesOfUid($weshare_info['Weshare']['creator']);
+        $creatorInfo = $userM->findById($weshare_info['Weshare']['creator']);
+        //$creatorNickName = $userM->findNicknamesOfUid($weshare_info['Weshare']['creator']);
+        $creatorNickName = $creatorInfo['User']['nickname'];
         $org_msg = "亲，您报名了".$creatorNickName."分享的".$title;
         if($order['Order']['ship_mark'] == SHARE_SHIP_KUAIDI_TAG){
             $org_msg = $org_msg.'，请留意后续的发货通知。';
         }else{
             $org_msg = $org_msg.'，请留意当天的取货提醒哈。';
         }
+        $org_msg = $org_msg.$creatorNickName.'电话:'.$creatorInfo['User']['mobilephone'];
         $post_data = array(
             "touser" => $open_id,
             "template_id" => $this->wx_message_template_ids["ORDER_PAID"],

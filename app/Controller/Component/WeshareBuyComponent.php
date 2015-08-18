@@ -5,7 +5,7 @@ class WeshareBuyComponent extends Component {
     //TODO 重构 weshare controller
     var $name = 'WeshareBuyComponent';
 
-    var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description');
+    var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'mobilephone');
 
     var $query_order_fields = array('id', 'creator', 'created', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type');
 
@@ -272,10 +272,17 @@ class WeshareBuyComponent extends Component {
                 )
             ));
             $share_creator = $weshare_info['Weshare']['creator'];
-            $nick_name_map = $this->User->findNicknamesMap(array($share_creator, $order_user_id));
-            $order_user_nickname = $nick_name_map[$order_user_id];
-            $share_creator_nickname = $nick_name_map[$share_creator];
-            $title = $order_user_nickname . '你好，' . $share_creator_nickname . '分享的' . $weshare_info['Weshare']['title'] . '寄出了，请注意查收。';
+            $users = $this->User->find('all', array(
+                'conditions' => array(
+                    'id' => array($share_creator, $order_user_id)
+                ),
+                'fields' => $this->query_user_fields
+            ));
+            $users = Hash::combine($users, '{n}.User.id', '{n}.User');
+            //$nick_name_map = $this->User->findNicknamesMap(array($share_creator, $order_user_id));
+            $order_user_nickname = $users[$order_user_id]['nickname'];
+            $share_creator_nickname = $users[$share_creator]['nickname'];
+            $title = $order_user_nickname . '你好，' . $share_creator_nickname . '分享的' . $weshare_info['Weshare']['title'] . '寄出了，请注意查收。'.$share_creator_nickname.'电话:'.$users[$share_creator]['mobilephone'];
             $shipTypesList = ShipAddress::ship_type_list();
             $ship_company_name = $shipTypesList[$order_info['Order']['ship_type']];
             $ship_code = $order_info['Order']['ship_code'];
@@ -403,9 +410,19 @@ class WeshareBuyComponent extends Component {
         ));
         $orders = Hash::combine($orders, '{n}.Order.id', '{n}.Order');
         if ($orders) {
-            usort($orders, function ($a, $b) {
-                return ($a['id'] < $b['id']) ? -1 : 1;
-            });
+            if($is_me){
+                usort($orders, function ($a, $b) {
+                    $a_update_date = $a['update'];
+                    $a_update_date_time = strtotime($a_update_date);
+                    $b_update_date = $b['update'];
+                    $b_update_date_time = strtotime($b_update_date);
+                    return ($a_update_date_time < $b_update_date_time) ? 1 : -1;
+                });
+            }else{
+                usort($orders, function ($a, $b) {
+                    return ($a['id'] < $b['id']) ? -1 : 1;
+                });
+            }
         }
         $carts = $this->Cart->find('all', array(
             'conditions' => array(
