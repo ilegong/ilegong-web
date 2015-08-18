@@ -10,7 +10,7 @@ class ShareController extends AppController{
 
     var $name = 'Share';
 
-    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'WeshareShipSetting', 'OfflineStore', 'Oauthbind', 'Comment', 'RefundLog');
+    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'WeshareShipSetting', 'OfflineStore', 'Oauthbind', 'Comment', 'RefundLog', 'PayNotify');
 
     var $components = array('Weixin');
 
@@ -370,6 +370,12 @@ class ShareController extends AppController{
             }
             $order_ids = Hash::extract($orders, '{n}.Order.id');
             $member_ids = Hash::extract($orders, '{n}.Order.member_id');
+            $pay_notifies = $this->PayNotify->find('all', array(
+                'conditions' => array(
+                    'order_id' => $order_ids
+                )
+            ));
+            $pay_notifies = Hash::combine($pay_notifies, '{n}.PayNotify.order_id', '{n}.PayNotify.out_trade_no');
             $weshares = $this->Weshare->find('all', array(
                 'conditions' => array(
                     'id' => $member_ids
@@ -398,13 +404,14 @@ class ShareController extends AppController{
                 $order_cart_map[$order_id][] = $item['Cart'];
             }
             $summery_result = array('order_count' => count($orders), 'total_all_price' => $total_price);
-            $this->set('summery',$summery_result);
+            $this->set('summery', $summery_result);
             $this->set('start_date', $_REQUEST['start_date']);
             $this->set('end_date', $_REQUEST['end_date']);
-            $this->set('orders',$orders);
-            $this->set('order_cart_map',$order_cart_map);
-            $this->set('weshares',$weshares);
-            $this->set('weshare_creators',$creators);
+            $this->set('orders', $orders);
+            $this->set('order_cart_map', $order_cart_map);
+            $this->set('weshares', $weshares);
+            $this->set('pay_notifies', $pay_notifies);
+            $this->set('weshare_creators', $creators);
         }
         $this->set('order_status',$order_status);
         $this->set('order_id', $request_order_id);

@@ -89,6 +89,7 @@
                     <th><input type="text" class="form-control" placeholder="创建时间" disabled></th>
                     <th><input type="text" class="form-control" placeholder="状态" disabled></th>
                     <th><input type="text" class="form-control" placeholder="物流方式" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="交易号" disabled></th>
                     <th>操作</th>
                 </tr>
             </thead>
@@ -139,6 +140,9 @@
                                 {{else}}
                                     快递
                                 {{/if}}
+                            </td>
+                            <td>
+                                {{$pay_notifies[$current_order['id']]}}
                             </td>
                             <td>
                                 {{if $current_order['ship_mark']=='pys_zi_ti'&&$current_order['status']==1}}
