@@ -124,30 +124,31 @@ class WeshareBuyComponent extends Component {
 
     private function recursionReply($order_comments, $reply_comments, $comment_replay_relation) {
         $comment_reply_format_result = array();
-        foreach($order_comments as $comment){
+        foreach ($order_comments as $comment) {
             $comment_id = $comment['id'];
             $comment_reply_result = array();
-            $this->processRecursionReply($reply_comments, $comment_reply_result, $comment_replay_relation, $comment_id, $level = 0);
+            $this->processRecursionReply($reply_comments, $comment_reply_result, $comment_replay_relation, $comment_id, 0);
             $comment_reply_format_result[$comment_id] = $comment_reply_result;
         }
         return $comment_reply_format_result;
     }
 
-    private function processRecursionReply($reply_comments, &$comment_replay_format_result, $comment_replay_relation, $comment_id, $level = 1) {
+    private function processRecursionReply($reply_comments, &$comment_replay_format_result, $comment_replay_relation, $comment_id, $level = 0) {
         $current_comment_replay_relation = $comment_replay_relation[$comment_id];
         if (!empty($current_comment_replay_relation)) {
             foreach ($current_comment_replay_relation as $reply_id) {
                 $reply = $reply_comments[$reply_id];
                 $username = $reply['username'];
                 $user_id = $reply['user_id'];
-                $item_reply_data = array( 'id' => $reply['id'], 'body' => $reply['body'],'plain_username' => $username);
+                $item_reply_data = array('id' => $reply['id'], 'body' => $reply['body'], 'plain_username' => $username);
                 $item_reply_data['username'] = $username;
                 $item_reply_data['user_id'] = $user_id;
                 $item_reply_data['is_reply'] = 0;
-                if($level == 1 && !empty($reply_comments[$comment_id])){
+                //todo check code issue
+                if ($level == 1) {
                     $parent_comment = $reply_comments[$comment_id];
                     $reply_user_id = $parent_comment['user_id'];
-                    if($user_id!=$reply_user_id){
+                    if ($user_id != $reply_user_id) {
                         $item_reply_data['reply_username'] = $parent_comment['username'];
                         $item_reply_data['reply_user_id'] = $reply_user_id;
                         $item_reply_data['is_reply'] = 1;
@@ -155,12 +156,11 @@ class WeshareBuyComponent extends Component {
                 }
                 $comment_replay_format_result[] = $item_reply_data;
                 $reply_reply_relation = $comment_replay_relation[$reply_id];
-                if(!empty($reply_reply_relation)){
-                    $this->processRecursionReply($reply_comments, $comment_replay_format_result, $comment_replay_relation, $reply_id, $level = 1);
+                if (!empty($reply_reply_relation)) {
+                    $this->processRecursionReply($reply_comments, $comment_replay_format_result, $comment_replay_relation, $reply_id, 1);
                 }
             }
         }
-        return $comment_replay_format_result;
     }
 
     public function create_share_comment($order_id, $comment_content, $reply_comment_id, $comment_uid, $share_id) {
