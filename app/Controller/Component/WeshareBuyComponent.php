@@ -396,7 +396,7 @@ class WeshareBuyComponent extends Component {
                 'status' => $order_status,
                 'deleted' => DELETED_NO
             ),
-            'fields' => array('id', 'creator', 'created', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type'),
+            'fields' => array('id', 'creator', 'created', 'updated', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type'),
             'order' => $sort
         ));
         $orderIds = Hash::extract($orders, '{n}.Order.id');
