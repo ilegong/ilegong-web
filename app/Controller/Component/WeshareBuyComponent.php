@@ -211,7 +211,7 @@ class WeshareBuyComponent extends Component {
         } else {
             //update order status
             $orderM->updateAll(array('status' => ORDER_STATUS_DONE, 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order_id));
-            $cartM->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order_id));
+            $cartM->updateAll(array('status' => ORDER_STATUS_DONE), array('order_id' => $order_id));
             if ($comment_uid == $order_info['Order']['creator']) {
                 //send to seller
                 $this->send_comment_notify($order_id, $share_id, $comment_content);
