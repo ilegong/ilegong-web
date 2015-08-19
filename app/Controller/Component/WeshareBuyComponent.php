@@ -216,7 +216,7 @@ class WeshareBuyComponent extends Component {
                 $this->send_comment_notify($order_id, $share_id, $comment_content);
             }
             if (!empty($comment['Comment']['id'])) {
-               $result =  $this->send_shareed_offer_notify($order_id, $share_id, $comment['Comment']['id']);
+                $this->send_shareed_offer_notify($order_id, $share_id, $comment['Comment']['id']);
             }
         }
         return array('success' => true, 'comment' => $comment['Comment'], 'comment_reply' => $commentReply['CommentReply'], 'order_id' => $order_id);
@@ -624,7 +624,7 @@ class WeshareBuyComponent extends Component {
         $keyword1 = $uid_name_map[$share_creator] . '分享礼包';
         $offer = $this->Weixin->send_share_offer_msg($open_id, $order_id, $title, $detail_url, $keyword1, $desc, $comment_id);
         $share_offer_id = $offer['id'];
-        $this->RedPacket->process_receive($share_offer_id, $order_creator, true);
+        $this->RedPacket->process_receive($share_offer_id, $order_creator, true, false);
     }
 
     public function send_comment_notify($order_id, $weshare_id, $comment_content) {
