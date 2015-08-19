@@ -571,7 +571,12 @@ class WeixinComponent extends Component
             $name = $offer['name'];
         }
         if ($number > 0) {
-            return $this->send_packet_received_message_by_openid($open_id, $number / 100, $name, $title, $detail_url, $keyword1, $desc);
+            if(empty($comment_id)){
+                return $this->send_packet_received_message_by_openid($open_id, $number / 100, $name, $title, $detail_url, $keyword1, $desc);
+            }else{
+                $this->send_packet_received_message_by_openid($open_id, $number / 100, $name, $title, $detail_url, $keyword1, $desc);
+                return $offer;
+            }
         }
         return false;
     }
