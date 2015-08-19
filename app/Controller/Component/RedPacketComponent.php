@@ -13,6 +13,7 @@ class RedPacketComponent extends Component {
      * @param $shared_offer_id
      * @param $uid
      * @param bool $is_weixin
+     * @param $send_msg
      * @return array
      * 处理红包 逻辑
      */
