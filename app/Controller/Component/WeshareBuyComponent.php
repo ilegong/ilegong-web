@@ -215,9 +215,9 @@ class WeshareBuyComponent extends Component {
             if ($comment_uid == $order_info['Order']['creator']) {
                 $this->send_comment_notify($order_id, $share_id, $comment_content);
             }
-//            if (!empty($comment['Comment']['id'])) {
-//                $this->send_shareed_offer_notify($order_id, $share_id, $comment['Comment']['id']);
-//            }
+            if (!empty($comment['Comment']['id'])) {
+                $this->send_shareed_offer_notify($order_id, $share_id, $comment['Comment']['id']);
+            }
         }
         return array('success' => true, 'comment' => $comment['Comment'], 'comment_reply' => $commentReply['CommentReply'], 'order_id' => $order_id);
     }
@@ -558,6 +558,9 @@ class WeshareBuyComponent extends Component {
         $this->process_send_to_comment_msg($orders);
     }
 
+    /**
+     * @param $orders
+     */
     private function process_send_to_comment_msg($orders){
         $oauthBindM = ClassRegistry::init('Oauthbind');
         $order_uids = Hash::extract($orders, '{n}.Order.creator');
@@ -600,6 +603,12 @@ class WeshareBuyComponent extends Component {
         $this->Weixin->send_comment_template_msg($open_id, $detail_url, $title, $order_id, $order_date, $desc);
     }
 
+    /**
+     * @param $order_id
+     * @param $weshare_id
+     * @param $comment_id
+     * 评论分享礼包
+     */
     public function send_shareed_offer_notify($order_id, $weshare_id, $comment_id) {
         //send to seller
         $order_info = $this->get_order_info($order_id);

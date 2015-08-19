@@ -113,8 +113,14 @@ class ShareOffer extends AppModel {
                     $userShared = $usModel->find_user_shared_offer($uid, $orderId, $so['ShareOffer']['id']);
                 }
                 if (empty($userShared)){
-                    //ratio_percent 生成红包的返点数
-                    $toShareNum = round( ($so['ShareOffer']['ratio_percent'] * $total_all_price * 100)/100, 0, PHP_ROUND_HALF_DOWN);
+                    if(!empty($commentId)){
+                        //ratio_percent 生成红包的返点数
+                        //$toShareNum = round( (1 * $total_all_price * 100)/100, 0, PHP_ROUND_HALF_DOWN);
+                        $toShareNum = 50;
+                    }else{
+                        //ratio_percent 生成红包的返点数
+                        $toShareNum = round( ($so['ShareOffer']['ratio_percent'] * $total_all_price * 100)/100, 0, PHP_ROUND_HALF_DOWN);
+                    }
                     if ($toShareNum <= 0) {
                         return null;
                     }
@@ -247,12 +253,14 @@ class ShareOffer extends AppModel {
         if ($userSharedModel->save($saveData)
         ) {
             $avg = $shareOffer['ShareOffer']['avg_number'];
-            $split_num = round($toShareNum/$avg, 0, PHP_ROUND_HALF_UP);
+            if(empty($commentId)){
+                $split_num = round($toShareNum/$avg, 0, PHP_ROUND_HALF_UP);
+            }else{
+                $split_num = 1;
+            }
             $amount_left = $toShareNum;
-
             $shared_id = $userSharedModel->getLastInsertID();
             $mSharedSlice = ClassRegistry::init('SharedSlice');
-
             //只有总体多于1毛，平均大于1分，才能分成多个红包
             if ($split_num > 1 && $avg >= 1) {
                 for ($i = 0; $i < $split_num; $i++) {
