@@ -130,35 +130,34 @@
 <div class="share-dialog" ng-show="vm.showNotifyShareDialog">
     <div style="width: 90%; margin: 0 auto; font-size: 1.3em;">点击右上角“…”，告诉{{vm.weshare.creator.nickname}}我团好了。</div>
 </div>
-<div class="redpacket" ng-show="vm.showNotifyGetPacketDialog">
-    <div class="first-box" ng-click="vm.showNotifyGetPacketDialog=false;vm.showLayer=false;">
-        <img class="body" src="/static/weshares/images/redpacket/fools_1.png">
-        <img class="user-headimg" ng-src="{{vm.weshare.creator.image||'/static/weshares/images/redpacket/hbss_icon.jpg'}}">
-        <div class="hot-click">
-            <div style="color:#FFFFFF;font-size:20pt; margin-top: 40%;vertical-align: middle;text-align: center;line-height: 20px;" ng-bind="vm.getPacketNum"></div>
+
+<div ng-show="vm.showNotifyGetPacketDialog" style="border: white;position: fixed;top: 58px;left: 8%; z-index: 999;padding: 10px 10px 10px;width: 80%;border-radius: 8px;display: block; background: #ff9426;">
+    <div style="text-align: center;">
+        <div style="height: 10px;line-height: 10px;">
+            <img src="/static/weshares/images/close.png" style="height: 12px; position: absolute; left: 10px; top: 10px; width: 12px;">
         </div>
-        <div class="nickname" ng-bind="vm.weshare.creator.nickname"></div>
-        <div class="tips">报名时直接抵现金</div>
+        <div>
+            <img style="width:50px; border-radius: 50px; height: 50px;" ng-src="{{vm.weshare.creator.image||'/static/weshares/images/redpacket/hbss_icon.jpg'}}"/>
+        </div>
+        <div style="line-height: 24px;">
+            <h3 style="color:  #FFFFFF;margin-bottom: 5px;">{{vm.weshare.creator.nickname}}送你分享礼包</h3>
+            <p style="color: darkslategray; line-height: normal;">获得{{vm.getPacketNum}}礼包，礼包金额可抵现金，分享礼包给小伙伴吧！</p>
+        </div>
     </div>
 </div>
-<!--paid done has red packet-->
-<img src="/static/weshares/images/shareto.png" style="top:0;right: 20px;position: fixed;z-index: 9999;" ng-show="vm.showNotifyShareOfferDialog"/>
-<div ng-show="vm.showNotifyShareOfferDialog" style="border: white;position: fixed;top: 58px;left: 8%; z-index: 999;padding: 10px 10px 10px;width: 80%;border-radius: 15px;">
-    <div style="background: #ff9426; border-radius: 5px 5px 0px 0px;">
-        <div style="display: inline-block; margin-left: 10px;margin-bottom: 10px;margin-top: 10px;">
-            <img style="width: 40px;height: 40px;" ng-src="/static/weshares/images/redpacket/hbicon.png"/>
-            <div style="color: #FFFFFF;margin-left:10px;display: inline-block;">
-                <div style="font-size: small; margin-bottom: 10px;">
-                    恭喜发财，大吉大利！
-                </div>
-                <div style="font-size: small;">
-                    分享领取红包
-                </div>
-            </div>
+
+<div ng-show="vm.showNotifyShareOfferDialog" style="border: white;position: fixed;top: 58px;left: 8%; z-index: 999;padding: 10px 10px 10px;width: 80%;border-radius: 8px;display: block; background: #ff9426;">
+    <div style="text-align: center;">
+        <div style="height: 10px;line-height: 10px;">
+            <img src="/static/weshares/images/close.png" style="height: 12px; position: absolute; left: 10px; top: 10px; width: 12px;">
         </div>
-    </div>
-    <div style="background: #FFFFFF;color: darkgray;font-size: smaller;border-radius:0px 0px 5px 5px;">
-        &nbsp;&nbsp;&nbsp;{{vm.weshare.creator.nickname}}的红包
+        <div>
+            <img style="width:50px; border-radius: 50px; height: 50px;" src="/static/weshares/images/red_packet.jpg"/>
+        </div>
+        <div style="line-height: 24px;">
+            <h3 style="color:  #FFFFFF;margin-bottom: 5px;">{{vm.weshare.creator.nickname}}送你分享礼包</h3>
+            <p style="color: darkslategray; line-height: normal;">分享礼包给小伙伴，礼包金额可抵现金，赶快分享吧！</p>
+        </div>
     </div>
 </div>
 <!--评价层-->

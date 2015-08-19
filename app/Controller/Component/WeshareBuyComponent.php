@@ -213,8 +213,10 @@ class WeshareBuyComponent extends Component {
             $orderM->updateAll(array('status' => ORDER_STATUS_DONE, 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order_id));
             $cartM->updateAll(array('status' => ORDER_STATUS_DONE), array('order_id' => $order_id));
             if ($comment_uid == $order_info['Order']['creator']) {
-                //send to seller
                 $this->send_comment_notify($order_id, $share_id, $comment_content);
+            }
+            if (!empty($comment['Comment']['id'])) {
+                $this->send_shareed_offer_notify($order_id, $share_id, $comment['Comment']['id']);
             }
         }
         return array('success' => true, 'comment' => $comment['Comment'], 'comment_reply' => $commentReply['CommentReply'], 'order_id' => $order_id);
@@ -596,6 +598,22 @@ class WeshareBuyComponent extends Component {
         $open_id_map = $this->get_open_ids(array($reply_id));
         $open_id = $open_id_map[$reply_id];
         $this->Weixin->send_comment_template_msg($open_id, $detail_url, $title, $order_id, $order_date, $desc);
+    }
+
+    public function send_shareed_offer_notify($order_id, $weshare_id, $comment_id) {
+        //send to seller
+        $order_info = $this->get_order_info($order_id);
+        $order_creator = $order_info['creator'];
+        $share_info = $this->get_weshare_info($weshare_id);
+        $share_creator = $share_info['creator'];
+        $uid_name_map = $this->get_users_nickname(array($order_creator, $share_creator));
+        $open_id_map = $this->get_open_ids(array($order_creator));
+        $open_id = $open_id_map[$order_creator];
+        $detail_url = $this->get_weshares_detail_url($weshare_id);
+        $title = $uid_name_map[$order_creator] . '，你好，恭喜你获得' . $uid_name_map[$share_creator] . '分享礼包！报名可以抵现！';
+        $desc = '分享，让生活更美。点击查看。';
+        $keyword1 = $uid_name_map[$share_creator] . '分享礼包';
+        $this->Weixin->send_share_offer_msg($open_id, $order_id, $title, $detail_url, $keyword1, $desc, $comment_id);
     }
 
     public function send_comment_notify($order_id, $weshare_id, $comment_content) {

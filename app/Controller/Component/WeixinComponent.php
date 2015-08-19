@@ -533,7 +533,7 @@ class WeixinComponent extends Component
         return false;
     }
 
-    private function gen_offer($order_id){
+    private function gen_offer($order_id,$comment_id=null){
         $so = ClassRegistry::init('ShareOffer');
         $orderM = ClassRegistry::init('Order');
         $orderInfo = $orderM->find('first',array(
@@ -558,12 +558,12 @@ class WeixinComponent extends Component
 //            }
 //        }
         $this->log('gen offer order info'.json_encode($orderInfo));
-        $offer = $so->query_gen_offer($orderInfo, $orderInfo['Order']['creator']);
+        $offer = $so->query_gen_offer($orderInfo, $orderInfo['Order']['creator'],null, $comment_id);
         return $offer;
     }
 
-    private function send_share_offer_msg($open_id, $order_id, $title = null, $detail_url = null) {
-        $offer = $this->gen_offer($order_id);
+    public function send_share_offer_msg($open_id, $order_id, $title = null, $detail_url = null, $keyword1 = null, $desc = null, $comment_id = null) {
+        $offer = $this->gen_offer($order_id,$comment_id);
         $number = 0;
         $name = '';
         if (!empty($offer)) {
@@ -571,7 +571,7 @@ class WeixinComponent extends Component
             $name = $offer['name'];
         }
         if ($number > 0) {
-            return $this->send_packet_received_message_by_openid($open_id, $number / 100, $name, $title, $detail_url);
+            return $this->send_packet_received_message_by_openid($open_id, $number / 100, $name, $title, $detail_url, $keyword1, $desc);
         }
         return false;
     }

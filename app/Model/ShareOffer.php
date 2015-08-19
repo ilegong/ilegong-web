@@ -65,9 +65,10 @@ class ShareOffer extends AppModel {
      * @param $order
      * @param $uid
      * @param $shareOfferId 指定优惠券
+     * @param $commentId 评论
      * @return object ShareOffer object (name, number, id)
      */
-    public function query_gen_offer($order, $uid, $shareOfferId=null) {
+    public function query_gen_offer($order, $uid, $shareOfferId=null, $commentId=null) {
         $status = $order['Order']['status'];
         $brandId = $order['Order']['brand_id'];
         $payTime = $order['Order']['pay_time'];
@@ -105,15 +106,19 @@ class ShareOffer extends AppModel {
             if (!empty($so)) {
                 $usModel = ClassRegistry::init('SharedOffer');
                 $orderId = $order['Order']['id'];
-                $userShared = $usModel->find_user_shared_offer($uid, $orderId, $so['ShareOffer']['id']);
                 //没有领取过
+                if(!empty($commentId)){
+                    $userShared = $usModel->find_user_comment_shared_offer($uid, $orderId, $so['ShareOffer']['id'],$commentId);
+                }else{
+                    $userShared = $usModel->find_user_shared_offer($uid, $orderId, $so['ShareOffer']['id']);
+                }
                 if (empty($userShared)){
                     //ratio_percent 生成红包的返点数
                     $toShareNum = round( ($so['ShareOffer']['ratio_percent'] * $total_all_price * 100)/100, 0, PHP_ROUND_HALF_DOWN);
                     if ($toShareNum <= 0) {
                         return null;
                     }
-                    return $this->genSharedSlices($orderCreator, $orderId, $usModel, $so, $toShareNum,$orderType == ORDER_TYPE_WESHARE_BUY);
+                    return $this->genSharedSlices($orderCreator, $orderId, $usModel, $so, $toShareNum, $orderType == ORDER_TYPE_WESHARE_BUY, $commentId);
                 }
                 else {
                     //已经领取过直接返回数据
@@ -218,10 +223,12 @@ class ShareOffer extends AppModel {
      * @param $userSharedModel
      * @param $shareOffer
      * @param $toShareNum
+     * @param $is_default_open
+     * @param $commentId
      * @internal param $order
      * @return array|null
      */
-    private function genSharedSlices($uid, $orderId, $userSharedModel, $shareOffer, $toShareNum, $is_default_open = false) {
+    private function genSharedSlices($uid, $orderId, $userSharedModel, $shareOffer, $toShareNum, $is_default_open = false, $commentId=null) {
         //订单Id和UID无法唯一！！！
         $userSharedModel->create();
         $saveData = array(
@@ -231,6 +238,9 @@ class ShareOffer extends AppModel {
             'uid' => $uid,
             'order_id' => $orderId,
         );
+        if(!empty($commentId)){
+            $saveData['comment_id'] = $commentId;
+        }
         if($is_default_open){
             $saveData['status'] = SHARED_OFFER_STATUS_GOING;
         }
