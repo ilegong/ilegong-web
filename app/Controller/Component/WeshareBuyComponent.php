@@ -215,9 +215,9 @@ class WeshareBuyComponent extends Component {
             if ($comment_uid == $order_info['Order']['creator']) {
                 $this->send_comment_notify($order_id, $share_id, $comment_content);
             }
-            if (!empty($comment['Comment']['id'])) {
-                $this->send_shareed_offer_notify($order_id, $share_id, $comment['Comment']['id']);
-            }
+//            if (!empty($comment['Comment']['id'])) {
+//                $this->send_shareed_offer_notify($order_id, $share_id, $comment['Comment']['id']);
+//            }
         }
         return array('success' => true, 'comment' => $comment['Comment'], 'comment_reply' => $commentReply['CommentReply'], 'order_id' => $order_id);
     }
