@@ -652,7 +652,11 @@ class WeshareBuyComponent extends Component {
         $open_id_map = $this->get_open_ids(array($order_creator));
         $open_id = $open_id_map[$order_creator];
         //分享的XXX
+        $sharer_offer_map = $this->sharer_has_offer(array($share_creator));
         $title = $uid_name_map[$order_creator].'你好，'.$uid_name_map[$share_creator].'说，分享的'.$share_info['title'].'收到了吧，给个爱心评价呢！';
+        if (!empty($sharer_offer_map[$share_info['creator']])) {
+            $title = $title . $uid_name_map[$share_creator] . '的红包等着你呢：）';
+        }
         $order_id = $order_info['id'];
         $order_date = $order_info['created'];
         $desc = '分享，让生活更美。点击回复' . $uid_name_map[$share_creator] . '。';
