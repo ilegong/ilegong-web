@@ -8,6 +8,8 @@ class WeixinComponent extends Component
         CURLOPT_TIMEOUT => 30
     );
 
+    public $components = array('ShareUtil');
+
     public $wx_message_template_ids = array(
         "ORDER_PAID" => "UXmiPQNz46zZ2nZfDZVVd9xLIx28t66ZPNBoX1WhE8Q",
         "ORDER_SHIPPED" => "87uu4CmlZT-xlZGO45T_XTHiFYAWHQaLv94iGuH-Ke4",
@@ -729,6 +731,7 @@ class WeixinComponent extends Component
         }
     }
 
+
     public function send_weshare_buy_wx_msg($openid,$order, $good, $user){
         if(empty($user) || substr( $user['User']['username'], 0, 4 ) === "pys_"){
             return;
@@ -744,15 +747,14 @@ class WeixinComponent extends Component
         $title = $weshare_info['Weshare']['title'];
         $userM = ClassRegistry::init('User');
         $creatorInfo = $userM->findById($weshare_info['Weshare']['creator']);
-        //$creatorNickName = $userM->findNicknamesOfUid($weshare_info['Weshare']['creator']);
         $creatorNickName = $creatorInfo['User']['nickname'];
-        $org_msg = "亲，您报名了".$creatorNickName."分享的".$title;
-        if($order['Order']['ship_mark'] == SHARE_SHIP_KUAIDI_TAG){
-            $org_msg = $org_msg.'，请留意后续的发货通知。';
-        }else{
-            $org_msg = $org_msg.'，请留意当天的取货提醒哈。';
+        $org_msg = "亲，您报名了" . $creatorNickName . "分享的" . $title;
+        if ($order['Order']['ship_mark'] == SHARE_SHIP_KUAIDI_TAG) {
+            $org_msg = $org_msg . '，请留意后续的发货通知。';
+        } else {
+            $org_msg = $org_msg . '，请留意当天的取货提醒哈。';
         }
-        $org_msg = $org_msg.$creatorNickName.'电话:'.$creatorInfo['User']['mobilephone'];
+        $org_msg = $org_msg . $creatorNickName . '电话:' . $creatorInfo['User']['mobilephone'];
         $post_data = array(
             "touser" => $open_id,
             "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
@@ -769,6 +771,8 @@ class WeixinComponent extends Component
         );
         $title = '亲，恭喜您获得' . $creatorNickName . '红包！';
         $detail_url = $this->get_weshare_packet_url($weshare_info['Weshare']['id']);
+        //save relation
+        $this->ShareUtil->save_relation($creatorInfo['User']['id'], $order['Order']['creator']);
         return $this->send_weixin_message($post_data) && $this->send_share_offer_msg($open_id, $order['Order']['id'], $title, $detail_url);
     }
 

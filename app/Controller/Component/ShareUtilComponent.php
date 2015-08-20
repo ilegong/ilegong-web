@@ -10,7 +10,7 @@ class ShareUtilComponent extends Component{
 
     var $name = 'ShareUtil';
 
-    public $uses = array('Weixin', 'WeshareBuy');
+    public $components = array('Weixin', 'WeshareBuy');
 
     public function process_weshare_task($weshareId, $sharer_id) {
         $userRelationM = ClassRegistry::init('UserRelation');
@@ -51,5 +51,12 @@ class ShareUtilComponent extends Component{
             )
         ));
         return empty($relation);
+    }
+
+    public function save_relation($sharer_id, $user_id){
+        if ($this->check_user_relation($sharer_id, $user_id)) {
+            $userRelationM = ClassRegistry::init('UserRelation');
+            $userRelationM->saveAll(array('user_id' => $sharer_id, 'follow_id' => $user_id, 'type' => 'Buy', 'created' => date('Y-m-d H:i:s')));
+        }
     }
 }
