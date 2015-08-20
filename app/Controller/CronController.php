@@ -13,7 +13,8 @@ class CronController extends AppController
 
     public $uses = array('CouponItem');
 
-    public $components = array('Weixin','WeshareBuy');
+    public $components = array('Weixin','WeshareBuy', 'ShareUtil');
+
 
 
     function send_weshare_order_to_comment_msg($weshareId = null) {
@@ -34,6 +35,34 @@ class CronController extends AppController
         echo json_encode(array('success' => true));
     }
 
+    function process_sharer_fans(){
+        $this->autoRender = false;
+        $allShares = $this->ShareUtil->get_all_weshares();
+        $queue = new SaeTaskQueue('test');
+        //批量添加任务
+        $taskArray = array();
+        foreach($allShares as $share){
+            $share_id = $share['Weshare']['id'];
+            $sharer_id = $share['Weshare']['creator'];
+            $url = '/cron/load_fans_task/'.$share_id.'/'.$sharer_id;
+            $taskArray[] = array('url'=>$url);
+        }
+        $queue->addTask($taskArray);
+        //将任务推入队列
+        $ret = $queue->push();
+        //任务添加失败时输出错误码和错误信息
+        if ($ret === false) {
+            echo json_encode(array($queue->errno(), $queue->errmsg()));
+            return;
+        };
+        echo json_encode(array('success' => true));
+    }
+
+    function load_fans_task($share_id, $sharer_id){
+        $this->autoRender = false;
+        $this->ShareUtil->process_weshare_task($share_id, $sharer_id);
+        echo json_encode(array('success' => true));
+    }
 
     function send_coupon_timeout_message()
     {
