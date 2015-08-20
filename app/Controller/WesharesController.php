@@ -422,9 +422,6 @@ class WesharesController extends AppController {
         ));
         $my_create_share_ids = Hash::extract($myCreateShares, '{n}.Weshare.id');
         $orderStatus = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE);
-        if ($uid != $current_uid) {
-            $orderStatus[] = ORDER_STATUS_VIRTUAL;
-        }
         $joinShareOrder = $this->Order->find('all', array(
             'conditions' => array(
                 'creator' => $uid,
@@ -775,9 +772,6 @@ class WesharesController extends AppController {
         ));
         $weshare_ids = Hash::extract($weshares, '{n}.Weshare.id');
         $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_DONE, ORDER_STATUS_RECEIVED);
-        if (!$is_me) {
-            $order_status[] = ORDER_STATUS_VIRTUAL;
-        }
         $follower_count = $this->Order->find('count', array(
             'conditions' => array(
                 'member_id' => $weshare_ids,
