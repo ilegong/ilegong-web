@@ -15,7 +15,13 @@ class WeshareBuyComponent extends Component {
 
     var $components = array('Session', 'Weixin', 'RedPacket');
 
-
+    /**
+     * @param $weshare_ids
+     * @param $sharer_id
+     * @return array
+     * 加载分享者 所有的评论
+     * 个人中心  页面
+     */
     public function load_sharer_comment_data($weshare_ids, $sharer_id) {
         $commentM = ClassRegistry::init('Comment');
         $userM = ClassRegistry::init('User');
@@ -54,6 +60,11 @@ class WeshareBuyComponent extends Component {
         return array('comment_count' => $comment_count, 'comments' => $comments, 'comment_users' => $comment_users, 'reply_percent' => $reply_percent);
     }
 
+    /**
+     * @param $sharer_id
+     * @return array
+     * 分享页面 获取分享者的所有评论数据
+     */
     public function load_sharer_comments($sharer_id) {
         $weshareM = ClassRegistry::init('Weshare');
         $commentM = ClassRegistry::init('Comment');
@@ -86,6 +97,11 @@ class WeshareBuyComponent extends Component {
         return array('share_all_comments' => $share_all_comments, 'share_comment_all_users' => $all_users);
     }
 
+    /**
+     * @param $weshare_id
+     * @return array
+     * 加载本次分享的数据
+     */
     public function load_comment_by_share_id($weshare_id) {
         $commentM = ClassRegistry::init('Comment');
         $commentReplyM = ClassRegistry::init('CommentReply');
@@ -122,6 +138,13 @@ class WeshareBuyComponent extends Component {
         return array('order_comments' => $order_comments, 'comment_replies' => $comment_replies);
     }
 
+    /**
+     * @param $order_comments
+     * @param $reply_comments
+     * @param $comment_replay_relation
+     * @return array
+     * 处理评论回复数据
+     */
     private function recursionReply($order_comments, $reply_comments, $comment_replay_relation) {
         $comment_reply_format_result = array();
         foreach ($order_comments as $comment) {
@@ -133,6 +156,14 @@ class WeshareBuyComponent extends Component {
         return $comment_reply_format_result;
     }
 
+    /**
+     * @param $reply_comments
+     * @param $comment_replay_format_result
+     * @param $comment_replay_relation
+     * @param $comment_id
+     * @param int $level
+     * 递归处理评论回复数据
+     */
     private function processRecursionReply($reply_comments, &$comment_replay_format_result, $comment_replay_relation, $comment_id, $level = 0) {
         $current_comment_replay_relation = $comment_replay_relation[$comment_id];
         if (!empty($current_comment_replay_relation)) {
@@ -163,6 +194,15 @@ class WeshareBuyComponent extends Component {
         }
     }
 
+    /**
+     * @param $order_id
+     * @param $comment_content
+     * @param $reply_comment_id
+     * @param $comment_uid
+     * @param $share_id
+     * @return array
+     * 提交评论
+     */
     public function create_share_comment($order_id, $comment_content, $reply_comment_id, $comment_uid, $share_id) {
         $commentM = ClassRegistry::init('Comment');
         $userM = ClassRegistry::init('User');
@@ -222,6 +262,10 @@ class WeshareBuyComponent extends Component {
         return array('success' => true, 'comment' => $comment['Comment'], 'comment_reply' => $commentReply['CommentReply'], 'order_id' => $order_id);
     }
 
+    /**
+     * @param $weshareId
+     * 创建新的分享之后发送模板消息
+     */
     public function send_new_share_msg($weshareId) {
         $this->Weshare = ClassRegistry::init('Weshare');
         $this->User = ClassRegistry::init('User');
@@ -254,6 +298,11 @@ class WeshareBuyComponent extends Component {
         }
     }
 
+    /**
+     * @param $order_id
+     * @param $weshare_id
+     * 快递寄出的模板消息
+     */
     public function send_share_product_ship_msg($order_id, $weshare_id) {
         $this->Weshare = ClassRegistry::init('Weshare');
         $this->Order = ClassRegistry::init('Order');
@@ -296,6 +345,11 @@ class WeshareBuyComponent extends Component {
         }
     }
 
+    /**
+     * @param $shareInfo
+     * @param $msg
+     * 到货提醒
+     */
     public function send_share_product_arrive_msg($shareInfo, $msg){
         $this->Order = ClassRegistry::init('Order');
         $this->User = ClassRegistry::init('User');
@@ -344,6 +398,12 @@ class WeshareBuyComponent extends Component {
         }
     }
 
+    /**
+     * @param $sharerId
+     * @param $weshareId
+     * @return array
+     * 加载粉丝数据
+     */
     public function load_fans_buy_sharer($sharerId, $weshareId) {
         $this->Weshare = ClassRegistry::init('Weshare');
         $this->Order = ClassRegistry::init('Order');
@@ -373,10 +433,24 @@ class WeshareBuyComponent extends Component {
         return $follower_ids;
     }
 
+    /**
+     * @param $openId
+     * @param $title
+     * @param $productName
+     * @param $detailUrl
+     * @param $sharerName
+     * @param $remark
+     * 处理发送 参团信息
+     */
     public function process_send_share_msg($openId, $title, $productName, $detailUrl,$sharerName,$remark) {
         send_join_tuan_buy_msg(null,$title,$productName,$sharerName,$remark,$detailUrl,$openId);
     }
 
+    /**
+     * @param $weshareId
+     * @return float
+     * 退款 金额
+     */
     public function get_refund_money_by_weshare($weshareId) {
         $orderM = ClassRegistry::init('Order');
         $refundLogM = ClassRegistry::init('RefundLog');
@@ -401,6 +475,13 @@ class WeshareBuyComponent extends Component {
         return $refund_money / 100;
     }
 
+    /**
+     * @param $weshareId
+     * @param $is_me
+     * @param bool $division
+     * @return array
+     * 获取分享的订单信息
+     */
     public function get_share_order_for_show($weshareId, $is_me, $division = false){
         $this->Weshare = ClassRegistry::init('Weshare');
         $this->Order = ClassRegistry::init('Order');
@@ -497,6 +578,10 @@ class WeshareBuyComponent extends Component {
         return array('users' => $users, 'orders' => $orders, 'order_cart_map' => $order_cart_map, 'summery' => $product_buy_num, 'ship_types' => $shipTypes);
     }
 
+    /**
+     * @param $weshareId
+     * 批量更新订单数据
+     */
     public function batch_update_order_status($weshareId) {
         $orderM = ClassRegistry::init('Order');
         $cartM = ClassRegistry::init('Cart');
@@ -517,6 +602,10 @@ class WeshareBuyComponent extends Component {
         $this->process_send_to_comment_msg($orders);
     }
 
+    /**
+     * @param null $weshareId
+     * 发送评论通知模板消息
+     */
     public function send_to_comment_msg($weshareId = null) {
         $orderM = ClassRegistry::init('Order');
         $limit_date = date('Y-m-d', strtotime("-4 days"));
@@ -535,6 +624,10 @@ class WeshareBuyComponent extends Component {
         $this->process_send_to_comment_msg($orders);
     }
 
+    /**
+     * @param null $weshareId
+     * 更新订单状态且发送评论通知信息
+     */
     public function chage_status_and_send_to_comment_msg($weshareId=null) {
         $orderM = ClassRegistry::init('Order');
         $cartM = ClassRegistry::init('Cart');
@@ -560,6 +653,7 @@ class WeshareBuyComponent extends Component {
 
     /**
      * @param $orders
+     * 通知下单用户去评论模板消息
      */
     private function process_send_to_comment_msg($orders){
         $oauthBindM = ClassRegistry::init('Oauthbind');
@@ -590,6 +684,14 @@ class WeshareBuyComponent extends Component {
         }
     }
 
+    /**
+     * @param $comment_uid
+     * @param $reply_id
+     * @param $content
+     * @param $share_id
+     * @param $order_id
+     * 用户之间互相评论
+     */
     public function send_comment_mutual_msg($comment_uid,$reply_id,$content, $share_id,$order_id){
         $uid_name_map = $this->get_users_nickname(array($comment_uid, $reply_id));
         $title = $uid_name_map[$reply_id].'你好，'.$uid_name_map[$comment_uid].'对你说：'.$content;
@@ -627,6 +729,12 @@ class WeshareBuyComponent extends Component {
         $this->RedPacket->process_receive($share_offer_id, $order_creator, true, false);
     }
 
+    /**
+     * @param $order_id
+     * @param $weshare_id
+     * @param $comment_content
+     * 通知下单用户 收到了评论
+     */
     public function send_comment_notify($order_id, $weshare_id, $comment_content) {
         $order_info = $this->get_order_info($order_id);
         $order_creator = $order_info['creator'];
@@ -643,6 +751,11 @@ class WeshareBuyComponent extends Component {
         $this->Weixin->send_comment_template_msg($open_id, $detail_url, $title, $order_id, $order_date, $desc);
     }
 
+    /**
+     * @param $order_id
+     * @param $weshare_id
+     * 通知分享者收到了评论
+     */
     public function send_comment_notify_buyer($order_id, $weshare_id){
         $order_info = $this->get_order_info($order_id);
         $order_creator = $order_info['creator'];
@@ -664,6 +777,12 @@ class WeshareBuyComponent extends Component {
         $this->Weixin->send_comment_template_msg($open_id, $detail_url, $title, $order_id, $order_date, $desc);
     }
 
+    /**
+     * @param $order_id
+     * @param $weshare_id
+     * @param $reply_content
+     * 收到评论回复通知
+     */
     public function send_comment_reply_notify($order_id,$weshare_id,$reply_content){
         $order_info = $this->get_order_info($order_id);
         $order_creator = $order_info['creator'];
@@ -680,6 +799,11 @@ class WeshareBuyComponent extends Component {
         $this->Weixin->send_comment_template_msg($open_id, $detail_url, $title, $order_id, $order_date, $desc);
     }
 
+    /**
+     * @param $weshareId
+     * @return string
+     * 获取分享的地址
+     */
     private function get_weshares_detail_url($weshareId){
         return  WX_HOST . '/weshares/view/' . $weshareId;
     }
@@ -751,6 +875,11 @@ class WeshareBuyComponent extends Component {
         return !empty($shareOffer);
     }
 
+    /**
+     * @param $sharer_ids
+     * @return array
+     * 分享者是否有红包
+     */
     private function sharer_has_offer($sharer_ids){
         $shareOfferM = ClassRegistry::init('ShareOffer');
         $shareOffer = $shareOfferM->find('all',array(
@@ -762,6 +891,11 @@ class WeshareBuyComponent extends Component {
         return $shareOffer;
     }
 
+    /**
+     * @param $orderId
+     * @return array
+     * 获取分享订单商品名称和数量
+     */
     private function get_cart_name_and_num($orderId) {
         $carts = $this->findCarts($orderId);
         $num = 0;

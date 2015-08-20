@@ -17,12 +17,20 @@ class WesharesController extends AppController {
         $this->layout = 'weshare';
     }
 
+    /**
+     * 首页
+     */
     public function index() {
         $this->layout = null;
         $uid = $this->currentUser['id'];
         $this->set('uid', $uid);
     }
 
+    /**
+     * @param string $weshare_id
+     * @param int $from
+     * 跳转到分享的详情页
+     */
     public function view($weshare_id, $from = 0) {
         $uid = $this->currentUser['id'];
         $this->set('weshare_id', $weshare_id);
@@ -40,7 +48,7 @@ class WesharesController extends AppController {
             $weshare = $this->Weshare->find('first', array('conditions' => array('id' => $weshare_id)));
             $weshare_creator = $weshare['Weshare']['creator'];
             $shared_offers = $this->SharedOffer->find_new_offers_by_weshare_creator($uid, $weshare_creator);
-            //get first
+            //get first offer
             if (!empty($shared_offers)) {
                 $this->set('shared_offer_id', $shared_offers[0]['SharedOffer']['id']);
                 $this->set('from', $this->pay_type);
@@ -51,6 +59,10 @@ class WesharesController extends AppController {
         }
     }
 
+    /**
+     * @param $weshareId
+     * 更新 分享信息
+     */
     public function update($weshareId) {
         $uid = $this->currentUser['id'];
         $weshareInfo = $this->get_weshare_detail($weshareId);
@@ -62,6 +74,10 @@ class WesharesController extends AppController {
         $this->set('weshare_id', $weshareId);
     }
 
+    /**
+     * @param $weshareId
+     * 分享的详细信息
+     */
     public function get_share_info($weshareId) {
         $this->autoRender = false;
         $shareInfo = $this->get_weshare_detail($weshareId);
@@ -73,6 +89,10 @@ class WesharesController extends AppController {
         return;
     }
 
+    /**
+     * 添加分享页面
+     * 判断用户是否绑定 手机 等信息
+     */
     public function add() {
         $currentUser = $this->currentUser;
         $uid = $currentUser['id'];
@@ -114,6 +134,9 @@ class WesharesController extends AppController {
         }
     }
 
+    /**
+     * 保存分享数据
+     */
     public function save() {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
@@ -159,6 +182,10 @@ class WesharesController extends AppController {
         return;
     }
 
+    /**
+     * @param $weshareId
+     * ajax 获取分享的详细信息
+     */
     public function detail($weshareId) {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
@@ -197,6 +224,12 @@ class WesharesController extends AppController {
         return;
     }
 
+    /**
+     * @param $uid
+     * @param $weshareId
+     * @return array|null
+     * 把微信分享的一些参数设置好
+     */
     public function set_weixin_share_data($uid, $weshareId) {
         if (parent::is_weixin()) {
             $weixinJs = prepare_wx_share_log($uid, 'wsid', $weshareId);
@@ -205,6 +238,11 @@ class WesharesController extends AppController {
         return null;
     }
 
+    /**
+     * @param $orderId
+     * @param $type
+     * 去支付
+     */
     public function pay($orderId, $type) {
         if ($type == 0) {
             $this->redirect('/wxPay/jsApiPay/' . $orderId . '?from=share');
@@ -216,6 +254,9 @@ class WesharesController extends AppController {
         }
     }
 
+    /**
+     * 下单
+     */
     public function makeOrder() {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
@@ -308,6 +349,10 @@ class WesharesController extends AppController {
         }
     }
 
+    /**
+     * @param $order_id
+     * 确认收货
+     */
     function confirmReceived($order_id) {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
@@ -347,6 +392,10 @@ class WesharesController extends AppController {
         echo json_encode(array(success => true));
     }
 
+    /**
+     * @param $weShareId
+     * 截止分享
+     */
     public function stopShare($weShareId) {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
@@ -354,6 +403,10 @@ class WesharesController extends AppController {
         echo json_encode(array('success' => true));
     }
 
+    /**
+     * @param null $uid
+     * 获取分享用户的个人中心,$uid为空 获取当前用户的
+     */
     public function user_share_info($uid = null) {
         $this->layout = 'weshare_bootstrap';
         $current_uid = $this->currentUser['id'];
@@ -438,6 +491,9 @@ class WesharesController extends AppController {
         $this->set('join_share_order_status', $joinShareOrderStatus);
     }
 
+    /**
+     * 分享订单 快递发货
+     */
     public function set_order_ship_code() {
         $this->autoRender = false;
         $order_id = $_REQUEST['order_id'];
@@ -451,6 +507,9 @@ class WesharesController extends AppController {
         return;
     }
 
+    /**
+     * 自有自提点 发货
+     */
     public function send_arrival_msg() {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
@@ -479,6 +538,10 @@ class WesharesController extends AppController {
         return;
     }
 
+    /**
+     * @param $weshareId
+     * 分享者订单统计页面
+     */
     public function share_order_list($weshareId) {
         $this->layout = 'weshare_bootstrap';
         $user_id = $this->currentUser['id'];
@@ -498,6 +561,10 @@ class WesharesController extends AppController {
         $this->set('weshareId', $weshareId);
     }
 
+    /**
+     * @param $weshareId
+     * 客户端 重新load评论
+     */
     public function loadComment($weshareId) {
         $this->autoRender = false;
         $comment_data = $this->WeshareBuy->load_comment_by_share_id($weshareId);
@@ -505,6 +572,9 @@ class WesharesController extends AppController {
         return;
     }
 
+    /**
+     * 提交评论
+     */
     public function comment() {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
@@ -523,6 +593,11 @@ class WesharesController extends AppController {
     }
 
     //TODO delete not use product
+    /**
+     * @param $weshareId
+     * @param $weshareProductData
+     * 保存分享商品
+     */
     private function saveWeshareProducts($weshareId, $weshareProductData) {
         if (empty($weshareProductData)) {
             return;
@@ -538,7 +613,12 @@ class WesharesController extends AppController {
         return $this->WeshareProduct->saveAll($weshareProductData);
     }
 
-
+    /**
+     * @param $weshareId
+     * @param $weshareShipData
+     * @return mixed
+     * 保存分享的物流方式
+     */
     private function saevWeshareShipType($weshareId, $weshareShipData) {
         foreach ($weshareShipData as &$item) {
             $item['weshare_id'] = $weshareId;
@@ -547,6 +627,11 @@ class WesharesController extends AppController {
     }
 
     //TODO delete not use address
+    /**
+     * @param $weshareId
+     * @param $weshareAddressData
+     * 保存分享的 自有自提点
+     */
     private function saveWeshareAddresses($weshareId, $weshareAddressData) {
         if (empty($weshareAddressData)) {
             return;
@@ -557,10 +642,22 @@ class WesharesController extends AppController {
         return $this->WeshareAddress->saveAll($weshareAddressData);
     }
 
+    /**
+     * @param $weshareId
+     * @param $is_me
+     * @param bool $division
+     * @return mixed
+     * 获取分享的订单信息
+     */
     private function get_weshare_buy_info($weshareId, $is_me, $division = false) {
         return $this->WeshareBuy->get_share_order_for_show($weshareId, $is_me, $division);
     }
 
+    /**
+     * @param $weshareId
+     * @return mixed
+     * 获取分享的详情
+     */
     private function get_weshare_detail($weshareId) {
         $weshareInfo = $this->Weshare->find('first', array(
             'conditions' => array(
@@ -600,6 +697,14 @@ class WesharesController extends AppController {
 
     }
 
+    /**
+     * @param $userInfo
+     * @param $mobileNum
+     * @param $address
+     * @param $uid
+     * @param int $offlineStoreId
+     * 记住用户填写的地址
+     */
     private function setShareConsignees($userInfo, $mobileNum, $address, $uid, $offlineStoreId = 0) {
         $consignee = $this->OrderConsignees->find('first', array(
             'conditions' => array(
@@ -621,6 +726,11 @@ class WesharesController extends AppController {
         $this->OrderConsignees->save(array('creator' => $uid, 'status' => STATUS_CONSIGNEES_SHARE, 'name' => $userInfo, 'mobilephone' => $mobileNum, 'address' => $address, 'ziti_id' => $offlineStoreId));
     }
 
+    /**
+     * @param $uid
+     * @return mixed
+     * 获取用户记住的地址
+     */
     private function getShareConsignees($uid) {
         $consignee = $this->OrderConsignees->find('first', array(
             'conditions' => array(
@@ -640,10 +750,22 @@ class WesharesController extends AppController {
         return $consignee['OrderConsignees'];
     }
 
+    /**
+     * @param $weshare_ids
+     * @param $sharer_id
+     * @return mixed
+     * 获取分享者的评论数据(汇总)
+     */
     private function getSharerCommentData($weshare_ids, $sharer_id) {
         return $this->WeshareBuy->load_sharer_comment_data($weshare_ids, $sharer_id);
     }
 
+    /**
+     * @param $uid
+     * @param bool $is_me
+     * @return array
+     * 获取分享者的一些统计数据(粉丝、分享次数)
+     */
     private function getUserShareSummery($uid, $is_me = false) {
         $weshares = $this->Weshare->find('all', array(
             'conditions' => array(
@@ -667,6 +789,11 @@ class WesharesController extends AppController {
         return array('share_count' => count($weshares), 'follower_count' => $follower_count);
     }
 
+    /**
+     * @param $weshareId
+     * @return array
+     * 获取分享的物流设置
+     */
     private function getWeshareShipSettings($weshareId) {
         $shareShipSettings = $this->WeshareShipSetting->find('all', array(
             'conditions' => array(
@@ -677,16 +804,33 @@ class WesharesController extends AppController {
         return $shareShipSettings;
     }
 
+    /**
+     * @param $shares
+     * 获取数据后处理
+     * 把图片的url拼接的字符串分隔成每个图片的url
+     */
     private function explode_share_imgs(&$shares) {
         foreach ($shares as &$item) {
             $item['Weshare']['images'] = explode('|', $item['Weshare']['images']);
         }
     }
 
+    /**
+     * @param $shareInfo
+     * @param $msg
+     * 处理发送消息
+     */
     private function process_send_msg($shareInfo, $msg) {
         $this->WeshareBuy->send_share_product_arrive_msg($shareInfo, $msg);
     }
 
+    /**
+     * @param $weshareId
+     * @param $weshareProduct
+     * @param $num
+     * @return array
+     * 购买前检查库存
+     */
     private function check_product_num($weshareId, $weshareProduct, $num) {
         $store_num = $weshareProduct['WeshareProduct']['store'];
         if ($store_num == 0) {
@@ -724,15 +868,34 @@ class WesharesController extends AppController {
         return array('result' => true);
     }
 
+    /**
+     * @param $share_offer_id
+     * @return mixed
+     * 处理 抢红包事件
+     */
     private function get_coupon_with_shared_id($share_offer_id) {
         $uid = $this->currentUser['id'];
         return $this->RedPacket->process_receive($share_offer_id, $uid, $this->is_weixin());
     }
 
+    /**
+     * @param $uid
+     * @param $sharer
+     * @return mixed
+     * 获取可用红包
+     */
     private function get_can_used_coupons($uid, $sharer) {
         return $this->CouponItem->find_my_valid_share_coupons($uid, $sharer);
     }
 
+    /**
+     * @param $order_id
+     * @param $uid
+     * @param $brand_id
+     * @param $total_all_price
+     * 使用 积分和红包逻辑
+     * 积分（没有用）
+     */
     private function order_use_score_and_coupon($order_id, $uid, $brand_id, $total_all_price) {
         //use coupon
         App::uses('OrdersController', 'Controller');
@@ -747,6 +910,11 @@ class WesharesController extends AppController {
         $ordersController->clean_score_and_coupon();
     }
 
+    /**
+     * @param $shared_offer_id
+     * 获取抢红包的数据
+     * 用户从红包链接 点击进来 要把抢红包的数据带回去
+     */
     private function process_shared_offer($shared_offer_id) {
         //to do check offer status
         $get_coupon_result = $this->get_coupon_with_shared_id($shared_offer_id);
@@ -770,6 +938,11 @@ class WesharesController extends AppController {
         $this->set('couponNum', $get_coupon_result['couponNum']);
     }
 
+    /**
+     * @param $sharer
+     * @return int
+     * 判断用户 能否使用好邻居
+     */
     private function sharer_can_use_we_ship($sharer) {
         $ship_setting = $this->SharerShipOption->find('first', array(
             'conditions' => array(
@@ -784,6 +957,14 @@ class WesharesController extends AppController {
     }
 
     //check order ship type gen order address
+    /**
+     * @param $weshareId
+     * @param $shipInfo
+     * @param $buyerData
+     * @param $uid
+     * @return mixed
+     * 单独处理订单的地址 根据 自有自提、快递、好邻居
+     */
     private function get_order_address($weshareId, $shipInfo, $buyerData, $uid) {
         $shipType = $shipInfo['ship_type'];
         $addressId = $shipInfo['address_id'];
@@ -818,6 +999,12 @@ class WesharesController extends AppController {
         }
     }
 
+    /**
+     * @param $id
+     * @param $weshareId
+     * @return mixed
+     * 获取分享的物流设置
+     */
     private function get_ship_set($id, $weshareId) {
         return $this->WeshareShipSetting->find('first', array(
             'conditions' => array(
@@ -827,6 +1014,13 @@ class WesharesController extends AppController {
         ));
     }
 
+    /**
+     * @param $weshareProducts
+     * @param $weshareId
+     * @param $productIdNumMap
+     * @return array|null
+     * 检查库存
+     */
     private function check_product_store($weshareProducts, $weshareId, $productIdNumMap) {
         $reason = '';
         foreach ($weshareProducts as $p) {
@@ -848,6 +1042,11 @@ class WesharesController extends AppController {
         return null;
     }
 
+    /**
+     * @param $uid
+     * @return bool
+     * 是否是认证分享者 写死
+     */
     private function is_verify_sharer($uid){
         $uids = array(633345,802852,544307,811917);
         return in_array($uid,$uids);
