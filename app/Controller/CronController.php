@@ -38,7 +38,7 @@ class CronController extends AppController
     function process_sharer_fans(){
         $this->autoRender = false;
         $allShares = $this->ShareUtil->get_all_weshares();
-        $queue = new SaeTaskQueue('test');
+        $queue = new SaeTaskQueue('share');
         //批量添加任务
         $taskArray = array();
         foreach($allShares as $share){
