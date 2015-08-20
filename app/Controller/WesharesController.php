@@ -2,7 +2,7 @@
 
 class WesharesController extends AppController {
 
-    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem', 'SharerShipOption', 'WeshareShipSetting', 'OfflineStore');
+    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem', 'SharerShipOption', 'WeshareShipSetting', 'OfflineStore', 'UserRelation');
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description');
 
@@ -770,17 +770,12 @@ class WesharesController extends AppController {
             ),
             'fields' => array('id')
         ));
-        $weshare_ids = Hash::extract($weshares, '{n}.Weshare.id');
-        $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_DONE, ORDER_STATUS_RECEIVED);
-        $follower_count = $this->Order->find('count', array(
+        $fans_count = $this->UserRelation->find('count', array(
             'conditions' => array(
-                'member_id' => $weshare_ids,
-                'status' => $order_status,
-                'type' => ORDER_TYPE_WESHARE_BUY
-            ),
-            'fields' => array('DISTINCT creator')
+                'user_id' => $uid
+            )
         ));
-        return array('share_count' => count($weshares), 'follower_count' => $follower_count);
+        return array('share_count' => count($weshares), 'follower_count' => $fans_count);
     }
 
     /**

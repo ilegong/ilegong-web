@@ -404,32 +404,15 @@ class WeshareBuyComponent extends Component {
      * @return array
      * 加载粉丝数据
      */
-    public function load_fans_buy_sharer($sharerId, $weshareId) {
-        $this->Weshare = ClassRegistry::init('Weshare');
-        $this->Order = ClassRegistry::init('Order');
-        $this->User = ClassRegistry::init('User');
-        $weshares = $this->Weshare->find('all', array(
+    public function load_fans_buy_sharer($sharerId, $weshareId=null) {
+        $userRelationM = ClassRegistry::init('UserRelation');
+        $relations = $userRelationM->find('all', array(
             'conditions' => array(
-                'creator' => $sharerId,
-                'not' => array(
-                    'id' => array($weshareId)
-                )
-            ),
-            'fields' => array('id')
+                'user_id' => $sharerId,
+                'deleted' => DELETED_NO
+            )
         ));
-        $weshare_ids = Hash::extract($weshares, '{n}.Weshare.id');
-        $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED);
-        //query fans limit 1000
-        $follower = $this->Order->find('all', array(
-            'conditions' => array(
-                'member_id' => $weshare_ids,
-                'status' => $order_status,
-                'type' => ORDER_TYPE_WESHARE_BUY,
-            ),
-            'fields' => array('DISTINCT creator'),
-            'limit' => 2000
-        ));
-        $follower_ids = Hash::extract($follower, '{n}.Order.creator');
+        $follower_ids = Hash::extract($relations, '{n}.UserRelation.follow_id');
         return $follower_ids;
     }
 
