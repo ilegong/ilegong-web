@@ -285,7 +285,8 @@ class WeshareBuyComponent extends Component {
             Cache::write(SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $weshare_info['creator'] . '_0','');
             Cache::write(SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $weshare_info['creator'] . '_1','');
             //SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId;
-            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id, '');
+            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id.'_0', '');
+            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id.'_1', '');
         }
         //$key = SHARE_COMMENT_DATA_CACHE_KEY . '_' . $weshare_id;
         Cache::write(SHARE_COMMENT_DATA_CACHE_KEY . '_' . $share_id, '');
@@ -496,7 +497,11 @@ class WeshareBuyComponent extends Component {
      * 获取分享的订单信息
      */
     public function get_share_order_for_show($weshareId, $is_me, $division = false){
-        $key = SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId;
+        if($division){
+            $key = SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId.'_1';
+        }else{
+            $key = SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId.'_0';
+        }
         $share_order_data = Cache::read($key);
         if (empty($share_order_data)) {
             $this->Weshare = ClassRegistry::init('Weshare');
