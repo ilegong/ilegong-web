@@ -554,9 +554,11 @@ class WeshareBuyComponent extends Component {
             ));
             $realTotalPrice = 0;
             $summeryTotalPrice = 0;
+            $couponPrice = 0;
             foreach ($orders as $order_item) {
                 $realTotalPrice = $realTotalPrice + $order_item['total_all_price'];
                 $summeryTotalPrice = $summeryTotalPrice + $order_item['total_price'];
+                $couponPrice = $couponPrice+ $order_item['coupon_total'];
             }
             foreach ($carts as $item) {
                 $order_id = $item['Cart']['order_id'];
@@ -574,6 +576,7 @@ class WeshareBuyComponent extends Component {
             $product_buy_num['all_buy_user_count'] = count($users);
             $product_buy_num['all_total_price'] = $summeryTotalPrice;
             $product_buy_num['real_total_price'] = $realTotalPrice;
+            $product_buy_num['all_coupon_price'] = $couponPrice/100;
             $users = Hash::combine($users, '{n}.User.id', '{n}.User');
             if ($division) {
                 $kuaidi_orders = array_filter($orders, "share_kuaidi_order_filter");
