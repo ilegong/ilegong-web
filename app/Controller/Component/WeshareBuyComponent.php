@@ -286,7 +286,9 @@ class WeshareBuyComponent extends Component {
             Cache::write(SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $weshare_info['creator'] . '_1','');
         }
         //$key = SHARE_COMMENT_DATA_CACHE_KEY . '_' . $weshare_id;
-        Cache::write(SHARE_COMMENT_DATA_CACHE_KEY . '_' . $weshare_info['creator'], '');
+        Cache::write(SHARE_COMMENT_DATA_CACHE_KEY . '_' . $share_id, '');
+        //SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId;
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id, '');
         return array('success' => true, 'comment' => $comment['Comment'], 'comment_reply' => $commentReply['CommentReply'], 'order_id' => $order_id);
     }
 
