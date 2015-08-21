@@ -1,4 +1,4 @@
-<link href="/static/weshares/css/share-info.css?v0.0.4" rel="stylesheet">
+<link href="/static/weshares/css/share-info.css?v0.0.5" rel="stylesheet">
 <div class="row" style="background: #EAEAEA;">
     <div class="col-md-12 user-details">
         <div class="user-image">
@@ -136,9 +136,9 @@
                 <div class="pageContentWrapper" style="height: 80vh;overflow-y: scroll;">
                     <!-- team members start -->
                     {{loop $fans_data $fan_key $fan_data}}
-                        <div class="columnWrapper oneThird teamMember {{if ($fan_key+1)%3==0}}lastColumn{{/if}}">
-                            <a href="/weshares/user_share_info/{{$fan_data['id']}}" class="teamMemberImageLink"> <img style="height: 100px;width: 100px;" src="{{$fan_data['image']}}" class="teamMemberImage" alt="" /> </a>
-                            <h3 class="teamMemberName">{{$fan_data['nickname']}}</h3>
+                        <div class="columnWrapper oneFifth teamMember {{if ($fan_key+1)%5==0}}lastColumn{{/if}}">
+                            <a href="/weshares/user_share_info/{{$fan_data['id']}}" class="teamMemberImageLink"> <img style="height: 50px;width: 50px;border-radius: 50px;" src="{{$fan_data['image']}}" class="teamMemberImage" alt="" /> </a>
+                            <h3 class="teamMemberName" style="margin-top: 10px;">{{$fan_data['nickname']}}</h3>
                         </div>
                     {{/loop}}
                 </div>
