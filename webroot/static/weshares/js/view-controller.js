@@ -230,7 +230,6 @@
             vm.buyerMobilePhone = vm.consignee.mobilephone;
             vm.buyerAddress = vm.consignee.address;
           }
-          vm.loadSharerAllComments(vm.weshare.creator.id);
           setWeiXinShareParams();
           //from paid done
           if (fromType == 1) {
@@ -576,6 +575,7 @@
     }
 
     function showCommentListDialog() {
+      vm.loadSharerAllComments(vm.weshare.creator.id);
       ngDialog.open({template: 'commentListDialog', scope: $scope, appendTo: '#commentListViewDialog'});
     }
 
