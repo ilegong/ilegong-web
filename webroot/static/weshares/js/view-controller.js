@@ -575,7 +575,9 @@
     }
 
     function showCommentListDialog() {
-      vm.loadSharerAllComments(vm.weshare.creator.id);
+      if(!vm.sharerAllComments){
+        vm.loadSharerAllComments(vm.weshare.creator.id);
+      }
       ngDialog.open({template: 'commentListDialog', scope: $scope, appendTo: '#commentListViewDialog'});
     }
 
