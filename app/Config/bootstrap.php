@@ -176,6 +176,7 @@ const SHARE_COMMENT_DATA_CACHE_KEY = 'share_comment_data_cache_key';
 const SHARE_ORDER_DATA_CACHE_KEY = 'share_order_data_cache_key';
 const SHARE_DETAIL_DATA_CACHE_KEY = 'share_detail_data_cache_key';
 const SHARER_CAN_USE_OFFLINE_STORE_CACHE_KEY = 'share_can_user_offline_store_cache_key';
+const SHARE_SHIP_SETTINGS_CACHE_KEY = 'share_ship_setting_cache_key';
 
 //Product 表里设置是这个产品，不论多少都是同一邮费
 const TYPE_ORDER_PRICE = 1; //订单总价满多少包邮

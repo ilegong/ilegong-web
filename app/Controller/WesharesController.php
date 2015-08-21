@@ -778,13 +778,19 @@ class WesharesController extends AppController {
      * 获取分享的物流设置
      */
     private function getWeshareShipSettings($weshareId) {
-        $shareShipSettings = $this->WeshareShipSetting->find('all', array(
-            'conditions' => array(
-                'weshare_id' => $weshareId
-            )
-        ));
-        $shareShipSettings = Hash::combine($shareShipSettings, '{n}.WeshareShipSetting.tag', '{n}.WeshareShipSetting');
-        return $shareShipSettings;
+        $key = SHARE_SHIP_SETTINGS_CACHE_KEY . '_' . $weshareId;
+        $ship_setting_data = Cache::read($key);
+        if (empty($ship_setting_data)) {
+            $shareShipSettings = $this->WeshareShipSetting->find('all', array(
+                'conditions' => array(
+                    'weshare_id' => $weshareId
+                )
+            ));
+            $shareShipSettings = Hash::combine($shareShipSettings, '{n}.WeshareShipSetting.tag', '{n}.WeshareShipSetting');
+            Cache::write($key, json_encode($shareShipSettings));
+            return $shareShipSettings;
+        }
+        return json_decode($ship_setting_data, true);
     }
 
     /**
