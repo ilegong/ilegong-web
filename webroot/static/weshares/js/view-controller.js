@@ -258,6 +258,8 @@
               }, 10000);
             }
           }
+          //load all comments
+          vm.loadSharerAllComments(vm.weshare.creator.id);
         }).
         error(function (data, status) {
           $log.log(data);
@@ -575,9 +577,6 @@
     }
 
     function showCommentListDialog() {
-      if(!vm.sharerAllComments){
-        vm.loadSharerAllComments(vm.weshare.creator.id);
-      }
       ngDialog.open({template: 'commentListDialog', scope: $scope, appendTo: '#commentListViewDialog'});
     }
 

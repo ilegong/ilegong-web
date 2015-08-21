@@ -656,42 +656,47 @@ class WesharesController extends AppController {
      * 获取分享的详情
      */
     private function get_weshare_detail($weshareId) {
-        $weshareInfo = $this->Weshare->find('first', array(
-            'conditions' => array(
-                'id' => $weshareId
-            )
-        ));
-        $weshareProducts = $this->WeshareProduct->find('all', array(
-            'conditions' => array(
-                'weshare_id' => $weshareId
-            )
-        ));
-        $weshareAddresses = $this->WeshareAddress->find('all', array(
-            'conditions' => array(
-                'weshare_id' => $weshareId
-            )
-        ));
-        $weshareShipSettings = $this->WeshareShipSetting->find('all', array(
-            'conditions' => array(
-                'weshare_id' => $weshareId
-            )
-        ));
-        $weshareShipSettings = Hash::combine($weshareShipSettings, '{n}.WeshareShipSetting.tag', '{n}.WeshareShipSetting');
-        $creatorInfo = $this->User->find('first', array(
-            'conditions' => array(
-                'id' => $weshareInfo['Weshare']['creator']
-            ),
-            'recursive' => 1, //int
-            'fields' => $this->query_user_fileds,
-        ));
-        $weshareInfo = $weshareInfo['Weshare'];
-        $weshareInfo['addresses'] = Hash::extract($weshareAddresses, '{n}.WeshareAddress');
-        $weshareInfo['products'] = Hash::extract($weshareProducts, '{n}.WeshareProduct');
-        $weshareInfo['creator'] = $creatorInfo['User'];
-        $weshareInfo['ship_type'] = $weshareShipSettings;
-        $weshareInfo['images'] = array_filter(explode('|', $weshareInfo['images']));
-        return $weshareInfo;
-
+        $key = SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId;
+        $share_detail = Cache::read($key);
+        if (empty($share_detail)) {
+            $weshareInfo = $this->Weshare->find('first', array(
+                'conditions' => array(
+                    'id' => $weshareId
+                )
+            ));
+            $weshareProducts = $this->WeshareProduct->find('all', array(
+                'conditions' => array(
+                    'weshare_id' => $weshareId
+                )
+            ));
+            $weshareAddresses = $this->WeshareAddress->find('all', array(
+                'conditions' => array(
+                    'weshare_id' => $weshareId
+                )
+            ));
+            $weshareShipSettings = $this->WeshareShipSetting->find('all', array(
+                'conditions' => array(
+                    'weshare_id' => $weshareId
+                )
+            ));
+            $weshareShipSettings = Hash::combine($weshareShipSettings, '{n}.WeshareShipSetting.tag', '{n}.WeshareShipSetting');
+            $creatorInfo = $this->User->find('first', array(
+                'conditions' => array(
+                    'id' => $weshareInfo['Weshare']['creator']
+                ),
+                'recursive' => 1, //int
+                'fields' => $this->query_user_fileds,
+            ));
+            $weshareInfo = $weshareInfo['Weshare'];
+            $weshareInfo['addresses'] = Hash::extract($weshareAddresses, '{n}.WeshareAddress');
+            $weshareInfo['products'] = Hash::extract($weshareProducts, '{n}.WeshareProduct');
+            $weshareInfo['creator'] = $creatorInfo['User'];
+            $weshareInfo['ship_type'] = $weshareShipSettings;
+            $weshareInfo['images'] = array_filter(explode('|', $weshareInfo['images']));
+            Cache::write($key, json_encode($weshareInfo));
+            return $weshareInfo;
+        }
+        return json_decode($share_detail, true);
     }
 
     /**
@@ -764,18 +769,7 @@ class WesharesController extends AppController {
      * 获取分享者的一些统计数据(粉丝、分享次数)
      */
     private function getUserShareSummery($uid, $is_me = false) {
-        $weshares = $this->Weshare->find('all', array(
-            'conditions' => array(
-                'creator' => $uid
-            ),
-            'fields' => array('id')
-        ));
-        $fans_count = $this->UserRelation->find('count', array(
-            'conditions' => array(
-                'user_id' => $uid
-            )
-        ));
-        return array('share_count' => count($weshares), 'follower_count' => $fans_count);
+        return $this->WeshareBuy->get_user_share_summary($uid);
     }
 
     /**
@@ -933,15 +927,21 @@ class WesharesController extends AppController {
      * 判断用户 能否使用好邻居
      */
     private function sharer_can_use_we_ship($sharer) {
-        $ship_setting = $this->SharerShipOption->find('first', array(
-            'conditions' => array(
-                'sharer_id' => $sharer
-            )
-        ));
-        if (empty($ship_setting)) {
-            return 0;
+        $key = SHARER_CAN_USE_OFFLINE_STORE_CACHE_KEY . '_' . $sharer;
+        $ship_set_type = Cache::read($key);
+        if (empty($ship_set_type)) {
+            $ship_setting = $this->SharerShipOption->find('first', array(
+                'conditions' => array(
+                    'sharer_id' => $sharer
+                )
+            ));
+            if (empty($ship_setting)) {
+                return 0;
+            }
+            $ship_set_type = $ship_setting['SharerShipOption']['type'];
+            Cache::write($key, $ship_set_type);
+            return $ship_set_type;
         }
-        $ship_set_type = $ship_setting['SharerShipOption']['type'];
         return $ship_set_type;
     }
 

@@ -169,8 +169,13 @@ define('OFF_SHELVE', PUBLISH_NO); //下架
 define('IN_CHECK', 2); //审查中
 define('IN_SHICHI', 3); //试吃中
 define('SHICHI_AND_NO_CHECK', 4); //试吃／审核不通过
-
-
+//分享缓存的key
+const SHARE_USER_SUMMERY_CACHE_KEY = 'share_user_summery_cache_key';
+const SHARER_ALL_COMMENT_DATA_CACHE_KEY = 'sharer_all_comment_data_cache_key';
+const SHARE_COMMENT_DATA_CACHE_KEY = 'share_comment_data_cache_key';
+const SHARE_ORDER_DATA_CACHE_KEY = 'share_order_data_cache_key';
+const SHARE_DETAIL_DATA_CACHE_KEY = 'share_detail_data_cache_key';
+const SHARER_CAN_USE_OFFLINE_STORE_CACHE_KEY = 'share_can_user_offline_store_cache_key';
 
 //Product 表里设置是这个产品，不论多少都是同一邮费
 const TYPE_ORDER_PRICE = 1; //订单总价满多少包邮

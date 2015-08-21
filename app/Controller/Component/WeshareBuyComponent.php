@@ -23,41 +23,48 @@ class WeshareBuyComponent extends Component {
      * 个人中心  页面
      */
     public function load_sharer_comment_data($weshare_ids, $sharer_id) {
-        $commentM = ClassRegistry::init('Comment');
-        $userM = ClassRegistry::init('User');
-        $comments = $commentM->find('all', array(
-            'conditions' => array(
-                'data_id' => $weshare_ids,
-                'type' => COMMENT_SHARE_TYPE,
-                'parent_id' => 0,
-                'status' => COMMENT_SHOW_STATUS
-            )
-        ));
-        $comment_ids = Hash::extract($comments, '{n}.Comment.id');
-        $comment_uids = Hash::extract($comments, '{n}.Comment.user_id');
-        $comment_users = $userM->find('all', array(
-            'conditions' => array(
-                'id' => $comment_uids
-            ),
-            'fields' => $this->query_user_fields
-        ));
-        $comment_users  = Hash::combine($comment_users, '{n}.User.id', '{n}.User');
-        $replay_count = $commentM->find('count', array(
-            'fields' => 'DISTINCT parent_id',
-            'conditions' => array(
-                'parent_id' => $comment_ids,
-                'status' => COMMENT_SHOW_STATUS,
-                'user_id' => $sharer_id,
-                'data_id' => $weshare_ids,
-                'type' => COMMENT_SHARE_TYPE,
-            )
-        ));
-        $comment_count = count($comments);
-        $reply_percent = 0;
-        if ($comment_count > 0) {
-            $reply_percent = $replay_count / $comment_count * 100;
+        $cache_key = SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $sharer_id.'_1';
+        $sharer_comment_data = Cache::read($cache_key);
+        if (empty($sharer_comment_data)) {
+            $commentM = ClassRegistry::init('Comment');
+            $userM = ClassRegistry::init('User');
+            $comments = $commentM->find('all', array(
+                'conditions' => array(
+                    'data_id' => $weshare_ids,
+                    'type' => COMMENT_SHARE_TYPE,
+                    'parent_id' => 0,
+                    'status' => COMMENT_SHOW_STATUS
+                )
+            ));
+            $comment_ids = Hash::extract($comments, '{n}.Comment.id');
+            $comment_uids = Hash::extract($comments, '{n}.Comment.user_id');
+            $comment_users = $userM->find('all', array(
+                'conditions' => array(
+                    'id' => $comment_uids
+                ),
+                'fields' => $this->query_user_fields
+            ));
+            $comment_users = Hash::combine($comment_users, '{n}.User.id', '{n}.User');
+            $replay_count = $commentM->find('count', array(
+                'fields' => 'DISTINCT parent_id',
+                'conditions' => array(
+                    'parent_id' => $comment_ids,
+                    'status' => COMMENT_SHOW_STATUS,
+                    'user_id' => $sharer_id,
+                    'data_id' => $weshare_ids,
+                    'type' => COMMENT_SHARE_TYPE,
+                )
+            ));
+            $comment_count = count($comments);
+            $reply_percent = 0;
+            if ($comment_count > 0) {
+                $reply_percent = $replay_count / $comment_count * 100;
+            }
+            $sharer_comment_data = array('comment_count' => $comment_count, 'comments' => $comments, 'comment_users' => $comment_users, 'reply_percent' => $reply_percent);
+            Cache::write($cache_key, json_encode($sharer_comment_data));
+            return $sharer_comment_data;
         }
-        return array('comment_count' => $comment_count, 'comments' => $comments, 'comment_users' => $comment_users, 'reply_percent' => $reply_percent);
+        return json_decode($sharer_comment_data, true);
     }
 
     /**
@@ -66,35 +73,42 @@ class WeshareBuyComponent extends Component {
      * 分享页面 获取分享者的所有评论数据
      */
     public function load_sharer_comments($sharer_id) {
-        $weshareM = ClassRegistry::init('Weshare');
-        $commentM = ClassRegistry::init('Comment');
-        $userM = ClassRegistry::init('User');
-        $allShares = $weshareM->find('all', array(
-            'conditions' => array(
-                'creator' => $sharer_id,
-                'status' => array(0, 1)
-            )
-        ));
-        $share_ids = Hash::extract($allShares, '{n}.Weshare.id');
-        $share_all_comments = $commentM->find('all', array(
-            'conditions' => array(
-                'type' => COMMENT_SHARE_TYPE,
-                'data_id' => $share_ids,
-                'status' => COMMENT_SHOW_STATUS,
-                'parent_id' => 0,
-                'not' => array('order_id' => null)
-            )
-        ));
-        $comment_user_ids = Hash::extract($share_all_comments, '{n}.Comment.user_id');
-        $share_all_comments = Hash::extract($share_all_comments, '{n}.Comment');
-        $all_users = $userM->find('all', array(
-            'conditions' => array(
-                'id' => $comment_user_ids
-            ),
-            'fields' => $this->query_user_fields
-        ));
-        $all_users = Hash::combine($all_users, '{n}.User.id', '{n}.User');
-        return array('share_all_comments' => $share_all_comments, 'share_comment_all_users' => $all_users);
+        $cache_key = SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $sharer_id . '_0';
+        $sharer_comment_data = Cache::read($cache_key);
+        if (empty($sharer_comment_data)) {
+            $weshareM = ClassRegistry::init('Weshare');
+            $commentM = ClassRegistry::init('Comment');
+            $userM = ClassRegistry::init('User');
+            $allShares = $weshareM->find('all', array(
+                'conditions' => array(
+                    'creator' => $sharer_id,
+                    'status' => array(0, 1)
+                )
+            ));
+            $share_ids = Hash::extract($allShares, '{n}.Weshare.id');
+            $share_all_comments = $commentM->find('all', array(
+                'conditions' => array(
+                    'type' => COMMENT_SHARE_TYPE,
+                    'data_id' => $share_ids,
+                    'status' => COMMENT_SHOW_STATUS,
+                    'parent_id' => 0,
+                    'not' => array('order_id' => null)
+                )
+            ));
+            $comment_user_ids = Hash::extract($share_all_comments, '{n}.Comment.user_id');
+            $share_all_comments = Hash::extract($share_all_comments, '{n}.Comment');
+            $all_users = $userM->find('all', array(
+                'conditions' => array(
+                    'id' => $comment_user_ids
+                ),
+                'fields' => $this->query_user_fields
+            ));
+            $all_users = Hash::combine($all_users, '{n}.User.id', '{n}.User');
+            $sharer_comment_data = array('share_all_comments' => $share_all_comments, 'share_comment_all_users' => $all_users);
+            Cache::write($cache_key, json_encode($sharer_comment_data));
+            return $sharer_comment_data;
+        }
+        return json_decode($sharer_comment_data, true);
     }
 
     /**
@@ -103,39 +117,46 @@ class WeshareBuyComponent extends Component {
      * 加载本次分享的数据
      */
     public function load_comment_by_share_id($weshare_id) {
-        $commentM = ClassRegistry::init('Comment');
-        $commentReplyM = ClassRegistry::init('CommentReply');
-        $comments = $commentM->find('all', array(
-            'conditions' => array(
-                'type' => COMMENT_SHARE_TYPE,
-                'data_id' => $weshare_id,
-                'status' => COMMENT_SHOW_STATUS
-            ),
-            'fields' => $this->$query_comment_fields
-        ));
-        //$comments = Hash::combine($comments,'{n}.Comment.id', '{n}.Comment', '{n}.Comment.order_id');
-        $order_comments = array_filter($comments, 'order_comment_filter');
-        $order_comments = Hash::combine($order_comments, '{n}.Comment.order_id', '{n}.Comment');
-        $reply_comments = array_filter($comments, 'order_reply_comment_filter');
-        $reply_comments = Hash::combine($reply_comments, '{n}.Comment.id', '{n}.Comment');
-        $commentReplies = $commentReplyM->find('all', array(
-            'conditions' => array(
-                'data_id' => $weshare_id,
-                'data_type' => COMMENT_SHARE_TYPE
-            ),
-            'order' => array('id ASC')
-        ));
-        $comment_reply_relation = array();
-        foreach($commentReplies as $commentReply){
-            $comment_id = $commentReply['CommentReply']['comment_id'];
-            $reply_id = $commentReply['CommentReply']['reply_id'];
-            if(!isset($comment_reply_relation[$comment_id])){
-                $comment_reply_relation[$comment_id] = array();
+        $key = SHARE_COMMENT_DATA_CACHE_KEY . '_' . $weshare_id;
+        $share_comment_data = Cache::read($key);
+        if (empty($share_comment_data)) {
+            $commentM = ClassRegistry::init('Comment');
+            $commentReplyM = ClassRegistry::init('CommentReply');
+            $comments = $commentM->find('all', array(
+                'conditions' => array(
+                    'type' => COMMENT_SHARE_TYPE,
+                    'data_id' => $weshare_id,
+                    'status' => COMMENT_SHOW_STATUS
+                ),
+                'fields' => $this->$query_comment_fields
+            ));
+            //$comments = Hash::combine($comments,'{n}.Comment.id', '{n}.Comment', '{n}.Comment.order_id');
+            $order_comments = array_filter($comments, 'order_comment_filter');
+            $order_comments = Hash::combine($order_comments, '{n}.Comment.order_id', '{n}.Comment');
+            $reply_comments = array_filter($comments, 'order_reply_comment_filter');
+            $reply_comments = Hash::combine($reply_comments, '{n}.Comment.id', '{n}.Comment');
+            $commentReplies = $commentReplyM->find('all', array(
+                'conditions' => array(
+                    'data_id' => $weshare_id,
+                    'data_type' => COMMENT_SHARE_TYPE
+                ),
+                'order' => array('id ASC')
+            ));
+            $comment_reply_relation = array();
+            foreach ($commentReplies as $commentReply) {
+                $comment_id = $commentReply['CommentReply']['comment_id'];
+                $reply_id = $commentReply['CommentReply']['reply_id'];
+                if (!isset($comment_reply_relation[$comment_id])) {
+                    $comment_reply_relation[$comment_id] = array();
+                }
+                $comment_reply_relation[$comment_id][] = $reply_id;
             }
-            $comment_reply_relation[$comment_id][] = $reply_id;
+            $comment_replies = $this->recursionReply($order_comments, $reply_comments, $comment_reply_relation);
+            $share_comment_data = array('order_comments' => $order_comments, 'comment_replies' => $comment_replies);
+            Cache::write($key, json_encode($share_comment_data));
+            return $share_comment_data;
         }
-        $comment_replies = $this->recursionReply($order_comments, $reply_comments, $comment_reply_relation);
-        return array('order_comments' => $order_comments, 'comment_replies' => $comment_replies);
+        return json_decode($share_comment_data, true);
     }
 
     /**
@@ -258,7 +279,14 @@ class WeshareBuyComponent extends Component {
             if (!empty($comment['Comment']['id'])) {
                 $this->send_shareed_offer_notify($order_id, $share_id, $comment['Comment']['id']);
             }
+            //clean cache
+            //$cache_key = SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $sharer_id . '_0';
+            //$cache_key = SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $sharer_id . '_1';
+            Cache::write(SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $weshare_info['creator'] . '_0','');
+            Cache::write(SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $weshare_info['creator'] . '_1','');
         }
+        //$key = SHARE_COMMENT_DATA_CACHE_KEY . '_' . $weshare_id;
+        Cache::write(SHARE_COMMENT_DATA_CACHE_KEY . '_' . $weshare_info['creator'], '');
         return array('success' => true, 'comment' => $comment['Comment'], 'comment_reply' => $commentReply['CommentReply'], 'order_id' => $order_id);
     }
 
@@ -466,96 +494,103 @@ class WeshareBuyComponent extends Component {
      * 获取分享的订单信息
      */
     public function get_share_order_for_show($weshareId, $is_me, $division = false){
-        $this->Weshare = ClassRegistry::init('Weshare');
-        $this->Order = ClassRegistry::init('Order');
-        $this->User = ClassRegistry::init('User');
-        $this->Cart = ClassRegistry::init('Cart');
-        $this->Oauthbind = ClassRegistry::init('Oauthbind');
-        $this->WeshareProduct = ClassRegistry::init('WeshareProduct');
-        $product_buy_num = array('details' => array());
-        $order_cart_map = array();
-        $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
-        $sort =  array('created DESC');
-        $orders = $this->Order->find('all', array(
-            'conditions' => array(
-                'member_id' => $weshareId,
-                'type' => ORDER_TYPE_WESHARE_BUY,
-                'status' => $order_status,
-                'deleted' => DELETED_NO
-            ),
-            'fields' => array('id', 'creator', 'created', 'updated', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type'),
-            'order' => $sort
-        ));
-        $orderIds = Hash::extract($orders, '{n}.Order.id');
-        $userIds = Hash::extract($orders, '{n}.Order.creator');
-        $users = $this->User->find('all', array(
-            'conditions' => array(
-                'id' => $userIds
-            ),
-            'recursive' => 1, //int
-            'fields' => $this->query_user_fields,
-        ));
-        $orders = Hash::combine($orders, '{n}.Order.id', '{n}.Order');
-        if ($orders) {
-            if($is_me){
-                usort($orders, function ($a, $b) {
-                    $a_update_date = $a['updated'];
-                    $a_update_date_time = strtotime($a_update_date);
-                    $b_update_date = $b['updated'];
-                    $b_update_date_time = strtotime($b_update_date);
-                    return ($a_update_date_time < $b_update_date_time) ? 1 : -1;
-                });
-            }else{
-                usort($orders, function ($a, $b) {
-                    return ($a['id'] < $b['id']) ? -1 : 1;
-                });
+        $key = SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId;
+        $share_order_data = Cache::read($key);
+        if (empty($share_order_data)) {
+            $this->Weshare = ClassRegistry::init('Weshare');
+            $this->Order = ClassRegistry::init('Order');
+            $this->User = ClassRegistry::init('User');
+            $this->Cart = ClassRegistry::init('Cart');
+            $this->Oauthbind = ClassRegistry::init('Oauthbind');
+            $this->WeshareProduct = ClassRegistry::init('WeshareProduct');
+            $product_buy_num = array('details' => array());
+            $order_cart_map = array();
+            $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
+            $sort = array('created DESC');
+            $orders = $this->Order->find('all', array(
+                'conditions' => array(
+                    'member_id' => $weshareId,
+                    'type' => ORDER_TYPE_WESHARE_BUY,
+                    'status' => $order_status,
+                    'deleted' => DELETED_NO
+                ),
+                'fields' => array('id', 'creator', 'created', 'updated', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type'),
+                'order' => $sort
+            ));
+            $orderIds = Hash::extract($orders, '{n}.Order.id');
+            $userIds = Hash::extract($orders, '{n}.Order.creator');
+            $users = $this->User->find('all', array(
+                'conditions' => array(
+                    'id' => $userIds
+                ),
+                'recursive' => 1, //int
+                'fields' => $this->query_user_fields,
+            ));
+            $orders = Hash::combine($orders, '{n}.Order.id', '{n}.Order');
+            if ($orders) {
+                if ($is_me) {
+                    usort($orders, function ($a, $b) {
+                        $a_update_date = $a['updated'];
+                        $a_update_date_time = strtotime($a_update_date);
+                        $b_update_date = $b['updated'];
+                        $b_update_date_time = strtotime($b_update_date);
+                        return ($a_update_date_time < $b_update_date_time) ? 1 : -1;
+                    });
+                } else {
+                    usort($orders, function ($a, $b) {
+                        return ($a['id'] < $b['id']) ? -1 : 1;
+                    });
+                }
             }
-        }
-        $carts = $this->Cart->find('all', array(
-            'conditions' => array(
-                'order_id' => $orderIds,
-                'type' => ORDER_TYPE_WESHARE_BUY,
-                'not' => array('order_id' => null, 'order_id' => '')
-            ),
-            'fields' => array('id', 'name', 'order_id', 'num', 'product_id', 'price')
-        ));
-        $realTotalPrice = 0;
-        foreach ($orders as $order_item) {
-            $realTotalPrice = $realTotalPrice + $order_item['total_all_price'];
-        }
-        $summeryTotalPrice = 0;
-        foreach ($carts as $item) {
-            $order_id = $item['Cart']['order_id'];
-            $product_id = $item['Cart']['product_id'];
-            $cart_num = $item['Cart']['num'];
-            $cart_price = $item['Cart']['price'];
-            $cart_name = $item['Cart']['name'];
-            if (!isset($product_buy_num['details'][$product_id])) $product_buy_num['details'][$product_id] = array('num' => 0, 'total_price' => 0, 'name' => $cart_name);
-            if (!isset($order_cart_map[$order_id])) $order_cart_map[$order_id] = array();
-            $product_buy_num['details'][$product_id]['num'] = $product_buy_num['details'][$product_id]['num'] + $cart_num;
-            $totalPrice = $cart_num * $cart_price;
-            $summeryTotalPrice += $totalPrice;
-            $product_buy_num['details'][$product_id]['total_price'] = $product_buy_num['details'][$product_id]['total_price'] + $totalPrice;
-            $order_cart_map[$order_id][] = $item['Cart'];
-        }
-        $product_buy_num['all_buy_user_count'] = count($users);
-        $product_buy_num['all_total_price'] = $summeryTotalPrice;
-        $product_buy_num['real_total_price'] = $realTotalPrice;
-        $users = Hash::combine($users, '{n}.User.id', '{n}.User');
-        if($division){
-            $kuaidi_orders = array_filter($orders, "share_kuaidi_order_filter");
-            if ($kuaidi_orders) {
-                usort($kuaidi_orders, function ($a, $b) {
-                    return ($a['status'] < $b['status']) ? -1 : 1;
-                });
+            $carts = $this->Cart->find('all', array(
+                'conditions' => array(
+                    'order_id' => $orderIds,
+                    'type' => ORDER_TYPE_WESHARE_BUY,
+                    'not' => array('order_id' => null, 'order_id' => '')
+                ),
+                'fields' => array('id', 'name', 'order_id', 'num', 'product_id', 'price')
+            ));
+            $realTotalPrice = 0;
+            foreach ($orders as $order_item) {
+                $realTotalPrice = $realTotalPrice + $order_item['total_all_price'];
             }
-            $self_ziti_orders = array_filter($orders, "share_self_ziti_order_filter");
-            $pys_ziti_orders = array_filter($orders, "share_pys_ziti_order_filter");
-            $orders = array(SHARE_SHIP_KUAIDI_TAG => $kuaidi_orders, SHARE_SHIP_SELF_ZITI_TAG => $self_ziti_orders, SHARE_SHIP_PYS_ZITI_TAG => $pys_ziti_orders);
+            $summeryTotalPrice = 0;
+            foreach ($carts as $item) {
+                $order_id = $item['Cart']['order_id'];
+                $product_id = $item['Cart']['product_id'];
+                $cart_num = $item['Cart']['num'];
+                $cart_price = $item['Cart']['price'];
+                $cart_name = $item['Cart']['name'];
+                if (!isset($product_buy_num['details'][$product_id])) $product_buy_num['details'][$product_id] = array('num' => 0, 'total_price' => 0, 'name' => $cart_name);
+                if (!isset($order_cart_map[$order_id])) $order_cart_map[$order_id] = array();
+                $product_buy_num['details'][$product_id]['num'] = $product_buy_num['details'][$product_id]['num'] + $cart_num;
+                $totalPrice = $cart_num * $cart_price;
+                $summeryTotalPrice += $totalPrice;
+                $product_buy_num['details'][$product_id]['total_price'] = $product_buy_num['details'][$product_id]['total_price'] + $totalPrice;
+                $order_cart_map[$order_id][] = $item['Cart'];
+            }
+            $product_buy_num['all_buy_user_count'] = count($users);
+            $product_buy_num['all_total_price'] = $summeryTotalPrice;
+            $product_buy_num['real_total_price'] = $realTotalPrice;
+            $users = Hash::combine($users, '{n}.User.id', '{n}.User');
+            if ($division) {
+                $kuaidi_orders = array_filter($orders, "share_kuaidi_order_filter");
+                if ($kuaidi_orders) {
+                    usort($kuaidi_orders, function ($a, $b) {
+                        return ($a['status'] < $b['status']) ? -1 : 1;
+                    });
+                }
+                $self_ziti_orders = array_filter($orders, "share_self_ziti_order_filter");
+                $pys_ziti_orders = array_filter($orders, "share_pys_ziti_order_filter");
+                $orders = array(SHARE_SHIP_KUAIDI_TAG => $kuaidi_orders, SHARE_SHIP_SELF_ZITI_TAG => $self_ziti_orders, SHARE_SHIP_PYS_ZITI_TAG => $pys_ziti_orders);
+            }
+            //show order ship type name
+            $shipTypes = ShipAddress::ship_type_list();
+            $share_order_data = array('users' => $users, 'orders' => $orders, 'order_cart_map' => $order_cart_map, 'summery' => $product_buy_num, 'ship_types' => $shipTypes);
+            Cache::write($key, json_encode($share_order_data));
+            return $share_order_data;
         }
-        //show order ship type name
-        $shipTypes = ShipAddress::ship_type_list();
-        return array('users' => $users, 'orders' => $orders, 'order_cart_map' => $order_cart_map, 'summery' => $product_buy_num, 'ship_types' => $shipTypes);
+        return json_decode($share_order_data, true);
     }
 
     /**
@@ -777,6 +812,35 @@ class WeshareBuyComponent extends Component {
         $desc = '分享，让生活更美。点击查看。';
         $detail_url = $this->get_weshares_detail_url($weshare_id);
         $this->Weixin->send_comment_template_msg($open_id, $detail_url, $title, $order_id, $order_date, $desc);
+    }
+
+    /**
+     * @param $uid
+     * @return array|mixed
+     *
+     */
+    public function get_user_share_summary($uid) {
+        $key = SHARE_USER_SUMMERY_CACHE_KEY . '_' . $uid;
+        $summery_data = Cache::read($key);
+        if (empty($summery_data)) {
+            $weshareM = ClassRegistry::init('Weshare');
+            $userRelationM = ClassRegistry::init('UserRelation');
+            $weshares = $weshareM->find('all', array(
+                'conditions' => array(
+                    'creator' => $uid
+                ),
+                'fields' => array('id')
+            ));
+            $fans_count = $userRelationM    ->find('count', array(
+                'conditions' => array(
+                    'user_id' => $uid
+                )
+            ));
+            $summery_data = array('share_count' => count($weshares), 'follower_count' => $fans_count);
+            Cache::write($key, json_encode($summery_data));
+            return $summery_data;
+        }
+        return json_decode($summery_data, true);
     }
 
     /**
