@@ -17,10 +17,16 @@
                 {{/if}}
                 {{if $sharer_comment_data['comment_count']>0}}
                     <div style="margin-top: 10px;margin-bottom: 10px;">
-                        <span>{{$sharer_comment_data['comment_count']}}条爱心评价</span>
-                        <button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#commentListModal">点击查看</button>
+                        <span><strong style="color: #ffa200">{{$sharer_comment_data['comment_count']}}</strong>&nbsp;&nbsp;条爱心评价</span>
+                        <button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#commentListModal">查看评价</button>
                     </div>
                 {{/if}}
+                <div style="margin-top: 10px;margin-bottom: 10px;">
+                    <span><strong style="color: #ffa200">{{$share_count}}</strong>&nbsp;&nbsp; <small>分享</small>&nbsp;&nbsp;<strong style="color: #ffa200">{{$follower_count}}</strong>&nbsp;&nbsp; <small>粉丝</small></span>
+                    {{if $follower_count>=0}}
+                    <a class="btn btn-warning btn-xs" href="">查看粉丝</a>
+                    {{/if}}
+                </div>
                 {{if $sharer_comment_data['comment_count']>0}}
                 <hr style="margin-top: 5px">
                 <div style="text-align: left;">
@@ -43,11 +49,6 @@
                     </div>
                     {{/if}}
                 </div>
-                <hr style="margin-top: 5px">
-                <span class="help-block"><strong style="color: #ffa200">{{$share_count}}</strong>&nbsp;&nbsp; <small>
-                    分享
-                </small>&nbsp;&nbsp;<strong style="color: #ffa200">{{$follower_count}}</strong>&nbsp;&nbsp; <small>粉丝
-                </small></span>
                 <!--<a class="btn btn-info" href="/weshares/add" role="button">我要分享</a>-->
             </div>
         </div>

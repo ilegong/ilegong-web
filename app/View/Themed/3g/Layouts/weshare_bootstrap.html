@@ -9,6 +9,8 @@
     <!-- Bootstrap -->
     <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
     <link href="//cdn.bootcss.com/bootstrap-modal/2.2.6/css/bootstrap-modal.min.css" rel="stylesheet">
+    <link href="http://cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="/static/weshares/css/site-common.css" media="all" rel="stylesheet" type="text/css">
     <script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="//cdn.bootcss.com/bootstrap-modal/2.2.6/js/bootstrap-modalmanager.min.js"></script>
@@ -16,16 +18,20 @@
     <script src="//cdn.bootcss.com/bootbox.js/4.4.0/bootbox.min.js"></script>
 </head>
 <body>
-<div class="container-fluid">
+<div class="container-fluid" style="margin-bottom: 30px;">
     {{$content_for_layout}}
     <br/>
     {{if !$hide_footer}}
-    <footer class="footer">
-        <div class="container">
-            <div style="text-align: center;">
-                <a href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=209712305&idx=1&sn=ddb8431d97100d7e6305c2bc46d9ae75#rd"><img src="/img/logo_footer.jpg" border="0" style="width: 4.625em;height: 1.583em;"/></a><br/>朋友说—朋友间最真挚的分享
-            </div>
-        </div>
+    <footer class="channel_bottom">
+        <a class="btm_item" href="/">
+            <p class="iconfont" style="height: 18px;"><i class="fa fa-home"></i></p>
+            <b>首页</b>
+        </a>
+        <a class="new" href="/weshares/add">我也要分享</a>
+        <a class="btm_item" href="/weshares/user_share_info/{{$uid}}">
+            <p class="iconfont" style="height: 18px;"><i class="fa fa-user"></i></p>
+            <b>我的</b>
+        </a>
     </footer>
     {{/if}}
 </div>

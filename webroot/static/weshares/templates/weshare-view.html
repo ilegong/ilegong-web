@@ -115,13 +115,19 @@
     </div>
 </div>
 
-<a ng-if="vm.weshare.status == 2||vm.weshare.status == 1" class="btn stop-btn">报名已截止</a>
-
-<div ng-if="vm.weshare.status==0" class="clearfix starttuan_btn">
-    <a ng-if="vm.isCreator()" ng-click="vm.stopShare()" style="background-color: #ffa200;">截止报名</a>
-    <a ng-if="!vm.isCreator()" ng-click="vm.buyProducts()" style="background-color: #ffa200;">我要报名</a>
-    <a ng-click="vm.showShareDialog=true;vm.showLayer=true;" style="background-color: #29ac0e;">分享给好友一起报名</a>
-</div>
+<footer class="channel_bottom">
+    <a class="btm_item" href="/">
+        <p class="iconfont"><i class="fa fa-home"></i></p>
+        <b>首页</b>
+    </a>
+    <a class="new" ng-if="!vm.isCreator()" ng-click="vm.buyProducts()">我要报名</a>
+    <a class="new" style="background-color:#9EB1BD;" ng-if="vm.isCreator()" ng-click="vm.stopShare()">截止报名</a>
+    <a class="new" ng-if="vm.weshare.status == 2||vm.weshare.status == 1">报名已截止</a>
+    <a class="btm_item" href="/weshares/user_share_info">
+        <p class="iconfont"><i class="fa fa-user"></i></p>
+        <b>我的</b>
+    </a>
+</footer>
 
 <div class="share-dialog" ng-show="vm.showShareDialog">
     <div style="width: 90%; margin: 0 auto; font-size: 1.3em;">点击右上角“…”，分享给好友或朋友圈。</div>

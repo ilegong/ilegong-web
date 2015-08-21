@@ -32,6 +32,8 @@
 
     <div class="media-body" data-id="{{$share['Weshare']['id']}}" name="share_item">
         <h4 class="media-heading user_name">{{$share['Weshare']['title']}}</h4>
-        {{mb_substr($share['Weshare']['description'],0,30)}}...
+        <div style="width:115px;white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden;">
+            {{$share['Weshare']['description']}}
+        </div>
     </div>
 </div>
