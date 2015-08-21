@@ -394,7 +394,8 @@ Licensed under MIT
     margin-bottom: 24px;
 }
 .teamMemberImage {
-    width: 100%;
+    width: 100px;
+    height: 100px;
     height: auto;
     border-radius: 50%;
 }
