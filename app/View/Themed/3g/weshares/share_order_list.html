@@ -35,7 +35,7 @@
             {{/loop}}
         </tbody>
         <tr>
-            <td colspan="3">总金额:&nbsp;<font color="red">{{$summery['real_total_price']-$refund_money}}</font>{{if $refund_money>0}}&nbsp;&nbsp;退款金额:&nbsp;<font color="red">{{$refund_money}}</font>{{/if}}{{if $summery['real_total_price']!=($summery['all_total_price']/100)}}&nbsp;&nbsp;红包金额:&nbsp;<font color="red">{{($summery['all_total_price']/100)-$summery['real_total_price']}}</font>{{/if}}&nbsp;&nbsp;&nbsp;总购买人数:&nbsp;<font color="red">{{$summery['all_buy_user_count']}}</font></td>
+            <td colspan="3">总金额:&nbsp;<font color="red">{{$summery['real_total_price']-$refund_money}}</font>{{if $refund_money>0}}&nbsp;&nbsp;退款金额:&nbsp;<font color="red">{{$refund_money}}</font>{{/if}}{{if $summery['real_total_price']!=($summery['all_total_price'])}}&nbsp;&nbsp;红包金额:&nbsp;<font color="red">{{($summery['all_total_price'])-$summery['real_total_price']}}</font>{{/if}}&nbsp;&nbsp;&nbsp;总购买人数:&nbsp;<font color="red">{{$summery['all_buy_user_count']}}</font></td>
         </tr>
     </table>
 </div>

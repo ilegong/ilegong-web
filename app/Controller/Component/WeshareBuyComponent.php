@@ -553,10 +553,11 @@ class WeshareBuyComponent extends Component {
                 'fields' => array('id', 'name', 'order_id', 'num', 'product_id', 'price')
             ));
             $realTotalPrice = 0;
+            $summeryTotalPrice = 0;
             foreach ($orders as $order_item) {
                 $realTotalPrice = $realTotalPrice + $order_item['total_all_price'];
+                $summeryTotalPrice = $summeryTotalPrice + $order_item['total_price'];
             }
-            $summeryTotalPrice = 0;
             foreach ($carts as $item) {
                 $order_id = $item['Cart']['order_id'];
                 $product_id = $item['Cart']['product_id'];
@@ -567,7 +568,6 @@ class WeshareBuyComponent extends Component {
                 if (!isset($order_cart_map[$order_id])) $order_cart_map[$order_id] = array();
                 $product_buy_num['details'][$product_id]['num'] = $product_buy_num['details'][$product_id]['num'] + $cart_num;
                 $totalPrice = $cart_num * $cart_price;
-                $summeryTotalPrice += $totalPrice;
                 $product_buy_num['details'][$product_id]['total_price'] = $product_buy_num['details'][$product_id]['total_price'] + $totalPrice;
                 $order_cart_map[$order_id][] = $item['Cart'];
             }
