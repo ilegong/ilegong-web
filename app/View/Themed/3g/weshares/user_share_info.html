@@ -23,8 +23,8 @@
                 {{/if}}
                 <div style="margin-top: 10px;margin-bottom: 10px;">
                     <span><strong style="color: #ffa200">{{$share_count}}</strong>&nbsp;&nbsp; <small>分享</small>&nbsp;&nbsp;<strong style="color: #ffa200">{{$follower_count}}</strong>&nbsp;&nbsp; <small>粉丝</small></span>
-                    {{if $follower_count>=0}}
-                    <a class="btn btn-warning btn-xs" href="">查看粉丝</a>
+                    {{if $follower_count>0}}
+                        <a class="btn btn-warning btn-xs" data-toggle="modal" data-target="#fansListModal">查看粉丝</a>
                     {{/if}}
                 </div>
                 {{if $sharer_comment_data['comment_count']>0}}
@@ -125,6 +125,27 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 {{/if}}
+<div class="modal fade" id="fansListModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" style="float: left;" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" style="text-align: center;">{{$follower_count}}粉丝</h4>
+            </div>
+            <div class="modal-body">
+                <div class="pageContentWrapper" style="height: 80vh;">
+                    <!-- team members start -->
+                    {{loop $fans_data $fan_key $fan_data}}
+                        <div class="columnWrapper oneThird teamMember {{if ($fan_key+2)%2==0}}lastColumn{{/if}}">
+                            <a href="/weshares/user_share_info/{{$fan_data['id']}}" class="teamMemberImageLink"> <img src="{{$fan_data['image']}}" class="teamMemberImage" alt="" /> </a>
+                            <h3 class="teamMemberName">{{$fan_data['nickname']}}</h3>
+                        </div>
+                    {{/loop}}
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
 <script>
     $(document).ready(function () {
         $('div[name="share_item"]').on('click', function () {

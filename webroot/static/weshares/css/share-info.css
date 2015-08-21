@@ -338,3 +338,80 @@ Licensed under MIT
     overflow: auto;
 
 }
+
+.pageWrapper {
+    padding-top: 36px;
+    margin-bottom: 36px;
+}
+
+.pageContentWrapper {
+    background-color: #f9f9f9;
+    padding-top: 18px;
+    padding-bottom: 27px;
+}
+.pageWrapper > *:last-child, .pageContentWrapper > *:last-child {
+    margin-bottom: 0px;
+}
+.columnWrapper {
+    margin-bottom: 27px;
+}
+.columnWrapper > *:last-child {
+    margin-bottom: 0px;
+}
+.oneHalf {
+    float: left;
+    width: 46%;
+    margin-right: 8%;
+}
+.oneThird {
+    float: left;
+    width: 30%;
+    margin-right: 5%;
+}
+.oneFourth {
+    float: left;
+    width: 22%;
+    margin-right: 4%;
+}
+.oneFifth {
+    float: left;
+    width: 16.8%;
+    margin-right: 4%;
+}
+.oneSixth {
+    float: left;
+    width: 13.33%;
+    margin-right: 4%;
+}
+.lastColumn {
+    margin-right: 0px;
+}
+.teamMember {
+}
+.teamMemberImageLink {
+    border-radius: 50%;
+    border: 6px solid #f9f9f9;
+    margin-bottom: 24px;
+}
+.teamMemberImage {
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+}
+.teamMemberName {
+    text-align: center;
+    padding-top: 0px;
+    font-size: 15px;
+}
+.teamMemberInfo {
+    text-align: center;
+    margin-bottom: 22px;
+}
+.teamMemberButton {
+    margin-left: auto;
+    margin-right: auto;
+    width: 62px;
+    text-align: center;
+    display: block;
+}
+

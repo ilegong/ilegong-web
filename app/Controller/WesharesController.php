@@ -473,6 +473,7 @@ class WesharesController extends AppController {
         }
         $userShareSummery = $this->getUserShareSummery($uid, $uid == $current_uid);
         $shareCommentData = $this->getSharerCommentData($my_create_share_ids, $uid);
+        $userFansData = $this->WeshareBuy->get_user_fans_data($uid);
         $this->explode_share_imgs($myCreateShares);
         $this->explode_share_imgs($myJoinShares);
         $this->set($userShareSummery);
@@ -486,6 +487,7 @@ class WesharesController extends AppController {
         $canSupportOfflineStore = $this->sharer_can_use_we_ship($uid);
         $this->set('is_support_offline_store', $canSupportOfflineStore > 0);
         $this->set('join_share_order_status', $joinShareOrderStatus);
+        $this->set('fans_data',$userFansData);
     }
 
     /**

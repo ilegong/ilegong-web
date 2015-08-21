@@ -846,6 +846,37 @@ class WeshareBuyComponent extends Component {
     }
 
     /**
+     * @param $uid
+     * 获取用户粉丝的信息
+     * @return array|mixed
+     */
+    public function get_user_fans_data($uid) {
+        $key = SHARER_FANS_DATA_CACHE_KEY . '_' . $uid;
+        $fans_data = Cache::read($key);
+        if (empty($fans_data)) {
+            $userRelationM = ClassRegistry::init('UserRelation');
+            $userM = ClassRegistry::init('User');
+            $relations = $userRelationM->find('all', array(
+                'conditions' => array(
+                    'user_id' => $uid,
+                    'deleted' => DELETED_NO
+                )
+            ));
+            $fans_id = Hash::extract($relations, '{n}.UserRelation.follow_id');
+            $fans_data = $userM->find('all', array(
+                'conditions' => array(
+                    'id' => $fans_id
+                ),
+                'fields' => $this->query_user_fields
+            ));
+            $fans_data = Hash::extract($fans_data, '{n}.User');
+            Cache::write($key, json_encode($fans_data));
+            return $fans_data;
+        }
+        return json_decode($fans_data, true);
+    }
+
+    /**
      * @param $weshareId
      * @return string
      * 获取分享的地址
