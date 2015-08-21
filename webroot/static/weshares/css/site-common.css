@@ -1,12 +1,11 @@
 .channel_bottom {
-    height: 57px;
+    height: 40px;
 }
 
 footer {
     box-sizing: border-box;
     position: fixed;
     width: 100%;
-    height: 46px;
     left: 0;
     bottom: 0;
     padding: 7px 0 0;
@@ -27,8 +26,8 @@ a {
     text-decoration: none;
 }
 .channel_bottom .iconfont {
-    font-size: 32px;
-    line-height: 32px;
+    font-size: 20px;
+    line-height: 15px;
     color: #fff !important;
 }
 .channel_bottom b {
@@ -40,7 +39,7 @@ a {
     position: relative;
     width: 56%;
     margin: 0 2%;
-    line-height: 42px;
+    line-height: 25px;
     background-color: #2b96dc;
     border-radius: 2px;
     overflow: hidden;
