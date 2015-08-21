@@ -16,7 +16,7 @@
 			isMobileValid: isMobileValid,
 			isNumber: isNumber,
 			toPercent: toPercent
-		}
+		};
 		function isMobileValid(mobile){
 			return /^1\d{10}$/.test(mobile);
 		}
@@ -34,23 +34,12 @@
 })(window, window.angular);
 
 (function (window, angular) {
-	var app = angular.module('weshares', ['ui.router', 'module.services', 'module.filters', 'module.directives', 'ngDialog'])
+	var app = angular.module('weshares', ['ui.router', 'module.services', 'module.filters', 'module.directives'])
 		.constant('_', window._)
 		.config(configCompileProvider)
 		.config(configHttpProvider)
 		.config(extendLog)
 		.run(initApp);
-
-  app.config(['ngDialogProvider', function (ngDialogProvider) {
-    ngDialogProvider.setDefaults({
-      showClose: true,
-      closeByDocument: true,
-      closeByEscape: false,
-      cache: true,
-      disableAnimation:true,
-      animationEndSupport: false
-    });
-  }]);
 
 	/* @ngInject */
 	function configCompileProvider($compileProvider) {

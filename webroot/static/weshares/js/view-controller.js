@@ -95,7 +95,7 @@
     }
   }
 
-  function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, $filter, $window, Utils, ngDialog) {
+  function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, $filter, $window, Utils) {
     var vm = this;
     vm.showShareDetailView = true;
     ChooseOfflineStore(vm, $log, $http, $templateCache, $timeout);
@@ -577,7 +577,8 @@
     }
 
     function showCommentListDialog() {
-      ngDialog.open({template: 'commentListDialog', scope: $scope, appendTo: '#commentListViewDialog'});
+      vm.showCommentListDialogView=true;
+      vm.showLayer = true;
     }
 
     function closeCommentDialog() {

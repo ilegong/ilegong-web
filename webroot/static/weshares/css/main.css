@@ -139,16 +139,20 @@ ul li { list-style: none; }
 .statistics-dialog ul li strong {color: #ffa200;}
 .share-dialog {width: 100%;background-color: #ffffff;color: #c73c3c;position: fixed;z-index: 5;left: 0;top: 0;text-align: center;font-weight: bold;padding: 40px 0;}
 
-.comment_list_box #box_title{width:100%;font-weight:bold;line-height:28px;font-size:20px;text-align: center;}
-.comment_list_box #box_title span{color: #ff0000}
+.comment_list_box {height: 80vh;overflow-y: scroll;}
+.comment_list-dialog #box_title{width:100%;font-weight:bold;line-height:28px;font-size:20px;text-align: center;}
+.comment_list-dialog #box_title span{color: #ff0000}
+.comment_list-dialog {border: white;position: fixed;top: 20px;left: 8%; z-index: 999;padding: 10px 10px 10px;width: 80%;border-radius: 4px;display: block; background: #f5f5f5;}
+.comment_list-dialog .nav{height: 10px;line-height: 10px;}
+.comment_list-dialog .nav .close-btn{height: 12px; position: absolute; left: 10px; top: 10px; width: 12px;}
 /* con */
 .comment_list_box #con{margin:0px auto;position:relative;border-top:1px solid #d6d6d6;background-color:#FFF;overflow:hidden;}
 .comment_list_box #con .bottomcover{position:absolute;bottom:0;background:url("../images/halftransp.png") no-repeat 0 -5px;height:35px;width:394px;_background:none;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/halftransp.png', sizingMethod='crop');pointer-events:none;}
 .comment_list_box #con ul{position:relative;margin:0px 10px 0px 10px;top:0;left:0;padding:0;}
 .comment_list_box #con ul li{width:100%;border-top:1px dotted #d6d6d6;padding:10px 0;_padding:8px 0;overflow:hidden;line-height:1.5;}
-.comment_list_box #con ul li .div_left{float:left;width: 20%;height: 50px;}
-.comment_list_box #con ul li .div_left img{width: 50px;height: 50px;border-radius: 50px;border: 1px solid #333333;}
-.comment_list_box #con ul li .div_right{float:right;width: 80%;}
+.comment_list_box #con ul li .div_left{float:left;width: 15%;height: 50px;}
+.comment_list_box #con ul li .div_left img{width: 40px;height: 40px;border-radius: 50px;border: 1px solid #333333;}
+.comment_list_box #con ul li .div_right{float:right;width: 83%;}
 .comment_list_box #con ul li .div_right span{color:#6EAFD5;padding:0px;}
 .comment_list_box #con ul li .div_right .twit_item_time{color:#999;padding:0px;}
 
