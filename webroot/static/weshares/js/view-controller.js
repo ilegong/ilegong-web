@@ -473,11 +473,6 @@
     }
 
     function buyProducts() {
-      var productsHasError = vm.validateProducts();
-      if (productsHasError) {
-        alert('请输入商品数量');
-        return;
-      }
       vm.showShareDetailView = false;
       vm.showBalanceView = true;
       vm.chooseShipType = false;
@@ -637,6 +632,11 @@
     }
 
     function validateOrderData() {
+      var productsHasError = vm.validateProducts();
+      if (productsHasError) {
+        alert('请输入商品数量');
+        return;
+      }
       if (vm.selectShipType == -1) {
         alert('请选择快递方式');
         vm.chooseShipType = true;
