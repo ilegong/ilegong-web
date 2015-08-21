@@ -133,7 +133,7 @@
                 <h4 class="modal-title" style="text-align: center;">{{$follower_count}}粉丝</h4>
             </div>
             <div class="modal-body">
-                <div class="pageContentWrapper" style="height: 80vh;">
+                <div class="pageContentWrapper" style="height: 80vh;overflow-y: scroll;">
                     <!-- team members start -->
                     {{loop $fans_data $fan_key $fan_data}}
                         <div class="columnWrapper oneThird teamMember {{if ($fan_key+1)%3==0}}lastColumn{{/if}}">
