@@ -831,7 +831,7 @@ class WeshareBuyComponent extends Component {
                 ),
                 'fields' => array('id')
             ));
-            $fans_count = $userRelationM    ->find('count', array(
+            $fans_count = $userRelationM->find('count', array(
                 'conditions' => array(
                     'user_id' => $uid
                 )
