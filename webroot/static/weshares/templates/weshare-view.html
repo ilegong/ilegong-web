@@ -120,8 +120,8 @@
         <p class="iconfont" style="height: 16px;"><i class="fa fa-home"></i></p>
         <b>首页</b>
     </a>
-    <a class="new" ng-if="!vm.isCreator()" ng-click="vm.buyProducts()">我要报名</a>
-    <a class="new" style="background-color:#9EB1BD;" ng-if="vm.isCreator()" ng-click="vm.stopShare()">截止报名</a>
+    <a class="new" ng-if="!vm.isCreator()&&vm.weshare.status == 0" ng-click="vm.buyProducts()">我要报名</a>
+    <a class="new" style="background-color:#9EB1BD;" ng-if="vm.isCreator()&&vm.weshare.status == 0" ng-click="vm.stopShare()">截止报名</a>
     <a class="new" ng-if="vm.weshare.status == 2||vm.weshare.status == 1">报名已截止</a>
     <a class="btm_item" href="/weshares/user_share_info">
         <p class="iconfont" style="height: 16px;"><i class="fa fa-user"></i></p>
