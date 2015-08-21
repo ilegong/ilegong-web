@@ -96,13 +96,14 @@
             </div>
         </div>
     </div>
+
     <footer class="channel_bottom">
         <a class="btm_item" href="/">
             <p class="iconfont" style="height: 16px;"><i class="fa fa-home"></i></p>
             <b>首页</b>
         </a>
-        <a class="new" style="width: 28%;">微信支付</a>
-        <a class="new" style="width: 28%; margin-right: 7%;">支付宝支付</a>
+        <a class="new" ng-click='vm.submitOrder(0);' style="width: 28%;">微信支付</a>
+        <a class="new" ng-click='vm.submitOrder(1);' style="width: 28%; margin-right: 7%;">支付宝支付</a>
         <a class="btm_item" href="/weshares/user_share_info">
             <p class="iconfont" style="height: 16px;"><i class="fa fa-user"></i></p>
             <b>我的</b>
