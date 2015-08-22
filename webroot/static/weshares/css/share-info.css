@@ -131,7 +131,7 @@ Licensed under MIT
 
 .user-details .user-info-block {
     width: 100%;
-    margin-top: -25px;
+    margin-top: -30px;
     background: rgb(255, 255, 255);
     z-index: 0;
     padding-top: 35px;
@@ -140,7 +140,7 @@ Licensed under MIT
 .user-info-block .user-heading {
     width: 100%;
     text-align: center;
-    padding-bottom: 10px;
+    padding-bottom: 1px;
 }
 
 .user-info-block .navigation {
