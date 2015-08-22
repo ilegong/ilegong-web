@@ -19,20 +19,20 @@
                 </div>
                 <div style="margin-top: 10px;margin-bottom: 10px;">
                     <ul style="height: 40px;overflow: hidden;font-size: 18px;display: block;padding: 0;">
-                        <li style="display:inline-block;width: 65px;text-align: center;border-right-width: 1px;border-right-style: solid;border-color: #d9d9d9;">
-                            <a style="display: block;color: #333;text-decoration: none;" data-toggle="modal" data-target="#commentListModal">
+                        <li id="show-comment-modal-dialog" style="display:inline-block;width: 65px;text-align: center;border-right-width: 1px;border-right-style: solid;border-color: #d9d9d9;">
+                            <a style="display: block;color: #333;text-decoration: none;">
                                 <strong style="display: block;font-weight: bold;line-height: 18px;width: 65px;overflow: hidden;color: #449D44;">{{$sharer_comment_data['comment_count']}}</strong>
                                 <span style="display: block;font-size: 12px;color: #808080;text-decoration: none;">爱心评价</span>
                             </a>
                         </li>
-                        <li style="display:inline-block;width: 65px;text-align: center;border-right-width: 1px;border-right-style: solid;border-color: #d9d9d9;">
-                            <a style="display: block;color: #333;text-decoration: none;" data-toggle="modal" data-target="#fansListModal">
+                        <li id="show-fans-modal-dialog" style="display:inline-block;width: 65px;text-align: center;border-right-width: 1px;border-right-style: solid;border-color: #d9d9d9;">
+                            <a style="display: block;color: #333;text-decoration: none;">
                                 <strong style="display: block;font-weight: bold;line-height: 18px;width: 65px;overflow: hidden;color: #449D44;">{{$follower_count}}</strong>
                                 <span style="display: block;font-size: 12px;color: #808080;text-decoration: none;">粉丝</span>
                             </a>
                         </li>
-                        <li style="display:inline-block;width: 65px;text-align: center;">
-                            <a style="display: block;color: #333;text-decoration: none;" data-toggle="modal" data-target="#focusListModal">
+                        <li id="show-focus-modal-dialog" style="display:inline-block;width: 65px;text-align: center;">
+                            <a style="display: block;color: #333;text-decoration: none;">
                                 <strong style="display: block;font-weight: bold;line-height: 18px;width: 65px;overflow: hidden;color: #449D44;">{{if empty($focus_count)}}0{{else}}{{$focus_count}}{{/if}}</strong>
                                 <span style="display: block;font-size: 12px;color: #808080;text-decoration: none;">关注</span>
                             </a>
@@ -220,6 +220,24 @@
 </div>
 <script>
     $(document).ready(function () {
+        //show-focus-modal-dialog
+        //show-fans-modal-dialog
+        //show-comment-modal-dialog
+        var $showCommentLi = $('#show-comment-modal-dialog');
+        var $commentModalDialog = $('#commentListModal');
+        var $showFansLi = $('#show-fans-modal-dialog');
+        var $fansModalDialog = $('#fansListModal');
+        var $showFocusLi = $('#show-focus-modal-dialog');
+        var $focusModalDialog = $('#focusListModal');
+        $showCommentLi.on('click',function(){
+            $commentModalDialog.modal('show');
+        });
+        $showFansLi.on('click',function(){
+            $fansModalDialog.modal('show');
+        });
+        $showFocusLi.on('click',function(){
+            $focusModalDialog.modal('show');
+        });
         $('div[name="share_item"]').on('click', function () {
             var $me = $(this);
             var id = $me.data('id');
