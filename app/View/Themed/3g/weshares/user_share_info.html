@@ -106,7 +106,6 @@
         </div>
     </div>
 </div>
-{{if $sharer_comment_data['comment_count']>0}}
 <div class="modal fade" id="commentListModal">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -114,28 +113,67 @@
                 <button type="button" style="float: left;" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" style="text-align: center;">{{$sharer_comment_data['comment_count']}}爱心评价</h4>
             </div>
-            <div class="modal-body">
-                <div class="">
-                    <div class="msg-wrap" style="padding: 0;">
-                        {{loop $sharer_comment_data['comments'] $comment}}
-                        <div class="media msg">
-                            <a class="pull-left" href="#">
-                                <img class="img-circle" alt="64x64" style="width: 32px; height: 32px;" src="{{$sharer_comment_data['comment_users'][$comment['Comment']['user_id']]['image']}}">
-                            </a>
-                            <div class="media-body">
-                                <small class="pull-right time"><i class="fa fa-clock-o"></i>{{friendlyDateFromStr($comment['Comment']['created'], FFDATE_CH_MD);}}</small>
-                                <h5 class="media-heading">{{$comment['Comment']['username']}}</h5>
-                                <small class="col-lg-10" style="padding: 0;">{{$comment['Comment']['body']}}</small>
+            <div class="modal-body" style="padding: 5px;">
+                <div>
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#receive-comments" role="tab" data-toggle="tab">我收到的</a></li>
+                        <li role="presentation"><a href="#send-comments" aria-controls="profile" role="tab" data-toggle="tab">我评价的</a></li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="receive-comments">
+                            <div class="">
+                                <div class="msg-wrap" style="padding: 0;">
+                                    {{loop $sharer_comment_data['comments'] $comment}}
+                                    <?php
+                                        $comment_user_id = $comment["Comment"]["user_id"];
+                                    ?>
+                                    <div class="media msg" onclick="window.location.href='/weshares/user_share_info/{{$comment_user_id}}'">
+                                        <a class="pull-left" href="/weshares/user_share_info/{{$comment['Comment']['user_id']}}">
+                                            <img class="img-circle" alt="64x64" style="width: 32px; height: 32px;" src="{{$sharer_comment_data['comment_users'][$comment['Comment']['user_id']]['image']}}">
+                                        </a>
+                                        <div class="media-body">
+                                            <small class="pull-right time"><i class="fa fa-clock-o"></i>{{friendlyDateFromStr($comment['Comment']['created'], FFDATE_CH_MD);}}</small>
+                                            <h5 class="media-heading">{{$comment['Comment']['username']}}</h5>
+                                            <small class="col-lg-10" style="padding: 0;">{{$comment['Comment']['body']}}</small>
+                                        </div>
+                                    </div>
+                                    {{/loop}}
+                                </div>
                             </div>
                         </div>
-                        {{/loop}}
+                        <div role="tabpanel" class="tab-pane" id="send-comments">
+                            <div class="">
+                                <div class="msg-wrap" style="padding: 0;">
+                                    {{loop $user_comment_data['comments'] $comment}}
+                                    <?php
+                                        $share_id = $comment['Comment']['data_id'];
+                                        $share_creator = $comment['Comment']['creator'];
+                                        $share_creator_nickname = $user_comment_data['share_creators'][$share_creator]['nickname'];
+                                        $title = $share_creator_nickname.'分享的'.$user_comment_data['share_info'][$share_id]['title'];
+                                    ?>
+                                    <div class="media msg" onclick="window.location.href='/weshares/view/{{$share_id}}'">
+                                        <a class="pull-left" href="/weshares/view/{{$share_id}}">
+                                            <img class="img-circle" alt="64x64" style="width: 32px; height: 32px;"  onerror="this.src='/img/default_user_icon.jpg'" src="{{$share_user['image']}}">
+                                        </a>
+                                        <div class="media-body">
+                                            <small class="pull-right time"><i class="fa fa-clock-o"></i>{{friendlyDateFromStr($comment['Comment']['created'], FFDATE_CH_MD);}}</small>
+                                            <h5 class="media-heading">{{$title}}</h5>
+                                            <small class="col-lg-10" style="padding: 0;">{{$comment['Comment']['body']}}</small>
+                                        </div>
+                                    </div>
+                                    {{/loop}}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-{{/if}}
 <!--focus data-->
 <div class="modal fade" id="focusListModal">
     <div class="modal-dialog">

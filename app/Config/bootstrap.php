@@ -173,6 +173,7 @@ define('SHICHI_AND_NO_CHECK', 4); //试吃／审核不通过
 const SHARE_USER_SUMMERY_CACHE_KEY = 'share_user_summery_cache_key';
 const SHARER_FANS_DATA_CACHE_KEY = 'sharer_fans_data_cache_key';
 const SHARER_FOCUS_DATA_CACHE_KEY = 'sharer_focus_data_cache_key';
+const USER_SHARE_COMMENTS_DATA_CACHE_KEY = 'user_share_comments_data_cache_key';
 const SHARER_ALL_COMMENT_DATA_CACHE_KEY = 'sharer_all_comment_data_cache_key';
 const SHARE_COMMENT_DATA_CACHE_KEY = 'share_comment_data_cache_key';
 const SHARE_ORDER_DATA_CACHE_KEY = 'share_order_data_cache_key';

@@ -34,7 +34,9 @@ class WeshareBuyComponent extends Component {
                     'type' => COMMENT_SHARE_TYPE,
                     'parent_id' => 0,
                     'status' => COMMENT_SHOW_STATUS
-                )
+                ),
+                'order' => array('created DESC'),
+                'limit' => 100
             ));
             $comment_ids = Hash::extract($comments, '{n}.Comment.id');
             $comment_uids = Hash::extract($comments, '{n}.Comment.user_id');
@@ -65,6 +67,52 @@ class WeshareBuyComponent extends Component {
             return $sharer_comment_data;
         }
         return json_decode($sharer_comment_data, true);
+    }
+
+    /**
+     * @param $uid
+     * @return array|mixed
+     * 获取用户评论的数据
+     */
+    public function load_user_share_comments($uid) {
+        $key = USER_SHARE_COMMENTS_DATA_CACHE_KEY . '_' . $uid;
+        $user_share_comment_data = Cache::read($key);
+        if (empty($user_share_comment_data)) {
+            $commentM = ClassRegistry::init('Comment');
+            $userM = ClassRegistry::init('User');
+            $weshareM = ClassRegistry::init('Weshare');
+            $comments = $commentM->find('all', array(
+                'conditions' => array(
+                    'type' => COMMENT_SHARE_TYPE,
+                    'user_id' => $uid,
+                    'status' => COMMENT_SHOW_STATUS
+                ),
+                'order' => array('created DESC'),
+                'limit' => 100
+            ));
+            $share_ids = Hash::extract($comments, '{n}.Comment.data_id');
+            $share_info = $weshareM->find('all', array(
+                'conditions' => array(
+                    'id' => $share_ids
+                )
+            ));
+            $share_creator_ids = Hash::extract($share_info, '{n}.Weshare.creator');
+            foreach ($share_info as &$item) {
+                $item['Weshare']['images'] = explode('|', $item['Weshare']['images']);
+            }
+            $share_info = Hash::combine($share_info, '{n}.Weshare.id', '{n}.Weshare');
+            $share_creators = $userM->find('all', array(
+                'conditions' => array(
+                    'id' => $share_creator_ids
+                ),
+                'fields' => $this->query_user_fields
+            ));
+            $share_creators = Hash::combine($share_creators, '{n}.User.id', '{n}.User');
+            $user_share_comment_data = array('comments' => $comments, 'share_info' => $share_info, 'share_creators' => $share_creators);
+            Cache::write($key, json_encode($user_share_comment_data));
+            return $user_share_comment_data;
+        }
+        return json_decode($user_share_comment_data, true);
     }
 
     /**
