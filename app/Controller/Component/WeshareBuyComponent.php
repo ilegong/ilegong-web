@@ -846,11 +846,47 @@ class WeshareBuyComponent extends Component {
                     'user_id' => $uid
                 )
             ));
-            $summery_data = array('share_count' => count($weshares), 'follower_count' => $fans_count);
+            $focus_count = $userRelationM->find('count', array(
+                'conditions' => array(
+                    'follow_id' => $uid
+                )
+            ));
+            $summery_data = array('share_count' => count($weshares), 'follower_count' => $fans_count, 'focus_count' => $focus_count);
             Cache::write($key, json_encode($summery_data));
             return $summery_data;
         }
         return json_decode($summery_data, true);
+    }
+
+    /**
+     * @param $uid
+     * @return mixed
+     * 获取用户关注
+     */
+    public function get_user_focus($uid) {
+        $key = SHARER_FOCUS_DATA_CACHE_KEY . '_' . $uid;
+        $focus_data = Cache::read($key);
+        if (empty($focus_data)) {
+            $userRelationM = ClassRegistry::init('UserRelation');
+            $userM = ClassRegistry::init('User');
+            $relations = $userRelationM->find('all', array(
+                'conditions' => array(
+                    'follow_id' => $uid,
+                    'deleted' => DELETED_NO
+                )
+            ));
+            $focus_id = Hash::extract($relations, '{n}.UserRelation.user_id');
+            $focus_data = $userM->find('all', array(
+                'conditions' => array(
+                    'id' => $focus_id
+                ),
+                'fields' => $this->query_user_fields
+            ));
+            $focus_data = Hash::extract($focus_data, '{n}.User');
+            Cache::write($key, json_encode($focus_data));
+            return $focus_data;
+        }
+        return json_decode($focus_data, true);
     }
 
     /**
