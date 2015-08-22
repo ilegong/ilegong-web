@@ -1,4 +1,4 @@
-<link href="/static/weshares/css/share-info.css?v0.0.9" rel="stylesheet">
+<link href="/static/weshares/css/share-info.css?v0.1.0" rel="stylesheet">
 <div class="row" style="background: #EAEAEA;">
     <div class="col-md-12 user-details">
         <div class="user-image">
@@ -231,13 +231,13 @@
         var $showFocusLi = $('#show-focus-modal-dialog');
         var $focusModalDialog = $('#focusListModal');
         $showCommentLi.on('click',function(){
-            $commentModalDialog.modal('show');
+            $commentModalDialog.modal({show:true,backdrop:'static'});
         });
         $showFansLi.on('click',function(){
-            $fansModalDialog.modal('show');
+            $fansModalDialog.modal({show:true,backdrop:'static'});
         });
         $showFocusLi.on('click',function(){
-            $focusModalDialog.modal('show');
+            $focusModalDialog.modal({show:true,backdrop:'static'});
         });
         $('div[name="share_item"]').on('click', function () {
             var $me = $(this);

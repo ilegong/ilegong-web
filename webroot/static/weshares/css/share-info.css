@@ -415,4 +415,8 @@ Licensed under MIT
     text-align: center;
     display: block;
 }
+body .modal-open {
+    position:relative;
+    overflow: hidden;
+}
 
