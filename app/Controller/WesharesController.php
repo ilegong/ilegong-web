@@ -2,7 +2,7 @@
 
 class WesharesController extends AppController {
 
-    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem', 'SharerShipOption', 'WeshareShipSetting', 'OfflineStore', 'UserRelation');
+    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem', 'SharerShipOption', 'WeshareShipSetting', 'OfflineStore', 'UserRelation', 'Comment');
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description');
 
@@ -403,6 +403,7 @@ class WesharesController extends AppController {
         echo json_encode(array('success' => true));
     }
 
+
     /**
      * @param null $uid
      * 获取分享用户的个人中心,$uid为空 获取当前用户的
@@ -413,42 +414,13 @@ class WesharesController extends AppController {
         if (empty($uid)) {
             $uid = $current_uid;
         }
-        $myCreateShares = $this->Weshare->find('all', array(
-            'conditions' => array(
-                'creator' => $uid,
-                'status' => array(0, 1)
-            ),
-            'order' => array('created DESC')
-        ));
-        $my_create_share_ids = Hash::extract($myCreateShares, '{n}.Weshare.id');
-        $orderStatus = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE);
-        $joinShareOrder = $this->Order->find('all', array(
-            'conditions' => array(
-                'creator' => $uid,
-                'type' => ORDER_TYPE_WESHARE_BUY,
-                'status' => $orderStatus
-            ),
-            'fields' => array('member_id', 'id', 'status')
-        ));
-        $joinShareOrderStatus = Hash::combine($joinShareOrder, '{n}.Order.member_id', '{n}.Order.status');
-        $joinShareIds = Hash::extract($joinShareOrder, '{n}.Order.member_id');
-        $joinShareIds = array_unique($joinShareIds);
-        $myJoinShares = $this->Weshare->find('all', array(
-            'conditions' => array(
-                'id' => $joinShareIds,
-                'status' => array(0, 1)
-            ),
-            'order' => array('created DESC')
-        ));
-        $creatorIds = Hash::extract($myJoinShares, '{n}.Weshare.creator');
-        $creatorIds[] = $uid;
-        $creators = $this->User->find('all', array(
-            'conditions' => array(
-                'id' => $creatorIds
-            ),
-            'fields' => $this->query_user_fileds
-        ));
-        $creators = Hash::combine($creators, '{n}.User.id', '{n}.User');
+        $user_share_data = $this->WeshareBuy->prepare_user_share_info($uid);
+        $creators = $user_share_data['creators'];
+        $my_create_share_ids = $user_share_data['my_create_share_ids'];
+        $joinShareOrderStatus = $user_share_data['joinShareOrderStatus'];
+        $myCreateShares = $user_share_data['myCreateShares'];
+        $myJoinShares = $user_share_data['myJoinShares'];
+        $joinShareComments = $user_share_data['joinShareComments'];
         $shareUser = $creators[$uid];
         if (parent::is_weixin()) {
             $wexin_params = $this->set_weixin_share_data($uid, -1);
@@ -476,8 +448,6 @@ class WesharesController extends AppController {
         $userCommentData = $this->WeshareBuy->load_user_share_comments($uid);
         $userFansData = $this->WeshareBuy->get_user_fans_data($uid);
         $userFocusData = $this->WeshareBuy->get_user_focus($uid);
-        $this->explode_share_imgs($myCreateShares);
-        $this->explode_share_imgs($myJoinShares);
         $this->set($userShareSummery);
         $this->set('is_me', $uid == $current_uid);
         $this->set('share_user', $shareUser);
@@ -492,6 +462,7 @@ class WesharesController extends AppController {
         $this->set('join_share_order_status', $joinShareOrderStatus);
         $this->set('fans_data',$userFansData);
         $this->set('focus_data',$userFocusData);
+        $this->set('joinShareComments', $joinShareComments);
     }
 
     /**
@@ -799,16 +770,7 @@ class WesharesController extends AppController {
         return json_decode($ship_setting_data, true);
     }
 
-    /**
-     * @param $shares
-     * 获取数据后处理
-     * 把图片的url拼接的字符串分隔成每个图片的url
-     */
-    private function explode_share_imgs(&$shares) {
-        foreach ($shares as &$item) {
-            $item['Weshare']['images'] = explode('|', $item['Weshare']['images']);
-        }
-    }
+
 
     /**
      * @param $shareInfo
@@ -1049,7 +1011,7 @@ class WesharesController extends AppController {
      * 是否是认证分享者 写死
      */
     private function is_verify_sharer($uid){
-        $uids = array(633345,802852,544307,811917);
+        $uids = array(633345,802852,544307,811917, 801447);
         return in_array($uid,$uids);
     }
 }

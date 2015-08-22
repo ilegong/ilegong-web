@@ -85,7 +85,8 @@ class WeshareBuyComponent extends Component {
                 'conditions' => array(
                     'type' => COMMENT_SHARE_TYPE,
                     'user_id' => $uid,
-                    'status' => COMMENT_SHOW_STATUS
+                    'status' => COMMENT_SHOW_STATUS,
+                    'parent_id' => 0
                 ),
                 'order' => array('created DESC'),
                 'limit' => 100
@@ -97,9 +98,7 @@ class WeshareBuyComponent extends Component {
                 )
             ));
             $share_creator_ids = Hash::extract($share_info, '{n}.Weshare.creator');
-            foreach ($share_info as &$item) {
-                $item['Weshare']['images'] = explode('|', $item['Weshare']['images']);
-            }
+            $this->explode_share_imgs($share_info);
             $share_info = Hash::combine($share_info, '{n}.Weshare.id', '{n}.Weshare');
             $share_creators = $userM->find('all', array(
                 'conditions' => array(
@@ -113,6 +112,86 @@ class WeshareBuyComponent extends Component {
             return $user_share_comment_data;
         }
         return json_decode($user_share_comment_data, true);
+    }
+
+    /**
+     * @param $uid
+     * @return array|mixed
+     * 准备用户中心数据
+     */
+    public function prepare_user_share_info($uid){
+        $key = USER_SHARE_INFO_CACHE_KEY . '_' . $uid;
+        $user_share_data = Cache::read($key);
+        if (empty($user_share_data)) {
+            $weshareM = ClassRegistry::init('Weshare');
+            $orderM = ClassRegistry::init('Order');
+            $commentM = ClassRegistry::init('Comment');
+            $userM = ClassRegistry::init('User');
+            $myCreateShares = $weshareM->find('all', array(
+                'conditions' => array(
+                    'creator' => $uid,
+                    'status' => array(0, 1)
+                ),
+                'order' => array('created DESC')
+            ));
+            $my_create_share_ids = Hash::extract($myCreateShares, '{n}.Weshare.id');
+            $orderStatus = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE);
+            $joinShareOrder = $orderM->find('all', array(
+                'conditions' => array(
+                    'creator' => $uid,
+                    'type' => ORDER_TYPE_WESHARE_BUY,
+                    'status' => $orderStatus
+                ),
+                'fields' => array('member_id', 'id', 'status')
+            ));
+            $joinShareOrderIds = Hash::extract($joinShareOrder, '{n}.Order.id');
+            $joinShareComments = $commentM->find('all', array(
+                'conditions' => array(
+                    'order_id' => $joinShareOrderIds,
+                    'status' => COMMENT_SHOW_STATUS,
+                    'type' => COMMENT_SHARE_TYPE,
+                    'parent_id' => 0,
+                    'user_id' => $uid
+                )
+            ));
+            $joinShareComments = Hash::combine($joinShareComments, '{n}.Comment.order_id', '{n}.Comment');
+            $joinShareOrderStatus = Hash::combine($joinShareOrder, '{n}.Order.member_id', '{n}.Order');
+            $joinShareIds = Hash::extract($joinShareOrder, '{n}.Order.member_id');
+            $joinShareIds = array_unique($joinShareIds);
+            $myJoinShares = $weshareM->find('all', array(
+                'conditions' => array(
+                    'id' => $joinShareIds,
+                    'status' => array(0, 1)
+                ),
+                'order' => array('created DESC')
+            ));
+            $creatorIds = Hash::extract($myJoinShares, '{n}.Weshare.creator');
+            $creatorIds[] = $uid;
+            $creators = $userM->find('all', array(
+                'conditions' => array(
+                    'id' => $creatorIds
+                ),
+                'fields' => $this->query_user_fileds
+            ));
+            $creators = Hash::combine($creators, '{n}.User.id', '{n}.User');
+            $this->explode_share_imgs($myCreateShares);
+            $this->explode_share_imgs($myJoinShares);
+            $user_share_data = array('creators' => $creators, 'my_create_share_ids' => $my_create_share_ids, 'joinShareOrderStatus' => $joinShareOrderStatus, 'joinShareComments' => $joinShareComments, 'myJoinShares' => $myJoinShares, 'myCreateShares' => $myCreateShares);
+            Cache::write($key, json_encode($user_share_data));
+            return $user_share_data;
+        }
+        return json_decode($user_share_data, true);
+    }
+
+    /**
+     * @param $shares
+     * 获取数据后处理
+     * 把图片的url拼接的字符串分隔成每个图片的url
+     */
+    private function explode_share_imgs(&$shares) {
+        foreach ($shares as &$item) {
+            $item['Weshare']['images'] = explode('|', $item['Weshare']['images']);
+        }
     }
 
     /**
