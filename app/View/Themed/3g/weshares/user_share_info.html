@@ -184,7 +184,7 @@
                 <h4 class="modal-title" style="text-align: center;">{{if empty($focus_count)}}0{{else}}{{$focus_count}}{{/if}}关注</h4>
             </div>
             <div class="modal-body">
-                <div class="pageContentWrapper" style="overflow: scroll;">
+                <div class="pageContentWrapper" style="height: 75vh;overflow: scroll;">
                     <!-- team members start -->
                     {{loop $focus_data $focus_key $focus_data}}
                     <div class="columnWrapper oneFifth teamMember {{if ($focus_key+1)%5==0}}lastColumn{{/if}}">
@@ -206,7 +206,7 @@
                 <h4 class="modal-title" style="text-align: center;">{{$follower_count}}粉丝</h4>
             </div>
             <div class="modal-body">
-                <div class="pageContentWrapper" style="overflow: scroll;">
+                <div class="pageContentWrapper" style="height: 75vh;overflow: scroll;">
                     <!-- team members start -->
                     {{loop $fans_data $fan_key $fan_data}}
                         <div class="columnWrapper oneFifth teamMember {{if ($fan_key+1)%5==0}}lastColumn{{/if}}">
