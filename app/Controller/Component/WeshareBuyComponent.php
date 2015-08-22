@@ -58,7 +58,16 @@ class WeshareBuyComponent extends Component {
                 )
             ));
             $comment_count = count($comments);
+            $my_comment_count = $commentM->find('count',array(
+                'conditions' => array(
+                    'user_id' => $sharer_id,
+                    'type' => COMMENT_SHARE_TYPE,
+                    'parent_id' => 0,
+                    'status' => COMMENT_SHOW_STATUS
+                )
+            ));
             $reply_percent = 0;
+            $comment_count = $comment_count+$my_comment_count;
             if ($comment_count > 0) {
                 $reply_percent = $replay_count / $comment_count * 100;
             }

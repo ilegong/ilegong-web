@@ -117,8 +117,8 @@
                 <div>
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#receive-comments" role="tab" data-toggle="tab">我收到的</a></li>
-                        <li role="presentation"><a href="#send-comments" aria-controls="profile" role="tab" data-toggle="tab">我评价的</a></li>
+                        <li role="presentation" class="active"><a href="#receive-comments" role="tab" data-toggle="tab">收到的</a></li>
+                        <li role="presentation"><a href="#send-comments" aria-controls="profile" role="tab" data-toggle="tab">评价的</a></li>
                     </ul>
                     <!-- Tab panes -->
                     <div class="tab-content">
@@ -149,13 +149,14 @@
                                     {{loop $user_comment_data['comments'] $comment}}
                                     <?php
                                         $share_id = $comment['Comment']['data_id'];
-                                        $share_creator = $comment['Comment']['creator'];
+                                        $share_creator = $user_comment_data['share_info'][$share_id]['creator'];
                                         $share_creator_nickname = $user_comment_data['share_creators'][$share_creator]['nickname'];
+                                        $creator_image = $user_comment_data['share_creators'][$share_creator]['image'];
                                         $title = $share_creator_nickname.'分享的'.$user_comment_data['share_info'][$share_id]['title'];
                                     ?>
                                     <div class="media msg" onclick="window.location.href='/weshares/view/{{$share_id}}'">
                                         <a class="pull-left" href="/weshares/view/{{$share_id}}">
-                                            <img class="img-circle" alt="64x64" style="width: 32px; height: 32px;"  onerror="this.src='/img/default_user_icon.jpg'" src="{{$share_user['image']}}">
+                                            <img class="img-circle" alt="64x64" style="width: 32px; height: 32px;" onerror="this.src='/img/default_user_icon.jpg'" src="{{$creator_image}}">
                                         </a>
                                         <div class="media-body">
                                             <small class="pull-right time"><i class="fa fa-clock-o"></i>{{friendlyDateFromStr($comment['Comment']['created'], FFDATE_CH_MD);}}</small>
@@ -183,12 +184,12 @@
                 <h4 class="modal-title" style="text-align: center;">{{if empty($focus_count)}}0{{else}}{{$focus_count}}{{/if}}关注</h4>
             </div>
             <div class="modal-body">
-                <div class="pageContentWrapper" style="height: 80vh;overflow-y: scroll;">
+                <div class="pageContentWrapper" style="overflow: scroll;">
                     <!-- team members start -->
                     {{loop $focus_data $focus_key $focus_data}}
                     <div class="columnWrapper oneFifth teamMember {{if ($focus_key+1)%5==0}}lastColumn{{/if}}">
                         <a href="/weshares/user_share_info/{{$focus_data['id']}}" class="teamMemberImageLink"> <img style="height: 50px;width: 50px;border-radius: 50px;" src="{{$focus_data['image']}}" class="teamMemberImage" alt="" /> </a>
-                        <h3 class="teamMemberName" style="margin-top: 10px;">{{$focus_data['nickname']}}</h3>
+                        <h3 class="teamMemberName" style="margin-top: 10px;word-wrap: break-word;font-size: 13px;">{{$focus_data['nickname']}}</h3>
                     </div>
                     {{/loop}}
                 </div>
@@ -205,12 +206,12 @@
                 <h4 class="modal-title" style="text-align: center;">{{$follower_count}}粉丝</h4>
             </div>
             <div class="modal-body">
-                <div class="pageContentWrapper" style="height: 80vh;overflow-y: scroll;">
+                <div class="pageContentWrapper" style="overflow: scroll;">
                     <!-- team members start -->
                     {{loop $fans_data $fan_key $fan_data}}
                         <div class="columnWrapper oneFifth teamMember {{if ($fan_key+1)%5==0}}lastColumn{{/if}}">
                             <a href="/weshares/user_share_info/{{$fan_data['id']}}" class="teamMemberImageLink"> <img style="height: 50px;width: 50px;border-radius: 50px;" src="{{$fan_data['image']}}" class="teamMemberImage" alt="" /> </a>
-                            <h3 class="teamMemberName" style="margin-top: 10px;">{{$fan_data['nickname']}}</h3>
+                            <h3 class="teamMemberName" style="margin-top: 10px;word-wrap: break-word;font-size: 13px;">{{$fan_data['nickname']}}</h3>
                         </div>
                     {{/loop}}
                 </div>
