@@ -2,30 +2,42 @@
 <div class="row" style="background: #EAEAEA;">
     <div class="col-md-12 user-details">
         <div class="user-image">
-            <img style="width: 100px;height: 100px;" onerror="this.src='/img/default_user_icon.jpg'"
+            <img style="width: 60px;height: 60px;" onerror="this.src='/img/default_user_icon.jpg'"
                  src="{{$share_user['image']}}" alt="{{$share_user['nickname']}}" title="{{$share_user['nickname']}}"
                  class="img-circle">
         </div>
         <div class="user-info-block">
             <div class="user-heading">
-                <h3>{{$share_user['nickname']}}</h3>
-                {{if $is_verify_user}}
-                <span class="label label-warning">官方认证</span>
-                {{/if}}
-                {{if $is_support_offline_store}}
-                <span class="label label-info">好邻居支持</span>
-                {{/if}}
-                {{if $sharer_comment_data['comment_count']>0}}
-                    <div style="margin-top: 10px;margin-bottom: 10px;">
-                        <span><strong style="color: #ffa200">{{$sharer_comment_data['comment_count']}}</strong>&nbsp;&nbsp;条爱心评价</span>
-                        <button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#commentListModal">查看评价</button>
-                    </div>
-                {{/if}}
-                <div style="margin-top: 10px;margin-bottom: 10px;">
-                    <span><strong style="color: #ffa200">{{$share_count}}</strong>&nbsp;&nbsp; <small>分享</small>&nbsp;&nbsp;<strong style="color: #ffa200">{{$follower_count}}</strong>&nbsp;&nbsp; <small>粉丝</small></span>
-                    {{if $follower_count>0}}
-                        <a class="btn btn-warning btn-xs" data-toggle="modal" data-target="#fansListModal">查看粉丝</a>
+                <div>
+                    <span style="font-size: 16px;font-weight: bold;">{{$share_user['nickname']}}</span>
+                    {{if $is_verify_user}}
+                    <span class="label label-warning">官方认证</span>
                     {{/if}}
+                    {{if $is_support_offline_store}}
+                    <span class="label label-info">好邻居支持</span>
+                    {{/if}}
+                </div>
+                <div style="margin-top: 10px;margin-bottom: 10px;">
+                    <ul style="height: 40px;overflow: hidden;margin: 10px 0 0 0;font-size: 18px;display: block;margin-left: 5%;">
+                        <li style="float: left;width: 65px;text-align: center;border-right-width: 1px;border-right-style: solid;border-color: #d9d9d9;">
+                            <a style="display: block;color: #333;text-decoration: none;" data-toggle="modal" data-target="#commentListModal">
+                                <strong style="display: block;font-weight: bold;line-height: 18px;width: 65px;overflow: hidden;color: #449D44;">{{$sharer_comment_data['comment_count']}}</strong>
+                                <span style="display: block;font-size: 12px;color: #808080;text-decoration: none;">爱心评价</span>
+                            </a>
+                        </li>
+                        <li style="float: left;width: 65px;text-align: center;border-right-width: 1px;border-right-style: solid;border-color: #d9d9d9;">
+                            <a style="display: block;color: #333;text-decoration: none;" data-toggle="modal" data-target="#fansListModal">
+                                <strong style="display: block;font-weight: bold;line-height: 18px;width: 65px;overflow: hidden;color: #449D44;">{{$follower_count}}</strong>
+                                <span style="display: block;font-size: 12px;color: #808080;text-decoration: none;">粉丝</span>
+                            </a>
+                        </li>
+                        <li style="float: left;width: 65px;text-align: center;">
+                            <a style="display: block;color: #333;text-decoration: none;">
+                                <strong style="display: block;font-weight: bold;line-height: 18px;width: 65px;overflow: hidden;color: #449D44;">185</strong>
+                                <span style="display: block;font-size: 12px;color: #808080;text-decoration: none;">关注</span>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
                 {{if $sharer_comment_data['comment_count']>0}}
                 <hr style="margin-top: 5px">
@@ -49,7 +61,6 @@
                     </div>
                     {{/if}}
                 </div>
-                <!--<a class="btn btn-info" href="/weshares/add" role="button">我要分享</a>-->
             </div>
         </div>
     </div>
