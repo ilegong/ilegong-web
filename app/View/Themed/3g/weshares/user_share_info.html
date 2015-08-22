@@ -125,7 +125,7 @@
                             <div class="media-body">
                                 <small class="pull-right time"><i class="fa fa-clock-o"></i>{{friendlyDateFromStr($comment['Comment']['created'], FFDATE_CH_MD);}}</small>
                                 <h5 class="media-heading">{{$comment['Comment']['username']}}</h5>
-                                <small class="col-lg-10">{{$comment['Comment']['body']}}</small>
+                                <small class="col-lg-10" style="padding: 0;">{{$comment['Comment']['body']}}</small>
                             </div>
                         </div>
                         {{/loop}}
