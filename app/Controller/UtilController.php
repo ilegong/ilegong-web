@@ -25,11 +25,11 @@ class UtilController extends AppController{
         $carts = $this->Cart->find('all', array(
             'conditions' => array(
                 'product_id' => $product_id,
-                'not' => array('order_id' => null, 'order_id' => 0, 'type' => ORDER_TYPE_WESHARE_BUY),
-                'group' => array('creator'),
-                'limit' => 10,
-                'order' => array('created DESC')
-            )
+                'not' => array('order_id' => null, 'order_id' => 0, 'type' => ORDER_TYPE_WESHARE_BUY, 'creator' => 0, 'creator' => null),
+            ),
+            'group' => array('creator'),
+            'limit' => 10,
+            'order' => array('created DESC')
         ));
         $save_data = array();
         foreach ($carts as $cart_item) {
@@ -40,5 +40,6 @@ class UtilController extends AppController{
         }
         $this->UserRelation->saveAll($save_data);
         echo json_encode(array('success' => true));
+        return;
     }
 }
