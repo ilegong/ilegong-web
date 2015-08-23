@@ -28,7 +28,7 @@ class UtilController extends AppController{
                 'not' => array('order_id' => null, 'order_id' => 0, 'type' => ORDER_TYPE_WESHARE_BUY, 'creator' => 0, 'creator' => null),
             ),
             'group' => array('creator'),
-            'limit' => 10,
+            'limit' => 500,
             'order' => array('created DESC')
         ));
         $save_data = array();
