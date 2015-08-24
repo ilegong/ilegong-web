@@ -1072,10 +1072,34 @@ class WeshareBuyComponent extends Component {
         $tuan_leader_name = $weshare_info['creator']['nickname'];
         $remark = '点击详情，赶快加入' . $tuan_leader_name . '的分享！';
         $deatil_url = $this->get_weshares_detail_url($weshare_info['id']);
+        $already_buy_uids = $this->get_has_buy_user($weshare_info['id']);
         foreach ($fans_open_ids as $uid => $open_id) {
-            $title = $fans_data_nickname[$uid] . '你好，' . $msg_content;
-            $this->Weixin->send_share_buy_complete_msg($open_id, $title, $product_name, $tuan_leader_name, $remark, $deatil_url);
+            if (!in_array($uid, $already_buy_uids)) {
+                $title = $fans_data_nickname[$uid] . '你好，' . $msg_content;
+                $this->Weixin->send_share_buy_complete_msg($open_id, $title, $product_name, $tuan_leader_name, $remark, $deatil_url);
+            }
         }
+    }
+
+    /**
+     * @param $share_id
+     * @return array
+     *
+     * 获取本次分享已经购买的用户
+     */
+    private function get_has_buy_user($share_id){
+        $orderM = ClassRegistry::init('Order');
+        $orders = $orderM->find('all', array(
+            'conditions' => array(
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'status' => array(ORDER_STATUS_DONE, ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED),
+                'member_id' => $share_id
+            ),
+            'fields' => $this->query_order_fields,
+            'limit' => 300
+        ));
+        $uids = Hash::extract($orders, '{n}.Order.creator');
+        return $uids;
     }
 
     /**
