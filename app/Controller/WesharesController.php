@@ -167,6 +167,8 @@ class WesharesController extends AppController {
             if (empty($weshareData['id'])) {
                 //TODO use task queue
                 $this->WeshareBuy->send_new_share_msg($weshare['Weshare']['id']);
+                //clear cache
+                Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
             }
             echo json_encode(array('success' => true, 'id' => $weshare['Weshare']['id']));
             return;
