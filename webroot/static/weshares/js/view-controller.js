@@ -150,6 +150,10 @@
     vm.loadSharerAllComments = loadSharerAllComments;
     vm.getFormatDate = getFormatDate;
     vm.notifyFans = notifyFans;
+    vm.notifyType = notifyType;
+    vm.sendNewShareMsg = sendNewShareMsg;
+    vm.sendNotifyShareMsg = sendNotifyShareMsg;
+    vm.validNotifyMsgContent = validNotifyMsgContent;
     activate();
     function activate() {
       vm.initWeshareData();
@@ -575,6 +579,63 @@
     function notifyFans(){
       vm.showNotifyView = true;
       vm.showLayer = true;
+      vm.notify = {};
+      var msgContent = _.reduce(vm.ordersDetail.users, function(memo, user){ return memo + user['nickname']+'，'; }, '');
+      msgContent = msgContent+'都已经报名'+vm.weshare.creator.nickname+'分享的'+vm.weshare.title+'啦，就差你啦。';
+      vm.notify.content = msgContent;
+    }
+
+    function notifyType(){
+      if(vm.ordersDetail.orders&&vm.ordersDetail.orders.length>0){
+        return 1;
+      }
+      return 0;
+    }
+
+    function sendNewShareMsg(){
+      if (confirm('是否要发送消息，发送次数过多会对用户形成骚扰?')) {
+        $http({
+          method: 'GET',
+          url: '/weshares/send_new_share_msg/' + vm.weshare.id
+        }).success(function (data) {
+          // With the data succesfully returned, call our callback
+          if (data['success']) {
+            alert('发送成功');
+          }
+        }).error(function () {
+          alert("发送成功,请联系朋友说客服。。");
+        });
+      }
+    }
+
+    function validNotifyMsgContent(){
+      if(_.isEmpty(vm.notify.content)){
+        vm.notifyMsgHasError = true;
+        return;
+      }
+      vm.notifyMsgHasError = false;
+    }
+
+    function sendNotifyShareMsg(){
+      if(_.isEmpty(vm.notify.content)){
+        vm.notifyMsgHasError = true;
+        return;
+      }
+      vm.notifyMsgHasError = false;
+      if (confirm('是否要发送消息，发送次数过多会对用户形成骚扰?')) {
+        $http({
+          method: 'POST',
+          url: '/weshares/send_buy_percent_msg/' + vm.weshare.id,
+          data: {content: vm.notify.content}
+        }).success(function (data) {
+          // With the data succesfully returned, call our callback
+          if (data['success']) {
+            alert('发送成功');
+          }
+        }).error(function () {
+          alert("发送成功,请联系朋友说客服。。");
+        });
+      }
     }
 
     function showCommentListDialog() {

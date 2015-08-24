@@ -589,6 +589,51 @@ class WesharesController extends AppController {
         $content = $params['content'];
         $queue = new SaeTaskQueue('share');
         $queue->addTask("/weshares/process_send_buy_percent_msg/" . $weshare_id, "content=" . $content, true);
+        //将任务推入队列
+        $ret = $queue->push();
+        //任务添加失败时输出错误码和错误信息
+        if ($ret === false) {
+            $this->log('add task queue error ' . json_encode(array($queue->errno(), $queue->errmsg())));
+        }
+        echo json_encode(array('success' => true));
+        return;
+    }
+
+    /**
+     * @param $weshare_id
+     * 发送建团消息 采用队列
+     */
+    public function send_new_share_msg($weshare_id) {
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        if (empty($uid)) {
+            echo json_encode(array('success' => false, 'reason' => 'not_login'));
+            return;
+        }
+        $share_info = $this->get_weshare_detail($weshare_id);
+        if ($share_info['creator']['id'] != $uid) {
+            echo json_encode(array('success' => false, 'reason' => 'not_creator'));
+            return;
+        }
+        $queue = new SaeTaskQueue('share');
+        $queue->addTask("/weshares/process_send_new_share_msg/" . $weshare_id);
+        //将任务推入队列
+        $ret = $queue->push();
+        //任务添加失败时输出错误码和错误信息
+        if ($ret === false) {
+            $this->log('add task queue error ' . json_encode(array($queue->errno(), $queue->errmsg())));
+        }
+        echo json_encode(array('success' => true));
+        return;
+    }
+
+    /**
+     * @param $shareId
+     * 处理 建团消息 task
+     */
+    public function process_send_new_share_msg($shareId){
+        $this->autoRender = false;
+        $this->WeshareBuy->send_new_share_msg($shareId);
         echo json_encode(array('success' => true));
         return;
     }

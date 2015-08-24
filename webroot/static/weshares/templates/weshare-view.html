@@ -134,7 +134,10 @@
         <b>首页</b>
     </a>
     <a class="new" ng-if="!vm.isCreator()&&vm.weshare.status == 0" ng-click="vm.buyProducts()">我要报名</a>
-    <a class="new" ng-if="vm.isCreator()&&vm.weshare.status == 0" ng-click='vm.notifyFans();' style="width: 28%;">团购提醒</a>
+    <a class="new" ng-if="vm.isCreator()&&vm.weshare.status == 0&&vm.notifyType() == 1" ng-click='vm.notifyFans();'
+       style="width: 28%;">团购提醒</a>
+    <a class="new" ng-if="vm.isCreator()&&vm.weshare.status == 0&&vm.notifyType() == 0" ng-click='vm.sendNewShareMsg();'
+       style="width: 28%;">建团提醒</a>
     <a class="new" ng-if="vm.isCreator()&&vm.weshare.status == 0" ng-click='vm.stopShare();' style="width: 28%; margin-right: 7%;">截止报名</a>
     <a class="new" ng-if="vm.weshare.status == 2||vm.weshare.status == 1" style="background-color:#9EB1BD;">报名已截止</a>
     <a class="btm_item" href="/weshares/user_share_info">
@@ -203,13 +206,13 @@
         <a ng-click="vm.showLayer=false;vm.showNotifyView=false;" class="closebtn fr"></a>
     </div>
     <div class="clearfix" style="padding: 0 10px;margin-bottom: 10px;">
-        <div class="form-group" ng-class="{'has-error': vm.usernameHasError}">
-            <textarea id="msgContentDom" style="height: 100px;" class='form-control' ng-model='vm.notify.content' ng-change=''></textarea>
-            <p class='tips'>请输入评价信息</p>
+        <div class="form-group" ng-class="{'has-error': vm.notifyMsgHasError}">
+            <textarea id="msgContentDom" style="height: 100px;" class='form-control' ng-model='vm.notify.content' ng-change='vm.validNotifyMsgContent();'></textarea>
+            <p class='tips'>请输入信息内容</p>
         </div>
     </div>
     <div class="clearfix notify_btn">
-        <a ng-click='' style="background-color: #ffa200; width: 100%;">群发通知</a>
+        <a ng-click='vm.sendNotifyShareMsg();' style="background-color: #ffa200; width: 100%;">群发通知</a>
     </div>
 </div>
 <!--评论列表层-->
