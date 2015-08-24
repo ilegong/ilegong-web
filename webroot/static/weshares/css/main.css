@@ -157,6 +157,14 @@ ul li { list-style: none; }
 .comment_list_box #con ul li .div_right .twit_item_time{color:#999;padding:0px;}
 
 
+.notify-dialog{ background-color: #ffffff; padding: 15px 0 0; position: fixed; top: 20%; left: 0; width: 100%; z-index: 5;}
+.notify_btn{left: 0; bottom: 0; width: 100%;}
+.notify-dialog .closebtn{ margin-top: 3px; display: block; background: url(../images/weifxicon.png?v0.01) no-repeat -70px -65px; width: 15px; height: 15px; background-size: 100px 100px;}
+.notify_btn a{ width: 50%; float: left; display: block; line-height: 44px; text-align: center; text-decoration: none; color: #ffffff; font-size: 16px; display: block;}
+.notify-dialog label{ display: block; float: left; color: #000000; font-size: 16px; font-weight: bold;}
+.notify-dialog font{ display: block; text-align: center; color: #ffa200; font-size: 16px; line-height: 35px; padding-bottom: 50px;}
+
+
 .moreicon { position: absolute; top: 50%; margin-top: -0.7em; right: 0.6em; display: block; width: 0.667em; height: 1.334em; background: url(../images/pyshuo_icon.png) 0 -16.875em no-repeat; background-size: 25em 25em;}
 /*自提点详情alice add css 0627*/
 .logistics_ziti{ padding: 44px 10px 10px 10px;}

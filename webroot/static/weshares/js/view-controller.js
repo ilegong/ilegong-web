@@ -149,6 +149,7 @@
     vm.notifyUserToComment = notifyUserToComment;
     vm.loadSharerAllComments = loadSharerAllComments;
     vm.getFormatDate = getFormatDate;
+    vm.notifyFans = notifyFans;
     activate();
     function activate() {
       vm.initWeshareData();
@@ -569,6 +570,11 @@
         alert('提交失败');
       });
       vm.closeCommentDialog();
+    }
+
+    function notifyFans(){
+      vm.showNotifyView = true;
+      vm.showLayer = true;
     }
 
     function showCommentListDialog() {

@@ -165,7 +165,7 @@ class WesharesController extends AppController {
         $this->saevWeshareShipType($weshare['Weshare']['id'], $shipSetData);
         if ($saveBuyFlag) {
             if (empty($weshareData['id'])) {
-                //TODO use task queue 
+                //TODO use task queue
                 $this->WeshareBuy->send_new_share_msg($weshare['Weshare']['id']);
             }
             echo json_encode(array('success' => true, 'id' => $weshare['Weshare']['id']));

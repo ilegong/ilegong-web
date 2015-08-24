@@ -115,13 +115,27 @@
     </div>
 </div>
 
-<footer class="channel_bottom">
+<footer class="channel_bottom" ng-if="vm.weshare.creator.id!=802852">
     <a class="btm_item" href="/">
         <p class="iconfont" style="height: 16px;"><i class="fa fa-home"></i></p>
         <b>首页</b>
     </a>
     <a class="new" ng-if="!vm.isCreator()&&vm.weshare.status == 0" ng-click="vm.buyProducts()">我要报名</a>
     <a class="new" ng-if="vm.isCreator()&&vm.weshare.status == 0" ng-click="vm.stopShare()">截止报名</a>
+    <a class="new" ng-if="vm.weshare.status == 2||vm.weshare.status == 1" style="background-color:#9EB1BD;">报名已截止</a>
+    <a class="btm_item" href="/weshares/user_share_info">
+        <p class="iconfont" style="height: 16px;"><i class="fa fa-user"></i></p>
+        <b>我的</b>
+    </a>
+</footer>
+<footer class="channel_bottom" ng-if="vm.weshare.creator.id==802852">
+    <a class="btm_item" href="/">
+        <p class="iconfont" style="height: 16px;"><i class="fa fa-home"></i></p>
+        <b>首页</b>
+    </a>
+    <a class="new" ng-if="!vm.isCreator()&&vm.weshare.status == 0" ng-click="vm.buyProducts()">我要报名</a>
+    <a class="new" ng-if="vm.isCreator()&&vm.weshare.status == 0" ng-click='vm.notifyFans();' style="width: 28%;">团购提醒</a>
+    <a class="new" ng-if="vm.isCreator()&&vm.weshare.status == 0" ng-click='vm.stopShare();' style="width: 28%; margin-right: 7%;">截止报名</a>
     <a class="new" ng-if="vm.weshare.status == 2||vm.weshare.status == 1" style="background-color:#9EB1BD;">报名已截止</a>
     <a class="btm_item" href="/weshares/user_share_info">
         <p class="iconfont" style="height: 16px;"><i class="fa fa-user"></i></p>
@@ -182,6 +196,22 @@
         <a ng-click='vm.submitComment()' style="background-color: #ffa200; width: 100%;">评价</a>
     </div>
 </div>
+<!--通知粉丝层-->
+<div class="notify-dialog" ng-show="vm.showNotifyView">
+    <div class="clearfix title" style="padding: 0 10px 10px;">
+        <label style="font-size: 18px;">参团提醒<span style="color:#ff0000;" ng-bind="vm.userShareSummery.follower_count"></span>人</label>
+        <a ng-click="vm.showLayer=false;vm.showNotifyView=false;" class="closebtn fr"></a>
+    </div>
+    <div class="clearfix" style="padding: 0 10px;margin-bottom: 10px;">
+        <div class="form-group" ng-class="{'has-error': vm.usernameHasError}">
+            <textarea id="msgContentDom" style="height: 100px;" class='form-control' ng-model='vm.notify.content' ng-change=''></textarea>
+            <p class='tips'>请输入评价信息</p>
+        </div>
+    </div>
+    <div class="clearfix notify_btn">
+        <a ng-click='' style="background-color: #ffa200; width: 100%;">群发通知</a>
+    </div>
+</div>
 <!--评论列表层-->
 <div class="comment_list-dialog" ng-show="vm.showCommentListDialogView">
     <div class="nav">
@@ -203,4 +233,4 @@
         </div>
     </div>
 </div>
-<div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showLayer=false;vm.showCommentListDialog=false;vm.closeCommentDialog();vm.showBuyingDialog=false;vm.showShareDialog=false;vm.showNotifyShareDialog=false;vm.showNotifyShareOfferDialog=false;vm.showNotifyGetPacketDialog=false;"></div>
+<div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showLayer=false;vm.showNotifyView=false;vm.showCommentListDialog=false;vm.closeCommentDialog();vm.showBuyingDialog=false;vm.showShareDialog=false;vm.showNotifyShareDialog=false;vm.showNotifyShareOfferDialog=false;vm.showNotifyGetPacketDialog=false;"></div>
