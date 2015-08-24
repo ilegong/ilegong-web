@@ -370,7 +370,7 @@ class ShareController extends AppController{
             ),
             'fields' => array('id', 'nickname')
         ));
-        $order_users = Hash::combine($order_users, '{n}.Order.id', '{n}.Order');
+        $order_users = Hash::combine($order_users, '{n}.User.id', '{n}.User');
         $total_price = 0;
         if(!empty($orders)){
             foreach($orders as $order){
