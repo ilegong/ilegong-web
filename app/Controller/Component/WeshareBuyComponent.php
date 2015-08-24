@@ -789,7 +789,7 @@ class WeshareBuyComponent extends Component {
      * @param null $weshareId
      * 更新订单状态且发送评论通知信息
      */
-    public function chage_status_and_send_to_comment_msg($weshareId=null) {
+    public function change_status_and_send_to_comment_msg($weshareId=null) {
         $orderM = ClassRegistry::init('Order');
         $cartM = ClassRegistry::init('Cart');
         $limit_date = date('Y-m-d', strtotime("-7 days"));
