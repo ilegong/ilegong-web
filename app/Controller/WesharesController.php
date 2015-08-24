@@ -165,8 +165,14 @@ class WesharesController extends AppController {
         $this->saevWeshareShipType($weshare['Weshare']['id'], $shipSetData);
         if ($saveBuyFlag) {
             if (empty($weshareData['id'])) {
-                //TODO use task queue
-                $this->WeshareBuy->send_new_share_msg($weshare['Weshare']['id']);
+                $queue = new SaeTaskQueue('share');
+                $queue->addTask("/weshares/process_send_new_share_msg/" . $weshare['Weshare']['id']);
+                //将任务推入队列
+                $ret = $queue->push();
+                //任务添加失败时输出错误码和错误信息
+                if ($ret === false) {
+                    $this->log('add task queue error ' . json_encode(array($queue->errno(), $queue->errmsg())));
+                }
                 //clear cache
                 Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
             }
