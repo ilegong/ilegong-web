@@ -163,6 +163,8 @@ class WesharesController extends AppController {
         $this->saveWeshareProducts($weshare['Weshare']['id'], $productsData);
         $this->saveWeshareAddresses($weshare['Weshare']['id'], $addressesData);
         $this->saevWeshareShipType($weshare['Weshare']['id'], $shipSetData);
+        //clear cache
+        Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
         if ($saveBuyFlag) {
             if (empty($weshareData['id'])) {
                 $queue = new SaeTaskQueue('share');
@@ -173,8 +175,6 @@ class WesharesController extends AppController {
                 if ($ret === false) {
                     $this->log('add task queue error ' . json_encode(array($queue->errno(), $queue->errmsg())));
                 }
-                //clear cache
-                Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
             }
             echo json_encode(array('success' => true, 'id' => $weshare['Weshare']['id']));
             return;
