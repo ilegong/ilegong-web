@@ -1058,6 +1058,27 @@ class WeshareBuyComponent extends Component {
     }
 
     /**
+     * @param $weshare_info
+     * @param $msg_content
+     * 发送团购进度消息
+     */
+    public function send_buy_percent_msg($weshare_info, $msg_content) {
+        $share_creator = $weshare_info['creator']['id'];
+        $fans_data = $this->get_user_fans_data($share_creator);
+        $fans_data_nickname = Hash::combine($fans_data, '{n}.id', '{n}.nickname');
+        $fans_data_ids = Hash::extract($fans_data, '{n}.id');
+        $fans_open_ids = $this->get_open_ids($fans_data_ids);
+        $product_name = $weshare_info['title'];
+        $tuan_leader_name = $weshare_info['creator']['nickname'];
+        $remark = '点击详情，赶快加入' . $tuan_leader_name . '的分享！';
+        $deatil_url = $this->get_weshares_detail_url($weshare_info['id']);
+        foreach ($fans_open_ids as $uid => $open_id) {
+            $msg_content = $fans_data_nickname[$uid] . '你好，' . $msg_content;
+            $this->Weixin->send_share_buy_complete_msg($open_id, $msg_content, $product_name, $tuan_leader_name, $remark, $deatil_url);
+        }
+    }
+
+    /**
      * @param $weshareId
      * @return string
      * 获取分享的地址

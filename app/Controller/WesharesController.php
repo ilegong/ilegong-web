@@ -566,6 +566,45 @@ class WesharesController extends AppController {
         return;
     }
 
+    /**
+     * @param $weshare_id
+     * 客户端调用发送购买进度消息
+     * 可能执行任务比较长
+     * 采用队列
+     */
+    public function send_buy_percent_msg($weshare_id) {
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        if (empty($uid)) {
+            echo json_encode(array('success' => false, 'reason' => 'not_login'));
+            return;
+        }
+        $share_info = $this->get_weshare_detail($weshare_id);
+        if ($share_info['creator']['id'] != $uid) {
+            echo json_encode(array('success' => false, 'reason' => 'not_creator'));
+            return;
+        }
+        $params = json_encode(file_get_contents('php://input'), true);
+        $content = $params['content'];
+        $queue = new SaeTaskQueue('share');
+        $queue->addTask("/weshares/process_send_buy_percent_msg/" . $weshare_id, "content=" . $content, true);
+        echo json_encode(array('success' => true));
+        return;
+    }
+
+    /**
+     * @param $weshare_id
+     * 发送团购进度消息任务
+     */
+    public function process_send_buy_percent_msg($weshare_id) {
+        $this->autoRender = false;
+        $share_info = $this->get_weshare_detail($weshare_id);
+        $msg_content = $_REQUEST['content'];
+        $this->WeshareBuy->send_buy_percent_msg($share_info, $msg_content);
+        echo json_encode(array('success' => true));
+        return;
+    }
+
     //TODO delete not use product
     /**
      * @param $weshareId
