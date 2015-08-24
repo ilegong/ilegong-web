@@ -667,6 +667,35 @@ class WeixinComponent extends Component
         return false;
     }
 
+    /**
+     * @param $open_id
+     * @param $title
+     * @param $product_name
+     * @param $tuan_leader_wx
+     * @param $remark
+     * @param $deatil_url
+     * @return bool
+     * 团购提示信息
+     */
+    public function send_share_buy_complete_msg($open_id,$title,$product_name,$tuan_leader_wx='pyshuo@2015',$remark,$deatil_url){
+        if (!empty($open_id)) {
+            $post_data = array(
+                "touser" => $open_id,
+                "template_id" => $this->wx_message_template_ids["TUAN_TIP"],
+                "url" =>$deatil_url,
+                "topcolor" => "#FF0000",
+                "data" => array(
+                    "first" => array("value" => $title),
+                    "Pingou_ProductName" => array("value" => $product_name),
+                    "Weixin_ID" => array("value" => $tuan_leader_wx),
+                    "Remark" => array("value" => $remark, "color" => "#FF8800")
+                )
+            );
+            return $this->send_weixin_message($post_data);
+        }
+        return false;
+    }
+
 
     public function send_tuan_paid_msg($open_id, $price, $good_info, $ship_info, $order_no, $order = null, $send_date) {
         $ship_way = $order['Order']['ship_mark'];

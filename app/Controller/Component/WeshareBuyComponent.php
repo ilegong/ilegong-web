@@ -812,6 +812,7 @@ class WeshareBuyComponent extends Component {
         $this->process_send_to_comment_msg($orders);
     }
 
+
     /**
      * @param $orders
      * 通知下单用户去评论模板消息
