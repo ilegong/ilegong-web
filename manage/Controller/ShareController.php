@@ -364,7 +364,7 @@ class ShareController extends AppController{
             'order' => array('created DESC')
         ));
         $order_user_ids = Hash::extract($orders, '{n}.Order.creator');
-        $order_users = $this->find('all', array(
+        $order_users = $this->User->find('all', array(
             'conditions' => array(
                 'id' => $order_user_ids
             ),
