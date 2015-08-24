@@ -363,6 +363,14 @@ class ShareController extends AppController{
             'conditions' => $cond,
             'order' => array('created DESC')
         ));
+        $order_user_ids = Hash::extract($orders, '{n}.Order.creator');
+        $order_users = $this->find('all', array(
+            'conditions' => array(
+                'id' => $order_user_ids
+            ),
+            'fields' => array('id', 'nickname')
+        ));
+        $order_users = Hash::combine($order_users, '{n}.Order.id', '{n}.Order');
         $total_price = 0;
         if(!empty($orders)){
             foreach($orders as $order){
@@ -412,6 +420,7 @@ class ShareController extends AppController{
             $this->set('weshares', $weshares);
             $this->set('pay_notifies', $pay_notifies);
             $this->set('weshare_creators', $creators);
+            $this->set('order_users', $order_users);
         }
         $this->set('order_status',$order_status);
         $this->set('order_id', $request_order_id);

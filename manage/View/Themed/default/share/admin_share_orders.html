@@ -76,6 +76,7 @@
                 <tr class="filters">
                     <th><input type="text" class="form-control" placeholder="订单ID" disabled></th>
                     <th><input type="text" class="form-control" placeholder="用户ID" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="用户昵称" disabled></th>
                     <th><input type="text" class="form-control" placeholder="收货人" disabled></th>
                     <th><input type="text" class="form-control" placeholder="地址" disabled></th>
                     <th><input type="text" class="form-control" placeholder="联系方式" disabled></th>
@@ -106,6 +107,7 @@
                         <tr data-id="{{$current_order['id']}}">
                             <td>{{$current_order['id']}}</td>
                             <td>{{$current_order['creator']}}</td>
+                            <td>{{$order_users[$current_order['creator']]['nickname']}}</td>
                             <td>{{$current_order['consignee_name']}}</td>
                             <td>{{$current_order['consignee_address']}}</td>
                             <td>{{$current_order['consignee_mobilephone']}}</td>
