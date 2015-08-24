@@ -630,6 +630,8 @@
         }).success(function (data) {
           // With the data succesfully returned, call our callback
           if (data['success']) {
+            vm.showNotifyView = false;
+            vm.showLayer = false;
             alert('发送成功');
           }
         }).error(function () {

@@ -1073,8 +1073,8 @@ class WeshareBuyComponent extends Component {
         $remark = '点击详情，赶快加入' . $tuan_leader_name . '的分享！';
         $deatil_url = $this->get_weshares_detail_url($weshare_info['id']);
         foreach ($fans_open_ids as $uid => $open_id) {
-            $msg_content = $fans_data_nickname[$uid] . '你好，' . $msg_content;
-            $this->Weixin->send_share_buy_complete_msg($open_id, $msg_content, $product_name, $tuan_leader_name, $remark, $deatil_url);
+            $title = $fans_data_nickname[$uid] . '你好，' . $msg_content;
+            $this->Weixin->send_share_buy_complete_msg($open_id, $title, $product_name, $tuan_leader_name, $remark, $deatil_url);
         }
     }
 

@@ -587,7 +587,7 @@ class WesharesController extends AppController {
             echo json_encode(array('success' => false, 'reason' => 'not_creator'));
             return;
         }
-        $params = json_encode(file_get_contents('php://input'), true);
+        $params = json_decode(file_get_contents('php://input'), true);
         $content = $params['content'];
         $queue = new SaeTaskQueue('share');
         $queue->addTask("/weshares/process_send_buy_percent_msg/" . $weshare_id, "content=" . $content, true);
