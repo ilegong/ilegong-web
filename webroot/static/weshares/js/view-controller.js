@@ -161,7 +161,7 @@
 
     function getFormatDate(date){
       date = date.replace(' ','T');
-      var formatedDate = $filter('date')(new Date(date), 'MM-dd H:ss');
+      var formatedDate = $filter('date')(new Date(date), 'MM-dd HH:ss');
       return formatedDate;
     }
 
@@ -287,12 +287,15 @@
 
     function getSelectTypeDefaultVal(shipSettings) {
       if (vm.weshareSettings.kuai_di.status == 1) {
+        vm.shipFee = vm.weshareSettings.kuai_di.ship_fee;
         return 0;
       }
       if (vm.weshareSettings.self_ziti.status == 1) {
+        vm.shipFee = vm.weshareSettings.self_ziti.ship_fee;
         return 1;
       }
       if (vm.weshareSettings.pys_ziti.status == 1) {
+        vm.shipFee = vm.weshareSettings.pys_ziti.ship_fee;
         return 2;
       }
       return -1;
