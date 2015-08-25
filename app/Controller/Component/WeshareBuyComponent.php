@@ -997,21 +997,26 @@ class WeshareBuyComponent extends Component {
 
     /**
      * @param $uid
+     * @param $limit
      * @return mixed
      * 获取用户关注
      */
-    public function get_user_focus($uid) {
-        $key = SHARER_FOCUS_DATA_CACHE_KEY . '_' . $uid;
+    public function get_user_focus($uid, $limit = 0) {
+        $key = SHARER_FOCUS_DATA_CACHE_KEY . '_' . $uid . '_' . $limit;
         $focus_data = Cache::read($key);
         if (empty($focus_data)) {
             $userRelationM = ClassRegistry::init('UserRelation');
             $userM = ClassRegistry::init('User');
-            $relations = $userRelationM->find('all', array(
+            $queryCond = array(
                 'conditions' => array(
                     'follow_id' => $uid,
                     'deleted' => DELETED_NO
                 )
-            ));
+            );
+            if ($limit > 0) {
+                $queryCond['limit'] = $limit;
+            }
+            $relations = $userRelationM->find('all', $queryCond);
             $focus_id = Hash::extract($relations, '{n}.UserRelation.user_id');
             $focus_data = $userM->find('all', array(
                 'conditions' => array(
@@ -1028,21 +1033,26 @@ class WeshareBuyComponent extends Component {
 
     /**
      * @param $uid
+     * @param $limit
      * 获取用户粉丝的信息
      * @return array|mixed
      */
-    public function get_user_fans_data($uid) {
-        $key = SHARER_FANS_DATA_CACHE_KEY . '_' . $uid;
+    public function get_user_fans_data($uid, $limit = 0) {
+        $key = SHARER_FANS_DATA_CACHE_KEY . '_' . $uid . '_' . $limit;
         $fans_data = Cache::read($key);
         if (empty($fans_data)) {
             $userRelationM = ClassRegistry::init('UserRelation');
             $userM = ClassRegistry::init('User');
-            $relations = $userRelationM->find('all', array(
+            $queryCond = array(
                 'conditions' => array(
                     'user_id' => $uid,
                     'deleted' => DELETED_NO
                 )
-            ));
+            );
+            if ($limit > 0) {
+                $queryCond['limit'] = $limit;
+            }
+            $relations = $userRelationM->find('all', $queryCond);
             $fans_id = Hash::extract($relations, '{n}.UserRelation.follow_id');
             $fans_data = $userM->find('all', array(
                 'conditions' => array(
