@@ -10,7 +10,7 @@ class UtilController extends AppController{
 
     public $name = 'util';
 
-    public $uses = array('UserRelation', 'Order', 'Cart');
+    public $uses = array('UserRelation', 'Order', 'Cart', 'User', 'Oauthbind');
 
     public $components = array('ShareUtil');
 
@@ -69,14 +69,46 @@ class UtilController extends AppController{
      * task queue
      */
     public function processUpdateFansProfile($user_id, $limit, $offset){
+        $this->autoRender = false;
         $user_relations = $this->UserRelation->find('all', array(
             'conditions' => array(
-                'user_id' => $user_id
+                'user_id' => $user_id,
+                'type' => 'Transfer'
             ),
             'limit' => $limit,
-            'offset' => $offset
+            'offset' => $offset,
+            'order' => array('created DESC')
         ));
-        
+        $follow_ids = Hash::extract($user_relations, '{n}.UserRelation.follow_id');
+        $oauthBinds = $this->Oauthbind->find('all', array(
+            'conditions' => array(
+                'user_id' => $follow_ids
+            ),
+            'limit' => $limit
+        ));
+        if (!empty($oauthBinds)) {
+            foreach ($oauthBinds as $item) {
+                $user_id = $item['Oauthbind']['user_id'];
+                $open_id = $item['Oauthbind']['oauth_openid'];
+                $wx_user = get_user_info_from_wx($open_id);
+                $this->log('download wx user info ' . json_encode($wx_user));
+                $photo = $wx_user['headimgurl'];
+                $nickname = $wx_user['nickname'];
+                //default header
+                $download_url = 'http://51daifan.sinaapp.com/img/default_user_icon.jpg';
+                if (!empty($photo)) {
+                    $this->log('download wx user photo ' . $photo);
+                    $download_url = download_photo_from_wx($photo);
+                }
+                $this->User->id = null;
+                $this->User->updateAll(array('nickname' => "'" . $nickname . "'", 'image' => "'" . $download_url . "'"), array('id' => $user_id));
+            }
+        }
+        //update status
+        $this->UserRelation->id = null;
+        $this->UserRelation->updateAll(array('is_update' => 1), array('user_id' => $user_id, 'follow_id' => $follow_ids, 'type' => 'Transfer'));
+        echo json_encode(array('success' => true));
+        return;
     }
 
     /**
