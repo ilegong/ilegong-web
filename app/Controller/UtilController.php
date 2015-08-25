@@ -18,6 +18,7 @@ class UtilController extends AppController{
     /**
      * @param $product_id
      * @param $user_id
+     * @param $offset
      * 迁移粉丝数据
      */
     public function transferFansData($product_id, $user_id, $offset=0) {
