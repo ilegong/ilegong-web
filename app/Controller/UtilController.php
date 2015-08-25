@@ -94,6 +94,13 @@ class UtilController extends AppController{
                 $this->log('download wx user info ' . json_encode($wx_user));
                 $photo = $wx_user['headimgurl'];
                 $nickname = $wx_user['nickname'];
+                if(empty($nickname)){
+                    //user not have wexin info
+                    $this->UserRelation->updateAll(array('deleted' => 1), array('user_id' => $user_id, 'follow_id' => $follow_user_id, 'type' => 'Transfer'));
+                    continue;
+                }
+                //when user many oauth bind
+                $this->UserRelation->updateAll(array('deleted' => 0), array('user_id' => $user_id, 'follow_id' => $follow_user_id, 'type' => 'Transfer'));
                 //default header
                 $download_url = 'http://51daifan.sinaapp.com/img/default_user_icon.jpg';
                 if (!empty($photo)) {
