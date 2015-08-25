@@ -58,7 +58,7 @@ class UtilController extends AppController{
             $tasks[] = array('url' => $url);
         }
         $result = $this->addTaskQueue($tasks);
-        echo json_encode($result);
+        echo json_encode(array('result' => $result, 'tasks' => $tasks));
         return;
     }
 
@@ -100,14 +100,12 @@ class UtilController extends AppController{
                     $this->log('download wx user photo ' . $photo);
                     $download_url = download_photo_from_wx($photo);
                 }
-                $this->User->id = null;
                 $this->User->updateAll(array('nickname' => "'" . $nickname . "'", 'image' => "'" . $download_url . "'"), array('id' => $user_id));
             }
         }
         //update status
-        $this->UserRelation->id = null;
         $this->UserRelation->updateAll(array('is_update' => 1), array('user_id' => $user_id, 'follow_id' => $follow_ids, 'type' => 'Transfer'));
-        echo json_encode(array('success' => true));
+        echo json_encode(array('success' => true, 'oauth-bind' => $oauthBinds, 'follow-id' => $follow_ids));
         return;
     }
 
@@ -117,7 +115,7 @@ class UtilController extends AppController{
      * 添加队列任务
      */
     private function addTaskQueue($tasks) {
-        $queue = new SaeTaskQueue('share');
+        $queue = new SaeTaskQueue('cqueue');
         $queue->addTask($tasks);
         //将任务推入队列
         $ret = $queue->push();
