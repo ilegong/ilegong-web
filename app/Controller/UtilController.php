@@ -20,7 +20,7 @@ class UtilController extends AppController{
      * @param $user_id
      * 迁移粉丝数据
      */
-    public function transferFansData($product_id, $user_id) {
+    public function transferFansData($product_id, $user_id, $offset=0) {
         $this->autoRender = false;
         $carts = $this->Cart->find('all', array(
             'conditions' => array(
@@ -29,6 +29,7 @@ class UtilController extends AppController{
             ),
             'group' => array('creator'),
             'limit' => 500,
+            'offset' => $offset,
             'order' => array('created DESC')
         ));
         $save_data = array();
