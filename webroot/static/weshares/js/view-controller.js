@@ -355,13 +355,17 @@
       _.each(products, function (product) {
         totalPrice += product.price * product.num;
       });
-      if (vm.userCouponReduce) {
-        totalPrice -= vm.userCouponReduce;
+      if(totalPrice != 0){
+        if (vm.userCouponReduce) {
+          totalPrice -= vm.userCouponReduce;
+        }
+        vm.shipFee = parseInt(getShipFee());
+        vm.shipSetId = getShipSetId();
+        totalPrice += vm.shipFee;
+        vm.orderTotalPrice = totalPrice / 100;
+      }else{
+        vm.orderTotalPrice = 0;
       }
-      vm.shipFee = parseInt(getShipFee());
-      vm.shipSetId = getShipSetId();
-      totalPrice += vm.shipFee;
-      vm.orderTotalPrice = totalPrice / 100;
     }
 
     function getOrderComment(order_id) {
