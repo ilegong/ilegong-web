@@ -159,9 +159,15 @@
       vm.initWeshareData();
     }
 
-    function getFormatDate(date){
-      date = date.replace(' ','T');
-      var formatedDate = $filter('date')(new Date(date), 'MM-dd HH:ss');
+    function getDate(strDate) {
+      var date = eval('new Date(' + strDate.replace(/\d+(?=-[^-]+$)/,
+        function (a) { return parseInt(a, 10) - 1; }).match(/\d+/g) + ')');
+      return date;
+    }
+
+    function getFormatDate(dateStr){
+      var date = getDate(dateStr);
+      var formatedDate = $filter('date')(date, 'MM-dd HH:mm');
       return formatedDate;
     }
 
