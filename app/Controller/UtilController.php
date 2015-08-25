@@ -42,4 +42,57 @@ class UtilController extends AppController{
         echo json_encode(array('success' => true));
         return;
     }
+
+    /**
+     * @param $user_id
+     * @param $page_num
+     * @param $page_size
+     * 从微信里面更新粉丝信息
+     */
+    public function updateFansProfile($user_id, $page_num, $page_size) {
+        $this->autoRender = false;
+        $tasks = array();
+        foreach (range(0, $page_num) as $index) {
+            $offset = $index * $page_size;
+            $url = '/util/processUpdateFansProfile/' . $user_id . '/' . $page_size . '/' . $offset;
+            $tasks[] = array('url' => $url);
+        }
+        $result = $this->addTaskQueue($tasks);
+        echo json_encode($result);
+        return;
+    }
+
+    /**
+     * @param $user_id
+     * @param $limit
+     * @param $offset
+     * task queue
+     */
+    public function processUpdateFansProfile($user_id, $limit, $offset){
+        $user_relations = $this->UserRelation->find('all', array(
+            'conditions' => array(
+                'user_id' => $user_id
+            ),
+            'limit' => $limit,
+            'offset' => $offset
+        ));
+        
+    }
+
+    /**
+     * @param $tasks
+     * @return array
+     * 添加队列任务
+     */
+    private function addTaskQueue($tasks) {
+        $queue = new SaeTaskQueue('share');
+        $queue->addTask($tasks);
+        //将任务推入队列
+        $ret = $queue->push();
+        //任务添加失败时输出错误码和错误信息
+        if ($ret === false) {
+            return array('success' => false, 'errno' => $queue->errno(), 'errmsg' => $queue->errmsg());
+        }
+        return array('success' => true, 'errno' => $queue->errno(), 'errmsg' => $queue->errmsg());
+    }
 }
