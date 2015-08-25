@@ -41,6 +41,12 @@
 		.config(extendLog)
 		.run(initApp);
 
+  app.filter('unsafe', function($sce) {
+    return function(val) {
+      return $sce.trustAsHtml(val);
+    };
+  });
+
 	/* @ngInject */
 	function configCompileProvider($compileProvider) {
 		$compileProvider.imgSrcSanitizationWhitelist(/^\s*(https|file|blob|cdvfile|http|chrome-extension|blob:chrome-extension):|data:image\//);
