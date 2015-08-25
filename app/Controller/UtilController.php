@@ -88,7 +88,7 @@ class UtilController extends AppController{
         ));
         if (!empty($oauthBinds)) {
             foreach ($oauthBinds as $item) {
-                $user_id = $item['Oauthbind']['user_id'];
+                $follow_user_id = $item['Oauthbind']['user_id'];
                 $open_id = $item['Oauthbind']['oauth_openid'];
                 $wx_user = get_user_info_from_wx($open_id);
                 $this->log('download wx user info ' . json_encode($wx_user));
@@ -100,7 +100,7 @@ class UtilController extends AppController{
                     $this->log('download wx user photo ' . $photo);
                     $download_url = download_photo_from_wx($photo);
                 }
-                $this->User->updateAll(array('nickname' => "'" . $nickname . "'", 'image' => "'" . $download_url . "'"), array('id' => $user_id));
+                $this->User->updateAll(array('nickname' => "'" . $nickname . "'", 'image' => "'" . $download_url . "'"), array('id' => $follow_user_id));
             }
         }
         //update status
