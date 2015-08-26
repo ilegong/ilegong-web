@@ -11,7 +11,7 @@ class VoteController extends AppController {
 
 
     var $uses = array('VoteEvent', 'Candidate', 'Vote', 'CandidateEvent', 'UserSubReason');
-    var $components = array('Paginator');
+    var $components = array('Paginator', 'ShareUtil');
     var $paginate = array(
         'Candidate' => array(
             'order' => 'Candidate.created DESC',
@@ -144,10 +144,20 @@ class VoteController extends AppController {
      * 特定的人加入到特定的投票事件中 加入成功跳转到 vote_event_view
      */
     public function join_event($candidateId, $eventId) {
-
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        $CandidateUploadEvent = new CakeEvent('Vote.Candidate.created', $this->Candidate, array(
+            'id' => $candidateId,
+            'candidateData' => array('eventId' => $eventId, 'userId' => $uid)
+        ));
+        $this->getEventManager()->dispatch($CandidateUploadEvent);
+        $this->log('upload candidate event ' . json_encode($CandidateUploadEvent));
+        echo json_encode(array('success' => true));
+        return;
     }
 
     public function sign_up($eventId){
+
         //check login
         $uid = $this->currentUser['id'];
         if(empty($uid)){
@@ -168,9 +178,9 @@ class VoteController extends AppController {
         if(empty($uid)){
             $this->set('not_login',true);
         }
-//        if(!$this->is_weixin()||user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED){
-//            $this->set('not_weixin',true);
-//        }
+        if(!$this->is_weixin()||user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED){
+            $this->set('not_weixin',true);
+        }
         $this->set_wx_data($uid,$eventId);
         $this->set('op_cate','sign_up');
     }
@@ -212,12 +222,7 @@ class VoteController extends AppController {
             $candidate_id = $this->Candidate->id;
             $eventCandidateData = array('event_id' => $eventId, 'candidate_id' => $candidate_id, 'user_id' => $uid);
             $this->CandidateEvent->save($eventCandidateData);
-            $CandidateUploadEvent = new CakeEvent('Vote.Candidate.created', $this, array(
-                'id' => $candidate_id,
-                'candidateData' => array('eventId' => $eventId, 'userId' => $uid)
-            ));
-            $this->getEventManager()->dispatch($CandidateUploadEvent);
-            $this->log('upload candidate event ' . json_encode($CandidateUploadEvent));
+            $this->save_user_relation($uid);
             echo json_encode(array('success' => true));
             return;
         }
@@ -342,6 +347,19 @@ class VoteController extends AppController {
             return false;
         }
         return true;
+    }
+
+    private function save_user_relation($uid){
+        $userRelationM = ClassRegistry::init('UserRelation');
+        if($this->ShareUtil->check_user_relation('811917', $uid)){
+            $saveData = array(
+                'user_id' => '811917',
+                'follow_id' => $uid,
+                'type' => 'Vote',
+                'created' => date('Y-m-d H:i:s')
+            );
+            $userRelationM->save($saveData);
+        }
     }
 
     private function get_candidate_rank($candidate_id,$event_id){

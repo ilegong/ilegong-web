@@ -5,4 +5,5 @@ App::uses('VoteListener', 'lib/Event');
 App::uses('CakeEventManager', 'Event');
 
 // Attach listeners.
-CakeEventManager::instance()->attach(new VoteListener());
+$VoteListener = new VoteListener();
+CakeEventManager::instance()->attach($VoteListener);

@@ -7,21 +7,18 @@ App::uses('CakeLog', 'Log');
 class VoteListener implements CakeEventListener{
 
     public function implementedEvents() {
-        return array('Vote.Candidate.created' => array(
-            'callable' => 'subSharer',
-            'passParams' => true
-        ));
+        return array('Vote.Candidate.created' => 'subSharer');
     }
 
-    function subSharer(CakeEvent $event) {
+    public function subSharer(CakeEvent $event) {
         $candidateEventData = $event->data;
-        $candidateData = $candidateEventData->candidateData;
+        $candidateData = $candidateEventData['candidateData'];
         $eventId = $candidateData['eventId'];
         //sub
-        $candidateId = $candidateEventData->id;
-        CakeLog::write(LOG_ERR, 'event save relation candidate id ' . $candidateId . 'event id ' . $eventId);
+        $candidateId = $candidateEventData['id'];
+        $creatorId = $candidateData['userId'];
+        CakeLog::write(LOG_ERR, 'event save relation candidate event ' . json_encode($event) . ' candidate id ' . $candidateId . ' event id ' . $eventId . ' user id ' . $creatorId);
         if ($eventId == 6 && !empty($candidateId)) {
-            $creatorId = $candidateData->userId;
             $userRelationM = ClassRegistry::init('UserRelation');
             $saveData = array(
                 'user_id' => '811917',
