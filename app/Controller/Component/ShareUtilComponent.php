@@ -190,16 +190,16 @@ class ShareUtilComponent extends Component{
                 'share_user_id' => 813896,
                 'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_s/060eced7063_0807.jpg'
             ),
-            '297'=>array(
-                'share_id' => 297,
-                'share_name' => '瑞士卷——每一道甜品都是有故事的',
-                'share_img' => '/img/share_index/danggao.jpg',
-                'share_price' => '128',
-                'share_user_name' => '甜欣',
-                'share_vote' => 132,
-                'share_user_id' => 813896,
-                'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_s/060eced7063_0807.jpg'
-            ),
+//            '297'=>array(
+//                'share_id' => 297,
+//                'share_name' => '瑞士卷——每一道甜品都是有故事的',
+//                'share_img' => '/img/share_index/danggao.jpg',
+//                'share_price' => '128',
+//                'share_user_name' => '甜欣',
+//                'share_vote' => 132,
+//                'share_user_id' => 813896,
+//                'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_s/060eced7063_0807.jpg'
+//            ),
             '326'=>array(
                 'share_id' => 326,
                 'share_name' => '东北五常稻花香大米五常当地米厂专供',
