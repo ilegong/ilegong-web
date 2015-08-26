@@ -4,8 +4,6 @@ if (!defined('COMMON_PATH')) {
 }
 include_once COMMON_PATH . 'bootstrap.php';
 
-//add event listener
-require_once APP . 'Config' . DS . 'events.php';
 
 const WX_HOST = 'www.tongshijia.com';
 const WX_JS_API_CALL_URL = 'http://www.tongshijia.com/wxPay/jsApiPay';
@@ -2226,3 +2224,6 @@ spl_autoload_register(function ($class) {
         }
     }
 });
+
+//add event listener
+require_once APP . 'Config' . DS . 'events.php';
