@@ -120,8 +120,8 @@ class ShareUtilComponent extends Component{
                 'share_user_id' => 708029,
                 'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
             ),
-            '298'=>array(
-                'share_id' => 298,
+            '385'=>array(
+                'share_id' => 385,
                 'share_name' => '[内蒙古土默特]大红李子，天然纯绿色，顺丰包邮',
                 'share_img' => '/img/share_index/lizi.jpg',
                 'share_price' => '78',
@@ -129,6 +129,36 @@ class ShareUtilComponent extends Component{
                 'share_vote' => 99,
                 'share_user_id' => 816006,
                 'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/1ef4b665fec_0807.jpg'
+            ),
+            '388'=>array(
+                'share_id' => 388,
+                'share_name' => '泰国空运新鲜椰青',
+                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/2d117ce8806_0826.jpg',
+                'share_price' => '59',
+                'share_user_name' => '朋友说小妹',
+                'share_vote' => 203,
+                'share_user_id' => 711503,
+                'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/0609f46d89e_0813.jpg'
+            ),
+            '389'=>array(
+                'share_id' => 389,
+                'share_name' => '佳沛奇异果',
+                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/5380268e014_0826.jpg',
+                'share_price' => '66',
+                'share_user_name' => '朋友说小妹',
+                'share_vote' => 203,
+                'share_user_id' => 711503,
+                'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/0609f46d89e_0813.jpg'
+            ),
+            '390'=>array(
+                'share_id' => 390,
+                'share_name' => '佳沛金果',
+                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/c0982711918_0826.jpg',
+                'share_price' => '59',
+                'share_user_name' => '朋友说小妹',
+                'share_vote' => 203,
+                'share_user_id' => 711503,
+                'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/0609f46d89e_0813.jpg'
             ),
             '325'=>array(
                 'share_id' => 325,
@@ -139,6 +169,16 @@ class ShareUtilComponent extends Component{
                 'share_vote' => 145,
                 'share_user_id' => 807492,
                 'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/0797b2ef26b_0812.jpg'
+            ),
+            '354'=>array(
+                'share_id' => 354,
+                'share_name' => '密云山谷中纯正自家产荆花蜜',
+                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/5c3869af2f9_0826.jpg',
+                'share_price' => '38-78',
+                'share_user_name' => '樱花',
+                'share_vote' => 197,
+                'share_user_id' => 810684,
+                'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
             ),
             '342'=>array(
                 'share_id' => 342,
