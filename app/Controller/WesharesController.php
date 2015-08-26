@@ -441,12 +441,12 @@ class WesharesController extends AppController {
             $wexin_params = $this->set_weixin_share_data($uid, -1);
             $this->set($wexin_params);
             if ($uid == $current_uid) {
-                $title = $shareUser['nickname'] . '的微分享，和我一起来分享吧';
+                $title = '这是'.$shareUser['nickname'] . '的微分享，快来关注我吧';
                 $image = $shareUser['image'];
                 $desc = '朋友说是一个有人情味的分享社区，这里你不但可以吃到各地的特产，还能认识有趣的人。';
             } else {
                 $current_user = $this->currentUser;
-                $title = $current_user['nickname'] . '推荐了' . $shareUser['nickname'] . '的微分享，和我一起来分享吧';
+                $title = $current_user['nickname'] . '推荐了' . $shareUser['nickname'] . '的微分享，快来关注ta吧！';
                 $image = $shareUser['image'];
                 $desc = $shareUser['nickname'] . '是我的朋友，很靠谱。朋友说是一个有人情味的分享社区，这里你不但可以吃到各地的特产，还能认识有趣的人。';
             }
