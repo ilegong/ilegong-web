@@ -18,12 +18,17 @@
                     {{/if}}
                 </div>
                 {{if !$is_me}}
-                <div style="padding: 5px;">
-                    {{if !$sub_status}}
-                    <button class="btn btn-warning btn-sm btn-sub-sharer" data-sharer-id="{{$share_user['id']}}" data-user-id="{{$visitor}}">+关注</button>
-                    {{else}}
-                    <button class="btn btn-success btn-sm btn-unsub-sharer" data-sharer-id="{{$share_user['id']}}" data-user-id="{{$visitor}}">取消关注</button>
-                    {{/if}}
+                <div style="padding: 5px;" id="sub-div-content">
+                    <button id="sub-sharer" class="btn btn-warning btn-sm btn-sub-sharer" {{if $sub_status}}style="display:none;"{{/if}} data-sharer-id="{{$share_user['id']}}" data-user-id="{{$visitor}}">+关注</button>
+                    <!-- Single button -->
+                    <div id="unsub-sharer" class="btn-group" {{if !$sub_status}}style="display:none;"{{/if}}>
+                        <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            已关注 <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu btn-sm" style="min-width: 60px;">
+                            <li><a class="btn-unsub-sharer" data-sharer-id="{{$share_user['id']}}" data-user-id="{{$visitor}}">取消关注</a></li>
+                        </ul>
+                    </div>
                 </div>
                 {{/if}}
                 <div style="margin-top: 10px;margin-bottom: 10px;">
@@ -248,35 +253,32 @@
         $showFocusLi.on('click',function(){
             $focusModalDialog.modal({show:true,backdrop:'static'});
         });
-        function bindClick(){
-            $('button.btn-sub-sharer').on('click', function(e){
-                e.preventDefault();
-                var $me = $(this);
-                var sharer_id = $me.data('sharer-id');
-                var user_id  = $me.data('user-id');
-                $.getJSON('/weshares/subscribe_sharer/'+sharer_id+'/'+user_id, function(data){
-                    if(data['success']){
-                        $me.unbind();
-                        $me.removeClass('btn-sub-sharer').removeClass('btn-warning').addClass('btn-success').addClass('btn-unsub-sharer').text('取消关注');
-                        bindClick();
-                    }
-                });
+        $('button.btn-sub-sharer').on('click', function(e){
+            e.preventDefault();
+            var $me = $(this);
+            var sharer_id = $me.data('sharer-id');
+            var user_id  = $me.data('user-id');
+            $.getJSON('/weshares/subscribe_sharer/'+sharer_id+'/'+user_id, function(data){
+                if(data['success']){
+                    $('#unsub-sharer').show();
+                    $('#sub-sharer').hide();
+                }
             });
-            $('button.btn-unsub-sharer').on('click', function(e){
-                e.preventDefault();
-                var $me = $(this);
-                var sharer_id = $me.data('sharer-id');
-                var user_id  = $me.data('user-id');
-                $.getJSON('/weshares/unsubscribe_sharer/'+sharer_id+'/'+user_id, function(data){
+        });
+        $('a.btn-unsub-sharer').on('click', function(e){
+            e.preventDefault();
+            var $me = $(this);
+            var sharer_id = $me.data('sharer-id');
+            var user_id  = $me.data('user-id');
+            $.getJSON('/weshares/unsubscribe_sharer/'+sharer_id+'/'+user_id, function(data){
+                if(data['success']){
                     if(data['success']){
-                        $me.unbind();
-                        $me.removeClass('btn-unsub-sharer').removeClass('btn-success').addClass('btn-warning').addClass('btn-sub-sharer').text('+关注');
-                        bindClick();
+                        $('#unsub-sharer').hide();
+                        $('#sub-sharer').show();
                     }
-                });
+                }
             });
-        }
-        bindClick();
+        });
         $('div[name="share_item"]').on('click', function () {
             var $me = $(this);
             var id = $me.data('id');
