@@ -13,7 +13,7 @@ class WeshareBuyComponent extends Component {
 
     var $query_comment_fields = array('id', 'username', 'user_id', 'data_id', 'type', 'body', 'order_id', 'parent_id');
 
-    var $components = array('Session', 'Weixin', 'RedPacket');
+    var $components = array('Session', 'Weixin', 'RedPacket', 'ShareUtil');
 
     /**
      * @param $weshare_ids
@@ -1089,6 +1089,24 @@ class WeshareBuyComponent extends Component {
                 $this->Weixin->send_share_buy_complete_msg($open_id, $title, $product_name, $tuan_leader_name, $remark, $deatil_url);
             }
         }
+    }
+
+    /**
+     * @param $share_id
+     * @param $follow_id
+     * 关注
+     */
+    public function subscribe_sharer($share_id, $follow_id) {
+        $this->ShareUtil->save_relation($share_id, $follow_id);
+    }
+
+    /**
+     * @param $share_id
+     * @param $follow_id
+     * 取消关注
+     */
+    public function unsubscribe_sharer($share_id, $follow_id){
+        $this->ShareUtil->delete_relation($share_id, $follow_id);
     }
 
     /**

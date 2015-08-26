@@ -53,7 +53,12 @@ class ShareUtilComponent extends Component{
         return empty($relation);
     }
 
-    public function save_relation($sharer_id, $user_id){
+    public function delete_relation($sharer_id, $user_id) {
+        $userRelationM = ClassRegistry::init('UserRelation');
+        $userRelationM->updateAll(array('deleted' => DELETED_YES), array('user_id' => $sharer_id, 'follow_id' => $user_id));
+    }
+
+    public function save_relation($sharer_id, $user_id) {
         if ($this->check_user_relation($sharer_id, $user_id)) {
             $userRelationM = ClassRegistry::init('UserRelation');
             $userRelationM->saveAll(array('user_id' => $sharer_id, 'follow_id' => $user_id, 'type' => 'Buy', 'created' => date('Y-m-d H:i:s')));

@@ -521,6 +521,20 @@ class WesharesController extends AppController {
         return;
     }
 
+    public function subscribe_sharer($share_id, $user_id){
+        $this->autoRender = false;
+        $this->WeshareBuy->subscribe_sharer($share_id, $user_id);
+        echo json_encode(array('success' => true));
+        return;
+    }
+
+    public function unsubscribe_sharer($share_id, $user_id){
+        $this->autoRender = false;
+        $this->WeshareBuy->unsubscribe_sharer($share_id, $user_id);
+        echo json_encode(array('success' => true));
+        return;
+    }
+
     /**
      * @param $weshareId
      * 分享者订单统计页面

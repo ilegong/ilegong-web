@@ -978,6 +978,9 @@ class WeixinComponent extends Component
         $this->send_weixin_message($post_data);
     }
 
+    //TODO complete method
+    public function send_new_member_tip($open_id, $detail_url, $title, $member_name, $desc){
+    }
 
     public function send_comment_template_msg($user_open_id,$detail_url,$title,$order_id,$order_date,$desc){
         $post_data = array(
