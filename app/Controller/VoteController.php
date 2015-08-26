@@ -11,7 +11,7 @@ class VoteController extends AppController {
 
 
     var $uses = array('VoteEvent', 'Candidate', 'Vote', 'CandidateEvent', 'UserSubReason');
-    var $components = array('Paginator', 'ShareUtil');
+    var $components = array('Paginator', 'WeshareBuy');
     var $paginate = array(
         'Candidate' => array(
             'order' => 'Candidate.created DESC',
@@ -350,16 +350,7 @@ class VoteController extends AppController {
     }
 
     private function save_user_relation($uid){
-        $userRelationM = ClassRegistry::init('UserRelation');
-        if($this->ShareUtil->check_user_relation('811917', $uid)){
-            $saveData = array(
-                'user_id' => '811917',
-                'follow_id' => $uid,
-                'type' => 'Vote',
-                'created' => date('Y-m-d H:i:s')
-            );
-            $userRelationM->save($saveData);
-        }
+        $this->WeshareBuy->subscribe_sharer('811917', $uid);
     }
 
     private function get_candidate_rank($candidate_id,$event_id){
