@@ -256,6 +256,7 @@
                 var user_id  = $me.data('user-id');
                 $.getJSON('/weshares/subscribe_sharer/'+sharer_id+'/'+user_id, function(data){
                     if(data['success']){
+                        $me.unbind();
                         $me.removeClass('btn-sub-sharer').removeClass('btn-warning').addClass('btn-success').addClass('btn-unsub-sharer').text('取消关注');
                         bindClick();
                     }
@@ -268,6 +269,7 @@
                 var user_id  = $me.data('user-id');
                 $.getJSON('/weshares/unsubscribe_sharer/'+sharer_id+'/'+user_id, function(data){
                     if(data['success']){
+                        $me.unbind();
                         $me.removeClass('btn-unsub-sharer').removeClass('btn-success').addClass('btn-warning').addClass('btn-sub-sharer').text('+关注');
                         bindClick();
                     }
