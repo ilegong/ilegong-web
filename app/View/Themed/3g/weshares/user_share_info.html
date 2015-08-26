@@ -244,6 +244,8 @@
         var $fansModalDialog = $('#fansListModal');
         var $showFocusLi = $('#show-focus-modal-dialog');
         var $focusModalDialog = $('#focusListModal');
+        var processSub = false;
+        var processUnSub = false;
         $showCommentLi.on('click',function(){
             $commentModalDialog.modal({show:true,backdrop:'static'});
         });
@@ -255,11 +257,16 @@
         });
         $('button.btn-sub-sharer').on('click', function(e){
             e.preventDefault();
+            if(processSub){
+                return;
+            }
+            processSub = true;
             var $me = $(this);
             var sharer_id = $me.data('sharer-id');
             var user_id  = $me.data('user-id');
             $.getJSON('/weshares/subscribe_sharer/'+sharer_id+'/'+user_id, function(data){
                 if(data['success']){
+                    processSub = false;
                     $('#unsub-sharer').show();
                     $('#sub-sharer').hide();
                 }
@@ -267,12 +274,17 @@
         });
         $('a.btn-unsub-sharer').on('click', function(e){
             e.preventDefault();
+            if(processUnSub){
+                return;
+            }
+            processUnSub = true;
             var $me = $(this);
             var sharer_id = $me.data('sharer-id');
             var user_id  = $me.data('user-id');
             $.getJSON('/weshares/unsubscribe_sharer/'+sharer_id+'/'+user_id, function(data){
                 if(data['success']){
                     if(data['success']){
+                        processUnSub = false;
                         $('#unsub-sharer').hide();
                         $('#sub-sharer').show();
                     }
