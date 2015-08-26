@@ -6,7 +6,7 @@ class WesharesController extends AppController {
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description');
 
-    var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket');
+    var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil');
 
     var $share_ship_type = array('self_ziti', 'kuaidi', 'pys_ziti');
 
@@ -22,7 +22,9 @@ class WesharesController extends AppController {
      */
     public function index() {
         $this->layout = null;
+        $products = $this->ShareUtil->get_share_index_product();
         $uid = $this->currentUser['id'];
+        $this->set('products', $products);
         $this->set('uid', $uid);
     }
 
