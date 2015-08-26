@@ -212,6 +212,11 @@ class WesharesController extends AppController {
             'recursive' => 1, //int
             'fields' => $user_fields,
         ));
+        if(!$is_me){
+            $sub_status = $this->WeshareBuy->check_user_subscribe($weshareInfo['creator']['id'], $uid);
+        }else{
+            $sub_status = true;
+        }
         $consignee = $this->getShareConsignees($uid);
         $creatorId = $weshareInfo['creator']['id'];
         $user_share_summery = $this->getUserShareSummery($creatorId, $uid == $creatorId);
@@ -228,7 +233,8 @@ class WesharesController extends AppController {
             'consignee' => $consignee,
             'user_share_summery' => $user_share_summery,
             'my_coupons' => $my_coupon_items[0],
-            'comment_data' => $comment_data
+            'comment_data' => $comment_data,
+            'sub_status' => $sub_status
         ));
         return;
     }

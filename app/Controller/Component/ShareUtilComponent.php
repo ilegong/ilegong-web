@@ -42,6 +42,17 @@ class ShareUtilComponent extends Component{
         return $allWeshares;
     }
 
+    public function check_user_is_subscribe($user_id, $follow_id) {
+        $userRelationM = ClassRegistry::init('UserRelation');
+        $relation = $userRelationM->find('all', array(
+            'conditions' => array(
+                'user_id' => $user_id,
+                'follow_id' => $follow_id
+            )
+        ));
+        return (!empty($relation) && ($relation['UserRelation']['deleted'] == DELETED_NO));
+    }
+
     public function check_user_relation($user_id, $follow_id) {
         $userRelationM = ClassRegistry::init('UserRelation');
         $relation = $userRelationM->find('all', array(
@@ -58,10 +69,12 @@ class ShareUtilComponent extends Component{
         $userRelationM->updateAll(array('deleted' => DELETED_YES), array('user_id' => $sharer_id, 'follow_id' => $user_id));
     }
 
-    public function save_relation($sharer_id, $user_id) {
+    public function save_relation($sharer_id, $user_id, $type='Buy') {
+        $userRelationM = ClassRegistry::init('UserRelation');
         if ($this->check_user_relation($sharer_id, $user_id)) {
-            $userRelationM = ClassRegistry::init('UserRelation');
-            $userRelationM->saveAll(array('user_id' => $sharer_id, 'follow_id' => $user_id, 'type' => 'Buy', 'created' => date('Y-m-d H:i:s')));
+            $userRelationM->saveAll(array('user_id' => $sharer_id, 'follow_id' => $user_id, 'type' => $type, 'created' => date('Y-m-d H:i:s')));
+        }else{
+            $userRelationM->updateAll(array('deleted' => DELETED_NO), array('user_id' => $sharer_id, 'follow_id' => $user_id));
         }
     }
 }

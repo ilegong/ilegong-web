@@ -1092,21 +1092,30 @@ class WeshareBuyComponent extends Component {
     }
 
     /**
-     * @param $share_id
+     * @param $sharer_id
      * @param $follow_id
-     * 关注
+     * 获取用户关注信息
      */
-    public function subscribe_sharer($share_id, $follow_id) {
-        $this->ShareUtil->save_relation($share_id, $follow_id);
+    public function check_user_subscribe($sharer_id, $follow_id){
+        return $this->ShareUtil->check_user_is_subscribe($sharer_id, $follow_id);
     }
 
     /**
-     * @param $share_id
+     * @param $sharer_id
+     * @param $follow_id
+     * 关注
+     */
+    public function subscribe_sharer($sharer_id, $follow_id) {
+        $this->ShareUtil->save_relation($sharer_id, $follow_id, 'SUB');
+    }
+
+    /**
+     * @param $sharer_id
      * @param $follow_id
      * 取消关注
      */
-    public function unsubscribe_sharer($share_id, $follow_id){
-        $this->ShareUtil->delete_relation($share_id, $follow_id);
+    public function unsubscribe_sharer($sharer_id, $follow_id){
+        $this->ShareUtil->delete_relation($sharer_id, $follow_id);
     }
 
     /**

@@ -98,6 +98,7 @@
   function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, $filter, $window, Utils) {
     var vm = this;
     vm.showShareDetailView = true;
+    vm.subShareTipTxt = '+关注';
     ChooseOfflineStore(vm, $log, $http, $templateCache, $timeout);
 
     vm.statusMap = {
@@ -154,6 +155,7 @@
     vm.sendNewShareMsg = sendNewShareMsg;
     vm.sendNotifyShareMsg = sendNotifyShareMsg;
     vm.validNotifyMsgContent = validNotifyMsgContent;
+    vm.subSharer = subSharer;
     activate();
     function activate() {
       vm.initWeshareData();
@@ -227,6 +229,7 @@
           vm.weshareSettings = data['weshare_ship_settings'];
           vm.supportPysZiti = data['support_pys_ziti'];
           vm.selectShipType = getSelectTypeDefaultVal(vm.weshareSettings);
+          vm.userSubStatus = data['sub_status'];
           vm.sortOrders();
           if (vm.consignee && vm.consignee.offlineStore) {
             vm.checkedOfflineStore = vm.consignee.offlineStore;
@@ -619,6 +622,24 @@
           alert("发送成功,请联系朋友说客服。。");
         });
       }
+    }
+
+    function subSharer() {
+      if (vm.hasProcessSubSharer) {
+        return;
+      }
+      $http({
+        method: 'GET',
+        url: '/weshares/subscribe_sharer/' + vm.weshare.creator.id + '/' + vm.currentUser.id
+      }).success(function (data) {
+        // With the data succesfully returned, call our callback
+        if (data['success']) {
+          vm.hasProcessSubSharer = true;
+          vm.subShareTipTxt = '已关注';
+        }
+      }).error(function () {
+        vm.hasProcessSubSharer = false;
+      });
     }
 
     function validNotifyMsgContent(){
