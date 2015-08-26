@@ -167,6 +167,7 @@ class WesharesController extends AppController {
         Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshare['Weshare']['id'], '');
         if ($saveBuyFlag) {
             if (empty($weshareData['id'])) {
+                Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
                 $queue = new SaeTaskQueue('share');
                 $queue->addTask("/weshares/process_send_new_share_msg/" . $weshare['Weshare']['id']);
                 //将任务推入队列
