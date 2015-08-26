@@ -164,7 +164,7 @@ class WesharesController extends AppController {
         $this->saveWeshareAddresses($weshare['Weshare']['id'], $addressesData);
         $this->saevWeshareShipType($weshare['Weshare']['id'], $shipSetData);
         //clear cache
-        Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
+        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshare['Weshare']['id'], '');
         if ($saveBuyFlag) {
             if (empty($weshareData['id'])) {
                 $queue = new SaeTaskQueue('share');
