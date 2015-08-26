@@ -168,9 +168,9 @@ class VoteController extends AppController {
         if(empty($uid)){
             $this->set('not_login',true);
         }
-        if(!$this->is_weixin()||user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED){
-            $this->set('not_weixin',true);
-        }
+//        if(!$this->is_weixin()||user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED){
+//            $this->set('not_weixin',true);
+//        }
         $this->set_wx_data($uid,$eventId);
         $this->set('op_cate','sign_up');
     }
@@ -192,7 +192,7 @@ class VoteController extends AppController {
         }
         $signUpRecord = $this->has_sign_up($eventId,$uid);
         if(!empty($signUpRecord)){
-            echo json_encode(array('success' => false,'reason' => 'has sign', 'candidate_id' => $signUpRecord[CandidateEvent]['candidate_id']));
+            echo json_encode(array('success' => false,'reason' => 'has sign', 'candidate_id' => $signUpRecord['CandidateEvent']['candidate_id']));
             return;
         }
         $title = $_POST['title'];
@@ -211,10 +211,10 @@ class VoteController extends AppController {
         if ($this->Candidate->save($saveData)) {
             $candidate_id = $this->Candidate->id;
             $eventCandidateData = array('event_id' => $eventId, 'candidate_id' => $candidate_id, 'user_id' => $uid);
-            $candidateEvent = $this->CandidateEvent->save($eventCandidateData);
+            $this->CandidateEvent->save($eventCandidateData);
             $CandidateUploadEvent = new CakeEvent('Vote.Candidate.created', $this, array(
                 'id' => $candidate_id,
-                'data' => array('candidateEvent' => $candidateEvent, 'userId' => $uid)
+                'candidateData' => array('eventId' => $eventId, 'userId' => $uid)
             ));
             $this->getEventManager()->dispatch($CandidateUploadEvent);
             $this->log('upload candidate event ' . json_encode($CandidateUploadEvent));
