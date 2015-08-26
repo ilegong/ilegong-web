@@ -8,12 +8,12 @@
                 <img ng-if="vm.supportPysZiti>0" src="/static/weshares/images/hlj.jpeg" style="width: 25px;height: 25px;"/>
             </s>
         <li>
-            <div style="display: inline-flex;">
+            <div style="display: -webkit-inline-box">
                 <label ng-click="vm.toUserShareInfo(vm.weshare.creator.id)" ng-bind="vm.weshare.creator.nickname"></label>
                 <a style="margin-left: 5px;margin-top: 3px;width: 50px;line-height: 20px;background-color: #F2651A;" class="statistics-btn" ng-click="vm.subSharer();" ng-bind="vm.subShareTipTxt">+关注</a>
             </div>
             <s ng-if="vm.getOrderCommentLength()<1&&vm.userSubStatus"><b style="color: #ffa200" ng-bind="vm.userShareSummery.share_count">0</b>&nbsp; <small>分享</small>&nbsp;&nbsp;&nbsp;<b style="color: #ffa200" ng-bind="vm.userShareSummery.follower_count">0</b>&nbsp;<small>粉丝</small></s>
-            <s ng-if="vm.getOrderCommentLength()>=1&&vm.userSubStatus"><b style="color: #ffa200" ng-bind="vm.getOrderCommentLength()">0</b>&nbsp; <small>爱心评价</small><a style="margin-top: 0px;width: 65px;line-height: 0;margin-left: 10px;display: inline;" class="statistics-btn" ng-click="vm.showCommentListDialog()">点击查看</a></s>
+            <s ng-click="vm.showCommentListDialog()" ng-if="vm.getOrderCommentLength()>=1&&vm.userSubStatus"><b style="color: #ffa200" ng-bind="vm.getOrderCommentLength()">0</b>&nbsp; <small>爱心评价</small></s>
             <s>已有<span ng-bind="vm.ordersDetail.summery.all_buy_user_count"></span>人报名</s>
         </li>
         <ul class="clearfix header margin-bottom-12" style="margin-left: 3px;float: right;">
