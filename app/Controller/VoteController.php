@@ -42,6 +42,7 @@ class VoteController extends AppController {
      * 根据投票的事件ID到特定的投票页面
      */
     public function vote_event_view($eventId,$sort=0) {
+        //TODO set page title by event id
         $this->pageTitle = '朋友说第6届萌娃作品大赛';
         $uid = $this->currentUser['id'];
         $event_info = $this->get_event_info($eventId);
@@ -109,11 +110,12 @@ class VoteController extends AppController {
             echo json_encode(array('success' => false, 'reason' => 'Not logged'));
             return;
         }
-        if (user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED) {
-            $this->save_sub_reason($candidateId, $eventId, $uid);
-            echo json_encode(array('success' => false, 'reason' => 'Not subscribed'));
-            return;
-        }
+// vote user don't sub pys
+//        if (user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED) {
+//            $this->save_sub_reason($candidateId, $eventId, $uid);
+//            echo json_encode(array('success' => false, 'reason' => 'Not subscribed'));
+//            return;
+//        }
         list($uvote,$is_vote) = $this->is_already_vote($candidateId,$eventId,$uid);
         if(count($uvote)>= 5){
             echo json_encode(array('success' => false, 'reason' => 'more than five'));

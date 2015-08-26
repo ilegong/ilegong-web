@@ -35,7 +35,7 @@ ul li { list-style: none; }
 .babyrule h1{ width: 100px; line-height: 35px; text-align: center; color: #ffffff; background-color: #ff7c6e; font-size: 14px;}
 .babyrule p{ color: #ffffff; padding-top: 10px; line-height: 20px;}
 .baby_bottom{ height: 49px; background-color: #ffffff; position: fixed; left: 0; bottom: 0; width: 100%;}
-.baby_bottom ul li{ float: left; width: 25%; text-align: center; color: #666666;}
+.baby_bottom ul li{ float: left; width: 33.33%; text-align: center; color: #666666;}
 .baby_bottom ul li a{ text-decoration: none; display: block;}
 .baby_bottom ul li i {
     display: block;
