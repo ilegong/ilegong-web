@@ -2226,4 +2226,4 @@ spl_autoload_register(function ($class) {
 });
 
 //add event listener
-require_once APP . 'Config' . DS . 'events.php';
+//require_once APP . 'Config' . DS . 'events.php';
