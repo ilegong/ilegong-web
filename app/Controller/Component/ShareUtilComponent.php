@@ -173,7 +173,7 @@ class ShareUtilComponent extends Component{
             '354'=>array(
                 'share_id' => 354,
                 'share_name' => '密云山谷中纯正自家产荆花蜜',
-                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/5c3869af2f9_0826.jpg',
+                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/7167382dca7_0826.jpg',
                 'share_price' => '38-78',
                 'share_user_name' => '樱花',
                 'share_vote' => 197,
