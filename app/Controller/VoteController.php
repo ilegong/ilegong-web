@@ -6,6 +6,7 @@
  * Date: 6/27/15
  * Time: 10:05
  */
+App::uses('CakeEvent', 'Event');
 class VoteController extends AppController {
 
 
@@ -210,7 +211,13 @@ class VoteController extends AppController {
         if ($this->Candidate->save($saveData)) {
             $candidate_id = $this->Candidate->id;
             $eventCandidateData = array('event_id' => $eventId, 'candidate_id' => $candidate_id, 'user_id' => $uid);
-            $this->CandidateEvent->save($eventCandidateData);
+            $candidateEvent = $this->CandidateEvent->save($eventCandidateData);
+            $CandidateUploadEvent = new CakeEvent('Vote.Candidate.created', $this, array(
+                'id' => $candidate_id,
+                'data' => array('candidateEvent' => $candidateEvent, 'userId' => $uid)
+            ));
+            $this->getEventManager()->dispatch($CandidateUploadEvent);
+            $this->log('upload candidate event ' . json_encode($CandidateUploadEvent));
             echo json_encode(array('success' => true));
             return;
         }
