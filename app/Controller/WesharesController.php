@@ -463,8 +463,13 @@ class WesharesController extends AppController {
         $userCommentData = $this->WeshareBuy->load_user_share_comments($uid);
         $userFansData = $this->WeshareBuy->get_user_fans_data($uid, 100);
         $userFocusData = $this->WeshareBuy->get_user_focus($uid, 100);
+        if($uid != $current_uid){
+            $sub_status = $this->WeshareBuy->check_user_subscribe($uid, $current_uid);
+            $this->set('sub_status', $sub_status);
+        }
         $this->set($userShareSummery);
         $this->set('is_me', $uid == $current_uid);
+        $this->set('visitor', $current_uid);
         $this->set('share_user', $shareUser);
         $this->set('creators', $creators);
         $this->set('my_create_shares', $myCreateShares);

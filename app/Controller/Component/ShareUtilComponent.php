@@ -44,7 +44,7 @@ class ShareUtilComponent extends Component{
 
     public function check_user_is_subscribe($user_id, $follow_id) {
         $userRelationM = ClassRegistry::init('UserRelation');
-        $relation = $userRelationM->find('all', array(
+        $relation = $userRelationM->find('first', array(
             'conditions' => array(
                 'user_id' => $user_id,
                 'follow_id' => $follow_id

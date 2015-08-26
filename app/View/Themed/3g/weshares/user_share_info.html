@@ -17,6 +17,15 @@
                     <span class="label label-info">好邻居支持</span>
                     {{/if}}
                 </div>
+                {{if !$is_me}}
+                <div style="padding: 5px;">
+                    {{if !$sub_status}}
+                    <button class="btn btn-warning btn-sm btn-sub-sharer" data-sharer-id="{{$share_user['id']}}" data-user-id="{{$visitor}}">+关注</button>
+                    {{else}}
+                    <button class="btn btn-success btn-sm btn-unsub-sharer" data-sharer-id="{{$share_user['id']}}" data-user-id="{{$visitor}}">取消关注</button>
+                    {{/if}}
+                </div>
+                {{/if}}
                 <div style="margin-top: 10px;margin-bottom: 10px;">
                     <ul style="height: 40px;overflow: hidden;font-size: 18px;display: block;padding: 0;">
                         <li id="show-comment-modal-dialog" style="display:inline-block;width: 65px;text-align: center;border-right-width: 1px;border-right-style: solid;border-color: #d9d9d9;">
@@ -239,6 +248,33 @@
         $showFocusLi.on('click',function(){
             $focusModalDialog.modal({show:true,backdrop:'static'});
         });
+        function bindClick(){
+            $('button.btn-sub-sharer').on('click', function(e){
+                e.preventDefault();
+                var $me = $(this);
+                var sharer_id = $me.data('sharer-id');
+                var user_id  = $me.data('user-id');
+                $.getJSON('/weshares/subscribe_sharer/'+sharer_id+'/'+user_id, function(data){
+                    if(data['success']){
+                        $me.removeClass('btn-sub-sharer').removeClass('btn-warning').addClass('btn-success').addClass('btn-unsub-sharer').text('取消关注');
+                        bindClick();
+                    }
+                });
+            });
+            $('button.btn-unsub-sharer').on('click', function(e){
+                e.preventDefault();
+                var $me = $(this);
+                var sharer_id = $me.data('sharer-id');
+                var user_id  = $me.data('user-id');
+                $.getJSON('/weshares/unsubscribe_sharer/'+sharer_id+'/'+user_id, function(data){
+                    if(data['success']){
+                        $me.removeClass('btn-unsub-sharer').removeClass('btn-success').addClass('btn-warning').addClass('btn-sub-sharer').text('+关注');
+                        bindClick();
+                    }
+                });
+            });
+        }
+        bindClick();
         $('div[name="share_item"]').on('click', function () {
             var $me = $(this);
             var id = $me.data('id');
