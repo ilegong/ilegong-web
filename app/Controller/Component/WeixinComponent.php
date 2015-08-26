@@ -977,9 +977,21 @@ class WeixinComponent extends Component
         );
         $this->send_weixin_message($post_data);
     }
-
-    //TODO complete method
+    
     public function send_new_member_tip($open_id, $detail_url, $title, $member_name, $desc){
+        $post_data = array(
+            "touser" => $open_id,
+            "template_id" => 'ee_aZdUrvl_G4F6qSUgZufwnt8oWs9LpG1K8hZ0l3Yg',
+            "url" => $detail_url,
+            "topcolor" => "#FF0000",
+            "data" => array(
+                "first" => array("value" => $title),
+                "keyword1" => array("value" => $member_name),
+                "keyword2" => array("value" => date('Y-m-d H:i:s')),
+                "remark" => array("value" => $desc, "color" => "#FF8800")
+            )
+        );
+        $this->send_weixin_message($post_data);
     }
 
     public function send_comment_template_msg($user_open_id,$detail_url,$title,$order_id,$order_date,$desc){

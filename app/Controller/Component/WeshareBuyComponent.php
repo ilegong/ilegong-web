@@ -1107,6 +1107,7 @@ class WeshareBuyComponent extends Component {
      */
     public function subscribe_sharer($sharer_id, $follow_id) {
         $this->ShareUtil->save_relation($sharer_id, $follow_id, 'SUB');
+        $this->send_sub_template_msg($sharer_id, $follow_id);
     }
 
     /**
@@ -1116,6 +1117,21 @@ class WeshareBuyComponent extends Component {
      */
     public function unsubscribe_sharer($sharer_id, $follow_id){
         $this->ShareUtil->delete_relation($sharer_id, $follow_id);
+    }
+
+    /**
+     * @param $sharer_id
+     * @param $follow_id
+     */
+    public function send_sub_template_msg($sharer_id, $follow_id){
+        $openid_map = $this->get_open_ids(array($sharer_id));
+        $open_id = $openid_map[$sharer_id];
+        $nickname_map = $this->get_users_nickname(array($sharer_id, $follow_id));
+        $member_name = $nickname_map[$follow_id];
+        $title = $nickname_map[$sharer_id].'你好，'.$member_name.'刚刚关注了你。';
+        $detail_url = $this->get_sharer_detail_url($sharer_id);
+        $desc = '点击详情，查看我的粉丝！';
+        $this->Weixin->send_new_member_tip($open_id, $detail_url, $title, $member_name, $desc);
     }
 
     /**
@@ -1137,6 +1153,10 @@ class WeshareBuyComponent extends Component {
         ));
         $uids = Hash::extract($orders, '{n}.Order.creator');
         return $uids;
+    }
+
+    private function get_sharer_detail_url($sharer_id){
+        return WX_HOST.'/weshares/user_share_info/'.$sharer_id;
     }
 
     /**
