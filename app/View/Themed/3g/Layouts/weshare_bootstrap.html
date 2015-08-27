@@ -57,8 +57,12 @@
             var share_string = '{{$share_string ? $share_string :"0"}}';
             var to_timeline_title = "{{$title}}";
             var to_friend_title = "{{$title}}";
-            var to_friend_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=appMsg';
-            var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
+            var detail_url = "{{$detail_url}}";
+            if(!detail_url){
+                detail_url =  document.URL.split('?')[0];
+            }
+            var to_friend_link = detail_url + '?trstr='+ share_string + '&share_type=appMsg';
+            var to_timeline_link = detail_url + '?trstr='+ share_string + '&share_type=timeline';
             var imgUrl = "{{$this->Html->assetUrl($image)}}";
             var desc = "{{$desc}}";
             wx.onMenuShareAppMessage({

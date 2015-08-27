@@ -456,6 +456,8 @@ class WesharesController extends AppController {
             if (!$image) {
                 $image = 'http://dev.tongshijia.com/img/logo_footer.jpg';
             }
+            $detail_url = WX_HOST.'/weshares/user_share_info/'.$uid;
+            $this->set('detail_url', $detail_url);
             $this->set('title', $title);
             $this->set('image', $image);
             $this->set('desc', $desc);
