@@ -7,6 +7,9 @@
 
   function WesharesEditCtrl($scope, $rootScope, $log, $http, wx, Utils) {
     var vm = this;
+    $document.ready(function(){
+      $rootScope.loadingPage = false;
+    });
     vm.chooseAndUploadImage = chooseAndUploadImage;
     vm.uploadImage = uploadImage;
     vm.deleteImage = deleteImage;
@@ -24,6 +27,10 @@
     vm.saveCacheData = saveCacheData;
     vm.validateShipFee = validateShipFee;
     vm.dataCacheKey = 'cache_share_data';
+    vm.pageLoaded = pageLoaded;
+    function pageLoaded(){
+      $rootScope.loadingPage = false;
+    }
     activate();
     $scope.$watchCollection('vm.weshare', vm.saveCacheData);
     function activate() {
@@ -63,12 +70,9 @@
           vm.kuai_di_data = data['ship_type']['kuai_di'] || vm.kuai_di_data;
           vm.pys_ziti_data = data['ship_type']['pys_ziti'] || vm.pys_ziti_data;
           vm.kuaidi_show_ship_fee = vm.kuai_di_data.ship_fee/100;
-          $rootScope.loadingPage = false;
         }).error(function(data){
 
         });
-      }else{
-        $rootScope.loadingPage = false;
       }
       vm.messages = [];
       function setDefaultData(){

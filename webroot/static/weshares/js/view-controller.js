@@ -100,7 +100,6 @@
     vm.showShareDetailView = true;
     vm.subShareTipTxt = '+关注';
     ChooseOfflineStore(vm, $log, $http, $templateCache, $timeout);
-
     vm.statusMap = {
       0: '进行中',
       1: '已截止'
@@ -156,6 +155,10 @@
     vm.sendNotifyShareMsg = sendNotifyShareMsg;
     vm.validNotifyMsgContent = validNotifyMsgContent;
     vm.subSharer = subSharer;
+    vm.pageLoaded = pageLoaded;
+    function pageLoaded(){
+      $rootScope.loadingPage = false;
+    }
     activate();
     function activate() {
       vm.initWeshareData();
@@ -274,7 +277,6 @@
           }
           //load all comments
           vm.loadSharerAllComments(vm.weshare.creator.id);
-          $rootScope.loadingPage = false;
         }).
         error(function (data, status) {
           $log.log(data);

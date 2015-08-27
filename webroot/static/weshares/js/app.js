@@ -47,7 +47,22 @@
     };
   });
 
-	/* @ngInject */
+  app.directive('elemReady', function( $parse ) {
+    return {
+      restrict: 'A',
+      link: function( $scope, elem, attrs ) {
+        elem.ready(function(){
+          $scope.$apply(function(){
+            var func = $parse(attrs.elemReady);
+            func($scope);
+          })
+        })
+      }
+    }
+  })
+
+
+  /* @ngInject */
 	function configCompileProvider($compileProvider) {
 		$compileProvider.imgSrcSanitizationWhitelist(/^\s*(https|file|blob|cdvfile|http|chrome-extension|blob:chrome-extension):|data:image\//);
 	}
