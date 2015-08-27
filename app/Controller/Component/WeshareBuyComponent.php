@@ -1074,7 +1074,7 @@ class WeshareBuyComponent extends Component {
      */
     public function send_buy_percent_msg($weshare_info, $msg_content) {
         $share_creator = $weshare_info['creator']['id'];
-        $fans_data = $this->get_user_fans_data($share_creator);
+        $fans_data = $this->get_user_fans_data($share_creator, 3000);
         $fans_data_nickname = Hash::combine($fans_data, '{n}.id', '{n}.nickname');
         $fans_data_ids = Hash::extract($fans_data, '{n}.id');
         $fans_open_ids = $this->get_open_ids($fans_data_ids);
@@ -1107,6 +1107,9 @@ class WeshareBuyComponent extends Component {
      */
     public function subscribe_sharer($sharer_id, $follow_id) {
         $this->ShareUtil->save_relation($sharer_id, $follow_id, 'SUB');
+        Cache::write(SHARE_USER_SUMMERY_CACHE_KEY . '_' . $sharer_id, '');
+        Cache::write(SHARER_FOCUS_DATA_CACHE_KEY . '_' . $follow_id . '_100', '');
+        Cache::write(SHARER_FANS_DATA_CACHE_KEY . '_' . $sharer_id . '_100', '');
         $this->send_sub_template_msg($sharer_id, $follow_id);
     }
 
@@ -1116,6 +1119,9 @@ class WeshareBuyComponent extends Component {
      * 取消关注
      */
     public function unsubscribe_sharer($sharer_id, $follow_id){
+        Cache::write(SHARE_USER_SUMMERY_CACHE_KEY . '_' . $sharer_id, '');
+        Cache::write(SHARER_FOCUS_DATA_CACHE_KEY . '_' . $follow_id . '_100', '');
+        Cache::write(SHARER_FANS_DATA_CACHE_KEY . '_' . $sharer_id . '_100', '');
         $this->ShareUtil->delete_relation($sharer_id, $follow_id);
     }
 
@@ -1155,6 +1161,11 @@ class WeshareBuyComponent extends Component {
         return $uids;
     }
 
+    /**
+     * @param $sharer_id
+     * @return string
+     * 获取个人中心url
+     */
     private function get_sharer_detail_url($sharer_id){
         return WX_HOST.'/weshares/user_share_info/'.$sharer_id;
     }
