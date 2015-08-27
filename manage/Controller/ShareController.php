@@ -357,7 +357,7 @@ class ShareController extends AppController{
         if ($order_status != 0) {
             $cond['status'] = array($order_status);
         } else {
-            $cond['status'] = array(ORDER_STATUS_PAID, ORDER_STATUS_RECEIVED, ORDER_STATUS_SHIPPED);
+            $cond['status'] = array(ORDER_STATUS_PAID, ORDER_STATUS_RECEIVED, ORDER_STATUS_SHIPPED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
         }
         $orders = $this->Order->find('all',array(
             'conditions' => $cond,
