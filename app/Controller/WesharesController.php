@@ -624,7 +624,10 @@ class WesharesController extends AppController {
         $params = json_decode(file_get_contents('php://input'), true);
         $content = $params['content'];
         $queue = new SaeTaskQueue('share');
-        $queue->addTask("/weshares/process_send_buy_percent_msg/" . $weshare_id, "content=" . $content, true);
+        $fansPageInfo =$this->WeshareBuy->get_user_relation_page_info($uid);
+        $pageCount = $fansPageInfo['pageCount'];
+        $pageSize = $fansPageInfo['pageSize'];
+        $queue->addTask("/weshares/process_send_buy_percent_msg/" . $weshare_id . "/" . $pageCount . "/" . $pageSize, "content=" . $content, true);
         //将任务推入队列
         $ret = $queue->push();
         //任务添加失败时输出错误码和错误信息
@@ -651,8 +654,11 @@ class WesharesController extends AppController {
             echo json_encode(array('success' => false, 'reason' => 'not_creator'));
             return;
         }
+        $fansPageInfo =$this->WeshareBuy->get_user_relation_page_info($uid);
+        $pageCount = $fansPageInfo['pageCount'];
+        $pageSize = $fansPageInfo['pageSize'];
         $queue = new SaeTaskQueue('share');
-        $queue->addTask("/weshares/process_send_new_share_msg/" . $weshare_id);
+        $queue->addTask("/weshares/process_send_new_share_msg/" . $weshare_id . '/' . $pageCount . '/' . $pageSize);
         //将任务推入队列
         $ret = $queue->push();
         //任务添加失败时输出错误码和错误信息
@@ -665,24 +671,69 @@ class WesharesController extends AppController {
 
     /**
      * @param $shareId
+     * @param $pageCount
+     * @param $pageSize
      * 处理 建团消息 task
      */
-    public function process_send_new_share_msg($shareId){
+    public function process_send_new_share_msg($shareId, $pageCount, $pageSize) {
         $this->autoRender = false;
-        $this->WeshareBuy->send_new_share_msg($shareId);
+        $queue = new SaeTaskQueue('tasks');
+        $tasks = array();
+        foreach (range(0, $pageCount) as $page) {
+            $offset = $page * $pageSize;
+            $tasks[] = array('url' => "/weshares/send_new_share_msg_task/" . $shareId . "/" . $pageSize . "/" . $offset);
+        }
+        $queue->addTask($tasks);
+        $ret = $queue->push();
+        //$this->WeshareBuy->send_new_share_msg($shareId);
+        echo json_encode(array('success' => true, 'ret' => $ret));
+        return;
+    }
+
+    /**
+     * @param $shareId
+     * @param $limit
+     * @param $offset
+     * 处理建团消息子任务
+     */
+    public function send_new_share_msg_task($shareId, $limit, $offset){
+        $this->autoRender = false;
+        $this->WeshareBuy->send_new_share_msg($shareId,$limit, $offset);
         echo json_encode(array('success' => true));
         return;
     }
 
     /**
      * @param $weshare_id
+     * @param $pageCount
+     * @param $pageSize
      * 发送团购进度消息任务
      */
-    public function process_send_buy_percent_msg($weshare_id) {
+    public function process_send_buy_percent_msg($weshare_id, $pageCount, $pageSize) {
+        $this->autoRender = false;
+        $queue = new SaeTaskQueue('tasks');
+        $tasks = array();
+        $msg_content = $_REQUEST['content'];
+        foreach (range(0, $pageCount) as $page) {
+            $offset = $page * $pageSize;
+            $tasks[] = array('url' => "/weshares/send_buy_percent_msg_task/" . $weshare_id . "/" . $pageSize . "/" . $offset, "postdata" => "content=" . $msg_content);
+        }
+        $queue->addTask($tasks);
+        $ret = $queue->push();
+        echo json_encode(array('success' => true, 'ret' => $ret));
+        return;
+    }
+    /**
+     * @param $weshare_id
+     * @param $limit
+     * @param $offset
+     * 发送团购进度消息子任务
+     */
+    public function send_buy_percent_msg_task($weshare_id, $limit, $offset) {
         $this->autoRender = false;
         $share_info = $this->get_weshare_detail($weshare_id);
         $msg_content = $_REQUEST['content'];
-        $this->WeshareBuy->send_buy_percent_msg($share_info, $msg_content);
+        $this->WeshareBuy->send_buy_percent_msg($share_info, $msg_content, $limit, $offset);
         echo json_encode(array('success' => true));
         return;
     }

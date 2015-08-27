@@ -432,9 +432,11 @@ class WeshareBuyComponent extends Component {
 
     /**
      * @param $weshareId
+     * @param $limit
+     * @param $offset
      * 创建新的分享之后发送模板消息
      */
-    public function send_new_share_msg($weshareId) {
+    public function send_new_share_msg($weshareId, $limit = null, $offset = null) {
         $this->Weshare = ClassRegistry::init('Weshare');
         $this->User = ClassRegistry::init('User');
         $this->Oauthbind = ClassRegistry::init('Oauthbind');
@@ -454,15 +456,15 @@ class WeshareBuyComponent extends Component {
                 'id', 'nickname'
             )
         ));
-        $detail_url = WX_HOST.'/weshares/view/'.$weshareId;
+        $detail_url = WX_HOST . '/weshares/view/' . $weshareId;
         $sharer_name = $sharer_user_info['User']['nickname'];
         $product_name = $weshare['Weshare']['title'];
-        $title = '关注的'.$sharer_name.'发起了';
-        $remark = '点击详情，赶快加入'.$sharer_name.'的分享！';
-        $followers = $this->load_fans_buy_sharer($weshare['Weshare']['creator']);
+        $title = '关注的' . $sharer_name . '发起了';
+        $remark = '点击详情，赶快加入' . $sharer_name . '的分享！';
+        $followers = $this->load_fans_buy_sharer($weshare['Weshare']['creator'], $limit, $offset);
         $openIds = $this->Oauthbind->findWxServiceBindsByUids($followers);
-        foreach($openIds as $openId){
-            $this->process_send_share_msg($openId,$title,$product_name,$detail_url,$sharer_name,$remark);
+        foreach ($openIds as $openId) {
+            $this->process_send_share_msg($openId, $title, $product_name, $detail_url, $sharer_name, $remark);
         }
     }
 
@@ -568,17 +570,24 @@ class WeshareBuyComponent extends Component {
 
     /**
      * @param $sharerId
+     * @param $limit
+     * @param $offset
      * @return array
      * 加载粉丝数据
      */
-    public function load_fans_buy_sharer($sharerId) {
+    public function load_fans_buy_sharer($sharerId, $limit = null, $offset = null) {
         $userRelationM = ClassRegistry::init('UserRelation');
-        $relations = $userRelationM->find('all', array(
+        $cond = array(
             'conditions' => array(
                 'user_id' => $sharerId,
                 'deleted' => DELETED_NO
             )
-        ));
+        );
+        if($limit!=null&&$offset!=null){
+            $cond['limit'] = $limit;
+            $cond['offset'] = $offset;
+        }
+        $relations = $userRelationM->find('all', $cond);
         $follower_ids = Hash::extract($relations, '{n}.UserRelation.follow_id');
         return $follower_ids;
     }
@@ -1070,13 +1079,15 @@ class WeshareBuyComponent extends Component {
     /**
      * @param $weshare_info
      * @param $msg_content
+     * @param $limit
+     * @param $offset
      * 发送团购进度消息
      */
-    public function send_buy_percent_msg($weshare_info, $msg_content) {
+    public function send_buy_percent_msg($weshare_info, $msg_content, $limit=null, $offset=null) {
         $share_creator = $weshare_info['creator']['id'];
-        $fans_data = $this->get_user_fans_data($share_creator, 3000);
-        $fans_data_nickname = Hash::combine($fans_data, '{n}.id', '{n}.nickname');
-        $fans_data_ids = Hash::extract($fans_data, '{n}.id');
+        $fans_ids = $this->load_fans_buy_sharer($share_creator, $limit, $offset);
+        $fans_data_nickname = $this->get_users_nickname($fans_ids);
+        $fans_data_ids = $fans_ids;
         $fans_open_ids = $this->get_open_ids($fans_data_ids);
         $product_name = $weshare_info['title'];
         $tuan_leader_name = $weshare_info['creator']['nickname'];
@@ -1138,6 +1149,24 @@ class WeshareBuyComponent extends Component {
         $detail_url = $this->get_sharer_detail_url($sharer_id);
         $desc = '点击详情，查看我的粉丝！';
         $this->Weixin->send_new_member_tip($open_id, $detail_url, $title, $member_name, $desc);
+    }
+
+    /**
+     * @param $uid
+     * @return array
+     * 获取粉丝信息的分页数据
+     */
+    public function get_user_relation_page_info($uid) {
+        $UserRelationM = ClassRegistry::init('UserRelationM');
+        $totalRecords = $UserRelationM->find('count', array(
+            'conditions' => array(
+                'user_id' => $uid,
+                'deleted' => DELETED_NO
+            )
+        ));
+        $pageSize = 300;
+        $pageCount = ($totalRecords + $pageSize - 1) / $pageSize;
+        return array('pageCount' => $pageCount, 'pageSize' => $pageSize);
     }
 
     /**
