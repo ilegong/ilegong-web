@@ -623,10 +623,10 @@ class WesharesController extends AppController {
         }
         $params = json_decode(file_get_contents('php://input'), true);
         $content = $params['content'];
-        $queue = new SaeTaskQueue('share');
         $fansPageInfo =$this->WeshareBuy->get_user_relation_page_info($uid);
         $pageCount = $fansPageInfo['pageCount'];
         $pageSize = $fansPageInfo['pageSize'];
+        $queue = new SaeTaskQueue('share');
         $queue->addTask("/weshares/process_send_buy_percent_msg/" . $weshare_id . "/" . $pageCount . "/" . $pageSize, "content=" . $content, true);
         //将任务推入队列
         $ret = $queue->push();

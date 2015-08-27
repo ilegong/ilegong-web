@@ -1157,7 +1157,7 @@ class WeshareBuyComponent extends Component {
      * 获取粉丝信息的分页数据
      */
     public function get_user_relation_page_info($uid) {
-        $UserRelationM = ClassRegistry::init('UserRelationM');
+        $UserRelationM = ClassRegistry::init('UserRelation');
         $totalRecords = $UserRelationM->find('count', array(
             'conditions' => array(
                 'user_id' => $uid,
