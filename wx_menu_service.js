@@ -11,12 +11,12 @@
           {
             "type":"view",
             "name":"我要分享",
-            "url":"http://www.tongshijia.com/weshares/add"
+            "url":"http://www.pyshuo.com/users/wx_menu_point?referer_key=CLICK_URL_ADD_SHARE&from=service&_sl=wx.sv.home"
           },
           {
             "type":"view",
             "name":"我的分享",
-            "url":"http://www.tongshijia.com/weshares/user_share_info/"
+            "url":"http://www.pyshuo.com/users/wx_menu_point?referer_key=MY_SHARE_INFO&from=service&_sl=wx.sv.home"
           }
         ]
     },
@@ -26,7 +26,7 @@
             {
                 "type":"view",
                 "name":"个人中心",
-                "url":"http://www.pyshuo.com/weshares/user_share_info?from=service&_sl=wx.sv.uc"
+                "url":"http://www.pyshuo.com/users/wx_menu_point?referer_key=MY_SHARE_INFO&from=service&_sl=wx.sv.home"
             },
             {
                 "type":"view",

@@ -278,8 +278,13 @@ function oauth_wx_goto($refer_key, $host3g)
 {
     switch ($refer_key) {
         case "CLICK_URL_TECHAN":
-            return "http://$host3g/categories/mobileIndex.html?tagId=23&_sl=wx.menu.h_redirect";
+//            return "http://$host3g/categories/mobileIndex.html?tagId=23&_sl=wx.menu.h_redirect";
 //            return "http://$host3g/techan.html";
+            return "http://$host3g/weshares/index.html?_sl=wx.menu.h_redirect";
+        case "CLICK_URL_ADD_SHARE":
+            return "http://$host3g/weshares/add.html?_sl=wx.menu.h_redirect";
+        case "MY_SHARE_INFO":
+            return "http://$host3g/weshares/user_share_info.html?_sl=wx.menu.h_redirect";
         case "CLICK_URL_MINE":
             return "http://$host3g/orders/mine.html";
         case "CLICK_URL_SALE_AFTER_SAIL":

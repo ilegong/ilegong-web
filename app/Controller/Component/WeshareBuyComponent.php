@@ -398,6 +398,7 @@ class WeshareBuyComponent extends Component {
             ));
             $reply_comment_uid = $reply_comment['Comment']['user_id'];
             $order_uid = $order_info['Order']['creator'];
+            //check comment type
             if ($comment_uid == $weshare_info['creator'] && $reply_comment_uid == $order_uid) {
                 $this->send_comment_reply_notify($order_id, $share_id, $comment_content);
             } elseif ($reply_comment_id == $weshare_info['creator'] && $order_uid == $comment_uid) {
@@ -458,7 +459,7 @@ class WeshareBuyComponent extends Component {
         $product_name = $weshare['Weshare']['title'];
         $title = '关注的'.$sharer_name.'发起了';
         $remark = '点击详情，赶快加入'.$sharer_name.'的分享！';
-        $followers = $this->load_fans_buy_sharer($weshare['Weshare']['creator'],$weshareId);
+        $followers = $this->load_fans_buy_sharer($weshare['Weshare']['creator']);
         $openIds = $this->Oauthbind->findWxServiceBindsByUids($followers);
         foreach($openIds as $openId){
             $this->process_send_share_msg($openId,$title,$product_name,$detail_url,$sharer_name,$remark);
@@ -567,11 +568,10 @@ class WeshareBuyComponent extends Component {
 
     /**
      * @param $sharerId
-     * @param $weshareId
      * @return array
      * 加载粉丝数据
      */
-    public function load_fans_buy_sharer($sharerId, $weshareId=null) {
+    public function load_fans_buy_sharer($sharerId) {
         $userRelationM = ClassRegistry::init('UserRelation');
         $relations = $userRelationM->find('all', array(
             'conditions' => array(
