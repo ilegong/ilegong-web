@@ -1122,20 +1122,6 @@ class OrdersController extends AppController {
         }
     }
 
-    public function test_get_base_token() {
-        $this->autoRender = false;
-        try {
-            if ($this->is_admin($this->currentUser['id'])) {
-                $this->loadModel('WxOauth');
-                $o = $this->WxOauth->get_base_access_token();
-                $log = "get_base_access_token:" . $o . ", in json:" . json_encode($o);
-                $this->log($log);
-                echo $log;
-            }
-        } catch (Exception $e) {
-            echo "exception: $e";
-        }
-    }
 
     function set_mark_order(){
         $this->autoRender=false;

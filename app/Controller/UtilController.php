@@ -14,6 +14,23 @@ class UtilController extends AppController{
 
     public $components = array('ShareUtil');
 
+    /**
+     * 获取微信的token
+     */
+    public function get_base_token() {
+        $this->autoRender = false;
+        try {
+            if ($this->is_admin($this->currentUser['id'])) {
+                $this->loadModel('WxOauth');
+                $o = $this->WxOauth->get_base_access_token();
+                $log = "get_base_access_token:" . $o . ", in json:" . json_encode($o);
+                $this->log($log);
+                echo $log;
+            }
+        } catch (Exception $e) {
+            echo "exception: $e";
+        }
+    }
 
     /**
      * @param $product_id
