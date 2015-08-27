@@ -64,8 +64,8 @@ class ChatController extends AppController {
 
             //向小乐聊天机器人请求消息
             //比较蛋疼的是小乐机器人不识别utf-8必须先转为gbk
-
-            $url = 'http://xiao.douqq.com/api.php?msg=' . iconv("utf-8", "gbk", $_REQUEST["message"]) . '&type=txt';
+            $url='http://rmbz.net/Api/AiTalk.aspx?key=rmbznet&Type=text&word='.$_REQUEST["message"];
+            //$url = 'http://xiao.douqq.com/api.php?msg=' . iconv("utf-8", "gbk", $_REQUEST["message"]) . '&type=txt';
             $answer = file_get_contents($url);
             $sql = "INSERT  INTO `cake_msg_list` (msg, uname, action, send_time) VALUES ('$answer', '小乐', 'msg', NOW());";
             $mysql->runSql($sql);
