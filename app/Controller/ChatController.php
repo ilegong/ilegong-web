@@ -2,8 +2,12 @@
 
 class ChatController extends AppController {
 
-    public function index() {
+    public function chat_room(){
         $this->layout = null;
+    }
+
+    public function index() {
+        $this->autoRender = false;
         $channel = new SaeChannel();
 //聊天记录保存在mysql之中
         $mysql = new SaeMysql();
@@ -168,6 +172,7 @@ class ChatController extends AppController {
             }
             $kv->set('ChatingUserList', $user_list);
         }
+        exit(0);
     }
 
 }
