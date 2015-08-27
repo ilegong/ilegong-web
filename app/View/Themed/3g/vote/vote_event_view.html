@@ -1,6 +1,6 @@
 {{template vote/vote_css_template}}
-<div class="container" style="background-color:#c54134;">
-    <div class="baby_banner"><img src="/img/vote/mengwa.jpg"></div>
+<div class="container" style="background-color:#c54134;margin-bottom: 50px;">
+    <div class="baby_banner" style="margin-bottom: 8px;"><img src="/img/vote/xbm_baby.jpg"></div>
     {{if $event_available}}
         {{if !$is_sign_up}}
             <a href="/vote/sign_up/{{$event_id}}" class="apply_btn">我要报名</a>
@@ -10,6 +10,9 @@
     {{else}}
         <a href="#" class="apply_btn">活动已经结束</a>
     {{/if}}
+    <div class="babyrule">
+        <p>活动时间：{{Date('Y年m月d日',strtotime($event_info['VoteEvent']['start_time']))}}～{{Date('Y年m月d日',strtotime($event_info['VoteEvent']['end_time']))}}</p>
+    </div>
     <div class="babylist">
         <div class="clearfix">
             <ul class="fl">
