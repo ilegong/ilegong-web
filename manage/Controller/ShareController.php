@@ -347,8 +347,8 @@ class ShareController extends AppController{
                 $cond['DATE(created) <='] = $end_date;
             }
         }
-        if($_REQUEST['weshare_id']){
-            $query_share_id = $_REQUEST['weshare_id'];
+        if($_REQUEST['share_id']){
+            $query_share_id = $_REQUEST['share_id'];
         }
         $order_status = $_REQUEST['order_status'];
         if($order_status){
@@ -421,6 +421,7 @@ class ShareController extends AppController{
             $this->set('pay_notifies', $pay_notifies);
             $this->set('weshare_creators', $creators);
             $this->set('order_users', $order_users);
+            $this->set('share_id', $query_share_id);
         }
         $this->set('order_status',$order_status);
         $this->set('order_id', $request_order_id);
