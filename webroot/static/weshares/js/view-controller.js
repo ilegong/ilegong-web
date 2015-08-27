@@ -274,6 +274,7 @@
           }
           //load all comments
           vm.loadSharerAllComments(vm.weshare.creator.id);
+          $rootScope.loadingPage = false;
         }).
         error(function (data, status) {
           $log.log(data);

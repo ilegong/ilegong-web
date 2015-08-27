@@ -102,5 +102,6 @@
 	}
 	function initApp($rootScope) {
 		$rootScope._ = _;
+    $rootScope.loadingPage=true;
 	}
 })(window, window.angular);

@@ -26,7 +26,6 @@
     vm.dataCacheKey = 'cache_share_data';
     activate();
     $scope.$watchCollection('vm.weshare', vm.saveCacheData);
-
     function activate() {
       vm.showShippmentInfo = false;
       var weshareId = angular.element(document.getElementById('weshareEditView')).attr('data-id');
@@ -64,8 +63,12 @@
           vm.kuai_di_data = data['ship_type']['kuai_di'] || vm.kuai_di_data;
           vm.pys_ziti_data = data['ship_type']['pys_ziti'] || vm.pys_ziti_data;
           vm.kuaidi_show_ship_fee = vm.kuai_di_data.ship_fee/100;
+          $rootScope.loadingPage = false;
         }).error(function(data){
+
         });
+      }else{
+        $rootScope.loadingPage = false;
       }
       vm.messages = [];
       function setDefaultData(){
