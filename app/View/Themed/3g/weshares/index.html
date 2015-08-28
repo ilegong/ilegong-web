@@ -3,9 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-    <link href="/static/weshares/css/common.css" media="all" rel="stylesheet" type="text/css">
-    <link href="/static/weshares/css/index-view.css" media="all" rel="stylesheet" type="text/css">
-    <link href="/static/weshares/css/site-common.css" media="all" rel="stylesheet" type="text/css">
+    {{$this->Html->css(array('/static/weshares/css/index.min.css'));}}
     <link href="http://cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <title>分享圈</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -23,9 +21,9 @@
                             <a href="/weshares/view/{{$product['share_id']}}" target="_self" class="media-photo media-cover">
                                 <div class="listing-img-container media-cover text-center">
                                     <img itemprop="image" data-current="0"
-                                         src="{{$product['share_img']}}"
+                                         src="{{$this->Html->assetUrl($product['share_img'])}}"
                                          class="img-responsive-height" alt="天津茶淀玫瑰香葡萄,8小时极致新鲜"
-                                         data-urls="[&quot;{{$product['share_img']}}&quot;]">
+                                         data-urls="[&quot;{{$this->Html->assetUrl($product['share_img'])}}&quot;]">
                                 </div>
                             </a>
                             <a href="/weshares/view/{{$product['share_id']}}" target="_self"
@@ -45,7 +43,7 @@
                                 <a href="/weshares/user_share_info/{{$product['share_user_id']}}"
                                    class="media-photo-badge pull-right card-profile-picture card-profile-picture-offset">
                                     <div class="media-photo media-round">
-                                        <img src="{{$product['share_user_img']}}"
+                                        <img src="{{$this->Html->assetUrl($product['share_user_img'])}}"
                                              alt="">
                                     </div>
                                 </a>
