@@ -17,13 +17,15 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
                             <h4 class="modal-title" id="myModalLabel">删除分享</h4>
                         </div>
                         <div class="modal-body">
                             <div class="form-horizontal">
                                 <div class="form-group">
                                     <label for="share-id" class="col-sm-2 control-label">分享ID</label>
+
                                     <div class="col-sm-10">
                                         <input type="email" class="form-control" id="share-id" placeholder="分享ID">
                                     </div>
@@ -41,13 +43,15 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
                             <h4 class="modal-title">清除用户缓存</h4>
                         </div>
                         <div class="modal-body">
                             <div class="form-horizontal">
                                 <div class="form-group">
                                     <label for="cache-user-id" class="col-sm-2 control-label">用户ID</label>
+
                                     <div class="col-sm-10">
                                         <input type="email" class="form-control" id="cache-user-id" placeholder="用户ID">
                                     </div>
@@ -65,13 +69,15 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
                             <h4 class="modal-title">清除分享缓存</h4>
                         </div>
                         <div class="modal-body">
                             <div class="form-horizontal">
                                 <div class="form-group">
                                     <label for="cache-share-id" class="col-sm-2 control-label">分享ID</label>
+
                                     <div class="col-sm-10">
                                         <input type="email" class="form-control" id="cache-share-id" placeholder="分享ID">
                                     </div>
@@ -89,7 +95,7 @@
     </div>
 </div>
 <script>
-    $(document).ready(function(){
+    $(document).ready(function () {
         var $deleteShareDialog = $('#delete-share-modal');
         var $clearUserCacheDialog = $('#clear-user-cache-modal');
         var $clearShareCacheDialog = $('#clear-share-cache-modal');
@@ -98,38 +104,61 @@
             $deleteShareDialog.modal('show');
             $('div.modal-backdrop').css('z-index', 99);
         });
-        $('#clear-user-cache').on('click', function(e){
+        $('#clear-user-cache').on('click', function (e) {
             e.preventDefault();
             $clearUserCacheDialog.modal('show');
             $('div.modal-backdrop').css('z-index', 99);
         });
-        $('#clear-share-cache-modal').on('click', function(e){
+        $('#clear-share-cache').on('click', function (e) {
             e.preventDefault();
             $clearShareCacheDialog.modal('show');
             $('div.modal-backdrop').css('z-index', 99);
         });
-        $('#handle-clear-user-cache').on('click', function(e){
+        $('#handle-clear-user-cache').on('click', function (e) {
             e.preventDefault();
             var userid = $('#cache-user-id').val();
-
-        });
-        $('#handle-clear-share-cache').on('click', function(e){
-            e.preventDefault();
-
-        });
-        $('#handle-delete-share').on('click', function(e){
-            e.preventDefault();
-            var shareId = $('#share-id').val();
-            if(shareId){
-                $.getJSON('/manage/admin/share/delete/' + shareId, function (data) {
-                    if(data['success']){
+            if (userid) {
+                $.getJSON('/manage/admin/share/clear_user_cache/' + userid, function (data) {
+                    if (data['success']) {
                         alert('success');
-                        $deleteShareDialog.modal('hide');
-                    }else{
+                        $clearUserCacheDialog.modal('hide');
+                    } else {
                         alert('fail');
                     }
                 });
-            }else{
+            } else {
+                alert('输入用户ID');
+            }
+        });
+        $('#handle-clear-share-cache').on('click', function (e) {
+            e.preventDefault();
+            var shareId = $('#cache-share-id').val();
+            if (shareId) {
+                $.getJSON('/manage/admin/share/clear_share_cache/' + shareId, function (data) {
+                    if (data['success']) {
+                        alert('success');
+                        $clearShareCacheDialog.modal('hide');
+                    } else {
+                        alert('fail');
+                    }
+                });
+            } else {
+                alert('输入分享ID');
+            }
+        });
+        $('#handle-delete-share').on('click', function (e) {
+            e.preventDefault();
+            var shareId = $('#share-id').val();
+            if (shareId) {
+                $.getJSON('/manage/admin/share/delete/' + shareId, function (data) {
+                    if (data['success']) {
+                        alert('success');
+                        $deleteShareDialog.modal('hide');
+                    } else {
+                        alert('fail');
+                    }
+                });
+            } else {
                 alert('填写id');
             }
         });
