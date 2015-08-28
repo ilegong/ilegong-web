@@ -2,14 +2,8 @@
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
-                <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-                <li><a href="#">Reports</a></li>
-                <li><a href="#">Analytics</a></li>
-                <li><a href="#">Export</a></li>
-            </ul>
-            <ul class="nav nav-sidebar">
-                <li><a href="">Nav item</a></li>
-                <li><a href="">Nav item again</a></li>
+                <li><a id="delete-share">删除分享</a></li>
+                <li><a href="">清除缓存</a></li>
                 <li><a href="">One more nav</a></li>
                 <li><a href="">Another nav item</a></li>
                 <li><a href="">More navigation</a></li>
@@ -20,5 +14,58 @@
                 <li><a href="">Another nav item</a></li>
             </ul>
         </div>
+        <div class="col-sm-12">
+            <!-- Modal -->
+            <div class="modal fade" id="delete-share-modal" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">删除分享</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="share-id" class="col-sm-2 control-label">分享ID</label>
+                                    <div class="col-sm-10">
+                                        <input type="email" class="form-control" id="share-id" placeholder="分享ID">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="button" class="btn btn-primary" id="handle-delete-share">删除</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+<script>
+    $(document).ready(function(){
+        var $deleteShareDialog = $('#delete-share-modal');
+        $('#delete-share').on('click', function (e) {
+            e.preventDefault();
+            $deleteShareDialog.modal('show');
+            $('div.modal-backdrop').css('z-index', 99);
+        });
+        $('#handle-delete-share').on('click', function(e){
+            e.preventDefault();
+            var shareId = $('#share-id').val();
+            if(shareId){
+                $.getJSON('/manage/admin/share/delete/' + shareId, function (data) {
+                    if(data['success']){
+                        alert('success');
+                        $deleteShareDialog.modal('hide');
+                    }else{
+                        alert('fail');
+                    }
+                });
+            }else{
+                alert('填写id');
+            }
+        });
+    });
+</script>

@@ -38,6 +38,19 @@ const ORDER_STATUS_TOUSU=12; //已投诉， 不要再用，投诉走其他流程
 const ORDER_STATUS_COMMENT=16; //待评价
 const ORDER_STATUS_RETURNING_MONEY=14;//退款中
 
+//分享缓存的key
+const SHARE_USER_SUMMERY_CACHE_KEY = 'share_user_summery_cache_key';
+const SHARER_FANS_DATA_CACHE_KEY = 'sharer_fans_data_cache_key';
+const SHARER_FOCUS_DATA_CACHE_KEY = 'sharer_focus_data_cache_key';
+const USER_SHARE_COMMENTS_DATA_CACHE_KEY = 'user_share_comments_data_cache_key';
+const SHARER_ALL_COMMENT_DATA_CACHE_KEY = 'sharer_all_comment_data_cache_key';
+const SHARE_COMMENT_DATA_CACHE_KEY = 'share_comment_data_cache_key';
+const SHARE_ORDER_DATA_CACHE_KEY = 'share_order_data_cache_key';
+const SHARE_DETAIL_DATA_CACHE_KEY = 'share_detail_data_cache_key';
+const SHARER_CAN_USE_OFFLINE_STORE_CACHE_KEY = 'share_can_user_offline_store_cache_key';
+const SHARE_SHIP_SETTINGS_CACHE_KEY = 'share_ship_setting_cache_key';
+const USER_SHARE_INFO_CACHE_KEY = 'user_share_info_cache_key';
+
 const ORDER_STATUS_VIRTUAL = 21;
 
 const ORDER_TUANGOU=5;

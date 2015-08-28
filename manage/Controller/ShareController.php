@@ -19,6 +19,29 @@ class ShareController extends AppController{
         $this->layout='bootstrap_layout';
     }
 
+    public function admin_utils(){
+
+    }
+
+    public function admin_delete($shareId) {
+        $this->autoRender = false;
+        $shareInfo = $this->Weshare->find('first', array(
+            'conditions' => array(
+                'id' => $shareId
+            )
+        ));
+        if (!empty($shareInfo)) {
+            $uid = $shareInfo['Weshare']['creator'];
+            $this->Weshare->delete($shareId);
+            $this->WeshareProduct->deleteAll(array('weshare_id' => $shareId));
+            $this->WeshareAddress->deleteAll(array('weshare_id' => $shareId));
+            Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
+            Cache::write(SHARE_USER_SUMMERY_CACHE_KEY . '_' . $uid, '');
+        }
+        echo json_encode(array('success' => true));
+        return;
+    }
+
     public function admin_set_offline_store_code() {
         $this->autoRender = false;
         $order_id = $_REQUEST['order_id'];
