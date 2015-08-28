@@ -7,9 +7,6 @@
 
   function WesharesEditCtrl($scope, $rootScope, $log, $http, wx, Utils) {
     var vm = this;
-    $document.ready(function(){
-      $rootScope.loadingPage = false;
-    });
     vm.chooseAndUploadImage = chooseAndUploadImage;
     vm.uploadImage = uploadImage;
     vm.deleteImage = deleteImage;
