@@ -51,7 +51,7 @@ class UtilController extends AppController{
         $save_data = array();
         $temp_data = array();
         foreach($orders as $order){
-            $order_creator = $order['creator'];
+            $order_creator = $order['Order']['creator'];
             if ($this->ShareUtil->check_user_relation($user_id, $order_creator)) {
                 if(!in_array($order_creator, $temp_data)){
                     $temp_data[]=$order_creator;
