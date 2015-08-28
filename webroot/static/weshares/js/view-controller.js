@@ -177,7 +177,7 @@
     }
 
     function loadSharerAllComments(sharer_id){
-      $http({method: 'GET', url: '/weshares/load_share_comments/' + sharer_id, cache: $templateCache}).
+      $http({method: 'GET', url: '/weshares/load_share_comments/' + sharer_id+'.json', cache: $templateCache}).
         success(function (data, status) {
           vm.sharerAllComments = data['share_all_comments'];
           vm.sharerAllCommntesUser = data['share_comment_all_users'];
@@ -192,7 +192,6 @@
       var fromType = angular.element(document.getElementById('weshareView')).attr('data-from-type');
       //first share
       var initSharedOfferId = angular.element(document.getElementById('weshareView')).attr('data-shared-offer');
-      //var followSharedOfferId = angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-offer');
       var followSharedType = angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-type');
       var followSharedNum = angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-coupon-num');
       vm.sharedOfferId = initSharedOfferId;
@@ -211,15 +210,14 @@
           vm.chooseOfflineStoreError = false;
         }
       });
-      $http({method: 'GET', url: '/weshares/detail/' + weshareId, cache: $templateCache}).
+      $http({method: 'GET', url: '/weshares/detail/' + weshareId+'.json', cache: $templateCache}).
         success(function (data, status) {
           vm.weshare = data['weshare'];
           vm.commentData = data['comment_data'];
           vm.orderComments = vm.commentData['order_comments'];
           if (vm.weshare.addresses && vm.weshare.addresses.length == 1) {
             vm.weshare.selectedAddressId = vm.weshare.addresses[0].id;
-          }
-          else if (vm.weshare.addresses && vm.weshare.addresses.length > 1) {
+          }else if (vm.weshare.addresses && vm.weshare.addresses.length > 1) {
             vm.weshare.addresses.unshift({id: -1, address: '请选择收货地址'});
             vm.weshare.selectedAddressId = -1;
           }
@@ -537,7 +535,7 @@
         return;
       }
       vm.submitProcessing = true;
-      $http.post('/weshares/makeOrder/', orderData).success(function (data) {
+      $http.post('/weshares/makeOrder', orderData).success(function (data) {
         if (data.success) {
           //pay
           window.location.href = '/weshares/pay/' + data.orderId + '/' + paymentType;
@@ -557,7 +555,7 @@
     }
 
     function reloadCommentData() {
-      $http({method: 'GET', url: '/weshares/loadComment/' + vm.weshare.id}).
+      $http({method: 'GET', url: '/weshares/loadComment/' + vm.weshare.id+'.json'}).
         success(function (data) {
           vm.commentData = data;
         }).
@@ -575,7 +573,7 @@
     }
 
     function submitComment() {
-      $http.post('/weshares/comment/', vm.submitTempCommentData).success(function (data) {
+      $http.post('/weshares/comment', vm.submitTempCommentData).success(function (data) {
         if (data.success) {
           if(data.type=='notify'){
             $window.alert('已经通知TA');
@@ -633,7 +631,7 @@
       }
       $http({
         method: 'GET',
-        url: '/weshares/subscribe_sharer/' + vm.weshare.creator.id + '/' + vm.currentUser.id
+        url: '/weshares/subscribe_sharer/' + vm.weshare.creator.id + '/' + vm.currentUser.id+'.json'
       }).success(function (data) {
         // With the data succesfully returned, call our callback
         if (data['success']) {

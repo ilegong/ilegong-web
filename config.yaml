@@ -9,8 +9,6 @@ handle:
   - rewrite: if (!is_file() && !is_dir() && path ~ "^manage/(.*)$") goto "manage/index.php?%{QUERY_STRING}"
   - rewrite: if (!is_file() && !is_dir() && path ~ "(.*)") goto "index.php?%{QUERY_STRING}"
   - expire: if(path ~ "\.(js|css|png|gif|jpg|jpeg|bmp|ico)") time 31536000
-#  - compress: if(path ~ "\.(css|js|html)$") compress
-#ʹ��content-type�ķ�ʽ֧��js��css����php������ص�����
   - compress: if(out_header["Content-Type"] ~ "(text|javascript|json)") compress
 cron:
 	- description: send coupons timeout message
