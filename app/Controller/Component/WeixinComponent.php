@@ -49,6 +49,10 @@ class WeixinComponent extends Component
         return WX_HOST . '/weshares/view/'.$weshare_id;
     }
 
+    public function get_user_share_info_url($uid){
+        return WX_HOST.'/weshares/user_share_info/'+$uid;
+    }
+
     public function get_order_query_url($order_no)
     {
 
@@ -827,11 +831,11 @@ class WeixinComponent extends Component
         $order_id = $order['Order']['id'];
         if ($seller_weixin != false) {
             $this->log('weshare paid send for creator '.$seller_weixin['oauth_openid'].' order id '.$order_id.' weshare id '.$weshare_info['Weshare']['id']);
-            $this->send_weshare_buy_paid_msg_for_creator($seller_weixin['oauth_openid'], $price, $good_info, $ship_info, $order_id, $weshare_info, $order_creator_name);
+            $this->send_weshare_buy_paid_msg_for_creator($seller_weixin['oauth_openid'], $price, $good_info, $ship_info, $order_id, $weshare_info, $order_creator_name, $order_creator);
         }
     }
 
-    public function send_weshare_buy_paid_msg_for_creator($seller_open_id, $price, $good_info, $ship_info, $order_no, $weshare_info,$order_creator_name=null, $shipType = '') {
+    public function send_weshare_buy_paid_msg_for_creator($seller_open_id, $price, $good_info, $ship_info, $order_no, $weshare_info,$order_creator_name=null, $shipType = '', $order_creator=0) {
         $title = $weshare_info['Weshare']['title'];
         $show_tile = "亲，有人报名了您分享的".$title."。";
         if(!empty($order_creator_name)){
@@ -846,11 +850,10 @@ class WeixinComponent extends Component
         if($shipType == SHARE_SHIP_PYS_ZITI_TAG){
             $show_tile = $show_tile.'好邻居自提。';
         }
-        $weshare_id = $weshare_info['Weshare']['id'];
         $post_data = array(
             "touser" => $seller_open_id,
             "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
-            "url" => $this->get_weshare_buy_detail($weshare_id),
+            "url" => $this->get_user_share_info_url($order_creator),
             "topcolor" => "#FF0000",
             "data" => array(
                 "first" => array("value" => $show_tile),

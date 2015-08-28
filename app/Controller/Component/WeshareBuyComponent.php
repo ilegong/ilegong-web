@@ -1146,7 +1146,7 @@ class WeshareBuyComponent extends Component {
         $nickname_map = $this->get_users_nickname(array($sharer_id, $follow_id));
         $member_name = $nickname_map[$follow_id];
         $title = $nickname_map[$sharer_id].'你好，'.$member_name.'刚刚关注了你。';
-        $detail_url = $this->get_sharer_detail_url($sharer_id);
+        $detail_url = $this->get_sharer_detail_url($follow_id);
         $desc = '点击详情，查看我的粉丝！';
         $this->Weixin->send_new_member_tip($open_id, $detail_url, $title, $member_name, $desc);
     }
