@@ -30,13 +30,17 @@ class ShareController extends AppController{
                 'id' => $shareId
             )
         ));
-        if (!empty($shareInfo)) {
-            $uid = $shareInfo['Weshare']['creator'];
-            $this->Weshare->delete($shareId);
-            $this->WeshareProduct->deleteAll(array('weshare_id' => $shareId));
-            $this->WeshareAddress->deleteAll(array('weshare_id' => $shareId));
-            Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
-            Cache::write(SHARE_USER_SUMMERY_CACHE_KEY . '_' . $uid, '');
+        try{
+            if (!empty($shareInfo)) {
+                $uid = $shareInfo['Weshare']['creator'];
+                $this->Weshare->delete($shareId);
+                $this->WeshareProduct->deleteAll(array('weshare_id' => $shareId));
+                $this->WeshareAddress->deleteAll(array('weshare_id' => $shareId));
+                Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
+                Cache::write(SHARE_USER_SUMMERY_CACHE_KEY . '_' . $uid, '');
+            }
+        }catch (Exception $e){
+            echo json_encode(array('msg' => $e->getMessage(), 'str' => $e->getTraceAsString()));
         }
         echo json_encode(array('success' => true));
         return;
