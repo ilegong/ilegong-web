@@ -45,7 +45,7 @@ class UtilController extends AppController{
                 'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_DONE, ORDER_STATUS_SHIPPED, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RECEIVED),
                 'type' => ORDER_TYPE_WESHARE_BUY
             ),
-            'group' => array('creator'),
+            'group' => array('Order.creator'),
             'limit' => 1000
         ));
         $save_data = array();
@@ -61,6 +61,7 @@ class UtilController extends AppController{
         }
         $this->UserRelation->saveAll($save_data);
         echo json_encode(array('success' => true));
+        return;
     }
 
     /**
