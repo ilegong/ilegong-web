@@ -49,8 +49,8 @@ class WeixinComponent extends Component
         return WX_HOST . '/weshares/view/'.$weshare_id;
     }
 
-    public function get_user_share_info_url($uid){
-        return WX_HOST.'/weshares/user_share_info/'+$uid;
+    public function get_user_share_info_url($uid) {
+        return WX_HOST . '/weshares/user_share_info/'. $uid;
     }
 
     public function get_order_query_url($order_no)
@@ -819,11 +819,12 @@ class WeixinComponent extends Component
         $seller_weixin = $oauthBindModel->findWxServiceBindByUid($weshare_info['Weshare']['creator']);
         $price = $order['Order']['total_all_price'];
         $order_creator = $order['Order']['creator'];
+        $order_ship_mark = $order['Order']['ship_mark'];
         $order_user = $userModel->find('first',array(
             'conditions' => array(
                 'id' => $order_creator
             ),
-            'fields' => array('nickname')
+            'fields' => array('id','nickname')
         ));
         $order_creator_name = $order_user['User']['nickname'];
         $good_info = $good['good_info'];
@@ -831,13 +832,14 @@ class WeixinComponent extends Component
         $order_id = $order['Order']['id'];
         if ($seller_weixin != false) {
             $this->log('weshare paid send for creator '.$seller_weixin['oauth_openid'].' order id '.$order_id.' weshare id '.$weshare_info['Weshare']['id']);
-            $this->send_weshare_buy_paid_msg_for_creator($seller_weixin['oauth_openid'], $price, $good_info, $ship_info, $order_id, $weshare_info, $order_creator_name, $order_creator);
+            $this->send_weshare_buy_paid_msg_for_creator($seller_weixin['oauth_openid'], $price, $good_info, $ship_info, $order_id, $weshare_info, $order_creator_name,$order_ship_mark, $order_user['User']['id']);
         }
     }
 
-    public function send_weshare_buy_paid_msg_for_creator($seller_open_id, $price, $good_info, $ship_info, $order_no, $weshare_info,$order_creator_name=null, $shipType = '', $order_creator=0) {
+    public function send_weshare_buy_paid_msg_for_creator($seller_open_id, $price, $good_info, $ship_info, $order_no, $weshare_info,$order_creator_name=null, $shipType = '', $order_creator) {
         $title = $weshare_info['Weshare']['title'];
         $show_tile = "亲，有人报名了您分享的".$title."。";
+        $detail_url = $this->get_user_share_info_url($order_creator);
         if(!empty($order_creator_name)){
             $show_tile = "亲，".$order_creator_name."报名了您分享的".$title."，";
         }
@@ -853,7 +855,7 @@ class WeixinComponent extends Component
         $post_data = array(
             "touser" => $seller_open_id,
             "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
-            "url" => $this->get_user_share_info_url($order_creator),
+            "url" => $detail_url,
             "topcolor" => "#FF0000",
             "data" => array(
                 "first" => array("value" => $show_tile),
