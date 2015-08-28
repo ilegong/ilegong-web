@@ -3,15 +3,12 @@
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
                 <li><a id="delete-share">删除分享</a></li>
-                <li><a href="">清除缓存</a></li>
-                <li><a href="">One more nav</a></li>
                 <li><a href="">Another nav item</a></li>
                 <li><a href="">More navigation</a></li>
             </ul>
             <ul class="nav nav-sidebar">
-                <li><a href="">Nav item again</a></li>
-                <li><a href="">One more nav</a></li>
-                <li><a href="">Another nav item</a></li>
+                <li><a id="clear-share-cache">清除分享缓存</a></li>
+                <li><a id="clear-user-cache">清除用户缓存</a></li>
             </ul>
         </div>
         <div class="col-sm-12">
@@ -40,16 +37,85 @@
                     </div>
                 </div>
             </div>
+            <div class="modal fade" id="clear-user-cache-modal" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">清除用户缓存</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="cache-user-id" class="col-sm-2 control-label">用户ID</label>
+                                    <div class="col-sm-10">
+                                        <input type="email" class="form-control" id="cache-user-id" placeholder="用户ID">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="button" class="btn btn-primary" id="handle-clear-user-cache">删除</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="clear-share-cache-modal" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">清除分享缓存</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="cache-share-id" class="col-sm-2 control-label">分享ID</label>
+                                    <div class="col-sm-10">
+                                        <input type="email" class="form-control" id="cache-share-id" placeholder="分享ID">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="button" class="btn btn-primary" id="handle-clear-share-cache">删除</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 <script>
     $(document).ready(function(){
         var $deleteShareDialog = $('#delete-share-modal');
+        var $clearUserCacheDialog = $('#clear-user-cache-modal');
+        var $clearShareCacheDialog = $('#clear-share-cache-modal');
         $('#delete-share').on('click', function (e) {
             e.preventDefault();
             $deleteShareDialog.modal('show');
             $('div.modal-backdrop').css('z-index', 99);
+        });
+        $('#clear-user-cache').on('click', function(e){
+            e.preventDefault();
+            $clearUserCacheDialog.modal('show');
+            $('div.modal-backdrop').css('z-index', 99);
+        });
+        $('#clear-share-cache-modal').on('click', function(e){
+            e.preventDefault();
+            $clearShareCacheDialog.modal('show');
+            $('div.modal-backdrop').css('z-index', 99);
+        });
+        $('#handle-clear-user-cache').on('click', function(e){
+            e.preventDefault();
+            var userid = $('#cache-user-id').val();
+
+        });
+        $('#handle-clear-share-cache').on('click', function(e){
+            e.preventDefault();
+
         });
         $('#handle-delete-share').on('click', function(e){
             e.preventDefault();

@@ -23,6 +23,20 @@ class ShareController extends AppController{
 
     }
 
+    public function admin_clear_user_cache($userId) {
+        $this->autoRender = false;
+        Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $userId, '');
+        echo json_encode(array('success' => true));
+        return;
+    }
+
+    public function admin_clear_share_cache($shareId) {
+        $this->autoRender = false;
+        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $shareId, '');
+        echo json_encode(array('success' => true));
+        return;
+    }
+
     public function admin_delete($shareId) {
         $this->autoRender = false;
         $shareInfo = $this->Weshare->find('first', array(
