@@ -380,8 +380,8 @@ class WeixinController extends AppController {
                         }
                     }
                     $content = array(
-                        array('title' => '晒萌宝作品，赢高级珐琅锅/儿童自行车，满100票，领钟祥特产米茶...', 'description' => '',
-                            'picUrl' => 'http://51daifan.sinaapp.com/img/imgstore/prize.jpg',
+                        array('title' => '晒萌宝小宝妈请吃海鲜啦', 'description' => '',
+                            'picUrl' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/2a9c850ed64_0829.jpg',
                             'url' => $detail_url),
                     );
                     echo $this->newArticleMsg($user, $me, $content);
