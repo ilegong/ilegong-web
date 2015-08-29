@@ -83,7 +83,7 @@ class ShareUtilComponent extends Component{
             '413'=>array(
                 'share_id' => 413,
                 'share_name' => '澳洲芦柑',
-                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/7f3d383a0a7_0829.jpg',
+                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/c436e3c5c8b_0829.jpg',
                 'share_price' => '139',
                 'share_user_name' => '小宝妈',
                 'share_vote' => 150,
