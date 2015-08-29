@@ -80,6 +80,16 @@ class ShareUtilComponent extends Component{
 
     public function get_share_index_product(){
         $product = array(
+            '413'=>array(
+                'share_id' => 413,
+                'share_name' => '澳洲芦柑',
+                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/097d71de6c7_0829.jpg',
+                'share_price' => '139',
+                'share_user_name' => '小宝妈',
+                'share_vote' => 150,
+                'share_user_id' => 811917,
+                'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
+            ),
             '363'=>array(
                 'share_id' => 363,
                 'share_name' => '天津茶淀玫瑰香葡萄,8小时极致新鲜',
