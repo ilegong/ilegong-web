@@ -239,9 +239,9 @@ class VoteController extends AppController {
             $this->redirect('/users/login.html?force_login=1&auto_weixin='.$this->is_weixin().'&referer=' . urlencode($ref));
             return;
         }
-        if (user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED) {
-            $this->set('not_sub',true);
-        }
+//        if (user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED) {
+//            $this->set('not_sub',true);
+//        }
        $candidate_data = $this->set_candidate_data($candidateId,$eventId,$uid);
        $this->set($candidate_data);
        $candidate_info = $this->Candidate->find('first',array(
