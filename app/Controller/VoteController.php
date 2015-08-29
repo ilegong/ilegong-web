@@ -242,39 +242,47 @@ class VoteController extends AppController {
      * 萌宝详情
      */
     public function candidate_detail($candidateId,$eventId) {
-       $uid = $this->currentUser['id'];
-        if(empty($uid)){
+        $uid = $this->currentUser['id'];
+        if (empty($uid)) {
             $ref = Router::url($_SERVER['REQUEST_URI']);
-            $this->redirect('/users/login.html?force_login=1&auto_weixin='.$this->is_weixin().'&referer=' . urlencode($ref));
+            $this->redirect('/users/login.html?force_login=1&auto_weixin=' . $this->is_weixin() . '&referer=' . urlencode($ref));
             return;
         }
 //        if (user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED) {
 //            $this->set('not_sub',true);
 //        }
-       $candidate_data = $this->set_candidate_data($candidateId,$eventId,$uid);
-       $this->set($candidate_data);
-       $candidate_info = $this->Candidate->find('first',array(
-          'conditions' => array(
-              'id' => $candidateId
-          )
-       ));
-       $rank_data = $this->get_candidate_rank($candidateId,$eventId);
-       $images = array_filter(explode('|',$candidate_info['Candidate']['images']));
-       $is_sign_up = $this->has_sign_up($eventId,$uid);
-       $this->set('is_sign_up',$is_sign_up);
-       $this->set('rank', $rank_data[0][0]['Rank']);
-       $event_info = $this->get_event_info($eventId);
-       $this->set('event_info',$event_info);
-       $this->set('candidate_id',$candidateId);
-       $this->set('event_id',$eventId);
-       $this->set('images',$images);
-       $this->set('candidate_info',$candidate_info);
-       $this->set('share_baby_info',true);
-       $this->set('weixin_share_title','我是第'.$candidateId.'号萌娃'.$candidate_info['Candidate']['title'].'，叔叔阿姨快来支持我一票啦');
-       $this->set_wx_data($this->currentUser['id'],$eventId);
-       $this->pageTitle = '我是'.$candidateId.'号萌娃,'.$candidate_info['Candidate']['title'];
-        $this->set('event_available',$this->check_event_is_available($event_info));
-       $this->set('op_cate','detail');
+        $candidate_data = $this->set_candidate_data($candidateId, $eventId, $uid);
+        $this->set($candidate_data);
+        $candidate_info = $this->Candidate->find('first', array(
+            'conditions' => array(
+                'id' => $candidateId
+            )
+        ));
+        $candidate_info_user_id = $candidate_info['Candidate']['user_id'];
+        $candidate_info_user = $this->User->find('first', array(
+            'conditions' => array(
+                'id' => $candidate_info_user_id
+            ),
+            'fields' => array('User.id', 'User.nickname', 'User.image')
+        ));
+        $this->set('candidate_info_user', $candidate_info_user);
+        $rank_data = $this->get_candidate_rank($candidateId, $eventId);
+        $images = array_filter(explode('|', $candidate_info['Candidate']['images']));
+        $is_sign_up = $this->has_sign_up($eventId, $uid);
+        $this->set('is_sign_up', $is_sign_up);
+        $this->set('rank', $rank_data[0][0]['Rank']);
+        $event_info = $this->get_event_info($eventId);
+        $this->set('event_info', $event_info);
+        $this->set('candidate_id', $candidateId);
+        $this->set('event_id', $eventId);
+        $this->set('images', $images);
+        $this->set('candidate_info', $candidate_info);
+        $this->set('share_baby_info', true);
+        $this->set('weixin_share_title', '我是第' . $candidateId . '号萌娃' . $candidate_info['Candidate']['title'] . '，叔叔阿姨快来支持我一票啦');
+        $this->set_wx_data($this->currentUser['id'], $eventId);
+        $this->pageTitle = '我是' . $candidateId . '号萌娃,' . $candidate_info['Candidate']['title'];
+        $this->set('event_available', $this->check_event_is_available($event_info));
+        $this->set('op_cate', 'detail');
     }
 
     private function has_sign_up($eventId,$userId){
