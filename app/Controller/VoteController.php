@@ -10,7 +10,7 @@ App::uses('CakeEvent', 'Event');
 class VoteController extends AppController {
 
 
-    var $uses = array('VoteEvent', 'Candidate', 'Vote', 'CandidateEvent', 'UserSubReason');
+    var $uses = array('VoteEvent', 'Candidate', 'Vote', 'CandidateEvent', 'UserSubReason', 'User');
     var $components = array('Paginator', 'WeshareBuy');
     var $paginate = array(
         'Candidate' => array(
@@ -63,7 +63,15 @@ class VoteController extends AppController {
             $this->set('op_cate','index');
         }
         $candidators_info = $this->Paginator->paginate('Candidate',array('Candidate.id' => $candidator_ids, 'Candidate.deleted' => DELETED_NO));
-
+        $candidators_info_user_ids = Hash::extract($candidators_info, '{n}.Candidate.user_id');
+        $candidators_users = $this->User->find('all', array(
+            'conditions' => array(
+                'id' => $candidators_info_user_ids
+            ),
+            'limit' => 200,
+            'fields' => array('User.id', 'User.nickname', 'User.image')
+        ));
+        $candidators_users = Hash::combine($candidators_users, '{n}.User.id', '{n}.User');
         if(!empty($candidators_info)){
             foreach($candidators_info as &$candidator){
                 list($uvote,$is_vote) = $this->is_already_vote($candidator['Candidate']['id'],$eventId,$uid);
@@ -78,6 +86,7 @@ class VoteController extends AppController {
         $this->set('candidators',$candidators);
         $this->set('candidators_info',$candidators_info);
         $this->set('event_id',$eventId);
+        $this->set('candidators_users', $candidators_users);
         $this->set('event_available',$this->check_event_is_available($event_info));
 
         $this->set_wx_data($uid,$eventId);

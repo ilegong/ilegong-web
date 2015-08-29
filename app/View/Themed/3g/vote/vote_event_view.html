@@ -37,6 +37,16 @@
                                 <dd class="fr"><a href="#X" class="cur">已结束</a></dd>
                                 {{/if}}
                             </dl>
+                            <dl class="clearfix" style="border-top: 1px dotted #ccc;">
+                                <dd class="fl" style="padding: 5px 0 5px 0; width: 50px;">
+                                    <a href="/weshares/share_user_info/{{$candidators_users[$candidator['Candidate']['user_id']]['id']}}" style="background-color: #FFFFFF;">
+                                        <img src="{{$candidators_users[$candidator['Candidate']['user_id']]['image']}}" style="width: 40px;height: 40px;border-radius: 50%;">
+                                    </a>
+                                </dd>
+                                <dd style="margin-left: 60px;margin-top: 15px;font-size: 16px;">
+                                    {{$candidators_users[$candidator['Candidate']['user_id']]['nickname']}}
+                                </dd>
+                            </dl>
                         </li>
                     {{/if}}
                 {{/loop}}
@@ -62,6 +72,16 @@
                                 {{else}}
                                 <dd class="fr"><a href="#X" class="cur">已结束</a></dd>
                                 {{/if}}
+                            </dl>
+                            <dl class="clearfix" style="border-top: 1px dotted #ccc;">
+                                <dd class="fl" style="padding: 5px 0 5px 0; width: 50px;">
+                                    <a href="/weshares/share_user_info/{{$candidators_users[$candidator['Candidate']['user_id']]['id']}}" style="background-color: #FFFFFF;">
+                                        <img src="{{$candidators_users[$candidator['Candidate']['user_id']]['image']}}" style="width: 40px;height: 40px;border-radius: 50%;">
+                                    </a>
+                                </dd>
+                                <dd style="margin-left: 60px;margin-top: 15px;font-size: 16px;">
+                                    {{$candidators_users[$candidator['Candidate']['user_id']]['nickname']}}
+                                </dd>
                             </dl>
                         </li>
                     {{/if}}
