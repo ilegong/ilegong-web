@@ -34,6 +34,7 @@ class VoteController extends AppController {
         parent::beforeRender();
         $this->set('hideNav',true);
         $this->set('hideFooter',true);
+        $this->pageTitle = '晒萌宝小宝妈请吃海鲜啦';
     }
 
     /**
@@ -44,7 +45,6 @@ class VoteController extends AppController {
      */
     public function vote_event_view($eventId,$sort=0) {
         //TODO set page title by event id
-        $this->pageTitle = '朋友说第6届萌娃作品大赛';
         $uid = $this->currentUser['id'];
         $event_info = $this->get_event_info($eventId);
         $candidators = $this->CandidateEvent->find('all',array(
@@ -170,7 +170,6 @@ class VoteController extends AppController {
             $this->redirect('/vote/candidate_detail/'.$sign_up_info['CandidateEvent']['candidate_id'].'/'.$eventId);
             return;
         }
-        $this->pageTitle='朋友说第6届萌娃作品大赛报名';
         $event_info = $this->get_event_info($eventId);
         $this->set('event_info',$event_info);
         $this->set('event_id',$eventId);
