@@ -49,9 +49,9 @@ class ShareController extends AppController{
         try{
             if (!empty($shareInfo)) {
                 $uid = $shareInfo['Weshare']['creator'];
-                $this->Weshare->delete($shareId);
-                $this->WeshareProduct->deleteAll(array('weshare_id' => $shareId));
-                $this->WeshareAddress->deleteAll(array('weshare_id' => $shareId));
+                $this->Weshare->updateAll(array('status' => 2), array('id' => $shareId));
+                //$this->WeshareProduct->deleteAll(array('weshare_id' => $shareId));
+                //$this->WeshareAddress->deleteAll(array('weshare_id' => $shareId));
                 Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
                 Cache::write(SHARE_USER_SUMMERY_CACHE_KEY . '_' . $uid, '');
             }
