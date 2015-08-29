@@ -118,6 +118,12 @@ function clearCacheAll(){
 	clearFolder(WEB_VISIT_CACHE);
 	@unlink(DATA_PATH.'settings.php');
 }
+
+function clearTemplateCache(){
+    clearFolder(WEB_VISIT_CACHE);
+    @unlink(DATA_PATH.'settings.php');
+}
+
 /**
  * 清空文件夹下的所有文件
  * @param string $dir 文件夹路径

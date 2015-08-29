@@ -280,6 +280,20 @@ class ToolsController extends AppController {
         }
     }
 
+    function admin_clear_template_cache() {
+        clearTemplateCache();
+        /*更新语言包缓存*/
+        $this->requestAction('/admin/tools/updateLanCache',array('data'=>array('uplang'=>'zh-cn')));
+        if ($this->RequestHandler->accepts('json') || $this->RequestHandler->isAjax() || isset($_GET['inajax'])) {
+            $this->autoRender = false;
+            echo json_encode(array('success' => __('Done')));
+            exit;
+        }
+        else{
+            $this->__message(__('Done'), '', 99999);
+        }
+    }
+
     /**
      * 生成链接的slug别名
      */
