@@ -110,6 +110,8 @@ class ShareController extends AppController{
         $offlineStore = $this->get_offline_store($order['Order']['consignee_id']);
         $this->Weixin->send_share_product_arrival($open_id, $detail_url, $title, $order_id, $offlineStore['OfflineStore']['alias'], $offlineStore['OfflineStore']['name'], $desc);
         $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'ship_code' => "'" . $code . "'"), array('id' => $order_id));
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id.'_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id.'_0', '');
         echo json_encode(array('success' => true));
     }
 
