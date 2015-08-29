@@ -143,6 +143,7 @@ class VoteController extends AppController {
         }
         //update vote num
         $this->update_candidate_vote_num($candidateId);
+        $this->save_user_relation($uid);
         echo json_encode(array('success' => true));
     }
 
