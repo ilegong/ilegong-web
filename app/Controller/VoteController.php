@@ -28,13 +28,13 @@ class VoteController extends AppController {
 
     public function beforeFilter(){
         parent::beforeFilter();
+        $this->pageTitle = '晒萌宝小宝妈请吃海鲜啦';
     }
 
     public function beforeRender(){
         parent::beforeRender();
         $this->set('hideNav',true);
         $this->set('hideFooter',true);
-        $this->pageTitle = '晒萌宝小宝妈请吃海鲜啦';
     }
 
     /**
