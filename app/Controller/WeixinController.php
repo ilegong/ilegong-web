@@ -82,7 +82,7 @@ class WeixinController extends AppController {
                         $reason = $this->UserSubReason->find('first',array('conditions' => array(
                             'user_id' => $uid,
                             'used' => 0,
-                            'type' => 'Vote6'
+                            'type' => 'Vote7'
                         )));
                         $default_content = array(
                             array('title' => '朋友说是什么？看完你就懂了！', 'description' => '',
@@ -96,7 +96,7 @@ class WeixinController extends AppController {
                                 'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=201694178&idx=3&sn=75c4b8f32c29e1c088c7de4ee2e22719#rd')
                         );
                         if(!empty($reason)){
-                            if ($reason['UserSubReason']['type'] == 'Vote6') {
+                            if ($reason['UserSubReason']['type'] == 'Vote7') {
                                 $title = $reason['UserSubReason']['title'];
                                 $content = array(
                                     array('title' => $title, 'description' => '快来支持我吧...',
@@ -360,10 +360,10 @@ class WeixinController extends AppController {
                 case '报名':
                 case '宝宝':
                 case '投票':
-                    $detail_url = 'http://www.tongshijia.com/vote/vote_event_view/5';
+                    $detail_url = 'http://www.tongshijia.com/vote/vote_event_view/6';
                     if($uid){
                         $event_candidate = $this->CandidateEvent->find('first',array(
-                            'conditions' => array('user_id' => $uid, 'event_id' => 5)
+                            'conditions' => array('user_id' => $uid, 'event_id' => 6)
                         ));
                         $this->log('event candidate '.json_encode($event_candidate));
                         if(!empty($event_candidate)){
@@ -375,7 +375,7 @@ class WeixinController extends AppController {
                             ));
                             if(!empty($candidate)){
                                 if($candidate['Candidate']['deleted']==DELETED_NO){
-                                    $detail_url = 'http://www.tongshijia.com/vote/candidate_detail/'.$candidate_id.'/5';
+                                    $detail_url = 'http://www.tongshijia.com/vote/candidate_detail/'.$candidate_id.'/6';
                                 }
                             }
                         }
