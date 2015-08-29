@@ -100,8 +100,8 @@ class ShareUtilComponent extends Component{
                 'share_user_id' => 711503,
                 'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/0609f46d89e_0813.jpg'
             ),
-            '374'=>array(
-                'share_id' => 374,
+            '414'=>array(
+                'share_id' => 414,
                 'share_name' => '平谷后北宫村当季精品桃',
                 'share_img' => '/img/share_index/datao.jpg',
                 'share_price' => '80-100',
