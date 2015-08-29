@@ -384,12 +384,16 @@ class ShareController extends AppController{
         $request_order_id = $_REQUEST['order_id'];
         if($_REQUEST['share_id']){
             $query_share_id = $_REQUEST['share_id'];
-
+        }
+        if($_REQUEST['mobile_no']){
+            $query_mobile_num = $_REQUEST['mobile_no'];
         }
         if($request_order_id){
                 $cond['id'] = $request_order_id;
         }elseif($query_share_id){
             $cond['member_id'] = $query_share_id;
+        }elseif($query_mobile_num){
+            $cond['consignee_mobilephone'] = $query_mobile_num;
         }else{
             if($start_date==$end_date){
                 $cond['DATE(created)'] = $query_date;
@@ -404,10 +408,13 @@ class ShareController extends AppController{
         } else {
             $cond['status'] = array(ORDER_STATUS_PAID, ORDER_STATUS_RECEIVED, ORDER_STATUS_SHIPPED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
         }
-        $orders = $this->Order->find('all',array(
+        $order_query_condition = array(
             'conditions' => $cond,
-            'order' => array('created DESC')
-        ));
+            'order' => array('created DESC'));
+        if ($query_mobile_num) {
+            $order_query_condition['limit'] = 200;
+        }
+        $orders = $this->Order->find('all', $order_query_condition);
         $order_user_ids = Hash::extract($orders, '{n}.Order.creator');
         $order_users = $this->User->find('all', array(
             'conditions' => array(
