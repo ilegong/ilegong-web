@@ -123,12 +123,30 @@ class ShareUtilComponent extends Component{
             'fields' => array('id', 'total_all_price')
         ));
         $order_total_price = array_reduce($orders, 'multi_array_sum');
-
+        $user_rebate_info = $this->get_user_rebate_info($user_id);
+        $rebate_money = $order_total_price*($user_rebate_info['rebate_percent']);
+        return $rebate_money;
     }
 
 
-    public function rebate_users(){
+    public function rebate_users() {
+        $rebate_users = array(
+            633345 => array(
+                'rebate_percent' => 0.1
+            ),
+            544307 => array(
+                'rebate_percent' => 0.1
+            ),
+            141 => array(
+                'rebate_percent' => 0.1
+            )
+        );
+        return $rebate_users;
+    }
 
+    public function get_user_rebate_info($user_id){
+        $rebate_users = $this->rebate_users();
+        return $rebate_users[$user_id];
     }
 
     public function get_share_index_product(){
