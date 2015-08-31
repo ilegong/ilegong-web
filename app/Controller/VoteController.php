@@ -121,11 +121,11 @@ class VoteController extends AppController {
             return;
         }
 // vote user don't sub pys
-//        if (user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED) {
-//            $this->save_sub_reason($candidateId, $eventId, $uid);
-//            echo json_encode(array('success' => false, 'reason' => 'Not subscribed'));
-//            return;
-//        }
+        if (user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED) {
+            $this->save_sub_reason($candidateId, $eventId, $uid);
+            echo json_encode(array('success' => false, 'reason' => 'Not subscribed'));
+            return;
+        }
         list($uvote,$is_vote) = $this->is_already_vote($candidateId,$eventId,$uid);
         if(count($uvote)>= 5){
             echo json_encode(array('success' => false, 'reason' => 'more than five'));
@@ -249,9 +249,9 @@ class VoteController extends AppController {
             $this->redirect('/users/login.html?force_login=1&auto_weixin=' . $this->is_weixin() . '&referer=' . urlencode($ref));
             return;
         }
-//        if (user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED) {
-//            $this->set('not_sub',true);
-//        }
+        if (user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED) {
+            $this->set('not_sub',true);
+        }
         $candidate_data = $this->set_candidate_data($candidateId, $eventId, $uid);
         $this->set($candidate_data);
         $candidate_info = $this->Candidate->find('first', array(
