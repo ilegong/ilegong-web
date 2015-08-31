@@ -100,7 +100,7 @@ class WeixinController extends AppController {
                                 $title = $reason['UserSubReason']['title'];
                                 $content = array(
                                     array('title' => $title, 'description' => '快来支持我吧...',
-                                        'picUrl' => 'http://51daifan.sinaapp.com/img/imgstore/prize.jpg',
+                                        'picUrl' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/2a9c850ed64_0829.jpg',
                                         'url' => $reason['UserSubReason']['url']),
                                 );
                                 $this->UserSubReason->updateAll(array('used' => 1), array('id' => $reason['UserSubReason']['id']));
