@@ -48,7 +48,12 @@ class UtilController extends AppController{
         return $diff_user_ids;
     }
 
+    public function process_send_share_msg($openId, $title, $productName, $detailUrl,$sharerName,$remark) {
+        send_join_tuan_buy_msg(null,$title,$productName,$sharerName,$remark,$detailUrl,$openId);
+    }
+
     public function send_notify_vote($user_id){
+        $this->autoRender = false;
         $title = '关注的小宝妈发起了';
         $remark = ' 晒萌宝吃海鲜啦，一等奖三文鱼、二等奖北极甜虾、三等奖黄花鱼、还有88元的礼券包，感谢亲们对小宝妈的支持，有你们在一起真好！点击详情，赶快来参加！';
         $followers = $this->load_user_fans($user_id);
@@ -58,6 +63,8 @@ class UtilController extends AppController{
         foreach ($openIds as $openId) {
             $this->process_send_share_msg($openId, $title, '晒萌宝小宝妈请吃海鲜啦！', 'www.tongshijia.com/vote/vote_event_view/6', '小宝妈', $remark);
         }
+        echo json_encode(array('success' => true));
+        return;
     }
 
     /**
