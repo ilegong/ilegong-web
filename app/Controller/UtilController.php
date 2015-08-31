@@ -53,6 +53,7 @@ class UtilController extends AppController{
         $remark = ' 晒萌宝吃海鲜啦，一等奖三文鱼、二等奖北极甜虾、三等奖黄花鱼、还有88元的礼券包，感谢亲们对小宝妈的支持，有你们在一起真好！点击详情，赶快来参加！';
         $followers = $this->load_user_fans($user_id);
         $followers[] = '633345';
+        $followers[] = '544307';
         $openIds = $this->Oauthbind->findWxServiceBindsByUids($followers);
         foreach ($openIds as $openId) {
             $this->process_send_share_msg($openId, $title, '晒萌宝小宝妈请吃海鲜啦！', 'www.tongshijia.com/vote/vote_event_view/6', '小宝妈', $remark);
