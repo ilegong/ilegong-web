@@ -2215,6 +2215,11 @@ function order_reply_comment_filter($var) {
     return $var['Comment']['parent_id'] != 0;
 }
 
+function multi_array_sum($total, $next) {
+    $total += $next['Order']['total_all_price'];
+    return $total;
+}
+
 /**
  * auto load spl lib
  */

@@ -106,6 +106,31 @@ class ShareUtilComponent extends Component{
         $rebateTrackLogM->updateAll(array('order_id' => $order_id), array('id' => $id));
     }
 
+    public function get_rebate_money($user_id){
+        $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
+        $orderM = ClassRegistry::init('Order');
+        $rebateLogs = $rebateTrackLogM->find('all', array(
+            'conditions' => array(
+                'sharer' => $user_id,
+                'not' => array('order_id' => 0, 'is_paid' => 0)
+            )
+        ));
+        $rebateOrderIds = Hash::extract($rebateLogs, '{n}.RebateTrackLog.order_id');
+        $orders = $orderM->find('all', array(
+            'conditions' => array(
+                'id' => $rebateOrderIds
+            ),
+            'fields' => array('id', 'total_all_price')
+        ));
+        $order_total_price = array_reduce($orders, 'multi_array_sum');
+
+    }
+
+
+    public function rebate_users(){
+
+    }
+
     public function get_share_index_product(){
         $product = array(
             '413'=>array(
