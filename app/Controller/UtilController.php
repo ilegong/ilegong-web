@@ -44,6 +44,7 @@ class UtilController extends AppController{
         $join_user_ids = Hash::extract($join_users, '{n}.CandidateEvent.user_id');
         $diff_user_ids = array_diff($order_user_ids, $join_user_ids);
         //echo json_encode(array('count' => count($diff_user_ids), 'user_ids' => $diff_user_ids));
+        $this->set('user_ids', $diff_user_ids);
         return $diff_user_ids;
     }
 
