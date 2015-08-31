@@ -188,6 +188,8 @@
     }
 
     function initWeshareData() {
+      var rebateLogId = angular.element(document.getElementById('weshareView')).attr('data-rebate-log-id');
+      vm.rebateLogId = rebateLogId || 0;
       var weshareId = angular.element(document.getElementById('weshareView')).attr('data-weshare-id');
       var fromType = angular.element(document.getElementById('weshareView')).attr('data-from-type');
       //first share
@@ -524,6 +526,7 @@
       }
       var orderData = {
         weshare_id: vm.weshare.id,
+        rebate_log_id: vm.rebateLogId,
         products: products,
         ship_info: ship_info,
         buyer: {name: vm.buyerName, mobilephone: vm.buyerMobilePhone, address: vm.buyerAddress}

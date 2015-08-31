@@ -78,6 +78,30 @@ class ShareUtilComponent extends Component{
         }
     }
 
+    public function save_rebate_log($recommend, $clicker) {
+        $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
+        $history_log = $rebateTrackLogM->find('first', array(
+            'conditions' => array(
+                'sharer' => $recommend,
+                'clicker' => $clicker,
+                'is_paid' => 0,
+                'order_id' => 0
+            )
+        ));
+        if (!empty($history_log)) {
+            return $history_log['RebateTrackLog']['id'];
+        }
+        $rebate_log = array('sharer' => $recommend, 'clicker' => $clicker, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'));
+        $rebateTrackLogM->save($rebate_log);
+        $rebateLogId = $rebateTrackLogM->id;
+        return $rebateLogId;
+    }
+
+    public function update_rebate_log($id, $order_id) {
+        $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
+        $rebateTrackLogM->updateAll(array('order_id' => $order_id, 'is_paid' => 1, 'updated' => '\'' . date('Y-m-d H:i:s') . '\''), array('id' => $id));
+    }
+
     public function get_share_index_product(){
         $product = array(
             '413'=>array(

@@ -39,10 +39,9 @@ class WesharesController extends AppController {
         //form paid done
         $this->log('weshare view mark ' . $_REQUEST['mark']);
         $recommend = $_REQUEST['recommend'];
-        if (!empty($recommend)) {
-            $rebate_log = array('sharer' => $recommend, 'clicker' => $uid, 'created' => date('Y-m-d H:i:s'));
-            $this->RebateTrackLog->save($rebate_log);
-            $rebateLogId = $this->RebateTrackLog->id;
+        //add rebate log
+        if (!empty($recommend)&&!empty($uid)) {
+            $rebateLogId = $this->ShareUtil->save_rebate_log($recommend, $uid);
             $this->set('rebateLogId', $rebateLogId);
         }
         //check has sharer has red packet
@@ -294,6 +293,7 @@ class WesharesController extends AppController {
         $products = $postDataArray['products'];
         $weshareId = $postDataArray['weshare_id'];
         $buyerData = $postDataArray['buyer'];
+        $rebateLogId = $postDataArray['rebate_log_id'];
         $cart = array();
         try {
             $weshareProductIds = Hash::extract($products, '{n}.id');
@@ -321,7 +321,7 @@ class WesharesController extends AppController {
             }
             $shipFee = $shipSetting['WeshareShipSetting']['ship_fee'];
             $address = $this->get_order_address($weshareId, $shipInfo, $buyerData, $uid);
-            $orderData = array('creator' => $uid, 'consignee_address' => $address, 'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $buyerData['name'], 'consignee_mobilephone' => $buyerData['mobilephone']);
+            $orderData = array('cate_id' => $rebateLogId, 'creator' => $uid, 'consignee_address' => $address, 'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $buyerData['name'], 'consignee_mobilephone' => $buyerData['mobilephone']);
             if ($shipType == SHARE_SHIP_PYS_ZITI) {
                 $orderData['ship_mark'] = SHARE_SHIP_PYS_ZITI_TAG;
             }
