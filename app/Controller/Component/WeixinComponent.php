@@ -759,8 +759,10 @@ class WeixinComponent extends Component
         //TODO check update rebate log add order id change paid status
         foreach ($orders as $order) {
             $cate_id = $order['Order']['cate_id'];
-            $order_id = $order['Order']['id'];
-            $this->ShareUtil->update_rebate_log($cate_id, $order_id);
+            if ($cate_id != 0) {
+                $order_id = $order['Order']['id'];
+                $this->ShareUtil->update_rebate_log($cate_id, $order_id);
+            }
             $openid = $oauth_binds[$order['Order']['creator']];
             $good = self::get_order_weshare_product_info($order, $carts);
             $user = $users[$order['Order']['creator']];
