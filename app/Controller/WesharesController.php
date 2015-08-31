@@ -2,7 +2,7 @@
 
 class WesharesController extends AppController {
 
-    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem', 'SharerShipOption', 'WeshareShipSetting', 'OfflineStore', 'UserRelation', 'Comment');
+    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem', 'SharerShipOption', 'WeshareShipSetting', 'OfflineStore', 'UserRelation', 'Comment', 'RebateTrackLog');
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description');
 
@@ -38,6 +38,13 @@ class WesharesController extends AppController {
         $this->set('weshare_id', $weshare_id);
         //form paid done
         $this->log('weshare view mark ' . $_REQUEST['mark']);
+        $recommend = $_REQUEST['recommend'];
+        if (!empty($recommend)) {
+            $rebate_log = array('sharer' => $recommend, 'clicker' => $uid, 'created' => date('Y-m-d H:i:s'));
+            $this->RebateTrackLog->save($rebate_log);
+            $rebateLogId = $this->RebateTrackLog->id;
+            $this->set('rebateLogId', $rebateLogId);
+        }
         //check has sharer has red packet
         //领取红包
         $shared_offer_id = $_REQUEST['shared_offer_id'];
