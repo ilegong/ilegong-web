@@ -84,7 +84,6 @@ class ShareUtilComponent extends Component{
             'conditions' => array(
                 'sharer' => $recommend,
                 'clicker' => $clicker,
-                'is_paid' => 0,
                 'order_id' => 0
             )
         ));
@@ -100,6 +99,11 @@ class ShareUtilComponent extends Component{
     public function update_rebate_log($id, $order_id) {
         $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
         $rebateTrackLogM->updateAll(array('order_id' => $order_id, 'is_paid' => 1, 'updated' => '\'' . date('Y-m-d H:i:s') . '\''), array('id' => $id));
+    }
+
+    public function update_rebate_log_order_id($id, $order_id){
+        $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
+        $rebateTrackLogM->updateAll(array('order_id' => $order_id), array('id' => $id));
     }
 
     public function get_share_index_product(){

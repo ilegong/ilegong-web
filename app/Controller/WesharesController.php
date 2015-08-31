@@ -365,6 +365,7 @@ class WesharesController extends AppController {
                 echo json_encode(array('success' => true, 'orderId' => $orderId));
                 return;
             }
+            $this->ShareUtil->update_rebate_log_order_id($rebateLogId, $orderId);
             echo json_encode(array('success' => false, 'orderId' => $orderId));
             return;
         } catch (Exception $e) {
