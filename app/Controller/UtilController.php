@@ -12,12 +12,9 @@ class UtilController extends AppController{
 
     public $uses = array('UserRelation', 'Order', 'Cart', 'User', 'Oauthbind', 'Weshare', 'CandidateEvent');
 
-    public $components = array('ShareUtil');
+    public $components = array('ShareUtil', 'Weixin');
 
-    /**
-     * @param $user_id
-     *
-     */
+
     public function load_user_fans($user_id){
         $this->autoRender = false;
         $shares = $this->Weshare->find('all', array(
@@ -46,7 +43,19 @@ class UtilController extends AppController{
         $order_user_ids = Hash::extract($orders_broup_by_user, '{n}.Order.creator');
         $join_user_ids = Hash::extract($join_users, '{n}.CandidateEvent.user_id');
         $diff_user_ids = array_diff($order_user_ids, $join_user_ids);
-        echo json_encode(array('count' => count($diff_user_ids), 'user_ids' => $diff_user_ids));
+        //echo json_encode(array('count' => count($diff_user_ids), 'user_ids' => $diff_user_ids));
+        return $diff_user_ids;
+    }
+
+    public function send_notify_vote($user_id){
+        $title = '关注的小宝妈发起了';
+        $remark = ' 晒萌宝吃海鲜啦，一等奖三文鱼、二等奖北极甜虾、三等奖黄花鱼、还有88元的礼券包，感谢亲们对小宝妈的支持，有你们在一起真好！点击详情，赶快来参加！';
+        $followers = $this->load_user_fans($user_id);
+        $followers[] = '633345';
+        $openIds = $this->Oauthbind->findWxServiceBindsByUids($followers);
+        foreach ($openIds as $openId) {
+            $this->process_send_share_msg($openId, $title, '晒萌宝小宝妈请吃海鲜啦！', 'www.tongshijia.com/vote/vote_event_view/6', '小宝妈', $remark);
+        }
     }
 
     /**
