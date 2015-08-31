@@ -10,9 +10,44 @@ class UtilController extends AppController{
 
     public $name = 'util';
 
-    public $uses = array('UserRelation', 'Order', 'Cart', 'User', 'Oauthbind');
+    public $uses = array('UserRelation', 'Order', 'Cart', 'User', 'Oauthbind', 'Weshare', 'CandidateEvent');
 
     public $components = array('ShareUtil');
+
+    /**
+     * @param $user_id
+     *
+     */
+    public function load_user_fans($user_id){
+        $this->autoRender = false;
+        $shares = $this->Weshare->find('all', array(
+            'conditions' => array(
+                'creator' => $user_id
+            ),
+            'limit' => 100
+        ));
+        $share_ids = Hash::extract($shares, '{n}.Weshare.id');
+
+        $orders_broup_by_user = $this->Order->find('all', array(
+            'conditions' => array(
+                'member_id' => $share_ids,
+                'ship_mark' => 'self_zi_ti'
+            ),
+            'limit' => 1000,
+            'group' => array('Order.creator')
+        ));
+
+        $join_users = $this->CandidateEvent->find('all', array(
+            'conditions' => array(
+                'event_id' => 6,
+            ),
+            'limit' => 500
+        ));
+        $order_user_ids = Hash::extract($orders_broup_by_user, '{n}.Order.creator');
+        $join_user_ids = Hash::extract($join_users, '{n}.CandidateEvent.user_id');
+        $diff_user_ids = array_diff($order_user_ids, $join_user_ids);
+        echo json_encode(array('count' => count($diff_user_ids), 'user_ids' => $diff_user_ids));
+    }
 
     /**
      * 获取微信的token
