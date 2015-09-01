@@ -65,6 +65,16 @@ class User extends AppModel {
 
     /**
      * @param $uid
+     * @return mixed
+     * check user is proxy
+     */
+    function userIsProxy($uid){
+        $proxyData = $this->find('first', array('conditions' => array('id' => $uid), 'fields' => array('is_proxy', 'id')));
+        return $proxyData['User']['is_proxy'];
+    }
+
+    /**
+     * @param $uid
      * @return string  null if not found
      */
     function findNicknamesOfUid($uid) {

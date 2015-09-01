@@ -123,25 +123,25 @@ class ShareUtilComponent extends Component{
             'fields' => array('id', 'total_all_price')
         ));
         $order_total_price = array_reduce($orders, 'multi_array_sum');
-        $user_rebate_info = $this->get_user_rebate_info($user_id);
-        $rebate_money = $order_total_price*($user_rebate_info['rebate_percent']);
-        return $rebate_money;
+        //$user_rebate_info = $this->get_user_rebate_info($user_id);
+        //$rebate_money = $order_total_price*($user_rebate_info['rebate_percent']);
+        return 0;
     }
 
-
-    public function rebate_users() {
-        $rebate_users = array(
-            633345 => array(
-                'rebate_percent' => 0.1
-            ),
-            544307 => array(
-                'rebate_percent' => 0.1
-            ),
-            141 => array(
-                'rebate_percent' => 0.1
-            )
-        );
-        return $rebate_users;
+    /**
+     * @param $uid
+     * @return bool
+     * check user is proxy
+     */
+    public function is_rebate_user($uid) {
+        $userM = ClassRegistry::init('User');
+        $isProxy = $userM->userIsProxy($uid);
+        return $isProxy == USER_IS_PROXY;
+    }
+    //TODO cal rebate money
+    public function cal_rebate_money($uid, $orders) {
+        $rebateMoney = 0;
+        $share_ids = Hash::extract($orders, '{n}.Order.member_id');
     }
 
     public function get_user_rebate_info($user_id){

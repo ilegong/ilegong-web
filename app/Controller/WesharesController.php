@@ -450,29 +450,7 @@ class WesharesController extends AppController {
         $myJoinShares = $user_share_data['myJoinShares'];
         $joinShareComments = $user_share_data['joinShareComments'];
         $shareUser = $creators[$uid];
-        if (parent::is_weixin()) {
-            $wexin_params = $this->set_weixin_share_data($uid, -1);
-            $this->set($wexin_params);
-            if ($uid == $current_uid) {
-                $title = '这是'.$shareUser['nickname'] . '的微分享，快来关注我吧';
-                $image = $shareUser['image'];
-                $desc = '朋友说是一个有人情味的分享社区，这里你不但可以吃到各地的特产，还能认识有趣的人。';
-            } else {
-                $current_user = $this->currentUser;
-                $title = $current_user['nickname'] . '推荐了' . $shareUser['nickname'] . '的微分享，快来关注ta吧！';
-                $image = $shareUser['image'];
-                $desc = $shareUser['nickname'] . '是我的朋友，很靠谱。朋友说是一个有人情味的分享社区，这里你不但可以吃到各地的特产，还能认识有趣的人。';
-            }
-            if (!$image) {
-                $image = 'http://dev.tongshijia.com/img/logo_footer.jpg';
-            }
-            $detail_url = WX_HOST.'/weshares/user_share_info/'.$uid;
-            $this->set('detail_url', $detail_url);
-            $this->set('title', $title);
-            $this->set('image', $image);
-            $this->set('desc', $desc);
-            $this->set('add_view', true);
-        }
+        $this->set_share_user_info_weixin_params($uid, $current_uid, $shareUser);
         $userShareSummery = $this->getUserShareSummery($uid, $uid == $current_uid);
         $shareCommentData = $this->getSharerCommentData($my_create_share_ids, $uid);
         $userCommentData = $this->WeshareBuy->load_user_share_comments($uid);
@@ -482,10 +460,10 @@ class WesharesController extends AppController {
             $sub_status = $this->WeshareBuy->check_user_subscribe($uid, $current_uid);
             $this->set('sub_status', $sub_status);
         }
-        if($uid == $current_uid){
-            $rebate_money = $this->ShareUtil->get_rebate_money($current_uid);
-            $this->set('rebate_money', $rebate_money);
-        }
+//        if($uid == $current_uid){
+//            $rebate_money = $this->ShareUtil->get_rebate_money($current_uid);
+//            $this->set('rebate_money', $rebate_money);
+//        }
         $this->set($userShareSummery);
         $this->set('is_me', $uid == $current_uid);
         $this->set('visitor', $current_uid);
@@ -1205,5 +1183,37 @@ class WesharesController extends AppController {
     private function is_verify_sharer($uid){
         $uids = array(633345,802852,544307,811917, 801447);
         return in_array($uid,$uids);
+    }
+
+    /**
+     * @param $uid
+     * @param $current_uid
+     * @param $shareUser
+     * 设置分享用户中心页面 微信分享参数
+     */
+    private function set_share_user_info_weixin_params($uid, $current_uid, $shareUser){
+        if (parent::is_weixin()) {
+            $wexin_params = $this->set_weixin_share_data($uid, -1);
+            $this->set($wexin_params);
+            if ($uid == $current_uid) {
+                $title = '这是'.$shareUser['nickname'] . '的微分享，快来关注我吧';
+                $image = $shareUser['image'];
+                $desc = '朋友说是一个有人情味的分享社区，这里你不但可以吃到各地的特产，还能认识有趣的人。';
+            } else {
+                $current_user = $this->currentUser;
+                $title = $current_user['nickname'] . '推荐了' . $shareUser['nickname'] . '的微分享，快来关注ta吧！';
+                $image = $shareUser['image'];
+                $desc = $shareUser['nickname'] . '是我的朋友，很靠谱。朋友说是一个有人情味的分享社区，这里你不但可以吃到各地的特产，还能认识有趣的人。';
+            }
+            if (!$image) {
+                $image = 'http://dev.tongshijia.com/img/logo_footer.jpg';
+            }
+            $detail_url = WX_HOST.'/weshares/user_share_info/'.$uid;
+            $this->set('detail_url', $detail_url);
+            $this->set('title', $title);
+            $this->set('image', $image);
+            $this->set('desc', $desc);
+            $this->set('add_view', true);
+        }
     }
 }

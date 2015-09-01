@@ -42,6 +42,8 @@ const TAG_ID_ROUQIN_DANPIN = 17;
 const TAG_ID_XINXIANSHUIGUO = 18;
 const TAG_ID_XINPIN_SHICHI = 19;
 
+const USER_IS_PROXY = 1;
+
 const FFDATE_CH_MDW = 'chinese_m_d_w';
 const FFDATE_CH_MD = 'chinese_m_d';
 

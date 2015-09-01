@@ -9,3 +9,21 @@ CREATE TABLE `cake_rebate_track_logs` (
   `updated` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+-- add proxy field
+ALTER TABLE `cake_users`
+ADD COLUMN `is_proxy` TINYINT(4) ZEROFILL NOT NULL DEFAULT 0 AFTER `payment`;
+
+-- add proxy settings
+
+CREATE TABLE `cake_proxy_rebate_percents` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL DEFAULT '0',
+  `share_id` int(11) NOT NULL DEFAULT '0',
+  `product_id` int(11) NOT NULL DEFAULT '0',
+  `percent` float NOT NULL DEFAULT '0',
+  `deleted` tinyint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
