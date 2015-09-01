@@ -161,8 +161,8 @@ class ShareUtilComponent extends Component{
                 'share_user_id' => 811917,
                 'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
             ),
-            '363'=>array(
-                'share_id' => 363,
+            '422'=>array(
+                'share_id' => 422,
                 'share_name' => '天津茶淀玫瑰香葡萄,8小时极致新鲜',
                 'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/f16a8e0a80e_0824.jpg',
                 'share_price' => '79.9',
@@ -181,16 +181,16 @@ class ShareUtilComponent extends Component{
                 'share_user_id' => 711503,
                 'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/0609f46d89e_0813.jpg'
             ),
-            '414'=>array(
-                'share_id' => 414,
-                'share_name' => '平谷后北宫村当季精品桃',
-                'share_img' => '/img/share_index/datao.jpg',
-                'share_price' => '80-100',
-                'share_user_name' => '小宝妈',
-                'share_vote' => 150,
-                'share_user_id' => 811917,
-                'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
-            ),
+//            '414'=>array(
+//                'share_id' => 414,
+//                'share_name' => '平谷后北宫村当季精品桃',
+//                'share_img' => '/img/share_index/datao.jpg',
+//                'share_price' => '80-100',
+//                'share_user_name' => '小宝妈',
+//                'share_vote' => 150,
+//                'share_user_id' => 811917,
+//                'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
+//            ),
             '357'=>array(
                 'share_id' => 357,
                 'share_name' => '像太阳一样的猕猴桃～浦江红心猕猴桃',
