@@ -302,60 +302,70 @@ class ShareUtilComponent extends Component {
                 'share_user_id' => 711503,
                 'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/0609f46d89e_0813.jpg'
             ),
-//            '414'=>array(
-//                'share_id' => 414,
-//                'share_name' => '平谷后北宫村当季精品桃',
-//                'share_img' => '/img/share_index/datao.jpg',
-//                'share_price' => '80-100',
-//                'share_user_name' => '小宝妈',
-//                'share_vote' => 150,
-//                'share_user_id' => 811917,
-//                'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
-//            ),
-            '357' => array(
-                'share_id' => 357,
-                'share_name' => '像太阳一样的猕猴桃～浦江红心猕猴桃',
-                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/594cea5464a_0821.jpg',
+            '406' => array(
+                'share_id' => 406,
+                'share_name' => ' 树上的糖包子，新鲜树摘威海青皮无花果 ',
+                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/6f41187b776_0901.jpg',
+                'share_price' => '69',
+                'share_user_name' => '盛夏',
+                'share_vote' => 95,
+                'share_user_id' => 708029,
+                'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
+            ),
+            '386' => array(
+                'share_id' => 386,
+                'share_name' => '翠香猕猴桃  甜蜜蜜，陕西周至翠香绿心猕猴桃',
+                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/dd0ddeb9bc9_0901.jpg',
                 'share_price' => '77',
                 'share_user_name' => '盛夏',
                 'share_vote' => 95,
                 'share_user_id' => 708029,
                 'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
             ),
-            '385' => array(
-                'share_id' => 385,
-                'share_name' => '[内蒙古土默特]大红李子，天然纯绿色，顺丰包邮',
-                'share_img' => '/img/share_index/lizi.jpg',
+            '410' => array(
+                'share_id' => 410,
+                'share_name' => ' 陕西眉县猴吃桃三色猕猴桃',
+                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/653d1bbe04e_0901.jpg',
+                'share_price' => '149',
+                'share_user_name' => '张慧敏',
+                'share_vote' => 230,
+                'share_user_id' => 23711,
+                'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/4c91fb9380d_0901.jpg'
+            ),
+            '420' => array(
+                'share_id' => 420,
+                'share_name' => '房山自家去青皮鲜核桃',
+                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/4dff0b6ff92_0901.jpg',
+                'share_price' => '45',
+                'share_user_name' => '大美',
+                'share_vote' => 230,
+                'share_user_id' => 842908,
+                'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/319793d271b_0828.jpg'
+            ),
+            '353' => array(
+                'share_id' => 353,
+                'share_name' => '房山窦店有机黄金梨',
+                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/7753d4bf5e4_0901.jpg',
+                'share_price' => '88',
+                'share_user_name' => '大美',
+                'share_vote' => 230,
+                'share_user_id' => 842908,
+                'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/319793d271b_0828.jpg'
+            ),
+            '394' => array(
+                'share_id' => 394,
+                'share_name' => '广州南沙一点红番薯',
+                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/2459fbbbcd3_0901.jpg',
                 'share_price' => '78',
-                'share_user_name' => '忠义',
-                'share_vote' => 99,
-                'share_user_id' => 816006,
-                'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/1ef4b665fec_0807.jpg'
+                'share_user_name' => '筠子花树',
+                'share_vote' => 125,
+                'share_user_id' => 664258,
+                'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/319793d271b_0828.jpg'
             ),
             '388' => array(
                 'share_id' => 388,
                 'share_name' => '泰国空运新鲜椰青',
                 'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/2d117ce8806_0826.jpg',
-                'share_price' => '59',
-                'share_user_name' => '朋友说小妹',
-                'share_vote' => 203,
-                'share_user_id' => 711503,
-                'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/0609f46d89e_0813.jpg'
-            ),
-            '389' => array(
-                'share_id' => 389,
-                'share_name' => '佳沛奇异果',
-                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/5380268e014_0826.jpg',
-                'share_price' => '66',
-                'share_user_name' => '朋友说小妹',
-                'share_vote' => 203,
-                'share_user_id' => 711503,
-                'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/0609f46d89e_0813.jpg'
-            ),
-            '390' => array(
-                'share_id' => 390,
-                'share_name' => '佳沛金果',
-                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/c0982711918_0826.jpg',
                 'share_price' => '59',
                 'share_user_name' => '朋友说小妹',
                 'share_vote' => 203,
