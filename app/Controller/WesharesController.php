@@ -239,7 +239,7 @@ class WesharesController extends AppController {
             'user_share_summery' => $user_share_summery,
             'my_coupons' => $my_coupon_items[0],
             'comment_data' => $comment_data,
-            'sub_status' => $sub_status
+            'sub_status' => $sub_status,
         ));
         return;
     }

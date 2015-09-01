@@ -111,6 +111,7 @@
     vm.decreaseProductNum = decreaseProductNum;
     vm.getOrderDisplayName = getOrderDisplayName;
     vm.isCreator = isCreator;
+    vm.isProxy = isProxy;
     vm.isOwner = isOwner;
     vm.isOrderReceived = isOrderReceived;
     vm.getConsigneeInfo = getConsigneeInfo;
@@ -311,6 +312,10 @@
         return 2;
       }
       return -1;
+    }
+
+    function isProxy(){
+      return !_.isEmpty(vm.currentUser) && vm.currentUser.is_proxy == 1
     }
 
     function isCreator() {

@@ -14,9 +14,9 @@
                     <label ng-click="vm.toUserShareInfo(vm.weshare.creator.id)" ng-bind="vm.weshare.creator.nickname"></label>
                     <a ng-if="!vm.userSubStatus" style="margin-left: 5px;margin-top: 3px;width: 50px;line-height: 20px;background-color: #F2651A;" class="statistics-btn" ng-click="vm.subSharer();" ng-bind="vm.subShareTipTxt">+关注</a>
                 </div>
+                <s>已有<span ng-bind="vm.ordersDetail.summery.all_buy_user_count" style="color: #ff0000;"></span>人报名&nbsp;&nbsp;佣金<span ng-bind="vm.weshare.proxy_rebate_percent.percent+'%'" style="color: #ff0000;"></span></s>
                 <s ng-if="vm.getOrderCommentLength()<1&&vm.userSubStatus"><b style="color: #ffa200" ng-bind="vm.userShareSummery.share_count">0</b>&nbsp; <small>分享</small>&nbsp;&nbsp;&nbsp;<b style="color: #ffa200" ng-bind="vm.userShareSummery.follower_count">0</b>&nbsp;<small>粉丝</small></s>
                 <s ng-click="vm.showCommentListDialog()" ng-if="vm.getOrderCommentLength()>=1&&vm.userSubStatus"><b style="color: #ffa200" ng-bind="vm.getOrderCommentLength()">0</b>&nbsp; <small>爱心评价</small></s>
-                <s>已有<span ng-bind="vm.ordersDetail.summery.all_buy_user_count"></span>人报名</s>
             </li>
             <ul class="clearfix header margin-bottom-12" style="margin-left: 3px;float: right;">
                 <li style="margin-right: 5px; float: right;" ng-if="vm.isCreator()"><a style="margin-top: 0px;width: 65px;"
@@ -134,7 +134,9 @@
             <p class="iconfont" style="height: 16px;"><i class="fa fa-home"></i></p>
             <b>首页</b>
         </a>
-        <a class="new" ng-if="!vm.isCreator()&&vm.weshare.status == 0" ng-click="vm.buyProducts()">我要报名</a>
+        <a class="new" ng-if="!vm.isCreator()&&!vm.isProxy()&&vm.weshare.status == 0" ng-click="vm.buyProducts()">我要报名</a>
+        <a class="new" ng-if="!vm.isCreator()&&vm.isProxy()&&vm.weshare.status == 0" ng-click="vm.buyProducts()" style="width: 28%;">我要报名</a>
+        <a class="new" ng-if="!vm.isCreator()&&vm.isProxy()&&vm.weshare.status == 0" ng-click="vm.showShareDialog=true;vm.showLayer=true;" style="width: 28%;margin-right: 7%;">我要推荐</a>
         <a class="new" ng-if="vm.isCreator()&&vm.weshare.status == 0&&vm.notifyType() == 1" ng-click='vm.notifyFans();'
            style="width: 28%;">团购提醒</a>
         <a class="new" ng-if="vm.isCreator()&&vm.weshare.status == 0&&vm.notifyType() == 0" ng-click='vm.sendNewShareMsg();'
