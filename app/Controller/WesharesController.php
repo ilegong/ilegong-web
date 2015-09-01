@@ -175,6 +175,7 @@ class WesharesController extends AppController {
         $this->saveWeshareShipType($weshare['Weshare']['id'], $shipSetData);
         $this->saveWeshareProxyPercent($weshare['Weshare']['id'], $proxyRebatePercent);
         //clear cache
+        //SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId
         Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshare['Weshare']['id'], '');
         if ($saveBuyFlag) {
             if (empty($weshareData['id'])) {
@@ -837,6 +838,11 @@ class WesharesController extends AppController {
                     'weshare_id' => $weshareId
                 )
             ));
+            $proxy_share_percent = $this->ProxyRebatePercent->find('first', array(
+                'conditions' => array(
+                    'share_id' => $weshareId
+                )
+            ));
             $weshareShipSettings = Hash::combine($weshareShipSettings, '{n}.WeshareShipSetting.tag', '{n}.WeshareShipSetting');
             $creatorInfo = $this->User->find('first', array(
                 'conditions' => array(
@@ -851,6 +857,7 @@ class WesharesController extends AppController {
             $weshareInfo['creator'] = $creatorInfo['User'];
             $weshareInfo['ship_type'] = $weshareShipSettings;
             $weshareInfo['images'] = array_filter(explode('|', $weshareInfo['images']));
+            $weshareInfo['proxy_rebate_percent'] = $proxy_share_percent['ProxyRebatePercent'];
             Cache::write($key, json_encode($weshareInfo));
             return $weshareInfo;
         }

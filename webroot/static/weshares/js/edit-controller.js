@@ -67,7 +67,8 @@
           vm.self_ziti_data = data['ship_type']['self_ziti'] || vm.self_ziti_data;
           vm.kuai_di_data = data['ship_type']['kuai_di'] || vm.kuai_di_data;
           vm.pys_ziti_data = data['ship_type']['pys_ziti'] || vm.pys_ziti_data;
-          vm.kuaidi_show_ship_fee = vm.kuai_di_data.ship_fee/100;
+          vm.kuaidi_show_ship_fee = vm.kuai_di_data.ship_fee / 100;
+          vm.proxy_rebate_percent = data['proxy_rebate_percent'] || vm.proxy_rebate_percent;
         }).error(function(data){
         });
       }
