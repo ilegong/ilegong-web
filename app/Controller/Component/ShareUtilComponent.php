@@ -360,7 +360,7 @@ class ShareUtilComponent extends Component {
                 'share_user_name' => '筠子花树',
                 'share_vote' => 125,
                 'share_user_id' => 664258,
-                'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/319793d271b_0828.jpg'
+                'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_27f6e242fbb54bea79ef3550e060f856.jpg'
             ),
             '388' => array(
                 'share_id' => 388,
