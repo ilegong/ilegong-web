@@ -1114,11 +1114,12 @@ class WeshareBuyComponent extends Component {
     /**
      * @param $sharer_id
      * @param $follow_id
+     * @param $type
      * 关注
      */
-    public function subscribe_sharer($sharer_id, $follow_id) {
-        if(!$this->ShareUtil->check_user_is_subscribe($sharer_id, $follow_id)){
-            $this->ShareUtil->save_relation($sharer_id, $follow_id, 'SUB');
+    public function subscribe_sharer($sharer_id, $follow_id, $type = 'SUB') {
+        if (!$this->ShareUtil->check_user_is_subscribe($sharer_id, $follow_id)) {
+            $this->ShareUtil->save_relation($sharer_id, $follow_id, $type);
             Cache::write(SHARE_USER_SUMMERY_CACHE_KEY . '_' . $sharer_id, '');
             Cache::write(SHARER_FOCUS_DATA_CACHE_KEY . '_' . $follow_id . '_100', '');
             Cache::write(SHARER_FANS_DATA_CACHE_KEY . '_' . $sharer_id . '_100', '');
@@ -1198,7 +1199,7 @@ class WeshareBuyComponent extends Component {
      * @return string
      * 获取个人中心url
      */
-    private function get_sharer_detail_url($sharer_id){
+    public function get_sharer_detail_url($sharer_id){
         return WX_HOST.'/weshares/user_share_info/'.$sharer_id;
     }
 
@@ -1207,11 +1208,11 @@ class WeshareBuyComponent extends Component {
      * @return string
      * 获取分享的地址
      */
-    private function get_weshares_detail_url($weshareId){
+    public function get_weshares_detail_url($weshareId){
         return  WX_HOST . '/weshares/view/' . $weshareId;
     }
 
-    private function get_open_ids($uids){
+    public function get_open_ids($uids){
         $oauthBindM = ClassRegistry::init('Oauthbind');
         $uid_openid_map = $oauthBindM->findWxServiceBindMapsByUids($uids);
         return $uid_openid_map;
@@ -1239,7 +1240,7 @@ class WeshareBuyComponent extends Component {
         return $order['Order'];
     }
 
-    private function get_users_nickname($uids){
+    public function get_users_nickname($uids){
         $userM = ClassRegistry::init('User');
         return $userM->findNicknamesMap($uids);
     }
@@ -1249,7 +1250,7 @@ class WeshareBuyComponent extends Component {
         return $userM->findNicknamesOfUid($uid);
     }
 
-    private function get_weshare_info($share_id){
+    public function get_weshare_info($share_id){
         $weshareM = ClassRegistry::init('Weshare');
         $share_info = $weshareM->find('first',array(
             'conditions' => array(

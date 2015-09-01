@@ -99,6 +99,7 @@ class ShareUtilComponent extends Component {
     /**
      * @param $id
      * @param $order
+     * @return array()
      * 更新 rebate log
      */
     public function update_rebate_log($id, $order) {
@@ -117,6 +118,10 @@ class ShareUtilComponent extends Component {
             $rebate_money = $rebate_money * 100;
         }
         $rebateTrackLogM->updateAll(array('is_paid' => 1, 'updated' => '\'' . date('Y-m-d H:i:s') . '\'', 'rebate_money' => $rebate_money), array('id' => $id, 'order_id' => $order_id));
+        $rebateTrackLog = $rebateTrackLogM->find('first', array(
+            'id' => $id
+        ));
+        return array('rebate_money' => $rebate_money, 'order_price' => $canRebateMoney, 'recommend' => $rebateTrackLog['RebateTrackLog']['sharer']);
     }
 
     /**
@@ -215,6 +220,35 @@ class ShareUtilComponent extends Component {
         return $rebate_users[$user_id];
     }
 
+    /**
+     * @param $id
+     * @param $order
+     * process rebate money
+     */
+    public function process_order_paid_rebate($id, $order) {
+        $rebateData = $this->update_rebate_log($id, $order);
+        $member_id = $order['Order']['member_id'];
+        $weshareInfo = $this->WeshareBuy->get_weshare_info($member_id);
+        $order_creator = $order['Order']['creator'];
+        $share_creator = $weshareInfo['creator'];
+        $recommend = $rebateData['recommend'];
+        $user_ids = array($order_creator, $share_creator, $recommend);
+        $this->WeshareBuy->subscribe_sharer($recommend, $order_creator, 'RECOMMEND');
+        $user_nicknames = $this->WeshareBuy->get_users_nickname($user_ids);
+        $recommend_open_ids = $this->WeshareBuy->get_open_ids(array($recommend));
+        $title = $user_nicknames[$recommend] . '，' . $user_nicknames[$order_creator] . '购买了你推荐的' . $user_nicknames[$share_creator] . $weshareInfo['title'] . '，获得返利回馈。';
+        $detail_url = $this->WeshareBuy->get_sharer_detail_url($recommend);
+        $order_id = $order['Order']['id'];
+        $order_money = $rebateData['order_price'];
+        $rebate_money = $rebateData['rebate_money'];
+        $pay_time = $order['Order']['created'];
+        $this->Weixin->send_rebate_template_msg($recommend_open_ids[$recommend], $detail_url, $order_id, $order_money, $pay_time, $rebate_money, $title);
+    }
+
+    /**
+     * @return array
+     * index product
+     */
     public function get_share_index_product() {
         $product = array(
             '413' => array(

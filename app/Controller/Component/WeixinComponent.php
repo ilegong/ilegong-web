@@ -757,15 +757,16 @@ class WeixinComponent extends Component
             'fields' => array('Cart.id','Cart.num','Cart.order_id','Cart.send_date','Cart.product_id', 'Cart.name'),
         ));
         foreach ($orders as $order) {
-            $cate_id = $order['Order']['cate_id'];
-            if ($cate_id != 0) {
-                //check update rebate log add order id change paid status
-                $this->ShareUtil->update_rebate_log($cate_id, $order);
-            }
             $openid = $oauth_binds[$order['Order']['creator']];
             $good = self::get_order_weshare_product_info($order, $carts);
             $user = $users[$order['Order']['creator']];
             $this->send_weshare_buy_wx_msg($openid, $order, $good, $user);
+            $cate_id = $order['Order']['cate_id'];
+            if ($cate_id != 0) {
+                //check update rebate log add order id change paid status
+                $this->ShareUtil->process_order_paid_rebate($cate_id, $order);
+                //$this->ShareUtil->update_rebate_log($cate_id, $order);
+            }
         }
     }
 
@@ -1015,6 +1016,24 @@ class WeixinComponent extends Component
                 "keyword1" => array("value" => $order_id),
                 "keyword2" => array("value" => $order_date),
                 "remark" => array("value" => $desc, "color" => "#FF8800")
+            )
+        );
+        $this->send_weixin_message($post_data);
+    }
+
+    public function send_rebate_template_msg($user_open_id, $detail_url, $order_id, $order_money, $pay_time, $rebate_money, $title) {
+        $post_data = array(
+            "touser" => $user_open_id,
+            "template_id" => 'DVuV9VC7qYa4H8oP1BaZosOViQ7RrU3v558VrjO7Cv0',
+            "url" => $detail_url,
+            "topcolor" => "#FF0000",
+            "data" => array(
+                "first" => array("value" => $title),
+                "keyword1" => array("value" => $order_id),
+                "keyword2" => array("value" => $order_money),
+                "keyword3" => array("value" => $pay_time),
+                "keyword4" => array("value" => $rebate_money),
+                "remark" => array("value" => '好东西要一起分享，谢谢你的推荐。点击查看详情。', "color" => "#FF8800")
             )
         );
         $this->send_weixin_message($post_data);
