@@ -23,6 +23,7 @@
     vm.validateAddress = validateAddress;
     vm.saveCacheData = saveCacheData;
     vm.validateShipFee = validateShipFee;
+    vm.validateRebatePercent = validateRebatePercent;
     vm.dataCacheKey = 'cache_share_data';
     vm.pageLoaded = pageLoaded;
     function pageLoaded(){
@@ -191,6 +192,9 @@
       if(vm.validateShipFee(vm.kuai_di_data.ship_fee)){
         return false;
       }
+      if(vm.validateRebatePercent()){
+        return false;
+      }
       vm.kuai_di_data.ship_fee = vm.kuai_di_data.ship_fee;
       vm.weshare.ship_type = [vm.self_ziti_data,vm.kuai_di_data,vm.pys_ziti_data];
       vm.weshare.proxy_rebate_percent = vm.proxy_rebate_percent;
@@ -239,6 +243,15 @@
     function validateAddress(){
       vm.addressError = vm.self_ziti_data.status==1&& _.isEmpty(vm.weshare.addresses)
       return vm.addressError;
+    }
+
+    function validateRebatePercent(){
+      if(!Utils.isNumber(vm.proxy_rebate_percent.percent)){
+        vm.rebatePercentHasError = true;
+      }else{
+        vm.rebatePercentHasError = false;
+      }
+      return vm.rebatePercentHasError;
     }
   }
 })(window, window.angular, window.wx);

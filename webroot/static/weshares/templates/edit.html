@@ -82,8 +82,9 @@
         </div>
         <div class="form-group">
             <div class="clearfix">
-                <div class="form-group fl" style="width: 50%; margin-right: 10px;">
-                    <input class='form-control' ng-model="vm.proxy_rebate_percent.percent" placeholder="团长佣金比例" style="width: 80%; margin-right: 10px; text-align: right;"/> <span class="fr" style="margin-top: 10px; font-size: 20px; color: #29AC0E;">%</span>
+                <div class="form-group fl" style="width: 50%; margin-right: 10px;" ng-class="{'has-error': vm.rebatePercentHasError}">
+                    <input class='form-control' ng-model="vm.proxy_rebate_percent.percent" placeholder="团长佣金比例" style="width: 80%; margin-right: 10px; text-align: right;" ng-change='vm.validateRebatePercent()' ng-blur='vm.validateRebatePercent()'/> <span class="fr" style="margin-top: 10px; font-size: 20px; color: #29AC0E;">%</span>
+                    <p class='tips'>请输入数字</p>
                 </div>
             </div>
             <p>
