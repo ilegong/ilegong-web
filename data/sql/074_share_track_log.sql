@@ -18,12 +18,13 @@ ADD COLUMN `is_proxy` TINYINT(4) ZEROFILL NOT NULL DEFAULT 0 AFTER `payment`;
 
 CREATE TABLE `cake_proxy_rebate_percents` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL DEFAULT '0',
   `share_id` int(11) NOT NULL DEFAULT '0',
   `percent` float NOT NULL DEFAULT '0',
+  `status` tinyint(4) NOT NULL DEFAULT '0',
   `deleted` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 
 

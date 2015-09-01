@@ -2,7 +2,8 @@
 
 class WesharesController extends AppController {
 
-    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem', 'SharerShipOption', 'WeshareShipSetting', 'OfflineStore', 'UserRelation', 'Comment', 'RebateTrackLog');
+    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem',
+        'SharerShipOption', 'WeshareShipSetting', 'OfflineStore', 'UserRelation', 'Comment', 'RebateTrackLog', 'ProxyRebatePercent');
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy');
 
@@ -166,24 +167,18 @@ class WesharesController extends AppController {
         $productsData = $postDataArray['products'];
         $addressesData = $postDataArray['addresses'];
         $shipSetData = $postDataArray['ship_type'];
+        $proxyRebatePercent = $postDataArray['proxy_rebate_percent'];
         $weshareData['creator'] = $uid;
         $saveBuyFlag = $weshare = $this->Weshare->save($weshareData);
         $this->saveWeshareProducts($weshare['Weshare']['id'], $productsData);
         $this->saveWeshareAddresses($weshare['Weshare']['id'], $addressesData);
-        $this->saevWeshareShipType($weshare['Weshare']['id'], $shipSetData);
+        $this->saveWeshareShipType($weshare['Weshare']['id'], $shipSetData);
+        $this->saveWeshareProxyPercent($weshare['Weshare']['id'], $proxyRebatePercent);
         //clear cache
         Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshare['Weshare']['id'], '');
         if ($saveBuyFlag) {
             if (empty($weshareData['id'])) {
                 Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
-//                $queue = new SaeTaskQueue('share');
-//                $queue->addTask("/weshares/process_send_new_share_msg/" . $weshare['Weshare']['id']);
-                //将任务推入队列
-//                  $ret = $queue->push();
-                //任务添加失败时输出错误码和错误信息
-//                if ($ret === false) {
-//                    $this->log('add task queue error ' . json_encode(array($queue->errno(), $queue->errmsg())));
-//                }
             }
             echo json_encode(array('success' => true, 'id' => $weshare['Weshare']['id']));
             return;
@@ -742,6 +737,16 @@ class WesharesController extends AppController {
         return;
     }
 
+    /**
+     * @param $weshareId
+     * @param $weshareProxyPercent
+     * 保存团长比例
+     */
+    private function saveWeshareProxyPercent($weshareId, $weshareProxyPercent) {
+        $weshareProxyPercent['share_id'] = $weshareId;
+        return $this->ProxyRebatePercent->save($weshareProxyPercent);
+    }
+
     //TODO delete not use product
     /**
      * @param $weshareId
@@ -769,7 +774,7 @@ class WesharesController extends AppController {
      * @return mixed
      * 保存分享的物流方式
      */
-    private function saevWeshareShipType($weshareId, $weshareShipData) {
+    private function saveWeshareShipType($weshareId, $weshareShipData) {
         foreach ($weshareShipData as &$item) {
             $item['weshare_id'] = $weshareId;
         }

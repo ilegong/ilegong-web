@@ -38,6 +38,7 @@
       vm.self_ziti_data = {status: 1, ship_fee: 0, tag: 'self_ziti'};
       vm.kuai_di_data = {status: -1, ship_fee: '', tag: 'kuai_di'};
       vm.pys_ziti_data = {status: -1, ship_fee: 0, tag: 'pys_ziti'};
+      vm.proxy_rebate_percent = {status: 0, percent: 0};
       vm.kuaidi_show_ship_fee = '';
       //add
       vm.weshare = {
@@ -68,7 +69,6 @@
           vm.pys_ziti_data = data['ship_type']['pys_ziti'] || vm.pys_ziti_data;
           vm.kuaidi_show_ship_fee = vm.kuai_di_data.ship_fee/100;
         }).error(function(data){
-
         });
       }
       vm.messages = [];
@@ -192,6 +192,7 @@
       }
       vm.kuai_di_data.ship_fee = vm.kuai_di_data.ship_fee;
       vm.weshare.ship_type = [vm.self_ziti_data,vm.kuai_di_data,vm.pys_ziti_data];
+      vm.weshare.proxy_rebate_percent = vm.proxy_rebate_percent;
       $log.log('submitted').log(vm.weshare);
       $http.post('/weshares/save', vm.weshare).success(function (data, status, headers, config) {
         if (data.success) {
@@ -201,11 +202,9 @@
         }else {
           var uid = data['uid'];
           window.location.href = '/weshares/user_share_info/'+uid;
-          $log.log("failed with status: " + status + ", data: ").log(data);
         }
       }).error(function (data, status, headers, config) {
         window.location.href = '/weshares/add';
-        $log.log("failed with status :" + status + ", data: ").log(data).log(', and config').log(config);
       });
     }
 
