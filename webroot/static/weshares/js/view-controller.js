@@ -869,12 +869,18 @@
         }
         desc += vm.weshare.description;
       } else if (userInfo) {
+        if (vm.isProxy()) {
+          url = url + '?recommend=' + vm.currentUser['id'];
+        }
         to_timeline_title = userInfo.nickname + '报名了' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
         to_friend_title = userInfo.nickname + '报名了' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
         imgUrl = vm.weshare.images[0] || userInfo.image;
         desc = vm.weshare.creator.nickname + '我认识，很靠谱。' + vm.weshare.description;
       } else if (vm.currentUser) {
         //default custom
+        if (vm.isProxy()) {
+          url = url + '?recommend=' + vm.currentUser['id'];
+        }
         to_timeline_title = vm.currentUser.nickname + '推荐' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
         to_friend_title = vm.currentUser.nickname + '推荐' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
         imgUrl = vm.weshare.images[0] || vm.currentUser.image;
@@ -895,6 +901,9 @@
         to_timeline_title = title;
         to_friend_title = title;
         url = url + '?shared_offer_id=' + vm.sharedOfferId;
+        if (vm.isProxy()) {
+          url = url + '&recommend=' + vm.currentUser['id'];
+        }
         to_friend_link = url;
         to_timeline_link = url;
         desc = vm.weshare.creator.nickname + '我认识，很靠谱！送你一个爱心礼包，一起来参加。';
