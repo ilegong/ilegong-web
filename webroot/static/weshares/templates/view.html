@@ -5,6 +5,7 @@
                 <img ng-src="{{vm.weshare.creator.image||'/img/default_user_icon.jpg'}}" ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/>
                 <br>
                 <s style="display: inline-flex;">
+                    <span ng-if="vm.weshare.creator.is_proxy==1" style="color: #29AC0E; font-size: 13px; font-weight: 700; padding-top: 10px; padding-right: 5px;">团长</span>
                     <img ng-if="vm.userShareSummery.follower_count>=50" src="/static/weshares/images/v.png" style="width: 20px;height: 20px;position: absolute;top: 44px;left: 41px;"/>
                     <img ng-if="vm.supportPysZiti>0" src="/static/weshares/images/hlj.jpeg" style="width: 25px;height: 25px;"/>
                 </s>

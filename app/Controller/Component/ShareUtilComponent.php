@@ -118,11 +118,12 @@ class ShareUtilComponent extends Component{
         $rebateOrderIds = Hash::extract($rebateLogs, '{n}.RebateTrackLog.order_id');
         $orders = $orderM->find('all', array(
             'conditions' => array(
-                'id' => $rebateOrderIds
+                'id' => $rebateOrderIds,
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_DONE, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED),
             ),
             'fields' => array('id', 'total_all_price')
         ));
-        $order_total_price = array_reduce($orders, 'multi_array_sum');
         //$user_rebate_info = $this->get_user_rebate_info($user_id);
         //$rebate_money = $order_total_price*($user_rebate_info['rebate_percent']);
         return 0;
@@ -133,15 +134,27 @@ class ShareUtilComponent extends Component{
      * @return bool
      * check user is proxy
      */
-    public function is_rebate_user($uid) {
+    public function is_proxy_user($uid) {
         $userM = ClassRegistry::init('User');
         $isProxy = $userM->userIsProxy($uid);
         return $isProxy == USER_IS_PROXY;
     }
     //TODO cal rebate money
     public function cal_rebate_money($uid, $orders) {
+        $proxyRebatePercentM = ClassRegistry::init('ProxyRebatePercent');
         $rebateMoney = 0;
         $share_ids = Hash::extract($orders, '{n}.Order.member_id');
+        $proxyPercents = $proxyRebatePercentM->find('all', array(
+            'conditions' => array(
+                'user_id' => $uid,
+                'share_id' => $share_ids,
+                'deleted' => DELETED_NO
+            )
+        ));
+        $proxyPercents = Hash::combine($proxyPercents, '{n}.ProxyRebatePercent.share_id', '{n}.ProxyRebatePercent');
+        foreach($orders as $order){
+
+        }
     }
 
     public function get_user_rebate_info($user_id){

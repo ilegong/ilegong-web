@@ -4,7 +4,7 @@ class WesharesController extends AppController {
 
     var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem', 'SharerShipOption', 'WeshareShipSetting', 'OfflineStore', 'UserRelation', 'Comment', 'RebateTrackLog');
 
-    var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description');
+    var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy');
 
     var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil');
 
@@ -460,10 +460,15 @@ class WesharesController extends AppController {
             $sub_status = $this->WeshareBuy->check_user_subscribe($uid, $current_uid);
             $this->set('sub_status', $sub_status);
         }
-//        if($uid == $current_uid){
-//            $rebate_money = $this->ShareUtil->get_rebate_money($current_uid);
-//            $this->set('rebate_money', $rebate_money);
-//        }
+        $user_is_proxy = $this->ShareUtil->is_proxy_user($uid);
+        if($user_is_proxy){
+            $this->set('is_proxy', true);
+        }
+        if($uid == $current_uid){
+            if($user_is_proxy){
+                //TODO cal rebate money
+            }
+        }
         $this->set($userShareSummery);
         $this->set('is_me', $uid == $current_uid);
         $this->set('visitor', $current_uid);
