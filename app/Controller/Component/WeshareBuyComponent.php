@@ -2,7 +2,7 @@
 
 
 class WeshareBuyComponent extends Component {
-    
+
     var $name = 'WeshareBuyComponent';
 
     var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'mobilephone', 'is_proxy');

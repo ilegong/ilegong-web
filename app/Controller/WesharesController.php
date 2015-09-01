@@ -467,6 +467,7 @@ class WesharesController extends AppController {
         if($uid == $current_uid){
             if($user_is_proxy){
                 //TODO cal rebate money
+                $this->set('show_rebate_money',true);
             }
         }
         $this->set($userShareSummery);
