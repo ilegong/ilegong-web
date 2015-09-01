@@ -2,10 +2,10 @@
 
 
 class WeshareBuyComponent extends Component {
-    //TODO 重构 weshare controller
+    
     var $name = 'WeshareBuyComponent';
 
-    var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'mobilephone');
+    var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'mobilephone', 'is_proxy');
 
     var $query_order_fields = array('id', 'creator', 'created', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type');
 
