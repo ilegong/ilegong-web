@@ -136,6 +136,27 @@ class ShareUtilComponent extends Component {
     }
 
     /**
+     * @param $share_id
+     * @return int
+     */
+    public function get_share_rebate_money($share_id){
+        $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
+        $allRebateMoney = 0;
+        $rebateLogs = $rebateTrackLogM->find('all', array(
+            'conditions' => array(
+                'share_id' => $share_id,
+                'not' => array('order_id' => 0, 'is_paid' => 0)
+            ),
+            'limit' => 500
+        ));
+        foreach ($rebateLogs as $log) {
+            $allRebateMoney = $allRebateMoney + $log['RebateTrackLog']['rebate_money'];
+        }
+        $allRebateMoney = $allRebateMoney / 100;
+        return $allRebateMoney;
+    }
+
+    /**
      * @param $user_id
      * @return int
      * 获取用户 返利的金钱
