@@ -159,6 +159,7 @@
     vm.pageLoaded = pageLoaded;
     vm.getRecommendInfo = getRecommendInfo;
     vm.isCurrentUserRecommend = isCurrentUserRecommend;
+    vm.toRecommendUserInfo = toRecommendUserInfo;
     function pageLoaded(){
       $rootScope.loadingPage = false;
     }
@@ -429,6 +430,11 @@
         return true;
       }
       return false;
+    }
+
+    function toRecommendUserInfo(order){
+      var recommendId = vm.rebateLogs[order['cate_id']];
+      window.location.href = '/weshares/user_share_info/' + recommendId;
     }
 
     function getShipSetId() {
