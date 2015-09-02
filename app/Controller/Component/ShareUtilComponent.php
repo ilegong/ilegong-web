@@ -120,7 +120,9 @@ class ShareUtilComponent extends Component {
         }
         $rebateTrackLogM->updateAll(array('is_paid' => 1, 'updated' => '\'' . date('Y-m-d H:i:s') . '\'', 'rebate_money' => $rebate_money), array('id' => $id, 'order_id' => $order_id));
         $rebateTrackLog = $rebateTrackLogM->find('first', array(
-            'id' => $id
+            'conditions' => array(
+                'id' => $id
+            )
         ));
         return array('rebate_money' => $rebate_money, 'order_price' => $canRebateMoney, 'recommend' => $rebateTrackLog['RebateTrackLog']['sharer']);
     }
