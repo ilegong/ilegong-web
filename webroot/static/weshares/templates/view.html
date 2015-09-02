@@ -82,8 +82,9 @@
                     <span class='display-name' ng-hide="_.isEmpty(vm.getOrderDisplayName(order.id))" ng-bind="vm.getOrderDisplayName(order.id)"></span>
                     <div style="display: inline-flex;width: 100%;">
                         <div><span class='created-at' ng-bind="vm.getFormatDate(order.created)"></span></div>
+                        <div style="float: right;margin-left: 40%;" ng-if="order.cate_id > 0"><div class="commenting-o" ng-if="(order.status!=3)||(order.status==3&&!vm.isOwner(order)&&!vm.isCreator())"><a style="margin-top: 0px;width: 65px;line-height: 0;margin-left: 10px;display: inline;background-color: #29AC0E;" class="statistics-btn" ng-bind="vm.getRecommendInfo(order)"></a></div></div>
                         <div style="float: right;margin-left: 60%;" ng-if="order.status==3&&vm.isOwner(order)" ng-click="vm.showCommentDialog(order)"><div class="commenting-o"><i class="fa fa-commenting-o fa-lg"></i></div></div>
-                        <div style="float: right;margin-left: 49%;" ng-if="order.status==3&&vm.isCreator()&&!order.notify" ng-click="vm.notifyUserToComment(order)"><div class="commenting-o"><a style="margin-top: 0px;width: 65px;line-height: 0;margin-left: 10px;display: inline;" class="statistics-btn">求评价</a></div></div>
+                        <div style="float: right;margin-left: 40%;" ng-if="order.status==3&&vm.isCreator()&&!order.notify" ng-click="vm.notifyUserToComment(order)"><div class="commenting-o"><a style="margin-top: 0px;width: 65px;line-height: 0;margin-left: 10px;display: inline;" class="statistics-btn">求评价</a></div></div>
                     </div>
                     <div class="send-info" ng-if="vm.isOwner(order)">
                         <span>姓名:</span>

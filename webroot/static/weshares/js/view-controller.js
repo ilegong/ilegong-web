@@ -157,6 +157,7 @@
     vm.validNotifyMsgContent = validNotifyMsgContent;
     vm.subSharer = subSharer;
     vm.pageLoaded = pageLoaded;
+    vm.getRecommendInfo = getRecommendInfo;
     function pageLoaded(){
       $rootScope.loadingPage = false;
     }
@@ -217,6 +218,7 @@
         success(function (data, status) {
           vm.weshare = data['weshare'];
           vm.commentData = data['comment_data'];
+          vm.rebateLogs = data['rebate_logs'];
           vm.orderComments = vm.commentData['order_comments'];
           if (vm.weshare.addresses && vm.weshare.addresses.length == 1) {
             vm.weshare.selectedAddressId = vm.weshare.addresses[0].id;
@@ -406,6 +408,12 @@
         return false;
       }
       return true;
+    }
+
+    function getRecommendInfo(order){
+      var recommendId = vm.rebateLogs[order['cate_id']];
+      var recommend = vm.ordersDetail['users'][recommendId]['nickname'];
+      return recommend+'推荐';
     }
 
     function getShipSetId() {
