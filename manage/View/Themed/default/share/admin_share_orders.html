@@ -32,6 +32,8 @@
         <a href="#">总金额&nbsp;&nbsp;<span style="color: #ff0000">{{$summery['total_all_price']}}</span></a>
         &nbsp;&nbsp;&nbsp;&nbsp;
         <a href="#">推荐订单数&nbsp;&nbsp;<span style="color: #ff0000">{{count($rebate_logs)}}</span></a>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="#">返利金额&nbsp;&nbsp;<span style="color: #ff0000">{{$all_rebate_money}}</span></a>
     </div>
     <div class="col-lg-6 pull-right">
         <form action="/manage/admin/share/share_orders" method="get" class="form-inline">

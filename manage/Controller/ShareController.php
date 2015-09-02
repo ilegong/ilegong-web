@@ -429,8 +429,13 @@ class ShareController extends AppController{
                 'conditions' => array(
                     'id' => $cateIds
                 ),
-                'fields' => array('id', 'sharer')
+                'fields' => array('id', 'sharer', 'rebate_money')
             ));
+            $allRebateMoney = 0 ;
+            foreach($rebateLogs as $rebate_item){
+                $allRebateMoney = $allRebateMoney + $rebate_item['RebateTrackLog']['rebate_money'];
+            }
+            $allRebateMoney = number_format(round($allRebateMoney/100, 2),2);
             $rebateSharerIds = Hash::extract($rebateLogs, '{n}.RebateTrackLog.sharer');
             $rebateLogs = Hash::combine($rebateLogs, '{n}.RebateTrackLog.id', '{n}.RebateTrackLog.sharer');
             $pay_notifies = $this->PayNotify->find('all', array(
@@ -471,6 +476,7 @@ class ShareController extends AppController{
                 $order_cart_map[$order_id][] = $item['Cart'];
             }
             $summery_result = array('order_count' => count($orders), 'total_all_price' => $total_price);
+            $this->set('all_rebate_money', $allRebateMoney);
             $this->set('rebate_logs', $rebateLogs);
             $this->set('summery', $summery_result);
             $this->set('start_date', $_REQUEST['start_date']);
