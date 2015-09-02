@@ -65,7 +65,7 @@
                         <td>{{$share['title']}}</td>
                             {{if $weshare_summery[$share['id']]}}
                                 {{if $weshare_refund_map[$share['id']]}}
-                                    <td>{{$weshare_summery[$share['id']]['total_price'] - $weshare_refund_map[$share['id']]}}</td>
+                                    <td>{{$weshare_summery[$share['id']]['total_price'] - $weshare_refund_map[$share['id']] -  $weshare_rebate_map[$share['id']]}}</td>
                                 {{else}}
                                     <td>{{$weshare_summery[$share['id']]['total_price']}}</td>
                                 {{/if}}

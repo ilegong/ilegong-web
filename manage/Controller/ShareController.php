@@ -180,6 +180,8 @@ class ShareController extends AppController{
             }
             $weshare_refund_money_map[$item_share_id] = $share_refund_money/100;
         }
+        $weshare_rebate_map = $this->get_share_rebate_money($weshare_ids);
+        $this->set('weshare_rebate_map', $weshare_rebate_map);
         $this->set('weshare_refund_map',$weshare_refund_money_map);
         $this->set('weshares', $weshares);
         $this->set('weshare_summery', $summery_data);
@@ -627,6 +629,29 @@ class ShareController extends AppController{
             )
         ));
         return $offlineStore;
+    }
+
+    function get_share_rebate_money($share_ids){
+        $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
+        $rebateLogs = $rebateTrackLogM->find('all', array(
+            'conditions' => array(
+                'share_id' => $share_ids,
+                'not' => array('order_id' => 0, 'is_paid' => 0)
+            ),
+            'limit' => 500
+        ));
+        $share_rebate_map = array();
+        foreach ($rebateLogs as $log) {
+            $share_id = $log['RebateTrackLog']['share_id'];
+            if(!isset($share_rebate_map[$share_id])){
+                $share_rebate_map[$share_id] = array('rebate_money' => 0);
+            }
+            $share_rebate_map[$share_id]['rebate_money'] = $log['RebateTrackLog']['rebate_money'];
+        }
+        foreach($share_rebate_map as &$rebate_item){
+            $rebate_item['rebate_money'] = number_format(round($rebate_item['rebate_money']/100, 2),2);
+        }
+        return $share_rebate_map;
     }
 
     /**
