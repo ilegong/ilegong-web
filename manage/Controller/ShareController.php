@@ -10,7 +10,8 @@ class ShareController extends AppController{
 
     var $name = 'Share';
 
-    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'WeshareShipSetting', 'OfflineStore', 'Oauthbind', 'Comment', 'RefundLog', 'PayNotify');
+    var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User',
+        'OrderConsignees', 'WeshareShipSetting', 'OfflineStore', 'Oauthbind', 'Comment', 'RefundLog', 'PayNotify', 'RebateTrackLog');
 
     var $components = array('Weixin');
 
@@ -415,14 +416,6 @@ class ShareController extends AppController{
             $order_query_condition['limit'] = 200;
         }
         $orders = $this->Order->find('all', $order_query_condition);
-        $order_user_ids = Hash::extract($orders, '{n}.Order.creator');
-        $order_users = $this->User->find('all', array(
-            'conditions' => array(
-                'id' => $order_user_ids
-            ),
-            'fields' => array('id', 'nickname')
-        ));
-        $order_users = Hash::combine($order_users, '{n}.User.id', '{n}.User');
         $total_price = 0;
         if(!empty($orders)){
             foreach($orders as $order){
@@ -430,6 +423,16 @@ class ShareController extends AppController{
             }
             $order_ids = Hash::extract($orders, '{n}.Order.id');
             $member_ids = Hash::extract($orders, '{n}.Order.member_id');
+            $cate_ids = Hash::extract($orders, '{n}.Order.cate_id');
+            $cateIds = array_unique($cate_ids);
+            $rebateLogs = $this->RebateTrackLog->find('all', array(
+                'conditions' => array(
+                    'id' => $cateIds
+                ),
+                'fields' => array('id', 'sharer')
+            ));
+            $rebateSharerIds = Hash::extract($rebateLogs, '{n}.RebateTrackLog.sharer');
+            $rebateLogs = Hash::combine($rebateLogs, '{n}.RebateTrackLog.id', '{n}.RebateTrackLog.sharer');
             $pay_notifies = $this->PayNotify->find('all', array(
                 'conditions' => array(
                     'order_id' => $order_ids
@@ -442,13 +445,17 @@ class ShareController extends AppController{
                 )
             ));
             $creatorIds = Hash::extract($weshares,'{n}.Weshare.creator');
-            $creators = $this->User->find('all',array(
+            $allUserIds= array_merge($creatorIds, $rebateSharerIds);
+            $order_user_ids = Hash::extract($orders, '{n}.Order.creator');
+            $allUserIds = array_merge($allUserIds, $order_user_ids);
+            $allUserIds = array_unique($allUserIds);
+            $all_users = $this->User->find('all', array(
                 'conditions' => array(
-                    'id' => $creatorIds
+                    'id' => $allUserIds
                 ),
-                'fields' => array('id', 'nickname', 'mobilephone')
+                'fields' => array('id', 'nickname')
             ));
-            $creators = Hash::combine($creators,'{n}.User.id','{n}.User');
+            $all_users = Hash::combine($all_users, '{n}.User.id', '{n}.User');
             $weshares = Hash::combine($weshares, '{n}.Weshare.id', '{n}.Weshare');
             $carts = $this->Cart->find('all',array(
                 'conditions' => array(
@@ -464,6 +471,7 @@ class ShareController extends AppController{
                 $order_cart_map[$order_id][] = $item['Cart'];
             }
             $summery_result = array('order_count' => count($orders), 'total_all_price' => $total_price);
+            $this->set('rebate_logs', $rebateLogs);
             $this->set('summery', $summery_result);
             $this->set('start_date', $_REQUEST['start_date']);
             $this->set('end_date', $_REQUEST['end_date']);
@@ -471,8 +479,7 @@ class ShareController extends AppController{
             $this->set('order_cart_map', $order_cart_map);
             $this->set('weshares', $weshares);
             $this->set('pay_notifies', $pay_notifies);
-            $this->set('weshare_creators', $creators);
-            $this->set('order_users', $order_users);
+            $this->set('all_users', $all_users);
         }
         $this->set('share_id', $query_share_id);
         $this->set('order_status',$order_status);

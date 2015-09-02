@@ -30,6 +30,8 @@
         <a href="#">订单数&nbsp;&nbsp;<span style="color: #ff0000">{{$summery['order_count']}}</span></a>
         &nbsp;&nbsp;&nbsp;&nbsp;
         <a href="#">总金额&nbsp;&nbsp;<span style="color: #ff0000">{{$summery['total_all_price']}}</span></a>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="#">推荐订单数&nbsp;&nbsp;<span style="color: #ff0000">{{count($rebate_logs)}}</span></a>
     </div>
     <div class="col-lg-6 pull-right">
         <form action="/manage/admin/share/share_orders" method="get" class="form-inline">
@@ -101,6 +103,7 @@
                     <th><input type="text" class="form-control" placeholder="状态" disabled></th>
                     <th><input type="text" class="form-control" placeholder="物流方式" disabled></th>
                     <th><input type="text" class="form-control" placeholder="交易号" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="推荐人" disabled></th>
                     <th>操作</th>
                 </tr>
             </thead>
@@ -111,13 +114,13 @@
                     $current_order_carts = $order_cart_map[$current_order_id];
                     $current_order = $order['Order'];
                     $current_share = $weshares[$current_order['member_id']];
-                    $current_share_creator = $weshare_creators[$current_share['creator']];
+                    $current_share_creator = $all_users[$current_share['creator']];
                     ?>
                     {{loop $current_order_carts $cart}}
                         <tr data-id="{{$current_order['id']}}">
                             <td>{{$current_order['id']}}</td>
                             <td>{{$current_order['creator']}}</td>
-                            <td>{{$order_users[$current_order['creator']]['nickname']}}</td>
+                            <td>{{$all_users[$current_order['creator']]['nickname']}}</td>
                             <td>{{$current_order['consignee_name']}}</td>
                             <td>{{$current_order['consignee_address']}}</td>
                             <td>{{$current_order['consignee_mobilephone']}}</td>
@@ -155,6 +158,9 @@
                             </td>
                             <td>
                                 {{$pay_notifies[$current_order['id']]}}
+                            </td>
+                            <td>
+                                {{$all_users[$rebate_logs[$current_order['cate_id']]]['nickname']}}
                             </td>
                             <td>
                                 {{if $current_order['ship_mark']=='pys_zi_ti'&&$current_order['status']==1}}
