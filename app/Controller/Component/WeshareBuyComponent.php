@@ -739,7 +739,7 @@ class WeshareBuyComponent extends Component {
                 $product_buy_num['details'][$product_id]['total_price'] = $product_buy_num['details'][$product_id]['total_price'] + $totalPrice;
                 $order_cart_map[$order_id][] = $item['Cart'];
             }
-            $product_buy_num['all_buy_user_count'] = count($users);
+            $product_buy_num['all_buy_user_count'] = count($orders);
             $product_buy_num['all_total_price'] = $summeryTotalPrice;
             $product_buy_num['real_total_price'] = $realTotalPrice;
             $product_buy_num['all_coupon_price'] = $couponPrice / 100;

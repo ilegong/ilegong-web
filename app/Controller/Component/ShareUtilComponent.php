@@ -264,6 +264,8 @@ class ShareUtilComponent extends Component {
         $order_money = $rebateData['order_price'];
         $rebate_money = $rebateData['rebate_money'];
         $pay_time = $order['Order']['created'];
+        $rebate_money =  round($rebate_money / 100, 2);
+        $rebate_money = number_format($rebate_money, 2);
         $this->Weixin->send_rebate_template_msg($recommend_open_ids[$recommend], $detail_url, $order_id, $order_money, $pay_time, $rebate_money, $title);
     }
 

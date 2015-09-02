@@ -41,9 +41,11 @@ class WesharesController extends AppController {
         $this->log('weshare view mark ' . $_REQUEST['mark']);
         $recommend = $_REQUEST['recommend'];
         //add rebate log
-        if (!empty($recommend)&&!empty($uid)) {
-            $rebateLogId = $this->ShareUtil->save_rebate_log($recommend, $uid, $weshare_id);
-            $this->set('rebateLogId', $rebateLogId);
+        if($this->ShareUtil->is_proxy_user($recommend)){
+            if (!empty($recommend)&&!empty($uid)) {
+                $rebateLogId = $this->ShareUtil->save_rebate_log($recommend, $uid, $weshare_id);
+                $this->set('rebateLogId', $rebateLogId);
+            }
         }
         //check has sharer has red packet
         //领取红包
