@@ -219,9 +219,9 @@ class WesharesController extends AppController {
             'recursive' => 1, //int
             'fields' => $user_fields,
         ));
-        if(!$is_me){
+        if (!$is_me) {
             $sub_status = $this->WeshareBuy->check_user_subscribe($weshareInfo['creator']['id'], $uid);
-        }else{
+        } else {
             $sub_status = true;
         }
         $consignee = $this->getShareConsignees($uid);
