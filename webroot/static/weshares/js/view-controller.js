@@ -864,8 +864,6 @@
       var imgUrl = '';
       var desc = '';
       var share_string = 'we_share';
-      var to_friend_link = url;
-      var to_timeline_link = url;
       //member
       var userInfo = vm.ordersDetail.users[vm.currentUser.id];
       if (vm.currentUser.id == vm.weshare.creator.id) {
@@ -912,10 +910,10 @@
         if (vm.isProxy()) {
           url = url + '&recommend=' + vm.currentUser['id'];
         }
-        to_friend_link = url;
-        to_timeline_link = url;
         desc = vm.weshare.creator.nickname + '我认识，很靠谱！送你一个爱心礼包，一起来参加。';
       }
+      var to_friend_link = url;
+      var to_timeline_link = url;
       if (wx) {
         wx.ready(function () {
           wx.onMenuShareAppMessage({
