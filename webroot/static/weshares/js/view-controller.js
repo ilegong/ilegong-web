@@ -158,6 +158,7 @@
     vm.subSharer = subSharer;
     vm.pageLoaded = pageLoaded;
     vm.getRecommendInfo = getRecommendInfo;
+    vm.isCurrentUserRecommend = isCurrentUserRecommend;
     function pageLoaded(){
       $rootScope.loadingPage = false;
     }
@@ -414,6 +415,17 @@
       var recommendId = vm.rebateLogs[order['cate_id']];
       var recommend = vm.ordersDetail['users'][recommendId]['nickname'];
       return recommend+'推荐';
+    }
+
+    function isCurrentUserRecommend(order){
+      if(vm.currentUser['is_proxy']==0){
+        return false;
+      }
+      var recommendId = vm.rebateLogs[order['cate_id']];
+      if(vm.currentUser['id']==recommendId){
+        return true;
+      }
+      return false;
     }
 
     function getShipSetId() {
