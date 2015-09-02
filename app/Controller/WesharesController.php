@@ -42,7 +42,7 @@ class WesharesController extends AppController {
         $recommend = $_REQUEST['recommend'];
         //add rebate log
         if (!empty($recommend)&&!empty($uid)) {
-            $rebateLogId = $this->ShareUtil->save_rebate_log($recommend, $uid);
+            $rebateLogId = $this->ShareUtil->save_rebate_log($recommend, $uid, $weshare_id);
             $this->set('rebateLogId', $rebateLogId);
         }
         //check has sharer has red packet
@@ -358,10 +358,10 @@ class WesharesController extends AppController {
                     $this->Session->write(OrdersController::key_balanced_conpons(), json_encode(array(0 => array($coupon_id))));
                     $this->order_use_score_and_coupon($orderId, $uid, 0, $totalPrice / 100);
                 }
+                $this->ShareUtil->update_rebate_log_order_id($rebateLogId, $orderId, $weshareId);
                 echo json_encode(array('success' => true, 'orderId' => $orderId));
                 return;
             }
-            $this->ShareUtil->update_rebate_log_order_id($rebateLogId, $orderId, $weshareId);
             echo json_encode(array('success' => false, 'orderId' => $orderId));
             return;
         } catch (Exception $e) {
