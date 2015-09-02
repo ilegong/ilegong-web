@@ -258,10 +258,11 @@ class ShareUtilComponent extends Component {
         $recommend = $rebateData['recommend'];
         $user_ids = array($order_creator, $share_creator, $recommend);
         $this->WeshareBuy->subscribe_sharer($recommend, $order_creator, 'RECOMMEND');
+        $this->WeshareBuy->subscribe_sharer($share_creator, $order_creator, 'BUY');
         $user_nicknames = $this->WeshareBuy->get_users_nickname($user_ids);
         $recommend_open_ids = $this->WeshareBuy->get_open_ids(array($recommend));
         $title = $user_nicknames[$recommend] . '，' . $user_nicknames[$order_creator] . '购买了你推荐的' . $user_nicknames[$share_creator] . $weshareInfo['title'] . '，获得返利回馈。';
-        $detail_url = $this->WeshareBuy->get_sharer_detail_url($recommend);
+        $detail_url = $this->WeshareBuy->get_weshares_detail_url($member_id);
         $order_id = $order['Order']['id'];
         $order_money = $rebateData['order_price'];
         $rebate_money = $rebateData['rebate_money'];
