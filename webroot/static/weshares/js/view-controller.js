@@ -193,7 +193,9 @@
 
     function initWeshareData() {
       var rebateLogId = angular.element(document.getElementById('weshareView')).attr('data-rebate-log-id');
+      var recommendUserId = angular.element(document.getElementById('weshareView')).attr('data-recommend-id');
       vm.rebateLogId = rebateLogId || 0;
+      vm.recommendUserId = recommendUserId || 0;
       var weshareId = angular.element(document.getElementById('weshareView')).attr('data-weshare-id');
       var fromType = angular.element(document.getElementById('weshareView')).attr('data-from-type');
       //first share
@@ -899,6 +901,9 @@
         if (vm.isProxy()) {
           url = url + '?recommend=' + vm.currentUser['id'];
         }
+        if(vm.recommendUserId!=0){
+          url = url + '?recommend=' + vm.recommendUserId;
+        }
         to_timeline_title = userInfo.nickname + '报名了' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
         to_friend_title = userInfo.nickname + '报名了' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
         imgUrl = vm.weshare.images[0] || userInfo.image;
@@ -907,6 +912,9 @@
         //default custom
         if (vm.isProxy()) {
           url = url + '?recommend=' + vm.currentUser['id'];
+        }
+        if(vm.recommendUserId!=0){
+          url = url + '?recommend=' + vm.recommendUserId;
         }
         to_timeline_title = vm.currentUser.nickname + '推荐' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
         to_friend_title = vm.currentUser.nickname + '推荐' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
@@ -930,6 +938,9 @@
         url = url + '?shared_offer_id=' + vm.sharedOfferId;
         if (vm.isProxy()) {
           url = url + '&recommend=' + vm.currentUser['id'];
+        }
+        if(vm.recommendUserId!=0){
+          url = url + '?recommend=' + vm.recommendUserId;
         }
         desc = vm.weshare.creator.nickname + '我认识，很靠谱！送你一个爱心礼包，一起来参加。';
       }

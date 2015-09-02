@@ -44,6 +44,7 @@ class WesharesController extends AppController {
         if($this->ShareUtil->is_proxy_user($recommend)){
             if (!empty($recommend)&&!empty($uid)) {
                 $rebateLogId = $this->ShareUtil->save_rebate_log($recommend, $uid, $weshare_id);
+                $this->set('recommend_id', $recommend);
                 $this->set('rebateLogId', $rebateLogId);
             }
         }
