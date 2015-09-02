@@ -218,7 +218,6 @@
         success(function (data, status) {
           vm.weshare = data['weshare'];
           vm.commentData = data['comment_data'];
-          vm.rebateLogs = data['rebate_logs'];
           vm.orderComments = vm.commentData['order_comments'];
           if (vm.weshare.addresses && vm.weshare.addresses.length == 1) {
             vm.weshare.selectedAddressId = vm.weshare.addresses[0].id;
@@ -228,6 +227,7 @@
           }
           vm.ordersDetail = data['ordersDetail'];
           vm.shipTypes = data['ordersDetail']['ship_types'];
+          vm.rebateLogs = data['ordersDetail']['rebate_logs'];
           vm.currentUser = data['current_user'] || {};
           vm.weixinInfo = data['weixininfo'];
           vm.consignee = data['consignee'];

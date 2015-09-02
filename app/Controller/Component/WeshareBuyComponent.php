@@ -9,6 +9,8 @@ class WeshareBuyComponent extends Component {
 
     var $query_order_fields = array('id', 'creator', 'created', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type');
 
+    var $query_share_info_order_fields = array('id', 'creator', 'created', 'updated', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type', 'total_price', 'coupon_total', 'cate_id');
+
     var $query_cart_fields = array('id', 'order_id', 'name', 'product_id', 'num');
 
     var $query_comment_fields = array('id', 'username', 'user_id', 'data_id', 'type', 'body', 'order_id', 'parent_id');
@@ -641,7 +643,7 @@ class WeshareBuyComponent extends Component {
      * @return array
      * 获取分享的订单信息
      */
-    public function get_share_order_for_show($weshareId, $is_me, $division = false){
+    public function get_share_order_for_show($weshareId, $is_me, $division = false) {
         if ($division) {
             $key = SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId . '_1';
         } else {
@@ -667,7 +669,7 @@ class WeshareBuyComponent extends Component {
                     'status' => $order_status,
                     'deleted' => DELETED_NO
                 ),
-                'fields' => array('id', 'creator', 'created', 'updated', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type', 'total_price', 'coupon_total'),
+                'fields' => $this->$query_share_info_order_fields,
                 'order' => $sort
             ));
             $orderIds = Hash::extract($orders, '{n}.Order.id');
