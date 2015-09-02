@@ -901,7 +901,7 @@
         if (vm.isProxy()) {
           url = url + '?recommend=' + vm.currentUser['id'];
         }
-        if(vm.recommendUserId!=0){
+        if(!vm.isProxy()&&vm.recommendUserId!=0){
           url = url + '?recommend=' + vm.recommendUserId;
         }
         to_timeline_title = userInfo.nickname + '报名了' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
@@ -913,7 +913,7 @@
         if (vm.isProxy()) {
           url = url + '?recommend=' + vm.currentUser['id'];
         }
-        if(vm.recommendUserId!=0){
+        if(!vm.isProxy()&&vm.recommendUserId!=0){
           url = url + '?recommend=' + vm.recommendUserId;
         }
         to_timeline_title = vm.currentUser.nickname + '推荐' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
@@ -939,7 +939,7 @@
         if (vm.isProxy()) {
           url = url + '&recommend=' + vm.currentUser['id'];
         }
-        if(vm.recommendUserId!=0){
+        if(!vm.isProxy()&&vm.recommendUserId!=0){
           url = url + '?recommend=' + vm.recommendUserId;
         }
         desc = vm.weshare.creator.nickname + '我认识，很靠谱！送你一个爱心礼包，一起来参加。';
