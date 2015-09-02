@@ -675,6 +675,9 @@ class WeshareBuyComponent extends Component {
             $orderIds = Hash::extract($orders, '{n}.Order.id');
             $cateIds = Hash::extract($orders, '{n}.Order.cate_id');
             $userIds = Hash::extract($orders, '{n}.Order.creator');
+            $orderIds = array_unique($orderIds);
+            $userIds = array_unique($userIds);
+            $cateIds = array_unique($cateIds);
             $rebateLogs = $this->RebateTrackLog->find('all', array(
                 'conditions' => array(
                     'id' => $cateIds

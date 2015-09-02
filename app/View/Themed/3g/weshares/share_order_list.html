@@ -27,16 +27,21 @@
         </thead>
         <tbody>
             {{loop $summery['details'] $item_summery}}
-            <tr>
-                <td>{{$item_summery['name']}}</td>
-                <td>{{$item_summery['num']}}</td>
-                <td>{{$item_summery['total_price']/100}}</td>
-            </tr>
+                <tr>
+                    <td>{{$item_summery['name']}}</td>
+                    <td>{{$item_summery['num']}}</td>
+                    <td>{{$item_summery['total_price']/100}}</td>
+                </tr>
             {{/loop}}
         </tbody>
         <tr>
             <td colspan="3">总金额:&nbsp;<font color="red">{{$summery['real_total_price']-$refund_money}}</font>{{if $refund_money>0}}&nbsp;&nbsp;退款金额:&nbsp;<font color="red">{{$refund_money}}</font>{{/if}}{{if $summery['all_coupon_price'] > 0}}&nbsp;&nbsp;红包金额:&nbsp;<font color="red">{{$summery['all_coupon_price']}}</font>{{/if}}&nbsp;&nbsp;&nbsp;总购买人数:&nbsp;<font color="red">{{$summery['all_buy_user_count']}}</font></td>
         </tr>
+        {{if count($rebate_logs) > 0}}
+        <tr>
+            <td colspan="3">推荐订单数:&nbsp;<font color="red">{{count($rebate_logs)}}</font>{{if $share_rebate_money>0}}&nbsp;&nbsp;佣金:&nbsp;<font color="red">{{$share_rebate_money}}</font>{{/if}}</td>
+        </tr>
+        {{/if}}
     </table>
 </div>
 {{/if}}
