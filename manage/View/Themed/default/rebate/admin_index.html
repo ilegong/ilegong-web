@@ -91,7 +91,9 @@
                         <td>{{$item['total_order_money']}}</td>
                         <td>{{$current_sharer['mobilephone']}}</td>
                         <td>{{$current_sharer['payment']}}</td>
-                        <td></td>
+                        <td>
+                            <button type="button" class="btn btn-primary pay-rebate-money" data-id="{{$item['sharer']}}">打款</button>
+                        </td>
                     </tr>
                     {{/loop}}
                     </tbody>
@@ -145,7 +147,23 @@
     })(jQuery);
 
     $(function () {
-
-
-    })
+        var $start_date = $('#start_date');
+        var $end_date = $('#end_date');
+        $('button.pay-rebate-money').on('click', function (e) {
+            var $me = $(this);
+            var sharerId = $me.data('id');
+            var start_date = $start_date.val();
+            var end_date = $end_date.val();
+            $.post('/manage/admin/rebate/pay_rebate', {
+                'sharer_id': sharerId,
+                'start_date': start_date,
+                'end_date': end_date
+            }, function (data) {
+                if(data['success']){
+                    alert('打款成功');
+                    $me.unbind();
+                }
+            }, 'json');
+        });
+    });
 </script>

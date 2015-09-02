@@ -16,6 +16,16 @@ class RebateController extends AppController{
         $this->layout='bootstrap_layout';
     }
 
+    public function admin_pay_rebate() {
+        $this->autoRender = false;
+        $sharer_id = $_REQUEST['sharer_id'];
+        $start_date = $_REQUEST['start_date'];
+        $end_date = $_REQUEST['end_date'];
+        $this->RebateTrackLog->updateAll(array('is_rebate' => 1), array('DATE(updated) >= ' => $start_date, 'DATE(updated) <= ' => $end_date, 'sharer' => $sharer_id, 'is_paid' => 1));
+        echo json_encode(array('success' => true));
+        return;
+    }
+
     public function admin_index(){
         $currentDate = date('Y-m-d H:i:s');
         if ($_REQUEST['start_date']) {

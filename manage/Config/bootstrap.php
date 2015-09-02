@@ -516,11 +516,11 @@ function _is_after_deadline_time($now, $deadline_time)
 function getMonthRange($date, $returnFirstDay = true) {
     $timestamp = strtotime($date);
     if ($returnFirstDay) {
-        $monthFirstDay = date('Y-m-1 00:00:00', $timestamp);
+        $monthFirstDay = date('Y-m-1', $timestamp);
         return $monthFirstDay;
     } else {
         $mdays = date('t', $timestamp);
-        $monthLastDay = date('Y-m-' . $mdays . ' 23:59:59', $timestamp);
+        $monthLastDay = date('Y-m-' . $mdays, $timestamp);
         return $monthLastDay;
     }
 }
