@@ -417,12 +417,15 @@
       return recommend+'推荐';
     }
 
-    function isCurrentUserRecommend(order){
-      if(vm.currentUser['is_proxy']==0){
+    function isCurrentUserRecommend(order) {
+      if (vm.isCreator()) {
+        return true;
+      }
+      if (vm.currentUser['is_proxy'] == 0) {
         return false;
       }
       var recommendId = vm.rebateLogs[order['cate_id']];
-      if(vm.currentUser['id']==recommendId){
+      if (vm.currentUser['id'] == recommendId) {
         return true;
       }
       return false;
