@@ -116,17 +116,16 @@ class WxPaymentComponent extends Component {
     public function saveNotifyAndUpdateStatus($out_trade_no, $transaction_id, $trade_type, $suc,
                                                  $openid = '',
                                                  $coupon_fee = '',
-
                                                  $total_fee = 0,
                                                  $is_subscribe = 0,
                                                  $bank_type = '',
                                                  $fee_type = '',
-
                                                  $attach = '',
                                                  $time_end = '') {
         $payNotifyModel = ClassRegistry::init('PayNotify');
         $payLogModel = ClassRegistry::init('PayLog');
-        $payNotifyModel->save(array('PayNotify' => array(
+        //array('PayNotify' => )
+        $payNotify = $payNotifyModel->save(array(
             'out_trade_no' => $out_trade_no,
             'transaction_id' => $transaction_id,
             'trade_type' => $trade_type,
@@ -139,8 +138,8 @@ class WxPaymentComponent extends Component {
             'attach' => empty($attach) ? '' : substr($attach, 0, 511),
             'time_end' => $time_end,
             'status' => PAYNOTIFY_STATUS_NEW
-        )));
-        $notifyLogId = $payNotifyModel->getLastInsertId();
+        ));
+        $notifyLogId = $payNotify['PayNotify']['id'];
         $payLog = $payLogModel->find('first', array('conditions' => array('out_trade_no' => $out_trade_no)));
         if (empty($payLog)) {
             $status = PAYNOTIFY_ERR_TRADENO;
