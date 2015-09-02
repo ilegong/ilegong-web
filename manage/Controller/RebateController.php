@@ -21,13 +21,13 @@ class RebateController extends AppController{
         if ($_REQUEST['start_date']) {
             $start_date = $_REQUEST['start_date'];
         } else {
-            $start_date = $this->getMonthRange($currentDate);
+            $start_date = getMonthRange($currentDate);
         }
 
         if ($_REQUEST['end_date']) {
             $end_date = $_REQUEST['end_date'];
         } else {
-            $end_date = $this->getMonthRange($currentDate, false);
+            $end_date = getMonthRange($currentDate, false);
         }
         $queryCond = array();
         $queryCond['DATE(updated) >= '] = $start_date;
@@ -76,22 +76,5 @@ class RebateController extends AppController{
         $this->set('end_date', $end_date);
     }
 
-    /**
-     * 获取指定日期所在月的开始日期与结束日期
-     * @param string $date
-     * @param boolean 为true返回开始日期，否则返回结束日期
-     * @return array
-     * @access private
-     */
-    private function getMonthRange($date, $returnFirstDay = true) {
-        $timestamp = strtotime($date);
-        if ($returnFirstDay) {
-            $monthFirstDay = date('Y-m-1 00:00:00', $timestamp);
-            return $monthFirstDay;
-        } else {
-            $mdays = date('t', $timestamp);
-            $monthLastDay = date('Y-m-' . $mdays . ' 23:59:59', $timestamp);
-            return $monthLastDay;
-        }
-    }
+
 }

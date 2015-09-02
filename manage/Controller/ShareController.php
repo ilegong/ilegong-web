@@ -312,6 +312,7 @@ class ShareController extends AppController{
     }
 
     public function admin_index(){
+        $current_date = date('Y-m-d H:i:s');
         $weshare_count = $this->Weshare->find('count', array(
             'limit' => 5000
         ));
@@ -342,6 +343,15 @@ class ShareController extends AppController{
                 'settlement' => 0
             )
         ));
+        $proxy_count = $this->RebateTrackLog->find('count', array(
+            'conditions' => array(
+                'DATE(updated) >= ' => getMonthRange($current_date),
+                'DATE(updated) <= ' => getMonthRange($current_date, false)
+            ),
+            'limit' => 100,
+            'group' => array('sharer')
+        ));
+        $this->set('proxy_count', $proxy_count);
         $this->set('share_pay_count', $share_pay_count);
         $this->set('share_count', $weshare_count);
         $this->set('share_creator_count', $weshare_creator_count);
