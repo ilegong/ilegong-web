@@ -180,6 +180,9 @@ class WesharesController extends AppController {
         //clear cache
         //SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId
         Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshare['Weshare']['id'], '');
+        //SHARE_SHIP_SETTINGS_CACHE_KEY . '_' . $weshareId;
+        Cache::write(SHARE_SHIP_SETTINGS_CACHE_KEY . '_' . $weshare['Weshare']['id'], '');
+        //SHARE_USER_SUMMERY_CACHE_KEY . '_' . $uid;
         if ($saveBuyFlag) {
             if (empty($weshareData['id'])) {
                 Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
