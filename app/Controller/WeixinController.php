@@ -12,7 +12,7 @@ class WeixinController extends AppController {
 
 	var $name = 'Weixin';
 
-    var $uses = array('Oauthbind', 'User', 'UserSubReason', 'Candidate', 'CandidateEvent',);
+    var $uses = array('Oauthbind', 'User', 'UserSubReason', 'Candidate', 'CandidateEvent','VoteSetting');
 	
 	public function beforeFilter(){
 		parent::beforeFilter();
@@ -79,11 +79,15 @@ class WeixinController extends AppController {
 
 				if($req['Event']=='subscribe'){ //订阅
                     if ($from == FROM_WX_SERVICE) {
-                        $reason = $this->UserSubReason->find('first',array('conditions' => array(
-                            'user_id' => $uid,
-                            'used' => 0,
-                            'type' => 'Vote7'
-                        )));
+                        $reason = $this->UserSubReason->find('first',
+                            array(
+                                'conditions' => array(
+                                    'user_id' => $uid,
+                                    'used' => 0,
+                                ),
+                                'order' => array('id DESC')
+                            )
+                        );
                         $default_content = array(
                             array('title' => '朋友说是什么？看完你就懂了！', 'description' => '',
                                 'picUrl' => 'https://mmbiz.qlogo.cn/mmbiz/qpxHrxLKdR0A6F8hWz04wVpntT9Jiao8XZn7as5FuHch5zFzFnvibjUGYU3J4ibxRyLicytfdd9qDQoqV1ODOp3Rjg/0',
@@ -95,12 +99,14 @@ class WeixinController extends AppController {
                                 'picUrl' => 'https://mmbiz.qlogo.cn/mmbiz/qpxHrxLKdR0A6F8hWz04wVpntT9Jiao8XYT9A69hTUYIomNtyJMbLnMibbSHO3NO5UaEics7OwEo9qLHfqmHas8zQ/0',
                                 'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=201694178&idx=3&sn=75c4b8f32c29e1c088c7de4ee2e22719#rd')
                         );
-                        if(!empty($reason)){
-                            if ($reason['UserSubReason']['type'] == 'Vote7') {
+                        if (!empty($reason)) {
+                            if (strpos($reason['UserSubReason']['type'], 'Vote') !== FALSE) {
                                 $title = $reason['UserSubReason']['title'];
+                                $event_id = $reason['UserSubReason']['data_id'];
+                                $picUrl = $this->VoteSetting->getServerReplyPic($event_id);
                                 $content = array(
                                     array('title' => $title, 'description' => '快来支持我吧...',
-                                        'picUrl' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/2a9c850ed64_0829.jpg',
+                                        'picUrl' => $picUrl,
                                         'url' => $reason['UserSubReason']['url']),
                                 );
                                 $this->UserSubReason->updateAll(array('used' => 1), array('id' => $reason['UserSubReason']['id']));
@@ -357,10 +363,44 @@ class WeixinController extends AppController {
                     echo $this->newTextMsg($user, $me,  "您的用户id为".$uid);
                     echo $this->newTextMsg($user, $me,  "您的用户id为(test2):".$uid);
                     break;
+                case '樱花':
+                    $voteConfig = $this->VoteSetting->getVoteConfig(7);
+                    $detail_url = $voteConfig['common_params']['server_reply_url'];
+                    $pic_url = $voteConfig['common_params']['server_reply_img'];
+                    $reply_title = $voteConfig['title'];
+                    if ($uid) {
+                        $event_candidate = $this->CandidateEvent->find('first', array(
+                            'conditions' => array('user_id' => $uid, 'event_id' => 7)
+                        ));
+                        $this->log('event candidate ' . json_encode($event_candidate));
+                        if (!empty($event_candidate)) {
+                            $candidate_id = $event_candidate['CandidateEvent']['candidate_id'];
+                            $candidate = $this->Candidate->find('first', array(
+                                'conditions' => array(
+                                    'id' => $candidate_id
+                                )
+                            ));
+                            if (!empty($candidate)) {
+                                if ($candidate['Candidate']['deleted'] == DELETED_NO) {
+                                    $detail_url = 'http://www.tongshijia.com/vote/candidate_detail/' . $candidate_id . '/7';
+                                }
+                            }
+                        }
+                    }
+                    $content = array(
+                        array('title' => $reply_title, 'description' => '',
+                            'picUrl' => $pic_url,
+                            'url' => $detail_url),
+                    );
+                    echo $this->newArticleMsg($user, $me, $content);
+                    break;
                 case '报名':
                 case '宝宝':
                 case '投票':
-                    $detail_url = 'http://www.tongshijia.com/vote/vote_event_view/6';
+                    $voteConfig = $this->VoteSetting->getVoteConfig(6);
+                    $detail_url = $voteConfig['common_params']['server_reply_url'];
+                    $pic_url = $voteConfig['common_params']['server_reply_img'];
+                    $reply_title = $voteConfig['title'];
                     if($uid){
                         $event_candidate = $this->CandidateEvent->find('first',array(
                             'conditions' => array('user_id' => $uid, 'event_id' => 6)
@@ -381,8 +421,8 @@ class WeixinController extends AppController {
                         }
                     }
                     $content = array(
-                        array('title' => '晒萌宝小宝妈请吃海鲜啦', 'description' => '',
-                            'picUrl' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/2a9c850ed64_0829.jpg',
+                        array('title' => $reply_title, 'description' => '',
+                            'picUrl' => $pic_url,
                             'url' => $detail_url),
                     );
                     echo $this->newArticleMsg($user, $me, $content);

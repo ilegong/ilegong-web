@@ -43,6 +43,11 @@ class VoteSetting extends AppModel{
         return $config['title'];
     }
 
+    public function getServerReplyPic($eventId) {
+        $config = $this->getVoteConfig($eventId);
+        return $config['common_params']['server_reply_img'];
+    }
+
     var $voteConfigs = array(
         6 => array(
             'id' => 6,
