@@ -282,6 +282,7 @@ class ShareUtilComponent extends Component {
         $WeshareProductM = ClassRegistry::init('WeshareProduct');
         $WeshareAddressM = ClassRegistry::init('WeshareAddress');
         $WeshareShipSettingM = ClassRegistry::init('WeshareShipSetting');
+        $proxyRebatePercentM = ClassRegistry::init('ProxyRebatePercent');
         $shareInfo = $WeshareM->find('first', array(
             'conditions' => array(
                 'id' => $shareId
@@ -308,6 +309,7 @@ class ShareUtilComponent extends Component {
             }
             $WeshareProductM->id = null;
             $WeshareProductM->saveAll($newProducts);
+
             $shareAddresses = $WeshareAddressM->find('all', array(
                 'conditions' => array(
                     'weshare_id' => $shareId
@@ -322,6 +324,7 @@ class ShareUtilComponent extends Component {
             }
             $WeshareAddressM->id = null;
             $WeshareAddressM->saveAll($newAddresses);
+
             $shareShipSettings = $WeshareShipSettingM->find('all', array(
                 'conditions' => array(
                     'weshare_id' => $shareId
@@ -336,6 +339,18 @@ class ShareUtilComponent extends Component {
             }
             $WeshareShipSettingM->id = null;
             $WeshareShipSettingM->saveAll($newShareShipSettings);
+
+            $oldShareRebateSet = $proxyRebatePercentM->find('first', array(
+                'conditions' => array('share_id' => $shareId)
+            ));
+            if(!empty($oldShareRebateSet)){
+                $newShareRebateSet = $oldShareRebateSet['ProxyRebatePercent'];
+                $newShareRebateSet['id'] = null;
+                $newShareRebateSet['share_id'] = $newShareId;
+                $proxyRebatePercentM->save($newShareRebateSet);
+            }else{
+                $proxyRebatePercentM->save(array('share_id' => $newShareId, 'percent' => 0));
+            }
             return array('shareId' => $newShareId, 'success' => true);
         }
         return array('success' => false);
