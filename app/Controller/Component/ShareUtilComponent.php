@@ -346,7 +346,7 @@ class ShareUtilComponent extends Component {
             '446' => array(
                 'share_id' => 446,
                 'share_name' => '阳澄湖大闸蟹2015中秋第一波团购启动啦！',
-                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/d0c241c3b9d_0906.jpg',
+                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/da7db400b09_0906.jpg',
                 'share_price' => '150',
                 'share_user_name' => '博文',
                 'share_vote' => 300,
@@ -356,7 +356,7 @@ class ShareUtilComponent extends Component {
             '438' => array(
                 'share_id' => 438,
                 'share_name' => '河南荥阳河阴软籽大石榴，9月20号抢鲜',
-                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/9491f3d02e1_0906.jpg',
+                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/1c025d72281_0906.jpg',
                 'share_price' => '68',
                 'share_user_name' => '段赵明',
                 'share_vote' => 300,
