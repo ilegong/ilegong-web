@@ -61,9 +61,11 @@ class VoteSetting extends AppModel{
             'product_params' => array(
                 'recommend' => '小宝妈',
                 'products' => array(
-                    'url' => 'http://www.tongshijia.com/weshares/view/413',
-                    'pic' => '/img/vote/xbm_recommend.jpg',
-                    'name' => '澳柑'
+                    array(
+                        'url' => 'http://www.tongshijia.com/weshares/view/413',
+                        'pic' => '/img/vote/xbm_recommend.jpg',
+                        'name' => '澳柑'
+                    )
                 )
             )
         )
