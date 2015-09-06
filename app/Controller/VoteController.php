@@ -36,7 +36,6 @@ class VoteController extends AppController {
         $this->set('hideNav', true);
         $this->set('hideFooter', true);
         $currentVoteConfig = $this->VoteSetting->getVoteConfig($this->eventId);
-        $this->pageTitle = $currentVoteConfig['common_params']['title'];
         $this->set('voteConfig', $currentVoteConfig);
     }
 
@@ -48,6 +47,7 @@ class VoteController extends AppController {
      */
     public function vote_event_view($eventId, $sort = 0) {
         $this->eventId = $eventId;
+        $this->pageTitle = $this->VoteSetting->getVoteTitle($eventId);
         $uid = $this->currentUser['id'];
         $event_info = $this->get_event_info($eventId);
         $candidators = $this->CandidateEvent->find('all', array(
@@ -175,6 +175,7 @@ class VoteController extends AppController {
 
     public function sign_up($eventId) {
         $this->eventId = $eventId;
+        $this->pageTitle = $this->VoteSetting->getVoteTitle($eventId);
         //check login
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
@@ -251,6 +252,7 @@ class VoteController extends AppController {
      */
     public function candidate_detail($candidateId, $eventId) {
         $this->eventId = $eventId;
+        $this->pageTitle = $this->VoteSetting->getVoteTitle($eventId);
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
             $ref = Router::url($_SERVER['REQUEST_URI']);

@@ -38,11 +38,17 @@ class VoteSetting extends AppModel{
         return $config['sub_url'];
     }
 
+    public function getVoteTitle($eventId) {
+        $config = $this->getVoteConfig($eventId);
+        return $config['title'];
+    }
+
     var $voteConfigs = array(
         6 => array(
             'id' => 6,
             'initiator' => '811917',
             'sub_type' => 'Vote7',
+            'title' => '晒萌宝小宝妈请吃海鲜啦',
             'sub_url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=209556231&idx=1&sn=2a60e7f060180c9ecd0792f89694defb#rd',
             'wx_params' => array(
                 'time_line_title' => '晒萌宝小宝妈请吃海鲜啦！',
@@ -53,7 +59,6 @@ class VoteSetting extends AppModel{
             'common_params' => array(
                 'banner' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8bb3a470e66_0829.jpg',
                 'prize_pic' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/2a9c850ed64_0829.jpg',
-                'title' => '晒萌宝小宝妈请吃海鲜啦',
                 'server_reply_title' => '晒萌宝小宝妈请吃海鲜啦',
                 'server_reply_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/2a9c850ed64_0829.jpg',
                 'server_reply_url' => 'http://www.tongshijia.com/vote/vote_event_view/6',
