@@ -161,6 +161,8 @@
     vm.isCurrentUserRecommend = isCurrentUserRecommend;
     vm.toRecommendUserInfo = toRecommendUserInfo;
     vm.cloneShare = cloneShare;
+    vm.resetNotifyContent = resetNotifyContent;
+    vm.defaultNotifyHasBuyMsgContent = defaultNotifyHasBuyMsgContent;
     function pageLoaded(){
       $rootScope.loadingPage = false;
     }
@@ -652,10 +654,15 @@
       vm.closeCommentDialog();
     }
 
-    function notifyFans(){
-      vm.showNotifyView = true;
-      vm.showLayer = true;
-      vm.notify = {};
+    function resetNotifyContent(){
+      if(vm.sendNotifyType == 0){
+        vm.notify.content = vm.defaultNotifyHasBuyMsgContent();
+      }else{
+        vm.notify.content = '';
+      }
+    }
+
+    function defaultNotifyHasBuyMsgContent(){
       var msgContent = '';
       if (Object.keys(vm['ordersDetail']['users']).length > 10) {
         var usersCount = Object.keys(vm['ordersDetail']['users']).length;
@@ -677,7 +684,16 @@
         msgContent = _.reduce(vm.ordersDetail.users, function(memo, user){ return memo + user['nickname']+'，'; }, '');
         msgContent = msgContent+'都已经报名'+vm.weshare.creator.nickname+'分享的'+vm.weshare.title+'啦，就差你啦。';
       }
-      vm.notify.content = msgContent;
+      return msgContent;
+    }
+
+    function notifyFans(){
+      vm.showNotifyView = true;
+      vm.showLayer = true;
+      vm.sendNotifyType = 0;
+      vm.notify = {};
+      vm.notify.type = vm.sendNotifyType;
+      vm.notify.content = vm.defaultNotifyHasBuyMsgContent();
     }
 
     function notifyType(){
@@ -739,7 +755,7 @@
         $http({
           method: 'POST',
           url: '/weshares/send_buy_percent_msg/' + vm.weshare.id,
-          data: {content: vm.notify.content}
+          data: {content: vm.notify.content, type: vm.sendNotifyType}
         }).success(function (data) {
           // With the data succesfully returned, call our callback
           if (data['success']) {

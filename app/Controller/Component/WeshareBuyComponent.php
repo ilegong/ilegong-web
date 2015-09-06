@@ -1099,6 +1099,23 @@ class WeshareBuyComponent extends Component {
     /**
      * @param $weshare_info
      * @param $msg_content
+     * notify has buy user
+     */
+    public function send_notify_buy_user_msg($weshare_info, $msg_content) {
+        $buy_uids = $this->get_has_buy_user($weshare_info['id']);
+        $buy_open_ids = $this->get_open_ids($buy_uids);
+        $tuan_leader_name = $weshare_info['creator']['nickname'];
+        $remark = '点击查看详情！';
+        $deatil_url = $this->get_weshares_detail_url($weshare_info['id']);
+        $product_name = $weshare_info['title'];
+        foreach ($buy_open_ids as $open_id) {
+            $this->Weixin->send_share_buy_complete_msg($open_id, $msg_content, $product_name, $tuan_leader_name, $remark, $deatil_url);
+        }
+    }
+
+    /**
+     * @param $weshare_info
+     * @param $msg_content
      * @param $limit
      * @param $offset
      * 发送团购进度消息

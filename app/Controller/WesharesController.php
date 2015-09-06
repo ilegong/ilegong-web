@@ -644,19 +644,33 @@ class WesharesController extends AppController {
         }
         $params = json_decode(file_get_contents('php://input'), true);
         $content = $params['content'];
-        $fansPageInfo =$this->WeshareBuy->get_user_relation_page_info($uid);
-        $pageCount = $fansPageInfo['pageCount'];
-        $pageSize = $fansPageInfo['pageSize'];
-        $queue = new SaeTaskQueue('share');
-        $queue->addTask("/weshares/process_send_buy_percent_msg/" . $weshare_id . "/" . $pageCount . "/" . $pageSize, "content=" . $content, true);
-        //将任务推入队列
-        $ret = $queue->push();
-        //任务添加失败时输出错误码和错误信息
-        if ($ret === false) {
-            $this->log('add task queue error ' . json_encode(array($queue->errno(), $queue->errmsg())));
+        $type = $params['type'];
+        if ($type == 0 || $type == '0') {
+            $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($uid);
+            $pageCount = $fansPageInfo['pageCount'];
+            $pageSize = $fansPageInfo['pageSize'];
+            $queue = new SaeTaskQueue('share');
+            $queue->addTask("/weshares/process_send_buy_percent_msg/" . $weshare_id . "/" . $pageCount . "/" . $pageSize, "content=" . $content, true);
+            //将任务推入队列
+            $ret = $queue->push();
+            //任务添加失败时输出错误码和错误信息
+            if ($ret === false) {
+                $this->log('add task queue error ' . json_encode(array($queue->errno(), $queue->errmsg())));
+            }
+            echo json_encode(array('success' => true));
+            return;
+        }else{
+            $queue = new SaeTaskQueue('share');
+            $queue->addTask("/weshares/process_notify_has_buy_fans/" . $weshare_id, "content=" . $content, true);
+            //将任务推入队列
+            $ret = $queue->push();
+            //任务添加失败时输出错误码和错误信息
+            if ($ret === false) {
+                $this->log('add task queue error ' . json_encode(array($queue->errno(), $queue->errmsg())));
+            }
+            echo json_encode(array('success' => true));
+            return;
         }
-        echo json_encode(array('success' => true));
-        return;
     }
 
     /**
@@ -743,6 +757,17 @@ class WesharesController extends AppController {
         $ret = $queue->push();
         echo json_encode(array('success' => true, 'ret' => $ret));
         return;
+    }
+
+    /**
+     * @param $weshareId
+     */
+    public function process_notify_has_buy_fans($weshareId){
+        $this->autoRender = false;
+        $msg_content = $_REQUEST['content'];
+        $share_info = $this->get_weshare_detail($weshareId);
+        $this->WeshareBuy->send_notify_buy_user_msg($share_info, $msg_content);
+        echo json_encode(array('success' => true));
     }
     /**
      * @param $weshare_id
