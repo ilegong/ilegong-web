@@ -32,5 +32,8 @@
     {{template vote/vote_rule_template}}
     {{template vote/baby_bottom_template}}
 </div>
-{{$this->Html->script(array('/js/vote/vote.js?v2','/js/common.js?v2'));}}
+<script>
+    sub_pys_url = "{{$voteConfig['sub_url']}}";
+</script>
+{{$this->Html->script(array('/js/vote/vote.js?v3','/js/common.js?v2'));}}
 {{template vote/wexin_share_template}}

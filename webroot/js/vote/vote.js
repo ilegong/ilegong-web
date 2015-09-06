@@ -23,7 +23,7 @@ $(function(){
            }else{
                if(data.reason=='Not subscribed'){
                    utils.alert(reasons[data.reason],function(){
-                       window.location.href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=209556231&idx=1&sn=2a60e7f060180c9ecd0792f89694defb#rd";
+                       window.location.href=sub_pys_url;
                    });
                }else if(data.reason=='Not logged'){
                    utils.alert(reasons[data.reason],function(){

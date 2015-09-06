@@ -1,6 +1,6 @@
 {{template vote/vote_css_template}}
 <div class="container" style="background-color:#c54134;margin-bottom: 50px;">
-    <div class="baby_banner" style="margin-bottom: 8px;"><img src="http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8bb3a470e66_0829.jpg"></div>
+    <div class="baby_banner" style="margin-bottom: 8px;"><img src="{{$this->Html->assetUrl($voteConfig['common_params']['banner'])}}"></div>
     {{if $event_available}}
         {{if !$is_sign_up}}
             <a href="/vote/sign_up/{{$event_id}}" class="apply_btn">我要报名</a>
@@ -99,5 +99,8 @@
     {{template vote/vote_rule_template}}
     {{template vote/baby_bottom_template}}
 </div>
-{{$this->Html->script(array('/js/vote/vote.js?v2','/js/common.js'));}}
+<script>
+    sub_pys_url = "{{$voteConfig['sub_url']}}";
+</script>
+{{$this->Html->script(array('/js/vote/vote.js?v3','/js/common.js'));}}
 {{template vote/wexin_share_template}}

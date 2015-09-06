@@ -1,6 +1,6 @@
 {{template vote/vote_css_template}}
 <div style="background-color:#c54134; margin-bottom: 50px;" id="baby_sign_up">
-    <div class="baby_banner"><img src="{{$this->Html->assetUrl('http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8bb3a470e66_0829.jpg')}}"/></div>
+    <div class="baby_banner"><img src="{{$this->Html->assetUrl($voteConfig['common_params']['banner'])}}"/></div>
     <div class="apply_bg">
         <ul class="clearfix">
             <li class="fl" style="width: 25%;">萌宝姓名</li>
@@ -37,7 +37,7 @@
                 <h1>如何报名</h1>
 
                 <p>请先关注朋友说微信公众号“pyshuo2014”如您已关注，请进入公众号回复“报名”即可！</p>
-                <a href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=209556231&idx=1&sn=2a60e7f060180c9ecd0792f89694defb#rd" class="babydetaillayer_btn">去关注</a>
+                <a href="{{$voteConfig['sub_url']}}" class="babydetaillayer_btn">去关注</a>
             </div>
         </div>
         <div class="tipslayer_bg"></div>

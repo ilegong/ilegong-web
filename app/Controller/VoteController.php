@@ -7,10 +7,11 @@
  * Time: 10:05
  */
 App::uses('CakeEvent', 'Event');
+
 class VoteController extends AppController {
 
-
-    var $uses = array('VoteEvent', 'Candidate', 'Vote', 'CandidateEvent', 'UserSubReason', 'User');
+    var $eventId = 0;
+    var $uses = array('VoteEvent', 'Candidate', 'Vote', 'CandidateEvent', 'UserSubReason', 'User', 'VoteSetting');
     var $components = array('Paginator', 'WeshareBuy');
     var $paginate = array(
         'Candidate' => array(
@@ -26,15 +27,17 @@ class VoteController extends AppController {
         )
     );
 
-    public function beforeFilter(){
+    public function beforeFilter() {
         parent::beforeFilter();
-        $this->pageTitle = '晒萌宝小宝妈请吃海鲜啦';
     }
 
-    public function beforeRender(){
+    public function beforeRender() {
         parent::beforeRender();
-        $this->set('hideNav',true);
-        $this->set('hideFooter',true);
+        $this->set('hideNav', true);
+        $this->set('hideFooter', true);
+        $currentVoteConfig = $this->VoteSetting->getVoteConfig($this->eventId);
+        $this->pageTitle = $currentVoteConfig['common_params']['title'];
+        $this->set('voteConfig', $currentVoteConfig);
     }
 
     /**
@@ -43,26 +46,26 @@ class VoteController extends AppController {
      * 可以排序
      * 根据投票的事件ID到特定的投票页面
      */
-    public function vote_event_view($eventId,$sort=0) {
-        //TODO set page title by event id
+    public function vote_event_view($eventId, $sort = 0) {
+        $this->eventId = $eventId;
         $uid = $this->currentUser['id'];
         $event_info = $this->get_event_info($eventId);
-        $candidators = $this->CandidateEvent->find('all',array(
+        $candidators = $this->CandidateEvent->find('all', array(
             'conditions' => array(
                 'event_id' => $eventId
             )
         ));
 
-        $candidator_ids = Hash::extract($candidators,'{n}.CandidateEvent.candidate_id');
-        $this->set('total_count',count($candidator_ids));
-        if($sort==1){
+        $candidator_ids = Hash::extract($candidators, '{n}.CandidateEvent.candidate_id');
+        $this->set('total_count', count($candidator_ids));
+        if ($sort == 1) {
             $this->Paginator->settings = $this->sortPaginate;
-            $this->set('op_cate','sort');
-        }else{
+            $this->set('op_cate', 'sort');
+        } else {
             $this->Paginator->settings = $this->paginate;
-            $this->set('op_cate','index');
+            $this->set('op_cate', 'index');
         }
-        $candidators_info = $this->Paginator->paginate('Candidate',array('Candidate.id' => $candidator_ids, 'Candidate.deleted' => DELETED_NO));
+        $candidators_info = $this->Paginator->paginate('Candidate', array('Candidate.id' => $candidator_ids, 'Candidate.deleted' => DELETED_NO));
         $candidators_info_user_ids = Hash::extract($candidators_info, '{n}.Candidate.user_id');
         $candidators_users = $this->User->find('all', array(
             'conditions' => array(
@@ -72,40 +75,42 @@ class VoteController extends AppController {
             'fields' => array('User.id', 'User.nickname', 'User.image')
         ));
         $candidators_users = Hash::combine($candidators_users, '{n}.User.id', '{n}.User');
-        if(!empty($candidators_info)){
-            foreach($candidators_info as &$candidator){
-                list($uvote,$is_vote) = $this->is_already_vote($candidator['Candidate']['id'],$eventId,$uid);
+        if (!empty($candidators_info)) {
+            foreach ($candidators_info as &$candidator) {
+                list($uvote, $is_vote) = $this->is_already_vote($candidator['Candidate']['id'], $eventId, $uid);
                 unset($uvote);
                 $candidator['is_vote'] = $is_vote;
             }
         }
-        $is_sign_up = $this->has_sign_up($eventId,$uid);
-        $this->set('is_sign_up',$is_sign_up);
-        $this->set('candidator_ids',$candidator_ids);
-        $this->set('event_info',$event_info);
-        $this->set('candidators',$candidators);
-        $this->set('candidators_info',$candidators_info);
-        $this->set('event_id',$eventId);
+        $is_sign_up = $this->has_sign_up($eventId, $uid);
+        $this->set('is_sign_up', $is_sign_up);
+        $this->set('candidator_ids', $candidator_ids);
+        $this->set('event_info', $event_info);
+        $this->set('candidators', $candidators);
+        $this->set('candidators_info', $candidators_info);
+        $this->set('event_id', $eventId);
         $this->set('candidators_users', $candidators_users);
-        $this->set('event_available',$this->check_event_is_available($event_info));
-
-        $this->set_wx_data($uid,$eventId);
+        $this->set('event_available', $this->check_event_is_available($event_info));
+        $this->set_wx_data($uid, $eventId);
     }
 
     private function save_sub_reason($candidateId, $eventId, $uid) {
-        $candidate_info = $this->Candidate->find('first',array(
+        $this->eventId = $eventId;
+        $candidate_info = $this->Candidate->find('first', array(
             'conditions' => array(
                 'id' => $candidateId
             )
         ));
-        $title = '我是第'.$candidateId.'号萌娃'.$candidate_info['Candidate']['title'];
-        $this->UserSubReason->save(array('type' => 'Vote7', 'url' => WX_HOST . '/vote/candidate_detail/' . $candidateId . '/' . $eventId, 'user_id' => $uid, 'title' => $title));
+        $title = '我是第' . $candidateId . '号萌娃' . $candidate_info['Candidate']['title'];
+        $type = $this->VoteSetting->getSubVoteType($eventId);
+        $this->UserSubReason->save(array('type' => $type, 'url' => WX_HOST . '/vote/candidate_detail/' . $candidateId . '/' . $eventId, 'user_id' => $uid, 'title' => $title, 'event_id' => $eventId));
     }
 
     public function to_sub($candidateId, $eventId) {
         $uid = $this->currentUser['id'];
         $this->save_sub_reason($candidateId, $eventId, $uid);
-        $this->redirect('http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=209556231&idx=1&sn=2a60e7f060180c9ecd0792f89694defb#rd');
+        $url = $this->VoteSetting->getSubVoteUrl($eventId);
+        $this->redirect($url);
     }
 
     /**
@@ -115,29 +120,30 @@ class VoteController extends AppController {
      */
     public function vote($candidateId, $eventId) {
         $this->autoRender = false;
+        $this->eventId = $eventId;
         $uid = $this->currentUser['id'];
-        if(empty($uid)){
+        if (empty($uid)) {
             echo json_encode(array('success' => false, 'reason' => 'Not logged'));
             return;
         }
-// vote user don't sub pys
+        // vote user don't sub pys
         if (user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED) {
             $this->save_sub_reason($candidateId, $eventId, $uid);
             echo json_encode(array('success' => false, 'reason' => 'Not subscribed'));
             return;
         }
-        list($uvote,$is_vote) = $this->is_already_vote($candidateId,$eventId,$uid);
-        if(count($uvote)>= 5){
+        list($uvote, $is_vote) = $this->is_already_vote($candidateId, $eventId, $uid);
+        if (count($uvote) >= 5) {
             echo json_encode(array('success' => false, 'reason' => 'more than five'));
             return;
         }
         //has vote for this baby
-        if($is_vote){
+        if ($is_vote) {
             echo json_encode(array('success' => false, 'reason' => 'already vote'));
             return;
         }
-        $vote = $this->Vote->save(array('candidate_id' => $candidateId, 'user_id'=>$uid, 'event_id'=>$eventId));
-        if(empty($vote)) {
+        $vote = $this->Vote->save(array('candidate_id' => $candidateId, 'user_id' => $uid, 'event_id' => $eventId));
+        if (empty($vote)) {
             echo json_encode(array('success' => false, 'reason' => 'save wrong'));
             return;
         }
@@ -155,6 +161,7 @@ class VoteController extends AppController {
      */
     public function join_event($candidateId, $eventId) {
         $this->autoRender = false;
+        $this->eventId = $eventId;
         $uid = $this->currentUser['id'];
         $CandidateUploadEvent = new CakeEvent('Vote.Candidate.created', $this->Candidate, array(
             'id' => $candidateId,
@@ -166,32 +173,32 @@ class VoteController extends AppController {
         return;
     }
 
-    public function sign_up($eventId){
-
+    public function sign_up($eventId) {
+        $this->eventId = $eventId;
         //check login
         $uid = $this->currentUser['id'];
-        if(empty($uid)){
+        if (empty($uid)) {
             $ref = Router::url($_SERVER['REQUEST_URI']);
-            $this->redirect('/users/login.html?force_login=1&auto_weixin='.$this->is_weixin().'&referer=' . urlencode($ref));
+            $this->redirect('/users/login.html?force_login=1&auto_weixin=' . $this->is_weixin() . '&referer=' . urlencode($ref));
             return;
         }
-        $sign_up_info = $this->has_sign_up($eventId,$uid);
-        if(!empty($sign_up_info)){
-            $this->redirect('/vote/candidate_detail/'.$sign_up_info['CandidateEvent']['candidate_id'].'/'.$eventId);
+        $sign_up_info = $this->has_sign_up($eventId, $uid);
+        if (!empty($sign_up_info)) {
+            $this->redirect('/vote/candidate_detail/' . $sign_up_info['CandidateEvent']['candidate_id'] . '/' . $eventId);
             return;
         }
         $event_info = $this->get_event_info($eventId);
-        $this->set('event_info',$event_info);
-        $this->set('event_id',$eventId);
+        $this->set('event_info', $event_info);
+        $this->set('event_id', $eventId);
         $uid = $this->currentUser['id'];
-        if(empty($uid)){
-            $this->set('not_login',true);
+        if (empty($uid)) {
+            $this->set('not_login', true);
         }
-        if(!$this->is_weixin()||user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED){
-            $this->set('not_weixin',true);
+        if (!$this->is_weixin() || user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED) {
+            $this->set('not_weixin', true);
         }
-        $this->set_wx_data($uid,$eventId);
-        $this->set('op_cate','sign_up');
+        $this->set_wx_data($uid, $eventId);
+        $this->set('op_cate', 'sign_up');
     }
 
     /**
@@ -209,9 +216,9 @@ class VoteController extends AppController {
             echo json_encode(array('success' => false, 'reason' => 'not subscribed'));
             return;
         }
-        $signUpRecord = $this->has_sign_up($eventId,$uid);
-        if(!empty($signUpRecord)){
-            echo json_encode(array('success' => false,'reason' => 'has sign', 'candidate_id' => $signUpRecord['CandidateEvent']['candidate_id']));
+        $signUpRecord = $this->has_sign_up($eventId, $uid);
+        if (!empty($signUpRecord)) {
+            echo json_encode(array('success' => false, 'reason' => 'has sign', 'candidate_id' => $signUpRecord['CandidateEvent']['candidate_id']));
             return;
         }
         $title = $_POST['title'];
@@ -242,7 +249,8 @@ class VoteController extends AppController {
     /**
      * 萌宝详情
      */
-    public function candidate_detail($candidateId,$eventId) {
+    public function candidate_detail($candidateId, $eventId) {
+        $this->eventId = $eventId;
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
             $ref = Router::url($_SERVER['REQUEST_URI']);
@@ -250,7 +258,7 @@ class VoteController extends AppController {
             return;
         }
         if (user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED) {
-            $this->set('not_sub',true);
+            $this->set('not_sub', true);
         }
         $candidate_data = $this->set_candidate_data($candidateId, $eventId, $uid);
         $this->set($candidate_data);
@@ -286,50 +294,50 @@ class VoteController extends AppController {
         $this->set('op_cate', 'detail');
     }
 
-    private function has_sign_up($eventId,$userId){
-        $record = $this->CandidateEvent->find('first',array(
+    private function has_sign_up($eventId, $userId) {
+        $record = $this->CandidateEvent->find('first', array(
             'conditions' => array(
-                'user_id'  => $userId,
+                'user_id' => $userId,
                 'event_id' => $eventId
             )
         ));
         return $record;
     }
 
-    private function is_already_vote($candidateId,$eventId,$uid){
+    private function is_already_vote($candidateId, $eventId, $uid) {
 
         $uvote = $this->Vote->find('all', array(
             'conditions' => array(
                 'user_id' => $uid,
                 'event_id' => $eventId,
-                'created >'=> date('Y-m-d', time()),
-                'created <'=> date('Y-m-d', strtotime('+1 day')),
+                'created >' => date('Y-m-d', time()),
+                'created <' => date('Y-m-d', strtotime('+1 day')),
             )
         ));
         $already_vote_candidate = Hash::extract($uvote, '{n}.Vote.candidate_id');
-        $is_vote = in_array($candidateId,$already_vote_candidate);
-        return array($uvote,$is_vote);
+        $is_vote = in_array($candidateId, $already_vote_candidate);
+        return array($uvote, $is_vote);
     }
 
-    private function get_event_info($eventId){
+    private function get_event_info($eventId) {
 
-        $event_info = $this->VoteEvent->find('first',array(
+        $event_info = $this->VoteEvent->find('first', array(
             'conditions' => array(
-                'id'=>$eventId
+                'id' => $eventId
             ),
             'fields' => array(
-                'start_time','end_time', 'deleted', 'published', 'place'
+                'start_time', 'end_time', 'deleted', 'published', 'place'
             )
         ));
         return $event_info;
     }
 
-    private function set_wx_data($uid,$eventId){
+    private function set_wx_data($uid, $eventId) {
         $weixinJs = prepare_wx_share_log($uid, 'voteEventId', $eventId);
         $this->set($weixinJs);
     }
 
-    private function set_candidate_data($candaidateId,$eventId,$uid){
+    private function set_candidate_data($candaidateId, $eventId, $uid) {
         $allCount = $this->Vote->find('count', array(
             'conditions' => array(
                 'event_id' => $eventId,
@@ -341,15 +349,15 @@ class VoteController extends AppController {
                 'user_id' => $uid,
                 'event_id' => $eventId,
                 'candidate_id' => $candaidateId,
-                'created >'=> date('Y-m-d', time()),
-                'created <'=> date('Y-m-d', strtotime('+1 day'))
+                'created >' => date('Y-m-d', time()),
+                'created <' => date('Y-m-d', strtotime('+1 day'))
             )
         ));
 
         return array('all_count' => $allCount, 'has_vote' => $hasVote);
     }
 
-    private function update_candidate_vote_num($candidateId){
+    private function update_candidate_vote_num($candidateId) {
         $this->Candidate->updateAll(array('vote_num' => 'vote_num + 1'), array('id' => $candidateId));
     }
 
@@ -366,31 +374,21 @@ class VoteController extends AppController {
         return true;
     }
 
-    private function save_user_relation($uid){
+    private function save_user_relation($uid) {
         $this->WeshareBuy->subscribe_sharer('811917', $uid);
     }
 
-    private function get_candidate_rank($candidate_id,$event_id){
-        $query_sql = 'SELECT (SELECT COUNT(rank.id) FROM cake_candidates rank WHERE rank.id IN (SELECT candidate_id from cake_candidate_events WHERE event_id='.$event_id.') AND c.vote_num <= rank.vote_num) AS Rank, c.id AS Id, c.vote_num AS Roll FROM cake_candidates c WHERE c.id='.$candidate_id.' ORDER BY c.vote_num ASC';
+    private function get_candidate_rank($candidate_id, $event_id) {
+        $query_sql = 'SELECT (SELECT COUNT(rank.id) FROM cake_candidates rank WHERE rank.id IN (SELECT candidate_id from cake_candidate_events WHERE event_id=' . $event_id . ') AND c.vote_num <= rank.vote_num) AS Rank, c.id AS Id, c.vote_num AS Roll FROM cake_candidates c WHERE c.id=' . $candidate_id . ' ORDER BY c.vote_num ASC';
         $rank_data = $this->Candidate->query($query_sql);
         return $rank_data;
     }
 
-    private function get_all_candidate_rank_data($event_id){
-        $query_sql = 'SELECT (SELECT COUNT(rank.id) FROM cake_candidates rank WHERE rank.id IN (SELECT candidate_id from cake_candidate_events WHERE event_id='.$event_id.') AND c.vote_num <= rank.vote_num) AS Rank, c.id AS Id, c.vote_num AS Roll, c.title AS Title FROM cake_candidates c WHERE c.id IN (SELECT candidate_id from cake_candidate_events WHERE event_id='.$event_id.') ORDER BY c.vote_num ASC';
+    private function get_all_candidate_rank_data($event_id) {
+        $query_sql = 'SELECT (SELECT COUNT(rank.id) FROM cake_candidates rank WHERE rank.id IN (SELECT candidate_id from cake_candidate_events WHERE event_id=' . $event_id . ') AND c.vote_num <= rank.vote_num) AS Rank, c.id AS Id, c.vote_num AS Roll, c.title AS Title FROM cake_candidates c WHERE c.id IN (SELECT candidate_id from cake_candidate_events WHERE event_id=' . $event_id . ') ORDER BY c.vote_num ASC';
         $all_rank_data = $this->Candidate->query($query_sql);
         return $all_rank_data;
     }
 
-
-    private function vote_event_configs(){
-        $configs = array(
-            6 => array(
-                'wx_params' => array(),
-                'common_params' => array(),
-                'product_params' => array()
-            ),
-        );
-    }
 
 }
