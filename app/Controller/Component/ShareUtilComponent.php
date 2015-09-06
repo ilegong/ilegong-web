@@ -356,7 +356,7 @@ class ShareUtilComponent extends Component {
             '438' => array(
                 'share_id' => 438,
                 'share_name' => '河南荥阳河阴软籽大石榴，9月20号抢鲜',
-                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/1c025d72281_0906.jpg',
+                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/a7c2d7a2a0d_0906.jpg',
                 'share_price' => '68',
                 'share_user_name' => '段赵明',
                 'share_vote' => 300,
