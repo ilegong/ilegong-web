@@ -636,8 +636,27 @@
       vm.showNotifyView = true;
       vm.showLayer = true;
       vm.notify = {};
-      var msgContent = _.reduce(vm.ordersDetail.users, function(memo, user){ return memo + user['nickname']+'，'; }, '');
-      msgContent = msgContent+'都已经报名'+vm.weshare.creator.nickname+'分享的'+vm.weshare.title+'啦，就差你啦。';
+      var msgContent = '';
+      if (Object.keys(vm['ordersDetail']['users']).length > 10) {
+        var usersCount = Object.keys(vm['ordersDetail']['users']).length;
+        var index = 0;
+        for (var userId in vm['ordersDetail']['users']) {
+          var user = vm['ordersDetail']['users'][userId];
+          index++;
+          if (index > 10) {
+            break
+          }
+          if (index == 10) {
+            msgContent =  msgContent + user['nickname'];
+          }else{
+            msgContent = msgContent + user['nickname'] + '，';
+          }
+        }
+        msgContent = msgContent+'...等'+usersCount+'人都已经报名'+vm.weshare.creator.nickname+'分享的'+vm.weshare.title+'啦，就差你啦。';
+      }else{
+        msgContent = _.reduce(vm.ordersDetail.users, function(memo, user){ return memo + user['nickname']+'，'; }, '');
+        msgContent = msgContent+'都已经报名'+vm.weshare.creator.nickname+'分享的'+vm.weshare.title+'啦，就差你啦。';
+      }
       vm.notify.content = msgContent;
     }
 
@@ -659,7 +678,7 @@
             alert('发送成功');
           }
         }).error(function () {
-          alert("发送成功,请联系朋友说客服。。");
+          alert("发送失败,请联系朋友说客服。。");
         });
       }
     }
@@ -709,7 +728,7 @@
             alert('发送成功');
           }
         }).error(function () {
-          alert("发送成功,请联系朋友说客服。。");
+          alert("发送失败,请联系朋友说客服。。");
         });
       }
     }
