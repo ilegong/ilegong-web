@@ -290,7 +290,9 @@ class ShareUtilComponent extends Component {
         ));
         $shareInfo = $shareInfo['Weshare'];
         $shareInfo['id'] = null;
+        $shareInfo['created'] = date('Y-m-d H:i:s');
         $shareInfo['status'] = 0;
+        $uid = $shareInfo['creator'];
         $WeshareM->id = null;
         $newShareInfo = $WeshareM->save($shareInfo);
         if ($newShareInfo) {
@@ -343,14 +345,15 @@ class ShareUtilComponent extends Component {
             $oldShareRebateSet = $proxyRebatePercentM->find('first', array(
                 'conditions' => array('share_id' => $shareId)
             ));
-            if(!empty($oldShareRebateSet)){
+            if (!empty($oldShareRebateSet)) {
                 $newShareRebateSet = $oldShareRebateSet['ProxyRebatePercent'];
                 $newShareRebateSet['id'] = null;
                 $newShareRebateSet['share_id'] = $newShareId;
                 $proxyRebatePercentM->save($newShareRebateSet);
-            }else{
+            } else {
                 $proxyRebatePercentM->save(array('share_id' => $newShareId, 'percent' => 0));
             }
+            Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
             return array('shareId' => $newShareId, 'success' => true);
         }
         return array('success' => false);
