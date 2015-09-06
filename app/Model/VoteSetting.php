@@ -67,6 +67,7 @@ class VoteSetting extends AppModel{
                 'server_reply_title' => '晒萌宝小宝妈请吃海鲜啦',
                 'server_reply_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/2a9c850ed64_0829.jpg',
                 'server_reply_url' => 'http://www.tongshijia.com/vote/vote_event_view/6',
+                'reply_tip_info' => '请先关注朋友说微信公众号“pyshuo2014”如您已关注，请进入公众号回复“报名”即可！'
             ),
             'product_params' => array(
                 'recommend' => '小宝妈',
@@ -97,6 +98,7 @@ class VoteSetting extends AppModel{
                 'server_reply_title' => '晒萌宝樱花请客了!',
                 'server_reply_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/77ba69da4f1_0906.jpg',
                 'server_reply_url' => 'http://www.tongshijia.com/vote/vote_event_view/7',
+                'reply_tip_info' => '请先关注朋友说微信公众号“pyshuo2014”如您已关注，请进入公众号回复“樱花”即可！'
             ),
             'product_params' => array(
                 'recommend' => '樱花',
