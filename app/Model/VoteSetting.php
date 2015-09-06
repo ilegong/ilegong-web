@@ -78,6 +78,36 @@ class VoteSetting extends AppModel{
                     )
                 )
             )
+        ),
+        7 => array(
+            'id' => 7,
+            'initiator' => '810684',
+            'sub_type' => 'Vote8',
+            'title' => '晒萌宝小宝妈请吃海鲜啦',
+            'sub_url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=209556231&idx=1&sn=2a60e7f060180c9ecd0792f89694defb#rd',
+            'wx_params' => array(
+                'time_line_title' => '晒萌宝小宝妈请吃海鲜啦！',
+                'chat_title' => '晒萌宝小宝妈请吃海鲜啦！',
+                'share_pic' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/4f4998d2b68_0829.jpg',
+                'desc' => '感谢亲们对小宝妈的支持，有你们在一起真好！让我们一起记录宝宝的美好瞬间。',
+            ),
+            'common_params' => array(
+                'banner' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/7eb18fb79da_0906.jpg',
+                'prize_pic' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/486b41f7fcc_0906.jpg',
+                'server_reply_title' => '晒萌宝小宝妈请吃海鲜啦',
+                'server_reply_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/486b41f7fcc_0906.jpg',
+                'server_reply_url' => 'http://www.tongshijia.com/vote/vote_event_view/7',
+            ),
+            'product_params' => array(
+                'recommend' => '樱花',
+                'products' => array(
+                    array(
+                        'url' => 'http://www.tongshijia.com/weshares/view/56',
+                        'pic' => '/img/imgstore/zao.jpg',
+                        'name' => '天山骏枣'
+                    )
+                )
+            )
         )
     );
 
