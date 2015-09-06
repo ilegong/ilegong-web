@@ -103,7 +103,7 @@ class VoteController extends AppController {
         ));
         $title = '我是第' . $candidateId . '号萌娃' . $candidate_info['Candidate']['title'];
         $type = $this->VoteSetting->getSubVoteType($eventId);
-        $this->UserSubReason->save(array('type' => $type, 'url' => WX_HOST . '/vote/candidate_detail/' . $candidateId . '/' . $eventId, 'user_id' => $uid, 'title' => $title, 'event_id' => $eventId));
+        $this->UserSubReason->save(array('type' => $type, 'url' => WX_HOST . '/vote/candidate_detail/' . $candidateId . '/' . $eventId, 'user_id' => $uid, 'title' => $title, 'data_id' => $eventId));
     }
 
     public function to_sub($candidateId, $eventId) {
@@ -149,7 +149,7 @@ class VoteController extends AppController {
         }
         //update vote num
         $this->update_candidate_vote_num($candidateId);
-        $this->save_user_relation($uid);
+        $this->save_user_relation($uid, $eventId);
         echo json_encode(array('success' => true));
     }
 
@@ -239,7 +239,7 @@ class VoteController extends AppController {
             $candidate_id = $this->Candidate->id;
             $eventCandidateData = array('event_id' => $eventId, 'candidate_id' => $candidate_id, 'user_id' => $uid);
             $this->CandidateEvent->save($eventCandidateData);
-            $this->save_user_relation($uid);
+            $this->save_user_relation($uid,$eventId);
             echo json_encode(array('success' => true));
             return;
         }
@@ -376,8 +376,9 @@ class VoteController extends AppController {
         return true;
     }
 
-    private function save_user_relation($uid) {
-        $this->WeshareBuy->subscribe_sharer('811917', $uid);
+    private function save_user_relation($uid, $eventId) {
+        $initiator = $this->VoteSetting->getVoteInitiator($eventId);
+        $this->WeshareBuy->subscribe_sharer($initiator, $uid);
     }
 
     private function get_candidate_rank($candidate_id, $event_id) {
