@@ -761,7 +761,6 @@
           if (data['success']) {
             vm.showNotifyView = false;
             vm.showLayer = false;
-            alert('发送成功');
           }
         }).error(function () {
           alert("发送失败,请联系朋友说客服。。");
