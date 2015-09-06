@@ -104,6 +104,7 @@ class WeixinController extends AppController {
                                 $title = $reason['UserSubReason']['title'];
                                 $event_id = $reason['UserSubReason']['data_id'];
                                 $picUrl = $this->VoteSetting->getServerReplyPic($event_id);
+                                $this->log("vote event id pic url:" . $event_id . ' ' . $picUrl);
                                 $content = array(
                                     array('title' => $title, 'description' => '快来支持我吧...',
                                         'picUrl' => $picUrl,
