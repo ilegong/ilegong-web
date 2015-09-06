@@ -160,6 +160,7 @@
     vm.getRecommendInfo = getRecommendInfo;
     vm.isCurrentUserRecommend = isCurrentUserRecommend;
     vm.toRecommendUserInfo = toRecommendUserInfo;
+    vm.cloneShare = cloneShare;
     function pageLoaded(){
       $rootScope.loadingPage = false;
     }
@@ -585,11 +586,30 @@
           if (data['reason']) {
             alert(data['reason']);
           } else {
-            alert('提交失败');
+            alert('提交失败.请联系客服..');
           }
         }
       }).error(function () {
         vm.submitProcessing = false;
+      });
+    }
+
+    function cloneShare(){
+      vm.cloneShareProcessing = true;
+      $http.post('/weshares/cloneShare/'+vm.weshare.id).success(function (data) {
+        if (data.success) {
+          //redirect view
+          window.location.href = '/weshares/view/' + data['shareId'];
+        } else {
+          vm.cloneShareProcessing = false;
+          if (data['reason']) {
+            alert(data['reason']);
+          } else {
+            alert('提交失败');
+          }
+        }
+      }).error(function () {
+        vm.cloneShareProcessing = false;
       });
     }
 

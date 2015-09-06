@@ -274,6 +274,7 @@ class ShareUtilComponent extends Component {
 
     /**
      * @param $shareId
+     * @return array
      * clone一份
      */
     public function cloneShare($shareId) {
@@ -288,6 +289,7 @@ class ShareUtilComponent extends Component {
         ));
         $shareInfo = $shareInfo['Weshare'];
         $shareInfo['id'] = null;
+        $shareInfo['status'] = 0;
         $WeshareM->id = null;
         $newShareInfo = $WeshareM->save($shareInfo);
         if ($newShareInfo) {
@@ -315,7 +317,7 @@ class ShareUtilComponent extends Component {
             foreach ($shareAddresses as $itemShareAddress) {
                 $itemShareAddress = $itemShareAddress['WeshareAddress'];
                 $itemShareAddress['id'] = null;
-                $itemShareAddress['weshare_id'] = null;
+                $itemShareAddress['weshare_id'] = $newShareId;
                 $newAddresses[] = $itemShareAddress;
             }
             $WeshareAddressM->id = null;
@@ -329,12 +331,14 @@ class ShareUtilComponent extends Component {
             foreach ($shareShipSettings as $itemShareShipSetting) {
                 $itemShareShipSetting = $itemShareShipSetting['WeshareShipSetting'];
                 $itemShareShipSetting['id'] = null;
-                $itemShareShipSetting['weshare_id'] = null;
+                $itemShareShipSetting['weshare_id'] = $newShareId;
                 $newShareShipSettings[] = $itemShareShipSetting;
             }
             $WeshareShipSettingM->id = null;
             $WeshareShipSettingM->saveAll($newShareShipSettings);
+            return array('shareId' => $newShareId, 'success' => true);
         }
+        return array('success' => false);
     }
 
     /**
