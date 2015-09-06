@@ -382,4 +382,15 @@ class VoteController extends AppController {
         return $all_rank_data;
     }
 
+
+    private function vote_event_configs(){
+        $configs = array(
+            6 => array(
+                'wx_params' => array(),
+                'common_params' => array(),
+                'product_params' => array()
+            ),
+        );
+    }
+
 }

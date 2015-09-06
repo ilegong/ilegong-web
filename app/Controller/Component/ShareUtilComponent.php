@@ -273,11 +273,96 @@ class ShareUtilComponent extends Component {
     }
 
     /**
+     * @param $shareId
+     * clone一份
+     */
+    public function cloneShare($shareId) {
+        $WeshareM = ClassRegistry::init('Weshare');
+        $WeshareProductM = ClassRegistry::init('WeshareProduct');
+        $WeshareAddressM = ClassRegistry::init('WeshareAddress');
+        $WeshareShipSettingM = ClassRegistry::init('WeshareShipSetting');
+        $shareInfo = $WeshareM->find('first', array(
+            'conditions' => array(
+                'id' => $shareId
+            )
+        ));
+        $shareInfo = $shareInfo['Weshare'];
+        $shareInfo['id'] = null;
+        $WeshareM->id = null;
+        $newShareInfo = $WeshareM->save($shareInfo);
+        if ($newShareInfo) {
+            $newShareId = $newShareInfo['Weshare']['id'];
+            $shareProducts = $WeshareProductM->find('all', array(
+                'conditions' => array(
+                    'weshare_id' => $shareId
+                )
+            ));
+            $newProducts = array();
+            foreach ($shareProducts as $itemShareProduct) {
+                $itemShareProduct = $itemShareProduct['WeshareProduct'];
+                $itemShareProduct['id'] = null;
+                $itemShareProduct['weshare_id'] = $newShareId;
+                $newProducts[] = $itemShareProduct;
+            }
+            $WeshareProductM->id = null;
+            $WeshareProductM->saveAll($newProducts);
+            $shareAddresses = $WeshareAddressM->find('all', array(
+                'conditions' => array(
+                    'weshare_id' => $shareId
+                )
+            ));
+            $newAddresses = array();
+            foreach ($shareAddresses as $itemShareAddress) {
+                $itemShareAddress = $itemShareAddress['WeshareAddress'];
+                $itemShareAddress['id'] = null;
+                $itemShareAddress['weshare_id'] = null;
+                $newAddresses[] = $itemShareAddress;
+            }
+            $WeshareAddressM->id = null;
+            $WeshareAddressM->saveAll($newAddresses);
+            $shareShipSettings = $WeshareShipSettingM->find('all', array(
+                'conditions' => array(
+                    'weshare_id' => $shareId
+                )
+            ));
+            $newShareShipSettings = array();
+            foreach ($shareShipSettings as $itemShareShipSetting) {
+                $itemShareShipSetting = $itemShareShipSetting['WeshareShipSetting'];
+                $itemShareShipSetting['id'] = null;
+                $itemShareShipSetting['weshare_id'] = null;
+                $newShareShipSettings[] = $itemShareShipSetting;
+            }
+            $WeshareShipSettingM->id = null;
+            $WeshareShipSettingM->saveAll($newShareShipSettings);
+        }
+    }
+
+    /**
      * @return array
      * index product
      */
     public function get_share_index_product() {
         $product = array(
+            '446' => array(
+                'share_id' => 446,
+                'share_name' => '阳澄湖大闸蟹2015中秋第一波团购启动啦！',
+                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/d0c241c3b9d_0906.jpg',
+                'share_price' => '150',
+                'share_user_name' => '博文',
+                'share_vote' => 300,
+                'share_user_id' => 815,
+                'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/9257b1649ba_0906.jpg'
+            ),
+            '438' => array(
+                'share_id' => 438,
+                'share_name' => '河南荥阳河阴软籽大石榴，9月20号抢鲜',
+                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/9491f3d02e1_0906.jpg',
+                'share_price' => '68',
+                'share_user_name' => '段赵明',
+                'share_vote' => 300,
+                'share_user_id' => 1199,
+                'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/6f5125521e1_0903.jpg'
+            ),
             '413' => array(
                 'share_id' => 413,
                 'share_name' => '澳洲芦柑',
