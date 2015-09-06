@@ -12,7 +12,7 @@ class WeixinController extends AppController {
 
 	var $name = 'Weixin';
 
-    var $uses = array('Oauthbind', 'User', 'UserSubReason', 'Candidate', 'CandidateEvent','VoteSetting');
+    var $uses = array('Oauthbind', 'User', 'UserSubReason', 'Candidate', 'CandidateEvent', 'VoteSetting');
 	
 	public function beforeFilter(){
 		parent::beforeFilter();
