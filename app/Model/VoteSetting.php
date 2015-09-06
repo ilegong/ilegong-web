@@ -88,7 +88,7 @@ class VoteSetting extends AppModel{
             'wx_params' => array(
                 'time_line_title' => '晒萌宝樱花请客了!',
                 'chat_title' => '晒萌宝樱花请客了!',
-                'share_pic' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/4f4998d2b68_0829.jpg',
+                'share_pic' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/45ff4a8f0cb_0906.jpg',
                 'desc' => '感谢亲们对樱花的支持，有你们在一起真好！让我们一起记录宝宝的美好瞬间。',
             ),
             'common_params' => array(
