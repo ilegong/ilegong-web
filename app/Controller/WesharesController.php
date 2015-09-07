@@ -796,6 +796,7 @@ class WesharesController extends AppController {
      * export order to excel
      */
     public function order_export($shareId){
+        $this->layout = null;
         $statics_data = $this->get_weshare_buy_info($shareId, true, true);
         $refund_money = $this->WeshareBuy->get_refund_money_by_weshare($shareId);
         $rebate_money = $this->ShareUtil->get_share_rebate_money($shareId);

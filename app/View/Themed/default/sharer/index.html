@@ -1,0 +1,31 @@
+<div class="row">
+    <div class="col-md-10">
+
+        <table class="table table-hover">
+            <tr>
+                <td>编号</td>
+                <td>分享名称</td>
+                <td>创建时间</td>
+                <td>分享状态</td>
+                <td>操作</td>
+            </tr>
+            {{loop $weshares $shareItem}}
+                <tr>
+                    <td>{{$shareItem['Weshare']['id']}}</td>
+                    <td>{{$shareItem['Weshare']['title']}}</td>
+                    <td>{{$shareItem['Weshare']['created']}}</td>
+                    <td>
+                        {{if $shareItem['Weshare']['status'] == 0}}
+                            <h3><span class="label label-success">进行中</span></h3>
+                        {{else}}
+                            <h3><span class="label label-danger">已截单</span></h3>
+                        {{/if}}
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" href="/weshares/order_export/{{$shareItem['Weshare']['id']}}" role="button">导出订单</a>
+                    </td>
+                </tr>
+            {{/loop}}
+        </table>
+    </div>
+</div>

@@ -1211,6 +1211,23 @@ class WeshareBuyComponent extends Component {
     }
 
     /**
+     * @param $uid
+     * @return array
+     * 获取用户分享信息
+     */
+    public function get_user_weshares($uid){
+        $weshareM = ClassRegistry::init('Weshare');
+        $weshares = $weshareM->find('all', array(
+            'conditions' => array(
+                'creator' => $uid
+            ),
+            'order' => array('id DESC'),
+            'limit' => 500
+        ));
+        return $weshares;
+    }
+
+    /**
      * @param $share_id
      * @return array
      *
