@@ -339,7 +339,7 @@ class PhpExcelHelper extends AppHelper {
         header("Pragma: public", true);
         header("Expires: 0"); // set expiration time
         header("Content-Type: application/force-download");
-        header("Content-Type: application/octet-stream");
+        header('Content-Type: application/vnd.ms-excel');
         header("Content-Type: application/download");
         header("Content-Transfer-Encoding: binary");
         header('Content-Disposition: attachment;filename="' . $filename . '"');

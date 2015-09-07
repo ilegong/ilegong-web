@@ -68,4 +68,4 @@ foreach($order_ship_tags as $tag){
 }
 // close table and output
 $this->PhpExcel->addTableFooter()
-    ->output('Pyshuo.com-' . $exportName . '-' . $this->Time->format(time(), '%Y%m%d%H%M') . '.xlsx', 'Excel5');
+    ->output('Pyshuo.com-' . $exportName . '-' . $this->Time->format(time(), '%Y%m%d%H%M') . '.xls', 'Excel5');
