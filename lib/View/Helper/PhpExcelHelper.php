@@ -331,10 +331,17 @@ class PhpExcelHelper extends AppHelper {
         // remove all output
         ob_end_clean();
 
+
         // headers
         //header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         //header('Content-Type: application/octet-stream');
-        header('Content-Type: application/vnd.ms-excel');
+        //header('Content-Type: application/vnd.ms-excel');
+        header("Pragma: public", true);
+        header("Expires: 0"); // set expiration time
+        header("Content-Type: application/force-download");
+        header("Content-Type: application/octet-stream");
+        header("Content-Type: application/download");
+        header("Content-Transfer-Encoding: binary");
         header('Content-Disposition: attachment;filename="' . $filename . '"');
         header('Cache-Control: max-age=0');
 
