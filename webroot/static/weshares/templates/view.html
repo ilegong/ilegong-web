@@ -84,9 +84,18 @@
                         <div style="display: inline;width: 100%;"><span style="width: 30%;" class='created-at' ng-bind="vm.getFormatDate(order.created)"></span><span ng-click="vm.toRecommendUserInfo(order)" style="margin-top: -30px;line-height: 20px;margin-left: 10px;background-color: #29AC0E;padding: 3px;float: right;display: block;width: auto;" class="statistics-btn" ng-bind="vm.getRecommendInfo(order)"></span></div>
                     </div>
                     <div style="display: inline-flex;width: 100%;" ng-if="!vm.isCurrentUserRecommend(order)||!(order.cate_id > 0&&((order.status!=3)||(order.status==3&&!vm.isOwner(order)&&!vm.isCreator())))">
-                        <div><span style="width: 100%;" class='created-at' ng-bind="vm.getFormatDate(order.created)"></span></div>
-                        <div style="float: right;margin-left: 60%;" ng-if="order.status==3&&vm.isOwner(order)" ng-click="vm.showCommentDialog(order)"><div class="commenting-o"><i class="fa fa-commenting-o fa-lg"></i></div></div>
-                        <div style="float: right;margin-left: 48%;" ng-if="order.status==3&&vm.isCreator()&&!order.notify" ng-click="vm.notifyUserToComment(order)"><div class="commenting-o"><a style="margin-top: 0px;width: 65px;line-height: 0;margin-left: 10px;display: inline;" class="statistics-btn">求评价</a></div></div>
+                        <div style="width: 29%;"><span style="width: 100%;" class='created-at' ng-bind="vm.getFormatDate(order.created)"></span></div>
+                        <div style="float: right;margin-left: 49%; width: 30%;"
+                             ng-if="order.status==3&&vm.isOwner(order)" ng-click="vm.showCommentDialog(order)">
+                            <div class="commenting-o"><i class="fa fa-commenting-o fa-lg"></i></div>
+                        </div>
+                        <div style="float: right;margin-left: 37%; width: 30%;"
+                             ng-if="order.status==3&&vm.isCreator()&&!order.notify"
+                             ng-click="vm.notifyUserToComment(order)">
+                            <div class="commenting-o"><a
+                                    style="margin-top: 0px;width: 65px;line-height: 0;margin-left: 10px;display: inline;"
+                                    class="statistics-btn">求评价</a></div>
+                        </div>
                     </div>
                     <div class="send-info" ng-if="vm.isOwner(order)">
                         <span>姓名:</span>
