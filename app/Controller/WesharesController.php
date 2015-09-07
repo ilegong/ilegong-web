@@ -13,6 +13,12 @@ class WesharesController extends AppController {
 
     var $pay_type = 1;
 
+
+    public function __construct($request = null, $response = null) {
+        $this->helpers[] = 'PhpExcel';
+        parent::__construct($request, $response);
+    }
+
     public function beforeFilter() {
         parent::beforeFilter();
         $this->layout = 'weshare';
@@ -41,8 +47,8 @@ class WesharesController extends AppController {
         $this->log('weshare view mark ' . $_REQUEST['mark']);
         $recommend = $_REQUEST['recommend'];
         //add rebate log
-        if($this->ShareUtil->is_proxy_user($recommend)){
-            if (!empty($recommend)&&!empty($uid)) {
+        if ($this->ShareUtil->is_proxy_user($recommend)) {
+            if (!empty($recommend) && !empty($uid)) {
                 $rebateLogId = $this->ShareUtil->save_rebate_log($recommend, $uid, $weshare_id);
                 $this->set('recommend_id', $recommend);
                 $this->set('rebateLogId', $rebateLogId);
@@ -412,8 +418,8 @@ class WesharesController extends AppController {
         }
         $result = $this->Order->updateAll(array('status' => ORDER_STATUS_RECEIVED, 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order['Order']['id']));
         $this->Cart->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order['Order']['id']));
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id.'_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id.'_0', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0', '');
         if (!$result) {
             echo json_encode(array(success => false, reason => "failed to update order status"));
             return;
@@ -470,17 +476,17 @@ class WesharesController extends AppController {
         $userCommentData = $this->WeshareBuy->load_user_share_comments($uid);
         $userFansData = $this->WeshareBuy->get_user_fans_data($uid, 100);
         $userFocusData = $this->WeshareBuy->get_user_focus($uid, 100);
-        if($uid != $current_uid){
+        if ($uid != $current_uid) {
             $sub_status = $this->WeshareBuy->check_user_subscribe($uid, $current_uid);
             $this->set('sub_status', $sub_status);
         }
         $user_is_proxy = $this->ShareUtil->is_proxy_user($uid);
-        if($user_is_proxy){
+        if ($user_is_proxy) {
             $this->set('is_proxy', true);
         }
-        if($uid == $current_uid){
-            if($user_is_proxy){
-                $this->set('show_rebate_money',true);
+        if ($uid == $current_uid) {
+            if ($user_is_proxy) {
+                $this->set('show_rebate_money', true);
                 $rebate_money = $this->ShareUtil->get_rebate_money($current_uid);
                 $this->set('rebate_money', $rebate_money);
             }
@@ -493,13 +499,13 @@ class WesharesController extends AppController {
         $this->set('my_create_shares', $myCreateShares);
         $this->set('my_join_shares', $myJoinShares);
         $this->set('sharer_comment_data', $shareCommentData);
-        $this->set('user_comment_data',$userCommentData);
+        $this->set('user_comment_data', $userCommentData);
         $this->set('is_verify_user', $this->is_verify_sharer($uid));
         $canSupportOfflineStore = $this->sharer_can_use_we_ship($uid);
         $this->set('is_support_offline_store', $canSupportOfflineStore > 0);
         $this->set('join_share_order_status', $joinShareOrderStatus);
-        $this->set('fans_data',$userFansData);
-        $this->set('focus_data',$userFocusData);
+        $this->set('fans_data', $userFansData);
+        $this->set('focus_data', $userFocusData);
         $this->set('joinShareComments', $joinShareComments);
     }
 
@@ -514,8 +520,8 @@ class WesharesController extends AppController {
         $ship_code = $_REQUEST['ship_code'];
         $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'ship_type' => $ship_company_id, 'ship_code' => "'" . $ship_code . "'", 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order_id, 'status' => ORDER_STATUS_PAID));
         $this->Cart->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order_id));
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id.'_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id.'_0', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0', '');
         $this->WeshareBuy->send_share_product_ship_msg($order_id, $weshare_id);
         echo json_encode(array('success' => true));
         return;
@@ -547,21 +553,21 @@ class WesharesController extends AppController {
         $prepare_update_order_ids = Hash::extract($prepare_update_orders, '{n}.Order.id');
         $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $prepare_update_order_ids));
         $this->Cart->updateAll(array('status' => ORDER_STATUS_SHIPPED), array('order_id' => $prepare_update_order_ids));
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id.'_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id.'_0', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0', '');
         $this->process_send_msg($share_info, $msg);
         echo json_encode(array('success' => true));
         return;
     }
 
-    public function subscribe_sharer($share_id, $user_id){
+    public function subscribe_sharer($share_id, $user_id) {
         $this->autoRender = false;
         $this->WeshareBuy->subscribe_sharer($share_id, $user_id);
         echo json_encode(array('success' => true));
         return;
     }
 
-    public function unsubscribe_sharer($share_id, $user_id){
+    public function unsubscribe_sharer($share_id, $user_id) {
         $this->autoRender = false;
         $this->WeshareBuy->unsubscribe_sharer($share_id, $user_id);
         echo json_encode(array('success' => true));
@@ -659,7 +665,7 @@ class WesharesController extends AppController {
             }
             echo json_encode(array('success' => true));
             return;
-        }else{
+        } else {
             $queue = new SaeTaskQueue('share');
             $queue->addTask("/weshares/process_notify_has_buy_fans/" . $weshare_id, "content=" . $content, true);
             //将任务推入队列
@@ -689,7 +695,7 @@ class WesharesController extends AppController {
             echo json_encode(array('success' => false, 'reason' => 'not_creator'));
             return;
         }
-        $fansPageInfo =$this->WeshareBuy->get_user_relation_page_info($uid);
+        $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($uid);
         $pageCount = $fansPageInfo['pageCount'];
         $pageSize = $fansPageInfo['pageSize'];
         $queue = new SaeTaskQueue('share');
@@ -731,9 +737,9 @@ class WesharesController extends AppController {
      * @param $offset
      * 处理建团消息子任务
      */
-    public function send_new_share_msg_task($shareId, $limit, $offset){
+    public function send_new_share_msg_task($shareId, $limit, $offset) {
         $this->autoRender = false;
-        $this->WeshareBuy->send_new_share_msg($shareId,$limit, $offset);
+        $this->WeshareBuy->send_new_share_msg($shareId, $limit, $offset);
         echo json_encode(array('success' => true));
         return;
     }
@@ -762,13 +768,14 @@ class WesharesController extends AppController {
     /**
      * @param $weshareId
      */
-    public function process_notify_has_buy_fans($weshareId){
+    public function process_notify_has_buy_fans($weshareId) {
         $this->autoRender = false;
         $msg_content = $_REQUEST['content'];
         $share_info = $this->get_weshare_detail($weshareId);
         $this->WeshareBuy->send_notify_buy_user_msg($share_info, $msg_content);
         echo json_encode(array('success' => true));
     }
+
     /**
      * @param $weshare_id
      * @param $limit
@@ -782,6 +789,19 @@ class WesharesController extends AppController {
         $this->WeshareBuy->send_buy_percent_msg($share_info, $msg_content, $limit, $offset);
         echo json_encode(array('success' => true));
         return;
+    }
+
+    /**
+     * @param $shareId
+     * export order to excel
+     */
+    public function order_export($shareId){
+        $statics_data = $this->get_weshare_buy_info($shareId, true, true);
+        $refund_money = $this->WeshareBuy->get_refund_money_by_weshare($shareId);
+        $rebate_money = $this->ShareUtil->get_share_rebate_money($shareId);
+        $this->set($statics_data);
+        $this->set('refund_money', $refund_money);
+        $this->set('rebate_money', $rebate_money);
     }
 
     /**
@@ -1003,7 +1023,6 @@ class WesharesController extends AppController {
         }
         return json_decode($ship_setting_data, true);
     }
-
 
 
     /**
@@ -1244,9 +1263,9 @@ class WesharesController extends AppController {
      * @return bool
      * 是否是认证分享者 写死
      */
-    private function is_verify_sharer($uid){
-        $uids = array(633345,802852,544307,811917, 801447);
-        return in_array($uid,$uids);
+    private function is_verify_sharer($uid) {
+        $uids = array(633345, 802852, 544307, 811917, 801447);
+        return in_array($uid, $uids);
     }
 
     /**
@@ -1255,12 +1274,12 @@ class WesharesController extends AppController {
      * @param $shareUser
      * 设置分享用户中心页面 微信分享参数
      */
-    private function set_share_user_info_weixin_params($uid, $current_uid, $shareUser){
+    private function set_share_user_info_weixin_params($uid, $current_uid, $shareUser) {
         if (parent::is_weixin()) {
             $wexin_params = $this->set_weixin_share_data($uid, -1);
             $this->set($wexin_params);
             if ($uid == $current_uid) {
-                $title = '这是'.$shareUser['nickname'] . '的微分享，快来关注我吧';
+                $title = '这是' . $shareUser['nickname'] . '的微分享，快来关注我吧';
                 $image = $shareUser['image'];
                 $desc = '朋友说是一个有人情味的分享社区，这里你不但可以吃到各地的特产，还能认识有趣的人。';
             } else {
@@ -1272,7 +1291,7 @@ class WesharesController extends AppController {
             if (!$image) {
                 $image = 'http://dev.tongshijia.com/img/logo_footer.jpg';
             }
-            $detail_url = WX_HOST.'/weshares/user_share_info/'.$uid;
+            $detail_url = WX_HOST . '/weshares/user_share_info/' . $uid;
             $this->set('detail_url', $detail_url);
             $this->set('title', $title);
             $this->set('image', $image);
