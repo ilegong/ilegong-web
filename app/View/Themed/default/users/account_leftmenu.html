@@ -2,7 +2,8 @@
 <li class="nav-header">账户中心</li>
 <li {{if $current_action=='edit'}}class="active"{{/if}}><a href="{{Router::url('/users/edit')}}">{{lang('edit_profile')}}</a></li>
 <li {{if $current_action=='editpassword'}}class="active"{{/if}}><a href="{{Router::url('/users/editpassword')}}">{{lang('edit_password')}}</a></li>
-<li {{if $current_action=='mine'}}class="active"{{/if}}><a href="{{Router::url('/orders/mine')}}">{{lang('user_orders')}}</a></li>
+<!--<li {{if $current_action=='mine'}}class="active"{{/if}}><a href="{{Router::url('/orders/mine')}}">{{lang('user_orders')}}</a></li>-->
+<li><a target="_blank" href="{{Router::url('/sharer/index')}}">分享订单</a></li>
 <!--
 <li class="nav-header">信息发布</li>
 <li {{if $current_action=='note'}}class="active"{{/if}}><a href="{{Router::url('/notes/lists')}}">我的记事</a></li>
