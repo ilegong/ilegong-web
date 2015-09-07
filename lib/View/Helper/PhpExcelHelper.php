@@ -332,7 +332,9 @@ class PhpExcelHelper extends AppHelper {
         ob_end_clean();
 
         // headers
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        //header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        //header('Content-Type: application/octet-stream');
+        header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '"');
         header('Cache-Control: max-age=0');
 
