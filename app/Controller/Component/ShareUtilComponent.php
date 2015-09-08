@@ -527,16 +527,16 @@ class ShareUtilComponent extends Component {
                 'share_user_id' => 664258,
                 'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_27f6e242fbb54bea79ef3550e060f856.jpg'
             ),
-            '388' => array(
-                'share_id' => 388,
-                'share_name' => '泰国空运新鲜椰青',
-                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/2d117ce8806_0826.jpg',
-                'share_price' => '59',
-                'share_user_name' => '朋友说小妹',
-                'share_vote' => 203,
-                'share_user_id' => 711503,
-                'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/0609f46d89e_0813.jpg'
-            ),
+//            '388' => array(
+//                'share_id' => 388,
+//                'share_name' => '泰国空运新鲜椰青',
+//                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/2d117ce8806_0826.jpg',
+//                'share_price' => '59',
+//                'share_user_name' => '朋友说小妹',
+//                'share_vote' => 203,
+//                'share_user_id' => 711503,
+//                'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/0609f46d89e_0813.jpg'
+//            ),
             '325' => array(
                 'share_id' => 325,
                 'share_name' => '来自广西十万大山的原生态巢蜜',
