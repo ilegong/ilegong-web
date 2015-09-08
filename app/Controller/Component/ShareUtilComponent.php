@@ -429,7 +429,7 @@ class ShareUtilComponent extends Component {
             '460' => array(
                 'share_id' => 460,
                 'share_name' => '云南九叶玫鲜花饼店',
-                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/f16a8e0a80e_0824.jpg',
+                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/d3c9dfd7efd_0908.jpg',
                 'share_price' => '5.5',
                 'share_user_name' => '白胡子老头',
                 'share_vote' => 123,
