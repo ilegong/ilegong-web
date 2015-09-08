@@ -434,7 +434,7 @@ class ShareUtilComponent extends Component {
                 'share_user_name' => '白胡子老头',
                 'share_vote' => 123,
                 'share_user_id' => 869820,
-                'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_40bab950248dce61adbc14cc327ba77c.jpg'
+                'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/368fc9903d0_0908.jpg'
             ),
             '56' => array(
                 'share_id' => 56,
