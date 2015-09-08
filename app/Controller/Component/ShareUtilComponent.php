@@ -110,6 +110,7 @@ class ShareUtilComponent extends Component {
         $share_id = $order['Order']['member_id'];
         $total_price = $order['Order']['total_all_price'];
         $rebate_money = 0;
+        $ship_fee = round($ship_fee / 100, 2);
         $canRebateMoney = $total_price - $ship_fee;
         $rebatePercentData = $this->get_share_rebate_data($share_id);
         if (!empty($rebatePercentData)) {
