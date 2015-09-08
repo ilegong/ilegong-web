@@ -587,16 +587,16 @@ class ShareUtilComponent extends Component {
                 'share_user_id' => 1388,
                 'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_928e6bec43ee9674c9abbcf7ce7eae61.jpg'
             ),
-            '350' => array(
-                'share_id' => 350,
-                'share_name' => '生态农庄之康陵村农户家自产小米@棒渣',
-                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/55d76e0b1e3_0818.jpg',
-                'share_price' => '26-36',
-                'share_user_name' => '樱花',
-                'share_vote' => 197,
-                'share_user_id' => 810684,
-                'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
-            ),
+//            '350' => array(
+//                'share_id' => 350,
+//                'share_name' => '生态农庄之康陵村农户家自产小米@棒渣',
+//                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/55d76e0b1e3_0818.jpg',
+//                'share_price' => '26-36',
+//                'share_user_name' => '樱花',
+//                'share_vote' => 197,
+//                'share_user_id' => 810684,
+//                'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
+//            ),
             '330' => array(
                 'share_id' => 330,
                 'share_name' => '怀柔散养老杨家黑猪肉',
