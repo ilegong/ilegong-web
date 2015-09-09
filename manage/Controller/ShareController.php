@@ -11,7 +11,7 @@ class ShareController extends AppController{
     var $name = 'Share';
 
     var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User',
-        'OrderConsignees', 'WeshareShipSetting', 'OfflineStore', 'Oauthbind', 'Comment', 'RefundLog', 'PayNotify', 'RebateTrackLog');
+        'OrderConsignees', 'WeshareShipSetting', 'OfflineStore', 'Oauthbind', 'Comment', 'RefundLog', 'PayNotify', 'RebateTrackLog', 'PayLog');
 
     var $components = array('Weixin');
 
@@ -450,12 +450,14 @@ class ShareController extends AppController{
             $allRebateMoney = number_format(round($allRebateMoney/100, 2),2);
             $rebateSharerIds = Hash::extract($rebateLogs, '{n}.RebateTrackLog.sharer');
             $rebateLogs = Hash::combine($rebateLogs, '{n}.RebateTrackLog.id', '{n}.RebateTrackLog.sharer');
-            $pay_notifies = $this->PayNotify->find('all', array(
+            $pay_notifies = $this->PayLog->find('all', array(
                 'conditions' => array(
-                    'order_id' => $order_ids
-                )
+                    'order_id' => $order_ids,
+                    'status' => 1
+                ),
+                'group' => array('order_id')
             ));
-            $pay_notifies = Hash::combine($pay_notifies, '{n}.PayNotify.order_id', '{n}.PayNotify.out_trade_no');
+            $pay_notifies = Hash::combine($pay_notifies, '{n}.PayLog.order_id', '{n}.PayLog.out_trade_no');
             $weshares = $this->Weshare->find('all', array(
                 'conditions' => array(
                     'id' => $member_ids
