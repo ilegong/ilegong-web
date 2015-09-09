@@ -232,6 +232,11 @@ class WxPayController extends AppController {
             $notify->setReturnParameter("return_msg", "内容为空"); //返回信息
         } else {
             $notify->saveData($xml);
+            if(empty($notify->data)){
+                $jsonData = json_decode($xml, true);
+                $notify->data = $jsonData['data'];
+                $notify->returnParameters = $jsonData['returnParameters'];
+            }
             $this->log('wx pay notify result '.json_encode($notify));
             //验证签名，并回应微信。
             //对后台通知交互时，如果微信收到商户的应答不是成功或超时，微信认为通知失败，
