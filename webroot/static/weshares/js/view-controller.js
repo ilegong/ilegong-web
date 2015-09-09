@@ -470,7 +470,12 @@
       if (!Utils.isNumber(product.num)) {
         product.num = 0;
       }
-      product.num = product.num + 1;
+      //check product is reach limit
+      if (product.limit > 0 && product.num == product.limit) {
+        alert('亲，最多可购' + product.limit + '份.');
+      } else {
+        product.num = product.num + 1;
+      }
       calOrderTotalPrice();
       vm.validateProducts();
     }
