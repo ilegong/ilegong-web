@@ -125,6 +125,7 @@ class WxPaymentComponent extends Component {
         $payNotifyModel = ClassRegistry::init('PayNotify');
         $payLogModel = ClassRegistry::init('PayLog');
         //array('PayNotify' => )
+        $payNotifyModel->id = null;
         $payNotify = $payNotifyModel->save(array(
             'out_trade_no' => $out_trade_no,
             'transaction_id' => $transaction_id,

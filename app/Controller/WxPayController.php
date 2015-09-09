@@ -228,6 +228,9 @@ class WxPayController extends AppController {
         $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
 
         $notify = $this->WxPayment->createNotify();
+
+        $this->log('wx pay notify result '.json_encode($notify));
+
         if(empty($xml)) {
             $notify->setReturnParameter("return_code", "FAIL"); //返回状态码
             $notify->setReturnParameter("return_msg", "内容为空"); //返回信息
