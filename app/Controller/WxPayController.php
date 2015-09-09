@@ -225,12 +225,12 @@ class WxPayController extends AppController {
 
     public function notify() {
         $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
+        $this->log('notify xml data '.$xml);
         $notify = $this->WxPayment->createNotify();
         if(empty($xml)) {
             $notify->setReturnParameter("return_code", "FAIL"); //返回状态码
             $notify->setReturnParameter("return_msg", "内容为空"); //返回信息
         } else {
-            $this->log('notify xml data '.$xml);
             $notify->saveData($xml);
             $this->log('wx pay notify result '.json_encode($notify));
             //验证签名，并回应微信。
