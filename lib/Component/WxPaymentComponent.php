@@ -168,7 +168,7 @@ class WxPaymentComponent extends Component {
                 }
             }
         }
-        $payNotifyModel->updateAll(array('status' => $status), array('id' => $notifyLogId));
+        $payNotifyModel->updateAll(array('status' => $status, 'order_id' => $orderId), array('id' => $notifyLogId));
         return array($status, $order);
     }
 
