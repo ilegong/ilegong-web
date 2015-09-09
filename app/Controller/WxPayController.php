@@ -224,20 +224,15 @@ class WxPayController extends AppController {
 
 
     public function notify() {
-
         $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
-
         $notify = $this->WxPayment->createNotify();
-
-        $this->log('wx pay notify result '.json_encode($notify));
-
         if(empty($xml)) {
             $notify->setReturnParameter("return_code", "FAIL"); //返回状态码
             $notify->setReturnParameter("return_msg", "内容为空"); //返回信息
         } else {
-
+            $this->log('notify xml data '.$xml);
             $notify->saveData($xml);
-
+            $this->log('wx pay notify result '.json_encode($notify));
             //验证签名，并回应微信。
             //对后台通知交互时，如果微信收到商户的应答不是成功或超时，微信认为通知失败，
             //微信会通过一定的策略（如30分钟共8次）定期重新发起通知，
