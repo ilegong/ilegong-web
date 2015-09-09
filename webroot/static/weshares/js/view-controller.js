@@ -163,6 +163,9 @@
     vm.cloneShare = cloneShare;
     vm.resetNotifyContent = resetNotifyContent;
     vm.defaultNotifyHasBuyMsgContent = defaultNotifyHasBuyMsgContent;
+    vm.closeRecommendDialog = closeRecommendDialog;
+    vm.submitRecommend = submitRecommend;
+    vm.validRecommendContent=validRecommendContent;
     function pageLoaded(){
       $rootScope.loadingPage = false;
     }
@@ -232,6 +235,7 @@
             vm.weshare.addresses.unshift({id: -1, address: '请选择收货地址'});
             vm.weshare.selectedAddressId = -1;
           }
+          vm.recommendData = data['recommendData'];
           vm.ordersDetail = data['ordersDetail'];
           vm.shipTypes = data['ordersDetail']['ship_types'];
           vm.rebateLogs = data['ordersDetail']['rebate_logs'];
@@ -243,6 +247,10 @@
           vm.supportPysZiti = data['support_pys_ziti'];
           vm.selectShipType = getSelectTypeDefaultVal(vm.weshareSettings);
           vm.userSubStatus = data['sub_status'];
+          vm.submitRecommendData = {};
+          vm.submitRecommendData.recommend_content = vm.weshare.creator.nickname+'很靠谱！';
+          vm.submitRecommendData.recommend_user = vm.currentUser.id;
+          vm.submitRecommendData.recommend_share = vm.weshare.id;
           vm.sortOrders();
           if (vm.consignee && vm.consignee.offlineStore) {
             vm.checkedOfflineStore = vm.consignee.offlineStore;
@@ -927,6 +935,31 @@
         return '提货码: ' + code;
       }
       return '';
+    }
+
+    function closeRecommendDialog() {
+      vm.showShareDialog = true;
+      vm.showRecommendDialog = false;
+    }
+
+    function submitRecommend() {
+      if (vm.validRecommendContent()) {
+        return false;
+      }
+      $http.post('/weshares/recommend', vm.submitRecommendData).success(function (data) {
+
+      }).error(function (e) {
+        $log.log(e);
+      });
+      vm.closeRecommendDialog();
+    }
+
+    function validRecommendContent() {
+      vm.recommendContentHasError = false;
+      if(_.isEmpty(vm.submitRecommendData.recommend_content)){
+        vm.recommendContentHasError = true;
+      }
+      return vm.recommendContentHasError;
     }
 
     function isShowShipCode(order) {

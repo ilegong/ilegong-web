@@ -32,8 +32,14 @@
                                                                                         ng-click="vm.createMyShare()">我也要分享</a>
                 </li>
             </ul>
-
         </ul>
+        <div class="recommend" ng-if="vm.recommendData.length > 0">
+            <div class="share-list">
+                <div ng-repeat="recommend in vm.recommendData" class="user-avatar" data-uid="recommend.id"><a ng-click="vm.toUserShareInfo(recommend.id)"><img
+                        ng-src="{{recommend.image}}" alt="{{recommend.nickname}}"></a></div>
+            </div>
+            <span class="share-list-etc">推荐</span>
+        </div>
         <div class="introduction margin-bottom-12">
             <b></b>
             <div class="status" ng-bind="vm.statusMap[vm.weshare.status]"></div>
@@ -148,7 +154,7 @@
         </a>
         <a class="new" ng-if="!vm.isCreator()&&!vm.isProxy()&&vm.weshare.status == 0" ng-click="vm.buyProducts()">我要报名</a>
         <a class="new" ng-if="!vm.isCreator()&&vm.isProxy()&&vm.weshare.status == 0" ng-click="vm.buyProducts()" style="width: 28%;">我要报名</a>
-        <a class="new" ng-if="!vm.isCreator()&&vm.isProxy()&&vm.weshare.status == 0" ng-click="vm.showShareDialog=true;vm.showLayer=true;" style="width: 28%;margin-right: 7%;">我要推荐</a>
+        <a class="new" ng-if="!vm.isCreator()&&vm.isProxy()&&vm.weshare.status == 0" ng-click="vm.showRecommendDialog=true;vm.showLayer=true;" style="width: 28%;margin-right: 7%;">我要推荐</a>
         <a class="new" ng-if="vm.isCreator()&&vm.weshare.status == 0&&vm.notifyType() == 1" ng-click='vm.notifyFans();'
            style="width: 28%;">团购提醒</a>
         <a class="new" ng-if="vm.isCreator()&&vm.weshare.status == 0&&vm.notifyType() == 0" ng-click='vm.sendNewShareMsg();'
@@ -250,6 +256,22 @@
             <a ng-click='vm.sendNotifyShareMsg();' style="background-color: #ffa200; width: 100%;">群发通知</a>
         </div>
     </div>
+    <!--推荐弹出层-->
+    <div class="recommend-dialog" ng-show="vm.showRecommendDialog">
+        <div class="clearfix title">
+            <label>推荐给我的粉丝</label>
+            <a ng-click="vm.closeRecommendDialog();" class="closebtn fr"></a>
+        </div>
+        <div class="clearfix" style="padding: 0 10px;">
+            <div class="form-group" ng-class="{'has-error': vm.recommendContentHasError}">
+                <textarea id="recommendContentDom" class='form-control' ng-model='vm.submitRecommendData.recommend_content' ng-change='vm.validRecommendContent()'></textarea>
+                <p class='tips'>请输入推荐信息</p>
+            </div>
+        </div>
+        <div class="clearfix recommend-btn">
+            <a ng-click='vm.submitRecommend()' style="background-color: #ffa200; width: 100%;">推荐</a>
+        </div>
+    </div>
     <!--评论列表层-->
     <div class="comment_list-dialog" ng-show="vm.showCommentListDialogView">
         <div class="nav">
@@ -271,7 +293,7 @@
             </div>
         </div>
     </div>
-    <div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showLayer=false;vm.showNotifyView=false;vm.showCommentListDialog=false;vm.closeCommentDialog();vm.showBuyingDialog=false;vm.showShareDialog=false;vm.showNotifyShareDialog=false;vm.showNotifyShareOfferDialog=false;vm.showNotifyGetPacketDialog=false;"></div>
+    <div class="background-layer" ng-show="vm.showLayer" ng-click="showRecommendDialog=false;vm.showLayer=false;vm.showNotifyView=false;vm.showCommentListDialog=false;vm.closeCommentDialog();vm.showBuyingDialog=false;vm.showShareDialog=false;vm.showNotifyShareDialog=false;vm.showNotifyShareOfferDialog=false;vm.showNotifyGetPacketDialog=false;"></div>
 </div>
 <div ng-show="vm.showBalanceView">
     <div style="background-color:#f5f5f5;margin-bottom: 20px;">

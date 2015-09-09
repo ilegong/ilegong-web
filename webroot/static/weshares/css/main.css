@@ -55,7 +55,47 @@ ul li { list-style: none; }
 .weshare-view ul li s{ font-size: 10px; color: #999999; text-decoration: none; display: block; padding-left: 10px; padding-top: 3px;}
 .weshare-view .statistics-btn{ display: block;background-color: #ffa200;color: #ffffff;text-decoration: none;text-align: center;width: 85px;line-height: 35px;margin-top: 10px;}
 
-.weshare-view .header{ margin-bottom: 10px;}
+.weshare-view .header {
+    margin-bottom: 10px;
+}
+
+.weshare-view .recommend {
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.weshare-view .recommend .share-tag {
+    float: left;
+    font-size: 9pt;
+    text-align: center;
+    overflow: hidden;
+}
+
+.weshare-view .recommend .share-list {
+    margin-left: 10px;
+}
+
+.weshare-view .recommend .share-list .user-avatar {
+    float: left;
+    margin-right: 4px;
+    margin-bottom: 5px;
+}
+
+.weshare-view .recommend .share-list .user-avatar img {
+    background-size: cover;
+    border: 0;
+    vertical-align: middle;
+    width: 24px;
+    height: 24px;
+}
+
+.weshare-view .recommend .share-list-etc {
+    font-size: 15px;
+    line-height: 30px;
+    color: #ffa200;
+    margin-left: 5px;
+}
 
 .weshare-view .introduction{ background-color: #ffffff; border: 1px #eaeaea solid; border-radius: 5px; padding: 15px 15px 0px 15px; position: relative;}
 .weshare-view .introduction b{display: block;position: absolute;top: -6px;left: 15px;background: url(../images/weifxicon.png) no-repeat -25px -25px;background-size: 100px 100px;width: 12px;height: 6px;}
@@ -156,13 +196,21 @@ ul li { list-style: none; }
 .comment_list_box #con ul li .div_right span{color:#6EAFD5;padding:0px;}
 .comment_list_box #con ul li .div_right .twit_item_time{color:#999;padding:0px;}
 
-
 .notify-dialog{ background-color: #ffffff; padding: 15px 0 0; position: fixed; top: 20%; left: 0; width: 100%; z-index: 5;}
 .notify_btn{left: 0; bottom: 0; width: 100%;}
 .notify-dialog .closebtn{ margin-top: 3px; display: block; background: url(../images/weifxicon.png?v0.01) no-repeat -70px -65px; width: 15px; height: 15px; background-size: 100px 100px;}
 .notify_btn a{ width: 50%; float: left; display: block; line-height: 44px; text-align: center; text-decoration: none; color: #ffffff; font-size: 16px; display: block;}
 .notify-dialog label{ display: block; float: left; color: #000000; font-size: 16px; font-weight: bold;}
 .notify-dialog font{ display: block; text-align: center; color: #ffa200; font-size: 16px; line-height: 35px; padding-bottom: 50px;}
+
+.recommend-dialog{ background-color: #ffffff; padding: 15px 0 0; position: fixed; top: 20%; left: 0; width: 100%; z-index: 5;}
+.recommend-dialog .title{padding: 0px 10px; margin-bottom: 15px;}
+.recommend-dialog .closebtn{ margin-top: 3px; display: block; background: url(../images/weifxicon.png?v0.01) no-repeat -70px -65px; width: 15px; height: 15px; background-size: 100px 100px;}
+.recommend-dialog label{ display: block; float: left; color: #29AC0E; font-size: 16px; font-weight: bold;}
+.recommend-dialog font{ display: block; text-align: center; color: #ffa200; font-size: 16px; line-height: 35px; padding-bottom: 50px;}
+.recommend-dialog .recommend-btn{left: 0; bottom: 0; width: 100%;}
+.recommend-dialog .recommend-btn a{ width: 50%; float: left; display: block; line-height: 44px; text-align: center; text-decoration: none; color: #ffffff; font-size: 16px; display: block;}
+
 
 
 .moreicon { position: absolute; top: 50%; margin-top: -0.7em; right: 0.6em; display: block; width: 0.667em; height: 1.334em; background: url(../images/pyshuo_icon.png) 0 -16.875em no-repeat; background-size: 25em 25em;}

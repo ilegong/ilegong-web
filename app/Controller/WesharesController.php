@@ -241,9 +241,11 @@ class WesharesController extends AppController {
         $my_coupon_items = $this->get_can_used_coupons($uid, $creatorId);
         $weshare_ship_settings = $this->getWeshareShipSettings($weshareId);
         $comment_data = $this->WeshareBuy->load_comment_by_share_id($weshareId);
+        $recommend_data = $this->WeshareBuy->load_share_recommend_data($weshareId);
         echo json_encode(array('support_pys_ziti' => $share_ship_set,
             'weshare' => $weshareInfo,
             'ordersDetail' => $ordersDetail,
+            'recommendData' => $recommend_data,
             'current_user' => $current_user['User'],
             'weixininfo' => $weixinInfo,
             'weshare_ship_settings' => $weshare_ship_settings,
@@ -803,6 +805,20 @@ class WesharesController extends AppController {
         $this->set($statics_data);
         $this->set('refund_money', $refund_money);
         $this->set('rebate_money', $rebate_money);
+    }
+
+    /**
+     * recommend share
+     */
+    public function recommend() {
+        $this->autoRender = false;
+        $params = json_decode(file_get_contents('php://input'), true);
+        $memo = $params['recommend_content'];
+        $userId = $params['recommend_user'];
+        $shareId = $params['recommend_share'];
+        $this->ShareUtil->saveShareRecommendLog($shareId, $userId, $memo);
+        echo json_encode(array('success' => true));
+        return;
     }
 
     /**

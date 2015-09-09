@@ -376,6 +376,17 @@ class ShareUtilComponent extends Component {
             'created' => $now
         );
         $recommendLogM->save($recommendData);
+        $thisUserRecommendCount = $recommendLogM->find('count', array(
+            'conditions' => array(
+                'data_id' => $shareId,
+                'data_type' => RECOMMEND_SHARE,
+                'user_id' => $userId
+            )
+        ));
+        //clear recommend cache
+        if ($thisUserRecommendCount == 1) {
+            Cache::write(SHARE_RECOMMEND_DATA_CACHE_KEY . '_' . $shareId, '');
+        }
         $optLogData = array('user_id' => $userId, 'obj_type' => OPT_LOG_SHARE_RECOMMEND, 'obj_id' => $shareId, 'created' => $now);
         $this->saveOptLog($optLogData);
         //todo send template msg

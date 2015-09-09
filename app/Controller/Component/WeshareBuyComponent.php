@@ -841,6 +841,38 @@ class WeshareBuyComponent extends Component {
         $this->process_send_to_comment_msg($orders);
     }
 
+    /**
+     * @param $shareId
+     * @return array|mixed
+     * load share recommend data
+     */
+    public function load_share_recommend_data($shareId) {
+        $key = SHARE_RECOMMEND_DATA_CACHE_KEY . '_' . $shareId;
+        $recommendData = Cache::read($key);
+        if (empty($recommendData)) {
+            $recommendLogM = ClassRegistry::init('RecommendLog');
+            $userM = ClassRegistry::init('User');
+            $shareRecommendData = $recommendLogM->find('all', array(
+                'conditions' => array(
+                    'data_type' => RECOMMEND_SHARE,
+                    'data_id' => $shareId
+                ),
+                'group' => array('user_id')
+            ));
+            $user_ids = Hash::extract($shareRecommendData, '{n}.RecommendLog.user_id');
+            $recommend_users = $userM->find('all', array(
+                'conditions' => array(
+                    'id' => $user_ids
+                ),
+                'fields' => array('id', 'nickname', 'image')
+            ));
+            $recommendData = Hash::extract($recommend_users, '{n}.User');
+            Cache::write($key, json_encode($recommendData));
+            return $recommendData;
+        }
+        return json_decode($recommendData, true);
+    }
+
 
     /**
      * @param $orders
