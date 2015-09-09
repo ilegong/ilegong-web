@@ -361,6 +361,36 @@ class ShareUtilComponent extends Component {
     }
 
     /**
+     * @param $shareId
+     * @param $userId
+     * @param $memo
+     */
+    public function saveShareRecommendLog($shareId, $userId, $memo) {
+        $recommendLogM = ClassRegistry::init('RecommendLog');
+        $now = date('Y-m-d H:i:s');
+        $recommendData = array(
+            'data_id' => $shareId,
+            'data_type' => RECOMMEND_SHARE,
+            'user_id' => $userId,
+            'memo' => $memo,
+            'created' => $now
+        );
+        $recommendLogM->save($recommendData);
+        $optLogData = array('user_id' => $userId, 'obj_type' => OPT_LOG_SHARE_RECOMMEND, 'obj_id' => $shareId, 'created' => $now);
+        $this->saveOptLog($optLogData);
+        //todo send template msg
+    }
+
+    /**
+     * @param $data
+     *
+     */
+    public function saveOptLog($data) {
+        $optLogM = ClassRegistry::init('OptLog');
+        $optLogM->save($data);
+    }
+
+    /**
      * @return array
      * index product
      */

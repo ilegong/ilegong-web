@@ -212,6 +212,16 @@ const SHARE_SHIP_SELF_ZITI_TAG = 'self_zi_ti';
 
 const SHARE_SHIP_KUAIDI_TAG = 'kuai_di';
 
+const RECOMMEND_SHARE = 1;
+
+const OPT_LOG_CREATE_SHARE = 1;
+
+const OPT_LOG_SHARE_RECOMMEND = 2;
+
+const OPT_LOG_SHARE_BUY = 3;
+
+const OPT_LOG_SHARE_COMMENT = 4;
+
 define('CATEGORY_ID_TECHAN', 114);
 
 define('PAYLOG_STATUS_NEW', 0);
