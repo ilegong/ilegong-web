@@ -1178,10 +1178,10 @@ class WeshareBuyComponent extends Component {
      *
      */
     public function send_recommend_msg($recommend_user, $share_id, $memo) {
-        $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($recommend_user);
-        $queue = new SaeTaskQueue('share');
+        $fansPageInfo = $this->get_user_relation_page_info($recommend_user);
         $pageCount = $fansPageInfo['pageCount'];
         $pageSize = $fansPageInfo['pageSize'];
+        $queue = new SaeTaskQueue('share');
         $queue->addTask("/task/process_send_recommend_msg/" . $share_id . '/' . $recommend_user . '/' . $pageCount . '/' . $pageSize, "memo=" . $memo);
         //将任务推入队列
         $ret = $queue->push();
