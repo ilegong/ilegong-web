@@ -11,10 +11,6 @@ handle:
   - expire: if(path ~ "\.(js|css|png|gif|jpg|jpeg|bmp|ico)") time 31536000
   - compress: if(out_header["Content-Type"] ~ "(text|javascript|json)") compress
 cron:
-	- description: send coupons timeout message
-	  url: /cron/send_coupon_timeout_message
-      schedule: */30 8-22 * * *
-      timezone: Beijing
     - description: gen statics order data
       url: /manage/admin/countly/cron_gen_data
       schedule: 0 3 * * *
