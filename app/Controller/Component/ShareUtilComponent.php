@@ -387,7 +387,7 @@ class ShareUtilComponent extends Component {
         if ($thisUserRecommendCount == 1) {
             Cache::write(SHARE_RECOMMEND_DATA_CACHE_KEY . '_' . $shareId, '');
         }
-        $optLogData = array('user_id' => $userId, 'obj_type' => OPT_LOG_SHARE_RECOMMEND, 'obj_id' => $shareId, 'created' => $now);
+        $optLogData = array('user_id' => $userId, 'obj_type' => OPT_LOG_SHARE_RECOMMEND, 'obj_id' => $shareId, 'created' => $now, 'memo' => $memo);
         $this->saveOptLog($optLogData);
         $this->WeshareBuy->send_recommend_msg($userId, $shareId, $memo);
         $this->notify_sharer_recommend($userId, $shareId);
