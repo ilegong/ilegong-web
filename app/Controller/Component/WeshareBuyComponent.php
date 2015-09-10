@@ -1219,13 +1219,15 @@ class WeshareBuyComponent extends Component {
         ));
         $user_info = Hash::combine($user_info, '{n}.User.id', '{n}.User');
         $sharer_user_info = $user_info[$sharer];
-        $detail_url = WX_HOST . '/weshares/view/' . $weshareId;
+        $detail_url = WX_HOST . '/weshares/view/' . $weshareId.'?recommend='.$recommend_user;
         $sharer_name = $sharer_user_info['nickname'];
         $recommend_name = $user_info[$recommend_user]['nickname'];
         $product_name = $weshare['Weshare']['title'];
         $title = '关注的' . $recommend_name . '推荐了' . $sharer_name . '的';
         $remark = $memo . '，点击赶快加入' . $sharer_name . '的分享！';
         $followers = $this->load_fans_buy_sharer($recommend_user, $limit, $offset);
+        $hasBuyUsers = $this->get_has_buy_user($weshareId);
+        $followers = array_diff($followers, $hasBuyUsers);
         $openIds = $this->Oauthbind->findWxServiceBindsByUids($followers);
         foreach ($openIds as $openId) {
             $this->Weixin->send_recommend_template_msg($openId, $detail_url, $remark, $title, $product_name, $sharer_name);

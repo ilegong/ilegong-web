@@ -836,27 +836,45 @@ class WeixinComponent extends Component
         $good_info = $good['good_info'];
         $ship_info = $good['ship_info'];
         $order_id = $order['Order']['id'];
+        $cate_id = $order['Order']['cate_id'];
         if ($seller_weixin != false) {
             $this->log('weshare paid send for creator '.$seller_weixin['oauth_openid'].' order id '.$order_id.' weshare id '.$weshare_info['Weshare']['id']);
-            $this->send_weshare_buy_paid_msg_for_creator($seller_weixin['oauth_openid'], $price, $good_info, $ship_info, $order_id, $weshare_info, $order_creator_name,$order_ship_mark, $order_user['User']['id']);
+            $this->send_weshare_buy_paid_msg_for_creator($seller_weixin['oauth_openid'], $price, $good_info, $ship_info, $order_id, $weshare_info, $order_creator_name,$order_ship_mark, $order_user['User']['id'],$cate_id);
         }
     }
 
-    public function send_weshare_buy_paid_msg_for_creator($seller_open_id, $price, $good_info, $ship_info, $order_no, $weshare_info,$order_creator_name=null, $shipType = '', $order_creator) {
+    public function send_weshare_buy_paid_msg_for_creator($seller_open_id, $price, $good_info, $ship_info, $order_no, $weshare_info, $order_creator_name = null, $shipType = '', $order_creator, $cate_id = 0) {
         $title = $weshare_info['Weshare']['title'];
-        $show_tile = "亲，有人报名了您分享的".$title."。";
         $detail_url = $this->get_user_share_info_url($order_creator);
-        if(!empty($order_creator_name)){
-            $show_tile = "亲，".$order_creator_name."报名了您分享的".$title."，";
+        $userM = ClassRegistry::init('User');
+        $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
+        $rebateTrackLog = $rebateTrackLogM->find('first', array(
+            'conditions' => array(
+                'id' => $cate_id
+            )
+        ));
+        $recommend_user = 0;
+        $share_creator = $weshare_info['Weshare']['creator'];
+        if (!empty($rebateTrackLog)) {
+            $recommend_user = $rebateTrackLog['RebateTrackLog']['sharer'];
         }
-        if($shipType == SHARE_SHIP_KUAIDI_TAG){
-            $show_tile = $show_tile.'需要快递。';
+        $user_names = $userM->findNicknamesMap(array($share_creator, $recommend_user));
+        $show_tile = $user_names[$share_creator] . "，有人报名了您分享的" . $title . "。";
+        if (!empty($order_creator_name)) {
+            if (empty($rebateTrackLog)) {
+                $show_tile = $user_names[$share_creator] . "，" . $order_creator_name . "报名了您分享的" . $title . "，";
+            } else {
+                $show_tile = $user_names[$share_creator] . "，" . $user_names[$recommend_user] . '推荐的' . $order_creator_name . '报名了您分享的平谷大桃，';
+            }
         }
-        if($shipType == SHARE_SHIP_SELF_ZITI_TAG){
-            $show_tile = $show_tile.'自提点自提。';
+        if ($shipType == SHARE_SHIP_KUAIDI_TAG) {
+            $show_tile = $show_tile . '需要快递。';
         }
-        if($shipType == SHARE_SHIP_PYS_ZITI_TAG){
-            $show_tile = $show_tile.'好邻居自提。';
+        if ($shipType == SHARE_SHIP_SELF_ZITI_TAG) {
+            $show_tile = $show_tile . '自提点自提。';
+        }
+        if ($shipType == SHARE_SHIP_PYS_ZITI_TAG) {
+            $show_tile = $show_tile . '好邻居自提。';
         }
         $post_data = array(
             "touser" => $seller_open_id,
