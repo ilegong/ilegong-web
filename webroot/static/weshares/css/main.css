@@ -62,7 +62,6 @@ ul li { list-style: none; }
 .weshare-view .recommend {
     width: 80%;
     overflow: hidden;
-    margin-top: -35px;
     margin-left: 55px;
 }
 
@@ -89,6 +88,7 @@ ul li { list-style: none; }
     vertical-align: middle;
     width: 24px;
     height: 24px;
+    border-radius: 0;
 }
 
 .weshare-view .recommend .share-list-etc {

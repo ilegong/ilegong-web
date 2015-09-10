@@ -14,9 +14,18 @@
                     <label ng-click="vm.toUserShareInfo(vm.weshare.creator.id)" ng-bind="vm.weshare.creator.nickname"></label>
                     <a ng-if="!vm.userSubStatus" style="margin-left: 5px;margin-top: 3px;width: 50px;line-height: 20px;background-color: #F2651A;" class="statistics-btn" ng-click="vm.subSharer();" ng-bind="vm.subShareTipTxt">+关注</a>
                 </div>
-                <s>已有<span ng-bind="vm.ordersDetail.summery.all_buy_user_count" style="color: #ff0000;"></span>人报名&nbsp;&nbsp;<span ng-if="(vm.currentUser.is_proxy==1||vm.isCreator())&&vm.weshare.proxy_rebate_percent.percent>0">佣金<span ng-bind="vm.weshare.proxy_rebate_percent.percent+'%'" style="color: #ff0000;"></span></span></s>
-                <s ng-if="vm.getOrderCommentLength()<1&&vm.userSubStatus"><b style="color: #ffa200" ng-bind="vm.userShareSummery.share_count">0</b>&nbsp; <small>分享</small>&nbsp;&nbsp;&nbsp;<b style="color: #ffa200" ng-bind="vm.userShareSummery.follower_count">0</b>&nbsp;<small>粉丝</small></s>
-                <s ng-click="vm.showCommentListDialog()" ng-if="vm.getOrderCommentLength()>=1&&vm.userSubStatus"><b style="color: #ffa200" ng-bind="vm.getOrderCommentLength()">0</b>&nbsp; <small>爱心评价</small></s>
+            <s><span ng-bind="vm.ordersDetail.summery.all_buy_user_count"
+                     style="color: #ffa200;"></span>&nbsp;报名
+                &nbsp;&nbsp;<span ng-click="vm.showCommentListDialog()"
+                                                                        ng-if="vm.getOrderCommentLength()>=1&&vm.userSubStatus"><b
+                    style="color: #ffa200" ng-bind="vm.getOrderCommentLength()">0</b>&nbsp;<small>爱心评价</small></span>
+                &nbsp;&nbsp;<span
+                    ng-if="vm.getOrderCommentLength()<1&&vm.userSubStatus"><b style="color: #ffa200"
+                                                                              ng-bind="vm.userShareSummery.follower_count">0</b>&nbsp;<small>
+                粉丝
+            </small></span>&nbsp;&nbsp;<span
+                    ng-if="(vm.currentUser.is_proxy==1||vm.isCreator())&&vm.weshare.proxy_rebate_percent.percent>0">佣金<span
+                    ng-bind="vm.weshare.proxy_rebate_percent.percent+'%'" style="color: #ff0000;"></span></span></s>
             </li>
             <ul class="clearfix header margin-bottom-12" style="margin-left: 3px;float: right;">
                 <li style="margin-right: 5px; float: right;" ng-if="vm.isCreator()"><a style="margin-top: 0px;width: 65px;"
@@ -32,14 +41,14 @@
                                                                                         ng-click="vm.createMyShare()">我也要分享</a>
                 </li>
             </ul>
-        </ul>
-        <div class="recommend" ng-if="vm.recommendData.length > 0">
-            <div class="share-list">
-                <div ng-repeat="recommend in vm.recommendData" class="user-avatar" data-uid="recommend.id"><a ng-click="vm.toUserShareInfo(recommend.id)"><img
-                        ng-src="{{recommend.image}}" alt="{{recommend.nickname}}"></a></div>
+            <div class="recommend" ng-if="vm.recommendData.length > 0">
+                <div class="share-list">
+                    <div ng-repeat="recommend in vm.recommendData" class="user-avatar" data-uid="recommend.id"><a ng-click="vm.toUserShareInfo(recommend.id)"><img
+                            ng-src="{{recommend.image}}" alt="{{recommend.nickname}}"></a></div>
+                </div>
+                <span class="share-list-etc">推荐</span>
             </div>
-            <span class="share-list-etc">推荐</span>
-        </div>
+        </ul>
         <div class="introduction margin-bottom-12">
             <b></b>
             <div class="status" ng-bind="vm.statusMap[vm.weshare.status]"></div>
