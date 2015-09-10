@@ -390,6 +390,9 @@ class ShareUtilComponent extends Component {
         $optLogData = array('user_id' => $userId, 'obj_type' => OPT_LOG_SHARE_RECOMMEND, 'obj_id' => $shareId, 'created' => $now);
         $this->saveOptLog($optLogData);
         //todo send template msg
+        if($userId == 802852){
+            $this->WeshareBuy->send_recommend_msg($userId, $shareId, $memo);
+        }
     }
 
     /**

@@ -1038,4 +1038,20 @@ class WeixinComponent extends Component
         );
         $this->send_weixin_message($post_data);
     }
+
+    public function send_recommend_template_msg($user_open_id, $detail_url, $remark, $title, $product_name, $sharer){
+        $post_data = array(
+            "touser" => $user_open_id,
+            "template_id" => 'P4iCqkiG7_s0SVwCSKyEuJ0NnLDgVNVCm2VQgSGdl-U',
+            "url" => $detail_url,
+            "topcolor" => "#FF0000",
+            "data" => array(
+                "Pingou_Action" => array("value" => $title),
+                "Pingou_ProductName" => array("value" => $product_name),
+                "Weixin_ID" => array("value" => $sharer),
+                "Remark" => array("value" => $remark, "color" => "#FF8800")
+            )
+        );
+        $this->send_weixin_message($post_data);
+    }
 }

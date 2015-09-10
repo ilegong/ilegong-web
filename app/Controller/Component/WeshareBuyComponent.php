@@ -1172,6 +1172,67 @@ class WeshareBuyComponent extends Component {
     }
 
     /**
+     * @param $recommend_user
+     * @param $share_id
+     * @param $memo
+     *
+     */
+    public function send_recommend_msg($recommend_user, $share_id, $memo) {
+        $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($recommend_user);
+        $queue = new SaeTaskQueue('share');
+        $pageCount = $fansPageInfo['pageCount'];
+        $pageSize = $fansPageInfo['pageSize'];
+        $queue->addTask("/task/process_send_recommend_msg/" . $share_id . '/' . $recommend_user . '/' . $pageCount . '/' . $pageSize, "memo=" . $memo);
+        //将任务推入队列
+        $ret = $queue->push();
+        //任务添加失败时输出错误码和错误信息
+        if ($ret === false) {
+            $this->log('add task queue error ' . json_encode(array($queue->errno(), $queue->errmsg())));
+        }
+        return $ret;
+    }
+
+    /**
+     * @param $weshareId
+     * @param $recommend_user
+     * @param $memo
+     * @param null $limit
+     * @param null $offset
+     */
+    public function send_recommend_msg_task($weshareId, $recommend_user, $memo, $limit = null, $offset = null) {
+        $this->Weshare = ClassRegistry::init('Weshare');
+        $this->User = ClassRegistry::init('User');
+        $this->Oauthbind = ClassRegistry::init('Oauthbind');
+        $weshare = $this->Weshare->find('first', array(
+            'conditions' => array(
+                'id' => $weshareId
+            )
+        ));
+        $sharer = $weshare['Weshare']['creator'];
+        $user_info = $this->User->find('all', array(
+            'conditions' => array(
+                'id' => array($sharer, $recommend_user)
+            ),
+            'fields' => array(
+                'id', 'nickname'
+            )
+        ));
+        $user_info = Hash::combine($user_info, '{n}.User.id', '{n}.User');
+        $sharer_user_info = $user_info[$sharer];
+        $detail_url = WX_HOST . '/weshares/view/' . $weshareId;
+        $sharer_name = $sharer_user_info['nickname'];
+        $recommend_name = $user_info[$recommend_user]['nickname'];
+        $product_name = $weshare['Weshare']['title'];
+        $title = '关注的' . $recommend_name . '推荐了' . $sharer_name . '的一个团购！';
+        $remark = $memo . '，点击赶快加入' . $sharer_name . '的分享！';
+        $followers = $this->load_fans_buy_sharer($recommend_user, $limit, $offset);
+        $openIds = $this->Oauthbind->findWxServiceBindsByUids($followers);
+        foreach ($openIds as $openId) {
+            $this->Weixin->send_recommend_template_msg($openId, $detail_url, $remark, $title, $product_name, $sharer_name);
+        }
+    }
+
+    /**
      * @param $sharer_id
      * @param $follow_id
      * 获取用户关注信息
@@ -1331,7 +1392,7 @@ class WeshareBuyComponent extends Component {
         return $userM->findNicknamesMap($uids);
     }
 
-    private function get_user_nickname($uid){
+    public function get_user_nickname($uid){
         $userM = ClassRegistry::init('User');
         return $userM->findNicknamesOfUid($uid);
     }
@@ -1346,7 +1407,7 @@ class WeshareBuyComponent extends Component {
         return $share_info['Weshare'];
     }
 
-    private function get_all_share_info($share_ids){
+    public function get_all_share_info($share_ids){
         $weshareM = ClassRegistry::init('Weshare');
         $share_info = $weshareM->find('all',array(
             'conditions' => array(
@@ -1356,7 +1417,7 @@ class WeshareBuyComponent extends Component {
         return $share_info;
     }
 
-    private function has_share_offer($uid){
+    public function has_share_offer($uid){
         $shareOfferM = ClassRegistry::init('ShareOffer');
         $shareOffer = $shareOfferM->find('first',array(
             'conditions' => array('sharer_id' => $uid),
@@ -1370,7 +1431,7 @@ class WeshareBuyComponent extends Component {
      * @return array
      * 分享者是否有红包
      */
-    private function sharer_has_offer($sharer_ids){
+    public function sharer_has_offer($sharer_ids){
         $shareOfferM = ClassRegistry::init('ShareOffer');
         $shareOffer = $shareOfferM->find('all',array(
             'conditions' => array('sharer_id' => $sharer_ids),
@@ -1386,7 +1447,7 @@ class WeshareBuyComponent extends Component {
      * @return array
      * 获取分享订单商品名称和数量
      */
-    private function get_cart_name_and_num($orderId) {
+    public function get_cart_name_and_num($orderId) {
         $carts = $this->findCarts($orderId);
         $num = 0;
         $cart_name = array();
