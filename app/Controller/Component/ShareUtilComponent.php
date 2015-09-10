@@ -389,10 +389,26 @@ class ShareUtilComponent extends Component {
         }
         $optLogData = array('user_id' => $userId, 'obj_type' => OPT_LOG_SHARE_RECOMMEND, 'obj_id' => $shareId, 'created' => $now);
         $this->saveOptLog($optLogData);
-        //todo send template msg
-        if($userId == 802852){
-            $this->WeshareBuy->send_recommend_msg($userId, $shareId, $memo);
-        }
+        $this->WeshareBuy->send_recommend_msg($userId, $shareId, $memo);
+        $this->notify_sharer_recommend($userId, $shareId);
+    }
+
+    /**
+     * @param $recommend
+     * @param $shareId
+     */
+    public function notify_sharer_recommend($recommend, $shareId) {
+        $share_info = $this->WeshareBuy->get_weshare_info($shareId);
+        $share_title = $share_info['title'];
+        $sharer = $share_info['creator'];
+        $share_open_id = $this->WeshareBuy->get_open_ids(array($sharer));
+        $share_open_id = $share_open_id[$sharer];
+        $user_nicknames = $this->WeshareBuy->get_users_nickname(array($sharer, $recommend));
+        $recommend_name = $user_nicknames[$recommend];
+        $title = $recommend_name . '推荐了您分享的' . $share_title;
+        $remark = '分享快乐，点击详情，看看' . $recommend_name . '是谁？';
+        $detail_url = $this->WeshareBuy->get_sharer_detail_url($recommend);
+        $this->WeshareBuy->send_recommend_notify_template_msg($share_open_id, $recommend_name, $title, $remark, $detail_url);
     }
 
     /**

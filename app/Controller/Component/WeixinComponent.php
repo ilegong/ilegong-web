@@ -1054,4 +1054,21 @@ class WeixinComponent extends Component
         );
         $this->send_weixin_message($post_data);
     }
+
+    public function send_recommend_notify_template_msg($user_open_id, $recommend_name, $title, $remark, $detail_url, $basic_info='团长', $position = '团长'){
+        $post_data = array(
+            "touser" => $user_open_id,
+            "template_id" => ' XgB0hibK6F3RXkXrQxT5LilfjQOAYUhjiCQ-XPW2ccw',
+            "url" => $detail_url,
+            "topcolor" => "#FF0000",
+            "data" => array(
+                "first" => array("value" => $title),
+                "keyword1" => array("value" => $recommend_name),
+                "keyword2" => array("value" => $basic_info),
+                "keyword3" => array("value" => $position),
+                "remark" => array("value" => $remark, "color" => "#FF8800")
+            )
+        );
+        $this->send_weixin_message($post_data);
+    }
 }
