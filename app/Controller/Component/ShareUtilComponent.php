@@ -412,6 +412,24 @@ class ShareUtilComponent extends Component {
     }
 
     /**
+     * @param $share_id
+     * @param $thumbnail
+     * @param $memo
+     * @param $user_id
+     */
+    public function save_create_share_opt_log($share_id, $thumbnail, $memo, $user_id) {
+        $optData = array(
+            'user_id' => $user_id,
+            'obj_type' => OPT_LOG_CREATE_SHARE,
+            'obj_id' => $share_id,
+            'created' => date('Y-m-d H:i:s'),
+            'memo' => $memo,
+            'thumbnail' => $thumbnail
+        );
+        $this->saveOptLog($optData);
+    }
+
+    /**
      * @param $data
      *
      */
