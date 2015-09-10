@@ -1223,7 +1223,7 @@ class WeshareBuyComponent extends Component {
         $sharer_name = $sharer_user_info['nickname'];
         $recommend_name = $user_info[$recommend_user]['nickname'];
         $product_name = $weshare['Weshare']['title'];
-        $title = '关注的' . $recommend_name . '推荐了' . $sharer_name . '的一个团购！';
+        $title = '关注的' . $recommend_name . '推荐了' . $sharer_name . '的';
         $remark = $memo . '，点击赶快加入' . $sharer_name . '的分享！';
         $followers = $this->load_fans_buy_sharer($recommend_user, $limit, $offset);
         $openIds = $this->Oauthbind->findWxServiceBindsByUids($followers);
