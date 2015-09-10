@@ -63,6 +63,7 @@ ul li { list-style: none; }
     width: 80%;
     overflow: hidden;
     margin-top: -35px;
+    margin-left: 55px;
 }
 
 .weshare-view .recommend .share-tag {
