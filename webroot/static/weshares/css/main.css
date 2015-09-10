@@ -60,9 +60,9 @@ ul li { list-style: none; }
 }
 
 .weshare-view .recommend {
-    width: 100%;
+    width: 80%;
     overflow: hidden;
-    margin-bottom: 15px;
+    margin-top: -35px;
 }
 
 .weshare-view .recommend .share-tag {
@@ -95,6 +95,7 @@ ul li { list-style: none; }
     line-height: 30px;
     color: #ffa200;
     margin-left: 5px;
+    font-size: 10px;
 }
 
 .weshare-view .introduction{ background-color: #ffffff; border: 1px #eaeaea solid; border-radius: 5px; padding: 15px 15px 0px 15px; position: relative;}
