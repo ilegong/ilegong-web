@@ -1058,7 +1058,7 @@ class WeixinComponent extends Component
     public function send_recommend_notify_template_msg($user_open_id, $recommend_name, $title, $remark, $detail_url, $basic_info='团长', $position = '团长'){
         $post_data = array(
             "touser" => $user_open_id,
-            "template_id" => ' XgB0hibK6F3RXkXrQxT5LilfjQOAYUhjiCQ-XPW2ccw',
+            "template_id" => 'XgB0hibK6F3RXkXrQxT5LilfjQOAYUhjiCQ-XPW2ccw',
             "url" => $detail_url,
             "topcolor" => "#FF0000",
             "data" => array(
