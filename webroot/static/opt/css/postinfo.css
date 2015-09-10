@@ -107,9 +107,15 @@
 	line-height:22px;
 	display: none;
 }
-.postinfo .mediacontent{
-	margin:6px 0px 0px 48px;  
-	min-height:50px;
+
+.postinfo .mediacontent {
+    margin: 6px 0px 0px 48px;
+    min-height: 50px;
+}
+
+.postinfo .pure-mediacontent {
+    margin: -15px 0px 0px 48px;
+    min-height: 50px;
 }
 .postinfo .linkcontent{
 	padding:6px 6px 3px 6px;
