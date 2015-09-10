@@ -408,7 +408,7 @@ class ShareUtilComponent extends Component {
         $title = $recommend_name . '推荐了您分享的' . $share_title;
         $remark = '分享快乐，点击详情，看看' . $recommend_name . '是谁？';
         $detail_url = $this->WeshareBuy->get_sharer_detail_url($recommend);
-        $this->WeshareBuy->send_recommend_notify_template_msg($share_open_id, $recommend_name, $title, $remark, $detail_url);
+        $this->Weixin->send_recommend_notify_template_msg($share_open_id, $recommend_name, $title, $remark, $detail_url);
     }
 
     /**
