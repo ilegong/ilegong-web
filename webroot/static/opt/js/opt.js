@@ -21,7 +21,7 @@ $(document).ready(function () {
     });
     $logListDiv.scroll(function () {
       loadMoreDataWithScrollY();
-      setTimeout(checkDataShow,200);
+      setTimeout(checkDataShow, 200);
     });
     initOptLogView();
   }
@@ -35,22 +35,16 @@ $(document).ready(function () {
 
   function loadMoreDataWithScrollY() {
     var topVal = logListDom.scrollTop;
-    var elmHeight = logListDom.clientHeight;
     if (topVal > 150) {
       $backTopBtn.show();
     } else {
       $backTopBtn.hide();
     }
-    var lastChildObj = logListDom.lastElementChild;
-    while (lastChildObj && logListDom.nodeName != "DIV") {
-      lastChildObj = lastChildObj.previousElementSibling;
-    }
-    if (lastChildObj != null) {
-      var lastChildObjTop = lastChildObj.offsetTop;
-      var lastChildObjHeight = 0;
-      if (topVal + elmHeight > (lastChildObjTop + lastChildObjHeight)) {
-        loadOptLogData(checkDataShow);
-      }
+    var st = logListDom.scrollTop;
+    var ch = logListDom.clientHeight;
+    var sh = logListDom.scrollHeight;
+    if (st + ch == sh) {
+      loadOptLogData(checkDataShow);
     }
   }
 
@@ -88,11 +82,7 @@ $(document).ready(function () {
   }
 
   function loadOptLogData(callback) {
-    if (loadDataFlag == 1) {
-      return false;
-    } else if (loadDataFlag == 2) {
-      return false;
-    }
+    $loadingDiv.show();
     loadDataFlag = 1;
     var timeStampInfoId = "";
     var bottomTimeStamp = "0";
@@ -126,6 +116,8 @@ $(document).ready(function () {
       if (callback) {
         callback();
       }
+      loadDataFlag = 0;
+      $loadingDiv.hide();
     };
     $.getJSON(getOptLogUrl, reqParams, callbackFunc);
   }
