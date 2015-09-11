@@ -98,7 +98,6 @@ $(document).ready(function () {
         return false;
       }
     }
-    console.log(bottomTimeStamp+','+oldest_timestamp);
     var reqParams = {
       "type": filterVal,
       "time": bottomTimeStamp,
