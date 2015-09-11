@@ -86,20 +86,13 @@ $(document).ready(function () {
   function loadOptLogData(callback) {
     $loadingDiv.show();
     loadDataFlag = 1;
-    var timeStampInfoId = "";
     var bottomTimeStamp = "0";
-    var lastInfoEl = $loadingDiv[0].previousElementSibling;
-    if (lastInfoEl) {
-      while (lastInfoEl && lastInfoEl.nodeType
-      && (lastInfoEl.nodeType != 1 || (timeStampInfoId = lastInfoEl.getAttribute("data-infoid")) == null)) {
-        lastInfoEl = lastInfoEl.previousElementSibling;
+    var $lastOptLog = $loadingDiv.prev('div.postinfo');
+    if ($lastOptLog) {
+      bottomTimeStamp = $lastOptLog.data("timestamp");
+      if (oldest_timestamp != 0 && bottomTimeStamp == oldest_timestamp) {
+        return false;
       }
-      if (lastInfoEl && timeStampInfoId) {
-        bottomTimeStamp = lastInfoEl.getAttribute("data-timestamp");
-      }
-    }
-    if (oldest_timestamp != 0 && bottomTimeStamp == oldest_timestamp) {
-      return false;
     }
     var reqParams = {
       "type": filterVal,
