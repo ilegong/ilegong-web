@@ -2237,7 +2237,7 @@ function multi_array_sum($total, $next) {
 function map_opt_log_data($var) {
     $timeStamp = strtotime($var['created']);
     $var['timestamp'] = $timeStamp;
-    $data_type = $var['data_type'];
+    $data_type = $var['obj_type'];
     if ($data_type == OPT_LOG_CREATE_SHARE) {
         $var['data_type_tag'] = '分享了';
     }

@@ -15,7 +15,6 @@ class ShareOptController extends AppController {
      * fetch opt log list
      */
     public function fetch_opt_list_data() {
-        //$time, $limit, $type = 0
         $time = $_REQUEST['time'];
         $limit = $_REQUEST['limit'];
         $type = $_REQUEST['type'];
@@ -44,8 +43,8 @@ class ShareOptController extends AppController {
      * @param $opt_logs
      * @return array
      */
-    private function combine_opt_log_data($opt_logs){
-        $opt_user_ids = Hash::extract($opt_logs, '{n}.OptLog.id');
+    private function combine_opt_log_data($opt_logs) {
+        $opt_user_ids = Hash::extract($opt_logs, '{n}.OptLog.user_id');
         $opt_user_ids = array_unique($opt_user_ids);
         $opt_users = $this->User->find('all', array(
             'conditions' => array(

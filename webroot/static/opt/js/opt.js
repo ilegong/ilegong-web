@@ -115,9 +115,6 @@ $(document).ready(function () {
       var list = data['opt_logs'] || [];
       var users = data['combine_data']['users'] || {};
       var nowTimeStamp = data['nowTimeStamp'];
-      if (callback) {
-        callback();
-      }
       for (var i = 0; i < list.length; i++) {
         var objJson = list[i];
         var objJsonUserId = objJson['user_id'];
@@ -126,7 +123,9 @@ $(document).ready(function () {
         parseInfoJsonObj(objJson, nowTimeStamp);
         document.getElementById("info_" + objJson.id).style.borderBottom = "1px solid #dfdfdd";
       }
-      callback();
+      if(callback){
+        callback();
+      }
     };
     $.getJSON(getOptLogUrl, reqParams, callbackFunc);
   }
@@ -134,7 +133,7 @@ $(document).ready(function () {
   function checkDataShow() {
     var dataShowObjs = $logListDiv.children("[data-show=0]");
     if (dataShowObjs.length > 0) {
-      var heightVal = $logListDiv.clientHeight;
+      var heightVal = logListDom.clientHeight;
       for (var i = 0; i < dataShowObjs.length; i++) {
         var obj = $(dataShowObjs[i]);
         var objOffset = obj.offset();
