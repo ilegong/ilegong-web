@@ -5,10 +5,15 @@
  */
 class ShareOptController extends AppController {
 
-    var $uses = array('OptLog', 'User');
+    var $uses = array('OptLog', 'User', 'VisitLog');
 
+    /**
+     * pys index view
+     */
     public function index() {
         $this->layout = null;
+        $uid = $this->currentUser['id'];
+        $this->save_visit_log($uid);
     }
 
     /**
@@ -54,5 +59,24 @@ class ShareOptController extends AppController {
         ));
         $opt_users = Hash::combine($opt_users, '{n}.User.id', '{n}.User');
         return array('users' => $opt_users);
+    }
+
+    /**
+     * @param $uid
+     * update user visit log
+     */
+    private function save_visit_log($uid) {
+        $visitLog = $this->VisitLog->find('first', array(
+            'conditions' => array(
+                'user_id' => $uid
+            )
+        ));
+        $now = date('Y-m-d H:i:s');
+        if (empty($visitLog)) {
+            $saveVisitLog = array('user_id' => $uid, 'last_visit_time' => $now);
+            $this->VisitLog->save($saveVisitLog);
+        } else {
+            $this->VisitLog->updateAll(array('last_visit_time' => '\'' . $now . '\''), array('id' => $visitLog['VisitLog']['id']));
+        }
     }
 }
