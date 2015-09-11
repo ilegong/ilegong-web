@@ -193,8 +193,8 @@ class WesharesController extends AppController {
             if (empty($weshareData['id'])) {
                 Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
                 $thumbnail = null;
-                if(count($weshareData['images'])>0){
-                    $thumbnail = $weshareData['images'][0];
+                if(count($images)>0){
+                    $thumbnail = $images[0];
                 }
                 $this->ShareUtil->save_create_share_opt_log($weshare['Weshare']['id'], $thumbnail, $weshareData['title'], $uid);
             }
