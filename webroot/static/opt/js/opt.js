@@ -98,7 +98,7 @@ $(document).ready(function () {
         bottomTimeStamp = lastInfoEl.getAttribute("data-timestamp");
       }
     }
-    if (bottomTimeStamp == oldest_timestamp) {
+    if (oldest_timestamp != 0 && bottomTimeStamp == oldest_timestamp) {
       return false;
     }
     var reqParams = {
