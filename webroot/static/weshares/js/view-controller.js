@@ -1023,6 +1023,7 @@
       }
       //share packet
       if (vm.isSharePacket && userInfo) {
+        url = 'http://www.tongshijia.com/weshares/view/' + vm.weshare.id;
         imgUrl = 'http://www.tongshijia.com/static/weshares/images/share_icon.jpg';
         var title = userInfo.nickname + '报名了' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
         to_timeline_title = title;
@@ -1032,7 +1033,7 @@
           url = url + '&recommend=' + vm.currentUser['id'];
         }
         if(!vm.isProxy()&&vm.recommendUserId!=0){
-          url = url + '?recommend=' + vm.recommendUserId;
+          url = url + '&recommend=' + vm.recommendUserId;
         }
         desc = vm.weshare.creator.nickname + '我认识，很靠谱！送你一个爱心礼包，一起来参加。';
       }
