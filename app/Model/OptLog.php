@@ -26,12 +26,36 @@ class OptLog extends AppModel{
         return $opt_logs;
     }
 
-    public function get_oldest_update_time(){
-
+    /**
+     * @return int|mixed
+     */
+    public function get_oldest_update_time() {
+        $timeStamp = Cache::read(OPT_LOG_OLDEST_TIME_CACHE_KEY, 0);
+        if ($timeStamp == 0) {
+            $oldestLog = $this->find('first', array(
+                'order' => array('created ASC')
+            ));
+            $oldestDate = $oldestLog['OptLog']['created'];
+            $timeStamp = strtotime($oldestDate);
+            Cache::write(OPT_LOG_OLDEST_TIME_CACHE_KEY, $timeStamp);
+        }
+        return $timeStamp;
     }
 
-    public function get_last_update_time(){
-
+    /**
+     * @return int|mixed
+     */
+    public function get_last_update_time() {
+        $timeStamp = Cache::read(OPT_LOG_LAST_TIME_CACHE_KEY, 0);
+        if ($timeStamp == 0) {
+            $lastLog = $this->find('first', array(
+                'order' => array('created DESC')
+            ));
+            $lastDate = $lastLog['OptLog']['created'];
+            $timeStamp = strtotime($lastDate);
+            Cache::write(OPT_LOG_LAST_TIME_CACHE_KEY, $timeStamp);
+        }
+        return $timeStamp;
     }
 
 
