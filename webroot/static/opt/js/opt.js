@@ -32,7 +32,7 @@ $(document).ready(function () {
   }
 
   function initOptLogView() {
-    loadOptLogData(checkDataShow);
+    loadOptLogData();
   }
 
   function loadMoreDataWithScrollY() {
@@ -84,6 +84,9 @@ $(document).ready(function () {
   }
 
   function loadOptLogData(callback) {
+    if (loadDataFlag == 1) {
+      return false;
+    }
     $loadingDiv.show();
     loadDataFlag = 1;
     var bottomTimeStamp = "0";
