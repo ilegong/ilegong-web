@@ -7,6 +7,8 @@ $(document).ready(function () {
   var getOptLogUrl = '/share_opt/fetch_opt_list_data.json';
   var loadDataFlag = 0;
   var filterVal = 0;
+  var oldest_timestamp = 0;
+  var last_timestamp = 0;
   init();
   function init() {
     var $body = $("body");
@@ -96,6 +98,9 @@ $(document).ready(function () {
         bottomTimeStamp = lastInfoEl.getAttribute("data-timestamp");
       }
     }
+    if (bottomTimeStamp == oldest_timestamp) {
+      return false;
+    }
     var reqParams = {
       "type": filterVal,
       "time": bottomTimeStamp,
@@ -103,6 +108,8 @@ $(document).ready(function () {
     };
     var callbackFunc = function (data) {
       var list = data['opt_logs'] || [];
+      last_timestamp = data['last_timestamp'];
+      oldest_timestamp = data['oldest_timestamp'];
       var users = data['combine_data']['users'] || {};
       var nowTimeStamp = data['nowTimeStamp'];
       for (var i = 0; i < list.length; i++) {
