@@ -89,11 +89,12 @@ $(document).ready(function () {
     }
     $loadingDiv.show();
     loadDataFlag = 1;
-    var bottomTimeStamp = "0";
+    var bottomTimeStamp = 0;
     var $lastOptLog = $loadingDiv.prev('div.postinfo');
-    if ($lastOptLog) {
+    if ($lastOptLog.length > 0) {
       bottomTimeStamp = $lastOptLog.data("timestamp");
       if (oldest_timestamp != 0 && bottomTimeStamp == oldest_timestamp) {
+        $loadingDiv.hide();
         return false;
       }
     }
@@ -104,8 +105,6 @@ $(document).ready(function () {
     };
     var callbackFunc = function (data) {
       var list = data['opt_logs'] || [];
-      last_timestamp = data['last_timestamp'];
-      oldest_timestamp = data['oldest_timestamp'];
       var users = data['combine_data']['users'] || {};
       var nowTimeStamp = data['nowTimeStamp'];
       for (var i = 0; i < list.length; i++) {
@@ -116,9 +115,11 @@ $(document).ready(function () {
         parseInfoJsonObj(objJson, nowTimeStamp);
         document.getElementById("info_" + objJson.id).style.borderBottom = "1px solid #dfdfdd";
       }
-      if (callback) {
-        callback();
+      if (last_timestamp == 0) {
+        checkDataShow();
       }
+      last_timestamp = data['last_timestamp'];
+      oldest_timestamp = data['oldest_timestamp'];
       loadDataFlag = 0;
       $loadingDiv.hide();
     };
@@ -239,9 +240,9 @@ $(document).ready(function () {
 
   var optLogTemplate = '<div class="postinfo" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: rgb(223, 223, 221);" data-show="0" data-infoid="<%this.id%>" data-timestamp="<%this.timestamp%>" data-myzan="0" id="info_<%this.id%>">' +
     '<a class="heada" href="javascript:void(0)">' +
-    '<img class="headimg" src="/static/opt/images/default.png" data-original="<%this.user_info.image%>">' +
+    '<img class="headimg" src="/static/opt/images/default.png" <%if(this.user_info){%>data-original="<%this.user_info.image%>"<%}else{%>data-original="/static/opt/images/default.png"<%}%>>' +
     '</a>' +
-    '<a href="javascript:void(0)" class="nickname"><%this.user_info.nickname%></a>' +
+    '<a href="javascript:void(0)" class="nickname"><%if(this.user_info){%><%this.user_info.nickname%><%}else{%>匿名用户<%}%></a>' +
     '<font class="jibie"><%this.data_type_tag%></font>' +
     '<font class="jibie" style="float:right"></font>' +
     '<div style="height:0px;clear:both"></div>' +

@@ -33,7 +33,7 @@ class ShareOptController extends AppController {
             $opt_logs = array();
             $combine_data = array();
         } else {
-            $datetime = date('Y-m-d H:i:s');
+            $datetime = date('Y-m-d H:i:s', $time);
             $opt_logs = $this->OptLog->fetch_by_time_limit_type($datetime, $limit, $type);
             $combine_data = $this->combine_opt_log_data($opt_logs);
             $opt_logs = Hash::extract($opt_logs, '{n}.OptLog');
