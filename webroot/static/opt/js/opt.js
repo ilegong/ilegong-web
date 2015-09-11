@@ -21,12 +21,12 @@ $(document).ready(function () {
     });
     $logListDiv.scroll(function () {
       loadMoreDataWithScrollY();
+      setTimeout(checkDataShow,200);
     });
     initOptLogView();
   }
 
   function showNewOptLogInfo() {
-
   }
 
   function initOptLogView() {
@@ -51,8 +51,6 @@ $(document).ready(function () {
       if (topVal + elmHeight > (lastChildObjTop + lastChildObjHeight)) {
         loadOptLogData(checkDataShow);
       }
-    }else{
-      checkDataShow();
     }
   }
 
