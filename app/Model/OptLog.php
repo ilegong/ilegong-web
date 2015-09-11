@@ -6,18 +6,18 @@ class OptLog extends AppModel{
 
 
     /**
-     * @param $time
+     * @param $format_date
      * @param $limit
      * @param $type
      * @return array
      */
-    public function fetch_by_time_limit_type($time, $limit, $type) {
-        $format_date = date('Y-m-d H:i:s', $time);
+    public function fetch_by_time_limit_type($format_date, $limit, $type) {
         $fetch_option = array(
             'conditions' => array(
                 'created < ' => $format_date,
             ),
-            'limit' => $limit
+            'limit' => $limit,
+            'order' => array('created DESC')
         );
         if ($type != 0) {
             $fetch_option['conditions']['obj_type'] = $type;

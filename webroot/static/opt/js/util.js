@@ -31,7 +31,7 @@ function url2Hash(_url) {
   }
   return parmhash;
 }
-function str2hashcode(str) {
+function str2Hashcode(str) {
   var hash = 1,
     charCode = 0,
     idx;
@@ -47,7 +47,7 @@ function str2hashcode(str) {
   return hash;
 }
 
-function sethrefEvent(infoid, isnotocuh) {
+function setHrefEvent(infoid, isnotocuh) {
   var obj = $("#info_" + infoid);
   if (obj.length == 0) {
     obj = $("#" + infoid);
@@ -112,26 +112,25 @@ function alertmsg(str) {
     alertmsgdivobj.style.display = "block";
   }
 }
-function hidemsg(str) {
+function hideMsg(str) {
   var alertmsgdivobj = document.getElementById("alertmsgdiv");
   if (alertmsgdivobj != null) {
     alertmsgdivobj.style.display = "none";
   }
 }
-function data2str(_data, format) {
+function date2Str(_date, format) {
   format = format || "yyyy-MM-dd hh:mm:ss";
   var o = {
-    "M+": _data.getMonth() + 1, //month
-    "d+": _data.getDate(),    //day
-    "h+": _data.getHours(),   //hour
-    "m+": _data.getMinutes(), //minute
-    "s+": _data.getSeconds(), //second
-    "q+": Math.floor((_data.getMonth() + 3) / 3),  //quarter
-    "S": _data.getMilliseconds() //millisecond
+    "M+": _date.getMonth() + 1, //month
+    "d+": _date.getDate(),    //day
+    "h+": _date.getHours(),   //hour
+    "m+": _date.getMinutes(), //minute
+    "s+": _date.getSeconds(), //second
+    "q+": Math.floor((_date.getMonth() + 3) / 3),  //quarter
+    "S": _date.getMilliseconds() //millisecond
   }
-  //console.log(o);
   if (/(y+)/.test(format)) format = format.replace(RegExp.$1,
-    (_data.getFullYear() + "").substr(4 - RegExp.$1.length));
+    (_date.getFullYear() + "").substr(4 - RegExp.$1.length));
   for (var k in o)if (new RegExp("(" + k + ")").test(format))
     format = format.replace(RegExp.$1,
       RegExp.$1.length == 1 ? o[k] :
@@ -139,19 +138,18 @@ function data2str(_data, format) {
   return format;
 }
 //长时间，形如 (2003-12-05 13:04:06)
-function str2date(str) {
-  var strlen = str.length;
-  if (strlen < 19) {
-    if (strlen == 10) {
+function str2Date(str) {
+  var strLen = str.length;
+  if (strLen < 19) {
+    if (strLen == 10) {
       str += " 00:00:00";
-    } else if (strlen == 16) {
+    } else if (strLen == 16) {
       str += ":00";
     }
   }
   var reg = /^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$/;
   var r = str.match(reg);
   if (r != null) {
-
     var d = new Date(r[1], r[3] - 1, r[4], r[5], r[6], r[7]);
     if (d.getFullYear() == r[1] && (d.getMonth() + 1) == r[3] && d.getDate() == r[4] && d.getHours() == r[5] && d.getMinutes() == r[6] && d.getSeconds() == r[7]) {
       return d;

@@ -4,34 +4,33 @@ $(document).ready(function () {
   var $loadingDiv = $('#dataloadingdiv');
   var loadingDivDom = $loadingDiv[0];
   var $backTopBtn = $('#topiconbut');
-  var getTopicOptLogUrl = '';
-  var showDataModel = "single";
+  var getOptLogUrl = '/share_opt/fetch_opt_list_data.json';
   var loadDataFlag = 0;
   var filterVal = 0;
-  var topicJson = {};
-  var l2CacheInfoArray = [];
-  var $body = $("body");
-  var w0 = $body.width();
-  var w1 = $logListDiv.width();
-  var zv1 = w0 / w1;
-  if (zv1 > 1.1) {
-    $body.css("zoom", zv1);
+  init();
+  function init() {
+    var $body = $("body");
+    var w0 = $body.width();
+    var w1 = $logListDiv.width();
+    var zv1 = w0 / w1;
+    if (zv1 > 1.1) {
+      $body.css("zoom", zv1);
+    }
+    $backTopBtn.click(function () {
+      $logListDiv.scrollTop(0);
+    });
+    $logListDiv.scroll(function () {
+      loadMoreDataWithScrollY();
+    });
+    initOptLogView();
   }
-
-  $backTopBtn.click(function () {
-    $logListDiv.scrollTop(0);
-  });
-
-  $logListDiv.scroll(function () {
-    loadMoreDataWithScrollY();
-  });
 
   function showNewOptLogInfo() {
 
   }
 
   function initOptLogView() {
-
+    loadOptLogData(checkDataShow);
   }
 
   function loadMoreDataWithScrollY() {
@@ -50,7 +49,7 @@ $(document).ready(function () {
       var lastChildObjTop = lastChildObj.offsetTop;
       var lastChildObjHeight = 0;
       if (topVal + elmHeight > (lastChildObjTop + lastChildObjHeight)) {
-        loadOptLogData();
+        loadOptLogData(checkDataShow);
       }
     }
   }
@@ -80,30 +79,12 @@ $(document).ready(function () {
         });
       }, 200);
     } else {
-      loadOptLogData();
+      loadOptLogData(checkDataShow);
     }
   }
 
   function filterOptLogData() {
 
-  }
-
-  function invokeAjax(url, callback, reqParams, method) {
-    var headers = {};
-    method = method || 'GET';
-    $.ajax({
-      headers: headers,
-      type: method,
-      url: url,
-      data: reqParams || {},
-      dataType: 'json',
-      success: function (data) {
-        callback(data);
-      },
-      error: function (XMLHttpRequest, textStatus, errorThrown) {
-        callback(null, XMLHttpRequest, textStatus, errorThrown, url);
-      }
-    });
   }
 
   function loadOptLogData(callback) {
@@ -125,90 +106,34 @@ $(document).ready(function () {
         bottomTimeStamp = lastInfoEl.getAttribute("data-timestamp");
       }
     }
-
     var reqParams = {
-      "filterVal": filterVal,
-      "bottomTimeStampInfoId": timeStampInfoId,
-      "bottomTimeStamp": bottomTimeStamp,
-      "discuss": "no  "
+      "type": filterVal,
+      "time": bottomTimeStamp,
+      "limit": 10
     };
-
-    if (topicJson && topicJson.topicPermit) {
-      reqParams["topicPermit"] = topicJson.topicPermit;
-    }
-
-    if (l2CacheInfoArray && l2CacheInfoArray.length > 0 && bottomTimeStamp != "0") {
-      var l2CacheIds = l2CacheInfoArray.shift().index;
-      reqParams["l2CacheIds"] = l2CacheIds;
-    }
-
     var callbackFunc = function (data) {
-      if (data['l2Cache']) {
-        l2CacheInfoArray = data['l2Cache'];
-      }
-      var list = data.list || [];
-      if (list.length < 10) {
-        if (!reqParms["l2CacheIds"]) {
-          loadDataFlag = 2;
-          $loadingDiv.style.display = "none";
-        }
-      }
-      var comment = data.comment || [];
+      var list = data['opt_logs'] || [];
+      var users = data['combine_data']['users'] || {};
       var nowTimeStamp = data['nowTimeStamp'];
-      var cacheHash = {};
-      for (var i = 0; i < comment.length; i++) {
-        cacheHash[comment[i]["optLogId"]] = comment[i];
-      }
       if (callback) {
         callback();
       }
       for (var i = 0; i < list.length; i++) {
         var objJson = list[i];
-        var commentObj = cacheHash[objJson.id];
-        if (commentObj) {
-          objJson["comment"] = commentObj;
-          if (objJson.topicPermit != null) {
-            commentObj["topicPermit"] = objJson.topicPermit;
-          }
-        }
-        parseJsonObj(objJson, nowTimeStamp);
-        if (true || showDataModel == "list") {
-          document.getElementById("info_" + objJson.id).style.borderBottom = "1px solid #dfdfdd";
-        }
+        var objJsonUserId = objJson['user_id'];
+        var objJsonUserInfo = users[objJsonUserId];
+        objJson['user_info'] = objJsonUserInfo;
+        parseInfoJsonObj(objJson, nowTimeStamp);
+        document.getElementById("info_" + objJson.id).style.borderBottom = "1px solid #dfdfdd";
       }
-      if (topicJson.id) {
-        getLikeAndComment(comment);
-      } else {
-        var allPlComment = [];
-        var rePlComment = [];
-        for (var i = 0; i < comment.length; i++) {
-          if (comment[i]["topicPermit"] == "2") {
-            allPlComment.push(comment[i]);
-          } else if (comment[i]["topicPermit"] == "1") {
-            rePlComment.push(comment[i]);
-          }
-        }
-        topicJson.topicpermit = "1";
-        getLikeAndComment(rePlComment);
-        topicJson.topicpermit = "2";
-        getLikeAndComment(allPlComment);
-      }
+      callback();
     };
-    invokeAjax(getTopicOptLogUrl, callbackFunc, reqParams);
-  }
-
-  function parseJsonObj(objJson) {
-
-  }
-
-  function getLikeAndComment(comment) {
-
+    $.getJSON(getOptLogUrl, reqParams, callbackFunc);
   }
 
   function checkDataShow() {
     var dataShowObjs = $logListDiv.children("[data-show=0]");
     if (dataShowObjs.length > 0) {
-      var scrollTopVal = $logListDiv.scrollTop;
       var heightVal = $logListDiv.clientHeight;
       for (var i = 0; i < dataShowObjs.length; i++) {
         var obj = $(dataShowObjs[i]);
@@ -227,9 +152,9 @@ $(document).ready(function () {
           var contentAObjs = mediaContentObj.children(".contenta");
           var contentAObjsLen = contentAObjs.length;
           for (var k = 0; k < contentAObjsLen; k++) {
-            var contentAimageUrl = contentAObjs[k].getAttribute("data-original");
-            if (contentAimageUrl) {
-              contentAObjs[k].style.backgroundImage = "url(" + contentAimageUrl + ")";
+            var contentAImageUrl = contentAObjs[k].getAttribute("data-original");
+            if (contentAImageUrl) {
+              contentAObjs[k].style.backgroundImage = "url(" + contentAImageUrl + ")";
               if (contentAObjs[k].className.indexOf("contentb") != -1) {
                 if (contentAObjs[k].getAttribute("data-shareid")) {
                   contentAObjs[k].style.backgroundSize = "cover";
@@ -272,25 +197,9 @@ $(document).ready(function () {
     }
   }
 
-  function parseinfoJSONObj(objJson, nowTimeStamp) {
-    var isNew = objJson.isNew;
-    var html = convertOptJson2html(objJson, nowTimeStamp);
-    if (isNew) {//新信息
-      var firstEl = logListDom.firstElementChild;
-      if (firstEl) {
-        firstEl.insertAdjacentHTML('afterEnd', html);
-      } else {
-        loadingDivDom.insertAdjacentHTML('BeforeBegin', html);
-      }
-    } else if (objJson["modify"]) {//修改
-      delete objJson["modify"];
-      var oldOptLogDom = document.getElementById("info_" + objJson.id);
-      if (oldOptLogDom) {
-        oldOptLogDom.outerHTML = html;
-      }
-    } else {
-      loadingDivDom.insertAdjacentHTML('BeforeBegin', html);
-    }
+  function parseInfoJsonObj(objJson) {
+    var html = convertOptJson2html(objJson);
+    loadingDivDom.insertAdjacentHTML('BeforeBegin', html);
     var optLogItemId = objJson.id;
     var optLogItemDom = $(document.getElementById("info_" + optLogItemId));
     var fontContentObj = optLogItemDom.children(".fontcontent");
@@ -330,29 +239,55 @@ $(document).ready(function () {
   }
 
 
-  function convertOptJson2html(objJson, nowTimeStamp){
-
+  function convertOptJson2html(objJson) {
+    return TemplateEngine(optLogTemplate, objJson);
   }
 
-  var TemplateEngine = function(html, options) {
+  var optLogTemplate = '<div class="postinfo" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: rgb(223, 223, 221);" data-show="0" data-infoid="<%this.id%>" data-timestamp="<%this.timestamp%>" data-myzan="0" id="info_<%this.id%>">' +
+    '<a class="heada" href="javascript:void(0)">' +
+    '<img class="headimg" src="/static/opt/images/default.png" data-original="<%this.user_info.image%>">' +
+    '</a>' +
+    '<a href="javascript:void(0)" class="nickname"><%this.user_info.nickname%></a>' +
+    '<font class="jibie"><%this.data_type_tag%></font>' +
+    '<font class="jibie" style="float:right"></font>' +
+    '<div style="height:0px;clear:both"></div>' +
+    '<%if(this.reply_content) {%> <div class="fontcontent"><%this.reply_content%></div> <%}%>' +
+    '<%if(this.reply_content) {%><a href="javascript:void(0)" class="expcontenta">全文</a><%}%>' +
+    '<div <%if(!this.memo){%>class="pure-mediacontent"<%}%> <%if(!this.memo){%>class="mediacontent"<%}%>><a href="<%this.data_url%>" data-url="<%this.data_url%>" class="linkcontent">' +
+    '<img src="/static/opt/images/pyqlink.png" data-original="<%this.thumbnail%>" style="width:40px;height:40px">' +
+    '<div class="linkfontcontent"><%this.memo%></div>' +
+    '</a> <div style="height:0px;clear:both"></div>' +
+    '</div>' +
+    '<div class="date"><%this.created%></div>' +
+    '<a href="javascript:void(0)" class="controlimg" style="visibility: hidden;">' +
+    '<img src="/static/opt/images/repicon.png"></a>' +
+    '<div style="height:0px;clear:both"></div>' +
+    '</div>';
+
+
+  var TemplateEngine = function (html, options) {
     var re = /<%(.+?)%>/g,
       reExp = /(^( )?(var|if|for|else|switch|case|break|{|}|;))(.*)?/g,
       code = 'with(obj) { var r=[];\n',
       cursor = 0,
       result;
-    var add = function(line, js) {
-      js? (code += line.match(reExp) ? line + '\n' : 'r.push(' + line + ');\n') :
+    var add = function (line, js) {
+      js ? (code += line.match(reExp) ? line + '\n' : 'r.push(' + line + ');\n') :
         (code += line != '' ? 'r.push("' + line.replace(/"/g, '\\"') + '");\n' : '');
       return add;
     }
-    while(match = re.exec(html)) {
+    while (match = re.exec(html)) {
       add(html.slice(cursor, match.index))(match[1], true);
       cursor = match.index + match[0].length;
     }
     add(html.substr(cursor, html.length - cursor));
     code = (code + 'return r.join(""); }').replace(/[\r\t\n]/g, '');
-    try { result = new Function('obj', code).apply(options, [options]); }
-    catch(err) { console.error("'" + err.message + "'", " in \n\nCode:\n", code, "\n"); }
+    try {
+      result = new Function('obj', code).apply(options, [options]);
+    }
+    catch (err) {
+      console.error("'" + err.message + "'", " in \n\nCode:\n", code, "\n");
+    }
     return result;
   };
 });

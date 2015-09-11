@@ -2233,6 +2233,31 @@ function multi_array_sum($total, $next) {
     return $total;
 }
 
+
+function map_opt_log_data($var) {
+    $timeStamp = strtotime($var['created']);
+    $var['timestamp'] = $timeStamp;
+    $data_type = $var['data_type'];
+    if ($data_type == OPT_LOG_CREATE_SHARE) {
+        $var['data_type_tag'] = '分享了';
+    }
+    if ($data_type == OPT_LOG_SHARE_BUY) {
+        $var['data_type_tag'] = '购买了';
+    }
+    if ($data_type == OPT_LOG_SHARE_COMMENT) {
+        $var['data_type_tag'] = '评价了';
+    }
+    if ($data_type == OPT_LOG_SHARE_RECOMMEND) {
+        $var['data_type_tag'] = '推荐了';
+    }
+    $var['data_url'] = '/weshares/view/' . $var['data_id'];
+    return $var;
+}
+
+function sort_data_by_id($a, $b) {
+    return ($a['id'] < $b['id']) ? -1 : 1;
+}
+
 /**
  * auto load spl lib
  */
