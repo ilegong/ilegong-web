@@ -1,8 +1,9 @@
 <?php
+
 /**
  * opt log modal
  */
-class OptLog extends AppModel{
+class OptLog extends AppModel {
 
 
     /**
@@ -24,6 +25,28 @@ class OptLog extends AppModel{
         }
         $opt_logs = $this->find('all', $fetch_option);
         return $opt_logs;
+    }
+
+    /**
+     * @param $time
+     * @param int $type
+     * @return int
+     * get not read count by limit time
+     */
+    public function fetch_count_by_time($time, $type = 0) {
+        $fetch_option = array(
+            'conditions' => array(
+                'created > ' => $time
+            ),
+            'order' => array('created DESC')
+        );
+        if ($type != 0) {
+            if ($type != 0) {
+                $fetch_option['conditions']['obj_type'] = $type;
+            }
+        }
+        $no_read_count = $this->find('count', $fetch_option);
+        return $no_read_count;
     }
 
     /**

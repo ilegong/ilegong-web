@@ -45,6 +45,26 @@ class ShareOptController extends AppController {
     }
 
     /**
+     * check user is has unread opt log
+     */
+    public function check_opt_has_new() {
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        $visitLog = $this->get_user_visit_log($uid);
+        $has_new_result = array('has_new' => true, 'count' => '0');
+        if (!empty($visitLog)) {
+            $last_visit_time = $visitLog['VisitLog']['last_visit_time'];
+            $unread_count = $this->OptLog->fetch_count_by_time($last_visit_time);
+            if ($unread_count == 0) {
+                $has_new_result['has_new'] = false;
+            }
+            $has_new_result['count'] = $unread_count;
+        }
+        echo json_encode($has_new_result);
+        return;
+    }
+
+    /**
      * @param $opt_logs
      * @return array
      */
@@ -78,5 +98,19 @@ class ShareOptController extends AppController {
         } else {
             $this->VisitLog->updateAll(array('last_visit_time' => '\'' . $now . '\''), array('id' => $visitLog['VisitLog']['id']));
         }
+    }
+
+    /**
+     * @param $uid
+     * @return mixed
+     * get user visit log
+     */
+    private function get_user_visit_log($uid) {
+        $visitLog = $this->VisitLog->find('first', array(
+            'conditions' => array(
+                'user_id' => $uid
+            )
+        ));
+        return $visitLog;
     }
 }
