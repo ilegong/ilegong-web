@@ -254,7 +254,7 @@ $(document).ready(function () {
     '<div style="height:0px;clear:both"></div>' +
     '<%if(this.reply_content) {%> <div class="fontcontent"><%this.reply_content%></div> <%}%>' +
     '<%if(this.reply_content) {%><a href="javascript:void(0)" class="expcontenta">全文</a><%}%>' +
-    '<div <%if(!this.memo){%>class="pure-mediacontent"<%}%> <%if(!this.memo){%>class="mediacontent"<%}%>><a href="<%this.data_url%>" data-url="<%this.data_url%>" class="linkcontent">' +
+    '<div <%if(!this.reply_content){%>class="pure-mediacontent"<%}%> <%if(this.reply_content){%>class="mediacontent"<%}%>><a href="<%this.data_url%>" data-url="<%this.data_url%>" class="linkcontent">' +
     '<img src="/static/opt/images/pyqlink.png" data-original="<%this.thumbnail%>" style="width:40px;height:40px">' +
     '<div class="linkfontcontent"><%this.memo%></div>' +
     '</a> <div style="height:0px;clear:both"></div>' +
@@ -264,7 +264,6 @@ $(document).ready(function () {
     '<img src="/static/opt/images/repicon.png"></a>' +
     '<div style="height:0px;clear:both"></div>' +
     '</div>';
-
 
   var TemplateEngine = function (html, options) {
     var re = /<%(.+?)%>/g,
