@@ -34,15 +34,15 @@ $(document).ready(function () {
   }
 
   function loadMoreDataWithScrollY() {
-    var topVal = $logListDiv.scrollTop;
-    var elmHeight = $logListDiv.clientHeight;
+    var topVal = logListDom.scrollTop;
+    var elmHeight = logListDom.clientHeight;
     if (topVal > 150) {
       $backTopBtn.show();
     } else {
       $backTopBtn.hide();
     }
-    var lastChildObj = $logListDiv.lastElementChild;
-    while (lastChildObj && lastChildObj.nodeName != "DIV") {
+    var lastChildObj = logListDom.lastElementChild;
+    while (lastChildObj && logListDom.nodeName != "DIV") {
       lastChildObj = lastChildObj.previousElementSibling;
     }
     if (lastChildObj != null) {
