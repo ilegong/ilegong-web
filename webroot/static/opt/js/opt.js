@@ -51,6 +51,8 @@ $(document).ready(function () {
       if (topVal + elmHeight > (lastChildObjTop + lastChildObjHeight)) {
         loadOptLogData(checkDataShow);
       }
+    }else{
+      checkDataShow();
     }
   }
 
@@ -123,7 +125,7 @@ $(document).ready(function () {
         parseInfoJsonObj(objJson, nowTimeStamp);
         document.getElementById("info_" + objJson.id).style.borderBottom = "1px solid #dfdfdd";
       }
-      if(callback){
+      if (callback) {
         callback();
       }
     };
