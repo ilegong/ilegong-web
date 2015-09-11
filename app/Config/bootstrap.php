@@ -2255,7 +2255,7 @@ function map_opt_log_data($var) {
 }
 
 function sort_data_by_id($a, $b) {
-    return ($a['id'] < $b['id']) ? -1 : 1;
+    return ($a['id'] < $b['id']) ? 1 : -1;
 }
 
 /**
