@@ -249,7 +249,7 @@ $(document).ready(function () {
     '<%if(this.reply_content) {%> <div class="fontcontent"><%this.reply_content%></div> <%}%>' +
     '<%if(this.reply_content) {%><a href="javascript:void(0)" class="expcontenta">全文</a><%}%>' +
     '<div <%if(!this.reply_content){%>class="pure-mediacontent"<%}%> <%if(this.reply_content){%>class="mediacontent"<%}%>><a href="<%this.data_url%>" data-url="<%this.data_url%>" class="linkcontent">' +
-    '<img src="/static/opt/images/pyqlink.png" data-original="<%this.thumbnail%>" style="width:40px;height:40px">' +
+    '<img src="/static/opt/images/pyqlink.png" data-original="<%this.thumbnail%>" style="width:40px;height:40px" data-show="0">' +
     '<div class="linkfontcontent"><%this.memo%></div>' +
     '</a> <div style="height:0px;clear:both"></div>' +
     '</div>' +
