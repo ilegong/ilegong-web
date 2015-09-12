@@ -99,6 +99,7 @@
     var vm = this;
     vm.showShareDetailView = true;
     vm.subShareTipTxt = '+关注';
+    vm.showUnReadMark = false;
     ChooseOfflineStore(vm, $log, $http, $templateCache, $timeout);
     vm.statusMap = {
       0: '进行中',
@@ -166,6 +167,7 @@
     vm.closeRecommendDialog = closeRecommendDialog;
     vm.submitRecommend = submitRecommend;
     vm.validRecommendContent=validRecommendContent;
+    vm.checkHasUnRead = checkHasUnRead;
     function pageLoaded(){
       $rootScope.loadingPage = false;
     }
@@ -295,6 +297,7 @@
           }
           //load all comments
           vm.loadSharerAllComments(vm.weshare.creator.id);
+          vm.checkHasUnRead();
         }).
         error(function (data, status) {
           $log.log(data);
@@ -960,6 +963,14 @@
         vm.recommendContentHasError = true;
       }
       return vm.recommendContentHasError;
+    }
+
+    function checkHasUnRead(){
+      $http.get('/share_opt/check_opt_has_new.json').success(function(data){
+        if(data['success']){
+          vm.showUnReadMark = true;
+        }
+      });
     }
 
     function isShowShipCode(order) {
