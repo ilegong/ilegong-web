@@ -162,8 +162,10 @@ $(document).ready(function () {
           }
           var imgObjs = mediaContentObj.find(".linkcontent img");
           $.each(imgObjs, function (index, item) {
-            var imgUrl = $(item).attr('data-original');
-            $(item).attr('src', imgUrl);
+            var imgUrl = $(item).attr('data-original')||'';
+            if(imgUrl){
+              $(item).attr('src', imgUrl);
+            }
           });
           var likeContentObj = obj.children(".zancontent");
           var commentContentObj = obj.children(".talkcontent");
