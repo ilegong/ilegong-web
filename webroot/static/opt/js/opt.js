@@ -143,13 +143,9 @@ $(document).ready(function () {
             headAImageObj.attr("src", headAImageUrl);
             headAImageObj[0].removeAttribute("data-original");
           }
-          var linkAImageObj = obj.children('.linkcontent').children('img');
-          if (linkAImageObj) {
-            var linkAImageUrl = linkAImageObj.attr("data-original") || "";
-            linkAImageObj.attr("src", linkAImageUrl);
-            linkAImageObj.attr("data-original", "");
-          }
+          var pureMediaContentObj = obj.children('.pure-mediacontent');
           var mediaContentObj = obj.children(".mediacontent");
+          mediaContentObj = mediaContentObj.concat(pureMediaContentObj);
           var contentAObjs = mediaContentObj.children(".contenta");
           var contentAObjsLen = contentAObjs.length;
           for (var k = 0; k < contentAObjsLen; k++) {
