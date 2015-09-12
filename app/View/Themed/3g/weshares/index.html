@@ -13,78 +13,80 @@
 <div class="outer-listings-container row-space-3" style="margin-bottom: 50px;">
     <div class="listings-container">
         {{loop $products $product}}
-            <div class="row">
-                <!--葡萄-->
-                <div class="col-sm-12 row-space-2 col-md-6">
-                    <div class="listing">
-                        <div class="panel-image listing-img">
-                            <a href="/weshares/view/{{$product['share_id']}}" target="_self" class="media-photo media-cover">
-                                <div class="listing-img-container media-cover text-center">
-                                    <img itemprop="image" data-current="0"
-                                         src="{{$this->Html->assetUrl($product['share_img'])}}"
-                                         class="img-responsive-height" alt="天津茶淀玫瑰香葡萄,8小时极致新鲜"
-                                         data-urls="[&quot;{{$this->Html->assetUrl($product['share_img'])}}&quot;]">
-                                </div>
-                            </a>
-                            <a href="/weshares/view/{{$product['share_id']}}" target="_self"
-                               class="link-reset panel-overlay-bottom-left panel-overlay-label panel-overlay-listing-label">
-                                <div>
-                                    <sup class="h6 text-contrast">￥</sup>
-                                    <span class="h3 text-contrast price-amount">{{$product['share_price']}}</span>
-                                    <sup class="h6 text-contrast"></sup>
+        <div class="row">
+            <!--葡萄-->
+            <div class="col-sm-12 row-space-2 col-md-6">
+                <div class="listing">
+                    <div class="panel-image listing-img">
+                        <a href="/weshares/view/{{$product['share_id']}}" target="_self"
+                           class="media-photo media-cover">
+                            <div class="listing-img-container media-cover text-center">
+                                <img itemprop="image" data-current="0"
+                                     src="{{$this->Html->assetUrl($product['share_img'])}}"
+                                     class="img-responsive-height" alt="天津茶淀玫瑰香葡萄,8小时极致新鲜"
+                                     data-urls="[&quot;{{$this->Html->assetUrl($product['share_img'])}}&quot;]">
+                            </div>
+                        </a>
+                        <a href="/weshares/view/{{$product['share_id']}}" target="_self"
+                           class="link-reset panel-overlay-bottom-left panel-overlay-label panel-overlay-listing-label">
+                            <div>
+                                <sup class="h6 text-contrast">￥</sup>
+                                <span class="h3 text-contrast price-amount">{{$product['share_price']}}</span>
+                                <sup class="h6 text-contrast"></sup>
                                     <span class="h3 icon-beach" data-behavior="tooltip" aria-label="即时预订">
                                       <i class="icon icon-instant-book icon-flush-sides"></i>
                                     </span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="panel-body panel-card-section">
+                        <div class="media">
+                            <a href="/weshares/user_share_info/{{$product['share_user_id']}}"
+                               class="media-photo-badge pull-right card-profile-picture card-profile-picture-offset">
+                                <div class="media-photo media-round">
+                                    <img src="{{$this->Html->assetUrl($product['share_user_img'])}}"
+                                         alt="">
                                 </div>
                             </a>
-                        </div>
-                        <div class="panel-body panel-card-section">
-                            <div class="media">
+                            <a href="/weshares/view/363" target="_self" class="text-normal">
+                                <h3 title="{{$product['share_name']}}" itemprop="name"
+                                    class="h5 listing-name text-truncate row-space-top-1">
+                                    {{$product['share_name']}}
+                                </h3>
+                            </a>
+
+                            <div itemprop="description" class="text-muted listing-location text-truncate">
                                 <a href="/weshares/user_share_info/{{$product['share_user_id']}}"
-                                   class="media-photo-badge pull-right card-profile-picture card-profile-picture-offset">
-                                    <div class="media-photo media-round">
-                                        <img src="{{$this->Html->assetUrl($product['share_user_img'])}}"
-                                             alt="">
-                                    </div>
-                                </a>
-                                <a href="/weshares/view/363" target="_self" class="text-normal">
-                                    <h3 title="{{$product['share_name']}}" itemprop="name"
-                                        class="h5 listing-name text-truncate row-space-top-1">
-                                        {{$product['share_name']}}
-                                    </h3>
-                                </a>
+                                   class="text-normal link-reset">
+                                    {{$product['share_user_name']}}
+                                    ·
+                                    <small>
+                                        <div class="star-rating">
+                                            <div class="foreground">
+                                                <i class="icon icon-beach icon-star"></i>
+                                                <i class="icon icon-beach icon-star"></i>
+                                                <i class="icon icon-beach icon-star"></i>
+                                                <i class="icon icon-beach icon-star"></i>
+                                                <i class="icon icon-beach icon-star-half"></i>
 
-                                <div itemprop="description" class="text-muted listing-location text-truncate">
-                                    <a href="/weshares/user_share_info/{{$product['share_user_id']}}" class="text-normal link-reset">
-                                        {{$product['share_user_name']}}
-                                        ·
-                                        <small>
-                                            <div class="star-rating">
-                                                <div class="foreground">
-                                                    <i class="icon icon-beach icon-star"></i>
-                                                    <i class="icon icon-beach icon-star"></i>
-                                                    <i class="icon icon-beach icon-star"></i>
-                                                    <i class="icon icon-beach icon-star"></i>
-                                                    <i class="icon icon-beach icon-star-half"></i>
-
-                                                </div>
-                                                <div class="background">
-                                                    <i class="icon icon-star icon-light-gray"></i>
-                                                    <i class="icon icon-star icon-light-gray"></i>
-                                                    <i class="icon icon-star icon-light-gray"></i>
-                                                    <i class="icon icon-star icon-light-gray"></i>
-                                                    <i class="icon icon-star icon-light-gray"></i>
-                                                </div>
                                             </div>
-                                        </small>
-                                        ·{{$product['share_vote']}}条爱心评价
-                                    </a>
-                                </div>
+                                            <div class="background">
+                                                <i class="icon icon-star icon-light-gray"></i>
+                                                <i class="icon icon-star icon-light-gray"></i>
+                                                <i class="icon icon-star icon-light-gray"></i>
+                                                <i class="icon icon-star icon-light-gray"></i>
+                                                <i class="icon icon-star icon-light-gray"></i>
+                                            </div>
+                                        </div>
+                                    </small>
+                                    ·{{$product['share_vote']}}条爱心评价
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
         {{/loop}}
     </div>
 </div>
@@ -94,6 +96,8 @@
         <b>首页</b>
     </a>
     <a class="btm_item" href="/share_opt/index.html" style="width: 33%; position: relative;">
+        <i style="background:#f00;border-radius:50%;width:15px;height:15px;top:-5px;right:30%;position:absolute; display: none;"
+           id="mark-has-unread"></i>
         <p class="iconfont" style="height: 2px;"><i class="fa fa-users"></i></p>
         <b>朋友说</b>
     </a>
@@ -102,5 +106,11 @@
         <b>我的</b>
     </a>
 </footer>
+<script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+<script src="/static/common/no-angular-common.js"></script>
+<script>
+    Pyshuo.share.utils.init();
+    Pyshuo.share.utils.checkHasUnreadInfo();
+</script>
 </body>
 </html>

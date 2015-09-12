@@ -2,11 +2,17 @@ Pyshuo = {};
 Pyshuo.share = {};
 Pyshuo.share.utils = {
   init: function () {
-    this.bottomNavDom = $('#share-bottom-nav');
+    this.markUnRead = $('#mark-has-unread');
   },
   checkHasUnreadInfo: function () {
+    var me = this;
     $.getJSON('/share_opt/check_opt_has_new', function (data) {
       //reset bottom nav
+      if (data['has_new']) {
+        me.markUnRead.show();
+      } else {
+        me.markUnRead.hide();
+      }
     });
   },
   saveToLocalStorage: function (key, value) {

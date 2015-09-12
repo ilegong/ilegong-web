@@ -23,7 +23,13 @@
     <br/>
     {{if !$hide_footer}}
     <footer class="channel_bottom">
+        <a class="btm_item" href="/weshares/index.html">
+            <p class="iconfont" style="height: 4px;"><i class="fa fa-home"></i></p>
+            <b>首页</b>
+        </a>
         <a class="btm_item" href="/share_opt/index.html">
+            <i style="background:#f00;border-radius:50%;width:15px;height:15px;top:-5px;right:30%;position:absolute; display: none;"
+               id="mark-has-unread"></i>
             <p class="iconfont" style="height: 4px;"><i class="fa fa-users"></i></p>
             <b>朋友说</b>
         </a>
@@ -37,6 +43,10 @@
 </div>
 {{if $jWeixinOn}}
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+    Pyshuo.share.utils.init();
+    Pyshuo.share.utils.checkHasUnreadInfo();
+</script>
 <script>
     if(wx){
         var wx_jssdk_appId = '{{$signPackage["appId"]}}';
