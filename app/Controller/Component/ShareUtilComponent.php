@@ -490,6 +490,16 @@ class ShareUtilComponent extends Component {
      */
     public function get_share_index_product() {
         $product = array(
+            '495' => array(
+                'share_id' => 495,
+                'share_name' => '哈密淖毛湖是哈密瓜',
+                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/31fafa2e3c2_0912.jpg',
+                'share_price' => '88',
+                'share_user_name' => '盛鹏飞',
+                'share_vote' => 165,
+                'share_user_id' => 870607,
+                'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/6c68367cde4_0909.jpg'
+            ),
             '446' => array(
                 'share_id' => 446,
                 'share_name' => '阳澄湖大闸蟹2015中秋第一波团购启动啦！',
@@ -631,26 +641,37 @@ class ShareUtilComponent extends Component {
                 'share_user_id' => 9228,
                 'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_a17d0cc7ba98f4ccc8207b225f4fa549.jpg'
             ),
-            '353' => array(
-                'share_id' => 353,
-                'share_name' => '房山窦店有机黄金梨',
-                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/7753d4bf5e4_0901.jpg',
-                'share_price' => '88',
-                'share_user_name' => '大美',
-                'share_vote' => 230,
-                'share_user_id' => 842908,
-                'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/319793d271b_0828.jpg'
+            '424' => array(
+                'share_id' => 424,
+                'share_name' => '东北野生臻蘑（2015年刚采摘的哦）',
+                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/22e7b36d290_0912.jpg',
+                'share_price' => '38',
+                'share_user_name' => '那那',
+                'share_vote' => 165,
+                'share_user_id' => 812111,
+                'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_db53c030cbe19145428f0d5ca58b9562.jpg'
             ),
-            '394' => array(
-                'share_id' => 394,
-                'share_name' => '广州南沙一点红番薯',
-                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/2459fbbbcd3_0901.jpg',
-                'share_price' => '78',
-                'share_user_name' => '筠子花树',
-                'share_vote' => 125,
-                'share_user_id' => 664258,
-                'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_27f6e242fbb54bea79ef3550e060f856.jpg'
-            ),
+
+//            '353' => array(
+//                'share_id' => 353,
+//                'share_name' => '房山窦店有机黄金梨',
+//                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/7753d4bf5e4_0901.jpg',
+//                'share_price' => '88',
+//                'share_user_name' => '大美',
+//                'share_vote' => 230,
+//                'share_user_id' => 842908,
+//                'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/319793d271b_0828.jpg'
+//            ),
+//            '394' => array(
+//                'share_id' => 394,
+//                'share_name' => '广州南沙一点红番薯',
+//                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/2459fbbbcd3_0901.jpg',
+//                'share_price' => '78',
+//                'share_user_name' => '筠子花树',
+//                'share_vote' => 125,
+//                'share_user_id' => 664258,
+//                'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_27f6e242fbb54bea79ef3550e060f856.jpg'
+//            ),
 //            '388' => array(
 //                'share_id' => 388,
 //                'share_name' => '泰国空运新鲜椰青',
