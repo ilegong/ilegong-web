@@ -38,6 +38,13 @@ ul li { list-style: none; }
 .weshare-add .images .image{ float: left; margin-right: 15px; position: relative; width: 50px;}
 .weshare-add .images .image img{ width: 50px; height: 50px;}
 .weshare-add .btn{text-align: center; line-height: 38px;}
+.weshare-add .product-spec-group{
+    border: 1px solid darkgrey;
+    padding-top: 5px;
+    padding-left: 2px;
+    padding-right: 2px;
+    margin-bottom: 5px;
+}
 .weshare-add .upload-btn{ border: 1px #29AC0E solid; display: block; font-size: 16px; color: #29AC0E; text-decoration: none;}
 .weshare-add .delete-btn{ margin-top: 8px; margin-right: 10px; background: url(../images/weifxicon.png?v0.01) no-repeat 0 0; background-size: 100px 100px; width: 25px; height: 25px;}
 .weshare-add .add-btn{ margin-top: 8px; margin-right: 10px; background: url(../images/weifxicon.png?v0.01) no-repeat 0 -35px; background-size: 100px 100px; width: 25px; height: 25px;}
