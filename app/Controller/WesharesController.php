@@ -60,10 +60,10 @@ class WesharesController extends AppController {
                 $this->set('from', $this->pay_type);
             }
             if ($from == 1) {
-                $this->set('from', $this->pay_type);
                 $paidMsg = $_REQUEST['msg'];
-                if (!empty($paidMsg) && $paidMsg == 'fail') {
+                if (!empty($paidMsg) && $paidMsg == 'ok') {
                     //TODO check pay fail issue
+                    $this->set('from', $this->pay_type);
                 }
             }
         }
