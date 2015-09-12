@@ -144,7 +144,6 @@ $(document).ready(function () {
             headAImageObj[0].removeAttribute("data-original");
           }
           var mediaContentObj = obj.children(".mediacontent .pure-mediacontent");
-          mediaContentObj = mediaContentObj.concat(pureMediaContentObj);
           var contentAObjs = mediaContentObj.children(".contenta");
           var contentAObjsLen = contentAObjs.length;
           for (var k = 0; k < contentAObjsLen; k++) {
