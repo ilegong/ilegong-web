@@ -41,7 +41,7 @@ html, body {
     border-bottom: 2px solid #F5F5F5;
     position: fixed;
     top: 0;
-    z-index: 100;
+    z-index: 9999;
     width: 100%;
 }
 
@@ -369,13 +369,13 @@ html, body {
 }
 
 .user-is-proxy-tag {
-    display: block;
-    background-color: #ffa200;
-    color: #fff;
-    text-decoration: none;
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 2px;
+    margin-top: 6px;
+    background-color: #29AC0E;
     text-align: center;
-    margin-top: 2px;
-    font-size: 12px;
     line-height: 18px;
 }
 
