@@ -42,18 +42,6 @@ class WesharesController extends AppController {
      */
     public function view($weshare_id, $from = 0) {
         $uid = $this->currentUser['id'];
-        $this->set('weshare_id', $weshare_id);
-        //form paid done
-        $this->log('weshare view mark ' . $_REQUEST['mark']);
-        $recommend = $_REQUEST['recommend'];
-        //add rebate log
-        if ($this->ShareUtil->is_proxy_user($recommend)) {
-            if (!empty($recommend) && !empty($uid)) {
-                $rebateLogId = $this->ShareUtil->save_rebate_log($recommend, $uid, $weshare_id);
-                $this->set('recommend_id', $recommend);
-                $this->set('rebateLogId', $rebateLogId);
-            }
-        }
         //check has sharer has red packet
         //领取红包
         $shared_offer_id = $_REQUEST['shared_offer_id'];
@@ -73,6 +61,22 @@ class WesharesController extends AppController {
             }
             if ($from == 1) {
                 $this->set('from', $this->pay_type);
+                $paidMsg = $_REQUEST['msg'];
+                if (!empty($paidMsg) && $paidMsg == 'fail') {
+                    //TODO check pay fail issue
+                }
+            }
+        }
+        $this->set('weshare_id', $weshare_id);
+        //form paid done
+        $this->log('weshare view mark ' . $_REQUEST['mark']);
+        $recommend = $_REQUEST['recommend'];
+        //add rebate log
+        if ($this->ShareUtil->is_proxy_user($recommend)) {
+            if (!empty($recommend) && !empty($uid)) {
+                $rebateLogId = $this->ShareUtil->save_rebate_log($recommend, $uid, $weshare_id);
+                $this->set('recommend_id', $recommend);
+                $this->set('rebateLogId', $rebateLogId);
             }
         }
     }
