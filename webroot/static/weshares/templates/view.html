@@ -153,9 +153,9 @@
     </div>
 
     <footer class="channel_bottom">
-        <a class="btm_item" href="/">
-            <p class="iconfont" style="height: 16px;"><i class="fa fa-home"></i></p>
-            <b>首页</b>
+        <a class="btm_item" href="/share_opt/index.html">
+            <p class="iconfont" style="height: 16px;"><i class="fa fa-users"></i></p>
+            <b>朋友说</b>
         </a>
         <a class="new" ng-if="!vm.isCreator()&&!vm.isProxy()&&vm.weshare.status == 0" ng-click="vm.buyProducts()">我要报名</a>
         <a class="new" ng-if="!vm.isCreator()&&vm.isProxy()&&vm.weshare.status == 0" ng-click="vm.buyProducts()" style="width: 28%;">我要报名</a>
@@ -401,9 +401,9 @@
         </div>
 
         <footer class="channel_bottom">
-            <a class="btm_item" href="/">
-                <p class="iconfont" style="height: 16px;"><i class="fa fa-home"></i></p>
-                <b>首页</b>
+            <a class="btm_item" href="/share_opt/index.html">
+                <p class="iconfont" style="height: 16px;"><i class="fa fa-users"></i></p>
+                <b>朋友说</b>
             </a>
             <a class="new" ng-click='vm.submitOrder(0);' style="width: 28%;">微信支付</a>
             <a class="new" ng-click='vm.submitOrder(1);' style="width: 28%; margin-right: 7%;">支付宝支付</a>

@@ -14,6 +14,7 @@
     <meta name="Description" content="朋友说">
     <link rel="stylesheet" href="/static/opt/css/postinfo.css">
     <link rel="stylesheet" href="/static/opt/css/opt.css">
+    <link href="http://cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <title>朋友说</title>
 </head>
 <body cz-shortcut-listen="true">
@@ -25,11 +26,8 @@
 <div id="maindiv">
     <div class="topheader topheader-patch">
         <div class="controls controls-patch">
-            <a href="javascript:void(0)" id="reloadbut" class="link reload">刷新</a>
-
             <div class="t" node-type="menutext" id="filterfatielistsel" onclick="">
-                <span style="color:#576b95;">全部评论</span><img src="/static/opt/images/downicon.png"
-                                                             style="max-width: 14px;margin-left: 6px;">
+                <span style="color:#ffa200;font-size: 20px;">朋友说</span>
             </div>
             <a href="javascript:void(0)" id="newiconbut">
                 <img id="indeximgfile" src="/static/opt/images/sayfb.png" style="max-width: 110px;">
@@ -46,15 +44,20 @@
 </div>
 <img id="topiconbut" style="display:none;width:40px;height:40px;position: fixed;right:15px;bottom:65px;"
      src="/static/opt/images/topicon.png">
-
-<div id="filterfatiemenudiv"
-     style="background-color:#FFFFFF;border:1px solid #FAFAFA;position:absolute;left:45px;top:35px;width:110px;z-index:10000;display: none;">
-    <div style="padding-left:10px;margin-top:6px;line-height:30px;height:30px;color:#576b95;overflow:hidden">全部动态</div>
-    <div style="padding-left:10px;margin-top:0px;line-height:30px;height:30px;color:#576b95;overflow:hidden">分享</div>
-    <div style="padding-left:10px;margin-bottom:6px;line-height:30px;height:30px;color:#576b95;overflow:hidden">推荐</div>
-    <div style="padding-left:10px;margin-bottom:6px;line-height:30px;height:30px;color:#576b95;overflow:hidden">评论</div>
-</div>
-<script src='http://channel.sinaapp.com/api.js'></script>
+<footer class="channel_bottom" id="share-bottom-nav">
+    <a class="btm_item" href="/" style="width: 33%;">
+        <p class="iconfont"><i class="fa fa-home"></i></p>
+        <b>首页</b>
+    </a>
+    <a class="btm_item" href="/share_opt/index.html" style="width: 33%;">
+        <p class="iconfont"><i class="fa fa-users"></i></p>
+        <b>朋友说</b>
+    </a>
+    <a class="btm_item" href="/weshares/user_share_info/{{$uid}}" style="width: 33%;">
+        <p class="iconfont"><i class="fa fa-user"></i></p>
+        <b>我的</b>
+    </a>
+</footer>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
 <script src="/static/opt/js/opt.js"></script>

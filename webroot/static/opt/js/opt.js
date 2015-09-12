@@ -45,7 +45,7 @@ $(document).ready(function () {
     var st = logListDom.scrollTop;
     var ch = logListDom.clientHeight;
     var sh = logListDom.scrollHeight;
-    if (st + ch == sh) {
+    if (sh - (st + ch) < 100) {
       loadOptLogData(checkDataShow);
     }
   }
