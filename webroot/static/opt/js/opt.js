@@ -143,6 +143,14 @@ $(document).ready(function () {
             headAImageObj.attr("src", headAImageUrl);
             headAImageObj[0].removeAttribute("data-original");
           }
+          var linkContentObj = obj.children('.linkcontent img');
+          $.each(linkContentObj, function (index, item) {
+            var trueImage = $(item).attr("data-original");
+            if (trueImage) {
+              $(item).attr('src', trueImage);
+              $(item).attr('data-show', 1);
+            }
+          });
           var mediaContentObj = obj.children(".mediacontent");
           var contentAObjs = mediaContentObj.children(".contenta");
           var contentAObjsLen = contentAObjs.length;
