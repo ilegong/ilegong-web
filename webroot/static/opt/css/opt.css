@@ -29,15 +29,20 @@ html, body {
 #maindiv {
     position: relative;
     max-width: 460px;
-    height: 91%;
+    height: 100%;
     overflow-x: hidden;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
+    padding-top: 50px;
 }
 
 .topheader-patch{
-    margin:0px 6px 0px 6px;
+    margin: -6px 6px 0px 6px;
     border-bottom: 2px solid #F5F5F5;
+    position: fixed;
+    top: 0;
+    z-index: 100;
+    width: 100%;
 }
 
 .topheader .controls-patch{
