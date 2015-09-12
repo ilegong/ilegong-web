@@ -26,7 +26,7 @@
         </div>
         <div class="offer-content">
             <p>
-                <strong>序号:</strong>&nbsp;&nbsp;<font color="red">{{$order_index}}</font><br>
+                <strong>序号:</strong>&nbsp;&nbsp;<font color="red">{{$item_order['id']}}</font><br>
                 <strong>商品:</strong>&nbsp;&nbsp;{{get_share_order_cart_display_name($order_cart_map[$item_order['id']])}}<br>
                 <strong>微信昵称:</strong>&nbsp;&nbsp;{{$users[$item_order['creator']]['nickname']}}<br>
                 <strong>收货人:</strong>&nbsp;&nbsp;{{$item_order['consignee_name']}}<br>

@@ -9,6 +9,13 @@ $(document).ready(function () {
   var filterVal = 0;
   var oldest_timestamp = 0;
   var last_timestamp = 0;
+  var lazyLoadOptions = {
+    event: "scrollstop",
+    vertical_only: true,
+    no_fake_img_loader: true,
+    container: $logListDiv,
+    load: afterLoad
+  };
   init();
   function init() {
     var $body = $("body");
@@ -28,6 +35,21 @@ $(document).ready(function () {
     initOptLogView();
   }
 
+  function afterLoad() {
+    var $me = $(this);
+    var tagName = $me[0].tagName;
+    if (tagName == 'a') {
+      if ($me.hasClass('contentb')) {
+        //background-size contain cover
+        var $hasShareAttr = $me.attr('data-shareid');
+        if ($hasShareAttr) {
+          $me.css({'background-size': "cover"});
+        } else {
+          $me.css({'background-size': "contain"});
+        }
+      }
+    }
+  }
   function showNewOptLogInfo() {
   }
 
@@ -130,77 +152,28 @@ $(document).ready(function () {
     $.getJSON(getOptLogUrl, reqParams, callbackFunc);
   }
 
+  function lazyLoadImg() {
+    var $optLogs = $('div.postinfo', $logListDiv);
+    var $optLogsHeadImgs = $('a.heada img.headimg', $optLogs);
+    $optLogsHeadImgs.lazyload(lazyLoadOptions);
+    var $mediaContent = $('div.mediacontent');
+    $mediaContent.lazyload(lazyLoadOptions);
+    var $pureMediaContent = $('div.pure-mediacontent');
+    $pureMediaContent.lazyload(lazyLoadOptions);
+    var $mediaContentLinkContent = $('.linkcontent img', $mediaContent);
+    $mediaContentLinkContent.lazyload(lazyLoadOptions);
+    var $pureMediaContentLinkContent = $('.linkcontent img', $pureMediaContent);
+    $pureMediaContentLinkContent.lazyload(lazyLoadOptions);
+    var $likeContent = $('.zancontent', $optLogs);
+    var $commentContent = $('.talkcontent', $optLogs);
+    var $likeHeadImg = $('.zheadimg', $likeContent);
+    $likeHeadImg.lazyload(lazyLoadOptions);
+    var $commentHeadImg = $('.theadimg', $commentContent);
+    $commentHeadImg.lazyload(lazyLoadOptions);
+  }
+
   function checkDataShow() {
-    var dataShowObjs = $logListDiv.children("[data-show=0]");
-    if (dataShowObjs.length > 0) {
-      var heightVal = logListDom.clientHeight;
-      for (var i = 0; i < dataShowObjs.length; i++) {
-        var obj = $(dataShowObjs[i]);
-        var objOffset = obj.offset();
-        var objBottomY = obj.height() + objOffset.top;
-        if ((objOffset.top >= 0 && objOffset.top < heightVal)
-          || (objBottomY > 0 && objOffset.top < 0)
-        ) {
-          var headAImageObj = obj.children(".heada").children(".headimg");
-          var headAImageUrl = headAImageObj.attr("data-original") || "";
-          if (headAImageUrl) {
-            headAImageObj.attr("src", headAImageUrl);
-            headAImageObj[0].removeAttribute("data-original");
-          }
-          var mediaContentObj = obj.children(".mediacontent,.pure-mediacontent");
-          var contentAObjs = mediaContentObj.children(".contenta");
-          var contentAObjsLen = contentAObjs.length;
-          for (var k = 0; k < contentAObjsLen; k++) {
-            var contentAImageUrl = contentAObjs[k].getAttribute("data-original");
-            if (contentAImageUrl) {
-              contentAObjs[k].style.backgroundImage = "url(" + contentAImageUrl + ")";
-              if (contentAObjs[k].className.indexOf("contentb") != -1) {
-                if (contentAObjs[k].getAttribute("data-shareid")) {
-                  contentAObjs[k].style.backgroundSize = "cover";
-                } else {
-                  contentAObjs[k].style.backgroundSize = "contain";
-                }
-              }
-              contentAObjs[k].removeAttribute("data-original");
-            }
-          }
-          var imgObjs = mediaContentObj.find(".linkcontent img");
-          $.each(imgObjs, function (index, item) {
-            var imgUrl = $(item).attr('data-original') || '';
-            if (imgUrl) {
-              $(item).attr('src', imgUrl);
-            }
-          });
-          var likeContentObj = obj.children(".zancontent");
-          var commentContentObj = obj.children(".talkcontent");
-          var likeDataCount = parseInt(likeContentObj.attr("data-count")) || 0;
-          var commentDataCount = parseInt(commentContentObj.attr("data-count")) || 0;
-          if (likeDataCount > 0 || commentDataCount > 0) {
-            var likeHeadImgObjs = likeContentObj.find(".zheadimg");
-            var commentHeadImgObjs = commentContentObj.find(".theadimg");
-            var likeHeadImgObjsLen = likeHeadImgObjs.length;
-            var commentHeadImgObjsLen = commentHeadImgObjs.length;
-            if (likeHeadImgObjsLen > 0 || commentHeadImgObjsLen > 0) {
-              obj.attr("data-show", 1);
-              for (var k = 0; k < likeHeadImgObjsLen; k++) {
-                var headImgUrl = likeHeadImgObjs[k].getAttribute("data-original") || "";
-                likeHeadImgObjs[k].setAttribute("src", headImgUrl);
-                likeHeadImgObjs[k].removeAttribute("data-original");
-              }
-              for (var k = 0; k < commentHeadImgObjsLen; k++) {
-                var headImgUrl = commentHeadImgObjs[k].getAttribute("data-original") || "";
-                commentHeadImgObjs[k].setAttribute("src", headImgUrl);
-                commentHeadImgObjs[k].removeAttribute("data-original");
-              }
-            }
-          } else {
-            obj.attr("data-show", 1);
-          }
-        } else if (objOffset.top > 0) {
-          break;
-        }
-      }
-    }
+    lazyLoadImg();
   }
 
   function parseInfoJsonObj(objJson) {
@@ -252,8 +225,8 @@ $(document).ready(function () {
   var optLogTemplate = '<div class="postinfo" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: rgb(223, 223, 221);" data-show="0" data-infoid="<%this.id%>" data-timestamp="<%this.timestamp%>" data-myzan="0" id="info_<%this.id%>">' +
     '<a class="heada" <%if(this.user_info){%>href="/weshares/user_share_info/<%this.user_info.id%>"<%}else{%>href="javascript:void(0)"<%}%>>' +
     '<img class="headimg" src="/static/opt/images/default.png" <%if(this.user_info){%>data-original="<%this.user_info.image%>"<%}else{%>data-original="/static/opt/images/default.png"<%}%>>' +
-    '<%if(this.user_info&&this.user_info.fans_count > 100){%><img src="/static/weshares/images/v.png" class="user-is-vip-user-tag"><%}%>'+
-    '<%if(this.user_info&&this.user_info.is_proxy==1){%><span class="user-is-proxy-tag">团长</span><%}%>'+
+    '<%if(this.user_info&&this.user_info.fans_count > 100){%><img src="/static/weshares/images/v.png" class="user-is-vip-user-tag"><%}%>' +
+    '<%if(this.user_info&&this.user_info.is_proxy==1){%><span class="user-is-proxy-tag">团长</span><%}%>' +
     '</a>' +
     '<a href="javascript:void(0)" class="nickname"><%if(this.user_info){%><%this.user_info.nickname%><%}else{%>匿名用户<%}%></a>' +
     '<font class="jibie"><%this.data_type_tag%></font>' +
