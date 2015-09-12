@@ -156,6 +156,7 @@ class WxPayController extends AppController {
         $this->set('tradeNo', $out_trade_no);
         $this->set('productDesc', $productDesc);
         $this->set('orderId', $orderId);
+        $this->set('hideNav', true);
     }
 
     /**

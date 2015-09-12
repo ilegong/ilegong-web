@@ -143,14 +143,6 @@ $(document).ready(function () {
             headAImageObj.attr("src", headAImageUrl);
             headAImageObj[0].removeAttribute("data-original");
           }
-          var linkContentObj = obj.children('.linkcontent img');
-          $.each(linkContentObj, function (index, item) {
-            var trueImage = $(item).attr("data-original");
-            if (trueImage) {
-              $(item).attr('src', trueImage);
-              $(item).attr('data-show', 1);
-            }
-          });
           var mediaContentObj = obj.children(".mediacontent");
           var contentAObjs = mediaContentObj.children(".contenta");
           var contentAObjsLen = contentAObjs.length;
@@ -257,7 +249,7 @@ $(document).ready(function () {
     '<%if(this.reply_content) {%> <div class="fontcontent"><%this.reply_content%></div> <%}%>' +
     '<%if(this.reply_content) {%><a href="javascript:void(0)" class="expcontenta">全文</a><%}%>' +
     '<div <%if(!this.reply_content){%>class="pure-mediacontent"<%}%> <%if(this.reply_content){%>class="mediacontent"<%}%>><a href="<%this.data_url%>" data-url="<%this.data_url%>" class="linkcontent">' +
-    '<img src="/static/opt/images/pyqlink.png" data-original="<%this.thumbnail%>" style="width:40px;height:40px" data-show="0">' +
+    '<img src="/static/opt/images/pyqlink.png" data-original="<%this.thumbnail%>" style="width:40px;height:40px">' +
     '<div class="linkfontcontent"><%this.memo%></div>' +
     '</a> <div style="height:0px;clear:both"></div>' +
     '</div>' +
