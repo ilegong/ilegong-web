@@ -144,7 +144,7 @@ $(document).ready(function () {
             headAImageObj[0].removeAttribute("data-original");
           }
           var mediaContentObj = obj.children(".mediacontent,.pure-mediacontent");
-          var contentAObjs = mediaContentObj.find(".linkcontent img");
+          var contentAObjs = mediaContentObj.children(".contenta");
           var contentAObjsLen = contentAObjs.length;
           for (var k = 0; k < contentAObjsLen; k++) {
             var contentAImageUrl = contentAObjs[k].getAttribute("data-original");
@@ -160,6 +160,11 @@ $(document).ready(function () {
               contentAObjs[k].removeAttribute("data-original");
             }
           }
+          var imgObjs = mediaContentObj.find(".linkcontent img");
+          $.each(imgObjs, function (index, item) {
+            var imgUrl = $(item).attr('data-original');
+            $(item).attr('src', imgUrl);
+          });
           var likeContentObj = obj.children(".zancontent");
           var commentContentObj = obj.children(".talkcontent");
           var likeDataCount = parseInt(likeContentObj.attr("data-count")) || 0;
