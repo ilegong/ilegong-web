@@ -412,6 +412,8 @@ class WeshareBuyComponent extends Component {
             //update order status
             $orderM->updateAll(array('status' => ORDER_STATUS_DONE, 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order_id));
             $cartM->updateAll(array('status' => ORDER_STATUS_DONE), array('order_id' => $order_id));
+            //save comment opt log
+            $this->ShareUtil->save_comment_opt_log($comment_uid, $share_id, $comment_content);
             if ($comment_uid == $order_info['Order']['creator']) {
                 $this->send_comment_notify($order_id, $share_id, $comment_content);
             }

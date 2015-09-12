@@ -432,6 +432,50 @@ class ShareUtilComponent extends Component {
     }
 
     /**
+     * @param $user_id
+     * @param $share_id
+     * save user buy product opt log
+     */
+    public function save_buy_opt_log($user_id, $share_id) {
+        $share_info = $this->WeshareBuy->get_weshare_info($share_id);
+        $memo = $share_info['title'];
+        $thumbnail = explode('|', $share_info['images']);
+        $thumbnail = $thumbnail[0];
+        $optData = array(
+            'user_id' => $user_id,
+            'obj_type' => OPT_LOG_SHARE_BUY,
+            'obj_id' => $share_id,
+            'created' => date('Y-m-d H:i:s'),
+            'memo' => $memo,
+            'thumbnail' => $thumbnail
+        );
+        $this->saveOptLog($optData);
+    }
+
+    /**
+     * @param $user_id
+     * @param $share_id
+     * @param $replay_text
+     * save comment opt log
+     */
+    public function save_comment_opt_log($user_id, $share_id, $replay_text) {
+        $share_info = $this->WeshareBuy->get_weshare_info($share_id);
+        $memo = $share_info['title'];
+        $thumbnail = explode('|', $share_info['images']);
+        $thumbnail = $thumbnail[0];
+        $optData = array(
+            'user_id' => $user_id,
+            'obj_type' => OPT_LOG_SHARE_COMMENT,
+            'obj_id' => $share_id,
+            'created' => date('Y-m-d H:i:s'),
+            'memo' => $memo,
+            'thumbnail' => $thumbnail,
+            'reply_content' => $replay_text
+        );
+        $this->saveOptLog($optData);
+    }
+
+    /**
      * @param $data
      *
      */
