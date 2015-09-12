@@ -83,7 +83,7 @@ $(document).ready(function () {
 
   }
 
-  function loadOptLogData(callback) {
+  function loadOptLogData() {
     if (loadDataFlag == 1) {
       return false;
     }
@@ -106,11 +106,15 @@ $(document).ready(function () {
     var callbackFunc = function (data) {
       var list = data['opt_logs'] || [];
       var users = data['combine_data']['users'] || {};
+      var user_fans_extra = data['combine_data']['user_fans_extra'] || {};
       var nowTimeStamp = data['nowTimeStamp'];
       for (var i = 0; i < list.length; i++) {
         var objJson = list[i];
         var objJsonUserId = objJson['user_id'];
         var objJsonUserInfo = users[objJsonUserId];
+        if (objJsonUserInfo) {
+          objJsonUserInfo['fans_count'] = user_fans_extra[objJsonUserId];
+        }
         objJson['user_info'] = objJsonUserInfo;
         parseInfoJsonObj(objJson, nowTimeStamp);
         document.getElementById("info_" + objJson.id).style.borderBottom = "1px solid #dfdfdd";
@@ -162,8 +166,8 @@ $(document).ready(function () {
           }
           var imgObjs = mediaContentObj.find(".linkcontent img");
           $.each(imgObjs, function (index, item) {
-            var imgUrl = $(item).attr('data-original')||'';
-            if(imgUrl){
+            var imgUrl = $(item).attr('data-original') || '';
+            if (imgUrl) {
               $(item).attr('src', imgUrl);
             }
           });
@@ -246,8 +250,10 @@ $(document).ready(function () {
   }
 
   var optLogTemplate = '<div class="postinfo" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: rgb(223, 223, 221);" data-show="0" data-infoid="<%this.id%>" data-timestamp="<%this.timestamp%>" data-myzan="0" id="info_<%this.id%>">' +
-    '<a class="heada" href="javascript:void(0)">' +
+    '<a class="heada" <%if(this.user_info){%>href="/weshares/user_share_info/<%this.user_info.id%>"<%}else{%>href="javascript:void(0)"<%}%>>' +
     '<img class="headimg" src="/static/opt/images/default.png" <%if(this.user_info){%>data-original="<%this.user_info.image%>"<%}else{%>data-original="/static/opt/images/default.png"<%}%>>' +
+    '<%if(this.user_info&&this.user_info.fans_count > 0){%><img src="/static/weshares/images/v.png" class="user-is-vip-user-tag"><%}%>'+
+    '<%if(this.user_info&&this.user_info.is_proxy==1){%><span class="user-is-proxy-tag">团长</span><%}%>'+
     '</a>' +
     '<a href="javascript:void(0)" class="nickname"><%if(this.user_info){%><%this.user_info.nickname%><%}else{%>匿名用户<%}%></a>' +
     '<font class="jibie"><%this.data_type_tag%></font>' +

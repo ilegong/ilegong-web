@@ -5,7 +5,7 @@
  */
 class ShareOptController extends AppController {
 
-    var $uses = array('OptLog', 'User', 'VisitLog');
+    var $uses = array('OptLog', 'User', 'VisitLog', 'UserRelation');
 
     /**
      * pys index view
@@ -75,10 +75,20 @@ class ShareOptController extends AppController {
             'conditions' => array(
                 'id' => $opt_user_ids
             ),
-            'fields' => array('id', 'nickname', 'image')
+            'fields' => array('id', 'nickname', 'image', 'is_proxy')
         ));
+        $opt_users_share_info = $this->UserRelation->find('all', array(
+            'conditions' => array(
+                'user_id' => $opt_user_ids
+            ),
+            'group' => array('user_id'),
+            'fields' => array(
+                'count(id) as fans_count', 'user_id'
+            )
+        ));
+        $opt_users_share_info = Hash::combine($opt_users_share_info, '{n}.UserRelation.user_id', '{n}.0.fans_count');
         $opt_users = Hash::combine($opt_users, '{n}.User.id', '{n}.User');
-        return array('users' => $opt_users);
+        return array('users' => $opt_users, 'user_fans_extra' => $opt_users_share_info);
     }
 
     /**

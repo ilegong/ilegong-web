@@ -1,9 +1,9 @@
 html, body {
     width: 100%;
     height: 100%;
-    background:#FFFFFF url('') no-repeat left top;
-    overflow:hidden;
-    background-size:100% 100%;
+    background: #FFFFFF url('') no-repeat left top;
+    overflow: hidden;
+    background-size: 100% 100%;
 }
 
 * {
@@ -36,7 +36,7 @@ html, body {
     padding-top: 50px;
 }
 
-.topheader-patch{
+.topheader-patch {
     margin: -6px 6px 0px 6px;
     border-bottom: 2px solid #F5F5F5;
     position: fixed;
@@ -45,16 +45,24 @@ html, body {
     width: 100%;
 }
 
-.topheader .controls-patch{
-    height:40px;background-color:#FFFFFF;overflow:hidden;margin:6px 0px 0px 0px;padding:0px 8px 0px 8px
+.topheader .controls-patch {
+    height: 40px;
+    background-color: #FFFFFF;
+    overflow: hidden;
+    margin: 6px 0px 0px 0px;
+    padding: 0px 8px 0px 8px
 }
 
-.reload{
-    float:left;display:block;line-height:40px;font-weight:bold;
+.reload {
+    float: left;
+    display: block;
+    line-height: 40px;
+    font-weight: bold;
 }
 
-#newiconbut{
-    float:right;margin-top:10px;
+#newiconbut {
+    float: right;
+    margin-top: 10px;
 }
 
 .t:hover span, .t:hover .ficon_arrow_down {
@@ -307,7 +315,7 @@ html, body {
     display: inline-block;
     height: 32px;
     padding-right: 23px;
-    background-image: url("../../image/notice_icon.png");
+    background-image: url("/static/opt/images/notice_icon.png");
     background-repeat: no-repeat;
     background-size: 18px;
     background-position: right 7px;
@@ -359,6 +367,26 @@ html, body {
     -webkit-transform: rotate(-45deg);
     -o-transform: rotate(-45deg);
 }
+
+.user-is-proxy-tag {
+    display: block;
+    background-color: #ffa200;
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+    margin-top: 2px;
+    font-size: 12px;
+    line-height: 18px;
+}
+
+.user-is-vip-user-tag {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 31px;
+    left: 28px;
+}
+
 .channel_bottom {
     height: 40px;
 }
@@ -386,18 +414,21 @@ a {
     color: #428bca;
     text-decoration: none;
 }
+
 .channel_bottom .iconfont {
     font-size: 20px;
     line-height: 15px;
     color: #fff !important;
 }
-.channel_bottom .iconfont i{
+
+.channel_bottom .iconfont i {
     color: white;
 }
+
 .channel_bottom b {
     font-size: 12px;
     color: #ddd;
-    font-family: "Hiragino Sans GB","华文细黑",STHeiti,"微软雅黑","Microsoft YaHei",SimHei,"Helvetica Neue",Helvetica,Arial,sans-serif!important;
+    font-family: "Hiragino Sans GB", "华文细黑", STHeiti, "微软雅黑", "Microsoft YaHei", SimHei, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
     font-weight: normal;
 }
 
