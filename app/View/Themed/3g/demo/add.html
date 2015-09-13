@@ -51,7 +51,7 @@
                 <div class="form-group">
                     <div class="input-group">
                         <input type="text" readonly class="form-control" name="data[DemoData][loc]" id="loc-holder"
-                               placeholder="隐患地点"
+                               placeholder="隐患地点坐标"
                                required>
                         <span class="input-group-addon" id="getLocation"><i class="fa fa-map-marker"></i>点击获取位置</span>
                     </div>
@@ -76,29 +76,11 @@
                               name="data[DemoData][detail]"
                               rows="7"></textarea>
                 </div>
-                <button type="button" id="submit" name="submit" class="btn btn-primary pull-right">提交</button>
+                <button type="submit" id="submit" name="submit" class="btn btn-primary pull-right">提交</button>
             </form>
         </div>
     </div>
 </div>
-{{if $jWeixinOn}}
-<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-<script>
-    var wx_jssdk_appId = '{{$signPackage["appId"]}}';
-    var wx_jssdk_timestamp = '{{$signPackage["timestamp"]?$signPackage["timestamp"]:1}}';
-    var wx_jssdk_nonceStr = '{{$signPackage["nonceStr"]}}';
-    var wx_jssdk_signature = '{{$signPackage["signature"]}}';
-    var jsApiList = ['checkJsApi', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseImage', 'previewImage', 'uploadImage', 'downloadImage', 'openLocation', 'getLocation'];
-    wx.config({
-        debug: false,
-        appId: wx_jssdk_appId,
-        timestamp: wx_jssdk_timestamp,
-        nonceStr: wx_jssdk_nonceStr,
-        signature: wx_jssdk_signature,
-        jsApiList: jsApiList
-    });
-</script>
-{{/if}}
 <script>
     $(document).ready(function () {
         var $imgTmpPlace = $('#img-temp-place');
@@ -156,7 +138,7 @@
                             var imageUrl = data['download_url'];
                             if (imageUrl && imageUrl != 'false') {
                                 images.imgUrls.push(imageUrl);
-                                $imgTmpPlace.append('<img src="' + imageUrl + '" class="img-thumbnail" style="width: 120px;height: 120px;">');
+                                $imgTmpPlace.append('<img src="' + imageUrl + '" class="img-thumbnail" style="width: 50px;height: 50px;">');
                                 previewImage();
                             }
                         });
@@ -187,14 +169,14 @@
         };
 
         $('form').on('submit', function () {
-            if (images.imgUrls.length == 0) {
-                alert('请上传图片');
-                return false;
-            }
-            if (!hasUpload) {
-                alert('图片正在上传,请稍后');
-                return false;
-            }
+//            if (images.imgUrls.length == 0) {
+//                alert('请上传图片');
+//                return false;
+//            }
+//            if (!hasUpload) {
+//                alert('图片正在上传,请稍后');
+//                return false;
+//            }
             $('#data-images').val(images.imgUrls.join('|'));
         });
     });

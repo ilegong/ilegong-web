@@ -46,23 +46,23 @@
                         <div class="text-center">
                             <div class="row">
                                 <div class="col-sm-9">
-                                    <h3 class="pull-left">Post With image</h3>
+                                    <h3 class="pull-left">{{$detail['DemoData']['title']}}</h3>
                                 </div>
                                 <div class="col-sm-3">
                                     <h4 class="pull-right">
-                                        <small><em>2014-07-30 18:30:00</em></small>
+                                        <small><em>{{$detail['DemoData']['created']}}</em></small>
                                     </h4>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="panel-body">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                        quis nostrud exercitation..
+                        {{$detail['DemoData']['detail']}}
+                        {{loop $images $img}}
                         <a href="#" class="thumbnail">
-                            <img alt="Image" src="http://i.imgur.com/tAHVmXi.jpg">
+                            <img alt="Image" src="{{$img}}" class="content-image">
                         </a>
+                        {{/loop}}
                     </div>
                     <div class="panel-footer">
                         <span class="label label-default">Image</span> <span class="label label-default">Updates</span>
@@ -78,3 +78,20 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        var thumbnailImgs = $('img.content-image');
+        var imgs = [];
+        $.each(thumbnailImgs, function (index, item) {
+            var $item = $(item);
+            imgs.push($item.attr('src'));
+        });
+        $('img.content-image').on('click', function (e) {
+            wx.previewImage({
+                current: imgs[0],
+                urls: imgs
+            });
+        });
+
+    });
+</script>

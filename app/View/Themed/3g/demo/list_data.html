@@ -225,20 +225,23 @@
         <h1 id="timeline">隐患排查列表</h1>
     </div>
     <ul class="timeline">
+        {{loop $datas $item}}
         <li>
             <div class="timeline-badge success"><i class="glyphicon glyphicon-thumbs-up"></i></div>
             <div class="timeline-panel">
                 <div class="timeline-heading">
-                    <h4 class="timeline-title">title</h4>
-
+                    <h4 class="timeline-title"><a href="/demo/detail/{{$item['DemoData']['id']}}">{{$item['DemoData']['title']}}</a>
+                    </h4>
                     <p>
-                        <small class="text-muted"><i class="glyphicon glyphicon-time"></i> 2015-09-13</small>
+                        <small class="text-muted"><i class="glyphicon glyphicon-time"></i>&nbsp;&nbsp;&nbsp;{{$item['DemoData']['created']}}
+                        </small>
                     </p>
                 </div>
                 <div class="timeline-body">
-                    <p>test.</p>
+                    <p>{{$item['DemoData']['detail']}}</p>
                 </div>
             </div>
         </li>
+        {{/loop}}
     </ul>
 </div>

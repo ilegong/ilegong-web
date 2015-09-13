@@ -38,8 +38,16 @@ class DemoController extends AppController {
         }
     }
 
-    public function detail() {
-
+    public function detail($id) {
+        $detail = $this->DemoData->find('first', array(
+            'conditions' => array(
+                'id' => $id
+            )
+        ));
+        $this->set('detail', $detail);
+        $imageStr = $detail['DemoData']['images'];
+        $images = explode(',', $imageStr);
+        $this->set('images', $images);
     }
 
 }
