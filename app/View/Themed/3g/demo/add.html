@@ -50,10 +50,10 @@
                 </div>
                 <div class="form-group">
                     <div class="input-group">
-                        <input type="text" class="form-control" name="data[DemoData][loc]" id="loc-holder"
+                        <input type="text" readonly class="form-control" name="data[DemoData][loc]" id="loc-holder"
                                placeholder="隐患地点"
                                required>
-                        <span class="input-group-addon" id="getLocation"> <i class="fa fa-map-marker"></i></span>
+                        <span class="input-group-addon" id="getLocation"><i class="fa fa-map-marker"></i>点击获取位置</span>
                     </div>
                 </div>
                 <div class="form-group">
@@ -118,19 +118,23 @@
                 }
             });
         };
-        // 5.2 图片预览
-        document.querySelector('.img-thumbnail').onclick = function () {
-            var thumbnailImgs = $('.img-thumbnail');
-            var imgs = [];
-            $.each(thumbnailImgs, function (index, item) {
-                var $item = $(item);
-                imgs.push($item.attr('src'));
-            });
-            wx.previewImage({
-                current: imgs[0],
-                urls: imgs
-            });
-        };
+        function previewImage() {
+            $('.img-thumbnail').unbind();
+            // 5.2 图片预览
+            document.querySelector('.img-thumbnail').onclick = function () {
+                var thumbnailImgs = $('.img-thumbnail');
+                var imgs = [];
+                $.each(thumbnailImgs, function (index, item) {
+                    var $item = $(item);
+                    imgs.push($item.attr('src'));
+                });
+                wx.previewImage({
+                    current: imgs[0],
+                    urls: imgs
+                });
+            };
+        }
+
         // 5.3 上传图片
         function uploadImg() {
             if (images.localId.length == 0) {
@@ -153,6 +157,7 @@
                             if (imageUrl && imageUrl != 'false') {
                                 images.imgUrls.push(imageUrl);
                                 $imgTmpPlace.append('<img src="' + imageUrl + '" class="img-thumbnail" style="width: 120px;height: 120px;">');
+                                previewImage();
                             }
                         });
                         if (i < length) {
