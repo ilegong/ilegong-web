@@ -46,7 +46,8 @@
                 <h3 style="margin-bottom: 25px; text-align: center;">添加记录</h3>
 
                 <div class="form-group">
-                    <input type="text" class="form-control" name="data[DemoData][title]" placeholder="隐患名称" required>
+                    <input type="text" class="form-control" name="data[DemoData][title]" placeholder="隐患名称"
+                           id="data-title" required>
                 </div>
                 <div class="form-group">
                     <div class="input-group">
@@ -57,7 +58,8 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" name="data[DemoData][loc_detail]" placeholder="详细位置"
+                    <input type="text" class="form-control" name="data[DemoData][loc_detail]" id="data-loc-detail"
+                           placeholder="详细位置"
                            required>
                 </div>
                 <div class="form-group">
@@ -72,7 +74,7 @@
                 <div class="form-group" id="img-temp-place">
                 </div>
                 <div class="form-group">
-                    <textarea class="form-control" type="textarea" placeholder="描述" maxlength="140"
+                    <textarea id="data-detail" class="form-control" type="textarea" placeholder="描述" maxlength="140"
                               name="data[DemoData][detail]"
                               rows="7"></textarea>
                 </div>
@@ -169,14 +171,34 @@
         };
 
         $('form').on('submit', function () {
-//            if (images.imgUrls.length == 0) {
-//                alert('请上传图片');
-//                return false;
-//            }
-//            if (!hasUpload) {
-//                alert('图片正在上传,请稍后');
-//                return false;
-//            }
+            var title = $('#data-title').val();
+            if (!title) {
+                alert('请填写隐患名称');
+                return false;
+            }
+            var locDetail = $('#data-loc-detail').val();
+            if (!locDetail) {
+                alert('请填写详细位置信息');
+                return false;
+            }
+            if (images.imgUrls.length == 0) {
+                alert('请上传图片');
+                return false;
+            }
+            if (!hasUpload) {
+                alert('图片正在上传,请稍后');
+                return false;
+            }
+            var locVal = $('#loc-holder').val();
+            if (!locVal) {
+                alert('请获取位置信息');
+                return false;
+            }
+            var dataDetail = $('#data-detail');
+            if (!dataDetail) {
+                alert('请填写隐患描述');
+                return false;
+            }
             $('#data-images').val(images.imgUrls.join('|'));
         });
     });

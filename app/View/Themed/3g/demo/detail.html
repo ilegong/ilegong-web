@@ -57,6 +57,10 @@
                         </div>
                     </div>
                     <div class="panel-body">
+                        <p>
+                            | <i class="fa fa-map-marker"></i>&nbsp;位置坐标&nbsp;&nbsp;<a href="#">{{$detail['DemoData']['loc']}}</a>
+                            | <i class="fa fa-location-arrow"></i>&nbsp;位置信息&nbsp;&nbsp;{{$detail['DemoData']['loc_detail']}}
+                        </p>
                         {{$detail['DemoData']['detail']}}
                         {{loop $images $img}}
                         {{if !empty($img)}}
@@ -66,10 +70,6 @@
                         {{/if}}
                         {{/loop}}
                     </div>
-                    <!--<div class="panel-footer">-->
-                        <!--<span class="label label-default">Image</span> <span class="label label-default">Updates</span>-->
-                        <!--<span class="label label-default">July</span>-->
-                    <!--</div>-->
                 </div>
             </div>
         </div>
