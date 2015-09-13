@@ -1,0 +1,80 @@
+<style>
+    .navbar-brand-centered {
+        position: absolute;
+        left: 50%;
+        display: block;
+        width: 160px;
+        text-align: center;
+        background-color: transparent;
+    }
+
+    .navbar > .container .navbar-brand-centered,
+    .navbar > .container-fluid .navbar-brand-centered {
+        margin-left: -80px;
+    }
+</style>
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-brand-centered">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <div class="navbar-brand navbar-brand-centered">隐患排查系统</div>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbar-brand-centered">
+            <ul class="nav navbar-nav">
+                <li><a href="/demo/list_data.html">隐患排查列表</a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+</nav>
+<div class="container">
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-6">
+            <div id="postlist">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <div class="text-center">
+                            <div class="row">
+                                <div class="col-sm-9">
+                                    <h3 class="pull-left">Post With image</h3>
+                                </div>
+                                <div class="col-sm-3">
+                                    <h4 class="pull-right">
+                                        <small><em>2014-07-30 18:30:00</em></small>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                        quis nostrud exercitation..
+                        <a href="#" class="thumbnail">
+                            <img alt="Image" src="http://i.imgur.com/tAHVmXi.jpg">
+                        </a>
+                    </div>
+                    <div class="panel-footer">
+                        <span class="label label-default">Image</span> <span class="label label-default">Updates</span>
+                        <span class="label label-default">July</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-1">
+        </div>
+    </div>
+</div>

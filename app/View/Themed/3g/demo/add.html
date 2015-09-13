@@ -1,0 +1,195 @@
+<style>
+    .navbar-brand-centered {
+        position: absolute;
+        left: 50%;
+        display: block;
+        width: 160px;
+        text-align: center;
+        background-color: transparent;
+    }
+
+    .navbar > .container .navbar-brand-centered,
+    .navbar > .container-fluid .navbar-brand-centered {
+        margin-left: -80px;
+    }
+
+</style>
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-brand-centered">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <div class="navbar-brand navbar-brand-centered">隐患排查系统</div>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbar-brand-centered">
+            <ul class="nav navbar-nav">
+                <li><a href="/demo/list_data.html">隐患排查列表</a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+</nav>
+<div class="container">
+    <div class="col-md-12">
+        <div class="form-area">
+            <form role="form" method="post" action="/demo/do_add.html">
+                <br style="clear:both">
+
+                <h3 style="margin-bottom: 25px; text-align: center;">添加记录</h3>
+
+                <div class="form-group">
+                    <input type="text" class="form-control" name="data[DemoData][title]" placeholder="隐患名称" required>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="data[DemoData][loc]" id="loc" placeholder="隐患地点"
+                               required>
+                        <span class="input-group-addon" id="getLocation"> <i class="fa fa-map-marker"></i></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="data[DemoData][loc_detail]" placeholder="详细位置"
+                           required>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="data[DemoData][created]" value="{{$datetime}}"
+                           readonly placeholder="日期"
+                           required>
+                </div>
+                <div class="form-group">
+                    <button id="chooseImage" type="button" class="btn btn-primary btn-lg btn-block">拍照上传</button>
+                    <input type="hidden" name="data[DemoData][images]">
+                </div>
+                <div class="form-group" id="img-temp-place">
+                    <img src="..." alt="..." class="img-thumbnail">
+                </div>
+                <div class="form-group">
+                    <textarea class="form-control" type="textarea" placeholder="描述" maxlength="140"
+                              name="data[DemoData][detail]"
+                              rows="7"></textarea>
+                </div>
+                <button type="button" id="submit" name="submit" class="btn btn-primary pull-right">提交</button>
+            </form>
+        </div>
+    </div>
+</div>
+{{if $jWeixinOn}}
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+    var wx_jssdk_appId = '{{$signPackage["appId"]}}';
+    var wx_jssdk_timestamp = '{{$signPackage["timestamp"]?$signPackage["timestamp"]:1}}';
+    var wx_jssdk_nonceStr = '{{$signPackage["nonceStr"]}}';
+    var wx_jssdk_signature = '{{$signPackage["signature"]}}';
+    var jsApiList = ['checkJsApi', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseImage', 'previewImage', 'uploadImage', 'downloadImage', 'openLocation', 'getLocation'];
+    wx.config({
+        debug: false,
+        appId: wx_jssdk_appId,
+        timestamp: wx_jssdk_timestamp,
+        nonceStr: wx_jssdk_nonceStr,
+        signature: wx_jssdk_signature,
+        jsApiList: jsApiList
+    });
+</script>
+{{/if}}
+<script>
+    $(document).ready(function () {
+        var $imgTmpPlace = $('#img-temp-place');
+        var hasUpload = true;
+        // 5 图片接口
+        // 5.1 拍照、本地选图
+        var images = {
+            localId: [],
+            serverId: [],
+            imgUrls: []
+        };
+        document.querySelector('#chooseImage').onclick = function () {
+            wx.chooseImage({
+                success: function (res) {
+                    images.localId = res.localIds;
+                    uploadImg();
+                }
+            });
+        };
+        // 5.2 图片预览
+        document.querySelector('.img-thumbnail').onclick = function () {
+            var thumbnailImgs = $('.img-thumbnail');
+            var imgs = [];
+            $.each(thumbnailImgs, function (index, item) {
+                var $item = $(item);
+                imgs.push($item.attr('src'));
+            });
+            wx.previewImage({
+                current: imgs[0],
+                urls: imgs
+            });
+        };
+        // 5.3 上传图片
+        function uploadImg() {
+            if (images.localId.length == 0) {
+                return;
+            }
+            $('img.img-thumbnail').remove();
+            var i = 0, length = images.localId.length;
+            images.serverId = [];
+            images.imgUrls = [];
+            hasUpload = false;
+            function upload() {
+                wx.uploadImage({
+                    localId: images.localId[i],
+                    success: function (res) {
+                        i++;
+                        images.serverId.push(res.serverId);
+                        $.getJSON('/downloads/download_wx_img?media_id=' + res.serverId, function (data) {
+                            //download url
+                            var imageUrl = data['download_url'];
+                            if (imageUrl && imageUrl != 'false') {
+                                images.imgUrls.push(imageUrl);
+                                $imgTmpPlace.append('<img src="' + imageUrl + '" class="img-thumbnail">');
+                            }
+                        });
+                        if (i < length) {
+                            upload();
+                        } else {
+                            hasUpload = true;
+                        }
+                    },
+                    fail: function (res) {
+                        alert('上传失败,请重新上传');
+                    }
+                });
+            }
+
+            upload();
+        };
+        // 7.2 获取当前地理位置
+        document.querySelector('#getLocation').onclick = function () {
+            wx.getLocation({
+                success: function (res) {
+                    $('loc').val(res.latitude + ',' + res.longitude);
+                },
+                cancel: function (res) {
+                    alert('用户拒绝授权获取地理位置');
+                }
+            });
+        };
+
+        $('form').on('submit', function () {
+            if (images.imgUrls.length == 0) {
+                alert('请上传图片');
+                return false;
+            }
+            if (!hasUpload) {
+                alert('图片正在上传,请稍后');
+                return false;
+            }
+        });
+    });
+</script>
