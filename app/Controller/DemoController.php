@@ -46,7 +46,7 @@ class DemoController extends AppController {
         ));
         $this->set('detail', $detail);
         $imageStr = $detail['DemoData']['images'];
-        $images = explode(',', $imageStr);
+        $images = explode('|', $imageStr);
         $this->set('images', $images);
     }
 

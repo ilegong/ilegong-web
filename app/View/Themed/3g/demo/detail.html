@@ -59,9 +59,11 @@
                     <div class="panel-body">
                         {{$detail['DemoData']['detail']}}
                         {{loop $images $img}}
+                        {{if !empty($img)}}
                         <a href="#" class="thumbnail">
                             <img alt="Image" src="{{$img}}" class="content-image">
                         </a>
+                        {{/if}}
                         {{/loop}}
                     </div>
                     <div class="panel-footer">
