@@ -445,6 +445,7 @@ class ShareUtilComponent extends Component {
         $thumbnail = explode('|', $share_info['images']);
         $thumbnail = $thumbnail[0];
         $order_info = $this->WeshareBuy->get_cart_name_and_num($order_id);
+        $order_info = $order_info['cart_name'];
         $optData = array(
             'user_id' => $user_id,
             'obj_type' => OPT_LOG_SHARE_BUY,
