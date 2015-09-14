@@ -574,6 +574,16 @@ class ShareUtilComponent extends Component {
      */
     public function get_share_index_product() {
         $product = array(
+            '550' => array(
+                'share_id' => 550,
+                'share_name' => '沱沱工社有机蔬菜限量团购',
+                'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/c47ca5d399d_0914.jpg',
+                'share_price' => '40',
+                'share_user_name' => '沱沱工社',
+                'share_vote' => 315,
+                'share_user_id' => 867587,
+                'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/5e530f3a08e_0914.jpg'
+            ),
             '495' => array(
                 'share_id' => 495,
                 'share_name' => '哈密淖毛湖是哈密瓜',
