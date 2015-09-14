@@ -866,7 +866,7 @@ class WeixinComponent extends Component
             if (empty($rebateTrackLog)) {
                 $show_tile = $user_names[$share_creator] . "，" . $order_creator_name . "报名了您分享的" . $title . "，";
             } else {
-                $show_tile = $user_names[$share_creator] . "，" . $user_names[$recommend_user] . '推荐的' . $order_creator_name . '报名了您分享的平谷大桃，';
+                $show_tile = $user_names[$share_creator] . "，" . $user_names[$recommend_user] . '推荐的' . $order_creator_name . '报名了您分享的' . $title . '，';
             }
         }
         if ($shipType == SHARE_SHIP_KUAIDI_TAG) {
