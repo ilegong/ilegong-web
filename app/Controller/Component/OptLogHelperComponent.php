@@ -9,7 +9,7 @@ class OptLogHelperComponent extends Component {
 
     public function load_opt_log($time, $limit, $type) {
         //check cache init cache
-        $opt_logs = $this->loat_opt_log_by_time($time);
+        $opt_logs = $this->load_opt_log_by_time($time);
         $combine_data = $this->combine_opt_log_data($opt_logs);
         $opt_logs = Hash::extract($opt_logs, '{n}.OptLog');
         $opt_logs = array_map('map_opt_log_data', $opt_logs);
@@ -28,6 +28,7 @@ class OptLogHelperComponent extends Component {
             $optLogM = ClassRegistry::init('OptLog');
             $datetime = date('Y-m-d H:i:s');
             $opt_logs = $optLogM->fetch_by_time_limit_type($datetime, 100, 0);
+            usort($opt_logs, 'sort_opt_log_data_by_id');
             Cache::write($key, json_encode($opt_logs));
             return $opt_logs;
         }
@@ -40,7 +41,7 @@ class OptLogHelperComponent extends Component {
      * @return array
      * load opt_log
      */
-    private function loat_opt_log_by_time($time) {
+    private function load_opt_log_by_time($time) {
         $last_opt_data = $this->load_last_opt_data();
         $first_log = $last_opt_data[0];
         $first_log_date = $first_log['OptLog']['created'];
@@ -52,7 +53,7 @@ class OptLogHelperComponent extends Component {
         foreach ($last_opt_data as $index => $log_item) {
             $log_item_date = $log_item['OptLog']['created'];
             $log_item_time = strtotime($log_item_date);
-            if ($log_item_time >= $time) {
+            if ($log_item_time <= $time) {
                 $log_data = array_slice($last_opt_data, $index, 10);
                 return $log_data;
             }
