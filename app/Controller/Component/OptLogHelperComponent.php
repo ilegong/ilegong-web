@@ -47,7 +47,8 @@ class OptLogHelperComponent extends Component {
         $first_log = $last_opt_data[0];
         $first_log_date = $first_log['OptLog']['created'];
         $first_log_time = strtotime($first_log_date);
-        if ($time > $first_log_time) {
+        //check logic
+        if ($time >= $first_log_time) {
             $log_data = array_slice($last_opt_data, 0, 10);
             return $log_data;
         }
