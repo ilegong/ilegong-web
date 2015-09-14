@@ -831,6 +831,31 @@ class WesharesController extends AppController {
     }
 
     /**
+     * sharer refund money
+     */
+    public function refund_money() {
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        if (empty($uid)) {
+            echo json_encode(array('success' => false, 'reason' => 'no_login'));
+        }
+        $shareId = $_REQUEST['shareId'];
+        $share_info = $this->get_weshare_detail($shareId);
+        if ($share_info['creator']['id'] != $uid) {
+            echo json_encode(array('success' => false, 'reason' => 'not_creator'));
+            return;
+        }
+        $orderId = $_REQUEST['orderId'];
+        $refundMoney = $_REQUEST['refundMoney'];
+        $refundMark = $_REQUEST['refundMark'];
+        $result = $this->ShareUtil->refund($orderId, $refundMoney, $refundMark, 0);
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $shareId . '_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $shareId . '_0', '');
+        echo json_encode($result);
+        return;
+    }
+
+    /**
      * @param $weshareId
      * @param $weshareProxyPercent
      * 保存团长比例

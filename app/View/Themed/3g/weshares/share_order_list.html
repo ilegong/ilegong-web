@@ -20,27 +20,32 @@
     </div>
     <table class="table">
         <thead>
-            <tr>
-                <td>商品</td>
-                <td>数量</td>
-                <td>金额</td>
-            </tr>
+        <tr>
+            <td>商品</td>
+            <td>数量</td>
+            <td>金额</td>
+        </tr>
         </thead>
         <tbody>
-            {{loop $summery['details'] $item_summery}}
-                <tr>
-                    <td>{{$item_summery['name']}}</td>
-                    <td>{{$item_summery['num']}}</td>
-                    <td>{{$item_summery['total_price']/100}}</td>
-                </tr>
-            {{/loop}}
+        {{loop $summery['details'] $item_summery}}
+        <tr>
+            <td>{{$item_summery['name']}}</td>
+            <td>{{$item_summery['num']}}</td>
+            <td>{{$item_summery['total_price']/100}}</td>
+        </tr>
+        {{/loop}}
         </tbody>
         <tr>
-            <td colspan="3">总金额:&nbsp;<font color="red">{{$summery['real_total_price']-$refund_money-$share_rebate_money}}</font>{{if $refund_money>0}}&nbsp;&nbsp;退款金额:&nbsp;<font color="red">{{$refund_money}}</font>{{/if}}{{if $summery['all_coupon_price'] > 0}}&nbsp;&nbsp;红包金额:&nbsp;<font color="red">{{$summery['all_coupon_price']}}</font>{{/if}}&nbsp;&nbsp;&nbsp;总购买人数:&nbsp;<font color="red">{{$summery['all_buy_user_count']}}</font></td>
+            <td colspan="3">总金额:&nbsp;<font color="red">{{$summery['real_total_price']-$refund_money-$share_rebate_money}}</font>{{if
+                $refund_money>0}}&nbsp;&nbsp;退款金额:&nbsp;<font color="red">{{$refund_money}}</font>{{/if}}{{if
+                $summery['all_coupon_price'] > 0}}&nbsp;&nbsp;红包金额:&nbsp;<font color="red">{{$summery['all_coupon_price']}}</font>{{/if}}&nbsp;&nbsp;&nbsp;总购买人数:&nbsp;<font
+                        color="red">{{$summery['all_buy_user_count']}}</font></td>
         </tr>
         {{if count($rebate_logs) > 0}}
         <tr>
-            <td colspan="3">推荐订单数:&nbsp;<font color="red">{{count($rebate_logs)}}</font>{{if $share_rebate_money>0}}&nbsp;&nbsp;佣金:&nbsp;<font color="red">{{$share_rebate_money}}</font>{{/if}}</td>
+            <td colspan="3">推荐订单数:&nbsp;<font color="red">{{count($rebate_logs)}}</font>{{if $share_rebate_money>0}}&nbsp;&nbsp;佣金:&nbsp;<font
+                    color="red">{{$share_rebate_money}}</font>{{/if}}
+            </td>
         </tr>
         {{/if}}
     </table>
@@ -53,40 +58,43 @@
         <!-- Nav tabs category -->
         <ul class="nav nav-tabs">
             {{if count($orders[SHARE_SHIP_SELF_ZITI_TAG]) > 0}}
-                <li><a href="#self-ziti-orders" data-toggle="tab" data-order-type="self_ziti">自提&nbsp;&nbsp;<font color="red">{{count($orders[SHARE_SHIP_SELF_ZITI_TAG])}}</font></a></li>
+            <li><a href="#self-ziti-orders" data-toggle="tab" data-order-type="self_ziti">自提&nbsp;&nbsp;<font
+                    color="red">{{count($orders[SHARE_SHIP_SELF_ZITI_TAG])}}</font></a></li>
             {{/if}}
             {{if count($orders[SHARE_SHIP_KUAIDI_TAG]) > 0}}
-                <li><a href="#kuaidi-orders" data-toggle="tab" data-order-type="kuaidi">快递&nbsp;&nbsp;<font color="red">{{count($orders[SHARE_SHIP_KUAIDI_TAG])}}</font></a></li>
+            <li><a href="#kuaidi-orders" data-toggle="tab" data-order-type="kuaidi">快递&nbsp;&nbsp;<font color="red">{{count($orders[SHARE_SHIP_KUAIDI_TAG])}}</font></a>
+            </li>
             {{/if}}
             {{if count($orders[SHARE_SHIP_PYS_ZITI_TAG]) > 0}}
-                <li><a href="#pys-ziti-orders" data-toggle="tab" data-order-type="pys_ziti">好邻居&nbsp;&nbsp;<font color="red">{{count($orders[SHARE_SHIP_PYS_ZITI_TAG])}}</font></a></li>
+            <li><a href="#pys-ziti-orders" data-toggle="tab" data-order-type="pys_ziti">好邻居&nbsp;&nbsp;<font
+                    color="red">{{count($orders[SHARE_SHIP_PYS_ZITI_TAG])}}</font></a></li>
             {{/if}}
         </ul>
         <!-- Tab panes -->
         <div class="tab-content">
             {{if count($orders[SHARE_SHIP_SELF_ZITI_TAG]) > 0}}
-                <div class="tab-pane fade" id="self-ziti-orders">
-                    <div class="panel-group">
-                        <?php $current_orders=$orders[SHARE_SHIP_SELF_ZITI_TAG]; $current_tag = SHARE_SHIP_SELF_ZITI_TAG; ?>
-                        {{template weshares/share_order_list_template}}
-                    </div>
+            <div class="tab-pane fade" id="self-ziti-orders">
+                <div class="panel-group">
+                    <?php $current_orders=$orders[SHARE_SHIP_SELF_ZITI_TAG]; $current_tag = SHARE_SHIP_SELF_ZITI_TAG; ?>
+                    {{template weshares/share_order_list_template}}
                 </div>
+            </div>
             {{/if}}
             {{if count($orders[SHARE_SHIP_KUAIDI_TAG]) > 0}}
-                <div class="tab-pane fade" id="kuaidi-orders">
-                    <div class="panel-group">
-                        <?php $current_orders=$orders[SHARE_SHIP_KUAIDI_TAG]; $current_tag = SHARE_SHIP_KUAIDI_TAG; ?>
-                        {{template weshares/share_order_list_template}}
-                    </div>
+            <div class="tab-pane fade" id="kuaidi-orders">
+                <div class="panel-group">
+                    <?php $current_orders=$orders[SHARE_SHIP_KUAIDI_TAG]; $current_tag = SHARE_SHIP_KUAIDI_TAG; ?>
+                    {{template weshares/share_order_list_template}}
                 </div>
+            </div>
             {{/if}}
             {{if count($orders[SHARE_SHIP_PYS_ZITI_TAG]) > 0}}
-                <div class="tab-pane fade" id="pys-ziti-orders">
-                    <div class="panel-group">
-                        <?php $current_orders=$orders[SHARE_SHIP_PYS_ZITI_TAG]; $current_tag = SHARE_SHIP_PYS_ZITI_TAG; ?>
-                        {{template weshares/share_order_list_template}}
-                    </div>
+            <div class="tab-pane fade" id="pys-ziti-orders">
+                <div class="panel-group">
+                    <?php $current_orders=$orders[SHARE_SHIP_PYS_ZITI_TAG]; $current_tag = SHARE_SHIP_PYS_ZITI_TAG; ?>
+                    {{template weshares/share_order_list_template}}
                 </div>
+            </div>
             {{/if}}
         </div>
     </div>
@@ -95,17 +103,19 @@
 
 </div>
 <div class="row" style="position: fixed;height: 46px;bottom: 0;width: 100%;">
-    <div class="modal fade bs-example-modal-sm send-msg-dialog" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal fade bs-example-modal-sm send-msg-dialog" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">发送到货提醒</h4>
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal">
                         <div class="form-group">
                             <label for="arrival_msg" class="col-sm-2 control-label">到货提示</label>
+
                             <div class="col-sm-10">
                                 <textarea class="form-control" rows="3" id="arrival_msg">我们团的产品已经到啦，速度来取哈。</textarea>
                             </div>
@@ -114,27 +124,80 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary" data-id="{{$weshareId}}" name="send_product_arrival_msg">发送</button>
+                    <button type="button" class="btn btn-primary" data-id="{{$weshareId}}"
+                            name="send_product_arrival_msg">发送
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-    <button data-toggle="modal" data-target=".send-msg-dialog" type="button" class="btn btn-warning btn-lg btn-block" id="send_product_arrive_msg" style="border-radius:0px; display: none;">取货提醒</button>
+    <div class="modal fade bs-example-modal-sm send-msg-dialog" tabindex="-1" role="dialog" id="refund-money-dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">退款</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="refund-order-user" class="col-sm-2 control-label">用户名</label>
+
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" readonly id="refund-order-user">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="refund-order-id" class="col-sm-2 control-label">订单ID</label>
+
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" readonly id="refund-order-id">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="refund-money" class="col-sm-2 control-label">退款金额</label>
+
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control" id="refund-money">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="refund-msg" class="col-sm-2 control-label">退款提示</label>
+
+                            <div class="col-sm-10">
+                                <textarea class="form-control" rows="3" id="refund-msg"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" data-id="{{$weshareId}}" name="handle-refund-money">
+                        退款
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button data-toggle="modal" data-target=".send-msg-dialog" type="button" class="btn btn-warning btn-lg btn-block"
+            id="send_product_arrive_msg" style="border-radius:0px; display: none;">取货提醒
+    </button>
 </div>
 <script>
-    $(document).ready(function(){
+    $(document).ready(function () {
         var orderType = '';
         var $selfZitiOrder = $('#self-ziti-orders');
-        $('select[name="ship_company_code"]').on('change', function(){
+        $('select[name="ship_company_code"]').on('change', function () {
             var valueSelected = this.value;
             $("option[value='" + valueSelected + "']").prop("selected", true);
         });
-        $('ul.nav li a').on('click', function(){
-            var  $me = $(this);
+        $('ul.nav li a').on('click', function () {
+            var $me = $(this);
             orderType = $me.data('order-type');
-            if(orderType=='self_ziti'){
+            if (orderType == 'self_ziti') {
                 $('#send_product_arrive_msg').show();
-            }else{
+            } else {
                 $('#send_product_arrive_msg').hide();
             }
         });
@@ -148,17 +211,17 @@
             var orderId = $me.data('order-id');
             var shipCompayId = $shipCompany.val();
             var shipCode = $shipCode.val();
-            var companyName  = $("option:selected",$shipCompany).text();
+            var companyName = $("option:selected", $shipCompany).text();
             $.post('/weshares/set_order_ship_code', {
                 order_id: orderId,
                 company_id: shipCompayId,
                 ship_code: shipCode,
-                weshare_id:'{{$weshareId}}'
+                weshare_id: '{{$weshareId}}'
             }, function (data) {
-                if(data['success']){
+                if (data['success']) {
                     $parent.removeClass('offer-success').addClass('offer-warning');
                     $('div.shape-text', $parent).text('已发货');
-                    $form.parent('div.offer-content').append('<p><strong>'+companyName+':</strong><strong>'+shipCode+'</strong> </p>');
+                    $form.parent('div.offer-content').append('<p><strong>' + companyName + ':</strong><strong>' + shipCode + '</strong> </p>');
                     $form.remove();
                 }
             }, 'json');
@@ -188,7 +251,7 @@
             e.preventDefault();
             var $msgInput = $('#arrival_msg');
             var msg = $msgInput.val();
-            if(!msg||!msg.trim()){
+            if (!msg || !msg.trim()) {
                 return;
             }
             var id = $(this).data('id');
@@ -200,16 +263,65 @@
                 success: function (data) {
                     $('div.send-msg-dialog').modal('hide');
                     var $paidOrders = $('div[data-order-status="1"]', $selfZitiOrder);
-                    $paidOrders.each(function(index,item){
+                    $paidOrders.each(function (index, item) {
                         var $dom = $(item);
                         $dom.removeClass('offer-success').addClass('offer-warning');
                         $('div.shape-text', $dom).text('已发货');
-                        $dom.data('order-status','2')
+                        $dom.data('order-status', '2')
                     });
                 },
                 contentType: "application/json",
                 dataType: 'json'
             });
+        });
+        var $refundMoneyDialog = $('#refund-money-dialog');
+        var $refundOrderName = $('#refund-order-user', $refundMoneyDialog);
+        var $refundOrderId = $('#refund-order-id', $refundMoneyDialog);
+        var $refundMoney = $('#refund-money', $refundMoneyDialog);
+        var $refundMsg = $('#refund-msg', $refundMoneyDialog);
+        $('button[name="handle-refund-money"]').on('click', function (e) {
+            e.preventDefault();
+            var $me = $(this);
+            var refundMoney = $refundMoney.val();
+            if (isNaN(refundMoney)) {
+                alert('请输入退款金额');
+                return false;
+            }
+            var refundMark = $refundMsg.val();
+            if (!refundMark) {
+                alert('请输入退款原因');
+                return false;
+            }
+            var postData = {
+                orderId: $refundOrderId.val(),
+                shareId: $me.data('id'),
+                refundMoney: $refundMoney.val(),
+                refundMark: $refundMsg.val()
+            };
+            $.post('/weshares/refund_money.json', postData, function (data) {
+                if (data['success']) {
+                    var orderId = data['order_id'];
+                    var $refundBtn = $('#refund-btn-' + orderId);
+                    $refundBtn.unbind();
+                    var $parent = $refundBtn.parent('div.offer-content');
+                    $parent = $parent.parent();
+                    $parent.removeClass().addClass('offer').addClass('offer-danger');
+                    $('div.shape-text', $parent).text('退款中');
+                    $refundBtn.remove();
+                    $refundMoneyDialog.modal('hide');
+                }
+            }, 'json');
+        });
+        $('button.refund-money').on('click', function (e) {
+            e.preventDefault();
+            var $me = $(this);
+            var orderId = $me.data('order-id');
+            var orderUserName = $me.data('order-name');
+            $refundOrderName.val(orderUserName);
+            $refundOrderId.val(orderId);
+            $refundMoney.val(0);
+            $refundMsg.val('');
+            $refundMoneyDialog.modal('show');
         });
     });
 </script>

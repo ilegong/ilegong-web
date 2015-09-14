@@ -496,13 +496,21 @@ class ShareUtilComponent extends Component {
         Cache::write(LAST_OPT_LOG_DATA_CACHE_KEY,'');
     }
 
-    public function refund($orderId, $refundMoney, $refundMark, $refundStatus){
+    /**
+     * @param $orderId
+     * @param $refundMoney
+     * @param $refundMark
+     * @param $refundStatus
+     * @return array
+     *
+     */
+    public function refund($orderId, $refundMoney, $refundMark, $refundStatus) {
         $userM = ClassRegistry::init('User');
         $weshareM = ClassRegistry::init('Weshare');
         $refundLogM = ClassRegistry::init('RefundLog');
         $payLogM = ClassRegistry::init('PayLog');
         $orderM = ClassRegistry::init('Order');
-        $refundMoney = intval(intval($refundMoney) * 1000 / 10);
+        $refundMoney = intval($refundMoney * 1000 / 10);
         App::uses('CakeNumber', 'Utility');
         $showRefundMoney = CakeNumber::precision($refundMoney / 100, 2);
         $refundLog = $refundLogM->find('first', array(
@@ -557,12 +565,7 @@ class ShareUtilComponent extends Component {
             $title = $order_creator_info['User']['nickname'] . '，你好，我们已经为你申请退款，会在3-5个工作日内完成退款。';
             $this->Weixin->send_refunding_order_notify($order_creator_id, $title, $weshareTitle, $showRefundMoney, $detail_url, $orderId, $remark);
         }
-        //refund complete
-        if ($refundStatus == 1) {
-            $orderM->updateAll(array('status' => ORDER_STATUS_RETURN_MONEY), array('id' => $orderId));
-            $title = $order_creator_info['User']['nickname'] . '，你好，我们已经为你退款，会在3个工作日内到账，请注意查收。';
-            $this->Weixin->send_refund_order_notify($order_creator_id, $title, $weshareTitle, $showRefundMoney, $detail_url, $orderId, $remark);
-        }
+        return array('success' => true, 'order_id' => $orderId);
     }
 
     /**
