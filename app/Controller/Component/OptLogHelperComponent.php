@@ -1,8 +1,9 @@
 <?php
+
 /**
  * opt log helper
  */
-class OptLogHelperComponent extends Component{
+class OptLogHelperComponent extends Component {
 
     var $components = array('WeshareBuy');
 
@@ -17,6 +18,16 @@ class OptLogHelperComponent extends Component{
         usort($opt_logs, 'sort_data_by_id');
         $opt_log_data = array('opt_logs' => $opt_logs, 'combine_data' => $combine_data);
         return $opt_log_data;
+    }
+
+    private function load_last_opt_data() {
+        $key = LAST_OPT_LOG_DATA_CACHE_KEY;
+        $data = Cache::read($key);
+        if (empty($data)) {
+           
+        }
+        $last_opt_logs = json_decode($data, true);
+        return $last_opt_logs;
     }
 
     /**
