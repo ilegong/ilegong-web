@@ -389,7 +389,10 @@ class ShareUtilComponent extends Component {
         }
         $share_info = $this->WeshareBuy->get_weshare_info($shareId);
         $shareImg = explode('|', $share_info['images']);
-        $optLogData = array('user_id' => $userId, 'obj_type' => OPT_LOG_SHARE_RECOMMEND, 'obj_id' => $shareId, 'created' => $now, 'memo' => $share_info['title'], 'reply_content' => $memo, 'thumbnail' => $shareImg[0]);
+        $title = $share_info['title'];
+        $sharer_name = $this->WeshareBuy->get_user_nickname($share_info['creator']);
+        $title = $sharer_name . '分享的' . $title;
+        $optLogData = array('user_id' => $userId, 'obj_type' => OPT_LOG_SHARE_RECOMMEND, 'obj_id' => $shareId, 'created' => $now, 'memo' => $title, 'reply_content' => $memo, 'thumbnail' => $shareImg[0]);
         $this->saveOptLog($optLogData);
         $this->WeshareBuy->send_recommend_msg($userId, $shareId, $memo);
         $this->notify_sharer_recommend($userId, $shareId);
@@ -467,6 +470,8 @@ class ShareUtilComponent extends Component {
     public function save_comment_opt_log($user_id, $share_id, $replay_text) {
         $share_info = $this->WeshareBuy->get_weshare_info($share_id);
         $memo = $share_info['title'];
+        $sharer_name = $this->WeshareBuy->get_user_nickname($share_info['creator']);
+        $memo = $sharer_name . '分享的' . $memo;
         $thumbnail = explode('|', $share_info['images']);
         $thumbnail = $thumbnail[0];
         $optData = array(

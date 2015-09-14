@@ -272,7 +272,7 @@ $(document).ready(function () {
     '<%}%>' +
     '<%}%>'+
     '<%if(this.count>10){%>' +
-    '<font class="zaninfo"> ...共<%this.count%>人赞</font>' +
+    '<font class="zaninfo"> ...共<%this.count%>人报名</font>' +
     '<%}%>' +
     '<div style="height:0px;clear:both"></div></div>';
 
