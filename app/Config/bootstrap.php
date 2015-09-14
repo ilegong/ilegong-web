@@ -186,6 +186,7 @@ const SHARE_RECOMMEND_DATA_CACHE_KEY = 'share_recommend_data_key';
 const OPT_LOG_OLDEST_TIME_CACHE_KEY = 'opt_log_oldest_time_cache_key';
 const OPT_LOG_LAST_TIME_CACHE_KEY = 'opt_log_last_time_cache_key';
 const LAST_OPT_LOG_DATA_CACHE_KEY = 'last_opt_log_data_cache_key';
+const OPT_LOG_COMBINE_DATA_CACHE_KEY = 'opt_log_combine_data_cache_key';
 
 //Product 表里设置是这个产品，不论多少都是同一邮费
 const TYPE_ORDER_PRICE = 1; //订单总价满多少包邮
