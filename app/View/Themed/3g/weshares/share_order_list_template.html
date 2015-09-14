@@ -63,6 +63,8 @@
                     <button class="btn btn-primary set-order-ship-code" data-order-id="{{$item_order['id']}}">已发货</button>
                 </div>
             {{/if}}
+            {{if $item_order['status'] != ORDER_STATUS_DONE && $item_order['status'] != ORDER_STATUS_RETURN_MONEY}}
+            {{/if}}
         </div>
     </div>
 </div>
