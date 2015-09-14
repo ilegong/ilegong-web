@@ -264,11 +264,11 @@ $(document).ready(function () {
     '<img class="zanicon" src="/static/opt/images/zanicon.png">' +
     '<%if(this.count<=10){%>'+
     '<%for(var i=0;i<this.count;i++){%>' +
-    '<img class="zheadimg" src="/static/opt/images/default.png" data-original="<%this.users[this.userIds[i]].image%>" title="<%this.users[this.userIds[i]].nickname%>">' +
+    '<a href="/weshares/user_share_info/<%this.userIds[i]%>"><img class="zheadimg" src="/static/opt/images/default.png" data-original="<%this.users[this.userIds[i]].image%>" title="<%this.users[this.userIds[i]].nickname%>"></a>' +
     '<%}%>' +
     '<%}else{%>' +
     '<%for(var i=0;i<10;i++){%>' +
-    '<img class="zheadimg" src="/static/opt/images/default.png" data-original="<%this.users[this.userIds[i]].image%>" title="<%this.users[this.userIds[i]].nickname%>">' +
+    '<a href="/weshares/user_share_info/<%this.userIds[i]%>"><img class="zheadimg" src="/static/opt/images/default.png" data-original="<%this.users[this.userIds[i]].image%>" title="<%this.users[this.userIds[i]].nickname%>"></a>' +
     '<%}%>' +
     '<%}%>'+
     '<%if(this.count>10){%>' +
