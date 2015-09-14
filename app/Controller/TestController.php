@@ -17,9 +17,14 @@ class TestController extends AppController{
 
 
     public function send_tmp_msg() {
-        $userId = '';
+        $userId = 697674;
         $openId = $this->Oauthbind->findWxServiceBindByUid($userId);
-        //$this->Wexin->send_comment_template_msg($openId,$detail_url,$title,$order_id,$order_date,$desc);
+        $title = 'hi,你在我们平台订了猕猴桃和无花果，现在您留的电话不正确，请迅速和我们联系：18911692346，';
+        $order_id = 37377;
+        $order_date = '2015-09-10 21:14:32';
+        $desc = '生鲜不能存放，谢谢理解！';
+        $detail_url = '';
+        $this->Wexin->send_comment_template_msg($openId, $detail_url, $title, $order_id, $order_date, $desc);
     }
 
     public function test_send_tuan_buy_msg($orderId){
