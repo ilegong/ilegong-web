@@ -13,8 +13,14 @@ App::import('Vendor', 'Location', array('file' => 'Location/Distance/Haversine.p
 class TestController extends AppController{
 
     public $components = array('Weixin', 'WeshareBuy');
-    public $uses = array('Order');
+    public $uses = array('Order', 'Oauthbind');
 
+
+    public function send_tmp_msg() {
+        $userId = '';
+        $openId = $this->Oauthbind->findWxServiceBindByUid($userId);
+        //$this->Wexin->send_comment_template_msg($openId,$detail_url,$title,$order_id,$order_date,$desc);
+    }
 
     public function test_send_tuan_buy_msg($orderId){
         $order = $this->Order->find('first',array(

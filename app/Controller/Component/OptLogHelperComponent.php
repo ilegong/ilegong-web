@@ -54,7 +54,7 @@ class OptLogHelperComponent extends Component {
         foreach ($last_opt_data as $index => $log_item) {
             $log_item_date = $log_item['OptLog']['created'];
             $log_item_time = strtotime($log_item_date);
-            if ($log_item_time <= $time) {
+            if ($log_item_time < $time) {
                 $log_data = array_slice($last_opt_data, $index, 10);
                 return $log_data;
             }
