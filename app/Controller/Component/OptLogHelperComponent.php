@@ -9,9 +9,7 @@ class OptLogHelperComponent extends Component {
 
     public function load_opt_log($time, $limit, $type) {
         //check cache init cache
-        $optLogM = ClassRegistry::init('OptLog');
-        $datetime = date('Y-m-d H:i:s', $time);
-        $opt_logs = $optLogM->fetch_by_time_limit_type($datetime, 100, 0);
+        $opt_logs = $this->loat_opt_log_by_time($time);
         $combine_data = $this->combine_opt_log_data($opt_logs);
         $opt_logs = Hash::extract($opt_logs, '{n}.OptLog');
         $opt_logs = array_map('map_opt_log_data', $opt_logs);
@@ -20,14 +18,48 @@ class OptLogHelperComponent extends Component {
         return $opt_log_data;
     }
 
+    /**
+     * @return mixed
+     */
     private function load_last_opt_data() {
         $key = LAST_OPT_LOG_DATA_CACHE_KEY;
         $data = Cache::read($key);
         if (empty($data)) {
-           
+            $optLogM = ClassRegistry::init('OptLog');
+            $datetime = date('Y-m-d H:i:s');
+            $opt_logs = $optLogM->fetch_by_time_limit_type($datetime, 100, 0);
+            Cache::write($key, json_encode($opt_logs));
+            return $opt_logs;
         }
         $last_opt_logs = json_decode($data, true);
         return $last_opt_logs;
+    }
+
+    /**
+     * @param $time
+     * @return array
+     * load opt_log
+     */
+    private function loat_opt_log_by_time($time) {
+        $last_opt_data = $this->load_last_opt_data();
+        $first_log = $last_opt_data[0];
+        $first_log_date = $first_log['OptLog']['created'];
+        $first_log_time = strtotime($first_log_date);
+        if ($time > $first_log_time) {
+            $log_data = array_slice($last_opt_data, 0, 10);
+            return $log_data;
+        }
+        foreach ($last_opt_data as $index => $log_item) {
+            $log_item_date = $log_item['OptLog']['created'];
+            $log_item_time = strtotime($log_item_date);
+            if ($log_item_time >= $time) {
+                $log_data = array_slice($last_opt_data, $index, 10);
+                return $log_data;
+            }
+        }
+        $optLogM = ClassRegistry::init('OptLog');
+        $opt_logs = $optLogM->fetch_by_time_limit_type(date('Y-m-d H:i:s', $time), 10, 0);
+        return $opt_logs;
     }
 
     /**

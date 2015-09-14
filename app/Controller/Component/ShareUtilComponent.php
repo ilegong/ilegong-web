@@ -493,6 +493,7 @@ class ShareUtilComponent extends Component {
     public function saveOptLog($data) {
         $optLogM = ClassRegistry::init('OptLog');
         $optLogM->save($data);
+        Cache::write(LAST_OPT_LOG_DATA_CACHE_KEY,'');
     }
 
     /**
