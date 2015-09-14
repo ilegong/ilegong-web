@@ -768,7 +768,7 @@ class WeixinComponent extends Component
                 //$this->ShareUtil->update_rebate_log($cate_id, $order);
             }
             //save buy opt log
-            $this->ShareUtil->save_buy_opt_log($order['Order']['creator'], $order['Order']['member_id']);
+            $this->ShareUtil->save_buy_opt_log($order['Order']['creator'], $order['Order']['member_id'], $order['Order']['id']);
         }
     }
 

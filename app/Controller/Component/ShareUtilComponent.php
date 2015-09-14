@@ -143,7 +143,7 @@ class ShareUtilComponent extends Component {
      * @param $share_id
      * @return int
      */
-    public function get_share_rebate_money($share_id){
+    public function get_share_rebate_money($share_id) {
         $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
         $allRebateMoney = 0;
         $rebateLogs = $rebateTrackLogM->find('all', array(
@@ -268,7 +268,7 @@ class ShareUtilComponent extends Component {
         $order_money = $rebateData['order_price'];
         $rebate_money = $rebateData['rebate_money'];
         $pay_time = $order['Order']['created'];
-        $rebate_money =  round($rebate_money / 100, 2);
+        $rebate_money = round($rebate_money / 100, 2);
         $rebate_money = number_format($rebate_money, 2);
         $this->Weixin->send_rebate_template_msg($recommend_open_ids[$recommend], $detail_url, $order_id, $order_money, $pay_time, $rebate_money, $title);
     }
@@ -434,19 +434,24 @@ class ShareUtilComponent extends Component {
     /**
      * @param $user_id
      * @param $share_id
+     * @param $order_id
      * save user buy product opt log
      */
-    public function save_buy_opt_log($user_id, $share_id) {
+    public function save_buy_opt_log($user_id, $share_id, $order_id) {
         $share_info = $this->WeshareBuy->get_weshare_info($share_id);
         $memo = $share_info['title'];
+        $sharer_name = $this->WeshareBuy->get_user_nickname($share_info['creator']);
+        $memo = $sharer_name . '分享的' . $memo;
         $thumbnail = explode('|', $share_info['images']);
         $thumbnail = $thumbnail[0];
+        $order_info = $this->WeshareBuy->get_cart_name_and_num($order_id);
         $optData = array(
             'user_id' => $user_id,
             'obj_type' => OPT_LOG_SHARE_BUY,
             'obj_id' => $share_id,
             'created' => date('Y-m-d H:i:s'),
             'memo' => $memo,
+            'reply_content' => $order_info,
             'thumbnail' => $thumbnail
         );
         $this->saveOptLog($optData);
