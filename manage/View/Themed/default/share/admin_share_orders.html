@@ -134,7 +134,7 @@
                             <td>{{$cart['num']}}</td>
                             <td>{{$cart['price']*$cart['num']/100}}</td>
                             <td>{{$current_order['total_all_price']}}</td>
-                            <td>{{if !empty($refund_logs[$current_order['id']])}}{{$refund_logs[$current_order['id']]}}{{else}}0{{/if}}</td>
+                            <td>{{if !empty($refund_logs[$current_order['id']])}}{{$refund_logs[$current_order['id']]/100}}{{else}}0{{/if}}</td>
                             <td>{{$current_order['created']}}</td>
                             <td name="status">
                                 {{if $current_order['status']==ORDER_STATUS_PAID}}

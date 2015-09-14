@@ -450,7 +450,7 @@ class ShareController extends AppController{
                     ),
                     'fields' => array('order_id', 'id', 'refund_fee')
                 ));
-            $refundLogs = Hash::combine($rebateLogs, '{n}.RefundLog.order_id', '{n}.RefundLog.refund_fee');
+            $refundLogs = Hash::combine($refundLogs, '{n}.RefundLog.order_id', '{n}.RefundLog.refund_fee');
             $allRebateMoney = 0 ;
             foreach($rebateLogs as $rebate_item){
                 $allRebateMoney = $allRebateMoney + $rebate_item['RebateTrackLog']['rebate_money'];
