@@ -101,6 +101,7 @@
                     <th><input type="text" class="form-control" placeholder="商品份数" disabled></th>
                     <th><input type="text" class="form-control" placeholder="商品总价" disabled></th>
                     <th><input type="text" class="form-control" placeholder="订单总价" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="退款金额" disabled></th>
                     <th><input type="text" class="form-control" placeholder="创建时间" disabled></th>
                     <th><input type="text" class="form-control" placeholder="状态" disabled></th>
                     <th><input type="text" class="form-control" placeholder="物流方式" disabled></th>
@@ -133,6 +134,7 @@
                             <td>{{$cart['num']}}</td>
                             <td>{{$cart['price']*$cart['num']/100}}</td>
                             <td>{{$current_order['total_all_price']}}</td>
+                            <td>{{if !empty($refund_logs[$current_order['id']])}}{{$refund_logs[$current_order['id']]}}{{else}}0{{/if}}</td>
                             <td>{{$current_order['created']}}</td>
                             <td name="status">
                                 {{if $current_order['status']==ORDER_STATUS_PAID}}

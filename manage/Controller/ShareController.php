@@ -443,6 +443,14 @@ class ShareController extends AppController{
                 ),
                 'fields' => array('id', 'sharer', 'rebate_money')
             ));
+            $refundLogs = $this->RefundLog->find('all',
+                array(
+                    'conditions' => array(
+                        'order_id' => $order_ids
+                    ),
+                    'fields' => array('order_id', 'id', 'refund_fee')
+                ));
+            $refundLogs = Hash::combine($rebateLogs, '{n}.RefundLog.order_id', '{n}.RefundLog.refund_fee');
             $allRebateMoney = 0 ;
             foreach($rebateLogs as $rebate_item){
                 $allRebateMoney = $allRebateMoney + $rebate_item['RebateTrackLog']['rebate_money'];
@@ -488,6 +496,7 @@ class ShareController extends AppController{
                 $order_cart_map[$order_id][] = $item['Cart'];
             }
             $summery_result = array('order_count' => count($orders), 'total_all_price' => $total_price);
+            $this->set('refund_logs', $refundLogs);
             $this->set('all_rebate_money', $allRebateMoney);
             $this->set('rebate_logs', $rebateLogs);
             $this->set('summery', $summery_result);
