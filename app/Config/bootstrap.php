@@ -2242,7 +2242,7 @@ function map_opt_log_data($var) {
         $var['data_type_tag'] = '分享了';
     }
     if ($data_type == OPT_LOG_SHARE_BUY) {
-        $var['data_type_tag'] = '购买了';
+        $var['data_type_tag'] = '报名了';
     }
     if ($data_type == OPT_LOG_SHARE_COMMENT) {
         $var['data_type_tag'] = '评价了';
