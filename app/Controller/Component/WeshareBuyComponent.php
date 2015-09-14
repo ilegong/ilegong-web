@@ -7,7 +7,7 @@ class WeshareBuyComponent extends Component {
 
     var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'mobilephone', 'is_proxy');
 
-    var $query_order_fields = array('id', 'creator', 'created', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type');
+    var $query_order_fields = array('id', 'creator', 'created', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type', 'member_id');
 
     var $query_share_info_order_fields = array('id', 'creator', 'created', 'updated', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type', 'total_price', 'coupon_total', 'cate_id');
 
@@ -25,7 +25,7 @@ class WeshareBuyComponent extends Component {
      * 个人中心  页面
      */
     public function load_sharer_comment_data($weshare_ids, $sharer_id) {
-        $cache_key = SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $sharer_id.'_1';
+        $cache_key = SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $sharer_id . '_1';
         $sharer_comment_data = Cache::read($cache_key);
         if (empty($sharer_comment_data)) {
             $commentM = ClassRegistry::init('Comment');
@@ -60,7 +60,7 @@ class WeshareBuyComponent extends Component {
                 )
             ));
             $comment_count = count($comments);
-            $my_comment_count = $commentM->find('count',array(
+            $my_comment_count = $commentM->find('count', array(
                 'conditions' => array(
                     'user_id' => $sharer_id,
                     'type' => COMMENT_SHARE_TYPE,
@@ -69,7 +69,7 @@ class WeshareBuyComponent extends Component {
                 )
             ));
             $reply_percent = 0;
-            $comment_count = $comment_count+$my_comment_count;
+            $comment_count = $comment_count + $my_comment_count;
             if ($comment_count > 0) {
                 $reply_percent = $replay_count / $comment_count * 100;
             }
@@ -130,7 +130,7 @@ class WeshareBuyComponent extends Component {
      * @return array|mixed
      * 准备用户中心数据
      */
-    public function prepare_user_share_info($uid){
+    public function prepare_user_share_info($uid) {
         $key = USER_SHARE_INFO_CACHE_KEY . '_' . $uid;
         $user_share_data = Cache::read($key);
         if (empty($user_share_data)) {
@@ -423,11 +423,11 @@ class WeshareBuyComponent extends Component {
             //clean cache
             //$cache_key = SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $sharer_id . '_0';
             //$cache_key = SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $sharer_id . '_1';
-            Cache::write(SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $weshare_info['creator'] . '_0','');
-            Cache::write(SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $weshare_info['creator'] . '_1','');
+            Cache::write(SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $weshare_info['creator'] . '_0', '');
+            Cache::write(SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $weshare_info['creator'] . '_1', '');
             //SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId;
-            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id.'_0', '');
-            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id.'_1', '');
+            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_0', '');
+            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_1', '');
         }
         //$key = SHARE_COMMENT_DATA_CACHE_KEY . '_' . $weshare_id;
         Cache::write(SHARE_COMMENT_DATA_CACHE_KEY . '_' . $share_id, '');
@@ -507,7 +507,7 @@ class WeshareBuyComponent extends Component {
             //$nick_name_map = $this->User->findNicknamesMap(array($share_creator, $order_user_id));
             $order_user_nickname = $users[$order_user_id]['nickname'];
             $share_creator_nickname = $users[$share_creator]['nickname'];
-            $title = $order_user_nickname . '你好，' . $share_creator_nickname . '分享的' . $weshare_info['Weshare']['title'] . '寄出了，请注意查收。'.$share_creator_nickname.'电话:'.$users[$share_creator]['mobilephone'];
+            $title = $order_user_nickname . '你好，' . $share_creator_nickname . '分享的' . $weshare_info['Weshare']['title'] . '寄出了，请注意查收。' . $share_creator_nickname . '电话:' . $users[$share_creator]['mobilephone'];
             $shipTypesList = ShipAddress::ship_type_list();
             $ship_company_name = $shipTypesList[$order_info['Order']['ship_type']];
             $ship_code = $order_info['Order']['ship_code'];
@@ -524,7 +524,7 @@ class WeshareBuyComponent extends Component {
      * @param $msg
      * 到货提醒
      */
-    public function send_share_product_arrive_msg($shareInfo, $msg){
+    public function send_share_product_arrive_msg($shareInfo, $msg) {
         $this->Order = ClassRegistry::init('Order');
         $this->User = ClassRegistry::init('User');
         $this->Oauthbind = ClassRegistry::init('Oauthbind');
@@ -587,7 +587,7 @@ class WeshareBuyComponent extends Component {
                 'deleted' => DELETED_NO
             )
         );
-        if($limit!=null&&$offset!=null){
+        if ($limit != null && $offset != null) {
             $cond['limit'] = $limit;
             $cond['offset'] = $offset;
         }
@@ -605,8 +605,8 @@ class WeshareBuyComponent extends Component {
      * @param $remark
      * 处理发送 参团信息
      */
-    public function process_send_share_msg($openId, $title, $productName, $detailUrl,$sharerName,$remark) {
-        send_join_tuan_buy_msg(null,$title,$productName,$sharerName,$remark,$detailUrl,$openId);
+    public function process_send_share_msg($openId, $title, $productName, $detailUrl, $sharerName, $remark) {
+        send_join_tuan_buy_msg(null, $title, $productName, $sharerName, $remark, $detailUrl, $openId);
     }
 
     /**
@@ -807,7 +807,7 @@ class WeshareBuyComponent extends Component {
         );
         if (!empty($weshareId)) {
             $cond['member_id'] = $weshareId;
-        }else{
+        } else {
             $cond['DATE(updated)'] = $limit_date;
         }
         $orders = $orderM->find('all', array(
@@ -820,7 +820,7 @@ class WeshareBuyComponent extends Component {
      * @param null $weshareId
      * 更新订单状态且发送评论通知信息
      */
-    public function change_status_and_send_to_comment_msg($weshareId=null) {
+    public function change_status_and_send_to_comment_msg($weshareId = null) {
         $orderM = ClassRegistry::init('Order');
         $cartM = ClassRegistry::init('Cart');
         $limit_date = date('Y-m-d', strtotime("-7 days"));
@@ -880,7 +880,7 @@ class WeshareBuyComponent extends Component {
      * @param $orders
      * 通知下单用户去评论模板消息
      */
-    private function process_send_to_comment_msg($orders){
+    private function process_send_to_comment_msg($orders) {
         $oauthBindM = ClassRegistry::init('Oauthbind');
         $order_uids = Hash::extract($orders, '{n}.Order.creator');
         $order_member_ids = Hash::extract($orders, '{n}.Order.member_id');
@@ -917,9 +917,9 @@ class WeshareBuyComponent extends Component {
      * @param $order_id
      * 用户之间互相评论
      */
-    public function send_comment_mutual_msg($comment_uid,$reply_id,$content, $share_id,$order_id){
+    public function send_comment_mutual_msg($comment_uid, $reply_id, $content, $share_id, $order_id) {
         $uid_name_map = $this->get_users_nickname(array($comment_uid, $reply_id));
-        $title = $uid_name_map[$reply_id].'你好，'.$uid_name_map[$comment_uid].'对你说：'.$content;
+        $title = $uid_name_map[$reply_id] . '你好，' . $uid_name_map[$comment_uid] . '对你说：' . $content;
         $desc = '分享，让生活更美。点击查看。';
         $detail_url = $this->get_weshares_detail_url($share_id);
         $order_info = $this->get_order_info($order_id);
@@ -968,7 +968,7 @@ class WeshareBuyComponent extends Component {
         $uid_name_map = $this->get_users_nickname(array($order_creator, $share_creator));
         $open_id_map = $this->get_open_ids(array($share_creator));
         $open_id = $open_id_map[$share_creator];
-        $title = $uid_name_map[$share_creator].'你好，'.$uid_name_map[$order_creator].'说，感谢' . $uid_name_map[$share_creator] . '，' . $comment_content . '。';
+        $title = $uid_name_map[$share_creator] . '你好，' . $uid_name_map[$order_creator] . '说，感谢' . $uid_name_map[$share_creator] . '，' . $comment_content . '。';
         $order_id = $order_info['id'];
         $order_date = $order_info['created'];
         $desc = '分享，让生活更美。点击回复' . $uid_name_map[$order_creator] . '。';
@@ -981,7 +981,7 @@ class WeshareBuyComponent extends Component {
      * @param $weshare_id
      * 通知分享者收到了评论
      */
-    public function send_comment_notify_buyer($order_id, $weshare_id){
+    public function send_comment_notify_buyer($order_id, $weshare_id) {
         $order_info = $this->get_order_info($order_id);
         $order_creator = $order_info['creator'];
         $share_info = $this->get_weshare_info($weshare_id);
@@ -991,7 +991,7 @@ class WeshareBuyComponent extends Component {
         $open_id = $open_id_map[$order_creator];
         //分享的XXX
         $sharer_offer_map = $this->sharer_has_offer(array($share_creator));
-        $title = $uid_name_map[$order_creator].'你好，'.$uid_name_map[$share_creator].'说，分享的'.$share_info['title'].'收到了吧，给个爱心评价呢！';
+        $title = $uid_name_map[$order_creator] . '你好，' . $uid_name_map[$share_creator] . '说，分享的' . $share_info['title'] . '收到了吧，给个爱心评价呢！';
         if (!empty($sharer_offer_map[$share_info['creator']])) {
             $title = $title . $uid_name_map[$share_creator] . '的红包等着你呢：）';
         }
@@ -1008,15 +1008,15 @@ class WeshareBuyComponent extends Component {
      * @param $reply_content
      * 收到评论回复通知
      */
-    public function send_comment_reply_notify($order_id,$weshare_id,$reply_content){
+    public function send_comment_reply_notify($order_id, $weshare_id, $reply_content) {
         $order_info = $this->get_order_info($order_id);
         $order_creator = $order_info['creator'];
         $share_info = $this->get_weshare_info($weshare_id);
         $share_creator = $share_info['creator'];
         $uid_name_map = $this->get_users_nickname(array($order_creator, $share_creator));
-        $open_id_map = $this->get_open_ids(array($share_creator,$order_creator));
+        $open_id_map = $this->get_open_ids(array($share_creator, $order_creator));
         $open_id = $open_id_map[$order_creator];
-        $title = $uid_name_map[$order_creator].'你好，'.$uid_name_map[$share_creator].'说，谢谢你对我的支持，'.$reply_content.'。';
+        $title = $uid_name_map[$order_creator] . '你好，' . $uid_name_map[$share_creator] . '说，谢谢你对我的支持，' . $reply_content . '。';
         $order_id = $order_info['id'];
         $order_date = $order_info['created'];
         $desc = '分享，让生活更美。点击查看。';
@@ -1154,7 +1154,7 @@ class WeshareBuyComponent extends Component {
      * @param $offset
      * 发送团购进度消息
      */
-    public function send_buy_percent_msg($weshare_info, $msg_content, $limit=null, $offset=null) {
+    public function send_buy_percent_msg($weshare_info, $msg_content, $limit = null, $offset = null) {
         $share_creator = $weshare_info['creator']['id'];
         $fans_ids = $this->load_fans_buy_sharer($share_creator, $limit, $offset);
         $fans_data_nickname = $this->get_users_nickname($fans_ids);
@@ -1221,7 +1221,7 @@ class WeshareBuyComponent extends Component {
         ));
         $user_info = Hash::combine($user_info, '{n}.User.id', '{n}.User');
         $sharer_user_info = $user_info[$sharer];
-        $detail_url = WX_HOST . '/weshares/view/' . $weshareId.'?recommend='.$recommend_user;
+        $detail_url = WX_HOST . '/weshares/view/' . $weshareId . '?recommend=' . $recommend_user;
         $sharer_name = $sharer_user_info['nickname'];
         $recommend_name = $user_info[$recommend_user]['nickname'];
         $product_name = $weshare['Weshare']['title'];
@@ -1241,7 +1241,7 @@ class WeshareBuyComponent extends Component {
      * @param $follow_id
      * 获取用户关注信息
      */
-    public function check_user_subscribe($sharer_id, $follow_id){
+    public function check_user_subscribe($sharer_id, $follow_id) {
         return $this->ShareUtil->check_user_is_subscribe($sharer_id, $follow_id);
     }
 
@@ -1266,7 +1266,7 @@ class WeshareBuyComponent extends Component {
      * @param $follow_id
      * 取消关注
      */
-    public function unsubscribe_sharer($sharer_id, $follow_id){
+    public function unsubscribe_sharer($sharer_id, $follow_id) {
         Cache::write(SHARE_USER_SUMMERY_CACHE_KEY . '_' . $sharer_id, '');
         Cache::write(SHARER_FOCUS_DATA_CACHE_KEY . '_' . $follow_id . '_100', '');
         Cache::write(SHARER_FANS_DATA_CACHE_KEY . '_' . $sharer_id . '_100', '');
@@ -1277,12 +1277,12 @@ class WeshareBuyComponent extends Component {
      * @param $sharer_id
      * @param $follow_id
      */
-    public function send_sub_template_msg($sharer_id, $follow_id){
+    public function send_sub_template_msg($sharer_id, $follow_id) {
         $openid_map = $this->get_open_ids(array($sharer_id));
         $open_id = $openid_map[$sharer_id];
         $nickname_map = $this->get_users_nickname(array($sharer_id, $follow_id));
         $member_name = $nickname_map[$follow_id];
-        $title = $nickname_map[$sharer_id].'你好，'.$member_name.'刚刚关注了你。';
+        $title = $nickname_map[$sharer_id] . '你好，' . $member_name . '刚刚关注了你。';
         $detail_url = $this->get_sharer_detail_url($follow_id);
         $desc = '点击详情，查看我的粉丝！';
         $this->Weixin->send_new_member_tip($open_id, $detail_url, $title, $member_name, $desc);
@@ -1312,7 +1312,7 @@ class WeshareBuyComponent extends Component {
      * @return array
      * 获取用户分享信息
      */
-    public function get_user_weshares($uid){
+    public function get_user_weshares($uid) {
         $weshareM = ClassRegistry::init('Weshare');
         $weshares = $weshareM->find('all', array(
             'conditions' => array(
@@ -1330,7 +1330,7 @@ class WeshareBuyComponent extends Component {
      *
      * 获取本次分享已经购买的用户
      */
-    private function get_has_buy_user($share_id){
+    private function get_has_buy_user($share_id) {
         $orderM = ClassRegistry::init('Order');
         $orders = $orderM->find('all', array(
             'conditions' => array(
@@ -1346,12 +1346,44 @@ class WeshareBuyComponent extends Component {
     }
 
     /**
+     * @param $share_ids
+     * @return array
+     * 分享和已经购买用户的对应关系
+     */
+    public function get_has_buy_user_map($share_ids) {
+        $orderM = ClassRegistry::init('Order');
+        $orders = $orderM->find('all', array(
+            'conditions' => array(
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'status' => array(ORDER_STATUS_DONE, ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY),
+                'member_id' => $share_ids
+            ),
+            'fields' => $this->query_order_fields,
+            'limit' => 1000
+        ));
+        $share_user_map = array();
+        $all_user_ids = array();
+        foreach ($orders as $order_item) {
+            $share_id = $order_item['Order']['member_id'];
+            $user_id = $order_item['Order']['creator'];
+            if (!isset($share_user_map[$share_id])) {
+                $share_user_map[$share_id] = array();
+            }
+            if(!in_array($user_id, $share_user_map[$share_id])){
+                $share_user_map[$share_id][] = $user_id;
+            }
+            $all_user_ids[] = $user_id;
+        }
+        return array('all_user_ids' => $all_user_ids, 'share_user_map' => $share_user_map);
+    }
+
+    /**
      * @param $sharer_id
      * @return string
      * 获取个人中心url
      */
-    public function get_sharer_detail_url($sharer_id){
-        return WX_HOST.'/weshares/user_share_info/'.$sharer_id;
+    public function get_sharer_detail_url($sharer_id) {
+        return WX_HOST . '/weshares/user_share_info/' . $sharer_id;
     }
 
     /**
@@ -1359,17 +1391,17 @@ class WeshareBuyComponent extends Component {
      * @return string
      * 获取分享的地址
      */
-    public function get_weshares_detail_url($weshareId){
-        return  WX_HOST . '/weshares/view/' . $weshareId;
+    public function get_weshares_detail_url($weshareId) {
+        return WX_HOST . '/weshares/view/' . $weshareId;
     }
 
-    public function get_open_ids($uids){
+    public function get_open_ids($uids) {
         $oauthBindM = ClassRegistry::init('Oauthbind');
         $uid_openid_map = $oauthBindM->findWxServiceBindMapsByUids($uids);
         return $uid_openid_map;
     }
 
-    private function findCarts($orderId){
+    private function findCarts($orderId) {
         $this->Cart = ClassRegistry::init('Cart');
         $carts = $this->Cart->find('all', array(
             'conditions' => array(
@@ -1391,19 +1423,19 @@ class WeshareBuyComponent extends Component {
         return $order['Order'];
     }
 
-    public function get_users_nickname($uids){
+    public function get_users_nickname($uids) {
         $userM = ClassRegistry::init('User');
         return $userM->findNicknamesMap($uids);
     }
 
-    public function get_user_nickname($uid){
+    public function get_user_nickname($uid) {
         $userM = ClassRegistry::init('User');
         return $userM->findNicknamesOfUid($uid);
     }
 
-    public function get_weshare_info($share_id){
+    public function get_weshare_info($share_id) {
         $weshareM = ClassRegistry::init('Weshare');
-        $share_info = $weshareM->find('first',array(
+        $share_info = $weshareM->find('first', array(
             'conditions' => array(
                 'id' => $share_id
             )
@@ -1411,9 +1443,9 @@ class WeshareBuyComponent extends Component {
         return $share_info['Weshare'];
     }
 
-    public function get_all_share_info($share_ids){
+    public function get_all_share_info($share_ids) {
         $weshareM = ClassRegistry::init('Weshare');
-        $share_info = $weshareM->find('all',array(
+        $share_info = $weshareM->find('all', array(
             'conditions' => array(
                 'id' => $share_ids
             )
@@ -1421,9 +1453,9 @@ class WeshareBuyComponent extends Component {
         return $share_info;
     }
 
-    public function has_share_offer($uid){
+    public function has_share_offer($uid) {
         $shareOfferM = ClassRegistry::init('ShareOffer');
-        $shareOffer = $shareOfferM->find('first',array(
+        $shareOffer = $shareOfferM->find('first', array(
             'conditions' => array('sharer_id' => $uid),
             'order' => array('id desc')
         ));
@@ -1435,9 +1467,9 @@ class WeshareBuyComponent extends Component {
      * @return array
      * 分享者是否有红包
      */
-    public function sharer_has_offer($sharer_ids){
+    public function sharer_has_offer($sharer_ids) {
         $shareOfferM = ClassRegistry::init('ShareOffer');
-        $shareOffer = $shareOfferM->find('all',array(
+        $shareOffer = $shareOfferM->find('all', array(
             'conditions' => array('sharer_id' => $sharer_ids),
             'order' => array('id desc'),
             'fields' => array('id', 'sharer_id')

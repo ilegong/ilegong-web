@@ -128,6 +128,7 @@ $(document).ready(function () {
     var callbackFunc = function (data) {
       var list = data['opt_logs'] || [];
       var users = data['combine_data']['users'] || {};
+      var share_user_map = data['combine_data']['share_user_buy_map'] || {};
       var user_fans_extra = data['combine_data']['user_fans_extra'] || {};
       var nowTimeStamp = data['nowTimeStamp'];
       for (var i = 0; i < list.length; i++) {
@@ -139,6 +140,11 @@ $(document).ready(function () {
         }
         objJson['user_info'] = objJsonUserInfo;
         parseInfoJsonObj(objJson, nowTimeStamp);
+        var buy_user_ids = share_user_map[objJson['obj_id']];
+        if (buy_user_ids && buy_user_ids.length > 0) {
+          var $likeContent = pareseLikeInfos(buy_user_ids, users);
+          $('#info_' + objJson['id'], $logListDiv).append($likeContent);
+        }
         document.getElementById("info_" + objJson.id).style.borderBottom = "1px solid #dfdfdd";
       }
       if (last_timestamp == 0) {
@@ -174,6 +180,15 @@ $(document).ready(function () {
 
   function checkDataShow() {
     lazyLoadImg();
+  }
+
+  function pareseLikeInfos(userIds, users) {
+    var likeData = {
+      count: userIds.length,
+      userIds: userIds,
+      users: users
+    };
+    return TemplateEngine(optLogLikeTemplate, likeData);
   }
 
   function parseInfoJsonObj(objJson) {
@@ -244,6 +259,22 @@ $(document).ready(function () {
     '<img src="/static/opt/images/repicon.png"></a>' +
     '<div style="height:0px;clear:both"></div>' +
     '</div>';
+
+  var optLogLikeTemplate = '<div data-count="<%this.count%>" class="zancontent" style="margin-left:48px;min-height:30px;display:block;">' +
+    '<img class="zanicon" src="/static/opt/images/zanicon.png">' +
+    '<%if(this.count<=10){%>'+
+    '<%for(var i=0;i<this.count;i++){%>' +
+    '<img class="zheadimg" src="/static/opt/images/default.png" data-original="<%this.users[this.userIds[i]].image%>" title="<%this.users[this.userIds[i]].nickname%>">' +
+    '<%}%>' +
+    '<%}else{%>' +
+    '<%for(var i=0;i<10;i++){%>' +
+    '<img class="zheadimg" src="/static/opt/images/default.png" data-original="<%this.users[this.userIds[i]].image%>" title="<%this.users[this.userIds[i]].nickname%>">' +
+    '<%}%>' +
+    '<%}%>'+
+    '<%if(this.count>10){%>' +
+    '<font class="zaninfo"> ...共<%this.count%>人赞</font>' +
+    '<%}%>' +
+    '<div style="height:0px;clear:both"></div></div>';
 
   var TemplateEngine = function (html, options) {
     var re = /<%(.+?)%>/g,
