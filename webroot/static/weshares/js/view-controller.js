@@ -841,6 +841,12 @@
       if (status == 3) {
         return '待评价';
       }
+      if (status == 5) {
+        return '差价处理';
+      }
+      if (status == 6) {
+        return '补退尾款';
+      }
       return '已完成';
     }
 

@@ -197,7 +197,7 @@ class WesharesController extends AppController {
             if (empty($weshareData['id'])) {
                 Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
                 $thumbnail = null;
-                if(count($images)>0){
+                if (count($images) > 0) {
                     $thumbnail = $images[0];
                 }
                 $this->ShareUtil->save_create_share_opt_log($weshare['Weshare']['id'], $thumbnail, $weshareData['title'], $uid);
@@ -353,8 +353,14 @@ class WesharesController extends AppController {
             $order = $this->Order->save($orderData);
             $orderId = $order['Order']['id'];
             $totalPrice = 0;
+            $is_prepaid = 0;
             foreach ($weshareProducts as $p) {
                 $item = array();
+                //check product is tbd to set order prepaid
+                $tbd = $p['WeshareProduct']['tbd'];
+                if ($tbd == 1) {
+                    $is_prepaid = 1;
+                }
                 $pid = $p['WeshareProduct']['id'];
                 $num = $productIdNumMap[$pid];
                 $price = $p['WeshareProduct']['price'];
@@ -373,7 +379,7 @@ class WesharesController extends AppController {
             }
             $this->Cart->saveAll($cart);
             $totalPrice += $shipFee;
-            if ($this->Order->updateAll(array('total_all_price' => $totalPrice / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => $shipFee), array('id' => $orderId))) {
+            if ($this->Order->updateAll(array('total_all_price' => $totalPrice / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => $shipFee, 'is_prepaid' => $is_prepaid), array('id' => $orderId))) {
                 $coupon_id = $postDataArray['coupon_id'];
                 //check coupon
                 if (!empty($coupon_id)) {
@@ -806,7 +812,7 @@ class WesharesController extends AppController {
      * @param $shareId
      * export order to excel
      */
-    public function order_export($shareId){
+    public function order_export($shareId) {
         $this->layout = null;
         $statics_data = $this->get_weshare_buy_info($shareId, true, true);
         $refund_money = $this->WeshareBuy->get_refund_money_by_weshare($shareId);
