@@ -10,7 +10,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body class="" cz-shortcut-listen="true">
-<div class="outer-listings-container row-space-3" style="margin-bottom: 50px;">
+<div class="tabs tabs-style-bar">
+    <nav>
+        <ul>
+            <li><a href="/weshares/index.html" {{if $tag==0}}style="color:#FF5A5F;"{{/if}}><span>新品爆款</span></a></li>
+            <li><a href="/weshares/index/1.html" {{if $tag==1}}style="color:#FF5A5F;"{{/if}}><span>水果蔬菜</span></a></li>
+            <li><a href="/weshares/index/2.html" {{if $tag==2}}style="color:#FF5A5F;"{{/if}}><span>肉蛋粮油</span></a></li>
+            <li><a href="/weshares/index/3.html" {{if $tag==3}}style="color:#FF5A5F;"{{/if}}><span>零食其他</span></a></li>
+        </ul>
+    </nav>
+</div>
+<div class="outer-listings-container row-space-3" style="margin-bottom: 50px;margin-top: 45px;">
     <div class="listings-container">
         {{loop $products $product}}
         <div class="row">
@@ -98,6 +108,7 @@
     <a class="btm_item" href="/share_opt/index.html" style="width: 33%; position: relative;">
         <i style="background:#f00;border-radius:50%;width:15px;height:15px;top:-5px;right:30%;position:absolute; display: none;"
            id="mark-has-unread"></i>
+
         <p class="iconfont" style="height: 2px;"><i class="fa fa-users"></i></p>
         <b>朋友说</b>
     </a>
@@ -111,6 +122,25 @@
 <script>
     Pyshuo.share.utils.init();
     Pyshuo.share.utils.checkHasUnreadInfo();
+</script>
+<!--baidu statics-->
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?024856ad924d6a6714cb18c1090f25b2";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?705777ddf53d0d7a074a79a26c8f50cf";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
 </script>
 </body>
 </html>

@@ -4,7 +4,7 @@ uglifyjs ./webroot/static/weshares/js/angular.min.js  ./webroot/static/weshares/
 
 cat ./webroot/static/weshares/css/main.css ./webroot/static/weshares/css/site-common.css ./webroot/css/font-awesome-4.4.0/css/font-awesome.min.css | cleancss -o ./webroot/static/weshares/css/weshare.min.css
 
-cat ./webroot/static/weshares/css/common.css ./webroot/static/weshares/css/index-view.css ./webroot/static/weshares/css/site-common.css | cleancss -o ./webroot/static/weshares/css/index.min.css
+cat ./webroot/static/weshares/css/common.css ./webroot/static/weshares/css/index-view.css ./webroot/static/weshares/css/site-common.css ./webroot/static/weshares/css/tab.css  | cleancss -o ./webroot/static/weshares/css/index.min.css
 
 uglifyjs ./webroot/static/opt/js/lazyload.min.js ./webroot/static/opt/js/opt.js  -o ./webroot/static/opt/js/opt.min.js
 

@@ -25,14 +25,16 @@ class WesharesController extends AppController {
     }
 
     /**
+     * @param $tag
      * 首页
      */
-    public function index() {
+    public function index($tag=0) {
         $this->layout = null;
-        $products = $this->ShareUtil->get_share_index_product();
+        $products = $this->ShareUtil->get_share_index_product($tag);
         $uid = $this->currentUser['id'];
         $this->set('products', $products);
         $this->set('uid', $uid);
+        $this->set('tag', $tag);
     }
 
     /**
