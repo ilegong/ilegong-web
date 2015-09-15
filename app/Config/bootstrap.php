@@ -162,6 +162,8 @@ define('ORDER_STATUS_TOUSU', 12); //已投诉， 不要再用，投诉走其他�
 define('ORDER_STATUS_COMMENT', 16); //待评价
 define('ORDER_STATUS_RETURNING_MONEY', 14); //退款中
 
+define('ORDER_STATUS_PREPAID', 5);
+
 define('ORDER_STATUS_SPLIT',20);
 define('ORDER_STATUS_VIRTUAL', 21);
 
