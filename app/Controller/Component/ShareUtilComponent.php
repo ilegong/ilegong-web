@@ -738,16 +738,6 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 811917,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
                 ),
-                '327' => array(
-                    'share_id' => 327,
-                    'share_name' => '纯天然0添加雾岭山山楂条',
-                    'share_img' => '/img/share_index/shangzhatiao.jpg',
-                    'share_price' => '12.8',
-                    'share_user_name' => '朋友说小妹',
-                    'share_vote' => 123,
-                    'share_user_id' => 711503,
-                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/0609f46d89e_0813.jpg'
-                ),
                 '419' => array(
                     'share_id' => 419,
                     'share_name' => '山西古县新核桃',
