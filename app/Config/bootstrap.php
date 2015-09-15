@@ -163,6 +163,7 @@ define('ORDER_STATUS_COMMENT', 16); //待评价
 define('ORDER_STATUS_RETURNING_MONEY', 14); //退款中
 
 define('ORDER_STATUS_PREPAID', 5); //预付款
+define('ORDER_STATUS_PREPAID_TODO', 6);//预付款订单待处理
 
 define('ORDER_STATUS_SPLIT', 20);
 define('ORDER_STATUS_VIRTUAL', 21);

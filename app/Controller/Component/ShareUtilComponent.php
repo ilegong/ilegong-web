@@ -493,7 +493,7 @@ class ShareUtilComponent extends Component {
     public function saveOptLog($data) {
         $optLogM = ClassRegistry::init('OptLog');
         $optLogM->save($data);
-        Cache::write(LAST_OPT_LOG_DATA_CACHE_KEY,'');
+        Cache::write(LAST_OPT_LOG_DATA_CACHE_KEY, '');
     }
 
     /**
@@ -566,6 +566,19 @@ class ShareUtilComponent extends Component {
             $this->Weixin->send_refunding_order_notify($order_creator_id, $title, $weshareTitle, $showRefundMoney, $detail_url, $orderId, $remark);
         }
         return array('success' => true, 'order_id' => $orderId);
+    }
+
+    /**
+     * @param $order
+     * check order is repaid and update order status
+     */
+    public function check_order_is_prepaid_and_update_status($order) {
+        $order_is_prepaid = $order['Order']['is_prepaid'];
+        if ($order_is_prepaid == 1) {
+            $order_id = $order['Order']['id'];
+            $orderM = ClassRegistry::init('Order');
+            $orderM->updateAll(array('status' => ORDER_STATUS_PREPAID), array('id' => $order_id));
+        }
     }
 
     /**

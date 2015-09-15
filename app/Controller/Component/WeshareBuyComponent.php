@@ -1369,7 +1369,7 @@ class WeshareBuyComponent extends Component {
             if (!isset($share_user_map[$share_id])) {
                 $share_user_map[$share_id] = array();
             }
-            if(!in_array($user_id, $share_user_map[$share_id])){
+            if (!in_array($user_id, $share_user_map[$share_id])) {
                 $share_user_map[$share_id][] = $user_id;
             }
             $all_user_ids[] = $user_id;
@@ -1479,12 +1479,12 @@ class WeshareBuyComponent extends Component {
     }
 
     /**
-     * @param $orderId
+     * @param $order_id
      * @return array
      * 获取分享订单商品名称和数量
      */
-    public function get_cart_name_and_num($orderId) {
-        $carts = $this->findCarts($orderId);
+    public function get_cart_name_and_num($order_id) {
+        $carts = $this->findCarts($order_id);
         $num = 0;
         $cart_name = array();
         foreach ($carts as $cart_item) {
@@ -1493,4 +1493,5 @@ class WeshareBuyComponent extends Component {
         }
         return array('num' => $num, 'cart_name' => implode(',', $cart_name));
     }
+
 }

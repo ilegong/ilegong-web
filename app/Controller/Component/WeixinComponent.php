@@ -448,10 +448,16 @@ class WeixinComponent extends Component {
 
     /**
      * @param $order
+     * 订单支付成功后处理
      */
     public function notifyPaidDone($order) {
         if ($order['Order']['type'] == ORDER_TYPE_WESHARE_BUY) {
             $this->weshare_buy_order_paid($order);
+            //TODO check order is prepaid
+            $this->ShareUtil->check_order_is_prepaid_and_update_status($order);
+            //clean cache share
+            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $order['Order']['member_id'] . '_1', '');
+            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $order['Order']['member_id'] . '_0', '');
             return;
         }
         $this->on_order_status_change($order);
@@ -718,6 +724,10 @@ class WeixinComponent extends Component {
         return $this->send_weixin_message($post_data) && $this->send_share_offer_msg($open_id, $order_no);
     }
 
+    /**
+     * @param $orders
+     * 微分享支付成通知
+     */
     public function weshare_buy_order_paid($orders) {
         if (count($orders) == 1) {
             $orders = array($orders);
@@ -756,7 +766,13 @@ class WeixinComponent extends Component {
         }
     }
 
-
+    /**
+     * @param $openid
+     * @param $order
+     * @param $good
+     * @param $user
+     * 通知购买者和分享者
+     */
     public function send_weshare_buy_wx_msg($openid, $order, $good, $user) {
         if (empty($user) || substr($user['User']['username'], 0, 4) === "pys_") {
             return;
@@ -798,9 +814,6 @@ class WeixinComponent extends Component {
         $detail_url = $this->get_weshare_packet_url($weshare_info['Weshare']['id']);
         //save relation
         $this->ShareUtil->save_relation($creatorInfo['User']['id'], $order['Order']['creator']);
-        //SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_info['Weshare']['id'] . '_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_info['Weshare']['id'] . '_0', '');
         return $this->send_weixin_message($post_data) && $this->send_share_offer_msg($open_id, $order['Order']['id'], $title, $detail_url);
     }
 
