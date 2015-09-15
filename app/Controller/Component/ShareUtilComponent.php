@@ -569,6 +569,7 @@ class ShareUtilComponent extends Component {
     }
 
     /**
+     * @param $tag
      * @return array
      * index product
      */
@@ -908,8 +909,8 @@ class ShareUtilComponent extends Component {
                     'share_price' => '30',
                     'share_user_name' => '庄梓铭',
                     'share_vote' => 132,
-                    'share_user_id' => 813896,
-                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_s/060eced7063_0807.jpg'
+                    'share_user_id' => 823656,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_6f6b33c00c71819c1eb74f29f3f1503d.jpg'
                 ),
                 '62' => array(
                     'share_id' => 62,
@@ -918,8 +919,8 @@ class ShareUtilComponent extends Component {
                     'share_price' => '150',
                     'share_user_name' => '庄梓铭',
                     'share_vote' => 132,
-                    'share_user_id' => 813896,
-                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_s/060eced7063_0807.jpg'
+                    'share_user_id' => 823656,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_6f6b33c00c71819c1eb74f29f3f1503d.jpg'
                 ),
             )
         );
