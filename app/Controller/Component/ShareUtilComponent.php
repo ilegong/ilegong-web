@@ -709,7 +709,7 @@ class ShareUtilComponent extends Component {
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/4c91fb9380d_0901.jpg'
                 ),
                 '483' => array(
-                    'share_id' => 386,
+                    'share_id' => 483,
                     'share_name' => '山东烟台早熟红富士',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/82dc8c58397_0915.jpg',
                     'share_price' => '45',
