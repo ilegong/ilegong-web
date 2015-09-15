@@ -164,6 +164,7 @@ define('ORDER_STATUS_RETURNING_MONEY', 14); //退款中
 
 define('ORDER_STATUS_PREPAID', 5); //预付款
 define('ORDER_STATUS_PREPAID_TODO', 6);//预付款订单待处理
+define('ORDER_STATUS_REFUND', 7);//预付款比较大于实际金额 需要退款 生成退款订单 只作为标记 不进行实际操作
 
 define('ORDER_STATUS_SPLIT', 20);
 define('ORDER_STATUS_VIRTUAL', 21);
@@ -190,6 +191,7 @@ const OPT_LOG_OLDEST_TIME_CACHE_KEY = 'opt_log_oldest_time_cache_key';
 const OPT_LOG_LAST_TIME_CACHE_KEY = 'opt_log_last_time_cache_key';
 const LAST_OPT_LOG_DATA_CACHE_KEY = 'last_opt_log_data_cache_key';
 const OPT_LOG_COMBINE_DATA_CACHE_KEY = 'opt_log_combine_data_cache_key';
+const SHARER_MOBILE_PHONE_CACHE_KEY = 'sharer_mobile_phone_cache_key';
 
 //Product 表里设置是这个产品，不论多少都是同一邮费
 const TYPE_ORDER_PRICE = 1; //订单总价满多少包邮

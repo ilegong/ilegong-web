@@ -1171,4 +1171,30 @@ class WeixinComponent extends Component {
         return false;
     }
 
+    /**
+     * @param $user_openid
+     * @param $title
+     * @param $detail_url
+     * @param $price
+     * @param $mobile
+     * @param $remark
+     * @return send result
+     * 尾款提醒通知
+     */
+    public function send_remedial_order_msg($user_openid, $title, $detail_url, $price, $mobile, $remark) {
+        $post_data = array(
+            "touser" => $user_openid,
+            "template_id" => 'CY69fWO3zw8S6dWiPQFs3W9LgVHRMDFXMl_8CeLLWmI',
+            "url" => $detail_url,
+            "topcolor" => "#FF0000",
+            "data" => array(
+                "first" => array("value" => $title),
+                "keyword1" => array("value" => $price . '元'),
+                "keyword2" => array("value" => $mobile),
+                "remark" => array("value" => $remark, "color" => "#FF8800")
+            )
+        );
+        return $this->send_weixin_message($post_data);
+    }
+
 }

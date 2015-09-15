@@ -1462,6 +1462,23 @@ class WeshareBuyComponent extends Component {
         return !empty($shareOffer);
     }
 
+    public function get_sharer_mobile($uid){
+        $key = SHARER_MOBILE_PHONE_CACHE_KEY . '_' . $uid;
+        $mobile = Cache::read($key);
+        if(empty($mobile)){
+            $userM = ClassRegistry::init('User');
+            $userInfo = $userM->find('first', array(
+                'conditions' => array(
+                    'id' => $uid
+                ),
+                'fields' => array('id', 'mobilephone')
+            ));
+            $mobile = $userInfo['User']['mobilephone'];
+            Cache::write($key, $mobile);
+        }
+        return $mobile;
+    }
+
     /**
      * @param $sharer_ids
      * @return array
