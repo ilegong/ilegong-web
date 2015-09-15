@@ -162,9 +162,9 @@ define('ORDER_STATUS_TOUSU', 12); //已投诉， 不要再用，投诉走其他�
 define('ORDER_STATUS_COMMENT', 16); //待评价
 define('ORDER_STATUS_RETURNING_MONEY', 14); //退款中
 
-define('ORDER_STATUS_PREPAID', 5);
+define('ORDER_STATUS_PREPAID', 5); //预付款
 
-define('ORDER_STATUS_SPLIT',20);
+define('ORDER_STATUS_SPLIT', 20);
 define('ORDER_STATUS_VIRTUAL', 21);
 
 define('ON_SHELVE', PUBLISH_YES); //已上架
@@ -281,18 +281,15 @@ $source_appid_map = array();
 $order_after_paid_status = array(ORDER_STATUS_PAID, ORDER_STATUS_DONE, ORDER_STATUS_RECEIVED, ORDER_STATUS_SHIPPED);
 
 
-function get_agency_uid()
-{
+function get_agency_uid() {
     return array(411402, 633345, 146, 6799, 805934, 660240, 810892);
 }
 
-function oauth_wx_source()
-{
+function oauth_wx_source() {
     return 'wx-' . WX_APPID_SOURCE;
 }
 
-function oauth_wx_goto($refer_key, $host3g)
-{
+function oauth_wx_goto($refer_key, $host3g) {
     switch ($refer_key) {
         case "CLICK_URL_TECHAN":
 //            return "http://$host3g/categories/mobileIndex.html?tagId=23&_sl=wx.menu.h_redirect";
@@ -326,8 +323,7 @@ function oauth_wx_goto($refer_key, $host3g)
  * @param bool $not_require_info
  * @return string url to Weixin oauth
  */
-function redirect_to_wx_oauth($ref, $scope = WX_OAUTH_BASE, $not_require_info = false)
-{
+function redirect_to_wx_oauth($ref, $scope = WX_OAUTH_BASE, $not_require_info = false) {
     $return_uri = 'http://' . WX_HOST . '/users/wx_auth?';
     if (!empty($ref)) {
         $return_uri .= '&referer=' . urlencode($ref);
@@ -341,8 +337,7 @@ function redirect_to_wx_oauth($ref, $scope = WX_OAUTH_BASE, $not_require_info = 
 }
 
 
-function same_day($time1, $time2)
-{
+function same_day($time1, $time2) {
     $dt = new DateTime;
     $dt->setTimestamp($time1);
     $day1 = $dt->format(FORMAT_DATE);
@@ -351,8 +346,7 @@ function same_day($time1, $time2)
     return ($day1 == $day2);
 }
 
-function before_than($timeStr1, $timeStr2 = null)
-{
+function before_than($timeStr1, $timeStr2 = null) {
     if (!$timeStr1) {
         return false;
     }
@@ -374,8 +368,7 @@ function before_than($timeStr1, $timeStr2 = null)
     return ($ts1 < $ts2);
 }
 
-function filter_invalid_name($name, $def = '神秘人')
-{
+function filter_invalid_name($name, $def = '神秘人') {
     if (!$name || $name == 'null') {
         $name = $def;
     } else if (strpos($name, '微信用户') === 0) {
@@ -384,8 +377,7 @@ function filter_invalid_name($name, $def = '神秘人')
     return $name;
 }
 
-function calculate_try_price($priceInCent, $uid = 0, $shichituan = null)
-{
+function calculate_try_price($priceInCent, $uid = 0, $shichituan = null) {
     if ($shichituan == null && $uid) {
         $sctM = ClassRegistry::init('Shichituan');
         $shichituan = $sctM->find_in_period($uid, get_shichituan_period());
@@ -394,8 +386,7 @@ function calculate_try_price($priceInCent, $uid = 0, $shichituan = null)
     return ($isShichituan ? 99 : $priceInCent) / 100;
 }
 
-function special_cake_users($uid)
-{
+function special_cake_users($uid) {
     return /*$uid == 699919
     ||*/
         $uid == 708029 /*|| $uid == 632*/
@@ -403,8 +394,7 @@ function special_cake_users($uid)
 }
 
 
-function promo_code_new_user($pids)
-{
+function promo_code_new_user($pids) {
     return ((is_array($pids) && count($pids) == 1 && $pids[0] == PRODUCT_ID_CAKE) || ($pids == PRODUCT_ID_CAKE));
 }
 
@@ -417,8 +407,7 @@ function promo_code_new_user($pids)
  * @param null $pp special price by ShipPromotion
  * @return array array of price && specialId
  */
-function calculate_price($pid, $price, $currUid, $num, $cart_id = 0, $pp = null, $tuan_param = array())
-{
+function calculate_price($pid, $price, $currUid, $num, $cart_id = 0, $pp = null, $tuan_param = array()) {
 
     if (accept_user_price_pid($pid) && accept_user_price_pid_num($pid, $num) && !empty($cart_id)) {
         $userPrice = ClassRegistry::init('UserPrice');
@@ -505,8 +494,7 @@ function calculate_price($pid, $price, $currUid, $num, $cart_id = 0, $pp = null,
 }
 
 
-class ProductCartItem extends Object
-{
+class ProductCartItem extends Object {
     public $cartId;
     public $pid;
     public $num;
@@ -514,8 +502,7 @@ class ProductCartItem extends Object
     public $name;
     public $img;
 
-    public function __construct($cartItem, $itemPrice, $num, $used_coupons, $pid, $published = true)
-    {
+    public function __construct($cartItem, $itemPrice, $num, $used_coupons, $pid, $published = true) {
         $this->cartId = $cartItem['id'];
         $this->pid = $cartItem['product_id'];
         $this->price = $itemPrice;
@@ -529,16 +516,14 @@ class ProductCartItem extends Object
         $this->send_date = $cartItem['send_date'];
     }
 
-    public function total_price()
-    {
+    public function total_price() {
         return $this->num * $this->price;
     }
 
     /**
      * @param ProductCartItem $other
      */
-    public function merge($other)
-    {
+    public function merge($other) {
         if ($this->cartId != $other->cartId) {
             $msg = "not equals product id to merge a ProductCartItem:";
             $this->log($msg . ", src=" . json_encode($this) . ", other=" . json_encode($other));
@@ -549,8 +534,7 @@ class ProductCartItem extends Object
     }
 }
 
-class BrandCartItem
-{
+class BrandCartItem {
     public $id;
 
     /**
@@ -559,13 +543,11 @@ class BrandCartItem
     public $items = array();
     public $used_coupons;
 
-    public function __construct($brandId)
-    {
+    public function __construct($brandId) {
         $this->id = $brandId;
     }
 
-    public function add_product_item($item)
-    {
+    public function add_product_item($item) {
         $proItem = $this->items[$item->cartId];
         if (empty($proItem)) {
             $this->items[$item->cartId] = $item;
@@ -574,8 +556,7 @@ class BrandCartItem
         }
     }
 
-    public function total_price()
-    {
+    public function total_price() {
         $total = 0;
         foreach ($this->items as $item) {
             $total += $item->total_price();
@@ -583,8 +564,7 @@ class BrandCartItem
         return $total;
     }
 
-    public function total_num()
-    {
+    public function total_num() {
         $total = 0;
         foreach ($this->items as $item) {
             $total += $item->num;
@@ -592,21 +572,18 @@ class BrandCartItem
         return $total;
     }
 
-    public function coupon_applied($couponItemId)
-    {
+    public function coupon_applied($couponItemId) {
         return !empty($this->used_coupons) && array_search($couponItemId, $this->used_coupons) !== false;
     }
 
-    public function apply_coupon($couponItemId, $reduce_price, $applying)
-    {
+    public function apply_coupon($couponItemId, $reduce_price, $applying) {
         foreach ($this->items as $brandItem) {
             //TODO:
         }
     }
 }
 
-class OrderCartItem
-{
+class OrderCartItem {
     public $order_id;
     public $user_id;
     public $is_try = false;
@@ -616,8 +593,7 @@ class OrderCartItem
      */
     public $brandItems = array();
 
-    public function add_product_item($brand_id, $cartItem, $itemPrice, $num, $used_coupons, $published = true)
-    {
+    public function add_product_item($brand_id, $cartItem, $itemPrice, $num, $used_coupons, $published = true) {
         $brandItem = $this->brandItems[$brand_id];
         if (empty($brandItem)) {
             $brandItem = new BrandCartItem($brand_id);
@@ -626,8 +602,7 @@ class OrderCartItem
         $brandItem->add_product_item(new ProductCartItem($cartItem, $itemPrice, $num, $used_coupons, $published));
     }
 
-    public function find_product_item($cartId)
-    {
+    public function find_product_item($cartId) {
         foreach ($this->brandItems as $bid => $brandItem) {
             foreach ($brandItem->items as $productItem) {
                 if ($productItem->cartId == $cartId) {
@@ -638,8 +613,7 @@ class OrderCartItem
         return null;
     }
 
-    public function count_total_num($pid)
-    {
+    public function count_total_num($pid) {
         $num = 0;
         foreach ($this->brandItems as $bid => $brandItem) {
             foreach ($brandItem->items as $productItem) {
@@ -651,8 +625,7 @@ class OrderCartItem
         return $num;
     }
 
-    public function list_cart_id()
-    {
+    public function list_cart_id() {
         $cart_ids = array();
         foreach ($this->brandItems as $bid => $brandItem) {
             foreach ($brandItem->items as $productItem) {
@@ -663,8 +636,7 @@ class OrderCartItem
     }
 
 
-    public function total_price()
-    {
+    public function total_price() {
         $total = 0.0;
         foreach ($this->brandItems as $brandItem) {
             $total += $brandItem->total_price();
@@ -672,8 +644,7 @@ class OrderCartItem
         return $total;
     }
 
-    public function apply_coupon($brandId, $coupon)
-    {
+    public function apply_coupon($brandId, $coupon) {
 
         if (empty($coupon)) {
             return false;
@@ -697,8 +668,7 @@ class OrderCartItem
     }
 }
 
-function product_name_with_spec($prodName, $specId, $specs)
-{
+function product_name_with_spec($prodName, $specId, $specs) {
     if (!$specId || empty($specs)) {
         return $prodName;
     }
@@ -716,8 +686,7 @@ function product_name_with_spec($prodName, $specId, $specs)
  * @param $specs
  * @return bool|mixed
  */
-function product_spec_map($specs)
-{
+function product_spec_map($specs) {
     try {
         $specsMap = !empty($specs) ? json_decode($specs, true) : false;
         //if (!$specsMap) {
@@ -739,8 +708,7 @@ function product_spec_map($specs)
  * @param $session_id
  * @return array cartItemsByPid
  */
-function mergeCartWithDb($uid, $cookieItems, &$cartsDict, $poductModel, $cartModel, $session_id = null)
-{
+function mergeCartWithDb($uid, $cookieItems, &$cartsDict, $poductModel, $cartModel, $session_id = null) {
     $product_ids = array();
     $nums = array();
     foreach ($cookieItems as $item) {
@@ -803,8 +771,7 @@ function mergeCartWithDb($uid, $cookieItems, &$cartsDict, $poductModel, $cartMod
  * @param $newSpecId
  * @return string
  */
-function cart_dict_key($pid, $newSpecId)
-{
+function cart_dict_key($pid, $newSpecId) {
     return $pid . '-' . $newSpecId;
 }
 
@@ -812,8 +779,7 @@ function cart_dict_key($pid, $newSpecId)
  * @param $dbCartItems
  * @return array
  */
-function dict_db_carts($dbCartItems)
-{
+function dict_db_carts($dbCartItems) {
     $cartsDicts = array();
     if (!empty($dbCartItems)) {
         foreach ($dbCartItems as $ci) {
@@ -823,8 +789,7 @@ function dict_db_carts($dbCartItems)
     }
 }
 
-function find_latest_clicked_from($buyerId, $pid)
-{
+function find_latest_clicked_from($buyerId, $pid) {
     //CANNOT same with $newUserId
     if ($pid == PRODUCT_ID_RICE_10) {
         $trackLogModel = ClassRegistry::init('TrackLog');
@@ -840,11 +805,9 @@ function find_latest_clicked_from($buyerId, $pid)
 }
 
 
-class ProductCategory
-{
+class ProductCategory {
 
-    public static function product_category_list()
-    {
+    public static function product_category_list() {
         $productCategoryListJson = Cache::read('_productcategorylist');
         if (empty($productCategoryListJson)) {
             $productCategoryModel = ClassRegistry::init('ProductTag');
@@ -888,12 +851,10 @@ class ProductCategory
 
 }
 
-class ProductSpeciality
-{
+class ProductSpeciality {
 
     //获取产品属性指标
-    public static function get_product_attrs()
-    {
+    public static function get_product_attrs() {
         $allAttrs = Cache::read('all_product_attributes');
         if (!empty($allAttrs)) {
             $allAttrs = json_decode($allAttrs, true);
@@ -915,10 +876,8 @@ class ProductSpeciality
 
 }
 
-class TuanShip
-{
-    public static function get_all_tuan_ships()
-    {
+class TuanShip {
+    public static function get_all_tuan_ships() {
         $shipTypesJson = Cache::read('_tuanshiptypes');
         if (empty($shipTypesJson)) {
             $tuanShipTypeModel = ClassRegistry::init('TuanShipType');
@@ -934,21 +893,18 @@ class TuanShip
         return json_decode($shipTypesJson, true);
     }
 
-    public static function get_ship_name($id)
-    {
+    public static function get_ship_name($id) {
         $ships = TuanShip::get_all_tuan_ships();
         return $ships[$id]['name'];
     }
 
-    public static function  get_ship_code($id)
-    {
+    public static function  get_ship_code($id) {
         $ships = TuanShip::get_all_tuan_ships();
         return $ships[$id]['code'];
     }
 }
 
-class ShipAddress
-{
+class ShipAddress {
 //    public static $ship_type = array(
 //        101 => '申通',
 //        102 => '圆通',
@@ -968,8 +924,7 @@ class ShipAddress
     /**
      * @return array keyed with ship type id, value is array of fields for the ship type
      */
-    public static function ship_type_list()
-    {
+    public static function ship_type_list() {
         $ship_types = ShipAddress::ship_types();
         if (is_array($ship_types)) {
             return Hash::combine($ship_types, '{n}.id', '{n}.name');
@@ -978,8 +933,7 @@ class ShipAddress
         }
     }
 
-    public function get_all_ship_info()
-    {
+    public function get_all_ship_info() {
         $ship_types = ShipAddress::ship_types();
         $ship_type_list = Hash::combine($ship_types, '{n}.company', '{n}.name', '{n}.id');
         return $ship_type_list;
@@ -989,8 +943,7 @@ class ShipAddress
      * @param $orderInfo 快递公司
      * @return mixed
      */
-    public static function get_ship_detail($orderInfo)
-    {
+    public static function get_ship_detail($orderInfo) {
         $ship_types = ShipAddress::ship_types();
         $ship_type_list = Hash::combine($ship_types, '{n}.company', '{n}.name', '{n}.id');
         $ship_type = $ship_type_list[$orderInfo['Order']['ship_type']];
@@ -1030,8 +983,7 @@ class ShipAddress
     /**
      * @return array keyed with ship type id, value is array of fields for the ship type
      */
-    public static function ship_types()
-    {
+    public static function ship_types() {
         $shipTypesJson = Cache::read('_shiptypes');
         if (empty($shipTypesJson)) {
             $shipTypeModel = ClassRegistry::init('ShipType');
@@ -1049,8 +1001,7 @@ class ShipAddress
 }
 
 
-function game_uri($gameType, $defUri = '/')
-{
+function game_uri($gameType, $defUri = '/') {
 
     if (TRACK_TYPE_PRODUCT_RICE == $gameType) {
         return product_link(PRODUCT_ID_RICE_10, $defUri);
@@ -1066,7 +1017,7 @@ function game_uri($gameType, $defUri = '/')
  * @param string $descs
  * @return bool
  */
-function add_coupon_for_618($uid, $weixinC, $coupon, $descs = "满50元减20， 满30元减10元"){
+function add_coupon_for_618($uid, $weixinC, $coupon, $descs = "满50元减20， 满30元减10元") {
     $ci = ClassRegistry::init('CouponItem');
     //TODO limit get coupon times
     $ci->addCoupon($uid, $coupon, $uid, '618');
@@ -1074,8 +1025,7 @@ function add_coupon_for_618($uid, $weixinC, $coupon, $descs = "满50元减20， 
     return true;
 }
 
-function add_coupon_for_new($uid, $weixinC, $coupons = array(18483, 18482), $descs = "满100元减20， 满50元减10元")
-{
+function add_coupon_for_new($uid, $weixinC, $coupons = array(18483, 18482), $descs = "满100元减20， 满50元减10元") {
     $ci = ClassRegistry::init('CouponItem');
     $new_user_coupons = $coupons;
     $found = $ci->find_coupon_item_by_type_no_join($uid, $new_user_coupons);
@@ -1094,8 +1044,7 @@ function add_coupon_for_new($uid, $weixinC, $coupons = array(18483, 18482), $des
  * @param $defUri
  * @return string
  */
-function product_link($pid, $defUri)
-{
+function product_link($pid, $defUri) {
     $linkInCache = Cache::read('link_pro_' . $pid);
     if (!empty($linkInCache)) {
         return $linkInCache;
@@ -1110,8 +1059,7 @@ function product_link($pid, $defUri)
  * @param $defUri
  * @return string
  */
-function product_link2($p, $defUri = '/')
-{
+function product_link2($p, $defUri = '/') {
     if (!empty($p)) {
         $pp = empty($p['Product']) ? $p : $p['Product'];
         $link = "/products/" . date('Ymd', strtotime($pp['created'])) . "/" . $pp['slug'] . ".html";
@@ -1122,8 +1070,7 @@ function product_link2($p, $defUri = '/')
     }
 }
 
-function product_tuan_list_link($p, $defUri = '/')
-{
+function product_tuan_list_link($p, $defUri = '/') {
     if (!empty($p)) {
         $pp = empty($p['Product']) ? $p : $p['Product'];
         $link = "/tuans/lists/" . $pp['id'] . "/" . ".html";
@@ -1134,8 +1081,7 @@ function product_tuan_list_link($p, $defUri = '/')
     }
 }
 
-function url_append($url, $name, $value)
-{
+function url_append($url, $name, $value) {
     if (strpos($url, '?') !== false) {
         return $url . '&' . urlencode($name) . '=' . urlencode($value);
     } else {
@@ -1143,28 +1089,23 @@ function url_append($url, $name, $value)
     }
 }
 
-function url_colored($url, $value)
-{
+function url_colored($url, $value) {
     return url_append($url, '_sl', $value);
 }
 
-function wxDefaultName($name)
-{
+function wxDefaultName($name) {
     return notWeixinAuthUserInfo(0, $name);
 }
 
-function notWeixinAuthUserInfo($uid, $userName)
-{
+function notWeixinAuthUserInfo($uid, $userName) {
     return strpos($userName, '微信用户') === 0;
 }
 
-function filter_weixin_username($name)
-{
+function filter_weixin_username($name) {
     return notWeixinAuthUserInfo(0, $name) ? mb_substr($name, 4) : $name;
 }
 
-function date_days($timeStr, $addDays = 0)
-{
+function date_days($timeStr, $addDays = 0) {
     $end = DateTime::createFromFormat(FORMAT_DATETIME, $timeStr);
     if ($addDays) {
         $end->add(new DateInterval('P' . $addDays . 'D'));
@@ -1172,8 +1113,7 @@ function date_days($timeStr, $addDays = 0)
     return $end;
 }
 
-function is_past($timeStr, $addDays = 0)
-{
+function is_past($timeStr, $addDays = 0) {
     $end = DateTime::createFromFormat(FORMAT_DATETIME, $timeStr);
     if ($addDays) {
         $end->add(new DateInterval('P' . $addDays . 'D'));
@@ -1181,8 +1121,7 @@ function is_past($timeStr, $addDays = 0)
     return ($end->getTimestamp() < mktime());
 }
 
-function coupon_expired($coupon)
-{
+function coupon_expired($coupon) {
     if (empty($coupon)) {
         return true;
     }
@@ -1199,13 +1138,11 @@ function coupon_expired($coupon)
     return false;
 }
 
-function special_link($slug)
-{
+function special_link($slug) {
     return '/categories/special_list/' . $slug . '.html';
 }
 
-function brand_link($brand_id, $params = array())
-{
+function brand_link($brand_id, $params = array()) {
     $brandM = ClassRegistry::init('Brand');
     $brand = $brandM->findById($brand_id);
     $url = (!empty($brand)) ? "/brands/" . date('Ymd', strtotime($brand['Brand']['created'])) . "/" . $brand['Brand']['slug'] . ".html" : '/';
@@ -1220,8 +1157,7 @@ function brand_link($brand_id, $params = array())
     return $url;
 }
 
-function category_link($category_id)
-{
+function category_link($category_id) {
     $productTagM = ClassRegistry::init('ProductTag');
     $tag = $productTagM->find('first', array(
         'conditions' => array($category_id),
@@ -1231,18 +1167,15 @@ function category_link($category_id)
     return $url;
 }
 
-function small_thumb_link($imgUrl)
-{
+function small_thumb_link($imgUrl) {
     return thumb_link($imgUrl, 'thumb_s');
 }
 
-function medium_thumb_link($imgUrl)
-{
+function medium_thumb_link($imgUrl) {
     return thumb_link($imgUrl, 'thumb_m');
 }
 
-function thumb_link($imgUrl, $type = 'thumb_s')
-{
+function thumb_link($imgUrl, $type = 'thumb_s') {
     if ($imgUrl && strpos($imgUrl, "/$type/") === false) {
         $r = preg_replace('/(.*files\/20\d+\/)(thumb_[ms]\/)?(\s*)/i', '${1}' . $type . '/${3}', $imgUrl);
         return ($r != null) ? $r : $imgUrl;
@@ -1255,8 +1188,7 @@ function thumb_link($imgUrl, $type = 'thumb_s')
  * @param $session SessionComponent
  * @param $error
  */
-function setFlashError($session, $error)
-{
+function setFlashError($session, $error) {
     $session->setFlash($error, 'default', array('class' => 'alert alert-danger'));
 }
 
@@ -1271,8 +1203,7 @@ function setFlashError($session, $error)
  *  $limit_cur_user, -1 means no limit; 0 means no more; >1 means limit for curr user
  *  $total_left (-1 means no limit, 0 means sold out, more means left)
  */
-function afford_product_try($tryId, $currUid, $prodTry = null)
-{
+function afford_product_try($tryId, $currUid, $prodTry = null) {
     if (!$prodTry) {
         $tryM = ClassRegistry::init('ProductTry');
         $prodTry = $tryM->findById($tryId);
@@ -1292,8 +1223,7 @@ function afford_product_try($tryId, $currUid, $prodTry = null)
  * @param $currUid
  * @return mixed
  */
-function bought_try_by_user($tryId, $currUid)
-{
+function bought_try_by_user($tryId, $currUid) {
     $shichiM = ClassRegistry::init('OrderShichi');
     return $shichiM->bought_by_curr_user($tryId, $currUid);
 }
@@ -1312,8 +1242,7 @@ function bought_try_by_user($tryId, $currUid)
  *  $limit_cur_user, -1 means no limit; 0 means no more; >1 means limit for curr user
  *  $total_left (-1 means no limit, 0 means sold out, more means left)
  */
-function calculate_afford($pid, $currUid, $total_limit, $limit_per_user, $range = array())
-{
+function calculate_afford($pid, $currUid, $total_limit, $limit_per_user, $range = array()) {
     $afford_for_curr_user = true;
     $total_left = -1;
     $left_curr_user = -1;
@@ -1373,8 +1302,7 @@ function calculate_afford($pid, $currUid, $total_limit, $limit_per_user, $range 
     return array($afford_for_curr_user, $left_curr_user, $total_left);
 }
 
-function clean_total_sold($pid)
-{
+function clean_total_sold($pid) {
     $cache_sold_key = total_sold_cache_key($pid);
     Cache::delete($cache_sold_key);
 }
@@ -1383,8 +1311,7 @@ function clean_total_sold($pid)
  * @param $pid
  * @return string
  */
-function total_sold_cache_key($pid)
-{
+function total_sold_cache_key($pid) {
     $cache_sold_key = 'total_sold_pid_' . $pid;
     return $cache_sold_key;
 }
@@ -1396,8 +1323,7 @@ function total_sold_cache_key($pid)
  * @param $cartModel Object , default is null
  * @return array
  */
-function total_sold($pid, $range, $cartModel = null)
-{
+function total_sold($pid, $range, $cartModel = null) {
 
     $start = str2date($range['start']);
     $end = str2date($range['end']);
@@ -1456,8 +1382,7 @@ CakePlugin::load(array(
 ));
 
 
-function message_send($msg = null, $mobilephone = null)
-{
+function message_send($msg = null, $mobilephone = null) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, "http://sms-api.luosimao.com/v1/send.json");
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
@@ -1473,8 +1398,7 @@ function message_send($msg = null, $mobilephone = null)
     return $res;
 }
 
-function consignment_send_date($p_id)
-{
+function consignment_send_date($p_id) {
     $consignmentDateM = ClassRegistry::init('ConsignmentDate');
     $send_dates = $consignmentDateM->find('all', array(
         'conditions' => array('published' => PUBLISH_YES, 'product_id' => $p_id),
@@ -1493,8 +1417,7 @@ function consignment_send_date($p_id)
     return $rtn;
 }
 
-function remove_emoji($text)
-{
+function remove_emoji($text) {
     if (empty($text)) {
         return "";
     }
@@ -1506,8 +1429,7 @@ function remove_emoji($text)
  * @param $text
  * @return mixed|string
  */
-function convertWxName($text)
-{
+function convertWxName($text) {
     $nickname = remove_emoji($text);
     return ($nickname == '' ? '用户_' . mt_rand(10, 1000) : $nickname);
 }
@@ -1517,8 +1439,7 @@ function convertWxName($text)
  * @param $userModel
  * @return int if created failed return 0
  */
-function createNewUserByWeixin($userInfo, $userModel)
-{
+function createNewUserByWeixin($userInfo, $userModel) {
     $download_url = download_photo_from_wx($userInfo['headimgurl']);
     if (empty($download_url)) {
         $download_url = $userInfo['headimgurl'];
@@ -1546,8 +1467,7 @@ function createNewUserByWeixin($userInfo, $userModel)
  * @param $range
  * @return bool
  */
-function in_range($range)
-{
+function in_range($range) {
     return (empty($range['start']) || before_than($range['start']))
     && (empty($range['end']) || !before_than($range['end']));
 }
@@ -1556,8 +1476,7 @@ function in_range($range)
  * @param $special
  * @return array
  */
-function range_by_special($special)
-{
+function range_by_special($special) {
     if ($special['special']['show_day'] != '0000-00-00') {
         $day_start = $special['special']['show_day'] . ' 00:00:00';
         $day_end = $special['special']['show_day'] . ' 23:59:59';
@@ -1569,23 +1488,19 @@ function range_by_special($special)
     }
 }
 
-function accept_user_price_pid_num($pid, $num)
-{
+function accept_user_price_pid_num($pid, $num) {
     return false; // $pid == PRODUCT_ID_JD_HS_NZT && $num == 1;
 }
 
-function accept_user_price_pid($product_id)
-{
+function accept_user_price_pid($product_id) {
     return false; //$product_id == PRODUCT_ID_JD_HS_NZT;
 }
 
-function accept_user_price($product_id, $user_price)
-{
+function accept_user_price($product_id, $user_price) {
     return false; //($product_id == PRODUCT_ID_JD_HS_NZT) && !empty($user_price) && $user_price >= 1;
 }
 
-function cal_score_money($score, $total_price)
-{
+function cal_score_money($score, $total_price) {
     $score_money = $score / 100;
     if ($score_money > $total_price / 2) {
         return $total_price / 2;
@@ -1598,8 +1513,7 @@ function cal_score_money($score, $total_price)
  * @param $uid
  * @return int|mixed
  */
-function user_subscribed_pys($uid)
-{
+function user_subscribed_pys($uid) {
     $key = key_cache_sub($uid);
     $subscribe_status = Cache::read($key);
     if (empty($subscribe_status) || $subscribe_status == WX_STATUS_UNKNOWN) {
@@ -1620,8 +1534,7 @@ function user_subscribed_pys($uid)
     return $subscribe_status;
 }
 
-function send_weixin_message($post_data, $logObj = null)
-{
+function send_weixin_message($post_data, $logObj = null) {
     $tries = 2;
     $wxOauthM = ClassRegistry::init('WxOauth');
 
@@ -1663,8 +1576,7 @@ function send_weixin_message($post_data, $logObj = null)
     return false;
 }
 
-function gethtml($from_url, $url)
-{
+function gethtml($from_url, $url) {
     $ch = curl_init();
     //设置 来路，这个很重要 ，表示这个访问 是从 $form_url 这个链接点过去的。
     curl_setopt($ch, CURLOPT_REFERER, $from_url);
@@ -1681,8 +1593,7 @@ function gethtml($from_url, $url)
     return $res;
 }
 
-function get_user_info_from_wx($open_id)
-{
+function get_user_info_from_wx($open_id) {
     $wxOauthM = ClassRegistry::init('WxOauth');
     $access_token = $wxOauthM->get_base_access_token();
     $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token=' . $access_token . '&openid=' . $open_id;
@@ -1690,8 +1601,7 @@ function get_user_info_from_wx($open_id)
     return json_decode($content, $content);
 }
 
-function download_photo_from_wx($url)
-{
+function download_photo_from_wx($url) {
     App::uses('CurlDownloader', 'Lib');
     $dl = new CurlDownloader($url);
     $dl->isDownloadHeadImg(true);
@@ -1724,8 +1634,7 @@ function download_photo_from_wx($url)
  * @param $pidSidMap
  * @return array
  */
-function get_spec_by_pid_and_sid($pidSidMap)
-{
+function get_spec_by_pid_and_sid($pidSidMap) {
     $productSpecGroup = ClassRegistry::init('ProductSpecGroup');
     //有特惠价格或者商品没有specId 使用默认价格
     $result = array();
@@ -1751,9 +1660,9 @@ function get_spec_by_pid_and_sid($pidSidMap)
     return $result;
 }
 
-function get_spec_name_by_pid_and_sid($pid,$sid){
-    $spec_name = Cache::read('product-'.$pid.'-'.$sid.'-spec');
-    if(!empty($spec_name)){
+function get_spec_name_by_pid_and_sid($pid, $sid) {
+    $spec_name = Cache::read('product-' . $pid . '-' . $sid . '-spec');
+    if (!empty($spec_name)) {
         return $spec_name;
     }
     $result = get_spec_by_pid_and_sid(array(
@@ -1761,24 +1670,23 @@ function get_spec_name_by_pid_and_sid($pid,$sid){
     ));
     $spec_detail_arr = $result[cart_dict_key($pid, $sid)];
     $spec_name = empty($spec_detail_arr[1]) ? '' : $spec_detail_arr[1];
-    Cache::write('product-'.$pid.'-'.$sid.'-spec',$spec_name);
+    Cache::write('product-' . $pid . '-' . $sid . '-spec', $spec_name);
     return $spec_name;
 }
 
-function get_spec_name_try($tryId){
-    $spec_name = Cache::read('try-'.$tryId.'-spec');
-    if(!empty($spec_name)){
+function get_spec_name_try($tryId) {
+    $spec_name = Cache::read('try-' . $tryId . '-spec');
+    if (!empty($spec_name)) {
         return $spec_name;
     }
     $ProductTryM = ClassRegistry::init('ProductTry');
-    $try = $ProductTryM->find('first',array('conditions' => array('id' => $tryId)));
+    $try = $ProductTryM->find('first', array('conditions' => array('id' => $tryId)));
     $spec_name = $try['ProductTry']['spec'];
-    Cache::write('try-'.$tryId.'-spec',$spec_name);
+    Cache::write('try-' . $tryId . '-spec', $spec_name);
     return $spec_name;
 }
 
-function get_tuan_msg_element($tuan_buy_id)
-{
+function get_tuan_msg_element($tuan_buy_id) {
     $tuanBuyingM = ClassRegistry::init('TuanBuying');
     $tuanTeamM = ClassRegistry::init('TuanTeam');
     $productM = ClassRegistry::init('Product');
@@ -1841,9 +1749,8 @@ function get_tuan_msg_element($tuan_buy_id)
  * @return bool
  * 加入一个团购
  */
-function send_join_tuan_buy_msg($user_id, $title, $product_name, $tuan_leader_wx, $remark, $deatil_url, $open_id=null)
-{
-    if(empty($open_id)){
+function send_join_tuan_buy_msg($user_id, $title, $product_name, $tuan_leader_wx, $remark, $deatil_url, $open_id = null) {
+    if (empty($open_id)) {
         $oauthBindModel = ClassRegistry::init('Oauthbind');
         $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
         if ($user_weixin == false) {
@@ -1851,8 +1758,8 @@ function send_join_tuan_buy_msg($user_id, $title, $product_name, $tuan_leader_wx
         }
         $open_id = $user_weixin['oauth_openid'];
     }
-    if(empty($open_id)){
-       return false;
+    if (empty($open_id)) {
+        return false;
     }
     $post_data = array(
         "touser" => $open_id,
@@ -1879,8 +1786,7 @@ function send_join_tuan_buy_msg($user_id, $title, $product_name, $tuan_leader_wx
  * @return bool
  * 团购提示信息
  */
-function send_tuan_tip_msg($user_id, $title, $product_name, $tuan_leader_wx, $remark, $deatil_url)
-{
+function send_tuan_tip_msg($user_id, $title, $product_name, $tuan_leader_wx, $remark, $deatil_url) {
     $oauthBindModel = ClassRegistry::init('Oauthbind');
     $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
     if ($user_weixin != false) {
@@ -1903,16 +1809,14 @@ function send_tuan_tip_msg($user_id, $title, $product_name, $tuan_leader_wx, $re
 }
 
 //weixin 分享签名
-function prepare_wx_share()
-{
+function prepare_wx_share() {
     $oauthM = ClassRegistry::init('WxOauth');
     $signPackage = $oauthM->getSignPackage();
     return $signPackage;
 }
 
 //weixin 分享签名，记录用户分享信息
-function prepare_wx_share_log($currUid, $date_type, $data_id)
-{
+function prepare_wx_share_log($currUid, $date_type, $data_id) {
     $currUid = empty($currUid) ? 0 : $currUid;
     $share_string = $currUid . '-' . time() . '-rebate-' . $date_type . '_' . $data_id;
     $share_code = authcode($share_string, 'ENCODE', 'SHARE_TID');
@@ -1920,8 +1824,7 @@ function prepare_wx_share_log($currUid, $date_type, $data_id)
     return array('signPackage' => $signPackage, 'share_string' => urlencode($share_code));
 }
 
-function getTuanProductsAsJson()
-{
+function getTuanProductsAsJson() {
 //    $tuanProducts = Cache::read('tuan_products');
 //    if(empty($tuanProducts)){
     $tuanProductM = ClassRegistry::init('TuanProduct');
@@ -1937,25 +1840,22 @@ function getTuanProductsAsJson()
     return $tuanProducts;
 }
 
-function getTuanProducts()
-{
+function getTuanProducts() {
     return json_decode(getTuanProductsAsJson(), true);
 }
 
-function getTuanProductPrice($pid)
-{
+function getTuanProductPrice($pid) {
     $product_price_map = Hash::combine(getTuanProducts(), '{n}.TuanProduct.product_id', '{n}.TuanProduct.tuan_price');
     return floatval($product_price_map[$pid]);
 }
 
 //同类商品评论共享
-function get_group_product_ids($pid)
-{
+function get_group_product_ids($pid) {
     $egg_product = array(896, 818, 161);
     $cake_product = array(877, 869, 862);
     $comosus_product = array(925, 905, 851);
-    $rice_product = array(231,1045,229);
-    $cherry_product = array(897,1020);
+    $rice_product = array(231, 1045, 229);
+    $cherry_product = array(897, 1020);
     if (in_array($pid, $egg_product)) {
         return $egg_product;
     }
@@ -1965,17 +1865,16 @@ function get_group_product_ids($pid)
     if (in_array($pid, $comosus_product)) {
         return $comosus_product;
     }
-    if(in_array($pid,$rice_product)){
+    if (in_array($pid, $rice_product)) {
         return $rice_product;
     }
-    if(in_array($pid,$cherry_product)){
+    if (in_array($pid, $cherry_product)) {
         return $cherry_product;
     }
     return $pid;
 }
 
-function search_spec($spec_ids)
-{
+function search_spec($spec_ids) {
     if (count($spec_ids) != 1 || !empty($spec_ids[0])) {
         $specM = ClassRegistry::init('ProductSpecGroup');
         $spec_groups = $specM->find('all', array(
@@ -1988,8 +1887,7 @@ function search_spec($spec_ids)
     return null;
 }
 
-function search_consignment_date($consign_ids)
-{
+function search_consignment_date($consign_ids) {
     if (count($consign_ids) != 1 || !empty($consign_ids[0])) {
         $consignM = ClassRegistry::init('ConsignmentDate');
         $consign_dates = $consignM->find('all', array(
@@ -2002,8 +1900,7 @@ function search_consignment_date($consign_ids)
     return null;
 }
 
-function get_address($tuan_team, $offline_store)
-{
+function get_address($tuan_team, $offline_store) {
     if (empty($offline_store)) {
         $tuan_address = $tuan_team['TuanTeam']['tuan_addr'];
     } else {
@@ -2024,14 +1921,12 @@ function get_address($tuan_team, $offline_store)
     return $tuan_address;
 }
 
-function sort_award($a, $b)
-{
+function sort_award($a, $b) {
     if ($a['order'] == $b['order']) return 0;
     return ($a['order'] > $b['order']) ? 1 : -1;
 }
 
-function day_of_week($date_string)
-{
+function day_of_week($date_string) {
     $day = date_format(date_create($date_string), 'N');
     $ret = '';
     switch ($day) {
@@ -2060,8 +1955,7 @@ function day_of_week($date_string)
     return '周' . $ret;
 }
 
-function is_pys_product($brandId)
-{
+function is_pys_product($brandId) {
     return $brandId == PYS_BRAND_ID;
 }
 
@@ -2071,16 +1965,15 @@ function is_pys_product($brandId)
  * @param $time
  * @return bool|string
  */
-function get_send_date($deadline_day, $deadline_time, $week_days)
-{
+function get_send_date($deadline_day, $deadline_time, $week_days) {
     $week_days = explode(',', $week_days);
     $interval_one_day = new DateInterval('P1D');
 
     $send_date = new DateTime();
-    if(_is_after_deadline_time($send_date, $deadline_time)){
+    if (_is_after_deadline_time($send_date, $deadline_time)) {
         $deadline_day = $deadline_day + 1;
     }
-    $send_date->add(new DateInterval('P'.$deadline_day.'D'));
+    $send_date->add(new DateInterval('P' . $deadline_day . 'D'));
 
     while (!in_array($send_date->format('N'), $week_days)) {
         $send_date->add($interval_one_day);
@@ -2089,8 +1982,7 @@ function get_send_date($deadline_day, $deadline_time, $week_days)
     return $send_date;
 }
 
-function _is_after_deadline_time($now, $deadline_time)
-{
+function _is_after_deadline_time($now, $deadline_time) {
     $deadline_time = explode(':', $deadline_time);
     $limit_time = new DateTime('now');
     $limit_time->setTime($deadline_time[0], $deadline_time[1], $deadline_time[2]);
@@ -2099,39 +1991,39 @@ function _is_after_deadline_time($now, $deadline_time)
 }
 
 
-function get_pure_product_consignment_date($pid){
+function get_pure_product_consignment_date($pid) {
     $ProductConsignmentDate = ClassRegistry::init('ProductConsignmentDate');
-    $product_consignment_date = $ProductConsignmentDate->find('first',array('conditions' => array(
+    $product_consignment_date = $ProductConsignmentDate->find('first', array('conditions' => array(
         'published' => PUBLISH_YES,
         'product_id' => $pid
     )));
-    if(empty($product_consignment_date)){
+    if (empty($product_consignment_date)) {
         return null;
     }
     $week_days = $product_consignment_date['ProductConsignmentDate']['week_days'];
     $deadline_day = $product_consignment_date['ProductConsignmentDate']['deadline_day'];
     $deadline_time = $product_consignment_date['ProductConsignmentDate']['deadline_time'];
-    $consignment_date = get_send_date($deadline_day,$deadline_time,$week_days);
-    if($consignment_date==null){
+    $consignment_date = get_send_date($deadline_day, $deadline_time, $week_days);
+    if ($consignment_date == null) {
         return null;
     }
-    return date_format($consignment_date,'Y-m-d');
+    return date_format($consignment_date, 'Y-m-d');
 }
 
-function get_ship_mark_name($shipType){
-    if($shipType == 'ziti'){
+function get_ship_mark_name($shipType) {
+    if ($shipType == 'ziti') {
         return '自提';
     }
-    if($shipType == 'sfby'){
+    if ($shipType == 'sfby') {
         return '顺丰包邮';
     }
-    if($shipType == 'sfdf'){
+    if ($shipType == 'sfdf') {
         return '顺丰到付';
     }
-    if($shipType == 'kuaidi'){
+    if ($shipType == 'kuaidi') {
         return '快递';
     }
-    if($shipType == 'manbaoyou'){
+    if ($shipType == 'manbaoyou') {
         return '快递';
     }
     return null;
@@ -2145,7 +2037,7 @@ function split_pys_order($orderId) {
     $orderM = ClassRegistry::init('Order');
     $cartM = ClassRegistry::init('Cart');
     $order = $orderM->find('first', array('conditions' => array('id' => $orderId)));
-    if($order['Order']['brand_id']!=PYS_BRAND_ID){
+    if ($order['Order']['brand_id'] != PYS_BRAND_ID) {
         return;
     }
     if ($order['Order']['status'] != ORDER_STATUS_PAID) {
@@ -2182,34 +2074,34 @@ function split_pys_order($orderId) {
     $orderM->save($order['Order']);
 }
 
-function get_special_pid_list($specialId){
-    $pids_str = Cache::read('special_'.$specialId.'_pids');
-    if(!empty($pids_str)){
-        return json_decode($pids_str,true);
+function get_special_pid_list($specialId) {
+    $pids_str = Cache::read('special_' . $specialId . '_pids');
+    if (!empty($pids_str)) {
+        return json_decode($pids_str, true);
     }
     $ProductSpecial = ClassRegistry::init('ProductSpecial');
-    $special_product = $ProductSpecial->find('all',array('conditions' => array('special_id' => $specialId,'published' => PUBLISH_YES),'fields' => array('product_id')));
-    $pids = Hash::extract($special_product,'{n}.ProductSpecial.product_id');
-    Cache::write('special_'.$specialId.'_pids',json_encode($pids));
+    $special_product = $ProductSpecial->find('all', array('conditions' => array('special_id' => $specialId, 'published' => PUBLISH_YES), 'fields' => array('product_id')));
+    $pids = Hash::extract($special_product, '{n}.ProductSpecial.product_id');
+    Cache::write('special_' . $specialId . '_pids', json_encode($pids));
     return $pids;
 }
 
-function pid_in_special($pid,$specialId){
+function pid_in_special($pid, $specialId) {
     $pids = get_special_pid_list($specialId);
-    return in_array($pid,$pids);
+    return in_array($pid, $pids);
 }
 
-function group_buy_is_available($group_buy_label){
+function group_buy_is_available($group_buy_label) {
     $not_available_group_label = array('1069-1');
-    return !in_array($group_buy_label,$not_available_group_label);
+    return !in_array($group_buy_label, $not_available_group_label);
 }
 
-function get_share_order_cart_display_name($carts){
+function get_share_order_cart_display_name($carts) {
     $product_names = array();
-    foreach($carts as $item){
-        $product_names[] = $item['name'].'X'.$item['num'];
+    foreach ($carts as $item) {
+        $product_names[] = $item['name'] . 'X' . $item['num'];
     }
-    return implode(', ',$product_names);
+    return implode(', ', $product_names);
 }
 
 function share_kuaidi_order_filter($var) {
@@ -2262,7 +2154,7 @@ function sort_data_by_id($a, $b) {
     return ($a['id'] < $b['id']) ? 1 : -1;
 }
 
-function sort_opt_log_data_by_id($a, $b){
+function sort_opt_log_data_by_id($a, $b) {
     return ($a['OptLog']['id'] < $b['OptLog']['id']) ? 1 : -1;
 }
 
