@@ -298,6 +298,18 @@ class WesharesController extends AppController {
     }
 
     /**
+     * @param $orderId
+     * 支付 尾款
+     */
+    public function pay_order_add($orderId){
+        $this->layout = 'weshare_bootstrap';
+        $cart_info = $this->WeshareBuy->get_cart_name_and_num($orderId);
+        $order_info = $this->WeshareBuy->get_order_info($orderId);
+        $this->set('cart_info', $cart_info);
+        $this->set('order_info', $order_info);
+    }
+
+    /**
      * 下单
      */
     public function makeOrder() {

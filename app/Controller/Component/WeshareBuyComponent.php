@@ -1511,4 +1511,5 @@ class WeshareBuyComponent extends Component {
         return array('num' => $num, 'cart_name' => implode(',', $cart_name));
     }
 
+
 }

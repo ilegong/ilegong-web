@@ -604,6 +604,7 @@ class ShareUtilComponent extends Component {
         $un_confirm_order_price = $order['total_all_price'];
         $difference_price = $confirm_total_price + $order_ship_fee - $order_coupon_price - $un_confirm_order_price;
         $difference_price = round($difference_price, 2);
+        //gen virtual log order
         if ($difference_price != 0) {
             //should add pay order mark
             $new_order_data = $order['Order'];
@@ -649,7 +650,7 @@ class ShareUtilComponent extends Component {
             $cartM->saveAll($new_order_cart_data);
             $orderM->id = null;
             $orderM->updateAll(array('status' => ORDER_STATUS_PREPAID_TODO, 'price_difference' => $difference_price), array('id' => $order_id));
-            //TODO send template msg
+            //send msg
             $order_creator = $order['Order']['creator'];
             $weshare_id = $order['Order']['member_id'];
             $share_info = $this->WeshareBuy->get_weshare_info($weshare_id);
@@ -669,7 +670,7 @@ class ShareUtilComponent extends Component {
                 //荣浩，你报名小宝妈分享的鸡蛋X2、母鸡X1实际价格是100，你预付了80，还需要补余款20元，谢谢你的支持！
                 $title = $title . '还需要补余款' . $difference_price . '元，谢谢你的支持！';
                 //to pay
-                $detail_url = '';
+                $detail_url = 'http://www.tongshijia.com/weshares/pay_order_add/' . $new_order['Order']['id'];
             } else {
                 $title = $title . '我们将会在3-5个工作日给你退款' . abs($difference_price) . '元，谢谢你的支持！';
                 $detail_url = $this->WeshareBuy->get_weshares_detail_url($weshare_id);
