@@ -452,8 +452,9 @@ class WeixinComponent extends Component {
      */
     public function notifyPaidDone($order) {
         if ($order['Order']['type'] == ORDER_TYPE_WESHARE_BUY) {
+            //todo callback pay order add
             $this->weshare_buy_order_paid($order);
-            //TODO check order is prepaid
+            //check order is prepaid
             $this->ShareUtil->check_order_is_prepaid_and_update_status($order);
             //clean cache share
             Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $order['Order']['member_id'] . '_1', '');
