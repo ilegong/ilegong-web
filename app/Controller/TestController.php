@@ -20,7 +20,7 @@ class TestController extends AppController{
         $this->autoRender = false;
         $userId = 697674;
         $openId = $this->Oauthbind->findWxServiceBindByUid($userId);
-        $title = 'hi,你在我们平台订了猕猴桃和无花果，现在您留的电话不正确，请迅速和我们联系：18911692346，';
+        $title = 'hi,你在我们平台订了猕猴桃和无花果，现在您留的电话不正确，请迅速和我们联系：13651031953，';
         $order_id = 37377;
         $order_date = '2015-09-10 21:14:32';
         $desc = '生鲜不能存放，谢谢理解！';
