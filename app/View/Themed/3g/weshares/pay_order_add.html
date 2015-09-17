@@ -1,0 +1,19 @@
+<div class="row">
+    <h3>支付尾款</h3>
+    <div class="col-xs-12 col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    尾款信息
+                </h3>
+            </div>
+            <div class="panel-body">
+                <p class="lead">您购买了{{$cart_info['cart_name']}}，共{{$cart_info['num']}}件商品。<br>需要支付<strong>{{$order_info['total_all_price']}}</strong>元的尾款。<br>分享快乐，信任无价。</p>
+            </div>
+        </div>
+        <a href="/wxPay/jsApiPay/{{$order_info['id']}}?from=share" class="btn btn-success btn-lg btn-block"
+           role="button">微信支付</a>
+        <a href="/ali_pay/wap_to_alipay/{{$order_info['id']}}?from=share" class="btn btn-warning btn-lg btn-block"
+           role="button">支付宝支付</a>
+    </div>
+</div>

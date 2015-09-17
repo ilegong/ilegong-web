@@ -2,9 +2,11 @@
     .filterable {
         margin-top: 15px;
     }
+
     .filterable .panel-heading .pull-right {
         margin-top: -20px;
     }
+
     .filterable .filters input[disabled] {
         background-color: transparent;
         border: none;
@@ -13,12 +15,15 @@
         padding: 0;
         height: auto;
     }
+
     .filterable .filters input[disabled]::-webkit-input-placeholder {
         color: #333;
     }
+
     .filterable .filters input[disabled]::-moz-placeholder {
         color: #333;
     }
+
     .filterable .filters input[disabled]:-ms-input-placeholder {
         color: #333;
     }
@@ -48,7 +53,8 @@
             </div>
             <div class="form-group">
                 <label for="share_id">分享ID</label>
-                <input type="text" class="form-control" id="share_id" name="share_id" placeholder="分享ID" value="{{$share_id}}">
+                <input type="text" class="form-control" id="share_id" name="share_id" placeholder="分享ID"
+                       value="{{$share_id}}">
             </div>
             <div class="form-group">
                 <label for="start_date">开始日期</label>
@@ -68,6 +74,8 @@
                     <option value="2">已发货</option>
                     <option value="3">已收货</option>
                     <option value="9">已评价</option>
+                    <option value="5">待确定价格</option>
+                    <option value="6">待处理尾款</option>
                     <option value="14">退款中</option>
                     <option value="4">已退款</option>
                 </select>
@@ -81,104 +89,124 @@
     <div class="panel panel-primary filterable">
         <div class="panel-heading">
             <h3 class="panel-title">订单</h3>
+
             <div class="pull-right">
-                <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span>查找</button>
+                <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span>查找
+                </button>
             </div>
         </div>
         <table class="table">
             <thead>
-                <tr class="filters">
-                    <th><input type="text" class="form-control" placeholder="订单ID" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="用户ID" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="用户昵称" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="收货人" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="地址" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="联系方式" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="分享名称" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="分享人" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="分享人联系方式" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="商品" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="商品份数" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="商品总价" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="订单总价" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="退款金额" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="创建时间" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="状态" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="物流方式" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="交易号" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="推荐人" disabled></th>
-                    <th>操作</th>
-                </tr>
+            <tr class="filters">
+                <th><input type="text" class="form-control" placeholder="订单ID" disabled></th>
+                <th><input type="text" class="form-control" placeholder="用户ID" disabled></th>
+                <th><input type="text" class="form-control" placeholder="用户昵称" disabled></th>
+                <th><input type="text" class="form-control" placeholder="收货人" disabled></th>
+                <th><input type="text" class="form-control" placeholder="地址" disabled></th>
+                <th><input type="text" class="form-control" placeholder="联系方式" disabled></th>
+                <th><input type="text" class="form-control" placeholder="分享名称" disabled></th>
+                <th><input type="text" class="form-control" placeholder="分享人" disabled></th>
+                <th><input type="text" class="form-control" placeholder="分享人联系方式" disabled></th>
+                <th><input type="text" class="form-control" placeholder="商品" disabled></th>
+                <th><input type="text" class="form-control" placeholder="商品份数" disabled></th>
+                <th><input type="text" class="form-control" placeholder="商品总价" disabled></th>
+                <th><input type="text" class="form-control" placeholder="订单总价" disabled></th>
+                <th><input type="text" class="form-control" placeholder="尾款差价" disabled></th>
+                <th><input type="text" class="form-control" placeholder="退款金额" disabled></th>
+                <th><input type="text" class="form-control" placeholder="创建时间" disabled></th>
+                <th><input type="text" class="form-control" placeholder="状态" disabled></th>
+                <th><input type="text" class="form-control" placeholder="物流方式" disabled></th>
+                <th><input type="text" class="form-control" placeholder="交易号" disabled></th>
+                <th><input type="text" class="form-control" placeholder="推荐人" disabled></th>
+                <th>操作</th>
+            </tr>
             </thead>
             <tbody>
-                {{loop $orders $order}}
-                    <?php
+            {{loop $orders $order}}
+            <?php
                     $current_order_id = $order['Order']['id'];
                     $current_order_carts = $order_cart_map[$current_order_id];
                     $current_order = $order['Order'];
                     $current_share = $weshares[$current_order['member_id']];
                     $current_share_creator = $all_users[$current_share['creator']];
                     ?>
-                    {{loop $current_order_carts $cart}}
-                        <tr data-id="{{$current_order['id']}}">
-                            <td>{{$current_order['id']}}</td>
-                            <td>{{$current_order['creator']}}</td>
-                            <td>{{$all_users[$current_order['creator']]['nickname']}}</td>
-                            <td>{{$current_order['consignee_name']}}</td>
-                            <td>{{$current_order['consignee_address']}}</td>
-                            <td>{{$current_order['consignee_mobilephone']}}</td>
-                            <td>{{$current_share['title']}}</td>
-                            <td>{{$current_share_creator['nickname']}}</td>
-                            <td>{{$current_share_creator['mobilephone']}}</td>
-                            <td>{{$cart['name']}}</td>
-                            <td>{{$cart['num']}}</td>
-                            <td>{{$cart['price']*$cart['num']/100}}</td>
-                            <td>{{$current_order['total_all_price']}}</td>
-                            <td>{{if !empty($refund_logs[$current_order['id']])}}{{$refund_logs[$current_order['id']]/100}}{{else}}0{{/if}}</td>
-                            <td>{{$current_order['created']}}</td>
-                            <td name="status">
-                                {{if $current_order['status']==ORDER_STATUS_PAID}}
-                                已付款
-                                {{elseif $current_order['status'] == ORDER_STATUS_SHIPPED}}
-                                已发货
-                                {{elseif $current_order['status'] == ORDER_STATUS_RECEIVED}}
-                                已收货
-                                {{elseif $current_order['status'] == 14}}
-                                退款中
-                                {{elseif $current_order['status'] == 4}}
-                                已退款
-                                {{else}}
-                                已完成
-                                {{/if}}
-                            </td>
-                            <td>
-                                {{if $current_order['ship_mark'] == 'pys_zi_ti'}}
-                                    朋友说自提
-                                {{elseif $current_order['ship_mark'] == 'self_zi_ti'}}
-                                    自有自提
-                                {{else}}
-                                    快递
-                                {{/if}}
-                            </td>
-                            <td>
-                                {{$pay_notifies[$current_order['id']]}}
-                            </td>
-                            <td>
-                                {{$all_users[$rebate_logs[$current_order['cate_id']]]['nickname']}}
-                            </td>
-                            <td>
-                                {{if $current_order['ship_mark']=='pys_zi_ti'&&$current_order['status']==1}}
-                                    <button type="button" class="btn btn-danger send-offline-store-msg"
-                                            data-id="{{$current_order['id']}}" data-toggle="modal">发货
-                                    </button>
-                                {{/if}}
-                                {{if $current_order['status']!=4}}
-                                <button type="button" class="btn btn-info refund-order" data-share-id="{{$current_order['member_id']}}" data-id="{{$current_order['id']}}">{{if $current_order['status']!=14}}退款{{else}}退款完成{{/if}}</button>
-                                {{/if}}
-                            </td>
-                        </tr>
-                    {{/loop}}
-                {{/loop}}
+            {{loop $current_order_carts $cart}}
+            <tr data-id="{{$current_order['id']}}">
+                <td>{{$current_order['id']}}</td>
+                <td>{{$current_order['creator']}}</td>
+                <td>{{$all_users[$current_order['creator']]['nickname']}}</td>
+                <td>{{$current_order['consignee_name']}}</td>
+                <td>{{$current_order['consignee_address']}}</td>
+                <td>{{$current_order['consignee_mobilephone']}}</td>
+                <td>{{$current_share['title']}}</td>
+                <td>{{$current_share_creator['nickname']}}</td>
+                <td>{{$current_share_creator['mobilephone']}}</td>
+                <td>{{$cart['name']}}</td>
+                <td>{{$cart['num']}}</td>
+                <td>{{$cart['price']*$cart['num']/100}}</td>
+                <td>{{$current_order['total_all_price']}}</td>
+                <td>{{if $current_order['price_difference'] > 0}}加尾款{{elseif
+                    $current_order['price_difference']==0}}{{else}}退尾款{{/if}}&nbsp;&nbsp;<span style="color: red;">{{abs($current_order['price_difference'])}}</span>
+                </td>
+                <td>{{if
+                    !empty($refund_logs[$current_order['id']])}}{{$refund_logs[$current_order['id']]/100}}{{else}}0{{/if}}
+                </td>
+                <td>{{$current_order['created']}}</td>
+                <td name="status">
+                    {{if $current_order['status']==ORDER_STATUS_PAID}}
+                    已付款
+                    {{elseif $current_order['status'] == ORDER_STATUS_SHIPPED}}
+                    已发货
+                    {{elseif $current_order['status'] == ORDER_STATUS_RECEIVED}}
+                    已收货
+                    {{elseif $current_order['status'] == 5}}
+                    价格待定
+                    {{elseif $current_order['status'] == 6}}
+                    尾款处理
+                    {{elseif $current_order['status'] == 14}}
+                    退款中
+                    {{elseif $current_order['status'] == 4}}
+                    已退款
+                    {{else}}
+                    已完成
+                    {{/if}}
+                </td>
+                <td>
+                    {{if $current_order['ship_mark'] == 'pys_zi_ti'}}
+                    朋友说自提
+                    {{elseif $current_order['ship_mark'] == 'self_zi_ti'}}
+                    自有自提
+                    {{else}}
+                    快递
+                    {{/if}}
+                </td>
+                <td>
+                    {{$pay_notifies[$current_order['id']]}}
+                </td>
+                <td>
+                    {{$all_users[$rebate_logs[$current_order['cate_id']]]['nickname']}}
+                </td>
+                <td>
+                    {{if $current_order['ship_mark']=='pys_zi_ti'&&$current_order['status']==1}}
+                    <button type="button" class="btn btn-danger send-offline-store-msg"
+                            data-id="{{$current_order['id']}}" data-toggle="modal">发货
+                    </button>
+                    {{/if}}
+                    {{if $current_order['status']!=4}}
+                    <button type="button" class="btn btn-info refund-order"
+                            data-share-id="{{$current_order['member_id']}}" data-id="{{$current_order['id']}}">{{if
+                        $current_order['status']!=14}}退款{{else}}退款完成{{/if}}
+                    </button>
+                    {{/if}}
+                    {{if $current_order['status']==6&&$current_order['price_difference']<0}}
+                    <button type="button" data-share-id="{{$current_order['member_id']}}"
+                            data-id="{{$current_order['id']}}" class="btn btn-danger refund-added-order">退尾款
+                    </button>
+                    {{/if}}
+                </td>
+            </tr>
+            {{/loop}}
+            {{/loop}}
             </tbody>
         </table>
     </div>
@@ -187,25 +215,29 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">订单退款操作</h4>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal">
                     <div class="form-group">
                         <label for="refund-money" class="col-sm-2 control-label">退款金额</label>
+
                         <div class="col-sm-10">
                             <input type="number" class="form-control" id="refund-money" placeholder="金额/元">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="refund-reason" class="col-sm-2 control-label">退款描述</label>
+
                         <div class="col-sm-10">
                             <textarea id="refund-reason" class="form-control" rows="3"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">退款状态</label>
+
                         <div class="col-sm-10">
                             <div class="checkbox">
                                 <label class="radio-inline">
@@ -230,7 +262,8 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">好邻居发送到货提醒</h4>
             </div>
             <div class="modal-body">
@@ -252,7 +285,7 @@
     /*
      Please consider that the JS part isn't production ready at all, I just code it to show the concept of merging filters and titles together !
      */
-    $(document).ready(function(){
+    $(document).ready(function () {
 
         var order_status = '{{$order_status}}';
         var $offlineStoreDialog = $('#offlineStoreModal');
@@ -262,6 +295,7 @@
         var currentRefundOrderId = '';
         var $refundMoney = $('#refund-money');
         var $refundReason = $('#refund-reason');
+
         function setOption(selectElement, value) {
             var options = selectElement.options;
             for (var i = 0, optionsLength = options.length; i < optionsLength; i++) {
@@ -275,16 +309,29 @@
 
         setOption(document.getElementById('order_status'), order_status);
 
+        $('button.refund-added-order').on('click',function(e){
+            e.preventDefault();
+            var $me = $(this);
+            var orderId = $me.data('id');
+            $.getJSON('/manage/admin/orders/process_order_added_refund/' + orderId, function (data) {
+                if (data['success']) {
+                    $me.remove();
+                } else {
+                    alert('处理失败');
+                }
+            });
+        });
+
         //process refund
-        $('button.refund-order').on('click', function(){
+        $('button.refund-order').on('click', function () {
             var $me = $(this);
             currentRefundOrderId = $me.data('id');
             //load refund data
-            $.getJSON('/manage/admin/orders/get_share_refund_log/'+currentRefundOrderId,function(data){
+            $.getJSON('/manage/admin/orders/get_share_refund_log/' + currentRefundOrderId, function (data) {
                 $refundDialog.modal('show');
                 $('div.modal-backdrop').css('z-index', 99);
-                if(data['id']){
-                    $refundMoney.val(data['refund_fee']/100);
+                if (data['id']) {
+                    $refundMoney.val(data['refund_fee'] / 100);
                     $refundReason.val(data['remark']);
                 }
             });
@@ -327,9 +374,9 @@
                 order_id: currentOrderId,
                 ship_code: offlineStoreCode
             }, function (data) {
-                if(data['success']){
+                if (data['success']) {
                     $offlineStoreDialog.modal('hide');
-                    $('button[data-id="'+currentOrderId+'"]').remove();
+                    $('button[data-id="' + currentOrderId + '"]').remove();
                 }
             }, 'json');
         });
@@ -341,7 +388,7 @@
             $('div.modal-backdrop').css('z-index', 99);
         });
 
-        $('.filterable .btn-filter').click(function(){
+        $('.filterable .btn-filter').click(function () {
             var $panel = $(this).parents('.filterable'),
                     $filters = $panel.find('.filters input'),
                     $tbody = $panel.find('.table tbody');
@@ -355,7 +402,7 @@
             }
         });
 
-        $('.filterable .filters input').keyup(function(e){
+        $('.filterable .filters input').keyup(function (e) {
             /* Ignore tab key */
             var code = e.keyCode || e.which;
             if (code == '9') return;
@@ -367,7 +414,7 @@
                     $table = $panel.find('.table'),
                     $rows = $table.find('tbody tr');
             /* Dirtiest filter function ever ;) */
-            var $filteredRows = $rows.filter(function(){
+            var $filteredRows = $rows.filter(function () {
                 var value = $(this).find('td').eq(column).text().toLowerCase();
                 return value.indexOf(inputContent) === -1;
             });
@@ -378,7 +425,7 @@
             $filteredRows.hide();
             /* Prepend no-result row if all rows are filtered */
             if ($filteredRows.length === $rows.length) {
-                $table.find('tbody').prepend($('<tr class="no-result text-center"><td colspan="'+ $table.find('.filters th').length +'">No result found</td></tr>'));
+                $table.find('tbody').prepend($('<tr class="no-result text-center"><td colspan="' + $table.find('.filters th').length + '">No result found</td></tr>'));
             }
         });
     });

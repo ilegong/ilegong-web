@@ -38,6 +38,14 @@ const ORDER_STATUS_TOUSU=12; //已投诉， 不要再用，投诉走其他流程
 const ORDER_STATUS_COMMENT=16; //待评价
 const ORDER_STATUS_RETURNING_MONEY=14;//退款中
 
+define('ORDER_STATUS_PREPAID', 5); //预付款
+define('ORDER_STATUS_PREPAID_TODO', 6);//预付款订单待处理
+define('ORDER_STATUS_REFUND', 7);//预付款比较大于实际金额 需要退款 生成退款订单 只作为标记 不进行实际操作
+define('ORDER_STATUS_REFUND_DONE',8);//付款 退款 处理
+
+
+const REFUND_ADD_ORDER_TYPE = 1;
+
 //分享缓存的key
 const SHARE_USER_SUMMERY_CACHE_KEY = 'share_user_summery_cache_key';
 const SHARER_FANS_DATA_CACHE_KEY = 'sharer_fans_data_cache_key';

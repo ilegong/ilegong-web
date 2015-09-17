@@ -36,9 +36,17 @@
         {{/loop}}
         </tbody>
         <tr>
-            <td colspan="3">总金额:&nbsp;<font color="red">{{$summery['real_total_price']-$refund_money-$share_rebate_money}}</font>{{if
+            <td colspan="3">总金额:&nbsp;<font color="red">{{$summery['real_total_price']-$refund_money-$share_rebate_money+$repaid_order_money}}</font>{{if
                 $refund_money>0}}&nbsp;&nbsp;退款金额:&nbsp;<font color="red">{{$refund_money}}</font>{{/if}}{{if
-                $summery['all_coupon_price'] > 0}}&nbsp;&nbsp;红包金额:&nbsp;<font color="red">{{$summery['all_coupon_price']}}</font>{{/if}}&nbsp;&nbsp;&nbsp;总购买人数:&nbsp;<font
+                $summery['all_coupon_price'] > 0}}&nbsp;&nbsp;红包金额:&nbsp;<font color="red">{{$summery['all_coupon_price']}}</font>{{/if}}
+                {{if $repaid_order_money!=0}}
+                    {{if $repaid_order_money>0}}
+                        &nbsp;&nbsp;补尾款:&nbsp;<font color="red">{{$repaid_order_money}}</font>
+                    {{else}}
+                        &nbsp;&nbsp;退尾款:&nbsp;<font color="red">{{abs($repaid_order_money)}}</font>
+                    {{/if}}
+                {{/if}}
+                &nbsp;&nbsp;&nbsp;总购买人数:&nbsp;<font
                         color="red">{{$summery['all_buy_user_count']}}</font></td>
         </tr>
         {{if count($rebate_logs) > 0}}
@@ -149,6 +157,7 @@
                             </div>
                         </div>
                         <input type="hidden" class="form-control" readonly id="refund-order-id">
+
                         <div class="form-group">
                             <label for="refund-money" class="col-sm-2 control-label">退款金额</label>
 
@@ -174,148 +183,38 @@
             </div>
         </div>
     </div>
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="confirm-money-dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">确认价格</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="refund-order-user" class="col-sm-2 control-label">用户名</label>
+
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" readonly id="confirm-order-user">
+                            </div>
+                        </div>
+                        <input type="hidden" class="form-control" readonly id="confirm-order-id">
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" data-id="{{$weshareId}}" name="handle-confirm-money">
+                        确认价格
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <button data-toggle="modal" data-target=".send-msg-dialog" type="button" class="btn btn-warning btn-lg btn-block"
             id="send_product_arrive_msg" style="border-radius:0px; display: none;">取货提醒
     </button>
 </div>
-<script>
-    $(document).ready(function () {
-        var orderType = '';
-        var $selfZitiOrder = $('#self-ziti-orders');
-        $('select[name="ship_company_code"]').on('change', function () {
-            var valueSelected = this.value;
-            $("option[value='" + valueSelected + "']").prop("selected", true);
-        });
-        $('ul.nav li a').on('click', function () {
-            var $me = $(this);
-            orderType = $me.data('order-type');
-            if (orderType == 'self_ziti') {
-                $('#send_product_arrive_msg').show();
-            } else {
-                $('#send_product_arrive_msg').hide();
-            }
-        });
-        $('ul.nav li:first a').trigger('click');
-        $('button.set-order-ship-code').on('click', function () {
-            var $me = $(this);
-            var $parent = $me.parentsUntil('div.col-xs-12');
-            var $form = $me.parent('div');
-            var $shipCompany = $('select[name=ship_company_code]', $form);
-            var $shipCode = $('input[name=ship_code]', $form);
-            var orderId = $me.data('order-id');
-            var shipCompayId = $shipCompany.val();
-            var shipCode = $shipCode.val();
-            var companyName = $("option:selected", $shipCompany).text();
-            $.post('/weshares/set_order_ship_code', {
-                order_id: orderId,
-                company_id: shipCompayId,
-                ship_code: shipCode,
-                weshare_id: '{{$weshareId}}'
-            }, function (data) {
-                if (data['success']) {
-                    $parent.removeClass('offer-success').addClass('offer-warning');
-                    $('div.shape-text', $parent).text('已发货');
-                    $form.parent('div.offer-content').append('<p><strong>' + companyName + ':</strong><strong>' + shipCode + '</strong> </p>');
-                    $form.remove();
-                }
-            }, 'json');
-        });
-        $('button[name="set_order_shipped"]').on('click', function (e) {
-            e.preventDefault();
-            var $me = $(this);
-            bootbox.confirm("确定已发货?", function (result) {
-                if (!result) {
-                    return;
-                }
-                var order_id = $me.data('id');
-                var $parent = $me.parentsUntil('div.col-xs-12');
-                $.getJSON('/weshares/confirmReceived/' + order_id, function (data) {
-                    if (data['success']) {
-                        $parent.removeClass('offer-success').addClass('offer-warning');
-                        $('div.shape-text', $parent).text('已发货');
-                        $me.next().remove();
-                        $me.remove();
-                    } else {
-                        alert('修改失败');
-                    }
-                });
-            });
-        });
-        $('button[name="send_product_arrival_msg"]').on('click', function (e) {
-            e.preventDefault();
-            var $msgInput = $('#arrival_msg');
-            var msg = $msgInput.val();
-            if (!msg || !msg.trim()) {
-                return;
-            }
-            var id = $(this).data('id');
-            var postData = {msg: msg, share_id: id};
-            $.ajax({
-                type: 'POST',
-                url: '/weshares/send_arrival_msg',
-                data: JSON.stringify(postData), // or JSON.stringify ({name: 'jonas'}),
-                success: function (data) {
-                    $('div.send-msg-dialog').modal('hide');
-                    var $paidOrders = $('div[data-order-status="1"]', $selfZitiOrder);
-                    $paidOrders.each(function (index, item) {
-                        var $dom = $(item);
-                        $dom.removeClass('offer-success').addClass('offer-warning');
-                        $('div.shape-text', $dom).text('已发货');
-                        $dom.data('order-status', '2')
-                    });
-                },
-                contentType: "application/json",
-                dataType: 'json'
-            });
-        });
-        var $refundMoneyDialog = $('#refund-money-dialog');
-        var $refundOrderName = $('#refund-order-user', $refundMoneyDialog);
-        var $refundOrderId = $('#refund-order-id', $refundMoneyDialog);
-        var $refundMoney = $('#refund-money', $refundMoneyDialog);
-        var $refundMsg = $('#refund-msg', $refundMoneyDialog);
-        $('button[name="handle-refund-money"]').on('click', function (e) {
-            e.preventDefault();
-            var $me = $(this);
-            var refundMoney = $refundMoney.val();
-            if (isNaN(refundMoney)) {
-                alert('请输入退款金额');
-                return false;
-            }
-            var refundMark = $refundMsg.val();
-            if (!refundMark) {
-                alert('请输入退款原因');
-                return false;
-            }
-            var postData = {
-                orderId: $refundOrderId.val(),
-                shareId: $me.data('id'),
-                refundMoney: $refundMoney.val(),
-                refundMark: $refundMsg.val()
-            };
-            $.post('/weshares/refund_money.json', postData, function (data) {
-                if (data['success']) {
-                    var orderId = data['order_id'];
-                    var $refundBtn = $('#refund-btn-' + orderId);
-                    $refundBtn.unbind();
-                    var $parent = $refundBtn.parent('div.offer-content');
-                    $parent = $parent.parent();
-                    $parent.removeClass().addClass('offer').addClass('offer-danger');
-                    $('div.shape-text', $parent).text('退款中');
-                    $refundBtn.remove();
-                    $refundMoneyDialog.modal('hide');
-                }
-            }, 'json');
-        });
-        $('button.refund-money').on('click', function (e) {
-            e.preventDefault();
-            var $me = $(this);
-            var orderId = $me.data('order-id');
-            var orderUserName = $me.data('order-name');
-            $refundOrderName.val(orderUserName);
-            $refundOrderId.val(orderId);
-            $refundMoney.val(0);
-            $refundMsg.val('');
-            $refundMoneyDialog.modal('show');
-        });
-    });
-</script>
+<script src="/static/weshares/js/share-order-list.js"></script>

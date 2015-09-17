@@ -266,6 +266,7 @@
             vm.buyerName = vm.consignee.name;
             vm.buyerMobilePhone = vm.consignee.mobilephone;
             vm.buyerAddress = vm.consignee.address;
+            vm.buyerPatchAddress = vm.consignee.remark_address;
           }
           setWeiXinShareParams();
           //from paid done
@@ -584,7 +585,12 @@
         rebate_log_id: vm.rebateLogId,
         products: products,
         ship_info: ship_info,
-        buyer: {name: vm.buyerName, mobilephone: vm.buyerMobilePhone, address: vm.buyerAddress}
+        buyer: {
+          name: vm.buyerName,
+          mobilephone: vm.buyerMobilePhone,
+          address: vm.buyerAddress,
+          patchAddress: vm.buyerPatchAddress
+        }
       };
       if (vm.useCouponId) {
         orderData['coupon_id'] = vm.useCouponId;
@@ -840,6 +846,12 @@
       }
       if (status == 3) {
         return '待评价';
+      }
+      if (status == 5) {
+        return '差价处理';
+      }
+      if (status == 6) {
+        return '补退尾款';
       }
       return '已完成';
     }

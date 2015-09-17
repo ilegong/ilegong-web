@@ -199,7 +199,7 @@ class WesharesController extends AppController {
             if (empty($weshareData['id'])) {
                 Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
                 $thumbnail = null;
-                if(count($images)>0){
+                if (count($images) > 0) {
                     $thumbnail = $images[0];
                 }
                 $this->ShareUtil->save_create_share_opt_log($weshare['Weshare']['id'], $thumbnail, $weshareData['title'], $uid);
@@ -300,6 +300,18 @@ class WesharesController extends AppController {
     }
 
     /**
+     * @param $orderId
+     * 支付 尾款
+     */
+    public function pay_order_add($orderId){
+        $this->layout = 'weshare_bootstrap';
+        $cart_info = $this->WeshareBuy->get_cart_name_and_num($orderId);
+        $order_info = $this->WeshareBuy->get_order_info($orderId);
+        $this->set('cart_info', $cart_info);
+        $this->set('order_info', $order_info);
+    }
+
+    /**
      * 下单
      */
     public function makeOrder() {
@@ -355,8 +367,14 @@ class WesharesController extends AppController {
             $order = $this->Order->save($orderData);
             $orderId = $order['Order']['id'];
             $totalPrice = 0;
+            $is_prepaid = 0;
             foreach ($weshareProducts as $p) {
                 $item = array();
+                //check product is tbd to set order prepaid
+                $tbd = $p['WeshareProduct']['tbd'];
+                if ($tbd == 1) {
+                    $is_prepaid = 1;
+                }
                 $pid = $p['WeshareProduct']['id'];
                 $num = $productIdNumMap[$pid];
                 $price = $p['WeshareProduct']['price'];
@@ -375,7 +393,7 @@ class WesharesController extends AppController {
             }
             $this->Cart->saveAll($cart);
             $totalPrice += $shipFee;
-            if ($this->Order->updateAll(array('total_all_price' => $totalPrice / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => $shipFee), array('id' => $orderId))) {
+            if ($this->Order->updateAll(array('total_all_price' => $totalPrice / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => $shipFee, 'is_prepaid' => $is_prepaid), array('id' => $orderId))) {
                 $coupon_id = $postDataArray['coupon_id'];
                 //check coupon
                 if (!empty($coupon_id)) {
@@ -603,9 +621,11 @@ class WesharesController extends AppController {
         $statics_data = $this->get_weshare_buy_info($weshareId, true, true);
         $refund_money = $this->WeshareBuy->get_refund_money_by_weshare($weshareId);
         $rebate_money = $this->ShareUtil->get_share_rebate_money($weshareId);
+        $repaid_order_money = $this->WeshareBuy->get_added_order_repaid_money($weshareId);
         $this->set($statics_data);
         $this->set('refund_money', $refund_money);
         $this->set('rebate_money', $rebate_money);
+        $this->set('repaid_order_money', $repaid_order_money);
         $this->set('ship_type_list', ShipAddress::ship_type_list());
         $this->set('hide_footer', true);
         $this->set('user_id', $user_id);
@@ -808,7 +828,7 @@ class WesharesController extends AppController {
      * @param $shareId
      * export order to excel
      */
-    public function order_export($shareId){
+    public function order_export($shareId) {
         $this->layout = null;
         $statics_data = $this->get_weshare_buy_info($shareId, true, true);
         $refund_money = $this->WeshareBuy->get_refund_money_by_weshare($shareId);
@@ -854,6 +874,21 @@ class WesharesController extends AppController {
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $shareId . '_1', '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $shareId . '_0', '');
         echo json_encode($result);
+        return;
+    }
+
+    /**
+     * sharer confirm price
+     */
+    public function confirm_price() {
+        $this->autoRender = false;
+        $postData = $_REQUEST['data'];
+        $postDataJson = json_decode($postData, true);
+        $orderId = $postDataJson['order_id'];
+        $orderCartMap = $postDataJson['cart_map'];
+        $orderCartMap = Hash::combine($orderCartMap, '{n}.product_id', '{n}.price');
+        $this->ShareUtil->process_order_prepaid($orderId, $orderCartMap);
+        echo json_encode(array('success' => true, 'order_id' => $orderId));
         return;
     }
 
@@ -988,20 +1023,21 @@ class WesharesController extends AppController {
      * @param $mobileNum
      * @param $address
      * @param $uid
+     * @param $patchAddress
      * @param int $offlineStoreId
      * 记住用户填写的地址
      */
-    private function setShareConsignees($userInfo, $mobileNum, $address, $uid, $offlineStoreId = 0) {
+    private function setShareConsignees($userInfo, $mobileNum, $address, $uid, $patchAddress, $offlineStoreId = 0) {
         $consignee = $this->OrderConsignees->find('first', array(
             'conditions' => array(
                 'creator' => $uid,
                 'status' => STATUS_CONSIGNEES_SHARE
             ),
-            'fields' => array('id', 'name', 'mobilephone')
+            'fields' => array('id', 'name', 'mobilephone', 'remark_address')
         ));
         if (!empty($consignee)) {
             //update
-            $saveData = array('name' => "'" . $userInfo . "'", 'mobilephone' => "'" . $mobileNum . "'", 'address' => "'" . $address . "'");
+            $saveData = array('name' => "'" . $userInfo . "'", 'mobilephone' => "'" . $mobileNum . "'", 'address' => "'" . $address . "'", 'remark_address' => "'" . $patchAddress . "'");
             if ($offlineStoreId != 0) {
                 $saveData['ziti_id'] = $offlineStoreId;
             }
@@ -1009,7 +1045,7 @@ class WesharesController extends AppController {
             return;
         }
         //save
-        $this->OrderConsignees->save(array('creator' => $uid, 'status' => STATUS_CONSIGNEES_SHARE, 'name' => $userInfo, 'mobilephone' => $mobileNum, 'address' => $address, 'ziti_id' => $offlineStoreId));
+        $this->OrderConsignees->save(array('creator' => $uid, 'status' => STATUS_CONSIGNEES_SHARE, 'name' => $userInfo, 'mobilephone' => $mobileNum, 'address' => $address, 'ziti_id' => $offlineStoreId, 'remark_address' => $patchAddress));
     }
 
     /**
@@ -1023,7 +1059,7 @@ class WesharesController extends AppController {
                 'creator' => $uid,
                 'status' => STATUS_CONSIGNEES_SHARE
             ),
-            'fields' => array('name', 'mobilephone', 'address', 'ziti_id')
+            'fields' => array('name', 'mobilephone', 'address', 'ziti_id', 'remark_address')
         ));
         //load remember offline store id
         $ziti_id = $consignee['OrderConsignees']['ziti_id'];
@@ -1238,10 +1274,14 @@ class WesharesController extends AppController {
         $shipType = $shipInfo['ship_type'];
         $addressId = $shipInfo['address_id'];
         $customAddress = $buyerData['address'];
+        $patchAddress = $buyerData['patchAddress'];
+        if ($patchAddress == null) {
+            $patchAddress = '';
+        }
         if ($shipType == SHARE_SHIP_PYS_ZITI) {
             $offline_store_id = $addressId;
         }
-        $this->setShareConsignees($buyerData['name'], $buyerData['mobilephone'], $buyerData['address'], $uid, $offline_store_id);
+        $this->setShareConsignees($buyerData['name'], $buyerData['mobilephone'], $buyerData['address'], $uid, $patchAddress, $offline_store_id);
         if ($shipType == SHARE_SHIP_KUAIDI) {
             return $customAddress;
         }
@@ -1255,6 +1295,9 @@ class WesharesController extends AppController {
             $address = $tinyAddress['WeshareAddress']['address'];
             if ($customAddress) {
                 $address = $address;
+            }
+            if (!empty($patchAddress)) {
+                $address = $address . '【' . $patchAddress . '】';
             }
             return $address;
         }

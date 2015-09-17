@@ -10,7 +10,10 @@ const ORDER_TYPE_GROUP = 2;
 const ORDER_TYPE_GROUP_FILL = 4; //团购补充素有剩下的
 const ORDER_TYPE_PARENT = 3;
 const ORDER_TYPE_TUAN = 5; //团长团购
-const ORDER_TYPE_WESHARE_BUY = 9;
+
+const ORDER_TYPE_WESHARE_BUY = 9; // 分享订单
+const ORDER_TYPE_WESHARE_BUY_ADD = 10; //差价补充订单
+
 //change milk order to tuan sec kill
 const ORDER_TYPE_TUAN_SEC = 6;
 

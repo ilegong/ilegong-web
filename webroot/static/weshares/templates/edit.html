@@ -15,11 +15,18 @@
                 <input class='form-control' placeholder="价格/元" ng-model="product.price" ng-change='vm.validateProductPrice(product)' ng-blur='vm.validateProductPrice(product)'/>
                 <p class='tips'>请输入数字</p>
             </div>
-            <div class="form-group fl" ng-class="{'has-error': product.storeHasError}" style="width: 40%; margin-right: 10px;">
+            <div class="form-group fl" style="margin-top: 2%;">
+                <input type="checkbox" ng-model="product.tbd" ng-true-value="1" ng-false-value="0" ng-checked="product.tbd==1">
+                &nbsp;&nbsp;价格待定
+                &nbsp;&nbsp;
+            </div>
+            <img src="/static/weshares/images/faq.png" width="20px" height="20px" style="margin-top: 3%;" ng-click="vm.showProductTipInfo=true;vm.showLayer=true;">
+            <div class="form-group" ng-class="{'has-error': product.storeHasError}" style="width: 50%; margin-right: 10px;">
                 <input class='form-control' placeholder="库存/件,默认不限制" ng-model="product.store" ng-change='vm.validateProductStore(product)' ng-blur='vm.validateProductStore(product)'/>
                 <p class='tips'>请输入数字</p>
             </div>
-            <a class="fr btn" ng-class="{'delete-btn': !$last,'add-btn': $last}"
+            <a class="fr btn" style="position: relative;margin-top: -45px;margin-right: 35%;"
+               ng-class="{'delete-btn': !$last,'add-btn': $last}"
                ng-click="vm.toggleProduct(product, $last)"></a>
         </div>
         <div class="form-group">
@@ -94,6 +101,15 @@
         <a class="btn next-btn" ng-click="vm.saveWeshare()">oh，搞定了！</a>
         <a class="btn back-btn" ng-click="vm.showShippmentInfo=false">返回修改</a>
     </div>
+    <div class="dialog-delorder" ng-show="vm.showLayer">
+        <div class="dialog-bar">温馨提示<a ng-click="vm.showProductTipInfo=false;vm.showLayer=false;" class="dialog-close" title="关闭"></a></div>
+        <div class="dialog-content">
+            <p>
+                如果产品需要称重，价格不能提前确定，那么勾选后可以让用户预付设置的价格，发货后再填入实际金额，系统自动退款或发消息给用户付尾款。
+            </p>
+        </div>
+    </div>
+    <div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showProductTipInfo=false;vm.showLayer=false;;"></div>
 </div>
 <div style="text-align: center; margin-bottom: 0;">
     <a href="/"><img src="/img/logo_footer.jpg" border="0" style="width: 4.625em;height: 1.583em;"/></a><br/>朋友说—朋友间最真挚的分享

@@ -388,6 +388,12 @@
                 </div>
             </div>
             <div class="clearfix" style="padding: 0 10px;">
+                <div class="form-group" ng-class="{'has-error': vm.userPatchAddressHasError}" ng-if="vm.selectShipType==1">
+                    <input class='form-control' placeholder="小区-楼号-门牌(方便送货上门)" ng-model='vm.buyerPatchAddress' ng-change='vm.validateUserPatchAddress()'/>
+                    <p class='tips'>请输入小区-楼号-门牌(方便送货上门)</p>
+                </div>
+            </div>
+            <div class="clearfix" style="padding: 0 10px;">
                 <div class="form-group" ng-class="{'has-error': vm.usernameHasError}">
                     <input class='form-control' placeholder="输入姓名" ng-model='vm.buyerName' ng-change='vm.validateUserName()'/>
                     <p class='tips'>请输入收货人信息</p>

@@ -569,6 +569,135 @@ class ShareUtilComponent extends Component {
     }
 
     /**
+     * @param $order
+     * check order is repaid and update order status
+     */
+    public function check_order_is_prepaid_and_update_status($order) {
+        $order_is_prepaid = $order['Order']['is_prepaid'];
+        if ($order_is_prepaid == 1) {
+            $order_id = $order['Order']['id'];
+            $orderM = ClassRegistry::init('Order');
+            $orderM->updateAll(array('status' => ORDER_STATUS_PREPAID), array('id' => $order_id));
+        }
+    }
+
+    /**
+     * @param $order
+     * 支付尾款
+     */
+    public function process_paid_order_add($order) {
+        $parent_order_id = $order['parent_order_id'];
+        $orderM = ClassRegistry::init('Order');
+        $orderM->updateAll(array('status' => ORDER_STATUS_PAID), array('id' => $parent_order_id));
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $order['Order']['member_id'] . '_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $order['Order']['member_id'] . '_0', '');
+    }
+
+    /**
+     * @param $order_id
+     * @param $product_price_map
+     */
+    public function process_order_prepaid($order_id, $product_price_map) {
+        $orderM = ClassRegistry::init('Order');
+        $cartM = ClassRegistry::init('Cart');
+        $order = $orderM->find('first', array(
+            'conditions' => array(
+                'id' => $order_id,
+                'is_prepaid' => 1,
+                'status' => ORDER_STATUS_PREPAID
+            )
+        ));
+        $confirm_total_price = 0;
+        foreach ($product_price_map as $item) {
+            $confirm_total_price = $confirm_total_price + floatval($item);
+        }
+        $order_ship_fee = $order['Order']['ship_fee'];
+        $order_coupon_price = $order['Order']['coupon_total'] / 100;
+        $un_confirm_order_price = $order['Order']['total_all_price'];
+        $difference_price = $confirm_total_price + $order_ship_fee - $order_coupon_price - $un_confirm_order_price;
+        $difference_price = round($difference_price, 2);
+        //gen virtual log order
+        if ($difference_price != 0) {
+            //should add pay order mark
+            $new_order_data = $order['Order'];
+            $new_order_data['id'] = null;
+            $new_order_data['type'] = ORDER_TYPE_WESHARE_BUY_ADD;
+            $new_order_data['parent_order_id'] = $order_id;
+            $new_order_data['total_all_price'] = $difference_price;
+            $new_order_data['total_price'] = $confirm_total_price;
+            $new_order_data['difference_price'] = $difference_price;
+            if ($difference_price > 0) {
+                $new_order_data['status'] = ORDER_STATUS_WAITING_PAY;
+            } else {
+                $new_order_data['status'] = ORDER_STATUS_REFUND;
+            }
+            $orderM->id = null;
+            $new_order = $orderM->save($new_order_data);
+            $order_carts = $cartM->find('all', array(
+                'conditions' => array(
+                    'order_id' => $order_id
+                )
+            ));
+            $new_order_cart_data = array();
+            $product_array_map = array();
+            foreach ($order_carts as $cart_item) {
+                $new_cart = $cart_item['Cart'];
+                $product_id = $new_cart['product_id'];
+                $product_all_price = $product_price_map[$product_id];
+                if ($product_all_price > 0) {
+                    $product_num = $new_cart['num'];
+                    $product_price = round($product_all_price / $product_num, 2);
+                    $product_price = $product_price * 100;
+                    $new_cart['price'] = $product_price;
+                }
+                $new_cart['id'] = null;
+                $new_cart['order_id'] = $new_order['Order']['id'];
+                $new_order_cart_data[] = $new_cart;
+                $product_array_map[] = array(
+                    $product_id => array(
+                        'name' => $new_cart['name'],
+                        'num' => $new_cart['num']
+                    )
+                );
+            }
+            $cartM->id = null;
+            $cartM->saveAll($new_order_cart_data);
+            $orderM->id = null;
+            $orderM->updateAll(array('status' => ORDER_STATUS_PREPAID_TODO, 'price_difference' => $difference_price), array('id' => $order_id));
+            //send msg
+            $order_creator = $order['Order']['creator'];
+            $weshare_id = $order['Order']['member_id'];
+            $share_info = $this->WeshareBuy->get_weshare_info($weshare_id);
+            $sharer_id = $share_info['creator'];
+            $nicknames = $this->WeshareBuy->get_users_nickname(array($sharer_id, $order_creator));
+            $open_ids = $this->WeshareBuy->get_open_ids(array($order_creator));
+            $order_creator_open_id = $open_ids[$order_creator];
+            $title = $nicknames[$order_creator] . '，你报名' . $nicknames[$sharer_id] . '分享的';
+            $product_info_str_array = array();
+            foreach ($order_carts as $product_cart) {
+                $product_info_str_array[] = $product_cart['Cart']['name'] . 'X' . $product_cart['Cart']['num'] . '，实际价格是' . $product_price_map[$product_cart['Cart']['product_id']];
+            }
+            $title = $title . implode('、', $product_info_str_array);
+            $title = $title . '你预付了' . $un_confirm_order_price . '，';
+            if ($difference_price > 0) {
+                //荣浩，你报名小宝妈分享的鸡蛋X2、母鸡X1实际价格是100，你预付了80，还需要补余款20元，谢谢你的支持！
+                $title = $title . '，还需要补余款' . $difference_price . '元，谢谢你的支持！';
+                //to pay
+                $detail_url = 'http://www.tongshijia.com/weshares/pay_order_add/' . $new_order['Order']['id'];
+            } else {
+                $title = $title . '我们将会在3-5个工作日给你退款' . abs($difference_price) . '元，谢谢你的支持！';
+                $detail_url = $this->WeshareBuy->get_weshares_detail_url($weshare_id);
+            }
+            $share_mobile = $this->WeshareBuy->get_sharer_mobile($sharer_id);
+            $remark = '分享快乐，信任无价，点击支付余款。';
+            $this->Weixin->send_remedial_order_msg($order_creator_open_id, $title, $detail_url, abs($difference_price), $share_mobile, $remark);
+        } else {
+            $orderM->id = null;
+            $orderM->updateAll(array('status' => ORDER_STATUS_PAID, 'price_difference' => 0), array('id' => $order_id));
+        }
+    }
+
+    /**
      * @param $tag
      * @return array
      * index product

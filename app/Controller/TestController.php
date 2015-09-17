@@ -109,7 +109,7 @@ class TestController extends AppController{
                 'id' => $orderId
             )
         ));
-        $this->Weixin->weshare_buy_order_paid($order);
+        $this->Weixin->notifyPaidDone($order);
         echo json_encode(array('success' => true));
         return;
     }
