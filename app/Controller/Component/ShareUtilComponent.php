@@ -613,6 +613,7 @@ class ShareUtilComponent extends Component {
             $new_order_data['parent_order_id'] = $order_id;
             $new_order_data['total_all_price'] = $difference_price;
             $new_order_data['total_price'] = $confirm_total_price;
+            $new_order_data['difference_price'] = $difference_price;
             if ($difference_price > 0) {
                 $new_order_data['status'] = ORDER_STATUS_WAITING_PAY;
             } else {
