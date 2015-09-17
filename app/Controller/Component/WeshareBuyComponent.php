@@ -609,6 +609,20 @@ class WeshareBuyComponent extends Component {
         send_join_tuan_buy_msg(null, $title, $productName, $sharerName, $remark, $detailUrl, $openId);
     }
 
+
+    public function get_added_order_repaid_money($weshareId){
+        $orderM = ClassRegistry::init('Order');
+        $addOrderResult = $orderM->find('all', array(
+            'conditions' => array(
+                'type' => ORDER_TYPE_WESHARE_BUY_ADD,
+                'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_REFUND_DONE),
+                'member_id' => $weshareId
+            ),
+            'fields' => array('SUM(total_all_price) as all_repaid_order_money'),
+        ));
+        return $addOrderResult[0][0]['all_repaid_order_money'];
+    }
+
     /**
      * @param $weshareId
      * @return float
