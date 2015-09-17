@@ -645,10 +645,10 @@ class ShareUtilComponent extends Component {
                 $product_id = $new_cart['product_id'];
                 $product_all_price = $product_price_map[$product_id];
                 if ($product_all_price > 0) {
-                    $product_num = $new_cart['product_num'];
+                    $product_num = $new_cart['num'];
                     $product_price = round($product_all_price / $product_num, 2);
                     $product_price = $product_price * 100;
-                    $new_cart['product_price'] = $product_price;
+                    $new_cart['price'] = $product_price;
                 }
                 $new_cart['id'] = null;
                 $new_cart['order_id'] = $new_order['Order']['id'];
