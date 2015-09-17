@@ -24,7 +24,7 @@ CHANGE COLUMN `is_process_prepaid` `Is_process_prepaid` INT(4) NOT NULL DEFAULT 
 ALTER TABLE `cake_orders`
 CHANGE COLUMN `is_process_prepaid` `process_prepaid_status` INT(4) NOT NULL DEFAULT '0' ;
 
-ALTER TABLE `51daifan`.`cake_carts`
+ALTER TABLE `cake_carts`
 ADD COLUMN `confirm_price` TINYINT(4) NOT NULL DEFAULT 1 AFTER `tuan_buy_id`;
 
 
