@@ -705,16 +705,6 @@ class ShareUtilComponent extends Component {
     public function get_share_index_product($tag) {
         $product = array(
             0 => array(
-                '550' => array(
-                    'share_id' => 550,
-                    'share_name' => '沱沱工社有机蔬菜限量团购',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/c47ca5d399d_0914.jpg',
-                    'share_price' => '40',
-                    'share_user_name' => '沱沱工社',
-                    'share_vote' => 315,
-                    'share_user_id' => 867587,
-                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/5e530f3a08e_0914.jpg'
-                ),
                 '446' => array(
                     'share_id' => 446,
                     'share_name' => '阳澄湖大闸蟹2015中秋第一波团购启动啦！',
@@ -879,6 +869,16 @@ class ShareUtilComponent extends Component {
                 ),
             ),
             2 => array(
+                '550' => array(
+                    'share_id' => 550,
+                    'share_name' => '沱沱工社有机蔬菜限量团购',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/c47ca5d399d_0914.jpg',
+                    'share_price' => '40',
+                    'share_user_name' => '沱沱工社',
+                    'share_vote' => 315,
+                    'share_user_id' => 867587,
+                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/5e530f3a08e_0914.jpg'
+                ),
                 '503' => array(
                     'share_id' => 503,
                     'share_name' => '旱地杂粮之清水河小香米',
