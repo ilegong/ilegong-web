@@ -582,6 +582,18 @@ class ShareUtilComponent extends Component {
     }
 
     /**
+     * @param $order
+     * 支付尾款
+     */
+    public function process_paid_order_add($order){
+        $parent_order_id = $order['parent_order_id'];
+        $orderM = ClassRegistry::init('Order');
+        $orderM->updateAll(array('status' => ORDER_STATUS_PAID), array('id' => $parent_order_id));
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $order['Order']['member_id'] . '_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $order['Order']['member_id'] . '_0', '');
+    }
+
+    /**
      * @param $order_id
      * @param $product_price_map
      */

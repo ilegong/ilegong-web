@@ -451,6 +451,11 @@ class WeixinComponent extends Component {
      * 订单支付成功后处理
      */
     public function notifyPaidDone($order) {
+        //支付尾款
+        if($order['Order']['type'] == ORDER_TYPE_WESHARE_BUY_ADD){
+            $this->ShareUtil->process_paid_order_add($order);
+            return;
+        }
         if ($order['Order']['type'] == ORDER_TYPE_WESHARE_BUY) {
             //todo callback pay order add
             $this->weshare_buy_order_paid($order);
