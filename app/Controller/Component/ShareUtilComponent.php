@@ -585,7 +585,7 @@ class ShareUtilComponent extends Component {
      * @param $order
      * 支付尾款
      */
-    public function process_paid_order_add($order){
+    public function process_paid_order_add($order) {
         $parent_order_id = $order['parent_order_id'];
         $orderM = ClassRegistry::init('Order');
         $orderM->updateAll(array('status' => ORDER_STATUS_PAID), array('id' => $parent_order_id));
