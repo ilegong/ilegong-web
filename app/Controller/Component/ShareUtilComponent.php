@@ -597,17 +597,18 @@ class ShareUtilComponent extends Component {
         ));
         $confirm_total_price = 0;
         foreach ($product_price_map as $item) {
-            $confirm_total_price = $confirm_total_price + $item['price'];
+            $confirm_total_price = $confirm_total_price + floatval($item);
         }
-        $order_ship_fee = $order['ship_fee'];
-        $order_coupon_price = $order['coupon_total'] / 100;
-        $un_confirm_order_price = $order['total_all_price'];
+        $order_ship_fee = $order['Order']['ship_fee'];
+        $order_coupon_price = $order['Order']['coupon_total'] / 100;
+        $un_confirm_order_price = $order['Order']['total_all_price'];
         $difference_price = $confirm_total_price + $order_ship_fee - $order_coupon_price - $un_confirm_order_price;
         $difference_price = round($difference_price, 2);
         //gen virtual log order
         if ($difference_price != 0) {
             //should add pay order mark
             $new_order_data = $order['Order'];
+            $new_order_data['id'] = null;
             $new_order_data['type'] = ORDER_TYPE_WESHARE_BUY_ADD;
             $new_order_data['parent_order_id'] = $order_id;
             $new_order_data['total_all_price'] = $difference_price;
@@ -660,9 +661,8 @@ class ShareUtilComponent extends Component {
             $order_creator_open_id = $open_ids[$order_creator];
             $title = $nicknames[$order_creator] . '，你报名' . $nicknames[$sharer_id] . '分享的';
             $product_info_str_array = array();
-            foreach ($product_price_map as $key => $product_price_item) {
-                $product_info = $product_array_map[$key];
-                $product_info_str_array[] = $product_info['name'] . 'X' . $product_info['num'] . '实际价格是' . $product_price_item;
+            foreach ($order_carts as $product_cart) {
+                $product_info_str_array[] = $product_cart['Cart']['name'] . 'X' . $product_cart['Cart']['num'] . '实际价格是' . $product_price_map[$product_cart['Cart']['product_id']];
             }
             $title = $title . implode('、', $product_info_str_array);
             $title = $title . '你预付了' . $un_confirm_order_price . '，';

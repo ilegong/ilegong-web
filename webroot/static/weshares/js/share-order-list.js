@@ -139,6 +139,8 @@ $(document).ready(function () {
   var $confirmMoneyDialog = $('#confirm-money-dialog');
   var $confirmOrderId = $('#confirm-order-id', $confirmMoneyDialog);
   var $confirmUsername = $('#confirm-order-user', $confirmMoneyDialog);
+  var cartJsonStr = '';
+  var cartJsonData = {};
   $('button.price-confirm').on('click', function (e) {
     e.preventDefault();
     var $me = $(this);
@@ -146,20 +148,44 @@ $(document).ready(function () {
     var orderName = $me.data('order-name');
     $confirmOrderId.val(orderId);
     $confirmUsername.val(orderName);
-    var cartJsonStr = $('#order-cart-info-' + orderId).val();
-    var cartJsonData = JSON.parse(cartJsonStr);
+    cartJsonStr = $('#order-cart-info-' + orderId).val();
+    cartJsonData = JSON.parse(cartJsonStr);
     var formDom = '';
     $.each(cartJsonData, function (index, item) {
       formDom = formDom + '<div class="form-group cart-item">' +
-      '<label for="refund-money" class="col-sm-2 control-label">' + item['name'] + 'X' + item['num'] + '&nbsp;&nbsp;已经预付' + (item['price'] * item['num']) + '</label>' +
+      '<label for="refund-money" class="col-sm-2 control-label">' + item['name'] + 'X' + item['num'] + '&nbsp;&nbsp;已经预付' + (item['price'] * item['num'] / 100) + '</label>' +
       '<div class="col-sm-10">' +
-      '<input type="number" class="form-control" id="cart_' + item['id'] + '">' +
+      '<input type="number" placeholder="实际价格" class="form-control" id="cart_' + item['id'] + '" data-origin-price="'+(item['price'] * item['num'])+'">' +
       '</div>' +
       '</div>';
     });
     $('form', $confirmMoneyDialog).append(formDom);
+    $confirmMoneyDialog.modal('show');
+    //clear dom
+    $confirmMoneyDialog.on('hide.bs.modal', function () {
+      // clear dynamic form
+      $('form div.cart-item', $confirmMoneyDialog).remove();
+    });
   });
   $('button[name="handle-confirm-money"]').on('click', function (e) {
     e.preventDefault();
+    var $postData = {};
+    $postData['order_id'] = $confirmOrderId.val();
+    $postData['cart_map'] = [];
+    $.each(cartJsonData, function (index, item) {
+      var cartId = item['id'];
+      var $cartDom = $('#cart_' + cartId, $confirmMoneyDialog);
+      var cartOriginPrice = $cartDom.data('origin-price');
+      var cartPrice = $cartDom.val() || cartOriginPrice;
+      var cartProductId = item['product_id'];
+      var cartMapData = {};
+      cartMapData['product_id'] = cartProductId;
+      cartMapData['price'] = cartPrice;
+      $postData['cart_map'].push(cartMapData);
+    });
+    var $postJsonStr = JSON.stringify($postData);
+    $.post('/weshares/confirm_price', {data: $postJsonStr}, function (data) {
+      console.log(data);
+    });
   });
 });
