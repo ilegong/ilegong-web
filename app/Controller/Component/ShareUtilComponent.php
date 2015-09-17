@@ -675,13 +675,13 @@ class ShareUtilComponent extends Component {
             $title = $nicknames[$order_creator] . '，你报名' . $nicknames[$sharer_id] . '分享的';
             $product_info_str_array = array();
             foreach ($order_carts as $product_cart) {
-                $product_info_str_array[] = $product_cart['Cart']['name'] . 'X' . $product_cart['Cart']['num'] . '实际价格是' . $product_price_map[$product_cart['Cart']['product_id']];
+                $product_info_str_array[] = $product_cart['Cart']['name'] . 'X' . $product_cart['Cart']['num'] . '，实际价格是' . $product_price_map[$product_cart['Cart']['product_id']];
             }
             $title = $title . implode('、', $product_info_str_array);
             $title = $title . '你预付了' . $un_confirm_order_price . '，';
             if ($difference_price > 0) {
                 //荣浩，你报名小宝妈分享的鸡蛋X2、母鸡X1实际价格是100，你预付了80，还需要补余款20元，谢谢你的支持！
-                $title = $title . '还需要补余款' . $difference_price . '元，谢谢你的支持！';
+                $title = $title . '，还需要补余款' . $difference_price . '元，谢谢你的支持！';
                 //to pay
                 $detail_url = 'http://www.tongshijia.com/weshares/pay_order_add/' . $new_order['Order']['id'];
             } else {
