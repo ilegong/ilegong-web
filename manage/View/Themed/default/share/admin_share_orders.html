@@ -198,6 +198,11 @@
                         $current_order['status']!=14}}退款{{else}}退款完成{{/if}}
                     </button>
                     {{/if}}
+                    {{if $current_order['status']==6&&$current_order['price_difference']<0}}
+                    <button type="button" data-share-id="{{$current_order['member_id']}}"
+                            data-id="{{$current_order['id']}}" class="btn btn-danger refund-added-order">退尾款
+                    </button>
+                    {{/if}}
                 </td>
             </tr>
             {{/loop}}
@@ -303,6 +308,19 @@
         }
 
         setOption(document.getElementById('order_status'), order_status);
+
+        $('button.refund-added-order').on('click',function(e){
+            e.preventDefault();
+            var $me = $(this);
+            var orderId = $me.data('id');
+            $.getJSON('/manage/admin/orders/process_order_added_refund/' + orderId, function (data) {
+                if (data['success']) {
+                    $me.remove();
+                } else {
+                    alert('处理失败');
+                }
+            });
+        });
 
         //process refund
         $('button.refund-order').on('click', function () {

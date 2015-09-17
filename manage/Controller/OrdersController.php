@@ -1,18 +1,15 @@
 <?php
 
-class OrdersController extends AppController
-{
+class OrdersController extends AppController {
 
     var $name = 'Orders';
     public $components = array('Weixin');
 
-    public function admin_order_remark()
-    {
+    public function admin_order_remark() {
 
     }
 
-    public function admin_view($id)
-    {
+    public function admin_view($id) {
         $this->loadModel('Cart');
         $carts = $this->Cart->find('all', array(
             'conditions' => array('order_id' => $id),
@@ -21,11 +18,10 @@ class OrdersController extends AppController
         parent::admin_view($id);
     }
 
-    public function admin_edit($id = null, $copy = NULL)
-    {
+    public function admin_edit($id = null, $copy = NULL) {
         parent::admin_edit($id, $copy);
 
-        $this->log('edit order: '.json_encode($this->data));
+        $this->log('edit order: ' . json_encode($this->data));
 
         $username = $this->currentUser['username'];
         $user_agent = $this->request->header('User-Agent');
@@ -33,8 +29,7 @@ class OrdersController extends AppController
         $this->log('admin user edit order' . $id . ' admin user is ' . $username . ' request ip ' . $user_ip . ' user_agent ' . $user_agent);
     }
 
-    public function admin_edit2($id = null, $copy = NULL)
-    {
+    public function admin_edit2($id = null, $copy = NULL) {
         $this->loadModel('Order');
         $this->loadModel('Cart');
 
@@ -50,8 +45,7 @@ class OrdersController extends AppController
         $this->set('carts', $carts);
     }
 
-    public function admin_update2($id)
-    {
+    public function admin_update2($id) {
         $this->autoRender = false;
 
         $username = $this->currentUser['username'];
@@ -66,7 +60,7 @@ class OrdersController extends AppController
         }
 
         // 检查权限
-        if(!has_permission_to_modify_order($this->data['modify_user'])){
+        if (!has_permission_to_modify_order($this->data['modify_user'])) {
             echo json_encode(array('success' => false, 'reason' => 'no_permission'));
             return;
         }
@@ -76,15 +70,15 @@ class OrdersController extends AppController
         unset($this->data['modify_user']);
 
         // 必须修改至少一个字段
-        if(empty($this->data)){
+        if (empty($this->data)) {
             echo json_encode(array('success' => false, 'reason' => 'fields_are_empty'));
             return;
         }
 
         $new_order_status = $this->data['status'];
 
-        if(!empty($this->data['ship_mark'])){
-            if($this->data['ship_mark'] == 'ziti'){
+        if (!empty($this->data['ship_mark'])) {
+            if ($this->data['ship_mark'] == 'ziti') {
                 // 修改为自提，需有自提点
                 if (empty($this->data['consignee_id']) || $this->data['consignee_id'] == 0) {
                     echo json_encode(array('success' => false, 'reason' => 'missed_consignee_id'));
@@ -100,22 +94,21 @@ class OrdersController extends AppController
                 if (!empty($offlineStore)) {
                     $this->data['consignee_address'] = get_address(null, $offlineStore);
                 }
-            }
-            else{
+            } else {
                 $this->data['consignee_id'] = 0;
             }
         }
 
         // 添加备注，而不是直接修改
-        if(!empty($this->data['remark'])){
+        if (!empty($this->data['remark'])) {
             $remark = (empty($order['Order']['remark']) ? '' : $order['Order']['remark'] . ', ') . $this->data['remark'] . '(' . $modify_user . ')';
             $this->data['remark'] = $remark;
         }
-        foreach($this->data as $key => $value){
-            $this->data[$key] = "'".$value."'";
+        foreach ($this->data as $key => $value) {
+            $this->data[$key] = "'" . $value . "'";
         }
 
-        $this->log('update order ' . $id . ': '.json_encode($this->data));
+        $this->log('update order ' . $id . ': ' . json_encode($this->data));
         if (!$this->Order->updateAll($this->data, array('id' => $id))) {
             echo json_encode(array('success' => false, 'reason' => 'failed_to_save_order'));
             return;
@@ -124,8 +117,7 @@ class OrdersController extends AppController
         echo json_encode(array('success' => true, 'message_sent' => false));
     }
 
-    public function admin_trash($ids)
-    {
+    public function admin_trash($ids) {
         if (is_array($_POST['ids']) && !empty($_POST['ids'])) {
             $ids = $_POST['ids'];
         } else {
@@ -162,8 +154,7 @@ class OrdersController extends AppController
      * 删除数据
      * @param $id
      */
-    function admin_delete($ids = null)
-    {
+    function admin_delete($ids = null) {
         @set_time_limit(0);
         if (is_array($_POST['ids']) && !empty($_POST['ids'])) {
             $ids = $_POST['ids'];
@@ -198,8 +189,7 @@ class OrdersController extends AppController
      * 恢复删除标记
      * @param $id
      */
-    function admin_restore($ids = null)
-    {
+    function admin_restore($ids = null) {
         if (is_array($_POST['ids']) && !empty($_POST['ids'])) {
             $ids = $_POST['ids'];
         } else {
@@ -228,8 +218,7 @@ class OrdersController extends AppController
     }
 
 
-    protected function _custom_list_option(&$searchoptions)
-    {
+    protected function _custom_list_option(&$searchoptions) {
         $filterType = $_REQUEST['filterType'];
         $filter = $_REQUEST['filter'];
         if ($filterType) {
@@ -277,8 +266,7 @@ class OrdersController extends AppController
     }
 
 
-    public function admin_list_today()
-    {
+    public function admin_list_today() {
 
         $sent_by_our_self = array(
             35, //电科院-刘炎炎
@@ -528,18 +516,15 @@ class OrdersController extends AppController
         $this->set('product_id', $product_id);
     }
 
-    private function get_day_start($start_day = '')
-    {
+    private function get_day_start($start_day = '') {
         return $this->get_day_time($start_day);
     }
 
-    private function get_day_end($end_day = '')
-    {
+    private function get_day_end($end_day = '') {
         return $this->get_day_time($end_day, 23, 59, 59);
     }
 
-    private function get_day_time($day = '', $hour = 0, $minute = 0, $second = 0)
-    {
+    private function get_day_time($day = '', $hour = 0, $minute = 0, $second = 0) {
         if (!empty($day)) {
             $start_date = date_parse_from_format("Y-m-d", $day);
             $y = $start_date["year"];
@@ -576,6 +561,69 @@ class OrdersController extends AppController
             )
         ));
         echo json_encode($refundLog['RefundLog']);
+        return;
+    }
+
+    public function admin_process_order_added_refund($orderId) {
+        $this->autoRender = false;
+        $this->loadModel('User');
+        $this->loadModel('Weshare');
+        $this->loadModel('RefundLog');
+        $this->loadModel('PayLog');
+        $this->loadModel('Order');
+        $orderInfo = $this->Order->find('first', array(
+            'conditions' => array(
+                'parent_order_id' => $orderId,
+                'status' => ORDER_STATUS_REFUND
+            )
+        ));
+        if ($orderInfo) {
+            $showRefundMoney = abs($orderInfo['Order']['total_all_price']);
+            $PayLogInfo = $this->PayLog->find('first', array(
+                'conditions' => array(
+                    'order_id' => $orderId,
+                    'status' => 2
+                )
+            ));
+            $trade_type = $PayLogInfo['PayLog']['trade_type'];
+            if (empty($trade_type)) {
+                $trade_type = 'JSAPI';
+            }
+            $refundMoney = intval($showRefundMoney * 100);
+            $saveRefundLogData = array(
+                'order_id' => $orderId,
+                'refund_fee' => $refundMoney,
+                'created' => date('Y-m-d H:i:s'),
+                'trade_type' => $trade_type,
+                'remark' => '尾款退款',
+                'type' => REFUND_ADD_ORDER_TYPE
+            );
+            $this->RefundLog->save($saveRefundLogData);
+            $weshareId = $orderInfo['Order']['member_id'];
+            //refund processing
+            $weshareInfo = $this->Weshare->find('first', array(
+                'conditions' => array('id' => $weshareId)
+            ));
+            $order_creator_id = $orderInfo['Order']['creator'];
+            $order_creator_info = $this->User->find('first', array(
+                'conditions' => array(
+                    'User.id' => $order_creator_id
+                ),
+                'recursive' => 0, //int
+                'fields' => array('User.id', 'User.nickname')
+            ));
+            $weshareTitle = $weshareInfo['Weshare']['title'];
+            $remark = '点击查看详情';
+            $detail_url = WX_HOST . '/weshares/view/' . $weshareId;
+            $this->Order->updateAll(array('status' => ORDER_STATUS_REFUND_DONE), array('id' => $orderInfo['Order']['id']));
+            $this->Order->updateAll(array('status' => ORDER_STATUS_PAID), array('id' => $orderId));
+            $title = $order_creator_info['User']['nickname'] . '，你好，我们已经为你退款，会在3-5个工作日内到账，请注意查收。';
+            $this->Weixin->send_refund_order_notify($order_creator_id, $title, $weshareTitle, $showRefundMoney, $detail_url, $orderId, $remark);
+            //refund complete
+            echo json_encode(array('success' => true));
+            return;
+        }
+        echo json_encode(array('success' => false, 'reason' => 'no_order'));
         return;
     }
 
@@ -656,8 +704,7 @@ class OrdersController extends AppController
     }
 
 
-    public function admin_send_refund_notify()
-    {
+    public function admin_send_refund_notify() {
         $this->autoRender = false;
         $this->loadModel('User');
         $this->loadModel('Cart');
@@ -668,12 +715,12 @@ class OrdersController extends AppController
         $orderStatus = $_REQUEST['orderStatus'];
         $orderScores = $_REQUEST['orderScores'];
         $orderTotalALlPrice = $_REQUEST['orderTotalAllPrice'];
-        $userInfo = $this->User->find('first',array('conditions' => array('id' => $creator)));
-        $cartInfo = $this->Cart->find('all',array('conditions' => array('order_id' => $orderId)));
+        $userInfo = $this->User->find('first', array('conditions' => array('id' => $creator)));
+        $cartInfo = $this->Cart->find('all', array('conditions' => array('order_id' => $orderId)));
         $this->loadModel('RefundLog');
         $this->loadModel('PayLog');
 
-        $PayLogInfo = $this->PayLog->find('first',array(
+        $PayLogInfo = $this->PayLog->find('first', array(
             'conditions' => array(
                 'order_id' => $orderId,
                 'status' => 2
@@ -695,38 +742,38 @@ class OrdersController extends AppController
         $msg = $title;
         $detail_url = WX_HOST . '/orders/detail/' . $orderId;
         $remark = '点击查看订单，如有问题，请联系客服!';
-        if ($orderStatus == 4){
-            if($refundMoney == $orderTotalALlPrice){
-                if($this->_send_refund_scores($userInfo['User']['id'],$orderScores,$orderId)){
+        if ($orderStatus == 4) {
+            if ($refundMoney == $orderTotalALlPrice) {
+                if ($this->_send_refund_scores($userInfo['User']['id'], $orderScores, $orderId)) {
                     $score_msg = '积分变动通知已发出';
-                }else{
+                } else {
                     $score_msg = '积分变动通知发送失败';
                 }
-            }else{
+            } else {
                 $score_msg = '不发送积分变动通知';
             }
-        if (message_send($msg,$phone)){
-            $flag_1 = true;
-        }else{
-            $flag_1 = false;
-        }
-        if($this->Weixin->send_refund_order_notify($creator,$title,$product_name,$refundMoney,$detail_url,$orderId,$remark)){
-            $flag_2 = true;
-        }else{
-            $flag_2 = false;
-        }
-        if($flag_1||$flag_2){
-            $data['RefundLog']['order_id'] = $orderId;
-            $data['RefundLog']['refund_fee'] = intval(intval($refundMoney)*1000/10);
-            $data['RefundLog']['trade_type'] = $PayLogInfo['PayLog']['trade_type'];
-            $data['RefundLog']['remark'] = '已退款:'.$refundMark;
-            $this->RefundLog->save($data);
-            $returnInfo  = array('success' => true,'msg' =>'退款通知发送成功  '.$score_msg);
-        }else{
-            $returnInfo  = array('success' => false,'msg' =>'退款通知发送失败，请重试  '.$score_msg);
-        }
-        echo json_encode($returnInfo);
-        }else{
+            if (message_send($msg, $phone)) {
+                $flag_1 = true;
+            } else {
+                $flag_1 = false;
+            }
+            if ($this->Weixin->send_refund_order_notify($creator, $title, $product_name, $refundMoney, $detail_url, $orderId, $remark)) {
+                $flag_2 = true;
+            } else {
+                $flag_2 = false;
+            }
+            if ($flag_1 || $flag_2) {
+                $data['RefundLog']['order_id'] = $orderId;
+                $data['RefundLog']['refund_fee'] = intval(intval($refundMoney) * 1000 / 10);
+                $data['RefundLog']['trade_type'] = $PayLogInfo['PayLog']['trade_type'];
+                $data['RefundLog']['remark'] = '已退款:' . $refundMark;
+                $this->RefundLog->save($data);
+                $returnInfo = array('success' => true, 'msg' => '退款通知发送成功  ' . $score_msg);
+            } else {
+                $returnInfo = array('success' => false, 'msg' => '退款通知发送失败，请重试  ' . $score_msg);
+            }
+            echo json_encode($returnInfo);
+        } else {
             $data['RefundLog']['order_id'] = $orderId;
             $data['RefundLog']['refund_fee'] = intval(intval($refundMoney) * 1000 / 10);
             $data['RefundLog']['trade_type'] = $PayLogInfo['PayLog']['trade_type'];
@@ -740,48 +787,46 @@ class OrdersController extends AppController
         }
     }
 
-    public function  admin_compute_refund_money()
-    {
+    public function  admin_compute_refund_money() {
         $this->autoRender = false;
         $orderId = $_REQUEST['orderId'];
         $this->loadModel('RefundLog');
-        $refund_money = $this->RefundLog->query('select sum(refund_fee) as refund_money from cake_refund_logs where order_id =' . $orderId .' and remark like "%已退款%"');
+        $refund_money = $this->RefundLog->query('select sum(refund_fee) as refund_money from cake_refund_logs where order_id =' . $orderId . ' and remark like "%已退款%"');
         $refund_money = $refund_money[0][0]['refund_money'];
         echo json_encode($refund_money / 100);
     }
 
-    public function admin_get_refund_log($order_id,$total_price)
-    {
+    public function admin_get_refund_log($order_id, $total_price) {
 //        $total_price = $_REQUEST['total_price'];
         $this->loadModel('RefundLog');
         $RefundLogInfo = $this->RefundLog->find('all', array(
             'conditions' => array('order_id' => $order_id)
         ));
-        $refund_money = $this->RefundLog->query('select sum(refund_fee) as refund_money from cake_refund_logs where order_id ='.$order_id.' and remark like "%已退款%"');
-        $refund_money = $refund_money[0][0]['refund_money']/100;
-        $this->set('refund_money',$refund_money);
-        $this->set('RefundInfo',$RefundLogInfo);
-        $this->set('total_price',$total_price);
+        $refund_money = $this->RefundLog->query('select sum(refund_fee) as refund_money from cake_refund_logs where order_id =' . $order_id . ' and remark like "%已退款%"');
+        $refund_money = $refund_money[0][0]['refund_money'] / 100;
+        $this->set('refund_money', $refund_money);
+        $this->set('RefundInfo', $RefundLogInfo);
+        $this->set('total_price', $total_price);
     }
 
     /*
      * refund scores and send_message
      */
-    private function _send_refund_scores($userId,$scores,$orderId){
-            $this->loadModel('Score');
-            $rtn = $this->Score->refund_user_scores($userId,$scores,$orderId);
-            if(!empty($rtn)){
-                $userM = ClassRegistry::init('User');
-                $userM->add_score($userId, $rtn['Score']['score']);
-                return true;
-            }else return false;
+    private function _send_refund_scores($userId, $scores, $orderId) {
+        $this->loadModel('Score');
+        $rtn = $this->Score->refund_user_scores($userId, $scores, $orderId);
+        if (!empty($rtn)) {
+            $userM = ClassRegistry::init('User');
+            $userM->add_score($userId, $rtn['Score']['score']);
+            return true;
+        } else return false;
     }
 
-    private function _insert_pay_notifies($order){
+    private function _insert_pay_notifies($order) {
         $data = array();
 
         $time = date('YmdHis');
-        $data['PayNotify']['out_trade_no'] = 'OFFLINE-'.$time;
+        $data['PayNotify']['out_trade_no'] = 'OFFLINE-' . $time;
         $data['PayNotify']['transaction_id'] = -1;
         $data['PayNotify']['trade_type'] = 'OFFLINE';
         $data['PayNotify']['bank_type'] = '';
@@ -799,28 +844,29 @@ class OrdersController extends AppController
         }
     }
 
-    private function _on_order_paid($order){
-        $this->Order->updateAll(array('pay_time'=>"'".date("Y-m-d H:i:s")."'"), array('id' => $order['Order']['id']));
+    private function _on_order_paid($order) {
+        $this->Order->updateAll(array('pay_time' => "'" . date("Y-m-d H:i:s") . "'"), array('id' => $order['Order']['id']));
         $this->_insert_pay_notifies($order);
     }
 
-    private function _on_order_returning_money($order){
-
-    }
-    private function _on_order_return_money($order){
+    private function _on_order_returning_money($order) {
 
     }
 
-    private function _on_order_shipped($order, $data){
+    private function _on_order_return_money($order) {
+
+    }
+
+    private function _on_order_shipped($order, $data) {
         $this->loadModel('Oauthbind');
         $oauth_bind = $this->Oauthbind->find('first', array(
-            'conditions' => array( 'user_id' => $order['Order']['creator'], 'source' => oauth_wx_source()),
+            'conditions' => array('user_id' => $order['Order']['creator'], 'source' => oauth_wx_source()),
             'fields' => array('user_id', 'oauth_openid')
         ));
-        if(empty($oauth_bind)){
+        if (empty($oauth_bind)) {
             return false;
         }
-        if(empty($data['ship_type']) || !empty($data['ship_code'])){
+        if (empty($data['ship_type']) || !empty($data['ship_code'])) {
             return false;
         }
 
@@ -840,33 +886,35 @@ class OrdersController extends AppController
                 "remark" => array("value" => "点击查看订单详情。", "color" => "#FF8800")
             )
         );
-        if(send_weixin_message($post_data)){
+        if (send_weixin_message($post_data)) {
             return true;
-        }else{
-            $this->log("ship code B2C: failed to send weixin message for order ".$order['Order']['id']);
+        } else {
+            $this->log("ship code B2C: failed to send weixin message for order " . $order['Order']['id']);
             return false;
         }
     }
 
-    private function _get_order_good_info($order_id){
-        $info ='';
-        $number =0;
+    private function _get_order_good_info($order_id) {
+        $info = '';
+        $number = 0;
         $carts = $this->_get_carts_on_one_order($order_id);
-        foreach($carts as $cart){
-            $info = $info.$cart['Cart']['name'].':'.$cart['Cart']['num'].'件、';
-            $number +=$cart['Cart']['num'];
+        foreach ($carts as $cart) {
+            $info = $info . $cart['Cart']['name'] . ':' . $cart['Cart']['num'] . '件、';
+            $number += $cart['Cart']['num'];
         }
 
-        $info = substr($info,0,strlen($info)-2);
-        return array("good_info"=>$info,"good_number"=>$number);
+        $info = substr($info, 0, strlen($info) - 2);
+        return array("good_info" => $info, "good_number" => $number);
     }
-    public function _get_carts_on_one_order($order_id){
+
+    public function _get_carts_on_one_order($order_id) {
         $this->loadModel('Cart');
-        $carts = $this->Cart->find('all',array(
-            'conditions'=>array('order_id' => $order_id)));
+        $carts = $this->Cart->find('all', array(
+            'conditions' => array('order_id' => $order_id)));
         return $carts;
     }
-    public function admin_carts_edit($order_id){
+
+    public function admin_carts_edit($order_id) {
         $carts = $this->_get_carts_on_one_order($order_id);
         $this->set('carts', $carts);
     }

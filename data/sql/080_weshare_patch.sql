@@ -9,3 +9,8 @@ ADD COLUMN `price_difference` INT NOT NULL DEFAULT 0 AFTER `parent_order_id`;
 
 ALTER TABLE `cake_orders`
 ADD COLUMN `is_prepaid` TINYINT NOT NULL DEFAULT 0 AFTER `price_difference`;
+
+
+ALTER TABLE `cake_refund_logs`
+ADD COLUMN `type` TINYINT NOT NULL DEFAULT 0 AFTER `remark`;
+
