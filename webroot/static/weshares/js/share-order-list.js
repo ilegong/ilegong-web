@@ -186,7 +186,7 @@ $(document).ready(function () {
     var $postJsonStr = JSON.stringify($postData);
     $.post('/weshares/confirm_price.json', {data: $postJsonStr}, function (result) {
       if (result['success']) {
-        var orderId = data['order_id'];
+        var orderId = result['order_id'];
         var $priceConfirmBtn = $('#price-confirm-btn-' + orderId);
         $priceConfirmBtn.unbind();
         var $parent = $priceConfirmBtn.parent('div.offer-content');
