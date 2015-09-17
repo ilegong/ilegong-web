@@ -1021,20 +1021,21 @@ class WesharesController extends AppController {
      * @param $mobileNum
      * @param $address
      * @param $uid
+     * @param $patchAddress
      * @param int $offlineStoreId
      * 记住用户填写的地址
      */
-    private function setShareConsignees($userInfo, $mobileNum, $address, $uid, $offlineStoreId = 0) {
+    private function setShareConsignees($userInfo, $mobileNum, $address, $uid, $patchAddress, $offlineStoreId = 0) {
         $consignee = $this->OrderConsignees->find('first', array(
             'conditions' => array(
                 'creator' => $uid,
                 'status' => STATUS_CONSIGNEES_SHARE
             ),
-            'fields' => array('id', 'name', 'mobilephone')
+            'fields' => array('id', 'name', 'mobilephone', 'remark_address')
         ));
         if (!empty($consignee)) {
             //update
-            $saveData = array('name' => "'" . $userInfo . "'", 'mobilephone' => "'" . $mobileNum . "'", 'address' => "'" . $address . "'");
+            $saveData = array('name' => "'" . $userInfo . "'", 'mobilephone' => "'" . $mobileNum . "'", 'address' => "'" . $address . "'", 'remark_address' => "'" . $patchAddress . "'");
             if ($offlineStoreId != 0) {
                 $saveData['ziti_id'] = $offlineStoreId;
             }
@@ -1042,7 +1043,7 @@ class WesharesController extends AppController {
             return;
         }
         //save
-        $this->OrderConsignees->save(array('creator' => $uid, 'status' => STATUS_CONSIGNEES_SHARE, 'name' => $userInfo, 'mobilephone' => $mobileNum, 'address' => $address, 'ziti_id' => $offlineStoreId));
+        $this->OrderConsignees->save(array('creator' => $uid, 'status' => STATUS_CONSIGNEES_SHARE, 'name' => $userInfo, 'mobilephone' => $mobileNum, 'address' => $address, 'ziti_id' => $offlineStoreId, 'remark_address' => $patchAddress));
     }
 
     /**
@@ -1056,7 +1057,7 @@ class WesharesController extends AppController {
                 'creator' => $uid,
                 'status' => STATUS_CONSIGNEES_SHARE
             ),
-            'fields' => array('name', 'mobilephone', 'address', 'ziti_id')
+            'fields' => array('name', 'mobilephone', 'address', 'ziti_id', 'remark_address')
         ));
         //load remember offline store id
         $ziti_id = $consignee['OrderConsignees']['ziti_id'];
@@ -1271,10 +1272,14 @@ class WesharesController extends AppController {
         $shipType = $shipInfo['ship_type'];
         $addressId = $shipInfo['address_id'];
         $customAddress = $buyerData['address'];
+        $patchAddress = $buyerData['patchAddress'];
+        if ($patchAddress == null) {
+            $patchAddress = '';
+        }
         if ($shipType == SHARE_SHIP_PYS_ZITI) {
             $offline_store_id = $addressId;
         }
-        $this->setShareConsignees($buyerData['name'], $buyerData['mobilephone'], $buyerData['address'], $uid, $offline_store_id);
+        $this->setShareConsignees($buyerData['name'], $buyerData['mobilephone'], $buyerData['address'], $uid, $patchAddress, $offline_store_id);
         if ($shipType == SHARE_SHIP_KUAIDI) {
             return $customAddress;
         }
@@ -1288,6 +1293,9 @@ class WesharesController extends AppController {
             $address = $tinyAddress['WeshareAddress']['address'];
             if ($customAddress) {
                 $address = $address;
+            }
+            if (!empty($patchAddress)) {
+                $address = $address . '【' . $patchAddress . '】';
             }
             return $address;
         }

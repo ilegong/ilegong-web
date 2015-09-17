@@ -584,7 +584,12 @@
         rebate_log_id: vm.rebateLogId,
         products: products,
         ship_info: ship_info,
-        buyer: {name: vm.buyerName, mobilephone: vm.buyerMobilePhone, address: vm.buyerAddress}
+        buyer: {
+          name: vm.buyerName,
+          mobilephone: vm.buyerMobilePhone,
+          address: vm.buyerAddress,
+          patchAddress: vm.buyerPatchAddress
+        }
       };
       if (vm.useCouponId) {
         orderData['coupon_id'] = vm.useCouponId;
