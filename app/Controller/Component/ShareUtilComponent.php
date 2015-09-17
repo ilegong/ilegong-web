@@ -742,6 +742,26 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 708029,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
                 ),
+                '585' => array(
+                    'share_id' => 585,
+                    'share_name' => '新疆阿克苏天山脚下----有机鲜大枣',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/89849cc16b6_0917.jpg',//todo
+                    'share_price' => '100',
+                    'share_user_name' => '李樱花',
+                    'share_vote' => 95,
+                    'share_user_id' => 810684,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
+                ),
+                '586' => array(
+                    'share_id' => 586,
+                    'share_name' => '云南哀牢山古法手工叶子红糖，特价包邮还有赠品必须分享啊！',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/4dea8382e4e_0917.jpg',//todo
+                    'share_price' => '38',
+                    'share_user_name' => '鲲鲲',
+                    'share_vote' => 95,
+                    'share_user_id' => 806889,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
+                ),
                 '542' => array(
                     'share_id' => 542,
                     'share_name' => '喜迎中秋云南云腿月饼团购',
@@ -814,6 +834,16 @@ class ShareUtilComponent extends Component {
                 ),
             ),
             1 => array(
+                '550' => array(
+                    'share_id' => 550,
+                    'share_name' => '沱沱工社有机蔬菜限量团购',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/c47ca5d399d_0914.jpg',
+                    'share_price' => '40',
+                    'share_user_name' => '沱沱工社',
+                    'share_vote' => 315,
+                    'share_user_id' => 867587,
+                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/5e530f3a08e_0914.jpg'
+                ),
                 '386' => array(
                     'share_id' => 386,
                     'share_name' => '陕西周至翠香猕猴桃',
@@ -876,16 +906,6 @@ class ShareUtilComponent extends Component {
                 ),
             ),
             2 => array(
-                '550' => array(
-                    'share_id' => 550,
-                    'share_name' => '沱沱工社有机蔬菜限量团购',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/c47ca5d399d_0914.jpg',
-                    'share_price' => '40',
-                    'share_user_name' => '沱沱工社',
-                    'share_vote' => 315,
-                    'share_user_id' => 867587,
-                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/5e530f3a08e_0914.jpg'
-                ),
                 '503' => array(
                     'share_id' => 503,
                     'share_name' => '旱地杂粮之清水河小香米',
