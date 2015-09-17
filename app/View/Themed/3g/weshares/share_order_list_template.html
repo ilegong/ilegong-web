@@ -10,10 +10,6 @@
     offer-info
     {{elseif $item_order['status']==ORDER_STATUS_RETURNING_MONEY}}
     offer-danger
-    {{elseif $item_order['status']==ORDER_STATUS_PREPAID}}
-    offer-danger
-    {{elseif $item_order['status']==ORDER_STATUS_PREPAID_TODO}}
-    offer-warning
     {{else}}
     offer-default{{/if}}">
         <div class="shape">
@@ -87,7 +83,7 @@
             </button>
             <textarea style="display: none;" id="order-cart-info-{{$item_order['id']}}">{{json_encode($order_cart_map[$item_order['id']]);}}</textarea>
             {{/if}}
-            {{if $item_order['status']==ORDER_STATUS_PREPAID}}
+            {{if $item_order['process_prepaid_status']==ORDER_STATUS_PREPAID}}
             <button class="btn btn-info btn-sm pull-right price-confirm" data-order-name="{{$item_order['consignee_name']}}"
                     data-order-id="{{$item_order['id']}}" id="price-confirm-btn-{{$item_order['id']}}"
                     style="margin-bottom: 5px; margin-left: 5px;">确定价格
