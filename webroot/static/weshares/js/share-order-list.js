@@ -139,24 +139,27 @@ $(document).ready(function () {
   var $confirmMoneyDialog = $('#confirm-money-dialog');
   var $confirmOrderId = $('#confirm-order-id', $confirmMoneyDialog);
   var $confirmUsername = $('#confirm-order-user', $confirmMoneyDialog);
-  $('button.price-confirm').on('click', function(e){
+  $('button.price-confirm').on('click', function (e) {
     e.preventDefault();
     var $me = $(this);
     var orderId = $me.data('order-id');
-    var cartJsonStr = $('#order-cart-info-'+orderId).val();
+    var orderName = $me.data('order-name');
+    $confirmOrderId.val(orderId);
+    $confirmUsername.val(orderName);
+    var cartJsonStr = $('#order-cart-info-' + orderId).val();
     var cartJsonData = JSON.parse(cartJsonStr);
     var formDom = '';
     $.each(cartJsonData, function (index, item) {
-      formDom = formDom + '<div class="form-group">' +
-      '<label for="refund-money" class="col-sm-2 control-label">'+item['name']+'X'+item['num']+'</label>' +
+      formDom = formDom + '<div class="form-group cart-item">' +
+      '<label for="refund-money" class="col-sm-2 control-label">' + item['name'] + 'X' + item['num'] + '&nbsp;&nbsp;已经预付' + (item['price'] * item['num']) + '</label>' +
       '<div class="col-sm-10">' +
-      '<input type="number" class="form-control" id="">' +
+      '<input type="number" class="form-control" id="cart_' + item['id'] + '">' +
       '</div>' +
       '</div>';
     });
+    $('form', $confirmMoneyDialog).append(formDom);
   });
-
-  $('button[name="handle-confirm-money"]').on('click',function(e){
+  $('button[name="handle-confirm-money"]').on('click', function (e) {
     e.preventDefault();
   });
 });
