@@ -181,8 +181,10 @@ class ShareController extends AppController{
             $weshare_refund_money_map[$item_share_id] = $share_refund_money/100;
         }
         $weshare_rebate_map = $this->get_share_rebate_money($weshare_ids);
+        $repaid_money_result = $this->get_share_repaid_money($weshare_ids);
+        $this->set('repaid_money_result', $repaid_money_result);
         $this->set('weshare_rebate_map', $weshare_rebate_map);
-        $this->set('weshare_refund_map',$weshare_refund_money_map);
+        $this->set('weshare_refund_map', $weshare_refund_money_map);
         $this->set('weshares', $weshares);
         $this->set('weshare_summery', $summery_data);
         $this->set('creators', $creators);
@@ -648,6 +650,28 @@ class ShareController extends AppController{
             )
         ));
         return $offlineStore;
+    }
+
+    function get_share_repaid_money($share_ids){
+        $orderM = ClassRegistry::init('Order');
+        $addOrderResult = $orderM->find('all', array(
+            'conditions' => array(
+                'type' => ORDER_TYPE_WESHARE_BUY_ADD,
+                'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_REFUND_DONE),
+                'member_id' => $share_ids
+            ),
+            'fields' => array('total_all_price', 'id', 'member_id'),
+            'group' => array('member_id')
+        ));
+        $repaid_money_result = array();
+        foreach($addOrderResult as $item){
+            $member_id = $item['Order']['member_id'];
+            if(!isset($repaid_money_result[$member_id])){
+                $repaid_money_result[$member_id] = 0;
+            }
+            $repaid_money_result[$member_id] = $repaid_money_result[$member_id]+$item['Order']['total_all_price'];
+        }
+        return $repaid_money_result;
     }
 
     function get_share_rebate_money($share_ids){
