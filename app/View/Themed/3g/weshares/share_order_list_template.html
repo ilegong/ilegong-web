@@ -38,6 +38,25 @@
             </div>
         </div>
         <div class="offer-content">
+            {{if $item_order['process_prepaid_status']!=0}}
+            <div class="pull-right" style="margin-top: 18%;margin-right: -27%;">
+                {{if $item_order['process_prepaid_status']==ORDER_STATUS_PREPAID}}
+                <span class="label label-warning">待确认价格</span>
+                {{/if}}
+                {{if $item_order['process_prepaid_status']==ORDER_STATUS_PREPAID_TODO}}
+                <span class="label label-info">待补款</span>
+                {{/if}}
+                {{if $item_order['process_prepaid_status']==ORDER_STATUS_PREPAID_DONE}}
+                <span class="label label-success">已补款</span>
+                {{/if}}
+                {{if $item_order['process_prepaid_status']==ORDER_STATUS_REFUND_TODO}}
+                <span class="label label-danger">待退款</span>
+                {{/if}}
+                {{if $item_order['process_prepaid_status']==ORDER_STATUS_REFUND_DONE}}
+                <span class="label label-success">已退款</span>
+                {{/if}}
+            </div>
+            {{/if}}
             <p>
                 <strong>序号:</strong>&nbsp;&nbsp;<font color="red">{{$item_order['id']}}</font><br>
                 <strong>商品:</strong>&nbsp;&nbsp;{{get_share_order_cart_display_name($order_cart_map[$item_order['id']])}}<br>

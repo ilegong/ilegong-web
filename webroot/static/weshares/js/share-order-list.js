@@ -152,12 +152,14 @@ $(document).ready(function () {
     cartJsonData = JSON.parse(cartJsonStr);
     var formDom = '';
     $.each(cartJsonData, function (index, item) {
-      formDom = formDom + '<div class="form-group cart-item">' +
-      '<label for="refund-money" class="col-sm-2 control-label">' + item['name'] + 'X' + item['num'] + '&nbsp;&nbsp;已经预付' + (item['price'] * item['num'] / 100) + '</label>' +
-      '<div class="col-sm-10">' +
-      '<input type="number" placeholder="实际价格" class="form-control" id="cart_' + item['id'] + '" data-origin-price="' + (item['price'] * item['num']) + '">' +
-      '</div>' +
-      '</div>';
+      if (item['confirm_price'] == 0) {
+        formDom = formDom + '<div class="form-group cart-item">' +
+        '<label for="refund-money" class="col-sm-2 control-label">' + item['name'] + 'X' + item['num'] + '&nbsp;&nbsp;已经预付' + (item['price'] * item['num'] / 100) + '</label>' +
+        '<div class="col-sm-10">' +
+        '<input type="number" placeholder="实际价格" class="form-control" id="cart_' + item['id'] + '" data-origin-price="' + (item['price'] * item['num']) + '">' +
+        '</div>' +
+        '</div>';
+      }
     });
     $('form', $confirmMoneyDialog).append(formDom);
     $confirmMoneyDialog.modal('show');
@@ -173,15 +175,17 @@ $(document).ready(function () {
     $postData['order_id'] = $confirmOrderId.val();
     $postData['cart_map'] = [];
     $.each(cartJsonData, function (index, item) {
-      var cartId = item['id'];
-      var $cartDom = $('#cart_' + cartId, $confirmMoneyDialog);
-      var cartOriginPrice = $cartDom.data('origin-price');
-      var cartPrice = $cartDom.val() || cartOriginPrice;
-      var cartProductId = item['product_id'];
-      var cartMapData = {};
-      cartMapData['product_id'] = cartProductId;
-      cartMapData['price'] = cartPrice;
-      $postData['cart_map'].push(cartMapData);
+      if(item['confirm_price'] == 0){
+        var cartId = item['id'];
+        var $cartDom = $('#cart_' + cartId, $confirmMoneyDialog);
+        var cartOriginPrice = $cartDom.data('origin-price');
+        var cartPrice = $cartDom.val() || cartOriginPrice;
+        var cartProductId = item['product_id'];
+        var cartMapData = {};
+        cartMapData['product_id'] = cartProductId;
+        cartMapData['price'] = cartPrice;
+        $postData['cart_map'].push(cartMapData);
+      }
     });
     var $postJsonStr = JSON.stringify($postData);
     $.post('/weshares/confirm_price.json', {data: $postJsonStr}, function (result) {

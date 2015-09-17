@@ -670,7 +670,11 @@ class ShareUtilComponent extends Component {
             $cartM->id = null;
             $cartM->saveAll($new_order_cart_data);
             $orderM->id = null;
-            $orderM->updateAll(array('process_prepaid_status' => ORDER_STATUS_PREPAID_TODO, 'price_difference' => $total_difference_price), array('id' => $order_id));
+            if ($total_difference_price > 0) {
+                $orderM->updateAll(array('process_prepaid_status' => ORDER_STATUS_PREPAID_TODO, 'price_difference' => $total_difference_price), array('id' => $order_id));
+            } else {
+                $orderM->updateAll(array('process_prepaid_status' => ORDER_STATUS_REFUND_TODO, 'price_difference' => $total_difference_price), array('id' => $order_id));
+            }
             //send msg
             $order_creator = $order['Order']['creator'];
             $weshare_id = $order['Order']['member_id'];
