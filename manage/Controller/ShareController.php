@@ -362,7 +362,7 @@ class ShareController extends AppController{
     public function admin_all_shares() {
         $shares = $this->Weshare->find('all', array(
             'order' => array('created DESC'),
-            'limit' => 200
+            'limit' => 300
         ));
         $shareIds = Hash::extract($shares, '{n}.Weshare.id');
         $products = $this->WeshareProduct->find('all',array(
