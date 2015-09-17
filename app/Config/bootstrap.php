@@ -162,10 +162,12 @@ define('ORDER_STATUS_TOUSU', 12); //已投诉， 不要再用，投诉走其他�
 define('ORDER_STATUS_COMMENT', 16); //待评价
 define('ORDER_STATUS_RETURNING_MONEY', 14); //退款中
 
-define('ORDER_STATUS_PREPAID', 5); //预付款
-define('ORDER_STATUS_PREPAID_TODO', 6);//预付款订单待处理
-define('ORDER_STATUS_REFUND', 7);//预付款比较大于实际金额 需要退款 生成退款订单 只作为标记 不进行实际操作
-define('ORDER_STATUS_REFUND_DONE',8);//付款 退款 处理
+define('ORDER_STATUS_PREPAID', 25); //预付款
+define('ORDER_STATUS_PREPAID_TODO', 26);//预付款订单待处理
+define('ORDER_STATUS_PREPAID_DONE', 27);//预付款处理成功
+define('ORDER_STATUS_REFUND', 27);//预付款比较大于实际金额 需要退款 生成退款订单 只作为标记 不进行实际操作
+define('ORDER_STATUS_REFUND_TODO', 28);//付款 退款 处理
+define('ORDER_STATUS_REFUND_DONE', 29);//预付款退款
 
 define('ORDER_STATUS_SPLIT', 20);
 define('ORDER_STATUS_VIRTUAL', 21);
