@@ -266,6 +266,7 @@
             vm.buyerName = vm.consignee.name;
             vm.buyerMobilePhone = vm.consignee.mobilephone;
             vm.buyerAddress = vm.consignee.address;
+            vm.buyerPatchAddress = vm.consignee.remark_address;
           }
           setWeiXinShareParams();
           //from paid done
