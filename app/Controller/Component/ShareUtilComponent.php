@@ -750,7 +750,7 @@ class ShareUtilComponent extends Component {
                 '586' => array(
                     'share_id' => 586,
                     'share_name' => '云南哀牢山古法手工叶子红糖，特价包邮还有赠品必须分享啊！',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/4dea8382e4e_0917.jpg',//todo
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/abcb4094d25_0917.jpg',//todo
                     'share_price' => '38',
                     'share_user_name' => '鲲鲲',
                     'share_vote' => 59,
