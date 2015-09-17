@@ -878,7 +878,7 @@ class WesharesController extends AppController {
     /**
      * sharer confirm price
      */
-    public function confirm_price(){
+    public function confirm_price() {
         $this->autoRender = false;
         $postData = $_REQUEST['data'];
         $postDataJson = json_decode($postData, true);

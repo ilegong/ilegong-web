@@ -155,7 +155,7 @@ $(document).ready(function () {
       formDom = formDom + '<div class="form-group cart-item">' +
       '<label for="refund-money" class="col-sm-2 control-label">' + item['name'] + 'X' + item['num'] + '&nbsp;&nbsp;已经预付' + (item['price'] * item['num'] / 100) + '</label>' +
       '<div class="col-sm-10">' +
-      '<input type="number" placeholder="实际价格" class="form-control" id="cart_' + item['id'] + '" data-origin-price="'+(item['price'] * item['num'])+'">' +
+      '<input type="number" placeholder="实际价格" class="form-control" id="cart_' + item['id'] + '" data-origin-price="' + (item['price'] * item['num']) + '">' +
       '</div>' +
       '</div>';
     });
@@ -184,8 +184,20 @@ $(document).ready(function () {
       $postData['cart_map'].push(cartMapData);
     });
     var $postJsonStr = JSON.stringify($postData);
-    $.post('/weshares/confirm_price', {data: $postJsonStr}, function (data) {
-      console.log(data);
-    });
+    $.post('/weshares/confirm_price.json', {data: $postJsonStr}, function (result) {
+      if (result['success']) {
+        var orderId = data['order_id'];
+        var $priceConfirmBtn = $('#price-confirm-btn-' + orderId);
+        $priceConfirmBtn.unbind();
+        var $parent = $priceConfirmBtn.parent('div.offer-content');
+        $parent = $parent.parent();
+        $parent.removeClass().addClass('offer').addClass('offer-warning');
+        $('div.shape-text', $parent).text('尾款处理');
+        $priceConfirmBtn.remove();
+        $confirmMoneyDialog.modal('hide');
+      } else {
+        alert('保存失败,请联系客服');
+      }
+    }, 'json');
   });
 });
