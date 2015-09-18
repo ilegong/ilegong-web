@@ -909,7 +909,7 @@ class ShareUtilComponent extends Component {
             ),
             2 => array(
                 '557' => array(
-                    'share_id' => 503,
+                    'share_id' => 557,
                     'share_name' => '宫廷肘子',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/83a0d84d8ad_0918.jpg',//todo
                     'share_price' => '328',
