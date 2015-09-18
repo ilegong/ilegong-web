@@ -168,6 +168,7 @@
     vm.submitRecommend = submitRecommend;
     vm.validRecommendContent=validRecommendContent;
     vm.checkHasUnRead = checkHasUnRead;
+    vm.getProcessPrepaidStatus = getProcessPrepaidStatus;
     function pageLoaded(){
       $rootScope.loadingPage = false;
     }
@@ -834,6 +835,10 @@
       vm.submitTempCommentData.share_id = vm.weshare.id;
     }
 
+    function getProcessPrepaidStatus(status){
+
+    }
+
     function getStatusName(status, orderType) {
       if (status == 1) {
         return '待发货';
@@ -846,12 +851,6 @@
       }
       if (status == 3) {
         return '待评价';
-      }
-      if (status == 5) {
-        return '差价处理';
-      }
-      if (status == 6) {
-        return '补退尾款';
       }
       return '已完成';
     }
