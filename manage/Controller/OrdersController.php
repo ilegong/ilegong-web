@@ -616,7 +616,7 @@ class OrdersController extends AppController {
             $remark = '点击查看详情';
             $detail_url = WX_HOST . '/weshares/view/' . $weshareId;
             $this->Order->updateAll(array('status' => ORDER_STATUS_REFUND_DONE), array('id' => $orderInfo['Order']['id']));
-            $this->Order->updateAll(array('status' => ORDER_STATUS_PAID), array('id' => $orderId));
+            $this->Order->updateAll(array('process_prepaid_status' => ORDER_STATUS_REFUND_DONE), array('id' => $orderId));
             $title = $order_creator_info['User']['nickname'] . '，你好，我们已经为你退款，会在3-5个工作日内到账，请注意查收。';
             $this->Weixin->send_refund_order_notify($order_creator_id, $title, $weshareTitle, $showRefundMoney, $detail_url, $orderId, $remark);
             //refund complete

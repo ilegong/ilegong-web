@@ -423,6 +423,12 @@ class ShareController extends AppController{
         } else {
             $cond['status'] = array(ORDER_STATUS_PAID, ORDER_STATUS_RECEIVED, ORDER_STATUS_SHIPPED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_PREPAID, ORDER_STATUS_PREPAID_TODO, ORDER_STATUS_REFUND);
         }
+        $order_repaid_status = $_REQUEST['order_prepaid_status'];
+        if ($order_repaid_status != 0) {
+            $cond['process_prepaid_status'] = array($order_repaid_status);
+        } else {
+            $cond['process_prepaid_status'] = array(ORDER_STATUS_PREPAID, ORDER_STATUS_PREPAID_TODO, ORDER_STATUS_PREPAID_DONE, ORDER_STATUS_REFUND_TODO, ORDER_STATUS_REFUND_DONE);
+        }
         $order_query_condition = array(
             'conditions' => $cond,
             'order' => array('created DESC'));
