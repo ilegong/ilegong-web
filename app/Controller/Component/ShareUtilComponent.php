@@ -608,6 +608,9 @@ class ShareUtilComponent extends Component {
                 'process_prepaid_status' => ORDER_STATUS_PREPAID
             )
         ));
+        if (empty($order)) {
+            return;
+        }
         $order_carts = $cartM->find('all', array(
             'conditions' => array(
                 'order_id' => $order_id
