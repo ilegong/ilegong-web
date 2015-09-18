@@ -629,13 +629,14 @@ class ShareUtilComponent extends Component {
         //gen virtual log order
         if ($total_difference_price != 0) {
             //should add pay order mark
+            $savePrice = $total_difference_price*100;
             $new_order_data = $order['Order'];
             $new_order_data['id'] = null;
             $new_order_data['type'] = ORDER_TYPE_WESHARE_BUY_ADD;
             $new_order_data['parent_order_id'] = $order_id;
-            $new_order_data['total_all_price'] = abs($total_difference_price);
-            $new_order_data['total_price'] = abs($total_difference_price);
-            $new_order_data['difference_price'] = abs($total_difference_price);
+            $new_order_data['total_all_price'] = $savePrice;
+            $new_order_data['total_price'] = $savePrice;
+            $new_order_data['difference_price'] = $savePrice;
             $new_order_data['process_prepaid_status'] = 0;
             if ($total_difference_price > 0) {
                 $new_order_data['status'] = ORDER_STATUS_WAITING_PAY;
@@ -670,9 +671,9 @@ class ShareUtilComponent extends Component {
             $cartM->saveAll($new_order_cart_data);
             $orderM->id = null;
             if ($total_difference_price > 0) {
-                $orderM->updateAll(array('process_prepaid_status' => ORDER_STATUS_PREPAID_TODO, 'price_difference' => $total_difference_price), array('id' => $order_id));
+                $orderM->updateAll(array('process_prepaid_status' => ORDER_STATUS_PREPAID_TODO, 'price_difference' => $savePrice), array('id' => $order_id));
             } else {
-                $orderM->updateAll(array('process_prepaid_status' => ORDER_STATUS_REFUND_TODO, 'price_difference' => abs($total_difference_price)), array('id' => $order_id));
+                $orderM->updateAll(array('process_prepaid_status' => ORDER_STATUS_REFUND_TODO, 'price_difference' => $savePrice), array('id' => $order_id));
             }
             //send msg
             $order_creator = $order['Order']['creator'];

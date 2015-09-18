@@ -665,25 +665,19 @@ class ShareController extends AppController{
             'conditions' => array(
                 'type' => ORDER_TYPE_WESHARE_BUY_ADD,
                 'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_REFUND_DONE),
-                'member_id' => $share_ids,
-                'not' => array('parent_order_id' => 0)
+                'member_id' => $share_ids
             ),
             'fields' => array('total_all_price', 'id', 'member_id'),
             'group' => array('member_id')
         ));
         $repaid_money_result = array();
-        foreach ($addOrderResult as $item) {
+        foreach($addOrderResult as $item){
             $member_id = $item['Order']['member_id'];
-            if (!isset($repaid_money_result[$member_id])) {
+            if(!isset($repaid_money_result[$member_id])){
                 $repaid_money_result[$member_id] = 0;
             }
-            if ($item['Order']['status'] == ORDER_STATUS_PAID) {
-                $repaid_money_result[$member_id] = $repaid_money_result[$member_id] + $item['Order']['total_all_price'];
-            } else {
-                $repaid_money_result[$member_id] = $repaid_money_result[$member_id] - $item['Order']['total_all_price'];
-            }
+            $repaid_money_result[$member_id] = $repaid_money_result[$member_id]+$item['Order']['total_all_price'];
         }
-        return $repaid_money_result;
     }
 
     function get_share_rebate_money($share_ids){

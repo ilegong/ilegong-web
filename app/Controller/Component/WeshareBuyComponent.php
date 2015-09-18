@@ -609,27 +609,22 @@ class WeshareBuyComponent extends Component {
         send_join_tuan_buy_msg(null, $title, $productName, $sharerName, $remark, $detailUrl, $openId);
     }
 
-
+    /**
+     * @param $weshareId
+     * @return mixed
+     * 计算后结算的款项
+     */
     public function get_added_order_repaid_money($weshareId){
         $orderM = ClassRegistry::init('Order');
         $addOrderResult = $orderM->find('all', array(
             'conditions' => array(
                 'type' => ORDER_TYPE_WESHARE_BUY_ADD,
                 'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_REFUND_DONE),
-                'member_id' => $weshareId,
-                'not' => array('parent_order_id' => 0)
+                'member_id' => $weshareId
             ),
-            'fields' => array('id', 'total_all_price', 'total_price'),
+            'fields' => array('SUM(total_all_price) as all_repaid_order_money'),
         ));
-        $allRepaidMoney = 0;
-        foreach ($addOrderResult as $addOrder) {
-            if($addOrder['Order']['status'] == ORDER_STATUS_PAID){
-                $allRepaidMoney = $addOrderResult + $addOrder['Order']['total_all_price'];
-            }else{
-                $allRepaidMoney = $addOrderResult - $addOrder['Order']['total_all_price'];
-            }
-        }
-        return $allRepaidMoney;
+        return $addOrderResult[0][0]['all_repaid_order_money'];
     }
 
     /**
