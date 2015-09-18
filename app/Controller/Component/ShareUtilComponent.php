@@ -613,11 +613,11 @@ class ShareUtilComponent extends Component {
                 'order_id' => $order_id
             )
         ));
-        $order_carts = Hash::combine($order_carts, '{n}.Cart.product_id', '{n}.Cart');
+        $temp_order_carts = Hash::combine($order_carts, '{n}.Cart.product_id', '{n}.Cart');
         $cart_item_difference_price = array();
         $total_difference_price = 0;
         foreach ($product_price_map as $pid => $price) {
-            $order_cart = $order_carts[$pid];
+            $order_cart = $temp_order_carts[$pid];
             $cart_all_price = round($order_cart['num'] * $order_cart['price'] / 100, 2);
             $cart_difference_price = $price - $cart_all_price;
             $total_difference_price = $total_difference_price + $cart_difference_price;
@@ -640,11 +640,6 @@ class ShareUtilComponent extends Component {
             }
             $orderM->id = null;
             $new_order = $orderM->save($new_order_data);
-            $order_carts = $cartM->find('all', array(
-                'conditions' => array(
-                    'order_id' => $order_id
-                )
-            ));
             $new_order_cart_data = array();
             $product_array_map = array();
             foreach ($order_carts as $cart_item) {
