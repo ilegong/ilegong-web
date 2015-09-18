@@ -616,11 +616,20 @@ class WeshareBuyComponent extends Component {
             'conditions' => array(
                 'type' => ORDER_TYPE_WESHARE_BUY_ADD,
                 'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_REFUND_DONE),
-                'member_id' => $weshareId
+                'member_id' => $weshareId,
+                'not' => array('parent_order_id' => 0)
             ),
-            'fields' => array('SUM(total_all_price) as all_repaid_order_money'),
+            'fields' => array('id', 'total_all_price', 'total_price'),
         ));
-        return $addOrderResult[0][0]['all_repaid_order_money'];
+        $allRepaidMoney = 0;
+        foreach ($addOrderResult as $addOrder) {
+            if($addOrder['Order']['status'] == ORDER_STATUS_PAID){
+                $allRepaidMoney = $addOrderResult + $addOrder['Order']['total_all_price'];
+            }else{
+                $allRepaidMoney = $addOrderResult - $addOrder['Order']['total_all_price'];
+            }
+        }
+        return $allRepaidMoney;
     }
 
     /**
