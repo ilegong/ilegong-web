@@ -138,6 +138,7 @@
                     $current_order = $order['Order'];
                     $current_share = $weshares[$current_order['member_id']];
                     $current_share_creator = $all_users[$current_share['creator']];
+                    $loop_index=0;
                     ?>
             {{loop $current_order_carts $cart}}
             <tr data-id="{{$current_order['id']}}">
@@ -155,7 +156,7 @@
                 <td>{{$cart['price']*$cart['num']/100}}</td>
                 <td>{{$current_order['total_all_price']}}</td>
                 <td>{{if $current_order['price_difference'] > 0}}加尾款{{elseif
-                    $current_order['price_difference']==0}}{{else}}退尾款{{/if}}&nbsp;&nbsp;<span style="color: red;">{{abs($current_order['price_difference'])}}</span>
+                    $current_order['price_difference']==0}}{{else}}退尾款{{/if}}&nbsp;&nbsp;<span style="color: red;">{{abs($current_order['price_difference'])/100}}</span>
                 </td>
                 <td>{{if
                     !empty($refund_logs[$current_order['id']])}}{{$refund_logs[$current_order['id']]/100}}{{else}}0{{/if}}
@@ -196,6 +197,7 @@
                     {{$all_users[$rebate_logs[$current_order['cate_id']]]['nickname']}}
                 </td>
                 <td>
+                    {{if $loop_index==0}}
                     {{if $current_order['ship_mark']=='pys_zi_ti'&&$current_order['status']==1}}
                     <button type="button" class="btn btn-danger send-offline-store-msg"
                             data-id="{{$current_order['id']}}" data-toggle="modal">发货
@@ -212,8 +214,12 @@
                             data-id="{{$current_order['id']}}" class="btn btn-danger refund-added-order">退尾款
                     </button>
                     {{/if}}
+                    {{/if}}
                 </td>
             </tr>
+            <?php
+                $loop_index++;
+            ?>
             {{/loop}}
             {{/loop}}
             </tbody>
