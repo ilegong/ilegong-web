@@ -7,9 +7,9 @@ class WeshareBuyComponent extends Component {
 
     var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'mobilephone', 'is_proxy');
 
-    var $query_order_fields = array('id', 'creator', 'created', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type', 'member_id');
+    var $query_order_fields = array('id', 'creator', 'created', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type', 'member_id', 'process_prepaid_status', 'price_difference', 'is_prepaid');
 
-    var $query_share_info_order_fields = array('id', 'creator', 'created', 'updated', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type', 'total_price', 'coupon_total', 'cate_id');
+    var $query_share_info_order_fields = array('id', 'creator', 'created', 'updated', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type', 'total_price', 'coupon_total', 'cate_id', 'process_prepaid_status', 'price_difference', 'is_prepaid');
 
     var $query_cart_fields = array('id', 'order_id', 'name', 'product_id', 'num');
 

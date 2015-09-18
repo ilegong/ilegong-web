@@ -90,7 +90,7 @@
                         <strong ng-if="order.status==3" class="received-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong>
                         <strong ng-if="order.status==1" class="paid-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong>
                     </p>
-                    <p ng-if="order.process_prepaid_status!=0" style="padding: 0;padding-right: 10px;">
+                    <p ng-if="order.process_prepaid_status!=0&&order.is_prepaid==1" style="padding: 0;padding-right: 10px;">
                         <strong ng-if="order.process_prepaid_status==25" class="received-status" ng-bind="vm.getProcessPrepaidStatus(order.process_prepaid_status)"></strong>
                         <strong ng-if="order.process_prepaid_status==26" class="refund-status" ng-bind="vm.getProcessPrepaidStatus(order.process_prepaid_status)"></strong>
                         <strong ng-if="order.process_prepaid_status==27" class="paid-status" ng-bind="vm.getProcessPrepaidStatus(order.process_prepaid_status)"></strong>
