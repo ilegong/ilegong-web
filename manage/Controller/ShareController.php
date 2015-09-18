@@ -516,6 +516,7 @@ class ShareController extends AppController{
             $this->set('pay_notifies', $pay_notifies);
             $this->set('all_users', $all_users);
         }
+        $this->set('order_prepaid_status', $order_repaid_status);
         $this->set('share_id', $query_share_id);
         $this->set('order_status',$order_status);
         $this->set('order_id', $request_order_id);

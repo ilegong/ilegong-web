@@ -297,6 +297,7 @@
     $(document).ready(function () {
 
         var order_status = '{{$order_status}}';
+        var order_repaid_status = '{{$order_prepaid_status}}';
         var $offlineStoreDialog = $('#offlineStoreModal');
         var $offlineCodeInput = $('#offline-store-code');
         var $refundDialog = $('#refundModal');
@@ -317,6 +318,8 @@
         }
 
         setOption(document.getElementById('order_status'), order_status);
+
+        setOption(document.getElementById('order_prepaid_status'),order_repaid_status)
 
         $('button.refund-added-order').on('click',function(e){
             e.preventDefault();
