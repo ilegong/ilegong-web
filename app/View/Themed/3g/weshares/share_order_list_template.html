@@ -39,7 +39,7 @@
         </div>
         <div class="offer-content">
             {{if $item_order['process_prepaid_status']!=0}}
-            <div class="pull-right">
+            <div class="pull-right" id="process-prepaid-status">
                 {{if $item_order['process_prepaid_status']==ORDER_STATUS_PREPAID}}
                 <span class="label label-warning">待确认价格</span>
                 {{/if}}

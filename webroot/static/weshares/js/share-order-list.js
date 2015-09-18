@@ -195,8 +195,8 @@ $(document).ready(function () {
         $priceConfirmBtn.unbind();
         var $parent = $priceConfirmBtn.parent('div.offer-content');
         $parent = $parent.parent();
-        $parent.removeClass().addClass('offer').addClass('offer-warning');
-        $('div.shape-text', $parent).text('尾款处理');
+        var $statusLabel = $('#process-prepaid-status span', $parent);
+        $statusLabel.removeClass().addClass('label').addClass('label-info').text('待补款');
         $priceConfirmBtn.remove();
         $confirmMoneyDialog.modal('hide');
       } else {
