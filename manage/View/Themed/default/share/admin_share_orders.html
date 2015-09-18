@@ -207,7 +207,7 @@
                         $current_order['status']!=14}}退款{{else}}退款完成{{/if}}
                     </button>
                     {{/if}}
-                    {{if $current_order['status']==6&&$current_order['price_difference']<0}}
+                    {{if $current_order['process_prepaid_status']==ORDER_STATUS_REFUND_TODO&&$current_order['price_difference']<0}}
                     <button type="button" data-share-id="{{$current_order['member_id']}}"
                             data-id="{{$current_order['id']}}" class="btn btn-danger refund-added-order">退尾款
                     </button>
