@@ -908,6 +908,16 @@ class ShareUtilComponent extends Component {
                 ),
             ),
             2 => array(
+                '557' => array(
+                    'share_id' => 503,
+                    'share_name' => '宫廷肘子',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/83a0d84d8ad_0918.jpg',//todo
+                    'share_price' => '328',
+                    'share_user_name' => '艾麟~青清老号',
+                    'share_vote' => 356,
+                    'share_user_id' => 665141,
+                    'share_user_img' => 'http://wx.qlogo.cn/mmopen/Z3s4pqQLDpY3nUjibZfVjagJ1Nibicr2jmvaIjOJZTW8r2B8zyblOPpYpKia6USxZhiceT7AtuC0PberMnEewhvBHKxh9Yh2lMNPN/0'
+                ),
                 '503' => array(
                     'share_id' => 503,
                     'share_name' => '旱地杂粮之清水河小香米',
