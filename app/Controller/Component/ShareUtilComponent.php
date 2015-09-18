@@ -605,7 +605,7 @@ class ShareUtilComponent extends Component {
             'conditions' => array(
                 'id' => $order_id,
                 'is_prepaid' => 1,
-                'status' => ORDER_STATUS_PREPAID
+                'process_prepaid_status' => ORDER_STATUS_PREPAID
             )
         ));
         $order_carts = $cartM->find('all', array(
