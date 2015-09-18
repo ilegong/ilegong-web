@@ -633,6 +633,7 @@ class ShareUtilComponent extends Component {
             $new_order_data['total_all_price'] = $total_difference_price;
             $new_order_data['total_price'] = $total_difference_price;
             $new_order_data['difference_price'] = $total_difference_price;
+            $new_order_data['process_prepaid_status'] = 0;
             if ($total_difference_price > 0) {
                 $new_order_data['status'] = ORDER_STATUS_WAITING_PAY;
             } else {
