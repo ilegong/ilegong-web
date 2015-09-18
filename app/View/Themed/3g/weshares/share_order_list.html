@@ -36,7 +36,7 @@
         {{/loop}}
         </tbody>
         <tr>
-            <td colspan="3">总金额:&nbsp;<font color="red">{{$summery['real_total_price']-$refund_money-$share_rebate_money+($repaid_order_money/100)}}</font>{{if
+            <td colspan="3">总金额:&nbsp;<font color="red">{{$summery['real_total_price']-$refund_money-$share_rebate_money+$repaid_order_money}}</font>{{if
                 $refund_money>0}}&nbsp;&nbsp;退款金额:&nbsp;<font color="red">{{$refund_money}}</font>{{/if}}{{if
                 $summery['all_coupon_price'] > 0}}&nbsp;&nbsp;红包金额:&nbsp;<font color="red">{{$summery['all_coupon_price']}}</font>{{/if}}
                 {{if $repaid_order_money!=0}}
