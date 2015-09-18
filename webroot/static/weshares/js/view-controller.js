@@ -836,7 +836,21 @@
     }
 
     function getProcessPrepaidStatus(status){
-
+      if(status==25){
+        return '金额待定';
+      }
+      if(status==26){
+        return '待补款';
+      }
+      if(status==27){
+        return '已补款';
+      }
+      if(status==28){
+        return '待退差价';
+      }
+      if(status==29){
+        return '差价已退';
+      }
     }
 
     function getStatusName(status, orderType) {

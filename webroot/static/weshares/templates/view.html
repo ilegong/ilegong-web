@@ -90,6 +90,13 @@
                         <strong ng-if="order.status==3" class="received-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong>
                         <strong ng-if="order.status==1" class="paid-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong>
                     </p>
+                    <p ng-if="order.process_prepaid_status!=0" style="padding: 0;padding-right: 10px;">
+                        <strong ng-if="order.process_prepaid_status==25" class="received-status" ng-bind="vm.getProcessPrepaidStatus(order.process_prepaid_status)"></strong>
+                        <strong ng-if="order.process_prepaid_status==26" class="refund-status" ng-bind="vm.getProcessPrepaidStatus(order.process_prepaid_status)"></strong>
+                        <strong ng-if="order.process_prepaid_status==27" class="paid-status" ng-bind="vm.getProcessPrepaidStatus(order.process_prepaid_status)"></strong>
+                        <strong ng-if="order.process_prepaid_status==28" class="refund-status" ng-bind="vm.getProcessPrepaidStatus(order.process_prepaid_status)"></strong>
+                        <strong ng-if="order.process_prepaid_status==29" class="paid-status" ng-bind="vm.getProcessPrepaidStatus(order.process_prepaid_status)"></strong>
+                    </p>
                     <span class='display-name' ng-hide="_.isEmpty(vm.getOrderDisplayName(order.id))" ng-bind="vm.getOrderDisplayName(order.id)"></span>
                     <div style="display: inline-flex;width: 100%;" ng-if="vm.isCurrentUserRecommend(order)&&(order.cate_id > 0&&((order.status!=3)||(order.status==3&&!vm.isOwner(order)&&!vm.isCreator())))">
                         <div style="display: inline;width: 100%;"><span style="width: 30%;" class='created-at' ng-bind="vm.getFormatDate(order.created)"></span><span ng-click="vm.toRecommendUserInfo(order)" style="margin-top: -30px;line-height: 20px;margin-left: 10px;background-color: #29AC0E;padding: 3px;float: right;display: block;width: auto;" class="statistics-btn" ng-bind="vm.getRecommendInfo(order)"></span></div>
