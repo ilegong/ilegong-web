@@ -427,7 +427,7 @@ class ShareController extends AppController{
         if ($order_repaid_status != 0) {
             $cond['process_prepaid_status'] = array($order_repaid_status);
         } else {
-            $cond['process_prepaid_status'] = array(ORDER_STATUS_PREPAID, ORDER_STATUS_PREPAID_TODO, ORDER_STATUS_PREPAID_DONE, ORDER_STATUS_REFUND_TODO, ORDER_STATUS_REFUND_DONE);
+            $cond['process_prepaid_status'] = array(0, ORDER_STATUS_PREPAID, ORDER_STATUS_PREPAID_TODO, ORDER_STATUS_PREPAID_DONE, ORDER_STATUS_REFUND_TODO, ORDER_STATUS_REFUND_DONE);
         }
         $order_query_condition = array(
             'conditions' => $cond,
