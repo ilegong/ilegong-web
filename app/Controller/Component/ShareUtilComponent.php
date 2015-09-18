@@ -587,6 +587,7 @@ class ShareUtilComponent extends Component {
      */
     public function process_paid_order_add($order) {
         $order_id = $order['Order']['id'];
+        $this->log('order origin parent order  id' . $order['Order']['parent_order_id']);
         $orderM = ClassRegistry::init('Order');
         $this_order = $orderM->find('first', array(
             'conditions' => array(
