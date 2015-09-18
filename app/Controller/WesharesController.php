@@ -394,7 +394,11 @@ class WesharesController extends AppController {
             }
             $this->Cart->saveAll($cart);
             $totalPrice += $shipFee;
-            if ($this->Order->updateAll(array('total_all_price' => $totalPrice / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => $shipFee, 'is_prepaid' => $is_prepaid, 'process_prepaid_status' => ORDER_STATUS_PREPAID), array('id' => $orderId))) {
+            $update_order_data = array('total_all_price' => $totalPrice / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => $shipFee, 'is_prepaid' => $is_prepaid);
+            if ($is_prepaid) {
+                $update_order_data['process_prepaid_status'] = ORDER_STATUS_PREPAID;
+            }
+            if ($this->Order->updateAll($update_order_data, array('id' => $orderId))) {
                 $coupon_id = $postDataArray['coupon_id'];
                 //check coupon
                 if (!empty($coupon_id)) {
