@@ -329,15 +329,18 @@
 
         $('button.refund-added-order').on('click',function(e){
             e.preventDefault();
-            var $me = $(this);
-            var orderId = $me.data('id');
-            $.getJSON('/manage/admin/orders/process_order_added_refund/' + orderId, function (data) {
-                if (data['success']) {
-                    $me.remove();
-                } else {
-                    alert('处理失败');
-                }
-            });
+           var result =  confirm('确定退款完成？');
+            if(result){
+                var $me = $(this);
+                var orderId = $me.data('id');
+                $.getJSON('/manage/admin/orders/process_order_added_refund/' + orderId, function (data) {
+                    if (data['success']) {
+                        $me.remove();
+                    } else {
+                        alert('处理失败');
+                    }
+                });
+            }
         });
 
         //process refund
