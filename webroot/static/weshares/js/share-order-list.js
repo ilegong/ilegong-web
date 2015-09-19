@@ -24,12 +24,13 @@ $(document).ready(function () {
     var orderId = $me.data('order-id');
     var shipCompayId = $shipCompany.val();
     var shipCode = $shipCode.val();
+    var weshareId = $me.data('weshare-id');
     var companyName = $("option:selected", $shipCompany).text();
     $.post('/weshares/set_order_ship_code', {
       order_id: orderId,
       company_id: shipCompayId,
       ship_code: shipCode,
-      weshare_id: '{{$weshareId}}'
+      weshare_id: weshareId
     }, function (data) {
       if (data['success']) {
         $parent.removeClass('offer-success').addClass('offer-warning');
