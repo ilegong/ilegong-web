@@ -681,7 +681,11 @@ class WeshareBuyComponent extends Component {
             $this->RebateTrackLog = ClassRegistry::init('RebateTrackLog');
             $product_buy_num = array('details' => array());
             $order_cart_map = array();
-            $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
+            if($export){
+                $order_status = array(ORDER_STATUS_PAID);
+            }else{
+                $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
+            }
             $sort = array('created DESC');
             $orders = $this->Order->find('all', array(
                 'conditions' => array(
