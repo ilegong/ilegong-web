@@ -604,6 +604,7 @@ class ShareUtilComponent extends Component {
     /**
      * @param $order_id
      * @param $product_price_map
+     * @return int
      */
     public function process_order_prepaid($order_id, $product_price_map) {
         $orderM = ClassRegistry::init('Order');
@@ -636,7 +637,7 @@ class ShareUtilComponent extends Component {
         //gen virtual log order
         if ($total_difference_price != 0) {
             //should add pay order mark
-            $savePrice = $total_difference_price*100;
+            $savePrice = $total_difference_price * 100;
             $new_order_data = $order['Order'];
             $new_order_data['id'] = null;
             $new_order_data['type'] = ORDER_TYPE_WESHARE_BUY_ADD;
@@ -710,7 +711,9 @@ class ShareUtilComponent extends Component {
             //clear cache
             Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $order['Order']['member_id'] . '_1', '');
             Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $order['Order']['member_id'] . '_0', '');
+            return $total_difference_price;
         }
+        return 0;
     }
 
     /**

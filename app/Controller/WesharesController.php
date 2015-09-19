@@ -896,8 +896,8 @@ class WesharesController extends AppController {
         $orderId = $postDataJson['order_id'];
         $orderCartMap = $postDataJson['cart_map'];
         $orderCartMap = Hash::combine($orderCartMap, '{n}.product_id', '{n}.price');
-        $this->ShareUtil->process_order_prepaid($orderId, $orderCartMap);
-        echo json_encode(array('success' => true, 'order_id' => $orderId));
+        $difference_price = $this->ShareUtil->process_order_prepaid($orderId, $orderCartMap);
+        echo json_encode(array('success' => true, 'order_id' => $orderId, 'difference_price' => $difference_price));
         return;
     }
 

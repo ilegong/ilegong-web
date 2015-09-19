@@ -192,12 +192,19 @@ $(document).ready(function () {
     $.post('/weshares/confirm_price.json', {data: $postJsonStr}, function (result) {
       if (result['success']) {
         var orderId = result['order_id'];
+        var difference_price = parseFloat(result['difference_price']);
         var $priceConfirmBtn = $('#price-confirm-btn-' + orderId);
         $priceConfirmBtn.unbind();
         var $parent = $priceConfirmBtn.parent('div.offer-content');
         $parent = $parent.parent();
         var $statusLabel = $('#process-prepaid-status span', $parent);
-        $statusLabel.removeClass().addClass('label').addClass('label-info').text('待补款');
+        if (difference_price > 0){
+          $statusLabel.removeClass().addClass('label').addClass('label-info').text('待补款');
+        }else if(difference_price < 0){
+          $statusLabel.removeClass().addClass('label').addClass('label-info').text('待退差价');
+        }else{
+          $statusLabel.removeClass().addClass('label').addClass('label-info').text('无差价');
+        }
         $priceConfirmBtn.remove();
         $confirmMoneyDialog.modal('hide');
       } else {
