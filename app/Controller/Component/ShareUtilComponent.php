@@ -724,6 +724,16 @@ class ShareUtilComponent extends Component {
     public function get_share_index_product($tag) {
         $product = array(
             0 => array(
+                '605' => array(
+                    'share_id' => 605,
+                    'share_name' => '当天海南空运～薇薇安千层水果蛋糕中秋礼献',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/5f5d3edf6b4_0919.jpg',
+                    'share_price' => '160',
+                    'share_user_name' => '盛夏',
+                    'share_vote' => 235,
+                    'share_user_id' => 708029,
+                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
+                ),
                 '446' => array(
                     'share_id' => 446,
                     'share_name' => '阳澄湖大闸蟹2015中秋第一波团购启动啦！',
