@@ -100,7 +100,7 @@
     vm.showShareDetailView = true;
     vm.subShareTipTxt = '+关注';
     vm.showUnReadMark = false;
-    vm.readMoreBtnText = '更多';
+    vm.readMoreBtnText = '全文';
     vm.hideMoreShareInfo = true;
     vm.shouldShowReadMoreBtn = false;
 
@@ -1020,7 +1020,7 @@
     function handleReadMoreBtn() {
       vm.hideMoreShareInfo = !vm.hideMoreShareInfo;
       if (vm.hideMoreShareInfo) {
-        vm.readMoreBtnText = '更多';
+        vm.readMoreBtnText = '全文';
       } else {
         vm.readMoreBtnText = '收起';
       }
