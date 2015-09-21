@@ -82,7 +82,7 @@
         <div class="tab-content">
             {{if count($orders[SHARE_SHIP_SELF_ZITI_TAG]) > 0}}
             <div class="tab-pane fade" id="self-ziti-orders">
-                <div class="panel-group">
+                <div class="panel-group" style="margin-bottom: 5px;">
                     <?php $current_orders=$orders[SHARE_SHIP_SELF_ZITI_TAG]; $current_tag = SHARE_SHIP_SELF_ZITI_TAG; ?>
                     {{template weshares/share_order_list_template}}
                 </div>
@@ -90,7 +90,7 @@
             {{/if}}
             {{if count($orders[SHARE_SHIP_KUAIDI_TAG]) > 0}}
             <div class="tab-pane fade" id="kuaidi-orders">
-                <div class="panel-group">
+                <div class="panel-group" style="margin-bottom: 5px;">
                     <?php $current_orders=$orders[SHARE_SHIP_KUAIDI_TAG]; $current_tag = SHARE_SHIP_KUAIDI_TAG; ?>
                     {{template weshares/share_order_list_template}}
                 </div>
@@ -98,7 +98,7 @@
             {{/if}}
             {{if count($orders[SHARE_SHIP_PYS_ZITI_TAG]) > 0}}
             <div class="tab-pane fade" id="pys-ziti-orders">
-                <div class="panel-group">
+                <div class="panel-group" style="margin-bottom: 5px;">
                     <?php $current_orders=$orders[SHARE_SHIP_PYS_ZITI_TAG]; $current_tag = SHARE_SHIP_PYS_ZITI_TAG; ?>
                     {{template weshares/share_order_list_template}}
                 </div>
