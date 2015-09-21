@@ -1474,29 +1474,20 @@ class WeshareBuyComponent extends Component {
      * @return mixed
      */
     public function get_weshare_info($share_id) {
-        $weshareM = ClassRegistry::init('Weshare');
-        $share_info = $weshareM->find('first', array(
-            'conditions' => array(
-                'id' => $share_id
-            )
-        ));
-        //$share_info_str = json_encode($share_info['Weshare']);
-        //Cache::write($key, $share_info_str);
-        return $share_info['Weshare'];
-//        $key = SIMPLE_SHARE_INFO_CACHE_KEY . '_' . $share_id;
-//        $share_info_str = Cache::read($key);
-//        if (!empty($share_info_str)) {
-//            $weshareM = ClassRegistry::init('Weshare');
-//            $share_info = $weshareM->find('first', array(
-//                'conditions' => array(
-//                    'id' => $share_id
-//                )
-//            ));
-//            $share_info_str = json_encode($share_info['Weshare']);
-//            Cache::write($key, $share_info_str);
-//            return $share_info['Weshare'];
-//        }
-//        return json_decode($share_info_str, true);
+        $key = SIMPLE_SHARE_INFO_CACHE_KEY . '_' . $share_id;
+        $share_info_str = Cache::read($key);
+        if (empty($share_info_str)) {
+            $weshareM = ClassRegistry::init('Weshare');
+            $share_info = $weshareM->find('first', array(
+                'conditions' => array(
+                    'id' => $share_id
+                )
+            ));
+            $share_info_str = json_encode($share_info['Weshare']);
+            Cache::write($key, $share_info_str);
+            return $share_info['Weshare'];
+        }
+        return json_decode($share_info_str, true);
     }
 
     public function get_all_share_info($share_ids) {
