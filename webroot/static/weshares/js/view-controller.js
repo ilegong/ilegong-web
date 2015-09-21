@@ -244,6 +244,7 @@
             vm.weshare.addresses.unshift({id: -1, address: '请选择收货地址'});
             vm.weshare.selectedAddressId = -1;
           }
+          vm.isManage = data['is_manage'];
           vm.recommendData = data['recommendData'];
           vm.ordersDetail = data['ordersDetail'];
           vm.shipTypes = data['ordersDetail']['ship_types'];

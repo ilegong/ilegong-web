@@ -3,7 +3,7 @@
 class WesharesController extends AppController {
 
     var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem',
-        'SharerShipOption', 'WeshareShipSetting', 'OfflineStore', 'UserRelation', 'Comment', 'RebateTrackLog', 'ProxyRebatePercent');
+        'SharerShipOption', 'WeshareShipSetting', 'OfflineStore', 'UserRelation', 'Comment', 'RebateTrackLog', 'ProxyRebatePercent', 'ShareUserBind');
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy');
 
@@ -259,6 +259,7 @@ class WesharesController extends AppController {
         $weshare_ship_settings = $this->getWeshareShipSettings($weshareId);
         $comment_data = $this->WeshareBuy->load_comment_by_share_id($weshareId);
         $recommend_data = $this->WeshareBuy->load_share_recommend_data($weshareId);
+        $is_manage_user = $this->ShareUserBind->checkUserCanManageShare($weshareId, $uid);
         echo json_encode(array('support_pys_ziti' => $share_ship_set,
             'weshare' => $weshareInfo,
             'ordersDetail' => $ordersDetail,
@@ -271,6 +272,7 @@ class WesharesController extends AppController {
             'my_coupons' => $my_coupon_items[0],
             'comment_data' => $comment_data,
             'sub_status' => $sub_status,
+            'is_manage' => $is_manage_user
         ));
         return;
     }
@@ -630,7 +632,8 @@ class WesharesController extends AppController {
         $weshare = $this->Weshare->find('first', array(
             'conditions' => array('id' => $weshareId, 'creator' => $user_id)
         ));
-        if (empty($weshare)) {
+        $is_manage = $this->ShareUserBind->checkUserCanManageShare($weshareId, $user_id);
+        if (empty($weshare) && !$is_manage) {
             $this->redirect("/weshares/view/" . $weshareId);
         }
         $statics_data = $this->get_weshare_buy_info($weshareId, true, true);
