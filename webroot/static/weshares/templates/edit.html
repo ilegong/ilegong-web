@@ -25,6 +25,13 @@
                 <input class='form-control' placeholder="库存/件,默认不限制" ng-model="product.store" ng-change='vm.validateProductStore(product)' ng-blur='vm.validateProductStore(product)'/>
                 <p class='tips'>请输入数字</p>
             </div>
+            <div class="form-group" style="width: 55%; margin-right: 10px;">
+                <select class="form-control">
+                    <option>测试</option>
+                    <option>测试</option>
+                    <option>测试</option>
+                </select>
+            </div>
             <a class="fr btn" style="position: relative;margin-top: -45px;margin-right: 3%;"
                ng-class="{'delete-btn': !$last,'add-btn': $last}"
                ng-click="vm.toggleProduct(product, $last)"></a>
