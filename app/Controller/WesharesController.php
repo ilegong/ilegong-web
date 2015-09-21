@@ -28,7 +28,7 @@ class WesharesController extends AppController {
      * @param $tag
      * 首页
      */
-    public function index($tag=0) {
+    public function index($tag = 0) {
         $this->layout = null;
         $products = $this->ShareUtil->get_share_index_product($tag);
         $uid = $this->currentUser['id'];
@@ -39,7 +39,7 @@ class WesharesController extends AppController {
 
     /**
      * @param string $weshare_id
-     * @param int $from
+     * @param int $from 标示从什么地方跳转的访问
      * 跳转到分享的详情页
      */
     public function view($weshare_id, $from = 0) {
@@ -53,8 +53,10 @@ class WesharesController extends AppController {
             //process
             $this->process_shared_offer($shared_offer_id);
         } else {
-            $weshare = $this->Weshare->find('first', array('conditions' => array('id' => $weshare_id)));
-            $weshare_creator = $weshare['Weshare']['creator'];
+            //use cache
+            //$weshare = $this->Weshare->find('first', array('conditions' => array('id' => $weshare_id)));
+            $weshare = $this->WeshareBuy->get_weshare_info($weshare_id);
+            $weshare_creator = $weshare['creator'];
             $shared_offers = $this->SharedOffer->find_new_offers_by_weshare_creator($uid, $weshare_creator);
             //get first offer
             if (!empty($shared_offers)) {
@@ -64,8 +66,10 @@ class WesharesController extends AppController {
             if ($from == 1) {
                 $paidMsg = $_REQUEST['msg'];
                 if (!empty($paidMsg) && $paidMsg == 'ok') {
-                    //TODO check pay fail issue
                     $this->set('from', $this->pay_type);
+                } else {
+                    //TODO check pay fail issue
+                    $this->log('paid fail msg ' . $paidMsg);
                 }
             }
         }
@@ -303,12 +307,12 @@ class WesharesController extends AppController {
      * @param $orderId
      * 支付 尾款
      */
-    public function pay_order_add($orderId){
+    public function pay_order_add($orderId) {
         $this->layout = 'weshare_bootstrap';
         $cart_info = $this->WeshareBuy->get_cart_name_and_num($orderId);
         $order_info = $this->WeshareBuy->get_order_info($orderId);
-        if($order_info['status'] == ORDER_STATUS_PAID){
-            $this->redirect('/weshares/view/'.$order_info['member_id']);
+        if ($order_info['status'] == ORDER_STATUS_PAID) {
+            $this->redirect('/weshares/view/' . $order_info['member_id']);
             return;
         }
         $this->set('cart_info', $cart_info);
