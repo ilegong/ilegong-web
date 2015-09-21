@@ -764,6 +764,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 708029,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
                 ),
+                '595' => array(
+                    'share_id' => 595,
+                    'share_name' => '现摘现卖昌平黄元帅苹果（限北京地区）',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/8af9ffbb11b_0921.jpg',
+                    'share_price' => '60',
+                    'share_user_name' => '小屁孩',
+                    'share_vote' => 153,
+                    'share_user_id' => 872713,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_717de9805a863011e02385aaab0c5da4.jpg'
+                ),
                 '585' => array(
                     'share_id' => 585,
                     'share_name' => '新疆阿克苏天山脚下----有机鲜大枣',
