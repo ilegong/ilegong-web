@@ -60,6 +60,7 @@ const SHARE_DETAIL_DATA_CACHE_KEY = 'share_detail_data_cache_key';
 const SHARER_CAN_USE_OFFLINE_STORE_CACHE_KEY = 'share_can_user_offline_store_cache_key';
 const SHARE_SHIP_SETTINGS_CACHE_KEY = 'share_ship_setting_cache_key';
 const USER_SHARE_INFO_CACHE_KEY = 'user_share_info_cache_key';
+const SIMPLE_SHARE_INFO_CACHE_KEY = 'simple_share_info_cache_key';
 
 const ORDER_STATUS_VIRTUAL = 21;
 

@@ -36,6 +36,7 @@ class ShareController extends AppController{
         Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $shareId, '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $shareId.'_1', '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $shareId.'_0', '');
+        Cache::write(SIMPLE_SHARE_INFO_CACHE_KEY . '_' . $shareId, '');
         echo json_encode(array('success' => true));
         return;
     }
