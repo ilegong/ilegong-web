@@ -306,7 +306,7 @@
           //load all comments
           vm.loadSharerAllComments(vm.weshare.creator.id);
           vm.checkHasUnRead();
-          //vm.checkShareInfoHeight();
+          vm.checkShareInfoHeight();
         }).
         error(function (data, status) {
           $log.log(data);
@@ -1022,8 +1022,10 @@
     }
 
     function checkShareInfoHeight(){
-      var shareDescInfoHeight = angular.element(document.querySelector('#share-description'))[0].offsetHeight;
-      console.log(shareDescInfoHeight);
+      vm.shareDescInfoElement = angular.element(document.getElementById('share-description'));
+      vm.shareDescInfoElement.ready(function(){
+       // var height = vm.shareDescInfoElement[0].offsetHeight;
+      });
     }
 
     function setWeiXinShareParams() {
