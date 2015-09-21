@@ -100,6 +100,10 @@
     vm.showShareDetailView = true;
     vm.subShareTipTxt = '+关注';
     vm.showUnReadMark = false;
+    vm.readMoreBtnText = '更多';
+    vm.hideMoreShareInfo = true;
+    vm.shouldShowReadMoreBtn = false;
+
     ChooseOfflineStore(vm, $log, $http, $templateCache, $timeout);
     vm.statusMap = {
       0: '进行中',
@@ -169,6 +173,8 @@
     vm.validRecommendContent=validRecommendContent;
     vm.checkHasUnRead = checkHasUnRead;
     vm.getProcessPrepaidStatus = getProcessPrepaidStatus;
+    vm.handleReadMoreBtn = handleReadMoreBtn;
+    vm.checkShareInfoHeight = checkShareInfoHeight;
     function pageLoaded(){
       $rootScope.loadingPage = false;
     }
@@ -300,6 +306,7 @@
           //load all comments
           vm.loadSharerAllComments(vm.weshare.creator.id);
           vm.checkHasUnRead();
+          //vm.checkShareInfoHeight();
         }).
         error(function (data, status) {
           $log.log(data);
@@ -1005,6 +1012,18 @@
         }
       }
       return false;
+    }
+
+    //vm.handleReadMoreBtn = handleReadMoreBtn;
+    //vm.checkShareInfoHeight = checkShareInfoHeight;
+
+    function handleReadMoreBtn(){
+
+    }
+
+    function checkShareInfoHeight(){
+      var shareDescInfoHeight = angular.element(document.querySelector('#share-description'))[0].offsetHeight;
+      console.log(shareDescInfoHeight);
     }
 
     function setWeiXinShareParams() {

@@ -59,8 +59,8 @@
             {{/if}}
             <p>
                 <strong>序号:</strong>&nbsp;&nbsp;<font color="red">{{$item_order['id']}}</font>&nbsp;&nbsp;{{$users[$item_order['creator']]['nickname']}}<br>
-                <strong>商品:</strong>&nbsp;&nbsp;{{get_share_order_cart_display_name($order_cart_map[$item_order['id']])}}&nbsp;&nbsp;{{$item_order['total_all_price']}}<br>
-                <strong>收货人:</strong>&nbsp;&nbsp;{{$item_order['consignee_name']}}&nbsp;&nbsp;{{$item_order['consignee_mobilephone']}}&nbsp;&nbsp;{{$item_order['consignee_address']}}<br>
+                <strong>商品:</strong>&nbsp;&nbsp;{{get_share_order_cart_display_name($order_cart_map[$item_order['id']])}}&nbsp;&nbsp;￥{{$item_order['total_all_price']}}<br>
+                {{$item_order['consignee_name']}}&nbsp;&nbsp;{{$item_order['consignee_mobilephone']}}&nbsp;&nbsp;{{$item_order['consignee_address']}}<br>
             </p>
             {{if $item_order['status'] == ORDER_STATUS_SHIPPED}}
                 {{if $current_tag == SHARE_SHIP_KUAIDI_TAG}}
@@ -92,14 +92,14 @@
                 </div>
             {{/if}}
             {{if $item_order['status'] != ORDER_STATUS_RETURN_MONEY && $item_order['status'] != ORDER_STATUS_RETURNING_MONEY}}
-            <button class="btn btn-success btn-sm pull-right refund-money" data-order-name="{{$item_order['consignee_name']}}"
+            <button class="btn btn-success btn-xs pull-right refund-money" data-order-name="{{$item_order['consignee_name']}}"
                     data-order-id="{{$item_order['id']}}" id="refund-btn-{{$item_order['id']}}"
                     style="margin-bottom: 5px; margin-left: 5px;">退款
             </button>
             <textarea style="display: none;" id="order-cart-info-{{$item_order['id']}}">{{json_encode($order_cart_map[$item_order['id']]);}}</textarea>
             {{/if}}
             {{if $item_order['process_prepaid_status']==ORDER_STATUS_PREPAID}}
-            <button class="btn btn-info btn-sm pull-right price-confirm" data-order-name="{{$item_order['consignee_name']}}"
+            <button class="btn btn-info btn-xs pull-right price-confirm" data-order-name="{{$item_order['consignee_name']}}"
                     data-order-id="{{$item_order['id']}}" id="price-confirm-btn-{{$item_order['id']}}"
                     style="margin-bottom: 5px; margin-left: 5px;">确定价格
             </button>
