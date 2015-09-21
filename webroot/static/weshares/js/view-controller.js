@@ -1030,7 +1030,6 @@
       vm.shareDescInfoElement = angular.element(document.getElementById('share-description'));
       vm.shareDescInfoElement.ready(function(){
         var height = vm.shareDescInfoElement[0].offsetHeight;
-        console.log(height);
         if(height > 65){
           vm.shouldShowReadMoreBtn = true;
           vm.hideMoreShareInfo = true;
