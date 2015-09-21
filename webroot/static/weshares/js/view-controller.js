@@ -1017,14 +1017,27 @@
     //vm.handleReadMoreBtn = handleReadMoreBtn;
     //vm.checkShareInfoHeight = checkShareInfoHeight;
 
-    function handleReadMoreBtn(){
-
+    function handleReadMoreBtn() {
+      vm.hideMoreShareInfo = !vm.hideMoreShareInfo;
+      if (vm.hideMoreShareInfo) {
+        vm.readMoreBtnText = '更多';
+      } else {
+        vm.readMoreBtnText = '收起';
+      }
     }
 
     function checkShareInfoHeight(){
       vm.shareDescInfoElement = angular.element(document.getElementById('share-description'));
       vm.shareDescInfoElement.ready(function(){
-       // var height = vm.shareDescInfoElement[0].offsetHeight;
+        var height = vm.shareDescInfoElement[0].offsetHeight;
+        console.log(height);
+        if(height > 65){
+          vm.shouldShowReadMoreBtn = true;
+          vm.hideMoreShareInfo = true;
+        }else{
+          vm.shouldShowReadMoreBtn = false;
+          vm.hideMoreShareInfo = false;
+        }
       });
     }
 

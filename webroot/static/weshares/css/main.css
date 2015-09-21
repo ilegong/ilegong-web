@@ -147,7 +147,7 @@ ul li { list-style: none; }
 .weshare-view .orders .order.my-order .detail{ margin-left: 0; margin-right: 10px; background-color: #c9edc1; border: 1px #b3e1aa solid;}
 .weshare-view .orders .order.my-order .detail b{ background-position: -35px -35px;right: -6px;left: inherit;}
 .weshare-view .orders .order.my-order .send-info{ background-color: #a3d997;border-top: 1px #a3d997 solid;}
-.weshare-view p.share-description-omit{height: 65px;overflow-y: hidden}
+.weshare-view p.share-description-omit{height: 67px;overflow-y: hidden}
 
 .red-packet-dialog{border: white;position: fixed;top: 100px;left: 8%; z-index: 999;padding: 10px 10px 10px;width: 80%;border-radius: 8px;display: block; background: #ffa103;}
 .red-packet-dialog .content{text-align: center;}
