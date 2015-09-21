@@ -111,6 +111,7 @@ ul li { list-style: none; }
 .weshare-view .introduction .row{ padding: 0 0 10px;}
 .weshare-view .introduction .status{ display: block; position: absolute; z-index: 3; top: 8px; left: -5px; background: url(../images/weifxicon.png?v0.01) no-repeat -62px 0; background-size: 100px 100px; width: 40px; height: 23px; font-size: 12px; text-align:center; color: #ffffff; line-height: 18px;}
 .weshare-view .introduction .title{ font-size: 18px; color: #29AC0E; padding-top: 15px;}
+.weshare-view .introduction dl.images{margin-top: 10px;}
 .weshare-view .introduction dl dt{ float: left; margin-right: 10px; position: relative; height: 65px;}
 .weshare-view .introduction dl dt img{ width: 60px; height: 60px;}
 .weshare-view .introduction dl dt a{ width: 100%;}
