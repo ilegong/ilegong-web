@@ -101,7 +101,7 @@
     vm.subShareTipTxt = '+关注';
     vm.showUnReadMark = false;
     vm.readMoreBtnText = '全文';
-    vm.hideMoreShareInfo = true;
+    vm.hideMoreShareInfo = false;
     vm.shouldShowReadMoreBtn = false;
 
     ChooseOfflineStore(vm, $log, $http, $templateCache, $timeout);
