@@ -52,6 +52,7 @@
 }
 .offer-content{
     padding:0 20px 10px;
+    font-size: 11px;
 }
 
 .classlist { height: 44px; line-height: 44px; width: 100%; text-align: center; color: #ffffff; font-size: 20px;  background-color: #29ac0e; position: fixed; top: 0; z-index: 99; overflow: hidden;}
