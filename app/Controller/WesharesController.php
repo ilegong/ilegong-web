@@ -433,15 +433,19 @@ class WesharesController extends AppController {
 
     public function save_tags() {
         $this->autoRender = false;
+        $uid = $this->currentUser['id'];
         $postStr = file_get_contents('php://input');
         $tags = json_decode($postStr, true);
-        foreach ($tags as &$tag_item) {
-            if (isset($tag_item['created'])) {
-                $tag_item['created'] = date('Y-m-d H:i:s');
-            }
-        }
-        $tags = $this->ShareUtil->save_tags($tags);
+        $tags = $this->ShareUtil->save_tags_return($tags, $uid);
         echo json_encode(array('success' => true, 'tags' => $tags));
+        return;
+    }
+
+    public function get_tags(){
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        $tags = $this->ShareUtil->get_tags($uid);
+        echo json_encode(array('tags' => $tags));
         return;
     }
 
@@ -1030,6 +1034,7 @@ class WesharesController extends AppController {
                     'share_id' => $weshareId
                 )
             ));
+            $sharer_tags = $this->ShareUtil->get_tags($weshareInfo['Weshare']['creator']);
             $weshareShipSettings = Hash::combine($weshareShipSettings, '{n}.WeshareShipSetting.tag', '{n}.WeshareShipSetting');
             $creatorInfo = $this->User->find('first', array(
                 'conditions' => array(
@@ -1039,6 +1044,7 @@ class WesharesController extends AppController {
                 'fields' => $this->query_user_fileds,
             ));
             $weshareInfo = $weshareInfo['Weshare'];
+            $weshareInfo['tags'] = $sharer_tags;
             $weshareInfo['addresses'] = Hash::extract($weshareAddresses, '{n}.WeshareAddress');
             $weshareInfo['products'] = Hash::extract($weshareProducts, '{n}.WeshareProduct');
             $weshareInfo['creator'] = $creatorInfo['User'];

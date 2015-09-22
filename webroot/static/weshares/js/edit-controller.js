@@ -81,6 +81,13 @@
           vm.proxy_rebate_percent = data['proxy_rebate_percent'] || vm.proxy_rebate_percent;
         }).error(function (data) {
         });
+      }else{
+        //load tags
+        $http.get('/weshares/get_tags.json').success(function(data){
+          vm.weshare.tags = data.tags;
+        }).error(function(data){
+
+        });
       }
       vm.messages = [];
       function setDefaultData() {
@@ -249,6 +256,7 @@
       $http.post('/weshares/save_tags', vm.weshare.tags).success(function (data) {
         vm.isSaveingTag = false;
         $log.log(data);
+
       }).error(function (data) {
         vm.isSaveingTag = false;
         $log.log(data);

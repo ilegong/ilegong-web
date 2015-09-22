@@ -581,20 +581,30 @@ class ShareUtilComponent extends Component {
         }
     }
 
-    public function save_tags($tags) {
+    public function save_tags_return($tags, $uid) {
         $shareProductTagM = ClassRegistry::init('WeshareProductTag');
-        $tags = $shareProductTagM->saveAll($tags);
+        foreach ($tags as &$tag_item) {
+            if (!isset($tag_item['created'])) {
+                $tag_item['created'] = date('Y-m-d H:i:s');
+            }
+            if (!isset($tag_item['user_id'])) {
+                $tag_item['user_id'] = $uid;
+            }
+        }
+        $shareProductTagM->saveAll($tags);
+        $tags = $this->get_tags($uid);
         return $tags;
     }
 
-    public function get_tags($share_id, $user_id){
+    public function get_tags($user_id) {
         $shareProductTagM = ClassRegistry::init('WeshareProductTag');
         $tags = $shareProductTagM->find('all', array(
             'conditions' => array(
-                'share_id' => $share_id,
-                'user_id' => $user_id
+                'user_id' => $user_id,
+                'deleted' => DELETED_NO
             )
         ));
+        $tags = Hash::extract($tags, '{n}.WeshareProductTag');
         return $tags;
     }
 

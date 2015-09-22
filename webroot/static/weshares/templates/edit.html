@@ -26,10 +26,8 @@
                 <p class='tips'>请输入数字</p>
             </div>
             <div class="form-group" style="width: 55%; margin-right: 10px;">
-                <select class="form-control">
-                    <option>测试</option>
-                    <option>测试</option>
-                    <option>测试</option>
+                <select class="form-control" ng-modal="product.tag_id">
+                    <option ng-repeat="tag in vm.weshare.tags" ng-bind="tag.name" value="{{tag.id}}"></option>
                 </select>
             </div>
             <a class="set-product-tag" ng-click="vm.showEditShareView=false;vm.showEditTagView=true;">设置分组</a>
