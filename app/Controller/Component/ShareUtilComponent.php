@@ -800,6 +800,7 @@ class ShareUtilComponent extends Component {
             $temp_order_info['total_all_price'] = $temp_order_price;
             $temp_order_info = $orderM->save($temp_order_info);
             $new_order_id = $temp_order_info['Order']['id'];
+            $tag_carts = $tag_carts['carts'];
             foreach ($tag_carts as &$item_cart) {
                 $item_cart['order_id'] = $new_order_id;
                 $item_cart['id'] = null;
@@ -807,6 +808,7 @@ class ShareUtilComponent extends Component {
             }
         }
         $cartM->saveAll($result_carts);
+        $orderM->updateAll(array('type' => ORDER_TYPE_SPLIT), array('id' => $order_id));
     }
 
     /**
