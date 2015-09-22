@@ -53,7 +53,7 @@
         description: '',
         images: [],
         products: [
-          {name: '', store: '', tbd: 0}
+          {name: '', store: '', tbd: 0, tag_id: 4}
         ],
         send_info: '',
         addresses: [
@@ -81,11 +81,11 @@
           vm.proxy_rebate_percent = data['proxy_rebate_percent'] || vm.proxy_rebate_percent;
         }).error(function (data) {
         });
-      }else{
+      } else {
         //load tags
-        $http.get('/weshares/get_tags.json').success(function(data){
+        $http.get('/weshares/get_tags.json').success(function (data) {
           vm.weshare.tags = data.tags;
-        }).error(function(data){
+        }).error(function (data) {
 
         });
       }
