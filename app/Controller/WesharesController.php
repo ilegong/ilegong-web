@@ -388,7 +388,6 @@ class WesharesController extends AppController {
                     $is_prepaid = 1;
                     $item['confirm_price'] = 0;
                 }
-                //todo set tag id
                 $pid = $p['WeshareProduct']['id'];
                 $num = $productIdNumMap[$pid];
                 $price = $p['WeshareProduct']['price'];
@@ -402,6 +401,8 @@ class WesharesController extends AppController {
                 $item['creator'] = $uid;
                 $item['order_id'] = $orderId;
                 $item['tuan_buy_id'] = $weshareId;
+                //todo set tag id
+                $item['tag_id'] = $p['WeshareProduct']['tag_id'];
                 $cart[] = $item;
                 $totalPrice += $num * $price;
             }

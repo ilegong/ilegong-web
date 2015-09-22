@@ -537,8 +537,10 @@
     }
 
     function validateProducts() {
-      vm.productsHasError = _.all(vm.weshare.products, function (product) {
-        return !product.num || product.num <= 0;
+      vm.productsHasError = _.all(vm.weshare.products, function (products) {
+        return _.all(products,function(product){
+          return !product.num || product.num <= 0;
+        });
       });
       return vm.productsHasError;
     }
@@ -580,8 +582,13 @@
       if (!vm.validateOrderData()) {
         return false;
       }
-      var products = _.filter(vm.weshare.products, function (product) {
-        return product.num && (product.num > 0);
+      var products = [];
+      _.each(vm.weshare.products, function(products){
+        _.each(products, function(product){
+          if(product.num && (product.num > 0)){
+            products.push(product);
+          }
+        });
       });
       products = _.map(products, function (product) {
         return {id: product.id, num: product.num};
