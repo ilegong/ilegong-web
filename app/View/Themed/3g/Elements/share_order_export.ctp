@@ -37,6 +37,9 @@ foreach($order_ship_tags as $tag){
         $current_orders=$orders[$tag];
         $current_tag = $tag;
         foreach ($current_orders as $item) {
+            if($item['status']!=1){
+                continue;
+            }
             foreach ($order_cart_map[$item['id']] as $index => $cart) {
                 $row = array();
                 foreach ($fields as $fieldName) {

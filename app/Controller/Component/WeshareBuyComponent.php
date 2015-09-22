@@ -660,11 +660,10 @@ class WeshareBuyComponent extends Component {
      * @param $weshareId
      * @param $is_me
      * @param bool $division
-     * @param bool $export
      * @return array
      * 获取分享的订单信息
      */
-    public function get_share_order_for_show($weshareId, $is_me, $division = false, $export = false) {
+    public function get_share_order_for_show($weshareId, $is_me, $division = false) {
         if ($division) {
             $key = SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId . '_1';
         } else {
