@@ -388,6 +388,7 @@ class WesharesController extends AppController {
                     $is_prepaid = 1;
                     $item['confirm_price'] = 0;
                 }
+                //todo set tag id
                 $pid = $p['WeshareProduct']['id'];
                 $num = $productIdNumMap[$pid];
                 $price = $p['WeshareProduct']['price'];
@@ -955,6 +956,10 @@ class WesharesController extends AppController {
             if (empty($store)) {
                 $product['store'] = 0;
             }
+            $tag_id = $product['tag_id'];
+            if(empty($tag_id)){
+                $product['tag_id'] = 0;
+            }
         }
         return $this->WeshareProduct->saveAll($weshareProductData);
     }
@@ -1014,11 +1019,13 @@ class WesharesController extends AppController {
                     'id' => $weshareId
                 )
             ));
-            $weshareProducts = $this->WeshareProduct->find('all', array(
-                'conditions' => array(
-                    'weshare_id' => $weshareId
-                )
-            ));
+
+//            $weshareProducts = $this->WeshareProduct->find('all', array(
+//                'conditions' => array(
+//                    'weshare_id' => $weshareId
+//                )
+//            ));
+
             $weshareAddresses = $this->WeshareAddress->find('all', array(
                 'conditions' => array(
                     'weshare_id' => $weshareId
@@ -1043,10 +1050,11 @@ class WesharesController extends AppController {
                 'recursive' => 1, //int
                 'fields' => $this->query_user_fileds,
             ));
+            $weshareProducts = $this->ShareUtil->get_product_tag_map($weshareId);
             $weshareInfo = $weshareInfo['Weshare'];
             $weshareInfo['tags'] = $sharer_tags;
             $weshareInfo['addresses'] = Hash::extract($weshareAddresses, '{n}.WeshareAddress');
-            $weshareInfo['products'] = Hash::extract($weshareProducts, '{n}.WeshareProduct');
+            $weshareInfo['products'] = $weshareProducts;
             $weshareInfo['creator'] = $creatorInfo['User'];
             $weshareInfo['ship_type'] = $weshareShipSettings;
             $weshareInfo['images'] = array_filter(explode('|', $weshareInfo['images']));

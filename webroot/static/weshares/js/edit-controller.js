@@ -53,7 +53,7 @@
         description: '',
         images: [],
         products: [
-          {name: '', store: '', tbd: 0, tag_id: 4}
+          {name: '', store: '', tbd: 0, tag_id: '0'}
         ],
         send_info: '',
         addresses: [
@@ -86,7 +86,6 @@
         $http.get('/weshares/get_tags.json').success(function (data) {
           vm.weshare.tags = data.tags;
         }).error(function (data) {
-
         });
       }
       vm.messages = [];

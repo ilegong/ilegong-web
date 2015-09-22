@@ -11,6 +11,7 @@ const ORDER_TYPE_GROUP_FILL = 4; //团购补充素有剩下的
 const ORDER_TYPE_PARENT = 3;
 const ORDER_TYPE_TUAN = 5; //团长团购
 
+const ORDER_TYPE_SPLIT = 11; //订单已经被拆分
 const ORDER_TYPE_WESHARE_BUY = 9; // 分享订单
 const ORDER_TYPE_WESHARE_BUY_ADD = 10; //差价补充订单
 

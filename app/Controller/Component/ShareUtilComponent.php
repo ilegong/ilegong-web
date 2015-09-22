@@ -604,7 +604,7 @@ class ShareUtilComponent extends Component {
                 'deleted' => DELETED_NO
             )
         ));
-        $tags = Hash::extract($tags, '{n}.WeshareProductTag');
+        $tags = Hash::combine($tags,'{n}.WeshareProductTag.id' ,'{n}.WeshareProductTag');
         return $tags;
     }
 
@@ -626,6 +626,24 @@ class ShareUtilComponent extends Component {
         //process
         $this->log('add order paid ' . $parent_order_id);
         $orderM->updateAll(array('process_prepaid_status' => ORDER_STATUS_PREPAID_DONE), array('id' => $parent_order_id));
+    }
+
+    public function get_product_tag_map($weshare_id){
+        $weshareProductM = ClassRegistry::init('WeshareProduct');
+        $weshareProducts = $weshareProductM->find('all', array(
+            'conditions' => array(
+                'weshare_id' => $weshare_id
+            )
+        ));
+        $result = array();
+        foreach($weshareProducts as $product){
+            $tag_id = $product['WeshareProduct']['tag_id'];
+            if(!isset($result[$tag_id])){
+                $result[$tag_id] = array();
+            }
+            $result[$tag_id][]=$product['WeshareProduct'];
+        }
+        return $result;
     }
 
     /**
@@ -741,6 +759,54 @@ class ShareUtilComponent extends Component {
             return $total_difference_price;
         }
         return 0;
+    }
+
+    //TODO 分隔订单
+    public function split_order_by_tag($order) {
+        //todo cal ship fee
+        //todo check is prepaid
+        $orderM = ClassRegistry::init('Order');
+        $cartM = ClassRegistry::init('Cart');
+        $order_id = $order['Order']['id'];
+        $carts = $cartM->find('all', array(
+            'conditions' => array(
+                'order_id' => $order_id
+            )
+        ));
+        $cart_tag_ids = Hash::extract($carts, '{n}.Cart.tag_id');
+        $cart_tag_ids = array_unique($cart_tag_ids);
+        if (count($cart_tag_ids) <= 1) {
+            return;
+        }
+        $tag_cart_map = array();
+        foreach ($carts as $cart) {
+            $tag_id = $cart['Cart']['tag_id'];
+            if (!isset($tag_cart_map[$tag_id])) {
+                $tag_cart_map[$tag_id] = array('carts' => array(), 'total_price' => 0);
+            }
+            $tag_cart_map[$tag_id]['carts'][] = $cart['Cart'];
+            $cart_price = $cart['Cart']['num'] * $cart['Cart']['price'] / 100;
+            $tag_cart_map[$tag_id]['total_price'] = $tag_cart_map[$tag_id]['total_price'] + $cart_price;
+        }
+        $origin_order_info = $orderM->find('first', array('conditions' => array('id' => $order_id)));
+        $result_carts = array();
+        foreach ($tag_cart_map as $tag => $tag_carts) {
+            $orderM->id = null;
+            $temp_order_price = $tag_carts['total_price'];
+            $temp_order_info = $origin_order_info['Order'];
+            $temp_order_info['id'] = null;
+            $temp_order_info['parent_order_id'] = $order_id;
+            $temp_order_info['total_price'] = $temp_order_price;
+            $temp_order_info['total_all_price'] = $temp_order_price;
+            $temp_order_info = $orderM->save($temp_order_info);
+            $new_order_id = $temp_order_info['Order']['id'];
+            foreach ($tag_carts as &$item_cart) {
+                $item_cart['order_id'] = $new_order_id;
+                $item_cart['id'] = null;
+                $result_carts[] = $item_cart;
+            }
+        }
+        $cartM->saveAll($result_carts);
     }
 
     /**

@@ -235,6 +235,7 @@
       });
       $http({method: 'GET', url: '/weshares/detail/' + weshareId+'.json', cache: $templateCache}).
         success(function (data, status) {
+          $log.log(data);
           vm.weshare = data['weshare'];
           vm.commentData = data['comment_data'];
           vm.orderComments = vm.commentData['order_comments'];
