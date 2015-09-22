@@ -24,11 +24,17 @@
     vm.saveCacheData = saveCacheData;
     vm.validateShipFee = validateShipFee;
     vm.validateRebatePercent = validateRebatePercent;
+    vm.validateTagName = validateTagName;
+    vm.toggleTag = toggleTag;
+    vm.saveTag = saveTag;
     vm.dataCacheKey = 'cache_share_data';
     vm.pageLoaded = pageLoaded;
-    function pageLoaded(){
+    vm.showEditShareView = true;
+    vm.showEditTagView = false;
+    function pageLoaded() {
       $rootScope.loadingPage = false;
     }
+
     activate();
     $scope.$watchCollection('vm.weshare', vm.saveCacheData);
     function activate() {
@@ -52,6 +58,9 @@
         send_info: '',
         addresses: [
           {address: ''}
+        ],
+        tags: [
+          {name: ''}
         ]
       };
       var $cacheData = PYS.storage.load(vm.dataCacheKey);
@@ -70,20 +79,22 @@
           vm.pys_ziti_data = data['ship_type']['pys_ziti'] || vm.pys_ziti_data;
           vm.kuaidi_show_ship_fee = vm.kuai_di_data.ship_fee / 100;
           vm.proxy_rebate_percent = data['proxy_rebate_percent'] || vm.proxy_rebate_percent;
-        }).error(function(data){
+        }).error(function (data) {
         });
       }
       vm.messages = [];
-      function setDefaultData(){
-        if(!vm.weshare.addresses||vm.weshare.addresses.length==0){
+      function setDefaultData() {
+        if (!vm.weshare.addresses || vm.weshare.addresses.length == 0) {
           vm.weshare.addresses = [{address: ''}];
         }
-        if(!vm.weshare.send_info){
+        if (!vm.weshare.send_info) {
           vm.weshare.send_info = '';
+        }
+        if (!vm.weshare.tags) {
+          vm.weshare.tags = [{name: ''}];
         }
       }
     }
-			
 
     function chooseAndUploadImage() {
       wx.chooseImage({
@@ -159,6 +170,14 @@
       }
     }
 
+    function toggleTag(tag, isLast) {
+      if (isLast) {
+        vm.weshare.tags.push({name: ''});
+      } else {
+        vm.weshare.tags = _.without(vm.weshare.tags, tag);
+      }
+    }
+
     function nextStep() {
       var titleHasError = vm.validateTitle();
       var productHasError = false;
@@ -176,50 +195,73 @@
 
     function saveWeshare() {
       if (vm.isInProcess) {
+        alert('正在保存....');
         return;
       }
       vm.isInProcess = true;
       vm.weshare.addresses = _.filter(vm.weshare.addresses, function (address) {
         return !_.isEmpty(address.address);
       });
-      if(vm.validateAddress()){
-        vm.weshare.addresses= [
+      if (vm.validateAddress()) {
+        vm.weshare.addresses = [
           {address: ''}
         ];
         return false;
       }
       vm.kuai_di_data.ship_fee = vm.kuai_di_data.ship_fee || 0;
-      if(vm.validateShipFee(vm.kuai_di_data.ship_fee)){
+      if (vm.validateShipFee(vm.kuai_di_data.ship_fee)) {
         return false;
       }
-      if(vm.validateRebatePercent()){
+      if (vm.validateRebatePercent()) {
         return false;
       }
       vm.kuai_di_data.ship_fee = vm.kuai_di_data.ship_fee;
-      vm.weshare.ship_type = [vm.self_ziti_data,vm.kuai_di_data,vm.pys_ziti_data];
+      vm.weshare.ship_type = [vm.self_ziti_data, vm.kuai_di_data, vm.pys_ziti_data];
       vm.weshare.proxy_rebate_percent = vm.proxy_rebate_percent;
-      $log.log('submitted').log(vm.weshare);
       $http.post('/weshares/save', vm.weshare).success(function (data, status, headers, config) {
         if (data.success) {
           $log.log('post succeeded, data: ').log(data);
           PYS.storage.clear();
           window.location.href = '/weshares/view/' + data['id'];
-        }else {
+        } else {
           var uid = data['uid'];
-          window.location.href = '/weshares/user_share_info/'+uid;
+          window.location.href = '/weshares/user_share_info/' + uid;
         }
       }).error(function (data, status, headers, config) {
         window.location.href = '/weshares/add';
       });
     }
 
-    function validateShipFee(){
-      if(Utils.isNumber(vm.kuaidi_show_ship_fee)){
-        vm.kuai_di_data.ship_fee = vm.kuaidi_show_ship_fee*100;
+    function saveTag() {
+      if (vm.isSaveingTag) {
+        alert('正在保存....');
+        return;
       }
-      if(!Utils.isNumber(vm.kuai_di_data.ship_fee)&&vm.kuai_di_data.status==1){
+      var tagHasError = false;
+      _.each(vm.weshare.tags, function (tag) {
+        var tagNameHasError = vm.validateTagName(tag);
+        tagHasError = tagHasError || tagNameHasError;
+      });
+      if (tagHasError) {
+        return false;
+      }
+      vm.isSaveingTag = true;
+      $http.post('/weshares/save_tags', vm.weshare.tags).success(function (data) {
+        vm.isSaveingTag = false;
+        $log.log(data);
+      }).error(function (data) {
+        vm.isSaveingTag = false;
+        $log.log(data);
+      });
+    }
+
+    function validateShipFee() {
+      if (Utils.isNumber(vm.kuaidi_show_ship_fee)) {
+        vm.kuai_di_data.ship_fee = vm.kuaidi_show_ship_fee * 100;
+      }
+      if (!Utils.isNumber(vm.kuai_di_data.ship_fee) && vm.kuai_di_data.status == 1) {
         vm.shipFeeHasError = true;
-      }else{
+      } else {
         vm.shipFeeHasError = false;
       }
       return vm.shipFeeHasError;
@@ -235,20 +277,25 @@
       return product.nameHasError;
     }
 
+    function validateTagName(tag) {
+      tag.nameHasError = _.isEmpty(tag.name) || tag.name.length > 20;
+      return tag.nameHasError;
+    }
+
     function validateProductPrice(product) {
       product.priceHasError = !product.price || !Utils.isNumber(product.price);
       return product.priceHasError;
     }
 
-    function validateAddress(){
-      vm.addressError = vm.self_ziti_data.status==1&& _.isEmpty(vm.weshare.addresses)
+    function validateAddress() {
+      vm.addressError = vm.self_ziti_data.status == 1 && _.isEmpty(vm.weshare.addresses);
       return vm.addressError;
     }
 
-    function validateRebatePercent(){
-      if(!Utils.isNumber(vm.proxy_rebate_percent.percent)){
+    function validateRebatePercent() {
+      if (!Utils.isNumber(vm.proxy_rebate_percent.percent)) {
         vm.rebatePercentHasError = true;
-      }else{
+      } else {
         vm.rebatePercentHasError = false;
       }
       return vm.rebatePercentHasError;

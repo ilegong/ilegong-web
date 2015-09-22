@@ -431,6 +431,20 @@ class WesharesController extends AppController {
         }
     }
 
+    public function save_tags() {
+        $this->autoRender = false;
+        $postStr = file_get_contents('php://input');
+        $tags = json_decode($postStr, true);
+        foreach ($tags as &$tag_item) {
+            if (isset($tag_item['created'])) {
+                $tag_item['created'] = date('Y-m-d H:i:s');
+            }
+        }
+        $tags = $this->ShareUtil->save_tags($tags);
+        echo json_encode(array('success' => true, 'tags' => $tags));
+        return;
+    }
+
     /**
      * @param $order_id
      * 确认收货

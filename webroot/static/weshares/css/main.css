@@ -52,6 +52,10 @@ ul li { list-style: none; }
 .weshare-add .next-btn{ border: 1px #29AC0E solid; display: block; font-size: 16px; background-color: #29AC0E; color: #ffffff; text-decoration: none; margin-bottom: 20px; margin-top: 40px;}
 .weshare-add .back-btn{ color: #29AC0E; display: block; width: 80px; margin: 0 auto; margin-top: -15px; margin-bottom: 30px;}
 .weshare-add .checkbox-disable{color: #a9a9a9}
+.weshare-add .set-product-tag {
+    text-decoration: underline;
+    padding-left: 5px;
+}
 
 
 /*分享参团*/

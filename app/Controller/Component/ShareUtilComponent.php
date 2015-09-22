@@ -581,6 +581,23 @@ class ShareUtilComponent extends Component {
         }
     }
 
+    public function save_tags($tags) {
+        $shareProductTagM = ClassRegistry::init('WeshareProductTag');
+        $tags = $shareProductTagM->saveAll($tags);
+        return $tags;
+    }
+
+    public function get_tags($share_id, $user_id){
+        $shareProductTagM = ClassRegistry::init('WeshareProductTag');
+        $tags = $shareProductTagM->find('all', array(
+            'conditions' => array(
+                'share_id' => $share_id,
+                'user_id' => $user_id
+            )
+        ));
+        return $tags;
+    }
+
     /**
      * @param $order
      * 支付尾款

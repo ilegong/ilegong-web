@@ -1,4 +1,4 @@
-<div class="weshare-add">
+<div class="weshare-add" ng-if="vm.showEditShareView">
     <div class='share-info' ng-show="!vm.showShippmentInfo">
         <h1 class='margin-bottom-12'>分享描述</h1>
 
@@ -32,6 +32,7 @@
                     <option>测试</option>
                 </select>
             </div>
+            <a class="set-product-tag" ng-click="vm.showEditShareView=false;vm.showEditTagView=true;">设置分组</a>
             <a class="fr btn" style="position: relative;margin-top: -45px;margin-right: 3%;"
                ng-class="{'delete-btn': !$last,'add-btn': $last}"
                ng-click="vm.toggleProduct(product, $last)"></a>
@@ -117,6 +118,32 @@
         </div>
     </div>
     <div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showProductTipInfo=false;vm.showLayer=false;;"></div>
+</div>
+<div style="background-color:#f5f5f5;margin-bottom: 20px;" ng-if="vm.showEditTagView">
+    <div class="classlist">
+        <a ng-click="vm.showShareDetail()" class="back"></a>
+        分组
+    </div>
+    <div class="weshare-add" style="margin-top: 50px;">
+        <div class="shippment-info">
+            <div class="clearfix">
+                通过分组可以方便的管理多个商品
+            </div>
+            <div class="form-group">
+                <div class="clearfix" ng-repeat="tag in vm.weshare.tags">
+                    <div class="form-group fl" style="width: 80%; margin-right: 10px;" ng-class="{'has-error': tag.nameHasError}">
+                        <input class='form-control' placeholder="分组名称" ng-model="tag.name"
+                               ng-blur='vm.validateTagName(tag)' ng-change='vm.validateTagName(tag)'/>
+                    </div>
+                    <a class="fr btn" ng-class="{'delete-btn': !$last,'add-btn': $last}"
+                       ng-click="vm.toggleTag(tag, $last)"></a>
+                </div>
+                <p class='tips'>请输入分组名称</p>
+            </div>
+            <a class="btn next-btn" ng-click="vm.saveTag()">确定</a>
+            <a class="btn back-btn" ng-click="vm.showEditTagView=false;vm.showEditShareView=true">取消</a>
+        </div>
+    </div>
 </div>
 <div style="text-align: center; margin-bottom: 0;">
     <a href="/"><img src="/img/logo_footer.jpg" border="0" style="width: 4.625em;height: 1.583em;"/></a><br/>朋友说—朋友间最真挚的分享
