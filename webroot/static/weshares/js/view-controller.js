@@ -175,6 +175,7 @@
     vm.getProcessPrepaidStatus = getProcessPrepaidStatus;
     vm.handleReadMoreBtn = handleReadMoreBtn;
     vm.checkShareInfoHeight = checkShareInfoHeight;
+    vm.toggleTag = toggleTag;
     function pageLoaded(){
       $rootScope.loadingPage = false;
     }
@@ -237,6 +238,13 @@
         success(function (data, status) {
           $log.log(data);
           vm.weshare = data['weshare'];
+          vm.toggleState = {};
+          _.each(vm.weshare.tags, function (value, key) {
+            vm.toggleState[key] = {
+              open: true,
+              statusText: '收起'
+            };
+          });
           vm.commentData = data['comment_data'];
           vm.orderComments = vm.commentData['order_comments'];
           if (vm.weshare.addresses && vm.weshare.addresses.length == 1) {
@@ -1026,6 +1034,12 @@
       } else {
         vm.readMoreBtnText = '收起';
       }
+    }
+
+    function toggleTag(tag){
+      var currentToggleState = vm.toggleState[tag];
+      currentToggleState['open'] = !currentToggleState['open'];
+      currentToggleState['statusText'] = currentToggleState['open'] ? '收起' : '展开';
     }
 
     function checkShareInfoHeight(){

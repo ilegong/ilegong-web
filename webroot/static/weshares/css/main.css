@@ -27,6 +27,9 @@ ul li { list-style: none; }
 .form-group select.form-control{background-color: white; height: 38px;}
 .form-group .tips{display: none; font-size: 12px; color: #c62a35; line-height: 16px; padding-top: 5px;}
 .form-group.has-error .tips{display: block;}
+.product-group{margin-bottom: 5px;}
+.product-group .tips{display: none; font-size: 12px; color: #c62a35; line-height: 16px; padding-top: 5px;}
+.product-group.has-error .tips{display: block}
 
 .radio-group { clear:none; overflow: hidden;}
 .radio-group label { float:left; clear:none; display:block; padding: 0 10px; }
