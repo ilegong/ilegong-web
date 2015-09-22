@@ -15,7 +15,8 @@ class ShareUserBind extends AppModel {
         542 => array(544307, 633345),
         22 => array(633345),
         484 => array(633345, 141),
-        550 => array(633345, 141)
+        550 => array(633345, 141),
+        586 => array(633345, 141)
     );
 
     public function checkUserCanManageShare($share_id, $user_id) {
