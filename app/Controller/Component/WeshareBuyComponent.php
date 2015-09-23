@@ -628,6 +628,25 @@ class WeshareBuyComponent extends Component {
     }
 
     /**
+     * @param $orderIds
+     * @param $weshareId
+     * @return mixed
+     */
+    public function get_group_order_repaid_money($orderIds, $weshareId) {
+        $orderM = ClassRegistry::init('Order');
+        $addOrderResult = $orderM->find('all', array(
+            'conditions' => array(
+                'parent_order_id' => $orderIds,
+                'type' => ORDER_TYPE_WESHARE_BUY_ADD,
+                'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_REFUND_DONE),
+                'member_id' => $weshareId
+            ),
+            'fields' => array('SUM(total_all_price) as all_repaid_order_money'),
+        ));
+        return $addOrderResult[0][0]['all_repaid_order_money'];
+    }
+
+    /**
      * @param $weshareId
      * @return float
      * 退款 金额
@@ -740,7 +759,7 @@ class WeshareBuyComponent extends Component {
                     'type' => ORDER_TYPE_WESHARE_BUY,
                     'not' => array('order_id' => null, 'order_id' => '')
                 ),
-                'fields' => array('id', 'name', 'order_id', 'num', 'product_id', 'price', 'confirm_price')
+                'fields' => array('id', 'name', 'order_id', 'num', 'product_id', 'price', 'confirm_price', 'tag_id')
             ));
             $realTotalPrice = 0;
             $summeryTotalPrice = 0;
@@ -790,7 +809,7 @@ class WeshareBuyComponent extends Component {
                         return ($a['consignee_name'] < $b['consignee_name']) ? -1 : 1;
                     });
                 }
-                $orders = array(SHARE_SHIP_KUAIDI_TAG => $kuaidi_orders, SHARE_SHIP_SELF_ZITI_TAG => $self_ziti_orders, SHARE_SHIP_PYS_ZITI_TAG => $pys_ziti_orders);
+                $orders = array('origin_orders' => $orders, SHARE_SHIP_KUAIDI_TAG => $kuaidi_orders, SHARE_SHIP_SELF_ZITI_TAG => $self_ziti_orders, SHARE_SHIP_PYS_ZITI_TAG => $pys_ziti_orders);
             }
             //show order ship type name
             $shipTypes = ShipAddress::ship_type_list();
@@ -1556,6 +1575,4 @@ class WeshareBuyComponent extends Component {
         }
         return array('num' => $num, 'cart_name' => implode(',', $cart_name));
     }
-
-
 }

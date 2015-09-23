@@ -61,3 +61,7 @@
 .classlist ul{ padding-left:1em; width:50%;}
 .classlist ul li{ float:left; font-size:1.25em; color:#29ac0e; }
 .classlist ul li.back{ width:0.5em; height:1em; background:url('/img/mobilev1/pyshuo_icon.png?xxz') no-repeat -1.25em -16.875em; background-size:25em 25em; margin-top:0.7em; margin-right:0.5em;}
+
+.breadcrumb>.active a{
+    color: darkgray;
+}

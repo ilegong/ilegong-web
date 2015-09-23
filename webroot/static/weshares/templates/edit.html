@@ -1,4 +1,4 @@
-<div class="weshare-add">
+<div class="weshare-add" ng-if="vm.showEditShareView">
     <div class='share-info' ng-show="!vm.showShippmentInfo">
         <h1 class='margin-bottom-12'>分享描述</h1>
 
@@ -11,7 +11,7 @@
                 <input class='form-control' placeholder="产品名称/规格" ng-model="product.name" ng-change='vm.validateProductName(product)' ng-blur='vm.validateProductName(product)'/>
                 <p class='tips'>请输入描述, 不超过20个字</p>
             </div>
-            <div class="form-group fl" ng-class="{'has-error': product.priceHasError}" style="width: 55%; margin-right: 10px;">
+            <div class="form-group fl form-group-inline" ng-class="{'has-error': product.priceHasError}">
                 <input class='form-control' placeholder="价格/元" ng-model="product.price" ng-change='vm.validateProductPrice(product)' ng-blur='vm.validateProductPrice(product)'/>
                 <p class='tips'>请输入数字</p>
             </div>
@@ -21,11 +21,19 @@
                 &nbsp;&nbsp;
             </div>
             <img src="/static/weshares/images/faq.png" width="20px" height="20px" style="margin-top: 3%;" ng-click="vm.showProductTipInfo=true;vm.showLayer=true;">
-            <div class="form-group" ng-class="{'has-error': product.storeHasError}" style="width: 55%; margin-right: 10px;">
+            <div class="form-group form-group-inline" ng-class="{'has-error': product.storeHasError}">
                 <input class='form-control' placeholder="库存/件,默认不限制" ng-model="product.store" ng-change='vm.validateProductStore(product)' ng-blur='vm.validateProductStore(product)'/>
                 <p class='tips'>请输入数字</p>
             </div>
-            <a class="fr btn" style="position: relative;margin-top: -45px;margin-right: 3%;"
+            <div class="form-group fl form-group-inline" ng-show="vm.weshare.tags.length>0">
+                <select class="form-control" ng-model="product.tag_id" ng-options="tag.id as tag.name for tag in vm.weshare.tags">
+                    <option value="">默认分组</option>
+                </select>
+            </div>
+            <div class="form-group fl set-product-tag-group">
+                <a class="set-product-tag" ng-click="vm.editTagView()">设置分组</a>
+            </div>
+            <a class="fr btn" style="position: relative;margin-top: 10px;margin-right: 3%;"
                ng-class="{'delete-btn': !$last,'add-btn': $last}"
                ng-click="vm.toggleProduct(product, $last)"></a>
         </div>
@@ -110,6 +118,32 @@
         </div>
     </div>
     <div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showProductTipInfo=false;vm.showLayer=false;;"></div>
+</div>
+<div style="background-color:#f5f5f5;margin-bottom: 20px;" ng-if="vm.showEditTagView">
+    <div class="classlist">
+        <a ng-click="vm.hideEditTagView()" class="back"></a>
+        分组
+    </div>
+    <div class="weshare-add" style="margin-top: 50px;">
+        <div class="shippment-info">
+            <div class="clearfix">
+                通过分组可以方便的管理多个商品
+            </div>
+            <div class="form-group">
+                <div class="clearfix" ng-repeat="tag in vm.weshare.tags">
+                    <div class="form-group fl" style="width: 80%; margin-right: 10px;" ng-class="{'has-error': tag.nameHasError}">
+                        <input class='form-control' placeholder="分组名称" ng-model="tag.name"
+                               ng-blur='vm.validateTagName(tag)' ng-change='vm.validateTagName(tag)'/>
+                    </div>
+                    <a class="fr btn" ng-class="{'delete-btn': !$last,'add-btn': $last}"
+                       ng-click="vm.toggleTag(tag, $last)"></a>
+                </div>
+                <p class='tips'>请输入分组名称</p>
+            </div>
+            <a class="btn next-btn" ng-click="vm.saveTag()">确定</a>
+            <a class="btn back-btn" ng-click="vm.showEditTagView=false;vm.showEditShareView=true">取消</a>
+        </div>
+    </div>
 </div>
 <div style="text-align: center; margin-bottom: 0;">
     <a href="/"><img src="/img/logo_footer.jpg" border="0" style="width: 4.625em;height: 1.583em;"/></a><br/>朋友说—朋友间最真挚的分享

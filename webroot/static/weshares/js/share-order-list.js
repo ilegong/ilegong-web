@@ -1,4 +1,34 @@
 $(document).ready(function () {
+  var $shareOrderListTagToggle = $('#order-tag-toggle');
+  var $tagLi  = $('li', $shareOrderListTagToggle);
+  var $divOrderItems = $('div.div-order-item');
+  var $summeryProductItems = $('tr.summery-product-item');
+  var $orderDataSummeryItems = $('tr.order-data-summery');
+  var $zitiPanel = $('#self-ziti-orders');
+  $tagLi.on('click', function(e){
+    var $me = $(this);
+    var tagId = $me.data('id');
+    handleTagChange(tagId);
+    $tagLi.removeClass('active');
+    $me.addClass('active');
+  });
+
+  function handleTagChange(tag) {
+    if (tag == 0) {
+      $divOrderItems.show();
+      $summeryProductItems.show();
+      $orderDataSummeryItems.hide();
+      $('tr[name="order-data-summery-0"]').show();
+    } else {
+      $divOrderItems.hide();
+      $summeryProductItems.hide();
+      $('div[name="order-item-tag-' + tag + '"]').show();
+      $('tr[name="summery-product-' + tag + '"]').show();
+      $orderDataSummeryItems.hide();
+      $('tr[name="order-data-summery-' + tag + '"]').show();
+    }
+  }
+
   var orderType = '';
   var $selfZitiOrder = $('#self-ziti-orders');
   $('select[name="ship_company_code"]').on('change', function () {
@@ -69,7 +99,14 @@ $(document).ready(function () {
       return;
     }
     var id = $(this).data('id');
-    var postData = {msg: msg, share_id: id};
+    var $processOrders = $('div.div-order-item:visible', $zitiPanel);
+    var processOrderIds = [];
+    $processOrders.each(function(index,item){
+      var $item = $(item);
+      processOrderIds.push($item.data('id'));
+    });
+    var processOrderIdStrs = processOrderIds.join(',');
+    var postData = {msg: msg, share_id: id, ids: processOrderIdStrs};
     $.ajax({
       type: 'POST',
       url: '/weshares/send_arrival_msg',

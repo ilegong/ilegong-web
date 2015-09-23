@@ -175,6 +175,7 @@
     vm.getProcessPrepaidStatus = getProcessPrepaidStatus;
     vm.handleReadMoreBtn = handleReadMoreBtn;
     vm.checkShareInfoHeight = checkShareInfoHeight;
+    vm.toggleTag = toggleTag;
     function pageLoaded(){
       $rootScope.loadingPage = false;
     }
@@ -235,7 +236,15 @@
       });
       $http({method: 'GET', url: '/weshares/detail/' + weshareId+'.json', cache: $templateCache}).
         success(function (data, status) {
+          $log.log(data);
           vm.weshare = data['weshare'];
+          vm.toggleState = {0:{open: true, statusText: '收起'}};
+          _.each(vm.weshare.tags, function (value, key) {
+            vm.toggleState[key] = {
+              open: true,
+              statusText: '收起'
+            };
+          });
           vm.commentData = data['comment_data'];
           vm.orderComments = vm.commentData['order_comments'];
           if (vm.weshare.addresses && vm.weshare.addresses.length == 1) {
@@ -395,11 +404,16 @@
     }
 
     function calOrderTotalPrice() {
-      var products = _.filter(vm.weshare.products, function (product) {
-        return product.num > 0;
+      var submit_products = [];
+      _.each(vm.weshare.products, function(products){
+        _.each(products, function(product){
+          if(product.num && (product.num > 0)){
+            submit_products.push(product);
+          }
+        });
       });
       var totalPrice = 0;
-      _.each(products, function (product) {
+      _.each(submit_products, function (product) {
         totalPrice += product.price * product.num;
       });
       if(totalPrice != 0){
@@ -528,8 +542,10 @@
     }
 
     function validateProducts() {
-      vm.productsHasError = _.all(vm.weshare.products, function (product) {
-        return !product.num || product.num <= 0;
+      vm.productsHasError = _.all(vm.weshare.products, function (products) {
+        return _.all(products,function(product){
+          return !product.num || product.num <= 0;
+        });
       });
       return vm.productsHasError;
     }
@@ -571,10 +587,15 @@
       if (!vm.validateOrderData()) {
         return false;
       }
-      var products = _.filter(vm.weshare.products, function (product) {
-        return product.num && (product.num > 0);
+      var submit_products = [];
+      _.each(vm.weshare.products, function(products){
+        _.each(products, function(product){
+          if(product.num && (product.num > 0)){
+            submit_products.push(product);
+          }
+        });
       });
-      products = _.map(products, function (product) {
+      submit_products = _.map(submit_products, function (product) {
         return {id: product.id, num: product.num};
       });
       vm.shipFee = vm.shipFee || 0;
@@ -592,7 +613,7 @@
       var orderData = {
         weshare_id: vm.weshare.id,
         rebate_log_id: vm.rebateLogId,
-        products: products,
+        products: submit_products,
         ship_info: ship_info,
         buyer: {
           name: vm.buyerName,
@@ -1025,6 +1046,12 @@
       } else {
         vm.readMoreBtnText = '收起';
       }
+    }
+
+    function toggleTag(tag){
+      var currentToggleState = vm.toggleState[tag];
+      currentToggleState['open'] = !currentToggleState['open'];
+      currentToggleState['statusText'] = currentToggleState['open'] ? '收起' : '展开';
     }
 
     function checkShareInfoHeight(){

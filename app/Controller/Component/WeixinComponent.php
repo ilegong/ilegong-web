@@ -452,7 +452,7 @@ class WeixinComponent extends Component {
      */
     public function notifyPaidDone($order) {
         //支付尾款
-        if($order['Order']['type'] == ORDER_TYPE_WESHARE_BUY_ADD){
+        if ($order['Order']['type'] == ORDER_TYPE_WESHARE_BUY_ADD) {
             $this->ShareUtil->process_paid_order_add($order);
             //clean cache share
             Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $order['Order']['member_id'] . '_1', '');
@@ -466,6 +466,8 @@ class WeixinComponent extends Component {
             //clean cache share
             Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $order['Order']['member_id'] . '_1', '');
             Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $order['Order']['member_id'] . '_0', '');
+            //check cart tag id and split order
+            $this->ShareUtil->split_order_by_tag($order);
             return;
         }
         $this->on_order_status_change($order);

@@ -28,7 +28,7 @@
                                                                                        class="statistics-btn"
                                                                                        ng-click="vm.toShareOrderList()">订单管理</a>
                 </li>
-                <li style="margin-right: 5px; float: right;" ng-if="vm.isCreator()"><a style="margin-top: 0px;width: 65px;"
+                <li style="margin-right: 5px; float: right;" ng-if="vm.isCreator()"><a style="margin-top: 3px;width: 65px;"
                                                                                        class="statistics-btn"
                                                                                        ng-click="vm.toUpdate()">修改</a>
                 </li>
@@ -54,20 +54,27 @@
             <dl class="clearfix images margin-bottom-12">
                 <dt ng-repeat="image in vm.weshare.images"><a ng-click="vm.viewImage(image)"><img ng-src="{{image}}"/></a></dt>
             </dl>
-            <div class="products form-group" ng-class="{'has-error':vm.productsHasError}">
-                <dl class="clearfix product form-control" ng-repeat="product in vm.weshare.products">
-                    <dd class="fl" ng-if="!vm.checkProductNum(product)||product.store==0">{{product.name}}<span style="color: red;font-weight: bold;" ng-if="product.tbd==1">&nbsp;&nbsp;预付</span><span ng-if="!vm.checkProductNum(product)">&nbsp;&nbsp;(<span style="color: red;">抢光了</span>)</span></dd>
-                    <dd class="fl" ng-if="vm.checkProductNum(product)&&product.store>0">{{product.name}}<span style="color: red;font-weight: bold;" ng-if="product.tbd==1">&nbsp;&nbsp;预付</span>&nbsp;&nbsp;(仅剩<span style="color: red;" ng-bind="vm.getProductLeftNum(product)"></span>份)</dd>
-                    <dd class="fr" ng-if="vm.checkProductNum(product)">
-                        <a class='btn decrease-btn' ng-click="vm.decreaseProductNum(product)"></a>
-                        <span class='num' ng-bind="product.num||0"></span>
-                        <a class='btn increase-btn' ng-click="vm.increaseProductNum(product)"></a>
-                    </dd>
-                    <dd class="fr" ng-if="!vm.checkProductNum(product)">
-                        <span class='num' style="margin-left: 60px;">&nbsp;</span>
-                    </dd>
-                    <dd class="fr" style="color: #29AC0E;" ng-bind="product.price/100 | currency:'￥'"></dd>
-                </dl>
+            <div class="product-group" ng-class="{'has-error':vm.productsHasError}">
+                <div ng-repeat="(tag, products) in vm.weshare.products">
+                    <div ng-if="tag!=0"><a style="color: #ffa200;font-size: 15px;" ng-bind="vm.weshare.tags[tag]['name']"></a>&nbsp;&nbsp;<a ng-click="vm.toggleTag(tag)" ng-bind="vm.toggleState[tag]['statusText']"></a></div>
+                    <div class="products form-group">
+                        <div ng-show="vm.toggleState[tag]['open']">
+                            <dl class="clearfix product form-control" ng-repeat="product in products">
+                                <dd class="fl" ng-if="!vm.checkProductNum(product)||product.store==0">{{product.name}}<span style="color: red;font-weight: bold;" ng-if="product.tbd==1">&nbsp;&nbsp;预付</span><span ng-if="!vm.checkProductNum(product)">&nbsp;&nbsp;(<span style="color: red;">抢光了</span>)</span></dd>
+                                <dd class="fl" ng-if="vm.checkProductNum(product)&&product.store>0">{{product.name}}<span style="color: red;font-weight: bold;" ng-if="product.tbd==1">&nbsp;&nbsp;预付</span>&nbsp;&nbsp;(仅剩<span style="color: red;" ng-bind="vm.getProductLeftNum(product)"></span>份)</dd>
+                                <dd class="fr" ng-if="vm.checkProductNum(product)">
+                                    <a class='btn decrease-btn' ng-click="vm.decreaseProductNum(product)"></a>
+                                    <span class='num' ng-bind="product.num||0"></span>
+                                    <a class='btn increase-btn' ng-click="vm.increaseProductNum(product)"></a>
+                                </dd>
+                                <dd class="fr" ng-if="!vm.checkProductNum(product)">
+                                    <span class='num' style="margin-left: 60px;">&nbsp;</span>
+                                </dd>
+                                <dd class="fr" style="color: #29AC0E;" ng-bind="product.price/100 | currency:'￥'"></dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
                 <p class='tips'>请输入商品数量</p>
             </div>
             <div class='send-info text-center margin-bottom-12' ng-hide='_.isEmpty(vm.weshare.send_info)'>取货时间: <span ng-bind='vm.weshare.send_info'></span></div>
@@ -326,20 +333,27 @@
             </ul>
             <div class="introduction margin-bottom-12" style="padding: 15px 15px 10px 15px;">
                 <h1 class='title margin-bottom-12' ng-bind="vm.weshare.title" style="padding-top: 0px;"></h1>
-                <div class="products form-group" ng-class="{'has-error':vm.productsHasError}">
-                    <dl class="clearfix product form-control" ng-repeat="product in vm.weshare.products">
-                        <dd class="fl" ng-if="!vm.checkProductNum(product)||product.store==0">{{product.name}}<span ng-if="!vm.checkProductNum(product)">&nbsp;&nbsp;(<span style="color: red;">抢光了</span>)</span></dd>
-                        <dd class="fl" ng-if="vm.checkProductNum(product)&&product.store>0">{{product.name}}&nbsp;&nbsp;(仅剩<span style="color: red;" ng-bind="vm.getProductLeftNum(product)"></span>份)</dd>
-                        <dd class="fr" ng-if="vm.checkProductNum(product)">
-                            <a class='btn decrease-btn' ng-click="vm.decreaseProductNum(product)"></a>
-                            <span class='num' ng-bind="product.num||0"></span>
-                            <a class='btn increase-btn' ng-click="vm.increaseProductNum(product)"></a>
-                        </dd>
-                        <dd class="fr" ng-if="!vm.checkProductNum(product)">
-                            <span class='num' style="margin-left: 60px;">&nbsp;</span>
-                        </dd>
-                        <dd class="fr" style="color: #29AC0E;" ng-bind="product.price/100 | currency:'￥'"></dd>
-                    </dl>
+                <div class="product-group" ng-class="{'has-error':vm.productsHasError}">
+                    <div ng-repeat="(tag, products) in vm.weshare.products">
+                        <div ng-if="tag!=0"><a style="color: #ffa200;font-size: 15px;" ng-bind="vm.weshare.tags[tag]['name']"></a>&nbsp;&nbsp;<a ng-click="vm.toggleTag(tag)" ng-bind="vm.toggleState[tag]['statusText']"></a></div>
+                        <div class="products form-group">
+                            <div ng-show="vm.toggleState[tag]['open']">
+                                <dl class="clearfix product form-control" ng-repeat="product in products">
+                                    <dd class="fl" ng-if="!vm.checkProductNum(product)||product.store==0">{{product.name}}<span style="color: red;font-weight: bold;" ng-if="product.tbd==1">&nbsp;&nbsp;预付</span><span ng-if="!vm.checkProductNum(product)">&nbsp;&nbsp;(<span style="color: red;">抢光了</span>)</span></dd>
+                                    <dd class="fl" ng-if="vm.checkProductNum(product)&&product.store>0">{{product.name}}<span style="color: red;font-weight: bold;" ng-if="product.tbd==1">&nbsp;&nbsp;预付</span>&nbsp;&nbsp;(仅剩<span style="color: red;" ng-bind="vm.getProductLeftNum(product)"></span>份)</dd>
+                                    <dd class="fr" ng-if="vm.checkProductNum(product)">
+                                        <a class='btn decrease-btn' ng-click="vm.decreaseProductNum(product)"></a>
+                                        <span class='num' ng-bind="product.num||0"></span>
+                                        <a class='btn increase-btn' ng-click="vm.increaseProductNum(product)"></a>
+                                    </dd>
+                                    <dd class="fr" ng-if="!vm.checkProductNum(product)">
+                                        <span class='num' style="margin-left: 60px;">&nbsp;</span>
+                                    </dd>
+                                    <dd class="fr" style="color: #29AC0E;" ng-bind="product.price/100 | currency:'￥'"></dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
                     <p class='tips'>请输入商品数量</p>
                 </div>
                 <div class='total-fee text-center'>总金额：<span ng-bind="vm.orderTotalPrice | currency:'￥'"></span></div>

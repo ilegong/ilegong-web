@@ -232,7 +232,7 @@ class WesharesController extends AppController {
     public function detail($weshareId) {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
-        $weshareInfo = $this->get_weshare_detail($weshareId);
+        $weshareInfo = $this->get_weshare_detail($weshareId, true);
         $is_me = $uid == $weshareInfo['creator']['id'];
         $ordersDetail = $this->get_weshare_buy_info($weshareId, $is_me);
         $weixinInfo = $this->set_weixin_share_data($uid, $weshareId);
@@ -401,6 +401,8 @@ class WesharesController extends AppController {
                 $item['creator'] = $uid;
                 $item['order_id'] = $orderId;
                 $item['tuan_buy_id'] = $weshareId;
+                //todo set tag id
+                $item['tag_id'] = $p['WeshareProduct']['tag_id'];
                 $cart[] = $item;
                 $totalPrice += $num * $price;
             }
@@ -429,6 +431,24 @@ class WesharesController extends AppController {
             echo json_encode(array('success' => false, 'msg' => $e->getMessage()));
             return;
         }
+    }
+
+    public function save_tags() {
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        $postStr = file_get_contents('php://input');
+        $tags = json_decode($postStr, true);
+        $tags = $this->ShareUtil->save_tags_return($tags, $uid);
+        echo json_encode(array('success' => true, 'tags' => $tags));
+        return;
+    }
+
+    public function get_tags() {
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        $tags = $this->ShareUtil->get_tags_list($uid);
+        echo json_encode(array('tags' => $tags));
+        return;
     }
 
     /**
@@ -584,6 +604,8 @@ class WesharesController extends AppController {
         $params = json_decode(file_get_contents('php://input'), true);
         $msg = $params['msg'];
         $weshare_id = $params['share_id'];
+        $idsStr = $params['ids'];
+        $orderIds = explode(',', $idsStr);
         $share_info = $this->Weshare->find('first', array(
             'conditions' => array(
                 'id' => $weshare_id
@@ -595,7 +617,7 @@ class WesharesController extends AppController {
         }
         //update order status
         $prepare_update_orders = $this->Order->find('all', array(
-            'conditions' => array('status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED), 'type' => ORDER_TYPE_WESHARE_BUY, 'ship_mark' => SHARE_SHIP_SELF_ZITI_TAG, 'member_id' => $weshare_id),
+            'conditions' => array('status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED), 'type' => ORDER_TYPE_WESHARE_BUY, 'ship_mark' => SHARE_SHIP_SELF_ZITI_TAG, 'member_id' => $weshare_id, 'id' => $orderIds),
             'fields' => array('id')
         ));
         $prepare_update_order_ids = Hash::extract($prepare_update_orders, '{n}.Order.id');
@@ -636,11 +658,18 @@ class WesharesController extends AppController {
         if (empty($weshare) && !$is_manage) {
             $this->redirect("/weshares/view/" . $weshareId);
         }
+        $share_tags = $this->ShareUtil->get_share_tags($weshareId);
         $statics_data = $this->get_weshare_buy_info($weshareId, true, true);
         $refund_money = $this->WeshareBuy->get_refund_money_by_weshare($weshareId);
         $rebate_money = $this->ShareUtil->get_share_rebate_money($weshareId);
         $repaid_order_money = $this->WeshareBuy->get_added_order_repaid_money($weshareId);
+        if (count($share_tags['tags']) > 0) {
+            $tag_order_summery = $this->ShareUtil->summery_order_data_by_tag($statics_data, $weshareId);
+            $this->set('tag_order_summery', $tag_order_summery);
+        }
         $this->set($statics_data);
+        $this->set('tags', $share_tags['tags']);
+        $this->set('product_tag_map', $share_tags['product_tag_map']);
         $this->set('refund_money', $refund_money);
         $this->set('rebate_money', $rebate_money);
         $this->set('repaid_order_money', $repaid_order_money);
@@ -937,6 +966,10 @@ class WesharesController extends AppController {
             if (empty($store)) {
                 $product['store'] = 0;
             }
+            $tag_id = $product['tag_id'];
+            if (empty($tag_id)) {
+                $product['tag_id'] = 0;
+            }
         }
         return $this->WeshareProduct->saveAll($weshareProductData);
     }
@@ -983,11 +1016,16 @@ class WesharesController extends AppController {
 
     /**
      * @param $weshareId
+     * @param $product_to_map
      * @return mixed
      * 获取分享的详情
      */
-    private function get_weshare_detail($weshareId) {
-        $key = SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId;
+    private function get_weshare_detail($weshareId, $product_to_map = false) {
+        if ($product_to_map) {
+            $key = SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId . '_1';
+        } else {
+            $key = SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId . '_0';
+        }
         $share_detail = Cache::read($key);
         if (empty($share_detail)) {
             $weshareInfo = $this->Weshare->find('first', array(
@@ -995,11 +1033,7 @@ class WesharesController extends AppController {
                     'id' => $weshareId
                 )
             ));
-            $weshareProducts = $this->WeshareProduct->find('all', array(
-                'conditions' => array(
-                    'weshare_id' => $weshareId
-                )
-            ));
+
             $weshareAddresses = $this->WeshareAddress->find('all', array(
                 'conditions' => array(
                     'weshare_id' => $weshareId
@@ -1015,6 +1049,7 @@ class WesharesController extends AppController {
                     'share_id' => $weshareId
                 )
             ));
+            $sharer_tags = $this->ShareUtil->get_tags($weshareInfo['Weshare']['creator']);
             $weshareShipSettings = Hash::combine($weshareShipSettings, '{n}.WeshareShipSetting.tag', '{n}.WeshareShipSetting');
             $creatorInfo = $this->User->find('first', array(
                 'conditions' => array(
@@ -1023,9 +1058,20 @@ class WesharesController extends AppController {
                 'recursive' => 1, //int
                 'fields' => $this->query_user_fileds,
             ));
+            if ($product_to_map) {
+                $weshareProducts = $this->ShareUtil->get_product_tag_map($weshareId);
+            } else {
+                $weshareProducts = $this->WeshareProduct->find('all', array(
+                    'conditions' => array(
+                        'weshare_id' => $weshareId
+                    )
+                ));
+                $weshareProducts = Hash::extract($weshareProducts, '{n}.WeshareProduct');
+            }
             $weshareInfo = $weshareInfo['Weshare'];
+            $weshareInfo['tags'] = $sharer_tags;
             $weshareInfo['addresses'] = Hash::extract($weshareAddresses, '{n}.WeshareAddress');
-            $weshareInfo['products'] = Hash::extract($weshareProducts, '{n}.WeshareProduct');
+            $weshareInfo['products'] = $weshareProducts;
             $weshareInfo['creator'] = $creatorInfo['User'];
             $weshareInfo['ship_type'] = $weshareShipSettings;
             $weshareInfo['images'] = array_filter(explode('|', $weshareInfo['images']));

@@ -27,6 +27,9 @@ ul li { list-style: none; }
 .form-group select.form-control{background-color: white; height: 38px;}
 .form-group .tips{display: none; font-size: 12px; color: #c62a35; line-height: 16px; padding-top: 5px;}
 .form-group.has-error .tips{display: block;}
+.product-group{margin-bottom: 5px;}
+.product-group .tips{display: none; font-size: 12px; color: #c62a35; line-height: 16px; padding-top: 5px;}
+.product-group.has-error .tips{display: block}
 
 .radio-group { clear:none; overflow: hidden;}
 .radio-group label { float:left; clear:none; display:block; padding: 0 10px; }
@@ -52,6 +55,17 @@ ul li { list-style: none; }
 .weshare-add .next-btn{ border: 1px #29AC0E solid; display: block; font-size: 16px; background-color: #29AC0E; color: #ffffff; text-decoration: none; margin-bottom: 20px; margin-top: 40px;}
 .weshare-add .back-btn{ color: #29AC0E; display: block; width: 80px; margin: 0 auto; margin-top: -15px; margin-bottom: 30px;}
 .weshare-add .checkbox-disable{color: #a9a9a9}
+.weshare-add .set-product-tag {
+    text-decoration: underline;
+    padding-left: 5px;
+}
+.weshare-add .set-product-tag-group{
+    margin-top: 10px;
+}
+
+.weshare-add .form-group-inline{
+    width: 55%; margin-right: 10px;
+}
 
 
 /*分享参团*/

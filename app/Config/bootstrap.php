@@ -2111,6 +2111,14 @@ function get_share_order_cart_display_name($carts) {
     return implode(', ', $product_names);
 }
 
+function get_share_order_tag_id($carts) {
+    if (empty($carts)) {
+        return 0;
+    }
+    $first_cart = $carts[0];
+    return $first_cart['tag_id'];
+}
+
 function share_kuaidi_order_filter($var) {
     return empty($var['ship_mark']) || $var['ship_mark'] == SHARE_SHIP_KUAIDI_TAG;
 }
