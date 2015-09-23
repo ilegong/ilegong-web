@@ -662,7 +662,8 @@ class WesharesController extends AppController {
         $rebate_money = $this->ShareUtil->get_share_rebate_money($weshareId);
         $repaid_order_money = $this->WeshareBuy->get_added_order_repaid_money($weshareId);
         $this->set($statics_data);
-        $this->set('tags', $share_tags);
+        $this->set('tags', $share_tags['tags']);
+        $this->set('product_tag_map', $share_tags['product_tag_map']);
         $this->set('refund_money', $refund_money);
         $this->set('rebate_money', $rebate_money);
         $this->set('repaid_order_money', $repaid_order_money);

@@ -634,13 +634,18 @@ class ShareUtilComponent extends Component {
                 'weshare_id' => $weshare_id
             )
         ));
+        $product_tag_map = Hash::combine($shareProducts, '{n}.WeshareProduct.id', '{n}.WeshareProduct.tag_id');
         $productTagIds = Hash::extract($shareProducts, '{n}.WeshareProduct.tag_id');
         $productTags = $shareProductTagM->find('all', array(
             'conditions' => array(
                 'id' => $productTagIds
             )
         ));
-        return $productTags;
+        return array('tags' => $productTags, 'product_tag_map' => $product_tag_map);
+    }
+
+    public function summery_order_data_by_tag($orderData){
+
     }
 
     /**
@@ -800,6 +805,9 @@ class ShareUtilComponent extends Component {
     public function split_order_by_tag($order) {
         //todo cal ship fee
         //todo check is prepaid
+        //todo cal proxy fee
+        //todo cal refund money (confirm)
+        //todo cal red packet fee
         $orderM = ClassRegistry::init('Order');
         $cartM = ClassRegistry::init('Cart');
         $order_id = $order['Order']['id'];

@@ -1,17 +1,25 @@
 $(document).ready(function () {
   var $shareOrderListTagToggle = $('#order-tag-toggle');
-  var $tagLi  = $('ol li', $shareOrderListTagToggle);
+  var $tagLi  = $('li', $shareOrderListTagToggle);
+  var $divOrderItems = $('div.div-order-item');
+  var $summeryProductItems = $('tr.summery-product-item');
   $tagLi.on('click', function(e){
     var $me = $(this);
     var tagId = $me.data('id');
+    handleTagChange(tagId);
+    $tagLi.removeClass('active');
+    $me.addClass('active');
   });
 
   function handleTagChange(tag){
     if(tag==0){
-      $('div.div-order-item').show();
+      $divOrderItems.show();
+      $summeryProductItems.show();
     }else{
-      $('div.div-order-item').hide();
+      $divOrderItems.hide();
+      $summeryProductItems.hide();
       $('div[name="order-item-tag-'+tag+'"]').show();
+      $('tr[name="summery-product-'+tag+'"]').show();
     }
   }
 
