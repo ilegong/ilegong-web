@@ -461,13 +461,13 @@ class WeixinComponent extends Component {
         }
         if ($order['Order']['type'] == ORDER_TYPE_WESHARE_BUY) {
             $this->weshare_buy_order_paid($order);
+            //check cart tag id and split order
+            $this->ShareUtil->split_order_by_tag($order);
             //check order is prepaid
             //$this->ShareUtil->check_order_is_prepaid_and_update_status($order);
             //clean cache share
             Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $order['Order']['member_id'] . '_1', '');
             Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $order['Order']['member_id'] . '_0', '');
-            //check cart tag id and split order
-            $this->ShareUtil->split_order_by_tag($order);
             return;
         }
         $this->on_order_status_change($order);
