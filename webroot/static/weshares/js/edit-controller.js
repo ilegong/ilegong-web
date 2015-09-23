@@ -29,6 +29,8 @@
     vm.saveTag = saveTag;
     vm.dataCacheKey = 'cache_share_data';
     vm.pageLoaded = pageLoaded;
+    vm.hideEditTagView = hideEditTagView;
+    vm.editTagView = editTagView;
     vm.showEditShareView = true;
     vm.showEditTagView = false;
     function pageLoaded() {
@@ -59,9 +61,7 @@
         addresses: [
           {address: ''}
         ],
-        tags: [
-          {name: ''}
-        ]
+        tags: []
       };
       var $cacheData = PYS.storage.load(vm.dataCacheKey);
       if ($cacheData) {
@@ -84,7 +84,9 @@
       } else {
         //load tags
         $http.get('/weshares/get_tags.json').success(function (data) {
-          vm.weshare.tags = data.tags;
+          if (data.tags && data.tags.length > 0) {
+            vm.weshare.tags = data.tags;
+          }
         }).error(function (data) {
         });
       }
@@ -238,6 +240,22 @@
       });
     }
 
+    function hideEditTagView() {
+      vm.weshare.tags = _.filter(vm.weshare.tags, function (tag) {
+        return tag.id && tag.id > 0;
+      });
+      vm.showEditTagView = false;
+      vm.showEditShareView = true;
+    }
+
+    function editTagView() {
+      vm.showEditShareView = false;
+      vm.showEditTagView = true;
+      if (vm.weshare.tags.length == 0) {
+        vm.weshare.tags = [{name: ''}];
+      }
+    }
+
     function saveTag() {
       if (vm.isSaveingTag) {
         alert('正在保存....');
@@ -254,8 +272,10 @@
       vm.isSaveingTag = true;
       $http.post('/weshares/save_tags', vm.weshare.tags).success(function (data) {
         vm.isSaveingTag = false;
+        vm.showEditTagView = false;
+        vm.showEditShareView = true;
+        vm.weshare.tags = data.tags;
         $log.log(data);
-
       }).error(function (data) {
         vm.isSaveingTag = false;
         $log.log(data);

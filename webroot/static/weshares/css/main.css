@@ -59,6 +59,13 @@ ul li { list-style: none; }
     text-decoration: underline;
     padding-left: 5px;
 }
+.weshare-add .set-product-tag-group{
+    margin-top: 10px;
+}
+
+.weshare-add .form-group-inline{
+    width: 55%; margin-right: 10px;
+}
 
 
 /*分享参团*/

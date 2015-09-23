@@ -599,7 +599,7 @@ class ShareUtilComponent extends Component {
             }
         }
         $shareProductTagM->saveAll($tags);
-        $tags = $this->get_tags($uid);
+        $tags = $this->get_tags_list($uid);
         return $tags;
     }
 
@@ -617,6 +617,18 @@ class ShareUtilComponent extends Component {
             )
         ));
         $tags = Hash::combine($tags, '{n}.WeshareProductTag.id', '{n}.WeshareProductTag');
+        return $tags;
+    }
+
+    public function get_tags_list($user_id){
+        $shareProductTagM = ClassRegistry::init('WeshareProductTag');
+        $tags = $shareProductTagM->find('all', array(
+            'conditions' => array(
+                'user_id' => $user_id,
+                'deleted' => DELETED_NO
+            )
+        ));
+        $tags = Hash::extract($tags, '{n}.WeshareProductTag');
         return $tags;
     }
 

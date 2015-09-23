@@ -446,7 +446,7 @@ class WesharesController extends AppController {
     public function get_tags() {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
-        $tags = $this->ShareUtil->get_tags($uid);
+        $tags = $this->ShareUtil->get_tags_list($uid);
         echo json_encode(array('tags' => $tags));
         return;
     }
