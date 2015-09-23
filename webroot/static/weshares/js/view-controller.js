@@ -236,7 +236,6 @@
       });
       $http({method: 'GET', url: '/weshares/detail/' + weshareId+'.json', cache: $templateCache}).
         success(function (data, status) {
-          $log.log(data);
           vm.weshare = data['weshare'];
           vm.toggleState = {0:{open: true, statusText: '收起'}};
           _.each(vm.weshare.tags, function (value, key) {

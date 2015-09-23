@@ -880,7 +880,7 @@ class ShareUtilComponent extends Component {
             $temp_order_price = $tag_carts['total_price'];
             $temp_order_info = $origin_order_info['Order'];
             $temp_order_info['id'] = null;
-            $order_prepaid_result = $this->check_cart_confirm_price($tag_carts);
+            $order_prepaid_result = $this->check_cart_confirm_price($tag_carts['carts']);
             //set order is repaid
             if ($order_prepaid_result == 0) {
                 $temp_order_info['is_prepaid'] = 0;

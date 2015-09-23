@@ -152,6 +152,7 @@ class AliPayController extends AppController {
         }else{
             //标记来源
             $this->set('from', $from);
+            $this->set('form', $form);
             $this->pageTitle = '支付宝支付';
         }
     }
