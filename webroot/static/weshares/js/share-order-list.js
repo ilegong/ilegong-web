@@ -1,4 +1,20 @@
 $(document).ready(function () {
+  var $shareOrderListTagToggle = $('#order-tag-toggle');
+  var $tagLi  = $('ol li', $shareOrderListTagToggle);
+  $tagLi.on('click', function(e){
+    var $me = $(this);
+    var tagId = $me.data('id');
+  });
+
+  function handleTagChange(tag){
+    if(tag==0){
+      $('div.div-order-item').show();
+    }else{
+      $('div.div-order-item').hide();
+      $('div[name="order-item-tag-'+tag+'"]').show();
+    }
+  }
+
   var orderType = '';
   var $selfZitiOrder = $('#self-ziti-orders');
   $('select[name="ship_company_code"]').on('change', function () {

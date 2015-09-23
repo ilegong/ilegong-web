@@ -13,11 +13,24 @@
         <div class="pull-left">
             <h4>总计</h4>
         </div>
+
         <div class="pull-right">
             <a href="/weshares/order_export/{{$weshareId}}" class="btn btn-danger btn-xs" style="margin-top: 5px;">导出订单</a>
             <a href="/weshares/add" class="btn btn-warning btn-xs" style="margin-top: 5px;">去分享</a>
         </div>
     </div>
+    {{if count($tags) > 0}}
+    <br>
+    <br>
+    <div>
+        <ol class="breadcrumb" id="order-tag-toggle">
+            <li class="active" data-id="0"><a>全部</a></li>
+            {{loop $tags $tag}}
+            <li data-id="{{$tag['WeshareProductTag']['id']}}"><a>{{$tag['WeshareProductTag']['name']}}</a></li>
+            {{/loop}}
+        </ol>
+    </div>
+    {{/if}}
     <table class="table">
         <thead>
         <tr>

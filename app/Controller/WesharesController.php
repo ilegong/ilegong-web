@@ -656,11 +656,13 @@ class WesharesController extends AppController {
         if (empty($weshare) && !$is_manage) {
             $this->redirect("/weshares/view/" . $weshareId);
         }
+        $share_tags = $this->ShareUtil->get_share_tags($weshareId);
         $statics_data = $this->get_weshare_buy_info($weshareId, true, true);
         $refund_money = $this->WeshareBuy->get_refund_money_by_weshare($weshareId);
         $rebate_money = $this->ShareUtil->get_share_rebate_money($weshareId);
         $repaid_order_money = $this->WeshareBuy->get_added_order_repaid_money($weshareId);
         $this->set($statics_data);
+        $this->set('tags', $share_tags);
         $this->set('refund_money', $refund_money);
         $this->set('rebate_money', $rebate_money);
         $this->set('repaid_order_money', $repaid_order_money);

@@ -581,6 +581,13 @@ class ShareUtilComponent extends Component {
         }
     }
 
+    /**
+     * @param $tags
+     * @param $uid
+     * @return array
+     *
+     * save user share product tag and return
+     */
     public function save_tags_return($tags, $uid) {
         $shareProductTagM = ClassRegistry::init('WeshareProductTag');
         foreach ($tags as &$tag_item) {
@@ -596,6 +603,11 @@ class ShareUtilComponent extends Component {
         return $tags;
     }
 
+    /**
+     * @param $user_id
+     * @return array
+     * get user tags
+     */
     public function get_tags($user_id) {
         $shareProductTagM = ClassRegistry::init('WeshareProductTag');
         $tags = $shareProductTagM->find('all', array(
@@ -604,8 +616,31 @@ class ShareUtilComponent extends Component {
                 'deleted' => DELETED_NO
             )
         ));
-        $tags = Hash::combine($tags,'{n}.WeshareProductTag.id' ,'{n}.WeshareProductTag');
+        $tags = Hash::combine($tags, '{n}.WeshareProductTag.id', '{n}.WeshareProductTag');
         return $tags;
+    }
+
+    /**
+     * @param $weshare_id
+     * @return mixed
+     * 获取一次分享的分组
+     */
+    public function get_share_tags($weshare_id) {
+        //cache it
+        $shareProductM = ClassRegistry::init('WeshareProduct');
+        $shareProductTagM = ClassRegistry::init('WeshareProductTag');
+        $shareProducts = $shareProductM->find('all', array(
+            'conditions' => array(
+                'weshare_id' => $weshare_id
+            )
+        ));
+        $productTagIds = Hash::extract($shareProducts, '{n}.WeshareProduct.tag_id');
+        $productTags = $shareProductTagM->find('all', array(
+            'conditions' => array(
+                'id' => $productTagIds
+            )
+        ));
+        return $productTags;
     }
 
     /**

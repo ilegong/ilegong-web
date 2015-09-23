@@ -741,7 +741,7 @@ class WeshareBuyComponent extends Component {
                     'type' => ORDER_TYPE_WESHARE_BUY,
                     'not' => array('order_id' => null, 'order_id' => '')
                 ),
-                'fields' => array('id', 'name', 'order_id', 'num', 'product_id', 'price', 'confirm_price')
+                'fields' => array('id', 'name', 'order_id', 'num', 'product_id', 'price', 'confirm_price', 'tag_id')
             ));
             $realTotalPrice = 0;
             $summeryTotalPrice = 0;
