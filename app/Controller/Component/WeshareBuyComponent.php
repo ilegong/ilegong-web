@@ -628,6 +628,25 @@ class WeshareBuyComponent extends Component {
     }
 
     /**
+     * @param $orderIds
+     * @param $weshareId
+     * @return mixed
+     */
+    public function get_group_order_repaid_money($orderIds, $weshareId) {
+        $orderM = ClassRegistry::init('Order');
+        $addOrderResult = $orderM->find('all', array(
+            'conditions' => array(
+                'parent_order_id' => $orderIds,
+                'type' => ORDER_TYPE_WESHARE_BUY_ADD,
+                'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_REFUND_DONE),
+                'member_id' => $weshareId
+            ),
+            'fields' => array('SUM(total_all_price) as all_repaid_order_money'),
+        ));
+        return $addOrderResult[0][0]['all_repaid_order_money'];
+    }
+
+    /**
      * @param $weshareId
      * @return float
      * 退款 金额

@@ -644,7 +644,7 @@ class ShareUtilComponent extends Component {
         return array('tags' => $productTags, 'product_tag_map' => $product_tag_map);
     }
 
-    public function summery_order_data_by_tag($orderData) {
+    public function summery_order_data_by_tag($orderData, $shareId) {
         $orderCartMap = $orderData['order_cart_map'];
         $orders = $orderData['orders']['origin_orders'];
         $orders = Hash::combine($orders, '{n}.id', '{n}');
@@ -667,8 +667,10 @@ class ShareUtilComponent extends Component {
                 $item_order = $orders[$orderId];
                 $tagItemTotalPrice = $tagItemTotalPrice + $item_order['total_all_price'];
             }
+            $tagRepaidMoney = $this->WeshareBuy->get_group_order_repaid_money($orderIds, $shareId);
             $tagOrderSummery[$tagId]['total_price'] = $tagItemTotalPrice;
             $tagOrderSummery[$tagId]['buy_count'] = count($orderIds);
+            $tagOrderSummery[$tagId]['repaid_money'] = $tagRepaidMoney;
         }
         return $tagOrderSummery;
     }

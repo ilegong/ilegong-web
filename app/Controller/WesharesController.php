@@ -443,7 +443,7 @@ class WesharesController extends AppController {
         return;
     }
 
-    public function get_tags(){
+    public function get_tags() {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
         $tags = $this->ShareUtil->get_tags($uid);
@@ -661,8 +661,8 @@ class WesharesController extends AppController {
         $refund_money = $this->WeshareBuy->get_refund_money_by_weshare($weshareId);
         $rebate_money = $this->ShareUtil->get_share_rebate_money($weshareId);
         $repaid_order_money = $this->WeshareBuy->get_added_order_repaid_money($weshareId);
-        if(count($share_tags['tags']) >0 ){
-            $tag_order_summery = $this->ShareUtil->summery_order_data_by_tag($statics_data);
+        if (count($share_tags['tags']) > 0) {
+            $tag_order_summery = $this->ShareUtil->summery_order_data_by_tag($statics_data, $weshareId);
             $this->set('tag_order_summery', $tag_order_summery);
         }
         $this->set($statics_data);
@@ -965,7 +965,7 @@ class WesharesController extends AppController {
                 $product['store'] = 0;
             }
             $tag_id = $product['tag_id'];
-            if(empty($tag_id)){
+            if (empty($tag_id)) {
                 $product['tag_id'] = 0;
             }
         }
@@ -1019,11 +1019,11 @@ class WesharesController extends AppController {
      * @return mixed
      * 获取分享的详情
      */
-    private function get_weshare_detail($weshareId, $product_to_map=false) {
-        if($product_to_map){
-            $key = SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId.'_1';
-        }else{
-            $key = SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId.'_0';
+    private function get_weshare_detail($weshareId, $product_to_map = false) {
+        if ($product_to_map) {
+            $key = SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId . '_1';
+        } else {
+            $key = SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId . '_0';
         }
         $share_detail = Cache::read($key);
         if (empty($share_detail)) {
@@ -1057,9 +1057,9 @@ class WesharesController extends AppController {
                 'recursive' => 1, //int
                 'fields' => $this->query_user_fileds,
             ));
-            if($product_to_map){
+            if ($product_to_map) {
                 $weshareProducts = $this->ShareUtil->get_product_tag_map($weshareId);
-            }else{
+            } else {
                 $weshareProducts = $this->WeshareProduct->find('all', array(
                     'conditions' => array(
                         'weshare_id' => $weshareId
