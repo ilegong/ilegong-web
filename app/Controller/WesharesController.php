@@ -100,6 +100,7 @@ class WesharesController extends AppController {
         $share_ship_set = $this->sharer_can_use_we_ship($uid);
         $this->set('ship_type', $share_ship_set);
         $this->set('weshare_id', $weshareId);
+        $this->set('user_id', $uid);
     }
 
     /**
@@ -145,6 +146,7 @@ class WesharesController extends AppController {
         }
         $share_ship_set = $this->sharer_can_use_we_ship($uid);
         $this->set('ship_type', $share_ship_set);
+        $this->set('user_id', $uid);
         //设置微信分享参数
         if (parent::is_weixin()) {
             $wexin_params = $this->set_weixin_share_data($currentUser['id'], 0);

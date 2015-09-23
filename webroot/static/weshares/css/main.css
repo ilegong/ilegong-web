@@ -67,6 +67,14 @@ ul li { list-style: none; }
     width: 55%; margin-right: 10px;
 }
 
+.weshare-add .add-new-product-not-tag{
+    position: relative;margin-top: -45px;margin-right: 3%;
+}
+
+.weshare-add .add-new-product-tag{
+    position: relative;margin-top: 10px;margin-right: 3%;
+}
+
 
 /*分享参团*/
 .weshare-view{ padding: 10px 10px 60px;}

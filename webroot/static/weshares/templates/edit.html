@@ -25,17 +25,20 @@
                 <input class='form-control' placeholder="库存/件,默认不限制" ng-model="product.store" ng-change='vm.validateProductStore(product)' ng-blur='vm.validateProductStore(product)'/>
                 <p class='tips'>请输入数字</p>
             </div>
-            <div class="form-group fl form-group-inline" ng-show="vm.weshare.tags.length>0">
+            <div class="form-group fl form-group-inline" ng-show="vm.weshare.tags.length>0" ng-if="vm.checkUserCanSetTag()">
                 <select class="form-control" ng-model="product.tag_id" ng-options="tag.id as tag.name for tag in vm.weshare.tags">
                     <option value="">默认分组</option>
                 </select>
             </div>
-            <div class="form-group fl set-product-tag-group">
+            <div class="form-group fl set-product-tag-group" ng-if="vm.checkUserCanSetTag()">
                 <a class="set-product-tag" ng-click="vm.editTagView()">设置分组</a>
             </div>
-            <a class="fr btn" style="position: relative;margin-top: 10px;margin-right: 3%;"
+            <a class="fr btn" class="add-new-product-not-tag"
                ng-class="{'delete-btn': !$last,'add-btn': $last}"
-               ng-click="vm.toggleProduct(product, $last)"></a>
+               ng-click="vm.toggleProduct(product, $last)" ng-if="!vm.checkUserCanSetTag()"></a>
+            <a class="fr btn" class="add-new-product-tag"
+               ng-class="{'delete-btn': !$last,'add-btn': $last}"
+               ng-click="vm.toggleProduct(product, $last)" ng-if="vm.checkUserCanSetTag()"></a>
         </div>
         <div class="form-group">
             <textarea class='form-control' rows="3" cols="" placeholder="描述下分享的详细内容，让大家更好的了解。" ng-model="vm.weshare.description" style="display: block;"></textarea>

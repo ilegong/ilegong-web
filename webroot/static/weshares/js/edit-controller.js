@@ -31,6 +31,8 @@
     vm.pageLoaded = pageLoaded;
     vm.hideEditTagView = hideEditTagView;
     vm.editTagView = editTagView;
+    vm.checkUserCanSetTag = checkUserCanSetTag;
+    vm.canSetTagUser = [633345,544307,802852];
     vm.showEditShareView = true;
     vm.showEditTagView = false;
     function pageLoaded() {
@@ -43,6 +45,8 @@
       vm.showShippmentInfo = false;
       var weshareId = angular.element(document.getElementById('weshareEditView')).attr('data-id');
       var sharerShipType = angular.element(document.getElementById('weshareEditView')).attr('data-ship-type');
+      var userId =  angular.element(document.getElementById('weshareEditView')).attr('data-user-id');
+      vm.currentUserId = userId;
       vm.sharerShipType = sharerShipType;
       vm.self_ziti_data = {status: 1, ship_fee: 0, tag: 'self_ziti'};
       vm.kuai_di_data = {status: -1, ship_fee: '', tag: 'kuai_di'};
@@ -254,6 +258,21 @@
       if (vm.weshare.tags.length == 0) {
         vm.weshare.tags = [{name: ''}];
       }
+    }
+
+    function inArray(needle, haystack) {
+      var length = haystack.length;
+      for (var i = 0; i < length; i++) {
+        if (haystack[i] == needle) return true;
+      }
+      return false;
+    }
+
+    function checkUserCanSetTag(){
+      if(inArray(vm.currentUserId,vm.canSetTagUser)){
+        return true;
+      }
+      return false;
     }
 
     function saveTag() {
