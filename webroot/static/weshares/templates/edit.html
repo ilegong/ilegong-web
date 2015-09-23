@@ -33,10 +33,10 @@
             <div class="form-group fl set-product-tag-group" ng-if="vm.checkUserCanSetTag()">
                 <a class="set-product-tag" ng-click="vm.editTagView()">设置分组</a>
             </div>
-            <a class="fr btn" class="add-new-product-not-tag"
+            <a class="fr btn add-new-product-not-tag"
                ng-class="{'delete-btn': !$last,'add-btn': $last}"
                ng-click="vm.toggleProduct(product, $last)" ng-if="!vm.checkUserCanSetTag()"></a>
-            <a class="fr btn" class="add-new-product-tag"
+            <a class="fr btn add-new-product-tag"
                ng-class="{'delete-btn': !$last,'add-btn': $last}"
                ng-click="vm.toggleProduct(product, $last)" ng-if="vm.checkUserCanSetTag()"></a>
         </div>
