@@ -997,8 +997,7 @@ class WesharesController extends AppController {
             ));
             $weshareProducts = $this->WeshareProduct->find('all', array(
                 'conditions' => array(
-                    'weshare_id' => $weshareId,
-                    'deleted' => DELETED_NO
+                    'weshare_id' => $weshareId
                 )
             ));
             $weshareAddresses = $this->WeshareAddress->find('all', array(

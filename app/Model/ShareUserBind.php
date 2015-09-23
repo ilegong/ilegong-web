@@ -22,6 +22,7 @@ class ShareUserBind extends AppModel {
         369 => array(633345),
         399 => array(633345),
         401 => array(633345),
+        630 => array(633345)
 
     );
 
