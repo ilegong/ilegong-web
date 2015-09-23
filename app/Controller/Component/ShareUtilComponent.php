@@ -668,7 +668,7 @@ class ShareUtilComponent extends Component {
                 $tagItemTotalPrice = $tagItemTotalPrice + $item_order['total_all_price'];
             }
             $tagRepaidMoney = $this->WeshareBuy->get_group_order_repaid_money($orderIds, $shareId);
-            if($tagRepaidMoney==null){
+            if ($tagRepaidMoney == null) {
                 $tagRepaidMoney = 0;
             }
             $tagOrderSummery[$tagId]['total_price'] = $tagItemTotalPrice;
@@ -698,7 +698,7 @@ class ShareUtilComponent extends Component {
         $orderM->updateAll(array('process_prepaid_status' => ORDER_STATUS_PREPAID_DONE), array('id' => $parent_order_id));
     }
 
-    public function get_product_tag_map($weshare_id){
+    public function get_product_tag_map($weshare_id) {
         $weshareProductM = ClassRegistry::init('WeshareProduct');
         $weshareProducts = $weshareProductM->find('all', array(
             'conditions' => array(
@@ -706,12 +706,12 @@ class ShareUtilComponent extends Component {
             )
         ));
         $result = array();
-        foreach($weshareProducts as $product){
+        foreach ($weshareProducts as $product) {
             $tag_id = $product['WeshareProduct']['tag_id'];
-            if(!isset($result[$tag_id])){
+            if (!isset($result[$tag_id])) {
                 $result[$tag_id] = array();
             }
-            $result[$tag_id][]=$product['WeshareProduct'];
+            $result[$tag_id][] = $product['WeshareProduct'];
         }
         return $result;
     }
@@ -868,6 +868,15 @@ class ShareUtilComponent extends Component {
             $temp_order_price = $tag_carts['total_price'];
             $temp_order_info = $origin_order_info['Order'];
             $temp_order_info['id'] = null;
+            $order_prepaid_result = $this->check_cart_confirm_price($tag_carts);
+            //set order is repaid
+            if ($order_prepaid_result == 0) {
+                $temp_order_info['is_prepaid'] = 0;
+                $temp_order_info['process_prepaid_status'] = 0;
+            } else {
+                $temp_order_info['is_prepaid'] = 1;
+                $temp_order_info['process_prepaid_status'] = ORDER_STATUS_PREPAID;
+            }
             $temp_order_info['parent_order_id'] = $order_id;
             $temp_order_info['total_price'] = $temp_order_price;
             $temp_order_info['total_all_price'] = $temp_order_price;
@@ -882,6 +891,17 @@ class ShareUtilComponent extends Component {
         }
         $cartM->saveAll($result_carts);
         $orderM->updateAll(array('type' => ORDER_TYPE_SPLIT), array('id' => $order_id));
+    }
+
+    private function check_cart_confirm_price($tag_carts) {
+        $result = 0;
+        foreach ($tag_carts as $item) {
+            if ($item['confirm_price'] == 0) {
+                $result = 1;
+                break;
+            }
+        }
+        return $result;
     }
 
     /**
