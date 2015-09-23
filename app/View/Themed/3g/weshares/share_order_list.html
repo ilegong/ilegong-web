@@ -62,6 +62,7 @@
                 &nbsp;&nbsp;&nbsp;总购买人数:&nbsp;<font
                         color="red">{{$summery['all_buy_user_count']}}</font></td>
         </tr>
+        {{if count($tags) > 0}}
         {{loop $tag_order_summery $tag_id $summery_item}}
             <tr class="order-data-summery" name="order-data-summery-{{$tag_id}}" style="display: none">
                 <td colspan="3">总金额:&nbsp;<font color="red">{{$summery_item['total_price']}}</font>
@@ -69,6 +70,7 @@
                             color="red">{{$summery_item['buy_count']}}</font></td>
             </tr>
         {{/loop}}
+        {{/if}}
         {{if count($rebate_logs) > 0}}
             <tr>
                 <td colspan="3">推荐订单数:&nbsp;<font color="red">{{count($rebate_logs)}}</font>{{if $share_rebate_money>0}}&nbsp;&nbsp;佣金:&nbsp;<font

@@ -661,7 +661,10 @@ class WesharesController extends AppController {
         $refund_money = $this->WeshareBuy->get_refund_money_by_weshare($weshareId);
         $rebate_money = $this->ShareUtil->get_share_rebate_money($weshareId);
         $repaid_order_money = $this->WeshareBuy->get_added_order_repaid_money($weshareId);
-        $tag_order_summery = $this->ShareUtil->summery_order_data_by_tag($statics_data);
+        if(count($share_tags['tags']) >0 ){
+            $tag_order_summery = $this->ShareUtil->summery_order_data_by_tag($statics_data);
+            $this->set('tag_order_summery', $tag_order_summery);
+        }
         $this->set($statics_data);
         $this->set('tags', $share_tags['tags']);
         $this->set('product_tag_map', $share_tags['product_tag_map']);
@@ -672,7 +675,6 @@ class WesharesController extends AppController {
         $this->set('hide_footer', true);
         $this->set('user_id', $user_id);
         $this->set('weshareId', $weshareId);
-        $this->set('tag_order_summery', $tag_order_summery);
     }
 
     /**
