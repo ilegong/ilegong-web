@@ -791,7 +791,7 @@ class WeshareBuyComponent extends Component {
                         return ($a['consignee_name'] < $b['consignee_name']) ? -1 : 1;
                     });
                 }
-                $orders = array(SHARE_SHIP_KUAIDI_TAG => $kuaidi_orders, SHARE_SHIP_SELF_ZITI_TAG => $self_ziti_orders, SHARE_SHIP_PYS_ZITI_TAG => $pys_ziti_orders);
+                $orders = array('origin_orders' => $orders, SHARE_SHIP_KUAIDI_TAG => $kuaidi_orders, SHARE_SHIP_SELF_ZITI_TAG => $self_ziti_orders, SHARE_SHIP_PYS_ZITI_TAG => $pys_ziti_orders);
             }
             //show order ship type name
             $shipTypes = ShipAddress::ship_type_list();

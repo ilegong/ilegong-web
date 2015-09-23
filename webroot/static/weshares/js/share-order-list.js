@@ -3,6 +3,7 @@ $(document).ready(function () {
   var $tagLi  = $('li', $shareOrderListTagToggle);
   var $divOrderItems = $('div.div-order-item');
   var $summeryProductItems = $('tr.summery-product-item');
+  var $orderDataSummeryItems = $('tr.order-data-summery');
   $tagLi.on('click', function(e){
     var $me = $(this);
     var tagId = $me.data('id');
@@ -11,15 +12,19 @@ $(document).ready(function () {
     $me.addClass('active');
   });
 
-  function handleTagChange(tag){
-    if(tag==0){
+  function handleTagChange(tag) {
+    if (tag == 0) {
       $divOrderItems.show();
       $summeryProductItems.show();
-    }else{
+      $orderDataSummeryItems.hide();
+      $('tr[name="order-data-summery-0"]').show();
+    } else {
       $divOrderItems.hide();
       $summeryProductItems.hide();
-      $('div[name="order-item-tag-'+tag+'"]').show();
-      $('tr[name="summery-product-'+tag+'"]').show();
+      $('div[name="order-item-tag-' + tag + '"]').show();
+      $('tr[name="summery-product-' + tag + '"]').show();
+      $orderDataSummeryItems.hide();
+      $('tr[name="order-data-summery-' + tag + '"]').show();
     }
   }
 

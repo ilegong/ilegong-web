@@ -48,7 +48,7 @@
         </tr>
         {{/loop}}
         </tbody>
-        <tr>
+        <tr class="order-data-summery" name="order-data-summery-0">
             <td colspan="3">总金额:&nbsp;<font color="red">{{round($summery['real_total_price']-$refund_money-$share_rebate_money+$repaid_order_money,2)}}</font>{{if
                 $refund_money>0}}&nbsp;&nbsp;退款金额:&nbsp;<font color="red">{{$refund_money}}</font>{{/if}}{{if
                 $summery['all_coupon_price'] > 0}}&nbsp;&nbsp;红包金额:&nbsp;<font color="red">{{$summery['all_coupon_price']}}</font>{{/if}}
@@ -62,6 +62,13 @@
                 &nbsp;&nbsp;&nbsp;总购买人数:&nbsp;<font
                         color="red">{{$summery['all_buy_user_count']}}</font></td>
         </tr>
+        {{loop $tag_order_summery $tag_id $summery_item}}
+            <tr class="order-data-summery" name="order-data-summery-{{$tag_id}}" style="display: none">
+                <td colspan="3">总金额:&nbsp;<font color="red">{{$summery_item['total_price']}}</font>
+                    &nbsp;&nbsp;&nbsp;总购买人数:&nbsp;<font
+                            color="red">{{$summery_item['buy_count']}}</font></td>
+            </tr>
+        {{/loop}}
         {{if count($rebate_logs) > 0}}
             <tr>
                 <td colspan="3">推荐订单数:&nbsp;<font color="red">{{count($rebate_logs)}}</font>{{if $share_rebate_money>0}}&nbsp;&nbsp;佣金:&nbsp;<font

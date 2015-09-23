@@ -644,8 +644,33 @@ class ShareUtilComponent extends Component {
         return array('tags' => $productTags, 'product_tag_map' => $product_tag_map);
     }
 
-    public function summery_order_data_by_tag($orderData){
-
+    public function summery_order_data_by_tag($orderData) {
+        $orderCartMap = $orderData['order_cart_map'];
+        $orders = $orderData['orders']['origin_orders'];
+        $orders = Hash::combine($orders, '{n}.id', '{n}');
+        $tagOrderSummery = array();
+        $tagOrderIds = array();
+        foreach ($orderCartMap as $orderId => $carts) {
+            $firstCart = $carts[0];
+            $item_tagId = $firstCart['tag_id'];
+            if (!isset($tagOrderIds[$item_tagId])) {
+                $tagOrderIds[$item_tagId] = array();
+            }
+            $tagOrderIds[$item_tagId][] = $orderId;
+        }
+        foreach ($tagOrderIds as $tagId => $orderIds) {
+            if (!isset($tagOrderSummery[$tagId])) {
+                $tagOrderSummery[$tagId] = array();
+            }
+            $tagItemTotalPrice = 0;
+            foreach ($orderIds as $orderId) {
+                $item_order = $orders[$orderId];
+                $tagItemTotalPrice = $tagItemTotalPrice + $item_order['total_all_price'];
+            }
+            $tagOrderSummery[$tagId]['total_price'] = $tagItemTotalPrice;
+            $tagOrderSummery[$tagId]['buy_count'] = count($orderIds);
+        }
+        return $tagOrderSummery;
     }
 
     /**
