@@ -934,6 +934,26 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 999,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/2dca381fd51_0923.jpg'
                 ),
+                '636' => array(
+                    'share_id' => 636,
+                    'share_name' => '沾化冬枣，真正有机冬枣！',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/3757a24d870_0923.jpg',
+                    'share_price' => '58',
+                    'share_user_name' => '盛夏',
+                    'share_vote' => 235,
+                    'share_user_id' => 708029,
+                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
+                ),
+                '635' => array(
+                    'share_id' => 635,
+                    'share_name' => '朝鲜族特色美食-深海纯野生明太鱼',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/329b4b275d5_0923.jpg',
+                    'share_price' => '79',
+                    'share_user_name' => '明明有梨',
+                    'share_vote' => 235,
+                    'share_user_id' => 999,
+                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/2dca381fd51_0923.jpg'
+                ),
                 '605' => array(
                     'share_id' => 605,
                     'share_name' => '当天海南空运～薇薇安千层水果蛋糕中秋礼献',
@@ -983,16 +1003,6 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 153,
                     'share_user_id' => 872713,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_717de9805a863011e02385aaab0c5da4.jpg'
-                ),
-                '585' => array(
-                    'share_id' => 585,
-                    'share_name' => '新疆阿克苏天山脚下----有机鲜大枣',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/89849cc16b6_0917.jpg',//todo
-                    'share_price' => '100',
-                    'share_user_name' => '李樱花',
-                    'share_vote' => 156,
-                    'share_user_id' => 810684,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
                 ),
                 '586' => array(
                     'share_id' => 586,
@@ -1061,16 +1071,6 @@ class ShareUtilComponent extends Component {
                     'share_price' => '139',
                     'share_user_name' => '小宝妈',
                     'share_vote' => 50,
-                    'share_user_id' => 811917,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
-                ),
-                '484' => array(
-                    'share_id' => 484,
-                    'share_name' => '口感清甜、平谷经典晚24号大桃',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/c40b45adec8_0908.jpg',
-                    'share_price' => '100',
-                    'share_user_name' => '小宝妈',
-                    'share_vote' => 150,
                     'share_user_id' => 811917,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
                 ),
