@@ -668,6 +668,9 @@ class ShareUtilComponent extends Component {
                 $tagItemTotalPrice = $tagItemTotalPrice + $item_order['total_all_price'];
             }
             $tagRepaidMoney = $this->WeshareBuy->get_group_order_repaid_money($orderIds, $shareId);
+            if($tagRepaidMoney==null){
+                $tagRepaidMoney = 0;
+            }
             $tagOrderSummery[$tagId]['total_price'] = $tagItemTotalPrice;
             $tagOrderSummery[$tagId]['buy_count'] = count($orderIds);
             $tagOrderSummery[$tagId]['repaid_money'] = $tagRepaidMoney;
