@@ -4,6 +4,7 @@ $(document).ready(function () {
   var $divOrderItems = $('div.div-order-item');
   var $summeryProductItems = $('tr.summery-product-item');
   var $orderDataSummeryItems = $('tr.order-data-summery');
+  var $zitiPanel = $('#self-ziti-orders');
   $tagLi.on('click', function(e){
     var $me = $(this);
     var tagId = $me.data('id');
@@ -98,7 +99,14 @@ $(document).ready(function () {
       return;
     }
     var id = $(this).data('id');
-    var postData = {msg: msg, share_id: id};
+    var $processOrders = $('div.div-order-item:visible', $zitiPanel);
+    var processOrderIds = [];
+    $processOrders.each(function(index,item){
+      var $item = $(item);
+      processOrderIds.push($item.data('id'));
+    });
+    var processOrderIdStrs = processOrderIds.join(',');
+    var postData = {msg: msg, share_id: id, ids: processOrderIdStrs};
     $.ajax({
       type: 'POST',
       url: '/weshares/send_arrival_msg',
