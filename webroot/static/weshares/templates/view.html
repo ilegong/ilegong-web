@@ -49,7 +49,7 @@
             <b></b>
             <div class="status" ng-bind="vm.statusMap[vm.weshare.status]"></div>
             <h1 class='title margin-bottom-12' ng-bind="vm.weshare.title"></h1>
-            <p id="share-description" class="margin-bottom-12" ng-class="{'share-description-omit':vm.hideMoreShareInfo}" ng-hide='_.isEmpty(vm.weshare.description)' ng-bind-html='vm.weshare.description | unsafe'></p>
+            <p id="share-description" class="margin-bottom-12" ng-class="{'share-description-omit':vm.hideMoreShareInfo}" ng-hide='_.isEmpty(vm.weshare.description)' ng-bind-html='::vm.weshare.description | unsafe'></p>
             <a id="share-description-btn" ng-show="vm.shouldShowReadMoreBtn" ng-click="vm.handleReadMoreBtn()" ng-bind="vm.readMoreBtnText"></a>
             <dl class="clearfix images margin-bottom-12">
                 <dt ng-repeat="image in vm.weshare.images"><a ng-click="vm.viewImage(image)"><img lazy-src="{{image}}"/></a></dt>
