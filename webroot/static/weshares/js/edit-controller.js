@@ -157,6 +157,7 @@
           }
         });
       }
+
       upload();
     }
 
@@ -169,9 +170,9 @@
         vm.weshare.products.push({name: '', store: '', deleted: 0});
       }
       else {
-        if(product.id&&product.id>0){
+        if (product.id && product.id > 0) {
           product.deleted = 1;
-        }else{
+        } else {
           vm.weshare.products = _.without(vm.weshare.products, product);
         }
       }
@@ -181,9 +182,9 @@
       if (isLast) {
         vm.weshare.addresses.push({address: '', deleted: 0});
       } else {
-        if(address.id&&address.id>0){
+        if (address.id && address.id > 0) {
           address.deleted = 1;
-        }else{
+        } else {
           vm.weshare.addresses = _.without(vm.weshare.addresses, address);
         }
       }
@@ -265,8 +266,8 @@
     function editTagView() {
       vm.showEditShareView = false;
       vm.showEditTagView = true;
-      if (vm.weshare.tags.length == 0) {
-        vm.weshare.tags = [{name: ''}];
+      if (!vm.weshare.tags || vm.weshare.tags.length == 0) {
+        vm.weshare.tags = [{name: '', deleted: 0}];
       }
     }
 
