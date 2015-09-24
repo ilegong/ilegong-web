@@ -60,8 +60,8 @@
                     <div class="products form-group">
                         <div ng-show="vm.toggleState[tag]['open']">
                             <dl class="clearfix product form-control" ng-repeat="product in products">
-                                <dd class="fl" ng-if="!vm.checkProductNum(product)||product.store==0">{{product.name}}<span style="color: red;font-weight: bold;" ng-if="product.tbd==1">&nbsp;&nbsp;预付</span><span ng-if="!vm.checkProductNum(product)">&nbsp;&nbsp;(<span style="color: red;">抢光了</span>)</span></dd>
-                                <dd class="fl" ng-if="vm.checkProductNum(product)&&product.store>0">{{product.name}}<span style="color: red;font-weight: bold;" ng-if="product.tbd==1">&nbsp;&nbsp;预付</span>&nbsp;&nbsp;(仅剩<span style="color: red;" ng-bind="vm.getProductLeftNum(product)"></span>份)</dd>
+                                <dd class="fl" ng-if="!vm.checkProductNum(product)||product.store==0">{{::product.name}}<span style="color: red;font-weight: bold;" ng-if="product.tbd==1">&nbsp;&nbsp;预付</span><span ng-if="!vm.checkProductNum(product)">&nbsp;&nbsp;(<span style="color: red;">抢光了</span>)</span></dd>
+                                <dd class="fl" ng-if="vm.checkProductNum(product)&&product.store>0">{{::product.name}}<span style="color: red;font-weight: bold;" ng-if="product.tbd==1">&nbsp;&nbsp;预付</span>&nbsp;&nbsp;(仅剩<span style="color: red;" ng-bind="vm.getProductLeftNum(product)"></span>份)</dd>
                                 <dd class="fr" ng-if="vm.checkProductNum(product)">
                                     <a class='btn decrease-btn' ng-click="vm.decreaseProductNum(product)"></a>
                                     <span class='num' ng-bind="product.num||0"></span>
@@ -70,7 +70,7 @@
                                 <dd class="fr" ng-if="!vm.checkProductNum(product)">
                                     <span class='num' style="margin-left: 60px;">&nbsp;</span>
                                 </dd>
-                                <dd class="fr" style="color: #29AC0E;" ng-bind="product.price/100 | currency:'￥'"></dd>
+                                <dd class="fr" style="color: #29AC0E;" ng-bind="::product.price/100 | currency:'￥'"></dd>
                             </dl>
                         </div>
                     </div>
@@ -104,12 +104,12 @@
                         <strong ng-if="order.process_prepaid_status==28" class="refund-status" ng-bind="vm.getProcessPrepaidStatus(order.process_prepaid_status)"></strong>
                         <strong ng-if="order.process_prepaid_status==29" class="paid-status" ng-bind="vm.getProcessPrepaidStatus(order.process_prepaid_status)"></strong>
                     </p>
-                    <span class='display-name' ng-hide="_.isEmpty(vm.getOrderDisplayName(order.id))" ng-bind="vm.getOrderDisplayName(order.id)"></span>
+                    <span class='display-name' ng-hide="_.isEmpty(vm.getOrderDisplayName(order.id))" ng-bind="::vm.getOrderDisplayName(order.id)"></span>
                     <div style="display: inline-flex;width: 100%;" ng-if="vm.isCurrentUserRecommend(order)&&(order.cate_id > 0&&((order.status!=3)||(order.status==3&&!vm.isOwner(order)&&!vm.isCreator())))">
-                        <div style="display: inline;width: 100%;"><span style="width: 30%;" class='created-at' ng-bind="vm.getFormatDate(order.created)"></span><span ng-click="vm.toRecommendUserInfo(order)" style="margin-top: -30px;line-height: 20px;margin-left: 10px;background-color: #29AC0E;padding: 3px;float: right;display: block;width: auto;" class="statistics-btn" ng-bind="vm.getRecommendInfo(order)"></span></div>
+                        <div style="display: inline;width: 100%;"><span style="width: 30%;" class='created-at' ng-bind="::vm.getFormatDate(order.created)"></span><span ng-click="vm.toRecommendUserInfo(order)" style="margin-top: -30px;line-height: 20px;margin-left: 10px;background-color: #29AC0E;padding: 3px;float: right;display: block;width: auto;" class="statistics-btn" ng-bind="vm.getRecommendInfo(order)"></span></div>
                     </div>
                     <div style="display: inline-flex;width: 100%;" ng-if="!vm.isCurrentUserRecommend(order)||!(order.cate_id > 0&&((order.status!=3)||(order.status==3&&!vm.isOwner(order)&&!vm.isCreator())))">
-                        <div style="width: 29%;"><span style="width: 100%;" class='created-at' ng-bind="vm.getFormatDate(order.created)"></span></div>
+                        <div style="width: 29%;"><span style="width: 100%;" class='created-at' ng-bind="::vm.getFormatDate(order.created)"></span></div>
                         <div style="float: right;margin-left: 49%; width: 30%;"
                              ng-if="order.status==3&&vm.isOwner(order)" ng-click="vm.showCommentDialog(order)">
                             <div class="commenting-o"><i class="fa fa-commenting-o fa-lg"></i></div>
@@ -124,38 +124,38 @@
                     </div>
                     <div class="send-info" ng-if="vm.isOwner(order)">
                         <span>姓名:</span>
-                        <span ng-bind="order.consignee_name"></span>
+                        <span ng-bind="::order.consignee_name"></span>
                         <br>
                         <span>手机:</span>
-                        <span ng-bind="order.consignee_mobilephone"></span>
+                        <span ng-bind="::order.consignee_mobilephone"></span>
                         <br>
                         <span>地址:</span>
-                        <span ng-bind="order.consignee_address"></span>
+                        <span ng-bind="::order.consignee_address"></span>
                         <br/>
                         <a class="btn confirm-btn" ng-click="vm.confirmReceived(order)" ng-show="order.status==2"><span ng-if="order.ship_mark=='pys_zi_ti' || order.ship_mark=='self_zi_ti'">已收货</span><span ng-if="order.ship_mark=='kuai_di'">已签收</span></a>
                         <a class="btn order-confirmed-btn" ng-show="order.status==3"><span ng-if="order.ship_mark=='pys_zi_ti' || order.ship_mark=='self_zi_ti'">已收货</span><span ng-if="order.ship_mark=='kuai_di'">已签收</span></a>
                     </div>
-                    <span ng-if='vm.isShowShipCode(order);' class="display-name" style="background: darkgray;" ng-bind="vm.getShipCode(order);"></span>
+                    <span ng-if='vm.isShowShipCode(order);' class="display-name" style="background: darkgray;" ng-bind="::vm.getShipCode(order);"></span>
                 </li>
                 <li class="detail" ng-if='order.status==9'>
                     <b></b>
-                    <p><strong class='buyer-name' ng-bind="vm.ordersDetail.users[order.creator]['nickname']"></strong>
+                    <p><strong class='buyer-name' ng-bind="::vm.ordersDetail.users[order.creator]['nickname']"></strong>
                         <span class="done-status"><i class="fa fa-heart fa-lg"></i></span>
                     </p>
-                    <span class='display-name' ng-hide="_.isEmpty(vm.getOrderComment(order.id).body)" ng-bind="vm.getOrderComment(order.id).body"></span>
+                    <span class='display-name' ng-hide="_.isEmpty(vm.getOrderComment(order.id).body)" ng-bind="::vm.getOrderComment(order.id).body"></span>
                     <div style="display: inline-flex;width: 97%;">
-                        <div style="display: inline-flex;width: 100%;"><span class="small-order-info" ng-bind="vm.getOrderDisplayName(order.id)"></span><span class='created-at' ng-bind="vm.getFormatDate(order.created)"></span></div>
+                        <div style="display: inline-flex;width: 100%;"><span class="small-order-info" ng-bind="::vm.getOrderDisplayName(order.id)"></span><span class='created-at' ng-bind="::vm.getFormatDate(order.created)"></span></div>
                         <div style="float: right;" ng-if="order.status==9" ng-click="vm.showCommentDialog(order,vm.getOrderComment(order.id))"><div class="commenting-o"><i class="fa fa-commenting-o fa-lg"></i></div></div>
                     </div>
                     <div class="send-info" ng-if="vm.showReplies(vm.getOrderComment(order.id).id)">
                         <div ng-repeat="reply in vm.getReplyComments(vm.getOrderComment(order.id).id)" style="margin-bottom: 8px;" ng-click="vm.showCommentDialog(order,reply)">
                             <div ng-if="reply.is_reply==0" style="display: inline-table;">
-                                <a ng-bind="reply.username" style="color:#6EAFD5;" ng-click="vm.toUserShareInfo(reply.user_id)"></a><span>:&nbsp;</span>
+                                <a ng-bind="::reply.username" style="color:#6EAFD5;" ng-click="vm.toUserShareInfo(reply.user_id)"></a><span>:&nbsp;</span>
                             </div>
                             <div ng-if="reply.is_reply==1" style="display: inline-table;">
-                                <a ng-bind="reply.username" style="color:#6EAFD5;" ng-click="vm.toUserShareInfo(reply.user_id)"></a><span>回复</span><a ng-bind="reply.reply_username" style="color:#6EAFD5;" ng-click="vm.toUserShareInfo(reply.reply_user_id)"></a><span>:&nbsp;</span>
+                                <a ng-bind="::reply.username" style="color:#6EAFD5;" ng-click="vm.toUserShareInfo(reply.user_id)"></a><span>回复</span><a ng-bind="::reply.reply_username" style="color:#6EAFD5;" ng-click="vm.toUserShareInfo(reply.reply_user_id)"></a><span>:&nbsp;</span>
                             </div>
-                            <span ng-bind="reply.body" style="word-break: break-all;" ng-click="vm.showCommentDialog(order,reply)"></span>
+                            <span ng-bind="::reply.body" style="word-break: break-all;" ng-click="vm.showCommentDialog(order,reply)"></span>
                         </div>
                     </div>
                 </li>
