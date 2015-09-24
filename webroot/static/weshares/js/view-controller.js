@@ -170,15 +170,16 @@
     vm.defaultNotifyHasBuyMsgContent = defaultNotifyHasBuyMsgContent;
     vm.closeRecommendDialog = closeRecommendDialog;
     vm.submitRecommend = submitRecommend;
-    vm.validRecommendContent=validRecommendContent;
+    vm.validRecommendContent = validRecommendContent;
     vm.checkHasUnRead = checkHasUnRead;
     vm.getProcessPrepaidStatus = getProcessPrepaidStatus;
     vm.handleReadMoreBtn = handleReadMoreBtn;
     vm.checkShareInfoHeight = checkShareInfoHeight;
     vm.toggleTag = toggleTag;
-    function pageLoaded(){
+    function pageLoaded() {
       $rootScope.loadingPage = false;
     }
+
     activate();
     function activate() {
       vm.initWeshareData();
@@ -186,18 +187,20 @@
 
     function getDate(strDate) {
       var date = eval('new Date(' + strDate.replace(/\d+(?=-[^-]+$)/,
-        function (a) { return parseInt(a, 10) - 1; }).match(/\d+/g) + ')');
+        function (a) {
+          return parseInt(a, 10) - 1;
+        }).match(/\d+/g) + ')');
       return date;
     }
 
-    function getFormatDate(dateStr){
+    function getFormatDate(dateStr) {
       var date = getDate(dateStr);
       var formatedDate = $filter('date')(date, 'MM-dd HH:mm');
       return formatedDate;
     }
 
-    function loadSharerAllComments(sharer_id){
-      $http({method: 'GET', url: '/weshares/load_share_comments/' + sharer_id+'.json', cache: $templateCache}).
+    function loadSharerAllComments(sharer_id) {
+      $http({method: 'GET', url: '/weshares/load_share_comments/' + sharer_id + '.json', cache: $templateCache}).
         success(function (data, status) {
           vm.sharerAllComments = data['share_all_comments'];
           vm.sharerAllCommntesUser = data['share_comment_all_users'];
@@ -234,10 +237,10 @@
           vm.chooseOfflineStoreError = false;
         }
       });
-      $http({method: 'GET', url: '/weshares/detail/' + weshareId+'.json', cache: $templateCache}).
+      $http({method: 'GET', url: '/weshares/detail/' + weshareId + '.json', cache: $templateCache}).
         success(function (data, status) {
           vm.weshare = data['weshare'];
-          vm.toggleState = {0:{open: true, statusText: '收起'}};
+          vm.toggleState = {0: {open: true, statusText: '收起'}};
           _.each(vm.weshare.tags, function (value, key) {
             vm.toggleState[key] = {
               open: true,
@@ -248,7 +251,7 @@
           vm.orderComments = vm.commentData['order_comments'];
           if (vm.weshare.addresses && vm.weshare.addresses.length == 1) {
             vm.weshare.selectedAddressId = vm.weshare.addresses[0].id;
-          }else if (vm.weshare.addresses && vm.weshare.addresses.length > 1) {
+          } else if (vm.weshare.addresses && vm.weshare.addresses.length > 1) {
             vm.weshare.addresses.unshift({id: -1, address: '请选择收货地址'});
             vm.weshare.selectedAddressId = -1;
           }
@@ -266,7 +269,7 @@
           vm.selectShipType = getSelectTypeDefaultVal(vm.weshareSettings);
           vm.userSubStatus = data['sub_status'];
           vm.submitRecommendData = {};
-          vm.submitRecommendData.recommend_content = vm.weshare.creator.nickname+'我认识，很靠谱！';
+          vm.submitRecommendData.recommend_content = vm.weshare.creator.nickname + '我认识，很靠谱！';
           vm.submitRecommendData.recommend_user = vm.currentUser.id;
           vm.submitRecommendData.recommend_share = vm.weshare.id;
           vm.sortOrders();
@@ -352,7 +355,7 @@
       return -1;
     }
 
-    function isProxy(){
+    function isProxy() {
       return !_.isEmpty(vm.currentUser) && vm.currentUser.is_proxy == 1
     }
 
@@ -404,9 +407,9 @@
 
     function calOrderTotalPrice() {
       var submit_products = [];
-      _.each(vm.weshare.products, function(products){
-        _.each(products, function(product){
-          if(product.num && (product.num > 0)){
+      _.each(vm.weshare.products, function (products) {
+        _.each(products, function (product) {
+          if (product.num && (product.num > 0)) {
             submit_products.push(product);
           }
         });
@@ -415,7 +418,7 @@
       _.each(submit_products, function (product) {
         totalPrice += product.price * product.num;
       });
-      if(totalPrice != 0){
+      if (totalPrice != 0) {
         if (vm.userCouponReduce) {
           totalPrice -= vm.userCouponReduce;
         }
@@ -423,7 +426,7 @@
         vm.shipSetId = getShipSetId();
         totalPrice += vm.shipFee;
         vm.orderTotalPrice = totalPrice / 100;
-      }else{
+      } else {
         vm.orderTotalPrice = 0;
       }
     }
@@ -451,10 +454,10 @@
       return true;
     }
 
-    function getRecommendInfo(order){
+    function getRecommendInfo(order) {
       var recommendId = vm.rebateLogs[order['cate_id']];
       var recommend = vm.ordersDetail['users'][recommendId]['nickname'];
-      return recommend+'推荐';
+      return recommend + '推荐';
     }
 
     function isCurrentUserRecommend(order) {
@@ -471,7 +474,7 @@
       return false;
     }
 
-    function toRecommendUserInfo(order){
+    function toRecommendUserInfo(order) {
       var recommendId = vm.rebateLogs[order['cate_id']];
       window.location.href = '/weshares/user_share_info/' + recommendId;
     }
@@ -542,7 +545,7 @@
 
     function validateProducts() {
       vm.productsHasError = _.all(vm.weshare.products, function (products) {
-        return _.all(products,function(product){
+        return _.all(products, function (product) {
           return !product.num || product.num <= 0;
         });
       });
@@ -587,9 +590,9 @@
         return false;
       }
       var submit_products = [];
-      _.each(vm.weshare.products, function(products){
-        _.each(products, function(product){
-          if(product.num && (product.num > 0)){
+      _.each(vm.weshare.products, function (products) {
+        _.each(products, function (product) {
+          if (product.num && (product.num > 0)) {
             submit_products.push(product);
           }
         });
@@ -647,9 +650,9 @@
       });
     }
 
-    function cloneShare(){
+    function cloneShare() {
       vm.cloneShareProcessing = true;
-      $http.post('/weshares/cloneShare/'+vm.weshare.id).success(function (data) {
+      $http.post('/weshares/cloneShare/' + vm.weshare.id).success(function (data) {
         if (data.success) {
           //redirect view
           window.location.href = '/weshares/view/' + data['shareId'];
@@ -667,7 +670,7 @@
     }
 
     function reloadCommentData() {
-      $http({method: 'GET', url: '/weshares/loadComment/' + vm.weshare.id+'.json'}).
+      $http({method: 'GET', url: '/weshares/loadComment/' + vm.weshare.id + '.json'}).
         success(function (data) {
           vm.commentData = data;
         }).
@@ -687,7 +690,7 @@
     function submitComment() {
       $http.post('/weshares/comment', vm.submitTempCommentData).success(function (data) {
         if (data.success) {
-          if(data.type=='notify'){
+          if (data.type == 'notify') {
             $window.alert('已经通知TA');
             return true;
           }
@@ -705,15 +708,15 @@
       vm.closeCommentDialog();
     }
 
-    function resetNotifyContent(){
-      if(vm.sendNotifyType == 0){
+    function resetNotifyContent() {
+      if (vm.sendNotifyType == 0) {
         vm.notify.content = vm.defaultNotifyHasBuyMsgContent();
-      }else{
+      } else {
         vm.notify.content = '';
       }
     }
 
-    function defaultNotifyHasBuyMsgContent(){
+    function defaultNotifyHasBuyMsgContent() {
       var msgContent = '';
       if (Object.keys(vm['ordersDetail']['users']).length > 10) {
         var usersCount = Object.keys(vm['ordersDetail']['users']).length;
@@ -725,20 +728,22 @@
             break
           }
           if (index == 10) {
-            msgContent =  msgContent + user['nickname'];
-          }else{
+            msgContent = msgContent + user['nickname'];
+          } else {
             msgContent = msgContent + user['nickname'] + '，';
           }
         }
-        msgContent = msgContent+'...等'+usersCount+'人都已经报名'+vm.weshare.creator.nickname+'分享的'+vm.weshare.title+'啦，就差你啦。';
-      }else{
-        msgContent = _.reduce(vm.ordersDetail.users, function(memo, user){ return memo + user['nickname']+'，'; }, '');
-        msgContent = msgContent+'都已经报名'+vm.weshare.creator.nickname+'分享的'+vm.weshare.title+'啦，就差你啦。';
+        msgContent = msgContent + '...等' + usersCount + '人都已经报名' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title + '啦，就差你啦。';
+      } else {
+        msgContent = _.reduce(vm.ordersDetail.users, function (memo, user) {
+          return memo + user['nickname'] + '，';
+        }, '');
+        msgContent = msgContent + '都已经报名' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title + '啦，就差你啦。';
       }
       return msgContent;
     }
 
-    function notifyFans(){
+    function notifyFans() {
       vm.showNotifyView = true;
       vm.showLayer = true;
       vm.sendNotifyType = 0;
@@ -747,14 +752,14 @@
       vm.notify.content = vm.defaultNotifyHasBuyMsgContent();
     }
 
-    function notifyType(){
-      if(vm.ordersDetail.orders&&vm.ordersDetail.orders.length>0){
+    function notifyType() {
+      if (vm.ordersDetail.orders && vm.ordersDetail.orders.length > 0) {
         return 1;
       }
       return 0;
     }
 
-    function sendNewShareMsg(){
+    function sendNewShareMsg() {
       if (confirm('是否要发送消息，发送次数过多会对用户形成骚扰?')) {
         $http({
           method: 'GET',
@@ -776,7 +781,7 @@
       }
       $http({
         method: 'GET',
-        url: '/weshares/subscribe_sharer/' + vm.weshare.creator.id + '/' + vm.currentUser.id+'.json'
+        url: '/weshares/subscribe_sharer/' + vm.weshare.creator.id + '/' + vm.currentUser.id + '.json'
       }).success(function (data) {
         // With the data succesfully returned, call our callback
         if (data['success']) {
@@ -788,16 +793,16 @@
       });
     }
 
-    function validNotifyMsgContent(){
-      if(_.isEmpty(vm.notify.content)){
+    function validNotifyMsgContent() {
+      if (_.isEmpty(vm.notify.content)) {
         vm.notifyMsgHasError = true;
         return;
       }
       vm.notifyMsgHasError = false;
     }
 
-    function sendNotifyShareMsg(){
-      if(_.isEmpty(vm.notify.content)){
+    function sendNotifyShareMsg() {
+      if (_.isEmpty(vm.notify.content)) {
         vm.notifyMsgHasError = true;
         return;
       }
@@ -820,13 +825,13 @@
     }
 
     function showCommentListDialog() {
-      vm.showCommentListDialogView=true;
+      vm.showCommentListDialogView = true;
       vm.showLayer = true;
     }
 
     function closeCommentDialog() {
       vm.showCommentingDialog = false;
-      vm.showLayer=false;
+      vm.showLayer = false;
       vm.submitTempCommentData = {};
     }
 
@@ -848,10 +853,10 @@
         }
       } else {
         //check is creator
-        if(vm.currentUser.id == vm.weshare.creator.id){
+        if (vm.currentUser.id == vm.weshare.creator.id) {
           var order_username = vm.ordersDetail.users[order.creator]['nickname'];
           comment_tip_info = '回复' + order_username + '说：';
-        }else{
+        } else {
           comment_tip_info = '回复' + vm.weshare.creator.nickname + '说：';
         }
       }
@@ -863,20 +868,20 @@
       vm.submitTempCommentData.share_id = vm.weshare.id;
     }
 
-    function getProcessPrepaidStatus(status){
-      if(status==25){
+    function getProcessPrepaidStatus(status) {
+      if (status == 25) {
         return '金额待定';
       }
-      if(status==26){
+      if (status == 26) {
         return '待补款';
       }
-      if(status==27){
+      if (status == 27) {
         return '已补款';
       }
-      if(status==28){
+      if (status == 28) {
         return '待退差价';
       }
-      if(status==29){
+      if (status == 29) {
         return '差价已退';
       }
     }
@@ -1012,15 +1017,15 @@
 
     function validRecommendContent() {
       vm.recommendContentHasError = false;
-      if(_.isEmpty(vm.submitRecommendData.recommend_content)){
+      if (_.isEmpty(vm.submitRecommendData.recommend_content)) {
         vm.recommendContentHasError = true;
       }
       return vm.recommendContentHasError;
     }
 
-    function checkHasUnRead(){
-      $http.get('/share_opt/check_opt_has_new.json').success(function(data){
-        if(data['has_new']){
+    function checkHasUnRead() {
+      $http.get('/share_opt/check_opt_has_new.json').success(function (data) {
+        if (data['has_new']) {
           vm.showUnReadMark = true;
         }
       });
@@ -1047,20 +1052,20 @@
       }
     }
 
-    function toggleTag(tag){
+    function toggleTag(tag) {
       var currentToggleState = vm.toggleState[tag];
       currentToggleState['open'] = !currentToggleState['open'];
       currentToggleState['statusText'] = currentToggleState['open'] ? '收起' : '展开';
     }
 
-    function checkShareInfoHeight(){
+    function checkShareInfoHeight() {
       vm.shareDescInfoElement = angular.element(document.getElementById('share-description'));
-      vm.shareDescInfoElement.ready(function(){
+      vm.shareDescInfoElement.ready(function () {
         var height = vm.shareDescInfoElement[0].offsetHeight;
-        if(height > 65){
+        if (height > 65) {
           vm.shouldShowReadMoreBtn = true;
           vm.hideMoreShareInfo = true;
-        }else{
+        } else {
           vm.shouldShowReadMoreBtn = false;
           vm.hideMoreShareInfo = false;
         }
@@ -1089,7 +1094,7 @@
         if (vm.isProxy()) {
           url = url + '?recommend=' + vm.currentUser['id'];
         }
-        if(!vm.isProxy()&&vm.recommendUserId!=0){
+        if (!vm.isProxy() && vm.recommendUserId != 0) {
           url = url + '?recommend=' + vm.recommendUserId;
         }
         to_timeline_title = userInfo.nickname + '报名了' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
@@ -1101,7 +1106,7 @@
         if (vm.isProxy()) {
           url = url + '?recommend=' + vm.currentUser['id'];
         }
-        if(!vm.isProxy()&&vm.recommendUserId!=0){
+        if (!vm.isProxy() && vm.recommendUserId != 0) {
           url = url + '?recommend=' + vm.recommendUserId;
         }
         to_timeline_title = vm.currentUser.nickname + '推荐' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
@@ -1128,7 +1133,7 @@
         if (vm.isProxy()) {
           url = url + '&recommend=' + vm.currentUser['id'];
         }
-        if(!vm.isProxy()&&vm.recommendUserId!=0){
+        if (!vm.isProxy() && vm.recommendUserId != 0) {
           url = url + '&recommend=' + vm.recommendUserId;
         }
         desc = vm.weshare.creator.nickname + '我认识，很靠谱！送你一个爱心礼包，一起来参加。';
