@@ -443,6 +443,7 @@ class ShareController extends AppController{
                 $total_price += $order['Order']['total_all_price'];
             }
             $order_ids = Hash::extract($orders, '{n}.Order.id');
+            $parent_order_ids = Hash::extract($orders, '{n}.Order.parent_order_id');
             $member_ids = Hash::extract($orders, '{n}.Order.member_id');
             $cate_ids = Hash::extract($orders, '{n}.Order.cate_id');
             $cateIds = array_unique($cate_ids);
@@ -467,9 +468,11 @@ class ShareController extends AppController{
             $allRebateMoney = number_format(round($allRebateMoney/100, 2),2);
             $rebateSharerIds = Hash::extract($rebateLogs, '{n}.RebateTrackLog.sharer');
             $rebateLogs = Hash::combine($rebateLogs, '{n}.RebateTrackLog.id', '{n}.RebateTrackLog.sharer');
+            $pay_notify_order_ids = array_merge($order_ids, $parent_order_ids);
+            $pay_notify_order_ids = array_unique($pay_notify_order_ids);
             $pay_notifies = $this->PayNotify->find('all', array(
                 'conditions' => array(
-                    'order_id' => $order_ids
+                    'order_id' => $pay_notify_order_ids
                 ),
             ));
             $pay_notifies = Hash::combine($pay_notifies, '{n}.PayNotify.order_id', '{n}.PayNotify.out_trade_no');

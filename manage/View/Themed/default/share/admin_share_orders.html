@@ -191,7 +191,11 @@
                     {{/if}}
                 </td>
                 <td>
-                    {{$pay_notifies[$current_order['id']]}}
+                    {{if !empty($pay_notifies[$current_order['id']])}}
+                        {{$pay_notifies[$current_order['id']]}}
+                    {{else}}
+                        {{$pay_notifies[$current_order['parent_order_id']]}}
+                    {{/if}}
                 </td>
                 <td>
                     {{$all_users[$rebate_logs[$current_order['cate_id']]]['nickname']}}
