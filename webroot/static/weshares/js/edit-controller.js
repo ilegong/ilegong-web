@@ -89,9 +89,7 @@
       } else {
         //load tags
         $http.get('/weshares/get_tags.json').success(function (data) {
-          if (data.tags && data.tags.length > 0) {
-            vm.weshare.tags = data.tags;
-          }
+          vm.weshare.tags = data.tags;
         }).error(function (data) {
         });
       }
