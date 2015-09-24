@@ -325,15 +325,15 @@
             vm.buyerAddress = vm.consignee.address;
             vm.buyerPatchAddress = vm.consignee.remark_address;
           }
-          //load all comments
-          vm.loadSharerAllComments(vm.weshare.creator.id);
-          vm.checkHasUnRead();
-          vm.loadOrderDetail(weshareId);
           vm.checkShareInfoHeight();
         }).
         error(function (data, status) {
           $log.log(data);
         });
+      vm.loadOrderDetail(weshareId);
+      vm.checkHasUnRead();
+      //load all comments
+      vm.loadSharerAllComments(vm.weshare.creator.id);
     }
 
     function sortOrders() {
