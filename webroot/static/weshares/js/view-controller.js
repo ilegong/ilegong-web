@@ -443,7 +443,10 @@
     }
 
     function getOrderComment(order_id) {
-      return vm.commentData['order_comments'][order_id];
+      if(vm.commentData['order_comments']){
+        return vm.commentData['order_comments'][order_id];
+      }
+      return null;
     }
 
     function getOrderCommentLength() {
