@@ -327,12 +327,12 @@
           }
           vm.checkShareInfoHeight();
           //load all comments
+          vm.loadOrderDetail(weshareId);
           vm.loadSharerAllComments(vm.weshare.creator.id);
         }).
         error(function (data, status) {
           $log.log(data);
         });
-      vm.loadOrderDetail(weshareId);
       vm.checkHasUnRead();
     }
 
