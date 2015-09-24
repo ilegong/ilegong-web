@@ -479,7 +479,7 @@
         return false;
       }
       var recommendId = vm.rebateLogs[order['cate_id']];
-      if (vm.currentUser['id'] == recommendId) {
+      if (vm.currentUser&&vm.currentUser['id'] == recommendId) {
         return true;
       }
       return false;
