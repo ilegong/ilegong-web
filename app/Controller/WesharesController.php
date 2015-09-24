@@ -197,7 +197,8 @@ class WesharesController extends AppController {
         $this->saveWeshareProxyPercent($weshare['Weshare']['id'], $proxyRebatePercent);
         //clear cache
         //SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId
-        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshare['Weshare']['id'], '');
+        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshare['Weshare']['id'] . '_0', '');
+        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshare['Weshare']['id'] . '_1', '');
         //SHARE_SHIP_SETTINGS_CACHE_KEY . '_' . $weshareId;
         Cache::write(SHARE_SHIP_SETTINGS_CACHE_KEY . '_' . $weshare['Weshare']['id'], '');
         //SIMPLE_SHARE_INFO_CACHE_KEY . '_' . $share_id
@@ -1038,7 +1039,8 @@ class WesharesController extends AppController {
 
             $weshareAddresses = $this->WeshareAddress->find('all', array(
                 'conditions' => array(
-                    'weshare_id' => $weshareId
+                    'weshare_id' => $weshareId,
+                    'deleted' => DELETED_NO
                 )
             ));
             $weshareShipSettings = $this->WeshareShipSetting->find('all', array(
@@ -1052,6 +1054,7 @@ class WesharesController extends AppController {
                 )
             ));
             $sharer_tags = $this->ShareUtil->get_tags($weshareInfo['Weshare']['creator']);
+            $sharer_tags_list = $this->ShareUtil->get_tags_list($weshareInfo['Weshare']['creator']);
             $weshareShipSettings = Hash::combine($weshareShipSettings, '{n}.WeshareShipSetting.tag', '{n}.WeshareShipSetting');
             $creatorInfo = $this->User->find('first', array(
                 'conditions' => array(
@@ -1065,13 +1068,15 @@ class WesharesController extends AppController {
             } else {
                 $weshareProducts = $this->WeshareProduct->find('all', array(
                     'conditions' => array(
-                        'weshare_id' => $weshareId
+                        'weshare_id' => $weshareId,
+                        'deleted' => DELETED_NO
                     )
                 ));
                 $weshareProducts = Hash::extract($weshareProducts, '{n}.WeshareProduct');
             }
             $weshareInfo = $weshareInfo['Weshare'];
             $weshareInfo['tags'] = $sharer_tags;
+            $weshareInfo['tags_list'] = $sharer_tags_list;
             $weshareInfo['addresses'] = Hash::extract($weshareAddresses, '{n}.WeshareAddress');
             $weshareInfo['products'] = $weshareProducts;
             $weshareInfo['creator'] = $creatorInfo['User'];

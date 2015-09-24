@@ -714,7 +714,8 @@ class ShareUtilComponent extends Component {
         $weshareProductM = ClassRegistry::init('WeshareProduct');
         $weshareProducts = $weshareProductM->find('all', array(
             'conditions' => array(
-                'weshare_id' => $weshare_id
+                'weshare_id' => $weshare_id,
+                'deleted' => DELETED_NO
             )
         ));
         $result = array();

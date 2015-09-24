@@ -32,7 +32,7 @@
     vm.hideEditTagView = hideEditTagView;
     vm.editTagView = editTagView;
     vm.checkUserCanSetTag = checkUserCanSetTag;
-    vm.canSetTagUser = [633345,544307,802852];
+    vm.canSetTagUser = [633345, 544307, 802852];
     vm.showEditShareView = true;
     vm.showEditTagView = false;
     function pageLoaded() {
@@ -45,7 +45,7 @@
       vm.showShippmentInfo = false;
       var weshareId = angular.element(document.getElementById('weshareEditView')).attr('data-id');
       var sharerShipType = angular.element(document.getElementById('weshareEditView')).attr('data-ship-type');
-      var userId =  angular.element(document.getElementById('weshareEditView')).attr('data-user-id');
+      var userId = angular.element(document.getElementById('weshareEditView')).attr('data-user-id');
       vm.currentUserId = userId;
       vm.sharerShipType = sharerShipType;
       vm.self_ziti_data = {status: 1, ship_fee: 0, tag: 'self_ziti'};
@@ -59,11 +59,11 @@
         description: '',
         images: [],
         products: [
-          {name: '', store: '', tbd: 0, tag_id: '0'}
+          {name: '', store: '', tbd: 0, tag_id: '0', deleted: 0}
         ],
         send_info: '',
         addresses: [
-          {address: ''}
+          {address: '', deleted: 0}
         ],
         tags: []
       };
@@ -77,6 +77,7 @@
         $http.get('/weshares/get_share_info/' + weshareId).success(function (data) {
           $log.log(data);
           vm.weshare = data;
+          vm.weshare.tags = vm.weshare['tags_list'];
           setDefaultData();
           vm.self_ziti_data = data['ship_type']['self_ziti'] || vm.self_ziti_data;
           vm.kuai_di_data = data['ship_type']['kuai_di'] || vm.kuai_di_data;
@@ -97,13 +98,13 @@
       vm.messages = [];
       function setDefaultData() {
         if (!vm.weshare.addresses || vm.weshare.addresses.length == 0) {
-          vm.weshare.addresses = [{address: ''}];
+          vm.weshare.addresses = [{address: '', deleted: 0}];
         }
         if (!vm.weshare.send_info) {
           vm.weshare.send_info = '';
         }
         if (!vm.weshare.tags) {
-          vm.weshare.tags = [{name: ''}];
+          vm.weshare.tags = [{name: '', deleted: 0}];
         }
       }
     }
@@ -156,7 +157,6 @@
           }
         });
       }
-
       upload();
     }
 
@@ -166,27 +166,38 @@
 
     function toggleProduct(product, isLast) {
       if (isLast) {
-        vm.weshare.products.push({name: '', store: ''});
+        vm.weshare.products.push({name: '', store: '', deleted: 0});
       }
       else {
-        vm.weshare.products = _.without(vm.weshare.products, product);
+        if(product.id&&product.id>0){
+          product.deleted = 1;
+        }else{
+          vm.weshare.products = _.without(vm.weshare.products, product);
+        }
       }
     }
 
     function toggleAddress(address, isLast) {
       if (isLast) {
-        vm.weshare.addresses.push({address: ''});
-      }
-      else {
-        vm.weshare.addresses = _.without(vm.weshare.addresses, address);
+        vm.weshare.addresses.push({address: '', deleted: 0});
+      } else {
+        if(address.id&&address.id>0){
+          address.deleted = 1;
+        }else{
+          vm.weshare.addresses = _.without(vm.weshare.addresses, address);
+        }
       }
     }
 
     function toggleTag(tag, isLast) {
       if (isLast) {
-        vm.weshare.tags.push({name: ''});
+        vm.weshare.tags.push({name: '', deleted: 0});
       } else {
-        vm.weshare.tags = _.without(vm.weshare.tags, tag);
+        if (tag.id && tag.id > 0) {
+          tag.deleted = 1;
+        } else {
+          vm.weshare.tags = _.without(vm.weshare.tags, tag);
+        }
       }
     }
 
@@ -232,7 +243,6 @@
       vm.weshare.proxy_rebate_percent = vm.proxy_rebate_percent;
       $http.post('/weshares/save', vm.weshare).success(function (data, status, headers, config) {
         if (data.success) {
-          $log.log('post succeeded, data: ').log(data);
           PYS.storage.clear();
           window.location.href = '/weshares/view/' + data['id'];
         } else {
@@ -268,8 +278,8 @@
       return false;
     }
 
-    function checkUserCanSetTag(){
-      if(inArray(vm.currentUserId,vm.canSetTagUser)){
+    function checkUserCanSetTag() {
+      if (inArray(vm.currentUserId, vm.canSetTagUser)) {
         return true;
       }
       return false;
