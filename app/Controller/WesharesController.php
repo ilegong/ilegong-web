@@ -228,6 +228,13 @@ class WesharesController extends AppController {
         return;
     }
 
+    public function get_share_order_detail($shareId){
+        $this->autoRender = false;
+
+
+
+    }
+
     /**
      * @param $weshareId
      * ajax 获取分享的详细信息
@@ -880,7 +887,7 @@ class WesharesController extends AppController {
      */
     public function order_export($shareId) {
         $this->layout = null;
-        $statics_data = $this->get_weshare_buy_info($shareId, true, true);
+        $statics_data = $this->get_weshare_buy_info($shareId, true, true, true);
         $refund_money = $this->WeshareBuy->get_refund_money_by_weshare($shareId);
         $rebate_money = $this->ShareUtil->get_share_rebate_money($shareId);
         $this->set($statics_data);
@@ -1010,11 +1017,12 @@ class WesharesController extends AppController {
      * @param $weshareId
      * @param $is_me
      * @param bool $division
+     * @param bool $export
      * @return mixed
      * 获取分享的订单信息
      */
-    private function get_weshare_buy_info($weshareId, $is_me, $division = false) {
-        return $this->WeshareBuy->get_share_order_for_show($weshareId, $is_me, $division);
+    private function get_weshare_buy_info($weshareId, $is_me, $division = false, $export = false) {
+        return $this->WeshareBuy->get_share_order_for_show($weshareId, $is_me, $division, $export);
     }
 
     /**
