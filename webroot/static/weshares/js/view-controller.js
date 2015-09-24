@@ -475,7 +475,7 @@
       if (vm.isCreator()) {
         return true;
       }
-      if (vm.currentUser['is_proxy'] == 0) {
+      if (vm.currentUser&&vm.currentUser['is_proxy'] == 0) {
         return false;
       }
       var recommendId = vm.rebateLogs[order['cate_id']];
