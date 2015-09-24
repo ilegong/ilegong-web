@@ -620,7 +620,7 @@ class ShareUtilComponent extends Component {
         return $tags;
     }
 
-    public function get_tags_list($user_id){
+    public function get_tags_list($user_id) {
         $shareProductTagM = ClassRegistry::init('WeshareProductTag');
         $tags = $shareProductTagM->find('all', array(
             'conditions' => array(
@@ -843,13 +843,13 @@ class ShareUtilComponent extends Component {
         return 0;
     }
 
-    //TODO 分隔订单
+    //TODO check split order by tag
     public function split_order_by_tag($order) {
-        //todo cal ship fee
+        //todo check cal ship fee
+        //todo check cal red packet fee
         //todo check is prepaid
-        //todo cal proxy fee
-        //todo cal refund money (confirm)
-        //todo cal red packet fee
+        //todo check cal proxy fee
+        //todo check cal refund money (confirm)
         $orderM = ClassRegistry::init('Order');
         $cartM = ClassRegistry::init('Cart');
         $order_id = $order['Order']['id'];
@@ -875,6 +875,8 @@ class ShareUtilComponent extends Component {
         }
         $origin_order_info = $orderM->find('first', array('conditions' => array('id' => $order_id)));
         $result_carts = array();
+        $is_set_ship_fee = false;
+        $is_set_coupon = false;
         foreach ($tag_cart_map as $tag => $tag_carts) {
             $orderM->id = null;
             $temp_order_price = $tag_carts['total_price'];
@@ -892,6 +894,22 @@ class ShareUtilComponent extends Component {
             $temp_order_info['parent_order_id'] = $order_id;
             $temp_order_info['total_price'] = $temp_order_price;
             $temp_order_info['total_all_price'] = $temp_order_price;
+            //set ship fee to first order
+            if (!$is_set_ship_fee) {
+                $is_set_ship_fee = true;
+                $ship_fee = round($temp_order_info['ship_fee'] / 100, 2);
+                $temp_order_info['total_all_price'] = $temp_order_price + $ship_fee;
+            } else {
+                $temp_order_info['ship_fee'] = 0;
+            }
+            //set coupon for first order
+            if (!$is_set_coupon) {
+                $is_set_coupon = true;
+                $coupon_money = round($temp_order_info['coupon_total'] / 100, 2);
+                $temp_order_info['total_all_price'] = $temp_order_info['total_all_price'] - $coupon_money;
+            } else {
+                $temp_order_info['coupon_total'] = 0;
+            }
             $temp_order_info = $orderM->save($temp_order_info);
             $new_order_id = $temp_order_info['Order']['id'];
             $tag_carts = $tag_carts['carts'];
