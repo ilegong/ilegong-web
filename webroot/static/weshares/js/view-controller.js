@@ -154,6 +154,7 @@
     vm.closeCommentDialog = closeCommentDialog;
     vm.notifyUserToComment = notifyUserToComment;
     vm.loadSharerAllComments = loadSharerAllComments;
+    vm.loadOrderDetail = loadOrderDetail;
     vm.getFormatDate = getFormatDate;
     vm.notifyFans = notifyFans;
     vm.notifyType = notifyType;
@@ -210,12 +211,7 @@
         });
     }
 
-    function initWeshareData() {
-      var rebateLogId = angular.element(document.getElementById('weshareView')).attr('data-rebate-log-id');
-      var recommendUserId = angular.element(document.getElementById('weshareView')).attr('data-recommend-id');
-      vm.rebateLogId = rebateLogId || 0;
-      vm.recommendUserId = recommendUserId || 0;
-      var weshareId = angular.element(document.getElementById('weshareView')).attr('data-weshare-id');
+    function loadOrderDetail(share_id){
       var fromType = angular.element(document.getElementById('weshareView')).attr('data-from-type');
       //first share
       var initSharedOfferId = angular.element(document.getElementById('weshareView')).attr('data-shared-offer');
@@ -225,6 +221,52 @@
       if (initSharedOfferId) {
         vm.isSharePacket = true;
       }
+      $http({method: 'GET', url: '/weshares/get_share_order_detail/' + share_id + '.json', cache: $templateCache}).
+        success(function (data, status) {
+          vm.ordersDetail = data['ordersDetail'];
+          vm.shipTypes = data['ordersDetail']['ship_types'];
+          vm.rebateLogs = data['ordersDetail']['rebate_logs'];
+          vm.sortOrders();
+          setWeiXinShareParams();
+          //from paid done
+          if (fromType == 1) {
+            if (_.isEmpty(initSharedOfferId)) {
+              vm.showNotifyShareDialog = true;
+              vm.showLayer = true;
+            } else {
+              //check is new user buy it
+              var userInfo = vm.ordersDetail.users[vm.currentUser.id];
+              if (userInfo) {
+                vm.showNotifyShareOfferDialog = true;
+                vm.sharedOfferMsg = '恭喜发财，大吉大利！';
+                vm.showLayer = true;
+              }
+            }
+          }
+          //follow share
+          if (followSharedType) {
+            if (followSharedType == 'got') {
+              vm.showNotifyGetPacketDialog = true;
+              vm.getPacketNum = followSharedNum + '元';
+              vm.showLayer = true;
+              $timeout(function () {
+                vm.showLayer = false;
+                vm.showNotifyGetPacketDialog = false;
+              }, 10000);
+            }
+          }
+        }).
+        error(function (data, status) {
+          $log.log(data);
+        });
+    }
+
+    function initWeshareData() {
+      var rebateLogId = angular.element(document.getElementById('weshareView')).attr('data-rebate-log-id');
+      var recommendUserId = angular.element(document.getElementById('weshareView')).attr('data-recommend-id');
+      vm.rebateLogId = rebateLogId || 0;
+      vm.recommendUserId = recommendUserId || 0;
+      var weshareId = angular.element(document.getElementById('weshareView')).attr('data-weshare-id');
       vm.weshare = {};
       vm.orderTotalPrice = 0;
       $scope.$watch('vm.selectShipType', function (val) {
@@ -257,9 +299,6 @@
           }
           vm.isManage = data['is_manage'];
           vm.recommendData = data['recommendData'];
-          vm.ordersDetail = data['ordersDetail'];
-          vm.shipTypes = data['ordersDetail']['ship_types'];
-          vm.rebateLogs = data['ordersDetail']['rebate_logs'];
           vm.currentUser = data['current_user'] || {};
           vm.weixinInfo = data['weixininfo'];
           vm.consignee = data['consignee'];
@@ -272,7 +311,6 @@
           vm.submitRecommendData.recommend_content = vm.weshare.creator.nickname + '我认识，很靠谱！';
           vm.submitRecommendData.recommend_user = vm.currentUser.id;
           vm.submitRecommendData.recommend_share = vm.weshare.id;
-          vm.sortOrders();
           if (vm.consignee && vm.consignee.offlineStore) {
             vm.checkedOfflineStore = vm.consignee.offlineStore;
           }
@@ -287,37 +325,10 @@
             vm.buyerAddress = vm.consignee.address;
             vm.buyerPatchAddress = vm.consignee.remark_address;
           }
-          setWeiXinShareParams();
-          //from paid done
-          if (fromType == 1) {
-            if (_.isEmpty(initSharedOfferId)) {
-              vm.showNotifyShareDialog = true;
-              vm.showLayer = true;
-            } else {
-              //check is new user buy it
-              var userInfo = vm.ordersDetail.users[vm.currentUser.id];
-              if (userInfo) {
-                vm.showNotifyShareOfferDialog = true;
-                vm.sharedOfferMsg = '恭喜发财，大吉大利！';
-                vm.showLayer = true;
-              }
-            }
-          }
-          //follow share
-          if (followSharedType) {
-            if (followSharedType == 'got') {
-              vm.showNotifyGetPacketDialog = true;
-              vm.getPacketNum = followSharedNum + '元';
-              vm.showLayer = true;
-              $timeout(function () {
-                vm.showLayer = false;
-                vm.showNotifyGetPacketDialog = false;
-              }, 10000);
-            }
-          }
           //load all comments
           vm.loadSharerAllComments(vm.weshare.creator.id);
           vm.checkHasUnRead();
+          vm.loadOrderDetail(weshareId);
           vm.checkShareInfoHeight();
         }).
         error(function (data, status) {

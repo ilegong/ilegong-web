@@ -228,11 +228,16 @@ class WesharesController extends AppController {
         return;
     }
 
+    /**
+     * @param $shareId
+     * ajax 获取购买信息 拆分优化加载
+     */
     public function get_share_order_detail($shareId){
         $this->autoRender = false;
-
-
-
+        $this->autoRender = false;
+        $ordersDetail = $this->get_weshare_buy_info($shareId, true);
+        echo json_encode(array('ordersDetail' => $ordersDetail));
+        return;
     }
 
     /**
@@ -244,7 +249,6 @@ class WesharesController extends AppController {
         $uid = $this->currentUser['id'];
         $weshareInfo = $this->get_weshare_detail($weshareId, true);
         $is_me = $uid == $weshareInfo['creator']['id'];
-        $ordersDetail = $this->get_weshare_buy_info($weshareId, $is_me);
         $weixinInfo = $this->set_weixin_share_data($uid, $weshareId);
         $user_fields = $this->query_user_fileds;
         $user_fields[] = 'mobilephone';
@@ -272,7 +276,6 @@ class WesharesController extends AppController {
         $is_manage_user = $this->ShareUserBind->checkUserCanManageShare($weshareId, $uid);
         echo json_encode(array('support_pys_ziti' => $share_ship_set,
             'weshare' => $weshareInfo,
-            'ordersDetail' => $ordersDetail,
             'recommendData' => $recommend_data,
             'current_user' => $current_user['User'],
             'weixininfo' => $weixinInfo,
