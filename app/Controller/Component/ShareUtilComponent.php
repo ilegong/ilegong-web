@@ -609,27 +609,43 @@ class ShareUtilComponent extends Component {
      * get user tags
      */
     public function get_tags($user_id) {
-        $shareProductTagM = ClassRegistry::init('WeshareProductTag');
-        $tags = $shareProductTagM->find('all', array(
-            'conditions' => array(
-                'user_id' => $user_id,
-                'deleted' => DELETED_NO
-            )
-        ));
+        $tags = $this->load_tags_data($user_id);
         $tags = Hash::combine($tags, '{n}.WeshareProductTag.id', '{n}.WeshareProductTag');
         return $tags;
     }
 
+    /**
+     * @param $user_id
+     * @return array|mixed
+     * get user tags list
+     */
     public function get_tags_list($user_id) {
-        $shareProductTagM = ClassRegistry::init('WeshareProductTag');
-        $tags = $shareProductTagM->find('all', array(
-            'conditions' => array(
-                'user_id' => $user_id,
-                'deleted' => DELETED_NO
-            )
-        ));
+        $tags = $this->load_tags_data($user_id);
         $tags = Hash::extract($tags, '{n}.WeshareProductTag');
         return $tags;
+    }
+
+    /**
+     * @param $user_id
+     * @return mixed
+     * cache tags data
+     */
+    private function load_tags_data($user_id) {
+        $cache_key = SHARER_TAGS_DATA_CACHE_KEY . '_' . $user_id;
+        $cache_data = Cache::read($cache_key);
+        if (empty($cache_data)) {
+            $shareProductTagM = ClassRegistry::init('WeshareProductTag');
+            $tags = $shareProductTagM->find('all', array(
+                'conditions' => array(
+                    'user_id' => $user_id,
+                    'deleted' => DELETED_NO
+                )
+            ));
+            $cache_data = json_encode($tags);
+            Cache::write($cache_key, $cache_data);
+            return $tags;
+        }
+        return json_decode($cache_data, true);
     }
 
     /**
