@@ -34,7 +34,7 @@
 })(window, window.angular);
 
 (function (window, angular) {
-	var app = angular.module('weshares', ['ui.router', 'module.services', 'module.filters', 'module.directives'])
+	var app = angular.module('weshares', ['ui.router', 'module.services', 'module.filters', 'module.directives', 'me-lazyload'])
 		.constant('_', window._)
 		.config(configCompileProvider)
 		.config(configHttpProvider)

@@ -2,7 +2,7 @@
     <div class="weshare-view">
         <ul class="clearfix header margin-bottom-12">
             <li>
-                <img lazy-src="{{'/img/default_user_icon.jpg'}}" ng-src="{{vm.weshare.creator.image||'/img/default_user_icon.jpg'}}" ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/>
+                <img lazy-src="{{vm.weshare.creator.image||'/img/default_user_icon.jpg'}}" ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/>
                 <br>
                 <s style="display: inline-flex;">
                     <span ng-if="vm.weshare.creator.is_proxy==1" style="color: white; font-size: 13px; font-weight: 700; padding: 2px; margin-top: 6px; background-color: #29AC0E; text-align: center; ">团长</span>
@@ -39,8 +39,8 @@
             </ul>
             <div class="recommend" ng-if="vm.recommendData.length > 0">
                 <div class="share-list">
-                    <div ng-repeat="recommend in vm.recommendData" class="user-avatar" data-uid="recommend.id"><a ng-click="vm.toUserShareInfo(recommend.id)"><img lazy-src="{{'/img/default_user_icon.jpg'}}"
-                            ng-src="{{recommend.image}}" alt="{{recommend.nickname}}"></a></div>
+                    <div ng-repeat="recommend in vm.recommendData" class="user-avatar" data-uid="recommend.id"><a ng-click="vm.toUserShareInfo(recommend.id)"><img
+                            lazy-src="{{recommend.image}}" alt="{{recommend.nickname}}"></a></div>
                 </div>
                 <span class="share-list-etc">推荐</span>
             </div>
@@ -52,7 +52,7 @@
             <p id="share-description" class="margin-bottom-12" ng-class="{'share-description-omit':vm.hideMoreShareInfo}" ng-hide='_.isEmpty(vm.weshare.description)' ng-bind-html='vm.weshare.description | unsafe'></p>
             <a id="share-description-btn" ng-show="vm.shouldShowReadMoreBtn" ng-click="vm.handleReadMoreBtn()" ng-bind="vm.readMoreBtnText"></a>
             <dl class="clearfix images margin-bottom-12">
-                <dt ng-repeat="image in vm.weshare.images"><a ng-click="vm.viewImage(image)"><img ng-src="{{image}}"/></a></dt>
+                <dt ng-repeat="image in vm.weshare.images"><a ng-click="vm.viewImage(image)"><img lazy-src="{{image}}"/></a></dt>
             </dl>
             <div class="product-group" ng-class="{'has-error':vm.productsHasError}">
                 <div ng-repeat="(tag, products) in vm.weshare.products">
@@ -82,7 +82,7 @@
         <div class="orders">
             <ul class="order clearfix margin-bottom-12" ng-class="{'my-order': vm.isOwner(order)}" ng-repeat="order in vm.ordersDetail.orders">
                 <li class='buyer-image'>
-                    <img lazy-src="{{'/img/default_user_icon.jpg'}}" ng-click="vm.toUserShareInfo(order.creator)" ng-src="{{vm.ordersDetail.users[order.creator]['image']||'/img/default_user_icon.jpg'}}"/>
+                    <img ng-click="vm.toUserShareInfo(order.creator)" lazy-src="{{vm.ordersDetail.users[order.creator]['image']||'/img/default_user_icon.jpg'}}"/>
                     <p ng-if="vm.ordersDetail.users[order.creator]['is_proxy']==1" style="color: white; font-size: 13px; font-weight: 700; padding: 2px; margin-top: 1px; background-color: #29AC0E;text-align: center;">
                         团长</p>
                 </li>
