@@ -326,14 +326,14 @@
             vm.buyerPatchAddress = vm.consignee.remark_address;
           }
           vm.checkShareInfoHeight();
+          //load all comments
+          vm.loadSharerAllComments(vm.weshare.creator.id);
         }).
         error(function (data, status) {
           $log.log(data);
         });
       vm.loadOrderDetail(weshareId);
       vm.checkHasUnRead();
-      //load all comments
-      vm.loadSharerAllComments(vm.weshare.creator.id);
     }
 
     function sortOrders() {
