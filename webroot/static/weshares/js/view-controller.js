@@ -570,7 +570,7 @@
     }
 
     function getProductLeftNum(product) {
-      if (vm.ordersDetail.summery.details[product.id]) {
+      if (vm.ordersDetail&&vm.ordersDetail.summery.details[product.id]) {
         var product_buy_num = vm.ordersDetail.summery.details[product.id]['num'];
         var store_num = product.store;
         return store_num - product_buy_num;
