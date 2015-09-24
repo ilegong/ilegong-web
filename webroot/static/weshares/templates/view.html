@@ -11,17 +11,17 @@
                 </s>
             <li>
                 <div style="display: -webkit-inline-box">
-                    <label ng-click="vm.toUserShareInfo(vm.weshare.creator.id)" ng-bind="vm.weshare.creator.nickname"></label>
+                    <label ng-click="vm.toUserShareInfo(vm.weshare.creator.id)" ng-bind="::vm.weshare.creator.nickname"></label>
                     <a ng-if="!vm.userSubStatus" style="margin-left: 5px;margin-top: 3px;width: 50px;line-height: 20px;background-color: #F2651A;" class="statistics-btn" ng-click="vm.subSharer();" ng-bind="vm.subShareTipTxt">+关注</a>
                 </div>
-            <s><span ng-bind="vm.ordersDetail.summery.all_buy_user_count"
+            <s><span ng-bind="::vm.ordersDetail.summery.all_buy_user_count"
                      style="color: #ffa200;"></span>&nbsp;报名
                 &nbsp;&nbsp;<span ng-click="vm.showCommentListDialog()" ng-if="vm.getOrderCommentLength()>=1&&vm.userSubStatus"><span
-                    style="color: #ffa200" ng-bind="vm.getOrderCommentLength()">0</span>&nbsp;爱心评价</span>
+                    style="color: #ffa200" ng-bind="::vm.getOrderCommentLength()">0</span>&nbsp;爱心评价</span>
                 &nbsp;&nbsp;<span
-                    ng-if="vm.getOrderCommentLength()<1&&vm.userSubStatus"><span style="color: #ffa200" ng-bind="vm.userShareSummery.follower_count">0</span>&nbsp;粉丝</span>&nbsp;&nbsp;<span
+                    ng-if="vm.getOrderCommentLength()<1&&vm.userSubStatus"><span style="color: #ffa200" ng-bind="::vm.userShareSummery.follower_count">0</span>&nbsp;粉丝</span>&nbsp;&nbsp;<span
                     ng-if="(vm.currentUser.is_proxy==1||vm.isCreator())&&vm.weshare.proxy_rebate_percent.percent>0">佣金&nbsp;<span
-                    ng-bind="vm.weshare.proxy_rebate_percent.percent+'%'" style="color: #ffa200;"></span></span></s>
+                    ng-bind="::vm.weshare.proxy_rebate_percent.percent+'%'" style="color: #ffa200;"></span></span></s>
             </li>
             <ul class="clearfix">
                 <li style="margin-right: 5px; float: right;" ng-if="vm.isCreator()||vm.isManage"><a style="margin-top: 0px;width: 65px;"
@@ -56,7 +56,7 @@
             </dl>
             <div class="product-group" ng-class="{'has-error':vm.productsHasError}">
                 <div ng-repeat="(tag, products) in vm.weshare.products">
-                    <div ng-if="tag!=0"><a style="color: #ffa200;font-size: 15px;" ng-bind="vm.weshare.tags[tag]['name']"></a>&nbsp;&nbsp;<a ng-click="vm.toggleTag(tag)" ng-bind="vm.toggleState[tag]['statusText']"></a></div>
+                    <div ng-if="tag!=0"><a style="color: #ffa200;font-size: 15px;" ng-bind="::vm.weshare.tags[tag]['name']"></a>&nbsp;&nbsp;<a ng-click="vm.toggleTag(tag)" ng-bind="::vm.toggleState[tag]['statusText']"></a></div>
                     <div class="products form-group">
                         <div ng-show="vm.toggleState[tag]['open']">
                             <dl class="clearfix product form-control" ng-repeat="product in products">
@@ -452,7 +452,7 @@
         </div>
         <ul class="clearfix zitilist">
             <li class="fl">
-                <h1 ng-repeat="(code, area) in vm.areas" ng-bind="area.name" ng-click="vm.changeOfflineStoreArea(code)" ng-class="{'cur': vm.currentAreaCode == code}"></h1>
+                <h1 ng-repeat="(code, area) in vm.areas" ng-bind="::area.name" ng-click="vm.changeOfflineStoreArea(code)" ng-class="{'cur': vm.currentAreaCode == code}"></h1>
                 <h1>&nbsp;</h1>
                 <h1>&nbsp;</h1>
                 <h1>&nbsp;</h1>
@@ -462,7 +462,7 @@
             </li>
             <li class="fr" ng-repeat="(code, offlineStores) in vm.offlineStores" ng-show="vm.currentAreaCode == code">
                 <h2 class="clearfix" style="position: relative;" ng-repeat="(id, offlineStore) in offlineStores">
-                    <a ng-bind="offlineStore.alias" ng-click="vm.chooseOfflineStore(offlineStore)"></a>
+                    <a ng-bind="::offlineStore.alias" ng-click="vm.chooseOfflineStore(offlineStore)"></a>
                     <a class="moreicon" ng-click="vm.showOfflineStoreDetail(offlineStore)"></a>
                 </h2>
             </li>
