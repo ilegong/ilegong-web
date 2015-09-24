@@ -14,11 +14,11 @@ $(document).ready(function () {
   });
 
   function handleTagChange(tag) {
-    if (tag == 0) {
+    if (tag == 'all') {
       $divOrderItems.show();
       $summeryProductItems.show();
       $orderDataSummeryItems.hide();
-      $('tr[name="order-data-summery-0"]').show();
+      $('tr[name="order-data-summery-all"]').show();
     } else {
       $divOrderItems.hide();
       $summeryProductItems.hide();
