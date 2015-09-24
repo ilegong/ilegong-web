@@ -65,7 +65,7 @@
         </tr>
         {{loop $tag_order_summery $tag_id $summery_item}}
             <tr class="order-data-summery" name="order-data-summery-{{$tag_id}}" style="display: none">
-                <td colspan="3">总金额:&nbsp;<font color="red">{{$summery_item['total_price']-$summery_item['repaid_money']}}</font>
+                <td colspan="3">总金额:&nbsp;<font color="red">{{round($summery_item['total_price']-$summery_item['repaid_money'],2)}}</font>
                     {{if $summery_item['repaid_money']!=0}}
                         {{if $summery_item['repaid_money']>0}}
                         &nbsp;&nbsp;补尾款:&nbsp;<font color="red">{{round($summery_item['repaid_money'],2)}}</font>
