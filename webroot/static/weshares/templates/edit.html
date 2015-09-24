@@ -56,8 +56,9 @@
     <div class="shippment-info" ng-show='vm.showShippmentInfo'>
         <h1 class='margin-bottom-12'>设置取货信息</h1>
 
-        <div class="form-group">
-            <input class='form-control' placeholder="到货/发货时间" ng-model="vm.weshare.send_info"/>
+        <div class="form-group" ng-class="{'has-error': vm.weshareSendInfoHasError}">
+            <input class='form-control' placeholder="到货/发货时间" ng-model="vm.weshare.send_info" ng-change='vm.validateSendInfo()' ng-blur='vm.validateSendInfo()'/>
+            <p class='tips'>请输入发货时间, 不超过50个字</p>
         </div>
         <div class="clearfix">
             <div class="form-group fl">

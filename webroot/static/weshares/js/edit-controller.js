@@ -32,6 +32,7 @@
     vm.hideEditTagView = hideEditTagView;
     vm.editTagView = editTagView;
     vm.checkUserCanSetTag = checkUserCanSetTag;
+    vm.validateSendInfo = validateSendInfo;
     vm.canSetTagUser = [633345, 544307, 802852];
     vm.showEditShareView = true;
     vm.showEditTagView = false;
@@ -237,6 +238,9 @@
       if (vm.validateRebatePercent()) {
         return false;
       }
+      if(vm.validateSendInfo()){
+        return false;
+      }
       vm.kuai_di_data.ship_fee = vm.kuai_di_data.ship_fee;
       vm.weshare.ship_type = [vm.self_ziti_data, vm.kuai_di_data, vm.pys_ziti_data];
       vm.weshare.proxy_rebate_percent = vm.proxy_rebate_percent;
@@ -325,6 +329,11 @@
     function validateTitle() {
       vm.weshareTitleHasError = _.isEmpty(vm.weshare.title) || vm.weshare.title.length > 50;
       return vm.weshareTitleHasError;
+    }
+
+    function validateSendInfo(){
+      vm.weshareSendInfoHasError = _.isEmpty(vm.weshare.send_info) || vm.weshare.send_info.length > 50;
+      return vm.weshareSendInfoHasError;
     }
 
     function validateProductName(product) {
