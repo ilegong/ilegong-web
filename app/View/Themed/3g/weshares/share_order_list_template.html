@@ -61,6 +61,9 @@
                 <strong>序号:</strong>&nbsp;&nbsp;<font color="red">{{$item_order['id']}}</font>&nbsp;&nbsp;{{$users[$item_order['creator']]['nickname']}}<br>
                 <strong>商品:</strong>&nbsp;&nbsp;{{get_share_order_cart_display_name($order_cart_map[$item_order['id']])}}&nbsp;&nbsp;<font color="red">￥{{$item_order['total_all_price']}}</font><br>
                 {{$item_order['consignee_name']}}&nbsp;&nbsp;{{$item_order['consignee_mobilephone']}}&nbsp;&nbsp;{{$item_order['consignee_address']}}<br>
+                {{if !empty($item_order['business_remark'])}}
+                    <strong>备注:</strong>&nbsp;&nbsp;{{$item_order['business_remark']}}
+                {{/if}}
             </p>
             {{if $item_order['status'] == ORDER_STATUS_SHIPPED}}
                 {{if $current_tag == SHARE_SHIP_KUAIDI_TAG}}
