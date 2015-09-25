@@ -350,6 +350,7 @@ class WesharesController extends AppController {
         $postDataArray = json_decode($postStr, true);
         $products = $postDataArray['products'];
         $weshareId = $postDataArray['weshare_id'];
+        $business_remark = $postDataArray['remark'];
         $buyerData = $postDataArray['buyer'];
         $rebateLogId = $postDataArray['rebate_log_id'];
         $cart = array();
@@ -379,7 +380,7 @@ class WesharesController extends AppController {
             }
             $shipFee = $shipSetting['WeshareShipSetting']['ship_fee'];
             $address = $this->get_order_address($weshareId, $shipInfo, $buyerData, $uid);
-            $orderData = array('cate_id' => $rebateLogId, 'creator' => $uid, 'consignee_address' => $address, 'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $buyerData['name'], 'consignee_mobilephone' => $buyerData['mobilephone']);
+            $orderData = array('cate_id' => $rebateLogId, 'creator' => $uid, 'consignee_address' => $address, 'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $buyerData['name'], 'consignee_mobilephone' => $buyerData['mobilephone'], 'business_remark' => $business_remark);
             if ($shipType == SHARE_SHIP_PYS_ZITI) {
                 $orderData['ship_mark'] = SHARE_SHIP_PYS_ZITI_TAG;
             }

@@ -631,6 +631,7 @@
         rebate_log_id: vm.rebateLogId,
         products: submit_products,
         ship_info: ship_info,
+        remark: vm.buyerRemark,
         buyer: {
           name: vm.buyerName,
           mobilephone: vm.buyerMobilePhone,
