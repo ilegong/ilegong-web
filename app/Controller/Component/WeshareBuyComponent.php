@@ -614,7 +614,7 @@ class WeshareBuyComponent extends Component {
      * @return mixed
      * 计算后结算的款项
      */
-    public function get_added_order_repaid_money($weshareId){
+    public function get_added_order_repaid_money($weshareId) {
         $orderM = ClassRegistry::init('Order');
         $addOrderResult = $orderM->find('all', array(
             'conditions' => array(
@@ -700,9 +700,9 @@ class WeshareBuyComponent extends Component {
             $this->RebateTrackLog = ClassRegistry::init('RebateTrackLog');
             $product_buy_num = array('details' => array());
             $order_cart_map = array();
-            if($export){
+            if ($export) {
                 $order_status = array(ORDER_STATUS_PAID);
-            }else{
+            } else {
                 $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
             }
             $sort = array('created DESC');
@@ -790,7 +790,7 @@ class WeshareBuyComponent extends Component {
             $users = Hash::combine($users, '{n}.User.id', '{n}.User');
             if ($division) {
                 $kuaidi_orders = array_filter($orders, "share_kuaidi_order_filter");
-                if(!$export){
+                if (!$export) {
                     if ($kuaidi_orders) {
                         usort($kuaidi_orders, function ($a, $b) {
                             return ($a['status'] < $b['status']) ? -1 : 1;
@@ -1528,10 +1528,10 @@ class WeshareBuyComponent extends Component {
         return !empty($shareOffer);
     }
 
-    public function get_sharer_mobile($uid){
+    public function get_sharer_mobile($uid) {
         $key = SHARER_MOBILE_PHONE_CACHE_KEY . '_' . $uid;
         $mobile = Cache::read($key);
-        if(empty($mobile)){
+        if (empty($mobile)) {
             $userM = ClassRegistry::init('User');
             $userInfo = $userM->find('first', array(
                 'conditions' => array(
