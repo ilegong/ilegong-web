@@ -767,8 +767,10 @@
     }
 
     function notifyType() {
-      if (vm.ordersDetail.orders && vm.ordersDetail.orders.length > 0) {
-        return 1;
+      if(vm.ordersDetail){
+        if (vm.ordersDetail.orders && vm.ordersDetail.orders.length > 0) {
+          return 1;
+        }
       }
       return 0;
     }
