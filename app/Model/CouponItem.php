@@ -435,6 +435,13 @@ class CouponItem extends AppModel {
         ));
     }
 
+    /**
+     * @param $user_id
+     * @param $sharer
+     * @param bool $limit_non_used
+     * @return array|bool
+     * 获取分享的红包
+     */
     public function find_my_valid_share_coupons($user_id, $sharer, $limit_non_used = true) {
         if (!$user_id || !$sharer) {
             return false;
