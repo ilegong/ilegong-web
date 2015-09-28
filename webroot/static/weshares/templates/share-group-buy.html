@@ -1,0 +1,93 @@
+<div style="background-color:#f5f5f5;margin-bottom: 20px;">
+    <div class="classlist">
+        <a ng-click="vm.showShareDetail()" class="back"></a>
+        邻里拼团
+        <a ng-click="vm.showShareDetail()" class="home"></a>
+    </div>
+    <div class="weshare-view" style="margin-top: 40px;padding: 10px 10px 0px">
+        <ul class="clearfix header margin-bottom-12">
+            <li><img ng-src="{{vm.weshare.creator.image||'/img/default_user_icon.jpg'}}" ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/></li>
+            <li>
+                <label ng-click="vm.toUserShareInfo(vm.weshare.creator.id)" ng-bind="vm.weshare.creator.nickname"></label>
+                <s><b style="color: #ffa200" ng-bind="vm.userShareSummery.share_count">0</b>&nbsp; <small>分享</small>&nbsp;&nbsp;&nbsp;<b style="color: #ffa200" ng-bind="vm.userShareSummery.follower_count">0</b>&nbsp;<small>粉丝</small></s>
+                <s>已有<span ng-bind="vm.ordersDetail.summery.all_buy_user_count"></span>人报名</s>
+            </li>
+        </ul>
+        <div class="introduction margin-bottom-12" style="padding: 15px 15px 10px 15px;">
+            <h1 class='title margin-bottom-12' ng-bind="vm.weshare.title" style="padding-top: 0px;"></h1>
+            <div class="product-group" ng-class="{'has-error':vm.productsHasError}">
+                <div ng-repeat="(tag, products) in vm.weshare.products">
+                    <div ng-if="tag!=0"><a style="color: #ffa200;font-size: 15px;" ng-bind="vm.weshare.tags[tag]['name']"></a>&nbsp;&nbsp;<a ng-click="vm.toggleTag(tag)" ng-bind="vm.toggleState[tag]['statusText']"></a></div>
+                    <div class="products form-group">
+                        <div ng-show="vm.toggleState[tag]['open']">
+                            <dl class="clearfix product form-control" ng-repeat="product in products">
+                                <dd class="fl" ng-if="!vm.checkProductNum(product)||product.store==0">{{product.name}}<span style="color: red;font-weight: bold;" ng-if="product.tbd==1">&nbsp;&nbsp;预付</span><span ng-if="!vm.checkProductNum(product)">&nbsp;&nbsp;(<span style="color: red;">抢光了</span>)</span></dd>
+                                <dd class="fl" ng-if="vm.checkProductNum(product)&&product.store>0">{{product.name}}<span style="color: red;font-weight: bold;" ng-if="product.tbd==1">&nbsp;&nbsp;预付</span>&nbsp;&nbsp;(仅剩<span style="color: red;" ng-bind="vm.getProductLeftNum(product)"></span>份)</dd>
+                                <dd class="fr" ng-if="vm.checkProductNum(product)">
+                                    <a class='btn decrease-btn' ng-click="vm.decreaseProductNum(product)"></a>
+                                    <span class='num' ng-bind="product.num||0"></span>
+                                    <a class='btn increase-btn' ng-click="vm.increaseProductNum(product)"></a>
+                                </dd>
+                                <dd class="fr" ng-if="!vm.checkProductNum(product)">
+                                    <span class='num' style="margin-left: 60px;">&nbsp;</span>
+                                </dd>
+                                <dd class="fr" style="color: #29AC0E;" ng-bind="product.price/100 | currency:'￥'"></dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+                <p class='tips'>请输入商品数量</p>
+            </div>
+            <div class='total-fee text-center'>总金额：<span ng-bind="vm.orderTotalPrice | currency:'￥'"></span></div>
+
+            <div style="text-align: center" ng-if="vm.myCoupons">(已减去红包<span ng-bind="vm.userCouponReduce/100" style="color: #ffa200;"></span>元)</div>
+            <div style="text-align: center" ng-if="vm.shipFee>0">(快递费用<span ng-bind="vm.shipFee/100" style="color: #ffa200;"></span>元)</div>
+        </div>
+    </div>
+    <div style="background-color: #ffffff;padding-top: 1px;padding-bottom: 40px;">
+
+        <div class="clearfix" style="padding: 0 10px;">
+            <div class="form-group" ng-class="{'has-error': vm.userAddressHasError}" ng-if="vm.selectShipType==0">
+                <input class='form-control' placeholder="输入地址" ng-model='vm.buyerAddress' ng-change='vm.validateUserAddress()'/>
+                <p class='tips'>请输入收货人地址</p>
+            </div>
+        </div>
+        <div class="clearfix" style="padding: 0 10px;">
+            <div class="form-group" ng-class="{'has-error': vm.userPatchAddressHasError}" ng-if="vm.selectShipType==1">
+                <input class='form-control' placeholder="小区-楼号-门牌(方便必要时送货上门)" ng-model='vm.buyerPatchAddress' ng-change='vm.validateUserPatchAddress()'/>
+                <p class='tips'>请输入小区-楼号-门牌(方便必要时送货上门)</p>
+            </div>
+        </div>
+        <div class="clearfix" style="padding: 0 10px;">
+            <div class="form-group" ng-class="{'has-error': vm.usernameHasError}">
+                <input class='form-control' placeholder="输入姓名" ng-model='vm.buyerName' ng-change='vm.validateUserName()'/>
+                <p class='tips'>请输入收货人信息</p>
+            </div>
+        </div>
+        <div class="clearfix" style="padding: 0 10px;">
+            <div class="form-group" ng-class="{'has-error': vm.buyerMobilePhoneHasError}">
+                <input class='form-control' placeholder="输入手机号" ng-model='vm.buyerMobilePhone' ng-change='vm.validateMobile()'/>
+                <p class='tips'>请输入手机号</p>
+            </div>
+        </div>
+        <div class="clearfix" style="padding: 0 10px;">
+            <div class="form-group">
+                <textarea class="form-control" placeholder="备注" ng-model="vm.buyerRemark"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <footer class="channel_bottom">
+        <a class="btm_item" href="/share_opt/index.html">
+            <i ng-if="vm.showUnReadMark" style="background:#f00;border-radius:50%;width:15px;height:15px;top:2px;left:12%;position:absolute; display: block;"></i>
+            <p class="iconfont" style="height: 16px;"><i class="fa fa-users"></i></p>
+            <b>朋友说</b>
+        </a>
+        <a class="new" ng-click='vm.submitOrder(0);' style="width: 28%;">微信支付</a>
+        <a class="new" ng-click='vm.submitOrder(1);' style="width: 28%; margin-right: 7%;">支付宝支付</a>
+        <a class="btm_item" href="/weshares/user_share_info">
+            <p class="iconfont" style="height: 16px;"><i class="fa fa-user"></i></p>
+            <b>我的</b>
+        </a>
+    </footer>
+</div>
