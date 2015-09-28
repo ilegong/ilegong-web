@@ -52,6 +52,7 @@
       vm.self_ziti_data = {status: 1, ship_fee: 0, tag: 'self_ziti'};
       vm.kuai_di_data = {status: -1, ship_fee: '', tag: 'kuai_di'};
       vm.pys_ziti_data = {status: -1, ship_fee: 0, tag: 'pys_ziti'};
+      vm.pin_tuan_data = {status: -1, ship_fee: 5, tag: 'pin_tuan'};
       vm.proxy_rebate_percent = {status: 0, percent: 0};
       vm.kuaidi_show_ship_fee = '';
       //add
@@ -238,11 +239,11 @@
       if (vm.validateRebatePercent()) {
         return false;
       }
-      if(vm.validateSendInfo()){
+      if (vm.validateSendInfo()) {
         return false;
       }
       vm.kuai_di_data.ship_fee = vm.kuai_di_data.ship_fee;
-      vm.weshare.ship_type = [vm.self_ziti_data, vm.kuai_di_data, vm.pys_ziti_data];
+      vm.weshare.ship_type = [vm.self_ziti_data, vm.kuai_di_data, vm.pys_ziti_data, vm.pin_tuan_data];
       vm.weshare.proxy_rebate_percent = vm.proxy_rebate_percent;
       $http.post('/weshares/save', vm.weshare).success(function (data, status, headers, config) {
         if (data.success) {
@@ -331,7 +332,7 @@
       return vm.weshareTitleHasError;
     }
 
-    function validateSendInfo(){
+    function validateSendInfo() {
       vm.weshareSendInfoHasError = _.isEmpty(vm.weshare.send_info) || vm.weshare.send_info.length > 50;
       return vm.weshareSendInfoHasError;
     }
