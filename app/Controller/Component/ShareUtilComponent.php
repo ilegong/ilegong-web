@@ -982,7 +982,7 @@ class ShareUtilComponent extends Component {
                 '642' => array(
                     'share_id' => 642,
                     'share_name' => '库尔勒香梨北京直递',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_s/8e46d642e4e_0928.jpg',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/86a35649c9f_0928.jpg',
                     'share_price' => '138',
                     'share_user_name' => '新果媛（㎡）',
                     'share_vote' => 235,
