@@ -46,26 +46,26 @@
     </div>
     <div style="background-color: #ffffff;padding-top: 1px;padding-bottom: 40px;">
         <div class="clearfix" style="padding: 0 10px;">
-            <div class="form-group" ng-class="{'has-error': vm.groupBuyAddressHasError}">
-                <input class='form-control' placeholder="地址，会作为参团领居们的自提" ng-model='vm.groupBuyAddress' ng-change='vm.validateGroupBuyAddress()'/>
+            <div class="form-group" ng-class="{'has-error': vm.userAddressHasError}" ng-if="vm.selectShipType==0">
+                <input class='form-control' placeholder="地址，会作为参团邻居们的自提" ng-model='vm.buyerAddress' ng-change='vm.validateUserAddress()'/>
                 <p class='tips'>请输入开团地址</p>
             </div>
         </div>
         <div class="clearfix" style="padding: 0 10px;">
-            <div class="form-group" ng-class="{'has-error': vm.groupBuyUserHasError}">
-                <input class='form-control' placeholder="输入姓名" ng-model='vm.groupBuyUser' ng-change='vm.validateGroupBuyUser()'/>
+            <div class="form-group" ng-class="{'has-error': vm.usernameHasError}">
+                <input class='form-control' placeholder="输入姓名" ng-model='vm.buyerName' ng-change='vm.validateUserName()'/>
                 <p class='tips'>请输入收货人信息</p>
             </div>
         </div>
         <div class="clearfix" style="padding: 0 10px;">
-            <div class="form-group" ng-class="{'has-error': vm.groupBuyMobilePhoneHasError}">
-                <input class='form-control' placeholder="输入手机号" ng-model='vm.groupBuyMobilePhone' ng-change='vm.validateGroupBuyMobile()'/>
+            <div class="form-group" ng-class="{'has-error': vm.buyerMobilePhoneHasError}">
+                <input class='form-control' placeholder="输入手机号" ng-model='vm.buyerMobilePhone' ng-change='vm.validateMobile()'/>
                 <p class='tips'>请输入手机号</p>
             </div>
         </div>
         <div class="clearfix" style="padding: 0 10px;">
             <div class="form-group">
-                <textarea class="form-control" placeholder="备注" ng-model="vm.groupBuyRemark"></textarea>
+                <textarea class="form-control" placeholder="备注" ng-model="vm.buyerRemark"></textarea>
             </div>
         </div>
     </div>
