@@ -33,6 +33,7 @@
     vm.editTagView = editTagView;
     vm.checkUserCanSetTag = checkUserCanSetTag;
     vm.validateSendInfo = validateSendInfo;
+    vm.validatePinTuan = validatePinTuan;
     vm.canSetTagUser = [633345, 544307, 802852];
     vm.showEditShareView = true;
     vm.showEditTagView = false;
@@ -335,6 +336,10 @@
     function validateSendInfo() {
       vm.weshareSendInfoHasError = _.isEmpty(vm.weshare.send_info) || vm.weshare.send_info.length > 50;
       return vm.weshareSendInfoHasError;
+    }
+
+    function validatePinTuan() {
+      //TODO valid when user chose pin tuan limit must gt 0
     }
 
     function validateProductName(product) {

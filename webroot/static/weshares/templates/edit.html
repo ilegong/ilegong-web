@@ -91,8 +91,8 @@
                 <input type="checkbox" ng-model="vm.pin_tuan_data.status" ng-true-value="1" ng-false-value="-1" ng-checked="vm.pin_tuan_data.status==1">
             </div>
             &nbsp;&nbsp;&nbsp;邻里拼团
-            <div class="form-group fr" ng-class="{'has-error': vm.pingTuanHasError}" style="width: 45%; margin-right: 80px;" ng-show="vm.pin_tuan_data.status==1">
-                <input class='form-control' placeholder="拼团人数" ng-model="vm.pin_tuan_data.limit" ng-change='vm.validatePingTuan()' ng-blur='vm.validatePingTuan()'/>
+            <div class="form-group fr" ng-class="{'has-error': vm.pinTuanHasError}" style="width: 45%; margin-right: 80px;" ng-show="vm.pin_tuan_data.status==1">
+                <input class='form-control' placeholder="拼团人数" ng-model="vm.pin_tuan_data.limit" ng-change='vm.validatePinTuan()' ng-blur='vm.validatePinTuan()'/>
                 <p class='tips'>请输入数字</p>
             </div>
         </div>
