@@ -1,27 +1,33 @@
 <div class="weshare-view">
     <ul class="clearfix header margin-bottom-12">
         <li>
-            <img ng-src="{{vm.weshare.creator.image||'/img/default_user_icon.jpg'}}" ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/>
+            <img lazy-src="{{vm.weshare.creator.image||'/img/default_user_icon.jpg'}}" ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/>
             <br>
             <s style="display: inline-flex;">
+                <span ng-if="vm.weshare.creator.is_proxy==1" style="color: white; font-size: 13px; font-weight: 700; padding: 2px; margin-top: 6px; background-color: #29AC0E; text-align: center; ">团长</span>
                 <img ng-if="vm.userShareSummery.follower_count>=50" src="/static/weshares/images/v.png" style="width: 20px;height: 20px;position: absolute;top: 44px;left: 41px;"/>
                 <img ng-if="vm.supportPysZiti>0" src="/static/weshares/images/hlj.jpeg" style="width: 25px;height: 25px;"/>
             </s>
         <li>
             <div style="display: -webkit-inline-box">
-                <label ng-click="vm.toUserShareInfo(vm.weshare.creator.id)" ng-bind="vm.weshare.creator.nickname"></label>
+                <label ng-click="vm.toUserShareInfo(vm.weshare.creator.id)" ng-bind="::vm.weshare.creator.nickname"></label>
                 <a ng-if="!vm.userSubStatus" style="margin-left: 5px;margin-top: 3px;width: 50px;line-height: 20px;background-color: #F2651A;" class="statistics-btn" ng-click="vm.subSharer();" ng-bind="vm.subShareTipTxt">+关注</a>
             </div>
-            <s ng-if="vm.getOrderCommentLength()<1&&vm.userSubStatus"><b style="color: #ffa200" ng-bind="vm.userShareSummery.share_count">0</b>&nbsp; <small>分享</small>&nbsp;&nbsp;&nbsp;<b style="color: #ffa200" ng-bind="vm.userShareSummery.follower_count">0</b>&nbsp;<small>粉丝</small></s>
-            <s ng-click="vm.showCommentListDialog()" ng-if="vm.getOrderCommentLength()>=1&&vm.userSubStatus"><b style="color: #ffa200" ng-bind="vm.getOrderCommentLength()">0</b>&nbsp; <small>爱心评价</small></s>
-            <s>已有<span ng-bind="vm.ordersDetail.summery.all_buy_user_count"></span>人报名</s>
+            <s><span ng-bind="::vm.ordersDetail.summery.all_buy_user_count"
+                     style="color: #ffa200;"></span>&nbsp;报名
+                &nbsp;&nbsp;<span ng-click="vm.showCommentListDialog()" ng-if="vm.getOrderCommentLength()>=1&&vm.userSubStatus"><span
+                        style="color: #ffa200" ng-bind="::vm.getOrderCommentLength()">0</span>&nbsp;爱心评价</span>
+                &nbsp;&nbsp;<span
+                        ng-if="vm.getOrderCommentLength()<1&&vm.userSubStatus"><span style="color: #ffa200" ng-bind="::vm.userShareSummery.follower_count">0</span>&nbsp;粉丝</span>&nbsp;&nbsp;<span
+                        ng-if="(vm.currentUser.is_proxy==1||vm.isCreator())&&vm.weshare.proxy_rebate_percent.percent>0">佣金&nbsp;<span
+                        ng-bind="::vm.weshare.proxy_rebate_percent.percent+'%'" style="color: #ffa200;"></span></span></s>
         </li>
-        <ul class="clearfix header margin-bottom-12" style="margin-left: 3px;float: right;">
-            <li style="margin-right: 5px; float: right;" ng-if="vm.isCreator()"><a style="margin-top: 0px;width: 65px;"
-                                                                                   class="statistics-btn"
-                                                                                   ng-click="vm.toShareOrderList()">订单管理</a>
+        <ul class="clearfix">
+            <li style="margin-right: 5px; float: right;" ng-if="vm.isCreator()||vm.isManage"><a style="margin-top: 3px;width: 65px;"
+                                                                                                class="statistics-btn"
+                                                                                                ng-click="vm.toShareOrderList()">订单管理</a>
             </li>
-            <li style="margin-right: 5px; float: right;" ng-if="vm.isCreator()"><a style="margin-top: 0px;width: 65px;"
+            <li style="margin-right: 5px; float: right;" ng-if="vm.isCreator()"><a style="margin-top: 3px;width: 65px;"
                                                                                    class="statistics-btn"
                                                                                    ng-click="vm.toUpdate()">修改</a>
             </li>
@@ -30,38 +36,55 @@
                                                                                     ng-click="vm.createMyShare()">我也要分享</a>
             </li>
         </ul>
-
+        <div class="recommend" ng-if="vm.recommendData.length > 0">
+            <div class="share-list">
+                <div ng-repeat="recommend in vm.recommendData" class="user-avatar" data-uid="recommend.id"><a ng-click="vm.toUserShareInfo(recommend.id)"><img
+                        lazy-src="{{recommend.image}}" alt="{{recommend.nickname}}"></a></div>
+            </div>
+            <span class="share-list-etc">推荐</span>
+        </div>
     </ul>
     <div class="introduction margin-bottom-12">
         <b></b>
         <div class="status" ng-bind="vm.statusMap[vm.weshare.status]"></div>
         <h1 class='title margin-bottom-12' ng-bind="vm.weshare.title"></h1>
-        <p class="margin-bottom-12" ng-hide='_.isEmpty(vm.weshare.description)' ng-bind-html='vm.weshare.description | unsafe'></p>
-        <!--<a href="#X">更多</a>-->
+        <p id="share-description" class="margin-bottom-12" ng-class="{'share-description-omit':vm.hideMoreShareInfo}" ng-hide='_.isEmpty(vm.weshare.description)' ng-bind-html='::vm.weshare.description | unsafe'></p>
+        <a id="share-description-btn" ng-show="vm.shouldShowReadMoreBtn" ng-click="vm.handleReadMoreBtn()" ng-bind="vm.readMoreBtnText"></a>
         <dl class="clearfix images margin-bottom-12">
-            <dt ng-repeat="image in vm.weshare.images"><a ng-click="vm.viewImage(image)"><img ng-src="{{image}}"/></a></dt>
+            <dt ng-repeat="image in vm.weshare.images"><a ng-click="vm.viewImage(image)"><img lazy-src="{{image}}"/></a></dt>
         </dl>
-        <div class="products form-group" ng-class="{'has-error':vm.productsHasError}">
-            <dl class="clearfix product form-control" ng-repeat="product in vm.weshare.products">
-                <dd class="fl" ng-if="!vm.checkProductNum(product)||product.store==0">{{product.name}}<span ng-if="!vm.checkProductNum(product)">&nbsp;&nbsp;(<span style="color: red;">抢光了</span>)</span></dd>
-                <dd class="fl" ng-if="vm.checkProductNum(product)&&product.store>0">{{product.name}}&nbsp;&nbsp;(仅剩<span style="color: red;" ng-bind="vm.getProductLeftNum(product)"></span>份)</dd>
-                <dd class="fr" ng-if="vm.checkProductNum(product)">
-                    <a class='btn decrease-btn' ng-click="vm.decreaseProductNum(product)"></a>
-                    <span class='num' ng-bind="product.num||0"></span>
-                    <a class='btn increase-btn' ng-click="vm.increaseProductNum(product)"></a>
-                </dd>
-                <dd class="fr" ng-if="!vm.checkProductNum(product)">
-                    <span class='num' style="margin-left: 60px;">&nbsp;</span>
-                </dd>
-                <dd class="fr" style="color: #29AC0E;" ng-bind="product.price/100 | currency:'￥'"></dd>
-            </dl>
+        <div class="product-group" ng-class="{'has-error':vm.productsHasError}">
+            <div ng-repeat="(tag, products) in vm.weshare.products">
+                <div ng-if="tag!=0"><a style="color: #ffa200;font-size: 15px;" ng-bind="::vm.weshare.tags[tag]['name']"></a>&nbsp;&nbsp;<a ng-click="vm.toggleTag(tag)" ng-bind="::vm.toggleState[tag]['statusText']"></a></div>
+                <div class="products form-group">
+                    <div ng-show="vm.toggleState[tag]['open']">
+                        <dl class="clearfix product form-control" ng-repeat="product in products">
+                            <dd class="fl" ng-if="!vm.checkProductNum(product)||product.store==0">{{::product.name}}<span style="color: red;font-weight: bold;" ng-if="product.tbd==1">&nbsp;&nbsp;预付</span><span ng-if="!vm.checkProductNum(product)">&nbsp;&nbsp;(<span style="color: red;">抢光了</span>)</span></dd>
+                            <dd class="fl" ng-if="vm.checkProductNum(product)&&product.store>0">{{::product.name}}<span style="color: red;font-weight: bold;" ng-if="product.tbd==1">&nbsp;&nbsp;预付</span>&nbsp;&nbsp;(仅剩<span style="color: red;" ng-bind="vm.getProductLeftNum(product)"></span>份)</dd>
+                            <dd class="fr" ng-if="vm.checkProductNum(product)">
+                                <a class='btn decrease-btn' ng-click="vm.decreaseProductNum(product)"></a>
+                                <span class='num' ng-bind="product.num||0"></span>
+                                <a class='btn increase-btn' ng-click="vm.increaseProductNum(product)"></a>
+                            </dd>
+                            <dd class="fr" ng-if="!vm.checkProductNum(product)">
+                                <span class='num' style="margin-left: 60px;">&nbsp;</span>
+                            </dd>
+                            <dd class="fr" style="color: #29AC0E;" ng-bind="::product.price/100 | currency:'￥'"></dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
             <p class='tips'>请输入商品数量</p>
         </div>
         <div class='send-info text-center margin-bottom-12' ng-hide='_.isEmpty(vm.weshare.send_info)'>取货时间: <span ng-bind='vm.weshare.send_info'></span></div>
     </div>
     <div class="orders">
         <ul class="order clearfix margin-bottom-12" ng-class="{'my-order': vm.isOwner(order)}" ng-repeat="order in vm.ordersDetail.orders">
-            <li class='buyer-image'><img ng-click="vm.toUserShareInfo(order.creator)" ng-src="{{vm.ordersDetail.users[order.creator]['image']||'/img/default_user_icon.jpg'}}"/></li>
+            <li class='buyer-image'>
+                <img ng-click="vm.toUserShareInfo(order.creator)" lazy-src="{{vm.ordersDetail.users[order.creator]['image']||'/img/default_user_icon.jpg'}}"/>
+                <p ng-if="vm.ordersDetail.users[order.creator]['is_proxy']==1" style="color: white; font-size: 13px; font-weight: 700; padding: 2px; margin-top: 1px; background-color: #29AC0E;text-align: center;">
+                    团长</p>
+            </li>
             <li class="detail" ng-if='order.status!=9'>
                 <b></b>
                 <p><strong class='buyer-name' ng-bind="vm.ordersDetail.users[order.creator]['nickname']"></strong> 已经报名
@@ -73,46 +96,65 @@
                     <strong ng-if="order.status==3" class="received-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong>
                     <strong ng-if="order.status==1" class="paid-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong>
                 </p>
-                <span class='display-name' ng-hide="_.isEmpty(vm.getOrderDisplayName(order.id))" ng-bind="vm.getOrderDisplayName(order.id)"></span>
-                <div style="display: inline-flex;width: 100%;">
-                    <div><span class='created-at' ng-bind="vm.getFormatDate(order.created)"></span></div>
-                    <div style="float: right;margin-left: 60%;" ng-if="order.status==3&&vm.isOwner(order)" ng-click="vm.showCommentDialog(order)"><div class="commenting-o"><i class="fa fa-commenting-o fa-lg"></i></div></div>
-                    <div style="float: right;margin-left: 49%;" ng-if="order.status==3&&vm.isCreator()&&!order.notify" ng-click="vm.notifyUserToComment(order)"><div class="commenting-o"><a style="margin-top: 0px;width: 65px;line-height: 0;margin-left: 10px;display: inline;" class="statistics-btn">求评价</a></div></div>
+                <p ng-if="order.process_prepaid_status!=0&&order.is_prepaid==1" style="padding: 0;padding-right: 10px;">
+                    <strong ng-if="order.process_prepaid_status==25" class="received-status" ng-bind="vm.getProcessPrepaidStatus(order.process_prepaid_status)"></strong>
+                    <strong ng-if="order.process_prepaid_status==26" class="refund-status" ng-bind="vm.getProcessPrepaidStatus(order.process_prepaid_status)"></strong>
+                    <strong ng-if="order.process_prepaid_status==27" class="paid-status" ng-bind="vm.getProcessPrepaidStatus(order.process_prepaid_status)"></strong>
+                    <strong ng-if="order.process_prepaid_status==28" class="refund-status" ng-bind="vm.getProcessPrepaidStatus(order.process_prepaid_status)"></strong>
+                    <strong ng-if="order.process_prepaid_status==29" class="paid-status" ng-bind="vm.getProcessPrepaidStatus(order.process_prepaid_status)"></strong>
+                </p>
+                <span class='display-name' ng-hide="_.isEmpty(vm.getOrderDisplayName(order.id))" ng-bind="::vm.getOrderDisplayName(order.id)"></span>
+                <div style="display: inline-flex;width: 100%;" ng-if="vm.isCurrentUserRecommend(order)&&(order.cate_id > 0&&((order.status!=3)||(order.status==3&&!vm.isOwner(order)&&!vm.isCreator())))">
+                    <div style="display: inline;width: 100%;"><span style="width: 30%;" class='created-at' ng-bind="::vm.getFormatDate(order.created)"></span><span ng-click="vm.toRecommendUserInfo(order)" style="margin-top: -30px;line-height: 20px;margin-left: 10px;background-color: #29AC0E;padding: 3px;float: right;display: block;width: auto;" class="statistics-btn" ng-bind="vm.getRecommendInfo(order)"></span></div>
+                </div>
+                <div style="display: inline-flex;width: 100%;" ng-if="!vm.isCurrentUserRecommend(order)||!(order.cate_id > 0&&((order.status!=3)||(order.status==3&&!vm.isOwner(order)&&!vm.isCreator())))">
+                    <div style="width: 29%;"><span style="width: 100%;" class='created-at' ng-bind="::vm.getFormatDate(order.created)"></span></div>
+                    <div style="float: right;margin-left: 49%; width: 30%;"
+                         ng-if="order.status==3&&vm.isOwner(order)" ng-click="vm.showCommentDialog(order)">
+                        <div class="commenting-o"><i class="fa fa-commenting-o fa-lg"></i></div>
+                    </div>
+                    <div style="float: right;margin-left: 37%; width: 30%;"
+                         ng-if="order.status==3&&vm.isCreator()&&!order.notify"
+                         ng-click="vm.notifyUserToComment(order)">
+                        <div class="commenting-o"><a
+                                style="margin-top: 0px;width: 65px;line-height: 0;margin-left: 10px;display: inline;"
+                                class="statistics-btn">求评价</a></div>
+                    </div>
                 </div>
                 <div class="send-info" ng-if="vm.isOwner(order)">
                     <span>姓名:</span>
-                    <span ng-bind="order.consignee_name"></span>
+                    <span ng-bind="::order.consignee_name"></span>
                     <br>
                     <span>手机:</span>
-                    <span ng-bind="order.consignee_mobilephone"></span>
+                    <span ng-bind="::order.consignee_mobilephone"></span>
                     <br>
                     <span>地址:</span>
-                    <span ng-bind="order.consignee_address"></span>
+                    <span ng-bind="::order.consignee_address"></span>
                     <br/>
                     <a class="btn confirm-btn" ng-click="vm.confirmReceived(order)" ng-show="order.status==2"><span ng-if="order.ship_mark=='pys_zi_ti' || order.ship_mark=='self_zi_ti'">已收货</span><span ng-if="order.ship_mark=='kuai_di'">已签收</span></a>
                     <a class="btn order-confirmed-btn" ng-show="order.status==3"><span ng-if="order.ship_mark=='pys_zi_ti' || order.ship_mark=='self_zi_ti'">已收货</span><span ng-if="order.ship_mark=='kuai_di'">已签收</span></a>
                 </div>
-                <span ng-if='vm.isShowShipCode(order);' class="display-name" style="background: darkgray;" ng-bind="vm.getShipCode(order);"></span>
+                <span ng-if='vm.isShowShipCode(order);' class="display-name" style="background: darkgray;" ng-bind="::vm.getShipCode(order);"></span>
             </li>
             <li class="detail" ng-if='order.status==9'>
                 <b></b>
-                <p><strong class='buyer-name' ng-bind="vm.ordersDetail.users[order.creator]['nickname']"></strong>
+                <p><strong class='buyer-name' ng-bind="::vm.ordersDetail.users[order.creator]['nickname']"></strong>
                     <span class="done-status"><i class="fa fa-heart fa-lg"></i></span>
                 </p>
-                <span class='display-name' ng-hide="_.isEmpty(vm.getOrderComment(order.id).body)" ng-bind="vm.getOrderComment(order.id).body"></span>
+                <span class='display-name' ng-hide="_.isEmpty(vm.getOrderComment(order.id).body)" ng-bind="::vm.getOrderComment(order.id).body"></span>
                 <div style="display: inline-flex;width: 97%;">
-                    <div style="display: inline-flex;width: 100%;"><span class="small-order-info" ng-bind="vm.getOrderDisplayName(order.id)"></span><span class='created-at' ng-bind="vm.getFormatDate(order.created)"></span></div>
+                    <div style="display: inline-flex;width: 100%;"><span class="small-order-info" ng-bind="::vm.getOrderDisplayName(order.id)"></span><span class='created-at' ng-bind="::vm.getFormatDate(order.created)"></span></div>
                     <div style="float: right;" ng-if="order.status==9" ng-click="vm.showCommentDialog(order,vm.getOrderComment(order.id))"><div class="commenting-o"><i class="fa fa-commenting-o fa-lg"></i></div></div>
                 </div>
                 <div class="send-info" ng-if="vm.showReplies(vm.getOrderComment(order.id).id)">
                     <div ng-repeat="reply in vm.getReplyComments(vm.getOrderComment(order.id).id)" style="margin-bottom: 8px;" ng-click="vm.showCommentDialog(order,reply)">
                         <div ng-if="reply.is_reply==0" style="display: inline-table;">
-                            <a ng-bind="reply.username" style="color:#6EAFD5;" ng-click="vm.toUserShareInfo(reply.user_id)"></a><span>:&nbsp;</span>
+                            <a ng-bind="::reply.username" style="color:#6EAFD5;" ng-click="vm.toUserShareInfo(reply.user_id)"></a><span>:&nbsp;</span>
                         </div>
                         <div ng-if="reply.is_reply==1" style="display: inline-table;">
-                            <a ng-bind="reply.username" style="color:#6EAFD5;" ng-click="vm.toUserShareInfo(reply.user_id)"></a><span>回复</span><a ng-bind="reply.reply_username" style="color:#6EAFD5;" ng-click="vm.toUserShareInfo(reply.reply_user_id)"></a><span>:&nbsp;</span>
+                            <a ng-bind="::reply.username" style="color:#6EAFD5;" ng-click="vm.toUserShareInfo(reply.user_id)"></a><span>回复</span><a ng-bind="::reply.reply_username" style="color:#6EAFD5;" ng-click="vm.toUserShareInfo(reply.reply_user_id)"></a><span>:&nbsp;</span>
                         </div>
-                        <span ng-bind="reply.body" style="word-break: break-all;" ng-click="vm.showCommentDialog(order,reply)"></span>
+                        <span ng-bind="::reply.body" style="word-break: break-all;" ng-click="vm.showCommentDialog(order,reply)"></span>
                     </div>
                 </div>
             </li>
@@ -124,17 +166,26 @@
 </div>
 
 <footer class="channel_bottom">
-    <a class="btm_item" href="/">
-        <p class="iconfont" style="height: 16px;"><i class="fa fa-home"></i></p>
-        <b>首页</b>
+    <a class="btm_item" href="/share_opt/index.html">
+        <i ng-if="vm.showUnReadMark" style="background:#f00;border-radius:50%;width:15px;height:15px;top:2px;left:12%;position:absolute; display: block;"></i>
+        <p class="iconfont" style="height: 16px;"><i class="fa fa-users"></i></p>
+        <b>朋友说</b>
     </a>
-    <a class="new" ng-if="!vm.isCreator()&&vm.weshare.status == 0" ng-click="vm.buyProducts()">我要报名</a>
+    <a class="new" ng-if="!vm.isCreator()&&!vm.isProxy()&&vm.weshare.status == 0" ng-click="vm.buyProducts()">我要报名</a>
+    <a class="new" ng-if="!vm.isCreator()&&vm.isProxy()&&vm.weshare.status == 0" ng-click="vm.buyProducts()" style="width: 28%;">我要报名</a>
+    <a class="new" ng-if="!vm.isCreator()&&vm.isProxy()&&vm.weshare.status == 0" ng-click="vm.showRecommendDialog=true;vm.showLayer=true;" style="width: 28%;margin-right: 7%;">我要推荐</a>
     <a class="new" ng-if="vm.isCreator()&&vm.weshare.status == 0&&vm.notifyType() == 1" ng-click='vm.notifyFans();'
        style="width: 28%;">团购提醒</a>
     <a class="new" ng-if="vm.isCreator()&&vm.weshare.status == 0&&vm.notifyType() == 0" ng-click='vm.sendNewShareMsg();'
        style="width: 28%;">建团提醒</a>
-    <a class="new" ng-if="vm.isCreator()&&vm.weshare.status == 0" ng-click='vm.stopShare();' style="width: 28%; margin-right: 7%;">截止报名</a>
-    <a class="new" ng-if="vm.weshare.status == 2||vm.weshare.status == 1" style="background-color:#9EB1BD;">报名已截止</a>
+    <a class="new" ng-if="vm.isCreator()&&vm.weshare.status == 0" ng-click='vm.stopShare();'
+       style="width: 28%; margin-right: 7%;">截止报名</a>
+    <a class="new" ng-if="!vm.isCreator()&&(vm.weshare.status == 2||vm.weshare.status == 1)"
+       style="background-color:#9EB1BD;">报名已截止</a>
+    <a class="new" ng-if="vm.isCreator()&&(vm.weshare.status == 2||vm.weshare.status == 1)"
+       style="background-color:#9EB1BD;width: 28%;">报名已截止</a>
+    <a class="new" ng-if="vm.isCreator()&&(vm.weshare.status == 2||vm.weshare.status == 1)"
+       style="width: 28%; margin-right: 7%;" ng-click="vm.cloneShare()">重新开团</a>
     <a class="btm_item" href="/weshares/user_share_info">
         <p class="iconfont" style="height: 16px;"><i class="fa fa-user"></i></p>
         <b>我的</b>
@@ -197,8 +248,22 @@
 <!--通知粉丝层-->
 <div class="notify-dialog" ng-show="vm.showNotifyView">
     <div class="clearfix title" style="padding: 0 10px 10px;">
-        <label style="font-size: 18px;">参团提醒<span style="color:#ff0000;" ng-bind="vm.userShareSummery.follower_count"></span>人</label>
+        <label style="font-size: 18px;">参团提醒</label>
         <a ng-click="vm.showLayer=false;vm.showNotifyView=false;" class="closebtn fr"></a>
+    </div>
+    <div class="clearfix" style="padding: 0 10px;">
+        <div class="form-group">
+            <div class="form-control radio-group">
+                <div>
+                    <input type="radio" class="radio" ng-model="vm.sendNotifyType" value="0" ng-change='vm.resetNotifyContent()'/>
+                    <label>通知未买粉丝</label>
+                </div>
+                <div>
+                    <input type="radio" class="radio" ng-model="vm.sendNotifyType" value="1" ng-change='vm.resetNotifyContent()'/>
+                    <label>通知已买粉丝</label>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="clearfix" style="padding: 0 10px;margin-bottom: 10px;">
         <div class="form-group" ng-class="{'has-error': vm.notifyMsgHasError}">
@@ -208,6 +273,22 @@
     </div>
     <div class="clearfix notify_btn">
         <a ng-click='vm.sendNotifyShareMsg();' style="background-color: #ffa200; width: 100%;">群发通知</a>
+    </div>
+</div>
+<!--推荐弹出层-->
+<div class="recommend-dialog" ng-show="vm.showRecommendDialog">
+    <div class="clearfix title">
+        <label>推荐给我的粉丝</label>
+        <a ng-click="vm.closeRecommendDialog();" class="closebtn fr"></a>
+    </div>
+    <div class="clearfix" style="padding: 0 10px;">
+        <div class="form-group" ng-class="{'has-error': vm.recommendContentHasError}">
+            <textarea id="recommendContentDom" class='form-control' ng-model='vm.submitRecommendData.recommend_content' ng-change='vm.validRecommendContent()'></textarea>
+            <p class='tips'>请输入推荐信息</p>
+        </div>
+    </div>
+    <div class="clearfix recommend-btn">
+        <a ng-click='vm.submitRecommend()' style="background-color: #ffa200; width: 100%;">推荐</a>
     </div>
 </div>
 <!--评论列表层-->
@@ -231,4 +312,4 @@
         </div>
     </div>
 </div>
-<div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showLayer=false;vm.showNotifyView=false;vm.showCommentListDialog=false;vm.closeCommentDialog();vm.showBuyingDialog=false;vm.showShareDialog=false;vm.showNotifyShareDialog=false;vm.showNotifyShareOfferDialog=false;vm.showNotifyGetPacketDialog=false;"></div>
+<div class="background-layer" ng-show="vm.showLayer" ng-click="showRecommendDialog=false;vm.showLayer=false;vm.showNotifyView=false;vm.showCommentListDialog=false;vm.closeCommentDialog();vm.showBuyingDialog=false;vm.showShareDialog=false;vm.showNotifyShareDialog=false;vm.showNotifyShareOfferDialog=false;vm.showNotifyGetPacketDialog=false;"></div>
