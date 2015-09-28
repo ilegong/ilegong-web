@@ -1,7 +1,7 @@
 <div style="background-color:#f5f5f5;margin-bottom: 20px;">
     <div class="classlist">
         <a ng-click="vm.showShareDetail()" class="back"></a>
-        结算
+        邻里拼团
         <a ng-click="vm.showShareDetail()" class="home"></a>
     </div>
     <div class="weshare-view" style="margin-top: 40px;padding: 10px 10px 0px">
@@ -45,55 +45,10 @@
         </div>
     </div>
     <div style="background-color: #ffffff;padding-top: 1px;padding-bottom: 40px;">
-        <div class="clearfix" style="padding: 0 10px;margin-top: 10px;">
-            <div class="form-group" ng-class="{'has-error' : vm.chooseShipType}">
-                <div class="form-control radio-group">
-                    <div ng-show="vm.weshareSettings.kuai_di.status==1">
-                        <input type="radio" class="radio" ng-model="vm.selectShipType" value="0" id="kuaidi" ng-change='vm.calOrderTotalPrice()'/>
-                        <label for="kuaidi">快递</label>
-                    </div>
-                    <div ng-show="vm.weshareSettings.self_ziti.status==1">
-                        <input type="radio" class="radio" ng-model="vm.selectShipType" value="1" id="ziti" ng-change='vm.calOrderTotalPrice()'/>
-                        <label for="ziti">自提</label>
-                    </div>
-                    <div ng-show="vm.weshareSettings.pys_ziti.status==1">
-                        <input type="radio" class="radio" ng-model="vm.selectShipType" value="2" id="pys_ziti" ng-change='vm.calOrderTotalPrice()'/>
-                        <label for="pys_ziti">好邻居自提</label>
-                    </div>
-                </div>
-                <p class="tips">请选择物流方式</p>
-            </div>
-        </div>
-        <div class="clearfix" style="padding: 0 10px;" ng-show="vm.selectShipType==2" ng-class="{'has-error' : vm.chooseOfflineStoreError}">
-            <div class="form-group" ng-class="{'has-error' : vm.chooseShipType}">
-                <div class="form-control" ng-if="vm.checkedOfflineStore!=null">
-                    <span ng-bind="vm.checkedOfflineStore.alias"></span>&nbsp;<span ng-bind="vm.checkedOfflineStore.owner_name"></span>&nbsp;<span ng-bind="vm.checkedOfflineStore.owner_phone"></span>
-                    <a style="text-decoration: underline;font-size: 1em;color: #ffa200;margin-left: 70%;" ng-click="vm.showChooseOfflineStore()">选择自提点</a>
-                </div>
-                <div class="form-control" ng-if="vm.checkedOfflineStore==null">
-                    <a style="text-decoration: underline;font-size: 1em;color: #ffa200;margin-left: 70%;" ng-click="vm.showChooseOfflineStore()">选择自提点</a>
-                </div>
-                <p class="tips">请选择自提点</p>
-            </div>
-        </div>
-        <div class="clearfix" style="padding: 0 10px;">
-            <div class="form-group" ng-class="{'has-error': vm.addressHasError}" ng-if="vm.selectShipType==1">
-                <select class='form-control' ng-model='vm.weshare.selectedAddressId' ng-options="address.id as address.address for address in vm.weshare.addresses" ng-change='vm.validateAddress()'>
-                    <option value="-1">请选择地址</option>
-                </select>
-                <p class='tips'>请选择收货地址</p>
-            </div>
-        </div>
         <div class="clearfix" style="padding: 0 10px;">
             <div class="form-group" ng-class="{'has-error': vm.userAddressHasError}" ng-if="vm.selectShipType==0">
-                <input class='form-control' placeholder="输入地址" ng-model='vm.buyerAddress' ng-change='vm.validateUserAddress()'/>
-                <p class='tips'>请输入收货人地址</p>
-            </div>
-        </div>
-        <div class="clearfix" style="padding: 0 10px;">
-            <div class="form-group" ng-class="{'has-error': vm.userPatchAddressHasError}" ng-if="vm.selectShipType==1">
-                <input class='form-control' placeholder="小区-楼号-门牌(方便必要时送货上门)" ng-model='vm.buyerPatchAddress' ng-change='vm.validateUserPatchAddress()'/>
-                <p class='tips'>请输入小区-楼号-门牌(方便必要时送货上门)</p>
+                <input class='form-control' placeholder="地址，会作为参团邻居们的自提" ng-model='vm.buyerAddress' ng-change='vm.validateUserAddress()'/>
+                <p class='tips'>请输入开团地址</p>
             </div>
         </div>
         <div class="clearfix" style="padding: 0 10px;">

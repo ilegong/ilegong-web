@@ -6,7 +6,7 @@
     </div>
     <ul class="clearfix zitilist">
         <li class="fl">
-            <h1 ng-repeat="(code, area) in vm.areas" ng-bind="area.name" ng-click="vm.changeOfflineStoreArea(code)" ng-class="{'cur': vm.currentAreaCode == code}"></h1>
+            <h1 ng-repeat="(code, area) in vm.areas" ng-bind="::area.name" ng-click="vm.changeOfflineStoreArea(code)" ng-class="{'cur': vm.currentAreaCode == code}"></h1>
             <h1>&nbsp;</h1>
             <h1>&nbsp;</h1>
             <h1>&nbsp;</h1>
@@ -16,7 +16,7 @@
         </li>
         <li class="fr" ng-repeat="(code, offlineStores) in vm.offlineStores" ng-show="vm.currentAreaCode == code">
             <h2 class="clearfix" style="position: relative;" ng-repeat="(id, offlineStore) in offlineStores">
-                <a ng-bind="offlineStore.alias" ng-click="vm.chooseOfflineStore(offlineStore)"></a>
+                <a ng-bind="::offlineStore.alias" ng-click="vm.chooseOfflineStore(offlineStore)"></a>
                 <a class="moreicon" ng-click="vm.showOfflineStoreDetail(offlineStore)"></a>
             </h2>
         </li>

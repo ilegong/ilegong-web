@@ -221,11 +221,15 @@ const SHARE_SHIP_SELF_ZITI = 1;
 
 const SHARE_SHIP_PYS_ZITI = 2;
 
+const SHARE_SHIP_GROUP = 3;
+
 const SHARE_SHIP_PYS_ZITI_TAG = 'pys_zi_ti';
 
 const SHARE_SHIP_SELF_ZITI_TAG = 'self_zi_ti';
 
 const SHARE_SHIP_KUAIDI_TAG = 'kuai_di';
+
+const SHARE_SHIP_GROUP_TAG = 'group_buy';
 
 const RECOMMEND_SHARE = 1;
 
