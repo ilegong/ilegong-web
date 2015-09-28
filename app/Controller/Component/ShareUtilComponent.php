@@ -979,6 +979,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 708029,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
                 ),
+                '642' => array(
+                    'share_id' => 642,
+                    'share_name' => '库尔勒香梨北京直递',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_s/8e46d642e4e_0928.jpg',
+                    'share_price' => '138',
+                    'share_user_name' => '新果媛（㎡）',
+                    'share_vote' => 235,
+                    'share_user_id' => 623920,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_9a0333add3aa739197696ec99856b1d7.jpg'
+                ),
                 '635' => array(
                     'share_id' => 635,
                     'share_name' => '朝鲜族特色美食-深海纯野生明太鱼',
@@ -988,6 +998,26 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 235,
                     'share_user_id' => 999,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/2dca381fd51_0923.jpg'
+                ),
+                '591' => array(
+                    'share_id' => 591,
+                    'share_name' => '【劲爆特价】陕西眉县农家自产徐香猕猴桃家庭装包邮',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/6573df95802_0928.jpg',
+                    'share_price' => '19.9',
+                    'share_user_name' => '张慧敏',
+                    'share_vote' => 654,
+                    'share_user_id' => 23711,
+                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/4c91fb9380d_0901.jpg'
+                ),
+                '525' => array(
+                    'share_id' => 525,
+                    'share_name' => '四舅家的虐心葡萄',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/6c09d89b6e0_0928.jpg',
+                    'share_price' => '100',
+                    'share_user_name' => '段段',
+                    'share_vote' => 435,
+                    'share_user_id' => 804574,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_82b31493dfc5b2a3a561e1e30826cdd7.jpg'
                 ),
                 '605' => array(
                     'share_id' => 605,
@@ -1008,6 +1038,16 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 300,
                     'share_user_id' => 815,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/9257b1649ba_0906.jpg'
+                ),
+                '645' => array(
+                    'share_id' => 645,
+                    'share_name' => '父母种的红薯、紫薯、花生开刨啦',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/ff1894c1082_0928.jpg',
+                    'share_price' => '30',
+                    'share_user_name' => '大美',
+                    'share_vote' => 345,
+                    'share_user_id' => 842908,
+                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/319793d271b_0828.jpg'
                 ),
                 '438' => array(
                     'share_id' => 438,
@@ -1183,16 +1223,6 @@ class ShareUtilComponent extends Component {
                 ),
             ),
             2 => array(
-                '557' => array(
-                    'share_id' => 557,
-                    'share_name' => '宫廷肘子',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/83a0d84d8ad_0918.jpg',//todo
-                    'share_price' => '328',
-                    'share_user_name' => '艾麟~青清老号',
-                    'share_vote' => 356,
-                    'share_user_id' => 665141,
-                    'share_user_img' => 'http://wx.qlogo.cn/mmopen/Z3s4pqQLDpY3nUjibZfVjagJ1Nibicr2jmvaIjOJZTW8r2B8zyblOPpYpKia6USxZhiceT7AtuC0PberMnEewhvBHKxh9Yh2lMNPN/0'
-                ),
                 '503' => array(
                     'share_id' => 503,
                     'share_name' => '旱地杂粮之清水河小香米',
