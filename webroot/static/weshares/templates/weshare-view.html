@@ -172,9 +172,11 @@
         <p class="iconfont" style="height: 16px;"><i class="fa fa-users"></i></p>
         <b>朋友说</b>
     </a>
-    <a class="new" ng-if="!vm.isCreator()&&!vm.isProxy()&&vm.weshare.status == 0" ng-click="vm.buyProducts()">我要报名</a>
-    <a class="new" ng-if="!vm.isCreator()&&vm.isProxy()&&vm.weshare.status == 0" ng-click="vm.buyProducts()" style="width: 28%;">我要报名</a>
-    <a class="new" ng-if="!vm.isCreator()&&vm.isProxy()&&vm.weshare.status == 0" ng-click="vm.showRecommendDialog=true;vm.showLayer=true;" style="width: 28%;margin-right: 7%;">我要推荐</a>
+    <!--<a class="new" ng-if="!vm.isCreator()&&!vm.isProxy()&&vm.weshare.status == 0" ng-click="vm.buyProducts()">我要报名</a>我要报名-->
+    <!--<a class="new" ng-if="!vm.isCreator()&&vm.isProxy()&&vm.weshare.status == 0" ng-click="vm.buyProducts()" style="width: 28%;">我要报名</a>-->
+    <!--<a class="new" ng-if="!vm.isCreator()&&vm.isProxy()&&vm.weshare.status == 0" ng-click="vm.showRecommendDialog=true;vm.showLayer=true;" style="width: 28%;margin-right: 7%;">我要推荐</a>-->
+    <a class="new" ng-if="!vm.isCreator()&&vm.weshare.status == 0" ng-click="vm.buyProducts()" style="width: 28%;">我要报名</a>
+    <a class="new" ng-if="!vm.isCreator()&&vm.weshare.status == 0" ng-click="vm.showGroupShareTipDialog=true;vm.showLayer=true;" style="width: 28%;margin-right: 7%;">我要拼团</a>
     <a class="new" ng-if="vm.isCreator()&&vm.weshare.status == 0&&vm.notifyType() == 1" ng-click='vm.notifyFans();'
        style="width: 28%;">团购提醒</a>
     <a class="new" ng-if="vm.isCreator()&&vm.weshare.status == 0&&vm.notifyType() == 0" ng-click='vm.sendNewShareMsg();'
@@ -313,4 +315,29 @@
         </div>
     </div>
 </div>
-<div class="background-layer" ng-show="vm.showLayer" ng-click="showRecommendDialog=false;vm.showLayer=false;vm.showNotifyView=false;vm.showCommentListDialog=false;vm.closeCommentDialog();vm.showBuyingDialog=false;vm.showShareDialog=false;vm.showNotifyShareDialog=false;vm.showNotifyShareOfferDialog=false;vm.showNotifyGetPacketDialog=false;"></div>
+<div class="group-share-tip-dialog" ng-show="vm.showGroupShareTipDialog">
+    <div class="clearfix title">
+        <label>邻里拼团</label>
+        <a ng-click="vm.showLayer=false;vm.showGroupShareTipDialog=false;" class="closebtn fr"></a>
+    </div>
+    <ul id="progressbar">
+        <li class="active">支付开团</li>
+        <li class="active">等待邻里<br>参团支付</li>
+        <li class="active">达到人数<br>组团成功</li>
+        <li class="active">货到您家<br>邻里自提</li>
+    </ul>
+    <div class="clearfix" style="padding: 0 10px;">
+        <div class="form-group">
+            <p>
+                生鲜娇贵，物流成本高，如果离分享妈妈的家远，可以和邻居们一起拼团，大家都经济。
+            </p>
+            <p>
+                爱心分享您的家作为自提点，方便大家，同时我们每单付您5元略表心意。
+            </p>
+        </div>
+    </div>
+    <div class="clearfix recommend-btn">
+        <a ng-click='' style="background-color: #ffa200; width: 100%;">我要开团</a>
+    </div>
+</div>
+<div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showGroupShareTipDialog=false;vm.showRecommendDialog=false;vm.showLayer=false;vm.showNotifyView=false;vm.showCommentListDialog=false;vm.closeCommentDialog();vm.showBuyingDialog=false;vm.showShareDialog=false;vm.showNotifyShareDialog=false;vm.showNotifyShareOfferDialog=false;vm.showNotifyGetPacketDialog=false;"></div>
