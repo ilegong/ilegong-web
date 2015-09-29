@@ -220,7 +220,7 @@ const SHARE_SHIP_GROUP = 3;
 const SHARE_SHIP_PYS_ZITI_TAG = 'pys_zi_ti';
 const SHARE_SHIP_SELF_ZITI_TAG = 'self_zi_ti';
 const SHARE_SHIP_KUAIDI_TAG = 'kuai_di';
-const SHARE_SHIP_GROUP_TAG = 'group_buy';
+const SHARE_SHIP_GROUP_TAG = 'pin_tuan';
 const RECOMMEND_SHARE = 1;
 
 const OPT_LOG_CREATE_SHARE = 1;
