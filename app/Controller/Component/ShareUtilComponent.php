@@ -304,6 +304,8 @@ class ShareUtilComponent extends Component {
         $shareInfo['id'] = null;
         $shareInfo['created'] = date('Y-m-d H:i:s');
         $shareInfo['status'] = 0;
+        //set refer share id
+        $shareInfo['refer_share_id'] = $shareId;
         if (!empty($uid)) {
             $shareInfo['creator'] = $uid;
         }

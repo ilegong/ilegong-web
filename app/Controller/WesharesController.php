@@ -232,7 +232,7 @@ class WesharesController extends AppController {
      * @param $shareId
      * ajax 获取购买信息 拆分优化加载
      */
-    public function get_share_order_detail($shareId){
+    public function get_share_order_detail($shareId) {
         $this->autoRender = false;
         $this->autoRender = false;
         $ordersDetail = $this->get_weshare_buy_info($shareId, true);
@@ -389,6 +389,10 @@ class WesharesController extends AppController {
             }
             if ($shipType == SHARE_SHIP_KUAIDI) {
                 $orderData['ship_mark'] = SHARE_SHIP_KUAIDI_TAG;
+            }
+            if ($shipType == SHARE_SHIP_GROUP) {
+                $orderData['ship_mark'] = SHARE_SHIP_GROUP_TAG;
+                $orderData['relate_type'] = ORDER_TRIGGER_GROUP_SHARE_TYPE;
             }
             $order = $this->Order->save($orderData);
             $orderId = $order['Order']['id'];
