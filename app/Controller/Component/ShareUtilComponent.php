@@ -274,6 +274,21 @@ class ShareUtilComponent extends Component {
     }
 
     /**
+     * @param $share_id 原始分享ID
+     * @param $uid 发起用户
+     * @param $address 拼团的地址
+     * 发起一个拼团的分享
+     */
+    public function startGroupShare($share_id, $uid, $address){
+        $WeshareM = ClassRegistry::init('Weshare');
+        $WeshareProductM = ClassRegistry::init('WeshareProduct');
+        $WeshareAddressM = ClassRegistry::init('WeshareAddress');
+        $WeshareShipSettingM = ClassRegistry::init('WeshareShipSetting');
+        $proxyRebatePercentM = ClassRegistry::init('ProxyRebatePercent');
+
+    }
+
+    /**
      * @param $shareId
      * @return array
      * clone一份
