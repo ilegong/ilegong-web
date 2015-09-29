@@ -212,7 +212,7 @@
         });
     }
 
-    function loadOrderDetail(share_id){
+    function loadOrderDetail(share_id) {
       var fromType = angular.element(document.getElementById('weshareView')).attr('data-from-type');
       //first share
       var initSharedOfferId = angular.element(document.getElementById('weshareView')).attr('data-shared-offer');
@@ -306,7 +306,7 @@
           vm.myCoupons = data['my_coupons'];
           vm.weshareSettings = data['weshare_ship_settings'];
           vm.supportPysZiti = data['support_pys_ziti'];
-          vm.selectShipType = getSelectTypeDefaultVal(vm.weshareSettings);
+          vm.selectShipType = getSelectTypeDefaultVal();
           vm.userSubStatus = data['sub_status'];
           vm.submitRecommendData = {};
           vm.submitRecommendData.recommend_content = vm.weshare.creator.nickname + '我认识，很靠谱！';
@@ -351,7 +351,7 @@
       }
     }
 
-    function getSelectTypeDefaultVal(shipSettings) {
+    function getSelectTypeDefaultVal() {
       if (vm.weshareSettings.kuai_di.status == 1) {
         vm.shipFee = vm.weshareSettings.kuai_di.ship_fee;
         return 0;
@@ -363,6 +363,10 @@
       if (vm.weshareSettings.pys_ziti.status == 1) {
         vm.shipFee = vm.weshareSettings.pys_ziti.ship_fee;
         return 2;
+      }
+      if (vm.weshareSettings.group_buy.status == 1) {
+        vm.shipFee = vm.weshareSettings.group_buy.ship_fee;
+        return 3;
       }
       return -1;
     }
@@ -445,7 +449,7 @@
     }
 
     function getOrderComment(order_id) {
-      if(vm.commentData['order_comments']){
+      if (vm.commentData['order_comments']) {
         return vm.commentData['order_comments'][order_id];
       }
       return null;
@@ -480,11 +484,11 @@
       if (vm.isCreator()) {
         return true;
       }
-      if (vm.currentUser&&vm.currentUser['is_proxy'] == 0) {
+      if (vm.currentUser && vm.currentUser['is_proxy'] == 0) {
         return false;
       }
       var recommendId = vm.rebateLogs[order['cate_id']];
-      if (vm.currentUser&&vm.currentUser['id'] == recommendId) {
+      if (vm.currentUser && vm.currentUser['id'] == recommendId) {
         return true;
       }
       return false;
@@ -505,6 +509,9 @@
       if (vm.selectShipType == 2) {
         return vm.weshareSettings.pys_ziti.id;
       }
+      if (vm.selectShipType == 3) {
+        return vm.weshareSettings.group_buy.id;
+      }
     }
 
     function getShipFee() {
@@ -516,6 +523,9 @@
       }
       if (vm.selectShipType == 2) {
         return vm.weshareSettings.pys_ziti.ship_fee;
+      }
+      if (vm.selectShipType == 3) {
+        return vm.weshareSettings.group_buy.ship_fee;
       }
     }
 
@@ -575,7 +585,7 @@
     }
 
     function getProductLeftNum(product) {
-      if (vm.ordersDetail&&vm.ordersDetail.summery.details[product.id]) {
+      if (vm.ordersDetail && vm.ordersDetail.summery.details[product.id]) {
         var product_buy_num = vm.ordersDetail.summery.details[product.id]['num'];
         var store_num = product.store;
         return store_num - product_buy_num;
@@ -588,7 +598,7 @@
       if (store_num == 0) {
         return true;
       }
-      if (vm.ordersDetail&&vm.ordersDetail.summery.details[product.id]) {
+      if (vm.ordersDetail && vm.ordersDetail.summery.details[product.id]) {
         var product_buy_num = vm.ordersDetail.summery.details[product.id]['num'];
         return product_buy_num < store_num;
       }
@@ -601,7 +611,7 @@
       vm.chooseShipType = false;
     }
 
-    function startGroupShare(){
+    function startGroupShare() {
       vm.showGroupShareTipDialog = false;
       vm.showLayer = false;
       vm.showShareDetailView = false;
@@ -778,7 +788,7 @@
     }
 
     function notifyType() {
-      if(vm.ordersDetail){
+      if (vm.ordersDetail) {
         if (vm.ordersDetail.orders && vm.ordersDetail.orders.length > 0) {
           return 1;
         }
