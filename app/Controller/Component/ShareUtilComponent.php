@@ -279,26 +279,20 @@ class ShareUtilComponent extends Component {
      * @param $address 拼团的地址
      * 发起一个拼团的分享
      */
-    public function startGroupShare($share_id, $uid, $address){
-        $WeshareM = ClassRegistry::init('Weshare');
-        $WeshareProductM = ClassRegistry::init('WeshareProduct');
-        $WeshareAddressM = ClassRegistry::init('WeshareAddress');
-        $WeshareShipSettingM = ClassRegistry::init('WeshareShipSetting');
-        $proxyRebatePercentM = ClassRegistry::init('ProxyRebatePercent');
+    public function startGroupShare($share_id, $uid, $address) {
 
     }
 
     /**
      * @param $shareId
+     * @param $uid
+     * @param $address
+     * @param $type
      * @return array
-     * clone一份
+     * clone一份， 指定用户ID， 指定的地址
      */
-    public function cloneShare($shareId) {
+    public function cloneShare($shareId, $uid = null, $address = null, $type = 0) {
         $WeshareM = ClassRegistry::init('Weshare');
-        $WeshareProductM = ClassRegistry::init('WeshareProduct');
-        $WeshareAddressM = ClassRegistry::init('WeshareAddress');
-        $WeshareShipSettingM = ClassRegistry::init('WeshareShipSetting');
-        $proxyRebatePercentM = ClassRegistry::init('ProxyRebatePercent');
         $shareInfo = $WeshareM->find('first', array(
             'conditions' => array(
                 'id' => $shareId
@@ -308,71 +302,119 @@ class ShareUtilComponent extends Component {
         $shareInfo['id'] = null;
         $shareInfo['created'] = date('Y-m-d H:i:s');
         $shareInfo['status'] = 0;
+        if (!empty($uid)) {
+            $shareInfo['creator'] = $uid;
+        }
+        if (!empty($type)) {
+            $shareInfo['type'] = $type;
+        }
         $uid = $shareInfo['creator'];
         $WeshareM->id = null;
         $newShareInfo = $WeshareM->save($shareInfo);
         if ($newShareInfo) {
+            //clone product
             $newShareId = $newShareInfo['Weshare']['id'];
-            $shareProducts = $WeshareProductM->find('all', array(
-                'conditions' => array(
-                    'weshare_id' => $shareId
-                )
-            ));
-            $newProducts = array();
-            foreach ($shareProducts as $itemShareProduct) {
-                $itemShareProduct = $itemShareProduct['WeshareProduct'];
-                $itemShareProduct['id'] = null;
-                $itemShareProduct['weshare_id'] = $newShareId;
-                $newProducts[] = $itemShareProduct;
-            }
-            $WeshareProductM->id = null;
-            $WeshareProductM->saveAll($newProducts);
-
-            $shareAddresses = $WeshareAddressM->find('all', array(
-                'conditions' => array(
-                    'weshare_id' => $shareId
-                )
-            ));
-            $newAddresses = array();
-            foreach ($shareAddresses as $itemShareAddress) {
-                $itemShareAddress = $itemShareAddress['WeshareAddress'];
-                $itemShareAddress['id'] = null;
-                $itemShareAddress['weshare_id'] = $newShareId;
-                $newAddresses[] = $itemShareAddress;
-            }
-            $WeshareAddressM->id = null;
-            $WeshareAddressM->saveAll($newAddresses);
-
-            $shareShipSettings = $WeshareShipSettingM->find('all', array(
-                'conditions' => array(
-                    'weshare_id' => $shareId
-                )
-            ));
-            $newShareShipSettings = array();
-            foreach ($shareShipSettings as $itemShareShipSetting) {
-                $itemShareShipSetting = $itemShareShipSetting['WeshareShipSetting'];
-                $itemShareShipSetting['id'] = null;
-                $itemShareShipSetting['weshare_id'] = $newShareId;
-                $newShareShipSettings[] = $itemShareShipSetting;
-            }
-            $WeshareShipSettingM->id = null;
-            $WeshareShipSettingM->saveAll($newShareShipSettings);
-
-            $oldShareRebateSet = $proxyRebatePercentM->find('first', array(
-                'conditions' => array('share_id' => $shareId)
-            ));
-            if (!empty($oldShareRebateSet)) {
-                $newShareRebateSet = $oldShareRebateSet['ProxyRebatePercent'];
-                $newShareRebateSet['id'] = null;
-                $newShareRebateSet['share_id'] = $newShareId;
-                $proxyRebatePercentM->save($newShareRebateSet);
-            } else {
-                $proxyRebatePercentM->save(array('share_id' => $newShareId, 'percent' => 0));
-            }
+            $this->cloneShareProduct($newShareId, $shareId);
+            //clone address
+            $this->cloneShareAddresses($newShareId, $shareId);
+            //clone ship setting
+            $this->cloneShareShipSettings($newShareId, $shareId);
+            //clone rebate set
+            $this->cloneShareRebateSet($newShareId, $shareId);
             Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
             return array('shareId' => $newShareId, 'success' => true);
         }
         return array('success' => false);
+    }
+
+    /**
+     * @param $new_share_id
+     * @param $old_share_id
+     * clone share product
+     */
+    private function cloneShareProduct($new_share_id, $old_share_id) {
+        $WeshareProductM = ClassRegistry::init('WeshareProduct');
+        $shareProducts = $WeshareProductM->find('all', array(
+            'conditions' => array(
+                'weshare_id' => $old_share_id
+            )
+        ));
+        $newProducts = array();
+        foreach ($shareProducts as $itemShareProduct) {
+            $itemShareProduct = $itemShareProduct['WeshareProduct'];
+            $itemShareProduct['id'] = null;
+            $itemShareProduct['weshare_id'] = $new_share_id;
+            $newProducts[] = $itemShareProduct;
+        }
+        $WeshareProductM->id = null;
+        $WeshareProductM->saveAll($newProducts);
+        return;
+    }
+
+    /**
+     * @param $new_share_id
+     * @param $old_share_id
+     * clone share addresses
+     */
+    private function cloneShareAddresses($new_share_id, $old_share_id) {
+        $WeshareAddressM = ClassRegistry::init('WeshareAddress');
+        $shareAddresses = $WeshareAddressM->find('all', array(
+            'conditions' => array(
+                'weshare_id' => $old_share_id
+            )
+        ));
+        $newAddresses = array();
+        foreach ($shareAddresses as $itemShareAddress) {
+            $itemShareAddress = $itemShareAddress['WeshareAddress'];
+            $itemShareAddress['id'] = null;
+            $itemShareAddress['weshare_id'] = $new_share_id;
+            $newAddresses[] = $itemShareAddress;
+        }
+        $WeshareAddressM->id = null;
+        $WeshareAddressM->saveAll($newAddresses);
+    }
+
+    /**
+     * @param $new_share_id
+     * @param $old_share_id
+     * clone share ship setting
+     */
+    private function cloneShareShipSettings($new_share_id, $old_share_id) {
+        $WeshareShipSettingM = ClassRegistry::init('WeshareShipSetting');
+        $shareShipSettings = $WeshareShipSettingM->find('all', array(
+            'conditions' => array(
+                'weshare_id' => $old_share_id
+            )
+        ));
+        $newShareShipSettings = array();
+        foreach ($shareShipSettings as $itemShareShipSetting) {
+            $itemShareShipSetting = $itemShareShipSetting['WeshareShipSetting'];
+            $itemShareShipSetting['id'] = null;
+            $itemShareShipSetting['weshare_id'] = $new_share_id;
+            $newShareShipSettings[] = $itemShareShipSetting;
+        }
+        $WeshareShipSettingM->id = null;
+        $WeshareShipSettingM->saveAll($newShareShipSettings);
+    }
+
+    /**
+     * @param $new_share_id
+     * @param $old_share_id
+     * clone share rebate set
+     */
+    private function cloneShareRebateSet($new_share_id, $old_share_id) {
+        $proxyRebatePercentM = ClassRegistry::init('ProxyRebatePercent');
+        $oldShareRebateSet = $proxyRebatePercentM->find('first', array(
+            'conditions' => array('share_id' => $old_share_id)
+        ));
+        if (!empty($oldShareRebateSet)) {
+            $newShareRebateSet = $oldShareRebateSet['ProxyRebatePercent'];
+            $newShareRebateSet['id'] = null;
+            $newShareRebateSet['share_id'] = $new_share_id;
+            $proxyRebatePercentM->save($newShareRebateSet);
+        } else {
+            $proxyRebatePercentM->save(array('share_id' => $new_share_id, 'percent' => 0));
+        }
     }
 
     /**
