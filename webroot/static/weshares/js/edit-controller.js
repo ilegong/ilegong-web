@@ -53,7 +53,7 @@
       vm.self_ziti_data = {status: 1, ship_fee: 0, tag: 'self_ziti'};
       vm.kuai_di_data = {status: -1, ship_fee: '', tag: 'kuai_di'};
       vm.pys_ziti_data = {status: -1, ship_fee: 0, tag: 'pys_ziti'};
-      vm.pin_tuan_data = {status: -1, ship_fee: 5, tag: 'pin_tuan'};
+      vm.pin_tuan_data = {status: -1, ship_fee: 500, tag: 'pin_tuan'};
       vm.proxy_rebate_percent = {status: 0, percent: 0};
       vm.kuaidi_show_ship_fee = '';
       //add

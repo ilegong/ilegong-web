@@ -365,8 +365,8 @@
         vm.shipFee = vm.weshareSettings.pys_ziti.ship_fee;
         return 2;
       }
-      if (vm.weshareSettings.group_buy.status == 1) {
-        vm.shipFee = vm.weshareSettings.group_buy.ship_fee;
+      if (vm.weshareSettings.pin_tuan.status == 1) {
+        vm.shipFee = vm.weshareSettings.pin_tuan.ship_fee;
         return 3;
       }
       return -1;
@@ -511,7 +511,7 @@
         return vm.weshareSettings.pys_ziti.id;
       }
       if (vm.selectShipType == 3) {
-        return vm.weshareSettings.group_buy.id;
+        return vm.weshareSettings.pin_tuan.id;
       }
     }
 
@@ -526,7 +526,7 @@
         return vm.weshareSettings.pys_ziti.ship_fee;
       }
       if (vm.selectShipType == 3) {
-        return vm.weshareSettings.group_buy.ship_fee;
+        return vm.weshareSettings.pin_tuan.ship_fee;
       }
     }
 
@@ -613,6 +613,8 @@
     }
 
     function startGroupShare() {
+      vm.selectShipType = 3;
+      vm.shipFee = vm.weshareSettings.pin_tuan.ship_fee;
       vm.showGroupShareTipDialog = false;
       vm.showLayer = false;
       vm.showShareDetailView = false;
@@ -1091,7 +1093,7 @@
     }
 
     function supportGroupBuy() {
-      if (vm.weshareSettings.group_buy.status == 1) {
+      if (vm.weshareSettings&&vm.weshareSettings.pin_tuan.status == 1) {
         return true;
       }
       return false;
