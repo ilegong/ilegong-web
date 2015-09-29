@@ -212,34 +212,24 @@ const STATUS_CONSIGNEES_TUAN = 2;
 const STATUS_CONSIGNEES_TUAN_ZITI = 3;
 //分享地址
 const STATUS_CONSIGNEES_SHARE = 4;
-
 const SHARE_COUPON_OFFER_TYPE = -1;
-
 const SHARE_SHIP_KUAIDI = 0;
-
 const SHARE_SHIP_SELF_ZITI = 1;
-
 const SHARE_SHIP_PYS_ZITI = 2;
-
 const SHARE_SHIP_GROUP = 3;
-
 const SHARE_SHIP_PYS_ZITI_TAG = 'pys_zi_ti';
-
 const SHARE_SHIP_SELF_ZITI_TAG = 'self_zi_ti';
-
 const SHARE_SHIP_KUAIDI_TAG = 'kuai_di';
-
 const SHARE_SHIP_GROUP_TAG = 'group_buy';
-
 const RECOMMEND_SHARE = 1;
 
 const OPT_LOG_CREATE_SHARE = 1;
-
 const OPT_LOG_SHARE_RECOMMEND = 2;
-
 const OPT_LOG_SHARE_BUY = 3;
-
 const OPT_LOG_SHARE_COMMENT = 4;
+
+const DEFAULT_SHARE_TYPE = 0;
+const GROUP_SHARE_TYPE = 1;
 
 define('CATEGORY_ID_TECHAN', 114);
 

@@ -289,9 +289,9 @@ class ShareUtilComponent extends Component {
      * @param $address
      * @param $type
      * @return array
-     * clone一份， 指定用户ID， 指定的地址
+     * clone一份， 指定用户ID， 指定的地址， 类型
      */
-    public function cloneShare($shareId, $uid = null, $address = null, $type = 0) {
+    public function cloneShare($shareId, $uid = null, $address = null, $type = DEFAULT_SHARE_TYPE) {
         $WeshareM = ClassRegistry::init('Weshare');
         $shareInfo = $WeshareM->find('first', array(
             'conditions' => array(
@@ -315,16 +315,25 @@ class ShareUtilComponent extends Component {
             //clone product
             $newShareId = $newShareInfo['Weshare']['id'];
             $this->cloneShareProduct($newShareId, $shareId);
-            //clone address
-            $this->cloneShareAddresses($newShareId, $shareId);
-            //clone ship setting
-            $this->cloneShareShipSettings($newShareId, $shareId);
-            //clone rebate set
-            $this->cloneShareRebateSet($newShareId, $shareId);
+            if ($type == DEFAULT_SHARE_TYPE) {
+                //clone address
+                $this->cloneShareAddresses($newShareId, $shareId);
+                //clone ship setting
+                $this->cloneShareShipSettings($newShareId, $shareId);
+                //clone rebate set
+                $this->cloneShareRebateSet($newShareId, $shareId);
+            }
+            if ($type == GROUP_SHARE_TYPE) {
+
+            }
             Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
             return array('shareId' => $newShareId, 'success' => true);
         }
         return array('success' => false);
+    }
+
+    private function saveGroupShareAddress(){
+        
     }
 
     /**
