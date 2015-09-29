@@ -277,9 +277,10 @@ class ShareUtilComponent extends Component {
      * @param $share_id 原始分享ID
      * @param $uid 发起用户
      * @param $address 拼团的地址
+     * @param $address_remark 拼团备注地址
      * 发起一个拼团的分享
      */
-    public function startGroupShare($share_id, $uid, $address) {
+    public function startGroupShare($share_id, $uid, $address, $address_remark) {
 
     }
 
@@ -287,11 +288,12 @@ class ShareUtilComponent extends Component {
      * @param $shareId
      * @param $uid
      * @param $address
+     * @param $address_remarks
      * @param $type
      * @return array
      * clone一份， 指定用户ID， 指定的地址， 类型
      */
-    public function cloneShare($shareId, $uid = null, $address = null, $type = DEFAULT_SHARE_TYPE) {
+    public function cloneShare($shareId, $uid = null, $address = null, $address_remarks = null, $type = DEFAULT_SHARE_TYPE) {
         $WeshareM = ClassRegistry::init('Weshare');
         $shareInfo = $WeshareM->find('first', array(
             'conditions' => array(
@@ -324,7 +326,9 @@ class ShareUtilComponent extends Component {
                 $this->cloneShareRebateSet($newShareId, $shareId);
             }
             if ($type == GROUP_SHARE_TYPE) {
-
+                $this->saveGroupShareAddress($address, $newShareId, $shareId, $uid, $address_remarks);
+                $this->cloneShareShipSettings($newShareId, $shareId, true);
+                $this->cloneShareRebateSet($newShareId, $shareId, true);
             }
             Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
             return array('shareId' => $newShareId, 'success' => true);
@@ -332,8 +336,20 @@ class ShareUtilComponent extends Component {
         return array('success' => false);
     }
 
-    private function saveGroupShareAddress(){
-        
+    /**
+     * @param $address
+     * @param $new_share_id
+     * @param $old_share_id
+     * @param $uid
+     * @param $remarks
+     */
+    private function saveGroupShareAddress($address, $new_share_id, $old_share_id, $uid, $remarks) {
+        $WeshareAddressM = ClassRegistry::init('WeshareAddress');
+        $WeshareOfflineAddressM = ClassRegistry::init('WeshareOfflineAddress');
+        $shareAddressData = array('weshare_id' => $new_share_id, 'address' => $address);
+        $weshareOfflineAddress = array('creator' => $uid, 'share_id' => $new_share_id, 'refer_share_id' => $old_share_id, 'address' => $address, 'created' => date('Y-m-d H:i:s'), 'remarks' => $remarks);
+        $WeshareAddressM->save($shareAddressData);
+        $WeshareOfflineAddressM->save($weshareOfflineAddress);
     }
 
     /**
@@ -386,9 +402,10 @@ class ShareUtilComponent extends Component {
     /**
      * @param $new_share_id
      * @param $old_share_id
+     * @param $is_set_group
      * clone share ship setting
      */
-    private function cloneShareShipSettings($new_share_id, $old_share_id) {
+    private function cloneShareShipSettings($new_share_id, $old_share_id, $is_set_group = false) {
         $WeshareShipSettingM = ClassRegistry::init('WeshareShipSetting');
         $shareShipSettings = $WeshareShipSettingM->find('all', array(
             'conditions' => array(
@@ -402,6 +419,15 @@ class ShareUtilComponent extends Component {
             $itemShareShipSetting['weshare_id'] = $new_share_id;
             $newShareShipSettings[] = $itemShareShipSetting;
         }
+        if ($is_set_group) {
+            foreach ($newShareShipSettings as &$itemNewShareShipSetting) {
+                if ($itemNewShareShipSetting['tag'] == SHARE_SHIP_SELF_ZITI_TAG) {
+                    $itemNewShareShipSetting['status'] = 1;
+                } else {
+                    $itemNewShareShipSetting['status'] = -1;
+                }
+            }
+        }
         $WeshareShipSettingM->id = null;
         $WeshareShipSettingM->saveAll($newShareShipSettings);
     }
@@ -409,20 +435,24 @@ class ShareUtilComponent extends Component {
     /**
      * @param $new_share_id
      * @param $old_share_id
+     * @param $is_set_group
      * clone share rebate set
      */
-    private function cloneShareRebateSet($new_share_id, $old_share_id) {
+    private function cloneShareRebateSet($new_share_id, $old_share_id, $is_set_group = false) {
         $proxyRebatePercentM = ClassRegistry::init('ProxyRebatePercent');
         $oldShareRebateSet = $proxyRebatePercentM->find('first', array(
             'conditions' => array('share_id' => $old_share_id)
         ));
+        if (empty($oldShareRebateSet) || $is_set_group) {
+            $proxyRebatePercentM->save(array('share_id' => $new_share_id, 'percent' => 0));
+            return;
+        }
         if (!empty($oldShareRebateSet)) {
             $newShareRebateSet = $oldShareRebateSet['ProxyRebatePercent'];
             $newShareRebateSet['id'] = null;
             $newShareRebateSet['share_id'] = $new_share_id;
             $proxyRebatePercentM->save($newShareRebateSet);
-        } else {
-            $proxyRebatePercentM->save(array('share_id' => $new_share_id, 'percent' => 0));
+            return;
         }
     }
 
