@@ -178,6 +178,7 @@
     vm.handleReadMoreBtn = handleReadMoreBtn;
     vm.checkShareInfoHeight = checkShareInfoHeight;
     vm.toggleTag = toggleTag;
+    vm.supportGroupBuy = supportGroupBuy;
     function pageLoaded() {
       $rootScope.loadingPage = false;
     }
@@ -1087,6 +1088,13 @@
       } else {
         vm.readMoreBtnText = '收起';
       }
+    }
+
+    function supportGroupBuy() {
+      if (vm.weshareSettings.group_buy.status == 1) {
+        return true;
+      }
+      return false;
     }
 
     function toggleTag(tag) {
