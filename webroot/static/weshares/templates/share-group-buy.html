@@ -39,7 +39,6 @@
                 <p class='tips'>请输入商品数量</p>
             </div>
             <div class='total-fee text-center'>总金额：<span ng-bind="vm.orderTotalPrice | currency:'￥'"></span></div>
-
             <div style="text-align: center" ng-if="vm.myCoupons">(已减去红包<span ng-bind="vm.userCouponReduce/100" style="color: #ffa200;"></span>元)</div>
             <div style="text-align: center" ng-if="vm.shipFee>0">(快递费用<span ng-bind="vm.shipFee/100" style="color: #ffa200;"></span>元)</div>
         </div>

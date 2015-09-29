@@ -123,6 +123,7 @@
     vm.validateAddress = validateAddress;
     vm.validateProducts = validateProducts;
     vm.buyProducts = buyProducts;
+    vm.startGroupShare = startGroupShare;
     vm.validateMobile = validateMobile;
     vm.validateUserName = validateUserName;
     vm.validateUserAddress = validateUserAddress;
@@ -393,6 +394,7 @@
       vm.showOfflineStoreDetailView = false;
       vm.chooseOfflineStoreView = false;
       vm.showBalanceView = false;
+      vm.showStartGroupShareView = false;
       vm.showShareDetailView = true;
     }
 
@@ -596,6 +598,14 @@
     function buyProducts() {
       vm.showShareDetailView = false;
       vm.showBalanceView = true;
+      vm.chooseShipType = false;
+    }
+
+    function startGroupShare(){
+      vm.showGroupShareTipDialog = false;
+      vm.showLayer = false;
+      vm.showShareDetailView = false;
+      vm.showStartGroupShareView = true;
       vm.chooseShipType = false;
     }
 
