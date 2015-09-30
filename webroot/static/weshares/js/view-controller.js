@@ -103,7 +103,7 @@
     vm.readMoreBtnText = '全文';
     vm.hideMoreShareInfo = false;
     vm.shouldShowReadMoreBtn = false;
-
+    vm.startNewGroupShare = false;
     ChooseOfflineStore(vm, $log, $http, $templateCache, $timeout);
     vm.statusMap = {
       0: '进行中',
@@ -401,6 +401,7 @@
       vm.showBalanceView = false;
       vm.showStartGroupShareView = false;
       vm.showShareDetailView = true;
+      vm.startNewGroupShare = false;
     }
 
     function toUserShareInfo($uid) {
@@ -620,6 +621,7 @@
       vm.showShareDetailView = false;
       vm.showStartGroupShareView = true;
       vm.chooseShipType = false;
+      vm.startNewGroupShare = true;
     }
 
     function submitOrder(paymentType) {
@@ -655,6 +657,7 @@
         products: submit_products,
         ship_info: ship_info,
         remark: vm.buyerRemark,
+        start_new_group_share: vm.startNewGroupShare,
         buyer: {
           name: vm.buyerName,
           mobilephone: vm.buyerMobilePhone,
@@ -1093,7 +1096,7 @@
     }
 
     function supportGroupBuy() {
-      if (vm.weshareSettings&&vm.weshareSettings.pin_tuan.status == 1) {
+      if (vm.weshareSettings && vm.weshareSettings.pin_tuan.status == 1) {
         return true;
       }
       return false;

@@ -353,6 +353,7 @@ class WesharesController extends AppController {
         $business_remark = $postDataArray['remark'];
         $buyerData = $postDataArray['buyer'];
         $rebateLogId = $postDataArray['rebate_log_id'];
+        $is_start_new_group_share = $postDataArray['start_new_group_share'];
         $cart = array();
         try {
             $weshareProductIds = Hash::extract($products, '{n}.id');
@@ -391,9 +392,14 @@ class WesharesController extends AppController {
                 $orderData['ship_mark'] = SHARE_SHIP_KUAIDI_TAG;
             }
             if ($shipType == SHARE_SHIP_GROUP) {
+                //todo check is start share or order in offline address
                 $orderData['ship_mark'] = SHARE_SHIP_GROUP_TAG;
-                //标示这是一个邻里拼
-                $orderData['relate_type'] = ORDER_TRIGGER_GROUP_SHARE_TYPE;
+                if($is_start_new_group_share){
+                    //标示这是一个邻里拼
+                    $orderData['relate_type'] = ORDER_TRIGGER_GROUP_SHARE_TYPE;
+                    //todo clone share
+                    $this->ShareUtil->cloneShare($weshareId, $uid, $address, $business_remark, GROUP_SHARE_TYPE);
+                }
             }
             $order = $this->Order->save($orderData);
             $orderId = $order['Order']['id'];
@@ -1394,6 +1400,9 @@ class WesharesController extends AppController {
                 $address = $address;
             }
             return $address;
+        }
+        if($shipType == SHARE_SHIP_GROUP){
+            return $customAddress;
         }
     }
 

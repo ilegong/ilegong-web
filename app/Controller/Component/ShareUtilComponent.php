@@ -304,6 +304,12 @@ class ShareUtilComponent extends Component {
         $shareInfo['id'] = null;
         $shareInfo['created'] = date('Y-m-d H:i:s');
         $shareInfo['status'] = 0;
+        if ($type == GROUP_SHARE_TYPE) {
+            $origin_sharer_nickname = $this->WeshareBuy->get_user_nickname($shareInfo['creator']);
+            $shareInfo['title'] = '大家一起拼团' . $origin_sharer_nickname . '分享的' . $shareInfo['title'];
+            //default share status is not available
+            $shareInfo['status'] = 1;
+        }
         //set refer share id
         $shareInfo['refer_share_id'] = $shareId;
         if (!empty($uid)) {
@@ -958,13 +964,13 @@ class ShareUtilComponent extends Component {
         return 0;
     }
 
-    //TODO check split order by tag
+    // check split order by tag
     public function split_order_by_tag($order) {
-        //todo check cal ship fee
-        //todo check cal red packet fee
-        //todo check is prepaid
-        //todo check cal proxy fee
-        //todo check cal refund money (confirm)
+        // check cal ship fee
+        // check cal red packet fee
+        // check is prepaid
+        // check cal proxy fee
+        // check cal refund money (confirm)
         $orderM = ClassRegistry::init('Order');
         $cartM = ClassRegistry::init('Cart');
         $order_id = $order['Order']['id'];

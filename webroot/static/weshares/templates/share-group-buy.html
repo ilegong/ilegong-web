@@ -48,7 +48,7 @@
     </div>
     <div style="background-color: #ffffff;padding-top: 1px;padding-bottom: 40px;">
         <div class="clearfix" style="padding: 0 10px;">
-            <div class="form-group" ng-class="{'has-error': vm.userAddressHasError}" ng-if="vm.selectShipType==0">
+            <div class="form-group" ng-class="{'has-error': vm.userAddressHasError}">
                 <input class='form-control' placeholder="地址，会作为参团邻居们的自提" ng-model='vm.buyerAddress' ng-change='vm.validateUserAddress()'/>
                 <p class='tips'>请输入开团地址</p>
             </div>
