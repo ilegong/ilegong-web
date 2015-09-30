@@ -1235,16 +1235,16 @@ class ShareUtilComponent extends Component {
                 ),
             ),
             3 => array(
-                '605' => array(
-                    'share_id' => 605,
-                    'share_name' => '当天海南空运～薇薇安千层水果蛋糕中秋礼献',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/5f5d3edf6b4_0919.jpg',
-                    'share_price' => '160',
-                    'share_user_name' => '盛夏',
-                    'share_vote' => 235,
-                    'share_user_id' => 708029,
-                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
-                ),
+//                '605' => array(
+//                    'share_id' => 605,
+//                    'share_name' => '当天海南空运～薇薇安千层水果蛋糕中秋礼献',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/5f5d3edf6b4_0919.jpg',
+//                    'share_price' => '160',
+//                    'share_user_name' => '盛夏',
+//                    'share_vote' => 235,
+//                    'share_user_id' => 708029,
+//                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
+//                ),
                 '327' => array(
                     'share_id' => 327,
                     'share_name' => '纯天然0添加雾岭山山楂条',
