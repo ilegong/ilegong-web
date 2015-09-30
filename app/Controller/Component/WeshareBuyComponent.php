@@ -675,14 +675,30 @@ class WeshareBuyComponent extends Component {
         return $refund_money / 100;
     }
 
-
-    public function get_child_share_items($share_id){
+    /**
+     * @param $share_id
+     * @return array
+     * 获取组团分享的信息
+     */
+    public function get_child_share_items($share_id) {
         $OrderM = ClassRegistry::init('Order');
         $UserM = ClassRegistry::init('User');
-        $address_data = $this->get_share_offline_address_detail($share_id);
+        $WeshareM = ClassRegistry::init('Weshare');
+        $address_data = $this->ShareUtil->get_share_offline_address_detail($share_id);
         $share_ids = array();
-        foreach($address_data as $item_key=>$item_address_data){
+        foreach ($address_data as $item_key => $item_address_data) {
             $share_ids[] = $item_key;
+        }
+        $share_infos = $WeshareM->find('all', array(
+            'conditions' => array(
+                'id' => $share_ids
+            ),
+            'fields' => array('id', 'creator')
+        ));
+        $share_infos = Hash::combine($share_infos, '{n}.Weshare.id', '{n}.Weshare.creator');
+        foreach ($address_data as $item_key => &$item_address_data) {
+            $item_share_creator = $share_infos[$item_key];
+            $item_address_data['creator'] = $item_share_creator;
         }
         $group_share_order = $OrderM->find('all', array(
             'conditions' => array(
@@ -692,7 +708,24 @@ class WeshareBuyComponent extends Component {
             ),
             'fields' => array('id', 'creator', 'member_id')
         ));
-
+        $user_ids = Hash::extract($group_share_order, '{n}.Order.creator');
+        $user_ids = array_unique($user_ids);
+        $user_infos = $UserM->find('all', array(
+            'conditions' => array(
+                'id' => $user_ids
+            ),
+            'fields' => array('id', 'nickname', 'image')
+        ));
+        $user_infos = Hash::combine($user_infos, '{n}.User.id', '{n}.User');
+        foreach ($group_share_order as $order_item) {
+            $member_id = $order_item['Order']['member_id'];
+            $creator = $order_item['Order']['creator'];
+            if (!isset($address_data[$member_id]['join_users'])) {
+                $address_data[$member_id]['join_users'] = array();
+            }
+            $address_data[$member_id]['join_users'][] = $creator;
+        }
+        return array('child_share_data' => $address_data, 'child_share_user_infos' => $user_infos);
     }
 
     /**

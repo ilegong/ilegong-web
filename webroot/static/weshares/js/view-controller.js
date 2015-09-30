@@ -183,6 +183,7 @@
     vm.offlineAddressData = null;
     vm.loadOfflineAddressData = loadOfflineAddressData;
     vm.setShipFee = setShipFee;
+    vm.childShareDetail = null;
     function pageLoaded() {
       $rootScope.loadingPage = false;
     }
@@ -240,6 +241,7 @@
       $http({method: 'GET', url: '/weshares/get_share_order_detail/' + share_id + '.json', cache: $templateCache}).
         success(function (data, status) {
           vm.ordersDetail = data['ordersDetail'];
+          vm.childShareDetail = data['childShareData'];
           vm.shipTypes = data['ordersDetail']['ship_types'];
           vm.rebateLogs = data['ordersDetail']['rebate_logs'];
           vm.sortOrders();

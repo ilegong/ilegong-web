@@ -838,6 +838,12 @@ class ShareUtilComponent extends Component {
         return array('tags' => $productTags, 'product_tag_map' => $product_tag_map);
     }
 
+    /**
+     * @param $orderData
+     * @param $shareId
+     * @return array
+     * 分类统计订单
+     */
     public function summery_order_data_by_tag($orderData, $shareId) {
         $orderCartMap = $orderData['order_cart_map'];
         $orders = $orderData['orders']['origin_orders'];

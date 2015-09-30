@@ -234,8 +234,9 @@ class WesharesController extends AppController {
      */
     public function get_share_order_detail($shareId) {
         $this->autoRender = false;
+        $child_share_data = $this->WeshareBuy->get_child_share_items($shareId);
         $ordersDetail = $this->get_weshare_buy_info($shareId, true);
-        echo json_encode(array('ordersDetail' => $ordersDetail));
+        echo json_encode(array('ordersDetail' => $ordersDetail, 'childShareData' => $child_share_data));
         return;
     }
 
