@@ -273,16 +273,6 @@ class ShareUtilComponent extends Component {
         $this->Weixin->send_rebate_template_msg($recommend_open_ids[$recommend], $detail_url, $order_id, $order_money, $pay_time, $rebate_money, $title);
     }
 
-    /**
-     * @param $share_id 原始分享ID
-     * @param $uid 发起用户
-     * @param $address 拼团的地址
-     * @param $address_remark 拼团备注地址
-     * 发起一个拼团的分享
-     */
-    public function startGroupShare($share_id, $uid, $address, $address_remark) {
-
-    }
 
     /**
      * @param $shareId
@@ -308,7 +298,7 @@ class ShareUtilComponent extends Component {
             $origin_sharer_nickname = $this->WeshareBuy->get_user_nickname($shareInfo['creator']);
             $shareInfo['title'] = '大家一起拼团' . $origin_sharer_nickname . '分享的' . $shareInfo['title'];
             //default share status is not available
-            $shareInfo['status'] = 1;
+            $shareInfo['status'] = WESHARE_DELETE_STATUS;
         }
         //set refer share id
         $shareInfo['refer_share_id'] = $shareId;
@@ -727,6 +717,51 @@ class ShareUtilComponent extends Component {
         $tags = $this->load_tags_data($user_id);
         $tags = Hash::extract($tags, '{n}.WeshareProductTag');
         return $tags;
+    }
+
+    /**
+     * @param $order
+     * @return bool
+     * check is start new order share and reset order member id
+     */
+    public function check_is_start_new_group_share($order) {
+        if ($order['relate_type'] == ORDER_TRIGGER_GROUP_SHARE_TYPE) {
+            $order_id = $order['id'];
+            $order_creator = $order['creator'];
+            $order_member_id = $order['member_id'];
+            $orderM = ClassRegistry::init('Order');
+            $group_share = $this->get_group_share($order_creator, $order_member_id);
+            $group_share_id = $group_share['id'];
+            $orderM->updateAll(array('member_id' => $group_share_id), array('id' => $order_id));
+            $this->set_group_share_available($group_share_id);
+            //todo save opt log
+        }
+        return false;
+    }
+
+    /**
+     * @param $uid
+     * @param $refer_share_id
+     * @return mixed
+     */
+    public function get_group_share($uid, $refer_share_id){
+        $WeshareM = ClassRegistry::init('Weshare');
+        $weshare = $WeshareM->find('first', array(
+            'conditions' => array(
+                'type' => GROUP_SHARE_TYPE,
+                'creator' => $uid,
+                'refer_share_id' => $refer_share_id
+            )
+        ));
+        return $weshare['Weshare'];
+    }
+
+    /**
+     * @param $share_id
+     */
+    public function set_group_share_available($share_id) {
+        $weshareM = ClassRegistry::init('Weshare');
+        $weshareM->updateAll(array('status' => WESHARE_NORMAL_STATUS), array('id' => $share_id));
     }
 
     /**

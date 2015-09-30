@@ -461,6 +461,8 @@ class WeixinComponent extends Component {
         }
         if ($order['Order']['type'] == ORDER_TYPE_WESHARE_BUY) {
             $this->weshare_buy_order_paid($order);
+            //check is start new group share
+            $this->ShareUtil->check_is_start_new_group_share($order);
             //check cart tag id and split order
             $this->ShareUtil->split_order_by_tag($order);
             //check order is prepaid
