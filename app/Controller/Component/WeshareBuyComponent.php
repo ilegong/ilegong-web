@@ -675,6 +675,26 @@ class WeshareBuyComponent extends Component {
         return $refund_money / 100;
     }
 
+
+    public function get_child_share_items($share_id){
+        $OrderM = ClassRegistry::init('Order');
+        $UserM = ClassRegistry::init('User');
+        $address_data = $this->get_share_offline_address_detail($share_id);
+        $share_ids = array();
+        foreach($address_data as $item_key=>$item_address_data){
+            $share_ids[] = $item_key;
+        }
+        $group_share_order = $OrderM->find('all', array(
+            'conditions' => array(
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'member_id' => $share_ids,
+                'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY)
+            ),
+            'fields' => array('id', 'creator', 'member_id')
+        ));
+
+    }
+
     /**
      * @param $weshareId
      * @param $is_me

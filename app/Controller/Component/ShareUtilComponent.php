@@ -768,6 +768,7 @@ class ShareUtilComponent extends Component {
      * get share offline address detail
      */
     public function get_share_offline_address_detail($share_id) {
+        //todo cache it
         $WeshareM = ClassRegistry::init('Weshare');
         $query_address_sql = 'select * from cake_weshare_addresses where weshare_id in (select id from cake_weshares where refer_share_id=' . $share_id . ' and status=' . WESHARE_NORMAL_STATUS . ' and type=' . GROUP_SHARE_TYPE . ')';
         $address_result = $WeshareM->query($query_address_sql);
@@ -780,6 +781,7 @@ class ShareUtilComponent extends Component {
         }
         return $address_data;
     }
+
 
     /**
      * @param $share_id
