@@ -173,6 +173,20 @@ ul li { list-style: none; }
 .weshare-view .orders .order.my-order .send-info{ background-color: #a3d997;border-top: 1px #a3d997 solid;}
 .weshare-view p.share-description-omit{height: 65px;overflow-y: hidden}
 
+.offline-address-list{
+    border: 1px solid #ddd;
+}
+
+.offline-address-list .offline-address-item{
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-top: 5px;
+}
+
+.offline-address-list .offline-address-item span.address-name{
+    margin-left: 5px;
+}
+
 .red-packet-dialog{border: white;position: fixed;top: 100px;left: 8%; z-index: 999;padding: 10px 10px 10px;width: 80%;border-radius: 8px;display: block; background: #ffa103;}
 .red-packet-dialog .content{text-align: center;}
 .red-packet-dialog .nav{height: 10px;line-height: 10px;}

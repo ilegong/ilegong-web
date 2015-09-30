@@ -179,6 +179,8 @@
     vm.checkShareInfoHeight = checkShareInfoHeight;
     vm.toggleTag = toggleTag;
     vm.supportGroupBuy = supportGroupBuy;
+    vm.offlineAddressData = null;
+    vm.loadOfflineAddressData = loadOfflineAddressData;
     function pageLoaded() {
       $rootScope.loadingPage = false;
     }
@@ -207,6 +209,16 @@
         success(function (data, status) {
           vm.sharerAllComments = data['share_all_comments'];
           vm.sharerAllCommntesUser = data['share_comment_all_users'];
+        }).
+        error(function (data, status) {
+          $log.log(data);
+        });
+    }
+
+    function loadOfflineAddressData(share_id){
+      $http({method: 'GET', url: '/weshares/get_offline_address_detail/' + share_id + '.json', cache: $templateCache}).
+        success(function (data, status) {
+          vm.offlineAddressData = data;
         }).
         error(function (data, status) {
           $log.log(data);
@@ -331,6 +343,9 @@
           //load all comments
           vm.loadOrderDetail(weshareId);
           vm.loadSharerAllComments(vm.weshare.creator.id);
+          if(vm.supportGroupBuy()){
+            vm.loadOfflineAddressData(weshareId);
+          }
         }).
         error(function (data, status) {
           $log.log(data);

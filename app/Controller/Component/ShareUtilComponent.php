@@ -730,16 +730,17 @@ class ShareUtilComponent extends Component {
      * check is start new order share and reset order member id
      */
     public function check_is_start_new_group_share($order) {
-        if ($order['relate_type'] == ORDER_TRIGGER_GROUP_SHARE_TYPE) {
-            $order_id = $order['id'];
-            $order_creator = $order['creator'];
-            $order_member_id = $order['member_id'];
+        if ($order['Order']['relate_type'] == ORDER_TRIGGER_GROUP_SHARE_TYPE) {
+            $order_id = $order['Order']['id'];
+            $order_creator = $order['Order']['creator'];
+            $order_member_id = $order['Order']['member_id'];
             $orderM = ClassRegistry::init('Order');
             $group_share = $this->get_group_share($order_creator, $order_member_id);
             $group_share_id = $group_share['id'];
             $orderM->updateAll(array('member_id' => $group_share_id), array('id' => $order_id));
             $this->set_group_share_available($group_share_id);
             //todo save opt log
+            return true;
         }
         return false;
     }
@@ -759,6 +760,25 @@ class ShareUtilComponent extends Component {
             )
         ));
         return $weshare['Weshare'];
+    }
+
+    /**
+     * @param $share_id
+     * @return array
+     * get share offline address detail
+     */
+    public function get_share_offline_address_detail($share_id) {
+        $WeshareM = ClassRegistry::init('Weshare');
+        $query_address_sql = 'select * from cake_weshare_addresses where weshare_id in (select id from cake_weshares where refer_share_id=' . $share_id . ' and status=' . WESHARE_NORMAL_STATUS . ' and type=' . GROUP_SHARE_TYPE . ')';
+        $address_result = $WeshareM->query($query_address_sql);
+        $query_order_summery_sql = 'select count(id),member_id from cake_orders where type=' . ORDER_TYPE_WESHARE_BUY . ' and status !=' . ORDER_STATUS_WAITING_PAY . ' and member_id in (select id from cake_weshares where refer_share_id=' . $share_id . ' and status=' . WESHARE_NORMAL_STATUS . ' and type=' . GROUP_SHARE_TYPE . ')';
+        $order_summery_result = $WeshareM->query($query_order_summery_sql);
+        $address_data = Hash::combine($address_result, '{n}.cake_weshare_addresses.weshare_id', '{n}.cake_weshare_addresses');
+        $address_order_summery = Hash::combine($order_summery_result, '{n}.cake_orders.member_id', '{n}.0.count(id)');
+        foreach($address_data as $item_share_id=>&$address){
+            $address['order_count'] = $address_order_summery[$item_share_id];
+        }
+        return $address_data;
     }
 
     /**
