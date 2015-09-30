@@ -182,6 +182,7 @@
     vm.supportGroupBuy = supportGroupBuy;
     vm.offlineAddressData = null;
     vm.loadOfflineAddressData = loadOfflineAddressData;
+    vm.setShipFee = setShipFee;
     function pageLoaded() {
       $rootScope.loadingPage = false;
     }
@@ -529,6 +530,21 @@
       }
       if (vm.selectShipType == 3) {
         return vm.weshareSettings.pin_tuan.id;
+      }
+    }
+
+    function setShipFee(){
+      if (vm.selectShipType == 0) {
+        vm.shipFee = vm.weshareSettings.kuai_di.ship_fee;
+      }
+      if (vm.selectShipType == 1) {
+        vm.shipFee = vm.weshareSettings.self_ziti.ship_fee;
+      }
+      if (vm.selectShipType == 2) {
+        vm.shipFee = vm.weshareSettings.pys_ziti.ship_fee;
+      }
+      if (vm.selectShipType == 3) {
+        vm.shipFee = vm.weshareSettings.pin_tuan.ship_fee;
       }
     }
 
