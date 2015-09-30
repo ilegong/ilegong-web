@@ -295,8 +295,6 @@ class ShareUtilComponent extends Component {
         $shareInfo['created'] = date('Y-m-d H:i:s');
         $shareInfo['status'] = 0;
         if ($type == GROUP_SHARE_TYPE) {
-            $origin_sharer_nickname = $this->WeshareBuy->get_user_nickname($shareInfo['creator']);
-            $shareInfo['title'] = '大家一起拼团' . $origin_sharer_nickname . '分享的' . $shareInfo['title'];
             //default share status is not available
             $shareInfo['status'] = WESHARE_DELETE_STATUS;
         }
@@ -348,6 +346,11 @@ class ShareUtilComponent extends Component {
         $weshareOfflineAddress = array('creator' => $uid, 'share_id' => $new_share_id, 'refer_share_id' => $old_share_id, 'address' => $address, 'created' => date('Y-m-d H:i:s'), 'remarks' => $remarks);
         $WeshareAddressM->save($shareAddressData);
         $WeshareOfflineAddressM->save($weshareOfflineAddress);
+    }
+
+    //todo clone share product
+    private function cloneSharProductTag($new_share_id, $old_share_id){
+
     }
 
     /**
