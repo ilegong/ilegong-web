@@ -966,8 +966,7 @@ class WesharesController extends AppController {
         $weshareProxyPercent['share_id'] = $weshareId;
         return $this->ProxyRebatePercent->save($weshareProxyPercent);
     }
-
-    //TODO delete not use product
+    
     /**
      * @param $weshareId
      * @param $weshareProductData
@@ -1005,7 +1004,6 @@ class WesharesController extends AppController {
         return $this->WeshareShipSetting->saveAll($weshareShipData);
     }
 
-    //TODO delete not use address
     /**
      * @param $weshareId
      * @param $weshareAddressData
