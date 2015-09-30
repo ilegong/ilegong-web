@@ -295,6 +295,8 @@ class ShareUtilComponent extends Component {
         $shareInfo['created'] = date('Y-m-d H:i:s');
         $shareInfo['status'] = 0;
         if ($type == GROUP_SHARE_TYPE) {
+            $origin_sharer_nickname = $this->WeshareBuy->get_user_nickname($shareInfo['creator']);
+            $shareInfo['title'] = '大家一起拼团' . $origin_sharer_nickname . '分享的' . $shareInfo['title'];
             //default share status is not available
             $shareInfo['status'] = WESHARE_DELETE_STATUS;
         }
