@@ -392,6 +392,7 @@ class WesharesController extends AppController {
             }
             if ($shipType == SHARE_SHIP_GROUP) {
                 $orderData['ship_mark'] = SHARE_SHIP_GROUP_TAG;
+                //标示这是一个邻里拼
                 $orderData['relate_type'] = ORDER_TRIGGER_GROUP_SHARE_TYPE;
             }
             $order = $this->Order->save($orderData);
@@ -966,7 +967,7 @@ class WesharesController extends AppController {
         $weshareProxyPercent['share_id'] = $weshareId;
         return $this->ProxyRebatePercent->save($weshareProxyPercent);
     }
-    
+
     /**
      * @param $weshareId
      * @param $weshareProductData
