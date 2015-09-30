@@ -104,6 +104,7 @@
     vm.hideMoreShareInfo = false;
     vm.shouldShowReadMoreBtn = false;
     vm.startNewGroupShare = false;
+    vm.chooseOfflineAddress = null;
     ChooseOfflineStore(vm, $log, $http, $templateCache, $timeout);
     vm.statusMap = {
       0: '进行中',
@@ -215,7 +216,7 @@
         });
     }
 
-    function loadOfflineAddressData(share_id){
+    function loadOfflineAddressData(share_id) {
       $http({method: 'GET', url: '/weshares/get_offline_address_detail/' + share_id + '.json', cache: $templateCache}).
         success(function (data, status) {
           vm.offlineAddressData = data;
@@ -343,7 +344,7 @@
           //load all comments
           vm.loadOrderDetail(weshareId);
           vm.loadSharerAllComments(vm.weshare.creator.id);
-          if(vm.supportGroupBuy()){
+          if (vm.supportGroupBuy()) {
             vm.loadOfflineAddressData(weshareId);
           }
         }).
@@ -665,6 +666,15 @@
       }
       if (vm.selectShipType == 2) {
         ship_info['address_id'] = vm.checkedOfflineStore.id;
+      }
+      //邻里拼团
+      if (vm.selectShipType == 3&&!vm.startNewGroupShare) {
+        if(!vm.chooseOfflineAddress){
+          vm.offlineAddressHasError = true;
+          return;
+        }
+        vm.buyerAddress = vm.offlineAddressData[vm.chooseOfflineAddress]['address'];
+        ship_info['weshare_id'] = vm.chooseOfflineAddress;
       }
       var orderData = {
         weshare_id: vm.weshare.id,
