@@ -969,6 +969,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 1199,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/6f5125521e1_0903.jpg'
                 ),
+                '664' => array(
+                    'share_id' => 664,
+                    'share_name' => '当天海南空运～薇薇安千层水果蛋糕',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/39e96c45dc2_0930.jpg',
+                    'share_price' => '160',
+                    'share_user_name' => '盛夏',
+                    'share_vote' => 987,
+                    'share_user_id' => 708029,
+                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
+                ),
                 '406' => array(
                     'share_id' => 406,
                     'share_name' => ' 树上的糖包子，新鲜树摘威海青皮无花果 ',
@@ -982,7 +992,7 @@ class ShareUtilComponent extends Component {
                 '586' => array(
                     'share_id' => 586,
                     'share_name' => '云南哀牢山古法手工叶子红糖，特价包邮还有赠品必须分享啊！',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/abcb4094d25_0917.jpg',//todo
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/abcb4094d25_0917.jpg',
                     'share_price' => '38',
                     'share_user_name' => '鲲鲲',
                     'share_vote' => 59,
