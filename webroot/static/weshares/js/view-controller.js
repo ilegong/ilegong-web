@@ -153,6 +153,7 @@
     vm.getOrderCommentLength = getOrderCommentLength;
     vm.initWeshareData = initWeshareData;
     vm.sortOrders = sortOrders;
+    vm.combineShareBuyData = combineShareBuyData;
     vm.closeCommentDialog = closeCommentDialog;
     vm.notifyUserToComment = notifyUserToComment;
     vm.loadSharerAllComments = loadSharerAllComments;
@@ -357,6 +358,10 @@
       vm.checkHasUnRead();
     }
 
+    function combineShareBuyData() {
+
+    }
+
     function sortOrders() {
       if (!vm.isCreator()) {
         vm.ordersDetail.orders = _.sortBy(vm.ordersDetail.orders, function (order) {
@@ -535,7 +540,7 @@
       }
     }
 
-    function setShipFee(){
+    function setShipFee() {
       if (vm.selectShipType == 0) {
         vm.shipFee = vm.weshareSettings.kuai_di.ship_fee;
       }
@@ -686,8 +691,8 @@
         ship_info['address_id'] = vm.checkedOfflineStore.id;
       }
       //邻里拼团
-      if (vm.selectShipType == 3&&!vm.startNewGroupShare) {
-        if(!vm.chooseOfflineAddress){
+      if (vm.selectShipType == 3 && !vm.startNewGroupShare) {
+        if (!vm.chooseOfflineAddress) {
           vm.offlineAddressHasError = true;
           return;
         }
