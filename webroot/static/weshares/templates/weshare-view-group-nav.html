@@ -4,7 +4,7 @@
         <p class="iconfont" style="height: 16px;"><i class="fa fa-users"></i></p>
         <b>朋友说</b>
     </a>
-    <a class="new" ng-if="!vm.isCreator()&&!vm.supportGroupBuy()&&vm.weshare.status == 0" ng-click="vm.buyProducts()">我要报名</a>
+    <a class="new" ng-if="!vm.isCreator()&&!vm.isProxy()&&vm.weshare.status == 0" ng-click="vm.buyProducts()">我要报名</a>
     <a class="new" ng-if="!vm.isCreator()&&vm.isProxy()&&vm.weshare.status == 0" ng-click="vm.buyProducts()" style="width: 28%;">我要报名</a>
     <a class="new" ng-if="!vm.isCreator()&&vm.isProxy()&&vm.weshare.status == 0" ng-click="vm.showRecommendDialog=true;vm.showLayer=true;" style="width: 28%;margin-right: 7%;">我要推荐</a>
     <a class="new" ng-if="vm.isCreator()&&vm.weshare.status == 0&&vm.notifyType() == 1" ng-click='vm.notifyFans();'
