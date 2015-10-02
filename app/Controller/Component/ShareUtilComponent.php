@@ -422,19 +422,28 @@ class ShareUtilComponent extends Component {
             $itemShareShipSetting['weshare_id'] = $new_share_id;
             $newShareShipSettings[] = $itemShareShipSetting;
         }
+        $WeshareShipSettingM->id = null;
         if ($is_set_group) {
             //only set self ziti
+            $saveData = null;
+            $groupShareLimit = 0;
             foreach ($newShareShipSettings as &$itemNewShareShipSetting) {
                 if ($itemNewShareShipSetting['tag'] == SHARE_SHIP_SELF_ZITI_TAG) {
                     $itemNewShareShipSetting['status'] = 1;
                     $itemNewShareShipSetting['ship_fee'] = SHARE_OFFLINE_ADDRESS_SHIP_FEE;
-                } else {
-                    $itemNewShareShipSetting['status'] = -1;
+                    $saveData = $itemNewShareShipSetting;
+                }
+                if ($itemNewShareShipSetting['tag'] == SHARE_SHIP_GROUP_TAG) {
+                    $groupShareLimit = $itemNewShareShipSetting['limit'];
                 }
             }
+            $saveData['limit'] = $groupShareLimit;
+            $WeshareShipSettingM->saveAll(array($saveData));
+            return;
+        } else {
+            $WeshareShipSettingM->saveAll($newShareShipSettings);
+            return;
         }
-        $WeshareShipSettingM->id    = null;
-        $WeshareShipSettingM->saveAll($newShareShipSettings);
     }
 
     /**
