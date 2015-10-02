@@ -365,6 +365,7 @@ class WesharesController extends AppController {
         $buyerData = $postDataArray['buyer'];
         $rebateLogId = $postDataArray['rebate_log_id'];
         $is_start_new_group_share = $postDataArray['start_new_group_share'];
+        $is_group_share_type = $postDataArray['is_group_share'];
         $cart = array();
         try {
             $weshareProductIds = Hash::extract($products, '{n}.id');
@@ -397,19 +398,30 @@ class WesharesController extends AppController {
                 $orderData['ship_mark'] = SHARE_SHIP_PYS_ZITI_TAG;
             }
             if ($shipType == SHARE_SHIP_SELF_ZITI) {
-                $orderData['ship_mark'] = SHARE_SHIP_SELF_ZITI_TAG;
+                //check is group share
+                if ($is_group_share_type) {
+                    //mark group share
+                    $orderData['ship_mark'] = SHARE_SHIP_GROUP_TAG;
+                } else {
+                    $orderData['ship_mark'] = SHARE_SHIP_SELF_ZITI_TAG;
+                }
             }
             if ($shipType == SHARE_SHIP_KUAIDI) {
                 $orderData['ship_mark'] = SHARE_SHIP_KUAIDI_TAG;
             }
+            //remark share ship group or create
             if ($shipType == SHARE_SHIP_GROUP) {
-                //todo check is start share or order in offline address
+                //check is start share or order in offline address
                 $orderData['ship_mark'] = SHARE_SHIP_GROUP_TAG;
-                if($is_start_new_group_share){
-                    //标示这是一个邻里拼
+                $shipInfoWeshareId = $shipInfo['weshare_id'];
+                if ($is_start_new_group_share) {
+                    //标示这是一个邻里拼 触发 clone 一个分享
                     $orderData['relate_type'] = ORDER_TRIGGER_GROUP_SHARE_TYPE;
-                    //todo clone share
+                    //clone share
                     $this->ShareUtil->cloneShare($weshareId, $uid, $address, $business_remark, GROUP_SHARE_TYPE);
+                } else {
+                    //reset share id
+                    $orderData['member_id'] = $shipInfoWeshareId;
                 }
             }
             $order = $this->Order->save($orderData);
@@ -1412,7 +1424,7 @@ class WesharesController extends AppController {
             }
             return $address;
         }
-        if($shipType == SHARE_SHIP_GROUP){
+        if ($shipType == SHARE_SHIP_GROUP) {
             return $customAddress;
         }
     }

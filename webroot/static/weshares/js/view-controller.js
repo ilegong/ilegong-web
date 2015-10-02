@@ -105,6 +105,7 @@
     vm.shouldShowReadMoreBtn = false;
     vm.startNewGroupShare = false;
     vm.chooseOfflineAddress = null;
+    vm.isGroupShareType = false;
     ChooseOfflineStore(vm, $log, $http, $templateCache, $timeout);
     vm.statusMap = {
       0: '进行中',
@@ -309,6 +310,9 @@
       $http({method: 'GET', url: '/weshares/detail/' + weshareId + '.json', cache: $templateCache}).
         success(function (data, status) {
           vm.weshare = data['weshare'];
+          if (vm.weshare.type == 1) {
+            vm.isGroupShareType = true;
+          }
           vm.toggleState = {0: {open: true, statusText: '收起'}};
           _.each(vm.weshare.tags, function (value, key) {
             vm.toggleState[key] = {
@@ -727,6 +731,7 @@
         products: submit_products,
         ship_info: ship_info,
         remark: vm.buyerRemark,
+        is_group_share: vm.isGroupShareType,
         start_new_group_share: vm.startNewGroupShare,
         buyer: {
           name: vm.buyerName,
