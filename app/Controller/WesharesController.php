@@ -13,6 +13,8 @@ class WesharesController extends AppController {
 
     var $pay_type = 1;
 
+    const PROCESS_SHIP_MARK_DEFAULT_RESULT = 0;
+    const PROCESS_SHIP_MARK_UNFINISHED_RESULT = 1;
 
     public function __construct($request = null, $response = null) {
         $this->helpers[] = 'PhpExcel';
@@ -394,35 +396,9 @@ class WesharesController extends AppController {
             $shipFee = $shipSetting['WeshareShipSetting']['ship_fee'];
             $address = $this->get_order_address($weshareId, $shipInfo, $buyerData, $uid);
             $orderData = array('cate_id' => $rebateLogId, 'creator' => $uid, 'consignee_address' => $address, 'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $buyerData['name'], 'consignee_mobilephone' => $buyerData['mobilephone'], 'business_remark' => $business_remark);
-            if ($shipType == SHARE_SHIP_PYS_ZITI) {
-                $orderData['ship_mark'] = SHARE_SHIP_PYS_ZITI_TAG;
-            }
-            if ($shipType == SHARE_SHIP_SELF_ZITI) {
-                //check is group share
-                if ($is_group_share_type) {
-                    //mark group share
-                    $orderData['ship_mark'] = SHARE_SHIP_GROUP_TAG;
-                } else {
-                    $orderData['ship_mark'] = SHARE_SHIP_SELF_ZITI_TAG;
-                }
-            }
-            if ($shipType == SHARE_SHIP_KUAIDI) {
-                $orderData['ship_mark'] = SHARE_SHIP_KUAIDI_TAG;
-            }
-            //remark share ship group or create
-            if ($shipType == SHARE_SHIP_GROUP) {
-                //check is start share or order in offline address
-                $orderData['ship_mark'] = SHARE_SHIP_GROUP_TAG;
-                $shipInfoWeshareId = $shipInfo['weshare_id'];
-                if ($is_start_new_group_share) {
-                    //标示这是一个邻里拼 触发 clone 一个分享
-                    $orderData['relate_type'] = ORDER_TRIGGER_GROUP_SHARE_TYPE;
-                    //clone share
-                    $this->ShareUtil->cloneShare($weshareId, $uid, $address, $business_remark, GROUP_SHARE_TYPE);
-                } else {
-                    //reset share id
-                    $orderData['member_id'] = $shipInfoWeshareId;
-                }
+            $process_shi_mark_result = $this->process_order_ship_mark($shipType,$orderData,$is_group_share_type);
+            if($process_shi_mark_result == self::PROCESS_SHIP_MARK_UNFINISHED_RESULT){
+                $this->process_ship_group($orderData,$shipInfo,$is_start_new_group_share,$weshareId,$uid,$address,$business_remark);
             }
             $order = $this->Order->save($orderData);
             $orderId = $order['Order']['id'];
@@ -1470,6 +1446,46 @@ class WesharesController extends AppController {
             return array('success' => false, 'reason' => $reason);
         }
         return null;
+    }
+
+    private function process_order_ship_mark($shipType, &$orderData, $is_group_share_type) {
+        if ($shipType == SHARE_SHIP_PYS_ZITI) {
+            $orderData['ship_mark'] = SHARE_SHIP_PYS_ZITI_TAG;
+            return self::PROCESS_SHIP_MARK_DEFAULT_RESULT;
+        }
+        if ($shipType == SHARE_SHIP_SELF_ZITI) {
+            //check is group share
+            if ($is_group_share_type) {
+                //mark group share
+                $orderData['ship_mark'] = SHARE_SHIP_GROUP_TAG;
+            } else {
+                $orderData['ship_mark'] = SHARE_SHIP_SELF_ZITI_TAG;
+            }
+            return self::PROCESS_SHIP_MARK_DEFAULT_RESULT;
+        }
+        if ($shipType == SHARE_SHIP_KUAIDI) {
+            $orderData['ship_mark'] = SHARE_SHIP_KUAIDI_TAG;
+            return self::PROCESS_SHIP_MARK_DEFAULT_RESULT;
+        }
+        //remark share ship group or create
+        if ($shipType == SHARE_SHIP_GROUP) {
+            //check is start share or order in offline address
+            $orderData['ship_mark'] = SHARE_SHIP_GROUP_TAG;
+            return self::PROCESS_SHIP_MARK_UNFINISHED_RESULT_RESULT;
+        }
+    }
+
+    private function process_ship_group(&$orderData, $shipInfo, $is_start_new_group_share, $weshareId, $uid, $address, $business_remark) {
+        if ($is_start_new_group_share) {
+            //标示这是一个邻里拼 触发 clone 一个分享
+            $orderData['relate_type'] = ORDER_TRIGGER_GROUP_SHARE_TYPE;
+            //clone share
+            $this->ShareUtil->cloneShare($weshareId, $uid, $address, $business_remark, GROUP_SHARE_TYPE);
+        } else {
+            //reset share id
+            $shipInfoWeshareId = $shipInfo['weshare_id'];
+            $orderData['member_id'] = $shipInfoWeshareId;
+        }
     }
 
     /**
