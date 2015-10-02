@@ -423,6 +423,7 @@ class ShareUtilComponent extends Component {
             $newShareShipSettings[] = $itemShareShipSetting;
         }
         if ($is_set_group) {
+            //only set self ziti
             foreach ($newShareShipSettings as &$itemNewShareShipSetting) {
                 if ($itemNewShareShipSetting['tag'] == SHARE_SHIP_SELF_ZITI_TAG) {
                     $itemNewShareShipSetting['status'] = 1;
