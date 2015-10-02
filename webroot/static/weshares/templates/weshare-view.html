@@ -185,8 +185,11 @@
             </p>
         </div>
     </div>
-    <div class="clearfix recommend-btn">
+    <div class="clearfix recommend-btn" ng-if="vm.weshare.type==0">
         <a ng-click='vm.startGroupShare();' style="background-color: #ffa200; width: 100%;">我要开团</a>
+    </div>
+    <div class="clearfix recommend-btn" ng-if="vm.weshare.type==1">
+        <a ng-click='vm.toShareDetailView(vm.weshare.refer_share_id);' style="background-color: #ffa200; width: 100%;">我要开团</a>
     </div>
 </div>
 <div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showGroupShareTipDialog=false;vm.showRecommendDialog=false;vm.showLayer=false;vm.showNotifyView=false;vm.showCommentListDialog=false;vm.closeCommentDialog();vm.showBuyingDialog=false;vm.showShareDialog=false;vm.showNotifyShareDialog=false;vm.showNotifyShareOfferDialog=false;vm.showNotifyGetPacketDialog=false;"></div>
