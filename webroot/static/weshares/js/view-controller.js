@@ -132,6 +132,7 @@
     vm.submitOrder = submitOrder;
     vm.confirmReceived = confirmReceived;
     vm.toUserShareInfo = toUserShareInfo;
+    vm.toShareDetailView = toShareDetailView;
     vm.checkProductNum = checkProductNum;
     vm.getProductLeftNum = getProductLeftNum;
     vm.toShareOrderList = toShareOrderList;
@@ -443,6 +444,10 @@
       vm.showStartGroupShareView = false;
       vm.showShareDetailView = true;
       vm.startNewGroupShare = false;
+    }
+
+    function toShareDetailView($share_id){
+      window.location.href = '/weshares/view/' + $share_id;
     }
 
     function toUserShareInfo($uid) {
