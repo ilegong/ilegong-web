@@ -185,6 +185,7 @@
     vm.loadOfflineAddressData = loadOfflineAddressData;
     vm.setShipFee = setShipFee;
     vm.childShareDetail = null;
+    vm.currentUserOrderCount = 0;
     function pageLoaded() {
       $rootScope.loadingPage = false;
     }
@@ -219,6 +220,10 @@
         });
     }
 
+    /**
+     * 获取线下自提点和简单的购买数据购买数据
+     * @param share_id
+     */
     function loadOfflineAddressData(share_id) {
       $http({method: 'GET', url: '/weshares/get_offline_address_detail/' + share_id + '.json', cache: $templateCache}).
         success(function (data, status) {
@@ -242,10 +247,12 @@
       $http({method: 'GET', url: '/weshares/get_share_order_detail/' + share_id + '.json', cache: $templateCache}).
         success(function (data, status) {
           vm.ordersDetail = data['ordersDetail'];
-          vm.childShareDetail = data['childShareData'];
+          vm.childShareDetail = data['childShareData']['child_share_data'];
+          vm.childShareDetailUsers = data['childShareData']['child_share_user_infos'];
           vm.shipTypes = data['ordersDetail']['ship_types'];
           vm.rebateLogs = data['ordersDetail']['rebate_logs'];
           vm.sortOrders();
+          vm.combineShareBuyData();
           setWeiXinShareParams();
           //from paid done
           if (fromType == 1) {
@@ -358,16 +365,25 @@
       vm.checkHasUnRead();
     }
 
+    /**
+     * 订单数据和拼团数据组合
+     */
     function combineShareBuyData() {
-
+      var insertIndex = vm.currentUserOrderCount;
+      for (childShareItem in vm.childShareDetail) {
+        vm.ordersDetail.orders.splice(insertIndex, 0, vm.childShareDetail[childShareItem]);
+        insertIndex++;
+      }
     }
 
     function sortOrders() {
       if (!vm.isCreator()) {
         vm.ordersDetail.orders = _.sortBy(vm.ordersDetail.orders, function (order) {
           if (order.status == 9 && order.creator == vm.currentUser.id) {
+            vm.currentUserOrderCount = vm.currentUserOrderCount+1;
             return -2147483646;
           } else if (order.creator == vm.currentUser.id) {
+            vm.currentUserOrderCount = vm.currentUserOrderCount+1;
             return -2147483647;
           } else {
             return order.id;
@@ -405,6 +421,7 @@
     }
 
     function isOwner(order) {
+      //note may be a child share item
       return !_.isEmpty(vm.currentUser) && !_.isEmpty(order) && vm.currentUser.id == order.creator;
     }
 
@@ -1144,7 +1161,7 @@
     }
 
     function supportGroupBuy() {
-      if (vm.weshareSettings && vm.weshareSettings.pin_tuan.status == 1) {
+      if (vm.weshareSettings && vm.weshareSettings.pin_tuan && vm.weshareSettings.pin_tuan.status == 1) {
         return true;
       }
       return false;

@@ -129,6 +129,48 @@ ul li { list-style: none; }
     font-size: 10px;
 }
 
+/*child share join users*/
+
+.weshare-view .group-share-users {
+    width: 80%;
+    overflow: hidden;
+}
+
+
+.weshare-view .group-share-users .share-tag {
+    float: left;
+    font-size: 9pt;
+    text-align: center;
+    overflow: hidden;
+}
+
+.weshare-view .group-share-users .share-list {
+    margin-left: 10px;
+}
+
+.weshare-view .group-share-users .share-list .user-avatar {
+    float: left;
+    margin-right: 4px;
+    margin-bottom: 5px;
+}
+
+.weshare-view .group-share-users .share-list .user-avatar img {
+    background-size: cover;
+    border: 0;
+    vertical-align: middle;
+    width: 30px;
+    height: 30px;
+    border-radius: 0;
+}
+
+.weshare-view .group-share-users .share-list-etc {
+    font-size: 15px;
+    line-height: 30px;
+    color: #ffa200;
+    margin-left: 5px;
+    font-size: 10px;
+}
+
 .weshare-view .introduction{ background-color: #ffffff; border: 1px #eaeaea solid; border-radius: 5px; padding: 15px 15px 0px 15px; position: relative;}
 .weshare-view .introduction b{display: block;position: absolute;top: -6px;left: 15px;background: url(../images/weifxicon.png) no-repeat -25px -25px;background-size: 100px 100px;width: 12px;height: 6px;}
 .weshare-view .introduction .row{ padding: 0 0 10px;}

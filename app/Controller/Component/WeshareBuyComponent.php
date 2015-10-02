@@ -714,7 +714,7 @@ class WeshareBuyComponent extends Component {
             'conditions' => array(
                 'id' => $user_ids
             ),
-            'fields' => array('id', 'nickname', 'image')
+            'fields' => array('id', 'nickname', 'image', 'is_proxy')
         ));
         $user_infos = Hash::combine($user_infos, '{n}.User.id', '{n}.User');
         foreach ($group_share_order as $order_item) {
