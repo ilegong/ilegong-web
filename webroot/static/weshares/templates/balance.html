@@ -94,6 +94,7 @@
                     <li class="offline-address-item" ng-repeat="(offlineAddressShareId,offlineAddress) in vm.offlineAddressData"><input type="radio" ng-model="vm.chooseOfflineAddress" value="{{::offlineAddressShareId}}" class="radio"/><span class="address-name" ng-bind="::offlineAddress.address"></span></li>
                 </ul>
                 <p class="tips">请选择地址</p>
+                <a style="margin-top: 5px;width: 70%;margin-left: 15%;" class="ui-common-btn" ng-click="vm.showGroupShareTipDialog=true;vm.showLayer=true;">不在附近？开新团</a>
             </div>
         </div>
         <div class="clearfix" style="padding: 0 10px;">

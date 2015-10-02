@@ -84,6 +84,8 @@ ul li { list-style: none; }
 .weshare-view ul li s{ font-size: 10px; color: #999999; text-decoration: none; display: block; padding-left: 10px; padding-top: 3px;}
 .weshare-view .statistics-btn{ display: block;background-color: #ffa200;color: #ffffff;text-decoration: none;text-align: center;width: 85px;line-height: 35px;margin-top: 10px;}
 
+.ui-common-btn{ display: block;background-color: #ffa200;color: #ffffff;text-decoration: none;text-align: center;width: 85px;line-height: 35px;margin-top: 10px;}
+
 .weshare-view .header {
     margin-bottom: 10px;
 }
@@ -216,7 +218,6 @@ ul li { list-style: none; }
 .weshare-view p.share-description-omit{height: 65px;overflow-y: hidden}
 
 .offline-address-list{
-    border: 1px solid #ddd;
 }
 
 .offline-address-list .offline-address-item{
