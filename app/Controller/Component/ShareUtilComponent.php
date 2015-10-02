@@ -427,12 +427,13 @@ class ShareUtilComponent extends Component {
             foreach ($newShareShipSettings as &$itemNewShareShipSetting) {
                 if ($itemNewShareShipSetting['tag'] == SHARE_SHIP_SELF_ZITI_TAG) {
                     $itemNewShareShipSetting['status'] = 1;
+                    $itemNewShareShipSetting['ship_fee'] = SHARE_OFFLINE_ADDRESS_SHIP_FEE;
                 } else {
                     $itemNewShareShipSetting['status'] = -1;
                 }
             }
         }
-        $WeshareShipSettingM->id = null;
+        $WeshareShipSettingM->id    = null;
         $WeshareShipSettingM->saveAll($newShareShipSettings);
     }
 
