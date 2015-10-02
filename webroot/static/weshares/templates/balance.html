@@ -48,19 +48,19 @@
         <div class="clearfix" style="padding: 0 10px;margin-top: 10px;">
             <div class="form-group" ng-class="{'has-error' : vm.chooseShipType}">
                 <div class="form-control radio-group">
-                    <div ng-show="vm.weshareSettings.kuai_di.status==1">
+                    <div ng-if="vm.weshareSettings.kuai_di" ng-show="vm.weshareSettings.kuai_di.status==1">
                         <input type="radio" class="radio" ng-model="vm.selectShipType" value="0" id="kuaidi" ng-change='vm.calOrderTotalPrice();vm.setShipFee();'/>
                         <label for="kuaidi">快递</label>
                     </div>
-                    <div ng-show="vm.weshareSettings.self_ziti.status==1">
+                    <div ng-if="vm.weshareSettings.self_ziti" ng-show="vm.weshareSettings.self_ziti.status==1">
                         <input type="radio" class="radio" ng-model="vm.selectShipType" value="1" id="ziti" ng-change='vm.calOrderTotalPrice();vm.setShipFee();'/>
                         <label for="ziti">自提</label>
                     </div>
-                    <div ng-show="vm.weshareSettings.pys_ziti.status==1">
+                    <div ng-if="vm.weshareSettings.pys_ziti" ng-show="vm.weshareSettings.pys_ziti.status==1">
                         <input type="radio" class="radio" ng-model="vm.selectShipType" value="2" id="pys_ziti" ng-change='vm.calOrderTotalPrice();vm.setShipFee();'/>
                         <label for="pys_ziti">好邻居自提</label>
                     </div>
-                    <div ng-show="vm.weshareSettings.pin_tuan.status==1">
+                    <div ng-if="vm.weshareSettings.pin_tuan" ng-show="vm.weshareSettings.pin_tuan.status==1">
                         <input type="radio" class="radio" ng-model="vm.selectShipType" value="3" id="pintuan" ng-change='vm.calOrderTotalPrice();vm.setShipFee();'/>
                         <label for="pintuan">邻里拼团</label>
                     </div>

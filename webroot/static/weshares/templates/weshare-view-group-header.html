@@ -13,7 +13,7 @@
             <label ng-click="vm.toUserShareInfo(vm.weshare.creator.id)" ng-bind="::vm.weshare.creator.nickname"></label>
             <a ng-if="!vm.userSubStatus" style="margin-left: 5px;margin-top: 3px;width: 50px;line-height: 20px;background-color: #F2651A;" class="statistics-btn" ng-click="vm.subSharer();" ng-bind="vm.subShareTipTxt">+关注</a>
         </div>
-        <s><span ng-bind="::vm.ordersDetail.summery.all_buy_user_count" style="color: #ffa200;"></span>&nbsp;报名 &nbsp;&nbsp;<span ng-click="vm.showCommentListDialog()" ng-if="vm.getOrderCommentLength()>=1&&vm.userSubStatus"><span style="color: #ffa200" ng-bind="::vm.getOrderCommentLength()">0</span>&nbsp;爱心评价</span>&nbsp;&nbsp;<span ng-if="vm.getOrderCommentLength()<1&&vm.userSubStatus"><span style="color: #ffa200" ng-bind="::vm.userShareSummery.follower_count">0</span>&nbsp;粉丝</span>&nbsp;&nbsp;</s>
+        <s>目标<span style="color: #ffa200;" ng-bind="::vm.weshareSettings.self_ziti.limit"></span>人&nbsp;&nbsp;<span ng-bind="::vm.ordersDetail.summery.all_buy_user_count" style="color: #ffa200;"></span>&nbsp;报名 &nbsp;&nbsp;<span ng-click="vm.showCommentListDialog()" ng-if="vm.getOrderCommentLength()>=1&&vm.userSubStatus"><span style="color: #ffa200" ng-bind="::vm.getOrderCommentLength()">0</span>&nbsp;爱心评价</span>&nbsp;&nbsp;<span ng-if="vm.getOrderCommentLength()<1&&vm.userSubStatus"><span style="color: #ffa200" ng-bind="::vm.userShareSummery.follower_count">0</span>&nbsp;粉丝</span>&nbsp;&nbsp;</s>
     </li>
     <ul class="clearfix">
         <li style="margin-right: 5px; float: right;"><a style="margin-top: 3px;width: 75px;" class="statistics-btn" ng-click="vm.showGroupShareTipDialog=true;vm.showLayer=true;">我也要拼团</a></li>

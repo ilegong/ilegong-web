@@ -385,10 +385,10 @@
       if (!vm.isCreator()) {
         vm.ordersDetail.orders = _.sortBy(vm.ordersDetail.orders, function (order) {
           if (order.status == 9 && order.creator == vm.currentUser.id) {
-            vm.currentUserOrderCount = vm.currentUserOrderCount+1;
+            vm.currentUserOrderCount = vm.currentUserOrderCount + 1;
             return -2147483646;
           } else if (order.creator == vm.currentUser.id) {
-            vm.currentUserOrderCount = vm.currentUserOrderCount+1;
+            vm.currentUserOrderCount = vm.currentUserOrderCount + 1;
             return -2147483647;
           } else {
             return order.id;
@@ -398,19 +398,19 @@
     }
 
     function getSelectTypeDefaultVal() {
-      if (vm.weshareSettings.kuai_di.status == 1) {
+      if (vm.weshareSettings.kuai_di && vm.weshareSettings.kuai_di.status == 1) {
         vm.shipFee = vm.weshareSettings.kuai_di.ship_fee;
         return 0;
       }
-      if (vm.weshareSettings.self_ziti.status == 1) {
+      if (vm.weshareSettings.self_ziti && vm.weshareSettings.self_ziti.status == 1) {
         vm.shipFee = vm.weshareSettings.self_ziti.ship_fee;
         return 1;
       }
-      if (vm.weshareSettings.pys_ziti.status == 1) {
+      if (vm.weshareSettings.pys_ziti && vm.weshareSettings.pys_ziti.status == 1) {
         vm.shipFee = vm.weshareSettings.pys_ziti.ship_fee;
         return 2;
       }
-      if (vm.weshareSettings.pin_tuan.status == 1) {
+      if (vm.weshareSettings.pin_tuan && vm.weshareSettings.pin_tuan.status == 1) {
         vm.shipFee = vm.weshareSettings.pin_tuan.ship_fee;
         return 3;
       }
@@ -450,7 +450,7 @@
       vm.startNewGroupShare = false;
     }
 
-    function toShareDetailView($share_id){
+    function toShareDetailView($share_id) {
       window.location.href = '/weshares/view/' + $share_id;
     }
 
