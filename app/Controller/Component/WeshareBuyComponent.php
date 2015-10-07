@@ -723,7 +723,9 @@ class WeshareBuyComponent extends Component {
             if (!isset($address_data[$member_id]['join_users'])) {
                 $address_data[$member_id]['join_users'] = array();
             }
-            $address_data[$member_id]['join_users'][] = $creator;
+            if (!in_array($creator, $address_data[$member_id]['join_users'])) {
+                $address_data[$member_id]['join_users'][] = $creator;
+            }
         }
         return array('child_share_data' => $address_data, 'child_share_user_infos' => $user_infos);
     }
