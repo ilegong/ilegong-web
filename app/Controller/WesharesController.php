@@ -1471,7 +1471,7 @@ class WesharesController extends AppController {
         if ($shipType == SHARE_SHIP_GROUP) {
             //check is start share or order in offline address
             $orderData['ship_mark'] = SHARE_SHIP_GROUP_TAG;
-            return self::PROCESS_SHIP_MARK_UNFINISHED_RESULT_RESULT;
+            return self::PROCESS_SHIP_MARK_UNFINISHED_RESULT;
         }
     }
 
