@@ -219,18 +219,15 @@
     }
 
     function saveWeshare() {
-      if (vm.isInProcess) {
-        alert('正在保存....');
-        return;
-      }
-      vm.isInProcess = true;
       vm.weshare.addresses = _.filter(vm.weshare.addresses, function (address) {
         return !_.isEmpty(address.address);
       });
       if (vm.validateAddress()) {
-        vm.weshare.addresses = [
-          {address: ''}
-        ];
+        if(_.isEmpty(vm.weshare.addresses)){
+          vm.weshare.addresses = [
+            {address: '', deleted: 0}
+          ];
+        }
         return false;
       }
       vm.kuai_di_data.ship_fee = vm.kuai_di_data.ship_fee || 0;
@@ -243,6 +240,11 @@
       if (vm.validateSendInfo()) {
         return false;
       }
+      if (vm.isInProcess) {
+        alert('正在保存....');
+        return;
+      }
+      vm.isInProcess = true;
       vm.kuai_di_data.ship_fee = vm.kuai_di_data.ship_fee;
       vm.weshare.ship_type = [vm.self_ziti_data, vm.kuai_di_data, vm.pys_ziti_data, vm.pin_tuan_data];
       vm.weshare.proxy_rebate_percent = vm.proxy_rebate_percent;
@@ -359,6 +361,13 @@
 
     function validateAddress() {
       vm.addressError = vm.self_ziti_data.status == 1 && _.isEmpty(vm.weshare.addresses);
+      if (!vm.addressError) {
+        var tempAddressError = false;
+        _.each(vm.weshare.addresses, function (address) {
+          tempAddressError = tempAddressError || _.isEmpty(address.address);
+        });
+        vm.addressError = vm.addressError || tempAddressError;
+      }
       return vm.addressError;
     }
 
