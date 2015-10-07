@@ -351,7 +351,7 @@ class ShareUtilComponent extends Component {
     }
 
     //todo clone share product
-    private function cloneSharProductTag($new_share_id, $old_share_id){
+    private function cloneSharProductTag($new_share_id, $old_share_id) {
 
     }
 
@@ -742,6 +742,7 @@ class ShareUtilComponent extends Component {
      */
     public function check_is_start_new_group_share($order) {
         if ($order['Order']['relate_type'] == ORDER_TRIGGER_GROUP_SHARE_TYPE) {
+            $userId = $order['Order']['creator'];
             $order_id = $order['Order']['id'];
             $order_creator = $order['Order']['creator'];
             $order_member_id = $order['Order']['member_id'];
@@ -750,7 +751,11 @@ class ShareUtilComponent extends Component {
             $group_share_id = $group_share['id'];
             $orderM->updateAll(array('member_id' => $group_share_id), array('id' => $order_id));
             $this->set_group_share_available($group_share_id);
-            //todo save opt log
+            $now = date('Y-m-d H:i:s');
+            $shareImg = explode('|', $group_share['images']);
+            $title = $group_share['title'];
+            $optLogData = array('user_id' => $userId, 'obj_type' => OPT_LOG_START_GROUP_SHARE, 'obj_id' => $group_share_id, 'created' => $now, 'memo' => $title, 'thumbnail' => $shareImg[0]);
+            $this->saveOptLog($optLogData);
             return true;
         }
         return false;
@@ -761,7 +766,7 @@ class ShareUtilComponent extends Component {
      * @param $refer_share_id
      * @return mixed
      */
-    public function get_group_share($uid, $refer_share_id){
+    public function get_group_share($uid, $refer_share_id) {
         $WeshareM = ClassRegistry::init('Weshare');
         $weshare = $WeshareM->find('first', array(
             'conditions' => array(
@@ -787,7 +792,7 @@ class ShareUtilComponent extends Component {
         $order_summery_result = $WeshareM->query($query_order_summery_sql);
         $address_data = Hash::combine($address_result, '{n}.cake_weshare_addresses.weshare_id', '{n}.cake_weshare_addresses');
         $address_order_summery = Hash::combine($order_summery_result, '{n}.cake_orders.member_id', '{n}.0.count(id)');
-        foreach($address_data as $item_share_id=>&$address){
+        foreach ($address_data as $item_share_id => &$address) {
             $address['order_count'] = $address_order_summery[$item_share_id];
         }
         return $address_data;
