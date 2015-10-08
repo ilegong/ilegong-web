@@ -121,6 +121,10 @@
             <li><a href="#pys-ziti-orders" data-toggle="tab" data-order-type="pys_ziti">好邻居&nbsp;&nbsp;<font
                     color="red">{{count($orders[SHARE_SHIP_PYS_ZITI_TAG])}}</font></a></li>
             {{/if}}
+            {{if !empty($child_share_user_infos)}}
+            <li><a href="#group-share-orders" data-toggle="tab" data-order-type="pin_tuan">邻里拼团&nbsp;&nbsp;<font
+                    color="red">{{count($child_share_data)}}</font></a></li>
+            {{/if}}
         </ul>
         <!-- Tab panes -->
         <div class="tab-content">
@@ -145,6 +149,13 @@
                 <div class="panel-group" style="margin-bottom: 5px;">
                     <?php $current_orders=$orders[SHARE_SHIP_PYS_ZITI_TAG]; $current_tag = SHARE_SHIP_PYS_ZITI_TAG; ?>
                     {{template weshares/share_order_list_template}}
+                </div>
+            </div>
+            {{/if}}
+            {{if count($child_share_data) > 0}}
+            <div class="tab-pane fade" id="group-share-orders">
+                <div class="panel-group" style="margin-bottom: 5px;">
+                    {{template weshares/share_order_list_share_template}}
                 </div>
             </div>
             {{/if}}

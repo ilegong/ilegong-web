@@ -1,0 +1,20 @@
+{{loop $child_share_data $item_child_share}}
+<div class="col-xs-12 div-order-item" data-id="{{$item_child_share['weshare_id']}}">
+    <div class="offer offer-success">
+        <div class="shape">
+            <div class="shape-text">
+                邻里拼团
+            </div>
+        </div>
+        <div class="offer-content">
+            <div class="pull-right">
+                <span style="color:red;">{{$item_child_share['order_count']}}</span>&nbsp;人报名
+            </div>
+            <p>
+                <strong>发起人:</strong>&nbsp;&nbsp;{{$child_share_user_infos[$item_child_share['creator']]['nickname']}}<br>
+                <strong>拼团地址:</strong>&nbsp;&nbsp;{{$item_child_share['address']}}<br>
+            </p>
+        </div>
+    </div>
+</div>
+{{/loop}}

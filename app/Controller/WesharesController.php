@@ -696,6 +696,9 @@ class WesharesController extends AppController {
             $tag_order_summery = $this->ShareUtil->summery_order_data_by_tag($statics_data, $weshareId);
             $this->set('tag_order_summery', $tag_order_summery);
         }
+        $child_share_data = $this->WeshareBuy->get_child_share_items($weshareId);
+        //todo get child share buy data
+        $this->set($child_share_data);
         $this->set($statics_data);
         $this->set('tags', $share_tags['tags']);
         $this->set('product_tag_map', $share_tags['product_tag_map']);
