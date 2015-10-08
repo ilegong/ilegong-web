@@ -350,6 +350,23 @@ class WesharesController extends AppController {
     }
 
     /**
+     * 不支付直接开启新的分享
+     */
+    public function start_new_group_share() {
+        //不需要支付直接开团
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        $postStr = file_get_contents('php://input');
+        $postDataArray = json_decode($postStr, true);
+        $weshareId = $postDataArray['weshare_id'];
+        $address = $postDataArray['address'];
+        $business_remark = $postDataArray['business_remark'];
+        $result = $this->ShareUtil->cloneShare($weshareId, $uid, $address, $business_remark, GROUP_SHARE_TYPE);
+        echo json_encode($result);
+        return;
+    }
+
+    /**
      * 下单
      */
     public function makeOrder() {
@@ -408,7 +425,9 @@ class WesharesController extends AppController {
                 $item = array();
                 //check product is tbd to set order prepaid
                 $tbd = $p['WeshareProduct']['tbd'];
+                //商品价格待定
                 if ($tbd == 1) {
+                    //预付
                     $is_prepaid = 1;
                     $item['confirm_price'] = 0;
                 }
