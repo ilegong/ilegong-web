@@ -747,17 +747,20 @@ class ShareUtilComponent extends Component {
             $order_member_id = $order['Order']['member_id'];
             $orderM = ClassRegistry::init('Order');
             $group_share = $this->get_group_share($order_creator, $order_member_id);
-            $group_share_id = $group_share['id'];
-            $orderM->updateAll(array('member_id' => $group_share_id), array('id' => $order_id));
-            $this->set_group_share_available($group_share_id);
-            //save opt log
-            $now = date('Y-m-d H:i:s');
-            $shareImg = explode('|', $group_share['images']);
-            $title = $group_share['title'];
-            $optLogData = array('user_id' => $order_creator, 'obj_type' => OPT_LOG_START_GROUP_SHARE, 'obj_id' => $group_share_id, 'created' => $now, 'memo' => $title, 'thumbnail' => $shareImg[0]);
-            $this->saveOptLog($optLogData);
-            //todo send template msg
-            return true;
+            //重复执行之后可能出现问题，订单的member_id已经修改
+            if(!empty($group_share)){
+                $group_share_id = $group_share['id'];
+                $orderM->updateAll(array('member_id' => $group_share_id), array('id' => $order_id));
+                $this->set_group_share_available($group_share_id);
+                //save opt log
+                $now = date('Y-m-d H:i:s');
+                $shareImg = explode('|', $group_share['images']);
+                $title = $group_share['title'];
+                $optLogData = array('user_id' => $order_creator, 'obj_type' => OPT_LOG_START_GROUP_SHARE, 'obj_id' => $group_share_id, 'created' => $now, 'memo' => $title, 'thumbnail' => $shareImg[0]);
+                $this->saveOptLog($optLogData);
+                //todo send template msg
+                return true;
+            }
         }
         return false;
     }

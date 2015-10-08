@@ -479,8 +479,10 @@ class WeixinComponent extends Component {
         //check should clear child share cache
         if ($is_pin_tuan) {
             $refer_share_id = $this->ShareUtil->get_share_refer_id($share_id);
-            Cache::write(SHARE_OFFLINE_ADDRESS_SUMMERY_DATA_CACHE_KEY . '_' . $refer_share_id, '');
-            Cache::write(SHARE_OFFLINE_ADDRESS_BUY_DATA_CACHE_KEY . '_' . $refer_share_id, '');
+            if ($refer_share_id != $share_id) {
+                Cache::write(SHARE_OFFLINE_ADDRESS_SUMMERY_DATA_CACHE_KEY . '_' . $refer_share_id, '');
+                Cache::write(SHARE_OFFLINE_ADDRESS_BUY_DATA_CACHE_KEY . '_' . $refer_share_id, '');
+            }
         }
     }
 
