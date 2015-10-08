@@ -681,6 +681,7 @@ class WeshareBuyComponent extends Component {
      * 获取组团分享的信息
      */
     public function get_child_share_items($share_id) {
+        //cache it
         $OrderM = ClassRegistry::init('Order');
         $UserM = ClassRegistry::init('User');
         $WeshareM = ClassRegistry::init('Weshare');
