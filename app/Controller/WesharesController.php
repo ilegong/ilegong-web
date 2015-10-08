@@ -356,12 +356,16 @@ class WesharesController extends AppController {
         //不需要支付直接开团
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
+        if (empty($uid)) {
+            echo json_encode(array('success' => false, 'reason' => 'not_login'));
+            return;
+        }
         $postStr = file_get_contents('php://input');
         $postDataArray = json_decode($postStr, true);
         $weshareId = $postDataArray['weshare_id'];
         $address = $postDataArray['address'];
         $business_remark = $postDataArray['business_remark'];
-        $result = $this->ShareUtil->cloneShare($weshareId, $uid, $address, $business_remark, GROUP_SHARE_TYPE);
+        $result = $this->ShareUtil->cloneShare($weshareId, $uid, $address, $business_remark, GROUP_SHARE_TYPE, WESHARE_NORMAL_STATUS);
         echo json_encode($result);
         return;
     }

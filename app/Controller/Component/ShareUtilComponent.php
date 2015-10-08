@@ -280,10 +280,11 @@ class ShareUtilComponent extends Component {
      * @param $address
      * @param $address_remarks
      * @param $type
+     * @param $share_status
      * @return array
-     * clone一份， 指定用户ID， 指定的地址， 类型
+     * clone一份， 指定用户ID， 指定的地址， 类型， 状态
      */
-    public function cloneShare($shareId, $uid = null, $address = null, $address_remarks = null, $type = DEFAULT_SHARE_TYPE) {
+    public function cloneShare($shareId, $uid = null, $address = null, $address_remarks = null, $type = DEFAULT_SHARE_TYPE, $share_status = WESHARE_DELETE_STATUS) {
         $WeshareM = ClassRegistry::init('Weshare');
         $shareInfo = $WeshareM->find('first', array(
             'conditions' => array(
@@ -298,7 +299,7 @@ class ShareUtilComponent extends Component {
             $origin_sharer_nickname = $this->WeshareBuy->get_user_nickname($shareInfo['creator']);
             $shareInfo['title'] = '大家一起拼团' . $origin_sharer_nickname . '分享的' . $shareInfo['title'];
             //default share status is not available
-            $shareInfo['status'] = WESHARE_DELETE_STATUS;
+            $shareInfo['status'] = $share_status;
         }
         //set refer share id
         $shareInfo['refer_share_id'] = $shareId;

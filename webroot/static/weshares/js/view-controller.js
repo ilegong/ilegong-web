@@ -186,6 +186,7 @@
     vm.offlineAddressData = null;
     vm.loadOfflineAddressData = loadOfflineAddressData;
     vm.setShipFee = setShipFee;
+    vm.newGroupShare = newGroupShare;
     vm.childShareDetail = null;
     vm.currentUserOrderCount = 0;
     function pageLoaded() {
@@ -710,9 +711,11 @@
         ship_fee: vm.shipFee,
         ship_set_id: vm.shipSetId
       };
+      //self ziti
       if (vm.selectShipType == 1) {
         ship_info['address_id'] = vm.weshare.selectedAddressId;
       }
+      //offline store
       if (vm.selectShipType == 2) {
         ship_info['address_id'] = vm.checkedOfflineStore.id;
       }
@@ -763,6 +766,27 @@
         }
       }).error(function () {
         vm.submitProcessing = false;
+      });
+    }
+
+    //发起拼团
+    function newGroupShare() {
+      //valid address
+      if (vm.validateUserAddress()) {
+        return false;
+      }
+      var cloneShareData = {
+        weshare_id: vm.weshare.id,
+        address: vm.buyerAddress,
+        business_remark: vm.buyerRemark
+      };
+      $http.post('/weshares/start_new_group_share', cloneShareData).success(function (data) {
+        if (data.success) {
+          window.location.href = '/weshares/view/' + data.shareId;
+        } else {
+          alert('提交失败.请联系客服..');
+        }
+      }).error(function () {
       });
     }
 

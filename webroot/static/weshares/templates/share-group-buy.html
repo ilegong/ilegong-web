@@ -10,7 +10,7 @@
             <li>
                 <div style="display: -webkit-inline-box">
                     <label ng-click="vm.toUserShareInfo(vm.weshare.creator.id)" ng-bind="::vm.weshare.creator.nickname"></label>
-                    <a style="margin-left: 5px;margin-top: 3px;width: 50px;line-height: 20px;background-color: #F2651A;" class="statistics-btn">邻里拼</a>
+                    <a style="margin-left: 5px;margin-top: 3px;width: 50px;line-height: 20px;background-color: #F2651A;" class="statistics-btn">邻里拼团</a>
                 </div>
                 <s><b style="color: #ffa200" ng-bind="::vm.userShareSummery.share_count">0</b>&nbsp; <small>分享</small>&nbsp;&nbsp;&nbsp;<b style="color: #ffa200" ng-bind="::vm.userShareSummery.follower_count">0</b>&nbsp;<small>粉丝</small></s>
                 <s>已有<span style="color: #ffa200" ng-bind="::vm.ordersDetail.summery.all_buy_user_count"></span>人报名</s>
@@ -46,7 +46,7 @@
             <div style="text-align: center" ng-if="vm.shipFee>0">(快递费用<span ng-bind="vm.shipFee/100" style="color: #ffa200;"></span>元)</div>
         </div>
     </div>
-    <div style="background-color: #ffffff;padding-top: 1px;padding-bottom: 40px;">
+    <div style="background-color: #ffffff;padding-top: 5px;padding-bottom: 40px;">
         <div class="clearfix" style="padding: 0 10px;">
             <div class="form-group" ng-class="{'has-error': vm.userAddressHasError}">
                 <input class='form-control' placeholder="地址，会作为参团邻居们的自提" ng-model='vm.buyerAddress' ng-change='vm.validateUserAddress()'/>
@@ -70,6 +70,7 @@
                 <textarea class="form-control" placeholder="备注" ng-model="vm.buyerRemark"></textarea>
             </div>
         </div>
+        <a style="margin-top: 5px;width: 60%;margin-left: 20%;" class="ui-common-btn" ng-click="vm.newGroupShare()">不支付? 开新团</a>
     </div>
 
     <footer class="channel_bottom">
