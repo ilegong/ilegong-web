@@ -197,6 +197,8 @@ const OPT_LOG_COMBINE_DATA_CACHE_KEY = 'opt_log_combine_data_cache_key';
 const SHARER_MOBILE_PHONE_CACHE_KEY = 'sharer_mobile_phone_cache_key';
 const SIMPLE_SHARE_INFO_CACHE_KEY = 'simple_share_info_cache_key';
 const SHARER_TAGS_DATA_CACHE_KEY = 'sharer_tags_data_cache_key';
+const SHARE_OFFLINE_ADDRESS_SUMMERY_DATA_CACHE_KEY = 'share_offline_address_summery_data_cache_key'; //分享线下自提点 购买汇总数据缓存
+const SHARE_OFFLINE_ADDRESS_BUY_DATA_CACHE_KEY = 'share_offline_address_buy_data_cache_key';//分享线下自提点 购买信息
 
 //Product 表里设置是这个产品，不论多少都是同一邮费
 const TYPE_ORDER_PRICE = 1; //订单总价满多少包邮

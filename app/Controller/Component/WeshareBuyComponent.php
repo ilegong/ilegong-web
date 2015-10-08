@@ -681,54 +681,61 @@ class WeshareBuyComponent extends Component {
      * 获取组团分享的信息
      */
     public function get_child_share_items($share_id) {
-        //cache it
-        $OrderM = ClassRegistry::init('Order');
-        $UserM = ClassRegistry::init('User');
-        $WeshareM = ClassRegistry::init('Weshare');
-        $address_data = $this->ShareUtil->get_share_offline_address_detail($share_id);
-        $share_ids = array();
-        foreach ($address_data as $item_key => $item_address_data) {
-            $share_ids[] = $item_key;
-        }
-        $share_infos = $WeshareM->find('all', array(
-            'conditions' => array(
-                'id' => $share_ids
-            ),
-            'fields' => array('id', 'creator')
-        ));
-        $share_infos = Hash::combine($share_infos, '{n}.Weshare.id', '{n}.Weshare.creator');
-        foreach ($address_data as $item_key => &$item_address_data) {
-            $item_share_creator = $share_infos[$item_key];
-            $item_address_data['creator'] = $item_share_creator;
-        }
-        $group_share_order = $OrderM->find('all', array(
-            'conditions' => array(
-                'type' => ORDER_TYPE_WESHARE_BUY,
-                'member_id' => $share_ids,
-                'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY)
-            ),
-            'fields' => array('id', 'creator', 'member_id')
-        ));
-        $user_ids = Hash::extract($group_share_order, '{n}.Order.creator');
-        $user_ids = array_unique($user_ids);
-        $user_infos = $UserM->find('all', array(
-            'conditions' => array(
-                'id' => $user_ids
-            ),
-            'fields' => array('id', 'nickname', 'image', 'is_proxy')
-        ));
-        $user_infos = Hash::combine($user_infos, '{n}.User.id', '{n}.User');
-        foreach ($group_share_order as $order_item) {
-            $member_id = $order_item['Order']['member_id'];
-            $creator = $order_item['Order']['creator'];
-            if (!isset($address_data[$member_id]['join_users'])) {
-                $address_data[$member_id]['join_users'] = array();
+        $cache_key = SHARE_OFFLINE_ADDRESS_BUY_DATA_CACHE_KEY . '_' . $share_id;
+        $child_share_data_json = Cache::read($cache_key);
+        if (empty($child_share_data_json)) {
+            $OrderM = ClassRegistry::init('Order');
+            $UserM = ClassRegistry::init('User');
+            $WeshareM = ClassRegistry::init('Weshare');
+            $address_data = $this->ShareUtil->get_share_offline_address_detail($share_id);
+            $share_ids = array();
+            foreach ($address_data as $item_key => $item_address_data) {
+                $share_ids[] = $item_key;
             }
-            if (!in_array($creator, $address_data[$member_id]['join_users'])) {
-                $address_data[$member_id]['join_users'][] = $creator;
+            $share_infos = $WeshareM->find('all', array(
+                'conditions' => array(
+                    'id' => $share_ids
+                ),
+                'fields' => array('id', 'creator')
+            ));
+            $share_infos = Hash::combine($share_infos, '{n}.Weshare.id', '{n}.Weshare.creator');
+            foreach ($address_data as $item_key => &$item_address_data) {
+                $item_share_creator = $share_infos[$item_key];
+                $item_address_data['creator'] = $item_share_creator;
             }
+            $group_share_order = $OrderM->find('all', array(
+                'conditions' => array(
+                    'type' => ORDER_TYPE_WESHARE_BUY,
+                    'member_id' => $share_ids,
+                    'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY)
+                ),
+                'fields' => array('id', 'creator', 'member_id')
+            ));
+            $user_ids = Hash::extract($group_share_order, '{n}.Order.creator');
+            $user_ids = array_unique($user_ids);
+            $user_infos = $UserM->find('all', array(
+                'conditions' => array(
+                    'id' => $user_ids
+                ),
+                'fields' => array('id', 'nickname', 'image', 'is_proxy')
+            ));
+            $user_infos = Hash::combine($user_infos, '{n}.User.id', '{n}.User');
+            foreach ($group_share_order as $order_item) {
+                $member_id = $order_item['Order']['member_id'];
+                $creator = $order_item['Order']['creator'];
+                if (!isset($address_data[$member_id]['join_users'])) {
+                    $address_data[$member_id]['join_users'] = array();
+                }
+                if (!in_array($creator, $address_data[$member_id]['join_users'])) {
+                    $address_data[$member_id]['join_users'][] = $creator;
+                }
+            }
+            $child_share_data = array('child_share_data' => $address_data, 'child_share_user_infos' => $user_infos);
+            $child_share_data_json = json_encode($child_share_data);
+            Cache::write($cache_key, $child_share_data_json);
+            return $child_share_data;
         }
-        return array('child_share_data' => $address_data, 'child_share_user_infos' => $user_infos);
+        return json_decode($child_share_data_json, true);
     }
 
     /**

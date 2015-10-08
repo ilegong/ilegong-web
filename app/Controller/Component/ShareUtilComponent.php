@@ -785,18 +785,24 @@ class ShareUtilComponent extends Component {
      * get share offline address detail
      */
     public function get_share_offline_address_detail($share_id) {
-        //todo cache it
-        $WeshareM = ClassRegistry::init('Weshare');
-        $query_address_sql = 'select * from cake_weshare_addresses where weshare_id in (select id from cake_weshares where refer_share_id=' . $share_id . ' and status=' . WESHARE_NORMAL_STATUS . ' and type=' . GROUP_SHARE_TYPE . ')';
-        $address_result = $WeshareM->query($query_address_sql);
-        $query_order_summery_sql = 'select count(id),member_id from cake_orders where type=' . ORDER_TYPE_WESHARE_BUY . ' and status !=' . ORDER_STATUS_WAITING_PAY . ' and member_id in (select id from cake_weshares where refer_share_id=' . $share_id . ' and status=' . WESHARE_NORMAL_STATUS . ' and type=' . GROUP_SHARE_TYPE . ') group by member_id';
-        $order_summery_result = $WeshareM->query($query_order_summery_sql);
-        $address_data = Hash::combine($address_result, '{n}.cake_weshare_addresses.weshare_id', '{n}.cake_weshare_addresses');
-        $address_order_summery = Hash::combine($order_summery_result, '{n}.cake_orders.member_id', '{n}.0.count(id)');
-        foreach ($address_data as $item_share_id => &$address) {
-            $address['order_count'] = $address_order_summery[$item_share_id];
+        $cache_key = SHARE_OFFLINE_ADDRESS_SUMMERY_DATA_CACHE_KEY.'_'.$share_id;
+        $json_address_data = Cache::read($cache_key);
+        if(empty($json_address_data)){
+            $WeshareM = ClassRegistry::init('Weshare');
+            $query_address_sql = 'select * from cake_weshare_addresses where weshare_id in (select id from cake_weshares where refer_share_id=' . $share_id . ' and status=' . WESHARE_NORMAL_STATUS . ' and type=' . GROUP_SHARE_TYPE . ')';
+            $address_result = $WeshareM->query($query_address_sql);
+            $query_order_summery_sql = 'select count(id),member_id from cake_orders where type=' . ORDER_TYPE_WESHARE_BUY . ' and status !=' . ORDER_STATUS_WAITING_PAY . ' and member_id in (select id from cake_weshares where refer_share_id=' . $share_id . ' and status=' . WESHARE_NORMAL_STATUS . ' and type=' . GROUP_SHARE_TYPE . ') group by member_id';
+            $order_summery_result = $WeshareM->query($query_order_summery_sql);
+            $address_data = Hash::combine($address_result, '{n}.cake_weshare_addresses.weshare_id', '{n}.cake_weshare_addresses');
+            $address_order_summery = Hash::combine($order_summery_result, '{n}.cake_orders.member_id', '{n}.0.count(id)');
+            foreach ($address_data as $item_share_id => &$address) {
+                $address['order_count'] = $address_order_summery[$item_share_id];
+            }
+            $json_address_data = json_encode($address_data);
+            Cache::write($cache_key,$json_address_data);
+            return $address_data;
         }
-        return $address_data;
+        return json_decode($json_address_data, true);
     }
 
 
