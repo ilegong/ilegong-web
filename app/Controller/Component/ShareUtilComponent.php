@@ -742,7 +742,6 @@ class ShareUtilComponent extends Component {
      */
     public function check_is_start_new_group_share($order) {
         if ($order['Order']['relate_type'] == ORDER_TRIGGER_GROUP_SHARE_TYPE) {
-            $userId = $order['Order']['creator'];
             $order_id = $order['Order']['id'];
             $order_creator = $order['Order']['creator'];
             $order_member_id = $order['Order']['member_id'];
@@ -755,7 +754,7 @@ class ShareUtilComponent extends Component {
             $now = date('Y-m-d H:i:s');
             $shareImg = explode('|', $group_share['images']);
             $title = $group_share['title'];
-            $optLogData = array('user_id' => $userId, 'obj_type' => OPT_LOG_START_GROUP_SHARE, 'obj_id' => $group_share_id, 'created' => $now, 'memo' => $title, 'thumbnail' => $shareImg[0]);
+            $optLogData = array('user_id' => $order_creator, 'obj_type' => OPT_LOG_START_GROUP_SHARE, 'obj_id' => $group_share_id, 'created' => $now, 'memo' => $title, 'thumbnail' => $shareImg[0]);
             $this->saveOptLog($optLogData);
             //todo send template msg
             return true;
