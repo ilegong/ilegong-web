@@ -751,11 +751,13 @@ class ShareUtilComponent extends Component {
             $group_share_id = $group_share['id'];
             $orderM->updateAll(array('member_id' => $group_share_id), array('id' => $order_id));
             $this->set_group_share_available($group_share_id);
+            //save opt log
             $now = date('Y-m-d H:i:s');
             $shareImg = explode('|', $group_share['images']);
             $title = $group_share['title'];
             $optLogData = array('user_id' => $userId, 'obj_type' => OPT_LOG_START_GROUP_SHARE, 'obj_id' => $group_share_id, 'created' => $now, 'memo' => $title, 'thumbnail' => $shareImg[0]);
             $this->saveOptLog($optLogData);
+            //todo send template msg
             return true;
         }
         return false;
