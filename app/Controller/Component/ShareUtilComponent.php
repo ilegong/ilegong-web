@@ -1183,7 +1183,7 @@ class ShareUtilComponent extends Component {
         if (!empty($weshare)) {
             $share_creator = $weshare['Weshare']['creator'];
             $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
-            $rebate_log = array('sharer' => $share_creator, 'share_id' => $share_id, 'clicker' => $order_creator, 'order_id' => $order_id, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'rebate_money' => SHARE_GROUP_REBATE_MONEY, 'is_paid' => 1);
+            $rebate_log = array('sharer' => $share_creator, 'share_id' => $share_id, 'clicker' => $order_creator, 'order_id' => $order_id, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'rebate_money' => SHARE_GROUP_REBATE_MONEY, 'is_paid' => 1, 'type' => GROUP_SHARE_BUY_REBATE_TYPE);
             $rebateTrackLogM->save($rebate_log);
         }
     }

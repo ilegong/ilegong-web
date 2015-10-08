@@ -582,11 +582,9 @@ class WesharesController extends AppController {
             $this->set('is_proxy', true);
         }
         if ($uid == $current_uid) {
-            if ($user_is_proxy) {
-                $this->set('show_rebate_money', true);
-                $rebate_money = $this->ShareUtil->get_rebate_money($current_uid);
-                $this->set('rebate_money', $rebate_money);
-            }
+            $rebate_money = $this->ShareUtil->get_rebate_money($current_uid);
+            $this->set('rebate_money', $rebate_money);
+            $this->set('show_rebate_money', $rebate_money > 0);
         }
         $this->set($userShareSummery);
         $this->set('is_me', $uid == $current_uid);
