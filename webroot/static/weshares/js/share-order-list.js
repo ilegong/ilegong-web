@@ -5,6 +5,12 @@ $(document).ready(function () {
   var $summeryProductItems = $('tr.summery-product-item');
   var $orderDataSummeryItems = $('tr.order-data-summery');
   var $zitiPanel = $('#self-ziti-orders');
+  $('div.div-share-item').on('click',function(e){
+    e.preventDefault();
+    var $me = $(this);
+    var child_share_id = $me.data('id');
+    window.location.href='/weshares/view/'+child_share_id;
+  });
   $tagLi.on('click', function(e){
     var $me = $(this);
     var tagId = $me.data('id');
