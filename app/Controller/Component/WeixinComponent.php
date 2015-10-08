@@ -467,15 +467,21 @@ class WeixinComponent extends Component {
             //check order is prepaid
             //$this->ShareUtil->check_order_is_prepaid_and_update_status($order);
             //clean cache share
-            $this->clear_share_cache($order['Order']['member_id']);
+            $this->clear_share_cache($order['Order']['member_id'], $order['Order']['ship_mark'] == SHARE_SHIP_GROUP_TAG);
             return;
         }
         $this->on_order_status_change($order);
     }
 
-    private function clear_share_cache($share_id){
+    private function clear_share_cache($share_id, $is_pin_tuan = false) {
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_1', '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_0', '');
+        //check should clear child share cache
+        if ($is_pin_tuan) {
+            $refer_share_id = $this->ShareUtil->get_share_refer_id($share_id);
+            Cache::write(SHARE_OFFLINE_ADDRESS_SUMMERY_DATA_CACHE_KEY . '_' . $refer_share_id, '');
+            Cache::write(SHARE_OFFLINE_ADDRESS_BUY_DATA_CACHE_KEY . '_' . $refer_share_id, '');
+        }
     }
 
     /**
