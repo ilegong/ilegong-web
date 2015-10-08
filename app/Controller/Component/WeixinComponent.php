@@ -455,8 +455,7 @@ class WeixinComponent extends Component {
         if ($order['Order']['type'] == ORDER_TYPE_WESHARE_BUY_ADD) {
             $this->ShareUtil->process_paid_order_add($order);
             //clean cache share
-            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $order['Order']['member_id'] . '_1', '');
-            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $order['Order']['member_id'] . '_0', '');
+            $this->clear_share_cache($order['Order']['member_id']);
             return;
         }
         if ($order['Order']['type'] == ORDER_TYPE_WESHARE_BUY) {
@@ -468,11 +467,15 @@ class WeixinComponent extends Component {
             //check order is prepaid
             //$this->ShareUtil->check_order_is_prepaid_and_update_status($order);
             //clean cache share
-            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $order['Order']['member_id'] . '_1', '');
-            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $order['Order']['member_id'] . '_0', '');
+            $this->clear_share_cache($order['Order']['member_id']);
             return;
         }
         $this->on_order_status_change($order);
+    }
+
+    private function clear_share_cache($share_id){
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_0', '');
     }
 
     /**

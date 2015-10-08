@@ -757,9 +757,15 @@ class ShareUtilComponent extends Component {
             $optLogData = array('user_id' => $order_creator, 'obj_type' => OPT_LOG_START_GROUP_SHARE, 'obj_id' => $group_share_id, 'created' => $now, 'memo' => $title, 'thumbnail' => $shareImg[0]);
             $this->saveOptLog($optLogData);
             //todo send template msg
+            $this->clear_child_share_cache_data($order_member_id);
             return true;
         }
         return false;
+    }
+
+    private function clear_child_share_cache_data($share_id) {
+        Cache::write(SHARE_OFFLINE_ADDRESS_SUMMERY_DATA_CACHE_KEY . '_' . $share_id, '');
+        Cache::write(SHARE_OFFLINE_ADDRESS_BUY_DATA_CACHE_KEY . '_' . $share_id, '');
     }
 
     /**
