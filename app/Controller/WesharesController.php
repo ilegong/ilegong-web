@@ -518,8 +518,8 @@ class WesharesController extends AppController {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
         $this->Weshare->updateAll(array('status' => WESHARE_STOP_STATUS), array('id' => $weShareId, 'creator' => $uid, 'status' => WESHARE_NORMAL_STATUS));
-        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $shareId . '_0', '');
-        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $shareId . '_1', '');
+        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weShareId . '_0', '');
+        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weShareId . '_1', '');
         echo json_encode(array('success' => true));
         return;
     }
