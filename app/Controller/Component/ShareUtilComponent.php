@@ -759,10 +759,10 @@ class ShareUtilComponent extends Component {
                 $optLogData = array('user_id' => $order_creator, 'obj_type' => OPT_LOG_START_GROUP_SHARE, 'obj_id' => $group_share_id, 'created' => $now, 'memo' => $title, 'thumbnail' => $shareImg[0]);
                 $this->saveOptLog($optLogData);
                 //todo send template msg
-                return true;
+                return $group_share_id;
             }
         }
-        return false;
+        return $order['Order']['member_id'];
     }
 
     /**
@@ -1164,6 +1164,28 @@ class ShareUtilComponent extends Component {
             }
         }
         return $result;
+    }
+
+    /**
+     * @param $share_id
+     * @param $order_creator
+     * @param $order_id
+     * 把每单5元的自提费用添加的线下自提点用户余额里面
+     */
+    public function add_money_for_offline_address($share_id, $order_creator, $order_id) {
+        $WeshareM = ClassRegistry::init('Weshare');
+        $weshare = $WeshareM->find('first', array(
+            'conditions' => array(
+                'id' => $share_id,
+                'type' => GROUP_SHARE_TYPE
+            )
+        ));
+        if (!empty($weshare)) {
+            $share_creator = $weshare['Weshare']['creator'];
+            $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
+            $rebate_log = array('sharer' => $share_creator, 'share_id' => $share_id, 'clicker' => $order_creator, 'order_id' => $order_id, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'rebate_money' => SHARE_GROUP_REBATE_MONEY, 'is_paid' => 1);
+            $rebateTrackLogM->save($rebate_log);
+        }
     }
 
     /**

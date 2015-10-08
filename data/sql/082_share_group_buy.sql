@@ -10,3 +10,7 @@ ADD COLUMN `refer_share_id` INT NOT NULL DEFAULT 0 AFTER `type`;
 
 ALTER TABLE `cake_orders`
 ADD COLUMN `relate_type` INT(2) NOT NULL DEFAULT 0 AFTER `process_prepaid_status`;
+
+ALTER TABLE `cake_rebate_track_logs`
+ADD COLUMN `type` INT NOT NULL DEFAULT 0 AFTER `updated`;
+
