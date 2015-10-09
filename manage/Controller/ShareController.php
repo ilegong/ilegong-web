@@ -125,6 +125,7 @@ class ShareController extends AppController{
         $this->redirect(array('action' => 'admin_share_for_pay'));
     }
 
+
     public function admin_share_for_pay(){
         $weshares = $this->Weshare->find('all', array(
             'conditions' => array(
