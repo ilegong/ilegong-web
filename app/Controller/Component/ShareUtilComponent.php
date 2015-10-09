@@ -1303,7 +1303,7 @@ class ShareUtilComponent extends Component {
                 '674' => array(
                     'share_id' => 674,
                     'share_name' => '新疆阿克苏新温185核桃',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/9d4e03eb013_1009.jpg',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/71dfdf1dca7_1009.jpg',
                     'share_price' => '108',
                     'share_user_name' => '李樱花',
                     'share_vote' => 95,
