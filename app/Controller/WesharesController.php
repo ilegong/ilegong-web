@@ -366,6 +366,10 @@ class WesharesController extends AppController {
         $address = $postDataArray['address'];
         $business_remark = $postDataArray['business_remark'];
         $result = $this->ShareUtil->cloneShare($weshareId, $uid, $address, $business_remark, GROUP_SHARE_TYPE, WESHARE_NORMAL_STATUS);
+        //send template msg
+        if ($result['success']) {
+            $this->ShareUtil->trigger_send_new_share_msg($result['shareId'], $uid);
+        }
         echo json_encode($result);
         return;
     }
@@ -745,7 +749,6 @@ class WesharesController extends AppController {
             $this->set('tag_order_summery', $tag_order_summery);
         }
         $child_share_data = $this->WeshareBuy->get_child_share_items($weshareId);
-        //todo get child share buy data
         $this->set($child_share_data);
         $this->set($statics_data);
         $this->set('tags', $share_tags['tags']);

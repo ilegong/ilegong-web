@@ -8,6 +8,24 @@ class ShareUtilComponent extends Component {
 
     public $components = array('Weixin', 'WeshareBuy');
 
+    /**
+     * @param $weshare_id
+     * @param $uid
+     * 触发建团消息
+     */
+    public function trigger_send_new_share_msg($weshare_id, $uid){
+        $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($uid);
+        $pageCount = $fansPageInfo['pageCount'];
+        $pageSize = $fansPageInfo['pageSize'];
+        $queue = new SaeTaskQueue('share');
+        $queue->addTask("/weshares/process_send_new_share_msg/" . $weshare_id . '/' . $pageCount . '/' . $pageSize);
+        //将任务推入队列
+        $ret = $queue->push();
+        //任务添加失败时输出错误码和错误信息
+        if ($ret === false) {
+            $this->log('add task queue error ' . json_encode(array($queue->errno(), $queue->errmsg())));
+        }
+    }
 
     public function process_weshare_task($weshareId, $sharer_id) {
         $userRelationM = ClassRegistry::init('UserRelation');
@@ -783,7 +801,7 @@ class ShareUtilComponent extends Component {
             $orderM = ClassRegistry::init('Order');
             $group_share = $this->get_group_share($order_creator, $order_member_id);
             //重复执行之后可能出现问题，订单的member_id已经修改
-            if(!empty($group_share)){
+            if (!empty($group_share)) {
                 $group_share_id = $group_share['id'];
                 $orderM->updateAll(array('member_id' => $group_share_id), array('id' => $order_id));
                 $this->set_group_share_available($group_share_id);
@@ -793,7 +811,8 @@ class ShareUtilComponent extends Component {
                 $title = $group_share['title'];
                 $optLogData = array('user_id' => $order_creator, 'obj_type' => OPT_LOG_START_GROUP_SHARE, 'obj_id' => $group_share_id, 'created' => $now, 'memo' => $title, 'thumbnail' => $shareImg[0]);
                 $this->saveOptLog($optLogData);
-                //todo send template msg
+                //send msg
+                $this->ShareUtil->trigger_send_new_share_msg($group_share_id, $order_creator);
                 return $group_share_id;
             }
         }
