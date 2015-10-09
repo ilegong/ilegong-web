@@ -14,6 +14,14 @@
                 <strong>发起人:</strong>&nbsp;&nbsp;{{$child_share_user_infos[$item_child_share['creator']]['nickname']}}<br>
                 <strong>拼团地址:</strong>&nbsp;&nbsp;{{$item_child_share['address']}}<br>
             </p>
+            <button class="btn btn-success btn-xs pull-right refund-share-money"
+                    data-share-id="{{$item_child_share['weshare_id']}}" id="refund-share-btn-{{$item_child_share['weshare_id']}}"
+                    style="margin-bottom: 5px; margin-left: 5px;" data-address="{{$item_child_share['address']}}">退款
+            </button>
+            <button class="btn btn-success btn-xs pull-right set-shipped-share"
+                    data-share-id="{{$item_child_share['weshare_id']}}" id="set-share-shipped-btn-{{$item_child_share['weshare_id']}}"
+                    style="margin-bottom: 5px; margin-left: 5px;">发货
+            </button>
         </div>
     </div>
 </div>

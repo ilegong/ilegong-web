@@ -18,7 +18,6 @@ $(document).ready(function () {
     $tagLi.removeClass('active');
     $me.addClass('active');
   });
-
   function handleTagChange(tag) {
     if (tag == 'all') {
       $divOrderItems.show();
@@ -34,7 +33,6 @@ $(document).ready(function () {
       $('tr[name="order-data-summery-' + tag + '"]').show();
     }
   }
-
   var orderType = '';
   var $selfZitiOrder = $('#self-ziti-orders');
   $('select[name="ship_company_code"]').on('change', function () {
@@ -252,6 +250,40 @@ $(document).ready(function () {
         $confirmMoneyDialog.modal('hide');
       } else {
         alert('保存失败,请联系客服');
+      }
+    }, 'json');
+  });
+
+  var $refundShareDialog = $('#refund-share-dialog');
+  var $refundShareOfflineAddress = $('#refund-share-address', $refundShareDialog);
+  var $refundShareId = $('#refund-share-id', $refundShareDialog);
+  var $refundShareRemark = $('#refund-share-msg', $refundShareDialog);
+
+  $('button.refund-share-money').on('click', function(){
+    var $me = $(this);
+    var address = $me.data('address');
+    var shareId = $me.data('id');
+    $refundShareOfflineAddress.val(address);
+    $refundShareId.val(shareId);
+    $refundShareRemark.val('');
+    $refundMoneyDialog.modal('show');
+  });
+
+  $('button[name="handle-refund-share-money"]').on('click', function(e){
+    e.preventDefault();
+    var refundMark = $refundShareRemark.val();
+    var shareId = $refundShareId.val();
+    if (!refundMark) {
+      alert('请输入退款原因');
+      return false;
+    }
+    var postData = {
+      refundMark: refundMark
+    };
+    $.post('/weshares/refund_share/'+shareId+'.json', postData, function (data) {
+      if (data['success']) {
+        //todo mark
+        $('#refund-share-btn-'+shareId).remove();
       }
     }, 'json');
   });

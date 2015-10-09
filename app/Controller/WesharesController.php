@@ -1528,6 +1528,26 @@ class WesharesController extends AppController {
     }
 
     /**
+     * @param $shareId
+     * 给子分享退款
+     */
+    public function refund_share($shareId) {
+        $this->autoRender = false;
+        $queue = new SaeTaskQueue('tasks');
+        $tasks = array();
+        $remark = $_REQUEST['remark'];
+        $tasks[] = array('url' => "/task/batch_refund_money/" . $shareId . ".json", "postdata" => "remark=" . $remark);
+        $queue->addTask($tasks);
+        $ret = $queue->push();
+        echo json_encode(array('success' => true, 'ret' => $ret));
+        return;
+    }
+
+    public function shipped_share($shareId){
+        
+    }
+
+    /**
      * @param $uid
      * @param $current_uid
      * @param $shareUser

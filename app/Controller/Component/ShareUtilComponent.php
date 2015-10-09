@@ -1,16 +1,13 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: shichaopeng
- * Date: 8/20/15
- * Time: 15:04
- */
 class ShareUtilComponent extends Component {
 
     var $name = 'ShareUtil';
 
+    var $normal_order_status = array(ORDER_STATUS_DONE, ORDER_STATUS_PAID, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY);
+
     public $components = array('Weixin', 'WeshareBuy');
+
 
     public function process_weshare_task($weshareId, $sharer_id) {
         $userRelationM = ClassRegistry::init('UserRelation');
@@ -606,6 +603,39 @@ class ShareUtilComponent extends Component {
         $optLogM->save($data);
         Cache::write(LAST_OPT_LOG_DATA_CACHE_KEY, '');
     }
+
+    /**
+     * @param $shareId
+     * @return mixed
+     * 根据分享获取订单
+     */
+    public function get_share_orders($shareId){
+        $orderM = ClassRegistry::init('Order');
+        $share_orders = $orderM->find('all', array(
+            'conditions' => array(
+                'member_id' => $shareId,
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'status' => $this->normal_order_status
+            ),
+            'fields' => array('id', 'creator', 'total_all_price', 'status')
+        ));
+        return $share_orders;
+    }
+
+    /**
+     * @param $shareId
+     * @param $refundMark
+     * 批量处理订单退款
+     */
+    public function batch_refund_order($shareId, $refundMark) {
+        $orders = $this->get_share_orders($shareId);
+        foreach ($orders as $order_item) {
+            $refundMoney = $order_item['Order']['total_all_price'];
+            $order_id = $order_item['Order']['id'];
+            $this->refund($order_id, $refundMoney, $refundMark, 0);
+        }
+    }
+
 
     /**
      * @param $orderId
