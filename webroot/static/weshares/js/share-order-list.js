@@ -259,14 +259,15 @@ $(document).ready(function () {
   var $refundShareId = $('#refund-share-id', $refundShareDialog);
   var $refundShareRemark = $('#refund-share-msg', $refundShareDialog);
 
-  $('button.refund-share-money').on('click', function(){
+  $('button.refund-share-money').on('click', function(e){
+    e.preventDefault();
     var $me = $(this);
     var address = $me.data('address');
     var shareId = $me.data('id');
     $refundShareOfflineAddress.val(address);
     $refundShareId.val(shareId);
     $refundShareRemark.val('');
-    $refundMoneyDialog.modal('show');
+    $refundShareDialog.modal('show');
   });
 
   $('button[name="handle-refund-share-money"]').on('click', function(e){
@@ -284,6 +285,7 @@ $(document).ready(function () {
       if (data['success']) {
         //todo mark
         $('#refund-share-btn-'+shareId).remove();
+        $refundShareDialog.modal('hide');
       }
     }, 'json');
   });
