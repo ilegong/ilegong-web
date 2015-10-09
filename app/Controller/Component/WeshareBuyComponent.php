@@ -698,6 +698,7 @@ class WeshareBuyComponent extends Component {
                 ),
                 'fields' => array('id', 'creator')
             ));
+            $share_creators = Hash::extract($share_infos, '{n}.Weshare.creator');
             $share_infos = Hash::combine($share_infos, '{n}.Weshare.id', '{n}.Weshare.creator');
             foreach ($address_data as $item_key => &$item_address_data) {
                 $item_share_creator = $share_infos[$item_key];
@@ -712,6 +713,7 @@ class WeshareBuyComponent extends Component {
                 'fields' => array('id', 'creator', 'member_id')
             ));
             $user_ids = Hash::extract($group_share_order, '{n}.Order.creator');
+            $user_ids = array_merge($user_ids, $share_creators);
             $user_ids = array_unique($user_ids);
             $user_infos = $UserM->find('all', array(
                 'conditions' => array(
