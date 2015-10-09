@@ -705,6 +705,10 @@ class ShareUtilComponent extends Component {
             $orderM->updateAll(array('status' => ORDER_STATUS_RETURNING_MONEY), array('id' => $orderId));
             $title = $order_creator_info['User']['nickname'] . '，你好，我们已经为你申请退款，会在3-5个工作日内完成退款。';
             $this->Weixin->send_refunding_order_notify($order_creator_id, $title, $weshareTitle, $showRefundMoney, $detail_url, $orderId, $remark);
+            //如果是拼团订单 退款减去余额
+            if ($orderInfo['Order']['ship_mark'] == SHARE_SHIP_GROUP_TAG) {
+                $this->remove_money_for_offline_address($weshareId, $order_creator_id, $orderId);
+            }
         }
         return array('success' => true, 'order_id' => $orderId);
     }
@@ -1216,6 +1220,28 @@ class ShareUtilComponent extends Component {
             $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
             $rebate_log = array('sharer' => $share_creator, 'share_id' => $share_id, 'clicker' => $order_creator, 'order_id' => $order_id, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'rebate_money' => SHARE_GROUP_REBATE_MONEY, 'is_paid' => 1, 'type' => GROUP_SHARE_BUY_REBATE_TYPE);
             $rebateTrackLogM->save($rebate_log);
+        }
+    }
+
+    /**
+     * @param $share_id
+     * @param $order_creator
+     * @param $order_id
+     * 退款后每单5元自提费用减去
+     */
+    public function remove_money_for_offline_address($share_id, $order_creator, $order_id) {
+        $WeshareM = ClassRegistry::init('Weshare');
+        $weshare = $WeshareM->find('first', array(
+            'conditions' => array(
+                'id' => $share_id,
+                'type' => GROUP_SHARE_TYPE
+            )
+        ));
+        if (!empty($weshare)) {
+            //update is paid
+            $share_creator = $weshare['Weshare']['creator'];
+            $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
+            $rebateTrackLogM->updateAll(array('is_paid' => 0), array('sharer' => $share_creator, 'share_id' => $share_id, 'clicker' => $order_creator, 'order_id' => $order_id, 'is_paid' => 1, 'type' => GROUP_SHARE_BUY_REBATE_TYPE));
         }
     }
 
