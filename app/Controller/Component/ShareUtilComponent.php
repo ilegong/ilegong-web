@@ -1360,15 +1360,15 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 708029,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
                 ),
-                '642' => array(
-                    'share_id' => 642,
+                '629' => array(
+                    'share_id' => 629,
                     'share_name' => '库尔勒香梨北京直递',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/86a35649c9f_0928.jpg',
-                    'share_price' => '138',
-                    'share_user_name' => '新果媛（㎡）',
+                    'share_price' => '100',
+                    'share_user_name' => '林玲',
                     'share_vote' => 235,
-                    'share_user_id' => 623920,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_9a0333add3aa739197696ec99856b1d7.jpg'
+                    'share_user_id' => 873677,
+                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/751e5e512e1_1009.jpg'//todo
                 ),
                 '634' => array(
                     'share_id' => 634,
