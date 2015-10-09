@@ -536,7 +536,7 @@ class WeshareBuyComponent extends Component {
                 'type' => ORDER_TYPE_WESHARE_BUY,
                 'member_id' => $share_id,
                 'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED),
-                'ship_mark' => SHARE_SHIP_SELF_ZITI_TAG
+                'ship_mark' => array(SHARE_SHIP_SELF_ZITI_TAG, SHARE_SHIP_GROUP_TAG)
             ),
             'fields' => array(
                 'id', 'consignee_name', 'consignee_address', 'creator'

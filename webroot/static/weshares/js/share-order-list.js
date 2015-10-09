@@ -128,7 +128,36 @@ $(document).ready(function () {
       contentType: "application/json",
       dataType: 'json'
     });
+
   });
+
+  var $setShareShippedDialog = $('#set_share_shipped_dialog');
+  var $setShipShareId = $('#set_shipped_share_id', $setShareShippedDialog);
+  var $setShipShareMsg = $('#share_arrival_msg', $setShareShippedDialog);
+
+  $('button.set-shipped-share').on('click', function (e) {
+    e.preventDefault();
+    var $me = $(this);
+    var shareId = $me.data('id');
+    $setShipShareId.val(shareId);
+    $setShareShippedDialog.modal('show');
+  });
+
+  $('button[name="set-share-shipped"]').on('click', function (e) {
+    e.preventDefault();
+    var msg = $setShipShareMsg.val();
+    if (!msg || !msg.trim()) {
+      return;
+    }
+    var shareId = $setShipShareId.val();
+    var postData = {'share_id': shareId, 'msg': msg};
+    $.post('/weshares/set_share_shipped', postData, function () {
+      //todo set share shipped tag
+      $setShareShippedDialog.modal('hide');
+      $('#set-share-shipped-btn-' + shareId).remove();
+    }, 'json');
+  });
+
   var $refundMoneyDialog = $('#refund-money-dialog');
   var $refundOrderName = $('#refund-order-user', $refundMoneyDialog);
   var $refundOrderId = $('#refund-order-id', $refundMoneyDialog);

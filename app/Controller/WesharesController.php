@@ -680,6 +680,33 @@ class WesharesController extends AppController {
         return;
     }
 
+    /**
+     * 设置子分享发货
+     */
+    public function set_share_shipped(){
+        $this->autoRender = false;
+        $weshare_id = $_REQUEST['share_id'];
+        $msg = $_REQUEST['msg'];
+        $share_info = $this->Weshare->find('first', array(
+            'conditions' => array(
+                'id' => $weshare_id
+            )
+        ));
+        //update order status
+        $prepare_update_orders = $this->Order->find('all', array(
+            'conditions' => array('status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED), 'type' => ORDER_TYPE_WESHARE_BUY, 'ship_mark' => array(SHARE_SHIP_SELF_ZITI_TAG, SHARE_SHIP_GROUP_TAG), 'member_id' => $weshare_id),
+            'fields' => array('id')
+        ));
+        $prepare_update_order_ids = Hash::extract($prepare_update_orders, '{n}.Order.id');
+        $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $prepare_update_order_ids));
+        $this->Cart->updateAll(array('status' => ORDER_STATUS_SHIPPED), array('order_id' => $prepare_update_order_ids));
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0', '');
+        $this->process_send_msg($share_info, $msg);
+        echo json_encode(array('success' => true));
+        return;
+    }
+
     public function subscribe_sharer($share_id, $user_id) {
         $this->autoRender = false;
         $this->WeshareBuy->subscribe_sharer($share_id, $user_id);
@@ -1544,7 +1571,7 @@ class WesharesController extends AppController {
     }
 
     public function shipped_share($shareId){
-        
+
     }
 
     /**

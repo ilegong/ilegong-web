@@ -305,6 +305,34 @@
             </div>
         </div>
     </div>
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="set_share_shipped_dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">发送到货提醒</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <input type="hidden" id="set_shipped_share_id">
+                        <div class="form-group">
+                            <label for="arrival_msg" class="col-sm-2 control-label">到货提示</label>
+
+                            <div class="col-sm-10">
+                                <textarea class="form-control" rows="3" id="share_arrival_msg">我们团的产品已经到啦，速度来取哈。</textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary btn-xs" name="set-share-shipped">发送
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <button data-toggle="modal" data-target=".send-msg-dialog" type="button" class="btn btn-warning btn-lg btn-block"
             id="send_product_arrive_msg" style="border-radius:0px; display: none;">取货提醒
     </button>
