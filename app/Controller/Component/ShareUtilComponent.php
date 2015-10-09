@@ -1290,15 +1290,15 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 811917,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
                 ),
-                '438' => array(
-                    'share_id' => 438,
-                    'share_name' => '河南荥阳河阴软籽大石榴',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/a7c2d7a2a0d_0906.jpg',
-                    'share_price' => '68',
-                    'share_user_name' => '段赵明',
-                    'share_vote' => 300,
-                    'share_user_id' => 1199,
-                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/6f5125521e1_0903.jpg'
+                '681' => array(
+                    'share_id' => 681,
+                    'share_name' => '桂花纯露首映',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/9f7ff9c8a0e_1009.jpg',
+                    'share_price' => '188',
+                    'share_user_name' => '庄梓铭',
+                    'share_vote' => 356,
+                    'share_user_id' => 823656,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_6f6b33c00c71819c1eb74f29f3f1503d.jpg'
                 ),
                 '674' => array(
                     'share_id' => 674,
@@ -1309,6 +1309,16 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 95,
                     'share_user_id' => 810684,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
+                ),
+                '438' => array(
+                    'share_id' => 438,
+                    'share_name' => '河南荥阳河阴软籽大石榴',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/a7c2d7a2a0d_0906.jpg',
+                    'share_price' => '68',
+                    'share_user_name' => '段赵明',
+                    'share_vote' => 300,
+                    'share_user_id' => 1199,
+                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/6f5125521e1_0903.jpg'
                 ),
                 '664' => array(
                     'share_id' => 664,
