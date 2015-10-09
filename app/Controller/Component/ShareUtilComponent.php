@@ -1280,6 +1280,16 @@ class ShareUtilComponent extends Component {
     public function get_share_index_product($tag) {
         $product = array(
             0 => array(
+                '659' => array(
+                    'share_id' => 659,
+                    'share_name' => '浙江衢州橘子团（限北京地区）',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/000c732f7c6_1009.jpg',
+                    'share_price' => '60',
+                    'share_user_name' => '小宝妈',
+                    'share_vote' => 900,
+                    'share_user_id' => 811917,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
+                ),
                 '438' => array(
                     'share_id' => 438,
                     'share_name' => '河南荥阳河阴软籽大石榴',
@@ -1289,6 +1299,16 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 300,
                     'share_user_id' => 1199,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/6f5125521e1_0903.jpg'
+                ),
+                '674' => array(
+                    'share_id' => 674,
+                    'share_name' => '新疆阿克苏新温185核桃',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/9d4e03eb013_1009.jpg',
+                    'share_price' => '108',
+                    'share_user_name' => '李樱花',
+                    'share_vote' => 95,
+                    'share_user_id' => 810684,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
                 ),
                 '664' => array(
                     'share_id' => 664,
@@ -1556,16 +1576,6 @@ class ShareUtilComponent extends Component {
                 ),
             ),
             3 => array(
-//                '605' => array(
-//                    'share_id' => 605,
-//                    'share_name' => '当天海南空运～薇薇安千层水果蛋糕中秋礼献',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/5f5d3edf6b4_0919.jpg',
-//                    'share_price' => '160',
-//                    'share_user_name' => '盛夏',
-//                    'share_vote' => 235,
-//                    'share_user_id' => 708029,
-//                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
-//                ),
                 '327' => array(
                     'share_id' => 327,
                     'share_name' => '纯天然0添加雾岭山山楂条',
