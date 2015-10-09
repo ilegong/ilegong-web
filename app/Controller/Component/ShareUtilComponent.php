@@ -1292,8 +1292,8 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 708029,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
                 ),
-                '406' => array(
-                    'share_id' => 406,
+                '670' => array(
+                    'share_id' => 670,
                     'share_name' => ' 树上的糖包子，新鲜树摘威海青皮无花果 ',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/6f41187b776_0901.jpg',
                     'share_price' => '69',
