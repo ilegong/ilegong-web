@@ -360,6 +360,10 @@
     }
 
     function validateAddress() {
+      if(vm.self_ziti_data.status == -1){
+        vm.addressError = false;
+        return vm.addressError;
+      }
       vm.addressError = vm.self_ziti_data.status == 1 && _.isEmpty(vm.weshare.addresses);
       if (!vm.addressError) {
         var tempAddressError = false;
