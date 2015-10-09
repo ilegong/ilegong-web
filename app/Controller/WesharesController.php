@@ -366,8 +366,10 @@ class WesharesController extends AppController {
         $address = $postDataArray['address'];
         $business_remark = $postDataArray['business_remark'];
         $result = $this->ShareUtil->cloneShare($weshareId, $uid, $address, $business_remark, GROUP_SHARE_TYPE, WESHARE_NORMAL_STATUS);
-        //send template msg
+        //send template msg and clear cache
         if ($result['success']) {
+            Cache::write(SHARE_OFFLINE_ADDRESS_BUY_DATA_CACHE_KEY . '_' . $weshareId, '');
+            Cache::write(SHARE_OFFLINE_ADDRESS_SUMMERY_DATA_CACHE_KEY.'_'.$weshareId, '');
             $this->ShareUtil->trigger_send_new_share_msg($result['shareId'], $uid);
         }
         echo json_encode($result);

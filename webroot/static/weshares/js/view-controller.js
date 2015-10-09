@@ -1210,13 +1210,15 @@
     function checkShareInfoHeight() {
       vm.shareDescInfoElement = angular.element(document.getElementById('share-description'));
       vm.shareDescInfoElement.ready(function () {
-        var height = vm.shareDescInfoElement[0].offsetHeight;
-        if (height > 65) {
-          vm.shouldShowReadMoreBtn = true;
-          vm.hideMoreShareInfo = true;
-        } else {
-          vm.shouldShowReadMoreBtn = false;
-          vm.hideMoreShareInfo = false;
+        if(vm.shareDescInfoElement[0]){
+          var height = vm.shareDescInfoElement[0].offsetHeight;
+          if (height > 65) {
+            vm.shouldShowReadMoreBtn = true;
+            vm.hideMoreShareInfo = true;
+          } else {
+            vm.shouldShowReadMoreBtn = false;
+            vm.hideMoreShareInfo = false;
+          }
         }
       });
     }
