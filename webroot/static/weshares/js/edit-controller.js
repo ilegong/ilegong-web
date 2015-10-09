@@ -33,6 +33,7 @@
     vm.editTagView = editTagView;
     vm.checkUserCanSetTag = checkUserCanSetTag;
     vm.validateSendInfo = validateSendInfo;
+    vm.validatePinTuan = validatePinTuan;
     vm.canSetTagUser = [633345, 544307, 802852];
     vm.showEditShareView = true;
     vm.showEditTagView = false;
@@ -52,6 +53,7 @@
       vm.self_ziti_data = {status: 1, ship_fee: 0, tag: 'self_ziti'};
       vm.kuai_di_data = {status: -1, ship_fee: '', tag: 'kuai_di'};
       vm.pys_ziti_data = {status: -1, ship_fee: 0, tag: 'pys_ziti'};
+      vm.pin_tuan_data = {status: -1, ship_fee: 500, tag: 'pin_tuan'};
       vm.proxy_rebate_percent = {status: 0, percent: 0};
       vm.kuaidi_show_ship_fee = '';
       //add
@@ -217,18 +219,15 @@
     }
 
     function saveWeshare() {
-      if (vm.isInProcess) {
-        alert('正在保存....');
-        return;
-      }
-      vm.isInProcess = true;
       vm.weshare.addresses = _.filter(vm.weshare.addresses, function (address) {
         return !_.isEmpty(address.address);
       });
       if (vm.validateAddress()) {
-        vm.weshare.addresses = [
-          {address: ''}
-        ];
+        if(_.isEmpty(vm.weshare.addresses)){
+          vm.weshare.addresses = [
+            {address: '', deleted: 0}
+          ];
+        }
         return false;
       }
       vm.kuai_di_data.ship_fee = vm.kuai_di_data.ship_fee || 0;
@@ -238,11 +237,16 @@
       if (vm.validateRebatePercent()) {
         return false;
       }
-      if(vm.validateSendInfo()){
+      if (vm.validateSendInfo()) {
         return false;
       }
+      if (vm.isInProcess) {
+        alert('正在保存....');
+        return;
+      }
+      vm.isInProcess = true;
       vm.kuai_di_data.ship_fee = vm.kuai_di_data.ship_fee;
-      vm.weshare.ship_type = [vm.self_ziti_data, vm.kuai_di_data, vm.pys_ziti_data];
+      vm.weshare.ship_type = [vm.self_ziti_data, vm.kuai_di_data, vm.pys_ziti_data, vm.pin_tuan_data];
       vm.weshare.proxy_rebate_percent = vm.proxy_rebate_percent;
       $http.post('/weshares/save', vm.weshare).success(function (data, status, headers, config) {
         if (data.success) {
@@ -331,9 +335,13 @@
       return vm.weshareTitleHasError;
     }
 
-    function validateSendInfo(){
+    function validateSendInfo() {
       vm.weshareSendInfoHasError = _.isEmpty(vm.weshare.send_info) || vm.weshare.send_info.length > 50;
       return vm.weshareSendInfoHasError;
+    }
+
+    function validatePinTuan() {
+      //TODO valid when user chose pin tuan limit must gt 0
     }
 
     function validateProductName(product) {
@@ -352,7 +360,18 @@
     }
 
     function validateAddress() {
+      if(vm.self_ziti_data.status == -1){
+        vm.addressError = false;
+        return vm.addressError;
+      }
       vm.addressError = vm.self_ziti_data.status == 1 && _.isEmpty(vm.weshare.addresses);
+      if (!vm.addressError) {
+        var tempAddressError = false;
+        _.each(vm.weshare.addresses, function (address) {
+          tempAddressError = tempAddressError || _.isEmpty(address.address);
+        });
+        vm.addressError = vm.addressError || tempAddressError;
+      }
       return vm.addressError;
     }
 

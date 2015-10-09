@@ -197,6 +197,8 @@ const OPT_LOG_COMBINE_DATA_CACHE_KEY = 'opt_log_combine_data_cache_key';
 const SHARER_MOBILE_PHONE_CACHE_KEY = 'sharer_mobile_phone_cache_key';
 const SIMPLE_SHARE_INFO_CACHE_KEY = 'simple_share_info_cache_key';
 const SHARER_TAGS_DATA_CACHE_KEY = 'sharer_tags_data_cache_key';
+const SHARE_OFFLINE_ADDRESS_SUMMERY_DATA_CACHE_KEY = 'share_offline_address_summery_data_cache_key'; //分享线下自提点 购买汇总数据缓存
+const SHARE_OFFLINE_ADDRESS_BUY_DATA_CACHE_KEY = 'share_offline_address_buy_data_cache_key';//分享线下自提点 购买信息
 
 //Product 表里设置是这个产品，不论多少都是同一邮费
 const TYPE_ORDER_PRICE = 1; //订单总价满多少包邮
@@ -212,34 +214,33 @@ const STATUS_CONSIGNEES_TUAN = 2;
 const STATUS_CONSIGNEES_TUAN_ZITI = 3;
 //分享地址
 const STATUS_CONSIGNEES_SHARE = 4;
-
 const SHARE_COUPON_OFFER_TYPE = -1;
-
 const SHARE_SHIP_KUAIDI = 0;
-
 const SHARE_SHIP_SELF_ZITI = 1;
-
 const SHARE_SHIP_PYS_ZITI = 2;
-
 const SHARE_SHIP_GROUP = 3;
-
-const SHARE_SHIP_PYS_ZITI_TAG = 'pys_zi_ti';
-
-const SHARE_SHIP_SELF_ZITI_TAG = 'self_zi_ti';
-
+const SHARE_SHIP_PYS_ZITI_TAG = 'pys_ziti';
+const SHARE_SHIP_SELF_ZITI_TAG = 'self_ziti';
 const SHARE_SHIP_KUAIDI_TAG = 'kuai_di';
-
-const SHARE_SHIP_GROUP_TAG = 'group_buy';
-
+const SHARE_SHIP_GROUP_TAG = 'pin_tuan';
 const RECOMMEND_SHARE = 1;
 
 const OPT_LOG_CREATE_SHARE = 1;
-
 const OPT_LOG_SHARE_RECOMMEND = 2;
-
 const OPT_LOG_SHARE_BUY = 3;
-
 const OPT_LOG_SHARE_COMMENT = 4;
+const OPT_LOG_START_GROUP_SHARE = 5;
+
+const DEFAULT_SHARE_TYPE = 0;
+const GROUP_SHARE_TYPE = 1;
+
+const ORDER_TRIGGER_GROUP_SHARE_TYPE  = 1;
+
+const SHARE_OFFLINE_ADDRESS_SHIP_FEE = 500;
+const SHARE_GROUP_REBATE_MONEY = 500;
+
+const DEFAULT_REBATE_TYPE = 0; //默认返利
+const GROUP_SHARE_BUY_REBATE_TYPE = 1;//线下自提返利
 
 define('CATEGORY_ID_TECHAN', 114);
 
@@ -2165,6 +2166,9 @@ function map_opt_log_data($var) {
     }
     if ($data_type == OPT_LOG_SHARE_RECOMMEND) {
         $var['data_type_tag'] = '推荐了';
+    }
+    if ($data_type == OPT_LOG_START_GROUP_SHARE) {
+        $var['data_type_tag'] = '发起拼团';
     }
     $var['data_url'] = '/weshares/view/' . $var['obj_id'];
     return $var;

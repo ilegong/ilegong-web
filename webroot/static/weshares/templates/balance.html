@@ -8,21 +8,21 @@
         <ul class="clearfix header margin-bottom-12">
             <li><img ng-src="{{vm.weshare.creator.image||'/img/default_user_icon.jpg'}}" ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/></li>
             <li>
-                <label ng-click="vm.toUserShareInfo(vm.weshare.creator.id)" ng-bind="vm.weshare.creator.nickname"></label>
-                <s><b style="color: #ffa200" ng-bind="vm.userShareSummery.share_count">0</b>&nbsp; <small>分享</small>&nbsp;&nbsp;&nbsp;<b style="color: #ffa200" ng-bind="vm.userShareSummery.follower_count">0</b>&nbsp;<small>粉丝</small></s>
-                <s>已有<span ng-bind="vm.ordersDetail.summery.all_buy_user_count"></span>人报名</s>
+                <label ng-click="vm.toUserShareInfo(vm.weshare.creator.id)" ng-bind="::vm.weshare.creator.nickname"></label>
+                <s><b style="color: #ffa200" ng-bind="::vm.userShareSummery.share_count">0</b>&nbsp; <small>分享</small>&nbsp;&nbsp;&nbsp;<b style="color: #ffa200" ng-bind="::vm.userShareSummery.follower_count">0</b>&nbsp;<small>粉丝</small></s>
+                <s>已有<span ng-bind="::vm.ordersDetail.summery.all_buy_user_count"></span>人报名</s>
             </li>
         </ul>
         <div class="introduction margin-bottom-12" style="padding: 15px 15px 10px 15px;">
-            <h1 class='title margin-bottom-12' ng-bind="vm.weshare.title" style="padding-top: 0px;"></h1>
+            <h1 class='title margin-bottom-12' ng-bind="::vm.weshare.title" style="padding-top: 0px;"></h1>
             <div class="product-group" ng-class="{'has-error':vm.productsHasError}">
                 <div ng-repeat="(tag, products) in vm.weshare.products">
-                    <div ng-if="tag!=0"><a style="color: #ffa200;font-size: 15px;" ng-bind="vm.weshare.tags[tag]['name']"></a>&nbsp;&nbsp;<a ng-click="vm.toggleTag(tag)" ng-bind="vm.toggleState[tag]['statusText']"></a></div>
+                    <div ng-if="tag!=0"><a style="color: #ffa200;font-size: 15px;" ng-bind="::vm.weshare.tags[tag]['name']"></a>&nbsp;&nbsp;<a ng-click="vm.toggleTag(tag)" ng-bind="vm.toggleState[tag]['statusText']"></a></div>
                     <div class="products form-group">
                         <div ng-show="vm.toggleState[tag]['open']">
                             <dl class="clearfix product form-control" ng-repeat="product in products">
-                                <dd class="fl" ng-if="!vm.checkProductNum(product)||product.store==0">{{product.name}}<span style="color: red;font-weight: bold;" ng-if="product.tbd==1">&nbsp;&nbsp;预付</span><span ng-if="!vm.checkProductNum(product)">&nbsp;&nbsp;(<span style="color: red;">抢光了</span>)</span></dd>
-                                <dd class="fl" ng-if="vm.checkProductNum(product)&&product.store>0">{{product.name}}<span style="color: red;font-weight: bold;" ng-if="product.tbd==1">&nbsp;&nbsp;预付</span>&nbsp;&nbsp;(仅剩<span style="color: red;" ng-bind="vm.getProductLeftNum(product)"></span>份)</dd>
+                                <dd class="fl" ng-if="!vm.checkProductNum(product)||product.store==0">{{::product.name}}<span style="color: red;font-weight: bold;" ng-if="product.tbd==1">&nbsp;&nbsp;预付</span><span ng-if="!vm.checkProductNum(product)">&nbsp;&nbsp;(<span style="color: red;">抢光了</span>)</span></dd>
+                                <dd class="fl" ng-if="vm.checkProductNum(product)&&product.store>0">{{::product.name}}<span style="color: red;font-weight: bold;" ng-if="product.tbd==1">&nbsp;&nbsp;预付</span>&nbsp;&nbsp;(仅剩<span style="color: red;" ng-bind="vm.getProductLeftNum(product)"></span>份)</dd>
                                 <dd class="fr" ng-if="vm.checkProductNum(product)">
                                     <a class='btn decrease-btn' ng-click="vm.decreaseProductNum(product)"></a>
                                     <span class='num' ng-bind="product.num||0"></span>
@@ -48,17 +48,21 @@
         <div class="clearfix" style="padding: 0 10px;margin-top: 10px;">
             <div class="form-group" ng-class="{'has-error' : vm.chooseShipType}">
                 <div class="form-control radio-group">
-                    <div ng-show="vm.weshareSettings.kuai_di.status==1">
-                        <input type="radio" class="radio" ng-model="vm.selectShipType" value="0" id="kuaidi" ng-change='vm.calOrderTotalPrice()'/>
+                    <div ng-if="vm.weshareSettings.kuai_di" ng-show="vm.weshareSettings.kuai_di.status==1">
+                        <input type="radio" class="radio" ng-model="vm.selectShipType" value="0" id="kuaidi" ng-change='vm.calOrderTotalPrice();vm.setShipFee();'/>
                         <label for="kuaidi">快递</label>
                     </div>
-                    <div ng-show="vm.weshareSettings.self_ziti.status==1">
-                        <input type="radio" class="radio" ng-model="vm.selectShipType" value="1" id="ziti" ng-change='vm.calOrderTotalPrice()'/>
+                    <div ng-if="vm.weshareSettings.self_ziti" ng-show="vm.weshareSettings.self_ziti.status==1">
+                        <input type="radio" class="radio" ng-model="vm.selectShipType" value="1" id="ziti" ng-change='vm.calOrderTotalPrice();vm.setShipFee();'/>
                         <label for="ziti">自提</label>
                     </div>
-                    <div ng-show="vm.weshareSettings.pys_ziti.status==1">
-                        <input type="radio" class="radio" ng-model="vm.selectShipType" value="2" id="pys_ziti" ng-change='vm.calOrderTotalPrice()'/>
+                    <div ng-if="vm.weshareSettings.pys_ziti" ng-show="vm.weshareSettings.pys_ziti.status==1">
+                        <input type="radio" class="radio" ng-model="vm.selectShipType" value="2" id="pys_ziti" ng-change='vm.calOrderTotalPrice();vm.setShipFee();'/>
                         <label for="pys_ziti">好邻居自提</label>
+                    </div>
+                    <div ng-if="vm.weshareSettings.pin_tuan" ng-show="vm.weshareSettings.pin_tuan.status==1">
+                        <input type="radio" class="radio" ng-model="vm.selectShipType" value="3" id="pintuan" ng-change='vm.calOrderTotalPrice();vm.setShipFee();'/>
+                        <label for="pintuan">邻里拼团</label>
                     </div>
                 </div>
                 <p class="tips">请选择物流方式</p>
@@ -85,13 +89,22 @@
             </div>
         </div>
         <div class="clearfix" style="padding: 0 10px;">
+            <div class="form-group" ng-class="{'has-error': vm.offlineAddressHasError}" ng-if="vm.selectShipType==3">
+                <ul class="offline-address-list">
+                    <li class="offline-address-item" ng-repeat="(offlineAddressShareId,offlineAddress) in vm.offlineAddressData"><input type="radio" ng-model="vm.chooseOfflineAddress" value="{{::offlineAddressShareId}}" class="radio"/><span class="address-name" ng-bind="::offlineAddress.address"></span></li>
+                </ul>
+                <p class="tips">请选择地址</p>
+                <a style="margin-top: 5px;width: 70%;margin-left: 15%;" class="ui-common-btn" ng-click="vm.showShareDetail();vm.showGroupShareTipDialog=true;vm.showLayer=true;">不在附近？开新团</a>
+            </div>
+        </div>
+        <div class="clearfix" style="padding: 0 10px;">
             <div class="form-group" ng-class="{'has-error': vm.userAddressHasError}" ng-if="vm.selectShipType==0">
                 <input class='form-control' placeholder="输入地址" ng-model='vm.buyerAddress' ng-change='vm.validateUserAddress()'/>
                 <p class='tips'>请输入收货人地址</p>
             </div>
         </div>
         <div class="clearfix" style="padding: 0 10px;">
-            <div class="form-group" ng-class="{'has-error': vm.userPatchAddressHasError}" ng-if="vm.selectShipType==1">
+            <div class="form-group" ng-class="{'has-error': vm.userPatchAddressHasError}" ng-if="vm.selectShipType==1||vm.selectShipType==3">
                 <input class='form-control' placeholder="小区-楼号-门牌(方便必要时送货上门)" ng-model='vm.buyerPatchAddress' ng-change='vm.validateUserPatchAddress()'/>
                 <p class='tips'>请输入小区-楼号-门牌(方便必要时送货上门)</p>
             </div>

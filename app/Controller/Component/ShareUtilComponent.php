@@ -1,16 +1,31 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: shichaopeng
- * Date: 8/20/15
- * Time: 15:04
- */
 class ShareUtilComponent extends Component {
 
     var $name = 'ShareUtil';
 
+    var $normal_order_status = array(ORDER_STATUS_DONE, ORDER_STATUS_PAID, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY);
+
     public $components = array('Weixin', 'WeshareBuy');
+
+    /**
+     * @param $weshare_id
+     * @param $uid
+     * 触发建团消息
+     */
+    public function trigger_send_new_share_msg($weshare_id, $uid){
+        $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($uid);
+        $pageCount = $fansPageInfo['pageCount'];
+        $pageSize = $fansPageInfo['pageSize'];
+        $queue = new SaeTaskQueue('share');
+        $queue->addTask("/weshares/process_send_new_share_msg/" . $weshare_id . '/' . $pageCount . '/' . $pageSize);
+        //将任务推入队列
+        $ret = $queue->push();
+        //任务添加失败时输出错误码和错误信息
+        if ($ret === false) {
+            $this->log('add task queue error ' . json_encode(array($queue->errno(), $queue->errmsg())));
+        }
+    }
 
     public function process_weshare_task($weshareId, $sharer_id) {
         $userRelationM = ClassRegistry::init('UserRelation');
@@ -273,17 +288,19 @@ class ShareUtilComponent extends Component {
         $this->Weixin->send_rebate_template_msg($recommend_open_ids[$recommend], $detail_url, $order_id, $order_money, $pay_time, $rebate_money, $title);
     }
 
+
     /**
      * @param $shareId
+     * @param $uid
+     * @param $address
+     * @param $address_remarks
+     * @param $type
+     * @param $share_status
      * @return array
-     * clone一份
+     * clone一份， 指定用户ID， 指定的地址， 类型， 状态
      */
-    public function cloneShare($shareId) {
+    public function cloneShare($shareId, $uid = null, $address = null, $address_remarks = null, $type = DEFAULT_SHARE_TYPE, $share_status = WESHARE_DELETE_STATUS) {
         $WeshareM = ClassRegistry::init('Weshare');
-        $WeshareProductM = ClassRegistry::init('WeshareProduct');
-        $WeshareAddressM = ClassRegistry::init('WeshareAddress');
-        $WeshareShipSettingM = ClassRegistry::init('WeshareShipSetting');
-        $proxyRebatePercentM = ClassRegistry::init('ProxyRebatePercent');
         $shareInfo = $WeshareM->find('first', array(
             'conditions' => array(
                 'id' => $shareId
@@ -293,71 +310,180 @@ class ShareUtilComponent extends Component {
         $shareInfo['id'] = null;
         $shareInfo['created'] = date('Y-m-d H:i:s');
         $shareInfo['status'] = 0;
+        if ($type == GROUP_SHARE_TYPE) {
+            $origin_sharer_nickname = $this->WeshareBuy->get_user_nickname($shareInfo['creator']);
+            $shareInfo['title'] = '大家一起拼团' . $origin_sharer_nickname . '分享的' . $shareInfo['title'];
+            //default share status is not available
+            $shareInfo['status'] = $share_status;
+        }
+        //set refer share id
+        $shareInfo['refer_share_id'] = $shareId;
+        if (!empty($uid)) {
+            $shareInfo['creator'] = $uid;
+        }
+        if (!empty($type)) {
+            $shareInfo['type'] = $type;
+        }
         $uid = $shareInfo['creator'];
         $WeshareM->id = null;
         $newShareInfo = $WeshareM->save($shareInfo);
         if ($newShareInfo) {
+            //clone product
             $newShareId = $newShareInfo['Weshare']['id'];
-            $shareProducts = $WeshareProductM->find('all', array(
-                'conditions' => array(
-                    'weshare_id' => $shareId
-                )
-            ));
-            $newProducts = array();
-            foreach ($shareProducts as $itemShareProduct) {
-                $itemShareProduct = $itemShareProduct['WeshareProduct'];
-                $itemShareProduct['id'] = null;
-                $itemShareProduct['weshare_id'] = $newShareId;
-                $newProducts[] = $itemShareProduct;
+            $this->cloneShareProduct($newShareId, $shareId);
+            if ($type == DEFAULT_SHARE_TYPE) {
+                //clone address
+                $this->cloneShareAddresses($newShareId, $shareId);
+                //clone ship setting
+                $this->cloneShareShipSettings($newShareId, $shareId);
+                //clone rebate set
+                $this->cloneShareRebateSet($newShareId, $shareId);
             }
-            $WeshareProductM->id = null;
-            $WeshareProductM->saveAll($newProducts);
-
-            $shareAddresses = $WeshareAddressM->find('all', array(
-                'conditions' => array(
-                    'weshare_id' => $shareId
-                )
-            ));
-            $newAddresses = array();
-            foreach ($shareAddresses as $itemShareAddress) {
-                $itemShareAddress = $itemShareAddress['WeshareAddress'];
-                $itemShareAddress['id'] = null;
-                $itemShareAddress['weshare_id'] = $newShareId;
-                $newAddresses[] = $itemShareAddress;
-            }
-            $WeshareAddressM->id = null;
-            $WeshareAddressM->saveAll($newAddresses);
-
-            $shareShipSettings = $WeshareShipSettingM->find('all', array(
-                'conditions' => array(
-                    'weshare_id' => $shareId
-                )
-            ));
-            $newShareShipSettings = array();
-            foreach ($shareShipSettings as $itemShareShipSetting) {
-                $itemShareShipSetting = $itemShareShipSetting['WeshareShipSetting'];
-                $itemShareShipSetting['id'] = null;
-                $itemShareShipSetting['weshare_id'] = $newShareId;
-                $newShareShipSettings[] = $itemShareShipSetting;
-            }
-            $WeshareShipSettingM->id = null;
-            $WeshareShipSettingM->saveAll($newShareShipSettings);
-
-            $oldShareRebateSet = $proxyRebatePercentM->find('first', array(
-                'conditions' => array('share_id' => $shareId)
-            ));
-            if (!empty($oldShareRebateSet)) {
-                $newShareRebateSet = $oldShareRebateSet['ProxyRebatePercent'];
-                $newShareRebateSet['id'] = null;
-                $newShareRebateSet['share_id'] = $newShareId;
-                $proxyRebatePercentM->save($newShareRebateSet);
-            } else {
-                $proxyRebatePercentM->save(array('share_id' => $newShareId, 'percent' => 0));
+            if ($type == GROUP_SHARE_TYPE) {
+                $this->saveGroupShareAddress($address, $newShareId, $shareId, $uid, $address_remarks);
+                $this->cloneShareShipSettings($newShareId, $shareId, true);
+                $this->cloneShareRebateSet($newShareId, $shareId, true);
             }
             Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
             return array('shareId' => $newShareId, 'success' => true);
         }
         return array('success' => false);
+    }
+
+    /**
+     * @param $address
+     * @param $new_share_id
+     * @param $old_share_id
+     * @param $uid
+     * @param $remarks
+     */
+    private function saveGroupShareAddress($address, $new_share_id, $old_share_id, $uid, $remarks) {
+        $WeshareAddressM = ClassRegistry::init('WeshareAddress');
+        $WeshareOfflineAddressM = ClassRegistry::init('WeshareOfflineAddress');
+        $shareAddressData = array('weshare_id' => $new_share_id, 'address' => $address);
+        $weshareOfflineAddress = array('creator' => $uid, 'share_id' => $new_share_id, 'refer_share_id' => $old_share_id, 'address' => $address, 'created' => date('Y-m-d H:i:s'), 'remarks' => $remarks);
+        $WeshareAddressM->save($shareAddressData);
+        $WeshareOfflineAddressM->save($weshareOfflineAddress);
+    }
+
+    //todo clone share product
+    private function cloneSharProductTag($new_share_id, $old_share_id) {
+
+    }
+
+    /**
+     * @param $new_share_id
+     * @param $old_share_id
+     * clone share product
+     */
+    private function cloneShareProduct($new_share_id, $old_share_id) {
+        $WeshareProductM = ClassRegistry::init('WeshareProduct');
+        $shareProducts = $WeshareProductM->find('all', array(
+            'conditions' => array(
+                'weshare_id' => $old_share_id
+            )
+        ));
+        $newProducts = array();
+        foreach ($shareProducts as $itemShareProduct) {
+            $itemShareProduct = $itemShareProduct['WeshareProduct'];
+            $itemShareProduct['id'] = null;
+            $itemShareProduct['weshare_id'] = $new_share_id;
+            $newProducts[] = $itemShareProduct;
+        }
+        $WeshareProductM->id = null;
+        $WeshareProductM->saveAll($newProducts);
+        return;
+    }
+
+    /**
+     * @param $new_share_id
+     * @param $old_share_id
+     * clone share addresses
+     */
+    private function cloneShareAddresses($new_share_id, $old_share_id) {
+        $WeshareAddressM = ClassRegistry::init('WeshareAddress');
+        $shareAddresses = $WeshareAddressM->find('all', array(
+            'conditions' => array(
+                'weshare_id' => $old_share_id
+            )
+        ));
+        $newAddresses = array();
+        foreach ($shareAddresses as $itemShareAddress) {
+            $itemShareAddress = $itemShareAddress['WeshareAddress'];
+            $itemShareAddress['id'] = null;
+            $itemShareAddress['weshare_id'] = $new_share_id;
+            $newAddresses[] = $itemShareAddress;
+        }
+        $WeshareAddressM->id = null;
+        $WeshareAddressM->saveAll($newAddresses);
+    }
+
+    /**
+     * @param $new_share_id
+     * @param $old_share_id
+     * @param $is_set_group
+     * clone share ship setting
+     */
+    private function cloneShareShipSettings($new_share_id, $old_share_id, $is_set_group = false) {
+        $WeshareShipSettingM = ClassRegistry::init('WeshareShipSetting');
+        $shareShipSettings = $WeshareShipSettingM->find('all', array(
+            'conditions' => array(
+                'weshare_id' => $old_share_id
+            )
+        ));
+        $newShareShipSettings = array();
+        foreach ($shareShipSettings as $itemShareShipSetting) {
+            $itemShareShipSetting = $itemShareShipSetting['WeshareShipSetting'];
+            $itemShareShipSetting['id'] = null;
+            $itemShareShipSetting['weshare_id'] = $new_share_id;
+            $newShareShipSettings[] = $itemShareShipSetting;
+        }
+        $WeshareShipSettingM->id = null;
+        if ($is_set_group) {
+            //only set self ziti
+            $saveData = null;
+            $groupShareLimit = 0;
+            foreach ($newShareShipSettings as &$itemNewShareShipSetting) {
+                if ($itemNewShareShipSetting['tag'] == SHARE_SHIP_SELF_ZITI_TAG) {
+                    $itemNewShareShipSetting['status'] = 1;
+                    $itemNewShareShipSetting['ship_fee'] = SHARE_OFFLINE_ADDRESS_SHIP_FEE;
+                    $saveData = $itemNewShareShipSetting;
+                }
+                if ($itemNewShareShipSetting['tag'] == SHARE_SHIP_GROUP_TAG) {
+                    $groupShareLimit = $itemNewShareShipSetting['limit'];
+                }
+            }
+            $saveData['limit'] = $groupShareLimit;
+            $WeshareShipSettingM->saveAll(array($saveData));
+            return;
+        } else {
+            $WeshareShipSettingM->saveAll($newShareShipSettings);
+            return;
+        }
+    }
+
+    /**
+     * @param $new_share_id
+     * @param $old_share_id
+     * @param $is_set_group
+     * clone share rebate set
+     */
+    private function cloneShareRebateSet($new_share_id, $old_share_id, $is_set_group = false) {
+        $proxyRebatePercentM = ClassRegistry::init('ProxyRebatePercent');
+        $oldShareRebateSet = $proxyRebatePercentM->find('first', array(
+            'conditions' => array('share_id' => $old_share_id)
+        ));
+        if (empty($oldShareRebateSet) || $is_set_group) {
+            $proxyRebatePercentM->save(array('share_id' => $new_share_id, 'percent' => 0));
+            return;
+        }
+        if (!empty($oldShareRebateSet)) {
+            $newShareRebateSet = $oldShareRebateSet['ProxyRebatePercent'];
+            $newShareRebateSet['id'] = null;
+            $newShareRebateSet['share_id'] = $new_share_id;
+            $proxyRebatePercentM->save($newShareRebateSet);
+            return;
+        }
     }
 
     /**
@@ -497,6 +623,39 @@ class ShareUtilComponent extends Component {
     }
 
     /**
+     * @param $shareId
+     * @return mixed
+     * 根据分享获取订单
+     */
+    public function get_share_orders($shareId){
+        $orderM = ClassRegistry::init('Order');
+        $share_orders = $orderM->find('all', array(
+            'conditions' => array(
+                'member_id' => $shareId,
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'status' => $this->normal_order_status
+            ),
+            'fields' => array('id', 'creator', 'total_all_price', 'status')
+        ));
+        return $share_orders;
+    }
+
+    /**
+     * @param $shareId
+     * @param $refundMark
+     * 批量处理订单退款
+     */
+    public function batch_refund_order($shareId, $refundMark) {
+        $orders = $this->get_share_orders($shareId);
+        foreach ($orders as $order_item) {
+            $refundMoney = $order_item['Order']['total_all_price'];
+            $order_id = $order_item['Order']['id'];
+            $this->refund($order_id, $refundMoney, $refundMark, 0);
+        }
+    }
+
+
+    /**
      * @param $orderId
      * @param $refundMoney
      * @param $refundMark
@@ -564,6 +723,10 @@ class ShareUtilComponent extends Component {
             $orderM->updateAll(array('status' => ORDER_STATUS_RETURNING_MONEY), array('id' => $orderId));
             $title = $order_creator_info['User']['nickname'] . '，你好，我们已经为你申请退款，会在3-5个工作日内完成退款。';
             $this->Weixin->send_refunding_order_notify($order_creator_id, $title, $weshareTitle, $showRefundMoney, $detail_url, $orderId, $remark);
+            //如果是拼团订单 退款减去余额
+            if ($orderInfo['Order']['ship_mark'] == SHARE_SHIP_GROUP_TAG) {
+                $this->remove_money_for_offline_address($weshareId, $order_creator_id, $orderId);
+            }
         }
         return array('success' => true, 'order_id' => $orderId);
     }
@@ -626,6 +789,106 @@ class ShareUtilComponent extends Component {
     }
 
     /**
+     * @param $order
+     * @return bool
+     * check is start new order share and reset order member id
+     */
+    public function check_is_start_new_group_share($order) {
+        if ($order['Order']['relate_type'] == ORDER_TRIGGER_GROUP_SHARE_TYPE) {
+            $order_id = $order['Order']['id'];
+            $order_creator = $order['Order']['creator'];
+            $order_member_id = $order['Order']['member_id'];
+            $orderM = ClassRegistry::init('Order');
+            $group_share = $this->get_group_share($order_creator, $order_member_id);
+            //重复执行之后可能出现问题，订单的member_id已经修改
+            if (!empty($group_share)) {
+                $group_share_id = $group_share['id'];
+                $orderM->updateAll(array('member_id' => $group_share_id), array('id' => $order_id));
+                $this->set_group_share_available($group_share_id);
+                //save opt log
+                $now = date('Y-m-d H:i:s');
+                $shareImg = explode('|', $group_share['images']);
+                $title = $group_share['title'];
+                $optLogData = array('user_id' => $order_creator, 'obj_type' => OPT_LOG_START_GROUP_SHARE, 'obj_id' => $group_share_id, 'created' => $now, 'memo' => $title, 'thumbnail' => $shareImg[0]);
+                $this->saveOptLog($optLogData);
+                //send msg
+                $this->ShareUtil->trigger_send_new_share_msg($group_share_id, $order_creator);
+                return $group_share_id;
+            }
+        }
+        return $order['Order']['member_id'];
+    }
+
+    /**
+     * @param $shareId
+     * @return mixed
+     * get share refer_share_id
+     */
+    public function get_share_refer_id($shareId){
+        $weshareM = ClassRegistry::init('Weshare');
+        $weshare_info = $weshareM->find('first', array(
+            'conditions' => array(
+                'id' => $shareId
+            ),
+            'fields' => array('id', 'refer_share_id')
+        ));
+        return $weshare_info['Weshare']['refer_share_id'];
+    }
+
+
+    /**
+     * @param $uid
+     * @param $refer_share_id
+     * @return mixed
+     */
+    public function get_group_share($uid, $refer_share_id) {
+        $WeshareM = ClassRegistry::init('Weshare');
+        $weshare = $WeshareM->find('first', array(
+            'conditions' => array(
+                'type' => GROUP_SHARE_TYPE,
+                'creator' => $uid,
+                'refer_share_id' => $refer_share_id
+            )
+        ));
+        return $weshare['Weshare'];
+    }
+
+    /**
+     * @param $share_id
+     * @return array
+     * get share offline address detail
+     */
+    public function get_share_offline_address_detail($share_id) {
+        $cache_key = SHARE_OFFLINE_ADDRESS_SUMMERY_DATA_CACHE_KEY.'_'.$share_id;
+        $json_address_data = Cache::read($cache_key);
+        if(empty($json_address_data)){
+            $WeshareM = ClassRegistry::init('Weshare');
+            $query_address_sql = 'select * from cake_weshare_addresses where weshare_id in (select id from cake_weshares where refer_share_id=' . $share_id . ' and status=' . WESHARE_NORMAL_STATUS . ' and type=' . GROUP_SHARE_TYPE . ')';
+            $address_result = $WeshareM->query($query_address_sql);
+            $query_order_summery_sql = 'select count(id),member_id from cake_orders where type=' . ORDER_TYPE_WESHARE_BUY . ' and status !=' . ORDER_STATUS_WAITING_PAY . ' and member_id in (select id from cake_weshares where refer_share_id=' . $share_id . ' and status=' . WESHARE_NORMAL_STATUS . ' and type=' . GROUP_SHARE_TYPE . ') group by member_id';
+            $order_summery_result = $WeshareM->query($query_order_summery_sql);
+            $address_data = Hash::combine($address_result, '{n}.cake_weshare_addresses.weshare_id', '{n}.cake_weshare_addresses');
+            $address_order_summery = Hash::combine($order_summery_result, '{n}.cake_orders.member_id', '{n}.0.count(id)');
+            foreach ($address_data as $item_share_id => &$address) {
+                $address['order_count'] = $address_order_summery[$item_share_id];
+            }
+            $json_address_data = json_encode($address_data);
+            Cache::write($cache_key,$json_address_data);
+            return $address_data;
+        }
+        return json_decode($json_address_data, true);
+    }
+
+
+    /**
+     * @param $share_id
+     */
+    public function set_group_share_available($share_id) {
+        $weshareM = ClassRegistry::init('Weshare');
+        $weshareM->updateAll(array('status' => WESHARE_NORMAL_STATUS), array('id' => $share_id));
+    }
+
+    /**
      * @param $user_id
      * @return mixed
      * cache tags data
@@ -672,6 +935,12 @@ class ShareUtilComponent extends Component {
         return array('tags' => $productTags, 'product_tag_map' => $product_tag_map);
     }
 
+    /**
+     * @param $orderData
+     * @param $shareId
+     * @return array
+     * 分类统计订单
+     */
     public function summery_order_data_by_tag($orderData, $shareId) {
         $orderCartMap = $orderData['order_cart_map'];
         $orders = $orderData['orders']['origin_orders'];
@@ -860,13 +1129,13 @@ class ShareUtilComponent extends Component {
         return 0;
     }
 
-    //TODO check split order by tag
+    // check split order by tag
     public function split_order_by_tag($order) {
-        //todo check cal ship fee
-        //todo check cal red packet fee
-        //todo check is prepaid
-        //todo check cal proxy fee
-        //todo check cal refund money (confirm)
+        // check cal ship fee
+        // check cal red packet fee
+        // check is prepaid
+        // check cal proxy fee
+        // check cal refund money (confirm)
         $orderM = ClassRegistry::init('Order');
         $cartM = ClassRegistry::init('Cart');
         $order_id = $order['Order']['id'];
@@ -949,6 +1218,50 @@ class ShareUtilComponent extends Component {
             }
         }
         return $result;
+    }
+
+    /**
+     * @param $share_id
+     * @param $order_creator
+     * @param $order_id
+     * 把每单5元的自提费用添加的线下自提点用户余额里面
+     */
+    public function add_money_for_offline_address($share_id, $order_creator, $order_id) {
+        $WeshareM = ClassRegistry::init('Weshare');
+        $weshare = $WeshareM->find('first', array(
+            'conditions' => array(
+                'id' => $share_id,
+                'type' => GROUP_SHARE_TYPE
+            )
+        ));
+        if (!empty($weshare)) {
+            $share_creator = $weshare['Weshare']['creator'];
+            $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
+            $rebate_log = array('sharer' => $share_creator, 'share_id' => $share_id, 'clicker' => $order_creator, 'order_id' => $order_id, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'rebate_money' => SHARE_GROUP_REBATE_MONEY, 'is_paid' => 1, 'type' => GROUP_SHARE_BUY_REBATE_TYPE);
+            $rebateTrackLogM->save($rebate_log);
+        }
+    }
+
+    /**
+     * @param $share_id
+     * @param $order_creator
+     * @param $order_id
+     * 退款后每单5元自提费用减去
+     */
+    public function remove_money_for_offline_address($share_id, $order_creator, $order_id) {
+        $WeshareM = ClassRegistry::init('Weshare');
+        $weshare = $WeshareM->find('first', array(
+            'conditions' => array(
+                'id' => $share_id,
+                'type' => GROUP_SHARE_TYPE
+            )
+        ));
+        if (!empty($weshare)) {
+            //update is paid
+            $share_creator = $weshare['Weshare']['creator'];
+            $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
+            $rebateTrackLogM->updateAll(array('is_paid' => 0), array('sharer' => $share_creator, 'share_id' => $share_id, 'clicker' => $order_creator, 'order_id' => $order_id, 'is_paid' => 1, 'type' => GROUP_SHARE_BUY_REBATE_TYPE));
+        }
     }
 
     /**

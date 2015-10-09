@@ -121,6 +121,10 @@
             <li><a href="#pys-ziti-orders" data-toggle="tab" data-order-type="pys_ziti">好邻居&nbsp;&nbsp;<font
                     color="red">{{count($orders[SHARE_SHIP_PYS_ZITI_TAG])}}</font></a></li>
             {{/if}}
+            {{if !empty($child_share_user_infos)}}
+            <li><a href="#group-share-orders" data-toggle="tab" data-order-type="pin_tuan">邻里拼团&nbsp;&nbsp;<font
+                    color="red">{{count($child_share_data)}}</font></a></li>
+            {{/if}}
         </ul>
         <!-- Tab panes -->
         <div class="tab-content">
@@ -145,6 +149,13 @@
                 <div class="panel-group" style="margin-bottom: 5px;">
                     <?php $current_orders=$orders[SHARE_SHIP_PYS_ZITI_TAG]; $current_tag = SHARE_SHIP_PYS_ZITI_TAG; ?>
                     {{template weshares/share_order_list_template}}
+                </div>
+            </div>
+            {{/if}}
+            {{if count($child_share_data) > 0}}
+            <div class="tab-pane fade" id="group-share-orders">
+                <div class="panel-group" style="margin-bottom: 5px;">
+                    {{template weshares/share_order_list_share_template}}
                 </div>
             </div>
             {{/if}}
@@ -227,6 +238,43 @@
             </div>
         </div>
     </div>
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="refund-share-dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">退款</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="refund-share-address" class="col-sm-2 control-label">自提点名称</label>
+
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" readonly id="refund-share-address">
+                            </div>
+                        </div>
+                        <input type="hidden" class="form-control" readonly id="refund-share-id">
+
+                        <div class="form-group">
+                            <label for="refund-share-msg" class="col-sm-2 control-label">退款原因</label>
+
+                            <div class="col-sm-10">
+                                <textarea class="form-control" rows="3" id="refund-share-msg"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary btn-xs" name="handle-refund-share-money">
+                        退款
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="confirm-money-dialog">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
@@ -252,6 +300,34 @@
                     <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">取消</button>
                     <button type="button" class="btn btn-primary btn-xs" data-id="{{$weshareId}}" name="handle-confirm-money">
                         确认价格
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="set_share_shipped_dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">发送到货提醒</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <input type="hidden" id="set_shipped_share_id">
+                        <div class="form-group">
+                            <label for="arrival_msg" class="col-sm-2 control-label">到货提示</label>
+
+                            <div class="col-sm-10">
+                                <textarea class="form-control" rows="3" id="share_arrival_msg">我们团的产品已经到啦，速度来取哈。</textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary btn-xs" name="set-share-shipped">发送
                     </button>
                 </div>
             </div>

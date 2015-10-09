@@ -8,7 +8,7 @@ class WeixinComponent extends Component {
         CURLOPT_TIMEOUT => 30
     );
 
-    public $components = array('ShareUtil');
+    public $components = array('ShareUtil', 'WeshareBuy');
 
     public $wx_message_template_ids = array(
         "ORDER_PAID" => "UXmiPQNz46zZ2nZfDZVVd9xLIx28t66ZPNBoX1WhE8Q",
@@ -455,22 +455,36 @@ class WeixinComponent extends Component {
         if ($order['Order']['type'] == ORDER_TYPE_WESHARE_BUY_ADD) {
             $this->ShareUtil->process_paid_order_add($order);
             //clean cache share
-            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $order['Order']['member_id'] . '_1', '');
-            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $order['Order']['member_id'] . '_0', '');
+            $this->clear_share_cache($order['Order']['member_id']);
             return;
         }
         if ($order['Order']['type'] == ORDER_TYPE_WESHARE_BUY) {
             $this->weshare_buy_order_paid($order);
+            //check is start new group share
+            $share_id = $this->ShareUtil->check_is_start_new_group_share($order);
             //check cart tag id and split order
             $this->ShareUtil->split_order_by_tag($order);
             //check order is prepaid
             //$this->ShareUtil->check_order_is_prepaid_and_update_status($order);
+            $this->ShareUtil->add_money_for_offline_address($share_id, $order['Order']['creator'], $order['Order']['id']);
             //clean cache share
-            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $order['Order']['member_id'] . '_1', '');
-            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $order['Order']['member_id'] . '_0', '');
+            $this->clear_share_cache($order['Order']['member_id'], $order['Order']['ship_mark'] == SHARE_SHIP_GROUP_TAG);
             return;
         }
         $this->on_order_status_change($order);
+    }
+
+    private function clear_share_cache($share_id, $is_pin_tuan = false) {
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_0', '');
+        //check should clear child share cache
+        if ($is_pin_tuan) {
+            $refer_share_id = $this->ShareUtil->get_share_refer_id($share_id);
+            if ($refer_share_id != $share_id) {
+                Cache::write(SHARE_OFFLINE_ADDRESS_SUMMERY_DATA_CACHE_KEY . '_' . $refer_share_id, '');
+                Cache::write(SHARE_OFFLINE_ADDRESS_BUY_DATA_CACHE_KEY . '_' . $refer_share_id, '');
+            }
+        }
     }
 
     /**
@@ -849,6 +863,14 @@ class WeixinComponent extends Component {
         if ($seller_weixin != false) {
             $this->log('weshare paid send for creator ' . $seller_weixin['oauth_openid'] . ' order id ' . $order_id . ' weshare id ' . $weshare_info['Weshare']['id']);
             $this->send_weshare_buy_paid_msg_for_creator($seller_weixin['oauth_openid'], $price, $good_info, $ship_info, $order_id, $weshare_info, $order_creator_name, $order_ship_mark, $order_user['User']['id'], $cate_id);
+            if ($order_ship_mark == SHARE_SHIP_GROUP_TAG) {
+                //send parent share
+                $share_refer_share_id = $weshare_info['Weshare']['refer_share_id'];
+                $refer_share_info = $this->WeshareBuy->get_weshare_info($share_refer_share_id);
+                $refer_share_creator = $refer_share_info['creator'];
+                $refer_share_creator_weixin = $oauthBindModel->findWxServiceBindByUid($refer_share_creator);
+                $this->send_weshare_buy_paid_msg_for_creator($refer_share_creator_weixin['oauth_openid'], $price, $good_info, $ship_info, $order_id, array('Weshare' => $refer_share_info), $order_creator_name, $order_ship_mark, $order_user['User']['id'], $cate_id);
+            }
         }
     }
 

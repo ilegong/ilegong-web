@@ -1,0 +1,28 @@
+{{loop $child_share_data $item_child_share}}
+<div class="col-xs-12" data-id="{{$item_child_share['weshare_id']}}">
+    <div class="offer offer-success">
+        <div class="shape div-share-item">
+            <div class="shape-text">
+                邻里拼团
+            </div>
+        </div>
+        <div class="offer-content">
+            <div class="pull-right div-share-item">
+                <span style="color:red;">{{$item_child_share['order_count']}}</span>&nbsp;人报名
+            </div>
+            <p class="div-share-item">
+                <strong>发起人:</strong>&nbsp;&nbsp;{{$child_share_user_infos[$item_child_share['creator']]['nickname']}}<br>
+                <strong>拼团地址:</strong>&nbsp;&nbsp;{{$item_child_share['address']}}<br>
+            </p>
+            <button class="btn btn-warning btn-xs pull-right refund-share-money"
+                    data-id="{{$item_child_share['weshare_id']}}" id="refund-share-btn-{{$item_child_share['weshare_id']}}"
+                    style="margin-bottom: 5px; margin-left: 5px;" data-address="{{$item_child_share['address']}}">退款
+            </button>
+            <button class="btn btn-success btn-xs pull-right set-shipped-share"
+                    data-id="{{$item_child_share['weshare_id']}}" id="set-share-shipped-btn-{{$item_child_share['weshare_id']}}"
+                    style="margin-bottom: 5px; margin-left: 5px;">发货
+            </button>
+        </div>
+    </div>
+</div>
+{{/loop}}

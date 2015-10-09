@@ -81,11 +81,22 @@
                 <input type="checkbox" ng-model="vm.kuai_di_data.status" ng-true-value="1" ng-false-value="-1" ng-checked="vm.kuai_di_data.status==1">
             </div>
             &nbsp;&nbsp;&nbsp;快递
-            <div class="form-group fr" ng-class="{'has-error': vm.shipFeeHasError}" style="width: 60%; margin-right: 80px;" ng-show="vm.kuai_di_data.status==1">
+            <div class="form-group fr" ng-class="{'has-error': vm.shipFeeHasError}" style="width: 50%; margin-right: 80px;" ng-show="vm.kuai_di_data.status==1">
                 <input class='form-control' placeholder="快递费/元 (默认为0)" ng-model="vm.kuaidi_show_ship_fee" ng-change='vm.validateShipFee()' ng-blur='vm.validateShipFee()'/>
                 <p class='tips'>请输入数字</p>
             </div>
         </div>
+        <div class="clearfix">
+            <div class="form-group fl">
+                <input type="checkbox" ng-model="vm.pin_tuan_data.status" ng-true-value="1" ng-false-value="-1" ng-checked="vm.pin_tuan_data.status==1">
+            </div>
+            &nbsp;&nbsp;&nbsp;邻里拼团
+            <div class="form-group fr" ng-class="{'has-error': vm.pinTuanHasError}" style="width: 45%; margin-right: 80px;" ng-show="vm.pin_tuan_data.status==1">
+                <input class='form-control' placeholder="拼团人数" ng-model="vm.pin_tuan_data.limit" ng-change='vm.validatePinTuan()' ng-blur='vm.validatePinTuan()'/>
+                <p class='tips'>请输入数字</p>
+            </div>
+        </div>
+        <img src="/static/weshares/images/faq.png" width="20px" height="20px" class="fr" style="margin-right: 5%;margin-top: -12%;" ng-click="vm.showPinTuanTipInfo=true;vm.showLayer=true;" ng-show="vm.pin_tuan_data.status==1"/>
         <div class="clearfix" ng-class="{'checkbox-disable' : vm.sharerShipType==0}">
             <div class="form-group fl">
                 <input type="checkbox"  ng-disabled="vm.sharerShipType==0" ng-model="vm.pys_ziti_data.status" ng-true-value="1" ng-false-value="-1" ng-checked="vm.pys_ziti_data.status==1">
@@ -113,7 +124,7 @@
         <a class="btn next-btn" ng-click="vm.saveWeshare()">oh，搞定了！</a>
         <a class="btn back-btn" ng-click="vm.showShippmentInfo=false">返回修改</a>
     </div>
-    <div class="dialog-delorder" ng-show="vm.showLayer">
+    <div class="dialog-delorder" ng-show="vm.showProductTipInfo">
         <div class="dialog-bar">温馨提示<a ng-click="vm.showProductTipInfo=false;vm.showLayer=false;" class="dialog-close" title="关闭"></a></div>
         <div class="dialog-content">
             <p>
@@ -121,7 +132,15 @@
             </p>
         </div>
     </div>
-    <div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showProductTipInfo=false;vm.showLayer=false;;"></div>
+    <div class="dialog-delorder" ng-show="vm.showPinTuanTipInfo">
+        <div class="dialog-bar">温馨提示<a ng-click="vm.showPinTuanTipInfo=false;vm.showLayer=false;" class="dialog-close" title="关闭"></a></div>
+        <div class="dialog-content">
+            <p>
+                当其他小区有用户但是物流成本高时，可以选择让用户拼团，满一定人数再送货。
+            </p>
+        </div>
+    </div>
+    <div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showPinTuanTipInfo=false;vm.showProductTipInfo=false;vm.showLayer=false;;"></div>
 </div>
 <div style="background-color:#f5f5f5;margin-bottom: 20px;" ng-if="vm.showEditTagView">
     <div class="classlist">

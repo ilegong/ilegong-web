@@ -51,4 +51,15 @@ class TaskController extends AppController{
         return;
     }
 
+    /**
+     * @param $shareId
+     */
+    public function batch_refund_money($shareId) {
+        $this->autoRender = false;
+        $remark = $_REQUEST['remark'];
+        $this->ShareUtil->batch_refund_order($shareId, $remark);
+        echo json_encode(array('success' => true));
+        return;
+    }
+
 }

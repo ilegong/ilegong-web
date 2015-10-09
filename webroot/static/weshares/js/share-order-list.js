@@ -5,6 +5,12 @@ $(document).ready(function () {
   var $summeryProductItems = $('tr.summery-product-item');
   var $orderDataSummeryItems = $('tr.order-data-summery');
   var $zitiPanel = $('#self-ziti-orders');
+  $('div.div-share-item').on('click',function(e){
+    e.preventDefault();
+    var $me = $(this);
+    var child_share_id = $me.data('id');
+    window.location.href='/weshares/view/'+child_share_id;
+  });
   $tagLi.on('click', function(e){
     var $me = $(this);
     var tagId = $me.data('id');
@@ -12,7 +18,6 @@ $(document).ready(function () {
     $tagLi.removeClass('active');
     $me.addClass('active');
   });
-
   function handleTagChange(tag) {
     if (tag == 'all') {
       $divOrderItems.show();
@@ -28,7 +33,6 @@ $(document).ready(function () {
       $('tr[name="order-data-summery-' + tag + '"]').show();
     }
   }
-
   var orderType = '';
   var $selfZitiOrder = $('#self-ziti-orders');
   $('select[name="ship_company_code"]').on('change', function () {
@@ -124,7 +128,36 @@ $(document).ready(function () {
       contentType: "application/json",
       dataType: 'json'
     });
+
   });
+
+  var $setShareShippedDialog = $('#set_share_shipped_dialog');
+  var $setShipShareId = $('#set_shipped_share_id', $setShareShippedDialog);
+  var $setShipShareMsg = $('#share_arrival_msg', $setShareShippedDialog);
+
+  $('button.set-shipped-share').on('click', function (e) {
+    e.preventDefault();
+    var $me = $(this);
+    var shareId = $me.data('id');
+    $setShipShareId.val(shareId);
+    $setShareShippedDialog.modal('show');
+  });
+
+  $('button[name="set-share-shipped"]').on('click', function (e) {
+    e.preventDefault();
+    var msg = $setShipShareMsg.val();
+    if (!msg || !msg.trim()) {
+      return;
+    }
+    var shareId = $setShipShareId.val();
+    var postData = {'share_id': shareId, 'msg': msg};
+    $.post('/weshares/set_share_shipped', postData, function () {
+      //todo set share shipped tag
+      $setShareShippedDialog.modal('hide');
+      $('#set-share-shipped-btn-' + shareId).remove();
+    }, 'json');
+  });
+
   var $refundMoneyDialog = $('#refund-money-dialog');
   var $refundOrderName = $('#refund-order-user', $refundMoneyDialog);
   var $refundOrderId = $('#refund-order-id', $refundMoneyDialog);
@@ -246,6 +279,42 @@ $(document).ready(function () {
         $confirmMoneyDialog.modal('hide');
       } else {
         alert('保存失败,请联系客服');
+      }
+    }, 'json');
+  });
+
+  var $refundShareDialog = $('#refund-share-dialog');
+  var $refundShareOfflineAddress = $('#refund-share-address', $refundShareDialog);
+  var $refundShareId = $('#refund-share-id', $refundShareDialog);
+  var $refundShareRemark = $('#refund-share-msg', $refundShareDialog);
+
+  $('button.refund-share-money').on('click', function(e){
+    e.preventDefault();
+    var $me = $(this);
+    var address = $me.data('address');
+    var shareId = $me.data('id');
+    $refundShareOfflineAddress.val(address);
+    $refundShareId.val(shareId);
+    $refundShareRemark.val('');
+    $refundShareDialog.modal('show');
+  });
+
+  $('button[name="handle-refund-share-money"]').on('click', function(e){
+    e.preventDefault();
+    var refundMark = $refundShareRemark.val();
+    var shareId = $refundShareId.val();
+    if (!refundMark) {
+      alert('请输入退款原因');
+      return false;
+    }
+    var postData = {
+      refundMark: refundMark
+    };
+    $.post('/weshares/refund_share/'+shareId+'.json', postData, function (data) {
+      if (data['success']) {
+        //todo mark
+        $('#refund-share-btn-'+shareId).remove();
+        $refundShareDialog.modal('hide');
       }
     }, 'json');
   });

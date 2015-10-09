@@ -35,8 +35,8 @@ class ShareController extends AppController{
         $this->autoRender = false;
         Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $shareId . '_0', '');
         Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $shareId . '_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $shareId.'_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $shareId.'_0', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $shareId . '_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $shareId . '_0', '');
         Cache::write(SIMPLE_SHARE_INFO_CACHE_KEY . '_' . $shareId, '');
         echo json_encode(array('success' => true));
         return;
@@ -124,6 +124,7 @@ class ShareController extends AppController{
         $this->Weshare->updateAll(array('settlement' => 1), array('id' => $shareId, 'status' => array(1, 2)));
         $this->redirect(array('action' => 'admin_share_for_pay'));
     }
+
 
     public function admin_share_for_pay(){
         $weshares = $this->Weshare->find('all', array(

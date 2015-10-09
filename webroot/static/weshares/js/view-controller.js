@@ -103,7 +103,9 @@
     vm.readMoreBtnText = '全文';
     vm.hideMoreShareInfo = false;
     vm.shouldShowReadMoreBtn = false;
-
+    vm.startNewGroupShare = false;
+    vm.chooseOfflineAddress = null;
+    vm.isGroupShareType = false;
     ChooseOfflineStore(vm, $log, $http, $templateCache, $timeout);
     vm.statusMap = {
       0: '进行中',
@@ -123,6 +125,7 @@
     vm.validateAddress = validateAddress;
     vm.validateProducts = validateProducts;
     vm.buyProducts = buyProducts;
+    vm.startGroupShare = startGroupShare;
     vm.validateMobile = validateMobile;
     vm.validateUserName = validateUserName;
     vm.validateUserAddress = validateUserAddress;
@@ -130,6 +133,7 @@
     vm.submitOrder = submitOrder;
     vm.confirmReceived = confirmReceived;
     vm.toUserShareInfo = toUserShareInfo;
+    vm.toShareDetailView = toShareDetailView;
     vm.checkProductNum = checkProductNum;
     vm.getProductLeftNum = getProductLeftNum;
     vm.toShareOrderList = toShareOrderList;
@@ -151,6 +155,7 @@
     vm.getOrderCommentLength = getOrderCommentLength;
     vm.initWeshareData = initWeshareData;
     vm.sortOrders = sortOrders;
+    vm.combineShareBuyData = combineShareBuyData;
     vm.closeCommentDialog = closeCommentDialog;
     vm.notifyUserToComment = notifyUserToComment;
     vm.loadSharerAllComments = loadSharerAllComments;
@@ -177,6 +182,13 @@
     vm.handleReadMoreBtn = handleReadMoreBtn;
     vm.checkShareInfoHeight = checkShareInfoHeight;
     vm.toggleTag = toggleTag;
+    vm.supportGroupBuy = supportGroupBuy;
+    vm.offlineAddressData = null;
+    vm.loadOfflineAddressData = loadOfflineAddressData;
+    vm.setShipFee = setShipFee;
+    vm.newGroupShare = newGroupShare;
+    vm.childShareDetail = null;
+    vm.currentUserOrderCount = 0;
     function pageLoaded() {
       $rootScope.loadingPage = false;
     }
@@ -211,7 +223,21 @@
         });
     }
 
-    function loadOrderDetail(share_id){
+    /**
+     * 获取线下自提点和简单的购买数据购买数据
+     * @param share_id
+     */
+    function loadOfflineAddressData(share_id) {
+      $http({method: 'GET', url: '/weshares/get_offline_address_detail/' + share_id + '.json', cache: $templateCache}).
+        success(function (data, status) {
+          vm.offlineAddressData = data;
+        }).
+        error(function (data, status) {
+          $log.log(data);
+        });
+    }
+
+    function loadOrderDetail(share_id) {
       var fromType = angular.element(document.getElementById('weshareView')).attr('data-from-type');
       //first share
       var initSharedOfferId = angular.element(document.getElementById('weshareView')).attr('data-shared-offer');
@@ -224,9 +250,12 @@
       $http({method: 'GET', url: '/weshares/get_share_order_detail/' + share_id + '.json', cache: $templateCache}).
         success(function (data, status) {
           vm.ordersDetail = data['ordersDetail'];
+          vm.childShareDetail = data['childShareData']['child_share_data'];
+          vm.childShareDetailUsers = data['childShareData']['child_share_user_infos'];
           vm.shipTypes = data['ordersDetail']['ship_types'];
           vm.rebateLogs = data['ordersDetail']['rebate_logs'];
           vm.sortOrders();
+          vm.combineShareBuyData();
           setWeiXinShareParams();
           //from paid done
           if (fromType == 1) {
@@ -282,6 +311,9 @@
       $http({method: 'GET', url: '/weshares/detail/' + weshareId + '.json', cache: $templateCache}).
         success(function (data, status) {
           vm.weshare = data['weshare'];
+          if (vm.weshare.type == 1) {
+            vm.isGroupShareType = true;
+          }
           vm.toggleState = {0: {open: true, statusText: '收起'}};
           _.each(vm.weshare.tags, function (value, key) {
             vm.toggleState[key] = {
@@ -305,7 +337,7 @@
           vm.myCoupons = data['my_coupons'];
           vm.weshareSettings = data['weshare_ship_settings'];
           vm.supportPysZiti = data['support_pys_ziti'];
-          vm.selectShipType = getSelectTypeDefaultVal(vm.weshareSettings);
+          vm.selectShipType = getSelectTypeDefaultVal();
           vm.userSubStatus = data['sub_status'];
           vm.submitRecommendData = {};
           vm.submitRecommendData.recommend_content = vm.weshare.creator.nickname + '我认识，很靠谱！';
@@ -329,6 +361,9 @@
           //load all comments
           vm.loadOrderDetail(weshareId);
           vm.loadSharerAllComments(vm.weshare.creator.id);
+          if (vm.supportGroupBuy()) {
+            vm.loadOfflineAddressData(weshareId);
+          }
         }).
         error(function (data, status) {
           $log.log(data);
@@ -336,12 +371,25 @@
       vm.checkHasUnRead();
     }
 
+    /**
+     * 订单数据和拼团数据组合
+     */
+    function combineShareBuyData() {
+      var insertIndex = vm.currentUserOrderCount;
+      for (childShareItem in vm.childShareDetail) {
+        vm.ordersDetail.orders.splice(insertIndex, 0, vm.childShareDetail[childShareItem]);
+        insertIndex++;
+      }
+    }
+
     function sortOrders() {
       if (!vm.isCreator()) {
         vm.ordersDetail.orders = _.sortBy(vm.ordersDetail.orders, function (order) {
           if (order.status == 9 && order.creator == vm.currentUser.id) {
+            vm.currentUserOrderCount = vm.currentUserOrderCount + 1;
             return -2147483646;
           } else if (order.creator == vm.currentUser.id) {
+            vm.currentUserOrderCount = vm.currentUserOrderCount + 1;
             return -2147483647;
           } else {
             return order.id;
@@ -350,18 +398,22 @@
       }
     }
 
-    function getSelectTypeDefaultVal(shipSettings) {
-      if (vm.weshareSettings.kuai_di.status == 1) {
+    function getSelectTypeDefaultVal() {
+      if (vm.weshareSettings.kuai_di && vm.weshareSettings.kuai_di.status == 1) {
         vm.shipFee = vm.weshareSettings.kuai_di.ship_fee;
         return 0;
       }
-      if (vm.weshareSettings.self_ziti.status == 1) {
+      if (vm.weshareSettings.self_ziti && vm.weshareSettings.self_ziti.status == 1) {
         vm.shipFee = vm.weshareSettings.self_ziti.ship_fee;
         return 1;
       }
-      if (vm.weshareSettings.pys_ziti.status == 1) {
+      if (vm.weshareSettings.pys_ziti && vm.weshareSettings.pys_ziti.status == 1) {
         vm.shipFee = vm.weshareSettings.pys_ziti.ship_fee;
         return 2;
+      }
+      if (vm.weshareSettings.pin_tuan && vm.weshareSettings.pin_tuan.status == 1) {
+        vm.shipFee = vm.weshareSettings.pin_tuan.ship_fee;
+        return 3;
       }
       return -1;
     }
@@ -375,6 +427,7 @@
     }
 
     function isOwner(order) {
+      //note may be a child share item
       return !_.isEmpty(vm.currentUser) && !_.isEmpty(order) && vm.currentUser.id == order.creator;
     }
 
@@ -393,7 +446,13 @@
       vm.showOfflineStoreDetailView = false;
       vm.chooseOfflineStoreView = false;
       vm.showBalanceView = false;
+      vm.showStartGroupShareView = false;
       vm.showShareDetailView = true;
+      vm.startNewGroupShare = false;
+    }
+
+    function toShareDetailView($share_id) {
+      window.location.href = '/weshares/view/' + $share_id;
     }
 
     function toUserShareInfo($uid) {
@@ -443,7 +502,7 @@
     }
 
     function getOrderComment(order_id) {
-      if(vm.commentData['order_comments']){
+      if (vm.commentData['order_comments']) {
         return vm.commentData['order_comments'][order_id];
       }
       return null;
@@ -478,11 +537,11 @@
       if (vm.isCreator()) {
         return true;
       }
-      if (vm.currentUser&&vm.currentUser['is_proxy'] == 0) {
+      if (vm.currentUser && vm.currentUser['is_proxy'] == 0) {
         return false;
       }
       var recommendId = vm.rebateLogs[order['cate_id']];
-      if (vm.currentUser&&vm.currentUser['id'] == recommendId) {
+      if (vm.currentUser && vm.currentUser['id'] == recommendId) {
         return true;
       }
       return false;
@@ -503,6 +562,24 @@
       if (vm.selectShipType == 2) {
         return vm.weshareSettings.pys_ziti.id;
       }
+      if (vm.selectShipType == 3) {
+        return vm.weshareSettings.pin_tuan.id;
+      }
+    }
+
+    function setShipFee() {
+      if (vm.selectShipType == 0) {
+        vm.shipFee = vm.weshareSettings.kuai_di.ship_fee;
+      }
+      if (vm.selectShipType == 1) {
+        vm.shipFee = vm.weshareSettings.self_ziti.ship_fee;
+      }
+      if (vm.selectShipType == 2) {
+        vm.shipFee = vm.weshareSettings.pys_ziti.ship_fee;
+      }
+      if (vm.selectShipType == 3) {
+        vm.shipFee = vm.weshareSettings.pin_tuan.ship_fee;
+      }
     }
 
     function getShipFee() {
@@ -514,6 +591,9 @@
       }
       if (vm.selectShipType == 2) {
         return vm.weshareSettings.pys_ziti.ship_fee;
+      }
+      if (vm.selectShipType == 3) {
+        return vm.weshareSettings.pin_tuan.ship_fee;
       }
     }
 
@@ -573,7 +653,7 @@
     }
 
     function getProductLeftNum(product) {
-      if (vm.ordersDetail&&vm.ordersDetail.summery.details[product.id]) {
+      if (vm.ordersDetail && vm.ordersDetail.summery.details[product.id]) {
         var product_buy_num = vm.ordersDetail.summery.details[product.id]['num'];
         var store_num = product.store;
         return store_num - product_buy_num;
@@ -586,7 +666,7 @@
       if (store_num == 0) {
         return true;
       }
-      if (vm.ordersDetail&&vm.ordersDetail.summery.details[product.id]) {
+      if (vm.ordersDetail && vm.ordersDetail.summery.details[product.id]) {
         var product_buy_num = vm.ordersDetail.summery.details[product.id]['num'];
         return product_buy_num < store_num;
       }
@@ -597,6 +677,17 @@
       vm.showShareDetailView = false;
       vm.showBalanceView = true;
       vm.chooseShipType = false;
+    }
+
+    function startGroupShare() {
+      vm.selectShipType = 3;
+      vm.shipFee = vm.weshareSettings.pin_tuan.ship_fee;
+      vm.showGroupShareTipDialog = false;
+      vm.showLayer = false;
+      vm.showShareDetailView = false;
+      vm.showStartGroupShareView = true;
+      vm.chooseShipType = false;
+      vm.startNewGroupShare = true;
     }
 
     function submitOrder(paymentType) {
@@ -620,11 +711,22 @@
         ship_fee: vm.shipFee,
         ship_set_id: vm.shipSetId
       };
+      //self ziti
       if (vm.selectShipType == 1) {
         ship_info['address_id'] = vm.weshare.selectedAddressId;
       }
+      //offline store
       if (vm.selectShipType == 2) {
         ship_info['address_id'] = vm.checkedOfflineStore.id;
+      }
+      //邻里拼团
+      if (vm.selectShipType == 3 && !vm.startNewGroupShare) {
+        if (!vm.chooseOfflineAddress) {
+          vm.offlineAddressHasError = true;
+          return;
+        }
+        vm.buyerAddress = vm.offlineAddressData[vm.chooseOfflineAddress]['address'];
+        ship_info['weshare_id'] = vm.chooseOfflineAddress;
       }
       var orderData = {
         weshare_id: vm.weshare.id,
@@ -632,6 +734,8 @@
         products: submit_products,
         ship_info: ship_info,
         remark: vm.buyerRemark,
+        is_group_share: vm.isGroupShareType,
+        start_new_group_share: vm.startNewGroupShare,
         buyer: {
           name: vm.buyerName,
           mobilephone: vm.buyerMobilePhone,
@@ -662,6 +766,27 @@
         }
       }).error(function () {
         vm.submitProcessing = false;
+      });
+    }
+
+    //发起拼团
+    function newGroupShare() {
+      //valid address
+      if (vm.validateUserAddress()) {
+        return false;
+      }
+      var cloneShareData = {
+        weshare_id: vm.weshare.id,
+        address: vm.buyerAddress,
+        business_remark: vm.buyerRemark
+      };
+      $http.post('/weshares/start_new_group_share', cloneShareData).success(function (data) {
+        if (data.success) {
+          window.location.href = '/weshares/view/' + data.shareId;
+        } else {
+          alert('提交失败.请联系客服..');
+        }
+      }).error(function () {
       });
     }
 
@@ -768,7 +893,7 @@
     }
 
     function notifyType() {
-      if(vm.ordersDetail){
+      if (vm.ordersDetail) {
         if (vm.ordersDetail.orders && vm.ordersDetail.orders.length > 0) {
           return 1;
         }
@@ -1067,6 +1192,13 @@
       } else {
         vm.readMoreBtnText = '收起';
       }
+    }
+
+    function supportGroupBuy() {
+      if (vm.weshareSettings && vm.weshareSettings.pin_tuan && vm.weshareSettings.pin_tuan.status == 1) {
+        return true;
+      }
+      return false;
     }
 
     function toggleTag(tag) {
