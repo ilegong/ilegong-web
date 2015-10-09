@@ -2167,6 +2167,9 @@ function map_opt_log_data($var) {
     if ($data_type == OPT_LOG_SHARE_RECOMMEND) {
         $var['data_type_tag'] = '推荐了';
     }
+    if ($data_type == OPT_LOG_START_GROUP_SHARE) {
+        $var['data_type_tag'] = '发起拼团';
+    }
     $var['data_url'] = '/weshares/view/' . $var['obj_id'];
     return $var;
 }
