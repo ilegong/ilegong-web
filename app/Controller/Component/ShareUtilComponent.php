@@ -862,6 +862,7 @@ class ShareUtilComponent extends Component {
      * @return mixed
      */
     public function get_group_share($uid, $refer_share_id) {
+        //发起多次拼团有问题
         $WeshareM = ClassRegistry::init('Weshare');
         $weshare = $WeshareM->find('first', array(
             'conditions' => array(

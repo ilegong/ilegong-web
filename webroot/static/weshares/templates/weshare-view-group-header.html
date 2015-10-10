@@ -23,6 +23,10 @@
         <s>地址&nbsp;&nbsp;<span class="stress-span" ng-bind="::vm.weshare.addresses[0]['address']"></span></s>
     </li>
     <ul class="clearfix">
+        <li class="header-btn-wrap" ng-if="vm.isCreator()||vm.isManage"><a
+                class="statistics-btn order-manage-btn"
+                ng-click="vm.toShareOrderList()">订单管理</a>
+        </li>
         <li class="header-btn-wrap" ng-if="!vm.isCreator()&&vm.isProxy()&&vm.weshare.status == 0"><a
                 class="statistics-btn tip-share-btn"
                 ng-click="vm.showRecommendDialog=true;vm.showLayer=true;">我要推荐</a>
