@@ -28,7 +28,7 @@ class UtilController extends AppController{
         $orders_broup_by_user = $this->Order->find('all', array(
             'conditions' => array(
                 'member_id' => $share_ids,
-                'ship_mark' => 'self_zi_ti'
+                'ship_mark' => 'self_ziti'
             ),
             'limit' => 1000,
             'group' => array('Order.creator')

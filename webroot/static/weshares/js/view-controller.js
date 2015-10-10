@@ -1134,7 +1134,7 @@
         var ship_company = order['ship_type'];
         return vm.shipTypes[ship_company] + ': ' + code;
       }
-      if (shipMark == 'pys_zi_ti') {
+      if (shipMark == 'pys_ziti') {
         return '提货码: ' + code;
       }
       return '';
@@ -1174,7 +1174,7 @@
     }
 
     function isShowShipCode(order) {
-      if (order['ship_mark'] == 'kuai_di' || order['ship_mark'] == 'pys_zi_ti') {
+      if (order['ship_mark'] == 'kuai_di' || order['ship_mark'] == 'pys_ziti') {
         if (order.status != 1 && vm.isOwner(order)) {
           return true;
         }

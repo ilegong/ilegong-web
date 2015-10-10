@@ -77,7 +77,7 @@ class ShareController extends AppController{
                 'id' => $order_id,
                 'type' => ORDER_TYPE_WESHARE_BUY,
                 'status' => array(ORDER_STATUS_PAID),
-                'ship_mark' => 'pys_zi_ti'
+                'ship_mark' => 'pys_ziti'
             ),
             'fields' => array(
                 'id', 'consignee_name', 'consignee_address', 'creator', 'member_id', 'consignee_id'
