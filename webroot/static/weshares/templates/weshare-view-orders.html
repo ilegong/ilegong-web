@@ -76,8 +76,8 @@
                     <span>地址:</span>
                     <span ng-bind="::order.consignee_address"></span>
                     <br/>
-                    <a class="btn confirm-btn" ng-click="vm.confirmReceived(order)" ng-show="order.status==2"><span ng-if="order.ship_mark=='pys_ziti' || order.ship_mark=='self_ziti'">已收货</span><span ng-if="order.ship_mark=='kuai_di'">已签收</span></a>
-                    <a class="btn order-confirmed-btn" ng-show="order.status==3"><span ng-if="order.ship_mark=='pys_ziti' || order.ship_mark=='self_ziti'">已收货</span><span ng-if="order.ship_mark=='kuai_di'">已签收</span></a>
+                    <a class="btn confirm-btn" ng-click="vm.confirmReceived(order)" ng-show="order.status==2"><span ng-if="order.ship_mark=='pys_ziti' || order.ship_mark=='self_ziti' || order.ship_mark=='pin_tuan'">已收货</span><span ng-if="order.ship_mark=='kuai_di'">已签收</span></a>
+                    <a class="btn order-confirmed-btn" ng-show="order.status==3"><span ng-if="order.ship_mark=='pys_ziti' || order.ship_mark=='self_ziti' || order.ship_mark=='pin_tuan'">已收货</span><span ng-if="order.ship_mark=='kuai_di'">已签收</span></a>
                 </div>
                 <span ng-if='vm.isShowShipCode(order);' class="display-name" style="background: darkgray;" ng-bind="::vm.getShipCode(order);"></span>
             </li>
