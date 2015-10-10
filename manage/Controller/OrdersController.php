@@ -621,8 +621,10 @@ class OrdersController extends AppController {
             $this->Weixin->send_refund_order_notify($order_creator_id, $title, $weshareTitle, $showRefundMoney, $detail_url, $orderId, $remark);
             //refund complete
             //clean cache share
-            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId . '_1', '');
-            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId . '_0', '');
+            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId . '_1_1', '');
+            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId . '_0_1', '');
+            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId . '_1_0', '');
+            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId . '_0_0', '');
             echo json_encode(array('success' => true));
             return;
         }

@@ -475,8 +475,10 @@ class WeixinComponent extends Component {
     }
 
     private function clear_share_cache($share_id, $is_pin_tuan = false) {
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_0', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_1_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_0_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_1_0', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_0_0', '');
         //check should clear child share cache
         if ($is_pin_tuan) {
             $refer_share_id = $this->ShareUtil->get_share_refer_id($share_id);

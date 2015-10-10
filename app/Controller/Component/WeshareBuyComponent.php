@@ -426,8 +426,10 @@ class WeshareBuyComponent extends Component {
             Cache::write(SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $weshare_info['creator'] . '_0', '');
             Cache::write(SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $weshare_info['creator'] . '_1', '');
             //SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId;
-            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_0', '');
-            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_1', '');
+            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_1_1', '');
+            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_0_1', '');
+            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_1_0', '');
+            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_0_0', '');
         }
         //$key = SHARE_COMMENT_DATA_CACHE_KEY . '_' . $weshare_id;
         Cache::write(SHARE_COMMENT_DATA_CACHE_KEY . '_' . $share_id, '');
@@ -753,6 +755,11 @@ class WeshareBuyComponent extends Component {
             $key = SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId . '_1';
         } else {
             $key = SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId . '_0';
+        }
+        if ($export) {
+            $key = $key . '_0';
+        } else {
+            $key = $key . '_1';
         }
         $share_order_data = Cache::read($key);
         if (empty($share_order_data)) {
