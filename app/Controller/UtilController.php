@@ -14,7 +14,11 @@ class UtilController extends AppController{
 
     public $components = array('ShareUtil', 'Weixin');
 
-
+    /**
+     * @param $user_id
+     * @return array
+     * 获取用户粉丝
+     */
     public function load_user_fans($user_id){
         $this->autoRender = false;
         $shares = $this->Weshare->find('all', array(
@@ -25,7 +29,7 @@ class UtilController extends AppController{
         ));
         $share_ids = Hash::extract($shares, '{n}.Weshare.id');
 
-        $orders_broup_by_user = $this->Order->find('all', array(
+        $orders_group_by_user = $this->Order->find('all', array(
             'conditions' => array(
                 'member_id' => $share_ids,
                 'ship_mark' => 'self_ziti'
@@ -40,7 +44,7 @@ class UtilController extends AppController{
             ),
             'limit' => 500
         ));
-        $order_user_ids = Hash::extract($orders_broup_by_user, '{n}.Order.creator');
+        $order_user_ids = Hash::extract($orders_group_by_user, '{n}.Order.creator');
         $join_user_ids = Hash::extract($join_users, '{n}.CandidateEvent.user_id');
         $diff_user_ids = array_diff($order_user_ids, $join_user_ids);
         //echo json_encode(array('count' => count($diff_user_ids), 'user_ids' => $diff_user_ids));
@@ -48,10 +52,23 @@ class UtilController extends AppController{
         return $diff_user_ids;
     }
 
+    /**
+     * @param $openId
+     * @param $title
+     * @param $productName
+     * @param $detailUrl
+     * @param $sharerName
+     * @param $remark
+     * 处理发起分享通知
+     */
     public function process_send_share_msg($openId, $title, $productName, $detailUrl,$sharerName,$remark) {
         send_join_tuan_buy_msg(null,$title,$productName,$sharerName,$remark,$detailUrl,$openId);
     }
 
+    /**
+     * @param $user_id
+     * 发送投票通知
+     */
     public function send_notify_vote($user_id){
         $this->autoRender = false;
         $title = '关注的小宝妈发起了';

@@ -27,6 +27,11 @@ class ShareUtilComponent extends Component {
         }
     }
 
+    /**
+     * @param $weshareId
+     * @param $sharer_id
+     * 迁移粉丝数据
+     */
     public function process_weshare_task($weshareId, $sharer_id) {
         $userRelationM = ClassRegistry::init('UserRelation');
         $orderM = ClassRegistry::init('Order');
@@ -93,6 +98,13 @@ class ShareUtilComponent extends Component {
         }
     }
 
+    /**
+     * @param $recommend
+     * @param $clicker
+     * @param $weshare_id
+     * @return mixed
+     * 保存返利记录
+     */
     public function save_rebate_log($recommend, $clicker, $weshare_id) {
         $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
         $history_log = $rebateTrackLogM->find('first', array(
@@ -1003,6 +1015,11 @@ class ShareUtilComponent extends Component {
         $orderM->updateAll(array('process_prepaid_status' => ORDER_STATUS_PREPAID_DONE), array('id' => $parent_order_id));
     }
 
+    /**
+     * @param $weshare_id
+     * @return array
+     * 获取产品和分组的组合
+     */
     public function get_product_tag_map($weshare_id) {
         $weshareProductM = ClassRegistry::init('WeshareProduct');
         $weshareProducts = $weshareProductM->find('all', array(
@@ -1140,6 +1157,10 @@ class ShareUtilComponent extends Component {
     }
 
     // check split order by tag
+    /**
+     * @param $order
+     * 拆分订单根据分组
+     */
     public function split_order_by_tag($order) {
         // check cal ship fee
         // check cal red packet fee
@@ -1218,7 +1239,7 @@ class ShareUtilComponent extends Component {
         $cartM->saveAll($result_carts);
         $orderM->updateAll(array('type' => ORDER_TYPE_SPLIT), array('id' => $order_id));
     }
-
+    
     private function check_cart_confirm_price($tag_carts) {
         $result = 0;
         foreach ($tag_carts as $item) {

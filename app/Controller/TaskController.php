@@ -53,6 +53,7 @@ class TaskController extends AppController{
 
     /**
      * @param $shareId
+     * 批量退款，主要处理子分享订单
      */
     public function batch_refund_money($shareId) {
         $this->autoRender = false;

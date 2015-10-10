@@ -1527,6 +1527,13 @@ class WesharesController extends AppController {
         return null;
     }
 
+    /**
+     * @param $shipType
+     * @param $orderData
+     * @param $is_group_share_type
+     * @return int
+     * 用户下单根据选择的物流类型设置数据
+     */
     private function process_order_ship_mark($shipType, &$orderData, $is_group_share_type) {
         if ($shipType == SHARE_SHIP_PYS_ZITI) {
             $orderData['ship_mark'] = SHARE_SHIP_PYS_ZITI_TAG;
@@ -1554,6 +1561,16 @@ class WesharesController extends AppController {
         }
     }
 
+    /**
+     * @param $orderData
+     * @param $shipInfo
+     * @param $is_start_new_group_share
+     * @param $weshareId
+     * @param $uid
+     * @param $address
+     * @param $business_remark
+     * 处理用户邻里拼下单
+     */
     private function process_ship_group(&$orderData, $shipInfo, $is_start_new_group_share, $weshareId, $uid, $address, $business_remark) {
         if ($is_start_new_group_share) {
             //标示这是一个邻里拼 触发 clone 一个分享

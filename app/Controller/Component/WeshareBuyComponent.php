@@ -1581,6 +1581,11 @@ class WeshareBuyComponent extends Component {
         return json_decode($share_info_str, true);
     }
 
+    /**
+     * @param $share_ids
+     * @return mixed
+     * 根据分享的ID数组获取分享信息
+     */
     public function get_all_share_info($share_ids) {
         $weshareM = ClassRegistry::init('Weshare');
         $share_info = $weshareM->find('all', array(
@@ -1591,6 +1596,11 @@ class WeshareBuyComponent extends Component {
         return $share_info;
     }
 
+    /**
+     * @param $uid
+     * @return bool
+     * 是否有红包
+     */
     public function has_share_offer($uid) {
         $shareOfferM = ClassRegistry::init('ShareOffer');
         $shareOffer = $shareOfferM->find('first', array(
@@ -1600,6 +1610,11 @@ class WeshareBuyComponent extends Component {
         return !empty($shareOffer);
     }
 
+    /**
+     * @param $uid
+     * @return mixed
+     * 获取分享者手机号码
+     */
     public function get_sharer_mobile($uid) {
         $key = SHARER_MOBILE_PHONE_CACHE_KEY . '_' . $uid;
         $mobile = Cache::read($key);
