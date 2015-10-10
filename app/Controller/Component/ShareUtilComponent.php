@@ -832,7 +832,7 @@ class ShareUtilComponent extends Component {
                 $optLogData = array('user_id' => $order_creator, 'obj_type' => OPT_LOG_START_GROUP_SHARE, 'obj_id' => $group_share_id, 'created' => $now, 'memo' => $title, 'thumbnail' => $shareImg[0]);
                 $this->saveOptLog($optLogData);
                 //send msg
-                $this->ShareUtil->trigger_send_new_share_msg($group_share_id, $order_creator);
+                $this->trigger_send_new_share_msg($group_share_id, $order_creator);
                 return $group_share_id;
             }
         }
