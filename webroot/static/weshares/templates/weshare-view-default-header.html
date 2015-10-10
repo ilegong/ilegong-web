@@ -2,38 +2,40 @@
     <li>
         <img lazy-src="{{vm.weshare.creator.image||'/img/default_user_icon.jpg'}}" ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/>
         <br>
-        <s style="display: inline-flex;">
-            <span ng-if="vm.weshare.creator.is_proxy==1" style="color: white; font-size: 13px; font-weight: 700; padding: 2px; margin-top: 6px; background-color: #29AC0E; text-align: center; ">团长</span>
-            <img ng-if="vm.userShareSummery.follower_count>=50" src="/static/weshares/images/v.png" style="width: 20px;height: 20px;position: absolute;top: 44px;left: 41px;"/>
-            <img ng-if="vm.supportPysZiti>0" src="/static/weshares/images/hlj.jpeg" style="width: 25px;height: 25px;"/>
+        <s class="sharer-mark">
+            <span ng-if="vm.weshare.creator.is_proxy==1" class="grouper-mark">团长</span>
+            <img ng-if="vm.userShareSummery.follower_count>=50" src="/static/weshares/images/v.png" class="v-icon-img"/>
+            <img ng-if="vm.supportPysZiti>0" src="/static/weshares/images/hlj.jpeg" class="hlj-icon-img"/>
         </s>
     </li>
-    <li style="width: 65%">
-        <div style="display: -webkit-inline-box">
+    <li class="share-info-item-li">
+        <div class="sharer-nickname-display-inline">
             <label ng-click="vm.toUserShareInfo(vm.weshare.creator.id)" ng-bind="::vm.weshare.creator.nickname"></label>
-            <a ng-if="!vm.userSubStatus" style="margin-left: 5px;margin-top: 3px;width: 50px;line-height: 20px;background-color: #F2651A;" class="statistics-btn" ng-click="vm.subSharer();" ng-bind="vm.subShareTipTxt">+关注</a>
+            <a ng-if="!vm.userSubStatus" class="statistics-btn sub-sharer-btn" ng-click="vm.subSharer();" ng-bind="vm.subShareTipTxt">+关注</a>
         </div>
         <s><span ng-bind="::vm.ordersDetail.summery.all_buy_user_count"
-                 style="color: #ffa200;"></span>&nbsp;报名
-            &nbsp;&nbsp;<span ng-click="vm.showCommentListDialog()" ng-if="vm.getOrderCommentLength()>=1&&vm.userSubStatus"><span
-                    style="color: #ffa200" ng-bind="::vm.getOrderCommentLength()">0</span>&nbsp;爱心评价</span>
+                 class="stress-span"></span>&nbsp;报名
+            &nbsp;&nbsp;<span ng-click="vm.showCommentListDialog()"
+                              ng-if="vm.getOrderCommentLength()>=1&&vm.userSubStatus"><span
+                    class="stress-span" ng-bind="::vm.getOrderCommentLength()">0</span>&nbsp;爱心评价</span>
             &nbsp;&nbsp;<span
-                    ng-if="vm.getOrderCommentLength()<1&&vm.userSubStatus"><span style="color: #ffa200" ng-bind="::vm.userShareSummery.follower_count">0</span>&nbsp;粉丝</span>&nbsp;&nbsp;<span
+                    ng-if="vm.getOrderCommentLength()<1&&vm.userSubStatus"><span class="stress-span"
+                                                                                 ng-bind="::vm.userShareSummery.follower_count">0</span>&nbsp;粉丝</span>&nbsp;&nbsp;<span
                     ng-if="(vm.currentUser.is_proxy==1||vm.isCreator())&&vm.weshare.proxy_rebate_percent.percent>0">佣金&nbsp;<span
-                    ng-bind="::vm.weshare.proxy_rebate_percent.percent+'%'" style="color: #ffa200;"></span></span></s>
+                    ng-bind="::vm.weshare.proxy_rebate_percent.percent+'%'" class="stress-span"></span></span></s>
     </li>
     <ul class="clearfix">
-        <li style="margin-right: 5px; float: right;" ng-if="vm.isCreator()||vm.isManage"><a style="margin-top: 3px;width: 65px;"
-                                                                                            class="statistics-btn"
-                                                                                            ng-click="vm.toShareOrderList()">订单管理</a>
+        <li class="header-btn-wrap" ng-if="vm.isCreator()||vm.isManage"><a
+                class="statistics-btn order-manage-btn"
+                ng-click="vm.toShareOrderList()">订单管理</a>
         </li>
-        <li style="margin-right: 5px; float: right;" ng-if="vm.isCreator()"><a style="margin-top: 3px;width: 65px;"
-                                                                               class="statistics-btn"
-                                                                               ng-click="vm.toUpdate()">修改</a>
+        <li class="header-btn-wrap" ng-if="vm.isCreator()"><a
+                class="statistics-btn edit-share-btn"
+                ng-click="vm.toUpdate()">修改</a>
         </li>
-        <li style="margin-right: 5px; float: right;" ng-if="!vm.isCreator()"><a style="margin-top: 3px;width: 75px;"
-                                                                                class="statistics-btn"
-                                                                                ng-click="vm.createMyShare()">我也要分享</a>
+        <li class="header-btn-wrap" ng-if="!vm.isCreator()"><a
+                class="statistics-btn tip-share-btn"
+                ng-click="vm.createMyShare()">我也要分享</a>
         </li>
     </ul>
     <div class="recommend" ng-if="vm.recommendData.length > 0">
