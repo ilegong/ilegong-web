@@ -23,6 +23,10 @@
         <s>地址&nbsp;&nbsp;<span class="stress-span" ng-bind="::vm.weshare.addresses[0]['address']"></span></s>
     </li>
     <ul class="clearfix">
+        <li class="header-btn-wrap" ng-if="!vm.isCreator()&&vm.isProxy()&&vm.weshare.status == 0"><a
+                class="statistics-btn tip-share-btn"
+                ng-click="vm.showRecommendDialog=true;vm.showLayer=true;">我要推荐</a>
+        </li>
         <li class="header-btn-wrap"><a class="statistics-btn want-start-group-share" ng-click="vm.showGroupShareTipDialog=true;vm.showLayer=true;">我也要拼团</a></li>
     </ul>
 </ul>

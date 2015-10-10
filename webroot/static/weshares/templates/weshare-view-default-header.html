@@ -33,6 +33,10 @@
                 class="statistics-btn edit-share-btn"
                 ng-click="vm.toUpdate()">修改</a>
         </li>
+        <li class="header-btn-wrap" ng-if="!vm.isCreator()&&vm.isProxy()&&vm.weshare.status == 0"><a
+                class="statistics-btn tip-share-btn"
+                ng-click="vm.showRecommendDialog=true;vm.showLayer=true;">我要推荐</a>
+        </li>
         <li class="header-btn-wrap" ng-if="!vm.isCreator()"><a
                 class="statistics-btn tip-share-btn"
                 ng-click="vm.createMyShare()">我也要分享</a>
