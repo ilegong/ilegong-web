@@ -58,34 +58,14 @@
                     </thead>
                     <tbody>
                     {{loop $weshares $share}}
-                    <tr>
-                        <td>{{$share['id']}}</td>
-                        <td>{{$creators[$share['creator']]['id']}}</td>
-                        <td>{{$creators[$share['creator']]['nickname']}}</td>
-                        <td>{{$creators[$share['creator']]['mobilephone']}}</td>
-                        <td>{{$share['title']}}</td>
-                        <?php
-                            $current_share_repaid_money = $repaid_money_result[$share['id']];
-                            if($current_share_repaid_money == 0){
-                                $current_share_repaid_money = 0;
-                            }
-                        ?>
-                        {{if $weshare_summery[$share['id']]}}
-                        {{if $weshare_refund_map[$share['id']]}}
-                        <td>{{floatval($weshare_summery[$share['id']]['total_price']) - floatval($weshare_refund_map[$share['id']]) - floatval($weshare_rebate_map[$share['id']])+$current_share_repaid_money}}</td>
-                        {{else}}
-                        <td>{{floatval($weshare_summery[$share['id']]['total_price']) - floatval($weshare_rebate_map[$share['id']])+$current_share_repaid_money}}</td>
-                        {{/if}}
-                        {{else}}
-                        <td>0</td>
-                        {{/if}}
-                        <td>{{if $share['refer_share_id'] > 0}}{{$weshares[$share['refer_share_id']]['title']}}---{{$share['refer_share_id']}}{{/if}}</td>
-                        <td>{{$creators[$share['creator']]['payment']}}</td>
-                        <td><!-- Indicates a successful or positive action -->
-                            <a data-name="{{$share['title']}}" data-id="{{$share['id']}}" type="button"
-                               class="btn btn-success set-share-paid">置为已付款</a>
-                        </td>
-                    </tr>
+                    <?php $current_share_item = $share ?>
+                    {{template share/share_for_pay_item}}
+                    {{if !empty($share['child_share'])}}
+                        {{loop $share['child_share'] $child_share_item}}
+                            <?php $current_share_item = $child_share_item ?>
+                            {{template share/share_for_pay_item}}
+                        {{/loop}}
+                    {{/if}}
                     {{/loop}}
                     </tbody>
                 </table>

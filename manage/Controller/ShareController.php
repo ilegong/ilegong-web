@@ -129,6 +129,28 @@ class ShareController extends AppController{
         $this->redirect(array('action' => 'admin_share_for_pay'));
     }
 
+    /**
+     * @param $weshares
+     * reduce weshares 把子分享和父分享关联起来
+     */
+    private function reduce_weshares($weshares){
+        $remove_keys = array();
+        foreach($weshares as $share_id=>$share_item){
+            $refer_share_id = $share_item['refer_share_id'];
+            $parent_share = $weshares[$refer_share_id];
+            if(!empty($parent_share)){
+                if(!isset($parent_share['child_share'])){
+                    $parent_share['child_share'] = array();
+                }
+                $parent_share['child_share'][$share_id] = $share_item;
+                $remove_keys[] = $share_id;
+            }
+        }
+        foreach($remove_keys as $key){
+            unset($weshares[$key]);
+        }
+        return $weshares;
+    }
 
     public function admin_share_for_pay(){
         $weshares = $this->Weshare->find('all', array(
@@ -189,6 +211,7 @@ class ShareController extends AppController{
         }
         $weshare_rebate_map = $this->get_share_rebate_money($weshare_ids);
         $repaid_money_result = $this->get_share_repaid_money($weshare_ids);
+        $weshares = $this->reduce_weshares($weshares);
         $this->set('repaid_money_result', $repaid_money_result);
         $this->set('weshare_rebate_map', $weshare_rebate_map);
         $this->set('weshare_refund_map', $weshare_refund_money_map);

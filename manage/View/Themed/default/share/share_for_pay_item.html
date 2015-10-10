@@ -1,0 +1,28 @@
+<tr>
+    <td>{{$current_share_item['id']}}</td>
+    <td>{{$creators[$current_share_item['creator']]['id']}}</td>
+    <td>{{$creators[$current_share_item['creator']]['nickname']}}</td>
+    <td>{{$creators[$current_share_item['creator']]['mobilephone']}}</td>
+    <td>{{$current_share_item['title']}}</td>
+    <?php
+                            $current_share_repaid_money = $repaid_money_result[$current_share_item['id']];
+                            if($current_share_repaid_money == 0){
+                                $current_share_repaid_money = 0;
+                            }
+                        ?>
+    {{if $weshare_summery[$current_share_item['id']]}}
+    {{if $weshare_refund_map[$current_share_item['id']]}}
+    <td>{{floatval($weshare_summery[$current_share_item['id']]['total_price']) - floatval($weshare_refund_map[$current_share_item['id']]) - floatval($weshare_rebate_map[$current_share_item['id']])+$current_share_repaid_money}}</td>
+    {{else}}
+    <td>{{floatval($weshare_summery[$current_share_item['id']]['total_price']) - floatval($weshare_rebate_map[$current_share_item['id']])+$current_share_repaid_money}}</td>
+    {{/if}}
+    {{else}}
+    <td>0</td>
+    {{/if}}
+    <td>{{if $current_share_item['refer_share_id'] > 0}}{{$weshares[$current_share_item['refer_share_id']]['title']}}---{{$current_share_item['refer_share_id']}}{{/if}}</td>
+    <td>{{$creators[$current_share_item['creator']]['payment']}}</td>
+    <td><!-- Indicates a successful or positive action -->
+        <a data-name="{{$current_share_item['title']}}" data-id="{{$current_share_item['id']}}" type="button"
+           class="btn btn-success set-share-paid">置为已付款</a>
+    </td>
+</tr>
