@@ -1239,7 +1239,7 @@ class ShareUtilComponent extends Component {
         $cartM->saveAll($result_carts);
         $orderM->updateAll(array('type' => ORDER_TYPE_SPLIT), array('id' => $order_id));
     }
-    
+
     private function check_cart_confirm_price($tag_carts) {
         $result = 0;
         foreach ($tag_carts as $item) {
