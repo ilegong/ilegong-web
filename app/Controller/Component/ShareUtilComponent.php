@@ -1403,25 +1403,15 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 999,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/2dca381fd51_0923.jpg'
                 ),
-                '591' => array(
-                    'share_id' => 591,
+                '699' => array(
+                    'share_id' => 699,
                     'share_name' => '【劲爆特价】陕西眉县农家自产徐香猕猴桃家庭装包邮',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/6573df95802_0928.jpg',
-                    'share_price' => '19.9',
+                    'share_price' => '25',
                     'share_user_name' => '张慧敏',
                     'share_vote' => 654,
                     'share_user_id' => 23711,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/4c91fb9380d_0901.jpg'
-                ),
-                '525' => array(
-                    'share_id' => 525,
-                    'share_name' => '四舅家的虐心葡萄',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/6c09d89b6e0_0928.jpg',
-                    'share_price' => '100',
-                    'share_user_name' => '段段',
-                    'share_vote' => 435,
-                    'share_user_id' => 804574,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_82b31493dfc5b2a3a561e1e30826cdd7.jpg'
                 ),
                 '427' => array(
                     'share_id' => 427,
