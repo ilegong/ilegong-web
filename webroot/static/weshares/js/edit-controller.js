@@ -223,7 +223,7 @@
         return !_.isEmpty(address.address);
       });
       if (vm.validateAddress()) {
-        if(_.isEmpty(vm.weshare.addresses)){
+        if (_.isEmpty(vm.weshare.addresses)) {
           vm.weshare.addresses = [
             {address: '', deleted: 0}
           ];
@@ -238,6 +238,9 @@
         return false;
       }
       if (vm.validateSendInfo()) {
+        return false;
+      }
+      if (vm.validatePinTuan()) {
         return false;
       }
       if (vm.isInProcess) {
@@ -341,7 +344,11 @@
     }
 
     function validatePinTuan() {
-      //TODO valid when user chose pin tuan limit must gt 0
+      vm.pinTuanHasError = false;
+      if (vm.pin_tuan_data.status == 1 && vm.pin_tuan_data.limit <= 0) {
+        vm.pinTuanHasError = true;
+      }
+      return vm.pinTuanHasError;
     }
 
     function validateProductName(product) {
