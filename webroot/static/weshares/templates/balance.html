@@ -94,8 +94,10 @@
                     <li class="offline-address-item" ng-repeat="(offlineAddressShareId, offlineAddress) in vm.childShareDetail">
                         <input type="radio" ng-model="vm.chooseOfflineAddress" value="{{::offlineAddressShareId}}" class="radio"/>
                         <img lazy-src="{{::vm.childShareDetailUsers[offlineAddress['creator']]['image']}}">
-                        <span class="user-name" ng-bind="::vm.childShareDetailUsers[offlineAddress['creator']]['nickname']"></span>
-                        <div class="warp-address"><span class="address-name" ng-bind="::offlineAddress.address"></span><span class="wrap-order-info"><span class="address-order-count" ng-bind="::offlineAddress['order_count']||0"></span>人报名</span></div>
+                        <div class="wrap-address-info">
+                            <span class="user-name" ng-bind="::vm.childShareDetailUsers[offlineAddress['creator']]['nickname']"></span>
+                            <p class="warp-address"><span class="address-name" ng-bind="::offlineAddress.address"></span><span class="wrap-order-info"><span class="address-order-count" ng-bind="::offlineAddress['order_count']||0"></span>人报名</span></p>
+                        </div>
                     </li>
                 </ul>
                 <p class="tips">请选择地址</p>

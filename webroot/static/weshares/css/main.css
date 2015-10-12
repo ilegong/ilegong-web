@@ -237,9 +237,8 @@ ul li { list-style: none; }
 }
 
 .offline-address-list .offline-address-item{
-    padding-bottom: 5px;
     padding-left: 10px;
-    padding-top: 5px;
+    height: 50px;
 }
 
 .offline-address-list .offline-address-item img{
@@ -249,7 +248,7 @@ ul li { list-style: none; }
     width: 30px;
     height: 30px;
     border-radius: 0;
-    vertical-align: sub;
+    vertical-align: top;
 }
 
 .offline-address-list .offline-address-item span.user-name{
@@ -258,9 +257,17 @@ ul li { list-style: none; }
     font-size: 12px;
 }
 
-.offline-address-list .offline-address-item div.warp-address{
-    display: inline;
+.offline-address-list .offline-address-item div.wrap-address-info{
+    position: relative;
+    left: 50px;
+    top: -30px;
+    width: 85%;
+}
+
+.offline-address-list .offline-address-item p.warp-address{
+    display: block;
     word-break: break-all;
+    line-height: 15px;
 }
 
 .offline-address-list .offline-address-item span.address-name{
