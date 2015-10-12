@@ -143,6 +143,7 @@ $(document).ready(function () {
     $setShareShippedDialog.modal('show');
   });
 
+  //批量发货对子分享
   $('button[name="set-share-shipped"]').on('click', function (e) {
     e.preventDefault();
     var msg = $setShipShareMsg.val();

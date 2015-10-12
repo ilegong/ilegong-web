@@ -338,6 +338,10 @@ class ShareUtilComponent extends Component {
         }
         $uid = $shareInfo['creator'];
         $WeshareM->id = null;
+        if($type == GROUP_SHARE_TYPE){
+            $offlineAddress = $this->saveGroupShareOfflineAddress($address, $uid, $address_remarks);
+            $shareInfo['offline_address_id'] = $offlineAddress['WeshareOfflineAddress']['id'];
+        }
         $newShareInfo = $WeshareM->save($shareInfo);
         if ($newShareInfo) {
             //clone product
@@ -352,7 +356,7 @@ class ShareUtilComponent extends Component {
                 $this->cloneShareRebateSet($newShareId, $shareId);
             }
             if ($type == GROUP_SHARE_TYPE) {
-                $this->saveGroupShareAddress($address, $newShareId, $shareId, $uid, $address_remarks);
+                $this->saveGroupShareAddress($address, $newShareId);
                 $this->cloneShareShipSettings($newShareId, $shareId, true);
                 $this->cloneShareRebateSet($newShareId, $shareId, true);
             }
@@ -370,20 +374,22 @@ class ShareUtilComponent extends Component {
         return array('success' => false);
     }
 
+    private function saveGroupShareOfflineAddress($address, $uid, $remarks){
+        $WeshareOfflineAddressM = ClassRegistry::init('WeshareOfflineAddress');
+        $weshareOfflineAddress = array('creator' => $uid, 'address' => $address, 'created' => date('Y-m-d H:i:s'), 'remarks' => $remarks);
+        $offlineAddress = $WeshareOfflineAddressM->save($weshareOfflineAddress);
+        return $offlineAddress;
+    }
+
     /**
      * @param $address
-     * @param $new_share_id
-     * @param $old_share_id
-     * @param $uid
-     * @param $remarks
+     * @param $share_id
+     * @return mixed
      */
-    private function saveGroupShareAddress($address, $new_share_id, $old_share_id, $uid, $remarks) {
+    private function saveGroupShareAddress($address, $share_id) {
         $WeshareAddressM = ClassRegistry::init('WeshareAddress');
-        $WeshareOfflineAddressM = ClassRegistry::init('WeshareOfflineAddress');
-        $shareAddressData = array('weshare_id' => $new_share_id, 'address' => $address);
-        $weshareOfflineAddress = array('creator' => $uid, 'share_id' => $new_share_id, 'refer_share_id' => $old_share_id, 'address' => $address, 'created' => date('Y-m-d H:i:s'), 'remarks' => $remarks);
+        $shareAddressData = array('address' => $address, 'weshare_id' => $share_id);
         $WeshareAddressM->save($shareAddressData);
-        $WeshareOfflineAddressM->save($weshareOfflineAddress);
     }
 
     //todo clone share product

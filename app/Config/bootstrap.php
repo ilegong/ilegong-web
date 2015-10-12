@@ -143,6 +143,10 @@ const WESHARE_DELETE_STATUS = -1;
 
 const COMMENT_SHARE_TYPE = 'Share';
 
+//weshare order status
+const WESHARE_STATUS_WAIT_SHIP = 0;
+const WESHARE_STATUS_SHIPPED = 1;
+
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
 define('FORMAT_DATE_YUE_RI_HAN', 'n月j日');
