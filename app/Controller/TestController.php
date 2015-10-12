@@ -120,4 +120,10 @@ class TestController extends AppController{
         echo json_encode(array('success' => true));
     }
 
+    public function test_product_id_map(){
+        $this->autoRender = false;
+        $result = $this->WeshareBuy->get_product_id_map_by_origin_ids(53);
+        echo json_encode(array('success' => true, 'result' => $result));
+    }
+
 }

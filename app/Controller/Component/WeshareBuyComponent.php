@@ -789,6 +789,111 @@ class WeshareBuyComponent extends Component {
         return json_decode($child_share_data_json, true);
     }
 
+    //先不进行缓存
+    public function get_product_id_map_by_origin_ids($share_id) {
+        $weshareProductM = ClassRegistry::init('WeshareProduct');
+        $query_sql = 'select id, origin_product_id from cake_weshare_products where origin_product_id = (select id from cake_weshare_products where weshare_id=' . $share_id . ')';
+        $product_id_map = $weshareProductM->query($query_sql);
+        $product_id_map = Hash::combine($product_id_map, '{n}.cake_weshare_products.id', '{n}.cake_weshare_products.origin_product_id');
+        return $product_id_map;
+    }
+
+    /**
+     * @param $share_id
+     * @return mixed
+     * 获取子分享的统计数据
+     */
+    public function get_child_share_summery($share_id, $refer_share_id) {
+        $key = GROUP_SHARE_ORDER_SUMMERY_DATA_CACHE_KEY . '_' . $share_id;
+        $share_summery_data_str = Cache::read($key, '');
+        if (empty($share_summery_data_str)) {
+            $this->Weshare = ClassRegistry::init('Weshare');
+            $this->Order = ClassRegistry::init('Order');
+            $this->User = ClassRegistry::init('User');
+            $this->Cart = ClassRegistry::init('Cart');
+            $this->Oauthbind = ClassRegistry::init('Oauthbind');
+            $this->WeshareProduct = ClassRegistry::init('WeshareProduct');
+            $this->RebateTrackLog = ClassRegistry::init('RebateTrackLog');
+            $product_id_map = $this->get_product_id_map_by_origin_ids($refer_share_id);
+            $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
+            $sort = array('created DESC');
+            $orders = $this->Order->find('all', array(
+                'conditions' => array(
+                    'member_id' => $share_id,
+                    'type' => ORDER_TYPE_WESHARE_BUY,
+                    'status' => $order_status,
+                    'deleted' => DELETED_NO
+                ),
+                'fields' => $this->$query_share_info_order_fields,
+                'order' => $sort
+            ));
+            $orderIds = Hash::extract($orders, '{n}.Order.id');
+            $cateIds = Hash::extract($orders, '{n}.Order.cate_id');
+            $userIds = Hash::extract($orders, '{n}.Order.creator');
+            $orderIds = array_unique($orderIds);
+            $userIds = array_unique($userIds);
+            $cateIds = array_unique($cateIds);
+            $rebateLogs = $this->RebateTrackLog->find('all', array(
+                'conditions' => array(
+                    'id' => $cateIds
+                ),
+                'fields' => array('id', 'sharer')
+            ));
+            $rebateSharerIds = Hash::extract($rebateLogs, '{n}.RebateTrackLog.sharer');
+            $rebateLogs = Hash::combine($rebateLogs, '{n}.RebateTrackLog.id', '{n}.RebateTrackLog.sharer');
+            $userIds = array_merge($userIds, $rebateSharerIds);
+            $users = $this->User->find('all', array(
+                'conditions' => array(
+                    'id' => $userIds
+                ),
+                'recursive' => 1, //int
+                'fields' => $this->query_user_fields,
+            ));
+            $orders = Hash::combine($orders, '{n}.Order.id', '{n}.Order');
+            $carts = $this->Cart->find('all', array(
+                'conditions' => array(
+                    'order_id' => $orderIds,
+                    'type' => ORDER_TYPE_WESHARE_BUY,
+                    'not' => array('order_id' => null, 'order_id' => '')
+                ),
+                'fields' => array('id', 'name', 'order_id', 'num', 'product_id', 'price', 'confirm_price', 'tag_id')
+            ));
+            $realTotalPrice = 0;
+            $summeryTotalPrice = 0;
+            $couponPrice = 0;
+            foreach ($orders as $order_item) {
+                $realTotalPrice = $realTotalPrice + $order_item['total_all_price'];
+                $summeryTotalPrice = $summeryTotalPrice + $order_item['total_price'];
+                $couponPrice = $couponPrice + $order_item['coupon_total'];
+            }
+            foreach ($carts as $item) {
+                $order_id = $item['Cart']['order_id'];
+                $product_id = $item['Cart']['product_id'];
+                //get product map id
+                $product_id = $product_id_map[$product_id];
+                $cart_num = $item['Cart']['num'];
+                $cart_price = $item['Cart']['price'];
+                $cart_name = $item['Cart']['name'];
+                if (!isset($product_buy_num['details'][$product_id])) $product_buy_num['details'][$product_id] = array('num' => 0, 'total_price' => 0, 'name' => $cart_name);
+                if (!isset($order_cart_map[$order_id])) $order_cart_map[$order_id] = array();
+                $product_buy_num['details'][$product_id]['num'] = $product_buy_num['details'][$product_id]['num'] + $cart_num;
+                $totalPrice = $cart_num * $cart_price;
+                $product_buy_num['details'][$product_id]['total_price'] = $product_buy_num['details'][$product_id]['total_price'] + $totalPrice;
+                $order_cart_map[$order_id][] = $item['Cart'];
+            }
+            $product_buy_num['all_buy_user_count'] = count($orders);
+            $product_buy_num['all_total_price'] = $summeryTotalPrice;
+            $product_buy_num['real_total_price'] = $realTotalPrice;
+            $product_buy_num['all_coupon_price'] = $couponPrice / 100;
+            $share_rebate_money = $this->ShareUtil->get_share_rebate_money($share_id);
+            $refund_money = $this->get_refund_money_by_weshare($share_id);
+            $share_summery_data = array('users' => $users, 'order_cart_map' => $order_cart_map, 'summery' => $product_buy_num, 'rebate_logs' => $rebateLogs, 'share_rebate_money' => $share_rebate_money, 'refund_money' => $refund_money);
+            Cache::write($key, json_encode($share_summery_data));
+            return $share_summery_data;
+        }
+        return json_decode($share_summery_data_str, true);
+    }
+
     /**
      * @param $weshareId
      * @param $is_me
