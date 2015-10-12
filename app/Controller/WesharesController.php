@@ -1532,6 +1532,7 @@ class WesharesController extends AppController {
         }
         if ($shipType == SHARE_SHIP_SELF_ZITI) {
             //check is group share
+            //拼团标示另一种状态
             if ($is_group_share_type) {
                 //mark group share
                 $orderData['ship_mark'] = SHARE_SHIP_GROUP_TAG;
