@@ -800,6 +800,7 @@ class WeshareBuyComponent extends Component {
 
     /**
      * @param $share_id
+     * @param $refer_share_id
      * @return mixed
      * 获取子分享的统计数据
      */
@@ -886,8 +887,9 @@ class WeshareBuyComponent extends Component {
             $product_buy_num['real_total_price'] = $realTotalPrice;
             $product_buy_num['all_coupon_price'] = $couponPrice / 100;
             $share_rebate_money = $this->ShareUtil->get_share_rebate_money($share_id);
+            $share_rebate_ship_fee = $this->ShareUtil->get_share_rebate_ship_fee($share_id);
             $refund_money = $this->get_refund_money_by_weshare($share_id);
-            $share_summery_data = array('users' => $users, 'order_cart_map' => $order_cart_map, 'summery' => $product_buy_num, 'rebate_logs' => $rebateLogs, 'share_rebate_money' => $share_rebate_money, 'refund_money' => $refund_money);
+            $share_summery_data = array('users' => $users, 'order_cart_map' => $order_cart_map, 'summery' => $product_buy_num, 'rebate_logs' => $rebateLogs, 'share_rebate_money' => $share_rebate_money, 'refund_money' => $refund_money, 'share_rebate_ship_fee' => $share_rebate_ship_fee);
             Cache::write($key, json_encode($share_summery_data));
             return $share_summery_data;
         }

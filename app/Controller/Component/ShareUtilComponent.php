@@ -170,6 +170,28 @@ class ShareUtilComponent extends Component {
      * @param $share_id
      * @return int
      */
+    public function get_share_rebate_ship_fee($share_id){
+        $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
+        $allRebateMoney = 0;
+        $rebateLogs = $rebateTrackLogM->find('all', array(
+            'conditions' => array(
+                'share_id' => $share_id,
+                'type' => GROUP_SHARE_BUY_REBATE_TYPE,
+                'not' => array('order_id' => 0, 'is_paid' => 0)
+            ),
+            'limit' => 1000
+        ));
+        foreach ($rebateLogs as $log) {
+            $allRebateMoney = $allRebateMoney + $log['RebateTrackLog']['rebate_money'];
+        }
+        $allRebateMoney = $allRebateMoney / 100;
+        return $allRebateMoney;
+    }
+
+    /**
+     * @param $share_id
+     * @return int
+     */
     public function get_share_rebate_money($share_id) {
         $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
         $allRebateMoney = 0;
@@ -178,7 +200,7 @@ class ShareUtilComponent extends Component {
                 'share_id' => $share_id,
                 'not' => array('order_id' => 0, 'is_paid' => 0)
             ),
-            'limit' => 500
+            'limit' => 1000
         ));
         foreach ($rebateLogs as $log) {
             $allRebateMoney = $allRebateMoney + $log['RebateTrackLog']['rebate_money'];
