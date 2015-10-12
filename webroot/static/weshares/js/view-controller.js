@@ -396,6 +396,10 @@
     }
 
     function getSelectTypeDefaultVal() {
+      if (vm.weshareSettings.pin_tuan && vm.weshareSettings.pin_tuan.status == 1) {
+        vm.shipFee = vm.weshareSettings.pin_tuan.ship_fee;
+        return 3;
+      }
       if (vm.weshareSettings.kuai_di && vm.weshareSettings.kuai_di.status == 1) {
         vm.shipFee = vm.weshareSettings.kuai_di.ship_fee;
         return 0;
@@ -407,10 +411,6 @@
       if (vm.weshareSettings.pys_ziti && vm.weshareSettings.pys_ziti.status == 1) {
         vm.shipFee = vm.weshareSettings.pys_ziti.ship_fee;
         return 2;
-      }
-      if (vm.weshareSettings.pin_tuan && vm.weshareSettings.pin_tuan.status == 1) {
-        vm.shipFee = vm.weshareSettings.pin_tuan.ship_fee;
-        return 3;
       }
       return -1;
     }
