@@ -1586,7 +1586,7 @@ class ShareUtilComponent extends Component {
                 ),
                 '328' => array(
                     'share_id' => 328,
-                    'share_name' => '天福号山地散养有机柴鸡蛋',
+                    'share_name' => '天福号山地散养有机柴鸡蛋(限五环内)',
                     'share_img' => '/img/share_index/jidang.jpg',
                     'share_price' => '24.8',
                     'share_user_name' => '朋友说小妹',
@@ -1596,7 +1596,7 @@ class ShareUtilComponent extends Component {
                 ),
                 '329' => array(
                     'share_id' => 329,
-                    'share_name' => '天福号山地散养油鸡',
+                    'share_name' => '天福号山地散养油鸡(限五环内)',
                     'share_img' => '/img/share_index/jirou.jpg',
                     'share_price' => '118',
                     'share_user_name' => '朋友说小妹',
