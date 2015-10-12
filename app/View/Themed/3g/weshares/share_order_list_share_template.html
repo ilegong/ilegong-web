@@ -1,9 +1,16 @@
 {{loop $child_share_data $item_child_share}}
 <div class="col-xs-12" data-id="{{$item_child_share['weshare_id']}}">
-    <div class="offer offer-success">
+    <div class="offer {{if $item_child_share['status']==WESHARE_ORDER_STATUS_SHIPPED}}
+    offer-success
+    {{else}}
+    offer-danger{{/if}}">
         <div class="shape div-share-item">
             <div class="shape-text">
-                邻里拼团
+                {{if $item_child_share['status']==WESHARE_ORDER_STATUS_SHIPPED}}
+                已发货
+                {{else}}
+                待发货
+                {{/if}}
             </div>
         </div>
         <div class="offer-content">
@@ -18,10 +25,12 @@
                     data-id="{{$item_child_share['weshare_id']}}" id="refund-share-btn-{{$item_child_share['weshare_id']}}"
                     style="margin-bottom: 5px; margin-left: 5px;" data-address="{{$item_child_share['address']}}">退款
             </button>
+            {{if $item_child_share['status']==WESHARE_ORDER_STATUS_WAIT_SHIP}}
             <button class="btn btn-success btn-xs pull-right set-shipped-share" data-refer-share-id="{{$weshareId}}" data-address="{{$item_child_share['address']}}"
                     data-id="{{$item_child_share['weshare_id']}}" id="set-share-shipped-btn-{{$item_child_share['weshare_id']}}"
                     style="margin-bottom: 5px; margin-left: 5px;">发货
             </button>
+            {{/if}}
         </div>
     </div>
 </div>

@@ -161,9 +161,14 @@ $(document).ready(function () {
     var shipAddress = $setShipAddress.val();
     var postData = {'share_id': shareId, 'refer_share_id': referShareId, 'address': shipAddress, 'msg': msg};
     $.post('/weshares/set_share_shipped', postData, function () {
-      //todo set share shipped tag
+      var $setShippedBtn = $('#set-share-shipped-btn-' + shareId);
+      $setShippedBtn.unbind();
+      var $parent = $setShippedBtn.parent('div.offer-content');
+      $parent = $parent.parent();
+      $parent.removeClass().addClass('offer').addClass('offer-success');
+      $('div.shape-text', $parent).text('已发货');
+      $setShippedBtn.remove();
       $setShareShippedDialog.modal('hide');
-      $('#set-share-shipped-btn-' + shareId).remove();
     }, 'json');
   });
 
