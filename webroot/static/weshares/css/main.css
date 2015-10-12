@@ -268,14 +268,14 @@ ul li { list-style: none; }
     display: block;
     word-break: break-all;
     line-height: 15px;
+    margin-left: 5px;
 }
 
 .offline-address-list .offline-address-item span.address-name{
-    margin-left: 5px;
 }
 
 .offline-address-list .offline-address-item span.address-order-count{
-    margin-left: 5px;
+    margin-left: 3px;
     color: red;
     font-size: 13px;
 }
