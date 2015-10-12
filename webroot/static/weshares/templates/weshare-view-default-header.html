@@ -24,7 +24,7 @@
                     ng-if="(vm.currentUser.is_proxy==1||vm.isCreator())&&vm.weshare.proxy_rebate_percent.percent>0">佣金&nbsp;<span
                     ng-bind="::vm.weshare.proxy_rebate_percent.percent+'%'" class="stress-span"></span></span></s>
     </li>
-    <ul class="clearfix">
+    <ul class="clearfix ul-wrap-btn">
         <li class="header-btn-wrap" ng-if="vm.isCreator()||vm.isManage"><a
                 class="statistics-btn order-manage-btn"
                 ng-click="vm.toShareOrderList()">订单管理</a>

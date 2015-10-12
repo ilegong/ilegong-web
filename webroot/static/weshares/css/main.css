@@ -84,18 +84,19 @@ ul li { list-style: none; }
 .weshare-view ul li s{ font-size: 10px; color: #999999; text-decoration: none; display: block; padding-left: 10px; padding-top: 3px;}
 .weshare-view .statistics-btn{ display: block;background-color: #ffa200;color: #ffffff;text-decoration: none;text-align: center;width: 85px;line-height: 35px;margin-top: 10px;}
 .weshare-view .header-btn-wrap{margin-right: 5px; float: right;}
-.weshare-view .order-manage-btn{margin-top: 3px;width: 65px;line-height: 25px;}
-.weshare-view .edit-share-btn{margin-top: 3px;width: 65px;line-height: 25px;}
+.weshare-view .order-manage-btn{margin-top: 3px;width: 75px;line-height: 25px;}
+.weshare-view .edit-share-btn{margin-top: 3px;width: 75px;line-height: 25px;}
 .weshare-view .tip-share-btn{margin-top: 3px;width: 75px;line-height: 25px;}
 .weshare-view .stress-span{color: #ffa200}
 .weshare-view .sub-sharer-btn{margin-left: 5px;margin-top: 3px;width: 50px;line-height: 20px;background-color: #F2651A;}
 .weshare-view .sharer-nickname-display-inline{display: -webkit-inline-box}
-.weshare-view .share-info-item-li{width: 60%}
+.weshare-view .share-info-item-li{width: 50%}
+.weshare-view .ul-wrap-btn{width: 25%; float: right;}
 .weshare-view .hlj-icon-img{width: 25px;height: 25px;}
 .weshare-view .v-icon-img{width: 20px;height: 20px;position: absolute;top: 44px;left: 41px;}
 .weshare-view .grouper-mark{color: white; font-size: 13px; font-weight: 700; padding: 2px; margin-top: 6px; background-color: #29AC0E; text-align: center;}
 .weshare-view .sharer-mark{display: inline-flex;}
-.weshare-view .group-share-mark{margin-left: 5px;margin-top: 3px;width: 60px;line-height: 20px;background-color: #F2651A;font-size: 12px;}
+.weshare-view .group-share-mark{margin-left: 30px;margin-top: -6px;width: 60px;line-height: 20px;background-color: #F2651A;font-size: 12px;}
 .weshare-view .want-start-group-share{margin-top: 3px;width: 75px;}
 
 .ui-common-btn{ display: block;background-color: #ffa200;color: #ffffff;text-decoration: none;text-align: center;width: 85px;line-height: 35px;margin-top: 10px;}

@@ -3,6 +3,7 @@
     <div ng-if="vm.weshare.type==1" ng-include="'/static/weshares/templates/weshare-view-group-header.html?v0.0.9'"></div>
     <div class="introduction margin-bottom-12">
         <b></b>
+        <a ng-if="vm.weshare.type==1" class="statistics-btn group-share-mark">邻里拼团</a>
         <div class="status" ng-bind="vm.statusMap[vm.weshare.status]"></div>
         <h1 class='title margin-bottom-12' ng-bind="vm.weshare.title"></h1>
         <p id="share-description" class="margin-bottom-12" ng-class="{'share-description-omit':vm.hideMoreShareInfo}" ng-hide='_.isEmpty(vm.weshare.description)' ng-bind-html='::vm.weshare.description | unsafe'></p>
