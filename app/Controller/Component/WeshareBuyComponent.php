@@ -747,10 +747,11 @@ class WeshareBuyComponent extends Component {
                 'fields' => array('id', 'creator')
             ));
             $share_creators = Hash::extract($share_infos, '{n}.Weshare.creator');
-            $share_infos = Hash::combine($share_infos, '{n}.Weshare.id', '{n}.Weshare.creator');
+            $share_infos = Hash::combine($share_infos, '{n}.Weshare.id', '{n}.Weshare');
             foreach ($address_data as $item_key => &$item_address_data) {
-                $item_share_creator = $share_infos[$item_key];
+                $item_share_creator = $share_infos[$item_key]['creator'];
                 $item_address_data['creator'] = $item_share_creator;
+                $item_address_data['order_status'] = $share_infos[$item_key]['status'];
             }
             $group_share_order = $OrderM->find('all', array(
                 'conditions' => array(
@@ -767,7 +768,7 @@ class WeshareBuyComponent extends Component {
                 'conditions' => array(
                     'id' => $user_ids
                 ),
-                'fields' => array('id', 'nickname', 'image', 'is_proxy')
+                'fields' => array('id', 'nickname', 'image', 'is_proxy', 'mobilephone')
             ));
             $user_infos = Hash::combine($user_infos, '{n}.User.id', '{n}.User');
             foreach ($group_share_order as $order_item) {
