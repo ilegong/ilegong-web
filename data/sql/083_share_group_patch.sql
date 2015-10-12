@@ -8,4 +8,8 @@ DROP COLUMN `share_id`;
 ALTER TABLE `cake_weshares`
 ADD COLUMN `offline_address_id` INT NOT NULL DEFAULT 0 AFTER `order_status`;
 
+ALTER TABLE `cake_weshare_products`
+ADD COLUMN `origin_product_id` INT NOT NULL DEFAULT 0 AFTER `deleted`;
+
+
 

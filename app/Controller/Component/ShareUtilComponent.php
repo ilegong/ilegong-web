@@ -412,6 +412,7 @@ class ShareUtilComponent extends Component {
         $newProducts = array();
         foreach ($shareProducts as $itemShareProduct) {
             $itemShareProduct = $itemShareProduct['WeshareProduct'];
+            $itemShareProduct['origin_product_id'] = $itemShareProduct['id'];
             $itemShareProduct['id'] = null;
             $itemShareProduct['weshare_id'] = $new_share_id;
             $newProducts[] = $itemShareProduct;
