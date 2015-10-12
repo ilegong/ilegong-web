@@ -134,11 +134,17 @@ $(document).ready(function () {
   var $setShareShippedDialog = $('#set_share_shipped_dialog');
   var $setShipShareId = $('#set_shipped_share_id', $setShareShippedDialog);
   var $setShipShareMsg = $('#share_arrival_msg', $setShareShippedDialog);
+  var $setShipReferShareId = $('#set_shipped_refer_share_id', $setShareShippedDialog);
+  var $setShipAddress = $('#set_shipped_address', $setShareShippedDialog);
 
   $('button.set-shipped-share').on('click', function (e) {
     e.preventDefault();
     var $me = $(this);
     var shareId = $me.data('id');
+    var referShareId = $me.data('refer-share-id');
+    var address = $me.data('address');
+    $setShipReferShareId.val(referShareId);
+    $setShipAddress.val($setShipAddress);
     $setShipShareId.val(shareId);
     $setShareShippedDialog.modal('show');
   });
@@ -151,7 +157,9 @@ $(document).ready(function () {
       return;
     }
     var shareId = $setShipShareId.val();
-    var postData = {'share_id': shareId, 'msg': msg};
+    var referShareId = $setShipReferShareId.val();
+    var shipAddress = $setShipAddress.val();
+    var postData = {'share_id': shareId, 'refer_share_id': referShareId, 'address': shipAddress, 'msg': msg};
     $.post('/weshares/set_share_shipped', postData, function () {
       //todo set share shipped tag
       $setShareShippedDialog.modal('hide');

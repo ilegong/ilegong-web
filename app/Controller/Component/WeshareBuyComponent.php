@@ -522,6 +522,52 @@ class WeshareBuyComponent extends Component {
     }
 
     /**
+     * @param $share_id
+     * @param $refer_share_id
+     * @param $msg
+     * @param $address
+     * 对自提点进行发货
+     */
+    public function send_group_share_product_arrival_msg($share_id, $refer_share_id, $msg, $address) {
+        $weshareM = ClassRegistry::init('Weshare');
+        $weshareInfo = $weshareM->find('all', array(
+            'conditions' => array(
+                'id' => array($share_id, $refer_share_id)
+            )
+        ));
+        $weshareInfo = Hash::combine($weshareInfo, '{n}.Weshare.id', '{n}.Weshare');
+        $shareInfo = $weshareInfo[$refer_share_id];
+        $share_creator = $shareInfo['creator'];
+        $orderShareInfo = $weshareInfo[$share_id];
+        $order_share_creator = $orderShareInfo['creator'];
+        $user_ids = array($share_creator, $order_share_creator);
+        $users = $this->User->find('all', array(
+            'conditions' => array(
+                'id' => $user_ids
+            ),
+            'fields' => array('id', 'nickname')
+        ));
+        $users = Hash::combine($users, '{n}.User.id', '{n}.User');
+        $userOauthBinds = $this->Oauthbind->find('all', array(
+            'conditions' => array(
+                'user_id' => $user_ids
+            ),
+            'fields' => array('user_id', 'oauth_openid')
+        ));
+        $userOauthBinds = Hash::combine($userOauthBinds, '{n}.Oauthbind.user_id', '{n}.Oauthbind.oauth_openid');
+        $desc = '感谢大家对' . $users[$share_creator]['nickname'] . '的支持，分享快乐。';
+        $detail_url = WX_HOST . '/weshares/view/' . $refer_share_id;
+        $order_id = $share_id;
+        $order_user_id = $order_share_creator;
+        $open_id = $userOauthBinds[$order_user_id];
+        $order_user_name = $users[$order_user_id]['nickname'];
+        $title = $order_user_name . '你好，' . $msg;
+        $conginess_name = $users[$order_user_id]['nickname'];
+        $conginess_address = $address;
+        $this->Weixin->send_share_product_arrival($open_id, $detail_url, $title, $order_id, $conginess_address, $conginess_name, $desc);
+    }
+
+    /**
      * @param $shareInfo
      * @param $msg
      * 到货提醒

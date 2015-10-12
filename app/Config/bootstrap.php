@@ -144,8 +144,8 @@ const WESHARE_DELETE_STATUS = -1;
 const COMMENT_SHARE_TYPE = 'Share';
 
 //weshare order status
-const WESHARE_STATUS_WAIT_SHIP = 0;
-const WESHARE_STATUS_SHIPPED = 1;
+const WESHARE_ORDER_STATUS_WAIT_SHIP = 0;
+const WESHARE_ORDER_STATUS_SHIPPED = 1;
 
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');

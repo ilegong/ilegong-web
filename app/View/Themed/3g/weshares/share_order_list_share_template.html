@@ -18,7 +18,7 @@
                     data-id="{{$item_child_share['weshare_id']}}" id="refund-share-btn-{{$item_child_share['weshare_id']}}"
                     style="margin-bottom: 5px; margin-left: 5px;" data-address="{{$item_child_share['address']}}">退款
             </button>
-            <button class="btn btn-success btn-xs pull-right set-shipped-share"
+            <button class="btn btn-success btn-xs pull-right set-shipped-share" data-refer-share-id="{{$weshareId}}" data-address="{{$item_child_share['address']}}"
                     data-id="{{$item_child_share['weshare_id']}}" id="set-share-shipped-btn-{{$item_child_share['weshare_id']}}"
                     style="margin-bottom: 5px; margin-left: 5px;">发货
             </button>

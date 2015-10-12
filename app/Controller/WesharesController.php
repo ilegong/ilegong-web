@@ -369,7 +369,7 @@ class WesharesController extends AppController {
         //send template msg and clear cache
         if ($result['success']) {
             Cache::write(SHARE_OFFLINE_ADDRESS_BUY_DATA_CACHE_KEY . '_' . $weshareId, '');
-            Cache::write(SHARE_OFFLINE_ADDRESS_SUMMERY_DATA_CACHE_KEY.'_'.$weshareId, '');
+            Cache::write(SHARE_OFFLINE_ADDRESS_SUMMERY_DATA_CACHE_KEY . '_' . $weshareId, '');
             $this->ShareUtil->trigger_send_new_share_msg($result['shareId'], $uid);
         }
         echo json_encode($result);
@@ -423,9 +423,9 @@ class WesharesController extends AppController {
             $shipFee = $shipSetting['WeshareShipSetting']['ship_fee'];
             $address = $this->get_order_address($weshareId, $shipInfo, $buyerData, $uid);
             $orderData = array('cate_id' => $rebateLogId, 'creator' => $uid, 'consignee_address' => $address, 'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $buyerData['name'], 'consignee_mobilephone' => $buyerData['mobilephone'], 'business_remark' => $business_remark);
-            $process_shi_mark_result = $this->process_order_ship_mark($shipType,$orderData,$is_group_share_type);
-            if($process_shi_mark_result == self::PROCESS_SHIP_MARK_UNFINISHED_RESULT){
-                $this->process_ship_group($orderData,$shipInfo,$is_start_new_group_share,$weshareId,$uid,$address,$business_remark);
+            $process_shi_mark_result = $this->process_order_ship_mark($shipType, $orderData, $is_group_share_type);
+            if ($process_shi_mark_result == self::PROCESS_SHIP_MARK_UNFINISHED_RESULT) {
+                $this->process_ship_group($orderData, $shipInfo, $is_start_new_group_share, $weshareId, $uid, $address, $business_remark);
             }
             $order = $this->Order->save($orderData);
             $orderId = $order['Order']['id'];
@@ -695,28 +695,19 @@ class WesharesController extends AppController {
     /**
      * 设置子分享发货
      */
-    public function set_share_shipped(){
+    public function set_share_shipped() {
         $this->autoRender = false;
         $weshare_id = $_REQUEST['share_id'];
+        $refer_share_id = $_REQUEST['refer_share_id'];
+        $address = $_REQUEST['address'];
         $msg = $_REQUEST['msg'];
-        $share_info = $this->Weshare->find('first', array(
-            'conditions' => array(
-                'id' => $weshare_id
-            )
-        ));
-        //update order status
-        $prepare_update_orders = $this->Order->find('all', array(
-            'conditions' => array('status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED), 'type' => ORDER_TYPE_WESHARE_BUY, 'ship_mark' => array(SHARE_SHIP_SELF_ZITI_TAG, SHARE_SHIP_GROUP_TAG), 'member_id' => $weshare_id),
-            'fields' => array('id')
-        ));
-        $prepare_update_order_ids = Hash::extract($prepare_update_orders, '{n}.Order.id');
-        $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $prepare_update_order_ids));
-        $this->Cart->updateAll(array('status' => ORDER_STATUS_SHIPPED), array('order_id' => $prepare_update_order_ids));
+        //update share status
+        $this->Weshare->updateAll(array('order_status' => WESHARE_ORDER_STATUS_SHIPPED), array('id' => $weshare_id, 'order_status' => WESHARE_ORDER_STATUS_WAIT_SHIP));
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_1', '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_1', '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_0', '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
-        $this->process_send_msg($share_info, $msg);
+        $this->WeshareBuy->send_group_share_product_arrival_msg($weshare_id, $refer_share_id, $msg, $address);
         echo json_encode(array('success' => true));
         return;
     }
@@ -971,9 +962,9 @@ class WesharesController extends AppController {
      */
     public function order_export($shareId, $only_paid = 1) {
         $this->layout = null;
-        if($only_paid==1){
+        if ($only_paid == 1) {
             $export_paid_order = true;
-        }else{
+        } else {
             $export_paid_order = false;
         }
         $statics_data = $this->get_weshare_buy_info($shareId, true, true, $export_paid_order);
@@ -1610,7 +1601,7 @@ class WesharesController extends AppController {
         return;
     }
 
-    public function shipped_share($shareId){
+    public function shipped_share($shareId) {
 
     }
 
