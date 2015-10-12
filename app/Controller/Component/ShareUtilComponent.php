@@ -13,7 +13,7 @@ class ShareUtilComponent extends Component {
      * @param $uid
      * 触发建团消息
      */
-    public function trigger_send_new_share_msg($weshare_id, $uid){
+    public function trigger_send_new_share_msg($weshare_id, $uid) {
         $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($uid);
         $pageCount = $fansPageInfo['pageCount'];
         $pageSize = $fansPageInfo['pageSize'];
@@ -338,7 +338,7 @@ class ShareUtilComponent extends Component {
         }
         $uid = $shareInfo['creator'];
         $WeshareM->id = null;
-        if($type == GROUP_SHARE_TYPE){
+        if ($type == GROUP_SHARE_TYPE) {
             $offlineAddress = $this->saveGroupShareOfflineAddress($address, $uid, $address_remarks);
             $shareInfo['offline_address_id'] = $offlineAddress['WeshareOfflineAddress']['id'];
         }
@@ -362,7 +362,7 @@ class ShareUtilComponent extends Component {
             }
             Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
             //when clone share status normal save opt log
-            if($share_status == WESHARE_NORMAL_STATUS){
+            if ($share_status == WESHARE_NORMAL_STATUS) {
                 $now = date('Y-m-d H:i:s');
                 $shareImg = explode('|', $shareInfo['images']);
                 $title = '大家一起拼团' . $origin_sharer_nickname . '分享的' . $shareInfo['title'];
@@ -374,7 +374,7 @@ class ShareUtilComponent extends Component {
         return array('success' => false);
     }
 
-    private function saveGroupShareOfflineAddress($address, $uid, $remarks){
+    private function saveGroupShareOfflineAddress($address, $uid, $remarks) {
         $WeshareOfflineAddressM = ClassRegistry::init('WeshareOfflineAddress');
         $weshareOfflineAddress = array('creator' => $uid, 'address' => $address, 'created' => date('Y-m-d H:i:s'), 'remarks' => $remarks);
         $offlineAddress = $WeshareOfflineAddressM->save($weshareOfflineAddress);
@@ -653,7 +653,7 @@ class ShareUtilComponent extends Component {
      * @return mixed
      * 根据分享获取订单
      */
-    public function get_share_orders($shareId){
+    public function get_share_orders($shareId) {
         $orderM = ClassRegistry::init('Order');
         $share_orders = $orderM->find('all', array(
             'conditions' => array(
@@ -850,7 +850,7 @@ class ShareUtilComponent extends Component {
      * @return mixed
      * get share refer_share_id
      */
-    public function get_share_refer_id($shareId){
+    public function get_share_refer_id($shareId) {
         $weshareM = ClassRegistry::init('Weshare');
         $weshare_info = $weshareM->find('first', array(
             'conditions' => array(
@@ -886,9 +886,9 @@ class ShareUtilComponent extends Component {
      * get share offline address detail
      */
     public function get_share_offline_address_detail($share_id) {
-        $cache_key = SHARE_OFFLINE_ADDRESS_SUMMERY_DATA_CACHE_KEY.'_'.$share_id;
+        $cache_key = SHARE_OFFLINE_ADDRESS_SUMMERY_DATA_CACHE_KEY . '_' . $share_id;
         $json_address_data = Cache::read($cache_key);
-        if(empty($json_address_data)){
+        if (empty($json_address_data)) {
             $WeshareM = ClassRegistry::init('Weshare');
             $query_address_sql = 'select * from cake_weshare_addresses where weshare_id in (select id from cake_weshares where refer_share_id=' . $share_id . ' and status=' . WESHARE_NORMAL_STATUS . ' and type=' . GROUP_SHARE_TYPE . ')';
             $address_result = $WeshareM->query($query_address_sql);
@@ -900,7 +900,7 @@ class ShareUtilComponent extends Component {
                 $address['order_count'] = $address_order_summery[$item_share_id];
             }
             $json_address_data = json_encode($address_data);
-            Cache::write($cache_key,$json_address_data);
+            Cache::write($cache_key, $json_address_data);
             return $address_data;
         }
         return json_decode($json_address_data, true);
