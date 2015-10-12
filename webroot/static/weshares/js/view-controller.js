@@ -184,7 +184,7 @@
     vm.toggleTag = toggleTag;
     vm.supportGroupBuy = supportGroupBuy;
     vm.offlineAddressData = null;
-    vm.loadOfflineAddressData = loadOfflineAddressData;
+    //vm.loadOfflineAddressData = loadOfflineAddressData;
     vm.setShipFee = setShipFee;
     vm.newGroupShare = newGroupShare;
     vm.childShareDetail = null;
@@ -227,15 +227,15 @@
      * 获取线下自提点和简单的购买数据购买数据
      * @param share_id
      */
-    function loadOfflineAddressData(share_id) {
-      $http({method: 'GET', url: '/weshares/get_offline_address_detail/' + share_id + '.json', cache: $templateCache}).
-        success(function (data, status) {
-          vm.offlineAddressData = data;
-        }).
-        error(function (data, status) {
-          $log.log(data);
-        });
-    }
+    //function loadOfflineAddressData(share_id) {
+    //  $http({method: 'GET', url: '/weshares/get_offline_address_detail/' + share_id + '.json', cache: $templateCache}).
+    //    success(function (data, status) {
+    //      vm.offlineAddressData = data;
+    //    }).
+    //    error(function (data, status) {
+    //      $log.log(data);
+    //    });
+    //}
 
     function loadOrderDetail(share_id) {
       var fromType = angular.element(document.getElementById('weshareView')).attr('data-from-type');
@@ -361,9 +361,6 @@
           //load all comments
           vm.loadOrderDetail(weshareId);
           vm.loadSharerAllComments(vm.weshare.creator.id);
-          if (vm.supportGroupBuy()) {
-            vm.loadOfflineAddressData(weshareId);
-          }
         }).
         error(function (data, status) {
           $log.log(data);

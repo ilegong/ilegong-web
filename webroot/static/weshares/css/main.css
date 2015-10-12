@@ -138,6 +138,7 @@ ul li { list-style: none; }
     border-radius: 0;
 }
 
+
 .weshare-view .recommend .share-list-etc {
     font-size: 15px;
     line-height: 30px;
@@ -239,6 +240,21 @@ ul li { list-style: none; }
     padding-bottom: 5px;
     padding-left: 10px;
     padding-top: 5px;
+}
+
+.offline-address-list .offline-address-item img{
+    margin-left: 5px;
+    background-size: cover;
+    border: 0;
+    vertical-align: middle;
+    width: 30px;
+    height: 30px;
+    border-radius: 0;
+}
+
+.offline-address-list .offline-address-item span.user-name{
+    margin-left: 5px;
+    color: #29AC0E;
 }
 
 .offline-address-list .offline-address-item span.address-name{
