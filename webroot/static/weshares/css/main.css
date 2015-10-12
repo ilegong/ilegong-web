@@ -246,19 +246,36 @@ ul li { list-style: none; }
     margin-left: 5px;
     background-size: cover;
     border: 0;
-    vertical-align: middle;
     width: 30px;
     height: 30px;
     border-radius: 0;
+    vertical-align: sub;
 }
 
 .offline-address-list .offline-address-item span.user-name{
     margin-left: 5px;
     color: #29AC0E;
+    font-size: 12px;
+}
+
+.offline-address-list .offline-address-item div.warp-address{
+    display: inline;
+    word-break: break-all;
 }
 
 .offline-address-list .offline-address-item span.address-name{
     margin-left: 5px;
+}
+
+.offline-address-list .offline-address-item span.address-order-count{
+    margin-left: 5px;
+    color: red;
+    font-size: 13px;
+}
+
+.offline-address-list .offline-address-item span.wrap-order-info{
+    font-size: 12px;
+    color: #999;
 }
 
 .red-packet-dialog{border: white;position: fixed;top: 100px;left: 8%; z-index: 999;padding: 10px 10px 10px;width: 80%;border-radius: 8px;display: block; background: #ffa103;}
