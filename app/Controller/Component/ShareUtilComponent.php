@@ -1424,7 +1424,7 @@ class ShareUtilComponent extends Component {
      */
     public function new_static_address_group_shares($origin_share_id) {
         $static_addresses = $this->get_static_offline_address();
-        $queue = new SaeTaskQueue('test');
+        $queue = new SaeTaskQueue('share');
         //批量添加任务
         $tasks = array();
         foreach ($static_addresses as $static_address) {
