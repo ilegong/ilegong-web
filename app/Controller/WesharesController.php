@@ -775,21 +775,21 @@ class WesharesController extends AppController {
     }
 
     private function merge_child_share_summery_data(&$parent_summery_data, $child_share_datas) {
+        $parent_summery_data['child_share_order_count'] = 0;
         foreach ($child_share_datas as $child_share_data_item) {
             $child_share_summery_details = $child_share_data_item['summery']['details'];
             foreach ($child_share_summery_details as $pid => $summery_detail_item) {
-                if(empty($parent_summery_data['summery']['details'][$pid]['name'])){
+                if (empty($parent_summery_data['summery']['details'][$pid]['name'])) {
                     $parent_summery_data['summery']['details'][$pid]['name'] = $summery_detail_item['name'];
                 }
                 $parent_summery_data['summery']['details'][$pid]['num'] = $parent_summery_data['summery']['details'][$pid]['num'] + $summery_detail_item['num'];
                 $parent_summery_data['summery']['details'][$pid]['total_price'] = $parent_summery_data['summery']['details'][$pid]['total_price'] + $summery_detail_item['total_price'];
             }
-            
             $parent_summery_data['summery']['all_buy_user_count'] = $child_share_data_item['summery']['all_buy_user_count'] + $parent_summery_data['summery']['all_buy_user_count'];
             $parent_summery_data['summery']['all_total_price'] = $child_share_data_item['summery']['all_total_price'] + $parent_summery_data['summery']['all_total_price'];
             $parent_summery_data['summery']['real_total_price'] = $child_share_data_item['summery']['real_total_price'] + $parent_summery_data['summery']['real_total_price'];
             $parent_summery_data['summery']['all_coupon_price'] = $child_share_data_item['summery']['all_coupon_price'] + $parent_summery_data['summery']['all_coupon_price'];
-
+            $parent_summery_data['child_share_order_count'] = $parent_summery_data['child_share_order_count'] + $parent_summery_data['summery']['all_buy_user_count'];
             $rebate_logs = $child_share_data_item['rebate_logs'];
             $parent_summery_data['rebate_logs'] = array_merge($parent_summery_data['rebate_logs'], $rebate_logs);
             $share_rebate_money = $child_share_data_item['share_rebate_money'];
