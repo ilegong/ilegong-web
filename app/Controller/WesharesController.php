@@ -789,7 +789,9 @@ class WesharesController extends AppController {
             $parent_summery_data['summery']['all_total_price'] = $child_share_data_item['summery']['all_total_price'] + $parent_summery_data['summery']['all_total_price'];
             $parent_summery_data['summery']['real_total_price'] = $child_share_data_item['summery']['real_total_price'] + $parent_summery_data['summery']['real_total_price'];
             $parent_summery_data['summery']['all_coupon_price'] = $child_share_data_item['summery']['all_coupon_price'] + $parent_summery_data['summery']['all_coupon_price'];
-            $parent_summery_data['child_share_order_count'] = $parent_summery_data['child_share_order_count'] + $parent_summery_data['summery']['all_buy_user_count'];
+
+            $parent_summery_data['child_share_order_count'] = $parent_summery_data['child_share_order_count'] + $child_share_data_item['summery']['all_buy_user_count'];
+
             $rebate_logs = $child_share_data_item['rebate_logs'];
             $parent_summery_data['rebate_logs'] = array_merge($parent_summery_data['rebate_logs'], $rebate_logs);
             $share_rebate_money = $child_share_data_item['share_rebate_money'];
