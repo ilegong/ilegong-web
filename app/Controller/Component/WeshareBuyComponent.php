@@ -663,6 +663,9 @@ class WeshareBuyComponent extends Component {
      * 计算后结算的款项
      */
     public function get_added_order_repaid_money($weshareId) {
+        if(!is_array($weshareId)){
+            $weshareId = array($weshareId);
+        }
         $orderM = ClassRegistry::init('Order');
         $addOrderResult = $orderM->find('all', array(
             'conditions' => array(
@@ -694,12 +697,16 @@ class WeshareBuyComponent extends Component {
         return $addOrderResult[0][0]['all_repaid_order_money'];
     }
 
+
     /**
      * @param $weshareId
      * @return float
      * 退款 金额
      */
     public function get_refund_money_by_weshare($weshareId) {
+        if(!is_array($weshareId)){
+            $weshareId = array($weshareId);
+        }
         $orderM = ClassRegistry::init('Order');
         $refundLogM = ClassRegistry::init('RefundLog');
         $refund_orders = $orderM->find('all', array(
@@ -781,7 +788,7 @@ class WeshareBuyComponent extends Component {
                     $address_data[$member_id]['join_users'][] = $creator;
                 }
             }
-            $child_share_data = array('child_share_data' => $address_data, 'child_share_user_infos' => $user_infos);
+            $child_share_data = array('child_share_data' => $address_data, 'child_share_user_infos' => $user_infos, 'child_share_ids' => $share_ids);
             $child_share_data_json = json_encode($child_share_data);
             Cache::write($cache_key, $child_share_data_json);
             return $child_share_data;
@@ -830,9 +837,7 @@ class WeshareBuyComponent extends Component {
             ));
             $orderIds = Hash::extract($orders, '{n}.Order.id');
             $cateIds = Hash::extract($orders, '{n}.Order.cate_id');
-            $userIds = Hash::extract($orders, '{n}.Order.creator');
             $orderIds = array_unique($orderIds);
-            $userIds = array_unique($userIds);
             $cateIds = array_unique($cateIds);
             $rebateLogs = $this->RebateTrackLog->find('all', array(
                 'conditions' => array(
@@ -840,16 +845,7 @@ class WeshareBuyComponent extends Component {
                 ),
                 'fields' => array('id', 'sharer')
             ));
-            $rebateSharerIds = Hash::extract($rebateLogs, '{n}.RebateTrackLog.sharer');
             $rebateLogs = Hash::combine($rebateLogs, '{n}.RebateTrackLog.id', '{n}.RebateTrackLog.sharer');
-            $userIds = array_merge($userIds, $rebateSharerIds);
-            $users = $this->User->find('all', array(
-                'conditions' => array(
-                    'id' => $userIds
-                ),
-                'recursive' => 1, //int
-                'fields' => $this->query_user_fields,
-            ));
             $orders = Hash::combine($orders, '{n}.Order.id', '{n}.Order');
             $carts = $this->Cart->find('all', array(
                 'conditions' => array(
@@ -876,7 +872,6 @@ class WeshareBuyComponent extends Component {
                 $cart_price = $item['Cart']['price'];
                 $cart_name = $item['Cart']['name'];
                 if (!isset($product_buy_num['details'][$product_id])) $product_buy_num['details'][$product_id] = array('num' => 0, 'total_price' => 0, 'name' => $cart_name);
-                if (!isset($order_cart_map[$order_id])) $order_cart_map[$order_id] = array();
                 $product_buy_num['details'][$product_id]['num'] = $product_buy_num['details'][$product_id]['num'] + $cart_num;
                 $totalPrice = $cart_num * $cart_price;
                 $product_buy_num['details'][$product_id]['total_price'] = $product_buy_num['details'][$product_id]['total_price'] + $totalPrice;
@@ -889,7 +884,7 @@ class WeshareBuyComponent extends Component {
             $share_rebate_money = $this->ShareUtil->get_share_rebate_money($share_id);
             $share_rebate_ship_fee = $this->ShareUtil->get_share_rebate_ship_fee($share_id);
             $refund_money = $this->get_refund_money_by_weshare($share_id);
-            $share_summery_data = array('users' => $users, 'order_cart_map' => $order_cart_map, 'summery' => $product_buy_num, 'rebate_logs' => $rebateLogs, 'share_rebate_money' => $share_rebate_money, 'refund_money' => $refund_money, 'share_rebate_ship_fee' => $share_rebate_ship_fee);
+            $share_summery_data = array('summery' => $product_buy_num, 'rebate_logs' => $rebateLogs, 'share_rebate_money' => $share_rebate_money, 'refund_money' => $refund_money, 'share_rebate_ship_fee' => $share_rebate_ship_fee);
             Cache::write($key, json_encode($share_summery_data));
             return $share_summery_data;
         }

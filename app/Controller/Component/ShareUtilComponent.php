@@ -193,6 +193,9 @@ class ShareUtilComponent extends Component {
      * @return int
      */
     public function get_share_rebate_money($share_id) {
+        if(!is_array($share_id)){
+            $share_id = array($share_id);
+        }
         $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
         $allRebateMoney = 0;
         $rebateLogs = $rebateTrackLogM->find('all', array(

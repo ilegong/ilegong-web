@@ -740,22 +740,27 @@ class WesharesController extends AppController {
         if (empty($weshare) && !$is_manage) {
             $this->redirect("/weshares/view/" . $weshareId);
         }
+        $child_share_data = $this->WeshareBuy->get_child_share_items($weshareId);
         $share_tags = $this->ShareUtil->get_share_tags($weshareId);
         $statics_data = $this->get_weshare_buy_info($weshareId, true, true);
-        $refund_money = $this->WeshareBuy->get_refund_money_by_weshare($weshareId);
-        $rebate_money = $this->ShareUtil->get_share_rebate_money($weshareId);
-        $repaid_order_money = $this->WeshareBuy->get_added_order_repaid_money($weshareId);
+        //
+        $share_ids = $child_share_data['child_share_ids'];
+        $share_ids[] = $weshareId;
+        $refund_money = $this->WeshareBuy->get_refund_money_by_weshare($share_ids);
+        $rebate_money = $this->ShareUtil->get_share_rebate_money($share_ids);
+        $repaid_order_money = $this->WeshareBuy->get_added_order_repaid_money($share_ids);
+        //
         if (count($share_tags['tags']) > 0) {
             $tag_order_summery = $this->ShareUtil->summery_order_data_by_tag($statics_data, $weshareId);
             $this->set('tag_order_summery', $tag_order_summery);
         }
-        $child_share_data = $this->WeshareBuy->get_child_share_items($weshareId);
         $child_share_summery_datas = array();
-        foreach($child_share_data['child_share_data'] as $child_share_item){
+        foreach ($child_share_data['child_share_data'] as $child_share_item) {
             $child_share_id = $child_share_item['weshare_id'];
             $child_share_summery_datas[$child_share_id] = $this->WeshareBuy->get_child_share_summery($child_share_id, $weshareId);
         }
-        $this->set('child_share_summery_datas', $child_share_summery_datas);
+        //$this->set('child_share_summery_datas', $child_share_summery_datas);
+        $this->merge_child_share_summery_data($statics_data, $child_share_data);
         $this->set($child_share_data);
         $this->set($statics_data);
         $this->set('tags', $share_tags['tags']);
@@ -767,6 +772,22 @@ class WesharesController extends AppController {
         $this->set('hide_footer', true);
         $this->set('user_id', $user_id);
         $this->set('weshareId', $weshareId);
+    }
+
+    private function merge_child_share_summery_data(&$parent_summery_data, $child_share_datas) {
+        foreach ($child_share_datas as $child_share_data_item) {
+            $child_share_summery_details = $child_share_data_item['summery']['detail'];
+            foreach ($child_share_summery_details as $pid => $summery_detail_item) {
+                $parent_summery_data['summery']['detail'][$pid]['num'] = $parent_summery_data['summery']['detail'][$pid]['num'] + $summery_detail_item['num'];
+                $parent_summery_data['summery']['detail'][$pid]['total_price'] = $parent_summery_data['summery']['detail'][$pid]['total_price'] + $summery_detail_item['total_price'];
+            }
+            $rebate_logs = $child_share_data_item['rebate_logs'];
+            $parent_summery_data['rebate_logs'] = array_merge($parent_summery_data['rebate_logs'], $rebate_logs);
+            $share_rebate_money = $child_share_data_item['share_rebate_money'];
+            $parent_summery_data['share_rebate_money'] = $share_rebate_money;
+            $refund_money = $child_share_data_item['refund_money'];
+            $parent_summery_data['refund_money'] = $parent_summery_data['refund_money'] + $refund_money;
+        }
     }
 
     /**
