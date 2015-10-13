@@ -1287,11 +1287,12 @@ class ShareUtilComponent extends Component {
 
     /**
      * @param $share_id
-     * @param $order_creator
-     * @param $order_id
+     * @param $order
      * 把每单5元的自提费用添加的线下自提点用户余额里面
      */
-    public function add_money_for_offline_address($share_id, $order_creator, $order_id) {
+    public function add_money_for_offline_address($share_id, $order) {
+        $order_creator = $order['Order']['creator'];
+        $order_id = $order['Order']['id'];
         $WeshareM = ClassRegistry::init('Weshare');
         $weshare = $WeshareM->find('first', array(
             'conditions' => array(
@@ -1304,6 +1305,11 @@ class ShareUtilComponent extends Component {
             $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
             $rebate_log = array('sharer' => $share_creator, 'share_id' => $share_id, 'clicker' => $order_creator, 'order_id' => $order_id, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'rebate_money' => SHARE_GROUP_REBATE_MONEY, 'is_paid' => 1, 'type' => GROUP_SHARE_BUY_REBATE_TYPE);
             $rebateTrackLogM->save($rebate_log);
+            $order_username = $this->WeshareBuy->get_user_nickname($order_creator);
+            $user_open_id = $this->WeshareBuy->get_open_id($share_creator);
+            $detail_url = $this->WeshareBuy->get_weshares_detail_url($share_id);
+            $title = $order_username . '参加了，你发起的' . $weshare['Weshare']['title'];
+            $this->Weixin->send_rebate_template_msg($user_open_id, $detail_url, $order_id, $order['Order']['total_all_price'], $order['Order']['pay_time'], SHARE_GROUP_REBATE_MONEY, $title);
         }
     }
 

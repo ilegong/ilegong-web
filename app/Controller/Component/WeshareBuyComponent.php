@@ -1679,6 +1679,12 @@ class WeshareBuyComponent extends Component {
         return WX_HOST . '/weshares/view/' . $weshareId;
     }
 
+    public function get_open_id($uid){
+        $oauthBindM = ClassRegistry::init('Oauthbind');
+        $uid_openid_map = $oauthBindM->findWxServiceBindMapsByUids(array($uid));
+        return $uid_openid_map[$uid];
+    }
+
     public function get_open_ids($uids) {
         $oauthBindM = ClassRegistry::init('Oauthbind');
         $uid_openid_map = $oauthBindM->findWxServiceBindMapsByUids($uids);
