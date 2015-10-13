@@ -1336,6 +1336,23 @@ class ShareUtilComponent extends Component {
     }
 
     /**
+     * @return mixed
+     * 获取最新的子分享，用来推送模板消息
+     */
+    public function get_recent_group_share() {
+        $WeshareM = ClassRegistry::init('Weshare');
+        $shares = $WeshareM->find('all', array(
+            'conditions' => array(
+                'type' => GROUP_SHARE_TYPE,
+                'status' => WESHARE_NORMAL_STATUS
+            ),
+            'order' => array('id DESC'),
+            'limit' => 500
+        ));
+        return $shares;
+    }
+
+    /**
      * @param $tag
      * @return array
      * index product

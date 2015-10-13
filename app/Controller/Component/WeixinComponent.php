@@ -468,6 +468,7 @@ class WeixinComponent extends Component {
             //$this->ShareUtil->check_order_is_prepaid_and_update_status($order);
             //自提点费用
             $this->ShareUtil->add_money_for_offline_address($share_id, $order);
+            //todo check group share is complete and send msg
             //clean cache share
             $this->clear_share_cache($order['Order']['member_id'], $order['Order']['ship_mark'] == SHARE_SHIP_GROUP_TAG);
             return;
@@ -696,16 +697,16 @@ class WeixinComponent extends Component {
      * @param $product_name
      * @param $tuan_leader_name
      * @param $remark
-     * @param $deatil_url
+     * @param $detail_url
      * @return bool
      * 分享购买提示信息
      */
-    public function send_share_buy_complete_msg($open_id, $title, $product_name, $tuan_leader_name, $remark, $deatil_url) {
+    public function send_share_buy_complete_msg($open_id, $title, $product_name, $tuan_leader_name, $remark, $detail_url) {
         if (!empty($open_id)) {
             $post_data = array(
                 "touser" => $open_id,
                 "template_id" => $this->wx_message_template_ids["TUAN_TIP"],
-                "url" => $deatil_url,
+                "url" => $detail_url,
                 "topcolor" => "#FF0000",
                 "data" => array(
                     "first" => array("value" => $title),
