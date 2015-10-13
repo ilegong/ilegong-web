@@ -170,7 +170,7 @@ class ShareUtilComponent extends Component {
      * @param $share_id
      * @return int
      */
-    public function get_share_rebate_ship_fee($share_id){
+    public function get_share_rebate_ship_fee($share_id) {
         $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
         $allRebateMoney = 0;
         $rebateLogs = $rebateTrackLogM->find('all', array(
@@ -193,7 +193,7 @@ class ShareUtilComponent extends Component {
      * @return int
      */
     public function get_share_rebate_money($share_id) {
-        if(!is_array($share_id)){
+        if (!is_array($share_id)) {
             $share_id = array($share_id);
         }
         $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
@@ -1310,6 +1310,14 @@ class ShareUtilComponent extends Component {
             $detail_url = $this->WeshareBuy->get_weshares_detail_url($share_id);
             $title = $order_username . '参加了，你发起的' . $weshare['Weshare']['title'];
             $this->Weixin->send_rebate_template_msg($user_open_id, $detail_url, $order_id, $order['Order']['total_all_price'], $order['Order']['pay_time'], SHARE_GROUP_REBATE_MONEY, $title);
+            //notify share complete task
+            $queue = new SaeTaskQueue('tasks');
+            //添加单个任务
+            $queue->addTask("/task/notify_group_share_complete/".$share_id);
+            //将任务推入队列
+            $ret = $queue->push();
+            $this->log('notify share complete '.$ret);
+
         }
     }
 
@@ -1351,6 +1359,47 @@ class ShareUtilComponent extends Component {
         ));
         return $shares;
     }
+
+    /**
+     * @param $share_id
+     * 获取分享拼团需要人数
+     */
+    public function get_share_group_limit($share_id) {
+        $shipSettingM = ClassRegistry::init('WeshareShipSetting');
+        $groupShareShipSettings = $shipSettingM->find('first', array(
+            'conditions' => array(
+                'weshare_id' => $share_id,
+                'tag' => SHARE_SHIP_GROUP_TAG,
+                'status' => PUBLISH_YES
+            )
+        ));
+        return $groupShareShipSettings['WeshareShipSetting']['limit'];
+    }
+
+    /**
+     * 拼团成功通知
+     */
+    public function send_group_share_complete($share_id) {
+        $share_info = $this->WeshareBuy->get_weshare_info($share_id);
+        $share_orders = $this->get_share_orders($share_id);
+        $group_share_limit = $this->get_share_group_limit($share_info['refer_share_id']);
+        if (count($share_orders) >= $group_share_limit) {
+            $share_order_user_ids = Hash::extract($share_orders, '{n}.Order.creator');
+            $share_order_user_ids[] = $share_info['creator'];
+            $share_order_user_ids = array_unique($share_order_user_ids);
+            $share_title = $share_info['title'];
+            $user_open_ids = $this->WeshareBuy->get_open_ids($share_order_user_ids);
+            $user_nicknames = $this->WeshareBuy->get_users_nickname($share_order_user_ids);
+            $tuan_leader_name = $user_nicknames[$share_info['creator']];
+            $detail_url = $this->WeshareBuy->get_weshares_detail_url($share_id);
+            $title = '你好，您报名的' . $share_title . '，现在已经成团。吼，吼！';
+            $remark = '发货信息：' . $share_info['send_info'] . '请留意后续消息！';
+            foreach ($user_open_ids as $user_id => $user_open_id) {
+                $this->Weixin->send_share_buy_complete_msg($user_open_id, $title, $share_title, $tuan_leader_name, $remark, $detail_url);
+            }
+        }
+    }
+
 
     /**
      * @param $tag

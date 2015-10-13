@@ -137,4 +137,11 @@ class TaskController extends AppController {
         return;
     }
 
+    public function notify_group_share_complete($share_id) {
+        $this->autoRender = false;
+        $this->ShareUtil->send_group_share_complete($share_id);
+        echo json_encode(array('success' => true));
+        return;
+    }
+
 }
