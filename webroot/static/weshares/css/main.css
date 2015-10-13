@@ -33,8 +33,8 @@ ul li { list-style: none; }
 
 .radio-group { clear:none; overflow: hidden;}
 .radio-group label { float:left; clear:none; display:block; padding: 0 10px; }
-.radio-group input[type=radio], input.radio { float:left; clear:none; margin: 2px 0 0 2px; }
-.radio-group input[type=radio], input.radio-address { float:left; clear:none; margin: 2px 0 10px 2px; margin-top: 10px;}
+.radio-group input.radio { float:left; clear:none; margin: 2px 0 0 2px; }
+.radio-group input.radio-address { float:left; clear:none; margin: 2px 0 10px 2px; margin-top: 10px;}
 
 /*上传信息页面*/
 .weshare-add{ padding: 10px; line-height: 30px;}
