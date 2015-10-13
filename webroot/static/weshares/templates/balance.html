@@ -92,7 +92,7 @@
             <div class="form-group" ng-class="{'has-error': vm.offlineAddressHasError}" ng-if="vm.selectShipType==3">
                 <ul class="offline-address-list">
                     <li class="offline-address-item" ng-repeat="(offlineAddressShareId, offlineAddress) in vm.childShareDetail">
-                        <input type="radio" ng-model="vm.chooseOfflineAddress" value="{{::offlineAddressShareId}}" class="radio"/>
+                        <input type="radio" ng-model="vm.chooseOfflineAddress" value="{{::offlineAddressShareId}}" class="radio-address"/>
                         <img lazy-src="{{::vm.childShareDetailUsers[offlineAddress['creator']]['image']}}">
                         <div class="wrap-address-info">
                             <span class="user-name" ng-bind="::vm.childShareDetailUsers[offlineAddress['creator']]['nickname']"></span>
