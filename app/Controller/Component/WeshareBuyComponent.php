@@ -674,6 +674,7 @@ class WeshareBuyComponent extends Component {
                 'member_id' => $weshareId
             ),
             'fields' => array('SUM(total_all_price) as all_repaid_order_money'),
+            'limit' => 100
         ));
         return $addOrderResult[0][0]['all_repaid_order_money'];
     }
@@ -715,7 +716,8 @@ class WeshareBuyComponent extends Component {
                 'status' => array(ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY),
                 'type' => ORDER_TYPE_WESHARE_BUY,
                 'deleted' => DELETED_NO
-            )
+            ),
+            'limit' => 1000
         ));
         $refund_order_ids = Hash::extract($refund_orders, '{n}.Order.id');
         $refund_logs = $refundLogM->find('all', array(
