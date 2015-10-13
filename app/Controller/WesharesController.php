@@ -760,7 +760,7 @@ class WesharesController extends AppController {
             $child_share_summery_datas[$child_share_id] = $this->WeshareBuy->get_child_share_summery($child_share_id, $weshareId);
         }
         //$this->set('child_share_summery_datas', $child_share_summery_datas);
-        $this->merge_child_share_summery_data($statics_data, $child_share_data);
+        $this->merge_child_share_summery_data($statics_data, $child_share_summery_datas);
         $this->set($child_share_data);
         $this->set($statics_data);
         $this->set('tags', $share_tags['tags']);
@@ -776,10 +776,10 @@ class WesharesController extends AppController {
 
     private function merge_child_share_summery_data(&$parent_summery_data, $child_share_datas) {
         foreach ($child_share_datas as $child_share_data_item) {
-            $child_share_summery_details = $child_share_data_item['summery']['detail'];
+            $child_share_summery_details = $child_share_data_item['summery']['details'];
             foreach ($child_share_summery_details as $pid => $summery_detail_item) {
-                $parent_summery_data['summery']['detail'][$pid]['num'] = $parent_summery_data['summery']['detail'][$pid]['num'] + $summery_detail_item['num'];
-                $parent_summery_data['summery']['detail'][$pid]['total_price'] = $parent_summery_data['summery']['detail'][$pid]['total_price'] + $summery_detail_item['total_price'];
+                $parent_summery_data['summery']['details'][$pid]['num'] = $parent_summery_data['summery']['details'][$pid]['num'] + $summery_detail_item['num'];
+                $parent_summery_data['summery']['details'][$pid]['total_price'] = $parent_summery_data['summery']['details'][$pid]['total_price'] + $summery_detail_item['total_price'];
             }
             $rebate_logs = $child_share_data_item['rebate_logs'];
             $parent_summery_data['rebate_logs'] = array_merge($parent_summery_data['rebate_logs'], $rebate_logs);

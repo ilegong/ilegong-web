@@ -863,6 +863,7 @@ class WeshareBuyComponent extends Component {
                 $summeryTotalPrice = $summeryTotalPrice + $order_item['total_price'];
                 $couponPrice = $couponPrice + $order_item['coupon_total'];
             }
+            $product_buy_num = array('details' => array());
             foreach ($carts as $item) {
                 $order_id = $item['Cart']['order_id'];
                 $product_id = $item['Cart']['product_id'];
