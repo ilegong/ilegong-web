@@ -827,6 +827,7 @@ class WeshareBuyComponent extends Component {
             $product_id_map = $this->get_product_id_map_by_origin_ids($refer_share_id);
             $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
             $sort = array('created DESC');
+            
             $orders = $this->Order->find('all', array(
                 'conditions' => array(
                     'member_id' => $share_id,
@@ -835,27 +836,33 @@ class WeshareBuyComponent extends Component {
                     'deleted' => DELETED_NO
                 ),
                 'fields' => $this->$query_share_info_order_fields,
-                'order' => $sort
+                'order' => $sort,
+                'limit' => 1000
             ));
             $orderIds = Hash::extract($orders, '{n}.Order.id');
             $cateIds = Hash::extract($orders, '{n}.Order.cate_id');
             $orderIds = array_unique($orderIds);
             $cateIds = array_unique($cateIds);
+
             $rebateLogs = $this->RebateTrackLog->find('all', array(
                 'conditions' => array(
                     'id' => $cateIds
                 ),
-                'fields' => array('id', 'sharer')
+                'fields' => array('id', 'sharer'),
+                'limit' => 1000
             ));
+
             $rebateLogs = Hash::combine($rebateLogs, '{n}.RebateTrackLog.id', '{n}.RebateTrackLog.sharer');
             $orders = Hash::combine($orders, '{n}.Order.id', '{n}.Order');
+
             $carts = $this->Cart->find('all', array(
                 'conditions' => array(
                     'order_id' => $orderIds,
                     'type' => ORDER_TYPE_WESHARE_BUY,
                     'not' => array('order_id' => null, 'order_id' => '')
                 ),
-                'fields' => array('id', 'name', 'order_id', 'num', 'product_id', 'price', 'confirm_price', 'tag_id')
+                'fields' => array('id', 'name', 'order_id', 'num', 'product_id', 'price', 'confirm_price', 'tag_id'),
+                'limit' => 2000
             ));
             $realTotalPrice = 0;
             $summeryTotalPrice = 0;
