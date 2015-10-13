@@ -15,7 +15,7 @@
         </div>
         <div class="offer-content">
             <div class="pull-right div-share-item">
-                <span style="color:red;">{{$item_child_share['order_count']}}</span>&nbsp;人报名
+                <span style="color:red;">{{empty($item_child_share['order_count']) ? 0 : $item_child_share['order_count']}}</span>&nbsp;人报名
             </div>
             <p class="div-share-item">
                 <strong>发起人:</strong>&nbsp;&nbsp;{{$child_share_user_infos[$item_child_share['creator']]['nickname']}}<br>
