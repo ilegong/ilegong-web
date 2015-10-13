@@ -663,7 +663,7 @@ class WeshareBuyComponent extends Component {
      * 计算后结算的款项
      */
     public function get_added_order_repaid_money($weshareId) {
-        if(!is_array($weshareId)){
+        if (!is_array($weshareId)) {
             $weshareId = array($weshareId);
         }
         $orderM = ClassRegistry::init('Order');
@@ -704,7 +704,7 @@ class WeshareBuyComponent extends Component {
      * 退款 金额
      */
     public function get_refund_money_by_weshare($weshareId) {
-        if(!is_array($weshareId)){
+        if (!is_array($weshareId)) {
             $weshareId = array($weshareId);
         }
         $orderM = ClassRegistry::init('Order');
@@ -868,7 +868,9 @@ class WeshareBuyComponent extends Component {
                 $order_id = $item['Cart']['order_id'];
                 $product_id = $item['Cart']['product_id'];
                 //get product map id
-                $product_id = $product_id_map[$product_id];
+                if (!empty($product_id_map[$product_id])) {
+                    $product_id = $product_id_map[$product_id];
+                }
                 $cart_num = $item['Cart']['num'];
                 $cart_price = $item['Cart']['price'];
                 $cart_name = $item['Cart']['name'];

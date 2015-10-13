@@ -755,8 +755,7 @@ class WesharesController extends AppController {
             $this->set('tag_order_summery', $tag_order_summery);
         }
         $child_share_summery_datas = array();
-        foreach ($child_share_data['child_share_data'] as $child_share_item) {
-            $child_share_id = $child_share_item['weshare_id'];
+        foreach ($child_share_data['child_share_ids'] as $child_share_id) {
             $child_share_summery_datas[$child_share_id] = $this->WeshareBuy->get_child_share_summery($child_share_id, $weshareId);
         }
         //$this->set('child_share_summery_datas', $child_share_summery_datas);
