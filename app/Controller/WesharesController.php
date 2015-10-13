@@ -208,18 +208,31 @@ class WesharesController extends AppController {
         //SHARE_USER_SUMMERY_CACHE_KEY . '_' . $uid;
         if ($saveBuyFlag) {
             if (empty($weshareData['id'])) {
+                //create
                 Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
                 $thumbnail = null;
                 if (count($images) > 0) {
                     $thumbnail = $images[0];
                 }
                 $this->ShareUtil->save_create_share_opt_log($weshare['Weshare']['id'], $thumbnail, $weshareData['title'], $uid);
+                $this->check_share_and_trigger_new_share($weshare['Weshare']['id'], $shipSetData);
             }
             echo json_encode(array('success' => true, 'id' => $weshare['Weshare']['id']));
             return;
         } else {
             echo json_encode(array('success' => false, 'uid' => $uid));
             return;
+        }
+    }
+
+    private function check_share_and_trigger_new_share($shareId, $shipSetData) {
+        foreach ($shipSetData as $item) {
+            if ($item['tag'] == SHARE_SHIP_GROUP_TAG) {
+                if ($item['status'] == PUBLISH_YES && $item['limit'] > 0) {
+                    $this->ShareUtil->new_static_address_group_shares($shareId);
+                }
+                break;
+            }
         }
     }
 

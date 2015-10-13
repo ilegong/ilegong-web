@@ -1313,10 +1313,10 @@ class ShareUtilComponent extends Component {
             //notify share complete task
             $queue = new SaeTaskQueue('tasks');
             //添加单个任务
-            $queue->addTask("/task/notify_group_share_complete/".$share_id);
+            $queue->addTask("/task/notify_group_share_complete/" . $share_id);
             //将任务推入队列
             $ret = $queue->push();
-            $this->log('notify share complete '.$ret);
+            $this->log('notify share complete ' . $ret);
 
         }
     }
@@ -1400,6 +1400,49 @@ class ShareUtilComponent extends Component {
         }
     }
 
+    /**
+     * @return mixed
+     * 获取常用自提点
+     */
+    public function get_static_offline_address() {
+        //TODO cache it
+        $WeshareOfflineAddressM = ClassRegistry::init('WeshareOfflineAddress');
+        $staticOfflineAddress = $WeshareOfflineAddressM->find('all', array(
+            'conditions' => array(
+                'static' => 1,
+                'deleted' => DELETED_NO
+            ),
+            'limit' => 100,
+            'order' => array('weight DESC')
+        ));
+        return $staticOfflineAddress;
+    }
+
+    /**
+     * @param $origin_share_id
+     * 一次分享建成之后 触发建立以常用自提点为地址的分享
+     */
+    public function new_static_address_group_shares($origin_share_id) {
+        $static_addresses = $this->get_static_offline_address();
+        $queue = new SaeTaskQueue('test');
+        //批量添加任务
+        $tasks = array();
+        foreach ($static_addresses as $static_address) {
+            $address = $static_address['WeshareOfflineAddress']['address'];
+            $addressRemark = $static_address['WeshareOfflineAddress']['remarks'];
+            $addressCreator = $static_address['WeshareOfflineAddress']['creator'];
+            $url = "/task/process_start_group_share/" . $origin_share_id . "/" . $addressCreator;
+            $params = "address=" . $address . "&business_remark=" . $addressRemark;
+            $tasks[] = array('url' => $url, "postdata" => $params);
+        }
+        $queue->addTask($tasks);
+        //将任务推入队列
+        $ret = $queue->push();
+        //任务添加失败时输出错误码和错误信息
+        if ($ret === false)
+            var_dump($queue->errno(), $queue->errmsg());
+        return $ret;
+    }
 
     /**
      * @param $tag

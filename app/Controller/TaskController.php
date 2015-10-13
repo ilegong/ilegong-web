@@ -144,4 +144,33 @@ class TaskController extends AppController {
         return;
     }
 
+    /**
+     * @param $share_id
+     * @param $uid
+     * 一次分享成功后对常用自提点进行clone分享的任务
+     */
+    public function process_start_group_share($share_id, $uid) {
+        $this->autoRender = false;
+        $address = $_REQUEST['address'];
+        $business_remark = $_REQUEST['business_remark'];
+        $result = $this->ShareUtil->cloneShare($share_id, $uid, $address, $business_remark, GROUP_SHARE_TYPE, WESHARE_NORMAL_STATUS);
+        //send template msg and clear cache
+        if ($result['success']) {
+            Cache::write(SHARE_OFFLINE_ADDRESS_BUY_DATA_CACHE_KEY . '_' . $share_id, '');
+            Cache::write(SHARE_OFFLINE_ADDRESS_SUMMERY_DATA_CACHE_KEY . '_' . $share_id, '');
+        }
+        echo json_encode(array('success' => true));
+    }
+
+    /**
+     * @param $share_id
+     * 做一个触发器 去触发创建常用自提点的分享
+     */
+    public function trigger_start_static_group_share($share_id) {
+        $this->autoRender = false;
+        $this->ShareUtil->new_static_address_group_shares($share_id);
+        echo json_encode(array('success' => true));
+        return;
+    }
+
 }
