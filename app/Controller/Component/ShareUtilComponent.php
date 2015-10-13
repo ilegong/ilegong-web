@@ -916,7 +916,7 @@ class ShareUtilComponent extends Component {
         $json_address_data = Cache::read($cache_key);
         if (empty($json_address_data)) {
             $WeshareM = ClassRegistry::init('Weshare');
-            $query_address_sql = 'select * from cake_weshare_addresses where weshare_id in (select id from cake_weshares where refer_share_id=' . $share_id . ' and status=' . WESHARE_NORMAL_STATUS . ' and type=' . GROUP_SHARE_TYPE . ')';
+            $query_address_sql = 'select * from cake_weshare_addresses where weshare_id in (select id from cake_weshares where refer_share_id=' . $share_id . ' and type=' . GROUP_SHARE_TYPE . ')';
             $address_result = $WeshareM->query($query_address_sql);
             $query_order_summery_sql = 'select count(id),member_id from cake_orders where type=' . ORDER_TYPE_WESHARE_BUY . ' and status !=' . ORDER_STATUS_WAITING_PAY . ' and member_id in (select id from cake_weshares where refer_share_id=' . $share_id . ' and status=' . WESHARE_NORMAL_STATUS . ' and type=' . GROUP_SHARE_TYPE . ') group by member_id';
             $order_summery_result = $WeshareM->query($query_order_summery_sql);
