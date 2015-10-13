@@ -740,8 +740,6 @@ class WesharesController extends AppController {
         if (empty($weshare) && !$is_manage) {
             $this->redirect("/weshares/view/" . $weshareId);
         }
-        $this->log('share_order_list  ' . $weshareId);
-
         $child_share_data = $this->WeshareBuy->get_child_share_items($weshareId);
         $share_tags = $this->ShareUtil->get_share_tags($weshareId);
         $statics_data = $this->get_weshare_buy_info($weshareId, true, true);
@@ -750,9 +748,6 @@ class WesharesController extends AppController {
             $this->set('tag_order_summery', $tag_order_summery);
         }
         $child_share_summery_datas = array();
-
-        $this->log('child share ids ' . $child_share_data['child_share_ids']);
-
         foreach ($child_share_data['child_share_ids'] as $child_share_id) {
             $child_share_summery_datas[$child_share_id] = $this->WeshareBuy->get_child_share_summery($child_share_id, $weshareId);
         }
@@ -761,11 +756,10 @@ class WesharesController extends AppController {
         $this->merge_child_share_summery_data($statics_data, $child_share_summery_datas);
         $share_ids = $child_share_data['child_share_ids'];
         $share_ids[] = $weshareId;
-        $this->log('child share ids before query static data ' . $share_ids);
+
         $refund_money = $this->WeshareBuy->get_refund_money_by_weshare($share_ids);
         $rebate_money = $this->ShareUtil->get_share_rebate_money($share_ids);
         $repaid_order_money = $this->WeshareBuy->get_added_order_repaid_money($share_ids);
-        $this->log('child share ids after query static data ' . $share_ids);
 
         $this->set($child_share_data);
         $this->set($statics_data);

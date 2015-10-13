@@ -801,7 +801,7 @@ class WeshareBuyComponent extends Component {
     //先不进行缓存
     public function get_product_id_map_by_origin_ids($share_id) {
         $weshareProductM = ClassRegistry::init('WeshareProduct');
-        $query_sql = 'select id, origin_product_id from cake_weshare_products where origin_product_id = (select id from cake_weshare_products where weshare_id=' . $share_id . ')';
+        $query_sql = 'select id, origin_product_id from cake_weshare_products where origin_product_id in (select id from cake_weshare_products where weshare_id=' . $share_id . ')';
         $product_id_map = $weshareProductM->query($query_sql);
         $product_id_map = Hash::combine($product_id_map, '{n}.cake_weshare_products.id', '{n}.cake_weshare_products.origin_product_id');
         return $product_id_map;
@@ -827,7 +827,6 @@ class WeshareBuyComponent extends Component {
             $product_id_map = $this->get_product_id_map_by_origin_ids($refer_share_id);
             $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
             $sort = array('created DESC');
-            $this->log('debug get child share summery 1');
             $orders = $this->Order->find('all', array(
                 'conditions' => array(
                     'member_id' => $share_id,
@@ -843,7 +842,6 @@ class WeshareBuyComponent extends Component {
             $cateIds = Hash::extract($orders, '{n}.Order.cate_id');
             $orderIds = array_unique($orderIds);
             $cateIds = array_unique($cateIds);
-            $this->log('debug get child share summery 2');
             $rebateLogs = $this->RebateTrackLog->find('all', array(
                 'conditions' => array(
                     'id' => $cateIds
@@ -854,7 +852,6 @@ class WeshareBuyComponent extends Component {
 
             $rebateLogs = Hash::combine($rebateLogs, '{n}.RebateTrackLog.id', '{n}.RebateTrackLog.sharer');
             $orders = Hash::combine($orders, '{n}.Order.id', '{n}.Order');
-            $this->log('debug get child share summery 3');
             $carts = $this->Cart->find('all', array(
                 'conditions' => array(
                     'order_id' => $orderIds,
@@ -893,9 +890,7 @@ class WeshareBuyComponent extends Component {
             $product_buy_num['all_total_price'] = $summeryTotalPrice;
             $product_buy_num['real_total_price'] = $realTotalPrice;
             $product_buy_num['all_coupon_price'] = $couponPrice / 100;
-            $this->log('debug get child share summery 4');
             $share_rebate_money = $this->ShareUtil->get_share_rebate_money($share_id);
-            $this->log('debug get child share summery 5');
             $refund_money = $this->get_refund_money_by_weshare($share_id);
             $share_summery_data = array('summery' => $product_buy_num, 'rebate_logs' => $rebateLogs, 'share_rebate_money' => $share_rebate_money, 'refund_money' => $refund_money);
             Cache::write($key, json_encode($share_summery_data));
