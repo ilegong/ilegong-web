@@ -756,6 +756,7 @@ class WesharesController extends AppController {
         foreach ($child_share_data['child_share_ids'] as $child_share_id) {
             $child_share_summery_datas[$child_share_id] = $this->WeshareBuy->get_child_share_summery($child_share_id, $weshareId);
         }
+
         //$this->set('child_share_summery_datas', $child_share_summery_datas);
         $this->merge_child_share_summery_data($statics_data, $child_share_summery_datas);
         $share_ids = $child_share_data['child_share_ids'];
