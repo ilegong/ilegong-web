@@ -95,23 +95,15 @@
         {{/if}}
         {{if count($rebate_logs) > 0}}
             <tr>
-                <td colspan="3">推荐订单数:&nbsp;<font color="red">{{count($rebate_logs)}}</font>
+                <td colspan="3">推荐订单数:&nbsp;<font color="red">{{count($rebate_logs)}}</font>&nbsp;&nbsp;团长佣金:&nbsp;<font color="red">{{$share_rebate_money - ($child_share_order_count*SHARE_OFFLINE_ADDRESS_SHIP_FEE_SIMPLE)}}</font>
                 </td>
             </tr>
         {{/if}}
         {{if $child_share_order_count > 0}}
         <tr>
-            <td colspan="3">拼团订单数:&nbsp;<font color="red">{{$child_share_order_count}}</font>
+            <td colspan="3">拼团订单数:&nbsp;<font color="red">{{$child_share_order_count}}</font>&nbsp;&nbsp;自提点费用:&nbsp;<font color="red">{{$child_share_order_count*SHARE_OFFLINE_ADDRESS_SHIP_FEE_SIMPLE}}</font>
             </td>
         </tr>
-        {{/if}}
-        {{if $share_rebate_money > 0}}
-            <tr>
-                <td colspan="3">
-                    拼团和推荐佣金:&nbsp;<font
-                        color="red">{{$share_rebate_money}}</font>
-                </td>
-            </tr>
         {{/if}}
     </table>
 </div>

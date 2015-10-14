@@ -526,6 +526,7 @@ class ShareUtilComponent extends Component {
             'conditions' => array('share_id' => $old_share_id)
         ));
         if (empty($oldShareRebateSet) || $is_set_group) {
+            //子分享返利设置为0
             $proxyRebatePercentM->save(array('share_id' => $new_share_id, 'percent' => 0));
             return;
         }
