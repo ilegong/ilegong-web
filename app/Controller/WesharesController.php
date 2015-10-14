@@ -776,6 +776,7 @@ class WesharesController extends AppController {
 
         $this->set($child_share_data);
         $this->set($statics_data);
+        $this->set('weshare_info', $weshare);
         $this->set('tags', $share_tags['tags']);
         $this->set('product_tag_map', $share_tags['product_tag_map']);
         $this->set('refund_money', $refund_money);
