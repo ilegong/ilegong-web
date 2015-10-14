@@ -17,7 +17,7 @@
     {{if floatval($weshare_rebate_map[$current_share_item['id']]) - floatval($weshare_summery[$current_share_item['id']]['child_ship_fee']) > 0}}
     <td>{{floatval($weshare_rebate_map[$current_share_item['id']]) - floatval($weshare_summery[$current_share_item['id']]['child_ship_fee'])}}</td>
     {{else}}
-    0
+    <td>0</td>
     {{/if}}
     <td>{{floatval($weshare_refund_map[$current_share_item['id']])}}</td>
     <td>{{$current_share_repaid_money}}</td>
