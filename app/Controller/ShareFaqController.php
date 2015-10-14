@@ -20,14 +20,32 @@ class ShareFaqController extends AppController {
 
     public function faq($shareId, $userId) {
         $share_info = $this->get_share_info($shareId);
+        $current_user_id = $this->currentUser['id'];
         $share_creator = $share_info['Weshare']['creator'];
-        $user_infos = $this->User->find('all', array(
+        $user_info = $this->User->find('all', array(
             'conditions' => array(
                 'id' => array($userId, $share_creator)
             ),
             'fields' => array('id', 'nickname', 'image')
         ));
-
+        $user_info = Hash::combine($user_info, '{n}.User.id', '{n}.User');
+        $share_faqs = $this->ShareFaq->find('all', array(
+            'conditions' => array(
+                'sender' => $userId,
+                'receiver' => $share_creator,
+                'share_id' => $shareId,
+                'OR' => array(
+                    'sender' => $share_creator,
+                    'receiver' => $userId,
+                    'share_id' => $shareId,
+                )
+            ),
+            'order' => array('created DESC')
+        ));
+        $this->set('current_user_id', $current_user_id);
+        $this->set('share_info', $share_info);
+        $this->set('user_info', $user_info);
+        $this->set('share_faqs', $share_faqs);
     }
 
     public function create_faq() {

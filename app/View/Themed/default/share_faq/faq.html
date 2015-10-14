@@ -138,95 +138,31 @@
     <div class="panel panel-default">
         <div class="panel-heading top-bar">
             <div class="col-md-8 col-xs-8">
-                <h3 class="panel-title"><span class="glyphicon glyphicon-comment"></span> Chat - Miguel</h3>
+                <h3 class="panel-title"><span class="glyphicon glyphicon-comment"></span>{{$share_info['Weshare']['title']}}</h3>
             </div>
         </div>
         <div class="panel-body msg_container_base">
-            <div class="row msg_container base_sent">
+            {{loop $share_faqs $share_faq}}
+            <div class="row msg_container {{if $share_faq['ShareFaq']['sender'] == $current_user_id}}base_sent{{else}}base_receive{{/if}}">
                 <div class="col-md-10 col-xs-10">
                     <div class="messages msg_sent">
-                        <p>that mongodb thing looks good, huh?
-                            tiny master db, and huge document store</p>
-                        <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                        <p>{{$share_faq['ShareFaq']['msg']}}</p>
+                        <time datetime="{{$share_faq['ShareFaq']['created']}}">{{$share_faq['ShareFaq']['created']}}</time>
                     </div>
                 </div>
                 <div class="col-md-2 col-xs-2 avatar">
-                    <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg"
-                         class=" img-responsive ">
+                    <img src="{{$share_info[$share_faq['ShareFaq']['sender']]['image']}}"
+                         class="img-responsive ">
                 </div>
             </div>
-            <div class="row msg_container base_receive">
-                <div class="col-md-2 col-xs-2 avatar">
-                    <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg"
-                         class=" img-responsive ">
-                </div>
-                <div class="col-md-10 col-xs-10">
-                    <div class="messages msg_receive">
-                        <p>that mongodb thing looks good, huh?
-                            tiny master db, and huge document store</p>
-                        <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
-                    </div>
-                </div>
-            </div>
-            <div class="row msg_container base_receive">
-                <div class="col-md-2 col-xs-2 avatar">
-                    <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg"
-                         class=" img-responsive ">
-                </div>
-                <div class="col-xs-10 col-md-10">
-                    <div class="messages msg_receive">
-                        <p>that mongodb thing looks good, huh?
-                            tiny master db, and huge document store</p>
-                        <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
-                    </div>
-                </div>
-            </div>
-            <div class="row msg_container base_sent">
-                <div class="col-xs-10 col-md-10">
-                    <div class="messages msg_sent">
-                        <p>that mongodb thing looks good, huh?
-                            tiny master db, and huge document store</p>
-                        <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
-                    </div>
-                </div>
-                <div class="col-md-2 col-xs-2 avatar">
-                    <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg"
-                         class=" img-responsive ">
-                </div>
-            </div>
-            <div class="row msg_container base_receive">
-                <div class="col-md-2 col-xs-2 avatar">
-                    <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg"
-                         class=" img-responsive ">
-                </div>
-                <div class="col-xs-10 col-md-10">
-                    <div class="messages msg_receive">
-                        <p>that mongodb thing looks good, huh?
-                            tiny master db, and huge document store</p>
-                        <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
-                    </div>
-                </div>
-            </div>
-            <div class="row msg_container base_sent">
-                <div class="col-md-10 col-xs-10 ">
-                    <div class="messages msg_sent">
-                        <p>that mongodb thing looks good, huh?
-                            tiny master db, and huge document store</p>
-                        <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
-                    </div>
-                </div>
-                <div class="col-md-2 col-xs-2 avatar">
-                    <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg"
-                         class=" img-responsive ">
-                </div>
-            </div>
+            {{/loop}}
         </div>
         <div class="panel-footer">
             <div class="input-group">
                 <input id="btn-input" type="text" class="form-control input-sm chat_input"
-                       placeholder="Write your message here..."/>
+                       placeholder="写下你要说的话..."/>
                         <span class="input-group-btn">
-                        <button class="btn btn-primary btn-sm" id="btn-chat">Send</button>
+                        <button class="btn btn-primary btn-sm" id="btn-chat">发送</button>
                         </span>
             </div>
         </div>
