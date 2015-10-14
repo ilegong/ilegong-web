@@ -349,17 +349,19 @@ class CategoriesController extends AppController {
 
     public function productsHome($disableAutoRedirect = false) {
 
-        if (!$disableAutoRedirect) {
-            if ($this->RequestHandler->isMobile()) {
-//                $tagId = RECOMMEND_TAG_ID;
-//                if($_REQUEST['tagId']){
-//                    $tagId = $_REQUEST['tagId'];
-//                }
-//                $this->redirect('/categories/mobileIndex.html?tagId='.$tagId);
-                $this->redirect('/weshares/index.html');
-                return;
-            }
-        }
+        $this->redirect('/weshares/index.html');
+        return;
+//        if (!$disableAutoRedirect) {
+//            if ($this->RequestHandler->isMobile()) {
+////                $tagId = RECOMMEND_TAG_ID;
+////                if($_REQUEST['tagId']){
+////                    $tagId = $_REQUEST['tagId'];
+////                }
+////                $this->redirect('/categories/mobileIndex.html?tagId='.$tagId);
+//                $this->redirect('/weshares/index.html');
+//                return;
+//            }
+//        }
         $current_cateid = CATEGORY_ID_TECHAN;
         $page = 1;
         $pagesize = 60;
