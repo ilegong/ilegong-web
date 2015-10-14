@@ -5,10 +5,11 @@ $(document).ready(function () {
   var $summeryProductItems = $('tr.summery-product-item');
   var $orderDataSummeryItems = $('tr.order-data-summery');
   var $zitiPanel = $('#self-ziti-orders');
-  $('div.div-share-item').on('click',function(e){
+  $('div.offer .div-share-item').on('click',function(e){
     e.preventDefault();
     var $me = $(this);
-    var child_share_id = $me.data('id');
+    var $parent = $me.parent('col-xs-12');
+    var child_share_id = $parent.data('id');
     window.location.href='/weshares/view/'+child_share_id;
   });
   $tagLi.on('click', function(e){
