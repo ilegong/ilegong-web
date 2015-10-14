@@ -7,7 +7,7 @@ class ShareFaqController extends AppController {
     var $uses = array('ShareFaq', 'Weshares', 'User');
 
     public function faq_list() {
-        
+
     }
 
     public function faq() {

@@ -1,0 +1,45 @@
+<div class="media">
+    <p class="pull-right">
+        <small>{{friendlyDateFromStr($share['Weshare']['created'], FFDATE_CH_MD)}}</small>
+        {{if $parsing_join_share}}
+            <?php $current_share_id = $share['Weshare']['id']; ?>
+            {{if $join_share_order_status[$current_share_id]['status']==ORDER_STATUS_PAID}}
+                <span class="label label-info">待发货</span>
+            {{elseif $join_share_order_status[$current_share_id]['status']==ORDER_STATUS_SHIPPED}}
+                <span class="label label-warning">已发货</span>
+            {{elseif $join_share_order_status[$current_share_id]['status']==ORDER_STATUS_RECEIVED}}
+                <span class="label label-danger">待评价</span>
+            {{elseif $join_share_order_status[$current_share_id]['status']==ORDER_STATUS_DONE}}
+                <span class="label label-success">已评价</span>
+            {{else}}
+                <span class="label label-success">其他</span>
+            {{/if}}
+        {{else}}
+            {{if $share['Weshare']['status']==0}}
+                <span class="label label-info">进行中</span>
+            {{else}}
+                <span class="label label-danger">已结束</span>
+            {{/if}}
+        {{/if}}
+    </p>
+    <?php
+        $show_img = $share['Weshare']['images'][0];
+        if(!$show_img){
+            $show_img = $creators[$share['Weshare']['creator']]['image'];
+        }
+    ?>
+    <a class="media-left" href="#">
+        <img onerror="this.src='/img/default_user_icon.jpg'" src="{{$show_img}}" style="width: 40px;height: 40px;">
+    </a>
+
+    <div class="media-body" data-id="{{$share['Weshare']['id']}}" name="share_item">
+        <h4 class="media-heading user_name">{{$share['Weshare']['title']}}</h4>
+        <div style="width:115px;white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden;">
+            {{if $join_share_order_status[$current_share_id]['status']==ORDER_STATUS_DONE}}
+                {{$joinShareComments[$join_share_order_status[$current_share_id]['id']]['body']}}
+            {{else}}
+                {{$share['Weshare']['description']}}
+            {{/if}}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>微分享</title>
+    <!-- Bootstrap -->
+    <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//cdn.bootcss.com/bootstrap-modal/2.2.6/css/bootstrap-modal.min.css" rel="stylesheet">
+    <link href="http://cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="/static/weshares/css/site-common.css" media="all" rel="stylesheet" type="text/css">
+    <script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap-modal/2.2.6/js/bootstrap-modalmanager.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap-modal/2.2.6/js/bootstrap-modal.min.js"></script>
+    <script src="//cdn.bootcss.com/bootbox.js/4.4.0/bootbox.min.js"></script>
+</head>
+<body>
+<div class="container-fluid" style="margin-bottom: 30px;">
+    {{$content_for_layout}}
+    <br/>
+    {{if !$hide_footer}}
+    <footer class="channel_bottom">
+        <a class="btm_item" href="/share_opt/index.html">
+            <i style="background:#f00;border-radius:50%;width:15px;height:15px;top:-5px;right:30%;position:absolute; display: none;"
+               id="mark-has-unread"></i>
+            <p class="iconfont" style="height: 4px;"><i class="fa fa-users"></i></p>
+            <b>朋友说</b>
+        </a>
+        <a class="new" href="/weshares/add">我也要分享</a>
+        <a class="btm_item" href="/weshares/user_share_info/{{$uid}}">
+            <p class="iconfont" style="height: 4px;"><i class="fa fa-user"></i></p>
+            <b>我的</b>
+        </a>
+    </footer>
+    {{/if}}
+</div>
+{{if $jWeixinOn}}
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+    Pyshuo.share.utils.init();
+    Pyshuo.share.utils.checkHasUnreadInfo();
+</script>
+<script>
+    if(wx){
+        var wx_jssdk_appId = '{{$signPackage["appId"]}}';
+        var wx_jssdk_timestamp = '{{$signPackage["timestamp"]?$signPackage["timestamp"]:1}}';
+        var wx_jssdk_nonceStr = '{{$signPackage["nonceStr"]}}';
+        var wx_jssdk_signature = '{{$signPackage["signature"]}}';
+        var jsApiList = ['checkJsApi', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseImage', 'previewImage', 'uploadImage', 'downloadImage', 'openLocation', 'getLocation'];
+        wx.config({
+            debug: false,
+            appId: wx_jssdk_appId,
+            timestamp: wx_jssdk_timestamp,
+            nonceStr: wx_jssdk_nonceStr,
+            signature: wx_jssdk_signature,
+            jsApiList: jsApiList
+        });
+
+        wx.ready(function () {
+            var share_string = '{{$share_string ? $share_string :"0"}}';
+            var to_timeline_title = "{{$title}}";
+            var to_friend_title = "{{$title}}";
+            var detail_url = "{{$detail_url}}";
+            if(!detail_url){
+                detail_url =  document.URL.split('?')[0];
+            }
+            var to_friend_link = detail_url + '?trstr='+ share_string + '&share_type=appMsg';
+            var to_timeline_link = detail_url + '?trstr='+ share_string + '&share_type=timeline';
+            var imgUrl = "{{$this->Html->assetUrl($image)}}";
+            var desc = "{{$desc}}";
+            wx.onMenuShareAppMessage({
+                title: to_friend_title,
+                desc: desc,
+                link: to_friend_link,
+                imgUrl: imgUrl,
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                    if(share_string != '0'){
+                        setTimeout(function(){
+                            $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "appMsg" });
+                        }, 500);
+                    }
+                }
+            });
+            wx.onMenuShareTimeline({
+                title: to_timeline_title,
+                link: to_timeline_link,
+                imgUrl: imgUrl,
+                success: function () {
+                    if(share_string != '0'){
+                        setTimeout(function(){
+                            $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "timeline" });
+                        }, 500);
+                    }
+                }
+            });
+        });
+    }
+</script>
+{{/if}}
+<!--baidu statics-->
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?024856ad924d6a6714cb18c1090f25b2";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?705777ddf53d0d7a074a79a26c8f50cf";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+</body>
+</html>
