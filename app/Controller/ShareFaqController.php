@@ -49,7 +49,21 @@ class ShareFaqController extends AppController {
     }
 
     public function create_faq() {
-
+        $this->autoRender = false;
+        $msg = $_REQUEST['msg'];
+        $sender = $_REQUEST['sender'];
+        $receiver = $_REQUEST['receiver'];
+        $shareId = $_REQUEST['share_id'];
+        $faq_data = array(
+            'sender' => $sender,
+            'receiver' => $receiver,
+            'created' => date('Y-m-d H:i:s'),
+            'share_id' => $shareId,
+            'msg' => $msg
+        );
+        $faq_data = $this->ShareFaq->save($faq_data);
+        echo json_encode($faq_data);
+        return;
     }
 
     private function get_share_info($share_id) {
