@@ -1593,16 +1593,6 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 842908,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/319793d271b_0828.jpg'
                 ),
-                '529' => array(
-                    'share_id' => 529,
-                    'share_name' => '密云太师屯--传说中的玉米神话',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/26c0eec40d6_0915.jpg',
-                    'share_price' => '68',
-                    'share_user_name' => '李樱花',
-                    'share_vote' => 95,
-                    'share_user_id' => 810684,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
-                ),
                 '479' => array(
                     'share_id' => 479,
                     'share_name' => '正宗韩国辣白菜',
