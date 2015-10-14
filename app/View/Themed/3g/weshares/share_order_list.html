@@ -93,6 +93,11 @@
                             color="red">{{$summery['all_buy_user_count']}}</font></td>
             </tr>
         {{/if}}
+        {{if $summery_item['ship_fee'] > 0}}
+            <tr>
+                <td colspan="3">快递费用:&nbsp;<font color="red">{{$summery_item['ship_fee']}}</font></td>
+            </tr>
+        {{/if}}
         {{if count($rebate_logs) > 0}}
             <tr>
                 <td colspan="3">推荐订单数:&nbsp;<font color="red">{{count($rebate_logs)}}</font>{{if $share_rebate_money - ($child_share_order_count*SHARE_OFFLINE_ADDRESS_SHIP_FEE_SIMPLE) > 0}}&nbsp;&nbsp;团长佣金:&nbsp;<font color="red">{{$share_rebate_money - ($child_share_order_count*SHARE_OFFLINE_ADDRESS_SHIP_FEE_SIMPLE)}}</font>{{/if}}

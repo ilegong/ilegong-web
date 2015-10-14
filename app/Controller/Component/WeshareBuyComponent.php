@@ -864,10 +864,12 @@ class WeshareBuyComponent extends Component {
             $realTotalPrice = 0;
             $summeryTotalPrice = 0;
             $couponPrice = 0;
+            $shipFee = 0;
             foreach ($orders as $order_item) {
                 $realTotalPrice = $realTotalPrice + $order_item['total_all_price'];
                 $summeryTotalPrice = $summeryTotalPrice + $order_item['total_price'];
                 $couponPrice = $couponPrice + $order_item['coupon_total'];
+                $shipFee = $shipFee + $order_item['ship_fee'];
             }
             $product_buy_num = array('details' => array());
             foreach ($carts as $item) {
@@ -906,6 +908,8 @@ class WeshareBuyComponent extends Component {
      * @param bool $export
      * @return array
      * 获取分享的订单信息
+     *
+     * 这个里面的逻辑和上面统计子分享数据逻辑有共同处，修改的时候注意
      */
     public function get_share_order_for_show($weshareId, $is_me, $division = false, $export = false) {
         if ($division) {
@@ -994,10 +998,12 @@ class WeshareBuyComponent extends Component {
             $realTotalPrice = 0;
             $summeryTotalPrice = 0;
             $couponPrice = 0;
+            $shipFee = 0;
             foreach ($orders as $order_item) {
                 $realTotalPrice = $realTotalPrice + $order_item['total_all_price'];
                 $summeryTotalPrice = $summeryTotalPrice + $order_item['total_price'];
                 $couponPrice = $couponPrice + $order_item['coupon_total'];
+                $shipFee = $shipFee + $order_item['ship_fee'];
             }
             foreach ($carts as $item) {
                 $order_id = $item['Cart']['order_id'];
@@ -1016,6 +1022,7 @@ class WeshareBuyComponent extends Component {
             $product_buy_num['all_total_price'] = $summeryTotalPrice;
             $product_buy_num['real_total_price'] = $realTotalPrice;
             $product_buy_num['all_coupon_price'] = $couponPrice / 100;
+            $product_buy_num['all_ship_fee'] = $shipFee;
             $users = Hash::combine($users, '{n}.User.id', '{n}.User');
             if ($division) {
                 $kuaidi_orders = array_filter($orders, "share_kuaidi_order_filter");
