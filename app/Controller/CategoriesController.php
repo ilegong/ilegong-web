@@ -348,8 +348,9 @@ class CategoriesController extends AppController {
     }
 
     public function productsHome($disableAutoRedirect = false) {
-
-        $this->redirect('/weshares/index.html');
+        if(empty($_REQUEST['old'])){
+            $this->redirect('/weshares/index.html');
+        }
         return;
 //        if (!$disableAutoRedirect) {
 //            if ($this->RequestHandler->isMobile()) {
