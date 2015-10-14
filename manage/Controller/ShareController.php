@@ -1,12 +1,12 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: shichaopeng
  * Date: 7/20/15
  * Time: 17:11
  */
-
-class ShareController extends AppController{
+class ShareController extends AppController {
 
     var $name = 'Share';
 
@@ -15,12 +15,12 @@ class ShareController extends AppController{
 
     var $components = array('Weixin');
 
-    public function beforeFilter(){
+    public function beforeFilter() {
         parent::beforeFilter();
-        $this->layout='bootstrap_layout';
+        $this->layout = 'bootstrap_layout';
     }
 
-    public function admin_utils(){
+    public function admin_utils() {
 
     }
 
@@ -51,7 +51,7 @@ class ShareController extends AppController{
                 'id' => $shareId
             )
         ));
-        try{
+        try {
             if (!empty($shareInfo)) {
                 $uid = $shareInfo['Weshare']['creator'];
                 $this->Weshare->updateAll(array('status' => 2), array('id' => $shareId));
@@ -60,7 +60,7 @@ class ShareController extends AppController{
                 Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
                 Cache::write(SHARE_USER_SUMMERY_CACHE_KEY . '_' . $uid, '');
             }
-        }catch (Exception $e){
+        } catch (Exception $e) {
             echo json_encode(array('msg' => $e->getMessage(), 'str' => $e->getTraceAsString()));
         }
         echo json_encode(array('success' => true));
@@ -133,13 +133,13 @@ class ShareController extends AppController{
      * @param $weshares
      * reduce weshares 把子分享和父分享关联起来
      */
-    private function reduce_weshares($weshares){
+    private function reduce_weshares($weshares) {
         $remove_keys = array();
-        foreach($weshares as $share_id=>$share_item){
+        foreach ($weshares as $share_id => $share_item) {
             $refer_share_id = $share_item['refer_share_id'];
             $parent_share = $weshares[$refer_share_id];
-            if(!empty($parent_share)){
-                if(!isset($parent_share['child_share'])){
+            if (!empty($parent_share)) {
+                if (!isset($parent_share['child_share'])) {
                     $parent_share['child_share'] = array();
                 }
                 $parent_share['child_share'][$share_id] = $share_item;
@@ -147,18 +147,39 @@ class ShareController extends AppController{
             }
         }
         //remove single child share
-        foreach($weshares as $share_id=>$share_item){
-            if(!empty($share_item['refer_share_id'])){
+        foreach ($weshares as $share_id => $share_item) {
+            if (!empty($share_item['refer_share_id'])) {
                 $remove_keys[] = $share_id;
             }
         }
-        foreach($remove_keys as $key){
+        foreach ($remove_keys as $key) {
             unset($weshares[$key]);
         }
         return $weshares;
     }
 
-    public function admin_share_for_pay(){
+    public function reduce_share_summery($weshares, &$summery_data, &$repaid_money_result, &$weshare_rebate_map, &$weshare_refund_money_map) {
+        foreach ($weshares as $share_item_key => $share_item) {
+            $share_summery_data = $summery_data[$share_item_key];
+            $child_shares = $share_item['child_share'];
+            if (!empty($child_shares)) {
+                $share_summery_data['child_ship_fee'] = 0;
+                foreach ($child_shares as $child_item_id => $child_share_item) {
+                    $child_share_summery_data = $summery_data[$child_item_id];
+                    $share_summery_data['total_price'] = $share_summery_data['total_price'] + $child_share_summery_data['total_price'];
+                    $share_summery_data['child_ship_fee'] = $share_summery_data['child_ship_fee'] + $child_share_summery_data['ship_fee'];
+                    $share_summery_data['coupon_total'] = $share_summery_data['coupon_total'] + $child_share_summery_data['coupon_total'];
+                    $share_summery_data['product_total_price'] =$share_summery_data['product_total_price'] + $child_share_summery_data['product_total_price'];
+                    $repaid_money_result[$share_item_key] = $repaid_money_result[$share_item_key] + $repaid_money_result[$child_item_id];
+                    $weshare_rebate_map[$share_item_key] = $weshare_rebate_map[$share_item_key] + $weshare_rebate_map[$child_item_id];
+                    $weshare_refund_money_map[$share_item_key] = $weshare_refund_money_map[$share_item_key] + $weshare_refund_money_map[$child_item_id];
+                }
+            }
+
+        }
+    }
+
+    public function admin_share_for_pay() {
         $weshares = $this->Weshare->find('all', array(
             'conditions' => array(
                 'status' => array(1, 2),
@@ -190,6 +211,9 @@ class ShareController extends AppController{
         foreach ($orders as $item) {
             $member_id = $item['Order']['member_id'];
             $order_total_price = $item['Order']['total_all_price'];
+            $order_ship_fee = $item['Order']['ship_fee'];
+            $order_coupon_total = $item['Order']['coupon_total'];
+            $order_product_price  = $item['Order']['total_price'];
             if ($item['Order']['status'] == ORDER_STATUS_RETURN_MONEY || $item['Order']['status'] == ORDER_STATUS_RETURNING_MONEY) {
                 $refund_order_ids[] = $item['Order']['id'];
                 if (!isset($refund_orders[$member_id])) {
@@ -198,26 +222,31 @@ class ShareController extends AppController{
                 $refund_orders[$member_id][] = $item;
             }
             if (!isset($summery_data[$member_id])) {
-                $summery_data[$member_id] = array('total_price' => 0);
+                $summery_data[$member_id] = array('total_price' => 0, 'ship_fee' => 0, 'coupon_total' => 0);
             }
             $summery_data[$member_id]['total_price'] = $summery_data[$member_id]['total_price'] + $order_total_price;
+            $summery_data[$member_id]['ship_fee'] = $summery_data[$member_id]['ship_fee'] + $order_ship_fee;
+            $summery_data[$member_id]['coupon_total'] = $summery_data[$member_id]['coupon_total'] + $order_coupon_total;
+            $summery_data[$member_id]['product_total_price'] = $summery_data[$member_id]['product_total_price'] + $order_product_price;
         }
         $refund_logs = $this->RefundLog->find('all', array(
             'order_id' => $refund_order_ids
         ));
-        $refund_logs = Hash::combine($refund_logs,'{n}.RefundLog.order_id', '{n}.RefundLog.refund_fee');
+        $refund_logs = Hash::combine($refund_logs, '{n}.RefundLog.order_id', '{n}.RefundLog.refund_fee');
         $weshare_refund_money_map = array();
         foreach ($refund_orders as $item_share_id => $item_orders) {
             $share_refund_money = 0;
+            $weshare_refund_money_map[$item_share_id] = 0;
             foreach ($item_orders as $refund_order_item) {
                 $order_id = $refund_order_item['Order']['id'];
                 $share_refund_money = $share_refund_money + $refund_logs[$order_id];
             }
-            $weshare_refund_money_map[$item_share_id] = $share_refund_money/100;
+            $weshare_refund_money_map[$item_share_id] = $share_refund_money / 100;
         }
         $weshare_rebate_map = $this->get_share_rebate_money($weshare_ids);
         $repaid_money_result = $this->get_share_repaid_money($weshare_ids);
         $weshares = $this->reduce_weshares($weshares);
+        $this->reduce_share_summery($weshares, $summery_data, $repaid_money_result, $weshare_rebate_map, $weshare_refund_money_map);
         $this->set('repaid_money_result', $repaid_money_result);
         $this->set('weshare_rebate_map', $weshare_rebate_map);
         $this->set('weshare_refund_map', $weshare_refund_money_map);
@@ -316,13 +345,13 @@ class ShareController extends AppController{
     }
 
     public function admin_make_order($num = 1, $weshare_id) {
-        $this->autoRender=false;
+        $this->autoRender = false;
         /**
          * SELECT name FROM random AS r1 JOIN (SELECT CEIL(RAND() * (SELECT MAX(id) FROM random)) AS id) AS r2 WHERE r1.id >= r2.id ORDER BY r1.id ASC LIMIT 1
          *
          * select id, nickname, status, username from cake_users where status=9 limit 0,10
          */
-        $users = $this->User->query('SELECT user.id, user.nickname, user.username FROM cake_users  AS user JOIN (SELECT CEIL(RAND() * (SELECT MAX(id) FROM cake_users)) AS id) AS r2 WHERE user.id >= r2.id and user.nickname not like "微信用户%" ORDER BY user.id ASC LIMIT '.$num);
+        $users = $this->User->query('SELECT user.id, user.nickname, user.username FROM cake_users  AS user JOIN (SELECT CEIL(RAND() * (SELECT MAX(id) FROM cake_users)) AS id) AS r2 WHERE user.id >= r2.id and user.nickname not like "微信用户%" ORDER BY user.id ASC LIMIT ' . $num);
         $weshare = $this->Weshare->find('first', array(
             'conditions' => array(
                 'id' => $weshare_id
@@ -341,15 +370,15 @@ class ShareController extends AppController{
         $current_date = date('Y-m-d H:i:s');
         $rand_start = strtotime($current_date . ' -3 day');
         $rand_end = strtotime($current_date);
-        foreach($users as $user){
-            $order_date = $this->rand_date($rand_start,$rand_end);
+        foreach ($users as $user) {
+            $order_date = $this->rand_date($rand_start, $rand_end);
             $this->gen_order($weshare, $user, $weshare_products, $weshare_addresses, $order_date);
         }
         echo json_encode(array('success' => true));
         return;
     }
 
-    public function admin_index(){
+    public function admin_index() {
         $current_date = date('Y-m-d H:i:s');
         $weshare_count = $this->Weshare->find('count', array(
             'limit' => 5000
@@ -375,9 +404,9 @@ class ShareController extends AppController{
                 'DATE(created)' => date('Y-m-d'),
             )
         ));
-        $share_pay_count = $this->Weshare->find('count',array(
+        $share_pay_count = $this->Weshare->find('count', array(
             'conditions' => array(
-                'status' => array(1,2),
+                'status' => array(1, 2),
                 'settlement' => 0
             )
         ));
@@ -403,52 +432,52 @@ class ShareController extends AppController{
             'limit' => 300
         ));
         $shareIds = Hash::extract($shares, '{n}.Weshare.id');
-        $products = $this->WeshareProduct->find('all',array(
+        $products = $this->WeshareProduct->find('all', array(
             'conditions' => array(
                 'weshare_id' => $shareIds
             )
         ));
         $share_product_map = array();
-        foreach($products as $item){
-            if(!isset($share_product_map[$item['WeshareProduct']['weshare_id']])){
+        foreach ($products as $item) {
+            if (!isset($share_product_map[$item['WeshareProduct']['weshare_id']])) {
                 $share_product_map[$item['WeshareProduct']['weshare_id']] = array();
             }
             $share_product_map[$item['WeshareProduct']['weshare_id']][] = $item['WeshareProduct'];
         }
-        $this->set('shares',$shares);
-        $this->set('share_product_map',$share_product_map);
+        $this->set('shares', $shares);
+        $this->set('share_product_map', $share_product_map);
     }
 
-    public function admin_share_orders(){
+    public function admin_share_orders() {
         $query_date = date('Y-m-d');
-        $start_date  = $query_date;
+        $start_date = $query_date;
         $end_date = $query_date;
-        if($_REQUEST['start_date']){
+        if ($_REQUEST['start_date']) {
             $start_date = $_REQUEST['start_date'];
         }
-        if($_REQUEST['end_date']){
+        if ($_REQUEST['end_date']) {
             $end_date = $_REQUEST['end_date'];
         }
         $cond = array(
             'type' => 9,
         );
         $request_order_id = $_REQUEST['order_id'];
-        if($_REQUEST['share_id']){
+        if ($_REQUEST['share_id']) {
             $query_share_id = $_REQUEST['share_id'];
         }
-        if($_REQUEST['mobile_no']){
+        if ($_REQUEST['mobile_no']) {
             $query_mobile_num = $_REQUEST['mobile_no'];
         }
-        if($request_order_id){
-                $cond['id'] = $request_order_id;
-        }elseif($query_share_id){
+        if ($request_order_id) {
+            $cond['id'] = $request_order_id;
+        } elseif ($query_share_id) {
             $cond['member_id'] = $query_share_id;
-        }elseif($query_mobile_num){
+        } elseif ($query_mobile_num) {
             $cond['consignee_mobilephone'] = $query_mobile_num;
-        }else{
-            if($start_date==$end_date){
+        } else {
+            if ($start_date == $end_date) {
                 $cond['DATE(created)'] = $query_date;
-            }else{
+            } else {
                 $cond['DATE(created) >='] = $start_date;
                 $cond['DATE(created) <='] = $end_date;
             }
@@ -473,8 +502,8 @@ class ShareController extends AppController{
         }
         $orders = $this->Order->find('all', $order_query_condition);
         $total_price = 0;
-        if(!empty($orders)){
-            foreach($orders as $order){
+        if (!empty($orders)) {
+            foreach ($orders as $order) {
                 $total_price += $order['Order']['total_all_price'];
             }
             $order_ids = Hash::extract($orders, '{n}.Order.id');
@@ -496,11 +525,11 @@ class ShareController extends AppController{
                     'fields' => array('order_id', 'id', 'refund_fee')
                 ));
             $refundLogs = Hash::combine($refundLogs, '{n}.RefundLog.order_id', '{n}.RefundLog.refund_fee');
-            $allRebateMoney = 0 ;
-            foreach($rebateLogs as $rebate_item){
+            $allRebateMoney = 0;
+            foreach ($rebateLogs as $rebate_item) {
                 $allRebateMoney = $allRebateMoney + $rebate_item['RebateTrackLog']['rebate_money'];
             }
-            $allRebateMoney = number_format(round($allRebateMoney/100, 2),2);
+            $allRebateMoney = number_format(round($allRebateMoney / 100, 2), 2);
             $rebateSharerIds = Hash::extract($rebateLogs, '{n}.RebateTrackLog.sharer');
             $rebateLogs = Hash::combine($rebateLogs, '{n}.RebateTrackLog.id', '{n}.RebateTrackLog.sharer');
             $pay_notify_order_ids = array_merge($order_ids, $parent_order_ids);
@@ -516,8 +545,8 @@ class ShareController extends AppController{
                     'id' => $member_ids
                 )
             ));
-            $creatorIds = Hash::extract($weshares,'{n}.Weshare.creator');
-            $allUserIds= array_merge($creatorIds, $rebateSharerIds);
+            $creatorIds = Hash::extract($weshares, '{n}.Weshare.creator');
+            $allUserIds = array_merge($creatorIds, $rebateSharerIds);
             $order_user_ids = Hash::extract($orders, '{n}.Order.creator');
             $allUserIds = array_merge($allUserIds, $order_user_ids);
             $allUserIds = array_unique($allUserIds);
@@ -529,15 +558,15 @@ class ShareController extends AppController{
             ));
             $all_users = Hash::combine($all_users, '{n}.User.id', '{n}.User');
             $weshares = Hash::combine($weshares, '{n}.Weshare.id', '{n}.Weshare');
-            $carts = $this->Cart->find('all',array(
+            $carts = $this->Cart->find('all', array(
                 'conditions' => array(
                     'order_id' => $order_ids
                 )
             ));
             $order_cart_map = array();
-            foreach($carts as $item){
+            foreach ($carts as $item) {
                 $order_id = $item['Cart']['order_id'];
-                if(!isset($order_cart_map[$order_id])){
+                if (!isset($order_cart_map[$order_id])) {
                     $order_cart_map[$order_id] = array();
                 }
                 $order_cart_map[$order_id][] = $item['Cart'];
@@ -557,11 +586,11 @@ class ShareController extends AppController{
         }
         $this->set('order_prepaid_status', $order_repaid_status);
         $this->set('share_id', $query_share_id);
-        $this->set('order_status',$order_status);
+        $this->set('order_status', $order_status);
         $this->set('order_id', $request_order_id);
     }
 
-    private function get_random_item($items){
+    private function get_random_item($items) {
         return $items[array_rand($items)];
     }
 
@@ -612,7 +641,7 @@ class ShareController extends AppController{
         }
     }
 
-    private function gen_order($weshare, $user, $weshare_products, $weshare_address, $order_date, $address=null) {
+    private function gen_order($weshare, $user, $weshare_products, $weshare_address, $order_date, $address = null) {
         $weshareProducts = array();
         $weshareProducts[] = $this->get_random_item($weshare_products);
         $tinyAddress = $this->get_random_item($weshare_address);
@@ -620,12 +649,12 @@ class ShareController extends AppController{
         try {
             $mobile_phone = $this->randMobile(1);
             $addressId = 0;
-            if($address){
+            if ($address) {
                 $order_consignee_address = $address;
-            }else{
+            } else {
                 $order_consignee_address = '虚拟订单';
             }
-            if(!empty($tinyAddress)){
+            if (!empty($tinyAddress)) {
                 $addressId = $tinyAddress['WeshareAddress']['id'];
                 $order_consignee_address = $tinyAddress['WeshareAddress']['address'];
             }
@@ -635,7 +664,7 @@ class ShareController extends AppController{
             $this->Order->id = null;
             $order = $this->Order->save(array('creator' => $user['id'], 'consignee_address' => $order_consignee_address, 'member_id' => $weshare['Weshare']['id'], 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => $order_date, 'updated' => $order_date, 'consignee_id' => $addressId, 'consignee_name' => $user_name, 'consignee_mobilephone' => $mobile_phone[0]));
             $orderId = $order['Order']['id'];
-            if(!empty($orderId)){
+            if (!empty($orderId)) {
                 $totalPrice = 0;
                 foreach ($weshareProducts as $p) {
                     $item = array();
@@ -646,7 +675,7 @@ class ShareController extends AppController{
                     $item['price'] = $price;
                     $item['type'] = ORDER_TYPE_WESHARE_BUY;
                     $item['product_id'] = $p['WeshareProduct']['id'];
-                    $item['created'] =$order_date;
+                    $item['created'] = $order_date;
                     $item['updated'] = $order_date;
                     $item['creator'] = $user['id'];
                     $item['order_id'] = $orderId;
@@ -668,7 +697,7 @@ class ShareController extends AppController{
         }
     }
 
-    private function findCarts($orderId){
+    private function findCarts($orderId) {
         $carts = $this->Cart->find('all', array(
             'conditions' => array(
                 'order_id' => $orderId
@@ -689,8 +718,8 @@ class ShareController extends AppController{
         return array('num' => $num, 'cart_name' => implode(',', $cart_name));
     }
 
-    private function get_offline_store($offlineStoreId){
-        $offlineStore = $this->OfflineStore->find('first',array(
+    private function get_offline_store($offlineStoreId) {
+        $offlineStore = $this->OfflineStore->find('first', array(
             'conditions' => array(
                 'id' => $offlineStoreId
             )
@@ -698,7 +727,7 @@ class ShareController extends AppController{
         return $offlineStore;
     }
 
-    function get_share_repaid_money($share_ids){
+    function get_share_repaid_money($share_ids) {
         $orderM = ClassRegistry::init('Order');
         $addOrderResult = $orderM->find('all', array(
             'conditions' => array(
@@ -710,16 +739,16 @@ class ShareController extends AppController{
             'group' => array('member_id')
         ));
         $repaid_money_result = array();
-        foreach($addOrderResult as $item){
+        foreach ($addOrderResult as $item) {
             $member_id = $item['Order']['member_id'];
-            if(!isset($repaid_money_result[$member_id])){
+            if (!isset($repaid_money_result[$member_id])) {
                 $repaid_money_result[$member_id] = 0;
             }
-            $repaid_money_result[$member_id] = $repaid_money_result[$member_id]+$item['Order']['total_all_price'];
+            $repaid_money_result[$member_id] = $repaid_money_result[$member_id] + $item['Order']['total_all_price'];
         }
     }
 
-    function get_share_rebate_money($share_ids){
+    function get_share_rebate_money($share_ids) {
         $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
         $rebateLogs = $rebateTrackLogM->find('all', array(
             'conditions' => array(
@@ -731,13 +760,13 @@ class ShareController extends AppController{
         $share_rebate_map = array();
         foreach ($rebateLogs as $log) {
             $share_id = $log['RebateTrackLog']['share_id'];
-            if(!isset($share_rebate_map[$share_id])){
+            if (!isset($share_rebate_map[$share_id])) {
                 $share_rebate_map[$share_id] = array('rebate_money' => 0);
             }
             $share_rebate_map[$share_id]['rebate_money'] = $log['RebateTrackLog']['rebate_money'];
         }
-        foreach($share_rebate_map as &$rebate_item){
-            $rebate_item['rebate_money'] = number_format(round($rebate_item['rebate_money']/100, 2),2);
+        foreach ($share_rebate_map as &$rebate_item) {
+            $rebate_item['rebate_money'] = number_format(round($rebate_item['rebate_money'] / 100, 2), 2);
         }
         return $share_rebate_map;
     }
@@ -748,13 +777,13 @@ class ShareController extends AppController{
      * @author niujiazhu
      * @return array
      */
-    function randMobile($num = 1){
+    function randMobile($num = 1) {
         //手机号2-3为数组
-        $numberPlace = array(30,31,32,33,34,35,36,37,38,39,50,51,58,59,89);
-        for ($i = 0; $i < $num; $i++){
+        $numberPlace = array(30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 50, 51, 58, 59, 89);
+        for ($i = 0; $i < $num; $i++) {
             $mobile = 1;
-            $mobile .= $numberPlace[rand(0,count($numberPlace)-1)];
-            $mobile .= str_pad(rand(0,99999999),8,0,STR_PAD_LEFT);
+            $mobile .= $numberPlace[rand(0, count($numberPlace) - 1)];
+            $mobile .= str_pad(rand(0, 99999999), 8, 0, STR_PAD_LEFT);
             $result[] = $mobile;
         }
         return $result;

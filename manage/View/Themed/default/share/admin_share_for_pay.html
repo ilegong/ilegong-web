@@ -50,8 +50,14 @@
                         <th>分享人</th>
                         <th>分享人手机号码</th>
                         <th>分享名称</th>
+                        <th>总支付费用</th>
                         <th>应该结算金额</th>
-                        <th>一起结算名称和分享ID</th>
+                        <th>产品金额</th>
+                        <th>快递费用</th>
+                        <th>团长佣金</th>
+                        <th>退款金额</th>
+                        <th>补退差价</th>
+                        <th>拼团金额</th>
                         <th>支付方式</th>
                         <th>操作</th>
                     </tr>
@@ -60,12 +66,6 @@
                     {{loop $weshares $share}}
                     <?php $current_share_item = $share ?>
                     {{template share/share_for_pay_item}}
-                    {{if !empty($share['child_share'])}}
-                        {{loop $share['child_share'] $child_share_item}}
-                            <?php $current_share_item = $child_share_item ?>
-                            {{template share/share_for_pay_item}}
-                        {{/loop}}
-                    {{/if}}
                     {{/loop}}
                     </tbody>
                 </table>
