@@ -6,6 +6,12 @@ class ShareFaqController extends AppController {
 
     var $uses = array('ShareFaq', 'Weshares', 'User');
 
+
+    public function beforeFilter() {
+        parent::beforeFilter();
+        $this->layout = 'weshare_bootstrap';
+    }
+
     public function faq_list() {
 
     }
