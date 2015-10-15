@@ -1031,11 +1031,11 @@ class WesharesController extends AppController {
             $export_paid_order = false;
         }
         $statics_data = $this->get_weshare_buy_info($shareId, true, false, $export_paid_order);
-        $refund_money = $this->WeshareBuy->get_refund_money_by_weshare($shareId);
-        $rebate_money = $this->ShareUtil->get_share_rebate_money($shareId);
+        //$refund_money = $this->WeshareBuy->get_refund_money_by_weshare($shareId);
+        //$rebate_money = $this->ShareUtil->get_share_rebate_money($shareId);
         $this->set($statics_data);
-        $this->set('refund_money', $refund_money);
-        $this->set('rebate_money', $rebate_money);
+        //$this->set('refund_money', $refund_money);
+        //$this->set('rebate_money', $rebate_money);
     }
 
     /**
