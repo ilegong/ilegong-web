@@ -50,8 +50,9 @@ class ShareFaqController extends AppController {
 
     public function create_faq() {
         $this->autoRender = false;
+        //todo check login
+        $sender = $this->currentUser['id'];
         $msg = $_REQUEST['msg'];
-        $sender = $_REQUEST['sender'];
         $receiver = $_REQUEST['receiver'];
         $shareId = $_REQUEST['share_id'];
         $faq_data = array(
