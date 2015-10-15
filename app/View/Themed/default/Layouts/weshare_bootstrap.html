@@ -37,12 +37,12 @@
     </footer>
     {{/if}}
 </div>
+{{if $jWeixinOn}}
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
     Pyshuo.share.utils.init();
     Pyshuo.share.utils.checkHasUnreadInfo();
 </script>
-{{if $jWeixinOn}}
-<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
     if(wx){
         var wx_jssdk_appId = '{{$signPackage["appId"]}}';
