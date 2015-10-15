@@ -1035,17 +1035,6 @@ class WeshareBuyComponent extends Component {
                 }
                 $self_ziti_orders = array_filter($orders, "share_self_ziti_order_filter");
                 $pys_ziti_orders = array_filter($orders, "share_pys_ziti_order_filter");
-//                if ($export) {
-//                    usort($kuaidi_orders, function ($a, $b) {
-//                        return ($a['consignee_name'] < $b['consignee_name']) ? -1 : 1;
-//                    });
-//                    usort($self_ziti_orders, function ($a, $b) {
-//                        return ($a['consignee_name'] < $b['consignee_name']) ? -1 : 1;
-//                    });
-//                    usort($pys_ziti_orders, function ($a, $b) {
-//                        return ($a['consignee_name'] < $b['consignee_name']) ? -1 : 1;
-//                    });
-//                }
                 $orders = array('origin_orders' => $orders, SHARE_SHIP_KUAIDI_TAG => $kuaidi_orders, SHARE_SHIP_SELF_ZITI_TAG => $self_ziti_orders, SHARE_SHIP_PYS_ZITI_TAG => $pys_ziti_orders);
             }
             //show order ship type name
