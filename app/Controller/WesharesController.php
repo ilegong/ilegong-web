@@ -100,7 +100,9 @@ class WesharesController extends AppController {
             $this->redirect('/weshares/view/' . $weshareId . '/0');
         }
         $share_ship_set = $this->sharer_can_use_we_ship($uid);
-        $this->set('can_use_offline_address', $this->sharer_can_use_offline_address($uid));
+        if($this->sharer_can_use_offline_address($uid)){
+            $this->set('can_use_offline_address', 1);
+        }
         $this->set('ship_type', $share_ship_set);
         $this->set('weshare_id', $weshareId);
         $this->set('user_id', $uid);
