@@ -33,7 +33,6 @@ $header = array('订单号', '客户姓名', '下单时间', '支付时间', '�
 $order_status = array('待确认', '已支付', '已发货', '已收货', '已退款', '', '', '', '', '已完成', '已做废', '已确认', '已投诉', '', '退款中');
 $ship_mark = array('kuai_di' => '快递', 'self_ziti' => '自提', 'pys_ziti' => '好邻居');
 $rows = count($orders['origin_orders']);
-$order_ship_tags = array(SHARE_SHIP_SELF_ZITI_TAG, SHARE_SHIP_KUAIDI_TAG, SHARE_SHIP_PYS_ZITI_TAG);
 foreach ($orders['origin_orders'] as $item) {
     foreach ($order_cart_map[$item['id']] as $index => $cart) {
         $row = array();
