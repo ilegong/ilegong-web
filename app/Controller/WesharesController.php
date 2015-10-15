@@ -100,6 +100,7 @@ class WesharesController extends AppController {
             $this->redirect('/weshares/view/' . $weshareId . '/0');
         }
         $share_ship_set = $this->sharer_can_use_we_ship($uid);
+        $this->set('can_use_offline_address', $this->sharer_can_use_offline_address($uid));
         $this->set('ship_type', $share_ship_set);
         $this->set('weshare_id', $weshareId);
         $this->set('user_id', $uid);
@@ -147,6 +148,9 @@ class WesharesController extends AppController {
             return;
         }
         $share_ship_set = $this->sharer_can_use_we_ship($uid);
+        if($this->sharer_can_use_offline_address($uid)){
+            $this->set('can_use_offline_address', 1);
+        }
         $this->set('ship_type', $share_ship_set);
         $this->set('user_id', $uid);
         //设置微信分享参数
@@ -1472,6 +1476,13 @@ class WesharesController extends AppController {
             return $ship_set_type;
         }
         return $ship_set_type;
+    }
+
+    /**
+     * @param $sharer
+     */
+    private function sharer_can_use_offline_address($sharer) {
+        return $this->ShareUtil->is_proxy_user($sharer);
     }
 
     //check order ship type gen order address

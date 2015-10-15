@@ -86,7 +86,7 @@
                 <p class='tips'>请输入数字</p>
             </div>
         </div>
-        <div class="clearfix">
+        <div class="clearfix" ng-class="{'checkbox-disable' : vm.canUseOfflineAddress == 1}">
             <div class="form-group fl">
                 <input type="checkbox" ng-model="vm.pin_tuan_data.status" ng-true-value="1" ng-false-value="-1" ng-checked="vm.pin_tuan_data.status==1">
             </div>

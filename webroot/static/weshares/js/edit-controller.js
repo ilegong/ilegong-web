@@ -48,8 +48,10 @@
       var weshareId = angular.element(document.getElementById('weshareEditView')).attr('data-id');
       var sharerShipType = angular.element(document.getElementById('weshareEditView')).attr('data-ship-type');
       var userId = angular.element(document.getElementById('weshareEditView')).attr('data-user-id');
+      var canUseOfflineAddress = angular.element(document.getElementById('weshareEditView')).attr('data-can-user-offline-address');
       vm.currentUserId = userId;
       vm.sharerShipType = sharerShipType;
+      vm.canUseOfflineAddress = canUseOfflineAddress;
       vm.self_ziti_data = {status: 1, ship_fee: 0, tag: 'self_ziti'};
       vm.kuai_di_data = {status: -1, ship_fee: '', tag: 'kuai_di'};
       vm.pys_ziti_data = {status: -1, ship_fee: 0, tag: 'pys_ziti'};
