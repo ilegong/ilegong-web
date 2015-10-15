@@ -100,7 +100,7 @@ class WesharesController extends AppController {
             $this->redirect('/weshares/view/' . $weshareId . '/0');
         }
         $share_ship_set = $this->sharer_can_use_we_ship($uid);
-        if($this->sharer_can_use_offline_address($uid)){
+        if ($this->sharer_can_use_offline_address($uid)) {
             $this->set('can_use_offline_address', 1);
         }
         $this->set('ship_type', $share_ship_set);
@@ -150,7 +150,7 @@ class WesharesController extends AppController {
             return;
         }
         $share_ship_set = $this->sharer_can_use_we_ship($uid);
-        if($this->sharer_can_use_offline_address($uid)){
+        if ($this->sharer_can_use_offline_address($uid)) {
             $this->set('can_use_offline_address', 1);
         }
         $this->set('ship_type', $share_ship_set);
@@ -1462,28 +1462,27 @@ class WesharesController extends AppController {
      * 判断用户 能否使用好邻居
      */
     private function sharer_can_use_we_ship($sharer) {
-        $key = SHARER_CAN_USE_OFFLINE_STORE_CACHE_KEY . '_' . $sharer;
-        $ship_set_type = Cache::read($key);
-        if (empty($ship_set_type)) {
-            $ship_setting = $this->SharerShipOption->find('first', array(
-                'conditions' => array(
-                    'sharer_id' => $sharer
-                )
-            ));
-            if (empty($ship_setting)) {
-                return 0;
-            }
-            $ship_set_type = $ship_setting['SharerShipOption']['type'];
-            Cache::write($key, $ship_set_type);
-            return $ship_set_type;
-        }
-        return $ship_set_type;
+        return $this->ShareUtil->read_share_ship_option_setting($sharer, SHARE_SHIP_OPTION_OFFLINE_STORE);
     }
 
     /**
      * @param $sharer
+     * 数据库读取 能否使用拼团地址
+     * @return bool
+     */
+    private function sharer_can_user_offline_address($sharer) {
+        $setting = $this->ShareUtil->read_share_ship_option_setting($sharer, SHARE_SHIP_OPTION_OFFLINE_ADDRESS);
+        return $setting == PUBLISH_YES;
+    }
+
+    /**
+     * @param $sharer
+     * @return bool
      */
     private function sharer_can_use_offline_address($sharer) {
+        if ($this->sharer_can_user_offline_address($sharer)) {
+            return true;
+        }
         return $this->ShareUtil->is_proxy_user($sharer);
     }
 

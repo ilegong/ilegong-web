@@ -325,6 +325,27 @@ class ShareUtilComponent extends Component {
         $this->Weixin->send_rebate_template_msg($recommend_open_ids[$recommend], $detail_url, $order_id, $order_money, $pay_time, $rebate_money, $title);
     }
 
+    public function read_share_ship_option_setting($sharer, $type) {
+        $SharerShipOptionM = ClassRegistry::init('SharerShipOption');
+        $key = SHARER_CAN_USE_OFFLINE_STORE_CACHE_KEY . '_' . $sharer . '_' . $type;
+        $ship_set_type = Cache::read($key);
+        if (empty($ship_set_type)) {
+            $ship_setting = $SharerShipOptionM->find('first', array(
+                'conditions' => array(
+                    'sharer_id' => $sharer,
+                    'ship_option' => $type
+                )
+            ));
+            if (empty($ship_setting)) {
+                return 0;
+            }
+            $ship_set_type = $ship_setting['SharerShipOption']['status'];
+            Cache::write($key, $ship_set_type);
+            return $ship_set_type;
+        }
+        return $ship_set_type;
+    }
+
 
     /**
      * @param $shareId
