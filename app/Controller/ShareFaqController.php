@@ -15,11 +15,12 @@ class ShareFaqController extends AppController {
     }
 
     public function faq_list($shareId) {
-
+        //todo check is share creator
     }
 
     public function faq($shareId, $userId) {
         $share_info = $this->get_share_info($shareId);
+        //todo check is login
         $current_user_id = $this->currentUser['id'];
         $share_creator = $share_info['Weshare']['creator'];
         $user_info = $this->User->find('all', array(
@@ -42,6 +43,8 @@ class ShareFaqController extends AppController {
             ),
             'order' => array('created DESC')
         ));
+        $this->set('share_id', $shareId);
+        $this->set('receiver', $userId);
         $this->set('current_user_id', $current_user_id);
         $this->set('share_info', $share_info);
         $this->set('user_info', $user_info);
