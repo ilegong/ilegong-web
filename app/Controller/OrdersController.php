@@ -606,8 +606,18 @@ class OrdersController extends AppController {
         if (empty($orderinfo)) {
             $this->__message('订单不存在，或无权查看', '/');
         }
-
+        //process share order order status
         if ($orderinfo['Order']['type'] == ORDER_TYPE_WESHARE_BUY || $orderinfo['Order']['type'] == ORDER_TYPE_WESHARE_BUY_ADD) {
+            if($action == 'pay'){
+                if($orderinfo['Order']['status']==ORDER_STATUS_WAITING_PAY){
+                    if($_REQUEST['from'] == 'zhifubaopay'){
+                        $this->redirect('/weshares/pay/'.$orderId. '/1');
+                    }else{
+                        $this->redirect('/weshares/pay/'.$orderId);
+                    }
+                    return;
+                }
+            }
             $member_id = $orderinfo['Order']['member_id'];
             $this->redirect('/weshares/view/' . $member_id);
             return;

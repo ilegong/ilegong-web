@@ -103,12 +103,12 @@ class AliPayController extends AppController {
             $type=ALI_PAY_TYPE_WAPAPP;
         } else {
             $uid = $this->currentUser['id'];
-            if(empty($uid)){
-                if($_GET['from']=='share'){
-                    $this->redirect('/users/login?referer='.Router::url('/weshares/pay/'.$order_id));
+            if (empty($uid)) {
+                if ($_GET['from'] == 'share') {
+                    $this->redirect('/users/login?referer=' . Router::url('/weshares/pay/' . $order_id . '/1'));
                     return;
                 }
-                $this->redirect('/users/login?referer='.Router::url('/orders/detail/'.$order_id));
+                $this->redirect('/users/login?referer=' . Router::url('/orders/detail/' . $order_id));
                 return;
             }
             $type=ALI_PAY_TYPE_WAP;
