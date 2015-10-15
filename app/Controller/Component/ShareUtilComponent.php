@@ -1586,7 +1586,7 @@ class ShareUtilComponent extends Component {
                 '427' => array(
                     'share_id' => 427,
                     'share_name' => '姑妈家的桂圆肉',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/41203cc1055_1015.jpg',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/54fb984e461_1015.jpg',
                     'share_price' => '65',
                     'share_user_name' => 'Amy',
                     'share_vote' => 123,
