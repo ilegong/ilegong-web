@@ -1427,7 +1427,6 @@ class ShareUtilComponent extends Component {
      * 获取常用自提点
      */
     public function get_static_offline_address() {
-        //TODO cache it
         $WeshareOfflineAddressM = ClassRegistry::init('WeshareOfflineAddress');
         $staticOfflineAddress = $WeshareOfflineAddressM->find('all', array(
             'conditions' => array(

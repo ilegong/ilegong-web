@@ -794,6 +794,11 @@ class WesharesController extends AppController {
         $this->set('weshareId', $weshareId);
     }
 
+    /**
+     * @param $parent_summery_data
+     * @param $child_share_datas
+     * 自分享汇总数据合并
+     */
     private function merge_child_share_summery_data(&$parent_summery_data, $child_share_datas) {
         $parent_summery_data['child_share_order_count'] = 0;
         foreach ($child_share_datas as $child_share_data_item) {
