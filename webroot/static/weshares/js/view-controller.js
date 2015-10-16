@@ -99,6 +99,7 @@
     var vm = this;
     vm.showShareDetailView = true;
     vm.subShareTipTxt = '+关注';
+    vm.faqTipText = '联系商家';
     vm.showUnReadMark = false;
     vm.readMoreBtnText = '全文';
     vm.hideMoreShareInfo = false;
@@ -187,6 +188,7 @@
     //vm.loadOfflineAddressData = loadOfflineAddressData;
     vm.setShipFee = setShipFee;
     vm.newGroupShare = newGroupShare;
+    vm.redirectFaq = redirectFaq;
     vm.childShareDetail = null;
     vm.currentUserOrderCount = 0;
     function pageLoaded() {
@@ -357,6 +359,9 @@
             vm.buyerAddress = vm.consignee.address;
             vm.buyerPatchAddress = vm.consignee.remark_address;
           }
+          if (vm.isCreator()) {
+            vm.faqTipText = '反馈消息';
+          }
           vm.checkShareInfoHeight();
           //load all comments
           vm.loadOrderDetail(weshareId);
@@ -437,6 +442,14 @@
       return _.map(carts, function (cart) {
         return cart.name + 'X' + cart.num;
       }).join(', ');
+    }
+
+    function redirectFaq() {
+      if (vm.isCreator()) {
+        window.location.href = '/share_faq/faq_list/' + vm.weshare.id + '/' + vm.currentUser.id;
+      } else {
+        window.location.href = '/share_faq/faq/' + vm.weshare.id + '/' + vm.weshare.creator.id;
+      }
     }
 
     function showShareDetail() {
@@ -1207,7 +1220,7 @@
     function checkShareInfoHeight() {
       vm.shareDescInfoElement = angular.element(document.getElementById('share-description'));
       vm.shareDescInfoElement.ready(function () {
-        if(vm.shareDescInfoElement[0]){
+        if (vm.shareDescInfoElement[0]) {
           var height = vm.shareDescInfoElement[0].offsetHeight;
           if (height > 65) {
             vm.shouldShowReadMoreBtn = true;

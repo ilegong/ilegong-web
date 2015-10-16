@@ -1,5 +1,8 @@
 <link rel="stylesheet" href="/static/share_faq/css/share_faq.css">
 <div class="conversation-wrap col-lg-12">
+    {{if empty($faq_list)}}
+        <div class="alert alert-success" role="alert">没有用户反馈信息</div>
+    {{/if}}
     {{loop $faq_list $sender $sender_faq_data}}
     <div class="media conversation" data-href="/share_faq/faq/{{$sender_faq_data['share_id']}}/{{$sender}}">
         <a class="pull-left" href="/share_faq/faq/{{$sender_faq_data['share_id']}}/{{$sender}}">
@@ -21,7 +24,7 @@
     $(document).ready(function () {
         $('div.conversation').on('click', function (e) {
             e.preventDefault();
-            var $me = $(data);
+            var $me = $(this);
             var redirectHref = $me.data('href');
             window.location.href = redirectHref;
         });

@@ -9,18 +9,31 @@
         </div>
         <div class="panel-body msg_container_base" id="chat-msg-list">
             {{loop $share_faqs $share_faq}}
-            <div class="row msg_container {{if $share_faq['ShareFaq']['sender'] == $current_user_id}}base_sent{{else}}base_receive{{/if}}">
+            {{if $share_faq['ShareFaq']['sender'] == $current_user_id}}
+            <div class="row msg_container base_sent">
                 <div class="col-md-10 col-xs-10">
                     <div class="messages msg_sent">
                         <p>{{$share_faq['ShareFaq']['msg']}}</p>
-                        <time datetime="{{$share_faq['ShareFaq']['created']}}">{{$share_faq['ShareFaq']['created']}}
-                        </time>
+                        <time>{{$share_faq['ShareFaq']['created']}}</time>
                     </div>
                 </div>
                 <div class="col-md-2 col-xs-2 avatar">
-                    <img src="{{$user_info[$share_faq['ShareFaq']['sender']]['image']}}" class="img-responsive ">
+                    <img src="{{$user_info[$share_faq['ShareFaq']['sender']]['image']}}" class=" img-responsive ">
                 </div>
             </div>
+            {{else}}
+            <div class="row msg_container base_receive">
+                <div class="col-md-2 col-xs-2 avatar">
+                    <img src="{{$user_info[$share_faq['ShareFaq']['sender']]['image']}}" class="img-responsive ">
+                </div>
+                <div class="col-md-10 col-xs-10">
+                    <div class="messages msg_receive">
+                        <p>{{$share_faq['ShareFaq']['msg']}}</p>
+                        <time>{{$share_faq['ShareFaq']['created']}}</time>
+                    </div>
+                </div>
+            </div>
+            {{/if}}
             {{/loop}}
         </div>
         <div class="panel-footer">
@@ -28,6 +41,7 @@
             <input type="hidden" id="sender-nickname" value="{{$user_info[$current_user_id]['nickname']}}">
 
             <div class="input-group" id="chat-input-form">
+                <input type="hidden" id="sender" value="{{$current_user}}">
                 <input type="hidden" id="receiver" value="{{$receiver}}">
                 <input type="hidden" id="share-id" value="{{$share_id}}">
                 <input id="content" required type="text" class="form-control input-sm chat_input"
@@ -40,14 +54,20 @@
 </div>
 <script>
     $(document).ready(function () {
+        updateFaqRead();
         var $chatMsgList = $('#chat-msg-list');
         var senderImg = $('#sender-img').val();
         var $chatInputForm = $('#chat-input-form');
+        var $sender = $('#sender', $chatInputForm);
+        var senderId = $sender.val();
         var $receiver = $('#receiver', $chatInputForm);
         var $shareId = $('#share-id', $chatInputForm);
+        var shareId = $shareId.val();
         var $content = $('#content', $chatInputForm);
         var $btnSubmit = $('#btn-chat-submit', $chatInputForm);
-        $btnSubmit.on('click', function () {
+        var submit = false
+        $btnSubmit.on('click', function (e) {
+            e.preventDefault();
             //todo valid msg
             if (!$content.val()) {
                 alert('请输入内容');
@@ -58,9 +78,15 @@
                 "share_id": $shareId.val(),
                 "msg": $content.val()
             };
+            if (submit) {
+                alert('正在提交');
+            }
+            submit = true;
             $.post('/share_faq/create_faq/', postData, function (data) {
                 console.log(data);
                 $chatMsgList.append(genChatItemDom(data));
+                $content.val('');
+                submit = false;
             }, 'json');
         });
         function genChatItemDom(data) {
@@ -72,8 +98,11 @@
             return domStr;
         }
 
-        function updateFaqRead(){
+        function updateFaqRead() {
+            var updateInfoReadUrl = '/share_faq/update_faq_read/' + shareId + '/' + senderId;
+            $.getJSON(updateInfoReadUrl, function (data) {
 
+            });
         }
     });
 </script>
