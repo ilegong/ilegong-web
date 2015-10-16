@@ -54,7 +54,6 @@
 </div>
 <script>
     $(document).ready(function () {
-        updateFaqRead();
         var $chatMsgList = $('#chat-msg-list');
         var senderImg = $('#sender-img').val();
         var $chatInputForm = $('#chat-input-form');
@@ -65,7 +64,8 @@
         var shareId = $shareId.val();
         var $content = $('#content', $chatInputForm);
         var $btnSubmit = $('#btn-chat-submit', $chatInputForm);
-        var submit = false
+        var submit = false;
+        updateFaqRead();
         $btnSubmit.on('click', function (e) {
             e.preventDefault();
             //todo valid msg
