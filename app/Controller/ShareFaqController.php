@@ -16,6 +16,7 @@ class ShareFaqController extends AppController {
 
     public function faq_list($shareId) {
         //todo check is share creator
+
     }
 
     public function faq($shareId, $userId) {
@@ -32,16 +33,13 @@ class ShareFaqController extends AppController {
         $user_info = Hash::combine($user_info, '{n}.User.id', '{n}.User');
         $share_faqs = $this->ShareFaq->find('all', array(
             'conditions' => array(
-                'sender' => $userId,
-                'receiver' => $share_creator,
                 'share_id' => $shareId,
                 'OR' => array(
-                    'sender' => $share_creator,
-                    'receiver' => $userId,
-                    'share_id' => $shareId,
+                    'sender' => array($share_creator, $userId),
+                    'receiver' => array($share_creator, $userId),
                 )
             ),
-            'order' => array('created DESC')
+            'order' => array('created ASC')
         ));
         $this->set('share_id', $shareId);
         $this->set('receiver', $userId);

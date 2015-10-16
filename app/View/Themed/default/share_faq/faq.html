@@ -132,6 +132,11 @@
         -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
         background-color: #555;
     }
+
+    .avatar img {
+        width: 50px;
+        height: 50px;
+    }
 </style>
 <div class="chat-window">
     <div class="panel panel-default">
@@ -141,7 +146,7 @@
                 </h3>
             </div>
         </div>
-        <div class="panel-body msg_container_base">
+        <div class="panel-body msg_container_base" id="chat-msg-list">
             {{loop $share_faqs $share_faq}}
             <div class="row msg_container {{if $share_faq['ShareFaq']['sender'] == $current_user_id}}base_sent{{else}}base_receive{{/if}}">
                 <div class="col-md-10 col-xs-10">
@@ -152,7 +157,7 @@
                     </div>
                 </div>
                 <div class="col-md-2 col-xs-2 avatar">
-                    <img src="{{$share_info[$share_faq['ShareFaq']['sender']]['image']}}" class="img-responsive ">
+                    <img src="{{$user_info[$share_faq['ShareFaq']['sender']]['image']}}" class="img-responsive ">
                 </div>
             </div>
             {{/loop}}
@@ -160,23 +165,27 @@
         <div class="panel-footer">
             <input type="hidden" id="sender-img" value="{{$user_info[$current_user_id]['image']}}">
             <input type="hidden" id="sender-nickname" value="{{$user_info[$current_user_id]['nickname']}}">
+
             <div class="input-group" id="chat-input-form">
                 <input type="hidden" id="receiver" value="{{$receiver}}">
                 <input type="hidden" id="share-id" value="{{$share_id}}">
                 <input id="content" type="text" class="form-control input-sm chat_input" placeholder="写下你要说的话..."/>
-                <span class="input-group-btn"><button class="btn btn-primary btn-sm" id="btn-chat-submit">发送</button></span>
+                <span class="input-group-btn"><button class="btn btn-primary btn-sm" id="btn-chat-submit">发送
+                </button></span>
             </div>
         </div>
     </div>
 </div>
 <script>
     $(document).ready(function () {
+        var $chatMsgList = $('#chat-msg-list');
+        var senderImg = $('#sender-img').val();
         var $chatInputForm = $('#chat-input-form');
         var $receiver = $('#receiver', $chatInputForm);
         var $shareId = $('#share-id', $chatInputForm);
         var $content = $('#content', $chatInputForm);
         var $btnSubmit = $('#btn-chat-submit', $chatInputForm);
-        $btnSubmit.on('click', function(){
+        $btnSubmit.on('click', function () {
             //todo valid msg
             var postData = {
                 "receiver": $receiver.val(),
@@ -185,14 +194,16 @@
             };
             $.post('/share_faq/create_faq/', postData, function (data) {
                 console.log(data);
+                $chatMsgList.append(genChatItemDom(data));
             }, 'json');
         });
         function genChatItemDom(data) {
             var domStr = '<div class="row msg_container base_sent">' +
                     '<div class="col-md-10 col-xs-10">' +
                     '<div class="messages msg_sent">' +
-                    '<p></p>' +
-                    '<time datetime=""></time> </div> </div> <div class="col-md-2 col-xs-2 avatar"> <img src="" class="img-responsive"> </div> </div>';
+                    '<p>' + data['ShareFaq']['msg'] + '</p>' +
+                    '<time datetime="data["ShareFaq"]["created"]">' + data["ShareFaq"]["created"] + '</time></div></div><div class="col-md-2 col-xs-2 avatar"> <img src="' + senderImg + '" class="img-responsive"></div></div>';
+            return domStr;
         }
     });
 </script>
