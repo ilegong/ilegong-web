@@ -57,8 +57,9 @@ class ShareFaqUtilComponent extends Component {
         foreach ($faqList as $faqItem) {
             $faqSender = $faqItem['ShareFaq']['sender'];
             $faqItemHasRead = $faqItem['ShareFaq']['has_read'];
+            $faqItemShareId = $faqItem['ShareFaq']['share_id'];
             if (!isset($list_summery[$faqSender])) {
-                $list_summery[$faqSender] = array('all_count' => 0, 'unread_count' => 0, 'last_msg' => '', 'last_msg_created' => '');
+                $list_summery[$faqSender] = array('all_count' => 0, 'unread_count' => 0, 'last_msg' => '', 'last_msg_created' => '', 'share_id' => 0);
                 //sort by created desc
                 $faqItemCreated = $faqItem['ShareFaq']['created'];
                 $faqItemMsg = $faqItem['ShareFaq']['msg'];
@@ -66,6 +67,7 @@ class ShareFaqUtilComponent extends Component {
                 $list_summery[$faqSender]['last_msg'] = $faqItemMsg;
             }
             $list_summery[$faqSender]['all_count'] = $list_summery[$faqSender]['all_count'] + 1;
+            $list_summery[$faqSender]['share_id'] = $faqItemShareId;
             if ($faqItemHasRead == 0) {
                 $list_summery[$faqSender]['unread_count'] = $list_summery[$faqSender]['unread_count'] + 1;
             }

@@ -17,7 +17,7 @@ class ShareFaqController extends AppController {
     //目前只有分享者可以看到
     public function faq_list($shareId, $shareCreator) {
         $faq_list = $this->ShareFaqUtil->share_faq_list($shareId, $shareCreator);
-        $this->set('faq_list', $faq_list);
+        $this->set($faq_list);
     }
 
     public function faq($shareId, $userId) {
