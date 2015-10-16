@@ -1,12 +1,12 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: shichaopeng
  * Date: 8/23/15
  * Time: 20:16
  */
-
-class UtilController extends AppController{
+class UtilController extends AppController {
 
     public $name = 'util';
 
@@ -19,7 +19,7 @@ class UtilController extends AppController{
      * @return array
      * 获取用户粉丝
      */
-    public function load_user_fans($user_id){
+    public function load_user_fans($user_id) {
         $this->autoRender = false;
         $shares = $this->Weshare->find('all', array(
             'conditions' => array(
@@ -61,15 +61,15 @@ class UtilController extends AppController{
      * @param $remark
      * 处理发起分享通知
      */
-    public function process_send_share_msg($openId, $title, $productName, $detailUrl,$sharerName,$remark) {
-        send_join_tuan_buy_msg(null,$title,$productName,$sharerName,$remark,$detailUrl,$openId);
+    public function process_send_share_msg($openId, $title, $productName, $detailUrl, $sharerName, $remark) {
+        send_join_tuan_buy_msg(null, $title, $productName, $sharerName, $remark, $detailUrl, $openId);
     }
 
     /**
      * @param $user_id
      * 发送投票通知
      */
-    public function send_notify_vote($user_id){
+    public function send_notify_vote($user_id) {
         $this->autoRender = false;
         $title = '关注的小宝妈发起了';
         $remark = ' 晒萌宝吃海鲜啦，一等奖三文鱼、二等奖北极甜虾、三等奖黄花鱼、还有88元的礼券包，感谢亲们对小宝妈的支持，有你们在一起真好！点击详情，赶快来参加！';
@@ -107,7 +107,7 @@ class UtilController extends AppController{
      * @param $user_id
      * 根据分享迁移数据
      */
-    public function transferFansByShareId($shareId, $user_id){
+    public function transferFansByShareId($shareId, $user_id) {
         $this->autoRender = false;
         $orders = $this->Order->find('all', array(
             'conditions' => array(
@@ -120,11 +120,11 @@ class UtilController extends AppController{
         ));
         $save_data = array();
         $temp_data = array();
-        foreach($orders as $order){
+        foreach ($orders as $order) {
             $order_creator = $order['Order']['creator'];
             if ($this->ShareUtil->check_user_relation($user_id, $order_creator)) {
-                if(!in_array($order_creator, $temp_data)){
-                    $temp_data[]=$order_creator;
+                if (!in_array($order_creator, $temp_data)) {
+                    $temp_data[] = $order_creator;
                     $save_data[] = array('user_id' => $user_id, 'follow_id' => $order_creator, 'type' => 'Transfer', 'created' => date('Y-m-d H:i:s'));
                 }
             }
@@ -193,7 +193,7 @@ class UtilController extends AppController{
      * @param $offset
      * task queue
      */
-    public function processUpdateFansProfile($user_id, $limit, $offset){
+    public function processUpdateFansProfile($user_id, $limit, $offset) {
         $this->autoRender = false;
         $user_relations = $this->UserRelation->find('all', array(
             'conditions' => array(
@@ -219,7 +219,7 @@ class UtilController extends AppController{
                 $this->log('download wx user info ' . json_encode($wx_user));
                 $photo = $wx_user['headimgurl'];
                 $nickname = $wx_user['nickname'];
-                if(empty($nickname)){
+                if (empty($nickname)) {
                     //user not have wexin info
                     $this->UserRelation->updateAll(array('deleted' => 1), array('user_id' => $user_id, 'follow_id' => $follow_user_id, 'type' => 'Transfer'));
                     continue;
@@ -256,5 +256,12 @@ class UtilController extends AppController{
             return array('success' => false, 'errno' => $queue->errno(), 'errmsg' => $queue->errmsg());
         }
         return array('success' => true, 'errno' => $queue->errno(), 'errmsg' => $queue->errmsg());
+    }
+
+    public function start_static_shares($shareId) {
+        $this->autoRender = false;
+        $this->ShareUtil->new_static_address_group_shares($shareId);
+        echo json_encode(array('success' => true));
+        return;
     }
 }
