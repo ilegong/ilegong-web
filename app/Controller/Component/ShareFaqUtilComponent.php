@@ -4,6 +4,9 @@ class ShareFaqUtilComponent extends Component {
 
     var $name = 'ShareFaqUtil';
 
+
+    var $components = array('Weixin', 'WeshareBuy');
+
     /**
      * @param $shareId
      * @param $userId
@@ -112,5 +115,21 @@ class ShareFaqUtilComponent extends Component {
     public function update_user_faq_has_read($shareId, $userId) {
         $shareFaqM = ClassRegistry::init('ShareFaq');
         return $shareFaqM->updateAll(array('has_read' => SHARE_FAQ_READ), array('share_id' => $shareId, 'receiver' => $userId, 'has_read' => SHARE_FAQ_UNREAD));
+    }
+
+    /**
+     * @param $sender
+     * @param $receiver
+     * @param $msg
+     * @param $shareId
+     * send faq template msg
+     */
+    public function send_notify_template_msg($sender, $receiver, $msg, $shareId) {
+        $userNicknames = $this->WeshareBuy->get_users_nickname(array($sender, $receiver));
+        $userOauthBinds = $this->WeshareBuy->get_open_ids(array($sender, $receiver));
+        $title = $userNicknames[$receiver] . '你好' . '，' . $userNicknames[$sender] . '给你发送了一条消息。';
+        $datetime = date('Y-m-d H:i:s');
+        $detail_url = WX_HOST . '/share_faq/faq/' . $shareId . '/' . $sender;
+        $this->Weixin->send_faq_notify_template_msg($userOauthBinds[$receiver], $detail_url, $title, $msg, $datetime);
     }
 }

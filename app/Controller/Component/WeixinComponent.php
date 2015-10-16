@@ -1131,6 +1131,22 @@ class WeixinComponent extends Component {
         $this->send_weixin_message($post_data);
     }
 
+    public function send_faq_notify_template_msg($user_open_id, $detail_url, $title, $msg, $datetime) {
+        $post_data = array(
+            "touser" => $user_open_id,
+            "template_id" => 'llN-rNXxRKPMCh6hcgohP9o4Z-6oCqh6LeWedl8goXI',
+            "url" => $detail_url,
+            "topcolor" => "#FF0000",
+            "data" => array(
+                "first" => array("value" => $title),
+                "keyword1" => array("value" => $msg),
+                "keyword2" => array("value" => $datetime),
+                "remark" => array("value" => '点击详情，马上查看和回复。', "color" => "#FF8800")
+            )
+        );
+        $this->send_weixin_message($post_data);
+    }
+
     /**
      * @param $user_id
      * @param $title
@@ -1234,5 +1250,7 @@ class WeixinComponent extends Component {
         );
         return $this->send_weixin_message($post_data);
     }
+
+
 
 }
