@@ -1658,11 +1658,11 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 999,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/2dca381fd51_0923.jpg'
                 ),
-                '550' => array(
-                    'share_id' => 550,
+                '798' => array(
+                    'share_id' => 798,
                     'share_name' => '沱沱工社有机蔬菜限量团购',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/c47ca5d399d_0914.jpg',
-                    'share_price' => '40',
+                    'share_price' => '12',
                     'share_user_name' => '沱沱工社',
                     'share_vote' => 315,
                     'share_user_id' => 867587,
