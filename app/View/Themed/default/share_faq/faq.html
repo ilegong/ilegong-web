@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="/static/share_faq/css/share_faq.css?v0.0.1">
+<link rel="stylesheet" href="/static/share_faq/css/share_faq.css?v0.0.2">
 <div class="chat-window">
     <div class="panel panel-default">
         <div class="panel-heading top-bar">
@@ -36,7 +36,7 @@
             {{/if}}
             {{/loop}}
         </div>
-        <div class="panel-footer">
+        <div class="panel-footer" style="position: fixed;bottom: 0px;left: 0;">
             <input type="hidden" id="sender-img" value="{{$user_info[$current_user_id]['image']}}">
             <input type="hidden" id="sender-nickname" value="{{$user_info[$current_user_id]['nickname']}}">
 

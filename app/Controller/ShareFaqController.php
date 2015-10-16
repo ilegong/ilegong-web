@@ -42,6 +42,7 @@ class ShareFaqController extends AppController {
             ),
             'order' => array('created ASC')
         ));
+        $this->set('hide_footer',true);
         $this->set('current_user', $current_user_id);
         $this->set('share_id', $shareId);
         $this->set('receiver', $userId);
