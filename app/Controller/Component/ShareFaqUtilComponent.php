@@ -26,6 +26,23 @@ class ShareFaqUtilComponent extends Component {
     /**
      * @param $shareId
      * @param $shareCreator
+     * 分享者是否有未读信息
+     */
+    public function sharer_has_unread_info($shareId, $shareCreator) {
+        $shareFaqM = ClassRegistry::init('ShareFaq');
+        $sharerUnreadCount = $shareFaqM->find('count', array(
+            'conditions' => array(
+                'receiver' => $shareCreator,
+                'share_id' => $shareId,
+                'has_read' => SHARE_FAQ_UNREAD
+            )
+        ));
+        return $sharerUnreadCount;
+    }
+
+    /**
+     * @param $shareId
+     * @param $shareCreator
      * @return share faq list info
      * 获取分享者消息列表
      */

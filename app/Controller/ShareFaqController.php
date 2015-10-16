@@ -6,7 +6,7 @@ class ShareFaqController extends AppController {
 
     var $uses = array('ShareFaq', 'Weshare', 'User');
 
-    var $components = array('Weixin', 'WeshareBuy', 'ShareUtil');
+    var $components = array('Weixin', 'WeshareBuy', 'ShareUtil', 'ShareFaqUtil');
 
 
     public function beforeFilter() {
@@ -14,9 +14,9 @@ class ShareFaqController extends AppController {
         $this->layout = 'weshare_bootstrap';
     }
 
-    public function faq_list($shareId) {
+    public function faq_list($shareId, $shareCreator) {
         //todo check is share creator
-
+        $faq_list = $this->ShareFaqUtil->share_faq_list($shareId, $shareCreator);
     }
 
     public function faq($shareId, $userId) {
