@@ -14,9 +14,10 @@ class ShareFaqController extends AppController {
         $this->layout = 'weshare_bootstrap';
     }
 
+    //目前只有分享者可以看到
     public function faq_list($shareId, $shareCreator) {
-        //todo check is share creator
         $faq_list = $this->ShareFaqUtil->share_faq_list($shareId, $shareCreator);
+        $this->set('faq_list', $faq_list);
     }
 
     public function faq($shareId, $userId) {
