@@ -34,7 +34,7 @@
     vm.checkUserCanSetTag = checkUserCanSetTag;
     vm.validateSendInfo = validateSendInfo;
     vm.validatePinTuan = validatePinTuan;
-    vm.canSetTagUser = [633345, 544307, 802852];
+    vm.canSetTagUser = [633345, 544307, 802852, 867587];
     vm.showEditShareView = true;
     vm.showEditTagView = false;
     function pageLoaded() {
