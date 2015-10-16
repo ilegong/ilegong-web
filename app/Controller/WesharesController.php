@@ -1206,7 +1206,7 @@ class WesharesController extends AppController {
                     'share_id' => $weshareId
                 )
             ));
-            $sharer_tags = $this->ShareUtil->get_tags($weshareInfo['Weshare']['creator']);
+            $sharer_tags = $this->ShareUtil->get_tags($weshareInfo['Weshare']['creator'], $weshareInfo['refer_share_id']);
             $sharer_tags_list = $this->ShareUtil->get_tags_list($weshareInfo['Weshare']['creator']);
             $weshareShipSettings = Hash::combine($weshareShipSettings, '{n}.WeshareShipSetting.tag', '{n}.WeshareShipSetting');
             $creatorInfo = $this->User->find('first', array(

@@ -843,14 +843,20 @@ class ShareUtilComponent extends Component {
 
     /**
      * @param $user_id
+     * @param $refer_share_id
      * @return array
      * get user tags
      */
-    public function get_tags($user_id) {
-        $tags = $this->load_tags_data($user_id);
+    public function get_tags($user_id, $refer_share_id = 0) {
+        if ($refer_share_id == 0) {
+            $tags = $this->load_tags_data($user_id);
+        } else {
+            $tags = $this->load_tags_by_share($refer_share_id);
+        }
         $tags = Hash::combine($tags, '{n}.WeshareProductTag.id', '{n}.WeshareProductTag');
         return $tags;
     }
+
 
     /**
      * @param $user_id
@@ -963,6 +969,12 @@ class ShareUtilComponent extends Component {
     public function set_group_share_available($share_id) {
         $weshareM = ClassRegistry::init('Weshare');
         $weshareM->updateAll(array('status' => WESHARE_NORMAL_STATUS), array('id' => $share_id));
+    }
+
+    private function load_tags_by_share($share_id) {
+        $shareInfo = $this->WeshareBuy->get_weshare_info($share_id);
+        $shareCreator = $shareInfo['creator'];
+        return $this->load_tags_data($shareCreator);
     }
 
     /**
