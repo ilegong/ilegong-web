@@ -12,7 +12,7 @@
         <div class="sharer-nickname-display-inline">
             <label ng-click="vm.toUserShareInfo(vm.weshare.creator.id)" ng-bind="::vm.weshare.creator.nickname"></label>
             <a ng-if="!vm.userSubStatus" class="statistics-btn sub-sharer-btn" ng-click="vm.subSharer();" ng-bind="::vm.subShareTipTxt">+关注</a>
-            <a ng-if="vm.currentUser" class="faq-sharer-btn" ng-click="vm.redirectFaq()" ng-bind="::vm.faqTipText">联系商家</a>
+            <a ng-if="vm.currentUser" class="faq-sharer-btn" ng-click="vm.redirectFaq()" ng-bind="::vm.faqTipText">联系团长</a>
         </div>
         <s><span ng-bind="::vm.ordersDetail.summery.all_buy_user_count"
                  class="stress-span"></span>&nbsp;报名

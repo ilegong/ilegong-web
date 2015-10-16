@@ -99,7 +99,7 @@
     var vm = this;
     vm.showShareDetailView = true;
     vm.subShareTipTxt = '+关注';
-    vm.faqTipText = '联系商家';
+    vm.faqTipText = '联系团长';
     vm.showUnReadMark = false;
     vm.readMoreBtnText = '全文';
     vm.hideMoreShareInfo = false;
