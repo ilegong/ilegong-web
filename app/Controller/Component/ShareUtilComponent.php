@@ -836,6 +836,7 @@ class ShareUtilComponent extends Component {
             }
         }
         $shareProductTagM->saveAll($tags);
+        Cache::write(SHARER_TAGS_DATA_CACHE_KEY . '_' . $uid, '');
         $tags = $this->get_tags_list($uid);
         return $tags;
     }
