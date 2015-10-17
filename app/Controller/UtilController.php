@@ -258,10 +258,28 @@ class UtilController extends AppController {
         return array('success' => true, 'errno' => $queue->errno(), 'errmsg' => $queue->errmsg());
     }
 
+    /**
+     * @param $shareId
+     * 手动的开启常用自提点子分享
+     */
     public function start_static_shares($shareId) {
         $this->autoRender = false;
         $this->ShareUtil->new_static_address_group_shares($shareId);
         echo json_encode(array('success' => true));
+        return;
+    }
+
+    /**
+     * @param $shareOfferId
+     * @param $uid
+     * @param $totalNum
+     * 手工给分享者发一些红包
+     */
+    public function gen_share_offer_for_sharer($shareOfferId, $uid, $totalNum) {
+        $this->autoRender = false;
+        $shareOfferM = ClassRegistry::init('ShareOffer');
+        $genShareOfferResult = $shareOfferM->add_shared_slices($uid, $shareOfferId, $totalNum, true);
+        echo json_encode($genShareOfferResult);
         return;
     }
 }
