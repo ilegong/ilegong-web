@@ -1131,6 +1131,14 @@ class WeixinComponent extends Component {
         $this->send_weixin_message($post_data);
     }
 
+    /**
+     * @param $user_open_id
+     * @param $detail_url
+     * @param $title
+     * @param $msg
+     * @param $datetime
+     * 用户和分享者互动的模板消息
+     */
     public function send_faq_notify_template_msg($user_open_id, $detail_url, $title, $msg, $datetime) {
         $post_data = array(
             "touser" => $user_open_id,

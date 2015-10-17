@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class ShareFaqUtilComponent
+ * 主要是用来分享者和用户之间互动提问的
+ */
 class ShareFaqUtilComponent extends Component {
 
     var $name = 'ShareFaqUtil';
@@ -43,6 +47,11 @@ class ShareFaqUtilComponent extends Component {
         return $sharerUnreadCount;
     }
 
+    /**
+     * @param $queryCond
+     * @return array
+     * 获取到自己信息列表
+     */
     public function faq_list($queryCond) {
         $shareFaqM = ClassRegistry::init('ShareFaq');
         $userM = ClassRegistry::init('User');
@@ -78,6 +87,11 @@ class ShareFaqUtilComponent extends Component {
         return array('faq_list' => $list_summery, 'users' => $faqUserInfo);
     }
 
+    /**
+     * @param $userId
+     * @return array
+     * 获取购买者的信息列表
+     */
     public function user_faq_list($userId) {
         $queryCond = array(
             'conditions' => array(

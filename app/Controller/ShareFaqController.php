@@ -15,11 +15,21 @@ class ShareFaqController extends AppController {
     }
 
     //目前只有分享者可以看到
+    /**
+     * @param $shareId
+     * @param $shareCreator
+     * 分享者和用户交互的列表
+     */
     public function faq_list($shareId, $shareCreator) {
         $faq_list = $this->ShareFaqUtil->share_faq_list($shareId, $shareCreator);
         $this->set($faq_list);
     }
 
+    /**
+     * @param $shareId
+     * @param $userId
+     * 分享者和购买者交流页面
+     */
     public function faq($shareId, $userId) {
         $share_info = $this->get_share_info($shareId);
         //todo check is login
@@ -52,6 +62,9 @@ class ShareFaqController extends AppController {
         $this->set('share_faqs', $share_faqs);
     }
 
+    /**
+     * 发送消息
+     */
     public function create_faq() {
         $this->autoRender = false;
         //todo check login
@@ -86,6 +99,12 @@ class ShareFaqController extends AppController {
         return;
     }
 
+    /**
+     * @param $shareId
+     * @param $userId
+     * @param $shareCreator
+     * 获取用户未读信息
+     */
     public function get_user_unread_info($shareId, $userId, $shareCreator) {
         $this->autoRender = false;
         $unread_count = $this->ShareFaqUtil->has_unread_info($shareId, $userId, $shareCreator);

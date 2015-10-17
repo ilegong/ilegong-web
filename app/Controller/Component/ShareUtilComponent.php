@@ -971,6 +971,12 @@ class ShareUtilComponent extends Component {
         $weshareM->updateAll(array('status' => WESHARE_NORMAL_STATUS), array('id' => $share_id));
     }
 
+    /**
+     * @param $share_id
+     * @return mixed
+     * 根据分享ID回去商品标签
+     * 由于在拼团中，没有复制标签，所以要查找父分享的
+     */
     private function load_tags_by_share($share_id) {
         $shareInfo = $this->WeshareBuy->get_weshare_info($share_id);
         $shareCreator = $shareInfo['creator'];
