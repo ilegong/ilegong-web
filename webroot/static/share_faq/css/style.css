@@ -34,4 +34,4 @@ li{list-style:none;}
 .pr{position:relative;}
 .oh{overflow:hidden;}
 .mg10 {margin:10px 0;}
-.linear-g{position: fixed;top: 0;z-index: 100;background: -moz-linear-gradient(top, #fdfdfd, #f6f6f6);background: -webkit-gradient(linear,top,from(#fdfdfd),to(#f6f6f6));background: -webkit-linear-gradient(top, #fdfdfd, #f6f6f6);background: -o-linear-gradient(top, #fdfdfd, #f6f6f6);box-shadow:0 0 5px #ccc;}
+.linear-g{position: fixed;top: 0;left:0;z-index: 100;background: -moz-linear-gradient(top, #fdfdfd, #f6f6f6);background: -webkit-gradient(linear,top,from(#fdfdfd),to(#f6f6f6));background: -webkit-linear-gradient(top, #fdfdfd, #f6f6f6);background: -o-linear-gradient(top, #fdfdfd, #f6f6f6);box-shadow:0 0 5px #ccc;}

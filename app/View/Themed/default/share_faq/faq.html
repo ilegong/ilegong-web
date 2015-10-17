@@ -8,7 +8,7 @@
         <a href="/weshares/user_share_info/{{$receiver}}"
            class="glyphicon glyphicon-user col-xs-2 text-left"> </a>
     </div>
-    <div data-role="content" class="container" role="main" style="margin-top: 45px;margin-bottom: 15px;"
+    <div data-role="content" role="main" style="margin-top: 45px;margin-bottom: 15px;"
          id="chat-msg-list-container">
         <ul class="content-reply-box mg10" id="chat-msg-list">
             {{loop $share_faqs $share_faq}}
@@ -44,7 +44,6 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="/static/share_faq/js/jquery.mobile-1.4.0-rc.1.js"></script>
 <script type="text/javascript">
     $(function () {
         //var $chatMsgListContainer = $('#chat-msg-list-container');
