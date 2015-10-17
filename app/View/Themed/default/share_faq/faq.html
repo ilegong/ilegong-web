@@ -2,10 +2,10 @@
 <link rel="stylesheet" type="text/css" href="/static/share_faq/css/jquery.mobile.flatui.css"/>
 <div data-role="page">
     <div class="header linear-g">
-        <a href="/weshares/view/{{$share_info['Weshare']['id']}}" data-iconpos="notext"
+        <a href="/weshares/view/{{$share_info['Weshare']['id']}}"
            class="glyphicon glyphicon-home col-xs-2 text-right"> </a>
         <a class="text-center col-xs-8"><span class="share-title">{{$share_info['Weshare']['title']}}</span></a>
-        <a href="/weshares/user_share_info/{{$receiver}}" data-iconpos="notext"
+        <a href="/weshares/user_share_info/{{$receiver}}"
            class="glyphicon glyphicon-user col-xs-2 text-left"> </a>
     </div>
     <div data-role="content" class="container" role="main" style="margin-top: 45px;margin-bottom: 15px;"
@@ -14,10 +14,8 @@
             {{loop $share_faqs $share_faq}}
             <li class="{{if $share_faq['ShareFaq']['sender'] == $current_user_id}}even{{else}}odd{{/if}}">
                 <a class="user" href="/weshares/user_share_info/{{$share_faq['ShareFaq']['sender']}}"><img
-                        class="img-responsive avatar_" src="{{$user_info[$share_faq['ShareFaq']['sender']]['image']}}"
-                        alt=""><span
+                        class="img-responsive avatar_" src="{{$user_info[$share_faq['ShareFaq']['sender']]['image']}}"><span
                         class="user-name">{{$user_info[$share_faq['ShareFaq']['sender']]['nickname']}}</span></a>
-
                 <div class="reply-content-box">
                     <span class="reply-time">{{$share_faq['ShareFaq']['created']}}</span>
 
