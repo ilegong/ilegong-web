@@ -58,9 +58,11 @@ class ShareFaqController extends AppController {
             'conditions' => array(
                 'share_id' => $shareId,
                 'OR' => array(
-                    'sender' => array($share_creator, $current_user_id),
-                    'receiver' => array($share_creator, $current_user_id),
-                )
+                    array('sender' => $share_creator,
+                        'receiver' => $current_user_id),
+                    array('sender' => $current_user_id,
+                        'receiver' => $share_creator)
+                ),
             ),
             'order' => array('created ASC')
         ));
