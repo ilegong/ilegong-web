@@ -47,8 +47,6 @@ class ShareFaqController extends AppController {
                 return;
             }
         }
-
-
         $user_info = $this->User->find('all', array(
             'conditions' => array(
                 'id' => array($userId, $share_creator, $current_user_id)
