@@ -35,13 +35,19 @@ class ShareFaqController extends AppController {
         //todo check is login
         $current_user_id = $this->currentUser['id'];
         $share_creator = $share_info['Weshare']['creator'];
+        //join other faq info
+        if ($current_user_id != $share_creator && $userId != $share_creator) {
+            $this->redirect('/weshares/view/' . $shareId);
+            return;
+        }
         //别人发给分享者
-        if($userId != $share_creator){
+        if ($userId != $share_creator) {
             if ($current_user_id != $userId) {
                 $this->redirect('/weshares/view/' . $shareId);
                 return;
             }
         }
+
 
         $user_info = $this->User->find('all', array(
             'conditions' => array(
