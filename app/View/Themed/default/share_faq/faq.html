@@ -1,59 +1,55 @@
-<link rel="stylesheet" href="/static/share_faq/css/share_faq.css?v0.0.2">
-<div class="chat-window">
-    <div class="panel panel-default">
-        <div class="panel-heading top-bar">
-            <div class="col-md-8 col-xs-8">
-                <h3 class="panel-title"><span class="glyphicon glyphicon-comment"></span>&nbsp;&nbsp;{{$share_info['Weshare']['title']}}
-                </h3>
-            </div>
-        </div>
-        <div class="panel-body msg_container_base" id="chat-msg-list">
+<link rel="stylesheet" type="text/css" href="/static/share_faq/css/style.css">
+<link rel="stylesheet" type="text/css" href="/static/share_faq/css/jquery.mobile.flatui.css"/>
+<div data-role="page">
+    <div class="header linear-g">
+        <a href="/weshares/view/{{$share_info['Weshare']['id']}}" data-iconpos="notext"
+           class="glyphicon glyphicon-home col-xs-2 text-right"> </a>
+        <a class="text-center col-xs-8"><span class="share-title">{{$share_info['Weshare']['title']}}</span></a>
+        <a href="/weshares/user_share_info/{{$receiver}}" data-iconpos="notext"
+           class="glyphicon glyphicon-user col-xs-2 text-left"> </a>
+    </div>
+    <div data-role="content" class="container" role="main" style="margin-top: 45px;margin-bottom: 15px;"
+         id="chat-msg-list-container">
+        <ul class="content-reply-box mg10" id="chat-msg-list">
             {{loop $share_faqs $share_faq}}
-            {{if $share_faq['ShareFaq']['sender'] == $current_user_id}}
-            <div class="row msg_container base_sent">
-                <div class="col-md-10 col-xs-10">
-                    <div class="messages msg_sent">
-                        <p>{{$share_faq['ShareFaq']['msg']}}</p>
-                        <time>{{$share_faq['ShareFaq']['created']}}</time>
-                    </div>
-                </div>
-                <div class="col-md-2 col-xs-2 avatar">
-                    <img src="{{$user_info[$share_faq['ShareFaq']['sender']]['image']}}" class=" img-responsive ">
-                </div>
-            </div>
-            {{else}}
-            <div class="row msg_container base_receive">
-                <div class="col-md-2 col-xs-2 avatar">
-                    <img src="{{$user_info[$share_faq['ShareFaq']['sender']]['image']}}" class="img-responsive ">
-                </div>
-                <div class="col-md-10 col-xs-10">
-                    <div class="messages msg_receive">
-                        <p>{{$share_faq['ShareFaq']['msg']}}</p>
-                        <time>{{$share_faq['ShareFaq']['created']}}</time>
-                    </div>
-                </div>
-            </div>
-            {{/if}}
-            {{/loop}}
-        </div>
-        <div class="panel-footer" style="position: fixed;bottom: 0px;left: 0;">
-            <input type="hidden" id="sender-img" value="{{$user_info[$current_user_id]['image']}}">
-            <input type="hidden" id="sender-nickname" value="{{$user_info[$current_user_id]['nickname']}}">
+            <li class="{{if $share_faq['ShareFaq']['sender'] == $current_user_id}}even{{else}}odd{{/if}}">
+                <a class="user" href="/weshares/user_share_info/{{$share_faq['ShareFaq']['sender']}}"><img
+                        class="img-responsive avatar_" src="{{$user_info[$share_faq['ShareFaq']['sender']]['image']}}"
+                        alt=""><span
+                        class="user-name">{{$user_info[$share_faq['ShareFaq']['sender']]['nickname']}}</span></a>
 
-            <div class="input-group" id="chat-input-form">
-                <input type="hidden" id="sender" value="{{$current_user}}">
-                <input type="hidden" id="receiver" value="{{$receiver}}">
-                <input type="hidden" id="share-id" value="{{$share_id}}">
-                <input id="content" required type="text" class="form-control input-sm chat_input"
-                       placeholder="写下你要说的话..."/>
+                <div class="reply-content-box">
+                    <span class="reply-time">{{$share_faq['ShareFaq']['created']}}</span>
+
+                    <div class="reply-content pr">
+                        <span class="arrow">&nbsp;</span>
+                        {{$share_faq['ShareFaq']['msg']}}
+                    </div>
+                </div>
+            </li>
+            {{/loop}}
+        </ul>
+    </div>
+    <div class="panel-footer" style="position: fixed;bottom: 0px;left: 0;">
+        <input type="hidden" id="sender-img" value="{{$user_info[$current_user_id]['image']}}">
+        <input type="hidden" id="sender-nickname" value="{{$user_info[$current_user_id]['nickname']}}">
+
+        <div class="input-group" id="chat-input-form">
+            <input type="hidden" id="senderName" value="{{$user_info[$current_user]['nickname']}}">
+            <input type="hidden" id="sender" value="{{$current_user}}">
+            <input type="hidden" id="receiver" value="{{$receiver}}">
+            <input type="hidden" id="share-id" value="{{$share_id}}">
+            <input id="content" required type="text" class="form-control input-sm chat_input"
+                   placeholder="写下你要说的话..."/>
                 <span class="input-group-btn"><button class="btn btn-primary btn-sm" id="btn-chat-submit">发送
                 </button></span>
-            </div>
         </div>
     </div>
 </div>
-<script>
-    $(document).ready(function () {
+<script type="text/javascript" src="/static/share_faq/js/jquery.mobile-1.4.0-rc.1.js"></script>
+<script type="text/javascript">
+    $(function () {
+        //var $chatMsgListContainer = $('#chat-msg-list-container');
         var $chatMsgList = $('#chat-msg-list');
         var senderImg = $('#sender-img').val();
         var $chatInputForm = $('#chat-input-form');
@@ -62,13 +58,15 @@
         var $receiver = $('#receiver', $chatInputForm);
         var $shareId = $('#share-id', $chatInputForm);
         var shareId = $shareId.val();
+        var $senderName = $('#senderName', $chatInputForm);
+        var sendName = $senderName.val();
         var $content = $('#content', $chatInputForm);
         var $btnSubmit = $('#btn-chat-submit', $chatInputForm);
         var submit = false;
         updateFaqRead();
+        //scrollBottom();
         $btnSubmit.on('click', function (e) {
             e.preventDefault();
-            //todo valid msg
             if (!$content.val()) {
                 alert('请输入内容');
                 return;
@@ -87,14 +85,16 @@
                 $chatMsgList.append(genChatItemDom(data));
                 $content.val('');
                 submit = false;
+                //scrollBottom();
             }, 'json');
         });
+
+//        function scrollBottom(){
+//            $chatMsgListContainer.scrollTop($chatMsgListContainer.prop("scrollHeight"));
+//        }
+
         function genChatItemDom(data) {
-            var domStr = '<div class="row msg_container base_sent">' +
-                    '<div class="col-md-10 col-xs-10">' +
-                    '<div class="messages msg_sent">' +
-                    '<p>' + data['ShareFaq']['msg'] + '</p>' +
-                    '<time datetime="data["ShareFaq"]["created"]">' + data["ShareFaq"]["created"] + '</time></div></div><div class="col-md-2 col-xs-2 avatar"> <img src="' + senderImg + '" class="img-responsive"></div></div>';
+            var domStr = '<li class="even"><a class="user" href="/weshares/user_share_info/' + senderId + '"><img class="img-responsive avatar_" src="' + senderImg + '" alt=""><span class="user-name">' + sendName + '</span></a> <div class="reply-content-box"> <span class="reply-time">' + data["ShareFaq"]["created"] + '</span> <div class="reply-content pr"> <span class="arrow">&nbsp;</span>' + data['ShareFaq']['msg'] + '</div></div></li>';
             return domStr;
         }
 
