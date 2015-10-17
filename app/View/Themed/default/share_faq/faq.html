@@ -1,5 +1,5 @@
-<link rel="stylesheet" type="text/css" href="/static/share_faq/css/style.css">
-<link rel="stylesheet" type="text/css" href="/static/share_faq/css/jquery.mobile.flatui.css"/>
+<link rel="stylesheet" type="text/css" href="/static/share_faq/css/style.css?0.0.1">
+<link rel="stylesheet" type="text/css" href="/static/share_faq/css/jquery.mobile.flatui.css?0.0.1"/>
 <div data-role="page">
     <div class="header linear-g">
         <a href="/weshares/view/{{$share_info['Weshare']['id']}}"
@@ -14,8 +14,10 @@
             {{loop $share_faqs $share_faq}}
             <li class="{{if $share_faq['ShareFaq']['sender'] == $current_user_id}}even{{else}}odd{{/if}}">
                 <a class="user" href="/weshares/user_share_info/{{$share_faq['ShareFaq']['sender']}}"><img
-                        class="img-responsive avatar_" src="{{$user_info[$share_faq['ShareFaq']['sender']]['image']}}"><span
+                        class="img-responsive avatar_"
+                        src="{{$user_info[$share_faq['ShareFaq']['sender']]['image']}}"><span
                         class="user-name">{{$user_info[$share_faq['ShareFaq']['sender']]['nickname']}}</span></a>
+
                 <div class="reply-content-box">
                     <span class="reply-time">{{$share_faq['ShareFaq']['created']}}</span>
 
