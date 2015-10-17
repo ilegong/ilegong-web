@@ -221,7 +221,7 @@ class WesharesController extends AppController {
                     $thumbnail = $images[0];
                 }
                 $this->ShareUtil->save_create_share_opt_log($weshare['Weshare']['id'], $thumbnail, $weshareData['title'], $uid);
-                $this->check_share_and_trigger_new_share($weshare['Weshare']['id'], $shipSetData);
+                //$this->check_share_and_trigger_new_share($weshare['Weshare']['id'], $shipSetData);
             }
             echo json_encode(array('success' => true, 'id' => $weshare['Weshare']['id']));
             return;
