@@ -559,6 +559,12 @@ class WeixinComponent extends Component {
         return false;
     }
 
+    /**
+     * @param $order_id
+     * @param null $comment_id
+     * @return mixed
+     * 商场购买或者分享触发红包逻辑
+     */
     private function gen_offer($order_id, $comment_id = null) {
         $so = ClassRegistry::init('ShareOffer');
         $orderM = ClassRegistry::init('Order');
@@ -588,6 +594,18 @@ class WeixinComponent extends Component {
         return $offer;
     }
 
+    /**
+     * @param $open_id
+     * @param $order_id
+     * @param null $title
+     * @param null $detail_url
+     * @param null $keyword1
+     * @param null $desc
+     * @param null $comment_id
+     * @return bool
+     * 分享红包处理逻辑
+     * 可能是购买或者评论产生的红包
+     */
     public function send_share_offer_msg($open_id, $order_id, $title = null, $detail_url = null, $keyword1 = null, $desc = null, $comment_id = null) {
         $offer = $this->gen_offer($order_id, $comment_id);
         $number = 0;
@@ -607,6 +625,9 @@ class WeixinComponent extends Component {
         return false;
     }
 
+    /**
+     * @param $orderId
+     */
     public function check_group_buy_complete($orderId) {
         $groupBuyRecordM = ClassRegistry::init('GroupBuyRecord');
         $groupBuyM = ClassRegistry::init('GroupBuy');
@@ -786,6 +807,7 @@ class WeixinComponent extends Component {
             $user = $users[$order['Order']['creator']];
             $this->send_weshare_buy_wx_msg($openid, $order, $good, $user);
             $cate_id = $order['Order']['cate_id'];
+            //处理返利
             if ($cate_id != 0) {
                 //check update rebate log add order id change paid status
                 $this->ShareUtil->process_order_paid_rebate($cate_id, $order);
