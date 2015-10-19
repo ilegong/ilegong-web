@@ -489,6 +489,10 @@ class WeixinComponent extends Component {
             if ($refer_share_id != $share_id) {
                 Cache::write(SHARE_OFFLINE_ADDRESS_SUMMERY_DATA_CACHE_KEY . '_' . $refer_share_id, '');
                 Cache::write(SHARE_OFFLINE_ADDRESS_BUY_DATA_CACHE_KEY . '_' . $refer_share_id, '');
+                Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $refer_share_id . '_1_1', '');
+                Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $refer_share_id . '_0_1', '');
+                Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $refer_share_id . '_1_0', '');
+                Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $refer_share_id . '_0_0', '');
             }
         }
     }
