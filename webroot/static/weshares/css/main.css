@@ -470,7 +470,9 @@ ul li {
 .weshare-view .recommend {
     width: 60%;
     overflow: hidden;
-    margin-left: 55px;
+    margin-left: 65px;
+    position: fixed;
+    margin-top: 60px;
 }
 
 .weshare-view .recommend .share-tag {
