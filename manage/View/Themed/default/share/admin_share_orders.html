@@ -125,6 +125,7 @@
                 <th><input type="text" class="form-control" placeholder="创建时间" disabled></th>
                 <th><input type="text" class="form-control" placeholder="状态" disabled></th>
                 <th><input type="text" class="form-control" placeholder="物流方式" disabled></th>
+                <th><input type="text" class="form-control" placeholder="快递单号" disabled></th>
                 <th><input type="text" class="form-control" placeholder="交易号" disabled></th>
                 <th><input type="text" class="form-control" placeholder="推荐人" disabled></th>
                 <th>操作</th>
@@ -191,6 +192,9 @@
                     {{else}}
                     快递
                     {{/if}}
+                </td>
+                <td>
+                    {{$current_order['ship_code	']}}
                 </td>
                 <td>
                     {{if !empty($pay_notifies[$current_order['id']])}}
