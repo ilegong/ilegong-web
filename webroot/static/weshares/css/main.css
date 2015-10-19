@@ -405,6 +405,7 @@ ul li {
 
 .weshare-view .ul-wrap-btn {
     width: 25%;
+    margin-top: 20px;
     float: right;
 }
 
@@ -467,10 +468,9 @@ ul li {
 }
 
 .weshare-view .recommend {
-    width: 80%;
+    width: 60%;
     overflow: hidden;
     margin-left: 55px;
-    margin-top: -30px;
 }
 
 .weshare-view .recommend .share-tag {
