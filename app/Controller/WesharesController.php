@@ -199,7 +199,9 @@ class WesharesController extends AppController {
         $shipSetData = $postDataArray['ship_type'];
         $proxyRebatePercent = $postDataArray['proxy_rebate_percent'];
         $weshareData['creator'] = $uid;
+        //merge for child share data
         $saveBuyFlag = $weshare = $this->Weshare->save($weshareData);
+        //merge for child share data
         $this->saveWeshareProducts($weshare['Weshare']['id'], $productsData);
         $this->saveWeshareAddresses($weshare['Weshare']['id'], $addressesData);
         $this->saveWeshareShipType($weshare['Weshare']['id'], $shipSetData);
@@ -224,6 +226,8 @@ class WesharesController extends AppController {
                 $this->ShareUtil->save_create_share_opt_log($weshare['Weshare']['id'], $thumbnail, $weshareData['title'], $uid);
                 //  $this->check_share_and_trigger_new_share($weshare['Weshare']['id'], $shipSetData);
             }
+            //todo update child share data and product data
+            //$this->ShareUtil->cascadeSaveShareData($weshareData);
             echo json_encode(array('success' => true, 'id' => $weshare['Weshare']['id']));
             return;
         } else {

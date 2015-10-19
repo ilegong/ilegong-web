@@ -323,7 +323,7 @@ class ShareUtilComponent extends Component {
         $rebate_money = round($rebate_money / 100, 2);
         $rebate_money = number_format($rebate_money, 2);
         //rebate money gt 0 send msg
-        if($rebate_money > 0){
+        if ($rebate_money > 0) {
             $this->Weixin->send_rebate_template_msg($recommend_open_ids[$recommend], $detail_url, $order_id, $order_money, $pay_time, $rebate_money, $title);
         }
     }
@@ -1485,6 +1485,27 @@ class ShareUtilComponent extends Component {
         if ($ret === false)
             var_dump($queue->errno(), $queue->errmsg());
         return $ret;
+    }
+
+    /**
+     * @param $weshareData
+     * 级联更新数据
+     */
+    public function cascadeSaveShareData($weshareData) {
+        $shareId = $weshareData['id'];
+        if (!empty($shareId)) {
+            $weshareM = ClassRegistry::init('Weshare');
+            $childShares = $weshareM->find('all', array(
+                'conditions' => array(
+                    'refer_share_id' => $shareId,
+                    'type' => GROUP_SHARE_TYPE
+                )
+            ));
+            $childShareIds = Hash::extract($childShares, '{n}.Weshare.id');
+            //update child share data
+            unset($weshareData['id']);
+            $weshareM->updateAll($weshareData, array('id' => $childShareIds));
+        }
     }
 
     /**
