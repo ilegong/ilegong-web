@@ -189,6 +189,7 @@
     vm.setShipFee = setShipFee;
     vm.newGroupShare = newGroupShare;
     vm.redirectFaq = redirectFaq;
+    vm.checkUserHasStartGroupShare = checkUserHasStartGroupShare;
     vm.childShareDetail = null;
     vm.currentUserOrderCount = 0;
     function pageLoaded() {
@@ -238,6 +239,16 @@
     //      $log.log(data);
     //    });
     //}
+
+    function checkUserHasStartGroupShare(userId) {
+      for (key in vm.childShareDetail) {
+        var itemShare = vm.childShareDetail[key];
+        if (itemShare['creator'] == userId) {
+          return true;
+        }
+      }
+      return false;
+    }
 
     function loadOrderDetail(share_id) {
       var fromType = angular.element(document.getElementById('weshareView')).attr('data-from-type');
@@ -690,6 +701,10 @@
     }
 
     function startGroupShare() {
+      if (vm.checkUserHasStartGroupShare(vm.currentUser.id)) {
+        alert('您已经发起一次拼团了');
+        return false;
+      }
       vm.selectShipType = 3;
       vm.shipFee = vm.weshareSettings.pin_tuan.ship_fee;
       vm.showGroupShareTipDialog = false;
@@ -781,6 +796,10 @@
 
     //发起拼团
     function newGroupShare() {
+      if (vm.checkUserHasStartGroupShare(vm.currentUser.id)) {
+        alert('您已经发起一次拼团了');
+        return false;
+      }
       //valid address
       if (vm.validateUserAddress()) {
         return false;

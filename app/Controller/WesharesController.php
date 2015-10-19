@@ -373,6 +373,7 @@ class WesharesController extends AppController {
      */
     public function start_new_group_share() {
         //不需要支付直接开团
+        //check user has
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
         if (empty($uid)) {

@@ -372,11 +372,15 @@ ul li {
 }
 
 .weshare-view .sub-sharer-btn {
+    display: block;
+    margin-top: 0;
+    color: #ffffff;
+    text-decoration: none;
+    text-align: center;
     margin-left: 5px;
-    margin-top: 3px;
-    width: 50px;
+    width: 60px;
     line-height: 20px;
-    background-color: #F2651A;
+    background-color: #ffa200;
 }
 
 .weshare-view .faq-sharer-btn {
@@ -385,7 +389,7 @@ ul li {
     text-decoration: none;
     text-align: center;
     margin-left: 5px;
-    margin-top: 3px;
+    margin-top: 0;
     width: 60px;
     line-height: 20px;
     background-color: #F2651A;
@@ -441,9 +445,10 @@ ul li {
 }
 
 .weshare-view .want-start-group-share {
-    margin-top: 3px;
-    width: 75px;
+    margin-top: 0;
+    width: 65px;
     line-height: 25px;
+    font-size: 13px;
 }
 
 .ui-common-btn {
