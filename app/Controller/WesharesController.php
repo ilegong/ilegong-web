@@ -78,6 +78,7 @@ class WesharesController extends AppController {
         $this->set('weshare_id', $weshare_id);
         //form paid done
         $this->log('weshare view mark ' . $_REQUEST['mark']);
+        //获取推荐人
         $recommend = $_REQUEST['recommend'];
         //add rebate log
         if ($this->ShareUtil->is_proxy_user($recommend)) {

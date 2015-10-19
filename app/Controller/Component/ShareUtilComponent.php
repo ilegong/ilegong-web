@@ -322,7 +322,10 @@ class ShareUtilComponent extends Component {
         $pay_time = $order['Order']['created'];
         $rebate_money = round($rebate_money / 100, 2);
         $rebate_money = number_format($rebate_money, 2);
-        $this->Weixin->send_rebate_template_msg($recommend_open_ids[$recommend], $detail_url, $order_id, $order_money, $pay_time, $rebate_money, $title);
+        //rebate money gt 0 send msg
+        if($rebate_money > 0){
+            $this->Weixin->send_rebate_template_msg($recommend_open_ids[$recommend], $detail_url, $order_id, $order_money, $pay_time, $rebate_money, $title);
+        }
     }
 
     public function read_share_ship_option_setting($sharer, $type) {
