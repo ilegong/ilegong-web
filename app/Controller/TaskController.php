@@ -118,6 +118,10 @@ class TaskController extends AppController {
 
     public function process_notify_group_share($share_id, $now_count, $target_count) {
         $this->autoRender = false;
+        if($now_count > $target_count){
+            echo json_encode(array('success' => true, 'share-id' => $share_id, 'info' => 'full group'));
+            return;
+        }
         $share_info = $this->WeshareBuy->get_weshare_info($share_id);
         $share_orders = $this->ShareUtil->get_share_orders($share_id);
         $share_order_user_ids = Hash::extract($share_orders, '{n}.Order.creator');
