@@ -1,6 +1,6 @@
 <link rel="stylesheet" type="text/css" href="/static/share_faq/css/style.css?0.0.1">
 <link rel="stylesheet" type="text/css" href="/static/share_faq/css/jquery.mobile.flatui.css?0.0.1"/>
-<div data-role="page">
+<div>
     <div class="header linear-g">
         <a href="/weshares/view/{{$share_info['Weshare']['id']}}"
            class="glyphicon glyphicon-home col-xs-2 text-right"> </a>
@@ -8,7 +8,7 @@
         <a href="/weshares/user_share_info/{{$receiver}}"
            class="glyphicon glyphicon-user col-xs-2 text-left"> </a>
     </div>
-    <div data-role="content" role="main" style="margin-top: 45px;margin-bottom: 15px;"
+    <div style="margin-top: 45px;margin-bottom: 15px;"
          id="chat-msg-list-container">
         <ul class="content-reply-box mg10" id="chat-msg-list">
             {{loop $share_faqs $share_faq}}
