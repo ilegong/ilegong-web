@@ -1542,6 +1542,12 @@ class WeshareBuyComponent extends Component {
         //$this->ShareUtil->usedUserSubSharerReason($follow_id);;
     }
 
+    public function subscribe_sharer_by_share($share_id, $follow_id, $type = 'SUB') {
+        $share_info = $this->get_weshare_info($share_id);
+        $sharer_id = $share_info['creator'];
+        $this->subscribe_sharer($sharer_id, $follow_id, $type);
+    }
+
     /**
      * @param $sharer_id
      * @param $follow_id

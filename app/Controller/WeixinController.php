@@ -86,7 +86,7 @@ class WeixinController extends AppController {
                     }
                     if ($replay_type == 1) {
                         $url = $process_result['url'];
-                        echo $this->newTextMsg($user, $me, $content.'<a href="'.$url.'">点击查看详情</a>');
+                        echo $this->newTextMsg($user, $me, $content.'，<a href="'.$url.'">点击查看详情</a>');
                         //echo $this->newTextMsg($user, $me, $content.'<a href=\"' + $url + '\" >点击查看详情<\/a>');
                     }
                     if($from == FROM_WX_SERVICE){

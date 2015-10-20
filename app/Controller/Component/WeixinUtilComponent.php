@@ -6,6 +6,7 @@
  */
 class WeixinUtilComponent extends Component {
 
+    public $components = array('ShareUti', 'WeshareBuy');
 
     public function save_user_sub_reason($type, $url, $uid, $title, $data_id) {
         $UserSubReasonM = ClassRegistry::init('UserSubReason');
@@ -84,6 +85,12 @@ class WeixinUtilComponent extends Component {
                 } else if ($reason['UserSubReason']['type'] == SUB_SHARER_REASON_TYPE_FROM_USER_CENTER || $reason['UserSubReason']['type'] == SUB_SHARER_REASON_TYPE_FROM_SHARE_INFO) {
                     $replay_type = 1;
                     $content = $reason['UserSubReason']['title'];
+                    if($reason['UserSubReason']['type'] == SUB_SHARER_REASON_TYPE_FROM_USER_CENTER){
+                        $this->WeshareBuy->subscribe_sharer($reason['UserSubReason']['data_id'], $reason['UserSubReason']['user_id'], $type = 'SUB');
+                    }
+                    if($reason['UserSubReason']['type'] == SUB_SHARER_REASON_TYPE_FROM_SHARE_INFO){
+                        $this->WeshareBuy->subscribe_sharer_by_share($reason['UserSubReason']['data_id'], $reason['UserSubReason']['user_id'], $type = 'SUB');
+                    }
                 }
                 $UserSubReasonM = ClassRegistry::init('UserSubReason');
                 $UserSubReasonM->updateAll(array('used' => 1), array('id' => $reason['UserSubReason']['id']));
