@@ -1401,9 +1401,12 @@ class WeshareBuyComponent extends Component {
                 'conditions' => array(
                     'id' => $fans_id
                 ),
-                'fields' => $this->query_user_fields
+                'fields' => $this->query_user_fields,
+                'order' => array('id DESC')
             ));
+
             $fans_data = Hash::extract($fans_data, '{n}.User');
+            usort($fans_data, 'sort_data_by_id');
             Cache::write($key, json_encode($fans_data));
             return $fans_data;
         }
