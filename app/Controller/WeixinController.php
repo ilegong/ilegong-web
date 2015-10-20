@@ -77,73 +77,16 @@ class WeixinController extends AppController {
 
 			$input = "";
 			if(!empty($req['Event'])){
-
-
 				if($req['Event']=='subscribe'){ //订阅
-                    if ($from == FROM_WX_SERVICE) {
-                        $default_content = array(
-                            array('title' => '朋友说是什么？看完你就懂了！', 'description' => '',
-                                'picUrl' => 'https://mmbiz.qlogo.cn/mmbiz/qpxHrxLKdR0A6F8hWz04wVpntT9Jiao8XZn7as5FuHch5zFzFnvibjUGYU3J4ibxRyLicytfdd9qDQoqV1ODOp3Rjg/0',
-                                'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=201694178&idx=1&sn=8dea494e02c96dc21e51931604771748#rd'),
-                            array('title' => '朋友说上真实、纯朴、平凡的商家故事', 'description' => '',
-                                'picUrl' => 'https://mmbiz.qlogo.cn/mmbiz/qpxHrxLKdR0A6F8hWz04wVpntT9Jiao8X6T44E6S6eq8j4ZKjneD7QTQSWosTpePqnU37LSATvTp1icyotZ614ibA/0',
-                                'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=201694178&idx=2&sn=fea08fff581b496c70448505e6c32ccc#rd'),
-                            array('title' => '朋友说优质产品一览表', 'description' => '',
-                                'picUrl' => 'https://mmbiz.qlogo.cn/mmbiz/qpxHrxLKdR0A6F8hWz04wVpntT9Jiao8XYT9A69hTUYIomNtyJMbLnMibbSHO3NO5UaEics7OwEo9qLHfqmHas8zQ/0',
-                                'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=201694178&idx=3&sn=75c4b8f32c29e1c088c7de4ee2e22719#rd')
-                        );
-                        $reason = $this->WeixinUtil->get_user_sub_reason($uid);
-                        if (!empty($uid) && !empty($reason)) {
-                            if (strpos($reason['UserSubReason']['type'], 'Vote') !== FALSE) {
-                                $title = $reason['UserSubReason']['title'];
-                                $event_id = $reason['UserSubReason']['data_id'];
-                                $picUrl = $this->VoteSetting->getServerReplyPic($event_id);
-                                $this->log("vote event id pic url:" . $event_id . ' ' . $picUrl);
-                                $content = array(
-                                    array('title' => $title, 'description' => '快来支持我吧...',
-                                        'picUrl' => $picUrl,
-                                        'url' => $reason['UserSubReason']['url']),
-                                );
-                                $this->UserSubReason->updateAll(array('used' => 1), array('id' => $reason['UserSubReason']['id']));
-                            } else {
-                                $content = $default_content;
-                            }
-                        } else {
-                            $content = $default_content;
-                        }
-                        if ($uid) {
-                            Cache::write(key_cache_sub($uid), WX_STATUS_SUBSCRIBED);
-                        } else {
-                            try {
-                                $oauth_wx_source = oauth_wx_source();
-                                $this->loadModel('WxOauth');
-                                $uinfo = $this->WxOauth->get_user_info_by_base_token($openId);
-                                $userId = createNewUserByWeixin($uinfo, $this->User);
-                                $oauth['Oauthbind']['oauth_openid'] = $openId;
-                                $oauth['Oauthbind']['created'] = date(FORMAT_DATETIME);
-                                $oauth['Oauthbind']['source'] = $oauth_wx_source;
-                                $oauth['Oauthbind']['domain'] = $oauth_wx_source;
-                                $oauth['Oauthbind']['user_id'] = $userId;
-                                $this->Oauthbind->save($oauth['Oauthbind']);
-                            } catch (Exception $e) {
-                                $this->log("error to save new user:" . $e);
-                            }
-                        }
-                    } else {
-                        $content = array(
-                            array('title' => '朋友说是什么？看完你就懂了！', 'description' => '',
-                                'picUrl' => 'https://mmbiz.qlogo.cn/mmbiz/qpxHrxLKdR0A6F8hWz04wVpntT9Jiao8XZn7as5FuHch5zFzFnvibjUGYU3J4ibxRyLicytfdd9qDQoqV1ODOp3Rjg/0',
-                                'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=203424483&idx=1&sn=e281fc56834fb0c2942f887d2edd8d48#rd'),
-                            array('title' => '朋友说上真实、纯朴、平凡的商家故事', 'description' => '',
-                                'picUrl' => 'https://mmbiz.qlogo.cn/mmbiz/qpxHrxLKdR0A6F8hWz04wVpntT9Jiao8X6T44E6S6eq8j4ZKjneD7QTQSWosTpePqnU37LSATvTp1icyotZ614ibA/0',
-                                'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=203424483&idx=2&sn=31229814ba277288dbf1ce98ac497115#rd'),
-                            array('title' => '朋友说优质产品一览表', 'description' => '',
-                                'picUrl' => 'https://mmbiz.qlogo.cn/mmbiz/qpxHrxLKdR0A6F8hWz04wVpntT9Jiao8XYT9A69hTUYIomNtyJMbLnMibbSHO3NO5UaEics7OwEo9qLHfqmHas8zQ/0',
-                                'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=203424483&idx=3&sn=6331c07da8078c579126950bbfa2a71e#rd')
-                        );
+                    $process_result = $this->WeixinUtil->process_user_sub_weixin($from, $uid, $openId);
+                    $replay_type = $process_result['replay_type'];
+                    $content = $process_result['content'];
+                    if ($replay_type == 0) {
+                        echo $this->newArticleMsg($user, $me, $content);
                     }
-					echo $this->newArticleMsg($user, $me, $content);
-
+                    if ($replay_type == 1) {
+                        echo $this->newTextMsg($user, $me, $content);
+                    }
                     if($from == FROM_WX_SERVICE){
                         $key = key_cache_sub($uid,'kfinfo');
                         $subscribe_array = json_decode(Cache::read($key),true);
