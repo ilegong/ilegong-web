@@ -752,7 +752,7 @@ class WesharesController extends AppController {
             $data_id = $from_type == 0 ? $sharer_id : $share_id;
             $url = $from_type == 0 ? WX_HOST . '/weshares/user_share_info/' . $share_id : WX_HOST . '/weshares/view/' . $share_id;
             $nicknames = $this->WeshareBuy->get_users_nickname(array($sharer_id, $user_id));
-            $title = '<a href="' . $url . '">' . $nicknames[$user_id] . '你好，您已经关注' . $nicknames[$sharer_id] . '，点击查看</a>';
+            $title = $nicknames[$user_id] . '，你好，您已经关注' . $nicknames[$sharer_id] . '，点击查看';
             $this->UserSubReason->save(array('type' => $sub_type, 'url' => $url, 'user_id' => $user_id, 'title' => $title, 'data_id' => $data_id));
             echo json_encode(array('success' => false, 'reason' => 'not_sub'));
             return;

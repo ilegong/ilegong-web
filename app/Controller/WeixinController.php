@@ -85,7 +85,8 @@ class WeixinController extends AppController {
                         echo $this->newArticleMsg($user, $me, $content);
                     }
                     if ($replay_type == 1) {
-                        echo $this->newTextMsg($user, $me, $content);
+                        $url = $process_result['url'];
+                        echo $this->newTextMsg($user, $me, "<a href=\"" + $url + "\" >" . $content . "</a>");
                     }
                     if($from == FROM_WX_SERVICE){
                         $key = key_cache_sub($uid,'kfinfo');

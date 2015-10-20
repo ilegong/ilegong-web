@@ -67,7 +67,9 @@ class WeixinUtilComponent extends Component {
                     'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=201694178&idx=1&sn=8dea494e02c96dc21e51931604771748#rd')
             );
             $reason = $this->get_user_sub_reason($uid);
+            $url = '';
             if (!empty($uid) && !empty($reason)) {
+                $url = $reason['UserSubReason']['url'];
                 if (strpos($reason['UserSubReason']['type'], 'Vote') !== FALSE) {
                     $title = $reason['UserSubReason']['title'];
                     $event_id = $reason['UserSubReason']['data_id'];
@@ -98,7 +100,7 @@ class WeixinUtilComponent extends Component {
                     'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=203424483&idx=1&sn=e281fc56834fb0c2942f887d2edd8d48#rd')
             );
         }
-        return array('replay_type' => $replay_type, 'content' => $content);
+        return array('replay_type' => $replay_type, 'content' => $content, 'url' => $url);
     }
 
 }
