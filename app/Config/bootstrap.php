@@ -2195,6 +2195,10 @@ function sort_data_by_id($a, $b) {
     return ($a['id'] < $b['id']) ? 1 : -1;
 }
 
+function sort_data_by_id_desc($a, $b){
+    return ($a['id'] > $b['id']) ? 1 : -1;
+}
+
 function sort_opt_log_data_by_id($a, $b) {
     return ($a['OptLog']['id'] < $b['OptLog']['id']) ? 1 : -1;
 }

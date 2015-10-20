@@ -1406,7 +1406,7 @@ class WeshareBuyComponent extends Component {
             ));
 
             $fans_data = Hash::extract($fans_data, '{n}.User');
-            usort($fans_data, 'sort_data_by_id');
+            usort($fans_data, 'sort_data_by_id_desc');
             Cache::write($key, json_encode($fans_data));
             return $fans_data;
         }
