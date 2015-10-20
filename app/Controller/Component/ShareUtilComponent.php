@@ -1759,11 +1759,11 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 832279,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_624ed608a37ca10baec387ffb2d1fd89.jpg'
                 ),
-                '326' => array(
-                    'share_id' => 326,
+                '791' => array(
+                    'share_id' => 791,
                     'share_name' => '东北五常稻花香大米五常当地米厂专供',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/965ba48b2d2_0818.jpg',
-                    'share_price' => '158',
+                    'share_price' => '160',
                     'share_user_name' => '王谷丹',
                     'share_vote' => 187,
                     'share_user_id' => 1388,
