@@ -239,6 +239,7 @@
                     <?php
                         $fans_user_info = $fans_data['fans_data'];
                         $fans_relations = $fans_data['relations'];
+                        $fan_key = 0;
                      ?>
                     {{loop $fans_relations $fan_id}}
                         <?php $fan_data = $fans_user_info[$fan_id]; ?>
@@ -246,6 +247,7 @@
                             <a href="/weshares/user_share_info/{{$fan_data['id']}}" class="teamMemberImageLink"> <img style="height: 50px;width: 50px;border-radius: 50px;" src="{{$fan_data['image']}}" class="teamMemberImage" alt="" /> </a>
                             <h3 class="teamMemberName" style="margin-top: 10px;word-wrap: break-word;font-size: 13px;">{{$fan_data['nickname']}}</h3>
                         </div>
+                        <?php $fan_key = $fan_key + 1; ?>
                     {{/loop}}
                 </div>
             </div>
