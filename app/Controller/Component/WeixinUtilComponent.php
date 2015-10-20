@@ -58,7 +58,7 @@ class WeixinUtilComponent extends Component {
      * @param $openId
      * @return array
      */
-    public function process_user_sub_weixin($from, $uid, $openId){
+    public function process_user_sub_weixin($from, $uid, $openId) {
         $replay_type = 0;
         if ($from == FROM_WX_SERVICE) {
             $content = array(
@@ -80,7 +80,7 @@ class WeixinUtilComponent extends Component {
                             'url' => $reason['UserSubReason']['url']),
                     );
                 } else if ($reason['UserSubReason']['type'] == SUB_SHARER_REASON_TYPE_FROM_USER_CENTER || $reason['UserSubReason']['type'] == SUB_SHARER_REASON_TYPE_FROM_SHARE_INFO) {
-                    $replay_type == 1;
+                    $replay_type = 1;
                     $content = $reason['UserSubReason']['title'];
                 }
                 $UserSubReasonM = ClassRegistry::init('UserSubReason');
