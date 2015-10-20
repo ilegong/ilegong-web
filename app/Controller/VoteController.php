@@ -103,7 +103,7 @@ class VoteController extends AppController {
         ));
         $title = '我是第' . $candidateId . '号萌娃' . $candidate_info['Candidate']['title'];
         $type = $this->VoteSetting->getSubVoteType($eventId);
-        $this->UserSubReason->save(array('type' => $type, 'url' => WX_HOST . '/vote/candidate_detail/' . $candidateId . '/' . $eventId, 'user_id' => $uid, 'title' => $title, 'data_id' => $eventId));
+        $this->UserSubReason->save(array('type' => $type, 'url' => WX_HOST . '/vote/candidate_detail/' . $candidateId . '/' . $eventId, 'user_id' => $uid, 'title' => $title, 'data_id' => $eventId, 'created' => date('Y-m-d H:i:s')));
     }
 
     public function to_sub($candidateId, $eventId) {

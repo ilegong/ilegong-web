@@ -1539,6 +1539,7 @@ class WeshareBuyComponent extends Component {
             Cache::write(SHARER_FANS_DATA_CACHE_KEY . '_' . $sharer_id . '_100', '');
             $this->send_sub_template_msg($sharer_id, $follow_id);
         }
+        //$this->ShareUtil->usedUserSubSharerReason($follow_id);;
     }
 
     /**

@@ -13,6 +13,8 @@ class WeixinController extends AppController {
 	var $name = 'Weixin';
 
     var $uses = array('Oauthbind', 'User', 'UserSubReason', 'Candidate', 'CandidateEvent', 'VoteSetting');
+
+    var $components = array('WeixinUtil');
 	
 	public function beforeFilter(){
 		parent::beforeFilter();
@@ -79,15 +81,6 @@ class WeixinController extends AppController {
 
 				if($req['Event']=='subscribe'){ //订阅
                     if ($from == FROM_WX_SERVICE) {
-                        $reason = $this->UserSubReason->find('first',
-                            array(
-                                'conditions' => array(
-                                    'user_id' => $uid,
-                                    'used' => 0,
-                                ),
-                                'order' => array('id DESC')
-                            )
-                        );
                         $default_content = array(
                             array('title' => '朋友说是什么？看完你就懂了！', 'description' => '',
                                 'picUrl' => 'https://mmbiz.qlogo.cn/mmbiz/qpxHrxLKdR0A6F8hWz04wVpntT9Jiao8XZn7as5FuHch5zFzFnvibjUGYU3J4ibxRyLicytfdd9qDQoqV1ODOp3Rjg/0',
@@ -99,7 +92,8 @@ class WeixinController extends AppController {
                                 'picUrl' => 'https://mmbiz.qlogo.cn/mmbiz/qpxHrxLKdR0A6F8hWz04wVpntT9Jiao8XYT9A69hTUYIomNtyJMbLnMibbSHO3NO5UaEics7OwEo9qLHfqmHas8zQ/0',
                                 'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=201694178&idx=3&sn=75c4b8f32c29e1c088c7de4ee2e22719#rd')
                         );
-                        if (!empty($reason)) {
+                        $reason = $this->WeixinUtil->get_user_sub_reason($uid);
+                        if (!empty($uid) && !empty($reason)) {
                             if (strpos($reason['UserSubReason']['type'], 'Vote') !== FALSE) {
                                 $title = $reason['UserSubReason']['title'];
                                 $event_id = $reason['UserSubReason']['data_id'];
@@ -114,7 +108,7 @@ class WeixinController extends AppController {
                             } else {
                                 $content = $default_content;
                             }
-                        }else{
+                        } else {
                             $content = $default_content;
                         }
                         if ($uid) {
@@ -131,8 +125,8 @@ class WeixinController extends AppController {
                                 $oauth['Oauthbind']['domain'] = $oauth_wx_source;
                                 $oauth['Oauthbind']['user_id'] = $userId;
                                 $this->Oauthbind->save($oauth['Oauthbind']);
-                            }catch (Exception $e){
-                                $this->log("error to save new user:".$e);
+                            } catch (Exception $e) {
+                                $this->log("error to save new user:" . $e);
                             }
                         }
                     } else {

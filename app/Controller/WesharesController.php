@@ -3,7 +3,7 @@
 class WesharesController extends AppController {
 
     var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem',
-        'SharerShipOption', 'WeshareShipSetting', 'OfflineStore', 'UserRelation', 'Comment', 'RebateTrackLog', 'ProxyRebatePercent', 'ShareUserBind');
+        'SharerShipOption', 'WeshareShipSetting', 'OfflineStore', 'UserRelation', 'Comment', 'RebateTrackLog', 'ProxyRebatePercent', 'ShareUserBind', 'UserSubReason');
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy');
 
@@ -737,16 +737,39 @@ class WesharesController extends AppController {
         return;
     }
 
-    public function subscribe_sharer($share_id, $user_id) {
+    /**
+     * @param $sharer_id
+     * @param $user_id
+     * @param $from_type
+     * @param $share_id
+     * 关注分享者
+     */
+    public function subscribe_sharer($sharer_id, $user_id, $from_type = 0, $share_id = 0) {
         $this->autoRender = false;
-        $this->WeshareBuy->subscribe_sharer($share_id, $user_id);
+        if (user_subscribed_pys($user_id) != WX_STATUS_SUBSCRIBED) {
+            //save sub reason
+            $sub_type = $from_type == 0 ? SUB_SHARER_REASON_TYPE_FROM_USER_CENTER : SUB_SHARER_REASON_TYPE_FROM_SHARE_INFO;
+            $data_id = $from_type == 0 ? $sharer_id : $share_id;
+            $url = $from_type == 0 ? WX_HOST . '/weshares/user_share_info/' . $share_id : WX_HOST . '/weshares/view/' . $share_id;
+            $nicknames = $this->WeshareBuy->get_users_nickname(array($sharer_id, $user_id));
+            $title = $nicknames[$user_id] . '你好，您已经关注' . $nicknames[$sharer_id] . '<a href="' . $url . '">点击查看</a>';
+            $this->UserSubReason->save(array('type' => $sub_type, 'url' => $url, 'user_id' => $user_id, 'title' => $title, 'data_id' => $data_id));
+            echo json_encode(array('success' => true));
+            return;
+        }
+        $this->WeshareBuy->subscribe_sharer($sharer_id, $user_id);
         echo json_encode(array('success' => true));
         return;
     }
 
-    public function unsubscribe_sharer($share_id, $user_id) {
+    /**
+     * @param $sharer_id
+     * @param $user_id
+     * 取消关注分享者
+     */
+    public function unsubscribe_sharer($sharer_id, $user_id) {
         $this->autoRender = false;
-        $this->WeshareBuy->unsubscribe_sharer($share_id, $user_id);
+        $this->WeshareBuy->unsubscribe_sharer($sharer_id, $user_id);
         echo json_encode(array('success' => true));
         return;
     }

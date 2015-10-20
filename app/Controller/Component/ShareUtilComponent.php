@@ -1509,6 +1509,15 @@ class ShareUtilComponent extends Component {
     }
 
     /**
+     * @param $uid
+     * 把用户关注分享者的原因使用掉
+     */
+    public function usedUserSubSharerReason($uid) {
+        $SubReasonM = ClassRegistry::init('UserSubReason');
+        $SubReasonM->updateAll(array('used' => 1), array('user_id' => $uid, 'type' => array(SUB_SHARER_REASON_TYPE_FROM_USER_CENTER, SUB_SHARER_REASON_TYPE_FROM_SHARE_INFO)));
+    }
+
+    /**
      * @param $tag
      * @return array
      * index product
