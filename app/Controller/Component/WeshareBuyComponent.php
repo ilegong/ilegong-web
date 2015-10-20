@@ -1397,6 +1397,9 @@ class WeshareBuyComponent extends Component {
             }
             $relations = $userRelationM->find('all', $queryCond);
             $fans_id = Hash::extract($relations, '{n}.UserRelation.follow_id');
+            $relation_map = Hash::combine($relations, '{n}.UserRelation.id', '{n}.UserRelation.follow_id');
+            $relation_map = array_unique($relation_map);
+            usort($relation_map, 'sort_data_by_id');
             $fans_data = $userM->find('all', array(
                 'conditions' => array(
                     'id' => $fans_id
@@ -1405,8 +1408,8 @@ class WeshareBuyComponent extends Component {
                 'order' => array('id DESC')
             ));
 
-            $fans_data = Hash::extract($fans_data, '{n}.User');
-            usort($fans_data, 'sort_data_by_id_desc');
+            $fans_data = Hash::combine($fans_data, '{n}.User.id', '{n}.User');
+            $fans_data = array('fans_data' => $fans_data, 'relations' => $relation_map);
             Cache::write($key, json_encode($fans_data));
             return $fans_data;
         }

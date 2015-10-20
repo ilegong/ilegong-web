@@ -236,7 +236,12 @@
             <div class="modal-body">
                 <div class="pageContentWrapper" style="height: 75vh;overflow: scroll;">
                     <!-- team members start -->
-                    {{loop $fans_data $fan_key $fan_data}}
+                    <?php
+                        $fans_user_info = $fans_data['fans_data'];
+                        $fans_relations = $fans_data['relations'];
+                     ?>
+                    {{loop $fans_relations $fan_id}}
+                        <?php $fan_data = $fans_user_info[$fan_id]; ?>
                         <div class="columnWrapper oneFifth teamMember {{if ($fan_key+1)%5==0}}lastColumn{{/if}}">
                             <a href="/weshares/user_share_info/{{$fan_data['id']}}" class="teamMemberImageLink"> <img style="height: 50px;width: 50px;border-radius: 50px;" src="{{$fan_data['image']}}" class="teamMemberImage" alt="" /> </a>
                             <h3 class="teamMemberName" style="margin-top: 10px;word-wrap: break-word;font-size: 13px;">{{$fan_data['nickname']}}</h3>
