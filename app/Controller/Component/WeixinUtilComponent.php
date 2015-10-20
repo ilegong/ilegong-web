@@ -66,12 +66,13 @@ class WeixinUtilComponent extends Component {
                     'picUrl' => 'https://mmbiz.qlogo.cn/mmbiz/qpxHrxLKdR0A6F8hWz04wVpntT9Jiao8XZn7as5FuHch5zFzFnvibjUGYU3J4ibxRyLicytfdd9qDQoqV1ODOp3Rjg/0',
                     'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=201694178&idx=1&sn=8dea494e02c96dc21e51931604771748#rd')
             );
-            $reason = $this->WeixinUtil->get_user_sub_reason($uid);
+            $reason = $this->get_user_sub_reason($uid);
             if (!empty($uid) && !empty($reason)) {
                 if (strpos($reason['UserSubReason']['type'], 'Vote') !== FALSE) {
                     $title = $reason['UserSubReason']['title'];
                     $event_id = $reason['UserSubReason']['data_id'];
-                    $picUrl = $this->VoteSetting->getServerReplyPic($event_id);
+                    $VoteSettingM = ClassRegistry::init('VoteSetting');
+                    $picUrl = $VoteSettingM->getServerReplyPic($event_id);
                     $this->log("vote event id pic url:" . $event_id . ' ' . $picUrl);
                     $content = array(
                         array('title' => $title, 'description' => '快来支持我吧...',
@@ -82,12 +83,13 @@ class WeixinUtilComponent extends Component {
                     $replay_type == 1;
                     $content = $reason['UserSubReason']['title'];
                 }
-                $this->UserSubReason->updateAll(array('used' => 1), array('id' => $reason['UserSubReason']['id']));
+                $UserSubReasonM = ClassRegistry::init('UserSubReason');
+                $UserSubReasonM->updateAll(array('used' => 1), array('id' => $reason['UserSubReason']['id']));
             }
             if ($uid) {
-                $this->WeixinUtil->update_user_sub_status($uid);
+                $this->update_user_sub_status($uid);
             } else {
-                $this->WexinUtil->create_weixin_user($openId);
+                $this->create_weixin_user($openId);
             }
         } else {
             $content = array(
