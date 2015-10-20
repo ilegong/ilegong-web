@@ -283,6 +283,12 @@
                     processSub = false;
                     $('#unsub-sharer').show();
                     $('#sub-sharer').hide();
+                }else{
+                    if(data['reason'] = 'not_sub'){
+                        processSub = false;
+                        alert('请先关注朋友说微信公众号！');
+                        window.location.href = "http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=400154588&idx=1&sn=5568f4566698bacbc5a1f5ffeab4ccc3";
+                    }
                 }
             });
         });

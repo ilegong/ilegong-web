@@ -958,6 +958,9 @@
         if (data['success']) {
           vm.hasProcessSubSharer = true;
           vm.subShareTipTxt = '已关注';
+        }else{
+          alert('请先关注朋友说微信公众号！');
+          window.location.href = "http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=400154588&idx=1&sn=5568f4566698bacbc5a1f5ffeab4ccc3";
         }
       }).error(function () {
         vm.hasProcessSubSharer = false;
