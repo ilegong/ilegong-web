@@ -31,11 +31,11 @@ class WeixinUtilComponent extends Component {
         return $subReason;
     }
 
-    public function update_user_sub_status($uid){
+    public function update_user_sub_status($uid) {
         Cache::write(key_cache_sub($uid), WX_STATUS_SUBSCRIBED);
     }
 
-    public function create_weixin_user($openId){
+    public function create_weixin_user($openId) {
         try {
             $oauth_wx_source = oauth_wx_source();
             $WxOauthM = ClassRegistry::init('WxOauth');
@@ -61,6 +61,7 @@ class WeixinUtilComponent extends Component {
      */
     public function process_user_sub_weixin($from, $uid, $openId) {
         $replay_type = 0;
+        $url = '';
         if ($from == FROM_WX_SERVICE) {
             $content = array(
                 array('title' => '朋友说是什么？看完你就懂了！', 'description' => '',
@@ -68,7 +69,6 @@ class WeixinUtilComponent extends Component {
                     'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=201694178&idx=1&sn=8dea494e02c96dc21e51931604771748#rd')
             );
             $reason = $this->get_user_sub_reason($uid);
-            $url = '';
             if (!empty($uid) && !empty($reason)) {
                 $url = $reason['UserSubReason']['url'];
                 if (strpos($reason['UserSubReason']['type'], 'Vote') !== FALSE) {
@@ -83,14 +83,19 @@ class WeixinUtilComponent extends Component {
                             'url' => $reason['UserSubReason']['url']),
                     );
                 } else if ($reason['UserSubReason']['type'] == SUB_SHARER_REASON_TYPE_FROM_USER_CENTER || $reason['UserSubReason']['type'] == SUB_SHARER_REASON_TYPE_FROM_SHARE_INFO) {
-                    $replay_type = 1;
-                    $content = $reason['UserSubReason']['title'];
-                    if($reason['UserSubReason']['type'] == SUB_SHARER_REASON_TYPE_FROM_USER_CENTER){
+                    //http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/d83967f3845_1020.jpg
+                    if ($reason['UserSubReason']['type'] == SUB_SHARER_REASON_TYPE_FROM_USER_CENTER) {
                         $this->WeshareBuy->subscribe_sharer($reason['UserSubReason']['data_id'], $reason['UserSubReason']['user_id'], $type = 'SUB');
                     }
-                    if($reason['UserSubReason']['type'] == SUB_SHARER_REASON_TYPE_FROM_SHARE_INFO){
+                    if ($reason['UserSubReason']['type'] == SUB_SHARER_REASON_TYPE_FROM_SHARE_INFO) {
                         $this->WeshareBuy->subscribe_sharer_by_share($reason['UserSubReason']['data_id'], $reason['UserSubReason']['user_id'], $type = 'SUB');
                     }
+                    $content = array(array(
+                        'title' => $reason['UserSubReason']['title'],
+                        'description' => '点击查看详情....',
+                        'picUrl' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/d83967f3845_1020.jpg',
+                        'url' => $reason['UserSubReason']['url']
+                    ));
                 }
                 $UserSubReasonM = ClassRegistry::init('UserSubReason');
                 $UserSubReasonM->updateAll(array('used' => 1), array('id' => $reason['UserSubReason']['id']));
