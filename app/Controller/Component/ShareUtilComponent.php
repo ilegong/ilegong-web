@@ -1655,11 +1655,11 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 815,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/9257b1649ba_0906.jpg'
                 ),
-                '645' => array(
-                    'share_id' => 645,
+                '882' => array(
+                    'share_id' => 882,
                     'share_name' => '父母种的红薯、紫薯、花生开刨啦',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/ff1894c1082_0928.jpg',
-                    'share_price' => '30',
+                    'share_price' => '40',
                     'share_user_name' => '大美',
                     'share_vote' => 345,
                     'share_user_id' => 842908,
