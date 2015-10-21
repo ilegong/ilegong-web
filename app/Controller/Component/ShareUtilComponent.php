@@ -1525,6 +1525,36 @@ class ShareUtilComponent extends Component {
     public function get_share_index_product($tag) {
         $product = array(
             0 => array(
+                '747' => array(
+                    'share_id' => 747,
+                    'share_name' => '那那家五常稻花香米',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/f0449ac887f_1021.jpg',
+                    'share_price' => '166',
+                    'share_user_name' => '那那',
+                    'share_vote' => 600,
+                    'share_user_id' => 812111,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_db53c030cbe19145428f0d5ca58b9562.jpg'
+                ),
+                '881' => array(
+                    'share_id' => 881,
+                    'share_name' => '多油、好吃到停不下来的海鸭蛋',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/797488a660f_1021.jpg',
+                    'share_price' => '55',
+                    'share_user_name' => '李樱花',
+                    'share_vote' => 800,
+                    'share_user_id' => 810684,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
+                    ),
+                '828' => array(
+                    'share_id' => 828,
+                    'share_name' => '828',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/f5002bbb304_1021.jpg',
+                    'share_price' => '98',
+                    'share_user_name' => '习蛋蛋',
+                    'share_vote' => 650,
+                    'share_user_id' => 563240,
+                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/26a561eddc9_1021.jpg'
+                ),
                 '659' => array(
                     'share_id' => 659,
                     'share_name' => '浙江衢州橘子团（限北京地区）',
@@ -1534,16 +1564,6 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 900,
                     'share_user_id' => 811917,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
-                ),
-                '681' => array(
-                    'share_id' => 681,
-                    'share_name' => '桂花纯露首映',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/9f7ff9c8a0e_1009.jpg',
-                    'share_price' => '188',
-                    'share_user_name' => '庄梓铭',
-                    'share_vote' => 356,
-                    'share_user_id' => 823656,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_6f6b33c00c71819c1eb74f29f3f1503d.jpg'
                 ),
                 '674' => array(
                     'share_id' => 674,
@@ -1584,16 +1604,6 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 235,
                     'share_user_id' => 708029,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
-                ),
-                '586' => array(
-                    'share_id' => 586,
-                    'share_name' => '云南哀牢山古法手工叶子红糖，特价包邮还有赠品必须分享啊！',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/abcb4094d25_0917.jpg',
-                    'share_price' => '38',
-                    'share_user_name' => '鲲鲲',
-                    'share_vote' => 59,
-                    'share_user_id' => 806889,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
                 ),
                 '636' => array(
                     'share_id' => 636,
@@ -1880,6 +1890,16 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 132,
                     'share_user_id' => 813896,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_s/060eced7063_0807.jpg'
+                ),
+                '681' => array(
+                    'share_id' => 681,
+                    'share_name' => '桂花纯露首映',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/9f7ff9c8a0e_1009.jpg',
+                    'share_price' => '188',
+                    'share_user_name' => '庄梓铭',
+                    'share_vote' => 356,
+                    'share_user_id' => 823656,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_6f6b33c00c71819c1eb74f29f3f1503d.jpg'
                 ),
                 '537' => array(
                     'share_id' => 537,
