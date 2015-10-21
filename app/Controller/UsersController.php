@@ -498,6 +498,17 @@ class UsersController extends AppController {
         }
     }
 
+    function update_user_intro() {
+        $this->autoRender = false;
+        $user_intro = $_REQUEST['user_intro'];
+        $user_id = $_REQUEST['user_id'];
+        $this->User->id = $user_id;
+        $this->User->saveField('description', $user_intro);
+        Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $user_id, '');
+        echo json_encode(array('success' => true));
+        return;
+    }
+
     function reset($username = null, $key = null) {
         $this->pageTitle = __('Reset Password', true);
 

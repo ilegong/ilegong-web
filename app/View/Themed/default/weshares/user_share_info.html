@@ -69,11 +69,11 @@
                 {{/if}}
                 <hr style="margin-top: 5px;margin-bottom: 1px;">
                 <div style="text-align: left;">
-                    <h4>关于{{$share_user['nickname']}}</h4>
+                    <h4>关于{{$share_user['nickname']}} {{if $is_me}}&nbsp;&nbsp;<button type="button" class="btn btn-default btn-sm" id="open-update-user-info-dialog">修改</button>{{/if}}</h4>
                     {{if $share_user['description']}}
                     <div class="testimonials">
                         <div class="active item">
-                            <blockquote><p>{{mb_substr($share_user['description'],0,500)}}</p></blockquote>
+                            <blockquote><p id="user-info-placeholder">{{mb_substr($share_user['description'],0,500)}}</p></blockquote>
                         </div>
                     </div>
                     {{/if}}
@@ -254,19 +254,55 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
+<!--update user info -->
+<div class="modal fade" id="updateUserInfo">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">修改个人资料</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="user-info-textarea">简介</label>
+                            <input type="hidden" id="user-id" value="{{$current_uid}}">
+                            <textarea class="form-control" id="user-info-textarea" style="height: 100px;">{{$share_user['description']}}</textarea>
+                            <p class="help-block">不要超过500字.</p>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="save-user-intro">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     $(document).ready(function () {
         //show-focus-modal-dialog
         //show-fans-modal-dialog
         //show-comment-modal-dialog
+        var $userInfoPlaceHolder = $('#user-info-placeholder');
         var $showCommentLi = $('#show-comment-modal-dialog');
         var $commentModalDialog = $('#commentListModal');
         var $showFansLi = $('#show-fans-modal-dialog');
         var $fansModalDialog = $('#fansListModal');
         var $showFocusLi = $('#show-focus-modal-dialog');
         var $focusModalDialog = $('#focusListModal');
+        var $showUpdateUserInfoDialog = $('#open-update-user-info-dialog');
+        var $changeUserInfoDialog = $('#updateUserInfo');
+        var $saveUserIntro = $('#save-user-intro');
+        var $userInfoTextArea = $('#user-info-textarea');
+        var $userId = $('#user-id', $changeUserInfoDialog);
         var processSub = false;
         var processUnSub = false;
+        $showUpdateUserInfoDialog.on('click', function(){
+            $changeUserInfoDialog.modal({show:true, backdrop:'static'});
+        });
         $showCommentLi.on('click',function(){
             $commentModalDialog.modal({show:true,backdrop:'static'});
         });
@@ -275,6 +311,23 @@
         });
         $showFocusLi.on('click',function(){
             $focusModalDialog.modal({show:true,backdrop:'static'});
+        });
+        $saveUserIntro.on('click', function(e){
+            e.preventDefault();
+            var userIntro = $userInfoTextArea.val();
+            var userId = $userId.val();
+            if(!userIntro||!userIntro.trim()){
+                alert('请输入个人介绍');
+                return false;
+            }
+            $.post('/users/update_user_intro', {
+                'user_intro': userIntro, 'user_id': userId
+            }, function (data) {
+                if(data['success']){
+                    $userInfoPlaceHolder.text(userIntro);
+                }
+                $changeUserInfoDialog.modal('hide');
+            }, 'json');
         });
         $('button.btn-sub-sharer').on('click', function(e){
             e.preventDefault();

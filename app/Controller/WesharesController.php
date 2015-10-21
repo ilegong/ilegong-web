@@ -644,6 +644,7 @@ class WesharesController extends AppController {
         }
         $this->set($userShareSummery);
         $this->set('is_me', $uid == $current_uid);
+        $this->set('current_uid', $current_uid);
         $this->set('visitor', $current_uid);
         $this->set('share_user', $shareUser);
         $this->set('creators', $creators);
