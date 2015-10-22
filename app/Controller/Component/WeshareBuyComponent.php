@@ -1080,7 +1080,7 @@ class WeshareBuyComponent extends Component {
      */
     public function send_to_comment_msg($weshareId = null) {
         $orderM = ClassRegistry::init('Order');
-        $limit_date = date('Y-m-d', strtotime("-4 days"));
+        $limit_date = date('Y-m-d', strtotime("-7 days"));
         $cond = array(
             'status' => ORDER_STATUS_RECEIVED,
             'type' => ORDER_TYPE_WESHARE_BUY
