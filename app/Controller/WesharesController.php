@@ -747,6 +747,7 @@ class WesharesController extends AppController {
      */
     public function subscribe_sharer($sharer_id, $user_id, $from_type = 0, $share_id = 0) {
         $this->autoRender = false;
+        //没有关注服务号
         if (user_subscribed_pys($user_id) != WX_STATUS_SUBSCRIBED) {
             //save sub reason
             $sub_type = $from_type == 0 ? SUB_SHARER_REASON_TYPE_FROM_USER_CENTER : SUB_SHARER_REASON_TYPE_FROM_SHARE_INFO;

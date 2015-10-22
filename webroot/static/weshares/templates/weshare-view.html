@@ -1,6 +1,6 @@
 <div class="weshare-view">
-    <div ng-if="vm.weshare.type==0" ng-include="'/static/weshares/templates/weshare-view-default-header.html?v0.1.8'"></div>
-    <div ng-if="vm.weshare.type==1" ng-include="'/static/weshares/templates/weshare-view-group-header.html?v0.1.8'"></div>
+    <div ng-if="vm.weshare.type==0" ng-include="'/static/weshares/templates/weshare-view-default-header.html?v0.1.9'"></div>
+    <div ng-if="vm.weshare.type==1" ng-include="'/static/weshares/templates/weshare-view-group-header.html?v0.1.9'"></div>
     <div class="introduction margin-bottom-12">
         <b></b>
         <a ng-if="vm.weshare.type==1" class="statistics-btn group-share-mark">邻里拼团</a>
@@ -36,14 +36,14 @@
         </div>
         <div class='send-info text-center margin-bottom-12' ng-hide='_.isEmpty(vm.weshare.send_info)'>取货时间: <span ng-bind='vm.weshare.send_info'></span></div>
     </div>
-    <div ng-include="'/static/weshares/templates/weshare-view-orders.html?v0.1.8'"></div>
+    <div ng-include="'/static/weshares/templates/weshare-view-orders.html?v0.1.9'"></div>
     <div style="text-align: center;">
         <a href="/"><img src="/img/logo_footer.jpg" border="0" style="width: 4.625em;height: 1.583em;"/></a><br/>朋友说—朋友间最真挚的分享
     </div>
 </div>
 
-<div ng-if="vm.weshare.type==0" ng-include="'/static/weshares/templates/weshare-view-default-nav.html?v0.1.8'"></div>
-<div ng-if="vm.weshare.type==1" ng-include="'/static/weshares/templates/weshare-view-group-nav.html?v0.1.8'"></div>
+<div ng-if="vm.weshare.type==0" ng-include="'/static/weshares/templates/weshare-view-default-nav.html?v0.1.9'"></div>
+<div ng-if="vm.weshare.type==1" ng-include="'/static/weshares/templates/weshare-view-group-nav.html?v0.1.9'"></div>
 
 <div class="share-dialog" ng-show="vm.showShareDialog">
     <div style="width: 90%; margin: 0 auto; font-size: 1.3em;">点击右上角“…”，分享给好友或朋友圈。</div>
