@@ -143,7 +143,8 @@ class WesharesController extends AppController {
             'fields' => $user_fields,
         ));
         if (empty($current_user['User']['mobilephone'])) {
-            $this->redirect('/users/to_bind_mobile?from=share');
+            $ref_url = WX_HOST.'/weshares/add';
+            $this->redirect('/users/to_bind_mobile?from=share&ref='.$ref_url);
             return;
         }
         if (empty($current_user['User']['payment'])) {
