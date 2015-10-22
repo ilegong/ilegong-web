@@ -1535,8 +1535,8 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 812111,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_db53c030cbe19145428f0d5ca58b9562.jpg'
                 ),
-                '881' => array(
-                    'share_id' => 881,
+                '901' => array(
+                    'share_id' => 901,
                     'share_name' => '多油、好吃到停不下来的海鸭蛋',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/797488a660f_1021.jpg',
                     'share_price' => '55',
