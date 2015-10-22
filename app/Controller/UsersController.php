@@ -990,8 +990,8 @@ class UsersController extends AppController {
         $this->TrackLog->updateAll(array('from' => $new_serviceAccount_bind_uid), array('from' => $old_serviceAccount_bind_uid));
         $this->TrackLog->updateAll(array('to' => $new_serviceAccount_bind_uid), array('to' => $old_serviceAccount_bind_uid));
 
-        $this->loadModel('AwardWeixinTimeLog');
-        $this->AwardWeixinTimeLog->updateAll(array('uid' => $new_serviceAccount_bind_uid), array('uid' => $old_serviceAccount_bind_uid));
+//        $this->loadModel('AwardWeixinTimeLog');
+//        $this->AwardWeixinTimeLog->updateAll(array('uid' => $new_serviceAccount_bind_uid), array('uid' => $old_serviceAccount_bind_uid));
 
         $this->loadModel('AwardResult');
         $this->AwardResult->updateAll(array('uid' => $new_serviceAccount_bind_uid), array('uid' => $old_serviceAccount_bind_uid));
@@ -1025,6 +1025,9 @@ class UsersController extends AppController {
         //积分的
         //在后台给1000个
         //优惠券兑换的功能
+        //返利
+        //分享
+        //粉丝数据
     }
 
     /**
