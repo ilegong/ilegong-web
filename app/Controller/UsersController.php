@@ -26,6 +26,7 @@ class UsersController extends AppController {
     	'Auth',
         'Email',
         'Kcaptcha',
+        'FileUpload',
     	'Cookie' => array('name' => 'SAECMS', 'time' => '+2 weeks'),
     );
     /**
@@ -796,6 +797,37 @@ class UsersController extends AppController {
         } else {
             $this->redirect(redirect_to_wx_oauth($ref));
         }
+    }
+
+    function change_avatar() {
+        $this->layout = null;
+        $refer_url = $_REQUEST['ref'];
+        $uid = $this->currentUser['id'];
+        $this->set('refer_url', $refer_url);
+        $this->set('uid', $uid);
+    }
+
+    function upload_avatar() {
+        $this->autoRender = false;
+        $imgData = $_POST['imgData'];
+        $uid = $_POST['uid'];
+        // 截取有用的部分
+        list($type, $imgData) = explode(';', $imgData);
+        list(, $imgData) = explode(',', $imgData);
+        list(, $type) = explode('/', $type);
+        // base64 编码中使用了加号，
+        // 如果通过url传递base64数据，+号会转换成空格
+        $imgData = str_replace(' ', '+', $imgData);
+        $file_name = $uid . time() . '.' . $type;
+        $result = $this->FileUpload->save_base64_data(base64_decode($imgData), $file_name);
+        $imgUrl = $result['download_url'];
+        if(!empty($imgUrl)){
+            $this->User->id=$uid;
+            $this->User->saveField('image', $imgUrl);
+            Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
+        }
+        echo json_encode($result);
+        return;
     }
 
     function wx_auth() {

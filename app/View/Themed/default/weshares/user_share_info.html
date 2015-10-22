@@ -2,9 +2,15 @@
 <div class="row" style="background: #EAEAEA;">
     <div class="col-md-12 user-details">
         <div class="user-image">
+            {{if $is_me}}
+            <a href="/users/change_avatar?ref=/weshares/user_share_info"><img style="width: 80px;height: 80px;" onerror="this.src='/img/default_user_icon.jpg'"
+                    src="{{$share_user['image']}}" alt="{{$share_user['nickname']}}" title="{{$share_user['nickname']}}"
+                    class="img-circle"></a>
+            {{else}}
             <img style="width: 80px;height: 80px;" onerror="this.src='/img/default_user_icon.jpg'"
                  src="{{$share_user['image']}}" alt="{{$share_user['nickname']}}" title="{{$share_user['nickname']}}"
                  class="img-circle">
+            {{/if}}
         </div>
         <div class="user-info-block">
             <div class="user-heading">
