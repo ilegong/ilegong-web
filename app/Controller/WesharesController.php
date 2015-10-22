@@ -305,7 +305,7 @@ class WesharesController extends AppController {
         }
         $consignee = $this->getShareConsignees($uid);
         $creatorId = $weshareInfo['creator']['id'];
-        $user_share_summery = $this->getUserShareSummery($creatorId, $uid == $creatorId);
+        $user_share_summery = $this->getUserShareSummery($creatorId);
         $share_ship_set = $this->sharer_can_use_we_ship($weshareInfo['creator']['id']);
         $my_coupon_items = $this->get_can_used_coupons($uid, $creatorId);
         $weshare_ship_settings = $this->getWeshareShipSettings($weshareId);
@@ -625,7 +625,7 @@ class WesharesController extends AppController {
         $joinShareComments = $user_share_data['joinShareComments'];
         $shareUser = $creators[$uid];
         $this->set_share_user_info_weixin_params($uid, $current_uid, $shareUser);
-        $userShareSummery = $this->getUserShareSummery($uid, $uid == $current_uid);
+        $userShareSummery = $this->getUserShareSummery($uid);
         $shareCommentData = $this->getSharerCommentData($my_create_share_ids, $uid);
         $userCommentData = $this->WeshareBuy->load_user_share_comments($uid);
         $userFansData = $this->WeshareBuy->get_user_fans_data($uid, 100);
@@ -1340,11 +1340,10 @@ class WesharesController extends AppController {
 
     /**
      * @param $uid
-     * @param bool $is_me
      * @return array
      * 获取分享者的一些统计数据(粉丝、分享次数)
      */
-    private function getUserShareSummery($uid, $is_me = false) {
+    private function getUserShareSummery($uid) {
         return $this->WeshareBuy->get_user_share_summary($uid);
     }
 
