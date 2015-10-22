@@ -809,8 +809,8 @@ class UsersController extends AppController {
 
     function upload_avatar() {
         $this->autoRender = false;
-        $imgData = $_POST['imgData'];
         $uid = $_POST['uid'];
+        $imgData = $_POST['imgData'];
         // 截取有用的部分
         list($type, $imgData) = explode(';', $imgData);
         list(, $imgData) = explode(',', $imgData);
