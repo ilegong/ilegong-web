@@ -1547,7 +1547,7 @@ class ShareUtilComponent extends Component {
                     ),
                 '828' => array(
                     'share_id' => 828,
-                    'share_name' => '828',
+                    'share_name' => '赣南脐橙',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/f5002bbb304_1021.jpg',
                     'share_price' => '98',
                     'share_user_name' => '习蛋蛋',
