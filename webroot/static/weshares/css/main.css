@@ -322,6 +322,7 @@ ul li {
     color: #29AC0E;
     font-size: 16px;
     padding-top: 5px;
+    width: 100px;
 }
 
 .weshare-view ul li s {
@@ -381,6 +382,7 @@ ul li {
     width: 60px;
     line-height: 25px;
     background-color: #ffa200;
+    height: 25px;
 }
 
 .weshare-view .faq-sharer-btn {
@@ -393,6 +395,7 @@ ul li {
     width: 60px;
     line-height: 25px;
     background-color: #F2651A;
+    height: 25px;
 }
 
 .weshare-view .sharer-nickname-display-inline {
