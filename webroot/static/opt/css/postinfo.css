@@ -282,7 +282,7 @@
 	-webkit-appearance:initial;
 	border:none;
 	background:transparent;
-	background-image:url(../images/addimg.png);
+	background-image:url(http://51daifan-assets.stor.sinaapp.com/static/opt/images/addimg.png);
 	color:transparent;
 	border-radius:0;
 	background-size:cover;
@@ -295,12 +295,12 @@
 	float:left;
 	width:80px;
 	height:80px;
-	background-image:url(../images/addimg.png);
+	background-image:url(http://51daifan-assets.stor.sinaapp.com/static/opt/images/addimg.png);
 	background-size:cover;
 	margin:6px;
 }
 .newinfo input[type="button"],.newinfo .button,.button1{
-	background: #ffffff url('../images/buttonbg.png') no-repeat center center;
+	background: #ffffff url('http://51daifan-assets.stor.sinaapp.com/static/opt/images/buttonbg.png') no-repeat center center;
 	width:280px;
 	height:40px;
 	background-size:100% 100%;

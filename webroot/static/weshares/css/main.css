@@ -84,7 +84,7 @@ ul li {
     left: 10px;
     width: 1.167em;
     height: 1.133em;
-    background: url(../images/pyshuo_icon.png) no-repeat -15.667em -5.333em;
+    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/pyshuo_icon.png) no-repeat -15.667em -5.333em;
     background-size: 20em 20em;
 }
 
@@ -95,7 +95,7 @@ ul li {
     right: 10px;
     width: 1.2em;
     height: 1.133em;
-    background: url(../images/pyshuo_icon.png) no-repeat -17.667em -5.333em;
+    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/pyshuo_icon.png) no-repeat -17.667em -5.333em;
     background-size: 20em 20em;
 }
 
@@ -225,7 +225,7 @@ ul li {
 .weshare-add .delete-btn {
     margin-top: 8px;
     margin-right: 10px;
-    background: url(../images/weifxicon.png?v0.01) no-repeat 0 0;
+    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/weifxicon.png?v0.01) no-repeat 0 0;
     background-size: 100px 100px;
     width: 25px;
     height: 25px;
@@ -234,7 +234,7 @@ ul li {
 .weshare-add .add-btn {
     margin-top: 8px;
     margin-right: 10px;
-    background: url(../images/weifxicon.png?v0.01) no-repeat 0 -35px;
+    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/weifxicon.png?v0.01) no-repeat 0 -35px;
     background-size: 100px 100px;
     width: 25px;
     height: 25px;
@@ -244,7 +244,7 @@ ul li {
     position: absolute;
     top: -7px;
     right: -7px;
-    background: url(../images/weifxicon.png?v0.01) no-repeat -33px 0;
+    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/weifxicon.png?v0.01) no-repeat -33px 0;
     background-size: 100px 100px;
     width: 25px;
     height: 25px;
@@ -562,7 +562,7 @@ ul li {
     position: absolute;
     top: -6px;
     left: 15px;
-    background: url(../images/weifxicon.png) no-repeat -25px -25px;
+    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/weifxicon.png) no-repeat -25px -25px;
     background-size: 100px 100px;
     width: 12px;
     height: 6px;
@@ -578,7 +578,7 @@ ul li {
     z-index: 3;
     top: 8px;
     left: -5px;
-    background: url(../images/weifxicon.png?v0.01) no-repeat -62px 0;
+    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/weifxicon.png?v0.01) no-repeat -62px 0;
     background-size: 100px 100px;
     width: 40px;
     height: 23px;
@@ -645,7 +645,7 @@ ul li {
     float: left;
     width: 30px;
     height: 25px;
-    background: url(../images/weifxicon.png?v0.01) no-repeat;
+    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/weifxicon.png?v0.01) no-repeat;
     background-size: 100px 100px;
 }
 
@@ -724,7 +724,7 @@ ul li {
     position: absolute;
     left: -6px;
     top: 12px;
-    background: url(../images/weifxicon.png) no-repeat -25px -35px;
+    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/weifxicon.png) no-repeat -25px -35px;
     background-size: 100px 100px;
 }
 
@@ -1006,7 +1006,7 @@ ul li {
 .buying-dialog .closebtn {
     margin-top: 3px;
     display: block;
-    background: url(../images/weifxicon.png?v0.01) no-repeat -70px -65px;
+    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/weifxicon.png?v0.01) no-repeat -70px -65px;
     width: 15px;
     height: 15px;
     background-size: 100px 100px;
@@ -1056,7 +1056,7 @@ ul li {
 .commenting-dialog .closebtn {
     margin-top: 3px;
     display: block;
-    background: url(../images/weifxicon.png?v0.01) no-repeat -70px -65px;
+    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/weifxicon.png?v0.01) no-repeat -70px -65px;
     width: 15px;
     height: 15px;
     background-size: 100px 100px;
@@ -1097,7 +1097,7 @@ ul li {
 .send-msg-dialog .closebtn {
     margin-top: 3px;
     display: block;
-    background: url(../images/weifxicon.png?v0.01) no-repeat -70px -65px;
+    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/weifxicon.png?v0.01) no-repeat -70px -65px;
     width: 15px;
     height: 15px;
     background-size: 100px 100px;
@@ -1223,11 +1223,11 @@ ul li {
 .comment_list_box #con .bottomcover {
     position: absolute;
     bottom: 0;
-    background: url("../images/halftransp.png") no-repeat 0 -5px;
+    background: url("http://51daifan-assets.stor.sinaapp.com/static/weshares/images/halftransp.png") no-repeat 0 -5px;
     height: 35px;
     width: 394px;
     _background: none;
-    _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/halftransp.png', sizingMethod='crop');
+    _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://51daifan-assets.stor.sinaapp.com/static/weshares/images/halftransp.png', sizingMethod='crop');
     pointer-events: none;
 }
 
@@ -1295,7 +1295,7 @@ ul li {
 .notify-dialog .closebtn {
     margin-top: 3px;
     display: block;
-    background: url(../images/weifxicon.png?v0.01) no-repeat -70px -65px;
+    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/weifxicon.png?v0.01) no-repeat -70px -65px;
     width: 15px;
     height: 15px;
     background-size: 100px 100px;
@@ -1348,7 +1348,7 @@ ul li {
 .recommend-dialog .closebtn {
     margin-top: 3px;
     display: block;
-    background: url(../images/weifxicon.png?v0.01) no-repeat -70px -65px;
+    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/weifxicon.png?v0.01) no-repeat -70px -65px;
     width: 15px;
     height: 15px;
     background-size: 100px 100px;
@@ -1407,7 +1407,7 @@ ul li {
 .group-share-tip-dialog .closebtn {
     margin-top: 3px;
     display: block;
-    background: url(../images/weifxicon.png?v0.01) no-repeat -70px -65px;
+    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/weifxicon.png?v0.01) no-repeat -70px -65px;
     width: 15px;
     height: 15px;
     background-size: 100px 100px;
@@ -1512,7 +1512,7 @@ ul li {
     display: block;
     width: 0.667em;
     height: 1.334em;
-    background: url(../images/pyshuo_icon.png) 0 -16.875em no-repeat;
+    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/pyshuo_icon.png) 0 -16.875em no-repeat;
     background-size: 25em 25em;
 }
 
@@ -1646,7 +1646,7 @@ ul li {
 }
 
 .dialog-delorder .dialog-close {
-    background: url(../images/allBtn.png) -357px -1875px no-repeat;
+    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/allBtn.png) -357px -1875px no-repeat;
     float: right;
     height: 21px;
     margin-right: 6px;
