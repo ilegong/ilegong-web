@@ -3,7 +3,7 @@
         <div ng-if="order.weshare_id">
             <!-- child share data -->
             <li class='buyer-image'>
-                <img ng-click="vm.toUserShareInfo(order.creator)" lazy-src="{{vm.childShareDetailUsers[order.creator]['image']||'/img/default_user_icon.jpg'}}"/>
+                <img ng-click="vm.toUserShareInfo(order.creator)" lazy-src="{{vm.childShareDetailUsers[order.creator]['image']||'http://51daifan-assets.stor.sinaapp.com/img/default_user_icon.jpg'}}"/>
                 <p ng-if="vm.childShareDetailUsers[order.creator]['is_proxy']==1" style="color: white; font-size: 13px; font-weight: 700; padding: 2px; margin-top: 1px; background-color: #29AC0E;text-align: center;">
                     团长</p>
             </li>
@@ -26,7 +26,7 @@
         <div ng-if="!order.weshare_id">
             <!--default order-->
             <li class='buyer-image'>
-                <img ng-click="vm.toUserShareInfo(order.creator)" lazy-src="{{vm.ordersDetail.users[order.creator]['image']||'/img/default_user_icon.jpg'}}"/>
+                <img ng-click="vm.toUserShareInfo(order.creator)" lazy-src="{{vm.ordersDetail.users[order.creator]['image']||'http://51daifan-assets.stor.sinaapp.com/img/default_user_icon.jpg'}}"/>
                 <p ng-if="vm.ordersDetail.users[order.creator]['is_proxy']==1" style="color: white; font-size: 13px; font-weight: 700; padding: 2px; margin-top: 1px; background-color: #29AC0E;text-align: center;">
                     团长</p>
             </li>

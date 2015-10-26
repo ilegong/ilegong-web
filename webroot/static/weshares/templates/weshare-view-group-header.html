@@ -1,11 +1,11 @@
 <ul class="clearfix header margin-bottom-12">
     <li>
-        <img lazy-src="{{vm.weshare.creator.image||'/img/default_user_icon.jpg'}}" ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/>
+        <img lazy-src="{{vm.weshare.creator.image||'http://51daifan-assets.stor.sinaapp.com/img/default_user_icon.jpg'}}" ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/>
         <br>
         <s class="sharer-mark">
             <span ng-if="vm.weshare.creator.is_proxy==1" class="grouper-mark">团长</span>
-            <img ng-if="vm.userShareSummery.follower_count>=50" src="/static/weshares/images/v.png" class="v-icon-img"/>
-            <img ng-if="vm.supportPysZiti>0" src="/static/weshares/images/hlj.jpeg" class="hlj-icon-img"/>
+            <img ng-if="vm.userShareSummery.follower_count>=50" src="http://51daifan-assets.stor.sinaapp.com/static/weshares/images/v.png" class="v-icon-img"/>
+            <img ng-if="vm.supportPysZiti>0" src="http://51daifan-assets.stor.sinaapp.com/static/weshares/images/hlj.jpeg" class="hlj-icon-img"/>
         </s>
     </li>
     <li class="share-info-item-li">
