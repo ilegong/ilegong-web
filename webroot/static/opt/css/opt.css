@@ -315,7 +315,7 @@ html, body {
     display: inline-block;
     height: 32px;
     padding-right: 23px;
-    background-image: url("http://51daifan-assets.stor.sinaapp.com/static/opt/images/notice_icon.png");
+    /*background-image: url("http://51daifan-assets.stor.sinaapp.com/static/opt/images/notice_icon.png");*/
     background-repeat: no-repeat;
     background-size: 18px;
     background-position: right 7px;
