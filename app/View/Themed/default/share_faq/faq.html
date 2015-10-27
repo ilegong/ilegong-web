@@ -1,4 +1,4 @@
-<link rel="stylesheet" type="text/css" href="{{SAE_STATIC_FILE_PATH}}/static/share_faq/css/style.css?0.0.1">
+<link rel="stylesheet" type="text/css" href="{{SAE_STATIC_FILE_PATH}}/static/share_faq/css/style.css?0.0.2">
 <div>
     <div class="header linear-g">
         <a href="/weshares/view/{{$share_info['Weshare']['id']}}"
@@ -29,20 +29,22 @@
             {{/loop}}
         </ul>
     </div>
-    <div class="panel-footer" style="position: fixed;bottom: 0px;left: 0;">
+    <div class="panel-footer" style="position: fixed;bottom: 0px;left: 0;width: 100%;">
         <input type="hidden" id="sender-img" value="{{$user_info[$current_user_id]['image']}}">
         <input type="hidden" id="sender-nickname" value="{{$user_info[$current_user_id]['nickname']}}">
 
-        <div class="input-group" id="chat-input-form">
-            <input type="hidden" id="senderName" value="{{$user_info[$current_user]['nickname']}}">
-            <input type="hidden" id="sender" value="{{$current_user}}">
-            <input type="hidden" id="receiver" value="{{$receiver}}">
-            <input type="hidden" id="share-id" value="{{$share_id}}">
-            <input id="content" required type="text" class="form-control input-sm chat_input"
-                   placeholder="写下你要说的话..."/>
-                <span class="input-group-btn"><button class="btn btn-primary btn-sm" id="btn-chat-submit">发送
-                </button></span>
-        </div>
+        <div class="widget-area no-padding blank" id="chat-input-form">
+            <div class="status-upload">
+                <form>
+                    <input type="hidden" id="senderName" value="{{$user_info[$current_user]['nickname']}}">
+                    <input type="hidden" id="sender" value="{{$current_user}}">
+                    <input type="hidden" id="receiver" value="{{$receiver}}">
+                    <input type="hidden" id="share-id" value="{{$share_id}}">
+                    <textarea required id="content" placeholder="写下你要说的话..." ></textarea>
+                    <button type="submit" class="btn btn-success green" id="btn-chat-submit"><i class="fa fa-share"></i>发送</button>
+                </form>
+            </div><!-- Status Upload  -->
+        </div><!-- Widget Area -->
     </div>
 </div>
 <script>
