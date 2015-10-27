@@ -383,6 +383,8 @@ ul li {
     line-height: 25px;
     background-color: #ffa200;
     height: 25px;
+    position: absolute;
+    right: 21%;
 }
 
 .weshare-view .faq-sharer-btn {
