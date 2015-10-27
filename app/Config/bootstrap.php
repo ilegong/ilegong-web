@@ -154,6 +154,7 @@ const SUB_SHARER_REASON_TYPE_FROM_USER_CENTER = 'ShareUserInfo';
 const SUB_SHARER_REASON_TYPE_FROM_SHARE_INFO = 'ShareInfo';
 
 const SAE_STATIC_FILE_PATH = 'http://www.tongshijia.com';
+//http://51daifan-assets.stor.sinaapp.com
 
 const LOCAL_STATIC_FILE_PATH = 'http://dev.tongshijia.com';
 

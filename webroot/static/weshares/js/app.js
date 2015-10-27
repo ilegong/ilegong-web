@@ -39,6 +39,11 @@
 		.config(configCompileProvider)
 		.config(configHttpProvider)
 		.config(extendLog)
+    .config(['$sceDelegateProvider', function($sceDelegateProvider){
+      $sceDelegateProvider.resourceUrlWhitelist(
+        ['self', 'http://51daifan-assets.stor.sinaapp.com/**']
+      )
+    }])
 		.run(initApp);
 
   //define static file path
