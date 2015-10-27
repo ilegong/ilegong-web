@@ -1525,6 +1525,26 @@ class ShareUtilComponent extends Component {
     public function get_share_index_product($tag) {
         $product = array(
             0 => array(
+                '953' => array(
+                    'share_id' => 953,
+                    'share_name' => '脆甜好吃的冬雪蜜桃开团喽！',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/d6914715154_1027.jpg',
+                    'share_price' => '120',
+                    'share_user_name' => '何荷',
+                    'share_vote' => 235,
+                    'share_user_id' => 875275,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/8752751445930740.png'
+                ),
+                '954' => array(
+                    'share_id' => 954,
+                    'share_name' => '好吃到爆的琼中绿橙，来自北纬18°的热带天然水果',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/7c62eeb1412_1027.jpg',
+                    'share_price' => '128',
+                    'share_user_name' => '亮',
+                    'share_vote' => 300,
+                    'share_user_id' => 842862,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_03f346b121de697c8f51b36ba498700d.jpg'
+                ),
                 '747' => array(
                     'share_id' => 747,
                     'share_name' => '那那家五常稻花香米',
@@ -1554,26 +1574,6 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 650,
                     'share_user_id' => 563240,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/26a561eddc9_1021.jpg'
-                ),
-                '953' => array(
-                    'share_id' => 953,
-                    'share_name' => '脆甜好吃的冬雪蜜桃开团喽！',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/d6914715154_1027.jpg',
-                    'share_price' => '120',
-                    'share_user_name' => '何荷',
-                    'share_vote' => 235,
-                    'share_user_id' => 875275,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/8752751445930740.png'
-                ),
-                '954' => array(
-                    'share_id' => 954,
-                    'share_name' => '好吃到爆的琼中绿橙，来自北纬18°的热带天然水果',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/7c62eeb1412_1027.jpg',
-                    'share_price' => '128',
-                    'share_user_name' => '亮',
-                    'share_vote' => 300,
-                    'share_user_id' => 842862,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_03f346b121de697c8f51b36ba498700d.jpg'
                 ),
                 '659' => array(
                     'share_id' => 659,
