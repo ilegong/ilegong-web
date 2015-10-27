@@ -1588,7 +1588,7 @@ class ShareUtilComponent extends Component {
                 '438' => array(
                     'share_id' => 438,
                     'share_name' => '河南荥阳河阴软籽大石榴',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/a7c2d7a2a0d_0906.jpg',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/9275047528e_1027.jpg',
                     'share_price' => '68',
                     'share_user_name' => '段赵明',
                     'share_vote' => 300,
@@ -1615,16 +1615,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 708029,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
                 ),
-                '636' => array(
-                    'share_id' => 636,
-                    'share_name' => '沾化冬枣，真正有机冬枣！',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/3757a24d870_0923.jpg',
-                    'share_price' => '58',
-                    'share_user_name' => '盛夏',
-                    'share_vote' => 235,
-                    'share_user_id' => 708029,
-                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
-                ),
+//                '636' => array(
+//                    'share_id' => 636,
+//                    'share_name' => '沾化冬枣，真正有机冬枣！',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/3757a24d870_0923.jpg',
+//                    'share_price' => '58',
+//                    'share_user_name' => '盛夏',
+//                    'share_vote' => 235,
+//                    'share_user_id' => 708029,
+//                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
+//                ),
                 '629' => array(
                     'share_id' => 629,
                     'share_name' => '库尔勒香梨北京直递',
@@ -1675,8 +1675,8 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 815,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/9257b1649ba_0906.jpg'
                 ),
-                '882' => array(
-                    'share_id' => 882,
+                '952' => array(
+                    'share_id' => 952,
                     'share_name' => '父母种的红薯、紫薯、花生开刨啦',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/ff1894c1082_0928.jpg',
                     'share_price' => '40',
@@ -1685,8 +1685,8 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 842908,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/319793d271b_0828.jpg'
                 ),
-                '479' => array(
-                    'share_id' => 479,
+                '717' => array(
+                    'share_id' => 717,
                     'share_name' => '正宗韩国辣白菜',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/c68c07c4022_0915.jpg',
                     'share_price' => '35',
