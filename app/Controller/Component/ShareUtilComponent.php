@@ -1528,7 +1528,7 @@ class ShareUtilComponent extends Component {
                 '953' => array(
                     'share_id' => 953,
                     'share_name' => '脆甜好吃的冬雪蜜桃开团喽！',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/d6914715154_1027.jpg',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/980e1682705_1027.jpg',
                     'share_price' => '120',
                     'share_user_name' => '何荷',
                     'share_vote' => 235,
@@ -1595,16 +1595,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 806889,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
                 ),
-                '674' => array(
-                    'share_id' => 674,
-                    'share_name' => '新疆阿克苏新温185核桃',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/71dfdf1dca7_1009.jpg',
-                    'share_price' => '108',
-                    'share_user_name' => '李樱花',
-                    'share_vote' => 95,
-                    'share_user_id' => 810684,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
-                ),
+//                '674' => array(
+//                    'share_id' => 674,
+//                    'share_name' => '新疆阿克苏新温185核桃',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/71dfdf1dca7_1009.jpg',
+//                    'share_price' => '108',
+//                    'share_user_name' => '李樱花',
+//                    'share_vote' => 95,
+//                    'share_user_id' => 810684,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
+//                ),
                 '438' => array(
                     'share_id' => 438,
                     'share_name' => '河南荥阳河阴软籽大石榴',
