@@ -396,6 +396,8 @@ ul li {
     line-height: 25px;
     background-color: #F2651A;
     height: 25px;
+    position: absolute;
+    right: 4%;
 }
 
 .weshare-view .sharer-nickname-display-inline {
