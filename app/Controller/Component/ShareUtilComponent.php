@@ -1633,7 +1633,17 @@ class ShareUtilComponent extends Component {
                     'share_user_name' => '林玲',
                     'share_vote' => 235,
                     'share_user_id' => 873677,
-                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/751e5e512e1_1009.jpg'//todo
+                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/751e5e512e1_1009.jpg'
+                ),
+                '953' => array(
+                    'share_id' => 953,
+                    'share_name' => '脆甜好吃的冬雪蜜桃开团喽！',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/d6914715154_1027.jpg',
+                    'share_price' => '120',
+                    'share_user_name' => '何荷',
+                    'share_vote' => 235,
+                    'share_user_id' => 875275,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/8752751445930740.png'
                 ),
                 '634' => array(
                     'share_id' => 634,
