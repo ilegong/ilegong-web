@@ -95,8 +95,9 @@
     }
   }
 
-  function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, $filter, $window, Utils) {
+  function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, $filter, $window, Utils, staticFilePath) {
     var vm = this;
+    vm.staticFilePath = staticFilePath;
     vm.showShareDetailView = true;
     vm.subShareTipTxt = '+关注';
     vm.faqTipText = '联系团长';

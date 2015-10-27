@@ -20,7 +20,7 @@
                 &nbsp;&nbsp;价格待定
                 &nbsp;&nbsp;
             </div>
-            <img src="http://51daifan-assets.stor.sinaapp.com/static/weshares/images/faq.png" width="20px" height="20px" style="margin-top: 3%;" ng-click="vm.showProductTipInfo=true;vm.showLayer=true;">
+            <img src="{{vm.staticFilePath}}/static/weshares/images/faq.png" width="20px" height="20px" style="margin-top: 3%;" ng-click="vm.showProductTipInfo=true;vm.showLayer=true;">
             <div class="form-group form-group-inline" ng-class="{'has-error': product.storeHasError}">
                 <input class='form-control' placeholder="库存/件,默认不限制" ng-model="product.store" ng-change='vm.validateProductStore(product)' ng-blur='vm.validateProductStore(product)'/>
                 <p class='tips'>请输入数字</p>
@@ -96,7 +96,7 @@
                 <p class='tips'>请输入数字</p>
             </div>
         </div>
-        <img src="http://51daifan-assets.stor.sinaapp.com/static/weshares/images/faq.png" width="20px" height="20px" class="fr" style="margin-right: 5%;margin-top: -12%;" ng-click="vm.showPinTuanTipInfo=true;vm.showLayer=true;" ng-show="vm.pin_tuan_data.status==1"/>
+        <img src="{{vm.staticFilePath}}/static/weshares/images/faq.png" width="20px" height="20px" class="fr" style="margin-right: 5%;margin-top: -12%;" ng-click="vm.showPinTuanTipInfo=true;vm.showLayer=true;" ng-show="vm.pin_tuan_data.status==1"/>
         <div class="clearfix" ng-class="{'checkbox-disable' : vm.sharerShipType==0}">
             <div class="form-group fl">
                 <input type="checkbox"  ng-disabled="vm.sharerShipType==0" ng-model="vm.pys_ziti_data.status" ng-true-value="1" ng-false-value="-1" ng-checked="vm.pys_ziti_data.status==1">
@@ -140,7 +140,28 @@
             </p>
         </div>
     </div>
-    <div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showPinTuanTipInfo=false;vm.showProductTipInfo=false;vm.showLayer=false;;"></div>
+    <!--用户发起分享的时候判断是否是团长或者是否是更新分享数据,不是上面的情况提示信息-->
+    <div class="dialog-delorder" ng-if="vm.showCreateShareTipInfo">
+        <div class="dialog-bar">温馨提示<a ng-click="vm.showCreateShareTipInfo=false;vm.showLayer=false;" class="dialog-close" title="关闭"></a></div>
+        <div class="dialog-content">
+            <div style="padding: 10px">
+                <strong>欢迎来朋友说使用微分享分享您家的特产，您可以：</strong>
+                <ul>
+                    <li>
+                        1、将微分享作为一个IT工具，就像微店那样，统计订单、收款和维护粉丝，是的，我们是收费的，佣金是交易金额的5%，
+                        如果您的产品得到很多用户的认可，我们会做全站推荐；
+                    </li>
+                    <li>
+                        2、加入我们的分享社区，这是最有趣的，我们有很多热心分享的妈妈团长，您可以加入我们，一起参加线下活动，一起
+                        互相发现推荐好吃的特产，但前提是您有一颗乐于分享的心，您的产品非常优秀，如果是这样，
+                        赶快联系我们微信：191837170。
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+    <div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showCreateShareTipInfo=false;vm.showPinTuanTipInfo=false;vm.showProductTipInfo=false;vm.showLayer=false;;"></div>
 </div>
 <div style="background-color:#f5f5f5;margin-bottom: 20px;" ng-if="vm.showEditTagView">
     <div class="classlist">
@@ -169,5 +190,5 @@
     </div>
 </div>
 <div style="text-align: center; margin-bottom: 0;">
-    <a href="/"><img src="http://51daifan-assets.stor.sinaapp.com/img/logo_footer.jpg" border="0" style="width: 4.625em;height: 1.583em;"/></a><br/>朋友说—朋友间最真挚的分享
+    <a href="/"><img src="{{vm.staticFilePath}}/img/logo_footer.jpg" border="0" style="width: 4.625em;height: 1.583em;"/></a><br/>朋友说—朋友间最真挚的分享
 </div>

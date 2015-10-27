@@ -175,6 +175,12 @@ class AppController extends Controller {
                 $this->ShareTrackLog->save($data);
             }
         }
+        //set static file path
+        if (defined('SAE_MYSQL_DB')) {
+            $this->set('STATIC_FILE_PATH', SAE_STATIC_FILE_PATH);
+        } else {
+            $this->set('STATIC_FILE_PATH', LOCAL_STATIC_FILE_PATH);
+        }
     }
 
     public function afterFilter() {

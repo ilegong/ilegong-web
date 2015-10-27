@@ -155,6 +155,8 @@ const SUB_SHARER_REASON_TYPE_FROM_SHARE_INFO = 'ShareInfo';
 
 const SAE_STATIC_FILE_PATH = 'http://51daifan-assets.stor.sinaapp.com';
 
+const LOCAL_STATIC_FILE_PATH = 'http://dev.tongshijia.com';
+
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
 define('FORMAT_DATE_YUE_RI_HAN', 'n月j日');

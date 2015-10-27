@@ -5,8 +5,9 @@
     .controller('WesharesEditCtrl', WesharesEditCtrl);
 
 
-  function WesharesEditCtrl($scope, $rootScope, $log, $http, wx, Utils) {
+  function WesharesEditCtrl($scope, $rootScope, $log, $http, wx, Utils, staticFilePath) {
     var vm = this;
+    vm.staticFilePath = staticFilePath;
     vm.chooseAndUploadImage = chooseAndUploadImage;
     vm.uploadImage = uploadImage;
     vm.deleteImage = deleteImage;
@@ -52,6 +53,10 @@
       vm.currentUserId = userId;
       vm.sharerShipType = sharerShipType;
       vm.canUseOfflineAddress = canUseOfflineAddress;
+      if (!vm.canUseOfflineAddress) {
+        vm.showCreateShareTipInfo = true;
+        vm.showLayer = true;
+      }
       vm.self_ziti_data = {status: 1, ship_fee: 0, tag: 'self_ziti'};
       vm.kuai_di_data = {status: -1, ship_fee: '', tag: 'kuai_di'};
       vm.pys_ziti_data = {status: -1, ship_fee: 0, tag: 'pys_ziti'};
@@ -370,7 +375,7 @@
     }
 
     function validateAddress() {
-      if(vm.self_ziti_data.status == -1){
+      if (vm.self_ziti_data.status == -1) {
         vm.addressError = false;
         return vm.addressError;
       }

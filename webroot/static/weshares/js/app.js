@@ -41,6 +41,9 @@
 		.config(extendLog)
 		.run(initApp);
 
+  //define static file path
+  app.constant('staticFilePath', PYS.staticFilePath);
+
   app.filter('unsafe', function($sce) {
     return function(val) {
       return $sce.trustAsHtml(val);
@@ -59,7 +62,7 @@
         })
       }
     }
-  })
+  });
 
 
   /* @ngInject */
@@ -89,7 +92,7 @@
 					$rootScope.messages.push(message);
 				}
 				return message;
-			}
+			};
 
 			$delegate.log = function (msg, forceLog) {
 				_log(addMessage(msg, forceLog || false));

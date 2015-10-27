@@ -1,6 +1,10 @@
 <div class="weshare-view">
-    <div ng-if="vm.weshare.type==0" ng-include="'http://51daifan-assets.stor.sinaapp.com/static/weshares/templates/weshare-view-default-header.html?v0.2.0'"></div>
-    <div ng-if="vm.weshare.type==1" ng-include="'http://51daifan-assets.stor.sinaapp.com/static/weshares/templates/weshare-view-group-header.html?v0.2.0'"></div>
+    <div ng-if="vm.weshare.type==0">
+        <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-default-header.html?v0.2.1'"></ng-include>
+    </div>
+    <div ng-if="vm.weshare.type==1">
+        <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-group-header.html?v0.2.1'"></ng-include>
+    </div>
     <div class="introduction margin-bottom-12">
         <b></b>
         <a ng-if="vm.weshare.type==1" class="statistics-btn group-share-mark">邻里拼团</a>
@@ -36,14 +40,18 @@
         </div>
         <div class='send-info text-center margin-bottom-12' ng-hide='_.isEmpty(vm.weshare.send_info)'>取货时间: <span ng-bind='vm.weshare.send_info'></span></div>
     </div>
-    <div ng-include="'http://51daifan-assets.stor.sinaapp.com/static/weshares/templates/weshare-view-orders.html?v0.2.0'"></div>
+    <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-orders.html?v0.2.1'"></ng-include>
     <div style="text-align: center;">
-        <a href="/"><img src="http://51daifan-assets.stor.sinaapp.com/img/logo_footer.jpg" border="0" style="width: 4.625em;height: 1.583em;"/></a><br/>朋友说—朋友间最真挚的分享
+        <a href="/"><img src="{{vm.staticFilePath}}/img/logo_footer.jpg" border="0" style="width: 4.625em;height: 1.583em;"/></a><br/>朋友说—朋友间最真挚的分享
     </div>
 </div>
 
-<div ng-if="vm.weshare.type==0" ng-include="'http://51daifan-assets.stor.sinaapp.com/static/weshares/templates/weshare-view-default-nav.html?v0.2.0'"></div>
-<div ng-if="vm.weshare.type==1" ng-include="'http://51daifan-assets.stor.sinaapp.com/static/weshares/templates/weshare-view-group-nav.html?v0.2.0'"></div>
+<div ng-if="vm.weshare.type==0">
+    <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-default-nav.html?v0.2.1'"></ng-include>
+</div>
+<div ng-if="vm.weshare.type==1">
+    <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-group-nav.html?v0.2.1'"></ng-include>
+</div>
 
 <div class="share-dialog" ng-show="vm.showShareDialog">
     <div style="width: 90%; margin: 0 auto; font-size: 1.3em;">点击右上角“…”，分享给好友或朋友圈。</div>
@@ -56,10 +64,10 @@
 <div ng-show="vm.showNotifyGetPacketDialog" class="red-packet-dialog">
     <div class="content">
         <div class="nav">
-            <img src="http://51daifan-assets.stor.sinaapp.com/static/weshares/images/close.png" class="close-btn" ng-click="vm.showNotifyGetPacketDialog=false;vm.showLayer=false;">
+            <img src="{{vm.staticFilePath}}/static/weshares/images/close.png" class="close-btn" ng-click="vm.showNotifyGetPacketDialog=false;vm.showLayer=false;">
         </div>
         <div class="head">
-            <img ng-src="{{vm.weshare.creator.image||'http://51daifan-assets.stor.sinaapp.com/static/weshares/images/share_icon.jpg'}}"/>
+            <img ng-src="{{vm.weshare.creator.image||vm.staticFilePath + '/static/weshares/images/share_icon.jpg'}}"/>
         </div>
         <div class="desc">
             <h3>{{vm.weshare.creator.nickname}}送你爱心礼包</h3>
@@ -71,10 +79,10 @@
 <div ng-show="vm.showNotifyShareOfferDialog" class="red-packet-dialog">
     <div class="content">
         <div class="nav">
-            <img src="http://51daifan-assets.stor.sinaapp.com/static/weshares/images/close.png" class="close-btn" ng-click="vm.showNotifyShareOfferDialog=false;vm.showLayer=false;">
+            <img src="{{vm.staticFilePath}}/static/weshares/images/close.png" class="close-btn" ng-click="vm.showNotifyShareOfferDialog=false;vm.showLayer=false;">
         </div>
         <div class="head">
-            <img src="http://51daifan-assets.stor.sinaapp.com/static/weshares/images/share_icon.jpg"/>
+            <img src="{{vm.staticFilePath}}/static/weshares/images/share_icon.jpg"/>
         </div>
         <div class="desc">
             <h3>{{vm.weshare.creator.nickname}}送你爱心礼包</h3>
@@ -147,7 +155,7 @@
 <!--评论列表层-->
 <div class="comment_list-dialog" ng-show="vm.showCommentListDialogView">
     <div class="nav">
-        <img src="http://51daifan-assets.stor.sinaapp.com/static/weshares/images/close.png" class="close-btn" ng-click="vm.showCommentListDialogView=false;vm.showLayer=false;">
+        <img src="{{vm.staticFilePath}}/static/weshares/images/close.png" class="close-btn" ng-click="vm.showCommentListDialogView=false;vm.showLayer=false;">
     </div>
     <div id="box_title"><span ng-bind="vm.getOrderCommentLength()"></span>爱心评价</div>
     <div class="comment_list_box">
