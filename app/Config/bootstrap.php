@@ -151,9 +151,9 @@ const SHARE_SHIP_OPTION_OFFLINE_STORE = 1;
 const SHARE_SHIP_OPTION_OFFLINE_ADDRESS = 2;
 
 const SUB_SHARER_REASON_TYPE_FROM_USER_CENTER = 'ShareUserInfo'; // 标示用户关注朋友说的原因
-const SUB_SHARER_REASON_TYPE_FROM_SHARE_INFO = 'ShareInfo'; // 标示用户关注朋友说的原因
+const SUB_SHARER_REASON_TYPE_FROM_SHARE_INFO = 'ShareInfo'; //
 
-const SAE_STATIC_FILE_PATH = 'http://51daifan-assets.stor.sinaapp.com';
+const SAE_STATIC_FILE_PATH = 'http://www.tongshijia.com';
 //http://51daifan-assets.stor.sinaapp.com
 //http://www.tongshijia.com
 
