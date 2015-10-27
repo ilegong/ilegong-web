@@ -1545,6 +1545,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 842862,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_03f346b121de697c8f51b36ba498700d.jpg'
                 ),
+                '884' => array(
+                    'share_id' => 884,
+                    'share_name' => '鼎力推荐！云南天然蜜酿玫瑰，有买有赠，两瓶包邮！',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/7ff87aa3340_1027.jpg',
+                    'share_price' => '46',
+                    'share_user_name' => '鲲鲲',
+                    'share_vote' => 560,
+                    'share_user_id' => 806889,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
+                ),
                 '747' => array(
                     'share_id' => 747,
                     'share_name' => '那那家五常稻花香米',
