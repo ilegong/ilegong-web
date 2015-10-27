@@ -141,7 +141,7 @@ const WESHARE_MSG_SEND = 2;
 
 const WESHARE_DELETE_STATUS = -1;
 
-const COMMENT_SHARE_TYPE = 'Share';
+const COMMENT_SHARE_TYPE = 'Share'; //评论的类型
 
 //weshare order status
 const WESHARE_ORDER_STATUS_WAIT_SHIP = 0;
@@ -150,11 +150,12 @@ const WESHARE_ORDER_STATUS_SHIPPED = 1;
 const SHARE_SHIP_OPTION_OFFLINE_STORE = 1;
 const SHARE_SHIP_OPTION_OFFLINE_ADDRESS = 2;
 
-const SUB_SHARER_REASON_TYPE_FROM_USER_CENTER = 'ShareUserInfo';
-const SUB_SHARER_REASON_TYPE_FROM_SHARE_INFO = 'ShareInfo';
+const SUB_SHARER_REASON_TYPE_FROM_USER_CENTER = 'ShareUserInfo'; // 标示用户关注朋友说的原因
+const SUB_SHARER_REASON_TYPE_FROM_SHARE_INFO = 'ShareInfo'; // 标示用户关注朋友说的原因
 
-const SAE_STATIC_FILE_PATH = 'http://www.tongshijia.com';
+const SAE_STATIC_FILE_PATH = 'http://51daifan-assets.stor.sinaapp.com';
 //http://51daifan-assets.stor.sinaapp.com
+//http://www.tongshijia.com
 
 const LOCAL_STATIC_FILE_PATH = 'http://dev.tongshijia.com';
 
