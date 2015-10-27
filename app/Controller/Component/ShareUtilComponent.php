@@ -1528,7 +1528,7 @@ class ShareUtilComponent extends Component {
                 '747' => array(
                     'share_id' => 747,
                     'share_name' => '那那家五常稻花香米',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/f0449ac887f_1021.jpg',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/dafe5e63fc8_1027.jpg',
                     'share_price' => '166',
                     'share_user_name' => '那那',
                     'share_vote' => 600,
@@ -1538,7 +1538,7 @@ class ShareUtilComponent extends Component {
                 '901' => array(
                     'share_id' => 901,
                     'share_name' => '多油、好吃到停不下来的海鸭蛋',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/797488a660f_1021.jpg',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/ece57e81c34_1027.jpg',
                     'share_price' => '55',
                     'share_user_name' => '李樱花',
                     'share_vote' => 800,
@@ -1548,7 +1548,7 @@ class ShareUtilComponent extends Component {
                 '828' => array(
                     'share_id' => 828,
                     'share_name' => '赣南脐橙',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/f5002bbb304_1021.jpg',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/da5cb8ee003_1027.jpg',
                     'share_price' => '98',
                     'share_user_name' => '习蛋蛋',
                     'share_vote' => 650,
@@ -1695,16 +1695,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 712908,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/885789f1d97_0915.jpg'
                 ),
-                '542' => array(
-                    'share_id' => 542,
-                    'share_name' => '喜迎中秋云南云腿月饼团购',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/99b37d6ef0d_0915.jpg',
-                    'share_price' => '35',
-                    'share_user_name' => '白胡子老头',
-                    'share_vote' => 123,
-                    'share_user_id' => 869820,
-                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/368fc9903d0_0908.jpg'
-                ),
+//                '542' => array(
+//                    'share_id' => 542,
+//                    'share_name' => '喜迎中秋云南云腿月饼团购',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/99b37d6ef0d_0915.jpg',
+//                    'share_price' => '35',
+//                    'share_user_name' => '白胡子老头',
+//                    'share_vote' => 123,
+//                    'share_user_id' => 869820,
+//                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/368fc9903d0_0908.jpg'
+//                ),
             ),
             1 => array(
                 '635' => array(
