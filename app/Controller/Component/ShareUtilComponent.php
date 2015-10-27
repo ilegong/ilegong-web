@@ -1555,6 +1555,26 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 563240,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/26a561eddc9_1021.jpg'
                 ),
+                '953' => array(
+                    'share_id' => 953,
+                    'share_name' => '脆甜好吃的冬雪蜜桃开团喽！',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/d6914715154_1027.jpg',
+                    'share_price' => '120',
+                    'share_user_name' => '何荷',
+                    'share_vote' => 235,
+                    'share_user_id' => 875275,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/8752751445930740.png'
+                ),
+                '954' => array(
+                    'share_id' => 954,
+                    'share_name' => '好吃到爆的琼中绿橙，来自北纬18°的热带天然水果',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/7c62eeb1412_1027.jpg',
+                    'share_price' => '128',
+                    'share_user_name' => '亮',
+                    'share_vote' => 300,
+                    'share_user_id' => 842862,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_03f346b121de697c8f51b36ba498700d.jpg'
+                ),
                 '659' => array(
                     'share_id' => 659,
                     'share_name' => '浙江衢州橘子团（限北京地区）',
@@ -1634,16 +1654,6 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 235,
                     'share_user_id' => 873677,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/751e5e512e1_1009.jpg'
-                ),
-                '953' => array(
-                    'share_id' => 953,
-                    'share_name' => '脆甜好吃的冬雪蜜桃开团喽！',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/d6914715154_1027.jpg',
-                    'share_price' => '120',
-                    'share_user_name' => '何荷',
-                    'share_vote' => 235,
-                    'share_user_id' => 875275,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/8752751445930740.png'
                 ),
                 '634' => array(
                     'share_id' => 634,
