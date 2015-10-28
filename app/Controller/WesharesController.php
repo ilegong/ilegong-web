@@ -798,7 +798,7 @@ class WesharesController extends AppController {
         $share_tags = $this->ShareUtil->get_share_tags($weshareId);
         $all_tag_ids = Hash::extract($share_tags['tags'], '{n}.WeshareProductTag.id');
         //should show all tag
-        if ($weshare['Weshare']['creator'] == $user_id || count($share_tags) <= 1) {
+        if ($weshare['Weshare']['creator'] == $user_id || count($share_tags['tags']) <= 1) {
             $this->set('show_tag_all', true);
         }
         //存在多个商品标签不是管理员进来管理
