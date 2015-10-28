@@ -18,14 +18,17 @@ $(document).ready(function () {
     }
     $summeryProductItems.hide();
     $orderDataSummeryItems.hide();
+    $divOrderItems.hide();
   }
   $tagLi.on('click', function(e){
+    e.preventDefault();
     var $me = $(this);
     var tagId = $me.data('id');
     handleTagChange(tagId);
     $tagLi.removeClass('active');
     $me.addClass('active');
   });
+  init();
   function handleTagChange(tag) {
     if (tag == 'all') {
       $divOrderItems.show();
