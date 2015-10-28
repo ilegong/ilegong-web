@@ -3,6 +3,7 @@
   angular.module('weshares')
     .controller('WesharesViewCtrl', WesharesViewCtrl);
 
+
   function ChooseOfflineStore($vm, $log, $http, $templateCache, $timeout) {
     $vm.areas = {
       110101: {
