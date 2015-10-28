@@ -16,9 +16,6 @@ $(document).ready(function () {
     if($tagLi.length > 0){
       $('li:first', $shareOrderListTagToggle).trigger('click');
     }
-    $summeryProductItems.hide();
-    $orderDataSummeryItems.hide();
-    $divOrderItems.hide();
   }
   $tagLi.on('click', function(e){
     e.preventDefault();
