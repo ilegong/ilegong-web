@@ -48,6 +48,11 @@
         </thead>
         <tbody>
         {{loop $summery['details'] $cart_product_id $item_summery}}
+        <?php
+            if(!$show_tag_all&&!in_array($product_tag_map[$cart_product_id], $show_tag_ids)){
+                continue;
+            }
+        ?>
         <tr class="summery-product-item" name="summery-product-{{$product_tag_map[$cart_product_id]}}">
             <td>{{$item_summery['name']}}</td>
             <td>{{$item_summery['num']}}</td>
@@ -73,6 +78,11 @@
         </tr>
         {{/if}}
         {{loop $tag_order_summery $tag_id $summery_item}}
+        <?php
+            if(in_array($product_tag_map[$cart_product_id], $show_tag_ids)){
+                continue;
+            }
+        ?>
             <tr class="order-data-summery" name="order-data-summery-{{$tag_id}}" style="display: none">
                 <td colspan="3">总金额:&nbsp;<font color="red">{{round($summery_item['total_price']-$summery_item['repaid_money'],2)}}</font>
                     {{if $summery_item['repaid_money']!=0}}
@@ -129,20 +139,20 @@
         <!-- Nav tabs category -->
         <ul class="nav nav-tabs">
             {{if count($orders[SHARE_SHIP_SELF_ZITI_TAG]) > 0}}
-            <li><a href="#self-ziti-orders" data-toggle="tab" data-order-type="self_ziti">自提&nbsp;&nbsp;<font
-                    color="red">{{count($orders[SHARE_SHIP_SELF_ZITI_TAG])}}</font></a></li>
+            <li><a href="#self-ziti-orders" data-toggle="tab" data-order-type="self_ziti">自提{{if $show_tag_all}}&nbsp;&nbsp;<font
+                    color="red">{{count($orders[SHARE_SHIP_SELF_ZITI_TAG])}}</font>{{/if}}</a></li>
             {{/if}}
             {{if count($orders[SHARE_SHIP_KUAIDI_TAG]) > 0}}
-            <li><a href="#kuaidi-orders" data-toggle="tab" data-order-type="kuaidi">快递&nbsp;&nbsp;<font color="red">{{count($orders[SHARE_SHIP_KUAIDI_TAG])}}</font></a>
+            <li><a href="#kuaidi-orders" data-toggle="tab" data-order-type="kuaidi">快递{{if $show_tag_all}}&nbsp;&nbsp;<font color="red">{{count($orders[SHARE_SHIP_KUAIDI_TAG])}}</font>{{/if}}</a>
             </li>
             {{/if}}
             {{if count($orders[SHARE_SHIP_PYS_ZITI_TAG]) > 0}}
-            <li><a href="#pys-ziti-orders" data-toggle="tab" data-order-type="pys_ziti">好邻居&nbsp;&nbsp;<font
-                    color="red">{{count($orders[SHARE_SHIP_PYS_ZITI_TAG])}}</font></a></li>
+            <li><a href="#pys-ziti-orders" data-toggle="tab" data-order-type="pys_ziti">好邻居{{if $show_tag_all}}&nbsp;&nbsp;<font
+                    color="red">{{count($orders[SHARE_SHIP_PYS_ZITI_TAG])}}</font>{{/if}}</a></li>
             {{/if}}
             {{if !empty($child_share_user_infos)}}
-            <li><a href="#group-share-orders" data-toggle="tab" data-order-type="pin_tuan">邻里拼团&nbsp;&nbsp;<font
-                    color="red">{{count($child_share_data)}}</font></a></li>
+            <li><a href="#group-share-orders" data-toggle="tab" data-order-type="pin_tuan">邻里拼团{{if $show_tag_all}}&nbsp;&nbsp;<font
+                    color="red">{{count($child_share_data)}}</font>{{/if}}</a></li>
             {{/if}}
         </ul>
         <!-- Tab panes -->

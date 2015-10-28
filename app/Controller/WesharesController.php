@@ -801,7 +801,7 @@ class WesharesController extends AppController {
         if ($weshare['Weshare']['creator'] == $user_id || count($share_tags) <= 1) {
             $this->set('show_tag_all', true);
         }
-        //存在多个商品标签不是管理员
+        //存在多个商品标签不是管理员进来管理
         if (count($share_tags) > 0 && $weshare['Weshare']['creator'] != $user_id) {
             $all_tag_ids = $this->ShareAuthority->get_user_can_view_order_tags($user_id, $weshareId);
         }

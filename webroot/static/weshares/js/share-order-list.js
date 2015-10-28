@@ -12,6 +12,13 @@ $(document).ready(function () {
     var child_share_id = $parent.data('id');
     window.location.href='/weshares/view/'+child_share_id;
   });
+  function init(){
+    if($tagLi.length > 0){
+      $('li:first', $shareOrderListTagToggle).trigger('click');
+    }
+    $summeryProductItems.hide();
+    $orderDataSummeryItems.hide();
+  }
   $tagLi.on('click', function(e){
     var $me = $(this);
     var tagId = $me.data('id');
