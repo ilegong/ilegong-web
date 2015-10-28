@@ -793,6 +793,10 @@ class WesharesController extends AppController {
         }
         $child_share_data = $this->WeshareBuy->get_child_share_items($weshareId);
         $share_tags = $this->ShareUtil->get_share_tags($weshareId);
+        //存在商品标签
+        if($share_tags > 0){
+
+        }
         $statics_data = $this->get_weshare_buy_info($weshareId, true, true);
         if (count($share_tags['tags']) > 0) {
             $tag_order_summery = $this->ShareUtil->summery_order_data_by_tag($statics_data, $weshareId);

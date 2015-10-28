@@ -42,5 +42,25 @@ class ShareOperateSetting extends AppModel {
         return $shareOperateSettings;
     }
 
+    /**
+     * @param $uid
+     * @param $data_type
+     * @param $scope_id
+     * @param $scope_type
+     * @return array
+     */
+    public function get_user_spec_type_authority($uid, $data_type, $scope_id, $scope_type) {
+        $shareOperateSettings = $this->find('first', array(
+            'conditions' => array(
+                'user' => $uid,
+                'data_type' => $data_type,
+                'scope_id' => $scope_id,
+                'scope_type' => $scope_type,
+                'deleted' => DELETED_NO
+            )
+        ));
+        return $shareOperateSettings;
+    }
+
 
 }
