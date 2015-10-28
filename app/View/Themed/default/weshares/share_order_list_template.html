@@ -1,11 +1,6 @@
 <?php $order_index=0 ?>
 {{loop $current_orders $item_order}}
 <?php $order_index = $order_index+1; $current_tag_id = get_share_order_tag_id($order_cart_map[$item_order['id']]);?>
-<?php
-    if(!$show_tag_all&&!in_array($current_tag_id, $show_tag_ids)){
-        continue;
-    }
-?>
 <div class="col-xs-12 div-order-item" data-id="{{$item_order['id']}}" data-order-status="{{$item_order['status']}}" style="padding-right: 5px;padding-left: 5px;" name="order-item-tag-{{$current_tag_id}}">
     <div class="offer {{if $item_order['status']==ORDER_STATUS_PAID}}
     offer-success

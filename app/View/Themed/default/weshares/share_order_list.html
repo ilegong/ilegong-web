@@ -48,11 +48,6 @@
         </thead>
         <tbody>
         {{loop $summery['details'] $cart_product_id $item_summery}}
-        <?php
-            if(!in_array($product_tag_map[$cart_product_id], $show_tag_ids) && !$show_tag_all){
-                continue;
-            }
-        ?>
         <tr class="summery-product-item" name="summery-product-{{$product_tag_map[$cart_product_id]}}">
             <td>{{$item_summery['name']}}</td>
             <td>{{$item_summery['num']}}</td>
@@ -78,11 +73,6 @@
         </tr>
         {{/if}}
         {{loop $tag_order_summery $tag_id $summery_item}}
-            <?php
-                if(!in_array($tag_id, $show_tag_ids) && !$show_tag_all){
-                    continue;
-                }
-            ?>
             <tr class="order-data-summery" name="order-data-summery-{{$tag_id}}" style="display: none">
                 <td colspan="3">总金额:&nbsp;<font color="red">{{round($summery_item['total_price']-$summery_item['repaid_money'],2)}}</font>
                     {{if $summery_item['repaid_money']!=0}}
