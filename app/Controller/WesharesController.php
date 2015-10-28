@@ -796,6 +796,7 @@ class WesharesController extends AppController {
         }
         $child_share_data = $this->WeshareBuy->get_child_share_items($weshareId);
         $share_tags = $this->ShareUtil->get_share_tags($weshareId);
+        //should show all tag
         if ($weshare['Weshare']['creator'] == $user_id || count($share_tags) <= 1) {
             $this->set('show_tag_all', true);
         }
