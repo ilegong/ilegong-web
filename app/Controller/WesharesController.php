@@ -801,7 +801,7 @@ class WesharesController extends AppController {
         }
         //存在多个商品标签不是管理员
         if (count($share_tags) > 0 && $weshare['Weshare']['creator'] != $user_id) {
-            $userTags = $this->ShareAuthority->get_user_spec_type_authority($user_id, SHARE_TAG_ORDER_OPERATE_TYPE, $weshareId, SHARE_OPERATE_SCOPE_TYPE);
+            $userTags = $this->ShareAuthority->get_user_can_view_order_tags($user_id, $weshareId);
             $share_tags = $userTags;
         }
         $statics_data = $this->get_weshare_buy_info($weshareId, true, true);
