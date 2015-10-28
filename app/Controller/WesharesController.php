@@ -796,14 +796,14 @@ class WesharesController extends AppController {
         }
         $child_share_data = $this->WeshareBuy->get_child_share_items($weshareId);
         $share_tags = $this->ShareUtil->get_share_tags($weshareId);
+        $all_tag_ids = Hash::extract($share_tags['tags'], '{n}.WeshareProductTag.id');
         //should show all tag
         if ($weshare['Weshare']['creator'] == $user_id || count($share_tags) <= 1) {
             $this->set('show_tag_all', true);
         }
         //存在多个商品标签不是管理员
         if (count($share_tags) > 0 && $weshare['Weshare']['creator'] != $user_id) {
-            $userTags = $this->ShareAuthority->get_user_can_view_order_tags($user_id, $weshareId);
-            $share_tags = $userTags;
+            $all_tag_ids = $this->ShareAuthority->get_user_can_view_order_tags($user_id, $weshareId);
         }
         $statics_data = $this->get_weshare_buy_info($weshareId, true, true);
         if (count($share_tags['tags']) > 0) {
@@ -828,6 +828,7 @@ class WesharesController extends AppController {
         $this->set($statics_data);
         $this->set('weshare_info', $weshare);
         $this->set('tags', $share_tags['tags']);
+        $this->set('show_tag_ids', $all_tag_ids);
         $this->set('product_tag_map', $share_tags['product_tag_map']);
         $this->set('refund_money', $refund_money);
         $this->set('rebate_money', $rebate_money);

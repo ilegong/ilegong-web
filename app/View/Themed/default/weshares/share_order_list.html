@@ -19,7 +19,7 @@
             <a href="/weshares/add" class="btn btn-warning btn-xs" style="margin-top: 5px;">去分享</a>
         </div>
     </div>
-    {{if count($tags) > 0}}
+    {{if count($tags) > 0 && count($show_tag_ids) > 0}}
     <br>
     <br>
     <div>
@@ -28,6 +28,11 @@
             <li class="active" data-id="all"><a>全部</a></li>
             {{/if}}
             {{loop $tags $tag}}
+            <?php
+                if(!in_array($tag['WeshareProductTag']['id'], $show_tag_ids)){
+                    continue;
+                }
+            ?>
             <li data-id="{{$tag['WeshareProductTag']['id']}}"><a>{{$tag['WeshareProductTag']['name']}}</a></li>
             {{/loop}}
         </ol>
@@ -43,6 +48,11 @@
         </thead>
         <tbody>
         {{loop $summery['details'] $cart_product_id $item_summery}}
+        <?php
+            if(!in_array($product_tag_map[$cart_product_id], $show_tag_ids)){
+                continue;
+            }
+        ?>
         <tr class="summery-product-item" name="summery-product-{{$product_tag_map[$cart_product_id]}}">
             <td>{{$item_summery['name']}}</td>
             <td>{{$item_summery['num']}}</td>
@@ -51,6 +61,7 @@
         {{/loop}}
         </tbody>
         {{if count($tags) > 0}}
+        {{if $show_tag_all}}
         <tr class="order-data-summery" name="order-data-summery-all">
             <td colspan="3">总金额:&nbsp;<font color="red">{{round($summery['real_total_price']-$refund_money-$share_rebate_money+$repaid_order_money,2)}}</font>{{if
                 $refund_money>0}}&nbsp;&nbsp;退款金额:&nbsp;<font color="red">{{$refund_money}}</font>{{/if}}{{if
@@ -65,7 +76,13 @@
                 &nbsp;&nbsp;&nbsp;总购买人数:&nbsp;<font
                         color="red">{{$summery['all_buy_user_count']}}</font></td>
         </tr>
+        {{/if}}
         {{loop $tag_order_summery $tag_id $summery_item}}
+            <?php
+                if(!in_array($tag_id, $show_tag_ids)){
+                    continue;
+                }
+            ?>
             <tr class="order-data-summery" name="order-data-summery-{{$tag_id}}" style="display: none">
                 <td colspan="3">总金额:&nbsp;<font color="red">{{round($summery_item['total_price']-$summery_item['repaid_money'],2)}}</font>
                     {{if $summery_item['repaid_money']!=0}}
