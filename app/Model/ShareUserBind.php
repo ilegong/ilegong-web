@@ -29,14 +29,14 @@ class ShareUserBind extends AppModel {
         438 => array(633345),
         659 => array(68832, 633345),
         649 => array(633345),
-        692 => array(841358,874821,633345),
+        692 => array(841358, 874821, 633345),
         664 => array(633345),
         744 => array(633345),
         870 => array(633345),
         872 => array(633345),
         881 => array(633345),
         901 => array(633345),
-        884 => array(872936,633345),
+        884 => array(872936, 633345),
         915 => array(633345),
     );
 
@@ -46,5 +46,9 @@ class ShareUserBind extends AppModel {
             return false;
         }
         return in_array($user_id, $shareBindInfo);
+    }
+
+    public function getAllShareUserBind() {
+        return $this->shareBindData;
     }
 }

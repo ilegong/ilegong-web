@@ -1,7 +1,7 @@
 <?php
-include_once COMMON_PATH.'Config'.DS.'extend.php';
+include_once COMMON_PATH . 'Config' . DS . 'extend.php';
 
-include_once COMMON_PATH.'global_function.php';
+include_once COMMON_PATH . 'global_function.php';
 
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
@@ -51,6 +51,16 @@ const USER_IS_PROXY = 1;
 const FFDATE_CH_MDW = 'chinese_m_d_w';
 const FFDATE_CH_MD = 'chinese_m_d';
 
+const SHARE_ORDER_OPERATE_TYPE = 'ShareOrder'; //用户看订单权限
+
+const SHARE_TAG_ORDER_OPERATE_TYPE = 'ShareTagOrder';//查看分组订单权限
+
+const SHARE_OPERATE_SCOPE_TYPE = 'Share'; // 用户权限的配置范围
+
+const SHARE_ORDER_OPERATE_CACHE_KEY = 'share_order_operate_data_cache_key'; // 分享订单
+
+const SHARE_ORDER_TAG_OPERATE_CACHE_KEY = 'share_order_tag_operate_data_cache_key'; // 分享订单 分类
+
 $_display_tags_in_home = array(TAG_ID_CHULIANG, TAG_ID_ROUQIN_DANPIN, TAG_ID_XINPIN_SHICHI, TAG_ID_XINPIN_SHICHI);
 
 $_coupon_could_distribute = array(18483 => '新用户50返10元券', 18482 => '新用户100返20元券');
@@ -58,7 +68,7 @@ $_coupon_could_distribute = array(18483 => '新用户50返10元券', 18482 => '�
 function is_admin_uid($uid) {
 
     $_admin_uids = array(
-    '632' // liu zhaoren
+        '632' // liu zhaoren
     , '8' // ronghao
     , '141' //yxg
     , '819' //高静静
@@ -80,7 +90,7 @@ function action_of_score_item($change, $reason) {
         $action = '增加';
     } else if ($reason == SCORE_ORDER_SPENT) {
         $action = '消费';
-    } else if($reason == SCORE_ORDER_SPENT_UNDO) {
+    } else if ($reason == SCORE_ORDER_SPENT_UNDO) {
         $action = '返还';
     } else if ($reason == SCORE_ORDER_SPENT_CANCEL) {
         $action = '取消';
@@ -91,45 +101,44 @@ function action_of_score_item($change, $reason) {
 }
 
 App::build(array(
-	'plugins' => array(COMMON_PATH.'Plugin'.DS, APP_PATH.'Plugin'.DS, ),
-	//'views' => array(COMMON_PATH.'View'.DS),
-	'libs' => array(COMMON_PATH,APP_PATH.'Lib'.DS),
-	'vendors' => array(COMMON_PATH.'Vendor'.DS,),
-	'helpers' => array(COMMON_PATH.'View'.DS.'Helper'.DS,),
-	'locales' => array(ROOT.DS.'data'.DS.'locale' . DS),
-	'components' => array(COMMON_PATH.'Component'. DS),
-	'behaviors' => array(COMMON_PATH.'Behavior'. DS),
+    'plugins' => array(COMMON_PATH . 'Plugin' . DS, APP_PATH . 'Plugin' . DS,),
+    //'views' => array(COMMON_PATH.'View'.DS),
+    'libs' => array(COMMON_PATH, APP_PATH . 'Lib' . DS),
+    'vendors' => array(COMMON_PATH . 'Vendor' . DS,),
+    'helpers' => array(COMMON_PATH . 'View' . DS . 'Helper' . DS,),
+    'locales' => array(ROOT . DS . 'data' . DS . 'locale' . DS),
+    'components' => array(COMMON_PATH . 'Component' . DS),
+    'behaviors' => array(COMMON_PATH . 'Behavior' . DS),
 ));
 if (defined('SAE_MYSQL_DB')) {
-	App::build(array(
-		'locales' => array(TMP.'locale' . DS),
-	));
-	
-	// sae上禁止放在二级目录
-    define('IN_SAE',true);
-    define('SAE_STORAGE_UPLOAD_DOMAIN_NAME','images');
-    define('SAE_STORAGE_UPLOAD_AVATAR_DOMAIN_NAME','avatar');
-    define('SAE_STORAGE_UPLOAD_DOMAIN_URL','http://'.$_SERVER['HTTP_APPNAME'].'-'.SAE_STORAGE_UPLOAD_DOMAIN_NAME.'.stor.sinaapp.com');
-    define('UPLOAD_FILE_URL', 'http://'.$_SERVER['HTTP_APPNAME'].'-'.SAE_STORAGE_UPLOAD_DOMAIN_NAME.'.stor.sinaapp.com');
+    App::build(array(
+        'locales' => array(TMP . 'locale' . DS),
+    ));
+
+    // sae上禁止放在二级目录
+    define('IN_SAE', true);
+    define('SAE_STORAGE_UPLOAD_DOMAIN_NAME', 'images');
+    define('SAE_STORAGE_UPLOAD_AVATAR_DOMAIN_NAME', 'avatar');
+    define('SAE_STORAGE_UPLOAD_DOMAIN_URL', 'http://' . $_SERVER['HTTP_APPNAME'] . '-' . SAE_STORAGE_UPLOAD_DOMAIN_NAME . '.stor.sinaapp.com');
+    define('UPLOAD_FILE_URL', 'http://' . $_SERVER['HTTP_APPNAME'] . '-' . SAE_STORAGE_UPLOAD_DOMAIN_NAME . '.stor.sinaapp.com');
     // SAE上传地址，S3,Storage等. 带 saestor://，可直接用于fwrite,copy,等函数读写文件
     // 结合UPLOAD_RELATIVE_PATH能获取到文件的地址
-    define('UPLOAD_FILE_PATH', 'saestor://'.SAE_STORAGE_UPLOAD_DOMAIN_NAME.'/');
-    
-    define('WEB_VISIT_CACHE','saemc://cache/');
-    define('WEB_VISIT_CACHE_URL','/cache/');
-    
+    define('UPLOAD_FILE_PATH', 'saestor://' . SAE_STORAGE_UPLOAD_DOMAIN_NAME . '/');
+
+    define('WEB_VISIT_CACHE', 'saemc://cache/');
+    define('WEB_VISIT_CACHE_URL', '/cache/');
+
     define('DATA_PATH', 'saemc://data/'); //data目录使用kvdb，其余stor的均使用upload_file_path
-}
-else{
-	/**
-	 * 数据库保存的文件路径从files开始，UPLOAD_FILE_URL不用包含files
-	 * 结合UPLOAD_RELATIVE_PATH能获取到文件的地址
-	 */
-    define('UPLOAD_FILE_PATH', WWW_ROOT.DS); // 本地上传路径
-    define('UPLOAD_FILE_URL',str_replace('\\','/',APP_SUB_DIR)); //APP_SUB_DIR    
-    define('WEB_VISIT_CACHE',WWW_ROOT.DS.'cache'.DS);
-    define('WEB_VISIT_CACHE_URL',APP_SUB_DIR.'/cache/');
-    define('DATA_PATH', ROOT.DS.'data'.DS);    
+} else {
+    /**
+     * 数据库保存的文件路径从files开始，UPLOAD_FILE_URL不用包含files
+     * 结合UPLOAD_RELATIVE_PATH能获取到文件的地址
+     */
+    define('UPLOAD_FILE_PATH', WWW_ROOT . DS); // 本地上传路径
+    define('UPLOAD_FILE_URL', str_replace('\\', '/', APP_SUB_DIR)); //APP_SUB_DIR
+    define('WEB_VISIT_CACHE', WWW_ROOT . DS . 'cache' . DS);
+    define('WEB_VISIT_CACHE_URL', APP_SUB_DIR . '/cache/');
+    define('DATA_PATH', ROOT . DS . 'data' . DS);
 }
 // 文件的相对地址,结合UPLOAD_FILE_PATH获取到本地的地址
 define('UPLOAD_RELATIVE_PATH', '/files/');
@@ -138,7 +147,7 @@ define('UPLOAD_RELATIVE_PATH', '/files/');
 define('SAE_TASK_QUEUE_URL', 'http://www.miaomiaoxuan.com/api/sae/TaskQueue.php');
 
 if (function_exists('date_default_timezone_set')) {
-	date_default_timezone_set('Etc/GMT-8');
+    date_default_timezone_set('Etc/GMT-8');
 }
 
 
@@ -146,30 +155,29 @@ define('HTTP_REQUEST_METHOD', 'HttpCurl'); // or HttpSocket
 
 define('DEVELOP_MODE', '1'); // 显示隐藏的控制项，显示页面钩子
 
-define('OPEN_INTERNATIONAL',1);	// 站点是否开启多语言
+define('OPEN_INTERNATIONAL', 1);    // 站点是否开启多语言
 
 Configure::write('Dispatcher.filters', array(
-	'AssetDispatcher', // 处理js和css文件，压缩输出，作用不大。不能支持将内容汇总到一个文件输出
-	//'CacheDispatcher', // 检查整个页面的缓存.php文件，有则直接包含输出。与cachehelp配合使用，缓存文件有cachehelp生成。
+    'AssetDispatcher', // 处理js和css文件，压缩输出，作用不大。不能支持将内容汇总到一个文件输出
+    //'CacheDispatcher', // 检查整个页面的缓存.php文件，有则直接包含输出。与cachehelp配合使用，缓存文件有cachehelp生成。
 ));
 
-if(!defined('SAE_MYSQL_DB')){
-	/**
-	 * Configures default file logging options
-	 */
-	App::uses('CakeLog', 'Log');
-	CakeLog::config('debug', array(
-		'engine' => 'FileLog',
-		'types' => array('notice', 'info', 'debug'),
-		'file' => 'debug',
-	));
-	CakeLog::config('error', array(
-		'engine' => 'FileLog',
-		'types' => array('warning', 'error', 'critical', 'alert', 'emergency'),
-		'file' => 'error',
-	));
+if (!defined('SAE_MYSQL_DB')) {
+    /**
+     * Configures default file logging options
+     */
+    App::uses('CakeLog', 'Log');
+    CakeLog::config('debug', array(
+        'engine' => 'FileLog',
+        'types' => array('notice', 'info', 'debug'),
+        'file' => 'debug',
+    ));
+    CakeLog::config('error', array(
+        'engine' => 'FileLog',
+        'types' => array('warning', 'error', 'critical', 'alert', 'emergency'),
+        'file' => 'error',
+    ));
 }
-
 
 
 /**
@@ -177,41 +185,39 @@ if(!defined('SAE_MYSQL_DB')){
  */
 App::uses('PhpReader', 'Configure');
 Configure::config('default', new PhpReader(DATA_PATH));
-try{
-	Configure::load('settings');
-}
-catch(ConfigureException $e){
-	CakeLog::error('Configure load settings failed in lib/bootstrap.');
+try {
+    Configure::load('settings');
+} catch (ConfigureException $e) {
+    CakeLog::error('Configure load settings failed in lib/bootstrap.');
 }
 
-define('CLOUD_CRON_SECRET',Configure::read('Security.cloud_cron_secret'));
+define('CLOUD_CRON_SECRET', Configure::read('Security.cloud_cron_secret'));
 
-if(php_sapi_name()==='cli' || (defined('IN_SAE') && isset($_GET['cron_secret']) && $_GET['cron_secret'] == CLOUD_CRON_SECRET)){
-	define('IN_CLI',true);
-	unset($_GET['cron_secret'],$_REQUEST['cron_secret']);
+if (php_sapi_name() === 'cli' || (defined('IN_SAE') && isset($_GET['cron_secret']) && $_GET['cron_secret'] == CLOUD_CRON_SECRET)) {
+    define('IN_CLI', true);
+    unset($_GET['cron_secret'], $_REQUEST['cron_secret']);
 }
 
 $pluginBootstraps = Configure::read('Hook.bootstraps');
 $plugins = array_filter(explode(',', $pluginBootstraps));
 
 if (!empty($plugins)) {
-	foreach ($plugins as $plugin) {
-		$pluginName = Inflector::camelize($plugin);
-		try{
-			CakePlugin::load($pluginName, array(
-					'bootstrap'=>true,
-					'routes' => true,
-					'ignoreMissing' => true,
-			));
-		}
-		catch(Exception $e){
-			CakeLog::error('Plugin not found in lib/bootstrap: ' . $pluginName);
-			continue;
-		}
-	}
+    foreach ($plugins as $plugin) {
+        $pluginName = Inflector::camelize($plugin);
+        try {
+            CakePlugin::load($pluginName, array(
+                'bootstrap' => true,
+                'routes' => true,
+                'ignoreMissing' => true,
+            ));
+        } catch (Exception $e) {
+            CakeLog::error('Plugin not found in lib/bootstrap: ' . $pluginName);
+            continue;
+        }
+    }
 }
 
 
-function clear_tag_cache($tagId){
-    Cache::write('tag-products'.$tagId,'[]');
+function clear_tag_cache($tagId) {
+    Cache::write('tag-products' . $tagId, '[]');
 }

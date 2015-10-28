@@ -282,4 +282,24 @@ class UtilController extends AppController {
         echo json_encode($genShareOfferResult);
         return;
     }
+
+    /**
+     *
+     * 迁移写死的一些 用户权限配置数据
+     */
+    public function transfer_share_operate_settings() {
+        $this->autoRender = false;
+        $shareUserBindM = ClassRegistry::init('ShareUserBind');
+        $shareOperateSettingM = ClassRegistry::init('ShareOperateSetting');
+        $allShareUserBindDatas = $shareUserBindM->getAllShareUserBind();
+        $saveData = array();
+        foreach ($allShareUserBindDatas as $shareId => $userIds) {
+            foreach ($userIds as $uid) {
+                $saveData[] = array('data_type' => SHARE_ORDER_OPERATE_TYPE, 'data_id' => $shareId, 'scope_type' => SHARE_OPERATE_SCOPE_TYPE, 'scope_id' => $shareId, 'user' => $uid);
+            }
+        }
+        $shareOperateSettingM->saveAll($saveData);
+        echo json_encode(array('success' => true));
+        return;
+    }
 }
