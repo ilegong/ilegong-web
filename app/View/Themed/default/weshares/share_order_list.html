@@ -49,7 +49,7 @@
         <tbody>
         {{loop $summery['details'] $cart_product_id $item_summery}}
         <?php
-            if(!in_array($product_tag_map[$cart_product_id], $show_tag_ids)){
+            if(!in_array($product_tag_map[$cart_product_id], $show_tag_ids)&&!$show_tag_all){
                 continue;
             }
         ?>
@@ -79,7 +79,7 @@
         {{/if}}
         {{loop $tag_order_summery $tag_id $summery_item}}
             <?php
-                if(!in_array($tag_id, $show_tag_ids)){
+                if(!in_array($tag_id, $show_tag_ids)&&!&show_tag_all){
                     continue;
                 }
             ?>
