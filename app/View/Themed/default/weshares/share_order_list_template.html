@@ -2,7 +2,7 @@
 {{loop $current_orders $item_order}}
 <?php $order_index = $order_index+1; $current_tag_id = get_share_order_tag_id($order_cart_map[$item_order['id']]);?>
 <?php
-    if(!in_array($current_tag_id, $show_tag_ids)){
+    if(!$show_tag_all&&!in_array($current_tag_id, $show_tag_ids)){
         continue;
     }
 ?>
