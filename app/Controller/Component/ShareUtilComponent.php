@@ -1555,6 +1555,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 806889,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
                 ),
+                '915' => array(
+                    'share_id' => 915,
+                    'share_name' => '超级福利来喽！俄罗斯野生淡干小海参',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/fc7c7c2fdb1_1028.jpg',
+                    'share_price' => '399',
+                    'share_user_name' => '李樱花',
+                    'share_vote' => 800,
+                    'share_user_id' => 810684,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
+                ),
                 '747' => array(
                     'share_id' => 747,
                     'share_name' => '那那家五常稻花香米',
