@@ -18,6 +18,10 @@
             <i>联系信息</i>
             <em><span ng-bind="vm.currentOfflineStore.owner_name"></span> <span ng-bind="vm.currentOfflineStore.owner_phone"></span></em>
         </p>
-        <div name="offlineStoreMap" style="width: 100%;height: 400px;" id="offline-store-map"></div>
+        <div name="offlineStoreMap" id="offline-store-map">
+            <a href="{{::vm.currentOfflineStore.mapDetailUrl}}" target="_blank">
+                <img src="{{::vm.currentOfflineStore.mapImg}}">
+            </a>
+        </div>
     </div>
 </div>

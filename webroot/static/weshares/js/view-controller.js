@@ -1,7 +1,7 @@
 (function (window, angular) {
 
   angular.module('weshares')
-    .controller('WesharesViewCtrl', WesharesViewCtrl)
+    .controller('WesharesViewCtrl', WesharesViewCtrl);
 
   function ChooseOfflineStore($vm, $log, $http, $templateCache, $timeout) {
     $vm.areas = {
@@ -45,7 +45,7 @@
     $vm.showOfflineStoreDetail = showOfflineStoreDetail;
     $vm.chooseOfflineStore = chooseOfflineStore;
     $vm.showChooseOfflineStore = showChooseOfflineStore;
-    $vm.mapPanTo = mapPanTo;
+    //$vm.mapPanTo = mapPanTo;
     function showChooseOfflineStore() {
       $vm.showOfflineStoreDetailView = false;
       $vm.chooseOfflineStoreView = true;
@@ -61,33 +61,41 @@
       $vm.checkedOfflineStore = offlineStore;
     }
 
-    function mapPanTo(offlineStore) {
-      var point = new BMap.Point(offlineStore.location_long, offlineStore.location_lat);
-      $vm.offlineStoreMap.panTo(point);
-    }
+    //function mapPanTo(offlineStore) {
+    //  var point = new BMap.Point(offlineStore.location_long, offlineStore.location_lat);
+    //  $vm.offlineStoreMap.panTo(point);
+    //}
 
-    function showMap(offlineStore) {
-      var point = new BMap.Point(offlineStore.location_long, offlineStore.location_lat);
-      if ($vm.offlineStoreMap == null) {
-        $vm.offlineStoreMap = new BMap.Map("offline-store-map");
-        $vm.offlineStoreMap.centerAndZoom(point, 15);
-      } else {
-        $timeout(function () {
-          $vm.mapPanTo(offlineStore);
-        }, 200);
-      }
-      $vm.offlineStoreMap.clearOverlays();
-      var marker = new BMap.Marker(point);        // 创建标注
-      $vm.offlineStoreMap.addOverlay(marker);
-    }
+    //function showMap(offlineStore) {
+    //  var point = new BMap.Point(offlineStore.location_long, offlineStore.location_lat);
+    //  if ($vm.offlineStoreMap == null) {
+    //    $vm.offlineStoreMap = new BMap.Map("offline-store-map");
+    //    $vm.offlineStoreMap.centerAndZoom(point, 15);
+    //  } else {
+    //    $timeout(function () {
+    //      $vm.mapPanTo(offlineStore);
+    //    }, 200);
+    //  }
+    //  $vm.offlineStoreMap.clearOverlays();
+    //  var marker = new BMap.Marker(point);        // 创建标注
+    //  $vm.offlineStoreMap.addOverlay(marker);
+    //}
 
     function showOfflineStoreDetail(offlineStore) {
+      if (!offlineStore['mapImg']) {
+        var pointStr = offlineStore['location_long'] + ',' + offlineStore['location_lat'];
+        var reversePointStr = offlineStore['location_lat'] + ',' + offlineStore['location_long'];
+        var pointName = offlineStore['alias'];
+        offlineStore['mapImg'] = 'http://api.map.baidu.com/staticimage?width=400&height=200&center=' + pointStr + '&markers=' + pointName + '|' + pointStr + '&zoom=18&markerStyles=l,A,0xff0000';
+        offlineStore['mapDetailUrl'] = 'http://api.map.baidu.com/marker?location=' + reversePointStr + '&title=' + pointName + '&content=' + pointName + '&output=html';
+        //http://api.map.baidu.com/marker?location=39.916979519873,116.41004950566&title=我的位置&content=百度奎科大厦&output=html
+      }
       $vm.currentOfflineStore = offlineStore;
       $vm.showOfflineStoreDetailView = true;
       $vm.chooseOfflineStoreView = false;
       $vm.showShareDetailView = false;
       $vm.showBalanceView = false;
-      showMap($vm.currentOfflineStore);
+      //showMap($vm.currentOfflineStore);
     }
 
     function changeOfflineStoreArea(code) {

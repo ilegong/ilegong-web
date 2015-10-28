@@ -66,7 +66,8 @@ class DATABASE_CONFIG {
 			$this->default = array(
 				'datasource' => 'Database/Mysql',
 				'persistent' => false,
-				'host' => $_SERVER["dbhost"]? $_SERVER["dbhost"] : 'localhost',
+				//'host' => $_SERVER["dbhost"]? $_SERVER["dbhost"] : 'localhost',
+				'host' => '127.0.0.1',
 				'port' => '3306',
 				'login' => '51daifan',	// jieli
 				'password' => 'PGdvFePBenE4TtBb',	//zFY8smWUKcaLrUs5	
@@ -77,7 +78,7 @@ class DATABASE_CONFIG {
 			$this->master = array(
 				'datasource' => 'Database/Mysql',
 				'persistent' => false,
-				'host' => 'localhost',
+				'host' => '127.0.0.1',
 				'port' => '3306',
 				'login' => '51daifan',
 				'password' => 'PGdvFePBenE4TtBb',
@@ -89,7 +90,7 @@ class DATABASE_CONFIG {
 			$this->olddb = array(
 				'datasource' => 'Database/Mysql',
 				'persistent' => false,
-				'host' => 'localhost',
+				'host' => '127.0.0.1',
 				'login' => '51daifan',
 				'password' => 'PGdvFePBenE4TtBb',
 				'database' => 'old_saecms',
