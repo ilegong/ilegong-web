@@ -7,7 +7,7 @@ class WesharesController extends AppController {
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy');
 
-    var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil');
+    var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority');
 
     var $share_ship_type = array('self_ziti', 'kuaidi', 'pys_ziti');
 
@@ -143,8 +143,8 @@ class WesharesController extends AppController {
             'fields' => $user_fields,
         ));
         if (empty($current_user['User']['mobilephone'])) {
-            $ref_url = WX_HOST.'/weshares/add';
-            $this->redirect('/users/to_bind_mobile?from=share&ref='.$ref_url);
+            $ref_url = WX_HOST . '/weshares/add';
+            $this->redirect('/users/to_bind_mobile?from=share&ref=' . $ref_url);
             return;
         }
         if (empty($current_user['User']['payment'])) {
@@ -785,17 +785,24 @@ class WesharesController extends AppController {
         $this->layout = 'weshare_bootstrap';
         $user_id = $this->currentUser['id'];
         $weshare = $this->Weshare->find('first', array(
-            'conditions' => array('id' => $weshareId, 'creator' => $user_id)
+            'conditions' => array('id' => $weshareId)
         ));
         $is_manage = $this->ShareUserBind->checkUserCanManageShare($weshareId, $user_id);
-        if (empty($weshare) && !$is_manage) {
+        if (empty($weshare)) {
+            $this->redirect("/weshares/view/" . $weshareId);
+        }
+        if ($weshare['Weshare']['creator'] != $user_id && !$is_manage) {
             $this->redirect("/weshares/view/" . $weshareId);
         }
         $child_share_data = $this->WeshareBuy->get_child_share_items($weshareId);
         $share_tags = $this->ShareUtil->get_share_tags($weshareId);
-        //存在商品标签
-        if($share_tags > 0){
-
+        if ($weshare['Weshare']['creator'] == $user_id || count($share_tags) <= 1) {
+            $this->set('show_tag_all', true);
+        }
+        //存在多个商品标签不是管理员
+        if (count($share_tags) > 0 && $weshare['Weshare']['creator'] != $user_id) {
+            $userTags = $this->ShareAuthority->get_user_spec_type_authority($user_id, SHARE_TAG_ORDER_OPERATE_TYPE, $weshareId, SHARE_OPERATE_SCOPE_TYPE);
+            $share_tags = $userTags;
         }
         $statics_data = $this->get_weshare_buy_info($weshareId, true, true);
         if (count($share_tags['tags']) > 0) {

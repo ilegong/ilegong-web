@@ -24,7 +24,9 @@
     <br>
     <div>
         <ol class="breadcrumb" id="order-tag-toggle">
+            {{if $show_tag_all}}
             <li class="active" data-id="all"><a>全部</a></li>
+            {{/if}}
             {{loop $tags $tag}}
             <li data-id="{{$tag['WeshareProductTag']['id']}}"><a>{{$tag['WeshareProductTag']['name']}}</a></li>
             {{/loop}}
