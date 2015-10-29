@@ -1516,6 +1516,7 @@ class WeshareBuyComponent extends Component {
         $followers = $this->load_fans_buy_sharer($recommend_user, $limit, $offset);
         $hasBuyUsers = $this->get_has_buy_user($weshareId);
         $followers = array_diff($followers, $hasBuyUsers);
+        //todo check msg logs
         $openIds = $this->Oauthbind->findWxServiceBindsByUids($followers);
         foreach ($openIds as $openId) {
             $this->Weixin->send_recommend_template_msg($openId, $detail_url, $remark, $title, $product_name, $sharer_name);

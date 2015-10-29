@@ -52,6 +52,17 @@ class ShareUserBind extends AppModel {
         return in_array($user_id, $shareBindInfo);
     }
 
+    public function checkUserShareOrChildShare($weshare, $user_id) {
+        $share_id = $weshare['Weshare']['id'];
+        $refer_share_id = $weshare['Weshare']['refer_share_id'];
+        $shareBindInfo = $this->shareBindData[$share_id];
+        $referShareBindInfo = $this->shareBindData[$refer_share_id];
+        if (empty($shareBindInfo) && empty($referShareBindInfo)) {
+            return false;
+        }
+        return in_array($user_id, $shareBindInfo) || in_array($user_id, $referShareBindInfo);
+    }
+
     public function getAllShareUserBind() {
         return $this->shareBindData;
     }
