@@ -6,3 +6,7 @@ CREATE TABLE `cake_msg_logs` (
   `created` DATETIME NOT NULL,
   `deleted` VARCHAR(45) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`));
+
+ALTER TABLE `cake_msg_logs`
+ADD COLUMN `user_id` INT NOT NULL AFTER `id`;
+

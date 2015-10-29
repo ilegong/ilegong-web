@@ -1516,11 +1516,43 @@ class WeshareBuyComponent extends Component {
         $followers = $this->load_fans_buy_sharer($recommend_user, $limit, $offset);
         $hasBuyUsers = $this->get_has_buy_user($weshareId);
         $followers = array_diff($followers, $hasBuyUsers);
-        //todo check msg logs
+        //check msg logs
+        $followers = $this->check_msg_log_and_filter_user($weshareId, $followers, MSG_LOG_RECOMMEND_TYPE);
         $openIds = $this->Oauthbind->findWxServiceBindsByUids($followers);
         foreach ($openIds as $openId) {
             $this->Weixin->send_recommend_template_msg($openId, $detail_url, $remark, $title, $product_name, $sharer_name);
         }
+    }
+
+    /**
+     * @param $data_id
+     * @param $user_ids
+     * @param $type
+     * @return array
+     * 查找用户消息记录，过滤用户
+     */
+    public function check_msg_log_and_filter_user($data_id, $user_ids, $type) {
+        $msgLogM = ClassRegistry::init('MsgLog');
+        //添加更多的过滤条件 (比如今天只收一次)
+        $msgLogs = $msgLogM->find('all', array(
+            'conditions' => array(
+                'data_id' => $data_id,
+                'data_type' => $type
+            )
+        ));
+        $msgLogUserIds = Hash::extract($msgLogs, '{n}.MsgLog.user_id');
+        $user_ids = array_diff($user_ids, $msgLogUserIds);
+        $saveMsgLogData = array();
+        foreach ($user_ids as $item_uid) {
+            $saveMsgLogData[] = array(
+                'data_id' => $data_id,
+                'data_type' => $type,
+                'user_id' => $item_uid,
+                'created' => date('Y-m-d H:i:s'),
+            );
+        }
+        $msgLogM->saveAll($saveMsgLogData);
+        return $user_ids;
     }
 
     /**
@@ -1689,7 +1721,7 @@ class WeshareBuyComponent extends Component {
         return WX_HOST . '/weshares/view/' . $weshareId;
     }
 
-    public function get_open_id($uid){
+    public function get_open_id($uid) {
         $oauthBindM = ClassRegistry::init('Oauthbind');
         $uid_openid_map = $oauthBindM->findWxServiceBindMapsByUids(array($uid));
         return $uid_openid_map[$uid];

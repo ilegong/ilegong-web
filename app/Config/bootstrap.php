@@ -294,6 +294,8 @@ define('APP_REGISTER_MARK', 11); //APP注册用户标示
 define('SERVICE_LINE_PHONE', '010-56245991');
 define('SERVICE_LINE', '<a href="tel:01056245991">010-56245991</a>');
 
+define('MSG_LOG_RECOMMEND_TYPE', 1);
+
 global $page_style;
 global $pages_tpl;
 /*  分页样式    */
@@ -2201,7 +2203,7 @@ function sort_data_by_id($a, $b) {
     return ($a['id'] < $b['id']) ? 1 : -1;
 }
 
-function sort_data_by_id_desc($a, $b){
+function sort_data_by_id_desc($a, $b) {
     return ($a['id'] > $b['id']) ? 1 : -1;
 }
 
