@@ -55,7 +55,7 @@ class ShareAuthorityComponent extends Component {
         $cacheData = Cache::read($key);
         if (empty($cacheData)) {
             $shareOperateSettingM = ClassRegistry::init('ShareOperateSetting');
-            $operateSettings = $shareOperateSettingM->get_user_spec_type_authority($uid, SHARE_ORDER_OPERATE_TYPE, $shareId, SHARE_OPERATE_SCOPE_TYPE);
+            $operateSettings = $shareOperateSettingM->get_user_spec_type_authority($uid, SHARE_TAG_ORDER_OPERATE_TYPE, $shareId, SHARE_OPERATE_SCOPE_TYPE);
             $operateTagCollection = Hash::extract($operateSettings, '{n}.ShareOperateSetting.data_id');
             Cache::write($key, json_encode($operateTagCollection));
         } else {
