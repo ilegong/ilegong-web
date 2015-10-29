@@ -17,31 +17,31 @@ class ShareFaqController extends AppController {
     //目前只有分享者可以看到
     /**
      * @param $shareId
-     * @param $shareCreator
+     * @param $receiver
      * 分享者和用户交互的列表
      */
-    public function faq_list($shareId, $shareCreator) {
-        $faq_list = $this->ShareFaqUtil->share_faq_list($shareId, $shareCreator);
+    public function faq_list($shareId, $receiver) {
+        $faq_list = $this->ShareFaqUtil->share_faq_list($shareId, $receiver);
         $this->set($faq_list);
     }
 
     /**
      * @param $shareId
      * @param $userId
-     * 分享者和购买者交流页面
+     * 用户交流页面
      */
     public function faq($shareId, $userId) {
         $share_info = $this->get_share_info($shareId);
         //todo check is login
         $current_user_id = $this->currentUser['id'];
-        $share_creator = $share_info['Weshare']['creator'];
-        if ($current_user_id != $share_creator && $userId != $share_creator) {
-            $this->redirect('/weshares/view/' . $shareId);
-            return;
-        }
+//        $share_creator = $share_info['Weshare']['creator'];
+//        if ($current_user_id != $share_creator && $userId != $share_creator) {
+//            $this->redirect('/weshares/view/' . $shareId);
+//            return;
+//        }
         $user_info = $this->User->find('all', array(
             'conditions' => array(
-                'id' => array($userId, $share_creator, $current_user_id)
+                'id' => array($userId, $current_user_id)
             ),
             'fields' => array('id', 'nickname', 'image')
         ));

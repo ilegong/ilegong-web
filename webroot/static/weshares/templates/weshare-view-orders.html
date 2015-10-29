@@ -6,6 +6,8 @@
                 <img ng-click="vm.toUserShareInfo(order.creator)" lazy-src="{{vm.childShareDetailUsers[order.creator]['image']|| vm.staticFilePath + '/img/default_user_icon.jpg'}}"/>
                 <p ng-if="vm.childShareDetailUsers[order.creator]['is_proxy']==1" style="color: white; font-size: 13px; font-weight: 700; padding: 2px; margin-top: 1px; background-color: #29AC0E;text-align: center;">
                     团长</p>
+                <p ng-click="vm.chatToUser(order.creator);" ng-if="vm.currentUser.id" ng-click="" style="color: white; font-size: 13px; font-weight: 700; padding: 2px; margin-top: 3px; background-color: #F2651A;text-align: center;">
+                    私信</p>
             </li>
             <li class="detail" ng-click="vm.toShareDetailView(order.weshare_id);">
                 <b></b>
@@ -27,8 +29,10 @@
             <!--default order-->
             <li class='buyer-image'>
                 <img ng-click="vm.toUserShareInfo(order.creator)" lazy-src="{{vm.ordersDetail.users[order.creator]['image']|| vm.staticFilePath + '/img/default_user_icon.jpg'}}"/>
-                <p ng-if="vm.ordersDetail.users[order.creator]['is_proxy']==1" style="color: white; font-size: 13px; font-weight: 700; padding: 2px; margin-top: 1px; background-color: #29AC0E;text-align: center;">
+                <p ng-if="vm.ordersDetail.users[order.creator]['is_proxy']==1" style="color: white; font-size: 13px; font-weight: 700; padding: 2px; margin-top: 3px; background-color: #29AC0E;text-align: center;">
                     团长</p>
+                <p ng-click="vm.chatToUser(order.creator);" ng-if="vm.currentUser.id" ng-click="" style="color: white; font-size: 13px; font-weight: 700; padding: 2px; margin-top: 3px; background-color: #F2651A;text-align: center;">
+                    私信</p>
             </li>
             <li class="detail" ng-if='order.status!=9'>
                 <b></b>

@@ -309,6 +309,7 @@ ul li {
     width: 50px;
     border-radius: 50px;
     height: 50px;
+    margin-left: 5px;
 }
 
 .weshare-view ul li {
@@ -318,11 +319,10 @@ ul li {
 .weshare-view ul li label {
     font-weight: bold;
     display: block;
-    padding-left: 10px;
+    padding-left: 5px;
     color: #29AC0E;
     font-size: 16px;
     padding-top: 5px;
-    width: 100px;
 }
 
 .weshare-view ul li s {
@@ -330,7 +330,7 @@ ul li {
     color: #999999;
     text-decoration: none;
     display: block;
-    padding-left: 10px;
+    padding-left: 5px;
     padding-top: 3px;
 }
 
@@ -393,13 +393,11 @@ ul li {
     text-decoration: none;
     text-align: center;
     margin-left: 5px;
-    margin-top: 0;
+    margin-top: 5px;
     width: 60px;
     line-height: 25px;
     background-color: #F2651A;
     height: 25px;
-    position: absolute;
-    right: 4%;
 }
 
 .weshare-view .sharer-nickname-display-inline {
@@ -412,7 +410,6 @@ ul li {
 
 .weshare-view .ul-wrap-btn {
     width: 25%;
-    margin-top: 25px;
     float: right;
 }
 

@@ -200,6 +200,7 @@
     vm.newGroupShare = newGroupShare;
     vm.redirectFaq = redirectFaq;
     vm.checkUserHasStartGroupShare = checkUserHasStartGroupShare;
+    vm.chatToUser = chatToUser;
     vm.childShareDetail = null;
     vm.currentUserOrderCount = 0;
     function pageLoaded() {
@@ -258,6 +259,14 @@
         }
       }
       return false;
+    }
+
+    function chatToUser(userId) {
+      if (userId == vm.currentUser.id) {
+        window.location.href = '/share_faq/faq_list/' + vm.weshare.id + '/' + userId;
+        return;
+      }
+      window.location.href = '/share_faq/faq/' + vm.weshare.id + '/' + userId;
     }
 
     function loadOrderDetail(share_id) {
