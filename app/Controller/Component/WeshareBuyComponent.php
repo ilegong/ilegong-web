@@ -1516,7 +1516,7 @@ class WeshareBuyComponent extends Component {
         $followers = $this->load_fans_buy_sharer($recommend_user, $limit, $offset);
         $hasBuyUsers = $this->get_has_buy_user($weshareId);
         $followers = array_diff($followers, $hasBuyUsers);
-        //check msg logs
+        //check msg logs filter users
         $followers = $this->check_msg_log_and_filter_user($weshareId, $followers, MSG_LOG_RECOMMEND_TYPE);
         $openIds = $this->Oauthbind->findWxServiceBindsByUids($followers);
         foreach ($openIds as $openId) {
@@ -1533,12 +1533,15 @@ class WeshareBuyComponent extends Component {
      */
     public function check_msg_log_and_filter_user($data_id, $user_ids, $type) {
         $msgLogM = ClassRegistry::init('MsgLog');
-        //添加更多的过滤条件 (比如今天只收一次)
+        //添加更多的过滤条件 (比如每天只收一次)
+        //todo 记录过多的情况处理（暂时不会出现这个问题）
         $msgLogs = $msgLogM->find('all', array(
             'conditions' => array(
                 'data_id' => $data_id,
                 'data_type' => $type
-            )
+            ),
+            'fields' => array('user_id'),
+            'limit' => 3000
         ));
         $msgLogUserIds = Hash::extract($msgLogs, '{n}.MsgLog.user_id');
         $user_ids = array_diff($user_ids, $msgLogUserIds);
