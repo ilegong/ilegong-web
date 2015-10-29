@@ -4,6 +4,7 @@
             <ul class="nav nav-sidebar">
                 <li><a id="delete-share">删除分享</a></li>
                 <li><a href="/manage/admin/share_tool/share_operate_set_view">分享授权</a></li>
+                <li><a id="set-proxy" href="#">设置用户为团长</a></li>
             </ul>
             <ul class="nav nav-sidebar">
                 <li><a id="clear-share-cache">清除分享缓存</a></li>
@@ -90,6 +91,33 @@
                     </div>
                 </div>
             </div>
+            <div class="modal fade" id="set-user-proxy" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">设置用户为团长</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="set-proxy-user-id" class="col-sm-2 control-label">用户ID</label>
+
+                                    <div class="col-sm-10">
+                                        <input type="email" class="form-control" id="set-proxy-user-id"
+                                               placeholder="用户ID">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="button" class="btn btn-primary" id="handle-set-user-proxy">设置</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -98,6 +126,14 @@
         var $deleteShareDialog = $('#delete-share-modal');
         var $clearUserCacheDialog = $('#clear-user-cache-modal');
         var $clearShareCacheDialog = $('#clear-share-cache-modal');
+        var $setUserProxyDialog = $('#set-user-proxy');
+
+        $('#set-proxy').on('click', function (e) {
+            e.preventDefault();
+            $setUserProxyDialog.modal('show');
+            $('div.modal-backdrop').css('z-index', 99);
+        });
+
         $('#delete-share').on('click', function (e) {
             e.preventDefault();
             $deleteShareDialog.modal('show');
@@ -113,6 +149,24 @@
             $clearShareCacheDialog.modal('show');
             $('div.modal-backdrop').css('z-index', 99);
         });
+
+        $('#handle-set-user-proxy').on('click', function (e) {
+            e.preventDefault();
+            var userId = $('#set-proxy-user-id', $setUserProxyDialog).val();
+            if (!userId) {
+                alert('输入用户ID');
+                return;
+            }
+            $.getJSON('/manage/admin/share/set_user_proxy/' + userId, function (data) {
+                if (data['success']) {
+                    alert('success');
+                    $setUserProxyDialog.modal('hide');
+                } else {
+                    alert('fail');
+                }
+            });
+        });
+
         $('#handle-clear-user-cache').on('click', function (e) {
             e.preventDefault();
             var userid = $('#cache-user-id').val();

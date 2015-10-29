@@ -24,6 +24,14 @@ class ShareController extends AppController {
 
     }
 
+
+    public function admin_set_user_proxy($userId) {
+        $this->autoRender = false;
+        $this->User->update(array('is_proxy' => 1), array('id' => $userId));
+        echo json_encode(array('success' => true));
+        return;
+    }
+
     public function admin_clear_user_cache($userId) {
         $this->autoRender = false;
         Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $userId, '');
@@ -169,7 +177,7 @@ class ShareController extends AppController {
                     $share_summery_data['total_price'] = $share_summery_data['total_price'] + $child_share_summery_data['total_price'];
                     $share_summery_data['child_ship_fee'] = $share_summery_data['child_ship_fee'] + $child_share_summery_data['ship_fee'];
                     $share_summery_data['coupon_total'] = $share_summery_data['coupon_total'] + $child_share_summery_data['coupon_total'];
-                    $share_summery_data['product_total_price'] =$share_summery_data['product_total_price'] + $child_share_summery_data['product_total_price'];
+                    $share_summery_data['product_total_price'] = $share_summery_data['product_total_price'] + $child_share_summery_data['product_total_price'];
                     $repaid_money_result[$share_item_key] = $repaid_money_result[$share_item_key] + $repaid_money_result[$child_item_id];
                     $weshare_rebate_map[$share_item_key] = $weshare_rebate_map[$share_item_key] + $weshare_rebate_map[$child_item_id];
                     $weshare_refund_money_map[$share_item_key] = $weshare_refund_money_map[$share_item_key] + $weshare_refund_money_map[$child_item_id];
@@ -213,7 +221,7 @@ class ShareController extends AppController {
             $order_total_price = $item['Order']['total_all_price'];
             $order_ship_fee = $item['Order']['ship_fee'];
             $order_coupon_total = $item['Order']['coupon_total'];
-            $order_product_price  = $item['Order']['total_price'];
+            $order_product_price = $item['Order']['total_price'];
             if ($item['Order']['status'] == ORDER_STATUS_RETURN_MONEY || $item['Order']['status'] == ORDER_STATUS_RETURNING_MONEY) {
                 $refund_order_ids[] = $item['Order']['id'];
                 if (!isset($refund_orders[$member_id])) {
