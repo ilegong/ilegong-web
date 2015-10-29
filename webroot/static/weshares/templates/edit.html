@@ -20,7 +20,7 @@
                 &nbsp;&nbsp;价格待定
                 &nbsp;&nbsp;
             </div>
-            <img src="{{vm.staticFilePath}}/static/weshares/images/faq.png" width="20px" height="20px" style="margin-top: 3%;" ng-click="vm.showProductTipInfo=true;vm.showLayer=true;">
+            <img src="{{::vm.staticFilePath}}/static/weshares/images/faq.png" width="20px" height="20px" style="margin-top: 3%;" ng-click="vm.showProductTipInfo=true;vm.showLayer=true;">
             <div class="form-group form-group-inline" ng-class="{'has-error': product.storeHasError}">
                 <input class='form-control' placeholder="库存/件,默认不限制" ng-model="product.store" ng-change='vm.validateProductStore(product)' ng-blur='vm.validateProductStore(product)'/>
                 <p class='tips'>请输入数字</p>
@@ -96,7 +96,7 @@
                 <p class='tips'>请输入数字</p>
             </div>
         </div>
-        <img src="{{vm.staticFilePath}}/static/weshares/images/faq.png" width="20px" height="20px" class="fr" style="margin-right: 5%;margin-top: -12%;" ng-click="vm.showPinTuanTipInfo=true;vm.showLayer=true;" ng-show="vm.pin_tuan_data.status==1"/>
+        <img src="{{::vm.staticFilePath}}/static/weshares/images/faq.png" width="20px" height="20px" class="fr" style="margin-right: 5%;margin-top: -12%;" ng-click="vm.showPinTuanTipInfo=true;vm.showLayer=true;" ng-show="vm.pin_tuan_data.status==1"/>
         <div class="clearfix" ng-class="{'checkbox-disable' : vm.sharerShipType==0}">
             <div class="form-group fl">
                 <input type="checkbox"  ng-disabled="vm.sharerShipType==0" ng-model="vm.pys_ziti_data.status" ng-true-value="1" ng-false-value="-1" ng-checked="vm.pys_ziti_data.status==1">
@@ -190,5 +190,5 @@
     </div>
 </div>
 <div style="text-align: center; margin-bottom: 0;">
-    <a href="/"><img src="{{vm.staticFilePath}}/img/logo_footer.jpg" border="0" style="width: 4.625em;height: 1.583em;"/></a><br/>朋友说—朋友间最真挚的分享
+    <a href="/"><img src="{{::vm.staticFilePath}}/img/logo_footer.jpg" border="0" style="width: 4.625em;height: 1.583em;"/></a><br/>朋友说—朋友间最真挚的分享
 </div>

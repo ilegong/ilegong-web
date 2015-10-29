@@ -794,7 +794,9 @@ class WesharesController extends AppController {
         if ($weshare['Weshare']['creator'] != $user_id && !$is_manage) {
             $this->redirect("/weshares/view/" . $weshareId);
         }
+        //获取子分享数据
         $child_share_data = $this->WeshareBuy->get_child_share_items($weshareId);
+        //获取产品标签数据
         $share_tags = $this->ShareUtil->get_share_tags($weshareId);
         $all_tag_ids = Hash::extract($share_tags['tags'], '{n}.WeshareProductTag.id');
         //should show all tag
@@ -805,6 +807,7 @@ class WesharesController extends AppController {
         if (count($share_tags) > 0 && $weshare['Weshare']['creator'] != $user_id) {
             $all_tag_ids = $this->ShareAuthority->get_user_can_view_order_tags($user_id, $weshareId);
         }
+        //获取订单统计数据
         $statics_data = $this->get_weshare_buy_info($weshareId, true, true);
         if (count($share_tags['tags']) > 0) {
             $tag_order_summery = $this->ShareUtil->summery_order_data_by_tag($statics_data, $weshareId);
