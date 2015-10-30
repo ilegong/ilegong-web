@@ -70,6 +70,7 @@ DataConverter.prototype.create = function () {
 
   //build HTML for converter
   this.inputTextArea = $('#order-data-input');
+  this.tempTextPlace = $('#RawJson');
   this.outputTextArea = $('#order-data-output');
 
 
@@ -89,17 +90,13 @@ DataConverter.prototype.create = function () {
   });
   $("#order-data-input").change(function () {
     self.convert();
-    _gaq.push(['_trackEvent', 'DataType', self.outputDataType]);
   });
 };
 
 
 DataConverter.prototype.convert = function () {
-
   this.inputText = this.inputTextArea.val();
   this.outputText = "";
-
-
   //make sure there is input data before converting...
   if (this.inputText.length > 0) {
 
@@ -121,15 +118,18 @@ DataConverter.prototype.convert = function () {
     var errors = parseOutput.errors;
 
     this.outputText = DataGridRenderer[this.outputDataType](dataGrid, headerNames, headerTypes, this.indent, this.newLine);
-
     if(!errors){
-      JSONFormatter.format(this.outputText, {
-        collapse: false, // Setting to 'true' this will format the JSON into a collapsable/expandable tree
-        appendTo: 'order-data-output', // A string of the id, class or element name to append the formatted json
-        list_id: 'json' // The name of the id at the root ul of the formatted JSON
-      })
+      var jsonArrayData = JSON.parse(this.outputText);
+      var resultData = [];
+      var postData = [];
+      $.each(jsonArrayData, function(index,item){
+        resultData.push({"订单号":item['订单号'],"快递单号":item['快递单号'], "物流方式":item['快递方式']});
+        postData.push({"order_id":item['订单号'],"ship_code":item['快递单号'], "ship_mark":item['快递方式']});
+      });
+      this.tempTextPlace.val(JSON.stringify(resultData));
+      Process();
     }else{
-      this.outputTextArea.val(errors + this.outputText);
+      alert('格式有误');
     }
   }; //end test for existence of input text
 }
