@@ -158,8 +158,10 @@ class ShareController extends AppController {
         }
         //remove single child share
         foreach ($weshares as $share_id => $share_item) {
-            if (!empty($share_item['refer_share_id'])) {
-                $remove_keys[] = $share_id;
+            if($share_item['type'] == 1){
+                if (!empty($share_item['refer_share_id'])) {
+                    $remove_keys[] = $share_id;
+                }
             }
         }
         foreach ($remove_keys as $key) {
