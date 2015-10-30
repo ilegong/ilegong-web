@@ -65,7 +65,7 @@ class VoteSetting extends AppModel{
             'common_params' => array(
                 'banner' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/dada36a0363_1030.jpg',
                 'prize_pic' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/6bbd4e0c490_1030.jpg',
-                'server_reply_title' => '晒萌宝樱花请客了!',
+                'server_reply_title' => '万圣节最佳装扮评选投票啦！',
                 'server_reply_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/dada36a0363_1030.jpg',
                 'server_reply_url' => 'http://www.tongshijia.com/vote/vote_event_view/8',
                 'reply_tip_info' => '请先关注朋友说微信公众号“pyshuo2014”如您已关注，请进入公众号回复“万圣节”即可！'
