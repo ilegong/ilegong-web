@@ -105,30 +105,30 @@
             <div class="tabbable-line">
                 <ul class="nav nav-tabs ">
                     <li class="active">
-                        <a href="#tab_default_1" data-toggle="tab">{{if $is_me}}我发起的分享{{else}}TA发起的分享{{/if}}</a>
+                        <a href="#tab_default_1" data-toggle="tab">{{if $is_me}}我参加的分享{{else}}TA参加的分享{{/if}}</a>
                     </li>
                     <li>
-                        <a href="#tab_default_2" data-toggle="tab">{{if $is_me}}我参加的分享{{else}}TA参加的分享{{/if}}</a>
+                        <a href="#tab_default_2" data-toggle="tab">{{if $is_me}}我发起的分享{{else}}TA发起的分享{{/if}}</a>
                     </li>
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane active" id="tab_default_1">
+                    <div class="tab-pane" id="tab_default_1">
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="comments-list">
-                                    {{loop $my_create_shares $share}}
+                                    <?php $parsing_join_share = true; ?>
+                                    {{loop $my_join_shares $share}}
                                     {{template weshares/user_share_item_template}}
                                     {{/loop}}
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane" id="tab_default_2">
+                    <div class="tab-pane active" id="tab_default_2">
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="comments-list">
-                                    <?php $parsing_join_share = true; ?>
-                                    {{loop $my_join_shares $share}}
+                                    {{loop $my_create_shares $share}}
                                     {{template weshares/user_share_item_template}}
                                     {{/loop}}
                                 </div>
