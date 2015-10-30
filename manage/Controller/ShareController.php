@@ -144,14 +144,16 @@ class ShareController extends AppController {
     private function reduce_weshares($weshares) {
         $remove_keys = array();
         foreach ($weshares as $share_id => $share_item) {
-            $refer_share_id = $share_item['refer_share_id'];
-            $parent_share = $weshares[$refer_share_id];
-            if (!empty($parent_share)) {
-                if (!isset($parent_share['child_share'])) {
-                    $parent_share['child_share'] = array();
+            if($share_item['type'] == 1){
+                $refer_share_id = $share_item['refer_share_id'];
+                $parent_share = $weshares[$refer_share_id];
+                if (!empty($parent_share)) {
+                    if (!isset($parent_share['child_share'])) {
+                        $parent_share['child_share'] = array();
+                    }
+                    $parent_share['child_share'][$share_id] = $share_item;
+                    $remove_keys[] = $share_id;
                 }
-                $parent_share['child_share'][$share_id] = $share_item;
-                $remove_keys[] = $share_id;
             }
         }
         //remove single child share
