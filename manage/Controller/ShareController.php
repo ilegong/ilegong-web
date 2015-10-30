@@ -263,7 +263,9 @@ class ShareController extends AppController {
     public function admin_share_paid() {
         $cond = array(
             'status' => array(1, 2),
-            'settlement' => 1
+            'settlement' => 1,
+            'limit' => 1000,
+            'order' => array('created DESC')
         );
         $this->process_share_data($cond);
     }
@@ -271,7 +273,9 @@ class ShareController extends AppController {
     public function admin_share_for_pay() {
         $cond = array(
             'status' => array(1, 2),
-            'settlement' => 0
+            'settlement' => 0,
+            'limit' => 1000,
+            'order' => array('created DESC')
         );
         $this->process_share_data($cond);
     }
