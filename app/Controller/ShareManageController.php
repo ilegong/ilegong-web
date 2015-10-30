@@ -7,7 +7,7 @@
 class ShareManageController extends AppController {
 
 
-    public $components = array('ShareUti', 'WeshareBuy', 'ShareManage');
+    public $components = array('ShareUtil', 'WeshareBuy', 'ShareManage');
 
     public function beforeFilter() {
         parent::beforeFilter();
