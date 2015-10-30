@@ -1659,12 +1659,12 @@ class WeshareBuyComponent extends Component {
      *
      * 获取本次分享已经购买的用户
      */
-    private function get_has_buy_user($share_id) {
+    public function get_has_buy_user($share_id) {
         $orderM = ClassRegistry::init('Order');
         $orders = $orderM->find('all', array(
             'conditions' => array(
                 'type' => ORDER_TYPE_WESHARE_BUY,
-                'status' => array(ORDER_STATUS_DONE, ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED),
+                'status' => array(ORDER_STATUS_DONE, ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY),
                 'member_id' => $share_id
             ),
             'fields' => $this->query_order_fields,

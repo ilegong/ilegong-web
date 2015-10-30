@@ -12,7 +12,7 @@ class UtilController extends AppController {
 
     public $uses = array('UserRelation', 'Order', 'Cart', 'User', 'Oauthbind', 'Weshare', 'CandidateEvent');
 
-    public $components = array('ShareUtil', 'Weixin');
+    public $components = array('ShareUtil', 'Weixin', 'WeshareBuy');
 
     /**
      * @param $user_id
@@ -83,6 +83,28 @@ class UtilController extends AppController {
         echo json_encode(array('success' => true));
         return;
     }
+
+    public function send_tip_msg() {
+        $this->autoRender = false;
+        $title = '小贴士：黄心奇异果硬度非常好，放在冰箱里可保存两三个月。想吃时可拿出几个与熟的苹果香蕉密封在一起，大约一周时间摸着变软就可以吃了。大家收到猕猴桃之后请分批存放，避免一起成熟吃不过来。';
+        $uids_1 = $this->WeshareBuy->get_has_buy_user(692);
+        $uids_2 = $this->WeshareBuy->get_has_buy_user(499);
+        $uids_1[] = '633345';
+        $uids_1[] = '544307';
+        $openIds_1 = $this->Oauthbind->findWxServiceBindsByUids($uids_1);
+        foreach ($openIds_1 as $openId) {
+            $this->process_send_share_msg($openId, $title, '奇异果收到了吧！', 'www.tongshijia.com/weshares/view/692', '小宝妈', '点击去评论');
+        }
+        $openIds_2 = $this->Oauthbind->findWxServiceBindsByUids($uids_2);
+        foreach ($openIds_2 as $openId) {
+            $this->process_send_share_msg($openId, $title, '奇异果收到了吧！', 'www.tongshijia.com/weshares/view/499', '小宝妈', '点击去评论');
+        }
+        echo json_encode(array('success' => true));
+        return;
+    }
+
+
+
 
     /**
      * 获取微信的token
