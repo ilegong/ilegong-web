@@ -311,7 +311,7 @@ class WesharesController extends AppController {
         $weshare_ship_settings = $this->getWeshareShipSettings($weshareId);
         $comment_data = $this->WeshareBuy->load_comment_by_share_id($weshareId);
         $recommend_data = $this->WeshareBuy->load_share_recommend_data($weshareId);
-        $is_manage_user = $this->ShareUserBind->checkUserCanManageShare($weshareId, $uid);
+        $is_manage_user = $this->ShareAuthority->user_can_view_share_order_list($uid, $weshareId);
         echo json_encode(array('support_pys_ziti' => $share_ship_set,
             'weshare' => $weshareInfo,
             'recommendData' => $recommend_data,
