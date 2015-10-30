@@ -26,8 +26,8 @@
     "dist/js/sb-admin-2.js"
   ],
   "dependencies": {
-    "bootstrap": "~3.3.1",
-    "datatables": "~1.10.4",
+    "bootstrap": "~3.3.5",
+    "datatables": "~1.10.9",
     "datatables-plugins": "~1.0.1",
     "flot": "~0.8.3",
     "font-awesome": "~4.2.0",
