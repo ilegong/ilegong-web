@@ -38,21 +38,57 @@
                                 <th>创建时间</th>
                                 <th>收货人</th>
                                 <th>收货地址</th>
+                                <th>联系方式</th>
                                 <th>快递方式</th>
-                                <th>物流方式</th>
                                 <th>快递单号</th>
                                 <th>订单状态</th>
+                                <th>备注</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <!--<tr class="odd gradeX">-->
-                            <!--<td>Trident</td>-->
-                            <!--<td>Internet Explorer 4.0</td>-->
-                            <!--<td>Win 95+</td>-->
-                            <!--<td class="center">4</td>-->
-                            <!--<td class="center">X</td>-->
-                            <!--</tr>-->
+                            {{loop $orders $idenx $order}}
+                            <tr class="{{if $index%2==0}}odd gradeX{{else}}even gradeA{{/if}}">
+                                <td>{{$order['Order']['id']}}</td>
+                                <td>{{$user_data[$order['Order']['creator']]['nickname']}}</td>
+                                <td>{{$order['Order']['created']}}</td>
+                                <td>{{$order['Order']['consignee_name']}}</td>
+                                <td>{{$order['Order']['consignee_mobilephone']}}</td>
+                                <td>
+                                    {{if $order['Order']['ship_mark'] == 'pys_ziti'}}
+                                    朋友说自提
+                                    {{elseif $order['Order']['ship_mark'] == 'self_ziti'}}
+                                    自有自提
+                                    {{elseif $order['Order']['ship_mark'] == 'pin_tuan'}}
+                                    拼团
+                                    {{else}}
+                                    快递
+                                    {{/if}}
+                                </td>
+                                <td class="center">{{$order['Order']['ship_code']}}</td>
+                                <td class="center">
+                                    {{if $order['Order']['status']==ORDER_STATUS_PAID}}
+                                    已付款
+                                    {{elseif $order['Order']['status'] == ORDER_STATUS_SHIPPED}}
+                                    已发货
+                                    {{elseif $order['Order']['status'] == ORDER_STATUS_RECEIVED}}
+                                    已收货
+                                    {{elseif $order['Order']['status'] == 5}}
+                                    价格待定
+                                    {{elseif $order['Order']['status'] == 6}}
+                                    尾款处理
+                                    {{elseif $order['Order']['status'] == 14}}
+                                    退款中
+                                    {{elseif $order['Order']['status'] == 4}}
+                                    已退款
+                                    {{else}}
+                                    已完成
+                                    {{/if}}
+                                </td>
+                                <td>{{$order['Order']['$order['Order']['status']']}}</td>
+                                <td>发货</td>
+                            </tr>
+                            {{/loop}}
                             </tbody>
                         </table>
                     </div>
