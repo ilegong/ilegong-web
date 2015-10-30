@@ -86,24 +86,23 @@ class UtilController extends AppController {
 
     public function send_tip_msg() {
         $this->autoRender = false;
-        $title = '小贴士：黄心奇异果硬度非常好，放在冰箱里可保存两三个月。想吃时可拿出几个与熟的苹果香蕉密封在一起，大约一周时间摸着变软就可以吃了。大家收到猕猴桃之后请分批存放，避免一起成熟吃不过来。';
+        $msg = '小贴士：黄心奇异果硬度非常好，放在冰箱里可保存两三个月。想吃时可拿出几个与熟的苹果香蕉密封在一起，大约一周时间摸着变软就可以吃了。大家收到猕猴桃之后请分批存放，避免一起成熟吃不过来。';
         $uids_1 = $this->WeshareBuy->get_has_buy_user(692);
         $uids_2 = $this->WeshareBuy->get_has_buy_user(499);
         $uids_1[] = '633345';
         $uids_1[] = '544307';
         $openIds_1 = $this->Oauthbind->findWxServiceBindsByUids($uids_1);
+        $datetime = date('Y-m-d H:i:s');
         foreach ($openIds_1 as $openId) {
-            $this->process_send_share_msg($openId, $title, '奇异果收到了吧！', 'www.tongshijia.com/weshares/view/692', '小宝妈', '点击去评论');
+            $this->Weixin->send_faq_notify_template_msg($openId, 'www.tongshijia.com/weshares/view/692', '奇异果收到了吧！', $msg, $datetime);
         }
         $openIds_2 = $this->Oauthbind->findWxServiceBindsByUids($uids_2);
         foreach ($openIds_2 as $openId) {
-            $this->process_send_share_msg($openId, $title, '奇异果收到了吧！', 'www.tongshijia.com/weshares/view/499', '小宝妈', '点击去评论');
+            $this->Weixin->send_faq_notify_template_msg($openId, 'www.tongshijia.com/weshares/view/499', '奇异果收到了吧！', $msg, $datetime);
         }
         echo json_encode(array('success' => true));
         return;
     }
-
-
 
 
     /**
