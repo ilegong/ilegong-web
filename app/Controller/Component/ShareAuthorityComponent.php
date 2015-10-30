@@ -3,6 +3,7 @@
 
 class ShareAuthorityComponent extends Component {
 
+
     /**
      * @param $shareId
      * @param $uid
