@@ -97,9 +97,15 @@
             </tr>
             </thead>
             <tbody>
-            <tr data-id="" id="">
-
-            </tr>
+            {{loop $operate_settings $item_operate_setting}}
+                <tr data-id="{{$item_operate_setting['ShareOperateSetting']['id']}}" id="operate-{{$item_operate_setting['ShareOperateSetting']['id']}}">
+                    <td>{{$item_operate_setting['ShareOperateSetting']['id']}}</td>
+                    <td>{{$item_operate_setting['ShareOperateSetting']['user']}}</td>
+                    <td>{{$user_data[$item_operate_setting['ShareOperateSetting']['user']]['nickname']}}</td>
+                    {{if $item_operate_setting['ShareOperateSetting']['data_type'] == }}
+                    <td>{{$share_info['Weshare']['title']}}</td>
+                </tr>
+            {{/loop}}
             </tbody>
         </table>
     </div>
