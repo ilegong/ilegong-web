@@ -37,5 +37,9 @@ class ShareManageController extends AppController {
         }
     }
 
+    public function batch_set_order_ship_code(){
+
+
+    }
 
 }

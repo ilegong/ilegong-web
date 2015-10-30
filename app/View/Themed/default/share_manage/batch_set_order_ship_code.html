@@ -1,0 +1,64 @@
+<div class="container-fluid">
+    <link href='/static/sharer/json-formatter/jsonFormatter.css' media='all' rel='stylesheet' type='text/css' />
+    <script src="/static/sharer/json-formatter/JSONFormatter.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/sharer/mr-data-converter/js/CSVParser.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/sharer/mr-data-converter/js/DataGridRenderer.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/sharer/mr-data-converter/js/converter.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/sharer/mr-data-converter/js/Controller.js" type="text/javascript" charset="utf-8"></script>
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">批量发货</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="alert alert-danger">
+                通知用户导出的excel格式不要变,要不转换数据会影响发货
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <h1>原始数据</h1>
+
+                            <form role="form">
+                                <div class="form-group">
+                                    <label>复制excel的数据</label>
+                                    <textarea class="form-control" rows="30" id="order-data-input"></textarea>
+                                </div>
+                                <button class="btn btn-default">发货</button>
+                                <button type="reset" id="convertButton" class="btn btn-default">转换数据</button>
+                            </form>
+                        </div>
+                        <!-- /.col-lg-6 (nested) -->
+                        <div class="col-lg-6">
+                            <h1>转换后的数据(发货前请核对)</h1>
+
+                            <form role="form">
+                                <fieldset>
+                                    <div class="form-group has-warning">
+                                        <label>转换后的数据</label>
+                                        <textarea class="form-control" rows="30" readonly id="order-data-output"></textarea>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                        <!-- /.col-lg-6 (nested) -->
+                    </div>
+                    <!-- /.row (nested) -->
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+</div>
+<script>
+
+</script>

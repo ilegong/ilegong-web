@@ -19,10 +19,10 @@ $table = array(
     array('label' => __('状态'), 'width' => 8),
     array('label' => __('联系电话'), 'width' => 12),
     array('label' => __('收货地址'), 'width' => 40, 'wrap' => true),
-    array('label' => __('快递方式'), 'width' => 20),
-    array('label' => __('微信昵称'), 'width' => 10),
-    array('label' => __('备注'), 'width' => 30),
-    array('label' => __('快递单号'), 'width' => 20),
+    array('label' => __('快递方式'), 'width' => 20, 'wrap' => true),
+    array('label' => __('微信昵称'), 'width' => 10, 'wrap' => true),
+    array('label' => __('备注'), 'width' => 30, 'wrap' => true),
+    array('label' => __('快递单号'), 'width' => 20, 'wrap' => true),
 );
 
 // add heading with different font and bold text

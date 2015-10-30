@@ -23,7 +23,6 @@
                                 type="button" class="btn btn-outline btn-success">导出待全部订单</a>&nbsp;&nbsp;&nbsp;&nbsp;<a
                                 href="/weshares/view/{{$share_data['id']}}">查看&nbsp;&nbsp;{{$share_data['title']}}</a>{{/if}}
                         </p>
-
                         <form method="post" action="/share_manage/share_order">
                             <div class="input-group col-lg-6">
                                   <input type="text" name="share_id" class="form-control col-lg-6" placeholder="分享ID" value="{{$share_id}}">
@@ -47,7 +46,6 @@
                                 <th>快递单号</th>
                                 <th>订单状态</th>
                                 <th>备注</th>
-                                <th>操作</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -91,7 +89,6 @@
                                     {{/if}}
                                 </td>
                                 <td>{{$order['Order']['business_remark']}}</td>
-                                <td>发货</td>
                             </tr>
                             {{/loop}}
                             </tbody>
