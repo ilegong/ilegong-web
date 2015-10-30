@@ -20,7 +20,9 @@
 
                         <p>输入分享ID，先查询，查询到结果可以操作。&nbsp;&nbsp;&nbsp;<a type="button" class="btn btn-outline btn-primary"
                                                                      href="">导出待发货订单</a>&nbsp;&nbsp;&nbsp;&nbsp;<a
-                                type="button" class="btn btn-outline btn-success" href="">导出待全部订单</a></p>
+                                type="button" class="btn btn-outline btn-success" href="">导出待全部订单</a>&nbsp;&nbsp;&nbsp;&nbsp;<a
+                                href="/weshares/view/{{$share_data['id']}}">查看&nbsp;&nbsp;{{$share_data['title']}}</a>
+                        </p>
 
                         <div class="input-group col-lg-6">
                             <input type="text" class="form-control col-lg-6" placeholder="分享ID">
@@ -47,7 +49,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {{loop $orders $idenx $order}}
+                            {{loop $orders $index $order}}
                             <tr class="{{if $index%2==0}}odd gradeX{{else}}even gradeA{{/if}}">
                                 <td>{{$order['Order']['id']}}</td>
                                 <td>{{$user_data[$order['Order']['creator']]['nickname']}}</td>
@@ -85,7 +87,7 @@
                                     已完成
                                     {{/if}}
                                 </td>
-                                <td>{{$order['Order']['$order['Order']['status']']}}</td>
+                                <td>{{$order['Order']['business_remark']}}</td>
                                 <td>发货</td>
                             </tr>
                             {{/loop}}
