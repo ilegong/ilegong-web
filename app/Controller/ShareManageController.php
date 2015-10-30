@@ -33,6 +33,7 @@ class ShareManageController extends AppController {
             $this->set('orders', $orders);
             $this->set('user_data', $user_data);
             $this->set('share_data', $share_data);
+            $this->set('share_id', $share_id);
         }
     }
 

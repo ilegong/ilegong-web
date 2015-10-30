@@ -18,10 +18,10 @@
                     <div class="well">
                         <h4>操作说明</h4>
 
-                        <p>输入分享ID，先查询，查询到结果可以操作。&nbsp;&nbsp;&nbsp;<a type="button" class="btn btn-outline btn-primary"
-                                                                     href="">导出待发货订单</a>&nbsp;&nbsp;&nbsp;&nbsp;<a
-                                type="button" class="btn btn-outline btn-success" href="">导出待全部订单</a>&nbsp;&nbsp;&nbsp;&nbsp;<a
-                                href="/weshares/view/{{$share_data['id']}}">查看&nbsp;&nbsp;{{$share_data['title']}}</a>
+                        <p>输入分享ID，先查询，查询到结果可以操作。{{if !empty($share_id)}}&nbsp;&nbsp;&nbsp;<a href="/weshares/order_export/{{$share_id}}" type="button" class="btn btn-outline btn-primary"
+                                                                     >导出待发货订单</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="/weshares/order_export/{{$share_id}}/0"
+                                type="button" class="btn btn-outline btn-success">导出待全部订单</a>&nbsp;&nbsp;&nbsp;&nbsp;<a
+                                href="/weshares/view/{{$share_data['id']}}">查看&nbsp;&nbsp;{{$share_data['title']}}</a>{{/if}}
                         </p>
 
                         <form method="post" action="/share_manage/share_order">
