@@ -1,6 +1,6 @@
 <?php
 
-class ShareManageComponet extends Componet {
+class ShareManageComponet extends Component {
 
     public $components = array('ShareUti', 'WeshareBuy');
 
