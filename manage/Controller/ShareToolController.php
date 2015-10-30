@@ -51,6 +51,7 @@ class ShareToolController extends AppController {
                 'fields' => array('nickname', 'id', 'mobilephone')
             ));
             $usersData = Hash::combine($usersData, '{n}.User.id', '{n}.User');
+            $productTags = Hash::combine($productTags, '{n}.WeshareProductTag.id', '{n}.WeshareProductTag');
             $this->set('operate_settings', $shareOperateSettings);
             $this->set('user_data', $usersData);
             $this->set('operate_name_map', $this->operateDataTypeNameMap);

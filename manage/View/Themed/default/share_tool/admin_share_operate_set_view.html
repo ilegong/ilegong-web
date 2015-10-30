@@ -68,6 +68,9 @@
                 <label for="product_tag">商品标签</label>
                 <select class="form-control" id="product_tag" name="product_tag">
                     <option value="0">全部</option>
+                    {{loop $product_tags $item_p_tag_id $item_p_tag}}
+                    <option value="{{$item_p_tag_id}}">{{$item_p_tag['name']}}</option>
+                    {{/loop}}
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">添加</button>
@@ -98,13 +101,27 @@
             </thead>
             <tbody>
             {{loop $operate_settings $item_operate_setting}}
-                <tr data-id="{{$item_operate_setting['ShareOperateSetting']['id']}}" id="operate-{{$item_operate_setting['ShareOperateSetting']['id']}}">
-                    <td>{{$item_operate_setting['ShareOperateSetting']['id']}}</td>
-                    <td>{{$item_operate_setting['ShareOperateSetting']['user']}}</td>
-                    <td>{{$user_data[$item_operate_setting['ShareOperateSetting']['user']]['nickname']}}</td>
-                    {{if $item_operate_setting['ShareOperateSetting']['data_type'] == }}
-                    <td>{{$share_info['Weshare']['title']}}</td>
-                </tr>
+            <tr data-id="{{$item_operate_setting['ShareOperateSetting']['id']}}"
+                id="operate-{{$item_operate_setting['ShareOperateSetting']['id']}}">
+                <td>{{$item_operate_setting['ShareOperateSetting']['id']}}</td>
+                <td>{{$item_operate_setting['ShareOperateSetting']['user']}}</td>
+                <td>{{$user_data[$item_operate_setting['ShareOperateSetting']['user']]['nickname']}}</td>
+                {{if $item_operate_setting['ShareOperateSetting']['data_type'] == SHARE_ORDER_OPERATE_TYPE}}
+                <td>{{$share_info['Weshare']['title']}}---订单查看</td>
+                {{else}}
+                <td>
+                    {{$share_info['Weshare']['title']}}---{{$product_tags[$item_operate_setting['ShareOperateSetting']['data_id']]['name']}}---订单查看
+                </td>
+                {{/if}}
+                {{if $item_operate_setting['ShareOperateSetting']['data_type'] == SHARE_ORDER_OPERATE_TYPE}}
+                <td>订单查看</td>
+                {{else}}
+                <td>分组订单查看</td>
+                {{/if}}
+                <td>
+                    <button type="button" class="btn btn-primary btn-sm">删除</button>
+                </td>
+            </tr>
             {{/loop}}
             </tbody>
         </table>
