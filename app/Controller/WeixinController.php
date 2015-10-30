@@ -359,7 +359,7 @@ class WeixinController extends AppController {
                         }
                     }
                     $content = array(
-                        array('title' => $reply_title, 'description' => '',
+                        array('title' => $reply_title, 'description' => '这一天的装扮是多么的“可爱”！看看大家的装扮，我们快来比一比，谁的装扮最Cool! 最棒？',
                             'picUrl' => $pic_url,
                             'url' => $detail_url),
                     );
