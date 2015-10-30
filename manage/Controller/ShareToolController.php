@@ -64,14 +64,67 @@ class ShareToolController extends AppController {
      * 保存分享权限设置
      */
     public function admin_save_share_operate_setting() {
-
+        $user_id = $_REQUEST['user_id'];
+        $share_id = $_REQUEST['share_id'];
+        $tag_id = $_REQUEST['tag_id'];
+        $this->save_share_operate($user_id, $share_id);
+        $this->save_share_tag_operate($user_id, $tag_id, $share_id);
+        $this->redirect(array('action' => 'admin_share_operate_set_view', '?' => array('share_id' => $share_id)));
     }
 
+    private function save_share_tag_operate($user_id, $tag_id, $share_id) {
+        if (!empty($user_id) && !empty($share_id) && !empty($tag_id)) {
+            $oldData = $this->ShareOperateSetting->find('first', array(
+                'conditions' => array(
+                    'user' => $user_id,
+                    'data_type' => SHARE_TAG_ORDER_OPERATE_TYPE,
+                    'data_id' => $tag_id,
+                    'scope_id' => $share_id,
+                    'scope_type' => SHARE_OPERATE_SCOPE_TYPE
+                )
+            ));
+            if (empty($oldData)) {
+                $saveData = array('user' => $user_id,
+                    'data_type' => SHARE_TAG_ORDER_OPERATE_TYPE,
+                    'data_id' => $tag_id,
+                    'scope_id' => $share_id,
+                    'scope_type' => SHARE_OPERATE_SCOPE_TYPE);
+                $this->ShareOperateSetting->save($saveData);
+            }
+        }
+    }
+
+    private function save_share_operate($user_id, $share_id) {
+        if (!empty($user_id) && !empty($share_id)) {
+            $oldData = $this->ShareOperateSetting->find('first', array(
+                'conditions' => array(
+                    'user' => $user_id,
+                    'data_type' => SHARE_ORDER_OPERATE_TYPE,
+                    'data_id' => $share_id,
+                    'scope_id' => $share_id,
+                    'scope_type' => SHARE_OPERATE_SCOPE_TYPE
+                )
+            ));
+            if (empty($oldData)) {
+                $saveData = array('user' => $user_id,
+                    'data_type' => SHARE_ORDER_OPERATE_TYPE,
+                    'data_id' => $share_id,
+                    'scope_id' => $share_id,
+                    'scope_type' => SHARE_OPERATE_SCOPE_TYPE);
+                $this->ShareOperateSetting->save($saveData);
+            }
+        }
+    }
+
+
     /**
+     * @param $id
+     * @param $share_id
      * 删除分享权限
      */
-    public function admin_delete_share_operate_setting() {
-
+    public function admin_delete_share_operate_setting($id, $share_id) {
+        $this->ShareOperateSetting->delete($id);
+        $this->redirect(array('action' => 'admin_share_operate_set_view', '?' => array('share_id' => $share_id)));
     }
 
 }
