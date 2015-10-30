@@ -188,9 +188,7 @@ class ShareController extends AppController {
     }
 
     private function process_share_data($cond) {
-        $weshares = $this->Weshare->find('all', array(
-            'conditions' => $cond
-        ));
+        $weshares = $this->Weshare->find('all', $cond);
         $weshare_ids = Hash::extract($weshares, '{n}.Weshare.id');
         $weshare_creator_ids = Hash::extract($weshares, '{n}.Weshare.creator');
         $creators = $this->User->find('all', array(
@@ -264,20 +262,26 @@ class ShareController extends AppController {
         $cond = array(
             'status' => array(1, 2),
             'settlement' => 1,
-            'limit' => 1000,
+        );
+        $q_c = array(
+            'conditions' => $cond,
+            'limit' => 500,
             'order' => array('created DESC')
         );
-        $this->process_share_data($cond);
+        $this->process_share_data($q_c);
     }
 
     public function admin_share_for_pay() {
         $cond = array(
             'status' => array(1, 2),
             'settlement' => 0,
-            'limit' => 1000,
+        );
+        $q_c = array(
+            'conditions' => $cond,
+            'limit' => 500,
             'order' => array('created DESC')
         );
-        $this->process_share_data($cond);
+        $this->process_share_data($q_c);
     }
 
     public function admin_merge_ship_setting_data() {
