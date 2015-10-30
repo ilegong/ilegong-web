@@ -21,14 +21,15 @@ $table = array(
     array('label' => __('收货地址'), 'width' => 40, 'wrap' => true),
     array('label' => __('快递方式'), 'width' => 20),
     array('label' => __('微信昵称'), 'width' => 10),
-    array('label' => __('备注'), 'width' => 40)
+    array('label' => __('备注'), 'width' => 30),
+    array('label' => __('快递单号'), 'width' => 20),
 );
 
 // add heading with different font and bold text
 $this->PhpExcel->addTableHeader($table, array('name' => '宋体', 'bold' => true, 'size' => '16'));
 
 $add_header_flag = false;
-$fields = array('id', 'consignee_name', 'created', 'pay_time', 'goods', 'num', 'total_all_price', 'ship_fee', 'coupon_total', 'status', 'consignee_mobilephone', 'consignee_address', 'ship_mark', 'nickname', 'business_remark');
+$fields = array('id', 'consignee_name', 'created', 'pay_time', 'goods', 'num', 'total_all_price', 'ship_fee', 'coupon_total', 'status', 'consignee_mobilephone', 'consignee_address', 'ship_mark', 'nickname', 'business_remark', 'ship_code');
 $header = array('订单号', '客户姓名', '下单时间', '支付时间', '商品', '件数', '总价', '运费', '使用红包', '状态', '联系电话', '收货地址', '快递方式', '微信昵称', '备注');
 $order_status = array('待确认', '已支付', '已发货', '已收货', '已退款', '', '', '', '', '已完成', '已做废', '已确认', '已投诉', '', '退款中');
 $ship_mark = array('kuai_di' => '快递', 'self_ziti' => '自提', 'pys_ziti' => '好邻居', 'pin_tuan' => '拼团');
