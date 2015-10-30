@@ -43,20 +43,16 @@ foreach ($orders as $item) {
             } else if ($fieldName == 'num') {
                 $value = $cart['num'];
             } else {
-                if ($index == 0) {
-                    if ($fieldName == 'status') {
-                        $value = $order_status[$item['status']];
-                    } else if ($fieldName == 'coupon_total') {
-                        $value = $item['coupon_total'] / 100.0;
-                    } else if ($fieldName == 'ship_mark') {
-                        $value = $ship_mark[$item['ship_mark']];
-                    }else if ($fieldName == 'nickname'){
-                        $value = $users[$item['creator']]['nickname'];
-                    } else {
-                        $value = $item[$fieldName];
-                    }
+                if ($fieldName == 'status') {
+                    $value = $order_status[$item['status']];
+                } else if ($fieldName == 'coupon_total') {
+                    $value = $item['coupon_total'] / 100.0;
+                } else if ($fieldName == 'ship_mark') {
+                    $value = $ship_mark[$item['ship_mark']];
+                }else if ($fieldName == 'nickname'){
+                    $value = $users[$item['creator']]['nickname'];
                 } else {
-                    $value = '';
+                    $value = $item[$fieldName];
                 }
             }
             $row[] = $value;
