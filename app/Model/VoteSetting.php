@@ -48,7 +48,39 @@ class VoteSetting extends AppModel{
         return $config['common_params']['server_reply_img'];
     }
 
+
     var $voteConfigs = array(
+        8 => array(
+            'id' => 8,
+            'initiator' => '141',
+            'sub_type' => 'Vote9',
+            'title' => '孩子们最开心的万圣节又来了!',
+            'sub_url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=400481575&idx=1&sn=6de5a3b7c60d050bd3be1223e06fe09d',
+            'wx_params' => array(
+                'time_line_title' => '万圣节最佳装扮评选投票啦！',
+                'chat_title' => '万圣节最佳装扮评选投票啦！',
+                'share_pic' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/dada36a0363_1030.jpg',
+                'desc' => '这一天的装扮是多么的“可爱”！看看大家的装扮，我们快来比一比，谁的装扮最Cool! 最棒？',
+            ),
+            'common_params' => array(
+                'banner' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/dada36a0363_1030.jpg',
+                'prize_pic' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/6bbd4e0c490_1030.jpg',
+                'server_reply_title' => '晒萌宝樱花请客了!',
+                'server_reply_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/dada36a0363_1030.jpg',
+                'server_reply_url' => 'http://www.tongshijia.com/vote/vote_event_view/8',
+                'reply_tip_info' => '请先关注朋友说微信公众号“pyshuo2014”如您已关注，请进入公众号回复“万圣节”即可！'
+            ),
+//            'product_params' => array(
+//                'recommend' => '樱花',
+//                'products' => array(
+//                    array(
+//                        'url' => 'http://www.tongshijia.com/weshares/view/56',
+//                        'pic' => '/img/imgstore/zao.jpg',
+//                        'name' => '天山骏枣'
+//                    )
+//                )
+//            )
+        ),
         6 => array(
             'id' => 6,
             'initiator' => '811917',

@@ -334,6 +334,37 @@ class WeixinController extends AppController {
                     );
                     echo $this->newArticleMsg($user, $me, $content);
                     break;
+                case '万圣节':
+                    $voteConfig = $this->VoteSetting->getVoteConfig(8);
+                    $detail_url = $voteConfig['common_params']['server_reply_url'];
+                    $pic_url = $voteConfig['common_params']['server_reply_img'];
+                    $reply_title = $voteConfig['title'];
+                    if ($uid) {
+                        $event_candidate = $this->CandidateEvent->find('first', array(
+                            'conditions' => array('user_id' => $uid, 'event_id' => 8)
+                        ));
+                        $this->log('event candidate ' . json_encode($event_candidate));
+                        if (!empty($event_candidate)) {
+                            $candidate_id = $event_candidate['CandidateEvent']['candidate_id'];
+                            $candidate = $this->Candidate->find('first', array(
+                                'conditions' => array(
+                                    'id' => $candidate_id
+                                )
+                            ));
+                            if (!empty($candidate)) {
+                                if ($candidate['Candidate']['deleted'] == DELETED_NO) {
+                                    $detail_url = 'http://www.tongshijia.com/vote/candidate_detail/' . $candidate_id . '/8';
+                                }
+                            }
+                        }
+                    }
+                    $content = array(
+                        array('title' => $reply_title, 'description' => '',
+                            'picUrl' => $pic_url,
+                            'url' => $detail_url),
+                    );
+                    echo $this->newArticleMsg($user, $me, $content);
+                    break;
                 case '报名':
                 case '宝宝':
                 case '投票':
