@@ -187,12 +187,9 @@ class ShareController extends AppController {
         }
     }
 
-    public function admin_share_for_pay() {
+    private function process_share_data($cond) {
         $weshares = $this->Weshare->find('all', array(
-            'conditions' => array(
-                'status' => array(1, 2),
-                'settlement' => 0
-            )
+            'conditions' => $cond
         ));
         $weshare_ids = Hash::extract($weshares, '{n}.Weshare.id');
         $weshare_creator_ids = Hash::extract($weshares, '{n}.Weshare.creator');
@@ -261,6 +258,22 @@ class ShareController extends AppController {
         $this->set('weshares', $weshares);
         $this->set('weshare_summery', $summery_data);
         $this->set('creators', $creators);
+    }
+
+    public function admin_share_paid() {
+        $cond = array(
+            'status' => array(1, 2),
+            'settlement' => 1
+        );
+        $this->process_share_data($cond);
+    }
+
+    public function admin_share_for_pay() {
+        $cond = array(
+            'status' => array(1, 2),
+            'settlement' => 0
+        );
+        $this->process_share_data($cond);
     }
 
     public function admin_merge_ship_setting_data() {
@@ -418,6 +431,12 @@ class ShareController extends AppController {
                 'settlement' => 0
             )
         ));
+        $share_paid_count = $this->Weshare->find('count', array(
+            'conditions' => array(
+                'status' => array(1, 2),
+                'settlement' => 1
+            )
+        ));
         $proxy_count = $this->RebateTrackLog->find('count', array(
             'conditions' => array(
                 'DATE(updated) >= ' => getMonthRange($current_date),
@@ -432,6 +451,7 @@ class ShareController extends AppController {
         $this->set('share_creator_count', $weshare_creator_count);
         $this->set('join_share_count', $join_weshare_count);
         $this->set('today_order_count', $order_count);
+        $this->set('share_paid_count', $share_paid_count);
     }
 
     public function admin_all_shares() {
