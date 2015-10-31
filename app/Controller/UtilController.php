@@ -104,6 +104,62 @@ class UtilController extends AppController {
         return;
     }
 
+    public function send_tip_juzi_ziti_kuaidi(){
+        $this->autoRender = false;
+        $msg = '亲们，由于橘子从地里摘完直接装箱，难免水汽大有坏的，请收到货及时检查，附近来补，我们备了足够的量补给大家，快递到家的亲们，如果发现坏的多请及时联系，我们会退部分款给各位。谢谢大家支持！';
+        //$uids = $this->get_juzi_normal_user();
+        $uids = array(633345);
+        $datetime = date('Y-m-d H:i:s');
+        $openIds = $this->Oauthbind->findWxServiceBindsByUids($uids);
+        foreach ($openIds as $openId) {
+            $this->Weixin->send_faq_notify_template_msg($openId, 'www.tongshijia.com/weshares/view/659', '橘子收到了吧！', $msg, $datetime);
+        }
+        echo json_encode(array('success' => true));
+        return;
+    }
+
+
+    public function send_tip_juzi_hlj(){
+        $this->autoRender = false;
+        $msg = '亲们，我们的橘子已经到达北京啦，请下周二到好邻居便利店自提，周一我们还会发提醒短信请注意查收哈。谢谢大家支持！';
+        //$uids = $this->get_juzi_hlj_user();
+        $uids = array(633345);
+        $datetime = date('Y-m-d H:i:s');
+        $openIds = $this->Oauthbind->findWxServiceBindsByUids($uids);
+        foreach ($openIds as $openId) {
+            $this->Weixin->send_faq_notify_template_msg($openId, 'www.tongshijia.com/weshares/view/659', '橘子收到了吧！', $msg, $datetime);
+        }
+        echo json_encode(array('success' => true));
+        return;
+    }
+
+    private function get_juzi_normal_user(){
+        $OrderM = ClassRegistry::init('Order');
+        $orders = $OrderM->find('all', array(
+            'conditions' => array(
+                'member_id' => 659,
+                'ship_mark' => array('kuai_di', 'self_ziti'),
+                'status' => array(ORDER_STATUS_DONE, ORDER_STATUS_PAID, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE)
+            ),
+            'fields' => array('creator', 'id')
+        ));
+        $uids = Hash::extract($orders, '{n}.Order.creator');
+        return $uids;
+    }
+
+    private function get_juzi_hlj_user(){
+        $OrderM = ClassRegistry::init('Order');
+        $orders = $OrderM->find('all', array(
+            'conditions' => array(
+                'member_id' => 659,
+                'ship_mark' => array('pys_ziti'),
+                'status' => array(ORDER_STATUS_DONE, ORDER_STATUS_PAID, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE)
+            ),
+            'fields' => array('creator', 'id')
+        ));
+        $uids = Hash::extract($orders, '{n}.Order.creator');
+        return $uids;
+    }
 
     /**
      * 获取微信的token
