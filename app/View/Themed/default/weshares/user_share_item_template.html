@@ -11,8 +11,16 @@
                 <span class="label label-danger">待评价</span>
             {{elseif $join_share_order_status[$current_share_id]['status']==ORDER_STATUS_DONE}}
                 <span class="label label-success">已评价</span>
+            {{elseif $join_share_order_status[$current_share_id]['status']==ORDER_STATUS_RETURNING_MONEY}}
+                <span class="label label-success">退款中</span>
+            {{elseif $join_share_order_status[$current_share_id]['status']==ORDER_STATUS_RETURN_MONEY}}
+                <span class="label label-success">已退款</span>
             {{else}}
-                <span class="label label-success">其他</span>
+                {{if $share['Weshare']['status']==0}}
+                <span class="label label-info">进行中</span>
+                {{else}}
+                <span class="label label-danger">已结束</span>
+                {{/if}}
             {{/if}}
         {{else}}
             {{if $share['Weshare']['status']==0}}
