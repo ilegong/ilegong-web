@@ -790,7 +790,7 @@ class WesharesController extends AppController {
         if (empty($weshare)) {
             $this->redirect("/weshares/view/" . $weshareId);
         }
-        $is_manage = $this->ShareUserBind->checkUserShareOrChildShare($weshare, $user_id);
+        $is_manage = $this->ShareAuthority->user_can_view_share_order_list($user_id, $weshareId);
         if ($weshare['Weshare']['creator'] != $user_id && !$is_manage) {
             $this->redirect("/weshares/view/" . $weshareId);
         }
