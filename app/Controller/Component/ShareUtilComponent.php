@@ -1555,16 +1555,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 806889,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
                 ),
-                '915' => array(
-                    'share_id' => 915,
-                    'share_name' => '超级福利来喽！俄罗斯野生淡干小海参',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/fc7c7c2fdb1_1028.jpg',
-                    'share_price' => '399',
-                    'share_user_name' => '李樱花',
-                    'share_vote' => 800,
-                    'share_user_id' => 810684,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
-                ),
+//                '915' => array(
+//                    'share_id' => 915,
+//                    'share_name' => '超级福利来喽！俄罗斯野生淡干小海参',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/fc7c7c2fdb1_1028.jpg',
+//                    'share_price' => '399',
+//                    'share_user_name' => '李樱花',
+//                    'share_vote' => 800,
+//                    'share_user_id' => 810684,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
+//                ),
                 '747' => array(
                     'share_id' => 747,
                     'share_name' => '那那家五常稻花香米',
@@ -1575,8 +1575,8 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 812111,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_db53c030cbe19145428f0d5ca58b9562.jpg'
                 ),
-                '901' => array(
-                    'share_id' => 901,
+                '1019' => array(
+                    'share_id' => 1019,
                     'share_name' => '多油、好吃到停不下来的海鸭蛋',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/ece57e81c34_1027.jpg',
                     'share_price' => '55',
@@ -1595,16 +1595,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 563240,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/26a561eddc9_1021.jpg'
                 ),
-                '659' => array(
-                    'share_id' => 659,
-                    'share_name' => '浙江衢州橘子团（限北京地区）',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/000c732f7c6_1009.jpg',
-                    'share_price' => '60',
-                    'share_user_name' => '小宝妈',
-                    'share_vote' => 900,
-                    'share_user_id' => 811917,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
-                ),
+//                '659' => array(
+//                    'share_id' => 659,
+//                    'share_name' => '浙江衢州橘子团（限北京地区）',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/000c732f7c6_1009.jpg',
+//                    'share_price' => '60',
+//                    'share_user_name' => '小宝妈',
+//                    'share_vote' => 900,
+//                    'share_user_id' => 811917,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
+//                ),
                 '885' => array(
                     'share_id' => 885,
                     'share_name' => '云南哀牢山古法手工叶子红糖，特价包邮还有赠品必须分享啊！',
