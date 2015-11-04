@@ -1535,6 +1535,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 875275,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/8752751445930740.png'
                 ),
+                '1009' => array(
+                    'share_id' => 1009,
+                    'share_name' => '甜甜糯糯的迁西板栗',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/0019710cb43_1104.jpg',
+                    'share_price' => '75',
+                    'share_user_name' => 'Ruby',
+                    'share_vote' => 550,
+                    'share_user_id' => 873345,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_03a203d2622e7173f03d9cf3d8b4784d.jpg'
+                ),
                 '954' => array(
                     'share_id' => 954,
                     'share_name' => '好吃到爆的琼中绿橙，来自北纬18°的热带天然水果',
