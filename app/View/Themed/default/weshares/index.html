@@ -23,12 +23,18 @@
 <div class="outer-listings-container row-space-3" style="margin-bottom: 50px;margin-top: 45px;">
     <div class="listings-container">
         {{loop $products $product}}
+        <?php
+            $product_detail_url = '/weshares/view/'.$product['share_id'];
+            if($product['share_id']==1019){
+                $product_detail_url = $product_detail_url.'shared_offer_id=18694'
+            }
+        ?>
         <div class="row">
             <!--葡萄-->
             <div class="col-sm-12 row-space-2 col-md-6">
                 <div class="listing">
                     <div class="panel-image listing-img">
-                        <a href="/weshares/view/{{$product['share_id']}}" target="_self"
+                        <a href="{{$product_detail_url}}" target="_self"
                            class="media-photo media-cover">
                             <div class="listing-img-container media-cover text-center">
                                 <img itemprop="image" data-current="0"
@@ -37,7 +43,7 @@
                                      data-urls="[&quot;{{$this->Html->assetUrl($product['share_img'])}}&quot;]">
                             </div>
                         </a>
-                        <a href="/weshares/view/{{$product['share_id']}}" target="_self"
+                        <a href="{{$product_detail_url}}" target="_self"
                            class="link-reset panel-overlay-bottom-left panel-overlay-label panel-overlay-listing-label">
                             <div>
                                 <sup class="h6 text-contrast">￥</sup>
@@ -58,7 +64,7 @@
                                          alt="">
                                 </div>
                             </a>
-                            <a href="/weshares/view/{{$product['share_id']}}" target="_self" class="text-normal">
+                            <a href="{{$product_detail_url}}" target="_self" class="text-normal">
                                 <h3 title="{{$product['share_name']}}" itemprop="name"
                                     class="h5 listing-name text-truncate row-space-top-1">
                                     {{$product['share_name']}}
