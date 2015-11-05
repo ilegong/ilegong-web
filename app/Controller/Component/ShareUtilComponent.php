@@ -1525,6 +1525,16 @@ class ShareUtilComponent extends Component {
     public function get_share_index_product($tag) {
         $product = array(
             0 => array(
+                '961' => array(
+                    'share_id' => 961,
+                    'share_name' => '阳光下的枇杷，蒙自甜甜的小枇杷',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/39dda22d439_1105.jpeg',
+                    'share_price' => '108',
+                    'share_user_name' => '盛夏',
+                    'share_vote' => 235,
+                    'share_user_id' => 708029,
+                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
+                ),
                 '953' => array(
                     'share_id' => 953,
                     'share_name' => '脆甜好吃的冬雪蜜桃开团喽！',
