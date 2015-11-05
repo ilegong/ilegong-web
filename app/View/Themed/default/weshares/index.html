@@ -25,6 +25,9 @@
         {{loop $products $product}}
         <?php
             $product_detail_url = '/weshares/view/'.$product['share_id'];
+            if($product['share_id']==438){
+               $product_detail_url = $product_detail_url . '?shared_offer_id=438';
+            }
         ?>
         <div class="row">
             <!--葡萄-->
