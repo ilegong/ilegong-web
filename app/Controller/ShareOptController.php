@@ -15,7 +15,9 @@ class ShareOptController extends AppController {
     public function index() {
         $this->layout = null;
         $uid = $this->currentUser['id'];
-        $this->save_visit_log($uid);
+        if(!empty($uid)){
+            $this->save_visit_log($uid);
+        }
     }
 
     /**
