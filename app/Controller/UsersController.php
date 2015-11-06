@@ -9,7 +9,6 @@
  * @package  SaeCMS
  * @version  1.0
  * @author   Arlon <saecms@google.com>
-
  * @link     http://www.saecms.net
  */
 class UsersController extends AppController {
@@ -23,11 +22,11 @@ class UsersController extends AppController {
      */
     var $name = 'Users';
     var $components = array(
-    	'Auth',
+        'Auth',
         'Email',
         'Kcaptcha',
         'FileUpload',
-    	'Cookie' => array('name' => 'SAECMS', 'time' => '+2 weeks'),
+        'Cookie' => array('name' => 'SAECMS', 'time' => '+2 weeks'),
     );
     /**
      * Models used by the Controller
@@ -37,12 +36,12 @@ class UsersController extends AppController {
      */
     var $uses = array('User', 'Oauthbinds', 'WxOauth');
 
-    public function beforeFilter(){
-    	parent::beforeFilter();
+    public function beforeFilter() {
+        parent::beforeFilter();
 
-        $this->Auth->authenticate = array('WeinxinOAuth', 'Form', 'Pys','Mobile');
+        $this->Auth->authenticate = array('WeinxinOAuth', 'Form', 'Pys', 'Mobile');
 
-    	$this->Auth->allowedActions = array('register','login','forgot','captcha','reset', 'wx_login', 'wx_auth', 'wx_menu_point', 'login_state','get_spring_coupon');
+        $this->Auth->allowedActions = array('register', 'login', 'forgot', 'captcha', 'reset', 'wx_login', 'wx_auth', 'wx_menu_point', 'login_state', 'get_spring_coupon');
         $this->set('op_cate', 'me');
     }
 
@@ -80,10 +79,10 @@ class UsersController extends AppController {
         $this->layout = 'user_portlet';
     }
 
-    function goTage(){
-    	$code = authcode($this->currentUser['id'].','.$this->currentUser['username'],'ENCODE');
-    	$this->set('code',rawurlencode($code));
-    	$this->layout = false;
+    function goTage() {
+        $code = authcode($this->currentUser['id'] . ',' . $this->currentUser['username'], 'ENCODE');
+        $this->set('code', rawurlencode($code));
+        $this->layout = false;
     }
 
     function layout() {
@@ -125,21 +124,21 @@ class UsersController extends AppController {
 
                     if (mb_strlen($this->data['User']['nickname'], 'UTF-8') < 2) {
                         $this->Session->setFlash('用户名长度不能小于2个字符');
-                    }else if($this->data['User']['mobilephone'] !=  $current_post_num){
+                    } else if ($this->data['User']['mobilephone'] != $current_post_num) {
                         $this->Session->setFlash('请重新验证您的手机号码');
-                    }else if ($this->data['User']['password'] != $this->data['User']['password_confirm']) {
+                    } else if ($this->data['User']['password'] != $this->data['User']['password_confirm']) {
                         $this->Session->setFlash('两次密码不相等');
-                    }else if (is_null($this->data['User']['password']) || trim($this->data['User']['password']) == '') {
+                    } else if (is_null($this->data['User']['password']) || trim($this->data['User']['password']) == '') {
                         $this->Session->setFlash(__('Password should be longer than 6 characters'));
-                    }else if ($this->User->hasAny(array('User.mobilephone' => $this->data['User']['mobilephone']))){
+                    } else if ($this->User->hasAny(array('User.mobilephone' => $this->data['User']['mobilephone']))) {
                         $this->Session->setFlash(__('Mobilephone is taken by others.'));
-                    }else if($this->User->hasAny(array('User.username' => $this->data['User']['mobilephone']))){
+                    } else if ($this->User->hasAny(array('User.username' => $this->data['User']['mobilephone']))) {
                         $this->Session->setFlash(__('你的账号已被注册'));
-                    } else{
+                    } else {
                         $this->data['User']['password'] = Security::hash($this->data['User']['password'], null, true);
                         $has_error = false;
                         $this->data['User']['uc_id'] = 0;
-                        if ($has_error==false && $this->User->save($this->data)) {
+                        if ($has_error == false && $this->User->save($this->data)) {
                             //$this->autoRender = false;
                             $this->data['User']['id'] = $this->User->getLastInsertID();
                             if ($useractivate == 'email') {
@@ -156,26 +155,25 @@ class UsersController extends AppController {
                                 $this->Session->setFlash(__('Please receive email and activate your account.', true));
                             } elseif ($useractivate == 'hand') {
                                 $this->Session->setFlash(__('Please wait administrator to activate your account.', true));
-                            }
-                            else{
+                            } else {
                                 $this->Session->setFlash('注册成功!');
                             }
                             $this->after_create_user($this->data['User']['id']);
-                            $data = $this->User->find('first', array('conditions' => array('id' =>  $this->data['User']['id']) ));
+                            $data = $this->User->find('first', array('conditions' => array('id' => $this->data['User']['id'])));
                             $this->Session->write('Auth.User', $data['User']);
                             $this->redirect('/');
                         } else {
                             $this->Session->setFlash('注册失败，用户名或手机号已存在');
                         }
                     }
-                }else {
+                } else {
                     $this->Session->setFlash('短信验证码错误');
                 }
 
-            }else{
+            } else {
                 $this->Session->setFlash('短信验证未成功，请重新获取');
             }
-        }else {
+        } else {
             $this->Session->delete('Message.flash');
         }
 
@@ -197,9 +195,10 @@ class UsersController extends AppController {
             }
         } else {
             if ($this->User->hasAny(array(
-                        'User.username' => $username,
-                        'User.activation_key' => $key, 'User.status' => 0,)
-            )) {
+                    'User.username' => $username,
+                    'User.activation_key' => $key, 'User.status' => 0,)
+            )
+            ) {
                 $user = $this->User->findByUsername($username);
                 $this->User->id = $user['User']['id'];
                 $this->User->saveField('status', 1);
@@ -219,7 +218,7 @@ class UsersController extends AppController {
         }
     }
 
-    function edit($id=null) {
+    function edit($id = null) {
 
         $userinfo = $this->Auth->user();
         if ($userinfo['id']) {
@@ -250,8 +249,8 @@ class UsersController extends AppController {
 
     function my_profile() {
         $this->loadModel('Shichituan');
-        $result = $this->Shichituan->findByUser_id($this->currentUser['id'],array('Shichituan.shichi_id','Shichituan.pictures','Shichituan.status','Shichituan.period'),'Shichituan.shichi_id DESC');
-        $this->set('result',$result);
+        $result = $this->Shichituan->findByUser_id($this->currentUser['id'], array('Shichituan.shichi_id', 'Shichituan.pictures', 'Shichituan.status', 'Shichituan.period'), 'Shichituan.shichi_id DESC');
+        $this->set('result', $result);
         $userinfo = $this->Auth->user();
         if ($userinfo['id']) {
             $datainfo = $this->{$this->modelClass}->find('first', array('recursive' => -1, 'conditions' => array('id' => $userinfo['id'])));
@@ -269,16 +268,16 @@ class UsersController extends AppController {
 
 
     function editusername() {
-    	$userinfo = $this->Auth->user();
-    	if (!$userinfo['id']) {
-    		$this->Session->setFlash(__('You are not authorized to access that location.', true));
-    		$this->redirect(array('action' => 'login'));
-    	}
+        $userinfo = $this->Auth->user();
+        if (!$userinfo['id']) {
+            $this->Session->setFlash(__('You are not authorized to access that location.', true));
+            $this->redirect(array('action' => 'login'));
+        }
 
         $this->data['User']['username'] = trim($this->data['User']['username']);
-    	if (!empty($this->data) && !empty($this->data['User']['username']) && !empty($this->data['User']['password'])) {
+        if (!empty($this->data) && !empty($this->data['User']['username']) && !empty($this->data['User']['password'])) {
 
-            if ($this->User->hasAny(array('User.username' => $this->data['User']['username']))){
+            if ($this->User->hasAny(array('User.username' => $this->data['User']['username']))) {
                 $this->Session->setFlash(__('Username is taken by others.'));
             }
 
@@ -290,23 +289,22 @@ class UsersController extends AppController {
 
             if ($this->User->save($user['User'])) {
                 $this->Session->setFlash(__('成功设置用户名与密码'));
-            }
-            else {
+            } else {
                 $this->Session->setFlash(__('设置用户名与密码失败', true));
             }
-    	} else {
-    		$this->Session->delete('Message.flash');
-    	}
+        } else {
+            $this->Session->delete('Message.flash');
+        }
     }
 
     function wxBindToAccount($defUsername = '') {
-        $this->pageTitle =__('绑定帐号');
-    	$userinfo = $this->Auth->user();
+        $this->pageTitle = __('绑定帐号');
+        $userinfo = $this->Auth->user();
         $uid = $userinfo['id'];
         if (!$uid) {
-    		$this->Session->setFlash(__('You are not authorized to access that location.', true));
-    		$this->redirect(array('action' => 'login'));
-    	}
+            $this->Session->setFlash(__('You are not authorized to access that location.', true));
+            $this->redirect(array('action' => 'login'));
+        }
 
         $this->loadModel('Oauthbind');
         $wxBind = $this->Oauthbind->findWxServiceBindByUid($uid);
@@ -318,14 +316,14 @@ class UsersController extends AppController {
         $this->data['User']['username'] = trim($this->data['User']['username']);
 
         $oauth_openid = $wxBind['oauth_openid'];
-        if (!empty($wxBind) && $userinfo['username'] != $oauth_openid){
-            $this->__message(__('您的微信已经与帐号'. $userinfo['username'] .'绑定，不能再绑定其他帐号'), '/', 60);
+        if (!empty($wxBind) && $userinfo['username'] != $oauth_openid) {
+            $this->__message(__('您的微信已经与帐号' . $userinfo['username'] . '绑定，不能再绑定其他帐号'), '/', 60);
             return;
         }
 
         if (!empty($this->data) && !empty($this->data['User']['username'])) {
 
-            if (!empty($wxBind) && $this->data['User']['username'] == $userinfo['username']){
+            if (!empty($wxBind) && $this->data['User']['username'] == $userinfo['username']) {
                 $this->Session->setFlash(__('绑定成功！'));
                 return;
             }
@@ -364,7 +362,7 @@ class UsersController extends AppController {
         $userinfo = $this->Auth->user();
         if (!$userinfo['id']) {
             $err = __('You are not authorized to access that location.', true);
-        }  else {
+        } else {
             $newNickname = htmlspecialchars(trim($_POST['nickname']));
             if (mb_strlen($newNickname) < PROFILE_NICK_MIN_LEN) {
                 $err = '昵称至少需要' . PROFILE_NICK_MIN_LEN . '个字符！';
@@ -397,9 +395,9 @@ class UsersController extends AppController {
         $this->loadModel('SharedOffer');
         $sharedOffers = $this->SharedOffer->find_my_all_offers($this->currentUser['id']);
         $expiredIds = array();
-        foreach($sharedOffers as $o) {
+        foreach ($sharedOffers as $o) {
             $expired = is_past($o['SharedOffer']['start'], $o['ShareOffer']['valid_days']);
-            if($expired) {
+            if ($expired) {
                 $expiredIds[] = $o['SharedOffer']['id'];
             } else if (SharedOffer::slicesSharedOut($o['SharedOffer']['id'], $o['SharedOffer']['status'])) {
                 $soldOuts[] = $o['SharedOffer']['id'];
@@ -445,16 +443,16 @@ class UsersController extends AppController {
         if (!empty($this->data) && isset($this->data['User']['mobilephone'])) {
             $msgCode = $this->Session->read('messageCode');
             $readCode = $this->data['User']['code'];
-            if(empty($readCode)){
+            if (empty($readCode)) {
                 $this->Session->setFlash('短信验证码不能为空');
                 return;
-            }else{
-                if(!$msgCode){
+            } else {
+                if (!$msgCode) {
                     $this->Session->setFlash('短信验证失败');
                     return;
-                }else{
+                } else {
                     $codeLog = json_decode($msgCode, true);
-                    if (!($codeLog && is_array($codeLog) && $codeLog['code'] == $readCode && (time() - $codeLog['time'] < 30 * 60))){
+                    if (!($codeLog && is_array($codeLog) && $codeLog['code'] == $readCode && (time() - $codeLog['time'] < 30 * 60))) {
                         $this->Session->setFlash('短信验证未成功，请重新获取');
                         return;
                     }
@@ -476,7 +474,7 @@ class UsersController extends AppController {
 //                    }
 //                }
 //            }
-            if(empty($this->data['User']['password'])){
+            if (empty($this->data['User']['password'])) {
                 $this->Session->setFlash('密码不为空');
                 return;
             }
@@ -488,10 +486,10 @@ class UsersController extends AppController {
             $this->User->id = $user['User']['id'];
             $activationKey = md5(uniqid());
             $this->User->saveField('activation_key', $activationKey);
-            $this->set(array('user'=>$user, 'activationKey'=>$activationKey));
-            
+            $this->set(array('user' => $user, 'activationKey' => $activationKey));
+
             $user['User']['password'] = Security::hash($this->data['User']['password'], null, true);
-            if($this->User->save($user)){
+            if ($this->User->save($user)) {
                 $this->Session->setFlash(__('Password is updated success.', true));
                 $this->redirect(array('action' => 'login'));
             }
@@ -502,9 +500,11 @@ class UsersController extends AppController {
     function update_user_intro() {
         $this->autoRender = false;
         $user_intro = $_REQUEST['user_intro'];
+        $user_nickname = $_REQUEST['user_nickname'];
         $user_id = $_REQUEST['user_id'];
         $this->User->id = $user_id;
-        $this->User->saveField('description', $user_intro);
+        //$this->User->saveField('description', $user_intro);
+        $this->User->updateAll(array('description' => "'" . $user_intro . "'", 'nickname' => "'" . $user_nickname . "'"), array('id' => $user_id));
         Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $user_id, '');
         echo json_encode(array('success' => true));
         return;
@@ -522,11 +522,11 @@ class UsersController extends AppController {
         }
 
         $user = $this->User->find('first', array(
-                    'conditions' => array(
-                        'User.username' => $username,
-                        'User.activation_key' => $key,
-                    ),
-                ));
+            'conditions' => array(
+                'User.username' => $username,
+                'User.activation_key' => $key,
+            ),
+        ));
         if (!isset($user['User']['id'])) {
             $this->redirect(array('action' => 'login'));
         }
@@ -540,7 +540,7 @@ class UsersController extends AppController {
             }
         }
 
-        $this->set(array('user'=>$user, 'username'=>$username, 'key'=>$key));
+        $this->set(array('user' => $user, 'username' => $username, 'key' => $key));
     }
 
     function login_state() {
@@ -550,7 +550,7 @@ class UsersController extends AppController {
                 $login = false;
             }
         }
-        echo json_encode(array('login'=>$login));
+        echo json_encode(array('login' => $login));
         $this->autoRender = false;
     }
 
@@ -561,11 +561,11 @@ class UsersController extends AppController {
         $redirect = $this->data['User']['referer'] ? $this->data['User']['referer'] : ($_REQUEST['referer'] ? $_REQUEST['referer'] : $this->Auth->redirect());
         $success = false;
 
-        if(empty($this->data) && $this->request->query['data']){ //get 方式传入时,phonegap
+        if (empty($this->data) && $this->request->query['data']) { //get 方式传入时,phonegap
             $this->data = $this->request->query['data'];
         }
 
-        if(!empty($_GET['force_login'])) {
+        if (!empty($_GET['force_login'])) {
             $this->logoutCurrUser();
         }
 
@@ -573,11 +573,10 @@ class UsersController extends AppController {
             $this->User->id = $id;
             $this->User->updateAll(array(
                 'last_login' => "'" . date('Y-m-d H:i:s') . "'",
-                'last_ip' => "'". $this->request->clientIp(false) . "'"
+                'last_ip' => "'" . $this->request->clientIp(false) . "'"
             ), array('id' => $id,));
             $success = true;
-        }
-        else { // 通过表单登录
+        } else { // 通过表单登录
             $sid = $this->Session->id();
             if ($this->Auth->login()) {
 
@@ -587,19 +586,19 @@ class UsersController extends AppController {
                 $this->User->id = $this->Auth->user('id');
                 $this->User->updateAll(array(
                     'last_login' => "'" . date('Y-m-d H:i:s') . "'",
-                    'last_ip' => "'". $this->request->clientIp(false) ."'"
+                    'last_ip' => "'" . $this->request->clientIp(false) . "'"
                 ), array('id' => $this->User->id,));
 
                 $this->loadModel('Cart');
                 $this->Cart->merge_user_carts_after_login($this->User->id, $sid);
 
-                $this->Session->setFlash('登录成功'.$this->Session->read('Auth.User.session_flash'));
+                $this->Session->setFlash('登录成功' . $this->Session->read('Auth.User.session_flash'));
                 $success = true;
             }
         }
 
-        $login_by_account = isset($this->data['User']['username']) ;
-        $login_by_phone =  isset($this->data['User']['mobilephone']);
+        $login_by_account = isset($this->data['User']['username']);
+        $login_by_phone = isset($this->data['User']['mobilephone']);
         if ($success) {
             $this->Hook->call('loginSuccess');
 
@@ -609,26 +608,27 @@ class UsersController extends AppController {
                 'username' => $user['username'],
             );
 
-            if(!empty($this->data['User']['remember_me'])){
+            if (!empty($this->data['User']['remember_me'])) {
                 $cookietime = 2592000; // 一月内30*24*60*60
             } else {
                 $cookietime = 3600 * 24 * 7;
             }
-            $this->Cookie->write('Auth.User',$userinfo, true, $cookietime);
+            $this->Cookie->write('Auth.User', $userinfo, true, $cookietime);
 
             if ($this->RequestHandler->accepts('json') || $this->RequestHandler->isAjax() || isset($_GET['inajax'])) {
                 $successinfo = array('success' => '登录成功',
                     'userinfo' => $userinfo,
-                    'tasks'=>array(array('dotype'=>'reload')));
+                    'tasks' => array(array('dotype' => 'reload')));
 
                 $this->autoRender = false; // 不显示模板
 
                 $content = json_encode($successinfo);
-                if($_GET['jsoncallback']){
+                if ($_GET['jsoncallback']) {
                     $content = $_GET['jsoncallback'] . '(' . $content . ');';
                 }
                 $this->response->body($content);
-                $this->response->send(); exit;// exit退出时，cookie信息未发出，cookie创建失败。
+                $this->response->send();
+                exit;// exit退出时，cookie信息未发出，cookie创建失败。
             } else {
                 $this->redirect($redirect);
             }
@@ -636,21 +636,19 @@ class UsersController extends AppController {
             $loginFailMsg = __('username or password not right');
             if ($this->RequestHandler->accepts('json') || $this->RequestHandler->isAjax() || isset($_GET['inajax'])) {
                 // ajax 操作
-                if($login_by_account){
+                if ($login_by_account) {
                     $errorinfo = array('error' => '用户名或密码错误', 'tasks' => array(array('dotype' => 'html', 'selector' => '#login_errorinfo', 'content' => $loginFailMsg)));
-                }else{
+                } else {
                     $errorinfo = array('error' => '手机号码或密码错误', 'tasks' => array(array('dotype' => 'html', 'selector' => '#login_errorinfo', 'content' => $loginFailMsg)));
                 }
                 $content = json_encode($errorinfo);
                 $this->autoRender = false; // 不显示模板
-                if($_GET['jsoncallback']){
+                if ($_GET['jsoncallback']) {
                     echo $_GET['jsoncallback'] . '(' . $content . ');';
-                }
-                else{
+                } else {
                     echo $content;
                 }
-            }
-            else {
+            } else {
                 $this->Session->setFlash($loginFailMsg);
                 $this->set('fail_msg', $loginFailMsg);
             }
@@ -664,17 +662,17 @@ class UsersController extends AppController {
         $this->set('supportWeixin', $this->is_weixin());
         $this->data['User']['referer'] = $redirect;
         $this->set('referer', $redirect);
-        $this->set('errorType',$_REQUEST['type']);
-        $this->Session->write('coupon-id',$_REQUEST['coupon-id']);//领取优惠券
+        $this->set('errorType', $_REQUEST['type']);
+        $this->Session->write('coupon-id', $_REQUEST['coupon-id']);//领取优惠券
         $this->set('login_by_account', $login_by_account);
     }
 
     function logout() {
 
         $this->logoutCurrUser();
-        $this->Session->setFlash(__('Logout Success', true).$synlogout);
+        $this->Session->setFlash(__('Logout Success', true) . $synlogout);
         $referer = $this->referer();
-        $this->log("Refer:".$referer);
+        $this->log("Refer:" . $referer);
         $this->redirect('/users/login.html');
     }
 
@@ -685,7 +683,7 @@ class UsersController extends AppController {
         }
 
         $this->pageTitle = $user['User']['name'];
-        $this->set('user',$user);
+        $this->set('user', $user);
     }
 
     function bindWxSub() {
@@ -714,8 +712,8 @@ class UsersController extends AppController {
         $this->set('total_score', $this->User->get_score($uid));
 
         $this->loadModel('Shichituan');
-        $result = $this->Shichituan->findByUser_id($uid,array('Shichituan.shichi_id','Shichituan.status','Shichituan.pictures','Shichituan.period'),'Shichituan.shichi_id DESC');
-        $this->set('result',$result);
+        $result = $this->Shichituan->findByUser_id($uid, array('Shichituan.shichi_id', 'Shichituan.status', 'Shichituan.pictures', 'Shichituan.period'), 'Shichituan.shichi_id DESC');
+        $this->set('result', $result);
 
         $mOrder = ClassRegistry::init('Order');
         $received_cnt = $mOrder->count_received_order($this->currentUser['id']);
@@ -733,39 +731,39 @@ class UsersController extends AppController {
         }
 
         $this->pageTitle = $user['User']['name'];
-        $this->set('user',$user);
+        $this->set('user', $user);
     }
 
-    function myquestion($type='', $page=1, $count = 30) {
+    function myquestion($type = '', $page = 1, $count = 30) {
         $this->loadModel('Question');
         $questionlist = $this->Question->find('all',
-                        array('conditions' => array(
-                                'creator' => $this->currentUser['User']['sina_uid'],
-                                'published' => 1,
-                            )
-                ));
+            array('conditions' => array(
+                'creator' => $this->currentUser['User']['sina_uid'],
+                'published' => 1,
+            )
+            ));
         $this->set('questionlist', $questionlist);
     }
 
-    function myweibo($type='', $page=1, $count = 30) {
+    function myweibo($type = '', $page = 1, $count = 30) {
         $this->loadModel('Weibo');
         $weibolist = $this->Weibo->find('all',
-                        array(
-                            'conditions' => array(
-                                'Weibo.creator' => $this->currentUser['User']['sina_uid'],
-                                'Weibo.published' => 1,
-                            ),
-                            'fields' => array('Weibo.*', 'Question.*'),
-                            'limit' => 20,
-                            'joins' => array(
-                                array(
-                                    'table' => Inflector::tableize('Question'),
-                                    'alias' => 'Question',
-                                    'type' => 'left',
-                                    'conditions' => array('Weibo.data_id=Question.id', 'Weibo.model' => 'Question'),
-                                ),
-                            )
-                ));
+            array(
+                'conditions' => array(
+                    'Weibo.creator' => $this->currentUser['User']['sina_uid'],
+                    'Weibo.published' => 1,
+                ),
+                'fields' => array('Weibo.*', 'Question.*'),
+                'limit' => 20,
+                'joins' => array(
+                    array(
+                        'table' => Inflector::tableize('Question'),
+                        'alias' => 'Question',
+                        'type' => 'left',
+                        'conditions' => array('Weibo.data_id=Question.id', 'Weibo.model' => 'Question'),
+                    ),
+                )
+            ));
         $this->set('weibolist', $weibolist);
         $this->set('action', 'myweibo');
     }
@@ -778,7 +776,7 @@ class UsersController extends AppController {
 
         if ($_GET['do_wx_auth_if_not_log_in'] && (empty($this->currentUser) || !$this->currentUser['id'])) {
             $this->redirect(redirect_to_wx_oauth($redirect));
-        }  else {
+        } else {
             $this->redirect($redirect);
         }
     }
@@ -821,8 +819,8 @@ class UsersController extends AppController {
         $file_name = $uid . time() . '.' . $type;
         $result = $this->FileUpload->save_base64_data(base64_decode($imgData), $file_name);
         $imgUrl = $result['download_url'];
-        if(!empty($imgUrl)){
-            $this->User->id=$uid;
+        if (!empty($imgUrl)) {
+            $this->User->id = $uid;
             $this->User->saveField('image', $imgUrl);
             Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
         }
@@ -868,7 +866,7 @@ class UsersController extends AppController {
                     $refer_by_state = '';
                     if (!empty($_REQUEST['state'])) {
                         $str = base64_decode($_REQUEST['state']);
-                        $this->log("got state(after base64 decode):".$str);
+                        $this->log("got state(after base64 decode):" . $str);
                         if (($idx = strpos($str, self::WX_BIND_REDI_PREFIX)) !== false) {
                             $should_require_user_info = false;
                             //TODO: handle decrypt risk
@@ -878,7 +876,8 @@ class UsersController extends AppController {
                                 if (!empty($r) && !empty($r['Oauthbinds']['user_id'])) {
 
                                     if (isset($old_serviceAccount_binded_uid) && ($old_serviceAccount_binded_uid > 0
-                                        && $old_serviceAccount_binded_uid != $r['Oauthbinds']['user_id'])) {
+                                            && $old_serviceAccount_binded_uid != $r['Oauthbinds']['user_id'])
+                                    ) {
                                         $need_transfer = true;
                                     }
 
@@ -888,7 +887,7 @@ class UsersController extends AppController {
                             $url = substr($str, $idx + strlen(self::WX_BIND_REDI_PREFIX));
                             //TODO: handle risk for external links!!!
                             if (
-                                strpos($url, "http://".WX_HOST."/") === 0 ||
+                                strpos($url, "http://" . WX_HOST . "/") === 0 ||
                                 strpos($url, 'http://www.pyshuo.com/') === 0 ||
                                 strpos($url, 'http://www.pengyoushuo.com.cn/') === 0 ||
                                 strpos($url, 'http://www.tongshijia.com/') === 0
@@ -899,7 +898,7 @@ class UsersController extends AppController {
                     }
 
                     $ref = '';
-                    if(!empty($refer_by_state)) {
+                    if (!empty($refer_by_state)) {
                         $ref = $refer_by_state;
                     } else if (!empty($param_referer)) {
                         $ref = $param_referer;
@@ -943,16 +942,16 @@ class UsersController extends AppController {
                                 'password' => '',
                                 'uc_id' => 0
                             );
-                            if (!$this->User->save($uu)){
-                                $this->log('errot to save new user:'.$uu);
+                            if (!$this->User->save($uu)) {
+                                $this->log('errot to save new user:' . $uu);
                             }
                             $oauth['Oauthbinds']['user_id'] = $this->User->getLastInsertID();
                         }
                         $new_serviceAccount_binded_uid = $oauth['Oauthbinds']['user_id'];
                         $new_created = true;
 
-                        if (!$new_serviceAccount_binded_uid){
-                            $this->log("login failed for cannot got create new user with the current WX info: res=".json_encode($res).", wxUserInfo=".json_encode($wxUserInfo));
+                        if (!$new_serviceAccount_binded_uid) {
+                            $this->log("login failed for cannot got create new user with the current WX info: res=" . json_encode($res) . ", wxUserInfo=" . json_encode($wxUserInfo));
                             $this->wxFailAndGotoLogin($ref);
                             return;
                         }
@@ -962,18 +961,18 @@ class UsersController extends AppController {
                     if ($need_transfer && isset($old_serviceAccount_binded_uid) && $old_serviceAccount_binded_uid != $new_serviceAccount_binded_uid) {
                         $this->transferUserInfo($old_serviceAccount_binded_uid, $new_serviceAccount_binded_uid);
                     }
-                    if($new_serviceAccount_binded_uid) {
+                    if ($new_serviceAccount_binded_uid) {
                         $this->after_create_user($new_serviceAccount_binded_uid);
                     }
 
                     //TODO: fix risk
                     $redirectUrl = '/users/login?source=' . $oauth['Oauthbinds']['source'] . '&openid=' . $oauth['Oauthbinds']['oauth_openid'];
 
-                    if(!empty($refer_by_state)) {
+                    if (!empty($refer_by_state)) {
                         $this->redirect($redirectUrl . '&referer=' . urlencode($refer_by_state));
                     } else if (!empty($param_referer)) {
                         $this->redirect($redirectUrl . '&referer=' . urlencode($param_referer));
-                    }   else {
+                    } else {
                         $this->redirect($redirectUrl);
                     }
                 }
@@ -1011,9 +1010,9 @@ class UsersController extends AppController {
         $this->loadModel('Cart');
         $orderUpdated = $this->Order->updateAll(array('creator' => $new_serviceAccount_bind_uid), array('creator' => $old_serviceAccount_bind_uid));
         $consigneeUpdated = $this->OrderConsignee->updateAll(array('creator' => $new_serviceAccount_bind_uid), array('creator' => $old_serviceAccount_bind_uid));
-        $cartsUpdated =$this->Cart->updateAll(array('creator' => $new_serviceAccount_bind_uid), array('creator' => $old_serviceAccount_bind_uid));
+        $cartsUpdated = $this->Cart->updateAll(array('creator' => $new_serviceAccount_bind_uid), array('creator' => $old_serviceAccount_bind_uid));
 
-        $this->log("Merge WX Account from  $old_serviceAccount_bind_uid to " . $new_serviceAccount_bind_uid.": orderUpdated=".$orderUpdated.", consigneeUpdated=". $consigneeUpdated .", cartsUpdated=".$cartsUpdated);
+        $this->log("Merge WX Account from  $old_serviceAccount_bind_uid to " . $new_serviceAccount_bind_uid . ": orderUpdated=" . $orderUpdated . ", consigneeUpdated=" . $consigneeUpdated . ", cartsUpdated=" . $cartsUpdated);
 
         $this->loadModel('Brand');
         $this->Brand->updateAll(array('creator' => $new_serviceAccount_bind_uid), array('creator' => $old_serviceAccount_bind_uid));
@@ -1050,7 +1049,7 @@ class UsersController extends AppController {
         $this->Shichituan->updateAll(array('user_id' => $new_serviceAccount_bind_uid), array('user_id' => $old_serviceAccount_bind_uid));
 
         $this->loadModel('OrderComment');
-        $this->OrderComment->updateAll(array('user_id' => $new_serviceAccount_bind_uid),array('user_id' => $old_serviceAccount_bind_uid));
+        $this->OrderComment->updateAll(array('user_id' => $new_serviceAccount_bind_uid), array('user_id' => $old_serviceAccount_bind_uid));
 
 
         //团购的
@@ -1067,7 +1066,9 @@ class UsersController extends AppController {
      * @param $userInfo
      */
     public function updateUserProfileByWeixin($new_serviceAccount_binded_uid, $userInfo) {
-        if (empty($userInfo)) { return; }
+        if (empty($userInfo)) {
+            return;
+        }
         $user = $this->User->findById($new_serviceAccount_binded_uid);
         if (!empty($user)) {
             $changed = false;
@@ -1082,9 +1083,9 @@ class UsersController extends AppController {
             }
             if (!$user['image']) {
                 $download_url = download_photo_from_wx($userInfo['headimgurl']);
-                if(!empty($download_url)){
+                if (!empty($download_url)) {
                     $user['image'] = $download_url;
-                }else{
+                } else {
                     $user['image'] = $userInfo['headimgurl'];
                 }
                 $changed = true;
@@ -1108,7 +1109,7 @@ class UsersController extends AppController {
             if ($changed) {
                 $rtn = $this->User->save($user);
                 if (!$rtn) {
-                    $this->log('error to save user:'. $user['id']);
+                    $this->log('error to save user:' . $user['id']);
                 }
             }
         }
@@ -1121,7 +1122,7 @@ class UsersController extends AppController {
     public function createNewUserByWeixin($userInfo) {
         $uid = createNewUserByWeixin($userInfo, $this->User);
         if (empty($uid)) {
-            $this->log("error to save createNewUserByWeixin: with ". json_encode($userInfo));
+            $this->log("error to save createNewUserByWeixin: with " . json_encode($userInfo));
         } else {
             return $uid;
         }
@@ -1156,57 +1157,57 @@ class UsersController extends AppController {
         $this->redirect($redirect);
     }
 
-    public function mobile_bind(){
-        $this->autoRender=false;
+    public function mobile_bind() {
+        $this->autoRender = false;
         $readCode = $_POST['code'];
         $mobile_num = $_POST['mobile'];
         $msgCode = $this->Session->read('messageCode');
         $current_post_num = $this->Session->read('current_register_phone');
         $bind_from = $_POST['from'];
         $codeLog = json_decode($msgCode, true);
-        $user_info= array();
+        $user_info = array();
         $res = array();
         if ($codeLog && is_array($codeLog) && $codeLog['code'] == $readCode && (time() - $codeLog['time'] < 30 * 60)) {
             $user_info['User']['mobilephone'] = $mobile_num;
             $user_info['User']['id'] = $this->currentUser['id'];
             $user_info['User']['uc_id'] = 5;
-            if(empty($this->currentUser['id'])){
-                $res = array('success'=> false, 'msg'=>'please login');
-            } else if($mobile_num !=  $current_post_num){
-                $res = array('success'=> false, 'msg'=>'请重新验证您的手机号码');
-            }else if ($this->User->hasAny(array('User.mobilephone' => $mobile_num))){
+            if (empty($this->currentUser['id'])) {
+                $res = array('success' => false, 'msg' => 'please login');
+            } else if ($mobile_num != $current_post_num) {
+                $res = array('success' => false, 'msg' => '请重新验证您的手机号码');
+            } else if ($this->User->hasAny(array('User.mobilephone' => $mobile_num))) {
                 $tempUser = $this->getUserNamebyMobile($mobile_num);
-                $res = array('success'=> false, 'msg'=>'你的手机号已注册过，无法绑定，请用手机号登录','code'=>2,'username'=>$tempUser['User']['nickname']);
-            }else if($this->User->hasAny(array('User.username' => $mobile_num))){
-                if($this->currentUser['username'] == $mobile_num){
-                    if($this->User->save($user_info)){
-                        $res = array('success'=> true, 'msg'=>'你的账号和手机号绑定成功');
+                $res = array('success' => false, 'msg' => '你的手机号已注册过，无法绑定，请用手机号登录', 'code' => 2, 'username' => $tempUser['User']['nickname']);
+            } else if ($this->User->hasAny(array('User.username' => $mobile_num))) {
+                if ($this->currentUser['username'] == $mobile_num) {
+                    if ($this->User->save($user_info)) {
+                        $res = array('success' => true, 'msg' => '你的账号和手机号绑定成功');
                     };
-                }else{
+                } else {
                     $tempUser = $this->getUserNamebyMobile($mobile_num);
-                    $res = array('success'=> false, 'msg'=>'你的手机号已注册过，无法绑定，请用手机号登录','code'=>2,'username'=>$tempUser['User']['nickname']);
+                    $res = array('success' => false, 'msg' => '你的手机号已注册过，无法绑定，请用手机号登录', 'code' => 2, 'username' => $tempUser['User']['nickname']);
                 }
-            } else{
+            } else {
                 if ($this->User->save($user_info)) {
-                    $this->Session->write('Auth.User.mobilephone',$mobile_num);
+                    $this->Session->write('Auth.User.mobilephone', $mobile_num);
                     $result_msg = '你的账号和手机号绑定成功';
-                    if($bind_from=='refer'){
-                        $result_msg = $result_msg.',并获得1000积分';
+                    if ($bind_from == 'refer') {
+                        $result_msg = $result_msg . ',并获得1000积分';
                     }
-                    $res = array('success'=> true, 'msg'=>$result_msg);
+                    $res = array('success' => true, 'msg' => $result_msg);
 
                     $urM = ClassRegistry::init('Refer');
-                    if($urM->be_referred_and_new($this->currentUser['id'])) {
+                    if ($urM->be_referred_and_new($this->currentUser['id'])) {
                         $urM->update_referred_bind($this->currentUser['id'], $this->currentUser['nickname']);
                         $res['referred'] = true;
                     }
 
                 } else {
-                    $res = array('success'=> false, 'msg'=>'绑定失败，数据库忙');
+                    $res = array('success' => false, 'msg' => '绑定失败，数据库忙');
                 }
             }
-        }else {
-            $res = array('success'=> false, 'msg'=>'短信验证码错误');
+        } else {
+            $res = array('success' => false, 'msg' => '短信验证码错误');
         }
         echo json_encode($res);
     }
@@ -1220,26 +1221,26 @@ class UsersController extends AppController {
         return ($nickname == '' ? '用户_' . mt_rand(10, 1000) : $nickname);
     }
 
-    function complete_user_info(){
-        $this->pageTitle="完善用户信息";
+    function complete_user_info() {
+        $this->pageTitle = "完善用户信息";
         $from = $_REQUEST['from'];
-        $this->set('from',$from);
-        $this->set('hideNav',true);
+        $this->set('from', $from);
+        $this->set('hideNav', true);
         $uid = $this->currentUser['id'];
         $current_user = $this->User->find('first', array(
             'conditions' => array(
                 'id' => $uid
             ),
-            'fields' => array('payment','description'),
+            'fields' => array('payment', 'description'),
             'recursive' => 1, //int
         ));
-        $this->set('user',$current_user);
+        $this->set('user', $current_user);
     }
 
-    function complete(){
+    function complete() {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
-        if(empty($uid)){
+        if (empty($uid)) {
             echo json_encode(array('success' => false, 'reason' => 'not_login'));
             return;
         }
@@ -1251,7 +1252,7 @@ class UsersController extends AppController {
         return;
     }
 
-    function to_bind_mobile(){
+    function to_bind_mobile() {
         $userId = $this->Session->read('Auth.User.id');
         $userNickName = $this->Session->read('Auth.User.nickname');
         $orderId = $_REQUEST['order_id'];
@@ -1265,16 +1266,16 @@ class UsersController extends AppController {
 
         $this->set('short_intro', $short_intro);
         $this->set('ref_url', $ref_url);
-        $this->set('hideNav',true);
+        $this->set('hideNav', true);
 
-        $this->pageTitle="绑定手机号";
+        $this->pageTitle = "绑定手机号";
     }
 
-    function merge_data(){
-        $this->autoRender=false;
+    function merge_data() {
+        $this->autoRender = false;
         $userId = $this->Session->read('Auth.User.id');
         //no login user must to login
-        if(!$userId){
+        if (!$userId) {
             $this->Session->setFlash(__('You are not authorized to access that location.', true));
             $this->redirect(array('action' => 'login'));
         }
@@ -1285,15 +1286,15 @@ class UsersController extends AppController {
         $mobileCode = $_REQUEST['mobileCode'];
         $msgCode = $this->Session->read('messageCode');
         $codeLog = json_decode($msgCode, true);
-        if(is_array($codeLog)&&$codeLog['code']==$mobileCode){
+        if (is_array($codeLog) && $codeLog['code'] == $mobileCode) {
             $newUser = $this->getUserByMobile($mobile);
             $newUserId = $newUser['User']['id'];
             if (!empty($wxBind)) {
-                try{
+                try {
                     $this->Oauthbind->update_wx_bind_uid($oauth_openid, $userId, $newUserId);
-                }catch (Exception $e){
-                    $this->log("merge user data has exception user id ".$userId." new user id ".$newUserId).($e->getMessage());
-                    $result = array('success'=>'fale','msg'=>'信息合并失败');
+                } catch (Exception $e) {
+                    $this->log("merge user data has exception user id " . $userId . " new user id " . $newUserId) . ($e->getMessage());
+                    $result = array('success' => 'fale', 'msg' => '信息合并失败');
                 }
                 //do wx bind
 //                $wxNewBind = $this->Oauthbind->findWxServiceBindByUid($newUserId);
@@ -1304,29 +1305,29 @@ class UsersController extends AppController {
 //
 //                }
             }
-            $this->transferUserInfo($userId,$newUserId);
+            $this->transferUserInfo($userId, $newUserId);
             $this->logoutCurrUser();
-            $this->data['checkMobileCode']=true;
+            $this->data['checkMobileCode'] = true;
             $this->data['User'] = $newUser['User'];
             $this->Auth->login();
-            $result = array('success'=>'true','msg'=>'信息合并成功');
-        }else{
-            $result = array('success'=>'false','msg'=>'手机验证码不正确');
+            $result = array('success' => 'true', 'msg' => '信息合并成功');
+        } else {
+            $result = array('success' => 'false', 'msg' => '手机验证码不正确');
         }
         echo json_encode($result);
     }
 
-    function getUserByMobile($mobile){
+    function getUserByMobile($mobile) {
         $user = $this->User->find('first',
-            array('conditions' => array('mobilephone' => $mobile,'published'=>1))
-            );
+            array('conditions' => array('mobilephone' => $mobile, 'published' => 1))
+        );
         return $user;
     }
 
-    function getUserNamebyMobile($mobile){
-        $username = $this->User->find('first',array(
-            'conditions'=>array('mobilephone'=>$mobile,'published'=>1),
-            'fields'=>array('username','nickname')
+    function getUserNamebyMobile($mobile) {
+        $username = $this->User->find('first', array(
+            'conditions' => array('mobilephone' => $mobile, 'published' => 1),
+            'fields' => array('username', 'nickname')
         ));
         return $username;
     }
@@ -1342,8 +1343,8 @@ class UsersController extends AppController {
             } else {
                 $reason = 'not_login';
             }
-        }catch (Exception $e) {
-            $this->log("exception:". $e);
+        } catch (Exception $e) {
+            $this->log("exception:" . $e);
             $reason = 'unknown';
         }
         echo json_encode(array('success' => $got, 'reason' => $reason));

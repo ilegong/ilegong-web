@@ -75,7 +75,7 @@
                 {{/if}}
                 <hr style="margin-top: 5px;margin-bottom: 1px;">
                 <div style="text-align: left;">
-                    <h4>关于{{$share_user['nickname']}} {{if $is_me}}&nbsp;&nbsp;<button type="button" class="btn btn-default btn-sm" id="open-update-user-info-dialog">修改</button>{{/if}}</h4>
+                    <h4>关于{{$share_user['nickname']}} {{if $is_me}}<button type="button" class="btn btn-default btn-sm" id="open-update-user-info-dialog">修改</button>{{/if}}</h4>
                     {{if $share_user['description']}}
                     <div class="testimonials">
                         <div class="active item">
@@ -272,6 +272,10 @@
                 <div class="modal-body">
                     <form>
                         <div class="form-group">
+                            <label for="user-nickname">昵称</label>
+                            <input class="form-control" type="text" id="user-nickname" value="{{$share_user['nickname']}}">
+                        </div>
+                        <div class="form-group">
                             <label for="user-info-textarea">简介</label>
                             <input type="hidden" id="user-id" value="{{$current_uid}}">
                             <textarea class="form-control" id="user-info-textarea" style="height: 100px;">{{$share_user['description']}}</textarea>
@@ -303,6 +307,7 @@
         var $changeUserInfoDialog = $('#updateUserInfo');
         var $saveUserIntro = $('#save-user-intro');
         var $userInfoTextArea = $('#user-info-textarea');
+        var $userNicknameInput = $('#user-nickname');
         var $userId = $('#user-id', $changeUserInfoDialog);
         var processSub = false;
         var processUnSub = false;
@@ -320,16 +325,21 @@
         });
         $saveUserIntro.on('click', function(e){
             e.preventDefault();
+            var nickname = $userNicknameInput.val();
             var userIntro = $userInfoTextArea.val();
             var userId = $userId.val();
+            if(!nickname||!nickname.trim()){
+                alert('请输入昵称');
+                return;
+            }
             if(!userIntro||!userIntro.trim()){
                 alert('请输入个人介绍');
                 return false;
             }
             $.post('/users/update_user_intro', {
-                'user_intro': userIntro, 'user_id': userId
+                'user_intro': userIntro, 'user_id': userId, 'user_nickname': nickname
             }, function (data) {
-                if(data['success']){
+                if (data['success']) {
                     $userInfoPlaceHolder.text(userIntro);
                 }
                 $changeUserInfoDialog.modal('hide');
