@@ -5,6 +5,9 @@ class WeshareBuyComponent extends Component {
 
     var $name = 'WeshareBuyComponent';
 
+
+    var $share_order_count = 10;
+
     var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'mobilephone', 'is_proxy');
 
     var $query_order_fields = array('id', 'creator', 'created', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type', 'member_id', 'process_prepaid_status', 'price_difference', 'is_prepaid');
@@ -16,6 +19,7 @@ class WeshareBuyComponent extends Component {
     var $query_comment_fields = array('id', 'username', 'user_id', 'data_id', 'type', 'body', 'order_id', 'parent_id');
 
     var $components = array('Session', 'Weixin', 'RedPacket', 'ShareUtil');
+
 
     /**
      * @param $weshare_ids
@@ -210,7 +214,7 @@ class WeshareBuyComponent extends Component {
      * @return mixed
      * 获取分享者的爱心评价数量
      */
-    public function get_sharer_comments_count($uid){
+    public function get_sharer_comments_count($uid) {
         $key = SHARER_COMMENT_COUNT_DATA_CACHE_KEY . '_' . $uid;
         $cacheData = Cache::read($key);
         if (!empty($cacheData)) {
@@ -935,8 +939,62 @@ class WeshareBuyComponent extends Component {
         return json_decode($share_summery_data_str, true);
     }
 
-    public function get_share_detail_view_orders($weshareId, $all) {
-        //todo
+    public function get_share_order_page_info($weshareId) {
+        $order_count = $this->get_share_all_buy_count($weshareId);
+        $page_count = ceil($order_count / $this->share_order_count);
+        $page_info = array('order_count' => $order_count, 'page_count' => $page_count);
+        return $page_info;
+    }
+
+    public function get_share_detail_view_orders($weshareId, $page) {
+        //todo cache it 只缓存第一页的数据，实时更新第一页的缓存(分段缓存，细粒度缓存)
+        $orderM = ClassRegistry::init('Order');
+        $cartM = ClassRegistry::init('Cart');
+        $userM = ClassRegistry::init('User');
+        $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
+        $sort = array('created DESC');
+        $query_order_cond = array(
+            'conditions' => array(
+                'member_id' => $weshareId,
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'status' => $order_status,
+                'deleted' => DELETED_NO
+            ),
+            'fields' => $this->$query_share_info_order_fields,
+            'limit' => $this->share_order_count,
+            'offset' => ($page - 1) * $this->share_order_count,
+            'order' => $sort);
+        $orders = $orderM->find('all', $query_order_cond);
+        $orderIds = Hash::extract($orders, '{n}.Order.id');
+        $userIds = Hash::extract($orders, '{n}.Order.creator');
+        $users = $userM->find('all', array(
+            'conditions' => array(
+                'id' => $userIds
+            ),
+            'recursive' => 1, //int
+            'fields' => $this->query_user_fields,
+        ));
+        $users = Hash::combine($users, '{n}.User.id', '{n}.User');
+        $orders = Hash::combine($orders, '{n}.Order.id', '{n}.Order');
+        if ($orders) {
+            usort($orders, function ($a, $b) {
+                return ($a['id'] < $b['id']) ? -1 : 1;
+            });
+        }
+        $carts = $cartM->find('all', array(
+            'conditions' => array(
+                'order_id' => $orderIds,
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'not' => array('order_id' => null, 'order_id' => '')
+            ),
+            'fields' => array('id', 'name', 'order_id', 'num', 'product_id', 'price', 'confirm_price', 'tag_id')
+        ));
+        $order_cart_map = array();
+        foreach ($carts as $item) {
+            $order_id = $item['Cart']['order_id'];
+            $order_cart_map[$order_id][] = $item['Cart'];
+        }
+        //todo return data
     }
 
 

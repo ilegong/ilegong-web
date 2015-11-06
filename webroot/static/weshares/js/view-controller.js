@@ -231,6 +231,7 @@
     vm.chatToUser = chatToUser;
     vm.childShareDetail = null;
     vm.currentUserOrderCount = 0;
+    vm.shareOrderCount = 0;
     function pageLoaded() {
       $rootScope.loadingPage = false;
     }
@@ -1317,8 +1318,8 @@
         to_timeline_title = vm.weshare.creator.nickname + '分享:' + vm.weshare.title;
         to_friend_title = vm.weshare.creator.nickname + '分享:' + vm.weshare.title;
         imgUrl = vm.weshare.images[0] || vm.weshare.creator.image;
-        if (vm.ordersDetail.summery.all_buy_user_count >= 5) {
-          desc += '已经有' + vm.ordersDetail.summery.all_buy_user_count + '人报名，';
+        if (vm.shareOrderCount >= 5) {
+          desc += '已经有' + vm.shareOrderCount + '人报名，';
         }
         desc += vm.weshare.description;
       } else if (userInfo) {

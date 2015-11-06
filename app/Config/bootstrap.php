@@ -201,6 +201,7 @@ const USER_SHARE_COMMENTS_DATA_CACHE_KEY = 'user_share_comments_data_cache_key';
 const SHARER_ALL_COMMENT_DATA_CACHE_KEY = 'sharer_all_comment_data_cache_key';
 const SHARE_COMMENT_DATA_CACHE_KEY = 'share_comment_data_cache_key';
 const SHARE_ORDER_DATA_CACHE_KEY = 'share_order_data_cache_key';
+const SHARE_ORDER_PAGE_INFO_DATA_CACHE_KEY = 'share_order_page_info_data_cache_key'; //分享订单分页信息
 const SHARE_DETAIL_VIEW_ORDER_DATA_CACHE_KEY = 'share_detail_view_order_data_cache_key';//分享详情页面订单管理
 const SHARE_ORDER_COUNT_DATA_CACHE_KEY = 'share_order_count_data_cache_key';//分享订单数量缓存
 const SHARER_COMMENT_COUNT_DATA_CACHE_KEY = 'sharer_comment_count_data_cache_key';//分享者的爱心评价数量

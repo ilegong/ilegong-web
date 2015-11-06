@@ -1197,7 +1197,6 @@ class WesharesController extends AppController {
         return $this->WeshareShipSetting->saveAll($weshareShipData);
     }
 
-    //TODO delete not use address
     /**
      * @param $weshareId
      * @param $weshareAddressData
@@ -1231,6 +1230,7 @@ class WesharesController extends AppController {
      */
     private function get_weshare_view_order_info($weshareId, $all = 0) {
         //todo load share detail view order data
+
     }
 
     /**
