@@ -1538,7 +1538,7 @@ class ShareUtilComponent extends Component {
                 '1059' => array(
                     'share_id' => 1059,
                     'share_name' => '越南进口红心火龙果 大果5枚装',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/7d102ad171a_1105.jpeg',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/1657753d5b2_1106.jpg',
                     'share_price' => '88',
                     'share_user_name' => '金子',
                     'share_vote' => 188,
