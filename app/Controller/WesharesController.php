@@ -237,6 +237,11 @@ class WesharesController extends AppController {
         }
     }
 
+    /**
+     * @param $shareId
+     * @param $shipSetData
+     * 触发生成拼团的分享
+     */
     private function check_share_and_trigger_new_share($shareId, $shipSetData) {
         foreach ($shipSetData as $item) {
             if ($item['tag'] == SHARE_SHIP_GROUP_TAG) {
@@ -312,6 +317,7 @@ class WesharesController extends AppController {
         $comment_data = $this->WeshareBuy->load_comment_by_share_id($weshareId);
         $recommend_data = $this->WeshareBuy->load_share_recommend_data($weshareId);
         $is_manage_user = $this->ShareAuthority->user_can_view_share_order_list($uid, $weshareId);
+        $share_order_count = $this->WeshareBuy->get_share_all_buy_count($weshareId);
         echo json_encode(array('support_pys_ziti' => $share_ship_set,
             'weshare' => $weshareInfo,
             'recommendData' => $recommend_data,
@@ -323,7 +329,8 @@ class WesharesController extends AppController {
             'my_coupons' => $my_coupon_items[0],
             'comment_data' => $comment_data,
             'sub_status' => $sub_status,
-            'is_manage' => $is_manage_user
+            'is_manage' => $is_manage_user,
+            'share_order_count' => $share_order_count
         ));
         return;
     }
@@ -1216,6 +1223,14 @@ class WesharesController extends AppController {
      */
     private function get_weshare_buy_info($weshareId, $is_me, $division = false, $export = false) {
         return $this->WeshareBuy->get_share_order_for_show($weshareId, $is_me, $division, $export);
+    }
+
+    /**
+     * @param $weshareId
+     * @param $all
+     */
+    private function get_weshare_view_order_info($weshareId, $all = 0) {
+        //todo load share detail view order data
     }
 
     /**

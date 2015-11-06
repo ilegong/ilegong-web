@@ -15,10 +15,10 @@
             <a ng-if="!vm.userSubStatus" class="statistics-btn sub-sharer-btn" ng-click="vm.subSharer();" ng-bind="vm.subShareTipTxt">+关注</a>
         </div>
         <s>目标&nbsp;&nbsp;<span class="stress-span" ng-bind="::vm.weshareSettings.self_ziti.limit"></span>&nbsp;人
-            &nbsp;&nbsp;<span class="stress-span" ng-bind="::vm.ordersDetail.summery.all_buy_user_count"></span>&nbsp;
+            &nbsp;&nbsp;<span class="stress-span" ng-bind="::vm.shareOrderCount"></span>&nbsp;
             报名 &nbsp;&nbsp;<span ng-click="vm.showCommentListDialog()" ng-if="vm.getOrderCommentLength()>=1&&vm.userSubStatus">
-                <span class="stress-span" ng-bind="::vm.getOrderCommentLength()">0</span>&nbsp;
-                爱心评价</span>&nbsp;&nbsp;<span ng-if="vm.getOrderCommentLength()<1&&vm.userSubStatus">
+                <span class="stress-span" ng-bind="::vm.userShareSummery.comment_count">0</span>&nbsp;
+                爱心评价</span>&nbsp;&nbsp;<span ng-if="vm.userSubStatus">
                 <span class="stress-span" ng-bind="::vm.userShareSummery.follower_count">0</span>&nbsp;粉丝</span>&nbsp;&nbsp;</s>
         <s>地址&nbsp;&nbsp;<span class="stress-span" ng-bind="::vm.weshare.addresses[0]['address']"></span></s>
     </li>

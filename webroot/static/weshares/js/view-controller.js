@@ -106,6 +106,7 @@
 
   function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, $filter, $window, Utils, staticFilePath) {
     var vm = this;
+
     vm.staticFilePath = staticFilePath;
     vm.showShareDetailView = true;
     vm.subShareTipTxt = '+关注';
@@ -121,6 +122,33 @@
     vm.statusMap = {
       0: '进行中',
       1: '已截止'
+    };
+    vm.shipTypes = {
+      "101": "申通",
+      "102": "圆通",
+      "103": "韵达",
+      "104": "顺丰",
+      "105": "EMS",
+      "106": "邮政包裹",
+      "107": "天天",
+      "108": "汇通",
+      "109": "中通",
+      "110": "全一",
+      "111": "宅急送",
+      "112": "全峰",
+      "113": "快捷",
+      "115": "城际快递",
+      "132": "优速",
+      "133": "增益快递",
+      "134": "万家康",
+      "135": "京东快递",
+      "136": "德邦快递",
+      "137": "自提",
+      "138": "百富达",
+      "139": "黑狗",
+      "140": "E快送",
+      "141": "国通快递",
+      "142": "人人快递"
     };
     vm.commentData = {};
     vm.submitTempCommentData = {};
@@ -284,7 +312,7 @@
           vm.ordersDetail = data['ordersDetail'];
           vm.childShareDetail = data['childShareData']['child_share_data'];
           vm.childShareDetailUsers = data['childShareData']['child_share_user_infos'];
-          vm.shipTypes = data['ordersDetail']['ship_types'];
+          //vm.shipTypes = data['ordersDetail']['ship_types'];
           vm.rebateLogs = data['ordersDetail']['rebate_logs'];
           vm.sortOrders();
           vm.combineShareBuyData();
@@ -371,6 +399,7 @@
           vm.supportPysZiti = data['support_pys_ziti'];
           vm.selectShipType = getSelectTypeDefaultVal();
           vm.userSubStatus = data['sub_status'];
+          vm.shareOrderCount = data['share_order_count'];
           vm.submitRecommendData = {};
           vm.submitRecommendData.recommend_content = vm.weshare.creator.nickname + '我认识，很靠谱！';
           vm.submitRecommendData.recommend_user = vm.currentUser.id;
@@ -395,7 +424,6 @@
           vm.checkShareInfoHeight();
           //load all comments
           vm.loadOrderDetail(weshareId);
-          vm.loadSharerAllComments(vm.weshare.creator.id);
         }).
         error(function (data, status) {
           $log.log(data);
@@ -1018,6 +1046,7 @@
     }
 
     function showCommentListDialog() {
+      vm.loadSharerAllComments(vm.weshare.creator.id);
       vm.showCommentListDialogView = true;
       vm.showLayer = true;
     }

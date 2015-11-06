@@ -206,6 +206,40 @@ class WeshareBuyComponent extends Component {
     }
 
     /**
+     * @param $uid
+     * @return mixed
+     * 获取分享者的爱心评价数量
+     */
+    public function get_sharer_comments_count($uid){
+        $key = SHARER_COMMENT_COUNT_DATA_CACHE_KEY . '_' . $uid;
+        $cacheData = Cache::read($key);
+        if (!empty($cacheData)) {
+            return $cacheData;
+        }
+        $weshareM = ClassRegistry::init('Weshare');
+        $commentM = ClassRegistry::init('Comment');
+        $allShares = $weshareM->find('all', array(
+            'conditions' => array(
+                'creator' => $uid,
+                'status' => array(0, 1)
+            ),
+            'fields' => array('id')
+        ));
+        $share_ids = Hash::extract($allShares, '{n}.Weshare.id');
+        $sharer_comment_count = $commentM->find('count', array(
+            'conditions' => array(
+                'type' => COMMENT_SHARE_TYPE,
+                'data_id' => $share_ids,
+                'status' => COMMENT_SHOW_STATUS,
+                'parent_id' => 0,
+                'not' => array('order_id' => null)
+            )
+        ));
+        Cache::write($key, $sharer_comment_count);
+        return $sharer_comment_count;
+    }
+
+    /**
      * @param $sharer_id
      * @return array
      * 分享页面 获取分享者的所有评论数据
@@ -901,6 +935,11 @@ class WeshareBuyComponent extends Component {
         return json_decode($share_summery_data_str, true);
     }
 
+    public function get_share_detail_view_orders($weshareId, $all) {
+        //todo
+    }
+
+
     /**
      * @param $weshareId
      * @param $is_me
@@ -1305,6 +1344,31 @@ class WeshareBuyComponent extends Component {
     }
 
     /**
+     * @param $shareId
+     * @return mixed | int
+     * 获取分享的总购买份数
+     */
+    public function get_share_all_buy_count($shareId) {
+        $key = SHARE_ORDER_COUNT_DATA_CACHE_KEY . '_' . $shareId;
+        $cacheData = Cache::read($key);
+        if (!empty($cacheData)) {
+            return $cacheData;
+        }
+        $orderM = ClassRegistry::init('Order');
+        $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
+        $shareOrderCount = $orderM->find('count', array(
+            'conditions' => array(
+                'member_id' => $shareId,
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'status' => $order_status,
+                'deleted' => DELETED_NO
+            )
+        ));
+        Cache::write($key, $shareOrderCount);
+        return $shareOrderCount;
+    }
+
+    /**
      * @param $uid
      * @return array|mixed
      *
@@ -1331,7 +1395,8 @@ class WeshareBuyComponent extends Component {
                     'follow_id' => $uid
                 )
             ));
-            $summery_data = array('share_count' => count($weshares), 'follower_count' => $fans_count, 'focus_count' => $focus_count);
+            $comments_count = $this->get_sharer_comments_count($uid);
+            $summery_data = array('share_count' => count($weshares), 'follower_count' => $fans_count, 'focus_count' => $focus_count, 'comment_count' => $comments_count);
             Cache::write($key, json_encode($summery_data));
             return $summery_data;
         }
