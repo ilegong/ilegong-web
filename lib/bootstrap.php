@@ -53,13 +53,17 @@ const FFDATE_CH_MD = 'chinese_m_d';
 
 const SHARE_ORDER_OPERATE_TYPE = 'ShareOrder'; //用户看订单权限
 
+const SHARE_INFO_OPERATE_TYPE = 'ShareInfo'; //分享编辑权限
+
 const SHARE_TAG_ORDER_OPERATE_TYPE = 'ShareTagOrder';//查看分组订单权限
 
 const SHARE_OPERATE_SCOPE_TYPE = 'Share'; // 用户权限的配置范围
 
-const SHARE_ORDER_OPERATE_CACHE_KEY = 'share_order_operate_data_cache_key'; // 分享订单
+const SHARE_ORDER_OPERATE_CACHE_KEY = 'share_order_operate_data_cache_key'; // 分享订单管理
 
-const SHARE_ORDER_TAG_OPERATE_CACHE_KEY = 'share_order_tag_operate_data_cache_key'; // 分享订单 分类
+const SHARE_INFO_OPERATE_CACHE_KEY = 'share_info_operate_data_cache_key'; //分享详情的管理
+
+const SHARE_ORDER_TAG_OPERATE_CACHE_KEY = 'share_order_tag_operate_data_cache_key'; // 分享订单--分类订单管理
 
 $_display_tags_in_home = array(TAG_ID_CHULIANG, TAG_ID_ROUQIN_DANPIN, TAG_ID_XINPIN_SHICHI, TAG_ID_XINPIN_SHICHI);
 

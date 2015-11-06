@@ -5,6 +5,26 @@ class ShareAuthorityComponent extends Component {
 
 
     /**
+     * @param $uid
+     * @param $shareId
+     * @return bool
+     * 检查用户能否编辑分享信息
+     */
+    public function user_can_edit_share_info($uid, $shareId){
+        $key = SHARE_INFO_OPERATE_CACHE_KEY.'_'.$shareId;
+        $cacheData = Cache::read($key);
+        if(empty($cacheData)){
+            $shareOperateSettingM = ClassRegistry::init('ShareOperateSetting');
+            $operateSettings = $shareOperateSettingM->get_spec_type_authority(SHARE_INFO_OPERATE_TYPE, $shareId, SHARE_OPERATE_SCOPE_TYPE);
+            $operateUserCollection = Hash::extract($operateSettings, '{n}.ShareOperateSetting.user');
+            Cache::write($key, json_encode($operateUserCollection));
+        }else{
+            $operateUserCollection = json_decode($cacheData, true);
+        }
+        return in_array($uid, $operateUserCollection);
+    }
+
+    /**
      * @param $shareId
      * @param $uid
      * @return bool
