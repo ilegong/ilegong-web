@@ -952,6 +952,42 @@ class WeshareBuyComponent extends Component {
         return $page_info;
     }
 
+    public function get_share_buy_summery($shareId) {
+        $key  = SHARE_BUY_SUMMERY_INFO_CACHE_KEY.'_'.$shareId;
+        $cacheData = Cache::read($key);
+        if(empty($cacheData)){
+            $product_ids = $this->get_share_pids($shareId);
+            $sql = 'select sum(num), product_id from cake_carts where type=9 and status in (1,2,3,4,9,14) and product_id in (' . implode(',', $product_ids) . ') group by product_id';
+            $cartM = ClassRegistry::init('Cart');
+            $result = $cartM->query($sql);
+            $summery_result = array();
+            foreach($result as $item){
+                $item_pid = $item['cake_carts']['product_id'];
+                $item_count = $item[0]['sum(num)'];
+                if(!isset($summery_result[$item_pid])){
+                    $summery_result[$item_pid] = array();
+                }
+                $summery_result[$item_pid]['num'] = $item_count;
+            }
+            $summery = array('details' => $summery_result);
+            Cache::write($key, json_encode($summery));
+            return $summery;
+        }
+        return json_decode($cacheData, true);
+    }
+
+    public function get_share_pids($weshareId){
+        $weshareProductM = ClassRegistry::init('WeshareProduct');
+        $products = $weshareProductM->find('all', array(
+            'conditions' => array(
+                'weshare_id' => $weshareId,
+                'deleted' => DELETED_NO
+            ),
+            'fields' => array('id')
+        ));
+        return Hash::extract($products,'{n}.WeshareProduct.id');
+    }
+
     /**
      * @param $weshareId
      * @param $uid
@@ -1011,6 +1047,7 @@ class WeshareBuyComponent extends Component {
         }
         return $result;
     }
+
     /**
      * @param $cond
      * @return array

@@ -747,8 +747,8 @@
     }
 
     function getProductLeftNum(product) {
-      if (vm.ordersDetail && vm.ordersDetail.summery.details[product.id]) {
-        var product_buy_num = vm.ordersDetail.summery.details[product.id]['num'];
+      if (vm.ordersDetail && vm.ordersDetail['summery'].details[product.id]) {
+        var product_buy_num = vm.ordersDetail['summery'].details[product.id]['num'];
         var store_num = product.store;
         return store_num - product_buy_num;
       }
@@ -760,8 +760,8 @@
       if (store_num == 0) {
         return true;
       }
-      if (vm.ordersDetail && vm.ordersDetail.summery.details[product.id]) {
-        var product_buy_num = vm.ordersDetail.summery.details[product.id]['num'];
+      if (vm.ordersDetail && vm.ordersDetail['summery'].details[product.id]) {
+        var product_buy_num = vm.ordersDetail['summery'].details[product.id]['num'];
         return product_buy_num < store_num;
       }
       return true;
