@@ -960,6 +960,7 @@ class WeshareBuyComponent extends Component {
      *
      */
     public function get_current_user_share_order_data($weshareId, $uid) {
+        //check $uid
         $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
         $sort = array('created DESC');
         $query_order_cond = array(

@@ -273,6 +273,19 @@ class WesharesController extends AppController {
     }
 
     /**
+     * @param $shareId
+     * ajax 获取用户的订单和子分享数据
+     */
+    public function get_share_user_order_and_child_share($shareId){
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        $child_share_data = $this->WeshareBuy->get_child_share_items($shareId);
+        $ordersDetail = $this->WeshareBuy->get_current_user_share_order_data($shareId, $uid);
+        echo json_encode(array('ordersDetail' => $ordersDetail, 'childShareData' => $child_share_data));
+        return;
+    }
+
+    /**
      * @param $share_id
      * ajax 获取线下自提点 信息
      */
