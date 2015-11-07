@@ -957,7 +957,7 @@ class WeshareBuyComponent extends Component {
         $cacheData = Cache::read($key);
         if(empty($cacheData)){
             $product_ids = $this->get_share_pids($shareId);
-            $sql = 'select sum(num), product_id from cake_carts where type=9 and status in (1,2,3,4,9,14) and product_id in (' . implode(',', $product_ids) . ') group by product_id';
+            $sql = 'select sum(num), product_id from cake_carts where type=9 and product_id in (' . implode(',', $product_ids) . ') and order_id in (select id from cake_orders where type=9 and status in (1,2,3,4,9,14) and member_id='.$shareId.') group by product_id';
             $cartM = ClassRegistry::init('Cart');
             $result = $cartM->query($sql);
             $summery_result = array();
