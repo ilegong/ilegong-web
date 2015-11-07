@@ -1545,6 +1545,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 867768,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_6826f42e5a8ed9fc40cc3653e12b1064.jpg'
                 ),
+                '1060' => array(
+                    'share_id' => 1060,
+                    'share_name' => '没有美丽的图片，只有美丽的口感，小宝妈水果团',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/bbd485c6769_1107.jpg',
+                    'share_price' => '30',
+                    'share_user_name' => '小宝妈',
+                    'share_vote' => 1000,
+                    'share_user_id' => 811917,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
+                ),
                 '953' => array(
                     'share_id' => 953,
                     'share_name' => '脆甜好吃的冬雪蜜桃开团喽！',
