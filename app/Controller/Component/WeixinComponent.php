@@ -471,6 +471,7 @@ class WeixinComponent extends Component {
             //todo check group share is complete and send msg
             //clean cache share
             $this->clear_share_cache($order['Order']['member_id'], $order['Order']['ship_mark'] == SHARE_SHIP_GROUP_TAG);
+            Cache::write(USER_SHARE_ORDER_INFO_CACHE_KEY . '_' . $order['Order']['member_id'] . '_' . $order['Order']['creator'], '');
             return;
         }
         $this->on_order_status_change($order);
