@@ -761,7 +761,7 @@
         return true;
       }
       if (vm.ordersDetail && vm.ordersDetail['summery'].details[product.id]) {
-        var product_buy_num = vm.ordersDetail['summery'].details[product.id]['num'];
+        var product_buy_num = parseInt(vm.ordersDetail['summery'].details[product.id]['num']);
         return product_buy_num < store_num;
       }
       return true;
