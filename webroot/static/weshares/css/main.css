@@ -503,6 +503,7 @@ ul li {
     color: #ffa200;
     margin-left: 5px;
     font-size: 10px;
+    display: inline-block;
 }
 
 /*child share join users*/
