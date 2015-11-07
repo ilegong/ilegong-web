@@ -97,7 +97,8 @@ class WesharesController extends AppController {
     public function update($weshareId) {
         $uid = $this->currentUser['id'];
         $weshareInfo = $this->get_weshare_detail($weshareId);
-        if ($uid != $weshareInfo['creator']['id']) {
+        $can_edit_share = $this->ShareAuthority->user_can_edit_share_info($uid, $weshareId);
+        if ($uid != $weshareInfo['creator']['id']&&!$can_edit_share) {
             $this->redirect('/weshares/view/' . $weshareId . '/0');
         }
         $share_ship_set = $this->sharer_can_use_we_ship($uid);
@@ -330,6 +331,7 @@ class WesharesController extends AppController {
         $comment_data = $this->WeshareBuy->load_comment_by_share_id($weshareId);
         $recommend_data = $this->WeshareBuy->load_share_recommend_data($weshareId);
         $is_manage_user = $this->ShareAuthority->user_can_view_share_order_list($uid, $weshareId);
+        $can_edit_share = $this->ShareAuthority->user_can_edit_share_info($uid, $weshareId);
         $share_order_count = $this->WeshareBuy->get_share_all_buy_count($weshareId);
         echo json_encode(array('support_pys_ziti' => $share_ship_set,
             'weshare' => $weshareInfo,
@@ -343,6 +345,7 @@ class WesharesController extends AppController {
             'comment_data' => $comment_data,
             'sub_status' => $sub_status,
             'is_manage' => $is_manage_user,
+            'can_edit_share' => $can_edit_share,
             'share_order_count' => $share_order_count
         ));
         return;

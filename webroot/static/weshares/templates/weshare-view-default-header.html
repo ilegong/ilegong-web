@@ -30,7 +30,7 @@
                 class="statistics-btn order-manage-btn"
                 ng-click="vm.toShareOrderList()">订单管理</a>
         </li>
-        <li class="header-btn-wrap" ng-if="vm.isCreator()"><a
+        <li class="header-btn-wrap" ng-if="vm.isCreator()||vm.canEditShare"><a
                 class="statistics-btn edit-share-btn"
                 ng-click="vm.toUpdate()">修改</a>
         </li>

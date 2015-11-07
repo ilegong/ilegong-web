@@ -392,6 +392,7 @@
             vm.weshare.selectedAddressId = -1;
           }
           vm.isManage = data['is_manage'];
+          vm.canEditShare = data['can_edit_share'];
           vm.recommendData = data['recommendData'];
           vm.currentUser = data['current_user'] || {};
           vm.weixinInfo = data['weixininfo'];
