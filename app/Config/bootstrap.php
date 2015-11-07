@@ -221,6 +221,10 @@ const SHARE_OFFLINE_ADDRESS_SUMMERY_DATA_CACHE_KEY = 'share_offline_address_summ
 const SHARE_OFFLINE_ADDRESS_BUY_DATA_CACHE_KEY = 'share_offline_address_buy_data_cache_key';//分享线下自提点 购买信息
 const GROUP_SHARE_ORDER_SUMMERY_DATA_CACHE_KEY = 'group_share_order_summery_data_cache_key';
 
+const USER_SHARE_PAGE_INFO_CACHE_KEY = 'user_share_page_info_cache_key'; //缓存对应用户对应分享的分页信息
+const USER_SHARE_ORDER_INFO_CACHE_KEY = 'user_share_order_info_cache_key';//缓存对应用户对应分享的订单信息
+const USER_SHARE_ORDER_INFO_FIRST_PAGE_CACHE_KEY = 'user_share_order_info_first_page_cache_key';//缓存对应用户对应分享的第一页订单信息
+
 //Product 表里设置是这个产品，不论多少都是同一邮费
 const TYPE_ORDER_PRICE = 1; //订单总价满多少包邮
 const TYPE_REDUCE_BY_NUMS = 2; //同一商品满几件包邮

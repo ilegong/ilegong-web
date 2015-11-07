@@ -961,19 +961,26 @@ class WeshareBuyComponent extends Component {
      */
     public function get_current_user_share_order_data($weshareId, $uid) {
         //check $uid
-        $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
-        $sort = array('created DESC');
-        $query_order_cond = array(
-            'conditions' => array(
-                'member_id' => $weshareId,
-                'type' => ORDER_TYPE_WESHARE_BUY,
-                'status' => $order_status,
-                'deleted' => DELETED_NO,
-                'creator' => $uid
-            ),
-            'fields' => $this->$query_share_info_order_fields,
-            'order' => $sort);
-        return $this->load_share_order_data($query_order_cond);
+        $key = USER_SHARE_ORDER_INFO_CACHE_KEY . '_' . $weshareId . '_' . $uid;
+        $cacheData = Cache::read($key);
+        if (empty($cacheData)) {
+            $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
+            $sort = array('status' => 'desc', 'created' => 'desc');
+            $query_order_cond = array(
+                'conditions' => array(
+                    'member_id' => $weshareId,
+                    'type' => ORDER_TYPE_WESHARE_BUY,
+                    'status' => $order_status,
+                    'deleted' => DELETED_NO,
+                    'creator' => $uid
+                ),
+                'fields' => $this->query_share_info_order_fields,
+                'order' => $sort);
+            $data = $this->load_share_order_data($query_order_cond);
+            Cache::write($key, json_encode($data));
+            return $data;
+        }
+        return json_decode($cacheData, true);
     }
 
     /**
@@ -994,13 +1001,16 @@ class WeshareBuyComponent extends Component {
                 'deleted' => DELETED_NO,
                 'not' => array('creator' => $uid)
             ),
-            'fields' => $this->$query_share_info_order_fields,
+            'fields' => $this->query_share_info_order_fields,
             'limit' => $this->share_order_count,
             'offset' => ($page - 1) * $this->share_order_count,
             'order' => $sort);
-        return $this->load_share_order_data($query_order_cond);
+        $result = $this->load_share_order_data($query_order_cond);
+        if ($page == 1) {
+            $result['page_info'] = $this->get_share_order_page_info($weshareId, $uid);
+        }
+        return $result;
     }
-
     /**
      * @param $cond
      * @return array
@@ -1012,13 +1022,11 @@ class WeshareBuyComponent extends Component {
         $userM = ClassRegistry::init('User');
         $orders = $orderM->find('all', $cond);
         $orderIds = Hash::extract($orders, '{n}.Order.id');
-        $orders = Hash::combine($orders, '{n}.Order.id', '{n}.Order');
         $order_cart_map = array();
         $users = array();
         if ($orders) {
-            usort($orders, function ($a, $b) {
-                return ($a['id'] < $b['id']) ? -1 : 1;
-            });
+            $userIds = Hash::extract($orders, '{n}.Order.creator');
+            $cateIds = Hash::extract($orders, '{n}.Order.cate_id');
             $carts = $cartM->find('all', array(
                 'conditions' => array(
                     'order_id' => $orderIds,
@@ -1031,7 +1039,17 @@ class WeshareBuyComponent extends Component {
                 $order_id = $item['Cart']['order_id'];
                 $order_cart_map[$order_id][] = $item['Cart'];
             }
-            $userIds = Hash::extract($orders, '{n}.Order.creator');
+            $rebateLogM = ClassRegistry::init('RebateTrackLog');
+            $rebateLogs = $rebateLogM->find('all', array(
+                'conditions' => array(
+                    'id' => $cateIds
+                ),
+                'fields' => array('id', 'sharer')
+            ));
+            $rebateSharerIds = Hash::extract($rebateLogs, '{n}.RebateTrackLog.sharer');
+            $rebateLogs = Hash::combine($rebateLogs, '{n}.RebateTrackLog.id', '{n}.RebateTrackLog.sharer');
+            $userIds = array_merge($userIds, $rebateSharerIds);
+            $userIds = array_unique($userIds);
             $users = $userM->find('all', array(
                 'conditions' => array(
                     'id' => $userIds
@@ -1040,8 +1058,12 @@ class WeshareBuyComponent extends Component {
                 'fields' => $this->query_user_fields,
             ));
             $users = Hash::combine($users, '{n}.User.id', '{n}.User');
+            $orders = Hash::combine($orders, '{n}.Order.id', '{n}.Order');
+            usort($orders, function ($a, $b) {
+                return ($a['id'] < $b['id']) ? -1 : 1;
+            });
         }
-        $result_data = array('users' => $users, 'orders' => $orders, 'order_cart_map' => $order_cart_map);
+        $result_data = array('users' => $users, 'orders' => $orders, 'order_cart_map' => $order_cart_map, 'rebate_logs' => $rebateLogs);
         return $result_data;
     }
 
@@ -1458,7 +1480,7 @@ class WeshareBuyComponent extends Component {
     public function get_share_all_buy_count($shareId, $exclude_uid = 0) {
         $orderM = ClassRegistry::init('Order');
         $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
-        if($exclude_uid==0){
+        if ($exclude_uid == 0) {
             $key = SHARE_ORDER_COUNT_DATA_CACHE_KEY . '_' . $shareId;
             $cacheData = Cache::read($key);
             if (!empty($cacheData)) {

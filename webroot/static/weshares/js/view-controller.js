@@ -105,9 +105,8 @@
     }
   }
 
-  function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, $filter, $window, Utils, staticFilePath) {
+  function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, $filter, $window, Utils, staticFilePath, ShareOrder) {
     var vm = this;
-
     vm.staticFilePath = staticFilePath;
     vm.showShareDetailView = true;
     vm.subShareTipTxt = '+关注';
@@ -309,14 +308,14 @@
       if (initSharedOfferId) {
         vm.isSharePacket = true;
       }
-      $http({method: 'GET', url: '/weshares/get_share_order_detail/' + share_id + '.json', cache: $templateCache}).
+      $http({method: 'GET', url: '/weshares/get_share_user_order_and_child_share/' + share_id + '.json', cache: $templateCache}).
         success(function (data, status) {
           vm.ordersDetail = data['ordersDetail'];
           vm.childShareDetail = data['childShareData']['child_share_data'];
           vm.childShareDetailUsers = data['childShareData']['child_share_user_infos'];
           //vm.shipTypes = data['ordersDetail']['ship_types'];
           vm.rebateLogs = data['ordersDetail']['rebate_logs'];
-          vm.sortOrders();
+          //vm.sortOrders();
           vm.combineShareBuyData();
           setWeiXinShareParams();
           //from paid done
@@ -346,6 +345,8 @@
               }, 10000);
             }
           }
+          vm.shareOrder = new ShareOrder();
+          vm.shareOrder.shareId = share_id;
         }).
         error(function (data, status) {
           $log.log(data);
@@ -499,7 +500,12 @@
     }
 
     function getOrderDisplayName(orderId) {
-      var carts = vm.ordersDetail.order_cart_map[orderId];
+      var carts = [];
+      if(vm.ordersDetail&&vm.ordersDetail.order_cart_map&&vm.ordersDetail.order_cart_map[orderId]){
+        carts = vm.ordersDetail.order_cart_map[orderId];
+      }else{
+        carts = vm.shareOrder.order_cart_map[orderId];
+      }
       return _.map(carts, function (cart) {
         return cart.name + 'X' + cart.num;
       }).join(', ');
@@ -599,8 +605,15 @@
     }
 
     function getRecommendInfo(order) {
-      var recommendId = vm.rebateLogs[order['cate_id']];
-      var recommend = vm.ordersDetail['users'][recommendId]['nickname'];
+      var recommendId = 0;
+      var recommend = '';
+      if(vm.rebateLogs[order['cate_id']]){
+        recommendId = vm.rebateLogs[order['cate_id']];
+        recommend = vm.ordersDetail['users'][recommendId]['nickname'];
+      }else{
+        recommendId = vm.shareOrder.rebate_logs[order['cate_id']];
+        recommend = vm.shareOrder['users'][recommendId]['nickname'];
+      }
       return recommend + '推荐';
     }
 
@@ -611,7 +624,12 @@
       if (vm.currentUser && vm.currentUser['is_proxy'] == 0) {
         return false;
       }
-      var recommendId = vm.rebateLogs[order['cate_id']];
+      var recommendId = 0;
+      if(vm.rebateLogs&&vm.rebateLogs[order['cate_id']]){
+         recommendId = vm.rebateLogs[order['cate_id']];
+      }else{
+        recommendId = vm.shareOrder.rebate_logs[order['cate_id']];
+      }
       if (vm.currentUser && vm.currentUser['id'] == recommendId) {
         return true;
       }
@@ -619,7 +637,12 @@
     }
 
     function toRecommendUserInfo(order) {
-      var recommendId = vm.rebateLogs[order['cate_id']];
+      var recommendId = 0;
+      if(vm.rebateLogs[order['cate_id']]){
+        recommendId = vm.rebateLogs[order['cate_id']];
+      }else{
+        recommendId = vm.shareOrder.rebate_logs[order['cate_id']];
+      }
       window.location.href = '/weshares/user_share_info/' + recommendId;
     }
 

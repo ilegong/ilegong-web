@@ -36,7 +36,7 @@
 })(window, window.angular);
 
 (function (window, angular) {
-  var app = angular.module('weshares', ['ui.router', 'module.services', 'module.filters', 'module.directives', 'me-lazyload'])
+  var app = angular.module('weshares', ['infinite-scroll', 'module.services', 'module.filters', 'module.directives', 'me-lazyload'])
     .constant('_', window._)
     .config(configCompileProvider)
     .config(configHttpProvider)
@@ -47,6 +47,62 @@
       )
     }])
     .run(initApp);
+
+
+  // share order constructor function to encapsulate HTTP and pagination logic
+  app.factory('ShareOrder', function ($http, $templateCache) {
+
+    var ShareOrder = function () {
+      this.orders = [];
+      this.order_cart_map = {};
+      this.rebate_logs = {};
+      this.users = {};
+      this.shareId = 0;
+      this.busy = false;
+      this.noMore = false;
+      this.page = 1;
+      this.pageInfo = {};
+    };
+
+    /**
+     * Overwrites obj1's values with obj2's and adds obj2's if non existent in obj1
+     * @param obj1
+     * @param obj2
+     * @returns obj3 a new object based on obj1 and obj2
+     */
+    function merge_options(obj1,obj2){
+      var obj3 = {};
+      for (var attrname in obj1) { obj3[attrname] = obj1[attrname]; }
+      for (var attrname in obj2) { obj3[attrname] = obj2[attrname]; }
+      return obj3;
+    }
+
+    ShareOrder.prototype.nextPage = function () {
+      if (this.busy||this.noMore) return;
+      if(this.page > this.pageInfo['page_count']){
+        this.noMore = true;
+        return;
+      }
+      this.busy = true;
+      var url = "/weshares/get_share_order_by_page/" + this.shareId + "/" + this.page + ".json";
+      $http({method: 'GET', url: url, cache: $templateCache}).
+        success(function (data, status) {
+          this.busy = false;
+          this.orders = this.orders.concat(data['orders']);
+          this.order_cart_map = merge_options(this.order_cart_map, data['order_cart_map']);
+          this.rebate_logs = merge_options(this.rebate_logs, data['rebate_logs']);
+          this.users = merge_options(this.users, data['users']);
+          if(data['page_info']){
+            this.pageInfo = data['page_info'];
+          }
+          this.page = this.page+1;
+        }.bind(this)).
+        error(function (data, status) {
+
+        });
+    };
+    return ShareOrder;
+  });
 
   //define static file path
   app.constant('staticFilePath', PYS.staticFilePath);

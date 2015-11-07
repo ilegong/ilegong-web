@@ -263,7 +263,21 @@ class WesharesController extends AppController {
 
     /**
      * @param $shareId
+     * @param $page
+     * 获取分享订单信息 根据分享ID和页码
+     */
+    public function get_share_order_by_page($shareId, $page){
+        $this->autoRender=false;
+        $uid = $this->currentUser['id'];
+        $ordersDetail = $this->WeshareBuy->get_share_detail_view_orders($shareId, $page, $uid);
+        echo json_encode($ordersDetail);
+        return;
+    }
+
+    /**
+     * @param $shareId
      * ajax 获取购买信息 拆分优化加载
+     * 暂时不使用了
      */
     public function get_share_order_detail($shareId) {
         $this->autoRender = false;
