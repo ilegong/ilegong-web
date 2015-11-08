@@ -203,7 +203,6 @@ class WesharesController extends AppController {
         $addressesData = $postDataArray['addresses'];
         $shipSetData = $postDataArray['ship_type'];
         $proxyRebatePercent = $postDataArray['proxy_rebate_percent'];
-        $weshareData['creator'] = $uid;
         //merge for child share data
         $saveBuyFlag = $weshare = $this->Weshare->save($weshareData);
         //merge for child share data
