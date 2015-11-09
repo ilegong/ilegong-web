@@ -4,7 +4,7 @@
         <p class="iconfont" style="height: 16px;"><i class="fa fa-users"></i></p>
         <b>朋友说</b>
     </a>
-    <a class="new" ng-if="!vm.isCreator()&&vm.weshare.status == 0" ng-click="vm.buyProducts()">我要报名</a>
+    <a class="new" ng-if="!vm.isCreator()&&vm.weshare.status == 0" ng-click="vm.buyProducts()">我要购买</a>
     <a class="new" ng-if="vm.isCreator()&&vm.weshare.status == 0&&vm.notifyType() == 1" ng-click='vm.notifyFans();'
        style="width: 28%;">团购提醒</a>
     <a class="new" ng-if="vm.isCreator()&&vm.weshare.status == 0&&vm.notifyType() == 0" ng-click='vm.sendNewShareMsg();'
