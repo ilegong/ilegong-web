@@ -9,7 +9,7 @@ class ShareManageController extends AppController {
 
     public $components = array('Auth', 'ShareUtil', 'WeshareBuy', 'ShareManage', 'Cookie', 'Session', 'Paginator');
 
-    public $uses = array('User');
+    public $uses = array('User', 'Weshare');
 
     var $sortSharePaginate = array(
         'Candidate' => array(

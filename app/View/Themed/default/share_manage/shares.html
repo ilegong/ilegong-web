@@ -1,3 +1,9 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">我的分享</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
 <!-- /.row -->
 <div class="row">
     <div class="col-lg-12">
@@ -12,30 +18,28 @@
                         <thead>
                         <tr>
                             <th>#</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Username</th>
+                            <th>名称</th>
+                            <th>创建时间</th>
+                            <th>发货信息</th>
+                            <th>是否打款</th>
+                            <th>状态</th>
+                            <th>分享操作</th>
+                            <th>订单操作</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Larry</td>
-                            <td>the Bird</td>
-                            <td>@twitter</td>
-                        </tr>
+                        {{loop $shares $share}}
+                            <tr>
+                                <td>{{$share['Weshare']['id']}}</td>
+                                <td>{{$share['Weshare']['title']}}</td>
+                                <td>{{$share['Weshare']['created']}}</td>
+                                <td>{{$share['Wehsare']['send_info']}}</td>
+                                <td>{{if $share['Wehsare']['settlement'] == 0}}未打款{{else}}已打款{{/if}}</td>
+                                <td>{{if $share['Wehsare']['status'] == 0}}进行中{{else}}截团{{/if}}</td>
+                                <td><button type="button" class="btn btn-outline btn-primary btn-info">修改</button>&nbsp;&nbsp;<button type="button" class="btn btn-outline btn-danger btn-sm">删除</button></td>
+                                <td><button type="button" class="btn btn-outline btn-primary btn-sm">导出未发货订单</button>&nbsp;&nbsp;<button type="button" class="btn btn-outline btn-success btn-sm">导出全部订单</button></td>
+                            </tr>
+                        {{/loop}}
                         </tbody>
                     </table>
                 </div>
