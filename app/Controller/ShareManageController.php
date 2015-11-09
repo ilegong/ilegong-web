@@ -7,9 +7,32 @@
 class ShareManageController extends AppController {
 
 
-    public $components = array('Auth','ShareUtil', 'WeshareBuy', 'ShareManage', 'Cookie', 'Session');
+    public $components = array('Auth', 'ShareUtil', 'WeshareBuy', 'ShareManage', 'Cookie', 'Session', 'Paginator');
 
     public $uses = array('User');
+
+    var $sortSharePaginate = array(
+        'Candidate' => array(
+            'order' => 'Weshare.id DESC',
+            'limit' => 50,
+        )
+    );
+
+    /**
+     * 获取分享者的分享
+     */
+    public function shares() {
+        $uid = $this->currentUser['id'];
+        $this->Paginator->settings = $this->sortSharePaginate;
+        $q_cond = array(
+            'Weshare.creator' => $uid
+        );
+        if ($_REQUEST['key_word']) {
+            $q_cond['Weshare.title LIKE'] = '%' . $_REQUEST['key_word'] . '%';
+        }
+        $shares = $this->Paginator->paginate('Weshare', $q_cond);
+        $this->set('shares', $shares);
+    }
 
     public function beforeFilter() {
         $this->Auth->authenticate = array('WeinxinOAuth', 'Form', 'Pys', 'Mobile');
@@ -20,7 +43,7 @@ class ShareManageController extends AppController {
 
     public function index() {
         $uid = $this->currentUser['id'];
-        if(empty($uid)){
+        if (empty($uid)) {
             $this->redirect(array('action' => 'login'));
             return;
         }
@@ -28,12 +51,12 @@ class ShareManageController extends AppController {
         $this->set('collect_data', $collect_data);
     }
 
-    public function logout(){
+    public function logout() {
         $this->logoutCurrUser();
         $this->redirect(array('action' => 'login'));
     }
 
-    public function do_login(){
+    public function do_login() {
         if ($this->Auth->login()) {
             $this->User->id = $this->Auth->user('id');
             $this->User->updateAll(array(
@@ -79,7 +102,7 @@ class ShareManageController extends AppController {
         }
     }
 
-    public function batch_set_order_ship_code(){
+    public function batch_set_order_ship_code() {
 
     }
 }
