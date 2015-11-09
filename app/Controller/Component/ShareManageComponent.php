@@ -28,4 +28,44 @@ class ShareManageComponent extends Component {
         return $user_data;
     }
 
+
+    public function set_dashboard_collect_data($uid) {
+        $weshareM = ClassRegistry::init('Weshare');
+        $orderM = ClassRegistry::init('Order');
+        $userRelationM = ClassRegistry::init('UserRelation');
+        $shareFaqM = ClassRegistry::init('ShareFaq');
+        $share_count = $weshareM->find('count', array(
+            'conditions' => array(
+                'creator' => $uid
+            )
+        ));
+        $last_300_shares = $weshareM->find('all', array(
+            'conditions' => array(
+                'creator' => $uid
+            ),
+            'order' => array('id' => 'desc'),
+            'fields' => array('id'),
+            'limit' => 300
+        ));
+        $last_300_share_ids = Hash::extract($last_300_shares, '{n}.Weshare.id');
+        $order_count = $orderM->find('count', array(
+            'conditions' => array(
+                'member_id' => $last_300_share_ids,
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_COMMENT, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_COMMENT, ORDER_STATUS_DONE),
+            )
+        ));
+        $faq_count = $shareFaqM->find('count', array(
+            'conditions' => array(
+                'receiver' => $uid,
+                'has_read' => 0
+            )
+        ));
+        $fans_count = $userRelationM->find('count', array(
+            'conditions' => array(
+                'user_id' => $uid
+            )
+        ));
+        return array('share_count' => $share_count, 'order_count' => $order_count, 'faq_count' => $faq_count, 'fans_count' => $fans_count);
+    }
 }

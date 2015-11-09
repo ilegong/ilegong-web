@@ -1548,7 +1548,7 @@ class ShareUtilComponent extends Component {
                 '1060' => array(
                     'share_id' => 1060,
                     'share_name' => '没有美丽的图片，只有美丽的口感，小宝妈水果团',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/bbd485c6769_1107.jpg',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/869ca52575f_1109.jpg',
                     'share_price' => '30',
                     'share_user_name' => '小宝妈',
                     'share_vote' => 1000,

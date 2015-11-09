@@ -20,7 +20,13 @@ class ShareManageController extends AppController {
     }
 
     public function index() {
-
+        $uid = $this->currentUser['id'];
+        if(empty($uid)){
+            $this->redirect(array('action' => 'login'));
+            return;
+        }
+        $collect_data = $this->ShareManage->set_dashboard_collect_data($uid);
+        $this->set('collect_data', $collect_data);
     }
 
     public function logout(){
@@ -29,6 +35,7 @@ class ShareManageController extends AppController {
     }
 
     public function do_login(){
+        $this->logoutCurrUser();
         if ($this->Auth->login()) {
             $this->User->id = $this->Auth->user('id');
             $this->User->updateAll(array(
