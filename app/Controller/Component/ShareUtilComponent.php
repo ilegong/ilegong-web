@@ -1545,26 +1545,26 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 867768,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_6826f42e5a8ed9fc40cc3653e12b1064.jpg'
                 ),
-                '1060' => array(
-                    'share_id' => 1060,
-                    'share_name' => '没有美丽的图片，只有美丽的口感，小宝妈水果团',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/869ca52575f_1109.jpg',
-                    'share_price' => '30',
-                    'share_user_name' => '小宝妈',
-                    'share_vote' => 1000,
-                    'share_user_id' => 811917,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
-                ),
-                '953' => array(
-                    'share_id' => 953,
-                    'share_name' => '脆甜好吃的冬雪蜜桃开团喽！',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/980e1682705_1027.jpg',
-                    'share_price' => '120',
-                    'share_user_name' => '何荷',
-                    'share_vote' => 235,
-                    'share_user_id' => 875275,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/8752751445930740.png'
-                ),
+//                '1060' => array(
+//                    'share_id' => 1060,
+//                    'share_name' => '没有美丽的图片，只有美丽的口感，小宝妈水果团',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/869ca52575f_1109.jpg',
+//                    'share_price' => '30',
+//                    'share_user_name' => '小宝妈',
+//                    'share_vote' => 1000,
+//                    'share_user_id' => 811917,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
+//                ),
+//                '953' => array(
+//                    'share_id' => 953,
+//                    'share_name' => '脆甜好吃的冬雪蜜桃开团喽！',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/980e1682705_1027.jpg',
+//                    'share_price' => '120',
+//                    'share_user_name' => '何荷',
+//                    'share_vote' => 235,
+//                    'share_user_id' => 875275,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/8752751445930740.png'
+//                ),
                 '1009' => array(
                     'share_id' => 1009,
                     'share_name' => '甜甜糯糯的迁西板栗',
@@ -1675,16 +1675,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 1199,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/6f5125521e1_0903.jpg'
                 ),
-                '664' => array(
-                    'share_id' => 664,
-                    'share_name' => '当天海南空运～薇薇安千层水果蛋糕',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/39e96c45dc2_0930.jpg',
-                    'share_price' => '160',
-                    'share_user_name' => '盛夏',
-                    'share_vote' => 987,
-                    'share_user_id' => 708029,
-                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
-                ),
+//                '664' => array(
+//                    'share_id' => 664,
+//                    'share_name' => '当天海南空运～薇薇安千层水果蛋糕',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/39e96c45dc2_0930.jpg',
+//                    'share_price' => '160',
+//                    'share_user_name' => '盛夏',
+//                    'share_vote' => 987,
+//                    'share_user_id' => 708029,
+//                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
+//                ),
                 '670' => array(
                     'share_id' => 670,
                     'share_name' => ' 树上的糖包子，新鲜树摘威海青皮无花果 ',
@@ -1735,8 +1735,8 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 23711,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/4c91fb9380d_0901.jpg'
                 ),
-                '427' => array(
-                    'share_id' => 427,
+                '969' => array(
+                    'share_id' => 969,
                     'share_name' => '姑妈家的桂圆肉',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/54fb984e461_1015.jpg',
                     'share_price' => '38',
@@ -1755,8 +1755,8 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 815,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/9257b1649ba_0906.jpg'
                 ),
-                '952' => array(
-                    'share_id' => 952,
+                '1061' => array(
+                    'share_id' => 1061,
                     'share_name' => '父母种的红薯、紫薯、花生开刨啦',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/ff1894c1082_0928.jpg',
                     'share_price' => '40',

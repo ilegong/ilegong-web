@@ -31,6 +31,10 @@ class ShareManageController extends AppController {
             $q_cond['Weshare.title LIKE'] = '%' . $_REQUEST['key_word'] . '%';
         }
         $shares = $this->Paginator->paginate('Weshare', $q_cond);
+        $shares_count = $this->Weshare->find('count', array(
+            'conditions' => $q_cond
+        ));
+        $this->set('shares_count', $shares_count);
         $this->set('shares', $shares);
     }
 
