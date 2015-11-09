@@ -7,16 +7,15 @@
 class ShareManageController extends AppController {
 
 
-    public $components = array('ShareUtil', 'WeshareBuy', 'ShareManage');
+    public $components = array('Auth','ShareUtil', 'WeshareBuy', 'ShareManage', 'Cookie', 'Session');
 
     public $uses = array('User');
 
     public function beforeFilter() {
-        parent::beforeFilter();
-        $this->Auth->authenticate = array('Mobile');
-        $this->Auth->allowedActions = array('login', 'forgot', 'captcha', 'reset');
-        $this->set('op_cate', 'me');
+        $this->Auth->authenticate = array('WeinxinOAuth', 'Form', 'Pys', 'Mobile');
+        $this->Auth->allowedActions = array('login', 'forgot', 'reset', 'do_login');
         $this->layout = 'sharer';
+        parent::beforeFilter();
     }
 
     public function index() {
@@ -35,15 +34,26 @@ class ShareManageController extends AppController {
     }
 
     public function do_login(){
-        $this->logoutCurrUser();
         if ($this->Auth->login()) {
             $this->User->id = $this->Auth->user('id');
             $this->User->updateAll(array(
                 'last_login' => "'" . date('Y-m-d H:i:s') . "'",
                 'last_ip' => "'" . $this->request->clientIp(false) . "'"
             ), array('id' => $this->User->id,));
+            if (!empty($this->data['User']['remember_me'])) {
+                $cookietime = 2592000; // 一月内30*24*60*60
+            } else {
+                $cookietime = 3600 * 24 * 7;
+            }
+            $user = $this->Auth->user();
+            $userinfo = array(
+                'id' => $user['id'],
+                'username' => $user['username'],
+            );
+            $this->Cookie->write('Auth.User', $userinfo, true, $cookietime);
             $this->Session->setFlash('登录成功' . $this->Session->read('Auth.User.session_flash'));
-            $this->redirect(array('action' => 'index'));
+            $this->redirect('/share_manage/index');
+            return;
         }
         $this->Session->setFlash('登录失败,手机号或者密码错误');
         $this->redirect(array('action' => 'login'));
