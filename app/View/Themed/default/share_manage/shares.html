@@ -33,9 +33,9 @@
                                 <td>{{$share['Weshare']['id']}}</td>
                                 <td>{{$share['Weshare']['title']}}</td>
                                 <td>{{$share['Weshare']['created']}}</td>
-                                <td>{{$share['Wehsare']['send_info']}}</td>
-                                <td>{{if $share['Wehsare']['settlement'] == 0}}未打款{{else}}已打款{{/if}}</td>
-                                <td>{{if $share['Wehsare']['status'] == 0}}进行中{{else}}截团{{/if}}</td>
+                                <td>{{$share['Weshare']['send_info']}}</td>
+                                <td>{{if $share['Weshare']['settlement'] == 0}}未打款{{else}}已打款{{/if}}</td>
+                                <td>{{if $share['Weshare']['status'] == 0}}进行中{{else}}截团{{/if}}</td>
                                 <td><button type="button" class="btn btn-outline btn-primary btn-info">修改</button>&nbsp;&nbsp;<button type="button" class="btn btn-outline btn-danger btn-sm">删除</button></td>
                                 <td><button type="button" class="btn btn-outline btn-primary btn-sm">导出未发货订单</button>&nbsp;&nbsp;<button type="button" class="btn btn-outline btn-success btn-sm">导出全部订单</button></td>
                             </tr>
