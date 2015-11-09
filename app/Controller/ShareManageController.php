@@ -49,6 +49,7 @@ class ShareManageController extends AppController {
             $userinfo = array(
                 'id' => $user['id'],
                 'username' => $user['username'],
+                'nickname' => $user['nickname']
             );
             $this->Cookie->write('Auth.User', $userinfo, true, $cookietime);
             $this->Session->setFlash('登录成功' . $this->Session->read('Auth.User.session_flash'));
