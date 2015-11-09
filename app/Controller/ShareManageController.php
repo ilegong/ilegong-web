@@ -14,7 +14,7 @@ class ShareManageController extends AppController {
     var $sortSharePaginate = array(
         'Candidate' => array(
             'order' => 'Weshare.id DESC',
-            'limit' => 50,
+            'limit' => 20,
         )
     );
 
