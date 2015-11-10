@@ -45,7 +45,11 @@
                                 <td>{{if $share['Weshare']['settlement'] == 0}}未打款{{else}}已打款{{/if}}</td>
                                 <td>{{if $share['Weshare']['status'] == 0}}进行中{{else}}截团{{/if}}</td>
                                 <td><a href="#" type="button" class="btn btn-outline btn-primary btn-info">修改</a>&nbsp;&nbsp;<a href="#" type="button" class="btn btn-outline btn-danger btn-sm">删除</a></td>
-                                <td><a href="/weshares/order_export/{{$share['Weshare']['id']}}" target="_blank" class="btn btn-outline btn-primary btn-sm">导出待发货订单</a>&nbsp;&nbsp;<a href="/weshares/order_export/{{$share['Weshare']['id']}}/0" target="_blank" class="btn btn-outline btn-success btn-sm">导出全部订单</a></td>
+                                <td>
+                                    <a href="/share_manage/order_manage/{{$share['Weshare']['id']}}" class="btn btn-outline btn-primary btn-sm">订单管理</a>
+                                    &nbsp;&nbsp;<a href="/weshares/order_export/{{$share['Weshare']['id']}}" target="_blank" class="btn btn-outline btn-primary btn-sm">导出待发货订单</a>
+                                    &nbsp;&nbsp;<a href="/weshares/order_export/{{$share['Weshare']['id']}}/0" target="_blank" class="btn btn-outline btn-success btn-sm">导出全部订单</a>
+                                </td>
                             </tr>
                         {{/loop}}
                         </tbody>

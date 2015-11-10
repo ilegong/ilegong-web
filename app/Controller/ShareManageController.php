@@ -7,14 +7,21 @@
 class ShareManageController extends AppController {
 
 
-    public $components = array('Auth', 'ShareUtil', 'WeshareBuy', 'ShareManage', 'Cookie', 'Session', 'Paginator');
+    public $components = array('Auth', 'ShareUtil', 'WeshareBuy', 'ShareManage', 'Cookie', 'Session', 'Paginator', 'WeshareBuy');
 
-    public $uses = array('User', 'Weshare');
+    public $uses = array('User', 'Weshare', 'Order', 'Cart');
 
     var $sortSharePaginate = array(
         'Candidate' => array(
             'order' => 'Weshare.id DESC',
             'limit' => 20,
+        )
+    );
+
+    var $sortShareOrderPaginate = array(
+        'Order' => array(
+            'order' => 'Order.id DESC',
+            'limit' => 100
         )
     );
 
@@ -89,6 +96,41 @@ class ShareManageController extends AppController {
 
     public function login() {
         $this->layout = null;
+    }
+
+    public function order_manage($share_id) {
+        $share_info = $this->WeshareBuy->get_weshare_info($share_id);
+        $this->Paginator->settings = $this->sortShareOrderPaginate;
+        $q_cond = array(
+            'Order.member_id' => $share_id,
+            'Order.type' => ORDER_TYPE_WESHARE_BUY,
+            'NOT' => array(
+                'Order.status' => array(ORDER_STATUS_WAITING_PAY)
+            )
+        );
+        //set other query cond
+        $orders = $this->Paginator->paginate('Order', $q_cond);
+        $order_ids = Hash::extract($orders, '{n}.Order.id');
+        $order_carts = $this->Cart->find('all', array(
+            'conditions' => array(
+                'order_id' => $order_ids
+            )
+        ));
+        $order_cart_map = array();
+        foreach($order_carts as $cart_item){
+            $order_id = $cart_item['Cart']['order_id'];
+            if(!isset($order_cart_map[$order_id])){
+                $order_cart_map[$order_id] = array();
+            }
+            $order_cart_map[] = $cart_item['Cart'];
+        }
+        $orders_count = $this->Order->find('count', array(
+            'conditions' => $q_cond
+        ));
+        $this->set('order_cart_map', $order_cart_map);
+        $this->set('orders_count', $orders_count);
+        $this->set('orders', $orders);
+        $this->set('share_info', $share_info);
     }
 
     public function share_order() {

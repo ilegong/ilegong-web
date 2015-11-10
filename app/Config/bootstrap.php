@@ -2151,6 +2151,34 @@ function get_share_order_cart_display_name($carts) {
     return implode(', ', $product_names);
 }
 
+function get_ship_text_from_order_ship_mark($order_ship_mark){
+    if($order_ship_mark == SHARE_SHIP_PYS_ZITI_TAG){
+        return '好邻居自提';
+    }
+    if($order_ship_mark == SHARE_SHIP_KUAIDI_TAG){
+        return '快递';
+    }
+    if($order_ship_mark == SHARE_SHIP_GROUP_TAG){
+        return '拼团';
+    }
+    if($order_ship_mark == SHARE_SHIP_SELF_ZITI_TAG){
+        return '自提';
+    }
+}
+
+function get_order_status_text_form_order_status($order_status){
+    $order_status_text_map = array(
+        ORDER_STATUS_WAITING_PAY => '待支付',
+        ORDER_STATUS_PAID => '已支付',
+        ORDER_STATUS_SHIPPED => '已发货',
+        ORDER_STATUS_RECEIVED => '已收货',
+        ORDER_STATUS_COMMENT => '待评价',
+        ORDER_STATUS_RETURNING_MONEY => '退款中',
+        ORDER_STATUS_RETURN_MONEY => '已退款'
+    );
+    return $order_status_text_map[$order_status];
+}
+
 function get_share_order_tag_id($carts) {
     if (empty($carts)) {
         return 0;
