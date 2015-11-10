@@ -1633,7 +1633,7 @@ class ShareUtilComponent extends Component {
                 '1098' => array(
                     'share_id' => 1098,
                     'share_name' => '薇薇安千层出新口味咯，提拉米苏千层蛋糕冬日里的暖暖美食',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/66fc1d9fdc6_1110.jpg',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/49f0af92aa7_1110.jpg',
                     'share_price' => '160',
                     'share_user_name' => '盛夏',
                     'share_vote' => 235,
@@ -1725,16 +1725,16 @@ class ShareUtilComponent extends Component {
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
                 ),
                 //新疆大枣
-//                '1021' => array(
-//                    'share_id' => 1021,
-//                    'share_name' => '温暖亲情组合装“新疆大枣”@“福建银耳”',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/fc7c7c2fdb1_1028.jpg',//todo
-//                    'share_price' => '72',
-//                    'share_user_name' => '李樱花',
-//                    'share_vote' => 800,
-//                    'share_user_id' => 810684,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
-//                ),
+                '1021' => array(
+                    'share_id' => 1021,
+                    'share_name' => '温暖亲情组合装“新疆大枣”@“福建银耳”',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/c91e46cf7ba_1110.jpg',
+                    'share_price' => '72',
+                    'share_user_name' => '李樱花',
+                    'share_vote' => 800,
+                    'share_user_id' => 810684,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
+                ),
                 '446' => array(
                     'share_id' => 446,
                     'share_name' => '阳澄湖大闸蟹2015中秋第一波团购启动啦！',
