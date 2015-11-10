@@ -1570,7 +1570,7 @@ class ShareUtilComponent extends Component {
                 '789' => array(
                     'share_id' => 789,
                     'share_name' => '口口相传的艳艳山药第二批团！',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/27098aef138_1110.jpg',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/9865c6196ae_1110.jpg',
                     'share_price' => '85',
                     'share_user_name' => '艳艳',
                     'share_vote' => 800,
