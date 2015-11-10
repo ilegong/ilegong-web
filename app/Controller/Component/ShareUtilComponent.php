@@ -1857,6 +1857,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 23711,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/4c91fb9380d_0901.jpg'
                 ),
+//                '800' => array(
+//                    'share_id' => 800,
+//                    'share_name' => '新鲜栖霞红富士，现摘现发，无农药不打蜡',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/82dc8c58397_0915.jpg',//todo
+//                    'share_price' => '40',
+//                    'share_user_name' => '盛夏',
+//                    'share_vote' => 230,
+//                    'share_user_id' => 708029,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_e92e61d892c2ad72c0e01ec1ac136e71.jpg'
+//                ),
                 '828' => array(
                     'share_id' => 828,
                     'share_name' => '赣南脐橙',
@@ -1947,26 +1957,6 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 230,
                     'share_user_id' => 23711,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/4c91fb9380d_0901.jpg'
-                ),
-                '386' => array(
-                    'share_id' => 386,
-                    'share_name' => '陕西周至翠香猕猴桃',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/e613f69ab78_0915.jpg',
-                    'share_price' => '88',
-                    'share_user_name' => '盛夏',
-                    'share_vote' => 230,
-                    'share_user_id' => 708029,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_e92e61d892c2ad72c0e01ec1ac136e71.jpg'
-                ),
-                '483' => array(
-                    'share_id' => 483,
-                    'share_name' => '山东烟台早熟红富士',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/82dc8c58397_0915.jpg',
-                    'share_price' => '45',
-                    'share_user_name' => '盛夏',
-                    'share_vote' => 230,
-                    'share_user_id' => 708029,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_e92e61d892c2ad72c0e01ec1ac136e71.jpg'
                 ),
                 '419' => array(
                     'share_id' => 419,
