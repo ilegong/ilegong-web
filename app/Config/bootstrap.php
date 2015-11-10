@@ -2169,6 +2169,7 @@ function get_ship_text_from_order_ship_mark($order_ship_mark){
 function get_order_status_text_form_order_status($order_status){
     $order_status_text_map = array(
         ORDER_STATUS_WAITING_PAY => '待支付',
+        ORDER_STATUS_PAID => '待发货',
         ORDER_STATUS_PAID => '已支付',
         ORDER_STATUS_SHIPPED => '已发货',
         ORDER_STATUS_RECEIVED => '已收货',
