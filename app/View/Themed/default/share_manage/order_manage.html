@@ -15,6 +15,10 @@
             <div class="panel-body">
                 <form class="form-inline pull-right" method="POST" action="/share_manage/order_manage/{{$share_info['id']}}">
                     <div class="form-group">
+                        <label class="sr-only">type</label>
+                        <p class="form-control-static">订单类型</p>
+                    </div>
+                    <div class="form-group">
                         <label class="sr-only">订单类型</label>
                         <select name="order_ship_type" class="form-control">
                             <option>全部</option>
@@ -23,6 +27,10 @@
                             <option value="pys_ziti">好邻居</option>
                             <option value="pin_tuan">拼团</option>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only">status</label>
+                        <p class="form-control-static">订单状态</p>
                     </div>
                     <div class="form-group">
                         <label class="sr-only">订单状态</label>
@@ -37,8 +45,20 @@
                         </select>
                     </div>
                     <div class="form-group">
+                        <label class="sr-only">key_word</label>
+                        <p class="form-control-static">收货人</p>
+                    </div>
+                    <div class="form-group">
                         <label class="sr-only">收货人</label>
                         <input type="text" class="form-control" name="key_word" placeholder="收货人">
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only">mobile</label>
+                        <p class="form-control-static">联系方式</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only">联系方式</label>
+                        <input type="text" class="form-control" name="consignee_mobilephone" placeholder="收货人联系方式">
                     </div>
                     <button type="submit" class="btn btn-primary">查询</button>
                 </form>

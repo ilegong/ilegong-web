@@ -118,6 +118,9 @@ class ShareManageController extends AppController {
         if($_REQUEST['key_word']){
             $q_cond['Order.consignee_name LIKE'] = $_REQUEST['key_word'];
         }
+        if($_REQUEST['consignee_mobilephone']){
+            $q_cond['Order.consignee_mobilephone'] = $_REQUEST['consignee_mobilephone'];
+        }
         $orders = $this->Paginator->paginate('Order', $q_cond);
         $order_ids = Hash::extract($orders, '{n}.Order.id');
         $order_carts = $this->Cart->find('all', array(
