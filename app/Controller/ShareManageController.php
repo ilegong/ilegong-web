@@ -109,16 +109,16 @@ class ShareManageController extends AppController {
             )
         );
         //set other query cond
-        if($_REQUEST['order_ship_type']){
+        if (!empty($_REQUEST['order_ship_type']) && $_REQUEST['order_ship_type'] != 0) {
             $q_cond['Order.ship_mark'] = $_REQUEST['order_ship_type'];
         }
-        if($_REQUEST['order_status']){
+        if (!empty($_REQUEST['order_status']) && $_REQUEST['order_status'] != 0) {
             $q_cond['Order.status'] = $_REQUEST['order_status'];
         }
-        if($_REQUEST['key_word']){
-            $q_cond['Order.consignee_name LIKE'] = $_REQUEST['key_word'];
+        if (!empty($_REQUEST['consignee_name'])) {
+            $q_cond['Order.consignee_name LIKE'] = '%' . $_REQUEST['consignee_name'] . '%';
         }
-        if($_REQUEST['consignee_mobilephone']){
+        if (!empty($_REQUEST['consignee_mobilephone'])) {
             $q_cond['Order.consignee_mobilephone'] = $_REQUEST['consignee_mobilephone'];
         }
         $orders = $this->Paginator->paginate('Order', $q_cond);
