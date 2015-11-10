@@ -12,7 +12,7 @@ class ShareManageController extends AppController {
     public $uses = array('User', 'Weshare', 'Order', 'Cart');
 
     var $sortSharePaginate = array(
-        'Candidate' => array(
+        'Weshare' => array(
             'order' => 'Weshare.id DESC',
             'limit' => 20,
         )
