@@ -2031,6 +2031,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 711503,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/0609f46d89e_0813.jpg'
                 ),
+                '918' => array(
+                    'share_id' => 918,
+                    'share_name' => '积累了7000位老顾客的土鸡蛋 朋友说特供40枚/60元',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/15157459186_1110.jpg',
+                    'share_price' => '60',
+                    'share_user_name' => '小赵-水源绿色食品',
+                    'share_vote' => 203,
+                    'share_user_id' => 876460,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_deb52342ad0b28deb859ef2b01835ca8.jpg'
+                ),
                 '328' => array(
                     'share_id' => 328,
                     'share_name' => '天福号山地散养有机柴鸡蛋(限五环内)',
