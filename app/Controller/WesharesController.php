@@ -1749,7 +1749,7 @@ class WesharesController extends AppController {
      * 是否是认证分享者 写死
      */
     private function is_verify_sharer($uid) {
-        $uids = array(633345, 802852, 544307, 811917, 801447);
+        $uids = array(633345, 802852, 544307, 811917, 801447, 141);
         return in_array($uid, $uids);
     }
 

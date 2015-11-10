@@ -1702,17 +1702,17 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 806889,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
                 ),
-                //丑苹果
-                '1015' => array(
-                    'share_id' => 1015,
-                    'share_name' => '云南丑苹果，丑到崩溃，好吃到哭，实力派不靠卖脸，现摘即发。',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/bf3bac9a370_1110.jpg',
-                    'share_price' => '88',
-                    'share_user_name' => '鲲鲲',
-                    'share_vote' => 560,
-                    'share_user_id' => 806889,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
-                ),
+//                //丑苹果
+//                '1015' => array(
+//                    'share_id' => 1015,
+//                    'share_name' => '云南丑苹果，丑到崩溃，好吃到哭，实力派不靠卖脸，现摘即发。',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/bf3bac9a370_1110.jpg',
+//                    'share_price' => '88',
+//                    'share_user_name' => '鲲鲲',
+//                    'share_vote' => 560,
+//                    'share_user_id' => 806889,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
+//                ),
                 //怀北红 梨
                 '997' => array(
                     'share_id' => 997,
