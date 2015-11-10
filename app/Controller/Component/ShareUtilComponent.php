@@ -2144,8 +2144,8 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 823656,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_6f6b33c00c71819c1eb74f29f3f1503d.jpg'
                 ),
-                '537' => array(
-                    'share_id' => 537,
+                '721' => array(
+                    'share_id' => 721,
                     'share_name' => '可以吃的润唇膏',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/cd1a35d9e5a_0915.jpg',
                     'share_price' => '30',
