@@ -109,6 +109,15 @@ class ShareManageController extends AppController {
             )
         );
         //set other query cond
+        if($_REQUEST['order_ship_type']){
+            $q_cond['Order.ship_mark'] = $_REQUEST['order_ship_type'];
+        }
+        if($_REQUEST['order_status']){
+            $q_cond['Order.status'] = $_REQUEST['order_status'];
+        }
+        if($_REQUEST['key_word']){
+            $q_cond['Order.consignee_name LIKE'] = $_REQUEST['key_word'];
+        }
         $orders = $this->Paginator->paginate('Order', $q_cond);
         $order_ids = Hash::extract($orders, '{n}.Order.id');
         $order_carts = $this->Cart->find('all', array(
