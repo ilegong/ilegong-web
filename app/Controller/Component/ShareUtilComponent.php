@@ -1868,6 +1868,16 @@ class ShareUtilComponent extends Component {
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/26a561eddc9_1021.jpg'
                 ),
                 //玉米神话
+                '1070' => array(
+                    'share_id' => 1070,
+                    'share_name' => '密云太师屯--传说中的玉米神话',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/26c0eec40d6_0915.jpg',
+                    'share_price' => '68',
+                    'share_user_name' => '李樱花',
+                    'share_vote' => 95,
+                    'share_user_id' => 810684,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
+                ),
                 '954' => array(
                     'share_id' => 954,
                     'share_name' => '好吃到爆的琼中绿橙，来自北纬18°的热带天然水果',
