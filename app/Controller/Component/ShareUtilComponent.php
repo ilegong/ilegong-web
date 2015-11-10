@@ -1981,6 +1981,16 @@ class ShareUtilComponent extends Component {
             ),
             2 => array(
                 //寒之乡 稻花香
+                '1065' => array(
+                    'share_id' => 1065,
+                    'share_name' => '寒之乡稻花香2号大米----2015年新米上市啦！',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/b34f11172dc_1110.jpg',
+                    'share_price' => '110',
+                    'share_user_name' => '李樱花',
+                    'share_vote' => 300,
+                    'share_user_id' => 810684,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
+                ),
                 '503' => array(
                     'share_id' => 503,
                     'share_name' => '旱地杂粮之清水河小香米',
