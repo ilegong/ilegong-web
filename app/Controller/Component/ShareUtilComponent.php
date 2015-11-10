@@ -2084,16 +2084,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 1495,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_8c9bd6b81a7f53ebf9194404bf2f3bea.jpg'
                 ),
-                '460' => array(
-                    'share_id' => 460,
-                    'share_name' => '云南九叶玫鲜花饼店',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/d3c9dfd7efd_0908.jpg',
-                    'share_price' => '5',
-                    'share_user_name' => '白胡子老头',
-                    'share_vote' => 123,
-                    'share_user_id' => 869820,
-                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/368fc9903d0_0908.jpg'
-                ),
+//                '460' => array(
+//                    'share_id' => 460,
+//                    'share_name' => '云南九叶玫鲜花饼店',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/d3c9dfd7efd_0908.jpg',
+//                    'share_price' => '5',
+//                    'share_user_name' => '白胡子老头',
+//                    'share_vote' => 123,
+//                    'share_user_id' => 869820,
+//                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/368fc9903d0_0908.jpg'
+//                ),
                 '56' => array(
                     'share_id' => 56,
                     'share_name' => '新疆天山脚下的骏枣',
