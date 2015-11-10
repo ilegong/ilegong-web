@@ -1324,6 +1324,8 @@ class WesharesController extends AppController {
                 ));
                 $weshareProducts = Hash::extract($weshareProducts, '{n}.WeshareProduct');
             }
+            //show break line
+            $weshareInfo['Weshare']['description'] = str_replace(array("\r\n", "\n", "\r"), '<br />', $weshareInfo['Weshare']['description']);
             $weshareInfo = $weshareInfo['Weshare'];
             $weshareInfo['tags'] = $sharer_tags;
             $weshareInfo['tags_list'] = $sharer_tags_list;
