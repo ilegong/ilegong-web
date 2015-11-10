@@ -407,6 +407,30 @@ class UsersController extends AppController {
         $this->pageTitle = __('我的红包');
     }
 
+    function setpassword(){
+        $this->autoRender=false;
+        $userinfo = $this->Auth->user();
+        if(empty($userinfo['id'])){
+            echo json_encode(array('success' => false, 'reason' => 'not_login'));
+            return;
+        }
+        $new_password = $_REQUEST['password'];
+        if(empty($new_password)){
+            echo json_encode(array('success' => false, 'reason' => 'password_empty'));
+            return;
+        }
+        $user = array();
+        $user['id'] = $userinfo['id'];
+        $user['password'] = Security::hash($new_password, null, true);
+        $user['activation_key'] = md5(uniqid());
+        if($this->User->save($user)){
+            echo json_encode(array('success' => true));
+            return;
+        }
+        echo json_encode(array('success' => false, 'reason' => 'server_error'));
+        return;
+    }
+
     function editpassword() {
         $userinfo = $this->Auth->user();
         if (!$userinfo['id']) {

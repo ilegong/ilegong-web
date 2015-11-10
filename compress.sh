@@ -10,6 +10,9 @@ uglifyjs ./webroot/static/opt/js/lazyload.min.js ./webroot/static/opt/js/opt.js 
 
 cat ./webroot/static/opt/css/postinfo.css ./webroot/static/opt/css/opt.css | cleancss -o  ./webroot/static/opt/css/opt.min.css
 
-uglifyjs ./webroot/static/weshares/js/share-order-list.js  -o ./webroot/static/weshares/js/share-order-list.min.js
+uglifyjs ./webroot/static/weshares/js/share-order-list.js -m  -o ./webroot/static/weshares/js/share-order-list.min.js
 
 uglifyjs ./webroot/static/user/layer.m.js ./webroot/static/user/touch-0.2.14.min.js ./webroot/static/user/jquery.crop.js   -o ./webroot/static/user/avatar.min.js
+
+uglifyjs ./webroot/static/weshares/js/user-share-info.js -m  -o ./webroot/static/weshares/js/user-share-info.min.js
+
