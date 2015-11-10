@@ -2174,7 +2174,8 @@ function get_order_status_text_form_order_status($order_status){
         ORDER_STATUS_RECEIVED => '已收货',
         ORDER_STATUS_COMMENT => '待评价',
         ORDER_STATUS_RETURNING_MONEY => '退款中',
-        ORDER_STATUS_RETURN_MONEY => '已退款'
+        ORDER_STATUS_RETURN_MONEY => '已退款',
+        ORDER_STATUS_DONE => '已完成'
     );
     return $order_status_text_map[$order_status];
 }
