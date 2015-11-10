@@ -121,24 +121,27 @@ class ShareManageController extends AppController {
         if (!empty($_REQUEST['consignee_mobilephone'])) {
             $q_cond['Order.consignee_mobilephone'] = $_REQUEST['consignee_mobilephone'];
         }
-        $orders = $this->Paginator->paginate('Order', $q_cond);
-        $order_ids = Hash::extract($orders, '{n}.Order.id');
-        $order_carts = $this->Cart->find('all', array(
-            'conditions' => array(
-                'order_id' => $order_ids
-            )
-        ));
-        $order_cart_map = array();
-        foreach($order_carts as $cart_item){
-            $order_id = $cart_item['Cart']['order_id'];
-            if(!isset($order_cart_map[$order_id])){
-                $order_cart_map[$order_id] = array();
-            }
-            $order_cart_map[$order_id][] = $cart_item['Cart'];
-        }
         $orders_count = $this->Order->find('count', array(
             'conditions' => $q_cond
         ));
+        $order_cart_map = array();
+        $orders = array();
+        if($orders_count > 0){
+            $orders = $this->Paginator->paginate('Order', $q_cond);
+            $order_ids = Hash::extract($orders, '{n}.Order.id');
+            $order_carts = $this->Cart->find('all', array(
+                'conditions' => array(
+                    'order_id' => $order_ids
+                )
+            ));
+            foreach($order_carts as $cart_item){
+                $order_id = $cart_item['Cart']['order_id'];
+                if(!isset($order_cart_map[$order_id])){
+                    $order_cart_map[$order_id] = array();
+                }
+                $order_cart_map[$order_id][] = $cart_item['Cart'];
+            }
+        }
         $this->set('order_cart_map', $order_cart_map);
         $this->set('orders_count', $orders_count);
         $this->set('orders', $orders);
