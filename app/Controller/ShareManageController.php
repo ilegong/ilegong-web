@@ -122,7 +122,7 @@ class ShareManageController extends AppController {
             if(!isset($order_cart_map[$order_id])){
                 $order_cart_map[$order_id] = array();
             }
-            $order_cart_map[] = $cart_item['Cart'];
+            $order_cart_map[$order_id][] = $cart_item['Cart'];
         }
         $orders_count = $this->Order->find('count', array(
             'conditions' => $q_cond
