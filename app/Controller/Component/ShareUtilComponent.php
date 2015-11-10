@@ -1577,16 +1577,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 810684,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
                 ),
-                '1059' => array(
-                    'share_id' => 1059,
-                    'share_name' => '越南进口红心火龙果 大果5枚装',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/1657753d5b2_1106.jpg',
-                    'share_price' => '88',
-                    'share_user_name' => '金子',
-                    'share_vote' => 188,
-                    'share_user_id' => 867768,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_6826f42e5a8ed9fc40cc3653e12b1064.jpg'
-                ),
+//                '1059' => array(
+//                    'share_id' => 1059,
+//                    'share_name' => '越南进口红心火龙果 大果5枚装',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/1657753d5b2_1106.jpg',
+//                    'share_price' => '88',
+//                    'share_user_name' => '金子',
+//                    'share_vote' => 188,
+//                    'share_user_id' => 867768,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_6826f42e5a8ed9fc40cc3653e12b1064.jpg'
+//                ),
                 //地瓜干,牛杆菌
                 '1072' => array(
                     'share_id' => 1072,
