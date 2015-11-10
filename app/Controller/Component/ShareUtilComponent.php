@@ -2021,8 +2021,8 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 711503,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/0609f46d89e_0813.jpg'
                 ),
-                '918' => array(
-                    'share_id' => 918,
+                '1007' => array(
+                    'share_id' => 1007,
                     'share_name' => '积累了7000位老顾客的土鸡蛋 朋友说特供40枚/60元',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/15157459186_1110.jpg',
                     'share_price' => '60',
@@ -2144,8 +2144,8 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 823656,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_6f6b33c00c71819c1eb74f29f3f1503d.jpg'
                 ),
-                '721' => array(
-                    'share_id' => 721,
+                '766' => array(
+                    'share_id' => 766,
                     'share_name' => '可以吃的润唇膏',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/cd1a35d9e5a_0915.jpg',
                     'share_price' => '30',
@@ -2154,8 +2154,8 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 823656,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_6f6b33c00c71819c1eb74f29f3f1503d.jpg'
                 ),
-                '62' => array(
-                    'share_id' => 62,
+                '721' => array(
+                    'share_id' => 721,
                     'share_name' => '玫瑰纯露',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/bf23899c0b0_0915.jpg',
                     'share_price' => '150',
