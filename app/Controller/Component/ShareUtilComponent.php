@@ -2094,18 +2094,18 @@ class ShareUtilComponent extends Component {
 //                    'share_user_id' => 869820,
 //                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/368fc9903d0_0908.jpg'
 //                ),
-                '56' => array(
-                    'share_id' => 56,
-                    'share_name' => '新疆天山脚下的骏枣',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/babee077c75_0908.jpg',
-                    'share_price' => '100',
-                    'share_user_name' => '樱花',
-                    'share_vote' => 197,
-                    'share_user_id' => 810684,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
-                ),
-                '325' => array(
-                    'share_id' => 325,
+//                '56' => array(
+//                    'share_id' => 56,
+//                    'share_name' => '新疆天山脚下的骏枣',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/babee077c75_0908.jpg',
+//                    'share_price' => '100',
+//                    'share_user_name' => '樱花',
+//                    'share_vote' => 197,
+//                    'share_user_id' => 810684,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
+//                ),
+                '858' => array(
+                    'share_id' => 858,
                     'share_name' => '来自广西十万大山的原生态巢蜜',
                     'share_img' => '/img/share_index/fengchao.jpg',
                     'share_price' => '69',
@@ -2114,8 +2114,8 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 807492,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/0797b2ef26b_0812.jpg'
                 ),
-                '354' => array(
-                    'share_id' => 354,
+                '724' => array(
+                    'share_id' => 724,
                     'share_name' => '密云山谷中纯正自家产荆花蜜',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/7167382dca7_0826.jpg',
                     'share_price' => '38-78',
