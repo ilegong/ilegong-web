@@ -982,6 +982,15 @@ class ShipAddress {
         }
     }
 
+    public static function ship_type_name_id_map(){
+        $ship_types = ShipAddress::ship_types();
+        if (is_array($ship_types)) {
+            return Hash::combine($ship_types, '{n}.name', '{n}.id');
+        } else {
+            return false;
+        }
+    }
+
     public function get_all_ship_info() {
         $ship_types = ShipAddress::ship_types();
         $ship_type_list = Hash::combine($ship_types, '{n}.company', '{n}.name', '{n}.id');

@@ -73,7 +73,7 @@
             {{if $item_order['status'] == ORDER_STATUS_SHIPPED}}
                 {{if $current_tag == SHARE_SHIP_KUAIDI_TAG}}
                     <p>
-                        <strong>{{$ship_type_list[$item_order['ship_type']]}}:</strong><strong>{{$item_order['ship_code']}}</strong>
+                        <strong>{{if !empty($item_order['ship_type_name'])}}{{$item_order['ship_type_name']}}{{else}}{{$ship_type_list[$item_order['ship_type']]}}{{/if}}:</strong><strong>{{$item_order['ship_code']}}</strong>
                     </p>
                 {{/if}}
                 {{if $current_tag == SHARE_SHIP_PYS_ZITI_TAG}}

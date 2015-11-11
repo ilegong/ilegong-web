@@ -734,6 +734,31 @@ class WesharesController extends AppController {
         return;
     }
 
+    public function batch_set_order_ship_code() {
+        $this->autoRender = false;
+        $post_data = $_REQUEST['data'];
+        $order_list = json_decode($post_data, true);
+        $queue = new SaeTaskQueue('order_ship');
+        //批量添加任务
+        $task = array();
+        $ship_name_id_map = ShipAddress::ship_type_name_id_map();
+        foreach ($order_list as $order) {
+            $order_id = $order['id'];
+            $ship_type_name = $order['ship_type_name'];
+            $ship_company_id = $ship_name_id_map[$ship_type_name];
+            $ship_code = $order['ship_code'];
+            $weshare_id = $order['member_id'];
+            $params = "order_id=" . $order_id . "&company_id=" . $ship_company_id . "&weshare_id=" . $weshare_id . "&ship_code=" . $ship_code . "&ship_type_name=" . $ship_type_name;
+            $task[] = array('url' => "/task/process_set_order_ship_code", "postdata" => $params);
+        }
+        $queue->addTask($task);
+        //将任务推入队列
+        $ret = $queue->push();
+        //任务添加失败时输出错误码和错误信息
+        echo json_encode(array('success' => $ret, 'errno' => $queue->errno(), 'errmsg' => $queue->errmsg()));
+        return;
+    }
+
     /**
      * 自有自提点 发货
      */

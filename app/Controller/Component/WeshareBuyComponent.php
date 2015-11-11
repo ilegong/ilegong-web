@@ -10,9 +10,9 @@ class WeshareBuyComponent extends Component {
 
     var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'mobilephone', 'is_proxy');
 
-    var $query_order_fields = array('id', 'creator', 'created', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type', 'member_id', 'process_prepaid_status', 'price_difference', 'is_prepaid');
+    var $query_order_fields = array('id', 'creator', 'created', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type', 'ship_type_name', 'member_id', 'process_prepaid_status', 'price_difference', 'is_prepaid');
 
-    var $query_share_info_order_fields = array('id', 'creator', 'created', 'updated', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type', 'total_price', 'coupon_total', 'cate_id', 'process_prepaid_status', 'price_difference', 'is_prepaid', 'business_remark');
+    var $query_share_info_order_fields = array('id', 'creator', 'created', 'updated', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type', 'ship_type_name', 'total_price', 'coupon_total', 'cate_id', 'process_prepaid_status', 'price_difference', 'is_prepaid', 'business_remark');
 
     var $query_cart_fields = array('id', 'order_id', 'name', 'product_id', 'num');
 
@@ -953,18 +953,18 @@ class WeshareBuyComponent extends Component {
     }
 
     public function get_share_buy_summery($shareId) {
-        $key  = SHARE_BUY_SUMMERY_INFO_CACHE_KEY.'_'.$shareId;
+        $key = SHARE_BUY_SUMMERY_INFO_CACHE_KEY . '_' . $shareId;
         $cacheData = Cache::read($key);
-        if(empty($cacheData)){
+        if (empty($cacheData)) {
             $product_ids = $this->get_share_pids($shareId);
-            $sql = 'select sum(num), product_id from cake_carts where type=9 and product_id in (' . implode(',', $product_ids) . ') and order_id in (select id from cake_orders where type=9 and status in (1,2,3,4,9,14) and member_id='.$shareId.') group by product_id';
+            $sql = 'select sum(num), product_id from cake_carts where type=9 and product_id in (' . implode(',', $product_ids) . ') and order_id in (select id from cake_orders where type=9 and status in (1,2,3,4,9,14) and member_id=' . $shareId . ') group by product_id';
             $cartM = ClassRegistry::init('Cart');
             $result = $cartM->query($sql);
             $summery_result = array();
-            foreach($result as $item){
+            foreach ($result as $item) {
                 $item_pid = $item['cake_carts']['product_id'];
                 $item_count = $item[0]['sum(num)'];
-                if(!isset($summery_result[$item_pid])){
+                if (!isset($summery_result[$item_pid])) {
                     $summery_result[$item_pid] = array();
                 }
                 $summery_result[$item_pid]['num'] = $item_count;
@@ -976,7 +976,7 @@ class WeshareBuyComponent extends Component {
         return json_decode($cacheData, true);
     }
 
-    public function get_share_pids($weshareId){
+    public function get_share_pids($weshareId) {
         $weshareProductM = ClassRegistry::init('WeshareProduct');
         $products = $weshareProductM->find('all', array(
             'conditions' => array(
@@ -985,7 +985,7 @@ class WeshareBuyComponent extends Component {
             ),
             'fields' => array('id')
         ));
-        return Hash::extract($products,'{n}.WeshareProduct.id');
+        return Hash::extract($products, '{n}.WeshareProduct.id');
     }
 
     /**
@@ -2146,7 +2146,7 @@ class WeshareBuyComponent extends Component {
             return 0;
         }
         $rebate_setting = $this->ShareUtil->get_share_rebate_data($shareId);
-        $rebate_money = round((floatval($rebate_setting['ProxyRebatePercent']['percent']) * $total_price) / (100*100), 2);
+        $rebate_money = round((floatval($rebate_setting['ProxyRebatePercent']['percent']) * $total_price) / (100 * 100), 2);
         return $rebate_money;
     }
 

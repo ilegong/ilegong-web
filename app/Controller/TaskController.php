@@ -15,6 +15,26 @@ class TaskController extends AppController {
     }
 
     /**
+     * 批量发货任务
+     */
+    public function process_set_order_ship_code() {
+        $this->autoRender = false;
+        $order_id = $_REQUEST['order_id'];
+        $ship_company_id = $_REQUEST['company_id'];
+        $weshare_id = $_REQUEST['weshare_id'];
+        $ship_code = $_REQUEST['ship_code'];
+        $ship_type_name = $_REQUEST['ship_type_name'];
+        $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'ship_type_name' => "'" . $ship_type_name . "'", 'ship_type' => $ship_company_id, 'ship_code' => "'" . $ship_code . "'", 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order_id, 'status' => ORDER_STATUS_PAID));
+        $this->Cart->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order_id));
+        $this->WeshareBuy->send_share_product_ship_msg($order_id, $weshare_id);
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_0', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
+        echo json_encode(array('success' => true));
+    }
+
+    /**
      * @param $share_id
      * @param $recommend_user
      * @param $pageCount
