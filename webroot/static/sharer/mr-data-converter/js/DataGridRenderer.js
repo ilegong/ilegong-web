@@ -139,7 +139,10 @@ var DataGridRenderer = {
       outputText += "{";
       for (var j=0; j < numColumns; j++) {
         if ((headerTypes[j] == "int")||(headerTypes[j] == "float")) {
-          var rowOutput = row[j] || "null";
+          var rowOutput = "null";
+          if(row[j]){
+            rowOutput = '"' + ( row[j] || "" ) + '"';
+          }
         } else {
           var rowOutput = '"' + ( row[j] || "" ) + '"';
         };
