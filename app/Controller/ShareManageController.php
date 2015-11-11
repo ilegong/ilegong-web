@@ -45,6 +45,10 @@ class ShareManageController extends AppController {
         $this->set('shares', $shares);
     }
 
+    public function authorize_shares(){
+
+    }
+
     public function beforeFilter() {
         $this->Auth->authenticate = array('WeinxinOAuth', 'Form', 'Pys', 'Mobile');
         $this->Auth->allowedActions = array('login', 'forgot', 'reset', 'do_login');

@@ -960,7 +960,8 @@ class WesharesController extends AppController {
             return;
         }
         $share_info = $this->get_weshare_detail($weshare_id);
-        if ($share_info['creator']['id'] != $uid) {
+        $can_manage_order = $this->ShareAuthority->user_can_view_share_order_list($uid, $weshare_id);
+        if ($share_info['creator']['id'] != $uid&&!$can_manage_order) {
             echo json_encode(array('success' => false, 'reason' => 'not_creator'));
             return;
         }
