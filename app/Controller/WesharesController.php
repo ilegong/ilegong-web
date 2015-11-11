@@ -960,12 +960,9 @@ class WesharesController extends AppController {
             return;
         }
         $share_info = $this->get_weshare_detail($weshare_id);
-        $can_manage_order = $this->ShareAuthority->user_can_view_share_order_list($uid, $weshare_id);
         if ($share_info['creator']['id'] != $uid) {
-            if(!$can_manage_order){
-                echo json_encode(array('success' => false, 'reason' => 'not_creator'));
-                return;
-            }
+            echo json_encode(array('success' => false, 'reason' => 'not_creator'));
+            return;
         }
         $params = json_decode(file_get_contents('php://input'), true);
         $content = $params['content'];
@@ -1155,7 +1152,8 @@ class WesharesController extends AppController {
         }
         $shareId = $_REQUEST['shareId'];
         $share_info = $this->get_weshare_detail($shareId);
-        if ($share_info['creator']['id'] != $uid) {
+        $can_manage_order = $this->ShareAuthority->user_can_view_share_order_list($uid, $shareId);
+        if ($share_info['creator']['id'] != $uid && !$can_manage_order) {
             echo json_encode(array('success' => false, 'reason' => 'not_creator'));
             return;
         }
