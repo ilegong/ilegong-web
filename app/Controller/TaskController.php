@@ -9,6 +9,8 @@ class TaskController extends AppController {
 
     var $components = array('WeshareBuy', 'ShareUtil', 'Weixin');
 
+    var $uses = array();
+
     public function beforeFilter() {
         parent::beforeFilter();
         $this->layout = null;
@@ -24,8 +26,10 @@ class TaskController extends AppController {
         $weshare_id = $this->get_member_id_by_order_id($order_id);
         $ship_code = $_REQUEST['ship_code'];
         $ship_type_name = $_REQUEST['ship_type_name'];
-        $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'ship_type_name' => "'" . $ship_type_name . "'", 'ship_type' => $ship_company_id, 'ship_code' => "'" . $ship_code . "'", 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order_id, 'status' => ORDER_STATUS_PAID));
-        $this->Cart->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order_id));
+        $orderM = ClassRegistry::init('Order');
+        $cartM = ClassRegistry::init('Cart');
+        $orderM->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'ship_type_name' => "'" . $ship_type_name . "'", 'ship_type' => $ship_company_id, 'ship_code' => "'" . $ship_code . "'", 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order_id, 'status' => ORDER_STATUS_PAID));
+        $cartM->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order_id));
         $this->WeshareBuy->send_share_product_ship_msg($order_id, $weshare_id);
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_1', '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_1', '');
