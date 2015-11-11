@@ -268,8 +268,10 @@ const SHARE_GROUP_REBATE_MONEY = 500;
 
 const COMMENT_SHARE_ORDER_COUPON_MONEY = 50;//评论分享订单默认领取5毛红包
 
+//返利的类型
 const DEFAULT_REBATE_TYPE = 0; //默认返利
 const GROUP_SHARE_BUY_REBATE_TYPE = 1;//线下自提返利
+const PROXY_USER_PAID_REBATE_TYPE = 2;//团长购买返利
 
 const SHARE_FAQ_READ = 1;
 const SHARE_FAQ_UNREAD = 0;

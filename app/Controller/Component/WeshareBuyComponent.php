@@ -2114,4 +2114,28 @@ class WeshareBuyComponent extends Component {
         }
         return array('num' => $num, 'cart_name' => implode(',', $cart_name));
     }
+
+    /**
+     * @param $share_id
+     * @param $user
+     * @param $is_paid
+     * @param $is_rebate
+     * @param $order_id
+     * @param $rebate_money
+     * 团长购买有佣金的东西进行返利
+     */
+    public function log_proxy_rebate_log($share_id, $user, $is_paid, $is_rebate, $order_id, $rebate_money) {
+        $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
+        $data = array(
+            'share_id' => $share_id,
+            'sharer' => $user,
+            'clicker' => $user,
+            'is_paid' => $is_paid,
+            'is_rebate' => $is_rebate,
+            'order_id' => $order_id,
+            'rebate_money' => $rebate_money
+        );
+        $rebateLog = $rebateTrackLogM->save($data);
+        return $rebateLog['RebateTrackLog']['id'];
+    }
 }

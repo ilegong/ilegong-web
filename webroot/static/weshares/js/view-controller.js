@@ -608,7 +608,7 @@
     function getRecommendInfo(order) {
       var recommendId = 0;
       var recommend = '';
-      if(vm.rebateLogs[order['cate_id']]){
+      if(vm.rebateLogs&&vm.rebateLogs[order['cate_id']]){
         recommendId = vm.rebateLogs[order['cate_id']];
         recommend = vm.ordersDetail['users'][recommendId]['nickname'];
       }else{
