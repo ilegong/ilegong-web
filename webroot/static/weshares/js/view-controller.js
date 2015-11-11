@@ -592,6 +592,7 @@
         }
       } else {
         vm.orderTotalPrice = 0;
+        vm.rebateFee = 0;
       }
     }
 
