@@ -46,7 +46,30 @@ class ShareManageController extends AppController {
     }
 
     public function authorize_shares(){
-
+        $uid = $this->currentUser['id'];
+        $q_cond = array(
+            'user' => $uid,
+            'scope' => SHARE_OPERATE_SCOPE_TYPE,
+            'deleted' => DELETED_NO
+        );
+        $shareOperateSettingM = ClassRegistry::init('ShareOperateSetting');
+        $share_operate_settings = $shareOperateSettingM->find('all', array(
+            'conditions' => $q_cond,
+            'order' => array('id' => 'desc'),
+            'limit' => 300
+        ));
+        $share_ids = Hash::extract($share_operate_settings, '{n}.ShareOperateSetting.data_id');
+        $share_ids = array_unique($share_ids);
+        if(count($share_ids) > 0){
+            $weshareM = ClassRegistry::init('Weshare');
+            $shares = $weshareM->find('all', array(
+                'conditions' => array(
+                    'id' => $share_ids
+                ),
+                'order' => array('id' => 'desc')
+            ));
+            $this->set('shares', $shares);
+        }
     }
 
     public function beforeFilter() {
