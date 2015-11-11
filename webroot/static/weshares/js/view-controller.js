@@ -230,9 +230,11 @@
     vm.redirectFaq = redirectFaq;
     vm.checkUserHasStartGroupShare = checkUserHasStartGroupShare;
     vm.chatToUser = chatToUser;
+    vm.calProxyRebateFee = calProxyRebateFee;
     vm.childShareDetail = null;
     vm.currentUserOrderCount = 0;
     vm.shareOrderCount = 0;
+    vm.rebateFee = 0;
     function pageLoaded() {
       $rootScope.loadingPage = false;
     }
@@ -553,6 +555,16 @@
       }).join(',');
     }
 
+    function calProxyRebateFee(totalPrice){
+      if (!vm.currentUser || vm.currentUser['is_proxy'] == 0) {
+        return;
+      }
+      if (!vm.weshare.proxy_rebate_percent || vm.weshare.proxy_rebate_percent.percent <= 0) {
+        return;
+      }
+      vm.rebateFee = (totalPrice*vm.weshare.proxy_rebate_percent.percent/100).toFixed(2);
+    }
+
     function calOrderTotalPrice() {
       var submit_products = [];
       _.each(vm.weshare.products, function (products) {
@@ -570,10 +582,14 @@
         if (vm.userCouponReduce) {
           totalPrice -= vm.userCouponReduce;
         }
+        calProxyRebateFee(totalPrice/100);
         vm.shipFee = parseInt(getShipFee());
         vm.shipSetId = getShipSetId();
         totalPrice += vm.shipFee;
         vm.orderTotalPrice = totalPrice / 100;
+        if(vm.rebateFee>0){
+          vm.orderTotalPrice -= vm.rebateFee;
+        }
       } else {
         vm.orderTotalPrice = 0;
       }

@@ -132,27 +132,32 @@ class ShareUtilComponent extends Component {
      */
     public function update_rebate_log($id, $order) {
         $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
-        $order_id = $order['Order']['id'];
-        $ship_fee = $order['Order']['ship_fee'];
         $share_id = $order['Order']['member_id'];
-        $total_price = $order['Order']['total_all_price'];
-        $rebate_money = 0;
-        $ship_fee = round($ship_fee / 100, 2);
-        $canRebateMoney = $total_price - $ship_fee;
+        $order_id = $order['Order']['id'];
         $rebatePercentData = $this->get_share_rebate_data($share_id);
         if (!empty($rebatePercentData)) {
+            $rebateTrackLog = $rebateTrackLogM->find('first', array(
+                'conditions' => array(
+                    'id' => $id
+                )
+            ));
+            //proxy user buy
+            if($rebateTrackLog['RebateTrackLog']['type'] == PROXY_USER_PAID_REBATE_TYPE){
+                $rebateTrackLogM->updateAll(array('is_paid' => 1, 'updated' => '\'' . date('Y-m-d H:i:s') . '\''), array('id' => $id, 'order_id' => $order_id));
+                return array('rebate_money' => $rebateTrackLog['RebateTrackLog']['rebate_money'], 'order_price' => $order['Order']['total_all_price'], 'recommend' => $rebateTrackLog['RebateTrackLog']['sharer']);
+            }
+            $ship_fee = $order['Order']['ship_fee'];
+            $total_price = $order['Order']['total_all_price'];
+            $ship_fee = round($ship_fee / 100, 2);
+            $canRebateMoney = $total_price - $ship_fee;
             $percent = $rebatePercentData['ProxyRebatePercent']['percent'];
             $rebate_money = ($canRebateMoney * $percent) / 100;
             $rebate_money = round($rebate_money, 2);
             $rebate_money = $rebate_money * 100;
+            $rebateTrackLogM->updateAll(array('is_paid' => 1, 'updated' => '\'' . date('Y-m-d H:i:s') . '\'', 'rebate_money' => $rebate_money), array('id' => $id, 'order_id' => $order_id));
+            return array('rebate_money' => $rebate_money, 'order_price' => $total_price, 'recommend' => $rebateTrackLog['RebateTrackLog']['sharer']);
         }
-        $rebateTrackLogM->updateAll(array('is_paid' => 1, 'updated' => '\'' . date('Y-m-d H:i:s') . '\'', 'rebate_money' => $rebate_money), array('id' => $id, 'order_id' => $order_id));
-        $rebateTrackLog = $rebateTrackLogM->find('first', array(
-            'conditions' => array(
-                'id' => $id
-            )
-        ));
-        return array('rebate_money' => $rebate_money, 'order_price' => $canRebateMoney, 'recommend' => $rebateTrackLog['RebateTrackLog']['sharer']);
+
     }
 
     /**

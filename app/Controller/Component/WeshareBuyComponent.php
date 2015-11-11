@@ -2133,9 +2133,21 @@ class WeshareBuyComponent extends Component {
             'is_paid' => $is_paid,
             'is_rebate' => $is_rebate,
             'order_id' => $order_id,
-            'rebate_money' => $rebate_money
+            'rebate_money' => $rebate_money,
+            'type' => PROXY_USER_PAID_REBATE_TYPE
         );
         $rebateLog = $rebateTrackLogM->save($data);
         return $rebateLog['RebateTrackLog']['id'];
     }
+
+    public function cal_proxy_rebate_fee($total_price, $uid, $shareId) {
+        $user_is_proxy = $this->ShareUtil->is_proxy_user($uid);
+        if (!$user_is_proxy) {
+            return 0;
+        }
+        $rebate_setting = $this->ShareUtil->get_share_rebate_data($shareId);
+        $rebate_money = round((floatval($rebate_setting['ProxyRebatePercent']['percent']) * $total_price) / (100*100), 2);
+        return $rebate_money;
+    }
+
 }
