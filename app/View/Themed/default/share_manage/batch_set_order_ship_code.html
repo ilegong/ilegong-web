@@ -1,11 +1,5 @@
 <div class="container-fluid">
     <link href="/static/sharer/json/s.css" type="text/css" rel="stylesheet"/>
-    <script src="/static/sharer/json/c.js" type="text/javascript"></script>
-    <script src="/static/sharer/mr-data-converter/js/CSVParser.js" type="text/javascript" charset="utf-8"></script>
-    <script src="/static/sharer/mr-data-converter/js/DataGridRenderer.js" type="text/javascript"
-            charset="utf-8"></script>
-    <script src="/static/sharer/mr-data-converter/js/converter.js" type="text/javascript" charset="utf-8"></script>
-    <script src="/static/sharer/mr-data-converter/js/Controller.js" type="text/javascript" charset="utf-8"></script>
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">批量发货</h1>
@@ -34,7 +28,7 @@
                                     <label>复制excel的数据</label>
                                     <textarea class="form-control" rows="30" id="order-data-input"></textarea>
                                 </div>
-                                <button class="btn btn-default">发货</button>
+                                <button class="btn btn-default" id="handle-set-orders-shipped">发货</button>
                                 <button type="reset" id="convertButton" class="btn btn-default">转换数据</button>
                             </form>
                         </div>
@@ -66,5 +60,29 @@
     <!-- /.row -->
 </div>
 <script>
-
+    Pys = {};
+    Pys.sharerManage = {};
+    Pys.sharerManage.orderManage = {
+        'batch_set_ship_order_data': []
+    };
+</script>
+<script src="/static/sharer/json/c.js" type="text/javascript"></script>
+<script src="/static/sharer/mr-data-converter/js/CSVParser.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/sharer/mr-data-converter/js/DataGridRenderer.js" type="text/javascript"
+        charset="utf-8"></script>
+<script src="/static/sharer/mr-data-converter/js/converter.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/sharer/mr-data-converter/js/Controller.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    $(document).ready(function () {
+        var $handleBatchSetShippedBtn = $('#handle-set-orders-shipped');
+        $handleBatchSetShippedBtn.on('click', function (e) {
+            e.preventDefault();
+            var $postData = JSON.stringify(Pys.sharerManage.orderManage.batch_set_ship_order_data);
+            $.post('/weshares/batch_set_order_ship_code.json', {"data": $postData}, function (data) {
+                if (data['success']) {
+                    alert('成功');
+                }
+            }, 'json')
+        });
+    });
 </script>

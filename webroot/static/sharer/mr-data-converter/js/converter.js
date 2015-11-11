@@ -123,9 +123,10 @@ DataConverter.prototype.convert = function () {
       var resultData = [];
       var postData = [];
       $.each(jsonArrayData, function(index,item){
-        resultData.push({"订单号":item['订单号'],"快递单号":item['快递单号'], "物流方式":item['快递方式']});
-        postData.push({"order_id":item['订单号'],"ship_code":item['快递单号'], "ship_mark":item['快递方式']});
+        resultData.push({"订单号":item['订单号'],"快递单号":item['快递单号'], "物流方式":item['快递方式'], "快递公司" : item['快递公司']});
+        postData.push({"order_id":item['订单号'],"ship_code":item['快递单号'], "ship_type_name":item['快递公司']});
       });
+      Pys.sharerManage.orderManage.batch_set_ship_order_data = postData;
       this.tempTextPlace.val(JSON.stringify(resultData));
       Process();
     }else{

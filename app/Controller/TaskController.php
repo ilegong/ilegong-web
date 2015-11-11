@@ -21,7 +21,7 @@ class TaskController extends AppController {
         $this->autoRender = false;
         $order_id = $_REQUEST['order_id'];
         $ship_company_id = $_REQUEST['company_id'];
-        $weshare_id = $_REQUEST['weshare_id'];
+        $weshare_id = $this->get_member_id_by_order_id($order_id);
         $ship_code = $_REQUEST['ship_code'];
         $ship_type_name = $_REQUEST['ship_type_name'];
         $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'ship_type_name' => "'" . $ship_type_name . "'", 'ship_type' => $ship_company_id, 'ship_code' => "'" . $ship_code . "'", 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order_id, 'status' => ORDER_STATUS_PAID));
@@ -32,6 +32,17 @@ class TaskController extends AppController {
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_0', '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
         echo json_encode(array('success' => true));
+    }
+
+    private function get_member_id_by_order_id($orderId){
+        $orderM = ClassRegistry::init('Order');
+        $order = $orderM->find('first', array(
+            'conditions' => array(
+                'id' => $orderId
+            ),
+            'fields' => array('member_id')
+        ));
+        return $order['Order']['member_id'];
     }
 
     /**

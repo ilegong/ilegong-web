@@ -743,12 +743,11 @@ class WesharesController extends AppController {
         $task = array();
         $ship_name_id_map = ShipAddress::ship_type_name_id_map();
         foreach ($order_list as $order) {
-            $order_id = $order['id'];
+            $order_id = $order['order_id'];
             $ship_type_name = $order['ship_type_name'];
             $ship_company_id = $ship_name_id_map[$ship_type_name];
             $ship_code = $order['ship_code'];
-            $weshare_id = $order['member_id'];
-            $params = "order_id=" . $order_id . "&company_id=" . $ship_company_id . "&weshare_id=" . $weshare_id . "&ship_code=" . $ship_code . "&ship_type_name=" . $ship_type_name;
+            $params = "order_id=" . $order_id . "&company_id=" . $ship_company_id . "&ship_code=" . $ship_code . "&ship_type_name=" . $ship_type_name;
             $task[] = array('url' => "/task/process_set_order_ship_code", "postdata" => $params);
         }
         $queue->addTask($task);
