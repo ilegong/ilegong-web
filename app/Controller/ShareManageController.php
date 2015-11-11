@@ -45,11 +45,11 @@ class ShareManageController extends AppController {
         $this->set('shares', $shares);
     }
 
-    public function authorize_shares(){
+    public function authorize_shares() {
         $uid = $this->currentUser['id'];
         $q_cond = array(
             'user' => $uid,
-            'scope' => SHARE_OPERATE_SCOPE_TYPE,
+            'scope_type' => SHARE_OPERATE_SCOPE_TYPE,
             'deleted' => DELETED_NO
         );
         $shareOperateSettingM = ClassRegistry::init('ShareOperateSetting');
@@ -60,7 +60,7 @@ class ShareManageController extends AppController {
         ));
         $share_ids = Hash::extract($share_operate_settings, '{n}.ShareOperateSetting.data_id');
         $share_ids = array_unique($share_ids);
-        if(count($share_ids) > 0){
+        if (count($share_ids) > 0) {
             $weshareM = ClassRegistry::init('Weshare');
             $shares = $weshareM->find('all', array(
                 'conditions' => array(
@@ -69,6 +69,11 @@ class ShareManageController extends AppController {
                 'order' => array('id' => 'desc')
             ));
             $this->set('shares', $shares);
+            $share_operate_settings_result = array();
+            foreach($share_operate_settings as $share_operate_setting){
+                $share_operate_settings_result[] = $share_operate_setting['ShareOperateSetting']['data_id'].'-'.$share_operate_setting['ShareOperateSetting']['data_type'];
+            }
+            $this->set('share_operate_settings', $share_operate_settings_result);
         }
     }
 
