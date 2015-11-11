@@ -58,6 +58,30 @@ function DataConverter(nodeId) {
   this.upcaseHeaders = false;
   this.includeWhiteSpace = true;
   this.useTabsForIndent = false;
+  this.escapeable = /["\\\x00-\x1f\x7f-\x9f]/g,
+    this.meta = {
+      '\b': '\\b',
+      '\t': '\\t',
+      '\n': '\\n',
+      '\f': '\\f',
+      '\r': '\\r',
+      '"': '\\"',
+      '\\': '\\\\'
+    };
+  this.replaceEscape = function (string) {
+    if (string.match(this.escapeable)) {
+      return '"' + string.replace(this.escapeable, function (a) {
+          var c = this.meta[a];
+          if (typeof c === 'string') {
+            return c;
+          }
+          c = a.charCodeAt();
+          return '\\u00' + Math.floor(c / 16).toString(16) + (c % 16).toString(16);
+        }) + '"';
+    }
+    return string;
+  }
+
 
 }
 
@@ -119,7 +143,8 @@ DataConverter.prototype.convert = function () {
 
     this.outputText = DataGridRenderer[this.outputDataType](dataGrid, headerNames, headerTypes, this.indent, this.newLine);
     if(!errors){
-      var jsonArrayData = JSON.parse(this.outputText);
+
+      var jsonArrayData = JSON.parse(this.replaceEscape(this.outputText));
       var resultData = [];
       var postData = [];
       $.each(jsonArrayData, function(index,item){
