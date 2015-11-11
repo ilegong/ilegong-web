@@ -144,7 +144,7 @@ DataConverter.prototype.convert = function () {
     this.outputText = DataGridRenderer[this.outputDataType](dataGrid, headerNames, headerTypes, this.indent, this.newLine);
     if(!errors){
 
-      var jsonArrayData = JSON.parse(this.replaceEscape(this.outputText));
+      var jsonArrayData = JSON.parse(this.outputText);
       var resultData = [];
       var postData = [];
       $.each(jsonArrayData, function(index,item){
