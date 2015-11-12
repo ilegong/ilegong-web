@@ -2142,11 +2142,12 @@ class WeshareBuyComponent extends Component {
 
     public function cal_proxy_rebate_fee($total_price, $uid, $shareId) {
         //check user is proxy
+        $this->log('proxy share rebate share id '. $shareId);
         $userM = ClassRegistry::init('User');
         $isProxy = $userM->userIsProxy($uid);
         if($isProxy == USER_IS_PROXY){
             $rebate_setting = $this->ShareUtil->get_share_rebate_data($shareId);
-            $this->log('share rebate setting '. json_encode($rebate_setting));
+            $this->log('proxy share rebate setting '. json_encode($rebate_setting));
             $rebate_money = round((floatval($rebate_setting['ProxyRebatePercent']['percent']) * $total_price) / (100 * 100), 2);
             return $rebate_money;
         }
