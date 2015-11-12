@@ -27,7 +27,7 @@ class ShareController extends AppController {
 
     public function admin_set_user_proxy($userId) {
         $this->autoRender = false;
-        $this->User->updateAll(array('is_proxy' => 1), array('id' => $userId));
+        $this->User->updateAll(array('User.is_proxy' => 1), array('User.id' => $userId));
         echo json_encode(array('success' => true));
         return;
     }
