@@ -25,6 +25,7 @@ class ShareManageController extends AppController {
         )
     );
 
+
     /**
      * 获取分享者的分享
      */
@@ -43,6 +44,10 @@ class ShareManageController extends AppController {
         ));
         $this->set('shares_count', $shares_count);
         $this->set('shares', $shares);
+    }
+
+    public function share_edit($share_id){
+
     }
 
     public function authorize_shares() {
