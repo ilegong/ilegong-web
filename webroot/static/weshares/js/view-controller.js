@@ -579,10 +579,10 @@
         totalPrice += product.price * product.num;
       });
       if (totalPrice != 0) {
+        calProxyRebateFee(totalPrice/100);
         if (vm.userCouponReduce) {
           totalPrice -= vm.userCouponReduce;
         }
-        calProxyRebateFee(totalPrice/100);
         vm.shipFee = parseInt(getShipFee());
         vm.shipSetId = getShipSetId();
         totalPrice += vm.shipFee;
