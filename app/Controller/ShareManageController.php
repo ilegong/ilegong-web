@@ -34,6 +34,11 @@ class ShareManageController extends AppController {
         return;
     }
 
+    public function delete_share($shareId){
+        $this->Weshare->delete($shareId);
+        $this->redirect(array('action' => 'shares'));
+    }
+
     /**
      * 获取分享者的分享
      */
@@ -41,7 +46,8 @@ class ShareManageController extends AppController {
         $uid = $this->currentUser['id'];
         $this->Paginator->settings = $this->sortSharePaginate;
         $q_cond = array(
-            'Weshare.creator' => $uid
+            'Weshare.creator' => $uid,
+            'Weshare.status' => array(0,1)
         );
         if ($_REQUEST['key_word']) {
             $q_cond['Weshare.title LIKE'] = '%' . $_REQUEST['key_word'] . '%';

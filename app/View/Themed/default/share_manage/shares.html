@@ -44,7 +44,7 @@
                                 <td>{{$share['Weshare']['send_info']}}</td>
                                 <td>{{if $share['Weshare']['settlement'] == 0}}未打款{{else}}已打款{{/if}}</td>
                                 <td>{{if $share['Weshare']['status'] == 0}}进行中{{else}}截团{{/if}}</td>
-                                <td><a href="/share_manage/share_edit/{{$share['Weshare']['id']}}" type="button" class="btn btn-outline btn-primary btn-info">修改</a>&nbsp;&nbsp;<a href="#" type="button" class="btn btn-outline btn-danger btn-sm">删除</a></td>
+                                <td><a href="/share_manage/share_edit/{{$share['Weshare']['id']}}" type="button" class="btn btn-outline btn-primary btn-info">修改</a>&nbsp;&nbsp;<a href="/share_manage/delete_share/{{$share['Weshare']['id']}}" type="button" class="btn btn-outline btn-danger btn-sm">删除</a></td>
                                 <td>
                                     <a href="/share_manage/order_manage/{{$share['Weshare']['id']}}" class="btn btn-outline btn-info btn-sm">订单管理</a>
                                     &nbsp;&nbsp;<a href="/weshares/order_export/{{$share['Weshare']['id']}}" target="_blank" class="btn btn-outline btn-primary btn-sm">导出待发货订单</a>
