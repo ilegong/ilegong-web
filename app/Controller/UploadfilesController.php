@@ -94,8 +94,13 @@ class UploadfilesController extends AppController {
 //                        } else {
 //                            $img_src_url = $fspath;
 //                        }
+                        if (substr ( $fileifo['mid_thumb'], 0, 7 ) != 'http://') {
+                            $s_img_url =  UPLOAD_FILE_URL.str_replace ( '//', '/', ($fileifo['mid_thumb']) );;
+                        } else {
+                            $s_img_url = $fileifo['mid_thumb'];
+                        }
                         $info ['status'] = '1';
-                        $info ['message'] = '<div class="ui-upload-filelist" style="float:left;"><img src="'.$fileifo['mid_thumb'].'" width="100px" height="100px"><br><p><a href="'.$fileifo['mid_thumb'].'" target="_blank">预览</a>&nbsp;&nbsp;&nbsp;<a class="upload-file-delete" onclick="deleteImg(this);">删除</a></p></div>';
+                        $info ['message'] = '<div class="ui-upload-filelist" style="float:left;"><img src="'.$s_img_url.'" width="100px" height="100px"><br><p><a href="'.$s_img_url.'" target="_blank">预览</a>&nbsp;&nbsp;&nbsp;<a class="upload-file-delete" onclick="deleteImg(this);">删除</a></p></div>';
                     }else{
                         if (! ($file = $this->Uploadfile->save ( $this->data ))) {
                             $this->Session->setFlash ( 'Database save failed' );
