@@ -2144,6 +2144,7 @@ class WeshareBuyComponent extends Component {
         //check user is proxy
         $this->log('cal proxy rebate fee params ' . $total_price . ' uid ' . $uid . ' share id ' . $shareId);
         $user_is_proxy = $this->ShareUtil->is_proxy_user($uid);
+        $this->log('cal rebate fee proxy check' . $user_is_proxy);
         if (!$user_is_proxy) {
             return 0;
         }
