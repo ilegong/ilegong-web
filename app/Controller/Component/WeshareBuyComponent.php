@@ -2116,6 +2116,25 @@ class WeshareBuyComponent extends Component {
     }
 
     /**
+     * @param $shareId
+     * @return bool
+     * 检测分享是否截团
+     */
+    public function check_weshare_status($shareId) {
+        $weshareM = ClassRegistry::init('Weshare');
+        $weshare = $weshareM->find('first', array(
+            'conditions' => array(
+                'id' => $shareId
+            ),
+            'fields' => array('id', 'status')
+        ));
+        if (empty($weshare)) {
+            return false;
+        }
+        return $weshare['Weshare']['status'] == WESHARE_NORMAL_STATUS;
+    }
+
+    /**
      * @param $share_id
      * @param $user
      * @param $is_paid

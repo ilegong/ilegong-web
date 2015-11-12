@@ -464,6 +464,11 @@ class WesharesController extends AppController {
         $is_group_share_type = $postDataArray['is_group_share'];
         $cart = array();
         try {
+            $weshare_available = $this->WeshareBuy->check_weshare_status($weshareId);
+            if(!$weshare_available){
+                echo json_encode(array('success' => false, 'reason' => '分享已经截团'));
+                return;
+            }
             $weshareProductIds = Hash::extract($products, '{n}.id');
             $productIdNumMap = Hash::combine($products, '{n}.id', '{n}.num');
 
@@ -484,7 +489,7 @@ class WesharesController extends AppController {
             $shipSetId = $shipInfo['ship_set_id'];
             $shipSetting = $this->get_ship_set($shipSetId, $weshareId);
             if (empty($shipSetting)) {
-                echo json_encode(array('success' => false, 'msg' => '物流方式选择错误'));
+                echo json_encode(array('success' => false, 'reason' => '物流方式选择错误'));
                 return;
             }
             $shipFee = $shipSetting['WeshareShipSetting']['ship_fee'];
@@ -558,7 +563,7 @@ class WesharesController extends AppController {
             return;
         } catch (Exception $e) {
             $this->log($uid . 'buy share ' . $weshareId . $e);
-            echo json_encode(array('success' => false, 'msg' => $e->getMessage()));
+            echo json_encode(array('success' => false, 'reason' => $e->getMessage()));
             return;
         }
     }
@@ -1695,6 +1700,7 @@ class WesharesController extends AppController {
             )
         ));
     }
+
 
     /**
      * @param $weshareProducts
