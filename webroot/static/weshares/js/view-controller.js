@@ -1018,6 +1018,11 @@
           return 1;
         }
       }
+      if(vm.shareOrder){
+        if (vm.shareOrder.orders && vm.shareOrder.orders.length > 0) {
+          return 1;
+        }
+      }
       return 0;
     }
 
