@@ -35,17 +35,20 @@
         text-align: center;
         position: relative;
     }
-    .ui-upload-filelist{
+
+    .ui-upload-filelist {
         padding: 5px;
     }
-    .ui-upload-filelist p{
+
+    .ui-upload-filelist p {
         text-align: center;
     }
 
 </style>
 <div class="container-fluid">
     <!-- 文件上传进度条 -->
-    <div class="flash ui-wedget" id="fsUploadProgress" style="position:absolute;display:none;width:210px;top:200px;right:30px; z-index: 10000000;">
+    <div class="flash ui-wedget" id="fsUploadProgress"
+         style="position:absolute;display:none;width:210px;top:200px;right:30px; z-index: 10000000;">
     </div>
     <div class="row">
         <div class="col-lg-12">
@@ -95,24 +98,26 @@
                                 <div class="col-xs-12">
                                     <div class="col-md-12">
                                         <h3> 基本信息</h3>
+
                                         <div class="form-group">
                                             <label class="control-label">分享标题</label>
                                             <input maxlength="100" type="text" class="form-control"
-                                                   placeholder="分享标题"/>
+                                                   placeholder="分享标题" value="{{$this->data['Weshare']['title']}}"/>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">取货信息</label>
                                             <input maxlength="100" type="text" class="form-control"
-                                                   placeholder="取货信息"/>
+                                                   placeholder="取货信息" value="{{$this->data['Weshare']['send_info']}}"/>
                                         </div>
                                         <div class="form-group">
+                                            <input type="hidden" value="{{$this->data['Weshare']['images']}}">
                                             <label class="control-label">分享图片</label>
-                                            {{$this->Swfupload->load('images',array('modelClass' => 'Weshare', 'label' => ''),true)}}
+                                            {{$this->Swfupload->load('images',array('modelClass' => 'Weshare', 'label'
+                                            => ''),true)}}
                                         </div>
-                                        <div></div>
                                         <div class="form-group">
                                             <label class="control-label">分享描述</label>
-                                            <textarea class="form-control" rows="15" placeholder="分享描述"></textarea>
+                                            <textarea class="form-control" rows="15" placeholder="分享描述">{{$this->data['Weshare']['description']}}</textarea>
                                         </div>
                                         <button class="btn btn-primary nextBtn btn-lg pull-right" type="button">下一步
                                         </button>
@@ -171,13 +176,13 @@
 </div>
 <!-- /.container-fluid -->
 <script>
-    var swfu_array =[];
-    function deleteImg(element){
+    var swfu_array = [];
+    function deleteImg(element) {
         var me = $(element);
-        if(me.parents('div.ui-upload-filelist').length>0){
+        if (me.parents('div.ui-upload-filelist').length > 0) {
             me.parents('div.ui-upload-filelist').remove();
         }
-        if(me.parents('li.upload-fileitem').length>0){
+        if (me.parents('li.upload-fileitem').length > 0) {
             me.parents('li.upload-fileitem').remove();
         }
     }
