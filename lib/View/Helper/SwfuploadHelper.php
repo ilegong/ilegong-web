@@ -72,7 +72,7 @@ class SwfuploadHelper extends FormHelper {
 					}
 	        		$listfile.='<input type="hidden" name="data[Uploadfile]['.$uploadfile['id'].'][id]" value="'.$uploadfile['id'].'">
 	        		<p><input type="text" readonly name="data[Uploadfile]['.$uploadfile['id'].'][name]" value="'.urldecode($uploadfile['name']).'"/></p>
-	        		 <p><a href="'.$file_url.'" target="_blank">' . __ ( 'Preview') . '</a>
+	        		 <p><a href="'.$file_url.'" target="_blank">' . __ ( '预览') . '</a>
 	        		<a class="upload-file-delete" onclick="deleteImg(this);" rel="'.$uploadfile['id'].'" data-url="'.$this->url('/uploadfiles/delete/'.$uploadfile['id'].'.json').'">删除</a>
 	        		<a href="javascript:void(0);" onclick="setCoverImg(\''.$param['modelClass'].'\',\''.$thumb_url.'\');">设置为产品首图</a></p>
 	        		';
@@ -100,10 +100,10 @@ class SwfuploadHelper extends FormHelper {
         		}
         	}
         	if(is_image($file_url)){
-        		$listfile = '<a href="'.$file_url.'" title="'.__( 'Preview').'" target="_blank"><img src="'.$file_url.'" style="max-height:120px"/></a>';
+        		$listfile = '<a href="'.$file_url.'" title="'.__( '预览').'" target="_blank"><img src="'.$file_url.'" style="max-height:120px"/></a>';
         	}
         	else{
-        		$listfile = '<a href="'.$file_url.'" target="_blank">'.__( 'Preview').'</a>';
+        		$listfile = '<a href="'.$file_url.'" target="_blank">'.__( '预览').'</a>';
         	}
         }
         if($param['isadmin']){
@@ -189,7 +189,7 @@ $(function () {
 		return $hidden.'
         <div class="form-group swfupload-control" >'.
 				($param['label']?'<label class="col-sm-2 control-label">'.$param['label'].'</label>':'').
-				'<div class="col-sm-10 controls"><span id="spanButtonPlaceholder_'.$fieldid.'"></span>(10MB max)'.$param['after'].'</div>
+				'<div class="col-sm-10 controls"><span id="spanButtonPlaceholder_'.$fieldid.'"></span>(10MB 最大)'.$param['after'].'</div>
 				<div class="clearfix"></div>
 				<ul class="col-sm-10 col-sm-offset-2 upload-filelist" id="fileuploadinfo_'.$fieldname.'">'.$listfile.'</ul>
 		</div>'; 
