@@ -25,6 +25,14 @@ class ShareManageController extends AppController {
         )
     );
 
+    public function update_share(){
+        $this->autoRender=false;
+        $json_data = $_REQUEST['data'];
+        $share_data = json_decode($json_data, true);
+        $this->Weshare->save($share_data);
+        echo json_encode(array('success' => true));
+        return;
+    }
 
     /**
      * 获取分享者的分享

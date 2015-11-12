@@ -227,15 +227,27 @@
         var $shareDescriptionEl = $('#share-description', $shareBasicInfoPanel);
         $saveShareBasicInfoBtn.on('click', function(e){
             e.preventDefault();
+            var shareId = $shareIdEl.val();
             var shareTitle = $shareTitleEl.val();
             var shareSendInfo = $shareSendInfoEl.val();
             var imagesStr = get_share_images();
             var shareDescription = $shareDescriptionEl.val();
-
+            var data = {
+                "id": shareId,
+                "images": imagesStr,
+                "title": shareTitle,
+                "send_info": shareSendInfo,
+                "description": shareDescription
+            };
+            $.post('/share_manage/update_share.json', {"data":JSON.stringify(data)},function(data){
+                if(data['success']){
+                    alert('保存成功');
+                }
+            },'json');
         });
 
         function get_share_images(){
-            var $imagesEl = $('div.ui-upload-filelist image', $shareBasicInfoPanel);
+            var $imagesEl = $('div.ui-upload-filelist img', $shareBasicInfoPanel);
             var images = [];
             $imagesEl.each(function(index,item){
                 images.push($(item).attr('src'));
