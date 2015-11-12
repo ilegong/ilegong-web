@@ -532,11 +532,8 @@ class WesharesController extends AppController {
             $totalPrice += $shipFee;
             //cal proxy user rebate fee
             $update_order_data = array('total_all_price' => $totalPrice / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => $shipFee, 'is_prepaid' => $is_prepaid);
-            //todo remove
-            $this->log('proxy user rebate fee ' . $rebate_fee);
             if ($rebate_fee > 0) {
                 $rebate_log_id = $this->WeshareBuy->log_proxy_rebate_log($weshareId, $uid, 0, 1, $orderId, $rebate_fee * 100);
-                $this->log('proxy user rebate log id ' . $rebate_log_id);
                 if (!empty($rebate_log_id)) {
                     $update_order_data['cate_id'] = $rebate_log_id;
                     $update_order_data['total_all_price'] = $update_order_data['total_all_price'] - $rebate_fee;
