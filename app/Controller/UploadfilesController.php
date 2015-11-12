@@ -138,9 +138,11 @@ class UploadfilesController extends AppController {
 						if($select){
 							$info ['message'] .= '<p>
 							<a href="' . $src_url . '" target="_blank">' . __ ( '预览') . '</a>
-			        		<a class="upload-file-delete" onclick="deleteImg(this);" rel="'.$file_id.'" data-url="' . Router::url ( '/uploadfiles/delete/' . $file_id.'.json') . '">' . __ ( '删除') . '</a>
-			        		<a href="javascript:void(0);" onclick="setCoverImg(\'' . $this->data [$modelname] ['modelclass'] . '\',\'' . $mid_thumb_url . '\');">' . __ ( 'Set as title img') . '</a></p>
-							';
+			        		<a class="upload-file-delete" onclick="deleteImg(this);" rel="'.$file_id.'" data-url="' . Router::url ( '/uploadfiles/delete/' . $file_id.'.json') . '">' . __ ( '删除') . '</a>';
+                            if($modelname!='Weshare'){
+                                $info['messgae'] .='<a href="javascript:void(0);" onclick="setCoverImg(\'' . $this->data [$modelname] ['modelclass'] . '\',\'' . $mid_thumb_url . '\');">' . __ ( 'Set as title img') . '</a>';
+                            }
+                            $info['messgae'] .='</p>';
 						}
 						$info ['message'] .= '</div>';
 					}

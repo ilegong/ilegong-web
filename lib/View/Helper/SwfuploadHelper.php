@@ -186,13 +186,22 @@ $(function () {
 });
 </script>';
         $this->_View->append('bottomscript',$script);
-		return $hidden.'
+        if($param['modelClass'] == 'Weshare'){
+            $return_text = $hidden.'
+        <div class="form-group swfupload-control" ><div class="col-sm-12 controls"><span id="spanButtonPlaceholder_'.$fieldid.'"></span>(10MB 最大)'.$param['after'].'</div>
+				<div class="clearfix"></div>
+				<ul class="col-sm-12 upload-filelist" id="fileuploadinfo_'.$fieldname.'">'.$listfile.'</ul>
+		</div>';
+            return $return_text;
+        }
+        $return_text = $hidden.'
         <div class="form-group swfupload-control" >'.
-				($param['label']?'<label class="col-sm-2 control-label">'.$param['label'].'</label>':'').
-				'<div class="col-sm-10 controls"><span id="spanButtonPlaceholder_'.$fieldid.'"></span>(10MB 最大)'.$param['after'].'</div>
+            ($param['label']?'<label class="col-sm-2 control-label">'.$param['label'].'</label>':'').
+            '<div class="col-sm-10 controls"><span id="spanButtonPlaceholder_'.$fieldid.'"></span>(10MB 最大)'.$param['after'].'</div>
 				<div class="clearfix"></div>
 				<ul class="col-sm-10 col-sm-offset-2 upload-filelist" id="fileuploadinfo_'.$fieldname.'">'.$listfile.'</ul>
-		</div>'; 
+		</div>';
+        return $return_text;
     }
 
 
