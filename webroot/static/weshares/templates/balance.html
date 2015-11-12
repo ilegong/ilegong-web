@@ -41,7 +41,7 @@
             <div class='total-fee text-center'>总金额：<span ng-bind="vm.orderTotalPrice | currency:'￥'"></span></div>
             <div style="text-align: center" ng-if="vm.myCoupons">(已减去红包<span ng-bind="vm.userCouponReduce/100" style="color: #ffa200;"></span>元)</div>
             <div style="text-align: center" ng-if="vm.shipFee>0">(快递费用<span ng-bind="vm.shipFee/100" style="color: #ffa200;"></span>元)</div>
-            <div style="text-align: center" ng-if="vm.rebateFee>0">(团长返利<span ng-bind="vm.rebateFee" style="color: #ffa200;"></span>元)</div>
+            <div style="text-align: center" ng-if="vm.rebateFee>0">(团长优惠<span ng-bind="vm.rebateFee" style="color: #ffa200;"></span>元)</div>
         </div>
     </div>
     <div style="background-color: #ffffff;padding-top: 1px;padding-bottom: 40px;">

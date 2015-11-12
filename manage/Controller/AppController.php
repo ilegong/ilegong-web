@@ -113,7 +113,7 @@ class AppController extends Controller {
 			'action' => 'login',
 			'plugin' => null
 		);
-
+        //add allow action
         if (!in_array('*', $this->Auth->allowedActions)) {
             $this->Auth->allowedActions[] = 'admin_login';
             $this->Auth->allowedActions[] = 'admin_cron_gen_data';
