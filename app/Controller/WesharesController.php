@@ -1340,7 +1340,9 @@ class WesharesController extends AppController {
             ));
             $proxy_share_percent = $this->ProxyRebatePercent->find('first', array(
                 'conditions' => array(
-                    'share_id' => $weshareId
+                    'share_id' => $weshareId,
+                    'deleted' => DELETED_NO,
+                    'status' => PUBLISH_YES
                 )
             ));
             $sharer_tags = $this->ShareUtil->get_tags($weshareInfo['Weshare']['creator'], $weshareInfo['Weshare']['refer_share_id']);
