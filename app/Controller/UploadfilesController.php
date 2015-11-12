@@ -59,25 +59,25 @@ class UploadfilesController extends AppController {
 			// upload the file
 			$this->SwfUpload->file_post_name = $file_post_name;
 			if ($fileifo = $this->SwfUpload->upload ($file_model_name)) {
-				if($_REQUEST['no_db']){// 不保存到数据库，在ckeditor中上传文件的场景
-					$info ['status'] = '1';
-					$info =array_merge($info,$fileifo);
+                if($_REQUEST['no_db']){// 不保存到数据库，在ckeditor中上传文件的场景
+                    $info ['status'] = '1';
+                    $info =array_merge($info,$fileifo);
                     $file_url = UPLOAD_FILE_URL . $fileifo['fspath'];
-					//$file_url = str_replace('//', '/', $file_url);
-					if(is_image($file_url)){
-						$info['message'] = '<a href="'.$file_url.'" title="'.__( 'Preview').'" target="_blank"><img src="'.$file_url.'" style="max-height:120px"/></a>';
-					}
-					else{
-						$info['message'] = '<a href="'.$file_url.'" target="_blank">'.__( 'Preview').'</a>';
-					}
+                    //$file_url = str_replace('//', '/', $file_url);
+                    if(is_image($file_url)){
+                        $info['message'] = '<a href="'.$file_url.'" title="'.__( 'Preview').'" target="_blank"><img src="'.$file_url.'" style="max-height:120px"/></a>';
+                    }
+                    else{
+                        $info['message'] = '<a href="'.$file_url.'" target="_blank">'.__( 'Preview').'</a>';
+                    }
                     $info['fspath'] = $file_url;
-				}
-				else{
-					//check image size
-					$fspath = $fileifo['fspath'];
-					$modelname = Inflector::classify ( $this->name );
-					// save the file to the db, or do whateve ryou want to do with
-					// the data
+                }
+                else{
+                    //check image size
+                    $fspath = $fileifo['fspath'];
+                    $modelname = Inflector::classify ( $this->name );
+                    // save the file to the db, or do whateve ryou want to do with
+                    // the data
                     $this->data [$modelname] ['modelclass'] = $file_model_name;
                     $this->data [$modelname] ['fieldname'] = $file_post_name;
                     $this->data [$modelname] ['name'] = $fileifo['filename'];
@@ -88,65 +88,74 @@ class UploadfilesController extends AppController {
                         $this->data [$modelname] ['thumb'] = $fileifo['thumb'];
                         $this->data [$modelname] ['mid_thumb'] = $fileifo['mid_thumb'];
                     }
-					if (! ($file = $this->Uploadfile->save ( $this->data ))) {
-						$this->Session->setFlash ( 'Database save failed' );
-						$info ['message'] = $this->SwfUpload->filename . ' Database save failed'; // 保存记录时失败
-					} else {
-						
-						$info ['status'] = '1';
-						$file_id = $this->Uploadfile->getLastInsertId ();
-						$info ['fspath'] = $this->data [$modelname] ['fspath'];
-						$info ['file_id'] = $file_id;
-						$info ['message'] = '<div class="ui-upload-filelist" style="float:left;">';
-
-                        if (substr ( $this->data [$modelname] ['thumb'], 0, 7 ) != 'http://') {
-                            $file_url = UPLOAD_FILE_URL.str_replace ( '//', '/', ($this->data [$modelname] ['thumb']) );
-							$mid_url =  UPLOAD_FILE_URL.str_replace ( '//', '/', ($this->data [$modelname] ['mid_thumb']) );;
+                    if($file_model_name == 'Weshare'){
+//                        if (substr ( $fspath, 0, 7 ) != 'http://') {
+//                            $img_src_url = Router::url (str_replace ( '//', '/', $this->request->webroot . $fspath ));
+//                        } else {
+//                            $img_src_url = $fspath;
+//                        }
+                        $info ['status'] = '1';
+                        $info ['message'] = '<div class="ui-upload-filelist" style="float:left;"><img src="'.$fileifo['mid_thumb'].'" width="100px" height="100px"><br><p><a href="'.$fileifo['mid_thumb'].'" target="_blank">预览</a>&nbsp;&nbsp;&nbsp;<a class="upload-file-delete" onclick="deleteImg(this);">删除</a></p></div>';
+                    }else{
+                        if (! ($file = $this->Uploadfile->save ( $this->data ))) {
+                            $this->Session->setFlash ( 'Database save failed' );
+                            $info ['message'] = $this->SwfUpload->filename . ' Database save failed'; // 保存记录时失败
                         } else {
-                            $file_url = $this->data [$modelname] ['thumb'];
-							$mid_url = $this->data [$modelname] ['mid_thumb'];
-                        }
+                            $info ['status'] = '1';
+                            $file_id = $this->Uploadfile->getLastInsertId ();
+                            $info ['fspath'] = $this->data [$modelname] ['fspath'];
+                            $info ['file_id'] = $file_id;
+                            $info ['message'] = '<div class="ui-upload-filelist" style="float:left;">';
 
-                        $info['fspath'] = $file_url;
+                            if (substr ( $this->data [$modelname] ['thumb'], 0, 7 ) != 'http://') {
+                                $file_url = UPLOAD_FILE_URL.str_replace ( '//', '/', ($this->data [$modelname] ['thumb']) );
+                                $mid_url =  UPLOAD_FILE_URL.str_replace ( '//', '/', ($this->data [$modelname] ['mid_thumb']) );;
+                            } else {
+                                $file_url = $this->data [$modelname] ['thumb'];
+                                $mid_url = $this->data [$modelname] ['mid_thumb'];
+                            }
 
-						if ('image' == substr ( $this->data [$modelname] ['type'], 0, 5 )) {
-							$info ['message'] .= '<img src="' . $file_url . '" width="100px" height="100px"/><br/>';
-						}
-						else{
-							$info ['message'] .='<a href="' . $file_url . '" target="_blank">'.$this->data [$modelname] ['name'].'</a>';
-						}
-						$info ['message'] .= '<input type="hidden" name="data[Uploadfile][' . $file_id . '][id]" value="' . $file_id . '">';
-						
-						if ('image' == substr ( $this->data [$modelname] ['type'], 0, 5 )) {
+                            $info['fspath'] = $file_url;
 
+                            if ('image' == substr ( $this->data [$modelname] ['type'], 0, 5 )) {
+                                if($file_model_name == 'Weshare'){
+                                    $info ['message'] .= '<img src="' . $mid_url . '" width="100px" height="100px"/><br/>';
+                                }else{
+                                    $info ['message'] .= '<img src="' . $file_url . '" width="100px" height="100px"/><br/>';
+                                }
+                            }
+                            else{
+                                $info ['message'] .='<a href="' . $file_url . '" target="_blank">'.$this->data [$modelname] ['name'].'</a>';
+                            }
+                            $info ['message'] .= '<input type="hidden" name="data[Uploadfile][' . $file_id . '][id]" value="' . $file_id . '">';
 
-							//check
-							if(strpos($mid_url,'/')==0){
-								$mid_thumb_url = str_replace ( '\\', '/', $this->data [$modelname] ['mid_thumb'] );
-							}else if(strpos($mid_url,'http')==0){
-								$mid_thumb_url = $mid_url;
-							} else{
-								$mid_thumb_url = str_replace ( '\\', '/', $this->request->webroot . $this->data [$modelname] ['mid_thumb'] );
-							}
-							if (substr ( $this->data [$modelname] ['fspath'], 0, 7 ) != 'http://') {
-								$src_url = Router::url (str_replace ( '//', '/', $this->request->webroot . ($this->data [$modelname] ['fspath']) ));
-							} else {
-								$src_url = $this->data [$modelname] ['fspath'];
-							}
-						}
-						//商家管理产品可以选择多幅图片
-						if($select){
-							$info ['message'] .= '<p>
+                            if ('image' == substr ( $this->data [$modelname] ['type'], 0, 5 )) {
+                                //check
+                                if(strpos($mid_url,'/')==0){
+                                    $mid_thumb_url = str_replace ( '\\', '/', $this->data [$modelname] ['mid_thumb'] );
+                                }else if(strpos($mid_url,'http')==0){
+                                    $mid_thumb_url = $mid_url;
+                                } else{
+                                    $mid_thumb_url = str_replace ( '\\', '/', $this->request->webroot . $this->data [$modelname] ['mid_thumb'] );
+                                }
+                                if (substr ( $this->data [$modelname] ['fspath'], 0, 7 ) != 'http://') {
+                                    $src_url = Router::url (str_replace ( '//', '/', $this->request->webroot . ($this->data [$modelname] ['fspath']) ));
+                                } else {
+                                    $src_url = $this->data [$modelname] ['fspath'];
+                                }
+                            }
+                            //商家管理产品可以选择多幅图片
+                            if($select){
+                                $info ['message'] .= '<p>
 							<a href="' . $src_url . '" target="_blank">' . __ ( '预览') . '</a>
 			        		<a class="upload-file-delete" onclick="deleteImg(this);" rel="'.$file_id.'" data-url="' . Router::url ( '/uploadfiles/delete/' . $file_id.'.json') . '">' . __ ( '删除') . '</a>';
-                            if($modelname!='Weshare'){
                                 $info['messgae'] .='<a href="javascript:void(0);" onclick="setCoverImg(\'' . $this->data [$modelname] ['modelclass'] . '\',\'' . $mid_thumb_url . '\');">' . __ ( 'Set as title img') . '</a>';
+                                $info['messgae'] .='</p>';
                             }
-                            $info['messgae'] .='</p>';
-						}
-						$info ['message'] .= '</div>';
-					}
-				}
+                            $info ['message'] .= '</div>';
+                        }
+                    }
+                }
 			} else {
 				$info ['message'] = $this->SwfUpload->errorMessage;
 				$this->Session->setFlash ( $this->SwfUpload->errorMessage );

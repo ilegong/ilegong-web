@@ -47,7 +47,12 @@ class ShareManageController extends AppController {
     }
 
     public function share_edit($share_id){
-
+        $weshareData  = $this->Weshare->find('first', array(
+            'conditions' => array(
+                'id' => $share_id
+            )
+        ));
+        $this->data = $weshareData;
     }
 
     public function authorize_shares() {

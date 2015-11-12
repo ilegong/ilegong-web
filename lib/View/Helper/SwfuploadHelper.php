@@ -79,8 +79,14 @@ class SwfuploadHelper extends FormHelper {
 	        		$listfile.='</li>';
 	        	}
 	        }
-        }
-        elseif((isset($this->data[$param['modelClass']][$fieldname]) && !empty($this->data[$param['modelClass']][$file_post_name])) || !empty($param['value'])){
+        }elseif($param['modelClass'] == 'Weshare' && !empty($this->data[$param['modelClass']][$file_post_name])){
+            $this->log('share edit');
+            $images_str = $this->data[$param['modelClass']][$file_post_name];
+            $images = explode('|', $images_str);
+            foreach($images as $img){
+                $listfile .='<div class="ui-upload-filelist" style="float:left;"><img src="'.$img.'" width="100px" height="100px"><br><p><a href="'.$img.'" target="_blank">预览</a>&nbsp;&nbsp;&nbsp;<a class="upload-file-delete" onclick="deleteImg(this);">删除</a></p></div>';
+            }
+        } elseif((isset($this->data[$param['modelClass']][$fieldname]) && !empty($this->data[$param['modelClass']][$file_post_name])) || !empty($param['value'])){
         	// 上传文件的地址保存到本模块对应的字段中，而非保存在Uploadfile里
         	if($param['value']){
         		if(substr($param['value'],0,7) != 'http://'){
@@ -114,6 +120,9 @@ class SwfuploadHelper extends FormHelper {
         }
 		if($select){
 			$upload_url.='?select=true';
+            if($param['modelClass'] == 'Weshare'){
+                $upload_url .= '&no_db=1';
+            }
 		}
         $script = '<script>
 '.(($param['upload_limit']==1)?
