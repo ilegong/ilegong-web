@@ -138,7 +138,7 @@ class UploadfilesController extends AppController {
 						if($select){
 							$info ['message'] .= '<p>
 							<a href="' . $src_url . '" target="_blank">' . __ ( 'Preview') . '</a>
-			        		<a class="upload-file-delete" onclick="deleteImg(this);" rel="'.$file_id.'" href="#" data-url="' . Router::url ( '/uploadfiles/delete/' . $file_id.'.json') . '">' . __ ( 'Delete') . '</a>
+			        		<a class="upload-file-delete" onclick="deleteImg(this);" rel="'.$file_id.'" data-url="' . Router::url ( '/uploadfiles/delete/' . $file_id.'.json') . '">' . __ ( 'Delete') . '</a>
 			        		<a href="javascript:void(0);" onclick="setCoverImg(\'' . $this->data [$modelname] ['modelclass'] . '\',\'' . $mid_thumb_url . '\');">' . __ ( 'Set as title img') . '</a></p>
 							';
 						}

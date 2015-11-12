@@ -73,7 +73,7 @@ class SwfuploadHelper extends FormHelper {
 	        		$listfile.='<input type="hidden" name="data[Uploadfile]['.$uploadfile['id'].'][id]" value="'.$uploadfile['id'].'">
 	        		<p><input type="text" readonly name="data[Uploadfile]['.$uploadfile['id'].'][name]" value="'.urldecode($uploadfile['name']).'"/></p>
 	        		 <p><a href="'.$file_url.'" target="_blank">' . __ ( 'Preview') . '</a>
-	        		<a class="upload-file-delete" onclick="deleteImg(this);" rel="'.$uploadfile['id'].'" href="#" data-url="'.$this->url('/uploadfiles/delete/'.$uploadfile['id'].'.json').'">删除</a>
+	        		<a class="upload-file-delete" onclick="deleteImg(this);" rel="'.$uploadfile['id'].'" data-url="'.$this->url('/uploadfiles/delete/'.$uploadfile['id'].'.json').'">删除</a>
 	        		<a href="javascript:void(0);" onclick="setCoverImg(\''.$param['modelClass'].'\',\''.$thumb_url.'\');">设置为产品首图</a></p>
 	        		';
 	        		$listfile.='</li>';
