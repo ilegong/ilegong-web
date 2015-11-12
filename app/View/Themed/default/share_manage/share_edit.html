@@ -94,33 +94,33 @@
                             </div>
                         </div>
                         <form role="form">
+                            <input type="hidden" id="share-id" value="{{$this->data['Weshare']['id']}}">
                             <div class="row setup-content" id="step-1">
                                 <div class="col-xs-12">
-                                    <div class="col-md-12">
+                                    <div class="col-md-12" id="share-basic-info-panel">
                                         <h3> 基本信息</h3>
 
                                         <div class="form-group">
                                             <label class="control-label">分享标题</label>
                                             <input maxlength="100" type="text" class="form-control"
-                                                   placeholder="分享标题" value="{{$this->data['Weshare']['title']}}"/>
+                                                   placeholder="分享标题" value="{{$this->data['Weshare']['title']}}" id="share-title"/>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">取货信息</label>
                                             <input maxlength="100" type="text" class="form-control"
-                                                   placeholder="取货信息" value="{{$this->data['Weshare']['send_info']}}"/>
+                                                   placeholder="取货信息" value="{{$this->data['Weshare']['send_info']}}" id="share-send-info"/>
                                         </div>
                                         <div class="form-group">
-                                            <input type="hidden" value="{{$this->data['Weshare']['images']}}">
+                                            <input type="hidden" value="{{$this->data['Weshare']['images']}}" id="share-images">
                                             <label class="control-label">分享图片</label>
                                             {{$this->Swfupload->load('images',array('modelClass' => 'Weshare', 'label'
                                             => ''),true)}}
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label">分享描述</label>
-                                            <textarea class="form-control" rows="15" placeholder="分享描述">{{$this->data['Weshare']['description']}}</textarea>
+                                            <textarea class="form-control" rows="15" placeholder="分享描述" id="share-description">{{$this->data['Weshare']['description']}}</textarea>
                                         </div>
-                                        <button class="btn btn-primary nextBtn btn-lg pull-right" type="button">下一步
-                                        </button>
+                                        <button class="btn btn-primary btn-lg pull-right" type="button" id="save-share-basic-info">保存</button>
                                     </div>
                                 </div>
                             </div>
@@ -128,18 +128,7 @@
                                 <div class="col-xs-12">
                                     <div class="col-md-12">
                                         <h3> 分享产品</h3>
-
-                                        <div class="form-group">
-                                            <label class="control-label">Company Name</label>
-                                            <input maxlength="200" type="text" class="form-control"
-                                                   placeholder="Enter Company Name"/>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">Company Address</label>
-                                            <input maxlength="200" type="text" class="form-control"
-                                                   placeholder="Enter Company Address"/>
-                                        </div>
-                                        <button class="btn btn-primary nextBtn btn-lg pull-right" type="button">Next
+                                        <button class="btn btn-primary btn-lg pull-right" type="button">保存
                                         </button>
                                     </div>
                                 </div>
@@ -148,8 +137,7 @@
                                 <div class="col-xs-12">
                                     <div class="col-md-12">
                                         <h3> 物流设置</h3>
-                                        <button class="btn btn-success btn-lg nextBtn pull-right" type="button">Finish
-                                            3!
+                                        <button class="btn btn-success btn-lg pull-right" type="button">保存
                                         </button>
                                     </div>
                                 </div>
@@ -158,7 +146,7 @@
                                 <div class="col-xs-12">
                                     <div class="col-md-12">
                                         <h3> 佣金设置</h3>
-                                        <button class="btn btn-success btn-lg pull-right" type="submit">Finish 4!
+                                        <button class="btn btn-success btn-lg pull-right" type="button">保存
                                         </button>
                                     </div>
                                 </div>
@@ -226,6 +214,35 @@
         });
 
         $('div.setup-panel div a.btn-primary').trigger('click');
+    });
+</script>
+<script>
+    $(document).ready(function(){
+        var $shareBasicInfoPanel = $('#share-basic-info-panel');
+        var $shareIdEl = $('#share-id');
+        var $saveShareBasicInfoBtn = $('#save-share-basic-info', $shareBasicInfoPanel);
+        var $shareTitleEl = $('#share-title', $shareBasicInfoPanel);
+        var $shareSendInfoEl = $('#share-send-info', $shareBasicInfoPanel);
+        var $shareImagesEl = $('#share-images', $shareBasicInfoPanel);
+        var $shareDescriptionEl = $('#share-description', $shareBasicInfoPanel);
+        $saveShareBasicInfoBtn.on('click', function(e){
+            e.preventDefault();
+            var shareTitle = $shareTitleEl.val();
+            var shareSendInfo = $shareSendInfoEl.val();
+            var imagesStr = get_share_images();
+            var shareDescription = $shareDescriptionEl.val();
+
+        });
+
+        function get_share_images(){
+            var $imagesEl = $('div.ui-upload-filelist image', $shareBasicInfoPanel);
+            var images = [];
+            $imagesEl.each(function(index,item){
+                images.push($(item).attr('src'));
+            });
+            return images.join('|');
+        }
+
     });
 </script>
 {{$this->Html->script(array(

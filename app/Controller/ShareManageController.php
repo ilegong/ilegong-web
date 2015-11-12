@@ -7,7 +7,7 @@
 class ShareManageController extends AppController {
 
 
-    public $components = array('Auth', 'ShareUtil', 'WeshareBuy', 'ShareManage', 'Cookie', 'Session', 'Paginator', 'WeshareBuy');
+    public $components = array('Auth', 'ShareUtil', 'WeshareBuy', 'ShareManage', 'Cookie', 'Session', 'Paginator', 'WeshareBuy', 'ShareAuthority');
 
     public $uses = array('User', 'Weshare', 'Order', 'Cart');
 
@@ -47,11 +47,18 @@ class ShareManageController extends AppController {
     }
 
     public function share_edit($share_id){
+        $uid = $this->currentUser['id'];
         $weshareData  = $this->Weshare->find('first', array(
             'conditions' => array(
                 'id' => $share_id
             )
         ));
+        if($weshareData['Weshare']['creator']!=$uid){
+            if(!$this->ShareAuthority->user_can_edit_share_info($uid, $share_id)){
+                $this->redirect(array('action' => 'shares'));
+                return;
+            }
+        }
         $this->data = $weshareData;
     }
 
