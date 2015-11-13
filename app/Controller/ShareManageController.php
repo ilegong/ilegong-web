@@ -9,7 +9,7 @@ class ShareManageController extends AppController {
 
     public $components = array('Auth', 'ShareUtil', 'WeshareBuy', 'ShareManage', 'Cookie', 'Session', 'Paginator', 'WeshareBuy', 'ShareAuthority');
 
-    public $uses = array('User', 'Weshare', 'Order', 'Cart');
+    public $uses = array('User', 'Weshare', 'Order', 'Cart', 'WeshareProduct');
 
     var $sortSharePaginate = array(
         'Weshare' => array(
@@ -25,8 +25,8 @@ class ShareManageController extends AppController {
         )
     );
 
-    public function update_share(){
-        $this->autoRender=false;
+    public function update_share() {
+        $this->autoRender = false;
         $json_data = $_REQUEST['data'];
         $share_data = json_decode($json_data, true);
         $this->Weshare->save($share_data);
@@ -34,7 +34,7 @@ class ShareManageController extends AppController {
         return;
     }
 
-    public function delete_share($shareId){
+    public function delete_share($shareId) {
         $this->Weshare->delete($shareId);
         $this->redirect(array('action' => 'shares'));
     }
@@ -47,7 +47,7 @@ class ShareManageController extends AppController {
         $this->Paginator->settings = $this->sortSharePaginate;
         $q_cond = array(
             'Weshare.creator' => $uid,
-            'Weshare.status' => array(0,1)
+            'Weshare.status' => array(0, 1)
         );
         if ($_REQUEST['key_word']) {
             $q_cond['Weshare.title LIKE'] = '%' . $_REQUEST['key_word'] . '%';
@@ -60,19 +60,26 @@ class ShareManageController extends AppController {
         $this->set('shares', $shares);
     }
 
-    public function share_edit($share_id){
+    public function share_edit($share_id) {
         $uid = $this->currentUser['id'];
-        $weshareData  = $this->Weshare->find('first', array(
+        $weshareData = $this->Weshare->find('first', array(
             'conditions' => array(
                 'id' => $share_id
             )
         ));
-        if($weshareData['Weshare']['creator']!=$uid){
-            if(!$this->ShareAuthority->user_can_edit_share_info($uid, $share_id)){
+        if ($weshareData['Weshare']['creator'] != $uid) {
+            if (!$this->ShareAuthority->user_can_edit_share_info($uid, $share_id)) {
                 $this->redirect(array('action' => 'shares'));
                 return;
             }
         }
+        $weshare_products = $this->WeshareProduct->find('all', array(
+            'conditions' => array(
+                'weshare_id' => $share_id,
+                'deleted' => DELETED_NO
+            )
+        ));
+        $this->set('weshare_products', $weshare_products);
         $this->data = $weshareData;
     }
 
@@ -101,8 +108,8 @@ class ShareManageController extends AppController {
             ));
             $this->set('shares', $shares);
             $share_operate_settings_result = array();
-            foreach($share_operate_settings as $share_operate_setting){
-                $share_operate_settings_result[] = $share_operate_setting['ShareOperateSetting']['data_id'].'-'.$share_operate_setting['ShareOperateSetting']['data_type'];
+            foreach ($share_operate_settings as $share_operate_setting) {
+                $share_operate_settings_result[] = $share_operate_setting['ShareOperateSetting']['data_id'] . '-' . $share_operate_setting['ShareOperateSetting']['data_type'];
             }
             $this->set('share_operate_settings', $share_operate_settings_result);
         }
@@ -189,7 +196,7 @@ class ShareManageController extends AppController {
         ));
         $order_cart_map = array();
         $orders = array();
-        if($orders_count > 0){
+        if ($orders_count > 0) {
             $orders = $this->Paginator->paginate('Order', $q_cond);
             $order_ids = Hash::extract($orders, '{n}.Order.id');
             $order_carts = $this->Cart->find('all', array(
@@ -197,9 +204,9 @@ class ShareManageController extends AppController {
                     'order_id' => $order_ids
                 )
             ));
-            foreach($order_carts as $cart_item){
+            foreach ($order_carts as $cart_item) {
                 $order_id = $cart_item['Cart']['order_id'];
-                if(!isset($order_cart_map[$order_id])){
+                if (!isset($order_cart_map[$order_id])) {
                     $order_cart_map[$order_id] = array();
                 }
                 $order_cart_map[$order_id][] = $cart_item['Cart'];
