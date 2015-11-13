@@ -4,6 +4,30 @@ class ShareManageComponent extends Component {
 
     public $components = array('ShareUti', 'WeshareBuy');
 
+
+    public function get_weshare_products($shareId) {
+        $weshareProductM = ClassRegistry::init('WeshareProduct');
+        $weshare_products = $weshareProductM->find('all', array(
+            'conditions' => array(
+                'weshare_id' => $shareId,
+                'deleted' => DELETED_NO
+            )
+        ));
+        return $weshare_products;
+    }
+
+    public function get_share_product_tags($uid) {
+        $weshareProductTagM = ClassRegistry::init('WeshareProductTag');
+        $tags = $weshareProductTagM->find('all', array(
+            'conditions' => array(
+                'user_id' => $uid,
+                'deleted' => DELETED_NO
+            )
+        ));
+        return $tags;
+    }
+
+
     public function get_share_orders($share_id) {
         $OrderM = ClassRegistry::init('Order');
         $orders = $OrderM->find('all', array(

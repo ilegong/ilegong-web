@@ -73,13 +73,10 @@ class ShareManageController extends AppController {
                 return;
             }
         }
-        $weshare_products = $this->WeshareProduct->find('all', array(
-            'conditions' => array(
-                'weshare_id' => $share_id,
-                'deleted' => DELETED_NO
-            )
-        ));
+        $weshare_products = $this->ShareManage->get_weshare_products($share_id);
         $this->set('weshare_products', $weshare_products);
+        $share_tags = $this->ShareManage->get_share_product_tags($weshareData['Weshare']['creator']);
+        $this->set('weshare_tags', $share_tags);
         $this->data = $weshareData;
     }
 

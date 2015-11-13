@@ -978,11 +978,11 @@
 
     function defaultNotifyHasBuyMsgContent() {
       var msgContent = '';
-      if (Object.keys(vm['ordersDetail']['users']).length > 10) {
-        var usersCount = Object.keys(vm['ordersDetail']['users']).length;
+      if (Object.keys(vm.shareOrder['users']).length > 10) {
+        var usersCount = Object.keys(vm.shareOrder['users']).length;
         var index = 0;
-        for (var userId in vm['ordersDetail']['users']) {
-          var user = vm['ordersDetail']['users'][userId];
+        for (var userId in vm.shareOrder['users']) {
+          var user = vm.shareOrder['users'][userId];
           index++;
           if (index > 10) {
             break
@@ -995,7 +995,7 @@
         }
         msgContent = msgContent + '...等' + usersCount + '人都已经报名' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title + '啦，就差你啦。';
       } else {
-        msgContent = _.reduce(vm.ordersDetail.users, function (memo, user) {
+        msgContent = _.reduce(vm.shareOrder.users, function (memo, user) {
           return memo + user['nickname'] + '，';
         }, '');
         msgContent = msgContent + '都已经报名' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title + '啦，就差你啦。';

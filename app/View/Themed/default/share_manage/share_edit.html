@@ -136,40 +136,73 @@
                                     <div class="col-md-12">
                                         <h3> 分享产品</h3>
 
-                                        <div class="col-md-12">
+                                        <div class="col-md-12" id="share-product-info">
                                             {{loop $weshare_products $product}}
-                                                <div class='col-md-4'>
-                                                    <div style="margin:0;padding:0;display:inline">
-                                                        <input name="id" type="hidden" value="{{$product['WeshareProduct']['id']}}"/>
-                                                        <div class='form-row'>
-                                                            <div class='col-xs-12 form-group required'>
-                                                                <label class='control-label'>产品名称/规格</label>
-                                                                <input class='form-control' type='text' value="{{$product['WeshareProduct']['name']}}" name="product-name">
-                                                            </div>
+                                            <div class='col-md-4'
+                                                 id="share-product-{{$product['WeshareProduct']['id']}}">
+                                                <div style="margin:0;padding:0;display:inline">
+                                                    <input name="id" type="hidden"
+                                                           value="{{$product['WeshareProduct']['id']}}"/>
+
+                                                    <div class='form-row'>
+                                                        <div class='col-xs-12 form-group required'>
+                                                            <label class='control-label'>产品名称/规格</label>
+                                                            <input class='form-control' type='text'
+                                                                   value="{{$product['WeshareProduct']['name']}}"
+                                                                   name="product-name">
                                                         </div>
-                                                        <div class='form-row'>
-                                                            <div class='col-xs-4 form-group required'>
-                                                                <label class='control-label'>价格</label>
-                                                                <input class='form-control' type="number" value="{{$product['WeshareProduct']['name']}}" name="product-price">
-                                                            </div>
-                                                            <div class='col-xs-4 form-group required'>
-                                                                <label class='control-label'>库存</label>
-                                                                <input class='form-control' type='number' value="{{$product['WeshareProduct']['store']}}" name="product-store">
-                                                            </div>
-                                                            <div class='col-xs-4 form-group required'>
-                                                                <label class='control-label'>分组</label>
-                                                                <select class="form-control">
-                                                                    <option value="0">默认分组</option>
-                                                                </select>
-                                                            </div>
+                                                    </div>
+                                                    <div class='form-row'>
+                                                        <div class='col-xs-3 form-group required'>
+                                                            <label class='control-label'>价格</label>
+                                                            <input class='form-control' type="number"
+                                                                   value="{{$product['WeshareProduct']['price']}}"
+                                                                   name="product-price">
                                                         </div>
-                                                        <div class='form-row'>
-                                                            <div class='col-md-12 form-group'>
-                                                                <button class='form-control btn btn-primary'>删除</button>
-                                                            </div>
+                                                        <div class='col-xs-3 form-group required'>
+                                                            <label class='control-label'>库存</label>
+                                                            <input class='form-control' type='number'
+                                                                   value="{{$product['WeshareProduct']['store']}}"
+                                                                   name="product-store">
+                                                        </div>
+                                                        <div class='col-xs-6 form-group required'>
+                                                            <label class='control-label'>分组</label>
+                                                            <select class="form-control"
+                                                                    data-init-val="{{$product['WeshareProduct']['tag_id']}}">
+                                                                <option value="0">默认分组</option>
+                                                                {{loop $weshare_tags $tag}}
+                                                                <option value="{{$tag['WeshareProductTag']['id']}}">
+                                                                    {{$tag['WeshareProductTag']['name']}}
+                                                                </option>
+                                                                {{/loop}}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-row">
+                                                        <div class='col-xs-4 form-group required'>
+                                                            <label class="checkbox-inline">
+                                                                <input type="checkbox" value="1" name="product-tbd"
+                                                                       data-init-val="{{$tag['WeshareProductTag']['tbd']}}">
+                                                                价格待定
+                                                            </label>
+                                                        </div>
+                                                        <div class='col-xs-4 form-group required'>
+                                                            <label class="checkbox-inline">
+                                                                <input type="checkbox" value="1" name="product-limit"
+                                                                       data-init-val="{{$tag['WeshareProductTag']['limit']}}">
+                                                                限购一份
+                                                            </label>
+                                                        </div>
+                                                        <div class='col-xs-4 form-group required'>
+                                                            <label class="checkbox-inline">
+                                                                <input type="checkbox" value="1" name="product-deleted"
+                                                                       data-init-val="{{$tag['WeshareProductTag']['deleted']}}">
+                                                                是否下架
+                                                            </label>
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </div>
                                             {{/loop}}
                                         </div>
                                         <button class="btn btn-primary btn-lg pull-right" type="button">保存</button>
@@ -218,88 +251,7 @@
         }
     }
 </script>
-<script>
-    $(document).ready(function () {
-        var navListItems = $('div.setup-panel div a'),
-                allWells = $('.setup-content'),
-                allNextBtn = $('.nextBtn');
-
-        allWells.hide();
-        navListItems.click(function (e) {
-            e.preventDefault();
-            var $target = $($(this).attr('href')),
-                    $item = $(this);
-
-            if (!$item.hasClass('disabled')) {
-                navListItems.removeClass('btn-primary').addClass('btn-default');
-                $item.addClass('btn-primary');
-                allWells.hide();
-                $target.show();
-                $target.find('input:eq(0)').focus();
-            }
-        });
-        allNextBtn.click(function () {
-            var curStep = $(this).closest(".setup-content"),
-                    curStepBtn = curStep.attr("id"),
-                    nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
-                    curInputs = curStep.find("input[type='text'],input[type='url']"),
-                    isValid = true;
-
-            $(".form-group").removeClass("has-error");
-            for (var i = 0; i < curInputs.length; i++) {
-                if (!curInputs[i].validity.valid) {
-                    isValid = false;
-                    $(curInputs[i]).closest(".form-group").addClass("has-error");
-                }
-            }
-            if (isValid)
-                nextStepWizard.removeAttr('disabled').trigger('click');
-        });
-
-        $('div.setup-panel div a.btn-primary').trigger('click');
-    });
-</script>
-<script>
-    $(document).ready(function () {
-        var $shareBasicInfoPanel = $('#share-basic-info-panel');
-        var $shareIdEl = $('#share-id');
-        var $saveShareBasicInfoBtn = $('#save-share-basic-info', $shareBasicInfoPanel);
-        var $shareTitleEl = $('#share-title', $shareBasicInfoPanel);
-        var $shareSendInfoEl = $('#share-send-info', $shareBasicInfoPanel);
-        var $shareImagesEl = $('#share-images', $shareBasicInfoPanel);
-        var $shareDescriptionEl = $('#share-description', $shareBasicInfoPanel);
-        $saveShareBasicInfoBtn.on('click', function (e) {
-            e.preventDefault();
-            var shareId = $shareIdEl.val();
-            var shareTitle = $shareTitleEl.val();
-            var shareSendInfo = $shareSendInfoEl.val();
-            var imagesStr = get_share_images();
-            var shareDescription = $shareDescriptionEl.val();
-            var data = {
-                "id": shareId,
-                "images": imagesStr,
-                "title": shareTitle,
-                "send_info": shareSendInfo,
-                "description": shareDescription
-            };
-            $.post('/share_manage/update_share.json', {"data": JSON.stringify(data)}, function (data) {
-                if (data['success']) {
-                    alert('保存成功');
-                }
-            }, 'json');
-        });
-
-        function get_share_images() {
-            var $imagesEl = $('div.ui-upload-filelist img', $shareBasicInfoPanel);
-            var images = [];
-            $imagesEl.each(function (index, item) {
-                images.push($(item).attr('src'));
-            });
-            return images.join('|');
-        }
-
-    });
-</script>
+<script src="/static/sharer/custom/share-edit.js"></script>
 {{$this->Html->script(array(
 'swfupload/swfupload.js',
 'swfupload/swfupload.queue.js',
