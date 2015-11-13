@@ -346,7 +346,7 @@ class WesharesController extends AppController {
         $share_ship_set = $this->sharer_can_use_we_ship($weshareInfo['creator']['id']);
         $my_coupon_items = $this->get_can_used_coupons($uid, $creatorId);
         $weshare_ship_settings = $this->getWeshareShipSettings($weshareId);
-        $comment_data = $this->WeshareBuy->load_comment_by_share_id($weshareId);
+        //$comment_data = $this->WeshareBuy->load_comment_by_share_id($weshareId);
         $recommend_data = $this->WeshareBuy->load_share_recommend_data($weshareId);
         $is_manage_user = $this->ShareAuthority->user_can_view_share_order_list($uid, $weshareId);
         $can_edit_share = $this->ShareAuthority->user_can_edit_share_info($uid, $weshareId);
@@ -360,12 +360,22 @@ class WesharesController extends AppController {
             'consignee' => $consignee,
             'user_share_summery' => $user_share_summery,
             'my_coupons' => $my_coupon_items[0],
-            'comment_data' => $comment_data,
             'sub_status' => $sub_status,
             'is_manage' => $is_manage_user,
             'can_edit_share' => $can_edit_share,
             'share_order_count' => $share_order_count
         ));
+        return;
+    }
+
+    /**
+     * @param $weshareId
+     * 异步获取分享的评论数据
+     */
+    public function get_share_comment_data($weshareId){
+        $this->autoRender=false;
+        $comment_data = $this->WeshareBuy->load_comment_by_share_id($weshareId);
+        echo json_encode(array('comment_data' => $comment_data));
         return;
     }
 

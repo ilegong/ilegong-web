@@ -231,6 +231,7 @@
     vm.checkUserHasStartGroupShare = checkUserHasStartGroupShare;
     vm.chatToUser = chatToUser;
     vm.calProxyRebateFee = calProxyRebateFee;
+    vm.loadOrderCommentDara = loadOrderCommentDara;
     vm.childShareDetail = null;
     vm.currentUserOrderCount = 0;
     vm.shareOrderCount = 0;
@@ -256,6 +257,17 @@
       var date = getDate(dateStr);
       var formatedDate = $filter('date')(date, 'MM-dd HH:mm');
       return formatedDate;
+    }
+
+    function loadOrderCommentDara(share_id){
+      $http({method: 'GET', url: '/weshares/get_share_comment_data/' + share_id + '.json', cache: $templateCache}).
+        success(function (data, status) {
+          vm.commentData = data['comment_data'];
+          vm.orderComments = vm.commentData['order_comments'];
+        }).
+        error(function (data, status) {
+          $log.log(data);
+        });
     }
 
     function loadSharerAllComments(sharer_id) {
@@ -387,8 +399,6 @@
               statusText: '收起'
             };
           });
-          vm.commentData = data['comment_data'];
-          vm.orderComments = vm.commentData['order_comments'];
           if (vm.weshare.addresses && vm.weshare.addresses.length == 1) {
             vm.weshare.selectedAddressId = vm.weshare.addresses[0].id;
           } else if (vm.weshare.addresses && vm.weshare.addresses.length > 1) {
@@ -431,6 +441,7 @@
           vm.checkShareInfoHeight();
           //load all comments
           vm.loadOrderDetail(weshareId);
+          vm.loadOrderCommentDara(weshareId);
         }).
         error(function (data, status) {
           $log.log(data);

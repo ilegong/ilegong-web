@@ -269,7 +269,9 @@ class WeshareBuyComponent extends Component {
                     'status' => COMMENT_SHOW_STATUS,
                     'parent_id' => 0,
                     'not' => array('order_id' => null)
-                )
+                ),
+                'limit' => 500,
+                'order' => array('id' => 'desc')
             ));
             $comment_user_ids = Hash::extract($share_all_comments, '{n}.Comment.user_id');
             $share_all_comments = Hash::extract($share_all_comments, '{n}.Comment');
