@@ -1035,6 +1035,10 @@
           // With the data succesfully returned, call our callback
           if (data['success']) {
             alert('发送成功');
+          }else{
+            if(data['reason'] == 'user_bad'){
+              alert('发送失败，你已经被封号，请联系管理员..');
+            }
           }
         }).error(function () {
           alert("发送失败,请联系朋友说客服。。");

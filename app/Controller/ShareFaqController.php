@@ -133,12 +133,4 @@ class ShareFaqController extends AppController {
         return $share_info;
     }
 
-    function replace_urls($string){
-        $host = "([a-z\d][-a-z\d]*[a-z\d]\.)+[a-z][-a-z\d]*[a-z]";
-        $port = "(:\d{1,})?";
-        $path = "(\/[^?<>\#\"\s]+)?";
-        $query = "(\?[^<>\#\"\s]+)?";
-        return preg_replace("#((ht|f)tps?:\/\/{$host}{$port}{$path}{$query})#i", "", $string);
-    }
-
 }

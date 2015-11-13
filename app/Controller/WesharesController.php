@@ -1047,6 +1047,10 @@ class WesharesController extends AppController {
             echo json_encode(array('success' => false, 'reason' => 'not_login'));
             return;
         }
+        if(is_blacklist_user($uid)){
+            echo json_encode(array('success' => false, 'reason' => 'user_bad'));
+            return;
+        }
         $share_info = $this->get_weshare_detail($weshare_id);
         if ($share_info['creator']['id'] != $uid) {
             echo json_encode(array('success' => false, 'reason' => 'not_creator'));

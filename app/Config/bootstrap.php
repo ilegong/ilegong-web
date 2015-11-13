@@ -2260,6 +2260,19 @@ function sort_opt_log_data_by_id($a, $b) {
     return ($a['OptLog']['id'] < $b['OptLog']['id']) ? 1 : -1;
 }
 
+function replace_urls($string){
+    $host = "([a-z\d][-a-z\d]*[a-z\d]\.)+[a-z][-a-z\d]*[a-z]";
+    $port = "(:\d{1,})?";
+    $path = "(\/[^?<>\#\"\s]+)?";
+    $query = "(\?[^<>\#\"\s]+)?";
+    return preg_replace("#((ht|f)tps?:\/\/{$host}{$port}{$path}{$query})#i", "", $string);
+}
+
+function is_blacklist_user($uid){
+    $blacklist = array(881026);
+    return in_array($uid, $blacklist);
+}
+
 /**
  * auto load spl lib
  */
