@@ -76,7 +76,7 @@ class ShareFaqController extends AppController {
         $this->autoRender = false;
         //todo check login
         $sender = $this->currentUser['id'];
-        if($sender==881026){
+        if(is_blacklist_user($sender)){
             echo json_encode(array('success' => false, 'reason' => 'user_bad'));
             return;
         }
