@@ -16,3 +16,5 @@ uglifyjs ./webroot/static/user/layer.m.js ./webroot/static/user/touch-0.2.14.min
 
 uglifyjs ./webroot/static/weshares/js/user-share-info.js -m  -o ./webroot/static/weshares/js/user-share-info.min.js
 
+uglifyjs ./webroot/static/share_faq/custom/word-limit.js ./webroot/static/share_faq/custom/faq.js -m -o ./webroot/static/share_faq/custom/faq.min.js
+

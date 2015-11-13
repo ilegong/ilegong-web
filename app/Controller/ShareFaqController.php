@@ -91,6 +91,7 @@ class ShareFaqController extends AppController {
             'msg' => $msg
         );
         $faq_data = $this->ShareFaq->save($faq_data);
+        $faq_data['success'] = true;
         $this->ShareFaqUtil->send_notify_template_msg($sender, $receiver, $msg, $shareId);
         echo json_encode($faq_data);
         return;
