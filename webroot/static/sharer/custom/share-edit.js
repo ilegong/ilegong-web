@@ -80,16 +80,46 @@ $(document).ready(function () {
   var $shareProductInfoPanel = $('#share-product-info');
   initSelectCheckBoxVal();
 
+  function getProductData() {
+    var productData = [];
+    $('div.product-item', $shareProductInfoPanel).each(function (index, item) {
+      var $item = $(item);
+      var $productId = $('input[name="product-id"]', $item);
+      var $productName = $('input[name="product-name"]', $item);
+      var $productPrice = $('input[name="product-price"]', $item);
+      var $productStore = $('input[name="product-store"]', $item);
+      var $productTag = $('input[name="product-tag"]', $item);
+      var $productTbd = $('input[name="product-tdb"]', $item);
+      var $productLimit = $('input[name="product-limit"]', $item);
+      var $productDeleted = $('input[name="product-deleted"]', $item);
+      var data = {
+        "id": $productId.val(),
+        "name": $productName.val(),
+        "price": $productPrice.val(),
+        "store": $productStore.val(),
+        "limit": $productLimit.val(),
+        "tbd": $productTbd.val(),
+        "tag_id": $productTag.val(),
+        "deleted": $productDeleted.val()
+      };
+      productData.push(data);
+    });
+  }
+
   function initSelectCheckBoxVal() {
     $('select', $shareProductInfoPanel).each(function (index, item) {
       var $item = $(item);
       var initVal = $item.data('init-val');
       $item.val(initVal);
     });
-    $('input[type="checkbox"]', $shareProductInfoPanel).each(function(index, item){
+    $('input[type="checkbox"]', $shareProductInfoPanel).each(function (index, item) {
       var $item = $(item);
       var initVal = $item.data('init-val');
-      $item.val(initVal);
+      if (initVal > 0) {
+        $item.attr("checked", true);
+      } else {
+        $item.attr("checked", false);
+      }
     });
   }
 });

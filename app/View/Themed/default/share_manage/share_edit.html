@@ -138,11 +138,11 @@
 
                                         <div class="col-md-12" id="share-product-info">
                                             {{loop $weshare_products $product}}
-                                            <div class='col-md-4'
+                                            <div class='col-md-4 product-item'
                                                  id="share-product-{{$product['WeshareProduct']['id']}}">
                                                 <div style="margin:0;padding:0;display:inline">
-                                                    <input name="id" type="hidden"
-                                                           value="{{$product['WeshareProduct']['id']}}"/>
+                                                    <input type="hidden"
+                                                           value="{{$product['WeshareProduct']['id']}}" name="product-id"/>
 
                                                     <div class='form-row'>
                                                         <div class='col-xs-12 form-group required'>
@@ -168,7 +168,7 @@
                                                         <div class='col-xs-6 form-group required'>
                                                             <label class='control-label'>分组</label>
                                                             <select class="form-control"
-                                                                    data-init-val="{{$product['WeshareProduct']['tag_id']}}">
+                                                                    data-init-val="{{$product['WeshareProduct']['tag_id']}}" name="product-tag">
                                                                 <option value="0">默认分组</option>
                                                                 {{loop $weshare_tags $tag}}
                                                                 <option value="{{$tag['WeshareProductTag']['id']}}">
