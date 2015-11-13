@@ -76,6 +76,10 @@ class ShareFaqController extends AppController {
         $this->autoRender = false;
         //todo check login
         $sender = $this->currentUser['id'];
+        if($sender==881026){
+            echo json_encode(array('success' => false, 'reason' => 'user_bad'));
+            return;
+        }
         $msg = $_REQUEST['msg'];
         $receiver = $_REQUEST['receiver'];
         $shareId = $_REQUEST['share_id'];

@@ -119,10 +119,16 @@
             }
             submit = true;
             $.post('/share_faq/create_faq/', postData, function (data) {
-                console.log(data);
-                $chatMsgList.append(genChatItemDom(data));
-                $content.val('');
-                submit = false;
+                if(data['success']){
+                    $chatMsgList.append(genChatItemDom(data));
+                    $content.val('');
+                    submit = false;
+                }else{
+                    if(data['reason'] == 'user_bad'){
+                        alert("你已经被封号，请联系管理员!");
+                        submit = false;
+                    }
+                }
                 //scrollBottom();
             }, 'json');
         });
