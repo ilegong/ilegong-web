@@ -12,7 +12,7 @@ class SpreadConf extends AppModel {
         ),
         //片片妈
         878825 => array(
-            'wx_pic' => 'http://51daifan-images.stor.sinaapp.com/files/201511/133af48d18c_1114.jpg',
+            'wx_pic' => 'http://51daifan-images.stor.sinaapp.com/files/201511/5aa958fe129_1114.jpg',
             'wx_introduce_url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=400808364&idx=1&sn=3793771175d55f44090b64c6a9840551#rd'
         )
     );
