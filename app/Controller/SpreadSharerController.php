@@ -2,7 +2,9 @@
 
 class SpreadSharerController extends AppController {
 
-    var $uses = array('UserSubReason', 'WeshareBuy', 'User', 'SpreadConf');
+    var $uses = array('UserSubReason', 'User', 'SpreadConf');
+
+    var $components = array('WeshareBuy');
 
     public function scan_qrcode($sharer_id) {
         $uid = $this->currentUser['id'];
