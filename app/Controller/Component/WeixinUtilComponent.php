@@ -6,7 +6,9 @@
  */
 class WeixinUtilComponent extends Component {
 
-    public $components = array('ShareUti', 'WeshareBuy', 'SpreadConf');
+    public $uses = array('SpreadConf');
+
+    public $components = array('ShareUti', 'WeshareBuy');
 
     public function save_user_sub_reason($type, $url, $uid, $title, $data_id) {
         $UserSubReasonM = ClassRegistry::init('UserSubReason');
