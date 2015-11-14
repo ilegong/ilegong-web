@@ -59,7 +59,6 @@
       if (weshareId) {
         //update
         $http.get('/weshares/get_share_info/' + weshareId).success(function (data) {
-          $log.log(data);
           vm.weshare = data;
           vm.weshare.tags = vm.weshare['tags_list'];
           setDefaultData();
