@@ -43,7 +43,6 @@
     }
 
     activate();
-    $scope.$watchCollection('vm.weshare', vm.saveCacheData);
     function activate() {
       vm.showShippmentInfo = false;
       var weshareId = angular.element(document.getElementById('weshareEditView')).attr('data-id');
@@ -57,26 +56,6 @@
         vm.showCreateShareTipInfo = true;
         vm.showLayer = true;
       }
-      vm.self_ziti_data = {status: "1", ship_fee: 0, tag: 'self_ziti'};
-      vm.kuai_di_data = {status: "-1", ship_fee: '', tag: 'kuai_di'};
-      vm.pys_ziti_data = {status: "-1", ship_fee: 0, tag: 'pys_ziti'};
-      vm.pin_tuan_data = {status: "-1", ship_fee: 500, tag: 'pin_tuan'};
-      vm.proxy_rebate_percent = {status: 0, percent: 0};
-      vm.kuaidi_show_ship_fee = '';
-      //add
-      vm.weshare = {
-        title: '',
-        description: '',
-        images: [],
-        products: [
-          {name: '', store: '', tbd: 0, tag_id: '0', deleted: 0}
-        ],
-        send_info: '',
-        addresses: [
-          {address: '', deleted: 0}
-        ],
-        tags: []
-      };
       if (weshareId) {
         //update
         $http.get('/weshares/get_share_info/' + weshareId).success(function (data) {
@@ -84,21 +63,46 @@
           vm.weshare = data;
           vm.weshare.tags = vm.weshare['tags_list'];
           setDefaultData();
-          vm.self_ziti_data = data['ship_type']['self_ziti'] || vm.self_ziti_data;
-          vm.kuai_di_data = data['ship_type']['kuai_di'] || vm.kuai_di_data;
-          vm.pys_ziti_data = data['ship_type']['pys_ziti'] || vm.pys_ziti_data;
-          vm.pin_tuan_data = data['ship_type']['pin_tuan'] || vm.pin_tuan_data;
+          vm.self_ziti_data = data['ship_type']['self_ziti'];
+          vm.kuai_di_data = data['ship_type']['kuai_di'];
+          vm.pys_ziti_data = data['ship_type']['pys_ziti'];
+          vm.pin_tuan_data = data['ship_type']['pin_tuan'];
           vm.kuaidi_show_ship_fee = vm.kuai_di_data.ship_fee / 100;
           vm.proxy_rebate_percent = data['proxy_rebate_percent'] || vm.proxy_rebate_percent;
         }).error(function (data) {
         });
       } else {
+        //保存的时候 记住数据
+        $scope.$watchCollection('vm.weshare', vm.saveCacheData);
+        vm.self_ziti_data = {status: 1, ship_fee: 0, tag: 'self_ziti'};
+        vm.kuai_di_data = {status: -1, ship_fee: '', tag: 'kuai_di'};
+        vm.pys_ziti_data = {status: -1, ship_fee: 0, tag: 'pys_ziti'};
+        vm.pin_tuan_data = {status: -1, ship_fee: 500, tag: 'pin_tuan'};
+        vm.proxy_rebate_percent = {status: 0, percent: 0};
+        vm.kuaidi_show_ship_fee = '';
+        //add
+        vm.weshare = {
+          title: '',
+          description: '',
+          images: [],
+          products: [
+            {name: '', store: '', tbd: 0, tag_id: '0', deleted: 0}
+          ],
+          send_info: '',
+          addresses: [
+            {address: '', deleted: 0}
+          ],
+          tags: []
+        };
         //reset cache data
         var $cacheData = PYS.storage.load(vm.dataCacheKey);
         if ($cacheData) {
+          if(!$cacheData['id'])
           vm.weshare = $cacheData;
-          setDefaultData();
+        }else{
+          PYS.storage.save(vm.dataCacheKey, {}, 1);
         }
+        setDefaultData();
         //load tags
         $http.get('/weshares/get_tags.json').success(function (data) {
           vm.weshare.tags = data.tags;
