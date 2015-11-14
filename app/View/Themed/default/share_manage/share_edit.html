@@ -133,10 +133,10 @@
                             </div>
                             <div class="row setup-content" id="step-2">
                                 <div class="col-xs-12">
-                                    <div class="col-md-12">
+                                    <div class="col-md-12" id="share-product-info">
                                         <h3> 分享产品</h3>
 
-                                        <div class="col-md-12" id="share-product-info">
+                                        <div class="col-md-12">
                                             {{loop $weshare_products $product}}
                                             <div class='col-md-4 product-item'
                                                  id="share-product-{{$product['WeshareProduct']['id']}}">
@@ -182,21 +182,21 @@
                                                         <div class='col-xs-4 form-group required'>
                                                             <label class="checkbox-inline">
                                                                 <input type="checkbox" value="1" name="product-tbd"
-                                                                       data-init-val="{{$tag['WeshareProductTag']['tbd']}}">
+                                                                       data-init-val="{{$product['WeshareProduct']['tbd']}}">
                                                                 价格待定
                                                             </label>
                                                         </div>
                                                         <div class='col-xs-4 form-group required'>
                                                             <label class="checkbox-inline">
                                                                 <input type="checkbox" value="1" name="product-limit"
-                                                                       data-init-val="{{$tag['WeshareProductTag']['limit']}}">
+                                                                       data-init-val="{{$product['WeshareProduct']['limit']}}">
                                                                 限购一份
                                                             </label>
                                                         </div>
                                                         <div class='col-xs-4 form-group required'>
                                                             <label class="checkbox-inline">
                                                                 <input type="checkbox" value="1" name="product-deleted"
-                                                                       data-init-val="{{$tag['WeshareProductTag']['deleted']}}">
+                                                                       data-init-val="{{$product['WeshareProduct']['deleted']}}">
                                                                 是否下架
                                                             </label>
                                                         </div>
@@ -205,7 +205,7 @@
                                             </div>
                                             {{/loop}}
                                         </div>
-                                        <button class="btn btn-primary btn-lg pull-right" type="button">保存</button>
+                                        <button class="btn btn-primary btn-lg pull-right" type="button" id="save-share-product">保存</button>
                                     </div>
                                 </div>
                             </div>

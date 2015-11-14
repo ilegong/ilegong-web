@@ -59,6 +59,7 @@ $(document).ready(function () {
       "send_info": shareSendInfo,
       "description": shareDescription
     };
+    //todo valid data
     $.post('/share_manage/update_share.json', {"data": JSON.stringify(data)}, function (data) {
       if (data['success']) {
         alert('保存成功');
@@ -78,8 +79,17 @@ $(document).ready(function () {
   //end update share info
   //update share products
   var $shareProductInfoPanel = $('#share-product-info');
+  var $saveShareProductBtn = $('#save-share-product', $shareProductInfoPanel);
   initSelectCheckBoxVal();
-
+  $saveShareProductBtn.on('click', function (e) {
+    e.preventDefault();
+    var productData = getProductData();
+    $.post('/share_manage/update_share_product.json', {"data": JSON.stringify(productData)}, function (data) {
+      if (data['success']) {
+        alert('更新产品成功');
+      }
+    }, 'json');
+  });
   function getProductData() {
     var productData = [];
     $('div.product-item', $shareProductInfoPanel).each(function (index, item) {
@@ -88,7 +98,7 @@ $(document).ready(function () {
       var $productName = $('input[name="product-name"]', $item);
       var $productPrice = $('input[name="product-price"]', $item);
       var $productStore = $('input[name="product-store"]', $item);
-      var $productTag = $('input[name="product-tag"]', $item);
+      var $productTag = $('select[name="product-tag"]', $item);
       var $productTbd = $('input[name="product-tdb"]', $item);
       var $productLimit = $('input[name="product-limit"]', $item);
       var $productDeleted = $('input[name="product-deleted"]', $item);
@@ -97,13 +107,15 @@ $(document).ready(function () {
         "name": $productName.val(),
         "price": $productPrice.val(),
         "store": $productStore.val(),
-        "limit": $productLimit.val(),
-        "tbd": $productTbd.val(),
         "tag_id": $productTag.val(),
-        "deleted": $productDeleted.val()
+        "weshare_id": $shareIdEl.val()
       };
+      data['tbd'] = $productTbd.is(':checked') ? 1 : 0;
+      data['limit'] = $productLimit.is(':checked') ? 1 : 0;
+      data['deleted'] = $productDeleted.is(':checked') ? 1 : 0;
       productData.push(data);
     });
+    return productData;
   }
 
   function initSelectCheckBoxVal() {

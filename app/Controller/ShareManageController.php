@@ -34,6 +34,15 @@ class ShareManageController extends AppController {
         return;
     }
 
+    public function update_share_product() {
+        $this->autoRender = false;
+        $json_data = $_REQUEST['data'];
+        $share_product_data = json_decode($json_data, true);
+        $this->WeshareProduct->saveAll($share_product_data);
+        echo json_encode(array('success' => true));
+        return;
+    }
+
     public function delete_share($shareId) {
         $this->Weshare->delete($shareId);
         $this->redirect(array('action' => 'shares'));
