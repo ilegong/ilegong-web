@@ -15,10 +15,8 @@ class SpreadSharerController extends AppController {
         $this->WeshareBuy->subscribe_sharer($sharer_id, $uid, SUB_SHARER_REASON_TYPE_FROM_SPREAD);
         if (user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED) {
             //没有关注朋友说
-            $this->log('spread not sub wx ' . $uid);
             $this->save_sub_reason($sharer_id, $uid);
-            $sharer_conf = $this->SpreadConf->get_sharer_conf[$sharer_id];
-            $this->log('sharer conf ' . json_encode($sharer_conf));
+            $sharer_conf = $this->SpreadConf->get_sharer_conf($sharer_id);
             $this->redirect($sharer_conf['wx_introduce_url']);
             return;
         }
