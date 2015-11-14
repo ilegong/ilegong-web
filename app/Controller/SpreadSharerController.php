@@ -6,7 +6,7 @@ class SpreadSharerController extends AppController {
 
     public function scan_qrcode($sharer_id) {
         $uid = $this->currentUser['id'];
-        $this->WeshareBuy->subscribe_sharer($sharer_id, $uid, 'SPREAD');
+        $this->WeshareBuy->subscribe_sharer($sharer_id, $uid, SUB_SHARER_REASON_TYPE_FROM_SPREAD);
         if (user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED) {
             //没有关注朋友说
             $this->save_sub_reason($sharer_id, $uid);
@@ -28,7 +28,7 @@ class SpreadSharerController extends AppController {
             'fields' => array('id', 'nickname')
         ));
         $title = '我是' . $sharer_info['User']['nickname'] . '，感谢您关注我！';
-        $this->UserSubReason->save(array('type' => 'SPREAD', 'url' => WX_HOST . '/weshares/user_share_info/' . $sharer_id, 'user_id' => $uid, 'title' => $title, 'data_id' => $sharer_id, 'created' => date('Y-m-d H:i:s')));
+        $this->UserSubReason->save(array('type' => SUB_SHARER_REASON_TYPE_FROM_SPREAD, 'url' => WX_HOST . '/weshares/user_share_info/' . $sharer_id, 'user_id' => $uid, 'title' => $title, 'data_id' => $sharer_id, 'created' => date('Y-m-d H:i:s')));
     }
 
 }

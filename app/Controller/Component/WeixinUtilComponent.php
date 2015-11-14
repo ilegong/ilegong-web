@@ -6,7 +6,7 @@
  */
 class WeixinUtilComponent extends Component {
 
-    public $components = array('ShareUti', 'WeshareBuy');
+    public $components = array('ShareUti', 'WeshareBuy', 'SpreadConf');
 
     public function save_user_sub_reason($type, $url, $uid, $title, $data_id) {
         $UserSubReasonM = ClassRegistry::init('UserSubReason');
@@ -99,6 +99,17 @@ class WeixinUtilComponent extends Component {
                 }
                 $UserSubReasonM = ClassRegistry::init('UserSubReason');
                 $UserSubReasonM->updateAll(array('used' => 1), array('id' => $reason['UserSubReason']['id']));
+            } elseif ($reason['UserSubReason']['type'] == SUB_SHARER_REASON_TYPE_FROM_SPREAD) {
+                $sharer_id = $reason['UserSubReason']['data_id'];
+                $sharer_conf = $this->SpreadConf->get_sharer_conf($sharer_id);
+                $content = array(
+                    array(
+                        'title' => $reason['UserSubReason']['title'],
+                        'description' => '点击进入团长个人中心',
+                        'picUrl' => $sharer_conf['wx_pic'],
+                        'url' => $reason['UserSubReason']['url']
+                    )
+                );
             }
             if ($uid) {
                 $this->update_user_sub_status($uid);
