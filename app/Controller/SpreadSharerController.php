@@ -6,7 +6,7 @@ class SpreadSharerController extends AppController {
 
     var $components = array('WeshareBuy');
 
-    public function beforeFilter(){
+    public function beforeFilter() {
         if (empty($this->currentUser) && $this->is_weixin() && !in_array($this->request->params['controller'], array('users', 'check'))) {
             $this->redirect($this->login_link());
         }
@@ -14,6 +14,10 @@ class SpreadSharerController extends AppController {
 
     public function scan_qrcode($sharer_id) {
         $uid = $this->currentUser['id'];
+        if (empty($uid)) {
+            $this->redirect($this->login_link());
+            return;
+        }
         $this->WeshareBuy->subscribe_sharer($sharer_id, $uid, SUB_SHARER_REASON_TYPE_FROM_SPREAD);
         if (user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED) {
             //没有关注朋友说
