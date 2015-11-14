@@ -103,7 +103,7 @@ class WeixinUtilComponent extends Component {
                     $content = array(
                         array(
                             'title' => $reason['UserSubReason']['title'],
-                            'description' => '点击进入团长个人中心',
+                            'description' => '点击进入我的个人中心',
                             'picUrl' => $sharer_conf['wx_pic'],
                             'url' => $reason['UserSubReason']['url']
                         )
