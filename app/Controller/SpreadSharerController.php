@@ -33,7 +33,8 @@ class SpreadSharerController extends AppController {
             'recursive' => 1,
             'fields' => array('id', 'nickname')
         ));
-        $title = '我是' . $sharer_info['User']['nickname'] . '，感谢您关注我！';
+        //感恩关注片片妈，真挚、信任、分享。
+        $title = '感恩关注' . $sharer_info['User']['nickname'] . '，真挚、信任、分享。';
         $this->UserSubReason->save(array('type' => SUB_SHARER_REASON_TYPE_FROM_SPREAD, 'url' => WX_HOST . '/weshares/user_share_info/' . $sharer_id, 'user_id' => $uid, 'title' => $title, 'data_id' => $sharer_id, 'created' => date('Y-m-d H:i:s')));
     }
 
