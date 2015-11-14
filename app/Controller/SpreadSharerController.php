@@ -6,6 +6,12 @@ class SpreadSharerController extends AppController {
 
     var $components = array('WeshareBuy');
 
+    public function beforeFilter(){
+        if (empty($this->currentUser) && $this->is_weixin() && !in_array($this->request->params['controller'], array('users', 'check'))) {
+            $this->redirect($this->login_link());
+        }
+    }
+
     public function scan_qrcode($sharer_id) {
         $uid = $this->currentUser['id'];
         $this->WeshareBuy->subscribe_sharer($sharer_id, $uid, SUB_SHARER_REASON_TYPE_FROM_SPREAD);
