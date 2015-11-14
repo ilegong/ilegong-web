@@ -77,11 +77,6 @@
         ],
         tags: []
       };
-      var $cacheData = PYS.storage.load(vm.dataCacheKey);
-      if ($cacheData) {
-        vm.weshare = $cacheData;
-        setDefaultData();
-      }
       if (weshareId) {
         //update
         $http.get('/weshares/get_share_info/' + weshareId).success(function (data) {
@@ -98,6 +93,12 @@
         }).error(function (data) {
         });
       } else {
+        //reset cache data
+        var $cacheData = PYS.storage.load(vm.dataCacheKey);
+        if ($cacheData) {
+          vm.weshare = $cacheData;
+          setDefaultData();
+        }
         //load tags
         $http.get('/weshares/get_tags.json').success(function (data) {
           vm.weshare.tags = data.tags;
