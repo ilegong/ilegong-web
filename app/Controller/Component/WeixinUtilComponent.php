@@ -6,8 +6,6 @@
  */
 class WeixinUtilComponent extends Component {
 
-    public $uses = array('SpreadConf');
-
     public $components = array('ShareUti', 'WeshareBuy');
 
     public function save_user_sub_reason($type, $url, $uid, $title, $data_id) {
@@ -100,7 +98,8 @@ class WeixinUtilComponent extends Component {
                     ));
                 }elseif ($reason['UserSubReason']['type'] == SUB_SHARER_REASON_TYPE_FROM_SPREAD) {
                     $sharer_id = $reason['UserSubReason']['data_id'];
-                    $sharer_conf = $this->SpreadConf->get_sharer_conf($sharer_id);
+                    $SpreadConfM = ClassRegistry::init('SpreadConf');
+                    $sharer_conf = $SpreadConfM->get_sharer_conf($sharer_id);
                     $content = array(
                         array(
                             'title' => $reason['UserSubReason']['title'],
