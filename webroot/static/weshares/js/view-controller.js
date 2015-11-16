@@ -626,8 +626,9 @@
     }
 
     function showReplies(comment_id) {
-      var replies = vm.commentData['comment_replies'][comment_id];
-      if (!replies || replies.length == 0) {
+      var allReplies = vm.commentData['comment_replies'];
+      var replies = allReplies[comment_id];
+      if (!allReplies || !replies || replies.length == 0) {
         return false;
       }
       return true;
