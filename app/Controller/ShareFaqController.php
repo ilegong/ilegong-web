@@ -6,7 +6,7 @@ class ShareFaqController extends AppController {
 
     var $uses = array('ShareFaq', 'Weshare', 'User');
 
-    var $components = array('Weixin', 'WeshareBuy', 'ShareUtil', 'ShareFaqUtil');
+    var $components = array('Weixin', 'WeshareBuy', 'ShareUtil', 'ShareFaqUtil', 'ShareAuthority');
 
 
     public function beforeFilter() {
@@ -32,7 +32,6 @@ class ShareFaqController extends AppController {
      */
     public function faq($shareId, $userId) {
         $share_info = $this->get_share_info($shareId);
-        //todo check is login
         $current_user_id = $this->currentUser['id'];
         //every one can chat
 //        $share_creator = $share_info['Weshare']['creator'];
@@ -40,6 +39,15 @@ class ShareFaqController extends AppController {
 //            $this->redirect('/weshares/view/' . $shareId);
 //            return;
 //        }
+        //TODO check logic
+        $share_manage_users = $this->ShareAuthority->get_share_manage_auth_users($shareId);
+        if (!empty($share_manage_users)) {
+            //cuurent user is manage
+            if (in_array($current_user_id, $share_manage_users)) {
+                //set receiver is share creator
+                $current_user_id = $share_info['Weshare']['creator'];
+            }
+        }
         $user_info = $this->User->find('all', array(
             'conditions' => array(
                 'id' => array($userId, $current_user_id)
@@ -94,8 +102,22 @@ class ShareFaqController extends AppController {
         $faq_data = $this->ShareFaq->save($faq_data);
         $faq_data['success'] = true;
         $this->ShareFaqUtil->send_notify_template_msg($sender, $receiver, $msg, $shareId);
+        //check receive msg user is share creator
+        if ($this->check_msg_is_send_to_share_creator($shareId, $receiver)) {
+            $share_managers = $this->ShareAuthority->get_share_manage_auth_users($shareId);
+            if (!empty($share_managers)) {
+                foreach ($share_managers as $manager) {
+                    $this->ShareFaqUtil->send_notify_template_msg($sender, $manager, $msg, $shareId);
+                }
+            }
+        }
         echo json_encode($faq_data);
         return;
+    }
+
+    private function check_msg_is_send_to_share_creator($weshareId, $receiver) {
+        $weshareInfo = $this->WeshareBuy->get_weshare_info($weshareId);
+        return $weshareInfo['creator'] == $receiver;
     }
 
     public function update_faq_read($shareId, $userId) {
