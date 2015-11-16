@@ -418,6 +418,7 @@
           vm.selectShipType = getSelectTypeDefaultVal();
           vm.userSubStatus = data['sub_status'];
           vm.shareOrderCount = data['share_order_count'];
+          vm.favourableConfig = data['favourable_config'];
           vm.submitRecommendData = {};
           vm.submitRecommendData.recommend_content = vm.weshare.creator.nickname + '我认识，很靠谱！';
           vm.submitRecommendData.recommend_user = vm.currentUser.id;
@@ -591,6 +592,12 @@
         totalPrice += product.price * product.num;
       });
       if (totalPrice != 0) {
+        if(vm.favourableConfig){
+          //折扣
+          if(vm.favourableConfig['discount']){
+            totalPrice = totalPrice * vm.favourableConfig['discount'];
+          }
+        }
         calProxyRebateFee(totalPrice/100);
         if (vm.userCouponReduce) {
           totalPrice -= vm.userCouponReduce;

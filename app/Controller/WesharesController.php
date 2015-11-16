@@ -3,7 +3,7 @@
 class WesharesController extends AppController {
 
     var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem',
-        'SharerShipOption', 'WeshareShipSetting', 'OfflineStore', 'UserRelation', 'Comment', 'RebateTrackLog', 'ProxyRebatePercent', 'ShareUserBind', 'UserSubReason');
+        'SharerShipOption', 'WeshareShipSetting', 'OfflineStore', 'UserRelation', 'Comment', 'RebateTrackLog', 'ProxyRebatePercent', 'ShareUserBind', 'UserSubReason', 'ShareFavourableConfig');
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy');
 
@@ -352,6 +352,7 @@ class WesharesController extends AppController {
         $can_manage_share = $this->ShareAuthority->user_can_manage_share($uid, $weshareId);
         $can_edit_share = $this->ShareAuthority->user_can_edit_share_info($uid, $weshareId);
         $share_order_count = $this->WeshareBuy->get_share_all_buy_count($weshareId);
+        $favourable_config = $this->ShareFavourableConfig->get_favourable_config($weshareId);
         echo json_encode(array('support_pys_ziti' => $share_ship_set,
             'weshare' => $weshareInfo,
             'recommendData' => $recommend_data,
@@ -365,7 +366,8 @@ class WesharesController extends AppController {
             'is_manage' => $is_manage_user,
             'can_manage_share' => $can_manage_share,
             'can_edit_share' => $can_edit_share,
-            'share_order_count' => $share_order_count
+            'share_order_count' => $share_order_count,
+            'favourable_config' => $favourable_config
         ));
         return;
     }
@@ -544,6 +546,13 @@ class WesharesController extends AppController {
                 $totalPrice += $num * $price;
             }
             $this->Cart->saveAll($cart);
+            //检查是否有优惠
+            $favourable_config = $this->ShareFavourableConfig->get_favourable_config($weshareId);
+            if (!empty($favourable_config)) {
+                if ($favourable_config['discount']) {
+                    $totalPrice = round($totalPrice * $favourable_config['discount']);
+                }
+            }
             //产品价格的团长佣金
             $rebate_fee = $this->WeshareBuy->cal_proxy_rebate_fee($totalPrice, $uid, $weshareId);
             $totalPrice += $shipFee;
