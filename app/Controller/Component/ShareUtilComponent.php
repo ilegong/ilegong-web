@@ -142,7 +142,7 @@ class ShareUtilComponent extends Component {
                 )
             ));
             //proxy user buy
-            if($rebateTrackLog['RebateTrackLog']['type'] == PROXY_USER_PAID_REBATE_TYPE){
+            if ($rebateTrackLog['RebateTrackLog']['type'] == PROXY_USER_PAID_REBATE_TYPE) {
                 $rebateTrackLogM->updateAll(array('is_paid' => 1, 'updated' => '\'' . date('Y-m-d H:i:s') . '\''), array('id' => $id, 'order_id' => $order_id));
                 return array('rebate_money' => $rebateTrackLog['RebateTrackLog']['rebate_money'], 'order_price' => $order['Order']['total_all_price'], 'recommend' => $rebateTrackLog['RebateTrackLog']['sharer']);
             }
@@ -639,6 +639,10 @@ class ShareUtilComponent extends Component {
             'memo' => $memo,
             'thumbnail' => $thumbnail
         );
+        //黑名单用户不显示
+        if (is_blacklist_user($user_id)) {
+            $optData['deleted'] = DELETED_YES;
+        }
         $this->saveOptLog($optData);
     }
 

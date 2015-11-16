@@ -213,6 +213,18 @@
                                 <div class="col-xs-12">
                                     <div class="col-md-12">
                                         <h3> 物流设置</h3>
+                                        <div class="row">
+                                            {{loop $weshare_ship_settings $ship_setting}}
+                                            <div class="col-md-3">
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" value="">
+
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            {{/loop}}
+                                        </div>
                                         <button class="btn btn-success btn-lg pull-right" type="button">保存
                                         </button>
                                     </div>

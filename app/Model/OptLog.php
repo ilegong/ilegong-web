@@ -16,6 +16,7 @@ class OptLog extends AppModel {
         $fetch_option = array(
             'conditions' => array(
                 'created < ' => $format_date,
+                'deleted' => DELETED_NO
             ),
             'limit' => $limit,
             'order' => array('created DESC')
@@ -36,7 +37,8 @@ class OptLog extends AppModel {
     public function fetch_count_by_time($time, $type = 0) {
         $fetch_option = array(
             'conditions' => array(
-                'created > ' => $time
+                'created > ' => $time,
+                'deleted' => DELETED_NO
             ),
             'order' => array('created DESC')
         );

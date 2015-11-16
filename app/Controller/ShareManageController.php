@@ -86,6 +86,17 @@ class ShareManageController extends AppController {
         $this->set('weshare_products', $weshare_products);
         $share_tags = $this->ShareManage->get_share_product_tags($weshareData['Weshare']['creator']);
         $this->set('weshare_tags', $share_tags);
+        $weshare_ship_settings = $this->ShareManage->get_weshare_ship_settings($share_id);
+        $weshare_addresses = $this->ShareManage->get_weshare_addresses($share_id);
+        //拼团
+        if ($this->sharer_can_use_offline_address($uid)) {
+            $this->set('can_use_offline_address', true);
+        }
+        //好邻居
+        $share_ship_set = $this->ShareUtil->read_share_ship_option_setting($weshareData['Weshare']['creator'], SHARE_SHIP_OPTION_OFFLINE_STORE);
+        $this->set('ship_type', $share_ship_set);
+        $this->set('weshare_ship_settings', $weshare_ship_settings);
+        $this->set('weshare_addresses', $weshare_addresses);
         $this->data = $weshareData;
     }
 

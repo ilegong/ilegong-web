@@ -4,6 +4,36 @@ class ShareManageComponent extends Component {
 
     public $components = array('ShareUti', 'WeshareBuy');
 
+    /**
+     * @param $shareId
+     * @return array
+     * 获取到分享的物流设置
+     */
+    public function get_weshare_ship_settings($shareId) {
+        $weshareShipSettingM = ClassRegistry::init('WeshareShipSetting');
+        $shipSettings = $weshareShipSettingM->find('all', array(
+            'conditions' => array(
+                'weshare_id' => $shareId
+            )
+        ));
+
+        return $shipSettings;
+    }
+
+    /**
+     * @param $shareId
+     * @return mixed
+     * 分享地址
+     */
+    public function get_weshare_addresses($shareId) {
+        $weshareAddressM = ClassRegistry::init('WeshareAddress');
+        $weshareAddresses = $weshareAddressM->find('all', array(
+            'conditions' => array(
+                'weshare_id' => $shareId
+            )
+        ));
+        return $weshareAddresses;
+    }
 
     public function get_weshare_products($shareId) {
         $weshareProductM = ClassRegistry::init('WeshareProduct');
