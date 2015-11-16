@@ -80,7 +80,22 @@
     <h5>分享修改权限</h5>
 
     <div class="col-lg-12 pull-left">
-        <form action="/manage/admin/share_tool/save_share_operate_setting" method="post" class="form-inline">
+        <form action="/manage/admin/share_tool/save_share_edit_operate_setting" method="post" class="form-inline">
+            <div class="form-group">
+                <label>用户ID</label>
+                <input type="text" class="form-control" name="user_id" placeholder="">
+            </div>
+            <div class="form-group">
+                <label>分享ID</label>
+                <input type="text" class="form-control" name="share_id" placeholder="分享ID">
+            </div>
+            <button type="submit" class="btn btn-primary">添加</button>
+        </form>
+    </div>
+    <h5>分享管理权限</h5>
+
+    <div class="col-lg-12 pull-left">
+        <form action="/manage/admin/share_tool/save_share_manage_operate_setting" method="post" class="form-inline">
             <div class="form-group">
                 <label>用户ID</label>
                 <input type="text" class="form-control" name="user_id" placeholder="">
@@ -131,6 +146,10 @@
                 {{/if}}
                 {{if $item_operate_setting['ShareOperateSetting']['data_type'] == SHARE_ORDER_OPERATE_TYPE}}
                 <td style="color: #ff0000">订单查看</td>
+                {{elseif $item_operate_setting['ShareOperateSetting']['data_type'] == SHARE_INFO_OPERATE_TYPE}}
+                <td style="color: #ff0000">分享内容编辑</td>
+                {{elseif $item_operate_setting['ShareOperateSetting']['data_type'] == SHARE_MANAGE_OPERATE_TYPE}}
+                <td style="color: #ff0000">分享管理权限</td>
                 {{else}}
                 <td style="color: #ff0000">分组订单查看</td>
                 {{/if}}
