@@ -41,6 +41,17 @@ class ShareAuthorityComponent extends Component {
      * @param $uid
      * @param $shareId
      * @return bool
+     * 用户是否有管理权限
+     */
+    public function user_can_manage_share($uid, $shareId) {
+        $share_manage_users = $this->get_share_manage_auth_users($shareId);
+        return in_array($uid, $share_manage_users);
+    }
+
+    /**
+     * @param $uid
+     * @param $shareId
+     * @return bool
      * 检查用户能否编辑分享信息
      */
     public function user_can_edit_share_info($uid, $shareId) {

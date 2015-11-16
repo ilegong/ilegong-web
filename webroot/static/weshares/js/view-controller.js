@@ -406,6 +406,7 @@
             vm.weshare.selectedAddressId = -1;
           }
           vm.isManage = data['is_manage'];
+          vm.canManageShare = data['can_manage_share'];
           vm.canEditShare = data['can_edit_share'];
           vm.recommendData = data['recommendData'];
           vm.currentUser = data['current_user'] || {};
@@ -435,7 +436,7 @@
             vm.buyerAddress = vm.consignee.address;
             vm.buyerPatchAddress = vm.consignee.remark_address;
           }
-          if (vm.isCreator()) {
+          if (vm.isCreator()||vm.canManageShare) {
             vm.faqTipText = '反馈消息';
           }
           vm.checkShareInfoHeight();
@@ -526,8 +527,8 @@
     }
 
     function redirectFaq() {
-      if (vm.isCreator()) {
-        window.location.href = '/share_faq/faq_list/' + vm.weshare.id + '/' + vm.currentUser.id;
+      if (vm.isCreator()||vm.canManageShare) {
+        window.location.href = '/share_faq/faq_list/' + vm.weshare.id + '/' + vm.weshare.creator.id;
       } else {
         window.location.href = '/share_faq/faq/' + vm.weshare.id + '/' + vm.weshare.creator.id;
       }
