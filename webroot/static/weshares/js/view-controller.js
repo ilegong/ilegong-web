@@ -231,7 +231,7 @@
     vm.checkUserHasStartGroupShare = checkUserHasStartGroupShare;
     vm.chatToUser = chatToUser;
     vm.calProxyRebateFee = calProxyRebateFee;
-    vm.loadOrderCommentDara = loadOrderCommentDara;
+    vm.loadOrderCommentData = loadOrderCommentData;
     vm.childShareDetail = null;
     vm.currentUserOrderCount = 0;
     vm.shareOrderCount = 0;
@@ -259,7 +259,7 @@
       return formatedDate;
     }
 
-    function loadOrderCommentDara(share_id){
+    function loadOrderCommentData(share_id){
       $http({method: 'GET', url: '/weshares/get_share_comment_data/' + share_id + '.json', cache: $templateCache}).
         success(function (data, status) {
           vm.commentData = data['comment_data'];
@@ -441,7 +441,7 @@
           vm.checkShareInfoHeight();
           //load all comments
           vm.loadOrderDetail(weshareId);
-          vm.loadOrderCommentDara(weshareId);
+          vm.loadOrderCommentData(weshareId);
         }).
         error(function (data, status) {
           $log.log(data);
@@ -941,13 +941,7 @@
     }
 
     function reloadCommentData() {
-      $http({method: 'GET', url: '/weshares/loadComment/' + vm.weshare.id + '.json'}).
-        success(function (data) {
-          vm.commentData = data;
-        }).
-        error(function (data) {
-          $log.log(data);
-        });
+      vm.loadOrderCommentData(vm.weshare.id);
     }
 
     function notifyUserToComment(order) {
