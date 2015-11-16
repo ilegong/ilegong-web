@@ -9,7 +9,11 @@ class ShareFavourableConfig extends AppModel {
      *
      * ('discount' => 0)
      */
-    var $favourableConfig = array();
+    var $favourableConfig = array(
+//        71 => array(
+//            'discount' => 0.8
+//        )
+    );
 
     public function get_favourable_config($share_id) {
         return $this->favourableConfig[$share_id];

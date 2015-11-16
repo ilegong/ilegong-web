@@ -98,7 +98,7 @@ class WesharesController extends AppController {
         $uid = $this->currentUser['id'];
         $weshareInfo = $this->get_weshare_detail($weshareId);
         $can_edit_share = $this->ShareAuthority->user_can_edit_share_info($uid, $weshareId);
-        if ($uid != $weshareInfo['creator']['id']&&!$can_edit_share) {
+        if ($uid != $weshareInfo['creator']['id'] && !$can_edit_share) {
             $this->redirect('/weshares/view/' . $weshareId . '/0');
         }
         $share_ship_set = $this->sharer_can_use_we_ship($uid);
@@ -193,7 +193,7 @@ class WesharesController extends AppController {
         $weshareData['description'] = $postDataArray['description'];
         $weshareData['send_info'] = $postDataArray['send_info'];
         //create save creator
-        if(empty($postDataArray['id'])){
+        if (empty($postDataArray['id'])) {
             $weshareData['creator'] = $uid;
         }
         $weshareData['created'] = date('Y-m-d H:i:s');
@@ -268,8 +268,8 @@ class WesharesController extends AppController {
      * @param $page
      * 获取分享订单信息 根据分享ID和页码
      */
-    public function get_share_order_by_page($shareId, $page){
-        $this->autoRender=false;
+    public function get_share_order_by_page($shareId, $page) {
+        $this->autoRender = false;
         $uid = $this->currentUser['id'];
         $ordersDetail = $this->WeshareBuy->get_share_detail_view_orders($shareId, $page, $uid);
         echo json_encode($ordersDetail);
@@ -293,7 +293,7 @@ class WesharesController extends AppController {
      * @param $shareId
      * ajax 获取用户的订单和子分享数据
      */
-    public function get_share_user_order_and_child_share($shareId){
+    public function get_share_user_order_and_child_share($shareId) {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
         $child_share_data = $this->WeshareBuy->get_child_share_items($shareId);
@@ -376,8 +376,8 @@ class WesharesController extends AppController {
      * @param $weshareId
      * 异步获取分享的评论数据
      */
-    public function get_share_comment_data($weshareId){
-        $this->autoRender=false;
+    public function get_share_comment_data($weshareId) {
+        $this->autoRender = false;
         $comment_data = $this->WeshareBuy->load_comment_by_share_id($weshareId);
         echo json_encode(array('comment_data' => $comment_data));
         return;
@@ -479,7 +479,7 @@ class WesharesController extends AppController {
         $cart = array();
         try {
             $weshare_available = $this->WeshareBuy->check_weshare_status($weshareId);
-            if(!$weshare_available){
+            if (!$weshare_available) {
                 echo json_encode(array('success' => false, 'reason' => '分享已经截团'));
                 return;
             }
@@ -548,16 +548,18 @@ class WesharesController extends AppController {
             $this->Cart->saveAll($cart);
             //检查是否有优惠
             $favourable_config = $this->ShareFavourableConfig->get_favourable_config($weshareId);
+            $discountPrice = 0;
             if (!empty($favourable_config)) {
+                //优惠价格不计算邮费
                 if ($favourable_config['discount']) {
-                    $totalPrice = round($totalPrice * $favourable_config['discount']);
+                    $discountPrice = $totalPrice - round($totalPrice * $favourable_config['discount']);
                 }
             }
             //产品价格的团长佣金
-            $rebate_fee = $this->WeshareBuy->cal_proxy_rebate_fee($totalPrice, $uid, $weshareId);
+            $rebate_fee = $this->WeshareBuy->cal_proxy_rebate_fee($totalPrice - $discountPrice, $uid, $weshareId);
             $totalPrice += $shipFee;
             //cal proxy user rebate fee
-            $update_order_data = array('total_all_price' => $totalPrice / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => $shipFee, 'is_prepaid' => $is_prepaid);
+            $update_order_data = array('total_all_price' => ($totalPrice - $discountPrice) / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => $shipFee, 'is_prepaid' => $is_prepaid);
             if ($rebate_fee > 0) {
                 $rebate_log_id = $this->WeshareBuy->log_proxy_rebate_log($weshareId, $uid, 0, 1, $orderId, $rebate_fee * 100);
                 if (!empty($rebate_log_id)) {
@@ -1069,7 +1071,7 @@ class WesharesController extends AppController {
             echo json_encode(array('success' => false, 'reason' => 'not_login'));
             return;
         }
-        if(is_blacklist_user($uid)){
+        if (is_blacklist_user($uid)) {
             echo json_encode(array('success' => false, 'reason' => 'user_bad'));
             return;
         }
