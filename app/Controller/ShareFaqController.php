@@ -34,6 +34,7 @@ class ShareFaqController extends AppController {
         $share_info = $this->get_share_info($shareId);
         //todo check is login
         $current_user_id = $this->currentUser['id'];
+        //every one can chat
 //        $share_creator = $share_info['Weshare']['creator'];
 //        if ($current_user_id != $share_creator && $userId != $share_creator) {
 //            $this->redirect('/weshares/view/' . $shareId);
@@ -76,7 +77,7 @@ class ShareFaqController extends AppController {
         $this->autoRender = false;
         //todo check login
         $sender = $this->currentUser['id'];
-        if(is_blacklist_user($sender)){
+        if (is_blacklist_user($sender)) {
             echo json_encode(array('success' => false, 'reason' => 'user_bad'));
             return;
         }
