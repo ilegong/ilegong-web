@@ -626,9 +626,15 @@
     }
 
     function showReplies(comment_id) {
+      if (!vm.commentData) {
+        return false;
+      }
       var allReplies = vm.commentData['comment_replies'];
+      if(!allReplies){
+        return false;
+      }
       var replies = allReplies[comment_id];
-      if (!allReplies || !replies || replies.length == 0) {
+      if (!replies || replies.length == 0) {
         return false;
       }
       return true;

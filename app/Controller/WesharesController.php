@@ -717,6 +717,7 @@ class WesharesController extends AppController {
         $this->set('creators', $creators);
         $this->set('my_create_shares', $myCreateShares);
         $this->set('my_join_shares', $myJoinShares);
+        $this->set('authority_shares', $user_share_data['authority_shares']);
         $this->set('sharer_comment_data', $shareCommentData);
         $this->set('user_comment_data', $userCommentData);
         $this->set('is_verify_user', $this->is_verify_sharer($uid));

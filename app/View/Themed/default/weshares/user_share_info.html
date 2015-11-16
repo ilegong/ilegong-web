@@ -110,6 +110,11 @@
                     <li>
                         <a href="#tab_default_2" data-toggle="tab">{{if $is_me}}我发起的分享{{else}}TA发起的分享{{/if}}</a>
                     </li>
+                    {{if !empty($authority_shares) && $is_me}}
+                    <li>
+                        <a href="#tab_default_3" data-toggle="tab">授权我的分享</a>
+                    </li>
+                    {{/if}}
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_default_1">
@@ -135,6 +140,19 @@
                             </div>
                         </div>
                     </div>
+                    {{if !empty($authority_shares) && $is_me}}
+                    <div class="tab-pane" id="tab_default_3">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="comments-list">
+                                    {{loop $authority_shares $share}}
+                                        {{template weshares/user_share_item_template}}
+                                    {{/loop}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{/if}}
                 </div>
             </div>
         </div>
