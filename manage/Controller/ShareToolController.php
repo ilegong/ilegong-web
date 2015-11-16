@@ -72,6 +72,26 @@ class ShareToolController extends AppController {
         $this->redirect(array('action' => 'admin_share_operate_set_view', '?' => array('share_id' => $share_id)));
     }
 
+    public function admin_save_share_edit_operate_setting() {
+        $user_id = $_REQUEST['user_id'];
+        $share_id = $_REQUEST['share_id'];
+
+    }
+
+    public function admin_save_share_manage_operate_setting() {
+
+    }
+
+    //保存编辑分享的权限
+    private function save_edit_share_operate() {
+
+    }
+
+    //管理分享权限
+    private function save_manage_share_operate() {
+
+    }
+
     private function save_share_tag_operate($user_id, $tag_id, $share_id) {
         if (!empty($user_id) && !empty($share_id) && !empty($tag_id)) {
             $oldData = $this->ShareOperateSetting->find('first', array(

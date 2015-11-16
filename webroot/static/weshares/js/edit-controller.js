@@ -67,7 +67,11 @@
           vm.pys_ziti_data = data['ship_type']['pys_ziti'];
           vm.pin_tuan_data = data['ship_type']['pin_tuan'];
           vm.kuaidi_show_ship_fee = vm.kuai_di_data.ship_fee / 100;
-          vm.proxy_rebate_percent = data['proxy_rebate_percent'] || vm.proxy_rebate_percent;
+          if( data['proxy_rebate_percent']){
+            vm.proxy_rebate_percent = data['proxy_rebate_percent'];
+          }else{
+            vm.proxy_rebate_percent = {status: 0, percent: 0};
+          }
         }).error(function (data) {
         });
       } else {
