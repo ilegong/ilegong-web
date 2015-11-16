@@ -18,7 +18,7 @@ class WeshareBuyComponent extends Component {
 
     var $query_comment_fields = array('id', 'username', 'user_id', 'data_id', 'type', 'body', 'order_id', 'parent_id');
 
-    var $components = array('Session', 'Weixin', 'RedPacket', 'ShareUtil');
+    var $components = array('Session', 'Weixin', 'RedPacket', 'ShareUtil', 'ShareAuthority');
 
 
     /**
@@ -408,10 +408,22 @@ class WeshareBuyComponent extends Component {
         $orderM = ClassRegistry::init('Order');
         $cartM = ClassRegistry::init('Cart');
         $weshare_info = $this->get_weshare_info($share_id);
+        //分享者通知购买者 去评价
         if (($weshare_info['creator'] == $comment_uid) && $reply_comment_id == 0 && empty($comment_content)) {
             //seller send to buyer
             $this->send_comment_notify_buyer($order_id, $share_id, $comment_content);
             return array('success' => true, 'type' => 'notify');
+        }
+        $share_managers = $this->ShareAuthority->get_share_manage_auth_users($share_id);
+        //回复分享
+        if ($reply_comment_id != 0) {
+            //判断$comment_uid  是不是分享的管理员
+            if (!empty($share_managers)) {
+                //如果是分享的管理员，替换当前用户为分享的管理者
+                if (in_array($comment_uid, $share_managers)) {
+                    $comment_uid = $weshare_info['creator'];
+                }
+            }
         }
         $user_nickname = $userM->findNicknamesOfUid($comment_uid);
         $order_info = $orderM->findOrderByConditionsAndFields(array('id' => $order_id), array('created', 'creator'));
@@ -442,10 +454,13 @@ class WeshareBuyComponent extends Component {
             $order_uid = $order_info['Order']['creator'];
             //check comment type
             if ($comment_uid == $weshare_info['creator'] && $reply_comment_uid == $order_uid) {
+                //回复给订单用户
                 $this->send_comment_reply_notify($order_id, $share_id, $comment_content);
             } elseif ($reply_comment_id == $weshare_info['creator'] && $order_uid == $comment_uid) {
+                //回复给分享者
                 $this->send_comment_notify($order_id, $share_id, $comment_content);
             } elseif ($comment_uid != $reply_comment_uid) {
+                //用户之间交互
                 $this->send_comment_mutual_msg($comment_uid, $reply_comment_uid, $comment_content, $share_id, $order_id);
             }
         } else {
@@ -1460,6 +1475,13 @@ class WeshareBuyComponent extends Component {
         $desc = '分享，让生活更美。点击回复' . $uid_name_map[$order_creator] . '。';
         $detail_url = $this->get_weshares_detail_url($weshare_id);
         $this->Weixin->send_comment_template_msg($open_id, $detail_url, $title, $order_id, $order_date, $desc);
+        //send comment notify msg to share manager
+        $share_manager_open_ids = $this->ShareAuthority->get_share_manage_auth_user_open_ids($weshare_id);
+        if (!empty($share_manager_open_ids)) {
+            foreach ($share_manager_open_ids as $manager_open_id_item) {
+                $this->Weixin->send_comment_template_msg($manager_open_id_item, $detail_url, $title, $order_id, $order_date, $desc);
+            }
+        }
     }
 
     /**
@@ -2165,9 +2187,9 @@ class WeshareBuyComponent extends Component {
         //check user is proxy
         $userM = ClassRegistry::init('User');
         $isProxy = $userM->userIsProxy($uid);
-        if($isProxy == USER_IS_PROXY){
+        if ($isProxy == USER_IS_PROXY) {
             $rebate_setting = $this->ShareUtil->get_share_rebate_data($shareId);
-            if(!empty($rebate_setting)){
+            if (!empty($rebate_setting)) {
                 $rebate_money = round((floatval($rebate_setting['ProxyRebatePercent']['percent']) * $total_price) / (100 * 100), 2);
                 return $rebate_money;
             }
