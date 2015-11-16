@@ -105,7 +105,12 @@ class ShareToolController extends AppController {
                     'scope_id' => $share_id,
                     'scope_type' => SHARE_OPERATE_SCOPE_TYPE);
                 $this->ShareOperateSetting->save($saveData);
-                Cache::write($type . '_' . $share_id, '');
+                if ($type == SHARE_INFO_OPERATE_TYPE) {
+                    Cache::write(SHARE_INFO_OPERATE_CACHE_KEY . '_' . $share_id, '');
+                }
+                if ($type == SHARE_MANAGE_OPERATE_TYPE) {
+                    Cache::write(SHARE_MANAGE_OPERATE_CACHE_KEY . '_' . $share_id, '');
+                }
             }
         }
     }
