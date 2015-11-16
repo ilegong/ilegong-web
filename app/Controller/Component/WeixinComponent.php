@@ -8,7 +8,7 @@ class WeixinComponent extends Component {
         CURLOPT_TIMEOUT => 30
     );
 
-    public $components = array('ShareUtil', 'WeshareBuy');
+    public $components = array('ShareUtil', 'WeshareBuy', 'ShareAuthority');
 
     public $wx_message_template_ids = array(
         "ORDER_PAID" => "UXmiPQNz46zZ2nZfDZVVd9xLIx28t66ZPNBoX1WhE8Q",
@@ -900,6 +900,13 @@ class WeixinComponent extends Component {
         if ($seller_weixin != false) {
             $this->log('weshare paid send for creator ' . $seller_weixin['oauth_openid'] . ' order id ' . $order_id . ' weshare id ' . $weshare_info['Weshare']['id']);
             $this->send_weshare_buy_paid_msg_for_creator($seller_weixin['oauth_openid'], $price, $good_info, $ship_info, $order_id, $weshare_info, $order_creator_name, $order_ship_mark, $order_user['User']['id'], $cate_id);
+            //send paid done msg to manage user
+            $share_manage_user_open_ids = $this->ShareAuthority->get_share_manage_auth_user_open_ids($weshare_info['Weshare']['id']);
+            if (!empty($share_manage_user_open_ids)) {
+                foreach ($share_manage_user_open_ids as $open_id_item) {
+                    $this->send_weshare_buy_paid_msg_for_creator($open_id_item, $price, $good_info, $ship_info, $order_id, $weshare_info, $order_creator_name, $order_ship_mark, $order_user['User']['id'], $cate_id);
+                }
+            }
             if ($order_ship_mark == SHARE_SHIP_GROUP_TAG) {
                 //send parent share
                 $share_refer_share_id = $weshare_info['Weshare']['refer_share_id'];
@@ -1289,7 +1296,6 @@ class WeixinComponent extends Component {
         );
         return $this->send_weixin_message($post_data);
     }
-
 
 
 }

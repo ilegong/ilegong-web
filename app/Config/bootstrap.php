@@ -222,6 +222,8 @@ const SHARE_OFFLINE_ADDRESS_SUMMERY_DATA_CACHE_KEY = 'share_offline_address_summ
 const SHARE_OFFLINE_ADDRESS_BUY_DATA_CACHE_KEY = 'share_offline_address_buy_data_cache_key';//分享线下自提点 购买信息
 const GROUP_SHARE_ORDER_SUMMERY_DATA_CACHE_KEY = 'group_share_order_summery_data_cache_key';
 
+const SHARE_MANAGE_USER_OPEN_ID_DATA_CACHE_KEY = 'share_manage_user_open_id_data_cache_key';//分享管理者的openId缓存
+
 const USER_SHARE_PAGE_INFO_CACHE_KEY = 'user_share_page_info_cache_key'; //缓存对应用户对应分享的分页信息
 const USER_SHARE_ORDER_INFO_CACHE_KEY = 'user_share_order_info_cache_key';//缓存对应用户对应分享的订单信息
 const USER_SHARE_ORDER_INFO_FIRST_PAGE_CACHE_KEY = 'user_share_order_info_first_page_cache_key';//缓存对应用户对应分享的第一页订单信息
@@ -983,7 +985,7 @@ class ShipAddress {
         }
     }
 
-    public static function ship_type_name_id_map(){
+    public static function ship_type_name_id_map() {
         $ship_types = ShipAddress::ship_types();
         if (is_array($ship_types)) {
             return Hash::combine($ship_types, '{n}.name', '{n}.id');
@@ -2163,22 +2165,22 @@ function get_share_order_cart_display_name($carts) {
     return implode(', ', $product_names);
 }
 
-function get_ship_text_from_order_ship_mark($order_ship_mark){
-    if($order_ship_mark == SHARE_SHIP_PYS_ZITI_TAG){
+function get_ship_text_from_order_ship_mark($order_ship_mark) {
+    if ($order_ship_mark == SHARE_SHIP_PYS_ZITI_TAG) {
         return '好邻居自提';
     }
-    if($order_ship_mark == SHARE_SHIP_KUAIDI_TAG){
+    if ($order_ship_mark == SHARE_SHIP_KUAIDI_TAG) {
         return '快递';
     }
-    if($order_ship_mark == SHARE_SHIP_GROUP_TAG){
+    if ($order_ship_mark == SHARE_SHIP_GROUP_TAG) {
         return '拼团';
     }
-    if($order_ship_mark == SHARE_SHIP_SELF_ZITI_TAG){
+    if ($order_ship_mark == SHARE_SHIP_SELF_ZITI_TAG) {
         return '自提';
     }
 }
 
-function get_order_status_text_form_order_status($order_status){
+function get_order_status_text_form_order_status($order_status) {
     $order_status_text_map = array(
         ORDER_STATUS_WAITING_PAY => '待支付',
         ORDER_STATUS_PAID => '已支付',
@@ -2261,7 +2263,7 @@ function sort_opt_log_data_by_id($a, $b) {
     return ($a['OptLog']['id'] < $b['OptLog']['id']) ? 1 : -1;
 }
 
-function replace_urls($string){
+function replace_urls($string) {
     $host = "([a-z\d][-a-z\d]*[a-z\d]\.)+[a-z][-a-z\d]*[a-z]";
     $port = "(:\d{1,})?";
     $path = "(\/[^?<>\#\"\s]+)?";
@@ -2269,7 +2271,7 @@ function replace_urls($string){
     return preg_replace("#((ht|f)tps?:\/\/{$host}{$port}{$path}{$query})#i", "", $string);
 }
 
-function is_blacklist_user($uid){
+function is_blacklist_user($uid) {
     $blacklist = array(881026);
     return in_array($uid, $blacklist);
 }
