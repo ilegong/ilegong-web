@@ -92,6 +92,10 @@ class ShareFaqController extends AppController {
         $msg = $_REQUEST['msg'];
         $receiver = $_REQUEST['receiver'];
         $shareId = $_REQUEST['share_id'];
+        //check sender is share manager
+        if ($this->check_user_is_share_manager($sender, $shareId)) {
+            $sender = $this->get_weshare_creator($shareId);
+        }
         $faq_data = array(
             'sender' => $sender,
             'receiver' => $receiver,
@@ -115,9 +119,19 @@ class ShareFaqController extends AppController {
         return;
     }
 
+    private function check_user_is_share_manager($user, $weshare_id) {
+        $share_manage_users = $this->ShareAuthority->get_share_manage_auth_users($weshare_id);
+        return in_array($user, $share_manage_users);
+    }
+
     private function check_msg_is_send_to_share_creator($weshareId, $receiver) {
         $weshareInfo = $this->WeshareBuy->get_weshare_info($weshareId);
         return $weshareInfo['creator'] == $receiver;
+    }
+
+    private function get_weshare_creator($weshareId) {
+        $weshareInfo = $this->WeshareBuy->get_weshare_info($weshareId);
+        return $weshareInfo['creator'];
     }
 
     public function update_faq_read($shareId, $userId) {
