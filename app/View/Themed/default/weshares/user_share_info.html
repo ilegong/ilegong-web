@@ -106,17 +106,17 @@
                 <ul class="nav nav-tabs" id="share-nav-tab">
                     {{if !empty($my_create_shares)}}
                     <li>
-                        <a href="#tab_default_1" data-toggle="tab">{{if $is_me}}我发起的分享{{else}}TA发起的分享{{/if}}</a>
+                        <a href="#tab_default_1" data-toggle="tab">{{if $is_me}}我发起的{{else}}TA发起的{{/if}}</a>
                     </li>
                     {{/if}}
                     {{if !empty($authority_shares) && $is_me}}
                     <li>
-                        <a href="#tab_default_2" data-toggle="tab">被授权的分享</a>
+                        <a href="#tab_default_2" data-toggle="tab">被授权的</a>
                     </li>
                     {{/if}}
                     {{if !empty($my_join_shares)}}
                     <li>
-                        <a href="#tab_default_3" data-toggle="tab">{{if $is_me}}我参加的分享{{else}}TA参加的分享{{/if}}</a>
+                        <a href="#tab_default_3" data-toggle="tab">{{if $is_me}}我参加的{{else}}TA参加的{{/if}}</a>
                     </li>
                     {{/if}}
                 </ul>
