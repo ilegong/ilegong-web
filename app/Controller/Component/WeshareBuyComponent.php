@@ -1751,6 +1751,28 @@ class WeshareBuyComponent extends Component {
     /**
      * @param $weshare_info
      * @param $msg_content
+     * 发送给管理员团购结果通知
+     */
+    public function send_notify_user_msg_to_share_manager($weshare_info, $msg_content){
+        $share_id = $weshare_info['id'];
+        $share_manager = $this->ShareAuthority->get_share_manage_auth_users($share_id);
+        if (empty($share_manager)) {
+            $share_manager = array();
+        }
+        $share_manager[] = $weshare_info['creator']['id'];
+        $open_ids = $this->get_open_ids($share_manager);
+        $tuan_leader_name = $weshare_info['creator']['nickname'];
+        $remark = '点击查看详情！';
+        $deatil_url = $this->get_weshares_detail_url($weshare_info['id']);
+        $product_name = $weshare_info['title'];
+        foreach ($open_ids as $open_id) {
+            $this->Weixin->send_share_buy_complete_msg($open_id, $msg_content, $product_name, $tuan_leader_name, $remark, $deatil_url);
+        }
+    }
+
+    /**
+     * @param $weshare_info
+     * @param $msg_content
      * 发送团购提醒给分享管理员
      */
     public function send_buy_percent_msg_to_share_manager($weshare_info, $msg_content) {

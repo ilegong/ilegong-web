@@ -17,10 +17,12 @@ $(document).ready(function () {
   var $saveUserIntro = $('#save-user-intro');
   var $userInfoTextArea = $('#user-info-textarea');
   var $userNicknameInput = $('#user-nickname');
+  var $userSharesFirstTab = $('#share-nav-tab li:first a');
   var $userId = $('#user-id', $changeUserInfoDialog);
   var processSub = false;
   var processUnSub = false;
   var processSavePassword = false;
+  $userSharesFirstTab.trigger('click');
   $showUpdateUserInfoDialog.on('click', function () {
     $changeUserInfoDialog.modal({show: true, backdrop: 'static'});
   });

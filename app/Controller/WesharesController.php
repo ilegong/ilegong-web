@@ -804,7 +804,7 @@ class WesharesController extends AppController {
                 'id' => $weshare_id
             )
         ));
-        if ($uid != $share_info['Weshare']['creator']) {
+        if ($uid != $share_info['Weshare']['creator'] && !$this->ShareAuthority->user_can_view_share_order_list($uid, $weshare_id)) {
             echo json_encode(array('success' => false, 'reason' => 'invalid'));
             return;
         }
@@ -1049,6 +1049,8 @@ class WesharesController extends AppController {
             echo json_encode(array('success' => true));
             return;
         } else {
+            //todo 发送给分享的管理者
+            $this->WeshareBuy->send_notify_user_msg_to_share_manager($share_info, $content);
             $queue = new SaeTaskQueue('share');
             $queue->addTask("/weshares/process_notify_has_buy_fans/" . $weshare_id, "content=" . $content, true);
             //将任务推入队列
