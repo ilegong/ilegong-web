@@ -773,14 +773,17 @@ class WesharesController extends AppController {
         //批量添加任务
         $task = array();
         $ship_name_id_map = ShipAddress::ship_type_name_id_map();
+        $order_ids = array();
         foreach ($order_list as $order) {
             $order_id = $order['order_id'];
+            $order_ids[] = $order_id;
             $ship_type_name = $order['ship_type_name'];
             $ship_company_id = $ship_name_id_map[$ship_type_name];
             $ship_code = $order['ship_code'];
             $params = "order_id=" . $order_id . "&company_id=" . $ship_company_id . "&ship_code=" . $ship_code . "&ship_type_name=" . $ship_type_name;
             $task[] = array('url' => "/task/process_set_order_ship_code", "postdata" => $params);
         }
+        $this->WeshareBuy->clear_user_share_order_data_cache($order_ids, 0);
         $queue->addTask($task);
         //将任务推入队列
         $ret = $queue->push();

@@ -1089,14 +1089,17 @@ class WeshareBuyComponent extends Component {
      * @param $shareId
      * 清除分享用户缓存
      */
-    public function clear_user_share_order_data_cache($orderIds, $shareId) {
+    public function clear_user_share_order_data_cache($orderIds, $shareId=0) {
         $orderM = ClassRegistry::init('Order');
         $orders = $orderM->find('all', array(
             'conditions' => array(
                 'id' => $orderIds
             ),
-            'fields' => array('id', 'creator')
+            'fields' => array('id', 'creator', 'member_id')
         ));
+        if($shareId == 0){
+            $shareId = $orders[0]['Order']['member_id'];
+        }
         $order_creators = Hash::extract($orders, '{n}.Order.creator');
         foreach ($order_creators as $uid) {
             $this->do_clear_user_share_order_data_cache($uid, $shareId);
