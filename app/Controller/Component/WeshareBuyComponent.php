@@ -513,6 +513,7 @@ class WeshareBuyComponent extends Component {
             Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_0_1', '');
             Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_1_0', '');
             Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_0_0', '');
+            $this->WeshareBuy->clear_user_share_order_data_cache(array($order_id), $share_id);
         }
         //$key = SHARE_COMMENT_DATA_CACHE_KEY . '_' . $weshare_id;
         Cache::write(SHARE_COMMENT_DATA_CACHE_KEY . '_' . $share_id, '');
