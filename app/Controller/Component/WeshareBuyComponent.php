@@ -10,6 +10,8 @@ class WeshareBuyComponent extends Component {
 
     var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'mobilephone', 'is_proxy');
 
+    var $query_user_simple_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'mobilephone', 'is_proxy');
+
     var $query_order_fields = array('id', 'creator', 'created', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type', 'ship_type_name', 'member_id', 'process_prepaid_status', 'price_difference', 'is_prepaid');
 
     var $query_share_info_order_fields = array('id', 'creator', 'created', 'updated', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type', 'ship_type_name', 'total_price', 'coupon_total', 'cate_id', 'process_prepaid_status', 'price_difference', 'is_prepaid', 'business_remark');
@@ -1185,7 +1187,7 @@ class WeshareBuyComponent extends Component {
                     'id' => $userIds
                 ),
                 'recursive' => 1, //int
-                'fields' => $this->query_user_fields,
+                'fields' => $this->query_user_simple_fields,
             ));
             $users = Hash::combine($users, '{n}.User.id', '{n}.User');
             $orders = Hash::combine($orders, '{n}.Order.id', '{n}.Order');
