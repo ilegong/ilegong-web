@@ -129,6 +129,9 @@ class ShareController extends AppController {
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_1', '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_0', '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
+        foreach($order_user_ids as $uid){
+            Cache::write(USER_SHARE_ORDER_INFO_CACHE_KEY . '_' . $weshare_id . '_' . $uid, '');
+        }
         echo json_encode(array('success' => true));
     }
 

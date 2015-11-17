@@ -1085,6 +1085,30 @@ class WeshareBuyComponent extends Component {
     }
 
     /**
+     * @param $orderIds
+     * @param $shareId
+     * 清除分享用户缓存
+     */
+    public function clear_user_share_order_data_cache($orderIds, $shareId) {
+        $orderM = ClassRegistry::init('Order');
+        $orders = $orderM->find('all', array(
+            'conditions' => array(
+                'id' => $orderIds
+            ),
+            'fields' => array('id', 'creator')
+        ));
+        $order_creators = Hash::extract($orders, '{n}.Order.creator');
+        foreach ($order_creators as $uid) {
+            $this->do_clear_user_share_order_data_cache($uid, $shareId);
+        }
+
+    }
+
+    public function do_clear_user_share_order_data_cache($uid, $shareId) {
+        Cache::write(USER_SHARE_ORDER_INFO_CACHE_KEY . '_' . $shareId . '_' . $uid, '');
+    }
+
+    /**
      * @param $weshareId
      * @param $page
      * @param $uid 当前用户数据

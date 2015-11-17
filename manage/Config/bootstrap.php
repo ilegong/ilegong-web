@@ -62,6 +62,8 @@ const SHARE_SHIP_SETTINGS_CACHE_KEY = 'share_ship_setting_cache_key';
 const USER_SHARE_INFO_CACHE_KEY = 'user_share_info_cache_key';
 const SIMPLE_SHARE_INFO_CACHE_KEY = 'simple_share_info_cache_key';
 
+const USER_SHARE_ORDER_INFO_CACHE_KEY = 'user_share_order_info_cache_key';//缓存对应用户对应分享的订单信息
+
 const ORDER_STATUS_VIRTUAL = 21;
 
 const ORDER_TUANGOU=5;

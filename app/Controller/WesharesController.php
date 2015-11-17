@@ -759,6 +759,7 @@ class WesharesController extends AppController {
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_1', '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_0', '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
+        $this->WeshareBuy->clear_user_share_order_data_cache(array($order_id), $weshare_id);
         $this->WeshareBuy->send_share_product_ship_msg($order_id, $weshare_id);
         echo json_encode(array('success' => true));
         return;
@@ -820,6 +821,7 @@ class WesharesController extends AppController {
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_1', '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_0', '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
+        $this->WeshareBuy->clear_user_share_order_data_cache($prepare_update_order_ids, $weshare_id);
         $this->process_send_msg($share_info, $msg);
         echo json_encode(array('success' => true));
         return;
