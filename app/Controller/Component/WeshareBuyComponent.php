@@ -524,7 +524,7 @@ class WeshareBuyComponent extends Component {
      * 发送建团消息给分享的创建者
      */
     public function send_new_share_msg_to_share_manager($shareId) {
-        $share_manager = $this->ShareAuthority->get_share_manage_auth_users;
+        $share_manager = $this->ShareAuthority->get_share_manage_auth_users($shareId);
         $weshareM = ClassRegistry::init('Weshare');
         $weshare = $weshareM->find('first', array(
             'conditions' => array(
@@ -546,10 +546,6 @@ class WeshareBuyComponent extends Component {
      */
     public function send_new_share_msg($weshareId, $limit = null, $offset = null) {
         $this->Weshare = ClassRegistry::init('Weshare');
-        $this->User = ClassRegistry::init('User');
-        $this->Oauthbind = ClassRegistry::init('Oauthbind');
-        $this->WeshareProduct = ClassRegistry::init('WeshareProduct');
-
         $weshare = $this->Weshare->find('first', array(
             'conditions' => array(
                 'id' => $weshareId
@@ -560,7 +556,9 @@ class WeshareBuyComponent extends Component {
     }
 
     private function do_send_new_share_msg($weshare, $uids) {
-        $sharer_user_info = $this->User->find('first', array(
+        $userM = ClassRegistry::init('User');
+        $OauthbindM = ClassRegistry::init('Oauthbind');
+        $sharer_user_info = $userM->find('first', array(
             'conditions' => array(
                 'id' => $weshare['Weshare']['creator']
             ),
@@ -573,7 +571,7 @@ class WeshareBuyComponent extends Component {
         $product_name = $weshare['Weshare']['title'];
         $title = '关注的' . $sharer_name . '发起了';
         $remark = '点击详情，赶快加入' . $sharer_name . '的分享！';
-        $openIds = $this->Oauthbind->findWxServiceBindsByUids($uids);
+        $openIds = $OauthbindM->findWxServiceBindsByUids($uids);
         foreach ($openIds as $openId) {
             $this->process_send_share_msg($openId, $title, $product_name, $detail_url, $sharer_name, $remark);
         }
