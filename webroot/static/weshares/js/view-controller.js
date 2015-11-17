@@ -232,6 +232,7 @@
     vm.chatToUser = chatToUser;
     vm.calProxyRebateFee = calProxyRebateFee;
     vm.loadOrderCommentData = loadOrderCommentData;
+    vm.isShareManager = isShareManager;
     vm.childShareDetail = null;
     vm.currentUserOrderCount = 0;
     vm.shareOrderCount = 0;
@@ -504,6 +505,10 @@
 
     function isCreator() {
       return !_.isEmpty(vm.currentUser) && vm.currentUser.id == vm.weshare.creator.id;
+    }
+
+    function isShareManager(){
+      return vm.isCreator() || vm.canManageShare;
     }
 
     function isOwner(order) {
