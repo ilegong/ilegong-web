@@ -1025,7 +1025,7 @@ class WesharesController extends AppController {
             return;
         }
         $share_info = $this->get_weshare_detail($weshare_id);
-        if ($share_info['creator']['id'] != $uid) {
+        if ($share_info['creator']['id'] != $uid && !$this->ShareAuthority->user_can_manage_share($uid,$weshare_id)) {
             echo json_encode(array('success' => false, 'reason' => 'not_creator'));
             return;
         }
@@ -1078,7 +1078,7 @@ class WesharesController extends AppController {
             return;
         }
         $share_info = $this->get_weshare_detail($weshare_id);
-        if ($share_info['creator']['id'] != $uid) {
+        if ($share_info['creator']['id'] != $uid && !$this->ShareAuthority->user_can_manage_share($uid,$weshare_id)) {
             echo json_encode(array('success' => false, 'reason' => 'not_creator'));
             return;
         }
