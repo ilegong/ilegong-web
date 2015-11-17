@@ -639,12 +639,33 @@ class ShareUtilComponent extends Component {
             'memo' => $memo,
             'thumbnail' => $thumbnail
         );
-        //黑名单用户不显示
-        if (is_blacklist_user($user_id)) {
+        //黑名单用户不显示 或者 粉丝小于50
+        if (is_blacklist_user($user_id) || $this->get_user_level($user_id) == 0) {
             $optData['deleted'] = DELETED_YES;
         }
         $this->saveOptLog($optData);
     }
+
+    /**
+     * @param $uid
+     * @return int
+     * 获取用户等级
+     */
+    public function get_user_level($uid) {
+        $userRelationM = ClassRegistry::init('UserRelation');
+        $fans_count = $userRelationM->find('count', array(
+            'conditions' => array(
+                'user_id' => $uid
+            )
+        ));
+        if ($fans_count < 50) {
+            return 0;
+        }
+        if ($fans_count > 50) {
+            return 1;
+        }
+    }
+
 
     /**
      * @param $user_id
