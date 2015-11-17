@@ -3,7 +3,7 @@
 class WesharesController extends AppController {
 
     var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem',
-        'SharerShipOption', 'WeshareShipSetting', 'OfflineStore', 'UserRelation', 'Comment', 'RebateTrackLog', 'ProxyRebatePercent', 'ShareUserBind', 'UserSubReason', 'ShareFavourableConfig');
+        'SharerShipOption', 'WeshareShipSetting', 'OfflineStore', 'UserRelation', 'Comment', 'RebateTrackLog', 'ProxyRebatePercent', 'ShareUserBind', 'UserSubReason', 'ShareFavourableConfig', 'ShareAuthority');
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy');
 
@@ -1033,6 +1033,8 @@ class WesharesController extends AppController {
         $content = $params['content'];
         $type = $params['type'];
         if ($type == 0 || $type == '0') {
+            //发送给分享的管理者
+            $this->WeshareBuy->send_buy_percent_msg_to_share_manager($share_info, $content);
             $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($uid);
             $pageCount = $fansPageInfo['pageCount'];
             $pageSize = $fansPageInfo['pageSize'];
@@ -1080,6 +1082,7 @@ class WesharesController extends AppController {
             echo json_encode(array('success' => false, 'reason' => 'not_creator'));
             return;
         }
+        $this->WeshareBuy->send_new_share_msg_to_share_manager($weshare_id);
         $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($uid);
         $pageCount = $fansPageInfo['pageCount'];
         $pageSize = $fansPageInfo['pageSize'];
