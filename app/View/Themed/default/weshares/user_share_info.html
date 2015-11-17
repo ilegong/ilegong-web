@@ -109,14 +109,14 @@
                         <a href="#tab_default_1" data-toggle="tab">{{if $is_me}}我发起的分享{{else}}TA发起的分享{{/if}}</a>
                     </li>
                     {{/if}}
-                    {{if !empty($my_join_shares)}}
-                    <li>
-                        <a href="#tab_default_2" data-toggle="tab">{{if $is_me}}我参加的分享{{else}}TA参加的分享{{/if}}</a>
-                    </li>
-                    {{/if}}
                     {{if !empty($authority_shares) && $is_me}}
                     <li>
-                        <a href="#tab_default_3" data-toggle="tab">被授权</a>
+                        <a href="#tab_default_2" data-toggle="tab">被授权的分享</a>
+                    </li>
+                    {{/if}}
+                    {{if !empty($my_join_shares)}}
+                    <li>
+                        <a href="#tab_default_3" data-toggle="tab">{{if $is_me}}我参加的分享{{else}}TA参加的分享{{/if}}</a>
                     </li>
                     {{/if}}
                 </ul>
@@ -134,13 +134,12 @@
                         </div>
                     </div>
                     {{/if}}
-                    {{if !empty($my_join_shares)}}
+                    {{if !empty($authority_shares) && $is_me}}
                     <div class="tab-pane" id="tab_default_2">
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="comments-list">
-                                    <?php $parsing_join_share = true; ?>
-                                    {{loop $my_join_shares $share}}
+                                    {{loop $authority_shares $share}}
                                     {{template weshares/user_share_item_template}}
                                     {{/loop}}
                                 </div>
@@ -148,13 +147,14 @@
                         </div>
                     </div>
                     {{/if}}
-                    {{if !empty($authority_shares) && $is_me}}
+                    {{if !empty($my_join_shares)}}
                     <div class="tab-pane" id="tab_default_3">
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="comments-list">
-                                    {{loop $authority_shares $share}}
-                                        {{template weshares/user_share_item_template}}
+                                    <?php $parsing_join_share = true; ?>
+                                    {{loop $my_join_shares $share}}
+                                    {{template weshares/user_share_item_template}}
                                     {{/loop}}
                                 </div>
                             </div>
@@ -346,4 +346,4 @@
         </div>
     </div>
 </div>
-<script src="{{$STATIC_FILE_PATH}}/static/weshares/js/user-share-info.min.js?v0.0.2" type="text/javascript"></script>
+<script src="{{$STATIC_FILE_PATH}}/static/weshares/js/user-share-info.min.js?v0.0.3" type="text/javascript"></script>
