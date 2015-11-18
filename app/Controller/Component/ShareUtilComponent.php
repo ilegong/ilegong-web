@@ -1568,7 +1568,7 @@ class ShareUtilComponent extends Component {
                 //银耳
                 '1063' => array(
                     'share_id' => 1063,
-                    'share_name' => '鲜活银耳(双11限时抢购）【顺丰包邮】',
+                    'share_name' => '鲜活银耳【顺丰包邮】',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/f257f80229f_1110.jpg',
                     'share_price' => '88',
                     'share_user_name' => '片片妈',
