@@ -1555,6 +1555,56 @@ class ShareUtilComponent extends Component {
     public function get_share_index_product($tag) {
         $product = array(
             0 => array(
+                '1238' => array(
+                    'share_id' => 1238,
+                    'share_name' => '香妃柚',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/9bd5eea0b33_1118.jpg',
+                    'share_price' => '74.8',
+                    'share_user_name' => '朋友说小妹',
+                    'share_vote' => 1000,
+                    'share_user_id' => 711503,
+                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/0609f46d89e_0813.jpg'
+                ),
+                '1237' => array(
+                    'share_id' => 1237,
+                    'share_name' => '泰国野生迷你（MINI）小菠萝',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/fc5ce30c960_1118.jpg',
+                    'share_price' => '149',
+                    'share_user_name' => '朋友说小妹',
+                    'share_vote' => 1000,
+                    'share_user_id' => 711503,
+                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/0609f46d89e_0813.jpg'
+                ),
+                '1165' => array(
+                    'share_id' => 1165,
+                    'share_name' => '刺激你的味蕾，百香果',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/6ebd4d49632_1118.jpg',
+                    'share_price' => '48',
+                    'share_user_name' => '盛夏',
+                    'share_vote' => 700,
+                    'share_user_id' => 708029,
+                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
+                ),
+                '1201' => array(
+                    'share_id' => 1201,
+                    'share_name' => '沧源原始森林野生丑木耳',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/0c2ac493287_1118.jpg',
+                    'share_price' => '36',
+                    'share_user_name' => '鲲鲲',
+                    'share_vote' => 560,
+                    'share_user_id' => 806889,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
+                ),
+                '1101' => array(
+                    'share_id' => 1101,
+                    'share_name' => '老家农家自产玉米面',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/dd3ad10f3f2_1118.jpg',
+                    'share_price' => '26',
+                    'share_user_name' => '陈彦',
+                    'share_vote' => 300,
+                    'share_user_id' => 848454,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_ddecfe1af5d21c658eed85d84a10ba6c.jpg'
+                ),
                 '438' => array(
                     'share_id' => 438,
                     'share_name' => '河南荥阳河阴软籽大石榴',
@@ -1670,16 +1720,16 @@ class ShareUtilComponent extends Component {
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
                 ),
                 //微微安
-                '1098' => array(
-                    'share_id' => 1098,
-                    'share_name' => '薇薇安千层出新口味咯，提拉米苏千层蛋糕冬日里的暖暖美食',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/49f0af92aa7_1110.jpg',
-                    'share_price' => '160',
-                    'share_user_name' => '盛夏',
-                    'share_vote' => 235,
-                    'share_user_id' => 708029,
-                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
-                ),
+//                '1098' => array(
+//                    'share_id' => 1098,
+//                    'share_name' => '薇薇安千层出新口味咯，提拉米苏千层蛋糕冬日里的暖暖美食',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/49f0af92aa7_1110.jpg',
+//                    'share_price' => '160',
+//                    'share_user_name' => '盛夏',
+//                    'share_vote' => 235,
+//                    'share_user_id' => 708029,
+//                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
+//                ),
                 //脐橙
                 '1085' => array(
                     'share_id' => 1085,
@@ -1815,16 +1865,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 806889,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
                 ),
-                '1061' => array(
-                    'share_id' => 1061,
-                    'share_name' => '父母种的红薯、紫薯、花生开刨啦',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/ff1894c1082_0928.jpg',
-                    'share_price' => '40',
-                    'share_user_name' => '大美',
-                    'share_vote' => 345,
-                    'share_user_id' => 842908,
-                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/319793d271b_0828.jpg'
-                ),
+//                '1061' => array(
+//                    'share_id' => 1061,
+//                    'share_name' => '父母种的红薯、紫薯、花生开刨啦',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/ff1894c1082_0928.jpg',
+//                    'share_price' => '40',
+//                    'share_user_name' => '大美',
+//                    'share_vote' => 345,
+//                    'share_user_id' => 842908,
+//                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/319793d271b_0828.jpg'
+//                ),
 //                '674' => array(
 //                    'share_id' => 674,
 //                    'share_name' => '新疆阿克苏新温185核桃',
