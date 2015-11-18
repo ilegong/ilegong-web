@@ -93,7 +93,7 @@
                                 </div>
                             </div>
                         </div>
-                        <form role="form">
+                        <div role="form">
                             <input type="hidden" id="share-id" value="{{$this->data['Weshare']['id']}}">
 
                             <div class="row setup-content" id="step-1">
@@ -135,76 +135,144 @@
                                 <div class="col-xs-12">
                                     <div class="col-md-12" id="share-product-info">
                                         <h3> 分享产品</h3>
+                                        <button type="button" class="btn btn-success pull-right" id="add-new-product">添加一个</button>
+                                        <div class='col-md-4 product-item' id="share-product-template" style="display: none;">
+                                            <div style="margin:0;padding:0;display:inline">
+                                                <input type="hidden"
+                                                       value="0" name="product-id"/>
 
-                                        <div class="col-md-12">
-                                            {{loop $weshare_products $product}}
-                                            <div class='col-md-4 product-item'
-                                                 id="share-product-{{$product['WeshareProduct']['id']}}">
-                                                <div style="margin:0;padding:0;display:inline">
-                                                    <input type="hidden"
-                                                           value="{{$product['WeshareProduct']['id']}}" name="product-id"/>
-
-                                                    <div class='form-row'>
-                                                        <div class='col-xs-12 form-group required'>
-                                                            <label class='control-label'>产品名称/规格</label>
-                                                            <input class='form-control' type='text'
-                                                                   value="{{$product['WeshareProduct']['name']}}"
-                                                                   name="product-name">
-                                                        </div>
+                                                <div class='form-row'>
+                                                    <div class='col-xs-12 form-group required'>
+                                                        <label class='control-label'>产品名称/规格</label>
+                                                        <input class='form-control' type='text'
+                                                               value=""
+                                                               name="product-name">
                                                     </div>
-                                                    <div class='form-row'>
-                                                        <div class='col-xs-3 form-group required'>
-                                                            <label class='control-label'>价格</label>
-                                                            <input class='form-control' type="number"
-                                                                   value="{{$product['WeshareProduct']['price']}}"
-                                                                   name="product-price">
-                                                        </div>
-                                                        <div class='col-xs-3 form-group required'>
-                                                            <label class='control-label'>库存</label>
-                                                            <input class='form-control' type='number'
-                                                                   value="{{$product['WeshareProduct']['store']}}"
-                                                                   name="product-store">
-                                                        </div>
-                                                        <div class='col-xs-6 form-group required'>
-                                                            <label class='control-label'>分组</label>
-                                                            <select class="form-control"
-                                                                    data-init-val="{{$product['WeshareProduct']['tag_id']}}" name="product-tag">
-                                                                <option value="0">默认分组</option>
-                                                                {{loop $weshare_tags $tag}}
-                                                                <option value="{{$tag['WeshareProductTag']['id']}}">
-                                                                    {{$tag['WeshareProductTag']['name']}}
-                                                                </option>
-                                                                {{/loop}}
-                                                            </select>
-                                                        </div>
+                                                </div>
+                                                <div class='form-row'>
+                                                    <div class='col-xs-3 form-group required'>
+                                                        <label class='control-label'>价格</label>
+                                                        <input class='form-control' type="number"
+                                                               value="0"
+                                                               name="product-price">
                                                     </div>
-                                                    <div class="form-row">
-                                                        <div class='col-xs-4 form-group required'>
-                                                            <label class="checkbox-inline">
-                                                                <input type="checkbox" value="1" name="product-tbd"
-                                                                       data-init-val="{{$product['WeshareProduct']['tbd']}}">
-                                                                价格待定
-                                                            </label>
-                                                        </div>
-                                                        <div class='col-xs-4 form-group required'>
-                                                            <label class="checkbox-inline">
-                                                                <input type="checkbox" value="1" name="product-limit"
-                                                                       data-init-val="{{$product['WeshareProduct']['limit']}}">
-                                                                限购一份
-                                                            </label>
-                                                        </div>
-                                                        <div class='col-xs-4 form-group required'>
-                                                            <label class="checkbox-inline">
-                                                                <input type="checkbox" value="1" name="product-deleted"
-                                                                       data-init-val="{{$product['WeshareProduct']['deleted']}}">
-                                                                是否下架
-                                                            </label>
-                                                        </div>
+                                                    <div class='col-xs-3 form-group required'>
+                                                        <label class='control-label'>库存</label>
+                                                        <input class='form-control' type='number'
+                                                               value="0"
+                                                               name="product-store">
+                                                    </div>
+                                                    <div class='col-xs-6 form-group required'>
+                                                        <label class='control-label'>分组</label>
+                                                        <select class="form-control"
+                                                                data-init-val="{{$product['WeshareProduct']['tag_id']}}"
+                                                                name="product-tag">
+                                                            <option value="0">默认分组</option>
+                                                            {{loop $weshare_tags $tag}}
+                                                            <option value="{{$tag['WeshareProductTag']['id']}}">
+                                                                {{$tag['WeshareProductTag']['name']}}
+                                                            </option>
+                                                            {{/loop}}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class='col-xs-4 form-group required'>
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" value="1" name="product-tbd">
+                                                            价格待定
+                                                        </label>
+                                                    </div>
+                                                    <div class='col-xs-4 form-group required'>
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" value="1" name="product-limit">
+                                                            限购一份
+                                                        </label>
+                                                    </div>
+                                                    <div class='col-xs-4 form-group required'>
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" value="1" name="product-deleted">
+                                                            是否下架
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class='form-row'>
+                                                    <div class='col-md-12 form-group'>
+                                                        <button class='form-control btn btn-warning share-product-rm-btn'>移除</button>
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="col-md-12" id="product-container">
+                                            {{loop $weshare_products $product}}
+                                                <div class='col-md-4 product-item'
+                                                     id="share-product-{{$product['WeshareProduct']['id']}}">
+                                                    <div style="margin:0;padding:0;display:inline">
+                                                        <input type="hidden"
+                                                               value="{{$product['WeshareProduct']['id']}}" name="product-id"/>
+
+                                                        <div class='form-row'>
+                                                            <div class='col-xs-12 form-group required'>
+                                                                <label class='control-label'>产品名称/规格</label>
+                                                                <input class='form-control' type='text'
+                                                                       value="{{$product['WeshareProduct']['name']}}"
+                                                                       name="product-name">
+                                                            </div>
+                                                        </div>
+                                                        <div class='form-row'>
+                                                            <div class='col-xs-3 form-group required'>
+                                                                <label class='control-label'>价格</label>
+                                                                <input class='form-control' type="number"
+                                                                       value="{{$product['WeshareProduct']['price']}}"
+                                                                       name="product-price">
+                                                            </div>
+                                                            <div class='col-xs-3 form-group required'>
+                                                                <label class='control-label'>库存</label>
+                                                                <input class='form-control' type='number'
+                                                                       value="{{$product['WeshareProduct']['store']}}"
+                                                                       name="product-store">
+                                                            </div>
+                                                            <div class='col-xs-6 form-group required'>
+                                                                <label class='control-label'>分组</label>
+                                                                <select class="form-control"
+                                                                        data-init-val="{{$product['WeshareProduct']['tag_id']}}" name="product-tag">
+                                                                    <option value="0">默认分组</option>
+                                                                    {{loop $weshare_tags $tag}}
+                                                                    <option value="{{$tag['WeshareProductTag']['id']}}">
+                                                                        {{$tag['WeshareProductTag']['name']}}
+                                                                    </option>
+                                                                    {{/loop}}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-row">
+                                                            <div class='col-xs-4 form-group required'>
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" value="1" name="product-tbd"
+                                                                           data-init-val="{{$product['WeshareProduct']['tbd']}}">
+                                                                    价格待定
+                                                                </label>
+                                                            </div>
+                                                            <div class='col-xs-4 form-group required'>
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" value="1" name="product-limit"
+                                                                           data-init-val="{{$product['WeshareProduct']['limit']}}">
+                                                                    限购一份
+                                                                </label>
+                                                            </div>
+                                                            <div class='col-xs-4 form-group required'>
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" value="1" name="product-deleted"
+                                                                           data-init-val="{{$product['WeshareProduct']['deleted']}}">
+                                                                    是否下架
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             {{/loop}}
                                         </div>
+
                                         <button class="btn btn-primary btn-lg pull-right" type="button" id="save-share-product">保存</button>
                                     </div>
                                 </div>
@@ -239,7 +307,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
                 <!-- /.panel-body -->

@@ -79,7 +79,10 @@ $(document).ready(function () {
   //end update share info
   //update share products
   var $shareProductInfoPanel = $('#share-product-info');
+  var $addNewShareProductBtn = $('#add-new-product', $shareProductInfoPanel);
   var $saveShareProductBtn = $('#save-share-product', $shareProductInfoPanel);
+  var $productContainer = $('#product-container', $shareProductInfoPanel);
+  var $shareProductTemplate = $('#share-product-template', $shareProductInfoPanel);
   initSelectCheckBoxVal();
   $saveShareProductBtn.on('click', function (e) {
     e.preventDefault();
@@ -90,6 +93,20 @@ $(document).ready(function () {
       }
     }, 'json');
   });
+  $addNewShareProductBtn.on('click', function (e) {
+    e.preventDefault();
+    $productContainer.append($shareProductTemplate.clone(true).attr('id', '').show());
+    initRmShareBtnEvent();
+  });
+  function initRmShareBtnEvent(){
+    var $shareProudctRmBtn = $('button.share-product-rm-btn', $productContainer);
+    $shareProudctRmBtn.unbind();
+    $shareProudctRmBtn.on('click', function(e){
+      e.preventDefault();
+      var $me = $(this);
+      $me.parent().parent().parent().remove();
+    });
+  }
   function getProductData() {
     var productData = [];
     $('div.product-item', $shareProductInfoPanel).each(function (index, item) {
