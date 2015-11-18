@@ -72,8 +72,12 @@
             </p>
             {{if $item_order['status'] == ORDER_STATUS_SHIPPED}}
                 {{if $current_tag == SHARE_SHIP_KUAIDI_TAG}}
-                    <p>
-                        <strong>{{if !empty($item_order['ship_type_name'])}}{{$item_order['ship_type_name']}}{{else}}{{$ship_type_list[$item_order['ship_type']]}}{{/if}}:</strong><strong>{{$item_order['ship_code']}}</strong>
+                    <p name="order-ship-info" id="order-ship-info-{{$item_order['id']}}">
+                        <strong name="order_ship_type_name">{{if !empty($item_order['ship_type_name'])}}{{$item_order['ship_type_name']}}{{else}}{{$ship_type_list[$item_order['ship_type']]}}{{/if}}</strong>:<strong name="order_ship_code">{{$item_order['ship_code']}}</strong>
+                        <button class="btn btn-info btn-xs edit-ship-code"
+                                data-order-id="{{$item_order['id']}}"
+                                style="margin-bottom: 5px; margin-left: 5px;">修改快递单号
+                        </button>
                     </p>
                 {{/if}}
                 {{if $current_tag == SHARE_SHIP_PYS_ZITI_TAG}}

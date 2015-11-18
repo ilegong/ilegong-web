@@ -766,6 +766,26 @@ class WesharesController extends AppController {
         return;
     }
 
+    /**
+     * 更新快递单号
+     */
+    public function update_order_ship_code() {
+        $this->autoRender = false;
+        $order_id = $_REQUEST['order_id'];
+        $ship_type_name = $_REQUEST['ship_type_name'];
+        $ship_code = $_REQUEST['ship_code'];
+        $weshare_id = $_REQUEST['weshare_id'];
+        $ship_name_id_map = ShipAddress::ship_type_name_id_map();
+        $ship_company_id = $ship_name_id_map[$ship_type_name];
+        $this->Order->updateAll(array('ship_type_name' => "'" . $ship_type_name . "'", 'ship_type' => $ship_company_id, 'ship_code' => "'" . $ship_code . "'"), array('id' => $order_id));
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_0', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
+        $this->WeshareBuy->clear_user_share_order_data_cache(array($order_id), $weshare_id);
+        echo json_encode(array('success' => true));
+    }
+
     public function batch_set_order_ship_code() {
         $this->autoRender = false;
         $post_data = $_REQUEST['data'];

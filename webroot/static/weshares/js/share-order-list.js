@@ -340,4 +340,53 @@ $(document).ready(function () {
       }
     }, 'json');
   });
+  //update order ship info
+  var $toEditOrderShipInfoBtn = $('button.edit-ship-code');
+  var $editOrderShipInfoForm = $('div.update-ship-info-dialog');
+  var $editOrderShipTypeNameEl = $('input[name="ship_type_name"]', $editOrderShipInfoForm);
+  var $editOrderShipCodeEl = $('input[name="ship_code"]', $editOrderShipInfoForm);
+  var $editOrderShipOrderId = $('input[name="order_id"]', $editOrderShipInfoForm);
+  var $handleUpdateShipCodeBtn = $('button[name="handle-update-ship-code"]', $editOrderShipInfoForm);
+  $toEditOrderShipInfoBtn.on('click', function (e) {
+    e.preventDefault();
+    var $me = $(this);
+    var orderId = $me.data('order-id');
+    var $shipInfoP = $me.parent();
+    var shipTypeName = $('strong[name="order_ship_type_name"]', $shipInfoP).text();
+    var shipCode = $('strong[name="order_ship_code"]', $shipInfoP).text();
+    $editOrderShipTypeNameEl.val(shipTypeName);
+    $editOrderShipCodeEl.val(shipCode);
+    $editOrderShipOrderId.val(orderId);
+    $editOrderShipInfoForm.modal('show');
+  });
+  $handleUpdateShipCodeBtn.on('click', function (e) {
+    e.preventDefault();
+    var $me = $(this);
+    var weshare_id = $me.data('id');
+    var order_id = $editOrderShipOrderId.val();
+    var ship_type_name = $editOrderShipTypeNameEl.val();
+    var ship_code = $editOrderShipCodeEl.val();
+    if(!ship_code || !ship_type_name){
+      alert('请输入快递单号和快递公司');
+      return false;
+    }
+    var postData = {
+      'order_id': order_id,
+      'ship_type_name': ship_type_name,
+      'ship_code': ship_code,
+      'weshare_id': weshare_id
+    };
+    $.post('/weshares/update_order_ship_code', postData, function (data) {
+      if(data['success']){
+        //update view
+        var $currentOrderShipInfo = $('#order-ship-info-' + order_id);
+        $('strong[name="order_ship_type_name"]', $currentOrderShipInfo).text(ship_type_name);
+        $('strong[name="order_ship_code"]', $currentOrderShipInfo).text(ship_code);
+        $editOrderShipOrderId.val('');
+        $editOrderShipTypeNameEl.val('');
+        $editOrderShipCodeEl.val('');
+        $editOrderShipInfoForm.modal('hide');
+      }
+    }, 'json')
+  });
 });
