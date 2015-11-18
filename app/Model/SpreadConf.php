@@ -15,9 +15,15 @@ class SpreadConf extends AppModel {
             'wx_pic' => 'http://51daifan-images.stor.sinaapp.com/files/201511/5aa958fe129_1114.jpg',
             'wx_introduce_url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=400808364&idx=1&sn=3793771175d55f44090b64c6a9840551#rd'
         ),
+        //樱花
         810684 => array(
             'wx_pic' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/0e72665aaf0_1118.jpg',
             'wx_introduce_url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=400867431&idx=1&sn=329a6932fbf666c10a599be327eac7e4'
+        ),
+        //鲲
+        806889 => array(
+            'wx_pic' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/c3f462e211c_1118.jpg',
+            'wx_introduce_url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=400868619&idx=1&sn=db972ca21c45da233d846ecd89940b60'
         )
     );
 
