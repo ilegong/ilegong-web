@@ -151,4 +151,31 @@ $(document).ready(function () {
       }
     });
   }
+
+  //end edit share product
+  //update share ship setting
+  var $shareShipSettingInfoPanel = $('#shareShipSettingsInfo');
+  var $shipSettingItems = $('div.ship-setting-item', $shareShipSettingInfoPanel);
+  var $addNewAddressBtn = $('button.add-new-address', $shareShipSettingInfoPanel);
+  var $newAddressInput = $('input.new-address-val', $shareShipSettingInfoPanel);
+  var $shipFeeInput = $('input.ship-fee', $shareShipSettingInfoPanel);
+  var $pinTuanNumInput = $('input.pin-tuan-num', $shareShipSettingInfoPanel);
+  var $weshareAddressUl = $('ul[name="weshare-addresses"]', $shareShipSettingInfoPanel);
+
+  function getShareAddress() {
+
+  }
+
+  function getShareShipSettingsData() {
+
+  }
+
+  $addNewAddressBtn.on('click', function(){
+
+  });
+
+  function initRmWeshareAddressEvent() {
+    var $rmWeshareAddressBtn = $('button.rm-weshare-address', $shareShipSettingInfoPanel);
+  }
+  //end update share ship setting
 });
