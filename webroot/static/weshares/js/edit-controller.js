@@ -272,8 +272,7 @@
           PYS.storage.clear();
           window.location.href = '/weshares/view/' + data['id'];
         } else {
-          var uid = data['uid'];
-          window.location.href = '/weshares/user_share_info/' + uid;
+          window.location.href = '/weshares/user_share_info/';
         }
       }).error(function (data, status, headers, config) {
         window.location.href = '/weshares/add';
