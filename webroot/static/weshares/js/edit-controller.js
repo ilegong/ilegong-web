@@ -62,10 +62,22 @@
           vm.weshare = data;
           vm.weshare.tags = vm.weshare['tags_list'];
           setDefaultData();
-          vm.self_ziti_data = data['ship_type']['self_ziti'];
-          vm.kuai_di_data = data['ship_type']['kuai_di'];
-          vm.pys_ziti_data = data['ship_type']['pys_ziti'];
-          vm.pin_tuan_data = data['ship_type']['pin_tuan'];
+          vm.self_ziti_data = {status: 1, ship_fee: 0, tag: 'self_ziti'};
+          vm.kuai_di_data = {status: -1, ship_fee: '', tag: 'kuai_di'};
+          vm.pys_ziti_data = {status: -1, ship_fee: 0, tag: 'pys_ziti'};
+          vm.pin_tuan_data = {status: -1, ship_fee: 500, tag: 'pin_tuan'};
+          if(data['ship_type']['self_ziti']){
+            vm.self_ziti_data = data['ship_type']['self_ziti'];
+          }
+          if(data['ship_type']['kuai_di']){
+            vm.kuai_di_data = data['ship_type']['kuai_di'];
+          }
+          if(data['ship_type']['pys_ziti']){
+            vm.pys_ziti_data = data['ship_type']['pys_ziti'];
+          }
+          if(data['ship_type']['pin_tuan']){
+            vm.pin_tuan_data = data['ship_type']['pin_tuan'];
+          }
           vm.kuaidi_show_ship_fee = vm.kuai_di_data.ship_fee / 100;
           if( data['proxy_rebate_percent']){
             vm.proxy_rebate_percent = data['proxy_rebate_percent'];
