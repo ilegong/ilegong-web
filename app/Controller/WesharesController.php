@@ -784,7 +784,7 @@ class WesharesController extends AppController {
             $params = "order_id=" . $order_id . "&company_id=" . $ship_company_id . "&ship_code=" . $ship_code . "&ship_type_name=" . $ship_type_name;
             $task[] = array('url' => "/task/process_set_order_ship_code", "postdata" => $params);
         }
-        $this->WeshareBuy->clear_user_share_order_data_cache($order_ids, 0);
+        //$this->WeshareBuy->clear_user_share_order_data_cache($order_ids, 0);
         $queue->addTask($task);
         //将任务推入队列
         $ret = $queue->push();
