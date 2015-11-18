@@ -104,12 +104,12 @@ $(document).ready(function () {
     $shareProudctRmBtn.on('click', function(e){
       e.preventDefault();
       var $me = $(this);
-      $me.parent().parent().parent().remove();
+      $me.parent().parent().parent().parent().remove();
     });
   }
   function getProductData() {
     var productData = [];
-    $('div.product-item', $shareProductInfoPanel).each(function (index, item) {
+    $('div.product-item', $productContainer).each(function (index, item) {
       var $item = $(item);
       var $productId = $('input[name="product-id"]', $item);
       var $productName = $('input[name="product-name"]', $item);

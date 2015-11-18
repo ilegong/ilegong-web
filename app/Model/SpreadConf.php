@@ -17,13 +17,18 @@ class SpreadConf extends AppModel {
         ),
         //樱花
         810684 => array(
-            'wx_pic' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/0e72665aaf0_1118.jpg',
+            'wx_pic' => 'http://51daifan-images.stor.sinaapp.com/files/201511/0e72665aaf0_1118.jpg',
             'wx_introduce_url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=400867431&idx=1&sn=329a6932fbf666c10a599be327eac7e4'
         ),
         //鲲
         806889 => array(
-            'wx_pic' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/c3f462e211c_1118.jpg',
+            'wx_pic' => 'http://51daifan-images.stor.sinaapp.com/files/201511/c3f462e211c_1118.jpg',
             'wx_introduce_url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=400868619&idx=1&sn=db972ca21c45da233d846ecd89940b60'
+        ),
+        //小宝妈
+        811917 => array(
+            'wx_pic' => 'http://51daifan-images.stor.sinaapp.com/files/201511/833f2b7b706_1118.jpg',
+            'wx_introduce_url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=400870041&idx=1&sn=c83330a75f6bb27862c3a8de4b08807a'
         )
     );
 
