@@ -989,7 +989,7 @@ class UsersController extends AppController {
 
                     //TODO: fix risk
                     $redirectUrl = '/users/login?source=' . $oauth['Oauthbinds']['source'] . '&openid=' . $oauth['Oauthbinds']['oauth_openid'];
-                    $this->log('wx oath after redirect login url ' . $redirectUrl);
+                    $this->log('wx oauth after redirect login url ' . $redirectUrl);
                     if (!empty($refer_by_state)) {
                         $this->redirect($redirectUrl . '&referer=' . urlencode($refer_by_state));
                     } else if (!empty($param_referer)) {
@@ -1104,13 +1104,15 @@ class UsersController extends AppController {
                 $changed = true;
             }
             if (!$user['image']) {
-                $download_url = download_photo_from_wx($userInfo['headimgurl']);
-                if (!empty($download_url)) {
-                    $user['image'] = $download_url;
-                } else {
-                    $user['image'] = $userInfo['headimgurl'];
+                if(!empty($userInfo['headimgurl'])){
+                    $download_url = download_photo_from_wx($userInfo['headimgurl']);
+                    if (!empty($download_url)) {
+                        $user['image'] = $download_url;
+                    } else {
+                        $user['image'] = $userInfo['headimgurl'];
+                    }
+                    $changed = true;
                 }
-                $changed = true;
             }
             if (!$user['city']) {
                 $user['city'] = $userInfo['city'];
