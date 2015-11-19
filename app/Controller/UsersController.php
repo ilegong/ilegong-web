@@ -603,19 +603,15 @@ class UsersController extends AppController {
         } else { // 通过表单登录
             $sid = $this->Session->id();
             if ($this->Auth->login()) {
-
+                //可能通过微信授权登陆成功
                 $newSid = $this->Session->id();
-
-
                 $this->User->id = $this->Auth->user('id');
                 $this->User->updateAll(array(
                     'last_login' => "'" . date('Y-m-d H:i:s') . "'",
                     'last_ip' => "'" . $this->request->clientIp(false) . "'"
                 ), array('id' => $this->User->id,));
-
                 $this->loadModel('Cart');
                 $this->Cart->merge_user_carts_after_login($this->User->id, $sid);
-
                 $this->Session->setFlash('登录成功' . $this->Session->read('Auth.User.session_flash'));
                 $success = true;
             }
@@ -625,27 +621,22 @@ class UsersController extends AppController {
         $login_by_phone = isset($this->data['User']['mobilephone']);
         if ($success) {
             $this->Hook->call('loginSuccess');
-
             $user = $this->Auth->user();
             $userinfo = array(
                 'id' => $user['id'],
                 'username' => $user['username'],
             );
-
             if (!empty($this->data['User']['remember_me'])) {
                 $cookietime = 2592000; // 一月内30*24*60*60
             } else {
                 $cookietime = 3600 * 24 * 7;
             }
             $this->Cookie->write('Auth.User', $userinfo, true, $cookietime);
-
             if ($this->RequestHandler->accepts('json') || $this->RequestHandler->isAjax() || isset($_GET['inajax'])) {
                 $successinfo = array('success' => '登录成功',
                     'userinfo' => $userinfo,
                     'tasks' => array(array('dotype' => 'reload')));
-
                 $this->autoRender = false; // 不显示模板
-
                 $content = json_encode($successinfo);
                 if ($_GET['jsoncallback']) {
                     $content = $_GET['jsoncallback'] . '(' . $content . ');';
@@ -654,6 +645,8 @@ class UsersController extends AppController {
                 $this->response->send();
                 exit;// exit退出时，cookie信息未发出，cookie创建失败。
             } else {
+                $redirect = empty($redirect) ? WX_HOST . '/weshares/index.html' : $redirect;
+                $this->log('login success redirect '.redirect);
                 $this->redirect($redirect);
             }
         } elseif ($login_by_account || $login_by_phone) {
