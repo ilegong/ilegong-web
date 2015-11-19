@@ -579,20 +579,15 @@ class UsersController extends AppController {
     }
 
     function login() {
-
         $this->pageTitle = __('登录');
-
         $redirect = $this->data['User']['referer'] ? $this->data['User']['referer'] : ($_REQUEST['referer'] ? $_REQUEST['referer'] : $this->Auth->redirect());
         $success = false;
-
         if (empty($this->data) && $this->request->query['data']) { //get 方式传入时,phonegap
             $this->data = $this->request->query['data'];
         }
-
         if (!empty($_GET['force_login'])) {
             $this->logoutCurrUser();
         }
-
         if ($id = $this->Auth->user('id')) { //已经登录的
             $this->User->id = $id;
             $this->User->updateAll(array(
@@ -610,8 +605,9 @@ class UsersController extends AppController {
                     'last_login' => "'" . date('Y-m-d H:i:s') . "'",
                     'last_ip' => "'" . $this->request->clientIp(false) . "'"
                 ), array('id' => $this->User->id,));
-                $this->loadModel('Cart');
-                $this->Cart->merge_user_carts_after_login($this->User->id, $sid);
+                //remove old b2c merge cart
+                //$this->loadModel('Cart');
+                //$this->Cart->merge_user_carts_after_login($this->User->id, $sid);
                 $this->Session->setFlash('登录成功' . $this->Session->read('Auth.User.session_flash'));
                 $success = true;
             }
@@ -632,6 +628,7 @@ class UsersController extends AppController {
                 $cookietime = 3600 * 24 * 7;
             }
             $this->Cookie->write('Auth.User', $userinfo, true, $cookietime);
+            //ajax login
             if ($this->RequestHandler->accepts('json') || $this->RequestHandler->isAjax() || isset($_GET['inajax'])) {
                 $successinfo = array('success' => '登录成功',
                     'userinfo' => $userinfo,
@@ -645,9 +642,13 @@ class UsersController extends AppController {
                 $this->response->send();
                 exit;// exit退出时，cookie信息未发出，cookie创建失败。
             } else {
-                $redirect = empty($redirect) ? WX_HOST . '/weshares/index.html' : $redirect;
-                $this->log('login success redirect '.redirect);
+                //from page login
+                if (empty($redirect)) {
+                    $redirect = WX_HOST . '/weshares/index.html';
+                }
+                $this->log('login success redirect ' . $redirect);
                 $this->redirect($redirect);
+                return;
             }
         } elseif ($login_by_account || $login_by_phone) {
             $loginFailMsg = __('username or password not right');
