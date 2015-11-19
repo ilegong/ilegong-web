@@ -25,6 +25,50 @@ class ShareManageController extends AppController {
         )
     );
 
+    /**
+     * 查询用户
+     */
+    public function search_users() {
+        $u_mobile = $_REQUEST['mobile'];
+        $u_nickname = $_REQUEST['nick_name'];
+        if (!empty($u_mobile) || !empty($u_nickname)) {
+            $userM = ClassRegistry::init('User');
+            $cond = array();
+            if (!empty($u_nickname)) {
+                $cond['User.nickname LIKE'] = '%' . $u_nickname . '%';
+            }
+            if (!empty($u_mobile)) {
+                $cond['User.mobilephone'] = $u_mobile;
+            }
+            $users = $userM->find('all', array(
+                'conditions' => $cond,
+                'recursive' => 1,
+                'fields' => array('User.id', 'User.nickname', 'User.image'),
+                'limit' => 100
+            ));
+            $this->set('users', $users);
+        }
+
+    }
+
+    /**
+     * 查询分享
+     */
+    public function search_shares() {
+        $s_title = $_REQUEST['title'];
+        if (!empty($s_title)) {
+            $WeshareM = ClassRegistry::init('Weshare');
+            $cond = array('title LIKE' => '%' . $s_title . '%');
+            $weshares = $WeshareM->find('all', array(
+                'conditions' => $cond
+            ));
+            $this->set('weshares', $weshares);
+        }
+    }
+
+    /**
+     * 更新分享信息
+     */
     public function update_share() {
         $this->autoRender = false;
         $json_data = $_REQUEST['data'];

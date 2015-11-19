@@ -815,8 +815,12 @@ class UsersController extends AppController {
         }
 
         if ($_GET['scope'] == 'userinfo') {
+            //todo remove
+            $this->log('wx_oath redirect url '.redirect_to_wx_oauth($ref, WX_OAUTH_USERINFO));
             $this->redirect(redirect_to_wx_oauth($ref, WX_OAUTH_USERINFO));
         } else {
+            //todo remove
+            $this->log('wx_oath redirect url '.redirect_to_wx_oauth($ref));
             $this->redirect(redirect_to_wx_oauth($ref));
         }
     }
