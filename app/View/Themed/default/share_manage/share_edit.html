@@ -283,10 +283,10 @@
                                         <h3> 物流设置</h3>
                                         <div class="row">
                                             {{loop $weshare_ship_settings $ship_setting}}
-                                            <div class="col-md-3 ship-setting-item" data-name="{{$ship_setting['WeshareShipSetting']['tag']}}" data-type="{{$ship_setting['WeshareShipSetting']['status']}}">
+                                            <div class="col-md-3 ship-setting-item" data-name="{{$ship_setting['WeshareShipSetting']['tag']}}" data-id="{{$ship_setting['WeshareShipSetting']['id']}}">
                                                 <div class="checkbox">
                                                     <label>
-                                                        <input type="checkbox" value="1" {{if $ship_setting['WeshareShipSetting']['status'] == '1'}}checked{{/if}} {{if $ship_setting['WeshareShipSetting']['tag'] == SHARE_SHIP_GROUP_TAG}}{{if !$can_use_offline_address}}disabled{{/if}}{{/if}} {{if $ship_setting['WeshareShipSetting']['tag'] == SHARE_SHIP_PYS_ZITI_TAG}}{{if !$offline_store_ship_set}}disabled{{/if}}{{/if}}>
+                                                        <input type="checkbox" value="1" name="ship_status" {{if $ship_setting['WeshareShipSetting']['status'] == '1'}}checked{{/if}} {{if $ship_setting['WeshareShipSetting']['tag'] == SHARE_SHIP_GROUP_TAG}}{{if !$can_use_offline_address}}disabled{{/if}}{{/if}} {{if $ship_setting['WeshareShipSetting']['tag'] == SHARE_SHIP_PYS_ZITI_TAG}}{{if !$offline_store_ship_set}}disabled{{/if}}{{/if}}>
                                                         {{get_ship_text_from_order_ship_mark($ship_setting['WeshareShipSetting']['tag'])}}
                                                     </label>
                                                 </div>
@@ -296,13 +296,13 @@
                                                 {{if $ship_setting['WeshareShipSetting']['tag'] == SHARE_SHIP_KUAIDI_TAG}}
                                                 <div class="form-group">
                                                     <label>快递费用</label>
-                                                    <input type="number" class="form-control ship-fee" placeholder="快递费用">
+                                                    <input type="number" class="form-control ship-fee" placeholder="快递费用" value="{{$ship_setting['WeshareShipSetting']['ship_fee']/100}}">
                                                 </div>
                                                 {{/if}}
                                                 {{if $ship_setting['WeshareShipSetting']['tag'] == SHARE_SHIP_GROUP_TAG}}
                                                 <div class="form-group">
                                                     <label>拼团人数</label>
-                                                    <input type="number" class="form-control pin-tuan-num" placeholder="拼团人数">
+                                                    <input type="number" class="form-control pin-tuan-num" placeholder="拼团人数" value="{{$ship_setting['WeshareShipSetting']['limit']}}">
                                                 </div>
                                                 <div class="alert alert-danger">对团长开放</div>
                                                 {{/if}}
@@ -317,23 +317,46 @@
                                                 <h5>自提地址</h5>
                                                 <ul name="weshare-addresses">
                                                     {{loop $weshare_addresses $address_item}}
-                                                    <li>{{$address_item['WeshareAddress']['address']}} <button type="button" class="btn btn-warning btn-circle rm-weshare-address" style="width: 20px;height: 20px;padding: 0px 0;"><i class="fa fa-times fa-lg"></i></button></li>
+                                                    {{if $address_item['WeshareAddress']['deleted'] == 0}}
+                                                    <li data-deleted="0" data-id="{{$address_item['WeshareAddress']['id']}}">{{$address_item['WeshareAddress']['address']}} <button type="button" class="btn btn-warning btn-circle rm-weshare-address" style="width: 20px;height: 20px;padding: 0px 0;"><i class="fa fa-times fa-lg"></i></button></li>
+                                                    {{/if}}
                                                     {{/loop}}
                                                 </ul>
                                                 {{/if}}
                                             </div>
                                             {{/loop}}
                                         </div>
-                                        <button class="btn btn-success btn-lg pull-right" type="button">保存
+                                        <button class="btn btn-success btn-lg pull-right"  id="save-share-ship-setting" type="button">保存
                                         </button>
                                     </div>
                                 </div>
                             </div>
                             <div class="row setup-content" id="step-4">
                                 <div class="col-xs-12">
-                                    <div class="col-md-12">
+                                    <div class="col-md-12" id="shareRebateSettingInfo">
                                         <h3> 佣金设置</h3>
-                                        <button class="btn btn-success btn-lg pull-right" type="button">保存
+                                        <div class="form-horizontal">
+                                            <input type="hidden" value="{{$share_rebate_set['ProxyRebatePercent']['id']}}" name="shareRebateId">
+                                            <div class="form-group">
+                                                <div class="col-sm-offset-2 col-sm-10">
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox" name="shareRebateStatus" data-init-val="{{$share_rebate_set['ProxyRebatePercent']['status']}}"> 启用
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">佣金百分比</label>
+                                                <div class="col-sm-2">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" name="shareRebate" value="{{$share_rebate_set['ProxyRebatePercent']['percent']}}">
+                                                        <span class="input-group-addon">%</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-success btn-lg pull-right" type="button" id="saveShareRebateSetting">保存
                                         </button>
                                     </div>
                                 </div>

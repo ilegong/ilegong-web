@@ -34,6 +34,34 @@ class ShareManageController extends AppController {
         return;
     }
 
+    /**
+     * 更新返利设置
+     */
+    public function update_share_rebate_setting() {
+        $this->autoRender = false;
+        $json_data = $_REQUEST['data'];
+        $data = json_decode($json_data, true);
+        $proxyRebatePercent = ClassRegistry::init('ProxyRebatePercent');
+        $proxyRebatePercent->save($data);
+        echo json_encode(array('success' => true));
+        return;
+    }
+
+    /**
+     * 更新分享的快递设置
+     */
+    public function update_share_ship_setting() {
+        $this->autoRender = false;
+        $json_data = $_POST['data'];
+        $data = json_decode($json_data, true);
+        $weshareShipSettingM = ClassRegistry::init('WeshareShipSetting');
+        $weshareAddressM = ClassRegistry::init('WeshareAddress');
+        $weshareShipSettingM->saveAll($data['ship_setting']);
+        $weshareAddressM->saveAll($data['weshare_address']);
+        echo json_encode(array('success' => true));
+        return;
+    }
+
     public function update_share_product() {
         $this->autoRender = false;
         $json_data = $_REQUEST['data'];
@@ -98,6 +126,9 @@ class ShareManageController extends AppController {
         $this->set('offline_store_ship_set', $offline_store_ship_set);
         $this->set('weshare_ship_settings', $weshare_ship_settings);
         $this->set('weshare_addresses', $weshare_addresses);
+        //rebate set
+        $share_rebate_set = $this->ShareManage->get_weshare_rebate_setting($share_id);
+        $this->set('share_rebate_set', $share_rebate_set);
         $this->data = $weshareData;
     }
 

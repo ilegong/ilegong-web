@@ -4,6 +4,21 @@ class ShareManageComponent extends Component {
 
     public $components = array('ShareUti', 'WeshareBuy');
 
+
+    /**
+     * @param $shareId
+     * @return percent
+     */
+    public function get_weshare_rebate_setting($shareId) {
+        $proxyRebatePercentM = ClassRegistry::init('ProxyRebatePercent');
+        $proxyRebatePercent = $proxyRebatePercentM->find('first', array(
+            'conditions' => array(
+                'share_id' => $shareId
+            )
+        ));
+        return $proxyRebatePercent;
+    }
+
     /**
      * @param $shareId
      * @return array
