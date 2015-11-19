@@ -1501,9 +1501,11 @@ function convertWxName($text) {
  * @return int if created failed return 0
  */
 function createNewUserByWeixin($userInfo, $userModel) {
-    $download_url = download_photo_from_wx($userInfo['headimgurl']);
-    if (empty($download_url)) {
-        $download_url = $userInfo['headimgurl'];
+    if(!empty($userInfo['headimgurl'])){
+        $download_url = download_photo_from_wx($userInfo['headimgurl']);
+        if (empty($download_url)) {
+            $download_url = $userInfo['headimgurl'];
+        }
     }
     if (!$userModel->save(array(
         'nickname' => convertWxName($userInfo['nickname']),
