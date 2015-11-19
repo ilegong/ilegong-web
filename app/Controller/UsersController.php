@@ -644,7 +644,7 @@ class UsersController extends AppController {
             } else {
                 //from page login
                 if (empty($redirect)) {
-                    $redirect = WX_HOST . '/weshares/index.html';
+                    $redirect = '/weshares/index.html';
                 }
                 $this->log('login success redirect ' . $redirect);
                 $this->redirect($redirect);
@@ -988,7 +988,7 @@ class UsersController extends AppController {
                     }
 
                     //TODO: fix risk
-                    $redirectUrl = WX_HOST.'/users/login?source=' . $oauth['Oauthbinds']['source'] . '&openid=' . $oauth['Oauthbinds']['oauth_openid'];
+                    $redirectUrl = '/users/login?source=' . $oauth['Oauthbinds']['source'] . '&openid=' . $oauth['Oauthbinds']['oauth_openid'];
                     $this->log('wx oath after redirect login url ' . $redirectUrl);
                     if (!empty($refer_by_state)) {
                         $this->redirect($redirectUrl . '&referer=' . urlencode($refer_by_state));
