@@ -48,7 +48,6 @@ class ShareManageController extends AppController {
             ));
             $this->set('users', $users);
         }
-
     }
 
     /**
