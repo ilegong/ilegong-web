@@ -59,7 +59,8 @@ class ShareManageController extends AppController {
             $WeshareM = ClassRegistry::init('Weshare');
             $cond = array('title LIKE' => '%' . $s_title . '%');
             $weshares = $WeshareM->find('all', array(
-                'conditions' => $cond
+                'conditions' => $cond,
+                'limit' => 100
             ));
             $this->set('weshares', $weshares);
         }
