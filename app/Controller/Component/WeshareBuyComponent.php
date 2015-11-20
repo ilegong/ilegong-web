@@ -1402,7 +1402,7 @@ class WeshareBuyComponent extends Component {
     public function change_status_and_send_to_comment_msg($weshareId = null) {
         $orderM = ClassRegistry::init('Order');
         $cartM = ClassRegistry::init('Cart');
-        $limit_date = date('Y-m-d', strtotime("-7 days"));
+        $limit_date = date('Y-m-d', strtotime("-15 days"));
         $cond = array(
             'status' => ORDER_STATUS_SHIPPED,
             'type' => ORDER_TYPE_WESHARE_BUY
