@@ -23,6 +23,9 @@ class TaskController extends AppController {
         $this->autoRender = false;
         $order_id = $_REQUEST['order_id'];
         $ship_company_id = $_REQUEST['company_id'];
+        if(empty($ship_company_id)){
+            $ship_company_id = 0;
+        }
         $weshare_id = $this->get_member_id_by_order_id($order_id);
         $ship_code = $_REQUEST['ship_code'];
         $ship_type_name = $_REQUEST['ship_type_name'];
