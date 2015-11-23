@@ -1154,7 +1154,12 @@
       } else {
         //check is creator
         if (vm.currentUser.id == vm.weshare.creator.id) {
-          var order_username = vm.ordersDetail.users[order.creator]['nickname'];
+          var order_username;
+          if(vm.ordersDetail.users[order.creator]){
+            order_username = vm.ordersDetail.users[order.creator]['nickname'];
+          }else{
+            order_username = vm.shareOrder.users[order.creator]['nickname'];
+          }
           comment_tip_info = '回复' + order_username + '说：';
         } else {
           comment_tip_info = '回复' + vm.weshare.creator.nickname + '说：';
