@@ -361,12 +361,12 @@
     }
 
     function validateTitle() {
-      vm.weshareTitleHasError = _.isEmpty(vm.weshare.title) || vm.weshare.title.length > 50;
+      vm.weshareTitleHasError = _.isEmpty(vm.weshare.title) || vm.weshare.title.length > 128;
       return vm.weshareTitleHasError;
     }
 
     function validateSendInfo() {
-      vm.weshareSendInfoHasError = _.isEmpty(vm.weshare.send_info) || vm.weshare.send_info.length > 50;
+      vm.weshareSendInfoHasError = _.isEmpty(vm.weshare.send_info) || vm.weshare.send_info.length > 68;
       return vm.weshareSendInfoHasError;
     }
 
