@@ -88,7 +88,7 @@ class WesharesController extends AppController {
                 $this->set('rebateLogId', $rebateLogId);
             }
         }
-
+        //mark this form comment template msg and auto pop comment dialog
         $comment_order_id = $_REQUEST['comment_order_id'];
         $replay_comment_id = $_REQUEST['reply_comment_id'];
         if(!empty($comment_order_id)){
@@ -385,7 +385,7 @@ class WesharesController extends AppController {
 
     /**
      * @return mixed
-     * 获取待评论的数据
+     * 自动弹出评论框的数据
      */
     private function prepare_comment_data() {
         $to_comment_order_id = $_REQUEST['comment_order_id'];

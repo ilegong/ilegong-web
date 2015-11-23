@@ -1574,8 +1574,9 @@ class WeshareBuyComponent extends Component {
      * @param $comment_content
      * @param $comment_id
      * 通知下单用户 收到了评论
+     * 标记评论
      */
-    public function send_comment_notify($order_id, $weshare_id, $comment_content, $comment_id=null) {
+    public function send_comment_notify($order_id, $weshare_id, $comment_content, $comment_id=0) {
         $order_info = $this->get_order_info($order_id);
         $order_creator = $order_info['creator'];
         $share_info = $this->get_weshare_info($weshare_id);
