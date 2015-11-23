@@ -186,6 +186,7 @@
     vm.getShipCode = getShipCode;
     vm.isShowShipCode = isShowShipCode;
     vm.showCommentDialog = showCommentDialog;
+    vm.showAutoCommentDialog = showAutoCommentDialog;
     vm.submitComment = submitComment;
     vm.getOrderComment = getOrderComment;
     vm.getReplyComments = getReplyComments;
@@ -334,33 +335,39 @@
           //vm.sortOrders();
           vm.combineShareBuyData();
           setWeiXinShareParams();
-          //from paid done
-          if (fromType == 1) {
-            if (_.isEmpty(initSharedOfferId)) {
-              vm.showNotifyShareDialog = true;
-              vm.showLayer = true;
-            } else {
-              //check is new user buy it
-              var userInfo = vm.ordersDetail.users[vm.currentUser.id];
-              if (userInfo) {
-                vm.showNotifyShareOfferDialog = true;
-                vm.sharedOfferMsg = '恭喜发财，大吉大利！';
+          //check user is auto comment
+          if(vm.autoPopCommentData['comment_order_info']){
+            vm.showAutoCommentDialog();
+          }else{
+            //from paid done
+            if (fromType == 1) {
+              if (_.isEmpty(initSharedOfferId)) {
+                vm.showNotifyShareDialog = true;
                 vm.showLayer = true;
+              } else {
+                //check is new user buy it
+                var userInfo = vm.ordersDetail.users[vm.currentUser.id];
+                if (userInfo) {
+                  vm.showNotifyShareOfferDialog = true;
+                  vm.sharedOfferMsg = '恭喜发财，大吉大利！';
+                  vm.showLayer = true;
+                }
+              }
+            }
+            //follow share
+            if (followSharedType) {
+              if (followSharedType == 'got') {
+                vm.showNotifyGetPacketDialog = true;
+                vm.getPacketNum = followSharedNum + '元';
+                vm.showLayer = true;
+                $timeout(function () {
+                  vm.showLayer = false;
+                  vm.showNotifyGetPacketDialog = false;
+                }, 10000);
               }
             }
           }
-          //follow share
-          if (followSharedType) {
-            if (followSharedType == 'got') {
-              vm.showNotifyGetPacketDialog = true;
-              vm.getPacketNum = followSharedNum + '元';
-              vm.showLayer = true;
-              $timeout(function () {
-                vm.showLayer = false;
-                vm.showNotifyGetPacketDialog = false;
-              }, 10000);
-            }
-          }
+          //process page order info
           vm.shareOrder = new ShareOrder();
           vm.shareOrder.shareId = share_id;
         }).
@@ -372,6 +379,9 @@
     function initWeshareData() {
       var rebateLogId = angular.element(document.getElementById('weshareView')).attr('data-rebate-log-id');
       var recommendUserId = angular.element(document.getElementById('weshareView')).attr('data-recommend-id');
+      //auto poup comment dialog
+      var commentOrderId = angular.element(document.getElementById('weshareView')).attr('data-comment-order-id');
+      var replayCommentId = angular.element(document.getElementById('weshareView')).attr('data-replay-comment-id');
       vm.rebateLogId = rebateLogId || 0;
       vm.recommendUserId = recommendUserId || 0;
       var weshareId = angular.element(document.getElementById('weshareView')).attr('data-weshare-id');
@@ -387,7 +397,11 @@
           vm.chooseOfflineStoreError = false;
         }
       });
-      $http({method: 'GET', url: '/weshares/detail/' + weshareId + '.json', cache: $templateCache}).
+      var shareDetailUrl = '/weshares/detail/' + weshareId + '.json?comment_order_id='+commentOrderId+'&reply_comment_id='+replayCommentId;
+      $http({method: 'GET', url: shareDetailUrl, params: {
+        "comment_order_id" : commentOrderId,
+        "reply_comment_id" : replayCommentId
+      }, cache: $templateCache}).
         success(function (data, status) {
           vm.weshare = data['weshare'];
           if (vm.weshare.type == 1) {
@@ -420,6 +434,7 @@
           vm.userSubStatus = data['sub_status'];
           vm.shareOrderCount = data['share_order_count'];
           vm.favourableConfig = data['favourable_config'];
+          vm.autoPopCommentData = data['prepare_comment_data'];
           vm.submitRecommendData = {};
           vm.submitRecommendData.recommend_content = vm.weshare.creator.nickname + '我认识，很靠谱！';
           vm.submitRecommendData.recommend_user = vm.currentUser.id;
@@ -1134,7 +1149,41 @@
       vm.showLayer = false;
       vm.submitTempCommentData = {};
     }
-
+    //todo auto popped up comment dialog
+    function showAutoCommentDialog(){
+      var order = vm.autoPopCommentData['comment_order_info'];
+      if(order){
+        vm.showCommentingDialog = true;
+        vm.showLayer = true;
+        var reply_comment_id = 0;
+        var comment_tip_info = '';
+        var comment = vm.autoPopCommentData['comment_info'];
+        if(comment){
+          reply_comment_id = comment.id || 0;
+          var reply_username = comment.username;
+          if (reply_username == vm.currentUser.nickname) {
+            comment_tip_info = '爱心评价';
+          } else {
+            comment_tip_info = '回复' + reply_username + '：';
+          }
+        } else {
+          //check is creator
+          if (vm.currentUser.id == vm.weshare.creator.id) {
+            var order_username = order['creator_nickname'];
+            comment_tip_info = '回复' + order_username + '说：';
+          } else {
+            comment_tip_info = '回复' + vm.weshare.creator.nickname + '说：';
+          }
+        }
+        vm.submitTempCommentData = {};
+        vm.commentTipInfo = comment_tip_info;
+        vm.commentOrder = order;
+        vm.submitTempCommentData.order_id = order.id;
+        vm.submitTempCommentData.reply_comment_id = reply_comment_id;
+        vm.submitTempCommentData.share_id = vm.weshare.id;
+      }
+    }
+    //open comment dialog
     function showCommentDialog(order, comment) {
       vm.showCommentingDialog = true;
       vm.showLayer = true;

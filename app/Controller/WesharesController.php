@@ -88,6 +88,15 @@ class WesharesController extends AppController {
                 $this->set('rebateLogId', $rebateLogId);
             }
         }
+
+        $comment_order_id = $_REQUEST['comment_order_id'];
+        $replay_comment_id = $_REQUEST['reply_comment_id'];
+        if(!empty($comment_order_id)){
+            $this->set('comment_order_id', $comment_order_id);
+        }
+        if(!empty($replay_comment_id)){
+            $this->set('reply_comment_id', $replay_comment_id);
+        }
     }
 
     /**
@@ -353,6 +362,7 @@ class WesharesController extends AppController {
         $can_edit_share = $this->ShareAuthority->user_can_edit_share_info($uid, $weshareId);
         $share_order_count = $this->WeshareBuy->get_share_all_buy_count($weshareId);
         $favourable_config = $this->ShareFavourableConfig->get_favourable_config($weshareId);
+        $prepare_comment_data = $this->prepare_comment_data();
         echo json_encode(array('support_pys_ziti' => $share_ship_set,
             'weshare' => $weshareInfo,
             'recommendData' => $recommend_data,
@@ -367,9 +377,22 @@ class WesharesController extends AppController {
             'can_manage_share' => $can_manage_share,
             'can_edit_share' => $can_edit_share,
             'share_order_count' => $share_order_count,
-            'favourable_config' => $favourable_config
+            'favourable_config' => $favourable_config,
+            'prepare_comment_data' => $prepare_comment_data
         ));
         return;
+    }
+
+    /**
+     * @return mixed
+     * 获取待评论的数据
+     */
+    private function prepare_comment_data() {
+        $to_comment_order_id = $_REQUEST['comment_order_id'];
+        $reply_comment_id = $_REQUEST['reply_comment_id'];
+        //准备评论数据
+        $prepare_comment_data = $this->WeshareBuy->prepare_to_comment_info($to_comment_order_id, $reply_comment_id);
+        return $prepare_comment_data;
     }
 
     /**
