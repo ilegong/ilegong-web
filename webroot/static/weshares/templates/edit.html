@@ -33,12 +33,24 @@
             <div class="form-group fl set-product-tag-group" ng-if="vm.checkUserCanSetTag()">
                 <a class="set-product-tag" ng-click="vm.editTagView()">设置分组</a>
             </div>
-            <a class="fr btn add-new-product-not-tag"
-               ng-class="{'delete-btn': !$last,'add-btn': $last}"
-               ng-click="vm.toggleProduct(product, $last)" ng-if="!vm.checkUserCanSetTag()"></a>
-            <a class="fr btn add-new-product-tag"
-               ng-class="{'delete-btn': !$last,'add-btn': $last}"
-               ng-click="vm.toggleProduct(product, $last)" ng-if="vm.checkUserCanSetTag()"></a>
+            <div ng-if="!$last">
+                <a class="fr btn add-new-product-not-tag delete-btn"
+                   ng-click="vm.toggleProduct(product, false)" ng-if="!vm.checkUserCanSetTag()"></a>
+                <a class="fr btn add-new-product-tag delete-btn"
+                   ng-click="vm.toggleProduct(product, false)" ng-if="vm.checkUserCanSetTag()"></a>
+            </div>
+            <div ng-if="$last">
+                <a class="fr btn add-new-product-not-tag add-btn"
+                   ng-click="vm.toggleProduct(product, true)" ng-if="!vm.checkUserCanSetTag()"></a>
+                <a class="fr btn add-new-product-tag add-btn"
+                   ng-click="vm.toggleProduct(product, true)" ng-if="vm.checkUserCanSetTag()"></a>
+                <div ng-if="!$first">
+                    <a class="fr btn add-new-product-not-tag delete-btn"
+                       ng-click="vm.toggleProduct(product, false)" ng-if="!vm.checkUserCanSetTag()"></a>
+                    <a class="fr btn add-new-product-tag delete-btn"
+                       ng-click="vm.toggleProduct(product, false)" ng-if="vm.checkUserCanSetTag()"></a>
+                </div>
+            </div>
         </div>
         <div class="form-group">
             <textarea class='form-control' rows="3" cols="" placeholder="描述下分享的详细内容，让大家更好的了解。" ng-model="vm.weshare.description" style="display: block;"></textarea>

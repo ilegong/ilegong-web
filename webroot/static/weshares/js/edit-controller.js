@@ -194,8 +194,8 @@
       vm.weshare.images = _.without(vm.weshare.images, image);
     }
 
-    function toggleProduct(product, isLast) {
-      if (isLast) {
+    function toggleProduct(product, add) {
+      if (add) {
         vm.weshare.products.push({name: '', store: '', deleted: 0});
       }
       else {
