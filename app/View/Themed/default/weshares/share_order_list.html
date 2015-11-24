@@ -149,15 +149,15 @@
         <ul class="nav nav-tabs">
             {{if count($orders[SHARE_SHIP_SELF_ZITI_TAG]) > 0}}
             <li><a href="#self-ziti-orders" data-toggle="tab" data-order-type="self_ziti">自提{{if $show_tag_all}}&nbsp;&nbsp;<font
-                    color="red">{{count($orders[SHARE_SHIP_SELF_ZITI_TAG])}}</font>{{/if}}</a></li>
+                    color="red" name="self-ziti-orders-count">{{count($orders[SHARE_SHIP_SELF_ZITI_TAG])}}</font>{{/if}}</a></li>
             {{/if}}
             {{if count($orders[SHARE_SHIP_KUAIDI_TAG]) > 0}}
-            <li><a href="#kuaidi-orders" data-toggle="tab" data-order-type="kuaidi">快递{{if $show_tag_all}}&nbsp;&nbsp;<font color="red">{{count($orders[SHARE_SHIP_KUAIDI_TAG])}}</font>{{/if}}</a>
+            <li><a href="#kuaidi-orders" data-toggle="tab" data-order-type="kuaidi">快递{{if $show_tag_all}}&nbsp;&nbsp;<font color="red" name="kuaidi-orders-count">{{count($orders[SHARE_SHIP_KUAIDI_TAG])}}</font>{{/if}}</a>
             </li>
             {{/if}}
             {{if count($orders[SHARE_SHIP_PYS_ZITI_TAG]) > 0}}
             <li><a href="#pys-ziti-orders" data-toggle="tab" data-order-type="pys_ziti">好邻居{{if $show_tag_all}}&nbsp;&nbsp;<font
-                    color="red">{{count($orders[SHARE_SHIP_PYS_ZITI_TAG])}}</font>{{/if}}</a></li>
+                    color="red" name="pys-ziti-orders-count">{{count($orders[SHARE_SHIP_PYS_ZITI_TAG])}}</font>{{/if}}</a></li>
             {{/if}}
             {{if !empty($child_share_user_infos)}}
             <li><a href="#group-share-orders" data-toggle="tab" data-order-type="pin_tuan">邻里拼团{{if $show_tag_all}}&nbsp;&nbsp;<font
@@ -416,4 +416,4 @@
             id="send_product_arrive_msg" style="border-radius:0px; display: none;">取货提醒
     </button>
 </div>
-<script src="{{$STATIC_FILE_PATH}}/static/weshares/js/share-order-list.min.js?v0.1.6"></script>
+<script src="{{$STATIC_FILE_PATH}}/static/weshares/js/share-order-list.min.js?v0.1.7"></script>

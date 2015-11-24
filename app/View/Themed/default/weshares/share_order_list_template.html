@@ -6,7 +6,7 @@
         continue;
     }
 ?>
-<div class="col-xs-12 div-order-item" data-id="{{$item_order['id']}}" data-order-status="{{$item_order['status']}}" style="padding-right: 5px;padding-left: 5px;" name="order-item-tag-{{$current_tag_id}}">
+<div class="col-xs-12 div-order-item" data-id="{{$item_order['id']}}" data-order-status="{{$item_order['status']}}" style="padding-right: 5px;padding-left: 5px;" name="order-item-tag-{{$current_tag_id}}" data-order-ship-type="{{$current_tag}}">
     <div class="offer {{if $item_order['status']==ORDER_STATUS_PAID}}
     offer-success
     {{elseif $item_order['status']==ORDER_STATUS_SHIPPED}}

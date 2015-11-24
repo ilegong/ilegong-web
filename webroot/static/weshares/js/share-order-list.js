@@ -86,6 +86,9 @@ $(document).ready(function () {
     }, 'json');
   });
   var $orderStatusLi = $('ul.nav-pills li');
+  var $zitiOrderCountDom = $('font[name="self-ziti-orders-count"]');
+  var $kuaidiOrderCountDom = $('font[name="kuaidi-orders-count"]');
+  var $pysZitiOrderCount = $('font[name="pys-ziti-orders-count"]');
   $orderStatusLi.on('click', function (e) {
     e.preventDefault();
     $orderStatusLi.removeClass('disabled');
@@ -97,18 +100,27 @@ $(document).ready(function () {
   });
   function showFilterOrderItems(tag, status) {
     $divOrderItems.hide();
+    var $showOrderItems = $divOrderItems;
     if (tag == 'all') {
-      if (status == 'all') {
-        $divOrderItems.show();
-      } else {
-        $divOrderItems.filter('div[data-order-status="' + status + '"]').show();
+      if (status != 'all') {
+        $showOrderItems = $divOrderItems.filter('div[data-order-status="' + status + '"]');
       }
     } else {
       if (status == 'all') {
-        $('div[name="order-item-tag-' + tag + '"]').show();
+        $showOrderItems = $('div[name="order-item-tag-' + tag + '"]');
       } else {
-        $('div[name="order-item-tag-' + tag + '"]').filter('div[data-order-status="' + status + '"]').show();
+        $showOrderItems = $('div[name="order-item-tag-' + tag + '"]').filter('div[data-order-status="' + status + '"]');
       }
+    }
+    $showOrderItems.show();
+    if($zitiOrderCountDom.length){
+      $zitiOrderCountDom.text($showOrderItems.filter('div[data-order-ship-type="self_ziti"]').length);
+    }
+    if($kuaidiOrderCountDom.length){
+      $kuaidiOrderCountDom.text($showOrderItems.filter('div[data-order-ship-type="kuai_di"]').length);
+    }
+    if($pysZitiOrderCount.length){
+      $pysZitiOrderCount.text($showOrderItems.filter('div[data-order-ship-type="pys_ziti"]').length);
     }
   }
   $('button[name="set_order_shipped"]').on('click', function (e) {
