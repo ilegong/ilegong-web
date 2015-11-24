@@ -1,0 +1,20 @@
+<div class="row">
+    <div class="col-lg-12">
+        <table class="table table-bordered">
+            <tr>
+                <th>日期</th>
+                <th>订单数</th>
+                <th>成交额</th>
+            </tr>
+            <tboday>
+                {{loop $summeryData $item}}
+                    <tr>
+                        <td>{{$item['StatisticsData']['data_date']}}</td>
+                        <td>{{$item['StatisticsData']['order_count']}}</td>
+                        <td>{{$item['StatisticsData']['trading_volume']}}</td>
+                    </tr>
+                {{/loop}}
+            </tboday>
+        </table>
+    </div>
+</div>

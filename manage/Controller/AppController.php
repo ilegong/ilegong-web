@@ -118,6 +118,7 @@ class AppController extends Controller {
             $this->Auth->allowedActions[] = 'admin_login';
             $this->Auth->allowedActions[] = 'admin_cron_gen_data';
             $this->Auth->allowedActions[] = 'admin_process_gen_data';
+            $this->Auth->allowedActions[] = 'admin_cron_gen_day_data';
         }
         
         if (defined('IN_CLI')) {

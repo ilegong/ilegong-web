@@ -11,10 +11,10 @@ handle:
   - expire: if(path ~ "\.(js|css|png|gif|jpg|jpeg|bmp|ico)") time 31536000
   - compress: if(out_header["Content-Type"] ~ "(text|javascript|json)") compress
 cron:
-#    - description: gen statics order data
-#      url: /manage/admin/countly/cron_gen_data
-#      schedule: 0 3 * * *
-#      timezone: Beijing
+    - description: gen statics order data
+      url: /manage/admin/ShareCountly/cron_gen_day_data
+      schedule: 0 3 * * *
+      timezone: Beijing
     - description: send to comment msg
       url: /cron/send_weshare_order_to_comment_msg
       schedule: 0 12 * * *
