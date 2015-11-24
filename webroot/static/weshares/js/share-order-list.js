@@ -5,6 +5,8 @@ $(document).ready(function () {
   var $summeryProductItems = $('tr.summery-product-item');
   var $orderDataSummeryItems = $('tr.order-data-summery');
   var $zitiPanel = $('#self-ziti-orders');
+  var filterOrderTag = 'all';
+  var filterOrderStatus = 'all';
   $('div.offer .div-share-item').on('click',function(e){
     e.preventDefault();
     var $me = $(this);
@@ -27,6 +29,7 @@ $(document).ready(function () {
   });
   init();
   function handleTagChange(tag) {
+    filterOrderTag = tag;
     if (tag == 'all') {
       $divOrderItems.show();
       $summeryProductItems.show();
@@ -35,7 +38,7 @@ $(document).ready(function () {
     } else {
       $divOrderItems.hide();
       $summeryProductItems.hide();
-      $('div[name="order-item-tag-' + tag + '"]').show();
+      showFilterOrderItems(filterOrderTag,filterOrderStatus);
       $('tr[name="summery-product-' + tag + '"]').show();
       $orderDataSummeryItems.hide();
       $('tr[name="order-data-summery-' + tag + '"]').show();
@@ -47,7 +50,7 @@ $(document).ready(function () {
     var valueSelected = this.value;
     $("option[value='" + valueSelected + "']").prop("selected", true);
   });
-  $('ul.nav li a').on('click', function () {
+  $('ul.nav-tabs li a').on('click', function () {
     var $me = $(this);
     orderType = $me.data('order-type');
     if (orderType == 'self_ziti') {
@@ -56,7 +59,7 @@ $(document).ready(function () {
       $('#send_product_arrive_msg').hide();
     }
   });
-  $('ul.nav li:first a').trigger('click');
+  $('ul.nav-tabs li:first a').trigger('click');
   $('button.set-order-ship-code').on('click', function () {
     var $me = $(this);
     var $parent = $me.parentsUntil('div.col-xs-12');
@@ -82,6 +85,32 @@ $(document).ready(function () {
       }
     }, 'json');
   });
+  var $orderStatusLi = $('ul.nav-pills li');
+  $orderStatusLi.on('click', function (e) {
+    e.preventDefault();
+    $orderStatusLi.removeClass('disabled');
+    var $me = $(this);
+    $me.addClass('disabled');
+    var toggleOrderStatus = $me.data('toggle-val');
+    filterOrderStatus = toggleOrderStatus;
+    showFilterOrderItems(filterOrderTag, filterOrderStatus);
+  });
+  function showFilterOrderItems(tag, status) {
+    $divOrderItems.hide();
+    if (tag == 'all') {
+      if (status == 'all') {
+        $divOrderItems.show();
+      } else {
+        $divOrderItems.filter('div[data-order-status="' + status + '"]').show();
+      }
+    } else {
+      if (status == 'all') {
+        $('div[name="order-item-tag-' + tag + '"]').show();
+      } else {
+        $('div[name="order-item-tag-' + tag + '"]').filter('div[data-order-status="' + status + '"]').show();
+      }
+    }
+  }
   $('button[name="set_order_shipped"]').on('click', function (e) {
     e.preventDefault();
     var $me = $(this);
