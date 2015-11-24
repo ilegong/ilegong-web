@@ -1,20 +1,49 @@
 <div class="row">
-    <div class="col-lg-12">
-        <table class="table table-bordered">
-            <tr>
-                <th>日期</th>
-                <th>订单数</th>
-                <th>成交额</th>
-            </tr>
-            <tboday>
-                {{loop $summeryData $item}}
-                    <tr>
-                        <td>{{$item['StatisticsData']['data_date']}}</td>
-                        <td>{{$item['StatisticsData']['order_count']}}</td>
-                        <td>{{$item['StatisticsData']['trading_volume']}}</td>
-                    </tr>
-                {{/loop}}
-            </tboday>
-        </table>
+    <div>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#table" aria-controls="data-table" role="tab" data-toggle="tab">查看表格数据</a></li>
+            <li role="presentation"><a href="#chart" aria-controls="data-chart" role="tab" data-toggle="tab">查看走势</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="table">
+                <div class="col-lg-12">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>订单数</th>
+                                <th>成交额</th>
+                            </tr>
+                        </thead>
+                        <tbody id="share-order-data-table">
+                        {{loop $summeryData $item}}
+                        <tr>
+                            <td>{{$item['StatisticsData']['data_date']}}</td>
+                            <td>{{$item['StatisticsData']['order_count']}}</td>
+                            <td>{{$item['StatisticsData']['trading_volume']}}</td>
+                        </tr>
+                        {{/loop}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="chart">
+                <div class="col-lg-12">
+                    <div id="chart-container" style="width: 100%;height: 600px;">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
+
+{{$this->Html->script(array(
+'/js/manage-lib/highchart/highcharts.js',
+'/js/manage-lib/highchart/exporting.js',
+'/js/manage-lib/highchart/dark-unica.js',
+'/js/manage/countly/day_share_order_chart.js?v2'));}}
