@@ -1358,14 +1358,10 @@ class WeshareBuyComponent extends Component {
             $product_buy_num['all_ship_fee'] = $shipFee;
             $users = Hash::combine($users, '{n}.User.id', '{n}.User');
             if ($division) {
+                usort($orders, function ($a, $b) {
+                    return ($a['id'] < $b['id']) ? 1 : -1;
+                });
                 $kuaidi_orders = array_filter($orders, "share_kuaidi_order_filter");
-                if (!$export) {
-                    if ($kuaidi_orders) {
-                        usort($kuaidi_orders, function ($a, $b) {
-                            return ($a['status'] < $b['status']) ? -1 : 1;
-                        });
-                    }
-                }
                 $self_ziti_orders = array_filter($orders, "share_self_ziti_order_filter");
                 $pys_ziti_orders = array_filter($orders, "share_pys_ziti_order_filter");
                 $orders = array('origin_orders' => $orders, SHARE_SHIP_KUAIDI_TAG => $kuaidi_orders, SHARE_SHIP_SELF_ZITI_TAG => $self_ziti_orders, SHARE_SHIP_PYS_ZITI_TAG => $pys_ziti_orders);
