@@ -1019,7 +1019,7 @@
     function defaultNotifyHasBuyMsgContent() {
       var msgContent = '';
       if (Object.keys(vm.shareOrder['users']).length > 10) {
-        var usersCount = Object.keys(vm.shareOrder['users']).length;
+        var usersCount = vm.shareOrderCount;
         var index = 0;
         for (var userId in vm.shareOrder['users']) {
           var user = vm.shareOrder['users'][userId];
