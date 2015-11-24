@@ -33,12 +33,8 @@
                 已退款
                 {{elseif $item_order['status']==ORDER_STATUS_RETURNING_MONEY}}
                 退款中
-                {{elseif $item_order['status']==ORDER_STATUS_PREPAID}}
-                待定价格
-                {{elseif $item_order['status']==ORDER_STATUS_PREPAID_TODO}}
-                尾款处理
                 {{else}}
-                    已完成
+                    已评价
                 {{/if}}
             </div>
         </div>
