@@ -29,6 +29,11 @@ class SpreadConf extends AppModel {
         811917 => array(
             'wx_pic' => 'http://51daifan-images.stor.sinaapp.com/files/201511/833f2b7b706_1118.jpg',
             'wx_introduce_url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=400870041&idx=1&sn=c83330a75f6bb27862c3a8de4b08807a'
+        ),
+        //四齐
+        866881 => array(
+            'wx_pic' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/0aee2bc1cb8_1124.jpg',
+            'wx_introduce_url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=401036111&idx=1&sn=87ee0619ab9fcb9fa35e057dba03a403&scene=1'
         )
     );
 
