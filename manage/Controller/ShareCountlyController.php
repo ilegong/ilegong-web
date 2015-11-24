@@ -40,7 +40,7 @@ class ShareCountlyController extends AppController{
         $this->autoRender = false;
         $orderM = ClassRegistry::init('Order');
         $statisticsDataM = ClassRegistry::init('StatisticsData');
-        $date_summery_data = $orderM->query("SELECT count(id), sum(total_all_price), date(created) FROM cake_orders WHERE date(created) > '2015-08-31' group by date(created)");
+        $date_summery_data = $orderM->query("SELECT count(id), sum(total_all_price), date(created) FROM cake_orders WHERE date(created) > '2015-08-31' and status !=0 group by date(created)");
         $saveData = array();
         foreach ($date_summery_data as $summery_item) {
             $saveData[] = array(
@@ -58,7 +58,7 @@ class ShareCountlyController extends AppController{
     private function gen_statics_data_by_date($date){
         $orderM = ClassRegistry::init('Order');
         $statisticsDataM = ClassRegistry::init('StatisticsData');
-        $date_summery_data = $orderM->query('SELECT count(id), sum(total_all_price) FROM cake_orders where date(created) = '.$date);
+        $date_summery_data = $orderM->query('SELECT count(id), sum(total_all_price) FROM cake_orders where status !=0 and date(created) = '.$date);
         $order_count = $date_summery_data[0][0]['count(id)'];
         $total_order_price = empty($date_summery_data[0][0]['sum(total_all_price)']) ? 0 : $date_summery_data[0][0]['sum(total_all_price)'];
         $saveData = array(
