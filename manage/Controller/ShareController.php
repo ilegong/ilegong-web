@@ -272,7 +272,7 @@ class ShareController extends AppController {
         );
         $q_c = array(
             'conditions' => $cond,
-            'limit' => 1000,
+            'limit' => 200,
             'order' => array('id DESC')
         );
         $this->process_share_data($q_c);
@@ -285,7 +285,7 @@ class ShareController extends AppController {
         );
         $q_c = array(
             'conditions' => $cond,
-            'limit' => 1000,
+            'limit' => 500,
             'order' => array('id DESC')
         );
         $this->process_share_data($q_c);
