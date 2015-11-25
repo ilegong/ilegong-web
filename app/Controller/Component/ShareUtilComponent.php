@@ -1565,6 +1565,27 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 806889,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
                 ),
+                '1181' => array(
+                    'share_id' => 1181,
+                    'share_name' => '多油、好吃到停不下来的海鸭蛋',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/ece57e81c34_1027.jpg',
+                    'share_price' => '55',
+                    'share_user_name' => '李樱花',
+                    'share_vote' => 800,
+                    'share_user_id' => 810684,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
+                ),
+                //山药
+                '1294' => array(
+                    'share_id' => 1294,
+                    'share_name' => '口口相传的艳艳山药第三批团！',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/9865c6196ae_1110.jpg',
+                    'share_price' => '85',
+                    'share_user_name' => '艳艳',
+                    'share_vote' => 800,
+                    'share_user_id' => 12376,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/123761447121370.png'
+                ),
                 '1238' => array(
                     'share_id' => 1238,
                     'share_name' => '香妃柚',
@@ -1655,27 +1676,6 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 235,
                     'share_user_id' => 708029,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
-                ),
-                //山药
-                '1294' => array(
-                    'share_id' => 1294,
-                    'share_name' => '口口相传的艳艳山药第三批团！',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/9865c6196ae_1110.jpg',
-                    'share_price' => '85',
-                    'share_user_name' => '艳艳',
-                    'share_vote' => 800,
-                    'share_user_id' => 12376,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/123761447121370.png'
-                ),
-                '1181' => array(
-                    'share_id' => 1181,
-                    'share_name' => '多油、好吃到停不下来的海鸭蛋',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/ece57e81c34_1027.jpg',
-                    'share_price' => '55',
-                    'share_user_name' => '李樱花',
-                    'share_vote' => 800,
-                    'share_user_id' => 810684,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
                 ),
 //                '1059' => array(
 //                    'share_id' => 1059,
