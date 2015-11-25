@@ -1595,6 +1595,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 6783,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0e8ff635498de280dd3193826d837ee5.jpg'
                 ),
+                '1304' => array(
+                    'share_id' => 1304,
+                    'share_name' => '越南进口红心火龙果 大果5枚装',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/1657753d5b2_1106.jpg',
+                    'share_price' => '88',
+                    'share_user_name' => '金子',
+                    'share_vote' => 188,
+                    'share_user_id' => 867768,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_6826f42e5a8ed9fc40cc3653e12b1064.jpg'
+                ),
                 //山药
                 '1294' => array(
                     'share_id' => 1294,
@@ -1697,16 +1707,6 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 708029,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
                 ),
-//                '1059' => array(
-//                    'share_id' => 1059,
-//                    'share_name' => '越南进口红心火龙果 大果5枚装',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/1657753d5b2_1106.jpg',
-//                    'share_price' => '88',
-//                    'share_user_name' => '金子',
-//                    'share_vote' => 188,
-//                    'share_user_id' => 867768,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_6826f42e5a8ed9fc40cc3653e12b1064.jpg'
-//                ),
                 //地瓜干,牛杆菌
                 '1072' => array(
                     'share_id' => 1072,
