@@ -1,0 +1,54 @@
+<style>
+    .classlist { height: 44px; line-height: 44px; width: 100%; text-align: center; color: #ffffff; font-size: 20px;  background-color: #29ac0e; position: fixed; top: 0; z-index: 99; overflow: hidden;}
+    .classlist a.back { display: block; position: absolute; top: 10px; left: 10px; width: 1.167em; height: 1.133em; background: url(http://51daifan-assets.stor.sinaapp.com/img/mobile/pyshuo_icon.png?v3) no-repeat -15.667em -5.333em; background-size: 20em 20em;}
+    .classlist a.home{ display: block; position: absolute; top: 10px; right: 10px; width: 1.2em; height: 1.133em; background: url(http://51daifan-assets.stor.sinaapp.com/img/mobile/pyshuo_icon.png?v3) no-repeat -17.667em -5.333em; background-size: 20em 20em;}
+    .classlist ul{ padding-left:1em; width:50%;}
+    .classlist ul li{ float:left; font-size:1.25em; color:#29ac0e; }
+    .classlist ul li.back{ width:0.5em; height:1em; background:url('http://51daifan-assets.stor.sinaapp.com/img/mobilev1/pyshuo_icon.png?xxz') no-repeat -1.25em -16.875em; background-size:25em 25em; margin-top:0.7em; margin-right:0.5em;}
+</style>
+<div class="row">
+    <div class="classlist">
+        <a href="/weshares/view/{{$order['Order']['member_id']}}" class="back"></a>
+        物流信息
+        <a href="/weshares/user_share_info/{{$order['Order']['creator']}}" class="home"></a>
+    </div>
+</div>
+<br><br><br>
+{{if $no_order}}
+<div class="row">
+    <div class="alert alert-danger" role="alert">该订单不存在</div>
+</div>
+{{else}}
+<div class="row">
+    <dl>
+        <dt>
+        <h4>订单信息</h4></dt>
+        <dd><strong>订单编号:</strong>{{$order['Order']['id']}}, <strong>商品信息:</strong>{{get_share_order_cart_display_name($carts)}}
+        </dd>
+        <dt>
+        <h4>收货信息</h4></dt>
+        <dd>
+            {{$order['Order']['consignee_name']}},{{$order['Order']['consignee_mobilephone']}},{{$order['Order']['consignee_address']}}
+        </dd>
+    </dl>
+</div>
+<div class="row">
+    {{if !empty($shipDetailSrc)}}
+    <iframe name="kuaidi100" class="embed-responsive-item" src="{{$shipDetailSrc}}" width="100%" height="100%">
+    </iframe>
+    {{else}}
+    {{if empty($express_info)}}
+    <div class="alert alert-danger" role="alert">抱歉暂无物流信息</div>
+    {{else}}
+    <table class="table table-bordered">
+        {{loop $express_info $item}}
+        <tr>
+            <td>{{$item->time}}</td>
+            <td>{{$item->context}}</td>
+        </tr>
+        {{/loop}}
+    </table>
+    {{/if}}
+    {{/if}}
+</div>
+{{/if}}

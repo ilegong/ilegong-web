@@ -763,7 +763,7 @@ ul li {
 }
 
 .weshare-view .orders .order .send-info .confirm-btn {
-    display: block;
+    display: inline-block;
     text-decoration: none;
     border-radius: 3px;
     border: 1px #29AC0E solid;
@@ -772,7 +772,7 @@ ul li {
     font-size: 14px;
     text-align: center;
     line-height: 26px;
-    width: 70px;
+    width: 100px;
     margin-top: 10px;
 }
 

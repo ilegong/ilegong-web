@@ -1001,7 +1001,7 @@ class ShipAddress {
     }
 
     /**
-     * @param $orderInfo 快递公司
+     * @param $orderInfo 订单信息
      * @return mixed
      */
     public static function get_ship_detail($orderInfo) {
@@ -1013,6 +1013,7 @@ class ShipAddress {
         }
         $com = key($ship_type);
         $nu = $orderInfo['Order']['ship_code'];
+        $nu = str_replace('-', '', $nu);
         if ($nu == '无' || $nu == '' || $nu == '已发货') {
             return null;
         }
@@ -1501,7 +1502,7 @@ function convertWxName($text) {
  * @return int if created failed return 0
  */
 function createNewUserByWeixin($userInfo, $userModel) {
-    if(!empty($userInfo['headimgurl'])){
+    if (!empty($userInfo['headimgurl'])) {
         $download_url = download_photo_from_wx($userInfo['headimgurl']);
         if (empty($download_url)) {
             $download_url = $userInfo['headimgurl'];

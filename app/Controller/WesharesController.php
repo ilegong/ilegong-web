@@ -7,7 +7,7 @@ class WesharesController extends AppController {
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy');
 
-    var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority');
+    var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'OrderExpress');
 
     var $share_ship_type = array('self_ziti', 'kuaidi', 'pys_ziti');
 
@@ -91,10 +91,10 @@ class WesharesController extends AppController {
         //mark this form comment template msg and auto pop comment dialog
         $comment_order_id = $_REQUEST['comment_order_id'];
         $replay_comment_id = $_REQUEST['reply_comment_id'];
-        if(!empty($comment_order_id)){
+        if (!empty($comment_order_id)) {
             $this->set('comment_order_id', $comment_order_id);
         }
-        if(!empty($replay_comment_id)){
+        if (!empty($replay_comment_id)) {
             $this->set('reply_comment_id', $replay_comment_id);
         }
     }
@@ -1074,7 +1074,7 @@ class WesharesController extends AppController {
             return;
         }
         $share_info = $this->get_weshare_detail($weshare_id);
-        if ($share_info['creator']['id'] != $uid && !$this->ShareAuthority->user_can_manage_share($uid,$weshare_id)) {
+        if ($share_info['creator']['id'] != $uid && !$this->ShareAuthority->user_can_manage_share($uid, $weshare_id)) {
             echo json_encode(array('success' => false, 'reason' => 'not_creator'));
             return;
         }
@@ -1129,7 +1129,7 @@ class WesharesController extends AppController {
             return;
         }
         $share_info = $this->get_weshare_detail($weshare_id);
-        if ($share_info['creator']['id'] != $uid && !$this->ShareAuthority->user_can_manage_share($uid,$weshare_id)) {
+        if ($share_info['creator']['id'] != $uid && !$this->ShareAuthority->user_can_manage_share($uid, $weshare_id)) {
             echo json_encode(array('success' => false, 'reason' => 'not_creator'));
             return;
         }
@@ -1898,6 +1898,51 @@ class WesharesController extends AppController {
 
     public function shipped_share($shareId) {
 
+    }
+
+    /**
+     * @param $orderId
+     * 获取订单的发货信息
+     */
+    public function express_info($orderId) {
+        $this->layout = 'weshare_bootstrap';
+        $orderM = ClassRegistry::init('Order');
+        $cartM = ClassRegistry::init('Cart');
+        $orderInfo = $orderM->find('first', array(
+            'conditions' => array(
+                'id' => $orderId
+            ),
+            'fields' => array('id', 'ship_type_name', 'ship_type', 'member_id', 'creator', 'ship_code', 'consignee_name', 'consignee_address', 'consignee_mobilephone')
+        ));
+        $carts = $cartM->find('all', array(
+            'conditions' => array(
+                'order_id' => $orderId
+            ),
+            'fields' => array(
+                'name', 'num'
+            )
+        ));
+        $carts = Hash::extract($carts, '{n}.Cart');
+        if (!empty($orderInfo)) {
+            $frameShipDetail = ShipAddress::get_ship_detail($orderInfo);
+            if (empty($frameShipDetail)) {
+                //fetch json ship info
+                $code = $orderInfo['Order']['ship_code'];
+                $ip = $this->get_ip();
+                $result = $this->OrderExpress->get_express_info($code, $ip);
+                $express_info = array();
+                if ($result->message == 'ok') {
+                    $express_info = $result->data;
+                }
+                $this->set('express_info', $express_info);
+            } else {
+                $this->set('shipDetailSrc', $frameShipDetail);
+            }
+            $this->set('order', $orderInfo);
+            $this->set('carts', $carts);
+        } else {
+            $this->set('no_order', true);
+        }
     }
 
     /**

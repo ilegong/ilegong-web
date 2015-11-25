@@ -234,6 +234,8 @@
     vm.calProxyRebateFee = calProxyRebateFee;
     vm.loadOrderCommentData = loadOrderCommentData;
     vm.isShareManager = isShareManager;
+    vm.isShowExpressInfoBtn = isShowExpressInfoBtn;
+    vm.showOrderExpressInfo = showOrderExpressInfo;
     vm.childShareDetail = null;
     vm.currentUserOrderCount = 0;
     vm.shareOrderCount = 0;
@@ -1343,8 +1345,12 @@
       var shipMark = order['ship_mark'];
       var code = order['ship_code'];
       if (shipMark == 'kuai_di') {
-        var ship_company = order['ship_type'];
-        return vm.shipTypes[ship_company] + ': ' + code;
+        var ship_type_name = order['ship_type_name'];
+        if(!ship_type_name){
+          var ship_company = order['ship_type'];
+          ship_type_name = vm.shipTypes[ship_company]
+        }
+        return ship_type_name + ': ' + code;
       }
       if (shipMark == 'pys_ziti') {
         return '提货码: ' + code;
@@ -1392,6 +1398,20 @@
         }
       }
       return false;
+    }
+
+    function isShowExpressInfoBtn(order){
+      if (order['ship_mark'] == 'kuai_di') {
+        if (order.status > 1 && vm.isOwner(order)) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    function showOrderExpressInfo(order) {
+      window.location.href = '/weshares/express_info/' + order.id;
+      return;
     }
 
     //vm.handleReadMoreBtn = handleReadMoreBtn;
