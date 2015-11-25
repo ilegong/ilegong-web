@@ -10,9 +10,9 @@ class OrderExpressComponent extends Component {
     public function get_com_by_code($ip, $ship_code) {
         $url = 'http://www.kuaidi100.com/autonumber/autoComNum?text=' . $ship_code;
         $result = $this->get($url, $ip);
-        $companies = $result['auto'][0];
+        $companies = $result->auto[0];
         if (!empty($companies)) {
-            return $companies['comCode'];
+            return $companies->comCode;
         }
         return null;
     }
@@ -21,7 +21,7 @@ class OrderExpressComponent extends Component {
         $company = $this->get_com_by_code($ip, $ship_code);
         $temp = $this->random();
         if (!empty($company)) {
-            $url = 'http://www.kuaidi100.com/query?type=' + $company + '&postid=' . $ship_code . '&id=1&valicode=&temp=' . $temp;
+            $url = 'http://www.kuaidi100.com/query?type=' . $company . '&postid=' . $ship_code . '&id=1&valicode=&temp=' . $temp;
             $result = $this->get($url, $ip);
             return $result;
         }
@@ -36,10 +36,10 @@ class OrderExpressComponent extends Component {
             curl_setopt($cl, CURLOPT_SSLVERSION, 1);
         }
         $header = array(
-            'CLIENT-IP' => $ip,
-            'X-FORWARDED-FOR' => $ip,
-            'Host' => 'www.kuaidi100.com',
-            "X-Requested-With" => "XMLHttpRequest"
+            'CLIENT-IP:' . $ip,
+            'X-FORWARDED-FOR:' . $ip,
+            'Host:www.kuaidi100.com',
+            'X-Requested-With:XMLHttpRequest'
         );
         curl_setopt($cl, CURLOPT_URL, $url);
         curl_setopt($cl, CURLOPT_RETURNTRANSFER, 1);
