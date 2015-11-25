@@ -18,6 +18,7 @@ class OrderExpressComponent extends Component {
     }
 
     public function get_express_info($ship_code, $ip) {
+        $ship_code = str_replace('-', '', $ship_code);
         $company = $this->get_com_by_code($ip, $ship_code);
         $temp = $this->random();
         if (!empty($company)) {
