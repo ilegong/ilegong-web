@@ -651,7 +651,10 @@ class WeshareBuyComponent extends Component {
             $share_creator_nickname = $users[$share_creator]['nickname'];
             $title = $order_user_nickname . '你好，' . $share_creator_nickname . '分享的' . $weshare_info['Weshare']['title'] . '寄出了，请注意查收。' . $share_creator_nickname . '电话:' . $users[$share_creator]['mobilephone'];
             $shipTypesList = ShipAddress::ship_type_list();
-            $ship_company_name = $shipTypesList[$order_info['Order']['ship_type']];
+            $ship_company_name = $order_info['Order']['ship_type_name'];
+            if(empty($ship_company_name)){
+                $ship_company_name = $shipTypesList[$order_info['Order']['ship_type']];
+            }
             $ship_code = $order_info['Order']['ship_code'];
             $desc = '感谢您对' . $share_creator_nickname . '的支持，分享快乐！';
             $cart_info = $this->get_cart_name_and_num($order_id);
