@@ -12,7 +12,7 @@ App::import('Vendor', 'Location', array('file' => 'Location/Distance/Haversine.p
 
 class TestController extends AppController{
 
-    public $components = array('Weixin', 'WeshareBuy');
+    public $components = array('Weixin', 'WeshareBuy', 'OrderExpress');
     public $uses = array('Order', 'Oauthbind');
 
 
@@ -123,6 +123,14 @@ class TestController extends AppController{
     public function test_product_id_map(){
         $this->autoRender = false;
         $result = $this->WeshareBuy->get_product_id_map_by_origin_ids(53);
+        echo json_encode(array('success' => true, 'result' => $result));
+    }
+
+    public function get_ship_code_result(){
+        $this->autoRender = false;
+        $code = $_REQUEST['code'];
+        $ip = $this->get_ip();
+        $result = $this->OrderExpress->get_express_info($code, $ip);
         echo json_encode(array('success' => true, 'result' => $result));
     }
 

@@ -765,5 +765,20 @@ class AppController extends Controller {
         $product_consignment_date = $product_consignment_date.'('.day_of_week($consignment_date).')';
         return $product_consignment_date;
     }
+
+    //获取客户端用户IP
+    protected function get_ip() {
+        if (!empty($_SERVER["HTTP_CLIENT_IP"])) {
+            $cip = $_SERVER["HTTP_CLIENT_IP"];
+        } elseif (!empty($_SERVER["HTTP_X_FORWARDED_FOR"])) {
+            $cip = $_SERVER["HTTP_X_FORWARDED_FOR"];
+        } elseif (!empty($_SERVER["REMOTE_ADDR"])) {
+            $cip = $_SERVER["REMOTE_ADDR"];
+        } else {
+            $cip = "0.0.0.0";
+        }
+        return $cip;
+    }
+
 }
 ?>
