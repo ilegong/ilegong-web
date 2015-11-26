@@ -44,7 +44,7 @@
                    ng-click="vm.toggleProduct(product, true)" ng-if="!vm.checkUserCanSetTag()"></a>
                 <a class="fr btn add-new-product-tag add-btn"
                    ng-click="vm.toggleProduct(product, true)" ng-if="vm.checkUserCanSetTag()"></a>
-                <div ng-if="!$first">
+                <div ng-if="$index!=0">
                     <a class="fr btn add-new-product-not-tag delete-btn"
                        ng-click="vm.toggleProduct(product, false)" ng-if="!vm.checkUserCanSetTag()"></a>
                     <a class="fr btn add-new-product-tag delete-btn"
