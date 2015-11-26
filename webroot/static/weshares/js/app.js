@@ -175,9 +175,7 @@
           }
 
           if (countBy === 'words') { // Count words
-
             foundWords = text.split(/\s+/);
-
             if (foundWords.length > limit) {
               text = foundWords.slice(0, limit).join(' ') + ellipsis;
               more = foundWords.slice(limit, count).join(' ');
@@ -185,7 +183,6 @@
             }
 
           } else { // Count characters
-
             if (count > limit) {
               text = orig.slice(0, limit) + ellipsis;
               more = orig.slice(limit, count);
@@ -197,10 +194,12 @@
           angular.element(document.getElementsByClassName('read-more')[0]).bind('click', function () {
             document.getElementsByClassName('read-more')[0].style.display = 'none';
             document.getElementsByClassName('more-text')[0].style.display = 'block';
+            document.getElementsByClassName('read-less')[0].style.display = 'block';
           });
           angular.element(document.getElementsByClassName('read-less')[0]).bind('click', function () {
             document.getElementsByClassName('read-more')[0].style.display = 'block';
             document.getElementsByClassName('more-text')[0].style.display = 'none';
+            document.getElementsByClassName('read-less')[0].style.display = 'none';
           });
         }
       }
