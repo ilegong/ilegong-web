@@ -147,17 +147,13 @@
           lessText = angular.isUndefined(scope.lessText) ? ' <a class="read-less">Less ^</a>' : ' <a class="read-less">' + scope.lessText + '</a>',
           ellipsis = angular.isUndefined(scope.ellipsis) ? '' : scope.ellipsis,
           limit = angular.isUndefined(scope.limit) ? 150 : scope.limit;
-
         attr.$observe('content', function (str) {
           readmore(str);
         });
-
         transclude(scope.$parent, function (clone, scope) {
           readmore(clone.text().trim());
         });
-
         function readmore(text) {
-
           var text = text,
             orig = text,
             regex = /\s+/gi,
@@ -168,12 +164,10 @@
             foundWords = [],
             markup = text,
             more = '';
-
           if (!angular.isUndefined(attr.words)) {
             countBy = 'words';
             count = wordCount;
           }
-
           if (countBy === 'words') { // Count words
             foundWords = text.split(/\s+/);
             if (foundWords.length > limit) {
@@ -181,14 +175,12 @@
               more = foundWords.slice(limit, count).join(' ');
               markup = text + moreText + '<span class="more-text">' + more + lessText + '</span>';
             }
-
           } else { // Count characters
             if (count > limit) {
               text = orig.slice(0, limit) + ellipsis;
               more = orig.slice(limit, count);
               markup = text + moreText + '<span class="more-text">' + more + lessText + '</span>';
             }
-
           }
           elem.append(markup);
           angular.element(document.getElementsByClassName('read-more')[0]).bind('click', function () {
