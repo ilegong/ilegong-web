@@ -145,6 +145,54 @@ class ThirdPartyExpressComponent extends Component {
     /**
      * @param $params
      * @return array|string
+     * 计算拼单的价钱
+     */
+    public function calculate_rr_multi_logistics_cost($params) {
+//$params ["userName"];
+//$params ["mapFrom"];
+//$params ["startingPhone"];
+//$params ["startingProvince"];
+//$params ["startingCity"];
+//$params ["startingAddress"];
+//$params ["startingLng"];
+//$params ["startingLat"];
+//$params ["childOrders"] = array(
+//array(
+//"goodsWeight" => $goodsWeight1,
+//"goodsWorth" => $goodsWorth1,
+//"consigneeProvince" => $consigneeProvince1,
+//"consigneeCity" => $consigneeCity1,
+//"consigneeAddress" => $consigneeAddress1,
+//"consigneeLng" => $consigneeLng1,
+//"consigneeLat" => $consigneeLat1),
+//array(
+//"goodsWeight" => $goodsWeight2,
+//"goodsWorth" => $goodsWorth2,
+//"consigneeProvince" => $consigneeProvince2,
+//"consigneeCity" => $consigneeCity2,
+//"consigneeAddress" => $consigneeAddress2,
+//"consigneeLng" => $consigneeLng2,
+//"consigneeLat" => $consigneeLat2)
+//);
+//$params ["sign"]; strtolower ( MD5 ( $appKey . strtolower ( MD5 ( $userName . $startingAddress ) ) ) );
+
+//$result ["isSuccess"]
+//$result ["errMsg"]
+//$result ["warn"]
+//$result ["totalPrice"]
+        $url = 'http://101.251.194.3:8091/delivery/3rd/getMultiPrice';
+        try {
+            $result = $this->curlPost($url, json_encode($params));
+            return $result;
+        } catch (Exception $e) {
+            $this->log('curl post error ' . $e->getMessage());
+            return array();
+        }
+    }
+
+    /**
+     * @param $params
+     * @return array|string
      * 重新下单
      */
     public function re_confirm_rr_order($params) {
@@ -197,17 +245,17 @@ class ThirdPartyExpressComponent extends Component {
      * 人人快递进行拼单
      */
     public function confirm_rr_multi_order($params) {
-//$pkg ["userName"];
-//$pkg ["parentBusinessNo"];
-//$pkg ["mapFrom"];
-//$pkg ["startingName"];
-//$pkg ["startingPhone"];
-//$pkg ["startingProvince"];
-//$pkg ["startingCity"];
-//$pkg ["startingAddress"];
-//$pkg ["startingLng"];
-//$pkg ["startingLat"];
-//$pkg ["childOrders"] = array(
+//$params ["userName"];
+//$params ["parentBusinessNo"];
+//$params ["mapFrom"];
+//$params ["startingName"];
+//$params ["startingPhone"];
+//$params ["startingProvince"];
+//$params ["startingCity"];
+//$params ["startingAddress"];
+//$params ["startingLng"];
+//$params ["startingLat"];
+//$params ["childOrders"] = array(
         //array(
         //"businessNo" => $businessNo1,
         //"goodsName"	=> $goodsName1,
@@ -235,8 +283,8 @@ class ThirdPartyExpressComponent extends Component {
         //"consigneeLat" => $consigneeLat2
         ////"remark" => $remark2)
         //);
-//$pkg ["callbackUrl"] = $callbackUrl;
-//$pkg ["sign"]; strtolower ( MD5 ( $appKey . strtolower ( MD5 ( $userName . $startingAddress ) ) ) )
+//$params ["callbackUrl"] = $callbackUrl;
+//$params ["sign"]; strtolower ( MD5 ( $appKey . strtolower ( MD5 ( $userName . $startingAddress ) ) ) )
 
 //$result ["isSuccess"]
 //$result ["errMsg"]
@@ -256,6 +304,67 @@ class ThirdPartyExpressComponent extends Component {
             return array();
         }
     }
+
+    /**
+     * @param $params
+     * @return array|string
+     * 取消订单
+     */
+    public function cancel_rr_multi_order($params) {
+//$params ["userName"];
+//$params ["parentOrderNo"];
+//$params ["parentBusinessNo"];
+//$params ["reason"];
+//$params ["sign"]; strtolower ( MD5 ( $appKey . strtolower ( MD5 ( $userName . $parentBusinessNo ) ) ) )
+
+//$result ["isSuccess"]
+//$result ["errMsg"]
+//$result ["warn"]
+//$result ["parentOrderNo"]
+//$result ["parentBusinessNo"]
+//$result ["childOrders"] Array<ChildOrder> => array('businessNo','orderNo')
+        $url = 'http://101.251.194.3:8091/delivery/3rd/cancelMultiOrder';
+        try {
+            $result = $this->curlPost($url, json_encode($params));
+            //可能遇到乱码问题
+            //mb_convert_encoding($result, "gb2312", "utf-8");
+            return $result;
+        } catch (Exception $e) {
+            $this->log('curl post error ' . $e->getMessage());
+            return array();
+        }
+    }
+
+    /**
+     * @param $params
+     * @return array|string
+     * 查询拼单状态
+     */
+    public function query_rr_multi_order($params) {
+//$params ["userName"];
+//$params ["parentBusinessNo"];
+//$params ["sign"]; strtolower ( MD5 ( $appKey . strtolower ( MD5 ( $userName . $parentBusinessNo ) ) ) );
+
+//$result ["isSuccess"]
+//$result ["errMsg"]
+//$result ["warn"]
+//$result ["parentOrderNo"]
+//$result ["parentBusinessNo"]
+//$result ["parentOrderState"]
+//$result ["childOrders"]   Array<ChildOrder> item = array('orderNo', 'businessNo', 'orderState', 'orderLogs' => array('type', 'operator', 'description', 'createTime'))
+
+        $url = 'http://101.251.194.3:8091/delivery/3rd/queryMultiOrder';
+        try {
+            $result = $this->curlPost($url, json_encode($params));
+            //可能遇到乱码问题
+            //mb_convert_encoding($result, "gb2312", "utf-8");
+            return $result;
+        } catch (Exception $e) {
+            $this->log('curl post error ' . $e->getMessage());
+            return array();
+        }
+    }
+
 
     /**
      * CURL POST数据
@@ -282,5 +391,7 @@ class ThirdPartyExpressComponent extends Component {
         return $result;
     }
 
-    var $rr_state_map = array(0 => '尚无人接单', 1 => '等待取件', 2 => '取消发件', 3 => '已取件', 4 => '问题件', 5 => '已签收', 6 => '送货中', 7 => '预授权');
+    var $rr_state_map = array(0 => '尚无人接单', 1 => '等待取件', 2 => '取消发件', 3 => '已取件', 5 => '问题件', 6 => '已签收', 7 => '送货中', 8 => '预授权');
+
+    var $rr_callback_state_map = array(1 => '接单', 2 => '取件', 3 => '签收', 4 => '超时', 5 => '客服取消订单', 6 => '客服取消接单', 7 => '客服协助接单', 8 => '客服协助取件', 9 => '客服协助签收');
 }
