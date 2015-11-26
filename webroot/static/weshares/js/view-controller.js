@@ -220,8 +220,8 @@
     vm.validRecommendContent = validRecommendContent;
     vm.checkHasUnRead = checkHasUnRead;
     vm.getProcessPrepaidStatus = getProcessPrepaidStatus;
-    vm.handleReadMoreBtn = handleReadMoreBtn;
-    vm.checkShareInfoHeight = checkShareInfoHeight;
+    //vm.handleReadMoreBtn = handleReadMoreBtn;
+    //vm.checkShareInfoHeight = checkShareInfoHeight;
     vm.toggleTag = toggleTag;
     vm.supportGroupBuy = supportGroupBuy;
     vm.offlineAddressData = null;
@@ -458,7 +458,7 @@
           if (vm.isCreator()||vm.canManageShare) {
             vm.faqTipText = '反馈消息';
           }
-          vm.checkShareInfoHeight();
+          //vm.checkShareInfoHeight();
           //load all comments
           vm.loadOrderDetail(weshareId);
           vm.loadOrderCommentData(weshareId);
@@ -1417,14 +1417,14 @@
     //vm.handleReadMoreBtn = handleReadMoreBtn;
     //vm.checkShareInfoHeight = checkShareInfoHeight;
 
-    function handleReadMoreBtn() {
-      vm.hideMoreShareInfo = !vm.hideMoreShareInfo;
-      if (vm.hideMoreShareInfo) {
-        vm.readMoreBtnText = '全文';
-      } else {
-        vm.readMoreBtnText = '收起';
-      }
-    }
+    //function handleReadMoreBtn() {
+    //  vm.hideMoreShareInfo = !vm.hideMoreShareInfo;
+    //  if (vm.hideMoreShareInfo) {
+    //    vm.readMoreBtnText = '全文';
+    //  } else {
+    //    vm.readMoreBtnText = '收起';
+    //  }
+    //}
 
     function supportGroupBuy() {
       if (vm.weshareSettings && vm.weshareSettings.pin_tuan && vm.weshareSettings.pin_tuan.status == 1) {
@@ -1439,21 +1439,21 @@
       currentToggleState['statusText'] = currentToggleState['open'] ? '收起' : '展开';
     }
 
-    function checkShareInfoHeight() {
-      vm.shareDescInfoElement = angular.element(document.getElementById('share-description'));
-      vm.shareDescInfoElement.ready(function () {
-        if (vm.shareDescInfoElement[0]) {
-          var height = vm.shareDescInfoElement[0].offsetHeight;
-          if (height > 65) {
-            vm.shouldShowReadMoreBtn = true;
-            vm.hideMoreShareInfo = true;
-          } else {
-            vm.shouldShowReadMoreBtn = false;
-            vm.hideMoreShareInfo = false;
-          }
-        }
-      });
-    }
+    //function checkShareInfoHeight() {
+    //  vm.shareDescInfoElement = angular.element(document.getElementById('share-description'));
+    //  vm.shareDescInfoElement.ready(function () {
+    //    if (vm.shareDescInfoElement[0]) {
+    //      var height = vm.shareDescInfoElement[0].offsetHeight;
+    //      if (height > 65) {
+    //        vm.shouldShowReadMoreBtn = true;
+    //        vm.hideMoreShareInfo = true;
+    //      } else {
+    //        vm.shouldShowReadMoreBtn = false;
+    //        vm.hideMoreShareInfo = false;
+    //      }
+    //    }
+    //  });
+    //}
 
     function setWeiXinShareParams() {
       var url = 'http://www.tongshijia.com/weshares/view/' + vm.weshare.id;

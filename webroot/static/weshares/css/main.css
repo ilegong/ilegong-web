@@ -305,6 +305,17 @@ ul li {
     padding: 10px 10px 60px;
 }
 
+.weshare-view a.read-more, a.read-less {
+    cursor: pointer;
+    color: blue;
+}
+.weshare-view span.more-text {
+    display: none;
+}
+.weshare-view span.more-text.show {
+    display: inline !important
+}
+
 .weshare-view ul img {
     width: 50px;
     border-radius: 50px;
@@ -1696,6 +1707,7 @@ ul li {
     color: #999;
     margin: 0;
 }
+
 
 
 
