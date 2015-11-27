@@ -230,7 +230,7 @@ class WesharesController extends AppController {
         //SHARE_USER_SUMMERY_CACHE_KEY . '_' . $uid;
         if ($saveBuyFlag) {
             if (empty($weshareData['id'])) {
-                //create
+                //create update clear user share info view cache
                 Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
                 $thumbnail = null;
                 if (count($images) > 0) {
@@ -694,6 +694,7 @@ class WesharesController extends AppController {
         //SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId . '_1'
         Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weShareId . '_0', '');
         Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weShareId . '_1', '');
+        Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
         echo json_encode(array('success' => true));
         return;
     }
