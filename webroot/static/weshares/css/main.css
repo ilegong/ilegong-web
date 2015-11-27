@@ -300,6 +300,20 @@ ul li {
     margin-right: 3%;
 }
 
+.weshare-add .del-new-product-not-tag {
+    position: relative;
+    margin-top: -45px;
+    margin-right: 15%;
+}
+
+.weshare-add .del-new-product-tag {
+    position: relative;
+    margin-top: 10px;
+    margin-right: 3%;
+}
+
+
+
 /*分享参团*/
 .weshare-view {
     padding: 10px 10px 60px;

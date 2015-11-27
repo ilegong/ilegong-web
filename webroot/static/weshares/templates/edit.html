@@ -34,20 +34,20 @@
                 <a class="set-product-tag" ng-click="vm.editTagView()">设置分组</a>
             </div>
             <div ng-if="!$last">
-                <a class="fr btn delete-btn"
+                <a class="fr btn delete-btn del-new-product-not-tag"
                    ng-click="vm.toggleProduct(product, false)" ng-if="!vm.checkUserCanSetTag()"></a>
-                <a class="fr btn add-new-product-tag delete-btn"
+                <a class="fr btn del-new-product-tag delete-btn"
                    ng-click="vm.toggleProduct(product, false)" ng-if="vm.checkUserCanSetTag()"></a>
             </div>
             <div ng-if="$last">
-                <a class="fr btn add-btn"
+                <a class="fr btn add-btn add-new-product-not-tag"
                    ng-click="vm.toggleProduct(product, true)" ng-if="!vm.checkUserCanSetTag()"></a>
                 <a class="fr btn add-new-product-tag add-btn"
                    ng-click="vm.toggleProduct(product, true)" ng-if="vm.checkUserCanSetTag()"></a>
                 <div ng-if="$index!=0">
-                    <a class="fr btn delete-btn"
+                    <a class="fr btn delete-btn del-new-product-not-tag"
                        ng-click="vm.toggleProduct(product, false)" ng-if="!vm.checkUserCanSetTag()"></a>
-                    <a class="fr btn add-new-product-tag delete-btn"
+                    <a class="fr btn del-new-product-tag delete-btn"
                        ng-click="vm.toggleProduct(product, false)" ng-if="vm.checkUserCanSetTag()"></a>
                 </div>
             </div>
