@@ -1057,6 +1057,11 @@ class WeshareBuyComponent extends Component {
         return $page_info;
     }
 
+    /**
+     * @param $shareId
+     * @return array|mixed
+     * 分享购买的统计汇总
+     */
     public function get_share_buy_summery($shareId) {
         $key = SHARE_BUY_SUMMERY_INFO_CACHE_KEY . '_' . $shareId;
         $cacheData = Cache::read($key);
@@ -1147,6 +1152,11 @@ class WeshareBuyComponent extends Component {
 
     }
 
+    /**
+     * @param $uid
+     * @param $shareId
+     * 微分享订单页面 缓存
+     */
     public function do_clear_user_share_order_data_cache($uid, $shareId) {
         Cache::write(USER_SHARE_ORDER_INFO_CACHE_KEY . '_' . $shareId . '_' . $uid, '');
     }
@@ -1865,6 +1875,12 @@ class WeshareBuyComponent extends Component {
         $this->do_send_buy_percent_msg($weshare_info, $fans_ids, $msg_content);
     }
 
+    /**
+     * @param $weshare_info
+     * @param $uids
+     * @param $msg_content
+     * 触发发送团购进度的通知
+     */
     public function do_send_buy_percent_msg($weshare_info, $uids, $msg_content) {
         $fans_data_nickname = $this->get_users_nickname($uids);
         $fans_data_ids = $uids;
@@ -1957,7 +1973,7 @@ class WeshareBuyComponent extends Component {
     public function check_msg_log_and_filter_user($data_id, $user_ids, $type) {
         $msgLogM = ClassRegistry::init('MsgLog');
         //添加更多的过滤条件 (比如每天只收一次)
-        //todo 记录过多的情况处理（暂时不会出现这个问题）
+        //todo 记录过多的情况处理（暂时不会出现这个问题）消息记录过多
         $msgLogs = $msgLogM->find('all', array(
             'conditions' => array(
                 'data_id' => $data_id,
@@ -2007,6 +2023,12 @@ class WeshareBuyComponent extends Component {
         //$this->ShareUtil->usedUserSubSharerReason($follow_id);;
     }
 
+    /**
+     * @param $share_id
+     * @param $follow_id
+     * @param string $type
+     * 关注分享者 通过分享
+     */
     public function subscribe_sharer_by_share($share_id, $follow_id, $type = 'SUB') {
         $share_info = $this->get_weshare_info($share_id);
         $sharer_id = $share_info['creator'];
@@ -2339,6 +2361,14 @@ class WeshareBuyComponent extends Component {
         return $rebateLog['RebateTrackLog']['id'];
     }
 
+    /**
+     * @param $total_price
+     * @param $uid
+     * @param $shareId
+     * @return float|int
+     * 计算团长返利
+     * 团长下单的时候自动扣除返利钱
+     */
     public function cal_proxy_rebate_fee($total_price, $uid, $shareId) {
         //check user is proxy
         $userM = ClassRegistry::init('User');
