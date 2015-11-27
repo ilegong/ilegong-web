@@ -1605,6 +1605,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 6783,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0e8ff635498de280dd3193826d837ee5.jpg'
                 ),
+                '1301' => array(
+                    'share_id' => 1301,
+                    'share_name' => '越南原装进口黑虎虾仁儿1000g',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/ee7947974c7_1127.jpg',
+                    'share_price' => '46',
+                    'share_user_name' => '吃好网',
+                    'share_vote' => 1000,
+                    'share_user_id' => 884103,
+                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/9e077f58c06_1125.jpg'
+                ),
                 '747' => array(
                     'share_id' => 747,
                     'share_name' => '那那家五常稻花香米',
