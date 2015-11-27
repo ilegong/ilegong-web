@@ -240,6 +240,7 @@ class WesharesController extends AppController {
                 //  $this->check_share_and_trigger_new_share($weshare['Weshare']['id'], $shipSetData);
             }
             //todo update child share data and product data
+            //update product 
             //$this->ShareUtil->cascadeSaveShareData($weshareData);
             echo json_encode(array('success' => true, 'id' => $weshare['Weshare']['id']));
             return;

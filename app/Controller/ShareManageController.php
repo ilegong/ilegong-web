@@ -74,6 +74,13 @@ class ShareManageController extends AppController {
         $json_data = $_REQUEST['data'];
         $share_data = json_decode($json_data, true);
         $this->Weshare->save($share_data);
+        //SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId
+        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $share_data['id'] . '_0', '');
+        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $share_data['id'] . '_1', '');
+        //SHARE_SHIP_SETTINGS_CACHE_KEY . '_' . $weshareId;
+        Cache::write(SHARE_SHIP_SETTINGS_CACHE_KEY . '_' . $share_data['id'], '');
+        //SIMPLE_SHARE_INFO_CACHE_KEY . '_' . $share_id
+        Cache::write(SIMPLE_SHARE_INFO_CACHE_KEY . '_' . $share_data['id'], '');
         echo json_encode(array('success' => true));
         return;
     }
