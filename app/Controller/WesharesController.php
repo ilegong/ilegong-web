@@ -1206,6 +1206,7 @@ class WesharesController extends AppController {
 
     /**
      * @param $weshareId
+     * 发送团购通知
      */
     public function process_notify_has_buy_fans($weshareId) {
         $this->autoRender = false;
@@ -1234,6 +1235,7 @@ class WesharesController extends AppController {
      * @param $shareId
      * @param $only_paid
      * export order to excel
+     * 是否只导出待发货的
      */
     public function order_export($shareId, $only_paid = 1) {
         $this->layout = null;
@@ -1252,6 +1254,7 @@ class WesharesController extends AppController {
 
     /**
      * recommend share
+     * 推荐分享
      */
     public function recommend() {
         $this->autoRender = false;
@@ -1266,6 +1269,7 @@ class WesharesController extends AppController {
 
     /**
      * sharer refund money
+     * 退款
      */
     public function refund_money() {
         $this->autoRender = false;
@@ -1275,6 +1279,7 @@ class WesharesController extends AppController {
         }
         $shareId = $_REQUEST['shareId'];
         $share_info = $this->get_weshare_detail($shareId);
+        //check user can manage share order
         $can_manage_order = $this->ShareAuthority->user_can_view_share_order_list($uid, $shareId);
         if ($share_info['creator']['id'] != $uid && !$can_manage_order) {
             echo json_encode(array('success' => false, 'reason' => 'not_creator'));
@@ -1294,6 +1299,7 @@ class WesharesController extends AppController {
 
     /**
      * sharer confirm price
+     * 分享者确认价格
      */
     public function confirm_price() {
         $this->autoRender = false;
