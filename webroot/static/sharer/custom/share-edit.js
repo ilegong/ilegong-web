@@ -60,7 +60,7 @@ $(document).ready(function () {
       "description": shareDescription
     };
     //todo valid data
-    $.post('/share_manage/update_share.json', {"data": JSON.stringify(data)}, function (data) {
+    $.post('/share_manage/update_share.json', {shareId: $shareIdEl.val(), "data": JSON.stringify(data)}, function (data) {
       if (data['success']) {
         alert('保存成功');
       }
@@ -87,7 +87,7 @@ $(document).ready(function () {
   $saveShareProductBtn.on('click', function (e) {
     e.preventDefault();
     var productData = getProductData();
-    $.post('/share_manage/update_share_product.json', {"data": JSON.stringify(productData)}, function (data) {
+    $.post('/share_manage/update_share_product.json', {shareId: $shareIdEl.val(), "data": JSON.stringify(productData)}, function (data) {
       if (data['success']) {
         alert('更新产品成功');
       }
@@ -180,7 +180,7 @@ $(document).ready(function () {
       'ship_setting': shipSettingData,
       'weshare_address': weshareAddressData
     };
-    $.post('/share_manage/update_share_ship_setting.json', {data: JSON.stringify(postData)}, function (data) {
+    $.post('/share_manage/update_share_ship_setting.json', {shareId: $shareIdEl.val(), data: JSON.stringify(postData)}, function (data) {
       if (data['success']) {
         alert('保存成功')
       }
@@ -272,7 +272,7 @@ $(document).ready(function () {
       'id': $rebateSetId.val(),
       'status': $rebateStatusCheckBox.is(':checked') ? 1 : 0
     };
-    $.post('/share_manage/update_share_rebate_setting.json', {data: JSON.stringify(rebateSetting)}, function (data) {
+    $.post('/share_manage/update_share_rebate_setting.json', {shareId: $shareIdEl.val(), data: JSON.stringify(rebateSetting)}, function (data) {
       if (data['success']) {
         alert('保存成功');
       }

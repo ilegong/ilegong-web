@@ -74,13 +74,7 @@ class ShareManageController extends AppController {
         $json_data = $_REQUEST['data'];
         $share_data = json_decode($json_data, true);
         $this->Weshare->save($share_data);
-        //SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId
-        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $share_data['id'] . '_0', '');
-        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $share_data['id'] . '_1', '');
-        //SHARE_SHIP_SETTINGS_CACHE_KEY . '_' . $weshareId;
-        Cache::write(SHARE_SHIP_SETTINGS_CACHE_KEY . '_' . $share_data['id'], '');
-        //SIMPLE_SHARE_INFO_CACHE_KEY . '_' . $share_id
-        Cache::write(SIMPLE_SHARE_INFO_CACHE_KEY . '_' . $share_data['id'], '');
+        $this->clear_share_cache();
         echo json_encode(array('success' => true));
         return;
     }
@@ -94,6 +88,7 @@ class ShareManageController extends AppController {
         $data = json_decode($json_data, true);
         $proxyRebatePercent = ClassRegistry::init('ProxyRebatePercent');
         $proxyRebatePercent->save($data);
+        $this->clear_share_cache();
         echo json_encode(array('success' => true));
         return;
     }
@@ -109,6 +104,7 @@ class ShareManageController extends AppController {
         $weshareAddressM = ClassRegistry::init('WeshareAddress');
         $weshareShipSettingM->saveAll($data['ship_setting']);
         $weshareAddressM->saveAll($data['weshare_address']);
+        $this->clear_share_cache();
         echo json_encode(array('success' => true));
         return;
     }
@@ -118,6 +114,7 @@ class ShareManageController extends AppController {
         $json_data = $_REQUEST['data'];
         $share_product_data = json_decode($json_data, true);
         $this->WeshareProduct->saveAll($share_product_data);
+        $this->clear_share_cache();
         echo json_encode(array('success' => true));
         return;
     }
@@ -335,5 +332,19 @@ class ShareManageController extends AppController {
 
     public function batch_set_order_ship_code() {
 
+    }
+
+    /**
+     * 清除分享的缓存
+     */
+    private function clear_share_cache() {
+        $shareId = $_REQUEST['shareId'];
+        //SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId
+        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $shareId . '_0', '');
+        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $shareId . '_1', '');
+        //SHARE_SHIP_SETTINGS_CACHE_KEY . '_' . $weshareId;
+        Cache::write(SHARE_SHIP_SETTINGS_CACHE_KEY . '_' . $shareId, '');
+        //SIMPLE_SHARE_INFO_CACHE_KEY . '_' . $share_id
+        Cache::write(SIMPLE_SHARE_INFO_CACHE_KEY . '_' . $shareId, '');
     }
 }
