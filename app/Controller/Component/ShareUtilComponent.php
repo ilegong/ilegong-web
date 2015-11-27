@@ -1575,16 +1575,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 810684,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
                 ),
-                '1270' => array(
-                    'share_id' => 1270,
-                    'share_name' => '俄罗斯艾利客面粉(高筋)【北京包邮】',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/7e79af0be49_1125.jpg',
-                    'share_price' => '160',
-                    'share_user_name' => '小宝妈',
-                    'share_vote' => 1000,
-                    'share_user_id' => 811917,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
-                ),
+//                '1270' => array(
+//                    'share_id' => 1270,
+//                    'share_name' => '俄罗斯艾利客面粉(高筋)【北京包邮】',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/7e79af0be49_1125.jpg',
+//                    'share_price' => '160',
+//                    'share_user_name' => '小宝妈',
+//                    'share_vote' => 1000,
+//                    'share_user_id' => 811917,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
+//                ),
                 '1292' => array(
                     'share_id' => 1292,
                     'share_name' => '德庆贡柑熟了，想找找当皇帝娘娘的感觉吗？',
