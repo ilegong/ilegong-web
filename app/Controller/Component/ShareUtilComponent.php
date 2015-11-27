@@ -1575,6 +1575,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 810684,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
                 ),
+                '1314' => array(
+                    'share_id' => 1314,
+                    'share_name' => '俱乐部团购14—赵姑娘合核枣',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/81f96c841c5_1127.jpg',
+                    'share_price' => '900',
+                    'share_user_name' => 'guru',
+                    'share_vote' => 1333,
+                    'share_user_id' => 859965,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_cb6f01f497f772a9dd58c1655c7770c1.jpg'
+                ),
 //                '1270' => array(
 //                    'share_id' => 1270,
 //                    'share_name' => '俄罗斯艾利客面粉(高筋)【北京包邮】',
@@ -1594,6 +1604,16 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 999,
                     'share_user_id' => 6783,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0e8ff635498de280dd3193826d837ee5.jpg'
+                ),
+                '747' => array(
+                    'share_id' => 747,
+                    'share_name' => '那那家五常稻花香米',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/dafe5e63fc8_1027.jpg',
+                    'share_price' => '166',
+                    'share_user_name' => '那那',
+                    'share_vote' => 600,
+                    'share_user_id' => 812111,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_db53c030cbe19145428f0d5ca58b9562.jpg'
                 ),
                 '1304' => array(
                     'share_id' => 1304,
@@ -1727,16 +1747,6 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 560,
                     'share_user_id' => 806889,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
-                ),
-                '747' => array(
-                    'share_id' => 747,
-                    'share_name' => '那那家五常稻花香米',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/dafe5e63fc8_1027.jpg',
-                    'share_price' => '166',
-                    'share_user_name' => '那那',
-                    'share_vote' => 600,
-                    'share_user_id' => 812111,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_db53c030cbe19145428f0d5ca58b9562.jpg'
                 ),
                 //无花果干 二团
                 '693' => array(
