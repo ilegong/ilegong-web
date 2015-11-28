@@ -1738,16 +1738,16 @@ class ShareUtilComponent extends Component {
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
                 ),
                 //地瓜干,牛杆菌
-                '1072' => array(
-                    'share_id' => 1072,
-                    'share_name' => '停不下来的味道～长白山脚下地瓜干',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/249eef44d07_1110.jpg',
-                    'share_price' => '65',
-                    'share_user_name' => '小宝妈',
-                    'share_vote' => 1000,
-                    'share_user_id' => 811917,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
-                ),
+//                '1072' => array(
+//                    'share_id' => 1072,
+//                    'share_name' => '停不下来的味道～长白山脚下地瓜干',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/249eef44d07_1110.jpg',
+//                    'share_price' => '65',
+//                    'share_user_name' => '小宝妈',
+//                    'share_vote' => 1000,
+//                    'share_user_id' => 811917,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
+//                ),
                 '1080' => array(
                     'share_id' => 1080,
                     'share_name' => '云南秘制油淋牛肝菌，过嘴不忘的味道',
@@ -1832,16 +1832,16 @@ class ShareUtilComponent extends Component {
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
                 ),
                 //笋干
-                '1057' => array(
-                    'share_id' => 1057,
-                    'share_name' => '鼎力推荐！楠竹笋干，父辈的手艺。宁可居无竹，不可食无笋，分享来自大地的馈赠！！',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/59a37d840ea_1110.jpg',
-                    'share_price' => '86',
-                    'share_user_name' => '鲲鲲',
-                    'share_vote' => 560,
-                    'share_user_id' => 806889,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
-                ),
+//                '1057' => array(
+//                    'share_id' => 1057,
+//                    'share_name' => '鼎力推荐！楠竹笋干，父辈的手艺。宁可居无竹，不可食无笋，分享来自大地的馈赠！！',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/59a37d840ea_1110.jpg',
+//                    'share_price' => '86',
+//                    'share_user_name' => '鲲鲲',
+//                    'share_vote' => 560,
+//                    'share_user_id' => 806889,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
+//                ),
 //                //丑苹果
 //                '1015' => array(
 //                    'share_id' => 1015,
@@ -1905,16 +1905,16 @@ class ShareUtilComponent extends Component {
 //                    'share_user_id' => 811917,
 //                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
 //                ),
-                '885' => array(
-                    'share_id' => 885,
-                    'share_name' => '云南哀牢山古法手工叶子红糖，特价包邮还有赠品必须分享啊！',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/abcb4094d25_0917.jpg',
-                    'share_price' => '38',
-                    'share_user_name' => '鲲鲲',
-                    'share_vote' => 130,
-                    'share_user_id' => 806889,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
-                ),
+//                '885' => array(
+//                    'share_id' => 885,
+//                    'share_name' => '云南哀牢山古法手工叶子红糖，特价包邮还有赠品必须分享啊！',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/abcb4094d25_0917.jpg',
+//                    'share_price' => '38',
+//                    'share_user_name' => '鲲鲲',
+//                    'share_vote' => 130,
+//                    'share_user_id' => 806889,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
+//                ),
 //                '1061' => array(
 //                    'share_id' => 1061,
 //                    'share_name' => '父母种的红薯、紫薯、花生开刨啦',
