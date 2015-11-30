@@ -66,6 +66,18 @@
                     <strong>备注:</strong>&nbsp;&nbsp;{{$item_order['business_remark']}}
                 {{/if}}
             </p>
+            {{if $item_order['status'] != ORDER_STATUS_SHIPPED && $item_order['status'] != ORDER_STATUS_PAID}}
+                {{if $current_tag == SHARE_SHIP_KUAIDI_TAG}}
+                        <p>
+                            <strong>{{if !empty($item_order['ship_type_name'])}}{{$item_order['ship_type_name']}}{{else}}{{$ship_type_list[$item_order['ship_type']]}}{{/if}}</strong>:<strong name="order_ship_code">{{$item_order['ship_code']}}</strong>
+                        </p>
+                {{/if}}
+                {{if $current_tag == SHARE_SHIP_PYS_ZITI_TAG}}
+                        <p>
+                            <strong>提货码:</strong><strong>{{$item_order['ship_code']}}</strong>
+                        </p>
+                {{/if}}
+            {{/if}}
             {{if $item_order['status'] == ORDER_STATUS_SHIPPED}}
                 {{if $current_tag == SHARE_SHIP_KUAIDI_TAG}}
                     <p name="order-ship-info" id="order-ship-info-{{$item_order['id']}}">
