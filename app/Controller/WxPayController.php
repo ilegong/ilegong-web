@@ -19,6 +19,19 @@ class WxPayController extends AppController {
         }
     }
 
+    /**
+     * @param $logistics_order_id
+     * 闪送或者第三方物流订单支付
+     */
+    public function logistics_order_pay($logistics_order_id){
+        $uid = $this->currentUser['id'];
+        if (empty($uid)) {
+            $ref = Router::url($_SERVER['REQUEST_URI']);
+            $this->redirect('/users/login.html?force_login=1&auto_weixin='.$this->is_weixin().'&referer=' . urlencode($ref));
+        }
+
+    }
+
     public function group_pay($memberId) {
 
         $uid = $this->currentUser['id'];
@@ -157,6 +170,69 @@ class WxPayController extends AppController {
         $this->set('productDesc', $productDesc);
         $this->set('orderId', $orderId);
         $this->set('hideNav', true);
+    }
+
+    /**
+     * @param $error_pay_redirect
+     * @param $logistics_order_id
+     * @param $uid
+     * @param $logistics_order
+     * @throws CakeException
+     * @return array js api parameters, out trade no, description
+     */
+    private function __prepareLogisticsOrderWxPay($error_pay_redirect, $logistics_order_id, $uid, $logistics_order){
+        if (!$this->is_weixin()) {
+            throw new CakeException("您只能在微信中使用微信支付。");
+        }
+        //使用jsapi接口
+        $jsApi = $this->WxPayment->createJsApi();
+
+        $oauth = ClassRegistry::init('Oauthbind')->findWxServiceBindByUid($uid);
+
+        if ($oauth && $oauth['oauth_openid']) {
+            $openid = $oauth['oauth_openid'];
+        }  else {
+            //通过code获得openid
+            if (!isset($_GET['code'])) {
+                //触发微信返回code码
+                $url = $jsApi->createOauthUrlForCode(WxPayConf_pub::WX_JS_LOGISTICS_API_CALL_URL . '/' . $logistics_order_id . '?showwxpaytitle=1');
+                Header("Location: $url");
+                exit();   //cannot use return!!!
+            } else {
+                //获取code码，以获取openid
+                $code = $_GET['code'];
+                $jsApi->setCode($code);
+                $openid = $jsApi->getOpenId();
+            }
+        }
+
+        list($productDesc, $body) = $this->WxPayment->getProductDesc($orderId);
+        $trade_type = TRADE_WX_API_TYPE;
+        $totalFee = intval(intval($order['Order']['total_all_price'] * 1000)/10);
+        $out_trade_no = $this->WxPayment->out_trade_no(WX_APPID_SOURCE, $orderId);
+
+        //=========步骤2：使用统一支付接口，获取prepay_id============
+        $prepay_id = $this->getPrePayIdFromWx($openid, $body, $out_trade_no, $totalFee);
+        if (!$prepay_id) {
+            $this->log("Re generate prepay id for order:".$orderId);
+            $out_trade_no = $this->WxPayment->out_trade_no(WX_APPID_SOURCE, $orderId);
+            $prepay_id = $this->getPrePayIdFromWx($openid, $body, $out_trade_no, $totalFee);
+        }
+
+        if ($prepay_id) {
+
+            $this->WxPayment->savePayLog($orderId, $out_trade_no, $body, $trade_type, $totalFee, $prepay_id, $openid);
+
+            //=========步骤3：使用jsapi调起支付============
+            $jsApi->setPrepayId($prepay_id);
+            $jsapi_param = $jsApi->getParameters();
+            $this->log("wxpay:" . $jsapi_param);
+            return array($jsapi_param, $out_trade_no, $productDesc);
+        }  else {
+            $this->log('wx_prepare_error');
+            $this->__message('支付服务忙死了，请您稍后重试', $error_pay_redirect, 5);
+            exit();
+        }
     }
 
     /**

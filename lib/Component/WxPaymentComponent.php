@@ -173,6 +173,12 @@ class WxPaymentComponent extends Component {
     }
 
 
+    public function getLogisticsDesc($orderId){
+        $logisticsOrderItemM = ClassRegistry::init('LogisticsOrderItem');
+        $desc = '';
+        $items = $logisticsOrderItemM->find('all', array());
+    }
+
     /**
      * @param $orderId
      * @return array (productDesc, body)
