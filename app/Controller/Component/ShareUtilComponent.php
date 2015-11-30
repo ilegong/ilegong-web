@@ -1875,16 +1875,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 810684,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
                 ),
-                '446' => array(
-                    'share_id' => 446,
-                    'share_name' => '阳澄湖大闸蟹2015中秋第一波团购启动啦！',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/da7db400b09_0906.jpg',
-                    'share_price' => '150',
-                    'share_user_name' => '博文',
-                    'share_vote' => 300,
-                    'share_user_id' => 815,
-                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/9257b1649ba_0906.jpg'
-                ),
+//                '446' => array(
+//                    'share_id' => 446,
+//                    'share_name' => '阳澄湖大闸蟹2015中秋第一波团购启动啦！',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/da7db400b09_0906.jpg',
+//                    'share_price' => '150',
+//                    'share_user_name' => '博文',
+//                    'share_vote' => 300,
+//                    'share_user_id' => 815,
+//                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/9257b1649ba_0906.jpg'
+//                ),
 //                '954' => array(
 //                    'share_id' => 954,
 //                    'share_name' => '好吃到爆的琼中绿橙，来自北纬18°的热带天然水果',
