@@ -19,19 +19,6 @@ class WxPayController extends AppController {
         }
     }
 
-    /**
-     * @param $logistics_order_id
-     * 闪送或者第三方物流订单支付
-     */
-    public function logistics_order_pay($logistics_order_id){
-        $uid = $this->currentUser['id'];
-        if (empty($uid)) {
-            $ref = Router::url($_SERVER['REQUEST_URI']);
-            $this->redirect('/users/login.html?force_login=1&auto_weixin='.$this->is_weixin().'&referer=' . urlencode($ref));
-        }
-
-    }
-
     public function group_pay($memberId) {
 
         $uid = $this->currentUser['id'];
@@ -173,6 +160,31 @@ class WxPayController extends AppController {
     }
 
     /**
+     * @param $logistics_order_id
+     * 闪送或者第三方物流订单支付
+     */
+    public function logistics_order_pay($logistics_order_id) {
+        $uid = $this->currentUser['id'];
+        if (empty($uid)) {
+            $ref = Router::url($_SERVER['REQUEST_URI']);
+            $this->redirect('/users/login.html?force_login=1&auto_weixin=' . $this->is_weixin() . '&referer=' . urlencode($ref));
+            return;
+        }
+        $error_pay_redirect = '';
+        $paid_done_url = '';
+        $this->pageTitle = '微信支付';
+        $order = $this->WxPayment->findLogisticsOrderAndCheckStatus($logistics_order_id, $uid);
+        list($jsapi_param, $out_trade_no, $desc) = $this->__prepareLogisticsOrderWxPay($error_pay_redirect, $logistics_order_id, $uid, $order);
+        $this->set('paid_done_url', $paid_done_url);
+        $this->set('jsApiParameters', $jsapi_param);
+        $this->set('totalFee', $order['Logistics']['total_all_price']);
+        $this->set('tradeNo', $out_trade_no);
+        $this->set('desc', $desc);
+        $this->set('logisticsOrderId', $logistics_order_id);
+        $this->set('hideNav', true);
+    }
+
+    /**
      * @param $error_pay_redirect
      * @param $logistics_order_id
      * @param $uid
@@ -180,18 +192,16 @@ class WxPayController extends AppController {
      * @throws CakeException
      * @return array js api parameters, out trade no, description
      */
-    private function __prepareLogisticsOrderWxPay($error_pay_redirect, $logistics_order_id, $uid, $logistics_order){
+    private function __prepareLogisticsOrderWxPay($error_pay_redirect, $logistics_order_id, $uid, $logistics_order) {
         if (!$this->is_weixin()) {
             throw new CakeException("您只能在微信中使用微信支付。");
         }
         //使用jsapi接口
         $jsApi = $this->WxPayment->createJsApi();
-
         $oauth = ClassRegistry::init('Oauthbind')->findWxServiceBindByUid($uid);
-
         if ($oauth && $oauth['oauth_openid']) {
             $openid = $oauth['oauth_openid'];
-        }  else {
+        } else {
             //通过code获得openid
             if (!isset($_GET['code'])) {
                 //触发微信返回code码
@@ -205,30 +215,26 @@ class WxPayController extends AppController {
                 $openid = $jsApi->getOpenId();
             }
         }
-
-        list($productDesc, $body) = $this->WxPayment->getProductDesc($orderId);
+        list($desc, $body) = $this->WxPayment->getLogisticsDesc($logistics_order_id);
         $trade_type = TRADE_WX_API_TYPE;
-        $totalFee = intval(intval($order['Order']['total_all_price'] * 1000)/10);
-        $out_trade_no = $this->WxPayment->out_trade_no(WX_APPID_SOURCE, $orderId);
-
+        $totalFee = intval(intval($logistics_order['LogisticsOrder']['total_price'] * 1000) / 10);
+        //生成交易单号
+        $out_trade_no = $this->WxPayment->out_trade_no(WX_APPID_SOURCE, $logistics_order_id);
         //=========步骤2：使用统一支付接口，获取prepay_id============
         $prepay_id = $this->getPrePayIdFromWx($openid, $body, $out_trade_no, $totalFee);
         if (!$prepay_id) {
-            $this->log("Re generate prepay id for order:".$orderId);
-            $out_trade_no = $this->WxPayment->out_trade_no(WX_APPID_SOURCE, $orderId);
+            $this->log("Re generate prepay id for logistics order:" . $logistics_order_id);
+            $out_trade_no = $this->WxPayment->out_trade_no(WX_APPID_SOURCE, $logistics_order_id);
             $prepay_id = $this->getPrePayIdFromWx($openid, $body, $out_trade_no, $totalFee);
         }
-
         if ($prepay_id) {
-
-            $this->WxPayment->savePayLog($orderId, $out_trade_no, $body, $trade_type, $totalFee, $prepay_id, $openid);
-
+            $this->WxPayment->savePayLog($logistics_order_id, $out_trade_no, $body, $trade_type, $totalFee, $prepay_id, $openid, LOGISTICS_ORDER_PAY_TYPE);
             //=========步骤3：使用jsapi调起支付============
             $jsApi->setPrepayId($prepay_id);
             $jsapi_param = $jsApi->getParameters();
             $this->log("wxpay:" . $jsapi_param);
-            return array($jsapi_param, $out_trade_no, $productDesc);
-        }  else {
+            return array($jsapi_param, $out_trade_no, $desc);
+        } else {
             $this->log('wx_prepare_error');
             $this->__message('支付服务忙死了，请您稍后重试', $error_pay_redirect, 5);
             exit();

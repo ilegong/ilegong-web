@@ -71,11 +71,13 @@ const SHARE_ORDER_TAG_OPERATE_CACHE_KEY = 'share_order_tag_operate_data_cache_ke
 
 const GOOD_ORDER_PAY_TYPE = 0; //商品购买 支付
 
-const LOGISTICS_ORDER_PAY_TYPE = 1; //第三方物流下单 支付
+const LOGISTICS_ORDER_PAY_TYPE = 1; //物流支付
 
 $_display_tags_in_home = array(TAG_ID_CHULIANG, TAG_ID_ROUQIN_DANPIN, TAG_ID_XINPIN_SHICHI, TAG_ID_XINPIN_SHICHI);
 
 $_coupon_could_distribute = array(18483 => '新用户50返10元券', 18482 => '新用户100返20元券');
+
+const LOGISTICS_ORDER_WAIT_PAY_STATUS = 0;
 
 function is_admin_uid($uid) {
 
