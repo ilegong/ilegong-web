@@ -1780,6 +1780,16 @@ class ShareUtilComponent extends Component {
 //                    'share_user_id' => 708029,
 //                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
 //                ),
+                '1335' => array(
+                    'share_id' => 1335,
+                    'share_name' => '六斤枇杷一斤膏----枇杷之乡，农家密炼，汁汁原味，滴滴健康',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/8eff16b947b_1130.jpg',
+                    'share_price' => '115',
+                    'share_user_name' => '鲲鲲',
+                    'share_vote' => 1000,
+                    'share_user_id' => 806889,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
+                ),
                 //脐橙
                 '1085' => array(
                     'share_id' => 1085,
