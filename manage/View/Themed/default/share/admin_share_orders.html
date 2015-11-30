@@ -28,6 +28,7 @@
         color: #333;
     }
 </style>
+{{$this->Html->css(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css'))}}
 <h3>分享用户产生的订单</h3>
 <hr>
 <div class="row">
@@ -308,12 +309,22 @@
         </div>
     </div>
 </div>
+{{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js'))}}
 <script>
     /*
      Please consider that the JS part isn't production ready at all, I just code it to show the concept of merging filters and titles together !
      */
     $(document).ready(function () {
-
+        $('#start_date').datetimepicker({
+            format: "yyyy-mm-dd",
+            maxView: "day",
+            autoclose: true
+        });
+        $('#end_date').datetimepicker({
+            format: "yyyy-mm-dd",
+            maxView: "day",
+            autoclose: true
+        });
         var order_status = '{{$order_status}}';
         var order_repaid_status = '{{$order_prepaid_status}}';
         var $offlineStoreDialog = $('#offlineStoreModal');
