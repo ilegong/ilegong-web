@@ -2194,16 +2194,16 @@ class ShareUtilComponent extends Component {
             ),
             3 => array(
                 //紫皮糖
-                '1079' => array(
-                    'share_id' => 1079,
-                    'share_name' => '俄罗斯经典紫皮糖',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/9d333807aad_1110.jpg',
-                    'share_price' => '70',
-                    'share_user_name' => '小宝妈',
-                    'share_vote' => 1000,
-                    'share_user_id' => 811917,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
-                ),
+//                '1079' => array(
+//                    'share_id' => 1079,
+//                    'share_name' => '俄罗斯经典紫皮糖',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/9d333807aad_1110.jpg',
+//                    'share_price' => '70',
+//                    'share_user_name' => '小宝妈',
+//                    'share_vote' => 1000,
+//                    'share_user_id' => 811917,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
+//                ),
                 '442' => array(
                     'share_id' => 442,
                     'share_name' => '烟台特产海鲜干货：鱿鱼丝/烤鱼片/金钩海米/干贝/瑶柱',
