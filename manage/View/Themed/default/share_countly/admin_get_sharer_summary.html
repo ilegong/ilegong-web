@@ -1,0 +1,52 @@
+<div class="container-fluid">
+    <h2>用户分享数据统计</h2>
+
+    <div class="row" style="margin-bottom: 20px;">
+        <form class="form-inline pull-right" action="/manage/admin/ShareCountly/get_sharer_summary" method="post">
+            <div class="form-group">
+                <label class="sr-only" for="sharer_id">用户ID</label>
+                <input type="number" class="form-control" id="sharer_id" name="sharer" placeholder="用户ID"
+                       value="{{$sharer}}">
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="start_date">开始日期</label>
+                <input type="text" class="form-control" id="start_date" name="start_date" placeholder="开始日期"
+                       value="{{$start_date}}">
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="end_date">结束日期</label>
+                <input type="text" class="form-control" id="end_date" name="end_date" placeholder="结束日期"
+                       value="{{$end_date}}">
+            </div>
+            <button type="submit" class="btn btn-default">查询</button>
+        </form>
+    </div>
+    <div class="row">
+        <table class="table table-bordered">
+            <thead>
+            <th>用户ID</th>
+            <th>用户名</th>
+            <th>手机号码</th>
+            <th>用户等级</th>
+            <th>粉丝数量</th>
+            <th>分享数量</th>
+            <th>总订单数</th>
+            <th>总交易额</th>
+            <th>总评论数</th>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{$sharer_info['User']['id']}}</td>
+                <td>{{$sharer_info['User']['nickname']}}</td>
+                <td>{{$sharer_info['User']['mobilephone']}}</td>
+                <td>{{$sharer_info['User']['is_proxy']}}</td>
+                <td>{{$share_count}}</td>
+                <td>{{$fans_count}}</td>
+                <td>{{$order_count}}</td>
+                <td>{{number_format($order_total_price[0][0]['order_total_price'],2)}}</td>
+                <td>{{$comment_count}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
