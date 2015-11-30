@@ -1566,6 +1566,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 806889,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
                 ),
+                '1351' => array(
+                    'share_id' => 1351,
+                    'share_name' => '富得流油的海鸭蛋',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/ece57e81c34_1027.jpg',
+                    'share_price' => '70',
+                    'share_user_name' => '小宝妈',
+                    'share_vote' => 1000,
+                    'share_user_id' => 811917,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
+                ),
 //                '1181' => array(
 //                    'share_id' => 1181,
 //                    'share_name' => '多油、好吃到停不下来的海鸭蛋',
