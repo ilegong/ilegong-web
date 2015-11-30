@@ -111,7 +111,7 @@ class ShareCountlyController extends AppController {
             $userRelationM = ClassRegistry::init('UserRelation');
             $fans_count = $userRelationM->find('count', array(
                 'conditions' => array(
-                    'user_id' => $sharer_id
+                    'follow_id' => $sharer_id
                 )
             ));
             $commentM = ClassRegistry::init('Comment');
