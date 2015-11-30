@@ -582,7 +582,8 @@ class OrdersController extends AppController {
             $PayLogInfo = $this->PayLog->find('first', array(
                 'conditions' => array(
                     'order_id' => $orderId,
-                    'status' => 2
+                    'status' => 2,
+                    'type' => GOOD_ORDER_PAY_TYPE
                 )
             ));
             $trade_type = $PayLogInfo['PayLog']['trade_type'];
@@ -677,7 +678,8 @@ class OrdersController extends AppController {
             $PayLogInfo = $this->PayLog->find('first', array(
                 'conditions' => array(
                     'order_id' => $orderId,
-                    'status' => 2
+                    'status' => 2,
+                    'type' => GOOD_ORDER_PAY_TYPE
                 )
             ));
             $trade_type = $PayLogInfo['PayLog']['trade_type'];
@@ -754,7 +756,8 @@ class OrdersController extends AppController {
         $PayLogInfo = $this->PayLog->find('first', array(
             'conditions' => array(
                 'order_id' => $orderId,
-                'status' => 2
+                'status' => 2,
+                'type' => GOOD_ORDER_PAY_TYPE
             )
         ));
         $product_name = null;

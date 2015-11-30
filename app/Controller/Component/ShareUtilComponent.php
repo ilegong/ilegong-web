@@ -788,7 +788,8 @@ class ShareUtilComponent extends Component {
             $PayLogInfo = $payLogM->find('first', array(
                 'conditions' => array(
                     'order_id' => $orderId,
-                    'status' => 2
+                    'status' => 2,
+                    'type' => GOOD_ORDER_PAY_TYPE
                 )
             ));
             $trade_type = $PayLogInfo['PayLog']['trade_type'];

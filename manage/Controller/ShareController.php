@@ -579,7 +579,8 @@ class ShareController extends AppController {
             $pay_notify_order_ids = array_unique($pay_notify_order_ids);
             $pay_notifies = $this->PayNotify->find('all', array(
                 'conditions' => array(
-                    'order_id' => $pay_notify_order_ids
+                    'order_id' => $pay_notify_order_ids,
+                    'type' => GOOD_ORDER_PAY_TYPE
                 ),
             ));
             $pay_notifies = Hash::combine($pay_notifies, '{n}.PayNotify.order_id', '{n}.PayNotify.out_trade_no');

@@ -236,7 +236,7 @@ class TuanController extends AppController
 
     public function _query_orders($conditions, $order_by, $limit = null)
     {
-        $this->PayNotify->query("update cake_pay_notifies set order_id =  substring_index(substring_index(out_trade_no,'-',2),'-',-1) where status = 6 and order_id is NULL");
+        $this->PayNotify->query("update cake_pay_notifies set order_id =  substring_index(substring_index(out_trade_no,'-',2),'-',-1) where status = 6 and order_id is NULL and type=0");
         $join_conditions = array(
             array(
                 'table' => 'pay_notifies',
