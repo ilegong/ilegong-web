@@ -1582,15 +1582,16 @@ class ShareUtilComponent extends Component {
     public function get_share_index_product($tag) {
         $product = array(
             0 => array(
-                '1268' => array(
-                    'share_id' => 1268,
-                    'share_name' => '麻阳冰糖橙（包邮预售）----不打药，不防腐，不上蜡，守护内心的“橙”实',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/2f2ae8653ee_1123.jpg',
-                    'share_price' => '68',
-                    'share_user_name' => '鲲鲲',
-                    'share_vote' => 560,
-                    'share_user_id' => 806889,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
+                //银耳
+                '1199' => array(
+                    'share_id' => 1199,
+                    'share_name' => '鲜活银耳@"防霾佳品"【顺丰包邮】',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/f257f80229f_1110.jpg',
+                    'share_price' => '108',
+                    'share_user_name' => '片片妈',
+                    'share_vote' => 600,
+                    'share_user_id' => 878825,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_52d08a7c8bb6e9611307b6c4858ca38c.jpg'
                 ),
                 '1351' => array(
                     'share_id' => 1351,
@@ -1601,6 +1602,16 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 1000,
                     'share_user_id' => 811917,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
+                ),
+                '1268' => array(
+                    'share_id' => 1268,
+                    'share_name' => '麻阳冰糖橙（包邮预售）----不打药，不防腐，不上蜡，守护内心的“橙”实',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/2f2ae8653ee_1123.jpg',
+                    'share_price' => '68',
+                    'share_user_name' => '鲲鲲',
+                    'share_vote' => 560,
+                    'share_user_id' => 806889,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
                 ),
 //                '1181' => array(
 //                    'share_id' => 1181,
@@ -1742,17 +1753,6 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 300,
                     'share_user_id' => 1199,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/6f5125521e1_0903.jpg'
-                ),
-                //银耳
-                '1228' => array(
-                    'share_id' => 1228,
-                    'share_name' => '鲜活银耳【顺丰包邮】',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/f257f80229f_1110.jpg',
-                    'share_price' => '108',
-                    'share_user_name' => '片片妈',
-                    'share_vote' => 600,
-                    'share_user_id' => 878825,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_52d08a7c8bb6e9611307b6c4858ca38c.jpg'
                 ),
                 '327' => array(
                     'share_id' => 327,

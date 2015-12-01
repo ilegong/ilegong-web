@@ -6,28 +6,50 @@
  */
 class ShareProductPoolController extends AppController {
 
+    public function beforeFilter() {
+        parent::beforeFilter();
+        $this->layout = 'weshare';
+    }
 
     /**
      *
      * 产品库首页
      */
     public function share_products_index() {
+        $this->layout = null;
         $share_products = $this->get_share_products();
         $this->set('share_products', $share_products);
     }
 
     /**
-     * 产品库详情页
+     * @param $share_id
+     * 产品库详情页(朋友说用户分享的一个分享)
      */
-    public function share_product_detail() {
+    public function share_product_detail($share_id) {
 
     }
 
     /**
+     * @param $share_id
+     * ajax 获取产品池的详情
+     */
+    public function get_share_product_detail($share_id) {
+        $this->autoRender = false;
+
+    }
+
+
+    private function get_share_product_info($share_id){
+
+        $weshareM = ClassRegistry::init('Weshare');
+
+    }
+
+
+    /**
      * @return array
      */
-    public function get_share_products() {
-
+    private function get_share_products() {
         $share_products = array(
             '1268' => array(
                 'share_id' => 1268,
@@ -39,5 +61,6 @@ class ShareProductPoolController extends AppController {
         );
         return $share_products;
     }
+
 
 }
