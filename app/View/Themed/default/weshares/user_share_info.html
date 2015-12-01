@@ -22,8 +22,8 @@
                     {{if $is_support_offline_store > 0}}
                     <span class="label label-info">好邻居支持</span>
                     {{/if}}
-                    {{if $is_proxy}}
-                    <span class="label label-success">团长</span>
+                    {{if !empty($user_level)}}
+                        <span class="label label-success">{{get_user_level_text($user_level['data_value'])}}</span>
                     {{/if}}
                 </div>
                 {{if !$is_me}}
