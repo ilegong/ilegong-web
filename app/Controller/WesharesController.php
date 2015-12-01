@@ -1450,6 +1450,9 @@ class WesharesController extends AppController {
                 'recursive' => 1, //int
                 'fields' => $this->query_user_fileds,
             ));
+            $creatorInfo = $creatorInfo['User'];
+            $creatorLevel = $this->ShareUtil->get_user_level($weshareInfo['Weshare']['creator']);
+            $creatorInfo['level'] = $creatorLevel;
             if ($product_to_map) {
                 $weshareProducts = $this->ShareUtil->get_product_tag_map($weshareId);
             } else {
@@ -1468,7 +1471,7 @@ class WesharesController extends AppController {
             $weshareInfo['tags_list'] = $sharer_tags_list;
             $weshareInfo['addresses'] = Hash::extract($weshareAddresses, '{n}.WeshareAddress');
             $weshareInfo['products'] = $weshareProducts;
-            $weshareInfo['creator'] = $creatorInfo['User'];
+            $weshareInfo['creator'] = $creatorInfo;
             $weshareInfo['ship_type'] = $weshareShipSettings;
             $weshareInfo['images'] = array_filter(explode('|', $weshareInfo['images']));
             $weshareInfo['proxy_rebate_percent'] = $proxy_share_percent['ProxyRebatePercent'];

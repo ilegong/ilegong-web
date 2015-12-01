@@ -684,16 +684,41 @@ class ShareUtilComponent extends Component {
                     'type' => $type,
                     'data_id' => $uid,
                     'deleted' => DELETED_NO
-                )
+                ),
+                'fields' => array('data_id', 'data_value', 'type')
             ));
             if (empty($user_level)) {
                 return null;
             }
             $user_level = $user_level['UserLevel'];
+            $level_name = get_user_level_text($user_level['data_value']);
+            $user_level['level_name'] = $level_name;
             Cache::write($key, json_encode($user_level));
             return $user_level;
         }
         return json_decode($cacheData, true);
+    }
+
+    /**
+     * @param $user_ids
+     * @return array
+     */
+    public function get_users_level($user_ids) {
+        $userLevelM = ClassRegistry::init('UserLevel');
+        $levels = $userLevelM->find('all', array(
+            'conditions' => array(
+                'type' => 0,
+                'data_id' => $user_ids,
+                'deleted' => DELETED_NO
+            ),
+            'fields' => array('data_id', 'data_value', 'type')
+        ));
+        $levels = Hash::combine($levels, '{n}.UserLevel.data_id', '{n}.UserLevel');
+        foreach ($levels as &$level_item) {
+            $level_item_name = get_user_level_text($level_item['data_value']);
+            $level_item['level_name'] = $level_item_name;
+        }
+        return $levels;
     }
 
 

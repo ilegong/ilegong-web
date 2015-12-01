@@ -23,7 +23,7 @@
                     <span class="label label-info">好邻居支持</span>
                     {{/if}}
                     {{if !empty($user_level)}}
-                        <span class="label label-success">{{get_user_level_text($user_level['data_value'])}}</span>
+                        <span class="label label-success">{{$user_level['level_name']}}</span>
                     {{/if}}
                 </div>
                 {{if !$is_me}}

@@ -57,6 +57,7 @@
       this.order_cart_map = {};
       this.rebate_logs = {};
       this.users = {};
+      this.levelData = {};
       this.shareId = 0;
       this.busy = false;
       this.noMore = false;
@@ -92,6 +93,7 @@
           this.order_cart_map = merge_options(this.order_cart_map, data['order_cart_map']);
           this.rebate_logs = merge_options(this.rebate_logs, data['rebate_logs']);
           this.users = merge_options(this.users, data['users']);
+          this.levelData = merge_options(this.levelData, data['level_data']);
           if(data['page_info']){
             this.pageInfo = data['page_info'];
           }

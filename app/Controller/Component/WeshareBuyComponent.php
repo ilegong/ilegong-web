@@ -923,6 +923,7 @@ class WeshareBuyComponent extends Component {
                 'fields' => array('id', 'nickname', 'image', 'is_proxy', 'mobilephone')
             ));
             $user_infos = Hash::combine($user_infos, '{n}.User.id', '{n}.User');
+            $level_data = $this->ShareUtil->get_users_level($user_ids);
             foreach ($group_share_order as $order_item) {
                 $member_id = $order_item['Order']['member_id'];
                 $creator = $order_item['Order']['creator'];
@@ -933,7 +934,7 @@ class WeshareBuyComponent extends Component {
                     $address_data[$member_id]['join_users'][] = $creator;
                 }
             }
-            $child_share_data = array('child_share_data' => $address_data, 'child_share_user_infos' => $user_infos, 'child_share_ids' => $share_ids);
+            $child_share_data = array('child_share_data' => $address_data, 'child_share_user_infos' => $user_infos, 'child_share_level_data' => $level_data, 'child_share_ids' => $share_ids);
             $child_share_data_json = json_encode($child_share_data);
             Cache::write($cache_key, $child_share_data_json);
             return $child_share_data;
@@ -1236,15 +1237,17 @@ class WeshareBuyComponent extends Component {
                 'recursive' => 1, //int
                 'fields' => $this->query_user_simple_fields,
             ));
+            $level_data = $this->ShareUtil->get_users_level($userIds);
             $users = Hash::combine($users, '{n}.User.id', '{n}.User');
             $orders = Hash::combine($orders, '{n}.Order.id', '{n}.Order');
             usort($orders, function ($a, $b) {
                 return ($a['id'] < $b['id']) ? -1 : 1;
             });
         }
-        $result_data = array('users' => $users, 'orders' => $orders, 'order_cart_map' => $order_cart_map, 'rebate_logs' => $rebateLogs);
+        $result_data = array('users' => $users, 'level_data' => $level_data, 'orders' => $orders, 'order_cart_map' => $order_cart_map, 'rebate_logs' => $rebateLogs);
         return $result_data;
     }
+
 
 
     /**

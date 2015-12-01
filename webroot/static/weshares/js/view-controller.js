@@ -332,6 +332,7 @@
           vm.ordersDetail = data['ordersDetail'];
           vm.childShareDetail = data['childShareData']['child_share_data'];
           vm.childShareDetailUsers = data['childShareData']['child_share_user_infos'];
+          vm.childShareDetailUsersLevel = data['childShareData']['child_share_level_data'];
           //vm.shipTypes = data['ordersDetail']['ship_types'];
           vm.rebateLogs = data['ordersDetail']['rebate_logs'];
           //vm.sortOrders();
