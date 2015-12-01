@@ -345,6 +345,9 @@ class WesharesController extends AppController {
             'recursive' => 1, //int
             'fields' => $user_fields,
         ));
+        $current_user = $current_user['User'];
+        $current_user_level_data = $this->ShareUtil->get_user_level($uid);
+        $current_user['level'] = $current_user_level_data;
         if (!$is_me) {
             $sub_status = $this->WeshareBuy->check_user_subscribe($weshareInfo['creator']['id'], $uid);
         } else {
@@ -367,7 +370,7 @@ class WesharesController extends AppController {
         echo json_encode(array('support_pys_ziti' => $share_ship_set,
             'weshare' => $weshareInfo,
             'recommendData' => $recommend_data,
-            'current_user' => $current_user['User'],
+            'current_user' => $current_user,
             'weixininfo' => $weixinInfo,
             'weshare_ship_settings' => $weshare_ship_settings,
             'consignee' => $consignee,
