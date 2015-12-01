@@ -128,6 +128,7 @@ $(document).ready(function () {
     var callbackFunc = function (data) {
       var list = data['opt_logs'] || [];
       var users = data['combine_data']['users'] || {};
+      var levels = data['combine_data']['users_level'] || {};
       var share_user_map = data['combine_data']['share_user_buy_map'] || {};
       var user_fans_extra = data['combine_data']['user_fans_extra'] || {};
       var nowTimeStamp = data['nowTimeStamp'];
@@ -135,10 +136,12 @@ $(document).ready(function () {
         var objJson = list[i];
         var objJsonUserId = objJson['user_id'];
         var objJsonUserInfo = users[objJsonUserId];
+        var objJsonUserLevel = levels[objJsonUserId];
         if (objJsonUserInfo) {
           objJsonUserInfo['fans_count'] = user_fans_extra[objJsonUserId];
         }
         objJson['user_info'] = objJsonUserInfo;
+        objJson['level_data'] = objJsonUserLevel;
         parseInfoJsonObj(objJson, nowTimeStamp);
         var buy_user_ids = share_user_map[objJson['obj_id']];
         if (buy_user_ids && buy_user_ids.length > 0) {
@@ -241,7 +244,7 @@ $(document).ready(function () {
     '<a class="heada" <%if(this.user_info){%>href="/weshares/user_share_info/<%this.user_info.id%>"<%}else{%>href="javascript:void(0)"<%}%>>' +
     '<img class="headimg" src="/static/opt/images/default.png" <%if(this.user_info){%>data-original="<%this.user_info.image%>"<%}else{%>data-original="/static/opt/images/default.png"<%}%>>' +
     '<%if(this.user_info&&this.user_info.fans_count > 100){%><img src="/static/weshares/images/v.png" class="user-is-vip-user-tag"><%}%>' +
-    '<%if(this.user_info&&this.user_info.is_proxy==1){%><span class="user-is-proxy-tag">团长</span><%}%>' +
+    '<%if(this.level_data){%><span class="user-is-proxy-tag"><%this.level_data.level_name%></span><%}%>' +
     '</a>' +
     '<a href="javascript:void(0)" class="nickname"><%if(this.user_info){%><%this.user_info.nickname%><%}else{%>匿名用户<%}%></a>' +
     '<font class="jibie"><%this.data_type_tag%></font>' +
