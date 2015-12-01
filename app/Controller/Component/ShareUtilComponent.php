@@ -721,6 +721,32 @@ class ShareUtilComponent extends Component {
         return $levels;
     }
 
+    /**
+     * @param $uid
+     * 检查用户是否有level ， 没有初始化一个
+     */
+    public function check_and_save_default_level($uid) {
+        $userLevelM = ClassRegistry::init('UserLevel');
+        $level = $userLevelM->find('first', array(
+            'conditions' => array(
+                'data_id' => $uid,
+                'type' => 0
+            )
+        ));
+        if (empty($level)) {
+            $date = date('Y-m-d H:i:s');
+            $init_level_data = array(
+                'data_id' => $uid,
+                'data_value' => 0,
+                'type' => 0,
+                'created' => $date,
+                'updated' => $date,
+                'deleted' => DELETED_NO
+            );
+            $userLevelM->save($init_level_data);
+        }
+    }
+
 
     /**
      * @param $user_id
