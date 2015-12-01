@@ -640,7 +640,7 @@ class ShareUtilComponent extends Component {
             'thumbnail' => $thumbnail
         );
         //黑名单用户不显示 或者 粉丝小于50
-        if (is_blacklist_user($user_id) || $this->get_user_level($user_id) == 0) {
+        if (is_blacklist_user($user_id) || $this->get_user_level_by_fans_count($user_id) == 0) {
             $optData['deleted'] = DELETED_YES;
         }
         $this->saveOptLog($optData);
@@ -651,7 +651,7 @@ class ShareUtilComponent extends Component {
      * @return int
      * 获取用户等级
      */
-    public function get_user_level($uid) {
+    public function get_user_level_by_fans_count($uid) {
         $userRelationM = ClassRegistry::init('UserRelation');
         $fans_count = $userRelationM->find('count', array(
             'conditions' => array(
@@ -664,6 +664,31 @@ class ShareUtilComponent extends Component {
         if ($fans_count > 50) {
             return 1;
         }
+    }
+
+    /**
+     * @param $uid
+     * @param $type
+     * @return array
+     * 获取用户等级
+     */
+    public function get_user_level($uid, $type = 0) {
+        $key = SHARER_LEVEL_CACHE_KEY . '_' . $uid . '_' . $type;
+        $cacheData = Cache::read($key);
+        if (empty($cacheData)) {
+            $userLevelM = ClassRegistry::init('UserLevel');
+            $user_level = $userLevelM->find('first', array(
+                'conditions' => array(
+                    'type' => $type,
+                    'data_id' => $uid,
+                    'deleted' => DELETED_NO
+                )
+            ));
+            $user_level = $user_level['UserLevel'];
+            Cache::write($key, json_encode($user_level));
+            return $user_level;
+        }
+        return json_decode($cacheData, true);
     }
 
 
@@ -1547,6 +1572,7 @@ class ShareUtilComponent extends Component {
         $SubReasonM = ClassRegistry::init('UserSubReason');
         $SubReasonM->updateAll(array('used' => 1), array('user_id' => $uid, 'type' => array(SUB_SHARER_REASON_TYPE_FROM_USER_CENTER, SUB_SHARER_REASON_TYPE_FROM_SHARE_INFO)));
     }
+
 
     /**
      * @param $tag

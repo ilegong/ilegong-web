@@ -195,12 +195,13 @@ define('IN_CHECK', 2); //审查中
 define('IN_SHICHI', 3); //试吃中
 define('SHICHI_AND_NO_CHECK', 4); //试吃／审核不通过
 //分享缓存的key
-const SHARE_USER_SUMMERY_CACHE_KEY = 'share_user_summery_cache_key';
-const SHARER_FANS_DATA_CACHE_KEY = 'sharer_fans_data_cache_key';
-const SHARER_FOCUS_DATA_CACHE_KEY = 'sharer_focus_data_cache_key';
+const SHARER_LEVEL_CACHE_KEY = 'sharer_level_cache_key';
+const SHARE_USER_SUMMERY_CACHE_KEY = 'share_user_summery_cache_key'; //分享用户的统计
+const SHARER_FANS_DATA_CACHE_KEY = 'sharer_fans_data_cache_key'; //分享用户粉丝的缓存
+const SHARER_FOCUS_DATA_CACHE_KEY = 'sharer_focus_data_cache_key'; //用户关注信息的缓存
 const USER_SHARE_COMMENTS_DATA_CACHE_KEY = 'user_share_comments_data_cache_key';
 const SHARER_ALL_COMMENT_DATA_CACHE_KEY = 'sharer_all_comment_data_cache_key';
-const SHARE_COMMENT_DATA_CACHE_KEY = 'share_comment_data_cache_key';
+const SHARE_COMMENT_DATA_CACHE_KEY = 'share_comment_data_cache_key'; //分享评论的缓存
 const SHARE_ORDER_DATA_CACHE_KEY = 'share_order_data_cache_key';
 const SHARE_ORDER_PAGE_INFO_DATA_CACHE_KEY = 'share_order_page_info_data_cache_key'; //分享订单分页信息
 const SHARE_DETAIL_VIEW_ORDER_DATA_CACHE_KEY = 'share_detail_view_order_data_cache_key';//分享详情页面订单管理
@@ -220,10 +221,8 @@ const SIMPLE_SHARE_INFO_CACHE_KEY = 'simple_share_info_cache_key';
 const SHARER_TAGS_DATA_CACHE_KEY = 'sharer_tags_data_cache_key';
 const SHARE_OFFLINE_ADDRESS_SUMMERY_DATA_CACHE_KEY = 'share_offline_address_summery_data_cache_key'; //分享线下自提点 购买汇总数据缓存
 const SHARE_OFFLINE_ADDRESS_BUY_DATA_CACHE_KEY = 'share_offline_address_buy_data_cache_key';//分享线下自提点 购买信息
-const GROUP_SHARE_ORDER_SUMMERY_DATA_CACHE_KEY = 'group_share_order_summery_data_cache_key';
-
+const GROUP_SHARE_ORDER_SUMMERY_DATA_CACHE_KEY = 'group_share_order_summery_data_cache_key'; //子分享汇总数据的缓存
 const SHARE_MANAGE_USER_OPEN_ID_DATA_CACHE_KEY = 'share_manage_user_open_id_data_cache_key';//分享管理者的openId缓存
-
 const USER_SHARE_PAGE_INFO_CACHE_KEY = 'user_share_page_info_cache_key'; //缓存对应用户对应分享的分页信息
 const USER_SHARE_ORDER_INFO_CACHE_KEY = 'user_share_order_info_cache_key';//缓存对应用户对应分享的订单信息
 const USER_SHARE_ORDER_INFO_FIRST_PAGE_CACHE_KEY = 'user_share_order_info_first_page_cache_key';//缓存对应用户对应分享的第一页订单信息
