@@ -1643,6 +1643,16 @@ class ShareUtilComponent extends Component {
 //                    'share_user_id' => 811917,
 //                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
 //                ),
+                '1358' => array(
+                    'share_id' => 1358,
+                    'share_name' => '越南黑虎虾仁 【纯野生虾仁】',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/ee7947974c7_1127.jpg',
+                    'share_price' => '150',
+                    'share_user_name' => '小宝妈',
+                    'share_vote' => 1000,
+                    'share_user_id' => 811917,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
+                ),
                 '1292' => array(
                     'share_id' => 1292,
                     'share_name' => '德庆贡柑熟了，想找找当皇帝娘娘的感觉吗？',
@@ -1653,16 +1663,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 6783,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0e8ff635498de280dd3193826d837ee5.jpg'
                 ),
-                '1301' => array(
-                    'share_id' => 1301,
-                    'share_name' => '越南原装进口黑虎虾仁儿1000g',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/ee7947974c7_1127.jpg',
-                    'share_price' => '46',
-                    'share_user_name' => '吃好网',
-                    'share_vote' => 1000,
-                    'share_user_id' => 884103,
-                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/9e077f58c06_1125.jpg'
-                ),
+//                '1301' => array(
+//                    'share_id' => 1301,
+//                    'share_name' => '越南原装进口黑虎虾仁儿1000g',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/ee7947974c7_1127.jpg',
+//                    'share_price' => '46',
+//                    'share_user_name' => '吃好网',
+//                    'share_vote' => 1000,
+//                    'share_user_id' => 884103,
+//                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/9e077f58c06_1125.jpg'
+//                ),
                 '747' => array(
                     'share_id' => 747,
                     'share_name' => '那那家五常稻花香米',
