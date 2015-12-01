@@ -651,7 +651,7 @@ class ShareUtilComponent extends Component {
     /**
      * @param $uid
      * @return int
-     * 获取用户等级
+     * 根据用户的粉丝数 判断能否出现在信息流中
      */
     public function get_user_level_by_fans_count($uid) {
         $userRelationM = ClassRegistry::init('UserRelation');
@@ -686,6 +686,9 @@ class ShareUtilComponent extends Component {
                     'deleted' => DELETED_NO
                 )
             ));
+            if (empty($user_level)) {
+                return null;
+            }
             $user_level = $user_level['UserLevel'];
             Cache::write($key, json_encode($user_level));
             return $user_level;

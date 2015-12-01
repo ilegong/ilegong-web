@@ -112,6 +112,23 @@ function action_of_score_item($change, $reason) {
     return $action;
 }
 
+/**
+ * @param $val
+ * @return string
+ */
+function get_user_level_text($val) {
+    $level_name_map = array(
+        0 => '分享达人',
+        1 => '实习团长',
+        2 => '正式团长',
+        3 => '优秀团长',
+        4 => '高级团长',
+        5 => '资深团长',
+        6 => '首席团长'
+    );
+    return $level_name_map[$val];
+}
+
 App::build(array(
     'plugins' => array(COMMON_PATH . 'Plugin' . DS, APP_PATH . 'Plugin' . DS,),
     //'views' => array(COMMON_PATH.'View'.DS),

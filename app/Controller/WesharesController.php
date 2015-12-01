@@ -743,6 +743,9 @@ class WesharesController extends AppController {
         if ($user_is_proxy) {
             $this->set('is_proxy', true);
         }
+        //get user level
+        $user_level = $this->ShareUtil->get_user_level($uid);
+        $this->set('user_level', $user_level);
         if ($uid == $current_uid) {
             $rebate_money = $this->ShareUtil->get_rebate_money($current_uid);
             $this->set('rebate_money', $rebate_money);

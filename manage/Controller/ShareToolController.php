@@ -15,6 +15,35 @@ class ShareToolController extends AppController {
         $this->layout = 'bootstrap_layout';
     }
 
+    /**
+     * 初始化用户等级数据
+     */
+    public function admin_init_sharer_level() {
+        $this->autoRender = false;
+        $sharer_ids = $this->Weshare->find('all', array(
+            'fields' => array('DISTINCT creator'),
+            'limit' => 1500
+        ));
+        $userLevelM = ClassRegistry::init('UserLevel');
+        $sharer_ids = Hash::extract($sharer_ids, '{n}.Weshare.creator');
+        $datas = array();
+        $date = date('Y-m-d H:i:s');
+        foreach ($sharer_ids as $sharer_id) {
+            $data_item = array(
+                'data_value' => 0,
+                'data_id' => $sharer_id,
+                'created' => $date,
+                'updated' => $date,
+                'deleted' => 0,
+                'type' => 0
+            );
+            $datas[] = $data_item;
+        }
+        $userLevelM->saveAll($datas);
+        echo json_encode(array('success' => true));
+        return;
+    }
+
 
     /**
      * 跳转到一个分享权限设置的页面
