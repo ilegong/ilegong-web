@@ -93,12 +93,18 @@ class ShareProductPoolController extends AppController {
                 'share_id' => 1268,
                 'share_name' => '麻阳冰糖橙（包邮预售）----不打药，不防腐，不上蜡，守护内心的“橙”实',
                 'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/2f2ae8653ee_1123.jpg',
-                'retail_price' => '68',
-                'trade_price' => '78'
+                'price' => '68',
+                'commission_percent' => 10,
+                'brand_img' => '',
+                'brand_name' => '',
+                'show_brand' => false,
+                'brand_custom_service' => 633345,
+                'published' => 1
             ),
         );
+        $share_products = array_filter($share_products, function($item){
+            return $item['published'] == PUBLISH_YES;
+        });
         return $share_products;
     }
-
-
 }
