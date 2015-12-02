@@ -9,7 +9,7 @@ class ShareProductPoolController extends AppController {
 
     var $name = 'share_product_pool';
 
-    var $components = array('ShareUtil');
+    var $components = array('ShareUtil', 'ShareAuthority');
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -47,6 +47,9 @@ class ShareProductPoolController extends AppController {
             return;
         }
         $result = $this->ShareUtil->cloneShare($share_id, $user_id);
+        if ($result['success']) {
+            $this->init_share_authorize($result['shareId'], $share_id, $user_id);
+        }
         echo json_encode($result);
         return;
     }
@@ -84,6 +87,17 @@ class ShareProductPoolController extends AppController {
         return json_decode($cacheData, true);
     }
 
+    private function init_share_authorize($share_id, $refer_share_id, $uid) {
+        $weshareM = ClassRegistry::init('Weshare');
+        $weshare_info = $weshareM->find('first', array(
+            'conditions' => array(
+                'id' => $refer_share_id
+            ),
+            'fields' => array('id', 'creator')
+        ));
+        $this->ShareAuthority->init_clone_share_from_pool_operate_config($share_id, $uid, $weshare_info['Weshare']['creator']);
+    }
+
     /**
      * @return array
      */
@@ -102,7 +116,7 @@ class ShareProductPoolController extends AppController {
                 'published' => 1
             ),
         );
-        $share_products = array_filter($share_products, function($item){
+        $share_products = array_filter($share_products, function ($item) {
             return $item['published'] == PUBLISH_YES;
         });
         return $share_products;
