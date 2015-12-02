@@ -2141,26 +2141,6 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 810684,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
                 ),
-                '954' => array(
-                    'share_id' => 954,
-                    'share_name' => '好吃到爆的琼中绿橙，来自北纬18°的热带天然水果',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/7c62eeb1412_1027.jpg',
-                    'share_price' => '128',
-                    'share_user_name' => '亮',
-                    'share_vote' => 300,
-                    'share_user_id' => 842862,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_03f346b121de697c8f51b36ba498700d.jpg'
-                ),
-                '629' => array(
-                    'share_id' => 629,
-                    'share_name' => '库尔勒香梨北京直递',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/86a35649c9f_0928.jpg',
-                    'share_price' => '100',
-                    'share_user_name' => '林玲',
-                    'share_vote' => 235,
-                    'share_user_id' => 873677,
-                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/751e5e512e1_1009.jpg'
-                ),
                 '634' => array(
                     'share_id' => 634,
                     'share_name' => '明明分享自家爸妈种植的正宗阳信鸭梨',
@@ -2244,16 +2224,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 832279,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_624ed608a37ca10baec387ffb2d1fd89.jpg'
                 ),
-                '791' => array(
-                    'share_id' => 791,
-                    'share_name' => '东北五常稻花香大米五常当地米厂专供',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/965ba48b2d2_0818.jpg',
-                    'share_price' => '160',
-                    'share_user_name' => '王谷丹',
-                    'share_vote' => 187,
-                    'share_user_id' => 1388,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_928e6bec43ee9674c9abbcf7ce7eae61.jpg'
-                ),
+//                '791' => array(
+//                    'share_id' => 791,
+//                    'share_name' => '东北五常稻花香大米五常当地米厂专供',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/965ba48b2d2_0818.jpg',
+//                    'share_price' => '160',
+//                    'share_user_name' => '王谷丹',
+//                    'share_vote' => 187,
+//                    'share_user_id' => 1388,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_928e6bec43ee9674c9abbcf7ce7eae61.jpg'
+//                ),
                 '424' => array(
                     'share_id' => 424,
                     'share_name' => '东北野生臻蘑（2015年刚采摘的哦）',
@@ -2377,16 +2357,6 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 813896,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_s/060eced7063_0807.jpg'
                 ),
-                '681' => array(
-                    'share_id' => 681,
-                    'share_name' => '桂花纯露首映',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/9f7ff9c8a0e_1009.jpg',
-                    'share_price' => '188',
-                    'share_user_name' => '庄梓铭',
-                    'share_vote' => 356,
-                    'share_user_id' => 823656,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_6f6b33c00c71819c1eb74f29f3f1503d.jpg'
-                ),
                 '766' => array(
                     'share_id' => 766,
                     'share_name' => '可以吃的润唇膏',
@@ -2397,16 +2367,7 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 823656,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_6f6b33c00c71819c1eb74f29f3f1503d.jpg'
                 ),
-                '721' => array(
-                    'share_id' => 721,
-                    'share_name' => '玫瑰纯露',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/bf23899c0b0_0915.jpg',
-                    'share_price' => '150',
-                    'share_user_name' => '庄梓铭',
-                    'share_vote' => 132,
-                    'share_user_id' => 823656,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_6f6b33c00c71819c1eb74f29f3f1503d.jpg'
-                ),
+
             )
         );
         return $product[$tag];
