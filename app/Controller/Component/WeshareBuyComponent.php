@@ -180,7 +180,8 @@ class WeshareBuyComponent extends Component {
             $myCreateShares = $weshareM->find('all', array(
                 'conditions' => array(
                     'creator' => $uid,
-                    'status' => array(0, 1)
+                    'status' => array(0, 1),
+                    'type' => array(GROUP_SHARE_TYPE, DEFAULT_SHARE_TYPE)
                 ),
                 'order' => array('created DESC')
             ));
@@ -211,7 +212,8 @@ class WeshareBuyComponent extends Component {
             $myJoinShares = $weshareM->find('all', array(
                 'conditions' => array(
                     'id' => $joinShareIds,
-                    'status' => array(0, 1)
+                    'status' => array(0, 1),
+                    'type' => array(GROUP_SHARE_TYPE, DEFAULT_SHARE_TYPE)
                 ),
                 'order' => array('created DESC')
             ));
