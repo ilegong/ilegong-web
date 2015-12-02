@@ -1638,6 +1638,16 @@ class ShareUtilComponent extends Component {
     public function get_share_index_product($tag) {
         $product = array(
             0 => array(
+                '1395' => array(
+                    'share_id' => 1395,
+                    'share_name' => '好吃的真空低温油浴果蔬套装（黄秋葵+香菇+什锦果蔬）',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/d50b8e8d6ad_1202.jpg',
+                    'share_price' => '68',
+                    'share_user_name' => '赵宇',
+                    'share_vote' => 2000,
+                    'share_user_id' => 810688,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_7db41874b00ec17af715b72adf87768a.jpg'
+                ),
                 '1268' => array(
                     'share_id' => 1268,
                     'share_name' => '麻阳冰糖橙（包邮预售）----不打药，不防腐，不上蜡，守护内心的“橙”实',
