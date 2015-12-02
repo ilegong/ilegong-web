@@ -1012,6 +1012,27 @@ ul li {
     display: block;
 }
 
+.clone-share-btn {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+.clone-share-btn a {
+    width: 50%;
+    float: left;
+    display: block;
+    line-height: 44px;
+    text-align: center;
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 16px;
+    display: block;
+}
+
+
+
 .buying-dialog {
     background-color: #ffffff;
     padding: 15px 0;

@@ -1,43 +1,10 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width,  initial-scale=1.0,user-scalable=no">
-    <style type="text/css">
-        @charset "utf-8";
-        * {
-            margin: 0;
-        }
-        html, body {
-            width: 100%;
-            height: 100%;
-            margin: 0px;
-            padding: 0px;
-            overflow: hidden;
-        }
-        img {
-            margin-bottom: 4%;
-            width: 100%;
-            border-radius: 1%;
-        }
-        a {
-            text-decoration: none;
-            color: gray;
-        }
-        .share-products-list {
-            bottom: 0px;
-            left: 0px;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            z-index: 1;
-        }
-        .list-view {
-            position: relative;
-            padding: 10px;
-        }
-    </style>
+    <link href="{{$STATIC_FILE_PATH}}/static/product_pool/product_pool.css" rel="stylesheet" type="text/css">
+    <link href="http://cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div class="share-products-list">
@@ -47,5 +14,27 @@
         <a href="#"><img src="/img/test/3.jpg"></a><br/>
     </div>
 </div>
+<footer class="channel_bottom">
+    <a class="btm_item" href="/" style="width: 33%;">
+        <p class="iconfont" style="height: 15px;"><i class="fa fa-home"></i></p>
+        <b>首页</b>
+    </a>
+    <a class="btm_item" href="/share_opt/index.html" style="width: 33%; position: relative;">
+        <i style="background:#f00;border-radius:50%;width:15px;height:15px;top:-5px;right:30%;position:absolute; display: none;"
+           id="mark-has-unread"></i>
+        <p class="iconfont" style="height: 15px;"><i class="fa fa-users"></i></p>
+        <b>朋友说</b>
+    </a>
+    <a class="btm_item" href="/weshares/user_share_info/{{$uid}}" style="width: 33%;">
+        <p class="iconfont" style="height: 15px;"><i class="fa fa-user"></i></p>
+        <b>我的</b>
+    </a>
+</footer>
+<script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+<script src="{{$STATIC_FILE_PATH}}/static/common/no-angular-common.js"></script>
+<script>
+    Pyshuo.share.utils.init();
+    Pyshuo.share.utils.checkHasUnreadInfo();
+</script>
 </body>
 </html>

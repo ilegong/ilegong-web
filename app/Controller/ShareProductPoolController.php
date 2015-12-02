@@ -9,6 +9,8 @@ class ShareProductPoolController extends AppController {
 
     var $name = 'share_product_pool';
 
+    var $components = array('ShareUtil');
+
     public function beforeFilter() {
         parent::beforeFilter();
         $this->layout = 'weshare';
@@ -20,6 +22,8 @@ class ShareProductPoolController extends AppController {
      */
     public function share_products_index() {
         $this->layout = null;
+        $uid = $this->currentUser['id'];
+        $this->set('uid', $uid);
         $share_products = $this->get_share_products();
         $this->set('share_products', $share_products);
     }
@@ -34,6 +38,21 @@ class ShareProductPoolController extends AppController {
 
     /**
      * @param $share_id
+     * 团长从产品库开启分享
+     */
+    public function clone_share($share_id) {
+        $user_id = $this->currentUser['id'];
+        if (empty($user_id)) {
+            echo json_encode(array('success' => false, 'reason' => 'not_login'));
+            return;
+        }
+        $result = $this->ShareUtil->cloneShare($share_id, $user_id);
+        echo json_encode($result);
+        return;
+    }
+
+    /**
+     * @param $share_id
      * ajax 获取产品池的详情
      */
     public function get_share_product_detail($share_id) {
@@ -43,13 +62,11 @@ class ShareProductPoolController extends AppController {
         return;
     }
 
-
     private function get_share_product_info($share_id) {
         $key = 'pool_product_info_cache_key_' . $share_id;
         $cacheData = Cache::read($key);
         if (empty($cacheData)) {
             $weshareM = ClassRegistry::init('Weshare');
-            $weshareProductM = ClassRegistry::init('WeshareProduct');
             //get share basic info
             $weshare_info = $weshareM->find('first', array(
                 'conditions' => array('id' => $share_id)
@@ -57,21 +74,15 @@ class ShareProductPoolController extends AppController {
             $weshare_info = $weshare_info['Weshare'];
             $weshare_info['description'] = str_replace(array("\r\n", "\n", "\r"), '<br />', $weshare_info['description']);
             $weshare_info['images'] = array_filter(explode('|', $weshare_info['images']));
-            //get share products
-            $weshare_products = $weshareProductM->find('all', array(
-                'conditions' => array(
-                    'weshare_id' => $share_id,
-                    'deleted' => DELETED_NO
-                )
-            ));
-            $weshare_products = Hash::extract($weshare_products, '{n}.WeshareProduct');
+            $weshare_products = $this->ShareUtil->get_product_tag_map($share_id);
+            $sharer_tags = $this->ShareUtil->get_tags($weshare_info['creator'], $weshare_info['refer_share_id']);
             $weshare_info['products'] = $weshare_products;
+            $weshare_info['tags'] = $sharer_tags;
             Cache::write($key, json_encode($weshare_info));
             return $weshare_info;
         }
         return json_decode($cacheData, true);
     }
-
 
     /**
      * @return array
