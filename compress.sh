@@ -18,3 +18,4 @@ uglifyjs ./webroot/static/weshares/js/user-share-info.js -m  -o ./webroot/static
 
 uglifyjs ./webroot/static/share_faq/custom/word-limit.js ./webroot/static/share_faq/custom/faq.js -m -o ./webroot/static/share_faq/custom/faq.min.js
 
+cat ./webroot/static/weshares/css/site-common.css ./webroot/static/product_pool/css/product_pool.css | cleancss -o  ./webroot/static/product_pool/css/product_pool.min.css
