@@ -1,6 +1,6 @@
 <div class="classlist">
     <a class="back"></a>
-    {{::vm.weshare.title | limitTo: 10}}
+    {{::vm.weshare.title | limitTo: 10}}{{vm.weshare.title.length > 10 ? '...' : ''}}
     <a class="home"></a>
 </div>
 <div class="weshare-view" style="margin-top: 40px;">
