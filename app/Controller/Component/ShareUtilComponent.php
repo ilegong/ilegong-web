@@ -1702,7 +1702,7 @@ class ShareUtilComponent extends Component {
                 '1358' => array(
                     'share_id' => 1358,
                     'share_name' => '越南黑虎虾仁 【纯野生虾仁】',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/ee7947974c7_1127.jpg',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/cc44309c109_1202.jpg',
                     'share_price' => '150',
                     'share_user_name' => '小宝妈',
                     'share_vote' => 1000,
