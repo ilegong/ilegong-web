@@ -1188,6 +1188,7 @@ class WeshareBuyComponent extends Component {
             'order' => $sort);
         $result = $this->load_share_order_data($query_order_cond);
         if ($page == 1) {
+            //第一页的话保存分页信息
             $result['page_info'] = $this->get_share_order_page_info($weshareId, $uid);
         }
         return $result;

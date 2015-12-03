@@ -68,6 +68,16 @@ class ShareProductPoolController extends AppController {
         return;
     }
 
+    /**
+     * @param $share_id
+     * @param $page
+     * 获取产品池中产品的订单和评论数据
+     * 这个里面不进行交互,只显示数据
+     */
+    public function get_product_orders_and_comments($share_id, $page = 1) {
+        
+    }
+
     private function get_share_product_info($share_id) {
         $key = 'pool_product_info_cache_key_' . $share_id;
         $cacheData = Cache::read($key);
