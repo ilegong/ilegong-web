@@ -1977,7 +1977,7 @@ class WeshareBuyComponent extends Component {
     public function check_msg_log_and_filter_user($data_id, $user_ids, $type) {
         $msgLogM = ClassRegistry::init('MsgLog');
         //添加更多的过滤条件 (比如每天只收一次)
-        //记录过多的情况处理（暂时不会出现这个问题）消息记录过多
+        //todo 记录过多的情况处理（暂时不会出现这个问题）消息记录过多
         $q_date = date('Y-m-d');
         $msgLogs = $msgLogM->find('all', array(
             'conditions' => array(
