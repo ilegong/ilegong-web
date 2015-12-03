@@ -1642,7 +1642,7 @@ class ShareUtilComponent extends Component {
                     'share_id' => 1395,
                     'share_name' => '好吃的真空低温油浴果蔬套装（黄秋葵+香菇+什锦果蔬）',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/d50b8e8d6ad_1202.jpg',
-                    'share_price' => '68',
+                    'share_price' => '55',
                     'share_user_name' => '赵宇',
                     'share_vote' => 2000,
                     'share_user_id' => 810688,
