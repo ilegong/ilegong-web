@@ -23,7 +23,6 @@
                     </div>
                 </div>
             </div>
-            <p class='tips'>请输入商品数量</p>
         </div>
         <div class='send-info text-center margin-bottom-12'>发货时间: {{::vm.weshare.send_info}}</div>
     </div>
@@ -32,9 +31,10 @@
     </div>
 </div>
 <div class="clearfix clone-share-btn">
-    <ul class="clearfix">
-        <li style="width: 50%;float: left;"><a ng-if="vm.weshare.status!=2" ng-click='vm.cloneShare()' style="background-color: #ffa200; width: 100%;">我要开团</a></li>
-        <li style="width: 50%;float: right"><a ng-if="vm.weshare.status!=2" ng-click='vm.foretaste()' style="background-color: #29ac0e; width: 100%;">试吃申请</a></li>
+    <a ng-if="vm.weshare.status!=2&&!vm.weshare.foretaste_share_id" ng-click='vm.cloneShare()' style="background-color: #ffa200; width: 100%;">我要开团</a>
+    <ul class="clearfix" ng-if="vm.weshare.status!=2&&vm.weshare.foretaste_share_id">
+        <li style="width: 50%;float: left;"><a ng-click='vm.cloneShare()' style="background-color: #ffa200; width: 100%;">我要开团</a></li>
+        <li style="width: 50%;float: right"><a ng-click='vm.foretaste()' style="background-color: #29ac0e; width: 100%;">试吃申请</a></li>
     </ul>
     <a ng-if="vm.weshare.status==2" style="background-color: #cccccc; width: 100%;">不可分享</a>
 </div>
