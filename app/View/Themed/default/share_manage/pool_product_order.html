@@ -31,10 +31,10 @@
                         <form method="post" action="/share_manage/pool_product_order">
                             <div class="row">
                                 <div class="col-sm-5">
-                                    <select class="form-control" id="pool-share-id" name="share_id">
+                                    <select class="form-control" id="pool-share-id" name="share_id" data-init-val="{{$share_id}}">
                                         <option>选择产品</option>
                                         {{loop $all_pool_products $product}}
-                                        <option value="{{$product['share_id']}}">{{$product['share_name']}}</option>
+                                        <option value="{{$product['share_id']}}" {{if $product["share_id"]==$share_id}}selected{{/if}}>{{$product['share_name']}}</option>
                                         {{/loop}}
                                     </select>
                                 </div>
@@ -43,7 +43,7 @@
                                 <div class="col-sm-12">
                                     {{loop $child_shares $child_share_id $child_share}}
                                     <label class="radio-inline">
-                                        <input type="radio" name="q_share_id" value="{{$child_share_id}}">
+                                        <input type="radio" name="q_share_id" value="{{$child_share_id}}" {{if $child_share_id==$q_share_id}}checked{{/if}}>
                                         {{$user_data[$child_share['creator']]['nickname']}}
                                     </label>
                                     {{/loop}}

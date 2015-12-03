@@ -341,6 +341,7 @@ class ShareManageController extends AppController {
                 $this->set('child_shares', $all_fork_shares);
                 $this->set('q_share_id', $q_share_id);
                 $this->set('current_share', $all_fork_shares[$q_share_id]);
+                $this->set('share_id', $share_id);
             }
         }
     }
