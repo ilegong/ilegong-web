@@ -175,22 +175,25 @@
             if (foundWords.length > limit) {
               text = foundWords.slice(0, limit).join(' ') + ellipsis;
               more = foundWords.slice(limit, count).join(' ');
-              markup = text + moreText + '<span class="more-text">' + more + lessText + '</span>';
+              markup = '<p class="less-text">' + text + moreText + '</p><p class="more-text">' + orig + lessText + '</p>';
             }
           } else { // Count characters
             if (count > limit) {
               text = orig.slice(0, limit) + ellipsis;
+              text = text.replace(/<\/?[^>]+(>|$)/g, "");
               more = orig.slice(limit, count);
-              markup = text + moreText + '<span class="more-text">' + more + lessText + '</span>';
+              markup = '<p class="less-text">' + text + moreText + '</p><p class="more-text">' + orig + lessText + '</p>';
             }
           }
           elem.append(markup);
           angular.element(document.getElementsByClassName('read-more')[0]).bind('click', function () {
+            document.getElementsByClassName('less-text')[0].style.display = 'none';
             document.getElementsByClassName('read-more')[0].style.display = 'none';
             document.getElementsByClassName('more-text')[0].style.display = 'block';
             document.getElementsByClassName('read-less')[0].style.display = 'block';
           });
           angular.element(document.getElementsByClassName('read-less')[0]).bind('click', function () {
+            document.getElementsByClassName('less-text')[0].style.display = 'block';
             document.getElementsByClassName('read-more')[0].style.display = 'block';
             document.getElementsByClassName('more-text')[0].style.display = 'none';
             document.getElementsByClassName('read-less')[0].style.display = 'none';
