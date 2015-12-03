@@ -44,4 +44,20 @@ class SharePoolProduct extends AppModel {
         return $this->product_foretaste_map[$share_id];
     }
 
+    /**
+     * @param $share_id
+     * @return mixed
+     * 获取团长从产品池中分享出去所有的分享
+     */
+    public function get_fork_share_ids($share_id) {
+        $weshareM = ClassRegistry::init('Weshare');
+        $shares = $weshareM->find('all', array(
+            'conditions' => array(
+                'refer_share_id' => $share_id
+            ),
+            'fields' => array('id', 'creator', 'status'),
+            'limit' => 100
+        ));
+        return $shares;
+    }
 }
