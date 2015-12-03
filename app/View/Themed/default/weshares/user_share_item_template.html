@@ -46,7 +46,7 @@
             {{if $join_share_order_status[$current_share_id]['status']==ORDER_STATUS_DONE}}
                 {{$joinShareComments[$join_share_order_status[$current_share_id]['id']]['body']}}
             {{else}}
-                {{$share['Weshare']['description']}}
+                {{strip_tags($share['Weshare']['description'])}}
             {{/if}}
         </div>
     </div>
