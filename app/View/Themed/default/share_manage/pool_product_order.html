@@ -33,8 +33,8 @@
                                 <div class="col-sm-5">
                                     <select class="form-control" id="pool-share-id" name="share_id">
                                         <option>选择产品</option>
-                                        {{loop $all_pool_products $product_key $product}}
-                                        <option value="{{$product_key}}">{{$product['share_name']}}</option>
+                                        {{loop $all_pool_products $product}}
+                                        <option value="{{$product['share_id']}}">{{$product['share_name']}}</option>
                                         {{/loop}}
                                     </select>
                                 </div>

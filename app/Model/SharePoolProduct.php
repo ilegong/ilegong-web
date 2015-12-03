@@ -6,10 +6,9 @@ class SharePoolProduct extends AppModel {
 
     //产品池所有产品
     var $products = array(
-        '1268' => array(
+        0 => array(
             'share_id' => 1268,
-            'foretaste_share_id' => 100,
-            'share_name' => '麻阳冰糖橙（包邮预售）----不打药，不防腐，不上蜡，守护内心的“橙”实',
+            'share_name' => '麻阳冰糖橙',
             'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/2f2ae8653ee_1123.jpg',
             'price' => '68',
             'commission_percent' => 10,
