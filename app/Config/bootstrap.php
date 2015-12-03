@@ -2073,6 +2073,13 @@ function get_pure_product_consignment_date($pid) {
     return date_format($consignment_date, 'Y-m-d');
 }
 
+function get_limit_string($text, $len) {
+    if (mb_strlen($text) > $len) {
+        return mb_substr($text, 0, $len).'...';
+    }
+    return $text;
+}
+
 function get_ship_mark_name($shipType) {
     if ($shipType == 'ziti') {
         return '自提';
