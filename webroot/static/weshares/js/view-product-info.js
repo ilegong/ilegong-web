@@ -35,7 +35,11 @@
     }
 
     function foretaste() {
-
+      if (vm.weshare['foretaste_share_id']) {
+        window.location.href = '/weshares/view/' + vm.weshare['foretaste_share_id'];
+      } else {
+        alert('该商品没有试吃！请联系客服。');
+      }
     }
 
     function toggleTag(tag) {
