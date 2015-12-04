@@ -13,7 +13,7 @@
     <a href="/" class="pro_aindex">去首页看看</a>
     <img src="http://51daifan-assets.stor.sinaapp.com/img%2Fbanner%2Fbanner.gif" width="100%"/>
 </div>
-<div style="margin-bottom: 35px;">
+<div style="margin-bottom: 40px;">
     {{loop $share_products $product}}
     <div class="mb5">
         <a href="/share_product_pool/share_product_detail/{{$product['share_id']}}"><img src="{{$product['share_img']}}" width="100%"/></a>
@@ -66,6 +66,7 @@
         var to_friend_title = "朋友说产品街";
         var to_friend_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=appMsg';
         var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
+        var imgUrl = 'http://51daifan-assets.stor.sinaapp.com/img%2Fbanner%2Fbanner.gif';
         var desc = "只有团长才可以逛的街，朋友说统一服务和售后";
         wx.onMenuShareAppMessage({
             title: to_friend_title,
