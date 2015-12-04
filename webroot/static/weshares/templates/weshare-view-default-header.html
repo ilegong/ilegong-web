@@ -5,7 +5,6 @@
         <s class="sharer-mark">
             <span ng-if="vm.weshare.creator.level" class="grouper-mark" ng-bind="::vm.weshare.creator.level.level_name"></span>
             <img ng-if="vm.userShareSummery.follower_count>=50" src="{{::vm.staticFilePath}}/static/weshares/images/v.png" class="v-icon-img"/>
-            <img ng-if="vm.supportPysZiti>0" src="{{::vm.staticFilePath}}/static/weshares/images/hlj.jpeg" class="hlj-icon-img"/>
         </s>
         <a ng-if="vm.currentUser" class="faq-sharer-btn" ng-click="vm.redirectFaq()" ng-bind="::vm.faqTipText">联系团长</a>
     </li>
