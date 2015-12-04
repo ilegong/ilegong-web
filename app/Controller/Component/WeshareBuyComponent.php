@@ -246,7 +246,8 @@ class WeshareBuyComponent extends Component {
             if (count($authority_share_ids) > 0) {
                 $authority_shares = $weshareM->find('all', array(
                     'conditions' => array(
-                        'id' => $authority_share_ids
+                        'id' => $authority_share_ids,
+                        'type' => array(GROUP_SHARE_TYPE, DEFAULT_SHARE_TYPE)
                     ),
                     'order' => array('id' => 'desc')
                 ));

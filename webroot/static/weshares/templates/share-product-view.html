@@ -16,10 +16,14 @@
                 <div ng-if="tag!=0"><a style="color: #ffa200;font-size: 15px;" ng-bind="::vm.weshare.tags[tag]['name']"></a>&nbsp;&nbsp;<a ng-click="vm.toggleTag(tag)" ng-bind="::vm.toggleState[tag]['statusText']"></a></div>
                 <div class="products form-group">
                     <div ng-show="vm.toggleState[tag]['open']">
-                        <dl class="clearfix product form-control" ng-repeat="product in products">
-                            <dd class="fl" ng-bind="::product.name"></dd>
-                            <dd class="fr" style="color: #29AC0E;" ng-bind="::product.price/100 | currency:'￥'"></dd>
-                        </dl>
+                        <div ng-repeat="product in products">
+                            <dl class="clearfix product form-control">
+                                <dd ng-bind="::product.name"></dd>
+                            </dl>
+                            <dl class="clearfix product form-control">
+                                <dd><strong>零售价:</strong><span style="color: #29AC0E;" ng-bind="::product.price/100 | currency:'￥'"></span>&nbsp;&nbsp;<strong>渠道价:</strong><span style="color: #29AC0E;" ng-bind="::vm.weshare.channel_price | currency:'￥'"></span></dd>
+                            </dl>
+                        </div>
                     </div>
                 </div>
             </div>

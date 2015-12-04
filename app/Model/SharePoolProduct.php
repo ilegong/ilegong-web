@@ -38,6 +38,21 @@ class SharePoolProduct extends AppModel {
     var $product_foretaste_map = array();
 
     /**
+     * @param $share_id
+     * @return array
+     */
+    public function get_product_by_share_id($share_id) {
+        $find_product = null;
+        foreach ($this->products as $product) {
+            if ($product['share_id'] == $share_id) {
+                $find_product = $product;
+                break;
+            }
+        }
+        return $find_product;
+    }
+
+    /**
      * @return array
      * 获取产品池中所有产品
      */
