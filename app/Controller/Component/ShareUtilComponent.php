@@ -377,6 +377,7 @@ class ShareUtilComponent extends Component {
         $shareInfo['created'] = date('Y-m-d H:i:s');
         $shareInfo['status'] = 0;
         $shareInfo['settlement'] = 0;
+        $shareInfo['type'] = 0;
         //order status offline address id
         if ($type == GROUP_SHARE_TYPE) {
             $origin_sharer_nickname = $this->WeshareBuy->get_user_nickname($shareInfo['creator']);
@@ -384,13 +385,13 @@ class ShareUtilComponent extends Component {
             //default share status is not available
             $shareInfo['status'] = $share_status;
         }
+        if (!empty($type)) {
+            $shareInfo['type'] = $type;
+        }
         //set refer share id
         $shareInfo['refer_share_id'] = $shareId;
         if (!empty($uid)) {
             $shareInfo['creator'] = $uid;
-        }
-        if (!empty($type)) {
-            $shareInfo['type'] = $type;
         }
         $uid = $shareInfo['creator'];
         $WeshareM->id = null;
