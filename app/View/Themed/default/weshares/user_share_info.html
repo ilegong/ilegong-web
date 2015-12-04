@@ -40,6 +40,9 @@
                     </div>
                 </div>
                 {{/if}}
+                {{if $is_me&&$is_proxy}}
+                    <a href="/share_product_pool/share_products_index.html" class="btn btn-danger btn-sm">产品街</a>
+                {{/if}}
                 <div style="margin-top: 10px;margin-bottom: 10px;">
                     <ul style="height: 40px;overflow: hidden;font-size: 18px;display: block;padding: 0;">
                         <li id="show-comment-modal-dialog" style="display:inline-block;width: 65px;text-align: center;border-right-width: 1px;border-right-style: solid;border-color: #d9d9d9;">
