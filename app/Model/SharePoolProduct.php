@@ -7,15 +7,15 @@ class SharePoolProduct extends AppModel {
     //产品池所有产品
     var $products = array(
         0 => array(
-            'share_id' => 1268,
-            'share_name' => '麻阳冰糖橙',
-            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/2f2ae8653ee_1123.jpg',
-            'price' => '68',
-            'commission_percent' => 10,
-            'brand_img' => '',
-            'brand_name' => '',
-            'show_brand' => false,
-            'brand_custom_service' => 633345,
+            'share_id' => 1411,
+            'share_name' => '踏歌山楂条5袋装',
+            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/3282987d41c_1204.jpg',
+            'price' => 64,
+            'commission_percent' => 30,
+            'brand_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_s/ef5896e5883_1204.jpg',
+            'brand_name' => '天天踏歌',
+            'show_brand' => true,
+            'brand_custom_service' => 711503,
             'published' => 1
         ),
     );

@@ -27,7 +27,7 @@ input{ -webkit-appearance: none; -moz-appearance: none; }
 .good a.txt b{ vertical-align: middle; display: table-cell; color: #333333;}
 .good ul{ background-color: #ffffff; padding-bottom: 5px;}
 .good ul li.fl strong{color:#ffa200; font-size: 1.1em;}
-.good ul li.fl label{ color: #acacac; text-decoration: line-through; font-size: 1em; font-weight: normal;}
+.good ul li.fl label{ color: #acacac; font-size: 1em; font-weight: normal;}
 .good ul li a.btn{ display: block; text-decoration:none; background-color: #ffa200; color: #fff; line-height: 30px; padding: 0 10px; font-size: 1em; font-weight: bold; margin-right: 10px;}
 
 
