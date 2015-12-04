@@ -228,7 +228,7 @@ class WeixinController extends AppController {
 				case "订单":
                 case "CLICK_URL_MINE":
 				case "2":
-					echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, oauth_wx_goto('CLICK_URL_MINE', $host3g)).'">我的订单</a>');
+					echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, oauth_wx_goto('CLICK_URL_MINE', $host3g)).'">个人中心</a>');
 					break;
                 case "3":
 					echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://wx.wsq.qq.com/177650290\" >51daifan微社区</a>");
