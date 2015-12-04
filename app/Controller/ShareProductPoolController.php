@@ -143,7 +143,7 @@ class ShareProductPoolController extends AppController {
                     $ship_info_item = '快递包邮';
                 } else {
                     $ship_fee = $ship_fee / 100;
-                    $ship_fee = numfmt_format($ship_fee, 2);
+                    $ship_fee = number_format($ship_fee, 2);
                     $ship_info_item = '快递费用' . $ship_fee . '元';
                 }
                 $ship_info[] = $ship_info_item;
