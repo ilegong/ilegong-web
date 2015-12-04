@@ -32,8 +32,8 @@ class ShareProductPoolController extends AppController {
         }
         //设置微信分享参数
         if (parent::is_weixin()) {
-            $wexin_params = $this->set_weixin_share_data($uid, 0);
-            $this->set($wexin_params);
+            $weixinJs = prepare_wx_share_log($uid, 'wsid', 0);
+            $this->set($weixinJs);
         }
         $this->set('uid', $uid);
         $share_products = $this->SharePoolProduct->get_all_products();

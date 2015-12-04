@@ -43,6 +43,7 @@
     Pyshuo.share.utils.init();
     Pyshuo.share.utils.checkHasUnreadInfo();
 </script>
+{{if $jWeixinOn}}
 <script>
     if(wx){
         var wx_jssdk_appId = '{{$signPackage["appId"]}}';
@@ -65,7 +66,6 @@
         var to_friend_title = "朋友说产品街";
         var to_friend_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=appMsg';
         var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
-        var imgUrl = "http://51daifan-assets.stor.sinaapp.com/img%2Fbanner%2Fbanner.gif";
         var desc = "只有团长才可以逛的街，朋友说统一服务和售后";
         wx.onMenuShareAppMessage({
             title: to_friend_title,
@@ -95,5 +95,6 @@
         });
     });
 </script>
+{{/if}}
 </body>
 </html>
