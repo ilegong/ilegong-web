@@ -26,7 +26,7 @@
         url: '/share_product_pool/get_share_product_detail/' + weshareId + '.json',
         cache: $templateCache
       }).success(function (data) {
-        $log.log(data);
+        //$log.log(data);
         vm.weshare = data;
         vm.initViewFieldName();
       }).error(function () {
