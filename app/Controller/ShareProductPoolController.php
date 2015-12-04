@@ -26,13 +26,18 @@ class ShareProductPoolController extends AppController {
         $this->layout = null;
         $uid = $this->currentUser['id'];
         $is_proxy = $this->ShareUtil->is_proxy_user($uid);
-        if ($is_proxy) {
-            $this->set('uid', $uid);
-            $share_products = $this->SharePoolProduct->get_all_products();
-            $this->set('share_products', $share_products);
+        if (!$is_proxy) {
+            $this->redirect('/weshares/index.html');
             return;
         }
-        $this->redirect('/weshares/index.html');
+        //设置微信分享参数
+        if (parent::is_weixin()) {
+            $wexin_params = $this->set_weixin_share_data($uid, 0);
+            $this->set($wexin_params);
+        }
+        $this->set('uid', $uid);
+        $share_products = $this->SharePoolProduct->get_all_products();
+        $this->set('share_products', $share_products);
         return;
     }
 
@@ -55,6 +60,7 @@ class ShareProductPoolController extends AppController {
      * 团长从产品库开启分享
      */
     public function clone_share($share_id) {
+        $this->autoRender = false;
         $user_id = $this->currentUser['id'];
         if (empty($user_id)) {
             echo json_encode(array('success' => false, 'reason' => 'not_login'));
