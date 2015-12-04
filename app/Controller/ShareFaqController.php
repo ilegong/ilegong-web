@@ -105,13 +105,15 @@ class ShareFaqController extends AppController {
         );
         $faq_data = $this->ShareFaq->save($faq_data);
         $faq_data['success'] = true;
-        $this->ShareFaqUtil->send_notify_template_msg($sender, $receiver, $msg, $shareId);
+        $weshareInfo = $this->WeshareBuy->get_weshare_info($shareId);
+        $share_title = $weshareInfo['title'];
+        $this->ShareFaqUtil->send_notify_template_msg($sender, $receiver, $msg, $shareId, $share_title);
         //check receive msg user is share creator
         if ($this->check_msg_is_send_to_share_creator($shareId, $receiver)) {
             $share_managers = $this->ShareAuthority->get_share_manage_auth_users($shareId);
             if (!empty($share_managers)) {
                 foreach ($share_managers as $manager) {
-                    $this->ShareFaqUtil->send_notify_template_msg($sender, $manager, $msg, $shareId);
+                    $this->ShareFaqUtil->send_notify_template_msg($sender, $manager, $msg, $shareId, $share_title);
                 }
             }
         }

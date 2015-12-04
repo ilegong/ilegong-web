@@ -136,14 +136,14 @@ class ShareFaqUtilComponent extends Component {
      * @param $receiver
      * @param $msg
      * @param $shareId
+     * @param $share_title
      * send faq template msg
      */
-    public function send_notify_template_msg($sender, $receiver, $msg, $shareId) {
+    public function send_notify_template_msg($sender, $receiver, $msg, $shareId, $share_title) {
         $userNicknames = $this->WeshareBuy->get_users_nickname(array($sender, $receiver));
         $userOauthBinds = $this->WeshareBuy->get_open_ids(array($sender, $receiver));
         $title = $userNicknames[$receiver] . '你好' . '，' . $userNicknames[$sender] . '给你发送了一条消息。';
-        $datetime = date('Y-m-d H:i:s');
         $detail_url = WX_HOST . '/share_faq/faq/' . $shareId . '/' . $sender;
-        $this->Weixin->send_faq_notify_template_msg($userOauthBinds[$receiver], $detail_url, $title, $msg, $datetime);
+        $this->Weixin->send_faq_notify_template_msg($userOauthBinds[$receiver], $detail_url, $title, $msg, $share_title);
     }
 }
