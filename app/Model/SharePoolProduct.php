@@ -8,8 +8,8 @@ class SharePoolProduct extends AppModel {
     var $products = array(
         0 => array(
             'share_id' => 1411,
-            'share_name' => '踏歌山楂条5袋装',
-            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/3282987d41c_1204.jpg',
+            'share_name' => '雾岭山楂条5袋装',
+            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/6d69b1150ff_1204.jpg',
             'price' => 64,
             'channel_price' => 45,
             'commission_percent' => 30,
