@@ -61,7 +61,6 @@ class ShareProductPoolController extends AppController {
      */
     public function clone_share($share_id) {
         $this->autoRender = false;
-        $user_id = $this->currentUser['id'];
         if (empty($user_id)) {
             echo json_encode(array('success' => false, 'reason' => 'not_login'));
             return;
@@ -71,9 +70,10 @@ class ShareProductPoolController extends AppController {
         if (!$is_proxy) {
             echo json_encode(array('success' => false, 'reason' => '不是团长'));
         }
-        $result = $this->ShareUtil->cloneShare($share_id, $user_id);
+        $result = $this->ShareUtil->cloneShare($share_id, $uid);
         if ($result['success']) {
-            $this->init_share_authorize($result['shareId'], $share_id, $user_id);
+            $pool_product_config = $this->SharePoolProduct->get_product_by_share_id($share_id);
+            $this->init_share_authorize($result['shareId'], $share_id, $pool_product_config['brand_custom_service']);
         }
         echo json_encode($result);
         return;
