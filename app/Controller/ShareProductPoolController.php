@@ -41,6 +41,12 @@ class ShareProductPoolController extends AppController {
      * 产品库详情页(朋友说用户分享的一个分享)
      */
     public function share_product_detail($share_id) {
+        $uid = $this->currentUser['id'];
+        $is_proxy = $this->ShareUtil->is_proxy_user($uid);
+        if (empty($uid) || !$is_proxy) {
+            $this->redirect('/weshares/index.html');
+            return;
+        }
         $this->set('weshare_id', $share_id);
     }
 
@@ -56,7 +62,7 @@ class ShareProductPoolController extends AppController {
         }
         $uid = $this->currentUser['id'];
         $is_proxy = $this->ShareUtil->is_proxy_user($uid);
-        if(!$is_proxy){
+        if (!$is_proxy) {
             echo json_encode(array('success' => false, 'reason' => '不是团长'));
         }
         $result = $this->ShareUtil->cloneShare($share_id, $user_id);
