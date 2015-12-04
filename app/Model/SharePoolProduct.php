@@ -9,7 +9,7 @@ class SharePoolProduct extends AppModel {
         0 => array(
             'share_id' => 1411,
             'share_name' => '雾岭山楂条5袋装',
-            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/6d69b1150ff_1204.jpg',
+            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/83a26e7f545_1204.jpg',
             'price' => 64,
             'channel_price' => 45,
             'commission_percent' => 30,
@@ -22,7 +22,7 @@ class SharePoolProduct extends AppModel {
         1 => array(
             'share_id' => 1415,
             'share_name' => '测试商品',
-            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/6d69b1150ff_1204.jpg',
+            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/83a26e7f545_1204.jpg',
             'price' => 1,
             'channel_price' => 0.5,
             'commission_percent' => 30,
