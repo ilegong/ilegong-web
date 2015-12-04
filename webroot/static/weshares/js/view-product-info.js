@@ -55,8 +55,12 @@
           window.location.href = '/weshares/view/' + newShareId;
         } else {
           if (data['reason']) {
-            alert('您还没有登录，请登录后进行操作。');
-            window.location.href = '/users/login'
+            if (data['reason' == 'not_login']) {
+              alert('您还没有登录，请登录后进行操作。');
+              window.location.href = '/users/login';
+            } else {
+              alert(data['reason']);
+            }
           } else {
             alert('分享失败请联系管理员');
           }

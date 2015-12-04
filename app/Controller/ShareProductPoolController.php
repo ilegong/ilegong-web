@@ -25,9 +25,15 @@ class ShareProductPoolController extends AppController {
     public function share_products_index() {
         $this->layout = null;
         $uid = $this->currentUser['id'];
-        $this->set('uid', $uid);
-        $share_products = $this->SharePoolProduct->get_all_products();
-        $this->set('share_products', $share_products);
+        $is_proxy = $this->ShareUtil->is_proxy_user($uid);
+        if ($is_proxy) {
+            $this->set('uid', $uid);
+            $share_products = $this->SharePoolProduct->get_all_products();
+            $this->set('share_products', $share_products);
+            return;
+        }
+        $this->redirect('/weshares/index.html');
+        return;
     }
 
     /**
@@ -47,6 +53,11 @@ class ShareProductPoolController extends AppController {
         if (empty($user_id)) {
             echo json_encode(array('success' => false, 'reason' => 'not_login'));
             return;
+        }
+        $uid = $this->currentUser['id'];
+        $is_proxy = $this->ShareUtil->is_proxy_user($uid);
+        if(!$is_proxy){
+            echo json_encode(array('success' => false, 'reason' => '不是团长'));
         }
         $result = $this->ShareUtil->cloneShare($share_id, $user_id);
         if ($result['success']) {
@@ -75,7 +86,7 @@ class ShareProductPoolController extends AppController {
      * 这个里面不进行交互,只显示数据
      */
     public function get_product_orders_and_comments($share_id, $page = 1) {
-        
+
     }
 
     private function get_share_product_info($share_id) {
