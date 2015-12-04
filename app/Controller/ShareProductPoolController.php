@@ -61,11 +61,11 @@ class ShareProductPoolController extends AppController {
      */
     public function clone_share($share_id) {
         $this->autoRender = false;
-        if (empty($user_id)) {
+        $uid = $this->currentUser['id'];
+        if (empty($uid)) {
             echo json_encode(array('success' => false, 'reason' => 'not_login'));
             return;
         }
-        $uid = $this->currentUser['id'];
         $is_proxy = $this->ShareUtil->is_proxy_user($uid);
         if (!$is_proxy) {
             echo json_encode(array('success' => false, 'reason' => '不是团长'));
