@@ -30,7 +30,7 @@ class SharePoolProduct extends AppModel {
             'brand_name' => '天天踏歌',
             'show_brand' => true,
             'brand_custom_service' => 559795,
-            'published' => 1
+            'published' => 0
         )
     );
 
