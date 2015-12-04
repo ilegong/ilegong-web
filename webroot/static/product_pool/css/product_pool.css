@@ -2,34 +2,15 @@
 /* CSS Document */
 
 * { padding: 0; margin: 0; font-family: Helvetica, STHeiti STXihei, Microsoft JhengHei, Microsoft YaHei, Arial; }
-body { min-width: 320px; font-size: 14px; }
+body { min-width: 320px; font-size: 14px;}
 ul li { list-style: none; }
 .fl { float: left; }
 .fr { float: right; }
-input{ -webkit-appearance: none; -moz-appearance: none; }
 .clearfix { zoom: 1; }
 .clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
-.radius10 { -moz-border-radius: 0.417em; /* Gecko browsers */ -webkit-border-radius: 0.417em; /* Webkit browsers */ border-radius: 0.417em; /* W3C syntax */ }
-.radius5 { border-radius: 5px; }
-.border_b { border-bottom: 1px #dddddd solid; }
-.gray { color: #999999; }
 
-.content{width: 100%;float:right;height: 100%;margin-bottom: 45px;}
-.content .good{ margin: 5px;}
-.content a.xq{ display: block; text-decoration: none; background-color: #fff; position: relative;}
-.content a.xq p{ display: block; position: absolute; background-color: #ffa200; color: #ffffff; padding: 5px; font-size: 1em; text-align:center; left: 0; top: 0;}
-.content a.xq img{max-width: 100%;}
-.content .title{ font-size: 1em; padding:8px 10px 3px 10px; line-height: 18px; color: #333333; font-weight: bold; background-color: #ffffff;}
-.content .price{ font-size:1em; padding: 0 8px; line-height: 30px;}
-.good a.phead{ display: block; float: left;}
-.good a.phead img{ width: 36px; height: 36px; border-radius: 36px;}
-.good a.txt{ font-size:1em; color: #999999; padding-left: 3px;  display: table; height: 36px; vertical-align: middle; text-decoration: none;}
-.good a.txt b{ vertical-align: middle; display: table-cell; color: #333333;}
-.good ul{ background-color: #ffffff; padding-bottom: 5px;}
-.good ul li.fl strong{color:#ffa200; font-size: 1.1em;}
-.good ul li.fl label{ color: #acacac; font-size: 1em; font-weight: normal;}
-.good ul li a.btn{ display: block; text-decoration:none; background-color: #ffa200; color: #fff; line-height: 30px; padding: 0 10px; font-size: 1em; font-weight: bold; margin-right: 10px;}
+.mb10{ margin-bottom: 10px;}
+.mb5{ margin-bottom: 5px;}
 
-
-
-
+.pro_banner{ position: relative;}
+.pro_aindex{ display: block; text-decoration: none; position: absolute; bottom: 15px; left: 50%; margin-left: -35px; width: 70px; font-size: 12px; color: #ffffff; text-align: center; line-height: 18px; border: 1px #ffffff solid;}
