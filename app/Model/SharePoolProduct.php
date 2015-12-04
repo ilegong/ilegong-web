@@ -19,6 +19,19 @@ class SharePoolProduct extends AppModel {
             'brand_custom_service' => 711503,
             'published' => 1
         ),
+        1 => array(
+            'share_id' => 1415,
+            'share_name' => '测试商品',
+            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/6d69b1150ff_1204.jpg',
+            'price' => 1,
+            'channel_price' => 0.5,
+            'commission_percent' => 30,
+            'brand_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_s/ef5896e5883_1204.jpg',
+            'brand_name' => '天天踏歌',
+            'show_brand' => true,
+            'brand_custom_service' => 559795,
+            'published' => 1
+        )
     );
 
     //产品和试吃的对应关系
