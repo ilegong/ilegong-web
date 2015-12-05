@@ -141,6 +141,22 @@ class SharePoolProduct extends AppModel {
                 )
             )
         ),
+        5 => array(
+            'share_id' => 1437,
+            'share_name' => '鲜活银耳【全国顺丰包邮】',
+            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/53d920db87f_1205.jpg',
+            'brand_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_52d08a7c8bb6e9611307b6c4858ca38c.jpg',
+            'brand_name' => '片片妈',
+            'show_brand' => true,
+            'brand_custom_service' => 12376,
+            'published' => 1,
+            'products' => array(
+                '2916' => array(
+                    'price' => 108,
+                    'channel_price' => 97.2,
+                )
+            )
+        ),
     );
 
 }
