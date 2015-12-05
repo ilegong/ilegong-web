@@ -17,7 +17,12 @@ class SharePoolProduct extends AppModel {
             'brand_name' => '天天踏歌',
             'show_brand' => true,
             'brand_custom_service' => 711503,
-            'published' => 1
+            'published' => 1,
+            'products' => array(
+                '2869' => array(
+                    'channel_price' => 45,
+                )
+            )
         ),
         1 => array(
             'share_id' => 1415,
@@ -30,7 +35,12 @@ class SharePoolProduct extends AppModel {
             'brand_name' => '天天踏歌',
             'show_brand' => true,
             'brand_custom_service' => 559795,
-            'published' => 0
+            'published' => 0,
+            'products' => array(
+                '2880' => array(
+                    'channel_price' => 0.5,
+                )
+            )
         )
     );
 

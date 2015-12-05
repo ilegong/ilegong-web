@@ -21,7 +21,7 @@
                                 <dd ng-bind="::product.name"></dd>
                             </dl>
                             <dl class="clearfix product form-control">
-                                <dd><strong>零售价:</strong><span style="color: #29AC0E;" ng-bind="::product.price/100 | currency:'￥'"></span>&nbsp;&nbsp;<strong>渠道价:</strong><span style="color: #29AC0E;" ng-bind="::vm.weshare.channel_price | currency:'￥'"></span></dd>
+                                <dd><strong>零售价:</strong><span style="color: #29AC0E;" ng-bind="::product.price/100 | currency:'￥'"></span>&nbsp;&nbsp;<strong>渠道价:</strong><span style="color: #29AC0E;" ng-bind="::vm.weshare.products_config[product.id]['channel_price'] | currency:'￥'"></span></dd>
                             </dl>
                         </div>
                     </div>

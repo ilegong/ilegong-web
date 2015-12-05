@@ -89,6 +89,7 @@ class ShareProductPoolController extends AppController {
         $share_info['foretaste_share_id'] = $this->SharePoolProduct->get_product_foretaste($share_id);
         $pool_product_config = $this->SharePoolProduct->get_product_by_share_id($share_id);
         $share_info['channel_price'] = $pool_product_config['channel_price'];
+        $share_info['products_config'] = $pool_product_config['products'];
         echo json_encode($share_info);
         return;
     }
