@@ -173,26 +173,26 @@ class SharePoolProduct extends AppModel {
                 )
             )
         ),
-        7 => array(
-            'share_id' => 22,
-            'share_name' => '雾岭山楂条5袋装',
-            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/83a26e7f545_1204.jpg',
-            'brand_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_s/ef5896e5883_1204.jpg',
-            'brand_name' => '天天踏歌',
-            'show_brand' => true,
-            'brand_custom_service' => 6333345,
-            'published' => 1,
-            'products' => array(
-                '31' => array(
-                    'price' => 12.8,
-                    'channel_price' => 9,
-                ),
-                '128' => array(
-                    'price' => 12.8,
-                    'channel_price' => 9,
-                ),
-            )
-        ),
+//        7 => array(
+//            'share_id' => 22,
+//            'share_name' => '雾岭山楂条5袋装',
+//            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/83a26e7f545_1204.jpg',
+//            'brand_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_s/ef5896e5883_1204.jpg',
+//            'brand_name' => '天天踏歌',
+//            'show_brand' => true,
+//            'brand_custom_service' => 6333345,
+//            'published' => 1,
+//            'products' => array(
+//                '31' => array(
+//                    'price' => 12.8,
+//                    'channel_price' => 9,
+//                ),
+//                '128' => array(
+//                    'price' => 12.8,
+//                    'channel_price' => 9,
+//                ),
+//            )
+//        ),
     );
 
 }
