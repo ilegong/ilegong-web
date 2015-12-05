@@ -157,6 +157,22 @@ class SharePoolProduct extends AppModel {
                 )
             )
         ),
+        6 => array(
+            'share_id' => 1438,
+            'share_name' => '那那家五常稻花香米',
+            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/15844587ff8_1205.jpg',
+            'brand_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_db53c030cbe19145428f0d5ca58b9562.jpg',
+            'brand_name' => '那那',
+            'show_brand' => true,
+            'brand_custom_service' => 812111,
+            'published' => 1,
+            'products' => array(
+                '2920' => array(
+                    'price' => 166,
+                    'channel_price' => 149.4,
+                )
+            )
+        ),
     );
 
 }
