@@ -10,9 +10,6 @@ class SharePoolProduct extends AppModel {
             'share_id' => 1411,
             'share_name' => '雾岭山楂条5袋装',
             'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/83a26e7f545_1204.jpg',
-            'price' => 64,
-            'channel_price' => 45,
-            'commission_percent' => 30,
             'brand_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_s/ef5896e5883_1204.jpg',
             'brand_name' => '天天踏歌',
             'show_brand' => true,
@@ -20,6 +17,7 @@ class SharePoolProduct extends AppModel {
             'published' => 1,
             'products' => array(
                 '2869' => array(
+                    'price' => 64,
                     'channel_price' => 45,
                 )
             )
@@ -28,9 +26,6 @@ class SharePoolProduct extends AppModel {
             'share_id' => 1415,
             'share_name' => '测试商品',
             'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/83a26e7f545_1204.jpg',
-            'price' => 1,
-            'channel_price' => 0.5,
-            'commission_percent' => 30,
             'brand_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_s/ef5896e5883_1204.jpg',
             'brand_name' => '天天踏歌',
             'show_brand' => true,
@@ -38,6 +33,7 @@ class SharePoolProduct extends AppModel {
             'published' => 0,
             'products' => array(
                 '2880' => array(
+                    'price' => 1,
                     'channel_price' => 0.5,
                 )
             )
