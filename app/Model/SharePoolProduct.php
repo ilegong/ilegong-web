@@ -153,7 +153,7 @@ class SharePoolProduct extends AppModel {
             'products' => array(
                 '2916' => array(
                     'price' => 108,
-                    'channel_price' => 97.2,
+                    'channel_price' => 98,
                 )
             )
         ),
@@ -169,7 +169,7 @@ class SharePoolProduct extends AppModel {
             'products' => array(
                 '2920' => array(
                     'price' => 166,
-                    'channel_price' => 149.4,
+                    'channel_price' => 150,
                 )
             )
         ),
