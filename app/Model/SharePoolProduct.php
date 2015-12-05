@@ -249,7 +249,7 @@ class SharePoolProduct extends AppModel {
             'brand_name' => '赵静',
             'show_brand' => true,
             'brand_custom_service' => 867250,
-            'published' => 0,
+            'published' => 1,
             'products' => array(
                 '2958' => array(
                     'price' => 95,
@@ -269,7 +269,7 @@ class SharePoolProduct extends AppModel {
             'brand_name' => '微儿',
             'show_brand' => true,
             'brand_custom_service' => 23771,
-            'published' => 0,
+            'published' => 1,
             'products' => array(
                 '2963' => array(
                     'price' => 78,
