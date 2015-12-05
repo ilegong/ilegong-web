@@ -4,6 +4,7 @@
 
   function ShareProductViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, $filter, $window, Utils, staticFilePath, PoolProductInfo) {
     var vm = this;
+    vm.showDetailView = true;
     vm.pageLoaded = pageLoaded;
     vm.initProductInfo = initProductInfo;
     vm.initViewFieldName = initViewFieldName;
