@@ -264,7 +264,7 @@ class SharePoolProduct extends AppModel {
         10 => array(
             'share_id' => 1449,
             'share_name' => '俄罗斯紫皮糖',
-            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/83a26e7f545_1204.jpg',//todo
+            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/50ee44b0bf0_1205.jpg',
             'brand_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_d742f4391e472ca6a24c58d96be17aca.jpg',
             'brand_name' => '微儿',
             'show_brand' => true,
