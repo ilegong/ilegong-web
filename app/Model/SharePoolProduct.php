@@ -244,7 +244,7 @@ class SharePoolProduct extends AppModel {
         9 => array(
             'share_id' => 1448,
             'share_name' => '有机翠香猕猴桃',
-            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/83a26e7f545_1204.jpg',//todo
+            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/0f737480e61_1205.jpg',
             'brand_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_2d0cd7f75b366ae4ccb40cc380351574.jpg',
             'brand_name' => '赵静',
             'show_brand' => true,
