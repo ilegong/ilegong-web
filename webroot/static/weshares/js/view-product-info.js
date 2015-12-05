@@ -2,7 +2,7 @@
   angular.module('weshares')
     .controller('ShareProductViewCtrl', ShareProductViewCtrl);
 
-  function ShareProductViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, $filter, $window, Utils, staticFilePath) {
+  function ShareProductViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, $filter, $window, Utils, staticFilePath, PoolProductInfo) {
     var vm = this;
     vm.pageLoaded = pageLoaded;
     vm.initProductInfo = initProductInfo;
@@ -21,16 +21,9 @@
       var weshareId = angular.element(document.getElementById('shareProductView')).attr('data-weshare-id');
       vm.shareId = weshareId;
       vm.weshare = {};
-      $http({
-        method: 'GET',
-        url: '/share_product_pool/get_share_product_detail/' + weshareId + '.json',
-        cache: $templateCache
-      }).success(function (data) {
-        //$log.log(data);
+      PoolProductInfo.prepareProductInfo(weshareId, function (data) {
         vm.weshare = data;
         vm.initViewFieldName();
-      }).error(function () {
-        $log.log('get share product info error');
       });
     }
 

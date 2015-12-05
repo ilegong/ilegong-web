@@ -323,16 +323,16 @@ ul li {
     cursor: pointer;
     color: blue;
 }
-.weshare-view p.less-text {
+.weshare-view div.less-text {
     display: block;
 }
-.weshare-view p.less-text.show{
+.weshare-view div.less-text.show{
     display: inline !important
 }
-.weshare-view p.more-text {
+.weshare-view div.more-text {
     display: none;
 }
-.weshare-view p.more-text.show {
+.weshare-view div.more-text.show {
     display: inline !important
 }
 

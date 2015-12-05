@@ -1,6 +1,6 @@
 #!/bin/sh
 
-uglifyjs ./webroot/static/weshares/js/angular.min.js  ./webroot/static/weshares/js/ng-infinite-scroll.min.js ./webroot/static/weshares/js/me-lazyload.js ./webroot/static/weshares/js/underscore-min.js  ./webroot/static/weshares/js/app.js ./webroot/static/weshares/js/edit-controller.js ./webroot/static/weshares/js/view-controller.js ./webroot/static/weshares/js/view-product-info.js -o ./webroot/static/weshares/js/weshare.min.js
+uglifyjs ./webroot/static/weshares/js/angular.min.js  ./webroot/static/weshares/js/ng-infinite-scroll.min.js ./webroot/static/weshares/js/me-lazyload.js ./webroot/static/weshares/js/underscore-min.js  ./webroot/static/weshares/js/app.js ./webroot/static/weshares/js/edit-controller.js ./webroot/static/weshares/js/view-controller.js ./webroot/static/weshares/js/pool-product-factory.js ./webroot/static/weshares/js/view-product-info.js -o ./webroot/static/weshares/js/weshare.min.js
 
 cat ./webroot/static/weshares/css/main.css ./webroot/static/weshares/css/site-common.css ./webroot/css/font-awesome-4.4.0/css/font-awesome.css | cleancss -o ./webroot/static/weshares/css/weshare.min.css
 

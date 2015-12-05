@@ -175,14 +175,14 @@
             if (foundWords.length > limit) {
               text = foundWords.slice(0, limit).join(' ') + ellipsis;
               more = foundWords.slice(limit, count).join(' ');
-              markup = '<p class="less-text">' + text + moreText + '</p><p class="more-text">' + orig + lessText + '</p>';
+              markup = '<div class="less-text">' + text + moreText + '</div><div class="more-text">' + orig + lessText + '</div>';
             }
           } else { // Count characters
             if (count > limit) {
               text = orig.slice(0, limit) + ellipsis;
               text = text.replace(/<\/?[^>]+(>|$)/g, "");
               more = orig.slice(limit, count);
-              markup = '<p class="less-text">' + text + moreText + '</p><p class="more-text">' + orig + lessText + '</p>';
+              markup = '<div class="less-text">' + text + moreText + '</div><div class="more-text">' + orig + lessText + '</div>';
             }
           }
           elem.append(markup);
