@@ -101,7 +101,7 @@ class SharePoolProduct extends AppModel {
             'brand_name' => '小宝妈',
             'show_brand' => true,
             'brand_custom_service' => 811917,
-            'published' => 0,
+            'published' => 1,
             'products' => array(
                 '2903' => array(
                     'price' => 150,
@@ -117,7 +117,7 @@ class SharePoolProduct extends AppModel {
             'brand_name' => '李明',
             'show_brand' => true,
             'brand_custom_service' => 6783,
-            'published' => 0,
+            'published' => 1,
             'products' => array(
                 '2904' => array(
                     'price' => 46,
@@ -133,7 +133,7 @@ class SharePoolProduct extends AppModel {
             'brand_name' => '张文艳',
             'show_brand' => true,
             'brand_custom_service' => 12376,
-            'published' => 0,
+            'published' => 1,
             'products' => array(
                 '2898' => array(
                     'price' => 85,
