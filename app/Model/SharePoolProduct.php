@@ -176,7 +176,7 @@ class SharePoolProduct extends AppModel {
         7 => array(
             'share_id' => 1445,
             'share_name' => '怀柔散养老杨家黑猪肉',
-            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/146d562145d_1205.jpg',
+            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/a093ee98c6c_1205.jpg',
             'brand_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_s/ef5896e5883_1204.jpg',
             'brand_name' => '老杨',
             'show_brand' => true,
@@ -212,12 +212,12 @@ class SharePoolProduct extends AppModel {
         8 => array(
             'share_id' => 1447,
             'share_name' => '第一抗癌食品窖藏红薯、紫薯【限北京】',
-            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/10f05b0195b_1205.jpg',
+            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/206035c42ce_1205.jpg',
             'brand_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/319793d271b_0828.jpg',
             'brand_name' => '大美',
             'show_brand' => true,
             'brand_custom_service' => 842908,
-            'published' => 0,
+            'published' => 1,
             'products' => array(
                 '2950' => array(
                     'price' => 40,//红薯家庭装
@@ -244,7 +244,7 @@ class SharePoolProduct extends AppModel {
         9 => array(
             'share_id' => 1448,
             'share_name' => '有机翠香猕猴桃',
-            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/0f737480e61_1205.jpg',
+            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/c899b3bbcbc_1205.jpg',
             'brand_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_2d0cd7f75b366ae4ccb40cc380351574.jpg',
             'brand_name' => '赵静',
             'show_brand' => true,
