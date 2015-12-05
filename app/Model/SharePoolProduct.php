@@ -173,26 +173,128 @@ class SharePoolProduct extends AppModel {
                 )
             )
         ),
-//        7 => array(
-//            'share_id' => 22,
-//            'share_name' => '雾岭山楂条5袋装',
-//            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/83a26e7f545_1204.jpg',
-//            'brand_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_s/ef5896e5883_1204.jpg',
-//            'brand_name' => '天天踏歌',
-//            'show_brand' => true,
-//            'brand_custom_service' => 6333345,
-//            'published' => 1,
-//            'products' => array(
-//                '31' => array(
-//                    'price' => 12.8,
-//                    'channel_price' => 9,
-//                ),
-//                '128' => array(
-//                    'price' => 12.8,
-//                    'channel_price' => 9,
-//                ),
-//            )
-//        ),
+        7 => array(
+            'share_id' => 1445,
+            'share_name' => '怀柔散养老杨家黑猪肉',
+            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/83a26e7f545_1204.jpg',//todo
+            'brand_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_s/ef5896e5883_1204.jpg',
+            'brand_name' => '老杨',
+            'show_brand' => true,
+            'brand_custom_service' => 711503,
+            'published' => 0,
+            'products' => array(
+                '2942' => array(
+                    'price' => 36.1,//后尖
+                    'channel_price' => 29,
+                ),
+                '2943' => array(
+                    'price' => 36.1,//前尖
+                    'channel_price' => 29,
+                ),
+                '2944' => array(
+                    'price' => 71.2,//肋排
+                    'channel_price' => 59,
+                ),
+                '2945' => array(
+                    'price' => 36.1, //猪腔骨
+                    'channel_price' => 29,
+                ),
+                '2946' => array(
+                    'price' => 42.7, //五花肉
+                    'channel_price' => 39,
+                ),
+                '2947' => array(
+                    'price' => 71.2, //纯里脊
+                    'channel_price' => 59,
+                )
+            )
+        ),
+        8 => array(
+            'share_id' => 1447,
+            'share_name' => '第一抗癌食品窖藏红薯、紫薯【限北京】',
+            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/83a26e7f545_1204.jpg',//todo
+            'brand_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/319793d271b_0828.jpg',
+            'brand_name' => '大美',
+            'show_brand' => true,
+            'brand_custom_service' => 842908,
+            'published' => 0,
+            'products' => array(
+                '2950' => array(
+                    'price' => 40,//红薯家庭装
+                    'channel_price' => 27,
+                ),
+                '2953' => array(
+                    'price' => 70,//紫薯家庭
+                    'channel_price' => 65,
+                ),
+                '2955' => array(
+                    'price' => 26,//迷你小红薯
+                    'channel_price' => 24,
+                ),
+                '2956' => array(
+                    'price' => 68, //精品红薯
+                    'channel_price' => 63,
+                ),
+                '2957' => array(
+                    'price' => 98, //精品紫薯
+                    'channel_price' => 91,
+                ),
+            )
+        ),
+        9 => array(
+            'share_id' => 1448,
+            'share_name' => '有机翠香猕猴桃',
+            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/83a26e7f545_1204.jpg',//todo
+            'brand_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_2d0cd7f75b366ae4ccb40cc380351574.jpg',
+            'brand_name' => '赵静',
+            'show_brand' => true,
+            'brand_custom_service' => 867250,
+            'published' => 0,
+            'products' => array(
+                '2958' => array(
+                    'price' => 95,
+                    'channel_price' => 88,
+                ),
+                '2959' => array(
+                    'price' => 180,
+                    'channel_price' => 166,
+                ),
+            )
+        ),
+        10 => array(
+            'share_id' => 1449,
+            'share_name' => '俄罗斯紫皮糖',
+            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/83a26e7f545_1204.jpg',//todo
+            'brand_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_d742f4391e472ca6a24c58d96be17aca.jpg',
+            'brand_name' => '微儿',
+            'show_brand' => true,
+            'brand_custom_service' => 23771,
+            'published' => 0,
+            'products' => array(
+                '2963' => array(
+                    'price' => 78,
+                    'channel_price' => 70,
+                ),
+
+            )
+        ),
+        11 => array(
+            'share_id' => 1450,
+            'share_name' => '超值新鲜正宗内蒙古中式羔羊排块，箱门爽口、口齿留香！',
+            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/83a26e7f545_1204.jpg',//todo
+            'brand_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/9e077f58c06_1125.jpg',
+            'brand_name' => '吃好网',
+            'show_brand' => true,
+            'brand_custom_service' => 884103,
+            'published' => 0,
+            'products' => array(
+                '2964' => array(
+                    'price' => 120,
+                    'channel_price' => 110,
+                ),
+
+            )
+        ),
     );
 
 }

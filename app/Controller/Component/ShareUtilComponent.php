@@ -1649,16 +1649,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 810688,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_7db41874b00ec17af715b72adf87768a.jpg'
                 ),
-                '1268' => array(
-                    'share_id' => 1268,
-                    'share_name' => '麻阳冰糖橙（包邮预售）----不打药，不防腐，不上蜡，守护内心的“橙”实',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/2f2ae8653ee_1123.jpg',
-                    'share_price' => '68',
-                    'share_user_name' => '鲲鲲',
-                    'share_vote' => 560,
-                    'share_user_id' => 806889,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
-                ),
+//                '1268' => array(
+//                    'share_id' => 1268,
+//                    'share_name' => '麻阳冰糖橙（包邮预售）----不打药，不防腐，不上蜡，守护内心的“橙”实',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/2f2ae8653ee_1123.jpg',
+//                    'share_price' => '68',
+//                    'share_user_name' => '鲲鲲',
+//                    'share_vote' => 560,
+//                    'share_user_id' => 806889,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
+//                ),
                 '1392' => array(
                     'share_id' => 1392,
                     'share_name' => '多油、好吃到停不下来的海鸭蛋',
@@ -1679,6 +1679,26 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 600,
                     'share_user_id' => 878825,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_52d08a7c8bb6e9611307b6c4858ca38c.jpg'
+                ),
+                '1436' => array(
+                    'share_id' => 1436,
+                    'share_name' => '沙窝萝卜--脆绿嫩',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/91ca3f25e0f_1205.jpg',
+                    'share_price' => '27',
+                    'share_user_name' => '平凡的世界',
+                    'share_vote' => 1000,
+                    'share_user_id' => 801447,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/8014471448421852.png'
+                ),
+                '1439' => array(
+                    'share_id' => 1439,
+                    'share_name' => '云南秘制油淋牛肝菌，过嘴不忘的味道',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/6eb4a007442_1110.jpg',
+                    'share_price' => '70',
+                    'share_user_name' => '鲲鲲',
+                    'share_vote' => 560,
+                    'share_user_id' => 806889,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
                 ),
                 '1358' => array(
                     'share_id' => 1358,
@@ -1894,8 +1914,8 @@ class ShareUtilComponent extends Component {
 //                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
 //                ),
                 //无花果干 二团
-                '693' => array(
-                    'share_id' => 693,
+                '1431' => array(
+                    'share_id' => 1431,
                     'share_name' => '威海0添加纯天然无花果干',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/6b4f424a8ad_1110.jpg',
                     'share_price' => '35',
@@ -1904,16 +1924,6 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 708029,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
                 ),
-//                '1080' => array(
-//                    'share_id' => 1080,
-//                    'share_name' => '云南秘制油淋牛肝菌，过嘴不忘的味道',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/6eb4a007442_1110.jpg',
-//                    'share_price' => '45',
-//                    'share_user_name' => '鲲鲲',
-//                    'share_vote' => 560,
-//                    'share_user_id' => 806889,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
-//                ),
                 //微微安
 //                '1098' => array(
 //                    'share_id' => 1098,
@@ -2010,16 +2020,16 @@ class ShareUtilComponent extends Component {
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
                 ),
                 //新疆大枣
-                '1021' => array(
-                    'share_id' => 1021,
-                    'share_name' => '温暖亲情组合装“新疆大枣”@“福建银耳”',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/c91e46cf7ba_1110.jpg',
-                    'share_price' => '72',
-                    'share_user_name' => '李樱花',
-                    'share_vote' => 800,
-                    'share_user_id' => 810684,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
-                ),
+//                '1021' => array(
+//                    'share_id' => 1021,
+//                    'share_name' => '温暖亲情组合装“新疆大枣”@“福建银耳”',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/c91e46cf7ba_1110.jpg',
+//                    'share_price' => '72',
+//                    'share_user_name' => '李樱花',
+//                    'share_vote' => 800,
+//                    'share_user_id' => 810684,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
+//                ),
 //                '446' => array(
 //                    'share_id' => 446,
 //                    'share_name' => '阳澄湖大闸蟹2015中秋第一波团购启动啦！',
