@@ -61,6 +61,9 @@ class SharePoolProduct extends AppModel {
         '1411' => array(
             //'try' => 56,
             'buy' => 1463
+        ),
+        '1432' => array(
+            'buy' => 1464
         )
     );
 
@@ -146,22 +149,22 @@ class SharePoolProduct extends AppModel {
                 )
             )
         ),
-//        5 => array(
-//            'share_id' => 1437,
-//            'share_name' => '鲜活银耳【全国顺丰包邮】',
-//            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/53d920db87f_1205.jpg',
-//            'brand_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_52d08a7c8bb6e9611307b6c4858ca38c.jpg',
-//            'brand_name' => '片片妈',
-//            'show_brand' => true,
-//            'brand_custom_service' => 12376,
-//            'published' => 1,
-//            'products' => array(
-//                '2916' => array(
-//                    'price' => 108,
-//                    'channel_price' => 98,
-//                )
-//            )
-//        ),
+        5 => array(
+            'share_id' => 1437,
+            'share_name' => '鲜活银耳【全国顺丰包邮】',
+            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/53d920db87f_1205.jpg',
+            'brand_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_52d08a7c8bb6e9611307b6c4858ca38c.jpg',
+            'brand_name' => '片片妈',
+            'show_brand' => true,
+            'brand_custom_service' => 12376,
+            'published' => 0,
+            'products' => array(
+                '2916' => array(
+                    'price' => 108,
+                    'channel_price' => 98,
+                )
+            )
+        ),
         6 => array(
             'share_id' => 1438,
             'share_name' => '那那家五常稻花香米',
@@ -300,27 +303,6 @@ class SharePoolProduct extends AppModel {
 
             )
         ),
-//        12 => array(
-//            'share_id' => 75,
-//            'share_name' => '超值新鲜正宗内蒙古中式羔羊排块，箱门爽口、口齿留香！',
-//            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/187724807dc_1205.jpg',
-//            'brand_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/9e077f58c06_1125.jpg',
-//            'brand_name' => '吃好网',
-//            'show_brand' => true,
-//            'brand_custom_service' => 884103,
-//            'published' => 1,
-//            'products' => array(
-//                '129' => array(
-//                    'price' => 12,
-//                    'channel_price' => 10,
-//                ),
-//                '131' => array(
-//                    'price' => 12,
-//                    'channel_price' => 10,
-//                ),
-//
-//            )
-//        ),
     );
 
 }
