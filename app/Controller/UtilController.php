@@ -87,10 +87,10 @@ class UtilController extends AppController {
     public function send_tip_msg($shareId) {
         $this->autoRender = false;
         $msg = '冰糖橙昨天已摘完，正在发往北京的途中，周四陆续安排快递，预计周日前后能送达，感谢您的耐心等待，感恩您对朋友说的支持。';
-        //$uids = $this->WeshareBuy->get_has_buy_user($shareId);
-        $uids = array();
+        $uids = $this->WeshareBuy->get_has_buy_user($shareId);
+        //$uids = array();
         $uids[] = '633345';
-        $uids_[] = '544307';
+        //$uids_[] = '544307';
         $openIds = $this->Oauthbind->findWxServiceBindsByUids($uids);
         foreach ($openIds as $openId) {
             $this->Weixin->send_faq_notify_template_msg($openId, 'www.tongshijia.com/weshares/view/' . $shareId, '冰糖橙延迟发货提醒', $msg, '麻阳冰糖橙');
