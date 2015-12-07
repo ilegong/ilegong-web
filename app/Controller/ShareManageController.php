@@ -318,16 +318,50 @@ class ShareManageController extends AppController {
     public function share_order() {
         $share_id = $_REQUEST['share_id'];
         if (!empty($share_id)) {
-            $orders = $this->ShareManage->get_share_orders($share_id);
-            $user_ids = Hash::extract($orders, '{n}.Order.creator');
-            $user_data = $this->ShareManage->get_users_data($user_ids);
-            $user_data = Hash::combine($user_data, '{n}.User.id', '{n}.User');
-            $share_data = $this->WeshareBuy->get_weshare_info($share_id);
-            $this->set('orders', $orders);
-            $this->set('user_data', $user_data);
-            $this->set('share_data', $share_data);
-            $this->set('share_id', $share_id);
+            $this->set_share_order_data($share_id);
         }
+    }
+
+    /**
+     * 产品池中产品的订单
+     */
+    public function pool_product_order() {
+        $share_id = $_REQUEST['share_id'];
+        $sharePoolProductM = ClassRegistry::init('SharePoolProduct');
+        $all_pool_products = $sharePoolProductM->get_all_products();
+        $this->set('all_pool_products', $all_pool_products);
+        if (!empty($share_id)) {
+            $sharePoolProductM = ClassRegistry::init('SharePoolProduct');
+            $all_fork_shares = $sharePoolProductM->get_fork_share_ids($share_id);
+            if (!empty($all_fork_shares)) {
+                $all_fork_shares = Hash::combine($all_fork_shares, '{n}.Weshare.id', '{n}.Weshare');
+                $q_share_id = $_REQUEST['q_share_id'] ? $_REQUEST['q_share_id'] : key($all_fork_shares);
+                $fork_share_creators = Hash::extract($all_fork_shares, '{n}.Weshare.creator');
+                $this->set_share_order_data($q_share_id, $fork_share_creators);
+                $this->set('child_shares', $all_fork_shares);
+                $this->set('q_share_id', $q_share_id);
+                $this->set('current_share', $all_fork_shares[$q_share_id]);
+                $this->set('share_id', $share_id);
+            }
+        }
+    }
+
+    /**
+     * @param $share_id
+     * @param array $patch_uids
+     * 公用的设置订单数据
+     */
+    private function set_share_order_data($share_id, $patch_uids = array()) {
+        $orders = $this->ShareManage->get_share_orders($share_id);
+        $user_ids = Hash::extract($orders, '{n}.Order.creator');
+        $user_ids = array_merge($user_ids, $patch_uids);
+        $user_data = $this->ShareManage->get_users_data($user_ids);
+        $user_data = Hash::combine($user_data, '{n}.User.id', '{n}.User');
+        $share_data = $this->WeshareBuy->get_weshare_info($share_id);
+        $this->set('orders', $orders);
+        $this->set('user_data', $user_data);
+        $this->set('share_data', $share_data);
+        $this->set('share_id', $share_id);
     }
 
     public function batch_set_order_ship_code() {

@@ -5,7 +5,7 @@
  */
 class OptLogHelperComponent extends Component {
 
-    var $components = array('WeshareBuy');
+    var $components = array('WeshareBuy', 'ShareUtil');
 
     public function load_opt_log($time, $limit, $type) {
         //check cache init cache
@@ -100,9 +100,10 @@ class OptLogHelperComponent extends Component {
                     'count(id) as fans_count', 'user_id'
                 )
             ));
+            $users_level_data = $this->ShareUtil->get_users_level($opt_user_ids);
             $opt_users_share_info = Hash::combine($opt_users_share_info, '{n}.UserRelation.user_id', '{n}.0.fans_count');
             $opt_users = Hash::combine($opt_users, '{n}.User.id', '{n}.User');
-            $combine_opt_log_data = array('users' => $opt_users, 'user_fans_extra' => $opt_users_share_info, 'share_user_buy_map' => $share_user_map);
+            $combine_opt_log_data = array('users' => $opt_users, 'users_level' => $users_level_data, 'user_fans_extra' => $opt_users_share_info, 'share_user_buy_map' => $share_user_map);
             Cache::write($key, json_encode($combine_opt_log_data));
             return $combine_opt_log_data;
         }

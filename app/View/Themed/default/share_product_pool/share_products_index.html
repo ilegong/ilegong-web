@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="只有团长才可以逛的街，朋友说统一服务和售后" />
+    <link href="{{$STATIC_FILE_PATH}}/static/product_pool/css/product_pool.min.css?0.0.2" rel="stylesheet" type="text/css">
+    <link href="http://cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <title>朋友说产品街</title>
+</head>
+<body style="background-color:#f5f5f5;">
+<div class="mb10 pro_banner">
+    <a href="/" class="pro_aindex">去首页看看</a>
+    <img src="http://51daifan-assets.stor.sinaapp.com/img%2Fbanner%2Fbanner.gif" width="100%"/>
+</div>
+<div style="margin-bottom: 45px;">
+    {{loop $share_products $product}}
+    <div class="mb5">
+        <a href="/share_product_pool/share_product_detail/{{$product['share_id']}}"><img src="{{$product['share_img']}}" width="100%"/></a>
+    </div>
+    {{/loop}}
+</div>
+<footer class="channel_bottom">
+    <a class="btm_item" href="/" style="width: 33%;">
+        <p class="iconfont" style="height: 18px;"><i class="fa fa-home"></i></p>
+        <b>首页</b>
+    </a>
+    <a class="btm_item" href="/share_opt/index.html" style="width: 33%; position: relative;">
+        <i style="background:#f00;border-radius:50%;width:15px;height:15px;top:-5px;right:30%;position:absolute; display: none;"
+           id="mark-has-unread"></i>
+        <p class="iconfont" style="height: 18px;"><i class="fa fa-users"></i></p>
+        <b>朋友说</b>
+    </a>
+    <a class="btm_item" href="/weshares/user_share_info/{{$uid}}" style="width: 33%;">
+        <p class="iconfont" style="height: 18px;"><i class="fa fa-user"></i></p>
+        <b>我的</b>
+    </a>
+</footer>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+<script src="{{$STATIC_FILE_PATH}}/static/common/no-angular-common.js"></script>
+<script>
+    Pyshuo.share.utils.init();
+    Pyshuo.share.utils.checkHasUnreadInfo();
+</script>
+{{if $jWeixinOn}}
+<script>
+    if(wx){
+        var wx_jssdk_appId = '{{$signPackage["appId"]}}';
+        var wx_jssdk_timestamp = '{{$signPackage["timestamp"]?$signPackage["timestamp"]:1}}';
+        var wx_jssdk_nonceStr = '{{$signPackage["nonceStr"]}}';
+        var wx_jssdk_signature = '{{$signPackage["signature"]}}';
+        var jsApiList = ['checkJsApi', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseImage', 'previewImage', 'uploadImage', 'downloadImage', 'openLocation', 'getLocation'];
+        wx.config({
+            debug: false,
+            appId: wx_jssdk_appId,
+            timestamp: wx_jssdk_timestamp,
+            nonceStr: wx_jssdk_nonceStr,
+            signature: wx_jssdk_signature,
+            jsApiList: jsApiList
+        });
+    }
+    wx.ready(function () {
+        var share_string = 'pool_product';
+        var to_timeline_title = "朋友说产品街";
+        var to_friend_title = "朋友说产品街";
+        var to_friend_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=appMsg';
+        var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
+        var imgUrl = 'http://51daifan-assets.stor.sinaapp.com/img%2Fbanner%2Fbanner.gif';
+        var desc = "只有团长才可以逛的街，朋友说统一服务和售后";
+        wx.onMenuShareAppMessage({
+            title: to_friend_title,
+            desc: desc,
+            link: to_friend_link,
+            imgUrl: imgUrl,
+            success: function () {
+                // 用户确认分享后执行的回调函数
+                if(share_string != '0'){
+                    setTimeout(function(){
+                        $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "appMsg" });
+                    }, 500);
+                }
+            }
+        });
+        wx.onMenuShareTimeline({
+            title: to_timeline_title,
+            link: to_timeline_link,
+            imgUrl: imgUrl,
+            success: function () {
+                if(share_string != '0'){
+                    setTimeout(function(){
+                        $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "timeline" });
+                    }, 500);
+                }
+            }
+        });
+    });
+</script>
+{{/if}}
+</body>
+</html>

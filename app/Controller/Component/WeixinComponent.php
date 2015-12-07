@@ -1180,19 +1180,19 @@ class WeixinComponent extends Component {
      * @param $detail_url
      * @param $title
      * @param $msg
-     * @param $datetime
+     * @param $share_title
      * 用户和分享者互动的模板消息
      */
-    public function send_faq_notify_template_msg($user_open_id, $detail_url, $title, $msg, $datetime) {
+    public function send_faq_notify_template_msg($user_open_id, $detail_url, $title, $msg, $share_title) {
         $post_data = array(
             "touser" => $user_open_id,
-            "template_id" => 'llN-rNXxRKPMCh6hcgohP9o4Z-6oCqh6LeWedl8goXI',
+            "template_id" => 'xJMoewdihfWaopdnP5oSa1qQahuKRMOSMSImyfjVQBE',
             "url" => $detail_url,
             "topcolor" => "#FF0000",
             "data" => array(
                 "first" => array("value" => $title),
-                "keyword1" => array("value" => $msg),
-                "keyword2" => array("value" => $datetime),
+                "keyword1" => array("value" => $share_title),
+                "keyword2" => array("value" => $msg),
                 "remark" => array("value" => '点击详情，马上查看和回复。', "color" => "#FF8800")
             )
         );

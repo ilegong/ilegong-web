@@ -22,8 +22,8 @@
                     {{if $is_support_offline_store > 0}}
                     <span class="label label-info">好邻居支持</span>
                     {{/if}}
-                    {{if $is_proxy}}
-                    <span class="label label-success">团长</span>
+                    {{if !empty($user_level)}}
+                        <span class="label label-success">{{$user_level['level_name']}}</span>
                     {{/if}}
                 </div>
                 {{if !$is_me}}
@@ -39,6 +39,11 @@
                         </ul>
                     </div>
                 </div>
+                {{/if}}
+                {{if $is_me&&$is_proxy}}
+                    <div style="padding: 5px;">
+                        <a href="/share_product_pool/share_products_index.html" class="btn btn-danger btn-sm">产品街</a>
+                    </div>
                 {{/if}}
                 <div style="margin-top: 10px;margin-bottom: 10px;">
                     <ul style="height: 40px;overflow: hidden;font-size: 18px;display: block;padding: 0;">

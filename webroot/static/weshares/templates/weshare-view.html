@@ -1,16 +1,16 @@
 <div class="weshare-view">
-    <div ng-if="vm.weshare.type==0">
-        <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-default-header.html?v0.3.7'"></ng-include>
+    <div ng-if="vm.weshare.type==0||vm.weshare.type==4">
+        <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-default-header.html?v0.4.4'"></ng-include>
     </div>
     <div ng-if="vm.weshare.type==1">
-        <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-group-header.html?v0.3.7'"></ng-include>
+        <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-group-header.html?v0.4.4'"></ng-include>
     </div>
     <div class="introduction margin-bottom-12">
         <b></b>
         <a ng-if="vm.weshare.type==1" class="statistics-btn group-share-mark">邻里拼团</a>
         <div class="status" ng-bind="vm.statusMap[vm.weshare.status]"></div>
         <h1 class='title margin-bottom-12' ng-bind="vm.weshare.title"></h1>
-        <p read-more more-text="展开" less-text="收起" limit="100" ellipsis="..." class="margin-bottom-12"  ng-hide='_.isEmpty(vm.weshare.description)' content="{{vm.weshare.description | unsafe}}"></p>
+        <p read-more more-text="展开..." less-text="收起" limit="100" class="margin-bottom-12"  ng-hide='_.isEmpty(vm.weshare.description)' content="{{vm.weshare.description | unsafe}}"></p>
         <dl class="clearfix images margin-bottom-12">
             <dt ng-repeat="image in vm.weshare.images"><a ng-click="vm.viewImage(image)"><img lazy-src="{{image}}"/></a></dt>
         </dl>
@@ -39,17 +39,17 @@
         </div>
         <div class='send-info text-center margin-bottom-12' ng-hide='_.isEmpty(vm.weshare.send_info)'>取货时间: <span ng-bind='vm.weshare.send_info'></span></div>
     </div>
-    <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-orders.html?v0.3.7'"></ng-include>
+    <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-orders.html?v0.4.4'"></ng-include>
     <div style="text-align: center;">
         <a href="/"><img src="{{::vm.staticFilePath}}/img/logo_footer.jpg" border="0" style="width: 4.625em;height: 1.583em;"/></a><br/>朋友说—朋友间最真挚的分享
     </div>
 </div>
 
-<div ng-if="vm.weshare.type==0">
-    <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-default-nav.html?v0.3.7'"></ng-include>
+<div ng-if="vm.weshare.type==0||vm.weshare.type==4">
+    <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-default-nav.html?v0.4.4'"></ng-include>
 </div>
 <div ng-if="vm.weshare.type==1">
-    <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-group-nav.html?v0.3.7'"></ng-include>
+    <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-group-nav.html?v0.4.4'"></ng-include>
 </div>
 
 <div class="share-dialog" ng-show="vm.showShareDialog">

@@ -57,6 +57,7 @@
       this.order_cart_map = {};
       this.rebate_logs = {};
       this.users = {};
+      this.levelData = {};
       this.shareId = 0;
       this.busy = false;
       this.noMore = false;
@@ -92,6 +93,7 @@
           this.order_cart_map = merge_options(this.order_cart_map, data['order_cart_map']);
           this.rebate_logs = merge_options(this.rebate_logs, data['rebate_logs']);
           this.users = merge_options(this.users, data['users']);
+          this.levelData = merge_options(this.levelData, data['level_data']);
           if(data['page_info']){
             this.pageInfo = data['page_info'];
           }
@@ -173,22 +175,25 @@
             if (foundWords.length > limit) {
               text = foundWords.slice(0, limit).join(' ') + ellipsis;
               more = foundWords.slice(limit, count).join(' ');
-              markup = text + moreText + '<span class="more-text">' + more + lessText + '</span>';
+              markup = '<div class="less-text">' + text + moreText + '</div><div class="more-text">' + orig + lessText + '</div>';
             }
           } else { // Count characters
             if (count > limit) {
               text = orig.slice(0, limit) + ellipsis;
+              text = text.replace(/<\/?[^>]+(>|$)/g, "");
               more = orig.slice(limit, count);
-              markup = text + moreText + '<span class="more-text">' + more + lessText + '</span>';
+              markup = '<div class="less-text">' + text + moreText + '</div><div class="more-text">' + orig + lessText + '</div>';
             }
           }
           elem.append(markup);
           angular.element(document.getElementsByClassName('read-more')[0]).bind('click', function () {
+            document.getElementsByClassName('less-text')[0].style.display = 'none';
             document.getElementsByClassName('read-more')[0].style.display = 'none';
             document.getElementsByClassName('more-text')[0].style.display = 'block';
             document.getElementsByClassName('read-less')[0].style.display = 'block';
           });
           angular.element(document.getElementsByClassName('read-less')[0]).bind('click', function () {
+            document.getElementsByClassName('less-text')[0].style.display = 'block';
             document.getElementsByClassName('read-more')[0].style.display = 'block';
             document.getElementsByClassName('more-text')[0].style.display = 'none';
             document.getElementsByClassName('read-less')[0].style.display = 'none';

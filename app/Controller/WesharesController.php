@@ -58,6 +58,14 @@ class WesharesController extends AppController {
             //use cache
             //$weshare = $this->Weshare->find('first', array('conditions' => array('id' => $weshare_id)));
             $weshare = $this->WeshareBuy->get_weshare_info($weshare_id);
+            if ($weshare['type'] == POOL_SHARE_BUY_TYPE) {
+                //check share type
+                if (!$this->ShareUtil->is_proxy_user($uid)) {
+                    //not proxy user redirect index
+                    $this->redirect('/weshares/index');
+                    return;
+                }
+            }
             $weshare_creator = $weshare['creator'];
             $shared_offers = $this->SharedOffer->find_new_offers_by_weshare_creator($uid, $weshare_creator);
             //get first offer
@@ -238,6 +246,8 @@ class WesharesController extends AppController {
                 }
                 $this->ShareUtil->save_create_share_opt_log($weshare['Weshare']['id'], $thumbnail, $weshareData['title'], $uid);
                 //  $this->check_share_and_trigger_new_share($weshare['Weshare']['id'], $shipSetData);
+                // check user level and init level data when not
+                $this->ShareUtil->check_and_save_default_level($uid);
             }
             //todo update child share data and product data
             //update product 
@@ -345,6 +355,9 @@ class WesharesController extends AppController {
             'recursive' => 1, //int
             'fields' => $user_fields,
         ));
+        $current_user = $current_user['User'];
+        $current_user_level_data = $this->ShareUtil->get_user_level($uid);
+        $current_user['level'] = $current_user_level_data;
         if (!$is_me) {
             $sub_status = $this->WeshareBuy->check_user_subscribe($weshareInfo['creator']['id'], $uid);
         } else {
@@ -367,7 +380,7 @@ class WesharesController extends AppController {
         echo json_encode(array('support_pys_ziti' => $share_ship_set,
             'weshare' => $weshareInfo,
             'recommendData' => $recommend_data,
-            'current_user' => $current_user['User'],
+            'current_user' => $current_user,
             'weixininfo' => $weixinInfo,
             'weshare_ship_settings' => $weshare_ship_settings,
             'consignee' => $consignee,
@@ -500,6 +513,7 @@ class WesharesController extends AppController {
         $rebateLogId = $postDataArray['rebate_log_id'];
         $is_start_new_group_share = $postDataArray['start_new_group_share'];
         $is_group_share_type = $postDataArray['is_group_share'];
+        //购物车
         $cart = array();
         try {
             $weshare_available = $this->WeshareBuy->check_weshare_status($weshareId);
@@ -743,6 +757,9 @@ class WesharesController extends AppController {
         if ($user_is_proxy) {
             $this->set('is_proxy', true);
         }
+        //get user level
+        $user_level = $this->ShareUtil->get_user_level($uid);
+        $this->set('user_level', $user_level);
         if ($uid == $current_uid) {
             $rebate_money = $this->ShareUtil->get_rebate_money($current_uid);
             $this->set('rebate_money', $rebate_money);
@@ -1447,6 +1464,9 @@ class WesharesController extends AppController {
                 'recursive' => 1, //int
                 'fields' => $this->query_user_fileds,
             ));
+            $creatorInfo = $creatorInfo['User'];
+            $creatorLevel = $this->ShareUtil->get_user_level($weshareInfo['Weshare']['creator']);
+            $creatorInfo['level'] = $creatorLevel;
             if ($product_to_map) {
                 $weshareProducts = $this->ShareUtil->get_product_tag_map($weshareId);
             } else {
@@ -1465,7 +1485,7 @@ class WesharesController extends AppController {
             $weshareInfo['tags_list'] = $sharer_tags_list;
             $weshareInfo['addresses'] = Hash::extract($weshareAddresses, '{n}.WeshareAddress');
             $weshareInfo['products'] = $weshareProducts;
-            $weshareInfo['creator'] = $creatorInfo['User'];
+            $weshareInfo['creator'] = $creatorInfo;
             $weshareInfo['ship_type'] = $weshareShipSettings;
             $weshareInfo['images'] = array_filter(explode('|', $weshareInfo['images']));
             $weshareInfo['proxy_rebate_percent'] = $proxy_share_percent['ProxyRebatePercent'];

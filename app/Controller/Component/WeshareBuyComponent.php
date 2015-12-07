@@ -177,10 +177,12 @@ class WeshareBuyComponent extends Component {
             $orderM = ClassRegistry::init('Order');
             $commentM = ClassRegistry::init('Comment');
             $userM = ClassRegistry::init('User');
+            $query_share_type = array(GROUP_SHARE_TYPE, DEFAULT_SHARE_TYPE, POOL_SHARE_BUY_TYPE);
             $myCreateShares = $weshareM->find('all', array(
                 'conditions' => array(
                     'creator' => $uid,
-                    'status' => array(0, 1)
+                    'status' => array(0, 1),
+                    'type' => $query_share_type
                 ),
                 'order' => array('created DESC')
             ));
@@ -211,7 +213,8 @@ class WeshareBuyComponent extends Component {
             $myJoinShares = $weshareM->find('all', array(
                 'conditions' => array(
                     'id' => $joinShareIds,
-                    'status' => array(0, 1)
+                    'status' => array(0, 1),
+                    'type' => $query_share_type
                 ),
                 'order' => array('created DESC')
             ));
@@ -244,7 +247,8 @@ class WeshareBuyComponent extends Component {
             if (count($authority_share_ids) > 0) {
                 $authority_shares = $weshareM->find('all', array(
                     'conditions' => array(
-                        'id' => $authority_share_ids
+                        'id' => $authority_share_ids,
+                        'type' => $query_share_type
                     ),
                     'order' => array('id' => 'desc')
                 ));
@@ -652,7 +656,7 @@ class WeshareBuyComponent extends Component {
             $title = $order_user_nickname . '你好，' . $share_creator_nickname . '分享的' . $weshare_info['Weshare']['title'] . '寄出了，请注意查收。' . $share_creator_nickname . '电话:' . $users[$share_creator]['mobilephone'];
             $shipTypesList = ShipAddress::ship_type_list();
             $ship_company_name = $order_info['Order']['ship_type_name'];
-            if(empty($ship_company_name)){
+            if (empty($ship_company_name)) {
                 $ship_company_name = $shipTypesList[$order_info['Order']['ship_type']];
             }
             $ship_code = $order_info['Order']['ship_code'];
@@ -923,6 +927,7 @@ class WeshareBuyComponent extends Component {
                 'fields' => array('id', 'nickname', 'image', 'is_proxy', 'mobilephone')
             ));
             $user_infos = Hash::combine($user_infos, '{n}.User.id', '{n}.User');
+            $level_data = $this->ShareUtil->get_users_level($user_ids);
             foreach ($group_share_order as $order_item) {
                 $member_id = $order_item['Order']['member_id'];
                 $creator = $order_item['Order']['creator'];
@@ -933,7 +938,7 @@ class WeshareBuyComponent extends Component {
                     $address_data[$member_id]['join_users'][] = $creator;
                 }
             }
-            $child_share_data = array('child_share_data' => $address_data, 'child_share_user_infos' => $user_infos, 'child_share_ids' => $share_ids);
+            $child_share_data = array('child_share_data' => $address_data, 'child_share_user_infos' => $user_infos, 'child_share_level_data' => $level_data, 'child_share_ids' => $share_ids);
             $child_share_data_json = json_encode($child_share_data);
             Cache::write($cache_key, $child_share_data_json);
             return $child_share_data;
@@ -1134,7 +1139,7 @@ class WeshareBuyComponent extends Component {
      * @param $shareId
      * 清除分享用户缓存
      */
-    public function clear_user_share_order_data_cache($orderIds, $shareId=0) {
+    public function clear_user_share_order_data_cache($orderIds, $shareId = 0) {
         $orderM = ClassRegistry::init('Order');
         $orders = $orderM->find('all', array(
             'conditions' => array(
@@ -1142,7 +1147,7 @@ class WeshareBuyComponent extends Component {
             ),
             'fields' => array('id', 'creator', 'member_id')
         ));
-        if($shareId == 0){
+        if ($shareId == 0) {
             $shareId = $orders[0]['Order']['member_id'];
         }
         $order_creators = Hash::extract($orders, '{n}.Order.creator');
@@ -1185,6 +1190,7 @@ class WeshareBuyComponent extends Component {
             'order' => $sort);
         $result = $this->load_share_order_data($query_order_cond);
         if ($page == 1) {
+            //第一页的话保存分页信息
             $result['page_info'] = $this->get_share_order_page_info($weshareId, $uid);
         }
         return $result;
@@ -1236,13 +1242,14 @@ class WeshareBuyComponent extends Component {
                 'recursive' => 1, //int
                 'fields' => $this->query_user_simple_fields,
             ));
+            $level_data = $this->ShareUtil->get_users_level($userIds);
             $users = Hash::combine($users, '{n}.User.id', '{n}.User');
             $orders = Hash::combine($orders, '{n}.Order.id', '{n}.Order');
             usort($orders, function ($a, $b) {
                 return ($a['id'] < $b['id']) ? -1 : 1;
             });
         }
-        $result_data = array('users' => $users, 'orders' => $orders, 'order_cart_map' => $order_cart_map, 'rebate_logs' => $rebateLogs);
+        $result_data = array('users' => $users, 'level_data' => $level_data, 'orders' => $orders, 'order_cart_map' => $order_cart_map, 'rebate_logs' => $rebateLogs);
         return $result_data;
     }
 
@@ -1526,7 +1533,7 @@ class WeshareBuyComponent extends Component {
             $order_date = $order_info['Order']['created'];
             $open_id = $uid_openid_map[$order_info['Order']['creator']];
             $order_id = $order_info['Order']['id'];
-            $detail_url = $this->get_weshares_detail_url($member_id).'?comment_order_id='.$order_id;
+            $detail_url = $this->get_weshares_detail_url($member_id) . '?comment_order_id=' . $order_id;
             $this->Weixin->send_comment_template_msg($open_id, $detail_url, $msg_title, $order_id, $order_date, $desc);
         }
     }
@@ -1540,11 +1547,11 @@ class WeshareBuyComponent extends Component {
      * @param $comment_id
      * 用户之间互相评论
      */
-    public function send_comment_mutual_msg($comment_uid, $reply_id, $content, $share_id, $order_id, $comment_id=0) {
+    public function send_comment_mutual_msg($comment_uid, $reply_id, $content, $share_id, $order_id, $comment_id = 0) {
         $uid_name_map = $this->get_users_nickname(array($comment_uid, $reply_id));
         $title = $uid_name_map[$reply_id] . '你好，' . $uid_name_map[$comment_uid] . '对你说：' . $content;
         $desc = '分享，让生活更美。点击查看。';
-        $detail_url = $this->get_weshares_detail_url($share_id).'?comment_order_id='.$order_id.'&reply_comment_id='.$comment_id;
+        $detail_url = $this->get_weshares_detail_url($share_id) . '?comment_order_id=' . $order_id . '&reply_comment_id=' . $comment_id;
         $order_info = $this->get_order_info($order_id);
         $order_id = $order_info['id'];
         $order_date = $order_info['created'];
@@ -1585,7 +1592,7 @@ class WeshareBuyComponent extends Component {
      * 通知下单用户 收到了评论
      * 标记评论
      */
-    public function send_comment_notify($order_id, $weshare_id, $comment_content, $comment_id=0) {
+    public function send_comment_notify($order_id, $weshare_id, $comment_content, $comment_id = 0) {
         $order_info = $this->get_order_info($order_id);
         $order_creator = $order_info['creator'];
         $share_info = $this->get_weshare_info($weshare_id);
@@ -1597,7 +1604,7 @@ class WeshareBuyComponent extends Component {
         $order_id = $order_info['id'];
         $order_date = $order_info['created'];
         $desc = '分享，让生活更美。点击回复' . $uid_name_map[$order_creator] . '。';
-        $detail_url = $this->get_weshares_detail_url($weshare_id).'?comment_order_id='.$order_id.'&reply_comment_id='.$comment_id;
+        $detail_url = $this->get_weshares_detail_url($weshare_id) . '?comment_order_id=' . $order_id . '&reply_comment_id=' . $comment_id;
         $this->Weixin->send_comment_template_msg($open_id, $detail_url, $title, $order_id, $order_date, $desc);
         //send comment notify msg to share manager
         $share_manager_open_ids = $this->ShareAuthority->get_share_manage_auth_user_open_ids($weshare_id);
@@ -1630,7 +1637,7 @@ class WeshareBuyComponent extends Component {
         $order_id = $order_info['id'];
         $order_date = $order_info['created'];
         $desc = '分享，让生活更美。点击回复' . $uid_name_map[$share_creator] . '。';
-        $detail_url = $this->get_weshares_detail_url($weshare_id).'?comment_order_id='.$order_id;
+        $detail_url = $this->get_weshares_detail_url($weshare_id) . '?comment_order_id=' . $order_id;
         $this->Weixin->send_comment_template_msg($open_id, $detail_url, $title, $order_id, $order_date, $desc);
     }
 
@@ -1830,7 +1837,7 @@ class WeshareBuyComponent extends Component {
      * @param $msg_content
      * 发送给管理员团购结果通知
      */
-    public function send_notify_user_msg_to_share_manager($weshare_info, $msg_content){
+    public function send_notify_user_msg_to_share_manager($weshare_info, $msg_content) {
         $share_id = $weshare_info['id'];
         $share_manager = $this->ShareAuthority->get_share_manage_auth_users($share_id);
         if (empty($share_manager)) {
@@ -1974,16 +1981,20 @@ class WeshareBuyComponent extends Component {
         $msgLogM = ClassRegistry::init('MsgLog');
         //添加更多的过滤条件 (比如每天只收一次)
         //todo 记录过多的情况处理（暂时不会出现这个问题）消息记录过多
+        $q_date = date('Y-m-d');
         $msgLogs = $msgLogM->find('all', array(
             'conditions' => array(
                 'data_id' => $data_id,
-                'data_type' => $type
+                'data_type' => $type,
+                'DATE(created)' => $q_date
             ),
             'fields' => array('user_id'),
-            'limit' => 3000
+            'limit' => 3000,
+            'order' => array('id desc')
         ));
         $msgLogUserIds = Hash::extract($msgLogs, '{n}.MsgLog.user_id');
         $user_ids = array_diff($user_ids, $msgLogUserIds);
+        $user_ids = array_filter($user_ids);
         $saveMsgLogData = array();
         foreach ($user_ids as $item_uid) {
             $saveMsgLogData[] = array(

@@ -3,9 +3,8 @@
         <img lazy-src="{{vm.weshare.creator.image|| vm.staticFilePath + '/img/default_user_icon.jpg'}}" ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/>
         <br>
         <s class="sharer-mark">
-            <span ng-if="vm.weshare.creator.is_proxy==1" class="grouper-mark">团长</span>
+            <span ng-if="vm.weshare.creator.level" class="grouper-mark" ng-bind="::vm.weshare.creator.level.level_name"></span>
             <img ng-if="vm.userShareSummery.follower_count>=50" src="{{::vm.staticFilePath}}/static/weshares/images/v.png" class="v-icon-img"/>
-            <img ng-if="vm.supportPysZiti>0" src="{{::vm.staticFilePath}}/static/weshares/images/hlj.jpeg" class="hlj-icon-img"/>
         </s>
         <a ng-if="vm.currentUser" class="faq-sharer-btn" ng-click="vm.redirectFaq()" ng-bind="::vm.faqTipText">联系团长</a>
     </li>
@@ -34,7 +33,7 @@
                 class="statistics-btn edit-share-btn"
                 ng-click="vm.toUpdate()">修改</a>
         </li>
-        <li class="header-btn-wrap" ng-if="!vm.isCreator()&&vm.isProxy()&&vm.weshare.status == 0"><a
+        <li class="header-btn-wrap" ng-if="!vm.isCreator()&&vm.isProxy()&&vm.weshare.status == 0 && vm.weshare.type!=4"><a
                 class="statistics-btn tip-share-btn"
                 ng-click="vm.showRecommendDialog=true;vm.showLayer=true;">我要推荐</a>
         </li>

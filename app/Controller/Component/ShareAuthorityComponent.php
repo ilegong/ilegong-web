@@ -92,6 +92,24 @@ class ShareAuthorityComponent extends Component {
     }
 
     /**
+     * @param $share_id
+     * @param $uid
+     * @param $refer_share_creator
+     * 从产品池分享产品初始化授权
+     */
+    public function init_clone_share_from_pool_operate_config($share_id, $uid, $refer_share_creator) {
+        $shareOperateSettingM = ClassRegistry::init('ShareOperateSetting');
+        $data = array();
+        $data[] = array('data_id' => $share_id, 'data_type' => SHARE_ORDER_OPERATE_TYPE, 'user' => $uid, 'scope_id' => $share_id, 'scope_type' => SHARE_OPERATE_SCOPE_TYPE);
+        $data[] = array('data_id' => $share_id, 'data_type' => SHARE_MANAGE_OPERATE_TYPE, 'user' => $uid, 'scope_id' => $share_id, 'scope_type' => SHARE_OPERATE_SCOPE_TYPE);
+        if ($uid != $refer_share_creator) {
+            $data[] = array('data_id' => $share_id, 'data_type' => SHARE_ORDER_OPERATE_TYPE, 'user' => $refer_share_creator, 'scope_id' => $share_id, 'scope_type' => SHARE_OPERATE_SCOPE_TYPE);
+            $data[] = array('data_id' => $share_id, 'data_type' => SHARE_MANAGE_OPERATE_TYPE, 'user' => $refer_share_creator, 'scope_id' => $share_id, 'scope_type' => SHARE_OPERATE_SCOPE_TYPE);
+        }
+        $shareOperateSettingM->saveAll($data);
+    }
+
+    /**
      * @param $tagId
      * @param $uid
      * @param $shareId
