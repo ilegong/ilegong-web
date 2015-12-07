@@ -48,7 +48,8 @@ class SharePoolProduct extends AppModel {
         $weshareM = ClassRegistry::init('Weshare');
         $shares = $weshareM->find('all', array(
             'conditions' => array(
-                'refer_share_id' => $share_id
+                'refer_share_id' => $share_id,
+                'not' => array('type' => POOL_SHARE_TYPE)
             ),
             'fields' => array('id', 'creator', 'status'),
             'limit' => 100
