@@ -334,6 +334,7 @@ class WxPayController extends AppController {
                 $out_trade_no = $notify->data['out_trade_no'];
                 $notifyRecord = $this->WxPayment->findOneNotify($out_trade_no);
                 if (!empty($notifyRecord)) {
+                    //通知重复
                     $this->log('[WEIXIN_PAY_NOTIFY] duplicated notify:' . $xml);
                 } else {
                     $trade_type = $notify->data['trade_type'];
@@ -351,6 +352,7 @@ class WxPayController extends AppController {
                     $result_code = $notify->data['result_code'];
 
                     $suc = $result_code == "SUCCESS";
+                    //保存支付成功通知信息
                     list($status, $order) = $this->WxPayment->saveNotifyAndUpdateStatus($out_trade_no, $transaction_id, $trade_type, $suc, $openid, $coupon_fee,
                         $total_fee, $is_subscribe, $bank_type, $fee_type, $attach, $time_end);
 
