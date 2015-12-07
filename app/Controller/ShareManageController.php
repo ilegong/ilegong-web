@@ -336,7 +336,7 @@ class ShareManageController extends AppController {
             if (!empty($all_fork_shares)) {
                 $all_fork_shares = Hash::combine($all_fork_shares, '{n}.Weshare.id', '{n}.Weshare');
                 $q_share_id = $_REQUEST['q_share_id'] ? $_REQUEST['q_share_id'] : key($all_fork_shares);
-                $fork_share_creators = Hash::extract($all_fork_shares, '{n}.Weshare.creator');
+                $fork_share_creators = Hash::extract($all_fork_shares, '{n}.creator');
                 $this->set_share_order_data($q_share_id, $fork_share_creators);
                 $this->set('child_shares', $all_fork_shares);
                 $this->set('q_share_id', $q_share_id);
