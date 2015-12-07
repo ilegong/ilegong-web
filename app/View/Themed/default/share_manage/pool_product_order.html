@@ -44,7 +44,7 @@
                                     {{loop $child_shares $child_share_id $child_share}}
                                     <label class="radio-inline">
                                         <input type="radio" name="q_share_id" value="{{$child_share_id}}" {{if $child_share_id==$q_share_id}}checked{{/if}}>
-                                        {{$user_data[$child_share['creator']]['nickname']}}
+                                        {{$user_data[$child_share['creator']]['nickname']}}{{if $child_share['type'] == POOL_SHARE_BUY_TYPE}}【渠道价购买链接】{{/if}}
                                     </label>
                                     {{/loop}}
                                 </div>

@@ -51,7 +51,7 @@ class SharePoolProduct extends AppModel {
                 'refer_share_id' => $share_id,
                 'not' => array('type' => POOL_SHARE_TYPE)
             ),
-            'fields' => array('id', 'creator', 'status'),
+            'fields' => array('id', 'creator', 'status', 'type'),
             'limit' => 100
         ));
         return $shares;
