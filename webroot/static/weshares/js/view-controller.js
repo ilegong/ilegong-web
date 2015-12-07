@@ -1487,11 +1487,13 @@
         desc = vm.weshare.creator.nickname + '我认识，很靠谱。' + vm.weshare.description.substr(0,20);
       } else if (vm.currentUser) {
         //default custom
-        if (vm.isProxy()) {
-          url = url + '?recommend=' + vm.currentUser['id'];
-        }
-        if (!vm.isProxy() && vm.recommendUserId != 0) {
-          url = url + '?recommend=' + vm.recommendUserId;
+        if(vm.weshare.type!==4){
+          if (vm.isProxy()) {
+            url = url + '?recommend=' + vm.currentUser['id'];
+          }
+          if (!vm.isProxy() && vm.recommendUserId != 0) {
+            url = url + '?recommend=' + vm.recommendUserId;
+          }
         }
         to_timeline_title = vm.currentUser.nickname + '推荐' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
         to_friend_title = vm.currentUser.nickname + '推荐' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
