@@ -58,10 +58,10 @@ class SharePoolProduct extends AppModel {
 
     //产品和试吃的对应关系
     var $product_buy_map = array(
-//        '75' => array(
-//            //'try' => 56,
-//            'buy' => 77
-//        )
+        '1411' => array(
+            //'try' => 56,
+            'buy' => 1463
+        )
     );
 
     //产品池所有产品

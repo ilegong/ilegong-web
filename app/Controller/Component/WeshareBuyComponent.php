@@ -177,11 +177,12 @@ class WeshareBuyComponent extends Component {
             $orderM = ClassRegistry::init('Order');
             $commentM = ClassRegistry::init('Comment');
             $userM = ClassRegistry::init('User');
+            $query_share_type = array(GROUP_SHARE_TYPE, DEFAULT_SHARE_TYPE, POOL_SHARE_BUY_TYPE);
             $myCreateShares = $weshareM->find('all', array(
                 'conditions' => array(
                     'creator' => $uid,
                     'status' => array(0, 1),
-                    'type' => array(GROUP_SHARE_TYPE, DEFAULT_SHARE_TYPE)
+                    'type' => $query_share_type
                 ),
                 'order' => array('created DESC')
             ));
@@ -213,7 +214,7 @@ class WeshareBuyComponent extends Component {
                 'conditions' => array(
                     'id' => $joinShareIds,
                     'status' => array(0, 1),
-                    'type' => array(GROUP_SHARE_TYPE, DEFAULT_SHARE_TYPE)
+                    'type' => $query_share_type
                 ),
                 'order' => array('created DESC')
             ));
@@ -247,7 +248,7 @@ class WeshareBuyComponent extends Component {
                 $authority_shares = $weshareM->find('all', array(
                     'conditions' => array(
                         'id' => $authority_share_ids,
-                        'type' => array(GROUP_SHARE_TYPE, DEFAULT_SHARE_TYPE)
+                        'type' => $query_share_type
                     ),
                     'order' => array('id' => 'desc')
                 ));
