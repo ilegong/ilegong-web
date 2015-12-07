@@ -61,9 +61,12 @@ class WesharesController extends AppController {
             if ($weshare['type'] == POOL_SHARE_BUY_TYPE) {
                 //check share type
                 if (!$this->ShareUtil->is_proxy_user($uid)) {
-                    //not proxy user redirect index
-                    $this->redirect('/weshares/index');
-                    return;
+                    $user_can_manage_share = $this->ShareAuthority->user_can_manage_share($uid, $weshare_id);
+                    if(!$user_can_manage_share){
+                        //not proxy or manage redirect index
+                        $this->redirect('/weshares/index');
+                        return;
+                    }
                 }
             }
             $weshare_creator = $weshare['creator'];
