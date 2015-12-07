@@ -64,7 +64,32 @@ class SharePoolProduct extends AppModel {
         ),
         '1432' => array(
             'buy' => 1464
+        ),
+        '1433' => array(
+            'buy' => 1466
+        ),
+        '1430' => array(
+            'buy' => 1467
+        ),
+        '1438' => array(
+            'buy' => 1438
+        ),
+        '1445' => array(
+            'buy' => 1469
+        ),
+        '1447' => array(
+            'buy' => 1471
+        ),
+        '1448' => array(
+            'buy' => 1473
+        ),
+        '1449' => array(
+            'buy' => 1474
+        ),
+        '1450' => array(
+            'buy' => 1475
         )
+
     );
 
     //产品池所有产品
