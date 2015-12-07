@@ -261,6 +261,8 @@ const OPT_LOG_START_GROUP_SHARE = 5;
 
 const DEFAULT_SHARE_TYPE = 0; //默认团购
 const GROUP_SHARE_TYPE = 1; //拼团团购
+const POOL_SHARE_TYPE = 3; //产品池类型的分享
+const POOL_SHARE_BUY_TYPE = 4; //产品池中购买的分享的链接
 
 const ORDER_TRIGGER_GROUP_SHARE_TYPE = 1;
 
@@ -2075,7 +2077,7 @@ function get_pure_product_consignment_date($pid) {
 
 function get_limit_string($text, $len) {
     if (mb_strlen($text) > $len) {
-        return mb_substr($text, 0, $len).'...';
+        return mb_substr($text, 0, $len) . '...';
     }
     return $text;
 }

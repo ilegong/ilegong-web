@@ -11,7 +11,8 @@
     vm.toggleTag = toggleTag;
     vm.cloneShare = cloneShare;
     vm.viewImage = viewImage;
-    vm.foretaste = foretaste;
+    vm.toBuyShare = toBuyShare;
+    vm.initProductBuyBtn = initProductBuyBtn;
     vm.staticFilePath = staticFilePath;
     activate();
     function activate() {
@@ -25,12 +26,28 @@
       PoolProductInfo.prepareProductInfo(weshareId, function (data) {
         vm.weshare = data;
         vm.initViewFieldName();
+        vm.initProductBuyBtn();
       });
     }
 
-    function foretaste() {
-      if (vm.weshare['foretaste_share_id']) {
-        window.location.href = '/weshares/view/' + vm.weshare['foretaste_share_id'];
+    //初始化购买按钮
+    function initProductBuyBtn() {
+      if (vm.weshare['buy_config']) {
+        var buyConfig = vm.weshare['buy_config'];
+        if (buyConfig['try']) {
+          vm.buyShareId = buyConfig['try'];
+          vm.buyButtonText = '试吃申请';
+        }
+        if (buyConfig['buy']) {
+          vm.buyShareId = buyConfig['buy'];
+          vm.buyButtonText = '渠道价购买';
+        }
+      }
+    }
+
+    function toBuyShare() {
+      if (vm.buyShareId) {
+        window.location.href = '/weshares/view/' + vm.buyShareId;
       } else {
         alert('该商品没有试吃！请联系客服。');
       }
@@ -42,6 +59,7 @@
       currentToggleState['statusText'] = currentToggleState['open'] ? '收起' : '展开';
     }
 
+    //发起自己的分享
     function cloneShare() {
       $http({method: 'GET', url: '/share_product_pool/clone_share/' + vm.shareId}).success(function (data) {
         if (data['success']) {

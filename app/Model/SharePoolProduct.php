@@ -35,8 +35,8 @@ class SharePoolProduct extends AppModel {
      * @return mixed
      * 获取产品池中产品的试吃id
      */
-    public function get_product_foretaste($share_id) {
-        return $this->product_foretaste_map[$share_id];
+    public function get_product_buy_config($share_id) {
+        return $this->product_buy_map[$share_id];
     }
 
     /**
@@ -57,7 +57,12 @@ class SharePoolProduct extends AppModel {
     }
 
     //产品和试吃的对应关系
-    var $product_foretaste_map = array();
+    var $product_buy_map = array(
+//        '75' => array(
+//            //'try' => 56,
+//            'buy' => 77
+//        )
+    );
 
     //产品池所有产品
     var $products = array(
@@ -295,6 +300,27 @@ class SharePoolProduct extends AppModel {
 
             )
         ),
+//        12 => array(
+//            'share_id' => 75,
+//            'share_name' => '超值新鲜正宗内蒙古中式羔羊排块，箱门爽口、口齿留香！',
+//            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/187724807dc_1205.jpg',
+//            'brand_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/9e077f58c06_1125.jpg',
+//            'brand_name' => '吃好网',
+//            'show_brand' => true,
+//            'brand_custom_service' => 884103,
+//            'published' => 1,
+//            'products' => array(
+//                '129' => array(
+//                    'price' => 12,
+//                    'channel_price' => 10,
+//                ),
+//                '131' => array(
+//                    'price' => 12,
+//                    'channel_price' => 10,
+//                ),
+//
+//            )
+//        ),
     );
 
 }

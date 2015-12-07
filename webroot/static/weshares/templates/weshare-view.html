@@ -1,5 +1,5 @@
 <div class="weshare-view">
-    <div ng-if="vm.weshare.type==0">
+    <div ng-if="vm.weshare.type==0||vm.weshare.type==4">
         <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-default-header.html?v0.3.9'"></ng-include>
     </div>
     <div ng-if="vm.weshare.type==1">
@@ -45,7 +45,7 @@
     </div>
 </div>
 
-<div ng-if="vm.weshare.type==0">
+<div ng-if="vm.weshare.type==0||vm.weshare.type==4">
     <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-default-nav.html?v0.3.9'"></ng-include>
 </div>
 <div ng-if="vm.weshare.type==1">

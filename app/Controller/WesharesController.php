@@ -58,6 +58,14 @@ class WesharesController extends AppController {
             //use cache
             //$weshare = $this->Weshare->find('first', array('conditions' => array('id' => $weshare_id)));
             $weshare = $this->WeshareBuy->get_weshare_info($weshare_id);
+            if ($weshare['type'] == POOL_SHARE_BUY_TYPE) {
+                //check share type
+                if (!$this->ShareUtil->is_proxy_user($uid)) {
+                    //not proxy user redirect index
+                    $this->redirect('/weshares/index');
+                    return;
+                }
+            }
             $weshare_creator = $weshare['creator'];
             $shared_offers = $this->SharedOffer->find_new_offers_by_weshare_creator($uid, $weshare_creator);
             //get first offer
@@ -505,6 +513,7 @@ class WesharesController extends AppController {
         $rebateLogId = $postDataArray['rebate_log_id'];
         $is_start_new_group_share = $postDataArray['start_new_group_share'];
         $is_group_share_type = $postDataArray['is_group_share'];
+        //购物车
         $cart = array();
         try {
             $weshare_available = $this->WeshareBuy->check_weshare_status($weshareId);
