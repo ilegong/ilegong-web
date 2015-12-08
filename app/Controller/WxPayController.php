@@ -484,7 +484,7 @@ class WxPayController extends AppController {
      * @param $out_trade_no
      * @param $totalFee
      * @return bool
-     *
+     * 物流订单支付信息
      */
     protected function getPrePayLogisticsIdFromWx($openid, $body, $out_trade_no, $totalFee){
         //使用统一支付接口
