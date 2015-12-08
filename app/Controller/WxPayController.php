@@ -228,7 +228,7 @@ class WxPayController extends AppController {
             $prepay_id = $this->getPrePayLogisticsIdFromWx($openid, $body, $out_trade_no, $totalFee);
         }
         if ($prepay_id) {
-            $this->WxPayment->savePayLog($logistics_order_id, $out_trade_no, $body, $trade_type, $totalFee, $prepay_id, $openid, LOGISTICS_ORDER_PAY_TYPE);
+            $this->WxPayment->saveLogisticsPayLog($logistics_order_id, $out_trade_no, $body, $trade_type, $totalFee, $prepay_id, $openid, LOGISTICS_ORDER_PAY_TYPE);
             //=========步骤3：使用jsapi调起支付============
             $jsApi->setPrepayId($prepay_id);
             $jsapi_param = $jsApi->getParameters();
