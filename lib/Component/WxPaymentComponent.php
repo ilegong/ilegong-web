@@ -26,6 +26,10 @@ class WxPaymentComponent extends Component {
         return $source."-$orderId-".mktime().'-'.rand(0, 100);
     }
 
+//    public function logistics_out_trade_no($source, $orderId){
+//        return $source."-$orderId-".mktime().'-'.rand(0, 100);
+//    }
+
     public function goToAliPayForm($order_id, $uid) {
         App::import('Vendor', 'ali_direct_pay/AliPay');
         $ali = new AliPay();
@@ -72,6 +76,32 @@ class WxPaymentComponent extends Component {
      * @param $totalFee
      * @param $prepay_id
      * @param $openid
+     * @param $type
+     * @return mixed
+     * @return mixed true|false, or the results
+     */
+    public function saveLogisticsPayLog($orderId, $out_trade_no, $body, $trade_type, $totalFee, $prepay_id, $openid, $type){
+        $payLog = ClassRegistry::init('PayLog');
+        return $payLog->save(array('PayLog' => array(
+            'out_trade_no' => $out_trade_no,
+            'body' => $body,
+            'trade_type' => $trade_type,
+            'total_fee' => $totalFee,
+            'prepay_id' => $prepay_id,
+            'openid' => $openid,
+            'order_id' => $orderId,
+            'type' => $type
+        )));
+    }
+
+    /**
+     * @param $orderId
+     * @param $out_trade_no
+     * @param $body
+     * @param $trade_type
+     * @param $totalFee
+     * @param $prepay_id
+     * @param $openid
      * @return mixed true/false, or the results
      */
     public function savePayLog($orderId, $out_trade_no, $body, $trade_type, $totalFee, $prepay_id, $openid) {
@@ -83,7 +113,7 @@ class WxPaymentComponent extends Component {
             'total_fee' => $totalFee,
             'prepay_id' => $prepay_id,
             'openid' => $openid,
-            'order_id' => $orderId
+            'order_id' => $orderId,
         )));
     }
 
@@ -94,6 +124,82 @@ class WxPaymentComponent extends Component {
     public function findOneNotify($out_trade_no) {
         $payNotify = ClassRegistry::init('PayNotify');
         return $payNotify->find('first', array('conditions' => array('out_trade_no' => $out_trade_no)));
+    }
+
+    /**
+     * @param $out_trade_no
+     * @param $transaction_id
+     * @param $trade_type
+     * @param $suc
+     * @param string $openid
+     * @param string $coupon_fee
+     * @param int $total_fee
+     * @param int $is_subscribe
+     * @param string $bank_type
+     * @param string $fee_type
+     * @param string $attach
+     * @param string $time_end
+     * @param int $type
+     * @internal param $result_code
+     * @internal param $notify
+     * @return array order id and order object
+     */
+    public function saveLogisticsNotifyAndUpdateStatus($out_trade_no, $transaction_id, $trade_type, $suc,
+                                                       $openid = '',
+                                                       $coupon_fee = '',
+                                                       $total_fee = 0,
+                                                       $is_subscribe = 0,
+                                                       $bank_type = '',
+                                                       $fee_type = '',
+                                                       $attach = '',
+                                                       $time_end = '', $type) {
+        $payNotifyModel = ClassRegistry::init('PayNotify');
+        $payLogModel = ClassRegistry::init('PayLog');
+        $payNotifyModel->id = null;
+        $payNotify = $payNotifyModel->save(array(
+            'out_trade_no' => $out_trade_no,
+            'transaction_id' => $transaction_id,
+            'trade_type' => $trade_type,
+            'openid' => empty($openid) ? 'unknown' : $openid,
+            'coupon_fee' => empty($coupon_fee) ? 0 : $coupon_fee,
+            'total_fee' => $total_fee,
+            'is_subscribe' => $is_subscribe,
+            'bank_type' => $bank_type,
+            'fee_type' => empty($fee_type) ? 'CNY' : $fee_type,
+            'attach' => empty($attach) ? '' : substr($attach, 0, 511),
+            'time_end' => $time_end,
+            'status' => PAYNOTIFY_STATUS_NEW,
+            'type' => $type
+        ));
+        $notifyLogId = $payNotify['PayNotify']['id'];
+        $payLog = $payLogModel->find('first', array('conditions' => array('out_trade_no' => $out_trade_no)));
+        if (empty($payLog)) {
+            $status = PAYNOTIFY_ERR_TRADENO;
+        } else {
+            $payLogModel->updateAll(array('status' => $suc ? PAYLOG_STATUS_FAIL : PAYLOG_STATUS_SUCCESS), array('out_trade_no' => $out_trade_no));
+            $status = PAYNOTIFY_STATUS_PAYLOG_UPDATED;
+
+            $orderId = $payLog['PayLog']['order_id'];
+            if ($suc) {
+                $logisticsOrderM = ClassRegistry::init('LogisticsOrder');
+                $order = $logisticsOrderM->find('first', array('conditions' => array('id' => $orderId)));
+                if (empty($order)) {
+                    $status = PAYNOTIFY_ERR_ORDER_NONE;
+                } else if ($order['LogisticsOrder']['status'] != ORDER_STATUS_WAITING_PAY || $order['LogisticsOrder']['deleted'] == 1) {
+                    $status = PAYNOTIFY_ERR_ORDER_STATUS_ERR;
+                } else {
+                    //update logistics order status
+                    $updatedResult = $logisticsOrderM->updateAll(array('status' => LOGISTICS_ORDER_PAID_STATUS), array('id' => $orderId));
+                    $this->log('set_logistics_order_to_paid:' . $orderId . ', updatedResult=' . $updatedResult);
+                    $status = PAYNOTIFY_STATUS_ORDER_UPDATED;
+                    if ($updatedResult) {
+                        $order['LogisticsOrder']['status'] = LOGISTICS_ORDER_PAID_STATUS;
+                    }
+                }
+            }
+        }
+        $payNotifyModel->updateAll(array('status' => $status, 'order_id' => $orderId), array('id' => $notifyLogId));
+        return array($status, $order);
     }
 
     /**
@@ -172,6 +278,34 @@ class WxPaymentComponent extends Component {
         return array($status, $order);
     }
 
+    /**
+     * @param $logistics_order_id
+     * @return array(desc body)
+     */
+    public function getLogisticsDesc($logistics_order_id) {
+        $logisticsOrderItemM = ClassRegistry::init('LogisticsOrderItem');
+        $desc = '';
+        $items = $logisticsOrderItemM->find('all', array(
+            'conditions' => array(
+                'logistics_order_id' => $logistics_order_id
+            ),
+            'fields' => array('goods_name')
+        ));
+        if (!empty($items)) {
+            $itemNames = array_map(function ($val) {
+                return $val['LogisticsOrderItem']['goods_name'];
+            }, $items);
+            $desc .= implode('、', $itemNames);
+            $body = mb_substr($desc, 0, 25);
+            $end = " 商品的物流费用";
+            $desc .= $end;
+            $body .= $end;
+        } else {
+            //display errors
+            $this->log('Cannot get logistics items: ' . $logistics_order_id . '/pay?msg=cannot_get_cart_items');
+        }
+        return array($desc, $body);
+    }
 
     /**
      * @param $orderId
@@ -222,6 +356,31 @@ class WxPaymentComponent extends Component {
             throw new CakeException('/?wx_pay_order_status_incorrect='.$order['Order']['creator'].'__uid='. $uid);
         }
 
+        return $order;
+    }
+
+    /**
+     * @param $logistics_order_id
+     * @param $uid
+     * @return mixed
+     * @throw CakeException if status is incorrect or it's not owned by current user
+     */
+    public function findLogisticsOrderAndCheckStatus($logistics_order_id, $uid) {
+        $logisticsOrderM = ClassRegistry::init('LogisticsOrder');
+        $order = $logisticsOrderM->find('first', array(
+            'conditions' => array(
+                'id' => $logistics_order_id,
+                'creator' => $uid
+            )
+        ));
+        if (empty($order)) {
+            throw new CakeException('wx_pay_order_not_found:' . $logistics_order_id);
+        } else if ($order['LogisticsOrder']['creator'] !== $uid) {
+            throw new CakeException('/?wx_pay_order_id_not_owned=' . $order['LogisticsOrder']['creator'] . '__uid=' . $uid);
+        }
+        if ($order['LogisticsOrder']['status'] != LOGISTICS_ORDER_WAIT_PAY_STATUS || $order['LogisticsOrder']['deleted'] == DELETED_YES) {
+            throw new CakeException('/?wx_pay_order_status_incorrect=' . $order['LogisticsOrder']['creator'] . '__uid=' . $uid);
+        }
         return $order;
     }
 
