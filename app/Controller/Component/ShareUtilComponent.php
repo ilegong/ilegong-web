@@ -1750,8 +1750,8 @@ class ShareUtilComponent extends Component {
 //                    'share_user_id' => 811917,
 //                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
 //                ),
-                '1292' => array(
-                    'share_id' => 1292,
+                '1451' => array(
+                    'share_id' => 1451,
                     'share_name' => '德庆贡柑熟了，想找找当皇帝娘娘的感觉吗？',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/3c397b7406b_1125.jpg',
                     'share_price' => '46',

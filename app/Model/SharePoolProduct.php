@@ -346,6 +346,23 @@ class SharePoolProduct extends AppModel {
 
             )
         ),
+        13 => array(
+            'share_id' => 1492,
+            'share_name' => '小火团贡玉米 规格12棒/箱',
+            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/b17c9f68199_1208.jpg',
+            'brand_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_4c2cec11eabe3762984f808c5ceafdbd.jpg',
+            'brand_name' => '李翊鸥',
+            'show_brand' => true,
+            'brand_custom_service' => 886456,
+            'published' => 1,
+            'products' => array(
+                '3069' => array(
+                    'price' => 68,
+                    'channel_price' => 58,
+                ),
+
+            )
+        ),
     );
 
 }
