@@ -77,8 +77,22 @@ $_display_tags_in_home = array(TAG_ID_CHULIANG, TAG_ID_ROUQIN_DANPIN, TAG_ID_XIN
 
 $_coupon_could_distribute = array(18483 => '新用户50返10元券', 18482 => '新用户100返20元券');
 
+const RR_LOGISTICS_CALLBACK = 'www.tongshijia.com/logistics/rr_logistics_callback.html';
+const RR_LOGISTICS_USERNAME = '';
+const RR_LOGISTICS_APP_KEY = '';
+
+const RR_SINGLE_LOGISTICS_ORDER_TYPE = 0;//人人 单独订单类型
+const RR_MULTI_LOGISTICS_ORDER_TYPE = 1;//人人 拼单类型
+
+//物流订单status
 const LOGISTICS_ORDER_WAIT_PAY_STATUS = 0;
 const LOGISTICS_ORDER_PAID_STATUS = 1;
+const LOGISTICS_ORDER_RECEIVE = 2;
+const LOGISTICS_ORDER_PICKUP = 3;
+const LOGISTICS_ORDER_SIGN = 4;
+const LOGISTICS_ORDER_CANCEL = 5;
+
+
 
 function is_admin_uid($uid) {
 

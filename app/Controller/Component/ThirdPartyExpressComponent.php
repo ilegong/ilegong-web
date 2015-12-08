@@ -12,29 +12,6 @@ class ThirdPartyExpressComponent extends Component {
      * 计算快递费用
      */
     public function calculate_rr_logistics_cost($params) {
-//$params ["userName"];
-//$params ["goodsWeight"];
-//$params ["goodsWorth"];
-//$params ["mapFrom"];  op
-//$params ["startingPhone"];
-//$params ["startingProvince"]; op 仅直辖市和特别行政区可以为空
-//$params ["startingCity"];
-//$params ["startingAddress"];
-//$params ["startingLng"]; op
-//$params ["startingLat"]; op
-//$params ["consigneeProvince"]; op 仅直辖市和特别行政区可以为空
-//$params ["consigneeCity"];
-//$params ["consigneeAddress"];
-//$params ["consigneeLng"]; op
-//$params ["consigneeLat"]; op
-//$params ["$params"]; op
-//$params ["sign"];  strtolower ( MD5 ( $appKey . strtolower ( MD5 ( $userName . $startingAddress . $consigneeAddress ) ) ) )
-
-//$result ["isSuccess"]; String
-//$result ["errMsg"]; String
-//$result ["warn"]; String
-//$result ["price"]; Double
-
         $url = "http://101.251.194.3:8091/delivery/3rd/getFastPrice";
         try {
             $result = $this->curlPost($url, json_encode($params));
@@ -51,38 +28,6 @@ class ThirdPartyExpressComponent extends Component {
      * 确认订单
      */
     public function confirm_rr_order($params) {
-//$params ["userName"];
-//$params ["businessNo"]; 订单号
-//$params ["goodsName"];
-//$params ["goodsWeight"];
-//$params ["goodsWorth"];
-//$params ["mapFrom"]; op
-//$params ["startingName"];
-//$params ["startingPhone"];
-//$params ["startingProvince"]; op 仅直辖市和特别行政区可以为空
-//$params ["startingCity"];
-//$params ["startingAddress"];
-//$params ["startingLng"]; op
-//$params ["startingLat"]; op
-//$params ["consigneeName"];
-//$params ["consigneePhone"];
-//$params ["consigneeProvince"]; op 仅直辖市和特别行政区可以为空
-//$params ["consigneeCity"];
-//$params ["consigneeAddress"];
-//$params ["consigneeLng"];
-//$params ["consigneeLat"];
-//$params ["serviceFees"];
-//$params ["pickupTime"]; op
-//$params ["remark"]; op
-//$params ["callbackUrl"];
-//$params ["sign"]; strtolower ( MD5 ( $appKey . strtolower ( MD5 ( $userName . $startingAddress . $consigneeAddress ) ) ) );
-
-//$result ["isSuccess"];
-//$result ["errMsg"];
-//$result ["warn"];
-//$result ["price"];
-//$result ["orderNo"];
-//$result ["businessNo"];
         $url = 'http://101.251.194.3:8091/delivery/3rd/confrmOrder';
         try {
             $result = $this->curlPost($url, json_encode($params));
