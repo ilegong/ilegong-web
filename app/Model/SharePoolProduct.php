@@ -329,6 +329,23 @@ class SharePoolProduct extends AppModel {
 
             )
         ),
+        12 => array(
+            'share_id' => 1489,
+            'share_name' => '黄山头茬野生冬笋',
+            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/f88a0295cd9_1208.jpg',
+            'brand_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_3d6ae69222c0363d52c96236175e1ec2.jpg',
+            'brand_name' => '刘强',
+            'show_brand' => true,
+            'brand_custom_service' => 879158,
+            'published' => 1,
+            'products' => array(
+                '3064' => array(
+                    'price' => 158,
+                    'channel_price' => 125,
+                ),
+
+            )
+        ),
     );
 
 }
