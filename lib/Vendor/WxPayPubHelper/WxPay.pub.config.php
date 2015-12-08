@@ -30,6 +30,7 @@ class WxPayConf_pub
 	//=======【异步通知url设置】===================================
 	//异步通知url，商户根据实际开发过程设定
 	const NOTIFY_URL = WX_NOTIFY_URL;
+    const LOGISTICS_PAY_NOTIFY_URL = WX_LOGISTICS_NOTIFY_URL;
 
 	//=======【curl超时设置】===================================
 	//本例程通过curl使用HTTP POST方法，此处可修改其超时时间，默认为30秒

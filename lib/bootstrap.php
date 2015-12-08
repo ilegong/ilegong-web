@@ -78,6 +78,7 @@ $_display_tags_in_home = array(TAG_ID_CHULIANG, TAG_ID_ROUQIN_DANPIN, TAG_ID_XIN
 $_coupon_could_distribute = array(18483 => '新用户50返10元券', 18482 => '新用户100返20元券');
 
 const LOGISTICS_ORDER_WAIT_PAY_STATUS = 0;
+const LOGISTICS_ORDER_PAID_STATUS = 1;
 
 function is_admin_uid($uid) {
 
