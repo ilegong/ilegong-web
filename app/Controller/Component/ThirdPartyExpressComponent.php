@@ -12,7 +12,7 @@ class ThirdPartyExpressComponent extends Component {
      * 计算快递费用
      */
     public function calculate_rr_logistics_cost($params) {
-        $url = "http://101.251.194.3:8091/delivery/3rd/getFastPrice";
+        $url = "http://openapi.rrkd.cn/v2/getfastprice";
         try {
             $result = $this->curlPost($url, json_encode($params));
             return $result;
@@ -28,7 +28,7 @@ class ThirdPartyExpressComponent extends Component {
      * 确认订单
      */
     public function confirm_rr_order($params) {
-        $url = 'http://101.251.194.3:8091/delivery/3rd/confrmOrder';
+        $url = 'http://openapi.rrkd.cn/v2/addorderfortdd';
         try {
             $result = $this->curlPost($url, json_encode($params));
             return $result;
@@ -45,7 +45,7 @@ class ThirdPartyExpressComponent extends Component {
      */
     //如果自由人已经取件则不能取消
     public function cancel_rr_order($params) {
-        $url = 'http://101.251.194.3:8091/delivery/3rd/cancelOrder';
+        $url = 'http://openapi.rrkd.cn/v2/cancelorder';
         try {
             $result = $this->curlPost($url, json_encode($params));
             return $result;
@@ -67,7 +67,7 @@ class ThirdPartyExpressComponent extends Component {
 //$result ["businessNo"]
 //$result ["orderState"]
 //$result ["orderLogs"] => array()  item => array('type', 'operator', 'description', 'createTime')
-        $url = 'http://101.251.194.3:8091/delivery/3rd/queryOrder';
+        $url = 'http://openapi.rrkd.cn/v2/queryorder';
         try {
             $result = $this->curlPost($url, json_encode($params));
             return $result;
@@ -115,7 +115,7 @@ class ThirdPartyExpressComponent extends Component {
 //$result ["errMsg"]
 //$result ["warn"]
 //$result ["totalPrice"]
-        $url = 'http://101.251.194.3:8091/delivery/3rd/getMultiPrice';
+        $url = 'http://openapi.rrkd.cn/v2/getMultiPrice';
         try {
             $result = $this->curlPost($url, json_encode($params));
             return $result;
@@ -162,7 +162,7 @@ class ThirdPartyExpressComponent extends Component {
 //$result ["price"]
 //$result ["orderNo"]
 //$result ["businessNo"]
-        $url = 'http://101.251.194.3:8091/delivery/3rd/againOrder';
+        $url = 'http://openapi.rrkd.cn/v2/againorder';
         try {
             $result = $this->curlPost($url, json_encode($params));
             //可能遇到乱码问题
@@ -228,7 +228,7 @@ class ThirdPartyExpressComponent extends Component {
 //$result ["parentOrderNo"] //人人快递生成的总订单号
 //$result ["totalPrice"]
 //$result ["priceDetails"] => Array<OrderPriceResult> OrderPriceResult => array("businessNo", "orderNo", "price")
-        $url = 'http://101.251.194.3:8091/delivery/3rd/confirmMultiOrder';
+        $url = 'http://openapi.rrkd.cn/v2/confirmMultiOrder';
         try {
             $result = $this->curlPost($url, json_encode($params));
             //可能遇到乱码问题
@@ -258,7 +258,7 @@ class ThirdPartyExpressComponent extends Component {
 //$result ["parentOrderNo"]
 //$result ["parentBusinessNo"]
 //$result ["childOrders"] Array<ChildOrder> => array('businessNo','orderNo')
-        $url = 'http://101.251.194.3:8091/delivery/3rd/cancelMultiOrder';
+        $url = 'http://openapi.rrkd.cn/v2/cancelMultiOrder';
         try {
             $result = $this->curlPost($url, json_encode($params));
             //可能遇到乱码问题
@@ -288,7 +288,32 @@ class ThirdPartyExpressComponent extends Component {
 //$result ["parentOrderState"]
 //$result ["childOrders"]   Array<ChildOrder> item = array('orderNo', 'businessNo', 'orderState', 'orderLogs' => array('type', 'operator', 'description', 'createTime'))
 
-        $url = 'http://101.251.194.3:8091/delivery/3rd/queryMultiOrder';
+        $url = 'http://openapi.rrkd.cn/v2/queryMultiOrder';
+        try {
+            $result = $this->curlPost($url, json_encode($params));
+            //可能遇到乱码问题
+            //mb_convert_encoding($result, "gb2312", "utf-8");
+            return $result;
+        } catch (Exception $e) {
+            $this->log('curl post error ' . $e->getMessage());
+            return array();
+        }
+    }
+
+    /**
+     * @param $params
+     * @return array|string
+     * 获取接单人的信息
+     */
+    public function get_rr_deliverer($params){
+        /*
+        $params['userName']	        String	是	人人快递分配的第三方平台账号	15100000000
+        $params['orderNo']	        String	否	人人快递产生的订单号	123
+        $params['businessNo']	    String	是	第三方生成的订单号	XXXXXX
+        $params['customerPhone']	String	是	商户手机号	15100000000
+        $params['sign']	            String	是	验证串
+         */
+        $url = 'http://code.rrkd.cn/v2/getorderdeliverer';
         try {
             $result = $this->curlPost($url, json_encode($params));
             //可能遇到乱码问题
@@ -312,7 +337,13 @@ class ThirdPartyExpressComponent extends Component {
      */
     public function curlPost($url, $post_data = array(), $timeout = 5, $header = array()) {
         $header = empty ($header) ? array() : $header;
-        $post_string = $post_data;
+        $header [] = "Content-Type: application/json"; // 指定请求头为application/json 【非常重要】
+        $header [] = "timestamp:" . date('YmdH:i:s'); // 【非常重要】
+        if(is_array($post_data)){
+            $post_string = http_build_query($post_data);
+        }else{
+            $post_string = $post_data;
+        }
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $post_string);

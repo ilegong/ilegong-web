@@ -137,7 +137,7 @@ class LogisticsComponent extends Component {
      * 获取签名
      */
     public function get_sign($keyword) {
-        return strtolower(MD5(RR_LOGISTICS_APP_KEY . strtolower(MD5($keyword))));
+        return strtolower(MD5(RR_LOGISTICS_APP_KEY .MD5(date('YmdH:i:s')). strtolower(MD5($keyword))));
     }
 
     /**

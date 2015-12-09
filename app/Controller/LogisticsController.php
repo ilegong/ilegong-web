@@ -87,7 +87,7 @@ class LogisticsController extends AppController {
         $order_info = $this->get_order_info($order_id);
         $startingAddress = $order_info['Order']['consignee_address'];
         $json_params = $_REQUEST['params'];
-        $params = json_encode($json_params, true);
+        $params = json_decode($json_params, true);
         $sign_keyword = RR_LOGISTICS_USERNAME . $startingAddress . $params ["consigneeAddress"];
         $params['sign'] = $this->Logistics->get_sign($sign_keyword);
         $params['goodsWeight'] = 1;
