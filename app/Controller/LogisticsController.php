@@ -102,13 +102,21 @@ class LogisticsController extends AppController {
     }
 
     /**
-     * 确认生成订单
+     * 确认生成系统订单
      */
     public function confirm_logistics_order() {
         $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        if(empty($uid)){
+            echo json_encode(array('success' => false, 'reason' => 'not_login'));
+            return;
+        }
+        $order_id = $_REQUEST['orderId'];
+        $order_info = $this->get_order_info($order_id);
         $json_params = $_REQUEST['params'];
         $params = json_decode($json_params, true);
-        $result = $this->ThirdPartyExpress->create_logistics_order_from_rr($params);
+        $params['creator'] = $uid;
+        $result = $this->Logistics->create_logistics_order_from_rr($params);
         echo json_encode($result);
         return;
     }
@@ -119,16 +127,6 @@ class LogisticsController extends AppController {
      */
     public function pay_logistics_order($type) {
         //支付订单
-    }
-
-    public function confirm_rr_order() {
-        $json_params = $_REQUEST['params'];
-        $params = json_decode($json_params, true);
-        $sign_key_word = $params['userName'] . $params ["startingAddress"] . $params ["consigneeAddress"];
-        $params['sign'] = $this->Logistics->get_sign($sign_key_word);
-        $result = $this->ThirdPartyExpress->confirm_rr_order($params);
-        echo $result;
-        return;
     }
 
     private function get_order_info($orderId){
