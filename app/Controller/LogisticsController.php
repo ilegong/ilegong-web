@@ -14,7 +14,7 @@ class LogisticsController extends AppController {
 
     public $components = array('ThirdPartyExpress', 'Logistics');
 
-    public $uses = array('Order');
+    public $uses = array('Order', 'Cart');
 
     /**
      * @param $orderId
@@ -107,7 +107,7 @@ class LogisticsController extends AppController {
     public function confirm_logistics_order() {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
-        if(empty($uid)){
+        if (empty($uid)) {
             echo json_encode(array('success' => false, 'reason' => 'not_login'));
             return;
         }
@@ -116,6 +116,14 @@ class LogisticsController extends AppController {
         $json_params = $_REQUEST['params'];
         $params = json_decode($json_params, true);
         $params['creator'] = $uid;
+        $params['goodsName'] = $this->get_order_cart($order_id);
+        $params['goodsWeight'] = 1;
+        $params['goodsWorth'] = intval($order_info['Order']['total_all_price']);
+        $params['startingPhone'] = SERVICE_LINE_PHONE;
+        $params['startingCity'] = '北京';
+        $params['startingAddress'] = $order_info['Order']['consignee_address'];
+        //todo set total price
+        $params['consigneeCity'] = '北京';
         $result = $this->Logistics->create_logistics_order_from_rr($params);
         echo json_encode($result);
         return;
@@ -129,12 +137,26 @@ class LogisticsController extends AppController {
         //支付订单
     }
 
-    private function get_order_info($orderId){
+    private function get_order_info($orderId) {
         $order_info = $this->Order->find('first', array(
             'conditions' => array('id' => $orderId, 'status' => ORDER_STATUS_SHIPPED, 'type' => ORDER_TYPE_WESHARE_BUY),
             'fields' => array('id', 'status', 'consignee_name', 'consignee_id', 'consignee_address', 'consignee_mobilephone', 'member_id', 'total_all_price')
         ));
         return $order_info;
+    }
+
+    private function get_order_cart($orderId) {
+        $carts = $this->Cart->find('all', array(
+            'conditions' => array(
+                'order_id' => $orderId
+            ),
+            'fields' => array('id', 'name', 'num')
+        ));
+        $cart_info = array();
+        foreach ($carts as $cart_item) {
+            $cart_info[] = $cart_item['Cart']['name'] . 'X' . $cart_item['Cart']['num'];
+        }
+        return implode(',', $cart_info);
     }
 
     /**

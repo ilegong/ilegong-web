@@ -53,7 +53,7 @@ class LogisticsComponent extends Component {
             );
             $logistics_order_item = $logisticsOrderItemM->save($logistics_order_item);
             if ($logistics_order_item && !empty($logistics_order_item)) {
-                return array('success' => true, 'logistics_order_id' => $logistics_order);
+                return array('success' => true, 'logistics_order' => $logistics_order);
             }
         }
         return array('success' => false);
