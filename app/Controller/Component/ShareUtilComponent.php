@@ -1663,7 +1663,7 @@ class ShareUtilComponent extends Component {
                     'share_id' => 1510,
                     'share_name' => '精选深海野生中段带鱼 肉美肥厚【包邮】',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/c4c9f3c7bb8_1209.jpg',
-                    'share_price' => '79.8',
+                    'share_price' => '85',
                     'share_user_name' => '小宝妈',
                     'share_vote' => 2000,
                     'share_user_id' => 811917,
