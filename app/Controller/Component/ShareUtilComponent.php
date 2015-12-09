@@ -1803,7 +1803,7 @@ class ShareUtilComponent extends Component {
                 ),
                 '438' => array(
                     'share_id' => 438,
-                    'share_name' => '河南荥阳河阴软籽大石榴',
+                    'share_name' => '河南荥阳河阴软籽大石榴，双十二活动点击有红包',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/9275047528e_1027.jpg',
                     'share_price' => '68',
                     'share_user_name' => '段赵明',
