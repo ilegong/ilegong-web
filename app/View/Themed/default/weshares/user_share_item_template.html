@@ -1,3 +1,6 @@
+{{if $share['Weshare']['type'] == POOL_SHARE_BUY_TYPE && !$is_me}}
+continue;
+{{/if}}
 <div class="media">
     <p class="pull-right">
         <small>{{friendlyDateFromStr($share['Weshare']['created'], FFDATE_CH_MD)}}</small>

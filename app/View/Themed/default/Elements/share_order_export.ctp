@@ -64,4 +64,4 @@ foreach ($orders as $item) {
 
 // close table and output
 $this->PhpExcel->addTableFooter()
-    ->output('Pyshuo.com-' . $exportName . '-' . $this->Time->format(time(), '%Y%m%d%H%M') . '.xls', 'Excel5');
+    ->output($exportName . '-' . $this->Time->format(time(), '%Y%m%d%H%M') . '.xls', 'Excel5');
