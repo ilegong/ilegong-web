@@ -1,0 +1,32 @@
+@charset "utf-8";
+/* CSS Document */
+* { padding: 0; margin: 0; font-family: Helvetica, STHeiti STXihei, Microsoft JhengHei, Microsoft YaHei, Arial;}
+body { min-width: 320px; font-size: 14px; }
+ul li { list-style: none; }
+.fl { float: left; }
+.fr { float: right; }
+.clearfix { zoom: 1; }
+.clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+.radius10 { -moz-border-radius: 0.417em; /* Gecko browsers */ -webkit-border-radius: 0.417em; /* Webkit browsers */ border-radius: 0.417em; /* W3C syntax */ }
+.radius5 { border-radius: 5px; }
+.border_b { border-bottom: 1px #dddddd solid;}
+.gray { color: #999999; }
+/*返回*/
+.classlist { height: 44px; line-height: 44px; width: 100%; text-align: center; color: #ffffff; font-size: 20px; background-color: #29ac0e; position: fixed; top: 0; z-index: 999; overflow: hidden;}
+.classlist a.back { display: block; position: absolute; top: 10px; left: 10px; width: 1.167em; height: 1.133em; background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/pyshuo_icon.png) no-repeat -15.667em -5.333em; background-size: 20em 20em;}
+.classlist a.home{ display: block; position: absolute; top: 10px; right: 10px; width: 1.2em; height: 1.133em; background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/pyshuo_icon.png) no-repeat -17.667em -5.333em; background-size: 20em 20em;}
+
+.share_tuan_pay{ background-color: #ffffff; padding: 10px 0; margin-top: 45px; left: 0; width: 100%; z-index: 5;}
+.share_tuan_pay label{ display: block; float: left; color: #29AC0E; font-size: 16px; font-weight: bold;}
+.share_tuan_pay input{ font-size: 14px; border: 1px #dddddd solid; padding: 8px; line-height: 20px; margin:0 10px; margin-top: 15px;box-shadow: none; outline: none; border-radius: 0; width: 90%; float: left; margin-bottom: 5px;}
+.share_tuan_pay textarea{ font-size: 14px; border: 1px #dddddd solid; padding: 8px; line-height: 20px; margin:0 10px; margin-top: 15px;box-shadow: none; outline: none; border-radius: 0; width: 90%; float: left; margin-bottom: 5px;}
+.share_tuan_pay font{ display: block; text-align: center; color: #ffa200; font-size: 16px; line-height: 35px; padding-bottom: 50px;}
+
+
+
+.cal_ship_fee_btn{left: 0; bottom: 0; width: 100%;}
+.cal_ship_fee_btn a{ width: 50%; line-height: 44px; text-align: center; text-decoration: none; color: #ffffff; font-size: 16px;display: block;}
+
+.starttuan_btn{ position: fixed; left: 0; bottom: 0; width: 100%;}
+.starttuan_btn a{ width: 50%; float: left; display: block; line-height: 44px; text-align: center; text-decoration: none; color: #ffffff; font-size: 16px;}
+

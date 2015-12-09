@@ -14,6 +14,10 @@ class LogisticsController extends AppController {
 
     public $components = array('ThirdPartyExpress', 'Logistics');
 
+    public function rr_logistics() {
+        $this->layout = null;
+    }
+
     /**
      * 取消人人订单
      */
@@ -93,11 +97,11 @@ class LogisticsController extends AppController {
      * @param $type
      * 支付物流订单
      */
-    public function pay_logistics_order($type){
+    public function pay_logistics_order($type) {
         //支付订单
     }
 
-    public function confirm_rr_order(){
+    public function confirm_rr_order() {
         $json_params = $_REQUEST['params'];
         $params = json_decode($json_params, true);
         $sign_key_word = $params['userName'] . $params ["startingAddress"] . $params ["consigneeAddress"];
