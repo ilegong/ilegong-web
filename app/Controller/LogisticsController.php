@@ -76,15 +76,45 @@ class LogisticsController extends AppController {
         return;
     }
 
-    public function rr_logistics_callback(){
+    /**
+     * 人人快递回调接口
+     */
+    public function rr_logistics_callback() {
         $this->autoRender = false;
         $msgType = $_POST['msgType'];
         $orderNo = $_POST['orderNo'];
         $businessNo = $_POST['businessNo'];
-        $createTime = $_POST['createTime'];
         $sign = $_POST['sign'];
-        if($this->valid_rr_sign($sign, $orderNo, $businessNo)){
-
+        if ($this->valid_rr_sign($sign, $orderNo, $businessNo)) {
+            switch ($msgType) {
+                case 1: //接单
+                    $this->handle_rr_receive($businessNo, $orderNo);
+                    break;
+                case 2: //取件
+                    $this->handle_rr_take($businessNo, $orderNo);
+                    break;
+                case 3: //签收
+                    $this->handle_rr_sign($businessNo, $orderNo);
+                    break;
+                case 4: //超时
+                    $this->handle_rr_timeout_cancel($businessNo, $orderNo);
+                    break;
+                case 5: //客服取消订单
+                    $this->handle_rr_cancel_by_rr($businessNo, $orderNo);
+                    break;
+                case 6: //客服取消接单
+                    $this->handle_rr_cancel_receive_by_rr($businessNo, $orderNo);
+                    break;
+                case 7: //客服协助接单
+                    $this->handle_rr_receive_by_rr($businessNo, $orderNo);
+                    break;
+                case 8: //客服协助取件
+                    $this->handle_rr_take_by_rr($businessNo, $orderNo);
+                    break;
+                case 9: //客服协助签收
+                    $this->handle_rr_sign_by_rr($businessNo, $orderNo);
+                    break;
+            }
         }
         echo json_encode(array('success' => false));
         return;
@@ -97,41 +127,50 @@ class LogisticsController extends AppController {
     }
 
 
-    private function handle_rr_receive() {
+    private function handle_rr_receive($business_no, $business_order_id) {
         //人人快递接单 1
+        $this->Logistics->update_logistics_order_status(LOGISTICS_ORDER_RECEIVE, $business_no, $business_order_id);
     }
 
-    private function handle_rr_take() {
+    private function handle_rr_take($business_no, $business_order_id) {
         //人人快递取件 2
+        $this->Logistics->update_logistics_order_status(LOGISTICS_ORDER_TAKE, $business_no, $business_order_id);
     }
 
 
-    private function handle_rr_sign() {
+    private function handle_rr_sign($business_no, $business_order_id) {
         //人人快递签收 3
+        $this->Logistics->update_logistics_order_status(LOGISTICS_ORDER_SIGN, $business_no, $business_order_id);
     }
 
-    private function handle_rr_timeout_cancel() {
+    private function handle_rr_timeout_cancel($business_no, $business_order_id) {
         //人人快递超时取消 4
+        $this->Logistics->update_logistics_order_status(LOGISTICS_ORDER_CANCEL, $business_no, $business_order_id);
     }
 
-    private function handle_rr_cancel_by_rr() {
+    private function handle_rr_cancel_by_rr($business_no, $business_order_id) {
         //取消订单 5
+        $this->Logistics->update_logistics_order_status(LOGISTICS_ORDER_CANCEL, $business_no, $business_order_id);
     }
 
-    private function handle_rr_cancel_receive_by_rr() {
+    private function handle_rr_cancel_receive_by_rr($business_no, $business_order_id) {
         //取消接单 6
+        $this->Logistics->update_logistics_order_status(LOGISTICS_ORDER_CANCEL, $business_no, $business_order_id);
     }
 
-    private function handle_rr_receive_by_rr() {
+    private function handle_rr_receive_by_rr($business_no, $business_order_id) {
         //接单 7
+        $this->Logistics->update_logistics_order_status(LOGISTICS_ORDER_RECEIVE, $business_no, $business_order_id);
     }
 
-    private function handle_rr_take_by_rr() {
+    private function handle_rr_take_by_rr($business_no, $business_order_id) {
         //取件 8
+        $this->Logistics->update_logistics_order_status(LOGISTICS_ORDER_TAKE, $business_no, $business_order_id);
     }
 
-    private function handle_rr_sign_by_rr() {
+    private function handle_rr_sign_by_rr($business_no, $business_order_id) {
         //签收 9
+        $this->Logistics->update_logistics_order_status(LOGISTICS_ORDER_SIGN, $business_no, $business_order_id);
     }
 
 }

@@ -59,10 +59,6 @@ class LogisticsComponent extends Component {
         return array('success' => false);
     }
 
-    public function get_rr_business_no($logistics_order_id) {
-        return 'rr-' . $logistics_order_id . '-' . mktime() . '-' . rand(0, 100);
-    }
-
     public function trigger_confirm_rr_order($logistics_order_id) {
 //$params ["userName"];
 //$params ["businessNo"]; 订单号
@@ -142,5 +138,25 @@ class LogisticsComponent extends Component {
      */
     public function get_sign($keyword) {
         return strtolower(MD5(RR_LOGISTICS_APP_KEY . strtolower(MD5($keyword))));
+    }
+
+    /**
+     * @param $logistics_order_id
+     * @return string
+     * 生成人人快递的订单号
+     */
+    public function get_rr_business_no($logistics_order_id) {
+        return 'rr-' . $logistics_order_id . '-' . mktime() . '-' . rand(0, 100);
+    }
+
+    /**
+     * @param $status
+     * @param $business_no
+     * @param $business_order_id
+     * 更新物流订单状态
+     */
+    public function update_logistics_order_status($status, $business_no, $business_order_id) {
+        $logisticsOrderM = ClassRegistry::init('LogisticsOrder');
+        $logisticsOrderM->update(array('status' => $status), array('business_no' => $business_no, 'business_order_id' => $business_order_id));
     }
 }
