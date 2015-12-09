@@ -81,7 +81,7 @@ const RR_LOGISTICS_CALLBACK = 'www.tongshijia.com/logistics/rr_logistics_callbac
 const RR_LOGISTICS_USERNAME = '13693655401';
 const RR_LOGISTICS_APP_KEY = '5ad9d9600d21bdf6193eeff7a4ba9b99';
 const RR_LOGISTICS_URL = 'http://code.rrkd.cn/v2';
-
+const PYS_PROXY_NAME = '朋友说';
 
 const RR_SINGLE_LOGISTICS_ORDER_TYPE = 0;//人人 单独订单类型
 const RR_MULTI_LOGISTICS_ORDER_TYPE = 1;//人人 拼单类型

@@ -98,12 +98,6 @@ class LogisticsController extends AppController {
         $params['consigneeCity'] = '北京市';
         $params['startingPhone'] = SERVICE_LINE_PHONE;
         $params['userName'] = RR_LOGISTICS_USERNAME;
-//        $params['consigneeProvince'] = '北京市';
-//        $params['startingProvince'] = '北京市';
-//        $params['startingLng'] = '104.06439974915000000000';
-//        $params['startingLat'] = '30.66519340531100000000';
-//        $params['consigneeLng'] = '104.06439974915000000000';
-//        $params['consigneeLat'] = '30.66519340531100000000';
         $result = $this->ThirdPartyExpress->calculate_rr_logistics_cost($params);
         echo $result;
         return;
@@ -121,6 +115,12 @@ class LogisticsController extends AppController {
         }
         $order_id = $_REQUEST['orderId'];
         $order_info = $this->get_order_info($order_id);
+        if(empty($order_info)){
+            echo json_encode(array('success' => false, 'reason' => 'not_order'));
+            return;
+        }
+        $starting_address = $order_info['Order']['consignee_address'];
+        $starting_address = str_replace('，', '', $starting_address);
         $json_params = $_REQUEST['params'];
         $params = json_decode($json_params, true);
         $params['creator'] = $uid;
@@ -129,9 +129,9 @@ class LogisticsController extends AppController {
         $params['goodsWorth'] = intval($order_info['Order']['total_all_price']);
         $params['startingPhone'] = SERVICE_LINE_PHONE;
         $params['startingCity'] = '北京';
-        $params['startingAddress'] = $order_info['Order']['consignee_address'];
-        //todo set total price
+        $params['startingAddress'] = $starting_address;
         $params['consigneeCity'] = '北京';
+        //todo check total price
         $result = $this->Logistics->create_logistics_order_from_rr($params);
         echo json_encode($result);
         return;

@@ -31,7 +31,7 @@
     <div class="clearfix">
         <textarea placeholder="备注" rows="8" id="consignee-remark"></textarea>
     </div>
-    <font>支付金额：￥129.00</font>
+    <font>支付金额：￥<span id="logistics-fee">0</span></font>
 
     <div class="cal_ship_fee_btn">
         <a id="cal-logistics-fee" style="background-color: #29ac0e;">计算费用</a>
@@ -47,11 +47,13 @@
         var $calLogisticsFeeBtn = $('#cal-logistics-fee');
         var $consigneeAddressEl = $('#consignee-address');
         var $consigneeUsernameEl = $('#consignee-username');
-        var $consigneeMobileEl = $('#consignee-mobile');
+        var $consigneeMobileEl = $('#consignee-mobilephone');
         var $consigneeRemark = $('#consignee-remark');
         var $payWithWxBtn = $('#payWithWxBtn');
         var $payWithAliPayBtn = $('#payWithAliPayBtn');
+        var $logisticsFeeEl = $('#logistics-fee');
         var $orderIdEL = $('#order-id');
+        var logisticsFee = 0;
         //计算快递费用
         $calLogisticsFeeBtn.on('click', function (e) {
             e.preventDefault();
@@ -80,29 +82,36 @@
             };
             $.post('/logistics/cal_rr_ship_fee', postData, function (data) {
                 if(data['status'] == 1){
-                    
+                    logisticsFee = data['price'];
                 }else{
                     alert('计算失败，请核对信息后重试！');
+                    logisticsFee = 0;
                 }
+                $logisticsFeeEl.text(logisticsFee);
             }, 'json');
         }
 
         //生成物流订单
         function makeLogisticsOrder(type) {
+            if (logisticsFee == 0) {
+                alert('请先计算快递费用。');
+                return;
+            }
             var logisticsParams = {
                 'consigneeAddress': $consigneeAddressEl.val(),
                 'remark': $consigneeRemark.val(),
                 'order_id': $orderIdEL.val(),
                 'consigneeName': $consigneeUsernameEl.val(),
-                'consigneePhone': $consigneeMobileEl.val()
+                'consigneePhone': $consigneeMobileEl.val(),
+                'total_price': logisticsFee
             };
             var postData = {
-                'order_id': $orderIdEL.val(),
-                'params': JSON.stringify(logisticsParams),
-                'payType': type
+                'orderId': $orderIdEL.val(),
+                'params': JSON.stringify(logisticsParams)
             };
             $.post('/logistics/confirm_logistics_order', postData, function (data) {
                 console.log(data);
+                console.log(type);
             }, 'json');
         }
     });
