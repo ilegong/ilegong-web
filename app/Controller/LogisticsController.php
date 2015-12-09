@@ -14,8 +14,20 @@ class LogisticsController extends AppController {
 
     public $components = array('ThirdPartyExpress', 'Logistics');
 
-    public function rr_logistics() {
+    public $uses = array('Order');
+
+    /**
+     * @param $orderId
+     * 呼叫人人快递
+     */
+    public function rr_logistics($orderId) {
         $this->layout = null;
+        $order_info = $this->get_order_info($orderId);
+        if (empty($order_info)) {
+            $this->redirect('/weshares/index.html');
+            return;
+        }
+        $this->set('order_info', $order_info);
     }
 
     /**
@@ -71,11 +83,19 @@ class LogisticsController extends AppController {
 //$result ["errMsg"]; String
 //$result ["warn"]; String
 //$result ["price"]; Double
-
+        $order_id = $_REQUEST['order_id'];
+        $order_info = $this->get_order_info($order_id);
+        $startingAddress = $order_info['Order']['consignee_address'];
         $json_params = $_REQUEST['params'];
         $params = json_encode($json_params, true);
-        $sign_keyword = $params ["userName"] . $params ["startingAddress"] . $params ["consigneeAddress"];
+        $sign_keyword = RR_LOGISTICS_USERNAME . $startingAddress . $params ["consigneeAddress"];
         $params['sign'] = $this->Logistics->get_sign($sign_keyword);
+        $params['goodsWeight'] = 1;
+        $params['goodsWorth'] = intval($order_info['Order']['total_all_price']);
+        $params['startingAddress'] = $startingAddress;
+        $params['startingCity'] = '北京';
+        $params['consigneeCity'] = '北京';
+        $params['userName'] = RR_LOGISTICS_USERNAME;
         $result = $this->ThirdPartyExpress->calculate_rr_logistics_cost($params);
         echo $result;
         return;
@@ -109,6 +129,14 @@ class LogisticsController extends AppController {
         $result = $this->ThirdPartyExpress->confirm_rr_order($params);
         echo $result;
         return;
+    }
+
+    private function get_order_info($orderId){
+        $order_info = $this->Order->find('first', array(
+            'conditions' => array('id' => $orderId, 'status' => ORDER_STATUS_SHIPPED, 'type' => ORDER_TYPE_WESHARE_BUY),
+            'fields' => array('id', 'status', 'consignee_name', 'consignee_id', 'consignee_address', 'consignee_mobilephone', 'member_id', 'total_all_price')
+        ));
+        return $order_info;
     }
 
     /**

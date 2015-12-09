@@ -17,26 +17,58 @@
     <div class="clearfix" style="padding: 5px 10px 0px 10px;">
         <label>输入联系信息</label>
     </div>
+    <input type="hidden" value="{{$order_info['Order']['id']}}" id="order-id">
+
     <div class="clearfix">
-        <input placeholder="收货地址"/>
+        <input placeholder="收货地址" id="consignee-address"/>
     </div>
     <div class="clearfix">
-        <input placeholder="姓名"/>
+        <input placeholder="姓名" id="consignee-username" value="{{$order_info['Order']['consignee_name']}}"/>
     </div>
     <div class="clearfix">
-        <input placeholder="手机号"/>
+        <input placeholder="手机号" id="consignee-mobilephone" value="{{$order_info['Order']['consignee_mobilephone']}}"/>
     </div>
     <div class="clearfix">
-        <textarea placeholder="备注" rows="8"></textarea>
+        <textarea placeholder="备注" rows="8" id="consignee-remark"></textarea>
     </div>
     <font>支付金额：￥129.00</font>
+
     <div class="cal_ship_fee_btn">
-        <a href="#X" style="background-color: #29ac0e;">微信支付</a>
+        <a id="cal-logistics-fee" style="background-color: #29ac0e;">计算费用</a>
     </div>
     <div class="clearfix starttuan_btn">
         <a href="#X" style="background-color: #29ac0e;">微信支付</a>
         <a href="#X" style="background-color: #ffa200;">支付宝</a>
     </div>
 </div>
+<script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var $calLogisticsFeeBtn = $('#cal-logistics-fee');
+        var $consigneeAddressEl = $('#consignee-address');
+        var $consigneeUsernameEl = $('#consignee-username');
+        var $consigneeMobileEl = $('#consignee-mobile');
+        var $consigneeRemark = $('#consignee-remark');
+        var $orderIdEL = $('#order-id');
+        //计算快递费用
+        $calLogisticsFeeBtn.on('click', function (e) {
+            e.preventDefault();
+            calLogisticsPrice();
+        });
+        //计算快递费用
+        function calLogisticsPrice() {
+            var logisticsParams = {
+                'consigneeAddress': $consigneeAddressEl.val()
+            };
+            var postData = {
+                'order_id': $orderIdEL.val(),
+                'params': JSON.stringify(logisticsParams)
+            };
+            $.post('/logistics/cal_rr_ship_fee', postData, function (data) {
+                console.log(data);
+            }, 'json');
+        }
+    });
+</script>
 </body>
 </html>

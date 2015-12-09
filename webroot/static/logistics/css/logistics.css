@@ -25,7 +25,7 @@ ul li { list-style: none; }
 
 
 .cal_ship_fee_btn{left: 0; bottom: 0; width: 100%;}
-.cal_ship_fee_btn a{ width: 50%; line-height: 44px; text-align: center; text-decoration: none; color: #ffffff; font-size: 16px;display: block;}
+.cal_ship_fee_btn a{ width: 25%; line-height: 44px; text-align: center; text-decoration: none; color: #ffffff; font-size: 16px;display: block;margin-left: 37%;}
 
 .starttuan_btn{ position: fixed; left: 0; bottom: 0; width: 100%;}
 .starttuan_btn a{ width: 50%; float: left; display: block; line-height: 44px; text-align: center; text-decoration: none; color: #ffffff; font-size: 16px;}
