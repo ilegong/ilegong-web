@@ -12,7 +12,7 @@ class ThirdPartyExpressComponent extends Component {
      * 计算快递费用
      */
     public function calculate_rr_logistics_cost($params) {
-        $url = "http://openapi.rrkd.cn/v2/getfastprice";
+        $url = RR_LOGISTICS_URL."/getfastprice";
         try {
             $result = $this->curlPost($url, json_encode($params));
             return $result;
