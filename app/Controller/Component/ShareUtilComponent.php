@@ -2364,7 +2364,7 @@ class ShareUtilComponent extends Component {
                 '1512' => array(
                     'share_id' => 1512,
                     'share_name' => '泉林本色 180g卷筒纸 5提共50卷套装',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/a8d8a9adf87_1209.jpg',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/ff99631a365_1209.jpg',
                     'share_price' => '132',
                     'share_user_name' => '馨聪',
                     'share_vote' => 2000,
