@@ -32,6 +32,7 @@
                             <th>#ID</th>
                             <th>头像</th>
                             <th>昵称</th>
+                            <th>手机号码</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -40,6 +41,7 @@
                             <td valign="middle">{{$user['User']['id']}}</td>
                             <td valign="middle"><img src="{{$user['User']['image']}}" class="img-rounded" style="width: 50px;height: 50px;"></td>
                             <td valign="middle">{{$user['User']['nickname']}}</td>
+                            <td valign="middle">{{$user['User']['mobilephone']}}</td>
                         </tr>
                         {{/loop}}
                         </tbody>

@@ -86,6 +86,7 @@ class LogisticsController extends AppController {
         $order_id = $_REQUEST['order_id'];
         $order_info = $this->get_order_info($order_id);
         $startingAddress = $order_info['Order']['consignee_address'];
+        $startingAddress = str_replace('，', '', $startingAddress);
         $json_params = $_REQUEST['params'];
         $params = json_decode($json_params, true);
         $sign_keyword = RR_LOGISTICS_USERNAME . $startingAddress . $params ["consigneeAddress"];
@@ -93,9 +94,16 @@ class LogisticsController extends AppController {
         $params['goodsWeight'] = 1;
         $params['goodsWorth'] = intval($order_info['Order']['total_all_price']);
         $params['startingAddress'] = $startingAddress;
-        $params['startingCity'] = '北京';
-        $params['consigneeCity'] = '北京';
+        $params['startingCity'] = '北京市';
+        $params['consigneeCity'] = '北京市';
+        $params['startingPhone'] = SERVICE_LINE_PHONE;
         $params['userName'] = RR_LOGISTICS_USERNAME;
+//        $params['consigneeProvince'] = '北京市';
+//        $params['startingProvince'] = '北京市';
+//        $params['startingLng'] = '104.06439974915000000000';
+//        $params['startingLat'] = '30.66519340531100000000';
+//        $params['consigneeLng'] = '104.06439974915000000000';
+//        $params['consigneeLat'] = '30.66519340531100000000';
         $result = $this->ThirdPartyExpress->calculate_rr_logistics_cost($params);
         echo $result;
         return;
@@ -164,10 +172,12 @@ class LogisticsController extends AppController {
      */
     public function rr_logistics_callback() {
         $this->autoRender = false;
-        $msgType = $_POST['msgType'];
-        $orderNo = $_POST['orderNo'];
-        $businessNo = $_POST['businessNo'];
-        $sign = $_POST['sign'];
+        $postStr = file_get_contents('php://input');
+        $result = json_decode($postStr, true);
+        $msgType = $result['msgType'];
+        $orderNo = $result['orderNo'];
+        $businessNo = $result['businessNo'];
+        $sign = $result['sign'];
         if ($this->valid_rr_sign($sign, $orderNo, $businessNo)) {
             switch ($msgType) {
                 case 1: //接单

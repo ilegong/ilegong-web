@@ -71,14 +71,19 @@
         //计算快递费用
         function calLogisticsPrice() {
             var logisticsParams = {
-                'consigneeAddress': $consigneeAddressEl.val()
+                'consigneeAddress': $consigneeAddressEl.val(),
+                'consigneePhone': $consigneeMobileEl.val()
             };
             var postData = {
                 'order_id': $orderIdEL.val(),
                 'params': JSON.stringify(logisticsParams)
             };
             $.post('/logistics/cal_rr_ship_fee', postData, function (data) {
-                console.log(data);
+                if(data['status'] == 1){
+                    
+                }else{
+                    alert('计算失败，请核对信息后重试！');
+                }
             }, 'json');
         }
 
