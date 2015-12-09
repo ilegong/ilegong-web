@@ -283,6 +283,10 @@ class ShareController extends AppController {
             'status' => array(1, 2),
             'settlement' => 0,
         );
+        $share_id = $_REQUEST['share_id'];
+        if (!empty($share_id)) {
+            $cond['id'] = $share_id;
+        }
         $q_c = array(
             'conditions' => $cond,
             'limit' => 500,
