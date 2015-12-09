@@ -1661,7 +1661,7 @@ class ShareUtilComponent extends Component {
                 ),
                 '1510' => array(
                     'share_id' => 1510,
-                    'share_name' => '野生净鱼段带鱼【包邮】',
+                    'share_name' => '精选深海野生中段带鱼 肉美肥厚【包邮】',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/c4c9f3c7bb8_1209.jpg',
                     'share_price' => '79.8',
                     'share_user_name' => '小宝妈',
@@ -2363,7 +2363,7 @@ class ShareUtilComponent extends Component {
                 //泉林的纸
                 '1512' => array(
                     'share_id' => 1512,
-                    'share_name' => '泉林本色纸品【限北京】',
+                    'share_name' => '泉林本色 180g卷筒纸 5提共50卷套装',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/a8d8a9adf87_1209.jpg',
                     'share_price' => '132',
                     'share_user_name' => '馨聪',
