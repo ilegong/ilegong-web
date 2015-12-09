@@ -632,6 +632,9 @@ class WesharesController extends AppController {
         }
     }
 
+    /**
+     * 保存商品的标签
+     */
     public function save_tags() {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
@@ -642,6 +645,9 @@ class WesharesController extends AppController {
         return;
     }
 
+    /**
+     * 获取商品的标签
+     */
     public function get_tags() {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];

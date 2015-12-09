@@ -45,16 +45,6 @@ class ThirdPartyExpressComponent extends Component {
      */
     //如果自由人已经取件则不能取消
     public function cancel_rr_order($params) {
-//$params ["userName"];
-//$params ["businessNo"];
-//$params ["reason"];
-//$params ["sign"]; strtolower ( MD5 ( $appKey . strtolower ( MD5 ( $userName . $businessNo ) ) ) )
-
-//$result ["isSuccess"];
-//$result ["errMsg"];
-//$result ["warn"];
-//$result ["orderNo"];
-//$result ["businessNo"];
         $url = 'http://101.251.194.3:8091/delivery/3rd/cancelOrder';
         try {
             $result = $this->curlPost($url, json_encode($params));

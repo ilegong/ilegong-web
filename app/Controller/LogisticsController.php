@@ -14,7 +14,37 @@ class LogisticsController extends AppController {
 
     public $components = array('ThirdPartyExpress', 'Logistics');
 
+    /**
+     * 取消人人订单
+     */
+    public function cancel_rr_logistics_order() {
+        $this->autoRender = false;
+//$params ["userName"];
+//$params ["businessNo"];
+//$params ["reason"];
+//$params ["sign"]; strtolower ( MD5 ( $appKey . strtolower ( MD5 ( $userName . $businessNo ) ) ) )
+
+//$result ["isSuccess"];
+//$result ["errMsg"];
+//$result ["warn"];
+//$result ["orderNo"];
+//$result ["businessNo"];
+        $params = array();
+        $reason = $_REQUEST['reason'];
+        $businessNo = $_REQUEST['businessNo'];
+        $params['reason'] = $reason;
+        $params['userName'] = RR_LOGISTICS_USERNAME;
+        $params['businessNo'] = $businessNo;
+        $sign_keyword = RR_LOGISTICS_USERNAME . $businessNo;
+        $sign = $this->Logistics->get_sign($sign_keyword);
+        $params['sign'] = $sign;
+        $result = $this->ThirdPartyExpress->cancel_rr_order($params);
+        echo $result;
+        return;
+    }
+
     public function cal_rr_ship_fee() {
+        $this->autoRender = false;
 //$params ["userName"];
 //$params ["goodsWeight"];
 //$params ["goodsWorth"];
@@ -50,7 +80,8 @@ class LogisticsController extends AppController {
     /**
      * 确认生成订单
      */
-    public function confirm_logistics_order(){
+    public function confirm_logistics_order() {
+        $this->autoRender = false;
         $json_params = $_REQUEST['params'];
         $params = json_decode($json_params, true);
         $result = $this->ThirdPartyExpress->create_logistics_order_from_rr($params);
@@ -63,7 +94,7 @@ class LogisticsController extends AppController {
      * 支付物流订单
      */
     public function pay_logistics_order($type){
-
+        //支付订单
     }
 
     public function confirm_rr_order(){
