@@ -1641,7 +1641,7 @@ class ShareUtilComponent extends Component {
             0 => array(
                 '1436' => array(
                     'share_id' => 1436,
-                    'share_name' => '沙窝萝卜--脆绿嫩',
+                    'share_name' => '老舅家的沙窝萝卜--脆绿嫩',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/91ca3f25e0f_1205.jpg',
                     'share_price' => '27',
                     'share_user_name' => '平凡的世界',
@@ -1651,7 +1651,7 @@ class ShareUtilComponent extends Component {
                 ),
                 '1484' => array(
                     'share_id' => 1484,
-                    'share_name' => '俄罗斯野生淡干小海参',
+                    'share_name' => '俄罗斯野生淡干小海参第二团开始了',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/38e770bc1b4_1209.jpg',
                     'share_price' => '399',
                     'share_user_name' => '樱花',
@@ -1660,7 +1660,7 @@ class ShareUtilComponent extends Component {
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
                 ),
                 '1510' => array(
-                    'share_id' => 1506,
+                    'share_id' => 1510,
                     'share_name' => '野生净鱼段带鱼【包邮】',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/c4c9f3c7bb8_1209.jpg',
                     'share_price' => '79.8',
