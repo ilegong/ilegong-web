@@ -12,7 +12,7 @@ App::import('Vendor', 'Location', array('file' => 'Location/Distance/Haversine.p
 
 class TestController extends AppController{
 
-    public $components = array('Weixin', 'WeshareBuy', 'OrderExpress');
+    public $components = array('Weixin', 'WeshareBuy', 'OrderExpress', 'Logistics');
     public $uses = array('Order', 'Oauthbind');
 
 
@@ -132,6 +132,12 @@ class TestController extends AppController{
         $ip = $this->get_ip();
         $result = $this->OrderExpress->get_express_info($code, $ip);
         echo json_encode(array('success' => true, 'result' => $result));
+    }
+
+    public function logistics_test($id){
+        $this->autoRender = false;
+        $this->Logistics->notifyPaidDone($id);
+        echo json_encode(array('success' => true));
     }
 
 }

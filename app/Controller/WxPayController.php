@@ -368,7 +368,7 @@ class WxPayController extends AppController {
                         //todo notify logistics order is pay
                         //trigger paid done event
                         //$this->Weixin->notifyPaidDone($order);
-                        $this->Logistics->notifyPaidDone($order);
+                        $this->Logistics->notifyPaidDone($order['LogisticsOrder']['id']);
                     }
                 }
             }

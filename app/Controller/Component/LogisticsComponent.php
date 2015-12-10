@@ -162,13 +162,14 @@ class LogisticsComponent extends Component {
     }
 
     /**
-     * @param $order
+     * @param $logistics_order_id
      * 物流订单支付成功之后回调
      */
-    public function notifyPaidDone($order){
-        $logistics_order_id = $order['LogisticsOrder']['id'];
+    public function notifyPaidDone($logistics_order_id) {
         //send template msg
         $logisticsOrderM = ClassRegistry::init('LogisticsOrder');
-        $logisticsOrderM->updateAll(array('status' => LOGISTICS_ORDER_PAID_STATUS),array('id' => $logistics_order_id, 'status' => LOGISTICS_ORDER_WAIT_PAY_STATUS));
+        $logisticsOrderM->updateAll(array('status' => LOGISTICS_ORDER_PAID_STATUS), array('id' => $logistics_order_id, 'status' => LOGISTICS_ORDER_WAIT_PAY_STATUS));
+        //trigger call rr logistics api
+        $this->trigger_confirm_rr_order($logistics_order_id);
     }
 }

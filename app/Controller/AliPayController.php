@@ -428,7 +428,7 @@ class AliPayController extends AppController {
                 $total_fee_in_cent, false, '', '', $attach, '', LOGISTICS_ORDER_PAY_TYPE);
             if ($status == PAYNOTIFY_STATUS_ORDER_UPDATED) {
                 //call rr logistics api
-                $this->Logistics->notifyPaidDone($order);
+                $this->Logistics->notifyPaidDone($order['LogisticsOrder']['id']);
             }
             return array($status, $order);
         }
