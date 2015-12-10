@@ -95,6 +95,16 @@ class AliPayController extends AppController {
         }
     }
 
+    public function logistics_order_alipay($order_id){
+        $uid = $this->currentUser['id'];
+        //not login
+        if(empty($uid)){
+            $this->redirect('/users/login?referer=' . Router::url('/logistics/pay_logistics_order/1/' . $order_id));
+            return;
+        }
+        
+    }
+
     public function wap_to_alipay($order_id) {
 
         $from = $_GET['from'];
