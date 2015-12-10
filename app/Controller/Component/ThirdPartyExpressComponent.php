@@ -350,6 +350,7 @@ class ThirdPartyExpressComponent extends Component {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
         curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $header); // 模拟的header头
         $result = curl_exec($ch);
         curl_close($ch);
