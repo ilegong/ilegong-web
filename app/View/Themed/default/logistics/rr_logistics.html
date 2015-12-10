@@ -54,9 +54,15 @@
         var $logisticsFeeEl = $('#logistics-fee');
         var $orderIdEL = $('#order-id');
         var logisticsFee = 0;
+        var processCalShipFee = false;
+        var processConfirmOrder = false;
         //计算快递费用
         $calLogisticsFeeBtn.on('click', function (e) {
             e.preventDefault();
+            if (processCalShipFee) {
+                return;
+            }
+            processCalShipFee = true;
             calLogisticsPrice();
         });
         //微信支付
@@ -81,18 +87,23 @@
                 'params': JSON.stringify(logisticsParams)
             };
             $.post('/logistics/cal_rr_ship_fee', postData, function (data) {
-                if(data['status'] == 1){
+                if (data['status'] == 1) {
                     logisticsFee = data['price'];
-                }else{
+                } else {
                     alert('计算失败，请核对信息后重试！');
                     logisticsFee = 0;
                 }
                 $logisticsFeeEl.text(logisticsFee);
+                processCalShipFee = false;
             }, 'json');
         }
 
         //生成物流订单
         function makeLogisticsOrder(type) {
+            if (processConfirmOrder) {
+                return;
+            }
+            processConfirmOrder = true;
             if (logisticsFee == 0) {
                 alert('请先计算快递费用。');
                 return;
