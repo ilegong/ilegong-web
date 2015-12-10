@@ -28,7 +28,7 @@ class ThirdPartyExpressComponent extends Component {
     public function confirm_rr_order($params) {
         $url = 'http://openapi.rrkd.cn/v2/addorderfortdd';
         try {
-            $result = $this->curlPost($url, json_encode($params));
+            $result = $this->curlPost($url, $params);
             return $result;
         } catch (Exception $e) {
             $this->log('curl post error ' . $e->getMessage());
@@ -337,6 +337,7 @@ class ThirdPartyExpressComponent extends Component {
         $header = empty ($header) ? array() : $header;
         $header [] = "Content-Type: application/json"; // 指定请求头为application/json 【非常重要】
         $header [] = "tstamp:" . date('YmdH:i:s'); // 【非常重要】
+        //$header [] = "timestamp:" . date('YmdH:i:s'); // 【非常重要】
         if (is_array($post_data)) {
             $params['version'] = 2.0;
             $post_string = json_encode($post_data);

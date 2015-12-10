@@ -170,6 +170,6 @@ class LogisticsComponent extends Component {
         $logisticsOrderM = ClassRegistry::init('LogisticsOrder');
         $logisticsOrderM->updateAll(array('status' => LOGISTICS_ORDER_PAID_STATUS), array('id' => $logistics_order_id, 'status' => LOGISTICS_ORDER_WAIT_PAY_STATUS));
         //trigger call rr logistics api
-        $this->trigger_confirm_rr_order($logistics_order_id);
+        return $this->trigger_confirm_rr_order($logistics_order_id);
     }
 }

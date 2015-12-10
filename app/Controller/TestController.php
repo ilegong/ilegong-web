@@ -136,8 +136,8 @@ class TestController extends AppController{
 
     public function logistics_test($id){
         $this->autoRender = false;
-        $this->Logistics->notifyPaidDone($id);
-        echo json_encode(array('success' => true));
+        $result = $this->Logistics->notifyPaidDone($id);
+        echo json_encode(array('success' => true, 'result' => $result));
     }
 
 }
