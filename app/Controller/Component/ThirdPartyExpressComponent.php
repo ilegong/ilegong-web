@@ -336,11 +336,13 @@ class ThirdPartyExpressComponent extends Component {
     public function curlPost($url, $post_data = array(), $timeout = 10, $header = array()) {
         $header = empty ($header) ? array() : $header;
         $header [] = "Content-Type: application/json"; // 指定请求头为application/json 【非常重要】
+        //TODO sae 问题
         $header [] = "timestamp:" . date('YmdH:i:s'); // 【非常重要】
         if (is_array($post_data)) {
             $params['version'] = 2.0;
             $post_string = json_encode($post_data);
         } else {
+            //http_build_query()
             $post_string = $post_data;
         }
         $ch = curl_init();
