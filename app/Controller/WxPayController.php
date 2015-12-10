@@ -8,9 +8,9 @@
  */
 class WxPayController extends AppController {
 
-    public $components = array('WxPayment','Weixin');
+    public $components = array('WxPayment', 'Weixin', 'Logistics');
 
-    var $uses = array('Order', 'PayLog', 'PayNotify');
+    var $uses = array('Order', 'PayLog', 'PayNotify',);
 
     function beforeFilter(){
         parent::beforeFilter();
@@ -368,6 +368,7 @@ class WxPayController extends AppController {
                         //todo notify logistics order is pay
                         //trigger paid done event
                         //$this->Weixin->notifyPaidDone($order);
+                        $this->Logistics->notifyPaidDone($order);
                     }
                 }
             }

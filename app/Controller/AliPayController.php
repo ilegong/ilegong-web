@@ -8,7 +8,7 @@
  */
 class AliPayController extends AppController {
 
-    public $components = array('WxPayment', 'Weixin');
+    public $components = array('WxPayment', 'Weixin', 'Logistics');
 
     const SHORT_URL_STATUS_DONE = 0;
     const SHORT_URL_STATUS_NEW = 1;
@@ -427,7 +427,8 @@ class AliPayController extends AppController {
             list($status, $order) = $this->WxPayment->saveLogisticsNotifyAndUpdateStatus($out_trade_no, $trade_no, TRADE_ALI_TYPE, true, $buyer_email, 0,
                 $total_fee_in_cent, false, '', '', $attach, '', LOGISTICS_ORDER_PAY_TYPE);
             if ($status == PAYNOTIFY_STATUS_ORDER_UPDATED) {
-                //TODO call rr logistics api
+                //call rr logistics api
+                $this->Logistics->notifyPaidDone($order);
             }
             return array($status, $order);
         }
