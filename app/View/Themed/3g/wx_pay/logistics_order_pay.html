@@ -83,7 +83,6 @@
                     WeixinJSBridge.log(res.err_msg);
                     $msg = res.err_msg;
                 }
-
                 if (!not_redirect) {
                     window.location.href = doneUrlPrefix +'?msg='+ encodeURIComponent($msg);
                 }
@@ -108,7 +107,6 @@
             jsApiCall();
         }
     }
-
     $(document).ready(function(){
         callpay();
     });
