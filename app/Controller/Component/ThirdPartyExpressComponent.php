@@ -12,8 +12,7 @@ class ThirdPartyExpressComponent extends Component {
         //http://code.rrkd.cn/v2
         $url = RR_LOGISTICS_URL."/getfastprice";
         try {
-            $params['version'] = 2.0;
-            $result = $this->curlPost($url, json_encode($params));
+            $result = $this->curlPost($url, $params);
             return $result;
         } catch (Exception $e) {
             $this->log('curl post error ' . $e->getMessage());
@@ -339,7 +338,8 @@ class ThirdPartyExpressComponent extends Component {
         $header [] = "Content-Type: application/json"; // 指定请求头为application/json 【非常重要】
         $header [] = "timestamp:" . date('YmdH:i:s'); // 【非常重要】
         if (is_array($post_data)) {
-            $post_string = http_build_query($post_data);
+            $params['version'] = 2.0;
+            $post_string = json_encode($post_data);
         } else {
             $post_string = $post_data;
         }
