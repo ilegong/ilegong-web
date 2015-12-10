@@ -1,0 +1,136 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>{{$pageTitle}}</title>
+    {{$this->Html->css(array('http://'.WX_HOST.'/css/bootstrap_2.css?v1.2'));}}
+    {{$this->Html->script(array('http://libs.baidu.com/jquery/1.9.1/jquery.min.js'));}}
+    <script type="text/javascript">
+        //<![CDATA[
+        // for debugging javascript!
+        (function (window) {
+            window.onerror = function (msg, url, ln) {
+                //transform errors
+                if (typeof(msg) === 'object' && msg.srcElement && msg.target) {
+                    if (msg.srcElement == '[object HTMLScriptElement]' && msg.target == '[object HTMLScriptElement]') {
+                        msg = 'Error loading script';
+                    } else {
+                        msg = 'Event Error - target:' + msg.target + ' srcElement:' + msg.srcElement;
+                    }
+                }
+                msg = msg.toString();
+                //ignore errors
+                if (msg.indexOf("Location.toString") > -1) {
+                    return;
+                }
+                if (msg.indexOf("Error loading script") > -1) {
+                    return;
+                }
+                //report errors
+                window.onerror = function () {
+                };
+                (new Image()).src = "/jserror?msg=" + encodeURIComponent(msg) + "&url=" + encodeURIComponent(url || document.location.toString().replace(/#.*$/, "")) + "&ln=" + parseInt(ln || 0) + "&r=" + (+new Date());
+            };
+        })(window);
+        //]]>
+    </script>
+    {{if $jWeixinOn}}
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    {{/if}}
+</head>
+<body style="background-color: #F5F5F5">
+{{if !noFlash }}
+<div class="container">
+    {{$this->Session->flash()}}
+</div>
+{{/if}}
+<script>
+    //hide footer bar
+    document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+        if (typeof WeixinJSBridge != 'undefined') {
+            WeixinJSBridge.call('hideToolbar');
+        }
+    });
+</script>
+<script type="text/javascript">
+
+    //调用微信JS api 支付
+    function jsApiCall()
+    {
+        var doneUrlPrefix = '{{$paid_done_url}}';
+        WeixinJSBridge.invoke('getBrandWCPayRequest', {{$jsApiParameters}},
+            function(res){
+                var $msg, not_redirect;
+                if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+                    $msg = 'ok';
+                } else if(res.err_msg == "get_brand_wcpay_request:cancel") {
+                    $msg = 'cancel';
+                } else if(res.err_msg == "get_brand_wcpay_request:fail") {
+                    $msg = 'fail';
+                } else if(res.err_msg == "system:access_denied" || res.err_msg == "access_control:not_allow" || res.err_msg == 'getBrandWCPayRequest:fail_invalid appid'){
+                    $msg = 'denied';
+                    utils.alert('<div class="alert-warning">请添加我们客服微信号:pyshuo2015，客服小妹协助完成支付，谢谢您的支持。</div>', function(){
+                        window.location.href = doneUrlPrefix +'?msg='+ encodeURIComponent($msg);
+                    });
+                    not_redirect = true;
+                } else {
+                    WeixinJSBridge.log(res.err_msg);
+                    $msg = res.err_msg;
+                }
+
+                if (!not_redirect) {
+                    window.location.href = doneUrlPrefix +'?msg='+ encodeURIComponent($msg);
+                }
+            });
+    };
+
+    function callpay()
+    {
+        var $this = $(this);
+        if ($this.attr('disabled') == 'disabled') {
+            return;
+        }
+        $this.attr('disabled', 'disabled').addClass('disabled');
+        if (typeof WeixinJSBridge == "undefined"){
+            if( document.addEventListener ){
+                document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+            }else if (document.attachEvent){
+                document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+                document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+            }
+        }else{
+            jsApiCall();
+        }
+    }
+
+    $(document).ready(function(){
+        callpay();
+    });
+</script>
+
+<div class="row">
+    <div class="panel panel-primary">
+        <div class="panel-body">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <span>{{$desc}}</span>
+                </li>
+                <li class="list-group-item">
+                    <span>应付总额:</span>
+                    <span class="text-price fontsize14 pull-right">¥{{$this->Number->precision($totalFee, 2)}}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div align="center">
+        <button type="button" class="btn btn-warning" onclick="callpay()">正在跳转微信支付...</button>
+    </div>
+</div>
+</body>
+</html>

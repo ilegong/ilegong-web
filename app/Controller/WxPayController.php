@@ -164,24 +164,24 @@ class WxPayController extends AppController {
      * 闪送或者第三方物流订单支付
      */
     public function logistics_order_pay($logistics_order_id) {
+        $this->layout = null;
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
             $ref = Router::url($_SERVER['REQUEST_URI']);
             $this->redirect('/users/login.html?force_login=1&auto_weixin=' . $this->is_weixin() . '&referer=' . urlencode($ref));
             return;
         }
-        $error_pay_redirect = '';
-        $paid_done_url = '';
         $this->pageTitle = '微信支付';
         $order = $this->WxPayment->findLogisticsOrderAndCheckStatus($logistics_order_id, $uid);
+        $error_pay_redirect = '/weshares/view/' . $order['LogisticsOrder']['weshare_id'];
+        $paid_done_url = '/weshares/view/' . $order['LogisticsOrder']['weshare_id'];
         list($jsapi_param, $out_trade_no, $desc) = $this->__prepareLogisticsOrderWxPay($error_pay_redirect, $logistics_order_id, $uid, $order);
         $this->set('paid_done_url', $paid_done_url);
         $this->set('jsApiParameters', $jsapi_param);
-        $this->set('totalFee', $order['Logistics']['total_all_price']);
+        $this->set('totalFee', $order['LogisticsOrder']['total_price']);
         $this->set('tradeNo', $out_trade_no);
         $this->set('desc', $desc);
-        $this->set('logisticsOrderId', $logistics_order_id);
-        $this->set('hideNav', true);
+        $this->set('orderId', $logistics_order_id);
     }
 
     /**

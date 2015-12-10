@@ -289,7 +289,7 @@ class WxPaymentComponent extends Component {
             'conditions' => array(
                 'logistics_order_id' => $logistics_order_id
             ),
-            'fields' => array('goods_name')
+            'fields' => array('id', 'goods_name')
         ));
         if (!empty($items)) {
             $itemNames = array_map(function ($val) {
@@ -367,21 +367,30 @@ class WxPaymentComponent extends Component {
      */
     public function findLogisticsOrderAndCheckStatus($logistics_order_id, $uid) {
         $logisticsOrderM = ClassRegistry::init('LogisticsOrder');
-        $order = $logisticsOrderM->find('first', array(
+        $orderM = ClassRegistry::init('Order');
+        $logistics_order = $logisticsOrderM->find('first', array(
             'conditions' => array(
                 'id' => $logistics_order_id,
                 'creator' => $uid
             )
         ));
-        if (empty($order)) {
+        if (empty($logistics_order)) {
             throw new CakeException('wx_pay_order_not_found:' . $logistics_order_id);
-        } else if ($order['LogisticsOrder']['creator'] !== $uid) {
-            throw new CakeException('/?wx_pay_order_id_not_owned=' . $order['LogisticsOrder']['creator'] . '__uid=' . $uid);
+        } else if ($logistics_order['LogisticsOrder']['creator'] !== $uid) {
+            throw new CakeException('/?wx_pay_order_id_not_owned=' . $logistics_order['LogisticsOrder']['creator'] . '__uid=' . $uid);
         }
-        if ($order['LogisticsOrder']['status'] != LOGISTICS_ORDER_WAIT_PAY_STATUS || $order['LogisticsOrder']['deleted'] == DELETED_YES) {
-            throw new CakeException('/?wx_pay_order_status_incorrect=' . $order['LogisticsOrder']['creator'] . '__uid=' . $uid);
+        if ($logistics_order['LogisticsOrder']['status'] != LOGISTICS_ORDER_WAIT_PAY_STATUS || $logistics_order['LogisticsOrder']['deleted'] == DELETED_YES) {
+            throw new CakeException('/?wx_pay_order_status_incorrect=' . $logistics_order['LogisticsOrder']['creator'] . '__uid=' . $uid);
         }
-        return $order;
+        $goods_order = $orderM->find('first', array(
+            'conditions' => array(
+                'id' => $logistics_order['LogisticsOrder']['order_id'],
+                'type' => ORDER_TYPE_WESHARE_BUY
+            ),
+            'fields' => array('id', 'member_id')
+        ));
+        $logistics_order['LogisticsOrder']['weshare_id'] = $goods_order['Order']['member_id'];
+        return $logistics_order;
     }
 
     /**
