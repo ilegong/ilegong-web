@@ -255,7 +255,7 @@ class SharePoolProduct extends AppModel {
             'products' => array(
                 '2950' => array(
                     'price' => 40,//红薯家庭装
-                    'channel_price' => 27,
+                    'channel_price' => 37,
                 ),
                 '2953' => array(
                     'price' => 70,//紫薯家庭
