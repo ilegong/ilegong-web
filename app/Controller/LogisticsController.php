@@ -146,7 +146,7 @@ class LogisticsController extends AppController {
     public function pay_logistics_order($type, $orderId) {
         if($type == 0){
             //微信支付订单
-            $this->redirect('/wxPay/logistics_order_pay/'.$orderId);
+            $this->redirect('/wxPay/jsApiPay/'.$orderId.'?action=logistics');
             return;
         }
         if($type == 1){

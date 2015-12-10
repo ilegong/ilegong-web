@@ -66,6 +66,7 @@
         var doneUrlPrefix = '{{$paid_done_url}}';
         WeixinJSBridge.invoke('getBrandWCPayRequest', {{$jsApiParameters}},
             function(res){
+                alert(JSON.stringify(res));
                 var $msg, not_redirect;
                 if(res.err_msg == "get_brand_wcpay_request:ok" ) {
                     $msg = 'ok';

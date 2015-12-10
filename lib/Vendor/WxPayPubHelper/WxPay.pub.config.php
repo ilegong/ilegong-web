@@ -20,7 +20,7 @@ class WxPayConf_pub
 	const JS_API_CALL_URL = WX_JS_API_CALL_URL;
 
     //
-    const WX_JS_LOGISTICS_API_CALL_URL =  WX_JS_LOGISTICS_API_CALL_URL;
+    const JS_LOGISTICS_API_CALL_URL =  WX_JS_LOGISTICS_API_CALL_URL;
 	
 	//=======【证书路径设置】=====================================
 	//证书路径,注意应该填写绝对路径

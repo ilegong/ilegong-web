@@ -134,6 +134,12 @@ class WxPayController extends AppController {
             return;
         }
 
+        if($_GET['action'] == 'logistics'){
+            $this->logistics_order_pay($orderId);
+            $this->__viewFileName = 'logistics_order_pay';
+            return;
+        }
+
         $uid = $this->currentUser['id'];
         $error_pay_redirect = '/orders/detail/' . $orderId . '/pay';
         $paid_done_url = '/orders/detail/'.$orderId.'/paid';
@@ -205,7 +211,7 @@ class WxPayController extends AppController {
             //通过code获得openid
             if (!isset($_GET['code'])) {
                 //触发微信返回code码
-                $url = $jsApi->createOauthUrlForCode(WxPayConf_pub::WX_JS_LOGISTICS_API_CALL_URL . '/' . $logistics_order_id . '?showwxpaytitle=1');
+                $url = $jsApi->createOauthUrlForCode(WxPayConf_pub::JS_API_CALL_URL . '/' . $logistics_order_id . '?showwxpaytitle=1');
                 Header("Location: $url");
                 exit();   //cannot use return!!!
             } else {
