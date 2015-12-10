@@ -219,12 +219,12 @@ class WxPayController extends AppController {
         $trade_type = TRADE_WX_API_TYPE;
         $totalFee = intval(intval($logistics_order['LogisticsOrder']['total_price'] * 1000) / 10);
         //生成交易单号
-        $out_trade_no = $this->WxPayment->out_trade_no(WX_APPID_SOURCE, $logistics_order_id);
+        $out_trade_no = $this->WxPayment->logistics_out_trade_no(WX_APPID_SOURCE, $logistics_order_id);
         //=========步骤2：使用统一支付接口，获取prepay_id============
         $prepay_id = $this->getPrePayLogisticsIdFromWx($openid, $body, $out_trade_no, $totalFee);
         if (!$prepay_id) {
             $this->log("Re generate prepay id for logistics order:" . $logistics_order_id);
-            $out_trade_no = $this->WxPayment->out_trade_no(WX_APPID_SOURCE, $logistics_order_id);
+            $out_trade_no = $this->WxPayment->logistics_out_trade_no(WX_APPID_SOURCE, $logistics_order_id);
             $prepay_id = $this->getPrePayLogisticsIdFromWx($openid, $body, $out_trade_no, $totalFee);
         }
         if ($prepay_id) {

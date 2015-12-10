@@ -26,9 +26,9 @@ class WxPaymentComponent extends Component {
         return $source."-$orderId-".mktime().'-'.rand(0, 100);
     }
 
-//    public function logistics_out_trade_no($source, $orderId){
-//        return $source."-$orderId-".mktime().'-'.rand(0, 100);
-//    }
+    public function logistics_out_trade_no($source, $orderId){
+        return $source."-rr-"."-$orderId-".mktime().'-'.rand(0, 100);
+    }
 
     public function goToAliPayForm($order_id, $uid) {
         App::import('Vendor', 'ali_direct_pay/AliPay');
