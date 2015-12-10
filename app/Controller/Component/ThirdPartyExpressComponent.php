@@ -333,7 +333,7 @@ class ThirdPartyExpressComponent extends Component {
      * @param array $header 头信息
      * @return string $result 响应结果
      */
-    public function curlPost($url, $post_data = array(), $timeout = 5, $header = array()) {
+    public function curlPost($url, $post_data, $timeout = 5, $header) {
         $header = empty ($header) ? array() : $header;
         $header [] = "Content-Type: application/json"; // 指定请求头为application/json 【非常重要】
         $header [] = "timestamp:" . date('YmdH:i:s'); // 【非常重要】
