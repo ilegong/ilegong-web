@@ -119,6 +119,7 @@ class LogisticsController extends AppController {
             echo json_encode(array('success' => false, 'reason' => 'not_order'));
             return;
         }
+        //todo check order has call rr logistics
         $starting_address = $order_info['Order']['consignee_address'];
         $starting_address = str_replace('，', '', $starting_address);
         $json_params = $_REQUEST['params'];
@@ -139,10 +140,19 @@ class LogisticsController extends AppController {
 
     /**
      * @param $type
+     * @param $orderId
      * 支付物流订单
      */
-    public function pay_logistics_order($type) {
-        //支付订单
+    public function pay_logistics_order($type, $orderId) {
+        if($type == 0){
+            //微信支付订单
+            $this->redirect('/wxPay/logistics_order_pay/'.$orderId);
+            return;
+        }
+        if($type == 1){
+            //支付宝支付
+            return;
+        }
     }
 
     private function get_order_info($orderId) {
