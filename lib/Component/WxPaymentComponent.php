@@ -55,6 +55,12 @@ class WxPaymentComponent extends Component {
         return $this->api_form($order_id, $uid, $ali, $type);
     }
 
+    public function wap_logisticsGoToAliPayForm($order_id, $uid, $type = ALI_PAY_TYPE_WAP){
+        App::import('Vendor', 'ali_wap_pay/AliWapPay');
+        $ali = new AliWapPay();
+        return $this->logistics_api_form($order_id, $uid, $ali, $type);
+    }
+
     public function wap_notify() {
         App::import('Vendor', 'ali_wap_pay/AliWapPay');
         $ali = new AliWapPay();
@@ -397,6 +403,7 @@ class WxPaymentComponent extends Component {
      * @param $order_id
      * @param $uid
      * @param $ali
+     * @param $type
      * @return mixed
      */
     protected function api_form($order_id, $uid, $ali, $type) {
@@ -408,6 +415,24 @@ class WxPaymentComponent extends Component {
         $out_trade_no = $this->out_trade_no(TRADE_ALI_TYPE, $order_id);
         $this->savePayLog($order_id, $out_trade_no, $body, TRADE_ALI_TYPE, $totalFee * 100, '', '');
         return $ali->api_form($out_trade_no, $order_id, $subject, $totalFee, $body, $type);
+    }
+
+    /**
+     * @param $order_id
+     * @param $uid
+     * @param $ali
+     * @param $type
+     * @return mixed
+     * 生成物流订单的支付
+     */
+    protected function logistics_api_form($order_id, $uid, $ali, $type) {
+        $order = $this->findLogisticsOrderAndCheckStatus($order_id, $uid);
+        $share_id = $order['LogisticsOrder']['weshare_id'];
+        $totalFee = $order['LogisticsOrder']['total_price'];
+        list($subject, $body) = $this->getLogisticsDesc($order_id);
+        $out_trade_no = $this->logistics_out_trade_no(TRADE_ALI_TYPE, $order_id);
+        $this->saveLogisticsPayLog($order_id, $out_trade_no, $body, TRADE_ALI_TYPE, $totalFee * 100, '', '', LOGISTICS_ORDER_PAY_TYPE);
+        return $ali->logistics_api_form($out_trade_no, $subject, $totalFee, $type, $share_id);
     }
 
 } 

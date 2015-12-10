@@ -4,6 +4,9 @@
 
 ---pay notify table add type
 
+ALTER TABLE `cake_alipay_cache_forms`
+ADD COLUMN `type` INT NOT NULL DEFAULT 0 AFTER `order_id`;
+
 --- logistics orders
 CREATE TABLE `cake_logistics_orders` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

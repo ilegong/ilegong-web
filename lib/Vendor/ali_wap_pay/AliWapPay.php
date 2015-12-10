@@ -82,6 +82,58 @@ class AliWapPay extends Object {
         return $alipayNotify->verifyReturn();
     }
 
+    public function & logistics_api_form($out_trade_no, $subject, $total_fee, $type = ALI_PAY_TYPE_WAP, $share_id) {
+        $format = "xml";
+        $v = "2.0";
+        //请求号，需要保证每次都是唯一
+        $req_id = date('Ymdhis').'-'.$out_trade_no;
+        $seller_email = ALI_ACCOUNT;
+
+        $merchant_url = $this->alipay_config['transport'].'://'. ALI_HOST."/weshares/view/$share_id.html?from=zhifubaopay";
+        //需http://格式的完整路径，不能加?id=123这类自定义参数
+        $notify_url = 'http://'.ALI_HOST.'/ali_pay/logistics_wap_notify.html';
+        $call_back_url = 'http://'.ALI_HOST.'/ali_pay/logistics_return_back'.($type == ALI_PAY_TYPE_WAPAPP?'_app':'').'.html';
+
+        //请求业务参数详细
+        $req_data = '<direct_trade_create_req><notify_url>' . $notify_url . '</notify_url><call_back_url>' . $call_back_url . '</call_back_url><seller_account_name>' . $seller_email . '</seller_account_name><out_trade_no>' . $out_trade_no . '</out_trade_no><subject>' . $subject . '</subject><total_fee>' . $total_fee . '</total_fee><merchant_url>' . $merchant_url . '</merchant_url></direct_trade_create_req>';
+
+        /************************************************************/
+        $para_token = array(
+            "service" => "alipay.wap.trade.create.direct",
+            "partner" => trim($this->alipay_config['partner']),
+            "sec_id" => trim($this->alipay_config['sign_type']),
+            "format"	=> $format,
+            "v"	=> $v,
+            "req_id"	=> $req_id,
+            "req_data"	=> $req_data,
+            "_input_charset" => trim(strtolower($this->alipay_config['input_charset']))
+        );
+
+        $alipaySubmit = new AlipaySubmit($this->alipay_config);
+        $html_text = $alipaySubmit->buildRequestHttp($para_token);
+        $html_text = urldecode($html_text);
+
+        $para_html_text = $alipaySubmit->parseResponse($html_text);
+
+        $request_token = $para_html_text['request_token'];
+
+        /**************************根据授权码token调用交易接口alipay.wap.auth.authAndExecute**************************/
+        $req_data = '<auth_and_execute_req><request_token>' . $request_token . '</request_token></auth_and_execute_req>';
+        $parameter = array(
+            "service" => "alipay.wap.auth.authAndExecute",
+            "partner" => trim($this->alipay_config['partner']),
+            "sec_id" => trim($this->alipay_config['sign_type']),
+            "format"	=> $format,
+            "v"	=> $v,
+            "req_id"	=> $req_id,
+            "req_data"	=> $req_data,
+            "_input_charset"	=> trim(strtolower($this->alipay_config['input_charset']))
+        );
+
+        $alipaySubmit = new AlipaySubmit($this->alipay_config);
+        return $alipaySubmit->buildRequestForm($parameter, 'get', __('正在跳转到支付宝...'));
+    }
+
     public function & api_form($out_trade_no, $order_id, $subject, $total_fee, $body, $type = ALI_PAY_TYPE_WAP) {
         $format = "xml";
         $v = "2.0";

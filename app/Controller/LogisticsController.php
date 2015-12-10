@@ -151,6 +151,7 @@ class LogisticsController extends AppController {
         }
         if($type == 1){
             //支付宝支付
+            $this->redirect('/ali_pay/wap_to_alipay/' . $orderId . '?action=logistics');
             return;
         }
     }
