@@ -45,7 +45,7 @@ class ThirdPartyExpressComponent extends Component {
     public function cancel_rr_order($params) {
         $url = 'http://openapi.rrkd.cn/v2/cancelorder';
         try {
-            $result = $this->curlPost($url, json_encode($params));
+            $result = $this->curlPost($url, $params);
             return $result;
         } catch (Exception $e) {
             $this->log('curl post error ' . $e->getMessage());
@@ -67,7 +67,7 @@ class ThirdPartyExpressComponent extends Component {
 //$result ["orderLogs"] => array()  item => array('type', 'operator', 'description', 'createTime')
         $url = 'http://openapi.rrkd.cn/v2/queryorder';
         try {
-            $result = $this->curlPost($url, json_encode($params));
+            $result = $this->curlPost($url, $params);
             return $result;
         } catch (Exception $e) {
             $this->log('curl post error ' . $e->getMessage());
@@ -115,7 +115,7 @@ class ThirdPartyExpressComponent extends Component {
 //$result ["totalPrice"]
         $url = 'http://openapi.rrkd.cn/v2/getMultiPrice';
         try {
-            $result = $this->curlPost($url, json_encode($params));
+            $result = $this->curlPost($url, $params);
             return $result;
         } catch (Exception $e) {
             $this->log('curl post error ' . $e->getMessage());
@@ -162,7 +162,7 @@ class ThirdPartyExpressComponent extends Component {
 //$result ["businessNo"]
         $url = 'http://openapi.rrkd.cn/v2/againorder';
         try {
-            $result = $this->curlPost($url, json_encode($params));
+            $result = $this->curlPost($url, $params);
             //可能遇到乱码问题
             //mb_convert_encoding($result, "gb2312", "utf-8");
             return $result;
@@ -228,7 +228,7 @@ class ThirdPartyExpressComponent extends Component {
 //$result ["priceDetails"] => Array<OrderPriceResult> OrderPriceResult => array("businessNo", "orderNo", "price")
         $url = 'http://openapi.rrkd.cn/v2/confirmMultiOrder';
         try {
-            $result = $this->curlPost($url, json_encode($params));
+            $result = $this->curlPost($url, $params);
             //可能遇到乱码问题
             //mb_convert_encoding($result, "gb2312", "utf-8");
             return $result;
@@ -258,7 +258,7 @@ class ThirdPartyExpressComponent extends Component {
 //$result ["childOrders"] Array<ChildOrder> => array('businessNo','orderNo')
         $url = 'http://openapi.rrkd.cn/v2/cancelMultiOrder';
         try {
-            $result = $this->curlPost($url, json_encode($params));
+            $result = $this->curlPost($url, $params);
             //可能遇到乱码问题
             //mb_convert_encoding($result, "gb2312", "utf-8");
             return $result;
@@ -288,7 +288,7 @@ class ThirdPartyExpressComponent extends Component {
 
         $url = 'http://openapi.rrkd.cn/v2/queryMultiOrder';
         try {
-            $result = $this->curlPost($url, json_encode($params));
+            $result = $this->curlPost($url, $params);
             //可能遇到乱码问题
             //mb_convert_encoding($result, "gb2312", "utf-8");
             return $result;
@@ -313,7 +313,7 @@ class ThirdPartyExpressComponent extends Component {
          */
         $url = 'http://code.rrkd.cn/v2/getorderdeliverer';
         try {
-            $result = $this->curlPost($url, json_encode($params));
+            $result = $this->curlPost($url, $params);
             //可能遇到乱码问题
             //mb_convert_encoding($result, "gb2312", "utf-8");
             return $result;
