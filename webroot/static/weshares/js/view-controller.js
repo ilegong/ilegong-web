@@ -1422,7 +1422,16 @@
     }
 
     function handleCallLogistics(order){
+      var orderId = order['id'];
+      //订单已经叫过快递
+      if(vm.logisticsOrderData[orderId]){
+        var logisticsOrder = vm.logisticsOrderData[orderId];
+        if(logisticsOrder['status'] == 5){
 
+          return;
+        }
+      }
+      window.location.href='/logistics/rr_logistics/'+orderId;
     }
 
     function getLogisticsBtnText(order){

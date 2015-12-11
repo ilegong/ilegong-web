@@ -60,40 +60,8 @@ class LogisticsComponent extends Component {
         return array('success' => false);
     }
 
-    public function trigger_confirm_rr_order($logistics_order_id) {
-//$params ["userName"];
-//$params ["businessNo"]; 订单号
-//$params ["goodsName"];
-//$params ["goodsWeight"];
-//$params ["goodsWorth"];
-//$params ["mapFrom"]; op
-//$params ["startingName"];
-//$params ["startingPhone"];
-//$params ["startingProvince"]; op 仅直辖市和特别行政区可以为空
-//$params ["startingCity"];
-//$params ["startingAddress"];
-//$params ["startingLng"]; op
-//$params ["startingLat"]; op
-//$params ["consigneeName"];
-//$params ["consigneePhone"];
-//$params ["consigneeProvince"]; op 仅直辖市和特别行政区可以为空
-//$params ["consigneeCity"];
-//$params ["consigneeAddress"];
-//$params ["consigneeLng"];
-//$params ["consigneeLat"];
-//$params ["serviceFees"];
-//$params ["pickupTime"]; op
-//$params ["remark"]; op
-//$params ["callbackUrl"];
-//$params ["sign"]; strtolower ( MD5 ( $appKey . strtolower ( MD5 ( $userName . $startingAddress . $consigneeAddress ) ) ) );
 
-//$result ["isSuccess"];
-//$result ["errMsg"];
-//$result ["warn"];
-//$result ["price"];
-//$result ["orderNo"];
-//$result ["businessNo"];
-
+    private function prepare_rr_order_params($logistics_order_id){
         $logisticsOrderM = ClassRegistry::init('LogisticsOrder');
         $logisticsOrderItemM = ClassRegistry::init('LogisticsOrderItem');
         $logistics_order = $logisticsOrderM->find('first', array(
@@ -127,7 +95,50 @@ class LogisticsComponent extends Component {
             'callbackUrl' => RR_LOGISTICS_CALLBACK,
             'sign' => $sign,
         );
+        return $post_params;
+    }
 
+    public function re_confirm_rr_order($logistics_order_id){
+        $post_params = $this->prepare_rr_order_params($logistics_order_id);
+        $result = $this->ThirdPartyExpress->re_confirm_rr_order($post_params);
+        $result = json_decode($result, true);
+        return $result;
+    }
+
+    public function trigger_confirm_rr_order($logistics_order_id) {
+//$params ["userName"];
+//$params ["businessNo"]; 订单号
+//$params ["goodsName"];
+//$params ["goodsWeight"];
+//$params ["goodsWorth"];
+//$params ["mapFrom"]; op
+//$params ["startingName"];
+//$params ["startingPhone"];
+//$params ["startingProvince"]; op 仅直辖市和特别行政区可以为空
+//$params ["startingCity"];
+//$params ["startingAddress"];
+//$params ["startingLng"]; op
+//$params ["startingLat"]; op
+//$params ["consigneeName"];
+//$params ["consigneePhone"];
+//$params ["consigneeProvince"]; op 仅直辖市和特别行政区可以为空
+//$params ["consigneeCity"];
+//$params ["consigneeAddress"];
+//$params ["consigneeLng"];
+//$params ["consigneeLat"];
+//$params ["serviceFees"];
+//$params ["pickupTime"]; op
+//$params ["remark"]; op
+//$params ["callbackUrl"];
+//$params ["sign"]; strtolower ( MD5 ( $appKey . strtolower ( MD5 ( $userName . $startingAddress . $consigneeAddress ) ) ) );
+
+//$result ["isSuccess"];
+//$result ["errMsg"];
+//$result ["warn"];
+//$result ["price"];
+//$result ["orderNo"];
+//$result ["businessNo"];
+        $post_params = $this->prepare_rr_order_params($logistics_order_id);
         $result = $this->ThirdPartyExpress->confirm_rr_order($post_params);
         return $result;
     }
@@ -158,7 +169,7 @@ class LogisticsComponent extends Component {
      */
     public function update_logistics_order_status($status, $business_no, $business_order_id) {
         $logisticsOrderM = ClassRegistry::init('LogisticsOrder');
-        $logisticsOrderM->update(array('status' => $status), array('business_no' => $business_no, 'business_order_id' => $business_order_id));
+        $logisticsOrderM->update(array('status' => $status, 'update' => "'" . date('Y-m-d H:i:s') . "'"), array('business_no' => $business_no, 'business_order_id' => $business_order_id));
     }
 
     /**

@@ -163,6 +163,17 @@ class LogisticsController extends AppController {
     }
 
     /**
+     * @param $logistics_order_id
+     * 订单取消之后重新呼叫
+     */
+    public function re_confirm_rr_logistics_order($logistics_order_id) {
+        $this->autoRender = false;
+        $result = $this->Logistics->re_confirm_rr_order($logistics_order_id);
+        echo json_encode($result);
+        return;
+    }
+
+    /**
      * @param $type
      * @param $orderId
      * 支付物流订单
