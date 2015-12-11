@@ -200,7 +200,7 @@ class LogisticsComponent extends Component {
         $this->log('logistics order paid notify paid done');
         //send template msg
         $logisticsOrderM = ClassRegistry::init('LogisticsOrder');
-        $updateData = array('status' => LOGISTICS_ORDER_PAID_STATUS);
+        $updateData = array('status' => LOGISTICS_ORDER_PAID_STATUS, 'update' => "'" . date('Y-m-d H:i:s') . "'");
         //trigger call rr logistics api
         $result_str = $this->trigger_confirm_rr_order($logistics_order_id);
         $result = json_decode($result_str, true);
@@ -212,7 +212,7 @@ class LogisticsComponent extends Component {
         } else {
             $this->log('auto call rr logistics fail reason ' . $result_str);
         }
-        $logisticsOrderM->updateAll($updateData, array('id' => $logistics_order_id, 'status' => LOGISTICS_ORDER_WAIT_PAY_STATUS));
+        $logisticsOrderM->updateAll($updateData, array('id' => $logistics_order_id));
         return $result;
     }
 }
