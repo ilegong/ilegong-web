@@ -1426,15 +1426,15 @@
       //订单已经叫过快递
       if (vm.logisticsOrderData[orderId]) {
         var logisticsOrder = vm.logisticsOrderData[orderId];
-        if (logisticsOrder['status'] == 5) {
+        if (logisticsOrder['status'] == 5 || (logisticsOrder['status'] == 1 && !logisticsOrder['business_order_id'])) {
           var logisticsOrderId = logisticsOrder['id'];
           $http.get('/logistics/re_confirm_rr_logistics_order/' + logisticsOrderId).success(function (data) {
-            if(data['status']==1){
+            if (data['status'] == 1) {
               vm.logisticsOrderData[orderId]['status'] = 1;
-            }else{
+            } else {
               alert(data['msg']);
             }
-          }).error(function(){
+          }).error(function () {
             alert('呼叫失败，请联系客服。');
           });
           return;
@@ -1443,24 +1443,27 @@
       window.location.href = '/logistics/rr_logistics/' + orderId;
     }
 
-    function getLogisticsBtnText(order){
+    function getLogisticsBtnText(order) {
       var orderId = order['id'];
       //订单已经叫过快递
-      if(vm.logisticsOrderData[orderId]){
+      if (vm.logisticsOrderData[orderId]) {
         var logisticsOrder = vm.logisticsOrderData[orderId];
-        if(logisticsOrder['status'] == 1){
-          return '待接单';
+        if (logisticsOrder['status'] == 1) {
+          if (logisticsOrder['business_order_id']) {
+            return '待接单';
+          }
+          return '重新叫快递';
         }
-        if(logisticsOrder['status'] == 2){
+        if (logisticsOrder['status'] == 2) {
           return '已接单';
         }
-        if(logisticsOrder['status'] == 3){
+        if (logisticsOrder['status'] == 3) {
           return '已取货';
         }
-        if(logisticsOrder['status'] == 4){
+        if (logisticsOrder['status'] == 4) {
           return '已签收';
         }
-        if(logisticsOrder['status'] == 5){
+        if (logisticsOrder['status'] == 5) {
           return '重新叫快递';
         }
       }
