@@ -108,9 +108,10 @@ class LogisticsComponent extends Component {
         ));
         $sign_keyword = RR_LOGISTICS_USERNAME . $logistics_order['LogisticsOrder']['starting_address'] . $logistics_order_item['LogisticsOrderItem']['consignee_address'];
         $sign = $this->get_sign($sign_keyword);
+        $business_no = $this->get_rr_business_no($logistics_order['LogisticsOrder']['id']);
         $post_params = array(
             'userName' => RR_LOGISTICS_USERNAME,
-            'businessNo' => '',
+            'businessNo' => $business_no,
             'goodsName' => $logistics_order_item['LogisticsOrderItem']['goods_name'],
             'goodsWeight' => $logistics_order_item['LogisticsOrderItem']['goods_weight'],
             'goodsWorth' => $logistics_order_item['LogisticsOrderItem']['goods_worth'],
@@ -122,10 +123,9 @@ class LogisticsComponent extends Component {
             'consigneePhone' => $logistics_order_item['LogisticsOrderItem']['consignee_phone'],
             'consigneeCity' => $logistics_order_item['LogisticsOrderItem']['consignee_city'],
             'consigneeAddress' => $logistics_order_item['LogisticsOrderItem']['consignee_address'],
-            'serviceFees' => 0,
             'remark' => $logistics_order_item['LogisticsOrderItem']['remark'],
             'callbackUrl' => RR_LOGISTICS_CALLBACK,
-            'sign' => $sign
+            'sign' => $sign,
         );
 
         $result = $this->ThirdPartyExpress->confirm_rr_order($post_params);

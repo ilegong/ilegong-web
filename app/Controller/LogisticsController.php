@@ -220,7 +220,7 @@ class LogisticsController extends AppController {
                     break;
             }
         }
-        echo json_encode(array('success' => false));
+        echo 'success';
         return;
     }
 

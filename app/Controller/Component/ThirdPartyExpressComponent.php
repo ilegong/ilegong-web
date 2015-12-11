@@ -10,7 +10,7 @@ class ThirdPartyExpressComponent extends Component {
      */
     public function calculate_rr_logistics_cost($params) {
         //http://code.rrkd.cn/v2
-        $url = RR_LOGISTICS_URL."/getfastprice";
+        $url = RR_LOGISTICS_URL . "/getfastprice";
         try {
             $result = $this->curlPost($url, $params);
             return $result;
@@ -26,7 +26,7 @@ class ThirdPartyExpressComponent extends Component {
      * 确认订单
      */
     public function confirm_rr_order($params) {
-        $url = 'http://openapi.rrkd.cn/v2/addorderfortdd';
+        $url = RR_LOGISTICS_URL . '/addorderfortdd';
         try {
             $result = $this->curlPost($url, $params);
             return $result;
@@ -43,7 +43,7 @@ class ThirdPartyExpressComponent extends Component {
      */
     //如果自由人已经取件则不能取消
     public function cancel_rr_order($params) {
-        $url = 'http://openapi.rrkd.cn/v2/cancelorder';
+        $url = RR_LOGISTICS_URL . '/cancelorder';
         try {
             $result = $this->curlPost($url, $params);
             return $result;
@@ -65,7 +65,7 @@ class ThirdPartyExpressComponent extends Component {
 //$result ["businessNo"]
 //$result ["orderState"]
 //$result ["orderLogs"] => array()  item => array('type', 'operator', 'description', 'createTime')
-        $url = 'http://openapi.rrkd.cn/v2/queryorder';
+        $url = RR_LOGISTICS_URL . '/queryorder';
         try {
             $result = $this->curlPost($url, $params);
             return $result;
@@ -303,7 +303,7 @@ class ThirdPartyExpressComponent extends Component {
      * @return array|string
      * 获取接单人的信息
      */
-    public function get_rr_deliverer($params){
+    public function get_rr_deliverer($params) {
         /*
         $params['userName']	        String	是	人人快递分配的第三方平台账号	15100000000
         $params['orderNo']	        String	否	人人快递产生的订单号	123
@@ -311,7 +311,7 @@ class ThirdPartyExpressComponent extends Component {
         $params['customerPhone']	String	是	商户手机号	15100000000
         $params['sign']	            String	是	验证串
          */
-        $url = 'http://code.rrkd.cn/v2/getorderdeliverer';
+        $url = RR_LOGISTICS_URL . '/getorderdeliverer';
         try {
             $result = $this->curlPost($url, $params);
             //可能遇到乱码问题
