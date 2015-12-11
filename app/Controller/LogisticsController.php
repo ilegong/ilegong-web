@@ -145,6 +145,7 @@ class LogisticsController extends AppController {
         $params['startingCity'] = '北京市';
         $params['startingAddress'] = $starting_address;
         $params['consigneeCity'] = '北京市';
+        $params['pickup_code'] = $order_info['Order']['ship_code'];
         $patch_remark = '提货码：' . $order_info['Order']['ship_code'];
         if (!empty($params['remark'])) {
             $params['remark'] = $params['remark'] . '，' . $patch_remark;

@@ -35,7 +35,8 @@ class LogisticsComponent extends Component {
             'starting_city' => $data['startingCity'],
             'starting_address' => $data['startingAddress'],
             'total_price' => $data['total_price'],
-            'type' => RR_SINGLE_LOGISTICS_ORDER_TYPE
+            'type' => RR_SINGLE_LOGISTICS_ORDER_TYPE,
+            'pickup_code' => $data['pickup_code']
         );
         $logistics_order = $logisticsOrderM->save($logistics_order);
         if ($logistics_order && !empty($logistics_order)) {
