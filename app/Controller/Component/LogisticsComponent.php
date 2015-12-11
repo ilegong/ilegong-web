@@ -197,6 +197,7 @@ class LogisticsComponent extends Component {
      * 物流订单支付成功之后回调
      */
     public function notifyPaidDone($logistics_order_id) {
+        $this->log('logistics order paid notify paid done');
         //send template msg
         $logisticsOrderM = ClassRegistry::init('LogisticsOrder');
         $updateData = array('status' => LOGISTICS_ORDER_PAID_STATUS);
