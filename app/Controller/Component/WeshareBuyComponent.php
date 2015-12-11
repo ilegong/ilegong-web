@@ -1157,6 +1157,7 @@ class WeshareBuyComponent extends Component {
             $logistics_orders = $logisticsOrderM->find('all', array(
                 'conditions' => array(
                     'order_id' => $order_ids,
+                    'deleted' => DELETED_NO,
                     'not' => array('status' => array(0))
                 ),
                 'fields' => array('id', 'order_id', 'status')
