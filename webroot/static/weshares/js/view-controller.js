@@ -235,7 +235,10 @@
     vm.loadOrderCommentData = loadOrderCommentData;
     vm.isShareManager = isShareManager;
     vm.isShowExpressInfoBtn = isShowExpressInfoBtn;
+    vm.isShowCallLogisticsBtn = isShowCallLogisticsBtn;
+    vm.handleCallLogistics = handleCallLogistics;
     vm.showOrderExpressInfo = showOrderExpressInfo;
+    vm.getLogisticsBtnText = getLogisticsBtnText;
     vm.childShareDetail = null;
     vm.currentUserOrderCount = 0;
     vm.shareOrderCount = 0;
@@ -335,6 +338,7 @@
           vm.childShareDetailUsersLevel = data['childShareData']['child_share_level_data'];
           //vm.shipTypes = data['ordersDetail']['ship_types'];
           vm.rebateLogs = data['ordersDetail']['rebate_logs'];
+          vm.logisticsOrderData = data['logisticsOrderData'];
           //vm.sortOrders();
           vm.combineShareBuyData();
           setWeiXinShareParams();
@@ -1401,6 +1405,13 @@
       return false;
     }
 
+    function isShowCallLogisticsBtn(order) {
+      if (order['ship_mark'] == 'pys_ziti' && order['status'] == 2 && vm.isOwner(order)) {
+        return true;
+      }
+      return false;
+    }
+
     function isShowExpressInfoBtn(order){
       if (order['ship_mark'] == 'kuai_di') {
         if (order.status > 1 && vm.isOwner(order)) {
@@ -1408,6 +1419,34 @@
         }
       }
       return false;
+    }
+
+    function handleCallLogistics(order){
+
+    }
+
+    function getLogisticsBtnText(order){
+      var orderId = order['id'];
+      //订单已经叫过快递
+      if(vm.logisticsOrderData[orderId]){
+        var logisticsOrder = vm.logisticsOrderData[orderId];
+        if(logisticsOrder['status'] == 1){
+          return '待接单';
+        }
+        if(logisticsOrder['status'] == 2){
+          return '已接单';
+        }
+        if(logisticsOrder['status'] == 3){
+          return '已取货';
+        }
+        if(logisticsOrder['status'] == 4){
+          return '已签收';
+        }
+        if(logisticsOrder['status'] == 5){
+          return '重新叫快递';
+        }
+      }
+      return '叫快递';
     }
 
     function showOrderExpressInfo(order) {

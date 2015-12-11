@@ -1135,6 +1135,38 @@ class WeshareBuyComponent extends Component {
     }
 
     /**
+     * @param $weshareId
+     * @param $uid
+     * @return array
+     * 获取个人订单 呼叫人人和闪送的订单
+     */
+    public function get_current_user_logistics_order_data($weshareId, $uid) {
+        $orderM = ClassRegistry::init('Order');
+        $orders = $orderM->find('all', array(
+            'conditions' => array(
+                'member_id' => $weshareId,
+                'creator' => $uid,
+                'ship_mark' => SHARE_SHIP_PYS_ZITI_TAG
+            ),
+            'fields' => array('id')
+        ));
+        if (!empty($orders)) {
+            $order_ids = Hash::extract($orders, '{n}.Order.id');
+            $logisticsOrderM = ClassRegistry::init('LogisticsOrder');
+            //排除掉待支付的
+            $logistics_orders = $logisticsOrderM->find('all', array(
+                'conditions' => array(
+                    'order_id' => $order_ids,
+                    'not' => array('status' => array(0))
+                ),
+                'fields' => array('id', 'order_id', 'status')
+            ));
+            $logistics_orders = Hash::combine($logistics_orders, '{n}.LogisticsOrder.order_id', '{n}.LogisticsOrder');
+            return $logistics_orders;
+        }
+    }
+
+    /**
      * @param $orderIds
      * @param $shareId
      * 清除分享用户缓存

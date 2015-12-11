@@ -283,7 +283,7 @@ class SharePoolProduct extends AppModel {
             'brand_name' => '赵静',
             'show_brand' => true,
             'brand_custom_service' => 867250,
-            'published' => 1,
+            'published' => 0,
             'products' => array(
                 '2958' => array(
                     'price' => 95,
