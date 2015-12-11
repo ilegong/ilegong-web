@@ -93,7 +93,7 @@ class UtilController extends AppController {
         $uids[] = '544307';
         $openIds = $this->Oauthbind->findWxServiceBindsByUids($uids);
         foreach ($openIds as $openId) {
-            $this->Weixin->send_faq_notify_template_msg($openId, 'www.tongshijia.com/weshares/view/' . $shareId, '橙妾坐到了', $msg, '麻阳冰糖橙');
+            $this->Weixin->send_faq_notify_template_msg($openId, 'www.tongshijia.com/weshares/view/' . $shareId, '橙妾“坐”到了', $msg, '麻阳冰糖橙');
         }
         echo json_encode(array('success' => true));
         return;
