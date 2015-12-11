@@ -146,13 +146,14 @@ class LogisticsController extends AppController {
         $params['startingAddress'] = $starting_address;
         $params['consigneeCity'] = '北京市';
         $patch_remark = '提货码：' . $order_info['Order']['ship_code'];
-        if (!$params['remark']) {
+        if (!empty($params['remark'])) {
             $params['remark'] = $params['remark'] . '，' . $patch_remark;
         } else {
             $params['remark'] = $patch_remark;
         }
         //check total price
         $ship_fee_result = $this->get_rr_ship_fee($order_info, array('consigneeAddress' => $params['consigneeAddress'], 'consigneePhone' => $params['consigneePhone']));
+        $ship_fee_result = json_decode($ship_fee_result, true);
         if ($ship_fee_result['status'] == 1) {
             $params['total_price'] = $ship_fee_result['price'];
         }
