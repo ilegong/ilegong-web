@@ -138,7 +138,7 @@ class LogisticsComponent extends Component {
      * 获取签名
      */
     public function get_sign($keyword) {
-        return strtolower(MD5(RR_LOGISTICS_APP_KEY .MD5(date('YmdH:i:s')). strtolower(MD5($keyword))));
+        return strtolower(MD5(RR_LOGISTICS_APP_KEY . MD5(date('YmdH:i:s')) . strtolower(MD5($keyword))));
     }
 
     /**
@@ -163,13 +163,25 @@ class LogisticsComponent extends Component {
 
     /**
      * @param $logistics_order_id
+     * @return array
      * 物流订单支付成功之后回调
      */
     public function notifyPaidDone($logistics_order_id) {
         //send template msg
         $logisticsOrderM = ClassRegistry::init('LogisticsOrder');
-        $logisticsOrderM->updateAll(array('status' => LOGISTICS_ORDER_PAID_STATUS), array('id' => $logistics_order_id, 'status' => LOGISTICS_ORDER_WAIT_PAY_STATUS));
+        $updateData = array('status' => LOGISTICS_ORDER_PAID_STATUS);
         //trigger call rr logistics api
-        return $this->trigger_confirm_rr_order($logistics_order_id);
+        $result_str = $this->trigger_confirm_rr_order($logistics_order_id);
+        $result = json_decode($result_str, true);
+        if ($result['status'] == 1) {
+            $business_no = $result['businessNo'];
+            $order_no = $result['orderNo'];
+            $updateData['business_no'] = "'" . $business_no . "'";
+            $updateData['business_order_id'] = "'" . $order_no . "'";
+        } else {
+            $this->log('auto call rr logistics fail reason ' . $result_str);
+        }
+        $logisticsOrderM->updateAll($updateData, array('id' => $logistics_order_id, 'status' => LOGISTICS_ORDER_WAIT_PAY_STATUS));
+        return $result;
     }
 }

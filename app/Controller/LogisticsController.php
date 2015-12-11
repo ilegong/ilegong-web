@@ -129,9 +129,9 @@ class LogisticsController extends AppController {
         $params['goodsWeight'] = 1;
         $params['goodsWorth'] = intval($order_info['Order']['total_all_price']);
         $params['startingPhone'] = SERVICE_LINE_PHONE;
-        $params['startingCity'] = '北京';
+        $params['startingCity'] = '北京市';
         $params['startingAddress'] = $starting_address;
-        $params['consigneeCity'] = '北京';
+        $params['consigneeCity'] = '北京市';
         //todo check total price
         $result = $this->Logistics->create_logistics_order_from_rr($params);
         echo json_encode($result);

@@ -337,6 +337,7 @@ class ThirdPartyExpressComponent extends Component {
         $header = empty ($header) ? array() : $header;
         $header [] = "Content-Type: application/json"; // 指定请求头为application/json 【非常重要】
         $header [] = "tstamp:" . date('YmdH:i:s'); // 【非常重要】
+        $header [] = "Refer: www.tongshijia.com";
         //$header [] = "timestamp:" . date('YmdH:i:s'); // 【非常重要】
         if (is_array($post_data)) {
             $params['version'] = 2.0;

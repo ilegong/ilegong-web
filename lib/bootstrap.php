@@ -77,7 +77,7 @@ $_display_tags_in_home = array(TAG_ID_CHULIANG, TAG_ID_ROUQIN_DANPIN, TAG_ID_XIN
 
 $_coupon_could_distribute = array(18483 => '新用户50返10元券', 18482 => '新用户100返20元券');
 
-const RR_LOGISTICS_CALLBACK = 'www.tongshijia.com/logistics/rr_logistics_callback.html';
+const RR_LOGISTICS_CALLBACK = 'http://www.tongshijia.com/logistics/rr_logistics_callback.html';
 const RR_LOGISTICS_USERNAME = '13693655401';
 const RR_LOGISTICS_APP_KEY = '5ad9d9600d21bdf6193eeff7a4ba9b99';
 const RR_LOGISTICS_URL = 'http://code.rrkd.cn/v2';
