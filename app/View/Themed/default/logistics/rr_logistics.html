@@ -124,7 +124,7 @@
                 console.log(data);
                 console.log(type);
                 if(data['success']){
-                    window.location.href='/logistics/pay_logistics_order/'+type+'/'+data[''];
+                    window.location.href='/logistics/pay_logistics_order/'+type+'/'+data['logistics_order_id'];
                 }
             }, 'json');
         }
