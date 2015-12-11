@@ -1421,17 +1421,26 @@
       return false;
     }
 
-    function handleCallLogistics(order){
+    function handleCallLogistics(order) {
       var orderId = order['id'];
       //订单已经叫过快递
-      if(vm.logisticsOrderData[orderId]){
+      if (vm.logisticsOrderData[orderId]) {
         var logisticsOrder = vm.logisticsOrderData[orderId];
-        if(logisticsOrder['status'] == 5){
-
+        if (logisticsOrder['status'] == 5) {
+          var logisticsOrderId = logisticsOrder['id'];
+          $http.get('/logistics/re_confirm_rr_logistics_order/' + logisticsOrderId).success(function (data) {
+            if(data['status']==1){
+              vm.logisticsOrderData[orderId]['status'] = 1;
+            }else{
+              alert(data['msg']);
+            }
+          }).error(function(){
+            alert('呼叫失败，请联系客服。');
+          });
           return;
         }
       }
-      window.location.href='/logistics/rr_logistics/'+orderId;
+      window.location.href = '/logistics/rr_logistics/' + orderId;
     }
 
     function getLogisticsBtnText(order){

@@ -160,7 +160,7 @@ class ThirdPartyExpressComponent extends Component {
 //$result ["price"]
 //$result ["orderNo"]
 //$result ["businessNo"]
-        $url = 'http://openapi.rrkd.cn/v2/againorder';
+        $url = RR_LOGISTICS_URL . '/againorder';
         try {
             $result = $this->curlPost($url, $params);
             //可能遇到乱码问题

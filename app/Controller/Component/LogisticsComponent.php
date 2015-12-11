@@ -60,7 +60,11 @@ class LogisticsComponent extends Component {
         return array('success' => false);
     }
 
-
+    /**
+     * @param $logistics_order_id
+     * @return array
+     * 准备人人快递提交的数据
+     */
     private function prepare_rr_order_params($logistics_order_id){
         $logisticsOrderM = ClassRegistry::init('LogisticsOrder');
         $logisticsOrderItemM = ClassRegistry::init('LogisticsOrderItem');
@@ -76,7 +80,10 @@ class LogisticsComponent extends Component {
         ));
         $sign_keyword = RR_LOGISTICS_USERNAME . $logistics_order['LogisticsOrder']['starting_address'] . $logistics_order_item['LogisticsOrderItem']['consignee_address'];
         $sign = $this->get_sign($sign_keyword);
-        $business_no = $this->get_rr_business_no($logistics_order['LogisticsOrder']['id']);
+        $business_no = $logistics_order['LogisticsOrder']['business_no'];
+        if(empty($business_no)){
+            $business_no = $this->get_rr_business_no($logistics_order['LogisticsOrder']['id']);
+        }
         $post_params = array(
             'userName' => RR_LOGISTICS_USERNAME,
             'businessNo' => $business_no,
@@ -98,10 +105,21 @@ class LogisticsComponent extends Component {
         return $post_params;
     }
 
-    public function re_confirm_rr_order($logistics_order_id){
+    /**
+     * @param $logistics_order_id
+     * @return mixed
+     * re confirm order
+     */
+    public function re_confirm_rr_order($logistics_order_id) {
         $post_params = $this->prepare_rr_order_params($logistics_order_id);
         $result = $this->ThirdPartyExpress->re_confirm_rr_order($post_params);
         $result = json_decode($result, true);
+        if ($result['status'] == 1) {
+            //success
+            $logisticsOrderM = ClassRegistry::init('LogisticsOrder');
+            $orderNo = $result['orderNo'];
+            $logisticsOrderM->updateAll(array('status' => LOGISTICS_ORDER_PAID_STATUS, 'business_order_id' => "'" . $orderNo . "'"), array('id' => $logistics_order_id, 'status' => LOGISTICS_ORDER_CANCEL));
+        }
         return $result;
     }
 
