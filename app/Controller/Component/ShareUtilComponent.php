@@ -1791,16 +1791,16 @@ class ShareUtilComponent extends Component {
 //                    'share_user_id' => 811917,
 //                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
 //                ),
-//                '1451' => array(
-//                    'share_id' => 1451,
-//                    'share_name' => '德庆贡柑熟了，想找找当皇帝娘娘的感觉吗？',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/3c397b7406b_1125.jpg',
-//                    'share_price' => '46',
-//                    'share_user_name' => '李明',
-//                    'share_vote' => 999,
-//                    'share_user_id' => 6783,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0e8ff635498de280dd3193826d837ee5.jpg'
-//                ),
+                '1451' => array(
+                    'share_id' => 1451,
+                    'share_name' => '德庆贡柑熟了，想找找当皇帝娘娘的感觉吗？',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/3c397b7406b_1125.jpg',
+                    'share_price' => '46',
+                    'share_user_name' => '李明',
+                    'share_vote' => 999,
+                    'share_user_id' => 6783,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0e8ff635498de280dd3193826d837ee5.jpg'
+                ),
                 '438' => array(
                     'share_id' => 438,
                     'share_name' => '河南荥阳河阴软籽大石榴，双十二活动点击有红包',
