@@ -83,12 +83,26 @@ class LogisticsController extends AppController {
 //$result ["errMsg"]; String
 //$result ["warn"]; String
 //$result ["price"]; Double
+
         $order_id = $_REQUEST['order_id'];
-        $order_info = $this->get_order_info($order_id);
-        $startingAddress = $order_info['Order']['consignee_address'];
-        $startingAddress = str_replace('，', '', $startingAddress);
         $json_params = $_REQUEST['params'];
         $params = json_decode($json_params, true);
+        $order_info = $this->get_order_info($order_id);
+        $result = $this->get_rr_ship_fee($order_info, $params);
+        echo $result;
+        return;
+    }
+
+    /**
+     * @param $order_info
+     * @param $params
+     * @return mixed
+     *
+     * 获取人人的费用
+     */
+    private function get_rr_ship_fee($order_info, $params) {
+        $startingAddress = $order_info['Order']['consignee_address'];
+        $startingAddress = str_replace('，', '', $startingAddress);
         $sign_keyword = RR_LOGISTICS_USERNAME . $startingAddress . $params ["consigneeAddress"];
         $params['sign'] = $this->Logistics->get_sign($sign_keyword);
         $params['goodsWeight'] = 1;
@@ -99,8 +113,7 @@ class LogisticsController extends AppController {
         $params['startingPhone'] = SERVICE_LINE_PHONE;
         $params['userName'] = RR_LOGISTICS_USERNAME;
         $result = $this->ThirdPartyExpress->calculate_rr_logistics_cost($params);
-        echo $result;
-        return;
+        return $result;
     }
 
     /**
@@ -115,7 +128,7 @@ class LogisticsController extends AppController {
         }
         $order_id = $_REQUEST['orderId'];
         $order_info = $this->get_order_info($order_id);
-        if(empty($order_info)){
+        if (empty($order_info)) {
             echo json_encode(array('success' => false, 'reason' => 'not_order'));
             return;
         }
@@ -132,7 +145,17 @@ class LogisticsController extends AppController {
         $params['startingCity'] = '北京市';
         $params['startingAddress'] = $starting_address;
         $params['consigneeCity'] = '北京市';
-        //todo check total price
+        $patch_remark = '提货码：' . $order_info['Order']['ship_code'];
+        if (!$params['remark']) {
+            $params['remark'] = $params['remark'] . '，' . $patch_remark;
+        } else {
+            $params['remark'] = $patch_remark;
+        }
+        //check total price
+        $ship_fee_result = $this->get_rr_ship_fee($order_info, array('consigneeAddress' => $params['consigneeAddress'], 'consigneePhone' => $params['consigneePhone']));
+        if ($ship_fee_result['status'] == 1) {
+            $params['total_price'] = $ship_fee_result['price'];
+        }
         $result = $this->Logistics->create_logistics_order_from_rr($params);
         echo json_encode($result);
         return;
@@ -144,12 +167,12 @@ class LogisticsController extends AppController {
      * 支付物流订单
      */
     public function pay_logistics_order($type, $orderId) {
-        if($type == 0){
+        if ($type == 0) {
             //微信支付订单
-            $this->redirect('/wxPay/jsApiPay/'.$orderId.'?action=logistics');
+            $this->redirect('/wxPay/jsApiPay/' . $orderId . '?action=logistics');
             return;
         }
-        if($type == 1){
+        if ($type == 1) {
             //支付宝支付
             $this->redirect('/ali_pay/wap_to_alipay/' . $orderId . '?action=logistics');
             return;
@@ -158,8 +181,8 @@ class LogisticsController extends AppController {
 
     private function get_order_info($orderId) {
         $order_info = $this->Order->find('first', array(
-            'conditions' => array('id' => $orderId, 'status' => ORDER_STATUS_SHIPPED, 'type' => ORDER_TYPE_WESHARE_BUY),
-            'fields' => array('id', 'status', 'consignee_name', 'consignee_id', 'consignee_address', 'consignee_mobilephone', 'member_id', 'total_all_price')
+            'conditions' => array('id' => $orderId, 'status' => ORDER_STATUS_SHIPPED, 'type' => ORDER_TYPE_WESHARE_BUY, 'ship_mark' => SHARE_SHIP_PYS_ZITI_TAG),
+            'fields' => array('id', 'status', 'consignee_name', 'consignee_id', 'consignee_address', 'consignee_mobilephone', 'member_id', 'total_all_price', 'ship_code')
         ));
         return $order_info;
     }
