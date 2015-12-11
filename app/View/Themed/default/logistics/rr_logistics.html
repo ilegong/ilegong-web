@@ -76,8 +76,27 @@
             makeLogisticsOrder(1);
         });
 
+        function validData(){
+            if(!$consigneeAddressEl.val()){
+                alert('请输入收货地址');
+                return false;
+            }
+            if(!$consigneeMobileEl.val()){
+                alert('请输入收货人联系方式');
+                return false;
+            }
+            if(!$consigneeUsernameEl.val()){
+                alert('请输入收货人名称');
+                return false;
+            }
+            return true;
+        }
+
         //计算快递费用
         function calLogisticsPrice() {
+            if(!validData()){
+                return;
+            }
             var logisticsParams = {
                 'consigneeAddress': $consigneeAddressEl.val(),
                 'consigneePhone': $consigneeMobileEl.val()
@@ -100,6 +119,9 @@
 
         //生成物流订单
         function makeLogisticsOrder(type) {
+            if(!validData()){
+                return;
+            }
             if (processConfirmOrder) {
                 return;
             }
@@ -121,10 +143,10 @@
                 'params': JSON.stringify(logisticsParams)
             };
             $.post('/logistics/confirm_logistics_order', postData, function (data) {
-                console.log(data);
-                console.log(type);
                 if(data['success']){
                     window.location.href='/logistics/pay_logistics_order/'+type+'/'+data['logistics_order_id'];
+                }else{
+                    alert('提交失败，请联系客服。');
                 }
             }, 'json');
         }
