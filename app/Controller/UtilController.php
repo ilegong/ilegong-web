@@ -90,7 +90,7 @@ class UtilController extends AppController {
         //$uids = $this->WeshareBuy->get_has_buy_user($shareId);
         $uids = array();
         $uids[] = '633345';
-        $uids_[] = '544307';
+        $uids[] = '544307';
         $openIds = $this->Oauthbind->findWxServiceBindsByUids($uids);
         foreach ($openIds as $openId) {
             $this->Weixin->send_faq_notify_template_msg($openId, 'www.tongshijia.com/weshares/view/' . $shareId, '橙妾坐到了', $msg, '麻阳冰糖橙');
