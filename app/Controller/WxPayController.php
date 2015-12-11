@@ -315,6 +315,7 @@ class WxPayController extends AppController {
      * 物流订单支付成功
      */
     public function logistics_notify() {
+        $this->log('wx logistics notify');
         $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
         $this->log('notify xml data ' . $xml);
         $notify = $this->WxPayment->createNotify();
@@ -365,7 +366,7 @@ class WxPayController extends AppController {
                         $total_fee, $is_subscribe, $bank_type, $fee_type, $attach, $time_end, LOGISTICS_ORDER_PAY_TYPE);
 
                     if ($status == PAYNOTIFY_STATUS_ORDER_UPDATED) {
-                        //todo notify logistics order is pay
+                        //notify logistics order is pay
                         //trigger paid done event
                         //$this->Weixin->notifyPaidDone($order);
                         $this->Logistics->notifyPaidDone($order['LogisticsOrder']['id']);

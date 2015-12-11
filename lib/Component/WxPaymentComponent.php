@@ -27,7 +27,7 @@ class WxPaymentComponent extends Component {
     }
 
     public function logistics_out_trade_no($source, $orderId){
-        return $source."-rr-"."-$orderId-".mktime().'-'.rand(0, 100);
+        return $source."-rr"."-$orderId-".mktime().'-'.rand(0, 100);
     }
 
     public function goToAliPayForm($order_id, $uid) {
