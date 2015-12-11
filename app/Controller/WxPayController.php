@@ -483,7 +483,7 @@ class WxPayController extends AppController {
      * @return bool
      */
     private function _is_action_by_wx_callback() {
-        return array_search($this->request->params['action'], array('notify', 'warning')) !== false;
+        return array_search($this->request->params['action'], array('notify', 'warning', 'logistics_notify')) !== false;
     }
 
     /**
