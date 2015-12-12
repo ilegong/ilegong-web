@@ -1446,7 +1446,7 @@
     function getLogisticsBtnText(order) {
       var orderId = order['id'];
       //订单已经叫过快递
-      if (vm.logisticsOrderData[orderId]) {
+      if (vm.logisticsOrderData&&vm.logisticsOrderData[orderId]) {
         var logisticsOrder = vm.logisticsOrderData[orderId];
         if (logisticsOrder['status'] == 1) {
           if (logisticsOrder['business_order_id']) {
