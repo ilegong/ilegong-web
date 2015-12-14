@@ -1406,8 +1406,11 @@
     }
 
     function isShowCallLogisticsBtn(order) {
-      if (order['ship_mark'] == 'pys_ziti' && order['status'] == 2 && vm.isOwner(order)) {
-        return true;
+      //草莓可以呼叫闪送
+      if(vm.weshare.id==1305){
+        if (order['ship_mark'] == 'pys_ziti' && order['status'] == 2 && vm.isOwner(order)) {
+          return true;
+        }
       }
       return false;
     }
