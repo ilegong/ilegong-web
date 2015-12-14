@@ -48,7 +48,9 @@ foreach ($orders as $item) {
                     $value = $ship_mark[$item['ship_mark']];
                 }else if ($fieldName == 'nickname'){
                     $value = $users[$item['creator']]['nickname'];
-                } else {
+                }else if(){
+                    $value = $item['ship_fee'] / 100.0;
+                }else {
                     $value = $item[$fieldName];
                 }
             }

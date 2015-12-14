@@ -554,6 +554,7 @@ class WesharesController extends AppController {
                 return;
             }
             $shipFee = $shipSetting['WeshareShipSetting']['ship_fee'];
+            //邮费是按分存取的
             $address = $this->get_order_address($weshareId, $shipInfo, $buyerData, $uid);
             $orderData = array('cate_id' => $rebateLogId, 'creator' => $uid, 'consignee_address' => $address, 'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $buyerData['name'], 'consignee_mobilephone' => $buyerData['mobilephone'], 'business_remark' => $business_remark);
             $process_shi_mark_result = $this->process_order_ship_mark($shipType, $orderData, $is_group_share_type);
