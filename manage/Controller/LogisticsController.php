@@ -30,6 +30,10 @@ class LogisticsController extends AppController{
             $order_ids = $this->get_order_ids_by_share($share_id);
             $q_cond['order_id'] = $order_ids;
         }
+        $good_order_id = $_REQUEST['order_id'];
+        if(!empty($good_order_id)){
+            $q_cond['order_id'] = $good_order_id;
+        }
         $id = $_REQUEST['id'];
         if (!empty($id)) {
             $q_cond['id'] = $id;
