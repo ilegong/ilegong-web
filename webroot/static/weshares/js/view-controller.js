@@ -1407,7 +1407,7 @@
 
     function isShowCallLogisticsBtn(order) {
       //草莓可以呼叫闪送
-      if(vm.weshare.id==1305){
+      if (vm.weshare.id == 1305 || vm.weshare.id == 1585) {
         if (order['ship_mark'] == 'pys_ziti' && order['status'] == 2 && vm.isOwner(order)) {
           return true;
         }
@@ -1478,17 +1478,6 @@
       return;
     }
 
-    //vm.handleReadMoreBtn = handleReadMoreBtn;
-    //vm.checkShareInfoHeight = checkShareInfoHeight;
-
-    //function handleReadMoreBtn() {
-    //  vm.hideMoreShareInfo = !vm.hideMoreShareInfo;
-    //  if (vm.hideMoreShareInfo) {
-    //    vm.readMoreBtnText = '全文';
-    //  } else {
-    //    vm.readMoreBtnText = '收起';
-    //  }
-    //}
 
     function supportGroupBuy() {
       if (vm.weshareSettings && vm.weshareSettings.pin_tuan && vm.weshareSettings.pin_tuan.status == 1) {
@@ -1503,21 +1492,6 @@
       currentToggleState['statusText'] = currentToggleState['open'] ? '收起' : '展开';
     }
 
-    //function checkShareInfoHeight() {
-    //  vm.shareDescInfoElement = angular.element(document.getElementById('share-description'));
-    //  vm.shareDescInfoElement.ready(function () {
-    //    if (vm.shareDescInfoElement[0]) {
-    //      var height = vm.shareDescInfoElement[0].offsetHeight;
-    //      if (height > 65) {
-    //        vm.shouldShowReadMoreBtn = true;
-    //        vm.hideMoreShareInfo = true;
-    //      } else {
-    //        vm.shouldShowReadMoreBtn = false;
-    //        vm.hideMoreShareInfo = false;
-    //      }
-    //    }
-    //  });
-    //}
 
     function setWeiXinShareParams() {
       var url = 'http://www.tongshijia.com/weshares/view/' + vm.weshare.id;

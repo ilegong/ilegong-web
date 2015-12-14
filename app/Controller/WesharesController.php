@@ -325,7 +325,7 @@ class WesharesController extends AppController {
         $ordersDetail['summery'] = $share_summery;
         $logistics_order_data = array();
         //小芝麻草莓
-        if ($shareId == 1305) {
+        if ($shareId == 1305 || $shareId == 1585) {
             $logistics_order_data = $this->WeshareBuy->get_current_user_logistics_order_data($shareId, $uid);
         }
         echo json_encode(array('ordersDetail' => $ordersDetail, 'childShareData' => $child_share_data, 'logisticsOrderData' => $logistics_order_data));
