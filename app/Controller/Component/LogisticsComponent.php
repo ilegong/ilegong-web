@@ -123,7 +123,7 @@ class LogisticsComponent extends Component {
             $logisticsOrderM = ClassRegistry::init('LogisticsOrder');
             $orderNo = $result['orderNo'];
             $businessNo = $result['businessNo'];
-            $logisticsOrderM->updateAll(array('status' => LOGISTICS_ORDER_PAID_STATUS, 'business_order_id' => "'" . $orderNo . "'", 'business_no' => "'" . $businessNo . "'"), array('id' => $logistics_order_id, 'status' => LOGISTICS_ORDER_CANCEL));
+            $logisticsOrderM->updateAll(array('status' => LOGISTICS_ORDER_PAID_STATUS, 'business_order_id' => "'" . $orderNo . "'", 'business_no' => "'" . $businessNo . "'"), array('id' => $logistics_order_id));
         }
         return $result;
     }
