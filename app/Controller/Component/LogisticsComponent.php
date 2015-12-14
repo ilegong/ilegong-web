@@ -82,9 +82,6 @@ class LogisticsComponent extends Component {
         $sign_keyword = RR_LOGISTICS_USERNAME . $logistics_order['LogisticsOrder']['starting_address'] . $logistics_order_item['LogisticsOrderItem']['consignee_address'];
         $sign = $this->get_sign($sign_keyword);
         $business_no = $logistics_order['LogisticsOrder']['business_no'];
-        if(empty($business_no)){
-            $business_no = $this->get_rr_business_no($logistics_order['LogisticsOrder']['id']);
-        }
         $post_params = array(
             'userName' => RR_LOGISTICS_USERNAME,
             'businessNo' => $business_no,
@@ -113,13 +110,20 @@ class LogisticsComponent extends Component {
      */
     public function re_confirm_rr_order($logistics_order_id) {
         $post_params = $this->prepare_rr_order_params($logistics_order_id);
-        $result = $this->ThirdPartyExpress->re_confirm_rr_order($post_params);
+        if (!empty($post_params['businessNo'])) {
+            $result = $this->ThirdPartyExpress->re_confirm_rr_order($post_params);
+        } else {
+            $business_no = $this->get_rr_business_no($logistics_order_id);
+            $post_params['businessNo'] = $business_no;
+            $result = $this->ThirdPartyExpress->confirm_rr_order($post_params);
+        }
         $result = json_decode($result, true);
         if ($result['status'] == 1) {
             //success
             $logisticsOrderM = ClassRegistry::init('LogisticsOrder');
             $orderNo = $result['orderNo'];
-            $logisticsOrderM->updateAll(array('status' => LOGISTICS_ORDER_PAID_STATUS, 'business_order_id' => "'" . $orderNo . "'"), array('id' => $logistics_order_id, 'status' => LOGISTICS_ORDER_CANCEL));
+            $businessNo = $result['businessNo'];
+            $logisticsOrderM->updateAll(array('status' => LOGISTICS_ORDER_PAID_STATUS, 'business_order_id' => "'" . $orderNo . "'", 'business_no' => "'" . $businessNo . "'"), array('id' => $logistics_order_id, 'status' => LOGISTICS_ORDER_CANCEL));
         }
         return $result;
     }
@@ -158,6 +162,8 @@ class LogisticsComponent extends Component {
 //$result ["orderNo"];
 //$result ["businessNo"];
         $post_params = $this->prepare_rr_order_params($logistics_order_id);
+        $business_no = $this->get_rr_business_no($logistics_order_id);
+        $post_params['businessNo'] = $business_no;
         $result = $this->ThirdPartyExpress->confirm_rr_order($post_params);
         return $result;
     }
