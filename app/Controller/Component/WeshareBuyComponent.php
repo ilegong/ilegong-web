@@ -1160,7 +1160,7 @@ class WeshareBuyComponent extends Component {
                     'deleted' => DELETED_NO,
                     'not' => array('status' => array(0))
                 ),
-                'fields' => array('id', 'order_id', 'status')
+                'fields' => array('id', 'order_id', 'status', 'business_order_id')
             ));
             $logistics_orders = Hash::combine($logistics_orders, '{n}.LogisticsOrder.order_id', '{n}.LogisticsOrder');
             return $logistics_orders;

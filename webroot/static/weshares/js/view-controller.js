@@ -1434,6 +1434,7 @@
           $http.get('/logistics/re_confirm_rr_logistics_order/' + logisticsOrderId).success(function (data) {
             if (data['status'] == 1) {
               vm.logisticsOrderData[orderId]['status'] = 1;
+              vm.logisticsOrderData[orderId]['business_order_id'] = data['orderNo'];
             } else {
               alert(data['msg']);
             }
