@@ -1165,6 +1165,7 @@ class WeshareBuyComponent extends Component {
             $logistics_orders = Hash::combine($logistics_orders, '{n}.LogisticsOrder.order_id', '{n}.LogisticsOrder');
             return $logistics_orders;
         }
+        return array();
     }
 
     /**
