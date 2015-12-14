@@ -119,7 +119,21 @@
                 <td>{{$item['goods_worth']}}</td>
                 <td>{{$current_order['created']}}</td>
                 <td name="status">
-                    {{$current_order['status']}}
+                    {{if $current_order['status'] == LOGISTICS_ORDER_WAIT_PAY_STATUS}}
+                    待支付
+                    {{elseif $current_order['status'] == LOGISTICS_ORDER_PAID_STATUS}}
+                    已支付
+                    {{elseif $current_order['status'] == LOGISTICS_ORDER_RECEIVE}}
+                    已接单
+                    {{elseif $current_order['status'] == LOGISTICS_ORDER_TAKE}}
+                    已取货
+                    {{elseif $current_order['status'] == LOGISTICS_ORDER_SIGN}}
+                    已签收
+                    {{elseif $current_order['status'] == LOGISTICS_ORDER_CANCEL}}
+                    已取消
+                    {{else}}
+                    未知状态
+                    {{/if}}
                 </td>
                 <td>
                 </td>
