@@ -210,7 +210,7 @@ class LogisticsComponent extends Component {
             $updateData['business_no'] = "'" . $business_no . "'";
             $updateData['business_order_id'] = "'" . $order_no . "'";
         } else {
-            $this->log('auto call rr logistics fail reason ' . $result_str);
+            $this->log('logistics order id ' . $logistics_order_id . ' auto call rr logistics fail reason ' . $result_str);
         }
         $logisticsOrderM->updateAll($updateData, array('id' => $logistics_order_id));
         return $result;
