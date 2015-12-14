@@ -144,7 +144,11 @@ class LogisticsController extends AppController {
         $params['creator'] = $uid;
         $params['goodsName'] = $this->get_order_cart($order_id);
         $params['goodsWeight'] = 1;
-        $params['goodsWorth'] = intval($order_info['Order']['total_all_price']);
+        if($order_info['Order']['total_all_price'] > 1){
+            $params['goodsWorth'] = intval($order_info['Order']['total_all_price']);
+        }else{
+            $params['goodsWorth'] = 1;
+        }
         $params['startingPhone'] = SERVICE_LINE_PHONE;
         $params['startingCity'] = '北京市';
         $params['startingAddress'] = $starting_address;
