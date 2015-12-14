@@ -268,7 +268,7 @@ class ToolsController extends AppController {
     	 	
     	clearCacheAll();
     	/*更新语言包缓存*/
-    	//$this->requestAction('/admin/tools/updateLanCache',array('data'=>array('uplang'=>'zh-cn')));
+    	$this->requestAction('/admin/tools/updateLanCache',array('data'=>array('uplang'=>'zh-cn')));
     	
         if ($this->RequestHandler->accepts('json') || $this->RequestHandler->isAjax() || isset($_GET['inajax'])) {
         	$this->autoRender = false;
