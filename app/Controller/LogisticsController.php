@@ -105,8 +105,12 @@ class LogisticsController extends AppController {
         $startingAddress = str_replace('，', '', $startingAddress);
         $sign_keyword = RR_LOGISTICS_USERNAME . $startingAddress . $params ["consigneeAddress"];
         $params['sign'] = $this->Logistics->get_sign($sign_keyword);
-        $params['goodsWeight'] = 1;
-        $params['goodsWorth'] = intval($order_info['Order']['total_all_price']);
+        $params['goodsWeight'] = 1; //set default goods weight
+        if ($order_info['Order']['total_all_price'] > 1) {
+            $params['goodsWorth'] = intval($order_info['Order']['total_all_price']);
+        } else {
+            $params['goodsWorth'] = 1; //set default goods worth
+        }
         $params['startingAddress'] = $startingAddress;
         $params['startingCity'] = '北京市';
         $params['consigneeCity'] = '北京市';
