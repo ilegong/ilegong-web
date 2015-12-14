@@ -773,6 +773,10 @@ class ShareUtilComponent extends Component {
             'reply_content' => $order_info,
             'thumbnail' => $thumbnail
         );
+        //me test account don't show
+        if($share_info['creator'] == 802852){
+            $optData['deleted'] = DELETED_YES;
+        }
         $this->saveOptLog($optData);
     }
 
