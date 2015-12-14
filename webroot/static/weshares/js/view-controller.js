@@ -1441,6 +1441,8 @@
           }).error(function () {
             alert('呼叫失败，请联系客服。');
           });
+        }else{
+          alert('等待快递员接单。');
         }
         return;
       }
