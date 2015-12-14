@@ -1441,8 +1441,8 @@
           }).error(function () {
             alert('呼叫失败，请联系客服。');
           });
-          return;
         }
+        return;
       }
       window.location.href = '/logistics/rr_logistics/' + orderId;
     }
