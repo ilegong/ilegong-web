@@ -131,7 +131,7 @@ class SharePoolProduct extends AppModel {
         array(
             'share_id' => 1600,
             'share_name' => '好吃的真空低温油浴果蔬套装（黄秋葵+香菇+什锦果蔬）',
-            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/c9c10cbd197_1215.jpg',
+            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/c9c10cbd197_1215.jpg',
             'brand_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_7db41874b00ec17af715b72adf87768a.jpg',
             'brand_name' => '赵宇',
             'show_brand' => true,
