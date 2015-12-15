@@ -1694,8 +1694,8 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 708029,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
                 ),
-                '1395' => array(
-                    'share_id' => 1395,
+                '1575' => array(
+                    'share_id' => 1575,
                     'share_name' => '好吃的真空低温油浴果蔬套装（黄秋葵+香菇+什锦果蔬）',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/d50b8e8d6ad_1202.jpg',
                     'share_price' => '55',
@@ -1857,8 +1857,8 @@ class ShareUtilComponent extends Component {
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/123761447121370.png'
                 ),
                 //紫皮糖
-                '1338' => array(
-                    'share_id' => 1338,
+                '1582' => array(
+                    'share_id' => 1582,
                     'share_name' => '俄罗斯经典紫皮糖、鲜奶威化和酸奶威化',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/9d333807aad_1110.jpg',
                     'share_price' => '70',
