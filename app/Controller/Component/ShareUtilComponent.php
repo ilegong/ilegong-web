@@ -1744,16 +1744,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 811917,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
                 ),
-                '1256' => array(
-                    'share_id' => 1256,
-                    'share_name' => '有机翠香猕猴桃来了，你还等什么',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/7905f59b420_1203.jpg',
-                    'share_price' => '95',
-                    'share_user_name' => '赵静',
-                    'share_vote' => 1000,
-                    'share_user_id' => 867250,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_2d0cd7f75b366ae4ccb40cc380351574.jpg'
-                ),
+//                '1256' => array(
+//                    'share_id' => 1256,
+//                    'share_name' => '有机翠香猕猴桃来了，你还等什么',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/7905f59b420_1203.jpg',
+//                    'share_price' => '95',
+//                    'share_user_name' => '赵静',
+//                    'share_vote' => 1000,
+//                    'share_user_id' => 867250,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_2d0cd7f75b366ae4ccb40cc380351574.jpg'
+//                ),
                 //银耳
                 '1199' => array(
                     'share_id' => 1199,
