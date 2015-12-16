@@ -1339,6 +1339,7 @@ class WeixinComponent extends Component {
      * @param $title
      * @param $order_id
      * @param $start_address
+     * @param $consignee_address
      * @param $remark
      * @return bool
      * 物流订单信息通知
@@ -1346,7 +1347,7 @@ class WeixinComponent extends Component {
     public function send_logistics_order_notify_msg($user_openid, $url, $title, $order_id, $start_address, $consignee_address, $remark) {
         $post_data = array(
             "touser" => $user_openid,
-            "template_id" => 'template_id',
+            "template_id" => '3uA5ShDuM6amaaorl6899yMj9QvBmIiIAl7T9_JfR54',
             "url" => $url,
             "topcolor" => "#FF0000",
             "data" => array(
