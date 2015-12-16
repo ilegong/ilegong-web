@@ -1303,5 +1303,62 @@ class WeixinComponent extends Component {
         return $this->send_weixin_message($post_data);
     }
 
+    /**
+     * @param $user_openid
+     * @param $title
+     * @param $order_price
+     * @param $product_name
+     * @param $consignee_address
+     * @param $order_id
+     * @param $remark
+     * @param $detail_url
+     * @return send result
+     * 物流支付成功通知
+     */
+    public function send_logistics_order_paid_msg($user_openid, $title, $order_price, $product_name, $consignee_address, $order_id, $remark, $detail_url) {
+        $post_data = array(
+            "touser" => $user_openid,
+            "template_id" => 'UXmiPQNz46zZ2nZfDZVVd9xLIx28t66ZPNBoX1WhE8Q',
+            "url" => $detail_url,
+            "topcolor" => "#FF0000",
+            "data" => array(
+                "first" => $title,
+                "orderProductPrice" => $order_price,
+                "orderProductName" => $product_name,
+                "orderAddress" => $consignee_address,
+                "orderName" => $order_id,
+                "remark" => $remark
+            )
+        );
+        return $this->send_weixin_message($post_data);
+    }
+
+    /**
+     * @param $user_openid
+     * @param $url
+     * @param $title
+     * @param $order_id
+     * @param $start_address
+     * @param $remark
+     * @return bool
+     * 物流订单信息通知
+     */
+    public function send_logistics_order_notify_msg($user_openid, $url, $title, $order_id, $start_address,$consignee_address, $remark) {
+        $post_data = array(
+            "touser" => $user_openid,
+            "template_id" => 'template_id',
+            "url" => $url,
+            "topcolor" => "#FF0000",
+            "data" => array(
+                "first" => $title,
+                "keyword1" => $order_id,
+                "keyword2" => $start_address,
+                "keyword3" => $consignee_address,
+                "remark" => $remark
+            )
+        );
+        return $this->send_weixin_message($post_data);
+    }
+
 
 }

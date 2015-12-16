@@ -93,9 +93,7 @@ const LOGISTICS_ORDER_RECEIVE = 2;
 const LOGISTICS_ORDER_TAKE = 3;
 const LOGISTICS_ORDER_SIGN = 4;
 const LOGISTICS_ORDER_CANCEL = 5;
-
-
-
+const LOGISTICS_ORDER_INVALID = 6; //订单失效(退款操作)
 
 function is_admin_uid($uid) {
 

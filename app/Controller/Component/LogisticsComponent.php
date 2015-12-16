@@ -10,7 +10,7 @@
 class LogisticsComponent extends Component {
 
 
-    public $components = array('ThirdPartyExpress');
+    public $components = array('ThirdPartyExpress', 'Weixin');
 
     /**
      * @param $data
@@ -194,7 +194,7 @@ class LogisticsComponent extends Component {
      */
     public function update_logistics_order_status($status, $business_no, $business_order_id) {
         $logisticsOrderM = ClassRegistry::init('LogisticsOrder');
-        $logisticsOrderM->update(array('status' => $status, 'update' => "'" . date('Y-m-d H:i:s') . "'"), array('business_no' => $business_no, 'business_order_id' => $business_order_id));
+        return $logisticsOrderM->updateAll(array('status' => $status, 'update' => "'" . date('Y-m-d H:i:s') . "'"), array('business_no' => $business_no, 'business_order_id' => $business_order_id));
     }
 
     /**
@@ -218,7 +218,90 @@ class LogisticsComponent extends Component {
         } else {
             $this->log('logistics order id ' . $logistics_order_id . ' auto call rr logistics fail reason ' . $result_str);
         }
-        $logisticsOrderM->updateAll($updateData, array('id' => $logistics_order_id));
+        if ($logisticsOrderM->updateAll($updateData, array('id' => $logistics_order_id))) {
+            $this->send_logistics_order_paid_msg($logistics_order_id);
+        }
         return $result;
+    }
+
+    /**
+     * @param $logistics_order_id
+     * 发送物流订单支付成功 信息
+     */
+    public function send_logistics_order_paid_msg($logistics_order_id) {
+        $logisticsOrderM = ClassRegistry::init('LogisticsOrder');
+        $logisticsOrderItemM = ClassRegistry::init('LogisticsOrderItem');
+        $logistics_order = $logisticsOrderM->find('first', array(
+            'conditions' => array(
+                'id' => $logistics_order_id
+            )
+        ));
+        $logistics_order_item = $logisticsOrderItemM->find('first', array(
+            'conditions' => array(
+                'logistics_order_id' => $logistics_order_id
+            )
+        ));
+        $order_creator = $logistics_order['LogisticsOrder']['creator'];
+        $order_creator_openid = $this->get_user_openid($order_creator);
+        $title = '您已成功支付快递费用。';
+        $order_price = $logistics_order['LogisticsOrder']['total_price'];
+        $product_name = '人人送快递费用--' . $logistics_order_item['LogisticsOrderItem']['goods_name'];
+        $consignee_address = $logistics_order_item['LogisticsOrderItem']['consignee_address'];
+        $order_id = $logistics_order['LogisticsOrder']['order_id'];
+        $remark = '点击查看详情';
+        $share_id = $this->get_share_id_by($order_id);
+        $url = $this->get_share_detail_url($share_id);
+        $this->Weixin->send_logistics_order_paid_msg($order_creator_openid, $title, $order_price, $product_name, $consignee_address, $order_id, $remark, $url);
+    }
+
+    /**
+     * @param $title
+     * @param $remark
+     * @param $business_no
+     * 物流订单通知消息
+     */
+    public function send_logistics_order_notify_msg($title, $remark, $business_no) {
+        $logisticsOrderM = ClassRegistry::init('LogisticsOrder');
+        $logisticsOrderItemM = ClassRegistry::init('LogisticsOrderItem');
+        $logistics_order = $logisticsOrderM->find('first', array(
+            'conditions' => array(
+                'business_no' => $business_no
+            )
+        ));
+        $logistics_order_id = $logistics_order['LogisticsOrder']['id'];
+        $logistics_order_item = $logisticsOrderItemM->find('first', array(
+            'conditions' => array(
+                'logistics_order_id' => $logistics_order_id
+            )
+        ));
+        $order_creator = $logistics_order['LogisticsOrder']['creator'];
+        $order_creator_openid = $this->get_user_openid($order_creator);
+        $order_id = $logistics_order['LogisticsOrder']['order_id'];
+        $start_address = $logistics_order['LogisticsOrder']['starting_address'];
+        $consignee_address = $logistics_order_item['LogisticsOrderItem']['consignee_address'];
+        $share_id = $this->get_share_id_by($order_id);
+        $url = $this->get_share_detail_url($share_id);
+        $this->Weixin->send_logistics_order_notify_msg($order_creator_openid, $url, $title, $order_id, $start_address, $consignee_address, $remark);
+    }
+
+    private function get_share_detail_url($share_id) {
+        return WX_HOST . '/weshares/view/' . $share_id;
+    }
+
+    private function get_user_openid($uid) {
+        $OauthbindM = ClassRegistry::init('Oauthbind');
+        $oauth_bind = $OauthbindM->findWxServiceBindByUid($uid);
+        return $oauth_bind['oauth_openid'];
+    }
+
+    private function get_share_id_by($order_id) {
+        $OrderM = ClassRegistry::init('Order');
+        $order = $OrderM->find('first', array(
+            'conditions' => array(
+                'id' => $order_id
+            ),
+            'fields' => array('member_id')
+        ));
+        return $order['Order']['member_id'];
     }
 }

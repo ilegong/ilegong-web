@@ -277,7 +277,11 @@ class LogisticsController extends AppController {
 
     private function handle_rr_receive($business_no, $business_order_id) {
         //人人快递接单 1
-        $this->Logistics->update_logistics_order_status(LOGISTICS_ORDER_RECEIVE, $business_no, $business_order_id);
+        if($this->Logistics->update_logistics_order_status(LOGISTICS_ORDER_RECEIVE, $business_no, $business_order_id)){
+            $title = '快递已接单，请您耐心等待。';
+            $remark = '点击查看详情！';
+            $this->Logistics->send_logistics_order_notify_msg($title, $remark, $business_no);
+        }
     }
 
     private function handle_rr_take($business_no, $business_order_id) {
@@ -293,7 +297,11 @@ class LogisticsController extends AppController {
 
     private function handle_rr_timeout_cancel($business_no, $business_order_id) {
         //人人快递超时取消 4
-        $this->Logistics->update_logistics_order_status(LOGISTICS_ORDER_CANCEL, $business_no, $business_order_id);
+        if($this->Logistics->update_logistics_order_status(LOGISTICS_ORDER_CANCEL, $business_no, $business_order_id)){
+            $title = '快递呼叫超时，您可再次呼叫。';
+            $remark = '再次呼叫快递小伙儿～～';
+            $this->Logistics->send_logistics_order_notify_msg($title, $remark, $business_no);
+        }
     }
 
     private function handle_rr_cancel_by_rr($business_no, $business_order_id) {
@@ -303,7 +311,11 @@ class LogisticsController extends AppController {
 
     private function handle_rr_cancel_receive_by_rr($business_no, $business_order_id) {
         //取消接单 6
-        $this->Logistics->update_logistics_order_status(LOGISTICS_ORDER_CANCEL, $business_no, $business_order_id);
+        if($this->Logistics->update_logistics_order_status(LOGISTICS_ORDER_CANCEL, $business_no, $business_order_id)){
+            $title = '快递已接单，请您耐心等待。';
+            $remark = '点击查看详情！';
+            $this->Logistics->send_logistics_order_notify_msg($title, $remark, $business_no);
+        }
     }
 
     private function handle_rr_receive_by_rr($business_no, $business_order_id) {
