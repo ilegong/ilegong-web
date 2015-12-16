@@ -1646,7 +1646,7 @@ class ShareUtilComponent extends Component {
                 '1436' => array(
                     'share_id' => 1436,
                     'share_name' => '老舅家的沙窝萝卜--脆绿嫩',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/91ca3f25e0f_1205.jpg',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/8d917876cee_1216.jpg',
                     'share_price' => '27',
                     'share_user_name' => '平凡的世界',
                     'share_vote' => 1000,
