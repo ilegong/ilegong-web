@@ -146,6 +146,23 @@ class SharePoolProduct extends AppModel {
             )
         ),
         array(
+            'share_id' => 1607,
+            'share_name' => '泉林本色 180g卷筒纸 5提共50卷套装',
+            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/4eef34e2ed7_1216.jpg',
+            'brand_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_bb0fe3108e30628b6766530390b7f1e8.jpg',
+            'brand_name' => '馨聪',
+            'show_brand' => true,
+            'brand_custom_service' => 872024,
+            'published' => 1,
+            'products' => array(
+                '3355' => array(
+                    'price' => 150,
+                    'channel_price' => 135,
+                ),
+
+            )
+        ),
+        array(
             'share_id' => 1449,
             'share_name' => '俄罗斯紫皮糖',
             'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/50ee44b0bf0_1205.jpg',
