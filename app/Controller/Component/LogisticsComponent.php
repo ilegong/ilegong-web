@@ -257,15 +257,15 @@ class LogisticsComponent extends Component {
     /**
      * @param $title
      * @param $remark
-     * @param $business_no
+     * @param $business_order_id
      * 物流订单通知消息
      */
-    public function send_logistics_order_notify_msg($title, $remark, $business_no) {
+    public function send_logistics_order_notify_msg($title, $remark, $business_order_id) {
         $logisticsOrderM = ClassRegistry::init('LogisticsOrder');
         $logisticsOrderItemM = ClassRegistry::init('LogisticsOrderItem');
         $logistics_order = $logisticsOrderM->find('first', array(
             'conditions' => array(
-                'business_no' => $business_no
+                'business_order_id' => $business_order_id
             )
         ));
         $logistics_order_id = $logistics_order['LogisticsOrder']['id'];
