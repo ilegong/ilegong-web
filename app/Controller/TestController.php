@@ -140,4 +140,10 @@ class TestController extends AppController{
         echo json_encode(array('success' => true, 'result' => $result));
     }
 
+    public function test_logistics_paid($logistics_order_id){
+        $this->autoRender = false;
+        $this->Logistics->send_logistics_order_paid_msg($logistics_order_id);
+        echo json_encode(array('success' => true));
+    }
+
 }
