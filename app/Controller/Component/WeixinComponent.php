@@ -1323,11 +1323,11 @@ class WeixinComponent extends Component {
             "topcolor" => "#FF0000",
             "data" => array(
                 "first" => $title,
-                "orderProductPrice" => $order_price,
-                "orderProductName" => $product_name,
-                "orderAddress" => $consignee_address,
-                "orderName" => $order_id,
-                "remark" => $remark
+                "orderProductPrice" => array("value" => $order_price),
+                "orderProductName" => array("value" => $product_name),
+                "orderAddress" => array("value" => $consignee_address),
+                "orderName" => array("value" => $order_id),
+                "remark" => array("value" => $remark, "color" => "#FF8800")
             )
         );
         return $this->send_weixin_message($post_data);
@@ -1343,18 +1343,18 @@ class WeixinComponent extends Component {
      * @return bool
      * 物流订单信息通知
      */
-    public function send_logistics_order_notify_msg($user_openid, $url, $title, $order_id, $start_address,$consignee_address, $remark) {
+    public function send_logistics_order_notify_msg($user_openid, $url, $title, $order_id, $start_address, $consignee_address, $remark) {
         $post_data = array(
             "touser" => $user_openid,
             "template_id" => 'template_id',
             "url" => $url,
             "topcolor" => "#FF0000",
             "data" => array(
-                "first" => $title,
-                "keyword1" => $order_id,
-                "keyword2" => $start_address,
-                "keyword3" => $consignee_address,
-                "remark" => $remark
+                "first" => array("value" => $title),
+                "keyword1" => array("value" => $order_id),
+                "keyword2" => array("value" => $start_address),
+                "keyword3" => array("value" => $consignee_address),
+                "remark" => array("value" => $remark, "color" => "#FF8800")
             )
         );
         return $this->send_weixin_message($post_data);
