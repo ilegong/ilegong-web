@@ -1643,6 +1643,16 @@ class ShareUtilComponent extends Component {
     public function get_share_index_product($tag) {
         $product = array(
             0 => array(
+                '1606' => array(
+                    'share_id' => 1606,
+                    'share_name' => '第一抗癌食品窖藏红薯又开团',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/df7b7081b9d_1216.jpg',
+                    'share_price' => '26',
+                    'share_user_name' => '大美',
+                    'share_vote' => 345,
+                    'share_user_id' => 842908,
+                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/319793d271b_0828.jpg'
+                ),
                 '1436' => array(
                     'share_id' => 1436,
                     'share_name' => '老舅家的沙窝萝卜--脆绿嫩',
@@ -2084,16 +2094,6 @@ class ShareUtilComponent extends Component {
 //                    'share_vote' => 130,
 //                    'share_user_id' => 806889,
 //                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
-//                ),
-//                '1061' => array(
-//                    'share_id' => 1061,
-//                    'share_name' => '父母种的红薯、紫薯、花生开刨啦',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/ff1894c1082_0928.jpg',
-//                    'share_price' => '40',
-//                    'share_user_name' => '大美',
-//                    'share_vote' => 345,
-//                    'share_user_id' => 842908,
-//                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/319793d271b_0828.jpg'
 //                ),
 //                '674' => array(
 //                    'share_id' => 674,
