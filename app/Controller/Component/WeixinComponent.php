@@ -1322,7 +1322,7 @@ class WeixinComponent extends Component {
             "url" => $detail_url,
             "topcolor" => "#FF0000",
             "data" => array(
-                "first" => $title,
+                "first" => array("value" => $title),
                 "orderProductPrice" => array("value" => $order_price),
                 "orderProductName" => array("value" => $product_name),
                 "orderAddress" => array("value" => $consignee_address),
