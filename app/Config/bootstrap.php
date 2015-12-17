@@ -2285,7 +2285,7 @@ function replace_urls($string) {
 }
 
 function is_blacklist_user($uid) {
-    $blacklist = array(881026);
+    $blacklist = array(881026, 886291);
     return in_array($uid, $blacklist);
 }
 
