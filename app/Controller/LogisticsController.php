@@ -271,7 +271,7 @@ class LogisticsController extends AppController {
 
     private function valid_rr_sign($sign, $orderNo, $businessNo) {
         $sign_keyword = RR_LOGISTICS_USERNAME . $orderNo . $businessNo;
-        $valid_sign = $this->Logistics->get_sign($sign_keyword);
+        $valid_sign = $this->Logistics->get_call_back_sign($sign_keyword);
         return $valid_sign == $sign;
     }
 

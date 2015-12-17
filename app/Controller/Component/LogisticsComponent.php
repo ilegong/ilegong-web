@@ -178,6 +178,15 @@ class LogisticsComponent extends Component {
     }
 
     /**
+     * @param $keyword
+     * @return string
+     * 回调的时候签名
+     */
+    public function get_call_back_sign($keyword) {
+        return strtolower(MD5(RR_LOGISTICS_APP_KEY + MD5($keyword)));
+    }
+
+    /**
      * @param $logistics_order_id
      * @return string
      * 生成人人快递的订单号
