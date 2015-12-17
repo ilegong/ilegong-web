@@ -229,6 +229,7 @@ class LogisticsController extends AppController {
         $this->autoRender = false;
         $postStr = file_get_contents('php://input');
         $result = json_decode($postStr, true);
+        $this->log('rr logistics call back result ' . $postStr);
         $msgType = $result['msgType'];
         $orderNo = $result['orderNo'];
         $businessNo = $result['businessNo'];
