@@ -302,7 +302,7 @@ class LogisticsComponent extends Component {
                 'business_order_id' => $business_order_id
             )
         ));
-        $order_id = $logistics_order['LogisticsOrder']['id'];
+        $order_id = $logistics_order['LogisticsOrder']['order_id'];
         $orderM->updateAll(array('status' => ORDER_STATUS_RECEIVED, 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order_id));
         $cartM->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order_id));
         $weshare_id = $this->get_share_id_by_order_id($order_id);
