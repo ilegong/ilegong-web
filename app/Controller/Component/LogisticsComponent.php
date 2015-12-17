@@ -10,7 +10,7 @@
 class LogisticsComponent extends Component {
 
 
-    public $components = array('ThirdPartyExpress', 'Weixin');
+    public $components = array('ThirdPartyExpress', 'Weixin', 'WeshareBuy');
 
     /**
      * @param $data

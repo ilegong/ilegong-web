@@ -1442,7 +1442,12 @@
             alert('呼叫失败，请联系客服。');
           });
         }else{
-          alert('等待快递员接单。');
+          if(logisticsOrder['status'] == 1){
+            alert('等待快递员接单');
+          }
+          if(logisticsOrder['status'] == 2){
+            alert('快递已接单，请耐心等候');
+          }
         }
         return;
       }
