@@ -1511,6 +1511,9 @@ function createNewUserByWeixin($userInfo, $userModel) {
             $download_url = $userInfo['headimgurl'];
         }
     }
+    if(empty($userModel)){
+        $userModel = ClassRegistry::init('User');
+    }
     if (!$userModel->save(array(
         'nickname' => convertWxName($userInfo['nickname']),
         'sex' => $userInfo['sex'] == 1 ? 0 : ($userInfo['sex'] == 2 ? 1 : null),

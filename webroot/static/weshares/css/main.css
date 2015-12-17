@@ -767,7 +767,7 @@ ul li {
 
 .weshare-view .orders .order .detail .display-name {
     display: block;
-    padding: 0 10px 10px 10px;
+    padding: 10px 10px 10px 10px;
     line-height: 18px;
     color: #333333;
     font-style: normal;
