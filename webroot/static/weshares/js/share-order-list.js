@@ -123,23 +123,22 @@ $(document).ready(function () {
       $pysZitiOrderCount.text($showOrderItems.filter('div[data-order-ship-type="pys_ziti"]').length);
     }
   }
-  $('button[name="set_order_shipped"]').on('click', function (e) {
+  $('button[name="set_order_received"]').on('click', function (e) {
     e.preventDefault();
     var $me = $(this);
-    bootbox.confirm("确定已发货?", function (result) {
+    bootbox.confirm("确定已签收?", function (result) {
       if (!result) {
         return;
       }
-      var order_id = $me.data('id');
+      var order_id = $me.data('order-id');
       var $parent = $me.parentsUntil('div.col-xs-12');
       $.getJSON('/weshares/confirmReceived/' + order_id, function (data) {
         if (data['success']) {
           $parent.removeClass('offer-success').addClass('offer-warning');
-          $('div.shape-text', $parent).text('已发货');
-          $me.next().remove();
+          $('div.shape-text', $parent).text('已取货');
           $me.remove();
         } else {
-          alert('修改失败');
+          alert('更新失败');
         }
       });
     });

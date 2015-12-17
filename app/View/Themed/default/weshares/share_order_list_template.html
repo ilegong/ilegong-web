@@ -93,6 +93,12 @@
                         <strong>提货码:</strong><strong>{{$item_order['ship_code']}}</strong>
                     </p>
                 {{/if}}
+                {{if $current_tag == SHARE_SHIP_SELF_ZITI_TAG}}
+                    <button class="btn btn-info btn-xs"
+                            data-order-id="{{$item_order['id']}}" name="set_order_received"
+                            style="margin-bottom: 5px; margin-left: 5px;">已签收
+                    </button>
+                {{/if}}
             {{/if}}
             {{if $item_order['status'] == ORDER_STATUS_PAID&&$current_tag == SHARE_SHIP_KUAIDI_TAG}}
                 <div class="form" style="display: inline;">
