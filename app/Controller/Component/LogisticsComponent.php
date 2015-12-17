@@ -183,7 +183,7 @@ class LogisticsComponent extends Component {
      * 回调的时候签名
      */
     public function get_call_back_sign($keyword) {
-        return strtolower(MD5(RR_LOGISTICS_APP_KEY + MD5($keyword)));
+        return strtolower(MD5(RR_LOGISTICS_APP_KEY . MD5($keyword)));
     }
 
     /**
