@@ -12,6 +12,50 @@ class LogisticsComponent extends Component {
 
     public $components = array('ThirdPartyExpress', 'Weixin', 'WeshareBuy');
 
+
+    private function get_logistics_order($logistics_order_id){
+        $logisticsOrderM = ClassRegistry::init('LogisticsOrder');
+        $logistics_order = $logisticsOrderM->find('first', array(
+            'conditions' => array(
+                'id' => $logistics_order_id
+            )
+        ));
+        return $logistics_order;
+    }
+
+    /**
+     * 获取人人快递订单操作日志
+     * @param $logistics_order_id
+     */
+    public function get_logistics_order_log($logistics_order_id) {
+        $logistics_order = $this->get_logistics_order($logistics_order_id);
+        $params = array();
+        $params['userName'] = RR_LOGISTICS_USERNAME;
+        $params['orderNo'] = $logistics_order['LogisticsOrder']['business_order_id'];
+        $params['businessNo'] = $logistics_order['LogisticsOrder']['business_no'];
+        $params['sign'] = $this->get_sign(RR_LOGISTICS_USERNAME . $logistics_order['LogisticsOrder']['business_no']);
+        $result = $this->ThirdPartyExpress->query_rr_order($params);
+        return $result;
+    }
+
+    /**
+     * @param $logistics_order_id
+     * @param $reason
+     * 取消人人订单
+     */
+    public function cancel_logistics_order($logistics_order_id, $reason) {
+        $logistics_order = $this->get_logistics_order($logistics_order_id);
+        $params = array();
+        $params['userName'] = RR_LOGISTICS_USERNAME;
+        $params['orderNo'] = $logistics_order['LogisticsOrder']['business_order_id'];
+        $params['businessNo'] = $logistics_order['LogisticsOrder']['business_no'];
+        $params['reason'] = $reason;
+        $params['sign'] = $this->get_sign(RR_LOGISTICS_USERNAME . $logistics_order['LogisticsOrder']['business_no']);
+        $result = $this->ThirdPartyExpress->cancel_rr_order($params);
+        return $result;
+
+    }
+
     /**
      * @param $data
      * @return array

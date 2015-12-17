@@ -31,32 +31,34 @@ class LogisticsController extends AppController {
     }
 
     /**
+     * @param $logistics_order_id
      * 取消人人订单
      */
-    public function cancel_rr_logistics_order() {
+    public function cancel_rr_logistics_order($logistics_order_id) {
         $this->autoRender = false;
-//$params ["userName"];
-//$params ["businessNo"];
-//$params ["reason"];
-//$params ["sign"]; strtolower ( MD5 ( $appKey . strtolower ( MD5 ( $userName . $businessNo ) ) ) )
-
-//$result ["isSuccess"];
-//$result ["errMsg"];
-//$result ["warn"];
-//$result ["orderNo"];
-//$result ["businessNo"];
-        $params = array();
         $reason = $_REQUEST['reason'];
-        $businessNo = $_REQUEST['businessNo'];
-        $params['reason'] = $reason;
-        $params['userName'] = RR_LOGISTICS_USERNAME;
-        $params['businessNo'] = $businessNo;
-        $sign_keyword = RR_LOGISTICS_USERNAME . $businessNo;
-        $sign = $this->Logistics->get_sign($sign_keyword);
-        $params['sign'] = $sign;
-        $result = $this->ThirdPartyExpress->cancel_rr_order($params);
+        $result = $this->Logistics->cancel_logistics_order($logistics_order_id, $reason);
         echo $result;
         return;
+    }
+
+    /**
+     * @param $logistics_order_id
+     * 查询人人订单的操作日志
+     */
+    public function get_rr_logistics_order_log($logistics_order_id){
+        $this->autoRender = false;
+        $result = $this->Logistics->get_logistics_order_log($logistics_order_id);
+        echo $result;
+        return;
+    }
+
+    /**
+     * @param $logistics_order_id
+     * 查询人人订单配送人的信息
+     */
+    public function get_rr_order_deliverer($logistics_order_id){
+
     }
 
     public function cal_rr_ship_fee() {
