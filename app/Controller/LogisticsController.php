@@ -296,6 +296,7 @@ class LogisticsController extends AppController {
     private function handle_rr_sign($business_no, $business_order_id) {
         //人人快递签收 3
         $this->Logistics->update_logistics_order_status(LOGISTICS_ORDER_SIGN, $business_no, $business_order_id);
+        $this->Logistics->update_user_order_status($business_order_id);
     }
 
     private function handle_rr_timeout_cancel($business_no, $business_order_id) {
@@ -338,6 +339,7 @@ class LogisticsController extends AppController {
     private function handle_rr_sign_by_rr($business_no, $business_order_id) {
         //签收 9
         $this->Logistics->update_logistics_order_status(LOGISTICS_ORDER_SIGN, $business_no, $business_order_id);
+        $this->Logistics->update_user_order_status($business_order_id);
     }
 
 }

@@ -258,7 +258,7 @@ class LogisticsComponent extends Component {
         $consignee_address = $logistics_order_item['LogisticsOrderItem']['consignee_address'];
         $order_id = $logistics_order['LogisticsOrder']['order_id'];
         $remark = '点击查看详情';
-        $share_id = $this->get_share_id_by($order_id);
+        $share_id = $this->get_share_id_by_order_id($order_id);
         $url = $this->get_share_detail_url($share_id);
         $this->Weixin->send_logistics_order_paid_msg($order_creator_openid, $title, $order_price, $product_name, $consignee_address, $order_id, $remark, $url);
     }
@@ -288,9 +288,29 @@ class LogisticsComponent extends Component {
         $order_id = $logistics_order['LogisticsOrder']['order_id'];
         $start_address = $logistics_order['LogisticsOrder']['starting_address'];
         $consignee_address = $logistics_order_item['LogisticsOrderItem']['consignee_address'];
-        $share_id = $this->get_share_id_by($order_id);
+        $share_id = $this->get_share_id_by_order_id($order_id);
         $url = $this->get_share_detail_url($share_id);
         $this->Weixin->send_logistics_order_notify_msg($order_creator_openid, $url, $title, $order_id, $start_address, $consignee_address, $remark);
+    }
+
+    public function update_user_order_status($business_order_id){
+        $logisticsOrderM = ClassRegistry::init('LogisticsOrder');
+        $orderM = ClassRegistry::init('Order');
+        $cartM = ClassRegistry::init('Cart');
+        $logistics_order = $logisticsOrderM->find('first', array(
+            'conditions' => array(
+                'business_order_id' => $business_order_id
+            )
+        ));
+        $order_id = $logistics_order['LogisticsOrder']['id'];
+        $orderM->updateAll(array('status' => ORDER_STATUS_RECEIVED, 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order_id));
+        $cartM->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order_id));
+        $weshare_id = $this->get_share_id_by_order_id($order_id);
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_0', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
+        $this->WeshareBuy->clear_user_share_order_data_cache(array($order_id), $weshare_id);
     }
 
     private function get_share_detail_url($share_id) {
@@ -303,7 +323,7 @@ class LogisticsComponent extends Component {
         return $oauth_bind['oauth_openid'];
     }
 
-    private function get_share_id_by($order_id) {
+    private function get_share_id_by_order_id($order_id) {
         $OrderM = ClassRegistry::init('Order');
         $order = $OrderM->find('first', array(
             'conditions' => array(
