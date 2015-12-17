@@ -234,6 +234,7 @@ class LogisticsController extends AppController {
         $orderNo = $result['orderNo'];
         $businessNo = $result['businessNo'];
         $sign = $result['sign'];
+        $this->log('rr call back msg type ' . $msgType . ' rr order No ' . $orderNo . ' rr business no ' . $businessNo);
         if ($this->valid_rr_sign($sign, $orderNo, $businessNo)) {
             switch ($msgType) {
                 case 1: //接单
@@ -272,6 +273,7 @@ class LogisticsController extends AppController {
     private function valid_rr_sign($sign, $orderNo, $businessNo) {
         $sign_keyword = RR_LOGISTICS_USERNAME . $orderNo . $businessNo;
         $valid_sign = $this->Logistics->get_call_back_sign($sign_keyword);
+        $this->log('call back sign ' . $sign . ' valid sign ' . $valid_sign);
         return $valid_sign == $sign;
     }
 
@@ -321,7 +323,11 @@ class LogisticsController extends AppController {
 
     private function handle_rr_receive_by_rr($business_no, $business_order_id) {
         //接单 7
-        $this->Logistics->update_logistics_order_status(LOGISTICS_ORDER_RECEIVE, $business_no, $business_order_id);
+        if($this->Logistics->update_logistics_order_status(LOGISTICS_ORDER_RECEIVE, $business_no, $business_order_id)){
+            $title = '快递已接单，请您耐心等待。';
+            $remark = '点击查看详情！';
+            $this->Logistics->send_logistics_order_notify_msg($title, $remark, $business_order_id);
+        }
     }
 
     private function handle_rr_take_by_rr($business_no, $business_order_id) {
