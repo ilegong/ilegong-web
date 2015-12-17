@@ -1663,6 +1663,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 801447,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/8014471448421852.png'
                 ),
+                '1392' => array(
+                    'share_id' => 1392,
+                    'share_name' => '多油、好吃到停不下来的海鸭蛋',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/ece57e81c34_1027.jpg',
+                    'share_price' => '55',
+                    'share_user_name' => '樱花',
+                    'share_vote' => 3000,
+                    'share_user_id' => 810684,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
+                ),
                 '1484' => array(
                     'share_id' => 1484,
                     'share_name' => '俄罗斯野生淡干小海参第二团开始了',
@@ -1724,16 +1734,7 @@ class ShareUtilComponent extends Component {
 //                    'share_user_id' => 806889,
 //                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
 //                ),
-                '1392' => array(
-                    'share_id' => 1392,
-                    'share_name' => '多油、好吃到停不下来的海鸭蛋',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/ece57e81c34_1027.jpg',
-                    'share_price' => '55',
-                    'share_user_name' => '樱花',
-                    'share_vote' => 3000,
-                    'share_user_id' => 810684,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
-                ),
+
                 '1439' => array(
                     'share_id' => 1439,
                     'share_name' => '云南秘制油淋牛肝菌，过嘴不忘的味道',
@@ -2252,8 +2253,8 @@ class ShareUtilComponent extends Component {
             ),
             2 => array(
                 //寒之乡 稻花香
-                '1065' => array(
-                    'share_id' => 1065,
+                '1403' => array(
+                    'share_id' => 1403,
                     'share_name' => '寒之乡稻花香2号大米----2015年新米上市啦！',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/b34f11172dc_1110.jpg',
                     'share_price' => '110',
