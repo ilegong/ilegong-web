@@ -1693,6 +1693,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 811917,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
                 ),
+                '1566' => array(
+                    'share_id' => 1566,
+                    'share_name' => '油淋鸡枞菌----邂逅山珍美味的快感',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/41bb355613e_1217.jpg',
+                    'share_price' => '48',
+                    'share_user_name' => '鲲鲲',
+                    'share_vote' => 2000,
+                    'share_user_id' => 806889,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
+                ),
                 '1500' => array(
                     'share_id' => 1500,
                     'share_name' => '小火团贡玉米 甜糯口感 浓郁的玉米原香',
@@ -1806,6 +1816,36 @@ class ShareUtilComponent extends Component {
 //                    'share_user_id' => 811917,
 //                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
 //                ),
+                '1459' => array(
+                    'share_id' => 1459,
+                    'share_name' => '您私人定制的有机土猪腊肉',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/450d0d1ac18_1217.jpg',
+                    'share_price' => '39',
+                    'share_user_name' => '橘子姐姐',
+                    'share_vote' => 999,
+                    'share_user_id' => 815328,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_4d626c6f16dbb4f373a3b1c4db07f918.jpg'
+                ),
+                '1519' => array(
+                    'share_id' => 1519,
+                    'share_name' => '祖传秘方，精心制作，辣婆婆来袭',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/b5dad3dfc3e_1217.jpg',
+                    'share_price' => '26',
+                    'share_user_name' => '李樱花',
+                    'share_vote' => 800,
+                    'share_user_id' => 810684,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
+                ),
+                '1598' => array(
+                    'share_id' => 1598,
+                    'share_name' => '浓浓小时候味道的地瓜干',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/58b9e1a90c9_1217.jpg',
+                    'share_price' => '65',
+                    'share_user_name' => '盛夏',
+                    'share_vote' => 1500,
+                    'share_user_id' => 708029,
+                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
+                ),
                 '1451' => array(
                     'share_id' => 1451,
                     'share_name' => '德庆贡柑熟了，想找找当皇帝娘娘的感觉吗？',
