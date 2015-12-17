@@ -50,6 +50,8 @@ foreach ($orders as $item) {
                     $value = $users[$item['creator']]['nickname'];
                 }else if($fieldName == 'ship_fee'){
                     $value = $item['ship_fee'] / 100.0;
+                }else if($fieldName == 'consignee_mobilephone'){
+                    $value = '手机:'.$item['consignee_mobilephone'];
                 }else {
                     $value = $item[$fieldName];
                 }
