@@ -1683,16 +1683,27 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 810684,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
                 ),
-                '1510' => array(
-                    'share_id' => 1510,
-                    'share_name' => '精选深海野生中段带鱼 肉美肥厚【包邮】',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/c4c9f3c7bb8_1209.jpg',
+                //山药
+                '1636' => array(
+                    'share_id' => 1636,
+                    'share_name' => '艳艳山药友情团',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/9865c6196ae_1110.jpg',
                     'share_price' => '85',
-                    'share_user_name' => '小宝妈',
-                    'share_vote' => 2000,
-                    'share_user_id' => 811917,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
+                    'share_user_name' => '艳艳',
+                    'share_vote' => 800,
+                    'share_user_id' => 12376,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/123761447121370.png'
                 ),
+//                '1510' => array(
+//                    'share_id' => 1510,
+//                    'share_name' => '精选深海野生中段带鱼 肉美肥厚【包邮】',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/c4c9f3c7bb8_1209.jpg',
+//                    'share_price' => '85',
+//                    'share_user_name' => '小宝妈',
+//                    'share_vote' => 2000,
+//                    'share_user_id' => 811917,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
+//                ),
                 '1566' => array(
                     'share_id' => 1566,
                     'share_name' => '油淋鸡枞菌----邂逅山珍美味的快感',
@@ -1886,17 +1897,6 @@ class ShareUtilComponent extends Component {
 //                    'share_user_id' => 867768,
 //                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_6826f42e5a8ed9fc40cc3653e12b1064.jpg'
 //                ),
-                //山药
-                '1483' => array(
-                    'share_id' => 1483,
-                    'share_name' => '口口相传的艳艳山药第五批团！',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/9865c6196ae_1110.jpg',
-                    'share_price' => '85',
-                    'share_user_name' => '艳艳',
-                    'share_vote' => 800,
-                    'share_user_id' => 12376,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/123761447121370.png'
-                ),
                 //紫皮糖
                 '1582' => array(
                     'share_id' => 1582,
