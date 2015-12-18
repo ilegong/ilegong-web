@@ -1643,13 +1643,43 @@ class ShareUtilComponent extends Component {
     public function get_share_index_product($tag) {
         $product = array(
             0 => array(
+                '1664' => array(
+                    'share_id' => 1664,
+                    'share_name' => '【赞橙】沱沱工社有机脐橙',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/00f1c31a335_1218.jpg',
+                    'share_price' => '98',
+                    'share_user_name' => '杨晓光',
+                    'share_vote' => 5000,
+                    'share_user_id' => 141,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg'
+                ),
+                '1529' => array(
+                    'share_id' => 1529,
+                    'share_name' => '烟台干货海带 补充各种维生素',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/e96c63a7651_1218.jpg',
+                    'share_price' => '46',
+                    'share_user_name' => '南彩',
+                    'share_vote' => 1000,
+                    'share_user_id' => 886905,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_eb6105d6e125a8e05a94b6f7608642db.jpg'
+                ),
+                '1530' => array(
+                    'share_id' => 1530,
+                    'share_name' => '烟台长岛金钩海米 天然晾晒 原味干虾米 味鲜劲道',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/02e7ae6f62c_1218.jpg',
+                    'share_price' => '47',
+                    'share_user_name' => '南彩',
+                    'share_vote' => 1000,
+                    'share_user_id' => 886905,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_eb6105d6e125a8e05a94b6f7608642db.jpg'
+                ),
                 '1606' => array(
                     'share_id' => 1606,
                     'share_name' => '第一抗癌食品窖藏红薯又开团',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/df7b7081b9d_1216.jpg',
                     'share_price' => '26',
                     'share_user_name' => '大美',
-                    'share_vote' => 345,
+                    'share_vote' => 1500,
                     'share_user_id' => 842908,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/319793d271b_0828.jpg'
                 ),
