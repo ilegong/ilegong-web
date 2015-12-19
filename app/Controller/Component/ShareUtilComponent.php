@@ -1645,7 +1645,7 @@ class ShareUtilComponent extends Component {
             0 => array(
                 '1664' => array(
                     'share_id' => 1664,
-                    'share_name' => '【赞橙】沱沱工社有机脐橙',
+                    'share_name' => '【赞橙】有机脐橙 吃后必赞',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/00f1c31a335_1218.jpg',
                     'share_price' => '98',
                     'share_user_name' => '杨晓光',
