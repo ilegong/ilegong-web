@@ -983,6 +983,19 @@ class WesharesController extends AppController {
     }
 
     /**
+     * update order remark
+     */
+    public function update_order_remark() {
+        $this->autoRender = false;
+        $order_id = $_POST['order_id'];
+        $order_remark = $_POST['order_remark'];
+        $weshare_id = $_POST['weshare_id'];
+        $this->WeshareBuy->update_order_remark($order_id, $order_remark, $weshare_id);
+        echo json_encode(array('success' => true));
+        return;
+    }
+
+    /**
      * @param $weshareId
      * 分享者订单统计页面
      */

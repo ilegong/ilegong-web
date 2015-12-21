@@ -1,25 +1,26 @@
 $(document).ready(function () {
   var $shareOrderListTagToggle = $('#order-tag-toggle');
-  var $tagLi  = $('li', $shareOrderListTagToggle);
+  var $tagLi = $('li', $shareOrderListTagToggle);
   var $divOrderItems = $('div.div-order-item');
   var $summeryProductItems = $('tr.summery-product-item');
   var $orderDataSummeryItems = $('tr.order-data-summery');
   var $zitiPanel = $('#self-ziti-orders');
   var filterOrderTag = 'all';
   var filterOrderStatus = 'all';
-  $('div.offer .div-share-item').on('click',function(e){
+  $('div.offer .div-share-item').on('click', function (e) {
     e.preventDefault();
     var $me = $(this);
     var $parent = $me.parentsUntil('div.col-xs-12').parent('div.col-xs-12');
     var child_share_id = $parent.data('id');
-    window.location.href='/weshares/view/'+child_share_id;
+    window.location.href = '/weshares/view/' + child_share_id;
   });
-  function init(){
-    if($tagLi.length > 0){
+  function init() {
+    if ($tagLi.length > 0) {
       $('li:first', $shareOrderListTagToggle).trigger('click');
     }
   }
-  $tagLi.on('click', function(e){
+
+  $tagLi.on('click', function (e) {
     e.preventDefault();
     var $me = $(this);
     var tagId = $me.data('id');
@@ -38,12 +39,13 @@ $(document).ready(function () {
     } else {
       $divOrderItems.hide();
       $summeryProductItems.hide();
-      showFilterOrderItems(filterOrderTag,filterOrderStatus);
+      showFilterOrderItems(filterOrderTag, filterOrderStatus);
       $('tr[name="summery-product-' + tag + '"]').show();
       $orderDataSummeryItems.hide();
       $('tr[name="order-data-summery-' + tag + '"]').show();
     }
   }
+
   var orderType = '';
   var $selfZitiOrder = $('#self-ziti-orders');
   $('select[name="ship_company_code"]').on('change', function () {
@@ -113,16 +115,17 @@ $(document).ready(function () {
       }
     }
     $showOrderItems.show();
-    if($zitiOrderCountDom.length){
+    if ($zitiOrderCountDom.length) {
       $zitiOrderCountDom.text($showOrderItems.filter('div[data-order-ship-type="self_ziti"]').length);
     }
-    if($kuaidiOrderCountDom.length){
+    if ($kuaidiOrderCountDom.length) {
       $kuaidiOrderCountDom.text($showOrderItems.filter('div[data-order-ship-type="kuai_di"]').length);
     }
-    if($pysZitiOrderCount.length){
+    if ($pysZitiOrderCount.length) {
       $pysZitiOrderCount.text($showOrderItems.filter('div[data-order-ship-type="pys_ziti"]').length);
     }
   }
+
   $('button[name="set_order_received"]').on('click', function (e) {
     e.preventDefault();
     var $me = $(this);
@@ -153,7 +156,7 @@ $(document).ready(function () {
     var id = $(this).data('id');
     var $processOrders = $('div.div-order-item:visible', $zitiPanel);
     var processOrderIds = [];
-    $processOrders.each(function(index,item){
+    $processOrders.each(function (index, item) {
       var $item = $(item);
       processOrderIds.push($item.data('id'));
     });
@@ -308,7 +311,7 @@ $(document).ready(function () {
     $postData['order_id'] = $confirmOrderId.val();
     $postData['cart_map'] = [];
     $.each(cartJsonData, function (index, item) {
-      if(item['confirm_price'] == 0){
+      if (item['confirm_price'] == 0) {
         var cartId = item['id'];
         var $cartDom = $('#cart_' + cartId, $confirmMoneyDialog);
         var cartOriginPrice = $cartDom.data('origin-price');
@@ -330,11 +333,11 @@ $(document).ready(function () {
         var $parent = $priceConfirmBtn.parent('div.offer-content');
         $parent = $parent.parent();
         var $statusLabel = $('#process-prepaid-status span', $parent);
-        if (difference_price > 0){
+        if (difference_price > 0) {
           $statusLabel.removeClass().addClass('label').addClass('label-info').text('待补款');
-        }else if(difference_price < 0){
+        } else if (difference_price < 0) {
           $statusLabel.removeClass().addClass('label').addClass('label-info').text('待退差价');
-        }else{
+        } else {
           $statusLabel.removeClass().addClass('label').addClass('label-info').text('无差价');
         }
         $priceConfirmBtn.remove();
@@ -350,7 +353,7 @@ $(document).ready(function () {
   var $refundShareId = $('#refund-share-id', $refundShareDialog);
   var $refundShareRemark = $('#refund-share-msg', $refundShareDialog);
 
-  $('button.refund-share-money').on('click', function(e){
+  $('button.refund-share-money').on('click', function (e) {
     e.preventDefault();
     var $me = $(this);
     var address = $me.data('address');
@@ -361,7 +364,7 @@ $(document).ready(function () {
     $refundShareDialog.modal('show');
   });
 
-  $('button[name="handle-refund-share-money"]').on('click', function(e){
+  $('button[name="handle-refund-share-money"]').on('click', function (e) {
     e.preventDefault();
     var refundMark = $refundShareRemark.val();
     var shareId = $refundShareId.val();
@@ -372,10 +375,10 @@ $(document).ready(function () {
     var postData = {
       refundMark: refundMark
     };
-    $.post('/weshares/refund_share/'+shareId+'.json', postData, function (data) {
+    $.post('/weshares/refund_share/' + shareId + '.json', postData, function (data) {
       if (data['success']) {
         //todo mark
-        $('#refund-share-btn-'+shareId).remove();
+        $('#refund-share-btn-' + shareId).remove();
         $refundShareDialog.modal('hide');
       }
     }, 'json');
@@ -406,7 +409,7 @@ $(document).ready(function () {
     var order_id = $editOrderShipOrderId.val();
     var ship_type_name = $editOrderShipTypeNameEl.val();
     var ship_code = $editOrderShipCodeEl.val();
-    if(!ship_code || !ship_type_name){
+    if (!ship_code || !ship_type_name) {
       alert('请输入快递单号和快递公司');
       return false;
     }
@@ -417,7 +420,7 @@ $(document).ready(function () {
       'weshare_id': weshare_id
     };
     $.post('/weshares/update_order_ship_code', postData, function (data) {
-      if(data['success']){
+      if (data['success']) {
         //update view
         var $currentOrderShipInfo = $('#order-ship-info-' + order_id);
         $('strong[name="order_ship_type_name"]', $currentOrderShipInfo).text(ship_type_name);
@@ -428,5 +431,46 @@ $(document).ready(function () {
         $editOrderShipInfoForm.modal('hide');
       }
     }, 'json')
+  });
+  //update order remark
+  var $toEditOrderRemarkInfoBtn = $('button.remark-order');
+  var $editOrderRemarkInfoForm = $('div.update-order-remark-dialog');
+  var $editOrderRemarkOrderId = $('input[name="order_id"]', $editOrderRemarkInfoForm);
+  var $editOrderRemarkContent = $('textarea[name="order_remark"]', $editOrderRemarkInfoForm);
+  var $handleUpdateOrderRemarkBtn = $('button[name="handle-update-order-remark"]', $editOrderRemarkInfoForm);
+  $toEditOrderRemarkInfoBtn.on('click', function (e) {
+    e.preventDefault();
+    var $me = $(this);
+    var orderId = $me.data('order-id');
+    var oldRemark = $me.data('order-remark');
+    $editOrderRemarkOrderId.val(orderId);
+    $editOrderRemarkContent.val(oldRemark);
+    $editOrderRemarkInfoForm.modal('show');
+  });
+  $handleUpdateOrderRemarkBtn.on('click', function (e) {
+    e.preventDefault();
+    var orderId = $editOrderRemarkOrderId.val();
+    var orderRemark = $editOrderRemarkContent.val();
+    var $me = $(this);
+    var weshare_id = $me.data('id');
+    var postData = {
+      "order_id": orderId,
+      "order_remark": orderRemark,
+      "weshare_id" : weshare_id
+    };
+    $.post('/weshares/update_order_remark', postData, function (data) {
+      if(data['success']){
+        var $orderInfoPanel = $('#order-info-panel-'+orderId);
+        var $orderRemarkHolder = $('span[name="order-remark"]');
+        if($orderRemarkHolder.length){
+          $orderRemarkHolder.text(orderRemark);
+        }else{
+          $orderInfoPanel.append('<strong name="order-remark">备注:</strong>&nbsp;&nbsp;<span name="order-remark">' + orderRemark + '</span>');
+        }
+      }else{
+        alert('标记失败！');
+      }
+      $editOrderRemarkInfoForm.modal('hide');
+    },'json');
   });
 });

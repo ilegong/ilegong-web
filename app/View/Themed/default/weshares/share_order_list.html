@@ -204,6 +204,39 @@
 
 </div>
 <div class="row" style="position: fixed;height: 46px;bottom: 0;width: 100%;">
+    <div class="modal fade bs-example-modal-sm update-order-remark-dialog" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">标记订单</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="arrival_msg" class="col-sm-2 control-label">订单ID</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="order_id" placeholder="订单ID" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="arrival_msg" class="col-sm-2 control-label">标记内容</label>
+                            <div class="col-sm-10">
+                                <textarea name="order_remark" class="form-control" placeholder="标记内容"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary btn-xs" data-id="{{$weshareId}}"
+                            name="handle-update-order-remark">标记
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade bs-example-modal-sm update-ship-info-dialog" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
@@ -416,4 +449,4 @@
             id="send_product_arrive_msg" style="border-radius:0px; display: none;">取货提醒
     </button>
 </div>
-<script src="{{$STATIC_FILE_PATH}}/static/weshares/js/share-order-list.min.js?v0.1.9"></script>
+<script src="{{$STATIC_FILE_PATH}}/static/weshares/js/share-order-list.min.js?v0.2.0"></script>

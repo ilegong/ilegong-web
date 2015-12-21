@@ -1299,6 +1299,16 @@ class WeshareBuyComponent extends Component {
         return $result_data;
     }
 
+    /**
+     * @param $orderId
+     * @param $orderRemark
+     * @param $weshareId
+     */
+    public function update_order_remark($orderId, $orderRemark, $weshareId) {
+        $orderM = ClassRegistry::init('Order');
+        $orderM->update(array('business_remark' => "'" . $orderRemark . "'"), array('id' => $orderId));
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId . '_1', '');
+    }
 
     /**
      * @param $weshareId
