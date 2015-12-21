@@ -453,6 +453,10 @@ $(document).ready(function () {
     var orderRemark = $editOrderRemarkContent.val();
     var $me = $(this);
     var weshare_id = $me.data('id');
+    if(!orderRemark.trim()){
+      alert('请输入备注信息！');
+      return;
+    }
     var postData = {
       "order_id": orderId,
       "order_remark": orderRemark,
