@@ -828,6 +828,10 @@
 
     function checkProductNum(product) {
       var store_num = product.store;
+      //sold out
+      if(store_num == -1){
+        return false;
+      }
       if (store_num == 0) {
         return true;
       }

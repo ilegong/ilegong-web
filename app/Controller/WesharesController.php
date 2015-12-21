@@ -558,6 +558,7 @@ class WesharesController extends AppController {
             $address = $this->get_order_address($weshareId, $shipInfo, $buyerData, $uid);
             $orderData = array('cate_id' => $rebateLogId, 'creator' => $uid, 'consignee_address' => $address, 'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $buyerData['name'], 'consignee_mobilephone' => $buyerData['mobilephone'], 'business_remark' => $business_remark);
             $process_shi_mark_result = $this->process_order_ship_mark($shipType, $orderData, $is_group_share_type);
+            //拼团
             if ($process_shi_mark_result == self::PROCESS_SHIP_MARK_UNFINISHED_RESULT) {
                 $this->process_ship_group($orderData, $shipInfo, $is_start_new_group_share, $weshareId, $uid, $address, $business_remark);
             }
@@ -1624,6 +1625,9 @@ class WesharesController extends AppController {
      */
     private function check_product_num($weshareId, $weshareProduct, $num) {
         $store_num = $weshareProduct['WeshareProduct']['store'];
+        if ($store_num == -1) {
+            return array('result' => false, 'type' => 0);
+        }
         if ($store_num == 0) {
             return array('result' => true);
         }
