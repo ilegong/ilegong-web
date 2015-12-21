@@ -22,7 +22,7 @@
             </div>
             <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/faq.png" width="20px" height="20px" style="margin-top: 3%;" ng-click="vm.showProductTipInfo=true;vm.showLayer=true;">
             <div class="form-group form-group-inline" ng-class="{'has-error': product.storeHasError}">
-                <input class='form-control' placeholder="库存/件,默认不限制" ng-model="product.store" ng-change='vm.validateProductStore(product)' ng-blur='vm.validateProductStore(product)'/>
+                <input class='form-control' placeholder="库存,默认(0)不限制,(-1)为售罄" ng-model="product.store" ng-change='vm.validateProductStore(product)' ng-blur='vm.validateProductStore(product)'/>
                 <p class='tips'>请输入数字</p>
             </div>
             <div class="form-group fl form-group-inline" ng-show="vm.weshare.tags.length>0" ng-if="vm.checkUserCanSetTag()">
