@@ -7,6 +7,24 @@ $(document).ready(function () {
   var $zitiPanel = $('#self-ziti-orders');
   var filterOrderTag = 'all';
   var filterOrderStatus = 'all';
+  var $filterOrderBtn = $('#filter-order');
+  var $filterOrderText = $('#filterOrderText');
+  $filterOrderBtn.on('click', function(e){
+    var filterText = $filterOrderText.val();
+    if(filterText.trim()){
+      $divOrderItems.each(function(){
+        if($('p[id^="order-info-panel"]',$(this)).text().indexOf(filterText) != -1){
+          $(this).show();
+        }else{
+          $(this).hide();
+        }
+      });
+    }else{
+      $divOrderItems.each(function(){
+        $(this).show();
+      });
+    }
+  });
   $('div.offer .div-share-item').on('click', function (e) {
     e.preventDefault();
     var $me = $(this);

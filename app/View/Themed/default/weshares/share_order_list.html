@@ -134,6 +134,16 @@
 {{/if}}
 <div class="row">
     <h4>订单列表</h4>
+    <div class="row" style="padding: 5px;">
+        <div class="col-lg-12">
+            <div class="input-group">
+                <input type="text" class="form-control" id="filterOrderText" placeholder="收货人或微信昵称">
+              <span class="input-group-btn">
+                <button id="filter-order" class="btn btn-primary" type="button">查询</button>
+              </span>
+            </div><!-- /input-group -->
+        </div><!-- /.col-lg-6 -->
+    </div><!-- /.row -->
     <ul class="nav nav-pills">
         <li role="presentation" class="disabled" data-toggle-val="all"><a href="#">全部</a></li>
         <li role="presentation" data-toggle-val="1"><a href="#">待发货</a></li>
@@ -449,4 +459,4 @@
             id="send_product_arrive_msg" style="border-radius:0px; display: none;">取货提醒
     </button>
 </div>
-<script src="{{$STATIC_FILE_PATH}}/static/weshares/js/share-order-list.min.js?v0.2.1"></script>
+<script src="{{$STATIC_FILE_PATH}}/static/weshares/js/share-order-list.min.js?v0.2.2"></script>
