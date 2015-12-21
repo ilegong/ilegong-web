@@ -89,12 +89,31 @@ class SharePoolProduct extends AppModel {
         ),
         '1450' => array(
             'buy' => 1475
+        ),
+        '1703' => array(
+            'buy' => 1704
         )
 
     );
 
     //产品池所有产品
     var $products = array(
+        array(
+            'share_id' => 1703,
+            'share_name' => '永兴冰糖橙【限北京】',
+            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/c4d4e73c72d_1221.jpg',
+            'brand_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg',
+            'brand_name' => '晓光',
+            'show_brand' => true,
+            'brand_custom_service' => 141,
+            'published' => 1,
+            'products' => array(
+                '3572' => array(
+                    'price' => 85,
+                    'channel_price' => 65,
+                )
+            )
+        ),
         array(
             'share_id' => 1411,
             'share_name' => '雾岭山楂条5袋装',
