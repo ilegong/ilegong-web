@@ -1653,26 +1653,6 @@ class ShareUtilComponent extends Component {
 //                    'share_user_id' => 141,
 //                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg'
 //                ),
-                '1529' => array(
-                    'share_id' => 1529,
-                    'share_name' => '烟台干货海带 补充各种维生素',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/e96c63a7651_1218.jpg',
-                    'share_price' => '46',
-                    'share_user_name' => '南彩',
-                    'share_vote' => 1000,
-                    'share_user_id' => 886905,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_eb6105d6e125a8e05a94b6f7608642db.jpg'
-                ),
-                '1530' => array(
-                    'share_id' => 1530,
-                    'share_name' => '烟台长岛金钩海米 天然晾晒 原味干虾米 味鲜劲道',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/02e7ae6f62c_1218.jpg',
-                    'share_price' => '47',
-                    'share_user_name' => '南彩',
-                    'share_vote' => 1000,
-                    'share_user_id' => 886905,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_eb6105d6e125a8e05a94b6f7608642db.jpg'
-                ),
                 '1606' => array(
                     'share_id' => 1606,
                     'share_name' => '第一抗癌食品窖藏红薯又开团',
@@ -1723,6 +1703,16 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 800,
                     'share_user_id' => 12376,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/123761447121370.png'
+                ),
+                '1675' => array(
+                    'share_id' => 1675,
+                    'share_name' => '德庆贡柑熟了，想找找当皇帝娘娘的感觉吗？',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/3c397b7406b_1125.jpg',
+                    'share_price' => '46',
+                    'share_user_name' => '李明',
+                    'share_vote' => 999,
+                    'share_user_id' => 6783,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0e8ff635498de280dd3193826d837ee5.jpg'
                 ),
 //                '1510' => array(
 //                    'share_id' => 1510,
@@ -1887,16 +1877,6 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 708029,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
                 ),
-                '1451' => array(
-                    'share_id' => 1451,
-                    'share_name' => '德庆贡柑熟了，想找找当皇帝娘娘的感觉吗？',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/3c397b7406b_1125.jpg',
-                    'share_price' => '46',
-                    'share_user_name' => '李明',
-                    'share_vote' => 999,
-                    'share_user_id' => 6783,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0e8ff635498de280dd3193826d837ee5.jpg'
-                ),
 //                '1301' => array(
 //                    'share_id' => 1301,
 //                    'share_name' => '越南原装进口黑虎虾仁儿1000g',
@@ -2002,8 +1982,8 @@ class ShareUtilComponent extends Component {
 //                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
 //                ),
                 //脐橙
-                '1085' => array(
-                    'share_id' => 1085,
+                '1697' => array(
+                    'share_id' => 1697,
                     'share_name' => '不打蜡不染色不催熟的赣南脐橙',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/9db396b550e_1110.jpg',
                     'share_price' => '49',
@@ -2176,6 +2156,26 @@ class ShareUtilComponent extends Component {
 //                    'share_user_id' => 869820,
 //                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/368fc9903d0_0908.jpg'
 //                ),
+                '1529' => array(
+                    'share_id' => 1529,
+                    'share_name' => '烟台干货海带 补充各种维生素',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/e96c63a7651_1218.jpg',
+                    'share_price' => '46',
+                    'share_user_name' => '南彩',
+                    'share_vote' => 1000,
+                    'share_user_id' => 886905,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_eb6105d6e125a8e05a94b6f7608642db.jpg'
+                ),
+                '1530' => array(
+                    'share_id' => 1530,
+                    'share_name' => '烟台长岛金钩海米 天然晾晒 原味干虾米 味鲜劲道',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/02e7ae6f62c_1218.jpg',
+                    'share_price' => '47',
+                    'share_user_name' => '南彩',
+                    'share_vote' => 1000,
+                    'share_user_id' => 886905,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_eb6105d6e125a8e05a94b6f7608642db.jpg'
+                ),
             ),
             1 => array(
                 '699' => array(
