@@ -1307,7 +1307,10 @@ class WeshareBuyComponent extends Component {
     public function update_order_remark($orderId, $orderRemark, $weshareId) {
         $orderM = ClassRegistry::init('Order');
         $orderM->update(array('business_remark' => "'" . $orderRemark . "'"), array('id' => $orderId));
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId . '_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId . '_1_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId . '_0_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId . '_1_0', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId . '_0_0', '');
     }
 
     /**
