@@ -1653,6 +1653,16 @@ class ShareUtilComponent extends Component {
 //                    'share_user_id' => 141,
 //                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg'
 //                ),
+                '1702' => array(
+                    'share_id' => 1702,
+                    'share_name' => '永兴冰糖橙【限北京】',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/bf6a636f075_1221.jpg',
+                    'share_price' => '85',
+                    'share_user_name' => '杨晓光',
+                    'share_vote' => 2000,
+                    'share_user_id' => 141,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg'
+                ),
                 '1606' => array(
                     'share_id' => 1606,
                     'share_name' => '第一抗癌食品窖藏红薯又开团',
