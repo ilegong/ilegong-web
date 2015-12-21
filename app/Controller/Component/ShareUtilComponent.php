@@ -1653,8 +1653,8 @@ class ShareUtilComponent extends Component {
 //                    'share_user_id' => 141,
 //                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg'
 //                ),
-                '1702' => array(
-                    'share_id' => 1702,
+                '1707' => array(
+                    'share_id' => 1707,
                     'share_name' => '永兴冰糖橙【限北京】',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/bf6a636f075_1221.jpg',
                     'share_price' => '85',
