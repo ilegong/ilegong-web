@@ -1643,16 +1643,16 @@ class ShareUtilComponent extends Component {
     public function get_share_index_product($tag) {
         $product = array(
             0 => array(
-                '1664' => array(
-                    'share_id' => 1664,
-                    'share_name' => '【赞橙】有机脐橙 吃后必赞',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/00f1c31a335_1218.jpg',
-                    'share_price' => '98',
-                    'share_user_name' => '杨晓光',
-                    'share_vote' => 5000,
-                    'share_user_id' => 141,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg'
-                ),
+//                '1664' => array(
+//                    'share_id' => 1664,
+//                    'share_name' => '【赞橙】有机脐橙 吃后必赞',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/00f1c31a335_1218.jpg',
+//                    'share_price' => '98',
+//                    'share_user_name' => '杨晓光',
+//                    'share_vote' => 5000,
+//                    'share_user_id' => 141,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg'
+//                ),
                 '1529' => array(
                     'share_id' => 1529,
                     'share_name' => '烟台干货海带 补充各种维生素',
