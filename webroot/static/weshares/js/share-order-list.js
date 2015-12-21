@@ -7,24 +7,9 @@ $(document).ready(function () {
   var $zitiPanel = $('#self-ziti-orders');
   var filterOrderTag = 'all';
   var filterOrderStatus = 'all';
+  var filterOrderKeyword = '';
   var $filterOrderBtn = $('#filter-order');
   var $filterOrderText = $('#filterOrderText');
-  $filterOrderBtn.on('click', function(e){
-    var filterText = $filterOrderText.val();
-    if(filterText.trim()){
-      $divOrderItems.each(function(){
-        if($('p[id^="order-info-panel"]',$(this)).text().indexOf(filterText) != -1){
-          $(this).show();
-        }else{
-          $(this).hide();
-        }
-      });
-    }else{
-      $divOrderItems.each(function(){
-        $(this).show();
-      });
-    }
-  });
   $('div.offer .div-share-item').on('click', function (e) {
     e.preventDefault();
     var $me = $(this);
@@ -57,7 +42,7 @@ $(document).ready(function () {
     } else {
       $divOrderItems.hide();
       $summeryProductItems.hide();
-      showFilterOrderItems(filterOrderTag, filterOrderStatus);
+      showFilterOrderItems(filterOrderTag, filterOrderStatus, filterOrderKeyword);
       $('tr[name="summery-product-' + tag + '"]').show();
       $orderDataSummeryItems.hide();
       $('tr[name="order-data-summery-' + tag + '"]').show();
@@ -109,6 +94,12 @@ $(document).ready(function () {
   var $zitiOrderCountDom = $('font[name="self-ziti-orders-count"]');
   var $kuaidiOrderCountDom = $('font[name="kuaidi-orders-count"]');
   var $pysZitiOrderCount = $('font[name="pys-ziti-orders-count"]');
+  $filterOrderBtn.on('click', function (e) {
+    e.preventDefault();
+    var filterText = $filterOrderText.val();
+    filterOrderKeyword = filterText.trim();
+    showFilterOrderItems(filterOrderTag, filterOrderStatus, filterOrderKeyword);
+  });
   $orderStatusLi.on('click', function (e) {
     e.preventDefault();
     $orderStatusLi.removeClass('disabled');
@@ -116,9 +107,9 @@ $(document).ready(function () {
     $me.addClass('disabled');
     var toggleOrderStatus = $me.data('toggle-val');
     filterOrderStatus = toggleOrderStatus;
-    showFilterOrderItems(filterOrderTag, filterOrderStatus);
+    showFilterOrderItems(filterOrderTag, filterOrderStatus, filterOrderKeyword);
   });
-  function showFilterOrderItems(tag, status) {
+  function showFilterOrderItems(tag, status, keyword) {
     $divOrderItems.hide();
     var $showOrderItems = $divOrderItems;
     if (tag == 'all') {
@@ -131,6 +122,15 @@ $(document).ready(function () {
       } else {
         $showOrderItems = $('div[name="order-item-tag-' + tag + '"]').filter('div[data-order-status="' + status + '"]');
       }
+    }
+    if(keyword){
+      $showOrderItems = $showOrderItems.filter(function(){
+        if($('p[id^="order-info-panel"]',$(this)).text().indexOf(keyword) != -1){
+          return true;
+        }else{
+          return false;
+        }
+      });
     }
     $showOrderItems.show();
     if ($zitiOrderCountDom.length) {
