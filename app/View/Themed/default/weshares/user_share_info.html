@@ -131,6 +131,7 @@
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="comments-list">
+                                    <?php $process_my_create_share = true; ?>
                                     {{loop $my_create_shares $share}}
                                     {{template weshares/user_share_item_template}}
                                     {{/loop}}
@@ -144,6 +145,7 @@
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="comments-list">
+                                    <?php $process_my_create_share = false; ?>
                                     {{loop $authority_shares $share}}
                                     {{template weshares/user_share_item_template}}
                                     {{/loop}}
@@ -157,6 +159,7 @@
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="comments-list">
+                                    <?php $process_my_create_share = false; ?>
                                     <?php $parsing_join_share = true; ?>
                                     {{loop $my_join_shares $share}}
                                     {{template weshares/user_share_item_template}}
@@ -351,4 +354,4 @@
         </div>
     </div>
 </div>
-<script src="{{$STATIC_FILE_PATH}}/static/weshares/js/user-share-info.min.js?v0.0.3" type="text/javascript"></script>
+<script src="{{$STATIC_FILE_PATH}}/static/weshares/js/user-share-info.min.js?v0.0.4" type="text/javascript"></script>

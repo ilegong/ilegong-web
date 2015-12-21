@@ -19,6 +19,7 @@ $(document).ready(function () {
   var $userNicknameInput = $('#user-nickname');
   var $userSharesFirstTab = $('#share-nav-tab li:first a');
   var $userId = $('#user-id', $changeUserInfoDialog);
+  var $deleteShareBtns = $('button[name="deleteShare"]');
   var processSub = false;
   var processUnSub = false;
   var processSavePassword = false;
@@ -37,6 +38,27 @@ $(document).ready(function () {
   });
   $showUpdatePasswordDialog.on('click', function () {
     $updateUserPasswordDialog.modal({show: true, backdrop: 'static'});
+  });
+  $deleteShareBtns.on('click', function (e) {
+    e.preventDefault();
+    var $me = $(this);
+    var shareId = $me.data('id');
+    bootbox.setDefaults("locale", "zh_CN");
+    bootbox.confirm({
+      size: 'small',
+      message: "确定删除？",
+      callback: function (result) {
+        if(result){
+          $.getJSON('/weshares/delete_share/'+shareId, function(data){
+            if(data['success']){
+              $me.parent('div.media').remove();
+            }else{
+              alert('删除失败！');
+            }
+          });
+        }
+      }
+    })
   });
   $saveUserPassword.on('click', function(e){
     e.preventDefault();

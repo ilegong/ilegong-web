@@ -55,5 +55,5 @@
             {{/if}}
         </div>
     </div>
-    {{if !$parsing_join_share&&$is_me}}<span class="pull-right" style="margin-top: -15px;">编号:<small style="color: #ff0000;">{{$share['Weshare']['id']}}</small></span>{{/if}}
+    {{if !$parsing_join_share&&$is_me}}<span class="pull-right" style="margin-top: -15px;">编号:<small style="color: #ff0000;">{{$share['Weshare']['id']}}</small></span>{{if $process_my_create_share}}<button name="deleteShare" data-id="{{$share['Weshare']['id']}}" type="button" class="btn btn-primary btn-xs pull-right" style="margin-top: -20px;">删除</button>{{/if}}{{/if}}
 </div>

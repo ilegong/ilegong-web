@@ -62,7 +62,7 @@ class WesharesController extends AppController {
                 //check share type
                 if (!$this->ShareUtil->is_proxy_user($uid)) {
                     $user_can_manage_share = $this->ShareAuthority->user_can_manage_share($uid, $weshare_id);
-                    if(!$user_can_manage_share){
+                    if (!$user_can_manage_share) {
                         //not proxy or manage redirect index
                         $this->redirect('/weshares/index');
                         return;
@@ -741,6 +741,20 @@ class WesharesController extends AppController {
         return;
     }
 
+    /**
+     * @param $shareId
+     */
+    public function delete_share($shareId) {
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        if (empty($uid)) {
+            echo json_encode(array('success' => false, 'reason' => 'not_login'));
+            return;
+        }
+        $this->WeshareBuy->delete_share($uid, $shareId);
+        echo json_encode(array('success' => true));
+        return;
+    }
 
     /**
      * @param null $uid
