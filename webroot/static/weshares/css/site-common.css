@@ -15,6 +15,18 @@ footer {
     border-top:1px #b3b4b6 solid;
 }
 
+footer a:visited {
+    text-decoration: none;
+}
+
+footer a:active {
+    text-decoration: none;
+}
+
+footer a:link{
+    text-decoration: none;
+}
+
 .channel_bottom .btm_item:nth-child(1), .channel_bottom .btm_item:nth-child(3) {
     width: 19%;
 }
@@ -23,10 +35,6 @@ footer {
     float: left;
 }
 
-a {
-    color: #428bca;
-    text-decoration: none;
-}
 .channel_bottom .iconfont {
     font-size: 20px;
     line-height: 15px;
