@@ -105,7 +105,7 @@ class SharePoolProduct extends AppModel {
             'brand_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg',
             'brand_name' => '晓光',
             'show_brand' => true,
-            'brand_custom_service' => 141,
+            'brand_custom_service' => 887026,
             'published' => 1,
             'products' => array(
                 '3572' => array(
