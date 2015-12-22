@@ -225,7 +225,7 @@ class WeshareBuyComponent extends Component {
             $myJoinShares = $weshareM->find('all', array(
                 'conditions' => array(
                     'id' => $joinShareIds,
-                    'status' => array(0, 1),
+                    'status' => array(0, 1, -1),
                     'type' => $query_share_type
                 ),
                 'order' => array('created DESC')
