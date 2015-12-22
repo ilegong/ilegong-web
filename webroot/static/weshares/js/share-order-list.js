@@ -481,18 +481,19 @@ $(document).ready(function () {
       "weshare_id" : weshare_id
     };
     $.post('/weshares/update_order_remark', postData, function (data) {
-      if(data['success']){
-        var $orderInfoPanel = $('#order-info-panel-'+orderId);
+      if (data['success']) {
+        var $orderInfoPanel = $('#order-info-panel-' + orderId);
         var $orderRemarkHolder = $('span[name="order-remark"]', $orderInfoPanel);
-        if($orderRemarkHolder.length){
+        if ($orderRemarkHolder.length) {
           $orderRemarkHolder.text(orderRemark);
-        }else{
+        } else {
           $orderInfoPanel.append('<strong name="order-remark">备注:</strong>&nbsp;&nbsp;<span name="order-remark">' + orderRemark + '</span>');
         }
-      }else{
+        $('#remark-order-' + orderId).data('order-remark', orderRemark);
+      } else {
         alert('标记失败！');
       }
       $editOrderRemarkInfoForm.modal('hide');
-    },'json');
+    }, 'json');
   });
 });

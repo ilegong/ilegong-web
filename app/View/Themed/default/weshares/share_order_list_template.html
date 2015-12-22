@@ -131,7 +131,7 @@
             </button>
             {{/if}}
             <!--remark order-->
-            <button class="btn btn-info btn-xs pull-right remark-order" data-order-name="{{$item_order['consignee_name']}}" data-order-remark="{{$item_order['business_remark']}}"
+            <button id="remark-order-{{$item_order['id']}}" class="btn btn-info btn-xs pull-right remark-order" data-order-name="{{$item_order['consignee_name']}}" data-order-remark="{{$item_order['business_remark']}}"
                     data-order-id="{{$item_order['id']}}"
                     style="margin-bottom: 5px; margin-left: 5px;">标记订单
             </button>
