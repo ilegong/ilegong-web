@@ -43,15 +43,19 @@
 <img id="topiconbut" style="display:none;width:40px;height:40px;position: fixed;right:15px;bottom:65px;"
      src="{{$STATIC_FILE_PATH}}/static/opt/images/topicon.png">
 <footer class="channel_bottom" id="share-bottom-nav">
-    <a class="btm_item" href="/" style="width: 33%;">
+    <a class="btm_item" href="/" style="width: 25%;">
         <p class="iconfont"><i class="fa fa-home"></i></p>
         <b>首页</b>
     </a>
-    <a class="btm_item" href="/share_opt/index.html" style="width: 33%;">
-        <p class="iconfont"><i class="fa fa-users"></i></p>
-        <b>朋友说</b>
+    <a class="btm_item" href="/share_opt/index.html" style="width: 25%;">
+        <p class="iconfont-active"><i class="fa fa-search"></i></p>
+        <b class="active">发现</b>
     </a>
-    <a class="btm_item" href="/weshares/user_share_info/{{$uid}}" style="width: 33%;">
+    <a class="btm_item" href="/share_opt/index.html" style="width: 25%;">
+        <p class="iconfont"><i class="fa fa-share-square-o"></i></p>
+        <b>我要分享</b>
+    </a>
+    <a class="btm_item" href="/weshares/user_share_info/{{$uid}}" style="width: 25%;">
         <p class="iconfont"><i class="fa fa-user"></i></p>
         <b>我的</b>
     </a>
