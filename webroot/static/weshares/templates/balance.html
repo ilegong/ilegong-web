@@ -138,14 +138,14 @@
 
     <footer class="channel_bottom">
         <a class="btm_item" href="/share_opt/index.html">
-            <i ng-if="vm.showUnReadMark" style="background:#f00;border-radius:50%;width:15px;height:15px;top:2px;left:12%;position:absolute; display: block;"></i>
-            <p class="iconfont" style="height: 16px;"><i class="fa fa-users"></i></p>
-            <b>朋友说</b>
+            <i ng-if="vm.showUnReadMark" style="background:#f00;border-radius:50%;width:10px;height:10px;top:2px;left:11%;position:absolute; display: block;"></i>
+            <p class="iconfont" style="height: 20px;"><i class="fa fa-search"></i></p>
+            <b>发现</b>
         </a>
-        <a class="new" ng-click='vm.submitOrder(0);' style="width: 28%;">微信支付</a>
-        <a class="new" ng-click='vm.submitOrder(1);' style="width: 28%; margin-right: 7%;">支付宝支付</a>
+        <a class="wx-pay" ng-click='vm.submitOrder(0);' style="width: 28%;">微信支付</a>
+        <a class="ali-pay" ng-click='vm.submitOrder(1);' style="width: 28%; margin-right: 7%;">支付宝支付</a>
         <a class="btm_item" href="/weshares/user_share_info">
-            <p class="iconfont" style="height: 16px;"><i class="fa fa-user"></i></p>
+            <p class="iconfont" style="height: 20px;"><i class="fa fa-user"></i></p>
             <b>我的</b>
         </a>
     </footer>

@@ -54,12 +54,59 @@ footer a:link{
     color: #49bc6e;
 }
 
-.channel_bottom .new {
+.channel_bottom .buy {
     position: relative;
     width: 56%;
     margin: 0 2%;
-    line-height: 25px;
-    background-color: #2b96dc;
+    line-height: 30px;
+    background-color: #ffa200;
+    border-radius: 2px;
+    overflow: hidden;
+    float: left;
+    color: #fff;
+}
+
+.channel_bottom .stop {
+    position: relative;
+    width: 56%;
+    margin: 0 2%;
+    line-height: 30px;
+    background-color: #49bc6e;
+    border-radius: 2px;
+    overflow: hidden;
+    float: left;
+    color: #fff;
+}
+
+.channel_bottom .cut-off {
+    position: relative;
+    width: 56%;
+    margin: 0 2%;
+    line-height: 30px;
+    background-color: #cccccc;
+    border-radius: 2px;
+    overflow: hidden;
+    float: left;
+    color: #fff;
+}
+
+.channel_bottom .wx-pay {
+    position: relative;
+    width: 56%;
+    margin: 0 2%;
+    line-height: 30px;
+    background-color: #49bc6e;
+    border-radius: 2px;
+    overflow: hidden;
+    float: left;
+    color: #fff;
+}
+.channel_bottom .ali-pay {
+    position: relative;
+    width: 56%;
+    margin: 0 2%;
+    line-height: 30px;
+    background-color: #ffa200;
     border-radius: 2px;
     overflow: hidden;
     float: left;

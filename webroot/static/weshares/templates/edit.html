@@ -206,6 +206,22 @@
         </div>
     </div>
 </div>
-<div style="text-align: center; margin-bottom: 0;">
-    <a href="/"><img ng-src="{{::vm.staticFilePath}}/img/logo_footer.jpg" border="0" style="width: 4.625em;height: 1.583em;"/></a><br/>朋友说—朋友间最真挚的分享
-</div>
+<footer class="channel_bottom" id="share-bottom-nav">
+    <a class="btm_item" href="/" style="width: 25%;">
+        <p class="iconfont" style="height: 18px;"><i class="fa fa-home"></i></p>
+        <b>首页</b>
+    </a>
+    <a class="btm_item" href="/share_opt/index.html" style="width: 25%; position: relative;">
+        <i style="background:#f00;border-radius:50%;width:10px;height:10px;top:-5px;right:35%;position:absolute; display: none;" id="mark-has-unread"></i>
+        <p class="iconfont" style="height: 18px;"><i class="fa fa-search"></i></p>
+        <b>发现</b>
+    </a>
+    <a class="btm_item" href="/weshares/add" style="width: 25%;">
+        <p class="iconfont-active" style="height: 18px;"><i class="fa fa-share-square-o"></i></p>
+        <b class="active">我要分享</b>
+    </a>
+    <a class="btm_item" href="/weshares/user_share_info/" style="width: 25%;">
+        <p class="iconfont" style="height: 18px;"><i class="fa fa-user"></i></p>
+        <b>我的</b>
+    </a>
+</footer>
