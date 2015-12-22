@@ -483,7 +483,7 @@ $(document).ready(function () {
     $.post('/weshares/update_order_remark', postData, function (data) {
       if(data['success']){
         var $orderInfoPanel = $('#order-info-panel-'+orderId);
-        var $orderRemarkHolder = $('span[name="order-remark"]');
+        var $orderRemarkHolder = $('span[name="order-remark"]', $orderInfoPanel);
         if($orderRemarkHolder.length){
           $orderRemarkHolder.text(orderRemark);
         }else{
