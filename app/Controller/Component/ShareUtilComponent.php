@@ -1663,6 +1663,17 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 884659,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_223e3853f9605168c254c1256767f18f.jpg'
                 ),
+                //无花果干 二团
+                '1732' => array(
+                    'share_id' => 1732,
+                    'share_name' => '富硒砂糖橘真的来啦',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/5c234cd3f0d_1223.jpg',
+                    'share_price' => '88',
+                    'share_user_name' => '盛夏',
+                    'share_vote' => 1435,
+                    'share_user_id' => 708029,
+                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
+                ),
 //                '1606' => array(
 //                    'share_id' => 1606,
 //                    'share_name' => '第一抗癌食品窖藏红薯又开团',
