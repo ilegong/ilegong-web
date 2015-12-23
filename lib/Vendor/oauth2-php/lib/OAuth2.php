@@ -660,12 +660,14 @@ class OAuth2 {
 					throw new OAuth2ServerException(self::HTTP_BAD_REQUEST, self::ERROR_UNSUPPORTED_GRANT_TYPE);
 				}
 				
-				if (!$input["username"] || !$input["password"]) {
+				if (!$input["username"] || !$input["password"] || !$input["unionid"]) {
 					throw new OAuth2ServerException(self::HTTP_BAD_REQUEST, self::ERROR_INVALID_REQUEST, 'Missing parameters. "username" and "password" required');
 				}
-				
-				$stored = $this->storage->checkUserCredentials($client[0], $input["username"], $input["password"]);
-				
+                if($input["unionid"]){
+                    $stored = $this->storage->checkUserUnionid($client[0],$input["unionid"]);
+                }else{
+                    $stored = $this->storage->checkUserCredentials($client[0], $input["username"], $input["password"]);
+                }
 				if ($stored === FALSE) {
 					throw new OAuth2ServerException(self::HTTP_BAD_REQUEST, self::ERROR_INVALID_GRANT);
 				}

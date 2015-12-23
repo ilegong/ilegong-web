@@ -579,6 +579,33 @@ class OAuthComponent extends Component implements IOAuth2Storage, IOAuth2Refresh
 	}
 
     /**
+     * @param $client_id
+     * @param $unionid
+     * @return array|bool
+     */
+    public function checkUserUnionid($client_id, $unionid) {
+        $oauthbindM = ClassRegistry::init('Oauthbind');
+        $oauthInfo = $oauthbindM->find('first', array(
+            'conditions' => array(
+                'unionId' => $unionid
+            )
+        ));
+        if (empty($oauthInfo)) {
+            return false;
+        }
+        $userM = ClassRegistry::init('User');
+        $userInfo = $userM->find('first', array(
+            'conditions' => array(
+                'id' => $oauthInfo['Oauthbind']['user_id']
+            )
+        ));
+        if (empty($userInfo)) {
+            return false;
+        }
+        return array('user_id' => $userInfo['User'][$this->User->primaryKey]);
+    }
+
+    /**
      * Grant type: weixin token
      * @see IOAuth2GrantImplicit::checkUserToken()
      * @param $client_id
@@ -587,6 +614,7 @@ class OAuthComponent extends Component implements IOAuth2Storage, IOAuth2Refresh
      * @param $refresh_token
      * @param $openid
      * @param $scope
+     * @return array
      */
     public function checkUserToken($client_id,$access_token,$expires_in,$refresh_token,$openid,$scope){
         $oauth_wx_source = oauth_wx_source();
