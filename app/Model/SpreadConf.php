@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class SpreadConf
+ *
+ * 团长推广的配置
+ */
 class SpreadConf extends AppModel {
 
     public $useTable = false;
