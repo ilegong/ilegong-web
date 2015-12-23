@@ -1663,16 +1663,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 884659,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_223e3853f9605168c254c1256767f18f.jpg'
                 ),
-                '1606' => array(
-                    'share_id' => 1606,
-                    'share_name' => '第一抗癌食品窖藏红薯又开团',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/df7b7081b9d_1216.jpg',
-                    'share_price' => '26',
-                    'share_user_name' => '大美',
-                    'share_vote' => 1500,
-                    'share_user_id' => 842908,
-                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/319793d271b_0828.jpg'
-                ),
+//                '1606' => array(
+//                    'share_id' => 1606,
+//                    'share_name' => '第一抗癌食品窖藏红薯又开团',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/df7b7081b9d_1216.jpg',
+//                    'share_price' => '26',
+//                    'share_user_name' => '大美',
+//                    'share_vote' => 1500,
+//                    'share_user_id' => 842908,
+//                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/319793d271b_0828.jpg'
+//                ),
                 '1436' => array(
                     'share_id' => 1436,
                     'share_name' => '老舅家的沙窝萝卜--脆绿嫩',
