@@ -594,6 +594,7 @@ class OAuth2 {
             "wx_expires_in"  => array("flags" => FILTER_REQUIRE_SCALAR),
             "wx_openid"  => array("flags" => FILTER_REQUIRE_SCALAR),
             "wx_scope"  => array("flags" => FILTER_REQUIRE_SCALAR),
+            "unionid" => array("flags" => FILTER_REQUIRE_SCALAR)
 		);
 		
 		// Input data by default can be either POST or GET
