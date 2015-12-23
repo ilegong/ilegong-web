@@ -1653,15 +1653,15 @@ class ShareUtilComponent extends Component {
 //                    'share_user_id' => 141,
 //                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg'
 //                ),
-                '1707' => array(
-                    'share_id' => 1707,
+                '1714' => array(
+                    'share_id' => 1714,
                     'share_name' => '永兴冰糖橙【限北京】',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/bf6a636f075_1221.jpg',
                     'share_price' => '85',
-                    'share_user_name' => '杨晓光',
-                    'share_vote' => 2000,
-                    'share_user_id' => 141,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg'
+                    'share_user_name' => '晚凉~文霞',
+                    'share_vote' => 1000,
+                    'share_user_id' => 884659,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_223e3853f9605168c254c1256767f18f.jpg'
                 ),
                 '1606' => array(
                     'share_id' => 1606,
