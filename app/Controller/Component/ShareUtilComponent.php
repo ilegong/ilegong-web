@@ -1704,16 +1704,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 810684,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
                 ),
-                '1484' => array(
-                    'share_id' => 1484,
-                    'share_name' => '俄罗斯野生淡干小海参第二团开始了',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/38e770bc1b4_1209.jpg',
-                    'share_price' => '399',
-                    'share_user_name' => '樱花',
-                    'share_vote' => 3000,
-                    'share_user_id' => 810684,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
-                ),
+//                '1484' => array(
+//                    'share_id' => 1484,
+//                    'share_name' => '俄罗斯野生淡干小海参第二团开始了',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/38e770bc1b4_1209.jpg',
+//                    'share_price' => '399',
+//                    'share_user_name' => '樱花',
+//                    'share_vote' => 3000,
+//                    'share_user_id' => 810684,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
+//                ),
                 //山药
                 '1636' => array(
                     'share_id' => 1636,
