@@ -49,7 +49,7 @@
 }
 .postinfo a,.link {
 	text-decoration: none;
-	color: #576b95;
+    color: #49bc6e;
 	-webkit-user-select: none;
 	-webkit-touch-callout: none;
 }
@@ -92,7 +92,7 @@
 	 font-weight:bold;
 }
 .postinfo .jibie {
-	 margin-left:16px;
+	 margin-left:10px;
 	 color:#767676;
 }
 .postinfo .fontcontent{
