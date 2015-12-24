@@ -240,7 +240,7 @@ $(document).ready(function () {
     return TemplateEngine(optLogTemplate, objJson);
   }
 
-  var optLogTemplate = '<div class="postinfo" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: rgb(223, 223, 221);" data-show="0" data-infoid="<%this.id%>" data-timestamp="<%this.timestamp%>" data-myzan="0" id="info_<%this.id%>">' +
+  var optLogTemplate = '<div class="postinfo" style="border-bottom-width: 1px; border-bottom-style: solid;" data-show="0" data-infoid="<%this.id%>" data-timestamp="<%this.timestamp%>" data-myzan="0" id="info_<%this.id%>">' +
     '<a class="heada" <%if(this.user_info){%>href="/weshares/user_share_info/<%this.user_info.id%>"<%}else{%>href="javascript:void(0)"<%}%>>' +
     '<img class="headimg" src="/static/opt/images/default.png" <%if(this.user_info){%>data-original="<%this.user_info.image%>"<%}else{%>data-original="/static/opt/images/default.png"<%}%>>' +
     '<%if(this.user_info&&this.user_info.fans_count > 100){%><img src="/static/weshares/images/v.png" class="user-is-vip-user-tag"><%}%>' +
