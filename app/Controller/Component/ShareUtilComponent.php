@@ -1643,27 +1643,6 @@ class ShareUtilComponent extends Component {
     public function get_share_index_product($tag) {
         $product = array(
             0 => array(
-//                '1664' => array(
-//                    'share_id' => 1664,
-//                    'share_name' => '【赞橙】有机脐橙 吃后必赞',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/00f1c31a335_1218.jpg',
-//                    'share_price' => '98',
-//                    'share_user_name' => '杨晓光',
-//                    'share_vote' => 5000,
-//                    'share_user_id' => 141,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg'
-//                ),
-                '1714' => array(
-                    'share_id' => 1714,
-                    'share_name' => '永兴冰糖橙【限北京】',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/bf6a636f075_1221.jpg',
-                    'share_price' => '85',
-                    'share_user_name' => '晚凉~文霞',
-                    'share_vote' => 1000,
-                    'share_user_id' => 884659,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_223e3853f9605168c254c1256767f18f.jpg'
-                ),
-                //无花果干 二团
                 '1732' => array(
                     'share_id' => 1732,
                     'share_name' => '富硒砂糖橘真的来啦',
@@ -1674,16 +1653,26 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 708029,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
                 ),
-//                '1606' => array(
-//                    'share_id' => 1606,
-//                    'share_name' => '第一抗癌食品窖藏红薯又开团',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/df7b7081b9d_1216.jpg',
-//                    'share_price' => '26',
-//                    'share_user_name' => '大美',
-//                    'share_vote' => 1500,
-//                    'share_user_id' => 842908,
-//                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/319793d271b_0828.jpg'
-//                ),
+                '1647' => array(
+                    'share_id' => 1647,
+                    'share_name' => '正宗妈妈味·湘西剁椒----辣些年',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/db34c2a011e_1224.jpg',
+                    'share_price' => '32',
+                    'share_user_name' => '鲲鲲',
+                    'share_vote' => 2654,
+                    'share_user_id' => 806889,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
+                ),
+                '1498' => array(
+                    'share_id' => 1498,
+                    'share_name' => '不含添加剂的薯条',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/852e6870f74_1224.jpg',
+                    'share_price' => '11.8',
+                    'share_user_name' => '海煜',
+                    'share_vote' => 500,
+                    'share_user_id' => 883095,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_173d81362e0b516ec73870fdf83c8a26.jpg'
+                ),
                 '1436' => array(
                     'share_id' => 1436,
                     'share_name' => '老舅家的沙窝萝卜--脆绿嫩',
@@ -1704,20 +1693,10 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 810684,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
                 ),
-//                '1484' => array(
-//                    'share_id' => 1484,
-//                    'share_name' => '俄罗斯野生淡干小海参第二团开始了',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/38e770bc1b4_1209.jpg',
-//                    'share_price' => '399',
-//                    'share_user_name' => '樱花',
-//                    'share_vote' => 3000,
-//                    'share_user_id' => 810684,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
-//                ),
                 //山药
-                '1636' => array(
-                    'share_id' => 1636,
-                    'share_name' => '艳艳山药友情团',
+                '1742' => array(
+                    'share_id' => 1742,
+                    'share_name' => '艳艳山药，自食&送礼，各取所需',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/9865c6196ae_1110.jpg',
                     'share_price' => '85',
                     'share_user_name' => '艳艳',
@@ -1735,26 +1714,6 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 6783,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0e8ff635498de280dd3193826d837ee5.jpg'
                 ),
-//                '1510' => array(
-//                    'share_id' => 1510,
-//                    'share_name' => '精选深海野生中段带鱼 肉美肥厚【包邮】',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/c4c9f3c7bb8_1209.jpg',
-//                    'share_price' => '85',
-//                    'share_user_name' => '小宝妈',
-//                    'share_vote' => 2000,
-//                    'share_user_id' => 811917,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
-//                ),
-                '1566' => array(
-                    'share_id' => 1566,
-                    'share_name' => '油淋鸡枞菌----邂逅山珍美味的快感',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/41bb355613e_1217.jpg',
-                    'share_price' => '48',
-                    'share_user_name' => '鲲鲲',
-                    'share_vote' => 2000,
-                    'share_user_id' => 806889,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
-                ),
                 '1500' => array(
                     'share_id' => 1500,
                     'share_name' => '小火团贡玉米 甜糯口感 浓郁的玉米原香',
@@ -1765,169 +1724,6 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 141,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg'
                 ),
-                //无花果干 二团
-                '1431' => array(
-                    'share_id' => 1431,
-                    'share_name' => '无添加威海无花果干，还送无花果叶茶',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/4def05a1d4b_1209.jpg',
-                    'share_price' => '35',
-                    'share_user_name' => '盛夏',
-                    'share_vote' => 235,
-                    'share_user_id' => 708029,
-                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
-                ),
-                '1575' => array(
-                    'share_id' => 1575,
-                    'share_name' => '好吃的真空低温油浴果蔬套装（黄秋葵+香菇+什锦果蔬）',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/d50b8e8d6ad_1202.jpg',
-                    'share_price' => '55',
-                    'share_user_name' => '赵宇',
-                    'share_vote' => 2000,
-                    'share_user_id' => 810688,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_7db41874b00ec17af715b72adf87768a.jpg'
-                ),
-//                '1268' => array(
-//                    'share_id' => 1268,
-//                    'share_name' => '麻阳冰糖橙（包邮预售）----不打药，不防腐，不上蜡，守护内心的“橙”实',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/2f2ae8653ee_1123.jpg',
-//                    'share_price' => '68',
-//                    'share_user_name' => '鲲鲲',
-//                    'share_vote' => 560,
-//                    'share_user_id' => 806889,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
-//                ),
-
-                '1439' => array(
-                    'share_id' => 1439,
-                    'share_name' => '云南秘制油淋牛肝菌，过嘴不忘的味道',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/6eb4a007442_1110.jpg',
-                    'share_price' => '70',
-                    'share_user_name' => '鲲鲲',
-                    'share_vote' => 560,
-                    'share_user_id' => 806889,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
-                ),
-                '1506' => array(
-                    'share_id' => 1506,
-                    'share_name' => '越南黑虎虾仁 【纯野生虾仁】',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/cc44309c109_1202.jpg',
-                    'share_price' => '150',
-                    'share_user_name' => '小宝妈',
-                    'share_vote' => 1000,
-                    'share_user_id' => 811917,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
-                ),
-//                '1256' => array(
-//                    'share_id' => 1256,
-//                    'share_name' => '有机翠香猕猴桃来了，你还等什么',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/7905f59b420_1203.jpg',
-//                    'share_price' => '95',
-//                    'share_user_name' => '赵静',
-//                    'share_vote' => 1000,
-//                    'share_user_id' => 867250,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_2d0cd7f75b366ae4ccb40cc380351574.jpg'
-//                ),
-                //银耳
-                '1199' => array(
-                    'share_id' => 1199,
-                    'share_name' => '鲜活银耳@"防霾佳品"【顺丰包邮】',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/f257f80229f_1110.jpg',
-                    'share_price' => '108',
-                    'share_user_name' => '片片妈',
-                    'share_vote' => 600,
-                    'share_user_id' => 878825,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_52d08a7c8bb6e9611307b6c4858ca38c.jpg'
-                ),
-//                '1181' => array(
-//                    'share_id' => 1181,
-//                    'share_name' => '多油、好吃到停不下来的海鸭蛋',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/ece57e81c34_1027.jpg',
-//                    'share_price' => '55',
-//                    'share_user_name' => '李樱花',
-//                    'share_vote' => 800,
-//                    'share_user_id' => 810684,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
-//                ),
-//                '1314' => array(
-//                    'share_id' => 1314,
-//                    'share_name' => '俱乐部团购14—赵姑娘合核枣',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/81f96c841c5_1127.jpg',
-//                    'share_price' => '900',
-//                    'share_user_name' => 'guru',
-//                    'share_vote' => 1333,
-//                    'share_user_id' => 859965,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_cb6f01f497f772a9dd58c1655c7770c1.jpg'
-//                ),
-//                '1270' => array(
-//                    'share_id' => 1270,
-//                    'share_name' => '俄罗斯艾利客面粉(高筋)【北京包邮】',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/7e79af0be49_1125.jpg',
-//                    'share_price' => '160',
-//                    'share_user_name' => '小宝妈',
-//                    'share_vote' => 1000,
-//                    'share_user_id' => 811917,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
-//                ),
-                '1459' => array(
-                    'share_id' => 1459,
-                    'share_name' => '您私人定制的有机土猪腊肉',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/450d0d1ac18_1217.jpg',
-                    'share_price' => '39',
-                    'share_user_name' => '橘子姐姐',
-                    'share_vote' => 999,
-                    'share_user_id' => 815328,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_4d626c6f16dbb4f373a3b1c4db07f918.jpg'
-                ),
-                '1519' => array(
-                    'share_id' => 1519,
-                    'share_name' => '祖传秘方，精心制作，辣婆婆来袭',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/b5dad3dfc3e_1217.jpg',
-                    'share_price' => '26',
-                    'share_user_name' => '李樱花',
-                    'share_vote' => 800,
-                    'share_user_id' => 810684,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
-                ),
-                '1598' => array(
-                    'share_id' => 1598,
-                    'share_name' => '浓浓小时候味道的地瓜干',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/58b9e1a90c9_1217.jpg',
-                    'share_price' => '65',
-                    'share_user_name' => '盛夏',
-                    'share_vote' => 1500,
-                    'share_user_id' => 708029,
-                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
-                ),
-//                '1301' => array(
-//                    'share_id' => 1301,
-//                    'share_name' => '越南原装进口黑虎虾仁儿1000g',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/ee7947974c7_1127.jpg',
-//                    'share_price' => '46',
-//                    'share_user_name' => '吃好网',
-//                    'share_vote' => 1000,
-//                    'share_user_id' => 884103,
-//                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/9e077f58c06_1125.jpg'
-//                ),
-                '747' => array(
-                    'share_id' => 747,
-                    'share_name' => '那那家五常稻花香米',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/dafe5e63fc8_1027.jpg',
-                    'share_price' => '166',
-                    'share_user_name' => '那那',
-                    'share_vote' => 600,
-                    'share_user_id' => 812111,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_db53c030cbe19145428f0d5ca58b9562.jpg'
-                ),
-//                '1304' => array(
-//                    'share_id' => 1304,
-//                    'share_name' => '越南进口红心火龙果 大果5枚装',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/1657753d5b2_1106.jpg',
-//                    'share_price' => '88',
-//                    'share_user_name' => '金子',
-//                    'share_vote' => 188,
-//                    'share_user_id' => 867768,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_6826f42e5a8ed9fc40cc3653e12b1064.jpg'
-//                ),
                 //紫皮糖
                 '1582' => array(
                     'share_id' => 1582,
@@ -1939,100 +1735,57 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 23771,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_d742f4391e472ca6a24c58d96be17aca.jpg'
                 ),
-//                '1238' => array(
-//                    'share_id' => 1238,
-//                    'share_name' => '香妃柚',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/9bd5eea0b33_1118.jpg',
-//                    'share_price' => '74.8',
-//                    'share_user_name' => '朋友说小妹',
-//                    'share_vote' => 1000,
-//                    'share_user_id' => 711503,
-//                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/0609f46d89e_0813.jpg'
-//                ),
-//                '1237' => array(
-//                    'share_id' => 1237,
-//                    'share_name' => '泰国野生迷你（MINI）小菠萝',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/fc5ce30c960_1118.jpg',
-//                    'share_price' => '149',
-//                    'share_user_name' => '朋友说小妹',
-//                    'share_vote' => 1000,
-//                    'share_user_id' => 711503,
-//                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/0609f46d89e_0813.jpg'
-//                ),
-//                '1201' => array(
-//                    'share_id' => 1201,
-//                    'share_name' => '沧源原始森林野生丑木耳',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/0c2ac493287_1118.jpg',
-//                    'share_price' => '36',
-//                    'share_user_name' => '鲲鲲',
-//                    'share_vote' => 560,
-//                    'share_user_id' => 806889,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
-//                ),
-//                '1101' => array(
-//                    'share_id' => 1101,
-//                    'share_name' => '老家农家自产玉米面',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/dd3ad10f3f2_1118.jpg',
-//                    'share_price' => '26',
-//                    'share_user_name' => '陈彦',
-//                    'share_vote' => 300,
-//                    'share_user_id' => 848454,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_ddecfe1af5d21c658eed85d84a10ba6c.jpg'
-//                ),
-                //地瓜干,牛杆菌
-//                '1072' => array(
-//                    'share_id' => 1072,
-//                    'share_name' => '停不下来的味道～长白山脚下地瓜干',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/249eef44d07_1110.jpg',
-//                    'share_price' => '65',
-//                    'share_user_name' => '小宝妈',
-//                    'share_vote' => 1000,
-//                    'share_user_id' => 811917,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
-//                ),
-
-                //微微安
-//                '1098' => array(
-//                    'share_id' => 1098,
-//                    'share_name' => '薇薇安千层出新口味咯，提拉米苏千层蛋糕冬日里的暖暖美食',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/49f0af92aa7_1110.jpg',
-//                    'share_price' => '160',
-//                    'share_user_name' => '盛夏',
-//                    'share_vote' => 235,
-//                    'share_user_id' => 708029,
-//                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
-//                ),
-                //脐橙
-                '1697' => array(
-                    'share_id' => 1697,
-                    'share_name' => '不打蜡不染色不催熟的赣南脐橙',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/9db396b550e_1110.jpg',
-                    'share_price' => '49',
+                '1575' => array(
+                    'share_id' => 1575,
+                    'share_name' => '好吃的真空低温油浴果蔬套装（黄秋葵+香菇+什锦果蔬）',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/d50b8e8d6ad_1202.jpg',
+                    'share_price' => '55',
+                    'share_user_name' => '赵宇',
+                    'share_vote' => 2000,
+                    'share_user_id' => 810688,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_7db41874b00ec17af715b72adf87768a.jpg'
+                ),
+                '1506' => array(
+                    'share_id' => 1506,
+                    'share_name' => '越南黑虎虾仁 【纯野生虾仁】',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/cc44309c109_1202.jpg',
+                    'share_price' => '150',
+                    'share_user_name' => '小宝妈',
+                    'share_vote' => 1000,
+                    'share_user_id' => 811917,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
+                ),
+                //银耳
+                '1199' => array(
+                    'share_id' => 1199,
+                    'share_name' => '鲜活银耳@"防霾佳品"【顺丰包邮】',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/f257f80229f_1110.jpg',
+                    'share_price' => '108',
+                    'share_user_name' => '片片妈',
+                    'share_vote' => 600,
+                    'share_user_id' => 878825,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_52d08a7c8bb6e9611307b6c4858ca38c.jpg'
+                ),
+                '1598' => array(
+                    'share_id' => 1598,
+                    'share_name' => '浓浓小时候味道的地瓜干',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/58b9e1a90c9_1217.jpg',
+                    'share_price' => '65',
                     'share_user_name' => '盛夏',
-                    'share_vote' => 235,
+                    'share_vote' => 1500,
                     'share_user_id' => 708029,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
                 ),
-//                '1060' => array(
-//                    'share_id' => 1060,
-//                    'share_name' => '没有美丽的图片，只有美丽的口感，小宝妈水果团',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/869ca52575f_1109.jpg',
-//                    'share_price' => '30',
-//                    'share_user_name' => '小宝妈',
-//                    'share_vote' => 1000,
-//                    'share_user_id' => 811917,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
-//                ),
-//                '953' => array(
-//                    'share_id' => 953,
-//                    'share_name' => '脆甜好吃的冬雪蜜桃开团喽！',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/980e1682705_1027.jpg',
-//                    'share_price' => '120',
-//                    'share_user_name' => '何荷',
-//                    'share_vote' => 235,
-//                    'share_user_id' => 875275,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/8752751445930740.png'
-//                ),
+                '747' => array(
+                    'share_id' => 747,
+                    'share_name' => '那那家五常稻花香米',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/dafe5e63fc8_1027.jpg',
+                    'share_price' => '166',
+                    'share_user_name' => '那那',
+                    'share_vote' => 600,
+                    'share_user_id' => 812111,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_db53c030cbe19145428f0d5ca58b9562.jpg'
+                ),
                 '1009' => array(
                     'share_id' => 1009,
                     'share_name' => '甜甜糯糯的迁西板栗',
@@ -2043,140 +1796,6 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 873345,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_03a203d2622e7173f03d9cf3d8b4784d.jpg'
                 ),
-                //笋干
-//                '1057' => array(
-//                    'share_id' => 1057,
-//                    'share_name' => '鼎力推荐！楠竹笋干，父辈的手艺。宁可居无竹，不可食无笋，分享来自大地的馈赠！！',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/59a37d840ea_1110.jpg',
-//                    'share_price' => '86',
-//                    'share_user_name' => '鲲鲲',
-//                    'share_vote' => 560,
-//                    'share_user_id' => 806889,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
-//                ),
-//                //丑苹果
-//                '1015' => array(
-//                    'share_id' => 1015,
-//                    'share_name' => '云南丑苹果，丑到崩溃，好吃到哭，实力派不靠卖脸，现摘即发。',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/bf3bac9a370_1110.jpg',
-//                    'share_price' => '88',
-//                    'share_user_name' => '鲲鲲',
-//                    'share_vote' => 560,
-//                    'share_user_id' => 806889,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
-//                ),
-
-                //新疆大枣
-//                '1021' => array(
-//                    'share_id' => 1021,
-//                    'share_name' => '温暖亲情组合装“新疆大枣”@“福建银耳”',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/c91e46cf7ba_1110.jpg',
-//                    'share_price' => '72',
-//                    'share_user_name' => '李樱花',
-//                    'share_vote' => 800,
-//                    'share_user_id' => 810684,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
-//                ),
-//                '446' => array(
-//                    'share_id' => 446,
-//                    'share_name' => '阳澄湖大闸蟹2015中秋第一波团购启动啦！',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/da7db400b09_0906.jpg',
-//                    'share_price' => '150',
-//                    'share_user_name' => '博文',
-//                    'share_vote' => 300,
-//                    'share_user_id' => 815,
-//                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/9257b1649ba_0906.jpg'
-//                ),
-//                '954' => array(
-//                    'share_id' => 954,
-//                    'share_name' => '好吃到爆的琼中绿橙，来自北纬18°的热带天然水果',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/7c62eeb1412_1027.jpg',
-//                    'share_price' => '128',
-//                    'share_user_name' => '亮',
-//                    'share_vote' => 300,
-//                    'share_user_id' => 842862,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_03f346b121de697c8f51b36ba498700d.jpg'
-//                ),
-//                '659' => array(
-//                    'share_id' => 659,
-//                    'share_name' => '浙江衢州橘子团（限北京地区）',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/000c732f7c6_1009.jpg',
-//                    'share_price' => '60',
-//                    'share_user_name' => '小宝妈',
-//                    'share_vote' => 900,
-//                    'share_user_id' => 811917,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
-//                ),
-//                '885' => array(
-//                    'share_id' => 885,
-//                    'share_name' => '云南哀牢山古法手工叶子红糖，特价包邮还有赠品必须分享啊！',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/abcb4094d25_0917.jpg',
-//                    'share_price' => '38',
-//                    'share_user_name' => '鲲鲲',
-//                    'share_vote' => 130,
-//                    'share_user_id' => 806889,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
-//                ),
-//                '674' => array(
-//                    'share_id' => 674,
-//                    'share_name' => '新疆阿克苏新温185核桃',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/71dfdf1dca7_1009.jpg',
-//                    'share_price' => '108',
-//                    'share_user_name' => '李樱花',
-//                    'share_vote' => 95,
-//                    'share_user_id' => 810684,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
-//                ),
-//                '664' => array(
-//                    'share_id' => 664,
-//                    'share_name' => '当天海南空运～薇薇安千层水果蛋糕',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/39e96c45dc2_0930.jpg',
-//                    'share_price' => '160',
-//                    'share_user_name' => '盛夏',
-//                    'share_vote' => 987,
-//                    'share_user_id' => 708029,
-//                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
-//                ),
-//                '670' => array(
-//                    'share_id' => 670,
-//                    'share_name' => ' 树上的糖包子，新鲜树摘威海青皮无花果 ',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/6f41187b776_0901.jpg',
-//                    'share_price' => '69',
-//                    'share_user_name' => '盛夏',
-//                    'share_vote' => 235,
-//                    'share_user_id' => 708029,
-//                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
-//                ),
-//                '636' => array(
-//                    'share_id' => 636,
-//                    'share_name' => '沾化冬枣，真正有机冬枣！',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/3757a24d870_0923.jpg',
-//                    'share_price' => '58',
-//                    'share_user_name' => '盛夏',
-//                    'share_vote' => 235,
-//                    'share_user_id' => 708029,
-//                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
-//                ),
-                '717' => array(
-                    'share_id' => 717,
-                    'share_name' => '正宗韩国辣白菜',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/c68c07c4022_0915.jpg',
-                    'share_price' => '35',
-                    'share_user_name' => '土豆',
-                    'share_vote' => 95,
-                    'share_user_id' => 712908,
-                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/885789f1d97_0915.jpg'
-                ),
-//                '542' => array(
-//                    'share_id' => 542,
-//                    'share_name' => '喜迎中秋云南云腿月饼团购',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/99b37d6ef0d_0915.jpg',
-//                    'share_price' => '35',
-//                    'share_user_name' => '白胡子老头',
-//                    'share_vote' => 123,
-//                    'share_user_id' => 869820,
-//                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/368fc9903d0_0908.jpg'
-//                ),
                 '1529' => array(
                     'share_id' => 1529,
                     'share_name' => '烟台干货海带 补充各种维生素',
@@ -2197,6 +1816,26 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 886905,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_eb6105d6e125a8e05a94b6f7608642db.jpg'
                 ),
+                '1744' => array(
+                    'share_id' => 1744,
+                    'share_name' => '正宗韩国辣白菜',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/c68c07c4022_0915.jpg',
+                    'share_price' => '35',
+                    'share_user_name' => '土豆',
+                    'share_vote' => 95,
+                    'share_user_id' => 712908,
+                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/885789f1d97_0915.jpg'
+                ),
+                '1724' => array(
+                    'share_id' => 1724,
+                    'share_name' => '内蒙原味瓜子(南瓜子、葵花子，生熟两样)',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/abcec69e8be_1224.jpg',
+                    'share_price' => '43',
+                    'share_user_name' => '忠',
+                    'share_vote' => 600,
+                    'share_user_id' => 816006,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_cb081df64d1b691b47b362d02fbff036.jpg'
+                )
             ),
             1 => array(
                 '699' => array(
@@ -2209,9 +1848,19 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 23711,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/4c91fb9380d_0901.jpg'
                 ),
+                '1612' => array(
+                    'share_id' => 1612,
+                    'share_name' => '川府菜缘“头茬”有机草莓开始预售啦！',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/4883bebd56d_1224.jpg',
+                    'share_price' => '166',
+                    'share_user_name' => '李樱花',
+                    'share_vote' => 300,
+                    'share_user_id' => 810684,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
+                ),
                 '438' => array(
                     'share_id' => 438,
-                    'share_name' => '河南荥阳河阴软籽大石榴，双十二活动点击有红包',
+                    'share_name' => '河南荥阳河阴软籽大石榴',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/9275047528e_1027.jpg',
                     'share_price' => '68',
                     'share_user_name' => '段赵明',
@@ -2219,8 +1868,30 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 1199,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/6f5125521e1_0903.jpg'
                 ),
-                '1602' => array(
-                    'share_id' => 1602,
+                //无花果干 二团
+                '1431' => array(
+                    'share_id' => 1431,
+                    'share_name' => '无添加威海无花果干，还送无花果叶茶',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/4def05a1d4b_1209.jpg',
+                    'share_price' => '35',
+                    'share_user_name' => '盛夏',
+                    'share_vote' => 235,
+                    'share_user_id' => 708029,
+                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
+                ),
+                //脐橙
+                '1697' => array(
+                    'share_id' => 1697,
+                    'share_name' => '不打蜡不染色不催熟的赣南脐橙',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/9db396b550e_1110.jpg',
+                    'share_price' => '49',
+                    'share_user_name' => '盛夏',
+                    'share_vote' => 235,
+                    'share_user_id' => 708029,
+                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
+                ),
+                '1690' => array(
+                    'share_id' => 1690,
                     'share_name' => '阳光下的枇杷，蒙自甜甜的小枇杷',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/39dda22d439_1105.jpeg',
                     'share_price' => '108',
@@ -2228,16 +1899,6 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 235,
                     'share_user_id' => 708029,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
-                ),
-                '828' => array(
-                    'share_id' => 828,
-                    'share_name' => '赣南脐橙',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/da5cb8ee003_1027.jpg',
-                    'share_price' => '98',
-                    'share_user_name' => '习蛋蛋',
-                    'share_vote' => 650,
-                    'share_user_id' => 563240,
-                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/26a561eddc9_1021.jpg'
                 ),
                 '800' => array(
                     'share_id' => 800,
@@ -2249,8 +1910,8 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 708029,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_e92e61d892c2ad72c0e01ec1ac136e71.jpg'
                 ),
-                '1165' => array(
-                    'share_id' => 1165,
+                '1674' => array(
+                    'share_id' => 1674,
                     'share_name' => '刺激你的味蕾，百香果',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/6ebd4d49632_1118.jpg',
                     'share_price' => '48',
@@ -2259,28 +1920,6 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 708029,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
                 ),
-                //怀北红 梨
-//                '997' => array(
-//                    'share_id' => 997,
-//                    'share_name' => '京郊特色之一----怀北“红肖梨”、“糖梨”',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/0c972b72dca_1110.jpg',
-//                    'share_price' => '85',
-//                    'share_user_name' => '李樱花',
-//                    'share_vote' => 800,
-//                    'share_user_id' => 810684,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
-//                ),
-                //玉米神话
-//                '1070' => array(
-//                    'share_id' => 1070,
-//                    'share_name' => '密云太师屯--传说中的玉米神话',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/26c0eec40d6_0915.jpg',
-//                    'share_price' => '68',
-//                    'share_user_name' => '李樱花',
-//                    'share_vote' => 95,
-//                    'share_user_id' => 810684,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
-//                ),
                 '634' => array(
                     'share_id' => 634,
                     'share_name' => '明明分享自家爸妈种植的正宗阳信鸭梨',
@@ -2301,26 +1940,6 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 810719,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/5421fc6174d_0911.jpg'
                 ),
-//                '635' => array(
-//                    'share_id' => 635,
-//                    'share_name' => '朝鲜族特色美食-深海纯野生明太鱼',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/329b4b275d5_0923.jpg',
-//                    'share_price' => '79',
-//                    'share_user_name' => '明明有梨',
-//                    'share_vote' => 235,
-//                    'share_user_id' => 999,
-//                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/2dca381fd51_0923.jpg'
-//                ),
-//                '410' => array(
-//                    'share_id' => 410,
-//                    'share_name' => '陕西眉县猴吃桃三色猕猴桃',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/653d1bbe04e_0901.jpg',
-//                    'share_price' => '149',
-//                    'share_user_name' => '张慧敏',
-//                    'share_vote' => 230,
-//                    'share_user_id' => 23711,
-//                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/4c91fb9380d_0901.jpg'
-//                ),
                 '419' => array(
                     'share_id' => 419,
                     'share_name' => '山西古县新核桃',
@@ -2364,16 +1983,6 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 832279,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_624ed608a37ca10baec387ffb2d1fd89.jpg'
                 ),
-//                '791' => array(
-//                    'share_id' => 791,
-//                    'share_name' => '东北五常稻花香大米五常当地米厂专供',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/965ba48b2d2_0818.jpg',
-//                    'share_price' => '160',
-//                    'share_user_name' => '王谷丹',
-//                    'share_vote' => 187,
-//                    'share_user_id' => 1388,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_928e6bec43ee9674c9abbcf7ce7eae61.jpg'
-//                ),
                 '424' => array(
                     'share_id' => 424,
                     'share_name' => '东北野生臻蘑（2015年刚采摘的哦）',
@@ -2436,6 +2045,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 711503,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/0609f46d89e_0813.jpg'
                 ),
+                '1563' => array(
+                    'share_id' => 1563,
+                    'share_name' => '宁夏头茬枸杞王，不负你的信赖！',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/6ada3790272_1224.jpg',
+                    'share_price' => '70',
+                    'share_user_name' => '鲲鲲',
+                    'share_vote' => 1562,
+                    'share_user_id' => 806889,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
+                ),
                 '1335' => array(
                     'share_id' => 1335,
                     'share_name' => '六斤枇杷一斤膏----枇杷之乡，农家密炼，汁汁原味，滴滴健康',
@@ -2446,8 +2065,18 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 806889,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
                 ),
-                '884' => array(
-                    'share_id' => 884,
+                '1552' => array(
+                    'share_id' => 1552,
+                    'share_name' => '云南哀牢山古法手工叶子红糖',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/abcb4094d25_0917.jpg',
+                    'share_price' => '38',
+                    'share_user_name' => '鲲鲲',
+                    'share_vote' => 130,
+                    'share_user_id' => 806889,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
+                ),
+                '1646' => array(
+                    'share_id' => 1646,
                     'share_name' => '鼎力推荐！云南天然蜜酿玫瑰，有买有赠，两瓶包邮！',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/7ff87aa3340_1027.jpg',
                     'share_price' => '46',
@@ -2455,6 +2084,36 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 560,
                     'share_user_id' => 806889,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
+                ),
+                '1439' => array(
+                    'share_id' => 1439,
+                    'share_name' => '云南秘制油淋牛肝菌，过嘴不忘的味道',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/6eb4a007442_1110.jpg',
+                    'share_price' => '70',
+                    'share_user_name' => '鲲鲲',
+                    'share_vote' => 560,
+                    'share_user_id' => 806889,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
+                ),
+                '1566' => array(
+                    'share_id' => 1566,
+                    'share_name' => '油淋鸡枞菌----邂逅山珍美味的快感',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/41bb355613e_1217.jpg',
+                    'share_price' => '48',
+                    'share_user_name' => '鲲鲲',
+                    'share_vote' => 2000,
+                    'share_user_id' => 806889,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
+                ),
+                '1519' => array(
+                    'share_id' => 1519,
+                    'share_name' => '祖传秘方，精心制作，辣婆婆来袭',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/b5dad3dfc3e_1217.jpg',
+                    'share_price' => '26',
+                    'share_user_name' => '李樱花',
+                    'share_vote' => 800,
+                    'share_user_id' => 810684,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
                 ),
                 //泉林的纸
                 '1512' => array(
@@ -2477,26 +2136,6 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 1495,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_8c9bd6b81a7f53ebf9194404bf2f3bea.jpg'
                 ),
-//                '460' => array(
-//                    'share_id' => 460,
-//                    'share_name' => '云南九叶玫鲜花饼店',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/d3c9dfd7efd_0908.jpg',
-//                    'share_price' => '5',
-//                    'share_user_name' => '白胡子老头',
-//                    'share_vote' => 123,
-//                    'share_user_id' => 869820,
-//                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/368fc9903d0_0908.jpg'
-//                ),
-//                '56' => array(
-//                    'share_id' => 56,
-//                    'share_name' => '新疆天山脚下的骏枣',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/babee077c75_0908.jpg',
-//                    'share_price' => '100',
-//                    'share_user_name' => '樱花',
-//                    'share_vote' => 197,
-//                    'share_user_id' => 810684,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
-//                ),
                 '858' => array(
                     'share_id' => 858,
                     'share_name' => '来自广西十万大山的原生态巢蜜',
@@ -2527,8 +2166,8 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 813896,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_s/060eced7063_0807.jpg'
                 ),
-                '766' => array(
-                    'share_id' => 766,
+                '1616' => array(
+                    'share_id' => 1616,
                     'share_name' => '可以吃的润唇膏',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/cd1a35d9e5a_0915.jpg',
                     'share_price' => '30',
