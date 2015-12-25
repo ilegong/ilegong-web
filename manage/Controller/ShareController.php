@@ -594,7 +594,10 @@ class ShareController extends AppController {
         $cond = array();
         $cond['DATE(created) >='] = $overdue_date;
         $cond['status'] = array(ORDER_STATUS_PAID);
-        $this->handle_query_orders($cond);
+        $order_query_condition = array(
+            'conditions' => $cond,
+            'order' => array('created DESC'));
+        $this->handle_query_orders($order_query_condition);
         $this->set('overdue_date', $overdue_date);
     }
 
@@ -650,7 +653,7 @@ class ShareController extends AppController {
         if ($query_mobile_num) {
             $order_query_condition['limit'] = 200;
         }
-        $this->handle_query_orders($cond);
+        $this->handle_query_orders($order_query_condition);
         $this->set('start_date', $_REQUEST['start_date']);
         $this->set('end_date', $_REQUEST['end_date']);
         $this->set('order_prepaid_status', $order_repaid_status);
