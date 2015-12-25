@@ -499,64 +499,7 @@ class ShareController extends AppController {
         $this->set('share_product_map', $share_product_map);
     }
 
-    public function admin_warn_orders(){
-
-
-
-    }
-
-    public function admin_share_orders() {
-        $query_date = date('Y-m-d');
-        $start_date = $query_date;
-        $end_date = $query_date;
-        if ($_REQUEST['start_date']) {
-            $start_date = $_REQUEST['start_date'];
-        }
-        if ($_REQUEST['end_date']) {
-            $end_date = $_REQUEST['end_date'];
-        }
-        $cond = array(
-            'type' => 9,
-        );
-        $request_order_id = $_REQUEST['order_id'];
-        if ($_REQUEST['share_id']) {
-            $query_share_id = $_REQUEST['share_id'];
-        }
-        if ($_REQUEST['mobile_no']) {
-            $query_mobile_num = $_REQUEST['mobile_no'];
-        }
-        if ($request_order_id) {
-            $cond['id'] = $request_order_id;
-        } elseif ($query_share_id) {
-            $cond['member_id'] = $query_share_id;
-        } elseif ($query_mobile_num) {
-            $cond['consignee_mobilephone'] = $query_mobile_num;
-        } else {
-            if ($start_date == $end_date) {
-                $cond['DATE(created)'] = $query_date;
-            } else {
-                $cond['DATE(created) >='] = $start_date;
-                $cond['DATE(created) <='] = $end_date;
-            }
-        }
-        $order_status = $_REQUEST['order_status'];
-        if ($order_status != 0) {
-            $cond['status'] = array($order_status);
-        } else {
-            $cond['status'] = array(ORDER_STATUS_PAID, ORDER_STATUS_RECEIVED, ORDER_STATUS_SHIPPED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_PREPAID, ORDER_STATUS_PREPAID_TODO, ORDER_STATUS_REFUND);
-        }
-        $order_repaid_status = $_REQUEST['order_prepaid_status'];
-        if ($order_repaid_status != 0) {
-            $cond['process_prepaid_status'] = array($order_repaid_status);
-        } else {
-            $cond['process_prepaid_status'] = array(0, ORDER_STATUS_PREPAID, ORDER_STATUS_PREPAID_TODO, ORDER_STATUS_PREPAID_DONE, ORDER_STATUS_REFUND_TODO, ORDER_STATUS_REFUND_DONE);
-        }
-        $order_query_condition = array(
-            'conditions' => $cond,
-            'order' => array('created DESC'));
-        if ($query_mobile_num) {
-            $order_query_condition['limit'] = 200;
-        }
+    private function handle_query_orders($order_query_condition){
         $orders = $this->Order->find('all', $order_query_condition);
         $total_price = 0;
         if (!empty($orders)) {
@@ -630,18 +573,86 @@ class ShareController extends AppController {
                 $order_cart_map[$order_id][] = $item['Cart'];
             }
             $summery_result = array('order_count' => count($orders), 'total_all_price' => $total_price);
-            $this->set('refund_logs', $refundLogs);
-            $this->set('all_rebate_money', $allRebateMoney);
-            $this->set('rebate_logs', $rebateLogs);
             $this->set('summery', $summery_result);
-            $this->set('start_date', $_REQUEST['start_date']);
-            $this->set('end_date', $_REQUEST['end_date']);
+            $this->set('refund_logs', $refundLogs);
             $this->set('orders', $orders);
-            $this->set('order_cart_map', $order_cart_map);
             $this->set('weshares', $weshares);
             $this->set('pay_notifies', $pay_notifies);
             $this->set('all_users', $all_users);
+            $this->set('order_cart_map', $order_cart_map);
+            $this->set('all_rebate_money', $allRebateMoney);
+            $this->set('rebate_logs', $rebateLogs);
         }
+    }
+
+    public function admin_warn_orders(){
+        if(!$_REQUEST['overdue_date']){
+            $overdue_date = date('Y-m-d',strtotime('-10 day'));
+        }else{
+            $overdue_date = $_REQUEST['overdue_date'];
+        }
+        $cond = array();
+        $cond['DATE(created) >='] = $overdue_date;
+        $cond['status'] = array(ORDER_STATUS_PAID);
+        $this->handle_query_orders($cond);
+        $this->set('overdue_date', $overdue_date);
+    }
+
+    public function admin_share_orders() {
+        $query_date = date('Y-m-d');
+        $start_date = $query_date;
+        $end_date = $query_date;
+        if ($_REQUEST['start_date']) {
+            $start_date = $_REQUEST['start_date'];
+        }
+        if ($_REQUEST['end_date']) {
+            $end_date = $_REQUEST['end_date'];
+        }
+        $cond = array(
+            'type' => 9,
+        );
+        $request_order_id = $_REQUEST['order_id'];
+        if ($_REQUEST['share_id']) {
+            $query_share_id = $_REQUEST['share_id'];
+        }
+        if ($_REQUEST['mobile_no']) {
+            $query_mobile_num = $_REQUEST['mobile_no'];
+        }
+        if ($request_order_id) {
+            $cond['id'] = $request_order_id;
+        } elseif ($query_share_id) {
+            $cond['member_id'] = $query_share_id;
+        } elseif ($query_mobile_num) {
+            $cond['consignee_mobilephone'] = $query_mobile_num;
+        } else {
+            if ($start_date == $end_date) {
+                $cond['DATE(created)'] = $query_date;
+            } else {
+                $cond['DATE(created) >='] = $start_date;
+                $cond['DATE(created) <='] = $end_date;
+            }
+        }
+        $order_status = $_REQUEST['order_status'];
+        if ($order_status != 0) {
+            $cond['status'] = array($order_status);
+        } else {
+            $cond['status'] = array(ORDER_STATUS_PAID, ORDER_STATUS_RECEIVED, ORDER_STATUS_SHIPPED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_PREPAID, ORDER_STATUS_PREPAID_TODO, ORDER_STATUS_REFUND);
+        }
+        $order_repaid_status = $_REQUEST['order_prepaid_status'];
+        if ($order_repaid_status != 0) {
+            $cond['process_prepaid_status'] = array($order_repaid_status);
+        } else {
+            $cond['process_prepaid_status'] = array(0, ORDER_STATUS_PREPAID, ORDER_STATUS_PREPAID_TODO, ORDER_STATUS_PREPAID_DONE, ORDER_STATUS_REFUND_TODO, ORDER_STATUS_REFUND_DONE);
+        }
+        $order_query_condition = array(
+            'conditions' => $cond,
+            'order' => array('created DESC'));
+        if ($query_mobile_num) {
+            $order_query_condition['limit'] = 200;
+        }
+        $this->handle_query_orders($cond);
+        $this->set('start_date', $_REQUEST['start_date']);
+        $this->set('end_date', $_REQUEST['end_date']);
         $this->set('order_prepaid_status', $order_repaid_status);
         $this->set('share_id', $query_share_id);
         $this->set('order_status', $order_status);
