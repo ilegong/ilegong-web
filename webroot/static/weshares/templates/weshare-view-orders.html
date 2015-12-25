@@ -5,8 +5,8 @@
             <!-- child share data -->
             <li class='buyer-image'>
                 <img ng-click="vm.toUserShareInfo(order.creator)" lazy-src="{{vm.childShareDetailUsers[order.creator]['image']|| vm.staticFilePath + '/img/default_user_icon.jpg'}}"/>
-                <p ng-if="vm.childShareDetailUsersLevel[order.creator]" ng-bind="::vm.childShareDetailUsersLevel[order.creator]['level_name']" style="color: white; font-size: 10px; font-weight: 700; padding: 2px; margin-top: 1px; background-color: #29AC0E;text-align: center;"></p>
-                <p ng-click="vm.chatToUser(order.creator);" ng-if="vm.currentUser.id" ng-click="" style="color: white; font-size: 13px; font-weight: 700; padding: 2px; margin-top: 3px; background-color: #F2651A;text-align: center;">
+                <p ng-if="vm.childShareDetailUsersLevel[order.creator]" ng-bind="::vm.childShareDetailUsersLevel[order.creator]['level_name']" style="color: #49bc6e;font-size: 13px;"></p>
+                <p ng-click="vm.chatToUser(order.creator);" ng-if="vm.currentUser.id" class="faq-sharer-btn">
                     私信</p>
             </li>
             <li class="detail" ng-click="vm.toShareDetailView(order.weshare_id);">
@@ -29,8 +29,8 @@
             <!--default order-->
             <li class='buyer-image'>
                 <img ng-click="vm.toUserShareInfo(order.creator)" lazy-src="{{vm.ordersDetail.users[order.creator]['image']|| vm.staticFilePath + '/img/default_user_icon.jpg'}}"/>
-                <p ng-if="vm.ordersDetail.level_data[order.creator]" ng-bind="::vm.ordersDetail.level_data[order.creator]['level_name']" style="color: white; font-size: 10px; font-weight: 700; padding: 2px; margin-top: 3px; background-color: #29AC0E;text-align: center;"></p>
-                <p ng-click="vm.chatToUser(order.creator);" ng-if="vm.currentUser.id" ng-click="" style="color: white; font-size: 13px; font-weight: 700; padding: 2px; margin-top: 3px; background-color: #F2651A;text-align: center;">
+                <p ng-if="vm.ordersDetail.level_data[order.creator]" ng-bind="::vm.ordersDetail.level_data[order.creator]['level_name']" style="color: #49bc6e;font-size: 13px;"></p>
+                <p ng-click="vm.chatToUser(order.creator);" ng-if="vm.currentUser.id" class="faq-sharer-btn">
                     私信</p>
             </li>
             <li class="detail" ng-if='order.status!=9'>
@@ -116,8 +116,8 @@
             <!--default order-->
             <li class='buyer-image'>
                 <img ng-click="vm.toUserShareInfo(order.creator)" lazy-src="{{vm.shareOrder.users[order.creator]['image']|| vm.staticFilePath + '/img/default_user_icon.jpg'}}"/>
-                <p ng-if="vm.shareOrder.levelData[order.creator]" ng-bind="::vm.shareOrder.levelData[order.creator]['level_name']" style="color: white; font-size: 10px; font-weight: 700; padding: 2px; margin-top: 3px; background-color: #29AC0E;text-align: center;"></p>
-                <p ng-click="vm.chatToUser(order.creator);" ng-if="vm.currentUser.id" ng-click="" style="color: white; font-size: 13px; font-weight: 700; padding: 2px; margin-top: 3px; background-color: #F2651A;text-align: center;">
+                <p ng-if="vm.shareOrder.levelData[order.creator]" ng-bind="::vm.shareOrder.levelData[order.creator]['level_name']" style="color: #49bc6e;font-size: 13px;"></p>
+                <p ng-click="vm.chatToUser(order.creator);" ng-if="vm.currentUser.id" class="faq-sharer-btn">
                     私信</p>
             </li>
             <li class="detail" ng-if='order.status!=9'>

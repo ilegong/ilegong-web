@@ -33,7 +33,7 @@
                 <span style="display: inline;font-weight: 700;line-height: 1;text-align: center;white-space: nowrap;vertical-align: baseline;color: #999999;font-size: 13px;padding-bottom: 5px;display: block;">已结束</span>
             {{/if}}
         {{/if}}
-        {{if !$parsing_join_share&&$is_me&&$process_my_create_share}}<button name="deleteShare" data-id="{{$share['Weshare']['id']}}" type="button" class="btn btn-primary btn-xs pull-right" style="background: #49bc6e;border: 0;">删除</button>{{/if}}
+        {{if !$parsing_join_share&&$is_me&&$process_my_create_share}}<button name="deleteShare" data-id="{{$share['Weshare']['id']}}" type="button" class="btn btn-primary btn-xs pull-right" style="background: #49bc6e;border: 0;width: 45px;">删除</button>{{/if}}
     </p>
     <?php
         $show_img = $share['Weshare']['images'][0];
@@ -46,7 +46,7 @@
     </a>
 
     <div class="media-body" data-id="{{$share['Weshare']['id']}}" name="share_item">
-        <h4 class="media-heading user_name" style="padding-top: 3px;padding-bottom: 3px;">{{get_limit_string($share['Weshare']['title'], 10)}}</h4>
+        <h4 class="media-heading user_name">{{get_limit_string($share['Weshare']['title'], 10)}}</h4>
         <div style="width:150px;white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden;color: #999;font-size: 13px;">
             {{friendlyDateFromStr($share['Weshare']['created'], "ymd")}}{{if !$parsing_join_share&&$is_me}}，编号:<span style="color: #ff0000;">{{$share['Weshare']['id']}}</span>{{/if}}
         </div>

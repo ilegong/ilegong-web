@@ -2,15 +2,11 @@
     <li>
         <img lazy-src="{{vm.weshare.creator.image|| vm.staticFilePath + '/img/default_user_icon.jpg'}}" ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/>
         <br>
-        <s class="sharer-mark">
-            <span ng-if="vm.weshare.creator.level" class="grouper-mark" ng-bind="::vm.weshare.creator.level.level_name"></span>
-            <img ng-if="vm.userShareSummery.follower_count>=50" ng-src="{{::vm.staticFilePath}}/static/weshares/images/v.png" class="v-icon-img"/>
-        </s>
-        <a ng-if="vm.currentUser" class="faq-sharer-btn" ng-click="vm.redirectFaq()" ng-bind="::vm.faqTipText">联系团长</a>
+        <a ng-if="vm.currentUser" class="faq-sharer-btn" ng-click="vm.redirectFaq()" ng-bind="::vm.faqTipText">私信</a>
     </li>
     <li class="share-info-item-li">
         <div class="sharer-nickname-display-inline">
-            <label ng-click="vm.toUserShareInfo(vm.weshare.creator.id)" ng-bind="::vm.weshare.creator.nickname"></label>
+            <label ng-click="vm.toUserShareInfo(vm.weshare.creator.id)" ng-bind="::vm.weshare.creator.nickname"></label><span ng-if="vm.weshare.creator.level" style="color: #49bc6e;font-size: 13px;" ng-bind="::vm.weshare.creator.level.level_name"></span>
             <a ng-if="!vm.userSubStatus" class="statistics-btn sub-sharer-btn" ng-click="vm.subSharer();" ng-bind="vm.subShareTipTxt">+关注</a>
         </div>
         <s>目标&nbsp;&nbsp;<span class="stress-span" ng-bind="::vm.weshareSettings.self_ziti.limit"></span>&nbsp;人

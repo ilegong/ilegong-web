@@ -36,7 +36,7 @@
                 {{/if}}
                 {{if $is_me&&$is_proxy}}
                     <div style="padding: 5px;">
-                        <a href="/share_product_pool/share_products_index.html" class="btn btn-danger btn-sm">产品街</a>
+                        <a href="/share_product_pool/share_products_index.html" class="btn btn-danger btn-sm" style="background: #f99d3a;border:0;">产品街</a>
                     </div>
                 {{/if}}
                 <div style="margin-top: 10px;margin-bottom: 10px;">
@@ -67,7 +67,7 @@
                     {{if $share_user['description']}}
                     <div class="testimonials">
                         <div class="active item">
-                            <p style="padding-left: 15px;padding-right: 15px;" id="user-info-placeholder">{{mb_substr($share_user['description'],0,500)}}</p>
+                            <p style="padding-left: 15px;padding-right: 15px;font-size: 13px;" id="user-info-placeholder">{{mb_substr($share_user['description'],0,500)}}</p>
                         </div>
                     </div>
                     {{/if}}
