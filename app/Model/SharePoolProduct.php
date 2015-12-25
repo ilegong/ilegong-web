@@ -90,9 +90,9 @@ class SharePoolProduct extends AppModel {
         '1450' => array(
             'buy' => 1475
         ),
-        '1703' => array(
-            'buy' => 1704
-        )
+//        '1703' => array(
+//            'buy' => 1704
+//        )
 
     );
 
@@ -106,7 +106,7 @@ class SharePoolProduct extends AppModel {
             'brand_name' => '晓光',
             'show_brand' => true,
             'brand_custom_service' => 887026,
-            'published' => 1,
+            'published' => 0,
             'products' => array(
                 '3572' => array(
                     'price' => 85,
