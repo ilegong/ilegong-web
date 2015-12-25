@@ -1,4 +1,4 @@
-<link href="{{$STATIC_FILE_PATH}}/static/weshares/css/share-info.css?v0.1.0" rel="stylesheet">
+<link href="{{$STATIC_FILE_PATH}}/static/weshares/css/share-info.css?v0.1.1" rel="stylesheet">
 <div class="row" style="background: #EAEAEA;">
     <div class="col-md-12 user-details">
         <div class="user-image">
@@ -15,20 +15,14 @@
         <div class="user-info-block">
             <div class="user-heading">
                 <div>
-                    <span style="font-size: 16px;font-weight: bold;">{{$share_user['nickname']}}</span>
-                    {{if $is_verify_user}}
-                    <span class="label label-warning">官方认证</span>
-                    {{/if}}
-                    {{if $is_support_offline_store > 0}}
-                    <span class="label label-info">好邻居支持</span>
-                    {{/if}}
+                    <span style="font-size: 14px;font-weight: bold;">{{$share_user['nickname']}}</span>
                     {{if !empty($user_level)}}
-                        <span class="label label-success">{{$user_level['level_name']}}</span>
+                        <span style="color: #49bc6e;font-size: 12px;">{{$user_level['level_name']}}</span>
                     {{/if}}
                 </div>
                 {{if !$is_me}}
                 <div style="padding: 5px;" id="sub-div-content">
-                    <button id="sub-sharer" class="btn btn-warning btn-sm btn-sub-sharer" {{if $sub_status}}style="display:none;"{{/if}} data-sharer-id="{{$share_user['id']}}" data-user-id="{{$visitor}}">+关注</button>
+                    <button id="sub-sharer" class="btn btn-warning btn-sm btn-sub-sharer" {{if $sub_status}}style="display:none;"{{else}}style="background: #f99d3a;border:0;"{{/if}} data-sharer-id="{{$share_user['id']}}" data-user-id="{{$visitor}}">+关注</button>
                     <!-- Single button -->
                     <div id="unsub-sharer" class="btn-group" {{if !$sub_status}}style="display:none;"{{/if}}>
                         <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -67,24 +61,13 @@
                         </li>
                     </ul>
                 </div>
-                {{if $sharer_comment_data['comment_count']>0}}
                 <hr style="margin-top: 5px;margin-bottom: 1px;">
                 <div style="text-align: left;">
-                    <h4>回复率</h4>
-                    <div class="testimonials">
-                        <div class="active item">
-                            <blockquote><p>{{$this->Number->precision($sharer_comment_data['reply_percent'], 2);}}%</p></blockquote>
-                        </div>
-                    </div>
-                </div>
-                {{/if}}
-                <hr style="margin-top: 5px;margin-bottom: 1px;">
-                <div style="text-align: left;">
-                    <h4>关于{{$share_user['nickname']}} {{if $is_me}}&nbsp;&nbsp;<button type="button" class="btn btn-default btn-sm" id="open-update-user-info-dialog">修改</button>&nbsp;&nbsp;<button type="button" class="btn btn-warning btn-sm" id="open-update-user-password-dialog">修改登录密码</button>{{/if}}</h4>
+                    <h4 style="font-size: 14px;padding-left: 15px;">关于{{$share_user['nickname']}} {{if $is_me}}&nbsp;&nbsp;<button type="button" class="btn btn-default btn-sm" id="open-update-user-info-dialog">修改</button>&nbsp;&nbsp;<button type="button" class="btn btn-default btn-sm" id="open-update-user-password-dialog">修改登录密码</button>{{/if}}</h4>
                     {{if $share_user['description']}}
                     <div class="testimonials">
                         <div class="active item">
-                            <blockquote><p id="user-info-placeholder">{{mb_substr($share_user['description'],0,500)}}</p></blockquote>
+                            <p style="padding-left: 15px;padding-right: 15px;" id="user-info-placeholder">{{mb_substr($share_user['description'],0,500)}}</p>
                         </div>
                     </div>
                     {{/if}}
@@ -92,12 +75,7 @@
                 {{if $show_rebate_money}}
                 <hr style="margin-top: 5px;margin-bottom: 1px;">
                 <div style="text-align: left;">
-                    <h4>我的余额</h4>
-                    <div class="testimonials">
-                        <div class="active item">
-                            <blockquote><p>￥{{$rebate_money}}</p></blockquote>
-                        </div>
-                    </div>
+                    <h4 style="font-size: 14px;padding-left: 15px;">我的余额 ￥{{$rebate_money}}</h4>
                 </div>
                 {{/if}}
             </div>
@@ -128,44 +106,32 @@
                 <div class="tab-content">
                     {{if !empty($my_create_shares)}}
                     <div class="tab-pane" id="tab_default_1">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div class="comments-list">
-                                    <?php $process_my_create_share = true; ?>
-                                    {{loop $my_create_shares $share}}
-                                    {{template weshares/user_share_item_template}}
-                                    {{/loop}}
-                                </div>
-                            </div>
+                        <div class="comments-list">
+                            <?php $process_my_create_share = true; ?>
+                            {{loop $my_create_shares $share}}
+                            {{template weshares/user_share_item_template}}
+                            {{/loop}}
                         </div>
                     </div>
                     {{/if}}
                     {{if !empty($authority_shares) && $is_me}}
                     <div class="tab-pane" id="tab_default_2">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div class="comments-list">
-                                    <?php $process_my_create_share = false; ?>
-                                    {{loop $authority_shares $share}}
-                                    {{template weshares/user_share_item_template}}
-                                    {{/loop}}
-                                </div>
-                            </div>
+                        <div class="comments-list">
+                            <?php $process_my_create_share = false; ?>
+                            {{loop $authority_shares $share}}
+                            {{template weshares/user_share_item_template}}
+                            {{/loop}}
                         </div>
                     </div>
                     {{/if}}
                     {{if !empty($my_join_shares)}}
                     <div class="tab-pane" id="tab_default_3">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div class="comments-list">
-                                    <?php $process_my_create_share = false; ?>
-                                    <?php $parsing_join_share = true; ?>
-                                    {{loop $my_join_shares $share}}
-                                    {{template weshares/user_share_item_template}}
-                                    {{/loop}}
-                                </div>
-                            </div>
+                        <div class="comments-list">
+                            <?php $process_my_create_share = false; ?>
+                            <?php $parsing_join_share = true; ?>
+                            {{loop $my_join_shares $share}}
+                            {{template weshares/user_share_item_template}}
+                            {{/loop}}
                         </div>
                     </div>
                     {{/if}}

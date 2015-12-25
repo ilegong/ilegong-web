@@ -5,6 +5,7 @@
 
 .comments-list .media {
     border-bottom: 1px dotted #ccc;
+    padding-bottom: 15px;
 }
 
 /***
@@ -15,7 +16,7 @@ Licensed under MIT
 
 /* Tabs panel */
 .tabbable-panel {
-    padding: 10px;
+    padding: 10px 0;
 }
 
 /* Default mode */
@@ -57,7 +58,7 @@ Licensed under MIT
 }
 
 .tabbable-line > .nav-tabs > li.active {
-    border-bottom: 4px solid #f3565d;
+    border-bottom: 2px solid #f3565d;
     position: relative;
 }
 
@@ -71,7 +72,7 @@ Licensed under MIT
 }
 
 .tabbable-line > .tab-content {
-    margin-top: -3px;
+    margin-top: -1px;
     background-color: #fff;
     border: 0;
     border-top: 1px solid #eee;
@@ -121,6 +122,8 @@ Licensed under MIT
     z-index: 1;
     width: 100%;
     text-align: center;
+    background-color: #ffffff;
+    padding-top: 10px;
 }
 
 .user-image img {

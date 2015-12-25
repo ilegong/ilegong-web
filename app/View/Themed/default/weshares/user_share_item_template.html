@@ -5,35 +5,35 @@
 ?>
 <div class="media">
     <p class="pull-right">
-        <small>{{friendlyDateFromStr($share['Weshare']['created'], FFDATE_CH_MD)}}</small>
         {{if $parsing_join_share}}
             <?php $current_share_id = $share['Weshare']['id']; ?>
             {{if $join_share_order_status[$current_share_id]['status']==ORDER_STATUS_PAID}}
-                <span class="label label-info">待发货</span>
+                <span style="font-weight: 700;line-height: 1;text-align: center;white-space: nowrap;vertical-align: baseline;color: #f99d3a;font-size: 13px;padding-bottom: 5px;display: block;">待发货</span>
             {{elseif $join_share_order_status[$current_share_id]['status']==ORDER_STATUS_SHIPPED}}
-                <span class="label label-warning">已发货</span>
+                <span style="font-weight: 700;line-height: 1;text-align: center;white-space: nowrap;vertical-align: baseline;color: #f99d3a;font-size: 13px;padding-bottom: 5px;display: block;">已发货</span>
             {{elseif $join_share_order_status[$current_share_id]['status']==ORDER_STATUS_RECEIVED}}
-                <span class="label label-danger">待评价</span>
+                <span style="font-weight: 700;line-height: 1;text-align: center;white-space: nowrap;vertical-align: baseline;color: #f99d3a;font-size: 13px;padding-bottom: 5px;display: block;">待评价</span>
             {{elseif $join_share_order_status[$current_share_id]['status']==ORDER_STATUS_DONE}}
-                <span class="label label-success">已评价</span>
+                <span style="font-weight: 700;line-height: 1;text-align: center;white-space: nowrap;vertical-align: baseline;color: #f99d3a;font-size: 13px;padding-bottom: 5px;display: block;">已评价</span>
             {{elseif $join_share_order_status[$current_share_id]['status']==ORDER_STATUS_RETURNING_MONEY}}
-                <span class="label label-success">退款中</span>
+                <span style="font-weight: 700;line-height: 1;text-align: center;white-space: nowrap;vertical-align: baseline;color: #f99d3a;font-size: 13px;padding-bottom: 5px;display: block;">退款中</span>
             {{elseif $join_share_order_status[$current_share_id]['status']==ORDER_STATUS_RETURN_MONEY}}
-                <span class="label label-success">已退款</span>
+                <span style="font-weight: 700;line-height: 1;text-align: center;white-space: nowrap;vertical-align: baseline;color: #f99d3a;font-size: 13px;padding-bottom: 5px;display: block;">已退款</span>
             {{else}}
                 {{if $share['Weshare']['status']==0}}
-                <span class="label label-info">进行中</span>
+                <span style="font-weight: 700;line-height: 1;text-align: center;white-space: nowrap;vertical-align: baseline;color: #f99d3a;font-size: 13px;padding-bottom: 5px;display: block;">进行中</span>
                 {{else}}
-                <span class="label label-danger">已结束</span>
+                <span style="font-weight: 700;line-height: 1;text-align: center;white-space: nowrap;vertical-align: baseline;color: #999999;font-size: 13px;padding-bottom: 5px;display: block;">已结束</span>
                 {{/if}}
             {{/if}}
         {{else}}
             {{if $share['Weshare']['status']==0}}
-                <span class="label label-info">进行中</span>
+                <span style="display: inline;font-weight: 700;line-height: 1;text-align: center;white-space: nowrap;vertical-align: baseline;color: #f99d3a;font-size: 13px;padding-bottom: 5px;display: block;">进行中</span>
             {{else}}
-                <span class="label label-danger">已结束</span>
+                <span style="display: inline;font-weight: 700;line-height: 1;text-align: center;white-space: nowrap;vertical-align: baseline;color: #999999;font-size: 13px;padding-bottom: 5px;display: block;">已结束</span>
             {{/if}}
         {{/if}}
+        {{if !$parsing_join_share&&$is_me&&$process_my_create_share}}<button name="deleteShare" data-id="{{$share['Weshare']['id']}}" type="button" class="btn btn-primary btn-xs pull-right" style="background: #49bc6e;border: 0;">删除</button>{{/if}}
     </p>
     <?php
         $show_img = $share['Weshare']['images'][0];
@@ -46,14 +46,9 @@
     </a>
 
     <div class="media-body" data-id="{{$share['Weshare']['id']}}" name="share_item">
-        <h4 class="media-heading user_name">{{get_limit_string($share['Weshare']['title'], 10)}}</h4>
-        <div style="width:150px;white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden;">
-            {{if $join_share_order_status[$current_share_id]['status']==ORDER_STATUS_DONE}}
-                {{$joinShareComments[$join_share_order_status[$current_share_id]['id']]['body']}}
-            {{else}}
-                {{strip_tags($share['Weshare']['description'])}}
-            {{/if}}
+        <h4 class="media-heading user_name" style="padding-top: 3px;padding-bottom: 3px;">{{get_limit_string($share['Weshare']['title'], 10)}}</h4>
+        <div style="width:150px;white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden;color: #999;font-size: 13px;">
+            {{friendlyDateFromStr($share['Weshare']['created'], "ymd")}}{{if !$parsing_join_share&&$is_me}}，编号:<span style="color: #ff0000;">{{$share['Weshare']['id']}}</span>{{/if}}
         </div>
     </div>
-    {{if !$parsing_join_share&&$is_me}}<span class="pull-right" style="margin-top: -15px;">编号:<small style="color: #ff0000;">{{$share['Weshare']['id']}}</small></span>{{if $process_my_create_share}}<button name="deleteShare" data-id="{{$share['Weshare']['id']}}" type="button" class="btn btn-primary btn-xs pull-right" style="margin-top: -20px;">删除</button>{{/if}}{{/if}}
 </div>
