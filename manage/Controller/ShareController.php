@@ -499,6 +499,12 @@ class ShareController extends AppController {
         $this->set('share_product_map', $share_product_map);
     }
 
+    public function admin_warn_orders(){
+
+
+
+    }
+
     public function admin_share_orders() {
         $query_date = date('Y-m-d');
         $start_date = $query_date;

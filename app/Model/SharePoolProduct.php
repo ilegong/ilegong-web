@@ -319,7 +319,7 @@ class SharePoolProduct extends AppModel {
             'brand_name' => '片片妈',
             'show_brand' => true,
             'brand_custom_service' => 12376,
-            'published' => 0,
+            'published' => 1,
             'products' => array(
                 '2916' => array(
                     'price' => 108,
