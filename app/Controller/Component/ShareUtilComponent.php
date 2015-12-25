@@ -1683,6 +1683,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 801447,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/8014471448421852.png'
                 ),
+                '1745' => array(
+                    'share_id' => 1745,
+                    'share_name' => '兰州鲜百合，润肺养颜',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/063a0b0305f_1225.jpg',
+                    'share_price' => '180',
+                    'share_user_name' => '鲲鲲',
+                    'share_vote' => 2654,
+                    'share_user_id' => 806889,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
+                ),
                 '1392' => array(
                     'share_id' => 1392,
                     'share_name' => '多油、好吃到停不下来的海鸭蛋',
