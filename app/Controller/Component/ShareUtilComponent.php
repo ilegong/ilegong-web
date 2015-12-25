@@ -1845,7 +1845,37 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 600,
                     'share_user_id' => 816006,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_cb081df64d1b691b47b362d02fbff036.jpg'
-                )
+                ),
+                '1758' => array(
+                    'share_id' => 1758,
+                    'share_name' => '“万岁子”、“长寿果”--新疆阿克苏核桃',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/592d0fecd5c_1225.jpg',
+                    'share_price' => '24.99',
+                    'share_user_name' => '西域美农',
+                    'share_vote' => 600,
+                    'share_user_id' => 897,
+                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201501/thumb_m/fd70e550e19_0122.jpg'
+                ),
+                '1757' => array(
+                    'share_id' => 1757,
+                    'share_name' => '树上黄，来自吐鲁番的贵族',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/a06f8b84295_1225.jpg',
+                    'share_price' => '18.99',
+                    'share_user_name' => '西域美农',
+                    'share_vote' => 600,
+                    'share_user_id' => 897,
+                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201501/thumb_m/fd70e550e19_0122.jpg'
+                ),
+                '1756' => array(
+                    'share_id' => 1756,
+                    'share_name' => '“天然红宝石”--新疆骏枣',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/37749b11b46_1225.jpg',
+                    'share_price' => '21.99',
+                    'share_user_name' => '西域美农',
+                    'share_vote' => 600,
+                    'share_user_id' => 897,
+                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201501/thumb_m/fd70e550e19_0122.jpg'
+                ),
             ),
             1 => array(
                 '699' => array(
