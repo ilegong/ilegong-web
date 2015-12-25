@@ -93,7 +93,9 @@ class SharePoolProduct extends AppModel {
 //        '1703' => array(
 //            'buy' => 1704
 //        )
-
+        '1492' => array(
+            'buy' => 1752
+        )
     );
 
     //产品池所有产品
