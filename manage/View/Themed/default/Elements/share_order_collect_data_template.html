@@ -1,0 +1,30 @@
+<?php
+    $collect_result = array();
+    foreach($current_orders as $order){
+        foreach($order_carts[$order['Order']['id']] as $cart){
+            if(!$cart['Cart']['matched']){
+                continue;
+            }
+            $product = $products[$cart['Cart']['product_id']];
+            $collect_key = $cart['Cart']['product_id'];
+            if(array_key_exists($collect_key,$collect_result)){
+                $collect_result[$collect_key]['num'] = intval($collect_result[$collect_key]['num'])+intval($cart['Cart']['num']);
+            }else{
+                $name = $cart['Cart']['name'];
+                $collect_result[$collect_key] = array('name'=>$name,'num'=>$cart['Cart']['num']);
+            }
+        }
+    }
+?>
+<table class="table table-bordered table-collect-data" style="margin-bottom: 20px;width: 50%;">
+    <tr>
+        <td>名称</td>
+        <td>数量</td>
+    </tr>
+    {{loop $collect_result  $collect_data}}
+        <tr>
+            <td>{{$collect_data['name']}}</td>
+            <td>{{$collect_data['num']}}</td>
+        </tr>
+    {{/loop}}
+</table>

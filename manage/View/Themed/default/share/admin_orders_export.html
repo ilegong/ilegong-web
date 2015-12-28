@@ -1,0 +1,97 @@
+{{$this->Html->css(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css'))}}
+<div class="header">
+    <ol class="breadcrumb">
+        <li><a href="/manage/admin/share/share_orders">分享订单管理</a></li>
+        <li class="active orders-modify">分享订单导出</li>
+    </ol>
+    <form class="form-inline" method="post" action="/manage/admin/share/orders_export" data-noajax="true">
+        <div style="padding-bottom: 10px;padding-top: 10px;">
+            <div class="form-group">
+                <input type="text" name="share_id" class="form-control" value="{{$share_id}}" placeholder="分享ID">
+            </div>
+            <button type="submit" class="btn btn-primary text-center">分享订单</button>
+        </div>
+    </form>
+    <hr/>
+    <div>
+        <h1>订单总计<span style="color: red">{{count($order_carts)}}</span>个，金额<span style="color: red">{{$total_order_money}}</span></h1>
+        <br/>
+        <h1>份数<span style="color: red">{{$product_count}}</span>
+            {{loop $product_spec_map $spec_map}}
+            &nbsp;&nbsp;&nbsp;{{$spec_groups[$spec_map['cake_carts']['specId']]?$spec_groups[$spec_map['cake_carts']['specId']]:'没有规格'}}&nbsp;&nbsp;<span
+                    style="color: red">{{$spec_map['0']['sum(num)']}}</span>
+            {{/loop}}
+        </h1>
+        <button class="btn btn-success export-excel">导出订单</button>
+        <button class="btn btn-primary toggle-orders" data-show-all='0'>只显示统计</button>
+        <button class="btn btn-primary print-orders">打印订单</button>
+    </div>
+    <hr/>
+</div>
+{{loop $ship_mark_enum $code $item}}
+{{if $code!='ziti'}}
+        <?php
+            $current_orders=$map_other_orders[$code];
+            $data_tag = $code;
+            $data_tag_name = $item['name'];
+            $delivery_type = $code;
+        ?>
+<h1 class="no-print"><span class="label no-print label-{{$item['style']}}">{{$item['name']}}</span></h1>
+<hr class="no-print" />
+<h3 {{if !empty($current_orders)}}class="ship-type new-page"{{else}}class="no-print"{{/if}}><span class="label no-print label-{{$item['style']}}">{{$item['name']}}</span></h3>
+<hr class="no-print"/>
+{{template Elements/share_order_data_template}}
+{{else}}
+<h2 class="no-print"><span class="label label-primary no-print">{{$item['name']}}</span></h2>
+<hr class="no-print" />
+<h2 class="no-print">
+    <span class="label label-warning no-print">朋友说自提</span>
+</h2>
+<hr class="no-print" />
+<div class="hidden" id="send_order_msg" data-reach="{{$reach_order}}" data-send_out="{{$send_out_order}}"></div>
+{{loop $pys_ziti_point $point}}
+<?php
+    $current_orders=$map_ziti_orders[$point['OfflineStore']['id']];
+    $data_tag = 'ziti-'.$point['OfflineStore']['id'];
+    $data_tag_name = $point['OfflineStore']['alias'];
+    $delivery_type = 'pys-stores';
+?>
+<h3 {{if !empty($current_orders)}}class="ship-type new-page"{{else}}class="no-print"{{/if}}><span class="label label-success">{{get_address(null,$point)}}</span></h3>
+<hr class="no-print"/>
+{{template Elements/share_order_data_template}}
+<?php unset($map_ziti_orders[$point['OfflineStore']['id']]); ?>
+{{/loop}}
+<h2 class="no-print"><span class="label label-warning">好邻居自提</span></h2>
+<hr class="no-print"/>
+{{loop $hlj_ziti_point $point}}
+<?php
+    $current_orders=$map_ziti_orders[$point['OfflineStore']['id']];
+    $data_tag = 'ziti-'.$point['OfflineStore']['id'];
+    $data_tag_name = $point['OfflineStore']['alias'];
+    $delivery_type = 'haolinju-stores';
+?>
+<h3 {{if !empty($current_orders)}}class="ship-type new-page"{{else}}class="no-print"{{/if}}><span class="label label-success">{{get_address(null,$point)}}</span></h3>
+<hr class="no-print"/>
+{{template Elements/share_order_data_template}}
+<?php unset($map_ziti_orders[$point['OfflineStore']['id']]); ?>
+{{/loop}}
+{{loop $map_ziti_orders $current_orders}}
+<?php
+    $data_tag='none-tag';
+    $data_tag_name = '未知自提点';
+    $delivery_type = 'unknown-stores';
+?>
+<h2 class="no-print"><span class="label label-danger">未知自提点</span></h2>
+<hr class="no-print"/>
+<h3 {{if !empty($current_orders)}}class="ship-type new-page"{{else}}class="no-print"{{/if}}><span class="label label-warning">没有自提点</span></h3>
+<hr class="no-print"/>
+{{template Elements/share_order_data_template}}
+{{/loop}}
+{{/if}}
+{{/loop}}
+
+{{$this->Html->script(array('/js/manage-lib/tablesort/tablesort.min.js','/js/manage-lib/tablesort/src/sorts/tablesort.date.js','/js/manage-lib/tablesort/src/sorts/tablesort.dotsep.js','/js/manage-lib/tablesort/src/sorts/tablesort.numeric.js','/js/manage/table_sort.js'));}}
+{{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js',
+'/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js',
+'/js/manage-lib/tableExport.jquery.plugin/tablesToExcel.js?v2.5'))}}
+{{$this->Html->script(array('manage/share/share_orders.js?v7.6'))}}
