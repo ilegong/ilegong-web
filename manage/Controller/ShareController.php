@@ -592,7 +592,7 @@ class ShareController extends AppController {
             $overdue_date = $_REQUEST['overdue_date'];
         }
         $cond = array();
-        $cond['DATE(created) >='] = $overdue_date;
+        $cond['DATE(created) <'] = $overdue_date;
         $cond['status'] = array(ORDER_STATUS_PAID);
         $order_query_condition = array(
             'conditions' => $cond,
