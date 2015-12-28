@@ -123,6 +123,10 @@ define('TUAN_CREATE_MSG','tuan_create_msg');
 define('TUAN_STARTDELIVER_MSG','tuan_startdeliver_msg');
 define('TUAN_NOTIFYDELIVER_MSG','tuan_notifydeliver_msg');
 
+const SHARE_SHIP_PYS_ZITI_TAG = 'pys_ziti';
+const SHARE_SHIP_SELF_ZITI_TAG = 'self_ziti';
+const SHARE_SHIP_KUAIDI_TAG = 'kuai_di';
+const SHARE_SHIP_GROUP_TAG = 'pin_tuan';
 
 include_once COMMON_PATH.'bootstrap.php';
 
@@ -461,15 +465,15 @@ function is_b2c($brand_id){
 }
 
 function share_self_ziti_order_filter($var){
-    return $var['Order']['ship_mark'] = SHARE_SHIP_SELF_ZITI_TAG;
+    return $var['Order']['ship_mark'] == SHARE_SHIP_SELF_ZITI_TAG;
 }
 
 function share_kuai_di_order_filter($var){
-    return $var['Order']['ship_mark'] = SHARE_SHIP_KUAIDI_TAG;
+    return $var['Order']['ship_mark'] == SHARE_SHIP_KUAIDI_TAG;
 }
 
 function share_pys_ziti_order_filter($var){
-    return $var['Order']['ship_mark'] = SHARE_SHIP_PYS_ZITI_TAG;
+    return $var['Order']['ship_mark'] == SHARE_SHIP_PYS_ZITI_TAG;
 }
 function share_none_order_filter($var){
     return ($var['Order']['ship_mark'] == null)||(trim($var['Order']['ship_mark']) == '');

@@ -29,7 +29,7 @@
     <hr/>
 </div>
 {{loop $ship_mark_enum $code $item}}
-{{if $code!='ziti'}}
+{{if $code!=SHARE_SHIP_PYS_ZITI_TAG || $code!= SHARE_SHIP_SELF_ZITI_TAG}}
         <?php
             $current_orders=$map_other_orders[$code];
             $data_tag = $code;
@@ -45,21 +45,21 @@
 <h2 class="no-print"><span class="label label-primary no-print">{{$item['name']}}</span></h2>
 <hr class="no-print" />
 <h2 class="no-print">
-    <span class="label label-warning no-print">朋友说自提</span>
+    <span class="label label-warning no-print">自提</span>
 </h2>
 <hr class="no-print" />
 <div class="hidden" id="send_order_msg" data-reach="{{$reach_order}}" data-send_out="{{$send_out_order}}"></div>
-{{loop $pys_ziti_point $point}}
+{{loop $weshare_addresses $point}}
 <?php
-    $current_orders=$map_ziti_orders[$point['OfflineStore']['id']];
-    $data_tag = 'ziti-'.$point['OfflineStore']['id'];
-    $data_tag_name = $point['OfflineStore']['alias'];
-    $delivery_type = 'pys-stores';
+    $current_orders=$map_self_ziti_orders[$point['WeshareAddress']['id']];
+    $data_tag = 'ziti-'.$point['WeshareAddress']['id'];
+    $data_tag_name = $point['WeshareAddress']['address'];
+    $delivery_type = 'self-stores';
 ?>
 <h3 {{if !empty($current_orders)}}class="ship-type new-page"{{else}}class="no-print"{{/if}}><span class="label label-success">{{get_address(null,$point)}}</span></h3>
 <hr class="no-print"/>
 {{template Elements/share_order_data_template}}
-<?php unset($map_ziti_orders[$point['OfflineStore']['id']]); ?>
+<?php unset($map_self_ziti_orders[$point['WeshareAddress']['id']]); ?>
 {{/loop}}
 <h2 class="no-print"><span class="label label-warning">好邻居自提</span></h2>
 <hr class="no-print"/>

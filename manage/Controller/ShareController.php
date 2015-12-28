@@ -611,7 +611,7 @@ class ShareController extends AppController {
     public function admin_share_orders_export() {
         $share_id = $_REQUEST['share_id'];
         if(!empty($share_id)){
-            $conditions = array('Order.member_id' => $share_id, 'Order.type' => ORDER_TYPE_WESHARE_BUY);
+            $conditions = array('Order.member_id' => $share_id, 'Order.type' => ORDER_TYPE_WESHARE_BUY, 'Order.status' => ORDER_STATUS_PAID);
             $this->_query_orders($conditions, 'Order.created DESC');
             $this->set('share_id', $share_id);
         }
@@ -718,14 +718,13 @@ class ShareController extends AppController {
             $this->set('total_order_money', $total_money);
         }
 
-        $ship_mark_enum = array(SHARE_SHIP_KUAIDI_TAG => array('name' => '快递', 'style' => 'active'), SHARE_SHIP_PYS_ZITI_TAG => array('name' => '好邻居自提', 'style' => 'warning'), SHARE_SHIP_SELF_ZITI_TAG => array('name' => '自提', 'style' => 'danger'), 'none' => array('name' => '没有标注', 'style' => 'info'));
+        $ship_mark_enum = array(SHARE_SHIP_KUAIDI_TAG => array('name' => '快递', 'style' => 'primary'), SHARE_SHIP_PYS_ZITI_TAG => array('name' => '好邻居自提', 'style' => 'warning'), SHARE_SHIP_SELF_ZITI_TAG => array('name' => '自提', 'style' => 'danger'), 'none' => array('name' => '没有标注', 'style' => 'info'));
         $this->set('ship_mark_enum', $ship_mark_enum);
-
         $ziti_orders = array_filter($orders, 'share_self_ziti_order_filter');
         $pys_ziti_orders = array_filter($orders, 'share_pys_ziti_order_filter');
         $kuaidi_orders = array_filter($orders, 'share_kuai_di_order_filter');
         $none_orders = array_filter($orders, 'share_none_order_filter');
-        $map_other_orders = array('ziti' => $ziti_orders, 'kuaidi' => $kuaidi_orders, 'none' => $none_orders, 'pys_ziti' => $pys_ziti_orders);
+        $map_other_orders = array(SHARE_SHIP_SELF_ZITI_TAG => $ziti_orders, SHARE_SHIP_KUAIDI_TAG => $kuaidi_orders, 'none' => $none_orders, SHARE_SHIP_PYS_ZITI_TAG => $pys_ziti_orders);
         $map_self_ziti_orders = array();
         foreach ($ziti_orders as $item) {
             $consignee_id = $item['Order']['consignee_id'];
@@ -775,6 +774,7 @@ class ShareController extends AppController {
 
         $this->set('pys_ziti_point', $pys_ziti_point);
         $this->set('hlj_ziti_point', $hlj_ziti_point);
+        $this->set('weshare_addresses', $weshare_addresses);
 
         $this->set('map_ziti_orders', $map_ziti_orders);
         $this->set('map_other_orders', $map_other_orders);
@@ -783,7 +783,6 @@ class ShareController extends AppController {
         $this->set('product_count', $product_count);
         $this->set('orders', $orders);
         $this->set('offline_stores', $offline_stores);
-        $this->set('weshare_addresses', $weshare_addresses);
         $this->set('order_carts', $order_carts);
         $this->set('product_detail', $product_detail);
         $this->set('products', $products);
