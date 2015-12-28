@@ -20,17 +20,21 @@
             {{elseif $join_share_order_status[$current_share_id]['status']==ORDER_STATUS_RETURN_MONEY}}
                 <span style="font-weight: 700;line-height: 1;text-align: center;white-space: nowrap;vertical-align: baseline;color: #f99d3a;font-size: 13px;padding-bottom: 5px;display: block;">已退款</span>
             {{else}}
-                {{if $share['Weshare']['status']==0}}
-                <span style="font-weight: 700;line-height: 1;text-align: center;white-space: nowrap;vertical-align: baseline;color: #f99d3a;font-size: 13px;padding-bottom: 5px;display: block;">进行中</span>
+                {{if $share['Weshare']['status'] == 0}}
+                    <span style="font-weight: 700;line-height: 1;text-align: center;white-space: nowrap;vertical-align: baseline;color: #f99d3a;font-size: 13px;padding-bottom: 5px;display: block;">进行中</span>
                 {{else}}
-                <span style="font-weight: 700;line-height: 1;text-align: center;white-space: nowrap;vertical-align: baseline;color: #999999;font-size: 13px;padding-bottom: 5px;display: block;">已结束</span>
+                    <span style="font-weight: 700;line-height: 1;text-align: center;white-space: nowrap;vertical-align: baseline;color: #999999;font-size: 13px;padding-bottom: 5px;display: block;">已结束</span>
                 {{/if}}
             {{/if}}
         {{else}}
-            {{if $share['Weshare']['status']==0}}
+            {{if $share['Weshare']['status'] == 0}}
                 <span style="display: inline;font-weight: 700;line-height: 1;text-align: center;white-space: nowrap;vertical-align: baseline;color: #f99d3a;font-size: 13px;padding-bottom: 5px;display: block;">进行中</span>
             {{else}}
-                <span style="display: inline;font-weight: 700;line-height: 1;text-align: center;white-space: nowrap;vertical-align: baseline;color: #999999;font-size: 13px;padding-bottom: 5px;display: block;">已结束</span>
+                {{if $share['Weshare']['settlement'] == 1}}
+                    <span style="display: inline;font-weight: 700;line-height: 1;text-align: center;white-space: nowrap;vertical-align: baseline;color: #999999;font-size: 13px;padding-bottom: 5px;display: block;">已打款</span>
+                {{else}}
+                    <span style="display: inline;font-weight: 700;line-height: 1;text-align: center;white-space: nowrap;vertical-align: baseline;color: #999999;font-size: 13px;padding-bottom: 5px;display: block;">已结束</span>
+                {{/if}}
             {{/if}}
         {{/if}}
         {{if !$parsing_join_share&&$is_me&&$process_my_create_share}}<button name="deleteShare" data-id="{{$share['Weshare']['id']}}" type="button" class="btn btn-primary btn-xs pull-right" style="background: #49bc6e;border: 0;width: 45px;">删除</button>{{/if}}
