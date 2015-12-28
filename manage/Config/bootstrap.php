@@ -460,6 +460,20 @@ function is_b2c($brand_id){
     return in_array($brand_id, b2c_brands());
 }
 
+function share_self_ziti_order_filter($var){
+    return $var['Order']['ship_mark'] = SHARE_SHIP_SELF_ZITI_TAG;
+}
+
+function share_kuai_di_order_filter($var){
+    return $var['Order']['ship_mark'] = SHARE_SHIP_KUAIDI_TAG;
+}
+
+function share_pys_ziti_order_filter($var){
+    return $var['Order']['ship_mark'] = SHARE_SHIP_PYS_ZITI_TAG;
+}
+function share_none_order_filter($var){
+    return ($var['Order']['ship_mark'] == null)||(trim($var['Order']['ship_mark']) == '');
+}
 function ziti_order_filter($var){
     return $var['Order']['ship_mark'] == 'ziti' && is_b2c($var['Order']['brand_id']);
 }

@@ -601,7 +601,7 @@ class ShareController extends AppController {
         $this->set('overdue_date', $overdue_date);
     }
 
-    public function admin_orders_export() {
+    public function admin_share_orders_export() {
         $share_id = $_REQUEST['share_id'];
         if(!empty($share_id)){
             $conditions = array('Order.member_id' => $share_id, 'Order.type' => ORDER_TYPE_WESHARE_BUY);
@@ -650,8 +650,8 @@ class ShareController extends AppController {
         $order_ids = array_unique(Hash::extract($all_orders, "{n}.Order.id"));
         $cart_ids = array_unique(Hash::extract($all_orders, "{n}.Cart.id"));
         $orders = array();
-        foreach($all_orders as $order){
-            if(!isset($orders[$order['Order']['id']])){
+        foreach ($all_orders as $order) {
+            if (!isset($orders[$order['Order']['id']])) {
                 $orders[$order['Order']['id']] = $order;
             }
         }
@@ -681,15 +681,14 @@ class ShareController extends AppController {
             if (!isset($order_carts[$order_id])) {
                 $order_carts[$order_id] = array();
             }
-            if($cart['Cart']['matched']){
+            if ($cart['Cart']['matched']) {
                 array_unshift($order_carts[$order_id], $cart);
-                if(isset($product_detail[$cart['Cart']['product_id']])){
-                    $product_detail[$cart['Cart']['product_id']] +=  $cart['Cart']['num'];
-                }else{
-                    $product_detail[$cart['Cart']['product_id']] =  $cart['Cart']['num'];
+                if (isset($product_detail[$cart['Cart']['product_id']])) {
+                    $product_detail[$cart['Cart']['product_id']] += $cart['Cart']['num'];
+                } else {
+                    $product_detail[$cart['Cart']['product_id']] = $cart['Cart']['num'];
                 }
-            }
-            else{
+            } else {
                 $order_carts[$order_id][] = $cart;
             }
         }
@@ -702,7 +701,7 @@ class ShareController extends AppController {
         }
         //total_money
         $total_money = 0;
-        if(!empty($orders)){
+        if (!empty($orders)) {
             foreach ($orders as $o) {
                 $o_status = $o['Order']['status'];
                 if ($o_status == 1 || $o_status == 2 || $o_status == 3) {
@@ -712,51 +711,72 @@ class ShareController extends AppController {
             $this->set('total_order_money', $total_money);
         }
 
-        $ship_mark_enum = array('ziti'=>array('name'=>'自提','style'=>'active'),'sfdf'=>array('name'=>'顺丰到付','style'=>'warning'),'kuaidi'=>array('name'=>'快递','style'=>'danger'),'c2c'=>array('name'=>'c2c订单','style'=>'info'),'none'=>array('name'=>'没有标注','style'=>'info'));
-        $this->set('ship_mark_enum',$ship_mark_enum);
+        $ship_mark_enum = array(SHARE_SHIP_KUAIDI_TAG => array('name' => '快递', 'style' => 'active'), SHARE_SHIP_PYS_ZITI_TAG => array('name' => '好邻居自提', 'style' => 'warning'), SHARE_SHIP_SELF_ZITI_TAG => array('name' => '自提', 'style' => 'danger'), 'none' => array('name' => '没有标注', 'style' => 'info'));
+        $this->set('ship_mark_enum', $ship_mark_enum);
 
-        $ziti_orders = array_filter($orders,'ziti_order_filter');
-        $sfdf_orders = array_filter($orders,'sfdf_order_filter');
-        $kuaidi_orders = array_filter($orders,'kuaidi_order_filter');
-        $c2c_orders = array_filter($orders,'c2c_order_filter');
-        $none_orders = array_filter($orders,'none_order_filter');
-        $map_other_orders = array('sfdf'=> $sfdf_orders,'kuaidi' => $kuaidi_orders,'none'=> $none_orders,'c2c'=> $c2c_orders);
-        $map_ziti_orders = array();
-
-        foreach($ziti_orders as $item){
+        $ziti_orders = array_filter($orders, 'share_self_ziti_order_filter');
+        $pys_ziti_orders = array_filter($orders, 'share_pys_ziti_order_filter');
+        $kuaidi_orders = array_filter($orders, 'share_kuai_di_order_filter');
+        $none_orders = array_filter($orders, 'share_none_order_filter');
+        $map_other_orders = array('ziti' => $ziti_orders, 'kuaidi' => $kuaidi_orders, 'none' => $none_orders, 'pys_ziti' => $pys_ziti_orders);
+        $map_self_ziti_orders = array();
+        foreach ($ziti_orders as $item) {
             $consignee_id = $item['Order']['consignee_id'];
-            if($consignee_id==null){
-                $consignee_id=0;
+            if ($consignee_id == null) {
+                $consignee_id = 0;
             }
-            if(!array_key_exists($consignee_id,$map_ziti_orders)){
+            if (!array_key_exists($consignee_id, $map_self_ziti_orders)) {
+                $map_self_ziti_orders[$consignee_id] = array();
+            }
+            $map_self_ziti_orders[$consignee_id][] = $item;
+        }
+        $map_ziti_orders = array();
+        foreach ($pys_ziti_orders as $item) {
+            $consignee_id = $item['Order']['consignee_id'];
+            if ($consignee_id == null) {
+                $consignee_id = 0;
+            }
+            if (!array_key_exists($consignee_id, $map_ziti_orders)) {
                 $map_ziti_orders[$consignee_id] = array();
             }
             $map_ziti_orders[$consignee_id][] = $item;
         }
 
         $offline_stores = array();
-        $offline_store_ids = array_filter(array_unique(Hash::extract($ziti_orders, "{n}.Order.consignee_id")));
+        $offline_store_ids = array_filter(array_unique(Hash::extract($pys_ziti_orders, "{n}.Order.consignee_id")));
         if (!empty($offline_store_ids)) {
             $offline_stores = $this->OfflineStore->find('all', array(
-                'conditions'=> array(
+                'conditions' => array(
                     'id' => $offline_store_ids
                 )
             ));
             $offline_stores = Hash::combine($offline_stores, "{n}.OfflineStore.id", "{n}");
         }
 
-        $pys_ziti_point = array_filter($offline_stores,'pys_ziti_filter');
-        $hlj_ziti_point = array_filter($offline_stores,'hlj_ziti_filter');
+        $weshare_addresses = array();
+        $weshare_address_ids = array_filter(array_unique(Hash::extract($ziti_orders, "{n}.Order.consignee_id")));
+        if(!empty($weshare_address_ids)){
+            $weshare_addresses = $this->WeshareAddress->find('all', array(
+                'conditions' => array(
+                    'id' => $weshare_address_ids
+                )
+            ));
+            $weshare_addresses = Hash::combine($weshare_addresses, '{n}.WeshareAdresss.id', '{n}');
+        }
+        $pys_ziti_point = array_filter($offline_stores, 'pys_ziti_filter');
+        $hlj_ziti_point = array_filter($offline_stores, 'hlj_ziti_filter');
 
-        $this->set('pys_ziti_point',$pys_ziti_point);
-        $this->set('hlj_ziti_point',$hlj_ziti_point);
+        $this->set('pys_ziti_point', $pys_ziti_point);
+        $this->set('hlj_ziti_point', $hlj_ziti_point);
 
-        $this->set('map_ziti_orders',$map_ziti_orders);
-        $this->set('map_other_orders',$map_other_orders);
+        $this->set('map_ziti_orders', $map_ziti_orders);
+        $this->set('map_other_orders', $map_other_orders);
+        $this->set('map_self_ziti_orders', $map_self_ziti_orders);
 
         $this->set('product_count', $product_count);
         $this->set('orders', $orders);
         $this->set('offline_stores', $offline_stores);
+        $this->set('weshare_addresses', $weshare_addresses);
         $this->set('order_carts', $order_carts);
         $this->set('product_detail', $product_detail);
         $this->set('products', $products);
