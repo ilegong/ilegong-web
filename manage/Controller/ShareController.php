@@ -585,20 +585,27 @@ class ShareController extends AppController {
         }
     }
 
-    public function admin_warn_orders(){
-        if(!$_REQUEST['overdue_date']){
-            $overdue_date = date('Y-m-d',strtotime('-10 day'));
-        }else{
-            $overdue_date = $_REQUEST['overdue_date'];
+    public function admin_warn_orders() {
+        if (!$_REQUEST['start_date']) {
+            $start_date = date('Y-m-d', strtotime('-15 day'));
+        } else {
+            $start_date = $_REQUEST['start_date'];
+        }
+        if (!$_REQUEST['end_date']) {
+            $end_date = date('Y-m-d');
+        } else {
+            $end_date = $_REQUEST['end_date'];
         }
         $cond = array();
-        $cond['DATE(created) <'] = $overdue_date;
+        $cond['DATE(created) >'] = $start_date;
+        $cond['DATE(created) <'] = $end_date;
         $cond['status'] = array(ORDER_STATUS_PAID);
         $order_query_condition = array(
             'conditions' => $cond,
             'order' => array('created DESC'));
         $this->handle_query_orders($order_query_condition);
-        $this->set('overdue_date', $overdue_date);
+        $this->set('start_date', $start_date);
+        $this->set('end_date', $end_date);
     }
 
     public function admin_share_orders_export() {
