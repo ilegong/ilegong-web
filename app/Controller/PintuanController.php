@@ -28,23 +28,86 @@ class PintuanController extends AppController {
     }
 
     /**
+     * @param $type 0=>normal 1=>start 2=>join
      * 用户下单
      */
-    public function make_order() {
+    public function make_order($type) {
         $this->autoRender = false;
         $share_id = $_REQUEST['share_id'];
-
-    }
-
-
-    private function get_product_price() {
-        if ($_REQUEST['start'] || $_REQUEST['normal']) {
-
-        } else {
-            $tag_id = $_REQUEST['tag_id'];
+        $pintuan_conf = $this->get_pintuan_conf($share_id);
+        $uid = $this->currentUser['id'];
+        if (empty($pintuan_conf)) {
+            echo json_encode(array('success' => false, 'reason' => 'param_error'));
+            return;
         }
+        $price = $pintuan_conf['normal_price'];
+        $tag_id = 0;
+        $now_date = date('Y-m-d H:i:s');
+        //join
+        if ($type == 2) {
+            $tag_id = $_REQUEST['tag_id'];
+            if (empty($tag_id)) {
+                echo json_encode(array('success' => false, 'reason' => 'param_error'));
+                return;
+            }
+            $price = $pintuan_conf['pintuan_price'];
+        }
+        //new
+        if ($type == 1) {
+            $price = $pintuan_conf['pintuan_price'];
+            //init tag??
+            $tag_id = $this->new_pintuan_tag($uid, $now_date, $share_id);
+            if (empty($tag_id)) {
+                echo json_encode(array('success' => false, 'reason' => 'system_error'));
+                return;
+            }
+        }
+        $order_data = $this->init_order_data();
+        $order_data['creator'] = $uid;
+        $order_data['created'] = $now_date;
+        $order_data['updated'] = $now_date;
+        $order_data['total_all_price'] = $price;
+        $order_data['total_price'] = $price;
+        $order_data['group_id'] = $tag_id; //pin tuan group id
+        $orderM = ClassRegistry::init('Order');
+        $order = $orderM->save($order_data);
+        $cart_data = array('order_id' => $order['Order']['id'], 'name' => $pintuan_conf['product']['name'], 'num' => 1, 'price' => $price * 100, 'type' => ORDER_TYPE_PIN_TUAN, 'product_id' => $pintuan_conf['product']['id'], 'created' => $now_date, 'updated' => $now_date, 'tuan_buy_id' => $share_id);
+        $cartM = ClassRegistry::init('Cart');
+        $cart = $cartM->save($cart_data);
+        if ($order && $cart) {
+            echo json_encode(array('success' => true, 'order_id' => $order['Order']['id']));
+            return;
+        }
+        echo json_encode(array('success' => false, 'reason' => 'system_error'));
+        return;
     }
 
+    /**
+     * @param $uid
+     * @param $date
+     * @param $share_id
+     * @return mixed
+     * 生成新的拼团标示
+     */
+    private function new_pintuan_tag($uid, $date, $share_id) {
+        $pinTuanTagM = ClassRegistry::init('PintuanTag');
+        $tag_data = array('creator' => $uid, 'created' => $date, 'share_id' => $share_id);
+        $tag = $pinTuanTagM->save($tag_data);
+        return $tag['PintuanTag']['id'];
+    }
+
+    /**
+     * @return array
+     * 初始化订单数据
+     */
+    private function init_order_data() {
+        $consignee_address = $_REQUEST['consignee_address'];
+        $consignee_mobilephone = $_REQUEST['consignee_mobilephone'];
+        $business_remark = $_REQUEST['business_remark'];
+        $consignee_name = $_REQUEST['consignee_name'];
+        $order_data = array('consignee_address' => $consignee_address, 'type' => ORDER_TYPE_PIN_TUAN, 'consignee_name' => $consignee_name, 'consignee_mobilephone' => $consignee_mobilephone, 'business_remark' => $business_remark);
+        return $order_data;
+    }
 
     /**
      * @param $share_id 分享的id

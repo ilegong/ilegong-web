@@ -14,6 +14,7 @@ const ORDER_TYPE_TUAN = 5; //团长团购
 const ORDER_TYPE_SPLIT = 11; //订单已经被拆分
 const ORDER_TYPE_WESHARE_BUY = 9; // 分享订单
 const ORDER_TYPE_WESHARE_BUY_ADD = 10; //差价补充订单
+const ORDER_TYPE_PIN_TUAN = 12; //拼团的订单类型
 
 //change milk order to tuan sec kill
 const ORDER_TYPE_TUAN_SEC = 6;

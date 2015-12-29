@@ -18,9 +18,13 @@ class PintuanConfig extends AppModel {
             'sharer_avatar' => '/static/pintuan/images/head.png',
             'share_title' => '越南红心火龙果 4个装',
             'share_label' => '来自［小宝妈］分享',
-            'normal_price' => 2,
-            'pintuan_price' => 1,
-            'limit_time' => 24
+            'limit_time' => 24,
+            'product' => array(
+                'id' => 12,
+                'normal_price' => 2,
+                'pintuan_price' => 1,
+                'name' => '越南红心火龙果 4个装'
+            )
         )
     );
 

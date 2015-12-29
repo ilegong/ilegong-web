@@ -156,7 +156,8 @@ const SUB_SHARER_REASON_TYPE_FROM_USER_CENTER = 'ShareUserInfo'; // 标示用户
 const SUB_SHARER_REASON_TYPE_FROM_SHARE_INFO = 'ShareInfo'; // 标示用户关注朋友说的原因 来向
 const SUB_SHARER_REASON_TYPE_FROM_SPREAD = 'Spread';
 
-const SAE_STATIC_FILE_PATH = 'http://51daifan-assets.stor.sinaapp.com';
+//const SAE_STATIC_FILE_PATH = 'http://51daifan-assets.stor.sinaapp.com';
+const SAE_STATIC_FILE_PATH = 'http://static.tongshijia.com';
 //http://51daifan-assets.stor.sinaapp.com
 //http://www.tongshijia.com
 
