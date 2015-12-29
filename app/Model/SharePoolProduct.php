@@ -117,6 +117,30 @@ class SharePoolProduct extends AppModel {
             )
         ),
         array(
+            'share_id' => 1783,
+            'share_name' => '忆味蕾，富平霜降柿饼重磅归来！',
+            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/bf24186cec7_1229.jpg',
+            'brand_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg',
+            'brand_name' => '朱晓宇',
+            'show_brand' => true,
+            'brand_custom_service' => 433224,
+            'published' => 0,
+            'products' => array(
+                '3758' => array(
+                    'price' => 28,
+                    'channel_price' => 21,
+                ),
+                '3759' => array(
+                    'price' => 80,
+                    'channel_price' => 63,
+                ),
+                '3760' => array(
+                    'price' => 130,
+                    'channel_price' => 105
+                )
+            )
+        ),
+        array(
             'share_id' => 1411,
             'share_name' => '雾岭山楂条5袋装',
             'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/83a26e7f545_1204.jpg',
