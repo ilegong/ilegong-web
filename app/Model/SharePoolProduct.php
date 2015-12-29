@@ -124,7 +124,7 @@ class SharePoolProduct extends AppModel {
             'brand_name' => '朱晓宇',
             'show_brand' => true,
             'brand_custom_service' => 433224,
-            'published' => 0,
+            'published' => 1,
             'products' => array(
                 '3758' => array(
                     'price' => 28,
