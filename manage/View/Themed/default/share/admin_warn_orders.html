@@ -83,7 +83,7 @@
                 <th><input type="text" class="form-control" placeholder="快递单号" disabled></th>
                 <th><input type="text" class="form-control" placeholder="交易号" disabled></th>
                 <th><input type="text" class="form-control" placeholder="推荐人" disabled></th>
-                <th>操作</th>
+                <th>分享状态</th>
             </tr>
             </thead>
             <tbody>
@@ -162,23 +162,10 @@
                     {{$all_users[$rebate_logs[$current_order['cate_id']]]['nickname']}}
                 </td>
                 <td>
-                    {{if $loop_index==0}}
-                    {{if $current_order['ship_mark']=='pys_ziti'&&$current_order['status']==1}}
-                    <button type="button" class="btn btn-danger send-offline-store-msg"
-                            data-id="{{$current_order['id']}}" data-toggle="modal">发货
-                    </button>
-                    {{/if}}
-                    {{if $current_order['status']!=4}}
-                    <button type="button" class="btn btn-info refund-order"
-                            data-share-id="{{$current_order['member_id']}}" data-id="{{$current_order['id']}}">{{if
-                        $current_order['status']!=14}}退款{{else}}退款完成{{/if}}
-                    </button>
-                    {{/if}}
-                    {{if $current_order['process_prepaid_status']==ORDER_STATUS_REFUND_TODO}}
-                    <button type="button" data-share-id="{{$current_order['member_id']}}"
-                            data-id="{{$current_order['id']}}" class="btn btn-danger refund-added-order">退尾款
-                    </button>
-                    {{/if}}
+                    {{if $current_share['status']==0}}
+                        进行中
+                    {{else}}
+                        已截止
                     {{/if}}
                 </td>
             </tr>
@@ -189,76 +176,6 @@
             {{/loop}}
             </tbody>
         </table>
-    </div>
-</div>
-<div class="modal" id="refundModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">订单退款操作</h4>
-            </div>
-            <div class="modal-body">
-                <form class="form-horizontal">
-                    <div class="form-group">
-                        <label for="refund-money" class="col-sm-2 control-label">退款金额</label>
-
-                        <div class="col-sm-10">
-                            <input type="number" class="form-control" id="refund-money" placeholder="金额/元">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="refund-reason" class="col-sm-2 control-label">退款描述</label>
-
-                        <div class="col-sm-10">
-                            <textarea id="refund-reason" class="form-control" rows="3"></textarea>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">退款状态</label>
-
-                        <div class="col-sm-10">
-                            <div class="checkbox">
-                                <label class="radio-inline">
-                                    <input type="radio" name="refund-status" value="0" checked="checked"> 退款中
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="refund-status" value="1"> 已退款
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary set-order-refund">提交</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal" id="offlineStoreModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">好邻居发送到货提醒</h4>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <label for="offline-store-code" class="control-label">提货码:</label>
-                        <input type="text" class="form-control" id="offline-store-code">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary send-offline-store-code-msg">发送</button>
-            </div>
-        </div>
     </div>
 </div>
 {{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js'))}}
