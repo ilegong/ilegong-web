@@ -27,8 +27,54 @@ class PintuanController extends AppController {
 
     }
 
-    public function balance() {
+    /**
+     * 用户下单
+     */
+    public function make_order() {
+        $this->autoRender = false;
+        $share_id = $_REQUEST['share_id'];
 
+    }
+
+
+    private function get_product_price() {
+        if ($_REQUEST['start'] || $_REQUEST['normal']) {
+    
+        } else {
+            $tag_id = $_REQUEST['tag_id'];
+        }
+    }
+
+
+    /**
+     * @param $share_id 分享的id
+     * 结算页面
+     */
+    public function balance($share_id) {
+        $tag_id = $_REQUEST['tag_id'];
+        if (empty($tag_id)) {
+            //没有拼团的tag
+            $start_pintuan = $_REQUEST['create'];
+            if (!empty($start_pintuan)) {
+                //发起拼团
+                $this->set('start', true);
+            } else {
+                //原价购买
+                $this->set('normal', true);
+            }
+        } else {
+            //加入拼团
+            $this->set('tag_id', $tag_id);
+        }
+        $this->set('share_id', $share_id);
+    }
+
+    private function pintuan_tag($tag_id) {
+        $pinTuanTagM = ClassRegistry::init('PintuanTag');
+        $tag = $pinTuanTagM->find('first', array(
+            'conditions' => array('id' => $tag_id)
+        ));
+        return $tag;
     }
 
     private function get_pintuan_conf($share_id) {

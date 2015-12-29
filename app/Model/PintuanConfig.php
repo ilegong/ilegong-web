@@ -20,6 +20,7 @@ class PintuanConfig extends AppModel {
             'share_label' => '来自［小宝妈］分享',
             'normal_price' => 2,
             'pintuan_price' => 1,
+            'limit_time' => 24
         )
     );
 
