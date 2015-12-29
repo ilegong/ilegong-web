@@ -1683,6 +1683,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 801447,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/8014471448421852.png'
                 ),
+                '669' => array(
+                    'share_id' => 669,
+                    'share_name' => '忆味蕾，富平霜降柿饼重磅归来！',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/57a0c994217_1229.jpg',
+                    'share_price' => '28',
+                    'share_user_name' => 'glcfarm',
+                    'share_vote' => 1000,
+                    'share_user_id' => 433224,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_e370e2e71308d0c78c1f22ff4f6aabca.jpg'
+                ),
                 '1745' => array(
                     'share_id' => 1745,
                     'share_name' => '兰州鲜百合，润肺养颜',

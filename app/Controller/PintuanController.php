@@ -39,7 +39,7 @@ class PintuanController extends AppController {
 
     private function get_product_price() {
         if ($_REQUEST['start'] || $_REQUEST['normal']) {
-    
+
         } else {
             $tag_id = $_REQUEST['tag_id'];
         }
