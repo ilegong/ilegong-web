@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>结伴抢美味</title>
     {{$this->Html->css(array('/static/pintuan/css/btc.css'))}}
+    <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 <body>
 <div class="btc_banner"><img src="{{$conf['banner_img']}}" /></div>
@@ -14,13 +15,26 @@
     <label>{{$conf['share_label']}}</label>
 </div>
 <div class="btc_baoming">
-    <div><label>若24小时内报名朋友数不足，将在7个工作日内为您自动退款。<br/><a href="#X">玩法规则</a></label></div>
+    <div><label>若24小时内报名数不足，在7个工作日内为您退款。<br/>2016年1月5日24点截止报名，2月6日统一发货<br/><a href="#X">玩法规则</a></label></div>
     <ul class="clearfix">
         <li class="fl"><img src="/static/pintuan/images/head_small.png" /></li>
         <li class="fr"><img src="/static/pintuan/images/head_default.png" /></li>
     </ul>
     <div class="btc_status"><img src="/static/pintuan/images/bm_defeated.png" /></div>
+    <div class="btc_countdown">
+        <ul class="clearfix">
+            <li>剩余&nbsp;</li>
+            <li class="time">20</li>
+            <li>：</li>
+            <li class="time">17</li>
+            <li>：</li>
+            <li class="time">28</li>
+            <li>&nbsp;结束</li>
+        </ul>
+    </div>
 </div>
+<div class="btc_pic"><div><img src="/static/pintuan/images/detail01.jpg" /></div><div><img src="/static/pintuan/images/detail02.jpg" /></div><div><img src="/static/pintuan/images/detail03.jpg" /></div></div>
+<!--报名-->
 <div class="btc_operation">
     <a href="#X" class="fl">
         <label class="fl">2个朋友一起报名</label>
@@ -31,5 +45,17 @@
         <label class="fr">¥<span>{{$conf['product']['normal_price']}}</span></label>
     </a>
 </div>
+<!--邀请分享-->
+<div class="btc_invitation">
+    <a href="#X" class="fl">
+        <i class="fa fa-home fa-2x"></i>
+        <br>
+        <span>朋友说</span>
+    </a>
+    <a href="#X" class="fr">还差1个朋友，赶快邀请</a>
+</div>
+<!--分享弹出层-->
+<div style="display: none;" class="layer_invitation"><img src="/static/pintuan/images/invitation.png" /></div>
+<div style="display: none;" class="layer_bg"></div>
 </body>
 </html>
