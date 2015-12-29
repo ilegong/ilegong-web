@@ -98,6 +98,12 @@ const LOGISTICS_ORDER_SIGN = 4;
 const LOGISTICS_ORDER_CANCEL = 5;
 const LOGISTICS_ORDER_INVALID = 6; //订单失效(退款操作)
 
+//拼团的的状态
+const PIN_TUAN_TAG_DEFAULT_STATUS = 0;
+const PIN_TUAN_TAG_PROGRESS_STATUS = 1;
+const PIN_TUAN_TAG_SUCCESS_STATUS = 2;
+const PIN_TUAN_TAG_EXPIRE_STATUS = 3;
+
 function is_admin_uid($uid) {
 
     $_admin_uids = array(

@@ -18,11 +18,25 @@ class PintuanController extends AppController {
         $this->layout = null;
     }
 
+    /**
+     * @param $share_id
+     * 拼团的详情
+     */
     public function detail($share_id) {
         $conf = $this->get_pintuan_conf($share_id);
+        $tag_id = $_REQUEST['tag_id'];
+        if (!empty($tag_id)) {
+            $this->set('tag_id', $tag_id);
+            $tag = $this->get_pintuan_tag($tag_id);
+            $this->set('tag', $tag);
+        }
+        $this->set('share_id', $share_id);
         $this->set('conf', $conf);
     }
 
+    /**
+     * 拼团的规则
+     */
     public function rule() {
 
     }
@@ -115,24 +129,32 @@ class PintuanController extends AppController {
      */
     public function balance($share_id) {
         $tag_id = $_REQUEST['tag_id'];
+        $conf = $this->get_pintuan_conf($share_id);
+        $price = $conf['product']['normal_price'];
         if (empty($tag_id)) {
             //没有拼团的tag
             $start_pintuan = $_REQUEST['create'];
             if (!empty($start_pintuan)) {
                 //发起拼团
                 $this->set('start', true);
+                $price = $conf['product']['pintuan_price'];
             } else {
                 //原价购买
                 $this->set('normal', true);
             }
         } else {
             //加入拼团
+            //todo check pintuan tag available
             $this->set('tag_id', $tag_id);
+            $price = $conf['product']['normal_price'];
         }
+        $this->set('price', $price);
+        $this->set('conf', $conf);
         $this->set('share_id', $share_id);
+
     }
 
-    private function pintuan_tag($tag_id) {
+    private function get_pintuan_tag($tag_id) {
         $pinTuanTagM = ClassRegistry::init('PintuanTag');
         $tag = $pinTuanTagM->find('first', array(
             'conditions' => array('id' => $tag_id)
