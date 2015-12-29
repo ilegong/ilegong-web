@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
+    <meta charset="UTF-8">
+    <title>结伴抢美味</title>
+    {{$this->Html->css(array('/static/pintuan/css/btc.css'))}}
+</head>
+<body>
+<div class="btc_banner"><img src="{{$conf['banner_img']}}" /></div>
+<div class="btc_head"><img src="{{$conf['sharer_avatar']}}" /></div>
+<div class="btc_title">
+    <h1>{{$conf['share_title']}}</h1>
+    <label>{{$conf['share_label']}}</label>
+</div>
+<div class="btc_baoming">
+    <div><label>若24小时内报名朋友数不足，将在7个工作日内为您自动退款。<br/><a href="#X">玩法规则</a></label></div>
+    <ul class="clearfix">
+        <li class="fl"><img src="/static/pintuan/images/head_small.png" /></li>
+        <li class="fr"><img src="/static/pintuan/images/head_default.png" /></li>
+    </ul>
+    <div class="btc_status"><img src="/static/pintuan/images/bm_defeated.png" /></div>
+</div>
+<div class="btc_operation">
+    <a href="#X" class="fl">
+        <label class="fl">2个朋友一起报名</label>
+        <label class="fr">¥<span>{{$conf['pintuan_price']}}</span></label>
+    </a>
+    <a href="#X" class="fr">
+        <label class="fl">自己报名</label>
+        <label class="fr">¥<span>{{$conf['normal_price']}}</span></label>
+    </a>
+</div>
+</body>
+</html>

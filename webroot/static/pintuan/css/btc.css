@@ -1,0 +1,38 @@
+@charset "utf-8";
+/* CSS Document */
+
+* { padding: 0; margin: 0; font-family: Helvetica, STHeiti STXihei, Microsoft JhengHei, Microsoft YaHei, Arial; }
+body { min-width: 320px; font-size: 12px;}
+ul li { list-style: none; }
+.fl { float: left; }
+.fr { float: right; }
+.clearfix { zoom: 1; }
+.clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+
+
+.btc_banner img{ width: 100%;}
+.btc_head{ position: relative;}
+.btc_head img{ width: 75px; border-radius: 75px; border: 1px #ffffff solid; position: absolute; margin-top: -37px; margin-left: 50%; left: -37px;}
+.btc_title{ text-align: center; color: #999999; line-height: 20px; padding: 50px 0 20px 0; border-bottom: 1px #eeeeee solid; margin-bottom: 20px;}
+.btc_title h1{ font-size: 18px; color: #f99d3a;}
+.btc_baoming{ text-align: center; border-bottom: 1px #eeeeee solid; position: relative;}
+.btc_baoming label{ color: #999999; line-height: 20px;}
+.btc_baoming label a{ color: #49bc6e; text-decoration: underline;}
+.btc_baoming ul{ width: 120px; margin: 0 auto; padding-bottom: 30px; padding-top: 10px;}
+.btc_baoming img{ width: 50px; border-radius: 50px;}
+.btc_status img{ width: 75px; height: 37px; position: absolute; left: 50%; margin-left: -37px; top:75px;}
+.btc_operation{ position: fixed; bottom: 0; width: 100%;}
+.btc_operation a{ display: block; width: 50%; height: 44px; font-size: 13px; color: #ffffff; line-height: 44px;}
+.btc_operation a label{display: block;}
+.btc_operation a label span{ font-size: 18px;}
+.btc_operation a.fl{ background-color: #f99d3a;}
+.btc_operation a.fr{ background-color: #49bc6e;}
+.btc_operation a label.fl{ padding-left: 10px;}
+.btc_operation a label.fr{ padding-right: 10px;}
+
+
+
+
+
+
+
