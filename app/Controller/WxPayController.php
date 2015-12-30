@@ -153,9 +153,10 @@ class WxPayController extends AppController {
         }
         if ($from == 'pintuan') {
             $shareId = $order['Order']['member_id'];
+            $groupId = $order['Order']['group_id'];
             $this->set('shareId', $shareId);
-            $paid_done_url = '/pintuan/detail/' . $shareId;
-            $error_pay_redirect = '/pintuan/detail/' . $shareId;
+            $paid_done_url = '/pintuan/detail/' . $shareId . '?tag_id=' . $groupId;
+            $error_pay_redirect = '/pintuan/detail/' . $shareId . '?tag_id=' . $groupId;
         }
         list($jsapi_param, $out_trade_no, $productDesc) = $this->__prepareWXPay($error_pay_redirect, $orderId, $uid, $order);
         if (!($from == 'share' || $from == 'pintuan')) {

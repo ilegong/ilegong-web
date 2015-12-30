@@ -40,6 +40,7 @@ class PintuanController extends AppController {
         $this->set('share_id', $share_id);
         $this->set('conf', $conf);
         $this->set('records', $records);
+        $this->set_share_weixin_params($uid, $conf['share_label'], $conf['banner_img']);
     }
 
     /**
@@ -203,4 +204,35 @@ class PintuanController extends AppController {
         $conf = $pintuanConfigM->get_conf_data($share_id);
         return $conf;
     }
+
+    /**
+     * @param $uid
+     * @param $weshareId
+     * @return array|null
+     * 把微信分享的一些参数设置好
+     */
+    public function set_weixin_share_data($uid, $weshareId) {
+        if (parent::is_weixin()) {
+            $weixinJs = prepare_wx_share_log($uid, 'wsid', $weshareId);
+            return $weixinJs;
+        }
+        return null;
+    }
+
+    /**
+     * @param $uid
+     * @param $title
+     * @param $image
+     */
+    private function set_share_weixin_params($uid, $title, $image) {
+        if (parent::is_weixin()) {
+            $wexin_params = $this->set_weixin_share_data($uid, -1);
+            $this->set($wexin_params);
+            $desc = '品质棒棒嗒，一起报名团长给你发福利。';
+            $this->set('title', $title);
+            $this->set('image', $image);
+            $this->set('desc', $desc);
+        }
+    }
+
 }
