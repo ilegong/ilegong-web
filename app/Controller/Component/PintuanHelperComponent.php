@@ -22,6 +22,8 @@ class PintuanHelperComponent extends Component {
         }
         //update or save pin tuan record
         $this->update_pintuan_record($order_id, $order_creator, $order_group_id);
+        //pintuan tag status
+        $this->update_pintuan_tag_status($order_group_id, $tag['PintuanTag']['num']);
     }
 
 
@@ -55,7 +57,9 @@ class PintuanHelperComponent extends Component {
         } else {
             $PintuanRecordM->updateAll(array('status' => PIN_TUAN_RECORD_PAID_STATUS), array('user_id' => $user_id, 'order_id' => $order_id, 'tag_id' => $tag_id));
         }
+
     }
+
 
     public function save_pintuan_record($record) {
         $PintuanRecordM = ClassRegistry::init('PintuanRecord');
@@ -63,7 +67,45 @@ class PintuanHelperComponent extends Component {
     }
 
     public function get_pintuan_records($tag_id) {
+        $PintuanRecordM = ClassRegistry::init('PintuanRecord');
+        $UserM = ClassRegistry::init('User');
+        $records = $PintuanRecordM->find('all', array(
+            'conditions' => array(
+                'tag_id' => $tag_id,
+                'status' => PIN_TUAN_RECORD_PAID_STATUS
+            )
+        ));
+        $uids = Hash::extract($records, '{n}.PintuanRecord.user_id');
+        $users = $UserM->find('all', array(
+            'conditions' => array(
+                'id' => $uids,
+            ),
+            'fields' => array('id', 'nickname', 'image')
+        ));
+        $users = Hash::combine($users, '{n}.User.id', '{n}.User');
+        foreach ($records as &$record_item) {
+            $current_uid = $record_item['PintuanRecord']['user_id'];
+            $record_item['PintuanRecord']['user_info'] = $users[$current_uid];
+        }
+        return $records;
+    }
 
+    public function get_pintuan_tag_order_count($tag_id) {
+        $PintuanRecordM = ClassRegistry::init('PintuanRecord');
+        $record_count = $PintuanRecordM->find('count', array(
+            'conditions' => array(
+                'tag_id' => $tag_id,
+                'status' => PIN_TUAN_RECORD_PAID_STATUS
+            )
+        ));
+        return $record_count;
+    }
+
+    private function update_pintuan_tag_status($tag_id, $tag_num) {
+        $record_count = $this->get_pintuan_tag_order_count($tag_id);
+        if ($record_count >= $tag_num) {
+            $this->update_pintuan_tag(array('status' => PIN_TUAN_TAG_SUCCESS_STATUS), array('id' => $tag_id));
+        }
     }
 
 }

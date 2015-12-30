@@ -72,6 +72,7 @@ $(document).ready(function () {
   var $layerInvitation = $('#layer-invitation');
   var $maskBgLayer = $('#mask-bg-layer');
   var $promptInvitationLayerBtn = $('#prompt-invitation-layer-btn');
+  var $expireTime = $('#tag-expire-date');
   $promptInvitationLayerBtn.on('click', function (e) {
     e.preventDefault();
     $maskBgLayer.show();
@@ -82,11 +83,10 @@ $(document).ready(function () {
     $layerInvitation.hide();
     $maskBgLayer.hide();
   });
-
   initTimeCountDown();
   function initTimeCountDown(){
     if(document.getElementById("leave-sec")){
-      var d = Date.UTC(2030, 6, 27, 16, 34);
+      var d = getDateFromStr($expireTime.val());
       var obj = {
         sec: document.getElementById("leave-sec"),
         mini: document.getElementById("leave-mini"),
@@ -94,5 +94,19 @@ $(document).ready(function () {
       };
       fnTimeCountDown(d, obj);
     }
+  }
+  function getDateFromStr(dateString){
+    //var dateString = "2010-08-09 01:02:03";
+    var reggie = /(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/;
+    var dateArray = reggie.exec(dateString);
+    var dateObject = Date.UTC(
+      (+dateArray[1]),
+      (+dateArray[2])-1, // Careful, month starts at 0!
+      (+dateArray[3]),
+      (+dateArray[4]),
+      (+dateArray[5]),
+      (+dateArray[6])
+    );
+    return dateObject;
   }
 });

@@ -50,7 +50,7 @@ class WeixinComponent extends Component {
     }
 
     public function get_pintuan_detail($weshare_id, $group_id) {
-        return WX_HOST . '/pintuan/detail/' . $weshare_id . '?tag_id = ' . $group_id;
+        return WX_HOST . '/pintuan/detail/' . $weshare_id . '?tag_id=' . $group_id;
     }
 
     public function get_user_share_info_url($uid) {

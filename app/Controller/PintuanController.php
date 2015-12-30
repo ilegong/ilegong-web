@@ -25,6 +25,7 @@ class PintuanController extends AppController {
      * 拼团的详情
      */
     public function detail($share_id) {
+        $uid = $this->currentUser['id'];
         $conf = $this->get_pintuan_conf($share_id);
         $tag_id = $_REQUEST['tag_id'];
         if (!empty($tag_id)) {
@@ -32,8 +33,13 @@ class PintuanController extends AppController {
             $tag = $this->get_pintuan_tag($tag_id);
             $this->set('tag', $tag);
         }
+        $records = $this->PintuanHelper->get_pintuan_records($tag_id);
+        $order_count = count($records);
+        $this->set('order_count', $order_count);
+        $this->set('uid', $uid);
         $this->set('share_id', $share_id);
         $this->set('conf', $conf);
+        $this->set('records', $records);
     }
 
     /**
@@ -188,6 +194,13 @@ class PintuanController extends AppController {
         $tag = $pinTuanTagM->find('first', array(
             'conditions' => array('id' => $tag_id)
         ));
+        $now = new DateTime();
+        $expire_time = new DateTime($tag['PintuanTag']['expire_date']);
+        if ($now >= $expire_time && $tag['PintuanTag']['status'] == PIN_TUAN_TAG_PROGRESS_STATUS) {
+            //update tag status
+            $pinTuanTagM->updateAll(array('status' => PIN_TUAN_TAG_EXPIRE_STATUS), array('id' => $tag_id, 'status' => PIN_TUAN_TAG_PROGRESS_STATUS));
+            $tag['PintuanTag']['status'] = PIN_TUAN_TAG_EXPIRE_STATUS;
+        }
         return $tag;
     }
 

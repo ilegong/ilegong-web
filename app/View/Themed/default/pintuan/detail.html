@@ -16,14 +16,22 @@
 </div>
 <div class="btc_baoming">
     <div><label>若24小时内报名数不足，在7个工作日内为您退款。<br/>2016年1月5日24点截止报名，2月6日统一发货<br/><a href="/pintuan/rule.html">玩法规则</a></label></div>
-    {{if !empty($tag_id)}}
+    {{if !empty($tag_id)}}'
+        {{if $order_count > 0}}
         <ul class="clearfix">
-            <li class="fl"><img src="/static/pintuan/images/head_small.png" /></li>
+            {{if $order_count >=2}}
+            <li class="fl"><img src="{{$records[0]['PintuanRecord']['user_info']['image']}}" /></li>
+            <li class="fr"><img src="{{$records[1]['PintuanRecord']['user_info']['image']}}" /></li>
+            {{else}}
+            <li class="fl"><img src="{{$records[0]['PintuanRecord']['user_info']['image']}}" /></li>
             <li class="fr"><img src="/static/pintuan/images/head_default.png" /></li>
+            {{/if}}
         </ul>
-        <div class="btc_status"><img src="/static/pintuan/images/bm_defeated.png" /></div>
+        {{/if}}
+        <div class="btc_status" {{if $tag['PintuanTag']['status'] != PIN_TUAN_TAG_EXPIRE_STATUS}}style="display: none;"{{/if}}><img src="/static/pintuan/images/bm_defeated.png" /></div>
+        {{if $tag['PintuanTag']['status'] == PIN_TUAN_TAG_PROGRESS_STATUS}}
         <div class="btc_countdown">
-            <input type="hidden" id="tag-expire-date" value="">
+            <input type="hidden" id="tag-expire-date" value="{{$tag['PintuanTag']['expire_date']}}">
             <ul class="clearfix">
                 <li>剩余&nbsp;</li>
                 <li class="time" id="leave-hour"></li>
@@ -34,10 +42,11 @@
                 <li>&nbsp;结束</li>
             </ul>
         </div>
+        {{/if}}
     {{/if}}
 </div>
 <div class="btc_pic"><div><img src="/static/pintuan/images/detail01.jpg" /></div><div><img src="/static/pintuan/images/detail02.jpg" /></div><div><img src="/static/pintuan/images/detail03.jpg" /></div></div>
-{{if empty($tag_id)}}
+{{if empty($tag_id) || ($tag['PintuanTag']['status'] != PIN_TUAN_TAG_PROGRESS_STATUS)}}
 <!--报名-->
 <div class="btc_operation">
     <a href="/pintuan/balance/{{$share_id}}?create=1" class="fl">
@@ -50,15 +59,23 @@
     </a>
 </div>
 {{else}}
-<!--邀请分享-->
-<div class="btc_invitation">
-    <a href="#X" class="fl">
-        <i class="fa fa-home fa-2x"></i>
-        <br>
-        <span>朋友说</span>
-    </a>
-    <a href="/pintuan/balacne/{{$share_id}}?tag_id={{$tag_id}}" class="fr" id="prompt-invitation-layer-btn">还差1个朋友，赶快邀请</a>
-</div>
+    <!--拼团进行中-->
+    {{if $tag['PintuanTag']['status'] == PIN_TUAN_TAG_PROGRESS_STATUS}}
+        <!--如果是发起拼团者进来-->
+        <!--邀请分享-->
+        <div class="btc_invitation">
+            <a href="#X" class="fl">
+                <i class="fa fa-home fa-2x"></i>
+                <br>
+                <span>朋友说</span>
+            </a>
+            {{if $tag['PintuanTag']['creator'] == $uid}}
+                <a class="fr" id="prompt-invitation-layer-btn">还差{{$tag['PintuanTag']['num'] - $order_count}}个朋友，赶快邀请</a>
+            {{else}}
+                <a href="/pintuan/balacne/{{$share_id}}?tag_id={{$tag_id}}" class="fr">加入拼团</a>
+            {{/if}}
+        </div>
+    {{/if}}
 {{/if}}
 <!--分享弹出层-->
 <div style="display: none;" class="layer_invitation" id="layer-invitation"><img src="/static/pintuan/images/invitation.png" /></div>
