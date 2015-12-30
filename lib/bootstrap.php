@@ -104,6 +104,10 @@ const PIN_TUAN_TAG_PROGRESS_STATUS = 1;
 const PIN_TUAN_TAG_SUCCESS_STATUS = 2;
 const PIN_TUAN_TAG_EXPIRE_STATUS = 3;
 
+//拼团记录的状态
+const PIN_TUAN_RECORD_DEFAULT_STATUS = 0;
+const PIN_TUAN_RECORD_PAID_STATUS = 1;
+
 function is_admin_uid($uid) {
 
     $_admin_uids = array(

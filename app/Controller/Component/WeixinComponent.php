@@ -8,7 +8,7 @@ class WeixinComponent extends Component {
         CURLOPT_TIMEOUT => 30
     );
 
-    public $components = array('ShareUtil', 'WeshareBuy', 'ShareAuthority');
+    public $components = array('ShareUtil', 'WeshareBuy', 'ShareAuthority', 'PintuanHelper');
 
     public $wx_message_template_ids = array(
         "ORDER_PAID" => "UXmiPQNz46zZ2nZfDZVVd9xLIx28t66ZPNBoX1WhE8Q",
@@ -462,8 +462,9 @@ class WeixinComponent extends Component {
             $this->clear_share_cache($order['Order']['member_id']);
             return;
         }
-        if($order['Order']['type'] == ORDER_TYPE_PIN_TUAN){
+        if ($order['Order']['type'] == ORDER_TYPE_PIN_TUAN) {
             $this->pintuan_buy_order_paid($order);
+            $this->PintuanHelper->handle_order_paid($order);
             return;
         }
         if ($order['Order']['type'] == ORDER_TYPE_WESHARE_BUY) {
@@ -802,7 +803,7 @@ class WeixinComponent extends Component {
      * @param $orders
      * 拼团支付成功
      */
-    public function pintuan_buy_order_paid($orders){
+    public function pintuan_buy_order_paid($orders) {
         if (count($orders) == 1) {
             $orders = array($orders);
         }
@@ -828,7 +829,7 @@ class WeixinComponent extends Component {
             $openid = $oauth_binds[$order['Order']['creator']];
             $good = self::get_order_weshare_product_info($order, $carts);
             $user = $users[$order['Order']['creator']];
-            $this->send_weshare_buy_wx_msg($openid, $order, $good, $user);
+            $this->send_pintuan_buy_wx_msg($openid, $order, $good, $user);
             //todo save pin tuan buy opt log
             //$this->ShareUtil->save_buy_opt_log($order['Order']['creator'], $order['Order']['member_id'], $order['Order']['id']);
         }
@@ -901,7 +902,7 @@ class WeixinComponent extends Component {
      * @param $user
      * 拼团的通知
      */
-    public function send_pintuan_buy_wx_msg($openid, $order, $good, $user){
+    public function send_pintuan_buy_wx_msg($openid, $order, $good, $user) {
         if (empty($user) || substr($user['User']['username'], 0, 4) === "pys_") {
             return;
         }

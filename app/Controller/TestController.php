@@ -162,4 +162,15 @@ class TestController extends AppController{
         echo json_encode(array('success' => true));
     }
 
+    public function test_pintuan_order_paid($orderId){
+        $this->autoRender = false;
+        $order = $this->Order->find('first', array(
+            'conditions' => array(
+                'id' => $orderId
+            )
+        ));
+        $this->Weixin->notifyPaidDone($order);
+        echo json_encode(array('success' => true));
+    }
+
 }

@@ -10,6 +10,8 @@ class PintuanController extends AppController {
 
     var $name = 'pintuan';
 
+    var $components = array('PintuanHelper');
+
     var $pin_tuan_config = array();
 
     public function beforeFilter() {
@@ -87,13 +89,20 @@ class PintuanController extends AppController {
         $order_data['total_all_price'] = $price;
         $order_data['total_price'] = $price;
         $order_data['group_id'] = $tag_id; //pin tuan group id
+        $order_data['member_id'] = $share_id;
         $orderM = ClassRegistry::init('Order');
         $order = $orderM->save($order_data);
         $cart_data = array('order_id' => $order['Order']['id'], 'name' => $pintuan_conf['product']['name'], 'num' => 1, 'price' => $price * 100, 'type' => ORDER_TYPE_PIN_TUAN, 'product_id' => $pintuan_conf['product']['id'], 'created' => $now_date, 'updated' => $now_date, 'tuan_buy_id' => $share_id);
         $cartM = ClassRegistry::init('Cart');
         $cart = $cartM->save($cart_data);
         if ($order && $cart) {
-            echo json_encode(array('success' => true, 'order_id' => $order['Order']['id']));
+            $order_id = $order['Order']['id'];
+            if ($tag_id) {
+                //save pin tuan record
+                $record = array('tag_id' => $tag_id, 'order_id' => $order_id, 'user_id' => $uid, 'created' => $now_date);
+                $this->PintuanHelper->save_pintuan_record($record);
+            }
+            echo json_encode(array('success' => true, 'order_id' => $order_id));
             return;
         }
         echo json_encode(array('success' => false, 'reason' => 'system_error'));
@@ -125,7 +134,7 @@ class PintuanController extends AppController {
      */
     private function new_pintuan_tag($uid, $date, $share_id) {
         $pinTuanTagM = ClassRegistry::init('PintuanTag');
-        $tag_data = array('creator' => $uid, 'created' => $date, 'share_id' => $share_id);
+        $tag_data = array('creator' => $uid, 'created' => $date, 'share_id' => $share_id, 'num' => 2);
         $tag = $pinTuanTagM->save($tag_data);
         return $tag['PintuanTag']['id'];
     }
