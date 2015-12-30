@@ -1755,16 +1755,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 23771,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_d742f4391e472ca6a24c58d96be17aca.jpg'
                 ),
-                '1575' => array(
-                    'share_id' => 1575,
-                    'share_name' => '好吃的真空低温油浴果蔬套装（黄秋葵+香菇+什锦果蔬）',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/d50b8e8d6ad_1202.jpg',
-                    'share_price' => '55',
-                    'share_user_name' => '赵宇',
-                    'share_vote' => 2000,
-                    'share_user_id' => 810688,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_7db41874b00ec17af715b72adf87768a.jpg'
-                ),
+//                '1575' => array(
+//                    'share_id' => 1575,
+//                    'share_name' => '好吃的真空低温油浴果蔬套装（黄秋葵+香菇+什锦果蔬）',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/d50b8e8d6ad_1202.jpg',
+//                    'share_price' => '55',
+//                    'share_user_name' => '赵宇',
+//                    'share_vote' => 2000,
+//                    'share_user_id' => 810688,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_7db41874b00ec17af715b72adf87768a.jpg'
+//                ),
                 '1506' => array(
                     'share_id' => 1506,
                     'share_name' => '越南黑虎虾仁 【纯野生虾仁】',
