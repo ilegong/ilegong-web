@@ -50,11 +50,15 @@ class PintuanController extends AppController {
         $share_id = $_REQUEST['share_id'];
         $pintuan_conf = $this->get_pintuan_conf($share_id);
         $uid = $this->currentUser['id'];
+        if (empty($uid)) {
+            echo json_encode(array('success' => false, 'reason' => 'not_login'));
+            return;
+        }
         if (empty($pintuan_conf)) {
             echo json_encode(array('success' => false, 'reason' => 'param_error'));
             return;
         }
-        $price = $pintuan_conf['normal_price'];
+        $price = $pintuan_conf['product']['normal_price'];
         $tag_id = 0;
         $now_date = date('Y-m-d H:i:s');
         //join
@@ -64,11 +68,11 @@ class PintuanController extends AppController {
                 echo json_encode(array('success' => false, 'reason' => 'param_error'));
                 return;
             }
-            $price = $pintuan_conf['pintuan_price'];
+            $price = $pintuan_conf['product']['pintuan_price'];
         }
         //new
         if ($type == 1) {
-            $price = $pintuan_conf['pintuan_price'];
+            $price = $pintuan_conf['product']['pintuan_price'];
             //init tag??
             $tag_id = $this->new_pintuan_tag($uid, $now_date, $share_id);
             if (empty($tag_id)) {
@@ -97,6 +101,22 @@ class PintuanController extends AppController {
     }
 
     /**
+     * @param $type
+     * @param $orderId
+     * 支付拼团的订单
+     */
+    public function pay($type, $orderId) {
+        if ($type == 0) {
+            $this->redirect('/wxPay/jsApiPay/' . $orderId . '?from=pintuan');
+            return;
+        }
+        if ($type == 1) {
+            $this->redirect('/ali_pay/wap_to_alipay/' . $orderId . '?from=pintuan');
+            return;
+        }
+    }
+
+    /**
      * @param $uid
      * @param $date
      * @param $share_id
@@ -119,7 +139,7 @@ class PintuanController extends AppController {
         $consignee_mobilephone = $_REQUEST['consignee_mobilephone'];
         $business_remark = $_REQUEST['business_remark'];
         $consignee_name = $_REQUEST['consignee_name'];
-        $order_data = array('consignee_address' => $consignee_address, 'type' => ORDER_TYPE_PIN_TUAN, 'consignee_name' => $consignee_name, 'consignee_mobilephone' => $consignee_mobilephone, 'business_remark' => $business_remark);
+        $order_data = array('consignee_address' => $consignee_address, 'type' => ORDER_TYPE_PIN_TUAN, 'consignee_name' => $consignee_name, 'consignee_mobilephone' => $consignee_mobilephone, 'business_remark' => $business_remark, 'ship_mark' => SHARE_SHIP_KUAIDI_TAG);
         return $order_data;
     }
 
@@ -136,17 +156,17 @@ class PintuanController extends AppController {
             $start_pintuan = $_REQUEST['create'];
             if (!empty($start_pintuan)) {
                 //发起拼团
-                $this->set('start', true);
+                $this->set('start', 1);
                 $price = $conf['product']['pintuan_price'];
             } else {
                 //原价购买
-                $this->set('normal', true);
+                $this->set('normal', 1);
             }
         } else {
             //加入拼团
             //todo check pintuan tag available
             $this->set('tag_id', $tag_id);
-            $price = $conf['product']['normal_price'];
+            $price = $conf['product']['pintuan_price'];
         }
         $this->set('price', $price);
         $this->set('conf', $conf);

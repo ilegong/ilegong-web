@@ -49,6 +49,10 @@ class WeixinComponent extends Component {
         return WX_HOST . '/weshares/view/' . $weshare_id;
     }
 
+    public function get_pintuan_detail($weshare_id, $group_id) {
+        return WX_HOST . '/pintuan/detail/' . $weshare_id . '?tag_id = ' . $group_id;
+    }
+
     public function get_user_share_info_url($uid) {
         return WX_HOST . '/weshares/user_share_info/' . $uid;
     }
@@ -458,6 +462,10 @@ class WeixinComponent extends Component {
             $this->clear_share_cache($order['Order']['member_id']);
             return;
         }
+        if($order['Order']['type'] == ORDER_TYPE_PIN_TUAN){
+            $this->pintuan_buy_order_paid($order);
+            return;
+        }
         if ($order['Order']['type'] == ORDER_TYPE_WESHARE_BUY) {
             Cache::write(USER_SHARE_ORDER_INFO_CACHE_KEY . '_' . $order['Order']['member_id'] . '_' . $order['Order']['creator'], '');
             Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $order['Order']['creator'], '');
@@ -792,6 +800,42 @@ class WeixinComponent extends Component {
 
     /**
      * @param $orders
+     * 拼团支付成功
+     */
+    public function pintuan_buy_order_paid($orders){
+        if (count($orders) == 1) {
+            $orders = array($orders);
+        }
+        $user_ids = Hash::extract($orders, '{n}.Order.creator');
+        $order_ids = Hash::extract($orders, '{n}.Order.id');
+        $oauthBindModel = ClassRegistry::init('Oauthbind');
+        $cartModel = ClassRegistry::init('Cart');
+        $userModel = ClassRegistry::init('User');
+        $oauth_binds = $oauthBindModel->find('list', array(
+            'conditions' => array('user_id' => $user_ids, 'source' => oauth_wx_source()),
+            'fields' => array('user_id', 'oauth_openid')
+        ));
+        $users = $userModel->find('all', array(
+            'conditions' => array('id' => $user_ids),
+            'fields' => array('id', 'username')
+        ));
+        $users = Hash::combine($users, '{n}.User.id', '{n}');
+        $carts = $cartModel->find('all', array(
+            'conditions' => array('order_id' => $order_ids),
+            'fields' => array('Cart.id', 'Cart.num', 'Cart.order_id', 'Cart.send_date', 'Cart.product_id', 'Cart.name'),
+        ));
+        foreach ($orders as $order) {
+            $openid = $oauth_binds[$order['Order']['creator']];
+            $good = self::get_order_weshare_product_info($order, $carts);
+            $user = $users[$order['Order']['creator']];
+            $this->send_weshare_buy_wx_msg($openid, $order, $good, $user);
+            //todo save pin tuan buy opt log
+            //$this->ShareUtil->save_buy_opt_log($order['Order']['creator'], $order['Order']['member_id'], $order['Order']['id']);
+        }
+    }
+
+    /**
+     * @param $orders
      * 微分享支付成通知
      */
     public function weshare_buy_order_paid($orders) {
@@ -848,6 +892,55 @@ class WeixinComponent extends Component {
             $this->send_weshare_buy_order_paid_msg($openid, $order, $good);
             $this->notify_weshare_buy_creator($order, $good);
         }
+    }
+
+    /**
+     * @param $openid
+     * @param $order
+     * @param $good
+     * @param $user
+     * 拼团的通知
+     */
+    public function send_pintuan_buy_wx_msg($openid, $order, $good, $user){
+        if (empty($user) || substr($user['User']['username'], 0, 4) === "pys_") {
+            return;
+        }
+        if ($order['Order']['status'] == ORDER_STATUS_PAID && !empty($openid)) {
+            $this->send_pintuan_buy_order_paid_msg($openid, $order, $good);
+            //$this->notify_weshare_buy_creator($order, $good);
+        }
+    }
+
+    public function send_pintuan_buy_order_paid_msg($open_id, $order, $good) {
+        $weshare_info = $good['weshare_info'];
+        $title = $weshare_info['Weshare']['title'];
+        $userM = ClassRegistry::init('User');
+        $creatorInfo = $userM->findById($weshare_info['Weshare']['creator']);
+        $creatorNickName = $creatorInfo['User']['nickname'];
+        $org_msg = "亲，您报名了" . $creatorNickName . "分享的" . $title;
+        if ($order['Order']['ship_mark'] == SHARE_SHIP_KUAIDI_TAG) {
+            $org_msg = $org_msg . '，请留意后续的发货通知。';
+        } else {
+            $org_msg = $org_msg . '，请留意当天的取货提醒哈。';
+        }
+        $org_msg = $org_msg . $creatorNickName . '电话:' . $creatorInfo['User']['mobilephone'];
+        $post_data = array(
+            "touser" => $open_id,
+            "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
+            "url" => $this->get_pintuan_detail($order['Order']['member_id'], $order['Order']['group_id']),
+            "topcolor" => "#FF0000",
+            "data" => array(
+                "first" => array("value" => $org_msg),
+                "orderProductPrice" => array("value" => $order['Order']['total_all_price']),
+                "orderProductName" => array("value" => $good['good_info']),
+                "orderAddress" => array("value" => empty($good['ship_info']) ? '' : $good['ship_info']),
+                "orderName" => array("value" => $order['Order']['id']),
+                "remark" => array("value" => "分享，让生活更美。点击查看详情。", "color" => "#FF8800")
+            )
+        );
+        //save relation
+        $this->ShareUtil->save_relation($creatorInfo['User']['id'], $order['Order']['creator']);
+        return $this->send_weixin_message($post_data);
     }
 
     public function send_weshare_buy_order_paid_msg($open_id, $order, $good) {

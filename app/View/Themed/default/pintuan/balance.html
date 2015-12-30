@@ -9,22 +9,28 @@
 <body style="background-color: #f9f9f9;">
 <div class="btc_good_money">
     <ul class="clearfix">
-        <li class="fl"><img src="/static/pintuan/images/banner_small.jpg" /></li>
-        <li style="overflow: hidden; display: block; padding-right: 30px;"><label>{{$conf['product']['name']}}</label><br/><span>数量：1份</span></li>
+        <li class="fl"><img src="/static/pintuan/images/banner_small.jpg"/></li>
+        <li style="overflow: hidden; display: block; padding-right: 30px;">
+            <label>{{$conf['product']['name']}}</label><br/><span>数量：1份</span></li>
         <li class="fr">¥{{$price}}</li>
     </ul>
 </div>
 <div class="btc_money_total">快递：¥0，总价：<span>￥{{$price}}</span></div>
 <div class="btc_adress">
-    <div><input name="" type="text" placeholder="输入收货地址"></div>
-    <div><input name="" type="text" placeholder="输入联系人姓名"></div>
-    <div><input name="" type="text" placeholder="输入联系电话"></div>
-    <div><textarea placeholder="备注"></textarea></div>
+    <input type="hidden" id="normal" value="{{$normal}}">
+    <input type="hidden" id="start" value="{{$start}}">
+    <input type="hidden" id="tagId" value="{{$tag_id}}">
+    <input type="hidden" id="shareId" value="{{$share_id}}">
+    <div><input name="consigneeAddress" id="consigneeAddress" type="text" placeholder="输入收货地址"></div>
+    <div><input name="consigneeName" id="consigneeName" type="text" placeholder="输入联系人姓名"></div>
+    <div><input name="consigneeMobile" id="consigneeMobile" type="text" placeholder="输入联系电话"></div>
+    <div><textarea id="businessRemark" placeholder="备注"></textarea></div>
 </div>
 <div class="btc_pay">
-    <a href="#X" class="fl">微信支付</a>
-    <a href="#X" class="fr">支付宝支付</a>
+    <a href="#X" class="fl" id="wx-pay">微信支付</a>
+    <a href="#X" class="fr" id="ali-pay">支付宝支付</a>
 </div>
 <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+<script src="/static/pintuan/js/balance.js"></script>
 </body>
 </html>

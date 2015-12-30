@@ -498,6 +498,11 @@ class AliPayController extends AppController {
                     $weshareId = $order['Order']['member_id'];
                     $this->redirect('/weshares/view/' . $weshareId . '/1');
                     return;
+                } elseif ($order['Order']['type'] == ORDER_TYPE_PIN_TUAN) {
+                    $weshareId = $order['Order']['member_id'];
+                    $groupId = $order['Order']['group_id'];
+                    $this->redirect('/pintuan/detail/' . $weshareId . '?tag_id=' . $groupId);
+                    return;
                 } else {
                     $this->redirect(array('action' => 'pay_short_url', $pay_uuid, '?' => array(
                         'paid_msg' => $msg, 'display_status' => $display_status, 'msg' => 'ok', 'callback' => true

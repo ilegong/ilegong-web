@@ -127,14 +127,13 @@ class WxPayController extends AppController {
     }
 
     public function jsApiPay($orderId) {
-
         if ($_GET['action'] == 'group_pay') {
             $this->group_pay($_GET['memberId']);
             $this->__viewFileName = 'group_pay';
             return;
         }
 
-        if($_GET['action'] == 'logistics'){
+        if ($_GET['action'] == 'logistics') {
             $this->logistics_order_pay($orderId);
             $this->__viewFileName = 'logistics_order_pay';
             return;
@@ -142,21 +141,27 @@ class WxPayController extends AppController {
 
         $uid = $this->currentUser['id'];
         $error_pay_redirect = '/orders/detail/' . $orderId . '/pay';
-        $paid_done_url = '/orders/detail/'.$orderId.'/paid';
+        $paid_done_url = '/orders/detail/' . $orderId . '/paid';
         $this->pageTitle = '微信支付';
         $order = $this->WxPayment->findOrderAndCheckStatus($orderId, $uid);
         $from = $_GET['from'];
-        if($from=='share'){
+        if ($from == 'share') {
             $shareId = $order['Order']['member_id'];
-            $this->set('shareId',$shareId);
-            $paid_done_url = '/weshares/view/'.$shareId.'/1';
-            $error_pay_redirect = '/weshares/view/'.$shareId;
+            $this->set('shareId', $shareId);
+            $paid_done_url = '/weshares/view/' . $shareId . '/1';
+            $error_pay_redirect = '/weshares/view/' . $shareId;
+        }
+        if ($from == 'pintuan') {
+            $shareId = $order['Order']['member_id'];
+            $this->set('shareId', $shareId);
+            $paid_done_url = '/pintuan/detail/' . $shareId;
+            $error_pay_redirect = '/pintuan/detail/' . $shareId;
         }
         list($jsapi_param, $out_trade_no, $productDesc) = $this->__prepareWXPay($error_pay_redirect, $orderId, $uid, $order);
-        if(!$from=='share'){
-            $paid_done_url = $paid_done_url.'?tradeNo='.$out_trade_no.'&msg=';
+        if (!($from == 'share' || $from == 'pintuan')) {
+            $paid_done_url = $paid_done_url . '?tradeNo=' . $out_trade_no . '&msg=';
         }
-        $this->set('paid_done_url',$paid_done_url);
+        $this->set('paid_done_url', $paid_done_url);
         $this->set('jsApiParameters', $jsapi_param);
         $this->set('totalFee', $order['Order']['total_all_price']);
         $this->set('tradeNo', $out_trade_no);
