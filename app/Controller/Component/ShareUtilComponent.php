@@ -2053,8 +2053,8 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 711503,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/0609f46d89e_0813.jpg'
                 ),
-                '1007' => array(
-                    'share_id' => 1007,
+                '1777' => array(
+                    'share_id' => 1777,
                     'share_name' => '积累了7000位老顾客的土鸡蛋 朋友说特供40枚/60元',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/15157459186_1110.jpg',
                     'share_price' => '60',
