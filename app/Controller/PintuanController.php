@@ -76,6 +76,12 @@ class PintuanController extends AppController {
                 echo json_encode(array('success' => false, 'reason' => 'param_error'));
                 return;
             }
+            $tag = $this->get_pintuan_tag($tag_id);
+            //valid tag
+            if($tag['PintuanTag']['status'] == PIN_TUAN_TAG_EXPIRE_STATUS){
+                echo json_encode(array('success' => false, 'reason' => 'tag_error'));
+                return;
+            }
             $price = $pintuan_conf['product']['pintuan_price'];
         }
         //new
@@ -179,7 +185,6 @@ class PintuanController extends AppController {
             }
         } else {
             //加入拼团
-            //todo check pintuan tag available
             $this->set('tag_id', $tag_id);
             $price = $conf['product']['pintuan_price'];
         }
@@ -190,18 +195,7 @@ class PintuanController extends AppController {
     }
 
     private function get_pintuan_tag($tag_id) {
-        $pinTuanTagM = ClassRegistry::init('PintuanTag');
-        $tag = $pinTuanTagM->find('first', array(
-            'conditions' => array('id' => $tag_id)
-        ));
-        $now = new DateTime();
-        $expire_time = new DateTime($tag['PintuanTag']['expire_date']);
-        if ($now >= $expire_time && $tag['PintuanTag']['status'] == PIN_TUAN_TAG_PROGRESS_STATUS) {
-            //update tag status
-            $pinTuanTagM->updateAll(array('status' => PIN_TUAN_TAG_EXPIRE_STATUS), array('id' => $tag_id, 'status' => PIN_TUAN_TAG_PROGRESS_STATUS));
-            $tag['PintuanTag']['status'] = PIN_TUAN_TAG_EXPIRE_STATUS;
-        }
-        return $tag;
+        return $this->PintuanHelper->check_and_return_pintuan_tag($tag_id);
     }
 
     private function get_pintuan_conf($share_id) {

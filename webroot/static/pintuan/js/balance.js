@@ -70,7 +70,11 @@ $(document).ready(function () {
       }
     } else {
       var errorMsg = getMakeOrderErrorMsg(data);
-      alert(errorMsg);
+      if(errorMsg){
+        alert(errorMsg);
+      }else{
+        window.location.reload();
+      }
     }
   }
 
@@ -84,6 +88,7 @@ $(document).ready(function () {
     if (data['reason'] == 'system_error') {
       return '下单失败，请联系客服';
     }
+    return '';
   }
 
   function getTradeType() {

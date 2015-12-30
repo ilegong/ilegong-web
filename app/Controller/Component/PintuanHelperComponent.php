@@ -42,6 +42,21 @@ class PintuanHelperComponent extends Component {
         return $tag;
     }
 
+    public function check_and_return_pintuan_tag($tag_id) {
+        $pinTuanTagM = ClassRegistry::init('PintuanTag');
+        $tag = $pinTuanTagM->find('first', array(
+            'conditions' => array('id' => $tag_id)
+        ));
+        $now = new DateTime();
+        $expire_time = new DateTime($tag['PintuanTag']['expire_date']);
+        if ($now >= $expire_time && $tag['PintuanTag']['status'] == PIN_TUAN_TAG_PROGRESS_STATUS) {
+            //update tag status
+            $pinTuanTagM->updateAll(array('status' => PIN_TUAN_TAG_EXPIRE_STATUS), array('id' => $tag_id, 'status' => PIN_TUAN_TAG_PROGRESS_STATUS));
+            $tag['PintuanTag']['status'] = PIN_TUAN_TAG_EXPIRE_STATUS;
+        }
+        return $tag;
+    }
+
     public function update_pintuan_record($order_id, $user_id, $tag_id) {
         $PintuanRecordM = ClassRegistry::init('PintuanRecord');
         $record = $PintuanRecordM->find('first', array(
