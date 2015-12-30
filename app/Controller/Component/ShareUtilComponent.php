@@ -1970,16 +1970,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 708029,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
                 ),
-                '634' => array(
-                    'share_id' => 634,
-                    'share_name' => '明明分享自家爸妈种植的正宗阳信鸭梨',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/bd4dde08463_0923.jpg',
-                    'share_price' => '66',
-                    'share_user_name' => '明明有梨',
-                    'share_vote' => 235,
-                    'share_user_id' => 999,
-                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/2dca381fd51_0923.jpg'
-                ),
+//                '634' => array(
+//                    'share_id' => 634,
+//                    'share_name' => '明明分享自家爸妈种植的正宗阳信鸭梨',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/bd4dde08463_0923.jpg',
+//                    'share_price' => '66',
+//                    'share_user_name' => '明明有梨',
+//                    'share_vote' => 235,
+//                    'share_user_id' => 999,
+//                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/2dca381fd51_0923.jpg'
+//                ),
                 '969' => array(
                     'share_id' => 969,
                     'share_name' => '姑妈家的桂圆肉',
