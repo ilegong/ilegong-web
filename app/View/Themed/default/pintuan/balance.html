@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
     <meta charset="UTF-8">
     <title>结伴抢美味</title>
-    {{$this->Html->css(array('/static/pintuan/css/btc.css'))}}
+    {{$this->Html->css(array($STATIC_FILE_PATH.'/static/pintuan/css/btc.css'))}}
 </head>
 <body style="background-color: #f9f9f9;">
 <div class="btc_good_money">
@@ -31,6 +31,6 @@
     <a href="#X" class="fr" id="ali-pay">支付宝支付</a>
 </div>
 <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
-<script src="/static/pintuan/js/balance.js"></script>
+<script src="{{$STATIC_FILE_PATH}}/static/pintuan/js/balance.js"></script>
 </body>
 </html>
