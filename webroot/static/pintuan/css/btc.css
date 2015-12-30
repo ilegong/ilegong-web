@@ -21,7 +21,15 @@ ul li { list-style: none; }
 .btc_baoming label a{ color: #49bc6e; text-decoration: underline;}
 .btc_baoming ul{ width: 120px; margin: 0 auto; padding-bottom: 20px; padding-top: 10px;}
 .btc_baoming img{ width: 50px; border-radius: 50px;}
-.btc_status img{ width: 75px; height: 37px; position: absolute; left: 50%; margin-left: -37px; top:75px;}
+.btc_status img {
+    width: 75px;
+    height: 37px;
+    position: absolute;
+    left: 50%;
+    margin-left: -37px;
+    top: 105px;
+    border-radius: 0;
+}
 .btc_operation,.btc_invitation{ position: fixed; bottom: 0; width: 100%;}
 .btc_operation a{ display: block; width: 50%; height: 44px; font-size: 13px; color: #ffffff; line-height: 44px;}
 .btc_operation a label{display: block;}
