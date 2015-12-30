@@ -15,7 +15,7 @@ class PintuanConfig extends AppModel {
             'share_id' => '1814',
             'banner_img' => '/static/pintuan/images/banner.jpg',
             'sharer_id' => '633345',
-            'sharer_avatar' => '/static/pintuan/images/head.png',
+            'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/6333451445516765.png',
             'share_title' => '越南红心火龙果 4个装',
             'share_label' => '来自［愣愣］的分享',
             'limit_time' => 24,
