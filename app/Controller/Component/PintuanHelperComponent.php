@@ -4,6 +4,8 @@ class PintuanHelperComponent extends Component {
 
     var $name = 'PintuanHelper';
 
+    var $components = array('ShareUtil');
+
     public function handle_order_paid($order) {
         $order_id = $order['Order']['id'];
         $order_creator = $order['Order']['creator'];
@@ -14,6 +16,9 @@ class PintuanHelperComponent extends Component {
             //start new pin tuan
             $expire_date = date('Y-m-d H:i:s', strtotime('+1 day'));
             $this->update_pintuan_tag(array('expire_date' => "'" . $expire_date . "'", 'order_id' => $order_id, 'status' => PIN_TUAN_TAG_PROGRESS_STATUS), array('id' => $order_group_id));
+        } else {
+            //save relation
+            $this->ShareUtil->save_relation($tag_creator, $order['Order']['creator']);
         }
         //update or save pin tuan record
         $this->update_pintuan_record($order_id, $order_creator, $order_group_id);
