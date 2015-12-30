@@ -22,7 +22,29 @@ $(document).ready(function () {
     triggerMakeOrder(1);
   });
 
+  function validOrderData() {
+    var consignee_address = $consgineeAddress.val();
+    var consignee_mobilephone = $consigneeMobile.val();
+    var consignee_name = $consgineeName.val();
+    if (!consignee_address.trim()) {
+      alert('请输入收件地址');
+      return false;
+    }
+    if (!consignee_mobilephone.trim()) {
+      alert('请输入收件人联系方式');
+      return false;
+    }
+    if (!consignee_name.trim()) {
+      alert('请输入收件人名称');
+      return false;
+    }
+    return true;
+  }
+
   function triggerMakeOrder(payType) {
+    if (!validOrderData()) {
+      return;
+    }
     var tradeType = getTradeType();
     var postData = {
       consignee_address: $consgineeAddress.val(),

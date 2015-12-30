@@ -19,6 +19,7 @@
     {{if !empty($tag_id)}}'
         {{if $order_count > 0}}
         <ul class="clearfix">
+            <!--一开始只有两个，先这样搞-->
             {{if $order_count >=2}}
             <li class="fl"><img src="{{$records[0]['PintuanRecord']['user_info']['image']}}" /></li>
             <li class="fr"><img src="{{$records[1]['PintuanRecord']['user_info']['image']}}" /></li>
