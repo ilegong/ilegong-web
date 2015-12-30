@@ -9,7 +9,7 @@ const WX_HOST = 'www.tongshijia.com';
 const WX_JS_API_CALL_URL = 'http://www.tongshijia.com/wxPay/jsApiPay';
 const WX_JS_LOGISTICS_API_CALL_URL = 'http://www.tongshijia.com/wxPay/logistics_order_pay';
 const WX_NOTIFY_URL = 'http://www.tongshijia.com/wxPay/notify.html';
-const WX_LOGISTICS_NOTIFY_URL  = 'http://www.tongshijia.com/wxPay/logistics_notify.html';
+const WX_LOGISTICS_NOTIFY_URL = 'http://www.tongshijia.com/wxPay/logistics_notify.html';
 const WX_SERVICE_ID_GOTO = 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200757804&idx=1&sn=90b121983525298a4ac26ee8d6c0bc1c#rd';
 
 const ALI_HOST = 'www.tongshijia.com';
@@ -1513,7 +1513,7 @@ function createNewUserByWeixin($userInfo, $userModel) {
             $download_url = $userInfo['headimgurl'];
         }
     }
-    if(empty($userModel)){
+    if (empty($userModel)) {
         $userModel = ClassRegistry::init('User');
     }
     if (!$userModel->save(array(
@@ -2173,6 +2173,21 @@ function pid_in_special($pid, $specialId) {
 function group_buy_is_available($group_buy_label) {
     $not_available_group_label = array('1069-1');
     return !in_array($group_buy_label, $not_available_group_label);
+}
+
+function get_pintuan_status_text($order_status, $tag_status) {
+    if ($tag_status == PIN_TUAN_TAG_EXPIRE_STATUS) {
+        return '报名失败，待退款';
+    }
+    if ($tag_status == PIN_TUAN_TAG_PROGRESS_STATUS) {
+        return '报名进行中，待发货';
+    }
+    if($tag_status == PIN_TUAN_TAG_SUCCESS_STATUS){
+        if($order_status == ORDER_STATUS_PAID){
+            return '报名成功，待发货';
+        }
+    }
+    return get_order_status_text_form_order_status($order_status);
 }
 
 function get_share_order_cart_display_name($carts) {

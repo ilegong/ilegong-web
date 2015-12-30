@@ -7,7 +7,7 @@ class WesharesController extends AppController {
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy');
 
-    var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'OrderExpress');
+    var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'OrderExpress', 'PintuanHelper');
 
     var $share_ship_type = array('self_ziti', 'kuaidi', 'pys_ziti');
 
@@ -813,6 +813,8 @@ class WesharesController extends AppController {
         $this->set('join_share_order_status', $joinShareOrderStatus);
         $this->set('fans_data', $userFansData);
         $this->set('focus_data', $userFocusData);
+        $pintuan_data = $this->PintuanHelper->get_user_pintuan_data($uid);
+        $this->set('pintuan_data', $pintuan_data);
         //$this->set('joinShareComments', $joinShareComments);
     }
 

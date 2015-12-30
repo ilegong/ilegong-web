@@ -88,7 +88,7 @@ class PintuanHelperComponent extends Component {
             'conditions' => array(
                 'id' => $share_ids
             ),
-            'fields' => array('id', 'title', 'images')
+            'fields' => array('id', 'title', 'images', 'created')
         ));
         foreach ($weshares as &$share_item) {
             $images = $share_item['Weshare']['images'];
@@ -96,16 +96,18 @@ class PintuanHelperComponent extends Component {
                 $share_item['Weshare']['images'] = explode('|', $images);
             }
         }
+        $weshares = Hash::combine($weshares, '{n}.Weshare.id', '{n}');
         return $weshares;
     }
 
     public function get_pintuan_tags($group_ids) {
         $PintuanTagM = ClassRegistry::init('PintuanTag');
-        $tags = $PintuanTagM->find('first', array(
+        $tags = $PintuanTagM->find('all', array(
             'conditions' => array(
                 'id' => $group_ids
             )
         ));
+        $tags = Hash::combine($tags, '{n}.PintuanTag.id', '{n}');
         return $tags;
     }
 

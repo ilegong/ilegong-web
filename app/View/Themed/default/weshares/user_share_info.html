@@ -89,17 +89,22 @@
                 <ul class="nav nav-tabs" id="share-nav-tab">
                     {{if !empty($my_create_shares)}}
                     <li>
-                        <a href="#tab_default_1" data-toggle="tab">{{if $is_me}}我发起的{{else}}TA发起的{{/if}}</a>
+                        <a href="#tab_default_1" data-toggle="tab" style="padding: 5px 10px;">{{if $is_me}}我发起的{{else}}TA发起的{{/if}}</a>
                     </li>
                     {{/if}}
                     {{if !empty($authority_shares) && $is_me}}
                     <li>
-                        <a href="#tab_default_2" data-toggle="tab">被授权的</a>
+                        <a href="#tab_default_2" data-toggle="tab" style="padding: 5px 10px;">被授权的</a>
                     </li>
                     {{/if}}
                     {{if !empty($my_join_shares)}}
                     <li>
-                        <a href="#tab_default_3" data-toggle="tab">{{if $is_me}}我参加的{{else}}TA参加的{{/if}}</a>
+                        <a href="#tab_default_3" data-toggle="tab" style="padding: 5px 10px;">{{if $is_me}}我参加的{{else}}TA参加的{{/if}}</a>
+                    </li>
+                    {{/if}}
+                    {{if !empty($pintuan_data)}}
+                    <li>
+                        <a href="#tab_default_4" data-toggle="tab" style="padding: 5px 10px;">{{if $is_me}}我拼团的{{else}}TA拼团的{{/if}}</a>
                     </li>
                     {{/if}}
                 </ul>
@@ -134,6 +139,18 @@
                             {{/loop}}
                         </div>
                     </div>
+                    {{/if}}
+                    {{if !empty($pintuan_data)}}
+                    <div class="tab-pane" id="tab_default_4">
+                        <div class="comments-list">
+                            <?php $pintuan_orders = $pintuan_data['orders']; ?>
+                            <?php $pintuan_shares = $pintuan_data['shares']; ?>
+                            <?php $pintuan_tags = $pintuan_data['tags']; ?>
+                            {{loop $pintuan_orders $order_item}}
+                            {{template weshares/user_pintuan_item_template}}
+                            {{/loop}}
+                        </div>
+                    <div>
                     {{/if}}
                 </div>
             </div>

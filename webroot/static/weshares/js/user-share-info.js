@@ -48,11 +48,11 @@ $(document).ready(function () {
       size: 'small',
       message: "确定删除？",
       callback: function (result) {
-        if(result){
-          $.getJSON('/weshares/delete_share/'+shareId, function(data){
-            if(data['success']){
+        if (result) {
+          $.getJSON('/weshares/delete_share/' + shareId, function (data) {
+            if (data['success']) {
               $me.parent('div.media').remove();
-            }else{
+            } else {
               alert('删除失败！');
             }
           });
@@ -60,9 +60,9 @@ $(document).ready(function () {
       }
     })
   });
-  $saveUserPassword.on('click', function(e){
+  $saveUserPassword.on('click', function (e) {
     e.preventDefault();
-    if(processSavePassword){
+    if (processSavePassword) {
       return;
     }
     processSavePassword = true;
@@ -70,48 +70,48 @@ $(document).ready(function () {
     var $rePasswordE = $('#re-user-password', $updateUserPasswordDialog);
     var password = $passwordE.val();
     var rePassword = $rePasswordE.val();
-    if(!password||!password.trim()){
+    if (!password || !password.trim()) {
       alert('输入密码');
       return;
     }
-    if(!rePassword||!rePassword.trim()){
+    if (!rePassword || !rePassword.trim()) {
       alert('输入确认密码');
       return;
     }
-    if(password!=password){
+    if (password != password) {
       alert('两次输入密码不同');
       return;
     }
-    $.post('/users/setpassword.json',{password:password},function(data){
+    $.post('/users/setpassword.json', {password: password}, function (data) {
       processSavePassword = false;
-      if(data['success']){
+      if (data['success']) {
         $updateUserPasswordDialog.modal('hide');
         $passwordE.val('');
         $rePasswordE.val('');
-      }else{
-        if(data['reason'] == 'not_login'){
+      } else {
+        if (data['reason'] == 'not_login') {
           alert('当前用户不存在');
         }
-        if(data['reason'] == 'password_empty'){
+        if (data['reason'] == 'password_empty') {
           alert('密码为空');
         }
-        if(data['reason'] == 'server_error'){
+        if (data['reason'] == 'server_error') {
           alert('系统出错，请联系客服。');
         }
       }
-    },'json');
+    }, 'json');
 
   });
-  $saveUserIntro.on('click', function(e){
+  $saveUserIntro.on('click', function (e) {
     e.preventDefault();
     var nickname = $userNicknameInput.val();
     var userIntro = $userInfoTextArea.val();
     var userId = $userId.val();
-    if(!nickname||!nickname.trim()){
+    if (!nickname || !nickname.trim()) {
       alert('请输入昵称');
       return;
     }
-    if(!userIntro||!userIntro.trim()){
+    if (!userIntro || !userIntro.trim()) {
       alert('请输入个人介绍');
       return false;
     }
@@ -124,22 +124,22 @@ $(document).ready(function () {
       $changeUserInfoDialog.modal('hide');
     }, 'json');
   });
-  $('button.btn-sub-sharer').on('click', function(e){
+  $('button.btn-sub-sharer').on('click', function (e) {
     e.preventDefault();
-    if(processSub){
+    if (processSub) {
       return;
     }
     processSub = true;
     var $me = $(this);
     var sharer_id = $me.data('sharer-id');
-    var user_id  = $me.data('user-id');
-    $.getJSON('/weshares/subscribe_sharer/'+sharer_id+'/'+user_id, function(data){
-      if(data['success']){
+    var user_id = $me.data('user-id');
+    $.getJSON('/weshares/subscribe_sharer/' + sharer_id + '/' + user_id, function (data) {
+      if (data['success']) {
         processSub = false;
         $('#unsub-sharer').show();
         $('#sub-sharer').hide();
-      }else{
-        if(data['reason'] = 'not_sub'){
+      } else {
+        if (data['reason'] = 'not_sub') {
           processSub = false;
           alert('请先关注朋友说微信公众号！');
           window.location.href = "http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=400154588&idx=1&sn=5568f4566698bacbc5a1f5ffeab4ccc3";
@@ -147,18 +147,18 @@ $(document).ready(function () {
       }
     });
   });
-  $('a.btn-unsub-sharer').on('click', function(e){
+  $('a.btn-unsub-sharer').on('click', function (e) {
     e.preventDefault();
-    if(processUnSub){
+    if (processUnSub) {
       return;
     }
     processUnSub = true;
     var $me = $(this);
     var sharer_id = $me.data('sharer-id');
-    var user_id  = $me.data('user-id');
-    $.getJSON('/weshares/unsubscribe_sharer/'+sharer_id+'/'+user_id, function(data){
-      if(data['success']){
-        if(data['success']){
+    var user_id = $me.data('user-id');
+    $.getJSON('/weshares/unsubscribe_sharer/' + sharer_id + '/' + user_id, function (data) {
+      if (data['success']) {
+        if (data['success']) {
           processUnSub = false;
           $('#unsub-sharer').hide();
           $('#sub-sharer').show();
@@ -170,5 +170,11 @@ $(document).ready(function () {
     var $me = $(this);
     var id = $me.data('id');
     window.location.href = '/weshares/view/' + id;
+  });
+  $('div[name="pintuan_item"]').on('click', function () {
+    var $me = $(this);
+    var id = $me.data('id');
+    var tagId = $me.data('tag-id');
+    window.location.href = '/pintuan/detail/' + id + '?tag_id=' + tagId;
   });
 });
