@@ -60,6 +60,54 @@ class PintuanHelperComponent extends Component {
 
     }
 
+    public function get_user_pintuan_data($uid) {
+        $orderM = ClassRegistry::init('Order');
+        $orders = $orderM->find('all', array(
+            'conditions' => array(
+                'creator' => $uid,
+                'type' => ORDER_TYPE_PIN_TUAN,
+                'not' => array('status' => array(ORDER_STATUS_WAITING_PAY))
+            ),
+            'fields' => array('id', 'member_id', 'group_id', 'status'),
+            'order' => array('id DESC'),
+            'limit' => 100
+        ));
+        if (empty($orders)) {
+            return array();
+        }
+        $share_ids = array_unique(Hash::extract($orders, '{n}.Order.member_id'));
+        $group_ids = array_unique(Hash::extract($orders, '{n}.Order.group_id'));
+        $shares = $this->get_pintuan_weshares($share_ids);
+        $tags = $this->get_pintuan_tags($group_ids);
+        return array('orders' => $orders, 'shares' => $shares, 'tags' => $tags);
+    }
+
+    public function get_pintuan_weshares($share_ids) {
+        $WeshareM = ClassRegistry::init('Weshare');
+        $weshares = $WeshareM->find('all', array(
+            'conditions' => array(
+                'id' => $share_ids
+            ),
+            'fields' => array('id', 'title', 'images')
+        ));
+        foreach ($weshares as &$share_item) {
+            $images = $share_item['Weshare']['images'];
+            if (!empty($images)) {
+                $share_item['Weshare']['images'] = explode('|', $images);
+            }
+        }
+        return $weshares;
+    }
+
+    public function get_pintuan_tags($group_ids) {
+        $PintuanTagM = ClassRegistry::init('PintuanTag');
+        $tags = $PintuanTagM->find('first', array(
+            'conditions' => array(
+                'id' => $group_ids
+            )
+        ));
+        return $tags;
+    }
 
     public function save_pintuan_record($record) {
         $PintuanRecordM = ClassRegistry::init('PintuanRecord');

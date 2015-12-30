@@ -772,7 +772,7 @@ class WesharesController extends AppController {
         $joinShareOrderStatus = $user_share_data['joinShareOrderStatus'];
         $myCreateShares = $user_share_data['myCreateShares'];
         $myJoinShares = $user_share_data['myJoinShares'];
-        $joinShareComments = $user_share_data['joinShareComments'];
+        //$joinShareComments = $user_share_data['joinShareComments'];
         $shareUser = $creators[$uid];
         $this->set_share_user_info_weixin_params($uid, $current_uid, $shareUser);
         $userShareSummery = $this->getUserShareSummery($uid);
@@ -813,7 +813,7 @@ class WesharesController extends AppController {
         $this->set('join_share_order_status', $joinShareOrderStatus);
         $this->set('fans_data', $userFansData);
         $this->set('focus_data', $userFocusData);
-        $this->set('joinShareComments', $joinShareComments);
+        //$this->set('joinShareComments', $joinShareComments);
     }
 
     /**

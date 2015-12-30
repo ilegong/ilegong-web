@@ -5,7 +5,6 @@ class WeshareBuyComponent extends Component {
 
     var $name = 'WeshareBuyComponent';
 
-
     var $share_order_count = 10;
 
     var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'mobilephone', 'is_proxy');
@@ -22,6 +21,7 @@ class WeshareBuyComponent extends Component {
 
     var $components = array('Session', 'Weixin', 'RedPacket', 'ShareUtil', 'ShareAuthority');
 
+    var $query_share_fields = array('id', 'title', 'images', 'status', 'creator', 'created', 'settlement', 'type');
 
     /**
      * @param $weshare_ids
@@ -187,7 +187,7 @@ class WeshareBuyComponent extends Component {
         if (empty($user_share_data)) {
             $weshareM = ClassRegistry::init('Weshare');
             $orderM = ClassRegistry::init('Order');
-            $commentM = ClassRegistry::init('Comment');
+            //$commentM = ClassRegistry::init('Comment');
             $userM = ClassRegistry::init('User');
             $query_share_type = array(GROUP_SHARE_TYPE, DEFAULT_SHARE_TYPE, POOL_SHARE_BUY_TYPE);
             $myCreateShares = $weshareM->find('all', array(
@@ -196,6 +196,7 @@ class WeshareBuyComponent extends Component {
                     'status' => array(0, 1),
                     'type' => $query_share_type
                 ),
+                'fields' => $this->query_share_fields,
                 'order' => array('created DESC')
             ));
             $my_create_share_ids = Hash::extract($myCreateShares, '{n}.Weshare.id');
@@ -208,17 +209,17 @@ class WeshareBuyComponent extends Component {
                 ),
                 'fields' => array('member_id', 'id', 'status')
             ));
-            $joinShareOrderIds = Hash::extract($joinShareOrder, '{n}.Order.id');
-            $joinShareComments = $commentM->find('all', array(
-                'conditions' => array(
-                    'order_id' => $joinShareOrderIds,
-                    'status' => COMMENT_SHOW_STATUS,
-                    'type' => COMMENT_SHARE_TYPE,
-                    'parent_id' => 0,
-                    'user_id' => $uid
-                )
-            ));
-            $joinShareComments = Hash::combine($joinShareComments, '{n}.Comment.order_id', '{n}.Comment');
+//            $joinShareOrderIds = Hash::extract($joinShareOrder, '{n}.Order.id');
+//            $joinShareComments = $commentM->find('all', array(
+//                'conditions' => array(
+//                    'order_id' => $joinShareOrderIds,
+//                    'status' => COMMENT_SHOW_STATUS,
+//                    'type' => COMMENT_SHARE_TYPE,
+//                    'parent_id' => 0,
+//                    'user_id' => $uid
+//                )
+//            ));
+//            $joinShareComments = Hash::combine($joinShareComments, '{n}.Comment.order_id', '{n}.Comment');
             $joinShareOrderStatus = Hash::combine($joinShareOrder, '{n}.Order.member_id', '{n}.Order');
             $joinShareIds = Hash::extract($joinShareOrder, '{n}.Order.member_id');
             $joinShareIds = array_unique($joinShareIds);
@@ -228,6 +229,7 @@ class WeshareBuyComponent extends Component {
                     'status' => array(0, 1, -1),
                     'type' => $query_share_type
                 ),
+                'fields' => $this->query_share_fields,
                 'order' => array('created DESC')
             ));
             $creatorIds = Hash::extract($myJoinShares, '{n}.Weshare.creator');
@@ -262,6 +264,7 @@ class WeshareBuyComponent extends Component {
                         'id' => $authority_share_ids,
                         'type' => $query_share_type
                     ),
+                    'fields' => $this->query_share_fields,
                     'order' => array('id' => 'desc')
                 ));
 //                $share_operate_settings_result = array();
@@ -270,7 +273,7 @@ class WeshareBuyComponent extends Component {
 //                }
             }
             $this->explode_share_imgs($authority_shares);
-            $user_share_data = array('authority_shares' => $authority_shares, 'creators' => $creators, 'my_create_share_ids' => $my_create_share_ids, 'joinShareOrderStatus' => $joinShareOrderStatus, 'joinShareComments' => $joinShareComments, 'myJoinShares' => $myJoinShares, 'myCreateShares' => $myCreateShares);
+            $user_share_data = array('authority_shares' => $authority_shares, 'creators' => $creators, 'my_create_share_ids' => $my_create_share_ids, 'joinShareOrderStatus' => $joinShareOrderStatus, 'myJoinShares' => $myJoinShares, 'myCreateShares' => $myCreateShares);
             Cache::write($key, json_encode($user_share_data));
             return $user_share_data;
         }
