@@ -11,18 +11,18 @@ class PintuanConfig extends AppModel {
     public $useTable = false;
 
     var $conf_data = array(
-        79 => array(
-            'share_id' => '79',
+        1814 => array(
+            'share_id' => '1814',
             'banner_img' => '/static/pintuan/images/banner.jpg',
-            'sharer_id' => '802852',
+            'sharer_id' => '633345',
             'sharer_avatar' => '/static/pintuan/images/head.png',
             'share_title' => '越南红心火龙果 4个装',
-            'share_label' => '来自［小宝妈］分享',
+            'share_label' => '来自［愣愣］的分享',
             'limit_time' => 24,
             'product' => array(
-                'id' => 139,
-                'normal_price' => 2,
-                'pintuan_price' => 1,
+                'id' => 3845,
+                'normal_price' => 0.2,
+                'pintuan_price' => 0.1,
                 'name' => '越南红心火龙果 4个装'
             )
         )
