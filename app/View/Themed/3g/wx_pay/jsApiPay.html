@@ -27,7 +27,11 @@
             }
 
             if (!not_redirect) {
-                window.location.href = doneUrlPrefix +'?msg='+ encodeURIComponent($msg);
+                if(doneUrlPrefix.indexOf('?') < 0){
+                    window.location.href = doneUrlPrefix +'?msg='+ encodeURIComponent($msg);
+                }else{
+                    window.location.href = doneUrlPrefix +'&msg='+ encodeURIComponent($msg);
+                }
             }
         }
     );

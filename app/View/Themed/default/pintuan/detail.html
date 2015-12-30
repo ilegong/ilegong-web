@@ -3,7 +3,7 @@
 <head lang="en">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
     <meta charset="UTF-8">
-    <title>结伴抢美味</title>
+    <title>{{$conf['share_label']}}</title>
     {{$this->Html->css(array($STATIC_FILE_PATH.'/static/pintuan/css/btc.css'))}}
     <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
@@ -25,11 +25,12 @@
             <li class="fr"><img src="{{$records[1]['PintuanRecord']['user_info']['image']}}" /></li>
             {{else}}
             <li class="fl"><img src="{{$records[0]['PintuanRecord']['user_info']['image']}}" /></li>
-            <li class="fr"><img src="/static/pintuan/images/head_default.png" /></li>
+            <li class="fr"><img src="{{$STATIC_FILE_PATH}}/static/pintuan/images/head_default.png" /></li>
             {{/if}}
         </ul>
         {{/if}}
-        <div class="btc_status" {{if $tag['PintuanTag']['status'] != PIN_TUAN_TAG_EXPIRE_STATUS}}style="display: none;"{{/if}}><img src="/static/pintuan/images/bm_defeated.png" /></div>
+        <div class="btc_status" {{if $tag['PintuanTag']['status'] != PIN_TUAN_TAG_EXPIRE_STATUS}}style="display: none;"{{/if}}><img src="{{$STATIC_FILE_PATH}}/static/pintuan/images/bm_defeated.png" /></div>
+        <div class="btc_status" {{if $tag['PintuanTag']['status'] == PIN_TUAN_TAG_SUCCESS_STATUS}}style="display: none;"{{/if}}><img src="{{$STATIC_FILE_PATH}}/static/pintuan/images/bm_succeed.png" /></div>
         {{if $tag['PintuanTag']['status'] == PIN_TUAN_TAG_PROGRESS_STATUS}}
         <div class="btc_countdown">
             <input type="hidden" id="tag-expire-date" value="{{$tag['PintuanTag']['expire_date']}}">
@@ -46,7 +47,7 @@
         {{/if}}
     {{/if}}
 </div>
-<div class="btc_pic"><div><img src="/static/pintuan/images/detail01.jpg" /></div><div><img src="/static/pintuan/images/detail02.jpg" /></div><div><img src="/static/pintuan/images/detail03.jpg" /></div></div>
+<div class="btc_pic"><div><img src="{{$STATIC_FILE_PATH}}/static/pintuan/images/detail01.jpg" /></div><div><img src="{{$STATIC_FILE_PATH}}/static/pintuan/images/detail02.jpg" /></div><div><img src="{{$STATIC_FILE_PATH}}/static/pintuan/images/detail03.jpg" /></div></div>
 {{if empty($tag_id) || ($tag['PintuanTag']['status'] != PIN_TUAN_TAG_PROGRESS_STATUS)}}
 <!--报名-->
 <div class="btc_operation">
@@ -73,7 +74,7 @@
             {{if $tag['PintuanTag']['creator'] == $uid}}
                 <a class="fr" id="prompt-invitation-layer-btn">还差{{$tag['PintuanTag']['num'] - $order_count}}个朋友，赶快邀请</a>
             {{else}}
-                <a href="/pintuan/balance/{{$share_id}}?tag_id={{$tag_id}}" class="fr">加入拼团</a>
+                <a href="/pintuan/balance/{{$share_id}}?tag_id={{$tag_id}}" class="fr">结伴抢美味</a>
             {{/if}}
         </div>
     {{/if}}
