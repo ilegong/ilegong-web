@@ -31,7 +31,7 @@
         {{/if}}
         <div class="btc_status" {{if $tag['PintuanTag']['status'] != PIN_TUAN_TAG_EXPIRE_STATUS}}style="display: none;"{{/if}}><img src="{{$STATIC_FILE_PATH}}/static/pintuan/images/bm_defeated.png" /></div>
         {{if $tag['PintuanTag']['status'] == PIN_TUAN_TAG_SUCCESS_STATUS}}<div class="btc_status"><img src="{{$STATIC_FILE_PATH}}/static/pintuan/images/bm_succeed.png" /></div>{{/if}}
-        {{if $tag['PintuanTag']['status'] == PIN_TUAN_TAG_PROGRESS_STATUS}}
+        {{if $tag['PintuanTag']['status'] == PIN_TUAN_TAG_PROGRESS_STATUS || $tag['PintuanTag']['status'] == PIN_TUAN_TAG_EXPIRE_STATUS}}
         <div class="btc_countdown">
             <input type="hidden" id="tag-expire-date" value="{{$tag['PintuanTag']['expire_date']}}">
             <ul class="clearfix">
