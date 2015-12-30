@@ -40,7 +40,7 @@ class PintuanController extends AppController {
         $this->set('share_id', $share_id);
         $this->set('conf', $conf);
         $this->set('records', $records);
-        $this->set_share_weixin_params($uid, $conf['share_label'], $conf['banner_img']);
+        $this->set_share_weixin_params($uid, $conf['wx_title'], $conf['banner_img']);
     }
 
     /**
