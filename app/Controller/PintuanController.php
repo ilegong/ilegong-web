@@ -14,8 +14,6 @@ class PintuanController extends AppController {
 
     var $components = array('PintuanHelper');
 
-    var $pin_tuan_config = array();
-
     public function beforeFilter() {
         parent::beforeFilter();
         //暂时不使用angular
@@ -30,10 +28,15 @@ class PintuanController extends AppController {
         $uid = $this->currentUser['id'];
         $conf = $this->get_pintuan_conf($share_id);
         $tag_id = $_REQUEST['tag_id'];
+        $wx_title = $conf['wx_title'];
         if (!empty($tag_id)) {
             $this->set('tag_id', $tag_id);
             $tag = $this->get_pintuan_tag($tag_id);
             $this->set('tag', $tag);
+            if ($tag['PintuanTag']['status'] == PIN_TUAN_TAG_PROGRESS_STATUS && $tag['PintuanTag']['creator'] == $uid) {
+                $username = $this->currentUser['nickname'];
+                $wx_title = $username . '报名了“[和你一起立省5元] 越南红心火龙果”，就差你一个啦 !';
+            }
         }
         $records = $this->PintuanHelper->get_pintuan_records($tag_id);
         $order_count = count($records);
@@ -42,7 +45,7 @@ class PintuanController extends AppController {
         $this->set('share_id', $share_id);
         $this->set('conf', $conf);
         $this->set('records', $records);
-        $this->set_share_weixin_params($uid, $conf['wx_title'], $conf['banner_img']);
+        $this->set_share_weixin_params($uid, $wx_title, $conf['banner_img'], $conf['wx_desc']);
     }
 
     /**
@@ -229,12 +232,12 @@ class PintuanController extends AppController {
      * @param $uid
      * @param $title
      * @param $image
+     * @param $desc
      */
-    private function set_share_weixin_params($uid, $title, $image) {
+    private function set_share_weixin_params($uid, $title, $image, $desc) {
         if (parent::is_weixin()) {
             $wexin_params = $this->set_weixin_share_data($uid, -1);
             $this->set($wexin_params);
-            $desc = '品质棒棒嗒，一起报名团长给你发福利。';
             $this->set('title', $title);
             $this->set('image', $image);
             $this->set('desc', $desc);

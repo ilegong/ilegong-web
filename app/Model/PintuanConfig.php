@@ -17,7 +17,8 @@ class PintuanConfig extends AppModel {
             'sharer_id' => '633345',
             'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/6333451445516765.png',
             'share_title' => '越南红心火龙果 4个装',
-            'wx_title' => '［愣愣］邀请你一起吃越南红心火龙果',
+            'wx_title' => '[和你一起立省5元] 越南红心火龙果，朋友说邀你吃',
+            'wx_desc' => '愣愣强烈推荐，品质棒棒嗒，好吃的要分享给大家一起吃！',
             'share_label' => '来自［愣愣］的分享',
             'limit_time' => 24,
             'product' => array(
