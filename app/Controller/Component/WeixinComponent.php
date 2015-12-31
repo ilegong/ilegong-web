@@ -924,7 +924,7 @@ class WeixinComponent extends Component {
         } else {
             $org_msg = $org_msg . '，请留意当天的取货提醒哈。';
         }
-        $org_msg = $org_msg . $creatorNickName . '电话:' . $creatorInfo['User']['mobilephone'];
+        $org_msg = $org_msg . $creatorNickName;
         $post_data = array(
             "touser" => $open_id,
             "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
