@@ -1776,16 +1776,16 @@ class ShareUtilComponent extends Component {
 //                    'share_user_id' => 810688,
 //                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_7db41874b00ec17af715b72adf87768a.jpg'
 //                ),
-//                '1506' => array(
-//                    'share_id' => 1506,
-//                    'share_name' => '越南黑虎虾仁 【纯野生虾仁】',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/cc44309c109_1202.jpg',
-//                    'share_price' => '150',
-//                    'share_user_name' => '小宝妈',
-//                    'share_vote' => 1000,
-//                    'share_user_id' => 811917,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
-//                ),
+                '1506' => array(
+                    'share_id' => 1506,
+                    'share_name' => '越南黑虎虾仁 【纯野生虾仁】',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/cc44309c109_1202.jpg',
+                    'share_price' => '150',
+                    'share_user_name' => '小宝妈',
+                    'share_vote' => 1000,
+                    'share_user_id' => 811917,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
+                ),
                 '747' => array(
                     'share_id' => 747,
                     'share_name' => '那那家五常稻花香米',
@@ -2002,6 +2002,16 @@ class ShareUtilComponent extends Component {
                 ),
             ),
             2 => array(
+                '1506' => array(
+                    'share_id' => 1506,
+                    'share_name' => '越南黑虎虾仁 【纯野生虾仁】',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/cc44309c109_1202.jpg',
+                    'share_price' => '150',
+                    'share_user_name' => '小宝妈',
+                    'share_vote' => 1000,
+                    'share_user_id' => 811917,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
+                ),
                 //寒之乡 稻花香
                 '1403' => array(
                     'share_id' => 1403,
