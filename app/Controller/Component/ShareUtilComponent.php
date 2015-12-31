@@ -1673,16 +1673,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 883095,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_173d81362e0b516ec73870fdf83c8a26.jpg'
                 ),
-                '1436' => array(
-                    'share_id' => 1436,
-                    'share_name' => '老舅家的沙窝萝卜--脆绿嫩',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/8d917876cee_1216.jpg',
-                    'share_price' => '27',
-                    'share_user_name' => '平凡的世界',
-                    'share_vote' => 1000,
-                    'share_user_id' => 801447,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/8014471448421852.png'
-                ),
+//                '1436' => array(
+//                    'share_id' => 1436,
+//                    'share_name' => '老舅家的沙窝萝卜--脆绿嫩',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/8d917876cee_1216.jpg',
+//                    'share_price' => '27',
+//                    'share_user_name' => '平凡的世界',
+//                    'share_vote' => 1000,
+//                    'share_user_id' => 801447,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/8014471448421852.png'
+//                ),
                 '669' => array(
                     'share_id' => 669,
                     'share_name' => '忆味蕾，富平霜降柿饼重磅归来！',
