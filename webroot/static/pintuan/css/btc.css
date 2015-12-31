@@ -58,7 +58,6 @@ ul li { list-style: none; }
 .btc_operation a.fr{ background-color: #49bc6e;}
 .btc_operation a label.fl {
     padding-left: 10px;
-    font-size: 1.1em;
 }
 .btc_operation a label.fr{ padding-right: 10px;}
 .btc_countdown{ background-color: #ffffff; position: absolute; left: 50%; margin-left: -70px; bottom: -10px; color: #999999; line-height: 20px;}
@@ -130,7 +129,7 @@ ul li { list-style: none; }
     display: block;
     width: 50%;
     height: 44px;
-    font-size: 1.2em;
+    font-size: 1.4em;
     color: #ffffff;
     line-height: 44px;
     text-align: center;
