@@ -1643,15 +1643,15 @@ class ShareUtilComponent extends Component {
     public function get_share_index_product($tag) {
         $product = array(
             0 => array(
-                '669' => array(
-                    'share_id' => 669,
+                '1804' => array(
+                    'share_id' => 1804,
                     'share_name' => '忆味蕾，富平霜降柿饼重磅归来！',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/57a0c994217_1229.jpg',
                     'share_price' => '28',
-                    'share_user_name' => 'glcfarm',
+                    'share_user_name' => '暮云春树',
                     'share_vote' => 1000,
-                    'share_user_id' => 433224,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_e370e2e71308d0c78c1f22ff4f6aabca.jpg'
+                    'share_user_id' => 65133,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/651331449722805.png'
                 ),
                 '1612' => array(
                     'share_id' => 1612,
@@ -1672,6 +1672,16 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 600,
                     'share_user_id' => 897,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201501/thumb_m/fd70e550e19_0122.jpg'
+                ),
+                '1514' => array(
+                    'share_id' => 1514,
+                    'share_name' => '越南草虾 来自越南深海的美味【北京包邮】',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/c821647039e_1231.jpg',
+                    'share_price' => '175',
+                    'share_user_name' => '杨晓光',
+                    'share_vote' => 2000,
+                    'share_user_id' => 141,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg'
                 ),
                 '1745' => array(
                     'share_id' => 1745,
@@ -2002,6 +2012,16 @@ class ShareUtilComponent extends Component {
                 ),
             ),
             2 => array(
+                '1576' => array(
+                    'share_id' => 1576,
+                    'share_name' => '天然、无添加、低胆固醇的抗癌之王—乌鸡蛋',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/a8f7f789c13_1231.jpg',
+                    'share_price' => '60',
+                    'share_user_name' => '三朵',
+                    'share_vote' => 1000,
+                    'share_user_id' => 882638,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/8826381448681480.png'
+                ),
                 '1506' => array(
                     'share_id' => 1506,
                     'share_name' => '越南黑虎虾仁 【纯野生虾仁】',
