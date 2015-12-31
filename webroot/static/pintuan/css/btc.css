@@ -46,11 +46,16 @@ ul li { list-style: none; }
 }
 .btc_operation,.btc_invitation{ position: fixed; bottom: 0; width: 100%;}
 .btc_operation a{ display: block; width: 50%; height: 44px; font-size: 13px; color: #ffffff; line-height: 44px;}
-.btc_operation a label{display: block;}
-.btc_operation a label span{ font-size: 18px;}
+.btc_operation a label{display: block; font-weight: bold;}
+.btc_operation a label span {
+    font-size: 1.4em;
+}
 .btc_operation a.fl{ background-color: #f99d3a;}
 .btc_operation a.fr{ background-color: #49bc6e;}
-.btc_operation a label.fl{ padding-left: 10px;}
+.btc_operation a label.fl {
+    padding-left: 10px;
+    font-size: 1.1em;
+}
 .btc_operation a label.fr{ padding-right: 10px;}
 .btc_countdown{ background-color: #ffffff; position: absolute; left: 50%; margin-left: -70px; bottom: -10px; color: #999999; line-height: 20px;}
 .btc_countdown ul{ padding: 0 5px; width: 140px;}
@@ -87,7 +92,7 @@ ul li { list-style: none; }
     color: #999999;
     font-size: 1.05em;
 }
-.btc_good_money ul li.fr{ position: absolute; top: 12px; right:10px; font-size: 14px; color: #f99d3a;}
+.btc_good_money ul li.fr{ position: absolute; top: 10px; right:10px; font-size: 14px; color: #f99d3a;}
 .btc_money_total {
     color: #666666;
     text-align: right;
@@ -116,7 +121,7 @@ ul li { list-style: none; }
     font-size: 1.05em;
 }
 .btc_pay{ position: fixed; bottom: 0; width: 100%;}
-.btc_pay a{font-size: 1.1em; display: block; width: 50%; height: 44px; font-size: 13px; color: #ffffff; line-height: 44px; text-align: center; text-decoration: none;}
+.btc_pay a{ display: block; width: 50%; height: 44px; font-size: 13px; color: #ffffff; line-height: 44px; text-align: center; text-decoration: none; font-weight: bold;}
 .btc_pay a.fl{ background-color: #49bc6e;}
 .btc_pay a.fr{ background-color: #f99d3a;}
 
@@ -143,8 +148,8 @@ ul li { list-style: none; }
 }
 .btc_rule_bg{ background-color: #f9f9f9; padding: 15px;}
 .btc_rule_bg span{ display: block; padding-bottom: 15px; line-height: 20px; color: #666666;}
-.btc_logo{ padding-top: 20px; width: 60px; margin: 0 auto; margin-bottom: 65px;}
-.btc_logo img{ width: 60px; height: 25px;}
+.btc_logo{ padding-top: 20px; width: 73px; margin: 0 auto; margin-bottom: 65px;}
+.btc_logo img{ width: 73px; height: 25px;}
 
 
 
