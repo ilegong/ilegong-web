@@ -16,7 +16,12 @@ ul li { list-style: none; }
 .btc_head img{ width: 75px; border-radius: 75px; border: 1px #ffffff solid; position: absolute; margin-top: -37px; margin-left: 50%; left: -37px;}
 .btc_title{ text-align: center; color: #999999; line-height: 20px; padding: 50px 0 20px 0; border-bottom: 1px #eeeeee solid; margin-bottom: 20px;}
 .btc_title h1{ font-size: 18px; color: #f99d3a;}
-.btc_baoming{ text-align: center; border-bottom: 1px #eeeeee solid; position: relative;}
+.btc_baoming {
+    text-align: center;
+    border-bottom: 1px #eeeeee solid;
+    position: relative;
+    padding-bottom: 20px;
+}
 .btc_baoming label {
     color: #999999;
     line-height: 20px;
@@ -24,7 +29,11 @@ ul li { list-style: none; }
 }
 .btc_title label{font-size: 1.1em;}
 .btc_baoming label a{ color: #49bc6e; text-decoration: underline;}
-.btc_baoming ul{ width: 120px; margin: 0 auto; padding-bottom: 20px; padding-top: 10px;}
+.btc_baoming ul {
+    width: 120px;
+    margin: 0 auto;
+    padding-top: 10px;
+}
 .btc_baoming img{ width: 50px; border-radius: 50px;}
 .btc_status img {
     width: 75px;
@@ -61,7 +70,7 @@ ul li { list-style: none; }
     margin-right: 10px;
     border-radius: 4px;
 }
-.btc_pic{ margin-bottom: 55px; padding-top: 20px;}
+.btc_pic{ padding-top: 20px;}
 .btc_pic img{ width: 100%; border: 0; margin-top: -3px;}
 
 /*layer*/
