@@ -11,7 +11,7 @@ class ShareController extends AppController {
     var $name = 'Share';
 
     var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User',
-        'OrderConsignees', 'WeshareShipSetting', 'OfflineStore', 'Oauthbind', 'Comment', 'RefundLog', 'PayNotify', 'RebateTrackLog', 'PayLog');
+        'OrderConsignees', 'WeshareShipSetting', 'OfflineStore', 'Oauthbind', 'Comment', 'RefundLog', 'PayNotify', 'RebateTrackLog', 'PayLog', 'PintuanTag');
 
     var $components = array('Weixin');
 
@@ -506,6 +506,7 @@ class ShareController extends AppController {
             foreach ($orders as $order) {
                 $total_price += $order['Order']['total_all_price'];
             }
+            $order_group_ids = array_unique(Hash::extract($orders, '{n}.Order.group_id'));
             $order_ids = Hash::extract($orders, '{n}.Order.id');
             $parent_order_ids = Hash::extract($orders, '{n}.Order.parent_order_id');
             $member_ids = Hash::extract($orders, '{n}.Order.member_id');
@@ -573,6 +574,13 @@ class ShareController extends AppController {
                 $order_cart_map[$order_id][] = $item['Cart'];
             }
             $summery_result = array('order_count' => count($orders), 'total_all_price' => $total_price);
+            $pintuan_tags = $this->PintuanTag->find('all', array(
+                'conditions' => array(
+                    'id' => $order_group_ids
+                )
+            ));
+            $pintuan_tags = Hash::combine($pintuan_tags, '{n}.PintuanTag.id', '{n}.PintuanTag');
+            $this->set('pintuan_tags', $pintuan_tags);
             $this->set('summery', $summery_result);
             $this->set('refund_logs', $refundLogs);
             $this->set('orders', $orders);
@@ -584,6 +592,7 @@ class ShareController extends AppController {
             $this->set('rebate_logs', $rebateLogs);
         }
     }
+
 
     public function admin_warn_orders() {
         if (!$_REQUEST['start_date']) {
@@ -788,6 +797,7 @@ class ShareController extends AppController {
         $this->set('products', $products);
     }
 
+
     public function admin_share_orders() {
         $query_date = date('Y-m-d');
         $start_date = $query_date;
@@ -798,9 +808,12 @@ class ShareController extends AppController {
         if ($_REQUEST['end_date']) {
             $end_date = $_REQUEST['end_date'];
         }
-        $cond = array(
-            'type' => 9,
-        );
+        $cond = array();
+        if($_REQUEST['order_type'] == 0){
+            $cond['type'] = array(9,12);
+        }else{
+            $cond['type'] = $_REQUEST['type'];
+        }
         $request_order_id = $_REQUEST['order_id'];
         if ($_REQUEST['share_id']) {
             $query_share_id = $_REQUEST['share_id'];
