@@ -16,7 +16,7 @@ class PintuanConfig extends AppModel {
             'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/banner.jpg',
             'sharer_id' => '633345',
             'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/6333451445516765.png',
-            'share_title' => '越南红心火龙果 4个装',
+            'share_title' => '越南红心火龙果 4个装 4.5斤左右',
             'wx_title' => '[和你一起立省5元] 越南红心火龙果 4个49元，愣愣邀你吃',
             'wx_desc' => '品质棒棒嗒，好吃的要分享给大家一起吃，朋友说—朋友间分享优质美食的平台！',
             'share_label' => '来自［愣愣］的分享',
