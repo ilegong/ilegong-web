@@ -74,6 +74,7 @@ ul li { list-style: none; }
     background-color: #f99d3a;
     margin-right: 10px;
     border-radius: 4px;
+    font-weight: bold;
 }
 .btc_pic{ padding-top: 20px;}
 .btc_pic img{ width: 100%; border: 0; margin-top: -3px;}
