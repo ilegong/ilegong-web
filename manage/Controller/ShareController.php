@@ -812,7 +812,7 @@ class ShareController extends AppController {
         if($_REQUEST['order_type'] == 0){
             $cond['type'] = array(9,12);
         }else{
-            $cond['type'] = $_REQUEST['type'];
+            $cond['type'] = $_REQUEST['order_type'];
         }
         $request_order_id = $_REQUEST['order_id'];
         if ($_REQUEST['share_id']) {
