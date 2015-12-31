@@ -37,10 +37,10 @@ class PintuanController extends AppController {
             if ($tag['PintuanTag']['status'] == PIN_TUAN_TAG_PROGRESS_STATUS) {
                 $wx_desc = '【就差你1个啦】' . $wx_desc;
                 if ($tag['PintuanTag']['creator'] == $uid) {
-                    $wx_title = '我报名了“[一起省5元]越南红心火龙果4个49元”  !';
+                    $wx_title = '我报名了“【一起省5元】越南红心火龙果4个49元”';
                 } else {
                     $user_nickname = $this->User->findNicknamesOfUid($tag['PintuanTag']['creator']);
-                    $wx_title = $user_nickname . '报名了“[一起省5元]越南红心火龙果4个49元”  !';
+                    $wx_title = $user_nickname . '报名了“【一起省5元】越南红心火龙果4个49元”';
                 }
             }
         }
