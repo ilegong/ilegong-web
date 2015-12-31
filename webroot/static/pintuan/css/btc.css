@@ -122,7 +122,17 @@ ul li { list-style: none; }
     font-size: 1.05em;
 }
 .btc_pay{ position: fixed; bottom: 0; width: 100%;}
-.btc_pay a{ display: block; width: 50%; height: 44px; font-size: 13px; color: #ffffff; line-height: 44px; text-align: center; text-decoration: none; font-weight: bold;}
+.btc_pay a {
+    display: block;
+    width: 50%;
+    height: 44px;
+    font-size: 1.1em;
+    color: #ffffff;
+    line-height: 44px;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+}
 .btc_pay a.fl{ background-color: #49bc6e;}
 .btc_pay a.fr{ background-color: #f99d3a;}
 
