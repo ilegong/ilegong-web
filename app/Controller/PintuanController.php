@@ -33,7 +33,7 @@ class PintuanController extends AppController {
             $this->set('tag_id', $tag_id);
             $tag = $this->get_pintuan_tag($tag_id);
             $this->set('tag', $tag);
-            if ($tag['PintuanTag']['status'] == PIN_TUAN_TAG_PROGRESS_STATUS && $tag['PintuanTag']['creator'] == $uid) {
+            if ($tag['PintuanTag']['status'] == PIN_TUAN_TAG_PROGRESS_STATUS) {
                 if ($tag['PintuanTag']['creator'] == $uid) {
                     $wx_title = '我报名了“[和你一起立省5元] 越南红心火龙果 4个49元”，就差你一个啦  !';
                 } else {
