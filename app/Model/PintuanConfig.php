@@ -44,7 +44,58 @@ class PintuanConfig extends AppModel {
                 'pintuan_price' => 49,
                 'name' => '越南红心火龙果 4个装'
             )
-        )
+        ),
+        1826 => array(
+            'share_id' => '1826',
+            'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/banner.jpg',
+            'sharer_id' => '806889',
+            'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg',
+            'share_title' => '越南红心火龙果 4个装 4.5斤左右',
+            'wx_title' => '[和你一起立省5元] 越南红心火龙果 4个49元，鲲鲲邀你吃',
+            'wx_desc' => '品质棒棒嗒，好吃的要分享给大家一起吃--朋友说',
+            'share_label' => '来自［鲲鲲］的分享',
+            'limit_time' => 24,
+            'product' => array(
+                'id' => 3868,
+                'normal_price' => 54,
+                'pintuan_price' => 49,
+                'name' => '越南红心火龙果 4个装'
+            )
+        ),
+        1827 => array(
+            'share_id' => '1827',
+            'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/banner.jpg',
+            'sharer_id' => '811917',
+            'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg',
+            'share_title' => '越南红心火龙果 4个装 4.5斤左右',
+            'wx_title' => '[和你一起立省5元] 越南红心火龙果 4个49元，小宝妈邀你吃',
+            'wx_desc' => '品质棒棒嗒，好吃的要分享给大家一起吃--朋友说',
+            'share_label' => '来自［小宝妈］的分享',
+            'limit_time' => 24,
+            'product' => array(
+                'id' => 3869,
+                'normal_price' => 54,
+                'pintuan_price' => 49,
+                'name' => '越南红心火龙果 4个装'
+            )
+        ),
+        1828 => array(
+            'share_id' => '1828',
+            'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/banner.jpg',
+            'sharer_id' => '811917',
+            'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg',
+            'share_title' => '越南红心火龙果 4个装 4.5斤左右',
+            'wx_title' => '[和你一起立省5元] 越南红心火龙果 4个49元，李樱花邀你吃',
+            'wx_desc' => '品质棒棒嗒，好吃的要分享给大家一起吃--朋友说',
+            'share_label' => '来自［李樱花］的分享',
+            'limit_time' => 24,
+            'product' => array(
+                'id' => 3870,
+                'normal_price' => 54,
+                'pintuan_price' => 49,
+                'name' => '越南红心火龙果 4个装'
+            )
+        ),
     );
 
     public function get_conf_data($share_id) {
