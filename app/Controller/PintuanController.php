@@ -29,16 +29,18 @@ class PintuanController extends AppController {
         $conf = $this->get_pintuan_conf($share_id);
         $tag_id = $_REQUEST['tag_id'];
         $wx_title = $conf['wx_title'];
+        $wx_desc = $conf['wx_desc'];
         if (!empty($tag_id)) {
             $this->set('tag_id', $tag_id);
             $tag = $this->get_pintuan_tag($tag_id);
             $this->set('tag', $tag);
             if ($tag['PintuanTag']['status'] == PIN_TUAN_TAG_PROGRESS_STATUS) {
+                $wx_desc = '就差你1个啦！' . $wx_desc;
                 if ($tag['PintuanTag']['creator'] == $uid) {
-                    $wx_title = '我报名了“[和你一起立省5元] 越南红心火龙果 4个49元”，就差你一个啦  !';
+                    $wx_title = '我报名了“[和你一起立省5元] 越南红心火龙果 4个49元”  !';
                 } else {
                     $user_nickname = $this->User->findNicknamesOfUid($tag['PintuanTag']['creator']);
-                    $wx_title = $user_nickname . '报名了“[和你一起立省5元] 越南红心火龙果 4个49元”，就差你一个啦  !';
+                    $wx_title = $user_nickname . '报名了“[和你一起立省5元] 越南红心火龙果 4个49元”  !';
                 }
             }
         }
@@ -49,7 +51,7 @@ class PintuanController extends AppController {
         $this->set('share_id', $share_id);
         $this->set('conf', $conf);
         $this->set('records', $records);
-        $this->set_share_weixin_params($uid, $wx_title, $conf['banner_img'], $conf['wx_desc']);
+        $this->set_share_weixin_params($uid, $wx_title, $conf['banner_img'], $wx_desc);
     }
 
     /**
