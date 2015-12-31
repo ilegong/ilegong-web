@@ -126,6 +126,11 @@ class PintuanHelperComponent extends Component {
         return $tags;
     }
 
+    public function cron_change_tag_status(){
+        $PintuanTagM = ClassRegistry::init('PintuanTag');
+        $expire_date  = date('Y-m-d H:i:s', strtotime('-1 day'));
+    }
+
     public function save_pintuan_record($record) {
         $PintuanRecordM = ClassRegistry::init('PintuanRecord');
         $PintuanRecordM->save($record);

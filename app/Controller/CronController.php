@@ -17,6 +17,7 @@ class CronController extends AppController
 
 
 
+
     function send_weshare_order_to_comment_msg($weshareId = null) {
         $this->autoRender = false;
         $this->WeshareBuy->send_to_comment_msg($weshareId);
