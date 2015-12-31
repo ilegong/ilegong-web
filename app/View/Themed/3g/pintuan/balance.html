@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0, minimal-ui">
     <meta charset="UTF-8">
     <title>{{$conf['share_label']}}</title>
-    {{$this->Html->css(array($STATIC_FILE_PATH.'/static/pintuan/css/btc.css?v0.01'))}}
+    {{$this->Html->css(array($STATIC_FILE_PATH.'/static/pintuan/css/btc.css?v0.02'))}}
 </head>
 <body style="background-color: #f9f9f9;">
 <div class="btc_good_money">
@@ -26,6 +26,7 @@
     <div><input name="consigneeMobile" id="consigneeMobile" type="text" placeholder="输入联系电话" value="{{$consignee['OrderConsignee']['mobilephone']}}"></div>
     <div><textarea id="businessRemark" placeholder="备注"></textarea></div>
 </div>
+<div class="btc_logo"><img src="{{$STATIC_FILE_PATH}}/static/pintuan/images/logo.png" /></div>
 <div class="btc_pay">
     <a href="#X" class="fl" id="wx-pay">微信支付</a>
     <a href="#X" class="fr" id="ali-pay">支付宝支付</a>

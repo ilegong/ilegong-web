@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
     <meta charset="UTF-8">
     <title>{{$conf['share_label']}}</title>
-    {{$this->Html->css(array($STATIC_FILE_PATH.'/static/pintuan/css/btc.css?v0.01'))}}
+    {{$this->Html->css(array($STATIC_FILE_PATH.'/static/pintuan/css/btc.css?v0.02'))}}
     <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 <body>
@@ -48,6 +48,7 @@
     {{/if}}
 </div>
 <div class="btc_pic"><div><img src="{{$STATIC_FILE_PATH}}/static/pintuan/images/detail01.jpg" /></div><div><img src="{{$STATIC_FILE_PATH}}/static/pintuan/images/detail02.jpg" /></div><div><img src="{{$STATIC_FILE_PATH}}/static/pintuan/images/detail03.jpg" /></div></div>
+<div class="btc_logo"><img src="{{$STATIC_FILE_PATH}}/static/pintuan/images/logo.png" /></div>
 {{if empty($tag_id) || ($tag['PintuanTag']['status'] != PIN_TUAN_TAG_PROGRESS_STATUS)}}
 <!--报名-->
 <div class="btc_operation">
