@@ -129,7 +129,7 @@ class ShareController extends AppController {
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_1', '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_0', '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
-        foreach($order_user_ids as $uid){
+        foreach ($order_user_ids as $uid) {
             Cache::write(USER_SHARE_ORDER_INFO_CACHE_KEY . '_' . $weshare_id . '_' . $uid, '');
         }
         echo json_encode(array('success' => true));
@@ -137,7 +137,33 @@ class ShareController extends AppController {
 
     public function admin_set_share_paid($shareId) {
         $this->Weshare->updateAll(array('settlement' => 1), array('id' => $shareId, 'status' => array(1, 2)));
+        $this->send_share_paid_msg($shareId);
         $this->redirect(array('action' => 'admin_share_for_pay'));
+    }
+
+    private function send_share_paid_msg($shareId) {
+        $fee = $_REQUEST['fee'];
+        if($fee > 0) {
+            $OauthbindM = ClassRegistry::init('Oauthbind');
+            $weshareM = ClassRegistry::init('Weshare');
+            $weshare = $weshareM->find('first', array(
+                'conditions' => array(
+                    'id' => $shareId
+                ),
+                'fields' => array('id', 'creator', 'title')
+            ));
+            $userOauthBinds = $OauthbindM->find('first', array(
+                'conditions' => array(
+                    'user_id' => $weshare['Weshare']['creator']
+                ),
+                'fields' => array('user_id', 'oauth_openid')
+            ));
+            $user_open_id = $userOauthBinds['Oauthbind']['oauth_openid'];
+            $detail_url = WX_HOST . '/weshares/view/' . $shareId;
+            $title = '您的编号为' . $shareId . '的分享已经结款';
+            $desc = '一共结款' . $fee . '元';
+            $this->Weixin->send_share_paid_msg($user_open_id, $detail_url, $title, $desc);
+        }
     }
 
     /**
@@ -147,7 +173,7 @@ class ShareController extends AppController {
     private function reduce_weshares($weshares) {
         $remove_keys = array();
         foreach ($weshares as $share_id => $share_item) {
-            if($share_item['type'] == 1){
+            if ($share_item['type'] == 1) {
                 $refer_share_id = $share_item['refer_share_id'];
                 $parent_share = $weshares[$refer_share_id];
                 if (!empty($parent_share)) {
@@ -161,7 +187,7 @@ class ShareController extends AppController {
         }
         //remove single child share
         foreach ($weshares as $share_id => $share_item) {
-            if($share_item['type'] == 1){
+            if ($share_item['type'] == 1) {
                 if (!empty($share_item['refer_share_id'])) {
                     $remove_keys[] = $share_id;
                 }
@@ -499,7 +525,7 @@ class ShareController extends AppController {
         $this->set('share_product_map', $share_product_map);
     }
 
-    private function handle_query_orders($order_query_condition){
+    private function handle_query_orders($order_query_condition) {
         $orders = $this->Order->find('all', $order_query_condition);
         $total_price = 0;
         if (!empty($orders)) {
@@ -619,15 +645,14 @@ class ShareController extends AppController {
 
     public function admin_share_orders_export() {
         $share_id = $_REQUEST['share_id'];
-        if(!empty($share_id)){
+        if (!empty($share_id)) {
             $conditions = array('Order.member_id' => $share_id, 'Order.type' => ORDER_TYPE_WESHARE_BUY, 'Order.status' => ORDER_STATUS_PAID);
             $this->_query_orders($conditions, 'Order.created DESC');
             $this->set('share_id', $share_id);
         }
     }
 
-    public function _query_orders($conditions, $order_by, $limit = null)
-    {
+    public function _query_orders($conditions, $order_by, $limit = null) {
         $this->PayNotify->query("update cake_pay_notifies set order_id =  substring_index(substring_index(out_trade_no,'-',2),'-',-1) where status = 6 and order_id is NULL and type=0");
         $join_conditions = array(
             array(
@@ -770,7 +795,7 @@ class ShareController extends AppController {
 
         $weshare_addresses = array();
         $weshare_address_ids = array_filter(array_unique(Hash::extract($ziti_orders, "{n}.Order.consignee_id")));
-        if(!empty($weshare_address_ids)){
+        if (!empty($weshare_address_ids)) {
             $weshare_addresses = $this->WeshareAddress->find('all', array(
                 'conditions' => array(
                     'id' => $weshare_address_ids
@@ -809,9 +834,9 @@ class ShareController extends AppController {
             $end_date = $_REQUEST['end_date'];
         }
         $cond = array();
-        if($_REQUEST['order_type'] == 0){
-            $cond['type'] = array(9,12);
-        }else{
+        if ($_REQUEST['order_type'] == 0) {
+            $cond['type'] = array(9, 12);
+        } else {
             $cond['type'] = $_REQUEST['order_type'];
         }
         $request_order_id = $_REQUEST['order_id'];
