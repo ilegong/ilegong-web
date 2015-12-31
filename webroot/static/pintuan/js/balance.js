@@ -34,11 +34,20 @@ $(document).ready(function () {
       alert('请输入收件人联系方式');
       return false;
     }
+    if(!valid_mobile(consignee_mobilephone)){
+      alert('输入正确的联系方式');
+      return false;
+    }
     if (!consignee_name.trim()) {
       alert('请输入收件人名称');
       return false;
     }
     return true;
+  }
+
+  function valid_mobile(mobilephone){
+    var reg = /((\d{11})|^((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1}))$)/;
+    return reg.test(mobilephone);
   }
 
   function triggerMakeOrder(payType) {
