@@ -13,10 +13,14 @@ class CronController extends AppController
 
     public $uses = array('CouponItem');
 
-    public $components = array('Weixin','WeshareBuy', 'ShareUtil');
+    public $components = array('Weixin','WeshareBuy', 'ShareUtil', 'PintuanHelper');
 
-
-
+    function cron_update_pintuan_tag_status(){
+        $this->autoRender = false;
+        $this->PintuanHelper->cron_change_tag_status();
+        echo json_encode(array('success' => true));
+        return;
+    }
 
     function send_weshare_order_to_comment_msg($weshareId = null) {
         $this->autoRender = false;
