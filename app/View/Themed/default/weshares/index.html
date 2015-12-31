@@ -24,9 +24,10 @@
     <div class="listings-container">
         {{loop $products $product}}
         <?php
-            $product_detail_url = '/weshares/view/'.$product['share_id'];
-            if($product['share_id']==438){
-               $product_detail_url = $product_detail_url . '?shared_offer_id=19877';
+            if($product['pintuan']){
+                $product_detail_url = '/pintuan/detail/'.$product['share_id'];
+            }else{
+                $product_detail_url = '/weshares/view/'.$product['share_id'];
             }
         ?>
         <div class="row">

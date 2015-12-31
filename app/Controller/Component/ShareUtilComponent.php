@@ -1643,6 +1643,17 @@ class ShareUtilComponent extends Component {
     public function get_share_index_product($tag) {
         $product = array(
             0 => array(
+                '1825' => array(
+                    'share_id' => 1825,
+                    'share_name' => '越南红心火龙果 4个装 4.5斤左右',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/eb50a0838ce_1231.jpg',
+                    'share_price' => '49',
+                    'share_user_name' => '杨晓光',
+                    'share_vote' => 2000,
+                    'share_user_id' => 141,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg',
+                    'pintuan' => true
+                ),
                 '1804' => array(
                     'share_id' => 1804,
                     'share_name' => '忆味蕾，富平霜降柿饼重磅归来！',
