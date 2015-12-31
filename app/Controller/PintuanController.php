@@ -10,7 +10,7 @@ class PintuanController extends AppController {
 
     var $name = 'pintuan';
 
-    var $uses = array('OrderConsignee');
+    var $uses = array('OrderConsignee', 'User');
 
     var $components = array('PintuanHelper');
 
@@ -34,7 +34,12 @@ class PintuanController extends AppController {
             $tag = $this->get_pintuan_tag($tag_id);
             $this->set('tag', $tag);
             if ($tag['PintuanTag']['status'] == PIN_TUAN_TAG_PROGRESS_STATUS && $tag['PintuanTag']['creator'] == $uid) {
-                $wx_title = '我报名了“[和你一起立省5元] 越南红心火龙果 4个49元”，就差你一个啦  !';
+                if ($tag['PintuanTag']['creator'] == $uid) {
+                    $wx_title = '我报名了“[和你一起立省5元] 越南红心火龙果 4个49元”，就差你一个啦  !';
+                } else {
+                    $user_nickname = $this->User->findNicknamesOfUid($tag['PintuanTag']['creator']);
+                    $wx_title = $user_nickname . '报名了“[和你一起立省5元] 越南红心火龙果 4个49元”，就差你一个啦  !';
+                }
             }
         }
         $records = $this->PintuanHelper->get_pintuan_records($tag_id);
@@ -83,7 +88,7 @@ class PintuanController extends AppController {
             }
             $tag = $this->get_pintuan_tag($tag_id);
             //valid tag
-            if($tag['PintuanTag']['status'] == PIN_TUAN_TAG_EXPIRE_STATUS){
+            if ($tag['PintuanTag']['status'] == PIN_TUAN_TAG_EXPIRE_STATUS) {
                 echo json_encode(array('success' => false, 'reason' => 'tag_error'));
                 return;
             }
