@@ -860,6 +860,7 @@ class ShareController extends AppController {
         $this->set('share_id', $query_share_id);
         $this->set('order_status', $order_status);
         $this->set('order_id', $request_order_id);
+        $this->set('order_type', $_REQUEST['order_type']);
     }
 
     private function get_random_item($items) {
