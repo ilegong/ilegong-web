@@ -158,7 +158,7 @@
                     ?>
             {{loop $current_order_carts $cart}}
             <tr data-id="{{$current_order['id']}}" {{if $current_order['type'] == 12}}class="danger"{{/if}}>
-                <td>{{$current_order['id']}} {{if $current_order['type'] == 12}}{{if $pintuan_tags[$current_order['group_id']]['status']==PIN_TUAN_TAG_EXPIRE_STATUS}}<font style="color: red;">拼团失败</font>{{/if}}{{/if}}</td>
+                <td>{{$current_order['id']}} {{if $current_order['type'] == 12}}{{if $pintuan_tags[$current_order['group_id']]['status']==PIN_TUAN_TAG_EXPIRE_STATUS}}<br><font style="color: red;">拼团失败</font>{{/if}}{{/if}}</td>
                 <td>{{$current_order['creator']}}</td>
                 <td>{{$all_users[$current_order['creator']]['nickname']}}</td>
                 <td>{{$current_order['consignee_name']}}</td>
