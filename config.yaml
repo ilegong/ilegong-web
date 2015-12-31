@@ -23,7 +23,7 @@ cron:
       url: /cron/change_share_order_status_and_send_msg
       schedule: 0 12 * * *
       timezone: Beijing
-#    - description: notify group share percent
-#      url: /task/notify_user_group_share_state
-#      schedule: 0 8 * * *
-#      timezone: Beijing
+    - description: notify group share percent
+      url: /cron/cron_update_pintuan_tag_status
+      schedule: 0 */4 * * *
+      timezone: Beijing
