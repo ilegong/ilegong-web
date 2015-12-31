@@ -10,6 +10,8 @@ class PintuanController extends AppController {
 
     var $name = 'pintuan';
 
+    var $uses = array('OrderConsignee');
+
     var $components = array('PintuanHelper');
 
     var $pin_tuan_config = array();
@@ -95,7 +97,7 @@ class PintuanController extends AppController {
                 return;
             }
         }
-        $order_data = $this->init_order_data();
+        $order_data = $this->init_order_data($uid);
         $order_data['creator'] = $uid;
         $order_data['created'] = $now_date;
         $order_data['updated'] = $now_date;
@@ -153,15 +155,17 @@ class PintuanController extends AppController {
     }
 
     /**
+     * @param $uid
      * @return array
      * 初始化订单数据
      */
-    private function init_order_data() {
+    private function init_order_data($uid) {
         $consignee_address = $_REQUEST['consignee_address'];
         $consignee_mobilephone = $_REQUEST['consignee_mobilephone'];
         $business_remark = $_REQUEST['business_remark'];
         $consignee_name = $_REQUEST['consignee_name'];
         $order_data = array('consignee_address' => $consignee_address, 'type' => ORDER_TYPE_PIN_TUAN, 'consignee_name' => $consignee_name, 'consignee_mobilephone' => $consignee_mobilephone, 'business_remark' => $business_remark, 'ship_mark' => SHARE_SHIP_KUAIDI_TAG);
+        $this->setPintuanConsignees($consignee_name, $consignee_mobilephone, $consignee_address, $uid);
         return $order_data;
     }
 
@@ -170,6 +174,7 @@ class PintuanController extends AppController {
      * 结算页面
      */
     public function balance($share_id) {
+        $uid = $this->currentUser['id'];
         $tag_id = $_REQUEST['tag_id'];
         $conf = $this->get_pintuan_conf($share_id);
         $price = $conf['product']['normal_price'];
@@ -189,10 +194,11 @@ class PintuanController extends AppController {
             $this->set('tag_id', $tag_id);
             $price = $conf['product']['pintuan_price'];
         }
+        $consignee = $this->getPintuanConsignees($uid);
+        $this->set('consignee', $consignee);
         $this->set('price', $price);
         $this->set('conf', $conf);
         $this->set('share_id', $share_id);
-
     }
 
     private function get_pintuan_tag($tag_id) {
@@ -233,6 +239,48 @@ class PintuanController extends AppController {
             $this->set('image', $image);
             $this->set('desc', $desc);
         }
+    }
+
+
+    /**
+     * @param $userInfo
+     * @param $mobileNum
+     * @param $address
+     * @param $uid
+     * 记住用户填写的地址
+     */
+    private function setPintuanConsignees($userInfo, $mobileNum, $address, $uid) {
+        $consignee = $this->OrderConsignee->find('first', array(
+            'conditions' => array(
+                'creator' => $uid,
+                'status' => STATUS_CONSIGNEES_PINTUAN
+            ),
+            'fields' => array('id', 'name', 'mobilephone', 'address')
+        ));
+        if (!empty($consignee)) {
+            //update
+            $saveData = array('name' => "'" . $userInfo . "'", 'mobilephone' => "'" . $mobileNum . "'", 'address' => "'" . $address . "'");
+            $this->OrderConsignee->updateAll($saveData, array('id' => $consignee['OrderConsignees']['id']));
+            return;
+        }
+        //save
+        $this->OrderConsignee->save(array('creator' => $uid, 'status' => STATUS_CONSIGNEES_PINTUAN, 'name' => $userInfo, 'mobilephone' => $mobileNum, 'address' => $address));
+    }
+
+    /**
+     * @param $uid
+     * @return mixed
+     * 获取拼团的地址
+     */
+    private function getPintuanConsignees($uid) {
+        $consignee = $this->OrderConsignee->find('first', array(
+            'conditions' => array(
+                'creator' => $uid,
+                'status' => STATUS_CONSIGNEES_PINTUAN
+            ),
+            'fields' => array('id', 'name', 'mobilephone', 'address')
+        ));
+        return $consignee;
     }
 
 }

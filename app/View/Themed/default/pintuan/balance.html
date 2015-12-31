@@ -21,9 +21,9 @@
     <input type="hidden" id="start" value="{{$start}}">
     <input type="hidden" id="tagId" value="{{$tag_id}}">
     <input type="hidden" id="shareId" value="{{$share_id}}">
-    <div><input name="consigneeAddress" id="consigneeAddress" type="text" placeholder="输入收货地址"></div>
-    <div><input name="consigneeName" id="consigneeName" type="text" placeholder="输入联系人姓名"></div>
-    <div><input name="consigneeMobile" id="consigneeMobile" type="text" placeholder="输入联系电话"></div>
+    <div><input name="consigneeAddress" id="consigneeAddress" type="text" placeholder="输入收货地址" value="{{$consignee['OrderConsignee']['address']}}"></div>
+    <div><input name="consigneeName" id="consigneeName" type="text" placeholder="输入联系人姓名" value="{{$consignee['OrderConsignee']['name']}}"></div>
+    <div><input name="consigneeMobile" id="consigneeMobile" type="text" placeholder="输入联系电话" value="{{$consignee['OrderConsignee']['mobilephone']}}"></div>
     <div><textarea id="businessRemark" placeholder="备注"></textarea></div>
 </div>
 <div class="btc_pay">
