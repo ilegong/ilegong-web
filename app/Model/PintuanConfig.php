@@ -96,6 +96,23 @@ class PintuanConfig extends AppModel {
                 'name' => '越南红心火龙果 4个装'
             )
         ),
+        1831 => array(
+            'share_id' => '1831',
+            'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/banner.jpg',
+            'sharer_id' => '878825',
+            'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_52d08a7c8bb6e9611307b6c4858ca38c.jpg',
+            'share_title' => '越南红心火龙果 4个装 4.5斤左右',
+            'wx_title' => '[和你一起立省5元] 越南红心火龙果 4个49元，片片妈邀你吃',
+            'wx_desc' => '品质棒棒嗒，好吃的要分享给大家一起吃--朋友说',
+            'share_label' => '来自［片片妈］的分享',
+            'limit_time' => 24,
+            'product' => array(
+                'id' => 3875,
+                'normal_price' => 54,
+                'pintuan_price' => 49,
+                'name' => '越南红心火龙果 4个装'
+            )
+        ),
     );
 
     public function get_conf_data($share_id) {
