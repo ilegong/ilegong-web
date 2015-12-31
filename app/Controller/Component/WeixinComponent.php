@@ -919,11 +919,7 @@ class WeixinComponent extends Component {
         $creatorInfo = $userM->findById($weshare_info['Weshare']['creator']);
         $creatorNickName = $creatorInfo['User']['nickname'];
         $org_msg = "亲，您报名了" . $creatorNickName . "分享的" . $title;
-        if ($order['Order']['ship_mark'] == SHARE_SHIP_KUAIDI_TAG) {
-            $org_msg = $org_msg . '，请留意后续的发货通知。';
-        } else {
-            $org_msg = $org_msg . '，请留意当天的取货提醒哈。';
-        }
+        $org_msg = $org_msg . '，1月5日截止报名，1月6日统一发货。';//todo custom it
         $org_msg = $org_msg . $creatorNickName;
         $post_data = array(
             "touser" => $open_id,
