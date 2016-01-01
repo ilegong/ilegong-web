@@ -1654,15 +1654,15 @@ class ShareUtilComponent extends Component {
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg',
                     'pintuan' => true
                 ),
-                '1804' => array(
-                    'share_id' => 1804,
+                '669' => array(
+                    'share_id' => 669,
                     'share_name' => '忆味蕾，富平霜降柿饼重磅归来！',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/57a0c994217_1229.jpg',
                     'share_price' => '28',
-                    'share_user_name' => '暮云春树',
+                    'share_user_name' => 'glcfarm',
                     'share_vote' => 1000,
-                    'share_user_id' => 65133,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/651331449722805.png'
+                    'share_user_id' => 433224,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_e370e2e71308d0c78c1f22ff4f6aabca.jpg'
                 ),
                 '1612' => array(
                     'share_id' => 1612,
