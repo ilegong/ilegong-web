@@ -122,7 +122,7 @@
                     {{if !empty($authority_shares) && $is_me}}
                     <div class="tab-pane" id="tab_default_2">
                         <div class="comments-list">
-                            <?php $process_my_create_share = false; ?>
+                            <?php $process_my_create_share = false; $parsing_authority_shares = true; ?>
                             {{loop $authority_shares $share}}
                             {{template weshares/user_share_item_template}}
                             {{/loop}}

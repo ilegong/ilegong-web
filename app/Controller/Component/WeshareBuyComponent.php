@@ -235,13 +235,6 @@ class WeshareBuyComponent extends Component {
             ));
             $creatorIds = Hash::extract($myJoinShares, '{n}.Weshare.creator');
             $creatorIds[] = $uid;
-            $creators = $userM->find('all', array(
-                'conditions' => array(
-                    'id' => $creatorIds
-                ),
-                'fields' => $this->query_user_fileds
-            ));
-            $creators = Hash::combine($creators, '{n}.User.id', '{n}.User');
             $this->explode_share_imgs($myCreateShares);
             $this->explode_share_imgs($myJoinShares);
             //authority shares
@@ -268,12 +261,22 @@ class WeshareBuyComponent extends Component {
                     'fields' => $this->query_share_fields,
                     'order' => array('id' => 'desc')
                 ));
+                $authority_shares_creators = Hash::extract($authority_shares, '{n}.Weshare.creator');
+                $creatorIds = array_unique(array_merge($creatorIds, $authority_shares_creators));
 //                $share_operate_settings_result = array();
 //                foreach ($share_operate_settings as $share_operate_setting) {
 //                    $share_operate_settings_result[] = $share_operate_setting['ShareOperateSetting']['data_id'] . '-' . $share_operate_setting['ShareOperateSetting']['data_type'];
 //                }
             }
+
             $this->explode_share_imgs($authority_shares);
+            $creators = $userM->find('all', array(
+                'conditions' => array(
+                    'id' => $creatorIds
+                ),
+                'fields' => $this->query_user_fileds
+            ));
+            $creators = Hash::combine($creators, '{n}.User.id', '{n}.User');
             $user_share_data = array('authority_shares' => $authority_shares, 'creators' => $creators, 'my_create_share_ids' => $my_create_share_ids, 'joinShareOrderStatus' => $joinShareOrderStatus, 'myJoinShares' => $myJoinShares, 'myCreateShares' => $myCreateShares);
             Cache::write($key, json_encode($user_share_data));
             return $user_share_data;
