@@ -1766,8 +1766,8 @@ class ShareUtilComponent extends Component {
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
                 ),
                 //山药
-                '1742' => array(
-                    'share_id' => 1742,
+                '1885' => array(
+                    'share_id' => 1885,
                     'share_name' => '艳艳山药，自食&送礼，各取所需',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/9865c6196ae_1110.jpg',
                     'share_price' => '85',
