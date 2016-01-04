@@ -748,6 +748,27 @@ class ShareUtilComponent extends Component {
         }
     }
 
+    /**
+     * @param $user_id
+     * @param $share_id
+     * @param $tag_id
+     * 保存拼团成功的日志
+     */
+    public function save_pintuan_success_opt_log($user_id, $share_id, $tag_id) {
+        $pintuanConfigM = ClassRegistry::init('PintuanConfig');
+        $conf_data = $pintuanConfigM->get_conf_data($share_id);
+        $memo = $conf_data['share_title'];
+        $thumbnail = $conf_data['banner_img'];
+        $optData = array(
+            'user_id' => $user_id,
+            'obj_type' => OPT_LOG_PINTUAN_SUCCESS,
+            'obj_id' => $tag_id,
+            'created' => date('Y-m-d H:i:s'),
+            'memo' => $memo,
+            'thumbnail' => $thumbnail
+        );
+        $this->saveOptLog($optData);
+    }
 
     /**
      * @param $user_id
@@ -774,7 +795,7 @@ class ShareUtilComponent extends Component {
             'thumbnail' => $thumbnail
         );
         //me test account don't show
-        if($share_info['creator'] == 802852){
+        if ($share_info['creator'] == 802852) {
             $optData['deleted'] = DELETED_YES;
         }
         $this->saveOptLog($optData);
