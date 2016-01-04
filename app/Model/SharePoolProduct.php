@@ -101,6 +101,22 @@ class SharePoolProduct extends AppModel {
     //产品池所有产品
     var $products = array(
         array(
+            'share_id' => 1437,
+            'share_name' => '鲜活银耳【全国顺丰包邮】',
+            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/a1455b6560a_0104.jpg',
+            'brand_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_52d08a7c8bb6e9611307b6c4858ca38c.jpg',
+            'brand_name' => '片片妈',
+            'show_brand' => true,
+            'brand_custom_service' => 12376,
+            'published' => 1,
+            'products' => array(
+                '2916' => array(
+                    'price' => 108,
+                    'channel_price' => 98,
+                )
+            )
+        ),
+        array(
             'share_id' => 1703,
             'share_name' => '永兴冰糖橙【限北京】',
             'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/83862b90237_0104.jpg',
@@ -350,22 +366,6 @@ class SharePoolProduct extends AppModel {
                 '2904' => array(
                     'price' => 46,
                     'channel_price' => 40,
-                )
-            )
-        ),
-        array(
-            'share_id' => 1437,
-            'share_name' => '鲜活银耳【全国顺丰包邮】',
-            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/53d920db87f_1205.jpg',
-            'brand_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_52d08a7c8bb6e9611307b6c4858ca38c.jpg',
-            'brand_name' => '片片妈',
-            'show_brand' => true,
-            'brand_custom_service' => 12376,
-            'published' => 1,
-            'products' => array(
-                '2916' => array(
-                    'price' => 108,
-                    'channel_price' => 98,
                 )
             )
         ),
