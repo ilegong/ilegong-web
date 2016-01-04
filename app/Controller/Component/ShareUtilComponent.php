@@ -1787,8 +1787,8 @@ class ShareUtilComponent extends Component {
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg'
                 ),
                 //银耳
-                '1199' => array(
-                    'share_id' => 1199,
+                '1834' => array(
+                    'share_id' => 1834,
                     'share_name' => '鲜活银耳@"防霾佳品"【顺丰包邮】',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/f257f80229f_1110.jpg',
                     'share_price' => '108',
@@ -1982,8 +1982,8 @@ class ShareUtilComponent extends Component {
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/8cff05178a6_0807.jpg'
                 ),
                 //脐橙
-                '1697' => array(
-                    'share_id' => 1697,
+                '1829' => array(
+                    'share_id' => 1829,
                     'share_name' => '不打蜡不染色不催熟的赣南脐橙',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/9db396b550e_1110.jpg',
                     'share_price' => '49',
