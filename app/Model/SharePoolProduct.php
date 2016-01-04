@@ -117,6 +117,22 @@ class SharePoolProduct extends AppModel {
             )
         ),
         array(
+            'share_id' => 1894,
+            'share_name' => '宝宝和老人特别喜欢的花牛苹果',
+            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/9fe70d2d40a_0104.jpg',
+            'brand_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_52d08a7c8bb6e9611307b6c4858ca38c.jpg',
+            'brand_name' => '木木夕',
+            'show_brand' => true,
+            'brand_custom_service' => 711480,
+            'published' => 1,
+            'products' => array(
+                '4016' => array(
+                    'price' => 68,
+                    'channel_price' => 60,
+                )
+            )
+        ),
+        array(
             'share_id' => 1703,
             'share_name' => '永兴冰糖橙【限北京】',
             'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/83862b90237_0104.jpg',
