@@ -1930,8 +1930,8 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 23711,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/4c91fb9380d_0901.jpg'
                 ),
-                '1732' => array(
-                    'share_id' => 1732,
+                '1840' => array(
+                    'share_id' => 1840,
                     'share_name' => '富硒砂糖橘真的来啦',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/5c234cd3f0d_1223.jpg',
                     'share_price' => '88',
