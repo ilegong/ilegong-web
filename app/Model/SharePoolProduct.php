@@ -103,12 +103,12 @@ class SharePoolProduct extends AppModel {
         array(
             'share_id' => 1703,
             'share_name' => '永兴冰糖橙【限北京】',
-            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/c4d4e73c72d_1221.jpg',
+            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/83862b90237_0104.jpg',
             'brand_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg',
             'brand_name' => '晓光',
             'show_brand' => true,
             'brand_custom_service' => 887026,
-            'published' => 0,
+            'published' => 1,
             'products' => array(
                 '3572' => array(
                     'price' => 85,
