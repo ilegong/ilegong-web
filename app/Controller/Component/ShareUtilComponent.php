@@ -1695,6 +1695,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 433224,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_e370e2e71308d0c78c1f22ff4f6aabca.jpg'
                 ),
+                '1877' => array(
+                    'share_id' => 1877,
+                    'share_name' => '陕西眉县黄心巨无霸黄金果猕猴桃6个装',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/fa93e7d2783_0104.jpg',
+                    'share_price' => '29.9',
+                    'share_user_name' => '张慧敏',
+                    'share_vote' => 654,
+                    'share_user_id' => 23711,
+                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201509/thumb_m/4c91fb9380d_0901.jpg'
+                ),
                 '1797' => array(
                     'share_id' => 1797,
                     'share_name' => '麻阳冰糖橙----不打药，不防腐，不上蜡，守护内心的“橙”实',
