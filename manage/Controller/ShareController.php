@@ -307,7 +307,7 @@ class ShareController extends AppController {
             'Weshare' => array(
                 'conditions' => $cond,
                 'limit' => 10,
-                'order' => array('id DESC')
+                'order' => array('Weshare.id DESC')
             )
         );
         $this->process_share_data($q_c);
@@ -326,7 +326,7 @@ class ShareController extends AppController {
             'Weshare' => array(
                 'conditions' => $cond,
                 'limit' => 10,
-                'order' => array('id DESC')
+                'order' => array('Weshare.id DESC')
             )
         );
         $this->process_share_data($q_c);
