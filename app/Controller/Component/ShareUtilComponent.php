@@ -1664,16 +1664,26 @@ class ShareUtilComponent extends Component {
     public function get_share_index_product($tag) {
         $product = array(
             0 => array(
-                '1825' => array(
-                    'share_id' => 1825,
-                    'share_name' => '越南红心火龙果 4个装 4.5斤左右',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/eb50a0838ce_1231.jpg',
-                    'share_price' => '49',
-                    'share_user_name' => '杨晓光',
-                    'share_vote' => 2000,
-                    'share_user_id' => 141,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg',
-                    'pintuan' => true
+//                '1825' => array(
+//                    'share_id' => 1825,
+//                    'share_name' => '越南红心火龙果 4个装 4.5斤左右',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/eb50a0838ce_1231.jpg',
+//                    'share_price' => '49',
+//                    'share_user_name' => '杨晓光',
+//                    'share_vote' => 2000,
+//                    'share_user_id' => 141,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg',
+//                    'pintuan' => true
+//                ),
+                '1868' => array(
+                    'share_id' => 1868,
+                    'share_name' => '来自张家口坝上原生态羊粪土豆',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/74b550be9ba_0104.jpg',
+                    'share_price' => '65',
+                    'share_user_name' => '赵静',
+                    'share_vote' => 500,
+                    'share_user_id' => 867250,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/8672501449738506.png'
                 ),
                 '669' => array(
                     'share_id' => 669,
@@ -1684,6 +1694,16 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 1000,
                     'share_user_id' => 433224,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_e370e2e71308d0c78c1f22ff4f6aabca.jpg'
+                ),
+                '1797' => array(
+                    'share_id' => 1797,
+                    'share_name' => '麻阳冰糖橙----不打药，不防腐，不上蜡，守护内心的“橙”实',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/2f2ae8653ee_1123.jpg',
+                    'share_price' => '82',
+                    'share_user_name' => '鲲鲲',
+                    'share_vote' => 560,
+                    'share_user_id' => 806889,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
                 ),
                 '1612' => array(
                     'share_id' => 1612,
@@ -1808,16 +1828,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 23771,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_d742f4391e472ca6a24c58d96be17aca.jpg'
                 ),
-//                '1575' => array(
-//                    'share_id' => 1575,
-//                    'share_name' => '好吃的真空低温油浴果蔬套装（黄秋葵+香菇+什锦果蔬）',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/d50b8e8d6ad_1202.jpg',
-//                    'share_price' => '55',
-//                    'share_user_name' => '赵宇',
-//                    'share_vote' => 2000,
-//                    'share_user_id' => 810688,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_7db41874b00ec17af715b72adf87768a.jpg'
-//                ),
+                '1875' => array(
+                    'share_id' => 1875,
+                    'share_name' => '好吃的真空低温油浴果蔬套装（黄秋葵+香菇+什锦果蔬）',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/d50b8e8d6ad_1202.jpg',
+                    'share_price' => '55',
+                    'share_user_name' => '赵宇',
+                    'share_vote' => 2000,
+                    'share_user_id' => 810688,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_7db41874b00ec17af715b72adf87768a.jpg'
+                ),
                 '1506' => array(
                     'share_id' => 1506,
                     'share_name' => '越南黑虎虾仁 【纯野生虾仁】',
