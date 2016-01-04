@@ -13,7 +13,8 @@ class ShareController extends AppController {
     var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User',
         'OrderConsignees', 'WeshareShipSetting', 'OfflineStore', 'Oauthbind', 'Comment', 'RefundLog', 'PayNotify', 'RebateTrackLog', 'PayLog', 'PintuanTag');
 
-    var $components = array('Weixin');
+    var $components = array('Weixin', 'Paginator');
+
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -221,7 +222,9 @@ class ShareController extends AppController {
     }
 
     private function process_share_data($cond) {
-        $weshares = $this->Weshare->find('all', $cond);
+        $this->Paginator->settings = $cond;
+        $weshares = $this->Paginator->paginate('Weshare', $cond['Weshare']['conditions']);
+        //$weshares = $this->Weshare->find('all', $cond);
         $weshare_ids = Hash::extract($weshares, '{n}.Weshare.id');
         $weshare_creator_ids = Hash::extract($weshares, '{n}.Weshare.creator');
         $creators = $this->User->find('all', array(
@@ -301,9 +304,11 @@ class ShareController extends AppController {
             $cond['id'] = $share_id;
         }
         $q_c = array(
-            'conditions' => $cond,
-            'limit' => 200,
-            'order' => array('id DESC')
+            'Weshare' => array(
+                'conditions' => $cond,
+                'limit' => 10,
+                'order' => array('id DESC')
+            )
         );
         $this->process_share_data($q_c);
     }
@@ -318,9 +323,11 @@ class ShareController extends AppController {
             $cond['id'] = $share_id;
         }
         $q_c = array(
-            'conditions' => $cond,
-            'limit' => 500,
-            'order' => array('id DESC')
+            'Weshare' => array(
+                'conditions' => $cond,
+                'limit' => 10,
+                'order' => array('id DESC')
+            )
         );
         $this->process_share_data($q_c);
     }

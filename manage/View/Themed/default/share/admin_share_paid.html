@@ -71,6 +71,12 @@
                 </table>
             </div>
         </div>
+        <nav>
+            <ul class="pager">
+                {{$this->Paginator->prev('&larr;Older', array( 'tag' => 'li','escape' => false), null, array('class' => 'prev disabled prv' ,'tag' => 'a', 'escape' => false));}}
+                {{$this->Paginator->next('Newer&rarr;', array( 'tag' => 'li','escape' => false), null, array('class' => 'next disabled nxt' ,'tag' => 'a', 'escape' => false));}}
+            </ul>
+        </nav>
     </div>
 </div>
 <script>
