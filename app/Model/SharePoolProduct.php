@@ -141,6 +141,22 @@ class SharePoolProduct extends AppModel {
             )
         ),
         array(
+            'share_id' => 1884,
+            'share_name' => '富硒砂糖橘',
+            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/1802770e8f3_0104.jpg',
+            'brand_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_e92e61d892c2ad72c0e01ec1ac136e71.jpg',
+            'brand_name' => '盛夏',
+            'show_brand' => true,
+            'brand_custom_service' => 708029,
+            'published' => 1,
+            'products' => array(
+                '3998' => array(
+                    'price' => 88,
+                    'channel_price' => 70,
+                )
+            )
+        ),
+        array(
             'share_id' => 1411,
             'share_name' => '雾岭山楂条5袋装',
             'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/83a26e7f545_1204.jpg',
