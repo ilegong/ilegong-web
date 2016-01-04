@@ -44,6 +44,25 @@ class ShareToolController extends AppController {
         return;
     }
 
+    /**
+     * @param $refer_share_id
+     * @return array
+     * 获取可能授权的用户
+     */
+    private function load_refer_share_authority_user($refer_share_id) {
+        if(!empty($refer_share_id)){
+            $shareOperateSettings = $this->ShareOperateSetting->find('all', array(
+                'conditions' => array(
+                    'scope_id' => $refer_share_id,
+                    'scope_type' => SHARE_OPERATE_SCOPE_TYPE
+                ),
+                'order' => array('user DESC')
+            ));
+            $history_operate_setting_uids = Hash::extract($shareOperateSettings, '{n}.ShareOperateSetting.user');
+            return $history_operate_setting_uids;
+        }
+        return array();
+    }
 
     /**
      * 跳转到一个分享权限设置的页面
@@ -70,8 +89,10 @@ class ShareToolController extends AppController {
                 ),
                 'order' => array('user DESC')
             ));
+            $history_operate_setting_uids = $this->load_refer_share_authority_user($shareInfo['Weshare']['refer_share_id']);
             $shareOperateUserIds = Hash::extract($shareOperateSettings, '{n}.ShareOperateSetting.user');
             $shareOperateUserIds[] = $share_creator;
+            $shareOperateUserIds = array_merge($shareOperateUserIds, $history_operate_setting_uids);
             $shareOperateUserIds = array_unique($shareOperateUserIds);
             $usersData = $this->User->find('all', array(
                 'conditions' => array(
@@ -81,6 +102,7 @@ class ShareToolController extends AppController {
             ));
             $usersData = Hash::combine($usersData, '{n}.User.id', '{n}.User');
             $productTags = Hash::combine($productTags, '{n}.WeshareProductTag.id', '{n}.WeshareProductTag');
+            $this->set('$history_operate_setting_uids', $history_operate_setting_uids);
             $this->set('operate_settings', $shareOperateSettings);
             $this->set('user_data', $usersData);
             $this->set('operate_name_map', $this->operateDataTypeNameMap);

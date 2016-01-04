@@ -51,6 +51,24 @@
         </form>
     </div>
     <hr>
+    {{if !empty($history_operate_setting_uids)}}
+    <h3>历史授权用户</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>用户ID</tr>
+            <tr>用户昵称</tr>
+        </thead>
+        <tbody>
+            {{loop $history_operate_setting_uids $uid}}
+                <tr>
+                    <td>{{$uid}}</td>
+                    <td>{{$user_data[$uid]['nickname']}}</td>
+                </tr>
+            {{/loop}}
+        </tbody>
+    </table>
+    <hr>
+    {{/if}}
     <h3>添加</h3>
     <br>
     <h5>订单管理权限</h5>
