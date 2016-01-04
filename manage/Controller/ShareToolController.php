@@ -102,7 +102,7 @@ class ShareToolController extends AppController {
             ));
             $usersData = Hash::combine($usersData, '{n}.User.id', '{n}.User');
             $productTags = Hash::combine($productTags, '{n}.WeshareProductTag.id', '{n}.WeshareProductTag');
-            $this->set('$history_operate_setting_uids', $history_operate_setting_uids);
+            $this->set('history_operate_setting_uids', $history_operate_setting_uids);
             $this->set('operate_settings', $shareOperateSettings);
             $this->set('user_data', $usersData);
             $this->set('operate_name_map', $this->operateDataTypeNameMap);
