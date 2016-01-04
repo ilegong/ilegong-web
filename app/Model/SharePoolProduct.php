@@ -90,9 +90,9 @@ class SharePoolProduct extends AppModel {
         '1450' => array(
             'buy' => 1475
         ),
-//        '1703' => array(
-//            'buy' => 1704
-//        )
+        '1703' => array(
+            'buy' => 1704
+        ),
         '1492' => array(
             'buy' => 1752
         )
@@ -329,7 +329,7 @@ class SharePoolProduct extends AppModel {
             'brand_name' => '大美',
             'show_brand' => true,
             'brand_custom_service' => 842908,
-            'published' => 1,
+            'published' => 0,
             'products' => array(
                 '2950' => array(
                     'price' => 40,//红薯家庭装
@@ -377,7 +377,7 @@ class SharePoolProduct extends AppModel {
             'brand_name' => '李明',
             'show_brand' => true,
             'brand_custom_service' => 6783,
-            'published' => 1,
+            'published' => 0,
             'products' => array(
                 '2904' => array(
                     'price' => 46,
@@ -465,7 +465,7 @@ class SharePoolProduct extends AppModel {
             'brand_name' => '刘强',
             'show_brand' => true,
             'brand_custom_service' => 879158,
-            'published' => 1,
+            'published' => 0,
             'products' => array(
                 '3064' => array(
                     'price' => 158,
