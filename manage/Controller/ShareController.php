@@ -325,7 +325,7 @@ class ShareController extends AppController {
         $q_c = array(
             'Weshare' => array(
                 'conditions' => $cond,
-                'limit' => 10,
+                'limit' => 100,
                 'order' => array('Weshare.id DESC')
             )
         );
