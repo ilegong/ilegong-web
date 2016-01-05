@@ -1678,7 +1678,7 @@ class ShareUtilComponent extends Component {
                 '1868' => array(
                     'share_id' => 1868,
                     'share_name' => '来自张家口坝上原生态羊粪土豆',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/74b550be9ba_0104.jpg',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/48d4eb9cb9e_0105.jpg',
                     'share_price' => '65',
                     'share_user_name' => '赵静',
                     'share_vote' => 500,
@@ -1765,6 +1765,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 810684,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
                 ),
+                '1906' => array(
+                    'share_id' => 1906,
+                    'share_name' => '老舅家的沙窝萝卜--脆绿嫩',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/8d917876cee_1216.jpg',
+                    'share_price' => '27',
+                    'share_user_name' => '平凡的世界',
+                    'share_vote' => 1000,
+                    'share_user_id' => 801447,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/8014471448421852.png'
+                ),
                 //山药
                 '1885' => array(
                     'share_id' => 1885,
@@ -1817,16 +1827,6 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 883095,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_173d81362e0b516ec73870fdf83c8a26.jpg'
                 ),
-//                '1436' => array(
-//                    'share_id' => 1436,
-//                    'share_name' => '老舅家的沙窝萝卜--脆绿嫩',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/8d917876cee_1216.jpg',
-//                    'share_price' => '27',
-//                    'share_user_name' => '平凡的世界',
-//                    'share_vote' => 1000,
-//                    'share_user_id' => 801447,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/8014471448421852.png'
-//                ),
                 //紫皮糖
                 '1582' => array(
                     'share_id' => 1582,
