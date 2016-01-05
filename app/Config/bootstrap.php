@@ -2264,6 +2264,10 @@ function multi_array_sum($total, $next) {
     return $total;
 }
 
+function map_share_type_text($type) {
+    $type_text_map = array(0 => '正常分享', 1 => '自提点拼团', 3 => '产品池', 4 => '渠道价购买', 5 => '多人拼团分享');
+    return $type_text_map[$type];
+}
 
 function map_opt_log_data($var) {
     $timeStamp = strtotime($var['created']);
@@ -2311,6 +2315,11 @@ function replace_urls($string) {
 function is_blacklist_user($uid) {
     $blacklist = array(881026, 886291);
     return in_array($uid, $blacklist);
+}
+
+function is_super_share_manager($uid) {
+    $super_manager = array(633345, 701166, 544307, 141, 802852);
+    return in_array($uid, $super_manager);
 }
 
 /**

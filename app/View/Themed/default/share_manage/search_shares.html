@@ -18,6 +18,10 @@
                         <label>分享名称</label>
                         <input type="text" class="form-control" name="title">
                     </div>
+                    <div class="form-group">
+                        <label>分享ID</label>
+                        <input type="text" class="form-control" name="id">
+                    </div>
                     <button type="submit" class="btn btn-default">查询</button>
                 </form>
                 <br>
@@ -28,6 +32,8 @@
                             <th>#ID</th>
                             <th>标题</th>
                             <th>创建者</th>
+                            <th>类型</th>
+                            <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -36,6 +42,8 @@
                             <td>{{$weshare['Weshare']['id']}}</td>
                             <td>{{$weshare['Weshare']['title']}}</td>
                             <td>{{$weshare['Weshare']['creator']}}</td>
+                            <td>{{map_share_type_text($weshare['Weshare']['type'])}}</td>
+                            <td><a href="/share_manage/share_edit/{{$weshare['Weshare']['id']}}?from=search" class="btn btn-link">编辑</a><a href="/share_manage/delete_share/{{$weshare['Weshare']['id']}}?from=search" class="btn btn-link">删除</a></td>
                         </tr>
                         {{/loop}}
                         </tbody>

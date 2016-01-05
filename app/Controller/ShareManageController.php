@@ -54,13 +54,23 @@ class ShareManageController extends AppController {
      * 查询分享
      */
     public function search_shares() {
+        $s_id = $_REQUEST['id'];
+        if (!empty($s_id)) {
+            $WeshareM = ClassRegistry::init('Weshare');
+            $cond = array('id' => $s_id);
+            $weshares = $WeshareM->find('all', array(
+                'conditions' => $cond,
+                'limit' => 300
+            ));
+            $this->set('weshares', $weshares);
+        }
         $s_title = $_REQUEST['title'];
         if (!empty($s_title)) {
             $WeshareM = ClassRegistry::init('Weshare');
             $cond = array('title LIKE' => '%' . $s_title . '%');
             $weshares = $WeshareM->find('all', array(
                 'conditions' => $cond,
-                'limit' => 100
+                'limit' => 300
             ));
             $this->set('weshares', $weshares);
         }
@@ -121,6 +131,10 @@ class ShareManageController extends AppController {
 
     public function delete_share($shareId) {
         $this->Weshare->delete($shareId);
+        if($_REQUEST['from'] == 'search'){
+            $this->redirect(array('action' => 'search_shares'));
+            return;
+        }
         $this->redirect(array('action' => 'shares'));
     }
 
@@ -153,7 +167,7 @@ class ShareManageController extends AppController {
             )
         ));
         if ($weshareData['Weshare']['creator'] != $uid) {
-            if (!$this->ShareAuthority->user_can_edit_share_info($uid, $share_id)) {
+            if (!$this->ShareAuthority->user_can_edit_share_info($uid, $share_id) && !is_super_share_manager($uid)) {
                 $this->redirect(array('action' => 'shares'));
                 return;
             }
