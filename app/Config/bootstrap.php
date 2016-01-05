@@ -318,6 +318,7 @@ define('SERVICE_LINE_PHONE', '010-56245991');
 define('SERVICE_LINE', '<a href="tel:01056245991">010-56245991</a>');
 
 define('MSG_LOG_RECOMMEND_TYPE', 1);
+define('MSG_LOG_NOTIFY_TYPE', 2);
 
 global $page_style;
 global $pages_tpl;
