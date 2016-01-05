@@ -27,7 +27,7 @@
                 </ul>
                 <!-- /.nav-second-level -->
             </li>
-            {{if is_super_share_manager(is_super_share_manager($uid))}}
+            {{if is_super_share_manager($CurrentUser['id'])}}
             <li>
                 <a href="#"><i class="fa fa-files-o fa-fw"></i>超级管理员<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
