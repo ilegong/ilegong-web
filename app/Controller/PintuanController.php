@@ -36,7 +36,6 @@ class PintuanController extends AppController {
             $tag_id = $this->PintuanHelper->get_tag_id_by_uid($uid);
         }
         if (!empty($tag_id)) {
-            $this->set('tag_id', $tag_id);
             $tag = $this->get_pintuan_tag($tag_id);
             $this->set('tag', $tag);
             if ($tag['PintuanTag']['status'] == PIN_TUAN_TAG_PROGRESS_STATUS) {
@@ -48,6 +47,7 @@ class PintuanController extends AppController {
                     $wx_title = $user_nickname . '报名了“【一起省5元】越南红心火龙果4个49元”';
                 }
             }
+            $this->set('tag_id', $tag_id);
         }
         $records = $this->PintuanHelper->get_pintuan_records($tag_id);
         $order_count = count($records);

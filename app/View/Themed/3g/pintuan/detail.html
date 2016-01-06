@@ -31,7 +31,7 @@
                 {{/if}}
             </ul>
             {{/if}}
-            <div class="btc_status" {{if $tag['PintuanTag']['status'] != PIN_TUAN_TAG_EXPIRE_STATUS}}style="display: none;"{{/if}}><img src="{{$STATIC_FILE_PATH}}/static/pintuan/images/bm_defeated.png" /></div>
+        {{if $tag['PintuanTag']['status'] == PIN_TUAN_TAG_EXPIRE_STATUS}} <div class="btc_status"><img src="{{$STATIC_FILE_PATH}}/static/pintuan/images/bm_defeated.png" /></div>{{/if}}
         {{if $tag['PintuanTag']['status'] == PIN_TUAN_TAG_SUCCESS_STATUS}}<div class="btc_status"><img src="{{$STATIC_FILE_PATH}}/static/pintuan/images/bm_succeed.png" /></div>{{/if}}
         {{if $tag['PintuanTag']['status'] == PIN_TUAN_TAG_PROGRESS_STATUS || $tag['PintuanTag']['status'] == PIN_TUAN_TAG_EXPIRE_STATUS}}
         <div class="btc_countdown">
@@ -78,16 +78,21 @@
         <!--邀请分享-->
         <div class="btc_invitation">
             <a href="/" class="fl">
-                <i style="background:#f00;border-radius:50%;width:10px;height:10px;top:-5px;right:35%;position:absolute; display: none;" id="mark-has-unread"></i>
+                <i style="background: #f00;border-radius: 50%;width: 10px;height: 10px;top: 3px;left: 10%;position: absolute; display: none;" id="mark-has-unread"></i>
                 <i class="fa fa-search fa-2x"></i>
                 <br>
                 <span>发现</span>
             </a>
             {{if $tag['PintuanTag']['creator'] == $uid}}
-                <a class="fr" id="prompt-invitation-layer-btn">还差{{$tag['PintuanTag']['num'] - $order_count}}个朋友，赶快邀请</a>
+                <a class="invitation_btn" id="prompt-invitation-layer-btn">还差{{$tag['PintuanTag']['num'] - $order_count}}个朋友，赶快邀请</a>
             {{else}}
-                <a href="/pintuan/balance/{{$share_id}}?tag_id={{$tag_id}}" class="fr">就差你了,赶快报名</a>
+                <a href="/pintuan/balance/{{$share_id}}?tag_id={{$tag_id}}" class="invitation_btn">就差你了,赶快报名</a>
             {{/if}}
+            <a href="#X" class="fl">
+                <i class="fa fa-bell fa-2x"></i>
+                <br>
+                <span>拼团提醒</span>
+            </a>
         </div>
     {{/if}}
 {{/if}}
@@ -96,6 +101,11 @@
 <div style="display: none;" class="layer_bg" id="mask-bg-layer"></div>
 <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
 <script src="{{$STATIC_FILE_PATH}}/static/pintuan/js/detail.js"></script>
+<script src="{{$STATIC_FILE_PATH}}/static/common/no-angular-common.js"></script>
+<script>
+    Pyshuo.share.utils.init();
+    Pyshuo.share.utils.checkHasUnreadInfo();
+</script>
 {{if $jWeixinOn}}
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
