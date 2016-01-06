@@ -32,6 +32,9 @@ class PintuanController extends AppController {
         $tag_id = $_REQUEST['tag_id'];
         $wx_title = $conf['wx_title'];
         $wx_desc = $conf['wx_desc'];
+        if (empty($tag_id)) {
+            $tag_id = $this->PintuanHelper->get_tag_id_by_uid($uid);
+        }
         if (!empty($tag_id)) {
             $this->set('tag_id', $tag_id);
             $tag = $this->get_pintuan_tag($tag_id);
