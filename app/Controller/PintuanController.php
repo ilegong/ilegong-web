@@ -51,13 +51,14 @@ class PintuanController extends AppController {
         }
         $records = $this->PintuanHelper->get_pintuan_records($tag_id);
         $order_count = count($records);
+        $wx_url = $this->get_pintuan_detail_url($share_id, $conf_id, $tag_id);
         $this->set('order_count', $order_count);
         $this->set('uid', $uid);
         $this->set('share_id', $share_id);
         $this->set('conf', $conf);
         $this->set('records', $records);
         $this->set('product_conf', $product_conf);
-        $this->set_share_weixin_params($uid, $wx_title, $conf['banner_img'], $wx_desc);
+        $this->set_share_weixin_params($uid, $wx_title, $conf['banner_img'], $wx_desc, $wx_url);
     }
 
     /**
@@ -252,16 +253,26 @@ class PintuanController extends AppController {
      * @param $image
      * @param $desc
      */
-    private function set_share_weixin_params($uid, $title, $image, $desc) {
+    private function set_share_weixin_params($uid, $title, $image, $desc, $wx_url) {
         if (parent::is_weixin()) {
             $wexin_params = $this->set_weixin_share_data($uid, -1);
             $this->set($wexin_params);
             $this->set('title', $title);
             $this->set('image', $image);
             $this->set('desc', $desc);
+            $this->set('wx_url', $wx_url);
         }
     }
 
+    /**
+     * @param $share_id // 分享ID
+     * @param $conf_id // 拼团商品的配置
+     * @param $tag_id // 拼团的ID
+     * @return string
+     */
+    private function get_pintuan_detail_url($share_id, $conf_id, $tag_id) {
+        return '/pintuan/detail/' . $share_id . '/' . $conf_id . '?tag_id=' . $tag_id;
+    }
 
     /**
      * @param $userInfo

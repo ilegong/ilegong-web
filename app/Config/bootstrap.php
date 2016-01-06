@@ -2270,10 +2270,12 @@ function map_share_type_text($type) {
     return $type_text_map[$type];
 }
 
+
 function map_opt_log_data($var) {
     $timeStamp = strtotime($var['created']);
     $var['timestamp'] = $timeStamp;
     $data_type = $var['obj_type'];
+    $detail_url = '/weshares/view/' . $var['obj_id'];;
     if ($data_type == OPT_LOG_CREATE_SHARE) {
         $var['data_type_tag'] = '分享了';
     }
@@ -2289,8 +2291,23 @@ function map_opt_log_data($var) {
     if ($data_type == OPT_LOG_START_GROUP_SHARE) {
         $var['data_type_tag'] = '发起拼团';
     }
-    $var['data_url'] = '/weshares/view/' . $var['obj_id'];
+    if ($data_type == OPT_LOG_PINTUAN_SUCCESS) {
+        $var['data_type_tag'] = '拼团成功';
+        $detail_url = get_pintuan_opt_log_url($var['obj_id']);
+    }
+    $var['data_url'] = $detail_url;
     return $var;
+}
+
+function get_pintuan_opt_log_url($tag_id) {
+    $PintuanTagM = ClassRegistry::init('PintuanTag');
+    $tag = $PintuanTagM->find('first', array(
+        'conditions' => array(
+            'id' => $tag_id
+        )
+    ));
+    $detail_url = '/pintuan/detail/' . $tag['PintuanTag']['share_id'] . '/' . $tag['PintuanTag']['pid'] . '?tag_id=' . $tag_id;
+    return $detail_url;
 }
 
 function sort_data_by_id($a, $b) {

@@ -141,7 +141,7 @@ class SharePoolProduct extends AppModel {
             'share_name' => '宝宝和老人特别喜欢的花牛苹果',
             'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/9fe70d2d40a_0104.jpg',
             'brand_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_52d08a7c8bb6e9611307b6c4858ca38c.jpg',
-            'brand_name' => '木木夕',
+            'brand_name' => '片片妈',
             'show_brand' => true,
             'brand_custom_service' => 711480,
             'published' => 1,

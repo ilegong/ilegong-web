@@ -128,7 +128,7 @@
             var share_string = '{{$share_string ? $share_string :"0"}}';
             var to_timeline_title = "{{$title}}";
             var to_friend_title = "{{$title}}";
-            var detail_url =  document.URL;
+            var detail_url =  "{{$wx_url}}";
             var to_friend_link = detail_url + '?trstr='+ share_string + '&share_type=appMsg';
             var to_timeline_link = detail_url + '?trstr='+ share_string + '&share_type=timeline';
             var imgUrl = "{{$this->Html->assetUrl($image)}}";

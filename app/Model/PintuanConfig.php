@@ -30,7 +30,7 @@ class PintuanConfig extends AppModel {
     );
 
     var $conf_data = array(
-        1814 => array(
+        79 => array(
             'share_id' => '1814',
             'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/banner.jpg',
             'sharer_id' => '633345',

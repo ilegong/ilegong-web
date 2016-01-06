@@ -22,8 +22,8 @@ class PintuanHelperComponent extends Component {
         }
         //update or save pin tuan record
         $this->update_pintuan_record($order_id, $order_creator, $order_group_id);
-        //pintuan tag status
-        $this->update_pintuan_tag_status($order_group_id, $tag['PintuanTag']['num']);
+        //update pintuan tag status and save opt log
+        $this->update_pintuan_tag_status($order_group_id, $tag['PintuanTag']['num'], $order_creator, $order['Order']['member_id']);
     }
 
 
@@ -188,9 +188,11 @@ class PintuanHelperComponent extends Component {
         return $record_count;
     }
 
-    private function update_pintuan_tag_status($tag_id, $tag_num) {
+    private function update_pintuan_tag_status($tag_id, $tag_num, $user_id, $share_id) {
         $record_count = $this->get_pintuan_tag_order_count($tag_id);
         if ($record_count >= $tag_num) {
+            //save pin tuan success opt log
+            $this->ShareUtil->save_pintuan_success_opt_log($user_id, $share_id, $tag_id);
             $this->update_pintuan_tag(array('status' => PIN_TUAN_TAG_SUCCESS_STATUS), array('id' => $tag_id));
         }
     }

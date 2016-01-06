@@ -25,3 +25,7 @@ CREATE TABLE `cake_pintuan_records` (
   `deleted` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+ALTER TABLE `cake_pintuan_tags`
+ADD COLUMN `pid` INT NOT NULL DEFAULT 1 AFTER `num`;
+
