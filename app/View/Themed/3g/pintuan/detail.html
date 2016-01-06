@@ -86,7 +86,7 @@
             {{if $tag['PintuanTag']['creator'] == $uid}}
                 <a class="invitation_btn" id="prompt-invitation-layer-btn">还差{{$tag['PintuanTag']['num'] - $order_count}}个朋友，赶快邀请</a>
             {{else}}
-                <a href="/pintuan/balance/{{$share_id}}?tag_id={{$tag_id}}" class="invitation_btn">就差你了,赶快报名</a>
+                <a href="/pintuan/balance/{{$share_id}}?tag_id={{$tag_id}}" class="invitation_btn">就差你了,赶快拼团 ¥{{$conf['product']['pintuan_price']}}</a>
             {{/if}}
             <a href="#X" class="fl">
                 <i class="fa fa-bell fa-2x"></i>

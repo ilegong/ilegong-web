@@ -84,6 +84,7 @@ $(document).ready(function () {
     $maskBgLayer.hide();
   });
   initTimeCountDown();
+  initView();
   function initTimeCountDown(){
     if(document.getElementById("leave-sec")){
       var d = getDateFromStr($expireTime.val());
@@ -93,6 +94,11 @@ $(document).ready(function () {
         hour: document.getElementById("leave-hour")
       };
       fnTimeCountDown(d, obj);
+    }
+  }
+  function initView(){
+    if($promptInvitationLayerBtn.length > 0){
+      $promptInvitationLayerBtn.trigger('click');
     }
   }
   function getDateFromStr(dateString){
