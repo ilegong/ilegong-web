@@ -1248,7 +1248,18 @@ class WeixinComponent extends Component {
         $this->send_weixin_message($post_data);
     }
 
+    /**
+     * @param $user_open_id
+     * @param $recommend_name
+     * @param $title
+     * @param $remark
+     * @param $detail_url
+     * @param string $basic_info
+     * @param string $position
+     * 推荐的模板消息
+     */
     public function send_recommend_notify_template_msg($user_open_id, $recommend_name, $title, $remark, $detail_url, $basic_info = '团长', $position = '团长') {
+        //删除 [推荐报告通知]
         $post_data = array(
             "touser" => $user_open_id,
             "template_id" => 'XgB0hibK6F3RXkXrQxT5LilfjQOAYUhjiCQ-XPW2ccw',
@@ -1378,6 +1389,7 @@ class WeixinComponent extends Component {
      * 尾款提醒通知
      */
     public function send_remedial_order_msg($user_openid, $title, $detail_url, $price, $mobile, $remark) {
+        //微信公众号 已经删除 [尾款提醒通知]
         $post_data = array(
             "touser" => $user_openid,
             "template_id" => 'CY69fWO3zw8S6dWiPQFs3W9LgVHRMDFXMl_8CeLLWmI',
@@ -1451,5 +1463,56 @@ class WeixinComponent extends Component {
         return $this->send_weixin_message($post_data);
     }
 
+    /**
+     * @param $user_open_id
+     * @param $title
+     * @param $good_name
+     * @param $fail_reason
+     * @param $remark
+     * @param $url
+     * @return bool
+     * 拼团失败消息
+     */
+    public function send_pintuan_fail_msg($user_open_id, $title, $good_name, $fail_reason, $remark, $url) {
+        $post_data = array(
+            "touser" => $user_open_id,
+            "template_id" => '0MAsqVfLFyvlZ3LFdhavuq2PXuMxgi1i7rJcmTP31HU',
+            "url" => $url,
+            "topcolor" => "#FF0000",
+            "data" => array(
+                "first" => array("value" => $title),
+                "keyword1" => array("value" => $good_name),
+                "keyword2" => array("value" => $fail_reason),
+                "remark" => array("value" => $remark, "color" => "#FF8800")
+            )
+        );
+        return $this->send_weixin_message($post_data);
+    }
+
+    /**
+     * @param $user_open_id
+     * @param $title
+     * @param $good_name
+     * @param $leader_name
+     * @param $remark
+     * @param $url
+     * @return bool
+     * 拼团成功提醒
+     */
+    public function send_pintuan_success_msg($user_open_id, $title, $good_name, $leader_name, $remark, $url) {
+        $post_data = array(
+            "touser" => $user_open_id,
+            "template_id" => 'BYtgM4U84etw2qbOyyZzR4FO8a-ddvjy8sgBiAQy64U',
+            "url" => $url,
+            "topcolor" => "#FF0000",
+            "data" => array(
+                "first" => array("value" => $title),
+                "Pingou_ProductName" => array("value" => $good_name),
+                "Weixin_ID" => array("value" => $leader_name),
+                "Remark" => array("value" => $remark, "color" => "#FF8800")
+            )
+        );
+        return $this->send_weixin_message($post_data);
+    }
 
 }

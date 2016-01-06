@@ -4,7 +4,7 @@ class PintuanHelperComponent extends Component {
 
     var $name = 'PintuanHelper';
 
-    var $components = array('ShareUtil');
+    var $components = array('ShareUtil', 'Weixin');
 
     /**
      * @param $conf_id
@@ -27,7 +27,7 @@ class PintuanHelperComponent extends Component {
      * @param $share_id
      * 更新拼团的数量
      */
-    private function update_pintuan_count($share_id){
+    private function update_pintuan_count($share_id) {
         $dataCollectM = ClassRegistry::init('DataCollect');
         $pintuanConfigM = ClassRegistry::init('PintuanConfig');
         $detail = $pintuanConfigM->get_conf_data($share_id);
@@ -83,6 +83,7 @@ class PintuanHelperComponent extends Component {
             //update tag status
             $pinTuanTagM->updateAll(array('status' => PIN_TUAN_TAG_EXPIRE_STATUS), array('id' => $tag_id, 'status' => PIN_TUAN_TAG_PROGRESS_STATUS));
             $tag['PintuanTag']['status'] = PIN_TUAN_TAG_EXPIRE_STATUS;
+            $this->send_pintuan_fail_msg($tag['PintuanTag']['share_id'], $tag['PintuanTag']['id'], $tag['PintuanTag']['creator']);
         }
         return $tag;
     }
@@ -156,10 +157,28 @@ class PintuanHelperComponent extends Component {
         return $tags;
     }
 
+    /**
+     * cron task update pin tuan tag status
+     */
     public function cron_change_tag_status() {
         $PintuanTagM = ClassRegistry::init('PintuanTag');
         $expire_date = date('Y-m-d H:i:s', strtotime('-1 day'));
-        $PintuanTagM->updateAll(array('status' => PIN_TUAN_TAG_EXPIRE_STATUS), array('expire_date <= ' => $expire_date, 'status' => PIN_TUAN_TAG_PROGRESS_STATUS));
+        $expire_pintuans = $PintuanTagM->find('all', array(
+            'conditions' => array(
+                'expire_date <= ' => $expire_date,
+                'status' => PIN_TUAN_TAG_PROGRESS_STATUS
+            )
+        ));
+        if (!empty($expire_pintuans)) {
+            $expire_pintuan_ids = Hash::extract($expire_pintuans, '{n}.PintuanTag.id');
+            $PintuanTagM->updateAll(array('status' => PIN_TUAN_TAG_EXPIRE_STATUS), array('id' => $expire_pintuan_ids));
+            foreach ($expire_pintuans as $pintuan_tag) {
+                $share_id = $pintuan_tag['PintuanTag']['share_id'];
+                $user_id = $pintuan_tag['PintuanTag']['creator'];
+                $tag_id = $pintuan_tag['PintuanTag']['id'];
+                $this->send_pintuan_fail_msg($share_id, $tag_id, $user_id);
+            }
+        }
     }
 
     public function save_pintuan_record($record) {
@@ -224,6 +243,39 @@ class PintuanHelperComponent extends Component {
             //save pin tuan success opt log
             $this->ShareUtil->save_pintuan_success_opt_log($user_id, $share_id, $tag_id);
             $this->update_pintuan_tag(array('status' => PIN_TUAN_TAG_SUCCESS_STATUS), array('id' => $tag_id));
+            $this->send_pintuan_success_msg($share_id, $tag_id, $user_id);
+        }
+    }
+
+    public function send_pintuan_success_msg($share_id, $tag_id, $uid) {
+        $oauthBindM = ClassRegistry::init('Oauthbind');
+        $user_open_id = $oauthBindM->findWxServiceBindByUid($uid);
+        if ($user_open_id) {
+            $pintuanConfigM = ClassRegistry::init('PintuanConfig');
+            $conf_data = $pintuanConfigM->get_conf_data($share_id);
+            $good_name = $conf_data['share_title'];
+            $conf_id = $conf_data['pid'];
+            $title = '恭喜您，您参加的团购已拼团成功，我们会尽快为您安排发货。';
+            $leader_name = $conf_data['sharer_nickname'];
+            $remark = '点击查看详情!邀请朋友来一起参加!';
+            $url = WX_HOST . '/pintuan/detail/' . $share_id . '/' . $conf_id . '?tag_id=' . $tag_id;
+            $this->Weixin->send_pintuan_success_msg($user_open_id, $title, $good_name, $leader_name, $remark, $url);
+        }
+    }
+
+    public function send_pintuan_fail_msg($share_id, $tag_id, $uid) {
+        $oauthBindM = ClassRegistry::init('Oauthbind');
+        $user_open_id = $oauthBindM->findWxServiceBindByUid($uid);
+        if ($user_open_id) {
+            $pintuanConfigM = ClassRegistry::init('PintuanConfig');
+            $conf_data = $pintuanConfigM->get_conf_data($share_id);
+            $good_name = $conf_data['share_title'];
+            $title = '您好，您发起的' . $good_name . '拼团失败！';
+            $fail_reason = '24小时内没有人参团';
+            $remark = '点击查看详情，重新发起拼团！';
+            $conf_id = $conf_data['pid'];
+            $url = WX_HOST . '/pintuan/detail/' . $share_id . '/' . $conf_id . '?tag_id=' . $tag_id;
+            $this->Weixin->send_pintuan_fail_msg($user_open_id, $title, $good_name, $fail_reason, $remark, $url);
         }
     }
 
