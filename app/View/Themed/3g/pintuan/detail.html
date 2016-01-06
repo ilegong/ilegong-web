@@ -78,9 +78,10 @@
         <!--邀请分享-->
         <div class="btc_invitation">
             <a href="/" class="fl">
-                <i class="fa fa-home fa-2x"></i>
+                <i style="background:#f00;border-radius:50%;width:10px;height:10px;top:-5px;right:35%;position:absolute; display: none;" id="mark-has-unread"></i>
+                <i class="fa fa-search fa-2x"></i>
                 <br>
-                <span>朋友说</span>
+                <span>发现</span>
             </a>
             {{if $tag['PintuanTag']['creator'] == $uid}}
                 <a class="fr" id="prompt-invitation-layer-btn">还差{{$tag['PintuanTag']['num'] - $order_count}}个朋友，赶快邀请</a>

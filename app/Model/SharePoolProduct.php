@@ -117,6 +117,26 @@ class SharePoolProduct extends AppModel {
             )
         ),
         array(
+            'share_id' => 1917,
+            'share_name' => '宝宝的山楂条  添加胡萝卜和苹果',
+            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/4aee3d3205f_0106.jpg',
+            'brand_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_52d08a7c8bb6e9611307b6c4858ca38c.jpg',
+            'brand_name' => '片片妈',
+            'show_brand' => true,
+            'brand_custom_service' => 878825,
+            'published' => 1,
+            'products' => array(
+                '3945' => array(
+                    'price' => 65,
+                    'channel_price' => 60,
+                ),
+                '3946' => array(
+                    'price' => 75,
+                    'channel_price' => 70,
+                ),
+            )
+        ),
+        array(
             'share_id' => 1894,
             'share_name' => '宝宝和老人特别喜欢的花牛苹果',
             'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/9fe70d2d40a_0104.jpg',

@@ -144,7 +144,8 @@ class PintuanHelperComponent extends Component {
                 'user_id' => $uid,
                 'status' => PIN_TUAN_RECORD_PAID_STATUS,
                 'deleted' => DELETED_NO
-            )
+            ),
+            'order' => array('id DESC')
         ));
         if (!empty($last_record)) {
             return $last_record['PintuanRecord']['tag_id'];
