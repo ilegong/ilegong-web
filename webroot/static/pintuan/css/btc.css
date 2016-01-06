@@ -13,70 +13,43 @@ ul li { list-style: none; }
 /*index*/
 .btc_banner img{ width: 100%;}
 .btc_head{ position: relative;}
-.btc_head img{ width: 75px; border-radius: 75px; border: 1px #ffffff solid; position: absolute; margin-top: -37px; margin-left: 50%; left: -37px;}
-.btc_title{ text-align: center; color: #999999; line-height: 20px; padding: 50px 0 20px 0; border-bottom: 1px #eeeeee solid; margin-bottom: 20px;}
-.btc_title h1{ font-size: 18px; color: #f99d3a;}
-.btc_baoming {
-    text-align: center;
-    border-bottom: 1px #eeeeee solid;
-    position: relative;
-    padding-bottom: 20px;
-}
-.btc_baoming label {
-    color: #333;
-    line-height: 20px;
-    font-size: 1.1em;
-}
-.btc_title label{font-size: 1.1em;}
+.btc_head img{ width: 50px; border-radius: 50px; border: 1px #ffffff solid; position: absolute; margin-top: -25px; right: 10px;}
+.btc_title{ color: #999999; line-height: 20px; padding: 15px 0 20px 10px; border-bottom: 1px #eeeeee solid; margin-bottom: 20px;}
+.btc_title h1{ font-size: 1.3em; color: #222222;}
+.btc_baoming{ text-align: center; border-bottom: 1px #eeeeee solid; position: relative; padding-bottom: 17px;}
+.btc_baoming label{ color: #999999; line-height: 20px;}
 .btc_baoming label a{ color: #49bc6e; text-decoration: underline;}
-.btc_baoming ul {
-    width: 120px;
-    margin: 0 auto;
-    padding-top: 10px;
-}
+.btc_baoming ul{ width: 120px; margin: 0 auto; padding-bottom: 20px; padding-top: 10px;}
 .btc_baoming img{ width: 50px; border-radius: 50px;}
 .btc_baoming .btc_path img{ width: 100%;}
-.btc_status img{ width: 75px; height: 37px; position: absolute; left: 50%; margin-left: -37px; top:125px; border-radius: 0;}
+.btc_baoming h1{ font-size: 1.2em; color: #ff0000; line-height: 20px;}
+.btc_baoming h2{ font-size: 1.1em; line-height: 20px; margin-bottom: 10px;}
+.btc_baoming h2 a{ color: #49bc6e;}
+.btc_baoming_head{ border-bottom: 1px #eeeeee solid; margin-bottom: 25px;}
+.btc_status img{ width: 75px; height: 37px; position: absolute; left: 50%; margin-left: -37px; top:50px; border-radius: 0;}
 .btc_operation,.btc_invitation{ position: fixed; bottom: 0; width: 100%;}
-.btc_operation a{ display: block; width: 50%; height: 44px; font-size: 13px; color: #ffffff; line-height: 44px;}
-.btc_operation a label {
-    display: block;
-    font-weight: bold;
-    font-size: 1.2em;
-}
-.btc_operation a label span {
-    font-size: 1.4em;
-}
+.btc_operation a{ display: block; width: 50%; height: 49px; color: #ffffff; line-height: 49px;}
+.btc_operation a label{display: block; font-size: 1.3em;}
+.btc_operation a label span{ font-size: 1.3em;}
 .btc_operation a.fl{ background-color: #f99d3a;}
 .btc_operation a.fr{ background-color: #49bc6e;}
-.btc_operation a label.fl {
-    padding-left: 10px;
-}
+.btc_operation a label.fl{ padding-left: 10px;}
 .btc_operation a label.fr{ padding-right: 10px;}
-.btc_countdown{ background-color: #ffffff; position: absolute; left: 50%; margin-left: -70px; bottom: -10px; color: #999999; line-height: 20px;}
+.btc_countdown{ background-color: #ffffff; position: absolute; left: 50%; margin-left: -70px; top: 94px; color: #999999; line-height: 20px;}
 .btc_countdown ul{ padding: 0 5px; width: 140px;}
 .btc_countdown ul li{ float: left;}
 .btc_countdown ul li.time{ width: 20px; height: 20px; background-color: #404040; color: #ffffff; text-align: center; border-radius: 4px;}
 .btc_invitation{ background-color: #f7f7f9; border-top: 1px #b3b4b6 solid; height: 49px;}
 .btc_invitation a{ display: block; text-align: center; color: #999999; text-decoration: none;}
-.btc_invitation a.fl{ width: 20%;margin-top: 5px;}
-.btc_invitation a.fr {
-    font-size: 1.2em;
-    color: #ffffff;
-    line-height: 39px;
-    text-decoration: none;
-    width: 75%;
-    margin-top: 5px;
-    background-color: #f99d3a;
-    margin-right: 10px;
-    border-radius: 4px;
-    font-weight: bold;
-}
+.btc_invitation a.fl{ width: 15%;}
+.btc_invitation a.invitation_btn{ float: left; font-size: 1.2em; font-weight: bold; color: #ffffff; line-height: 39px; text-decoration: none; width: 65%; margin: 5px 2.5% 0 2.5%;  background-color: #f99d3a; border-radius: 4px;}
 .btc_pic{ padding-top: 20px;}
-.btc_pic img{ width: 100%; border: 0; margin-top: -3px;}
+.btc_pic img{ width: 100%; border: 0; margin: 0; padding: 0;}
+.btc_logo{ padding-top: 20px; width: 73px; margin: 0 auto; margin-bottom: 65px;}
+.btc_logo img{ width: 73px; height: 25px;}
 
 /*layer*/
-.layer_bg{ background-color: #000000; filter:alpha(opacity=40); -moz-opacity:0.4; opacity:0.4; position: fixed; width: 100%; height: 100%; top: 0; left: 0;}
+.layer_bg{ background-color: #000000; filter:alpha(opacity=40); -moz-opacity:0.4; opacity:0.4; position: absolute; width: 100%; height: 100%; top: 0; left: 0;}
 .layer_invitation{ position: absolute; top: 0; z-index: 2; right: 0; text-align: right;}
 .layer_invitation img{ width: 60%;}
 
@@ -84,79 +57,26 @@ ul li { list-style: none; }
 .btc_good_money{ padding: 10px; background-color: #ffffff; border-bottom: 1px #eeeeee solid;}
 .btc_good_money img{ width: 90px; height: 59px; margin-right: 10px;}
 .btc_good_money label{ line-height: 16px; color: #333333; font-size: 14px;}
-.btc_good_money span {
-    line-height: 26px;
-    color: #999999;
-    font-size: 1.05em;
-}
+.btc_good_money span{ line-height: 26px; color: #999999; font-size: 12px; font-size: 1.05em;}
 .btc_good_money ul li.fr{ position: absolute; top: 10px; right:10px; font-size: 14px; color: #f99d3a;}
-.btc_money_total {
-    color: #666666;
-    text-align: right;
-    padding-right: 10px;
-    font-size: 1.05em;
-}
+.btc_money_total{ color: #666666; text-align: right; padding-right: 10px; font-size: 1.05em;}
 .btc_money_total span{ color: #f99d3a; line-height: 35px;}
 .btc_adress{ background-color: #ffffff; border-top: 1px #eeeeee solid; border-bottom: 1px #eeeeee solid; padding: 15px 10px;}
 .btc_adress div{ border-radius: 4px; border: 1px #dddddd solid; margin-bottom: 10px; padding: 5px 0; width: 100%;}
-.btc_adress div input {
-    border: none;
-    height: 25px;
-    line-height: 25px;
-    margin-left: 5px;
-    width: 85%;
-    outline: none;
-    font-size: 1.05em;
-}
-.btc_adress div textarea {
-    border: none;
-    resize: none;
-    margin-left: 5px;
-    width: 85%;
-    outline: none;
-    height: 40px;
-    font-size: 1.05em;
-}
-.btc_pay{ position: fixed; bottom: 0; width: 100%;}
-.btc_pay a {
-    display: block;
-    width: 50%;
-    height: 44px;
-    font-size: 1.4em;
-    color: #ffffff;
-    line-height: 44px;
-    text-align: center;
-    text-decoration: none;
-    font-weight: bold;
-}
+.btc_adress div input{ border: none; height: 25px; line-height: 25px; margin-left: 5px; width: 85%; outline: none; font-size: 1.05em;}
+.btc_adress div textarea{ border: none; resize: none; margin-left: 5px; width: 85%; outline: none; height: 40px; font-size: 1.05em;}
+.btc_pay{ position: fixed; bottom: 0; width: 100%; font-size: 1.1em;}
+.btc_pay a{ display: block; width: 50%; height: 44px; font-size: 1.4em; color: #ffffff; line-height: 44px; text-align: center; text-decoration: none; font-weight: bold;}
 .btc_pay a.fl{ background-color: #49bc6e;}
 .btc_pay a.fr{ background-color: #f99d3a;}
 
 /*rule*/
-.btc_rule_title {
-    text-align: center;
-    font-size: 1.4em;
-    color: #49bc6e;
-    padding: 15px 0;
-}
-.btc_rule {
-    padding: 0 15px 15px 15px;
-    line-height: 20px;
-    color: #666666;
-    font-size: 1.05em;
-}
+.btc_rule_title{ text-align: center; font-size: 16px; color:#49bc6e; padding: 15px 0;}
+.btc_rule{ padding: 0 15px 15px 15px; line-height: 20px; color: #666666;}
 .btc_rule strong,.btc_rule span{ display: block;}
-.btc_rule_bg span {
-    display: block;
-    padding-bottom: 15px;
-    line-height: 20px;
-    color: #666666;
-    font-size: 1.05em;
-}
+.btc_rule span{ padding-left: 10px;}
 .btc_rule_bg{ background-color: #f9f9f9; padding: 15px;}
 .btc_rule_bg span{ display: block; padding-bottom: 15px; line-height: 20px; color: #666666;}
-.btc_logo{ padding-top: 20px; width: 73px; margin: 0 auto; margin-bottom: 65px;}
-.btc_logo img{ width: 73px; height: 25px;}
 
 
 

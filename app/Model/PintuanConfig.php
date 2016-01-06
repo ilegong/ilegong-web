@@ -10,6 +10,25 @@ class PintuanConfig extends AppModel {
 
     public $useTable = false;
 
+    public function get_conf_data($share_id) {
+        return $this->conf_data[$share_id];
+    }
+
+    public function get_product_data($conf_id) {
+        return $this->pintuan_product_config[$conf_id];
+    }
+
+    var $pintuan_product_config = array(
+        1 => array(
+            'detail_img' => array('/static/pintuan/images/detail01.jpg', '/static/pintuan/images/detail02.jpg', '/static/pintuan/images/detail03.jpg'),
+            'send_info' => '2016年1月5日24点截止报名，1月6日统一发货'
+        ),
+        2 => array(
+            'detail_img' => array('/static/pintuan/images/detail01.jpg', '/static/pintuan/images/detail02.jpg', '/static/pintuan/images/detail03.jpg'),
+            'send_info' => '2016年1月5日24点截止报名，1月6日统一发货'
+        ),
+    );
+
     var $conf_data = array(
         1814 => array(
             'share_id' => '1814',
@@ -114,9 +133,5 @@ class PintuanConfig extends AppModel {
             )
         ),
     );
-
-    public function get_conf_data($share_id) {
-        return $this->conf_data[$share_id];
-    }
 
 }

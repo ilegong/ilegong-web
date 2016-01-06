@@ -137,6 +137,21 @@ class PintuanHelperComponent extends Component {
         $PintuanRecordM->save($record);
     }
 
+    public function get_tag_id_by_uid($uid) {
+        $PintuanRecordM = ClassRegistry::init('PintuanRecord');
+        $last_record = $PintuanRecordM->find('first', array(
+            'conditions' => array(
+                'user_id' => $uid,
+                'status' => PIN_TUAN_RECORD_PAID_STATUS,
+                'deleted' => DELETED_NO
+            )
+        ));
+        if (!empty($last_record)) {
+            return $last_record['PintuanRecord']['tag_id'];
+        }
+        return null;
+    }
+
     public function get_pintuan_records($tag_id) {
         $PintuanRecordM = ClassRegistry::init('PintuanRecord');
         $UserM = ClassRegistry::init('User');

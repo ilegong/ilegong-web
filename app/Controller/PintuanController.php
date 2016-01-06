@@ -22,11 +22,13 @@ class PintuanController extends AppController {
 
     /**
      * @param $share_id
+     * @param $conf_id
      * 拼团的详情
      */
-    public function detail($share_id) {
+    public function detail($share_id, $conf_id = 1) {
         $uid = $this->currentUser['id'];
         $conf = $this->get_pintuan_conf($share_id);
+        $product_conf = $this->get_pintuan_product_conf($conf_id);
         $tag_id = $_REQUEST['tag_id'];
         $wx_title = $conf['wx_title'];
         $wx_desc = $conf['wx_desc'];
@@ -51,6 +53,7 @@ class PintuanController extends AppController {
         $this->set('share_id', $share_id);
         $this->set('conf', $conf);
         $this->set('records', $records);
+        $this->set('product_conf', $product_conf);
         $this->set_share_weixin_params($uid, $wx_title, $conf['banner_img'], $wx_desc);
     }
 
@@ -212,6 +215,12 @@ class PintuanController extends AppController {
 
     private function get_pintuan_tag($tag_id) {
         return $this->PintuanHelper->check_and_return_pintuan_tag($tag_id);
+    }
+
+    private function get_pintuan_product_conf($conf_id) {
+        $pintuanConfigM = ClassRegistry::init('PintuanConfig');
+        $conf = $pintuanConfigM->get_product_data($conf_id);
+        return $conf;
     }
 
     private function get_pintuan_conf($share_id) {

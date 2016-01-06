@@ -1828,8 +1828,8 @@ class ShareUtilComponent extends Component {
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_173d81362e0b516ec73870fdf83c8a26.jpg'
                 ),
                 //紫皮糖
-                '1582' => array(
-                    'share_id' => 1582,
+                '1915' => array(
+                    'share_id' => 1915,
                     'share_name' => '俄罗斯经典紫皮糖、鲜奶威化和酸奶威化',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/9d333807aad_1110.jpg',
                     'share_price' => '70',

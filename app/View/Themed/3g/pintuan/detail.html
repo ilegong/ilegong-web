@@ -16,8 +16,7 @@
 </div>
 <div class="btc_baoming">
     <div class="btc_path"><img src="{{$STATIC_FILE_PATH}}/static/pintuan/images/path.gif" width="100%" /></div>
-    <div><label>【红红火火过新年  超值福利】<br>越南进口红心火龙果“二人团”，好东西和好朋友分享。<br>点击“自己买”，要支付54元；点击“2人拼团”后邀请1个朋友共同买，每人立省5元只要49元。
-        <br/>请注意：24小时内邀请有效，过期拼团失败，7天后全额退款。<br/>和好朋友一起过新年！<br/>2016年1月5日24点截止报名，1月6日统一发货<br/><a href="/pintuan/rule.html">玩法规则【限北京】</a></label></div>
+    <div><label>若24小时内拼团人数不足，在7个工作日内为您自动退款<br/>{{$product_conf['send_info']}}</label></div>
     {{if !empty($tag_id)}}'
         {{if $order_count > 0}}
         <ul class="clearfix">
@@ -49,7 +48,11 @@
         {{/if}}
     {{/if}}
 </div>
-<div class="btc_pic"><div><img src="{{$STATIC_FILE_PATH}}/static/pintuan/images/detail01.jpg" /></div><div><img src="{{$STATIC_FILE_PATH}}/static/pintuan/images/detail02.jpg" /></div><div><img src="{{$STATIC_FILE_PATH}}/static/pintuan/images/detail03.jpg" /></div></div>
+<div class="btc_pic">
+    {{loop $product_conf['detail_img'] $img}}
+        <div><img src="{{$STATIC_FILE_PATH}}{{$img}}"/></div>
+    {{/loop}}
+</div>
 <div class="btc_logo"><a href="/"><img src="{{$STATIC_FILE_PATH}}/static/pintuan/images/logo.png?v0.0.1" /></a></div>
 {{if empty($tag_id) || ($tag['PintuanTag']['status'] != PIN_TUAN_TAG_PROGRESS_STATUS)}}
 <!--报名-->
