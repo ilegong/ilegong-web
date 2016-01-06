@@ -41,6 +41,7 @@ class PintuanConfig extends AppModel {
             'promotions_title' => '报名了“【一起省5元】越南红心火龙果4个49元”',
             'share_label' => '来自［愣愣］的分享',
             'limit_time' => 24,
+            'pid' => 1,
             'product' => array(
                 'id' => 3845,
                 'normal_price' => 0.02,
@@ -59,6 +60,7 @@ class PintuanConfig extends AppModel {
             'promotions_title' => '报名了“【一起省5元】越南红心火龙果4个49元”',
             'share_label' => '来自［杨晓光］的分享',
             'limit_time' => 24,
+            'pid' => 1,
             'product' => array(
                 'id' => 3867,
                 'normal_price' => 54,
@@ -77,6 +79,7 @@ class PintuanConfig extends AppModel {
             'promotions_title' => '报名了“【一起省5元】越南红心火龙果4个49元”',
             'share_label' => '来自［鲲鲲］的分享',
             'limit_time' => 24,
+            'pid' => 1,
             'product' => array(
                 'id' => 3868,
                 'normal_price' => 54,
@@ -95,6 +98,7 @@ class PintuanConfig extends AppModel {
             'promotions_title' => '报名了“【一起省5元】越南红心火龙果4个49元”',
             'share_label' => '来自［小宝妈］的分享',
             'limit_time' => 24,
+            'pid' => 1,
             'product' => array(
                 'id' => 3869,
                 'normal_price' => 54,
@@ -113,6 +117,7 @@ class PintuanConfig extends AppModel {
             'promotions_title' => '报名了“【一起省5元】越南红心火龙果4个49元”',
             'share_label' => '来自［李樱花］的分享',
             'limit_time' => 24,
+            'pid' => 1,
             'product' => array(
                 'id' => 3870,
                 'normal_price' => 54,
@@ -131,6 +136,7 @@ class PintuanConfig extends AppModel {
             'promotions_title' => '报名了“【一起省5元】越南红心火龙果4个49元”',
             'share_label' => '来自［片片妈］的分享',
             'limit_time' => 24,
+            'pid' => 1,
             'product' => array(
                 'id' => 3875,
                 'normal_price' => 54,

@@ -6,6 +6,35 @@ class PintuanHelperComponent extends Component {
 
     var $components = array('ShareUtil');
 
+    /**
+     * @param $conf_id
+     * @return mixed
+     * 获取拼团报名人数
+     */
+    public function get_pintuan_count($conf_id) {
+        $dataCollectM = ClassRegistry::init('DataCollect');
+        $data = $dataCollectM->find('first', array(
+            'conditions' => array(
+                'data_id' => $conf_id,
+                'data_type' => COLLECT_DATA_PINTUAN_TYPE
+            )
+        ));
+        $count = $data['DataCollect']['plus_count'] + $data['DataCollect']['count'];
+        return $count;
+    }
+
+    /**
+     * @param $share_id
+     * 更新拼团的数量
+     */
+    private function update_pintuan_count($share_id){
+        $dataCollectM = ClassRegistry::init('DataCollect');
+        $pintuanConfigM = ClassRegistry::init('PintuanConfig');
+        $detail = $pintuanConfigM->get_conf_data($share_id);
+        $pid = $detail['pid'];
+        $dataCollectM->update(array('count' => 'count + 1'), array('data_id' => $pid, 'data_type' => COLLECT_DATA_PINTUAN_TYPE));
+    }
+
     public function handle_order_paid($order) {
         $order_id = $order['Order']['id'];
         $order_creator = $order['Order']['creator'];
@@ -24,6 +53,7 @@ class PintuanHelperComponent extends Component {
         $this->update_pintuan_record($order_id, $order_creator, $order_group_id);
         //update pintuan tag status and save opt log
         $this->update_pintuan_tag_status($order_group_id, $tag['PintuanTag']['num'], $order_creator, $order['Order']['member_id']);
+        $this->update_pintuan_count($order['Order']['member_id']);
     }
 
 

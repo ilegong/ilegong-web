@@ -29,3 +29,14 @@ CREATE TABLE `cake_pintuan_records` (
 ALTER TABLE `cake_pintuan_tags`
 ADD COLUMN `pid` INT NOT NULL DEFAULT 1 AFTER `num`;
 
+CREATE TABLE `cake_data_collects` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `data_type` INT NOT NULL DEFAULT 0,
+  `data_id` INT NOT NULL DEFAULT 0,
+  `count` INT NOT NULL DEFAULT 0,
+  `plus_count` INT NOT NULL DEFAULT 0,
+  `deleted` TINYINT NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`));
+
+
+

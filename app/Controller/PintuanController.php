@@ -32,6 +32,7 @@ class PintuanController extends AppController {
         $tag_id = $_REQUEST['tag_id'];
         $wx_title = $conf['wx_title'];
         $wx_desc = $conf['wx_desc'];
+        $all_buy_count = $this->PintuanHelper->get_pintuan_count($conf_id);
         if (empty($tag_id)) {
             $tag_id = $this->PintuanHelper->get_tag_id_by_uid($uid);
         }
@@ -58,6 +59,7 @@ class PintuanController extends AppController {
         $this->set('conf', $conf);
         $this->set('records', $records);
         $this->set('product_conf', $product_conf);
+        $this->set('all_buy_count', $all_buy_count);
         $this->set_share_weixin_params($uid, $wx_title, $conf['banner_img'], $wx_desc, $wx_url);
     }
 
