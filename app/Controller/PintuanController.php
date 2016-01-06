@@ -265,13 +265,13 @@ class PintuanController extends AppController {
     }
 
     /**
-     * @param $share_id // 分享ID
-     * @param $conf_id // 拼团商品的配置
-     * @param $tag_id // 拼团的ID
-     * @return string
+     * @param $share_id //分享ID
+     * @param $conf_id //拼团商品的配置
+     * @param $tag_id //拼团的ID
+     * @return string //
      */
     private function get_pintuan_detail_url($share_id, $conf_id, $tag_id) {
-        return '/pintuan/detail/' . $share_id . '/' . $conf_id . '?tag_id=' . $tag_id;
+        return WX_HOST.'/pintuan/detail/' . $share_id . '/' . $conf_id . '?tag_id=' . $tag_id;
     }
 
     /**
