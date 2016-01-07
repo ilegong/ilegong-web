@@ -615,6 +615,39 @@ class WeshareBuyComponent extends Component {
         $this->do_send_new_share_msg($weshare, $followers);
     }
 
+    /**
+     * @param $share_id
+     * @param null $limit
+     * @param null $offset
+     * 发送拼团消息
+     */
+    public function send_pintuan_share_msg($share_id, $limit = null, $offset = null) {
+        $PintuanConfigM = ClassRegistry::init('PintuanConfig');
+        $data = $PintuanConfigM->get_conf_data($share_id);
+        $followers = $this->load_fans_buy_sharer($data['sharer_id'], $limit, $offset);
+        $this->do_send_new_pintuan_msg($data, $followers);
+    }
+
+    /**
+     * @param $pintuan_data
+     * @param $uids
+     * 处理发送拼团消息
+     */
+    private function do_send_new_pintuan_msg($pintuan_data, $uids) {
+        //add filter
+        $uids = $this->check_msg_log_and_filter_user($pintuan_data['pid'], $uids, MSG_LOG_PINTUAN_TYPE);
+        $OauthbindM = ClassRegistry::init('Oauthbind');
+        $detail_url = WX_HOST . '/pintuan/detail/' . $pintuan_data['share_id'] . '/' . $pintuan_data['pid'];
+        $sharer_name = $pintuan_data['sharer_nickname'];
+        $product_name = $pintuan_data['share_title'];
+        $title = '关注的' . $sharer_name . '发起了';
+        $remark = '点击详情，赶快加入' . $sharer_name . '的拼团！';
+        $openIds = $OauthbindM->findWxServiceBindsByUids($uids);
+        foreach ($openIds as $openId) {
+            $this->process_send_share_msg($openId, $title, $product_name, $detail_url, $sharer_name, $remark);
+        }
+    }
+
     private function do_send_new_share_msg($weshare, $uids) {
         //add filter
         $uids = $this->check_msg_log_and_filter_user($weshare['Weshare']['id'], $uids, MSG_LOG_RECOMMEND_TYPE);

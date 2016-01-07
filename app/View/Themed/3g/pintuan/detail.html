@@ -61,14 +61,21 @@
 <div class="btc_logo"><a href="/"><img src="{{$STATIC_FILE_PATH}}/static/pintuan/images/logo.png?v0.0.1" /></a></div>
 {{if empty($tag_id) || ($tag['PintuanTag']['status'] != PIN_TUAN_TAG_PROGRESS_STATUS)}}
 <!--报名-->
-<div class="btc_operation">
-    <a href="/pintuan/balance/{{$share_id}}?create=1" class="fl">
-        <label class="fl">2人拼团</label>
-        <label class="fr">¥<span>{{$conf['product']['pintuan_price']}}</span></label>
+<div class="btc_invitation">
+    <a href="/share_opt/index.html" class="fl">
+        <i style="background: #f00;border-radius: 50%;width: 10px;height: 10px;top: 3px;left: 10%;position: absolute; display: none;" id="mark-has-unread"></i>
+        <i class="fa fa-search fa-2x"></i>
+        <br>
+        <span>发现</span>
     </a>
-    <a href="/pintuan/balance/{{$share_id}}" class="fr">
-        <label class="fl">自己买</label>
-        <label class="fr">¥<span>{{$conf['product']['normal_price']}}</span></label>
+    <div class="btc_buy fl">
+        <a href="/pintuan/balance/{{$share_id}}?create=1" class="fl">2人拼团&nbsp;¥<span>{{$conf['product']['pintuan_price']}}</span></a>
+        <a href="/pintuan/balance/{{$share_id}}" class="fr">自己买&nbsp;¥<span>{{$conf['product']['normal_price']}}</span></a>
+    </div>
+    <a href="#X" class="fl">
+        <i class="fa fa-bell fa-2x"></i>
+        <br>
+        <span>拼团提醒</span>
     </a>
 </div>
 {{else}}
@@ -77,7 +84,7 @@
         <!--如果是发起拼团者进来-->
         <!--邀请分享-->
         <div class="btc_invitation">
-            <a href="/" class="fl">
+            <a href="/share_opt/index.html" class="fl">
                 <i style="background: #f00;border-radius: 50%;width: 10px;height: 10px;top: 3px;left: 10%;position: absolute; display: none;" id="mark-has-unread"></i>
                 <i class="fa fa-search fa-2x"></i>
                 <br>

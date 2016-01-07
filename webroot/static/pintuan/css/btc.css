@@ -43,6 +43,11 @@ ul li { list-style: none; }
 .btc_invitation a{ display: block; text-align: center; color: #999999; text-decoration: none;}
 .btc_invitation a.fl{ width: 15%; margin-top: 5px;}
 .btc_invitation a.invitation_btn{ float: left; font-size: 1.2em; font-weight: bold; color: #ffffff; line-height: 39px; text-decoration: none; width: 65%; margin: 5px 2.5% 0 2.5%;  background-color: #f99d3a; border-radius: 4px;}
+.btc_buy{ padding: 0 2%; width: 66%;}
+.btc_invitation .btc_buy a{ display: block; width: 48%; margin-top: 5px; line-height: 39px; text-align: center; color: #ffffff; border-radius: 4px; font-size: 1.2em;}
+.btc_invitation .btc_buy a.fl{ background-color: #f99d3a;}
+.btc_invitation .btc_buy a.fr{ background-color: #49bc6e;}
+
 .btc_pic{ padding-top: 20px;}
 .btc_pic img{ width: 100%; border: 0; margin: 0; padding: 0;}
 .btc_logo{ padding-top: 20px; width: 73px; margin: 0 auto; margin-bottom: 65px;}

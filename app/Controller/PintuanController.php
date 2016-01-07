@@ -10,7 +10,7 @@ class PintuanController extends AppController {
 
     var $name = 'pintuan';
 
-    var $uses = array('OrderConsignee', 'User');
+    var $uses = array('OrderConsignee', 'User', 'WeshareBuy');
 
     var $components = array('PintuanHelper');
 
@@ -249,6 +249,55 @@ class PintuanController extends AppController {
         return null;
     }
 
+
+    public function send_new_pintuan_msg($share_id) {
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        if (empty($uid)) {
+            echo json_encode(array('success' => false, 'reason' => 'not_login'));
+            return;
+        }
+        if (is_blacklist_user($uid)) {
+            echo json_encode(array('success' => false, 'reason' => 'user_bad'));
+            return;
+        }
+        $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($uid);
+        $pageCount = $fansPageInfo['pageCount'];
+        $pageSize = $fansPageInfo['pageSize'];
+        $queue = new SaeTaskQueue('share');
+        $queue->addTask("/pintuan/process_send_new_pintuan_msg/" . $share_id . '/' . $pageCount . '/' . $pageSize);
+        //将任务推入队列
+        $ret = $queue->push();
+        //任务添加失败时输出错误码和错误信息
+        if ($ret === false) {
+            $this->log('add task queue error ' . json_encode(array($queue->errno(), $queue->errmsg())));
+        }
+        echo json_encode(array('success' => true));
+        return;
+    }
+
+    public function process_send_new_pintuan_msg($share_id, $pageCount, $pageSize) {
+        $this->autoRender = false;
+        $queue = new SaeTaskQueue('tasks');
+        $tasks = array();
+        foreach (range(0, $pageCount) as $page) {
+            $offset = $page * $pageSize;
+            $tasks[] = array('url' => "/pintuan/send_new_pintuan_msg_task/" . $share_id . "/" . $pageSize . "/" . $offset);
+        }
+        $queue->addTask($tasks);
+        $ret = $queue->push();
+        //$this->WeshareBuy->send_new_share_msg($shareId);
+        echo json_encode(array('success' => true, 'ret' => $ret));
+        return;
+    }
+
+    public function send_new_pintuan_msg_task($share_id, $limit, $offset) {
+        $this->autoRender = false;
+        $this->WeshareBuy->send_pintuan_share_msg($share_id, $limit, $offset);
+        echo json_encode(array('success' => true));
+        return;
+    }
+
     /**
      * @param $uid
      * @param $title
@@ -273,7 +322,7 @@ class PintuanController extends AppController {
      * @return string //
      */
     private function get_pintuan_detail_url($share_id, $conf_id, $tag_id) {
-        return WX_HOST.'/pintuan/detail/' . $share_id . '/' . $conf_id . '?tag_id=' . $tag_id;
+        return WX_HOST . '/pintuan/detail/' . $share_id . '/' . $conf_id . '?tag_id=' . $tag_id;
     }
 
     /**
