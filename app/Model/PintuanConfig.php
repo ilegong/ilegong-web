@@ -50,7 +50,7 @@ class PintuanConfig extends AppModel {
                 'id' => 4115,
                 'normal_price' => 0.02,
                 'pintuan_price' => 0.01,
-                'name' => '湖南麻阳冰糖橙 12个装 1kg左右'
+                'name' => '麻阳冰糖娃娃橙 12个装 1kg左右'
             )
         ),
         //火龙果
