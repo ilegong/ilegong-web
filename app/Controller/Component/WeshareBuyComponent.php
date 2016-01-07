@@ -2109,7 +2109,9 @@ class WeshareBuyComponent extends Component {
                 'created' => date('Y-m-d H:i:s'),
             );
         }
-        $msgLogM->saveAll($saveMsgLogData);
+        if(!empty($saveMsgLogData)){
+            $msgLogM->saveAll($saveMsgLogData);
+        }
         return $user_ids;
     }
 
