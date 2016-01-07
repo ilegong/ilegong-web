@@ -21,11 +21,13 @@ class PintuanConfig extends AppModel {
     var $pintuan_product_config = array(
         1 => array(
             'detail_img' => array('/static/pintuan/images/detail01.jpg', '/static/pintuan/images/detail02.jpg', '/static/pintuan/images/detail03.jpg'),
-            'send_info' => '2016年1月5日24点截止报名，1月6日统一发货'
+            'send_info' => '2016年1月5日24点截止报名，1月6日统一发货',
+            'send_date' => '1月6日'
         ),
         2 => array(
             'detail_img' => array('/static/pintuan/images/cz_detail01.png', '/static/pintuan/images/cz_detail02.jpg', '/static/pintuan/images/cz_detail03.jpg','/static/pintuan/images/cz_detail04.png','/static/pintuan/images/cz_detail05.jpg'),
-            'send_info' => '2016年1月11日24点截止报名，1月12日统一发货'
+            'send_info' => '2016年1月11日24点截止报名，1月12日统一发货',
+            'send_date' => '1月12日'
         ),
     );
 

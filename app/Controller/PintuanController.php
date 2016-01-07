@@ -51,6 +51,8 @@ class PintuanController extends AppController {
             $this->set('tag_id', $tag_id);
         }
         $records = $this->PintuanHelper->get_pintuan_records($tag_id);
+        $record_uids = Hash::extract($records, '{n}.PintuanRecord.user_id');
+        $this->set('record_uids', $record_uids);
         $order_count = count($records);
         $wx_url = $this->get_pintuan_detail_url($share_id, $tag_id);
         $this->set('order_count', $order_count);
