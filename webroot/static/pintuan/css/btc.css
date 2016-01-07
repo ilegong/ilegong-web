@@ -26,7 +26,7 @@ ul li { list-style: none; }
 .btc_baoming h2{ font-size: 1.1em; line-height: 20px; margin-bottom: 10px;}
 .btc_baoming h2 a{ color: #49bc6e;}
 .btc_baoming_head{ border-bottom: 1px #eeeeee solid; margin-bottom: 25px;position: relative;}
-.btc_status img{ width: 75px; height: 37px; position: absolute; left: 50%; margin-left: -37px; top:50px; border-radius: 0;}
+.btc_status img{ width: 75px; height: 37px; position: absolute; left: 50%; margin-left: -37px; top:35px; border-radius: 0;}
 .btc_operation,.btc_invitation{ position: fixed; bottom: 0; width: 100%;}
 .btc_operation a{ display: block; width: 50%; height: 49px; color: #ffffff; line-height: 49px;}
 .btc_operation a label{display: block; font-size: 1.3em;}
