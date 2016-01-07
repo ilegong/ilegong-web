@@ -33,6 +33,69 @@ class PintuanConfig extends AppModel {
 
     var $conf_data = array(
         //橙子
+        1951 => array(
+            'share_id' => '1951',
+            'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/cz_banner.jpg',
+            'small_banner_img' => 'http://static.tongshijia.com/static/pintuan/images/cz_banner_small.jpg',
+            'sharer_id' => '810684',
+            'sharer_nickname' => '李樱花',
+            'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg',
+            'share_title' => '麻阳冰糖娃娃橙 12个装 1kg左右 包邮 限北京',
+            'wx_title' => '［一起省4元］麻阳冰糖娃娃橙 12个12.8元包邮，李樱花邀你吃',
+            'wx_desc' => '虽然我很小，也很丑，但我是纯天然的—［朋友说］',
+            'promotions_title' => '购买了“［一起省4元］麻阳冰糖娃娃橙12个12.8元包邮”',
+            'share_label' => '来自［李樱花］的分享',
+            'limit_time' => 24,
+            'pid' => 2,
+            'product' => array(
+                'id' => 4128,
+                'normal_price' => 16.8,
+                'pintuan_price' => 12.8,
+                'name' => '麻阳冰糖娃娃橙 12个装 1kg左右'
+            )
+        ),
+        1950 => array(
+            'share_id' => '1950',
+            'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/cz_banner.jpg',
+            'small_banner_img' => 'http://static.tongshijia.com/static/pintuan/images/cz_banner_small.jpg',
+            'sharer_id' => '878825',
+            'sharer_nickname' => '片片妈',
+            'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_52d08a7c8bb6e9611307b6c4858ca38c.jpg',
+            'share_title' => '麻阳冰糖娃娃橙 12个装 1kg左右 包邮 限北京',
+            'wx_title' => '［一起省4元］麻阳冰糖娃娃橙 12个12.8元包邮，片片妈邀你吃',
+            'wx_desc' => '虽然我很小，也很丑，但我是纯天然的—［朋友说］',
+            'promotions_title' => '购买了“［一起省4元］麻阳冰糖娃娃橙12个12.8元包邮”',
+            'share_label' => '来自［片片妈］的分享',
+            'limit_time' => 24,
+            'pid' => 2,
+            'product' => array(
+                'id' => 4127,
+                'normal_price' => 16.8,
+                'pintuan_price' => 12.8,
+                'name' => '麻阳冰糖娃娃橙 12个装 1kg左右'
+            )
+        ),
+        1949 => array(
+            'share_id' => '1949',
+            'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/cz_banner.jpg',
+            'small_banner_img' => 'http://static.tongshijia.com/static/pintuan/images/cz_banner_small.jpg',
+            'sharer_id' => '811917',
+            'sharer_nickname' => '小宝妈',
+            'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg',
+            'share_title' => '麻阳冰糖娃娃橙 12个装 1kg左右 包邮 限北京',
+            'wx_title' => '［一起省4元］麻阳冰糖娃娃橙 12个12.8元包邮，小宝妈邀你吃',
+            'wx_desc' => '虽然我很小，也很丑，但我是纯天然的—［朋友说］',
+            'promotions_title' => '购买了“［一起省4元］麻阳冰糖娃娃橙12个12.8元包邮”',
+            'share_label' => '来自［小宝妈］的分享',
+            'limit_time' => 24,
+            'pid' => 2,
+            'product' => array(
+                'id' => 4126,
+                'normal_price' => 16.8,
+                'pintuan_price' => 12.8,
+                'name' => '麻阳冰糖娃娃橙 12个装 1kg左右'
+            )
+        ),
         1947 => array(
             'share_id' => '1947',
             'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/cz_banner.jpg',
@@ -164,7 +227,7 @@ class PintuanConfig extends AppModel {
             'share_id' => '1828',
             'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/banner.jpg',
             'small_banner_img' => 'http://static.tongshijia.com/static/pintuan/images/banner_small.jpg',
-            'sharer_id' => '811917',
+            'sharer_id' => '810684',
             'sharer_nickname' => '李樱花',
             'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg',
             'share_title' => '越南红心火龙果 4个装 4.5斤左右',
