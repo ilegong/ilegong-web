@@ -170,6 +170,7 @@ class PintuanHelperComponent extends Component {
         ));
         if (!empty($expire_pintuans)) {
             $expire_pintuan_ids = Hash::extract($expire_pintuans, '{n}.PintuanTag.id');
+            $this->log('expire pintuan ids'.json_encode($expire_pintuan_ids));
             $PintuanTagM->updateAll(array('status' => PIN_TUAN_TAG_EXPIRE_STATUS), array('id' => $expire_pintuan_ids));
             foreach ($expire_pintuans as $pintuan_tag) {
                 $share_id = $pintuan_tag['PintuanTag']['share_id'];
