@@ -22,16 +22,16 @@ class PintuanController extends AppController {
 
     /**
      * @param $share_id
-     * @param $conf_id
      * 拼团的详情
      */
-    public function detail($share_id, $conf_id = 1) {
+    public function detail($share_id) {
         $uid = $this->currentUser['id'];
         $conf = $this->get_pintuan_conf($share_id);
-        $product_conf = $this->get_pintuan_product_conf($conf_id);
         $tag_id = $_REQUEST['tag_id'];
         $wx_title = $conf['wx_title'];
         $wx_desc = $conf['wx_desc'];
+        $conf_id = $conf['pid'];
+        $product_conf = $this->get_pintuan_product_conf($conf_id);
         $all_buy_count = $this->PintuanHelper->get_pintuan_count($conf_id);
         if (empty($tag_id)) {
             $tag_id = $this->PintuanHelper->get_tag_id_by_uid($uid);
