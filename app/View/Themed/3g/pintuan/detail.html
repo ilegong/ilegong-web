@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
     <meta charset="UTF-8">
     <title>{{$conf['share_label']}}</title>
-    {{$this->Html->css(array($STATIC_FILE_PATH.'/static/pintuan/css/btc.css?v0.09'))}}
+    {{$this->Html->css(array($STATIC_FILE_PATH.'/static/pintuan/css/btc.css?v0.10'))}}
     <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 <body>
@@ -115,7 +115,7 @@
     {{/if}}
 {{/if}}
 <!--分享弹出层-->
-<div style="display: none;" class="layer_invitation" id="layer-invitation"><img src="/static/pintuan/images/invitation.png" /></div>
+<div style="display: none;" class="layer_invitation" id="layer-invitation"><img src="{{$STATIC_FILE_PATH}}/static/pintuan/images/invitation.png" /></div>
 <div style="display: none;" class="layer_bg" id="mask-bg-layer"></div>
 <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
 <script src="{{$STATIC_FILE_PATH}}/static/pintuan/js/detail.js?v0.09"></script>

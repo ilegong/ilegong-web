@@ -53,7 +53,6 @@ class PintuanHelperComponent extends Component {
         $this->update_pintuan_record($order_id, $order_creator, $order_group_id);
         //update pintuan tag status and save opt log
         $this->update_pintuan_tag_status($order_group_id, $tag['PintuanTag']['num'], $order_creator, $order['Order']['member_id']);
-
     }
 
 
