@@ -24,12 +24,34 @@ class PintuanConfig extends AppModel {
             'send_info' => '2016年1月5日24点截止报名，1月6日统一发货'
         ),
         2 => array(
-            'detail_img' => array('/static/pintuan/images/detail01.jpg', '/static/pintuan/images/detail02.jpg', '/static/pintuan/images/detail03.jpg'),
+            'detail_img' => array('/static/pintuan/images/cz_detail01.png', '/static/pintuan/images/cz_detail02.jpg', '/static/pintuan/images/cz_detail03.jpg','/static/pintuan/images/cz_detail04.png','/static/pintuan/images/cz_detail05.jpg'),
             'send_info' => '2016年1月5日24点截止报名，1月6日统一发货'
         ),
     );
 
     var $conf_data = array(
+        //橙子
+        80 => array(
+            'share_id' => '80',
+            'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/cz_banner.jpg',
+            'sharer_id' => '633345',
+            'sharer_nickname' => '愣愣',
+            'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/6333451445516765.png',
+            'share_title' => '湖南麻阳冰糖橙 12个装 1kg左右',
+            'wx_title' => '[和你一起立省5元] 越南红心火龙果 4个49元，愣愣邀你吃',
+            'wx_desc' => '品质棒棒嗒，好吃的要分享给大家一起吃--朋友说',
+            'promotions_title' => '报名了“【一起省5元】越南红心火龙果4个49元”',
+            'share_label' => '来自［愣愣］的分享',
+            'limit_time' => 24,
+            'pid' => 2,
+            'product' => array(
+                'id' => 140,
+                'normal_price' => 0.02,
+                'pintuan_price' => 0.01,
+                'name' => '越南红心火龙果 4个装'
+            )
+        ),
+        //火龙果
         79 => array(
             'share_id' => '1814',
             'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/banner.jpg',
@@ -151,5 +173,4 @@ class PintuanConfig extends AppModel {
             )
         ),
     );
-
 }
