@@ -41,7 +41,7 @@ class PintuanConfig extends AppModel {
             'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/6333451445516765.png',
             'share_title' => '麻阳冰糖娃娃橙 12个装 1kg左右',
             'wx_title' => '［一起省4元］麻阳冰糖娃娃橙 12个12.8元，愣愣邀你吃',
-            'wx_desc' => '虽然我很小，也很丑，但是我是纯天然的—［朋友说］',
+            'wx_desc' => '虽然我很小，也很丑，但我是纯天然的—［朋友说］',
             'promotions_title' => '购买了“［一起省4元］麻阳冰糖娃娃橙12个12.8元”',
             'share_label' => '来自［愣愣］的分享',
             'limit_time' => 24,
