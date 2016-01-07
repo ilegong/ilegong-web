@@ -33,6 +33,27 @@ class PintuanConfig extends AppModel {
 
     var $conf_data = array(
         //橙子
+        1947 => array(
+            'share_id' => '1947',
+            'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/cz_banner.jpg',
+            'small_banner_img' => 'http://static.tongshijia.com/static/pintuan/images/cz_banner_small.jpg',
+            'sharer_id' => '141',
+            'sharer_nickname' => '杨晓光',
+            'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg',
+            'share_title' => '麻阳冰糖娃娃橙 12个装 1kg左右 包邮 限北京',
+            'wx_title' => '［一起省4元］麻阳冰糖娃娃橙 12个12.8元包邮，杨晓光邀你吃',
+            'wx_desc' => '虽然我很小，也很丑，但我是纯天然的—［朋友说］',
+            'promotions_title' => '购买了“［一起省4元］麻阳冰糖娃娃橙12个12.8元包邮”',
+            'share_label' => '来自［杨晓光］的分享',
+            'limit_time' => 24,
+            'pid' => 2,
+            'product' => array(
+                'id' => 4115,
+                'normal_price' => 16.8,
+                'pintuan_price' => 12.8,
+                'name' => '麻阳冰糖娃娃橙 12个装 1kg左右'
+            )
+        ),
         1941 => array(
             'share_id' => '1941',
             'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/cz_banner.jpg',
