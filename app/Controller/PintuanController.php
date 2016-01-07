@@ -268,7 +268,8 @@ class PintuanController extends AppController {
         $pageCount = $fansPageInfo['pageCount'];
         $pageSize = $fansPageInfo['pageSize'];
         $queue = new SaeTaskQueue('share');
-        $queue->addTask("/pintuan/process_send_new_pintuan_msg/" . $share_id . '/' . $pageCount . '/' . $pageSize);
+        $tag_id = $_REQUEST['tag_id'];
+        $queue->addTask("/pintuan/process_send_new_pintuan_msg/" . $share_id . '/' . $pageCount . '/' . $pageSize, "tag_id=".$tag_id, true);
         //将任务推入队列
         $ret = $queue->push();
         //任务添加失败时输出错误码和错误信息
@@ -283,9 +284,10 @@ class PintuanController extends AppController {
         $this->autoRender = false;
         $queue = new SaeTaskQueue('tasks');
         $tasks = array();
+        $tag_id = $_REQUEST['tag_id'];
         foreach (range(0, $pageCount) as $page) {
             $offset = $page * $pageSize;
-            $tasks[] = array('url' => "/pintuan/send_new_pintuan_msg_task/" . $share_id . "/" . $pageSize . "/" . $offset);
+            $tasks[] = array('url' => "/pintuan/send_new_pintuan_msg_task/" . $share_id . "/" . $pageSize . "/" . $offset, "postdata" => "tag_id=" . $tag_id);
         }
         $queue->addTask($tasks);
         $ret = $queue->push();
@@ -296,7 +298,8 @@ class PintuanController extends AppController {
 
     public function send_new_pintuan_msg_task($share_id, $limit, $offset) {
         $this->autoRender = false;
-        $this->WeshareBuy->send_pintuan_share_msg($share_id, $limit, $offset);
+        $tag_id = $_REQUEST['tag_id'];
+        $this->WeshareBuy->send_pintuan_share_msg($share_id, $tag_id ,$limit, $offset);
         echo json_encode(array('success' => true));
         return;
     }
