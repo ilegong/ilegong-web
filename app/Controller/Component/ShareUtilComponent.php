@@ -1698,7 +1698,7 @@ class ShareUtilComponent extends Component {
                 '1944' => array(
                     'share_id' => 1944,
                     'share_name' => '一颗有梦想有追求的苹果',
-                    'share_img' => 'http://dev.tongshijia.com/files/201601/thumb_m/81e01bace54_0107.jpg',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/45991b6877b_0107.jpg',
                     'share_price' => '58',
                     'share_user_name' => '朋友说小妹',
                     'share_vote' => 645,
