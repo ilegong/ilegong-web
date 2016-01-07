@@ -1675,26 +1675,6 @@ class ShareUtilComponent extends Component {
 //                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg',
 //                    'pintuan' => true
 //                ),
-                '1944' => array(
-                    'share_id' => 1944,
-                    'share_name' => '一颗有梦想有追求的苹果',
-                    'share_img' => 'http://dev.tongshijia.com/files/201601/thumb_m/81e01bace54_0107.jpg',
-                    'share_price' => '58',
-                    'share_user_name' => '朋友说小妹',
-                    'share_vote' => 645,
-                    'share_user_id' => 711503,
-                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/0609f46d89e_0813.jpg'
-                ),
-                '1755' => array(
-                    'share_id' => 1755,
-                    'share_name' => '细腻多汁、轻软甜蜜 比橘肉更细腻的春见限量试吃【限北京 限1份】',
-                    'share_img' => 'http://dev.tongshijia.com/files/201601/thumb_m/e04ba01938f_0107.jpg',
-                    'share_price' => '45',
-                    'share_user_name' => '杨晓光',
-                    'share_vote' => 1200,
-                    'share_user_id' => 141,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg'
-                ),
                 '1900' => array(
                     'share_id' => 1900,
                     'share_name' => '精品天水花牛苹果 宝宝和老人特别喜欢',
@@ -1704,6 +1684,26 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 800,
                     'share_user_id' => 141,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg'
+                ),
+                '1755' => array(
+                    'share_id' => 1755,
+                    'share_name' => '细腻多汁、轻软甜蜜 比橘肉更细腻的春见',
+                    'share_img' => 'http://dev.tongshijia.com/files/201601/thumb_m/e04ba01938f_0107.jpg',
+                    'share_price' => '45',
+                    'share_user_name' => '杨晓光',
+                    'share_vote' => 1200,
+                    'share_user_id' => 141,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg'
+                ),
+                '1944' => array(
+                    'share_id' => 1944,
+                    'share_name' => '一颗有梦想有追求的苹果',
+                    'share_img' => 'http://dev.tongshijia.com/files/201601/thumb_m/81e01bace54_0107.jpg',
+                    'share_price' => '58',
+                    'share_user_name' => '朋友说小妹',
+                    'share_vote' => 645,
+                    'share_user_id' => 711503,
+                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/0609f46d89e_0813.jpg'
                 ),
                 '1868' => array(
                     'share_id' => 1868,
