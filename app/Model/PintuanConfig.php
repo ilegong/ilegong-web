@@ -36,6 +36,7 @@ class PintuanConfig extends AppModel {
         1941 => array(
             'share_id' => '1941',
             'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/cz_banner.jpg',
+            'small_banner_img' => 'http://static.tongshijia.com/static/pintuan/images/cz_banner_small.jpg',
             'sharer_id' => '802852',
             'sharer_nickname' => '愣愣',
             'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/6333451445516765.png',
@@ -57,6 +58,7 @@ class PintuanConfig extends AppModel {
         79 => array(
             'share_id' => '1814',
             'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/banner.jpg',
+            'small_banner_img' => 'http://static.tongshijia.com/static/pintuan/images/banner_small.jpg',
             'sharer_id' => '633345',
             'sharer_nickname' => '愣愣',
             'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/6333451445516765.png',
@@ -77,6 +79,7 @@ class PintuanConfig extends AppModel {
         1825 => array(
             'share_id' => '1825',
             'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/banner.jpg',
+            'small_banner_img' => 'http://static.tongshijia.com/static/pintuan/images/banner_small.jpg',
             'sharer_id' => '141',
             'sharer_nickname' => '杨晓光',
             'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg',
@@ -97,6 +100,7 @@ class PintuanConfig extends AppModel {
         1826 => array(
             'share_id' => '1826',
             'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/banner.jpg',
+            'small_banner_img' => 'http://static.tongshijia.com/static/pintuan/images/banner_small.jpg',
             'sharer_id' => '806889',
             'sharer_nickname' => '鲲鲲',
             'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg',
@@ -117,6 +121,7 @@ class PintuanConfig extends AppModel {
         1827 => array(
             'share_id' => '1827',
             'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/banner.jpg',
+            'small_banner_img' => 'http://static.tongshijia.com/static/pintuan/images/banner_small.jpg',
             'sharer_id' => '811917',
             'sharer_nickname' => '小宝妈',
             'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg',
@@ -137,6 +142,7 @@ class PintuanConfig extends AppModel {
         1828 => array(
             'share_id' => '1828',
             'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/banner.jpg',
+            'small_banner_img' => 'http://static.tongshijia.com/static/pintuan/images/banner_small.jpg',
             'sharer_id' => '811917',
             'sharer_nickname' => '李樱花',
             'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg',
@@ -157,6 +163,7 @@ class PintuanConfig extends AppModel {
         1831 => array(
             'share_id' => '1831',
             'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/banner.jpg',
+            'small_banner_img' => 'http://static.tongshijia.com/static/pintuan/images/banner_small.jpg',
             'sharer_id' => '878825',
             'sharer_nickname' => '片片妈',
             'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_52d08a7c8bb6e9611307b6c4858ca38c.jpg',
