@@ -637,7 +637,7 @@ class WeshareBuyComponent extends Component {
         //add filter
         $uids = $this->check_msg_log_and_filter_user($pintuan_data['pid'], $uids, MSG_LOG_PINTUAN_TYPE);
         $OauthbindM = ClassRegistry::init('Oauthbind');
-        $detail_url = WX_HOST . '/pintuan/detail/' . $pintuan_data['share_id'] . '/' . $pintuan_data['pid'];
+        $detail_url = WX_HOST . '/pintuan/detail/' . $pintuan_data['share_id'] . 'from=template_msg';
         $sharer_name = $pintuan_data['sharer_nickname'];
         $product_name = $pintuan_data['share_title'];
         $title = '关注的' . $sharer_name . '发起了';

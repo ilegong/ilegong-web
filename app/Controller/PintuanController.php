@@ -52,7 +52,7 @@ class PintuanController extends AppController {
         }
         $records = $this->PintuanHelper->get_pintuan_records($tag_id);
         $order_count = count($records);
-        $wx_url = $this->get_pintuan_detail_url($share_id, $conf_id, $tag_id);
+        $wx_url = $this->get_pintuan_detail_url($share_id, $tag_id);
         $this->set('order_count', $order_count);
         $this->set('uid', $uid);
         $this->set('share_id', $share_id);
@@ -318,12 +318,11 @@ class PintuanController extends AppController {
 
     /**
      * @param $share_id //分享ID
-     * @param $conf_id //拼团商品的配置
      * @param $tag_id //拼团的ID
      * @return string //拼团的详细地址
      */
-    private function get_pintuan_detail_url($share_id, $conf_id, $tag_id) {
-        return WX_HOST . '/pintuan/detail/' . $share_id . '/' . $conf_id . '?tag_id=' . $tag_id.'&from=template_msg';
+    private function get_pintuan_detail_url($share_id, $tag_id) {
+        return WX_HOST . '/pintuan/detail/' . $share_id . '?tag_id=' . $tag_id . '&from=wx_share';
     }
 
     /**

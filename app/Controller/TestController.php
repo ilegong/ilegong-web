@@ -173,4 +173,9 @@ class TestController extends AppController{
         echo json_encode(array('success' => true));
     }
 
+    public function test_send_pintuan_msg($shareId){
+        $this->autoRender = false;
+
+    }
+
 }

@@ -257,11 +257,10 @@ class PintuanHelperComponent extends Component {
             $pintuanConfigM = ClassRegistry::init('PintuanConfig');
             $conf_data = $pintuanConfigM->get_conf_data($share_id);
             $good_name = $conf_data['share_title'];
-            $conf_id = $conf_data['pid'];
             $title = '恭喜您，您参加的团购已拼团成功，我们会尽快为您安排发货。';
             $leader_name = $conf_data['sharer_nickname'];
             $remark = '点击查看详情!邀请朋友来一起参加!';
-            $url = WX_HOST . '/pintuan/detail/' . $share_id . '/' . $conf_id . '?tag_id=' . $tag_id;
+            $url = WX_HOST . '/pintuan/detail/' . $share_id . '?tag_id=' . $tag_id . '&from=template_msg';
             $this->Weixin->send_pintuan_success_msg($user_open_id, $title, $good_name, $leader_name, $remark, $url);
         }
     }
@@ -276,8 +275,7 @@ class PintuanHelperComponent extends Component {
             $title = '您好，您发起的' . $good_name . '拼团失败！';
             $fail_reason = '24小时内没有人参团';
             $remark = '点击查看详情，重新发起拼团！';
-            $conf_id = $conf_data['pid'];
-            $url = WX_HOST . '/pintuan/detail/' . $share_id . '/' . $conf_id . '?tag_id=' . $tag_id;
+            $url = WX_HOST . '/pintuan/detail/' . $share_id . '?tag_id=' . $tag_id . '&from=template_msg';
             $this->Weixin->send_pintuan_fail_msg($user_open_id, $title, $good_name, $fail_reason, $remark, $url);
         }
     }
