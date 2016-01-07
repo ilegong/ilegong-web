@@ -34,13 +34,13 @@ class PintuanConfig extends AppModel {
         80 => array(
             'share_id' => '80',
             'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/cz_banner.jpg',
-            'sharer_id' => '633345',
+            'sharer_id' => '802852',
             'sharer_nickname' => '愣愣',
             'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/6333451445516765.png',
             'share_title' => '湖南麻阳冰糖橙 12个装 1kg左右',
-            'wx_title' => '[和你一起立省5元] 越南红心火龙果 4个49元，愣愣邀你吃',
-            'wx_desc' => '品质棒棒嗒，好吃的要分享给大家一起吃--朋友说',
-            'promotions_title' => '报名了“【一起省5元】越南红心火龙果4个49元”',
+            'wx_title' => '［一起省4元］麻阳无农药冰糖橙 12个12.8元，愣愣邀你吃',
+            'wx_desc' => '品质棒棒嗒，好吃的要分享给大家一起吃—［朋友说］',
+            'promotions_title' => '购买了“【一起省5元】越南红心火龙果4个49元”',
             'share_label' => '来自［愣愣］的分享',
             'limit_time' => 24,
             'pid' => 2,
@@ -48,7 +48,7 @@ class PintuanConfig extends AppModel {
                 'id' => 140,
                 'normal_price' => 0.02,
                 'pintuan_price' => 0.01,
-                'name' => '越南红心火龙果 4个装'
+                'name' => '湖南麻阳冰糖橙 12个装 1kg左右'
             )
         ),
         //火龙果

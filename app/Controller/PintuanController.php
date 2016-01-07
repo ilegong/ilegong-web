@@ -109,7 +109,7 @@ class PintuanController extends AppController {
         if ($type == 1) {
             $price = $pintuan_conf['product']['pintuan_price'];
             //init tag??
-            $tag_id = $this->new_pintuan_tag($uid, $now_date, $share_id);
+            $tag_id = $this->new_pintuan_tag($uid, $now_date, $share_id, $pintuan_conf['pid']);
             if (empty($tag_id)) {
                 echo json_encode(array('success' => false, 'reason' => 'system_error'));
                 return;
@@ -162,12 +162,13 @@ class PintuanController extends AppController {
      * @param $uid
      * @param $date
      * @param $share_id
+     * @param $pid
      * @return mixed
      * 生成新的拼团标示
      */
-    private function new_pintuan_tag($uid, $date, $share_id) {
+    private function new_pintuan_tag($uid, $date, $share_id, $pid) {
         $pinTuanTagM = ClassRegistry::init('PintuanTag');
-        $tag_data = array('creator' => $uid, 'created' => $date, 'share_id' => $share_id, 'num' => 2);
+        $tag_data = array('creator' => $uid, 'created' => $date, 'share_id' => $share_id, 'num' => 2, 'pid' => $pid);
         $tag = $pinTuanTagM->save($tag_data);
         return $tag['PintuanTag']['id'];
     }
