@@ -43,4 +43,7 @@ ALTER TABLE `cake_pintuan_records`
 ADD COLUMN `pid` INT NOT NULL DEFAULT 1 AFTER `deleted`;
 
 
+ALTER TABLE `cake_pintuan_records`
+ADD COLUMN `share_id` INT NOT NULL DEFAULT 0 AFTER `pid`;
+
 
