@@ -52,7 +52,7 @@ class PintuanHelperComponent extends Component {
         //update or save pin tuan record
         $this->update_pintuan_record($order_id, $order_creator, $order_group_id);
         //update pintuan tag status and save opt log
-        $this->update_pintuan_tag_status($order_group_id, $tag['PintuanTag']['num'], $order_creator, $order['Order']['member_id']);
+        $this->update_pintuan_tag_status($order_group_id, $tag['PintuanTag']['num'], $order_creator, $order['Order']['member_id'], $tag_creator);
     }
 
 
@@ -237,16 +237,16 @@ class PintuanHelperComponent extends Component {
         return $record_count;
     }
 
-    private function update_pintuan_tag_status($tag_id, $tag_num, $user_id, $share_id) {
+    private function update_pintuan_tag_status($tag_id, $tag_num, $user_id, $share_id, $tag_creator) {
         $record_count = $this->get_pintuan_tag_order_count($tag_id);
         if ($record_count >= $tag_num) {
             //save pin tuan success opt log
             //check is test user don't save
-            if($share_id!=1941){
+            if ($share_id != 1941) {
                 $this->ShareUtil->save_pintuan_success_opt_log($user_id, $share_id, $tag_id);
             }
             $this->update_pintuan_tag(array('status' => PIN_TUAN_TAG_SUCCESS_STATUS), array('id' => $tag_id));
-            $this->send_pintuan_success_msg($share_id, $tag_id, $user_id);
+            $this->send_pintuan_success_msg($share_id, $tag_id, $tag_creator);
             $this->update_pintuan_count($share_id);
         }
     }
@@ -255,6 +255,7 @@ class PintuanHelperComponent extends Component {
         $oauthBindM = ClassRegistry::init('Oauthbind');
         $user_open_id = $oauthBindM->findWxServiceBindByUid($uid);
         if ($user_open_id) {
+            $user_open_id = $user_open_id['oauth_openid'];
             $pintuanConfigM = ClassRegistry::init('PintuanConfig');
             $conf_data = $pintuanConfigM->get_conf_data($share_id);
             $good_name = $conf_data['share_title'];
@@ -270,6 +271,7 @@ class PintuanHelperComponent extends Component {
         $oauthBindM = ClassRegistry::init('Oauthbind');
         $user_open_id = $oauthBindM->findWxServiceBindByUid($uid);
         if ($user_open_id) {
+            $user_open_id = $user_open_id['oauth_openid'];
             $pintuanConfigM = ClassRegistry::init('PintuanConfig');
             $conf_data = $pintuanConfigM->get_conf_data($share_id);
             $good_name = $conf_data['share_title'];
