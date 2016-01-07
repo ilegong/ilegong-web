@@ -13,7 +13,14 @@ ul li { list-style: none; }
 /*index*/
 .btc_banner img{ width: 100%;}
 .btc_head{ position: relative;}
-.btc_head img{ width: 50px; border-radius: 50px; border: 1px #ffffff solid; position: absolute; margin-top: -25px; right: 10px;}
+.btc_head img {
+    width: 50px;
+    border-radius: 50px;
+    border: 1px #ffffff solid;
+    position: absolute;
+    margin-top: -34px;
+    right: 10px;
+}
 .btc_title{ color: #999999; line-height: 20px; padding: 15px 0 20px 10px; border-bottom: 1px #eeeeee solid; margin-bottom: 20px;}
 .btc_title h1{ font-size: 1.3em; color: #222222;}
 .btc_baoming {
