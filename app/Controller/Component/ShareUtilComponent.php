@@ -1664,17 +1664,17 @@ class ShareUtilComponent extends Component {
     public function get_share_index_product($tag) {
         $product = array(
             0 => array(
-//                '1825' => array(
-//                    'share_id' => 1825,
-//                    'share_name' => '越南红心火龙果 4个装 4.5斤左右',
-//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/eb50a0838ce_1231.jpg',
-//                    'share_price' => '49',
-//                    'share_user_name' => '杨晓光',
-//                    'share_vote' => 2000,
-//                    'share_user_id' => 141,
-//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg',
-//                    'pintuan' => true
-//                ),
+                '1947' => array(
+                    'share_id' => 1947,
+                    'share_name' => '麻阳冰糖娃娃橙 12个装 1kg左右 包邮',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/48e4f1c06ac_0107.jpg',
+                    'share_price' => '12.8',
+                    'share_user_name' => '杨晓光',
+                    'share_vote' => 2000,
+                    'share_user_id' => 141,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg',
+                    'pintuan' => true
+                ),
                 '1900' => array(
                     'share_id' => 1900,
                     'share_name' => '精品天水花牛苹果 宝宝和老人特别喜欢',
