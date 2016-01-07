@@ -288,6 +288,7 @@ const PROXY_USER_PAID_REBATE_TYPE = 2;//团长购买返利
 const SHARE_FAQ_READ = 1;
 const SHARE_FAQ_UNREAD = 0;
 
+//数据统计类型
 const COLLECT_DATA_PINTUAN_TYPE = 0;
 
 define('CATEGORY_ID_TECHAN', 114);

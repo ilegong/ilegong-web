@@ -73,6 +73,7 @@ $(document).ready(function () {
   var $maskBgLayer = $('#mask-bg-layer');
   var $promptInvitationLayerBtn = $('#prompt-invitation-layer-btn');
   var $expireTime = $('#tag-expire-date');
+  var hasSendMsg = false;
   $promptInvitationLayerBtn.on('click', function (e) {
     e.preventDefault();
     $maskBgLayer.show();
@@ -100,6 +101,27 @@ $(document).ready(function () {
     if($promptInvitationLayerBtn.length > 0){
       $promptInvitationLayerBtn.trigger('click');
     }
+  }
+
+  $('a[name="notify-fans"]').on('click', function (e) {
+    if (!hasSendMsg) {
+      e.preventDefault();
+      var $me = $(this);
+      var shareId = $me.data('id');
+      var tagId = $me.data('tag-id') || 0;
+      notifyFans(shareId, tagId);
+      hasSendMsg = true;
+    }
+  });
+
+  function notifyFans(shareId, tagId){
+    $.getJSON('/pintuan/send_new_pintuan_msg/'+shareId, {'tag_id' : tagId} ,function(data){
+      if(data['success']){
+        alert('已经发送');
+      }else{
+        alert('发送失败');
+      }
+    });
   }
   function getDateFromStr(dateString){
     //var dateString = "2010-08-09 01:02:03";

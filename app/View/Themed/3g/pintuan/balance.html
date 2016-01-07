@@ -4,12 +4,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0, minimal-ui">
     <meta charset="UTF-8">
     <title>{{$conf['share_label']}}</title>
-    {{$this->Html->css(array($STATIC_FILE_PATH.'/static/pintuan/css/btc.css?v0.06'))}}
+    {{$this->Html->css(array($STATIC_FILE_PATH.'/static/pintuan/css/btc.css?v0.07'))}}
 </head>
 <body style="background-color: #f9f9f9;">
 <div class="btc_good_money">
     <ul class="clearfix">
-        <li class="fl"><img src="/static/pintuan/images/banner_small.jpg"/></li>
+        <li class="fl"><img src="{{$conf['small_banner_img']}}"/></li>
         <li style="overflow: hidden; display: block; padding-right: 30px;">
             <label>{{$conf['product']['name']}}</label><br/><span>数量：1份</span></li>
         <li class="fr">¥{{$price}}</li>

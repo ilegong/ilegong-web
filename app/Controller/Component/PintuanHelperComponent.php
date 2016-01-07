@@ -52,8 +52,7 @@ class PintuanHelperComponent extends Component {
         //update or save pin tuan record
         $this->update_pintuan_record($order_id, $order_creator, $order_group_id);
         //update pintuan tag status and save opt log
-        $this->update_pintuan_tag_status($order_group_id, $tag['PintuanTag']['num'], $order_creator, $order['Order']['member_id']);
-        $this->update_pintuan_count($order['Order']['member_id']);
+        $this->update_pintuan_tag_status($order_group_id, $tag['PintuanTag']['num'], $order_creator, $order['Order']['member_id'], $tag_creator);
     }
 
 
@@ -162,7 +161,7 @@ class PintuanHelperComponent extends Component {
      */
     public function cron_change_tag_status() {
         $PintuanTagM = ClassRegistry::init('PintuanTag');
-        $expire_date = date('Y-m-d H:i:s', strtotime('-1 day'));
+        $expire_date = date('Y-m-d H:i:s');
         $expire_pintuans = $PintuanTagM->find('all', array(
             'conditions' => array(
                 'expire_date <= ' => $expire_date,
@@ -171,6 +170,7 @@ class PintuanHelperComponent extends Component {
         ));
         if (!empty($expire_pintuans)) {
             $expire_pintuan_ids = Hash::extract($expire_pintuans, '{n}.PintuanTag.id');
+            $this->log('expire pintuan ids' . json_encode($expire_pintuan_ids));
             $PintuanTagM->updateAll(array('status' => PIN_TUAN_TAG_EXPIRE_STATUS), array('id' => $expire_pintuan_ids));
             foreach ($expire_pintuans as $pintuan_tag) {
                 $share_id = $pintuan_tag['PintuanTag']['share_id'];
@@ -186,13 +186,14 @@ class PintuanHelperComponent extends Component {
         $PintuanRecordM->save($record);
     }
 
-    public function get_tag_id_by_uid($uid) {
+    public function get_tag_id_by_uid($uid, $pid) {
         $PintuanRecordM = ClassRegistry::init('PintuanRecord');
         $last_record = $PintuanRecordM->find('first', array(
             'conditions' => array(
                 'user_id' => $uid,
                 'status' => PIN_TUAN_RECORD_PAID_STATUS,
-                'deleted' => DELETED_NO
+                'deleted' => DELETED_NO,
+                'pid' => $pid
             ),
             'order' => array('id DESC')
         ));
@@ -237,13 +238,17 @@ class PintuanHelperComponent extends Component {
         return $record_count;
     }
 
-    private function update_pintuan_tag_status($tag_id, $tag_num, $user_id, $share_id) {
+    private function update_pintuan_tag_status($tag_id, $tag_num, $user_id, $share_id, $tag_creator) {
         $record_count = $this->get_pintuan_tag_order_count($tag_id);
         if ($record_count >= $tag_num) {
             //save pin tuan success opt log
-            $this->ShareUtil->save_pintuan_success_opt_log($user_id, $share_id, $tag_id);
+            //check is test user don't save
+            if ($share_id != 1941) {
+                $this->ShareUtil->save_pintuan_success_opt_log($user_id, $share_id, $tag_id);
+            }
             $this->update_pintuan_tag(array('status' => PIN_TUAN_TAG_SUCCESS_STATUS), array('id' => $tag_id));
-            $this->send_pintuan_success_msg($share_id, $tag_id, $user_id);
+            $this->send_pintuan_success_msg($share_id, $tag_id, $tag_creator);
+            $this->update_pintuan_count($share_id);
         }
     }
 
@@ -251,14 +256,14 @@ class PintuanHelperComponent extends Component {
         $oauthBindM = ClassRegistry::init('Oauthbind');
         $user_open_id = $oauthBindM->findWxServiceBindByUid($uid);
         if ($user_open_id) {
+            $user_open_id = $user_open_id['oauth_openid'];
             $pintuanConfigM = ClassRegistry::init('PintuanConfig');
             $conf_data = $pintuanConfigM->get_conf_data($share_id);
             $good_name = $conf_data['share_title'];
-            $conf_id = $conf_data['pid'];
             $title = '恭喜您，您参加的团购已拼团成功，我们会尽快为您安排发货。';
             $leader_name = $conf_data['sharer_nickname'];
             $remark = '点击查看详情!邀请朋友来一起参加!';
-            $url = WX_HOST . '/pintuan/detail/' . $share_id . '/' . $conf_id . '?tag_id=' . $tag_id;
+            $url = WX_HOST . '/pintuan/detail/' . $share_id . '?tag_id=' . $tag_id . '&from=template_msg';
             $this->Weixin->send_pintuan_success_msg($user_open_id, $title, $good_name, $leader_name, $remark, $url);
         }
     }
@@ -267,14 +272,14 @@ class PintuanHelperComponent extends Component {
         $oauthBindM = ClassRegistry::init('Oauthbind');
         $user_open_id = $oauthBindM->findWxServiceBindByUid($uid);
         if ($user_open_id) {
+            $user_open_id = $user_open_id['oauth_openid'];
             $pintuanConfigM = ClassRegistry::init('PintuanConfig');
             $conf_data = $pintuanConfigM->get_conf_data($share_id);
             $good_name = $conf_data['share_title'];
             $title = '您好，您发起的' . $good_name . '拼团失败！';
             $fail_reason = '24小时内没有人参团';
             $remark = '点击查看详情，重新发起拼团！';
-            $conf_id = $conf_data['pid'];
-            $url = WX_HOST . '/pintuan/detail/' . $share_id . '/' . $conf_id . '?tag_id=' . $tag_id;
+            $url = WX_HOST . '/pintuan/detail/' . $share_id . '?tag_id=' . $tag_id . '&from=template_msg';
             $this->Weixin->send_pintuan_fail_msg($user_open_id, $title, $good_name, $fail_reason, $remark, $url);
         }
     }

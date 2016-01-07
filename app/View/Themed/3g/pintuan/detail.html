@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
     <meta charset="UTF-8">
     <title>{{$conf['share_label']}}</title>
-    {{$this->Html->css(array($STATIC_FILE_PATH.'/static/pintuan/css/btc.css?v0.08'))}}
+    {{$this->Html->css(array($STATIC_FILE_PATH.'/static/pintuan/css/btc.css?v0.14'))}}
     <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 <body>
@@ -16,9 +16,20 @@
 </div>
 
 <div class="btc_baoming">
+    {{if empty($tag_id)}}
     <h1>已有{{$all_buy_count}}人拼团成功</h1>
+    {{else}}
+        {{if in_array($uid, $record_uids)}}
+            {{if $tag['PintuanTag']['status'] == PIN_TUAN_TAG_EXPIRE_STATUS}}<h1>时间超出24小时，拼团失败</h1>{{/if}}
+            {{if $tag['PintuanTag']['status'] == PIN_TUAN_TAG_SUCCESS_STATUS}}<h1>您已拼团成功，{{$product_conf['send_date']}}为您发货</h1>{{/if}}
+            {{if $tag['PintuanTag']['status'] == PIN_TUAN_TAG_PROGRESS_STATUS}}<h1>已有{{$all_buy_count}}人拼团成功，24小时内邀请到好友则拼团成功</h1>{{/if}}
+        {{else}}
+            <h1>已有{{$all_buy_count}}人拼团成功</h1>
+        {{/if}}
+    {{/if}}
+    {{if !empty($tag_id)}}
     <div class="btc_baoming_head">
-        {{if !empty($tag_id)}}
+
             {{if $order_count > 0}}
             <ul class="clearfix">
                 <!--一开始只有两个，先这样搞-->
@@ -47,8 +58,8 @@
             </ul>
         </div>
         {{/if}}
-        {{/if}}
     </div>
+    {{/if}}
     <h2><a href="/pintuan/rule">拼团玩法［限北京］</a></h2>
     <div class="btc_path"><img src="{{$STATIC_FILE_PATH}}/static/pintuan/images/path.gif" width="100%" /></div>
     <div><label>若24小时内拼团人数不足，在7个工作日内为您自动退款<br/>{{$product_conf['send_info']}}</label></div>
@@ -72,7 +83,7 @@
         <a href="/pintuan/balance/{{$share_id}}?create=1" class="fl">2人拼团&nbsp;¥<span>{{$conf['product']['pintuan_price']}}</span></a>
         <a href="/pintuan/balance/{{$share_id}}" class="fr">自己买&nbsp;¥<span>{{$conf['product']['normal_price']}}</span></a>
     </div>
-    <a href="#X" class="fl">
+    <a class="fl" name="notify-fans" data-id="{{$share_id}}">
         <i class="fa fa-bell fa-2x"></i>
         <br>
         <span>拼团提醒</span>
@@ -95,7 +106,7 @@
             {{else}}
                 <a href="/pintuan/balance/{{$share_id}}?tag_id={{$tag_id}}" class="invitation_btn">就差你了,赶快拼团 ¥{{$conf['product']['pintuan_price']}}</a>
             {{/if}}
-            <a href="#X" class="fl">
+            <a class="fl" name="notify-fans" data-id="{{$share_id}}" data-tag-id="{{$tag_id}}">
                 <i class="fa fa-bell fa-2x"></i>
                 <br>
                 <span>拼团提醒</span>
@@ -104,10 +115,10 @@
     {{/if}}
 {{/if}}
 <!--分享弹出层-->
-<div style="display: none;" class="layer_invitation" id="layer-invitation"><img src="/static/pintuan/images/invitation.png" /></div>
+<div style="display: none;" class="layer_invitation" id="layer-invitation"><img src="{{$STATIC_FILE_PATH}}/static/pintuan/images/invitation.png" /></div>
 <div style="display: none;" class="layer_bg" id="mask-bg-layer"></div>
 <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
-<script src="{{$STATIC_FILE_PATH}}/static/pintuan/js/detail.js"></script>
+<script src="{{$STATIC_FILE_PATH}}/static/pintuan/js/detail.js?v0.09"></script>
 <script src="{{$STATIC_FILE_PATH}}/static/common/no-angular-common.js"></script>
 <script>
     Pyshuo.share.utils.init();

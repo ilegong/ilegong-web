@@ -10,9 +10,9 @@ class PintuanController extends AppController {
 
     var $name = 'pintuan';
 
-    var $uses = array('OrderConsignee', 'User', 'WeshareBuy');
+    var $uses = array('OrderConsignee', 'User');
 
-    var $components = array('PintuanHelper');
+    var $components = array('PintuanHelper', 'WeshareBuy');
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -22,19 +22,19 @@ class PintuanController extends AppController {
 
     /**
      * @param $share_id
-     * @param $conf_id
      * 拼团的详情
      */
-    public function detail($share_id, $conf_id = 1) {
+    public function detail($share_id) {
         $uid = $this->currentUser['id'];
         $conf = $this->get_pintuan_conf($share_id);
-        $product_conf = $this->get_pintuan_product_conf($conf_id);
         $tag_id = $_REQUEST['tag_id'];
         $wx_title = $conf['wx_title'];
         $wx_desc = $conf['wx_desc'];
+        $conf_id = $conf['pid'];
+        $product_conf = $this->get_pintuan_product_conf($conf_id);
         $all_buy_count = $this->PintuanHelper->get_pintuan_count($conf_id);
         if (empty($tag_id)) {
-            $tag_id = $this->PintuanHelper->get_tag_id_by_uid($uid);
+            $tag_id = $this->PintuanHelper->get_tag_id_by_uid($uid, $conf_id);
         }
         if (!empty($tag_id)) {
             $tag = $this->get_pintuan_tag($tag_id);
@@ -51,8 +51,10 @@ class PintuanController extends AppController {
             $this->set('tag_id', $tag_id);
         }
         $records = $this->PintuanHelper->get_pintuan_records($tag_id);
+        $record_uids = Hash::extract($records, '{n}.PintuanRecord.user_id');
+        $this->set('record_uids', $record_uids);
         $order_count = count($records);
-        $wx_url = $this->get_pintuan_detail_url($share_id, $conf_id, $tag_id);
+        $wx_url = $this->get_pintuan_detail_url($share_id, $tag_id);
         $this->set('order_count', $order_count);
         $this->set('uid', $uid);
         $this->set('share_id', $share_id);
@@ -109,7 +111,7 @@ class PintuanController extends AppController {
         if ($type == 1) {
             $price = $pintuan_conf['product']['pintuan_price'];
             //init tag??
-            $tag_id = $this->new_pintuan_tag($uid, $now_date, $share_id);
+            $tag_id = $this->new_pintuan_tag($uid, $now_date, $share_id, $pintuan_conf['pid']);
             if (empty($tag_id)) {
                 echo json_encode(array('success' => false, 'reason' => 'system_error'));
                 return;
@@ -132,7 +134,7 @@ class PintuanController extends AppController {
             $order_id = $order['Order']['id'];
             if ($tag_id) {
                 //save pin tuan record
-                $record = array('tag_id' => $tag_id, 'order_id' => $order_id, 'user_id' => $uid, 'created' => $now_date);
+                $record = array('tag_id' => $tag_id, 'order_id' => $order_id, 'user_id' => $uid, 'created' => $now_date, 'pid' => $pintuan_conf['pid']);
                 $this->PintuanHelper->save_pintuan_record($record);
             }
             echo json_encode(array('success' => true, 'order_id' => $order_id));
@@ -162,12 +164,13 @@ class PintuanController extends AppController {
      * @param $uid
      * @param $date
      * @param $share_id
+     * @param $pid
      * @return mixed
      * 生成新的拼团标示
      */
-    private function new_pintuan_tag($uid, $date, $share_id) {
+    private function new_pintuan_tag($uid, $date, $share_id, $pid) {
         $pinTuanTagM = ClassRegistry::init('PintuanTag');
-        $tag_data = array('creator' => $uid, 'created' => $date, 'share_id' => $share_id, 'num' => 2);
+        $tag_data = array('creator' => $uid, 'created' => $date, 'share_id' => $share_id, 'num' => 2, 'pid' => $pid);
         $tag = $pinTuanTagM->save($tag_data);
         return $tag['PintuanTag']['id'];
     }
@@ -265,7 +268,8 @@ class PintuanController extends AppController {
         $pageCount = $fansPageInfo['pageCount'];
         $pageSize = $fansPageInfo['pageSize'];
         $queue = new SaeTaskQueue('share');
-        $queue->addTask("/pintuan/process_send_new_pintuan_msg/" . $share_id . '/' . $pageCount . '/' . $pageSize);
+        $tag_id = $_REQUEST['tag_id'];
+        $queue->addTask("/pintuan/process_send_new_pintuan_msg/" . $share_id . '/' . $pageCount . '/' . $pageSize, "tag_id=".$tag_id, true);
         //将任务推入队列
         $ret = $queue->push();
         //任务添加失败时输出错误码和错误信息
@@ -280,9 +284,10 @@ class PintuanController extends AppController {
         $this->autoRender = false;
         $queue = new SaeTaskQueue('tasks');
         $tasks = array();
+        $tag_id = $_REQUEST['tag_id'];
         foreach (range(0, $pageCount) as $page) {
             $offset = $page * $pageSize;
-            $tasks[] = array('url' => "/pintuan/send_new_pintuan_msg_task/" . $share_id . "/" . $pageSize . "/" . $offset);
+            $tasks[] = array('url' => "/pintuan/send_new_pintuan_msg_task/" . $share_id . "/" . $pageSize . "/" . $offset, "postdata" => "tag_id=" . $tag_id);
         }
         $queue->addTask($tasks);
         $ret = $queue->push();
@@ -293,7 +298,8 @@ class PintuanController extends AppController {
 
     public function send_new_pintuan_msg_task($share_id, $limit, $offset) {
         $this->autoRender = false;
-        $this->WeshareBuy->send_pintuan_share_msg($share_id, $limit, $offset);
+        $tag_id = $_REQUEST['tag_id'];
+        $this->WeshareBuy->send_pintuan_share_msg($share_id, $tag_id ,$limit, $offset);
         echo json_encode(array('success' => true));
         return;
     }
@@ -317,12 +323,11 @@ class PintuanController extends AppController {
 
     /**
      * @param $share_id //分享ID
-     * @param $conf_id //拼团商品的配置
      * @param $tag_id //拼团的ID
-     * @return string //
+     * @return string //拼团的详细地址
      */
-    private function get_pintuan_detail_url($share_id, $conf_id, $tag_id) {
-        return WX_HOST . '/pintuan/detail/' . $share_id . '/' . $conf_id . '?tag_id=' . $tag_id;
+    private function get_pintuan_detail_url($share_id, $tag_id) {
+        return WX_HOST . '/pintuan/detail/' . $share_id . '?tag_id=' . $tag_id . '&from=wx_share';
     }
 
     /**

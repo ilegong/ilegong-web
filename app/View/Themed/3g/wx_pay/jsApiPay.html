@@ -30,7 +30,9 @@
                 if(doneUrlPrefix.indexOf('?') < 0){
                     window.location.href = doneUrlPrefix +'?msg='+ encodeURIComponent($msg);
                 }else{
-                    window.location.href = doneUrlPrefix +'&msg='+ encodeURIComponent($msg);
+                    setTimeout(function(){
+                        window.location.href = doneUrlPrefix +'&msg='+ encodeURIComponent($msg);
+                    },2000);
                 }
             }
         }

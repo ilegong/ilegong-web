@@ -12,7 +12,7 @@ App::import('Vendor', 'Location', array('file' => 'Location/Distance/Haversine.p
 
 class TestController extends AppController{
 
-    public $components = array('Weixin', 'WeshareBuy', 'OrderExpress', 'Logistics');
+    public $components = array('Weixin', 'WeshareBuy', 'OrderExpress', 'Logistics', 'PintuanHelper');
     public $uses = array('Order', 'Oauthbind');
 
 
@@ -170,6 +170,12 @@ class TestController extends AppController{
             )
         ));
         $this->Weixin->notifyPaidDone($order);
+        echo json_encode(array('success' => true));
+    }
+
+    public function test_send_pintuan_msg(){
+        $this->autoRender = false;
+        $this->PintuanHelper->send_pintuan_success_msg(1941, 2, 802852);
         echo json_encode(array('success' => true));
     }
 

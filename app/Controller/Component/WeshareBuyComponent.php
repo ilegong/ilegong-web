@@ -621,30 +621,36 @@ class WeshareBuyComponent extends Component {
      * @param null $offset
      * 发送拼团消息
      */
-    public function send_pintuan_share_msg($share_id, $limit = null, $offset = null) {
+    public function send_pintuan_share_msg($share_id, $tag_id, $limit = null, $offset = null) {
         $PintuanConfigM = ClassRegistry::init('PintuanConfig');
         $data = $PintuanConfigM->get_conf_data($share_id);
         $followers = $this->load_fans_buy_sharer($data['sharer_id'], $limit, $offset);
-        $this->do_send_new_pintuan_msg($data, $followers);
+        $this->do_send_new_pintuan_msg($data, $tag_id, $followers);
     }
 
     /**
      * @param $pintuan_data
+     * @param $tag_id
      * @param $uids
      * 处理发送拼团消息
      */
-    private function do_send_new_pintuan_msg($pintuan_data, $uids) {
+    private function do_send_new_pintuan_msg($pintuan_data, $tag_id, $uids) {
         //add filter
         $uids = $this->check_msg_log_and_filter_user($pintuan_data['pid'], $uids, MSG_LOG_PINTUAN_TYPE);
         $OauthbindM = ClassRegistry::init('Oauthbind');
-        $detail_url = WX_HOST . '/pintuan/detail/' . $pintuan_data['share_id'] . '/' . $pintuan_data['pid'];
+        $detail_url = WX_HOST . '/pintuan/detail/' . $pintuan_data['share_id'] . '?from=template_msg';
+        if ($tag_id != 0) {
+            $detail_url = $detail_url . '&tag_id=' . $tag_id;
+        }
         $sharer_name = $pintuan_data['sharer_nickname'];
         $product_name = $pintuan_data['share_title'];
         $title = '关注的' . $sharer_name . '发起了';
         $remark = '点击详情，赶快加入' . $sharer_name . '的拼团！';
         $openIds = $OauthbindM->findWxServiceBindsByUids($uids);
-        foreach ($openIds as $openId) {
-            $this->process_send_share_msg($openId, $title, $product_name, $detail_url, $sharer_name, $remark);
+        if ($openIds) {
+            foreach ($openIds as $openId) {
+                $this->process_send_share_msg($openId, $title, $product_name, $detail_url, $sharer_name, $remark);
+            }
         }
     }
 
@@ -668,8 +674,10 @@ class WeshareBuyComponent extends Component {
         $title = '关注的' . $sharer_name . '发起了';
         $remark = '点击详情，赶快加入' . $sharer_name . '的分享！';
         $openIds = $OauthbindM->findWxServiceBindsByUids($uids);
-        foreach ($openIds as $openId) {
-            $this->process_send_share_msg($openId, $title, $product_name, $detail_url, $sharer_name, $remark);
+        if($openIds){
+            foreach ($openIds as $openId) {
+                $this->process_send_share_msg($openId, $title, $product_name, $detail_url, $sharer_name, $remark);
+            }
         }
     }
 
@@ -2109,7 +2117,9 @@ class WeshareBuyComponent extends Component {
                 'created' => date('Y-m-d H:i:s'),
             );
         }
-        $msgLogM->saveAll($saveMsgLogData);
+        if(!empty($saveMsgLogData)){
+            $msgLogM->saveAll($saveMsgLogData);
+        }
         return $user_ids;
     }
 
