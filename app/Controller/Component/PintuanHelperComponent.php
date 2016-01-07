@@ -241,8 +241,10 @@ class PintuanHelperComponent extends Component {
         $record_count = $this->get_pintuan_tag_order_count($tag_id);
         if ($record_count >= $tag_num) {
             //save pin tuan success opt log
-            //TODO check is test user don't save
-            $this->ShareUtil->save_pintuan_success_opt_log($user_id, $share_id, $tag_id);
+            //check is test user don't save
+            if($share_id!=1941){
+                $this->ShareUtil->save_pintuan_success_opt_log($user_id, $share_id, $tag_id);
+            }
             $this->update_pintuan_tag(array('status' => PIN_TUAN_TAG_SUCCESS_STATUS), array('id' => $tag_id));
             $this->send_pintuan_success_msg($share_id, $tag_id, $user_id);
         }

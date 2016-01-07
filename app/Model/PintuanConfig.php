@@ -25,14 +25,14 @@ class PintuanConfig extends AppModel {
         ),
         2 => array(
             'detail_img' => array('/static/pintuan/images/cz_detail01.png', '/static/pintuan/images/cz_detail02.jpg', '/static/pintuan/images/cz_detail03.jpg','/static/pintuan/images/cz_detail04.png','/static/pintuan/images/cz_detail05.jpg'),
-            'send_info' => '2016年1月5日24点截止报名，1月6日统一发货'
+            'send_info' => '2016年1月11日24点截止报名，1月12日统一发货'
         ),
     );
 
     var $conf_data = array(
         //橙子
-        80 => array(
-            'share_id' => '80',
+        1941 => array(
+            'share_id' => '1941',
             'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/cz_banner.jpg',
             'sharer_id' => '802852',
             'sharer_nickname' => '愣愣',
@@ -40,12 +40,12 @@ class PintuanConfig extends AppModel {
             'share_title' => '湖南麻阳冰糖橙 12个装 1kg左右',
             'wx_title' => '［一起省4元］麻阳无农药冰糖橙 12个12.8元，愣愣邀你吃',
             'wx_desc' => '品质棒棒嗒，好吃的要分享给大家一起吃—［朋友说］',
-            'promotions_title' => '购买了“【一起省5元】越南红心火龙果4个49元”',
+            'promotions_title' => '购买了“［一起省4元］麻阳无农药冰糖橙 12个12.8元”',
             'share_label' => '来自［愣愣］的分享',
             'limit_time' => 24,
             'pid' => 2,
             'product' => array(
-                'id' => 140,
+                'id' => 4115,
                 'normal_price' => 0.02,
                 'pintuan_price' => 0.01,
                 'name' => '湖南麻阳冰糖橙 12个装 1kg左右'
