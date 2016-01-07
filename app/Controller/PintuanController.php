@@ -10,9 +10,9 @@ class PintuanController extends AppController {
 
     var $name = 'pintuan';
 
-    var $uses = array('OrderConsignee', 'User', 'WeshareBuy');
+    var $uses = array('OrderConsignee', 'User');
 
-    var $components = array('PintuanHelper');
+    var $components = array('PintuanHelper', 'WeshareBuy');
 
     public function beforeFilter() {
         parent::beforeFilter();
