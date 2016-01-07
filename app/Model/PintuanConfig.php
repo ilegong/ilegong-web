@@ -25,7 +25,7 @@ class PintuanConfig extends AppModel {
             'send_date' => '1月6日'
         ),
         2 => array(
-            'detail_img' => array('/static/pintuan/images/cz_detail01.png', '/static/pintuan/images/cz_detail02.jpg', '/static/pintuan/images/cz_detail03.png','/static/pintuan/images/cz_detail04.jpg','/static/pintuan/images/cz_detail05.png', '/static/pintuan/images/cz_detail06.jpg'),
+            'detail_img' => array('/static/pintuan/images/cz_detail01.png', '/static/pintuan/images/cz_detail02.jpg', '/static/pintuan/images/cz_detail03.png', '/static/pintuan/images/cz_detail04.jpg', '/static/pintuan/images/cz_detail05.png', '/static/pintuan/images/cz_detail06.jpg'),
             'send_info' => '2016年1月11日24点截止报名，1月12日统一发货',
             'send_date' => '1月12日'
         ),
