@@ -34,7 +34,7 @@ class PintuanController extends AppController {
         $product_conf = $this->get_pintuan_product_conf($conf_id);
         $all_buy_count = $this->PintuanHelper->get_pintuan_count($conf_id);
         if (empty($tag_id)) {
-            $tag_id = $this->PintuanHelper->get_tag_id_by_uid($uid);
+            $tag_id = $this->PintuanHelper->get_tag_id_by_uid($uid, $conf_id);
         }
         if (!empty($tag_id)) {
             $tag = $this->get_pintuan_tag($tag_id);
@@ -132,7 +132,7 @@ class PintuanController extends AppController {
             $order_id = $order['Order']['id'];
             if ($tag_id) {
                 //save pin tuan record
-                $record = array('tag_id' => $tag_id, 'order_id' => $order_id, 'user_id' => $uid, 'created' => $now_date);
+                $record = array('tag_id' => $tag_id, 'order_id' => $order_id, 'user_id' => $uid, 'created' => $now_date, 'pid' => $pintuan_conf['pid']);
                 $this->PintuanHelper->save_pintuan_record($record);
             }
             echo json_encode(array('success' => true, 'order_id' => $order_id));

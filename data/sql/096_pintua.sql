@@ -39,4 +39,8 @@ CREATE TABLE `cake_data_collects` (
   PRIMARY KEY (`id`));
 
 
+ALTER TABLE `cake_pintuan_records`
+ADD COLUMN `pid` INT NOT NULL DEFAULT 1 AFTER `deleted`;
+
+
 
