@@ -161,7 +161,7 @@ class PintuanHelperComponent extends Component {
      */
     public function cron_change_tag_status() {
         $PintuanTagM = ClassRegistry::init('PintuanTag');
-        $expire_date = date('Y-m-d H:i:s', strtotime('-1 day'));
+        $expire_date = date('Y-m-d H:i:s');
         $expire_pintuans = $PintuanTagM->find('all', array(
             'conditions' => array(
                 'expire_date <= ' => $expire_date,
@@ -170,7 +170,7 @@ class PintuanHelperComponent extends Component {
         ));
         if (!empty($expire_pintuans)) {
             $expire_pintuan_ids = Hash::extract($expire_pintuans, '{n}.PintuanTag.id');
-            $this->log('expire pintuan ids'.json_encode($expire_pintuan_ids));
+            $this->log('expire pintuan ids' . json_encode($expire_pintuan_ids));
             $PintuanTagM->updateAll(array('status' => PIN_TUAN_TAG_EXPIRE_STATUS), array('id' => $expire_pintuan_ids));
             foreach ($expire_pintuans as $pintuan_tag) {
                 $share_id = $pintuan_tag['PintuanTag']['share_id'];
