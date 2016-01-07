@@ -16,7 +16,12 @@ ul li { list-style: none; }
 .btc_head img{ width: 50px; border-radius: 50px; border: 1px #ffffff solid; position: absolute; margin-top: -25px; right: 10px;}
 .btc_title{ color: #999999; line-height: 20px; padding: 15px 0 20px 10px; border-bottom: 1px #eeeeee solid; margin-bottom: 20px;}
 .btc_title h1{ font-size: 1.3em; color: #222222;}
-.btc_baoming{ text-align: center; border-bottom: 1px #eeeeee solid; position: relative; padding-bottom: 17px;}
+.btc_baoming {
+    text-align: center;
+    border-bottom: 1px #eeeeee solid;
+    position: relative;
+    padding-bottom: 20px;
+}
 .btc_baoming label{ color: #999999; line-height: 20px;}
 .btc_baoming label a{ color: #49bc6e; text-decoration: underline;}
 .btc_baoming ul{ width: 120px; margin: 0 auto; padding-bottom: 20px; padding-top: 10px;}
@@ -25,7 +30,11 @@ ul li { list-style: none; }
 .btc_baoming h1{ font-size: 1.2em; color: #ff0000; line-height: 20px;}
 .btc_baoming h2{ font-size: 1.1em; line-height: 20px; margin-bottom: 10px;}
 .btc_baoming h2 a{ color: #49bc6e;}
-.btc_baoming_head{ border-bottom: 1px #eeeeee solid; margin-bottom: 25px;position: relative;}
+.btc_baoming_head {
+    border-bottom: 1px #eeeeee solid;
+    margin-bottom: 20px;
+    position: relative;
+}
 .btc_status img{ width: 75px; height: 37px; position: absolute; left: 50%; margin-left: -37px; top:35px; border-radius: 0;}
 .btc_operation,.btc_invitation{ position: fixed; bottom: 0; width: 100%;}
 .btc_operation a{ display: block; width: 50%; height: 49px; color: #ffffff; line-height: 49px;}
