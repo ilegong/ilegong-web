@@ -25,9 +25,9 @@
         {{loop $products $product}}
         <?php
             if($product['pintuan']){
-                $product_detail_url = '/pintuan/detail/'.$product['share_id'];
+                $product_detail_url = '/pintuan/detail/'.$product['share_id'].'?from=index_view';
             }else{
-                $product_detail_url = '/weshares/view/'.$product['share_id'];
+                $product_detail_url = '/weshares/view/'.$product['share_id'].'?from=index_view';
             }
         ?>
         <div class="row">
