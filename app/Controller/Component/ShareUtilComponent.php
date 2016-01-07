@@ -1688,8 +1688,8 @@ class ShareUtilComponent extends Component {
                 '1946' => array(
                     'share_id' => 1946,
                     'share_name' => '细腻多汁、轻软甜蜜 比橘肉更细腻的春见',
-                    'share_img' => 'http://dev.tongshijia.com/files/201601/thumb_m/e04ba01938f_0107.jpg',
-                    'share_price' => '45',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/9d86aabda41_0107.jpg',
+                    'share_price' => '49',
                     'share_user_name' => '杨晓光',
                     'share_vote' => 1200,
                     'share_user_id' => 141,
