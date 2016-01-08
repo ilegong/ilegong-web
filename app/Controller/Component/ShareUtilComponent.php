@@ -1678,7 +1678,7 @@ class ShareUtilComponent extends Component {
                 '1936' => array(
                     'share_id' => 1936,
                     'share_name' => '攀枝花米易枇杷「包邮」',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/cc44309c109_1202.jpg',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/a7a8e6147d0_0108.jpg',
                     'share_price' => '140',
                     'share_user_name' => '小宝妈',
                     'share_vote' => 1000,

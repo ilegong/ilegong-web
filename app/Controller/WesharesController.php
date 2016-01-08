@@ -24,6 +24,11 @@ class WesharesController extends AppController {
     public function beforeFilter() {
         parent::beforeFilter();
         $this->layout = 'weshare';
+        if(!$this->RequestHandler->isMobile()){
+            if(!$_REQUEST['tester']){
+                $this->redirect('/pys/index');
+            }
+        }
     }
 
     /**
@@ -38,6 +43,7 @@ class WesharesController extends AppController {
         $this->set('uid', $uid);
         $this->set('tag', $tag);
     }
+
 
     /**
      * @param string $weshare_id
