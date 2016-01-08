@@ -1403,7 +1403,10 @@
     function isShowShipCode(order) {
       if (order['ship_mark'] == 'kuai_di' || order['ship_mark'] == 'pys_ziti') {
         if (order.status != 1 && vm.isOwner(order)) {
-          return true;
+          var code = order['ship_code'];
+          if(code){
+            return true;
+          }
         }
       }
       return false;
