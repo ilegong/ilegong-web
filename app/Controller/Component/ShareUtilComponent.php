@@ -1675,6 +1675,16 @@ class ShareUtilComponent extends Component {
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg',
                     'pintuan' => true
                 ),
+                '1936' => array(
+                    'share_id' => 1936,
+                    'share_name' => '攀枝花米易枇杷「包邮」',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/cc44309c109_1202.jpg',
+                    'share_price' => '140',
+                    'share_user_name' => '小宝妈',
+                    'share_vote' => 1000,
+                    'share_user_id' => 811917,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
+                ),
                 '1972' => array(
                     'share_id' => 1972,
                     'share_name' => '山东烟台特产莱阳慈梨，每一个都来自中国梨乡！',
