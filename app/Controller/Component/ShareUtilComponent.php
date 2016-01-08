@@ -1664,6 +1664,28 @@ class ShareUtilComponent extends Component {
     public function get_share_index_product($tag) {
         $product = array(
             0 => array(
+                '1972' => array(
+                    'share_id' => 1972,
+                    'share_name' => '山东烟台特产莱阳慈梨，每一个都来自中国梨乡！',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_s/764a9d4b863_0108.jpg',
+                    'share_price' => '65',
+                    'share_user_name' => '平凡的世界',
+                    'share_vote' => 340,
+                    'share_user_id' => 801447,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/8014471448421852.png',
+                    'pintuan' => true
+                ),
+                '1929' => array(
+                    'share_id' => 1929,
+                    'share_name' => '用一年的时光等待一颗冬笋----来自山林的味道，只有一季，你舍得错过吗？',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/6564d6d8a60_0108.jpg',
+                    'share_price' => '56',
+                    'share_user_name' => '鲲鲲',
+                    'share_vote' => 2300,
+                    'share_user_id' => 806889,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg',
+                    'pintuan' => true
+                ),
                 '1947' => array(
                     'share_id' => 1947,
                     'share_name' => '麻阳冰糖娃娃橙 12个装 1kg左右 包邮',
