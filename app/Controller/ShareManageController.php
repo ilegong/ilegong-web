@@ -9,7 +9,7 @@ class ShareManageController extends AppController {
 
     public $components = array('Auth', 'ShareUtil', 'WeshareBuy', 'ShareManage', 'Cookie', 'Session', 'Paginator', 'WeshareBuy', 'ShareAuthority');
 
-    public $uses = array('User', 'Weshare', 'Order', 'Cart', 'WeshareProduct');
+    public $uses = array('User', 'Weshare', 'Order', 'Cart', 'WeshareProduct','UserLevel');
 
     var $sortSharePaginate = array(
         'Weshare' => array(
@@ -76,6 +76,17 @@ class ShareManageController extends AppController {
         }
     }
 
+    /*
+     * 为用户分配团长级别
+     */
+    public function search_level(){
+
+        if(!empty($_POST['data_id']) && !empty($_POST['data_value'])){
+            $this->UserLevel->save($_POST);
+        }else{
+            var_dump("分配失败");
+        }
+    }
     /**
      * 更新分享信息
      */
