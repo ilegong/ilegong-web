@@ -1679,7 +1679,7 @@ class ShareUtilComponent extends Component {
                     'share_id' => 1972,
                     'share_name' => '山东烟台特产莱阳慈梨，每一个都来自中国梨乡！',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/764a9d4b863_0108.jpg',
-                    'share_price' => '65',
+                    'share_price' => '68',
                     'share_user_name' => '平凡的世界',
                     'share_vote' => 340,
                     'share_user_id' => 801447,
