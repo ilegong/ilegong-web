@@ -1664,6 +1664,17 @@ class ShareUtilComponent extends Component {
     public function get_share_index_product($tag) {
         $product = array(
             0 => array(
+                '1947' => array(
+                    'share_id' => 1947,
+                    'share_name' => '麻阳冰糖娃娃橙 12个装 1kg左右 包邮',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/3ce3b15c2c7_0108.jpg',
+                    'share_price' => '12.8',
+                    'share_user_name' => '杨晓光',
+                    'share_vote' => 2000,
+                    'share_user_id' => 141,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg',
+                    'pintuan' => true
+                ),
                 '1936' => array(
                     'share_id' => 1936,
                     'share_name' => '攀枝花米易枇杷「包邮」',
