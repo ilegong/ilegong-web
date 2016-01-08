@@ -660,10 +660,10 @@ class OAuth2 {
 				if (!($this->storage instanceof IOAuth2GrantUser)) {
 					throw new OAuth2ServerException(self::HTTP_BAD_REQUEST, self::ERROR_UNSUPPORTED_GRANT_TYPE);
 				}
-				
-				if (!$input["username"] || !$input["password"] || !$input["unionid"]) {
-					throw new OAuth2ServerException(self::HTTP_BAD_REQUEST, self::ERROR_INVALID_REQUEST, 'Missing parameters. "username" and "password" required');
-				}
+
+                if ((!$input["username"] || !$input["password"]) && !$input["unionid"]) {
+                    throw new OAuth2ServerException(self::HTTP_BAD_REQUEST, self::ERROR_INVALID_REQUEST, 'Missing parameters. "username" and "password" or "unionid" required');
+                }
                 if($input["unionid"]){
                     $stored = $this->storage->checkUserUnionid($client[0],$input["unionid"]);
                 }else{
