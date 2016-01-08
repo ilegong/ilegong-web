@@ -34,8 +34,19 @@
             <ul class="clearfix">
                 <!--一开始只有两个，先这样搞-->
                 {{if $order_count >=2}}
-                    <li class="fl"><img src="{{$records[0]['PintuanRecord']['user_info']['image']}}" /></li>
-                    <li class="fr"><img src="{{$records[1]['PintuanRecord']['user_info']['image']}}" /></li>
+                    {{if in_array($uid, $record_uids)}}
+                        {{loop $records $idx $record}}
+                            {{if $record['PintuanRecord']['user_id'] == $uid}}
+                                <li class="fl"><img src="{{$record['PintuanRecord']['user_info']['image']}}" /></li>
+                                <?php unset($records[$idx]) ?>
+                            {{/if}}
+                        {{/loop}}
+                        <?php $second_record = array_shift($records) ?>
+                        <li class="fr"><img src="{{$second_record['PintuanRecord']['user_info']['image']}}" /></li>
+                    {{else}}
+                        <li class="fl"><img src="{{$records[0]['PintuanRecord']['user_info']['image']}}" /></li>
+                        <li class="fr"><img src="{{$records[1]['PintuanRecord']['user_info']['image']}}" /></li>
+                    {{/if}}
                 {{else}}
                     <li class="fl"><img src="{{$records[0]['PintuanRecord']['user_info']['image']}}" /></li>
                     <li class="fr"><img src="{{$STATIC_FILE_PATH}}/static/pintuan/images/head_default.png" /></li>
