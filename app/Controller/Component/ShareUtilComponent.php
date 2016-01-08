@@ -1684,7 +1684,6 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 340,
                     'share_user_id' => 801447,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/8014471448421852.png',
-                    'pintuan' => true
                 ),
                 '1929' => array(
                     'share_id' => 1929,
@@ -1695,7 +1694,6 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 2300,
                     'share_user_id' => 806889,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg',
-                    'pintuan' => true
                 ),
                 '1900' => array(
                     'share_id' => 1900,
