@@ -1715,16 +1715,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 141,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg'
                 ),
-                '1944' => array(
-                    'share_id' => 1944,
-                    'share_name' => '一颗有梦想有追求的苹果',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/45991b6877b_0107.jpg',
-                    'share_price' => '58',
-                    'share_user_name' => '朋友说小妹',
-                    'share_vote' => 645,
-                    'share_user_id' => 711503,
-                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/0609f46d89e_0813.jpg'
-                ),
+//                '1944' => array(
+//                    'share_id' => 1944,
+//                    'share_name' => '一颗有梦想有追求的苹果',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/45991b6877b_0107.jpg',
+//                    'share_price' => '58',
+//                    'share_user_name' => '朋友说小妹',
+//                    'share_vote' => 645,
+//                    'share_user_id' => 711503,
+//                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/0609f46d89e_0813.jpg'
+//                ),
                 '1868' => array(
                     'share_id' => 1868,
                     'share_name' => '来自张家口坝上原生态羊粪土豆',
@@ -1785,16 +1785,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 897,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201501/thumb_m/fd70e550e19_0122.jpg'
                 ),
-                '1514' => array(
-                    'share_id' => 1514,
-                    'share_name' => '越南草虾 来自越南深海的美味【北京包邮】',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/c821647039e_1231.jpg',
-                    'share_price' => '175',
-                    'share_user_name' => '杨晓光',
-                    'share_vote' => 2000,
-                    'share_user_id' => 141,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg'
-                ),
+//                '1514' => array(
+//                    'share_id' => 1514,
+//                    'share_name' => '越南草虾 来自越南深海的美味【北京包邮】',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/c821647039e_1231.jpg',
+//                    'share_price' => '175',
+//                    'share_user_name' => '杨晓光',
+//                    'share_vote' => 2000,
+//                    'share_user_id' => 141,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg'
+//                ),
                 '1745' => array(
                     'share_id' => 1745,
                     'share_name' => '兰州鲜百合，润肺养颜',
