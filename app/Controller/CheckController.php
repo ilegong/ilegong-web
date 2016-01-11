@@ -80,6 +80,7 @@ class CheckController extends AppController{
         $res = message_send($msg, $mobile);
         $res = json_decode($res, true);
         $res['timelimit'] = date('H:i', time() + 20 * 60);
+        $res['verify_code'] = $verifyCode;
         $this->Session->write('messageCode', json_encode(array('code' => $verifyCode, 'time' => time())));
         $this->Session->write('current_register_phone', $mobile);
         echo json_encode($res);
