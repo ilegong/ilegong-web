@@ -272,7 +272,9 @@ class OAuthController extends OAuthAppController {
             $oauth['Oauthbinds']['user_id'] = $userId;
             $saveUserResult = $oauthBindM->save($oauth);
             if ($saveUserResult) {
-                echo json_encode(array('success' => true));
+                $_GET = array('unionid' => $userInfo['unionid'], 'client_id' => $postData['client_id'], 'grant_type' => 'password');
+                header("HTTP/1.1 " . '200 OK');
+                $this->token();
                 return;
             }
         }
