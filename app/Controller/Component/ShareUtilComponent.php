@@ -1810,7 +1810,7 @@ class ShareUtilComponent extends Component {
                 '1834' => array(
                     'share_id' => 1834,
                     'share_name' => '鲜活银耳@"防霾佳品"【顺丰包邮】',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/f257f80229f_1110.jpg',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/268f5b0354f_0111.jpg',
                     'share_price' => '108',
                     'share_user_name' => '片片妈',
                     'share_vote' => 600,
