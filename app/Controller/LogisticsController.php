@@ -149,9 +149,9 @@ class LogisticsController extends AppController {
         $params['creator'] = $uid;
         $params['goodsName'] = $this->get_order_cart($order_id);
         $params['goodsWeight'] = 1;
-        if($order_info['Order']['total_all_price'] > 1){
+        if ($order_info['Order']['total_all_price'] > 1) {
             $params['goodsWorth'] = intval($order_info['Order']['total_all_price']);
-        }else{
+        } else {
             $params['goodsWorth'] = 1;
         }
         $params['startingPhone'] = SERVICE_LINE_PHONE;
@@ -159,12 +159,7 @@ class LogisticsController extends AppController {
         $params['startingAddress'] = $starting_address;
         $params['consigneeCity'] = '北京市';
         $params['pickup_code'] = $order_info['Order']['ship_code'];
-        $patch_remark = '提货码：' . $order_info['Order']['ship_code'];
-        if (!empty($params['remark'])) {
-            $params['remark'] = $params['remark'] . '，' . $patch_remark;
-        } else {
-            $params['remark'] = $patch_remark;
-        }
+        $params['remark'] = $this->get_logistics_order_remark($params['goodsName'], $order_info['Order']['ship_code'], $starting_address, $params['remark']);
         //check total price
         $ship_fee_result = $this->get_rr_ship_fee($order_info, array('consigneeAddress' => $params['consigneeAddress'], 'consigneePhone' => $params['consigneePhone']));
         $ship_fee_result = json_decode($ship_fee_result, true);
@@ -347,6 +342,19 @@ class LogisticsController extends AppController {
         $this->Logistics->update_logistics_order_status(LOGISTICS_ORDER_SIGN, $business_no, $business_order_id);
         //更新系统订单状态
         $this->Logistics->update_user_order_status($business_order_id);
+    }
+
+    /**
+     * @param $product_info
+     * @param $ship_code
+     * @param $pick_address
+     * @param $remark
+     * @return string
+     * get logistics order remark
+     */
+    private function get_logistics_order_remark($product_info, $ship_code, $pick_address, $remark) {
+        $remark_msg = "亲爱的跑腿哥，$product_info，共1件商品，取货码：$ship_code，取货地址：$pick_address【好邻居便利】。$remark 咨询取货问题请联系010-56245991【朋友说】";
+        return $remark_msg;
     }
 
 }
