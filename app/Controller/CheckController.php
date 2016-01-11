@@ -56,16 +56,8 @@ class CheckController extends AppController{
             echo json_encode(array('success' => false));
         }
     }
-    public function message_code(array $inputData = null){
-        $this->autoRender = false;
-        if (!isset($inputData)) {
-            $inputData = ($_SERVER['REQUEST_METHOD'] == 'POST') ? $_POST : $_GET;
-        }
 
-        if(!$this->check_mobile($inputData['mobile'])){
-            echo json_encode(array('error' => 2));
-            return;
-        }
+    private function gen_msg_verify_code() {
         $verifyCode = '';
         $str = '1234567890';
         //定义用于验证的数字和字母;
@@ -76,8 +68,35 @@ class CheckController extends AppController{
             //每次随机抽取一位数字;从第一个字到该字串最大长度,
             $verifyCode .= $str[$num];
         }
-        $msg = '短信验证码：'. $verifyCode .'，有效期为20分钟，感谢您对朋友说的支持。';
 
+        return $verifyCode;
+    }
+
+    public function get_message_code() {
+        $this->autoRender = false;
+        $mobile = $_REQUEST['mobile'];
+        $verifyCode = $this->gen_msg_verify_code();
+        $msg = '短信验证码：' . $verifyCode . '，有效期为20分钟，感谢您对朋友说的支持。';
+        $res = message_send($msg, $mobile);
+        $res = json_decode($res, true);
+        $res['timelimit'] = date('H:i', time() + 20 * 60);
+        $this->Session->write('messageCode', json_encode(array('code' => $verifyCode, 'time' => time())));
+        $this->Session->write('current_register_phone', $mobile);
+        echo json_encode($res);
+    }
+
+    public function message_code(array $inputData = null){
+        $this->autoRender = false;
+        if (!isset($inputData)) {
+            $inputData = ($_SERVER['REQUEST_METHOD'] == 'POST') ? $_POST : $_GET;
+        }
+
+        if(!$this->check_mobile($inputData['mobile'])){
+            echo json_encode(array('error' => 2));
+            return;
+        }
+        $verifyCode = $this->gen_msg_verify_code();
+        $msg = '短信验证码：' . $verifyCode . '，有效期为20分钟，感谢您对朋友说的支持。';
         if (!isset($inputData['type'])&&isset($_SESSION['captcha']) && $_SESSION['captcha'] == $inputData['keyString']) {
             unset($_SESSION['captcha']);
             $res = message_send($msg, $inputData['mobile']);
