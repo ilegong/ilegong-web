@@ -352,8 +352,8 @@ class LogisticsController extends AppController {
      * @return string
      * get logistics order remark
      */
-    private function get_logistics_order_remark($product_info, $ship_code, $pick_address, $remark) {
-        $remark_msg = "亲爱的跑腿哥，$product_info，共1件商品，取货码：$ship_code，取货地址：$pick_address【好邻居便利】。$remark 咨询取货问题请联系010-56245991【朋友说】";
+    private function get_logistics_order_remark($product_info, $ship_code = '', $pick_address, $remark = '') {
+        $remark_msg = "亲爱的跑腿哥，" . $product_info . "，共1件商品，取货码：" . $ship_code . "，取货地址：" . $pick_address . "【好邻居便利】。" . $remark . " 咨询取货问题请联系010-56245991【朋友说】";
         return $remark_msg;
     }
 
