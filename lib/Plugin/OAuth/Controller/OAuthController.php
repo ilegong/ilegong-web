@@ -227,9 +227,10 @@ class OAuthController extends OAuthAppController {
     public function addNewWxUser() {
         $this->autoRender = false;
         $postStr = file_get_contents('php://input');
+        $this->log('create user' . $postStr);
         $postData = json_decode($postStr, true);
         $wxTokenInfo = $postData['tokenInfo'];
-        $oauthBindM = ClassRegistry::init('oauthBindM');
+        $oauthBindsM = ClassRegistry::init('Oauthbinds');
         $userM = ClassRegistry::init('User');
         /**
          * {
@@ -270,13 +271,15 @@ class OAuthController extends OAuthAppController {
             $oauth['Oauthbinds']['extra_param'] = json_encode(array('scope' => $wxTokenInfo['scope'], 'expires_in' => $wxTokenInfo['expires_in']));
             $oauth['Oauthbinds']['unionId'] = $userInfo['unionid'];
             $oauth['Oauthbinds']['user_id'] = $userId;
-            $saveUserResult = $oauthBindM->save($oauth);
+            $saveUserResult = $oauthBindsM->save($oauth);
             if ($saveUserResult) {
                 $_GET = array('unionid' => $userInfo['unionid'], 'client_id' => $postData['client_id'], 'grant_type' => 'password');
                 header("HTTP/1.1 " . '200 OK');
                 $this->token();
                 return;
             }
+//            echo json_encode($saveUserResult);
+//            return;
         }
         echo json_encode(array('success' => false, 'reason' => 'create_user_field'));
         return;
