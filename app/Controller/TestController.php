@@ -179,4 +179,12 @@ class TestController extends AppController{
         echo json_encode(array('success' => true));
     }
 
+    public function delete_test_user() {
+        $this->autoRender = false;
+        $mobile_phone = '13520353557';
+        $userM = ClassRegistry::init('User');
+        $userM->deleteAll(array('User.mobilephone' => $mobile_phone), false);
+        echo json_encode(array('success' => true));
+    }
+
 }
