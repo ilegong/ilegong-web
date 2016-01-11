@@ -37,6 +37,7 @@ class LogisticsController extends AppController {
     public function cancel_rr_logistics_order($logistics_order_id) {
         $this->autoRender = false;
         $reason = $_REQUEST['reason'];
+        $reason = empty($reason) ? '没货了' : $reason;
         $result = $this->Logistics->cancel_logistics_order($logistics_order_id, $reason);
         echo $result;
         return;
