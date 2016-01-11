@@ -1664,27 +1664,27 @@ class ShareUtilComponent extends Component {
     public function get_share_index_product($tag) {
         $product = array(
             0 => array(
-                '1947' => array(
-                    'share_id' => 1947,
-                    'share_name' => '麻阳冰糖娃娃橙 12个装 1kg左右 包邮',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/3ce3b15c2c7_0108.jpg',
-                    'share_price' => '12.8',
-                    'share_user_name' => '杨晓光',
-                    'share_vote' => 2000,
-                    'share_user_id' => 141,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg',
-                    'pintuan' => true
-                ),
-                '1936' => array(
-                    'share_id' => 1936,
-                    'share_name' => '攀枝花米易枇杷「包邮」',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/a7a8e6147d0_0108.jpg',
-                    'share_price' => '140',
-                    'share_user_name' => '小宝妈',
-                    'share_vote' => 1000,
-                    'share_user_id' => 811917,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
-                ),
+//                '1947' => array(
+//                    'share_id' => 1947,
+//                    'share_name' => '麻阳冰糖娃娃橙 12个装 1kg左右 包邮',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/3ce3b15c2c7_0108.jpg',
+//                    'share_price' => '12.8',
+//                    'share_user_name' => '杨晓光',
+//                    'share_vote' => 2000,
+//                    'share_user_id' => 141,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg',
+//                    'pintuan' => true
+//                ),
+//                '1936' => array(
+//                    'share_id' => 1936,
+//                    'share_name' => '攀枝花米易枇杷「包邮」',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/a7a8e6147d0_0108.jpg',
+//                    'share_price' => '140',
+//                    'share_user_name' => '小宝妈',
+//                    'share_vote' => 1000,
+//                    'share_user_id' => 811917,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
+//                ),
                 '1929' => array(
                     'share_id' => 1929,
                     'share_name' => '用一年的时光等待一颗冬笋----来自山林的味道，只有一季，你舍得错过吗？',
@@ -1726,8 +1726,8 @@ class ShareUtilComponent extends Component {
 //                    'share_user_id' => 711503,
 //                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/0609f46d89e_0813.jpg'
 //                ),
-                '1868' => array(
-                    'share_id' => 1868,
+                '1991' => array(
+                    'share_id' => 1991,
                     'share_name' => '来自张家口坝上原生态羊粪土豆',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/48d4eb9cb9e_0105.jpg',
                     'share_price' => '65',
@@ -2115,8 +2115,8 @@ class ShareUtilComponent extends Component {
                 ),
             ),
             2 => array(
-                '1576' => array(
-                    'share_id' => 1576,
+                '1923' => array(
+                    'share_id' => 1923,
                     'share_name' => '天然、无添加、低胆固醇的抗癌之王—乌鸡蛋',
                     'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/a8f7f789c13_1231.jpg',
                     'share_price' => '60',
@@ -2268,16 +2268,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 806889,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
                 ),
-                '1439' => array(
-                    'share_id' => 1439,
-                    'share_name' => '云南秘制油淋牛肝菌，过嘴不忘的味道',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/6eb4a007442_1110.jpg',
-                    'share_price' => '70',
-                    'share_user_name' => '鲲鲲',
-                    'share_vote' => 560,
-                    'share_user_id' => 806889,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
-                ),
+//                '1439' => array(
+//                    'share_id' => 1439,
+//                    'share_name' => '云南秘制油淋牛肝菌，过嘴不忘的味道',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201511/thumb_m/6eb4a007442_1110.jpg',
+//                    'share_price' => '70',
+//                    'share_user_name' => '鲲鲲',
+//                    'share_vote' => 560,
+//                    'share_user_id' => 806889,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
+//                ),
                 '1566' => array(
                     'share_id' => 1566,
                     'share_name' => '油淋鸡枞菌----邂逅山珍美味的快感',
@@ -2329,16 +2329,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 807492,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/0797b2ef26b_0812.jpg'
                 ),
-                '724' => array(
-                    'share_id' => 724,
-                    'share_name' => '密云山谷中纯正自家产荆花蜜',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/7167382dca7_0826.jpg',
-                    'share_price' => '38-78',
-                    'share_user_name' => '樱花',
-                    'share_vote' => 197,
-                    'share_user_id' => 810684,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
-                ),
+//                '724' => array(
+//                    'share_id' => 724,
+//                    'share_name' => '密云山谷中纯正自家产荆花蜜',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/7167382dca7_0826.jpg',
+//                    'share_price' => '38-78',
+//                    'share_user_name' => '樱花',
+//                    'share_vote' => 197,
+//                    'share_user_id' => 810684,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
+//                ),
                 '342' => array(
                     'share_id' => 342,
                     'share_name' => '中式酥皮点心之Queen——蛋黄酥',
