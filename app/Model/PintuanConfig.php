@@ -45,6 +45,7 @@ class PintuanConfig extends AppModel {
             'wx_desc' => '虽然我很小，也很丑，但我是纯天然的—［朋友说］',
             'promotions_title' => '购买了“［一起省4元］麻阳冰糖娃娃橙12个12.8元包邮”',
             'share_label' => '来自［微儿］的分享',
+            'published' => 1,
             'limit_time' => 24,
             'pid' => 2,
             'product' => array(
@@ -68,6 +69,7 @@ class PintuanConfig extends AppModel {
             'share_label' => '来自［晚凉~文霞］的分享',
             'limit_time' => 24,
             'pid' => 2,
+            'published' => 1,
             'product' => array(
                 'id' => 4145,
                 'normal_price' => 16.8,
@@ -89,6 +91,7 @@ class PintuanConfig extends AppModel {
             'share_label' => '来自［李樱花］的分享',
             'limit_time' => 24,
             'pid' => 2,
+            'published' => 1,
             'product' => array(
                 'id' => 4128,
                 'normal_price' => 16.8,
@@ -110,6 +113,7 @@ class PintuanConfig extends AppModel {
             'share_label' => '来自［片片妈］的分享',
             'limit_time' => 24,
             'pid' => 2,
+            'published' => 1,
             'product' => array(
                 'id' => 4127,
                 'normal_price' => 16.8,
@@ -131,6 +135,7 @@ class PintuanConfig extends AppModel {
             'share_label' => '来自［小宝妈］的分享',
             'limit_time' => 24,
             'pid' => 2,
+            'published' => 1,
             'product' => array(
                 'id' => 4126,
                 'normal_price' => 16.8,
@@ -152,6 +157,7 @@ class PintuanConfig extends AppModel {
             'share_label' => '来自［杨晓光］的分享',
             'limit_time' => 24,
             'pid' => 2,
+            'published' => 1,
             'product' => array(
                 'id' => 4115,
                 'normal_price' => 16.8,
@@ -173,6 +179,7 @@ class PintuanConfig extends AppModel {
             'share_label' => '来自［愣愣］的分享',
             'limit_time' => 24,
             'pid' => 2,
+            'published' => 0,
             'product' => array(
                 'id' => 4115,
                 'normal_price' => 0.02,
@@ -195,6 +202,7 @@ class PintuanConfig extends AppModel {
             'share_label' => '来自［愣愣］的分享',
             'limit_time' => 24,
             'pid' => 1,
+            'published' => 1,
             'product' => array(
                 'id' => 3845,
                 'normal_price' => 0.02,
@@ -216,6 +224,7 @@ class PintuanConfig extends AppModel {
             'share_label' => '来自［杨晓光］的分享',
             'limit_time' => 24,
             'pid' => 1,
+            'published' => 1,
             'product' => array(
                 'id' => 3867,
                 'normal_price' => 54,
@@ -237,6 +246,7 @@ class PintuanConfig extends AppModel {
             'share_label' => '来自［鲲鲲］的分享',
             'limit_time' => 24,
             'pid' => 1,
+            'published' => 1,
             'product' => array(
                 'id' => 3868,
                 'normal_price' => 54,
@@ -258,6 +268,7 @@ class PintuanConfig extends AppModel {
             'share_label' => '来自［小宝妈］的分享',
             'limit_time' => 24,
             'pid' => 1,
+            'published' => 1,
             'product' => array(
                 'id' => 3869,
                 'normal_price' => 54,
@@ -279,6 +290,7 @@ class PintuanConfig extends AppModel {
             'share_label' => '来自［李樱花］的分享',
             'limit_time' => 24,
             'pid' => 1,
+            'published' => 1,
             'product' => array(
                 'id' => 3870,
                 'normal_price' => 54,
@@ -300,6 +312,7 @@ class PintuanConfig extends AppModel {
             'share_label' => '来自［片片妈］的分享',
             'limit_time' => 24,
             'pid' => 1,
+            'published' => 1,
             'product' => array(
                 'id' => 3875,
                 'normal_price' => 54,
