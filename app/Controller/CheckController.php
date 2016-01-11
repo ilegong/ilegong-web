@@ -90,8 +90,9 @@ class CheckController extends AppController{
         }else if(isset($inputData['type']) && $inputData['type'] == 'app'&&isset($inputData['device_uuid'])){
             //api接口操作
             $this->loadModel('MobileRegister');
+            //log register log
             $register_data = $this->MobileRegister->find('first', array('conditions'=>array('device_uuid' => $inputData['device_uuid'])));
-            if(!empty($register_data) && $register_data['MobileRegister']['picture_code'] == $inputData['keyString'] && $register_data['MobileRegister']['validated'] != 1){
+            if(!empty($register_data) && (empty($inputData['keyString']) || $register_data['MobileRegister']['picture_code'] == $inputData['keyString']) && $register_data['MobileRegister']['validated'] != 1){
                 $back_call = message_send($msg, $inputData['mobile']);
                 $back_call = json_decode($back_call, true);
                 if($back_call['error'] == 0){

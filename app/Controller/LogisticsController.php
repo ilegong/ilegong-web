@@ -61,6 +61,9 @@ class LogisticsController extends AppController {
 
     }
 
+    /**
+     * 计算人人快递费用
+     */
     public function cal_rr_ship_fee() {
         $this->autoRender = false;
 //$params ["userName"];
