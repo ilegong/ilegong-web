@@ -1179,26 +1179,6 @@ class UsersController extends AppController {
         $this->redirect($redirect);
     }
 
-    public function bind_mobile_api(){
-        $this->autoRender = false;
-        $uid = $this->currentUser['id'];
-        $mobile_num = $_REQUEST['mobile'];
-        $user_info = array();
-        $user_info['User']['mobilephone'] = $mobile_num;
-        $user_info['User']['id'] = $uid;
-        $user_info['User']['uc_id'] = 5;
-        if ($this->User->hasAny(array('User.mobilephone' => $mobile_num))) {
-            echo json_encode(array('success' => false, 'msg' => '你的手机号已注册过，无法绑定，请用手机号登录', 'code' => 2));
-            return;
-        }
-        //todo valid username is mobile
-        if ($this->User->save($user_info)) {
-            echo json_encode(array('success' => true, 'msg' => '你的账号和手机号绑定成功'));
-            return;
-        };
-        echo json_encode(array('success' => true, 'msg' => '绑定失败，亲联系客服'));
-        return;
-    }
 
 
     public function mobile_bind() {
