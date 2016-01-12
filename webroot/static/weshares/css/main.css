@@ -223,7 +223,7 @@ ul li {
 .weshare-add .delete-btn {
     margin-top: 8px;
     margin-right: 10px;
-    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/weifxicon.png?v0.03) no-repeat 0 0;
+    background: url(http://static.tongshijia.com/static/weshares/images/weifxicon.png?v0.03) no-repeat 0 0;
     background-size: 100px 100px;
     width: 25px;
     height: 25px;
@@ -232,7 +232,7 @@ ul li {
 .weshare-add .add-btn {
     margin-top: 8px;
     margin-right: 10px;
-    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/weifxicon.png?v0.03) no-repeat 0 -35px;
+    background: url(http://static.tongshijia.com/static/weshares/images/weifxicon.png?v0.03) no-repeat 0 -35px;
     background-size: 100px 100px;
     width: 25px;
     height: 25px;
@@ -242,7 +242,7 @@ ul li {
     position: absolute;
     top: -7px;
     right: -7px;
-    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/weifxicon.png?v0.03) no-repeat -33px 0;
+    background: url(http://static.tongshijia.com/static/weshares/images/weifxicon.png?v0.03) no-repeat -33px 0;
     background-size: 100px 100px;
     width: 25px;
     height: 25px;
@@ -593,7 +593,7 @@ ul li {
     position: absolute;
     top: -6px;
     left: 15px;
-    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/weifxicon.png) no-repeat -25px -25px;
+    background: url(http://static.tongshijia.com/static/weshares/images/weifxicon.png) no-repeat -25px -25px;
     background-size: 100px 100px;
     width: 12px;
     height: 6px;
@@ -608,7 +608,7 @@ ul li {
     position: absolute;
     z-index: 3;
     top: 0;
-    right: -5px;   background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/weifxicon.png?v0.03) -62px 0 no-repeat;
+    right: -5px;   background: url(http://static.tongshijia.com/static/weshares/images/weifxicon.png?v0.03) -62px 0 no-repeat;
     background-size: 75pt 75pt;
     width: 40px;
     height: 23px;
@@ -677,7 +677,7 @@ ul li {
     float: left;
     width: 30px;
     height: 25px;
-    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/weifxicon.png?v0.03) no-repeat;
+    background: url(http://static.tongshijia.com/static/weshares/images/weifxicon.png?v0.03) no-repeat;
     background-size: 100px 100px;
 }
 
@@ -756,7 +756,7 @@ ul li {
     position: absolute;
     left: -6px;
     top: 12px;
-    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/weifxicon.png) no-repeat -25px -35px;
+    background: url(http://static.tongshijia.com/static/weshares/images/weifxicon.png) no-repeat -25px -35px;
     background-size: 100px 100px;
 }
 
@@ -1059,7 +1059,7 @@ ul li {
 .buying-dialog .closebtn {
     margin-top: 3px;
     display: block;
-    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/weifxicon.png?v0.03) no-repeat -70px -65px;
+    background: url(http://static.tongshijia.com/static/weshares/images/weifxicon.png?v0.03) no-repeat -70px -65px;
     width: 15px;
     height: 15px;
     background-size: 100px 100px;
@@ -1109,7 +1109,7 @@ ul li {
 .commenting-dialog .closebtn {
     margin-top: 3px;
     display: block;
-    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/weifxicon.png?v0.03) no-repeat -70px -65px;
+    background: url(http://static.tongshijia.com/static/weshares/images/weifxicon.png?v0.03) no-repeat -70px -65px;
     width: 15px;
     height: 15px;
     background-size: 100px 100px;
@@ -1150,7 +1150,7 @@ ul li {
 .send-msg-dialog .closebtn {
     margin-top: 3px;
     display: block;
-    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/weifxicon.png?v0.03) no-repeat -70px -65px;
+    background: url(http://static.tongshijia.com/static/weshares/images/weifxicon.png?v0.03) no-repeat -70px -65px;
     width: 15px;
     height: 15px;
     background-size: 100px 100px;
@@ -1348,7 +1348,7 @@ ul li {
 .notify-dialog .closebtn {
     margin-top: 3px;
     display: block;
-    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/weifxicon.png?v0.03) no-repeat -70px -65px;
+    background: url(http://static.tongshijia.com/static/weshares/images/weifxicon.png?v0.03) no-repeat -70px -65px;
     width: 15px;
     height: 15px;
     background-size: 100px 100px;
@@ -1401,7 +1401,7 @@ ul li {
 .recommend-dialog .closebtn {
     margin-top: 3px;
     display: block;
-    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/weifxicon.png?v0.03) no-repeat -70px -65px;
+    background: url(http://static.tongshijia.com/static/weshares/images/weifxicon.png?v0.03) no-repeat -70px -65px;
     width: 15px;
     height: 15px;
     background-size: 100px 100px;
@@ -1460,7 +1460,7 @@ ul li {
 .group-share-tip-dialog .closebtn {
     margin-top: 3px;
     display: block;
-    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/weifxicon.png?v0.03) no-repeat -70px -65px;
+    background: url(http://static.tongshijia.com/static/weshares/images/weifxicon.png?v0.03) no-repeat -70px -65px;
     width: 15px;
     height: 15px;
     background-size: 100px 100px;
