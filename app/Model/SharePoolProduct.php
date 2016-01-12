@@ -95,6 +95,9 @@ class SharePoolProduct extends AppModel {
 //        ),
         '1492' => array(
             'buy' => 1752
+        ),
+        '1783' => array(
+            'buy' => 2018
         )
     );
 
