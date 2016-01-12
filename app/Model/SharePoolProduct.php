@@ -106,7 +106,7 @@ class SharePoolProduct extends AppModel {
         array(
             'share_id' => 2022,
             'share_name' => '现摘发货茂谷柑',
-            'share_img' => 'http://static.tongshijia.com/images/maogugongg.jpg',
+            'share_img' => 'http://static.tongshijia.com/images/1ce8a2d2-b91c-11e5-a8c5-00163e001f59.jpg',
             'brand_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_s/ef5896e5883_1204.jpg',
             'brand_name' => '娟子',
             'show_brand' => true,
