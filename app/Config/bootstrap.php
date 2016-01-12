@@ -158,6 +158,7 @@ const SUB_SHARER_REASON_TYPE_FROM_SPREAD = 'Spread';
 
 //const SAE_STATIC_FILE_PATH = 'http://51daifan-assets.stor.sinaapp.com';
 const SAE_STATIC_FILE_PATH = 'http://static.tongshijia.com';
+
 //http://51daifan-assets.stor.sinaapp.com
 //http://www.tongshijia.com
 //http://dev.tongshijia.com
