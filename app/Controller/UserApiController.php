@@ -33,6 +33,17 @@ class UserApiController extends AppController
 
     }
 
+    public function check_mobile_available()
+    {
+        $mobile = $_REQUEST['mobile'];
+        if ($this->User->hasAny(array('User.mobilephone' => $mobile))) {
+            echo json_encode(array('statusCode' => -1, 'statusMsg' => '手机号已经被注册'));
+            return;
+        }
+        echo json_encode(array('statusCode' => 1));
+        return;
+    }
+
     public function bind_mobile_api()
     {
         $this->autoRender = false;
