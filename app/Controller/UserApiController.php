@@ -10,7 +10,7 @@ class UserApiController extends AppController
     public function beforeFilter()
     {
         parent::beforeFilter();
-        $allow_action = array('test', 'ping');
+        $allow_action = array('test', 'ping', 'check_mobile_available');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action) == false) {
             $this->currentUser = $this->OAuth->user();
@@ -35,6 +35,7 @@ class UserApiController extends AppController
 
     public function check_mobile_available()
     {
+        $this->autoRender = false;
         $mobile = $_REQUEST['mobile'];
         if ($this->User->hasAny(array('User.mobilephone' => $mobile))) {
             echo json_encode(array('statusCode' => -1, 'statusMsg' => '手机号已经被注册'));
