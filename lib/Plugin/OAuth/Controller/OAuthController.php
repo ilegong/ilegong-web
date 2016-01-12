@@ -227,8 +227,8 @@ class OAuthController extends OAuthAppController {
     public function addNewWxUser() {
         $this->autoRender = false;
         $postStr = file_get_contents('php://input');
-        $this->log('create user' . $postStr);
         $postData = json_decode($postStr, true);
+        //$this->log('create user info ' . json_encode($postData));
         $wxTokenInfo = $postData['tokenInfo'];
         $oauthBindsM = ClassRegistry::init('Oauthbinds');
         $userM = ClassRegistry::init('User');
