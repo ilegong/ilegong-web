@@ -2288,16 +2288,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 806889,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg'
                 ),
-                '1519' => array(
-                    'share_id' => 1519,
-                    'share_name' => '祖传秘方，精心制作，辣婆婆来袭',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/b5dad3dfc3e_1217.jpg',
-                    'share_price' => '26',
-                    'share_user_name' => '李樱花',
-                    'share_vote' => 800,
-                    'share_user_id' => 810684,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
-                ),
+//                '1519' => array(
+//                    'share_id' => 1519,
+//                    'share_name' => '祖传秘方，精心制作，辣婆婆来袭',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/b5dad3dfc3e_1217.jpg',
+//                    'share_price' => '26',
+//                    'share_user_name' => '李樱花',
+//                    'share_vote' => 800,
+//                    'share_user_id' => 810684,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
+//                ),
                 //泉林的纸
                 '1512' => array(
                     'share_id' => 1512,
