@@ -1118,12 +1118,35 @@ class WeshareBuyComponent extends Component {
      * @return array
      * 获取分享的分页信息
      */
-    public function get_share_order_page_info($weshareId, $uid) {
+    public function get_share_order_page_info($weshareId, $uid)
+    {
         $order_count = $this->get_share_all_buy_count($weshareId, $uid);
         $page_count = ceil($order_count / $this->share_order_count);
+        //$this->get_refer_share_ids($weshareId, $uid);
         $page_info = array('order_count' => $order_count, 'page_count' => $page_count);
         return $page_info;
     }
+
+    /**
+     * @param $weshareId
+     *
+     */
+//    public function get_refer_share_ids($weshareId, $uid){
+//        $sql = "SELECT id AS refer_share_id, levels, paths
+//FROM (SELECT id, refer_share_id, @le := IF(refer_share_id = 0, 0, IF(LOCATE(CONCAT('|', refer_share_id, ':'), @pathlevel) > 0, SUBSTRING_INDEX(SUBSTRING_INDEX(@pathlevel, CONCAT('|', refer_share_id, ':'), -1), '|', 1) + 1, @le + 1)) AS levels, @pathlevel := CONCAT(@pathlevel, '|', id, ':', @le, '|') AS pathlevel, @pathnodes := IF(refer_share_id = 0, ',0', CONCAT_WS(',', IF(LOCATE(CONCAT('|', refer_share_id, ':'), @pathall) > 0, SUBSTRING_INDEX(SUBSTRING_INDEX(@pathall, CONCAT('|', refer_share_id, ':'), -1), '|', 1), @pathnodes), refer_share_id)) AS paths
+//		, @pathall := CONCAT(@pathall, '|', id, ':', @pathnodes, '|') AS pathall
+//	FROM cake_weshares, (SELECT @le := 0, @pathlevel := NULL, @pathall := NULL, @pathnodes := NULL
+//		) vv
+//	ORDER BY refer_share_id, id
+//	) src
+//WHERE id = ".$weshareId."
+//ORDER BY id";
+//        $weshareM = ClassRegistry::init('Weshare');
+//        $result = $weshareM->query($sql);
+//        $this->log('query share refer '.json_encode($result));
+//    }
+
+
 
     /**
      * @param $shareId
