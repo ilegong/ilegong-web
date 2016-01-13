@@ -36,13 +36,13 @@ $order_status = array('待确认', '已支付', '已发货', '已收货', '已�
 $ship_mark = array('kuai_di' => '快递', 'self_ziti' => '自提', 'pys_ziti' => '好邻居', 'pin_tuan' => '拼团');
 $rows = count($orders);
 foreach ($orders as $item) {
-    foreach($order_carts[$item['id']] as $index => $cart){
+    foreach($order_cart_map[$item['id']] as $index => $cart){
         $row = array();
         foreach ($fields as $fieldName) {
             if ($fieldName == 'goods') {
-                $value =  $cart['Cart']['name'];
+                $value =  $cart['name'];
             } else if($fieldName == 'num') {
-                $value =  $cart['Cart']['num'];
+                $value =  $cart['num'];
             } else {
                 if($index == 0){
                      if ($fieldName == 'status') {
