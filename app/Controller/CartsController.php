@@ -137,17 +137,19 @@ class CartsController extends AppController{
 	}
 
 	function cart_total(){
-        $count = $this->Cart->find('count', array(
-            'conditions' => array(
-                'status' => CART_ITEM_STATUS_NEW,
-                'type' => CART_ITEM_TYPE_NORMAL,
-                'order_id' => NULL,
-                'OR' => $this->user_condition
-            ),
-        ));
-		$successinfo = array('count' => $count);
-		echo json_encode($successinfo);
-		exit;
+        echo json_encode(array('count' => 0));
+        return;
+//        $count = $this->Cart->find('count', array(
+//            'conditions' => array(
+//                'status' => CART_ITEM_STATUS_NEW,
+//                'type' => CART_ITEM_TYPE_NORMAL,
+//                'order_id' => NULL,
+//                'OR' => $this->user_condition
+//            ),
+//        ));
+//		$successinfo = array('count' => $count);
+//		echo json_encode($successinfo);
+//		exit;
 	}
 
 	function listcart(){
