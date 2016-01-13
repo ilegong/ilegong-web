@@ -80,7 +80,8 @@ class ShareManageController extends AppController {
      * 为用户分配团长级别
      */
     public function search_level(){
-
+        $user_levels = get_user_levels();
+        $this->set('user_levels', $user_levels);
     }
 
    public function do_set_level(){

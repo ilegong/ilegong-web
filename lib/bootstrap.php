@@ -148,7 +148,12 @@ function action_of_score_item($change, $reason) {
  * @return string
  */
 function get_user_level_text($val) {
-    $level_name_map = array(
+    $level_name_map = get_user_levels();
+    return $level_name_map[$val];
+}
+
+function get_user_levels(){
+    return array(
         0 => '分享达人',
         1 => '实习团长',
         2 => '正式团长',
@@ -157,7 +162,6 @@ function get_user_level_text($val) {
         5 => '资深团长',
         6 => '首席团长'
     );
-    return $level_name_map[$val];
 }
 
 App::build(array(

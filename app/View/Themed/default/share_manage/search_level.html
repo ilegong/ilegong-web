@@ -20,13 +20,9 @@
                     <div class="form-group" style="margin-top: 30px">
                         <div style="float: left"><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;团长级别：</label></div>
                         <select class="form-control" name="data_value" style="width: 150px;float: left">
-                            <option value="0">分享达人</option>
-                            <option value="1">实习团长</option>
-                            <option value="2">正式团长</option>
-                            <option value="3">优秀团长</option>
-                            <option value="4">高级团长</option>
-                            <option value="5">资深团长</option>
-                            <option value="6">首席团长</option>
+                            {{loop $user_levels $key $value}}
+                            <option value="{{$key}}">{{$value}}</option>
+                            {{/loop}}
                         </select>
                     </div><br/>
                     <button id="sub" class="btn btn-success" style="margin-top: 30px;margin-left: 0px">提交</button>
