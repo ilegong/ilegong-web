@@ -83,21 +83,30 @@ class ShareManageController extends AppController {
 
     }
 
-   public function do_search_level(){
-        $this->autoRender=false;
-        $para = array();
-        $para['data_id'] = $_POST['data_id'];
-        $para['data_value'] = $_POST['data_value'];
-        $para['type'] = 0;
-        if(!empty($para)){
-            $res =  $this->UserLevel->save($para);
-            if($res){
-                echo json_encode(array('code' => '1000','msg' => 'succ'));
-            }else{
-                echo json_encode(array('code' => '1001','msg' => 'error'));
-            }
-        }
-        return;
+   public function do_set_level(){
+       $this->autoRender = false;
+       $para = array();
+       $para['data_id'] = $_POST['data_id'];
+       $para['data_value'] = $_POST['data_value'];
+       if(empty($para['data_id'])){
+           echo json_encode(array('code' => '1001', 'msg' => 'error'));
+           return;
+       }
+       $para['type'] = 0;
+       $old_data = $this->UserLevel->find('first', array(
+           'conditions' => array('data_id' => $para['data_id'])
+       ));
+       if(!empty($old_data)){
+           //set id for update
+           $para['id'] = $old_data['UserLevel']['id'];
+       }
+       $res = $this->UserLevel->save($para);
+       if ($res) {
+           echo json_encode(array('code' => '1000', 'msg' => 'succ'));
+       } else {
+           echo json_encode(array('code' => '1001', 'msg' => 'error'));
+       }
+       return;
     }
     /**
      * 更新分享信息
