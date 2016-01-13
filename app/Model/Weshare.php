@@ -27,6 +27,7 @@ WHERE id = " . $share_id . "
 ORDER BY id";
             $weshareM = ClassRegistry::init('Weshare');
             $result = $weshareM->query($sql);
+            $this->log('query refer share ids ' . json_encode($result));
             $levels = $result[0]['src']['levels'];
             if ($levels > 0) {
                 $paths = $result[0]['src']['paths'];

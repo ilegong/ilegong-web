@@ -17,17 +17,26 @@ class TestController extends AppController
     public $uses = array('Order', 'Oauthbind');
 
 
-    public function save_user_relation()
-    {
+//    public function save_user_relation()
+//    {
+//        $this->autoRender = false;
+//        $uids = array(1156, 1412, 1495, 9134, 12376, 23771, 24086, 68832, 433224, 506391, 544307, 559795, 633345, 711503, 660240, 701166, 710486, 801447, 801818, 806889, 807492, 810684,  813896, 815328, 816006, 842908);
+//        $saveData = array();
+//        foreach($uids as $uid){
+//            $saveData[] = array('user_id' => 895096, 'follow_id' => $uid, 'type' => 'SUB', 'created' => date('Y-m-d H:i:s'));
+//        }
+//        $userRelationM = ClassRegistry::init('UserRelation');
+//        $userRelationM->saveAll($saveData);
+//        echo json_encode(array('success' => true));
+//        return;
+//    }
+
+    public function test_query_share_ids($share_id, $uid){
         $this->autoRender = false;
-        $uids = array(1156, 1412, 1495, 9134, 12376, 23771, 24086, 68832, 433224, 506391, 544307, 559795, 633345, 711503, 660240, 701166, 710486, 801447, 801818, 806889, 807492, 810684,  813896, 815328, 816006, 842908);
-        $saveData = array();
-        foreach($uids as $uid){
-            $saveData[] = array('user_id' => 895096, 'follow_id' => $uid, 'type' => 'SUB', 'created' => date('Y-m-d H:i:s'));
-        }
-        $userRelationM = ClassRegistry::init('UserRelation');
-        $userRelationM->saveAll($saveData);
-        echo json_encode(array('success' => true));
+        $weshareM = ClassRegistry::init('Weshare');
+        $result = $weshareM->get_relate_share($share_id, $uid);
+        $share_buy_result = $this->WeshareBuy->get_share_and_all_refer_share_count($share_id, $uid);
+        echo json_encode(array('success' => true, 'result' => $result, 'share_buy_result' => $share_buy_result));
         return;
     }
 
