@@ -43,7 +43,7 @@ class PintuanConfig extends AppModel {
             'small_banner_img' => 'http://static.tongshijia.com/static/pintuan/images/xymn_banner_small.jpg',
             'sharer_id' => '141',
             'sharer_nickname' => '杨晓光',
-            'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/6333451445516765.png',
+            'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg',
             'share_title' => '西域美农 年货坚果大礼包8袋装1800g',
             'wx_title' => '[和你一起立省10元] 西域美农 年货坚果大礼包8袋装1800g',
             'wx_desc' => '品质棒棒嗒，好吃的要分享给大家一起吃--朋友说',
