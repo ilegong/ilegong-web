@@ -65,6 +65,9 @@
       this.pageInfo = {};
       this.referShareId = 0;
       this.loadedShareIds = [];
+      this.orderComments = {};
+      this.orderCommentReplaies = {};
+      this.combineComment = 0;
     };
 
     /**
@@ -90,10 +93,11 @@
           this.loadedShareIds.push(this.shareId);
           this.shareId = this.referShareId;
           this.page = 1;
+          this.combineComment = 1;
         }
       }
       this.busy = true;
-      var url = "/weshares/get_share_order_by_page/" + this.shareId + "/" + this.page + ".json";
+      var url = "/weshares/get_share_order_by_page/" + this.shareId + "/" + this.page + ".json?combineComment=" + this.combineComment;
       $http({method: 'GET', url: url, cache: $templateCache}).
         success(function (data, status) {
           this.busy = false;
@@ -105,6 +109,10 @@
           if(data['page_info']){
             this.pageInfo = data['page_info'];
             this.referShareId = data['page_info']['refer_share_id'];
+          }
+          if(data['comment_data']){
+            this.orderComments = merge_options(this.orderComments, data['comment_data']['order_comments']);
+            this.orderCommentReplaies = merge_options(this.orderCommentReplaies, data['comment_data']['comment_replies']);
           }
           this.page = this.page+1;
         }.bind(this)).

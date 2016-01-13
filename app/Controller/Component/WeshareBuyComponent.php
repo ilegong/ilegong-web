@@ -1333,9 +1333,11 @@ class WeshareBuyComponent extends Component {
      * @param $weshareId
      * @param $page
      * @param $uid 当前用户数据
+     * @param $combineComment
      * @return array
      */
-    public function get_share_detail_view_orders($weshareId, $page, $uid) {
+    public function get_share_detail_view_orders($weshareId, $page, $uid, $combineComment = 0)
+    {
         //todo cache it 只缓存第一页的数据，实时更新第一页的缓存(分段缓存，细粒度缓存)
         $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
         $sort = array('id DESC');
@@ -1356,6 +1358,12 @@ class WeshareBuyComponent extends Component {
             //第一页的话保存分页信息
             $result['page_info'] = $this->get_share_order_page_info($weshareId, $uid);
         }
+        if($combineComment == 1){
+            $order_ids = $result['order_ids'];
+            $commentData = $this->load_comment_by_order_id($order_ids);
+            $result['comment_data'] = $commentData;
+        }
+        unset($result['order_ids']);
         return $result;
     }
 
@@ -1412,7 +1420,7 @@ class WeshareBuyComponent extends Component {
                 return ($a['id'] < $b['id']) ? -1 : 1;
             });
         }
-        $result_data = array('users' => $users, 'level_data' => $level_data, 'orders' => $orders, 'order_cart_map' => $order_cart_map, 'rebate_logs' => $rebateLogs);
+        $result_data = array('users' => $users, 'level_data' => $level_data, 'orders' => $orders, 'order_cart_map' => $order_cart_map, 'rebate_logs' => $rebateLogs, 'order_ids' => $orderIds);
         return $result_data;
     }
 
