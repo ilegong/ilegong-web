@@ -383,27 +383,38 @@ class WeshareBuyComponent extends Component {
             'conditions' => $conds,
             'fields' => $this->$query_comment_fields
         ));
-        //$comments = Hash::combine($comments,'{n}.Comment.id', '{n}.Comment', '{n}.Comment.order_id');
-        $order_comments = array_filter($comments, 'order_comment_filter');
-        $order_comments = Hash::combine($order_comments, '{n}.Comment.order_id', '{n}.Comment');
-        $reply_comments = array_filter($comments, 'order_reply_comment_filter');
-        $reply_comments = Hash::combine($reply_comments, '{n}.Comment.id', '{n}.Comment');
-        $commentReplies = $commentReplyM->find('all', array(
-            'conditions' => $conds,
-            'order' => array('id ASC')
-        ));
-        $comment_reply_relation = array();
-        foreach ($commentReplies as $commentReply) {
-            $comment_id = $commentReply['CommentReply']['comment_id'];
-            $reply_id = $commentReply['CommentReply']['reply_id'];
-            if (!isset($comment_reply_relation[$comment_id])) {
-                $comment_reply_relation[$comment_id] = array();
+        if(count($comments) > 0){
+            //$comments = Hash::combine($comments,'{n}.Comment.id', '{n}.Comment', '{n}.Comment.order_id');
+            $comment_ids = Hash::extract($comments, '{n}.Comment.id');
+            $order_comments = array_filter($comments, 'order_comment_filter');
+            $order_comments = Hash::combine($order_comments, '{n}.Comment.order_id', '{n}.Comment');
+            $reply_comments = array_filter($comments, 'order_reply_comment_filter');
+            $reply_comments = Hash::combine($reply_comments, '{n}.Comment.id', '{n}.Comment');
+            $commentReplies = $commentReplyM->find('all', array(
+                'conditions' => array(
+                    'data_id' => $comments['Comment']['data_id'],
+                    'data_type' => COMMENT_SHARE_TYPE,
+                    'OR' => array(
+                        'comment_id' => $comment_ids,
+                        'reply_id' => $comment_ids
+                    )
+                ),
+                'order' => array('id ASC')
+            ));
+            $comment_reply_relation = array();
+            foreach ($commentReplies as $commentReply) {
+                $comment_id = $commentReply['CommentReply']['comment_id'];
+                $reply_id = $commentReply['CommentReply']['reply_id'];
+                if (!isset($comment_reply_relation[$comment_id])) {
+                    $comment_reply_relation[$comment_id] = array();
+                }
+                $comment_reply_relation[$comment_id][] = $reply_id;
             }
-            $comment_reply_relation[$comment_id][] = $reply_id;
+            $comment_replies = $this->recursionReply($order_comments, $reply_comments, $comment_reply_relation);
+            $share_comment_data = array('order_comments' => $order_comments, 'comment_replies' => $comment_replies);
+            return $share_comment_data;
         }
-        $comment_replies = $this->recursionReply($order_comments, $reply_comments, $comment_reply_relation);
-        $share_comment_data = array('order_comments' => $order_comments, 'comment_replies' => $comment_replies);
-        return $share_comment_data;
+        return array('order_comments' => array(), 'comment_replies' => array());
     }
 
     /**
