@@ -63,9 +63,10 @@
                 url: '/share_manage/do_search_level',
                 data: data,
                 cache: !1,
-                success: function (a) {
+                success: function (res) {
                     if(res.code == '1000'){
                         alert("分配成功");
+                        $("input[name='data_id']").val("");
                     }else{
                         alert("分配失败");
                     }
