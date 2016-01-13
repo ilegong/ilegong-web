@@ -114,8 +114,8 @@ class SharePoolProduct extends AppModel {
             'published' => 1,
             'products' => array(
                 '4252' => array(
-                    'price' => 149,
-                    'channel_price' => 139,
+                    'price' => 159,
+                    'channel_price' => 149,
                 )
             )
         ),

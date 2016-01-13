@@ -1122,10 +1122,9 @@ class WeshareBuyComponent extends Component {
     {
         $order_count = $this->get_share_all_buy_count($weshareId, $uid);
         $page_count = ceil($order_count / $this->share_order_count);
-        //$share_info = $this->get_weshare_info($weshareId);
-        //$refer_share_ids = $this->get_refer_share_ids($weshareId, $share_info['creator']);
-        // "refer_share_ids" => $refer_share_ids
-        $page_info = array('order_count' => $order_count, 'page_count' => $page_count);
+        $share_info = $this->get_weshare_info($weshareId);
+        $refer_share_ids = $this->get_refer_share_ids($share_info['refer_share_id'], $share_info['creator']);
+        $page_info = array('order_count' => $order_count, 'page_count' => $page_count, "refer_share_ids" => $refer_share_ids);
         return $page_info;
     }
 
@@ -1136,31 +1135,11 @@ class WeshareBuyComponent extends Component {
      */
     public function get_refer_share_ids($weshareId, $uid)
     {
-        $cache_key = SHARE_REFER_SHARE_IDS_CACHE_KEY.'_'.$weshareId.'_'.$uid;
-        $cache_data = Cache::read($cache_key);
-        if(empty($cache_data)){
-            $sql = "SELECT id, refer_share_id, levels, paths
-FROM (SELECT id, refer_share_id, @le := IF(refer_share_id = 0, 0, IF(LOCATE(CONCAT('|', refer_share_id, ':'), @pathlevel) > 0, SUBSTRING_INDEX(SUBSTRING_INDEX(@pathlevel, CONCAT('|', refer_share_id, ':'), -1), '|', 1) + 1, @le + 1)) AS levels, @pathlevel := CONCAT(@pathlevel, '|', id, ':', @le, '|') AS pathlevel, @pathnodes := IF(refer_share_id = 0, ',0', CONCAT_WS(',', IF(LOCATE(CONCAT('|', refer_share_id, ':'), @pathall) > 0, SUBSTRING_INDEX(SUBSTRING_INDEX(@pathall, CONCAT('|', refer_share_id, ':'), -1), '|', 1), @pathnodes), refer_share_id)) AS paths
-		, @pathall := CONCAT(@pathall, '|', id, ':', @pathnodes, '|') AS pathall
-	FROM cake_weshares, (SELECT @le := 0, @pathlevel := NULL, @pathall := NULL, @pathnodes := NULL
-		) vv WHERE creator=" . $uid . " and type=0
-	ORDER BY refer_share_id, id
-	) src
-WHERE id = " . $weshareId . "
-ORDER BY id";
-            $weshareM = ClassRegistry::init('Weshare');
-            $result = $weshareM->query($sql);
-            $levels = $result[0]['src']['levels'];
-            if ($levels > 0) {
-                $paths = $result[0]['src']['paths'];
-                $refer_share_ids = array_filter(explode(',', $paths));
-                Cache::write($cache_key, json_encode($refer_share_ids));
-                return $refer_share_ids;
-            }
-            Cache::write($cache_key, '[]');
-            return array();
-        }
-        return json_decode($cache_data, true);
+        $sql = 'SELECT id FROM cake_weshares as share where (share.id='.$weshareId.' or share.id=(select refer_share_id from cake_weshares where id='.$weshareId.' and creator='.$uid.')) and type=0 and creator='.$uid;
+        $weshareM = ClassRegistry::init('Weshare');
+        $result = $weshareM->query($sql);
+        $refer_share_ids = Hash::extract($result, '{n}.share.id');
+        return $refer_share_ids;
     }
 
 
