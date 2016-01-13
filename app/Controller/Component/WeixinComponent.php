@@ -1515,4 +1515,31 @@ class WeixinComponent extends Component {
         return $this->send_weixin_message($post_data);
     }
 
+    /**
+     * @param $user_open_id
+     * @param $title
+     * @param $good_name
+     * @param $leader_name
+     * @param $remark
+     * @param $url
+     * @return bool
+     * 发送拼团 预警通知
+     */
+    public function send_pintuan_warning_msg($user_open_id, $title, $good_name, $leader_name, $remark, $url)
+    {
+        $post_data = array(
+            "touser" => $user_open_id,
+            "template_id" => 'BYtgM4U84etw2qbOyyZzR4FO8a-ddvjy8sgBiAQy64U',
+            "url" => $url,
+            "topcolor" => "#FF0000",
+            "data" => array(
+                "first" => array("value" => $title),
+                "Pingou_ProductName" => array("value" => $good_name),
+                "Weixin_ID" => array("value" => $leader_name),
+                "Remark" => array("value" => $remark, "color" => "#FF8800")
+            )
+        );
+        return $this->send_weixin_message($post_data);
+    }
+
 }

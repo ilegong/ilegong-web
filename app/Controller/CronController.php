@@ -15,6 +15,14 @@ class CronController extends AppController
 
     public $components = array('Weixin','WeshareBuy', 'ShareUtil', 'PintuanHelper');
 
+
+    function cron_send_pintuan_warn_msg(){
+        $this->autoRender = false;
+
+        echo json_encode(array('success' => true));
+        return;
+    }
+
     function cron_update_pintuan_tag_status(){
         $this->autoRender = false;
         $this->PintuanHelper->cron_change_tag_status();

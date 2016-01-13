@@ -156,6 +156,28 @@ class PintuanHelperComponent extends Component {
         return $tags;
     }
 
+    public function cron_send_warning_msg()
+    {
+        $PintuanTagM = ClassRegistry::init('PintuanTag');
+        $expire_date = date('Y-m-d H:i:s', strtotime('-1 hour'));
+        $early_expire_pintuans = $PintuanTagM->find('all', array(
+            'conditions' => array(
+                'expire_date <= ' => $expire_date,
+                'status' => PIN_TUAN_TAG_PROGRESS_STATUS
+            )
+        ));
+        if (!empty($early_expire_pintuans)) {
+            $early_expire_pintuans_ids = Hash::extract($early_expire_pintuans, '{n}.PintuanTag.id');
+            $this->log('expire pintuan ids' . json_encode($early_expire_pintuans_ids));
+            foreach ($early_expire_pintuans as $pintuan_tag) {
+                $share_id = $pintuan_tag['PintuanTag']['share_id'];
+                $user_id = $pintuan_tag['PintuanTag']['creator'];
+                $tag_id = $pintuan_tag['PintuanTag']['id'];
+                $this->send_pintuan_warning_msg($share_id, $tag_id, $user_id);
+            }
+        }
+    }
+
     /**
      * cron task update pin tuan tag status
      */
@@ -253,6 +275,23 @@ class PintuanHelperComponent extends Component {
     }
 
     public function send_pintuan_success_msg($share_id, $tag_id, $uid) {
+        $oauthBindM = ClassRegistry::init('Oauthbind');
+        $user_open_id = $oauthBindM->findWxServiceBindByUid($uid);
+        if ($user_open_id) {
+            $user_open_id = $user_open_id['oauth_openid'];
+            $pintuanConfigM = ClassRegistry::init('PintuanConfig');
+            $conf_data = $pintuanConfigM->get_conf_data($share_id);
+            $good_name = $conf_data['share_title'];
+            $title = '恭喜您，您参加的团购已拼团成功，我们会尽快为您安排发货。';
+            $leader_name = $conf_data['sharer_nickname'];
+            $remark = '点击查看详情!邀请朋友来一起参加!';
+            $url = WX_HOST . '/pintuan/detail/' . $share_id . '?tag_id=' . $tag_id . '&from=template_msg';
+            $this->Weixin->send_pintuan_success_msg($user_open_id, $title, $good_name, $leader_name, $remark, $url);
+        }
+    }
+
+    //TODO send msg
+    public function send_pintuan_warning_msg($share_id, $tag_id, $uid){
         $oauthBindM = ClassRegistry::init('Oauthbind');
         $user_open_id = $oauthBindM->findWxServiceBindByUid($uid);
         if ($user_open_id) {
