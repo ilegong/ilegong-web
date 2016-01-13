@@ -385,7 +385,7 @@ class WesharesController extends AppController {
         $can_manage_share = $this->ShareAuthority->user_can_manage_share($uid, $weshareId);
         $can_edit_share = $this->ShareAuthority->user_can_edit_share_info($uid, $weshareId);
         $share_order_count = $this->WeshareBuy->get_share_all_buy_count($weshareId);
-        //$all_buy_count = $this->WeshareBuy->get_share_and_all_refer_share_count($weshareId, $weshareInfo['creator']['id']);
+        $all_buy_count = $this->WeshareBuy->get_share_and_all_refer_share_count($weshareId, $weshareInfo['creator']['id']);
         $favourable_config = $this->ShareFavourableConfig->get_favourable_config($weshareId);
         $prepare_comment_data = $this->prepare_comment_data();
         echo json_encode(array('support_pys_ziti' => $share_ship_set,
@@ -402,7 +402,7 @@ class WesharesController extends AppController {
             'can_manage_share' => $can_manage_share,
             'can_edit_share' => $can_edit_share,
             'share_order_count' => $share_order_count,
-            'all_buy_count' => $share_order_count,
+            'all_buy_count' => $all_buy_count,
             'favourable_config' => $favourable_config,
             'prepare_comment_data' => $prepare_comment_data
         ));
