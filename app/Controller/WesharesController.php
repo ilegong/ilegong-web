@@ -402,7 +402,7 @@ class WesharesController extends AppController {
             'can_manage_share' => $can_manage_share,
             'can_edit_share' => $can_edit_share,
             'share_order_count' => $share_order_count,
-            //'all_buy_count' => $all_buy_count,
+            'all_buy_count' => $share_order_count,
             'favourable_config' => $favourable_config,
             'prepare_comment_data' => $prepare_comment_data
         ));
