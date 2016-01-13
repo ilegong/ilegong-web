@@ -10,7 +10,7 @@
             <a ng-if="!vm.userSubStatus" class="statistics-btn sub-sharer-btn" ng-click="vm.subSharer();" ng-bind="vm.subShareTipTxt">+关注</a>
         </div>
         <s>目标&nbsp;&nbsp;<span class="stress-span" ng-bind="::vm.weshareSettings.self_ziti.limit"></span>&nbsp;人
-            &nbsp;&nbsp;<span class="stress-span" ng-bind="::vm.shareOrderCount"></span>&nbsp;
+            &nbsp;&nbsp;<span class="stress-span" ng-bind="::vm.totalBuyCount"></span>&nbsp;
             报名 &nbsp;&nbsp;<span ng-click="vm.showCommentListDialog()" ng-if="vm.userShareSummery.comment_count>=1&&vm.userSubStatus">
                 <span class="stress-span" ng-bind="::vm.userShareSummery.comment_count">0</span>&nbsp;
                 爱心评价</span>&nbsp;&nbsp;<span ng-if="vm.userSubStatus">

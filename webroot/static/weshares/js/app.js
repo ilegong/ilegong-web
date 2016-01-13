@@ -63,6 +63,8 @@
       this.noMore = false;
       this.page = 1;
       this.pageInfo = {};
+      this.referShareId = 0;
+      this.loadedShareIds = [];
     };
 
     /**
@@ -81,8 +83,14 @@
     ShareOrder.prototype.nextPage = function () {
       if (this.busy||this.noMore) return;
       if(this.page > this.pageInfo['page_count']){
-        this.noMore = true;
-        return;
+        if(!this.referShareId||this.referShareId==0) {
+          this.noMore = true;
+          return;
+        }else{
+          this.loadedShareIds.push(this.shareId);
+          this.shareId = this.referShareId;
+          this.page = 1;
+        }
       }
       this.busy = true;
       var url = "/weshares/get_share_order_by_page/" + this.shareId + "/" + this.page + ".json";
@@ -96,6 +104,7 @@
           this.levelData = merge_options(this.levelData, data['level_data']);
           if(data['page_info']){
             this.pageInfo = data['page_info'];
+            this.referShareId = data['page_info']['refer_share_id'];
           }
           this.page = this.page+1;
         }.bind(this)).

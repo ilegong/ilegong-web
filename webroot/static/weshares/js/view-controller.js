@@ -220,8 +220,6 @@
     vm.validRecommendContent = validRecommendContent;
     vm.checkHasUnRead = checkHasUnRead;
     vm.getProcessPrepaidStatus = getProcessPrepaidStatus;
-    //vm.handleReadMoreBtn = handleReadMoreBtn;
-    //vm.checkShareInfoHeight = checkShareInfoHeight;
     vm.toggleTag = toggleTag;
     vm.supportGroupBuy = supportGroupBuy;
     vm.offlineAddressData = null;
@@ -246,6 +244,7 @@
     vm.childShareDetail = null;
     vm.currentUserOrderCount = 0;
     vm.shareOrderCount = 0;
+    vm.totalBuyCount = 0;
     vm.rebateFee = 0;
     function pageLoaded() {
       $rootScope.loadingPage = false;
@@ -444,6 +443,7 @@
           vm.selectShipType = getSelectTypeDefaultVal();
           vm.userSubStatus = data['sub_status'];
           vm.shareOrderCount = data['share_order_count'];
+          vm.totalBuyCount = data['all_buy_count'];
           vm.favourableConfig = data['favourable_config'];
           vm.autoPopCommentData = data['prepare_comment_data'];
           vm.submitRecommendData = {};
@@ -997,7 +997,7 @@
     function notifyUserToComment(order) {
       vm.submitTempCommentData.order_id = order.id;
       vm.submitTempCommentData.reply_comment_id = 0;
-      vm.submitTempCommentData.share_id = vm.weshare.id;
+      vm.submitTempCommentData.share_id = order.member_id;
       vm.submitComment();
       order.notify = true;
     }
@@ -1234,7 +1234,7 @@
       vm.commentOrder = order;
       vm.submitTempCommentData.order_id = order.id;
       vm.submitTempCommentData.reply_comment_id = reply_comment_id;
-      vm.submitTempCommentData.share_id = vm.weshare.id;
+      vm.submitTempCommentData.share_id = order.member_id;
     }
 
     function getProcessPrepaidStatus(status) {

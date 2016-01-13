@@ -13,7 +13,7 @@ class WeshareBuyComponent extends Component {
 
     var $query_order_fields = array('id', 'creator', 'created', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type', 'ship_type_name', 'member_id', 'process_prepaid_status', 'price_difference', 'is_prepaid');
 
-    var $query_share_info_order_fields = array('id', 'creator', 'created', 'updated', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type', 'ship_type_name', 'total_price', 'coupon_total', 'cate_id', 'process_prepaid_status', 'price_difference', 'is_prepaid', 'business_remark');
+    var $query_share_info_order_fields = array('id', 'creator', 'created', 'updated', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type', 'member_id','ship_type_name', 'total_price', 'coupon_total', 'cate_id', 'process_prepaid_status', 'price_difference', 'is_prepaid', 'business_remark');
 
     var $query_cart_fields = array('id', 'order_id', 'name', 'product_id', 'num');
 
@@ -1123,9 +1123,24 @@ class WeshareBuyComponent extends Component {
         $order_count = $this->get_share_all_buy_count($weshareId, $uid);
         $page_count = ceil($order_count / $this->share_order_count);
         $share_info = $this->get_weshare_info($weshareId);
-        $refer_share_ids = $this->get_refer_share_ids($share_info['refer_share_id'], $share_info['creator']);
-        $page_info = array('order_count' => $order_count, 'page_count' => $page_count, "refer_share_ids" => $refer_share_ids);
+        $refer_share_id = $this->filter_refer_share_id($share_info['refer_share_id'], $share_info['creator']);
+        $page_info = array('order_count' => $order_count, 'page_count' => $page_count, "refer_share_id" => $refer_share_id);
         return $page_info;
+    }
+
+    /**
+     * @param $referShareId
+     * @param $uid
+     * @return int
+     * 过滤父分享的Id
+     */
+    private function filter_refer_share_id($referShareId, $uid)
+    {
+        $refer_share_info = $this->get_weshare_info($referShareId);
+        if (!empty($refer_share_info) && $refer_share_info['type'] == DEFAULT_SHARE_TYPE && $refer_share_info['creator'] == $uid) {
+            return $referShareId;
+        }
+        return 0;
     }
 
     /**
@@ -1791,6 +1806,26 @@ class WeshareBuyComponent extends Component {
         $desc = '分享，让生活更美。点击查看。';
         $detail_url = $this->get_weshares_detail_url($weshare_id) . '?comment_order_id=' . $order_id . '&reply_comment_id=' . $comment_id;
         $this->Weixin->send_comment_template_msg($open_id, $detail_url, $title, $order_id, $order_date, $desc);
+    }
+
+    /**
+     * @param $shareId
+     * @param $share_creator
+     */
+    public function get_share_and_all_refer_share_count($shareId, $share_creator)
+    {
+        $weshareM = ClassRegistry::init('Weshare');
+        $orderM = ClassRegistry::init('Order');
+        $refer_share_ids = $weshareM->get_relate_share($shareId, $share_creator);
+        $refer_share_ids[] = $shareId;
+        $order_count = $orderM->find('count', array(
+            'conditions' => array(
+                'member_id' => $refer_share_ids,
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'not' => array('status' => ORDER_STATUS_WAITING_PAY)
+            )
+        ));
+        return $order_count;
     }
 
     /**
