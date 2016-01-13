@@ -13,14 +13,13 @@
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
-                <form class="form-inline" action="/share_manage/search_level" method="post">
-                    <div class="form-group">
-                        <label>请输入用户ID：</label>
-                        <input type="text" class="form-control" name="data_id">
+                    <div class="form-group" style="margin-top: 30px">
+                        <div style="float: left"><label>请输入用户ID：</label></div>
+                        <input type="text" class="form-control" name="data_id" style="width: 200px;float: left">
                     </div><br/>
                     <div class="form-group" style="margin-top: 30px">
-                        <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;团长级别：</label>
-                        <select class="form-control" name="data_value">
+                        <div style="float: left"><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;团长级别：</label></div>
+                        <select class="form-control" name="data_value" style="width: 150px;float: left">
                             <option value="0">分享达人</option>
                             <option value="1">实习团长</option>
                             <option value="2">正式团长</option>
@@ -30,8 +29,7 @@
                             <option value="6">首席团长</option>
                         </select>
                     </div><br/>
-                    <button type="submit" class="btn btn-success" style="margin-top: 30px;margin-left: 110px">提交</button>
-                </form>
+                    <button id="sub" class="btn btn-success" style="margin-top: 30px;margin-left: 0px">提交</button>
                 <!-- /.table-responsive -->
             </div>
             <!-- /.panel-body -->
@@ -43,9 +41,8 @@
 <!-- /.row -->
 <script>
     $(document).ready(function(){
-
-
-        $("input[name='data_id']").blur(function(){
+        //提交
+        $("#sub").click(function(){
             var data_id = $("input[name='data_id']").val();
             if(data_id=="") {
                 alert("用户ID不能为空");
@@ -53,7 +50,31 @@
             }else if(isNaN(data_id)){
                 alert("用户ID必须为数字，请重新填写");
                 $("input[name='data_id']").val("");
+                return false;
             }
+            var data_value = $('[name=data_value]').val();
+            var data = {
+                data_id:data_id,
+                data_value:data_value
+            }
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: '/share_manage/do_search_level',
+                data: data,
+                cache: !1,
+                success: function (a) {
+                    if(res.code == '1000'){
+                        alert("分配成功");
+                    }else{
+                        alert("分配失败");
+                    }
+                },
+                error:function(){
+                    alert("网络错误");
+                }
+            });
         });
+
     });
 </script>

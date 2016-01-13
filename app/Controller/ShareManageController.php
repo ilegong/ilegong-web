@@ -81,11 +81,23 @@ class ShareManageController extends AppController {
      */
     public function search_level(){
 
-        if(!empty($_POST['data_id']) && !empty($_POST['data_value'])){
-            $this->UserLevel->save($_POST);
-        }else{
-            var_dump("分配失败");
+    }
+
+   public function do_search_level(){
+        $this->autoRender=false;
+        $para = array();
+        $para['data_id'] = $_POST['data_id'];
+        $para['data_value'] = $_POST['data_value'];
+        $para['type'] = 0;
+        if(!empty($para)){
+            $res =  $this->UserLevel->save($para);
+            if($res){
+                echo json_encode(array('code' => '1000','msg' => 'succ'));
+            }else{
+                echo json_encode(array('code' => '1001','msg' => 'error'));
+            }
         }
+        return;
     }
     /**
      * 更新分享信息
