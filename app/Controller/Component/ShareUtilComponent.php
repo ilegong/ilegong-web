@@ -1735,6 +1735,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 886905,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_eb6105d6e125a8e05a94b6f7608642db.jpg'
                 ),
+                '1971' => array(
+                    'share_id' => 1971,
+                    'share_name' => '原生态（腊八米+红枣+红糖 ）绝配！腊八儿节，送自己、送家人。',
+                    'share_img' => 'http://static.tongshijia.com/images/19d1a164-b9eb-11e5-a8c5-00163e001f59.jpg',
+                    'share_price' => '65',
+                    'share_user_name' => '片片妈',
+                    'share_vote' => 648,
+                    'share_user_id' => 878825,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_52d08a7c8bb6e9611307b6c4858ca38c.jpg'
+                ),
                 '1929' => array(
                     'share_id' => 1929,
                     'share_name' => '用一年的时光等待一颗冬笋----来自山林的味道，只有一季，你舍得错过吗？',
