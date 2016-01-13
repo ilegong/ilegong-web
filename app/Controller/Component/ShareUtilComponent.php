@@ -1685,6 +1685,26 @@ class ShareUtilComponent extends Component {
 //                    'share_user_id' => 811917,
 //                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
 //                ),
+                '2034' => array(
+                    'share_id' => 2034,
+                    'share_name' => '现摘空运第一茬 年前抢鲜尝 广西茂谷柑',
+                    'share_img' => 'http://static.tongshijia.com/images/487d46bc-b9e1-11e5-a8c5-00163e001f59.jpg',
+                    'share_price' => '159',
+                    'share_user_name' => '杨晓光',
+                    'share_vote' => 5689,
+                    'share_user_id' => 141,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg'
+                ),
+                '1981' => array(
+                    'share_id' => 1981,
+                    'share_name' => '农家土猪自制腊肠----肠常想念，才下舌尖，又上心间',
+                    'share_img' => 'http://static.tongshijia.com/images/78014244-b9e1-11e5-a8c5-00163e001f59.jpg ',
+                    'share_price' => '58',
+                    'share_user_name' => '鲲鲲',
+                    'share_vote' => 7568,
+                    'share_user_id' => 806889,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg',
+                ),
                 '1929' => array(
                     'share_id' => 1929,
                     'share_name' => '用一年的时光等待一颗冬笋----来自山林的味道，只有一季，你舍得错过吗？',
@@ -1694,6 +1714,36 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 2300,
                     'share_user_id' => 806889,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg',
+                ),
+                '2036' => array(
+                    'share_id' => 2036,
+                    'share_name' => '野生净鱼段带鱼【仅北京包邮】 远洋捕捞 肉质细腻 肥厚鲜美 营养丰富',
+                    'share_img' => 'http://static.tongshijia.com/images/b76e0782-b9e1-11e5-a8c5-00163e001f59.jpg',
+                    'share_price' => '70',
+                    'share_user_name' => '小宝妈',
+                    'share_vote' => 968,
+                    'share_user_id' => 811917,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
+                ),
+                '2033' => array(
+                    'share_id' => 2033,
+                    'share_name' => '追团甘甜多汁澳洲空运车厘子',
+                    'share_img' => 'http://static.tongshijia.com/images/ed34c504-b9e1-11e5-a8c5-00163e001f59.jpg',
+                    'share_price' => '385',
+                    'share_user_name' => '小宝妈',
+                    'share_vote' => 1024,
+                    'share_user_id' => 811917,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
+                ),
+                '2041' => array(
+                    'share_id' => 2041,
+                    'share_name' => '云南乌骨鸡礼盒 新年好礼 1000g 顺丰包邮',
+                    'share_img' => 'http://static.tongshijia.com/images/2a9b3e82-b9e2-11e5-a8c5-00163e001f59.jpg',
+                    'share_price' => '98',
+                    'share_user_name' => '小牛村 南彩',
+                    'share_vote' => 248,
+                    'share_user_id' => 886905,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_eb6105d6e125a8e05a94b6f7608642db.jpg'
                 ),
                 //脐橙
                 '1876' => array(
