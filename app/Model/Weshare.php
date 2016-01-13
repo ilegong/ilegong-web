@@ -15,25 +15,22 @@ class Weshare extends AppModel
         $cache_key = SHARE_REFER_SHARE_IDS_CACHE_KEY.'_'.$share_id.'_'.$uid;
         $cache_data = Cache::read($cache_key);
         if(empty($cache_data)){
-            $refer_share_ids = array();
-            $sql = "SELECT id, refer_share_id, levels, paths
-FROM (SELECT id, refer_share_id, @le := IF(refer_share_id = 0, 0, IF(LOCATE(CONCAT('|', refer_share_id, ':'), @pathlevel) > 0, SUBSTRING_INDEX(SUBSTRING_INDEX(@pathlevel, CONCAT('|', refer_share_id, ':'), -1), '|', 1) + 1, @le + 1)) AS levels, @pathlevel := CONCAT(@pathlevel, '|', id, ':', @le, '|') AS pathlevel, @pathnodes := IF(refer_share_id = 0, ',0', CONCAT_WS(',', IF(LOCATE(CONCAT('|', refer_share_id, ':'), @pathall) > 0, SUBSTRING_INDEX(SUBSTRING_INDEX(@pathall, CONCAT('|', refer_share_id, ':'), -1), '|', 1), @pathnodes), refer_share_id)) AS paths
-		, @pathall := CONCAT(@pathall, '|', id, ':', @pathnodes, '|') AS pathall
-	FROM cake_weshares, (SELECT @le := 0, @pathlevel := NULL, @pathall := NULL, @pathnodes := NULL
-		) vv WHERE creator=" . $uid . " and type=0
-	ORDER BY refer_share_id, id
-	) src
-WHERE id = " . $share_id . "
-ORDER BY id";
+            $sql = "SELECT T2.id, T2.title,T2.creator, T2.type
+FROM (
+    SELECT
+        @r AS _id,
+        (SELECT @r := refer_share_id FROM cake_weshares WHERE id = _id) AS refer_share_id,
+        @l := @l + 1 AS lvl
+    FROM
+        (SELECT @r := ".$share_id.", @l := 0) vars,
+        cake_weshares m
+    WHERE @r <> 0) T1
+JOIN cake_weshares T2
+ON T1._id = T2.id WHERE T2.type=0 and T2.creator=".$uid."
+ORDER BY T1.lvl DESC";
             $weshareM = ClassRegistry::init('Weshare');
             $result = $weshareM->query($sql);
-            $this->log('query refer share ids ' . json_encode($result));
-            $levels = $result[0]['src']['levels'];
-            if ($levels > 0) {
-                $paths = $result[0]['src']['paths'];
-                $refer_share_ids = array_filter(explode(',', $paths));
-                $refer_share_ids =  array_values($refer_share_ids);
-            }
+            $refer_share_ids = Hash::extract($result, '{n}.T2.id');
             Cache::write($cache_key, json_encode($refer_share_ids));
             return $refer_share_ids;
         }
