@@ -29,9 +29,36 @@ class PintuanConfig extends AppModel {
             'send_info' => '2016年1月11日24点截止报名，1月12日统一发货',
             'send_date' => '1月12日'
         ),
+        3 => array(
+            'detail_img' => array('/static/pintuan/images/xymn_detail01.jpg', '/static/pintuan/images/xymn_detail02.jpg', '/static/pintuan/images/xymn_detail03.jpg', '/static/pintuan/images/xymn_detail04.jpg', '/static/pintuan/images/xymn_detail05.jpg', '/static/pintuan/images/xymn_detail06.jpg', '/static/pintuan/images/xymn_detail07.jpg', '/static/pintuan/images/xymn_detail08.jpg', '/static/pintuan/images/xymn_detail09.jpg'),
+            'send_info' => '2016年1月18日24点截止报名，1月19日统一发货',
+            'send_date' => '1月19日'
+        ),
     );
 
     var $conf_data = array(
+        2047 => array(
+            'share_id' => '2047',
+            'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/xymn_banner.jpg',
+            'small_banner_img' => 'http://static.tongshijia.com/static/pintuan/images/xymn_banner_small.jpg',
+            'sharer_id' => '802852',
+            'sharer_nickname' => '愣愣',
+            'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/6333451445516765.png',
+            'share_title' => '西域美农 年货坚果大礼包8袋装1800g',
+            'wx_title' => '[和你一起立省10元] 西域美农 年货坚果大礼包8袋装1800g',
+            'wx_desc' => '品质棒棒嗒，好吃的要分享给大家一起吃--朋友说',
+            'promotions_title' => '报名了“【一起省10元】西域美农 年货坚果大礼包8袋装1800g”',
+            'share_label' => '来自［愣愣］的分享',
+            'limit_time' => 24,
+            'pid' => 3,
+            'published' => 1,
+            'product' => array(
+                'id' => 4290,
+                'normal_price' => 178,
+                'pintuan_price' => 165,
+                'name' => '年货坚果大礼包8袋装1800g'
+            )
+        ),
         //橙子
         1966 => array(
             'share_id' => '1966',
