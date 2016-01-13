@@ -6,7 +6,7 @@
     </div>
     <div class="weshare-view" style="margin-top: 40px;padding: 10px 10px 0px">
         <ul class="clearfix header margin-bottom-12">
-            <li><img ng-src="{{vm.weshare.creator.image|| vm.staticFilePath + '/img/default_user_icon.jpg'}}" ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/></li>
+            <li><img ng-src="{{vm.weshare.creator.image|| vm.staticFilePath + '/static/img/default_user_icon.jpg'}}" ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/></li>
             <li>
                 <label ng-click="vm.toUserShareInfo(vm.weshare.creator.id)" ng-bind="::vm.weshare.creator.nickname"></label>
                 <s><b style="color: #ffa200" ng-bind="::vm.userShareSummery.share_count">0</b>&nbsp; <small>分享</small>&nbsp;&nbsp;&nbsp;<b style="color: #ffa200" ng-bind="::vm.userShareSummery.follower_count">0</b>&nbsp;<small>粉丝</small></s>
