@@ -136,6 +136,26 @@ class SharePoolProduct extends AppModel {
             )
         ),
         array(
+            'share_id' => 2050,
+            'share_name' => '有机纯正红薯粉条 无任何添加剂',
+            'share_img' => 'http://static.tongshijia.com/images/e9770c56-b9eb-11e5-a8c5-00163e001f59.jpg',
+            'brand_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_52d08a7c8bb6e9611307b6c4858ca38c.jpg',
+            'brand_name' => '片片妈',
+            'show_brand' => true,
+            'brand_custom_service' => 12376,
+            'published' => 1,
+            'products' => array(
+                '4301' => array(
+                    'price' => 80,
+                    'channel_price' => 76,
+                ),
+                '4302' => array(
+                    'price' => 95,
+                    'channel_price' => 91,
+                )
+            )
+        ),
+        array(
             'share_id' => 1917,
             'share_name' => '宝宝的山楂条  添加胡萝卜和苹果',
             'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/4aee3d3205f_0106.jpg',
