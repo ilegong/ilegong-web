@@ -37,6 +37,28 @@ class PintuanConfig extends AppModel {
     );
 
     var $conf_data = array(
+        2051 => array(
+            'share_id' => '2051',
+            'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/xymn_banner.jpg',
+            'small_banner_img' => 'http://static.tongshijia.com/static/pintuan/images/xymn_banner_small.jpg',
+            'sharer_id' => '141',
+            'sharer_nickname' => '杨晓光',
+            'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/6333451445516765.png',
+            'share_title' => '西域美农 年货坚果大礼包8袋装1800g',
+            'wx_title' => '[和你一起立省10元] 西域美农 年货坚果大礼包8袋装1800g',
+            'wx_desc' => '品质棒棒嗒，好吃的要分享给大家一起吃--朋友说',
+            'promotions_title' => '报名了“【一起省10元】西域美农 年货坚果大礼包8袋装1800g”',
+            'share_label' => '来自［杨晓光］的分享',
+            'limit_time' => 24,
+            'pid' => 3,
+            'published' => 1,
+            'product' => array(
+                'id' => 4303,
+                'normal_price' => 178,
+                'pintuan_price' => 165,
+                'name' => '年货坚果大礼包8袋装1800g'
+            )
+        ),
         2047 => array(
             'share_id' => '2047',
             'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/xymn_banner.jpg',
