@@ -1321,6 +1321,21 @@ class WesharesController extends AppController {
         //$this->set('rebate_money', $rebate_money);
     }
 
+    public function old_order_export($shareId, $only_paid = 1){
+        $this->layout = null;
+        if ($only_paid == 1) {
+            $export_paid_order = true;
+        } else {
+            $export_paid_order = false;
+        }
+        $statics_data = $this->get_weshare_buy_info($shareId, true, false, $export_paid_order);
+        //$refund_money = $this->WeshareBuy->get_refund_money_by_weshare($shareId);
+        //$rebate_money = $this->ShareUtil->get_share_rebate_money($shareId);
+        $this->set($statics_data);
+        //$this->set('refund_money', $refund_money);
+        //$this->set('rebate_money', $rebate_money);
+    }
+
     /**
      * recommend share
      * 推荐分享
