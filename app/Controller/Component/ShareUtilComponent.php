@@ -1705,16 +1705,6 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 806889,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg',
                 ),
-                '1929' => array(
-                    'share_id' => 1929,
-                    'share_name' => '用一年的时光等待一颗冬笋----来自山林的味道，只有一季，你舍得错过吗？',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/6564d6d8a60_0108.jpg',
-                    'share_price' => '56',
-                    'share_user_name' => '鲲鲲',
-                    'share_vote' => 2300,
-                    'share_user_id' => 806889,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg',
-                ),
                 '2036' => array(
                     'share_id' => 2036,
                     'share_name' => '野生净鱼段带鱼【仅北京包邮】 远洋捕捞 肉质细腻 肥厚鲜美 营养丰富',
@@ -1744,6 +1734,16 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 248,
                     'share_user_id' => 886905,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_eb6105d6e125a8e05a94b6f7608642db.jpg'
+                ),
+                '1929' => array(
+                    'share_id' => 1929,
+                    'share_name' => '用一年的时光等待一颗冬笋----来自山林的味道，只有一季，你舍得错过吗？',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/6564d6d8a60_0108.jpg',
+                    'share_price' => '56',
+                    'share_user_name' => '鲲鲲',
+                    'share_vote' => 2300,
+                    'share_user_id' => 806889,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg',
                 ),
                 //脐橙
                 '1876' => array(
