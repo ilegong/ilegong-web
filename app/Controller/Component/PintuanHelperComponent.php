@@ -290,7 +290,6 @@ class PintuanHelperComponent extends Component {
         }
     }
 
-    //TODO send msg
     public function send_pintuan_warning_msg($share_id, $tag_id, $uid){
         $oauthBindM = ClassRegistry::init('Oauthbind');
         $user_open_id = $oauthBindM->findWxServiceBindByUid($uid);
@@ -299,9 +298,9 @@ class PintuanHelperComponent extends Component {
             $pintuanConfigM = ClassRegistry::init('PintuanConfig');
             $conf_data = $pintuanConfigM->get_conf_data($share_id);
             $good_name = $conf_data['share_title'];
-            $title = '恭喜您，您参加的团购已拼团成功，我们会尽快为您安排发货。';
+            $title = '您的拼团还有1个小时就失败啦，赶快邀请好友参团吧～';
             $leader_name = $conf_data['sharer_nickname'];
-            $remark = '点击查看详情!邀请朋友来一起参加!';
+            $remark = '查看详情!赶紧分享邀请朋友来一起参加!';
             $url = WX_HOST . '/pintuan/detail/' . $share_id . '?tag_id=' . $tag_id . '&from=template_msg';
             $this->Weixin->send_pintuan_success_msg($user_open_id, $title, $good_name, $leader_name, $remark, $url);
         }

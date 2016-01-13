@@ -375,48 +375,69 @@ class WeshareBuyComponent extends Component {
         return json_decode($sharer_comment_data, true);
     }
 
+    private function query_comment($conds)
+    {
+        $commentM = ClassRegistry::init('Comment');
+        $commentReplyM = ClassRegistry::init('CommentReply');
+        $comments = $commentM->find('all', array(
+            'conditions' => $conds,
+            'fields' => $this->$query_comment_fields
+        ));
+        //$comments = Hash::combine($comments,'{n}.Comment.id', '{n}.Comment', '{n}.Comment.order_id');
+        $order_comments = array_filter($comments, 'order_comment_filter');
+        $order_comments = Hash::combine($order_comments, '{n}.Comment.order_id', '{n}.Comment');
+        $reply_comments = array_filter($comments, 'order_reply_comment_filter');
+        $reply_comments = Hash::combine($reply_comments, '{n}.Comment.id', '{n}.Comment');
+        $commentReplies = $commentReplyM->find('all', array(
+            'conditions' => $conds,
+            'order' => array('id ASC')
+        ));
+        $comment_reply_relation = array();
+        foreach ($commentReplies as $commentReply) {
+            $comment_id = $commentReply['CommentReply']['comment_id'];
+            $reply_id = $commentReply['CommentReply']['reply_id'];
+            if (!isset($comment_reply_relation[$comment_id])) {
+                $comment_reply_relation[$comment_id] = array();
+            }
+            $comment_reply_relation[$comment_id][] = $reply_id;
+        }
+        $comment_replies = $this->recursionReply($order_comments, $reply_comments, $comment_reply_relation);
+        $share_comment_data = array('order_comments' => $order_comments, 'comment_replies' => $comment_replies);
+        return $share_comment_data;
+    }
+
+    /**
+     * @param $order_ids
+     * @return array()
+     * 获取评论数据
+     */
+    public function load_comment_by_order_id($order_ids)
+    {
+        $conds = array(
+            'type' => COMMENT_SHARE_TYPE,
+            'order_id' => $order_ids,
+            'status' => COMMENT_SHOW_STATUS
+        );
+        $share_comment_data = $this->query_comment($conds);
+        return $share_comment_data;
+    }
+
     /**
      * @param $weshare_id
      * @return array
      * 加载本次分享的数据
      */
-    public function load_comment_by_share_id($weshare_id) {
+    public function load_comment_by_share_id($weshare_id)
+    {
         $key = SHARE_COMMENT_DATA_CACHE_KEY . '_' . $weshare_id;
         $share_comment_data = Cache::read($key);
         if (empty($share_comment_data)) {
-            $commentM = ClassRegistry::init('Comment');
-            $commentReplyM = ClassRegistry::init('CommentReply');
-            $comments = $commentM->find('all', array(
-                'conditions' => array(
-                    'type' => COMMENT_SHARE_TYPE,
-                    'data_id' => $weshare_id,
-                    'status' => COMMENT_SHOW_STATUS
-                ),
-                'fields' => $this->$query_comment_fields
-            ));
-            //$comments = Hash::combine($comments,'{n}.Comment.id', '{n}.Comment', '{n}.Comment.order_id');
-            $order_comments = array_filter($comments, 'order_comment_filter');
-            $order_comments = Hash::combine($order_comments, '{n}.Comment.order_id', '{n}.Comment');
-            $reply_comments = array_filter($comments, 'order_reply_comment_filter');
-            $reply_comments = Hash::combine($reply_comments, '{n}.Comment.id', '{n}.Comment');
-            $commentReplies = $commentReplyM->find('all', array(
-                'conditions' => array(
-                    'data_id' => $weshare_id,
-                    'data_type' => COMMENT_SHARE_TYPE
-                ),
-                'order' => array('id ASC')
-            ));
-            $comment_reply_relation = array();
-            foreach ($commentReplies as $commentReply) {
-                $comment_id = $commentReply['CommentReply']['comment_id'];
-                $reply_id = $commentReply['CommentReply']['reply_id'];
-                if (!isset($comment_reply_relation[$comment_id])) {
-                    $comment_reply_relation[$comment_id] = array();
-                }
-                $comment_reply_relation[$comment_id][] = $reply_id;
-            }
-            $comment_replies = $this->recursionReply($order_comments, $reply_comments, $comment_reply_relation);
-            $share_comment_data = array('order_comments' => $order_comments, 'comment_replies' => $comment_replies);
+            $conds = array(
+                'type' => COMMENT_SHARE_TYPE,
+                'data_id' => $weshare_id,
+                'status' => COMMENT_SHOW_STATUS
+            );
+            $share_comment_data = $this->query_comment($conds);
             Cache::write($key, json_encode($share_comment_data));
             return $share_comment_data;
         }
