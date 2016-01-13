@@ -228,8 +228,9 @@ class OAuthController extends OAuthAppController {
         $this->autoRender = false;
         $postStr = file_get_contents('php://input');
         $postData = json_decode($postStr, true);
+        //$this->log('create user info ' . json_encode($postData));
         $wxTokenInfo = $postData['tokenInfo'];
-        $oauthBindM = ClassRegistry::init('oauthBindM');
+        $oauthBindsM = ClassRegistry::init('Oauthbinds');
         $userM = ClassRegistry::init('User');
         /**
          * {
@@ -270,11 +271,15 @@ class OAuthController extends OAuthAppController {
             $oauth['Oauthbinds']['extra_param'] = json_encode(array('scope' => $wxTokenInfo['scope'], 'expires_in' => $wxTokenInfo['expires_in']));
             $oauth['Oauthbinds']['unionId'] = $userInfo['unionid'];
             $oauth['Oauthbinds']['user_id'] = $userId;
-            $saveUserResult = $oauthBindM->save($oauth);
+            $saveUserResult = $oauthBindsM->save($oauth);
             if ($saveUserResult) {
-                echo json_encode(array('success' => true));
+                $_GET = array('unionid' => $userInfo['unionid'], 'client_id' => $postData['client_id'], 'grant_type' => 'password');
+                header("HTTP/1.1 " . '200 OK');
+                $this->token();
                 return;
             }
+//            echo json_encode($saveUserResult);
+//            return;
         }
         echo json_encode(array('success' => false, 'reason' => 'create_user_field'));
         return;
@@ -291,46 +296,45 @@ class OAuthController extends OAuthAppController {
             exit();
         }
         $mobile = intval($inputData['mobile']);
-        $this->loadModel('MobileRegisters');
-        $app_register = $this->MobileRegisters->find('first', array('conditions' => array('device_uuid' => $inputData['device_uuid'])));
-        if ($app_register['MobileRegisters']['message_code'] == $inputData['code']) {
-            $userM = ClassRegistry::init('User');
-            $userM->create();
-            $data = array();
-            $data['User']['role_id'] = Configure::read('User.defaultroler'); // Registered defaultroler
-            $data['User']['activation_key'] = md5(uniqid());
-            //$data['User']['nickname'] = trim($inputData['nickname']);
-            $data['User']['mobilephone'] = $mobile;
-//            if (mb_strlen($data['User']['nickname'], 'UTF-8') < 1) {
-//                echo json_encode(array('error'=>2, 'error_description'=>'nickname too short'));
-//                exit();
-            if ($inputData['mobile'] != $app_register['MobileRegisters']['mobile']) {
-                echo json_encode(array('error' => 5, 'error_description' => 'Mobile is not as same as previous'));
-                exit();
-            } else if ($userM->hasAny(array('User.mobilephone' => $data['User']['mobilephone']))) {
-                echo json_encode(array('error' => 2, 'error_description' => 'Mobile is taken by others'));
-                exit();
-            } else if ($userM->hasAny(array('User.username' => $data['User']['mobilephone']))) {
-                echo json_encode(array('error' => 2, 'error_description' => 'Mobile is taken by older'));
-                exit();
-            } else {
-                $data['User']['password'] = Security::hash($inputData['password'], null, true);
-                $data['User']['uc_id'] = APP_REGISTER_MARK;
-                if ($userM->save($data)) {
-                    //$user_id = $userM->getLastInsertID();
-                    //$token = $this->OAuth->createAccessToken($inputData['client_id'], $user_id);
-                    $_GET = array('username' => $mobile, 'password' => $inputData['password'], 'client_id' => $inputData['client_id'], 'grant_type' => 'password');
-                    header("HTTP/1.1 " . '200 OK');
-                    $this->token();
-                } else {
-                    echo json_encode(array('error' => 3, 'error_description' => 'saving wrong'));
-                    exit();
-                }
-            }
-        } else {
-            echo json_encode(array('error' => 4, 'error_description' => 'code wrong'));
+//        $this->loadModel('MobileRegisters');
+//        $app_register = $this->MobileRegisters->find('first', array('conditions' => array('device_uuid' => $inputData['device_uuid'])));
+        $userM = ClassRegistry::init('User');
+        $userM->create();
+        $data = array();
+        $data['User']['role_id'] = Configure::read('User.defaultroler'); // Registered defaultroler
+        $data['User']['activation_key'] = md5(uniqid());
+        $data['User']['nickname'] = '朋友说';
+        $data['User']['mobilephone'] = $mobile;
+//        if ($inputData['mobile'] != $app_register['MobileRegisters']['mobile']) {
+//            echo json_encode(array('error' => 5, 'error_description' => 'Mobile is not as same as previous'));
+//            exit();
+//        } else
+        if ($userM->hasAny(array('User.mobilephone' => $data['User']['mobilephone']))) {
+            echo json_encode(array('error' => 2, 'error_description' => 'Mobile is taken by others'));
             exit();
+        } else if ($userM->hasAny(array('User.username' => $data['User']['mobilephone']))) {
+            echo json_encode(array('error' => 2, 'error_description' => 'Mobile is taken by older'));
+            exit();
+        } else {
+            $data['User']['password'] = Security::hash($inputData['password'], null, true);
+            $data['User']['uc_id'] = APP_REGISTER_MARK;
+            if ($userM->save($data)) {
+                //$user_id = $userM->getLastInsertID();
+                //$token = $this->OAuth->createAccessToken($inputData['client_id'], $user_id);
+                $_GET = array('username' => $mobile, 'password' => $inputData['password'], 'client_id' => $inputData['client_id'], 'grant_type' => 'password');
+                header("HTTP/1.1 " . '200 OK');
+                $this->token();
+            } else {
+                echo json_encode(array('error' => 3, 'error_description' => 'saving wrong'));
+                exit();
+            }
         }
+//        if ($app_register['MobileRegisters']['message_code'] == $inputData['code']) {
+//
+//        } else {
+//            echo json_encode(array('error' => 4, 'error_description' => 'code wrong'));
+//            exit();
+//        }
     }
 
 }

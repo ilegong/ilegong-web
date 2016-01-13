@@ -1118,12 +1118,31 @@ class WeshareBuyComponent extends Component {
      * @return array
      * 获取分享的分页信息
      */
-    public function get_share_order_page_info($weshareId, $uid) {
+    public function get_share_order_page_info($weshareId, $uid)
+    {
         $order_count = $this->get_share_all_buy_count($weshareId, $uid);
         $page_count = ceil($order_count / $this->share_order_count);
-        $page_info = array('order_count' => $order_count, 'page_count' => $page_count);
+        $share_info = $this->get_weshare_info($weshareId);
+        $refer_share_ids = $this->get_refer_share_ids($share_info['refer_share_id'], $share_info['creator']);
+        $page_info = array('order_count' => $order_count, 'page_count' => $page_count, "refer_share_ids" => $refer_share_ids);
         return $page_info;
     }
+
+    /**
+     * @param $weshareId
+     * @param $uid
+     * @return array
+     */
+    public function get_refer_share_ids($weshareId, $uid)
+    {
+        $sql = 'SELECT id FROM cake_weshares as share where (share.id='.$weshareId.' or share.id=(select refer_share_id from cake_weshares where id='.$weshareId.' and creator='.$uid.')) and type=0 and creator='.$uid;
+        $weshareM = ClassRegistry::init('Weshare');
+        $result = $weshareM->query($sql);
+        $refer_share_ids = Hash::extract($result, '{n}.share.id');
+        return $refer_share_ids;
+    }
+
+
 
     /**
      * @param $shareId

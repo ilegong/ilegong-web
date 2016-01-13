@@ -236,9 +236,13 @@
     vm.isShareManager = isShareManager;
     vm.isShowExpressInfoBtn = isShowExpressInfoBtn;
     vm.isShowCallLogisticsBtn = isShowCallLogisticsBtn;
+    vm.isShowCancelLogisticsBtn = isShowCancelLogisticsBtn;
     vm.handleCallLogistics = handleCallLogistics;
+    vm.handleCancelLogistics = handleCancelLogistics;
     vm.showOrderExpressInfo = showOrderExpressInfo;
     vm.getLogisticsBtnText = getLogisticsBtnText;
+    vm.showLogisticsStatusInfo = showLogisticsStatusInfo;
+    vm.getLogisticsStatusText = getLogisticsStatusText;
     vm.childShareDetail = null;
     vm.currentUserOrderCount = 0;
     vm.shareOrderCount = 0;
@@ -1412,6 +1416,17 @@
       return false;
     }
 
+    function isShowCancelLogisticsBtn(order) {
+      if (vm.isShowCallLogisticsBtn(order)) {
+        var orderId = order['id'];
+        var logisticsOrder = vm.logisticsOrderData[orderId];
+        if (logisticsOrder && logisticsOrder['status'] == 1) {
+          return true;
+        }
+      }
+      return false;
+    }
+
     function isShowCallLogisticsBtn(order) {
       //草莓可以呼叫闪送
       if (vm.weshare.id == 1305 || vm.weshare.id == 1585) {
@@ -1429,6 +1444,29 @@
         }
       }
       return false;
+    }
+
+    function handleCancelLogistics(order) {
+      var orderId = order['id'];
+      if (vm.logisticsOrderData[orderId]) {
+        var logisticsOrder = vm.logisticsOrderData[orderId];
+        if (logisticsOrder['status'] == 1 && logisticsOrder['business_order_id']) {
+          var logisticsOrderId = logisticsOrder['id'];
+          $http.get('/logistics/cancel_rr_logistics_order/' + logisticsOrderId).success(function (data) {
+            if (data['status'] == 1) {
+              vm.logisticsOrderData[orderId]['status'] = 4;
+              vm.logisticsOrderData[orderId]['business_order_id'] = data['orderNo'];
+            } else {
+              alert(data['msg']);
+            }
+          }).error(function () {
+            alert('呼叫失败，请联系客服。');
+          });
+        } else {
+          alert("快递已接单，不能取消。");
+        }
+        return;
+      }
     }
 
     function handleCallLogistics(order) {
@@ -1459,6 +1497,31 @@
         return;
       }
       window.location.href = '/logistics/rr_logistics/' + orderId;
+    }
+
+    function getLogisticsStatusText(order) {
+      var orderId = order['id'];
+      if (vm.logisticsOrderData && vm.logisticsOrderData[orderId]) {
+        var logisticsOrder = vm.logisticsOrderData[orderId];
+        if (logisticsOrder['status'] == 5) {
+          return '快递已经取消(超时或者自己取消)';
+        }
+      }
+      return '';
+    }
+
+    function showLogisticsStatusInfo(order){
+      //草莓可以呼叫闪送
+      if(vm.isShowCallLogisticsBtn(order)){
+        var orderId = order['id'];
+        if (vm.logisticsOrderData&&vm.logisticsOrderData[orderId]) {
+          var logisticsOrder = vm.logisticsOrderData[orderId];
+          if (logisticsOrder['status'] == 5) {
+            return true;
+          }
+        }
+      }
+      return false;
     }
 
     function getLogisticsBtnText(order) {

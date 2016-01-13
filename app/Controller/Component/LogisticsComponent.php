@@ -43,16 +43,24 @@ class LogisticsComponent extends Component {
      * @param $reason
      * 取消人人订单
      */
-    public function cancel_logistics_order($logistics_order_id, $reason) {
+    public function cancel_logistics_order($logistics_order_id, $reason)
+    {
         $logistics_order = $this->get_logistics_order($logistics_order_id);
-        $params = array();
-        $params['userName'] = RR_LOGISTICS_USERNAME;
-        $params['orderNo'] = $logistics_order['LogisticsOrder']['business_order_id'];
-        $params['businessNo'] = $logistics_order['LogisticsOrder']['business_no'];
-        $params['reason'] = $reason;
-        $params['sign'] = $this->get_sign(RR_LOGISTICS_USERNAME . $logistics_order['LogisticsOrder']['business_no']);
-        $result = $this->ThirdPartyExpress->cancel_rr_order($params);
-        return $result;
+        if ($logistics_order['LogisticsOrder']['status'] == LOGISTICS_ORDER_PAID_STATUS) {
+            $params = array();
+            $params['userName'] = RR_LOGISTICS_USERNAME;
+            $params['orderNo'] = $logistics_order['LogisticsOrder']['business_order_id'];
+            $params['businessNo'] = $logistics_order['LogisticsOrder']['business_no'];
+            $params['reason'] = $reason;
+            $params['sign'] = $this->get_sign(RR_LOGISTICS_USERNAME . $logistics_order['LogisticsOrder']['business_no']);
+            $result = $this->ThirdPartyExpress->cancel_rr_order($params);
+            $json_result = json_decode($result, true);
+            if ($json_result['status'] == 1 || $json_result['code'] == '20029') {
+                $logisticsOrderM = ClassRegistry::init('LogisticsOrder');
+                $logisticsOrderM->update(array('status' => LOGISTICS_ORDER_CANCEL), array('id' => $logistics_order_id));
+            }
+            return $result;
+        }
 
     }
 

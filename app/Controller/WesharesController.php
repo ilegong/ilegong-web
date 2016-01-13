@@ -24,11 +24,6 @@ class WesharesController extends AppController {
     public function beforeFilter() {
         parent::beforeFilter();
         $this->layout = 'weshare';
-        if(!$this->RequestHandler->isMobile()){
-            if(!$_REQUEST['tester']){
-                $this->redirect('/pys/index');
-            }
-        }
     }
 
     /**

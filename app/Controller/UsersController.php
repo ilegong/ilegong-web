@@ -1179,6 +1179,8 @@ class UsersController extends AppController {
         $this->redirect($redirect);
     }
 
+
+
     public function mobile_bind() {
         $this->autoRender = false;
         $readCode = $_POST['code'];

@@ -95,11 +95,30 @@ class SharePoolProduct extends AppModel {
 //        ),
         '1492' => array(
             'buy' => 1752
+        ),
+        '1783' => array(
+            'buy' => 2018
         )
     );
 
     //产品池所有产品
     var $products = array(
+        array(
+            'share_id' => 2022,
+            'share_name' => '现摘发货茂谷柑',
+            'share_img' => 'http://static.tongshijia.com/images/1ce8a2d2-b91c-11e5-a8c5-00163e001f59.jpg',
+            'brand_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_s/ef5896e5883_1204.jpg',
+            'brand_name' => '娟子',
+            'show_brand' => true,
+            'brand_custom_service' => 801709,
+            'published' => 1,
+            'products' => array(
+                '4252' => array(
+                    'price' => 159,
+                    'channel_price' => 149,
+                )
+            )
+        ),
         array(
             'share_id' => 1437,
             'share_name' => '鲜活银耳【全国顺丰包邮】',
@@ -160,7 +179,7 @@ class SharePoolProduct extends AppModel {
             'brand_name' => '晓光',
             'show_brand' => true,
             'brand_custom_service' => 887026,
-            'published' => 1,
+            'published' => 0,
             'products' => array(
                 '3572' => array(
                     'price' => 85,

@@ -664,7 +664,7 @@ class OrdersController extends AppController {
         $this->loadModel('Order');
         $orderId = $_REQUEST['orderId'];
         $refundMoney = $_REQUEST['refundMoney'];
-        $refundMoney = intval(intval($refundMoney) * 1000 / 10);
+        $refundMoney = intval($refundMoney * 1000 / 10);
         App::uses('CakeNumber', 'Utility');
         $showRefundMoney = CakeNumber::precision($refundMoney / 100, 2);
         $refundMark = $_REQUEST['refundMark'];

@@ -81,6 +81,17 @@
     {{/loop}}
 </div>
 <div class="btc_logo"><a href="/"><img src="{{$STATIC_FILE_PATH}}/static/pintuan/images/logo.png?v0.0.1" /></a></div>
+{{if $conf['published']==0}}
+<div class="btc_invitation">
+    <a href="/share_opt/index.html" class="fl">
+        <i style="background: #f00;border-radius: 50%;width: 10px;height: 10px;top: 3px;left: 10%;position: absolute; display: none;" id="mark-has-unread"></i>
+        <i class="fa fa-search fa-2x"></i>
+        <br>
+        <span>发现</span>
+    </a>
+    <a class="invitation_btn" style="background-color:#cccccc;color:#ffffff;width: 80%;">拼团结束</a>
+</div>
+{{else}}
 {{if empty($tag_id) || ($tag['PintuanTag']['status'] != PIN_TUAN_TAG_PROGRESS_STATUS)}}
 <!--报名-->
 <div class="btc_invitation">
@@ -101,29 +112,30 @@
     </a>
 </div>
 {{else}}
-    <!--拼团进行中-->
-    {{if $tag['PintuanTag']['status'] == PIN_TUAN_TAG_PROGRESS_STATUS}}
-        <!--如果是发起拼团者进来-->
-        <!--邀请分享-->
-        <div class="btc_invitation">
-            <a href="/share_opt/index.html" class="fl">
-                <i style="background: #f00;border-radius: 50%;width: 10px;height: 10px;top: 3px;left: 10%;position: absolute; display: none;" id="mark-has-unread"></i>
-                <i class="fa fa-search fa-2x"></i>
-                <br>
-                <span>发现</span>
-            </a>
-            {{if $tag['PintuanTag']['creator'] == $uid}}
-                <a class="invitation_btn" id="prompt-invitation-layer-btn">还差{{$tag['PintuanTag']['num'] - $order_count}}个朋友，赶快邀请</a>
-            {{else}}
-                <a href="/pintuan/balance/{{$share_id}}?tag_id={{$tag_id}}" class="invitation_btn">就差你了,赶快拼团 ¥{{$conf['product']['pintuan_price']}}</a>
-            {{/if}}
-            <a class="fl" name="notify-fans" data-id="{{$share_id}}" data-tag-id="{{$tag_id}}">
-                <i class="fa fa-bell fa-2x"></i>
-                <br>
-                <span>拼团提醒</span>
-            </a>
-        </div>
+<!--拼团进行中-->
+{{if $tag['PintuanTag']['status'] == PIN_TUAN_TAG_PROGRESS_STATUS}}
+<!--如果是发起拼团者进来-->
+<!--邀请分享-->
+<div class="btc_invitation">
+    <a href="/share_opt/index.html" class="fl">
+        <i style="background: #f00;border-radius: 50%;width: 10px;height: 10px;top: 3px;left: 10%;position: absolute; display: none;" id="mark-has-unread"></i>
+        <i class="fa fa-search fa-2x"></i>
+        <br>
+        <span>发现</span>
+    </a>
+    {{if $tag['PintuanTag']['creator'] == $uid}}
+    <a class="invitation_btn" id="prompt-invitation-layer-btn">还差{{$tag['PintuanTag']['num'] - $order_count}}个朋友，赶快邀请</a>
+    {{else}}
+    <a href="/pintuan/balance/{{$share_id}}?tag_id={{$tag_id}}" class="invitation_btn">就差你了,赶快拼团 ¥{{$conf['product']['pintuan_price']}}</a>
     {{/if}}
+    <a class="fl" name="notify-fans" data-id="{{$share_id}}" data-tag-id="{{$tag_id}}">
+        <i class="fa fa-bell fa-2x"></i>
+        <br>
+        <span>拼团提醒</span>
+    </a>
+</div>
+{{/if}}
+{{/if}}
 {{/if}}
 <!--分享弹出层-->
 <div style="display: none;" class="layer_invitation" id="layer-invitation"><img src="{{$STATIC_FILE_PATH}}/static/pintuan/images/invitation.png" /></div>

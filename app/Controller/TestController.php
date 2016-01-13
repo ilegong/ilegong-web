@@ -10,13 +10,29 @@ App::import('Vendor', 'Location', array('file' => 'Location/Coordinate.php'));
 App::import('Vendor', 'Location', array('file' => 'Location/Distance/Vincenty.php'));
 App::import('Vendor', 'Location', array('file' => 'Location/Distance/Haversine.php'));
 
-class TestController extends AppController{
+class TestController extends AppController
+{
 
-    public $components = array('Weixin', 'WeshareBuy', 'OrderExpress', 'Logistics', 'PintuanHelper');
+    public $components = array('Weixin', 'WeshareBuy', 'OrderExpress', 'Logistics', 'PintuanHelper', 'ShareUtil');
     public $uses = array('Order', 'Oauthbind');
 
 
-    public function send_tmp_msg() {
+    public function save_user_relation()
+    {
+        $this->autoRender = false;
+        $uids = array(1156, 1412, 1495, 9134, 12376, 23771, 24086, 68832, 433224, 506391, 544307, 559795, 633345, 711503, 660240, 701166, 710486, 801447, 801818, 806889, 807492, 810684,  813896, 815328, 816006, 842908);
+        $saveData = array();
+        foreach($uids as $uid){
+            $saveData[] = array('user_id' => 895096, 'follow_id' => $uid, 'type' => 'SUB', 'created' => date('Y-m-d H:i:s'));
+        }
+        $userRelationM = ClassRegistry::init('UserRelation');
+        $userRelationM->saveAll($saveData);
+        echo json_encode(array('success' => true));
+        return;
+    }
+
+    public function send_tmp_msg()
+    {
         $this->autoRender = false;
         $userId = 697674;
         $openId = $this->Oauthbind->findWxServiceBindByUid($userId);
@@ -29,53 +45,60 @@ class TestController extends AppController{
         echo json_encode(array('success' => true));
     }
 
-    public function test_send_tuan_buy_msg($orderId){
-        $order = $this->Order->find('first',array(
-            'conditions'=>array('id' => $orderId)));
+    public function test_send_tuan_buy_msg($orderId)
+    {
+        $order = $this->Order->find('first', array(
+            'conditions' => array('id' => $orderId)));
         $this->Weixin->notifyPaidDone($order);
     }
 
-    public function test_set_order_paid_done($orderId){
-        $this->Order->set_order_to_paid($orderId, 0, 633345, 1, $memberId=0);
+    public function test_set_order_paid_done($orderId)
+    {
+        $this->Order->set_order_to_paid($orderId, 0, 633345, 1, $memberId = 0);
     }
 
-    public function test_order_paid_done($orderId){
+    public function test_order_paid_done($orderId)
+    {
         $this->autoRender = false;
         $this->loadModel('Order');
-        $this->Order->set_order_to_paid($orderId, 0, 633345, 5, $memberId=0);
+        $this->Order->set_order_to_paid($orderId, 0, 633345, 5, $memberId = 0);
         echo json_encode(array('success' => true));
         return;
     }
 
-    public function test_get_option_date(){
+    public function test_get_option_date()
+    {
         $this->autoRender = false;
-        $date = get_consignment_date('3','2,4,6','17,30');
-        echo json_encode(array('success' => true,'date' => $date));
+        $date = get_consignment_date('3', '2,4,6', '17,30');
+        echo json_encode(array('success' => true, 'date' => $date));
         return;
     }
 
-    public function test_get_send_date(){
+    public function test_get_send_date()
+    {
         $this->autoRender = false;
         $date = get_send_date('2', '19:00:00', '2,4,6');
-        echo json_encode(array('success' => true,'data' => $date));
+        echo json_encode(array('success' => true, 'data' => $date));
         return;
     }
 
-    public function test_send_ship_code(){
+    public function test_send_ship_code()
+    {
         $this->autoRender = false;
-        $this->WeshareBuy->send_share_product_ship_msg(32,22);
+        $this->WeshareBuy->send_share_product_ship_msg(32, 22);
         echo json_encode(array('success' => true));
     }
 
-    public function test_get_match_location(){
-        $this->autoRender=false;
+    public function test_get_match_location()
+    {
+        $this->autoRender = false;
         $this->loadModel('OfflineStore');
         //116.336402,40.06276
         //116.336145,40.062573
-        $coordinate = new Location\Coordinate(40.062573,116.336145);
+        $coordinate = new Location\Coordinate(40.062573, 116.336145);
         $squrePoint = $coordinate->getSquarePoint($coordinate);
 
-        $offlineStore = $this->OfflineStore->find('all',array(
+        $offlineStore = $this->OfflineStore->find('all', array(
             'conditions' => array(
                 'location_lat >=' => $squrePoint['right-bottom']['lat'],
                 'location_lat <=' => $squrePoint['left-top']['lat'],
@@ -87,24 +110,27 @@ class TestController extends AppController{
                 )
             )
         ));
-        $offlineStore = Hash::combine($offlineStore,'{n}.OfflineStore.id','{n}.OfflineStore.name');
+        $offlineStore = Hash::combine($offlineStore, '{n}.OfflineStore.id', '{n}.OfflineStore.name');
         echo json_encode($offlineStore);
     }
 
-    public function test_wx_location() {
+    public function test_wx_location()
+    {
         $coordinate1 = new Location\Coordinate(19.820664, -155.468066); // Mauna Kea Summit
         $coordinate2 = new Location\Coordinate(20.709722, -156.253333); // Haleakala Summit
         $this->set('distance', $this->cal_tow_point_distance($coordinate1, $coordinate2));
     }
 
-    private function cal_tow_point_distance($p1, $p2) {
+    private function cal_tow_point_distance($p1, $p2)
+    {
         $calculator = new Location\Distance\Vincenty();
         return $calculator->getDistance($p1, $p2);
     }
 
-    public function test_send_msg_for_creator($orderId){
+    public function test_send_msg_for_creator($orderId)
+    {
         $this->autoRender = false;
-        $order = $this->Order->find('first',array(
+        $order = $this->Order->find('first', array(
             'conditions' => array(
                 'id' => $orderId
             )
@@ -114,19 +140,22 @@ class TestController extends AppController{
         return;
     }
 
-    public function test_send_weshare_new_msg($weshareId){
+    public function test_send_weshare_new_msg($weshareId)
+    {
         $this->autoRender = false;
         $this->WeshareBuy->send_new_share_msg($weshareId);
         echo json_encode(array('success' => true));
     }
 
-    public function test_product_id_map(){
+    public function test_product_id_map()
+    {
         $this->autoRender = false;
         $result = $this->WeshareBuy->get_product_id_map_by_origin_ids(53);
         echo json_encode(array('success' => true, 'result' => $result));
     }
 
-    public function get_ship_code_result(){
+    public function get_ship_code_result()
+    {
         $this->autoRender = false;
         $code = $_REQUEST['code'];
         $ip = $this->get_ip();
@@ -134,35 +163,40 @@ class TestController extends AppController{
         echo json_encode(array('success' => true, 'result' => $result));
     }
 
-    public function logistics_test($id){
+    public function logistics_test($id)
+    {
         $this->autoRender = false;
         $result = $this->Logistics->notifyPaidDone($id);
         echo json_encode(array('success' => true, 'result' => $result));
     }
 
-    public function test_logistics_paid($logistics_order_id){
+    public function test_logistics_paid($logistics_order_id)
+    {
         $this->autoRender = false;
         $this->Logistics->send_logistics_order_paid_msg($logistics_order_id);
         echo json_encode(array('success' => true));
     }
 
-    public function test_logistics_notify_receive($logistics_no){
-        $this->autoRender  = false;
+    public function test_logistics_notify_receive($logistics_no)
+    {
+        $this->autoRender = false;
         $title = '快递已接单，请您耐心等待。';
         $remark = '点击查看详情！';
         $this->Logistics->send_logistics_order_notify_msg($title, $remark, $logistics_no);
         echo json_encode(array('success' => true));
     }
 
-    public function test_logistics_notify_cancel($logistics_no){
-        $this->autoRender  = false;
+    public function test_logistics_notify_cancel($logistics_no)
+    {
+        $this->autoRender = false;
         $title = '快递呼叫超时，您可再次呼叫。';
         $remark = '再次呼叫快递小伙儿～～';
         $this->Logistics->send_logistics_order_notify_msg($title, $remark, $logistics_no);
         echo json_encode(array('success' => true));
     }
 
-    public function test_pintuan_order_paid($orderId){
+    public function test_pintuan_order_paid($orderId)
+    {
         $this->autoRender = false;
         $order = $this->Order->find('first', array(
             'conditions' => array(
@@ -173,7 +207,8 @@ class TestController extends AppController{
         echo json_encode(array('success' => true));
     }
 
-    public function test_send_pintuan_msg(){
+    public function test_send_pintuan_msg()
+    {
         $this->autoRender = false;
         $this->PintuanHelper->send_pintuan_success_msg(1941, 2, 802852);
         echo json_encode(array('success' => true));
