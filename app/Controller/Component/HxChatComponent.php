@@ -5,7 +5,7 @@ class HxChatComponent extends Component
 
     var $name = 'HxChat';
 
-    public function reg_user($user_id)
+    public function reg_hx_user($user_id)
     {
         App::import('Vendor', 'hx/HxUser.class.php');
         $hxUser = new HxUser(HX_APP_NAME, HX_CLIENT_ID, HX_CLIENT_SECRET);
@@ -14,8 +14,13 @@ class HxChatComponent extends Component
             $hx_user_data = array(
                 array('username' => $user_id, 'password' => $hx_password)
             );
-            $hxUser->regUserOnAuth($hx_user_data);
+            $json_result = $hxUser->regUserOnAuth($hx_user_data);
+            $result = json_decode($json_result, true);
+            if (empty($result['error'])) {
+                return array('statusCode' => 1, 'hx_user' => array('username' => $user_id, 'password' => $hx_password));
+            }
         }
+        return array('statusCode' => -1, 'statusMsg' => '注册失败');
     }
 
 

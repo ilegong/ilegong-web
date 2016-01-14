@@ -15,12 +15,15 @@ class UserApiController extends AppController
         if (array_search($this->request->params['action'], $allow_action) == false) {
             $this->currentUser = $this->OAuth->user();
         }
+        $this->autoRender = false;
     }
 
     public function reg_hx_user()
     {
-        App::import('Vendor', 'hx/HxUser.class.php');
-
+        $user_id = $this->currentUser['id'];
+        $result = $this->HxChat->reg_hx_user($user_id);
+        echo json_encode($result);
+        return;
     }
 
     public function profile()
