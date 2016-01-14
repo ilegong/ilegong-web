@@ -1867,15 +1867,15 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 897,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201501/thumb_m/fd70e550e19_0122.jpg'
                 ),
-                '1906' => array(
-                    'share_id' => 1906,
-                    'share_name' => '老舅家的沙窝萝卜--脆绿嫩',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/8d917876cee_1216.jpg',
-                    'share_price' => '27',
-                    'share_user_name' => '平凡的世界',
-                    'share_vote' => 1000,
-                    'share_user_id' => 801447,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/8014471448421852.png'
+                '747' => array(
+                    'share_id' => 747,
+                    'share_name' => '那那家五常稻花香米',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/dafe5e63fc8_1027.jpg',
+                    'share_price' => '166',
+                    'share_user_name' => '那那',
+                    'share_vote' => 600,
+                    'share_user_id' => 812111,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_db53c030cbe19145428f0d5ca58b9562.jpg'
                 ),
                 //银耳
                 '1834' => array(
@@ -1918,15 +1918,15 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 811917,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
                 ),
-                '747' => array(
-                    'share_id' => 747,
-                    'share_name' => '那那家五常稻花香米',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/dafe5e63fc8_1027.jpg',
-                    'share_price' => '166',
-                    'share_user_name' => '那那',
-                    'share_vote' => 600,
-                    'share_user_id' => 812111,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_db53c030cbe19145428f0d5ca58b9562.jpg'
+                '1906' => array(
+                    'share_id' => 1906,
+                    'share_name' => '老舅家的沙窝萝卜--脆绿嫩',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/8d917876cee_1216.jpg',
+                    'share_price' => '27',
+                    'share_user_name' => '平凡的世界',
+                    'share_vote' => 1000,
+                    'share_user_id' => 801447,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/8014471448421852.png'
                 ),
                 '1529' => array(
                     'share_id' => 1529,
