@@ -7,13 +7,14 @@ CREATE TABLE `cake_chat_groups` (
   `created` datetime NOT NULL,
   `creator` int(11) NOT NULL,
   `approval` tinyint(4) NOT NULL DEFAULT '0',
-  `public` tinyint(4) NOT NULL DEFAULT '0',
+  `is_public` tinyint(4) NOT NULL DEFAULT '0',
   `maxusers` int(11) NOT NULL DEFAULT '300',
   `description` varchar(256) NOT NULL,
-  `status` int(11) DEFAULT NULL,
+  `status` int(11) NOT NULL DEFAULT '0',
   `deleted` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE `cake_user_friends` (
   `id` int(11) NOT NULL,
