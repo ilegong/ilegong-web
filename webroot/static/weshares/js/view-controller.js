@@ -648,7 +648,9 @@
 
     function getOrderComment(order_id) {
       if (vm.commentData['order_comments']) {
-        return vm.commentData['order_comments'][order_id];
+        if(vm.commentData['order_comments'][order_id]){
+          return vm.commentData['order_comments'][order_id];
+        }
       }
       if(vm.shareOrder['orderComments']){
         return vm.shareOrder['orderComments'][order_id];
@@ -668,7 +670,9 @@
 
     function getReplyComments(comment_id) {
       if(vm.commentData['comment_replies']){
-        return vm.commentData['comment_replies'][comment_id];
+        if(vm.commentData['comment_replies'][comment_id]){
+          return vm.commentData['comment_replies'][comment_id];
+        }
       }
       if(vm.shareOrder['orderCommentReplies']){
         return vm.shareOrder['orderCommentReplies'][comment_id];
