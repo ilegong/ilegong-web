@@ -1,0 +1,1 @@
+scp -P 9527 -r static/* iler@182.92.221.93:/www/51daifan/static/

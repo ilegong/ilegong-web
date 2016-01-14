@@ -650,25 +650,39 @@
       if (vm.commentData['order_comments']) {
         return vm.commentData['order_comments'][order_id];
       }
+      if(vm.shareOrder['orderComments']){
+        return vm.shareOrder['orderComments'][order_id];
+      }
       return null;
     }
 
     function getOrderCommentLength() {
       if (vm.sharerAllComments) {
+        if (vm.shareOrder['orderComments']) {
+          return (vm.shareOrder['orderComments'].length || 0) + vm.sharerAllComments.length;
+        }
         return vm.sharerAllComments.length;
       }
       return 0;
     }
 
     function getReplyComments(comment_id) {
-      return vm.commentData['comment_replies'][comment_id];
+      if(vm.commentData['comment_replies']){
+        return vm.commentData['comment_replies'][comment_id];
+      }
+      if(vm.shareOrder['orderCommentReplies']){
+        return vm.shareOrder['orderCommentReplies'][comment_id];
+      }
     }
 
     function showReplies(comment_id) {
-      if (!vm.commentData) {
+      if (!vm.commentData && !vm.shareOrder['orderCommentReplies']) {
         return false;
       }
       var allReplies = vm.commentData['comment_replies'];
+      if(!allReplies){
+        allReplies = vm.shareOrder['orderCommentReplies'];
+      }
       if(!allReplies){
         return false;
       }

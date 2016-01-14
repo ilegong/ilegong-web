@@ -66,7 +66,7 @@
       this.referShareId = 0;
       this.loadedShareIds = [];
       this.orderComments = {};
-      this.orderCommentReplaies = {};
+      this.orderCommentReplies = {};
       this.combineComment = 0;
     };
 
@@ -112,7 +112,7 @@
           }
           if(data['comment_data']){
             this.orderComments = merge_options(this.orderComments, data['comment_data']['order_comments']);
-            this.orderCommentReplaies = merge_options(this.orderCommentReplaies, data['comment_data']['comment_replies']);
+            this.orderCommentReplies = merge_options(this.orderCommentReplies, data['comment_data']['comment_replies']);
           }
           this.page = this.page+1;
         }.bind(this)).
