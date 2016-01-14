@@ -232,6 +232,7 @@ const USER_SHARE_ORDER_INFO_CACHE_KEY = 'user_share_order_info_cache_key';//缓�
 const USER_SHARE_ORDER_INFO_FIRST_PAGE_CACHE_KEY = 'user_share_order_info_first_page_cache_key';//缓存对应用户对应分享的第一页订单信息
 const SHARE_BUY_SUMMERY_INFO_CACHE_KEY = 'share_buy_summery_info_cache_key';//分享统计信息
 const SHARE_REFER_SHARE_IDS_CACHE_KEY = 'share_refer_share_ids_cache_key';
+const HX_TOKEN_CACHE_KEY = 'hx_token_cache_key';
 
 //Product 表里设置是这个产品，不论多少都是同一邮费
 const TYPE_ORDER_PRICE = 1; //订单总价满多少包邮
