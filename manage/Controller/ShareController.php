@@ -628,6 +628,8 @@ class ShareController extends AppController {
 
 
     public function admin_warn_orders() {
+        $cond = array();
+        $share_array = array();
         if (!$_REQUEST['start_date']) {
             $start_date = date('Y-m-d', strtotime('-15 day'));
         } else {
@@ -638,7 +640,21 @@ class ShareController extends AppController {
         } else {
             $end_date = $_REQUEST['end_date'];
         }
-        $cond = array();
+        if($_REQUEST['share_name']){
+            $share_name = $_REQUEST['share_name'];
+            $share_array[' title '] = trim($share_name);
+        }
+        $share_data = $this->Weshare->find('all', array(
+            'conditions' => array(
+                'title' => $share_array[' title ']
+            )
+        ));
+        if(!empty($share_data)){
+            $cond['member_id'] = array();
+            foreach($share_data as $key=>$value) {
+                $cond['member_id'] = $value['Weshare']['id'];
+            }
+        }
         $cond['DATE(created) >'] = $start_date;
         $cond['DATE(created) <'] = $end_date;
         $cond['status'] = array(ORDER_STATUS_PAID);
