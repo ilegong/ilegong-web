@@ -1728,7 +1728,7 @@ class ShareUtilComponent extends Component {
                 '2041' => array(
                     'share_id' => 2041,
                     'share_name' => '云南乌骨鸡礼盒 新年好礼 1000g 顺丰包邮',
-                    'share_img' => 'http://static.tongshijia.com/images/2a9b3e82-b9e2-11e5-a8c5-00163e001f59.jpg',
+                    'share_img' => 'http://static.tongshijia.com/images/25b25abe-ba90-11e5-a8c5-00163e001f59.jpg',
                     'share_price' => '98',
                     'share_user_name' => '小牛村 南彩',
                     'share_vote' => 248,
