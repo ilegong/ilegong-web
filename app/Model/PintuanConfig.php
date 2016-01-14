@@ -55,7 +55,7 @@ class PintuanConfig extends AppModel {
             'promotions_title' => '购买了“［一起省16元］昌平现摘红颜草莓4斤142元”',
             'share_label' => '来自［李樱花］的分享',
             'limit_time' => 24,
-            'pid' => 2,
+            'pid' => 4,
             'published' => 1,
             'product' => array(
                 'id' => 4321,
