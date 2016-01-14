@@ -643,7 +643,7 @@ class ShareController extends AppController {
             $share_name = $_REQUEST['share_name'];
             $share_data = $this->Weshare->find('all', array(
                 'conditions' => array(
-                    'title' => '%' . $share_name . '%'
+                    'title LIKE' => '%' . $share_name . '%'
                 )
             ));
             $share_ids = Hash::extract($share_data, '{n}.Weshare.id');
@@ -659,6 +659,7 @@ class ShareController extends AppController {
         $this->handle_query_orders($order_query_condition);
         $this->set('start_date', $start_date);
         $this->set('end_date', $end_date);
+        $this->set('share_name', $share_name);
     }
 
     public function admin_share_orders_export() {
