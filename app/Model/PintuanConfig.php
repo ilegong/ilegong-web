@@ -42,6 +42,28 @@ class PintuanConfig extends AppModel {
     );
 
     var $conf_data = array(
+        2074 => array(
+            'share_id' => '2074',
+            'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/cm_banner.jpg',
+            'small_banner_img' => 'http://static.tongshijia.com/static/pintuan/images/cm_banner_small.jpg',
+            'sharer_id' => '141',
+            'sharer_nickname' => '杨晓光',
+            'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg',
+            'share_title' => '昌平小汤山 现摘红颜草莓  4斤装',
+            'wx_title' => '［一起省16元］昌平现摘红颜草莓4斤142元，杨晓光邀你吃',
+            'wx_desc' => '吃过就会竖起大拇指的新鲜草莓—［朋友说］',
+            'promotions_title' => '购买了“［一起省16元］昌平现摘红颜草莓4斤142元”',
+            'share_label' => '来自［杨晓光］的分享',
+            'limit_time' => 24,
+            'pid' => 4,
+            'published' => 1,
+            'product' => array(
+                'id' => 4354,
+                'normal_price' => 158,
+                'pintuan_price' => 142,
+                'name' => '现摘红颜草莓  4斤装'
+            )
+        ),
         2073 => array(
             'share_id' => '2073',
             'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/cm_banner.jpg',
