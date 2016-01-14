@@ -293,6 +293,11 @@ const SHARE_FAQ_UNREAD = 0;
 //数据统计类型
 const COLLECT_DATA_PINTUAN_TYPE = 0;
 
+
+const HX_APP_NAME = 'pyjia';
+const HX_CLIENT_ID = 'YXA6zAZWMLnYEeWBR61HoGXdXA';
+const HX_CLIENT_SECRET = 'YXA6rKa-1NpmgnMyAcfJBqaVtVJjCtg';
+
 define('CATEGORY_ID_TECHAN', 114);
 
 define('PAYLOG_STATUS_NEW', 0);
@@ -2344,6 +2349,30 @@ function is_blacklist_user($uid) {
 function is_super_share_manager($uid) {
     $super_manager = array(633345, 701166, 544307, 141, 802852, 801447);
     return in_array($uid, $super_manager);
+}
+
+/**
+ * 遍历对象转换为数组
+ * @param object $obj
+ * @return array
+ */
+function obj2arr($obj){
+    $arr = is_object($obj) ? get_object_vars($obj) : $obj;
+    if(is_array($arr)){
+        return array_map('obj2arr', $arr);
+    }else{
+        return $arr;
+    }
+}
+
+/**
+ * @param $ql
+ * @return str
+ * 转换url字符串
+ */
+function url_enc($ql){
+    $str = urlencode($ql);
+    return str_replace('%2A', '*', $str);
 }
 
 /**

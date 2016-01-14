@@ -18,7 +18,7 @@ class CronController extends AppController
 
     function cron_send_pintuan_warn_msg(){
         $this->autoRender = false;
-
+        $this->PintuanHelper->cron_send_warning_msg();
         echo json_encode(array('success' => true));
         return;
     }

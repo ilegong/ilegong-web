@@ -27,3 +27,7 @@ cron:
       url: /cron/cron_update_pintuan_tag_status
       schedule: 0 */4 * * *
       timezone: Beijing
+    - description: notify pintuan fail
+      url: /cron/cron_send_pintuan_warn_msg
+      schedule: 0 */2 * * *
+      timezone: Beijing

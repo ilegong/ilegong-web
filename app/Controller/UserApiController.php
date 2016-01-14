@@ -17,6 +17,17 @@ class UserApiController extends AppController
         }
     }
 
+    public function reg_hx_user()
+    {
+        App::import('Vendor', 'hx/HxUser.class.php');
+        $hxUser = new HxUser(HX_APP_NAME, HX_CLIENT_ID, HX_CLIENT_SECRET);
+        $current_user_id = $this->currentUser['id'];
+        $hx_user_data = array(
+            array('username' => $current_user_id, 'password' => 'administrator')
+        );
+        $hxUser->regUserOnAuth($hx_user_data);
+    }
+
     public function profile()
     {
         $userM = ClassRegistry::init('User');
