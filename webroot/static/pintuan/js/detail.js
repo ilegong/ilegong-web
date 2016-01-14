@@ -106,11 +106,16 @@ $(document).ready(function () {
   $('a[name="notify-fans"]').on('click', function (e) {
     if (!hasSendMsg) {
       e.preventDefault();
-      var $me = $(this);
-      var shareId = $me.data('id');
-      var tagId = $me.data('tag-id') || 0;
-      notifyFans(shareId, tagId);
-      hasSendMsg = true;
+      var a=confirm("确认发送消息？");
+      if(a){
+        var $me = $(this);
+        var shareId = $me.data('id');
+        var tagId = $me.data('tag-id') || 0;
+        notifyFans(shareId, tagId);
+        hasSendMsg = true;
+      }
+    }else{
+      alert('已经发送消息！');
     }
   });
 

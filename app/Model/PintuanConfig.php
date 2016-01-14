@@ -34,9 +34,58 @@ class PintuanConfig extends AppModel {
             'send_info' => '2016年1月18日24点截止报名，1月19日统一发货',
             'send_date' => '1月19日'
         ),
+        4 => array(
+            'detail_img' => array('/static/pintuan/images/cm_detail01.jpg', '/static/pintuan/images/cm_detail02.gif', '/static/pintuan/images/cm_detail03.jpg', '/static/pintuan/images/cm_detail04.gif', '/static/pintuan/images/cm_detail05.gif'),
+            'send_info' => '2016年1月18日24点截止报名，1月19日统一发货',
+            'send_date' => '1月19日'
+        ),
     );
 
     var $conf_data = array(
+        2062 => array(
+            'share_id' => '2062',
+            'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/cm_banner.jpg',
+            'small_banner_img' => 'http://static.tongshijia.com/static/pintuan/images/cm_banner_small.jpg',
+            'sharer_id' => '810684',
+            'sharer_nickname' => '李樱花',
+            'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg',
+            'share_title' => '昌平小汤山 现摘红颜草莓  4斤装',
+            'wx_title' => '［一起省16元］昌平现摘红颜草莓4斤142元，李樱花邀你吃',
+            'wx_desc' => '吃过就会竖起大拇指的新鲜草莓—［朋友说］',
+            'promotions_title' => '购买了“［一起省16元］昌平现摘红颜草莓4斤142元”',
+            'share_label' => '来自［李樱花］的分享',
+            'limit_time' => 24,
+            'pid' => 2,
+            'published' => 1,
+            'product' => array(
+                'id' => 4321,
+                'normal_price' => 158,
+                'pintuan_price' => 142,
+                'name' => '现摘红颜草莓  4斤装'
+            )
+        ),
+        2061 => array(
+            'share_id' => '2061',
+            'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/cm_banner.jpg',
+            'small_banner_img' => 'http://static.tongshijia.com/static/pintuan/images/cm_banner_small.jpg',
+            'sharer_id' => '802852',
+            'sharer_nickname' => '愣愣',
+            'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/6333451445516765.png',
+            'share_title' => '昌平小汤山 现摘红颜草莓  4斤装',
+            'wx_title' => '［一起省16元］昌平现摘红颜草莓4斤142元，愣愣邀你吃',
+            'wx_desc' => '吃过就会竖起大拇指的新鲜草莓—［朋友说］',
+            'promotions_title' => '购买了“［一起省16元］昌平现摘红颜草莓4斤142元”',
+            'share_label' => '来自［愣愣］的分享',
+            'limit_time' => 24,
+            'pid' => 4,
+            'published' => 1,
+            'product' => array(
+                'id' => 4320,
+                'normal_price' => 158,
+                'pintuan_price' => 142,
+                'name' => '现摘红颜草莓  4斤装'
+            )
+        ),
         2051 => array(
             'share_id' => '2051',
             'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/xymn_banner.jpg',
@@ -44,10 +93,10 @@ class PintuanConfig extends AppModel {
             'sharer_id' => '141',
             'sharer_nickname' => '杨晓光',
             'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg',
-            'share_title' => '西域美农 年货坚果大礼包8袋装1800g',
-            'wx_title' => '[和你一起立省10元] 西域美农 年货坚果大礼包8袋装1800g',
-            'wx_desc' => '品质棒棒嗒，好吃的要分享给大家一起吃--朋友说',
-            'promotions_title' => '报名了“【一起省10元】西域美农 年货坚果大礼包8袋装1800g”',
+            'share_title' => '［一起省13元］西域美农坚果礼包1800g165元，杨晓光邀你吃',
+            'wx_title' => '［一起省13元］西域美农坚果礼包1800g165元',
+            'wx_desc' => '让您个性十足，倍有面子的礼包—［朋友说］',
+            'promotions_title' => '报名了“【一起省13元】西域美农 年货坚果大礼包8袋装1800g”',
             'share_label' => '来自［杨晓光］的分享',
             'limit_time' => 24,
             'pid' => 3,
