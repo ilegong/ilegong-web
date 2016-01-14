@@ -42,6 +42,28 @@ class PintuanConfig extends AppModel {
     );
 
     var $conf_data = array(
+        2073 => array(
+            'share_id' => '2073',
+            'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/cm_banner.jpg',
+            'small_banner_img' => 'http://static.tongshijia.com/static/pintuan/images/cm_banner_small.jpg',
+            'sharer_id' => '801447',
+            'sharer_nickname' => '平凡的世界',
+            'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/8014471448421852.png',
+            'share_title' => '昌平小汤山 现摘红颜草莓  4斤装',
+            'wx_title' => '［一起省16元］昌平现摘红颜草莓4斤142元，平凡的世界邀你吃',
+            'wx_desc' => '吃过就会竖起大拇指的新鲜草莓—［朋友说］',
+            'promotions_title' => '购买了“［一起省16元］昌平现摘红颜草莓4斤142元”',
+            'share_label' => '来自［平凡的世界］的分享',
+            'limit_time' => 24,
+            'pid' => 4,
+            'published' => 1,
+            'product' => array(
+                'id' => 4352,
+                'normal_price' => 158,
+                'pintuan_price' => 142,
+                'name' => '现摘红颜草莓  4斤装'
+            )
+        ),
         2062 => array(
             'share_id' => '2062',
             'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/cm_banner.jpg',
@@ -116,9 +138,9 @@ class PintuanConfig extends AppModel {
             'sharer_nickname' => '愣愣',
             'sharer_avatar' => 'http://51daifan-avatar.stor.sinaapp.com/6333451445516765.png',
             'share_title' => '西域美农 年货坚果大礼包8袋装1800g',
-            'wx_title' => '[和你一起立省10元] 西域美农 年货坚果大礼包8袋装1800g',
+            'wx_title' => '［一起省13元］西域美农坚果礼包1800g165元，愣愣邀你吃',
             'wx_desc' => '品质棒棒嗒，好吃的要分享给大家一起吃--朋友说',
-            'promotions_title' => '报名了“【一起省10元】西域美农 年货坚果大礼包8袋装1800g”',
+            'promotions_title' => '报名了“【一起省13元】西域美农 年货坚果大礼包8袋装1800g”',
             'share_label' => '来自［愣愣］的分享',
             'limit_time' => 24,
             'pid' => 3,

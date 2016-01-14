@@ -302,7 +302,7 @@ class PintuanHelperComponent extends Component {
             $leader_name = $conf_data['sharer_nickname'];
             $remark = '查看详情!赶紧分享邀请朋友来一起参加!';
             $url = WX_HOST . '/pintuan/detail/' . $share_id . '?tag_id=' . $tag_id . '&from=template_msg';
-            $this->Weixin->send_pintuan_success_msg($user_open_id, $title, $good_name, $leader_name, $remark, $url);
+            $this->Weixin->send_pintuan_warning_msg($user_open_id, $title, $good_name, $leader_name, $remark, $url);
         }
     }
 

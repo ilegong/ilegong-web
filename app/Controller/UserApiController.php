@@ -3,7 +3,7 @@
 class UserApiController extends AppController
 {
 
-    public $components = array('OAuth.OAuth', 'Session');
+    public $components = array('OAuth.OAuth', 'Session', 'HxChat');
 
     public $uses = array('User');
 
@@ -15,6 +15,15 @@ class UserApiController extends AppController
         if (array_search($this->request->params['action'], $allow_action) == false) {
             $this->currentUser = $this->OAuth->user();
         }
+        $this->autoRender = false;
+    }
+
+    public function reg_hx_user()
+    {
+        $user_id = $this->currentUser['id'];
+        $result = $this->HxChat->reg_hx_user($user_id);
+        echo json_encode($result);
+        return;
     }
 
     public function profile()
