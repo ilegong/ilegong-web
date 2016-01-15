@@ -71,7 +71,21 @@ class UserApiController extends AppController
     public function get_friends()
     {
         $user_id = $this->currentUser['id'];
-
+        $friends_data = $this->UserFriend->find('all', array(
+            'conditions' => array(
+                'user_id' => $user_id,
+                'deleted' => DELETED_NO,
+                'status' => 0
+            ),
+            'limit' => 500
+        ));
+        $friend_ids = Hash::extract($friends_data, '{n}.UserFriend.friend_id');
+        $user_infos = $this->User->find('all', array(
+            'conditions' => array(
+                'id' => $friend_ids,
+            ),
+            'fields' => array('id', 'image', 'nickname', 'is_proxy')
+        ));
     }
 
     public function check_mobile_available()
