@@ -1685,6 +1685,28 @@ class ShareUtilComponent extends Component {
 //                    'share_user_id' => 811917,
 //                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
 //                ),
+                '2074' => array(
+                    'share_id' => 2074,
+                    'share_name' => '［一起省16元］昌平现摘红颜草莓4斤142元',
+                    'share_img' => 'http://static.tongshijia.com/images/b83e1d6c-bb69-11e5-94c2-00163e001f59.jpg',
+                    'share_price' => '142',
+                    'share_user_name' => '杨晓光',
+                    'share_vote' => 3254,
+                    'share_user_id' => 141,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg',
+                    'pintuan' => true
+                ),
+                '2051' => array(
+                    'share_id' => 2051,
+                    'share_name' => '［一起省13元］西域美农坚果礼包1800g165元',
+                    'share_img' => 'http://static.tongshijia.com/images/30d6bf6c-bb6b-11e5-94c2-00163e001f59.jpg ',
+                    'share_price' => '142',
+                    'share_user_name' => '杨晓光',
+                    'share_vote' => 3254,
+                    'share_user_id' => 141,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg',
+                    'pintuan' => true
+                ),
                 '2034' => array(
                     'share_id' => 2034,
                     'share_name' => '现摘空运第一茬 年前抢鲜尝 广西茂谷柑',
