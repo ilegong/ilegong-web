@@ -346,6 +346,7 @@ class ShareManageController extends AppController
                     'order_id' => $order_ids
                 )
             ));
+            $user_ids = Hash::extract($orders, '{n}.Order.creator');
             foreach ($order_carts as $cart_item) {
                 $order_id = $cart_item['Cart']['order_id'];
                 if (!isset($order_cart_map[$order_id])) {
@@ -353,7 +354,15 @@ class ShareManageController extends AppController
                 }
                 $order_cart_map[$order_id][] = $cart_item['Cart'];
             }
+            $users = $this->User->find('all', array(
+                'conditions' => array(
+                    'id' => $user_ids
+                ),
+                'fields' => array('id', 'nickname')
+            ));
+            $user_data = Hash::combine($users, '{n}.User.id', '{n}.User');
         }
+        $this->set('user_data', $user_data);
         $this->set('order_cart_map', $order_cart_map);
         $this->set('orders_count', $orders_count);
         $this->set('orders', $orders);
@@ -378,8 +387,17 @@ class ShareManageController extends AppController
                 'member_id' => $share_ids,
                 'status' => ORDER_STATUS_PAID
             );
+            $share_infos = $this->Weshare->find('all', array(
+                'conditions' => array(
+                    'id' => $share_ids
+                ),
+                'fields' => array('id', 'title')
+            ));
+            $share_infos = Hash::combine($share_infos, '{n}.Weshare.id', '{n}.Weshare');
+            $this->set('share_infos', $share_infos);
             $this->handle_query_order($q_cond);
         }
+
     }
 
     public function order_manage($share_id)
