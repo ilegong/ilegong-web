@@ -1693,6 +1693,7 @@ function get_user_info_from_wx($open_id) {
 function download_photo_from_wx($url) {
     App::uses('CurlDownloader', 'Lib');
     $dl = new CurlDownloader($url);
+    //todo download image to aliyun
     $dl->isDownloadHeadImg(true);
     $dl->download();
     $download_url = '';

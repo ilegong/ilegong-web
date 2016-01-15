@@ -397,6 +397,12 @@ ul li {
     line-height: 25px;
 }
 
+.weshare-view .tip-create-share-btn {
+    width: 65px;
+    margin-top: 5px;
+    line-height: 25px;
+}
+
 .weshare-view .stress-span {
     color: #ffa200
 }

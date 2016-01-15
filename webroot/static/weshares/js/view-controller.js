@@ -1358,7 +1358,7 @@
     function createMyShare() {
       var wx_article = 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=209712305&idx=1&sn=ddb8431d97100d7e6305c2bc46d9ae75#rd';
       if (vm.currentUser['mobilephone'] && vm.currentUser['payment']) {
-        window.location.href = '/weshares/add';
+        window.location.href = '/weshares/add?from=share_view';
       } else {
         window.location.href = wx_article;
       }
