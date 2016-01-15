@@ -23,6 +23,18 @@ class HxChatComponent extends Component
         return array('statusCode' => -1, 'statusMsg' => '注册失败');
     }
 
+    public function add_friend($user_id, $friend_id)
+    {
+        App::import('Vendor', 'hx/HxUser.class.php');
+        $hxUser = new HxUser(HX_APP_NAME, HX_CLIENT_ID, HX_CLIENT_SECRET);
+        $json_result = $hxUser->addFriendToUser($user_id, $friend_id);
+        $result = json_decode($json_result, true);
+        if (empty($result['error'])) {
+            return true;
+        }
+        return false;
+    }
+
 
     function set_user_hx_password($user_id, $password)
     {

@@ -5,7 +5,7 @@ class UserApiController extends AppController
 
     public $components = array('OAuth.OAuth', 'Session', 'HxChat');
 
-    public $uses = array('User');
+    public $uses = array('User', 'UserFriend');
 
     public function beforeFilter()
     {
@@ -38,6 +38,37 @@ class UserApiController extends AppController
     }
 
     public function test()
+    {
+
+    }
+
+    public function add_friend($friend_id)
+    {
+        $user_id = $this->currentUser['id'];
+        if (!$this->UserFriend->hasAny(array('user_id' => $user_id, 'friend_id' => $friend_id))) {
+            $date_now = date('Y-m-d H:i:s');
+            $save_data = array('user_id' => $user_id, 'friend_id' => $friend_id, 'created' => $date_now, 'updated' => $date_now);
+            $friend_data = $this->UserFriend->save($save_data);
+            if($friend_data){
+                $result = $this->HxChat->add_friend($user_id, $friend_id);
+                if(!$result){
+                    $this->log('add hx user friend error');
+                }
+                echo json_encode(array('statusCode' => 1, 'statusMsg' => '添加成功', 'data' => $friend_data));
+                return;
+            }else{
+                echo json_encode(array('statusCode' => 1, 'statusMsg' => '添加失败'));
+                return;
+            }
+        }
+        echo json_encode(array('statusCode' => 2, 'statusMsg' => '已经是好友'));
+        return;
+    }
+
+    /**
+     * 获取好友列表
+     */
+    public function get_friends()
     {
 
     }
