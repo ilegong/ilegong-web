@@ -20,6 +20,7 @@
                             <thead>
                             <tr>
                                 <th>ID</th>
+                                <th>商品信息</th>
                                 <th>用户昵称</th>
                                 <th>创建时间</th>
                                 <th>收货人</th>
@@ -35,6 +36,7 @@
                             {{loop $orders $index $order}}
                             <tr class="{{if $index%2==0}}odd gradeX{{else}}even gradeA{{/if}}">
                                 <td>{{$order['Order']['id']}}</td>
+                                <td>{{get_share_order_cart_display_name($order_cart_map[$order['Order']['id']])}}</td>
                                 <td>{{$user_data[$order['Order']['creator']]['nickname']}}</td>
                                 <td>{{$order['Order']['created']}}</td>
                                 <td>{{$order['Order']['consignee_name']}}</td>
