@@ -4,12 +4,13 @@
  * Class ShareManageController
  * 分享者管理系统
  */
-class ShareManageController extends AppController {
+class ShareManageController extends AppController
+{
 
 
     public $components = array('Auth', 'ShareUtil', 'WeshareBuy', 'ShareManage', 'Cookie', 'Session', 'Paginator', 'WeshareBuy', 'ShareAuthority');
 
-    public $uses = array('User', 'Weshare', 'Order', 'Cart', 'WeshareProduct','UserLevel');
+    public $uses = array('User', 'Weshare', 'Order', 'Cart', 'WeshareProduct', 'UserLevel');
 
     var $sortSharePaginate = array(
         'Weshare' => array(
@@ -28,7 +29,8 @@ class ShareManageController extends AppController {
     /**
      * 查询用户
      */
-    public function search_users() {
+    public function search_users()
+    {
         $u_mobile = $_REQUEST['mobile'];
         $u_nickname = $_REQUEST['nick_name'];
         if (!empty($u_mobile) || !empty($u_nickname)) {
@@ -53,7 +55,8 @@ class ShareManageController extends AppController {
     /**
      * 查询分享
      */
-    public function search_shares() {
+    public function search_shares()
+    {
         $s_id = $_REQUEST['id'];
         if (!empty($s_id)) {
             $WeshareM = ClassRegistry::init('Weshare');
@@ -79,40 +82,44 @@ class ShareManageController extends AppController {
     /*
      * 为用户分配团长级别
      */
-    public function search_level(){
+    public function search_level()
+    {
         $user_levels = get_user_levels();
         $this->set('user_levels', $user_levels);
     }
 
-   public function do_set_level(){
-       $this->autoRender = false;
-       $para = array();
-       $para['data_id'] = $_POST['data_id'];
-       $para['data_value'] = $_POST['data_value'];
-       if(empty($para['data_id'])){
-           echo json_encode(array('code' => '1001', 'msg' => 'error'));
-           return;
-       }
-       $para['type'] = 0;
-       $old_data = $this->UserLevel->find('first', array(
-           'conditions' => array('data_id' => $para['data_id'])
-       ));
-       if(!empty($old_data)){
-           //set id for update
-           $para['id'] = $old_data['UserLevel']['id'];
-       }
-       $res = $this->UserLevel->save($para);
-       if ($res) {
-           echo json_encode(array('code' => '1000', 'msg' => 'succ'));
-       } else {
-           echo json_encode(array('code' => '1001', 'msg' => 'error'));
-       }
-       return;
+    public function do_set_level()
+    {
+        $this->autoRender = false;
+        $para = array();
+        $para['data_id'] = $_POST['data_id'];
+        $para['data_value'] = $_POST['data_value'];
+        if (empty($para['data_id'])) {
+            echo json_encode(array('code' => '1001', 'msg' => 'error'));
+            return;
+        }
+        $para['type'] = 0;
+        $old_data = $this->UserLevel->find('first', array(
+            'conditions' => array('data_id' => $para['data_id'])
+        ));
+        if (!empty($old_data)) {
+            //set id for update
+            $para['id'] = $old_data['UserLevel']['id'];
+        }
+        $res = $this->UserLevel->save($para);
+        if ($res) {
+            echo json_encode(array('code' => '1000', 'msg' => 'succ'));
+        } else {
+            echo json_encode(array('code' => '1001', 'msg' => 'error'));
+        }
+        return;
     }
+
     /**
      * 更新分享信息
      */
-    public function update_share() {
+    public function update_share()
+    {
         $this->autoRender = false;
         $json_data = $_REQUEST['data'];
         $share_data = json_decode($json_data, true);
@@ -125,7 +132,8 @@ class ShareManageController extends AppController {
     /**
      * 更新返利设置
      */
-    public function update_share_rebate_setting() {
+    public function update_share_rebate_setting()
+    {
         $this->autoRender = false;
         $json_data = $_REQUEST['data'];
         $data = json_decode($json_data, true);
@@ -139,7 +147,8 @@ class ShareManageController extends AppController {
     /**
      * 更新分享的快递设置
      */
-    public function update_share_ship_setting() {
+    public function update_share_ship_setting()
+    {
         $this->autoRender = false;
         $json_data = $_POST['data'];
         $data = json_decode($json_data, true);
@@ -152,7 +161,8 @@ class ShareManageController extends AppController {
         return;
     }
 
-    public function update_share_product() {
+    public function update_share_product()
+    {
         $this->autoRender = false;
         $json_data = $_REQUEST['data'];
         $share_product_data = json_decode($json_data, true);
@@ -162,9 +172,10 @@ class ShareManageController extends AppController {
         return;
     }
 
-    public function delete_share($shareId) {
+    public function delete_share($shareId)
+    {
         $this->Weshare->delete($shareId);
-        if($_REQUEST['from'] == 'search'){
+        if ($_REQUEST['from'] == 'search') {
             $this->redirect(array('action' => 'search_shares'));
             return;
         }
@@ -174,7 +185,8 @@ class ShareManageController extends AppController {
     /**
      * 获取分享者的分享
      */
-    public function shares() {
+    public function shares()
+    {
         $uid = $this->currentUser['id'];
         $this->Paginator->settings = $this->sortSharePaginate;
         $q_cond = array(
@@ -192,7 +204,8 @@ class ShareManageController extends AppController {
         $this->set('shares', $shares);
     }
 
-    public function share_edit($share_id) {
+    public function share_edit($share_id)
+    {
         $uid = $this->currentUser['id'];
         $weshareData = $this->Weshare->find('first', array(
             'conditions' => array(
@@ -227,7 +240,8 @@ class ShareManageController extends AppController {
         $this->data = $weshareData;
     }
 
-    public function authorize_shares() {
+    public function authorize_shares()
+    {
         $uid = $this->currentUser['id'];
         $q_cond = array(
             'user' => $uid,
@@ -259,14 +273,17 @@ class ShareManageController extends AppController {
         }
     }
 
-    public function beforeFilter() {
+    public function beforeFilter()
+    {
         $this->Auth->authenticate = array('WeinxinOAuth', 'Form', 'Pys', 'Mobile');
         $this->Auth->allowedActions = array('login', 'forgot', 'reset', 'do_login');
         $this->layout = 'sharer';
         parent::beforeFilter();
     }
 
-    public function index() {
+
+    public function index()
+    {
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
             $this->redirect(array('action' => 'login'));
@@ -276,12 +293,14 @@ class ShareManageController extends AppController {
         $this->set('collect_data', $collect_data);
     }
 
-    public function logout() {
+    public function logout()
+    {
         $this->logoutCurrUser();
         $this->redirect(array('action' => 'login'));
     }
 
-    public function do_login() {
+    public function do_login()
+    {
         if ($this->Auth->login()) {
             $this->User->id = $this->Auth->user('id');
             $this->User->updateAll(array(
@@ -308,33 +327,12 @@ class ShareManageController extends AppController {
         $this->redirect(array('action' => 'login'));
     }
 
-    public function login() {
+    public function login()
+    {
         $this->layout = null;
     }
 
-    public function order_manage($share_id) {
-        $share_info = $this->WeshareBuy->get_weshare_info($share_id);
-        $this->Paginator->settings = $this->sortShareOrderPaginate;
-        $q_cond = array(
-            'Order.member_id' => $share_id,
-            'Order.type' => ORDER_TYPE_WESHARE_BUY,
-            'NOT' => array(
-                'Order.status' => array(ORDER_STATUS_WAITING_PAY)
-            )
-        );
-        //set other query cond
-        if (!empty($_REQUEST['order_ship_type']) && $_REQUEST['order_ship_type'] != 0) {
-            $q_cond['Order.ship_mark'] = $_REQUEST['order_ship_type'];
-        }
-        if (!empty($_REQUEST['order_status']) && $_REQUEST['order_status'] != 0) {
-            $q_cond['Order.status'] = $_REQUEST['order_status'];
-        }
-        if (!empty($_REQUEST['consignee_name'])) {
-            $q_cond['Order.consignee_name LIKE'] = '%' . $_REQUEST['consignee_name'] . '%';
-        }
-        if (!empty($_REQUEST['consignee_mobilephone'])) {
-            $q_cond['Order.consignee_mobilephone'] = $_REQUEST['consignee_mobilephone'];
-        }
+    private function handle_query_order($q_cond){
         $orders_count = $this->Order->find('count', array(
             'conditions' => $q_cond
         ));
@@ -359,10 +357,61 @@ class ShareManageController extends AppController {
         $this->set('order_cart_map', $order_cart_map);
         $this->set('orders_count', $orders_count);
         $this->set('orders', $orders);
+    }
+
+    public function get_my_paid_order()
+    {
+        $uid = $this->currentUser['id'];
+        $create_share = $this->Weshare->find('all', array(
+            'conditions' => array(
+                'creator' => $uid,
+            ),
+            'fields' => array('id'),
+            'limit' => 100,
+            'order' => array('id DESC')
+        ));
+        $create_share_ids = Hash::extract($create_share, '{n}.Weshare.id');
+        $auth_share_ids = $this->ShareAuthority->get_my_auth_share_ids($uid);
+        $share_ids = array_merge($create_share_ids, $auth_share_ids);
+        if(!empty($share_ids)){
+            $q_cond = array(
+                'member_id' => $share_ids,
+                'status' => ORDER_STATUS_PAID
+            );
+            $this->handle_query_order($q_cond);
+        }
+    }
+
+    public function order_manage($share_id)
+    {
+        $share_info = $this->WeshareBuy->get_weshare_info($share_id);
+        $this->Paginator->settings = $this->sortShareOrderPaginate;
+        $q_cond = array(
+            'Order.member_id' => $share_id,
+            'Order.type' => ORDER_TYPE_WESHARE_BUY,
+            'NOT' => array(
+                'Order.status' => array(ORDER_STATUS_WAITING_PAY)
+            )
+        );
+        //set other query cond
+        if (!empty($_REQUEST['order_ship_type']) && $_REQUEST['order_ship_type'] != 0) {
+            $q_cond['Order.ship_mark'] = $_REQUEST['order_ship_type'];
+        }
+        if (!empty($_REQUEST['order_status']) && $_REQUEST['order_status'] != 0) {
+            $q_cond['Order.status'] = $_REQUEST['order_status'];
+        }
+        if (!empty($_REQUEST['consignee_name'])) {
+            $q_cond['Order.consignee_name LIKE'] = '%' . $_REQUEST['consignee_name'] . '%';
+        }
+        if (!empty($_REQUEST['consignee_mobilephone'])) {
+            $q_cond['Order.consignee_mobilephone'] = $_REQUEST['consignee_mobilephone'];
+        }
+        $this->handle_query_order($q_cond);
         $this->set('share_info', $share_info);
     }
 
-    public function share_order() {
+    public function share_order()
+    {
         $share_id = $_REQUEST['share_id'];
         if (!empty($share_id)) {
             $this->set_share_order_data($share_id);
@@ -372,7 +421,8 @@ class ShareManageController extends AppController {
     /**
      * 产品池中产品的订单
      */
-    public function pool_product_order() {
+    public function pool_product_order()
+    {
         $share_id = $_REQUEST['share_id'];
         $sharePoolProductM = ClassRegistry::init('SharePoolProduct');
         $all_pool_products = $sharePoolProductM->get_all_products();
@@ -398,7 +448,8 @@ class ShareManageController extends AppController {
      * @param array $patch_uids
      * 公用的设置订单数据
      */
-    private function set_share_order_data($share_id, $patch_uids = array()) {
+    private function set_share_order_data($share_id, $patch_uids = array())
+    {
         $orders = $this->ShareManage->get_share_orders($share_id);
         $user_ids = Hash::extract($orders, '{n}.Order.creator');
         $user_ids = array_merge($user_ids, $patch_uids);
@@ -411,14 +462,16 @@ class ShareManageController extends AppController {
         $this->set('share_id', $share_id);
     }
 
-    public function batch_set_order_ship_code() {
+    public function batch_set_order_ship_code()
+    {
 
     }
 
     /**
      * 清除分享的缓存
      */
-    private function clear_share_cache() {
+    private function clear_share_cache()
+    {
         $shareId = $_REQUEST['shareId'];
         //SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId
         Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $shareId . '_0', '');

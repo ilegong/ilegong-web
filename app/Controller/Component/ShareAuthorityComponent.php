@@ -5,6 +5,26 @@ class ShareAuthorityComponent extends Component {
 
 
     /**
+     * @param $uid
+     * @return array
+     * 返回授权我的分享
+     */
+    public function get_my_auth_share_ids($uid){
+        $shareOperateSettingM = ClassRegistry::init('ShareOperateSetting');
+        $settings = $shareOperateSettingM->find('all', array(
+            'conditions' => array(
+                'user' => $uid,
+                'data_type' => SHARE_ORDER_OPERATE_TYPE,
+                'scope_type' => SHARE_OPERATE_SCOPE_TYPE
+            ),
+            'order' => array('id DESC'),
+            'limit' => 100
+        ));
+        $share_ids = Hash::extract($settings, '{n}.ShareOperateSetting.data_id');
+        return $share_ids;
+    }
+
+    /**
      * @param $share_id
      * @return array|mixed
      * 获取到授权用户的ID
