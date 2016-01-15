@@ -1777,6 +1777,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 141,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg'
                 ),
+                '1833' => array(
+                    'share_id' => 1833,
+                    'share_name' => '栖霞是苹果之都，自家种的苹果',
+                    'share_img' => 'http://static.tongshijia.com/images/da08c55e-bb51-11e5-b111-00163e001f59.jpg',
+                    'share_price' => '69.8',
+                    'share_user_name' => '婉清妈妈',
+                    'share_vote' => 321,
+                    'share_user_id' => 892471,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_64ff4d2096b02f63dfd801315cd0b76e.jpg'
+                ),
                 '1971' => array(
                     'share_id' => 1971,
                     'share_name' => '原生态（腊八米+红枣+红糖 ）绝配！腊八儿节，送自己、送家人。',
@@ -2359,6 +2369,16 @@ class ShareUtilComponent extends Component {
 //                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg'
 //                ),
                 //泉林的纸
+                '1977' => array(
+                    'share_id' => 1977,
+                    'share_name' => '福建尤溪红糯米酒（俗称黄酒、月子酒）',
+                    'share_img' => 'http://static.tongshijia.com/images/6a62770e-bb51-11e5-b111-00163e001f59.jpg ',
+                    'share_price' => '88',
+                    'share_user_name' => '春之花',
+                    'share_vote' => 165,
+                    'share_user_id' => 726457,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/7264571452829828.png'
+                ),
                 '1512' => array(
                     'share_id' => 1512,
                     'share_name' => '泉林本色 180g卷筒纸 5提共50卷套装',
