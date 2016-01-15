@@ -1777,6 +1777,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 141,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg'
                 ),
+                '2056' => array(
+                    'share_id' => 2056,
+                    'share_name' => '年习喜·年货礼盒-----味道是想念最好的慰藉',
+                    'share_img' => 'http://static.tongshijia.com/images/fd1f67b0-bb5a-11e5-94c2-00163e001f59.jpg ',
+                    'share_price' => '318',
+                    'share_user_name' => '鲲鲲',
+                    'share_vote' => 656,
+                    'share_user_id' => 806889,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg',
+                ),
 //                '1833' => array(
 //                    'share_id' => 1833,
 //                    'share_name' => '栖霞是苹果之都，自家种的苹果',

@@ -70,6 +70,7 @@ class UserApiController extends AppController
      */
     public function get_friends()
     {
+        $user_id = $this->currentUser['id'];
 
     }
 
