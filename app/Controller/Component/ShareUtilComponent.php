@@ -1688,7 +1688,7 @@ class ShareUtilComponent extends Component {
                 '2074' => array(
                     'share_id' => 2074,
                     'share_name' => '［一起省16元］昌平现摘红颜草莓4斤142元',
-                    'share_img' => 'http://static.tongshijia.com/images/b83e1d6c-bb69-11e5-94c2-00163e001f59.jpg',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/e3f51b74729_0115.jpg',
                     'share_price' => '142',
                     'share_user_name' => '杨晓光',
                     'share_vote' => 3254,
@@ -1699,7 +1699,7 @@ class ShareUtilComponent extends Component {
                 '2051' => array(
                     'share_id' => 2051,
                     'share_name' => '［一起省13元］西域美农坚果礼包1800g165元',
-                    'share_img' => 'http://static.tongshijia.com/images/30d6bf6c-bb6b-11e5-94c2-00163e001f59.jpg ',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/cf526f2c3e6_0115.jpg',
                     'share_price' => '142',
                     'share_user_name' => '杨晓光',
                     'share_vote' => 3254,
@@ -1802,7 +1802,7 @@ class ShareUtilComponent extends Component {
                 '2056' => array(
                     'share_id' => 2056,
                     'share_name' => '年习喜·年货礼盒-----味道是想念最好的慰藉',
-                    'share_img' => 'http://static.tongshijia.com/images/fd1f67b0-bb5a-11e5-94c2-00163e001f59.jpg ',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/2622d548862_0115.jpg',
                     'share_price' => '318',
                     'share_user_name' => '鲲鲲',
                     'share_vote' => 656,
@@ -2404,7 +2404,7 @@ class ShareUtilComponent extends Component {
                 '1977' => array(
                     'share_id' => 1977,
                     'share_name' => '福建尤溪红糯米酒（俗称黄酒、月子酒）',
-                    'share_img' => 'http://static.tongshijia.com/images/6a62770e-bb51-11e5-b111-00163e001f59.jpg ',
+                    'share_img' => 'http://static.tongshijia.com/images/6a62770e-bb51-11e5-b111-00163e001f59.jpg',
                     'share_price' => '88',
                     'share_user_name' => '春之花',
                     'share_vote' => 165,
