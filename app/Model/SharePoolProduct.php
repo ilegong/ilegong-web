@@ -122,7 +122,7 @@ class SharePoolProduct extends AppModel {
         array(
             'share_id' => 2098,
             'share_name' => '巨好吃的鲜8纯芝麻酱【全国包邮】',
-            'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/a1455b6560a_0104.jpg',//todo
+            'share_img' => 'http://static.tongshijia.com/images/633dae9e-bb60-11e5-94c2-00163e001f59.jpg',
             'brand_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_b820324df8db0ad6606b6a613a925c98.jpg',
             'brand_name' => '酒香婷',
             'show_brand' => true,
