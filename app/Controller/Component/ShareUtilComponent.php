@@ -1859,16 +1859,16 @@ class ShareUtilComponent extends Component {
 //                    'share_user_id' => 711503,
 //                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201508/thumb_m/0609f46d89e_0813.jpg'
 //                ),
-                '1991' => array(
-                    'share_id' => 1991,
-                    'share_name' => '来自张家口坝上原生态羊粪土豆',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/48d4eb9cb9e_0105.jpg',
-                    'share_price' => '65',
-                    'share_user_name' => '赵静',
-                    'share_vote' => 500,
-                    'share_user_id' => 867250,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/8672501449738506.png'
-                ),
+//                '1991' => array(
+//                    'share_id' => 1991,
+//                    'share_name' => '来自张家口坝上原生态羊粪土豆',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/48d4eb9cb9e_0105.jpg',
+//                    'share_price' => '65',
+//                    'share_user_name' => '赵静',
+//                    'share_vote' => 500,
+//                    'share_user_id' => 867250,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/8672501449738506.png'
+//                ),
                 '1794' => array(
                     'share_id' => 1794,
                     'share_name' => '多油、好吃到停不下来的海鸭蛋',
