@@ -6,15 +6,18 @@
  * Date: 11/24/15
  * Time: 16:48
  */
-class ShareCountlyController extends AppController {
+class ShareCountlyController extends AppController
+{
 
 
-    public function beforeFilter() {
+    public function beforeFilter()
+    {
         parent::beforeFilter();
         $this->layout = 'bootstrap_layout';
     }
 
-    public function admin_order_statics() {
+    public function admin_order_statics()
+    {
         $statisticsDataM = ClassRegistry::init('StatisticsData');
         $summeryData = $statisticsDataM->find('all', array(
             'order' => array('id desc'),
@@ -27,15 +30,20 @@ class ShareCountlyController extends AppController {
     /**
      * 定时任务生成团长前一天的统计数据
      */
-    public function admin_cron_gen_proxy_data(){
+    public function admin_cron_gen_proxy_data()
+    {
         $this->autoRender = false;
         $date = $_REQUEST['date'];
         if (empty($date)) {
             $date = date('Y-m-d', strtotime("-1 day"));
         }
+        $result = $this->gen_sharer_statics_data_by_date($date);
+        echo json_encode($result);
+        return;
     }
 
-    public function admin_cron_gen_day_data() {
+    public function admin_cron_gen_day_data()
+    {
         $this->autoRender = false;
         $date = $_REQUEST['date'];
         if (empty($date)) {
@@ -46,7 +54,8 @@ class ShareCountlyController extends AppController {
         return;
     }
 
-    public function admin_gen_old_data() {
+    public function admin_gen_old_data()
+    {
         //SELECT count(id), sum(total_all_price), date(created) FROM 51daifan.cake_orders group by date(created);
         $this->autoRender = false;
         $orderM = ClassRegistry::init('Order');
@@ -66,7 +75,8 @@ class ShareCountlyController extends AppController {
         return;
     }
 
-    public function admin_get_sharer_summary() {
+    public function admin_get_sharer_summary()
+    {
         $sharer_id = $_REQUEST['sharer'];
         if (!empty($sharer_id)) {
             $start_date = $_REQUEST['start_date'];
@@ -85,7 +95,8 @@ class ShareCountlyController extends AppController {
         }
     }
 
-    private function get_sharer_summery_data($sharer_id, $start_date, $end_date) {
+    private function get_sharer_summery_data($sharer_id, $start_date, $end_date)
+    {
         $weshareM = ClassRegistry::init('Weshare');
         $shares = $weshareM->find('all', array(
             'conditions' => array(
@@ -139,7 +150,8 @@ class ShareCountlyController extends AppController {
         return null;
     }
 
-    private function gen_statics_data_by_date($date) {
+    private function gen_statics_data_by_date($date)
+    {
         $orderM = ClassRegistry::init('Order');
         $statisticsDataM = ClassRegistry::init('StatisticsData');
         $date_summery_data = $orderM->query("SELECT count(id), sum(total_all_price) FROM cake_orders where status !=0 and date(created) = '" . $date . "'");
@@ -155,14 +167,39 @@ class ShareCountlyController extends AppController {
         return $staticsData;
     }
 
-    private function gen_sharer_statics_data_by_date($date){
+    private function gen_sharer_statics_data_by_date($date)
+    {
         $userLevelM = ClassRegistry::init('UserLevel');
-
+        $sharer_count = $userLevelM->find('count', array('conditions' => array('type' => 0)));
+        $limit = 10;
+        $page_count = ceil($sharer_count / $limit);
+        $queue = new SaeTaskQueue('cron_data');
+        //批量添加任务
+        $array = array();
+        foreach (range(0, $page_count) as $page) {
+            $task_url = '/manage/admin/ShareCountly/gen_sharer_statics_data_task/' . $date . '/' . $limit . '/' . $page;
+            $array[] = array('url' => $task_url);
+        }
+        $queue->addTask($array);
+        //将任务推入队列
+        $ret = $queue->push();
+        return $ret;
     }
 
 
-    public function gen_sharer_statics_data_task($date, $limit, $page){
+    public function gen_sharer_statics_data_task($date, $limit, $page)
+    {
         //生成用户统计数据的任务
+        $userLevelM = ClassRegistry::init('UserLevel');
+        $user_level_datas = $userLevelM->find('all', array(
+            'conditions' => array(
+                'type' => 0
+            ),
+            'limit' => $limit,
+            'offset' => $limit * $page,
+            'order' => array('id DESC')
+        ));
+        $user_ids = Hash::extract($user_level_datas, '{n}.UserLevel.data_id');
 
     }
 }
