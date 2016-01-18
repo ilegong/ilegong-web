@@ -171,7 +171,7 @@ class ShareCountlyController extends AppController
     {
         $userLevelM = ClassRegistry::init('UserLevel');
         $sharer_count = $userLevelM->find('count', array('conditions' => array('type' => 0)));
-        $limit = 10;
+        $limit = 5;
         $page_count = ceil($sharer_count / $limit);
         $queue = new SaeTaskQueue('cron_data');
         //批量添加任务
@@ -187,8 +187,9 @@ class ShareCountlyController extends AppController
     }
 
 
-    public function gen_sharer_statics_data_task($date, $limit, $page)
+    public function admin_gen_sharer_statics_data_task($date, $limit, $page)
     {
+        $this->autoRender =false;
         //生成用户统计数据的任务
         $userLevelM = ClassRegistry::init('UserLevel');
         $user_level_datas = $userLevelM->find('all', array(
@@ -197,9 +198,50 @@ class ShareCountlyController extends AppController
             ),
             'limit' => $limit,
             'offset' => $limit * $page,
-            'order' => array('id DESC')
+            'order' => array('id ASC')
         ));
         $user_ids = Hash::extract($user_level_datas, '{n}.UserLevel.data_id');
+        $save_data = array();
+        foreach($user_ids as $uid){
+            $save_data[] = $this->get_sharer_data($uid, $date);
+        }
+        if(!empty($save_data)){
+            $sharerStaticsDataM = ClassRegistry::init('SharerStaticsData');
+            $sharerStaticsDataM->saveAll($save_data);
+        }
+        echo json_encode(array('success' => true));
+        return;
+    }
 
+    public function get_sharer_data($user_id, $date)
+    {
+        $weshareM = ClassRegistry::init('Weshare');
+        $orderM = ClassRegistry::init('Order');
+        $userRelationM = ClassRegistry::init('UserRelation');
+        $create_share_count = $weshareM->find('count', array(
+            'conditions' => array(
+                'DATE(created)' => $date,
+                'creator' => $user_id
+            )
+        ));
+        $fans_count = $userRelationM->find('count', array(
+            'conditions' => array(
+                'user_id' => $user_id,
+                'DATE(created)' => $date
+            )
+        ));
+        $runing_shares = $weshareM->find('all', array(
+            'conditions' => array(
+                'status' => 0,
+                'creator' => $user_id
+            ),
+            'limit' => 100
+        ));
+        $runing_share_ids = Hash::extract($runing_shares, '{n}.Weshare.id');
+        $order_summery = $orderM->query("select count(id), sum(total_all_price) from cake_orders where type=9 and status!=0 and member_id in ('.implode(',', $runing_share_ids).') and DATE(created)="."'".$date."'");
+        $order_count = $order_summery[0][0]['count(id)'];
+        $trading_volume = empty($order_summery[0][0]['sum(total_all_price)'])? 0 : $order_summery[0][0]['sum(total_all_price)'];
+        $data = array('order_count' => $order_count, 'trading_volume' => $trading_volume, 'created' => date('Y-m-d H:i:s'), 'data_date' => $date, 'sharer_id' => $user_id, 'share_count' => $create_share_count, 'fans_count' => $fans_count);
+        return $data;
     }
 }
