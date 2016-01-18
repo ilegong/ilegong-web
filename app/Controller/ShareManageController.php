@@ -499,4 +499,20 @@ class ShareManageController extends AppController
         //SIMPLE_SHARE_INFO_CACHE_KEY . '_' . $share_id
         Cache::write(SIMPLE_SHARE_INFO_CACHE_KEY . '_' . $shareId, '');
     }
+
+    //统计商品的份数
+    /**
+     SELECT name, SUM( num )
+    FROM cake_carts
+    WHERE order_id
+    IN (
+
+    SELECT id
+    FROM cake_orders
+    WHERE member_id =2078
+    AND ship_mark =  'kuai_di'
+    )
+    GROUP BY product_id
+     *
+     */
 }
