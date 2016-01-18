@@ -232,13 +232,14 @@ class ShareCountlyController extends AppController
         ));
         $runing_shares = $weshareM->find('all', array(
             'conditions' => array(
-                'status' => 0,
-                'creator' => $user_id
+                'creator' => $user_id,
+                'not' => array('status' => -1)
             ),
-            'limit' => 100
+            'limit' => 100,
+            'order' => array('id DESC')
         ));
         $runing_share_ids = Hash::extract($runing_shares, '{n}.Weshare.id');
-        $order_summery = $orderM->query("select count(id), sum(total_all_price) from cake_orders where type=9 and status!=0 and member_id in ('.implode(',', $runing_share_ids).') and DATE(created)="."'".$date."'");
+        $order_summery = $orderM->query("select count(id), sum(total_all_price) from cake_orders where type=9 and status!=0 and member_id in (".implode(',', $runing_share_ids).") and DATE(created)='".$date."'");
         $order_count = $order_summery[0][0]['count(id)'];
         $trading_volume = empty($order_summery[0][0]['sum(total_all_price)'])? 0 : $order_summery[0][0]['sum(total_all_price)'];
         $data = array('order_count' => $order_count, 'trading_volume' => $trading_volume, 'created' => date('Y-m-d H:i:s'), 'data_date' => $date, 'sharer_id' => $user_id, 'share_count' => $create_share_count, 'fans_count' => $fans_count);
