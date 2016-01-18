@@ -27,6 +27,22 @@ class ShareCountlyController extends AppController
         $this->set('summeryData', $summeryData);
     }
 
+    public function admin_sharer_statics(){
+        $date = date('Y-m-d');
+        if(!empty($_REQUEST['date'])){
+            $date = $_REQUEST['date'];
+        }
+        $sharerStaticsDataM = ClassRegistry::init('SharerStaticsData');
+        $allData = $sharerStaticsDataM->find('all', array(
+            'conditions' => array(
+                'data_date' => $date
+            ),
+            'order' => array('order_count DESC')
+        ));
+        $this->set('all_data', $allData);
+        $this->set('date', $date);
+    }
+
     /**
      * 定时任务生成团长前一天的统计数据
      */

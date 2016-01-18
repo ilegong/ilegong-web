@@ -1,0 +1,35 @@
+<div class="row">
+    <form class="form-inline">
+        <div class="form-group">
+            <label class="sr-only" for="query_date">查询日期</label>
+            <input type="text" class="form-control" id="query_date" placeholder="查询日期" name="date" value="{{$date}}">
+        </div>
+        <button type="submit" class="btn btn-default">查询</button>
+    </form>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>团长ID</th>
+                <th>日期</th>
+                <th>分享订单数</th>
+                <th>订单总额</th>
+                <th>粉丝增加数</th>
+                <th>创建分享数</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{loop $all_data $data}}
+            <tr>
+                <td>{{$data['SharerStaticsData']['sharer_id']}}</td>
+                <td>{{$data['SharerStaticsData']['data_date']}}</td>
+                <td>{{$data['SharerStaticsData']['order_count']}}</td>
+                <td>{{$data['SharerStaticsData']['trading_volume']}}</td>
+                <td>{{$data['SharerStaticsData']['fans_count']}}</td>
+                <td>{{$data['SharerStaticsData']['share_count']}}</td>
+                <td></td>
+            </tr>
+            {{/loop}}
+        </tbody>
+    </table>
+</div>
