@@ -156,6 +156,7 @@ class ShareCountlyController extends AppController {
     }
 
     private function gen_sharer_statics_data_by_date($date){
+        $userLevelM = ClassRegistry::init('UserLevel');
 
     }
 

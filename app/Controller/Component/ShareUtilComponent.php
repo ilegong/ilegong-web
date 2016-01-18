@@ -1738,16 +1738,6 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 811917,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
                 ),
-                '2041' => array(
-                    'share_id' => 2041,
-                    'share_name' => '云南乌骨鸡礼盒 新年好礼 1000g 顺丰包邮',
-                    'share_img' => 'http://static.tongshijia.com/images/25b25abe-ba90-11e5-a8c5-00163e001f59.jpg',
-                    'share_price' => '98',
-                    'share_user_name' => '小牛村 南彩',
-                    'share_vote' => 248,
-                    'share_user_id' => 886905,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_eb6105d6e125a8e05a94b6f7608642db.jpg'
-                ),
                 '1981' => array(
                     'share_id' => 1981,
                     'share_name' => '农家土猪自制腊肠----肠常想念，才下舌尖，又上心间',
@@ -1989,6 +1979,16 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 600,
                     'share_user_id' => 897,
                     'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201501/thumb_m/fd70e550e19_0122.jpg'
+                ),
+                '2041' => array(
+                    'share_id' => 2041,
+                    'share_name' => '云南乌骨鸡礼盒 新年好礼 1000g 顺丰包邮',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/3801c445b40_0118.jpg',
+                    'share_price' => '98',
+                    'share_user_name' => '小牛村 南彩',
+                    'share_vote' => 248,
+                    'share_user_id' => 886905,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_eb6105d6e125a8e05a94b6f7608642db.jpg'
                 ),
 //                '1797' => array(
 //                    'share_id' => 1797,
