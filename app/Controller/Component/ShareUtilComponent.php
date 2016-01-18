@@ -1768,6 +1768,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 433224,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_e370e2e71308d0c78c1f22ff4f6aabca.jpg'
                 ),
+                '1500' => array(
+                    'share_id' => 1500,
+                    'share_name' => '小火团贡玉米 甜糯口感 浓郁的玉米原香',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/0129a52fd3d_1209.jpg',
+                    'share_price' => '68',
+                    'share_user_name' => '杨晓光',
+                    'share_vote' => 2000,
+                    'share_user_id' => 141,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg'
+                ),
                 //脐橙
                 '1876' => array(
                     'share_id' => 1876,
@@ -1788,16 +1798,6 @@ class ShareUtilComponent extends Component {
                     'share_vote' => 1024,
                     'share_user_id' => 811917,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
-                ),
-                '1500' => array(
-                    'share_id' => 1500,
-                    'share_name' => '小火团贡玉米 甜糯口感 浓郁的玉米原香',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/0129a52fd3d_1209.jpg',
-                    'share_price' => '68',
-                    'share_user_name' => '杨晓光',
-                    'share_vote' => 2000,
-                    'share_user_id' => 141,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg'
                 ),
                 '2056' => array(
                     'share_id' => 2056,
