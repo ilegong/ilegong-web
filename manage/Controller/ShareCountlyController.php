@@ -10,6 +10,8 @@ class ShareCountlyController extends AppController
 {
 
 
+    public $uses = array('SharerStaticsData');
+
     public $components = array('Paginator');
 
 
@@ -36,13 +38,14 @@ class ShareCountlyController extends AppController
             $date = $_REQUEST['date'];
         }
         $sharer_statics_paginate = array(
-            'conditions' => array(
-                'data_date' => $date
-            ),
-            'limit' => 100,
-            'order' => array(
-                'order_count' => 'desc'
-            )
+            'SharerStaticsData' => array(
+                'conditions' => array(
+                    'SharerStaticsData.data_date' => $date
+                ),
+                'limit' => 100,
+                'order' => array(
+                    'SharerStaticsData.order_count' => 'desc'
+                ))
         );
         $this->Paginator->settings = $sharer_statics_paginate;
         $allData = $this->Paginator->paginate('SharerStaticsData');

@@ -1,5 +1,5 @@
 <div class="row">
-    <form class="form-inline">
+    <form class="form-inline" action="/manage/admin/ShareCountly/sharer_statics" method="get">
         <div class="form-group">
             <label class="sr-only" for="query_date">查询日期</label>
             <input type="text" class="form-control" id="query_date" placeholder="查询日期" name="date" value="{{$date}}">
@@ -32,4 +32,13 @@
             {{/loop}}
         </tbody>
     </table>
+    <div class="pagination pagination-large">
+        <ul class="pagination">
+            <?php
+                echo $this->Paginator->prev(__('prev'), array('tag' => 'li'), null, array('tag' => 'li','class' => 'disabled','disabledTag' => 'a'));
+            echo $this->Paginator->numbers(array('separator' => '','currentTag' => 'a', 'currentClass' => 'active','tag' => 'li','first' => 1));
+            echo $this->Paginator->next(__('next'), array('tag' => 'li','currentClass' => 'disabled'), null, array('tag' => 'li','class' => 'disabled','disabledTag' => 'a'));
+            ?>
+        </ul>
+    </div>
 </div>
