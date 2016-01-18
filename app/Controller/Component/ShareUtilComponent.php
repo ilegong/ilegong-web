@@ -1758,6 +1758,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 806889,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_42fcd0bc876709a6fe3df32826b8d1fa.jpg',
                 ),
+                '2053' => array(
+                    'share_id' => 2053,
+                    'share_name' => '三代传承传统手工技艺-零添加、回购率超高的广东腊肠',
+                    'share_img' => 'http://static.tongshijia.com/images/fd66a6f2-bddf-11e5-b1f0-00163e1600b6.jpg',
+                    'share_price' => '70',
+                    'share_user_name' => '三朵',
+                    'share_vote' => 7568,
+                    'share_user_id' => 882638,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/8826381448681480.png',
+                ),
                 '669' => array(
                     'share_id' => 669,
                     'share_name' => '忆味蕾，富平霜降柿饼重磅归来！',
