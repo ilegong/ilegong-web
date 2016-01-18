@@ -10,6 +10,9 @@ class ShareCountlyController extends AppController
 {
 
 
+    public $components = array('Paginator');
+
+
     public function beforeFilter()
     {
         parent::beforeFilter();
@@ -32,13 +35,17 @@ class ShareCountlyController extends AppController
         if(!empty($_REQUEST['date'])){
             $date = $_REQUEST['date'];
         }
-        $sharerStaticsDataM = ClassRegistry::init('SharerStaticsData');
-        $allData = $sharerStaticsDataM->find('all', array(
+        $sharer_statics_paginate = array(
             'conditions' => array(
                 'data_date' => $date
             ),
-            'order' => array('order_count DESC')
-        ));
+            'limit' => 100,
+            'order' => array(
+                'order_count' => 'desc'
+            )
+        );
+        $this->Paginator->settings = $sharer_statics_paginate;
+        $allData = $this->Paginator->paginate('SharerStaticsData');
         $this->set('all_data', $allData);
         $this->set('date', $date);
     }
