@@ -1738,16 +1738,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 23771,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_d742f4391e472ca6a24c58d96be17aca.jpg'
                 ),
-                '2036' => array(
-                    'share_id' => 2036,
-                    'share_name' => '野生净鱼段带鱼【仅北京包邮】 远洋捕捞 肉质细腻 肥厚鲜美 营养丰富',
-                    'share_img' => 'http://static.tongshijia.com/images/b76e0782-b9e1-11e5-a8c5-00163e001f59.jpg',
-                    'share_price' => '70',
-                    'share_user_name' => '小宝妈',
-                    'share_vote' => 968,
-                    'share_user_id' => 811917,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
-                ),
+//                '2036' => array(
+//                    'share_id' => 2036,
+//                    'share_name' => '野生净鱼段带鱼【仅北京包邮】 远洋捕捞 肉质细腻 肥厚鲜美 营养丰富',
+//                    'share_img' => 'http://static.tongshijia.com/images/b76e0782-b9e1-11e5-a8c5-00163e001f59.jpg',
+//                    'share_price' => '70',
+//                    'share_user_name' => '小宝妈',
+//                    'share_vote' => 968,
+//                    'share_user_id' => 811917,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
+//                ),
                 '1981' => array(
                     'share_id' => 1981,
                     'share_name' => '农家土猪自制腊肠----肠常想念，才下舌尖，又上心间',
@@ -1950,16 +1950,16 @@ class ShareUtilComponent extends Component {
                     'share_user_id' => 810688,
                     'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_7db41874b00ec17af715b72adf87768a.jpg'
                 ),
-                '1506' => array(
-                    'share_id' => 1506,
-                    'share_name' => '越南黑虎虾仁 【纯野生虾仁】',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/cc44309c109_1202.jpg',
-                    'share_price' => '150',
-                    'share_user_name' => '小宝妈',
-                    'share_vote' => 1000,
-                    'share_user_id' => 811917,
-                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
-                ),
+//                '1506' => array(
+//                    'share_id' => 1506,
+//                    'share_name' => '越南黑虎虾仁 【纯野生虾仁】',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/cc44309c109_1202.jpg',
+//                    'share_price' => '150',
+//                    'share_user_name' => '小宝妈',
+//                    'share_vote' => 1000,
+//                    'share_user_id' => 811917,
+//                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
+//                ),
                 '1906' => array(
                     'share_id' => 1906,
                     'share_name' => '老舅家的沙窝萝卜--脆绿嫩',
