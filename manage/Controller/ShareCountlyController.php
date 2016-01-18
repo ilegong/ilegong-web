@@ -24,6 +24,17 @@ class ShareCountlyController extends AppController {
         $this->set('summeryData', $summeryData);
     }
 
+    /**
+     * 定时任务生成团长前一天的统计数据
+     */
+    public function admin_cron_gen_proxy_data(){
+        $this->autoRender = false;
+        $date = $_REQUEST['date'];
+        if (empty($date)) {
+            $date = date('Y-m-d', strtotime("-1 day"));
+        }
+    }
+
     public function admin_cron_gen_day_data() {
         $this->autoRender = false;
         $date = $_REQUEST['date'];
@@ -144,4 +155,13 @@ class ShareCountlyController extends AppController {
         return $staticsData;
     }
 
+    private function gen_sharer_statics_data_by_date($date){
+
+    }
+
+
+    public function gen_sharer_statics_data_task($date, $limit, $page){
+        //生成用户统计数据的任务
+
+    }
 }
