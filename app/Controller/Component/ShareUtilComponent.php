@@ -1717,6 +1717,16 @@ class ShareUtilComponent extends Component {
 //                    'share_user_id' => 141,
 //                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_f88cfd957b22b112058e340d508423a7.jpg'
 //                ),
+                '2135' => array(
+                    'share_id' => 2135,
+                    'share_name' => '年货之群虾荟萃',
+                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201601/thumb_m/63858bc47e3_0118.jpg',
+                    'share_price' => '125',
+                    'share_user_name' => '小宝妈',
+                    'share_vote' => 2135,
+                    'share_user_id' => 811917,
+                    'share_user_img' => 'http://51daifan-avatar.stor.sinaapp.com/wx_head_0d2b043df6670db623a2448a29af4124.jpg'
+                ),
                 //紫皮糖
                 '1915' => array(
                     'share_id' => 1915,
