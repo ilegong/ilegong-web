@@ -24,19 +24,27 @@ class ShareCountlyController extends AppController
     public function admin_sharer_statics_detail()
     {
         $user_id = $_REQUEST['user_id'];
-        $sharer_paginate = array(
-            'SharerStaticsData' => array(
+        if (!empty($user_id)) {
+            $sharer_paginate = array(
+                'SharerStaticsData' => array(
+                    'conditions' => array(
+                        'SharerStaticsData.sharer_id' => $user_id
+                    ),
+                    'limit' => 60,
+                    'order' => array(
+                        'SharerStaticsData.data_date' => 'ASC'
+                    ))
+            );
+            $this->Paginator->settings = $sharer_paginate;
+            $data = $this->Paginator->paginate('SharerStaticsData');
+            $user = $this->User->find('first', array(
                 'conditions' => array(
-                    'SharerStaticsData.sharer_id' => $user_id
-                ),
-                'limit' => 60,
-                'order' => array(
-                    'SharerStaticsData.data_date' => 'ASC'
-                ))
-        );
-        $this->Paginator->settings = $sharer_paginate;
-        $data = $this->Paginator->paginate('SharerStaticsData');
-        $this->set('all_data', $data);
+                    'id' => $user_id
+                )
+            ));
+            $this->set('user', $user);
+            $this->set('all_data', $data);
+        }
     }
 
     public function admin_order_statics()
