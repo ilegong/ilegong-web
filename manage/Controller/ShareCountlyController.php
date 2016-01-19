@@ -60,8 +60,8 @@ class ShareCountlyController extends AppController
 
     public function admin_sharer_statics()
     {
-        $start_date = date('Y-m-d');
-        $end_date = date('Y-m-d');
+        $start_date = date('Y-m-d', strtotime('-1 day'));
+        $end_date = date('Y-m-d', strtotime('-1 day'));
         if (!empty($_REQUEST['start_date'])) {
             $start_date = $_REQUEST['start_date'];
         }
