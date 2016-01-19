@@ -182,7 +182,7 @@
                                     ?>
                                     <div class="media msg" onclick="window.location.href='/weshares/user_share_info/{{$comment_user_id}}'">
                                         <a class="pull-left" href="/weshares/user_share_info/{{$comment['Comment']['user_id']}}">
-                                            <img class="img-circle" alt="64x64" style="width: 32px; height: 32px;" src="{{$sharer_comment_data['comment_users'][$comment['Comment']['user_id']]['image']}}">
+                                            <img class="img-circle lazy" alt="64x64" style="width: 32px; height: 32px;" data-original="{{$sharer_comment_data['comment_users'][$comment['Comment']['user_id']]['image']}}">
                                         </a>
                                         <div class="media-body">
                                             <small class="pull-right time"><i class="fa fa-clock-o"></i>{{friendlyDateFromStr($comment['Comment']['created'], FFDATE_CH_MD);}}</small>
@@ -207,7 +207,7 @@
                                     ?>
                                     <div class="media msg" onclick="window.location.href='/weshares/view/{{$share_id}}'">
                                         <a class="pull-left" href="/weshares/view/{{$share_id}}">
-                                            <img class="img-circle" alt="64x64" style="width: 32px; height: 32px;" onerror="this.src='http://static.tongshijia.com/static/img/default_user_icon.jpg'" src="{{$creator_image}}">
+                                            <img class="img-circle lazy" alt="64x64" style="width: 32px; height: 32px;" onerror="this.src='http://static.tongshijia.com/static/img/default_user_icon.jpg'" data-original="{{$creator_image}}">
                                         </a>
                                         <div class="media-body">
                                             <small class="pull-right time"><i class="fa fa-clock-o"></i>{{friendlyDateFromStr($comment['Comment']['created'], FFDATE_CH_MD);}}</small>
@@ -239,7 +239,7 @@
                     <!-- team members start -->
                     {{loop $focus_data $focus_key $focus_data}}
                     <div class="columnWrapper oneFifth teamMember {{if ($focus_key+1)%5==0}}lastColumn{{/if}}">
-                        <a href="/weshares/user_share_info/{{$focus_data['id']}}" class="teamMemberImageLink"> <img style="height: 50px;width: 50px;border-radius: 50px;" src="{{$focus_data['image']}}" class="teamMemberImage" alt="" /> </a>
+                        <a href="/weshares/user_share_info/{{$focus_data['id']}}" class="teamMemberImageLink"> <img style="height: 50px;width: 50px;border-radius: 50px;" data-original="{{$focus_data['image']}}" class="teamMemberImage lazy" alt="" /> </a>
                         <h3 class="teamMemberName" style="margin-top: 10px;word-wrap: break-word;font-size: 13px;">{{$focus_data['nickname']}}</h3>
                     </div>
                     {{/loop}}
@@ -267,7 +267,7 @@
                     {{loop $fans_relations $fan_id}}
                         <?php $fan_data = $fans_user_info[$fan_id]; ?>
                         <div class="columnWrapper oneFifth teamMember {{if ($fan_key+1)%5==0}}lastColumn{{/if}}">
-                            <a href="/weshares/user_share_info/{{$fan_data['id']}}" class="teamMemberImageLink"> <img style="height: 50px;width: 50px;border-radius: 50px;" src="{{$fan_data['image']}}" class="teamMemberImage" alt="" /> </a>
+                            <a href="/weshares/user_share_info/{{$fan_data['id']}}" class="teamMemberImageLink"> <img style="height: 50px;width: 50px;border-radius: 50px;" data-original="{{$fan_data['image']}}" class="teamMemberImage lazy" alt="" /> </a>
                             <h3 class="teamMemberName" style="margin-top: 10px;word-wrap: break-word;font-size: 13px;">{{$fan_data['nickname']}}</h3>
                         </div>
                         <?php $fan_key = $fan_key + 1; ?>
@@ -337,4 +337,4 @@
         </div>
     </div>
 </div>
-<script src="{{$STATIC_FILE_PATH}}/static/weshares/js/user-share-info.min.js?v0.0.4" type="text/javascript"></script>
+<script src="{{$STATIC_FILE_PATH}}/static/weshares/js/user-share-info.min.js?v0.0.5" type="text/javascript"/>

@@ -14,7 +14,7 @@ uglifyjs ./webroot/static/weshares/js/share-order-list.js -m  -o ./webroot/stati
 
 uglifyjs ./webroot/static/user/layer.m.js ./webroot/static/user/touch-0.2.14.min.js ./webroot/static/user/jquery.crop.js   -o ./webroot/static/user/avatar.min.js
 
-uglifyjs ./webroot/static/weshares/js/user-share-info.js -m  -o ./webroot/static/weshares/js/user-share-info.min.js
+uglifyjs ./webroot/static/opt/js/lazyload.min.js ./webroot/static/weshares/js/user-share-info.js -m  -o ./webroot/static/weshares/js/user-share-info.min.js
 
 uglifyjs ./webroot/static/share_faq/custom/word-limit.js ./webroot/static/share_faq/custom/faq.js -m -o ./webroot/static/share_faq/custom/faq.min.js
 
