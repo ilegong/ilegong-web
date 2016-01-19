@@ -17,7 +17,7 @@ cron:
       timezone: Beijing
     - description: gen statics order data
       url: /manage/admin/ShareCountly/cron_gen_proxy_data
-      schedule: 0 2 * * *
+      schedule: 0 4 * * *
       timezone: Beijing
     - description: send to comment msg
       url: /cron/send_weshare_order_to_comment_msg
