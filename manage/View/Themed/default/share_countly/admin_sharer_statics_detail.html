@@ -25,8 +25,8 @@
                 <tbody id="data-table-body">
                 {{loop $all_data $data}}
                 <tr>
-                    <td>{{$data['SharerStaticsData']['sharer_id']}}</td>
                     <td>{{$data['SharerStaticsData']['data_date']}}</td>
+                    <td>{{$data['SharerStaticsData']['sharer_id']}}</td>
                     <td>{{$data['SharerStaticsData']['order_count']}}</td>
                     <td>{{$data['SharerStaticsData']['trading_volume']}}</td>
                     <td>{{$data['SharerStaticsData']['fans_count']}}</td>
@@ -50,3 +50,74 @@
         </div>
     </div>
 </div>
+{{$this->Html->script(array(
+'/js/manage-lib/highchart/highcharts.js',
+'/js/manage-lib/highchart/exporting.js',
+'/js/manage-lib/highchart/dark-unica.js'));}}
+<script type="text/javascript">
+    $(function () {
+        var $table = $('#data-table-body');
+        var $tableDatas = $('tr', $table);
+        var categories = [];
+        var orderCount = [];
+        var totalPrice = [];
+        var fansCount = [];
+        var shareCount = [];
+        $tableDatas.each(function (index, item) {
+            var $trData = $(item);
+            var $tdDatas = $('td', $trData);
+            categories.push($($tdDatas.get(0)).text());
+            orderCount.push(parseInt($($tdDatas.get(2)).text()));
+            totalPrice.push(parseFloat($($tdDatas.get(3)).text()));
+            fansCount.push(parseFloat($($tdDatas.get(4)).text()));
+            shareCount.push(parseFloat($($tdDatas.get(5)).text()));
+        });
+
+        $('#chart-container').highcharts({
+            title: {
+                text: '团长数据汇总',
+                x: -20 //center
+            },
+            subtitle: {
+                text: '',
+                x: -20
+            },
+            xAxis: {
+                categories: categories
+            },
+            yAxis: {
+                title: {
+                    text: ''
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                valueSuffix: ''
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            series: [{
+                name: '订单数',
+                data: orderCount
+            }, {
+                name: '成交额',
+                data: totalPrice
+            },{
+                name: '粉丝数据',
+                data: fansCount
+            },{
+                name: '创建分享数',
+                data: shareCount
+            }
+            ]
+        });
+    });
+</script>

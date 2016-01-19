@@ -31,7 +31,7 @@ class ShareCountlyController extends AppController
                 ),
                 'limit' => 60,
                 'order' => array(
-                    'SharerStaticsData.data_date' => 'DESC'
+                    'SharerStaticsData.data_date' => 'ASC'
                 ))
         );
         $this->Paginator->settings = $sharer_paginate;
