@@ -39,8 +39,8 @@
                            class="media-photo media-cover">
                             <div class="listing-img-container media-cover text-center">
                                 <img itemprop="image" data-current="0"
-                                     src="{{$this->Html->assetUrl($product['share_img'])}}"
-                                     class="img-responsive-height"
+                                     data-original="{{$this->Html->assetUrl($product['share_img'])}}"
+                                     class="img-responsive-height lazy"
                                      data-urls="[&quot;{{$this->Html->assetUrl($product['share_img'])}}&quot;]">
                             </div>
                         </a>
@@ -61,8 +61,8 @@
                             <a href="/weshares/user_share_info/{{$product['share_user_id']}}"
                                class="media-photo-badge pull-right card-profile-picture card-profile-picture-offset">
                                 <div class="media-photo media-round" style="border: 1px solid #fff;">
-                                    <img src="{{$this->Html->assetUrl($product['share_user_img'])}}"
-                                         alt="">
+                                    <img data-original="{{$this->Html->assetUrl($product['share_user_img'])}}"
+                                         alt="" class="lazy">
                                 </div>
                             </a>
                             <a href="{{$product_detail_url}}" target="_self" class="text-normal">
@@ -127,10 +127,14 @@
     </a>
 </footer>
 <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+<script src="{{$STATIC_FILE_PATH}}/static/opt/js/lazyload.min.js"></script>
 <script src="{{$STATIC_FILE_PATH}}/static/common/no-angular-common.js"></script>
 <script>
     Pyshuo.share.utils.init();
     Pyshuo.share.utils.checkHasUnreadInfo();
+    $("img.lazy").lazyload({
+        effect : "fadeIn"
+    });
 </script>
 <!--baidu statics-->
 <script>
