@@ -1,17 +1,20 @@
 <?php
+
+require_once("HxCurl.php");
+
 class HxEaseServer {
     protected $ch;
     protected $client_id;
     protected $client_secret;
     protected $token;
-    protected $url = 'https://a1.easemob.com/ilegong/';
+    protected $url = 'https://a1.easemob.com/ilegong-pys/';
 
     public function __construct($app_name, $client_id, $client_secret){
         $this->ch = new HxCurl();
         $this->url .= $app_name;
         $this->client_id = $client_id;
         $this->client_secret = $client_secret;
-        $this->token = $this->getTokenOnCache();
+        $this->token = $this->getToken();
     }
 
     /**

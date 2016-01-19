@@ -1,5 +1,11 @@
 <?php
 
+//App::import('Vendor', 'hx', array('file' => 'hx/HxUser.class.php'));
+//App::import('Vendor', 'hx', array('file' => 'hx/HxCurl.class.php'));
+//App::import('Vendor', 'hx', array('file' => 'hx/HxEaseServer.class.php'));
+//App::import('Vendor', 'hx', array('file' => 'hx/HxMessage.class.php'));
+//App::import('Vendor', 'hx', array('file' => 'hx/HxUser.class.php'));
+
 class HxChatComponent extends Component
 {
 
@@ -7,7 +13,7 @@ class HxChatComponent extends Component
 
     public function reg_hx_user($user_id)
     {
-        App::import('Vendor', 'hx/HxUser.class.php');
+        App::import('Vendor', 'hx/HxUser');
         $hxUser = new HxUser(HX_APP_NAME, HX_CLIENT_ID, HX_CLIENT_SECRET);
         $hx_password = $this->get_password(12);
         if ($this->set_user_hx_password($user_id, $hx_password)) {
@@ -25,7 +31,7 @@ class HxChatComponent extends Component
 
     public function add_friend($user_id, $friend_id)
     {
-        App::import('Vendor', 'hx/HxUser.class.php');
+        App::import('Vendor', 'hx/HxUser');
         $hxUser = new HxUser(HX_APP_NAME, HX_CLIENT_ID, HX_CLIENT_SECRET);
         $json_result = $hxUser->addFriendToUser($user_id, $friend_id);
         $result = json_decode($json_result, true);

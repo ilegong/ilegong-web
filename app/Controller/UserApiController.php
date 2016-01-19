@@ -32,14 +32,40 @@ class UserApiController extends AppController
         $user_id = $this->currentUser['id'];
         $datainfo = $userM->find('first', array('recursive' => -1,
             'conditions' => array('id' => $user_id),
-            'fields' => array('nickname', 'email', 'image', 'sex', 'companies', 'bio', 'mobilephone', 'email', 'username', 'id')));
-        $this->set('my_profile', array('User' => $datainfo['User']));
-        $this->set('_serialize', array('my_profile'));
+            'fields' => array('nickname', 'email', 'image', 'sex', 'companies', 'bio', 'mobilephone', 'email', 'username', 'id', 'hx_password')));
+        echo json_encode(array('my_profile' => array('User' => $datainfo['User'])));
+        return;
     }
 
     public function test()
     {
 
+    }
+
+    public function load_fans($page, $limit)
+    {
+        $user_id = $this->currentUser['id'];
+        $userRelationM = ClassRegistry::init('UserRelation');
+        $fans_data = $userRelationM->find('all', array(
+            'conditions' => array(
+                'user_id' => $user_id
+            ),
+            'limit' => $limit,
+            'offset' => ($page - 1) * $limit,
+            'order' => array('id DESC')
+        ));
+        $fans_id = Hash::extract($fans_data, '{n}.UserRelation.follow_id');
+        if (empty($fans_id)) {
+            echo json_encode(array());
+            return;
+        }
+        $userM = ClassRegistry::init('User');
+        $users = $userM->find('first', array('recursive' => -1,
+            'conditions' => array('id' => $fans_id),
+            'fields' => array('nickname', 'email', 'image', 'sex', 'companies', 'bio', 'mobilephone', 'email', 'username', 'id')));
+        $users = Hash::extract($users, '{n}.User');
+        echo json_encode($users);
+        return;
     }
 
     public function add_friend($friend_id)
@@ -57,7 +83,7 @@ class UserApiController extends AppController
                 echo json_encode(array('statusCode' => 1, 'statusMsg' => '添加成功', 'data' => $friend_data));
                 return;
             } else {
-                echo json_encode(array('statusCode' => 1, 'statusMsg' => '添加失败'));
+                echo json_encode(array('statusCode' => -1, 'statusMsg' => '添加失败'));
                 return;
             }
         }

@@ -1,4 +1,7 @@
 <?php
+
+require_once("HxEaseServer.php");
+
 class HxUser extends HxEaseServer {
 
     /**

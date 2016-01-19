@@ -1,5 +1,7 @@
 <?php
-class HxCurl {
+
+class HxCurl
+{
     private $ch;
 
     /**
@@ -7,7 +9,8 @@ class HxCurl {
      * @param string $url
      * @param string $type 'GET'
      */
-    public function __construct(){
+    public function __construct()
+    {
         $this->ch = curl_init();
     }
 
@@ -15,7 +18,8 @@ class HxCurl {
      * 创建提交的数据
      * @param array $data
      */
-    public function createData($data, $to = 'json'){
+    public function createData($data, $to = 'json')
+    {
         curl_setopt($this->ch, CURLOPT_POSTFIELDS, json_encode($data));
     }
 
@@ -23,11 +27,13 @@ class HxCurl {
      * 设置Header
      * @param string $str
      */
-    public function createHeader($header){
+    public function createHeader($header)
+    {
         curl_setopt($this->ch, CURLOPT_HTTPHEADER, $header);
     }
 
-    public function execute($url, $type){
+    public function execute($url, $type)
+    {
         curl_setopt($this->ch, CURLOPT_URL, $url);
         curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, 0);
@@ -39,5 +45,7 @@ class HxCurl {
         return obj2arr(json_decode($this->content));
     }
 
-    public function __destruct(){}
+    public function __destruct()
+    {
+    }
 }
