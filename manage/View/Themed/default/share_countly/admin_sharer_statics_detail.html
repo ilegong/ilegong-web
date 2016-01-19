@@ -1,0 +1,52 @@
+<div>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active">
+            <a href="#table-data" aria-controls="table-data" role="tab" data-toggle="tab">表格数据</a>
+        </li>
+        <li role="presentation">
+            <a href="#chart-data" aria-controls="chart-data" role="tab" data-toggle="tab">统计</a>
+        </li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="table-data">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>团长ID</th>
+                    <th>日期</th>
+                    <th>分享订单数</th>
+                    <th>订单总额</th>
+                    <th>粉丝增加数</th>
+                    <th>创建分享数</th>
+                </tr>
+                </thead>
+                <tbody id="data-table-body">
+                {{loop $all_data $data}}
+                <tr>
+                    <td>{{$data['SharerStaticsData']['sharer_id']}}</td>
+                    <td>{{$data['SharerStaticsData']['data_date']}}</td>
+                    <td>{{$data['SharerStaticsData']['order_count']}}</td>
+                    <td>{{$data['SharerStaticsData']['trading_volume']}}</td>
+                    <td>{{$data['SharerStaticsData']['fans_count']}}</td>
+                    <td>{{$data['SharerStaticsData']['share_count']}}</td>
+                </tr>
+                {{/loop}}
+                </tbody>
+            </table>
+            <div class="pagination pagination-large">
+                <ul class="pagination">
+                    <?php
+                echo $this->Paginator->prev(__('prev'), array('tag' => 'li'), null, array('tag' => 'li','class' => 'disabled','disabledTag' => 'a'));
+                    echo $this->Paginator->numbers(array('separator' => '','currentTag' => 'a', 'currentClass' => 'active','tag' => 'li','first' => 1));
+                    echo $this->Paginator->next(__('next'), array('tag' => 'li','currentClass' => 'disabled'), null, array('tag' => 'li','class' => 'disabled','disabledTag' => 'a'));
+                    ?>
+                </ul>
+            </div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="chart-data">
+
+        </div>
+    </div>
+</div>

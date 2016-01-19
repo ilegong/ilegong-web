@@ -21,6 +21,24 @@ class ShareCountlyController extends AppController
         $this->layout = 'bootstrap_layout';
     }
 
+    public function admin_sharer_statics_detail()
+    {
+        $user_id = $_REQUEST['user_id'];
+        $sharer_paginate = array(
+            'SharerStaticsData' => array(
+                'conditions' => array(
+                    'SharerStaticsData.sharer_id' => $user_id
+                ),
+                'limit' => 60,
+                'order' => array(
+                    'SharerStaticsData.data_date' => 'DESC'
+                ))
+        );
+        $this->Paginator->settings = $sharer_paginate;
+        $data = $this->Paginator->paginate('SharerStaticsData');
+        $this->set('all_data', $data);
+    }
+
     public function admin_order_statics()
     {
         $statisticsDataM = ClassRegistry::init('StatisticsData');
