@@ -1,8 +1,12 @@
 <div class="row">
     <form class="form-inline" action="/manage/admin/ShareCountly/sharer_statics" method="get">
         <div class="form-group">
-            <label class="sr-only" for="query_date">查询日期</label>
-            <input type="text" class="form-control" id="query_date" placeholder="查询日期" name="date" value="{{$date}}">
+            <label class="sr-only" for="query_start_date">开始日期</label>
+            <input type="text" class="form-control" id="query_start_date" placeholder="查询日期" name="start_date" value="{{$start_date}}">
+        </div>
+        <div class="form-group">
+            <label class="sr-only" for="query_end_date">结束日期</label>
+            <input type="text" class="form-control" id="query_end_date" placeholder="查询日期" name="end_date" value="{{$end_date}}">
         </div>
         <button type="submit" class="btn btn-default">查询</button>
     </form>
@@ -25,10 +29,16 @@
                 <td>{{$data['SharerStaticsData']['sharer_id']}}</td>
                 <td>{{$users[$data['SharerStaticsData']['sharer_id']]['nickname']}}</td>
                 <td>{{$data['SharerStaticsData']['data_date']}}</td>
-                <td>{{$data['SharerStaticsData']['order_count']}}</td>
-                <td>{{$data['SharerStaticsData']['trading_volume']}}</td>
-                <td>{{$data['SharerStaticsData']['fans_count']}}</td>
-                <td>{{$data['SharerStaticsData']['share_count']}}</td>
+                <td>{{$data['SharerStaticsData']['sum_order_count']}}</td>
+                <td>{{CakeNumber::format($data['SharerStaticsData']['sum_trading_volume'], array(
+                    'places' => 2,
+                    'before' => '¥ ',
+                    'escape' => false,
+                    'decimals' => '.',
+                    'thousands' => ','
+                    ));}}</td>
+                <td>{{$data['SharerStaticsData']['sum_fans_count']}}</td>
+                <td>{{$data['SharerStaticsData']['sum_share_count']}}</td>
                 <td><a class="btn btn-warning" href="/manage/admin/ShareCountly/sharer_statics_detail?user_id={{$data['SharerStaticsData']['sharer_id']}}" role="button">查看团长30日数据汇总</a></td>
             </tr>
             {{/loop}}

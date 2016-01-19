@@ -6,6 +6,7 @@
  * Date: 11/24/15
  * Time: 16:48
  */
+App::uses('CakeNumber', 'Utility');
 class ShareCountlyController extends AppController
 {
 
@@ -13,7 +14,6 @@ class ShareCountlyController extends AppController
     public $uses = array('SharerStaticsData', 'User');
 
     public $components = array('Paginator');
-
 
     public function beforeFilter()
     {
@@ -58,20 +58,29 @@ class ShareCountlyController extends AppController
         $this->set('summeryData', $summeryData);
     }
 
-    public function admin_sharer_statics(){
-        $date = date('Y-m-d');
-        if(!empty($_REQUEST['date'])){
-            $date = $_REQUEST['date'];
+    public function admin_sharer_statics()
+    {
+        $start_date = date('Y-m-d');
+        $end_date = date('Y-m-d');
+        if (!empty($_REQUEST['start_date'])) {
+            $start_date = $_REQUEST['start_date'];
         }
+        if(!empty($_REQUEST['end_date'])){
+            $end_date = $_REQUEST['end_date'];
+        }
+        $this->SharerStaticsData->virtualFields = array('sum_order_count' => 'SUM(order_count)', 'sum_trading_volume' => 'SUM(trading_volume)', 'sum_share_count' => 'SUM(share_count)', 'sum_fans_count' => 'SUM(fans_count)');
         $sharer_statics_paginate = array(
             'SharerStaticsData' => array(
                 'conditions' => array(
-                    'SharerStaticsData.data_date' => $date
+                    'SharerStaticsData.data_date >=' => $start_date,
+                    'SharerStaticsData.data_date <=' => $end_date,
                 ),
                 'limit' => 100,
                 'order' => array(
-                    'SharerStaticsData.order_count' => 'desc'
-                ))
+                    'SharerStaticsData.sum_order_count' => 'desc'
+                ),
+                'group' => array('SharerStaticsData.sharer_id')
+                )
         );
         $this->Paginator->settings = $sharer_statics_paginate;
         $allData = $this->Paginator->paginate('SharerStaticsData');
@@ -85,7 +94,8 @@ class ShareCountlyController extends AppController
         $users = Hash::combine($users, '{n}.User.id', '{n}.User');
         $this->set('users', $users);
         $this->set('all_data', $allData);
-        $this->set('date', $date);
+        $this->set('start_date', $start_date);
+        $this->set('end_date', $end_date);
     }
 
     /**
