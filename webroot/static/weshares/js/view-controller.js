@@ -1603,8 +1603,8 @@
         to_timeline_title = vm.weshare.creator.nickname + '分享:' + vm.weshare.title;
         to_friend_title = vm.weshare.creator.nickname + '分享:' + vm.weshare.title;
         imgUrl = vm.weshare.images[0] || vm.weshare.creator.image;
-        if (vm.shareOrderCount >= 5) {
-          desc += '已经有' + vm.shareOrderCount + '人报名，';
+        if (vm.totalBuyCount >= 5) {
+          desc += '已经有' + vm.totalBuyCount + '人报名，';
         }
         desc += vm.weshare.description.substr(0,20);
       } else if (userInfo) {
