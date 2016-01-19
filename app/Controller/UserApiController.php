@@ -5,7 +5,7 @@ class UserApiController extends AppController
 
     public $components = array('OAuth.OAuth', 'Session', 'HxChat');
 
-    public $uses = array('User', 'UserFriend');
+    public $uses = array('User', 'UserFriend', 'UserLevel');
 
     public function beforeFilter()
     {
@@ -49,14 +49,14 @@ class UserApiController extends AppController
             $date_now = date('Y-m-d H:i:s');
             $save_data = array('user_id' => $user_id, 'friend_id' => $friend_id, 'created' => $date_now, 'updated' => $date_now);
             $friend_data = $this->UserFriend->save($save_data);
-            if($friend_data){
+            if ($friend_data) {
                 $result = $this->HxChat->add_friend($user_id, $friend_id);
-                if(!$result){
+                if (!$result) {
                     $this->log('add hx user friend error');
                 }
                 echo json_encode(array('statusCode' => 1, 'statusMsg' => '添加成功', 'data' => $friend_data));
                 return;
-            }else{
+            } else {
                 echo json_encode(array('statusCode' => 1, 'statusMsg' => '添加失败'));
                 return;
             }
@@ -86,6 +86,18 @@ class UserApiController extends AppController
             ),
             'fields' => array('id', 'image', 'nickname', 'is_proxy')
         ));
+        $user_levels = $this->UserLevel->find('all', array(
+            'conditions' => array(
+                'data_id' => $friend_ids,
+                'type' => 0
+            ),
+            'fields' => array(
+                'data_id', 'data_value'
+            )
+        ));
+        $user_levels = Hash::combine($user_levels, '{n}.UserLevel.data_id', '{n}.UserLevel.data_value');
+        echo json_encode(array('friends' => $user_infos, 'levels' => $user_levels));
+        return;
     }
 
     public function check_mobile_available()
