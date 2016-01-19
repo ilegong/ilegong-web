@@ -186,7 +186,7 @@ class WesharesController extends AppController {
             $title = $currentUser['nickname'] . '邀请你一起来加入分享';
             $image = $currentUser['image'];
             if (!$image) {
-                $image = 'http://dev.tongshijia.com/img/logo_footer.jpg';
+                $image = 'http://static.tongshijia.com/static/img/logo_footer.jpg';
             }
             $desc = '朋友说是一个有人情味的分享社区，这里你不但可以吃到各地的特产，还能认识有趣的人。';
             $this->set('title', $title);

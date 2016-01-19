@@ -7,7 +7,7 @@ class WeshareBuyComponent extends Component {
 
     var $share_order_count = 10;
 
-    var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'mobilephone', 'is_proxy');
+    var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'mobilephone', 'is_proxy', 'avatar');
 
     var $query_user_simple_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'mobilephone', 'is_proxy');
 
