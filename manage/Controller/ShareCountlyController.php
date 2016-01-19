@@ -10,7 +10,7 @@ class ShareCountlyController extends AppController
 {
 
 
-    public $uses = array('SharerStaticsData');
+    public $uses = array('SharerStaticsData', 'User');
 
     public $components = array('Paginator');
 
@@ -67,6 +67,15 @@ class ShareCountlyController extends AppController
         );
         $this->Paginator->settings = $sharer_statics_paginate;
         $allData = $this->Paginator->paginate('SharerStaticsData');
+        $uids = Hash::extract($allData, '{n}.SharerStaticsData.sharer_id');
+        $users = $this->User->find('all', array(
+            'conditions' => array(
+                'id' => $uids
+            ),
+            'fields' => array('id', 'nickname', 'image')
+        ));
+        $users = Hash::combine($users, '{n}.User.id', '{n}.User');
+        $this->set('users', $users);
         $this->set('all_data', $allData);
         $this->set('date', $date);
     }

@@ -10,6 +10,7 @@
         <thead>
             <tr>
                 <th>团长ID</th>
+                <th>团长名</th>
                 <th>日期</th>
                 <th>分享订单数</th>
                 <th>订单总额</th>
@@ -22,6 +23,7 @@
             {{loop $all_data $data}}
             <tr>
                 <td>{{$data['SharerStaticsData']['sharer_id']}}</td>
+                <td>{{$users[$data['SharerStaticsData']['sharer_id']]['nickname']}}</td>
                 <td>{{$data['SharerStaticsData']['data_date']}}</td>
                 <td>{{$data['SharerStaticsData']['order_count']}}</td>
                 <td>{{$data['SharerStaticsData']['trading_volume']}}</td>
