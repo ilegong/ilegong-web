@@ -54,6 +54,12 @@
     <!-- /.col-lg-6 -->
 </div><!-- /.row -->
 <div class="row">
+    <div class="form-group">
+        <label>查询</label>
+        <input type="search" class="form-control light-table-filter" data-table="order-table" placeholder="关键词">
+    </div>
+</div>
+<div class="row">
     <div class="panel panel-primary filterable">
         <div class="panel-heading">
             <h3 class="panel-title">订单</h3>
@@ -63,7 +69,7 @@
                 </button>
             </div>
         </div>
-        <table class="table">
+        <table class="table order-table">
             <thead>
             <tr class="filters">
                 <th><input type="text" class="form-control" placeholder="订单ID" disabled></th>
@@ -183,6 +189,47 @@
     </div>
 </div>
 {{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js'))}}
+<script>
+    (function(document) {
+        'use strict';
+
+        var LightTableFilter = (function(Arr) {
+
+            var _input;
+
+            function _onInputEvent(e) {
+                _input = e.target;
+                var tables = document.getElementsByClassName(_input.getAttribute('data-table'));
+                Arr.forEach.call(tables, function(table) {
+                    Arr.forEach.call(table.tBodies, function(tbody) {
+                        Arr.forEach.call(tbody.rows, _filter);
+                    });
+                });
+            }
+
+            function _filter(row) {
+                var text = row.textContent.toLowerCase(), val = _input.value.toLowerCase();
+                row.style.display = text.indexOf(val) === -1 ? 'none' : 'table-row';
+            }
+
+            return {
+                init: function() {
+                    var inputs = document.getElementsByClassName('light-table-filter');
+                    Arr.forEach.call(inputs, function(input) {
+                        input.oninput = _onInputEvent;
+                    });
+                }
+            };
+        })(Array.prototype);
+
+        document.addEventListener('readystatechange', function() {
+            if (document.readyState === 'complete') {
+                LightTableFilter.init();
+            }
+        });
+
+    })(document);
+</script>
 <script>
     /*
      Please consider that the JS part isn't production ready at all, I just code it to show the concept of merging filters and titles together !
