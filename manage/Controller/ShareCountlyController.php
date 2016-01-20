@@ -247,7 +247,7 @@ class ShareCountlyController extends AppController
         $queue = new SaeTaskQueue('cron_data');
         //批量添加任务
         $array = array();
-        foreach (range(0, $page_count) as $page) {
+        foreach (range(1, $page_count) as $page) {
             $task_url = '/manage/admin/ShareCountly/gen_sharer_statics_data_task/' . $date . '/' . $limit . '/' . $page;
             $array[] = array('url' => $task_url);
         }
@@ -268,7 +268,7 @@ class ShareCountlyController extends AppController
                 'type' => 0
             ),
             'limit' => $limit,
-            'offset' => $limit * $page,
+            'page' => $page,
             'order' => array('id ASC')
         ));
         $user_ids = Hash::extract($user_level_datas, '{n}.UserLevel.data_id');
@@ -280,6 +280,15 @@ class ShareCountlyController extends AppController
             $sharerStaticsDataM = ClassRegistry::init('SharerStaticsData');
             $sharerStaticsDataM->saveAll($save_data);
         }
+        echo json_encode(array('success' => true));
+        return;
+    }
+
+    public function save_sharer_data($user_id, $date){
+        $this->autoRender = false;
+        $userLevelM = ClassRegistry::init('UserLevel');
+        $save_data = $this->get_sharer_data($user_id, $date);
+        $userLevelM->save($save_data);
         echo json_encode(array('success' => true));
         return;
     }
