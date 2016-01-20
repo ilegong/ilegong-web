@@ -1,11 +1,5 @@
 <?php
 
-//App::import('Vendor', 'hx', array('file' => 'hx/HxUser.class.php'));
-//App::import('Vendor', 'hx', array('file' => 'hx/HxCurl.class.php'));
-//App::import('Vendor', 'hx', array('file' => 'hx/HxEaseServer.class.php'));
-//App::import('Vendor', 'hx', array('file' => 'hx/HxMessage.class.php'));
-//App::import('Vendor', 'hx', array('file' => 'hx/HxUser.class.php'));
-
 class HxChatComponent extends Component
 {
 
@@ -21,9 +15,13 @@ class HxChatComponent extends Component
                 array('username' => $user_id, 'password' => $hx_password)
             );
             $json_result = $hxUser->regUserOnAuth($hx_user_data);
-            $result = json_decode($json_result, true);
-            if (empty($result['error'])) {
+            if (empty($json_result['error'])) {
                 return array('statusCode' => 1, 'hx_user' => array('username' => $user_id, 'password' => $hx_password));
+            }
+            if($json_result['error'] == 'duplicate_unique_property_exists'){
+                return array('statusCode' => -2, 'statusMsg' => '已经注册');
+            }else{
+                return array('statusCode' => -3, 'statusMsg' => '注册IM用户失败');
             }
         }
         return array('statusCode' => -1, 'statusMsg' => '注册失败');

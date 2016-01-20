@@ -28,7 +28,7 @@ class HxEaseServer {
             return $token;
         }
         $token_data = json_decode($token_cache_data, true);
-        $expiration_date = $token_cache_data['expiration_date'];
+        $expiration_date = $token_data['expiration_date'];
         $now = time();
         if ($expiration_date - $now > 0) {
             return $token_data['token'];

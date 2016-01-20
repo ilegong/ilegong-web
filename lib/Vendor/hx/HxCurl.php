@@ -4,6 +4,8 @@ class HxCurl
 {
     private $ch;
 
+    private $content;
+
     /**
      * 初始化
      * @param string $url
@@ -41,11 +43,11 @@ class HxCurl
         curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
         $this->content = curl_exec($this->ch);
-        curl_close($this->ch);
         return obj2arr(json_decode($this->content));
     }
 
     public function __destruct()
     {
+        if($this->ch != null) curl_close($this->ch);
     }
 }

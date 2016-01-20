@@ -121,6 +121,7 @@ class UserApiController extends AppController
                 'data_id', 'data_value'
             )
         ));
+        $user_infos = Hash::extract($user_infos, '{n}.User');
         $user_levels = Hash::combine($user_levels, '{n}.UserLevel.data_id', '{n}.UserLevel.data_value');
         echo json_encode(array('friends' => $user_infos, 'levels' => $user_levels));
         return;
