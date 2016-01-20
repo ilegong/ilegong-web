@@ -31,6 +31,29 @@ class TestController extends AppController
 //        return;
 //    }
 
+
+    public function update_old_avatar()
+    {
+        $this->autoRender = false;
+        $userM = ClassRegistry::init('User');
+        $users = $userM->find('all', array(
+            'conditions' => array(
+                'avatar LIKE' => 'avatar/http://51daifan%'
+            ),
+            'limit' => 100
+        ));
+        $save_data = array();
+        foreach ($users as $user) {
+            $uid = $user['User']['id'];
+            $image = $user['User']['image'];
+            $avatar = create_avatar_in_aliyun($image);
+            $save_data[] = array('id' => $uid, 'avatar' => $avatar);
+        }
+        $userM->saveAll($save_data);
+        echo json_encode(array('success' => true));
+        return;
+    }
+
     public function test_query_share_ids($share_id, $uid){
         $this->autoRender = false;
         $weshareM = ClassRegistry::init('Weshare');
