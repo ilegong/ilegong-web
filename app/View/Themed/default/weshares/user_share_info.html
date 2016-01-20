@@ -24,7 +24,7 @@
                                     ?>
                                     <div class="media msg" onclick="window.location.href='/weshares/user_share_info/{{$comment_user_id}}'">
                                         <a class="pull-left" href="/weshares/user_share_info/{{$comment['Comment']['user_id']}}">
-                                            <img class="img-circle lazy" alt="64x64" style="width: 32px; height: 32px;" data-original="{{$sharer_comment_data['comment_users'][$comment['Comment']['user_id']]['image']}}">
+                                            <img class="img-circle lazy" alt="64x64" style="width: 32px; height: 32px;" data-original="{{get_user_avatar($sharer_comment_data['comment_users'][$comment['Comment']['user_id']])}}">
                                         </a>
                                         <div class="media-body">
                                             <small class="pull-right time"><i class="fa fa-clock-o"></i>{{friendlyDateFromStr($comment['Comment']['created'], FFDATE_CH_MD);}}</small>
@@ -44,7 +44,7 @@
                                         $share_id = $comment['Comment']['data_id'];
                                         $share_creator = $user_comment_data['share_info'][$share_id]['creator'];
                                         $share_creator_nickname = $user_comment_data['share_creators'][$share_creator]['nickname'];
-                                        $creator_image = $user_comment_data['share_creators'][$share_creator]['image'];
+                                        $creator_image = get_user_avatar($user_comment_data['share_creators'][$share_creator]);
                                         $title = $share_creator_nickname.'分享的'.$user_comment_data['share_info'][$share_id]['title'];
                                     ?>
                                     <div class="media msg" onclick="window.location.href='/weshares/view/{{$share_id}}'">
@@ -79,10 +79,10 @@
             <div class="modal-body">
                 <div class="pageContentWrapper" style="height: 75vh;overflow: scroll;">
                     <!-- team members start -->
-                    {{loop $focus_data $focus_key $focus_data}}
+                    {{loop $focus_data $focus_key $focus_data_item}}
                     <div class="columnWrapper oneFifth teamMember {{if ($focus_key+1)%5==0}}lastColumn{{/if}}">
-                        <a href="/weshares/user_share_info/{{$focus_data['id']}}" class="teamMemberImageLink"> <img style="height: 50px;width: 50px;border-radius: 50px;" data-original="{{$focus_data['image']}}" class="teamMemberImage lazy" alt="" /> </a>
-                        <h3 class="teamMemberName" style="margin-top: 10px;word-wrap: break-word;font-size: 13px;">{{$focus_data['nickname']}}</h3>
+                        <a href="/weshares/user_share_info/{{$focus_data_item['id']}}" class="teamMemberImageLink"> <img style="height: 50px;width: 50px;border-radius: 50px;" data-original="{{get_user_avatar($focus_data_item)}}" class="teamMemberImage lazy" alt="" /> </a>
+                        <h3 class="teamMemberName" style="margin-top: 10px;word-wrap: break-word;font-size: 13px;">{{$focus_data_item['nickname']}}</h3>
                     </div>
                     {{/loop}}
                 </div>
@@ -109,7 +109,7 @@
                     {{loop $fans_relations $fan_id}}
                     <?php $fan_data = $fans_user_info[$fan_id]; ?>
                     <div class="columnWrapper oneFifth teamMember {{if ($fan_key+1)%5==0}}lastColumn{{/if}}">
-                        <a href="/weshares/user_share_info/{{$fan_data['id']}}" class="teamMemberImageLink"> <img style="height: 50px;width: 50px;border-radius: 50px;" data-original="{{$fan_data['image']}}" class="teamMemberImage lazy" alt="" /> </a>
+                        <a href="/weshares/user_share_info/{{$fan_data['id']}}" class="teamMemberImageLink"> <img style="height: 50px;width: 50px;border-radius: 50px;" data-original="{{get_user_avatar($fan_data)}}" class="teamMemberImage lazy" alt="" /> </a>
                         <h3 class="teamMemberName" style="margin-top: 10px;word-wrap: break-word;font-size: 13px;">{{$fan_data['nickname']}}</h3>
                     </div>
                     <?php $fan_key = $fan_key + 1; ?>

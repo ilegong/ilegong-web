@@ -42,6 +42,7 @@
 </div>
 <img id="topiconbut" style="display:none;width:40px;height:40px;position: fixed;right:15px;bottom:65px;"
      src="{{$STATIC_FILE_PATH}}/static/opt/images/topicon.png">
+{{if !$hide_footer}}
 <footer class="channel_bottom" id="share-bottom-nav">
     <a class="btm_item" href="/" style="width: 25%;">
         <p class="iconfont"><i class="fa fa-home"></i></p>
@@ -60,6 +61,7 @@
         <b>我的</b>
     </a>
 </footer>
+{{/if}}
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
 <script src="{{$STATIC_FILE_PATH}}/static/opt/js/opt.min.js?v0.1.5"></script>
