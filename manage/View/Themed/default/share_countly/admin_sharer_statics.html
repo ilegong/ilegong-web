@@ -19,6 +19,7 @@
                 <th>分享订单数</th>
                 <th>订单总额</th>
                 <th>粉丝增加数</th>
+                <th>用户总粉丝数</th>
                 <th>创建分享数</th>
                 <th>操作</th>
             </tr>
@@ -38,6 +39,7 @@
                     'thousands' => ','
                     ));}}</td>
                 <td>{{$data['SharerStaticsData']['sum_fans_count']}}</td>
+                <td>{{user_relation_data[$data['SharerStaticsData']['sharer_id']]['sum_fans_count']}}</td>
                 <td>{{$data['SharerStaticsData']['sum_share_count']}}</td>
                 <td><a class="btn btn-warning" href="/manage/admin/ShareCountly/sharer_statics_detail?user_id={{$data['SharerStaticsData']['sharer_id']}}" role="button">查看团长30日数据汇总</a></td>
             </tr>
