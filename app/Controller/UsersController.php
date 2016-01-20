@@ -825,7 +825,8 @@ class UsersController extends AppController {
         $this->set('uid', $uid);
     }
 
-    function upload_avatar() {
+    function upload_avatar()
+    {
         $this->autoRender = false;
         $uid = $_POST['uid'];
         $imgData = $_POST['imgData'];
@@ -842,7 +843,7 @@ class UsersController extends AppController {
         if (!empty($imgUrl)) {
             $ali_avatar = create_avatar_in_aliyun($imgUrl);
             $this->User->id = $uid;
-            $this->User->update(array('image' => $imgUrl, 'avatar' => $ali_avatar), array('id'=>$uid));
+            $this->User->update(array('image' => "'" . $imgUrl . "'", 'avatar' => "'" . $ali_avatar . "'"), array('id' => $uid));
             //$this->User->saveField('image', $imgUrl);
             Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
         }
