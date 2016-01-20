@@ -1705,6 +1705,7 @@ function create_avatar_in_aliyun($url)
     curl_setopt($ch, CURLOPT_POSTFIELDS, 'url='.$url);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     $response = curl_exec($ch);
+    log($response);
     $ali_avatar = '';
     if($httpCode == 200){
         $result = json_decode($response, true);
@@ -1712,7 +1713,6 @@ function create_avatar_in_aliyun($url)
             $ali_avatar = $result['url'];
         }
     }
-
     curl_close($ch);
     return $ali_avatar;
 }

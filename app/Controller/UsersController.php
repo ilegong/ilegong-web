@@ -842,6 +842,7 @@ class UsersController extends AppController {
         $imgUrl = $result['download_url'];
         if (!empty($imgUrl)) {
             $ali_avatar = create_avatar_in_aliyun($imgUrl);
+            $this->log('ali_avatar '.$ali_avatar);
             $this->User->id = $uid;
             $this->User->update(array('image' => "'" . $imgUrl . "'", 'avatar' => "'" . $ali_avatar . "'"), array('id' => $uid));
             //$this->User->saveField('image', $imgUrl);
