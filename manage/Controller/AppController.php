@@ -119,7 +119,7 @@ class AppController extends Controller {
             $this->Auth->allowedActions[] = 'admin_cron_gen_data';
             $this->Auth->allowedActions[] = 'admin_process_gen_data';
             $this->Auth->allowedActions[] = 'admin_cron_gen_day_data';
-            $this->Auth->allowedActions[] = 'admin_cron_gen_day_data';
+            $this->Auth->allowedActions[] = 'admin_cron_gen_proxy_data';
             $this->Auth->allowedActions[] = 'admin_gen_sharer_statics_data_task';
         }
         
