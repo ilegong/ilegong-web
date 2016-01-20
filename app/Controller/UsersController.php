@@ -1076,6 +1076,12 @@ class UsersController extends AppController {
         $this->loadModel('OrderComment');
         $this->OrderComment->updateAll(array('user_id' => $new_serviceAccount_bind_uid), array('user_id' => $old_serviceAccount_bind_uid));
 
+        $this->loadModel('Weshare');
+        $this->Weshare->updateAll(array('creator' => $new_serviceAccount_bind_uid), array('creator' => $old_serviceAccount_bind_uid));
+
+        $this->loadModel('UserRelation');
+        $this->UserRelation->updateAll(array('user_id' => $new_serviceAccount_bind_uid), array('user_id' => $old_serviceAccount_bind_uid));
+
 
         //团购的
         //积分的

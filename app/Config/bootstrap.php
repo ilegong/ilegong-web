@@ -2386,7 +2386,7 @@ function is_blacklist_user($uid) {
 }
 
 function is_super_share_manager($uid) {
-    $super_manager = array(633345, 701166, 544307, 141, 802852, 801447,895096,711503, 897195);
+    $super_manager = array(633345, 701166, 544307, 141, 802852, 801447,895096,711503, 897195, 897247);
     return in_array($uid, $super_manager);
 }
 
