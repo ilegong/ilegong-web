@@ -23,9 +23,19 @@ $(document).ready(function () {
   var processSub = false;
   var processUnSub = false;
   var processSavePassword = false;
-  $("img.lazy").lazyload({
-    effect : "fadeIn"
+
+  $(function() {
+    $("img.lazy").lazyload({
+      event : "sporty"
+    });
   });
+
+  $(window).bind("load", function() {
+    setTimeout(function() {
+      $("img.lazy").trigger("sporty")
+    }, 2000);
+  });
+
   $userSharesFirstTab.trigger('click');
   $showUpdateUserInfoDialog.on('click', function () {
     $changeUserInfoDialog.modal({show: true, backdrop: 'static'});
