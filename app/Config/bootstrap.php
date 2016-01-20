@@ -1699,7 +1699,7 @@ function get_user_info_from_wx($open_id) {
 function create_avatar_in_aliyun($url)
 {
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, 'http://www.sinanapp.com');
+    curl_setopt($ch, CURLOPT_URL, ALI_CREATE_AVATAR_URL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
     curl_setopt($ch, CURLOPT_POST, TRUE);
     curl_setopt($ch, CURLOPT_POSTFIELDS, 'url='.$url);
