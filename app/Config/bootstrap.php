@@ -1703,14 +1703,11 @@ function create_avatar_in_aliyun($url)
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
     curl_setopt($ch, CURLOPT_POST, TRUE);
     curl_setopt($ch, CURLOPT_POSTFIELDS, 'url='.$url);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     $response = curl_exec($ch);
     $ali_avatar = '';
-    if($httpCode == 200){
-        $result = json_decode($response, true);
-        if($result['result']){
-            $ali_avatar = $result['url'];
-        }
+    $result = json_decode($response, true);
+    if($result['result']){
+        $ali_avatar = $result['url'];
     }
     curl_close($ch);
     return $ali_avatar;

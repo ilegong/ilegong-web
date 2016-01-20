@@ -824,26 +824,7 @@ class UsersController extends AppController {
         $this->set('refer_url', $refer_url);
         $this->set('uid', $uid);
     }
-
-    private function ali_download_image($url){
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, ALI_CREATE_AVATAR_URL);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_POST, TRUE);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, 'url='.$url);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $response = curl_exec($ch);
-        $this->log('ali creator avatar '.$response);
-        $ali_avatar = '';
-        if($httpCode == 200){
-            $result = json_decode($response, true);
-            if($result['result']){
-                $ali_avatar = $result['url'];
-            }
-        }
-        curl_close($ch);
-        return $ali_avatar;
-    }
+    
 
     function upload_avatar()
     {
@@ -861,7 +842,7 @@ class UsersController extends AppController {
         $result = $this->FileUpload->save_base64_data(base64_decode($imgData), $file_name);
         $imgUrl = $result['download_url'];
         if (!empty($imgUrl)) {
-            $ali_avatar = $this->ali_download_image($imgUrl);
+            $ali_avatar = create_avatar_in_aliyun($imgUrl);
             $this->log('ali_avatar '.$ali_avatar);
             $this->User->id = $uid;
             $this->User->update(array('image' => "'" . $imgUrl . "'", 'avatar' => "'" . $ali_avatar . "'"), array('id' => $uid));
