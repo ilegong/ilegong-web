@@ -840,8 +840,10 @@ class UsersController extends AppController {
         $result = $this->FileUpload->save_base64_data(base64_decode($imgData), $file_name);
         $imgUrl = $result['download_url'];
         if (!empty($imgUrl)) {
+            $ali_avatar = create_avatar_in_aliyun($imgUrl);
             $this->User->id = $uid;
-            $this->User->saveField('image', $imgUrl);
+            $this->User->update(array('image' => $imgUrl, 'avatar' => $ali_avatar), array('id'=>$uid));
+            //$this->User->saveField('image', $imgUrl);
             Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
         }
         echo json_encode($result);

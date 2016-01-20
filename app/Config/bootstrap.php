@@ -15,6 +15,8 @@ const WX_SERVICE_ID_GOTO = 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid
 const ALI_HOST = 'www.tongshijia.com';
 const ALI_ACCOUNT = 'yxg@ilegong.com';
 
+const ALI_CREATE_AVATAR_URL = 'http://static.tongshijia.com/download_avatar';
+
 const TRADE_ALI_TYPE = 'ZFB';
 const TRADE_WX_API_TYPE = 'JSAPI';
 
@@ -1524,11 +1526,14 @@ function convertWxName($text) {
  * @return int if created failed return 0
  */
 function createNewUserByWeixin($userInfo, $userModel) {
+    $download_url = $userInfo['headimgurl'];
+    $ali_avatar = '';
     if (!empty($userInfo['headimgurl'])) {
         $download_url = download_photo_from_wx($userInfo['headimgurl']);
         if (empty($download_url)) {
             $download_url = $userInfo['headimgurl'];
         }
+        $ali_avatar = create_avatar_in_aliyun($userInfo['headimgurl']);
     }
     if (empty($userModel)) {
         $userModel = ClassRegistry::init('User');
@@ -1543,7 +1548,8 @@ function createNewUserByWeixin($userInfo, $userModel) {
         'language' => $userInfo['language'],
         'username' => $userInfo['openid'],
         'password' => '',
-        'uc_id' => 0
+        'uc_id' => 0,
+        'avatar' => $ali_avatar
     ))
     ) {
         return 0;
@@ -1688,6 +1694,27 @@ function get_user_info_from_wx($open_id) {
     $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token=' . $access_token . '&openid=' . $open_id;
     $content = gethtml(WX_HOST, $url);
     return json_decode($content, $content);
+}
+
+function create_avatar_in_aliyun($url)
+{
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, 'http://www.sinanapp.com');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, 'url='.$url);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $response = curl_exec($ch);
+    $ali_avatar = '';
+    if($httpCode == 200){
+        $result = json_decode($response, true);
+        if($result['result']){
+            $ali_avatar = $result['url'];
+        }
+    }
+
+    curl_close($ch);
+    return $ali_avatar;
 }
 
 function download_photo_from_wx($url) {
