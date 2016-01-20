@@ -91,13 +91,13 @@ class ShareCountlyController extends AppController
             ),
             'fields' => array('id', 'nickname', 'image')
         ));
-        $userRelationM = ClassRegistry::init('UserRelationM');
-        $userRelationM->virtualFields = array('sum_fans_count' => 'SUM(id)');
+        $userRelationM = ClassRegistry::init('UserRelation');
+        $userRelationM->virtualFields = array('fans_count' => 'COUNT(id)');
         $userRelationData = $userRelationM->find('all', array(
             'conditions' => array(
-                'UserRelationM.user_id' => $uids
+                'UserRelation.user_id' => $uids
             ),
-            'group' => array('UserRelationM.user_id')
+            'group' => array('UserRelation.user_id')
         ));
         $userRelationData = Hash::combine($userRelationData, '{n}.UserRelation.user_id', '{n}.UserRelation');
         $users = Hash::combine($users, '{n}.User.id', '{n}.User');
