@@ -15,6 +15,7 @@ class HxChatComponent extends Component
                 array('username' => $user_id, 'password' => $hx_password)
             );
             $json_result = $hxUser->regUserOnAuth($hx_user_data);
+            $this->log('reg hx user '. json_encode($json_result));
             if (empty($json_result['error'])) {
                 return array('statusCode' => 1, 'hx_user' => array('username' => $user_id, 'password' => $hx_password));
             }
@@ -27,11 +28,23 @@ class HxChatComponent extends Component
         return array('statusCode' => -1, 'statusMsg' => '注册失败');
     }
 
+    public function delete_friend($user_id, $friend_id){
+        App::import('Vendor', 'hx/HxUser');
+        $hxUser = new HxUser(HX_APP_NAME, HX_CLIENT_ID, HX_CLIENT_SECRET);
+        $json_result = $hxUser->deleteFriendOnUser($user_id, $friend_id);
+        $this->log('delete friend result '. json_encode($json_result));
+        if(empty($json_result['error'])){
+            return true;
+        }
+        return false;
+    }
+
     public function add_friend($user_id, $friend_id)
     {
         App::import('Vendor', 'hx/HxUser');
         $hxUser = new HxUser(HX_APP_NAME, HX_CLIENT_ID, HX_CLIENT_SECRET);
         $json_result = $hxUser->addFriendToUser($user_id, $friend_id);
+        $this->log('add friend result '. json_encode($json_result));
         $result = json_decode($json_result, true);
         if (empty($result['error'])) {
             return true;

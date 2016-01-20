@@ -28,13 +28,19 @@ class UserApiController extends AppController
 
     public function profile()
     {
-        $userM = ClassRegistry::init('User');
         $user_id = $this->currentUser['id'];
+        $datainfo = $this->get_user_info($user_id);
+        echo json_encode(array('my_profile' => array('User' => $datainfo['User'])));
+        return;
+    }
+
+    private function get_user_info($user_id)
+    {
+        $userM = ClassRegistry::init('User');
         $datainfo = $userM->find('first', array('recursive' => -1,
             'conditions' => array('id' => $user_id),
             'fields' => array('nickname', 'email', 'image', 'sex', 'companies', 'bio', 'mobilephone', 'email', 'username', 'id', 'hx_password')));
-        echo json_encode(array('my_profile' => array('User' => $datainfo['User'])));
-        return;
+        return $datainfo;
     }
 
     public function test()
@@ -68,19 +74,37 @@ class UserApiController extends AppController
         return;
     }
 
+    public function delete_friend($friend_id)
+    {
+        $user_id = $this->currentUser['id'];
+        if ($this->UserFriend->updateAll(array('deleted' => DELETED_YES), array('user_id' => $user_id, 'friend_id' => $friend_id))) {
+            if ($this->HxChat->delete_friend($user_id, $friend_id)) {
+                echo json_encode(array('statusCode' => 1, 'statusMsg' => '删除成功'));
+                return;
+            }
+        }
+
+        echo json_encode(array('statusCode' => -1, 'statusMsg' => '删除失败'));
+        return;
+    }
+
     public function add_friend($friend_id)
     {
         $user_id = $this->currentUser['id'];
-        if (!$this->UserFriend->hasAny(array('user_id' => $user_id, 'friend_id' => $friend_id))) {
+        if (!$this->UserFriend->hasAny(array('user_id' => $user_id, 'friend_id' => $friend_id, 'deleted' => DELETED_NO))) {
             $date_now = date('Y-m-d H:i:s');
-            $save_data = array('user_id' => $user_id, 'friend_id' => $friend_id, 'created' => $date_now, 'updated' => $date_now);
+            $save_data = array();
+            //互相添加好友
+            $save_data[] = array('user_id' => $user_id, 'friend_id' => $friend_id, 'created' => $date_now, 'updated' => $date_now);
+            $save_data[] = array('user_id' => $friend_id, 'friend_id' => $user_id, 'created' => $date_now, 'updated' => $date_now);
             $friend_data = $this->UserFriend->save($save_data);
             if ($friend_data) {
                 $result = $this->HxChat->add_friend($user_id, $friend_id);
                 if (!$result) {
                     $this->log('add hx user friend error');
                 }
-                echo json_encode(array('statusCode' => 1, 'statusMsg' => '添加成功', 'data' => $friend_data));
+                $friend_info = $this->get_user_info($friend_id);
+                echo json_encode(array('statusCode' => 1, 'statusMsg' => '添加成功', 'data' => $friend_data, 'friend_info' => $friend_info['User']));
                 return;
             } else {
                 echo json_encode(array('statusCode' => -1, 'statusMsg' => '添加失败'));
