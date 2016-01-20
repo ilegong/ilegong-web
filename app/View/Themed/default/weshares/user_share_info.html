@@ -123,12 +123,12 @@
     <div class="col-md-12 user-details">
         <div class="user-image">
             {{if $is_me}}
-            <a href="/users/change_avatar?ref=/weshares/user_share_info"><img style="width: 80px;height: 80px;left: 5%;" onerror="this.src='http://static.tongshijia.com/static/img/default_user_icon.jpg'"
-                    src="{{$share_user['image']}}" alt="{{$share_user['nickname']}}" title="{{$share_user['nickname']}}"
+            <a href="/users/change_avatar?ref=/weshares/user_share_info"><img class="lazy" style="width: 80px;height: 80px;left: 5%;" onerror="this.src='http://static.tongshijia.com/static/img/default_user_icon.jpg'"
+                                                                              data-original="{{get_user_avatar($share_user)}}" alt="{{$share_user['nickname']}}" title="{{$share_user['nickname']}}"
                     class="img-circle"><i style="position: relative;top: 35px;left: -15px;display: inline-block;" class="fa fa-camera fa-2x"></i></a>
             {{else}}
-            <img style="width: 80px;height: 80px;" onerror="this.src='http://static.tongshijia.com/static/img/default_user_icon.jpg'"
-                 src="{{$share_user['image']}}" alt="{{$share_user['nickname']}}" title="{{$share_user['nickname']}}"
+            <img style="width: 80px;height: 80px;" onerror="this.src='http://static.tongshijia.com/static/img/default_user_icon.jpg'" content="lazy"
+                 data-original="{{get_user_avatar($share_user)}}" alt="{{$share_user['nickname']}}" title="{{$share_user['nickname']}}"
                  class="img-circle">
             {{/if}}
         </div>

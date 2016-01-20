@@ -1696,6 +1696,20 @@ function get_user_info_from_wx($open_id) {
     return json_decode($content, $content);
 }
 
+function get_user_avatar($user)
+{
+    if (empty($user)) {
+        return "";
+    }
+    if ($user['User']) {
+        $user = $user['User'];
+    }
+    if ($user['avatar']) {
+        return SAE_STATIC_FILE_PATH . '/' . $user['avatar'];
+    }
+    return $user['image'];
+}
+
 function create_avatar_in_aliyun($url)
 {
     $ch = curl_init();
