@@ -509,6 +509,20 @@ function has_permission_to_modify_order($user){
     return in_array($user, array('miaoyue', 'xiaoguang', 'xiaoqing', 'xinyu', 'jingge', 'huiyan', 'jiangwei'));
 }
 
+function dateRange( $first, $last, $step = '+1 day', $format = 'Y-m-d' ) {
+
+    $dates = array();
+    $current = strtotime( $first );
+    $last = strtotime( $last );
+
+    while( $current <= $last ) {
+
+        $dates[] = date( $format, $current );
+        $current = strtotime( $step, $current );
+    }
+
+    return $dates;
+}
 
 
 /**

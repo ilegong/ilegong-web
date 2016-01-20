@@ -284,10 +284,14 @@ class ShareCountlyController extends AppController
         return;
     }
 
-    public function save_sharer_data($user_id, $date){
+    public function admin_save_sharer_data($user_id){
         $this->autoRender = false;
         $userLevelM = ClassRegistry::init('UserLevel');
-        $save_data = $this->get_sharer_data($user_id, $date);
+        $save_data[] = array();
+        $date_ranges = dateRange('2016-01-01', '2016-01-19');
+        foreach($date_ranges as $date){
+            $save_data[] = $this->get_sharer_data($user_id, $date);
+        }
         $userLevelM->save($save_data);
         echo json_encode(array('success' => true));
         return;
