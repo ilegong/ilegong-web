@@ -824,7 +824,7 @@ class UsersController extends AppController {
         $this->set('refer_url', $refer_url);
         $this->set('uid', $uid);
     }
-    
+
 
     function upload_avatar()
     {

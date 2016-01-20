@@ -13,8 +13,8 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>团长ID</th>
-                <th>团长名</th>
+                <th>分享人ID</th>
+                <th>分享人昵称</th>
                 <th>日期</th>
                 <th>分享订单数</th>
                 <th>订单总额</th>
@@ -28,7 +28,7 @@
             <tr>
                 <td>{{$data['SharerStaticsData']['sharer_id']}}</td>
                 <td>{{$users[$data['SharerStaticsData']['sharer_id']]['nickname']}}</td>
-                <td>{{$data['SharerStaticsData']['data_date']}}</td>
+                <td>{{$start_date.'---'.$end_date}}</td>
                 <td>{{$data['SharerStaticsData']['sum_order_count']}}</td>
                 <td>{{CakeNumber::format($data['SharerStaticsData']['sum_trading_volume'], array(
                     'places' => 2,
