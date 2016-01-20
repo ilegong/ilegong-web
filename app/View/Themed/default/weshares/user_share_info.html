@@ -1,4 +1,124 @@
 <link href="{{$STATIC_FILE_PATH}}/static/weshares/css/share-info.css?v0.1.2" rel="stylesheet">
+<div class="modal fade" id="commentListModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" style="float: left;" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" style="text-align: center;">{{$sharer_comment_data['comment_count']}}爱心评价</h4>
+            </div>
+            <div class="modal-body" style="padding: 5px;">
+                <div>
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#receive-comments" role="tab" data-toggle="tab">收到的</a></li>
+                        <li role="presentation"><a href="#send-comments" aria-controls="profile" role="tab" data-toggle="tab">评价的</a></li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="receive-comments">
+                            <div class="">
+                                <div class="msg-wrap" style="padding: 0;">
+                                    {{loop $sharer_comment_data['comments'] $comment}}
+                                    <?php
+                                        $comment_user_id = $comment["Comment"]["user_id"];
+                                    ?>
+                                    <div class="media msg" onclick="window.location.href='/weshares/user_share_info/{{$comment_user_id}}'">
+                                        <a class="pull-left" href="/weshares/user_share_info/{{$comment['Comment']['user_id']}}">
+                                            <img class="img-circle lazy" alt="64x64" style="width: 32px; height: 32px;" data-original="{{$sharer_comment_data['comment_users'][$comment['Comment']['user_id']]['image']}}">
+                                        </a>
+                                        <div class="media-body">
+                                            <small class="pull-right time"><i class="fa fa-clock-o"></i>{{friendlyDateFromStr($comment['Comment']['created'], FFDATE_CH_MD);}}</small>
+                                            <h5 class="media-heading">{{$comment['Comment']['username']}}</h5>
+                                            <small class="col-lg-10" style="padding: 0;">{{$comment['Comment']['body']}}</small>
+                                        </div>
+                                    </div>
+                                    {{/loop}}
+                                </div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="send-comments">
+                            <div class="">
+                                <div class="msg-wrap" style="padding: 0;">
+                                    {{loop $user_comment_data['comments'] $comment}}
+                                    <?php
+                                        $share_id = $comment['Comment']['data_id'];
+                                        $share_creator = $user_comment_data['share_info'][$share_id]['creator'];
+                                        $share_creator_nickname = $user_comment_data['share_creators'][$share_creator]['nickname'];
+                                        $creator_image = $user_comment_data['share_creators'][$share_creator]['image'];
+                                        $title = $share_creator_nickname.'分享的'.$user_comment_data['share_info'][$share_id]['title'];
+                                    ?>
+                                    <div class="media msg" onclick="window.location.href='/weshares/view/{{$share_id}}'">
+                                        <a class="pull-left" href="/weshares/view/{{$share_id}}">
+                                            <img class="img-circle lazy" alt="64x64" style="width: 32px; height: 32px;" onerror="this.src='http://static.tongshijia.com/static/img/default_user_icon.jpg'" data-original="{{$creator_image}}">
+                                        </a>
+                                        <div class="media-body">
+                                            <small class="pull-right time"><i class="fa fa-clock-o"></i>{{friendlyDateFromStr($comment['Comment']['created'], FFDATE_CH_MD);}}</small>
+                                            <h5 class="media-heading">{{$title}}</h5>
+                                            <small class="col-lg-10" style="padding: 0;">{{$comment['Comment']['body']}}</small>
+                                        </div>
+                                    </div>
+                                    {{/loop}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!--focus data-->
+<div class="modal fade" id="focusListModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" style="float: left;" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" style="text-align: center;">{{if empty($focus_count)}}0{{else}}{{$focus_count}}{{/if}}关注</h4>
+            </div>
+            <div class="modal-body">
+                <div class="pageContentWrapper" style="height: 75vh;overflow: scroll;">
+                    <!-- team members start -->
+                    {{loop $focus_data $focus_key $focus_data}}
+                    <div class="columnWrapper oneFifth teamMember {{if ($focus_key+1)%5==0}}lastColumn{{/if}}">
+                        <a href="/weshares/user_share_info/{{$focus_data['id']}}" class="teamMemberImageLink"> <img style="height: 50px;width: 50px;border-radius: 50px;" data-original="{{$focus_data['image']}}" class="teamMemberImage lazy" alt="" /> </a>
+                        <h3 class="teamMemberName" style="margin-top: 10px;word-wrap: break-word;font-size: 13px;">{{$focus_data['nickname']}}</h3>
+                    </div>
+                    {{/loop}}
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div>
+</div>
+<!--fans data-->
+<div class="modal fade" id="fansListModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" style="float: left;" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" style="text-align: center;">{{$follower_count}}粉丝</h4>
+            </div>
+            <div class="modal-body">
+                <div class="pageContentWrapper" style="height: 75vh;overflow: scroll;">
+                    <!-- team members start -->
+                    <?php
+                        $fans_user_info = $fans_data['fans_data'];
+                        $fans_relations = $fans_data['relations'];
+                        $fan_key = 0;
+                     ?>
+                    {{loop $fans_relations $fan_id}}
+                    <?php $fan_data = $fans_user_info[$fan_id]; ?>
+                    <div class="columnWrapper oneFifth teamMember {{if ($fan_key+1)%5==0}}lastColumn{{/if}}">
+                        <a href="/weshares/user_share_info/{{$fan_data['id']}}" class="teamMemberImageLink"> <img style="height: 50px;width: 50px;border-radius: 50px;" data-original="{{$fan_data['image']}}" class="teamMemberImage lazy" alt="" /> </a>
+                        <h3 class="teamMemberName" style="margin-top: 10px;word-wrap: break-word;font-size: 13px;">{{$fan_data['nickname']}}</h3>
+                    </div>
+                    <?php $fan_key = $fan_key + 1; ?>
+                    {{/loop}}
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
 <div class="row" style="background: #EAEAEA;">
     <div class="col-md-12 user-details">
         <div class="user-image">
@@ -156,126 +276,6 @@
             </div>
         </div>
     </div>
-</div>
-<div class="modal fade" id="commentListModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" style="float: left;" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" style="text-align: center;">{{$sharer_comment_data['comment_count']}}爱心评价</h4>
-            </div>
-            <div class="modal-body" style="padding: 5px;">
-                <div>
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#receive-comments" role="tab" data-toggle="tab">收到的</a></li>
-                        <li role="presentation"><a href="#send-comments" aria-controls="profile" role="tab" data-toggle="tab">评价的</a></li>
-                    </ul>
-                    <!-- Tab panes -->
-                    <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="receive-comments">
-                            <div class="">
-                                <div class="msg-wrap" style="padding: 0;">
-                                    {{loop $sharer_comment_data['comments'] $comment}}
-                                    <?php
-                                        $comment_user_id = $comment["Comment"]["user_id"];
-                                    ?>
-                                    <div class="media msg" onclick="window.location.href='/weshares/user_share_info/{{$comment_user_id}}'">
-                                        <a class="pull-left" href="/weshares/user_share_info/{{$comment['Comment']['user_id']}}">
-                                            <img class="img-circle lazy" alt="64x64" style="width: 32px; height: 32px;" data-original="{{$sharer_comment_data['comment_users'][$comment['Comment']['user_id']]['image']}}">
-                                        </a>
-                                        <div class="media-body">
-                                            <small class="pull-right time"><i class="fa fa-clock-o"></i>{{friendlyDateFromStr($comment['Comment']['created'], FFDATE_CH_MD);}}</small>
-                                            <h5 class="media-heading">{{$comment['Comment']['username']}}</h5>
-                                            <small class="col-lg-10" style="padding: 0;">{{$comment['Comment']['body']}}</small>
-                                        </div>
-                                    </div>
-                                    {{/loop}}
-                                </div>
-                            </div>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="send-comments">
-                            <div class="">
-                                <div class="msg-wrap" style="padding: 0;">
-                                    {{loop $user_comment_data['comments'] $comment}}
-                                    <?php
-                                        $share_id = $comment['Comment']['data_id'];
-                                        $share_creator = $user_comment_data['share_info'][$share_id]['creator'];
-                                        $share_creator_nickname = $user_comment_data['share_creators'][$share_creator]['nickname'];
-                                        $creator_image = $user_comment_data['share_creators'][$share_creator]['image'];
-                                        $title = $share_creator_nickname.'分享的'.$user_comment_data['share_info'][$share_id]['title'];
-                                    ?>
-                                    <div class="media msg" onclick="window.location.href='/weshares/view/{{$share_id}}'">
-                                        <a class="pull-left" href="/weshares/view/{{$share_id}}">
-                                            <img class="img-circle lazy" alt="64x64" style="width: 32px; height: 32px;" onerror="this.src='http://static.tongshijia.com/static/img/default_user_icon.jpg'" data-original="{{$creator_image}}">
-                                        </a>
-                                        <div class="media-body">
-                                            <small class="pull-right time"><i class="fa fa-clock-o"></i>{{friendlyDateFromStr($comment['Comment']['created'], FFDATE_CH_MD);}}</small>
-                                            <h5 class="media-heading">{{$title}}</h5>
-                                            <small class="col-lg-10" style="padding: 0;">{{$comment['Comment']['body']}}</small>
-                                        </div>
-                                    </div>
-                                    {{/loop}}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-<!--focus data-->
-<div class="modal fade" id="focusListModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" style="float: left;" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" style="text-align: center;">{{if empty($focus_count)}}0{{else}}{{$focus_count}}{{/if}}关注</h4>
-            </div>
-            <div class="modal-body">
-                <div class="pageContentWrapper" style="height: 75vh;overflow: scroll;">
-                    <!-- team members start -->
-                    {{loop $focus_data $focus_key $focus_data}}
-                    <div class="columnWrapper oneFifth teamMember {{if ($focus_key+1)%5==0}}lastColumn{{/if}}">
-                        <a href="/weshares/user_share_info/{{$focus_data['id']}}" class="teamMemberImageLink"> <img style="height: 50px;width: 50px;border-radius: 50px;" data-original="{{$focus_data['image']}}" class="teamMemberImage lazy" alt="" /> </a>
-                        <h3 class="teamMemberName" style="margin-top: 10px;word-wrap: break-word;font-size: 13px;">{{$focus_data['nickname']}}</h3>
-                    </div>
-                    {{/loop}}
-                </div>
-            </div>
-        </div><!-- /.modal-content -->
-    </div>
-</div>
-<!--fans data-->
-<div class="modal fade" id="fansListModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" style="float: left;" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" style="text-align: center;">{{$follower_count}}粉丝</h4>
-            </div>
-            <div class="modal-body">
-                <div class="pageContentWrapper" style="height: 75vh;overflow: scroll;">
-                    <!-- team members start -->
-                    <?php
-                        $fans_user_info = $fans_data['fans_data'];
-                        $fans_relations = $fans_data['relations'];
-                        $fan_key = 0;
-                     ?>
-                    {{loop $fans_relations $fan_id}}
-                        <?php $fan_data = $fans_user_info[$fan_id]; ?>
-                        <div class="columnWrapper oneFifth teamMember {{if ($fan_key+1)%5==0}}lastColumn{{/if}}">
-                            <a href="/weshares/user_share_info/{{$fan_data['id']}}" class="teamMemberImageLink"> <img style="height: 50px;width: 50px;border-radius: 50px;" data-original="{{$fan_data['image']}}" class="teamMemberImage lazy" alt="" /> </a>
-                            <h3 class="teamMemberName" style="margin-top: 10px;word-wrap: break-word;font-size: 13px;">{{$fan_data['nickname']}}</h3>
-                        </div>
-                        <?php $fan_key = $fan_key + 1; ?>
-                    {{/loop}}
-                </div>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
 </div>
 <!--update user info -->
 <div class="modal fade" id="updateUserInfo">
