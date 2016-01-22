@@ -122,7 +122,7 @@ class ShareController extends AppController {
         $order_user_id = $order['Order']['creator'];
         $open_id = $userOauthBinds[$order_user_id];
         $order_user_name = $users[$order_user_id]['nickname'];
-        $title = $order_user_name . '你好，您订购的' . $cart_info['cart_name'] . '已经到达自提点，提货码：' . $code . '，生鲜娇贵，请尽快取货哈。';
+        $title = $order_user_name . '你好，您订购的' . $cart_info['cart_name'] . '已经到达自提点[好邻居便利店]，提货码：' . $code . '，生鲜娇贵，请尽快取货哈。';
         $offlineStore = $this->get_offline_store($order['Order']['consignee_id']);
         $this->Weixin->send_share_product_arrival($open_id, $detail_url, $title, $order_id, $offlineStore['OfflineStore']['alias'], $offlineStore['OfflineStore']['name'], $desc);
         $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'ship_code' => "'" . $code . "'"), array('id' => $order_id));
