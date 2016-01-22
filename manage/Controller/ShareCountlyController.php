@@ -252,7 +252,7 @@ class ShareCountlyController extends AppController
     {
         $userLevelM = ClassRegistry::init('UserLevel');
         $sharer_count = $userLevelM->find('count', array('conditions' => array('type' => 0)));
-        $limit = 5;
+        $limit = 10;
         $page_count = ceil($sharer_count / $limit);
         $queue = new SaeTaskQueue('cron_data');
         //批量添加任务
