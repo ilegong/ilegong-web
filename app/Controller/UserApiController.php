@@ -130,24 +130,8 @@ class UserApiController extends AppController
             'limit' => 500
         ));
         $friend_ids = Hash::extract($friends_data, '{n}.UserFriend.friend_id');
-        $user_infos = $this->User->find('all', array(
-            'conditions' => array(
-                'id' => $friend_ids,
-            ),
-            'fields' => array('id', 'image', 'nickname', 'is_proxy')
-        ));
-        $user_levels = $this->UserLevel->find('all', array(
-            'conditions' => array(
-                'data_id' => $friend_ids,
-                'type' => 0
-            ),
-            'fields' => array(
-                'data_id', 'data_value'
-            )
-        ));
-        $user_infos = Hash::extract($user_infos, '{n}.User');
-        $user_levels = Hash::combine($user_levels, '{n}.UserLevel.data_id', '{n}.UserLevel.data_value');
-        echo json_encode(array('friends' => $user_infos, 'levels' => $user_levels));
+        $data = $this->HxChat->get_users_info($friend_ids);
+        echo json_encode(array('friends' => $data['users'], 'levels' => $data['levels']));
         return;
     }
 

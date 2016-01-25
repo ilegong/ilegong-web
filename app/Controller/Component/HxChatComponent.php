@@ -5,6 +5,31 @@ class HxChatComponent extends Component
 
     var $name = 'HxChat';
 
+
+    public function get_users_info($uids)
+    {
+        $userM = ClassRegistry::init('User');
+        $userLevelM = ClassRegistry::init('UserLevel');
+        $user_infos = $userM->find('all', array(
+            'conditions' => array(
+                'id' => $uids,
+            ),
+            'fields' => array('id', 'image', 'nickname', 'is_proxy')
+        ));
+        $user_levels = $userLevelM->find('all', array(
+            'conditions' => array(
+                'data_id' => $uids,
+                'type' => 0
+            ),
+            'fields' => array(
+                'data_id', 'data_value'
+            )
+        ));
+        $user_infos = Hash::extract($user_infos, '{n}.User');
+        $user_levels = Hash::combine($user_levels, '{n}.UserLevel.data_id', '{n}.UserLevel.data_value');
+        return array('users' => $user_infos, 'levels' => $user_levels);
+    }
+
     public function reg_hx_user($user_id)
     {
         App::import('Vendor', 'hx/HxUser');
@@ -63,15 +88,49 @@ class HxChatComponent extends Component
 
     }
 
-    public function get_user_status()
+    public function get_user_status($username)
     {
-
+        App::import('Vendor', 'hx/HxUser');
+        $hxUser = new HxUser(HX_APP_NAME, HX_CLIENT_ID, HX_CLIENT_SECRET);
+        return $hxUser->getUserStatus($username);
     }
 
-    public function create_group()
+    public function create_group($data)
     {
-
+        App::import('Vendor', 'hx/HxGroup');
+        $hxGroup = new HxGroup(HX_APP_NAME, HX_CLIENT_ID, HX_CLIENT_SECRET);
+        $result = $hxGroup->createGroup($data);
+        if ($result['error']) {
+            $this->log('create group error' . json_encode($result));
+            return false;
+        }
+        $hx_group_id = $result['data']['groupid'];
+        //save database
+        $group_data = $this->save_group_data($data, $hx_group_id);
+        return $group_data;
     }
+
+    private function save_group_data($data, $hx_group_id)
+    {
+        $chatGroupM = ClassRegistry::init('ChatGroup');
+        $userGroupM = ClassRegistry::init('UserGroup');
+        $date_now = date('Y-m-d H:i:s');
+        $group_data = array('hx_group_id' => $hx_group_id, 'created' => $data, 'creator' => $data['owner'], 'approval' => $data['approval'], 'maxusers' => $data['maxusers'], 'is_public' => $data['public'], 'description' => $data['desc'], 'group_name' => $data['groupname']);
+        $group_result = $chatGroupM->save($group_data);
+        if ($group_result) {
+            $group_id = $group_result['ChatGroup']['id'];
+            $member_ids = $data['members'] ? $data['members'] : array();
+            $member_ids[] = $data['owner'];
+            $member_data = [];
+            foreach ($member_ids as $m_id) {
+                $member_data[] = array('user_id' => $m_id, 'group_id' => $group_id, 'created' => $date_now, 'updated' => $date_now);
+            }
+            $userGroupM->saveAll($member_data);
+            return $group_result;
+        }
+        return false;
+    }
+
 
     public function update_group()
     {
