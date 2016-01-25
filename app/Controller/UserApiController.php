@@ -97,7 +97,7 @@ class UserApiController extends AppController
             //互相添加好友
             $save_data[] = array('user_id' => $user_id, 'friend_id' => $friend_id, 'created' => $date_now, 'updated' => $date_now);
             $save_data[] = array('user_id' => $friend_id, 'friend_id' => $user_id, 'created' => $date_now, 'updated' => $date_now);
-            $friend_data = $this->UserFriend->save($save_data);
+            $friend_data = $this->UserFriend->saveAll($save_data);
             if ($friend_data) {
                 $result = $this->HxChat->add_friend($user_id, $friend_id);
                 if (!$result) {
