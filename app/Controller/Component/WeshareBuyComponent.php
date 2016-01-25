@@ -1414,6 +1414,8 @@ class WeshareBuyComponent extends Component {
                 'fields' => $this->query_user_simple_fields,
             ));
             $level_data = $this->ShareUtil->get_users_level($userIds);
+            //reset user image
+            $users = array_map('map_user_avatar2', $users);
             $users = Hash::combine($users, '{n}.User.id', '{n}.User');
             $orders = Hash::combine($orders, '{n}.Order.id', '{n}.Order');
             usort($orders, function ($a, $b) {
