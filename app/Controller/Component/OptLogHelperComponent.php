@@ -88,7 +88,7 @@ class OptLogHelperComponent extends Component {
                 'conditions' => array(
                     'id' => $opt_user_ids
                 ),
-                'fields' => array('id', 'nickname', 'image', 'is_proxy')
+                'fields' => array('id', 'nickname', 'image', 'is_proxy', 'avatar')
             ));
             $userRelationM = ClassRegistry::init('UserRelation');
             $opt_users_share_info = $userRelationM->find('all', array(
