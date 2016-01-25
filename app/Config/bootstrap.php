@@ -1696,6 +1696,7 @@ function get_user_info_from_wx($open_id) {
     return json_decode($content, $content);
 }
 
+
 function get_user_avatar($user)
 {
     if (empty($user)) {
@@ -2320,6 +2321,15 @@ function map_share_type_text($type) {
     return $type_text_map[$type];
 }
 
+function map_user_avatar2($var){
+    $var['User']['image'] = get_user_avatar($var);
+    return $var;
+}
+
+function map_user_avatar($var){
+    $var['image'] = get_user_avatar($var);
+    return $var;
+}
 
 function map_opt_log_data($var) {
     $timeStamp = strtotime($var['created']);

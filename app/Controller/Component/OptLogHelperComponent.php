@@ -103,6 +103,7 @@ class OptLogHelperComponent extends Component {
             $users_level_data = $this->ShareUtil->get_users_level($opt_user_ids);
             $opt_users_share_info = Hash::combine($opt_users_share_info, '{n}.UserRelation.user_id', '{n}.0.fans_count');
             $opt_users = Hash::combine($opt_users, '{n}.User.id', '{n}.User');
+            $opt_users = array_map('map_user_avatar', $opt_users);
             $combine_opt_log_data = array('users' => $opt_users, 'users_level' => $users_level_data, 'user_fans_extra' => $opt_users_share_info, 'share_user_buy_map' => $share_user_map);
             Cache::write($key, json_encode($combine_opt_log_data));
             return $combine_opt_log_data;
