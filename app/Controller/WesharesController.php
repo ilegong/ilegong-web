@@ -5,7 +5,7 @@ class WesharesController extends AppController {
     var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem',
         'SharerShipOption', 'WeshareShipSetting', 'OfflineStore', 'UserRelation', 'Comment', 'RebateTrackLog', 'ProxyRebatePercent', 'ShareUserBind', 'UserSubReason', 'ShareFavourableConfig', 'ShareAuthority');
 
-    var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy');
+    var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
 
     var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'OrderExpress', 'PintuanHelper');
 
@@ -367,6 +367,8 @@ class WesharesController extends AppController {
             'fields' => $user_fields,
         ));
         $current_user = $current_user['User'];
+        //reset user image
+        $current_user['image'] = get_user_avatar($current_user);
         $current_user_level_data = $this->ShareUtil->get_user_level($uid);
         $current_user['level'] = $current_user_level_data;
         if (!$is_me) {
@@ -1530,6 +1532,8 @@ class WesharesController extends AppController {
                 'fields' => $this->query_user_fileds,
             ));
             $creatorInfo = $creatorInfo['User'];
+            //reset user image
+            $creatorInfo['image'] = get_user_avatar($creatorInfo);
             $creatorLevel = $this->ShareUtil->get_user_level($weshareInfo['Weshare']['creator']);
             $creatorInfo['level'] = $creatorLevel;
             if ($product_to_map) {
