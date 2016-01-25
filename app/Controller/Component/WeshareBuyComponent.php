@@ -1679,9 +1679,11 @@ class WeshareBuyComponent extends Component {
                 'conditions' => array(
                     'id' => $user_ids
                 ),
-                'fields' => array('id', 'nickname', 'image')
+                'fields' => array('id', 'nickname', 'image', 'avatar')
             ));
             $recommendData = Hash::extract($recommend_users, '{n}.User');
+            //reset user image
+            $recommendData = array_map('map_user_avatar', $recommendData);
             Cache::write($key, json_encode($recommendData));
             return $recommendData;
         }
