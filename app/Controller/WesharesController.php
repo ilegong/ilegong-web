@@ -1154,6 +1154,14 @@ class WesharesController extends AppController {
         $type = $params['type'];
         if ($type == 0 || $type == '0') {
             //发送给分享的管理者
+            //发送给没有购买的粉丝
+            $checkSendMsgResult = $this->ShareUtil->checkCanSendMsg($uid);
+            if(!$checkSendMsgResult['success']){
+                echo json_encode($checkSendMsgResult);
+                return;
+            }
+            $send_msg_log_data = array('created' => date('Y-m-d H:i:s'), 'sharer_id' => $uid, 'data_id' => $weshare_id, 'type' => MSG_LOG_NOTIFY_TYPE, 'status' => 1);
+            $this->ShareUtil->saveSendMsgLog($send_msg_log_data);
             $this->WeshareBuy->send_buy_percent_msg_to_share_manager($share_info, $content);
             $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($uid);
             $pageCount = $fansPageInfo['pageCount'];
@@ -1166,10 +1174,9 @@ class WesharesController extends AppController {
             if ($ret === false) {
                 $this->log('add task queue error ' . json_encode(array($queue->errno(), $queue->errmsg())));
             }
-            echo json_encode(array('success' => true));
+            echo json_encode(array('success' => true, 'msg' => $checkSendMsgResult['msg']));
             return;
         } else {
-            //todo 发送给分享的管理者
             $this->WeshareBuy->send_notify_user_msg_to_share_manager($share_info, $content);
             $queue = new SaeTaskQueue('share');
             $queue->addTask("/weshares/process_notify_has_buy_fans/" . $weshare_id, "content=" . $content, true);
@@ -1188,7 +1195,8 @@ class WesharesController extends AppController {
      * @param $weshare_id
      * 发送建团消息 采用队列
      */
-    public function send_new_share_msg($weshare_id) {
+    public function send_new_share_msg($weshare_id)
+    {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
@@ -1204,6 +1212,13 @@ class WesharesController extends AppController {
             echo json_encode(array('success' => false, 'reason' => 'not_creator'));
             return;
         }
+        $checkCanSendMsgResult = $this->ShareUtil->checkCanSendMsg($uid);
+        if (!$checkCanSendMsgResult['success']) {
+            echo json_encode($checkCanSendMsgResult);
+            return;
+        }
+        $send_msg_log_data = array('created' => date('Y-m-d H:i:s'), 'sharer_id' => $uid, 'data_id' => $weshare_id, 'type' => MSG_LOG_NOTIFY_TYPE, 'status' => 1);
+        $this->ShareUtil->saveSendMsgLog($send_msg_log_data);
         $this->WeshareBuy->send_new_share_msg_to_share_manager($weshare_id);
         $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($uid);
         $pageCount = $fansPageInfo['pageCount'];
@@ -1216,7 +1231,7 @@ class WesharesController extends AppController {
         if ($ret === false) {
             $this->log('add task queue error ' . json_encode(array($queue->errno(), $queue->errmsg())));
         }
-        echo json_encode(array('success' => true));
+        echo json_encode(array('success' => true, 'msg' => $checkCanSendMsgResult['msg']));
         return;
     }
 
@@ -1348,8 +1363,8 @@ class WesharesController extends AppController {
         $memo = $params['recommend_content'];
         $userId = $params['recommend_user'];
         $shareId = $params['recommend_share'];
-        $this->ShareUtil->saveShareRecommendLog($shareId, $userId, $memo);
-        echo json_encode(array('success' => true));
+        $result = $this->ShareUtil->saveShareRecommendLog($shareId, $userId, $memo);
+        echo json_encode($result);
         return;
     }
 

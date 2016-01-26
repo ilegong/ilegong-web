@@ -2130,6 +2130,10 @@ class WeshareBuyComponent extends Component {
      *
      */
     public function send_recommend_msg($recommend_user, $share_id, $memo) {
+        $checkSendMsgResult = $this->ShareUtil->checkCanSendMsg($recommend_user);
+        if(!$checkSendMsgResult['success']){
+            return $checkSendMsgResult;
+        }
         $fansPageInfo = $this->get_user_relation_page_info($recommend_user);
         $pageCount = $fansPageInfo['pageCount'];
         $pageSize = $fansPageInfo['pageSize'];
@@ -2141,7 +2145,7 @@ class WeshareBuyComponent extends Component {
         if ($ret === false) {
             $this->log('add task queue error ' . json_encode(array($queue->errno(), $queue->errmsg())));
         }
-        return $ret;
+        return $checkSendMsgResult;
     }
 
     /**

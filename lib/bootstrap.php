@@ -152,6 +152,34 @@ function get_user_level_text($val) {
     return $level_name_map[$val];
 }
 
+function get_user_level_msg_count($val)
+{
+    $settings = array(
+        0 => array(
+            'limit' => 0,
+        ),
+        1 => array(
+            'limit' => 0,
+        ),
+        2 => array(
+            'limit' => 2,
+        ),
+        3 => array(
+            'limit' => 2,
+        ),
+        4 => array(
+            'limit' => 2,
+        ),
+        5 => array(
+            'limit' => 2,
+        ),
+        6 => array(
+            'limit' => 2,
+        )
+    );
+    return $settings[$val];
+}
+
 function get_user_levels(){
     return array(
         0 => '分享达人',

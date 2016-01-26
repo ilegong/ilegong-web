@@ -43,7 +43,7 @@ class HxGroup extends HxEaseServer
 
     public function addMember($username, $groupId)
     {
-        $url = $this->url . '/chatdemoui/chatgroups/' . $groupId . '/users/' . $username;
+        $url = $this->url . '/chatgroups/' . $groupId . '/users/' . $username;
         return $this->ch->execute($url, 'POST');
     }
 

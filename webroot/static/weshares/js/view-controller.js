@@ -1107,10 +1107,17 @@
         }).success(function (data) {
           // With the data succesfully returned, call our callback
           if (data['success']) {
-            alert('发送成功');
+            var msg = '发送成功';
+            if(data['msg']){
+              msg = data['msg'];
+            }
+            alert(msg);
           }else{
             if(data['reason'] == 'user_bad'){
               alert('发送失败，你已经被封号，请联系管理员..');
+            }
+            if(data['msg']){
+              alert(data['msg']);
             }
           }
         }).error(function () {
@@ -1164,6 +1171,9 @@
           if (data['success']) {
             vm.showNotifyView = false;
             vm.showLayer = false;
+          }
+          if(data['msg']){
+            alert(data['msg']);
           }
         }).error(function () {
           alert("发送失败,请联系朋友说客服。。");
@@ -1399,7 +1409,9 @@
         return false;
       }
       $http.post('/weshares/recommend', vm.submitRecommendData).success(function (data) {
-
+        if(data['msg']){
+          alert(data['msg']);
+        }
       }).error(function (e) {
         $log.log(e);
       });

@@ -57,9 +57,31 @@ class ChatApiController extends AppController
         return;
     }
 
-
-    public function get_group_members($group_id)
+    public function get_group_info($hx_group_id)
     {
+        $chatGroupM = ClassRegistry::init('ChatGroup');
+        $chatGroup = $chatGroupM->find('first', array(
+            'conditions' => array(
+                'hx_group_id' => $hx_group_id
+            )
+        ));
+        $userGroupM = ClassRegistry::init('UserGroup');
+        $group_id = $this->get_group_id($hx_group_id);
+        $member_count = $userGroupM->find('count', array(
+            'conditions' => array(
+                'group_id' => $group_id,
+                'deleted' => DELETED_NO
+            )
+        ));
+        $groupInfo = $chatGroup['ChatGroup'];
+        $groupInfo['member_count'] = $member_count;
+        echo json_encode($groupInfo);
+        return;
+    }
+
+    public function get_group_members($hx_group_id)
+    {
+        $group_id = $this->get_group_id($hx_group_id);
         $members = $this->UserGroup->find('all', array(
             'conditions' => array(
                 'group_id' => $group_id,
@@ -73,12 +95,13 @@ class ChatApiController extends AppController
         return;
     }
 
-    public function add_group_members($group_id)
+    public function add_group_members($hx_group_id)
     {
         $postData = parent::get_post_raw_data();
         $user_ids = $postData['usernames'];
         $save_data = array();
         $date_now = date('Y-m-d H:i:s');
+        $group_id = $this->get_group_id($hx_group_id);
         foreach ($user_ids as $uid) {
             if (!$this->UserGroup->hasAny(array('user_id' => $uid, 'group_id' => $group_id))) {
                 $save_data[] = array('user_id' => $uid, 'group_id' => $group_id, 'created' => $date_now, 'updated' => $date_now);
@@ -86,7 +109,6 @@ class ChatApiController extends AppController
         }
         $save_result = $this->UserGroup->saveAll($save_data);
         if ($save_result) {
-            $hx_group_id = $this->get_hx_group_id($group_id);
             $this->HxChat->add_group_members($user_ids, $hx_group_id);
             echo json_encode(array('statusCode' => 1, 'statusMsg' => '添加成功'));
             return;
@@ -95,8 +117,9 @@ class ChatApiController extends AppController
         return;
     }
 
-    public function add_group_member($group_id, $user_id)
+    public function add_group_member($hx_group_id, $user_id)
     {
+        $group_id = $this->get_group_id($hx_group_id);
         if ($this->UserGroup->hasAny(array('user_id' => $user_id, 'group_id' => $group_id, 'deleted' => DELETED_NO))) {
             echo json_encode(array('statusCode' => -1, 'statusMsg' => '用户已经在群里'));
             return;
@@ -105,7 +128,6 @@ class ChatApiController extends AppController
         $save_data = array('user_id' => $user_id, 'group_id' => $group_id, 'created' => $date_now, 'updated' => $date_now);
         $user_group = $this->UserGroup->save($save_data);
         if ($user_group) {
-            $hx_group_id = $this->get_hx_group_id($group_id);
             $this->HxChat->add_group_member($user_id, $hx_group_id);
             echo json_encode(array('statusCode' => 1, 'statusMsg' => '添加成功', 'data' => $user_group));
             return;
@@ -114,11 +136,11 @@ class ChatApiController extends AppController
         return;
     }
 
-    public function delete_group_member($group_id, $user_id)
+    public function delete_group_member($hx_group_id, $user_id)
     {
+        $group_id = $this->get_group_id($hx_group_id);
         $update_result = $this->UserGroup->updateAll(array('deleted' => DELETED_YES), array('group_id' => $group_id, 'user_id' => $user_id, 'deleted' => DELETED_NO));
         if ($update_result) {
-            $hx_group_id = $this->get_hx_group_id($group_id);
             $this->HxChat->delete_group_member($user_id, $hx_group_id);
             echo json_encode(array('statusCode' => 1, 'statusMsg' => '删除成功'));
             return;
@@ -127,10 +149,11 @@ class ChatApiController extends AppController
         return;
     }
 
-    public function delete_group_members($group_id)
+    public function delete_group_members($hx_group_id)
     {
         $postData = parent::get_post_raw_data();
         $user_ids = $postData['usernames'];
+        $group_id = $this->get_group_id($hx_group_id);
         $update_result = $this->UserGroup->updateAll(array('deleted' => DELETED_YES), array('group_id' => $group_id, 'user_id' => $user_ids));
         if ($update_result) {
             $hx_group_id = $this->get_hx_group_id($group_id);
@@ -140,6 +163,17 @@ class ChatApiController extends AppController
         }
         echo json_encode(array('statusCode' => -1, 'statusMsg' => '删除失败'));
         return;
+    }
+
+
+    private function get_group_id($hx_group_id)
+    {
+        $chatGroup = $this->ChatGroup->find('first', array(
+            'conditions' => array(
+                'hx_group_id' => $hx_group_id
+            )
+        ));
+        return $chatGroup['ChatGroup']['id'];
     }
 
     private function get_hx_group_id($group_id)

@@ -1,6 +1,7 @@
 <?php
 
-class ShareUtilComponent extends Component {
+class ShareUtilComponent extends Component
+{
 
     var $name = 'ShareUtil';
 
@@ -13,7 +14,8 @@ class ShareUtilComponent extends Component {
      * @param $uid
      * 触发建团消息
      */
-    public function trigger_send_new_share_msg($weshare_id, $uid) {
+    public function trigger_send_new_share_msg($weshare_id, $uid)
+    {
         $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($uid);
         $pageCount = $fansPageInfo['pageCount'];
         $pageSize = $fansPageInfo['pageSize'];
@@ -32,7 +34,8 @@ class ShareUtilComponent extends Component {
      * @param $sharer_id
      * 迁移粉丝数据
      */
-    public function process_weshare_task($weshareId, $sharer_id) {
+    public function process_weshare_task($weshareId, $sharer_id)
+    {
         $userRelationM = ClassRegistry::init('UserRelation');
         $orderM = ClassRegistry::init('Order');
         $orders = $orderM->find('all', array(
@@ -54,7 +57,8 @@ class ShareUtilComponent extends Component {
         $userRelationM->saveAll($saveDatas);
     }
 
-    public function get_all_weshares() {
+    public function get_all_weshares()
+    {
         $weshareM = ClassRegistry::init('Weshare');
         $allWeshares = $weshareM->find('all', array(
             'limit' => 200
@@ -62,7 +66,8 @@ class ShareUtilComponent extends Component {
         return $allWeshares;
     }
 
-    public function check_user_is_subscribe($user_id, $follow_id) {
+    public function check_user_is_subscribe($user_id, $follow_id)
+    {
         $userRelationM = ClassRegistry::init('UserRelation');
         $relation = $userRelationM->find('first', array(
             'conditions' => array(
@@ -73,7 +78,8 @@ class ShareUtilComponent extends Component {
         return (!empty($relation) && ($relation['UserRelation']['deleted'] == DELETED_NO));
     }
 
-    public function check_user_relation($user_id, $follow_id) {
+    public function check_user_relation($user_id, $follow_id)
+    {
         $userRelationM = ClassRegistry::init('UserRelation');
         $relation = $userRelationM->find('all', array(
             'conditions' => array(
@@ -84,12 +90,14 @@ class ShareUtilComponent extends Component {
         return empty($relation);
     }
 
-    public function delete_relation($sharer_id, $user_id) {
+    public function delete_relation($sharer_id, $user_id)
+    {
         $userRelationM = ClassRegistry::init('UserRelation');
         $userRelationM->updateAll(array('deleted' => DELETED_YES), array('user_id' => $sharer_id, 'follow_id' => $user_id));
     }
 
-    public function save_relation($sharer_id, $user_id, $type = 'Buy') {
+    public function save_relation($sharer_id, $user_id, $type = 'Buy')
+    {
         $userRelationM = ClassRegistry::init('UserRelation');
         if ($this->check_user_relation($sharer_id, $user_id)) {
             $userRelationM->saveAll(array('user_id' => $sharer_id, 'follow_id' => $user_id, 'type' => $type, 'created' => date('Y-m-d H:i:s')));
@@ -105,7 +113,8 @@ class ShareUtilComponent extends Component {
      * @return mixed
      * 保存返利记录
      */
-    public function save_rebate_log($recommend, $clicker, $weshare_id) {
+    public function save_rebate_log($recommend, $clicker, $weshare_id)
+    {
         $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
         $history_log = $rebateTrackLogM->find('first', array(
             'conditions' => array(
@@ -130,7 +139,8 @@ class ShareUtilComponent extends Component {
      * @return array()
      * 更新 rebate log
      */
-    public function update_rebate_log($id, $order) {
+    public function update_rebate_log($id, $order)
+    {
         $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
         $share_id = $order['Order']['member_id'];
         $order_id = $order['Order']['id'];
@@ -166,7 +176,8 @@ class ShareUtilComponent extends Component {
      * @param $share_id
      * 用户下单后更新返利日志
      */
-    public function update_rebate_log_order_id($id, $order_id, $share_id) {
+    public function update_rebate_log_order_id($id, $order_id, $share_id)
+    {
         $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
         $rebateTrackLogM->updateAll(array('order_id' => $order_id, 'share_id' => $share_id), array('id' => $id));
     }
@@ -175,7 +186,8 @@ class ShareUtilComponent extends Component {
      * @param $share_id
      * @return int
      */
-    public function get_share_rebate_ship_fee($share_id) {
+    public function get_share_rebate_ship_fee($share_id)
+    {
         $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
         $allRebateMoney = 0;
         $rebateLogs = $rebateTrackLogM->find('all', array(
@@ -197,7 +209,8 @@ class ShareUtilComponent extends Component {
      * @param $share_id
      * @return int
      */
-    public function get_share_rebate_money($share_id) {
+    public function get_share_rebate_money($share_id)
+    {
         if (!is_array($share_id)) {
             $share_id = array($share_id);
         }
@@ -222,7 +235,8 @@ class ShareUtilComponent extends Component {
      * @return int
      * 获取用户 返利的金钱
      */
-    public function get_rebate_money($user_id) {
+    public function get_rebate_money($user_id)
+    {
         $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
         $allRebateMoney = 0;
         $rebateLogs = $rebateTrackLogM->find('all', array(
@@ -244,7 +258,8 @@ class ShareUtilComponent extends Component {
      * @return bool
      * check user is proxy
      */
-    public function is_proxy_user($uid) {
+    public function is_proxy_user($uid)
+    {
         $userM = ClassRegistry::init('User');
         $isProxy = $userM->userIsProxy($uid);
         return $isProxy == USER_IS_PROXY;
@@ -254,7 +269,8 @@ class ShareUtilComponent extends Component {
      * @param $share_id
      * 获取分享rebate data
      */
-    public function get_share_rebate_data($share_id) {
+    public function get_share_rebate_data($share_id)
+    {
         $proxyRebatePercentM = ClassRegistry::init('ProxyRebatePercent');
         $proxyPercent = $proxyRebatePercentM->find('first', array(
             'conditions' => array(
@@ -271,7 +287,8 @@ class ShareUtilComponent extends Component {
      * @return int
      * cal rebate money
      */
-    public function cal_rebate_money($orders) {
+    public function cal_rebate_money($orders)
+    {
         $proxyRebatePercentM = ClassRegistry::init('ProxyRebatePercent');
         $rebateMoney = 0;
         $share_ids = Hash::extract($orders, '{n}.Order.member_id');
@@ -297,7 +314,8 @@ class ShareUtilComponent extends Component {
         return round($rebateMoney, 2);
     }
 
-    public function get_user_rebate_info($user_id) {
+    public function get_user_rebate_info($user_id)
+    {
         $rebate_users = $this->rebate_users();
         return $rebate_users[$user_id];
     }
@@ -307,7 +325,8 @@ class ShareUtilComponent extends Component {
      * @param $order
      * process rebate money
      */
-    public function process_order_paid_rebate($id, $order) {
+    public function process_order_paid_rebate($id, $order)
+    {
         $rebateData = $this->update_rebate_log($id, $order);
         $member_id = $order['Order']['member_id'];
         $weshareInfo = $this->WeshareBuy->get_weshare_info($member_id);
@@ -333,7 +352,8 @@ class ShareUtilComponent extends Component {
         }
     }
 
-    public function read_share_ship_option_setting($sharer, $type) {
+    public function read_share_ship_option_setting($sharer, $type)
+    {
         $SharerShipOptionM = ClassRegistry::init('SharerShipOption');
         $key = SHARER_CAN_USE_OFFLINE_STORE_CACHE_KEY . '_' . $sharer . '_' . $type;
         $ship_set_type = Cache::read($key);
@@ -365,7 +385,8 @@ class ShareUtilComponent extends Component {
      * @return array
      * clone一份， 指定用户ID， 指定的地址， 类型， 状态
      */
-    public function cloneShare($shareId, $uid = null, $address = null, $address_remarks = null, $type = DEFAULT_SHARE_TYPE, $share_status = WESHARE_DELETE_STATUS) {
+    public function cloneShare($shareId, $uid = null, $address = null, $address_remarks = null, $type = DEFAULT_SHARE_TYPE, $share_status = WESHARE_DELETE_STATUS)
+    {
         $WeshareM = ClassRegistry::init('Weshare');
         $shareInfo = $WeshareM->find('first', array(
             'conditions' => array(
@@ -431,7 +452,8 @@ class ShareUtilComponent extends Component {
         return array('success' => false);
     }
 
-    private function saveGroupShareOfflineAddress($address, $uid, $remarks) {
+    private function saveGroupShareOfflineAddress($address, $uid, $remarks)
+    {
         $WeshareOfflineAddressM = ClassRegistry::init('WeshareOfflineAddress');
         $weshareOfflineAddress = array('creator' => $uid, 'address' => $address, 'created' => date('Y-m-d H:i:s'), 'remarks' => $remarks);
         $offlineAddress = $WeshareOfflineAddressM->save($weshareOfflineAddress);
@@ -443,14 +465,16 @@ class ShareUtilComponent extends Component {
      * @param $share_id
      * @return mixed
      */
-    private function saveGroupShareAddress($address, $share_id) {
+    private function saveGroupShareAddress($address, $share_id)
+    {
         $WeshareAddressM = ClassRegistry::init('WeshareAddress');
         $shareAddressData = array('address' => $address, 'weshare_id' => $share_id);
         $WeshareAddressM->save($shareAddressData);
     }
 
     //todo clone share product
-    private function cloneSharProductTag($new_share_id, $old_share_id) {
+    private function cloneSharProductTag($new_share_id, $old_share_id)
+    {
 
     }
 
@@ -459,7 +483,8 @@ class ShareUtilComponent extends Component {
      * @param $old_share_id
      * clone share product
      */
-    private function cloneShareProduct($new_share_id, $old_share_id) {
+    private function cloneShareProduct($new_share_id, $old_share_id)
+    {
         $WeshareProductM = ClassRegistry::init('WeshareProduct');
         $shareProducts = $WeshareProductM->find('all', array(
             'conditions' => array(
@@ -484,7 +509,8 @@ class ShareUtilComponent extends Component {
      * @param $old_share_id
      * clone share addresses
      */
-    private function cloneShareAddresses($new_share_id, $old_share_id) {
+    private function cloneShareAddresses($new_share_id, $old_share_id)
+    {
         $WeshareAddressM = ClassRegistry::init('WeshareAddress');
         $shareAddresses = $WeshareAddressM->find('all', array(
             'conditions' => array(
@@ -508,7 +534,8 @@ class ShareUtilComponent extends Component {
      * @param $is_set_group
      * clone share ship setting
      */
-    private function cloneShareShipSettings($new_share_id, $old_share_id, $is_set_group = false) {
+    private function cloneShareShipSettings($new_share_id, $old_share_id, $is_set_group = false)
+    {
         $WeshareShipSettingM = ClassRegistry::init('WeshareShipSetting');
         $shareShipSettings = $WeshareShipSettingM->find('all', array(
             'conditions' => array(
@@ -552,7 +579,8 @@ class ShareUtilComponent extends Component {
      * @param $is_set_group
      * clone share rebate set
      */
-    private function cloneShareRebateSet($new_share_id, $old_share_id, $is_set_group = false) {
+    private function cloneShareRebateSet($new_share_id, $old_share_id, $is_set_group = false)
+    {
         $proxyRebatePercentM = ClassRegistry::init('ProxyRebatePercent');
         $oldShareRebateSet = $proxyRebatePercentM->find('first', array(
             'conditions' => array('share_id' => $old_share_id)
@@ -576,7 +604,8 @@ class ShareUtilComponent extends Component {
      * @param $userId
      * @param $memo
      */
-    public function saveShareRecommendLog($shareId, $userId, $memo) {
+    public function saveShareRecommendLog($shareId, $userId, $memo)
+    {
         $recommendLogM = ClassRegistry::init('RecommendLog');
         $now = date('Y-m-d H:i:s');
         $recommendData = array(
@@ -605,15 +634,17 @@ class ShareUtilComponent extends Component {
         $title = $sharer_name . '分享的' . $title;
         $optLogData = array('user_id' => $userId, 'obj_type' => OPT_LOG_SHARE_RECOMMEND, 'obj_id' => $shareId, 'created' => $now, 'memo' => $title, 'reply_content' => $memo, 'thumbnail' => $shareImg[0]);
         $this->saveOptLog($optLogData);
-        $this->WeshareBuy->send_recommend_msg($userId, $shareId, $memo);
+        $sendResult = $this->WeshareBuy->send_recommend_msg($userId, $shareId, $memo);
         $this->notify_sharer_recommend($userId, $shareId);
+        return $sendResult;
     }
 
     /**
      * @param $recommend
      * @param $shareId
      */
-    public function notify_sharer_recommend($recommend, $shareId) {
+    public function notify_sharer_recommend($recommend, $shareId)
+    {
         $share_info = $this->WeshareBuy->get_weshare_info($shareId);
         $share_title = $share_info['title'];
         $sharer = $share_info['creator'];
@@ -633,7 +664,8 @@ class ShareUtilComponent extends Component {
      * @param $memo
      * @param $user_id
      */
-    public function save_create_share_opt_log($share_id, $thumbnail, $memo, $user_id) {
+    public function save_create_share_opt_log($share_id, $thumbnail, $memo, $user_id)
+    {
         $optData = array(
             'user_id' => $user_id,
             'obj_type' => OPT_LOG_CREATE_SHARE,
@@ -654,7 +686,8 @@ class ShareUtilComponent extends Component {
      * @return int
      * 根据用户的粉丝数 判断能否出现在信息流中
      */
-    public function get_user_level_by_fans_count($uid) {
+    public function get_user_level_by_fans_count($uid)
+    {
         $userRelationM = ClassRegistry::init('UserRelation');
         $fans_count = $userRelationM->find('count', array(
             'conditions' => array(
@@ -675,7 +708,8 @@ class ShareUtilComponent extends Component {
      * @return array
      * 获取用户等级
      */
-    public function get_user_level($uid, $type = 0) {
+    public function get_user_level($uid, $type = 0)
+    {
         $key = SHARER_LEVEL_CACHE_KEY . '_' . $uid . '_' . $type;
         $cacheData = Cache::read($key);
         if (empty($cacheData)) {
@@ -704,7 +738,8 @@ class ShareUtilComponent extends Component {
      * @param $user_ids
      * @return array
      */
-    public function get_users_level($user_ids) {
+    public function get_users_level($user_ids)
+    {
         $userLevelM = ClassRegistry::init('UserLevel');
         $levels = $userLevelM->find('all', array(
             'conditions' => array(
@@ -726,7 +761,8 @@ class ShareUtilComponent extends Component {
      * @param $uid
      * 检查用户是否有level ， 没有初始化一个
      */
-    public function check_and_save_default_level($uid) {
+    public function check_and_save_default_level($uid)
+    {
         $userLevelM = ClassRegistry::init('UserLevel');
         $level = $userLevelM->find('first', array(
             'conditions' => array(
@@ -754,7 +790,8 @@ class ShareUtilComponent extends Component {
      * @param $tag_id
      * 保存拼团成功的日志
      */
-    public function save_pintuan_success_opt_log($user_id, $share_id, $tag_id) {
+    public function save_pintuan_success_opt_log($user_id, $share_id, $tag_id)
+    {
         $pintuanConfigM = ClassRegistry::init('PintuanConfig');
         $conf_data = $pintuanConfigM->get_conf_data($share_id);
         $memo = $conf_data['share_title'];
@@ -776,7 +813,8 @@ class ShareUtilComponent extends Component {
      * @param $order_id
      * save user buy product opt log
      */
-    public function save_buy_opt_log($user_id, $share_id, $order_id) {
+    public function save_buy_opt_log($user_id, $share_id, $order_id)
+    {
         $share_info = $this->WeshareBuy->get_weshare_info($share_id);
         $memo = $share_info['title'];
         $sharer_name = $this->WeshareBuy->get_user_nickname($share_info['creator']);
@@ -807,7 +845,8 @@ class ShareUtilComponent extends Component {
      * @param $replay_text
      * save comment opt log
      */
-    public function save_comment_opt_log($user_id, $share_id, $replay_text) {
+    public function save_comment_opt_log($user_id, $share_id, $replay_text)
+    {
         $share_info = $this->WeshareBuy->get_weshare_info($share_id);
         $memo = $share_info['title'];
         $sharer_name = $this->WeshareBuy->get_user_nickname($share_info['creator']);
@@ -830,7 +869,8 @@ class ShareUtilComponent extends Component {
      * @param $data
      *
      */
-    public function saveOptLog($data) {
+    public function saveOptLog($data)
+    {
         $optLogM = ClassRegistry::init('OptLog');
         $optLogM->save($data);
         Cache::write(LAST_OPT_LOG_DATA_CACHE_KEY, '');
@@ -841,7 +881,8 @@ class ShareUtilComponent extends Component {
      * @return mixed
      * 根据分享获取订单
      */
-    public function get_share_orders($shareId) {
+    public function get_share_orders($shareId)
+    {
         $orderM = ClassRegistry::init('Order');
         $share_orders = $orderM->find('all', array(
             'conditions' => array(
@@ -859,7 +900,8 @@ class ShareUtilComponent extends Component {
      * @param $refundMark
      * 批量处理订单退款
      */
-    public function batch_refund_order($shareId, $refundMark) {
+    public function batch_refund_order($shareId, $refundMark)
+    {
         $orders = $this->get_share_orders($shareId);
         foreach ($orders as $order_item) {
             $refundMoney = $order_item['Order']['total_all_price'];
@@ -877,7 +919,8 @@ class ShareUtilComponent extends Component {
      * @return array
      *
      */
-    public function refund($orderId, $refundMoney, $refundMark, $refundStatus) {
+    public function refund($orderId, $refundMoney, $refundMark, $refundStatus)
+    {
         $userM = ClassRegistry::init('User');
         $weshareM = ClassRegistry::init('Weshare');
         $refundLogM = ClassRegistry::init('RefundLog');
@@ -950,7 +993,8 @@ class ShareUtilComponent extends Component {
      * @param $order
      * check order is repaid and update order status
      */
-    public function check_order_is_prepaid_and_update_status($order) {
+    public function check_order_is_prepaid_and_update_status($order)
+    {
         $order_is_prepaid = $order['Order']['is_prepaid'];
         if ($order_is_prepaid == 1) {
             $order_id = $order['Order']['id'];
@@ -966,7 +1010,8 @@ class ShareUtilComponent extends Component {
      *
      * save user share product tag and return
      */
-    public function save_tags_return($tags, $uid) {
+    public function save_tags_return($tags, $uid)
+    {
         $shareProductTagM = ClassRegistry::init('WeshareProductTag');
         foreach ($tags as &$tag_item) {
             if (!isset($tag_item['created'])) {
@@ -988,7 +1033,8 @@ class ShareUtilComponent extends Component {
      * @return array
      * get user tags
      */
-    public function get_tags($user_id, $refer_share_id = 0) {
+    public function get_tags($user_id, $refer_share_id = 0)
+    {
         if ($refer_share_id == 0) {
             $tags = $this->load_tags_data($user_id);
         } else {
@@ -1004,7 +1050,8 @@ class ShareUtilComponent extends Component {
      * @return array|mixed
      * get user tags list
      */
-    public function get_tags_list($user_id) {
+    public function get_tags_list($user_id)
+    {
         $tags = $this->load_tags_data($user_id);
         $tags = Hash::extract($tags, '{n}.WeshareProductTag');
         return $tags;
@@ -1015,7 +1062,8 @@ class ShareUtilComponent extends Component {
      * @return bool
      * check is start new order share and reset order member id
      */
-    public function check_is_start_new_group_share($order) {
+    public function check_is_start_new_group_share($order)
+    {
         if ($order['Order']['relate_type'] == ORDER_TRIGGER_GROUP_SHARE_TYPE) {
             $order_id = $order['Order']['id'];
             $order_creator = $order['Order']['creator'];
@@ -1046,7 +1094,8 @@ class ShareUtilComponent extends Component {
      * @return mixed
      * get share refer_share_id
      */
-    public function get_share_refer_id($shareId) {
+    public function get_share_refer_id($shareId)
+    {
         $weshareM = ClassRegistry::init('Weshare');
         $weshare_info = $weshareM->find('first', array(
             'conditions' => array(
@@ -1063,7 +1112,8 @@ class ShareUtilComponent extends Component {
      * @param $refer_share_id
      * @return mixed
      */
-    public function get_group_share($uid, $refer_share_id) {
+    public function get_group_share($uid, $refer_share_id)
+    {
         //发起多次拼团有问题
         $WeshareM = ClassRegistry::init('Weshare');
         $weshare = $WeshareM->find('first', array(
@@ -1081,7 +1131,8 @@ class ShareUtilComponent extends Component {
      * @return array
      * get share offline address detail
      */
-    public function get_share_offline_address_detail($share_id) {
+    public function get_share_offline_address_detail($share_id)
+    {
         $cache_key = SHARE_OFFLINE_ADDRESS_SUMMERY_DATA_CACHE_KEY . '_' . $share_id;
         $json_address_data = Cache::read($cache_key);
         if (empty($json_address_data)) {
@@ -1107,7 +1158,8 @@ class ShareUtilComponent extends Component {
     /**
      * @param $share_id
      */
-    public function set_group_share_available($share_id) {
+    public function set_group_share_available($share_id)
+    {
         $weshareM = ClassRegistry::init('Weshare');
         $weshareM->updateAll(array('status' => WESHARE_NORMAL_STATUS), array('id' => $share_id));
     }
@@ -1118,7 +1170,8 @@ class ShareUtilComponent extends Component {
      * 根据分享ID回去商品标签
      * 由于在拼团中，没有复制标签，所以要查找父分享的
      */
-    private function load_tags_by_share($share_id) {
+    private function load_tags_by_share($share_id)
+    {
         $shareInfo = $this->WeshareBuy->get_weshare_info($share_id);
         $shareCreator = $shareInfo['creator'];
         return $this->load_tags_data($shareCreator);
@@ -1129,7 +1182,8 @@ class ShareUtilComponent extends Component {
      * @return mixed
      * cache tags data
      */
-    private function load_tags_data($user_id) {
+    private function load_tags_data($user_id)
+    {
         $cache_key = SHARER_TAGS_DATA_CACHE_KEY . '_' . $user_id;
         $cache_data = Cache::read($cache_key);
         if (empty($cache_data)) {
@@ -1152,7 +1206,8 @@ class ShareUtilComponent extends Component {
      * @return mixed
      * 获取一次分享的分组
      */
-    public function get_share_tags($weshare_id) {
+    public function get_share_tags($weshare_id)
+    {
         //cache it
         $shareProductM = ClassRegistry::init('WeshareProduct');
         $shareProductTagM = ClassRegistry::init('WeshareProductTag');
@@ -1177,7 +1232,8 @@ class ShareUtilComponent extends Component {
      * @return array
      * 分类统计订单
      */
-    public function summery_order_data_by_tag($orderData, $shareId) {
+    public function summery_order_data_by_tag($orderData, $shareId)
+    {
         $orderCartMap = $orderData['order_cart_map'];
         $orders = $orderData['orders']['origin_orders'];
         $orders = Hash::combine($orders, '{n}.id', '{n}');
@@ -1215,7 +1271,8 @@ class ShareUtilComponent extends Component {
      * @param $order
      * 支付尾款
      */
-    public function process_paid_order_add($order) {
+    public function process_paid_order_add($order)
+    {
         $order_id = $order['Order']['id'];
         $this->log('order origin parent order  id' . $order['Order']['parent_order_id']);
         $orderM = ClassRegistry::init('Order');
@@ -1236,7 +1293,8 @@ class ShareUtilComponent extends Component {
      * @return array
      * 获取产品和分组的组合
      */
-    public function get_product_tag_map($weshare_id) {
+    public function get_product_tag_map($weshare_id)
+    {
         $weshareProductM = ClassRegistry::init('WeshareProduct');
         $weshareProducts = $weshareProductM->find('all', array(
             'conditions' => array(
@@ -1260,7 +1318,8 @@ class ShareUtilComponent extends Component {
      * @param $product_price_map
      * @return int
      */
-    public function process_order_prepaid($order_id, $product_price_map) {
+    public function process_order_prepaid($order_id, $product_price_map)
+    {
         $orderM = ClassRegistry::init('Order');
         $cartM = ClassRegistry::init('Cart');
         $order = $orderM->find('first', array(
@@ -1377,7 +1436,8 @@ class ShareUtilComponent extends Component {
      * @param $order
      * 拆分订单根据分组
      */
-    public function split_order_by_tag($order) {
+    public function split_order_by_tag($order)
+    {
         // check cal ship fee
         // check cal red packet fee
         // check is prepaid
@@ -1456,7 +1516,8 @@ class ShareUtilComponent extends Component {
         $orderM->updateAll(array('type' => ORDER_TYPE_SPLIT), array('id' => $order_id));
     }
 
-    private function check_cart_confirm_price($tag_carts) {
+    private function check_cart_confirm_price($tag_carts)
+    {
         $result = 0;
         foreach ($tag_carts as $item) {
             if ($item['confirm_price'] == 0) {
@@ -1472,7 +1533,8 @@ class ShareUtilComponent extends Component {
      * @param $order
      * 把每单5元的自提费用添加的线下自提点用户余额里面
      */
-    public function add_money_for_offline_address($share_id, $order) {
+    public function add_money_for_offline_address($share_id, $order)
+    {
         $order_creator = $order['Order']['creator'];
         $order_id = $order['Order']['id'];
         $WeshareM = ClassRegistry::init('Weshare');
@@ -1509,7 +1571,8 @@ class ShareUtilComponent extends Component {
      * @param $order_id
      * 退款后每单5元自提费用减去
      */
-    public function remove_money_for_offline_address($share_id, $order_creator, $order_id) {
+    public function remove_money_for_offline_address($share_id, $order_creator, $order_id)
+    {
         $WeshareM = ClassRegistry::init('Weshare');
         $weshare = $WeshareM->find('first', array(
             'conditions' => array(
@@ -1529,7 +1592,8 @@ class ShareUtilComponent extends Component {
      * @return mixed
      * 获取最新的子分享，用来推送模板消息
      */
-    public function get_recent_group_share() {
+    public function get_recent_group_share()
+    {
         $WeshareM = ClassRegistry::init('Weshare');
         $shares = $WeshareM->find('all', array(
             'conditions' => array(
@@ -1546,7 +1610,8 @@ class ShareUtilComponent extends Component {
      * @param $share_id
      * 获取分享拼团需要人数
      */
-    public function get_share_group_limit($share_id) {
+    public function get_share_group_limit($share_id)
+    {
         $shipSettingM = ClassRegistry::init('WeshareShipSetting');
         $groupShareShipSettings = $shipSettingM->find('first', array(
             'conditions' => array(
@@ -1561,7 +1626,8 @@ class ShareUtilComponent extends Component {
     /**
      * 拼团成功通知
      */
-    public function send_group_share_complete($share_id) {
+    public function send_group_share_complete($share_id)
+    {
         $share_info = $this->WeshareBuy->get_weshare_info($share_id);
         $share_orders = $this->get_share_orders($share_id);
         $group_share_limit = $this->get_share_group_limit($share_info['refer_share_id']);
@@ -1586,7 +1652,8 @@ class ShareUtilComponent extends Component {
      * @return mixed
      * 获取常用自提点
      */
-    public function get_static_offline_address() {
+    public function get_static_offline_address()
+    {
         $WeshareOfflineAddressM = ClassRegistry::init('WeshareOfflineAddress');
         $staticOfflineAddress = $WeshareOfflineAddressM->find('all', array(
             'conditions' => array(
@@ -1603,7 +1670,8 @@ class ShareUtilComponent extends Component {
      * @param $origin_share_id
      * 一次分享建成之后 触发建立以常用自提点为地址的分享
      */
-    public function new_static_address_group_shares($origin_share_id) {
+    public function new_static_address_group_shares($origin_share_id)
+    {
         $static_addresses = $this->get_static_offline_address();
         $queue = new SaeTaskQueue('share');
         //批量添加任务
@@ -1629,7 +1697,8 @@ class ShareUtilComponent extends Component {
      * @param $weshareData
      * 级联更新数据
      */
-    public function cascadeSaveShareData($weshareData) {
+    public function cascadeSaveShareData($weshareData)
+    {
         $shareId = $weshareData['id'];
         if (!empty($shareId)) {
             $weshareM = ClassRegistry::init('Weshare');
@@ -1650,9 +1719,67 @@ class ShareUtilComponent extends Component {
      * @param $uid
      * 把用户关注分享者的原因使用掉
      */
-    public function usedUserSubSharerReason($uid) {
+    public function usedUserSubSharerReason($uid)
+    {
         $SubReasonM = ClassRegistry::init('UserSubReason');
         $SubReasonM->updateAll(array('used' => 1), array('user_id' => $uid, 'type' => array(SUB_SHARER_REASON_TYPE_FROM_USER_CENTER, SUB_SHARER_REASON_TYPE_FROM_SHARE_INFO)));
+    }
+
+    /**
+     * @param $data
+     * 保存团长发送消息的日志
+     */
+    public function saveSendMsgLog($data)
+    {
+        $sendMsgLogM = ClassRegistry::init('SendMsgLog');
+        $sendMsgLogM->save($data);
+    }
+
+    /**
+     * @param $uid
+     * @return array
+     * 检查团长是否可以发送消息
+     */
+    public function checkCanSendMsg($uid)
+    {
+        $limit_count = $this->getSharerMsgLimit($uid);
+        $limit_count = $limit_count['limit'];
+        if ($limit_count == 0) {
+            return array('success' => false, 'msg' => '团长才能发送模板消息');
+        }
+        $sendMsgLogM = ClassRegistry::init('SendMsgLog');
+        $sendMsgCount = $sendMsgLogM->find('count', array(
+            'conditions' => array(
+                'sharer_id' => $uid,
+                'status' => 1,
+                'deleted' => DELETED_NO,
+                'DATE(created)' => date('Y-m-d')
+            )
+        ));
+        if ($sendMsgCount >= $limit_count) {
+            return array('success' => false, 'msg' => '每天限发' . $limit_count . '条消息');
+        }
+        return array('success' => true, 'msg' => '还可以发送' . ($limit_count - $sendMsgCount) . '条消息');
+    }
+
+    /**
+     * @param $uid
+     * 获取对应级别用户发送消息的限制
+     */
+    public function getSharerMsgLimit($uid)
+    {
+        $userLevelM = ClassRegistry::init('UserLevel');
+        $userLevel = $userLevelM->find('first', array(
+            'conditions' => array(
+                'type' => 0,
+                'data_id' => $uid,
+            )
+        ));
+        $user_val = 0;
+        if (!empty($userLevel)) {
+            $user_val = $userLevel['UserLevel']['data_value'];
+        }
+        return get_user_level_msg_count($user_val);
     }
 
 
@@ -1661,7 +1788,8 @@ class ShareUtilComponent extends Component {
      * @return array
      * index product
      */
-    public function get_share_index_product($tag) {
+    public function get_share_index_product($tag)
+    {
         $product = array(
             0 => array(
                 '1305' => array(
