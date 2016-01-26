@@ -64,7 +64,7 @@ $(document).ready(function () {
         if (result) {
           $.getJSON('/weshares/delete_share/' + shareId, function (data) {
             if (data['success']) {
-              $me.parent('div.media').remove();
+              $me.parent().parent('div.media').remove();
             } else {
               alert('删除失败！');
             }
