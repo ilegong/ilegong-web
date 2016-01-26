@@ -60,7 +60,7 @@ class AppController extends Controller {
 
     public function beforeFilter() {
     	load_lang('default'); // 加载默认语言
-    	
+
     	$this->Setting->writeConfiguration();
     	$site_info = Configure::read('Site');
     	$this->set('site', $site_info);
@@ -75,7 +75,7 @@ class AppController extends Controller {
             ));
             $this->set('productTags', $productTags);
         }
-    
+
     	// 无Session，且有Cookie登录信息时，解析cookie生成信息。否则忽略cookie，防止每次都要消耗性能解密cookie
     	// 其余时间使用session。
     	if(!$this->Session->read('Auth.User.id') && isset($_COOKIE['SAECMS']) && $_COOKIE['SAECMS']['Auth']['User']){
@@ -111,12 +111,12 @@ class AppController extends Controller {
     	if($_GET['theme']){
     		$this->theme=$_GET['theme'];
     	}
-    
+
     	if ($this->RequestHandler->isAjax() || isset($_GET['inajax'])) {
     		// ajax 操作
     		$this->layout = 'ajax';
     	}
-    	
+
     	if (Configure::read('Site.openStatic')){
     		App::uses('HtmlCache', 'Lib');
     		$content = HtmlCache::getfile($this->request->here);
@@ -189,7 +189,7 @@ class AppController extends Controller {
         	$file_name = urlencode($this->request->here);
         	file_put_contents(TMP.$file_name, $html);
         	// 使用wkhtmltopdf命令导出pdf
-        	$ret =system("wkhtmltopdf ".(TMP.$file_name)." ".(TMP.$file_name).".pdf",$retval); 
+        	$ret =system("wkhtmltopdf ".(TMP.$file_name)." ".(TMP.$file_name).".pdf",$retval);
         	if($ret!==false){
         		//header('Content-Type:application/pdf');
         		header("Content-Type: application/force-download");
@@ -211,13 +211,13 @@ class AppController extends Controller {
             }
         }
     }
-    
+
 	/**
      * //当含语言的参数时，设置base追加locale的内容，当传入locale为默认内容时，跳转去除locale参数。
      */
     private function _international(){
     	if (!empty($this->request->params['locale']) && $this->request->params['locale']!=DEFAULT_LANGUAGE) {
-    		//当含语言的参数时，设置base追加locale的内容，    		
+    		//当含语言的参数时，设置base追加locale的内容，
     		$this->request->base = $this->request->base.'/'.$this->request->params['locale'];
     		define('APPEND_LOCALE_BASE', true);
     		if($this->request->params['locale']=='zh-tw' && DEFAULT_LANGUAGE=='zh-cn'){
@@ -256,7 +256,7 @@ class AppController extends Controller {
         $this->set('CurrentUser', $this->currentUser);
         $this->set('is_admin', $this->is_admin($this->currentUser['id']));
         $this->set('pageTitle', $this->pageTitle);
-        
+
 		// view时，有current_data_id。
         $this->set('current_url', Router::url().'?'.http_build_query($this->request->query));
         $this->set('current_model', $this->modelClass);
@@ -329,7 +329,7 @@ class AppController extends Controller {
             }
         }
     	$this->{$modelClass}->recursive = 1; // 显示时，查询出相关联的数据。
-        
+
         $cond = array($modelClass . '.deleted' => 0, );
         if ($modelClass != 'Product') {
             $cond[$modelClass . '.published'] = 1;
@@ -345,14 +345,14 @@ class AppController extends Controller {
                 'conditions' => $cond,
         ));
         $this->viewdata = ${$modelClass};
-        
+
         if (empty(${$modelClass})) {
             $url = $this->referer();
             if (empty($url))
                 $url = '/';
             throw new NotFoundException();
         }
-        
+
         $this->loadModel('Uploadfile');
     	${$modelClass}['Uploadfile'] = $this->Uploadfile->find('all',array(
         		'conditions'=> array(
@@ -363,7 +363,7 @@ class AppController extends Controller {
         ));
         if(Configure::read($modelClass.'.view_nums')){// 记录访问次数
         	$this->{$modelClass}->updateAll(
-        			array('views_count' => 'views_count+1'), 
+        			array('views_count' => 'views_count+1'),
         			array('id'=>${$modelClass}[$modelClass]['id'])
         	);
         }
@@ -374,7 +374,7 @@ class AppController extends Controller {
 //		print_r(${$modelClass});
         // 若同时发布到了多个栏目，导航默认只算第一个栏目的
         $current_cateid = ${$modelClass}[$modelClass]['cate_id'];
-        
+
         $this->loadModel('Category');
         $path_cachekey = 'category_path_'.$current_cateid;
         $navigations = Cache::read($path_cachekey);
@@ -386,7 +386,7 @@ class AppController extends Controller {
         while($navigations[0]['Category']['model']=='website'){
         	array_shift($navigations);
         }
-        
+
         $this->set('top_category_id', $navigations[0]['Category']['id']);
         $this->set('top_category_name', $navigations[0]['Category']['name']);
         //seotitle  seodescription  seokeywords
@@ -415,7 +415,7 @@ class AppController extends Controller {
 //		print_r( ${$modelClass});
         $this->set($modelClass, ${$modelClass});
 //         print_r(${$modelClass});
-        
+
         $params = array($modelClass, ${$modelClass}[$modelClass]['id']);
         $this->Hook->call('viewItem', $params);
 //         $this->Hook->call('nextItems', $params);
@@ -434,7 +434,7 @@ class AppController extends Controller {
         	}
             $this->data[$modelClass]['deleted'] = 0;
             $this->data[$modelClass]['creator'] = $this->currentUser['id'];
-            
+
             //print_r($this->data);
             //exit;
             $this->{$modelClass}->create();
@@ -489,7 +489,7 @@ class AppController extends Controller {
         $page = $this->_getParamVars('page');
         $rows = 60;
         $joins = array();
-        
+
         $conditions = getSearchOptions($this->request->query,$this->modelClass);
         $datalist = $this->{$this->modelClass}->find('all', array(
                     'conditions' => $conditions,
@@ -778,6 +778,12 @@ class AppController extends Controller {
             $cip = "0.0.0.0";
         }
         return $cip;
+    }
+
+    protected function get_post_raw_data(){
+        $postStr = file_get_contents('php://input');
+        $postData = json_decode($postStr, true);
+        return $postData;
     }
 
 }

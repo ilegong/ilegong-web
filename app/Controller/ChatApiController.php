@@ -21,8 +21,7 @@ class ChatApiController extends AppController
 
     public function create_group()
     {
-        $postStr = file_get_contents('php://input');
-        $postData = json_decode($postStr, true);
+        $postData = parent::get_post_raw_data();
         $result = $this->HxChat->create_group($postData);
         if ($result) {
             echo json_encode(array('statusCode' => 1, 'data' => $result, 'statusMsg' => '创建成功'));
@@ -37,10 +36,27 @@ class ChatApiController extends AppController
 
     }
 
-    public function get_groups()
+    public function get_my_groups()
     {
-
+        $uid = $this->currentUser['id'];
+        $user_groups = $this->UserGroup->find('all', array(
+            'conditions' => array(
+                'deleted' => DELETED_NO,
+                'user_id' => $uid
+            ),
+            'limit' => 500
+        ));
+        $group_ids = Hash::extract($user_groups, '{n}.UserGroup.group_id');
+        $groups = $this->ChatGroup->find('all', array(
+            'conditions' => array(
+                'id' => $group_ids
+            )
+        ));
+        $groups = Hash::extract($groups, '{n}.ChatGroup');
+        echo json_encode(array('groups' => $groups));
+        return;
     }
+
 
     public function get_group_members($group_id)
     {
@@ -57,12 +73,58 @@ class ChatApiController extends AppController
         return;
     }
 
-    public function add_group_member()
+    public function add_group_members($group_id)
     {
-
+        $postData = parent::get_post_raw_data();
+        $user_ids = $postData['usernames'];
+        $save_data = array();
+        $date_now = date('Y-m-d H:i:s');
+        foreach ($user_ids as $uid) {
+            if (!$this->UserGroup->hasAny(array('user_id' => $uid, 'group_id' => $group_id))) {
+                $save_data[] = array('user_id' => $uid, 'group_id' => $group_id, 'created' => $date_now, 'updated' => $date_now);
+            }
+        }
+        $save_result = $this->UserGroup->saveAll($save_data);
+        if ($save_result) {
+            $this->HxChat->add_group_members($user_ids, $group_id);
+            echo json_encode(array('statusCode' => 1, 'statusMsg' => '添加成功'));
+            return;
+        }
+        echo json_encode(array('statusCode' => -2, 'statusMsg' => '添加失败'));
+        return;
     }
 
-    public function delete_group_member()
+    public function add_group_member($group_id, $user_id)
+    {
+        if ($this->UserGroup->hasAny(array('user_id' => $user_id, 'group_id' => $group_id))) {
+            echo json_encode(array('statusCode' => -1, 'statusMsg' => '用户已经在群里'));
+            return;
+        }
+        $date_now = date('Y-m-d H:i:s');
+        $save_data = array('user_id' => $user_id, 'group_id' => $group_id, 'created' => $date_now, 'updated' => $date_now);
+        $user_group = $this->UserGroup->save($save_data);
+        if ($user_group) {
+            $this->HxChat->add_group_member($group_id, $user_id);
+            echo json_encode(array('statusCode' => 1, 'statusMsg' => '添加成功', 'data' => $user_group));
+            return;
+        }
+        echo json_encode(array('statusCode' => -1, 'statusMsg' => '添加失败'));
+        return;
+    }
+
+    public function delete_group_member($group_id, $user_id)
+    {
+        $update_result = $this->UserGroup->updateAll(array('deleted' => DELETED_YES), array('group_id' => $group_id, 'user_id' => $user_id));
+        if ($update_result) {
+
+            echo json_encode(array('statusCode' => 1, 'statusMsg' => '删除成功'));
+            return;
+        }
+        echo json_encode(array('statusCode' => -1, 'statusMsg' => '删除失败'));
+        return;
+    }
+
+    public function delete_group_members()
     {
 
     }

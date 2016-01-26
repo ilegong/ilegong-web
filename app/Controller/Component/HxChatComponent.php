@@ -32,8 +32,7 @@ class HxChatComponent extends Component
 
     public function reg_hx_user($user_id)
     {
-        App::import('Vendor', 'hx/HxUser');
-        $hxUser = new HxUser(HX_APP_NAME, HX_CLIENT_ID, HX_CLIENT_SECRET);
+        $hxUser = $this->get_hx_user();
         $hx_password = $this->get_password(12);
         if ($this->set_user_hx_password($user_id, $hx_password)) {
             $hx_user_data = array(
@@ -55,8 +54,7 @@ class HxChatComponent extends Component
 
     public function delete_friend($user_id, $friend_id)
     {
-        App::import('Vendor', 'hx/HxUser');
-        $hxUser = new HxUser(HX_APP_NAME, HX_CLIENT_ID, HX_CLIENT_SECRET);
+        $hxUser = $this->get_hx_user();
         $json_result = $hxUser->deleteFriendOnUser($user_id, $friend_id);
         $this->log('delete friend result ' . json_encode($json_result));
         if (empty($json_result['error'])) {
@@ -67,8 +65,7 @@ class HxChatComponent extends Component
 
     public function add_friend($user_id, $friend_id)
     {
-        App::import('Vendor', 'hx/HxUser');
-        $hxUser = new HxUser(HX_APP_NAME, HX_CLIENT_ID, HX_CLIENT_SECRET);
+        $hxUser = $this->get_hx_user();
         $json_result = $hxUser->addFriendToUser($user_id, $friend_id);
         $this->log('add friend result ' . json_encode($json_result));
         $result = json_decode($json_result, true);
@@ -90,15 +87,13 @@ class HxChatComponent extends Component
 
     public function get_user_status($username)
     {
-        App::import('Vendor', 'hx/HxUser');
-        $hxUser = new HxUser(HX_APP_NAME, HX_CLIENT_ID, HX_CLIENT_SECRET);
+        $hxUser = $this->get_hx_user();
         return $hxUser->getUserStatus($username);
     }
 
     public function create_group($data)
     {
-        App::import('Vendor', 'hx/HxGroup');
-        $hxGroup = new HxGroup(HX_APP_NAME, HX_CLIENT_ID, HX_CLIENT_SECRET);
+        $hxGroup = $this->get_hx_group();
         $result = $hxGroup->createGroup($data);
         if ($result['error']) {
             $this->log('create group error' . json_encode($result));
@@ -137,14 +132,51 @@ class HxChatComponent extends Component
 
     }
 
-    public function add_group_members()
+    public function delete_group_member($user_id, $group_id)
     {
-
+        $hxGroup = $this->get_hx_group();
+        $result = $hxGroup->removeMember($user_id, $group_id);
+        if ($result['error']) {
+            $this->log('remove group member fail ' . json_encode($result));
+            return false;
+        }
+        return true;
     }
 
-    public function add_group_member()
+    public function delete_group_members($user_ids, $group_id)
     {
+        $hxGroup = $this->get_hx_group();
+        $result = $hxGroup->removeMembers($user_ids, $group_id);
+        if ($result['error']) {
+            $this->log('remove group members fail ' . json_encode($result));
+            return false;
+        }
+        return true;
+    }
 
+    public function add_group_members($user_ids, $group_id)
+    {
+        $hxGroup = $this->get_hx_group();
+        $data = array('usernames' => $user_ids);
+        $result = $hxGroup->addMembers($data, $group_id);
+        if ($result['error']) {
+            $this->log('add group members fail ' . json_encode($result));
+            $this->log('add group member error for hx group id ' . $group_id . ' user ids ' . implode(',', $user_ids));
+            return false;
+        }
+        return true;
+    }
+
+    public function add_group_member($group_id, $user_id)
+    {
+        $hxGroup = $this->get_hx_group();
+        $result = $hxGroup->addMember($user_id, $group_id);
+        if ($result['error']) {
+            $this->log('add group member fail ' . json_encode($result));
+            $this->log('add group member error for hx group id ' . $group_id . ' user id ' . $user_id);
+            return false;
+        }
+        return true;
     }
 
     public function deactivate_user()
@@ -174,5 +206,19 @@ class HxChatComponent extends Component
         return $str;
     }
 
+
+    private function get_hx_group()
+    {
+        App::import('Vendor', 'hx/HxGroup');
+        $hxGroup = new HxGroup(HX_APP_NAME, HX_CLIENT_ID, HX_CLIENT_SECRET);
+        return $hxGroup;
+    }
+
+    private function get_hx_user()
+    {
+        App::import('Vendor', 'hx/HxUser');
+        $hxUser = new HxUser(HX_APP_NAME, HX_CLIENT_ID, HX_CLIENT_SECRET);
+        return $hxUser;
+    }
 
 }
