@@ -97,7 +97,7 @@ class ChatApiController extends AppController
 
     public function add_group_member($group_id, $user_id)
     {
-        if ($this->UserGroup->hasAny(array('user_id' => $user_id, 'group_id' => $group_id))) {
+        if ($this->UserGroup->hasAny(array('user_id' => $user_id, 'group_id' => $group_id, 'deleted' => DELETED_NO))) {
             echo json_encode(array('statusCode' => -1, 'statusMsg' => '用户已经在群里'));
             return;
         }
@@ -116,7 +116,7 @@ class ChatApiController extends AppController
 
     public function delete_group_member($group_id, $user_id)
     {
-        $update_result = $this->UserGroup->updateAll(array('deleted' => DELETED_YES), array('group_id' => $group_id, 'user_id' => $user_id));
+        $update_result = $this->UserGroup->updateAll(array('deleted' => DELETED_YES), array('group_id' => $group_id, 'user_id' => $user_id, 'deleted' => DELETED_NO));
         if ($update_result) {
             $hx_group_id = $this->get_hx_group_id($group_id);
             $this->HxChat->delete_group_member($user_id, $hx_group_id);

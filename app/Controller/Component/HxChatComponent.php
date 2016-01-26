@@ -110,7 +110,9 @@ class HxChatComponent extends Component
         $chatGroupM = ClassRegistry::init('ChatGroup');
         $userGroupM = ClassRegistry::init('UserGroup');
         $date_now = date('Y-m-d H:i:s');
-        $group_data = array('hx_group_id' => $hx_group_id, 'created' => $data, 'creator' => $data['owner'], 'approval' => $data['approval'], 'maxusers' => $data['maxusers'], 'is_public' => $data['public'], 'description' => $data['desc'], 'group_name' => $data['groupname']);
+        $approval = $data['approval'] ? 1 : 0;
+        $public = $data['public'] ? 1 : 0;
+        $group_data = array('hx_group_id' => $hx_group_id, 'created' => $date_now, 'creator' => $data['owner'], 'approval' => $approval, 'maxusers' => $data['maxusers'], 'is_public' => $public, 'description' => $data['desc'], 'group_name' => $data['groupname']);
         $group_result = $chatGroupM->save($group_data);
         if ($group_result) {
             $group_id = $group_result['ChatGroup']['id'];
