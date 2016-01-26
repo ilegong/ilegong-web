@@ -86,7 +86,8 @@ class ChatApiController extends AppController
         }
         $save_result = $this->UserGroup->saveAll($save_data);
         if ($save_result) {
-            $this->HxChat->add_group_members($user_ids, $group_id);
+            $hx_group_id = $this->get_hx_group_id($group_id);
+            $this->HxChat->add_group_members($user_ids, $hx_group_id);
             echo json_encode(array('statusCode' => 1, 'statusMsg' => '添加成功'));
             return;
         }
@@ -104,7 +105,8 @@ class ChatApiController extends AppController
         $save_data = array('user_id' => $user_id, 'group_id' => $group_id, 'created' => $date_now, 'updated' => $date_now);
         $user_group = $this->UserGroup->save($save_data);
         if ($user_group) {
-            $this->HxChat->add_group_member($group_id, $user_id);
+            $hx_group_id = $this->get_hx_group_id($group_id);
+            $this->HxChat->add_group_member($user_id, $hx_group_id);
             echo json_encode(array('statusCode' => 1, 'statusMsg' => '添加成功', 'data' => $user_group));
             return;
         }
@@ -116,7 +118,8 @@ class ChatApiController extends AppController
     {
         $update_result = $this->UserGroup->updateAll(array('deleted' => DELETED_YES), array('group_id' => $group_id, 'user_id' => $user_id));
         if ($update_result) {
-
+            $hx_group_id = $this->get_hx_group_id($group_id);
+            $this->HxChat->delete_group_member($user_id, $hx_group_id);
             echo json_encode(array('statusCode' => 1, 'statusMsg' => '删除成功'));
             return;
         }
@@ -124,9 +127,29 @@ class ChatApiController extends AppController
         return;
     }
 
-    public function delete_group_members()
+    public function delete_group_members($group_id)
     {
+        $postData = parent::get_post_raw_data();
+        $user_ids = $postData['usernames'];
+        $update_result = $this->UserGroup->updateAll(array('deleted' => DELETED_YES), array('group_id' => $group_id, 'user_id' => $user_ids));
+        if ($update_result) {
+            $hx_group_id = $this->get_hx_group_id($group_id);
+            $this->HxChat->delete_group_members($user_ids, $hx_group_id);
+            echo json_encode(array('statusCode' => 1, 'statusMsg' => '删除成功'));
+            return;
+        }
+        echo json_encode(array('statusCode' => -1, 'statusMsg' => '删除失败'));
+        return;
+    }
 
+    private function get_hx_group_id($group_id)
+    {
+        $chatGroup = $this->ChatGroup->find('first', array(
+            'conditions' => array(
+                'id' => $group_id
+            )
+        ));
+        return $chatGroup['ChatGroup']['hx_group_id'];
     }
 
 }

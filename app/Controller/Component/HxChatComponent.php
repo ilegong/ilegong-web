@@ -167,7 +167,7 @@ class HxChatComponent extends Component
         return true;
     }
 
-    public function add_group_member($group_id, $user_id)
+    public function add_group_member($user_id, $group_id)
     {
         $hxGroup = $this->get_hx_group();
         $result = $hxGroup->addMember($user_id, $group_id);
