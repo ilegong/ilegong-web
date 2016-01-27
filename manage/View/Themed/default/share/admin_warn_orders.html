@@ -95,7 +95,8 @@
                 <th><input type="text" class="form-control" placeholder="快递单号" disabled></th>
                 <th><input type="text" class="form-control" placeholder="交易号" disabled></th>
                 <th><input type="text" class="form-control" placeholder="推荐人" disabled></th>
-                <th>分享状态</th>
+                <th><input type="text" class="form-control" placeholder="分享状态" disabled></th>
+                <th><input type="text" class="form-control" placeholder="操作" disabled></th>
             </tr>
             </thead>
             <tbody>
@@ -179,6 +180,9 @@
                     {{else}}
                         已截止
                     {{/if}}
+                </td>
+                <td>
+                    <a target="_blank" class="btn btn-info" href="/manage/admin/orders/edit/{{$current_order['id']}}" role="button">编辑订单</a>
                 </td>
             </tr>
             <?php
