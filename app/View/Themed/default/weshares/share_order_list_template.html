@@ -99,7 +99,8 @@
                         style="margin-bottom: 5px; margin-left: 5px;">已签收
                 </button>
             {{/if}}
-            {{if $item_order['status'] == ORDER_STATUS_PAID&&$current_tag == SHARE_SHIP_KUAIDI_TAG}}
+            {{if $item_order['status'] == ORDER_STATUS_PAID}}
+                {{if $current_tag == SHARE_SHIP_KUAIDI_TAG}}
                 <div class="form" style="display: inline;">
                     <div class="form-group" style="display: inline-block;width: 30%;">
                         <select class="form-control" name="ship_company_code">
@@ -115,6 +116,11 @@
                     </div>
                     <button class="btn btn-primary set-order-ship-code" data-order-id="{{$item_order['id']}}" data-weshare-id="{{$weshareId}}">已发货</button>
                 </div>
+                {{else}}
+                    <div class="form" style="display: inline;">
+                        <button class="btn btn-primary set-order-shipped" data-order-id="{{$item_order['id']}}" data-weshare-id="{{$weshareId}}">已发货</button>
+                    </div>
+                {{/if}}
             {{/if}}
             {{if $item_order['status'] != ORDER_STATUS_RETURN_MONEY && $item_order['status'] != ORDER_STATUS_RETURNING_MONEY}}
             <button class="btn btn-success btn-xs pull-right refund-money" data-order-name="{{$item_order['consignee_name']}}"

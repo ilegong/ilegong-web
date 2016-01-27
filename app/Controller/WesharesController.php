@@ -847,6 +847,22 @@ class WesharesController extends AppController {
         return;
     }
 
+    public function set_order_shipped(){
+        $this->autoRender = false;
+        $order_id = $_REQUEST['order_id'];
+        $weshare_id = $_REQUEST['weshare_id'];
+        $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order_id, 'status' => ORDER_STATUS_PAID));
+        $this->Cart->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order_id));
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_0', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
+        $this->WeshareBuy->clear_user_share_order_data_cache(array($order_id), $weshare_id);
+        echo json_encode(array('success' => true));
+        return;
+    }
+
+
     /**
      * 更新快递单号
      */

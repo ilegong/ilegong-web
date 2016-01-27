@@ -65,11 +65,7 @@ class UserApiController extends AppController
             echo json_encode(array());
             return;
         }
-        $userM = ClassRegistry::init('User');
-        $users = $userM->find('first', array('recursive' => -1,
-            'conditions' => array('id' => $fans_id),
-            'fields' => array('nickname', 'email', 'image', 'sex', 'companies', 'bio', 'mobilephone', 'email', 'username', 'id')));
-        $users = Hash::extract($users, '{n}.User');
+        $users = $this->HxChat->get_users_info($fans_id);
         echo json_encode($users);
         return;
     }

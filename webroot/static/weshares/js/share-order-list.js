@@ -65,6 +65,23 @@ $(document).ready(function () {
     }
   });
   $('ul.nav-tabs li:first a').trigger('click');
+  $('button.set-order-shipped').on('click', function(){
+    var $me = $(this);
+    var $parent = $me.parentsUntil('div.col-xs-12');
+    var $form = $me.parent('div');
+    var orderId = $me.data('order-id');
+    var weshareId = $me.data('weshare-id');
+    $.post('/weshares/set_order_shipped', {
+      order_id: orderId,
+      weshare_id: weshareId
+    }, function (data) {
+      if (data['success']) {
+        $parent.removeClass('offer-success').addClass('offer-warning');
+        $('div.shape-text', $parent).text('已发货');
+        $form.remove();
+      }
+    }, 'json');
+  });
   $('button.set-order-ship-code').on('click', function () {
     var $me = $(this);
     var $parent = $me.parentsUntil('div.col-xs-12');

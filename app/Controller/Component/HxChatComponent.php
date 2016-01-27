@@ -27,7 +27,16 @@ class HxChatComponent extends Component
         ));
         $user_infos = Hash::extract($user_infos, '{n}.User');
         $user_levels = Hash::combine($user_levels, '{n}.UserLevel.data_id', '{n}.UserLevel.data_value');
-        return array('users' => $user_infos, 'levels' => $user_levels);
+        foreach($user_infos as &$user_item){
+            $uid = $user_item['id'];
+            $level = -1;
+            if($user_levels[$uid]){
+                $level = $user_levels[$uid];
+            }
+            $level_text = get_user_level_text($level);
+            $user_item['level'] = $level_text;
+        }
+        return $user_infos;
     }
 
     public function reg_hx_user($user_id)
