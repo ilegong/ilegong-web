@@ -1795,7 +1795,7 @@ class ShareUtilComponent extends Component
                 '1305' => array(
                     'share_id' => 1305,
                     'share_name' => '新一季的芝麻家诚实的草莓来啦',
-                    'share_img' => 'http://static.tongshijia.com/images/2deeddf6-c4a9-11e5-a821-00163e1600b6.jpg',
+                    'share_img' => 'http://static.tongshijia.com/images/bf0f1990-c4e0-11e5-a821-00163e1600b6.jpg',
                     'share_price' => '238',
                     'share_user_name' => '小芝麻',
                     'share_vote' => 2687,
@@ -1805,7 +1805,7 @@ class ShareUtilComponent extends Component
                 '2005' => array(
                     'share_id' => 2005,
                     'share_name' => '有机纯正红薯粉条 无任何添加剂',
-                    'share_img' => 'http://static.tongshijia.com/images/932ec480-c420-11e5-a821-00163e1600b6.jpg',
+                    'share_img' => 'http://static.tongshijia.com/images/bf0f45a0-c4e0-11e5-a821-00163e1600b6.jpg',
                     'share_price' => '80',
                     'share_user_name' => '片片妈',
                     'share_vote' => 2568,
@@ -1815,7 +1815,7 @@ class ShareUtilComponent extends Component
                 '2131' => array(
                     'share_id' => 2131,
                     'share_name' => '巨好吃的鲜8纯芝麻酱【全国包邮】',
-                    'share_img' => 'http://static.tongshijia.com/images/932edd62-c420-11e5-a821-00163e1600b6.jpg',
+                    'share_img' => 'http://static.tongshijia.com/images/bf0f2e3a-c4e0-11e5-a821-00163e1600b6.jpg',
                     'share_price' => '29',
                     'share_user_name' => '平凡的世界',
                     'share_vote' => 1358,
@@ -1825,7 +1825,7 @@ class ShareUtilComponent extends Component
                 '2178' => array(
                     'share_id' => 2178,
                     'share_name' => '年货精选之群鱼荟萃',
-                    'share_img' => 'http://static.tongshijia.com/images/932f123c-c420-11e5-a821-00163e1600b6.jpg',
+                    'share_img' => 'http://static.tongshijia.com/images/bf0ef820-c4e0-11e5-a821-00163e1600b6.jpg',
                     'share_price' => '47',
                     'share_user_name' => '小宝妈',
                     'share_vote' => 2135,
@@ -1845,7 +1845,7 @@ class ShareUtilComponent extends Component
                 '2189' => array(
                     'share_id' => 2189,
                     'share_name' => '就想那一口旧时酥糖--真味花生酥',
-                    'share_img' => 'http://static.tongshijia.com/images/932f01e8-c420-11e5-a821-00163e1600b6.jpg',
+                    'share_img' => 'http://static.tongshijia.com/images/bf0f5ae0-c4e0-11e5-a821-00163e1600b6.jpg',
                     'share_price' => '36',
                     'share_user_name' => '郭佳',
                     'share_vote' => 352,
