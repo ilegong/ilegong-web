@@ -51,16 +51,6 @@
         <label class="col-sm-2 control-label">快递方式</label>
 
         <div class="col-sm-10">
-            <!--<select name="ship_mark" data-value="{{$order['Order']['ship_mark']}}" class="form-control ship-mark">-->
-                <!--<option value=""-->
-                <!--{{if $order['Order']['ship_mark']==''}}selected='selected'{{/if}}>请选择</option>-->
-                <!--<option value="ziti"-->
-                <!--{{if $order['Order']['ship_mark']=='ziti'}}selected='selected'{{/if}}>自提</option>-->
-                <!--<option value="kuaidi"-->
-                <!--{{if $order['Order']['ship_mark']=='kuaidi'}}selected='selected'{{/if}}>快递</option>-->
-                <!--<option value="sfdf"-->
-                <!--{{if $order['Order']['ship_mark']=='sfdf'}}selected='selected'{{/if}}>顺丰到付</option>-->
-            <!--</select>-->
             <select name="ship_mark" data-value="{{$order['Order']['ship_mark']}}" class="form-control ship-mark">
                 <option value=""
                         {{if $order['Order']['ship_mark']==''}}selected='selected'{{/if}}>请选择</option>
