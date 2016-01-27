@@ -1987,16 +1987,16 @@ class ShareUtilComponent extends Component
                     'share_user_id' => 883095,
                     'share_user_img' => 'http://static.tongshijia.com/avatar/wx_head_173d81362e0b516ec73870fdf83c8a26.jpg'
                 ),
-                '1875' => array(
-                    'share_id' => 1875,
-                    'share_name' => '好吃的真空低温油浴果蔬套装（黄秋葵+香菇+什锦果蔬）',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/d50b8e8d6ad_1202.jpg',
-                    'share_price' => '55',
-                    'share_user_name' => '赵宇',
-                    'share_vote' => 2000,
-                    'share_user_id' => 810688,
-                    'share_user_img' => 'http://static.tongshijia.com/avatar/wx_head_7db41874b00ec17af715b72adf87768a.jpg'
-                ),
+//                '1875' => array(
+//                    'share_id' => 1875,
+//                    'share_name' => '好吃的真空低温油浴果蔬套装（黄秋葵+香菇+什锦果蔬）',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/d50b8e8d6ad_1202.jpg',
+//                    'share_price' => '55',
+//                    'share_user_name' => '赵宇',
+//                    'share_vote' => 2000,
+//                    'share_user_id' => 810688,
+//                    'share_user_img' => 'http://static.tongshijia.com/avatar/wx_head_7db41874b00ec17af715b72adf87768a.jpg'
+//                ),
                 '1906' => array(
                     'share_id' => 1906,
                     'share_name' => '老舅家的沙窝萝卜--脆绿嫩',
