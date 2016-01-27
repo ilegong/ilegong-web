@@ -1795,7 +1795,7 @@ class ShareUtilComponent extends Component
                 '1305' => array(
                     'share_id' => 1305,
                     'share_name' => '新一季的芝麻家诚实的草莓来啦',
-                    'share_img' => 'http://static.tongshijia.com/images/00560ada-c4a0-11e5-a821-00163e1600b6.jpg',
+                    'share_img' => 'http://static.tongshijia.com/images/36761724-c4a8-11e5-a821-00163e1600b6.jpg',
                     'share_price' => '238',
                     'share_user_name' => '小芝麻',
                     'share_vote' => 2687,
