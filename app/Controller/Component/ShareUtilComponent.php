@@ -2017,16 +2017,16 @@ class ShareUtilComponent extends Component
                     'share_user_id' => 886905,
                     'share_user_img' => 'http://static.tongshijia.com/avatar/wx_head_eb6105d6e125a8e05a94b6f7608642db.jpg'
                 ),
-                '1758' => array(
-                    'share_id' => 1758,
-                    'share_name' => '“万岁子”、“长寿果”--新疆阿克苏核桃',
-                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/592d0fecd5c_1225.jpg',
-                    'share_price' => '24.99',
-                    'share_user_name' => '西域美农',
-                    'share_vote' => 600,
-                    'share_user_id' => 897,
-                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201501/thumb_m/fd70e550e19_0122.jpg'
-                ),
+//                '1758' => array(
+//                    'share_id' => 1758,
+//                    'share_name' => '“万岁子”、“长寿果”--新疆阿克苏核桃',
+//                    'share_img' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/592d0fecd5c_1225.jpg',
+//                    'share_price' => '24.99',
+//                    'share_user_name' => '西域美农',
+//                    'share_vote' => 600,
+//                    'share_user_id' => 897,
+//                    'share_user_img' => 'http://51daifan-images.stor.sinaapp.com/files/201501/thumb_m/fd70e550e19_0122.jpg'
+//                ),
                 '2041' => array(
                     'share_id' => 2041,
                     'share_name' => '云南乌骨鸡礼盒 新年好礼 1000g 顺丰包邮',
