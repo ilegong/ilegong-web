@@ -1783,6 +1783,30 @@ class ShareUtilComponent extends Component
     }
 
 
+    public function get_index_product($tag_id){
+        $key = INDEX_VIEW_PRODUCT_CACHE_KEY.'_'.$tag_id;
+        $cache_data = Cache::read($key);
+        if(empty($cache_data)){
+            $indexProductM = ClassRegistry::init('IndexProduct');
+            $index_products = $indexProductM->find('all', array(
+                'conditions' => array(
+                    'tag_id' => $tag_id,
+                    'deleted' => DELETED_NO,
+                ),
+                'order' => array('sort_val ASC')
+            ));
+            $result = array();
+            foreach($index_products as $product){
+                $result[] = $product['IndexProduct'];
+            }
+            Cache::write($key, json_encode($result));
+            return $result;
+        }
+
+        return json_decode($cache_data, true);
+
+    }
+
     /**
      * @param $tag
      * @return array

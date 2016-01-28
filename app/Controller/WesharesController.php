@@ -32,7 +32,7 @@ class WesharesController extends AppController {
      */
     public function index($tag = 0) {
         $this->layout = null;
-        $products = $this->ShareUtil->get_share_index_product($tag);
+        $products = $this->ShareUtil->get_index_product($tag);
         $uid = $this->currentUser['id'];
         $this->set('products', $products);
         $this->set('uid', $uid);
