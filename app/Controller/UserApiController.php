@@ -127,7 +127,7 @@ class UserApiController extends AppController
         ));
         $friend_ids = Hash::extract($friends_data, '{n}.UserFriend.friend_id');
         $data = $this->HxChat->get_users_info($friend_ids);
-        echo json_encode(array('friends' => $data['users'], 'levels' => $data['levels']));
+        echo json_encode($data);
         return;
     }
 

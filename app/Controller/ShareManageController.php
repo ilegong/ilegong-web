@@ -485,6 +485,48 @@ class ShareManageController extends AppController
 
     }
 
+    public function index_products()
+    {
+        $tags = get_index_tags();
+        $tag_id = empty($_REQUEST['tag_id']) ? $tags[0]['id'] : $_REQUEST['tag_id'];
+        $this->set('tags', $tags);
+        $index_products = $this->ShareManage->get_index_products($tag_id);
+        $this->set('index_products', $index_products);
+        $this->set('tag_id', $tag_id);
+    }
+
+    public function index_product_add()
+    {
+        $tags = get_index_tags();
+        $this->set('tags', $tags);
+    }
+
+    public function index_product_delete($id)
+    {
+        $indexProductM = ClassRegistry::init('IndexProduct');
+        $indexProductM->update(array('deleted' => DELETED_YES), array('id' => $id));
+        $this->redirect(array('action' => 'index_products'));
+    }
+
+    public function index_product_edit($id)
+    {
+        $indexProductM = ClassRegistry::init('IndexProduct');
+        $index_product = $indexProductM->find('first', array(
+            'conditions' => array(
+                'id' => $id
+            )
+        ));
+        $this->set('index_product', $index_product);
+        $tags = get_index_tags();
+        $this->set('tags', $tags);
+    }
+
+    public function index_product_save(){
+        $data = $this->data;
+        $this->ShareManage->save_index_product($data);
+        $this->redirect(array('action' => 'index_products'));
+    }
+
     /**
      * 清除分享的缓存
      */

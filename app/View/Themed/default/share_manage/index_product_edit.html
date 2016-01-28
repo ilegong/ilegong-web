@@ -1,0 +1,83 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">添加首页产品</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                添加
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <form role="form" action="/shareManage/index_product_save.html" method="post">
+                            <input type="hidden" name="data[IndexProduct][id]" value="{{$index_product['IndexProduct']['id']}}">
+                            <div class="form-group">
+                                <label>分享编号</label>
+                                <input type="text" class="form-control" name="data[IndexProduct][share_id]" value="{{$index_product['IndexProduct']['share_id']}}">
+                                <p class="help-block">对应系统真实分享</p>
+                            </div>
+                            <div class="form-group">
+                                <label>显示名称</label>
+                                <input type="text" class="form-control" name="data[IndexProduct][share_name]" value="{{$index_product['IndexProduct']['share_name']}}">
+                                <p class="help-block">首页显示名称</p>
+                            </div>
+                            <div class="form-group">
+                                <label>显示价格</label>
+                                <input type="text" class="form-control" name="data[IndexProduct][share_price]" value="{{$index_product['IndexProduct']['share_price']}}">
+                                <p class="help-block">用于显示，不参与计算</p>
+                            </div>
+                            <div class="form-group">
+                                <label>爱心评价</label>
+                                <input type="number" class="form-control" name="data[IndexProduct][share_vote]" value="{{$index_product['IndexProduct']['share_vote']}}">
+                                <p class="help-block">用于显示，（一般大于1000）</p>
+                            </div>
+                            <div class="form-group">
+                                <label>排序值</label>
+                                <input type="number" class="form-control" name="data[IndexProduct][sort_val]" value="{{$index_product['IndexProduct']['sort_val']}}">
+                                <p class="help-block">用于显示顺序，数值越小排序靠前</p>
+                            </div>
+                            <div class="form-group">
+                                <label>展示图片链接</label>
+                                <textarea class="form-control" rows="3" name="data[IndexProduct][share_img]">{{$index_product['IndexProduct']['share_img']}}</textarea>
+                                <p class="help-block">上传图片地址 <a href="http://static.tongshijia.com/upload" target="_blank">点击上传图片</a></p>
+                            </div>
+                            <div class="form-group">
+                                <label>是否拼团</label>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="data[IndexProduct][type]" value="0" {{if $index_product['IndexProduct']['type'] == 0}}checked{{/if}}>否
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="data[IndexProduct][type]" value="1" {{if $index_product['IndexProduct']['type'] == 1}}checked{{/if}}>是
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>所属分类</label>
+                                <select class="form-control" name="data[IndexProduct][tag_id]">
+                                    {{loop $tags $tag}}
+                                    <option value="{{$tag['id']}}" {{if $index_product['IndexProduct']['tag_id'] == $tag['id']}}selected{{/if}}>{{$tag['name']}}</option>
+                                    {{/loop}}
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-default">保存</button>
+                        </form>
+                    </div>
+                </div>
+                <!-- /.row (nested) -->
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+</div>

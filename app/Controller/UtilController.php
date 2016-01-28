@@ -10,9 +10,31 @@ class UtilController extends AppController {
 
     public $name = 'util';
 
-    public $uses = array('UserRelation', 'Order', 'Cart', 'User', 'Oauthbind', 'Weshare', 'CandidateEvent');
+    public $uses = array('UserRelation', 'Order', 'Cart', 'User', 'Oauthbind', 'Weshare', 'CandidateEvent', 'IndexProduct');
 
     public $components = array('ShareUtil', 'Weixin', 'WeshareBuy');
+
+
+    public function init_index_product(){
+        $this->autoRender = false;
+        $tags = get_index_tags();
+        $save_data = array();
+        foreach ($tags as $tag) {
+            $tag_id = $tag['id'];
+            $current_tag_products = $this->ShareUtil->get_share_index_product($tag_id);
+            $sort_val = 0;
+            foreach ($current_tag_products as $product) {
+                $product['tag_id'] = $tag_id;
+                $product['type'] = 0;
+                $sort_val = $sort_val + 1;
+                $product['sort_val'] = $sort_val;
+                $save_data[] = $product;
+            }
+        }
+        $this->IndexProduct->saveAll($save_data);
+        echo(json_encode(array('success' => true)));
+        return;
+    }
 
     /**
      * @param $user_id

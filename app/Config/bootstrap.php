@@ -2331,6 +2331,10 @@ function map_user_avatar($var){
     return $var;
 }
 
+function get_index_tags(){
+    return array(array('id' => 0, 'name' => '新品爆款'),array('id' => 1, 'name' => '水果蔬菜'),array('id' => 2, 'name' => '肉蛋粮油'),array('id' => 3, 'name' => '零食其他'));
+}
+
 function map_opt_log_data($var) {
     $timeStamp = strtotime($var['created']);
     $var['timestamp'] = $timeStamp;
