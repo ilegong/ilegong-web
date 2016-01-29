@@ -422,4 +422,19 @@ body .modal-open {
     position:relative;
     overflow: hidden;
 }
+.mine_order_total {
+    color: #f99d3a;
+    padding: 1em 1em 0.4em 1em;
+    text-align: center;
+    font-size: 1.1em;
+}
+.mine_order s em a {
+    display: block;
+    line-height: 20px;
+    border: 1px #cccccc solid;
+    padding: 0 10px;
+    color: #777777;
+    text-decoration: none;
+    border-radius: 2px;
+}
 

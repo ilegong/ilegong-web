@@ -2623,4 +2623,28 @@ class WeshareBuyComponent extends Component {
         return 0;
     }
 
+    public function get_month_total_count($uid){
+        $weshareM = ClassRegistry::init('Weshare');
+        $orderM = ClassRegistry::init('Order');
+        $user_shares = $weshareM->find('all', array(
+            'conditions' => array(
+                'creator' => $uid
+            ),
+            'order' => array('id DESC'),
+            'limit' => 100
+        ));
+        $share_ids = Hash::extract($user_shares, '{n}.Weshare.id');
+        $first_day = date('Y-m-01', strtotime(date('Y-m-d')));
+        $last_day = date('Y-m-d', strtotime("$first_day +1 month -1 day"));
+        $order_count = $orderM->find('count', array(
+            'conditions' => array(
+                'member_id' => $share_ids,
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'not' => array('status' => ORDER_STATUS_WAITING_PAY),
+                'date(created) BETWEEN ? AND ?' => array($first_day, $last_day)
+            )
+        ));
+        return $order_count;
+    }
+
 }

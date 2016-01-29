@@ -19,3 +19,5 @@ uglifyjs ./webroot/static/opt/js/lazyload.min.js ./webroot/static/weshares/js/us
 uglifyjs ./webroot/static/share_faq/custom/word-limit.js ./webroot/static/share_faq/custom/faq.js -m -o ./webroot/static/share_faq/custom/faq.min.js
 
 cat ./webroot/static/weshares/css/site-common.css ./webroot/static/product_pool/css/product_pool.css | cleancss -o  ./webroot/static/product_pool/css/product_pool.min.css
+
+cat ./webroot/static/weshares/css/share-info.css | cleancss -o  ./webroot/static/weshares/css/share-info.min.css
