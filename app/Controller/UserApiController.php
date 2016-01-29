@@ -1,6 +1,6 @@
 <?php
 
-class UserApiController extends Controller
+class UserApiController extends AppController
 {
 
     public $components = array('OAuth.OAuth', 'Session', 'HxChat');
@@ -9,12 +9,14 @@ class UserApiController extends Controller
 
     public function beforeFilter()
     {
-        $allow_action = array('test', 'check_mobile_available');
+        parent::beforeFilter();
+        $allow_action = array('ping', 'test', 'check_mobile_available');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action) == false) {
             $this->currentUser = $this->OAuth->user();
         }
-        $this->autoRender = false;
+        //$this->layout = null;
+        //$this->autoRender = false;
     }
 
     public function reg_hx_user()
@@ -30,15 +32,18 @@ class UserApiController extends Controller
         $this->autoRender = false;
         $user_id = $this->currentUser['id'];
         $datainfo = $this->get_user_info($user_id);
-        echo json_encode(array('my_profile' => array('User' => $datainfo['User'])));
-        return;
+        $userInfo = $datainfo['User'];
+        $this->set('user_info', $userInfo);
+        //$this->set('_serialize', array('user_info'));
+        echo json_encode(array('my_profile' => array('User' => $userInfo)));
+        //return;
     }
 
     private function get_user_info($user_id)
     {
         $datainfo = $this->User->find('first', array('recursive' => -1,
             'conditions' => array('id' => $user_id),
-            'fields' => array('nickname', 'email', 'image', 'sex', 'companies', 'bio', 'mobilephone', 'email', 'username', 'id', 'hx_password')));
+            'fields' => array('nickname', 'email', 'image', 'sex', 'mobilephone',  'username', 'id', 'hx_password')));
         return $datainfo;
     }
 
