@@ -1,10 +1,7 @@
 <?php
 
-class HxChatComponent extends Component
+class ChatUtilComponent extends Component
 {
-
-    var $name = 'HxChat';
-
 
     public function get_users_info($uids)
     {
@@ -27,10 +24,10 @@ class HxChatComponent extends Component
         ));
         $user_infos = Hash::extract($user_infos, '{n}.User');
         $user_levels = Hash::combine($user_levels, '{n}.UserLevel.data_id', '{n}.UserLevel.data_value');
-        foreach($user_infos as &$user_item){
+        foreach ($user_infos as &$user_item) {
             $uid = $user_item['id'];
             $level = -1;
-            if($user_levels[$uid]){
+            if ($user_levels[$uid]) {
                 $level = $user_levels[$uid];
             }
             $level_text = get_user_level_text($level);
@@ -109,32 +106,7 @@ class HxChatComponent extends Component
             return false;
         }
         $hx_group_id = $result['data']['groupid'];
-        //save database
-        $group_data = $this->save_group_data($data, $hx_group_id);
-        return $group_data;
-    }
-
-    private function save_group_data($data, $hx_group_id)
-    {
-        $chatGroupM = ClassRegistry::init('ChatGroup');
-        $userGroupM = ClassRegistry::init('UserGroup');
-        $date_now = date('Y-m-d H:i:s');
-        $approval = $data['approval'] ? 1 : 0;
-        $public = $data['public'] ? 1 : 0;
-        $group_data = array('hx_group_id' => $hx_group_id, 'created' => $date_now, 'creator' => $data['owner'], 'approval' => $approval, 'maxusers' => $data['maxusers'], 'is_public' => $public, 'description' => $data['desc'], 'group_name' => $data['groupname']);
-        $group_result = $chatGroupM->save($group_data);
-        if ($group_result) {
-            $group_id = $group_result['ChatGroup']['id'];
-            $member_ids = $data['members'] ? $data['members'] : array();
-            $member_ids[] = $data['owner'];
-            $member_data = [];
-            foreach ($member_ids as $m_id) {
-                $member_data[] = array('user_id' => $m_id, 'group_id' => $group_id, 'created' => $date_now, 'updated' => $date_now);
-            }
-            $userGroupM->saveAll($member_data);
-            return $group_result;
-        }
-        return false;
+        return $hx_group_id;
     }
 
 
@@ -218,18 +190,20 @@ class HxChatComponent extends Component
     }
 
 
-    private function get_hx_group()
+    function get_hx_group()
     {
         App::import('Vendor', 'hx/HxGroup');
         $hxGroup = new HxGroup(HX_APP_NAME, HX_CLIENT_ID, HX_CLIENT_SECRET);
         return $hxGroup;
+
     }
 
-    private function get_hx_user()
+    function get_hx_user()
     {
         App::import('Vendor', 'hx/HxUser');
         $hxUser = new HxUser(HX_APP_NAME, HX_CLIENT_ID, HX_CLIENT_SECRET);
         return $hxUser;
+
     }
 
 }

@@ -2,54 +2,58 @@
 
 class UserApiController extends AppController
 {
-
-    public $components = array('OAuth.OAuth', 'Session', 'HxChat');
-
+    public $components = array('OAuth.OAuth', 'ChatUtil');
     public $uses = array('User', 'UserFriend', 'UserLevel', 'UserRelation');
 
     public function beforeFilter()
     {
         parent::beforeFilter();
-        $allow_action = array('ping', 'test', 'check_mobile_available');
+        $allow_action = array('test',    'check_mobile_available');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action) == false) {
             $this->currentUser = $this->OAuth->user();
         }
-        //$this->layout = null;
-        //$this->autoRender = false;
+        $this->autoRender = false;
     }
 
     public function reg_hx_user()
     {
         $user_id = $this->currentUser['id'];
-        $result = $this->HxChat->reg_hx_user($user_id);
+        $result = $this->ChatUtil->reg_hx_user($user_id);
         echo json_encode($result);
         return;
     }
 
     public function profile()
     {
-        $this->autoRender = false;
         $user_id = $this->currentUser['id'];
         $datainfo = $this->get_user_info($user_id);
         $userInfo = $datainfo['User'];
-        $this->set('user_info', $userInfo);
-        //$this->set('_serialize', array('user_info'));
         echo json_encode(array('my_profile' => array('User' => $userInfo)));
-        //return;
+        return;
+    }
+
+    public function my_profile()
+    {
+        $user_id = $this->currentUser['id'];
+        $datainfo = $this->get_user_info($user_id);
+        $userInfo = $datainfo['User'];
+        echo json_encode($userInfo);
+        exit();
     }
 
     private function get_user_info($user_id)
     {
         $datainfo = $this->User->find('first', array('recursive' => -1,
             'conditions' => array('id' => $user_id),
-            'fields' => array('nickname', 'email', 'image', 'sex', 'mobilephone',  'username', 'id', 'hx_password')));
+            'fields' => array('nickname', 'image', 'sex', 'mobilephone', 'username', 'id', 'hx_password')));
         return $datainfo;
     }
 
     public function test()
     {
-
+        echo 'hello world';
+        return;
     }
 
     public function load_fans($page, $limit)
@@ -68,7 +72,7 @@ class UserApiController extends AppController
             echo json_encode(array());
             return;
         }
-        $users = $this->HxChat->get_users_info($fans_id);
+        $users = $this->ChatUtil->get_users_info($fans_id);
         echo json_encode($users);
         return;
     }
@@ -77,7 +81,7 @@ class UserApiController extends AppController
     {
         $user_id = $this->currentUser['id'];
         if ($this->UserFriend->updateAll(array('deleted' => DELETED_YES), array('user_id' => $user_id, 'friend_id' => $friend_id))) {
-            if ($this->HxChat->delete_friend($user_id, $friend_id)) {
+            if ($this->ChatUtil->delete_friend($user_id, $friend_id)) {
                 echo json_encode(array('statusCode' => 1, 'statusMsg' => '删除成功'));
                 return;
             }
@@ -98,7 +102,7 @@ class UserApiController extends AppController
             $save_data[] = array('user_id' => $friend_id, 'friend_id' => $user_id, 'created' => $date_now, 'updated' => $date_now);
             $friend_data = $this->UserFriend->saveAll($save_data);
             if ($friend_data) {
-                $result = $this->HxChat->add_friend($user_id, $friend_id);
+                $result = $this->ChatUtil->add_friend($user_id, $friend_id);
                 if (!$result) {
                     $this->log('add hx user friend error');
                 }
@@ -129,7 +133,7 @@ class UserApiController extends AppController
             'limit' => 500
         ));
         $friend_ids = Hash::extract($friends_data, '{n}.UserFriend.friend_id');
-        $data = $this->HxChat->get_users_info($friend_ids);
+        $data = $this->ChatUtil->get_users_info($friend_ids);
         echo json_encode($data);
         return;
     }
