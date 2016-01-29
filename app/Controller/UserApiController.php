@@ -1,16 +1,15 @@
 <?php
 
-class UserApiController extends AppController
+class UserApiController extends Controller
 {
 
     public $components = array('OAuth.OAuth', 'Session', 'HxChat');
 
-    public $uses = array('User', 'UserFriend', 'UserLevel');
+    public $uses = array('User', 'UserFriend', 'UserLevel', 'UserRelation');
 
     public function beforeFilter()
     {
-        parent::beforeFilter();
-        $allow_action = array('test', 'ping', 'check_mobile_available');
+        $allow_action = array('test', 'check_mobile_available');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action) == false) {
             $this->currentUser = $this->OAuth->user();
@@ -28,6 +27,7 @@ class UserApiController extends AppController
 
     public function profile()
     {
+        $this->autoRender = false;
         $user_id = $this->currentUser['id'];
         $datainfo = $this->get_user_info($user_id);
         echo json_encode(array('my_profile' => array('User' => $datainfo['User'])));
@@ -36,8 +36,7 @@ class UserApiController extends AppController
 
     private function get_user_info($user_id)
     {
-        $userM = ClassRegistry::init('User');
-        $datainfo = $userM->find('first', array('recursive' => -1,
+        $datainfo = $this->User->find('first', array('recursive' => -1,
             'conditions' => array('id' => $user_id),
             'fields' => array('nickname', 'email', 'image', 'sex', 'companies', 'bio', 'mobilephone', 'email', 'username', 'id', 'hx_password')));
         return $datainfo;
@@ -51,8 +50,7 @@ class UserApiController extends AppController
     public function load_fans($page, $limit)
     {
         $user_id = $this->currentUser['id'];
-        $userRelationM = ClassRegistry::init('UserRelation');
-        $fans_data = $userRelationM->find('all', array(
+        $fans_data = $this->UserRelation->find('all', array(
             'conditions' => array(
                 'user_id' => $user_id
             ),

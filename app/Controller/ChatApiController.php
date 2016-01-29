@@ -1,6 +1,6 @@
 <?php
 
-class ChatApiController extends AppController
+class ChatApiController extends Controller
 {
 
 
@@ -10,7 +10,6 @@ class ChatApiController extends AppController
 
     public function beforeFilter()
     {
-        parent::beforeFilter();
         $allow_action = array();
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action) == false) {

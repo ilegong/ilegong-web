@@ -786,7 +786,6 @@ class WesharesController extends AppController {
         $userCommentData = $this->WeshareBuy->load_user_share_comments($uid);
         $userFansData = $this->WeshareBuy->get_user_fans_data($uid, 100);
         $userFocusData = $this->WeshareBuy->get_user_focus($uid, 100);
-        $userMonthOrderCount = $this->WeshareBuy->get_month_total_count($uid);
         if ($uid != $current_uid) {
             $sub_status = $this->WeshareBuy->check_user_subscribe($uid, $current_uid);
             $this->set('sub_status', $sub_status);
@@ -822,7 +821,10 @@ class WesharesController extends AppController {
         $this->set('focus_data', $userFocusData);
         $pintuan_data = $this->PintuanHelper->get_user_pintuan_data($uid);
         $this->set('pintuan_data', $pintuan_data);
-        $this->set('order_count', $userMonthOrderCount);
+        if($uid == $current_uid && !empty($user_level)){
+            $userMonthOrderCount = $this->WeshareBuy->get_month_total_count($uid);
+            $this->set('order_count', $userMonthOrderCount);
+        }
         //$this->set('joinShareComments', $joinShareComments);
     }
 

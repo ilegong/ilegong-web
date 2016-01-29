@@ -1,4 +1,4 @@
-ALTER TABLE `51daifan`.`cake_users`
+ALTER TABLE `cake_users`
 ADD COLUMN `hx_password` VARCHAR(128) NULL AFTER `is_proxy`;
 
 CREATE TABLE `cake_chat_groups` (
@@ -12,12 +12,14 @@ CREATE TABLE `cake_chat_groups` (
   `description` varchar(256) NOT NULL,
   `status` int(11) NOT NULL DEFAULT '0',
   `deleted` tinyint(4) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `group_name` varchar(64) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `hx_group_id_UNIQUE` (`hx_group_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE `cake_user_friends` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `friend_id` int(11) NOT NULL,
   `status` int(11) NOT NULL DEFAULT '0',
@@ -25,7 +27,8 @@ CREATE TABLE `cake_user_friends` (
   `created` datetime NOT NULL,
   `updated` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE `cake_user_groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -36,4 +39,4 @@ CREATE TABLE `cake_user_groups` (
   `status` int(11) NOT NULL DEFAULT '0',
   `deleted` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
