@@ -200,7 +200,7 @@
                 {{/if}}
             </div>
         </div>
-        {{if $is_me}}
+        {{if $is_me&&!empty($user_level)}}
         <div class="mine_order_total">本月您已完成{{$order_count}}个订单，加油哦！</div>
         {{/if}}
     </div>
