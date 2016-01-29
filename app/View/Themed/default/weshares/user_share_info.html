@@ -200,7 +200,9 @@
                 {{/if}}
             </div>
         </div>
-        <div class="mine_order_total">本月您已完成{{<0order_count></0order_count>}}个订单，加油哦！</div>
+        {{if $is_me}}
+        <div class="mine_order_total">本月您已完成{{$order_count}}个订单，加油哦！</div>
+        {{/if}}
     </div>
 </div>
 <div class="row">
