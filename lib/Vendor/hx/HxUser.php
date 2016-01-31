@@ -1,8 +1,6 @@
 <?php
 
-namespace HxModule;
-
-use HxModule\HxEaseServer;
+require_once('HxEaseServer.php');
 
 class HxUser extends HxEaseServer
 {
@@ -51,7 +49,7 @@ class HxUser extends HxEaseServer
 
     public function addUserBlock($friend, $username)
     {
-        $data = array("usernames" => [$friend]);
+        $data = array("usernames" => array($friend));
         return $this->addUsersBlock($data, $username);
     }
 
@@ -168,5 +166,3 @@ class HxUser extends HxEaseServer
         return $this->ch->execute($url, 'GET');
     }
 }
-
-?>

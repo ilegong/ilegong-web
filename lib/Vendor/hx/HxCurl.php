@@ -1,6 +1,6 @@
 <?php
 
-namespace HxModule;
+require_once('HxEaseServer.php');
 
 class HxCurl
 {

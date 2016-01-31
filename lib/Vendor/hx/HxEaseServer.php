@@ -1,8 +1,6 @@
 <?php
 
-namespace HxModule;
-
-use HxModule\HxCurl;
+require_once('HxCurl.php');
 
 class HxEaseServer {
     protected $ch;
@@ -81,4 +79,3 @@ class HxEaseServer {
         return file_get_contents('./token.txt');
     }
 }
-?>

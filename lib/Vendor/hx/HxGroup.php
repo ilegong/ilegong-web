@@ -2,6 +2,8 @@
 
 namespace HxModule;
 
+use HxModule\HxEaseServer;
+
 class HxGroup extends HxEaseServer
 {
 

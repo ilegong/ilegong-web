@@ -1,5 +1,4 @@
 <?php
-
 class ChatUtilComponent extends Component
 {
 
@@ -203,7 +202,6 @@ class ChatUtilComponent extends Component
         App::import('Vendor', 'hx/HxUser');
         $hxUser = new HxUser(HX_APP_NAME, HX_CLIENT_ID, HX_CLIENT_SECRET);
         return $hxUser;
-
     }
 
 }
