@@ -1,6 +1,6 @@
 <?php
 
-require_once("HxEaseServer.php");
+namespace HxModule;
 
 class HxGroup extends HxEaseServer
 {

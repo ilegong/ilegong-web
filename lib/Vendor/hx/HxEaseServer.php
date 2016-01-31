@@ -1,6 +1,8 @@
 <?php
 
-require_once("HxCurl.php");
+namespace HxModule;
+
+use HxModule\HxCurl;
 
 class HxEaseServer {
     protected $ch;

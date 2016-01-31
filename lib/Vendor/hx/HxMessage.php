@@ -1,5 +1,8 @@
 <?php
-require_once("HxEaseServer.php");
+
+namespace HxModule;
+
+use HxModule\HxEaseServer;
 
 class HxMessage extends HxEaseServer {
 

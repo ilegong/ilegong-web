@@ -1,5 +1,7 @@
 <?php
 
+namespace HxModule;
+
 class HxCurl
 {
     private $ch;
