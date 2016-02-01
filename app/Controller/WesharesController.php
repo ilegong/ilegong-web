@@ -26,6 +26,10 @@ class WesharesController extends AppController {
         $this->layout = 'weshare';
     }
 
+    public function tutorial(){
+        $this->layout=null;
+    }
+
     /**
      * @param $tag
      * 首页
@@ -165,7 +169,10 @@ class WesharesController extends AppController {
             'fields' => $user_fields,
         ));
         if (empty($current_user['User']['mobilephone'])) {
-            $ref_url = WX_HOST . '/weshares/add';
+            $ref_url = WX_HOST.'/weshares/tutorial';
+            if ($_REQUEST['has_read']) {
+                $ref_url = WX_HOST . '/weshares/add';
+            }
             $this->redirect('/users/to_bind_mobile?from=share&ref=' . $ref_url);
             return;
         }
