@@ -1,6 +1,5 @@
 <?php
 
-namespace Pagon;
 
 class Event
 {

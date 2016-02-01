@@ -23,7 +23,8 @@
  * THE SOFTWARE.
  */
 
-namespace Pagon;
+
+require_once('EventEmitter.php');
 
 /**
  * Fiber

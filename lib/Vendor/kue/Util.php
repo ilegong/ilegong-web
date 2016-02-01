@@ -1,6 +1,5 @@
 <?php
 
-namespace Kue;
 
 class Util
 {

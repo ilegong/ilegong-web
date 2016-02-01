@@ -1,8 +1,8 @@
 <?php
 
-namespace Kue;
 
-use Pagon\EventEmitter;
+require_once('EventEmitter.php');
+require_once('AttemptException.php');
 
 class Worker extends EventEmitter
 {

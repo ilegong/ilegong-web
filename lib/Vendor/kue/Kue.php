@@ -1,8 +1,7 @@
 <?php
 
-namespace Kue;
-
-use Pagon\Fiber;
+require_once('Fiber.php');
+require_once('Worker.php');
 
 class Kue extends Fiber
 {

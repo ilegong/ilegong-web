@@ -13,7 +13,7 @@ App::import('Vendor', 'Location', array('file' => 'Location/Distance/Haversine.p
 class TestController extends AppController
 {
 
-    public $components = array('Weixin', 'WeshareBuy', 'OrderExpress', 'Logistics', 'PintuanHelper', 'ShareUtil');
+    public $components = array('Weixin', 'WeshareBuy', 'OrderExpress', 'Logistics', 'PintuanHelper', 'ShareUtil', 'Queue');
     public $uses = array('Order', 'Oauthbind');
 
 
@@ -31,6 +31,13 @@ class TestController extends AppController
 //        return;
 //    }
 
+
+    public function add_queue(){
+        $this->autoRender = false;
+        $this->Queue->add_curl_task();
+        echo json_encode(array('success' => true));
+        return;
+    }
 
     public function update_old_avatar()
     {

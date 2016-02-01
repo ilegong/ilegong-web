@@ -1,7 +1,5 @@
 <?php
 
-namespace Pagon;
-
 if (function_exists('FNMATCH')) {
     define('FNMATCH', true);
 } else {

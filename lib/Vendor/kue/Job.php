@@ -3,9 +3,9 @@
  * Job.php.
  */
 
-namespace Kue;
 
-use Pagon\Fiber;
+require_once('Fiber.php');
+require_once('Util.php');
 
 class Job extends Fiber
 {
