@@ -2,7 +2,7 @@
 
 require_once('Fiber.php');
 require_once('Worker.php');
-
+require_once('Job.php');
 class Kue extends Fiber
 {
     protected $injectors = array(
@@ -43,7 +43,7 @@ class Kue extends Fiber
     public static function handleError()
     {
         set_error_handler(function ($type, $message, $file, $line) {
-            if (error_reporting() & $type) throw new \ErrorException($message, $type, 0, $file, $line);
+            if (error_reporting() & $type) throw new ErrorException($message, $type, 0, $file, $line);
         });
     }
 
@@ -60,7 +60,7 @@ class Kue extends Fiber
         $this->client = & $this->injectors['client'];
 
         if (!$this->client) {
-            $this->client = new \Redis();
+            $this->client = new Redis();
             $this->client->connect($this->injectors['host'], $this->injectors['port']);
             if ($this->injectors['db']) {
                 $this->client->select($this->injectors['db']);
@@ -105,7 +105,7 @@ class Kue extends Fiber
      */
     public function process($type = null, $fn = null)
     {
-        if ($type instanceof \Closure) {
+        if ($type instanceof Closure) {
             $fn = $type;
             $type = null;
         }

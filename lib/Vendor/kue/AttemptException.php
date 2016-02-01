@@ -1,6 +1,6 @@
 <?php
 
 
-class AttemptException extends \Exception
+class AttemptException extends Exception
 {
 }

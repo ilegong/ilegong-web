@@ -70,7 +70,7 @@ class Job extends Fiber
      *
      * @param array $type
      * @param array $data
-     * @return \Kue\Job
+     * @return Kue Job
      */
     public function __construct($type, $data = array())
     {
@@ -179,7 +179,7 @@ class Job extends Fiber
 
         $this->emit('error', $error);
 
-        if ($error instanceof \Exception) {
+        if ($error instanceof Exception) {
             $str = get_class($error) . ' Error on ' . $error->getFile() . ' ' . $error->getLine();
             $str .= $error->getTraceAsString();
         } else {

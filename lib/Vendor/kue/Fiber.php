@@ -51,7 +51,7 @@ class Fiber extends EventEmitter
      * Add injector
      *
      * @param string   $key
-     * @param \Closure $value
+     * @param Closure $value
      */
     public function __set($key, $value)
     {
@@ -63,13 +63,13 @@ class Fiber extends EventEmitter
      *
      * @param string $key
      * @throws \InvalidArgumentException
-     * @return mixed|\Closure
+     * @return mixed|Closure
      */
     public function &__get($key)
     {
-        if (!isset($this->injectors[$key])) throw new \InvalidArgumentException(sprintf('Can not get non-exists injector "%s::%s"', get_called_class(), $key));
+        if (!isset($this->injectors[$key])) throw new InvalidArgumentException(sprintf('Can not get non-exists injector "%s::%s"', get_called_class(), $key));
 
-        if ($this->injectors[$key] instanceof \Closure) {
+        if ($this->injectors[$key] instanceof Closure) {
             $tmp = $this->injectors[$key]();
         } else {
             $tmp = & $this->injectors[$key];
@@ -101,11 +101,11 @@ class Fiber extends EventEmitter
     /**
      * Protect the closure
      *
-     * @param \Closure|String $key
-     * @param \Closure|String $closure
-     * @return \Closure
+     * @param Closure|String $key
+     * @param Closure|String $closure
+     * @return Closure
      */
-    public function protect($key, \Closure $closure = null)
+    public function protect($key, Closure $closure = null)
     {
         if (!$closure) {
             $closure = $key;
@@ -122,11 +122,11 @@ class Fiber extends EventEmitter
     /**
      * Share the closure
      *
-     * @param \Closure|string $key
-     * @param \Closure|null   $closure
-     * @return \Closure
+     * @param Closure|string $key
+     * @param Closure|null   $closure
+     * @return Closure
      */
-    public function share($key, \Closure $closure = null)
+    public function share($key, Closure $closure = null)
     {
         if (!$closure) {
             $closure = $key;
@@ -150,20 +150,20 @@ class Fiber extends EventEmitter
      * Extend the injector
      *
      * @param string   $key
-     * @param \Closure $closure
-     * @return \Closure
+     * @param Closure $closure
+     * @return Closure
      * @throws \InvalidArgumentException
      */
-    public function extend($key, \Closure $closure)
+    public function extend($key, Closure $closure)
     {
         if (!isset($this->injectors[$key])) {
-            throw new \InvalidArgumentException(sprintf('Injector "%s::%s" is not defined.', get_called_class(), $key));
+            throw new InvalidArgumentException(sprintf('Injector "%s::%s" is not defined.', get_called_class(), $key));
         }
 
         $factory = $this->injectors[$key];
 
-        if (!($factory instanceof \Closure)) {
-            throw new \InvalidArgumentException(sprintf('Injector "%s::%s" does not contain an object definition.', get_called_class(), $key));
+        if (!($factory instanceof Closure)) {
+            throw new InvalidArgumentException(sprintf('Injector "%s::%s" does not contain an object definition.', get_called_class(), $key));
         }
 
         $that = $this;
@@ -182,11 +182,11 @@ class Fiber extends EventEmitter
      */
     public function __call($method, $args)
     {
-        if (($closure = $this->$method) instanceof \Closure) {
+        if (($closure = $this->$method) instanceof Closure) {
             return call_user_func_array($closure, $args);
         }
 
-        throw new \BadMethodCallException(sprintf('Call to undefined protect injector "%s::%s()', get_called_class(), $method));
+        throw new BadMethodCallException(sprintf('Call to undefined protect injector "%s::%s()', get_called_class(), $method));
     }
 
     /**

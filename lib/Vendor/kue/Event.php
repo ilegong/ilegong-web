@@ -27,7 +27,7 @@ class Event
      * @param callable $listener
      * @return EventEmitter
      */
-    public static function on($event, \Closure $listener)
+    public static function on($event, Closure $listener)
     {
         return static::emitter()->on($event, $listener);
     }
@@ -39,7 +39,7 @@ class Event
      * @param callable     $listener
      * @return EventEmitter
      */
-    public static function once($event, \Closure $listener)
+    public static function once($event, Closure $listener)
     {
         return static::emitter()->once($event, $listener);
     }
@@ -52,7 +52,7 @@ class Event
      * @param callable     $listener
      * @return EventEmitter
      */
-    public static function many($event, $times = 1, \Closure $listener)
+    public static function many($event, $times = 1, Closure $listener)
     {
         return static::emitter()->many($event, $times, $listener);
     }
@@ -64,7 +64,7 @@ class Event
      * @param callable     $listener
      * @return EventEmitter
      */
-    public static function off($event, \Closure $listener)
+    public static function off($event, Closure $listener)
     {
         return static::emitter()->off($event, $listener);
     }
@@ -87,7 +87,7 @@ class Event
      * @param callable $listener
      * @return EventEmitter
      */
-    public static function removeListener($event, \Closure $listener)
+    public static function removeListener($event, Closure $listener)
     {
         return static::emitter()->removeListener($event, $listener);
     }

@@ -13,7 +13,7 @@ App::import('Vendor', 'Location', array('file' => 'Location/Distance/Haversine.p
 class TestController extends AppController
 {
 
-    public $components = array('Weixin', 'WeshareBuy', 'OrderExpress', 'Logistics', 'PintuanHelper', 'ShareUtil', 'Queue');
+    public $components = array('Weixin', 'WeshareBuy', 'OrderExpress', 'Logistics', 'PintuanHelper', 'ShareUtil', 'RedisQueue');
     public $uses = array('Order', 'Oauthbind');
 
 
@@ -34,7 +34,7 @@ class TestController extends AppController
 
     public function add_queue(){
         $this->autoRender = false;
-        $this->Queue->add_curl_task();
+        $this->RedisQueue->add_curl_task();
         echo json_encode(array('success' => true));
         return;
     }

@@ -59,11 +59,11 @@ class EventEmitter
                 array_push($this_args, $event);
             }
             foreach ($listeners as &$listener) {
-                if ($listener instanceof \Closure) {
+                if ($listener instanceof Closure) {
                     // Closure Listener
                     call_user_func_array($listener, $this_args);
                     $emitted = true;
-                } elseif (is_array($listener) && $listener[0] instanceof \Closure) {
+                } elseif (is_array($listener) && $listener[0] instanceof Closure) {
                     if ($listener[1]['times'] > 0) {
                         // Closure Listener
                         call_user_func_array($listener[0], $this_args);
@@ -82,10 +82,10 @@ class EventEmitter
      *
      * @static
      * @param array|string $event
-     * @param \Closure     $listener
+     * @param Closure     $listener
      * @return $this
      */
-    public function on($event, \Closure $listener)
+    public function on($event, Closure $listener)
     {
         foreach ((array)$event as $e) {
             $this->listeners[strtolower($e)][] = $listener;
@@ -100,7 +100,7 @@ class EventEmitter
      * @param callable     $listener
      * @return $this
      */
-    public function once($event, \Closure $listener)
+    public function once($event, Closure $listener)
     {
         foreach ((array)$event as $e) {
             $this->listeners[strtolower($e)][] = array($listener, array('times' => 1));
@@ -116,7 +116,7 @@ class EventEmitter
      * @param callable     $listener
      * @return $this
      */
-    public function many($event, $times = 1, \Closure $listener)
+    public function many($event, $times = 1, Closure $listener)
     {
         foreach ((array)$event as $e) {
             $this->listeners[strtolower($e)][] = array($listener, array('times' => $times));
@@ -131,7 +131,7 @@ class EventEmitter
      * @param callable     $listener
      * @return $this
      */
-    public function off($event, \Closure $listener)
+    public function off($event, Closure $listener)
     {
         foreach ((array)$event as $e) {
             $e = strtolower($e);
@@ -165,10 +165,10 @@ class EventEmitter
      *
      * @static
      * @param array|string $event
-     * @param \Closure     $listener
+     * @param Closure     $listener
      * @return $this
      */
-    public function addListener($event, \Closure $listener)
+    public function addListener($event, Closure $listener)
     {
         return $this->on($event, $listener);
     }
@@ -178,10 +178,10 @@ class EventEmitter
      *
      * @static
      * @param string   $event
-     * @param \Closure $listener
+     * @param Closure $listener
      * @return $this
      */
-    public function removeListener($event, \Closure $listener)
+    public function removeListener($event, Closure $listener)
     {
         return $this->off($event, $listener);
     }
