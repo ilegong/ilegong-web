@@ -898,7 +898,6 @@ class WesharesController extends AppController {
         $this->autoRender = false;
         $post_data = $_REQUEST['data'];
         $order_list = json_decode($post_data, true);
-        $queue = new SaeTaskQueue('order_ship');
         //批量添加任务
         $task = array();
         $ship_name_id_map = ShipAddress::ship_type_name_id_map();
@@ -912,10 +911,7 @@ class WesharesController extends AppController {
             $params = "order_id=" . $order_id . "&company_id=" . $ship_company_id . "&ship_code=" . $ship_code . "&ship_type_name=" . $ship_type_name;
             $task[] = array('url' => "/task/process_set_order_ship_code", "postdata" => $params);
         }
-        //$this->WeshareBuy->clear_user_share_order_data_cache($order_ids, 0);
-        $queue->addTask($task);
-        //将任务推入队列
-        $ret = $queue->push();
+        $ret = $this->RedisQueue->add_tasks('order_ship', $task);
         //任务添加失败时输出错误码和错误信息
         echo json_encode(array('success' => $ret, 'errno' => $queue->errno(), 'errmsg' => $queue->errmsg()));
         return;
@@ -1193,26 +1189,12 @@ class WesharesController extends AppController {
             $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($uid);
             $pageCount = $fansPageInfo['pageCount'];
             $pageSize = $fansPageInfo['pageSize'];
-            $queue = new SaeTaskQueue('share');
-            $queue->addTask("/weshares/process_send_buy_percent_msg/" . $weshare_id . "/" . $pageCount . "/" . $pageSize, "content=" . $content, true);
-            //将任务推入队列
-            $ret = $queue->push();
-            //任务添加失败时输出错误码和错误信息
-            if ($ret === false) {
-                $this->log('add task queue error ' . json_encode(array($queue->errno(), $queue->errmsg())));
-            }
+            $this->RedisQueue->add_tasks('share', "/weshares/process_send_buy_percent_msg/" . $weshare_id . "/" . $pageCount . "/" . $pageSize, "content=" . $content, true);
             echo json_encode(array('success' => true, 'msg' => $checkSendMsgResult['msg']));
             return;
         } else {
             $this->WeshareBuy->send_notify_user_msg_to_share_manager($share_info, $content);
-            $queue = new SaeTaskQueue('share');
-            $queue->addTask("/weshares/process_notify_has_buy_fans/" . $weshare_id, "content=" . $content, true);
-            //将任务推入队列
-            $ret = $queue->push();
-            //任务添加失败时输出错误码和错误信息
-            if ($ret === false) {
-                $this->log('add task queue error ' . json_encode(array($queue->errno(), $queue->errmsg())));
-            }
+            $this->RedisQueue->add_tasks('share', "/weshares/process_notify_has_buy_fans/" . $weshare_id, "content=" . $content, true);
             echo json_encode(array('success' => true));
             return;
         }
@@ -1251,18 +1233,7 @@ class WesharesController extends AppController {
         $pageCount = $fansPageInfo['pageCount'];
         $pageSize = $fansPageInfo['pageSize'];
         $task_url = "/weshares/process_send_new_share_msg/" . $weshare_id . '/' . $pageCount . '/' . $pageSize;
-        if(defined('SAE_MYSQL_DB')){
-            $queue = new SaeTaskQueue('share');
-            $queue->addTask($task_url);
-            //将任务推入队列
-            $ret = $queue->push();
-            //任务添加失败时输出错误码和错误信息
-            if ($ret === false) {
-                $this->log('add task queue error ' . json_encode(array($queue->errno(), $queue->errmsg())));
-            }
-        }else{
-            $this->RedisQueue->add_curl_task($task_url);
-        }
+        $this->RedisQueue->add_tasks('share', $task_url);
         echo json_encode(array('success' => true, 'msg' => $checkCanSendMsgResult['msg']));
         return;
     }
@@ -1280,13 +1251,7 @@ class WesharesController extends AppController {
             $offset = $page * $pageSize;
             $tasks[] = array('url' => "/weshares/send_new_share_msg_task/" . $shareId . "/" . $pageSize . "/" . $offset);
         }
-        if(defined('SAE_MYSQL_DB')){
-            $queue = new SaeTaskQueue('tasks');
-            $queue->addTask($tasks);
-            $ret = $queue->push();
-        }else{
-            $this->RedisQueue->batch_add_task($tasks);
-        }
+        $ret = $this->RedisQueue->add_tasks('tasks', $tasks);
         //$this->WeshareBuy->send_new_share_msg($shareId);
         echo json_encode(array('success' => true, 'ret' => $ret));
         return;
@@ -1313,15 +1278,13 @@ class WesharesController extends AppController {
      */
     public function process_send_buy_percent_msg($weshare_id, $pageCount, $pageSize) {
         $this->autoRender = false;
-        $queue = new SaeTaskQueue('tasks');
         $tasks = array();
         $msg_content = $_REQUEST['content'];
         foreach (range(0, $pageCount) as $page) {
             $offset = $page * $pageSize;
             $tasks[] = array('url' => "/weshares/send_buy_percent_msg_task/" . $weshare_id . "/" . $pageSize . "/" . $offset, "postdata" => "content=" . $msg_content);
         }
-        $queue->addTask($tasks);
-        $ret = $queue->push();
+        $ret = $this->RedisQueue->add_tasks('tasks', $tasks);
         echo json_encode(array('success' => true, 'ret' => $ret));
         return;
     }
@@ -2037,12 +2000,10 @@ class WesharesController extends AppController {
      */
     public function refund_share($shareId) {
         $this->autoRender = false;
-        $queue = new SaeTaskQueue('tasks');
         $tasks = array();
         $remark = $_REQUEST['remark'];
         $tasks[] = array('url' => "/task/batch_refund_money/" . $shareId . ".json", "postdata" => "remark=" . $remark);
-        $queue->addTask($tasks);
-        $ret = $queue->push();
+        $ret = $this->RedisQueue->add_tasks('tasks', $tasks);
         echo json_encode(array('success' => true, 'ret' => $ret));
         return;
     }

@@ -2430,6 +2430,11 @@ function url_enc($ql){
     return str_replace('%2A', '*', $str);
 }
 
+
+function check_sae(){
+    return defined('SAE_MYSQL_DB');
+}
+
 /**
  * auto load spl lib
  */
