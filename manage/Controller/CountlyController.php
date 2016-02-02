@@ -12,6 +12,8 @@ class CountlyController extends AppController{
 
     var $uses = array('User','OfflineStore','Order','StatisticsZitiData','StatisticsOrderData','Cart');
 
+    var $components = array('RedisQueue');
+
     public function admin_index(){
         $this->set('active','gen-data');
     }
@@ -117,15 +119,7 @@ class CountlyController extends AppController{
         $end_week = strtotime("next sunday");
         $start_date = date("Y-m-d",$start_week);
         $end_date = date("Y-m-d",$end_week);
-        $queue = new SaeTaskQueue('chaopeng');
-        //添加单个任务
-        $queue->addTask("/manage/admin/countly/process_gen_data/".$start_date."/".$end_date);
-        //将任务推入队列
-        $ret = $queue->push();
-        //任务添加失败时输出错误码和错误信息
-        if ($ret === false){
-            $this->log('gen statics data queue errno '.($queue->errno()).' err msg '.($queue->errmsg()));
-        }
+        $this->RedisQueue->add_tasks('chaopeng', "/manage/admin/countly/process_gen_data/".$start_date."/".$end_date);
         echo json_encode(array('success'=>true));
         return;
     }

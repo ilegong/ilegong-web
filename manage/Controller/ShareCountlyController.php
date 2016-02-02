@@ -13,7 +13,7 @@ class ShareCountlyController extends AppController
 
     public $uses = array('SharerStaticsData', 'User');
 
-    public $components = array('Paginator');
+    public $components = array('Paginator', 'RedisQueue');
 
     public function beforeFilter()
     {
@@ -254,16 +254,13 @@ class ShareCountlyController extends AppController
         $sharer_count = $userLevelM->find('count', array('conditions' => array('type' => 0)));
         $limit = 10;
         $page_count = ceil($sharer_count / $limit);
-        $queue = new SaeTaskQueue('cron_data');
         //批量添加任务
         $array = array();
         foreach (range(1, $page_count) as $page) {
             $task_url = '/manage/admin/ShareCountly/gen_sharer_statics_data_task/' . $date . '/' . $limit . '/' . $page;
             $array[] = array('url' => $task_url);
         }
-        $queue->addTask($array);
-        //将任务推入队列
-        $ret = $queue->push();
+        $ret = $this->RedisQueue->add_tasks('cron_data', $array);
         return $ret;
     }
 

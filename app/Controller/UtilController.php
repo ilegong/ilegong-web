@@ -12,7 +12,7 @@ class UtilController extends AppController {
 
     public $uses = array('UserRelation', 'Order', 'Cart', 'User', 'Oauthbind', 'Weshare', 'CandidateEvent', 'IndexProduct');
 
-    public $components = array('ShareUtil', 'Weixin', 'WeshareBuy');
+    public $components = array('ShareUtil', 'Weixin', 'WeshareBuy', 'RedisQueue');
 
 
     public function init_index_product(){
@@ -356,15 +356,8 @@ class UtilController extends AppController {
      * 添加队列任务
      */
     private function addTaskQueue($tasks) {
-        $queue = new SaeTaskQueue('cqueue');
-        $queue->addTask($tasks);
-        //将任务推入队列
-        $ret = $queue->push();
-        //任务添加失败时输出错误码和错误信息
-        if ($ret === false) {
-            return array('success' => false, 'errno' => $queue->errno(), 'errmsg' => $queue->errmsg());
-        }
-        return array('success' => true, 'errno' => $queue->errno(), 'errmsg' => $queue->errmsg());
+        $this->RedisQueue->add_tasks('cqueue', $tasks);
+        return array('success' => true);
     }
 
     /**

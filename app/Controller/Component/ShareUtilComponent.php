@@ -7,7 +7,7 @@ class ShareUtilComponent extends Component
 
     var $normal_order_status = array(ORDER_STATUS_DONE, ORDER_STATUS_PAID, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY);
 
-    public $components = array('Weixin', 'WeshareBuy');
+    public $components = array('Weixin', 'WeshareBuy', 'RedisQueue');
 
     /**
      * @param $weshare_id
@@ -19,14 +19,7 @@ class ShareUtilComponent extends Component
         $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($uid);
         $pageCount = $fansPageInfo['pageCount'];
         $pageSize = $fansPageInfo['pageSize'];
-        $queue = new SaeTaskQueue('share');
-        $queue->addTask("/weshares/process_send_new_share_msg/" . $weshare_id . '/' . $pageCount . '/' . $pageSize);
-        //将任务推入队列
-        $ret = $queue->push();
-        //任务添加失败时输出错误码和错误信息
-        if ($ret === false) {
-            $this->log('add task queue error ' . json_encode(array($queue->errno(), $queue->errmsg())));
-        }
+        $this->RedisQueue->add_tasks('share',"/weshares/process_send_new_share_msg/" . $weshare_id . '/' . $pageCount . '/' . $pageSize);
     }
 
     /**
@@ -1554,12 +1547,7 @@ class ShareUtilComponent extends Component
             $detail_url = $this->WeshareBuy->get_weshares_detail_url($share_id);
             $title = $order_username . '参加了，你发起的' . $weshare['Weshare']['title'];
             $this->Weixin->send_rebate_template_msg($user_open_id, $detail_url, $order_id, $order['Order']['total_all_price'], $order['Order']['pay_time'], SHARE_GROUP_REBATE_MONEY, $title);
-            //notify share complete task
-            $queue = new SaeTaskQueue('tasks');
-            //添加单个任务
-            $queue->addTask("/task/notify_group_share_complete/" . $share_id);
-            //将任务推入队列
-            $ret = $queue->push();
+            $ret = $this->RedisQueue->add_tasks('tasks', "/task/notify_group_share_complete/" . $share_id);
             $this->log('notify share complete ' . $ret);
 
         }
@@ -1673,7 +1661,6 @@ class ShareUtilComponent extends Component
     public function new_static_address_group_shares($origin_share_id)
     {
         $static_addresses = $this->get_static_offline_address();
-        $queue = new SaeTaskQueue('share');
         //批量添加任务
         $tasks = array();
         foreach ($static_addresses as $static_address) {
@@ -1684,12 +1671,7 @@ class ShareUtilComponent extends Component
             $params = "address=" . $address . "&business_remark=" . $addressRemark;
             $tasks[] = array('url' => $url, "postdata" => $params);
         }
-        $queue->addTask($tasks);
-        //将任务推入队列
-        $ret = $queue->push();
-        //任务添加失败时输出错误码和错误信息
-        if ($ret === false)
-            var_dump($queue->errno(), $queue->errmsg());
+        $ret = $this->RedisQueue->add_tasks('share', $tasks);
         return $ret;
     }
 

@@ -59,23 +59,7 @@ class CronController extends AppController
             $url = '/cron/load_fans_task/'.$share_id.'/'.$sharer_id;
             $taskArray[] = array('url'=>$url);
         }
-        if(IN_SAE){
-            $queue = new SaeTaskQueue('share');
-            $queue->addTask($taskArray);
-            //将任务推入队列
-            $ret = $queue->push();
-            //任务添加失败时输出错误码和错误信息
-            if ($ret === false) {
-                echo json_encode(array($queue->errno(), $queue->errmsg()));
-                return;
-            };
-        }else{
-            $ret = $this->RedisQueue->batch_add_task($taskArray);
-            if ($ret === false) {
-                echo json_encode(array('success' => false));
-                return;
-            };
-        }
+        $this->RedisQueue->add_tasks('share', $taskArray);
         echo json_encode(array('success' => true));
     }
 
@@ -295,21 +279,7 @@ class CronController extends AppController
             $date = date('Y-m-d');
         }
         $task_url = "/cron/process_gen_refer_data/".$date;
-        if(IN_SAE){
-            $queue = new SaeTaskQueue('chaopeng');
-            $queue->addTask($task_url);
-            $ret = $queue->push();
-            //任务添加失败时输出错误码和错误信息
-            if ($ret === false){
-                var_dump($queue->errno(), $queue->errmsg());
-                $this->log('queue error '.$queue->errno().' queue error msg '.$queue->errmsg());
-            }
-        }else{
-            $ret = $this->RedisQueue->add_curl_task($task_url);
-            if(!$ret){
-                $this->log('redis queue error gen user refer data');
-            }
-        }
+        $this->add_tasks('chaopeng', $task_url);
         echo json_encode(array('success' => true,'date' => $date));
     }
 

@@ -19,7 +19,7 @@ class WeshareBuyComponent extends Component {
 
     var $query_comment_fields = array('id', 'username', 'user_id', 'data_id', 'type', 'body', 'order_id', 'parent_id');
 
-    var $components = array('Session', 'Weixin', 'RedPacket', 'ShareUtil', 'ShareAuthority');
+    var $components = array('Session', 'Weixin', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'RedisQueue');
 
     var $query_share_fields = array('id', 'title', 'images', 'status', 'creator', 'created', 'settlement', 'type');
 
@@ -2137,14 +2137,7 @@ class WeshareBuyComponent extends Component {
         $fansPageInfo = $this->get_user_relation_page_info($recommend_user);
         $pageCount = $fansPageInfo['pageCount'];
         $pageSize = $fansPageInfo['pageSize'];
-        $queue = new SaeTaskQueue('share');
-        $queue->addTask("/task/process_send_recommend_msg/" . $share_id . '/' . $recommend_user . '/' . $pageCount . '/' . $pageSize, "memo=" . $memo);
-        //将任务推入队列
-        $ret = $queue->push();
-        //任务添加失败时输出错误码和错误信息
-        if ($ret === false) {
-            $this->log('add task queue error ' . json_encode(array($queue->errno(), $queue->errmsg())));
-        }
+        $this->RedisQueue->add_tasks('share', "/task/process_send_recommend_msg/" . $share_id . '/' . $recommend_user . '/' . $pageCount . '/' . $pageSize, "memo=" . $memo);
         return $checkSendMsgResult;
     }
 

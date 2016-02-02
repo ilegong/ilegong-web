@@ -7,7 +7,7 @@
  */
 class TaskController extends AppController {
 
-    var $components = array('WeshareBuy', 'ShareUtil', 'Weixin');
+    var $components = array('WeshareBuy', 'ShareUtil', 'Weixin', 'RedisQueue');
 
     var $uses = array();
 
@@ -63,14 +63,12 @@ class TaskController extends AppController {
     public function process_send_recommend_msg($share_id, $recommend_user, $pageCount, $pageSize) {
         $this->autoRender = false;
         $memo = $_REQUEST['memo'];
-        $queue = new SaeTaskQueue('tasks');
         $tasks = array();
         foreach (range(0, $pageCount) as $page) {
             $offset = $page * $pageSize;
             $tasks[] = array('url' => "/task/send_recommend_msg_task/" . $share_id . "/" . $recommend_user . "/" . $pageSize . "/" . $offset, "postdata" => "memo=" . $memo);
         }
-        $queue->addTask($tasks);
-        $ret = $queue->push();
+        $ret = $this->RedisQueue->add_tasks('tasks', $tasks);
         echo json_encode(array('success' => true, 'ret' => $ret));
         return;
     }
@@ -137,7 +135,6 @@ class TaskController extends AppController {
         $refer_share_ids = Hash::extract($shares, '{n}.Weshare.refer_share_id');
         $share_order_count_map = $this->group_share_order_counts($share_ids);
         $share_group_limit_map = $this->share_group_limit_map($refer_share_ids);
-        $queue = new SaeTaskQueue('tasks');
         //批量添加任务
         $tasks = array();
         //任务添加失败时输出错误码和错误信息
@@ -148,10 +145,8 @@ class TaskController extends AppController {
                 $tasks[] = array('url' => "/task/process_notify_group_share/" . $item_share_id . "/" . $share_order_count_map[$item_share_id] . "/" . $share_group_limit_map[$item_refer_share_id]);
             }
         }
-        $queue->addTask($tasks);
-        //将任务推入队列
-        $ret = $queue->push();
-        echo json_encode(array('success' => true, 'ret' => $ret, 'errno' => $queue->errno(), 'errmsg' => $queue->errmsg()));
+        $ret = $this->RedisQueue->add_tasks('tasks', $tasks);
+        echo json_encode(array('success' => true, 'ret' => $ret));
         return;
     }
 

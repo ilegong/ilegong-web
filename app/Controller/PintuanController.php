@@ -12,7 +12,7 @@ class PintuanController extends AppController {
 
     var $uses = array('OrderConsignee', 'User');
 
-    var $components = array('PintuanHelper', 'WeshareBuy');
+    var $components = array('PintuanHelper', 'WeshareBuy', 'RedisQueue');
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -267,31 +267,21 @@ class PintuanController extends AppController {
         $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($uid);
         $pageCount = $fansPageInfo['pageCount'];
         $pageSize = $fansPageInfo['pageSize'];
-        $queue = new SaeTaskQueue('share');
         $tag_id = $_REQUEST['tag_id'];
-        $queue->addTask("/pintuan/process_send_new_pintuan_msg/" . $share_id . '/' . $pageCount . '/' . $pageSize, "tag_id=".$tag_id, true);
-        //将任务推入队列
-        $ret = $queue->push();
-        //任务添加失败时输出错误码和错误信息
-        if ($ret === false) {
-            $this->log('add task queue error ' . json_encode(array($queue->errno(), $queue->errmsg())));
-        }
+        $this->RedisQueue->add_tasks('share', "/pintuan/process_send_new_pintuan_msg/" . $share_id . '/' . $pageCount . '/' . $pageSize, "tag_id=" . $tag_id, true);
         echo json_encode(array('success' => true));
         return;
     }
 
     public function process_send_new_pintuan_msg($share_id, $pageCount, $pageSize) {
         $this->autoRender = false;
-        $queue = new SaeTaskQueue('tasks');
         $tasks = array();
         $tag_id = $_REQUEST['tag_id'];
         foreach (range(0, $pageCount) as $page) {
             $offset = $page * $pageSize;
             $tasks[] = array('url' => "/pintuan/send_new_pintuan_msg_task/" . $share_id . "/" . $pageSize . "/" . $offset, "postdata" => "tag_id=" . $tag_id);
         }
-        $queue->addTask($tasks);
-        $ret = $queue->push();
-        //$this->WeshareBuy->send_new_share_msg($shareId);
+        $ret = $this->RedisQueue->add_tasks('tasks', $tasks);
         echo json_encode(array('success' => true, 'ret' => $ret));
         return;
     }
