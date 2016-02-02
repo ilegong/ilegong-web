@@ -7,7 +7,7 @@ class WesharesController extends AppController {
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
 
-    var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'OrderExpress', 'PintuanHelper');
+    var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'OrderExpress', 'PintuanHelper', 'RedisQueue');
 
     var $share_ship_type = array('self_ziti', 'kuaidi', 'pys_ziti');
 
@@ -1250,13 +1250,18 @@ class WesharesController extends AppController {
         $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($uid);
         $pageCount = $fansPageInfo['pageCount'];
         $pageSize = $fansPageInfo['pageSize'];
-        $queue = new SaeTaskQueue('share');
-        $queue->addTask("/weshares/process_send_new_share_msg/" . $weshare_id . '/' . $pageCount . '/' . $pageSize);
-        //将任务推入队列
-        $ret = $queue->push();
-        //任务添加失败时输出错误码和错误信息
-        if ($ret === false) {
-            $this->log('add task queue error ' . json_encode(array($queue->errno(), $queue->errmsg())));
+        $task_url = "/weshares/process_send_new_share_msg/" . $weshare_id . '/' . $pageCount . '/' . $pageSize;
+        if(defined('SAE_MYSQL_DB')){
+            $queue = new SaeTaskQueue('share');
+            $queue->addTask($task_url);
+            //将任务推入队列
+            $ret = $queue->push();
+            //任务添加失败时输出错误码和错误信息
+            if ($ret === false) {
+                $this->log('add task queue error ' . json_encode(array($queue->errno(), $queue->errmsg())));
+            }
+        }else{
+            $this->RedisQueue->add_curl_task($task_url);
         }
         echo json_encode(array('success' => true, 'msg' => $checkCanSendMsgResult['msg']));
         return;
@@ -1270,14 +1275,18 @@ class WesharesController extends AppController {
      */
     public function process_send_new_share_msg($shareId, $pageCount, $pageSize) {
         $this->autoRender = false;
-        $queue = new SaeTaskQueue('tasks');
         $tasks = array();
         foreach (range(0, $pageCount) as $page) {
             $offset = $page * $pageSize;
             $tasks[] = array('url' => "/weshares/send_new_share_msg_task/" . $shareId . "/" . $pageSize . "/" . $offset);
         }
-        $queue->addTask($tasks);
-        $ret = $queue->push();
+        if(defined('SAE_MYSQL_DB')){
+            $queue = new SaeTaskQueue('tasks');
+            $queue->addTask($tasks);
+            $ret = $queue->push();
+        }else{
+            $this->RedisQueue->batch_add_task($tasks);
+        }
         //$this->WeshareBuy->send_new_share_msg($shareId);
         echo json_encode(array('success' => true, 'ret' => $ret));
         return;
