@@ -72,19 +72,6 @@ if (defined('SAE_MYSQL_DB')) {
     Configure::write('App.assetsUrl', 'http://51daifan.sinaapp.com');
 }
 
-if (defined('SAE_MYSQL_DB')) {
-    $engine = 'Saemc';
-}
-elseif(isset($_SERVER['HTTP_HOST'])&&preg_match('/\.aliapp\.com$/',$_SERVER['HTTP_HOST'])){
-	$engine = 'Acemc';
-}
-else {
-    $engine = 'File';
-    if (extension_loaded('apc') && (php_sapi_name() !== 'cli' || ini_get('apc.enable_cli'))) {
-        $engine = 'Apc';
-    }
-}
-
 // In development mode, caches should expire quickly.
 // 缓存的配置，后台的前缀与前台的前缀保持一致。后台删除缓存时，前后台缓存就都能删除了
 $duration = 7200;
@@ -92,44 +79,85 @@ if (Configure::read('debug') > 1) {
     $duration = 300;
 }
 $cache_prefix = '';
-if(defined('SAE_MYSQL_DB')){
-	// 区分各版本的缓存，不互相冲突
-	$cache_prefix = $_SERVER['HTTP_APPVERSION'];
-}
-/*
- *  前后台使用不同的缓存文件 _cake_core_,_cake_model_
- *  缓存的配置，前台的前缀包含后台的前缀（利用后台的prefix比较时能涵盖前台的文件）。后台删除缓存时，前后台就都能删除了.
- *  如后台的前缀为 miaocms_, 则前台的前缀可使用miaocms_app_
- *  
- *  前台后使用相同的配置文件 default
- *  后台操作修改数据更新缓存时，同时能更新前台的缓存（使用同一份缓存文件）
- *  如后台修改Setting设置项
- */
-Cache::config('_cake_core_', array(
-            'engine' => $engine,
-            'prefix' => $cache_prefix.'core_app_',
-            'path' => CACHE . 'persistent' . DS,
-            'serialize' => ($engine === 'File'),
-            'duration' => $duration,
-            'probability'=> 100,
-        ));
-Cache::config('_cake_model_', array(
-            'engine' => $engine,
-            'prefix' => $cache_prefix.'model_app_',
-            'path' => CACHE . 'models' . DS,
-            'serialize' => ($engine === 'File'),
-            'duration' => $duration,
-            'probability'=> 100,
-        ));
+if(class_exists('Memcached')){
+    Cache::config('default', array(
+        'engine' => $engine,
+        'servers' => array('127.0.0.1:11211'),
+        'duration' => $duration,
+        'probability' => 100,
+        'prefix' => $cache_prefix . 'miaocms_'
+    ));
 
-Cache::config('default', array(
-            'engine' => $engine,
-            'duration' => $duration,
-            'probability' => 100,
-            'prefix' => $cache_prefix.'miaocms_',
-            'lock' => false,
-            'serialize' => true,
-        ));
+    Cache::config('_cake_core_', array(
+        'engine' => $engine,
+        'prefix' => $cache_prefix . 'core_app_',
+        'servers' => array('127.0.0.1:11211'),
+        'duration' => $duration,
+        'probability' => 100,
+    ));
+
+    Cache::config('_cake_model_', array(
+        'engine' => $engine,
+        'prefix' => $cache_prefix . 'model_app_',
+        'servers' => array('127.0.0.1:11211'),
+        'duration' => $duration,
+        'probability' => 100,
+    ));
+}else{
+    if (defined('SAE_MYSQL_DB')) {
+        $engine = 'Saemc';
+    }
+    elseif(isset($_SERVER['HTTP_HOST'])&&preg_match('/\.aliapp\.com$/',$_SERVER['HTTP_HOST'])){
+        $engine = 'Acemc';
+    }
+    else {
+        $engine = 'File';
+        if (extension_loaded('apc') && (php_sapi_name() !== 'cli' || ini_get('apc.enable_cli'))) {
+            $engine = 'Apc';
+        }
+    }
+
+    if(defined('SAE_MYSQL_DB')){
+        // 区分各版本的缓存，不互相冲突
+        $cache_prefix = $_SERVER['HTTP_APPVERSION'];
+    }
+    /*
+     *  前后台使用不同的缓存文件 _cake_core_,_cake_model_
+     *  缓存的配置，前台的前缀包含后台的前缀（利用后台的prefix比较时能涵盖前台的文件）。后台删除缓存时，前后台就都能删除了.
+     *  如后台的前缀为 miaocms_, 则前台的前缀可使用miaocms_app_
+     *
+     *  前台后使用相同的配置文件 default
+     *  后台操作修改数据更新缓存时，同时能更新前台的缓存（使用同一份缓存文件）
+     *  如后台修改Setting设置项
+     */
+    Cache::config('_cake_core_', array(
+        'engine' => $engine,
+        'prefix' => $cache_prefix.'core_app_',
+        'path' => CACHE . 'persistent' . DS,
+        'serialize' => ($engine === 'File'),
+        'duration' => $duration,
+        'probability'=> 100,
+    ));
+    Cache::config('_cake_model_', array(
+        'engine' => $engine,
+        'prefix' => $cache_prefix.'model_app_',
+        'path' => CACHE . 'models' . DS,
+        'serialize' => ($engine === 'File'),
+        'duration' => $duration,
+        'probability'=> 100,
+    ));
+
+    Cache::config('default', array(
+        'engine' => $engine,
+        'duration' => $duration,
+        'probability' => 100,
+        'prefix' => $cache_prefix.'miaocms_',
+        'lock' => false,
+        'serialize' => true,
+    ));
+}
+
+
 // UCenter config
 /*
 if(defined('SAE_MYSQL_DB')){ // in sae
