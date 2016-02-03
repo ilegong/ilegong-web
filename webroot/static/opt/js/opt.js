@@ -242,7 +242,7 @@ $(document).ready(function () {
 
   var optLogTemplate = '<div class="postinfo" style="border-bottom-width: 1px; border-bottom-style: solid;" data-show="0" data-infoid="<%this.id%>" data-timestamp="<%this.timestamp%>" data-myzan="0" id="info_<%this.id%>">' +
     '<a class="heada" <%if(this.user_info){%>href="/weshares/user_share_info/<%this.user_info.id%>"<%}else{%>href="javascript:void(0)"<%}%>>' +
-    '<img class="headimg" src="/static/opt/images/default.png" <%if(this.user_info){%>data-original="<%this.user_info.image%>"<%}else{%>data-original="/static/opt/images/default.png"<%}%>>' +
+    '<img class="headimg" src="http://static.tongshijia.com/static/opt/images/default.png" <%if(this.user_info){%>data-original="<%this.user_info.image%>"<%}else{%>data-original="http://static.tongshijia.com/static/opt/images/default.png"<%}%>>' +
     '<%if(this.user_info&&this.user_info.fans_count > 100){%><img src="/static/weshares/images/v.png" class="user-is-vip-user-tag"><%}%>' +
     '<%if(this.level_data){%><span class="user-is-proxy-tag"><%this.level_data.level_name%></span><%}%>' +
     '</a>' +
@@ -253,25 +253,25 @@ $(document).ready(function () {
     '<%if(this.reply_content) {%> <div class="fontcontent"><%this.reply_content%></div> <%}%>' +
     '<%if(this.reply_content) {%><a href="javascript:void(0)" class="expcontenta">全文</a><%}%>' +
     '<div <%if(!this.reply_content){%>class="pure-mediacontent"<%}%> <%if(this.reply_content){%>class="mediacontent"<%}%>><a href="<%this.data_url%>" data-url="<%this.data_url%>" class="linkcontent">' +
-    '<img src="/static/opt/images/pyqlink.png" data-original="<%this.thumbnail%>" style="width:40px;height:40px">' +
+    '<img src="http://static.tongshijia.com/static/opt/images/pyqlink.png" data-original="<%this.thumbnail%>" style="width:40px;height:40px">' +
     '<div class="linkfontcontent"><%this.memo%></div>' +
     '</a> <div style="height:0px;clear:both"></div>' +
     '</div>' +
     '<div class="date"><%this.created%></div>' +
     '<a href="javascript:void(0)" class="controlimg" style="visibility: hidden;">' +
-    '<img src="/static/opt/images/repicon.png"></a>' +
+    '<img src="http://static.tongshijia.com/static/opt/images/repicon.png"></a>' +
     '<div style="height:0px;clear:both"></div>' +
     '</div>';
 
   var optLogLikeTemplate = '<div data-count="<%this.count%>" class="zancontent" style="margin-left:48px;min-height:30px;display:block;">' +
-    '<img class="zanicon" src="/static/opt/images/zanicon.png">' +
+    '<img class="zanicon" src="http://static.tongshijia.com/static/opt/images/zanicon.png">' +
     '<%if(this.count<=10){%>'+
     '<%for(var i=0;i<this.count;i++){%>' +
-    '<a href="/weshares/user_share_info/<%this.userIds[i]%>"><img class="zheadimg" src="/static/opt/images/default.png" data-original="<%this.users[this.userIds[i]].image%>" title="<%this.users[this.userIds[i]].nickname%>"></a>' +
+    '<a href="/weshares/user_share_info/<%this.userIds[i]%>"><img class="zheadimg" src="http://static.tongshijia.com/static/opt/images/default.png" data-original="<%this.users[this.userIds[i]].image%>" title="<%this.users[this.userIds[i]].nickname%>"></a>' +
     '<%}%>' +
     '<%}else{%>' +
     '<%for(var i=0;i<10;i++){%>' +
-    '<a href="/weshares/user_share_info/<%this.userIds[i]%>"><img class="zheadimg" src="/static/opt/images/default.png" data-original="<%this.users[this.userIds[i]].image%>" title="<%this.users[this.userIds[i]].nickname%>"></a>' +
+    '<a href="/weshares/user_share_info/<%this.userIds[i]%>"><img class="zheadimg" src="http://static.tongshijia.com/static/opt/images/default.png" data-original="<%this.users[this.userIds[i]].image%>" title="<%this.users[this.userIds[i]].nickname%>"></a>' +
     '<%}%>' +
     '<%}%>'+
     '<%if(this.count>10){%>' +
