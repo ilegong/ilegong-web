@@ -1724,7 +1724,7 @@ class ShareUtilComponent extends Component
      */
     public function checkCanSendMsg($uid)
     {
-        if($uid==633345){
+        if($uid==633345||$uid==802852){
             return array('success' => true, 'msg' => '还可以发送很多条消息');
         }
         $limit_count = $this->getSharerMsgLimit($uid);
