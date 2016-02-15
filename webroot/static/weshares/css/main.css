@@ -341,7 +341,7 @@ ul li {
 .shippment-info .freight h1{ font-size: 1em; font-weight: normal; line-height: 38px; border-bottom: 1px #eeeeee solid; padding: 0 10px; color: #666666;}
 .shippment-info .freightrate{ padding: 10px;}
 .shippment-info .freightrate label{ display: block; float: left; line-height: 36px; color: #666666;}
-.shippment-info .freightrate s{ float: left; margin: 0 10px; border: 1px #dddddd solid; border-radius: 4px; padding: 10px; width: 50px; background-color: #ffffff;}
+.shippment-info .freightrate s{ float: left; margin: 0 10px; border: 1px #dddddd solid; border-radius: 4px; width: 50px; background-color: #ffffff;}
 .shippment-info .freightrate s input{ font-size: 1em; border: 0; width: 100%; color: #666666;}
 
 .shippment-info .haolinju{ padding: 5px 10px;}

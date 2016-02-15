@@ -75,7 +75,7 @@
         </div>
         <div class="send-info-form">
             <div class="freightmore">
-                <div class="sendouttime"><input type="text" placeholder="到货/发货时间" /></div>
+                <div class="sendouttime"><input type="text" placeholder="到货/发货时间" ng-model="vm.weshare.send_info" ng-change='vm.validateSendInfo()' ng-blur='vm.validateSendInfo()'/></div>
             </div>
         </div>
         <div class="ziti">
@@ -84,22 +84,18 @@
                 <dd>自己的自提点</dd>
             </dl>
             <div class="freightmore" ng-class="{'has-error': vm.addressError}">
-                <ul class="clearfix">
+                <ul class="clearfix" ng-repeat="address in vm.weshare.addresses | filter:{deleted : 0}">
                     <li class="fl"><div class="sendoutsite"><input type="text" placeholder="取货地点，联系人，联系电话" ng-model="address.address" ng-blur='vm.validateAddress()'/></div></li>
-                    <li class="fr"><a href="#X" class="delete">删除</a></li>
-                </ul>
-                <ul class="clearfix">
-                    <li class="fl"><div class="sendoutsite"><input type="text" placeholder="取货地点，联系人，联系电话" /></div></li>
-                    <li class="fr"><a href="#X">添加</a></li>
+                    <li class="fr" ng-click="vm.toggleAddress(address, $last)"><a ng-if="!$last" class="delete">删除</a><a ng-if="$last">添加</a></li>
                 </ul>
             </div>
         </div>
         <div class="expressage">
             <dl class="clearfix">
-                <dd><input type="checkbox" /></dd>
+                <dd><input type="checkbox" ng-model="vm.kuai_di_data.status" ng-true-value="1" ng-false-value="-1" ng-checked="vm.kuai_di_data.status==1"/></dd>
                 <dd>快递</dd>
             </dl>
-            <div class="freightmore" style="display: none;">
+            <div class="freightmore" ng-show="vm.kuai_di_data.status==1">
                 <ul class="clearfix choice">
                     <li><input checked type="radio" name="1" /></li>
                     <li>自定义运费</li>
@@ -131,17 +127,17 @@
         </dl>
         <div class="clearfix ziti">
             <dl class="clearfix">
-                <dd><input checked type="checkbox" /></dd>
+                <dd><input type="checkbox" ng-model="vm.proxy_rebate_percent.status" ng-true-value="1" ng-false-value="0" ng-checked="vm.proxy_rebate_percent.status==1"/></dd>
                 <dd>设置团长的佣金比例(推广好办法)</dd>
             </dl>
-            <div class="freightmore">
+            <div class="freightmore" ng-show="vm.proxy_rebate_percent.status==1">
                 <ul class="clearfix">
-                    <li class="fl"><div class="sendoutsite"><input type="text" placeholder="团长佣金比例" /></div></li>
+                    <li class="fl"><div class="sendoutsite" ng-class="{'has-error': vm.rebatePercentHasError}"><input type="text" placeholder="团长佣金比例" ng-change='vm.validateRebatePercent()' ng-blur='vm.validateRebatePercent()' ng-model="vm.proxy_rebate_percent.percent"/></div></li>
                     <li class="fr" style="padding-top: 10px;margin-right: 12%;"><span style="font-size: 25px; color: #29AC0E;">%</span></li>
                 </ul>
             </div>
         </div>
-        <a href="#X" class="submitbtn">Oh，搞定了！</a>
+        <a class="submitbtn" ng-click="vm.saveWeshare()">Oh，搞定了！</a>
     </div>
     <!--产品预付设置提示-->
     <div class="dialog-delorder" ng-show="vm.showProductTipInfo">
