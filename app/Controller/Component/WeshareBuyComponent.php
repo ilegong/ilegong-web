@@ -2006,7 +2006,7 @@ class WeshareBuyComponent extends Component {
             $fans_id = Hash::extract($relations, '{n}.UserRelation.follow_id');
             $relation_map = Hash::combine($relations, '{n}.UserRelation.id', '{n}.UserRelation.follow_id');
             $relation_map = array_unique($relation_map);
-            usort($relation_map, 'sort_data_by_id');
+            //usort($relation_map, 'sort_data_by_id');
             $fans_data = $userM->find('all', array(
                 'conditions' => array(
                     'id' => $fans_id
