@@ -176,6 +176,21 @@ class WeshareBuyComponent extends Component {
         Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
     }
 
+    public function get_my_create_shares($uid){
+        $weshareM = ClassRegistry::init('Weshare');
+        $query_share_type = array(GROUP_SHARE_TYPE, DEFAULT_SHARE_TYPE, POOL_SHARE_BUY_TYPE);
+        $myCreateShares = $weshareM->find('all', array(
+            'conditions' => array(
+                'creator' => $uid,
+                'status' => array(0, 1),
+                'type' => $query_share_type
+            ),
+            'fields' => $this->query_share_fields,
+            'order' => array('created DESC')
+        ));
+        return $myCreateShares;
+    }
+
     /**
      * @param $uid
      * @return array|mixed
@@ -190,15 +205,7 @@ class WeshareBuyComponent extends Component {
             //$commentM = ClassRegistry::init('Comment');
             $userM = ClassRegistry::init('User');
             $query_share_type = array(GROUP_SHARE_TYPE, DEFAULT_SHARE_TYPE, POOL_SHARE_BUY_TYPE);
-            $myCreateShares = $weshareM->find('all', array(
-                'conditions' => array(
-                    'creator' => $uid,
-                    'status' => array(0, 1),
-                    'type' => $query_share_type
-                ),
-                'fields' => $this->query_share_fields,
-                'order' => array('created DESC')
-            ));
+            $myCreateShares = $this->get_my_create_shares($uid);
             $my_create_share_ids = Hash::extract($myCreateShares, '{n}.Weshare.id');
             $orderStatus = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE);
             $joinShareOrder = $orderM->find('all', array(
