@@ -176,18 +176,25 @@ class WeshareBuyComponent extends Component {
         Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
     }
 
+    /**
+     * @param $uid
+     * @return mixed
+     * query shares
+     */
     public function get_my_create_shares($uid){
         $weshareM = ClassRegistry::init('Weshare');
         $query_share_type = array(GROUP_SHARE_TYPE, DEFAULT_SHARE_TYPE, POOL_SHARE_BUY_TYPE);
         $myCreateShares = $weshareM->find('all', array(
             'conditions' => array(
                 'creator' => $uid,
-                'status' => array(0, 1),
+                'status' => array(WESHARE_STOP_STATUS, WESHARE_NORMAL_STATUS),
                 'type' => $query_share_type
             ),
             'fields' => $this->query_share_fields,
-            'order' => array('created DESC')
+            'order' => array('created DESC'),
+            'limit' => 100
         ));
+        $this->explode_share_imgs($myCreateShares);
         return $myCreateShares;
     }
 
@@ -242,7 +249,7 @@ class WeshareBuyComponent extends Component {
             ));
             $creatorIds = Hash::extract($myJoinShares, '{n}.Weshare.creator');
             $creatorIds[] = $uid;
-            $this->explode_share_imgs($myCreateShares);
+            //$this->explode_share_imgs($myCreateShares);
             $this->explode_share_imgs($myJoinShares);
             //authority shares
             $authority_shares = array();
@@ -2623,6 +2630,11 @@ class WeshareBuyComponent extends Component {
         return 0;
     }
 
+    /**
+     * @param $uid
+     * @return mixed
+     * 获取团长当月订单
+     */
     public function get_month_total_count($uid){
         $weshareM = ClassRegistry::init('Weshare');
         $orderM = ClassRegistry::init('Order');
@@ -2645,6 +2657,117 @@ class WeshareBuyComponent extends Component {
             )
         ));
         return $order_count;
+    }
+
+    /**
+     * @param $share_ids
+     * @return array
+     * 获取所有分享的结算金额
+     */
+    public function get_shares_balance_money($share_ids){
+        $orders = $this->Order->find('all', array(
+            'conditions' => array(
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'member_id' => $share_ids,
+                'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY)
+            )
+        ));
+        $refund_orders = array();
+        $refund_order_ids = array();
+        $summery_data = array();
+        foreach ($orders as $item) {
+            $member_id = $item['Order']['member_id'];
+            $order_total_price = $item['Order']['total_all_price'];
+            $order_ship_fee = $item['Order']['ship_fee'];
+            $order_coupon_total = $item['Order']['coupon_total'];
+            $order_product_price = $item['Order']['total_price'];
+            if ($item['Order']['status'] == ORDER_STATUS_RETURN_MONEY || $item['Order']['status'] == ORDER_STATUS_RETURNING_MONEY) {
+                $refund_order_ids[] = $item['Order']['id'];
+                if (!isset($refund_orders[$member_id])) {
+                    $refund_orders[$member_id] = array();
+                }
+                $refund_orders[$member_id][] = $item;
+            }
+            if (!isset($summery_data[$member_id])) {
+                $summery_data[$member_id] = array('total_price' => 0, 'ship_fee' => 0, 'coupon_total' => 0);
+            }
+            $summery_data[$member_id]['total_price'] = $summery_data[$member_id]['total_price'] + $order_total_price;
+            $summery_data[$member_id]['ship_fee'] = $summery_data[$member_id]['ship_fee'] + $order_ship_fee;
+            $summery_data[$member_id]['coupon_total'] = $summery_data[$member_id]['coupon_total'] + $order_coupon_total;
+            $summery_data[$member_id]['product_total_price'] = $summery_data[$member_id]['product_total_price'] + $order_product_price;
+        }
+        $refund_logs = $this->RefundLog->find('all', array(
+            'order_id' => $refund_order_ids
+        ));
+        $refund_logs = Hash::combine($refund_logs, '{n}.RefundLog.order_id', '{n}.RefundLog.refund_fee');
+        $weshare_refund_money_map = array();
+        foreach ($refund_orders as $item_share_id => $item_orders) {
+            $share_refund_money = 0;
+            $weshare_refund_money_map[$item_share_id] = 0;
+            foreach ($item_orders as $refund_order_item) {
+                $order_id = $refund_order_item['Order']['id'];
+                $share_refund_money = $share_refund_money + $refund_logs[$order_id];
+            }
+            $weshare_refund_money_map[$item_share_id] = $share_refund_money / 100;
+        }
+        $weshare_rebate_map = $this->get_shares_rebate_money($share_ids);
+        $weshare_repaid_map = $this->get_share_repaid_money($share_ids);
+        return array('weshare_repaid_map' => $weshare_repaid_map, 'weshare_rebate_map' => $weshare_rebate_map, 'weshare_refund_map' => $weshare_refund_money_map, 'weshare_summery' => $summery_data);
+    }
+
+    /**
+     * @param $share_ids
+     * @return array
+     * 获取分享的返利金额
+     */
+    public function get_shares_rebate_money($share_ids){
+        $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
+        $rebateLogs = $rebateTrackLogM->find('all', array(
+            'conditions' => array(
+                'share_id' => $share_ids,
+                'not' => array('order_id' => 0, 'is_paid' => 0)
+            ),
+            'limit' => 500
+        ));
+        $share_rebate_map = array();
+        foreach ($rebateLogs as $log) {
+            $share_id = $log['RebateTrackLog']['share_id'];
+            if (!isset($share_rebate_map[$share_id])) {
+                $share_rebate_map[$share_id] = array('rebate_money' => 0);
+            }
+            $share_rebate_map[$share_id]['rebate_money'] = $log['RebateTrackLog']['rebate_money'];
+        }
+        foreach ($share_rebate_map as &$rebate_item) {
+            $rebate_item['rebate_money'] = number_format(round($rebate_item['rebate_money'] / 100, 2), 2);
+        }
+        return $share_rebate_map;
+    }
+
+    /**
+     * @param $share_ids
+     * @return array
+     * 获取分享的补退差价
+     */
+    public function get_share_repaid_money($share_ids){
+        $orderM = ClassRegistry::init('Order');
+        $addOrderResult = $orderM->find('all', array(
+            'conditions' => array(
+                'type' => ORDER_TYPE_WESHARE_BUY_ADD,
+                'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_REFUND_DONE),
+                'member_id' => $share_ids
+            ),
+            'fields' => array('total_all_price', 'id', 'member_id'),
+            'group' => array('member_id')
+        ));
+        $repaid_money_result = array();
+        foreach ($addOrderResult as $item) {
+            $member_id = $item['Order']['member_id'];
+            if (!isset($repaid_money_result[$member_id])) {
+                $repaid_money_result[$member_id] = 0;
+            }
+            $repaid_money_result[$member_id] = $repaid_money_result[$member_id] + $item['Order']['total_all_price'];
+        }
+        return $repaid_money_result;
     }
 
 }

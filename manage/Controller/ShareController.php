@@ -1063,6 +1063,7 @@ class ShareController extends AppController {
             }
             $repaid_money_result[$member_id] = $repaid_money_result[$member_id] + $item['Order']['total_all_price'];
         }
+        return $repaid_money_result;
     }
 
     function get_share_rebate_money($share_ids) {
