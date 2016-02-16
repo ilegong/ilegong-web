@@ -59,9 +59,13 @@ if (function_exists('date_default_timezone_set')) {
     date_default_timezone_set('Etc/GMT-8');
 }
 
+$duration = 7200;
+if (Configure::read('debug') > 1) {
+    $duration = 300;
+}
 if(class_exists('Memcached')){
     $engine = 'Memcached';
-    $cache_prefix = '';
+    $cache_prefix = 'manage';
     Cache::config('default', array(
         'engine' => $engine,
         'servers' => array('127.0.0.1:11211'),
@@ -90,11 +94,6 @@ if(class_exists('Memcached')){
         $engine = 'Saemc';
     } else {
         $engine = 'File';
-    }
-
-    $duration = 7200;
-    if (Configure::read('debug') > 1) {
-        $duration = 300;
     }
     $cache_prefix = '';
     if(defined('SAE_MYSQL_DB')){
