@@ -9,7 +9,7 @@ class SharerApiController extends AppController
 
     public function beforeFilter()
     {
-        $allow_action = array();
+        $allow_action = array('test');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action) == false) {
             $this->currentUser = $this->OAuth->user();
@@ -21,9 +21,18 @@ class SharerApiController extends AppController
         $uid = $this->currentUser['id'];
         $createShares = $this->WeshareBuy->get_my_create_shares($uid);
         $share_ids = Hash::extract($createShares, '{n}.Weshare.id');
-        $query_order_sql = 'select count(id), member_id cake_orders where member_id in (' . implode(',', $share_ids) . ') and status=1 group member_id';
+        $query_order_sql = 'select count(id), member_id from cake_orders where member_id in (' . implode(',', $share_ids) . ') and status=1 group by member_id';
         $orderM = ClassRegistry::init('Order');
         $result = $orderM->query($query_order_sql);
+        $result = Hash::combine($result, '{n}.cake_orders.member_id', '{n}.count(id)');
+        $share_balacne_money = $this->get_share_balance_result($share_ids);
+        $createShares = Hash::extract($createShares, '{n}.Weshare');
+        foreach ($createShares as &$shareItem) {
+            $shareItem['order_count'] = $result[$shareItem['id']];
+            $shareItem['balance_money'] = $share_balacne_money[$shareItem['id']];
+        }
+        echo json_encode($createShares);
+        return;
     }
 
     private function  get_share_balance_result($share_ids){

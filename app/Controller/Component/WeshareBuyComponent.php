@@ -2665,7 +2665,8 @@ class WeshareBuyComponent extends Component {
      * 获取所有分享的结算金额
      */
     public function get_shares_balance_money($share_ids){
-        $orders = $this->Order->find('all', array(
+        $orderM = ClassRegistry::init('Order');
+        $orders = $orderM->find('all', array(
             'conditions' => array(
                 'type' => ORDER_TYPE_WESHARE_BUY,
                 'member_id' => $share_ids,
@@ -2696,7 +2697,8 @@ class WeshareBuyComponent extends Component {
             $summery_data[$member_id]['coupon_total'] = $summery_data[$member_id]['coupon_total'] + $order_coupon_total;
             $summery_data[$member_id]['product_total_price'] = $summery_data[$member_id]['product_total_price'] + $order_product_price;
         }
-        $refund_logs = $this->RefundLog->find('all', array(
+        $RefundLogM = ClassRegistry::init('RefundLog');
+        $refund_logs = $RefundLogM->find('all', array(
             'order_id' => $refund_order_ids
         ));
         $refund_logs = Hash::combine($refund_logs, '{n}.RefundLog.order_id', '{n}.RefundLog.refund_fee');
