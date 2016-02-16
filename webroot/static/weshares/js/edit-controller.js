@@ -367,6 +367,9 @@
 
     function validateSendInfo() {
       vm.weshareSendInfoHasError = _.isEmpty(vm.weshare.send_info) || vm.weshare.send_info.length > 68;
+      if(vm.weshareSendInfoHasError){
+        alert('请输入到货/发货时间！');
+      }
       return vm.weshareSendInfoHasError;
     }
 
@@ -406,11 +409,15 @@
         });
         vm.addressError = vm.addressError || tempAddressError;
       }
+      if(vm.addressError){
+        alert('自提地址不能为空！');
+      }
       return vm.addressError;
     }
 
     function validateRebatePercent() {
       if (!Utils.isNumber(vm.proxy_rebate_percent.percent)) {
+        alert('输入正确的团长佣金比例！');
         vm.rebatePercentHasError = true;
       } else {
         vm.rebatePercentHasError = false;
