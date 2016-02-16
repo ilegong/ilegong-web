@@ -36,10 +36,9 @@
     </div>
 </div>
 <div class="clearfix clone-share-btn">
-    <!--<a ng-if="vm.weshare.status!=2&&!vm.weshare['buy_config']" ng-click='vm.cloneShare()' style="background-color: #ffa200; width: 100%;">我要开团</a>-->
-    <!--<ul class="clearfix" ng-if="vm.weshare.status!=2&&vm.weshare['buy_config']">-->
-        <!--<li style="width: 50%;float: left;"><a ng-click='vm.cloneShare()' style="background-color: #ffa200; width: 100%;">我要开团</a></li>-->
-        <!--<li style="width: 50%;float: right;"><a ng-click='vm.toBuyShare()' style="background-color: #29ac0e; width: 100%;">{{::vm.buyButtonText}}</a></li>-->
-    <!--</ul>-->
-    <a style="background-color: #cccccc; width: 100%;">不可分享</a>
+    <a ng-if="vm.weshare.status!=2&&!vm.weshare['buy_config']" ng-click='vm.cloneShare()' style="background-color: #ffa200; width: 100%;">我要开团</a>
+    <ul class="clearfix" ng-if="vm.weshare.status!=2&&vm.weshare['buy_config']">
+        <li style="width: 50%;float: left;"><a ng-click='vm.cloneShare()' style="background-color: #ffa200; width: 100%;">我要开团</a></li>
+        <li style="width: 50%;float: right;"><a ng-click='vm.toBuyShare()' style="background-color: #29ac0e; width: 100%;">{{::vm.buyButtonText}}</a></li>
+    </ul>
 </div>
