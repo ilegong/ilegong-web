@@ -145,6 +145,10 @@ const WESHARE_MSG_SEND = 2;
 
 const WESHARE_DELETE_STATUS = -1;
 
+const WESHARE_UNSETTLEMENT_STATUS = 0;
+
+const WESHARE_SETTLEMENT_STATUS = 1;
+
 const COMMENT_SHARE_TYPE = 'Share'; //评论的类型
 
 //weshare order status

@@ -21,18 +21,42 @@ class SharerApiController extends AppController
         $uid = $this->currentUser['id'];
         $createShares = $this->WeshareBuy->get_my_create_shares($uid);
         $share_ids = Hash::extract($createShares, '{n}.Weshare.id');
-        $query_order_sql = 'select count(id), member_id from cake_orders where member_id in (' . implode(',', $share_ids) . ') and status=1 group by member_id';
-        $orderM = ClassRegistry::init('Order');
-        $result = $orderM->query($query_order_sql);
-        $result = Hash::combine($result, '{n}.cake_orders.member_id', '{n}.count(id)');
-        $share_balacne_money = $this->get_share_balance_result($share_ids);
-        $createShares = Hash::extract($createShares, '{n}.Weshare');
-        foreach ($createShares as &$shareItem) {
-            $shareItem['order_count'] = $result[$shareItem['id']];
-            $shareItem['balance_money'] = $share_balacne_money[$shareItem['id']];
+        if(!empty($share_ids)){
+            $query_order_sql = 'select count(id), member_id from cake_orders where member_id in (' . implode(',', $share_ids) . ') and status=1 group by member_id';
+            $orderM = ClassRegistry::init('Order');
+            $result = $orderM->query($query_order_sql);
+            $result = Hash::combine($result, '{n}.cake_orders.member_id', '{n}.count(id)');
+            $share_balacne_money = $this->get_share_balance_result($share_ids);
+            $createShares = Hash::extract($createShares, '{n}.Weshare');
+            foreach ($createShares as &$shareItem) {
+                $shareItem['order_count'] = empty($result[$shareItem['id']]) ? 0 : $result[$shareItem['id']];
+                $shareItem['balance_money'] = $share_balacne_money[$shareItem['id']];
+            }
         }
-        echo json_encode($createShares);
+        usort($createShares, 'sort_data_by_id_desc');
+        $shareResult = $this->classify_shares_by_status($createShares);
+        echo json_encode($shareResult);
         return;
+    }
+
+    private function classify_shares_by_status($createShares){
+        //normal => 进行中 stop => 截团 settlement => 已结款
+        $result = array('normal' => array(), 'stop' => array(), 'settlement' => array());
+        foreach ($createShares as $shareItem) {
+            $settlement = $shareItem['settlement'];
+            $status = $shareItem['status'];
+            if ($settlement == WESHARE_SETTLEMENT_STATUS) {
+                $result['settlement'][] = $shareItem;
+            } else {
+                if ($status == WESHARE_NORMAL_STATUS) {
+                    $result['normal'][] = $shareItem;
+                }
+                if ($status == WESHARE_STOP_STATUS) {
+                    $result['stop'][] = $shareItem;
+                }
+            }
+        }
+        return $result;
     }
 
     private function  get_share_balance_result($share_ids){
