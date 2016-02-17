@@ -1117,6 +1117,7 @@ class UsersController extends AppController {
                     $download_url = download_photo_from_wx($userInfo['headimgurl']);
                     if (!empty($download_url)) {
                         $user['image'] = $download_url;
+                        $user['avatar'] = $download_url;
                     } else {
                         $user['image'] = $userInfo['headimgurl'];
                     }
