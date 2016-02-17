@@ -24,7 +24,7 @@ class FileUploadComponent extends Component {
         } else {
             $myfile = fopen(WWW_ROOT . 'files/wx-download/' . $name, "w");
             fwrite($myfile, $base64_data);
-            $download_url = WX_HOST.'/files/wx-download/' . $name;
+            $download_url = 'http://' . WX_HOST . '/files/wx-download/' . $name;
             //delete temp file
         }
         return array('download_url' => $download_url, 'success' => true);
