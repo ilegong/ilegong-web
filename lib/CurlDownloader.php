@@ -11,7 +11,7 @@ class CurlDownloader {
     private $fp = NULL;
     private $debug = FALSE;
     private $fileSize = 0;
-    private $tmpPath='';
+    private $tmpPath=TMP;
     private $responseStr=NULL;
     private $uploadFileName=NULL;
     private $isDownloadWxHead=false;
