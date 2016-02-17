@@ -7,8 +7,7 @@ class SharerApiController extends AppController
     public $components = array('OAuth.OAuth', 'Session', 'WeshareBuy', 'ShareUtil');
 
 
-    public function beforeFilter()
-    {
+    public function beforeFilter(){
         $allow_action = array('test');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action) == false) {
@@ -16,6 +15,7 @@ class SharerApiController extends AppController
         }
         $this->autoRender = false;
     }
+
 
     public function get_my_shares(){
         $uid = $this->currentUser['id'];
@@ -35,6 +35,8 @@ class SharerApiController extends AppController
         }
         usort($createShares, 'sort_data_by_id_desc');
         $shareResult = $this->classify_shares_by_status($createShares);
+        $userMonthOrderCount = $this->WeshareBuy->get_month_total_count($uid);
+        $shareResult['monthOrderCount'] = $userMonthOrderCount;
         echo json_encode($shareResult);
         return;
     }
