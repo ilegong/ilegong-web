@@ -2198,9 +2198,11 @@ class WeshareBuyComponent extends Component {
      * 查找用户消息记录，过滤用户
      */
     public function check_msg_log_and_filter_user($data_id, $user_ids, $type) {
+        if($data_id == 0){
+            return $user_ids;
+        }
         $msgLogM = ClassRegistry::init('MsgLog');
         //添加更多的过滤条件 (比如每天只收一次)
-        //todo 记录过多的情况处理（暂时不会出现这个问题）消息记录过多
         $q_date = date('Y-m-d');
         $msgLogs = $msgLogM->find('all', array(
             'conditions' => array(
