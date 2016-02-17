@@ -38,6 +38,7 @@
     vm.canSetTagUser = [633345, 544307, 802852, 867587, 804975];
     vm.showEditShareView = true;
     vm.showEditTagView = false;
+    vm.customShipping = 1;
     function pageLoaded() {
       $rootScope.loadingPage = false;
     }
@@ -135,6 +136,10 @@
         if (!vm.weshare.tags) {
           vm.weshare.tags = [{name: '', deleted: 0}];
         }
+      }
+
+      function setKuidiSettings(){
+
       }
     }
 

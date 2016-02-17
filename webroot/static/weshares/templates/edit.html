@@ -97,25 +97,27 @@
             </dl>
             <div class="freightmore" ng-show="vm.kuai_di_data.status==1">
                 <ul class="clearfix choice">
-                    <li><input type="radio" name="1" ng-model="" /></li>
+                    <li><input type="radio" value="1" ng-model="vm.customShipping" ng-value="1"/></li>
                     <li>自定义运费</li>
-                    <li class="pl15"><input type="radio" name="1" /></li>
+                    <li class="pl15"><input type="radio" value="0" ng-model="vm.customShipping" ng-value="0" /></li>
                     <li>包邮</li>
                 </ul>
-                <div class="freight">
-                    <h1>默认［除指定地区外］</h1>
-                    <div class="clearfix freightrate">
-                        <label>快递费</label>
-                        <s><input type="text" /></s>
-                        <label>元</label>
+                <div ng-show="vm.customShipping==1">
+                    <div class="freight">
+                        <h1>默认［除指定地区外］</h1>
+                        <div class="clearfix freightrate">
+                            <label>快递费</label>
+                            <s><input type="number" ng-model="vm.otherRegionShipFee"/></s>
+                            <label>元</label>
+                        </div>
                     </div>
-                </div>
-                <div class="freight">
-                    <h1>默认［北京地区］</h1>
-                    <div class="clearfix freightrate">
-                        <label>快递费</label>
-                        <s><input type="text" /></s>
-                        <label>元</label>
+                    <div class="freight">
+                        <h1>默认［北京地区］</h1>
+                        <div class="clearfix freightrate">
+                            <label>快递费</label>
+                            <s><input type="number" ng-model="vm.bjRegionShipFee"/></s>
+                            <label>元</label>
+                        </div>
                     </div>
                 </div>
             </div>
