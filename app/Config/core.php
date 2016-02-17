@@ -78,7 +78,7 @@ $duration = 7200;
 if (Configure::read('debug') > 1) {
     $duration = 300;
 }
-$cache_prefix = '';
+$cache_prefix = 'app';
 if(class_exists('Memcached')){
     $engine = 'Memcached';
     Cache::config('default', array(
