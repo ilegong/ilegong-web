@@ -25,20 +25,7 @@ class StaffsController extends AppController {
         'Email',
         'Kcaptcha',
     	'Cookie' => array('name' => 'SAECMS', 'time' => '+2 weeks'),
-        'Acl',
-        'Auth'=>array(
-            'authenticate' => array(
-                'Form'=>array(
-                    'userModel' => 'Staff','recursive' => 1,
-                    'fields'=>array(
-                        'username'=>'name',
-                        'password'=>'password'
-                    )
-                ),
-            ),
-//         	'authorize' => 'Controller',
-        ),
-        'AclFilter',
+        //'Securimage',
     );
 
     function beforeFilter() {
