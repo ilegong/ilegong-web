@@ -1,0 +1,78 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">缓存控制</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                缓存工具类
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <h4>清除缓存</h4>
+                <p>
+                    <button type="button" class="btn btn-default" id="clear-share-info-cache">清除分享详情缓存</button>
+                    <button type="button" class="btn btn-primary" id="clear-share-order-cache">清除分享订单缓存</button>
+                    <button type="button" class="btn btn-success" id="clear-auth-cache">清除授权缓存</button>
+                    <button type="button" class="btn btn-info" id="clear-user-cache">清除用户信息缓存</button>
+                    <button type="button" class="btn btn-warning" id="clear-app-cache">清除所有缓存</button>
+                    <!--<button type="button" class="btn btn-danger">Danger</button>-->
+                    <!--<button type="button" class="btn btn-link">Link</button>-->
+                </p>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+    </div>
+    <!-- /.col-lg-6 -->
+</div>
+<!-- /.row -->
+</div>
+<!-- /#page-wrapper -->
+
+<script>
+    $(document).ready(function () {
+        var $clearAppCacheBtn = $('#clear-app-cache');
+        $clearAppCacheBtn.on('click', function (e) {
+            e.preventDefault();
+            $.getJSON('/share_manage/clear_app_cache', function () {
+                alert('清除成功');
+            });
+        });
+        var $clearShareInfoCache = $('#clear-share-info-cache');
+        $clearShareInfoCache.on('click', function (e) {
+            e.preventDefault();
+            var shareId = prompt("请输入分享ID");
+            $.getJSON('/share_manage/clear_share_info_cache?shareId=' + shareId, function () {
+                alert('清除成功');
+            });
+        });
+        var $clearShareOrderCache = $('#clear-share-order-cache');
+        $clearShareOrderCache.on('click', function (e) {
+            e.preventDefault();
+            var shareId = prompt("请输入分享ID");
+            $.getJSON('/share_manage/clear_share_order_cache?shareId=' + shareId, function () {
+                alert('清除成功');
+            });
+        });
+        var $clearAuthCache = $('#clear-auth-cache');
+        $clearAuthCache.on('click', function (e) {
+            e.preventDefault();
+            var shareId = prompt("请输入分享ID");
+            $.getJSON('/share_manage/clear_share_auth_cache?shareId=' + shareId, function () {
+                alert('清除成功');
+            });
+        });
+        var $clearUserCache = $('#clear-user-cache');
+        $clearUserCache.on('click', function (e) {
+            e.preventDefault();
+            var userId = prompt("请输入用户ID");
+            $.getJSON('/share_manage/clear_user_info_cache?user_id=' + userId, function () {
+                alert('清除成功');
+            });
+        });
+    });
+</script>
