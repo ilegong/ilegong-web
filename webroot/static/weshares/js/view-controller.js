@@ -3792,7 +3792,6 @@
         vm.getLogisticsStatusText = getLogisticsStatusText;
         vm.childShareDetail = null;
         vm.currentUserOrderCount = 0;
-        vm.shareOrderCount = 0;
         vm.totalBuyCount = 0;
         vm.rebateFee = 0;
         function pageLoaded() {
@@ -4001,7 +4000,6 @@
                     vm.supportPysZiti = data['support_pys_ziti'];
                     vm.selectShipType = getSelectTypeDefaultVal();
                     vm.userSubStatus = data['sub_status'];
-                    vm.shareOrderCount = data['share_order_count'];
                     vm.totalBuyCount = data['all_buy_count'];
                     vm.favourableConfig = data['favourable_config'];
                     vm.autoPopCommentData = data['prepare_comment_data'];
@@ -4614,14 +4612,13 @@
 
         function defaultNotifyHasBuyMsgContent() {
             var msgContent = '';
-            if (Object.keys(vm.shareOrder['users']).length > 10) {
-                var usersCount = vm.shareOrderCount;
+            if (vm.totalBuyCount > 10) {
                 var index = 0;
                 for (var userId in vm.shareOrder['users']) {
                     var user = vm.shareOrder['users'][userId];
                     index++;
                     if (index > 10) {
-                        break
+                        break;
                     }
                     if (index == 10) {
                         msgContent = msgContent + user['nickname'];
@@ -4629,7 +4626,7 @@
                         msgContent = msgContent + user['nickname'] + '，';
                     }
                 }
-                msgContent = msgContent + '...等' + usersCount + '人都已经报名' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title + '啦，就差你啦。';
+                msgContent = msgContent + '...等' + vm.totalBuyCount + '人都已经报名' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title + '啦，就差你啦。';
             } else {
                 msgContent = _.reduce(vm.shareOrder.users, function (memo, user) {
                     return memo + user['nickname'] + '，';

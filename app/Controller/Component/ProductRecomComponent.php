@@ -57,7 +57,7 @@ class ProductRecomComponent extends Component {
                     break;
                 }
             }
-            $this->log("random times for $tag: ". $randTimes);
+            $this->log("random times for $tag: ". $randTimes, LOG_DEBUG);
         }
         return $recommend;
     }
