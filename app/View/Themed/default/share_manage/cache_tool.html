@@ -16,6 +16,7 @@
                 <h4>清除缓存</h4>
                 <p>
                     <button type="button" class="btn btn-default" id="clear-share-info-cache">清除分享详情缓存</button>
+                    <button type="button" class="btn btn-default" id="clear-pool-share-info-cache">清除产品街分享详情缓存</button>
                     <button type="button" class="btn btn-primary" id="clear-share-order-cache">清除分享订单缓存</button>
                     <button type="button" class="btn btn-success" id="clear-auth-cache">清除授权缓存</button>
                     <button type="button" class="btn btn-info" id="clear-user-cache">清除用户信息缓存</button>
@@ -71,6 +72,14 @@
             e.preventDefault();
             var userId = prompt("请输入用户ID");
             $.getJSON('/share_manage/clear_user_info_cache?user_id=' + userId, function () {
+                alert('清除成功');
+            });
+        });
+        var $clearPoolShareCacheBtn = $('#clear-pool-share-info-cache');
+        $clearPoolShareCacheBtn.on('click', function(e){
+            e.preventDefault();
+            var shareId = prompt("请输入ID");
+            $.getJSON('/share_manage/clear_pool_product_cache?shareId='+shareId, function(){
                 alert('清除成功');
             });
         });

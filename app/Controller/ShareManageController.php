@@ -561,11 +561,21 @@ class ShareManageController extends AppController
         Cache::write(SIMPLE_SHARE_INFO_CACHE_KEY . '_' . $shareId, '');
     }
 
+
     public function cache_tool(){}
 
     public function clear_share_info_cache(){
         $this->autoRender = false;
         $this->clear_share_cache();
+        echo json_encode(array('success' => true));
+        return;
+    }
+
+    public function clear_pool_product_cache(){
+        $this->autoRender=false;
+        $share_id = $_REQUEST['shareId'];
+        $key = 'pool_product_info_cache_key_' . $share_id;
+        Cache::write($key, '');
         echo json_encode(array('success' => true));
         return;
     }
