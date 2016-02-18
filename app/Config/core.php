@@ -80,6 +80,7 @@ if (Configure::read('debug') > 1) {
 }
 $cache_prefix = '';
 if(class_exists('Memcached')){
+    $cache_prefix = 'pys_app_';
     $engine = 'Memcached';
     Cache::config('default', array(
         'engine' => $engine,
