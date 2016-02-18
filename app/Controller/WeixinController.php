@@ -64,7 +64,7 @@ class WeixinController extends AppController {
 			$user = $req["FromUserName"];
 			//$type = $req["MsgType"];
 
-            $this->log($req);
+            $this->log($req, LOG_DEBUG);
 
             $host3g = (WX_HOST);
 

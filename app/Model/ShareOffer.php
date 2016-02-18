@@ -74,7 +74,7 @@ class ShareOffer extends AppModel {
         $payTime = $order['Order']['pay_time'];
         $total_all_price = $order['Order']['total_all_price'];
         $orderType = $order['Order']['type'];
-        $this->log('query_gen_offer order info' . json_encode($order));
+        $this->log('query_gen_offer order info' . json_encode($order), LOG_INFO);
         if (($status == ORDER_STATUS_DONE
                 || $status == ORDER_STATUS_PAID
                 || $status == ORDER_STATUS_RECEIVED
@@ -101,7 +101,7 @@ class ShareOffer extends AppModel {
                     $share_creator = $weshare['Weshare']['creator'];
                     //根据分享者的配置生成红包
                     $so = $soModel->findBySharerId($share_creator, true, $shareOfferId);
-                    $this->log('offer so ' . json_encode($so));
+                    $this->log('offer so ' . json_encode($so), LOG_INFO);
                 }
             } else {
                 //商城购买的逻辑
