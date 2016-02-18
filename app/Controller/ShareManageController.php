@@ -485,6 +485,16 @@ class ShareManageController extends AppController
 
     }
 
+    public function clear_index_product_cache(){
+        $this->autoRender=false;
+        Cache::write(INDEX_VIEW_PRODUCT_CACHE_KEY.'_0', '');
+        Cache::write(INDEX_VIEW_PRODUCT_CACHE_KEY.'_1', '');
+        Cache::write(INDEX_VIEW_PRODUCT_CACHE_KEY.'_2', '');
+        Cache::write(INDEX_VIEW_PRODUCT_CACHE_KEY.'_3', '');
+        echo json_encode(array('success' => true));
+        return;
+    }
+
     public function clear_app_cache(){
         $this->autoRender=false;
         Cache::clear(false, 'default');
