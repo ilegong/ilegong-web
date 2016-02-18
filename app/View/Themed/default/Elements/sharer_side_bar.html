@@ -55,6 +55,9 @@
                     <li>
                         <a href="/share_manage/search_level">为用户分配团长级别</a>
                     </li>
+                    <li>
+                        <a id="clear-app-cache">清除缓存</a>
+                    </li>
                 </ul>
                 <!-- /.nav-second-level -->
             </li>
@@ -64,3 +67,14 @@
     <!-- /.sidebar-collapse -->
 </div>
 <!-- /.navbar-static-side -->
+<script>
+    $(document).ready(function () {
+        var $clearAppCacheBtn = $('#clear-app-cache');
+        $clearAppCacheBtn.on('click', function (e) {
+            e.preventDefault();
+            $.getJSON('/share_manage/clear_app_cache', function (data) {
+                alert('清除成功');
+            });
+        });
+    });
+</script>

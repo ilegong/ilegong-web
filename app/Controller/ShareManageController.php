@@ -485,6 +485,15 @@ class ShareManageController extends AppController
 
     }
 
+    public function clear_app_cache(){
+        $this->autoRender=false;
+        Cache::clear(false, '_cake_model_');
+        Cache::clear(false, '_cake_core_');
+        Cache::clear(false, 'default');
+        echo json_encode(array('success' => true));
+        return;
+    }
+
     public function index_products()
     {
         $tags = get_index_tags();
