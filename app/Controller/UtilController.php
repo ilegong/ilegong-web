@@ -341,7 +341,7 @@ class UtilController extends AppController {
                     $this->log('download wx user photo ' . $photo);
                     $download_url = download_photo_from_wx($photo);
                 }
-                $this->User->updateAll(array('nickname' => "'" . $nickname . "'", 'image' => "'" . $download_url . "'"), array('id' => $follow_user_id));
+                $this->User->updateAll(array('nickname' => "'" . $nickname . "'", 'image' => "'" . $download_url . "'", 'avatar' => "'".$download_url."'"), array('id' => $follow_user_id));
             }
         }
         //update status

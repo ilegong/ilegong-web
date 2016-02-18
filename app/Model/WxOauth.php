@@ -173,7 +173,7 @@ class WxOauth extends Model {
             CURLOPT_POSTFIELDS => $body,
         );
         curl_setopt_array($curl, ($options + $this->wx_curl_option_defaults));
-        $this->log("WXOauth-curl:".$url);
+        $this->log("WXOauth-curl:".$url, LOG_DEBUG);
         $time_start = mktime();
         $rtn = curl_exec($curl);
 
@@ -221,7 +221,7 @@ class WxOauth extends Model {
             CURLOPT_POSTFIELDS => '',
         );
         curl_setopt_array($curl, ($options + $this->wx_curl_option_defaults));
-        $this->log("WXOauth-curl:".$url);
+        $this->log("WXOauth-curl:".$url, LOG_DEBUG);
         $time_start = mktime();
         $rtn = curl_exec($curl);
         curl_close($curl);

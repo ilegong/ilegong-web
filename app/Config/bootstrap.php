@@ -1735,28 +1735,30 @@ function create_avatar_in_aliyun($url)
 }
 
 function download_photo_from_wx($url) {
-    App::uses('CurlDownloader', 'Lib');
-    $dl = new CurlDownloader($url);
-    //todo download image to aliyun
-    $dl->isDownloadHeadImg(true);
-    $dl->download();
-    $download_url = '';
-    if ($dl->getFileName() != 'remote.out') {
-        if (defined('SAE_MYSQL_DB')) {
-            $stor = new SaeStorage();
-            $download_url = $stor->upload(SAE_STORAGE_UPLOAD_AVATAR_DOMAIN_NAME, $dl->getUploadFileName(), $dl->getFileName());
-            if (!$download_url) {
-                //retry
-                $download_url = $stor->upload(SAE_STORAGE_UPLOAD_AVATAR_DOMAIN_NAME, $dl->getUploadFileName(), $dl->getFileName());
-            }
-        } else {
-            copy($dl->getFileName(), WWW_ROOT . 'files/wx-download/' . $dl->getFileName());
-            $download_url = '/files/wx-download/' . $dl->getFileName();
-            //delete temp file
-            unlink($dl->getFileName());
-        }
-    }
-    return $download_url;
+//    App::uses('CurlDownloader', 'Lib');
+//    $dl = new CurlDownloader($url);
+//    $dl->isDownloadHeadImg(true);
+//    $dl->download();
+//    $download_url = '';
+//    if ($dl->getFileName() != 'remote.out') {
+//        if (defined('SAE_MYSQL_DB')) {
+//            $stor = new SaeStorage();
+//            $download_url = $stor->upload(SAE_STORAGE_UPLOAD_AVATAR_DOMAIN_NAME, $dl->getUploadFileName(), $dl->getFileName());
+//            if (!$download_url) {
+//                //retry
+//                $download_url = $stor->upload(SAE_STORAGE_UPLOAD_AVATAR_DOMAIN_NAME, $dl->getUploadFileName(), $dl->getFileName());
+//            }
+//        } else {
+//            copy($dl->getFileName(), WWW_ROOT . 'files/wx-download/' . $dl->getFileName());
+//            $download_url = '/files/wx-download/' . $dl->getFileName();
+//            //delete temp file
+//            unlink($dl->getFileName());
+//        }
+//    }
+//    return $download_url;
+    //use aliyun
+    $ali_avatar = create_avatar_in_aliyun($url);
+    return $ali_avatar;
 }
 
 

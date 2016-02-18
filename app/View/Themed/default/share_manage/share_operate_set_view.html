@@ -1,0 +1,230 @@
+<style>
+    .filterable {
+        margin-top: 15px;
+    }
+
+    .filterable .panel-heading .pull-right {
+        margin-top: -20px;
+    }
+
+    .filterable .filters input[disabled] {
+        background-color: transparent;
+        border: none;
+        cursor: auto;
+        box-shadow: none;
+        padding: 0;
+        height: auto;
+    }
+
+    .filterable .filters input[disabled]::-webkit-input-placeholder {
+        color: #333;
+    }
+
+    .filterable .filters input[disabled]::-moz-placeholder {
+        color: #333;
+    }
+
+    .filterable .filters input[disabled]:-ms-input-placeholder {
+        color: #333;
+    }
+</style>
+<h3>分享授权</h3>
+<hr>
+<div class="row">
+    <div class="col-lg-6">
+        <a href="#">分享ID&nbsp;&nbsp;<span style="color: #ff0000">{{$share_info['Weshare']['id']}}</span></a>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="#">分享名称&nbsp;&nbsp;<span style="color: blue">{{$share_info['Weshare']['title']}}</span></a>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="#">分享人&nbsp;&nbsp;<span style="color: blue">{{$user_data[$share_info['Weshare']['creator']]['nickname']}}</span></a>
+    </div>
+    <h3>查询</h3>
+
+    <div class="col-lg-12 pull-left">
+        <form action="" method="get" class="form-inline">
+            <div class="form-group">
+                <label for="share_id">分享ID</label>
+                <input type="text" class="form-control" id="share_id" name="share_id" placeholder="请先查询分享数据"
+                       value="{{$share_id}}">
+            </div>
+            <button type="submit" class="btn btn-default">查询</button>
+        </form>
+    </div>
+    <hr>
+    {{if !empty($history_operate_setting_uids)}}
+    <h3>历史授权用户</h3>
+    <table class="table table-bordered">
+        <thead>
+        <tr>用户ID</tr>
+        <tr>用户昵称</tr>
+        </thead>
+        <tbody>
+        {{loop $history_operate_setting_uids $uid}}
+        <tr>
+            <td>{{$uid}}</td>
+            <td>{{$user_data[$uid]['nickname']}}</td>
+        </tr>
+        {{/loop}}
+        </tbody>
+    </table>
+    <hr>
+    {{/if}}
+    <h3>添加</h3>
+    <br>
+    <h5>订单管理权限</h5>
+    <div class="col-lg-12 pull-left">
+        <form action="/share_manage/save_share_operate_setting" method="post" class="form-inline">
+            <div class="form-group">
+                <label for="user_id">用户ID</label>
+                <input type="text" class="form-control" id="user_id" name="user_id" placeholder="">
+            </div>
+            <div class="form-group">
+                <label for="operate_share_id">分享ID</label>
+                <input type="text" class="form-control" id="operate_share_id" name="share_id" placeholder="分享ID">
+            </div>
+            <!--如果有标签-->
+            <div class="form-group">
+                <label for="product_tag">商品标签</label>
+                <select class="form-control" id="product_tag" name="product_tag">
+                    <option value="0">全部</option>
+                    {{loop $product_tags $item_p_tag_id $item_p_tag}}
+                    <option value="{{$item_p_tag_id}}">{{$item_p_tag['name']}}</option>
+                    {{/loop}}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">添加</button>
+        </form>
+    </div>
+    <br>
+    <h5>分享修改权限</h5>
+
+    <div class="col-lg-12 pull-left">
+        <form action="/share_manage/save_share_edit_operate_setting" method="post" class="form-inline">
+            <div class="form-group">
+                <label>用户ID</label>
+                <input type="text" class="form-control" name="user_id" placeholder="">
+            </div>
+            <div class="form-group">
+                <label>分享ID</label>
+                <input type="text" class="form-control" name="share_id" placeholder="分享ID">
+            </div>
+            <button type="submit" class="btn btn-primary">添加</button>
+        </form>
+    </div>
+    <br>
+    <h5>分享管理权限</h5>
+
+    <div class="col-lg-12 pull-left">
+        <form action="/share_manage/save_share_manage_operate_setting" method="post" class="form-inline">
+            <div class="form-group">
+                <label>用户ID</label>
+                <input type="text" class="form-control" name="user_id" placeholder="">
+            </div>
+            <div class="form-group">
+                <label>分享ID</label>
+                <input type="text" class="form-control" name="share_id" placeholder="分享ID">
+            </div>
+            <button type="submit" class="btn btn-primary">添加</button>
+        </form>
+    </div>
+    <!-- /.col-lg-6 -->
+</div><!-- /.row -->
+<div class="row">
+    <div class="panel panel-primary filterable">
+        <div class="panel-heading">
+            <h3 class="panel-title">授权列表</h3>
+
+            <div class="pull-right">
+                <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span>查找
+                </button>
+            </div>
+        </div>
+        <table class="table">
+            <thead>
+            <tr class="filters">
+                <th><input type="text" class="form-control" placeholder="ID" disabled></th>
+                <th><input type="text" class="form-control" placeholder="用户ID" disabled></th>
+                <th><input type="text" class="form-control" placeholder="用户昵称" disabled></th>
+                <th><input type="text" class="form-control" placeholder="授权数据" disabled></th>
+                <th><input type="text" class="form-control" placeholder="授权名称" disabled></th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{loop $operate_settings $item_operate_setting}}
+            <tr data-id="{{$item_operate_setting['ShareOperateSetting']['id']}}"
+                id="operate-{{$item_operate_setting['ShareOperateSetting']['id']}}">
+                <td>{{$item_operate_setting['ShareOperateSetting']['id']}}</td>
+                <td>{{$item_operate_setting['ShareOperateSetting']['user']}}</td>
+                <td>{{$user_data[$item_operate_setting['ShareOperateSetting']['user']]['nickname']}}</td>
+                {{if $item_operate_setting['ShareOperateSetting']['data_type'] == SHARE_ORDER_OPERATE_TYPE}}
+                <td>{{$share_info['Weshare']['title']}}---订单查看</td>
+                {{else}}
+                <td>
+                    {{$share_info['Weshare']['title']}}---{{$product_tags[$item_operate_setting['ShareOperateSetting']['data_id']]['name']}}---订单查看
+                </td>
+                {{/if}}
+                {{if $item_operate_setting['ShareOperateSetting']['data_type'] == SHARE_ORDER_OPERATE_TYPE}}
+                <td style="color: #ff0000">订单查看</td>
+                {{elseif $item_operate_setting['ShareOperateSetting']['data_type'] == SHARE_INFO_OPERATE_TYPE}}
+                <td style="color: #ff0000">分享内容编辑</td>
+                {{elseif $item_operate_setting['ShareOperateSetting']['data_type'] == SHARE_MANAGE_OPERATE_TYPE}}
+                <td style="color: #ff0000">分享管理权限</td>
+                {{else}}
+                <td style="color: #ff0000">分组订单查看</td>
+                {{/if}}
+                <td>
+                    <a onclick="javascript:return window.confirm('确定删除吗？');" type="button"
+                       class="btn btn-primary btn-sm"
+                       href="/share_manage/delete_share_operate_setting/{{$item_operate_setting['ShareOperateSetting']['id']}}/{{$item_operate_setting['ShareOperateSetting']['scope_id']}}">删除</a>
+                </td>
+            </tr>
+            {{/loop}}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.filterable .btn-filter').click(function () {
+            var $panel = $(this).parents('.filterable'),
+                    $filters = $panel.find('.filters input'),
+                    $tbody = $panel.find('.table tbody');
+            if ($filters.prop('disabled') == true) {
+                $filters.prop('disabled', false);
+                $filters.first().focus();
+            } else {
+                $filters.val('').prop('disabled', true);
+                $tbody.find('.no-result').remove();
+                $tbody.find('tr').show();
+            }
+        });
+
+        $('.filterable .filters input').keyup(function (e) {
+            /* Ignore tab key */
+            var code = e.keyCode || e.which;
+            if (code == '9') return;
+            /* Useful DOM data and selectors */
+            var $input = $(this),
+                    inputContent = $input.val().toLowerCase(),
+                    $panel = $input.parents('.filterable'),
+                    column = $panel.find('.filters th').index($input.parents('th')),
+                    $table = $panel.find('.table'),
+                    $rows = $table.find('tbody tr');
+            /* Dirtiest filter function ever ;) */
+            var $filteredRows = $rows.filter(function () {
+                var value = $(this).find('td').eq(column).text().toLowerCase();
+                return value.indexOf(inputContent) === -1;
+            });
+            /* Clean previous no-result if exist */
+            $table.find('tbody .no-result').remove();
+            /* Show all rows, hide filtered ones (never do that outside of a demo ! xD) */
+            $rows.show();
+            $filteredRows.hide();
+            /* Prepend no-result row if all rows are filtered */
+            if ($filteredRows.length === $rows.length) {
+                $table.find('tbody').prepend($('<tr class="no-result text-center"><td colspan="' + $table.find('.filters th').length + '">No result found</td></tr>'));
+            }
+        });
+    });
+</script>

@@ -272,7 +272,7 @@ class WxPaymentComponent extends Component {
                 //    $status = PAYNOTIFY_ERR_ORDER_FEE;
                 } else {
                     $updatedResult = $orderModel->set_order_to_paid($orderId, $order['Order']['try_id'], $order['Order']['creator'], $order['Order']['type'], $order['Order']['member_id']);
-                    $this->log('set_order_to_paid:'.$orderId.', updatedResult='.$updatedResult);
+                    $this->log('set_order_to_paid:'.$orderId.', updatedResult='.$updatedResult, LOG_INFO);
                     $status = PAYNOTIFY_STATUS_ORDER_UPDATED;
                     if($updatedResult){
                         $order['Order']['status'] = ORDER_STATUS_PAID;

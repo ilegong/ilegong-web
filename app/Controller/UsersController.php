@@ -891,7 +891,7 @@ class UsersController extends AppController {
                     $refer_by_state = '';
                     if (!empty($_REQUEST['state'])) {
                         $str = base64_decode($_REQUEST['state']);
-                        $this->log("got state(after base64 decode):" . $str);
+                        $this->log("got state(after base64 decode):" . $str, LOG_INFO);
                         if (($idx = strpos($str, self::WX_BIND_REDI_PREFIX)) !== false) {
                             $should_require_user_info = false;
                             //TODO: handle decrypt risk
@@ -968,7 +968,7 @@ class UsersController extends AppController {
                                 'uc_id' => 0
                             );
                             if (!$this->User->save($uu)) {
-                                $this->log('errot to save new user:' . $uu);
+                                $this->log('Failed to save new user:' . $uu);
                             }
                             $oauth['Oauthbinds']['user_id'] = $this->User->getLastInsertID();
                         }
@@ -992,7 +992,7 @@ class UsersController extends AppController {
 
                     //TODO: fix risk
                     $redirectUrl = '/users/login?source=' . $oauth['Oauthbinds']['source'] . '&openid=' . $oauth['Oauthbinds']['oauth_openid'];
-                    $this->log('wx oauth after redirect login url ' . $redirectUrl);
+                    $this->log('wx oauth after redirect login url ' . $redirectUrl, LOG_INFO);
                     if (!empty($refer_by_state)) {
                         $this->redirect($redirectUrl . '&referer=' . urlencode($refer_by_state));
                     } else if (!empty($param_referer)) {
@@ -1117,6 +1117,7 @@ class UsersController extends AppController {
                     $download_url = download_photo_from_wx($userInfo['headimgurl']);
                     if (!empty($download_url)) {
                         $user['image'] = $download_url;
+                        $user['avatar'] = $download_url;
                     } else {
                         $user['image'] = $userInfo['headimgurl'];
                     }

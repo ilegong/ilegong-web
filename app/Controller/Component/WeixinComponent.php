@@ -334,7 +334,7 @@ class WeixinComponent extends Component {
     }
 
     public function send_packet_received_message_by_openid($open_id, $packet_money, $packet_name, $title = null, $detail_url = null, $keyword1 = null, $desc = null) {
-        $this->log('send msg title' . $title . ' detail url ' . $detail_url);
+        $this->log('send msg title ' . $title . ' detail url ' . $detail_url, LOG_INFO);
         if (empty($detail_url)) {
             $detail_url = $this->get_packet_url();
         }
@@ -613,7 +613,7 @@ class WeixinComponent extends Component {
 //                return $offer;
 //            }
 //        }
-        $this->log('gen offer order info' . json_encode($orderInfo));
+        $this->log('gen offer order info' . json_encode($orderInfo), LOG_DEBUG);
         $offer = $so->query_gen_offer($orderInfo, $orderInfo['Order']['creator'], null, $comment_id);
         return $offer;
     }

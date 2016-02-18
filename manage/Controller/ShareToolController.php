@@ -156,14 +156,14 @@ class ShareToolController extends AppController {
                     'scope_id' => $share_id,
                     'scope_type' => SHARE_OPERATE_SCOPE_TYPE);
                 $this->ShareOperateSetting->save($saveData);
-                if ($type == SHARE_INFO_OPERATE_TYPE) {
-                    Cache::write(SHARE_INFO_OPERATE_CACHE_KEY . '_' . $share_id, '');
-                    Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $user_id, '');
-                }
-                if ($type == SHARE_MANAGE_OPERATE_TYPE) {
-                    Cache::write(SHARE_MANAGE_OPERATE_CACHE_KEY . '_' . $share_id, '');
-                    Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $user_id, '');
-                }
+//                if ($type == SHARE_INFO_OPERATE_TYPE) {
+//                    Cache::write(SHARE_INFO_OPERATE_CACHE_KEY . '_' . $share_id, '');
+//                    Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $user_id, '');
+//                }
+//                if ($type == SHARE_MANAGE_OPERATE_TYPE) {
+//                    Cache::write(SHARE_MANAGE_OPERATE_CACHE_KEY . '_' . $share_id, '');
+//                    Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $user_id, '');
+//                }
             }
         }
     }
@@ -187,9 +187,9 @@ class ShareToolController extends AppController {
                     'scope_id' => $share_id,
                     'scope_type' => SHARE_OPERATE_SCOPE_TYPE);
                 $this->ShareOperateSetting->save($saveData);
-                Cache::write(SHARE_ORDER_TAG_OPERATE_CACHE_KEY . '_' . $share_id, '');
-                Cache::write(SHARE_ORDER_TAG_OPERATE_CACHE_KEY . '_' . $share_id . '_' . $tag_id, '');
-                Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $user_id, '');
+//                Cache::write(SHARE_ORDER_TAG_OPERATE_CACHE_KEY . '_' . $share_id, '');
+//                Cache::write(SHARE_ORDER_TAG_OPERATE_CACHE_KEY . '_' . $share_id . '_' . $tag_id, '');
+//                Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $user_id, '');
             }
         }
     }
@@ -212,8 +212,8 @@ class ShareToolController extends AppController {
                     'scope_id' => $share_id,
                     'scope_type' => SHARE_OPERATE_SCOPE_TYPE);
                 $this->ShareOperateSetting->save($saveData);
-                Cache::write(SHARE_ORDER_OPERATE_CACHE_KEY . '_' . $share_id, '');
-                Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $user_id, '');
+//                Cache::write(SHARE_ORDER_OPERATE_CACHE_KEY . '_' . $share_id, '');
+//                Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $user_id, '');
             }
         }
     }
@@ -232,8 +232,8 @@ class ShareToolController extends AppController {
             if ($data['ShareOperateSetting']['data_type'] == SHARE_ORDER_OPERATE_TYPE) {
                 Cache::write(SHARE_ORDER_OPERATE_CACHE_KEY . '_' . $share_id, '');
             } else {
-                Cache::write(SHARE_ORDER_TAG_OPERATE_CACHE_KEY . '_' . $share_id, '');
-                Cache::write(SHARE_ORDER_TAG_OPERATE_CACHE_KEY . '_' . $share_id . '_' . $data_id, '');
+//                Cache::write(SHARE_ORDER_TAG_OPERATE_CACHE_KEY . '_' . $share_id, '');
+//                Cache::write(SHARE_ORDER_TAG_OPERATE_CACHE_KEY . '_' . $share_id . '_' . $data_id, '');
             }
         }
         $this->redirect(array('action' => 'admin_share_operate_set_view', '?' => array('share_id' => $share_id)));

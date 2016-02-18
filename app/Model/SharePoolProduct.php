@@ -114,8 +114,8 @@ class SharePoolProduct extends AppModel {
             'published' => 1,
             'products' => array(
                 '4252' => array(
-                    'price' => 159,
-                    'channel_price' => 149,
+                    'price' => 119,
+                    'channel_price' => 110,
                 )
             )
         ),
@@ -127,7 +127,7 @@ class SharePoolProduct extends AppModel {
             'brand_name' => '酒香婷',
             'show_brand' => true,
             'brand_custom_service' => 892813,
-            'published' => 1,
+            'published' => 0,
             'products' => array(
                 '4397' => array(
                     'price' => 29,
@@ -235,7 +235,7 @@ class SharePoolProduct extends AppModel {
             'brand_name' => '朱晓宇',
             'show_brand' => true,
             'brand_custom_service' => 433224,
-            'published' => 1,
+            'published' => 0,
             'products' => array(
                 '3758' => array(
                     'price' => 28,
@@ -259,7 +259,7 @@ class SharePoolProduct extends AppModel {
             'brand_name' => '盛夏',
             'show_brand' => true,
             'brand_custom_service' => 708029,
-            'published' => 1,
+            'published' => 0,
             'products' => array(
                 '3998' => array(
                     'price' => 88,
@@ -311,7 +311,7 @@ class SharePoolProduct extends AppModel {
             'brand_name' => '赵宇',
             'show_brand' => true,
             'brand_custom_service' => 810688,
-            'published' => 1,
+            'published' => 0,
             'products' => array(
                 '3334' => array(
                     'price' => 59.9,
@@ -328,7 +328,7 @@ class SharePoolProduct extends AppModel {
             'brand_name' => '馨聪',
             'show_brand' => true,
             'brand_custom_service' => 872024,
-            'published' => 1,
+            'published' => 0,
             'products' => array(
                 '3355' => array(
                     'price' => 150,
@@ -378,7 +378,7 @@ class SharePoolProduct extends AppModel {
             'brand_name' => '张文艳',
             'show_brand' => true,
             'brand_custom_service' => 12376,
-            'published' => 1,
+            'published' => 0,
             'products' => array(
                 '2898' => array(
                     'price' => 85,
@@ -394,7 +394,7 @@ class SharePoolProduct extends AppModel {
             'brand_name' => '吃好网',
             'show_brand' => true,
             'brand_custom_service' => 884103,
-            'published' => 1,
+            'published' => 0,
             'products' => array(
                 '2964' => array(
                     'price' => 120,
@@ -491,7 +491,7 @@ class SharePoolProduct extends AppModel {
             'brand_name' => '老杨',
             'show_brand' => true,
             'brand_custom_service' => 711503,
-            'published' => 1,
+            'published' => 0,
             'products' => array(
                 '2942' => array(
                     'price' => 36.1,//后尖

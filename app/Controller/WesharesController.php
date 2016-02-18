@@ -707,8 +707,11 @@ class WesharesController extends AppController {
         $is_owner = $uid == $order['Order']['creator'];
         $is_creator = $uid == $weshare['Weshare']['creator'];
         if (!$is_owner && !$is_creator) {
-            echo json_encode(array(success => false, reason => 'only owner or creator '));
-            return;
+            $is_manage = $this->ShareAuthority->user_can_view_share_order_list($uid, $weshare_id);
+            if(!$is_manage){
+                echo json_encode(array(success => false, reason => 'only owner or creator '));
+                return;
+            }
         }
         $result = $this->Order->updateAll(array('status' => ORDER_STATUS_RECEIVED, 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order['Order']['id']));
         $this->Cart->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order['Order']['id']));
@@ -913,7 +916,7 @@ class WesharesController extends AppController {
         }
         $ret = $this->RedisQueue->add_tasks('order_ship', $task);
         //任务添加失败时输出错误码和错误信息
-        echo json_encode(array('success' => $ret, 'errno' => $queue->errno(), 'errmsg' => $queue->errmsg()));
+        echo json_encode(array('success' => $ret));
         return;
     }
 
