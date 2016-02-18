@@ -204,7 +204,7 @@ class WxOauthSource extends DataSource {
             CURLOPT_POSTFIELDS => '',
         );
         curl_setopt_array($curl, ($options + $this->wx_curl_option_defaults));
-        $this->log("WXOauth-curl:".$url);
+        $this->log("WXOauth-curl:".$url, LOG_DEBUG);
         $rtn = curl_exec($curl);
         curl_close($curl);
 

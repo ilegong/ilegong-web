@@ -24,7 +24,7 @@ class OptLogHelperComponent extends Component {
     private function load_last_opt_data() {
         $key = LAST_OPT_LOG_DATA_CACHE_KEY;
         $data = Cache::read($key);
-        $this->log('get cache from ' . $key);
+        $this->log('get cache from ' . $key, LOG_DEBUG);
         if (empty($data)) {
             $optLogM = ClassRegistry::init('OptLog');
             $datetime = date('Y-m-d H:i:s');
@@ -32,7 +32,7 @@ class OptLogHelperComponent extends Component {
             Cache::write($key, json_encode($opt_logs));
             return $opt_logs;
         }
-        $this->log('get opt log use cache');
+        $this->log('get opt log use cache', LOG_DEBUG);
         $last_opt_logs = json_decode($data, true);
         return $last_opt_logs;
     }

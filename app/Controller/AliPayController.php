@@ -394,7 +394,7 @@ class AliPayController extends AppController {
 
         $notifyRecord = $this->WxPayment->findOneNotify($out_trade_no);
         if (!empty($notifyRecord)) {
-            $this->log("Zhifubao: Aready done, so skipped: " . $out_trade_no);
+            $this->log("Zhifubao: Aready done, so skipped: " . $out_trade_no, LOG_INFO);
             return array(PAYNOTIFY_STATUS_SKIPPED, null, $notifyRecord);
         } else {
             list($status, $order) = $this->WxPayment->saveNotifyAndUpdateStatus($out_trade_no, $trade_no, TRADE_ALI_TYPE, true, $buyer_email, 0,
@@ -421,7 +421,7 @@ class AliPayController extends AppController {
         $total_fee_in_cent = $total_fee * 100;
         $notifyRecord = $this->WxPayment->findOneNotify($out_trade_no);
         if (!empty($notifyRecord)) {
-            $this->log("Zhifubao: Aready done, so skipped: " . $out_trade_no);
+            $this->log("Zhifubao: Aready done, so skipped: " . $out_trade_no, LOG_INFO);
             return array(PAYNOTIFY_STATUS_SKIPPED, null, $notifyRecord);
         } else {
             list($status, $order) = $this->WxPayment->saveLogisticsNotifyAndUpdateStatus($out_trade_no, $trade_no, TRADE_ALI_TYPE, true, $buyer_email, 0,
@@ -446,7 +446,7 @@ class AliPayController extends AppController {
         if ($verify) {
 
             //获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表
-            $this->log("Zhifubao: return_back: request:" . json_encode($_REQUEST));
+            $this->log("Zhifubao: return_back: request:" . json_encode($_REQUEST), LOG_INFO);
 
             $order_id = $display_status = $msg = '';
             $order_type = ORDER_TYPE_DEF;
@@ -480,7 +480,7 @@ class AliPayController extends AppController {
                 $msg = '支付失败，请重新支付。 有任何疑问请致电我们。';
             }
         } else {
-            $this->log("Zhifubao: fail to verify(return_back): request:" . json_encode($_REQUEST));
+            $this->log("Zhifubao: fail to verify(return_back): request:" . json_encode($_REQUEST), LOG_ERR);
             $display_status = 'system_error';
             $msg = '接收支付信息失败，请进入订单页面检查状态。';
         }
@@ -555,7 +555,7 @@ class AliPayController extends AppController {
     protected function handle_logistics_return_back($verify, $trade_status, $out_trade_no, $trade_no, $isSuccess, $attach) {
         if ($verify) {
             //获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表
-            $this->log("Zhifubao: return_back: request:" . json_encode($_REQUEST));
+            $this->log("Zhifubao: return_back: request:" . json_encode($_REQUEST), LOG_INFO);
             $order_id = $display_status = $msg = '';
             //pay_uuid
             $pay_uuid = $this->Session->read('alipay_uuid');
@@ -582,7 +582,7 @@ class AliPayController extends AppController {
                 $msg = '支付失败，请重新支付。 有任何疑问请致电我们。';
             }
         } else {
-            $this->log("Zhifubao: fail to verify(return_back): request:" . json_encode($_REQUEST));
+            $this->log("Zhifubao: fail to verify(return_back): request:" . json_encode($_REQUEST), LOG_ERR);
             $display_status = 'system_error';
             $msg = '接收支付信息失败，请进入订单页面检查状态。';
         }

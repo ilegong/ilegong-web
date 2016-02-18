@@ -52,7 +52,7 @@ class AliWapPay extends Object {
                 $doc->loadXML($alipayNotify->decrypt($notify_data));
             }
 
-            $this->log('get notify resp xml:'. $notify_data);
+            $this->log('get notify resp xml:'. $notify_data, LOG_INFO);
 
             if(!empty($doc->getElementsByTagName( "notify" )->item(0)->nodeValue) ) {
                 $out_trade_no = $doc->getElementsByTagName( "out_trade_no" )->item(0)->nodeValue;
