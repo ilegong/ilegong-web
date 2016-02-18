@@ -321,9 +321,8 @@ class WxPayController extends AppController {
      * 物流订单支付成功
      */
     public function logistics_notify() {
-        $this->log('wx logistics notify');
         $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
-        $this->log('logistics notify xml data ' . $xml);
+        $this->log('logistics notify, raw xml data ' . $xml, LOG_DEBUG);
         $notify = $this->WxPayment->createNotify();
         if (empty($xml)) {
             $notify->setReturnParameter("return_code", "FAIL"); //返回状态码
@@ -335,7 +334,7 @@ class WxPayController extends AppController {
                 $notify->data = $jsonData['data'];
                 $notify->returnParameters = $jsonData['returnParameters'];
             }
-            $this->log('logistics wx pay notify result ' . json_encode($notify));
+            $this->log('logistics notify result: ' . json_encode($notify), LOG_INFO);
             //验证签名，并回应微信。
             //对后台通知交互时，如果微信收到商户的应答不是成功或超时，微信认为通知失败，
             //微信会通过一定的策略（如30分钟共8次）定期重新发起通知，
@@ -350,7 +349,7 @@ class WxPayController extends AppController {
                 $notifyRecord = $this->WxPayment->findOneNotify($out_trade_no);
                 if (!empty($notifyRecord)) {
                     //通知重复
-                    $this->log('[WEIXIN_PAY_NOTIFY] duplicated notify:' . $xml);
+                    $this->log('duplicated notify for :' . $out_trade_no . ', raw xml: '. $xml, LOG_WARNING);
                 } else {
                     $trade_type = $notify->data['trade_type'];
                     $transaction_id = $notify->data['transaction_id'];
@@ -387,15 +386,15 @@ class WxPayController extends AppController {
         //==商户根据实际情况设置相应的处理流程，此处仅作举例=======
 
         //以log文件形式记录回调信息
-        $this->log("【接收到的notify通知】:\n" . $xml . "\n");
+        $this->log("【接收到的notify通知】:\n" . $xml . "\n", LOG_DEBUG);
 
         if ($notify->checkSign() == TRUE) {
             if ($notify->data["return_code"] == "FAIL") {
-                $this->log("【通信出错】:\n" . $xml . "\n");
+                $this->log("【通信出错】:\n" . $xml . "\n", LOG_ERR);
             } elseif ($notify->data["result_code"] == "FAIL") {
-                $this->log("【业务出错】:\n" . $xml . "\n");
+                $this->log("【业务出错】:\n" . $xml . "\n", LOG_ERR);
             } else {
-                $this->log("【支付成功】:\n" . $xml . "\n");
+                $this->log("【支付成功】:\n" . $xml . "\n", LOG_INFO);
             }
         }
 
@@ -405,7 +404,7 @@ class WxPayController extends AppController {
 
     public function notify() {
         $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
-        $this->log('notify xml data '.$xml);
+        $this->log('notify, raw xml data '.$xml, LOG_DEBUG);
         $notify = $this->WxPayment->createNotify();
         if(empty($xml)) {
             $notify->setReturnParameter("return_code", "FAIL"); //返回状态码
@@ -417,7 +416,7 @@ class WxPayController extends AppController {
                 $notify->data = $jsonData['data'];
                 $notify->returnParameters = $jsonData['returnParameters'];
             }
-            $this->log('wx pay notify result '.json_encode($notify));
+            $this->log('wx pay notify result '.json_encode($notify), LOG_INFO);
             //验证签名，并回应微信。
             //对后台通知交互时，如果微信收到商户的应答不是成功或超时，微信认为通知失败，
             //微信会通过一定的策略（如30分钟共8次）定期重新发起通知，
@@ -432,7 +431,7 @@ class WxPayController extends AppController {
                 $notifyRecord = $this->WxPayment->findOneNotify($out_trade_no);
                 if (!empty($notifyRecord)) {
                     //通知重复
-                    $this->log('[WEIXIN_PAY_NOTIFY] duplicated notify:' . $xml);
+                    $this->log('duplicated notify for :' . $out_trade_no . ', raw xml: '. $xml, LOG_WARNING);
                 } else {
                     $trade_type = $notify->data['trade_type'];
                     $transaction_id = $notify->data['transaction_id'];
@@ -466,15 +465,15 @@ class WxPayController extends AppController {
         //==商户根据实际情况设置相应的处理流程，此处仅作举例=======
 
         //以log文件形式记录回调信息
-        $this->log("【接收到的notify通知】:\n" . $xml . "\n");
+        $this->log("【接收到的notify通知】:\n" . $xml . "\n", LOG_DEBUG);
 
         if ($notify->checkSign() == TRUE) {
             if ($notify->data["return_code"] == "FAIL") {
-                $this->log("【通信出错】:\n" . $xml . "\n");
+                $this->log("【通信出错】:\n" . $xml . "\n", LOG_ERR);
             } elseif ($notify->data["result_code"] == "FAIL") {
-                $this->log("【业务出错】:\n" . $xml . "\n");
+                $this->log("【业务出错】:\n" . $xml . "\n", LOG_ERR);
             } else {
-                $this->log("【支付成功】:\n" . $xml . "\n");
+                $this->log("【支付成功】:\n" . $xml . "\n", LOG_INFO);
             }
         }
 

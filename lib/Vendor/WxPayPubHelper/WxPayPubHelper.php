@@ -154,7 +154,7 @@ class Common_util_pub extends Object
      */
     public function postXmlCurl($xml, $url, $second = 30)
 	{
-        $this->log("try to post:$url  $xml");
+        $this->log("try to post:$url  $xml", LOG_DEBUG);
         //初始化curl        
         $ch = curl_init();
         //设置超时
@@ -182,16 +182,16 @@ class Common_util_pub extends Object
             //echo "<a href='http://curl.haxx.se/libcurl/c/libcurl-errors.html'>错误原因查询</a></br>";
             curl_close($ch);
 
-            $this->log("curl post result: error-no=".$errorNo." error=". $error .", query here: http://curl.haxx.se/libcurl/c/libcurl-errors.html");
+            $this->log("curl post result: error-no=".$errorNo." error=". $error .", url: ". $url . ", xml: ".$xml, LOG_ERR);
 
             return false;
         } else if ($data) {
             curl_close($ch);
-            $this->log("curl post result:". $data);
+            $this->log("curl post result:". $data.", url: ". $url . ", xml: ".$xml, LOG_INFO);
             return $data;
         } else {
             curl_close($ch);
-            $this->log("curl post result: no data");
+            $this->log("curl post result: no data".", url: ". $url . ", xml: ".$xml, LOG_INFO);
             return false;
         }
 	}
