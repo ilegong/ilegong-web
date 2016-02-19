@@ -387,19 +387,6 @@ function loadProvince() {
     }
     $("#provinceDiv").html(b)
 }
-function loadProvince_get() {
-    var a = appDomain + "/get_province";
-    jQuery.ajax({type: "POST",dataType: "json",url: a,data: "",success: function(a) {
-        if (a) {
-            var b = "<option value= '0'>\u8bf7\u9009\u62e9</option>";
-            for (var c in a){
-                b += "<option value='" + c + "'>" + a[c] + "</option>";
-            }
-            $("#provinceDiv").html(b)
-        }
-    },error: function() {
-    }})
-}
 // 请求城市列表
 function loadCity() {
     var a = $("#provinceDiv option:selected"), b = a.val(), c = a.text();
