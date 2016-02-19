@@ -4,6 +4,9 @@ if (!defined('COMMON_PATH')) {
 }
 include_once COMMON_PATH . 'bootstrap.php';
 
+App::build(array(
+    'Controller' => array(APP_PATH . 'Controller/', APP_PATH . 'Controller/ApiController/'),
+));
 
 const WX_HOST = 'www.tongshijia.com';
 const WX_JS_API_CALL_URL = 'http://www.tongshijia.com/wxPay/jsApiPay';
