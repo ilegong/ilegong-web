@@ -1,0 +1,53 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">分享工具类</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                复制开团
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label>分享ID</label>
+                                <input type="number" class="form-control" placeholder="分享ID" id="copyShareId">
+                            </div>
+                            <div class="form-group">
+                                <label>用户ID</label>
+                                <input type="number" class="form-control" placeholder="用户ID" name="copyUserId">
+                            </div>
+                            <button id="copyShareBtn" class="btn btn-default">复制开团</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row (nested) -->
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+</div>
+<!-- /#page-wrapper -->
+
+<script>
+    $(document).ready(function(){
+        $('#copyShareBtn').on('click', function(e){
+            e.preventDefault();
+            var copyShareId = $('#copyShareId').val();
+            var copyUserId = $('#copyUserId').val();
+            $.getJSON('/share_manage/copy_share_to_user/' + copyShareId + '/' + copyUserId, function (data) {
+                alert(data['result']['shareId']);
+            });
+        });
+    });
+</script>

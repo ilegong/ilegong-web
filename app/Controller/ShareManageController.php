@@ -824,4 +824,15 @@ class ShareManageController extends AppController
         $this->redirect(array('action' => 'share_operate_set_view', '?' => array('share_id' => $share_id)));
     }
 
+    public function share_utils(){
+
+    }
+
+    public function copy_share_to_user($shareId, $userId){
+        $this->autoRender = false;
+        $result = $this->ShareUtil->cloneShare($shareId, $userId);
+        echo json_encode(array('success' => true, 'result' => $result));
+        return;
+    }
+
 }
