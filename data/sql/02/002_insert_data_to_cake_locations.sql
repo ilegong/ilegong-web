@@ -15,4 +15,4 @@ update cake_locations set parent_id = 4 where parent_id = 1 and name in ('广东
 update cake_locations set parent_id = 5 where parent_id = 1 and name in ('辽宁', '吉林', '黑龙江');
 update cake_locations set parent_id = 6 where parent_id = 1 and name in ('陕西', '新疆', '甘肃', '宁夏', '青海');
 update cake_locations set parent_id = 7 where parent_id = 1 and name in ('重庆', '云南', '贵州', '西藏', '四川');
-update cake_locations set parent_id = 7 where parent_id = 1 and name in ('香港', '澳门', '台湾');
+update cake_locations set parent_id = 8 where parent_id = 1 and name in ('香港', '澳门', '台湾');
