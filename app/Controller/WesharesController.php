@@ -240,14 +240,6 @@ class WesharesController extends AppController {
         $this->saveWeshareProxyPercent($weshare['Weshare']['id'], $proxyRebatePercent);
         if ($saveBuyFlag) {
             if (empty($weshareData['id'])) {
-                //create update clear user share info view cache
-                Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
-                //clear cache
-                //SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId
-                Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshare['Weshare']['id'] . '_0', '');
-                Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshare['Weshare']['id'] . '_1', '');
-                //SHARE_SHIP_SETTINGS_CACHE_KEY . '_' . $weshareId;
-                Cache::write(SHARE_SHIP_SETTINGS_CACHE_KEY . '_' . $weshare['Weshare']['id'], '');
                 //SIMPLE_SHARE_INFO_CACHE_KEY . '_' . $share_id
                 Cache::write(SIMPLE_SHARE_INFO_CACHE_KEY . '_' . $weshare['Weshare']['id'], '');
                 //SHARE_USER_SUMMERY_CACHE_KEY . '_' . $uid;
@@ -259,6 +251,15 @@ class WesharesController extends AppController {
                 //  $this->check_share_and_trigger_new_share($weshare['Weshare']['id'], $shipSetData);
                 // check user level and init level data when not
                 $this->ShareUtil->check_and_save_default_level($uid);
+            }else{
+                //create update clear user share info view cache
+                Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
+                //clear cache
+                //SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId
+                Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshare['Weshare']['id'] . '_0', '');
+                Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshare['Weshare']['id'] . '_1', '');
+                //SHARE_SHIP_SETTINGS_CACHE_KEY . '_' . $weshareId;
+                Cache::write(SHARE_SHIP_SETTINGS_CACHE_KEY . '_' . $weshare['Weshare']['id'], '');
             }
             //todo update child share data and product data
             //update product 
