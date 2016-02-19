@@ -13,7 +13,7 @@ class LocationsController extends AppController
     public function get_provinces()
     {
         $this->autoRender = false;
-        $params = array('conditions' => array('parent_id between ? and ?', array(1, 10)), 'fields' => array('id', 'name', 'parent_id'));
+        $params = array('conditions' => array('parent_id between ? and ?'=>array(1, 10)), 'fields' => array('id', 'name', 'parent_id'));
         $provinces = $this->Location->find('list', $params);
         echo json_encode($provinces);
     }
