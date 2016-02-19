@@ -13,6 +13,10 @@ class SharerApiController extends AppController{
         $this->autoRender = false;
     }
 
+    public function create_share(){
+
+    }
+
     public function get_my_share_orders($shareId){
         $result = $this->WeshareBuy->get_share_order_for_show($shareId, true, $division = false, $export = false);
         unset($result['ship_types']);

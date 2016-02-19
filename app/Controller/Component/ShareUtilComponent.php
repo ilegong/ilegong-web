@@ -1766,7 +1766,7 @@ class ShareUtilComponent extends Component
         }
         return get_user_level_msg_count($user_val);
     }
-    
+
     public function get_index_product($tag_id){
         $key = INDEX_VIEW_PRODUCT_CACHE_KEY.'_'.$tag_id;
         $cache_data = Cache::read($key);
@@ -1788,6 +1788,126 @@ class ShareUtilComponent extends Component
         }
 
         return json_decode($cache_data, true);
+    }
 
+    public function create_share($postDataArray, $uid){
+        $WeshareM = ClassRegistry::init('Weshare');
+        $weshareData = array();
+        $weshareData['id'] = $postDataArray['id'];
+        $weshareData['title'] = $postDataArray['title'];
+        $weshareData['description'] = $postDataArray['description'];
+        $weshareData['send_info'] = $postDataArray['send_info'];
+        //create save creator
+        if (empty($postDataArray['id'])) {
+            $weshareData['creator'] = $uid;
+        }
+        $weshareData['created'] = date('Y-m-d H:i:s');
+        $images = $postDataArray['images'];
+        $weshareData['images'] = implode('|', $images);
+        $productsData = $postDataArray['products'];
+        $addressesData = $postDataArray['addresses'];
+        $shipSetData = $postDataArray['ship_type'];
+        $proxyRebatePercent = $postDataArray['proxy_rebate_percent'];
+        //merge for child share data
+        $saveBuyFlag = $weshare = $WeshareM->save($weshareData);
+        //merge for child share data
+        $this->saveWeshareProducts($weshare['Weshare']['id'], $productsData);
+        $this->saveWeshareAddresses($weshare['Weshare']['id'], $addressesData);
+        $this->saveWeshareShipType($weshare['Weshare']['id'], $shipSetData);
+        $this->saveWeshareProxyPercent($weshare['Weshare']['id'], $proxyRebatePercent);
+        if ($saveBuyFlag) {
+            if (empty($weshareData['id'])) {
+                //create update clear user share info view cache
+                Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
+                //clear cache
+                //SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId
+                Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshare['Weshare']['id'] . '_0', '');
+                Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshare['Weshare']['id'] . '_1', '');
+                //SHARE_SHIP_SETTINGS_CACHE_KEY . '_' . $weshareId;
+                Cache::write(SHARE_SHIP_SETTINGS_CACHE_KEY . '_' . $weshare['Weshare']['id'], '');
+                //SIMPLE_SHARE_INFO_CACHE_KEY . '_' . $share_id
+                Cache::write(SIMPLE_SHARE_INFO_CACHE_KEY . '_' . $weshare['Weshare']['id'], '');
+                //SHARE_USER_SUMMERY_CACHE_KEY . '_' . $uid;
+                $thumbnail = null;
+                if (count($images) > 0) {
+                    $thumbnail = $images[0];
+                }
+                $this->save_create_share_opt_log($weshare['Weshare']['id'], $thumbnail, $weshareData['title'], $uid);
+                //  $this->check_share_and_trigger_new_share($weshare['Weshare']['id'], $shipSetData);
+                // check user level and init level data when not
+                $this->check_and_save_default_level($uid);
+            }
+            //todo update child share data and product data
+            //update product
+            //$this->ShareUtil->cascadeSaveShareData($weshareData);
+            return array('success' => true, 'id' => $weshare['Weshare']['id']);
+        }
+    }
+
+    /**
+     * @param $weshareId
+     * @param $weshareProxyPercent
+     * 保存团长比例
+     */
+    private function saveWeshareProxyPercent($weshareId, $weshareProxyPercent) {
+        $ProxyRebatePercentM = ClassRegistry::init('ProxyRebatePercent');
+        $weshareProxyPercent['share_id'] = $weshareId;
+        return $ProxyRebatePercentM->save($weshareProxyPercent);
+    }
+
+    //TODO delete not use product
+    /**
+     * @param $weshareId
+     * @param $weshareProductData
+     * 保存分享商品
+     */
+    private function saveWeshareProducts($weshareId, $weshareProductData) {
+        $WeshareProductM = ClassRegistry::init('WeshareProduct');
+        if (empty($weshareProductData)) {
+            return;
+        }
+        foreach ($weshareProductData as &$product) {
+            $product['weshare_id'] = $weshareId;
+            $product['price'] = ($product['price'] * 100);
+            $store = $product['store'];
+            if (empty($store)) {
+                $product['store'] = 0;
+            }
+            $tag_id = $product['tag_id'];
+            if (empty($tag_id)) {
+                $product['tag_id'] = 0;
+            }
+        }
+        return $WeshareProductM->saveAll($weshareProductData);
+    }
+
+    /**
+     * @param $weshareId
+     * @param $weshareShipData
+     * @return mixed
+     * 保存分享的物流方式
+     */
+    private function saveWeshareShipType($weshareId, $weshareShipData) {
+        $WeshareShipSettingM = ClassRegistry::init('WeshareShipSetting');
+        foreach ($weshareShipData as &$item) {
+            $item['weshare_id'] = $weshareId;
+        }
+        return $WeshareShipSettingM->saveAll($weshareShipData);
+    }
+
+    /**
+     * @param $weshareId
+     * @param $weshareAddressData
+     * 保存分享的 自有自提点
+     */
+    private function saveWeshareAddresses($weshareId, $weshareAddressData) {
+        $WeshareAddressM = ClassRegistry::init('WeshareAddress');
+        if (empty($weshareAddressData)) {
+            return;
+        }
+        foreach ($weshareAddressData as &$address) {
+            $address['weshare_id'] = $weshareId;
+        }
+        return $WeshareAddressM->saveAll($weshareAddressData);
     }
 }
