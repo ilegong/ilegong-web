@@ -145,6 +145,10 @@ const WESHARE_MSG_SEND = 2;
 
 const WESHARE_DELETE_STATUS = -1;
 
+const WESHARE_UNSETTLEMENT_STATUS = 0;
+
+const WESHARE_SETTLEMENT_STATUS = 1;
+
 const COMMENT_SHARE_TYPE = 'Share'; //评论的类型
 
 //weshare order status
@@ -164,7 +168,7 @@ const ALIYUN_AVATAR_DOMAIN = 'http://static.tongshijia.com/avatar/';
 //http://51daifan-assets.stor.sinaapp.com
 //http://www.tongshijia.com
 //http://dev.tongshijia.com
-const LOCAL_STATIC_FILE_PATH = 'http://static.tongshijia.com';
+const LOCAL_STATIC_FILE_PATH = 'http://dev.tongshijia.com';
 
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
