@@ -1,11 +1,8 @@
 <?php
 
-class SharerApiController extends AppController
-{
-
+class SharerApiController extends AppController{
 
     public $components = array('OAuth.OAuth', 'Session', 'WeshareBuy', 'ShareUtil');
-
 
     public function beforeFilter(){
         $allow_action = array('test');
@@ -16,6 +13,12 @@ class SharerApiController extends AppController
         $this->autoRender = false;
     }
 
+    public function get_my_share_orders($shareId){
+        $result = $this->WeshareBuy->get_share_order_for_show($shareId, true, $division = false, $export = false);
+        unset($result['ship_types']);
+        unset($result['rebate_logs']);
+        echo json_encode($result);
+    }
 
     public function get_my_shares(){
         $uid = $this->currentUser['id'];
