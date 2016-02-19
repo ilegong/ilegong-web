@@ -111,7 +111,7 @@ class SharePoolProduct extends AppModel {
             'brand_name' => '娟子',
             'show_brand' => true,
             'brand_custom_service' => 801709,
-            'published' => 1,
+            'published' => 0,
             'products' => array(
                 '4252' => array(
                     'price' => 119,

@@ -2776,4 +2776,8 @@ class WeshareBuyComponent extends Component {
         return $repaid_money_result;
     }
 
+    public function calculate_share_ship_fee($shareId, $carts){
+        //TODO calculate share ship fee
+    }
+
 }
