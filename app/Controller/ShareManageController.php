@@ -602,6 +602,7 @@ class ShareManageController extends AppController
         $user_id = $_REQUEST['user_id'];
         Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $user_id, '');
         Cache::write(SHARER_LEVEL_CACHE_KEY . '_' . $user_id . '_' . 0, '');
+        clearMemcacheCacheByKeyword($user_id);
         echo json_encode(array('success' => true));
         return;
     }
