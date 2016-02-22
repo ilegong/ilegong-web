@@ -57,8 +57,6 @@ class ShareToolController extends AppController {
             'limit' => 100
         ));
         $weshare_ids = Hash::extract($weshares, '{n}.Weshare.id');
-
-
     }
 
     /**

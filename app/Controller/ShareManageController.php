@@ -72,11 +72,25 @@ class ShareManageController extends AppController
         $s_title = $_REQUEST['title'];
         if (!empty($s_title)) {
             $WeshareM = ClassRegistry::init('Weshare');
+            $UserM = ClassRegistry::init('User');
             $cond = array('title LIKE' => '%' . $s_title . '%');
+            $share_status = $_REQUEST['share_status'];
+            if ($share_status != "all") {
+                $cond['status'] = $share_status;
+            }
             $weshares = $WeshareM->find('all', array(
                 'conditions' => $cond,
                 'limit' => 300
             ));
+            $share_creators = Hash::extract($weshares, '{n}.Weshare.creator');
+            $users = $UserM->find('all', array(
+                'conditions' => array(
+                    'id' => $share_creators
+                ),
+                'fields' => array('id', 'nickname')
+            ));
+            $users = Hash::combine($users, '{n}.User.id', '{n}.User');
+            $this->set('users', $users);
             $this->set('weshares', $weshares);
         }
     }
