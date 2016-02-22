@@ -2440,10 +2440,6 @@ function url_enc($ql){
 }
 
 
-function check_sae(){
-    return defined('SAE_MYSQL_DB');
-}
-
 /**
  * auto load spl lib
  */

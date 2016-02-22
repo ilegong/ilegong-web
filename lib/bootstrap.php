@@ -313,3 +313,7 @@ if (!empty($plugins)) {
 function clear_tag_cache($tagId) {
     Cache::write('tag-products' . $tagId, '[]');
 }
+
+function check_sae(){
+    return defined('SAE_MYSQL_DB');
+}
