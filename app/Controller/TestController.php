@@ -13,7 +13,7 @@ App::import('Vendor', 'Location', array('file' => 'Location/Distance/Haversine.p
 class TestController extends AppController
 {
 
-    public $components = array('Weixin', 'WeshareBuy', 'OrderExpress', 'Logistics', 'PintuanHelper', 'ShareUtil', 'RedisQueue');
+    public $components = array('Weixin', 'WeshareBuy', 'OrderExpress', 'Logistics', 'PintuanHelper', 'ShareUtil', 'RedisQueue', 'DeliveryTemplate');
     public $uses = array('Order', 'Oauthbind');
 
 
@@ -30,6 +30,14 @@ class TestController extends AppController
 //        echo json_encode(array('success' => true));
 //        return;
 //    }
+
+
+    public function test_delivery_template(){
+        $this->autoRender = false;
+        $ship_fee = $this->DeliveryTemplate->calculate_ship_fee(5, 0, 53);
+        echo json_encode(array('ship_fee' => $ship_fee));
+        return;
+    }
 
 
     public function add_queue(){
