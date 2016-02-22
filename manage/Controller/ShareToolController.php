@@ -1,6 +1,7 @@
 <?php
 
-class ShareToolController extends AppController {
+class ShareToolController extends AppController
+{
 
 
     var $name = 'share_tool';
@@ -10,7 +11,8 @@ class ShareToolController extends AppController {
 
     var $operateDataTypeNameMap = array(SHARE_ORDER_OPERATE_TYPE => '查看订单权限', SHARE_TAG_ORDER_OPERATE_TYPE => '查看分组订单权限');
 
-    public function beforeFilter() {
+    public function beforeFilter()
+    {
         parent::beforeFilter();
         $this->layout = 'bootstrap_layout';
     }
@@ -18,7 +20,8 @@ class ShareToolController extends AppController {
     /**
      * 初始化用户等级数据
      */
-    public function admin_init_sharer_level() {
+    public function admin_init_sharer_level()
+    {
         $this->autoRender = false;
         $sharer_ids = $this->Weshare->find('all', array(
             'fields' => array('DISTINCT creator'),
@@ -44,19 +47,38 @@ class ShareToolController extends AppController {
         return;
     }
 
-    public function admin_init_share_ship_settings($offset){
+    public function admin_init_share_ship_settings($offset)
+    {
+        $this->autoRender = false;
         $WeshareM = ClassRegistry::init('Weshare');
-        $WeshareShipSettingM = ClassRegistry::init('WeshareShipSetting');
         $WeshareDeliveryTemplateM = ClassRegistry::init('WeshareDeliveryTemplate');
+        $WeshareShipSettingM = ClassRegistry::init('WeshareShipSetting');
         $weshares = $WeshareM->find('all', array(
             'conditions' => array(
                 'status' => 0
             ),
             'order' => array('id DESC'),
             'offset' => $offset,
-            'limit' => 100
+            'limit' => 50
         ));
         $weshare_ids = Hash::extract($weshares, '{n}.Weshare.id');
+        $weshares = Hash::combine($weshares, '{n}.Weshare.id', '{n}.Weshare');
+        $ship_settings = $WeshareShipSettingM->find('all', array(
+            'conditions' => array(
+                'weshare_id' => $weshare_ids,
+                'status' => 1,
+                'tag' => 'kuai_di'
+            )
+        ));
+        $saveData = array();
+        foreach ($ship_settings as $ship_set) {
+            $weshare_id = $ship_set['WeshareShipSetting']['weshare_id'];
+            $user_id = $weshares[$weshare_id]['creator'];
+            $saveData[] = array('user_id' => $user_id, 'weshare_id' => $weshare_id, 'start_units' => 1, 'start_fee' => $ship_set['WeshareShipSetting']['ship_fee'], 'add_units' => 1, 'add_fee' => 0, 'is_default' => 1, 'created' => date('Y-m-d H:i:s'));
+        }
+        $WeshareDeliveryTemplateM->saveAll($saveData);
+        echo json_encode(array('success' => true));
+        return;
     }
 
     /**
@@ -64,8 +86,9 @@ class ShareToolController extends AppController {
      * @return array
      * 获取可能授权的用户
      */
-    private function load_refer_share_authority_user($refer_share_id) {
-        if(!empty($refer_share_id)){
+    private function load_refer_share_authority_user($refer_share_id)
+    {
+        if (!empty($refer_share_id)) {
             $shareOperateSettings = $this->ShareOperateSetting->find('all', array(
                 'conditions' => array(
                     'scope_id' => $refer_share_id,
@@ -82,7 +105,8 @@ class ShareToolController extends AppController {
     /**
      * 跳转到一个分享权限设置的页面
      */
-    public function admin_share_operate_set_view() {
+    public function admin_share_operate_set_view()
+    {
         $shareId = $_REQUEST['share_id'];
         if (!empty($shareId)) {
             $shareInfo = $this->Weshare->find('first', array(
@@ -129,7 +153,8 @@ class ShareToolController extends AppController {
     /**
      * 保存分享权限设置
      */
-    public function admin_save_share_operate_setting() {
+    public function admin_save_share_operate_setting()
+    {
         $user_id = $_REQUEST['user_id'];
         $share_id = $_REQUEST['share_id'];
         $tag_id = $_REQUEST['tag_id'];
@@ -138,14 +163,16 @@ class ShareToolController extends AppController {
         $this->redirect(array('action' => 'admin_share_operate_set_view', '?' => array('share_id' => $share_id)));
     }
 
-    public function admin_save_share_edit_operate_setting() {
+    public function admin_save_share_edit_operate_setting()
+    {
         $user_id = $_REQUEST['user_id'];
         $share_id = $_REQUEST['share_id'];
         $this->save_share_operate_setting($user_id, $share_id, SHARE_INFO_OPERATE_TYPE);
         $this->redirect(array('action' => 'admin_share_operate_set_view', '?' => array('share_id' => $share_id)));
     }
 
-    public function admin_save_share_manage_operate_setting() {
+    public function admin_save_share_manage_operate_setting()
+    {
         $user_id = $_REQUEST['user_id'];
         $share_id = $_REQUEST['share_id'];
         $this->save_share_operate_setting($user_id, $share_id, SHARE_MANAGE_OPERATE_TYPE);
@@ -153,7 +180,8 @@ class ShareToolController extends AppController {
     }
 
     //保存编辑分享的权限
-    private function save_share_operate_setting($user_id, $share_id, $type) {
+    private function save_share_operate_setting($user_id, $share_id, $type)
+    {
         if (!empty($user_id) && !empty($share_id) && !empty($type)) {
             $oldData = $this->ShareOperateSetting->find('first', array(
                 'conditions' => array(
@@ -184,7 +212,8 @@ class ShareToolController extends AppController {
     }
 
 
-    private function save_share_tag_operate($user_id, $tag_id, $share_id) {
+    private function save_share_tag_operate($user_id, $tag_id, $share_id)
+    {
         if (!empty($user_id) && !empty($share_id) && !empty($tag_id)) {
             $oldData = $this->ShareOperateSetting->find('first', array(
                 'conditions' => array(
@@ -209,7 +238,8 @@ class ShareToolController extends AppController {
         }
     }
 
-    private function save_share_operate($user_id, $share_id) {
+    private function save_share_operate($user_id, $share_id)
+    {
         if (!empty($user_id) && !empty($share_id)) {
             $oldData = $this->ShareOperateSetting->find('first', array(
                 'conditions' => array(
@@ -240,7 +270,8 @@ class ShareToolController extends AppController {
      * @param $data_id
      * 删除分享权限
      */
-    public function admin_delete_share_operate_setting($id, $share_id, $data_id) {
+    public function admin_delete_share_operate_setting($id, $share_id, $data_id)
+    {
         $data = $this->ShareOperateSetting->find('first', array('conditions' => array('id' => $id)));
         if (!empty($data)) {
             $this->ShareOperateSetting->delete($id);
