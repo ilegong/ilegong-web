@@ -44,6 +44,23 @@ class ShareToolController extends AppController {
         return;
     }
 
+    public function admin_init_share_ship_settings($offset){
+        $WeshareM = ClassRegistry::init('Weshare');
+        $WeshareShipSettingM = ClassRegistry::init('WeshareShipSetting');
+        $WeshareDeliveryTemplateM = ClassRegistry::init('WeshareDeliveryTemplate');
+        $weshares = $WeshareM->find('all', array(
+            'conditions' => array(
+                'status' => 0
+            ),
+            'order' => array('id DESC'),
+            'offset' => $offset,
+            'limit' => 100
+        ));
+        $weshare_ids = Hash::extract($weshares, '{n}.Weshare.id');
+
+
+    }
+
     /**
      * @param $refer_share_id
      * @return array

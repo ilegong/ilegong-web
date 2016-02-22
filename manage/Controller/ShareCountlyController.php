@@ -331,6 +331,7 @@ class ShareCountlyController extends AppController
             'order' => array('id DESC')
         ));
         $runing_share_ids = Hash::extract($runing_shares, '{n}.Weshare.id');
+        $this->log("gen proxy data sql "."select count(id), sum(total_all_price) from cake_orders where type=9 and status!=0 and member_id in (".implode(',', $runing_share_ids).") and DATE(created)='".$date."'", LOG_DEBUG);
         $order_summery = $orderM->query("select count(id), sum(total_all_price) from cake_orders where type=9 and status!=0 and member_id in (".implode(',', $runing_share_ids).") and DATE(created)='".$date."'");
         $order_count = empty($order_summery[0][0]['count(id)']) ? 0 : $order_summery[0][0]['count(id)'];
         $trading_volume = empty($order_summery[0][0]['sum(total_all_price)'])? 0 : $order_summery[0][0]['sum(total_all_price)'];
