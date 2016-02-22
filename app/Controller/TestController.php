@@ -34,7 +34,7 @@ class TestController extends AppController
 
     public function test_delivery_template(){
         $this->autoRender = false;
-        $ship_fee = $this->DeliveryTemplate->calculate_ship_fee(5, 0, 53);
+        $ship_fee = $this->DeliveryTemplate->calculate_ship_fee(5, 0, 58);
         echo json_encode(array('ship_fee' => $ship_fee));
         return;
     }
