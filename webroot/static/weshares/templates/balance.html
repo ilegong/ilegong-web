@@ -99,23 +99,20 @@
         </div>
         <div class="clearfix" style="padding: 0 10px;">
             <div class="form-group" ng-if="vm.selectShipType==0">
-                <select ng-model="selectedProvince" ng-change="selectedUnit=''" ng-options="district.name for district in districts" class="form-control" style="width: 22%;">
+                <select ng-model="vm.selectedProvince" ng-change="vm.loadCityData(vm.selectedProvince)" ng-options="province.id as province.name for province in vm.provinceData" class="form-control" style="width: 25%;">
                     <option value="">选择省</option>
                 </select>
-                <select ng-model="selectedCity" ng-change="selectedPosition=''" ng-options="unit.name for unit in selectedDistrict.units" class="form-control" style="width: 22%;">
+                <select ng-model="vm.selectedCity" ng-change="vm.loadCountyData(vm.selectedCity)" ng-options="id as city for (id, city) in vm.cityData" class="form-control" style="width: 30%;">
                     <option value="">选择市</option>
                 </select>
-                <select ng-model="selectedCounty" ng-options="unit.name for unit in selectedUnit.positions" class="form-control" style="width: 23%;">
+                <select ng-model="vm.selectedCounty" ng-options="id as county for (id, county) in vm.countyData"  class="form-control" style="width: 30%;">
                     <option value="">选择市县</option>
-                </select>
-                <select ng-model="selectedPosition" ng-options="unit.name for unit in selectedUnit.positions" class="form-control" style="width: 23%;">
-                    <option value="">选择乡镇</option>
                 </select>
             </div>
         </div>
         <div class="clearfix" style="padding: 0 10px;">
             <div class="form-group" ng-class="{'has-error': vm.userAddressHasError}" ng-if="vm.selectShipType==0">
-                <input class='form-control' placeholder="输入地址" ng-model='vm.buyerAddress' ng-change='vm.validateUserAddress()'/>
+                <input class='form-control' placeholder="输入详细地址" ng-model='vm.buyerAddress' ng-change='vm.validateUserAddress()'/>
                 <p class='tips'>请输入收货人地址</p>
             </div>
         </div>

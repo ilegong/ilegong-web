@@ -10,12 +10,37 @@ class LocationsController extends AppController
 {
     public $name = 'Locations';
 
+    public static $PROVINCES_CACHE_KEY = 'location_province_cache';
+
+    public static $PROVINCES_LIST_CACHE_KEY = 'location_province_list_cache';
+
+    public static $CITY_CACHE_KEY = 'location_city_cache';
+
+    public function get_province_list(){
+        $this->autoRender = false;
+        $cacheData = Cache::read(self::$PROVINCES_CACHE_KEY);
+        if(empty($cacheData)){
+            $params = array('conditions' => array('parent_id between ? and ?'=>array(1, 10)), 'fields' => array('id', 'name', 'parent_id'));
+            $provinces = $this->Location->find('all', $params);
+            $provinces = Hash::extract($provinces, '{n}.Location');
+            usort($provinces, 'sort_data_by_id_desc');
+            $cacheData = json_encode($provinces);
+            Cache::write(self::$PROVINCES_CACHE_KEY, $cacheData);
+        }
+        echo $cacheData;
+    }
+
     public function get_provinces()
     {
         $this->autoRender = false;
-        $params = array('conditions' => array('parent_id between ? and ?'=>array(1, 10)), 'fields' => array('id', 'name', 'parent_id'));
-        $provinces = $this->Location->find('list', $params);
-        echo json_encode($provinces);
+        $cacheData = Cache::read(self::$PROVINCES_CACHE_KEY);
+        if(empty($cacheData)){
+            $params = array('conditions' => array('parent_id between ? and ?'=>array(1, 10)), 'fields' => array('id', 'name', 'parent_id'));
+            $provinces = $this->Location->find('list', $params);
+            $cacheData = json_encode($provinces);
+            Cache::write(self::$PROVINCES_CACHE_KEY, $cacheData);
+        }
+        echo $cacheData;
     }
 
     public function get_city()
@@ -23,9 +48,16 @@ class LocationsController extends AppController
         $this->autoRender = false;
         if ($this->request->is('post') || $this->request->is('get')) {
             $province_id = intval($_REQUEST['provinceId']);
-            $params = array('conditions' => array('parent_id' => $province_id), 'fields' => array('id', 'name'));
-            $cities = $this->Location->find('list', $params);
-            echo json_encode($cities);
+            $cache_key = self::$CITY_CACHE_KEY.'_'.$province_id;
+            $cacheData = Cache::read($cache_key);
+            if(empty($cacheData)){
+                $params = array('conditions' => array('parent_id' => $province_id), 'fields' => array('id', 'name'));
+                $cities = $this->Location->find('list', $params);
+                $cacheData = json_encode($cities);
+                Cache::write($cache_key, $cacheData);
+            }
+
+            echo $cacheData;
         }
     }
 
