@@ -425,6 +425,8 @@ class ShareUtilComponent extends Component
                 $this->cloneShareShipSettings($newShareId, $shareId);
                 //clone rebate set
                 $this->cloneShareRebateSet($newShareId, $shareId);
+                //clone share delivery template
+                $this->cloneDeliveryTemplate($newShareId, $shareId, $uid);
             }
             if ($type == GROUP_SHARE_TYPE) {
                 $this->saveGroupShareAddress($address, $newShareId);
@@ -519,6 +521,44 @@ class ShareUtilComponent extends Component
         }
         $WeshareAddressM->id = null;
         $WeshareAddressM->saveAll($newAddresses);
+    }
+
+    /**
+     * @param $new_share_id
+     * @param $old_share_id
+     * @param $uid
+     */
+    private function cloneDeliveryTemplate($new_share_id, $old_share_id, $uid){
+        $WeshareDeliveryTemplateM = ClassRegistry::init('WeshareDeliveryTemplate');
+        $WeshareTemplateRegionM = ClassRegistry::init('WeshareTemplateRegion');
+        $deliveryTemplates = $WeshareDeliveryTemplateM->find('all', array(
+            'conditions' => array(
+                'id' => $old_share_id
+            )
+        ));
+        $newDeliveryTemplates = array();
+        foreach($deliveryTemplates as $deliveryTemplate){
+            $itemDeliveryTemplate = $deliveryTemplate['WeshareDeliveryTemplate'];
+            $itemDeliveryTemplate['id'] = null;
+            $itemDeliveryTemplate['weshare_id'] = $new_share_id;
+            $itemDeliveryTemplate['user_id'] = $uid;
+            $newDeliveryTemplates[] = $itemDeliveryTemplate;
+        }
+        $WeshareDeliveryTemplateM->saveAll($newDeliveryTemplates);
+        $templateRegions = $WeshareTemplateRegionM->find('all', array(
+            'conditions' => array(
+                'weshare_id' => $old_share_id
+            )
+        ));
+        $newTemplateRegions = array();
+        foreach($templateRegions as $templateRegion){
+            $itemTemplateRegion = $templateRegion['WeshareTemplateRegion'];
+            $itemTemplateRegion['id'] = null;
+            $itemTemplateRegion['weshare_id'] = $new_share_id;
+            $itemTemplateRegion['creator'] = $uid;
+            $newTemplateRegions[] = $itemTemplateRegion;
+        }
+        $WeshareTemplateRegionM->saveAll($newTemplateRegions);
     }
 
     /**
