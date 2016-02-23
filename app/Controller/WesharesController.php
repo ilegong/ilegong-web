@@ -221,6 +221,7 @@ class WesharesController extends AppController {
         $weshareData['description'] = $postDataArray['description'];
         $weshareData['send_info'] = $postDataArray['send_info'];
         //create save creator
+        $weshareData['creator'] = $postDataArray['creator']['id'];
         if (empty($postDataArray['id'])) {
             $weshareData['creator'] = $uid;
         }
@@ -236,7 +237,7 @@ class WesharesController extends AppController {
         //merge for child share data
         $this->saveWeshareProducts($weshare['Weshare']['id'], $productsData);
         $this->saveWeshareAddresses($weshare['Weshare']['id'], $addressesData);
-        $this->saveWeshareShipType($weshare['Weshare']['id'], $weshareData['creator'] ,$shipSetData);
+        $this->saveWeshareShipType($weshare['Weshare']['id'], $weshare['Weshare']['creator'], $shipSetData);
         $this->saveWeshareProxyPercent($weshare['Weshare']['id'], $proxyRebatePercent);
         if ($saveBuyFlag) {
             if (empty($weshareData['id'])) {
@@ -1480,7 +1481,9 @@ class WesharesController extends AppController {
         $ship_fee = 0;
         foreach ($weshareShipData as &$item) {
             $item['weshare_id'] = $weshareId;
-            $ship_fee = $item['ship_fee'];
+            if($item['tag'] == SHARE_SHIP_KUAIDI_TAG){
+                $ship_fee = $item['ship_fee'];
+            }
         }
         $this->DeliveryTemplate->save_share_default_delivery_template($weshareId, $userId, $ship_fee);
         return $this->WeshareShipSetting->saveAll($weshareShipData);
