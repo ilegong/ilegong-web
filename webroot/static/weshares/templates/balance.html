@@ -105,7 +105,7 @@
                 <select ng-model="vm.selectedCity" ng-change="vm.loadCountyData(vm.selectedCity)" ng-options="id as city for (id, city) in vm.cityData" class="form-control" style="width: 30%;">
                     <option value="">选择市(区)</option>
                 </select>
-                <select ng-model="vm.selectedCounty" ng-options="id as county for (id, county) in vm.countyData"  class="form-control-no-error" style="width: 30%;">
+                <select ng-model="vm.selectedCounty" ng-options="id as county for (id, county) in vm.countyData"  class="form-control-no-error" style="width: 32%;">
                     <option value="">选择市县(街道)</option>
                 </select>
                 <p class='tips'>请选择省(市)、市(区)</p>
