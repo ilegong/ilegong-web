@@ -13,12 +13,7 @@ class DeliveryTemplateComponent extends Component{
         ));
         if (empty($region)) {
             //default
-            $defaultDeliveryTemplate = $WeshareDeliveryTemplateM->find('first', array(
-                'conditions' => array(
-                    'weshare_id' => $weshare_id,
-                    'is_default' => 1
-                )
-            ));
+            $defaultDeliveryTemplate = $this->get_default_delivery_template($weshare_id, $WeshareDeliveryTemplateM);
             return $this->get_ship_fee_by_template($good_num, $defaultDeliveryTemplate);
         }
         $template_id = $region['WeshareTemplateRegion']['delivery_template_id'];
@@ -46,6 +41,27 @@ class DeliveryTemplateComponent extends Component{
             )
         ));
         return $template;
+    }
+
+    private function get_default_delivery_template($weshare_id, $WeshareDeliveryTemplateM){
+        $defaultDeliveryTemplate = $WeshareDeliveryTemplateM->find('first', array(
+            'conditions' => array(
+                'weshare_id' => $weshare_id,
+                'is_default' => 1
+            )
+        ));
+        return $defaultDeliveryTemplate;
+    }
+
+    public function save_share_default_delivery_template($weshare_id, $user_id, $ship_fee){
+        $WeshareDeliveryTemplateM = ClassRegistry::init('WeshareDeliveryTemplate');
+        if ($WeshareDeliveryTemplateM->hasAny(array('weshare_id' => $weshare_id, 'is_default' => 1))) {
+            //update
+            $WeshareDeliveryTemplateM->updateAll(array('start_fee' => $ship_fee), array('weshare_id' => $weshare_id, 'is_default' => 1));
+        } else {
+            //save
+            $WeshareDeliveryTemplateM->save(array('user_id' => $user_id, 'weshare_id' => $weshare_id, 'start_units' => 1, 'start_fee' => $ship_fee, 'add_units' => 1, 'add_fee' => 0, 'is_default' => 1, 'created' => date('Y-m-d H:i:s')));
+        }
     }
 
 }

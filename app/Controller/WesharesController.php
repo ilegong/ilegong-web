@@ -236,7 +236,7 @@ class WesharesController extends AppController {
         //merge for child share data
         $this->saveWeshareProducts($weshare['Weshare']['id'], $productsData);
         $this->saveWeshareAddresses($weshare['Weshare']['id'], $addressesData);
-        $this->saveWeshareShipType($weshare['Weshare']['id'], $shipSetData);
+        $this->saveWeshareShipType($weshare['Weshare']['id'], $weshareData['creator'] ,$shipSetData);
         $this->saveWeshareProxyPercent($weshare['Weshare']['id'], $proxyRebatePercent);
         if ($saveBuyFlag) {
             if (empty($weshareData['id'])) {
@@ -262,7 +262,7 @@ class WesharesController extends AppController {
                 Cache::write(SHARE_SHIP_SETTINGS_CACHE_KEY . '_' . $weshare['Weshare']['id'], '');
             }
             //todo update child share data and product data
-            //update product 
+            //update product
             //$this->ShareUtil->cascadeSaveShareData($weshareData);
             echo json_encode(array('success' => true, 'id' => $weshare['Weshare']['id']));
             return;
@@ -1471,14 +1471,18 @@ class WesharesController extends AppController {
 
     /**
      * @param $weshareId
+     * @param $userId
      * @param $weshareShipData
      * @return mixed
      * 保存分享的物流方式
      */
-    private function saveWeshareShipType($weshareId, $weshareShipData) {
+    private function saveWeshareShipType($weshareId, $userId, $weshareShipData) {
+        $ship_fee = 0;
         foreach ($weshareShipData as &$item) {
             $item['weshare_id'] = $weshareId;
+            $ship_fee = $item['ship_fee'];
         }
+        $this->DeliveryTemplate->save_share_default_delivery_template($weshareId, $userId, $ship_fee);
         return $this->WeshareShipSetting->saveAll($weshareShipData);
     }
 
