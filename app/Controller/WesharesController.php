@@ -1900,7 +1900,8 @@ class WesharesController extends AppController {
             }
             $this->setShareConsignees($buyerData, $uid, $shipType, $offline_store_id);
             if ($shipType == SHARE_SHIP_KUAIDI) {
-                return $customAddress;
+                $location_address  = $this->get_address_location($buyerData);
+                return $location_address.$customAddress;
             }
         }
         if ($shipType == SHARE_SHIP_SELF_ZITI) {
@@ -1930,6 +1931,26 @@ class WesharesController extends AppController {
         if ($shipType == SHARE_SHIP_GROUP) {
             return $customAddress;
         }
+    }
+
+    private function get_address_location($buyerData){
+        $provinceId = $buyerData['provinceId'];
+        $cityId = $buyerData['cityId'];
+        $countyId = $buyerData['countyId'];
+        $locationM = ClassRegistry::init('Location');
+        $locationIds = array_filter(array($provinceId, $cityId, $countyId));
+        $locations = $locationM->find('all', array(
+            'conditions' => array(
+                'id' => $locationIds
+            ),
+            'fields' => array('id','name')
+        ));
+        $locations = Hash::combine($locations, '{n}.Location.id', '{n}.Location.name');
+        $location_address = '';
+        foreach($locationIds as $locationId){
+            $location_address = $location_address . $locations[$locationId];
+        }
+        return $location_address;
     }
 
     /**

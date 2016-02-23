@@ -4396,7 +4396,7 @@
     }
 
     function validateLocation(){
-      if(!vm.selectedProvince || !vm.selectedCity){
+      if(vm.selectShipType==0 && (!vm.selectedProvince || !vm.selectedCity)){
         vm.locationHasError = true;
       }else{
         vm.locationHasError = false;
