@@ -7,7 +7,7 @@ class WesharesController extends AppController {
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
 
-    var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'OrderExpress', 'PintuanHelper', 'RedisQueue');
+    var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'OrderExpress', 'PintuanHelper', 'RedisQueue', 'DeliveryTemplate');
 
     var $share_ship_type = array('self_ziti', 'kuaidi', 'pys_ziti');
 
@@ -518,6 +518,21 @@ class WesharesController extends AppController {
     }
 
     /**
+     * @param $ship_setting
+     * @param $good_num
+     * @param $weshare_id
+     * @return mixed
+     * 计算订单费用
+     */
+    private function calculate_ship_fee($ship_setting, $good_num, $weshare_id){
+        if($ship_setting['WeshareShipSetting']['tag'] != SHARE_SHIP_KUAIDI_TAG){
+            return $ship_setting['WeshareShipSetting']['ship_fee'];
+        }
+        $shipFee = $this->DeliveryTemplate->calculate_ship_fee($good_num, 0, $weshare_id);
+        return $shipFee;
+    }
+
+    /**
      * 下单
      */
     public function makeOrder() {
@@ -567,7 +582,6 @@ class WesharesController extends AppController {
                 echo json_encode(array('success' => false, 'reason' => '物流方式选择错误'));
                 return;
             }
-            $shipFee = $shipSetting['WeshareShipSetting']['ship_fee'];
             //邮费是按分存取的
             $address = $this->get_order_address($weshareId, $shipInfo, $buyerData, $uid);
             $orderData = array('cate_id' => $rebateLogId, 'creator' => $uid, 'consignee_address' => $address, 'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $buyerData['name'], 'consignee_mobilephone' => $buyerData['mobilephone'], 'business_remark' => $business_remark);
@@ -580,6 +594,7 @@ class WesharesController extends AppController {
             $orderId = $order['Order']['id'];
             $totalPrice = 0;
             $is_prepaid = 0;
+            $cart_good_num = 0;
             foreach ($weshareProducts as $p) {
                 $item = array();
                 //check product is tbd to set order prepaid
@@ -592,6 +607,7 @@ class WesharesController extends AppController {
                 }
                 $pid = $p['WeshareProduct']['id'];
                 $num = $productIdNumMap[$pid];
+                $cart_good_num = $cart_good_num + $num;
                 $price = $p['WeshareProduct']['price'];
                 $item['name'] = $p['WeshareProduct']['name'];
                 $item['num'] = $num;
@@ -620,6 +636,7 @@ class WesharesController extends AppController {
             }
             //产品价格的团长佣金
             $rebate_fee = $this->WeshareBuy->cal_proxy_rebate_fee($totalPrice - $discountPrice, $uid, $weshareId);
+            $shipFee = $this->calculate_ship_fee($shipSetting, $cart_good_num, $weshareId);
             $totalPrice += $shipFee;
             //cal proxy user rebate fee
             $update_order_data = array('total_all_price' => ($totalPrice - $discountPrice) / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => $shipFee, 'is_prepaid' => $is_prepaid);
