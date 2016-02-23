@@ -32,30 +32,30 @@ class TestController extends AppController
 //    }
 
 
-    public function test_delivery_template(){
-        $this->autoRender = false;
-        $ship_fee = $this->DeliveryTemplate->calculate_ship_fee(1, 0, 53);
-        echo json_encode(array('testCase' => 1, 'ship_fee' => $ship_fee));
-        echo '<br>';
-        $ship_fee = $this->DeliveryTemplate->calculate_ship_fee(2, 0, 53);
-        echo json_encode(array('testCase' => 2, 'ship_fee' => $ship_fee));
-        echo '<br>';
-        $ship_fee = $this->DeliveryTemplate->calculate_ship_fee(1, 0, 59);
-        echo json_encode(array('testCase' => 3, 'ship_fee' => $ship_fee));
-        echo '<br>';
-        $ship_fee = $this->DeliveryTemplate->calculate_ship_fee(5, 0, 59);
-        echo json_encode(array('testCase' => 4, 'ship_fee' => $ship_fee));
-        echo '<br>';
-        $ship_fee = $this->DeliveryTemplate->calculate_ship_fee(1, 310000, 60);
-        echo json_encode(array('testCase' => 5, 'ship_fee' => $ship_fee));
-        echo '<br>';
-        $ship_fee = $this->DeliveryTemplate->calculate_ship_fee(2, 540000, 60);
-        echo json_encode(array('testCase' => 6, 'ship_fee' => $ship_fee));
-        echo '<br>';
-        $ship_fee = $this->DeliveryTemplate->calculate_ship_fee(2, 110000, 60);
-        echo json_encode(array('testCase' => 7, 'ship_fee' => $ship_fee));
-        return;
-    }
+//    public function test_delivery_template(){
+//        $this->autoRender = false;
+//        $ship_fee = $this->DeliveryTemplate->calculate_ship_fee(1, 0, 53);
+//        echo json_encode(array('testCase' => 1, 'ship_fee' => $ship_fee));
+//        echo '<br>';
+//        $ship_fee = $this->DeliveryTemplate->calculate_ship_fee(2, 0, 53);
+//        echo json_encode(array('testCase' => 2, 'ship_fee' => $ship_fee));
+//        echo '<br>';
+//        $ship_fee = $this->DeliveryTemplate->calculate_ship_fee(1, 0, 59);
+//        echo json_encode(array('testCase' => 3, 'ship_fee' => $ship_fee));
+//        echo '<br>';
+//        $ship_fee = $this->DeliveryTemplate->calculate_ship_fee(5, 0, 59);
+//        echo json_encode(array('testCase' => 4, 'ship_fee' => $ship_fee));
+//        echo '<br>';
+//        $ship_fee = $this->DeliveryTemplate->calculate_ship_fee(1, 310000, 60);
+//        echo json_encode(array('testCase' => 5, 'ship_fee' => $ship_fee));
+//        echo '<br>';
+//        $ship_fee = $this->DeliveryTemplate->calculate_ship_fee(2, 540000, 60);
+//        echo json_encode(array('testCase' => 6, 'ship_fee' => $ship_fee));
+//        echo '<br>';
+//        $ship_fee = $this->DeliveryTemplate->calculate_ship_fee(2, 110000, 60);
+//        echo json_encode(array('testCase' => 7, 'ship_fee' => $ship_fee));
+//        return;
+//    }
 
 
     public function add_queue(){
