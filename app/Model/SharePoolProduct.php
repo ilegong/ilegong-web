@@ -104,6 +104,42 @@ class SharePoolProduct extends AppModel {
     //产品池所有产品
     var $products = array(
         array(
+            'share_id' => 2426,
+            'share_name' => '空运大五星枇杷',
+            'share_img' => 'http://static.tongshijia.com/images/583fe8ee-da1a-11e5-a821-00163e1600b6.jpg',
+            'brand_img' => 'http://static.tongshijia.com/avatar/2015/12/31/wx_head_e92e61d892c2ad72c0e01ec1ac136e71.jpg',
+            'brand_name' => '盛夏',
+            'show_brand' => true,
+            'brand_custom_service' => 708029,
+            'published' => 1,
+            'products' => array(
+                '5258' => array(
+                    'price' => 95,
+                    'channel_price' => 78,
+                )
+            )
+        ),
+        array(
+            'share_id' => 2427,
+            'share_name' => '新疆天山脚下的“新”骏枣',
+            'share_img' => 'http://static.tongshijia.com/images/584006e4-da1a-11e5-a821-00163e1600b6.jpg',
+            'brand_img' => 'http://static.tongshijia.com/avatar/2015/12/31/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg',
+            'brand_name' => '李樱花',
+            'show_brand' => true,
+            'brand_custom_service' => 810684,
+            'published' => 1,
+            'products' => array(
+                '5260' => array(
+                    'price' => 120,
+                    'channel_price' => 105,
+                ),
+                '5261' => array(
+                    'price' => 130,
+                    'channel_price' => 115,
+                ),
+            )
+        ),
+        array(
             'share_id' => 2022,
             'share_name' => '现摘发货茂谷柑',
             'share_img' => 'http://static.tongshijia.com/images/1ce8a2d2-b91c-11e5-a8c5-00163e001f59.jpg',
