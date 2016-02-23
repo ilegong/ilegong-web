@@ -3713,6 +3713,7 @@
     vm.getConsigneeInfo = getConsigneeInfo;
     vm.validateAddress = validateAddress;
     vm.validateProducts = validateProducts;
+    vm.validateLocation = validateLocation;
     vm.buyProducts = buyProducts;
     vm.startGroupShare = startGroupShare;
     vm.validateMobile = validateMobile;
@@ -4394,6 +4395,15 @@
       return vm.productsHasError;
     }
 
+    function validateLocation(){
+      if(!vm.selectedProvince || !vm.selectedCity){
+        vm.locationHasError = true;
+      }else{
+        vm.locationHasError = false;
+      }
+      return vm.locationHasError;
+    }
+
 
     function validateUserAddress() {
       vm.userAddressHasError = _.isEmpty(vm.buyerAddress);
@@ -4496,7 +4506,10 @@
           name: vm.buyerName,
           mobilephone: vm.buyerMobilePhone,
           address: vm.buyerAddress,
-          patchAddress: vm.buyerPatchAddress
+          patchAddress: vm.buyerPatchAddress,
+          provinceId: vm.selectedProvince,
+          cityId: vm.selectedCity,
+          countyId: vm.selectedCounty
         }
       };
       if (vm.useCouponId) {
@@ -4898,6 +4911,9 @@
         if (addressHasError) {
           return false;
         }
+      }
+      if(vm.validateLocation()){
+        return false;
       }
       return true;
     }
