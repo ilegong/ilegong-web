@@ -165,7 +165,7 @@ const SUB_SHARER_REASON_TYPE_FROM_USER_CENTER = 'ShareUserInfo'; // 标示用户
 const SUB_SHARER_REASON_TYPE_FROM_SHARE_INFO = 'ShareInfo'; // 标示用户关注朋友说的原因 来向
 const SUB_SHARER_REASON_TYPE_FROM_SPREAD = 'Spread';
 //const SAE_STATIC_FILE_PATH = 'http://51daifan-assets.stor.sinaapp.com';
-if ($_ENV['TONGSHIJIA_ENV'] == 'test' || $_ENV['TONGSHIJIA_ENV'] == 'product') {
+if (getenv('TONGSHIJIA_ENV') == 'test' || getenv('TONGSHIJIA_ENV') == 'product') {
     //const SAE_STATIC_FILE_PATH = 'http://static.tongshijia.com';
     define('SAE_STATIC_FILE_PATH', 'http://static.tongshijia.com');
 } else {
