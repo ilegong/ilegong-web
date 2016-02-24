@@ -104,6 +104,42 @@ class SharePoolProduct extends AppModel {
     //产品池所有产品
     var $products = array(
         array(
+            'share_id' => 2418,
+            'share_name' => '雷诺啤酒',
+            'share_img' => 'http://static.tongshijia.com/images/b9745658-dae3-11e5-a821-00163e1600b6.jpg',
+            'brand_img' => 'http://static.tongshijia.com/avatar/8014471448421852.png',
+            'brand_name' => '平凡的世界',
+            'show_brand' => true,
+            'brand_custom_service' => 801447,
+            'published' => 1,
+            'products' => array(
+                '5236' => array(
+                    'price' => 96,
+                    'channel_price' => 80,
+                ),
+                '5245' => array(
+                    'price' => 168,
+                    'channel_price' => 145,
+                ),
+                '5246' => array(
+                    'price' => 102,
+                    'channel_price' => 86,
+                ),
+                '5247' => array(
+                    'price' => 180,
+                    'channel_price' => 157,
+                ),
+                '5248' => array(
+                    'price' => 102,
+                    'channel_price' => 86,
+                ),
+                '5249' => array(
+                    'price' => 180,
+                    'channel_price' => 157,
+                ),
+            )
+        ),
+        array(
             'share_id' => 2426,
             'share_name' => '空运大五星枇杷',
             'share_img' => 'http://static.tongshijia.com/images/583fe8ee-da1a-11e5-a821-00163e1600b6.jpg',
