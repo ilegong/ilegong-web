@@ -47,7 +47,7 @@ class ShareManageController extends AppController
             $users = $userM->find('all', array(
                 'conditions' => $cond,
                 'recursive' => 1,
-                'fields' => array('User.id', 'User.nickname', 'User.image', 'User.mobilephone'),
+                'fields' => array('User.id', 'User.nickname', 'User.image', 'User.mobilephone', 'User.avatar'),
                 'limit' => 100
             ));
             $this->set('users', $users);
