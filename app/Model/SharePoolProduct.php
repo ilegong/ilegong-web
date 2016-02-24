@@ -107,10 +107,10 @@ class SharePoolProduct extends AppModel {
             'share_id' => 2418,
             'share_name' => '雷诺啤酒',
             'share_img' => 'http://static.tongshijia.com/images/b9745658-dae3-11e5-a821-00163e1600b6.jpg',
-            'brand_img' => 'http://static.tongshijia.com/avatar/8014471448421852.png',
-            'brand_name' => '平凡的世界',
+            'brand_img' => 'http://static.tongshijia.com/avatar/2016/02/23/wx_head_644cc160-da3e-11e5-a821-00163e1600b6.jpg',
+            'brand_name' => '终南山南',
             'show_brand' => true,
-            'brand_custom_service' => 801447,
+            'brand_custom_service' => 547017,
             'published' => 1,
             'products' => array(
                 '5236' => array(
