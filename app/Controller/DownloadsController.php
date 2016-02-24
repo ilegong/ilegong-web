@@ -5,7 +5,7 @@ class DownloadsController extends AppController{
 
     private function download_wx_img_aliyun($access_token, $media_id)
     {
-        $url = SAE_STATIC_FILE_PATH . '/download_wx_image?media_id=' . $media_id . '&access_token=' . $access_token;
+        $url = SAE_IMAGES_FILE_PATH . '/download_wx_image?media_id=' . $media_id . '&access_token=' . $access_token;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_POST, false);
         curl_setopt($ch, CURLOPT_URL, $url);

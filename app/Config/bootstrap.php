@@ -166,6 +166,7 @@ const SUB_SHARER_REASON_TYPE_FROM_SHARE_INFO = 'ShareInfo'; // 标示用户关�
 const SUB_SHARER_REASON_TYPE_FROM_SPREAD = 'Spread';
 //const SAE_STATIC_FILE_PATH = 'http://51daifan-assets.stor.sinaapp.com';
 const SAE_STATIC_FILE_PATH = 'http://static.tongshijia.com';
+const SAE_IMAGES_FILE_PATH = 'http://images.tongshijia.com';
 const ALIYUN_AVATAR_DOMAIN = 'http://static.tongshijia.com/avatar/';
 
 //http://51daifan-assets.stor.sinaapp.com
