@@ -113,11 +113,26 @@ ul li {
     box-sizing: border-box;
 }
 
+.form-group .form-control-no-error {
+    box-shadow: none;
+    width: 100%;
+    font-size: 14px;
+    color: #666;
+    padding: 10px 0;
+    line-height: 1.42857143;
+    box-sizing: border-box;
+}
+
 .form-group.has-error .form-control {
     border-color: #a94442;
 }
 
 .form-group select.form-control {
+    background-color: white;
+    height: 38px;
+}
+
+.form-group select.form-control-no-error {
     background-color: white;
     height: 38px;
 }

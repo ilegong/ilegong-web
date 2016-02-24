@@ -5,14 +5,6 @@
         <a ng-click="vm.showShareDetail()" class="home"></a>
     </div>
     <div class="weshare-view" style="margin-top: 40px;padding: 10px 10px 0px">
-        <ul class="clearfix header margin-bottom-12">
-            <li><img ng-src="{{vm.weshare.creator.image|| vm.staticFilePath + '/static/img/default_user_icon.jpg'}}" ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/></li>
-            <li>
-                <label ng-click="vm.toUserShareInfo(vm.weshare.creator.id)" ng-bind="::vm.weshare.creator.nickname"></label>
-                <s><b style="color: #ffa200" ng-bind="::vm.userShareSummery.share_count">0</b>&nbsp; <small>分享</small>&nbsp;&nbsp;&nbsp;<b style="color: #ffa200" ng-bind="::vm.userShareSummery.follower_count">0</b>&nbsp;<small>粉丝</small></s>
-                <s>已有<span class="stress-span" ng-bind="::vm.ordersDetail.summery.all_buy_user_count"></span>人报名</s>
-            </li>
-        </ul>
         <div class="introduction margin-bottom-12" style="padding: 15px 15px 10px 15px;">
             <h1 class='title margin-bottom-12' ng-bind="::vm.weshare.title" style="padding-top: 0px;"></h1>
             <div class="product-group" ng-class="{'has-error':vm.productsHasError}">
@@ -106,8 +98,22 @@
             </div>
         </div>
         <div class="clearfix" style="padding: 0 10px;">
+            <div class="form-group" ng-if="vm.selectShipType==0" ng-class="{'has-error': vm.locationHasError}">
+                <select ng-model="vm.selectedProvince" ng-change="vm.loadCityData(vm.selectedProvince)" ng-options="province.id as province.name for province in vm.provinceData" class="form-control" style="width: 25%;">
+                    <option value="">选择省(市)</option>
+                </select>
+                <select ng-model="vm.selectedCity" ng-change="vm.loadCountyData(vm.selectedCity)" ng-options="id as city for (id, city) in vm.cityData" class="form-control" style="width: 30%;">
+                    <option value="">选择市(区)</option>
+                </select>
+                <select ng-model="vm.selectedCounty" ng-options="id as county for (id, county) in vm.countyData"  class="form-control-no-error" style="width: 32%;">
+                    <option value="">选择市县(街道)</option>
+                </select>
+                <p class='tips'>请选择省(市)、市(区)</p>
+            </div>
+        </div>
+        <div class="clearfix" style="padding: 0 10px;">
             <div class="form-group" ng-class="{'has-error': vm.userAddressHasError}" ng-if="vm.selectShipType==0">
-                <input class='form-control' placeholder="输入地址" ng-model='vm.buyerAddress' ng-change='vm.validateUserAddress()'/>
+                <input class='form-control' placeholder="输入详细地址" ng-model='vm.buyerAddress' ng-change='vm.validateUserAddress()'/>
                 <p class='tips'>请输入收货人地址</p>
             </div>
         </div>

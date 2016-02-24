@@ -11,7 +11,7 @@ class ShareController extends AppController {
     var $name = 'Share';
 
     var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User',
-        'OrderConsignees', 'WeshareShipSetting', 'OfflineStore', 'Oauthbind', 'Comment', 'RefundLog', 'PayNotify', 'RebateTrackLog', 'PayLog', 'PintuanTag');
+         'WeshareShipSetting', 'OfflineStore', 'Oauthbind', 'Comment', 'RefundLog', 'PayNotify', 'RebateTrackLog', 'PayLog', 'PintuanTag');
 
     var $components = array('Weixin', 'Paginator');
 

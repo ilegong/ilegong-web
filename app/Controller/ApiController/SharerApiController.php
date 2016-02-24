@@ -14,7 +14,12 @@ class SharerApiController extends AppController{
     }
 
     public function create_share(){
-
+        $uid = $this->currentUser['id'];
+        $postStr = file_get_contents('php://input');
+        $postDataArray = json_decode($postStr, true);
+        $result = $this->ShareUtil->create_share($postDataArray, $uid);
+        echo json_encode($result);
+        return;
     }
 
     public function get_my_share_orders($shareId){

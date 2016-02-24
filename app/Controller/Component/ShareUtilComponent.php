@@ -7,7 +7,7 @@ class ShareUtilComponent extends Component
 
     var $normal_order_status = array(ORDER_STATUS_DONE, ORDER_STATUS_PAID, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY);
 
-    public $components = array('Weixin', 'WeshareBuy', 'RedisQueue');
+    public $components = array('Weixin', 'WeshareBuy', 'RedisQueue', 'DeliveryTemplate');
 
     /**
      * @param $weshare_id
@@ -425,6 +425,8 @@ class ShareUtilComponent extends Component
                 $this->cloneShareShipSettings($newShareId, $shareId);
                 //clone rebate set
                 $this->cloneShareRebateSet($newShareId, $shareId);
+                //clone share delivery template
+                $this->cloneDeliveryTemplate($newShareId, $shareId, $uid);
             }
             if ($type == GROUP_SHARE_TYPE) {
                 $this->saveGroupShareAddress($address, $newShareId);
@@ -519,6 +521,44 @@ class ShareUtilComponent extends Component
         }
         $WeshareAddressM->id = null;
         $WeshareAddressM->saveAll($newAddresses);
+    }
+
+    /**
+     * @param $new_share_id
+     * @param $old_share_id
+     * @param $uid
+     */
+    private function cloneDeliveryTemplate($new_share_id, $old_share_id, $uid){
+        $WeshareDeliveryTemplateM = ClassRegistry::init('WeshareDeliveryTemplate');
+        $WeshareTemplateRegionM = ClassRegistry::init('WeshareTemplateRegion');
+        $deliveryTemplates = $WeshareDeliveryTemplateM->find('all', array(
+            'conditions' => array(
+                'id' => $old_share_id
+            )
+        ));
+        $newDeliveryTemplates = array();
+        foreach($deliveryTemplates as $deliveryTemplate){
+            $itemDeliveryTemplate = $deliveryTemplate['WeshareDeliveryTemplate'];
+            $itemDeliveryTemplate['id'] = null;
+            $itemDeliveryTemplate['weshare_id'] = $new_share_id;
+            $itemDeliveryTemplate['user_id'] = $uid;
+            $newDeliveryTemplates[] = $itemDeliveryTemplate;
+        }
+        $WeshareDeliveryTemplateM->saveAll($newDeliveryTemplates);
+        $templateRegions = $WeshareTemplateRegionM->find('all', array(
+            'conditions' => array(
+                'weshare_id' => $old_share_id
+            )
+        ));
+        $newTemplateRegions = array();
+        foreach($templateRegions as $templateRegion){
+            $itemTemplateRegion = $templateRegion['WeshareTemplateRegion'];
+            $itemTemplateRegion['id'] = null;
+            $itemTemplateRegion['weshare_id'] = $new_share_id;
+            $itemTemplateRegion['creator'] = $uid;
+            $newTemplateRegions[] = $itemTemplateRegion;
+        }
+        $WeshareTemplateRegionM->saveAll($newTemplateRegions);
     }
 
     /**
@@ -1798,6 +1838,7 @@ class ShareUtilComponent extends Component
         $weshareData['description'] = $postDataArray['description'];
         $weshareData['send_info'] = $postDataArray['send_info'];
         //create save creator
+        $weshareData['creator'] = $postDataArray['creator']['id'];
         if (empty($postDataArray['id'])) {
             $weshareData['creator'] = $uid;
         }
@@ -1808,13 +1849,15 @@ class ShareUtilComponent extends Component
         $addressesData = $postDataArray['addresses'];
         $shipSetData = $postDataArray['ship_type'];
         $proxyRebatePercent = $postDataArray['proxy_rebate_percent'];
+        $deliveryTemplates = $postDataArray['delivery_templates'];
         //merge for child share data
         $saveBuyFlag = $weshare = $WeshareM->save($weshareData);
         //merge for child share data
         $this->saveWeshareProducts($weshare['Weshare']['id'], $productsData);
         $this->saveWeshareAddresses($weshare['Weshare']['id'], $addressesData);
-        $this->saveWeshareShipType($weshare['Weshare']['id'], $shipSetData);
+        $this->saveWeshareShipType($weshare['Weshare']['id'], $weshare['Weshare']['creator'], $shipSetData);
         $this->saveWeshareProxyPercent($weshare['Weshare']['id'], $proxyRebatePercent);
+        $this->saveWeshareDeliveryTemplate($weshare['Weshare']['id'], $weshare['Weshare']['creator'], $deliveryTemplates);
         if ($saveBuyFlag) {
             if (empty($weshareData['id'])) {
                 //create update clear user share info view cache
@@ -1842,6 +1885,7 @@ class ShareUtilComponent extends Component
             //$this->ShareUtil->cascadeSaveShareData($weshareData);
             return array('success' => true, 'id' => $weshare['Weshare']['id']);
         }
+        return array('success' => false, 'uid' => $uid);
     }
 
     /**
@@ -1883,16 +1927,22 @@ class ShareUtilComponent extends Component
 
     /**
      * @param $weshareId
+     * @param $userId
      * @param $weshareShipData
      * @return mixed
      * 保存分享的物流方式
      */
-    private function saveWeshareShipType($weshareId, $weshareShipData) {
-        $WeshareShipSettingM = ClassRegistry::init('WeshareShipSetting');
+    private function saveWeshareShipType($weshareId, $userId, $weshareShipData) {
+        $ship_fee = 0;
+        $WeshareSettingM = ClassRegistry::init('WeshareShipSetting');
         foreach ($weshareShipData as &$item) {
             $item['weshare_id'] = $weshareId;
+            if ($item['tag'] == SHARE_SHIP_KUAIDI_TAG) {
+                $ship_fee = $item['ship_fee'];
+            }
         }
-        return $WeshareShipSettingM->saveAll($weshareShipData);
+        $this->DeliveryTemplate->save_share_default_delivery_template($weshareId, $userId, $ship_fee);
+        return $WeshareSettingM->saveAll($weshareShipData);
     }
 
     /**
@@ -1909,5 +1959,22 @@ class ShareUtilComponent extends Component
             $address['weshare_id'] = $weshareId;
         }
         return $WeshareAddressM->saveAll($weshareAddressData);
+    }
+
+    /**
+     * @param $weshareId
+     * @param $user_id
+     * @param $weshareDeliveryTemplateData
+     * 保存分享的快递模板
+     */
+    private function saveWeshareDeliveryTemplate($weshareId, $user_id, $weshareDeliveryTemplateData){
+        if (!empty($weshareDeliveryTemplateData)) {
+            //filter data
+            foreach ($weshareDeliveryTemplateData as &$itemTemplateData) {
+                $itemTemplateData['weshare_id'] = $weshareId;
+                $itemTemplateData['user_id'] = $user_id;
+            }
+            $this->DeliveryTemplate->save_all_delivery_template($weshareDeliveryTemplateData);
+        }
     }
 }

@@ -165,14 +165,19 @@ const SUB_SHARER_REASON_TYPE_FROM_USER_CENTER = 'ShareUserInfo'; // 标示用户
 const SUB_SHARER_REASON_TYPE_FROM_SHARE_INFO = 'ShareInfo'; // 标示用户关注朋友说的原因 来向
 const SUB_SHARER_REASON_TYPE_FROM_SPREAD = 'Spread';
 //const SAE_STATIC_FILE_PATH = 'http://51daifan-assets.stor.sinaapp.com';
-const SAE_STATIC_FILE_PATH = 'http://static.tongshijia.com';
+if (getenv('TONGSHIJIA_ENV') == 'test' || getenv('TONGSHIJIA_ENV') == 'product') {
+    //const SAE_STATIC_FILE_PATH = 'http://static.tongshijia.com';
+    define('SAE_STATIC_FILE_PATH', 'http://static.tongshijia.com');
+} else {
+    define('SAE_STATIC_FILE_PATH', 'http://dev.tongshijia.com');
+}
 const SAE_IMAGES_FILE_PATH = 'http://images.tongshijia.com';
 const ALIYUN_AVATAR_DOMAIN = 'http://static.tongshijia.com/avatar/';
 
 //http://51daifan-assets.stor.sinaapp.com
 //http://www.tongshijia.com
 //http://dev.tongshijia.com
-const LOCAL_STATIC_FILE_PATH = 'http://static.tongshijia.com';
+const LOCAL_STATIC_FILE_PATH = 'http://dev.tongshijia.com';
 
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
@@ -262,6 +267,18 @@ const STATUS_CONSIGNEES_TUAN_ZITI = 3;
 const STATUS_CONSIGNEES_SHARE = 4;
 //拼团地址
 const STATUS_CONSIGNEES_PINTUAN = 5;
+
+//团购地址地址
+const TYPE_CONSIGNEES_TUAN = 2;
+//自提地址
+const TYPE_CONSIGNEES_TUAN_ZITI = 3;
+//分享地址
+const TYPE_CONSIGNEES_SHARE = 4;
+//拼团地址
+const TYPE_CONSIGNEES_PINTUAN = 5;
+//分享自提
+const TYPE_CONSIGNEES_SHARE_ZITI = 6;
+const TYPE_CONSIGNEE_SHARE_OFFLINE_STORE = 7;
 
 const SHARE_COUPON_OFFER_TYPE = -1;
 const SHARE_SHIP_KUAIDI = 0;
@@ -1739,30 +1756,32 @@ function create_avatar_in_aliyun($url)
 }
 
 function download_photo_from_wx($url) {
-//    App::uses('CurlDownloader', 'Lib');
-//    $dl = new CurlDownloader($url);
-//    $dl->isDownloadHeadImg(true);
-//    $dl->download();
-//    $download_url = '';
-//    if ($dl->getFileName() != 'remote.out') {
-//        if (defined('SAE_MYSQL_DB')) {
-//            $stor = new SaeStorage();
-//            $download_url = $stor->upload(SAE_STORAGE_UPLOAD_AVATAR_DOMAIN_NAME, $dl->getUploadFileName(), $dl->getFileName());
-//            if (!$download_url) {
-//                //retry
-//                $download_url = $stor->upload(SAE_STORAGE_UPLOAD_AVATAR_DOMAIN_NAME, $dl->getUploadFileName(), $dl->getFileName());
-//            }
-//        } else {
-//            copy($dl->getFileName(), WWW_ROOT . 'files/wx-download/' . $dl->getFileName());
-//            $download_url = '/files/wx-download/' . $dl->getFileName();
-//            //delete temp file
-//            unlink($dl->getFileName());
-//        }
-//    }
-//    return $download_url;
     //use aliyun
     $ali_avatar = create_avatar_in_aliyun($url);
-    return $ali_avatar;
+    if(!empty($ali_avatar)){
+        return $ali_avatar;
+    }
+    App::uses('CurlDownloader', 'Lib');
+    $dl = new CurlDownloader($url);
+    $dl->isDownloadHeadImg(true);
+    $dl->download();
+    $download_url = '';
+    if ($dl->getFileName() != 'remote.out') {
+        if (defined('SAE_MYSQL_DB')) {
+            $stor = new SaeStorage();
+            $download_url = $stor->upload(SAE_STORAGE_UPLOAD_AVATAR_DOMAIN_NAME, $dl->getUploadFileName(), $dl->getFileName());
+            if (!$download_url) {
+                //retry
+                $download_url = $stor->upload(SAE_STORAGE_UPLOAD_AVATAR_DOMAIN_NAME, $dl->getUploadFileName(), $dl->getFileName());
+            }
+        } else {
+            copy($dl->getFileName(), WWW_ROOT . 'files/wx-download/' . $dl->getUploadFileName());
+            $download_url = '/files/wx-download/' . $dl->getUploadFileName();
+            //delete temp file
+            unlink($dl->getFileName());
+        }
+    }
+    return $download_url;
 }
 
 
