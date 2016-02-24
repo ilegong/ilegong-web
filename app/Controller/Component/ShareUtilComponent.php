@@ -1849,13 +1849,15 @@ class ShareUtilComponent extends Component
         $addressesData = $postDataArray['addresses'];
         $shipSetData = $postDataArray['ship_type'];
         $proxyRebatePercent = $postDataArray['proxy_rebate_percent'];
+        $deliveryTemplates = $postDataArray['delivery_templates'];
         //merge for child share data
         $saveBuyFlag = $weshare = $WeshareM->save($weshareData);
         //merge for child share data
         $this->saveWeshareProducts($weshare['Weshare']['id'], $productsData);
         $this->saveWeshareAddresses($weshare['Weshare']['id'], $addressesData);
-        $this->saveWeshareShipType($weshare['Weshare']['id'],$weshare['Weshare']['creator'], $shipSetData);
+        $this->saveWeshareShipType($weshare['Weshare']['id'], $weshare['Weshare']['creator'], $shipSetData);
         $this->saveWeshareProxyPercent($weshare['Weshare']['id'], $proxyRebatePercent);
+        $this->saveWeshareDeliveryTemplate($weshare['Weshare']['id'], $weshare['Weshare']['creator'], $deliveryTemplates);
         if ($saveBuyFlag) {
             if (empty($weshareData['id'])) {
                 //create update clear user share info view cache
@@ -1883,6 +1885,7 @@ class ShareUtilComponent extends Component
             //$this->ShareUtil->cascadeSaveShareData($weshareData);
             return array('success' => true, 'id' => $weshare['Weshare']['id']);
         }
+        return array('success' => false, 'uid' => $uid);
     }
 
     /**
@@ -1959,10 +1962,18 @@ class ShareUtilComponent extends Component
 
     /**
      * @param $weshareId
+     * @param $user_id
      * @param $weshareDeliveryTemplateData
      * 保存分享的快递模板
      */
-    private function saveWeshareDeliveryTemplate($weshareId, $weshareDeliveryTemplateData){
-
+    private function saveWeshareDeliveryTemplate($weshareId, $user_id, $weshareDeliveryTemplateData){
+        if (!empty($weshareDeliveryTemplateData)) {
+            //filter data
+            foreach ($weshareDeliveryTemplateData as &$itemTemplateData) {
+                $itemTemplateData['weshare_id'] = $weshareId;
+                $itemTemplateData['user_id'] = $user_id;
+            }
+            $this->DeliveryTemplate->save_all_delivery_template($weshareDeliveryTemplateData);
+        }
     }
 }

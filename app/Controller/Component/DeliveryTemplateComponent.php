@@ -64,4 +64,42 @@ class DeliveryTemplateComponent extends Component{
         }
     }
 
+    /**
+     * @param $deliveryTemplates
+     * save regions
+     */
+    public function save_all_delivery_template($deliveryTemplates){
+        $WeshareDeliveryTemplateM = ClassRegistry::init('WeshareDeliveryTemplate');
+        $WeshareTemplateRegions = ClassRegistry::init('WeshareTemplateRegions');
+        foreach ($deliveryTemplates as $itemTemplate) {
+            //$WeshareDeliveryTemplateM->saveAll($deliveryTemplates);
+            $is_default = $itemTemplate['is_default'];
+            $weshare_id = $itemTemplate['weshare_id'];
+            $regions = $itemTemplate['regions'];
+            unset($itemTemplate['regions']);
+            //process default delivery template default template only one
+            if ($is_default == 1) {
+                if ($WeshareDeliveryTemplateM->hasAny(array('weshare_id' => $weshare_id, 'is_default' => 1))) {
+                    $old_data = $WeshareDeliveryTemplateM->find('first', array(
+                        'conditions' => array(
+                            'weshare_id' => $weshare_id,
+                            'is_default' => 1
+                        )
+                    ));
+                    $old_data = $old_data['WeshareDeliveryTemplate'];
+                    $itemTemplate = array_merge($itemTemplate, $old_data);
+                    $WeshareDeliveryTemplateM->save($itemTemplate);
+                }
+            } else {
+                $itemTemplate = $WeshareDeliveryTemplateM->save($itemTemplate);
+                foreach ($regions as &$region_item) {
+                    $region_item['weshare_id'] = $itemTemplate['weshare_id'];
+                    $region_item['creator'] = $itemTemplate['user_id'];
+                    $region_item['delivery_template_id'] = $WeshareDeliveryTemplateM->id;
+                }
+                $WeshareTemplateRegions->saveAll($regions);
+            }
+        }
+    }
+
 }

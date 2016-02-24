@@ -215,62 +215,9 @@ class WesharesController extends AppController {
         }
         $postStr = file_get_contents('php://input');
         $postDataArray = json_decode($postStr, true);
-        $weshareData = array();
-        $weshareData['id'] = $postDataArray['id'];
-        $weshareData['title'] = $postDataArray['title'];
-        $weshareData['description'] = $postDataArray['description'];
-        $weshareData['send_info'] = $postDataArray['send_info'];
-        //create save creator
-        $weshareData['creator'] = $postDataArray['creator']['id'];
-        if (empty($postDataArray['id'])) {
-            $weshareData['creator'] = $uid;
-        }
-        $weshareData['created'] = date('Y-m-d H:i:s');
-        $images = $postDataArray['images'];
-        $weshareData['images'] = implode('|', $images);
-        $productsData = $postDataArray['products'];
-        $addressesData = $postDataArray['addresses'];
-        $shipSetData = $postDataArray['ship_type'];
-        $proxyRebatePercent = $postDataArray['proxy_rebate_percent'];
-        //merge for child share data
-        $saveBuyFlag = $weshare = $this->Weshare->save($weshareData);
-        //merge for child share data
-        $this->saveWeshareProducts($weshare['Weshare']['id'], $productsData);
-        $this->saveWeshareAddresses($weshare['Weshare']['id'], $addressesData);
-        $this->saveWeshareShipType($weshare['Weshare']['id'], $weshare['Weshare']['creator'], $shipSetData);
-        $this->saveWeshareProxyPercent($weshare['Weshare']['id'], $proxyRebatePercent);
-        if ($saveBuyFlag) {
-            if (empty($weshareData['id'])) {
-                //SIMPLE_SHARE_INFO_CACHE_KEY . '_' . $share_id
-                Cache::write(SIMPLE_SHARE_INFO_CACHE_KEY . '_' . $weshare['Weshare']['id'], '');
-                //SHARE_USER_SUMMERY_CACHE_KEY . '_' . $uid;
-                $thumbnail = null;
-                if (count($images) > 0) {
-                    $thumbnail = $images[0];
-                }
-                $this->ShareUtil->save_create_share_opt_log($weshare['Weshare']['id'], $thumbnail, $weshareData['title'], $uid);
-                //  $this->check_share_and_trigger_new_share($weshare['Weshare']['id'], $shipSetData);
-                // check user level and init level data when not
-                $this->ShareUtil->check_and_save_default_level($uid);
-            }else{
-                //create update clear user share info view cache
-                Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
-                //clear cache
-                //SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId
-                Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshare['Weshare']['id'] . '_0', '');
-                Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshare['Weshare']['id'] . '_1', '');
-                //SHARE_SHIP_SETTINGS_CACHE_KEY . '_' . $weshareId;
-                Cache::write(SHARE_SHIP_SETTINGS_CACHE_KEY . '_' . $weshare['Weshare']['id'], '');
-            }
-            //todo update child share data and product data
-            //update product
-            //$this->ShareUtil->cascadeSaveShareData($weshareData);
-            echo json_encode(array('success' => true, 'id' => $weshare['Weshare']['id']));
-            return;
-        } else {
-            echo json_encode(array('success' => false, 'uid' => $uid));
-            return;
-        }
+        $result = $this->ShareUtil->create_share($postDataArray, $uid);
+        echo $result;
+        return;
     }
 
     /**
@@ -727,7 +674,7 @@ class WesharesController extends AppController {
         $is_creator = $uid == $weshare['Weshare']['creator'];
         if (!$is_owner && !$is_creator) {
             $is_manage = $this->ShareAuthority->user_can_view_share_order_list($uid, $weshare_id);
-            if(!$is_manage){
+            if (!$is_manage) {
                 echo json_encode(array(success => false, reason => 'only owner or creator '));
                 return;
             }
@@ -740,11 +687,11 @@ class WesharesController extends AppController {
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
         $this->WeshareBuy->clear_user_share_order_data_cache(array($order_id), $weshare_id);
         if (!$result) {
-            echo json_encode(array(success => false, reason => "failed to update order status"));
+            echo json_encode(array("success" => false, "reason" => "failed to update order status"));
             return;
         }
-
-        echo json_encode(array(success => true));
+        echo json_encode(array("success" => true));
+        return;
     }
 
     /**
@@ -1435,74 +1382,6 @@ class WesharesController extends AppController {
         return;
     }
 
-    /**
-     * @param $weshareId
-     * @param $weshareProxyPercent
-     * 保存团长比例
-     */
-    private function saveWeshareProxyPercent($weshareId, $weshareProxyPercent) {
-        $weshareProxyPercent['share_id'] = $weshareId;
-        return $this->ProxyRebatePercent->save($weshareProxyPercent);
-    }
-
-    //TODO delete not use product
-    /**
-     * @param $weshareId
-     * @param $weshareProductData
-     * 保存分享商品
-     */
-    private function saveWeshareProducts($weshareId, $weshareProductData) {
-        if (empty($weshareProductData)) {
-            return;
-        }
-        foreach ($weshareProductData as &$product) {
-            $product['weshare_id'] = $weshareId;
-            $product['price'] = ($product['price'] * 100);
-            $store = $product['store'];
-            if (empty($store)) {
-                $product['store'] = 0;
-            }
-            $tag_id = $product['tag_id'];
-            if (empty($tag_id)) {
-                $product['tag_id'] = 0;
-            }
-        }
-        return $this->WeshareProduct->saveAll($weshareProductData);
-    }
-
-    /**
-     * @param $weshareId
-     * @param $userId
-     * @param $weshareShipData
-     * @return mixed
-     * 保存分享的物流方式
-     */
-    private function saveWeshareShipType($weshareId, $userId, $weshareShipData) {
-        $ship_fee = 0;
-        foreach ($weshareShipData as &$item) {
-            $item['weshare_id'] = $weshareId;
-            if($item['tag'] == SHARE_SHIP_KUAIDI_TAG){
-                $ship_fee = $item['ship_fee'];
-            }
-        }
-        $this->DeliveryTemplate->save_share_default_delivery_template($weshareId, $userId, $ship_fee);
-        return $this->WeshareShipSetting->saveAll($weshareShipData);
-    }
-
-    /**
-     * @param $weshareId
-     * @param $weshareAddressData
-     * 保存分享的 自有自提点
-     */
-    private function saveWeshareAddresses($weshareId, $weshareAddressData) {
-        if (empty($weshareAddressData)) {
-            return;
-        }
-        foreach ($weshareAddressData as &$address) {
-            $address['weshare_id'] = $weshareId;
-        }
-        return $this->WeshareAddress->saveAll($weshareAddressData);
-    }
 
     /**
      * @param $weshareId
