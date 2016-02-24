@@ -40,7 +40,7 @@
                         <tr>
                             <td valign="middle">{{$user['User']['id']}}</td>
                             <td valign="middle"><img src="{{$user['User']['image']}}" class="img-rounded" style="width: 50px;height: 50px;"></td>
-                            <td valign="middle">{{$user['User']['nickname']}}</td>
+                            <td valign="middle">{{get_user_avatar($user)}}</td>
                             <td valign="middle">{{$user['User']['mobilephone']}}</td>
                         </tr>
                         {{/loop}}
