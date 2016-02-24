@@ -55,6 +55,7 @@ class DownloadsController extends AppController{
                     $this->log('upload file to sae errMsg');
                 }
             } else {
+                //todo fix bug
                 copy($dl->getFileName(), WWW_ROOT . 'files/wx-download/' . $dl->getFileName());
                 $download_url = '/files/wx-download/' . $dl->getFileName();
                 //delete temp file
