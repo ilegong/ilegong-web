@@ -7,7 +7,7 @@ class ShareUtilComponent extends Component
 
     var $normal_order_status = array(ORDER_STATUS_DONE, ORDER_STATUS_PAID, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY);
 
-    public $components = array('Weixin', 'WeshareBuy', 'RedisQueue');
+    public $components = array('Weixin', 'WeshareBuy', 'RedisQueue', 'DeliveryTemplate');
 
     /**
      * @param $weshare_id
@@ -1934,6 +1934,7 @@ class ShareUtilComponent extends Component
      */
     private function saveWeshareShipType($weshareId, $userId, $weshareShipData) {
         $ship_fee = 0;
+        $WeshareSettingM = ClassRegistry::init('WeshareShipSetting');
         foreach ($weshareShipData as &$item) {
             $item['weshare_id'] = $weshareId;
             if ($item['tag'] == SHARE_SHIP_KUAIDI_TAG) {
@@ -1941,7 +1942,7 @@ class ShareUtilComponent extends Component
             }
         }
         $this->DeliveryTemplate->save_share_default_delivery_template($weshareId, $userId, $ship_fee);
-        return $this->WeshareShipSetting->saveAll($weshareShipData);
+        return $WeshareSettingM->saveAll($weshareShipData);
     }
 
     /**
