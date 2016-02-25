@@ -4018,7 +4018,13 @@
             }
             vm.selectedProvince = vm.consignee.province_id;
             vm.selectedCity = vm.consignee.city_id;
+            if(vm.consignee.city_id){
+              vm.loadCityData(vm.consignee.province_id);
+            }
             vm.selectedCounty = vm.consignee.county_id;
+            if(vm.consignee.county_id){
+              vm.loadCountyData(vm.consignee.city_id);
+            }
           }
           if (vm.myCoupons) {
             vm.useCouponId = vm.myCoupons.CouponItem.id;
