@@ -1545,7 +1545,7 @@ class WesharesController extends AppController {
                 'creator' => $uid,
                 'type' => TYPE_CONSIGNEES_SHARE
             ),
-            'fields' => array('name', 'mobilephone', 'address', 'ziti_id', 'remark_address')
+            'fields' => array('name', 'mobilephone', 'address', 'ziti_id', 'remark_address', 'province_id', 'city_id', 'county_id')
         ));
         //load remember offline store id
         $ziti_id = $consignee['OrderConsignees']['ziti_id'];

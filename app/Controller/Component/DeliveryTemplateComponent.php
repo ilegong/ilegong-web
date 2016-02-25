@@ -93,8 +93,8 @@ class DeliveryTemplateComponent extends Component{
             } else {
                 $itemTemplate = $WeshareDeliveryTemplateM->save($itemTemplate);
                 foreach ($regions as &$region_item) {
-                    $region_item['weshare_id'] = $itemTemplate['weshare_id'];
-                    $region_item['creator'] = $itemTemplate['user_id'];
+                    $region_item['weshare_id'] = $itemTemplate['WeshareDeliveryTemplate']['weshare_id'];
+                    $region_item['creator'] = $itemTemplate['WeshareDeliveryTemplate']['user_id'];
                     $region_item['delivery_template_id'] = $WeshareDeliveryTemplateM->id;
                 }
                 $WeshareTemplateRegions->saveAll($regions);

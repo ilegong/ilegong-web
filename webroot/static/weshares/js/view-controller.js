@@ -4012,8 +4012,13 @@
           vm.submitRecommendData.recommend_content = vm.weshare.creator.nickname + '我认识，很靠谱！';
           vm.submitRecommendData.recommend_user = vm.currentUser.id;
           vm.submitRecommendData.recommend_share = vm.weshare.id;
-          if (vm.consignee && vm.consignee.offlineStore) {
-            vm.checkedOfflineStore = vm.consignee.offlineStore;
+          if (vm.consignee) {
+            if(vm.consignee.offlineStore){
+              vm.checkedOfflineStore = vm.consignee.offlineStore;
+            }
+            vm.selectedProvince = vm.consignee.province_id;
+            vm.selectedCity = vm.consignee.city_id;
+            vm.selectedCounty = vm.consignee.county_id;
           }
           if (vm.myCoupons) {
             vm.useCouponId = vm.myCoupons.CouponItem.id;
