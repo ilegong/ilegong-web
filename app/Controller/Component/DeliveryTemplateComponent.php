@@ -87,7 +87,7 @@ class DeliveryTemplateComponent extends Component{
                         )
                     ));
                     $old_data = $old_data['WeshareDeliveryTemplate'];
-                    $itemTemplate = array_merge($itemTemplate, $old_data);
+                    $itemTemplate = array_merge($old_data, $itemTemplate);
                     $WeshareDeliveryTemplateM->save($itemTemplate);
                 }
             } else {
