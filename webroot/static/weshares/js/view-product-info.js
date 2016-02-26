@@ -61,6 +61,11 @@
 
     //发起自己的分享
     function cloneShare() {
+      if (vm.cloneShareProcessing) {
+        return;
+      }
+
+      vm.cloneShareProcessing = true;
       $http({method: 'GET', url: '/share_product_pool/clone_share/' + vm.shareId}).success(function (data) {
         if (data['success']) {
           var newShareId = data['shareId'];
@@ -74,11 +79,14 @@
               alert(data['reason']);
             }
           } else {
-            alert('分享失败请联系管理员');
+            alert('开团失败，请联系管理员');
           }
         }
+        vm.cloneShareProcessing = false;
       }).error(function () {
-        $log.log('clone share from product pool error')
+        $log.log('clone share from product pool error');
+        alert('系统错误，请联系管理员');
+        vm.cloneShareProcessing = false;
       });
     }
 
