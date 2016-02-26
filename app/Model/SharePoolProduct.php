@@ -104,6 +104,26 @@ class SharePoolProduct extends AppModel {
     //产品池所有产品
     var $products = array(
         array(
+            'share_id' => 2439,
+            'share_name' => '蔓越莓',
+            'share_img' => 'http://static.tongshijia.com/images/777d6be4-dc38-11e5-a821-00163e1600b6.jpg',
+            'brand_img' => 'http://static.tongshijia.com/avatar/2015/12/31/wx_head_9920c7076998639a0607b0ac4eb33af7.jpg',
+            'brand_name' => '岳远磊',
+            'show_brand' => true,
+            'brand_custom_service' => 894625,
+            'published' => 1,
+            'products' => array(
+                '5283' => array(
+                    'price' => 50,
+                    'channel_price' => 41,
+                ),
+                '5415' => array(
+                    'price' => 94,
+                    'channel_price' => 76,
+                ),
+            )
+        ),
+        array(
             'share_id' => 2418,
             'share_name' => '雷诺啤酒',
             'share_img' => 'http://static.tongshijia.com/images/b9745658-dae3-11e5-a821-00163e1600b6.jpg',
