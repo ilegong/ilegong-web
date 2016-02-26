@@ -533,7 +533,7 @@ class ShareUtilComponent extends Component
         $WeshareTemplateRegionM = ClassRegistry::init('WeshareTemplateRegion');
         $deliveryTemplates = $WeshareDeliveryTemplateM->find('all', array(
             'conditions' => array(
-                'id' => $old_share_id
+                'weshare_id' => $old_share_id
             )
         ));
         $newDeliveryTemplates = array();
