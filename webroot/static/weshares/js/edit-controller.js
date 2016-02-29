@@ -37,11 +37,24 @@
     vm.hideChooseCityView = hideChooseCityView;
     vm.initCityData = initCityData;
     vm.toggleAreaProvinceCheckStatus = toggleAreaProvinceCheckStatus;
+    vm.setDefaultShipSettingData = setDefaultShipSettingData;
+    vm.setDefaultProxyRebatePercent = setDefaultProxyRebatePercent;
     vm.canSetTagUser = [633345, 544307, 802852, 867587, 804975];
     vm.showEditShareView = true;
     vm.showEditTagView = false;
     function pageLoaded() {
       $rootScope.loadingPage = false;
+    }
+
+    function setDefaultShipSettingData(){
+      vm.self_ziti_data = {status: 1, ship_fee: 0, tag: 'self_ziti'};
+      vm.kuai_di_data = {status: -1, ship_fee: '', tag: 'kuai_di'};
+      vm.pys_ziti_data = {status: -1, ship_fee: 0, tag: 'pys_ziti'};
+      vm.pin_tuan_data = {status: -1, ship_fee: 500, tag: 'pin_tuan'};
+    }
+
+    function setDefaultProxyRebatePercent(){
+      vm.proxy_rebate_percent = {status: 0, percent: 0};
     }
 
     activate();
@@ -66,10 +79,8 @@
           vm.weshare = data;
           vm.weshare.tags = vm.weshare['tags_list'];
           setDefaultData();
-          vm.self_ziti_data = {status: 1, ship_fee: 0, tag: 'self_ziti'};
-          vm.kuai_di_data = {status: -1, ship_fee: '', tag: 'kuai_di'};
-          vm.pys_ziti_data = {status: -1, ship_fee: 0, tag: 'pys_ziti'};
-          vm.pin_tuan_data = {status: -1, ship_fee: 500, tag: 'pin_tuan'};
+          setDefaultShipSettingData();
+          setDefaultProxyRebatePercent();
           if (data['ship_type']['self_ziti']) {
             vm.self_ziti_data = data['ship_type']['self_ziti'];
           }
@@ -85,19 +96,14 @@
           vm.kuaidi_show_ship_fee = vm.kuai_di_data.ship_fee / 100;
           if (data['proxy_rebate_percent']) {
             vm.proxy_rebate_percent = data['proxy_rebate_percent'];
-          } else {
-            vm.proxy_rebate_percent = {status: 0, percent: 0};
           }
         }).error(function (data) {
         });
       } else {
         //保存的时候 记住数据
         $scope.$watchCollection('vm.weshare', vm.saveCacheData);
-        vm.self_ziti_data = {status: 1, ship_fee: 0, tag: 'self_ziti'};
-        vm.kuai_di_data = {status: -1, ship_fee: '', tag: 'kuai_di'};
-        vm.pys_ziti_data = {status: -1, ship_fee: 0, tag: 'pys_ziti'};
-        vm.pin_tuan_data = {status: -1, ship_fee: 500, tag: 'pin_tuan'};
-        vm.proxy_rebate_percent = {status: 0, percent: 0};
+        setDefaultShipSettingData();
+        setDefaultProxyRebatePercent();
         vm.kuaidi_show_ship_fee = '';
         //add
         vm.weshare = {
