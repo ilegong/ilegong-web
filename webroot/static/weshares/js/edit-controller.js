@@ -11,13 +11,11 @@
     vm.chooseAndUploadImage = chooseAndUploadImage;
     vm.uploadImage = uploadImage;
     vm.deleteImage = deleteImage;
-
     vm.toggleProduct = toggleProduct;
     vm.toggleAddress = toggleAddress;
-
     vm.nextStep = nextStep;
+    vm.backStep = backStep;
     vm.saveWeshare = saveWeshare;
-
     vm.validateTitle = validateTitle;
     vm.validateProductName = validateProductName;
     vm.validateProductPrice = validateProductPrice;
@@ -35,6 +33,9 @@
     vm.checkUserCanSetTag = checkUserCanSetTag;
     vm.validateSendInfo = validateSendInfo;
     vm.validatePinTuan = validatePinTuan;
+    vm.showChooseCityView = showChooseCityView;
+    vm.hideChooseCityView = hideChooseCityView;
+    vm.initCityData = initCityData;
     vm.canSetTagUser = [633345, 544307, 802852, 867587, 804975];
     vm.showEditShareView = true;
     vm.showEditTagView = false;
@@ -44,6 +45,8 @@
 
     activate();
     function activate() {
+      vm.initCityData();
+      vm.showEditShareInfo = true;
       vm.showShippmentInfo = false;
       var weshareId = angular.element(document.getElementById('weshareEditView')).attr('data-id');
       var sharerShipType = angular.element(document.getElementById('weshareEditView')).attr('data-ship-type');
@@ -66,22 +69,22 @@
           vm.kuai_di_data = {status: -1, ship_fee: '', tag: 'kuai_di'};
           vm.pys_ziti_data = {status: -1, ship_fee: 0, tag: 'pys_ziti'};
           vm.pin_tuan_data = {status: -1, ship_fee: 500, tag: 'pin_tuan'};
-          if(data['ship_type']['self_ziti']){
+          if (data['ship_type']['self_ziti']) {
             vm.self_ziti_data = data['ship_type']['self_ziti'];
           }
-          if(data['ship_type']['kuai_di']){
+          if (data['ship_type']['kuai_di']) {
             vm.kuai_di_data = data['ship_type']['kuai_di'];
           }
-          if(data['ship_type']['pys_ziti']){
+          if (data['ship_type']['pys_ziti']) {
             vm.pys_ziti_data = data['ship_type']['pys_ziti'];
           }
-          if(data['ship_type']['pin_tuan']){
+          if (data['ship_type']['pin_tuan']) {
             vm.pin_tuan_data = data['ship_type']['pin_tuan'];
           }
           vm.kuaidi_show_ship_fee = vm.kuai_di_data.ship_fee / 100;
-          if( data['proxy_rebate_percent']){
+          if (data['proxy_rebate_percent']) {
             vm.proxy_rebate_percent = data['proxy_rebate_percent'];
-          }else{
+          } else {
             vm.proxy_rebate_percent = {status: 0, percent: 0};
           }
         }).error(function (data) {
@@ -112,9 +115,9 @@
         //reset cache data
         var $cacheData = PYS.storage.load(vm.dataCacheKey);
         if ($cacheData) {
-          if(!$cacheData['id'])
-          vm.weshare = $cacheData;
-        }else{
+          if (!$cacheData['id'])
+            vm.weshare = $cacheData;
+        } else {
           PYS.storage.save(vm.dataCacheKey, {}, 1);
         }
         setDefaultData();
@@ -231,6 +234,11 @@
       }
     }
 
+    function backStep() {
+      vm.showShippmentInfo = false;
+      vm.showEditShareInfo = true;
+    }
+
     function nextStep() {
       var titleHasError = vm.validateTitle();
       var productHasError = false;
@@ -244,6 +252,7 @@
       }
 
       vm.showShippmentInfo = true;
+      vm.showEditShareInfo = false;
     }
 
     function saveWeshare() {
@@ -289,6 +298,84 @@
       }).error(function (data, status, headers, config) {
         window.location.href = '/weshares/add';
       });
+    }
+
+    function initCityData() {
+      vm.areaData = [{"name": "华东", "id": "1", "showChild": false}, {
+        "name": "华北",
+        "id": "2",
+        "showChild": false
+      }, {"name": "华中", "id": "3", "showChild": false}, {"name": "华南", "id": "4", "showChild": false}, {
+        "name": "东北",
+        "id": "5",
+        "showChild": false
+      }, {"name": "西北", "id": "6", "showChild": false}, {"name": "西南", "id": "7", "showChild": false}, {
+        "name": "港澳台",
+        "id": "8",
+        "showChild": false
+      }];
+      vm.provinceData = {
+        "1": {
+          "310100": "上海",
+          "320000": "江苏",
+          "330000": "浙江",
+          "340000": "安徽",
+          "360000": "江西"
+        },
+        "2": {
+          "110100": "北京",
+          "120100": "天津",
+          "130000": "河北",
+          "140000": "山西",
+          "150000": "内蒙古",
+          "370000": "山东"
+        },
+        "3": {
+          "410000": "河南",
+          "420000": "湖北",
+          "430000": "湖南"
+        },
+        "4": {
+          "350000": "福建",
+          "440000": "广东",
+          "450000": "广西",
+          "460000": "海南"
+        },
+        "5": {
+          "210000": "辽宁",
+          "220000": "吉林",
+          "230000": "黑龙江"
+        },
+        "6": {
+          "610000": "陕西",
+          "620000": "甘肃",
+          "630000": "青海",
+          "640000": "宁夏",
+          "650000": "新疆"
+        },
+        "7": {
+          "500100": "重庆",
+          "510000": "四川",
+          "520000": "贵州",
+          "530000": "云南",
+          "540000": "西藏"
+        },
+        "8": {
+          "710000": "台湾",
+          "810000": "香港",
+          "820000": "澳门"
+        }
+      };
+    }
+
+    function showChooseCityView() {
+      vm.isShowChooseCity = true;
+      vm.showShippmentInfo = false;
+    }
+
+    function hideChooseCityView() {
+      vm.isShowChooseCity = false;
+      vm.showShippmentInfo = true;
     }
 
     function hideEditTagView() {

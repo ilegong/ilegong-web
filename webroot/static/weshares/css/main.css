@@ -884,11 +884,11 @@ ul li {
 
 
 /*back*/
-.weshare-add div.shippment-info .refer-back-bg{ background-color: #f9f9f9; border-bottom: 1px #dddddd solid; color: #333333; font-size: 1.3em; line-height: 44px; text-align: center; position: fixed; top: 0; left: 0; width: 100%;}
-.weshare-add div.shippment-info .refer-back-bg a{ position: absolute; left: 15px; text-decoration: none; color: #333333; width: 4em; height: 44px;}
-.weshare-add div.shippment-info .refer-back-bg a img,.refer-back-bg a label{ float: left;}
-.weshare-add div.shippment-info .refer-back-bg a label{ padding-left: 5px; font-size: 0.8em;}
-.weshare-add div.shippment-info .refer-back-bg a img{ width: 8px;  margin-top: 14px;}
+.refer-back-bg{ background-color: #f9f9f9; border-bottom: 1px #dddddd solid; color: #333333; font-size: 1.3em; line-height: 44px; text-align: center; position: fixed; top: 0; left: 0; width: 100%;}
+.refer-back-bg a{ position: absolute; left: 15px; text-decoration: none; color: #333333; width: 4em; height: 44px;}
+.refer-back-bg a img,.refer-back-bg a label{ float: left;}
+.refer-back-bg a label{ padding-left: 5px; font-size: 0.8em;}
+.refer-back-bg a img{ width: 8px;  margin-top: 14px;}
 
 .weshare-add div.shippment-info .ziti{ background-color: #ffffff; margin: 48px 0 5px 0; border: 1px #eeeeee solid; padding: 0 10px;}
 .weshare-add div.shippment-info .ziti dl,.expressage dl{ padding: 12px 0 7px 0;}
@@ -911,8 +911,8 @@ ul li {
 .weshare-add div.shippment-info .freightrate s{ float: left; margin: 0 8px; border: 1px #dddddd solid; border-radius: 4px; padding: 0px 4px; width: 30px; background-color: #ffffff;}
 .weshare-add div.shippment-info .freightrate s input{ font-size: 1em; border: 0; width: 100%; color: #666666;}
 .weshare-add div.shippment-info .pt10{ padding-top: 10px;}
-.weshare-add div.shippment-info .deletebtn{ color: #666666; text-decoration: none; padding:10px 0 10px 10px; display: block;}
-.weshare-add div.shippment-info .more_city{ display: block; float: right; padding: 10px 0 10px 10px;}
+.weshare-add div.shippment-info .deletebtn{ color: #666666; text-decoration: none; padding:10px 10px 10px; display: block;}
+.weshare-add div.shippment-info .more_city{ display: block; float: right;}
 .weshare-add div.shippment-info .more_city img{ width: 9px; height: 16px;}
 .weshare-add div.shippment-info .add_freight{ text-decoration: underline; color: #49bc6e; padding-bottom: 10px; display: block; width: 50%;}
 
