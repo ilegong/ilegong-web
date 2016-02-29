@@ -136,6 +136,21 @@ class UtilController extends AppController {
         return;
     }
 
+    public function send_pp_tip_msg($shareId) {
+        $this->autoRender = false;
+        $msg = '非常抱歉，因枇杷基地负责人奶奶于前天突然去世，枇杷发货稍延迟请各位小伙伴耐心等待，今明两天会开始恢复正常如数发出，造成不便敬请谅解。';
+        //$uids = $this->WeshareBuy->get_has_buy_user($shareId);
+        $uids = array();
+        $uids[] = '633345';
+        //$uids[] = '544307';
+        $openIds = $this->Oauthbind->findWxServiceBindsByUids($uids);
+        foreach ($openIds as $openId) {
+            $this->Weixin->send_faq_notify_template_msg($openId, 'www.tongshijia.com/weshares/view/' . $shareId, '枇杷延时发货提醒', $msg, '空运大五星枇杷');
+        }
+        echo json_encode(array('success' => true));
+        return;
+    }
+
     public function send_tip_juzi_ziti_kuaidi(){
         $this->autoRender = false;
         $msg = '亲们，由于橘子从地里摘完直接装箱，难免水汽大有坏的，请收到货及时检查，附近来补，我们备了足够的量补给大家，快递到家的亲们，如果发现坏的多请及时联系，我们会退部分款给各位。谢谢大家支持！';
