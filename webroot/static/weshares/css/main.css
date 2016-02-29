@@ -878,6 +878,48 @@ ul li {
     overflow-y: hidden
 }
 
+.weshare-view div.shippment-info{
+
+}
+
+/*back*/
+.weshare-add div.shippment-info .refer-back-bg{ background-color: #f9f9f9; border-bottom: 1px #dddddd solid; color: #333333; font-size: 1.3em; line-height: 44px; text-align: center; position: fixed; top: 0; left: 0; width: 100%;}
+.weshare-add div.shippment-info .refer-back-bg a{ position: absolute; left: 15px; text-decoration: none; color: #333333; width: 4em; height: 44px;}
+.weshare-add div.shippment-info .refer-back-bg a img,.refer-back-bg a label{ float: left;}
+.weshare-add div.shippment-info .refer-back-bg a label{ padding-left: 5px; font-size: 0.8em;}
+.weshare-add div.shippment-info .refer-back-bg a img{ width: 8px;  margin-top: 14px;}
+
+.weshare-add div.shippment-info .ziti{ background-color: #ffffff; margin: 64px 0 5px 0; border: 1px #eeeeee solid; padding: 0 10px;}
+.weshare-add div.shippment-info .ziti dl,.expressage dl{ padding: 12px 0 7px 0;}
+.weshare-add div.shippment-info .freightmore{ border-top: 1px #eeeeee solid; padding-top: 12px; margin-top: 5px; margin-bottom: 2px;}
+.weshare-add div.shippment-info .ziti dl dd,.expressage dl dd{ float: left;}
+.weshare-add div.shippment-info .ziti dl dd,.expressage dl dd input,.haolinju dd input,.expressage ul.choice li input{ margin-right: 3px;}
+.weshare-add div.shippment-info .sendouttime{ border: 1px #dddddd solid; border-radius: 4px; margin-bottom: 10px; padding: 5px;}
+.weshare-add div.shippment-info .sendouttime input,.sendoutsite input{ border: none; border-radius: 0; font-size: 1em; width: 100%;}
+.weshare-add div.shippment-info .sendoutsite{ border: 1px #dddddd solid; border-radius: 4px; padding: 5px; margin-bottom: 10px;}
+.weshare-add div.shippment-info .ziti ul li.fl{ width: 80%;}
+.weshare-add div.shippment-info .ziti ul li.fr a{ line-height: 35px; border: 1px #49bc6e solid; color: #49bc6e; padding: 0 10px; border-radius: 4px; display: block; text-decoration: none;}
+.weshare-add div.shippment-info .ziti ul li.fr a.delete{ border-color: #cccccc; color: #333333;}
+
+.weshare-add div.shippment-info .expressage,.haolinju{ background-color: #ffffff; margin: 0 0 5px 0; border: 1px #eeeeee solid; padding: 0 10px 5px 10px;}
+.weshare-add div.shippment-info .expressage ul.choice{ padding-bottom: 12px; padding-left: 10px; color: #666666;}
+.weshare-add div.shippment-info .expressage ul.choice li{ float: left;}
+.weshare-add div.shippment-info .pl15{ padding-left: 15px;}
+.weshare-add div.shippment-info .freight{ background-color: #f9f9f9; margin-bottom: 5px;}
+.weshare-add div.shippment-info .freight h1{ font-size: 1em; font-weight: normal; line-height: 38px; border-bottom: 1px #eeeeee solid; padding: 0 10px; color: #666666;}
+.weshare-add div.shippment-info .freightrate{ padding: 10px;}
+.weshare-add div.shippment-info .freightrate label{ display: block; float: left; line-height: 36px; color: #666666;}
+.weshare-add div.shippment-info .freightrate s{ float: left; margin: 0 10px; border: 1px #dddddd solid; border-radius: 4px; width: 50px; background-color: #ffffff;}
+.weshare-add div.shippment-info .freightrate s input{ font-size: 1em; border: 0; width: 100%; color: #666666;}
+
+.weshare-add div.shippment-info .haolinju{ padding: 5px 10px;}
+.weshare-add div.shippment-info .haolinju dd.fr{ font-size: 0.9em; text-align: right;}
+.weshare-add div.shippment-info .haolinju dd.fr span{ color: #49bc6e;}
+.weshare-add div.shippment-info .haolinju dd.fl{ padding-top: 7px;}
+
+.weshare-add div.shippment-info .submitbtn{ display: block; text-decoration: none; margin: 40px 20px 20px 20px; line-height: 40px; text-align: center; background-color: #49bc6e; color: #ffffff; border-radius: 4px; font-size: 1.2em;}
+
+
 .offline-address-list {
 }
 
