@@ -46,11 +46,34 @@ class SharerApiController extends AppController{
                 $shareItem['balance_money'] = $share_balacne_money[$shareItem['id']];
             }
         }
-        usort($createShares, 'sort_data_by_id_desc');
+        usort($createShares, 'sort_data_by_id');
         $shareResult = $this->classify_shares_by_status($createShares);
         $userMonthOrderCount = $this->WeshareBuy->get_month_total_count($uid);
         $shareResult['monthOrderCount'] = $userMonthOrderCount;
         echo json_encode($shareResult);
+        return;
+    }
+
+    /**
+     * @param $shareId
+     * 重新开团
+     */
+    public function open_new_share($shareId){
+        $result = $this->ShareUtil->cloneShare($shareId);
+        if($result['success']){
+            $shareId = $result['shareId'];
+            $weshareM = ClassRegistry::init('Weshare');
+            $shareInfo = $weshareM->find('first', array(
+                'conditions' => array(
+                    'id' => $shareId
+                ),
+                'fields' => array('id', 'title', 'images', 'status', 'created')
+            ));
+            $shareInfo = $shareInfo['Weshare'];
+            $shareInfo['images'] = explode(',', $shareInfo['images']);
+            echo json_encode(array('success' => true, 'shareInfo' => $shareInfo));
+        }
+        echo json_encode(array('success' => false));
         return;
     }
 
