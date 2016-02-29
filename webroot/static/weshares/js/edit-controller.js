@@ -36,6 +36,7 @@
     vm.showChooseCityView = showChooseCityView;
     vm.hideChooseCityView = hideChooseCityView;
     vm.initCityData = initCityData;
+    vm.toggleAreaProvinceCheckStatus = toggleAreaProvinceCheckStatus;
     vm.canSetTagUser = [633345, 544307, 802852, 867587, 804975];
     vm.showEditShareView = true;
     vm.showEditTagView = false;
@@ -300,72 +301,11 @@
       });
     }
 
-    function initCityData() {
-      vm.areaData = [{"name": "华东", "id": "1", "showChild": false}, {
-        "name": "华北",
-        "id": "2",
-        "showChild": false
-      }, {"name": "华中", "id": "3", "showChild": false}, {"name": "华南", "id": "4", "showChild": false}, {
-        "name": "东北",
-        "id": "5",
-        "showChild": false
-      }, {"name": "西北", "id": "6", "showChild": false}, {"name": "西南", "id": "7", "showChild": false}, {
-        "name": "港澳台",
-        "id": "8",
-        "showChild": false
-      }];
-      vm.provinceData = {
-        "1": {
-          "310100": "上海",
-          "320000": "江苏",
-          "330000": "浙江",
-          "340000": "安徽",
-          "360000": "江西"
-        },
-        "2": {
-          "110100": "北京",
-          "120100": "天津",
-          "130000": "河北",
-          "140000": "山西",
-          "150000": "内蒙古",
-          "370000": "山东"
-        },
-        "3": {
-          "410000": "河南",
-          "420000": "湖北",
-          "430000": "湖南"
-        },
-        "4": {
-          "350000": "福建",
-          "440000": "广东",
-          "450000": "广西",
-          "460000": "海南"
-        },
-        "5": {
-          "210000": "辽宁",
-          "220000": "吉林",
-          "230000": "黑龙江"
-        },
-        "6": {
-          "610000": "陕西",
-          "620000": "甘肃",
-          "630000": "青海",
-          "640000": "宁夏",
-          "650000": "新疆"
-        },
-        "7": {
-          "500100": "重庆",
-          "510000": "四川",
-          "520000": "贵州",
-          "530000": "云南",
-          "540000": "西藏"
-        },
-        "8": {
-          "710000": "台湾",
-          "810000": "香港",
-          "820000": "澳门"
-        }
-      };
+    function toggleAreaProvinceCheckStatus(areaId){
+      var areaCheckStatus = vm.areaCheckStatus[areaId];
+      _.each(vm.provinceData[areaId], function(_, key){
+        vm.provinceCheckStatus[key] = areaCheckStatus;
+      });
     }
 
     function showChooseCityView() {
@@ -495,7 +435,119 @@
       }
       return vm.addressError;
     }
-
+    function initCityData() {
+      vm.areaData = [{"name": "华东", "id": "1", "showChild": false}, {
+        "name": "华北",
+        "id": "2",
+        "showChild": false
+      }, {"name": "华中", "id": "3", "showChild": false}, {"name": "华南", "id": "4", "showChild": false}, {
+        "name": "东北",
+        "id": "5",
+        "showChild": false
+      }, {"name": "西北", "id": "6", "showChild": false}, {"name": "西南", "id": "7", "showChild": false}, {
+        "name": "港澳台",
+        "id": "8",
+        "showChild": false
+      }];
+      vm.areaCheckStatus = {
+        "1": false,
+        "2": false,
+        "3": false,
+        "4": false,
+        "5": false,
+        "6": false,
+        "7": false,
+        "8": false
+      };
+      vm.provinceCheckStatus = {
+        "310100": false,
+        "320000": false,
+        "330000": false,
+        "340000": false,
+        "360000": false,
+        "110100": false,
+        "120100": false,
+        "130000": false,
+        "140000": false,
+        "150000": false,
+        "370000": false,
+        "410000": false,
+        "420000": false,
+        "430000": false,
+        "350000": false,
+        "440000": false,
+        "450000": false,
+        "460000": false,
+        "210000": false,
+        "220000": false,
+        "230000": false,
+        "610000": false,
+        "620000": false,
+        "630000": false,
+        "640000": false,
+        "650000": false,
+        "500100": false,
+        "510000": false,
+        "520000": false,
+        "530000": false,
+        "540000": false,
+        "710000": false,
+        "810000": false,
+        "820000": false
+      };
+      vm.provinceData = {
+        "1": {
+          "310100": "上海",
+          "320000": "江苏",
+          "330000": "浙江",
+          "340000": "安徽",
+          "360000": "江西"
+        },
+        "2": {
+          "110100": "北京",
+          "120100": "天津",
+          "130000": "河北",
+          "140000": "山西",
+          "150000": "内蒙古",
+          "370000": "山东"
+        },
+        "3": {
+          "410000": "河南",
+          "420000": "湖北",
+          "430000": "湖南"
+        },
+        "4": {
+          "350000": "福建",
+          "440000": "广东",
+          "450000": "广西",
+          "460000": "海南"
+        },
+        "5": {
+          "210000": "辽宁",
+          "220000": "吉林",
+          "230000": "黑龙江"
+        },
+        "6": {
+          "610000": "陕西",
+          "620000": "甘肃",
+          "630000": "青海",
+          "640000": "宁夏",
+          "650000": "新疆"
+        },
+        "7": {
+          "500100": "重庆",
+          "510000": "四川",
+          "520000": "贵州",
+          "530000": "云南",
+          "540000": "西藏"
+        },
+        "8": {
+          "710000": "台湾",
+          "810000": "香港",
+          "820000": "澳门"
+        }
+      };
+    }
     function validateRebatePercent() {
       if (!Utils.isNumber(vm.proxy_rebate_percent.percent)) {
         vm.rebatePercentHasError = true;
@@ -505,4 +557,5 @@
       return vm.rebatePercentHasError;
     }
   }
+
 })(window, window.angular, window.wx);

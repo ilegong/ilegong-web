@@ -189,7 +189,6 @@
                         <a href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=400854243&idx=1&sn=cce48490ef7ac0ee9f697eba6216aecf&scene=1">朋友说商家入驻指南</a>
                     </li>
                 </ul>
-
             </div>
         </div>
     </div>
@@ -198,7 +197,7 @@
 <div style="background-color: #f9f9f9;margin-bottom: 50px;" ng-if="vm.isShowChooseCity">
     <div class="refer-back-bg">
         选择地区
-        <a href="#X">
+        <a ng-click="vm.hideChooseCityView();">
             <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/back.png"/>
             <label>返回</label>
         </a>
@@ -209,13 +208,13 @@
     <div class="citylist" ng-repeat="area in vm.areaData">
         <ul class="clearfix">
             <li class="fl"><a class="show_city" ng-click="area.showChild=!area.showChild"><img src="{{::vm.staticFilePath}}/static/weshares/images/show_city.png" /></a></li>
-            <li class="fl" ng-bind="area.name"></li>
-            <li class="fr"><input type="checkbox" ng-value="area.id"/></li>
+            <li class="fl" ng-bind="area.name" ng-click="area.showChild=!area.showChild"></li>
+            <li class="fr"><input type="checkbox" ng-model="vm.areaCheckStatus[area.id]" ng-change="vm.toggleAreaProvinceCheckStatus(area.id)" ng-true-value="true" ng-false-value="false"/></li>
         </ul>
         <div ng-show="area.showChild">
             <ul class="clearfix" ng-repeat="(provinceId, provinceName) in vm.provinceData[area.id]">
                 <li class="fl gray pl28" ng-bind="provinceName"></li>
-                <li class="fr"><input type="checkbox" ng-value="provinceId"/></li>
+                <li class="fr"><input type="checkbox" ng-model="vm.provinceCheckStatus[provinceId]" ng-change="" ng-true-value="true" ng-false-value="false"/></li>
             </ul>
         </div>
     </div>
