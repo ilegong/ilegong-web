@@ -69,7 +69,7 @@
         <div class="refer-back-bg">
             设置配送信息
             <a href="#X">
-                <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/back.png"/>
+                <img src="{{::vm.staticFilePath}}/static/weshares/images/back.png"/>
                 <label>返回</label>
             </a>
         </div>
@@ -82,11 +82,11 @@
                 <div class="sendouttime"><input type="text" placeholder="到货/发货时间" /></div>
                 <ul class="clearfix">
                     <li class="fl"><div class="sendoutsite"><input type="text" placeholder="取货地点，联系人，联系电话" /></div></li>
-                    <li class="fr"><a href="" class="delete">删除</a></li>
+                    <li class="fr"><a href="#X" class="delete">删除</a></li>
                 </ul>
                 <ul class="clearfix">
                     <li class="fl"><div class="sendoutsite"><input type="text" placeholder="取货地点，联系人，联系电话" /></div></li>
-                    <li class="fr"><a href="">添加</a></li>
+                    <li class="fr"><a href="#X">添加</a></li>
                 </ul>
             </div>
         </div>
@@ -96,28 +96,51 @@
                 <dd>快递</dd>
             </dl>
             <div class="freightmore">
-                <ul class="clearfix choice">
-                    <li><input checked type="radio" name="1" /></li>
-                    <li>自定义运费</li>
-                    <li class="pl15"><input type="radio" name="1" /></li>
-                    <li>包邮</li>
-                </ul>
                 <div class="freight">
                     <h1>默认［除指定地区外］</h1>
                     <div class="clearfix freightrate">
-                        <label>快递费</label>
-                        <s><input type="text" /></s>
-                        <label>元</label>
+                        <div class="pt10 clearfix">
+                            <label>默认运费</label>
+                            <s><input type="text" placeholder="100" /></s>
+                            <label>件内，</label>
+                            <s><input type="text" placeholder="0" /></s>
+                            <label>元</label>
+                        </div>
+                        <div class="pt10 clearfix">
+                            <label>每增加</label>
+                            <s><input type="text" placeholder="1" /></s>
+                            <label>件，增加运费</label>
+                            <s><input type="text" placeholder="0" /></s>
+                            <label>元</label>
+                        </div>
                     </div>
                 </div>
-                <div class="freight">
-                    <h1>默认［北京地区］</h1>
-                    <div class="clearfix freightrate">
-                        <label>快递费</label>
-                        <s><input type="text" /></s>
-                        <label>元</label>
+                <div class="clearfix">
+                    <div class="freight fl">
+                        <h1 class="clearfix">
+                            <div class="fl">选择地区</div>
+                            <a href="#X" class="more_city"><img src="{{::vm.staticFilePath}}/static/weshares/images/more_city.png" /></a>
+                        </h1>
+                        <div class="clearfix freightrate">
+                            <div class="pt10 clearfix">
+                                <label>指定</label>
+                                <s><input type="text" /></s>
+                                <label>件内，</label>
+                                <s><input type="text" /></s>
+                                <label>元</label>
+                            </div>
+                            <div class="pt10 clearfix">
+                                <label>每增加</label>
+                                <s><input type="text" /></s>
+                                <label>件，增加运费</label>
+                                <s><input type="text" /></s>
+                                <label>元</label>
+                            </div>
+                        </div>
                     </div>
+                    <div class="fr"><a href="#X" class="deletebtn">删除</a></div>
                 </div>
+                <a href="#X" class="add_freight">添加指定地区运费</a>
             </div>
         </div>
         <dl class="clearfix haolinju">
