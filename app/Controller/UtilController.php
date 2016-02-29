@@ -139,8 +139,8 @@ class UtilController extends AppController {
     public function send_pp_tip_msg($shareId) {
         $this->autoRender = false;
         $msg = '非常抱歉，因枇杷基地负责人奶奶于前天突然去世，枇杷发货稍延迟请各位小伙伴耐心等待，今明两天会开始恢复正常如数发出，造成不便敬请谅解。';
-        //$uids = $this->WeshareBuy->get_has_buy_user($shareId);
-        $uids = array();
+        $uids = $this->WeshareBuy->get_has_buy_user($shareId, array(ORDER_STATUS_PAID));
+        //$uids = array();
         $uids[] = '633345';
         //$uids[] = '544307';
         $openIds = $this->Oauthbind->findWxServiceBindsByUids($uids);
