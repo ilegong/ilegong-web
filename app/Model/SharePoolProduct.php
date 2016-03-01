@@ -104,6 +104,22 @@ class SharePoolProduct extends AppModel {
     //产品池所有产品
     var $products = array(
         array(
+            'share_id' => 2583,
+            'share_name' => '茂谷柑',
+            'share_img' => 'http://static.tongshijia.com/images/12421510-df83-11e5-a821-00163e1600b6.jpg',
+            'brand_img' => 'http://static.tongshijia.com/static/img/default_user_icon.jpg',
+            'brand_name' => '娟子',
+            'show_brand' => true,
+            'brand_custom_service' => 801709,
+            'published' => 1,
+            'products' => array(
+                '5617' => array(
+                    'price' => 115,
+                    'channel_price' => 105,
+                )
+            )
+        ),
+        array(
             'share_id' => 2499,
             'share_name' => '香辣豆干',
             'share_img' => 'http://static.tongshijia.com/images/31323380-dc5c-11e5-a821-00163e1600b6.jpg',
