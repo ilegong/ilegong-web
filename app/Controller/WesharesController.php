@@ -7,7 +7,7 @@ class WesharesController extends AppController {
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
 
-    var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'OrderExpress', 'PintuanHelper', 'RedisQueue', 'DeliveryTemplate');
+    var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'OrderExpress', 'PintuanHelper', 'RedisQueue', 'DeliveryTemplate', 'OrderUtil');
 
     var $share_ship_type = array('self_ziti', 'kuaidi', 'pys_ziti');
 
@@ -481,12 +481,13 @@ class WesharesController extends AppController {
     }
 
     /**
-     * 下单
+     * 用户下单
      */
     public function makeOrder() {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
+            $this->log('Failed to create order: user not logged in', LOG_WARNING);
             echo json_encode(array('success' => false, 'reason' => 'not_login'));
             return;
         }
@@ -504,6 +505,7 @@ class WesharesController extends AppController {
         try {
             $weshare_available = $this->WeshareBuy->check_weshare_status($weshareId);
             if (!$weshare_available) {
+                $this->log('Failed to create order for '.$uid.' with weshare ' . $weshareId . ': weshare is not available.', LOG_WARNING);
                 echo json_encode(array('success' => false, 'reason' => '分享已经截团'));
                 return;
             }
@@ -518,18 +520,22 @@ class WesharesController extends AppController {
             ));
             $checkProductStoreResult = $this->check_product_store($weshareProducts, $weshareId, $productIdNumMap);
             if (!empty($checkProductStoreResult)) {
+                $this->log('Failed to create order for '.$uid.' with weshare ' . $weshareId . ': product is sold out.', LOG_WARNING);
                 echo json_encode($checkProductStoreResult);
                 return;
             }
+
             $shipInfo = $postDataArray['ship_info'];
             $addressId = $shipInfo['address_id'];
             $shipType = $shipInfo['ship_type'];
             $shipSetId = $shipInfo['ship_set_id'];
             $shipSetting = $this->get_ship_set($shipSetId, $weshareId);
             if (empty($shipSetting)) {
+                $this->log('Failed to create order for '.$uid.' with weshare ' . $weshareId . ': ship setting is empty', LOG_WARNING);
                 echo json_encode(array('success' => false, 'reason' => '物流方式选择错误'));
                 return;
             }
+
             //邮费是按分存取的
             $address = $this->get_order_address($weshareId, $shipInfo, $buyerData, $uid);
             $orderData = array('cate_id' => $rebateLogId, 'creator' => $uid, 'consignee_address' => $address, 'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $buyerData['name'], 'consignee_mobilephone' => $buyerData['mobilephone'], 'business_remark' => $business_remark);
@@ -607,9 +613,14 @@ class WesharesController extends AppController {
                     $this->order_use_score_and_coupon($orderId, $uid, 0, $totalPrice / 100);
                 }
                 $this->ShareUtil->update_rebate_log_order_id($rebateLogId, $orderId, $weshareId);
+
+                $this->log('Failed to create order for '.$uid.' with weshare ' . $weshareId . ' successfully, order id '. $orderId);
+                $this->OrderUtil->on_order_created($uid, $weshareId, $orderId);
+
                 echo json_encode(array('success' => true, 'orderId' => $orderId));
                 return;
             }
+
             echo json_encode(array('success' => false, 'orderId' => $orderId));
             return;
         } catch (Exception $e) {

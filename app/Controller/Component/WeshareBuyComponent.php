@@ -211,7 +211,6 @@ class WeshareBuyComponent extends Component {
         if (empty($user_share_data)) {
             $weshareM = ClassRegistry::init('Weshare');
             $orderM = ClassRegistry::init('Order');
-            //$commentM = ClassRegistry::init('Comment');
             $userM = ClassRegistry::init('User');
             $query_share_type = array(GROUP_SHARE_TYPE, DEFAULT_SHARE_TYPE, POOL_SHARE_BUY_TYPE);
             $myCreateShares = $this->get_my_create_shares($uid);

@@ -232,6 +232,7 @@
                     {{/if}}
                 </ul>
                 <div class="tab-content">
+                    <!-- 我发起的-->
                     {{if !empty($my_create_shares)}}
                     <div class="tab-pane" id="tab_default_1">
                         <div class="comments-list">
@@ -242,6 +243,7 @@
                         </div>
                     </div>
                     {{/if}}
+                    <!-- -->
                     {{if !empty($authority_shares) && $is_me}}
                     <div class="tab-pane" id="tab_default_2">
                         <div class="comments-list">
@@ -252,6 +254,7 @@
                         </div>
                     </div>
                     {{/if}}
+                    <!-- 我参加的-->
                     {{if !empty($my_join_shares)}}
                     <div class="tab-pane" id="tab_default_3">
                         <div class="comments-list">
