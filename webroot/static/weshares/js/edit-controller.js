@@ -284,7 +284,6 @@
       if (titleHasError || productHasError) {
         return;
       }
-
       vm.showShippmentInfo = true;
       vm.showEditShareInfo = false;
     }
