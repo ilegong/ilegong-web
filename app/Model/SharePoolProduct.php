@@ -131,7 +131,7 @@ class SharePoolProduct extends AppModel {
             'share_id' => 2583,
             'share_name' => '茂谷柑',
             'share_img' => 'http://static.tongshijia.com/images/12421510-df83-11e5-a821-00163e1600b6.jpg',
-            'brand_img' => 'http://static.tongshijia.com/static/img/default_user_icon.jpg',
+            'brand_img' => 'http://www.tongshijia.com/files/wx-download/8017091456819914.png',
             'brand_name' => '娟子',
             'show_brand' => true,
             'brand_custom_service' => 801709,
