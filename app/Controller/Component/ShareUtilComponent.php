@@ -1889,6 +1889,22 @@ class ShareUtilComponent extends Component
     }
 
     /**
+     * @param $shareId
+     * @param $uid
+     * 截止团购
+     */
+    public function stop_share($shareId, $uid){
+        $this->Weshare->updateAll(array('status' => WESHARE_STOP_STATUS), array('id' => $shareId, 'creator' => $uid, 'status' => WESHARE_NORMAL_STATUS));
+        //stop child share
+        $this->Weshare->updateAll(array('status' => WESHARE_STOP_STATUS), array('refer_share_id' => $shareId, 'status' => WESHARE_NORMAL_STATUS, 'type' => GROUP_SHARE_TYPE));
+        //SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId . '_1'
+        //SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId . '_1'
+        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $shareId . '_0', '');
+        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $shareId . '_1', '');
+        Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
+    }
+
+    /**
      * @param $weshareId
      * @param $weshareProxyPercent
      * 保存团长比例

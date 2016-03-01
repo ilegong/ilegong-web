@@ -13,6 +13,10 @@ class SharerApiController extends AppController{
         $this->autoRender = false;
     }
 
+
+    /**
+     * 创建分享
+     */
     public function create_share(){
         $uid = $this->currentUser['id'];
         $postStr = file_get_contents('php://input');
@@ -23,6 +27,10 @@ class SharerApiController extends AppController{
         return;
     }
 
+    /**
+     * @param $shareId
+     * 获取分享订单
+     */
     public function get_my_share_orders($shareId){
         $result = $this->WeshareBuy->get_share_order_for_show($shareId, true, $division = false, $export = false);
         unset($result['ship_types']);
@@ -30,6 +38,9 @@ class SharerApiController extends AppController{
         echo json_encode($result);
     }
 
+    /**
+     * 获取我的分享
+     */
     public function get_my_shares(){
         $uid = $this->currentUser['id'];
         $createShares = $this->WeshareBuy->get_my_create_shares($uid);
@@ -75,6 +86,35 @@ class SharerApiController extends AppController{
         }
         echo json_encode(array('success' => false));
         return;
+    }
+
+    /**
+     * @param $shareId
+     * 截团
+     */
+    public function stop_share($shareId){
+        $uid = $this->currentUser['id'];
+        $this->ShareUtil->stop_share($shareId, $uid);
+        echo json_encode(array('success' => true));
+        return;
+    }
+
+    /**
+     * remark order
+     */
+    public function remark_order(){
+        $postStr = file_get_contents('php://input');
+        $postData = json_decode($postStr, true);
+        $this->WeshareBuy->update_order_remark($postData['order_id'], $postData['order_remark'], $postData['share_id']);
+        echo json_encode(array('success' => true));
+        return;
+    }
+
+    /**
+     * 发送团购通知
+     */
+    public function send_notify_msg(){
+
     }
 
     private function classify_shares_by_status($createShares){

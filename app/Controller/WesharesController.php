@@ -701,14 +701,7 @@ class WesharesController extends AppController {
     public function stopShare($weShareId) {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
-        $this->Weshare->updateAll(array('status' => WESHARE_STOP_STATUS), array('id' => $weShareId, 'creator' => $uid, 'status' => WESHARE_NORMAL_STATUS));
-        //stop child share
-        $this->Weshare->updateAll(array('status' => WESHARE_STOP_STATUS), array('refer_share_id' => $weShareId, 'status' => WESHARE_NORMAL_STATUS, 'type' => GROUP_SHARE_TYPE));
-        //SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId . '_1'
-        //SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId . '_1'
-        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weShareId . '_0', '');
-        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weShareId . '_1', '');
-        Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
+        $this->ShareUtil->stop_share($weShareId, $uid);
         echo json_encode(array('success' => true));
         return;
     }
