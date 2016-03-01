@@ -614,7 +614,7 @@ class WesharesController extends AppController {
                 }
                 $this->ShareUtil->update_rebate_log_order_id($rebateLogId, $orderId, $weshareId);
 
-                $this->log('Failed to create order for '.$uid.' with weshare ' . $weshareId . ' successfully, order id '. $orderId);
+                $this->log('Create order for '.$uid.' with weshare ' . $weshareId . ' successfully, order id '. $orderId);
                 $this->OrderUtil->on_order_created($uid, $weshareId, $orderId);
 
                 echo json_encode(array('success' => true, 'orderId' => $orderId));
