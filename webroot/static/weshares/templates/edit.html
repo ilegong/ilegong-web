@@ -112,32 +112,32 @@
                         </div>
                     </div>
                 </div>
-                <div class="clearfix">
+                <div class="clearfix" ng-repeat="deliveryTemplateItem in vm.deliveryTemplates">
                     <div class="freight fl">
                         <h1 class="clearfix">
                             <div class="fl">选择地区</div>
-                            <a href="#X" class="more_city" ng-click="vm.showChooseCityView();"><img ng-src="{{::vm.staticFilePath}}/static/weshares/images/more_city.png" /></a>
+                            <a class="more_city" ng-click="vm.showChooseCityView();"><img ng-src="{{::vm.staticFilePath}}/static/weshares/images/more_city.png" /></a>
                         </h1>
                         <div class="clearfix freightrate">
                             <div class="pt10 clearfix">
                                 <label>指定</label>
-                                <s><input type="text" /></s>
+                                <s><input type="text" ng-model="deliveryTemplateItem.start_units"/></s>
                                 <label>件内，</label>
-                                <s><input type="text" /></s>
+                                <s><input type="text" ng-model="deliveryTemplateItem.start_fee"/></s>
                                 <label>元</label>
                             </div>
                             <div class="pt10 clearfix">
                                 <label>每增加</label>
-                                <s><input type="text" /></s>
+                                <s><input type="text" ng-model="deliveryTemplateItem.add_units"/></s>
                                 <label>件，增加运费</label>
-                                <s><input type="text" /></s>
+                                <s><input type="text" ng-model="deliveryTemplateItem.add_fee"/></s>
                                 <label>元</label>
                             </div>
                         </div>
                     </div>
-                    <div class="fr"><a href="#X" class="deletebtn">删除</a></div>
+                    <div class="fr"><a ng-click="vm.removeDeliveryTemplate(deliveryTemplateItem)" class="deletebtn">删除</a></div>
                 </div>
-                <a href="#X" class="add_freight">添加指定地区运费</a>
+                <a ng-click="vm.addDeliveryTemplate()" class="add_freight">添加指定地区运费</a>
             </div>
         </div>
         <dl class="clearfix haolinju">

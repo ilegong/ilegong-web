@@ -39,24 +39,49 @@
     vm.toggleAreaProvinceCheckStatus = toggleAreaProvinceCheckStatus;
     vm.setDefaultShipSettingData = setDefaultShipSettingData;
     vm.setDefaultProxyRebatePercent = setDefaultProxyRebatePercent;
+    vm.setDefaultDeliveryTemplate = setDefaultDeliveryTemplate;
+    vm.setDeliveryTemplates = setDeliveryTemplates;
+    vm.removeDeliveryTemplate = removeDeliveryTemplate;
+    vm.addDeliveryTemplate = addDeliveryTemplate;
     vm.canSetTagUser = [633345, 544307, 802852, 867587, 804975];
     vm.showEditShareView = true;
     vm.showEditTagView = false;
     function pageLoaded() {
       $rootScope.loadingPage = false;
     }
-
     function setDefaultShipSettingData(){
       vm.self_ziti_data = {status: 1, ship_fee: 0, tag: 'self_ziti'};
       vm.kuai_di_data = {status: -1, ship_fee: '', tag: 'kuai_di'};
       vm.pys_ziti_data = {status: -1, ship_fee: 0, tag: 'pys_ziti'};
       vm.pin_tuan_data = {status: -1, ship_fee: 500, tag: 'pin_tuan'};
     }
-
     function setDefaultProxyRebatePercent(){
       vm.proxy_rebate_percent = {status: 0, percent: 0};
     }
-
+    function setDefaultDeliveryTemplate(){
+      vm.defaultDeliveryTemplate = {
+        "start_units": 1,
+        "start_fee": 0,
+        "add_units": 1,
+        "add_fee": 0,
+        "is_default": 1
+      };
+    }
+    function setDeliveryTemplates(){
+      vm.deliveryTemplates = [];
+    }
+    function removeDeliveryTemplate(deliveryTemplate){
+      vm.deliveryTemplates = _.without(vm.deliveryTemplates, deliveryTemplate);
+    }
+    function addDeliveryTemplate(){
+      vm.deliveryTemplates.push({
+        "start_units": 1,
+        "start_fee": 0,
+        "add_units": 1,
+        "add_fee": 0,
+        "is_default": 0
+      });
+    }
     activate();
     function activate() {
       vm.initCityData();
@@ -104,6 +129,8 @@
         $scope.$watchCollection('vm.weshare', vm.saveCacheData);
         setDefaultShipSettingData();
         setDefaultProxyRebatePercent();
+        vm.setDefaultDeliveryTemplate();
+        vm.setDeliveryTemplates();
         vm.kuaidi_show_ship_fee = '';
         //add
         vm.weshare = {
@@ -291,10 +318,12 @@
         alert('正在保存....');
         return;
       }
+      vm.deliveryTemplates.push(vm.defaultDeliveryTemplate);
       vm.isInProcess = true;
       vm.kuai_di_data.ship_fee = vm.kuai_di_data.ship_fee;
       vm.weshare.ship_type = [vm.self_ziti_data, vm.kuai_di_data, vm.pys_ziti_data, vm.pin_tuan_data];
       vm.weshare.proxy_rebate_percent = vm.proxy_rebate_percent;
+      vm.weshare['delivery_templates'] = vm.deliveryTemplates;
       $http.post('/weshares/save', vm.weshare).success(function (data, status, headers, config) {
         if (data.success) {
           PYS.storage.clear();
