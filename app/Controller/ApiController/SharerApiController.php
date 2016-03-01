@@ -118,7 +118,9 @@ class SharerApiController extends AppController{
     public function send_notify_msg(){
         $postStr = file_get_contents('php://input');
         $postData = json_decode($postStr, true);
-        $result = $this->ShareUtil->send_buy_percent_msg($postData['type'], $postData['user_id'], $share_info, $content, $weshare_id);
+        $weshare_id = $postData['share_id'];
+        $share_info = $this->ShareUtil->get_weshare_detail();
+        $result = $this->ShareUtil->send_buy_percent_msg($postData['type'], $postData['user_id'], $share_info, $postData['content'], $weshare_id);
         echo json_decode($result);
         return;
     }
