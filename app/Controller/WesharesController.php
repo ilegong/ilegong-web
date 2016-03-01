@@ -121,7 +121,7 @@ class WesharesController extends AppController {
      */
     public function update($weshareId) {
         $uid = $this->currentUser['id'];
-        $weshareInfo = $this->get_weshare_detail($weshareId);
+        $weshareInfo = $this->ShareUtil->get_weshare_detail($weshareId);
         $can_edit_share = $this->ShareAuthority->user_can_edit_share_info($uid, $weshareId);
         if ($uid != $weshareInfo['creator']['id'] && !$can_edit_share) {
             $this->redirect('/weshares/view/' . $weshareId . '/0');
@@ -141,7 +141,7 @@ class WesharesController extends AppController {
      */
     public function get_share_info($weshareId) {
         $this->autoRender = false;
-        $shareInfo = $this->get_weshare_detail($weshareId);
+        $shareInfo = $this->ShareUtil->get_weshare_detail($weshareId);
         $products = &$shareInfo['products'];
         foreach ($products as &$p) {
             $p['price'] = $p['price'] / 100;
@@ -309,7 +309,7 @@ class WesharesController extends AppController {
     public function detail($weshareId) {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
-        $weshareInfo = $this->get_weshare_detail($weshareId, true);
+        $weshareInfo = $this->ShareUtil->get_weshare_detail($weshareId, true);
         $is_me = $uid == $weshareInfo['creator']['id'];
         $weixinInfo = $this->set_weixin_share_data($uid, $weshareId);
         $user_fields = $this->query_user_fileds;
@@ -1129,7 +1129,7 @@ class WesharesController extends AppController {
             echo json_encode(array('success' => false, 'reason' => 'not_login'));
             return;
         }
-        $share_info = $this->get_weshare_detail($weshare_id);
+        $share_info = $this->ShareUtil->get_weshare_detail($weshare_id);
         if ($share_info['creator']['id'] != $uid && !$this->ShareAuthority->user_can_manage_share($uid, $weshare_id)) {
             echo json_encode(array('success' => false, 'reason' => 'not_creator'));
             return;
@@ -1137,29 +1137,9 @@ class WesharesController extends AppController {
         $params = json_decode(file_get_contents('php://input'), true);
         $content = $params['content'];
         $type = $params['type'];
-        if ($type == 0 || $type == '0') {
-            //发送给分享的管理者
-            //发送给没有购买的粉丝
-            $checkSendMsgResult = $this->ShareUtil->checkCanSendMsg($uid);
-            if(!$checkSendMsgResult['success']){
-                echo json_encode($checkSendMsgResult);
-                return;
-            }
-            $send_msg_log_data = array('created' => date('Y-m-d H:i:s'), 'sharer_id' => $uid, 'data_id' => $weshare_id, 'type' => MSG_LOG_NOTIFY_TYPE, 'status' => 1);
-            $this->ShareUtil->saveSendMsgLog($send_msg_log_data);
-            $this->WeshareBuy->send_buy_percent_msg_to_share_manager($share_info, $content);
-            $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($uid);
-            $pageCount = $fansPageInfo['pageCount'];
-            $pageSize = $fansPageInfo['pageSize'];
-            $this->RedisQueue->add_tasks('share', "/weshares/process_send_buy_percent_msg/" . $weshare_id . "/" . $pageCount . "/" . $pageSize, "content=" . $content, true);
-            echo json_encode(array('success' => true, 'msg' => $checkSendMsgResult['msg']));
-            return;
-        } else {
-            $this->WeshareBuy->send_notify_user_msg_to_share_manager($share_info, $content);
-            $this->RedisQueue->add_tasks('share', "/weshares/process_notify_has_buy_fans/" . $weshare_id, "content=" . $content, true);
-            echo json_encode(array('success' => true));
-            return;
-        }
+        $result = $this->ShareUtil->send_buy_percent_msg($type, $uid, $share_info, $content, $weshare_id);
+        echo json_encode($result);
+        return;
     }
 
     /**
@@ -1178,7 +1158,7 @@ class WesharesController extends AppController {
             echo json_encode(array('success' => false, 'reason' => 'user_bad'));
             return;
         }
-        $share_info = $this->get_weshare_detail($weshare_id);
+        $share_info = $this->ShareUtil->get_weshare_detail($weshare_id);
         if ($share_info['creator']['id'] != $uid && !$this->ShareAuthority->user_can_manage_share($uid, $weshare_id)) {
             echo json_encode(array('success' => false, 'reason' => 'not_creator'));
             return;
@@ -1258,7 +1238,7 @@ class WesharesController extends AppController {
     public function process_notify_has_buy_fans($weshareId) {
         $this->autoRender = false;
         $msg_content = $_REQUEST['content'];
-        $share_info = $this->get_weshare_detail($weshareId);
+        $share_info = $this->ShareUtil->get_weshare_detail($weshareId);
         $this->WeshareBuy->send_notify_buy_user_msg($share_info, $msg_content);
         echo json_encode(array('success' => true));
     }
@@ -1271,7 +1251,7 @@ class WesharesController extends AppController {
      */
     public function send_buy_percent_msg_task($weshare_id, $limit, $offset) {
         $this->autoRender = false;
-        $share_info = $this->get_weshare_detail($weshare_id);
+        $share_info = $this->ShareUtil->get_weshare_detail($weshare_id);
         $msg_content = $_REQUEST['content'];
         $this->WeshareBuy->send_buy_percent_msg($share_info, $msg_content, $limit, $offset);
         echo json_encode(array('success' => true));
@@ -1340,7 +1320,7 @@ class WesharesController extends AppController {
             echo json_encode(array('success' => false, 'reason' => 'no_login'));
         }
         $shareId = $_REQUEST['shareId'];
-        $share_info = $this->get_weshare_detail($shareId);
+        $share_info = $this->ShareUtil->get_weshare_detail($shareId);
         //check user can manage share order
         $can_manage_order = $this->ShareAuthority->user_can_view_share_order_list($uid, $shareId);
         if ($share_info['creator']['id'] != $uid && !$can_manage_order) {
@@ -1395,87 +1375,6 @@ class WesharesController extends AppController {
     private function get_weshare_view_order_info($weshareId, $all = 0) {
         //todo load share detail view order data
 
-    }
-
-    /**
-     * @param $weshareId
-     * @param $product_to_map
-     * @return mixed
-     * 获取分享的详情
-     */
-    private function get_weshare_detail($weshareId, $product_to_map = false) {
-        if ($product_to_map) {
-            $key = SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId . '_1';
-        } else {
-            $key = SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId . '_0';
-        }
-        $share_detail = Cache::read($key);
-        if (empty($share_detail)) {
-            $weshareInfo = $this->Weshare->find('first', array(
-                'conditions' => array(
-                    'id' => $weshareId
-                )
-            ));
-
-            $weshareAddresses = $this->WeshareAddress->find('all', array(
-                'conditions' => array(
-                    'weshare_id' => $weshareId,
-                    'deleted' => DELETED_NO
-                )
-            ));
-            $weshareShipSettings = $this->WeshareShipSetting->find('all', array(
-                'conditions' => array(
-                    'weshare_id' => $weshareId
-                )
-            ));
-            $proxy_share_percent = $this->ProxyRebatePercent->find('first', array(
-                'conditions' => array(
-                    'share_id' => $weshareId,
-                    'deleted' => DELETED_NO,
-                    'status' => PUBLISH_YES
-                )
-            ));
-            $sharer_tags = $this->ShareUtil->get_tags($weshareInfo['Weshare']['creator'], $weshareInfo['Weshare']['refer_share_id']);
-            $sharer_tags_list = $this->ShareUtil->get_tags_list($weshareInfo['Weshare']['creator']);
-            $weshareShipSettings = Hash::combine($weshareShipSettings, '{n}.WeshareShipSetting.tag', '{n}.WeshareShipSetting');
-            $creatorInfo = $this->User->find('first', array(
-                'conditions' => array(
-                    'id' => $weshareInfo['Weshare']['creator']
-                ),
-                'recursive' => 1, //int
-                'fields' => $this->query_user_fileds,
-            ));
-            $creatorInfo = $creatorInfo['User'];
-            //reset user image
-            $creatorInfo['image'] = get_user_avatar($creatorInfo);
-            $creatorLevel = $this->ShareUtil->get_user_level($weshareInfo['Weshare']['creator']);
-            $creatorInfo['level'] = $creatorLevel;
-            if ($product_to_map) {
-                $weshareProducts = $this->ShareUtil->get_product_tag_map($weshareId);
-            } else {
-                $weshareProducts = $this->WeshareProduct->find('all', array(
-                    'conditions' => array(
-                        'weshare_id' => $weshareId,
-                        'deleted' => DELETED_NO
-                    )
-                ));
-                $weshareProducts = Hash::extract($weshareProducts, '{n}.WeshareProduct');
-            }
-            //show break line
-            $weshareInfo['Weshare']['description'] = str_replace(array("\r\n", "\n", "\r"), '<br />', $weshareInfo['Weshare']['description']);
-            $weshareInfo = $weshareInfo['Weshare'];
-            $weshareInfo['tags'] = $sharer_tags;
-            $weshareInfo['tags_list'] = $sharer_tags_list;
-            $weshareInfo['addresses'] = Hash::extract($weshareAddresses, '{n}.WeshareAddress');
-            $weshareInfo['products'] = $weshareProducts;
-            $weshareInfo['creator'] = $creatorInfo;
-            $weshareInfo['ship_type'] = $weshareShipSettings;
-            $weshareInfo['images'] = array_filter(explode('|', $weshareInfo['images']));
-            $weshareInfo['proxy_rebate_percent'] = $proxy_share_percent['ProxyRebatePercent'];
-            Cache::write($key, json_encode($weshareInfo));
-            return $weshareInfo;
-        }
-        return json_decode($share_detail, true);
     }
 
     /**

@@ -9,6 +9,8 @@ class ShareUtilComponent extends Component
 
     public $components = array('Weixin', 'WeshareBuy', 'RedisQueue', 'DeliveryTemplate');
 
+    var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
+
     /**
      * @param $weshare_id
      * @param $uid
@@ -1905,6 +1907,124 @@ class ShareUtilComponent extends Component
         Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $shareId . '_0', '');
         Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $shareId . '_1', '');
         Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
+    }
+
+    /**
+     * @param $type
+     * @param $uid
+     * @param $share_info
+     * @param $content
+     * @param $weshare_id
+     * @return array
+     * 发送团购进度提醒
+     */
+    public function send_buy_percent_msg($type, $uid, $share_info, $content, $weshare_id){
+        if ($type == 0 || $type == '0') {
+            //发送给分享的管理者
+            //发送给没有购买的粉丝
+            $checkSendMsgResult = $this->checkCanSendMsg($uid);
+            if(!$checkSendMsgResult['success']){
+                return $checkSendMsgResult;
+            }
+            $send_msg_log_data = array('created' => date('Y-m-d H:i:s'), 'sharer_id' => $uid, 'data_id' => $weshare_id, 'type' => MSG_LOG_NOTIFY_TYPE, 'status' => 1);
+            $this->saveSendMsgLog($send_msg_log_data);
+            $this->WeshareBuy->send_buy_percent_msg_to_share_manager($share_info, $content);
+            $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($uid);
+            $pageCount = $fansPageInfo['pageCount'];
+            $pageSize = $fansPageInfo['pageSize'];
+            $this->RedisQueue->add_tasks('share', "/weshares/process_send_buy_percent_msg/" . $weshare_id . "/" . $pageCount . "/" . $pageSize, "content=" . $content, true);
+            return array('success' => true, 'msg' => $checkSendMsgResult['msg']);
+        } else {
+            $this->WeshareBuy->send_notify_user_msg_to_share_manager($share_info, $content);
+            $this->RedisQueue->add_tasks('share', "/weshares/process_notify_has_buy_fans/" . $weshare_id, "content=" . $content, true);
+            return array('success' => true);
+        }
+    }
+
+    /**
+     * @param $weshareId
+     * @param bool $product_to_map
+     * @return mixed
+     * 获取分享的详情
+     */
+    public function get_weshare_detail($weshareId, $product_to_map = false){
+        if ($product_to_map) {
+            $key = SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId . '_1';
+        } else {
+            $key = SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId . '_0';
+        }
+        $share_detail = Cache::read($key);
+        if (empty($share_detail)) {
+            $weshareM = ClassRegistry::init('Weshare');
+            $weshareAddressM = ClassRegistry::init('WeshareAddress');
+            $weshareShipSettingM = ClassRegistry::init('WeshareShipSetting');
+            $proxyRebatePercentM = ClassRegistry::init('ProxyRebatePercent');
+            $userM = ClassRegistry::init('User');
+            $weshareProductM = ClassRegistry::init('WeshareProduct');
+            $weshareInfo = $weshareM->find('first', array(
+                'conditions' => array(
+                    'id' => $weshareId
+                )
+            ));
+            $weshareAddresses = $weshareAddressM->find('all', array(
+                'conditions' => array(
+                    'weshare_id' => $weshareId,
+                    'deleted' => DELETED_NO
+                )
+            ));
+            $weshareShipSettings = $weshareShipSettingM->find('all', array(
+                'conditions' => array(
+                    'weshare_id' => $weshareId
+                )
+            ));
+            $proxy_share_percent = $proxyRebatePercentM->find('first', array(
+                'conditions' => array(
+                    'share_id' => $weshareId,
+                    'deleted' => DELETED_NO,
+                    'status' => PUBLISH_YES
+                )
+            ));
+            $sharer_tags = $this->get_tags($weshareInfo['Weshare']['creator'], $weshareInfo['Weshare']['refer_share_id']);
+            $sharer_tags_list = $this->get_tags_list($weshareInfo['Weshare']['creator']);
+            $weshareShipSettings = Hash::combine($weshareShipSettings, '{n}.WeshareShipSetting.tag', '{n}.WeshareShipSetting');
+            $creatorInfo = $userM->find('first', array(
+                'conditions' => array(
+                    'id' => $weshareInfo['Weshare']['creator']
+                ),
+                'recursive' => 1, //int
+                'fields' => $this->query_user_fileds,
+            ));
+            $creatorInfo = $creatorInfo['User'];
+            //reset user image
+            $creatorInfo['image'] = get_user_avatar($creatorInfo);
+            $creatorLevel = $this->get_user_level($weshareInfo['Weshare']['creator']);
+            $creatorInfo['level'] = $creatorLevel;
+            if ($product_to_map) {
+                $weshareProducts = $this->get_product_tag_map($weshareId);
+            } else {
+                $weshareProducts = $weshareProductM->find('all', array(
+                    'conditions' => array(
+                        'weshare_id' => $weshareId,
+                        'deleted' => DELETED_NO
+                    )
+                ));
+                $weshareProducts = Hash::extract($weshareProducts, '{n}.WeshareProduct');
+            }
+            //show break line
+            $weshareInfo['Weshare']['description'] = str_replace(array("\r\n", "\n", "\r"), '<br />', $weshareInfo['Weshare']['description']);
+            $weshareInfo = $weshareInfo['Weshare'];
+            $weshareInfo['tags'] = $sharer_tags;
+            $weshareInfo['tags_list'] = $sharer_tags_list;
+            $weshareInfo['addresses'] = Hash::extract($weshareAddresses, '{n}.WeshareAddress');
+            $weshareInfo['products'] = $weshareProducts;
+            $weshareInfo['creator'] = $creatorInfo;
+            $weshareInfo['ship_type'] = $weshareShipSettings;
+            $weshareInfo['images'] = array_filter(explode('|', $weshareInfo['images']));
+            $weshareInfo['proxy_rebate_percent'] = $proxy_share_percent['ProxyRebatePercent'];
+            Cache::write($key, json_encode($weshareInfo));
+            return $weshareInfo;
+        }
+        return json_decode($share_detail, true);
     }
 
     /**

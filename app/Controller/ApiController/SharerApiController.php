@@ -116,7 +116,11 @@ class SharerApiController extends AppController{
      * 发送团购通知
      */
     public function send_notify_msg(){
-
+        $postStr = file_get_contents('php://input');
+        $postData = json_decode($postStr, true);
+        $result = $this->ShareUtil->send_buy_percent_msg($postData['type'], $postData['user_id'], $share_info, $content, $weshare_id);
+        echo json_decode($result);
+        return;
     }
 
     private function classify_shares_by_status($createShares){
