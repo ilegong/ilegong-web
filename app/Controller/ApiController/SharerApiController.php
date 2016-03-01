@@ -107,6 +107,7 @@ class SharerApiController extends AppController{
         $postStr = file_get_contents('php://input');
         $postData = json_decode($postStr, true);
         $this->WeshareBuy->update_order_remark($postData['order_id'], $postData['order_remark'], $postData['share_id']);
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $postData['share_id'] . '_0_1', "");
         echo json_encode(array('success' => true));
         return;
     }
