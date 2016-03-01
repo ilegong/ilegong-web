@@ -104,6 +104,30 @@ class SharePoolProduct extends AppModel {
     //产品池所有产品
     var $products = array(
         array(
+            'share_id' => 2586,
+            'share_name' => '茂谷柑',
+            'share_img' => 'http://static.tongshijia.com/images/8c15c85e-df84-11e5-a821-00163e1600b6.jpg',
+            'brand_img' => 'http://static.tongshijia.com/avatar/2015/12/31/wx_head_c28163f48f28b06d7563680daec84367.jpg',
+            'brand_name' => 'daisy',
+            'show_brand' => true,
+            'brand_custom_service' => 895741,
+            'published' => 1,
+            'products' => array(
+                '5620' => array(
+                    'price' => 60,
+                    'channel_price' => 50,
+                ),
+                '5621' => array(
+                    'price' => 100,
+                    'channel_price' => 90,
+                ),
+                '5622' => array(
+                    'price' => 180,
+                    'channel_price' => 160,
+                ),
+            )
+        ),
+        array(
             'share_id' => 2583,
             'share_name' => '茂谷柑',
             'share_img' => 'http://static.tongshijia.com/images/12421510-df83-11e5-a821-00163e1600b6.jpg',
