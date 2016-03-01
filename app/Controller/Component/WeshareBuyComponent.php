@@ -23,7 +23,7 @@ class WeshareBuyComponent extends Component {
 
     var $components = array('Session', 'Weixin', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'RedisQueue');
 
-    var $query_share_fields = array('id', 'title', 'images', 'status', 'creator', 'created', 'settlement', 'type');
+    var $query_share_fields = array('id', 'title', 'images', 'status', 'creator', 'created', 'settlement', 'type', 'description');
 
     /**
      * @param $weshare_ids
