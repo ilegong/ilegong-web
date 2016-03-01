@@ -83,11 +83,12 @@ class WesharesController extends AppController {
             }
             if ($from == 1) {
                 $paidMsg = $_REQUEST['msg'];
-                if (!empty($paidMsg) && $paidMsg == 'ok') {
+                if ($paidMsg == 'ok') {
                     $this->set('from', $this->pay_type);
+                } else if ($paidMsg == 'cancel') {
+                    $this->log('Payment of user '.$uid.' to weshare '.$weshare_id.' failed: canceled', LOG_INFO);
                 } else {
-                    //TODO check pay fail issue
-                    $this->log('paid fail msg ' . $paidMsg);
+                    $this->log('Payment of user '.$uid.' to weshare '.$weshare_id.' failed: '.$paidMsg, LOG_ERR);
                 }
             }
         }
