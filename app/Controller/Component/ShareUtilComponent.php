@@ -1845,6 +1845,9 @@ class ShareUtilComponent extends Component
         $weshareData['creator'] = $postDataArray['creator']['id'];
         if (empty($postDataArray['id'])) {
             $weshareData['creator'] = $uid;
+        }else{
+            //clear delivery template data
+            $this->DeliveryTemplate->clear_share_delivery_template($postDataArray['id']);
         }
         $weshareData['created'] = date('Y-m-d H:i:s');
         $images = $postDataArray['images'];

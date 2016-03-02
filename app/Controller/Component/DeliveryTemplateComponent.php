@@ -5,6 +5,17 @@ class DeliveryTemplateComponent extends Component{
 
     /**
      * @param $shareId
+     * 清除物流设置
+     */
+    public function clear_share_delivery_template($shareId){
+        $WeshareDeliveryTemplateM = ClassRegistry::init('WeshareDeliveryTemplate');
+        $WeshareTemplateRegionM = ClassRegistry::init('WeshareTemplateRegion');
+        $WeshareDeliveryTemplateM->deleteAll(array('weshare_id' => $shareId, 'is_default' => 0));
+        $WeshareTemplateRegionM->deleteAll(array('weshare_id' => $shareId));
+    }
+
+    /**
+     * @param $shareId
      * @return array
      * 获取编辑分享的时候数据
      */
