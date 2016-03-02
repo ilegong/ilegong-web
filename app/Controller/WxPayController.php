@@ -235,7 +235,7 @@ class WxPayController extends AppController {
         //=========步骤2：使用统一支付接口，获取prepay_id============
         $prepay_id = $this->getPrePayLogisticsIdFromWx($openid, $body, $out_trade_no, $totalFee);
         if (!$prepay_id) {
-            $this->log("Re generate prepay id for logistics order:" . $logistics_order_id);
+            $this->log("prepareLogisticsOrderWxPay: regenerate prepay id of order ".$logistics_order_id." and user ".$openid." and fee " . $totalFee, LOG_INFO);
             $out_trade_no = $this->WxPayment->logistics_out_trade_no(WX_APPID_SOURCE, $logistics_order_id);
             $prepay_id = $this->getPrePayLogisticsIdFromWx($openid, $body, $out_trade_no, $totalFee);
         }
@@ -244,10 +244,10 @@ class WxPayController extends AppController {
             //=========步骤3：使用jsapi调起支付============
             $jsApi->setPrepayId($prepay_id);
             $jsapi_param = $jsApi->getParameters();
-            $this->log("wxpay:" . $jsapi_param);
+            $this->log("prepareLogisticsOrderWxPay: prepay of order ".$logistics_order_id." and user ".$openid." and fee ".$totalFee.": " . $jsapi_param, LOG_INFO);
             return array($jsapi_param, $out_trade_no, $desc);
         } else {
-            $this->log('wx_prepare_error');
+            $this->log("prepareLogisticsOrderWxPay: prepay of order ".$logistics_order_id." and user ".$openid." and fee ".$totalFee." failed: cannot get prepay id", LOG_ERR);
             $this->__message('支付服务忙死了，请您稍后重试', $error_pay_redirect, 5);
             exit();
         }
@@ -296,7 +296,7 @@ class WxPayController extends AppController {
         //=========步骤2：使用统一支付接口，获取prepay_id============
         $prepay_id = $this->getPrePayIdFromWx($openid, $body, $out_trade_no, $totalFee);
         if (!$prepay_id) {
-            $this->log("Re generate prepay id for order:".$orderId);
+            $this->log("prepareWXPay: regenerate prepay id of order ".$orderId." and user ".$openid." and fee " . $totalFee, LOG_INFO);
             $out_trade_no = $this->WxPayment->out_trade_no(WX_APPID_SOURCE, $orderId);
             $prepay_id = $this->getPrePayIdFromWx($openid, $body, $out_trade_no, $totalFee);
         }
@@ -308,10 +308,10 @@ class WxPayController extends AppController {
             //=========步骤3：使用jsapi调起支付============
             $jsApi->setPrepayId($prepay_id);
             $jsapi_param = $jsApi->getParameters();
-            $this->log("wxpay:" . $jsapi_param);
+            $this->log("prepareWXPay: prepay of order ".$orderId." and user ".$openid." and fee ".$totalFee.": " . $jsapi_param, LOG_INFO);
             return array($jsapi_param, $out_trade_no, $productDesc);
         }  else {
-            $this->log('wx_prepare_error');
+            $this->log("prepareWXPay: prepay of order ".$orderId." and user ".$openid." and fee ".$totalFee." failed: cannot get prepay id", LOG_ERR);
             $this->__message('支付服务忙死了，请您稍后重试', $error_pay_redirect, 5);
             exit();
         }
