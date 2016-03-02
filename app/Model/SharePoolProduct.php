@@ -116,6 +116,26 @@ class SharePoolProduct extends AppModel {
                 '5626' => array(
                     'price' => 55,
                     'channel_price' => 50,
+                ),
+                '5626' => array(
+                    'price' => 55,
+                    'channel_price' => 50,
+                )
+            )
+        ),
+        array(
+            'share_id' => 2589,
+            'share_name' => '海鸭蛋',
+            'share_img' => 'http://static.tongshijia.com/images/f87be962-df8c-11e5-a821-00163e1600b6.jpg',
+            'brand_img' => 'http://static.tongshijia.com/avatar/2015/12/31/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg',
+            'brand_name' => '李樱花',
+            'show_brand' => true,
+            'brand_custom_service' => 810684,
+            'published' => 1,
+            'products' => array(
+                '5626' => array(
+                    'price' => 55,
+                    'channel_price' => 50,
                 )
             )
         ),

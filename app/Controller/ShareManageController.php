@@ -348,7 +348,8 @@ class ShareManageController extends AppController
         $this->layout = null;
     }
 
-    private function handle_query_order($q_cond){
+    private function handle_query_order($q_cond)
+    {
         $orders_count = $this->Order->find('count', array(
             'conditions' => $q_cond
         ));
@@ -398,7 +399,7 @@ class ShareManageController extends AppController
         $create_share_ids = Hash::extract($create_share, '{n}.Weshare.id');
         $auth_share_ids = $this->ShareAuthority->get_my_auth_share_ids($uid);
         $share_ids = array_merge($create_share_ids, $auth_share_ids);
-        if(!empty($share_ids)){
+        if (!empty($share_ids)) {
             $q_cond = array(
                 'member_id' => $share_ids,
                 'status' => ORDER_STATUS_PAID
@@ -501,18 +502,20 @@ class ShareManageController extends AppController
 
     }
 
-    public function clear_index_product_cache(){
-        $this->autoRender=false;
-        Cache::write(INDEX_VIEW_PRODUCT_CACHE_KEY.'_0', '');
-        Cache::write(INDEX_VIEW_PRODUCT_CACHE_KEY.'_1', '');
-        Cache::write(INDEX_VIEW_PRODUCT_CACHE_KEY.'_2', '');
-        Cache::write(INDEX_VIEW_PRODUCT_CACHE_KEY.'_3', '');
+    public function clear_index_product_cache()
+    {
+        $this->autoRender = false;
+        $this->ShareManage->clear_cache_for_index_products_of_type(0);
+        $this->ShareManage->clear_cache_for_index_products_of_type(1);
+        $this->ShareManage->clear_cache_for_index_products_of_type(2);
+        $this->ShareManage->clear_cache_for_index_products_of_type(3);
         echo json_encode(array('success' => true));
         return;
     }
 
-    public function clear_app_cache(){
-        $this->autoRender=false;
+    public function clear_app_cache()
+    {
+        $this->autoRender = false;
         Cache::clear(false, 'default');
         echo json_encode(array('success' => true));
         return;
@@ -537,7 +540,12 @@ class ShareManageController extends AppController
     public function index_product_delete($id)
     {
         $indexProductM = ClassRegistry::init('IndexProduct');
+        $this->log('delete index product ' . $id, LOG_INFO);
         $indexProductM->update(array('deleted' => DELETED_YES), array('id' => $id));
+
+        $indexProduct = $indexProductM->findById($id);
+        $this->ShareManage->on_index_product_deleted($indexProduct);
+
         $this->redirect(array('action' => 'index_products'));
     }
 
@@ -554,7 +562,8 @@ class ShareManageController extends AppController
         $this->set('tags', $tags);
     }
 
-    public function index_product_save(){
+    public function index_product_save()
+    {
         $data = $this->data;
         $this->ShareManage->save_index_product($data);
         $this->redirect(array('action' => 'index_products'));
@@ -576,17 +585,21 @@ class ShareManageController extends AppController
     }
 
 
-    public function cache_tool(){}
+    public function cache_tool()
+    {
+    }
 
-    public function clear_share_info_cache(){
+    public function clear_share_info_cache()
+    {
         $this->autoRender = false;
         $this->clear_share_cache();
         echo json_encode(array('success' => true));
         return;
     }
 
-    public function clear_pool_product_cache(){
-        $this->autoRender=false;
+    public function clear_pool_product_cache()
+    {
+        $this->autoRender = false;
         $share_id = $_REQUEST['shareId'];
         $key = 'pool_product_info_cache_key_' . $share_id;
         Cache::write($key, '');
@@ -594,8 +607,9 @@ class ShareManageController extends AppController
         return;
     }
 
-    public function clear_share_order_cache(){
-        $this->autoRender=false;
+    public function clear_share_order_cache()
+    {
+        $this->autoRender = false;
         $share_id = $_REQUEST['shareId'];
         Cache::write(SHARE_BUY_SUMMERY_INFO_CACHE_KEY . '_' . $share_id, '');
         Cache::write(SHARE_ORDER_COUNT_DATA_CACHE_KEY . '_' . $share_id, '');
@@ -611,8 +625,9 @@ class ShareManageController extends AppController
         return;
     }
 
-    public function clear_user_info_cache(){
-        $this->autoRender=false;
+    public function clear_user_info_cache()
+    {
+        $this->autoRender = false;
         $user_id = $_REQUEST['user_id'];
         Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $user_id, '');
         Cache::write(SHARER_LEVEL_CACHE_KEY . '_' . $user_id . '_' . 0, '');
@@ -621,8 +636,9 @@ class ShareManageController extends AppController
         return;
     }
 
-    public function clear_share_auth_cache(){
-        $this->autoRender=false;
+    public function clear_share_auth_cache()
+    {
+        $this->autoRender = false;
         $share_id = $_REQUEST['shareId'];
         Cache::write(SHARE_ORDER_OPERATE_CACHE_KEY . '_' . $share_id, '');
         echo json_encode(array('success' => true));
@@ -631,17 +647,17 @@ class ShareManageController extends AppController
 
     //统计商品的份数
     /**
-     SELECT name, SUM( num )
-    FROM cake_carts
-    WHERE order_id
-    IN (
-
-    SELECT id
-    FROM cake_orders
-    WHERE member_id =2078
-    AND ship_mark =  'kuai_di'
-    )
-    GROUP BY product_id
+     * SELECT name, SUM( num )
+     * FROM cake_carts
+     * WHERE order_id
+     * IN (
+     *
+     * SELECT id
+     * FROM cake_orders
+     * WHERE member_id =2078
+     * AND ship_mark =  'kuai_di'
+     * )
+     * GROUP BY product_id
      *
      */
 
@@ -650,8 +666,9 @@ class ShareManageController extends AppController
      * @return array
      * 获取可能授权的用户
      */
-    private function load_refer_share_authority_user($refer_share_id) {
-        if(!empty($refer_share_id)){
+    private function load_refer_share_authority_user($refer_share_id)
+    {
+        if (!empty($refer_share_id)) {
             $shareOperateSettings = $this->ShareOperateSetting->find('all', array(
                 'conditions' => array(
                     'scope_id' => $refer_share_id,
@@ -668,7 +685,8 @@ class ShareManageController extends AppController
     /**
      * 跳转到一个分享权限设置的页面
      */
-    public function share_operate_set_view() {
+    public function share_operate_set_view()
+    {
         $shareId = $_REQUEST['share_id'];
         if (!empty($shareId)) {
             $shareInfo = $this->Weshare->find('first', array(
@@ -715,7 +733,8 @@ class ShareManageController extends AppController
     /**
      * 保存分享权限设置
      */
-    public function save_share_operate_setting() {
+    public function save_share_operate_setting()
+    {
         $user_id = $_REQUEST['user_id'];
         $share_id = $_REQUEST['share_id'];
         $tag_id = $_REQUEST['tag_id'];
@@ -724,14 +743,16 @@ class ShareManageController extends AppController
         $this->redirect(array('action' => 'share_operate_set_view', '?' => array('share_id' => $share_id)));
     }
 
-    public function save_share_edit_operate_setting() {
+    public function save_share_edit_operate_setting()
+    {
         $user_id = $_REQUEST['user_id'];
         $share_id = $_REQUEST['share_id'];
         $this->process_save_share_operate_setting($user_id, $share_id, SHARE_INFO_OPERATE_TYPE);
         $this->redirect(array('action' => 'share_operate_set_view', '?' => array('share_id' => $share_id)));
     }
 
-    public function save_share_manage_operate_setting() {
+    public function save_share_manage_operate_setting()
+    {
         $user_id = $_REQUEST['user_id'];
         $share_id = $_REQUEST['share_id'];
         $this->save_share_operate_setting($user_id, $share_id, SHARE_MANAGE_OPERATE_TYPE);
@@ -739,7 +760,8 @@ class ShareManageController extends AppController
     }
 
     //保存编辑分享的权限
-    private function process_save_share_operate_setting($user_id, $share_id, $type) {
+    private function process_save_share_operate_setting($user_id, $share_id, $type)
+    {
         if (!empty($user_id) && !empty($share_id) && !empty($type)) {
             $oldData = $this->ShareOperateSetting->find('first', array(
                 'conditions' => array(
@@ -770,7 +792,8 @@ class ShareManageController extends AppController
     }
 
 
-    private function save_share_tag_operate($user_id, $tag_id, $share_id) {
+    private function save_share_tag_operate($user_id, $tag_id, $share_id)
+    {
         if (!empty($user_id) && !empty($share_id) && !empty($tag_id)) {
             $oldData = $this->ShareOperateSetting->find('first', array(
                 'conditions' => array(
@@ -795,7 +818,8 @@ class ShareManageController extends AppController
         }
     }
 
-    private function save_share_operate($user_id, $share_id) {
+    private function save_share_operate($user_id, $share_id)
+    {
         if (!empty($user_id) && !empty($share_id)) {
             $oldData = $this->ShareOperateSetting->find('first', array(
                 'conditions' => array(
@@ -826,7 +850,8 @@ class ShareManageController extends AppController
      * @param $data_id
      * 删除分享权限
      */
-    public function delete_share_operate_setting($id, $share_id, $data_id) {
+    public function delete_share_operate_setting($id, $share_id, $data_id)
+    {
         $data = $this->ShareOperateSetting->find('first', array('conditions' => array('id' => $id)));
         if (!empty($data)) {
             $this->ShareOperateSetting->delete($id);
@@ -840,11 +865,13 @@ class ShareManageController extends AppController
         $this->redirect(array('action' => 'share_operate_set_view', '?' => array('share_id' => $share_id)));
     }
 
-    public function share_utils(){
+    public function share_utils()
+    {
 
     }
 
-    public function copy_share_to_user($shareId, $userId){
+    public function copy_share_to_user($shareId, $userId)
+    {
         $this->autoRender = false;
         $result = $this->ShareUtil->cloneShare($shareId, $userId);
         echo json_encode(array('success' => true, 'result' => $result));
