@@ -93,6 +93,8 @@
       vm.resetProvinceAreaCheckStatus();
       vm.showEditShareInfo = true;
       vm.showShippmentInfo = false;
+      vm.setDefaultDeliveryTemplate();
+      vm.setDeliveryTemplates();
       var weshareId = angular.element(document.getElementById('weshareEditView')).attr('data-id');
       var sharerShipType = angular.element(document.getElementById('weshareEditView')).attr('data-ship-type');
       var userId = angular.element(document.getElementById('weshareEditView')).attr('data-user-id');
@@ -128,6 +130,12 @@
           if (data['proxy_rebate_percent']) {
             vm.proxy_rebate_percent = data['proxy_rebate_percent'];
           }
+          if (!_.isEmpty(data['deliveryTemplate']['delivery_templates'])) {
+            vm.deliveryTemplates = data['deliveryTemplate']['delivery_templates'];
+          }
+          if (!_.isEmpty(data['deliveryTemplate']['default_delivery_template'])) {
+            vm.defaultDeliveryTemplate = data['deliveryTemplate']['default_delivery_template'];
+          }
         }).error(function (data) {
         });
       } else {
@@ -135,8 +143,6 @@
         $scope.$watchCollection('vm.weshare', vm.saveCacheData);
         setDefaultShipSettingData();
         setDefaultProxyRebatePercent();
-        vm.setDefaultDeliveryTemplate();
-        vm.setDeliveryTemplates();
         vm.kuaidi_show_ship_fee = '';
         //add
         vm.weshare = {
@@ -323,12 +329,12 @@
         alert('正在保存....');
         return;
       }
-      vm.deliveryTemplates.push(vm.defaultDeliveryTemplate);
+      var deliveryTemplates = vm.deliveryTemplates.concat(vm.defaultDeliveryTemplate);
       vm.isInProcess = true;
       vm.kuai_di_data.ship_fee = vm.kuai_di_data.ship_fee;
       vm.weshare.ship_type = [vm.self_ziti_data, vm.kuai_di_data, vm.pys_ziti_data, vm.pin_tuan_data];
       vm.weshare.proxy_rebate_percent = vm.proxy_rebate_percent;
-      vm.weshare['delivery_templates'] = vm.deliveryTemplates;
+      vm.weshare['delivery_templates'] = deliveryTemplates;
       $http.post('/weshares/save', vm.weshare).success(function (data, status, headers, config) {
         if (data.success) {
           PYS.storage.clear();
@@ -340,7 +346,6 @@
         window.location.href = '/weshares/add';
       });
     }
-
     function toggleAreaProvinceCheckStatus(areaId){
       var areaCheckStatus = vm.areaCheckStatus[areaId];
       _.each(vm.provinceData[areaId], function(_, key){

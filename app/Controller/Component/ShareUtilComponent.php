@@ -2021,10 +2021,15 @@ class ShareUtilComponent extends Component
             $weshareInfo['ship_type'] = $weshareShipSettings;
             $weshareInfo['images'] = array_filter(explode('|', $weshareInfo['images']));
             $weshareInfo['proxy_rebate_percent'] = $proxy_share_percent['ProxyRebatePercent'];
+            $weshareInfo['deliveryTemplate'] = $this->DeliveryTemplate->get_edit_delivery_templates($weshareId);
             Cache::write($key, json_encode($weshareInfo));
             return $weshareInfo;
         }
         return json_decode($share_detail, true);
+    }
+
+    public function get_delivery_template($share_id){
+
     }
 
     public function set_order_ship_code($ship_company_id, $weshare_id, $ship_code, $order_id){

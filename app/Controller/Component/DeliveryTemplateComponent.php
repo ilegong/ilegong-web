@@ -2,6 +2,51 @@
 
 class DeliveryTemplateComponent extends Component{
 
+
+    /**
+     * @param $shareId
+     * @return array
+     * 获取编辑分享的时候数据
+     */
+    public function get_edit_delivery_templates($shareId){
+        $WeshareDeliveryTemplateM = ClassRegistry::init('WeshareDeliveryTemplate');
+        $WeshareTemplateRegionM = ClassRegistry::init('WeshareTemplateRegion');
+        $allDeliveryTemplates = $WeshareDeliveryTemplateM->find('all', array(
+            'conditions' => array(
+                'weshare_id' => $shareId
+            )
+        ));
+        $deliveryTemplates = array();
+        foreach ($allDeliveryTemplates as $deliveryTemplateItem) {
+            if ($deliveryTemplateItem['WeshareDeliveryTemplate']['is_default'] == 1) {
+                $defaultDeliveryTemplate = $deliveryTemplateItem['WeshareDeliveryTemplate'];
+                unset($defaultDeliveryTemplate['id']);
+            } else {
+                $deliveryTemplates[] = $deliveryTemplateItem['WeshareDeliveryTemplate'];
+            }
+        }
+        $deliveryTemplateIds = Hash::extract($deliveryTemplates, '{n}.id');
+        $templateRegions = $WeshareTemplateRegionM->find('all', array(
+            'conditions' => array(
+                'weshare_id' => $shareId,
+                'delivery_template_id' => $deliveryTemplateIds
+            )
+        ));
+        $region_data = array();
+        foreach ($templateRegions as $regionItem) {
+            $item_template_id = $regionItem['WeshareTemplateRegion']['delivery_template_id'];
+            if (!isset($region_data[$item_template_id])) {
+                $region_data[$item_template_id] = array();
+            }
+            $region_data[$item_template_id][] = array('province_id' => $regionItem['WeshareTemplateRegion']['province_id'], 'province_name' => $regionItem['WeshareTemplateRegion']['province_name']);
+        }
+        foreach($deliveryTemplates as &$deliveryTemplateItem){
+            $deliveryTemplateItem['regions'] = $region_data[$deliveryTemplateItem['id']];
+            unset($deliveryTemplateItem['id']);
+        }
+        return array('default_delivery_template' => $defaultDeliveryTemplate, 'delivery_templates' => $deliveryTemplates);
+    }
+
     public function calculate_ship_fee($good_num, $province_id, $weshare_id){
         $WeshareDeliveryTemplateM = ClassRegistry::init('WeshareDeliveryTemplate');
         $WeshareTemplateRegionM = ClassRegistry::init('WeshareTemplateRegion');
@@ -72,6 +117,8 @@ class DeliveryTemplateComponent extends Component{
         $WeshareDeliveryTemplateM = ClassRegistry::init('WeshareDeliveryTemplate');
         $WeshareTemplateRegions = ClassRegistry::init('WeshareTemplateRegions');
         foreach ($deliveryTemplates as $itemTemplate) {
+            //reset id to null
+            $WeshareDeliveryTemplateM->id = null;
             //$WeshareDeliveryTemplateM->saveAll($deliveryTemplates);
             $is_default = $itemTemplate['is_default'];
             $weshare_id = $itemTemplate['weshare_id'];
@@ -88,8 +135,8 @@ class DeliveryTemplateComponent extends Component{
                     ));
                     $old_data = $old_data['WeshareDeliveryTemplate'];
                     $itemTemplate = array_merge($old_data, $itemTemplate);
-                    $WeshareDeliveryTemplateM->save($itemTemplate);
                 }
+                $WeshareDeliveryTemplateM->save($itemTemplate);
             } else {
                 $itemTemplate = $WeshareDeliveryTemplateM->save($itemTemplate);
                 foreach ($regions as &$region_item) {

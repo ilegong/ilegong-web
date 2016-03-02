@@ -98,16 +98,16 @@
                     <div class="clearfix freightrate">
                         <div class="pt10 clearfix">
                             <label>默认运费</label>
-                            <s><input type="text" placeholder="100" /></s>
+                            <s><input type="text" placeholder="1" ng-model="vm.defaultDeliveryTemplate.start_units"/></s>
                             <label>件内，</label>
-                            <s><input type="text" placeholder="0" /></s>
+                            <s><input type="text" placeholder="0" ng-model="vm.defaultDeliveryTemplate.start_fee"/></s>
                             <label>元</label>
                         </div>
                         <div class="pt10 clearfix">
                             <label>每增加</label>
-                            <s><input type="text" placeholder="1" /></s>
+                            <s><input type="text" placeholder="1" ng-model="vm.defaultDeliveryTemplate.add_units"/></s>
                             <label>件，增加运费</label>
-                            <s><input type="text" placeholder="0" /></s>
+                            <s><input type="text" placeholder="0" ng-model="vm.defaultDeliveryTemplate.add_fee"/></s>
                             <label>元</label>
                         </div>
                     </div>
