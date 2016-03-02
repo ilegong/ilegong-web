@@ -211,7 +211,7 @@
         <div ng-show="area.showChild">
             <ul class="clearfix" ng-repeat="(provinceId, provinceName) in vm.provinceData[area.id]">
                 <li class="fl gray pl28" ng-bind="provinceName"></li>
-                <li class="fr"><input type="checkbox" ng-model="vm.provinceCheckStatus[provinceId]" ng-change="" ng-true-value="true" ng-false-value="false"/></li>
+                <li class="fr"><input type="checkbox" ng-model="vm.provinceCheckStatus[provinceId]" ng-change="vm.setAreaCheckStatus(area.id)" ng-true-value="true" ng-false-value="false"/></li>
             </ul>
         </div>
     </div>

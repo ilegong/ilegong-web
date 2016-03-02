@@ -44,7 +44,9 @@
     vm.removeDeliveryTemplate = removeDeliveryTemplate;
     vm.addDeliveryTemplate = addDeliveryTemplate;
     vm.deliveryTemplateChooseCity = deliveryTemplateChooseCity;
+    vm.resetProvinceAreaCheckStatus = resetProvinceAreaCheckStatus;
     vm.showDeliveryTemplateProvinceNames = showDeliveryTemplateProvinceNames;
+    vm.setAreaCheckStatus = setAreaCheckStatus;
     vm.canSetTagUser = [633345, 544307, 802852, 867587, 804975];
     vm.showEditShareView = true;
     vm.showEditTagView = false;
@@ -88,6 +90,7 @@
     activate();
     function activate() {
       vm.initCityData();
+      vm.resetProvinceAreaCheckStatus();
       vm.showEditShareInfo = true;
       vm.showShippmentInfo = false;
       var weshareId = angular.element(document.getElementById('weshareEditView')).attr('data-id');
@@ -345,12 +348,6 @@
       });
     }
 
-    function showChooseCityView(deliveryTemplate) {
-      vm.isShowChooseCity = true;
-      vm.showShippmentInfo = false;
-      vm.currentDeliveryTemplate = deliveryTemplate;
-    }
-
     function hideChooseCityView() {
       vm.isShowChooseCity = false;
       vm.showShippmentInfo = true;
@@ -475,36 +472,27 @@
     }
 
     function showDeliveryTemplateProvinceNames(deliveryTemplate){
-       if(!_.isEmpty(deliveryTemplate['regions'])){
-         var nameStr =  _.reduce(deliveryTemplate['regions'], function(memo, checkedProvince){ return memo +','+ checkedProvince['province_name']; }, '');
-         return nameStr;
-       }
-       return '选择地区';
+      if (!_.isEmpty(deliveryTemplate['regions'])) {
+        var nameStr = _.reduce(deliveryTemplate['regions'], function (memo, checkedProvince) {
+          return checkedProvince['province_name'] + ',' + memo;
+        }, '');
+        return nameStr;
+      }
+      return '选择地区';
     }
 
     function deliveryTemplateChooseCity(){
       vm.hideChooseCityView();
+      vm.currentDeliveryTemplate['regions'] = [];
       var checkedProvinces = _.map(vm.provinceCheckStatus, function(checked, provinceId){ if(checked){return provinceId} });
+      checkedProvinces = _.filter(checkedProvinces, function(provinceId){return provinceId;});
       var checkedProvinceData = _.map(checkedProvinces, function(provinceId){
-        return {"province_id":provinceId, "province_name": vm.provinceIdNameMap};
+        return {"province_id":provinceId, "province_name": vm.provinceIdNameMap[provinceId]};
       });
       vm.currentDeliveryTemplate['regions'] = checkedProvinceData;
     }
 
-    function initCityData() {
-      vm.areaData = [{"name": "华东", "id": "1", "showChild": false}, {
-        "name": "华北",
-        "id": "2",
-        "showChild": false
-      }, {"name": "华中", "id": "3", "showChild": false}, {"name": "华南", "id": "4", "showChild": false}, {
-        "name": "东北",
-        "id": "5",
-        "showChild": false
-      }, {"name": "西北", "id": "6", "showChild": false}, {"name": "西南", "id": "7", "showChild": false}, {
-        "name": "港澳台",
-        "id": "8",
-        "showChild": false
-      }];
+    function resetProvinceAreaCheckStatus(){
       vm.areaCheckStatus = {
         "1": false,
         "2": false,
@@ -551,6 +539,22 @@
         "810000": false,
         "820000": false
       };
+    }
+
+    function initCityData() {
+      vm.areaData = [{"name": "华东", "id": "1", "showChild": false}, {
+        "name": "华北",
+        "id": "2",
+        "showChild": false
+      }, {"name": "华中", "id": "3", "showChild": false}, {"name": "华南", "id": "4", "showChild": false}, {
+        "name": "东北",
+        "id": "5",
+        "showChild": false
+      }, {"name": "西北", "id": "6", "showChild": false}, {"name": "西南", "id": "7", "showChild": false}, {
+        "name": "港澳台",
+        "id": "8",
+        "showChild": false
+      }];
       vm.provinceIdNameMap = {
         "310100": "上海",
         "320000": "江苏",
@@ -587,6 +591,7 @@
         "810000": "香港",
         "820000": "澳门"
       };
+      vm.areaIds = ["1", "2", "3", "4", "5", "6", "7", "8"];
       vm.provinceData = {
         "1": {
           "310100": "上海",
@@ -640,6 +645,31 @@
         }
       };
     }
+
+    function setAreaCheckStatus(areaId){
+      var areaChildProvinces = vm.provinceData[areaId];
+      var provinceIds = _.keys(areaChildProvinces);
+      var checkStatusResult = _.reduce(provinceIds, function (memo, provinceId) {
+        return memo && vm.provinceCheckStatus[provinceId];
+      }, true);
+      vm.areaCheckStatus[areaId] = checkStatusResult;
+    }
+
+    function showChooseCityView(deliveryTemplate) {
+      vm.resetProvinceAreaCheckStatus();
+      vm.isShowChooseCity = true;
+      vm.showShippmentInfo = false;
+      vm.currentDeliveryTemplate = deliveryTemplate;
+      var regions = deliveryTemplate['regions'];
+      _.each(regions, function (item) {
+        vm.provinceCheckStatus[item['province_id']] = true;
+      });
+      _.each(vm.areaIds, function (areaId) {
+        vm.setAreaCheckStatus(areaId);
+      });
+    }
+
+
     function validateRebatePercent() {
       if (!Utils.isNumber(vm.proxy_rebate_percent.percent)) {
         vm.rebatePercentHasError = true;
