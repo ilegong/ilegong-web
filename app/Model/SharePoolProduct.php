@@ -104,6 +104,46 @@ class SharePoolProduct extends AppModel {
     //产品池所有产品
     var $products = array(
         array(
+            'share_id' => 2620,
+            'share_name' => '泰国椰青',
+            'share_img' => 'http://static.tongshijia.com/images/1f31de58-e05b-11e5-a821-00163e1600b6.jpg',
+            'brand_img' => 'http://static.tongshijia.com/static/img/default_user_icon.jpg',
+            'brand_name' => '易果生鲜',
+            'show_brand' => true,
+            'brand_custom_service' => 898367,
+            'published' => 1,
+            'products' => array(
+                '5687' => array(
+                    'price' => 49,
+                    'channel_price' => 45,
+                ),
+                '5688' => array(
+                    'price' => 98,
+                    'channel_price' => 87,
+                )
+            )
+        ),
+        array(
+            'share_id' => 2619,
+            'share_name' => '新疆骏枣和甘肃琉璃苣蜂蜜',
+            'share_img' => 'http://static.tongshijia.com/images/574fcad0-e05a-11e5-a821-00163e1600b6.jpg',
+            'brand_img' => 'http://static.tongshijia.com/avatar/2015/12/31/wx_head_8818f46c1ef7ac4df8327bbb9404431c.jpg',
+            'brand_name' => '本来物语',
+            'show_brand' => true,
+            'brand_custom_service' => 879054,
+            'published' => 1,
+            'products' => array(
+                '5682' => array(
+                    'price' => 63,
+                    'channel_price' => 54,
+                ),
+                '5685' => array(
+                    'price' => 59,
+                    'channel_price' => 50,
+                )
+            )
+        ),
+        array(
             'share_id' => 2589,
             'share_name' => '海鸭蛋',
             'share_img' => 'http://static.tongshijia.com/images/f87be962-df8c-11e5-a821-00163e1600b6.jpg',
