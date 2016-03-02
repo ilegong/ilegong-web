@@ -78,6 +78,7 @@ class WeixinController extends AppController {
 			$input = "";
 			if(!empty($req['Event'])){
 				if($req['Event']=='subscribe'){ //订阅
+                    $this->log('On wechat event subscribe: '.$from.trim($req['FromUserName']), LOG_INFO);
                     $process_result = $this->WeixinUtil->process_user_sub_weixin($from, $uid, $openId);
                     $replay_type = $process_result['replay_type'];
                     $content = $process_result['content'];
@@ -145,7 +146,7 @@ class WeixinController extends AppController {
 				} else if ($req['Event'] == 'CLICK') {
                     $input = $req['EventKey'];
                 } else if ($req['Event'] == 'unsubscribe') {
-                    $this->log('unsubscribe'.$from.trim($req['FromUserName']));
+                    $this->log('On wechat event unsubscribe: '.$from.trim($req['FromUserName']), LOG_INFO);
                     if ($from == FROM_WX_SERVICE) {
                         $uid = $this->Oauthbind->findUidByWx(trim($req['FromUserName']));
                         if ($uid) {

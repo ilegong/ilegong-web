@@ -1717,22 +1717,27 @@ class WesharesController extends AppController {
     private function process_shared_offer($shared_offer_id) {
         //to do check offer status
         $get_coupon_result = $this->get_coupon_with_shared_id($shared_offer_id);
-        $this->log('share user get red packet result ' . json_encode($get_coupon_result));
+        $this->log('share user get red packet result: ' . json_encode($get_coupon_result), LOG_DEBUG);
         if (!$get_coupon_result['success']) {
+            $this->log('share user get red packet result: failed.', LOG_INFO);
             $this->set('get_coupon_type', 'fail');
             return;
         }
         //no more
         if ($get_coupon_result['noMore']) {
+            $this->log('share user get red packet result: no more', LOG_INFO);
             $this->set('get_coupon_type', 'no_more');
             return;
         }
         //accepted
         $this->set('follow_shared_offer_id', $shared_offer_id);
         if ($get_coupon_result['accepted'] && $get_coupon_result['just_accepted'] == 0) {
+            $this->log('share user get red packet result: accepted', LOG_INFO);
             $this->set('get_coupon_type', 'accepted');
             return;
         }
+
+        $this->log('share user get red packet result: got '.$get_coupon_result['couponNum'], LOG_INFO);
         $this->set('get_coupon_type', 'got');
         $this->set('couponNum', $get_coupon_result['couponNum']);
     }
