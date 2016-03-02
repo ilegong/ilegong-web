@@ -7,7 +7,7 @@ class ShareUtilComponent extends Component
 
     var $normal_order_status = array(ORDER_STATUS_DONE, ORDER_STATUS_PAID, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY);
 
-    public $components = array('Weixin', 'WeshareBuy', 'RedisQueue', 'DeliveryTemplate');
+    public $components = array('Weixin', 'WeshareBuy', 'RedisQueue', 'DeliveryTemplate', 'ShareAuthority');
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
 
@@ -2025,6 +2025,113 @@ class ShareUtilComponent extends Component
             return $weshareInfo;
         }
         return json_decode($share_detail, true);
+    }
+
+    public function set_order_ship_code($ship_company_id, $weshare_id, $ship_code, $order_id){
+        $ship_type_list = ShipAddress::ship_type_list();
+        $ship_type_name = $ship_type_list[$ship_company_id];
+        $orderM = ClassRegistry::init('Order');
+        $cartM = ClassRegistry::init('Cart');
+        $orderM->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'ship_type_name' => "'" . $ship_type_name . "'", 'ship_type' => $ship_company_id, 'ship_code' => "'" . $ship_code . "'", 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order_id, 'status' => ORDER_STATUS_PAID));
+        $cartM->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order_id));
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_0', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
+        $this->WeshareBuy->clear_user_share_order_data_cache(array($order_id), $weshare_id);
+        $this->WeshareBuy->send_share_product_ship_msg($order_id, $weshare_id);
+    }
+
+    public function update_order_ship_code($ship_code, $weshare_id, $order_id, $company_id, $ship_type_name){
+        if (empty($company_id)) {
+            $ship_name_id_map = ShipAddress::ship_type_name_id_map();
+            $ship_company_id = $ship_name_id_map[$ship_type_name];
+        } else {
+            $ship_company_id = $company_id;
+        }
+        $orderM = ClassRegistry::init('Order');
+        $orderM->updateAll(array('ship_type_name' => "'" . $ship_type_name . "'", 'ship_type' => $ship_company_id, 'ship_code' => "'" . $ship_code . "'"), array('id' => $order_id));
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_0', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
+        $this->WeshareBuy->clear_user_share_order_data_cache(array($order_id), $weshare_id);
+    }
+
+    public function confirm_received_order($order_id, $uid){
+        $orderM = ClassRegistry::init('Order');
+        $cartM = ClassRegistry::init('Cart');
+        $weshareM = ClassRegistry::init('Weshare');
+        $order = $orderM->findById($order_id);
+        if (empty($order)) {
+            return array('success' => false, 'reason' => 'order does not exist');
+        }
+        if ($order['Order']['type'] != ORDER_TYPE_WESHARE_BUY) {
+            return array('success' => false, 'reason' => 'invalid order');
+        }
+        $weshare_id = $order['Order']['member_id'];
+        $weshare = $weshareM->findById($weshare_id);
+        if (empty($weshare)) {
+            return array('success' => false, 'reason' => 'invalid weshare');
+        }
+        $is_owner = $uid == $order['Order']['creator'];
+        $is_creator = $uid == $weshare['Weshare']['creator'];
+        if (!$is_owner && !$is_creator) {
+            $is_manage = $this->ShareAuthority->user_can_view_share_order_list($uid, $weshare_id);
+            if (!$is_manage) {
+                return array('success' => false, 'reason' => 'only owner or creator ');
+            }
+        }
+        $result = $orderM->updateAll(array('status' => ORDER_STATUS_RECEIVED, 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order['Order']['id']));
+        $cartM->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order['Order']['id']));
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_0', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
+        $this->WeshareBuy->clear_user_share_order_data_cache(array($order_id), $weshare_id);
+        if (!$result) {
+            return array("success" => false, "reason" => "failed to update order status");
+        }
+        return array("success" => true);
+    }
+
+    public function send_arrival_msg($order_ids, $share_id, $uid, $content){
+        $weshareM = ClassRegistry::init('Weshare');
+        $orderM = ClassRegistry::init('Order');
+        $cartM = ClassRegistry::init('Cart');
+        $share_info = $weshareM->find('first', array(
+            'conditions' => array(
+                'id' => $share_id
+            )
+        ));
+        if ($uid != $share_info['Weshare']['creator'] && !$this->ShareAuthority->user_can_view_share_order_list($uid, $share_id)) {
+            return array('success' => false, 'reason' => 'invalid');
+        }
+        //update order status
+        $prepare_update_orders = $orderM->find('all', array(
+            'conditions' => array('status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED), 'type' => ORDER_TYPE_WESHARE_BUY, 'ship_mark' => SHARE_SHIP_SELF_ZITI_TAG, 'member_id' => $share_id, 'id' => $order_ids),
+            'fields' => array('id')
+        ));
+        $prepare_update_order_ids = Hash::extract($prepare_update_orders, '{n}.Order.id');
+        $orderM->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $prepare_update_order_ids));
+        $cartM->updateAll(array('status' => ORDER_STATUS_SHIPPED), array('order_id' => $prepare_update_order_ids));
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_1_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_0_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_1_0', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_0_0', '');
+        $this->WeshareBuy->clear_user_share_order_data_cache($prepare_update_order_ids, $share_id);
+        $this->WeshareBuy->send_share_product_arrive_msg($share_info, $content, $order_ids);
+    }
+
+    public function order_refund($shareId, $uid, $orderId, $refundMoney, $refundMark){
+        $share_info = $this->get_weshare_detail($shareId);
+        //check user can manage share order
+        $can_manage_order = $this->ShareAuthority->user_can_view_share_order_list($uid, $shareId);
+        if ($share_info['creator']['id'] != $uid && !$can_manage_order) {
+            return array('success' => false, 'reason' => 'not_creator');
+        }
+        $result = $this->refund($orderId, $refundMoney, $refundMark, 0);
+        return $result;
     }
 
     /**

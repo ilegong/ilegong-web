@@ -19,9 +19,7 @@ class SharerApiController extends AppController{
      */
     public function create_share(){
         $uid = $this->currentUser['id'];
-        $postStr = file_get_contents('php://input');
-        $this->log('app post str ' . $postStr, LOG_DEBUG);
-        $postDataArray = json_decode($postStr, true);
+        $postDataArray = $this->get_post_raw_data();
         $result = $this->ShareUtil->create_share($postDataArray, $uid);
         echo json_encode($result);
         return;
@@ -104,8 +102,7 @@ class SharerApiController extends AppController{
      * remark order
      */
     public function remark_order(){
-        $postStr = file_get_contents('php://input');
-        $postData = json_decode($postStr, true);
+        $postData = $this->get_post_raw_data();
         $this->WeshareBuy->update_order_remark($postData['order_id'], $postData['order_remark'], $postData['share_id']);
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $postData['share_id'] . '_0_1', "");
         echo json_encode(array('success' => true));
@@ -116,8 +113,7 @@ class SharerApiController extends AppController{
      * 发送团购通知
      */
     public function send_notify_msg(){
-        $postStr = file_get_contents('php://input');
-        $postData = json_decode($postStr, true);
+        $postData = $this->get_post_raw_data();
         $weshare_id = $postData['share_id'];
         $share_info = $this->ShareUtil->get_weshare_detail();
         $result = $this->ShareUtil->send_buy_percent_msg($postData['type'], $postData['user_id'], $share_info, $postData['content'], $weshare_id);
@@ -125,6 +121,80 @@ class SharerApiController extends AppController{
         return;
     }
 
+    /**
+     * 填写订单快递单号
+     */
+    public function set_order_ship_code(){
+        $postData = $this->get_post_raw_data();
+        $ship_company_id = $postData['company_id'];
+        $weshare_id = $postData['share_id'];
+        $ship_code = $postData['ship_code'];
+        $order_id = $postData['order_id'];
+        $this->ShareUtil->set_order_ship_code($ship_company_id, $weshare_id, $ship_code, $order_id);
+        echo json_encode(array('success' => true));
+        return;
+    }
+
+    /**
+     * 更新快递单号
+     */
+    public function update_order_ship_code(){
+        $postData = $this->get_post_raw_data();
+        $ship_code = $postData['ship_code'];
+        $weshare_id = $postData['share_id'];
+        $order_id = $postData['order_id'];
+        $company_id = $postData['company_id'];
+        $ship_type_name = $postData['ship_type_name'];
+        $this->ShareUtil->update_order_ship_code($ship_code, $weshare_id, $order_id, $company_id, $ship_type_name);
+        echo json_encode(array('success' => true));
+        return;
+    }
+
+    /**
+     * 发送到货提醒
+     */
+    public function send_pickup_notify(){
+        $uid = $this->currentUser['id'];
+        $postData = $this->get_post_raw_data();
+        $order_ids = $postData['order_ids'];
+        $weshare_id = $postData['share_id'];
+        $content = $postData['content'];
+        $this->ShareUtil->send_arrival_msg($order_ids, $weshare_id, $uid, $content);
+        echo json_encode(array('succsess' => true));
+        return;
+    }
+
+    /**
+     * 订单退款
+     */
+    public function order_refund(){
+        $uid = $this->currentUser['id'];
+        $postData  = $this->get_post_raw_data();
+        $shareId = $postData['shareId'];
+        $orderId = $postData['orderId'];
+        $refundMoney = $postData['refundMoney'];
+        $refundMark = $postData['refundMark'];
+        $result = $this->ShareUtil->order_refund($shareId, $uid, $orderId, $refundMoney, $refundMark);
+        echo json_encode($result);
+        return;
+    }
+
+    /**
+     * @param $order_id
+     * 确认取货
+     */
+    public function confirm_received($order_id){
+        $uid = $this->currentUser['id'];
+        $result = $this->ShareUtil->confirm_received_order($order_id, $uid);
+        echo json_encode($result);
+        return;
+    }
+
+    /**
+     * @param $createShares
+     * @return array
+     * 过滤分类订单
+     */
     private function classify_shares_by_status($createShares){
         //normal => 进行中 stop => 截团 settlement => 已结款
         $result = array('normal' => array(), 'stop' => array(), 'settlement' => array());
@@ -145,6 +215,11 @@ class SharerApiController extends AppController{
         return $result;
     }
 
+    /**
+     * @param $share_ids
+     * @return array
+     * 获取结算结果
+     */
     private function  get_share_balance_result($share_ids){
         $balance_result = $this->WeshareBuy->get_shares_balance_money($share_ids);
         $summery_data = $balance_result['weshare_summery'];

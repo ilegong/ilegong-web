@@ -649,43 +649,8 @@ class WesharesController extends AppController {
             echo json_encode(array('success' => false, 'reason' => 'not_login'));
             return;
         }
-
-        $order = $this->Order->findById($order_id);
-        if (empty($order)) {
-            echo json_encode(array(success => false, reason => 'order does not exist'));
-            return;
-        }
-        if ($order['Order']['type'] != ORDER_TYPE_WESHARE_BUY) {
-            echo json_encode(array(success => false, reason => 'invalid order'));
-            return;
-        }
-        $weshare_id = $order['Order']['member_id'];
-        $weshare = $this->Weshare->findById($weshare_id);
-        if (empty($weshare)) {
-            echo json_encode(array(success => false, reason => 'invalid weshare'));
-            return;
-        }
-        $is_owner = $uid == $order['Order']['creator'];
-        $is_creator = $uid == $weshare['Weshare']['creator'];
-        if (!$is_owner && !$is_creator) {
-            $is_manage = $this->ShareAuthority->user_can_view_share_order_list($uid, $weshare_id);
-            if (!$is_manage) {
-                echo json_encode(array(success => false, reason => 'only owner or creator '));
-                return;
-            }
-        }
-        $result = $this->Order->updateAll(array('status' => ORDER_STATUS_RECEIVED, 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order['Order']['id']));
-        $this->Cart->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order['Order']['id']));
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_0', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
-        $this->WeshareBuy->clear_user_share_order_data_cache(array($order_id), $weshare_id);
-        if (!$result) {
-            echo json_encode(array("success" => false, "reason" => "failed to update order status"));
-            return;
-        }
-        echo json_encode(array("success" => true));
+        $result = $this->ShareUtil->confirm_received_order($order_id, $uid);
+        echo json_encode($result);
         return;
     }
 
@@ -801,16 +766,7 @@ class WesharesController extends AppController {
         $ship_company_id = $_REQUEST['company_id'];
         $weshare_id = $_REQUEST['weshare_id'];
         $ship_code = $_REQUEST['ship_code'];
-        $ship_type_list = ShipAddress::ship_type_list();
-        $ship_type_name = $ship_type_list[$ship_company_id];
-        $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'ship_type_name' => "'" . $ship_type_name . "'", 'ship_type' => $ship_company_id, 'ship_code' => "'" . $ship_code . "'", 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order_id, 'status' => ORDER_STATUS_PAID));
-        $this->Cart->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order_id));
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_0', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
-        $this->WeshareBuy->clear_user_share_order_data_cache(array($order_id), $weshare_id);
-        $this->WeshareBuy->send_share_product_ship_msg($order_id, $weshare_id);
+        $this->ShareUtil->set_order_ship_code($ship_company_id, $weshare_id, $ship_code, $order_id);
         echo json_encode(array('success' => true));
         return;
     }
@@ -840,14 +796,7 @@ class WesharesController extends AppController {
         $ship_type_name = $_REQUEST['ship_type_name'];
         $ship_code = $_REQUEST['ship_code'];
         $weshare_id = $_REQUEST['weshare_id'];
-        $ship_name_id_map = ShipAddress::ship_type_name_id_map();
-        $ship_company_id = $ship_name_id_map[$ship_type_name];
-        $this->Order->updateAll(array('ship_type_name' => "'" . $ship_type_name . "'", 'ship_type' => $ship_company_id, 'ship_code' => "'" . $ship_code . "'"), array('id' => $order_id));
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_0', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
-        $this->WeshareBuy->clear_user_share_order_data_cache(array($order_id), $weshare_id);
+        $this->ShareUtil->update_order_ship_code($ship_code, $weshare_id, $order_id, null, $ship_type_name);
         echo json_encode(array('success' => true));
     }
 
@@ -885,29 +834,7 @@ class WesharesController extends AppController {
         $weshare_id = $params['share_id'];
         $idsStr = $params['ids'];
         $orderIds = explode(',', $idsStr);
-        $share_info = $this->Weshare->find('first', array(
-            'conditions' => array(
-                'id' => $weshare_id
-            )
-        ));
-        if ($uid != $share_info['Weshare']['creator'] && !$this->ShareAuthority->user_can_view_share_order_list($uid, $weshare_id)) {
-            echo json_encode(array('success' => false, 'reason' => 'invalid'));
-            return;
-        }
-        //update order status
-        $prepare_update_orders = $this->Order->find('all', array(
-            'conditions' => array('status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED), 'type' => ORDER_TYPE_WESHARE_BUY, 'ship_mark' => SHARE_SHIP_SELF_ZITI_TAG, 'member_id' => $weshare_id, 'id' => $orderIds),
-            'fields' => array('id')
-        ));
-        $prepare_update_order_ids = Hash::extract($prepare_update_orders, '{n}.Order.id');
-        $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $prepare_update_order_ids));
-        $this->Cart->updateAll(array('status' => ORDER_STATUS_SHIPPED), array('order_id' => $prepare_update_order_ids));
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_0', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
-        $this->WeshareBuy->clear_user_share_order_data_cache($prepare_update_order_ids, $weshare_id);
-        $this->process_send_msg($share_info, $msg);
+        $this->ShareUtil->send_arrival_msg($orderIds, $weshare_id, $uid, $msg);
         echo json_encode(array('success' => true));
         return;
     }
@@ -1315,21 +1242,10 @@ class WesharesController extends AppController {
             echo json_encode(array('success' => false, 'reason' => 'no_login'));
         }
         $shareId = $_REQUEST['shareId'];
-        $share_info = $this->ShareUtil->get_weshare_detail($shareId);
-        //check user can manage share order
-        $can_manage_order = $this->ShareAuthority->user_can_view_share_order_list($uid, $shareId);
-        if ($share_info['creator']['id'] != $uid && !$can_manage_order) {
-            echo json_encode(array('success' => false, 'reason' => 'not_creator'));
-            return;
-        }
         $orderId = $_REQUEST['orderId'];
         $refundMoney = $_REQUEST['refundMoney'];
         $refundMark = $_REQUEST['refundMark'];
-        $result = $this->ShareUtil->refund($orderId, $refundMoney, $refundMark, 0);
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $shareId . '_1_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $shareId . '_0_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $shareId . '_1_0', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $shareId . '_0_0', '');
+        $result = $this->ShareUtil->order_refund($shareId, $uid, $orderId, $refundMoney, $refundMark);
         echo json_encode($result);
         return;
     }
@@ -1486,14 +1402,6 @@ class WesharesController extends AppController {
     }
 
 
-    /**
-     * @param $shareInfo
-     * @param $msg
-     * 处理发送消息
-     */
-    private function process_send_msg($shareInfo, $msg) {
-        $this->WeshareBuy->send_share_product_arrive_msg($shareInfo, $msg);
-    }
 
     /**
      * @param $weshareId
