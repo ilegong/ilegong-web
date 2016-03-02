@@ -205,6 +205,9 @@ class ShareManageComponent extends Component
     }
 
     public function clear_cache_for_index_products_of_type($type){
-        Cache::write(INDEX_VIEW_PRODUCT_CACHE_KEY.'_'.$type, '');
+        Cache::write(INDEX_VIEW_PRODUCT_CACHE_KEY.'_0', '');
+        Cache::write(INDEX_VIEW_PRODUCT_CACHE_KEY.'_1', '');
+        Cache::write(INDEX_VIEW_PRODUCT_CACHE_KEY.'_2', '');
+        Cache::write(INDEX_VIEW_PRODUCT_CACHE_KEY.'_3', '');
     }
 }
