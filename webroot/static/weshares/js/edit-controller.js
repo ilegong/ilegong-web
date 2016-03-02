@@ -43,9 +43,12 @@
     vm.setDeliveryTemplates = setDeliveryTemplates;
     vm.removeDeliveryTemplate = removeDeliveryTemplate;
     vm.addDeliveryTemplate = addDeliveryTemplate;
+    vm.deliveryTemplateChooseCity = deliveryTemplateChooseCity;
+    vm.showDeliveryTemplateProvinceNames = showDeliveryTemplateProvinceNames;
     vm.canSetTagUser = [633345, 544307, 802852, 867587, 804975];
     vm.showEditShareView = true;
     vm.showEditTagView = false;
+    vm.currentDeliveryTemplate = null;
     function pageLoaded() {
       $rootScope.loadingPage = false;
     }
@@ -342,9 +345,10 @@
       });
     }
 
-    function showChooseCityView() {
+    function showChooseCityView(deliveryTemplate) {
       vm.isShowChooseCity = true;
       vm.showShippmentInfo = false;
+      vm.currentDeliveryTemplate = deliveryTemplate;
     }
 
     function hideChooseCityView() {
@@ -469,6 +473,24 @@
       }
       return vm.addressError;
     }
+
+    function showDeliveryTemplateProvinceNames(deliveryTemplate){
+       if(!_.isEmpty(deliveryTemplate['regions'])){
+         var nameStr =  _.reduce(deliveryTemplate['regions'], function(memo, checkedProvince){ return memo +','+ checkedProvince['province_name']; }, '');
+         return nameStr;
+       }
+       return '选择地区';
+    }
+
+    function deliveryTemplateChooseCity(){
+      vm.hideChooseCityView();
+      var checkedProvinces = _.map(vm.provinceCheckStatus, function(checked, provinceId){ if(checked){return provinceId} });
+      var checkedProvinceData = _.map(checkedProvinces, function(provinceId){
+        return {"province_id":provinceId, "province_name": vm.provinceIdNameMap};
+      });
+      vm.currentDeliveryTemplate['regions'] = checkedProvinceData;
+    }
+
     function initCityData() {
       vm.areaData = [{"name": "华东", "id": "1", "showChild": false}, {
         "name": "华北",
@@ -528,6 +550,42 @@
         "710000": false,
         "810000": false,
         "820000": false
+      };
+      vm.provinceIdNameMap = {
+        "310100": "上海",
+        "320000": "江苏",
+        "330000": "浙江",
+        "340000": "安徽",
+        "360000": "江西",
+        "110100": "北京",
+        "120100": "天津",
+        "130000": "河北",
+        "140000": "山西",
+        "150000": "内蒙古",
+        "370000": "山东",
+        "410000": "河南",
+        "420000": "湖北",
+        "430000": "湖南",
+        "350000": "福建",
+        "440000": "广东",
+        "450000": "广西",
+        "460000": "海南",
+        "210000": "辽宁",
+        "220000": "吉林",
+        "230000": "黑龙江",
+        "610000": "陕西",
+        "620000": "甘肃",
+        "630000": "青海",
+        "640000": "宁夏",
+        "650000": "新疆",
+        "500100": "重庆",
+        "510000": "四川",
+        "520000": "贵州",
+        "530000": "云南",
+        "540000": "西藏",
+        "710000": "台湾",
+        "810000": "香港",
+        "820000": "澳门"
       };
       vm.provinceData = {
         "1": {

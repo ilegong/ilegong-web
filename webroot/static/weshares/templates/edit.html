@@ -114,9 +114,9 @@
                 </div>
                 <div class="clearfix" ng-repeat="deliveryTemplateItem in vm.deliveryTemplates">
                     <div class="freight fl">
-                        <h1 class="clearfix">
-                            <div class="fl">选择地区</div>
-                            <a class="more_city" ng-click="vm.showChooseCityView();"><img ng-src="{{::vm.staticFilePath}}/static/weshares/images/more_city.png" /></a>
+                        <h1 class="clearfix" ng-click="vm.showChooseCityView(deliveryTemplateItem);">
+                            <div class="fl" ng-bind="vm.showDeliveryTemplateProvinceNames(deliveryTemplateItem)"></div>
+                            <a class="more_city"><img ng-src="{{::vm.staticFilePath}}/static/weshares/images/more_city.png" /></a>
                         </h1>
                         <div class="clearfix freightrate">
                             <div class="pt10 clearfix">
@@ -198,7 +198,7 @@
             <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/back.png"/>
             <label>返回</label>
         </a>
-        <a href="#X" style="right: 15px; left: auto; width: 2em; color: #49bc6e;">
+        <a ng-click="vm.deliveryTemplateChooseCity()" style="right: 15px; left: auto; width: 2em; color: #49bc6e;">
             <label>完成</label>
         </a>
     </div>
