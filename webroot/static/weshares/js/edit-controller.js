@@ -315,10 +315,12 @@
         return false;
       }
       vm.kuai_di_data.ship_fee = vm.kuai_di_data.ship_fee || 0;
+      var deliveryTemplates = vm.deliveryTemplates.concat(vm.defaultDeliveryTemplate);
       if (vm.validateShipFee(vm.kuai_di_data.ship_fee)) {
         return false;
       }
       if (vm.validateRebatePercent()) {
+        alert('请设置团长佣金比例');
         return false;
       }
       if (vm.validateSendInfo()) {
@@ -328,14 +330,13 @@
       if (vm.validatePinTuan()) {
         return false;
       }
-      if(!vm.validateDeliveryTemplateData()){
+      if(!vm.validateDeliveryTemplateData(deliveryTemplates)){
         return false;
       }
       if (vm.isInProcess) {
         alert('正在保存....');
         return;
       }
-      var deliveryTemplates = vm.deliveryTemplates.concat(vm.defaultDeliveryTemplate);
       vm.isInProcess = true;
       vm.kuai_di_data.ship_fee = vm.kuai_di_data.ship_fee;
       vm.weshare.ship_type = [vm.self_ziti_data, vm.kuai_di_data, vm.pys_ziti_data, vm.pin_tuan_data];
@@ -685,12 +686,16 @@
         var deliveryTemplateItem = deliveryTemplates[i];
         if (deliveryTemplateItem['is_default'] == 0) {
           if (_.isEmpty(deliveryTemplateItem['regions'])) {
-            alert('非默认运费设置，需要知道地区');
+            alert('非默认运费设置，需要指定地区');
             return false;
           }
         }
-        if(_.isNaN(deliveryTemplateItem['start_units'])||_.isNaN(deliveryTemplateItem['start_fee'])||_.isNaN(deliveryTemplateItem['add_units'])||_.isNaN(deliveryTemplateItem['add_fee'])){
+        if (!Utils.isNumber(deliveryTemplateItem['start_units']) || !Utils.isNumber(deliveryTemplateItem['start_fee']) || !Utils.isNumber(deliveryTemplateItem['add_units']) || !Utils.isNumber(deliveryTemplateItem['add_fee'])) {
           alert('运费设置需要输入数字');
+          return false;
+        }
+        if (deliveryTemplateItem['start_units'] < 1 || deliveryTemplateItem['add_units'] < 1) {
+          alert('运费设置商品件数必须大于1');
           return false;
         }
       }
