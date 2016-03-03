@@ -110,10 +110,10 @@ class WesharesComponent extends Component
         if (count($images) > 0) {
             $thumbnail = $images[0];
         }
-        $this->save_create_share_opt_log($weshare['Weshare']['id'], $thumbnail, $weshare['Weshare']['title'], $uid);
+        $this->ShareUtil->save_create_share_opt_log($weshare['Weshare']['id'], $thumbnail, $weshare['Weshare']['title'], $uid);
         //  $this->check_share_and_trigger_new_share($weshare['Weshare']['id'], $shipSetData);
         // check user level and init level data when not
-        $this->check_and_save_default_level($uid);
+        $this->ShareUtil->check_and_save_default_level($uid);
     }
 
     private function on_weshare_updated($uid, $weshare){
