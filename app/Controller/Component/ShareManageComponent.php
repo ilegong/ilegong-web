@@ -18,6 +18,39 @@ class ShareManageComponent extends Component
         return $indexProducts;
     }
 
+    public function get_pool_product($id)
+    {
+        $indexProductM = ClassRegistry::init('PoolProduct');
+        $indexProducts = $indexProductM->find('all', [
+            'conditions' => [
+                'PoolProduct.deleted' => DELETED_NO,
+                'PoolProduct.id' => $id,
+            ],
+            'fields' => [
+                'PoolProduct.*',
+                'WeshareProducts.*',
+                'Weshares.*'
+                ],
+            'joins' => [
+                [
+                    'table' => 'weshare_products',
+                    'alias' => 'WeshareProducts',
+                    'conditions' => [
+                        'PoolProduct.weshare_id = WeshareProducts.weshare_id',
+                    ],
+                ], [
+                    'table' => 'weshares',
+                    'alias' => 'Weshares',
+                    'conditions' => [
+                        'PoolProduct.weshare_id = Weshares.id',
+                    ],
+                ],
+            ],
+            //'order' => array('weshare_id ASC')
+        ]);
+
+        return $this->rearrange_pool_product($indexProducts)[0];
+    }
     public function get_pool_products()
     {
         $indexProductM = ClassRegistry::init('PoolProduct');
@@ -58,12 +91,33 @@ class ShareManageComponent extends Component
             } else {
                 $ak++;
                 $arr[$ak]['PoolProduct'] = $v['PoolProduct'];
+                $arr[$ak]['Weshares'] = $v['Weshares'];
                 $arr[$ak]['WeshareProducts'][] = $v['WeshareProducts'];
                 $oldid = $productid;
             }
         }
 
         return $arr;
+    }
+
+    public function save_pool_product($data)
+    {
+        // 更新cake_pool_products表
+        $poolProductM = ClassRegistry::init('PoolProduct');
+        $poolProduct = $data['PoolProduct'];
+        $poolProductM->save($data);
+
+        // 更新cake_weshare_products表
+        $weshareProductM = ClassRegistry::init('WeshareProducts');
+        foreach ($data['WeshareProduct'] as $item) {
+            $weshareProductM->save($item);
+        }
+
+        // 更新cake_weshares表
+        $wesharesM = ClassRegistry::init('Weshares');
+        $wesharesM->save($data['Weshares']);
+
+        return true;
     }
 
     public function save_index_product($data)

@@ -560,7 +560,21 @@ class ShareManageController extends AppController
         $this->set('tags', $tags);
     }
 
-    public function index_product_save(){
+    public function pool_product_edit($id)
+    {
+        $product = $this->ShareManage->get_pool_product($id);
+        $this->set('index_product', $product);
+    }
+
+    public function pool_product_save()
+    {
+        $data = $this->data;
+        $this->ShareManage->save_pool_product($data);
+        $this->redirect(array('action' => 'pool_products'));
+    }
+
+    public function index_product_save()
+    {
         $data = $this->data;
         $this->ShareManage->save_index_product($data);
         $this->redirect(array('action' => 'index_products'));
