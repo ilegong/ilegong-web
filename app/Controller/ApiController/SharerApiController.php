@@ -5,7 +5,7 @@ class SharerApiController extends AppController{
     public $components = array('OAuth.OAuth', 'Session', 'WeshareBuy', 'ShareUtil');
 
     public function beforeFilter(){
-        $allow_action = array('test');
+        $allow_action = array('test', 'update_share');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action) == false) {
             $this->currentUser = $this->OAuth->user();
