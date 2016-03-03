@@ -4,17 +4,17 @@
 // 不包含：订单；产品街；首页产品；团长；用户
 class WesharesComponent extends Component
 {
-    var $name = 'WesharesComponent';
-    var $uses = array('Weshare');
-
     public $components = array('ShareUtil');
 
     public function stop_weshare($uid, $weshare_id)
     {
+        $WeshareM = ClassRegistry::init('Weshare');
+
         $this->log('User '.$uid. ' stops weshare '.$weshare_id, LOG_INFO);
-        $this->Weshare->updateAll(array('status' => WESHARE_STOP_STATUS), array('id' => $weshare_id, 'creator' => $uid, 'status' => WESHARE_NORMAL_STATUS));
+
+        $WeshareM->updateAll(array('status' => WESHARE_STOP_STATUS), array('id' => $weshare_id, 'creator' => $uid, 'status' => WESHARE_NORMAL_STATUS));
         //stop child share
-        $this->Weshare->updateAll(array('status' => WESHARE_STOP_STATUS), array('refer_share_id' => $weshare_id, 'status' => WESHARE_NORMAL_STATUS, 'type' => GROUP_SHARE_TYPE));
+        $WeshareM->updateAll(array('status' => WESHARE_STOP_STATUS), array('refer_share_id' => $weshare_id, 'status' => WESHARE_NORMAL_STATUS, 'type' => GROUP_SHARE_TYPE));
 
         $this->on_weshare_stopped($uid, $weshare_id);
     }
