@@ -108,13 +108,13 @@ class ShareManageComponent extends Component
         $poolProductM->save($data);
 
         // 更新cake_weshare_products表
-        $weshareProductM = ClassRegistry::init('WeshareProducts');
+        $weshareProductM = ClassRegistry::init('WeshareProduct');
         foreach ($data['WeshareProduct'] as $item) {
             $weshareProductM->save($item);
         }
 
         // 更新cake_weshares表
-        $wesharesM = ClassRegistry::init('Weshares');
+        $wesharesM = ClassRegistry::init('Weshare');
         $wesharesM->save($data['Weshares']);
 
         return true;

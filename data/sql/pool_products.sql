@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS `cake_pool_products` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 ALTER TABLE `cake_weshare_products` ADD channel_price int(11) AFTER price;
+ALTER TABLE `cake_pool_products` ADD FOREIGN KEY fk_pool_products_weshareId_cakeWeshares_id (weshare_id) REFERENCES cake_weshares(id);
 
 INSERT INTO `cake_pool_products` VALUES ('', 2589, '海鸭蛋', 'http://static.tongshijia.com/images/f87be962-df8c-11e5-a821-00163e1600b6.jpg', '', 1, 0);
 UPDATE `cake_weshare_products` SET `channel_price` = 50 WHERE id = 5626;
