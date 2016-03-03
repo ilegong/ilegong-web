@@ -3794,6 +3794,7 @@
     vm.initProvince = initProvince;
     vm.loadCityData = loadCityData;
     vm.loadCountyData = loadCounty;
+    vm.calculateShipFee = calculateShipFee;
     vm.childShareDetail = null;
     vm.currentUserOrderCount = 0;
     vm.totalBuyCount = 0;
@@ -4008,6 +4009,7 @@
           vm.totalBuyCount = data['all_buy_count'];
           vm.favourableConfig = data['favourable_config'];
           vm.autoPopCommentData = data['prepare_comment_data'];
+          vm.dliveryTemplate = data['deliveryTemplate'];
           vm.submitRecommendData = {};
           vm.submitRecommendData.recommend_content = vm.weshare.creator.nickname + '我认识，很靠谱！';
           vm.submitRecommendData.recommend_user = vm.currentUser.id;
@@ -4344,7 +4346,16 @@
 
     function getShipFee() {
       if (vm.selectShipType == 0) {
-        return vm.weshareSettings.kuai_di.ship_fee;
+        //return vm.weshareSettings.kuai_di.ship_fee;
+        var goodNum = 0;
+        _.each(vm.weshare.products, function (products) {
+          _.each(products, function (product) {
+            if (product.num && (product.num > 0)) {
+              goodNum = goodNum + product.num;
+            }
+          });
+        });
+        return vm.calculateShipFee(vm.dliveryTemplate, vm.selectedProvince, goodNum);
       }
       if (vm.selectShipType == 1) {
         return vm.weshareSettings.self_ziti.ship_fee;
@@ -5179,6 +5190,44 @@
       return;
     }
 
+    function calculateShipFee(deliveryTemplate, provinceId, goodNum) {
+      var shipFee = 0;
+      if (provinceId && goodNum > 0) {
+        var template = null;
+        if (deliveryTemplate['delivery_templates'] && deliveryTemplate['delivery_templates'].length > 0) {
+          for (var i = 0; i < deliveryTemplate['delivery_templates'].length; i++) {
+            var deliveryTemplateItem = deliveryTemplate['delivery_templates'][i];
+            var regions = deliveryTemplateItem['regions'];
+            if (regions && regions.length > 0) {
+              for (var j = 0; j < regions.length; j++) {
+                var region = regions[j];
+                if (region['province_id'] == provinceId) {
+                  template = deliveryTemplateItem;
+                }
+                break;
+              }
+              if (template) {
+                break;
+              }
+            }
+          }
+        }
+        if (!template) {
+          template = deliveryTemplate['default_delivery_template'];
+        }
+        var startUnits = template['start_units'];
+        var startFee = template['start_fee'];
+        var addUnits = template['add_units'];
+        var addFee = template['add_fee'];
+        var gapNum = goodNum - startUnits;
+        if (gapNum <= 0) {
+          shipFee = startFee / 100;
+        } else {
+          shipFee = (startFee + (Math.ceil(gapNum / addUnits) * addFee)) / 100;
+        }
+      }
+      return shipFee;
+    }
 
     function supportGroupBuy() {
       if (vm.weshareSettings && vm.weshareSettings.pin_tuan && vm.weshareSettings.pin_tuan.status == 1) {
