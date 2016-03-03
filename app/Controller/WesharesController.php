@@ -713,8 +713,8 @@ class WesharesController extends AppController {
     public function stopShare($weShareId) {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
-        // 判断权限：owner或者超级管理员
 
+        // 判断权限：owner或者超级管理员
         $this->WesharesComponent->stop_share($uid, $weShareId);
 
         echo json_encode(array('success' => true));
