@@ -2,8 +2,9 @@
 
 // 包含：跟分享相关的业务逻辑
 // 不包含：订单；产品街；首页产品；团长；用户
-class ShareManageComponent extends Component
+class WesharesComponent extends Component
 {
+    var $name = 'WesharesComponent';
     var $uses = array('Weshare');
 
     public $components = array('ShareUtil');
