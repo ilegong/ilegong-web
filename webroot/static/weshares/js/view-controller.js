@@ -5215,15 +5215,15 @@
         if (!template) {
           template = deliveryTemplate['default_delivery_template'];
         }
-        var startUnits = template['start_units'];
-        var startFee = template['start_fee'];
-        var addUnits = template['add_units'];
-        var addFee = template['add_fee'];
+        var startUnits = parseInt(template['start_units']);
+        var startFee = parseInt(template['start_fee']);
+        var addUnits = parseInt(template['add_units']);
+        var addFee = parseInt(template['add_fee']);
         var gapNum = goodNum - startUnits;
         if (gapNum <= 0) {
-          shipFee = startFee / 100;
+          shipFee = startFee;
         } else {
-          shipFee = (startFee + (Math.ceil(gapNum / addUnits) * addFee)) / 100;
+          shipFee = (startFee + (Math.ceil(gapNum / addUnits) * addFee));
         }
       }
       return shipFee;
