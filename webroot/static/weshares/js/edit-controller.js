@@ -47,6 +47,7 @@
     vm.resetProvinceAreaCheckStatus = resetProvinceAreaCheckStatus;
     vm.showDeliveryTemplateProvinceNames = showDeliveryTemplateProvinceNames;
     vm.setAreaCheckStatus = setAreaCheckStatus;
+    vm.validateDeliveryTemplateData = validateDeliveryTemplateData;
     vm.canSetTagUser = [633345, 544307, 802852, 867587, 804975];
     vm.showEditShareView = true;
     vm.showEditTagView = false;
@@ -310,6 +311,7 @@
             {address: '', deleted: 0}
           ];
         }
+        alert('请输入自提地址');
         return false;
       }
       vm.kuai_di_data.ship_fee = vm.kuai_di_data.ship_fee || 0;
@@ -320,9 +322,13 @@
         return false;
       }
       if (vm.validateSendInfo()) {
+        alert('输入到货/发货时间');
         return false;
       }
       if (vm.validatePinTuan()) {
+        return false;
+      }
+      if(!vm.validateDeliveryTemplateData()){
         return false;
       }
       if (vm.isInProcess) {
@@ -674,6 +680,22 @@
       });
     }
 
+    function validateDeliveryTemplateData(deliveryTemplates){
+      for (var i = 0; i < deliveryTemplates.length; i++) {
+        var deliveryTemplateItem = deliveryTemplates[i];
+        if (deliveryTemplateItem['is_default'] == 0) {
+          if (_.isEmpty(deliveryTemplateItem['regions'])) {
+            alert('非默认运费设置，需要知道地区');
+            return false;
+          }
+        }
+        if(_.isNaN(deliveryTemplateItem['start_units'])||_.isNaN(deliveryTemplateItem['start_fee'])||_.isNaN(deliveryTemplateItem['add_units'])||_.isNaN(deliveryTemplateItem['add_fee'])){
+          alert('运费设置需要输入数字');
+          return false;
+        }
+      }
+      return true;
+    }
 
     function validateRebatePercent() {
       if (!Utils.isNumber(vm.proxy_rebate_percent.percent)) {

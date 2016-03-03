@@ -145,6 +145,18 @@
             <dd class="fl">好邻居</dd>
             <dd class="fr">使用前请先联系微信<br/><span>[yangxiaoguang]</span>沟通物流</dd>
         </dl>
+        <div class="ziti" style="margin: 0;">
+            <dl class="clearfix">
+                <dd><input type="checkbox" ng-model="vm.proxy_rebate_percent.status" ng-true-value="1" ng-false-value="0" ng-checked="vm.proxy_rebate_percent.status==1"/></dd>
+                <dd>设置团长的佣金比例(推广好办法)</dd>
+            </dl>
+            <div class="freightmore">
+                <div style="width: 60%;">
+                    <input style="padding: 10px;" class="sendouttime" type="text" placeholder="团长佣金比例" ng-model="vm.proxy_rebate_percent.percent" ng-change='vm.validateRebatePercent()' ng-blur='vm.validateRebatePercent()'/>
+                    <label style="font-size: 20px; color: #29AC0E;">%</label>
+                </div>
+            </div>
+        </div>
         <a class="submitbtn" ng-click="vm.saveWeshare()">Oh，搞定了！</a>
     </div>
 
