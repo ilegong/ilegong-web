@@ -224,6 +224,8 @@ class WesharesComponent extends Component
             foreach ($weshareDeliveryTemplateData as &$itemTemplateData) {
                 $itemTemplateData['weshare_id'] = $weshareId;
                 $itemTemplateData['user_id'] = $user_id;
+                $itemTemplateData['add_fee'] = $itemTemplateData['add_fee']*100;
+                $itemTemplateData['start_fee'] = $itemTemplateData['start_fee']*100;
             }
             $this->DeliveryTemplate->save_all_delivery_template($weshareDeliveryTemplateData);
         }
