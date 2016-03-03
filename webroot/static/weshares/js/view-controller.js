@@ -4009,7 +4009,7 @@
           vm.totalBuyCount = data['all_buy_count'];
           vm.favourableConfig = data['favourable_config'];
           vm.autoPopCommentData = data['prepare_comment_data'];
-          vm.dliveryTemplate = data['deliveryTemplate'];
+          vm.dliveryTemplate = data['weshare']['deliveryTemplate'];
           vm.submitRecommendData = {};
           vm.submitRecommendData.recommend_content = vm.weshare.creator.nickname + '我认识，很靠谱！';
           vm.submitRecommendData.recommend_user = vm.currentUser.id;
