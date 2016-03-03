@@ -364,7 +364,7 @@ define('MSG_LOG_PINTUAN_TYPE', 3);
 global $page_style;
 global $pages_tpl;
 /*  分页样式    */
-//style=1 共2991条 200页 当前第1页 [ 1 2 3 4 5 6 7 8 9 10 ... 200 ] 
+//style=1 共2991条 200页 当前第1页 [ 1 2 3 4 5 6 7 8 9 10 ... 200 ]
 //style=2 共118条 | 首页 | 上一页 | 下一页 | 尾页 | 65条/页 | 共2页  <select>第1页</select>
 $page_style = 1;
 $pages_tpl = array(
@@ -2363,7 +2363,21 @@ function map_user_avatar($var){
 }
 
 function get_index_tags(){
-    return array(array('id' => 0, 'name' => '新品爆款'),array('id' => 1, 'name' => '水果蔬菜'),array('id' => 2, 'name' => '肉蛋粮油'),array('id' => 3, 'name' => '零食其他'));
+    return array(
+        array(
+            'id' => 0,
+            'name' => '新品爆款'
+        ), array(
+            'id' => 1,
+            'name' => '水果蔬菜'
+        ), array(
+            'id' => 2,
+            'name' => '肉蛋粮油'
+        ), array(
+            'id' => 3,
+            'name' => '零食其他'
+        )
+    );
 }
 
 function map_opt_log_data($var) {
@@ -2431,7 +2445,7 @@ function is_blacklist_user($uid) {
 }
 
 function is_super_share_manager($uid) {
-    $super_manager = array(633345, 701166, 544307, 141, 802852, 801447,895096,711503, 897195, 897247,5081, 559795);
+    $super_manager = array(633345, 701166, 544307, 141, 802852, 801447,895096,711503, 897195, 897247,5081, 559795, 902131);
     return in_array($uid, $super_manager);
 }
 

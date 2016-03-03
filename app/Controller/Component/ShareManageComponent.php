@@ -18,6 +18,54 @@ class ShareManageComponent extends Component
         return $indexProducts;
     }
 
+    public function get_pool_products()
+    {
+        $indexProductM = ClassRegistry::init('PoolProduct');
+        $indexProducts = $indexProductM->find('all', [
+            'conditions' => [
+                'PoolProduct.deleted' => DELETED_NO,
+            ],
+            'fields' => [
+                'PoolProduct.*',
+                'WeshareProducts.*'
+                ],
+            'joins' => [
+                [
+                    'table' => 'weshare_products',
+                    'alias' => 'WeshareProducts',
+                    'conditions' => [
+                        'PoolProduct.weshare_id = WeshareProducts.weshare_id',
+                    ],
+                ]
+            ],
+            //'order' => array('weshare_id ASC')
+        ]);
+
+        return $this->rearrange_pool_product($indexProducts);
+    }
+
+    private function rearrange_pool_product($data) {
+        if (count($data) == 0) {
+            return [];
+        }
+
+        $oldid = 0;
+        $ak = -1;
+        foreach ($data as $k => $v) {
+            $productid = $v['PoolProduct']['id'];
+            if ($oldid == $productid) {
+                $arr[$ak]['WeshareProducts'][] = $v['WeshareProducts'];
+            } else {
+                $ak++;
+                $arr[$ak]['PoolProduct'] = $v['PoolProduct'];
+                $arr[$ak]['WeshareProducts'][] = $v['WeshareProducts'];
+                $oldid = $productid;
+            }
+        }
+
+        return $arr;
+    }
+
     public function save_index_product($data)
     {
         $indexProductM = ClassRegistry::init('IndexProduct');

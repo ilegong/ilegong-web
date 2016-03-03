@@ -1,7 +1,7 @@
 <?php
 if(isset($_SERVER['SERVER_ADDR']) && $_SERVER['SERVER_ADDR'] == '127.0.0.1' || $_SERVER['SERVER_ADDR'] == '::1'){
 	Configure::write('debug',1);
-	Configure::write('Cache.disable', false);
+	Configure::write('Cache.disable', true);
 	define('IS_LOCALHOST', true);
 }
 else{

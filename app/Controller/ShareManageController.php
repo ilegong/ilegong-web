@@ -528,6 +528,12 @@ class ShareManageController extends AppController
         $this->set('tag_id', $tag_id);
     }
 
+    public function pool_products()
+    {
+        $index_products = $this->ShareManage->get_pool_products();
+        $this->set('index_products', $index_products);
+    }
+
     public function index_product_add()
     {
         $tags = get_index_tags();

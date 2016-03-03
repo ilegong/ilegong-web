@@ -419,7 +419,8 @@ class DboSource extends DataSource {
  * @param array $params values to be bound to the query
  * @return mixed Resource or object representing the result set, or false on failure
  */
-	public function execute($sql, $options = array(), $params = array()) {
+	public function execute($sql, $options = array(), $params = array(), $print = false) {
+        if ($print) echo $sql . "<br />\n";
 		$options += array('log' => $this->fullDebug);
 
 		$t = microtime(true);
