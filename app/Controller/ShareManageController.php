@@ -576,8 +576,7 @@ class ShareManageController extends AppController
     {
         $shareId = $_REQUEST['shareId'];
         //SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId
-        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $shareId . '_0', '');
-        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $shareId . '_1', '');
+        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $shareId, '');
         //SHARE_SHIP_SETTINGS_CACHE_KEY . '_' . $weshareId;
         Cache::write(SHARE_SHIP_SETTINGS_CACHE_KEY . '_' . $shareId, '');
         //SIMPLE_SHARE_INFO_CACHE_KEY . '_' . $share_id

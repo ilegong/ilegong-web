@@ -7,7 +7,7 @@ class WesharesController extends AppController {
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
 
-    var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'OrderExpress', 'PintuanHelper', 'RedisQueue', 'DeliveryTemplate', 'OrderUtil');
+    var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'OrderExpress', 'PintuanHelper', 'RedisQueue', 'DeliveryTemplate', 'OrderUtil', 'WesharesComponent');
 
     var $share_ship_type = array('self_ziti', 'kuaidi', 'pys_ziti');
 
@@ -713,14 +713,10 @@ class WesharesController extends AppController {
     public function stopShare($weShareId) {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
-        $this->Weshare->updateAll(array('status' => WESHARE_STOP_STATUS), array('id' => $weShareId, 'creator' => $uid, 'status' => WESHARE_NORMAL_STATUS));
-        //stop child share
-        $this->Weshare->updateAll(array('status' => WESHARE_STOP_STATUS), array('refer_share_id' => $weShareId, 'status' => WESHARE_NORMAL_STATUS, 'type' => GROUP_SHARE_TYPE));
-        //SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId . '_1'
-        //SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId . '_1'
-        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weShareId . '_0', '');
-        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weShareId . '_1', '');
-        Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
+        // 判断权限：owner或者超级管理员
+
+        $this->WesharesComponent->stop_share($uid, $weShareId);
+
         echo json_encode(array('success' => true));
         return;
     }
@@ -1423,11 +1419,7 @@ class WesharesController extends AppController {
      * 获取分享的详情
      */
     private function get_weshare_detail($weshareId, $product_to_map = false) {
-        if ($product_to_map) {
-            $key = SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId . '_1';
-        } else {
-            $key = SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId . '_0';
-        }
+        $key = SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId;
         $share_detail = Cache::read($key);
         if (empty($share_detail)) {
             $weshareInfo = $this->Weshare->find('first', array(
