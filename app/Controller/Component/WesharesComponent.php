@@ -53,11 +53,11 @@ class WesharesComponent extends Component
 
         if (empty($weshareData['id'])) {
             $this->on_weshare_created($uid, $weshare);
-            $this->log('Create weshare for user '.$uid +' successfully: '. $weshare['Weshare']['id'], LOG_INFO);
+            $this->log('Create weshare '.$weshare['Weshare']['id'].' for user '.$uid +' successfully: '.json_encode($weshare) , LOG_INFO);
         }
         else{
             $this->on_weshare_updated($uid, $weshare);
-            $this->log('Update weshare '.$weshareData['id'].' for user '.$uid +' successfully', LOG_INFO);
+            $this->log('Update weshare '.$weshareData['id'].' for user '.$uid +' successfully: '.json_encode($weshare) , LOG_INFO);
         }
 
         //todo update child share data and product data
@@ -105,7 +105,7 @@ class WesharesComponent extends Component
     private function on_weshare_created($uid, $weshare){
         $this->clear_cache_for_weshare($uid, $weshare['Weshare']['id']);
         // 消息流
-        $images = $weshare['Weshare']['images'].explode('|');
+        $images = explode('|', $weshare['Weshare']['images']);
         $thumbnail = null;
         if (count($images) > 0) {
             $thumbnail = $images[0];
