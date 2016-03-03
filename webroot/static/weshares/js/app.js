@@ -36,54 +36,6 @@
 })(window, window.angular);
 
 (function (window, angular) {
-  angular.module('module.services', []).service('ShipFeeCalculate', ShipFeeCalculate);
-  function ShipFeeCalculate() {
-    return {
-      calculate: calculate
-    };
-    function calculate(deliveryTemplate, provinceId, goodNum) {
-      var shipFee = 0;
-      if (!provinceId || goodNum == 0) {
-        return shipFee;
-      }
-      var template = null;
-      if (deliveryTemplate['delivery_templates'] && deliveryTemplate['delivery_templates'].length > 0) {
-        for (var i = 0; i < deliveryTemplate['delivery_templates'].length; i++) {
-          var deliveryTemplateItem = deliveryTemplate['delivery_templates'][i];
-          var regions = deliveryTemplateItem['regions'];
-          if (regions && regions.length > 0) {
-            for (var j = 0; j < regions.length; j++) {
-              var region = regions[j];
-              if (region['province_id'] == provinceId) {
-                template = deliveryTemplateItem;
-              }
-              break;
-            }
-            if (template) {
-              break;
-            }
-          }
-        }
-      }
-      if (!template) {
-        template = deliveryTemplate['default_delivery_template'];
-      }
-      var startUnits = template['start_units'];
-      var startFee = template['start_fee'];
-      var addUnits = template['add_units'];
-      var addFee = template['add_fee'];
-      var gapNum = goodNum - startUnits;
-      if (gapNum <= 0) {
-        shipFee = startFee / 100;
-      } else {
-        shipFee = (startFee + (Math.ceil(gapNum / addUnits) * addFee)) / 100;
-      }
-      return shipFee;
-    }
-  }
-})(window, window.angular);
-
-(function (window, angular) {
   var app = angular.module('weshares', ['infinite-scroll', 'module.services', 'module.filters', 'module.directives', 'me-lazyload'])
     .constant('_', window._)
     .config(configCompileProvider)
