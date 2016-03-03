@@ -117,7 +117,7 @@ class WesharesComponent extends Component
     }
 
     private function on_weshare_updated($uid, $weshare){
-        $this->clear_cache_for_weshare($uid, $weshare['Weshare']['id']);
+        $this->clear_cache_for_weshare($uid, $weshare);
     }
 
     private function on_weshare_deleted($uid, $weshare_id){
