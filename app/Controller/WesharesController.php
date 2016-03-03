@@ -734,14 +734,16 @@ class WesharesController extends AppController {
     /**
      * @param $shareId
      */
-    public function delete_share($shareId) {
+    public function delete_share($weshare_id) {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
+            $this->log('Failed to delete weshare '.$weshare_id.': user not logged in');
             echo json_encode(array('success' => false, 'reason' => 'not_login'));
             return;
         }
-        $this->WeshareBuy->delete_share($uid, $shareId);
+
+        $this->Weshares->delete_weshare($uid, $weshare_id);
         echo json_encode(array('success' => true));
         return;
     }

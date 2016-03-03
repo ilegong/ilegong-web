@@ -81,6 +81,23 @@ class WesharesComponent extends Component
         $this->on_weshare_stopped($uid, $weshare_id);
     }
 
+
+    /**
+     * @param $uid
+     * @param $shareId
+     * @return int
+     * 删除分享
+     */
+    public function delete_weshare($uid, $weshare_id) {
+        $weshareM = ClassRegistry::init('Weshare');
+        $weshareM->update(array('status' => WESHARE_DELETE_STATUS), array('id' => $weshare_id, 'creator' => $uid));
+
+        $this->log('Delete weshare '.$weshare_id.' of user '.$uid . ' successfully');
+
+        $this->on_weshare_deleted($uid, $weshare_id);
+    }
+
+
     private function on_weshare_stopped($uid, $weshare_id)
     {
         Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshare_id, '');
@@ -103,6 +120,10 @@ class WesharesComponent extends Component
 
     private function on_weshare_updated($uid, $weshare){
         $this->clear_cache_for_weshare($uid, $weshare['Weshare']['id']);
+    }
+
+    private function on_weshare_deleted($uid, $weshare_id){
+        Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
     }
 
     private function clear_cache_for_weshare($uid, $weshare){
