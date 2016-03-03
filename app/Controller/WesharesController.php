@@ -7,7 +7,7 @@ class WesharesController extends AppController {
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
 
-    var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'OrderExpress', 'PintuanHelper', 'RedisQueue', 'DeliveryTemplate', 'OrderUtil', 'WesharesComponent');
+    var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'OrderExpress', 'PintuanHelper', 'RedisQueue', 'DeliveryTemplate', 'OrderUtil', 'Weshares');
 
     var $share_ship_type = array('self_ziti', 'kuaidi', 'pys_ziti');
 
@@ -707,15 +707,15 @@ class WesharesController extends AppController {
     }
 
     /**
-     * @param $weShareId
+     * @param $weshare_id
      * 截止分享
      */
-    public function stopShare($weShareId) {
+    public function stopShare($weshare_id) {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
 
         // 判断权限：owner或者超级管理员
-        $this->WesharesComponent->stop_share($uid, $weShareId);
+        $this->Weshares->stop_weshare($uid, $weshare_id);
 
         echo json_encode(array('success' => true));
         return;
