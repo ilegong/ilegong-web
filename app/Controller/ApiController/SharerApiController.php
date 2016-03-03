@@ -13,6 +13,26 @@ class SharerApiController extends AppController{
         $this->autoRender = false;
     }
 
+    /**
+     * @param $shareId
+     * 更新分享
+     */
+    public function update_share($shareId){
+        $weshareInfo = $this->ShareUtil->get_weshare_detail($shareId);
+        echo json_encode($weshareInfo);
+        return;
+    }
+
+    /**
+     * 保存分享
+     */
+    public function save_share(){
+        $uid = $this->currentUser['id'];
+        $postDataArray = $this->get_post_raw_data();
+        $result = $this->ShareUtil->create_share($postDataArray, $uid);
+        echo json_encode($result);
+        return;
+    }
 
     /**
      * 创建分享
