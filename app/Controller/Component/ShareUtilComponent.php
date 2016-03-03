@@ -1842,61 +1842,51 @@ class ShareUtilComponent extends Component
      * 获取分享的详情
      */
     public function get_weshare_detail($weshareId, $product_to_map = false){
-        if ($product_to_map) {
-            $key = SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId . '_1';
-        } else {
-            $key = SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId . '_0';
-        }
+        $key = SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId;
         $share_detail = Cache::read($key);
         if (empty($share_detail)) {
-            $weshareM = ClassRegistry::init('Weshare');
-            $weshareAddressM = ClassRegistry::init('WeshareAddress');
-            $weshareShipSettingM = ClassRegistry::init('WeshareShipSetting');
-            $proxyRebatePercentM = ClassRegistry::init('ProxyRebatePercent');
-            $userM = ClassRegistry::init('User');
-            $weshareProductM = ClassRegistry::init('WeshareProduct');
-            $weshareInfo = $weshareM->find('first', array(
+            $weshareInfo = $this->Weshare->find('first', array(
                 'conditions' => array(
                     'id' => $weshareId
                 )
             ));
-            $weshareAddresses = $weshareAddressM->find('all', array(
+            $weshareAddresses = $this->WeshareAddress->find('all', array(
                 'conditions' => array(
                     'weshare_id' => $weshareId,
                     'deleted' => DELETED_NO
                 )
             ));
-            $weshareShipSettings = $weshareShipSettingM->find('all', array(
+            $weshareShipSettings = $this->WeshareShipSetting->find('all', array(
                 'conditions' => array(
                     'weshare_id' => $weshareId
                 )
             ));
-            $proxy_share_percent = $proxyRebatePercentM->find('first', array(
+            $proxy_share_percent = $this->ProxyRebatePercent->find('first', array(
                 'conditions' => array(
                     'share_id' => $weshareId,
                     'deleted' => DELETED_NO,
                     'status' => PUBLISH_YES
                 )
             ));
-            $sharer_tags = $this->get_tags($weshareInfo['Weshare']['creator'], $weshareInfo['Weshare']['refer_share_id']);
-            $sharer_tags_list = $this->get_tags_list($weshareInfo['Weshare']['creator']);
+            $sharer_tags = $this->ShareUtil->get_tags($weshareInfo['Weshare']['creator'], $weshareInfo['Weshare']['refer_share_id']);
+            $sharer_tags_list = $this->ShareUtil->get_tags_list($weshareInfo['Weshare']['creator']);
             $weshareShipSettings = Hash::combine($weshareShipSettings, '{n}.WeshareShipSetting.tag', '{n}.WeshareShipSetting');
-            $creatorInfo = $userM->find('first', array(
+            $creatorInfo = $this->User->find('first', array(
                 'conditions' => array(
                     'id' => $weshareInfo['Weshare']['creator']
                 ),
                 'recursive' => 1, //int
-                'fields' => $this->query_user_fileds,
+                'fields' => $this->query_user_fields,
             ));
             $creatorInfo = $creatorInfo['User'];
             //reset user image
             $creatorInfo['image'] = get_user_avatar($creatorInfo);
-            $creatorLevel = $this->get_user_level($weshareInfo['Weshare']['creator']);
+            $creatorLevel = $this->ShareUtil->get_user_level($weshareInfo['Weshare']['creator']);
             $creatorInfo['level'] = $creatorLevel;
             if ($product_to_map) {
-                $weshareProducts = $this->get_product_tag_map($weshareId);
+                $weshareProducts = $this->ShareUtil->get_product_tag_map($weshareId);
             } else {
-                $weshareProducts = $weshareProductM->find('all', array(
+                $weshareProducts = $this->WeshareProduct->find('all', array(
                     'conditions' => array(
                         'weshare_id' => $weshareId,
                         'deleted' => DELETED_NO
@@ -1915,7 +1905,6 @@ class ShareUtilComponent extends Component
             $weshareInfo['ship_type'] = $weshareShipSettings;
             $weshareInfo['images'] = array_filter(explode('|', $weshareInfo['images']));
             $weshareInfo['proxy_rebate_percent'] = $proxy_share_percent['ProxyRebatePercent'];
-            $weshareInfo['deliveryTemplate'] = $this->DeliveryTemplate->get_edit_delivery_templates($weshareId);
             Cache::write($key, json_encode($weshareInfo));
             return $weshareInfo;
         }

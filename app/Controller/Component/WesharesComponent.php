@@ -13,10 +13,10 @@ class WesharesComponent extends Component
         if (empty($postDataArray['id'])) {
             $this->log('Create weshare for user '.$uid, LOG_INFO);
             $weshareData['creator'] = $uid;
-            $this->DeliveryTemplate->clear_share_delivery_template($postDataArray['id']);
         } else {
             $this->log('Update weshare ' . $postDataArray['id'] . ' for user '.$uid , LOG_INFO);
             $weshareData['creator'] = $postDataArray['creator']['id'];
+            $this->DeliveryTemplate->clear_share_delivery_template($postDataArray['id']);
         }
 
         $weshareData['id'] = $postDataArray['id'];
