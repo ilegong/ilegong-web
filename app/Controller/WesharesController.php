@@ -4,10 +4,15 @@ class WesharesController extends AppController {
 
     var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem',
         'SharerShipOption', 'WeshareShipSetting', 'OfflineStore', 'UserRelation', 'Comment', 'RebateTrackLog', 'ProxyRebatePercent', 'ShareUserBind', 'UserSubReason', 'ShareFavourableConfig', 'ShareAuthority');
+
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
+
     var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'OrderExpress', 'PintuanHelper', 'RedisQueue', 'DeliveryTemplate', 'OrderUtil', 'Weshares');
+
     var $share_ship_type = array('self_ziti', 'kuaidi', 'pys_ziti');
+
     var $pay_type = 1;
+
     const PROCESS_SHIP_MARK_DEFAULT_RESULT = 0;
     const PROCESS_SHIP_MARK_UNFINISHED_RESULT = 1;
 
@@ -154,7 +159,7 @@ class WesharesController extends AppController {
         $currentUser = $this->currentUser;
         $uid = $currentUser['id'];
         //check user has bind mobile and payment
-        $user_fields = $this->query_user_fileds;
+        $user_fields = $this->query_user_fields;
         $user_fields[] = 'mobilephone';
         $user_fields[] = 'payment';
         $current_user = $this->User->find('first', array(
@@ -1304,7 +1309,83 @@ class WesharesController extends AppController {
         //todo load share detail view order data
 
     }
-    
+
+    /**
+     * @param $weshareId
+     * @param $product_to_map
+     * @return mixed
+     * 获取分享的详情
+     */
+    private function get_weshare_detail($weshareId, $product_to_map = false) {
+        $key = SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId;
+        $share_detail = Cache::read($key);
+        if (empty($share_detail)) {
+            $weshareInfo = $this->Weshare->find('first', array(
+                'conditions' => array(
+                    'id' => $weshareId
+                )
+            ));
+
+            $weshareAddresses = $this->WeshareAddress->find('all', array(
+                'conditions' => array(
+                    'weshare_id' => $weshareId,
+                    'deleted' => DELETED_NO
+                )
+            ));
+            $weshareShipSettings = $this->WeshareShipSetting->find('all', array(
+                'conditions' => array(
+                    'weshare_id' => $weshareId
+                )
+            ));
+            $proxy_share_percent = $this->ProxyRebatePercent->find('first', array(
+                'conditions' => array(
+                    'share_id' => $weshareId,
+                    'deleted' => DELETED_NO,
+                    'status' => PUBLISH_YES
+                )
+            ));
+            $sharer_tags = $this->ShareUtil->get_tags($weshareInfo['Weshare']['creator'], $weshareInfo['Weshare']['refer_share_id']);
+            $sharer_tags_list = $this->ShareUtil->get_tags_list($weshareInfo['Weshare']['creator']);
+            $weshareShipSettings = Hash::combine($weshareShipSettings, '{n}.WeshareShipSetting.tag', '{n}.WeshareShipSetting');
+            $creatorInfo = $this->User->find('first', array(
+                'conditions' => array(
+                    'id' => $weshareInfo['Weshare']['creator']
+                ),
+                'recursive' => 1, //int
+                'fields' => $this->query_user_fileds,
+            ));
+            $creatorInfo = $creatorInfo['User'];
+            //reset user image
+            $creatorInfo['image'] = get_user_avatar($creatorInfo);
+            $creatorLevel = $this->ShareUtil->get_user_level($weshareInfo['Weshare']['creator']);
+            $creatorInfo['level'] = $creatorLevel;
+            if ($product_to_map) {
+                $weshareProducts = $this->ShareUtil->get_product_tag_map($weshareId);
+            } else {
+                $weshareProducts = $this->WeshareProduct->find('all', array(
+                    'conditions' => array(
+                        'weshare_id' => $weshareId,
+                        'deleted' => DELETED_NO
+                    )
+                ));
+                $weshareProducts = Hash::extract($weshareProducts, '{n}.WeshareProduct');
+            }
+            //show break line
+            $weshareInfo['Weshare']['description'] = str_replace(array("\r\n", "\n", "\r"), '<br />', $weshareInfo['Weshare']['description']);
+            $weshareInfo = $weshareInfo['Weshare'];
+            $weshareInfo['tags'] = $sharer_tags;
+            $weshareInfo['tags_list'] = $sharer_tags_list;
+            $weshareInfo['addresses'] = Hash::extract($weshareAddresses, '{n}.WeshareAddress');
+            $weshareInfo['products'] = $weshareProducts;
+            $weshareInfo['creator'] = $creatorInfo;
+            $weshareInfo['ship_type'] = $weshareShipSettings;
+            $weshareInfo['images'] = array_filter(explode('|', $weshareInfo['images']));
+            $weshareInfo['proxy_rebate_percent'] = $proxy_share_percent['ProxyRebatePercent'];
+            Cache::write($key, json_encode($weshareInfo));
+            return $weshareInfo;
+        }
+        return json_decode($share_detail, true);
+    }
 
     /**
      * @param $buyerData
