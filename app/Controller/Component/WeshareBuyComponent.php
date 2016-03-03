@@ -168,18 +168,6 @@ class WeshareBuyComponent extends Component {
 
     /**
      * @param $uid
-     * @param $shareId
-     * @return int
-     * 删除分享
-     */
-    public function delete_share($uid, $shareId) {
-        $weshareM = ClassRegistry::init('Weshare');
-        $weshareM->update(array('status' => WESHARE_DELETE_STATUS), array('id' => $shareId, 'creator' => $uid));
-        Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
-    }
-
-    /**
-     * @param $uid
      * @return mixed
      * query shares
      */
