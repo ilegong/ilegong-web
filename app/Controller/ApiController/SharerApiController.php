@@ -160,7 +160,7 @@ class SharerApiController extends AppController{
         $weshare_id = $postData['share_id'];
         $content = $postData['content'];
         $this->ShareUtil->send_arrival_msg($order_ids, $weshare_id, $uid, $content);
-        echo json_encode(array('succsess' => true));
+        echo json_encode(array('success' => true));
         return;
     }
 
