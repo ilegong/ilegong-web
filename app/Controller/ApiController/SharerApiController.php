@@ -29,7 +29,7 @@ class SharerApiController extends AppController{
     public function save_share(){
         $uid = $this->currentUser['id'];
         $postDataArray = $this->get_post_raw_data();
-        $result = $this->ShareUtil->create_share($postDataArray, $uid);
+        $result = $this->Weshares->create_weshare($postDataArray, $uid);
         echo json_encode($result);
         return;
     }
@@ -40,7 +40,7 @@ class SharerApiController extends AppController{
     public function create_share(){
         $uid = $this->currentUser['id'];
         $postDataArray = $this->get_post_raw_data();
-        $result = $this->ShareUtil->create_share($postDataArray, $uid);
+        $result = $this->Weshares->create_weshare($postDataArray, $uid);
         echo json_encode($result);
         return;
     }
@@ -50,7 +50,7 @@ class SharerApiController extends AppController{
      * 获取分享订单
      */
     public function get_my_share_orders($shareId){
-        $result = $this->WeshareBuy->get_share_order_for_show($shareId, true, $division = false, $export = false);
+        $result = $this->Weshares->get_share_order_for_show($shareId, true, $division = false, $export = false);
         unset($result['ship_types']);
         unset($result['rebate_logs']);
         echo json_encode($result);
@@ -113,7 +113,7 @@ class SharerApiController extends AppController{
      */
     public function stop_share($shareId){
         $uid = $this->currentUser['id'];
-        $this->ShareUtil->stop_share($shareId, $uid);
+        $this->Weshares->stop_weshare($shareId, $uid);
         echo json_encode(array('success' => true));
         return;
     }

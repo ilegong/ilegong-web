@@ -4,7 +4,7 @@
 // 不包含：订单；产品街；首页产品；团长；用户
 class WesharesComponent extends Component
 {
-    public $components = array('ShareUtil');
+    public $components = array('ShareUtil', 'DeliveryTemplate');
 
     public function create_weshare($postDataArray, $uid)
     {
