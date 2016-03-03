@@ -7,7 +7,7 @@ class WesharesController extends AppController {
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
 
-    var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'OrderExpress', 'PintuanHelper', 'RedisQueue', 'DeliveryTemplate', 'OrderUtil');
+    var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'OrderExpress', 'PintuanHelper', 'RedisQueue', 'DeliveryTemplate', 'OrderUtil', 'Weshares');
 
     var $share_ship_type = array('self_ziti', 'kuaidi', 'pys_ziti');
 
@@ -216,7 +216,7 @@ class WesharesController extends AppController {
         }
         $postStr = file_get_contents('php://input');
         $postDataArray = json_decode($postStr, true);
-        $result = $this->ShareUtil->create_share($postDataArray, $uid);
+        $result = $this->Weshares->create_weshare($postDataArray, $uid);
         echo json_encode($result);
         return;
     }
@@ -707,20 +707,16 @@ class WesharesController extends AppController {
     }
 
     /**
-     * @param $weShareId
+     * @param $weshare_id
      * 截止分享
      */
-    public function stopShare($weShareId) {
+    public function stopShare($weshare_id) {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
-        $this->Weshare->updateAll(array('status' => WESHARE_STOP_STATUS), array('id' => $weShareId, 'creator' => $uid, 'status' => WESHARE_NORMAL_STATUS));
-        //stop child share
-        $this->Weshare->updateAll(array('status' => WESHARE_STOP_STATUS), array('refer_share_id' => $weShareId, 'status' => WESHARE_NORMAL_STATUS, 'type' => GROUP_SHARE_TYPE));
-        //SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId . '_1'
-        //SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId . '_1'
-        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weShareId . '_0', '');
-        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weShareId . '_1', '');
-        Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
+
+        // 判断权限：owner或者超级管理员
+        $this->Weshares->stop_weshare($uid, $weshare_id);
+
         echo json_encode(array('success' => true));
         return;
     }
@@ -738,14 +734,16 @@ class WesharesController extends AppController {
     /**
      * @param $shareId
      */
-    public function delete_share($shareId) {
+    public function delete_share($weshare_id) {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
+            $this->log('Failed to delete weshare '.$weshare_id.': user not logged in');
             echo json_encode(array('success' => false, 'reason' => 'not_login'));
             return;
         }
-        $this->WeshareBuy->delete_share($uid, $shareId);
+
+        $this->Weshares->delete_weshare($uid, $weshare_id);
         echo json_encode(array('success' => true));
         return;
     }
@@ -1423,11 +1421,7 @@ class WesharesController extends AppController {
      * 获取分享的详情
      */
     private function get_weshare_detail($weshareId, $product_to_map = false) {
-        if ($product_to_map) {
-            $key = SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId . '_1';
-        } else {
-            $key = SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId . '_0';
-        }
+        $key = SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId;
         $share_detail = Cache::read($key);
         if (empty($share_detail)) {
             $weshareInfo = $this->Weshare->find('first', array(
