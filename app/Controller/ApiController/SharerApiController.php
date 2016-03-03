@@ -2,7 +2,7 @@
 
 class SharerApiController extends AppController{
 
-    public $components = array('OAuth.OAuth', 'Session', 'WeshareBuy', 'ShareUtil');
+    public $components = array('OAuth.OAuth', 'Session', 'WeshareBuy', 'ShareUtil', 'Weshares');
 
     public function beforeFilter(){
         $allow_action = array('test');
@@ -18,7 +18,7 @@ class SharerApiController extends AppController{
         $postStr = file_get_contents('php://input');
         $this->log('app post str ' . $postStr, LOG_DEBUG);
         $postDataArray = json_decode($postStr, true);
-        $result = $this->ShareUtil->create_share($postDataArray, $uid);
+        $result = $this->Weshares->create_share($postDataArray, $uid);
         echo json_encode($result);
         return;
     }

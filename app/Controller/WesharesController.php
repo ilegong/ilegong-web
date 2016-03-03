@@ -216,7 +216,7 @@ class WesharesController extends AppController {
         }
         $postStr = file_get_contents('php://input');
         $postDataArray = json_decode($postStr, true);
-        $result = $this->ShareUtil->create_share($postDataArray, $uid);
+        $result = $this->Weshares->create_weshare($postDataArray, $uid);
         echo json_encode($result);
         return;
     }
