@@ -104,6 +104,102 @@ class SharePoolProduct extends AppModel {
     //产品池所有产品
     var $products = array(
         array(
+            'share_id' => 2620,
+            'share_name' => '泰国椰青',
+            'share_img' => 'http://static.tongshijia.com/images/1f31de58-e05b-11e5-a821-00163e1600b6.jpg',
+            'brand_img' => 'http://static.tongshijia.com/static/img/default_user_icon.jpg',
+            'brand_name' => '易果生鲜',
+            'show_brand' => true,
+            'brand_custom_service' => 898367,
+            'published' => 1,
+            'products' => array(
+                '5687' => array(
+                    'price' => 49,
+                    'channel_price' => 45,
+                ),
+                '5688' => array(
+                    'price' => 98,
+                    'channel_price' => 87,
+                )
+            )
+        ),
+        array(
+            'share_id' => 2619,
+            'share_name' => '新疆骏枣和甘肃琉璃苣蜂蜜',
+            'share_img' => 'http://static.tongshijia.com/images/574fcad0-e05a-11e5-a821-00163e1600b6.jpg',
+            'brand_img' => 'http://static.tongshijia.com/avatar/2015/12/31/wx_head_8818f46c1ef7ac4df8327bbb9404431c.jpg',
+            'brand_name' => '本来物语',
+            'show_brand' => true,
+            'brand_custom_service' => 879054,
+            'published' => 1,
+            'products' => array(
+                '5682' => array(
+                    'price' => 63,
+                    'channel_price' => 54,
+                ),
+                '5685' => array(
+                    'price' => 59,
+                    'channel_price' => 50,
+                )
+            )
+        ),
+        array(
+            'share_id' => 2589,
+            'share_name' => '海鸭蛋',
+            'share_img' => 'http://static.tongshijia.com/images/f87be962-df8c-11e5-a821-00163e1600b6.jpg',
+            'brand_img' => 'http://static.tongshijia.com/avatar/2015/12/31/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg',
+            'brand_name' => '李樱花',
+            'show_brand' => true,
+            'brand_custom_service' => 810684,
+            'published' => 1,
+            'products' => array(
+                '5626' => array(
+                    'price' => 55,
+                    'channel_price' => 50,
+                )
+            )
+        ),
+        array(
+            'share_id' => 2586,
+            'share_name' => '茂谷柑',
+            'share_img' => 'http://static.tongshijia.com/images/8c15c85e-df84-11e5-a821-00163e1600b6.jpg',
+            'brand_img' => 'http://static.tongshijia.com/avatar/2015/12/31/wx_head_c28163f48f28b06d7563680daec84367.jpg',
+            'brand_name' => 'daisy',
+            'show_brand' => true,
+            'brand_custom_service' => 895741,
+            'published' => 1,
+            'products' => array(
+                '5620' => array(
+                    'price' => 60,
+                    'channel_price' => 50,
+                ),
+                '5621' => array(
+                    'price' => 100,
+                    'channel_price' => 90,
+                ),
+                '5622' => array(
+                    'price' => 180,
+                    'channel_price' => 160,
+                ),
+            )
+        ),
+        array(
+            'share_id' => 2583,
+            'share_name' => '茂谷柑',
+            'share_img' => 'http://static.tongshijia.com/images/12421510-df83-11e5-a821-00163e1600b6.jpg',
+            'brand_img' => 'http://www.tongshijia.com/files/wx-download/8017091456819914.png',
+            'brand_name' => '娟子',
+            'show_brand' => true,
+            'brand_custom_service' => 801709,
+            'published' => 1,
+            'products' => array(
+                '5617' => array(
+                    'price' => 115,
+                    'channel_price' => 105,
+                )
+            )
+        ),
+        array(
             'share_id' => 2499,
             'share_name' => '香辣豆干',
             'share_img' => 'http://static.tongshijia.com/images/31323380-dc5c-11e5-a821-00163e1600b6.jpg',

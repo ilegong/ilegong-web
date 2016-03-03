@@ -27,6 +27,15 @@ class ShareManageComponent extends Component
         $data['IndexProduct']['share_user_img'] = get_user_avatar($user_info);
         $data['IndexProduct']['share_user_name'] = $user_info['nickname'];
         $result = $indexProductM->save($data);
+
+        if(empty($data['IndexProduct']['id'])){
+            $this->log('add index product '.$result['IndexProduct']['id'].': '.json_encode($result), LOG_INFO);
+        }
+        else{
+            $this->log('update index product '.$result['IndexProduct']['id'].': '.json_encode($result), LOG_INFO);
+        }
+
+        $this->on_index_product_saved($result);
         return $result;
     }
 
@@ -185,5 +194,21 @@ class ShareManageComponent extends Component
             )
         ));
         return array('share_count' => $share_count, 'order_count' => $order_count, 'faq_count' => $faq_count, 'fans_count' => $fans_count);
+    }
+
+    public function on_index_product_saved($index_product){
+        $this->clear_cache_for_index_products_of_type($index_product['IndexProduct']['type']);
+    }
+
+    public function on_index_product_deleted($index_product){
+        $this->clear_cache_for_index_products_of_type($index_product['IndexProduct']['type']);
+    }
+
+    public function clear_cache_for_index_products_of_type($type){
+        // 普通情况下，只按type清除缓存即可；但有时候商品从一个type1修改为type2，需求同事清除type1和type2的缓存；
+        Cache::write(INDEX_VIEW_PRODUCT_CACHE_KEY.'_0', '');
+        Cache::write(INDEX_VIEW_PRODUCT_CACHE_KEY.'_1', '');
+        Cache::write(INDEX_VIEW_PRODUCT_CACHE_KEY.'_2', '');
+        Cache::write(INDEX_VIEW_PRODUCT_CACHE_KEY.'_3', '');
     }
 }

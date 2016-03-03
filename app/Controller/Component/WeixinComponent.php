@@ -994,7 +994,7 @@ class WeixinComponent extends Component {
         $order_id = $order['Order']['id'];
         $cate_id = $order['Order']['cate_id'];
         if ($seller_weixin != false) {
-            $this->log('weshare paid send for creator ' . $seller_weixin['oauth_openid'] . ' order id ' . $order_id . ' weshare id ' . $weshare_info['Weshare']['id']);
+            $this->log('weshare paid send for creator ' . $seller_weixin['oauth_openid'] . ' order id ' . $order_id . ' weshare id ' . $weshare_info['Weshare']['id'], LOG_INFO);
             $this->send_weshare_buy_paid_msg_for_creator($seller_weixin['oauth_openid'], $price, $good_info, $ship_info, $order_id, $weshare_info, $order_creator_name, $order_ship_mark, $order_user['User']['id'], $cate_id);
             //send paid done msg to manage user
             $share_manage_user_open_ids = $this->ShareAuthority->get_share_manage_auth_user_open_ids($weshare_info['Weshare']['id']);
@@ -1161,7 +1161,7 @@ class WeixinComponent extends Component {
         } else {
             $msg = '用户' . $order_consinessname . '刚刚购买了' . $good_infomation[0] . '、' . $good_infomation[1] . '等' . $good_num . '件商品，订单金额' . $price . '元，请您发货。订单号' . $order_id . '，关注服务号接收更详细信息。';
         }
-        $this->log('brand_creator:' . json_encode($brand_creator) . 'bussiness_info' . json_encode($bussiness_info) . 'bussiness_mobilephone' . json_encode($bussiness_mobilephone) . 'msg' . $msg);
+        $this->log('brand_creator:' . json_encode($brand_creator) . 'bussiness_info' . json_encode($bussiness_info) . 'bussiness_mobilephone' . json_encode($bussiness_mobilephone) . 'msg' . $msg, LOG_INFO);
         message_send($msg, $bussiness_mobilephone);
     }
 

@@ -5,7 +5,9 @@ class WesharesController extends AppController {
     var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem',
         'SharerShipOption', 'WeshareShipSetting', 'OfflineStore', 'UserRelation', 'Comment', 'RebateTrackLog', 'ProxyRebatePercent', 'ShareUserBind', 'UserSubReason', 'ShareFavourableConfig', 'ShareAuthority');
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
-    var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'OrderExpress', 'PintuanHelper', 'RedisQueue', 'DeliveryTemplate');
+
+    var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'OrderExpress', 'PintuanHelper', 'RedisQueue', 'DeliveryTemplate', 'OrderUtil', 'Weshares');
+
     var $share_ship_type = array('self_ziti', 'kuaidi', 'pys_ziti');
     var $pay_type = 1;
     const PROCESS_SHIP_MARK_DEFAULT_RESULT = 0;
@@ -78,11 +80,12 @@ class WesharesController extends AppController {
             }
             if ($from == 1) {
                 $paidMsg = $_REQUEST['msg'];
-                if (!empty($paidMsg) && $paidMsg == 'ok') {
+                if ($paidMsg == 'ok') {
                     $this->set('from', $this->pay_type);
+                } else if ($paidMsg == 'cancel') {
+                    $this->log('Payment of user '.$uid.' to weshare '.$weshare_id.' failed: canceled', LOG_INFO);
                 } else {
-                    //TODO check pay fail issue
-                    $this->log('paid fail msg ' . $paidMsg);
+                    $this->log('Payment of user '.$uid.' to weshare '.$weshare_id.' failed: '.$paidMsg, LOG_ERR);
                 }
             }
         }
@@ -210,7 +213,7 @@ class WesharesController extends AppController {
         }
         $postStr = file_get_contents('php://input');
         $postDataArray = json_decode($postStr, true);
-        $result = $this->ShareUtil->create_share($postDataArray, $uid);
+        $result = $this->Weshares->create_weshare($postDataArray, $uid);
         echo json_encode($result);
         return;
     }
@@ -476,12 +479,13 @@ class WesharesController extends AppController {
     }
 
     /**
-     * 下单
+     * 用户下单
      */
     public function makeOrder() {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
+            $this->log('Failed to create order: user not logged in', LOG_WARNING);
             echo json_encode(array('success' => false, 'reason' => 'not_login'));
             return;
         }
@@ -499,6 +503,7 @@ class WesharesController extends AppController {
         try {
             $weshare_available = $this->WeshareBuy->check_weshare_status($weshareId);
             if (!$weshare_available) {
+                $this->log('Failed to create order for '.$uid.' with weshare ' . $weshareId . ': weshare is not available.', LOG_WARNING);
                 echo json_encode(array('success' => false, 'reason' => '分享已经截团'));
                 return;
             }
@@ -513,18 +518,22 @@ class WesharesController extends AppController {
             ));
             $checkProductStoreResult = $this->check_product_store($weshareProducts, $weshareId, $productIdNumMap);
             if (!empty($checkProductStoreResult)) {
+                $this->log('Failed to create order for '.$uid.' with weshare ' . $weshareId . ': product is sold out.', LOG_WARNING);
                 echo json_encode($checkProductStoreResult);
                 return;
             }
+
             $shipInfo = $postDataArray['ship_info'];
             $addressId = $shipInfo['address_id'];
             $shipType = $shipInfo['ship_type'];
             $shipSetId = $shipInfo['ship_set_id'];
             $shipSetting = $this->get_ship_set($shipSetId, $weshareId);
             if (empty($shipSetting)) {
+                $this->log('Failed to create order for '.$uid.' with weshare ' . $weshareId . ': ship setting is empty', LOG_WARNING);
                 echo json_encode(array('success' => false, 'reason' => '物流方式选择错误'));
                 return;
             }
+
             //邮费是按分存取的
             $address = $this->get_order_address($weshareId, $shipInfo, $buyerData, $uid);
             $orderData = array('cate_id' => $rebateLogId, 'creator' => $uid, 'consignee_address' => $address, 'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $buyerData['name'], 'consignee_mobilephone' => $buyerData['mobilephone'], 'business_remark' => $business_remark);
@@ -602,9 +611,14 @@ class WesharesController extends AppController {
                     $this->order_use_score_and_coupon($orderId, $uid, 0, $totalPrice / 100);
                 }
                 $this->ShareUtil->update_rebate_log_order_id($rebateLogId, $orderId, $weshareId);
+
+                $this->log('Create order for '.$uid.' with weshare ' . $weshareId . ' successfully, order id '. $orderId, LOG_INFO);
+                $this->OrderUtil->on_order_created($uid, $weshareId, $orderId);
+
                 echo json_encode(array('success' => true, 'orderId' => $orderId));
                 return;
             }
+
             echo json_encode(array('success' => false, 'orderId' => $orderId));
             return;
         } catch (Exception $e) {
@@ -655,13 +669,16 @@ class WesharesController extends AppController {
     }
 
     /**
-     * @param $weShareId
+     * @param $weshare_id
      * 截止分享
      */
-    public function stopShare($weShareId) {
+    public function stopShare($weshare_id) {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
-        $this->ShareUtil->stop_share($weShareId, $uid);
+
+        // 判断权限：owner或者超级管理员
+        $this->Weshares->stop_weshare($uid, $weshare_id);
+
         echo json_encode(array('success' => true));
         return;
     }
@@ -1287,6 +1304,7 @@ class WesharesController extends AppController {
         //todo load share detail view order data
 
     }
+    
 
     /**
      * @param $buyerData
@@ -1401,7 +1419,7 @@ class WesharesController extends AppController {
         return json_decode($ship_setting_data, true);
     }
 
-
+    
 
     /**
      * @param $weshareId
@@ -1500,22 +1518,27 @@ class WesharesController extends AppController {
     private function process_shared_offer($shared_offer_id) {
         //to do check offer status
         $get_coupon_result = $this->get_coupon_with_shared_id($shared_offer_id);
-        $this->log('share user get red packet result ' . json_encode($get_coupon_result));
+        $this->log('share user get red packet result: ' . json_encode($get_coupon_result), LOG_DEBUG);
         if (!$get_coupon_result['success']) {
+            $this->log('share user get red packet result: failed.', LOG_INFO);
             $this->set('get_coupon_type', 'fail');
             return;
         }
         //no more
         if ($get_coupon_result['noMore']) {
+            $this->log('share user get red packet result: no more', LOG_INFO);
             $this->set('get_coupon_type', 'no_more');
             return;
         }
         //accepted
         $this->set('follow_shared_offer_id', $shared_offer_id);
         if ($get_coupon_result['accepted'] && $get_coupon_result['just_accepted'] == 0) {
+            $this->log('share user get red packet result: accepted', LOG_INFO);
             $this->set('get_coupon_type', 'accepted');
             return;
         }
+
+        $this->log('share user get red packet result: got '.$get_coupon_result['couponNum'], LOG_INFO);
         $this->set('get_coupon_type', 'got');
         $this->set('couponNum', $get_coupon_result['couponNum']);
     }

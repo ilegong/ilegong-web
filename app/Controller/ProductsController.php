@@ -585,7 +585,7 @@ class ProductsController extends AppController{
             }
         }
 
-        $this->log("view product:".$pid.", specialLists=".json_encode($specialLists));
+        $this->log("view product:".$pid.", specialLists=".json_encode($specialLists), LOG_INFO);
 
         $use_special = false;
         $price = $this->viewdata['Product']['price'];
@@ -598,7 +598,7 @@ class ProductsController extends AppController{
                 list($afford_for_curr_user, $left_cur_user, $total_left) =
                     calculate_afford($pid, $currUid, $special['special']['limit_total'], $special['special']['limit_per_user'], $special_rg);
 
-                $this->log('view product afford(special): for_curr_user=' . $afford_for_curr_user . ', left_cur_user=' . $left_cur_user . ', total_left=' . $total_left . ', range=' . json_encode($special_rg) . ', uid=' . $currUid);
+                $this->log('view product afford(special): for_curr_user=' . $afford_for_curr_user . ', left_cur_user=' . $left_cur_user . ', total_left=' . $total_left . ', range=' . json_encode($special_rg) . ', uid=' . $currUid, LOG_INFO);
 
                 $promo_name = $special['name'];
                 $special_least_num = $special['special']['least_num'];
