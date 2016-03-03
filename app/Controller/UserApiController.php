@@ -32,6 +32,8 @@ class UserApiController extends AppController
         $user_summery = $this->WeshareBuy->get_user_share_summary($user_id);
         $rebate_money = $this->ShareUtil->get_rebate_money($user_id);
         $user_summery['rebate_money'] = $rebate_money;
+        $user_level = $this->ShareUtil->get_user_level($user_id);
+        $userInfo['level'] = $user_level;
         echo json_encode(array('my_profile' => array('User' => $userInfo), 'user_summery' => $user_summery));
         return;
     }
