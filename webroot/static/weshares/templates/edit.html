@@ -15,12 +15,12 @@
                 <input class='form-control' placeholder="价格/元" ng-model="product.price" ng-change='vm.validateProductPrice(product)' ng-blur='vm.validateProductPrice(product)'/>
                 <p class='tips'>请输入数字</p>
             </div>
-            <div class="form-group fl" style="margin-top: 2%;">
-                <input type="checkbox" ng-model="product.tbd" ng-true-value="1" ng-false-value="0" ng-checked="product.tbd==1">
-                &nbsp;&nbsp;价格待定
-                &nbsp;&nbsp;
-            </div>
-            <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/faq.png" width="20px" height="20px" style="margin-top: 3%;" ng-click="vm.showProductTipInfo=true;vm.showLayer=true;">
+            <!--<div class="form-group fl" style="margin-top: 2%;">-->
+                <!--<input type="checkbox" ng-model="product.tbd" ng-true-value="1" ng-false-value="0" ng-checked="product.tbd==1">-->
+                <!--&nbsp;&nbsp;价格待定-->
+                <!--&nbsp;&nbsp;-->
+            <!--</div>-->
+            <!--<img ng-src="{{::vm.staticFilePath}}/static/weshares/images/faq.png" width="20px" height="20px" style="margin-top: 3%;" ng-click="vm.showProductTipInfo=true;vm.showLayer=true;">-->
             <div class="form-group form-group-inline" ng-class="{'has-error': product.storeHasError}">
                 <input class='form-control' placeholder="库存,默认(0)不限制,(-1)为售罄" ng-model="product.store" ng-change='vm.validateProductStore(product)' ng-blur='vm.validateProductStore(product)'/>
                 <p class='tips'>请输入数字</p>
