@@ -1842,7 +1842,7 @@ class ShareUtilComponent extends Component
         $weshareData['description'] = $postDataArray['description'];
         $weshareData['send_info'] = $postDataArray['send_info'];
         //create save creator
-        //$weshareData['creator'] = $postDataArray['creator']['id'];
+        $weshareData['creator'] = $postDataArray['creator']['id'];
         if (empty($postDataArray['id'])) {
             $weshareData['creator'] = $uid;
         }else{
