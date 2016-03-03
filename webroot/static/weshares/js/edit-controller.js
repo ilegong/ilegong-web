@@ -48,7 +48,7 @@
     vm.showDeliveryTemplateProvinceNames = showDeliveryTemplateProvinceNames;
     vm.setAreaCheckStatus = setAreaCheckStatus;
     vm.validateDeliveryTemplateData = validateDeliveryTemplateData;
-    vm.canSetTagUser = [633345, 544307, 802852, 867587, 804975];
+    vm.canSetTagUser = [];
     vm.showEditShareView = true;
     vm.showEditTagView = false;
     vm.currentDeliveryTemplate = null;
