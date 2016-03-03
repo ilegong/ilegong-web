@@ -29,7 +29,8 @@ class ShareManageComponent extends Component
             'fields' => [
                 'PoolProduct.*',
                 'WeshareProducts.*',
-                'Weshares.*'
+                'Weshares.*',
+                'User.*'
                 ],
             'joins' => [
                 [
@@ -44,10 +45,16 @@ class ShareManageComponent extends Component
                     'conditions' => [
                         'PoolProduct.weshare_id = Weshares.id',
                     ],
+                  ], [
+                    'table' => 'users',
+                    'alias' => 'User',
+                    'conditions' => [
+                      'Weshares.creator = User.id',
+                    ],
+                  ],
                 ],
-            ],
-            //'order' => array('weshare_id ASC')
-        ]);
+                //'order' => array('weshare_id ASC')
+              ]);
 
         return $this->rearrange_pool_product($indexProducts)[0];
     }
@@ -92,6 +99,7 @@ class ShareManageComponent extends Component
                 $ak++;
                 $arr[$ak]['PoolProduct'] = $v['PoolProduct'];
                 $arr[$ak]['Weshares'] = $v['Weshares'];
+                $arr[$ak]['User'] = $v['User'];
                 $arr[$ak]['WeshareProducts'][] = $v['WeshareProducts'];
                 $oldid = $productid;
             }
