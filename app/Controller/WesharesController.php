@@ -5,7 +5,7 @@ class WesharesController extends AppController {
     var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem',
         'SharerShipOption', 'WeshareShipSetting', 'OfflineStore', 'UserRelation', 'Comment', 'RebateTrackLog', 'ProxyRebatePercent', 'ShareUserBind', 'UserSubReason', 'ShareFavourableConfig', 'ShareAuthority');
 
-    var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
+    var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
 
     var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'OrderExpress', 'PintuanHelper', 'RedisQueue', 'DeliveryTemplate', 'OrderUtil', 'Weshares');
 
@@ -159,7 +159,7 @@ class WesharesController extends AppController {
         $currentUser = $this->currentUser;
         $uid = $currentUser['id'];
         //check user has bind mobile and payment
-        $user_fields = $this->query_user_fileds;
+        $user_fields = $this->query_user_fields;
         $user_fields[] = 'mobilephone';
         $user_fields[] = 'payment';
         $current_user = $this->User->find('first', array(
@@ -313,7 +313,7 @@ class WesharesController extends AppController {
         $weshareInfo = $this->get_weshare_detail($weshareId, true);
         $is_me = $uid == $weshareInfo['creator']['id'];
         $weixinInfo = $this->set_weixin_share_data($uid, $weshareId);
-        $user_fields = $this->query_user_fileds;
+        $user_fields = $this->query_user_fields;
         $user_fields[] = 'mobilephone';
         $user_fields[] = 'payment';
         $current_user = $this->User->find('first', array(
@@ -1456,7 +1456,7 @@ class WesharesController extends AppController {
                     'id' => $weshareInfo['Weshare']['creator']
                 ),
                 'recursive' => 1, //int
-                'fields' => $this->query_user_fileds,
+                'fields' => $this->query_user_fields,
             ));
             $creatorInfo = $creatorInfo['User'];
             //reset user image
