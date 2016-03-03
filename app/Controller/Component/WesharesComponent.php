@@ -35,9 +35,7 @@ class WesharesComponent extends Component
         //merge for child share data
         $saveBuyFlag = $weshare = $WeshareM->save($weshareData);
 
-        $this->log('Save weshare successfully: '.json_encode($weshare));
-
-        if (!empty($saveBuyFlag)) {
+        if (empty($saveBuyFlag)) {
             if (empty($weshareData['id'])) {
                 $this->log('Failed to create weshare for user '.$uid, LOG_WARNING);
             } else {
@@ -92,7 +90,7 @@ class WesharesComponent extends Component
         $weshareM = ClassRegistry::init('Weshare');
         $weshareM->update(array('status' => WESHARE_DELETE_STATUS), array('id' => $weshare_id, 'creator' => $uid));
 
-        $this->log('Delete weshare '.$weshare_id.' of user '.$uid . ' successfully');
+        $this->log('Delete weshare '.$weshare_id.' of user '.$uid . ' successfully', LOG_INFO);
 
         $this->on_weshare_deleted($uid, $weshare_id);
     }
