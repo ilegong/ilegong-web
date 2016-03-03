@@ -43,6 +43,7 @@ class ShareController extends AppController {
     public function admin_clear_share_cache($shareId) {
         $this->autoRender = false;
         Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $shareId, '');
+        Cache::write(SHARE_DETAIL_DATA_WITH_TAG_CACHE_KEY . '_' . $shareId, '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $shareId . '_1_1', '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $shareId . '_0_1', '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $shareId . '_1_0', '');
