@@ -18,7 +18,7 @@ class SharerApiController extends AppController{
      * 更新分享
      */
     public function update_share($shareId){
-        $weshareInfo = $this->ShareUtil->get_weshare_detail($shareId);
+        $weshareInfo = $this->ShareUtil->get_edit_share_info($shareId);
         echo json_encode($weshareInfo);
         return;
     }
@@ -50,7 +50,7 @@ class SharerApiController extends AppController{
      * 获取分享订单
      */
     public function get_my_share_orders($shareId){
-        $result = $this->Weshares->get_share_order_for_show($shareId, true, $division = false, $export = false);
+        $result = $this->WeshareBuy->get_share_order_for_show($shareId, true, $division = false, $export = false);
         unset($result['ship_types']);
         unset($result['rebate_logs']);
         echo json_encode($result);
@@ -99,7 +99,7 @@ class SharerApiController extends AppController{
                 'fields' => array('id', 'title', 'images', 'status', 'created', 'description')
             ));
             $shareInfo = $shareInfo['Weshare'];
-            $shareInfo['images'] = explode(',', $shareInfo['images']);
+            $shareInfo['images'] = explode('|', $shareInfo['images']);
             echo json_encode(array('success' => true, 'shareInfo' => $shareInfo));
             return;
         }
@@ -113,7 +113,7 @@ class SharerApiController extends AppController{
      */
     public function stop_share($shareId){
         $uid = $this->currentUser['id'];
-        $this->Weshares->stop_weshare($shareId, $uid);
+        $this->Weshares->stop_weshare($uid, $shareId);
         echo json_encode(array('success' => true));
         return;
     }
@@ -135,9 +135,9 @@ class SharerApiController extends AppController{
     public function send_notify_msg(){
         $postData = $this->get_post_raw_data();
         $weshare_id = $postData['share_id'];
-        $share_info = $this->ShareUtil->get_weshare_detail();
+        $share_info = $this->ShareUtil->get_weshare_detail($weshare_id);
         $result = $this->ShareUtil->send_buy_percent_msg($postData['type'], $postData['user_id'], $share_info, $postData['content'], $weshare_id);
-        echo json_decode($result);
+        echo js($result);
         return;
     }
 
