@@ -100,6 +100,7 @@ class ShareManageComponent extends Component
                 $ak++;
                 $arr[$ak]['PoolProduct'] = $v['PoolProduct'];
                 $arr[$ak]['Weshares'] = $v['Weshares'];
+                $arr[$ak]['Weshares']['images_array'] = explode('|', $v['Weshares']['images']);
                 $arr[$ak]['User'] = $v['User'];
                 $arr[$ak]['WeshareProducts'][] = $v['WeshareProducts'];
                 $oldid = $productid;

@@ -68,10 +68,28 @@
                             </a>
 
                             <input type="hidden" class="form-control" name="data[Weshares][id]" value="{{$index_product['Weshares']['id']}}">
-                            <div class="form-group">
-                              <label>展示图片链接</label>
-                              <textarea class="form-control" rows="3" name="data[Weshares][images]">{{$index_product['Weshares']['images']}}</textarea>
-                              <p class="help-block">上传图片地址 <a href="http://images.tongshijia.com/upload" target="_blank">点击上传图片</a></p>
+                            <input type='hidden' class="form-control" id='store-images-string' name="data[Weshares][images]" value="{{$index_product['Weshares']['images']}}" autocomplete="off" />
+                            <div class="row images-list">
+                              <h3>
+                                展示图片链接
+                              </h3>
+                              {{loop $index_product['Weshares']['images_array'] $image}}
+                              <div class="image-area col-sm-2">
+                                <img src="{{$image}}" />
+                                  <div class="operator">
+                                    <a class="btn btn-primary preview-image" src-data="{{$image}}" href="javascript:void(0)">预览</a>
+                                    <a class="btn btn-danger delete-image" src-data="{{$image}}" href="javascript:void(0)">删除</a>
+                                  </div>
+                              </div>
+                              {{/loop}}
+                                <div class="col-sm-12 upload-btn">
+                                    <a class='btn btn-default' href="javascript:void(0)" id='upload-image'>
+                                        选择图片
+                                    </a>
+                                    <a class='btn btn-primary' href="javascript:void(0)" id='upload-image-action'>
+                                        上传图片
+                                    </a>
+                                </div>
                             </div>
                             <div class="form-group">
                               <label>Banner图片链接</label>
@@ -97,6 +115,30 @@
 <!-- /.row -->
 </div>
 
+
+
+<div class="modal fade" id="image-preview-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">图片预览</h4>
+            </div>
+            <div class="modal-body">
+                <img id="image-preview" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<form id="file-uploader">
+    <input type="file" class="hidden" id="uploader" name="new-upload-image" />
+</form>
+
+
 <script>
 $(function (){
   $('#add-new-product').click(function (){
@@ -110,5 +152,64 @@ $(function (){
 
     $('#add-new-product').before(newItem);
   });
+
+    $('.preview-image').click(function (){
+        $('#image-preview').attr('src', $(this).attr('src-data'));
+        $('#image-preview-modal').modal('show');
+    });
+
+    $('.delete-image').click(function (){
+        var arr = $('#store-images-string').val().split('|');
+        var idx = arr.splice(arr.indexOf($(this).attr('src-data')), 1);
+        var nstring = arr.join('|');
+        $('#store-images-string').val(nstring);
+        $(this).parent('div').parent('div.image-area').remove();
+    });
+
+    $('#upload-image').click(function (){
+        $('#uploader').click();
+    });
+
+    $('#upload-image-action').click(function (){
+        var formData = new FormData($('#file-uploader')[0]);
+
+        $.ajax({
+            url: 'http://images.tongshijia.com/ajaxupload' ,
+            type: 'POST',
+            data: formData,
+            dataType: 'jsonp',
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (returndata) {
+                alert(returndata);
+            },
+            error: function (returndata) {
+                alert(returndata);
+            }
+        });
+
+    });
 });
 </script>
+<style>
+    .images-list {
+        margin: 10px 0;
+    }
+    .image-area img {
+        width: 160px;
+        height: 160px;
+    }
+    .image-area .operator {
+        margin: 5px 0;
+    }
+    .upload-btn {
+        margin: 0;
+        padding: 0;
+    }
+    #image-preview {
+        max-width: 100%;
+        height: 80%;
+    }
+</style>
