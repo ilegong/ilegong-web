@@ -227,6 +227,7 @@ const SHARE_DETAIL_VIEW_ORDER_DATA_CACHE_KEY = 'share_detail_view_order_data_cac
 const SHARE_ORDER_COUNT_DATA_CACHE_KEY = 'share_order_count_data_cache_key';//分享订单数量缓存
 const SHARER_COMMENT_COUNT_DATA_CACHE_KEY = 'sharer_comment_count_data_cache_key';//分享者的爱心评价数量
 const SHARE_DETAIL_DATA_CACHE_KEY = 'share_detail_data_cache_key';//分享详情信息缓存
+const SHARE_DETAIL_DATA_WITH_TAG_CACHE_KEY = 'share_detail_data_with_tag_cache_key';//分享详情信息缓存
 const SHARER_CAN_USE_OFFLINE_STORE_CACHE_KEY = 'share_can_user_offline_store_cache_key';//能否使用好邻居自提点缓存
 const SHARE_SHIP_SETTINGS_CACHE_KEY = 'share_ship_setting_cache_key';//分享的快递设置
 const USER_SHARE_INFO_CACHE_KEY = 'user_share_info_cache_key';//分享用户中心的缓存

@@ -23,7 +23,7 @@ class WeshareBuyComponent extends Component {
 
     var $components = array('Session', 'Weixin', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'RedisQueue');
 
-    var $query_share_fields = array('id', 'title', 'images', 'status', 'creator', 'created', 'settlement', 'type');
+    var $query_share_fields = array('id', 'title', 'images', 'status', 'creator', 'created', 'settlement', 'type', 'description');
 
     /**
      * @param $weshare_ids
@@ -815,9 +815,10 @@ class WeshareBuyComponent extends Component {
     /**
      * @param $shareInfo
      * @param $msg
+     * @param $order_ids
      * 到货提醒
      */
-    public function send_share_product_arrive_msg($shareInfo, $msg) {
+    public function send_share_product_arrive_msg($shareInfo, $msg, $order_ids) {
         $this->Order = ClassRegistry::init('Order');
         $this->User = ClassRegistry::init('User');
         $this->Oauthbind = ClassRegistry::init('Oauthbind');
@@ -826,6 +827,7 @@ class WeshareBuyComponent extends Component {
         //select order paid to send msg
         $orders = $this->Order->find('all', array(
             'conditions' => array(
+                'id' => $order_ids,
                 'type' => ORDER_TYPE_WESHARE_BUY,
                 'member_id' => $share_id,
                 'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED),

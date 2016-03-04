@@ -4,7 +4,7 @@
 // 不包含：订单；产品街；首页产品；团长；用户
 class WesharesComponent extends Component
 {
-    public $components = array('ShareUtil');
+    public $components = array('ShareUtil', 'DeliveryTemplate');
 
     public function create_weshare($postDataArray, $uid)
     {
@@ -16,6 +16,7 @@ class WesharesComponent extends Component
         } else {
             $this->log('Update weshare ' . $postDataArray['id'] . ' for user '.$uid , LOG_INFO);
             $weshareData['creator'] = $postDataArray['creator']['id'];
+            $this->DeliveryTemplate->clear_share_delivery_template($postDataArray['id']);
         }
 
         $weshareData['id'] = $postDataArray['id'];
@@ -53,11 +54,11 @@ class WesharesComponent extends Component
 
         if (empty($weshareData['id'])) {
             $this->on_weshare_created($uid, $weshare);
-            $this->log('Create weshare for user '.$uid +' successfully: '. $weshare['Weshare']['id'], LOG_INFO);
+            $this->log('Create weshare '.$weshare['Weshare']['id'].' for user '.$uid +' successfully: '.json_encode($weshare) , LOG_INFO);
         }
         else{
             $this->on_weshare_updated($uid, $weshare);
-            $this->log('Update weshare '.$weshareData['id'].' for user '.$uid +' successfully', LOG_INFO);
+            $this->log('Update weshare '.$weshareData['id'].' for user '.$uid +' successfully: '.json_encode($weshare) , LOG_INFO);
         }
 
         //todo update child share data and product data
@@ -99,25 +100,26 @@ class WesharesComponent extends Component
     private function on_weshare_stopped($uid, $weshare_id)
     {
         Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshare_id, '');
+        Cache::write(SHARE_DETAIL_DATA_WITH_TAG_CACHE_KEY . '_' . $weshare_id, '');
         Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
     }
 
     private function on_weshare_created($uid, $weshare){
-        $this->clear_cache_for_weshare($uid, $weshare['Weshare']['id']);
+        $this->clear_cache_for_weshare($uid, $weshare);
         // 消息流
-        $images = $weshare['Weshare']['images'].explode('|');
+        $images = explode('|', $weshare['Weshare']['images']);
         $thumbnail = null;
         if (count($images) > 0) {
             $thumbnail = $images[0];
         }
-        $this->save_create_share_opt_log($weshare['Weshare']['id'], $thumbnail, $weshare['Weshare']['title'], $uid);
+        $this->ShareUtil->save_create_share_opt_log($weshare['Weshare']['id'], $thumbnail, $weshare['Weshare']['title'], $uid);
         //  $this->check_share_and_trigger_new_share($weshare['Weshare']['id'], $shipSetData);
         // check user level and init level data when not
-        $this->check_and_save_default_level($uid);
+        $this->ShareUtil->check_and_save_default_level($uid);
     }
 
     private function on_weshare_updated($uid, $weshare){
-        $this->clear_cache_for_weshare($uid, $weshare['Weshare']['id']);
+        $this->clear_cache_for_weshare($uid, $weshare);
     }
 
     private function on_weshare_deleted($uid, $weshare_id){
@@ -127,6 +129,7 @@ class WesharesComponent extends Component
     private function clear_cache_for_weshare($uid, $weshare){
         Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
         Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshare['Weshare']['id'], '');
+        Cache::write(SHARE_DETAIL_DATA_WITH_TAG_CACHE_KEY . '_' . $weshare['Weshare']['id'], '');
         Cache::write(SHARE_SHIP_SETTINGS_CACHE_KEY . '_' . $weshare['Weshare']['id'], '');
         Cache::write(SIMPLE_SHARE_INFO_CACHE_KEY . '_' . $weshare['Weshare']['id'], '');
     }
@@ -221,6 +224,8 @@ class WesharesComponent extends Component
             foreach ($weshareDeliveryTemplateData as &$itemTemplateData) {
                 $itemTemplateData['weshare_id'] = $weshareId;
                 $itemTemplateData['user_id'] = $user_id;
+                $itemTemplateData['add_fee'] = $itemTemplateData['add_fee']*100;
+                $itemTemplateData['start_fee'] = $itemTemplateData['start_fee']*100;
             }
             $this->DeliveryTemplate->save_all_delivery_template($weshareDeliveryTemplateData);
         }

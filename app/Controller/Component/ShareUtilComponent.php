@@ -8,7 +8,9 @@ class ShareUtilComponent extends Component
 
     var $normal_order_status = array(ORDER_STATUS_DONE, ORDER_STATUS_PAID, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY);
 
-    public $components = array('Weixin', 'WeshareBuy', 'RedisQueue', 'DeliveryTemplate');
+    public $components = array('Weixin', 'WeshareBuy', 'RedisQueue', 'DeliveryTemplate', 'ShareAuthority');
+
+    var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
 
     /**
      * @param $weshare_id
@@ -537,29 +539,31 @@ class ShareUtilComponent extends Component
                 'weshare_id' => $old_share_id
             )
         ));
-        $newDeliveryTemplates = array();
-        foreach($deliveryTemplates as $deliveryTemplate){
-            $itemDeliveryTemplate = $deliveryTemplate['WeshareDeliveryTemplate'];
-            $itemDeliveryTemplate['id'] = null;
-            $itemDeliveryTemplate['weshare_id'] = $new_share_id;
-            $itemDeliveryTemplate['user_id'] = $uid;
-            $newDeliveryTemplates[] = $itemDeliveryTemplate;
+        if(!empty($deliveryTemplates)){
+            $newDeliveryTemplates = array();
+            foreach($deliveryTemplates as $deliveryTemplate){
+                $itemDeliveryTemplate = $deliveryTemplate['WeshareDeliveryTemplate'];
+                $itemDeliveryTemplate['id'] = null;
+                $itemDeliveryTemplate['weshare_id'] = $new_share_id;
+                $itemDeliveryTemplate['user_id'] = $uid;
+                $newDeliveryTemplates[] = $itemDeliveryTemplate;
+            }
+            $WeshareDeliveryTemplateM->saveAll($newDeliveryTemplates);
+            $templateRegions = $WeshareTemplateRegionM->find('all', array(
+                'conditions' => array(
+                    'weshare_id' => $old_share_id
+                )
+            ));
+            $newTemplateRegions = array();
+            foreach($templateRegions as $templateRegion){
+                $itemTemplateRegion = $templateRegion['WeshareTemplateRegion'];
+                $itemTemplateRegion['id'] = null;
+                $itemTemplateRegion['weshare_id'] = $new_share_id;
+                $itemTemplateRegion['creator'] = $uid;
+                $newTemplateRegions[] = $itemTemplateRegion;
+            }
+            $WeshareTemplateRegionM->saveAll($newTemplateRegions);
         }
-        $WeshareDeliveryTemplateM->saveAll($newDeliveryTemplates);
-        $templateRegions = $WeshareTemplateRegionM->find('all', array(
-            'conditions' => array(
-                'weshare_id' => $old_share_id
-            )
-        ));
-        $newTemplateRegions = array();
-        foreach($templateRegions as $templateRegion){
-            $itemTemplateRegion = $templateRegion['WeshareTemplateRegion'];
-            $itemTemplateRegion['id'] = null;
-            $itemTemplateRegion['weshare_id'] = $new_share_id;
-            $itemTemplateRegion['creator'] = $uid;
-            $newTemplateRegions[] = $itemTemplateRegion;
-        }
-        $WeshareTemplateRegionM->saveAll($newTemplateRegions);
     }
 
     /**
@@ -1829,5 +1833,103 @@ class ShareUtilComponent extends Component
         }
 
         return json_decode($cache_data, true);
+    }
+
+    private function query_share_detail($weshare_id, $with_tag){
+        $weshareM = ClassRegistry::init('Weshare');
+        $weshareAddressM = ClassRegistry::init('WeshareAddress');
+        $weshareShipSettingM = ClassRegistry::init('WeshareShipSetting');
+        $proxyRebatePercentM = ClassRegistry::init('ProxyRebatePercent');
+        $userM = ClassRegistry::init('User');
+        $weshareProductM = ClassRegistry::init('WeshareProduct');
+        $weshareInfo = $weshareM->find('first', array(
+            'conditions' => array(
+                'id' => $weshare_id
+            )
+        ));
+        $weshareAddresses = $weshareAddressM->find('all', array(
+            'conditions' => array(
+                'weshare_id' => $weshare_id,
+                'deleted' => DELETED_NO
+            )
+        ));
+        $weshareShipSettings = $weshareShipSettingM->find('all', array(
+            'conditions' => array(
+                'weshare_id' => $weshare_id
+            )
+        ));
+        $proxy_share_percent = $proxyRebatePercentM->find('first', array(
+            'conditions' => array(
+                'share_id' => $weshare_id,
+                'deleted' => DELETED_NO,
+                'status' => PUBLISH_YES
+            )
+        ));
+        $sharer_tags = $this->get_tags($weshareInfo['Weshare']['creator'], $weshareInfo['Weshare']['refer_share_id']);
+        $sharer_tags_list = $this->get_tags_list($weshareInfo['Weshare']['creator']);
+        $weshareShipSettings = Hash::combine($weshareShipSettings, '{n}.WeshareShipSetting.tag', '{n}.WeshareShipSetting');
+        $creatorInfo = $userM->find('first', array(
+            'conditions' => array(
+                'id' => $weshareInfo['Weshare']['creator']
+            ),
+            'recursive' => 1, //int
+            'fields' => $this->query_user_fileds,
+        ));
+        $creatorInfo = $creatorInfo['User'];
+        //reset user image
+        $creatorInfo['image'] = get_user_avatar($creatorInfo);
+        $creatorLevel = $this->get_user_level($weshareInfo['Weshare']['creator']);
+        $creatorInfo['level'] = $creatorLevel;
+        if ($with_tag) {
+            $weshareProducts = $this->get_product_tag_map($weshare_id);
+        } else {
+            $weshareProducts = $weshareProductM->find('all', array(
+                'conditions' => array(
+                    'weshare_id' => $weshare_id,
+                    'deleted' => DELETED_NO
+                )
+            ));
+            $weshareProducts = Hash::extract($weshareProducts, '{n}.WeshareProduct');
+        }
+        //show break line
+        $weshareInfo['Weshare']['description'] = str_replace(array("\r\n", "\n", "\r"), '<br />', $weshareInfo['Weshare']['description']);
+        $weshareInfo = $weshareInfo['Weshare'];
+        $weshareInfo['tags'] = $sharer_tags;
+        $weshareInfo['tags_list'] = $sharer_tags_list;
+        $weshareInfo['addresses'] = Hash::extract($weshareAddresses, '{n}.WeshareAddress');
+        $weshareInfo['products'] = $weshareProducts;
+        $weshareInfo['creator'] = $creatorInfo;
+        $weshareInfo['ship_type'] = $weshareShipSettings;
+        $weshareInfo['images'] = array_filter(explode('|', $weshareInfo['images']));
+        $weshareInfo['proxy_rebate_percent'] = $proxy_share_percent['ProxyRebatePercent'];
+        $weshareInfo['deliveryTemplate'] = $this->DeliveryTemplate->get_edit_delivery_templates($weshare_id);
+        return $weshareInfo;
+    }
+
+    public function get_tag_weshare_detail($weshare_id){
+        $key = SHARE_DETAIL_DATA_WITH_TAG_CACHE_KEY . '_' . $weshare_id;
+        $share_detail = Cache::read($key);
+        if (empty($share_detail)) {
+            $share_detail = $this->query_share_detail($weshare_id, true);
+            Cache::write($key, json_encode($share_detail));
+            return $share_detail;
+        }
+        return json_decode($share_detail, true);
+    }
+
+    /**
+     * @param $weshare_id
+     * @return mixed
+     * 获取分享的详情
+     */
+    public function get_weshare_detail($weshare_id){
+        $key = SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshare_id;
+        $share_detail = Cache::read($key);
+        if (empty($share_detail)) {
+            $share_detail = $this->query_share_detail($weshare_id, false);
+            Cache::write($key, json_encode($share_detail));
+            return $share_detail;
+        }
+        return json_decode($share_detail, true);
     }
 }
