@@ -2074,4 +2074,27 @@ class ShareUtilComponent extends Component
         return $result;
     }
 
+    /**
+     * @param $weshare_id
+     * 获取编辑分享的内容
+     */
+    public function get_edit_share_info($weshare_id){
+        $shareInfo = $this->ShareUtil->get_weshare_detail($weshare_id);
+        //change product price
+        //change ship fee
+        $products = &$shareInfo['products'];
+        foreach ($products as &$p) {
+            $p['price'] = $p['price'] / 100;
+        }
+        $defaultDeliveryTemplate = &$shareInfo['deliveryTemplate']['default_delivery_template'];
+        $defaultDeliveryTemplate['add_fee'] = $defaultDeliveryTemplate['add_fee'] / 100;
+        $defaultDeliveryTemplate['start_fee'] = $defaultDeliveryTemplate['start_fee'] / 100;
+        $deliveryTemplates = &$shareInfo['deliveryTemplate']['delivery_templates'];
+        foreach ($deliveryTemplates as &$deliveryTemplateItem) {
+            $deliveryTemplateItem['add_fee'] = $deliveryTemplateItem['add_fee'] / 100;
+            $deliveryTemplateItem['start_fee'] = $deliveryTemplateItem['start_fee'] / 100;
+        }
+        return $shareInfo;
+    }
+
 }

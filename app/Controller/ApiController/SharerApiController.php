@@ -18,7 +18,7 @@ class SharerApiController extends AppController{
      * 更新分享
      */
     public function update_share($shareId){
-        $weshareInfo = $this->ShareUtil->get_weshare_detail($shareId);
+        $weshareInfo = $this->ShareUtil->get_edit_share_info($shareId);
         echo json_encode($weshareInfo);
         return;
     }
@@ -137,7 +137,7 @@ class SharerApiController extends AppController{
         $weshare_id = $postData['share_id'];
         $share_info = $this->ShareUtil->get_weshare_detail($weshare_id);
         $result = $this->ShareUtil->send_buy_percent_msg($postData['type'], $postData['user_id'], $share_info, $postData['content'], $weshare_id);
-        echo json_encode($result);
+        echo js($result);
         return;
     }
 

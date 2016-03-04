@@ -141,11 +141,7 @@ class WesharesController extends AppController {
      */
     public function get_share_info($weshareId) {
         $this->autoRender = false;
-        $shareInfo = $this->ShareUtil->get_weshare_detail($weshareId);
-        $products = &$shareInfo['products'];
-        foreach ($products as &$p) {
-            $p['price'] = $p['price'] / 100;
-        }
+        $shareInfo = $this->ShareUtil->get_edit_share_info($weshareId);
         echo json_encode($shareInfo);
         return;
     }
