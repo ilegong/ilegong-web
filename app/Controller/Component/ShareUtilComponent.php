@@ -2076,10 +2076,11 @@ class ShareUtilComponent extends Component
 
     /**
      * @param $weshare_id
+     * @return array
      * 获取编辑分享的内容
      */
     public function get_edit_share_info($weshare_id){
-        $shareInfo = $this->ShareUtil->get_weshare_detail($weshare_id);
+        $shareInfo = $this->get_weshare_detail($weshare_id);
         //change product price
         //change ship fee
         $products = &$shareInfo['products'];

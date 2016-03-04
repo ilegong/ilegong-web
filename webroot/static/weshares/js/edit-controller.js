@@ -131,6 +131,12 @@
           if (data['proxy_rebate_percent']) {
             vm.proxy_rebate_percent = data['proxy_rebate_percent'];
           }
+          if (!_.isEmpty(data['deliveryTemplate']['delivery_templates'])) {
+            vm.deliveryTemplates = data['deliveryTemplate']['delivery_templates'];
+          }
+          if (!_.isEmpty(data['deliveryTemplate']['default_delivery_template'])) {
+            vm.defaultDeliveryTemplate = data['deliveryTemplate']['default_delivery_template'];
+          }
         }).error(function (data) {
         });
       } else {
