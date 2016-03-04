@@ -113,7 +113,7 @@ class SharerApiController extends AppController{
      */
     public function stop_share($shareId){
         $uid = $this->currentUser['id'];
-        $this->Weshares->stop_weshare($shareId, $uid);
+        $this->Weshares->stop_weshare($uid, $shareId);
         echo json_encode(array('success' => true));
         return;
     }

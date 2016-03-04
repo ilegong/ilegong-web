@@ -2637,7 +2637,7 @@ class WeshareBuyComponent extends Component {
                 'creator' => $uid
             ),
             'order' => array('id DESC'),
-            'limit' => 100
+            'limit' => 500
         ));
         $share_ids = Hash::extract($user_shares, '{n}.Weshare.id');
         $first_day = date('Y-m-01', strtotime(date('Y-m-d')));
