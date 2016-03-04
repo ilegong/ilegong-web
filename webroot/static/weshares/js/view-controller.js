@@ -4331,7 +4331,7 @@
 
     function setShipFee() {
       if (vm.selectShipType == 0) {
-        vm.shipFee = vm.weshareSettings.kuai_di.ship_fee;
+        vm.shipFee = getShipFee();
       }
       if (vm.selectShipType == 1) {
         vm.shipFee = vm.weshareSettings.self_ziti.ship_fee;
@@ -4739,7 +4739,7 @@
           vm.subShareTipTxt = '已关注';
         } else {
           alert('请先关注朋友说微信公众号！');
-          window.location.href = "http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=400154588&idx=1&sn=5568f4566698bacbc5a1f5ffeab4ccc3";
+          window.location.href = "https://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=403992659&idx=1&sn=714a1a5f0bb4940f895e60f2f3995544";
         }
       }).error(function () {
         vm.hasProcessSubSharer = false;
@@ -5247,6 +5247,7 @@
     }
 
     function loadCityData(provinceId) {
+      vm.calOrderTotalPrice();
       $http({method: 'GET', url: '/locations/get_city.json?provinceId=' + provinceId, cache: $templateCache}).
         success(function (data, status) {
           vm.cityData = data;

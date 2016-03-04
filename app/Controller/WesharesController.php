@@ -43,7 +43,6 @@ class WesharesController extends AppController {
         $this->set('tag', $tag);
     }
 
-
     /**
      * @param string $weshare_id
      * @param int $from 标示从什么地方跳转的访问
@@ -142,11 +141,7 @@ class WesharesController extends AppController {
      */
     public function get_share_info($weshareId) {
         $this->autoRender = false;
-        $shareInfo = $this->ShareUtil->get_weshare_detail($weshareId);
-        $products = &$shareInfo['products'];
-        foreach ($products as &$p) {
-            $p['price'] = $p['price'] / 100;
-        }
+        $shareInfo = $this->ShareUtil->get_edit_share_info($weshareId);
         echo json_encode($shareInfo);
         return;
     }
@@ -219,22 +214,6 @@ class WesharesController extends AppController {
         $result = $this->Weshares->create_weshare($postDataArray, $uid);
         echo json_encode($result);
         return;
-    }
-
-    /**
-     * @param $shareId
-     * @param $shipSetData
-     * 触发生成拼团的分享
-     */
-    private function check_share_and_trigger_new_share($shareId, $shipSetData) {
-        foreach ($shipSetData as $item) {
-            if ($item['tag'] == SHARE_SHIP_GROUP_TAG) {
-                if ($item['status'] == PUBLISH_YES && $item['limit'] > 0) {
-                    $this->ShareUtil->new_static_address_group_shares($shareId);
-                }
-                break;
-            }
-        }
     }
 
     public function load_share_comments($sharer_id) {
