@@ -232,11 +232,28 @@ class ShareManageController extends AppController
         return $data[0]['Weshare'];
     }
 
+    public function pool_product_new()
+    {
+    }
+
+    public function pool_product_delete($id)
+    {
+        // 在cake_pool_products表里面删除数据
+        $model = ClassRegistry::init('PoolProduct');
+        $model->update([
+            'deleted' => 1
+        ], [
+            'id' => $id,
+        ]);
+
+        $this->redirect('/shareManage/pool_products');
+    }
+
     public function pool_share_copy($share_id)
     {
         $uid = $this->currentUser['id'];
         // 先克隆初来一份Wesahres表行
-        $nshare = $this->ShareUtil->cloneShare($share_id);
+        $nshare = $this->ShareUtil->cloneShare($share_id, null, null, null, POOL_SHARE_TYPE);
         $nshare = $this->get_weshare_by_id($nshare['shareId']);
         // 手动填充cake_pool_products表.
         $data = [];
