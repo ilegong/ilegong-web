@@ -223,13 +223,13 @@ class ShareManageController extends AppController
     private function get_weshare_by_id($sid)
     {
         $model = ClassRegistry::init('Weshare');
-        $data = $model->find('all', [
+        $data = $model->find('first', [
             'conditions' => [
                 'id' => $sid,
             ],
         ]);
 
-        return $data[0]['Weshare'];
+        return $data['Weshare'];
     }
 
     public function pool_product_add()

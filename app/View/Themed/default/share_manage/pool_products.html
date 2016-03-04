@@ -62,32 +62,6 @@
             </tbody>
           </table>
         </div>
-<style>
-.share-images {
-  max-width: 80px;
-}
-.share-btns > a.btn {
-  display: inline;
-}
-div.item-class {
-      width: 350px;
-}
-div.item-class > span.title {
-  display: inline-block;
-    width: 200px;
-      overflow: hidden;
-        text-overflow: ellipsis;
-          white-space: nowrap;
-}
-div.item-class > span.price {
-  display: inline-block;
-    width: 70px;
-}
-div.item-class > span.channel_price {
-  display: inline-block;
-    width: 70px;
-}
-</style>
         <!-- /.table-responsive -->
       </div>
       <!-- /.panel-body -->
@@ -95,14 +69,4 @@ div.item-class > span.channel_price {
     <!-- /.panel -->
   </div>
 </div>
-<!-- /.row -->
-<script>
-$(document).ready(function () {
-  var $clearIndexProductCacheBtn = $('#clear-index-product-cache');
-  $clearIndexProductCacheBtn.on('click', function (e) {
-    $.getJSON('/share_manage/clear_pool_product_cache', function (data) {
-      alert('清除成功');
-    });
-  });
-});
-</script>
+<link href="http://dev.tongshijia.com/static/manage/css/pool_products.css" rel="stylesheet">

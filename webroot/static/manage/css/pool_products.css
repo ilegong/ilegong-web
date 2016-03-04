@@ -1,0 +1,24 @@
+.share-images {
+  max-width: 80px;
+}
+.share-btns > a.btn {
+  display: inline;
+}
+div.item-class {
+      width: 350px;
+}
+div.item-class > span.title {
+  display: inline-block;
+    width: 200px;
+      overflow: hidden;
+        text-overflow: ellipsis;
+          white-space: nowrap;
+}
+div.item-class > span.price {
+  display: inline-block;
+    width: 70px;
+}
+div.item-class > span.channel_price {
+  display: inline-block;
+    width: 70px;
+}
