@@ -20,8 +20,16 @@
                 <div class="products form-group">
                     <div ng-show="vm.toggleState[tag]['open']">
                         <dl class="clearfix product form-control" ng-repeat="product in products">
-                            <dd class="fl" ng-if="!vm.checkProductNum(product)||product.store==0" style="width: 80%;">{{::product.name}}<span style="color: red;font-weight: bold;" ng-if="product.tbd==1">&nbsp;&nbsp;预付</span><span ng-if="!vm.checkProductNum(product)">&nbsp;&nbsp;(<span style="color: red;">抢光了</span>)</span></dd>
-                            <dd class="fl" ng-if="vm.checkProductNum(product)&&product.store>0" style="width: 80%;">{{::product.name}}<span style="color: red;font-weight: bold;" ng-if="product.tbd==1">&nbsp;&nbsp;预付</span>&nbsp;&nbsp;(仅剩<span style="color: red;" ng-bind="vm.getProductLeftNum(product)"></span>份)</dd>
+                            <dd class="fl" ng-if="!vm.checkProductNum(product)||product.store==0" style="width: 80%;">
+                                {{::product.name}}
+                                <!--<span style="color: red;font-weight: bold;" ng-if="product.tbd==1">&nbsp;&nbsp;预付</span>-->
+                                <span ng-if="!vm.checkProductNum(product)">&nbsp;&nbsp;(<span style="color: red;">抢光了</span>)</span>
+                            </dd>
+                            <dd class="fl" ng-if="vm.checkProductNum(product)&&product.store>0" style="width: 80%;">
+                                {{::product.name}}
+                                <!--<span style="color: red;font-weight: bold;" ng-if="product.tbd==1">&nbsp;&nbsp;预付</span>-->
+                                &nbsp;&nbsp;(仅剩<span style="color: red;" ng-bind="vm.getProductLeftNum(product)"></span>份)
+                            </dd>
                             <dd class="fr" ng-if="vm.checkProductNum(product)">
                                 <a class='btn decrease-btn' ng-click="vm.decreaseProductNum(product)"></a>
                                 <span class='num' ng-bind="product.num||0"></span>
