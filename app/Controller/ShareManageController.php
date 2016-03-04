@@ -232,7 +232,7 @@ class ShareManageController extends AppController
         return $data[0]['Weshare'];
     }
 
-    public function pool_product_new()
+    public function pool_product_add()
     {
     }
 
