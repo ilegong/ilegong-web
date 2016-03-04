@@ -43,7 +43,6 @@ class WesharesController extends AppController {
         $this->set('tag', $tag);
     }
 
-
     /**
      * @param string $weshare_id
      * @param int $from 标示从什么地方跳转的访问
