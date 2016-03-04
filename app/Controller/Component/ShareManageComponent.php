@@ -78,13 +78,14 @@ class ShareManageComponent extends Component
                     ],
                 ]
             ],
-            //'order' => array('weshare_id ASC')
+            'order' => ['PoolProduct.id DESC'],
         ]);
 
         return $this->rearrange_pool_product($indexProducts);
     }
 
     private function rearrange_pool_product($data) {
+        //print_r($data);
         if (count($data) == 0) {
             return [];
         }
@@ -118,6 +119,10 @@ class ShareManageComponent extends Component
         // 更新cake_weshare_products表
         $weshareProductM = ClassRegistry::init('WeshareProduct');
         foreach ($data['WeshareProduct'] as $item) {
+            if (!isset($item['id'])) {
+                $item['id'] = null;
+                $item['weshare_id'] = $data['Weshares']['id'];
+            }
             $weshareProductM->save($item);
         }
 

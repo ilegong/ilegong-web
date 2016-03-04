@@ -38,8 +38,8 @@
                             </div>
 
                             {{loop $index_product['WeshareProducts'] $key $WeshareProduct}}
+                            <div class='row pool-product-item'>
                             <input type="hidden" class="form-control" name="data[WeshareProduct][{{$key}}][id]" value="{{$WeshareProduct['id']}}">
-                            <div class='row'>
                               <div class="form-group col-sm-3">
                                 <label>规格</label>
                                 <input type="text" class="form-control" name="data[WeshareProduct][{{$key}}][name]" value="{{$WeshareProduct['name']}}">
@@ -63,6 +63,9 @@
                               </div>
                             </div>
                             {{/loop}}
+                            <a href='javascript:void(0)' id='add-new-product' class='btn btn-primary'>
+                              添加新规格
+                            </a>
 
                             <input type="hidden" class="form-control" name="data[Weshares][id]" value="{{$index_product['Weshares']['id']}}">
                             <div class="form-group">
@@ -93,3 +96,19 @@
 </div>
 <!-- /.row -->
 </div>
+
+<script>
+$(function (){
+  $('#add-new-product').click(function (){
+    var len = $('.pool-product-item').length;
+    var newItem = $('.pool-product-item').eq(0).clone();
+    newItem.find('input[type!=hidden]').each(function (){
+      var tmp_name = $(this).attr('name');
+      $(this).attr('name', tmp_name.replace(/(data\[[a-zA-Z_-]+\]\[)\d+(\]\[[a-zA-Z_-]+\])/g, '$1' + len + '$2'));
+      $(this).attr('value', '');
+    });
+
+    $('#add-new-product').before(newItem);
+  });
+});
+</script>
