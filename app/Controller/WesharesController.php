@@ -220,22 +220,6 @@ class WesharesController extends AppController {
         return;
     }
 
-    /**
-     * @param $shareId
-     * @param $shipSetData
-     * 触发生成拼团的分享
-     */
-    private function check_share_and_trigger_new_share($shareId, $shipSetData) {
-        foreach ($shipSetData as $item) {
-            if ($item['tag'] == SHARE_SHIP_GROUP_TAG) {
-                if ($item['status'] == PUBLISH_YES && $item['limit'] > 0) {
-                    $this->ShareUtil->new_static_address_group_shares($shareId);
-                }
-                break;
-            }
-        }
-    }
-
     public function load_share_comments($sharer_id) {
         $this->autoRender = false;
         $share_all_comments = $this->WeshareBuy->load_sharer_comments($sharer_id);
