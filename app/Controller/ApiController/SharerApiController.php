@@ -50,7 +50,7 @@ class SharerApiController extends AppController{
      * 获取分享订单
      */
     public function get_my_share_orders($shareId){
-        $result = $this->Weshares->get_share_order_for_show($shareId, true, $division = false, $export = false);
+        $result = $this->WeshareBuy->get_share_order_for_show($shareId, true, $division = false, $export = false);
         unset($result['ship_types']);
         unset($result['rebate_logs']);
         echo json_encode($result);
@@ -135,7 +135,7 @@ class SharerApiController extends AppController{
     public function send_notify_msg(){
         $postData = $this->get_post_raw_data();
         $weshare_id = $postData['share_id'];
-        $share_info = $this->ShareUtil->get_weshare_detail();
+        $share_info = $this->ShareUtil->get_weshare_detail($weshare_id);
         $result = $this->ShareUtil->send_buy_percent_msg($postData['type'], $postData['user_id'], $share_info, $postData['content'], $weshare_id);
         echo json_decode($result);
         return;
