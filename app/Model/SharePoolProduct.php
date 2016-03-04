@@ -115,7 +115,9 @@ class SharePoolProduct extends AppModel {
     }
 
     //产品和试吃的对应关系
-    var $product_buy_map = array(
+    var $product_buy_map = [];
+
+    /*array(
         '1411' => array(
             //'try' => 56,
             'buy' => 1463
@@ -157,4 +159,5 @@ class SharePoolProduct extends AppModel {
             'buy' => 2018
         )
     );
+    */
 }
