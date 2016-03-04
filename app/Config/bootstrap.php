@@ -169,7 +169,7 @@ if (getenv('TONGSHIJIA_ENV') == 'product') {
     //const SAE_STATIC_FILE_PATH = 'http://static.tongshijia.com';
     define('SAE_STATIC_FILE_PATH', 'http://static.tongshijia.com');
 } elseif (getenv('TONGSHIJIA_ENV') == 'test') {
-    define('SAE_STATIC_FILE_PATH', 'http://test.tongshijia.com');
+    define('SAE_STATIC_FILE_PATH', 'http://static-test.tongshijia.com');
 } else {
     define('SAE_STATIC_FILE_PATH', 'http://dev.tongshijia.com');
 }
