@@ -5247,13 +5247,13 @@
     }
 
     function loadCityData(provinceId) {
+      vm.calOrderTotalPrice();
       $http({method: 'GET', url: '/locations/get_city.json?provinceId=' + provinceId, cache: $templateCache}).
         success(function (data, status) {
           vm.cityData = data;
         }).
         error(function (data, status) {
         });
-      vm.calOrderTotalPrice();
     }
 
     function loadCounty(cityId) {

@@ -29,8 +29,6 @@ class DeliveryTemplateComponent extends Component{
         ));
         $deliveryTemplates = array();
         foreach ($allDeliveryTemplates as $deliveryTemplateItem) {
-            $deliveryTemplateItem['WeshareDeliveryTemplate']['add_fee'] = $deliveryTemplateItem['WeshareDeliveryTemplate']['add_fee']/100;
-            $deliveryTemplateItem['WeshareDeliveryTemplate']['start_fee'] = $deliveryTemplateItem['WeshareDeliveryTemplate']['start_fee']/100;
             if ($deliveryTemplateItem['WeshareDeliveryTemplate']['is_default'] == 1) {
                 $defaultDeliveryTemplate = $deliveryTemplateItem['WeshareDeliveryTemplate'];
                 unset($defaultDeliveryTemplate['id']);

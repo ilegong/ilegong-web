@@ -133,9 +133,16 @@
           }
           if (!_.isEmpty(data['deliveryTemplate']['delivery_templates'])) {
             vm.deliveryTemplates = data['deliveryTemplate']['delivery_templates'];
+            vm.deliveryTemplates = _.map(vm.deliveryTemplates, function (item) {
+              item['add_fee'] = parseInt(item['add_fee']) / 100;
+              item['start_fee'] = parseInt(item['start_fee']) / 100;
+              return item;
+            });
           }
           if (!_.isEmpty(data['deliveryTemplate']['default_delivery_template'])) {
             vm.defaultDeliveryTemplate = data['deliveryTemplate']['default_delivery_template'];
+            vm.defaultDeliveryTemplate['add_fee'] = parseInt(vm.defaultDeliveryTemplate['add_fee']) / 100;
+            vm.defaultDeliveryTemplate['start_fee'] = parseInt(vm.defaultDeliveryTemplate['start_fee']) / 100;
           }
         }).error(function (data) {
         });
