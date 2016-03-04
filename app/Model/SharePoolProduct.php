@@ -104,6 +104,30 @@ class SharePoolProduct extends AppModel {
     //产品池所有产品
     var $products = array(
         array(
+            'share_id' => 2664,
+            'share_name' => '谷物麦片/白/黑芝麻',
+            'share_img' => 'http://static.tongshijia.com/images/218f3c22-e1d7-11e5-a821-00163e1600b6.jpg',
+            'brand_img' => 'http://static.tongshijia.com/avatar/2015/12/31/wx_head_9920c7076998639a0607b0ac4eb33af7.jpg',
+            'brand_name' => '岳远磊',
+            'show_brand' => true,
+            'brand_custom_service' => 894625,
+            'published' => 1,
+            'products' => array(
+                '5807' => array(
+                    'price' => 49,
+                    'channel_price' => 37,
+                ),
+                '5808' => array(
+                    'price' => 55,
+                    'channel_price' => 41,
+                ),
+                '5809' => array(
+                    'price' => 79,
+                    'channel_price' => 60,
+                )
+            )
+        ),
+        array(
             'share_id' => 2620,
             'share_name' => '泰国椰青',
             'share_img' => 'http://static.tongshijia.com/images/1f31de58-e05b-11e5-a821-00163e1600b6.jpg',
