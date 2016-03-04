@@ -4331,7 +4331,7 @@
 
     function setShipFee() {
       if (vm.selectShipType == 0) {
-        vm.shipFee = vm.weshareSettings.kuai_di.ship_fee;
+        vm.shipFee = getShipFee();
       }
       if (vm.selectShipType == 1) {
         vm.shipFee = vm.weshareSettings.self_ziti.ship_fee;
@@ -5253,6 +5253,7 @@
         }).
         error(function (data, status) {
         });
+      vm.calOrderTotalPrice();
     }
 
     function loadCounty(cityId) {
