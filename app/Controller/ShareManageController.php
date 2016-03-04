@@ -220,6 +220,38 @@ class ShareManageController extends AppController
         $this->set('shares', $shares);
     }
 
+    private function get_weshare_by_id($sid)
+    {
+        $model = ClassRegistry::init('Weshare');
+        $data = $model->find('all', [
+            'conditions' => [
+                'id' => $sid,
+            ],
+        ]);
+
+        return $data[0]['Weshare'];
+    }
+
+    public function pool_share_copy($share_id)
+    {
+        $uid = $this->currentUser['id'];
+        // 先克隆初来一份Wesahres表行
+        $nshare = $this->ShareUtil->cloneShare($share_id);
+        $nshare = $this->get_weshare_by_id($nshare['shareId']);
+        // 手动填充cake_pool_products表.
+        $data = [];
+        $data['weshare_id'] = $nshare['id'];
+        $data['share_name'] = $nshare['title'];
+        $data['created'] = date('Y-m-d H:i:s');
+        $data['status'] = 1;
+        $data['delete'] = 0;
+
+        $model = ClassRegistry::init('PoolProduct');
+        $res = $model->save($data);
+        $id = $model->getLastInsertId();
+        $this->redirect("/shareManage/pool_product_edit/$id.html");
+    }
+
     public function share_edit($share_id)
     {
         $uid = $this->currentUser['id'];

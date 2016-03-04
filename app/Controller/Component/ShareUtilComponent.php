@@ -379,6 +379,18 @@ class ShareUtilComponent extends Component
      * @return array
      * clone一份， 指定用户ID， 指定的地址， 类型， 状态
      */
+    /**
+     * cloneShare
+     *
+     * @param mixed $shareId
+     * @param mixed $uid
+     * @param mixed $address
+     * @param mixed $address_remarks
+     * @param mixed $type
+     * @param mixed $share_status
+     * @access public
+     * @return void
+     */
     public function cloneShare($shareId, $uid = null, $address = null, $address_remarks = null, $type = DEFAULT_SHARE_TYPE, $share_status = WESHARE_DELETE_STATUS)
     {
         $WeshareM = ClassRegistry::init('Weshare');
