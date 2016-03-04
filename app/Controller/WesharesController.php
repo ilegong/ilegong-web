@@ -7,7 +7,7 @@ class WesharesController extends AppController {
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
 
-    var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'OrderExpress', 'PintuanHelper', 'RedisQueue', 'DeliveryTemplate', 'OrderUtil', 'Weshares');
+    var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'OrderExpress', 'PintuanHelper', 'RedisQueue', 'DeliveryTemplate', 'Orders', 'Weshares');
 
     var $share_ship_type = array('self_ziti', 'kuaidi', 'pys_ziti');
 
@@ -596,7 +596,7 @@ class WesharesController extends AppController {
                 $this->ShareUtil->update_rebate_log_order_id($rebateLogId, $orderId, $weshareId);
 
                 $this->log('Create order for '.$uid.' with weshare ' . $weshareId . ' successfully, order id '. $orderId, LOG_INFO);
-                $this->OrderUtil->on_order_created($uid, $weshareId, $orderId);
+                $this->Orders->on_order_created($uid, $weshareId, $orderId);
 
                 echo json_encode(array('success' => true, 'orderId' => $orderId));
                 return;
