@@ -470,7 +470,7 @@ class ShareUtilComponent extends Component
         $WeshareAddressM->save($shareAddressData);
     }
 
-    //todo clone share product
+    //todo clone share product tag
     private function cloneSharProductTag($new_share_id, $old_share_id)
     {
 
