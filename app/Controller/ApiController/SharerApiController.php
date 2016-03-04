@@ -99,7 +99,7 @@ class SharerApiController extends AppController{
                 'fields' => array('id', 'title', 'images', 'status', 'created', 'description')
             ));
             $shareInfo = $shareInfo['Weshare'];
-            $shareInfo['images'] = explode(',', $shareInfo['images']);
+            $shareInfo['images'] = explode('|', $shareInfo['images']);
             echo json_encode(array('success' => true, 'shareInfo' => $shareInfo));
             return;
         }
