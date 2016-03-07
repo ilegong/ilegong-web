@@ -307,6 +307,7 @@ class WesharesController extends AppController {
         $current_user['image'] = get_user_avatar($current_user);
         $current_user_level_data = $this->ShareUtil->get_user_level($uid);
         $current_user['level'] = $current_user_level_data;
+        $current_user['is_proxy'] = $current_user_level_data['data_value'] >= PROXY_USER_LEVEL_VALUE ? 1 : 0;
         if (!$is_me) {
             $sub_status = $this->WeshareBuy->check_user_subscribe($weshareInfo['creator']['id'], $uid);
         } else {
