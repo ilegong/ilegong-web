@@ -12,9 +12,9 @@
  * @link      http://r03.org/
  */
 
-namespace Location\Distance;
+namespace LocationHelper\Distance;
 
-use Location\Coordinate;
+use LocationHelper\Coordinate;
 
 /**
  * Interface for Distance Calculator Classes

@@ -11,10 +11,10 @@
  * @link      http://www.mtb-news.de/
  */
 
-namespace Location;
+namespace LocationHelper;
 
-use Location\Distance\DistanceInterface,
-    Location\Formatter\Polyline\FormatterInterface;
+use LocationHelper\Distance\DistanceInterface,
+    LocationHelper\Formatter\Polyline\FormatterInterface;
 
 /**
  * Polyline Implementation

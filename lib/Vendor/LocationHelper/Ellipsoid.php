@@ -11,7 +11,7 @@
  * @link      http://www.mtb-news.de/
  */
 
-namespace Location;
+namespace LocationHelper;
 
 /**
  * Ellipsoid

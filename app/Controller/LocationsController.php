@@ -16,6 +16,8 @@ class LocationsController extends AppController
 
     public static $CITY_CACHE_KEY = 'location_city_cache';
 
+    //var $uses = array('Location');
+
     public function get_province_list(){
         $this->autoRender = false;
         $cacheData = Cache::read(self::$PROVINCES_CACHE_KEY);

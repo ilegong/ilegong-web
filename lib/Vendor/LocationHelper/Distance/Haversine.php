@@ -12,11 +12,11 @@
  * @link      http://r03.org/
  */
 
-namespace Location\Distance;
+namespace LocationHelper\Distance;
 
-use Location\Coordinate;
-use Location\Exception\NotConvergingException;
-use Location\Exception\NotMatchingEllipsoidException;
+use LocationHelper\Coordinate;
+use LocationHelper\Exception\NotConvergingException;
+use LocationHelper\Exception\NotMatchingEllipsoidException;
 
 /**
  * Implementation of distance calculation with http://en.wikipedia.org/wiki/Law_of_haversines
