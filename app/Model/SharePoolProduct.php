@@ -19,6 +19,7 @@ class SharePoolProduct extends AppModel {
             'conditions' => [
                 'PoolProduct.deleted' => DELETED_NO,
                 'PoolProduct.status' => 1,
+                'WeshareProducts.deleted' => DELETED_NO,
             ],
             'fields' => [
                 'PoolProduct.*',
