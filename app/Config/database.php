@@ -9,7 +9,7 @@ class DATABASE_CONFIG {
 		'password' => '',		
 		'database' => '',
 		'prefix' => 'cake_',
-		'encoding'=>'utf8', 
+		'encoding'=>'utf8mb4', 
 	);		
 	var $master = array(
 		'datasource' => 'Database/Mysql',
@@ -19,7 +19,7 @@ class DATABASE_CONFIG {
 		'password' => '',
 		'database' => '',
 		'prefix' => 'cake_',
-		'encoding'=>'utf8', 
+		'encoding'=>'utf8mb4', 
 	);
 
     public $WxOauth = array(
@@ -56,7 +56,7 @@ class DATABASE_CONFIG {
 					'password' => 'r0341de2c',
 					'database' => 'r9574arlonlov',
 					'prefix' => 'cake_',
-					'encoding'=>'utf8',
+					'encoding'=>'utf8mb4',
 			);
 			$this->master = array(
 					'datasource' => 'Database/Mysql',
@@ -66,7 +66,7 @@ class DATABASE_CONFIG {
 					'password' => 'r0341de2c',
 					'database' => 'r9574arlonlov',
 					'prefix' => 'cake_',
-					'encoding'=>'utf8',
+					'encoding'=>'utf8mb4',
 			);
 		}
 		else{ // in localhost
@@ -79,7 +79,7 @@ class DATABASE_CONFIG {
 				'password' => 'PGdvFePBenE4TtBb',	//zFY8smWUKcaLrUs5
 				'database' => $_SERVER["dbname"]? $_SERVER["dbname"] : '51daifan',
 				'prefix' => 'cake_',
-				'encoding'=>'utf8', 
+				'encoding'=>'utf8mb4', 
 			);		
 			$this->master = array(
 				'datasource' => 'Database/Mysql',
@@ -90,7 +90,7 @@ class DATABASE_CONFIG {
 				'password' => 'PGdvFePBenE4TtBb',
 				'database' => '51daifan',
 				'prefix' => 'cake_',
-				'encoding'=>'utf8', 
+				'encoding'=>'utf8mb4', 
 			);
 			// used in dbupdate for new version. compare database diffrence
 			$this->olddb = array(
@@ -101,7 +101,7 @@ class DATABASE_CONFIG {
 				'password' => 'PGdvFePBenE4TtBb',
 				'database' => 'old_saecms',
 				'prefix' => 'cake_',
-				'encoding'=>'utf8', 
+				'encoding'=>'utf8mb4', 
 			);
 		}
 	}
