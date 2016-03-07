@@ -676,7 +676,7 @@ class WesharesController extends AppController {
     }
 
     /**
-     * @param $shareId
+     * @param $weshare_id
      */
     public function delete_share($weshare_id) {
         $this->autoRender = false;

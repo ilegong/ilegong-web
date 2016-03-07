@@ -108,6 +108,8 @@ const PIN_TUAN_TAG_EXPIRE_STATUS = 3;
 const PIN_TUAN_RECORD_DEFAULT_STATUS = 0;
 const PIN_TUAN_RECORD_PAID_STATUS = 1;
 
+const PROXY_USER_LEVEL_VALUE = 2;
+
 function is_admin_uid($uid) {
 
     $_admin_uids = array(

@@ -256,9 +256,8 @@ class ShareUtilComponent extends Component
      */
     public function is_proxy_user($uid)
     {
-        $userM = ClassRegistry::init('User');
-        $isProxy = $userM->userIsProxy($uid);
-        return $isProxy == USER_IS_PROXY;
+        $userLevel = $this->get_user_level($uid);
+        return $userLevel['data_value'] == PROXY_USER_LEVEL_VALUE;
     }
 
     /**
