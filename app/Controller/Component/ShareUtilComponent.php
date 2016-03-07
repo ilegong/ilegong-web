@@ -380,7 +380,7 @@ class ShareUtilComponent extends Component
      * @return array
      * clone一份， 指定用户ID， 指定的地址， 类型， 状态
      */
-    public function cloneShare($shareId, $uid = null, $address = null, $address_remarks = null, $type = DEFAULT_SHARE_TYPE, $share_status = WESHARE_DELETE_STATUS)
+    public function cloneShare($shareId, $uid = null, $address = null, $address_remarks = null, $type = DEFAULT_SHARE_TYPE, $share_status = WESHARE_DELETE_STATUS, $share_limit = null)
     {
         $WeshareM = ClassRegistry::init('Weshare');
         $shareInfo = $WeshareM->find('first', array(
@@ -419,7 +419,7 @@ class ShareUtilComponent extends Component
         if ($newShareInfo) {
             //clone product
             $newShareId = $newShareInfo['Weshare']['id'];
-            $this->cloneShareProduct($newShareId, $shareId);
+            $this->cloneShareProduct($newShareId, $shareId, $share_limit);
             if ($type == DEFAULT_SHARE_TYPE) {
                 //clone address
                 $this->cloneShareAddresses($newShareId, $shareId);
@@ -480,7 +480,7 @@ class ShareUtilComponent extends Component
      * @param $old_share_id
      * clone share product
      */
-    private function cloneShareProduct($new_share_id, $old_share_id)
+    private function cloneShareProduct($new_share_id, $old_share_id, $share_limit)
     {
         $WeshareProductM = ClassRegistry::init('WeshareProduct');
         $shareProducts = $WeshareProductM->find('all', array(
@@ -494,6 +494,9 @@ class ShareUtilComponent extends Component
             $itemShareProduct['origin_product_id'] = $itemShareProduct['id'];
             $itemShareProduct['id'] = null;
             $itemShareProduct['weshare_id'] = $new_share_id;
+            if ($share_limit !== null) {
+                $itemShareProduct['limit'] = $share_limit;
+            }
             $newProducts[] = $itemShareProduct;
         }
         $WeshareProductM->id = null;

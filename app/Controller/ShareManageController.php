@@ -232,6 +232,19 @@ class ShareManageController extends AppController
         return $data['Weshare'];
     }
 
+    public function pool_product_item_ban($id, $sid)
+    {
+        // 在cake_pool_products表里面删除数据
+        $model = ClassRegistry::init('WeshareProduct');
+        $model->update([
+            'deleted' => 1
+        ], [
+            'id' => $id,
+        ]);
+
+        $this->redirect("/shareManage/pool_product_edit/$sid.html");
+    }
+
     public function pool_product_add()
     {
     }
@@ -266,16 +279,18 @@ class ShareManageController extends AppController
     {
         $uid = $this->currentUser['id'];
         // 先克隆初来一份Wesahres表行
-        $nshare = $this->ShareUtil->cloneShare($share_id, null, null, null, POOL_SHARE_TYPE);
+        $nshare = $this->ShareUtil->cloneShare($share_id, null, null, null, POOL_SHARE_TYPE, WESHARE_DELETE_STATUS, 0);
         $nshare = $this->get_weshare_by_id($nshare['shareId']);
         // 手动填充cake_pool_products表.
         $data = [];
         $data['weshare_id'] = $nshare['id'];
         $data['share_name'] = $nshare['title'];
         $data['created'] = date('Y-m-d H:i:s');
-        $data['status'] = 1;
-        $data['delete'] = 0;
-
+        // 0 下架
+        // 1 上架
+        // 2 刚刚复制完, 新建的状态
+        $data['status'] = 2;
+        $data['deleted'] = 0;
         $model = ClassRegistry::init('PoolProduct');
         $res = $model->save($data);
         $id = $model->getLastInsertId();
@@ -638,9 +653,24 @@ class ShareManageController extends AppController
 
     public function pool_product_save()
     {
+        $error = false;
         $data = $this->data;
-        $this->ShareManage->save_pool_product($data);
-        $this->redirect(array('action' => 'pool_products'));
+        if (!$data['Weshares']['images']) {
+            $error = "分享链接BANNER图不能为空.";
+        }
+        foreach ($data['WeshareProduct'] as $key => $value) {
+            if ($value['channel_price'] == "") {
+                $error = "渠道价不能为空";
+                break;
+            }
+        }
+        if ($error) {
+            echo $error;
+        } else {
+            $data['PoolProduct']['status'] = 1;
+            $this->ShareManage->save_pool_product($data);
+            $this->redirect(array('action' => 'pool_products'));
+        }
     }
 
     public function index_product_save()

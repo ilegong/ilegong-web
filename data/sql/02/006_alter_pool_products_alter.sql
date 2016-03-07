@@ -1,0 +1,1 @@
+alter table cake_pool_products modify status smallint(2);
