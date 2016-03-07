@@ -32,7 +32,7 @@ $(function (){
   });
 
   $('.delete-banner-image').on("click", function (){
-    $('#banner-images-string').val();
+    $('#banner-images-string').val('');
     $(this).parent('div').parent('div.banner-image-area').remove();
   });
 
@@ -86,6 +86,7 @@ $(function (){
         imgUrl = 'http://static.tongshijia.com/' + data.url[0];
         var obj = $('.image-area').eq(0).clone();
         obj.removeClass('col-sm-2').addClass('col-sm-12 banner-image-area');
+        obj.find('a.delete-image').removeClass('delete-image').addClass('delete-banner-image');
         obj.find('img').attr('src', imgUrl);
         obj.find('a').attr('src-data', imgUrl);
         $('.banner-image-area').remove();
@@ -102,3 +103,20 @@ $(function (){
 
   });
 });
+
+function checkUserInput(form) {
+  var data = $(form).serializeArray();
+  var error = false;
+
+  data.forEach(function (item){
+    if (item.value == '') {
+      error = true;
+    }
+  });
+
+  if (error) {
+    alert('您的输入有误, 请检查您的输入');
+  }
+
+  return !error;
+}

@@ -124,6 +124,8 @@ class ShareManageComponent extends Component
                 $item['id'] = null;
                 $item['weshare_id'] = $data['Weshares']['id'];
             }
+            $item['price'] *= 100;
+            $item['channel_price'] *= 100;
             $weshareProductM->save($item);
         }
 

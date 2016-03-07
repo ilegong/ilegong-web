@@ -56,7 +56,7 @@
                 <td>
                   {{$product['PoolProduct']['status']}}
                 </td>
-                <td class='share-btns'><a class="btn btn-info" href="/shareManage/pool_product_edit/{{$product['PoolProduct']['id']}}.html" role="button">编辑</a>&nbsp;|&nbsp;<a class="btn btn-primary" href="/shareManage/pool_product_order_manage/{{$product['PoolProduct']['id']}}.html" role="button">订单管理</a>&nbsp;|&nbsp;<a class="btn btn-danger" href="/shareManage/pool_product_ban/{{$product['PoolProduct']['id']}}.html" role="button">下架</a>&nbsp;|&nbsp;<a class="btn btn-danger" href="/shareManage/pool_product_delete/{{$product['PoolProduct']['id']}}.html" role="button">删除</a></td>
+                <td class='share-btns'><a class="btn btn-info" href="/shareManage/pool_product_edit/{{$product['PoolProduct']['id']}}.html" role="button">编辑</a>&nbsp;|&nbsp;<a class="btn btn-primary" href="/shareManage/pool_product_order_manage/{{$product['PoolProduct']['id']}}.html" role="button">订单管理</a>&nbsp;|&nbsp;<a class="btn btn-danger ban-pool-product" href="javascript:void(0);" data-upid={{$product['PoolProduct']['id']}} role="button">下架</a>&nbsp;|&nbsp;<a class="btn btn-danger delete-pool-product" href="javascript:void(0);" data-upid="{{$product['PoolProduct']['id']}}" role="button">删除</a></td>
               </tr>
               {{/loop}}
             </tbody>
@@ -70,3 +70,4 @@
   </div>
 </div>
 <link href="http://dev.tongshijia.com/static/manage/css/pool_products.css" rel="stylesheet">
+<script src="/static/manage/js/pool_product.js"></script>
