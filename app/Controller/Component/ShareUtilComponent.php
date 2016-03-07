@@ -257,7 +257,7 @@ class ShareUtilComponent extends Component
     public function is_proxy_user($uid)
     {
         $userLevel = $this->get_user_level($uid);
-        return $userLevel['data_value'] == PROXY_USER_LEVEL_VALUE;
+        return $userLevel['data_value'] >= PROXY_USER_LEVEL_VALUE;
     }
 
     /**
