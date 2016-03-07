@@ -18,6 +18,7 @@ class SharePoolProduct extends AppModel {
         $data = $model->find('all', [
             'conditions' => [
                 'PoolProduct.deleted' => DELETED_NO,
+                'PoolProduct.status' => 1,
             ],
             'fields' => [
                 'PoolProduct.*',
