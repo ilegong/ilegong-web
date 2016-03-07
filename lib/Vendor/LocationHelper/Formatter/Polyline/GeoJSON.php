@@ -11,9 +11,9 @@
  * @link      https://github.com/mjaschen/phpgeo
  */
 
-namespace Location\Formatter\Polyline;
+namespace LocationHelper\Formatter\Polyline;
 
-use Location\Polyline;
+use LocationHelper\Polyline;
 
 /**
  * GeoJSON Polyline Formatter
@@ -27,7 +27,7 @@ use Location\Polyline;
 class GeoJSON implements FormatterInterface
 {
     /**
-     * @param \Location\Polyline $polyline
+     * @param \LocationHelper\Polyline $polyline
      *
      * @return string
      */

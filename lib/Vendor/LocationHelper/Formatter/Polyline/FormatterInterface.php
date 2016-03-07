@@ -11,9 +11,9 @@
  * @link      https://github.com/mjaschen/phpgeo
  */
 
-namespace Location\Formatter\Polyline;
+namespace LocationHelper\Formatter\Polyline;
 
-use Location\Polyline;
+use LocationHelper\Polyline;
 
 /**
  * Polyline Formatter Interface

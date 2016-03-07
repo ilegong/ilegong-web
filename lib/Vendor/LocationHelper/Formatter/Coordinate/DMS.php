@@ -12,9 +12,9 @@
  * @link      http://r03.org/
  */
 
-namespace Location\Formatter\Coordinate;
+namespace LocationHelper\Formatter\Coordinate;
 
-use Location\Coordinate;
+use LocationHelper\Coordinate;
 
 /**
  * Coordinate Formatter "DMS"

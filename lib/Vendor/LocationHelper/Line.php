@@ -11,9 +11,9 @@
  * @link      http://www.mtb-news.de/
  */
 
-namespace Location;
+namespace LocationHelper;
 
-use Location\Distance\DistanceInterface;
+use LocationHelper\Distance\DistanceInterface;
 
 /**
  * Line Implementation
@@ -26,12 +26,12 @@ use Location\Distance\DistanceInterface;
 class Line
 {
     /**
-     * @var \Location\Coordinate
+     * @var \LocationHelper\Coordinate
      */
     protected $point1;
 
     /**
-     * @var \Location\Coordinate
+     * @var \LocationHelper\Coordinate
      */
     protected $point2;
 
@@ -46,7 +46,7 @@ class Line
     }
 
     /**
-     * @param \Location\Coordinate $point1
+     * @param \LocationHelper\Coordinate $point1
      */
     public function setPoint1($point1)
     {
@@ -54,7 +54,7 @@ class Line
     }
 
     /**
-     * @return \Location\Coordinate
+     * @return \LocationHelper\Coordinate
      */
     public function getPoint1()
     {
@@ -62,7 +62,7 @@ class Line
     }
 
     /**
-     * @param \Location\Coordinate $point2
+     * @param \LocationHelper\Coordinate $point2
      */
     public function setPoint2($point2)
     {
@@ -70,7 +70,7 @@ class Line
     }
 
     /**
-     * @return \Location\Coordinate
+     * @return \LocationHelper\Coordinate
      */
     public function getPoint2()
     {

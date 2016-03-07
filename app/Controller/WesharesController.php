@@ -7,7 +7,7 @@ class WesharesController extends AppController {
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
 
-    var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'OrderExpress', 'PintuanHelper', 'RedisQueue', 'DeliveryTemplate', 'OrderUtil', 'Weshares');
+    var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'OrderExpress', 'PintuanHelper', 'RedisQueue', 'DeliveryTemplate', 'Orders', 'Weshares');
 
     var $share_ship_type = array('self_ziti', 'kuaidi', 'pys_ziti');
 
@@ -307,6 +307,7 @@ class WesharesController extends AppController {
         $current_user['image'] = get_user_avatar($current_user);
         $current_user_level_data = $this->ShareUtil->get_user_level($uid);
         $current_user['level'] = $current_user_level_data;
+        $current_user['is_proxy'] = $current_user_level_data['data_value'] >= PROXY_USER_LEVEL_VALUE ? 1 : 0;
         if (!$is_me) {
             $sub_status = $this->WeshareBuy->check_user_subscribe($weshareInfo['creator']['id'], $uid);
         } else {
@@ -595,7 +596,7 @@ class WesharesController extends AppController {
                 $this->ShareUtil->update_rebate_log_order_id($rebateLogId, $orderId, $weshareId);
 
                 $this->log('Create order for '.$uid.' with weshare ' . $weshareId . ' successfully, order id '. $orderId, LOG_INFO);
-                $this->OrderUtil->on_order_created($uid, $weshareId, $orderId);
+                $this->Orders->on_order_created($uid, $weshareId, $orderId);
 
                 echo json_encode(array('success' => true, 'orderId' => $orderId));
                 return;
@@ -676,7 +677,7 @@ class WesharesController extends AppController {
     }
 
     /**
-     * @param $shareId
+     * @param $weshare_id
      */
     public function delete_share($weshare_id) {
         $this->autoRender = false;

@@ -11,12 +11,12 @@
  * @link      http://r03.org/
  */
 
-namespace Location;
+namespace LocationHelper;
 
-use Location\Ellipsoid,
-    Location\Distance,
-    Location\Distance\DistanceInterface,
-    Location\Formatter\Coordinate\FormatterInterface;
+use LocationHelper\Ellipsoid,
+    LocationHelper\Distance,
+    LocationHelper\Distance\DistanceInterface,
+    LocationHelper\Formatter\Coordinate\FormatterInterface;
 
 /**
  * Coordinate Implementation

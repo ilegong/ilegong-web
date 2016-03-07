@@ -6,10 +6,10 @@
  * Time: 11:27
  */
 
-App::import('Vendor', 'Location', array('file' => 'Location/Coordinate.php'));
-App::import('Vendor', 'Location', array('file' => 'Location/Distance/Vincenty.php'));
-App::import('Vendor', 'Location', array('file' => 'Location/Distance/Haversine.php'));
 
+App::import('Vendor', 'LocationHelper', array('file' => 'LocationHelper/Coordinate.php'));
+App::import('Vendor', 'LocationHelper', array('file' => 'LocationHelper/Distance/Vincenty.php'));
+App::import('Vendor', 'LocationHelper', array('file' => 'LocationHelper/Distance/Haversine.php'));
 class TestController extends AppController
 {
 
@@ -160,7 +160,7 @@ class TestController extends AppController
         $this->loadModel('OfflineStore');
         //116.336402,40.06276
         //116.336145,40.062573
-        $coordinate = new Location\Coordinate(40.062573, 116.336145);
+        $coordinate = new LocationHelper\Coordinate(40.062573, 116.336145);
         $squrePoint = $coordinate->getSquarePoint($coordinate);
 
         $offlineStore = $this->OfflineStore->find('all', array(
@@ -181,14 +181,17 @@ class TestController extends AppController
 
     public function test_wx_location()
     {
-        $coordinate1 = new Location\Coordinate(19.820664, -155.468066); // Mauna Kea Summit
-        $coordinate2 = new Location\Coordinate(20.709722, -156.253333); // Haleakala Summit
-        $this->set('distance', $this->cal_tow_point_distance($coordinate1, $coordinate2));
+        $this->autoRender = false;
+        $coordinate1 = new LocationHelper\Coordinate(19.820664, -155.468066); // Mauna Kea Summit
+        $coordinate2 = new LocationHelper\Coordinate(20.709722, -156.253333); // Haleakala Summit
+        //$this->set('distance', $this->cal_tow_point_distance($coordinate1, $coordinate2));
+        echo json_encode(array('distance' => $this->cal_tow_point_distance($coordinate1, $coordinate2)));
+        return;
     }
 
     private function cal_tow_point_distance($p1, $p2)
     {
-        $calculator = new Location\Distance\Vincenty();
+        $calculator = new LocationHelper\Distance\Vincenty();
         return $calculator->getDistance($p1, $p2);
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Location\Exception;
+namespace LocationHelper\Exception;
 
 class NotMatchingEllipsoidException extends \InvalidArgumentException
 {

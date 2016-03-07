@@ -1,4 +1,7 @@
 <?php
+//support utf8mb4
+mysqli_set_charset($handle, "utf8mb4");
+
 if (!defined('COMMON_PATH')) {
     define('COMMON_PATH', ROOT . DS . 'lib' . DS);
 }
@@ -18,7 +21,7 @@ const WX_SERVICE_ID_GOTO = 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid
 const ALI_HOST = 'www.tongshijia.com';
 const ALI_ACCOUNT = 'yxg@ilegong.com';
 
-const ALI_CREATE_AVATAR_URL = 'http://static.tongshijia.com/download_avatar';
+const ALI_CREATE_AVATAR_URL = 'http://images.tongshijia.com/download_avatar';
 
 const TRADE_ALI_TYPE = 'ZFB';
 const TRADE_WX_API_TYPE = 'JSAPI';
@@ -1559,11 +1562,14 @@ function createNewUserByWeixin($userInfo, $userModel) {
     $download_url = $userInfo['headimgurl'];
     $ali_avatar = '';
     if (!empty($userInfo['headimgurl'])) {
-        $download_url = download_photo_from_wx($userInfo['headimgurl']);
-        if (empty($download_url)) {
-            $download_url = $userInfo['headimgurl'];
-        }
         $ali_avatar = create_avatar_in_aliyun($userInfo['headimgurl']);
+        $download_url = $ali_avatar;
+        if(empty($ali_avatar)){
+            $download_url = download_photo_from_wx($userInfo['headimgurl']);
+            if (empty($download_url)) {
+                $download_url = $userInfo['headimgurl'];
+            }
+        }
     }
     if (empty($userModel)) {
         $userModel = ClassRegistry::init('User');

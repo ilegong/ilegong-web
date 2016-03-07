@@ -18,11 +18,11 @@
  * @link      http://r03.org/
  */
 
-namespace Location\Processor\Polyline;
+namespace LocationHelper\Processor\Polyline;
 
-use Location\Coordinate;
-use Location\Line;
-use Location\Polyline;
+use LocationHelper\Coordinate;
+use LocationHelper\Line;
+use LocationHelper\Polyline;
 
 /**
  * Simplify Polyline with the Douglas-Peucker-Algorithm
@@ -36,7 +36,7 @@ use Location\Polyline;
 class Simplify
 {
     /**
-     * @var \Location\Polyline
+     * @var \LocationHelper\Polyline
      */
     protected $polyline;
 

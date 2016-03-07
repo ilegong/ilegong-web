@@ -11,9 +11,9 @@
  * @link      http://r03.org/
  */
 
-namespace Location;
+namespace LocationHelper;
 
-use Location\Coordinate;
+use LocationHelper\Coordinate;
 
 /**
  * Coordinate Bounds Class

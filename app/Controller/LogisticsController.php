@@ -12,7 +12,7 @@ class LogisticsController extends AppController {
 
     public $name = 'logistics';
 
-    public $components = array('ThirdPartyExpress', 'Logistics');
+    public $components = array('ThirdPartyExpress', 'Logistics', 'Orders');
 
     public $uses = array('Order', 'Cart');
 
@@ -22,7 +22,7 @@ class LogisticsController extends AppController {
      */
     public function rr_logistics($orderId) {
         $this->layout = null;
-        $order_info = $this->get_order_info($orderId);
+        $order_info = $this->Orders->get_order_info2($orderId);
         if (empty($order_info)) {
             $this->redirect('/weshares/index.html');
             return;
@@ -93,7 +93,7 @@ class LogisticsController extends AppController {
         $order_id = $_REQUEST['order_id'];
         $json_params = $_REQUEST['params'];
         $params = json_decode($json_params, true);
-        $order_info = $this->get_order_info($order_id);
+        $order_info = $this->Orders->get_order_info2($order_id);
         $result = $this->get_rr_ship_fee($order_info, $params);
         echo $result;
         return;
@@ -137,7 +137,7 @@ class LogisticsController extends AppController {
             return;
         }
         $order_id = $_REQUEST['orderId'];
-        $order_info = $this->get_order_info($order_id);
+        $order_info = $this->Orders->get_order_info2($order_id);
         if (empty($order_info)) {
             echo json_encode(array('success' => false, 'reason' => 'not_order'));
             return;
@@ -199,14 +199,6 @@ class LogisticsController extends AppController {
             $this->redirect('/ali_pay/wap_to_alipay/' . $orderId . '?action=logistics');
             return;
         }
-    }
-
-    private function get_order_info($orderId) {
-        $order_info = $this->Order->find('first', array(
-            'conditions' => array('id' => $orderId, 'status' => ORDER_STATUS_SHIPPED, 'type' => ORDER_TYPE_WESHARE_BUY, 'ship_mark' => SHARE_SHIP_PYS_ZITI_TAG),
-            'fields' => array('id', 'status', 'consignee_name', 'consignee_id', 'consignee_address', 'consignee_mobilephone', 'member_id', 'total_all_price', 'ship_code')
-        ));
-        return $order_info;
     }
 
     private function get_order_cart($orderId) {
