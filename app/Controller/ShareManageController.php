@@ -249,6 +249,19 @@ class ShareManageController extends AppController
         $this->redirect('/shareManage/pool_products');
     }
 
+    public function pool_product_ban($id)
+    {
+        // 在cake_pool_products表里面状态设置为下架
+        $model = ClassRegistry::init('PoolProduct');
+        $model->update([
+            'status' => 0
+        ], [
+            'id' => $id,
+        ]);
+
+        $this->redirect('/shareManage/pool_products');
+    }
+
     public function pool_share_copy($share_id)
     {
         $uid = $this->currentUser['id'];

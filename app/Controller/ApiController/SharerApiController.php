@@ -137,7 +137,7 @@ class SharerApiController extends AppController{
         $weshare_id = $postData['share_id'];
         $share_info = $this->ShareUtil->get_weshare_detail($weshare_id);
         $result = $this->ShareUtil->send_buy_percent_msg($postData['type'], $postData['user_id'], $share_info, $postData['content'], $weshare_id);
-        echo js($result);
+        echo json_encode($result);
         return;
     }
 
