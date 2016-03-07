@@ -1,6 +1,6 @@
 <?php
 //support utf8mb4
-mysqli_set_charset($handle, "utf8mb4");
+//mysqli_set_charset($handler, "utf8mb4");
 
 if (!defined('COMMON_PATH')) {
     define('COMMON_PATH', ROOT . DS . 'lib' . DS);
