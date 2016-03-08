@@ -6,6 +6,15 @@ $(function (){
       console.log('手贱, 不好意思');
     }
   });
+  $('#hidden-show-ban-item').click(function (){
+    console.log('clicked....');
+    $('.row.pool-product-item').each(function (){
+      if ($(this).attr('status') == 1) {
+        console.log("hidden item.");
+        $(this).toggle();
+      }
+    });
+  });
   $('#add-new-product').on("click", function (){
     var len = $('.pool-product-item').length;
     var newItem = $('.pool-product-item').eq(0).clone();

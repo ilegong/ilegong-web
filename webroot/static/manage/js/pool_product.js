@@ -13,4 +13,18 @@ $(function (){
       console.log('手贱, 不好意思');
     }
   });
+  $('#show-hidden-by-status-ban').click(function (){
+    $('tr.list-item').each(function (){
+      if ($(this).attr('status') == 0) {
+        $(this).toggle();
+      }
+    });
+  });
+  $('#show-hidden-by-status-pending').click(function (){
+    $('tr.list-item').each(function (){
+      if ($(this).attr('status') == 2) {
+        $(this).toggle();
+      }
+    });
+  });
 });
