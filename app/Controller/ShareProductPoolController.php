@@ -9,7 +9,7 @@ class ShareProductPoolController extends AppController {
 
     var $name = 'share_product_pool';
 
-    var $uses = array('SharePoolProduct');
+    var $uses = array('SharePoolProduct', 'Weshare');
 
     var $components = array('ShareUtil', 'ShareAuthority');
 
@@ -72,8 +72,7 @@ class ShareProductPoolController extends AppController {
         }
         $result = $this->ShareUtil->cloneShare($share_id, $uid);
         if ($result['success']) {
-            $pool_product_config = $this->SharePoolProduct->get_product_by_share_id($share_id);
-            $this->init_share_authorize($result['shareId'], $share_id, $pool_product_config['brand_custom_service']);
+            $this->init_share_authorize($result['shareId'], $share_id, $uid);
         }
         echo json_encode($result);
         return;
