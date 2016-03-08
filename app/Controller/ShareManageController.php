@@ -35,7 +35,8 @@ class ShareManageController extends AppController
     {
         $u_mobile = $_REQUEST['mobile'];
         $u_nickname = $_REQUEST['nick_name'];
-        if (!empty($u_mobile) || !empty($u_nickname)) {
+        $u_id = $_REQUEST['uid'];
+        if (!empty($u_mobile) || !empty($u_nickname)|| !empty($u_id)) {
             $userM = ClassRegistry::init('User');
             $cond = array();
             if (!empty($u_nickname)) {
@@ -44,13 +45,21 @@ class ShareManageController extends AppController
             if (!empty($u_mobile)) {
                 $cond['User.mobilephone'] = $u_mobile;
             }
+            if (!empty($u_id)) {
+                $cond['User.id'] = $u_id;
+            }
             $users = $userM->find('all', array(
                 'conditions' => $cond,
                 'recursive' => 1,
                 'fields' => array('User.id', 'User.nickname', 'User.image', 'User.mobilephone', 'User.avatar'),
                 'limit' => 100
             ));
-            $this->set('users', $users);
+            if ($this->request->is('ajax')) {
+                //print_r($users);
+                echo json_encode($users[0]['User']); exit();
+            } else {
+                $this->set('users', $users);
+            }
         }
     }
 

@@ -20,6 +20,12 @@
 
               <div class='row'>
                 <div class="form-group col-sm-4">
+                  <label>分享人(ID)</label>
+                  <input type="text" class="form-control" name="data[Weshares][creator]"
+                  value="{{$index_product['Weshares']['creator']}}">
+                  <p class="help-block">分享人手机号</p>
+                </div>
+                <div class="form-group col-sm-4">
                   <label>分享人</label>
                   <input type="text" class="form-control" name="disable_data[PoolProduct][name]" value="{{$index_product['User']['nickname']}}" disabled>
                   <p class="help-block">分享人</p>

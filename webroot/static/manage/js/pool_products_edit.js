@@ -15,6 +15,26 @@ $(function (){
       }
     });
   });
+  $('input[name="data[Weshares][creator]"]').on('change', function (){
+    var uid = $(this).val();
+    if (uid == "") {
+      alert('用户ID不应该为空');
+    }
+
+    $.ajax({
+      url: '/share_manage/search_users?uid=' + uid,
+      type: 'get',
+      dataType: 'json',
+      success: function (data) {
+        console.log(data);
+        $('input[name="disable_data[PoolProduct][name]"]').val(data.nickname);
+        $('input[name="disable_data[PoolProduct][mobilephone]"]').val(data.mobilephone);
+      },
+      error: function () {
+        alert('用户信息错误, 请仔细检查');
+      }
+    });
+  });
   $('#add-new-product').on("click", function (){
     var len = $('.pool-product-item').length;
     var newItem = $('.pool-product-item').eq(0).clone();
