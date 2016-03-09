@@ -51,6 +51,9 @@ class SharerApiController extends AppController{
      */
     public function get_my_share_orders($shareId){
         $result = $this->WeshareBuy->get_share_order_for_show($shareId, true, $division = false, $export = false);
+        $result['orders'] = usort($result['orders'], function ($a, $b) {
+            return ($a['id'] < $b['id']) ? 1 : -1;
+        });
         unset($result['ship_types']);
         unset($result['rebate_logs']);
         echo json_encode($result);
