@@ -391,9 +391,9 @@ class ShareUtilComponent extends Component
         $shareInfo = $shareInfo['Weshare'];
         $shareInfo['id'] = null;
         $shareInfo['created'] = date('Y-m-d H:i:s');
-        $shareInfo['status'] = 0;
-        $shareInfo['settlement'] = 0;
-        $shareInfo['type'] = 0;
+        $shareInfo['status'] = 0; //分享状态
+        $shareInfo['settlement'] = 0; //打款状态为未打款
+        $shareInfo['type'] = 0; //默认分享类型
         //order status offline address id
         if ($type == GROUP_SHARE_TYPE) {
             $origin_sharer_nickname = $this->WeshareBuy->get_user_nickname($shareInfo['creator']);

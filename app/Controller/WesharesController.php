@@ -1195,7 +1195,7 @@ class WesharesController extends AppController {
         } else {
             $export_paid_order = false;
         }
-        $statics_data = $this->get_weshare_buy_info($shareId, true, false, $export_paid_order);
+        $statics_data = $this->get_weshare_buy_info($shareId, true, true, $export_paid_order);
         //$refund_money = $this->WeshareBuy->get_refund_money_by_weshare($shareId);
         //$rebate_money = $this->ShareUtil->get_share_rebate_money($shareId);
         $this->set($statics_data);
@@ -1210,7 +1210,7 @@ class WesharesController extends AppController {
         } else {
             $export_paid_order = false;
         }
-        $statics_data = $this->get_weshare_buy_info($shareId, true, false, $export_paid_order);
+        $statics_data = $this->get_weshare_buy_info($shareId, true, true, $export_paid_order);
         //$refund_money = $this->WeshareBuy->get_refund_money_by_weshare($shareId);
         //$rebate_money = $this->ShareUtil->get_share_rebate_money($shareId);
         $this->set($statics_data);

@@ -1446,7 +1446,7 @@ class WeshareBuyComponent extends Component {
     /**
      * @param $weshareId
      * @param $is_me
-     * @param bool $division
+     * @param bool $division 根据发货方式 分类订单
      * @param bool $export
      * @return array
      * 获取分享的订单信息

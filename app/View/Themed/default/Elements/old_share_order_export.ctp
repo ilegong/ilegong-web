@@ -35,34 +35,27 @@ $header = array('订单号', '客户姓名', '下单时间', '支付时间', '�
 $order_status = array('待确认', '已支付', '已发货', '已收货', '已退款', '', '', '', '', '已完成', '已做废', '已确认', '已投诉', '', '退款中');
 $ship_mark = array('kuai_di' => '快递', 'self_ziti' => '自提', 'pys_ziti' => '好邻居', 'pin_tuan' => '拼团');
 $rows = count($orders);
-foreach ($orders as $item) {
-    foreach($order_cart_map[$item['id']] as $index => $cart){
+foreach(array($orders[SHARE_SHIP_KUAIDI_TAG], $orders[SHARE_SHIP_KUAIDI_TAG], $orders[SHARE_SHIP_PYS_ZITI_TAG]) as $split_orders){
+    foreach ($split_orders as $item) {
         $row = array();
         foreach ($fields as $fieldName) {
             if ($fieldName == 'goods') {
-                $value =  $cart['name'];
-            } else if($fieldName == 'num') {
-                $value =  $cart['num'];
+                $value = get_share_order_cart_display_name($order_cart_map[$item['id']]);
             } else {
-                if($index == 0){
-                     if ($fieldName == 'status') {
-                         $value = $order_status[$item['status']];
-                     } else if ($fieldName == 'coupon_total') {
-                         $value = $item['coupon_total'] / 100.0;
-                     } else if ($fieldName == 'ship_mark') {
-                         $value = $ship_mark[$item['ship_mark']];
-                     }else if ($fieldName == 'nickname'){
-                         $value = $users[$item['creator']]['nickname'];
-                     }else if($fieldName == 'ship_fee'){
-                         $value = $item['ship_fee'] / 100.0;
-                     }else if($fieldName == 'consignee_mobilephone'){
-                         $value = '手机:'.$item['consignee_mobilephone'];
-                     }else {
-                         $value = $item[$fieldName];
-                     }
-                }
-                else{
-                    $value = '';
+                if ($fieldName == 'status') {
+                    $value = $order_status[$item['status']];
+                } else if ($fieldName == 'coupon_total') {
+                    $value = $item['coupon_total'] / 100.0;
+                } else if ($fieldName == 'ship_mark') {
+                    $value = $ship_mark[$item['ship_mark']];
+                }else if ($fieldName == 'nickname'){
+                    $value = $users[$item['creator']]['nickname'];
+                }else if($fieldName == 'ship_fee'){
+                    $value = $item['ship_fee'] / 100.0;
+                }else if($fieldName == 'consignee_mobilephone'){
+                    $value = '手机:'.$item['consignee_mobilephone'];
+                }else {
+                    $value = $item[$fieldName];
                 }
             }
             $row[] = $value;
