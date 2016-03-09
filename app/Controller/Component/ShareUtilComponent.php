@@ -2131,11 +2131,12 @@ class ShareUtilComponent extends Component
             }
         }
 
-        foreach ($methods as $method) {
-            if (!in_array($method, ['self_ziti', 'kuai_di'])) {
+        foreach (['self_ziti', 'kuai_di'] as $method) {
+            if (!in_array($method, $methods)) {
                 $$method = true;
             }
         }
+
         return $self_ziti && $kuai_di;
     }
 
