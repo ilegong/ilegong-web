@@ -80,10 +80,22 @@
             </dl>
             <div class="freightmore">
                 <div class="sendouttime"><input type="text" placeholder="到货/发货时间" ng-model="vm.weshare.send_info" ng-change='vm.validateSendInfo()' ng-blur='vm.validateSendInfo()'/></div>
-                <ul class="clearfix" ng-repeat="address in vm.weshare.addresses | filter:{deleted : 0}">
-                    <li class="fl"><div class="sendoutsite"><input type="text" placeholder="取货地点，联系人，联系电话" ng-model="address.address" ng-blur='vm.validateAddress()'/></div></li>
-                    <li class="fr" ng-if="$last"><a ng-click="vm.toggleAddress(address, $last)">添加</a></li>
-                    <li class="fr" ng-if="!$last"><a ng-click="vm.toggleAddress(address, $last)" class="delete">删除</a></li>
+                <ul class="clearfix" ng-repeat="address in vm.weshare.addresses | filter:{deleted : 0}" style="border: 1px solid #cccccc;padding: 5px;">
+                    <li class="fl sendoutsite">
+                        <input type="text" placeholder="取货地点" ng-model="address.address" ng-blur='vm.validateAddress()'/>
+                    </li>
+                    <li class="fl sendoutsite">
+                        <input type="text" placeholder="联系人" ng-model="address.name" ng-blur='vm.validateAddress()'/>
+                    </li>
+                    <li class="fl sendoutsite">
+                        <input type="text" placeholder="联系电话" ng-model="address.phone" ng-blur='vm.validateAddress()'/>
+                    </li>
+                    <li class="fr" ng-if="$last">
+                        <a ng-click="vm.toggleAddress(address, $last)">添加</a>
+                    </li>
+                    <li class="fr" ng-if="!$last">
+                        <a ng-click="vm.toggleAddress(address, $last)" class="delete">删除</a>
+                    </li>
                 </ul>
             </div>
         </div>

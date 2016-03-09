@@ -35,7 +35,7 @@ $order_status = array('待确认', '已支付', '已发货', '已收货', '已�
 $ship_mark = array('kuai_di' => '快递', 'self_ziti' => '自提', 'pys_ziti' => '好邻居', 'pin_tuan' => '拼团');
 $rows = count($orders);
 
-foreach(array($orders[SHARE_SHIP_KUAIDI_TAG], $orders[SHARE_SHIP_KUAIDI_TAG], $orders[SHARE_SHIP_PYS_ZITI_TAG]) as $split_orders){
+foreach(array($orders[SHARE_SHIP_KUAIDI_TAG], $orders[SHARE_SHIP_SELF_ZITI_TAG], $orders[SHARE_SHIP_PYS_ZITI_TAG]) as $split_orders){
     foreach ($split_orders as $item) {
         $row = array();
         foreach ($fields as $fieldName) {
