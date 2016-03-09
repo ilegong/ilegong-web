@@ -3978,6 +3978,12 @@
       }).
         success(function (data, status) {
           vm.weshare = data['weshare'];
+          if(!_.isEmpty(vm.weshare.creator.image)){
+            vm.weshare.creator.image = vm.weshare.creator.image.replace('.jpg', '_thumb.jpg');
+          }
+          else{
+            vm.weshare.creator.image = vm.staticFilePath + '/static/img/default_user_icon_thumb.jpg'
+          }
           if (vm.weshare.type == 1) {
             vm.isGroupShareType = true;
           }
