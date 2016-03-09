@@ -55,16 +55,19 @@
     function pageLoaded() {
       $rootScope.loadingPage = false;
     }
-    function setDefaultShipSettingData(){
+
+    function setDefaultShipSettingData() {
       vm.self_ziti_data = {status: 1, ship_fee: 0, tag: 'self_ziti'};
       vm.kuai_di_data = {status: -1, ship_fee: '', tag: 'kuai_di'};
       vm.pys_ziti_data = {status: -1, ship_fee: 0, tag: 'pys_ziti'};
       vm.pin_tuan_data = {status: -1, ship_fee: 500, tag: 'pin_tuan'};
     }
-    function setDefaultProxyRebatePercent(){
+
+    function setDefaultProxyRebatePercent() {
       vm.proxy_rebate_percent = {status: 0, percent: 0};
     }
-    function setDefaultDeliveryTemplate(){
+
+    function setDefaultDeliveryTemplate() {
       vm.defaultDeliveryTemplate = {
         "start_units": 1,
         "start_fee": 0,
@@ -73,13 +76,16 @@
         "is_default": 1
       };
     }
-    function setDeliveryTemplates(){
+
+    function setDeliveryTemplates() {
       vm.deliveryTemplates = [];
     }
-    function removeDeliveryTemplate(deliveryTemplate){
+
+    function removeDeliveryTemplate(deliveryTemplate) {
       vm.deliveryTemplates = _.without(vm.deliveryTemplates, deliveryTemplate);
     }
-    function addDeliveryTemplate(){
+
+    function addDeliveryTemplate() {
       vm.deliveryTemplates.push({
         "start_units": 1,
         "start_fee": 0,
@@ -88,6 +94,7 @@
         "is_default": 0
       });
     }
+
     activate();
     function activate() {
       vm.initCityData();
@@ -155,7 +162,7 @@
           ],
           send_info: '',
           addresses: [
-            {address: '', deleted: 0}
+            {address: '', deleted: 0, name: '', phone: ''}
           ],
           tags: []
         };
@@ -177,7 +184,7 @@
       vm.messages = [];
       function setDefaultData() {
         if (!vm.weshare.addresses || vm.weshare.addresses.length == 0) {
-          vm.weshare.addresses = [{address: '', deleted: 0}];
+          vm.weshare.addresses = [{address: '', deleted: 0, name: '', address: ''}];
         }
         if (!vm.weshare.send_info) {
           vm.weshare.send_info = '';
@@ -259,7 +266,7 @@
 
     function toggleAddress(address, isLast) {
       if (isLast) {
-        vm.weshare.addresses.push({address: '', deleted: 0});
+        vm.weshare.addresses.push({address: '', deleted: 0, name: '', phone: ''});
       } else {
         if (address.id && address.id > 0) {
           address.deleted = 1;
@@ -308,10 +315,10 @@
       if (vm.validateAddress()) {
         if (_.isEmpty(vm.weshare.addresses)) {
           vm.weshare.addresses = [
-            {address: '', deleted: 0}
+            {address: '', deleted: 0, name: '', phone: ''}
           ];
         }
-        alert('请输入自提地址');
+        alert('请输入完整自提地址信息');
         return false;
       }
       vm.kuai_di_data.ship_fee = vm.kuai_di_data.ship_fee || 0;
@@ -330,7 +337,7 @@
       if (vm.validatePinTuan()) {
         return false;
       }
-      if(!vm.validateDeliveryTemplateData(deliveryTemplates)){
+      if (!vm.validateDeliveryTemplateData(deliveryTemplates)) {
         return false;
       }
       if (vm.isInProcess) {
@@ -353,9 +360,10 @@
         window.location.href = '/weshares/add';
       });
     }
-    function toggleAreaProvinceCheckStatus(areaId){
+
+    function toggleAreaProvinceCheckStatus(areaId) {
       var areaCheckStatus = vm.areaCheckStatus[areaId];
-      _.each(vm.provinceData[areaId], function(_, key){
+      _.each(vm.provinceData[areaId], function (_, key) {
         vm.provinceCheckStatus[key] = areaCheckStatus;
       });
     }
@@ -476,14 +484,14 @@
       if (!vm.addressError) {
         var tempAddressError = false;
         _.each(vm.weshare.addresses, function (address) {
-          tempAddressError = tempAddressError || _.isEmpty(address.address);
+          tempAddressError = tempAddressError || _.isEmpty(address.address) || _.isEmpty(address.name) || _.isEmpty(address.phone);
         });
         vm.addressError = vm.addressError || tempAddressError;
       }
       return vm.addressError;
     }
 
-    function showDeliveryTemplateProvinceNames(deliveryTemplate){
+    function showDeliveryTemplateProvinceNames(deliveryTemplate) {
       if (!_.isEmpty(deliveryTemplate['regions'])) {
         var nameStr = _.reduce(deliveryTemplate['regions'], function (memo, checkedProvince) {
           return checkedProvince['province_name'] + ',' + memo;
@@ -493,18 +501,24 @@
       return '选择地区';
     }
 
-    function deliveryTemplateChooseCity(){
+    function deliveryTemplateChooseCity() {
       vm.hideChooseCityView();
       vm.currentDeliveryTemplate['regions'] = [];
-      var checkedProvinces = _.map(vm.provinceCheckStatus, function(checked, provinceId){ if(checked){return provinceId} });
-      checkedProvinces = _.filter(checkedProvinces, function(provinceId){return provinceId;});
-      var checkedProvinceData = _.map(checkedProvinces, function(provinceId){
-        return {"province_id":provinceId, "province_name": vm.provinceIdNameMap[provinceId]};
+      var checkedProvinces = _.map(vm.provinceCheckStatus, function (checked, provinceId) {
+        if (checked) {
+          return provinceId
+        }
+      });
+      checkedProvinces = _.filter(checkedProvinces, function (provinceId) {
+        return provinceId;
+      });
+      var checkedProvinceData = _.map(checkedProvinces, function (provinceId) {
+        return {"province_id": provinceId, "province_name": vm.provinceIdNameMap[provinceId]};
       });
       vm.currentDeliveryTemplate['regions'] = checkedProvinceData;
     }
 
-    function resetProvinceAreaCheckStatus(){
+    function resetProvinceAreaCheckStatus() {
       vm.areaCheckStatus = {
         "1": false,
         "2": false,
@@ -658,7 +672,7 @@
       };
     }
 
-    function setAreaCheckStatus(areaId){
+    function setAreaCheckStatus(areaId) {
       var areaChildProvinces = vm.provinceData[areaId];
       var provinceIds = _.keys(areaChildProvinces);
       var checkStatusResult = _.reduce(provinceIds, function (memo, provinceId) {
@@ -681,7 +695,7 @@
       });
     }
 
-    function validateDeliveryTemplateData(deliveryTemplates){
+    function validateDeliveryTemplateData(deliveryTemplates) {
       for (var i = 0; i < deliveryTemplates.length; i++) {
         var deliveryTemplateItem = deliveryTemplates[i];
         if (deliveryTemplateItem['is_default'] == 0) {
