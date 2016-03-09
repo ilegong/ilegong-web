@@ -409,7 +409,7 @@ class WesharesController extends AppController {
     public function pay_order_add($orderId) {
         $this->layout = 'weshare_bootstrap';
         $cart_info = $this->WeshareBuy->get_cart_name_and_num($orderId);
-        $order_info = $this->WeshareBuy->get_order_info($orderId);
+        $order_info = $this->Orders->get_order_info($orderId);
         if ($order_info['status'] == ORDER_STATUS_PAID) {
             $this->redirect('/weshares/view/' . $order_info['member_id']);
             return;

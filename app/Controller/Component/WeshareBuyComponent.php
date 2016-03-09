@@ -19,7 +19,7 @@ class WeshareBuyComponent extends Component {
 
     var $query_comment_fields = array('id', 'username', 'user_id', 'data_id', 'type', 'body', 'order_id', 'parent_id');
 
-    var $components = array('Session', 'Weixin', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'RedisQueue');
+    var $components = array('Session', 'Weixin', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'RedisQueue', 'Orders');
 
     var $query_share_fields = array('id', 'title', 'images', 'status', 'creator', 'created', 'settlement', 'type', 'description');
 
@@ -1743,7 +1743,7 @@ class WeshareBuyComponent extends Component {
         $title = $uid_name_map[$reply_id] . '你好，' . $uid_name_map[$comment_uid] . '对你说：' . $content;
         $desc = '分享，让生活更美。点击查看。';
         $detail_url = $this->get_weshares_detail_url($share_id) . '?comment_order_id=' . $order_id . '&reply_comment_id=' . $comment_id;
-        $order_info = $this->get_order_info($order_id);
+        $order_info = $this->Orders->get_order_info($order_id);
         $order_id = $order_info['Order']['id'];
         $order_date = $order_info['Order']['created'];
         $open_id_map = $this->get_open_ids(array($reply_id));
@@ -1759,7 +1759,7 @@ class WeshareBuyComponent extends Component {
      */
     public function send_shareed_offer_notify($order_id, $weshare_id, $comment_id) {
         //send to seller
-        $order_info = $this->get_order_info($order_id);
+        $order_info = $this->Orders->get_order_info($order_id);
         $order_creator = $order_info['Order']['creator'];
         $share_info = $this->get_weshare_info($weshare_id);
         $share_creator = $share_info['creator'];
@@ -1784,7 +1784,7 @@ class WeshareBuyComponent extends Component {
      * 标记评论
      */
     public function send_comment_notify($order_id, $weshare_id, $comment_content, $comment_id = 0) {
-        $order_info = $this->get_order_info($order_id);
+        $order_info = $this->Orders->get_order_info($order_id);
         $order_creator = $order_info['Order']['creator'];
         $share_info = $this->get_weshare_info($weshare_id);
         $share_creator = $share_info['creator'];
@@ -1812,7 +1812,7 @@ class WeshareBuyComponent extends Component {
      * 通知分享者收到了评论
      */
     public function send_comment_notify_buyer($order_id, $weshare_id) {
-        $order_info = $this->get_order_info($order_id);
+        $order_info = $this->Orders->get_order_info($order_id);
         $order_creator = $order_info['Order']['creator'];
         $share_info = $this->get_weshare_info($weshare_id);
         $share_creator = $share_info['creator'];
@@ -1840,7 +1840,7 @@ class WeshareBuyComponent extends Component {
      * 收到评论回复通知
      */
     public function send_comment_reply_notify($order_id, $weshare_id, $reply_content, $comment_id = 0) {
-        $order_info = $this->get_order_info($order_id);
+        $order_info = $this->Orders->get_order_info($order_id);
         $order_creator = $order_info['Order']['creator'];
         $share_info = $this->get_weshare_info($weshare_id);
         $share_creator = $share_info['Order']['creator'];
