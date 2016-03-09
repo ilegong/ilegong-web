@@ -54,7 +54,15 @@
         {{template Elements/sharer_side_bar}}
     </nav>
     <div id="page-wrapper">
-        {{$content_for_layout}}
+      {{if ($errormsg = $this->Session->flash())}}
+      <div role="alert" class="alert alert-warning alert-dismissible fade in">
+        <button aria-label="Close" data-dismiss="alert" class="close" type="button">
+          <span aria-hidden="true">×</span>
+        </button>
+        <strong>错误</strong><br /> {{$errormsg}}
+      </div>
+      {{/if}}
+      {{$content_for_layout}}
     </div>
     <!-- /#page-wrapper -->
 </div>

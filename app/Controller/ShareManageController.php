@@ -286,6 +286,12 @@ class ShareManageController extends AppController
 
     public function pool_share_copy($share_id)
     {
+        // 在开始克隆之前, 要加一点判断.
+        if (!$this->ShareUtil->check_delivery($share_id)) {
+            $this->Session->setFlash("没有相应的物流模板数据或者物流模板数据错误, 请检查", null);
+            $this->redirect('/share_manage/search_shares?id=' . $share_id);
+        }
+
         $uid = $this->currentUser['id'];
         // 先克隆初来一份Wesahres表行
         $nshare = $this->ShareUtil->cloneShare($share_id, null, null, null, POOL_SHARE_TYPE, WESHARE_DELETE_STATUS, 0);

@@ -2099,4 +2099,69 @@ class ShareUtilComponent extends Component
         return $shareInfo;
     }
 
+    public function check_delivery($sid)
+    {
+        $shipSettingModel = ClassRegistry::init('WeshareShipSetting');
+        $shipSettings = $shipSettingModel->find('all', [
+            'conditions' => [
+                'weshare_id' => $sid,
+                'status' => 1,
+            ]
+        ]);
+
+        if (!$shipSettings) {
+            return false;
+        }
+
+        $self_ziti = false;
+        $kuai_di = false;
+
+        $methods = [];
+        foreach ($shipSettings as $item) {
+            $ship = $item['WeshareShipSetting'];
+            switch($ship['tag']) {
+                case 'self_ziti':
+                    $self_ziti = $this->check_ziti($sid);
+                    $methods[] = 'self_ziti';
+                    break;
+                case 'kuai_di':
+                    $kuai_di = $this->check_kuaidi($sid);
+                    $methods[] = 'kuai_di';
+                    break;
+            }
+        }
+
+        foreach ($methods as $method) {
+            if (!in_array($method, ['self_ziti', 'kuai_di'])) {
+                $$method = true;
+            }
+        }
+        return $self_ziti && $kuai_di;
+    }
+
+
+    private function check_ziti($sid)
+    {
+        $weshareAddresseModel = ClassRegistry::init('WeshareAddresse');
+        $weshareAddresse = $weshareAddresseModel->find('all', [
+            'conditions' => [
+                'weshare_id' => $sid
+            ]
+        ]);
+
+        return $weshareAddresse;
+    }
+
+
+    private function check_kuaidi($sid)
+    {
+        $weshareDeliveryModel = ClassRegistry::init('WeshareDeliveryTemplate');
+        $weshareDeliveryTemplates = $weshareDeliveryModel->find('all', [
+            'conditions' => [
+                'weshare_id' => $sid
+            ]
+        ]);
+
+        return $weshareDeliveryTemplates;
+    }
 }
