@@ -18,41 +18,72 @@
                     <div class="well">
                         <h4>操作说明</h4>
 
-                        <p>输入分享ID，先查询，查询到结果可以操作。{{if !empty($q_share_id)}}&nbsp;&nbsp;&nbsp;<a
-                                href="/weshares/order_export/{{$q_share_id}}" type="button"
-                                class="btn btn-outline btn-primary"
-                                >导出待发货订单</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="/weshares/order_export/{{$q_share_id}}/0"
-                                                                       type="button"
-                                                                       class="btn btn-outline btn-success">导出全部订单</a>&nbsp;&nbsp;&nbsp;&nbsp;<a
-                                href="/weshares/view/{{$q_share_id}}">查看&nbsp;&nbsp;{{$current_share['title']}}</a>{{/if}}
+                        <p>输入分享ID，先查询，查询到结果可以操作。{{if !empty($q_share_id)}}&nbsp;&nbsp;&nbsp;<a href="/share_manage/order_export/{{$share_id}}/{{$q_share_id}}" type="button" class="btn btn-outline btn-primary" >导出待发货订单</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="/share_manage/order_export/{{$share_id}}/{{$q_share_id}}/0" type="button" class="btn btn-outline btn-success">导出全部订单</a>{{/if}}
                         </p>
                     </div>
                     <div class="well">
                         <form method="post" action="/share_manage/pool_product_order">
-                            <div class="row">
-                                <div class="col-sm-5">
-                                    <select class="form-control" id="pool-share-id" name="share_id" data-init-val="{{$share_id}}">
-                                        <option>选择产品</option>
-                                        {{loop $all_pool_products $product}}
-                                        <option value="{{$product['share_id']}}" {{if $product["share_id"]==$share_id}}selected{{/if}}>{{$product['share_name']}}</option>
-                                        {{/loop}}
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    {{loop $child_shares $child_share_id $child_share}}
-                                    <label class="radio-inline">
-                                        <input type="radio" name="q_share_id" value="{{$child_share_id}}" {{if $child_share_id==$q_share_id}}checked{{/if}}>
-                                        {{$user_data[$child_share['creator']]['nickname']}}{{if $child_share['type'] == POOL_SHARE_BUY_TYPE}}【渠道价购买链接】{{/if}}
-                                        <strong>【{{$child_share_id}}】</strong>
-                                    </label>
-                                    {{/loop}}
-                                </div>
-                            </div>
+<div class="row">
+    <div class="col-sm-7">
+        <select class="form-control" id="pool-share-id" name="share_id" data-init-val="{{$share_id}}" autocomplete='off'>
+            <option value='-1'>选择产品</option>
+            {{loop $all_pool_products $product}}
+            <option value="{{$product['share_id']}}" {{if $product["share_id"]==$share_id}}selected{{/if}}>{{$product['share_name']}}</option>
+            {{/loop}}
+        </select>
+    </div>
+    <div class="col-sm-2">
+        <select class="form-control" id="pool-share-users" name="q_share_id">
+            <option value='-1'>全部</option>
+            {{loop $child_shares $child_share_id $child_share}}
+                <option value="{{$child_share_id}}" {{if $child_share_id==$q_share_id}}selected{{/if}}>
+                {{$user_data[$child_share['creator']]['nickname']}}
+                {{if $child_share['type'] == POOL_SHARE_BUY_TYPE}}
+                【渠道价购买链接】
+                {{/if}}
+                <strong>【{{$child_share_id}}】</strong>
+            {{/loop}}
+        </select>
+    </div>
+</div>
                             <button type="submit" class="btn btn-primary">查询</button>
                         </form>
                     </div>
+
+
+                    <script>
+$('#pool-share-id').on('change', function () {
+  var pid = $(this).val();
+  if (pid == -1) {
+    return false;
+  }
+  $.ajax({
+    url: '/share_manage/pool_product_fork_order',
+    type: 'post',
+    data: {share_id: pid},
+    dataType: 'json',
+    success: function (data) {
+        var innerHtml = "<option value='-1'>全部</option>";
+        innerHtml += data.map(function (item, key){
+            var str = "";
+            str = "<option value='" + item.id + "'>" + item.nickname;
+                if (item.type == 4) {
+                    str += "【渠道价购买链接】";
+                }
+            str += "【" + item.id + "】</option>";
+
+            return str;
+        });
+        $('#pool-share-users').html(innerHtml);
+    },
+    error: function (data) {
+        console.error(data);
+    }
+  });
+});
+                    </script>
+
+
                     {{if !empty($orders)}}
                     <div class="dataTable_wrapper">
                         <table class="table table-striped table-bordered table-hover" id="share-order-table">
