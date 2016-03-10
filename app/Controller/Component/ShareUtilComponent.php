@@ -1902,7 +1902,7 @@ class ShareUtilComponent extends Component
         $weshareInfo['products'] = $weshareProducts;
         $weshareInfo['creator'] = $creatorInfo;
         $weshareInfo['ship_type'] = $weshareShipSettings;
-        $weshareInfo['images'] = array_filter(explode('|', $weshareInfo['images']));
+        $weshareInfo['images'] = array_map('map_share_img', array_filter(explode('|', $weshareInfo['images'])));
         $weshareInfo['proxy_rebate_percent'] = $proxy_share_percent['ProxyRebatePercent'];
         $weshareInfo['deliveryTemplate'] = $this->DeliveryTemplate->get_edit_delivery_templates($weshare_id);
         return $weshareInfo;

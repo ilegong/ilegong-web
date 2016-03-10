@@ -2458,6 +2458,13 @@ function is_super_share_manager($uid) {
     return in_array($uid, $super_manager);
 }
 
+function map_share_img($item){
+    if (!strpos($item, 'http')) {
+        return 'http://' . WX_HOST . $item;
+    }
+    return $item;
+}
+
 /**
  * 遍历对象转换为数组
  * @param object $obj
