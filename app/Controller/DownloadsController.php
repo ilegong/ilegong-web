@@ -39,7 +39,7 @@ class DownloadsController extends AppController{
         $this->log("download file from wx url is :" . $source);
         //download as a temp file
         $dl = new CurlDownloader($source);
-        $size = $dl->download();
+        $dl->download();
         //is not error output
         if ($dl->getFileName() != 'remote.out') {
             if (defined('SAE_MYSQL_DB')) {
@@ -49,7 +49,6 @@ class DownloadsController extends AppController{
                     //retry
                     $download_url = $stor->upload(SAE_STORAGE_UPLOAD_DOMAIN_NAME, $dl->getUploadFileName(), $dl->getFileName());
                 }
-                unlink($dl->getFileName());
                 $this->log('handle_file_upload: final file=' . $download_url . ', $file-path=' . $dl->getFileName() . ', $uploaded_file=' . $dl->getFileName());
                 if (!$download_url) {
                     $this->log('upload file to sae errMsg');
@@ -57,9 +56,9 @@ class DownloadsController extends AppController{
             } else {
                 copy($dl->getFileName(), WWW_ROOT . 'files/wx-download/' . $dl->getUploadFileName());
                 $download_url = '/files/wx-download/' . $dl->getUploadFileName();
-                //delete temp file
-                unlink($dl->getFileName());
             }
+            //delete temp file
+            unlink($dl->getFileName());
             echo json_encode(array(
                 'success' => true,
                 'download_url' => $download_url

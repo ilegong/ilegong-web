@@ -1786,9 +1786,9 @@ function download_photo_from_wx($url) {
         } else {
             copy($dl->getFileName(), WWW_ROOT . 'files/wx-download/' . $dl->getUploadFileName());
             $download_url = '/files/wx-download/' . $dl->getUploadFileName();
-            //delete temp file
-            unlink($dl->getFileName());
         }
+        //delete temp file
+        unlink($dl->getFileName());
     }
     return $download_url;
 }
