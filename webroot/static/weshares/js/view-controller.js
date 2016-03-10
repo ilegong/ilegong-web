@@ -3658,7 +3658,7 @@
     var vm = this;
     vm.staticFilePath = staticFilePath;
     vm.showShareDetailView = true;
-    vm.subShareTipTxt = '+关注';
+    //vm.subShareTipTxt = '+关注';
     vm.faqTipText = '私信';
     vm.showUnReadMark = false;
     vm.readMoreBtnText = '全文';
@@ -3795,6 +3795,7 @@
     vm.loadCityData = loadCityData;
     vm.loadCountyData = loadCounty;
     vm.calculateShipFee = calculateShipFee;
+    vm.unSubSharer = unSubSharer;
     vm.childShareDetail = null;
     vm.currentUserOrderCount = 0;
     vm.totalBuyCount = 0;
@@ -4731,6 +4732,23 @@
       }
     }
 
+    function unSubSharer() {
+      if (vm.hasProcessSubSharer) {
+        return;
+      }
+      $http({
+        method: 'GET',
+        url: '/weshares/unsubscribe_sharer/' + vm.weshare.creator.id + '/' + vm.currentUser.id
+      }).success(function (data) {
+        vm.hasProcessSubSharer = false;
+        if (data['success']) {
+          vm.userSubStatus = !vm.userSubStatus;
+        }
+      }).error(function (data) {
+        vm.hasProcessSubSharer = true;
+      });
+    }
+
     function subSharer() {
       if (vm.hasProcessSubSharer) {
         return;
@@ -4740,9 +4758,10 @@
         url: '/weshares/subscribe_sharer/' + vm.weshare.creator.id + '/' + vm.currentUser.id + '/1/' + vm.weshare.id + '.json'
       }).success(function (data) {
         // With the data succesfully returned, call our callback
+        vm.hasProcessSubSharer = false;
         if (data['success']) {
-          vm.hasProcessSubSharer = true;
-          vm.subShareTipTxt = '已关注';
+          //vm.subShareTipTxt = '已关注';
+          vm.userSubStatus = !vm.userSubStatus;
         } else {
           alert('请先关注朋友说微信公众号！');
           window.location.href = "https://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=403992659&idx=1&sn=714a1a5f0bb4940f895e60f2f3995544";
