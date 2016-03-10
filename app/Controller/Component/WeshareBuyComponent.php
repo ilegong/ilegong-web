@@ -393,7 +393,6 @@ class WeshareBuyComponent extends Component {
             $reply_comments = Hash::combine($reply_comments, '{n}.Comment.id', '{n}.Comment');
             $commentReplies = $commentReplyM->find('all', array(
                 'conditions' => array(
-                    'data_id' => $comments[0]['Comment']['data_id'],
                     'data_type' => COMMENT_SHARE_TYPE,
                     'OR' => array(
                         'comment_id' => $comment_ids,
