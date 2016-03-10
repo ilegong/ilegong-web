@@ -4259,18 +4259,19 @@
       if (!vm.commentData && !vm.shareOrder['orderCommentReplies']) {
         return false;
       }
-      var allReplies = vm.commentData['comment_replies'];
-      if (!allReplies) {
-        allReplies = vm.shareOrder['orderCommentReplies'];
+      var selfAllReplies = vm.commentData['comment_replies'];
+      if (!selfAllReplies) {
+        if(selfAllReplies[comment_id]){
+          return true
+        }
       }
-      if (!allReplies) {
-        return false;
+      var referAllReplies = vm.shareOrder['orderCommentReplies'];
+      if (!referAllReplies) {
+        if(referAllReplies[comment_id]){
+          return true;
+        }
       }
-      var replies = allReplies[comment_id];
-      if (!replies || replies.length == 0) {
-        return false;
-      }
-      return true;
+      return false;;
     }
 
     function getRecommendInfo(order) {
