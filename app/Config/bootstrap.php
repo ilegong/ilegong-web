@@ -2459,10 +2459,20 @@ function is_super_share_manager($uid) {
 }
 
 function map_share_img($item){
-//    if (!strpos($item, 'http')) {
-//        return 'http://' . WX_HOST . $item;
-//    }
+    if (!startsWith($item, 'http')) {
+        return 'http://' . WX_HOST . $item;
+    }
     return $item;
+}
+
+function startsWith($haystack, $needle) {
+    // search backwards starting from haystack length characters from the end
+    return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== false;
+}
+
+function endsWith($haystack, $needle) {
+    // search forward starting from end minus needle length characters
+    return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== false);
 }
 
 /**
