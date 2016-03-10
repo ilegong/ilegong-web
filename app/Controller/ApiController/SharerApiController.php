@@ -46,6 +46,17 @@ class SharerApiController extends AppController{
     }
 
     /**
+     * 删除分享
+     * @param $weshare_id
+     */
+    public function delete_share($weshare_id){
+        $uid = $this->currentUser['id'];
+        $this->Weshares->delete_weshare($uid, $weshare_id);
+        echo json_encode(array('success' => true));
+        return;
+    }
+
+    /**
      * @param $shareId
      * 获取分享订单
      */
