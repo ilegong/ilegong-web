@@ -37,7 +37,7 @@ class LocationsController extends AppController
         $this->autoRender = false;
         $cacheData = Cache::read(self::$PROVINCES_CACHE_KEY);
         if(empty($cacheData)){
-            $params = array('conditions' => array('parent_id between ? and ?'=>array(1, 10)), 'fields' => array('id', 'name', 'parent_id'));
+            $params = array('conditions' => array('parent_id between ? and ?'=>array(1, 10)), 'fields' => array('id', 'name', 'parent_id'), 'order' => array('parent_id ASC'));
             $provinces = $this->Location->find('list', $params);
             $cacheData = json_encode($provinces);
             Cache::write(self::$PROVINCES_CACHE_KEY, $cacheData);
