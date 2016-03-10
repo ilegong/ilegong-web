@@ -1732,7 +1732,7 @@ function get_user_info_from_wx($open_id) {
     return json_decode($content, $content);
 }
 
-
+// Priority: small avatar, image
 function get_user_avatar($user)
 {
     if (empty($user)) {
@@ -1742,7 +1742,7 @@ function get_user_avatar($user)
         $user = $user['User'];
     }
     if ($user['avatar']) {
-        return SAE_STATIC_FILE_PATH . '/' . $user['avatar'];
+        return SAE_STATIC_FILE_PATH . '/' . str_replace('avatar/', 'avatar/s/', $user['avatar']);
     }
     return $user['image'];
 }
