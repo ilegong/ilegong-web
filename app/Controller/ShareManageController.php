@@ -584,6 +584,13 @@ class ShareManageController extends AppController
         }
 
         $orders = $this->ShareManage->get_share_orders($shareId);
+        /*
+        $user_ids = Hash::extract($orders, '{n}.Order.creator');
+        $user_data = $this->ShareManage->get_users_data($user_ids);
+        $user_data = Hash::combine($user_data, '{n}.User.id', '{n}.User');
+        $share_data = $this->WeshareBuy->get_weshare_info($share_id);
+        */
+
         $this->set('orders', $orders);
     }
 
