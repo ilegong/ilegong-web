@@ -4260,13 +4260,13 @@
         return false;
       }
       var selfAllReplies = vm.commentData['comment_replies'];
-      if (!selfAllReplies) {
+      if (selfAllReplies) {
         if(selfAllReplies[comment_id]){
           return true
         }
       }
       var referAllReplies = vm.shareOrder['orderCommentReplies'];
-      if (!referAllReplies) {
+      if (referAllReplies) {
         if(referAllReplies[comment_id]){
           return true;
         }
