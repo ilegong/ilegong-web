@@ -204,8 +204,8 @@ class SharerApiController extends AppController{
     public function order_refund(){
         $uid = $this->currentUser['id'];
         $postData  = $this->get_post_raw_data();
-        $shareId = $postData['shareId'];
-        $orderId = $postData['orderId'];
+        $shareId = $postData['share_id'];
+        $orderId = $postData['order_id'];
         $refundMoney = $postData['refundMoney'];
         $refundMark = $postData['refundMark'];
         $result = $this->ShareUtil->order_refund($shareId, $uid, $orderId, $refundMoney, $refundMark);
