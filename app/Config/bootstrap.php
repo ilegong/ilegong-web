@@ -2459,9 +2459,9 @@ function is_super_share_manager($uid) {
 }
 
 function map_share_img($item){
-    if (!strpos($item, 'http')) {
-        return 'http://' . WX_HOST . $item;
-    }
+//    if (!strpos($item, 'http')) {
+//        return 'http://' . WX_HOST . $item;
+//    }
     return $item;
 }
 
