@@ -2110,6 +2110,7 @@ class ShareUtilComponent extends Component
         ]);
 
         if (!$shipSettings) {
+            $this->log('Failed to create pool product with weshare '.$sid.': ship setting is empty', LOG_WARNING);
             return false;
         }
 

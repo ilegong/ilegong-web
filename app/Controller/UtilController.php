@@ -351,7 +351,7 @@ class UtilController extends AppController {
                 //when user many oauth bind
                 $this->UserRelation->updateAll(array('deleted' => 0), array('user_id' => $user_id, 'follow_id' => $follow_user_id, 'type' => 'Transfer'));
                 //default header
-                $download_url = 'http://51daifan.sinaapp.com/img/default_user_icon.jpg';
+                $download_url = 'http://static.tongshijia.com/avatar/default.jpg';
                 if (!empty($photo)) {
                     $this->log('download wx user photo ' . $photo);
                     $download_url = download_photo_from_wx($photo);

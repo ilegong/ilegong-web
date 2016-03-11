@@ -1,6 +1,6 @@
 <ul class="clearfix header margin-bottom-12">
     <li>
-        <img lazy-src="{{vm.weshare.creator.image|| vm.staticFilePath + '/static/img/default_user_icon.jpg'}}" ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/>
+        <img lazy-src="{{vm.weshare.creator.image|| vm.staticFilePath + '/avatar/s/default.jpg'}}" ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/>
         <br>
         <a ng-if="vm.currentUser" class="faq-sharer-btn" ng-click="vm.redirectFaq()" ng-bind="::vm.faqTipText">私信</a>
     </li>
