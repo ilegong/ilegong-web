@@ -173,6 +173,49 @@ function send_weixin_message($post_data, $logObj = null) {
     return false;
 }
 
+function convert_to_short_url($url){
+    $tries = 2;
+    $wxOauthM = ClassRegistry::init('WxOauth');
+    $wx_curl_option_defaults = array(
+        CURLOPT_HEADER => false,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 30
+    );
+    $post_data = [
+        "action" => "long2short",
+        "long_url" => $url
+    ];
+    while ($tries-- > 0) {
+        $access_token = $wxOauthM->get_base_access_token();
+        if (!empty($access_token)) {
+            $curl = curl_init();
+            $options = array(
+                CURLOPT_URL => 'https://api.weixin.qq.com/cgi-bin/shorturl?access_token=' . $access_token,
+                CURLOPT_CUSTOMREQUEST => 'POST', // GET POST PUT PATCH DELETE HEAD OPTIONS
+            );
+            if (!empty($post_data)) {
+                $options[CURLOPT_POSTFIELDS] = json_encode($post_data);
+            }
+            curl_setopt_array($curl, ($options + $wx_curl_option_defaults));
+            $json = curl_exec($curl);
+            curl_close($curl);
+            $output = json_decode($json, true);
+            if (!empty($logObj)) {
+                $logObj->log("post weixin api send template message output: " . json_encode($output), LOG_DEBUG);
+            }
+            if ($output['errcode'] == 0) {
+                return $output['short_url'];
+            } else {
+                if (!$wxOauthM->should_retry_for_failed_token($output)) {
+                    return false;
+                };
+            }
+            return false;
+        }
+    }
+    return false;
+}
+
 
 function get_tuan_msg_element($tuan_buy_id,$flag=true){
     $tuanBuyingM = ClassRegistry::init('TuanBuying');
