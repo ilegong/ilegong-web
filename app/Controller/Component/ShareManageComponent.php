@@ -245,19 +245,52 @@ class ShareManageComponent extends Component
         return $tags;
     }
 
-
-    public function get_share_orders($share_id)
+    /**
+     * @param $share_id
+     * @param int $only_paid
+     * @return mixed
+     * 获取分享的订单
+     */
+    public function get_share_orders($share_id, $only_paid = 0)
     {
         $OrderM = ClassRegistry::init('Order');
+        $q_order_status = $only_paid == 1 ? [ORDER_STATUS_PAID] : [ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_COMMENT, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_COMMENT, ORDER_STATUS_DONE];
         $orders = $OrderM->find('all', array(
             'conditions' => array(
                 'type' => ORDER_TYPE_WESHARE_BUY,
                 'member_id' => $share_id,
-                'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_COMMENT, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_COMMENT, ORDER_STATUS_DONE),
+                'status' => $q_order_status,
             ),
             'limit' => 2000
         ));
         return $orders;
+    }
+
+    /**
+     * @param $order_ids
+     * @return array
+     * 获取订单和购物车map
+     */
+    public function get_order_cart_map($order_ids){
+        if(empty($order_ids)){
+            return [];
+        }
+        $cartM = ClassRegistry::init('Cart');
+        $carts = $cartM->find('all', [
+            'conditions' => [
+                'order_id' => $order_ids
+            ],
+            'fields' => ['id', 'order_id', 'num', 'name']
+        ]);
+        $result = [];
+        foreach($carts as $cart_item){
+            $order_id = $cart_item['Cart']['order_id'];
+            if(!isset($result[$order_id])){
+                $result[$order_id] = [];
+            }
+            $result[$order_id][] = $cart_item['Cart'];
+        }
+        return $result;
     }
 
     public function get_users_data($user_ids)

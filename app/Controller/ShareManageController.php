@@ -566,32 +566,22 @@ class ShareManageController extends AppController
     /**
      * @param $weshareId
      * @param $shareId
-     * @param $only_paid
+     * @param $only_paid //是否只导出待发货
      * export order to excel
      * 是否只导出待发货的
      */
     public function order_export($weshareId, $shareId, $only_paid = 1) {
         $this->layout = null;
-        if ($only_paid == 1) {
-            $export_paid_order = true;
-        } else {
-            $export_paid_order = false;
-        }
         if ($shareId == -1) {
             // export all orders.
             $sharePoolProductM = ClassRegistry::init('SharePoolProduct');
             $shareId = $sharePoolProductM->get_all_fork_shares($weshareId);
         }
-
-        $orders = $this->ShareManage->get_share_orders($shareId);
-        /*
-        $user_ids = Hash::extract($orders, '{n}.Order.creator');
-        $user_data = $this->ShareManage->get_users_data($user_ids);
-        $user_data = Hash::combine($user_data, '{n}.User.id', '{n}.User');
-        $share_data = $this->WeshareBuy->get_weshare_info($share_id);
-        */
-
+        $orders = $this->ShareManage->get_share_orders($shareId, $only_paid);
+        $order_ids = Hash::extract($orders, '{n}.Order.id');
+        $order_cart_map = $this->ShareManage->get_order_cart_map($order_ids);
         $this->set('orders', $orders);
+        $this->set('order_cart_map', $order_cart_map);
     }
 
     /**
