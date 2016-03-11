@@ -31,7 +31,6 @@
                         <thead>
                             <tr>
                                 <th>日期</th>
-                                <th>登录用户数</th>
                                 <th>注册用户数</th>
                                 <th>总购买人数</th>
                                 <th>新购买人数</th>
@@ -41,7 +40,6 @@
                          {{loop $date_ranges $date_item}}
                             <tr>
                                 <td>{{$date_item}}</td>
-                                <td>{{$login_data[$date_item] ? $login_data[$date_item] : 0}}</td>
                                 <td>{{$register_data[$date_item] ? $register_data[$date_item] : 0}}</td>
                                 <td>{{$buy_data[$date_item] ? $buy_data[$date_item] : 0}}</td>
                                 <td>{{$new_user_buy_data[$date_item] ? $new_user_buy_data[$date_item] : 0}}</td>

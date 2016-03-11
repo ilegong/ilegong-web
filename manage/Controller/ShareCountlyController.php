@@ -33,17 +33,17 @@ class ShareCountlyController extends AppController
             $end_date = date('Y-m-d', strtotime('-1 day'));
         }
         $register_data = $userM->query("SELECT count(id) as l_count, date(created) as q_date FROM cake_users WHERE date(created) between '" . $start_date . "' and '" . $end_date . "' group by date(created)");
-        $login_data = $userM->query("SELECT count(id) as r_count, date(last_login) as q_date FROM cake_users where date(last_login) between '" . $start_date . "' and '" . $end_date . "' group by date(created)");
+        //$login_data = $userM->query("SELECT count(id) as r_count, date(last_login) as q_date FROM cake_users where date(last_login) between '" . $start_date . "' and '" . $end_date . "' group by date(created)");
         $buy_data = $orderM->query("SELECT count(DISTINCT creator) as u_count, date(created) as q_date FROM cake_orders WHERE type=9 and status > 0 and date(created) between '" . $start_date . "' and '" . $end_date . "' group by date(created)");
         $new_user_buy_data = $orderM->query("SELECT count(id) as o_count,date(created) as q_date FROM cake_orders as t_o where type=9 and status > 0 and t_o.creator in (select t_u.id from cake_users as t_u where date(t_u.created)=date(t_o.created)) and date(t_o.created) between '" . $start_date . "' and '" . $end_date . "' group by date(t_o.created)");
         $register_data = Hash::combine($register_data, '{n}.0.q_date', '{n}.0.l_count');
-        $login_data = Hash::combine($login_data, '{n}.0.q_date', '{n}.0.r_count');
+        //$login_data = Hash::combine($login_data, '{n}.0.q_date', '{n}.0.r_count');
         $buy_data = Hash::combine($buy_data, '{n}.0.q_date', '{n}.0.u_count');
         $new_user_buy_data = Hash::combine($new_user_buy_data, '{n}.0.q_date', '{n}.0.o_count');
         $this->set('start_date', $start_date);
         $this->set('end_date', $end_date);
         $this->set('register_data', $register_data);
-        $this->set('login_data', $login_data);
+        //$this->set('login_data', $login_data);
         $this->set('buy_data', $buy_data);
         $this->set('new_user_buy_data', $new_user_buy_data);
         $this->set('date_ranges', $this->createDateRange($start_date, $end_date));
