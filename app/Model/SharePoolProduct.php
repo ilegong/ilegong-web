@@ -116,6 +116,61 @@ class SharePoolProduct extends AppModel {
         return $shares;
     }
 
+    public function get_all_fork_shares($weshareId)
+    {
+        $data = $this->get_fork_share_info_with_username($weshareId);
+        $ret = [];
+        foreach ($data as $v) {
+            $ret[] = $v['id'];
+        }
+
+        return $ret;
+    }
+
+    /**
+     * @param $share_id
+     * @return mixed
+     * 获取团长从产品池中分享出去所有的分享(带用户名版本)
+     */
+    public function get_fork_share_info_with_username($share_id)
+    {
+        $weshareM = ClassRegistry::init('Weshare');
+        $shares = $weshareM->find('all', [
+            'conditions' => [
+                'Weshare.refer_share_id' => $share_id,
+                'not' => ['Weshare.type' => POOL_SHARE_TYPE]
+            ],
+            'joins' => [
+                [
+                    'table' => 'users',
+                    'alias' => 'Users',
+                    'conditions' => [
+                        'Weshare.creator = Users.id',
+                    ],
+                ]
+            ],
+            'fields' => [
+                'Weshare.id',
+                'Weshare.creator',
+                'Weshare.status',
+                'Weshare.type',
+                'Users.nickname',
+            ],
+        ]);
+
+        $data = [];
+        foreach ($shares as $v) {
+            $tmp = [];
+            $tmp['id'] = $v['Weshare']['id'];
+            $tmp['creator'] = $v['Weshare']['creator'];
+            $tmp['status'] = $v['Weshare']['status'];
+            $tmp['type'] = $v['Weshare']['type'];
+            $tmp['nickname'] = $v['Users']['nickname'];
+            $data[] = $tmp;
+        }
+        return $data;
+    }
+
     //产品和试吃的对应关系
     var $product_buy_map = [];
 

@@ -546,6 +546,45 @@ class ShareManageController extends AppController
     }
 
     /**
+     * 产品池中fork产品的订单
+     */
+    public function pool_product_fork_order()
+    {
+        if ($this->request->is('ajax')) {
+            $share_id = $_REQUEST['share_id'];
+            $sharePoolProductM = ClassRegistry::init('SharePoolProduct');
+            $all_fork_shares = $sharePoolProductM->get_fork_share_info_with_username($share_id);
+            // print_r($all_fork_shares);die();
+            header('Content-type: application/json');
+            echo json_encode($all_fork_shares);
+            exit();
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @param $weshareId
+     * @param $shareId
+     * @param $only_paid //是否只导出待发货
+     * export order to excel
+     * 是否只导出待发货的
+     */
+    public function order_export($weshareId, $shareId, $only_paid = 1) {
+        $this->layout = null;
+        if ($shareId == -1) {
+            // export all orders.
+            $sharePoolProductM = ClassRegistry::init('SharePoolProduct');
+            $shareId = $sharePoolProductM->get_all_fork_shares($weshareId);
+        }
+        $orders = $this->ShareManage->get_share_orders($shareId, $only_paid);
+        $order_ids = Hash::extract($orders, '{n}.Order.id');
+        $order_cart_map = $this->ShareManage->get_order_cart_map($order_ids);
+        $this->set('orders', $orders);
+        $this->set('order_cart_map', $order_cart_map);
+    }
+
+    /**
      * 产品池中产品的订单
      */
     public function pool_product_order()
@@ -559,12 +598,15 @@ class ShareManageController extends AppController
             $all_fork_shares = $sharePoolProductM->get_fork_share_ids($share_id);
             if (!empty($all_fork_shares)) {
                 $all_fork_shares = Hash::combine($all_fork_shares, '{n}.Weshare.id', '{n}.Weshare');
-                $q_share_id = $_REQUEST['q_share_id'] ? $_REQUEST['q_share_id'] : key($all_fork_shares);
+                // 这里默认取来第一个, ID
+                // 循环, 遍历, 模板改一下, 以数组形式显示
+                // $q_share_id = $_REQUEST['q_share_id'] ? $_REQUEST['q_share_id'] : -1;
+                $q_share_id = ($_REQUEST['q_share_id'] == -1) ? array_keys($all_fork_shares) : $_REQUEST['q_share_id'];
                 $fork_share_creators = Hash::extract($all_fork_shares, '{n}.creator');
                 $this->set_share_order_data($q_share_id, $fork_share_creators);
                 $this->set('child_shares', $all_fork_shares);
-                $this->set('q_share_id', $q_share_id);
-                $this->set('current_share', $all_fork_shares[$q_share_id]);
+                $this->set('q_share_id', $_REQUEST['q_share_id']);
+                $this->set('current_share', $all_fork_shares[$_REQUEST['q_share_id']]);
                 $this->set('share_id', $share_id);
             }
         }
