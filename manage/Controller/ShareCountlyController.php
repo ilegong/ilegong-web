@@ -49,6 +49,32 @@ class ShareCountlyController extends AppController
         $this->set('date_ranges', $this->createDateRange($start_date, $end_date));
     }
 
+    public function admin_hottest_good(){
+        $q_date = date('Y-m-d', strtotime('-11 day'));
+        $orderM = ClassRegistry::init('Order');
+        $weshareM = ClassRegistry::init('Weshare');
+        $userM = ClassRegistry::init('User');
+        $data = $orderM->query("SELECT count(id) as s_c, member_id as weshare_id FROM cake_orders where date(created)>'" . $q_date . "' AND status > 0 and type=9 group by member_id order by s_c desc");
+        $this->set('data', $data);
+        $weshare_ids = array_unique(Hash::extract($data, '{n}.cake_orders.weshare_id'));
+        $weshares = $weshareM->find('all', [
+            'conditions' => [
+                'id' => $weshare_ids
+            ],
+            'fields' => ['id', 'title', 'creator']
+        ]);
+        $share_creators = array_unique(Hash::extract($weshares, '{n}.Weshare.creator'));
+        $weshares = Hash::combine($weshares, '{n}.Weshare.id', '{n}.Weshare');
+        $users = $userM->find('all',[
+            'conditions' => [
+                'id' => $share_creators
+            ],
+            'fields' => ['id', 'nickname']
+        ]);
+        $users = Hash::combine($users, '{n}.User.id', '{n}.User');
+        $this->set('users', $users);
+        $this->set('weshares', $weshares);
+    }
 
 
     /**
