@@ -225,6 +225,22 @@ class SharerApiController extends AppController{
     }
 
     /**
+     * @param $shareId
+     * @param int $only_paid
+     * 订单导出
+     */
+    public function order_export($shareId, $only_paid = 1){
+        $this->layout = null;
+        if ($only_paid == 1) {
+            $export_paid_order = true;
+        } else {
+            $export_paid_order = false;
+        }
+        $statics_data = $this->WeshareBuy->get_share_order_for_show($shareId, true, true, $export_paid_order);
+        $this->set($statics_data);
+    }
+
+    /**
      * @param $createShares
      * @return array
      * 过滤分类订单
