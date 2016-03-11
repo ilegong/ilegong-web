@@ -92,7 +92,7 @@
             if(rating==3||rating==2){
                 ratingStr="中评";
             }
-            var userPhoto='{{$this->Html->assetUrl("/img/default_user_icon.jpg")}}';
+            var userPhoto='http://static.tongshijia.com/avatar/s/default.jpg';
             if(item["userPhoto"]&&item["userPhoto"]!='null'){
                 userPhoto=item["userPhoto"].replace('thumb_s','thumb_m');
             }

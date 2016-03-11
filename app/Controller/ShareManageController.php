@@ -309,6 +309,8 @@ class ShareManageController extends AppController
         $model = ClassRegistry::init('PoolProduct');
         $res = $model->save($data);
         $id = $model->getLastInsertId();
+
+        $this->log('Copy share to pool product successfully, share id '.$share_id.', pool product id '.$id, LOG_INFO);
         $this->redirect("/shareManage/pool_product_edit/$id.html");
     }
 

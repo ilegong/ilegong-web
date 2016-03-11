@@ -57,7 +57,7 @@
             $.each(data, function (index, item) {
                 var comment = item['Comment'];
                 var template = '<dl class="clearfix">';
-                var defaultPhoto = '{{$this->Html->assetUrl("/img/default_user_icon.jpg")}}';
+                var defaultPhoto = 'http://static.tongshijia.com/avatar/s/default.jpg';
                 if(comment["userPhoto"]){
                     defaultPhoto = comment["userPhoto"].replace('thumb_s/','');
                 }
