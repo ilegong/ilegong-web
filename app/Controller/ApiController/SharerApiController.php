@@ -230,6 +230,7 @@ class SharerApiController extends AppController{
      * 订单导出
      */
     public function order_export($shareId, $only_paid = 1){
+        $this->autoRender = true;
         $this->layout = null;
         if ($only_paid == 1) {
             $export_paid_order = true;
