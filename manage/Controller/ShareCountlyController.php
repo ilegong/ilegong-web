@@ -21,6 +21,60 @@ class ShareCountlyController extends AppController
         $this->layout = 'bootstrap_layout';
     }
 
+    public function admin_app_statics(){
+        $userM = ClassRegistry::init('User');
+        $orderM = ClassRegistry::init('Order');
+        $start_date = $_REQUEST['start_date'];
+        if(empty($start_date)){
+            $start_date = date('Y-m-d', strtotime('-1 day'));
+        }
+        $end_date = $_REQUEST['end_date'];
+        if(empty($end_date)){
+            $end_date = date('Y-m-d', strtotime('-1 day'));
+        }
+        $register_data = $userM->query("SELECT count(id) as l_count, date(created) as q_date FROM cake_users WHERE date(created) between '" . $start_date . "' and '" . $end_date . "' group by date(created)");
+        $login_data = $userM->query("SELECT count(id) as r_count, date(last_login) as q_date FROM cake_users where date(last_login) between '" . $start_date . "' and '" . $end_date . "' group by date(created)");
+        $buy_data = $orderM->query("SELECT count(DISTINCT creator) as u_count, date(created) as q_date FROM cake_orders WHERE type=9 and status > 0 and date(created) between '" . $start_date . "' and '" . $end_date . "' group by date(created)");
+        $new_user_buy_data = $orderM->query("SELECT count(id) as o_count,date(created) as q_date FROM cake_orders as t_o where type=9 and status > 0 and t_o.creator in (select t_u.id from cake_users as t_u where date(t_u.created)=date(t_o.created)) and date(t_o.created) between '" . $start_date . "' and '" . $end_date . "' group by date(t_o.created)");
+        $register_data = Hash::combine($register_data, '{n}.0.q_date', '{n}.0.l_count');
+        $login_data = Hash::combine($login_data, '{n}.0.q_date', '{n}.0.r_count');
+        $buy_data = Hash::combine($buy_data, '{n}.0.q_date', '{n}.0.u_count');
+        $new_user_buy_data = Hash::combine($new_user_buy_data, '{n}.0.q_date', '{n}.0.o_count');
+        $this->set('start_date', $start_date);
+        $this->set('end_date', $end_date);
+        $this->set('register_data', $register_data);
+        $this->set('login_data', $login_data);
+        $this->set('buy_data', $buy_data);
+        $this->set('new_user_buy_data', $new_user_buy_data);
+        $this->set('date_ranges', $this->createDateRange($start_date, $end_date));
+    }
+
+
+
+    /**
+     * Returns every date between two dates as an array
+     * @param string $startDate the start of the date range
+     * @param string $endDate the end of the date range
+     * @param string $format DateTime format, default is Y-m-d
+     * @return array returns every date between $startDate and $endDate, formatted as "Y-m-d"
+     */
+    function createDateRange($startDate, $endDate, $format = "Y-m-d")
+    {
+        $range = [];
+        if ($startDate == $endDate) {
+            $range[] = $startDate;
+            return $range;
+        }
+        $begin = new DateTime($startDate);
+        $end = new DateTime($endDate);
+        $interval = new DateInterval('P1D'); // 1 Day
+        $dateRange = new DatePeriod($begin, $interval, $end);
+        foreach ($dateRange as $date) {
+            $range[] = $date->format($format);
+        }
+        return $range;
+    }
+
     public function admin_sharer_statics_detail()
     {
         $user_id = $_REQUEST['user_id'];
