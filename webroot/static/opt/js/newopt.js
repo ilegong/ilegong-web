@@ -217,7 +217,7 @@ $(document).ready(function () {
           '<li class="text1"><%this.title%></li>' +
           '<li class="text2"><%this.description%>......更多&gt;&gt;</li>' +
         '</ul>' +
-        '<img src="images/fenxiang.png" class="img fl">' +
+          '<img src="/static/opt/images/fenxiang.png" class="img fl">' +
         '<div class="fenxian fl">分享</div>' +
         '<div class="c fr">' +
           '<div class="bm bin">报名(9)</div>' +
