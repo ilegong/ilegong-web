@@ -929,7 +929,7 @@ class ShareManageController extends AppController
     {
         $user_id = $_REQUEST['user_id'];
         $share_id = $_REQUEST['share_id'];
-        $this->save_share_operate_setting($user_id, $share_id, SHARE_MANAGE_OPERATE_TYPE);
+        $this->process_save_share_operate_setting($user_id, $share_id, SHARE_MANAGE_OPERATE_TYPE);
         $this->redirect(array('action' => 'share_operate_set_view', '?' => array('share_id' => $share_id)));
     }
 
