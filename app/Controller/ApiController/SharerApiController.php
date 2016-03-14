@@ -78,7 +78,7 @@ class SharerApiController extends AppController{
         $createShares = $this->WeshareBuy->get_my_create_shares($uid);
         $share_ids = Hash::extract($createShares, '{n}.Weshare.id');
         if(!empty($share_ids)){
-            $query_order_sql = 'select count(id), member_id from cake_orders where member_id in (' . implode(',', $share_ids) . ') and status=1 group by member_id';
+            $query_order_sql = 'select count(id), member_id from cake_orders where member_id in (' . implode(',', $share_ids) . ') and status=1 and type=9 group by member_id';
             $orderM = ClassRegistry::init('Order');
             $result = $orderM->query($query_order_sql);
             $result = Hash::combine($result, '{n}.cake_orders.member_id', '{n}.count(id)');
