@@ -7,15 +7,18 @@ class OptLogHelperComponent extends Component {
 
     var $components = array('WeshareBuy', 'ShareUtil');
 
-    public function load_opt_log($time, $limit, $type, $newIndex = false) {
+    public function load_opt_log($time, $limit, $type, $new = false) {
         //check cache init cache
-        $opt_logs = $this->load_opt_log_by_time($time);
-        $combine_data = $this->combine_opt_log_data($opt_logs);
+        $opt_logs = $this->load_opt_log_by_time($time, $new);
+        $combine_data = $this->combine_opt_log_data($opt_logs, $new);
         $opt_logs = Hash::extract($opt_logs, '{n}.OptLog');
         $opt_logs = array_map('map_opt_log_data', $opt_logs);
         usort($opt_logs, 'sort_data_by_id');
-        $opt_log_data = array('opt_logs' => $opt_logs, 'combine_data' => $combine_data);
-        if ($newIndex) {
+        $opt_log_data = [
+            'opt_logs' => $opt_logs,
+            'combine_data' => $combine_data
+        ];
+        if ($new) {
             $opt_log_data = $this->rearrange($opt_log_data);
         }
         return $opt_log_data;
@@ -45,7 +48,7 @@ class OptLogHelperComponent extends Component {
      * @return array
      * load opt_log
      */
-    private function load_opt_log_by_time($time) {
+    private function load_opt_log_by_time($time, $new) {
         $last_opt_data = $this->load_last_opt_data();
         $first_log = $last_opt_data[0];
         $first_log_date = $first_log['OptLog']['created'];
@@ -64,7 +67,11 @@ class OptLogHelperComponent extends Component {
             }
         }
         $optLogM = ClassRegistry::init('OptLog');
-        $opt_logs = $optLogM->fetch_by_time_limit_type(date('Y-m-d H:i:s', $time), 10, 0);
+        if ($new) {
+            $opt_logs = $optLogM->new_fetch_by_time_limit_type(date('Y-m-d H:i:s', $time), 10, 0);
+        } else {
+            $opt_logs = $optLogM->fetch_by_time_limit_type(date('Y-m-d H:i:s', $time), 10, 0);
+        }
         return $opt_logs;
     }
 
@@ -72,7 +79,7 @@ class OptLogHelperComponent extends Component {
      * @param $opt_logs
      * @return array
      */
-    private function combine_opt_log_data($opt_logs) {
+    private function combine_opt_log_data($opt_logs, $share_info = false) {
         $key = OPT_LOG_COMBINE_DATA_CACHE_KEY;
         $start_id = $opt_logs[0]['OptLog']['id'];
         $end_id = $opt_logs[count($opt_logs) - 1]['OptLog']['id'];
@@ -81,7 +88,11 @@ class OptLogHelperComponent extends Component {
         if (empty($combine_opt_log_data)) {
             $opt_user_ids = Hash::extract($opt_logs, '{n}.OptLog.user_id');
             $opt_data_ids = Hash::extract($opt_logs, '{n}.OptLog.obj_id');
-            $shares_info = $this->get_share_and_user_info($opt_data_ids);
+            if ($share_info) {
+                $shares_info = $this->get_share_and_user_info($opt_data_ids);
+            } else {
+                $share_info = [];
+            }
             $share_buy_user_info = $this->WeshareBuy->get_has_buy_user_map($opt_data_ids);
             $share_user_map = $share_buy_user_info['share_user_map'];
             $buy_user_ids = $share_buy_user_info['all_user_ids'];

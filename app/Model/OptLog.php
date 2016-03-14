@@ -35,7 +35,7 @@ class OptLog extends AppModel {
      * @param $type
      * @return array
      */
-    public function newfetch_by_time_limit_type($format_date, $limit, $type) {
+    public function new_fetch_by_time_limit_type($format_date, $limit, $type) {
         $fetch_option = array(
             'conditions' => array(
                 'created < ' => $format_date,
