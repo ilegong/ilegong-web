@@ -1,19 +1,6 @@
 <div class="top">
     <ul class="clearfix">
         <li class="fl"><a href="/">{{$this->Html->image($this->Html->assetUrl('/img/common/logo-pys.png'), array('title' => $site[title],'alt' => $site[title]))}}</a></li>
-        <!--<li class="search_box fl">-->
-            <!--<input class="fl" name="" type="text" placeholder="万橙, 比褚橙不只甜了一点点" />-->
-            <!--<a class="search_btn fl" href="#X">搜索</a>-->
-        <!--</li>-->
-        <li class="myorder fr" style="margin-right:15px;">
-            {{if (!empty($CurrentUser))}}
-                <?php echo $this->Html->link('<span class="myhead_icon"></span><span>我的订单</span>', array('controller' => 'orders','action'=>'mine','plugin' => null ,),array('escape'=>false,'class'=>'clearfix',)); ?>
-            {{/if}}
-            <a href="{{$this->Html->url(array('controller'=>'carts','action'=>'listcart'))}}" class="clearfix">
-                <span class="cart_icon"></span>
-                <span>购物车&nbsp;<strong id="item-count"></strong></span>
-            </a>
-        </li>
     </ul>
 </div>
 <style>
@@ -26,68 +13,9 @@
 <div class="custom_nav">
     <ul class="clearfix">
         <li class="fl" id="classification_menu" style="position:relative;">
-            {{if $is_index}}
-            <a href="/" id="index_class_all">
-            {{else}}
-            <a href="/">
-            {{/if}}
-                <dl class="clearfix">
-                    <dt>全部商品分类</dt>
-                    {{if !$is_index}}
-                        <dt class="class" id="classification_menu_flag"></dt>
-                    {{else}}
-                        <dt style="width:10px; height:5px; margin:17px 0 0 5px;"></dt>
-                    {{/if}}
-
-                </dl>
-            </a>
-            <?PHP
-                $tagsWithProducts = ProductCategory::product_category_list();
-            ?>
-            <!--category-->
-            {{if count($tagsWithProducts)>0}}
-            <dl class="moreclass" id="classification_child_menu" style="display: {{$is_index?'':'none'}}">
-                <dd>
-                    <?PHP foreach($tagsWithProducts as $tagWithProduct) {
-                        if($tagWithProduct['ProductCounts']>0){ ?>
-                    <a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tagWithProduct['ProductTag']['slug'] ))}}?history={{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tagWithProduct['ProductTag']['slug'] ))}}">{{$tagWithProduct['ProductTag']['name']}}</a>
-                    <?php } ?>
-                    <?php } ?>
-                </dd>
-            </dl>
-            {{/if}}
+            <a href="/" ></a>
         </li>
         <!--menu-->
-        <?php
-		if(empty($top_category_id)) $top_category_id=0;
-		echo $this->Section->getNavMenu('Category',
-        array(
-        'selectedid'=> $top_category_id,
-        'defaultClass'=>'',
-        'preli'=>'',
-        'sufli'=>'',
-        'maxdepth' => 2,
-        'ulAttributes' => array(),
-        'liAttributes'=> array('class'=>'fl'),
-        'subliAttributes'=> array(),
-        'subliAttributes2'=> array(),
-        'subliAttributes3'=> array(),
-        'linkAttributes'=> array(), //'activeclass'=>'active'
-        'selectedid' => 0,
-        'dropdown' => true,
-        'outtag' => '',// 当 outtag,midtag为空或false时，外围无ul,li.
-        'midtag' => 'li',
-        'separator'=>'',
-        'inner_separator'=>'',
-        'dropdownClass' => '',
-        ),$site_cate_id
-        );
-        ?>
-        {{if $CurrentUser['is_business']}}
-        <li class="fl"><a href="/s/index"  class=" ui-menu-last">我的店铺</a></li>
-        {{else}}
-        <li class="fl"><a href="/openstores/apply"  class=" ui-menu-last">我要开店</a></li>
-        {{/if}}
         <li class="fr">
             {{if (!empty($CurrentUser))}}
             <div class="head_bg clearfix">
