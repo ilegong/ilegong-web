@@ -185,7 +185,8 @@ class OptLogHelperComponent extends Component {
             $tmp['level'] = "V{$level}{$level_pool[$level]}";
             $tmp['title'] = $share['title'];
             $tmp['description'] = mb_substr($share['description'], 0, 110);
-            $tmp['image'] = explode('|', $share['images'])[0];
+            $image = explode('|', $share['images'])[0];
+            $tmp['image'] = $image ? : "http://static.tongshijia.com/static/img/default_user_icon.jpg";
 
             $ret[$share['id']] = $tmp;
         }
@@ -206,6 +207,7 @@ class OptLogHelperComponent extends Component {
             $tmp['customer'] = $users[$customer]['nickname'];
             $tmp['time'] = $item['timestamp'];
             $tmp['readtime'] = $this->get_read_time($item['timestamp']);
+            $tmp['data_url'] = $item['data_url'];
 
 
             $ret[] = $tmp;
