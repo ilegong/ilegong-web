@@ -2114,7 +2114,7 @@ class WeshareBuyComponent extends Component {
             $product_name = $weshare_info['title'];
             $tuan_leader_name = $weshare_info['creator']['nickname'];
             $remark = '点击详情，赶快加入' . $tuan_leader_name . '的分享！';
-            $deatil_url = $this->get_weshares_detail_url($weshare_info['id']);
+            $deatil_url = $this->get_weshares_detail_url($weshare_info['id']).'?from=_template_msg';
             $already_buy_uids = $this->get_has_buy_user($weshare_info['id']);
             foreach ($fans_open_ids as $uid => $open_id) {
                 if (!in_array($uid, $already_buy_uids)) {
