@@ -14,7 +14,7 @@ ul li { list-style: none; }
 
 
 
-a{color: #000; position: none;}   
+a{color: #000; position: none;}
 .tuijian-top-sousuo{height: 3.167em; background: #fff; border-bottom: 1px solid #ddd; padding:0 1.25em; position:relative;}
 .sousuo{padding-top: 0.8em;}
 .sousuo img{ width:1.667em;  width:1.667em;}
@@ -31,7 +31,10 @@ a{color: #000; position: none;}
 .center{position:absolute; top:1em; left:4.083em;line-height:10px;}
 .center1{position:absolute; top:1.7em; left:4.083em;line-height:10px;}
 .biao-bin{display:inline-block;}
-.tupian{width:3.333em; height:3.333em; padding-top:15px; padding-left:1.25em;}
+.tupian{
+  border-radius: 3.333em;
+width:3.333em; height:3.333em; margin-top:15px; margin-left:1.25em;
+}
 .nicheng{margin-left:1.25em; font-size:1.15em; color:#333;}
 
 .ta{font-size:1.083em; color:#666; text-align:center; line-height:2em;}
@@ -39,7 +42,7 @@ a{color: #000; position: none;}
 .bk-balck{width:5em; height:2em; border:1px solid #bbb; border-radius:5px; margin:1.25em 1.25em 1em 0;}
 .bk-balck>img{width:1em; height:0.5em; line-height:2.5em;}
 
-.b{width:6em; height:1.2em;position:absolute; top:4.5em; left:6.5em; margin-left:5px; margin-top:-40px; border:1px solid #f99d3a; border-radius:5px; }
+.b{width:6em; height:1.2em;position:absolute; top:4em; margin-left:5px; margin-top:-40px; border:1px solid #f99d3a; border-radius:5px; }
 .b1{width:6em; height:1.2em; position:absolute; top:-6px; left:6.5em; margin-left:5px; margin-top:2px; border:1px solid #f99d3a; border-radius:5px; }
 .jibie{font-size:0.8em; padding-top:2px; color:#f99d3a; text-align:center;line-height:1.2em;}
 .time{padding-top:8px ; padding-left:1.4em; font-size:1em; color:#999;}

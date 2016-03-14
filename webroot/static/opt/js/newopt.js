@@ -211,13 +211,13 @@ $(document).ready(function () {
   '<!--产品-->' +
     '<div>' +
         '<div class="chanpin">' +
-            '<img src="<%this.image%>">' +
+            '<a href="<%this.data_url%>"><img src="<%this.image%>"></a>' +
         '</div>' +
         '<ul>' +
           '<li class="text1"><%this.title%></li>' +
-          '<li class="text2"><%this.description%>......更多&gt;&gt;</li>' +
+          '<li class="text2"><%this.description%>......<a href="<%this.data_url%>">更多&gt;&gt;</a></li>' +
         '</ul>' +
-        '<img src="images/fenxiang.png" class="img fl">' +
+          '<img src="http://static.tongshijia.com/static/opt/images/fenxiang.png" class="img fl">' +
         '<div class="fenxian fl">分享</div>' +
         '<div class="c fr">' +
           '<div class="bm bin">报名(9)</div>' +
