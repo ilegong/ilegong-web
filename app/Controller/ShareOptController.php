@@ -24,6 +24,20 @@ class ShareOptController extends AppController {
     }
 
     /**
+     * pys index view
+     */
+    public function newindex() {
+        $this->layout = null;
+        $uid = $this->currentUser['id'];
+        if(!empty($uid)){
+            $this->save_visit_log($uid);
+        }
+        if($_REQUEST['from'] == 'app'){
+            $this->set('hide_footer', true);
+        }
+    }
+
+    /**
      * fetch opt log list
      */
     public function fetch_opt_list_data() {
@@ -37,14 +51,51 @@ class ShareOptController extends AppController {
         $oldest_timestamp = $this->OptLog->get_oldest_update_time();
         $last_timestamp = $this->OptLog->get_last_update_time();
         if ($time <= $oldest_timestamp) {
-            $opt_logs = array();
-            $combine_data = array();
+            $opt_logs = [];
+            $combine_data = [];
         } else {
             $opt_log_data = $this->OptLogHelper->load_opt_log($time, $limit, $type);
             $opt_logs = $opt_log_data['opt_logs'];
             $combine_data = $opt_log_data['combine_data'];
         }
-        echo json_encode(array('oldest_timestamp' => $oldest_timestamp, 'last_timestamp' => $last_timestamp, 'opt_logs' => $opt_logs, 'combine_data' => $combine_data));
+        $data = [
+            'oldest_timestamp' => $oldest_timestamp,
+            'last_timestamp' => $last_timestamp,
+            'opt_logs' => $opt_logs,
+            'combine_data' => $combine_data
+        ];
+        
+        echo json_encode($data);
+        return;
+    }
+
+
+    /**
+     * fetch opt log list
+     */
+    public function newfetch_opt_list_data() {
+        $time = $_REQUEST['time'];
+        $limit = $_REQUEST['limit'];
+        $type = $_REQUEST['type'];
+        $this->autoRender = false;
+        if ($time == 0) {
+            $time = time();
+        }
+        $oldest_timestamp = $this->OptLog->get_oldest_update_time();
+        $last_timestamp = $this->OptLog->get_last_update_time();
+        if ($time <= $oldest_timestamp) {
+            $opt_logs = [];
+            $combine_data = [];
+        } else {
+            $opt_log_data = $this->OptLogHelper->load_opt_log($time, $limit, $type, 1);
+            $opt_logs = $opt_log_data;
+        }
+        $data = [
+            'oldest_timestamp' => $oldest_timestamp,
+            'last_timestamp' => $last_timestamp,
+            'opt_logs' => $opt_logs,
+        ];
+        echo json_encode($data);
         return;
     }
 

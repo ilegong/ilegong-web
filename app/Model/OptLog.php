@@ -18,8 +18,10 @@ class OptLog extends AppModel {
                 'created < ' => $format_date,
                 'deleted' => DELETED_NO
             ),
+            // 'fields' => ['id', 'obj_id', 'created'],
             'limit' => $limit,
-            'order' => array('created DESC')
+            'order' => array('created DESC'),
+            'group' => array('obj_id'),
         );
         if ($type != 0) {
             $fetch_option['conditions']['obj_type'] = $type;
