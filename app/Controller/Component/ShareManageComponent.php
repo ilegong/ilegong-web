@@ -78,7 +78,7 @@ class ShareManageComponent extends Component
                     ],
                 ]
             ],
-            'order' => ['PoolProduct.id DESC'],
+            'order' => ['PoolProduct.sort ASC'],
         ]);
 
         return $this->rearrange_pool_product($indexProducts);

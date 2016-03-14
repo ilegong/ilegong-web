@@ -34,7 +34,7 @@ class SharePoolProduct extends AppModel {
                     ],
                 ]
             ],
-            'order' => ['PoolProduct.id DESC'],
+            'order' => ['PoolProduct.sort ASC'],
         ]);
 
         return $this->rearrange_data($data);
