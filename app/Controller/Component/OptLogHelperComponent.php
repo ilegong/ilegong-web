@@ -52,8 +52,8 @@ class OptLogHelperComponent extends Component {
      * @return array
      * load opt_log
      */
-    private function load_opt_log_by_time($time, $new) {
-        $last_opt_data = $this->load_last_opt_data();
+    private function load_opt_log_by_time($time, $new = false) {
+        $last_opt_data = $this->load_last_opt_data($new);
         $first_log = $last_opt_data[0];
         $first_log_date = $first_log['OptLog']['created'];
         $first_log_time = strtotime($first_log_date);
