@@ -21,7 +21,7 @@
         <div class="clearfix">
             <!--个人信息关注TA-->
             <ul class="biao border-bottom">
-                <li ><img class="tupian fl" src="{{get_user_avatar($user_item)}}"></li>
+                <li ><img class="tupian fl" src="{{get_user_avatar($user_item)}}" onerror="this.src='http://static.tongshijia.com/avatar/s/default.jpg'"></li>
                 <li class="center fl">
                     <br>
                     <div class="nicheng biao-bin">{{$user_item['User']['nickname']}}</div>
@@ -32,8 +32,11 @@
                     <div class="jibie2 jibie b2 biao-bin">TA是个吃货游客~~</div>
                     {{/if}}
                 </li>
-                <li class="fr"><div class="bk-balck ta">关注TA</div></li>
+                {{if in_array($user_item['User']['id'], $data['sub_user_ids'])}}
                 <li class="fr"><div class="bk-balck ta1">已关注<img src="{{$STATIC_FILE_PATH}}/static/weshares/images/arrow-d.png"></div></li>
+                {{else}}
+                <li class="fr"><div class="bk-balck ta">关注TA</div></li>
+                {{/if}}
             </ul>
         </div>
     {{/loop}}
