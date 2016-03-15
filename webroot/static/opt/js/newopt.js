@@ -90,7 +90,9 @@ $(document).ready(function () {
       $loadingDiv.hide();
       return false;
     }
+    var followed = $('#show-only-followed').hasClass('activity') ? 1 : 0;
     var reqParams = {
+      'followed': followed,
       "type": filterVal,
       "time": bottomTimeStamp,
       "limit": 10
@@ -228,4 +230,33 @@ $(document).ready(function () {
     }
     return result;
   };
+
+  $('#show-all').on('click', function (){
+    if ($(this).hasClass('activity')) {
+      return true;
+    } else {
+      // 切换回到全部显示列表
+      $('#show-only-followed').removeClass('activity');
+      $('#show-all').addClass('activity');
+
+      // 重新获取列表
+      bottomTimeStamp = 0;
+      $('div.clearfix.list_item').remove();
+      initOptLogView();
+    }
+  });
+  $('#show-only-followed').on('click', function (){
+    if ($(this).hasClass('activity')) {
+      return true;
+    } else {
+      // 切换回到显示关注列表
+      $('#show-all').removeClass('activity');
+      $('#show-only-followed').addClass('activity');
+
+      // 重新获取列表
+      bottomTimeStamp = 0;
+      $('div.clearfix.list_item').remove();
+      initOptLogView();
+    }
+  });
 });

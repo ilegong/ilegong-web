@@ -7,10 +7,10 @@ class OptLogHelperComponent extends Component {
 
     var $components = array('WeshareBuy', 'ShareUtil');
 
-    public function load_opt_log($time, $limit, $type, $new = false) {
+    public function load_opt_log($time, $limit, $type, $new = false, $followed = false) {
         //check cache init cache
-        $opt_logs = $this->load_opt_log_by_time($time, $new);
-        $combine_data = $this->combine_opt_log_data($opt_logs, $new);
+        $opt_logs = $this->load_opt_log_by_time($time, $new, $followed);
+        $combine_data = $this->combine_opt_log_data($opt_logs, $new, $followed);
         $opt_logs = Hash::extract($opt_logs, '{n}.OptLog');
         $opt_logs = array_map('map_opt_log_data', $opt_logs);
         usort($opt_logs, 'sort_data_by_id');
@@ -27,15 +27,15 @@ class OptLogHelperComponent extends Component {
     /**
      * @return mixed
      */
-    private function load_last_opt_data($new = false) {
-        $key = LAST_OPT_LOG_DATA_CACHE_KEY;
+    private function load_last_opt_data($new = false, $followed = false) {
+        $key = LAST_OPT_LOG_DATA_CACHE_KEY . "_$followed";
         $data = Cache::read($key);
         $this->log('get cache from ' . $key, LOG_DEBUG);
         if (empty($data)) {
             $optLogM = ClassRegistry::init('OptLog');
             $datetime = date('Y-m-d H:i:s');
             if ($new) {
-                $opt_logs = $optLogM->new_fetch_by_time_limit_type($datetime, 100, 0);
+                $opt_logs = $optLogM->new_fetch_by_time_limit_type($datetime, 100, 0, $followed);
             } else {
                 $opt_logs = $optLogM->fetch_by_time_limit_type($datetime, 100, 0);
             }
@@ -52,8 +52,8 @@ class OptLogHelperComponent extends Component {
      * @return array
      * load opt_log
      */
-    private function load_opt_log_by_time($time, $new = false) {
-        $last_opt_data = $this->load_last_opt_data($new);
+    private function load_opt_log_by_time($time, $new = false, $followed = false) {
+        $last_opt_data = $this->load_last_opt_data($new, $followed);
         $first_log = $last_opt_data[0];
         $first_log_date = $first_log['OptLog']['created'];
         $first_log_time = strtotime($first_log_date);
@@ -72,7 +72,7 @@ class OptLogHelperComponent extends Component {
         }
         $optLogM = ClassRegistry::init('OptLog');
         if ($new) {
-            $opt_logs = $optLogM->new_fetch_by_time_limit_type(date('Y-m-d H:i:s', $time), 10, 0);
+            $opt_logs = $optLogM->new_fetch_by_time_limit_type(date('Y-m-d H:i:s', $time), 10, 0, $followed);
         } else {
             $opt_logs = $optLogM->fetch_by_time_limit_type(date('Y-m-d H:i:s', $time), 10, 0);
         }
@@ -83,8 +83,8 @@ class OptLogHelperComponent extends Component {
      * @param $opt_logs
      * @return array
      */
-    private function combine_opt_log_data($opt_logs, $share_info = false) {
-        $key = OPT_LOG_COMBINE_DATA_CACHE_KEY;
+    private function combine_opt_log_data($opt_logs, $share_info = false, $followed = false) {
+        $key = OPT_LOG_COMBINE_DATA_CACHE_KEY . "_$followed";
         $start_id = $opt_logs[0]['OptLog']['id'];
         $end_id = $opt_logs[count($opt_logs) - 1]['OptLog']['id'];
         $key = $key . '_' . $start_id . '_' . $end_id;
