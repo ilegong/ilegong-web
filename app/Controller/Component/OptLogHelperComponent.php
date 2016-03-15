@@ -148,7 +148,7 @@ class OptLogHelperComponent extends Component {
                 'Weshare.*',
                 'User.*',
                 'UserLevel.*'
-                ],
+            ],
             'joins' => [
                 [
                     'table' => 'users',
@@ -191,6 +191,10 @@ class OptLogHelperComponent extends Component {
             $tmp['description'] = mb_substr($share['description'], 0, 110);
             $image = explode('|', $share['images'])[0];
             $tmp['image'] = $image ? : "http://static.tongshijia.com/static/img/default_user_icon.jpg";
+            // 1. 报名数
+            $tmp['baoming'] = $this->WeshareBuy->get_share_and_all_refer_share_count($share['id'], $user['id']);
+            // 2. 浏览数
+            $tmp['liulan'] = 100;
 
             $ret[$share['id']] = $tmp;
         }

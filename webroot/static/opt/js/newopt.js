@@ -9,6 +9,7 @@ $(document).ready(function () {
   var filterVal = 0;
   var oldest_timestamp = 0;
   var last_timestamp = 0;
+  var bottomTimeStamp = 0;
   var lazyLoadOptions = {
     event: "scrollstop",
     vertical_only: true,
@@ -56,6 +57,12 @@ $(document).ready(function () {
     loadOptLogData();
   }
 
+  /**
+   * loadMoreDataWithScrollY 显示或者隐藏回到顶部按钮
+   *
+   * @access public
+   * @return void
+   */
   function loadMoreDataWithScrollY() {
     var topVal = logListDom.scrollTop;
     if (topVal > 150) {
@@ -63,34 +70,9 @@ $(document).ready(function () {
     } else {
       $backTopBtn.hide();
     }
-  }
 
-  function reloadLogOptData() {
-    var optLogs = $logListDiv.children(".postinfo");
-    var optLogsLen = optLogs.length;
-    if (optLogsLen > 0) {
-      $(optLogs[0]).before($loadingDiv);
-      $loadingDiv.show();
-      var topVal = $loadingDiv.offset().top;
-      var scrollTopVal = $logListDiv.scrollTop;
-      if (topVal < 0) {
-        $logListDiv.scrollTop = (scrollTopVal + topVal) - 60;
-      } else {
-        if (topVal < 30) {
-          $logListDiv.scrollTop = scrollTopVal - 60;
-        }
-      }
-      setTimeout(function () {
-        loadOptLogData(function () {
-          $loadingDiv.css("marginBottom", optLogsLen * 120);
-          optLogs.remove();
-          setTimeout(function () {
-            $loadingDiv.css("marginBottom", 0);
-          }, 300);
-        });
-      }, 200);
-    } else {
-      loadOptLogData(checkDataShow);
+    if (logListDom.scrollHeight - topVal < 150 + logListDom.clientHeight) {
+      loadOptLogData();
     }
   }
 
@@ -104,14 +86,9 @@ $(document).ready(function () {
     }
     $loadingDiv.show();
     loadDataFlag = 1;
-    var bottomTimeStamp = 0;
-    var $lastOptLog = $loadingDiv.prev('div.postinfo');
-    if ($lastOptLog.length > 0) {
-      bottomTimeStamp = $lastOptLog.data("timestamp");
-      if (oldest_timestamp != 0 && bottomTimeStamp == oldest_timestamp) {
-        $loadingDiv.hide();
-        return false;
-      }
+    if (oldest_timestamp != 0 && bottomTimeStamp == oldest_timestamp) {
+      $loadingDiv.hide();
+      return false;
     }
     var reqParams = {
       "type": filterVal,
@@ -123,6 +100,7 @@ $(document).ready(function () {
       var nowTimeStamp = data['nowTimeStamp'];
       for (var i = 0; i < list.length; i++) {
         var objJson = list[i];
+        bottomTimeStamp = objJson.time;
         parseInfoJsonObj(objJson, nowTimeStamp);
       }
       last_timestamp = data['last_timestamp'];
@@ -185,14 +163,13 @@ $(document).ready(function () {
 
 
   function convertOptJson2html(objJson) {
-    console.log(objJson);
     return TemplateEngine(_optLogTemplate, objJson);
     // return TemplateEngine(optLogTemplate, objJson);
   }
 
 
   var _optLogTemplate = "" +
-'<div class="clearfix" data-timestamp="<%this.timestamp%>" id="info_<%this.id%>">' +
+'<div class="clearfix list_item" id="info_<%this.share_id%>">' +
   '<!--个人信息关注TA-->' +
   '<ul class="biao ">' +
     '<li>' +
@@ -214,14 +191,14 @@ $(document).ready(function () {
             '<a href="<%this.data_url%>"><img src="<%this.image%>"></a>' +
         '</div>' +
         '<ul>' +
-          '<li class="text1"><%this.title%></li>' +
+          '<li class="text1"><a href="<%this.data_url%>"><%this.title%></a></li>' +
           '<li class="text2"><%this.description%>......<a href="<%this.data_url%>">更多&gt;&gt;</a></li>' +
         '</ul>' +
-          '<img src="http://static.tongshijia.com/static/opt/images/fenxiang.png" class="img fl">' +
+        '<img src="http://static.tongshijia.com/static/opt/images/fenxiang.png" class="img fl">' +
         '<div class="fenxian fl">分享</div>' +
         '<div class="c fr">' +
-          '<div class="bm bin">报名(9)</div>' +
-          '<div class="pl bin">评论(9)</div>' +
+          '<div class="bm bin">报名(<%this.baoming%>)</div>' +
+          '<div class="pl bin">浏览(<%this.liulan%>)</div>' +
         '</div>' +
      '</div>' +
 '</div>';

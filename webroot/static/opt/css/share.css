@@ -20,9 +20,10 @@ a{color: #000; position: none;}
 .sousuo img{ width:1.667em;  width:1.667em;}
 .tuijian_center{ position: absolute; top:5px; left:50%; margin-left:-6em;}
 .bk{width: 4.9em; height: 2.15em; line-height: 2.15em; border: 1px solid #0fc449; text-align: center;}
-.bk_green{background: #0fc449; color:#ffffff; border-radius:5px 0 0 5px;}
+.bk_green{background-color: #FFFFFF;  color: #0fc449; border-radius:5px 0 0 5px;}
 .bk_white{ background-color: #FFFFFF; color: #0fc449; border-radius: 0 5px 5px 0;}
-.fenxiang{color: #0fc449; line-height: 3.167em; padding-right:5px;}
+.activity{ background-color: #0fc449; color:#ffffff;}
+.fenxiang a {color: #0fc449; line-height: 3.167em; padding-right:5px;text-decoration: none;}
 .tuijian{align: center; font-size: 2.333em; color: #fff;}
 
 .bg{height: 8px; background-color: #f1f1f1;}
@@ -50,7 +51,7 @@ width:3.333em; height:3.333em; margin-top:15px; margin-left:1.25em;
 .k{width:11.333em; height:4.833em; border:0.5px solid #999; border-radius:5px; padding-top:2em; margin-left:15em;}
 .g{margin-left:15em;}
 
-.chanpin>img{height:16.666em; width:100%;}
+.chanpin > a >img{height:16.666em; width:100%;}
 .text1{font-size:1.15em; color:#333; padding-left:1.25em; padding-top:10px;}
 
 .text2{font-size:1em; color:#999; padding-left:1.25em; padding-right:1em; padding-top:10px;}
