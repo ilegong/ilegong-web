@@ -7,9 +7,18 @@ class OptLogHelperComponent extends Component {
 
     var $components = array('WeshareBuy', 'ShareUtil');
 
+    public function __get($key)
+    {
+        if ($key == 'uid') {
+            return $_SESSION['Auth']['User']['id'];
+        }
+        return parent::__get($key);
+    }
+
     public function load_opt_log($time, $limit, $type, $new = false, $followed = false) {
         //check cache init cache
         $opt_logs = $this->load_opt_log_by_time($time, $new, $followed);
+        if (!$opt_logs) return false;
         $combine_data = $this->combine_opt_log_data($opt_logs, $new, $followed);
         $opt_logs = Hash::extract($opt_logs, '{n}.OptLog');
         $opt_logs = array_map('map_opt_log_data', $opt_logs);
@@ -29,7 +38,10 @@ class OptLogHelperComponent extends Component {
      */
     private function load_last_opt_data($new = false, $followed = false) {
         $key = LAST_OPT_LOG_DATA_CACHE_KEY . "_$followed";
-        $data = Cache::read($key);
+        if ($followed) {
+            $key .= $this->uid;
+        }
+        $data = false;// Cache::read($key);
         $this->log('get cache from ' . $key, LOG_DEBUG);
         if (empty($data)) {
             $optLogM = ClassRegistry::init('OptLog');
@@ -54,6 +66,7 @@ class OptLogHelperComponent extends Component {
      */
     private function load_opt_log_by_time($time, $new = false, $followed = false) {
         $last_opt_data = $this->load_last_opt_data($new, $followed);
+        if (!$last_opt_data) return false;
         $first_log = $last_opt_data[0];
         $first_log_date = $first_log['OptLog']['created'];
         $first_log_time = strtotime($first_log_date);
@@ -85,10 +98,13 @@ class OptLogHelperComponent extends Component {
      */
     private function combine_opt_log_data($opt_logs, $share_info = false, $followed = false) {
         $key = OPT_LOG_COMBINE_DATA_CACHE_KEY . "_$followed";
+        if ($followed) {
+            $key .= $this->uid;
+        }
         $start_id = $opt_logs[0]['OptLog']['id'];
         $end_id = $opt_logs[count($opt_logs) - 1]['OptLog']['id'];
         $key = $key . '_' . $start_id . '_' . $end_id;
-        $combine_opt_log_data = Cache::read($key);
+        $combine_opt_log_data = false;//Cache::read($key);
         if (empty($combine_opt_log_data)) {
             $opt_user_ids = Hash::extract($opt_logs, '{n}.OptLog.user_id');
             $opt_data_ids = Hash::extract($opt_logs, '{n}.OptLog.obj_id');
@@ -216,7 +232,6 @@ class OptLogHelperComponent extends Component {
             $tmp['time'] = $item['timestamp'];
             $tmp['readtime'] = $this->get_read_time($item['timestamp']);
             $tmp['data_url'] = $item['data_url'];
-
 
             $ret[] = $tmp;
         }

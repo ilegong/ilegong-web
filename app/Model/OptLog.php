@@ -5,6 +5,13 @@
  */
 class OptLog extends AppModel {
 
+    public function __get($key)
+    {
+        if ($key == 'uid') {
+            return $_SESSION['Auth']['User']['id'];
+        }
+        return parent::__get($key);
+    }
 
     /**
      * @param $format_date
@@ -41,16 +48,20 @@ class OptLog extends AppModel {
             'created < ' => $format_date,
             'deleted' => DELETED_NO
         ];
-        if ($followed && ($uid = $_SESSION['Auth']['User']['id'])) {
+        if ($followed && $this->uid) {
             // 当用户选定只看fllowed的团长的东西时, 我们需要做一些过滤.
             $userRelationM = ClassRegistry::init('UserRelation');
             $info = $userRelationM->find('all', [
                 'conditions' => [
-                    'follow_id' => $uid,
+                    'follow_id' => $this->uid,
+                    'deleted' => DELETED_NO,
                 ],
                 'fields' => ['user_id'],
             ]);
             $info = Hash::extract($info, '{n}.UserRelation.user_id');
+            if (!$info) {
+                return false;
+            }
             // 先找到自己关注的团长, 在进行查询.
             $conditions['obj_creator'] = $info;
         }

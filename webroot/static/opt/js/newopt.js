@@ -98,6 +98,10 @@ $(document).ready(function () {
       "limit": 10
     };
     var callbackFunc = function (data) {
+      if (data.error) {
+        alert('没有获取到有效数据!!!');
+        return;
+      }
       var list = data['opt_logs'];
       var nowTimeStamp = data['nowTimeStamp'];
       for (var i = 0; i < list.length; i++) {

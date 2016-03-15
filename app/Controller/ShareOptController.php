@@ -91,6 +91,12 @@ class ShareOptController extends AppController {
         } else {
             $opt_log_data = $this->OptLogHelper->load_opt_log($time, $limit, $type, 1, $fllowed);
             $opt_logs = $opt_log_data;
+            if (!$opt_logs) {
+                echo json_encode([
+                    'error' => 'get data failed.',
+                ]);
+                return ;
+            }
         }
         $data = [
             'oldest_timestamp' => $oldest_timestamp,
