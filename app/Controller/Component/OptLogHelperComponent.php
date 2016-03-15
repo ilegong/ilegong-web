@@ -27,14 +27,18 @@ class OptLogHelperComponent extends Component {
     /**
      * @return mixed
      */
-    private function load_last_opt_data() {
+    private function load_last_opt_data($new = false) {
         $key = LAST_OPT_LOG_DATA_CACHE_KEY;
         $data = Cache::read($key);
         $this->log('get cache from ' . $key, LOG_DEBUG);
         if (empty($data)) {
             $optLogM = ClassRegistry::init('OptLog');
             $datetime = date('Y-m-d H:i:s');
-            $opt_logs = $optLogM->fetch_by_time_limit_type($datetime, 100, 0);
+            if ($new) {
+                $opt_logs = $optLogM->new_fetch_by_time_limit_type($datetime, 100, 0);
+            } else {
+                $opt_logs = $optLogM->fetch_by_time_limit_type($datetime, 100, 0);
+            }
             Cache::write($key, json_encode($opt_logs));
             return $opt_logs;
         }
@@ -48,8 +52,8 @@ class OptLogHelperComponent extends Component {
      * @return array
      * load opt_log
      */
-    private function load_opt_log_by_time($time, $new) {
-        $last_opt_data = $this->load_last_opt_data();
+    private function load_opt_log_by_time($time, $new = false) {
+        $last_opt_data = $this->load_last_opt_data($new);
         $first_log = $last_opt_data[0];
         $first_log_date = $first_log['OptLog']['created'];
         $first_log_time = strtotime($first_log_date);
@@ -171,7 +175,7 @@ class OptLogHelperComponent extends Component {
             5 => '资深团长',
             6 => '首席团长'
         ];
-        
+
         $ret = [];
         foreach($data as $item) {
             $share = $item['Weshare'];
@@ -212,7 +216,7 @@ class OptLogHelperComponent extends Component {
 
             $ret[] = $tmp;
         }
-        
+
         return $ret;
     }
 
