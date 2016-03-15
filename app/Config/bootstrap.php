@@ -178,6 +178,7 @@ if (getenv('TONGSHIJIA_ENV') == 'product') {
 }
 const SAE_IMAGES_FILE_PATH = 'http://images.tongshijia.com';
 const ALIYUN_AVATAR_DOMAIN = 'http://static.tongshijia.com/avatar/';
+const ALIYUN_AVATAR_PREFIX = 'http://static.tongshijia.com';
 
 //http://51daifan-assets.stor.sinaapp.com
 //http://www.tongshijia.com
@@ -1742,7 +1743,7 @@ function get_user_avatar($user)
         $user = $user['User'];
     }
     if ($user['avatar']) {
-        return SAE_STATIC_FILE_PATH . '/' . str_replace('avatar/', 'avatar/s/', $user['avatar']);
+        return ALIYUN_AVATAR_PREFIX . '/' . str_replace('avatar/', 'avatar/s/', $user['avatar']);
     }
     return $user['image'];
 }

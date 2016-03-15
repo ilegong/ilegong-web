@@ -1,0 +1,21 @@
+<div infinite-scroll='vm.loadData()' infinite-scroll-disabled='vm.noMoreData||vm.loadingData'
+     infinite-scroll-distance='1'>
+    <div class="clearfix" ng-repeat="user in vm.users">
+        <!--个人信息关注TA-->
+        <ul class="biao border-bottom">
+            <li ><img class="tupian fl" lazy-src="{{user['User']['image']}}" onerror="this.src='http://static.tongshijia.com/avatar/s/default.jpg'"></li>
+            <li class="center fl">
+                <br>
+                <div class="nicheng biao-bin" ng-bind="user['User']['nickname']"></div>
+                <br>
+                <div ng-if="vm.level_map[user['User']['id']]" class="jibie1 jibie b biao-bin" ng-bind="vm.getUserLevelText(user['User']['id'])"></div>
+                <div ng-if="!vm.level_map[user['User']['id']]" class="jibie2 jibie b2 biao-bin">TA是个吃货游客~~</div>
+            </li>
+            <li class="fr" ng-if="!vm.hasSub(user['User']['id'])"><div class="bk-balck ta">关注TA</div></li>
+            <li class="fr" ng-if="vm.hasSub(user['User']['id'])"><div class="bk-balck ta">已关注<img lazy-src="http://static.tongshijia.com/static/weshares/images/arrow-d.png"></div></li>
+        </ul>
+    </div>
+
+    <div style="text-align: center;color: #ffa200;margin-bottom: 10px;" ng-show='vm.loadingData'>加载中...</div>
+    <div style="text-align: center;color: #ffa200;margin-bottom: 10px;" ng-show='vm.noMoreData'>没有更多数据</div>
+</div>

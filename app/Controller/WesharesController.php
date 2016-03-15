@@ -1812,8 +1812,10 @@ class WesharesController extends AppController {
 
     public function fans_list($uid){
         $this->layout = null;
-        $data = $this->UserFans->get_fans($uid);
-        $this->set('data', $data);
+        $currentId = $this->currentUser['id'];
+        $me = $uid == $currentId ? 1 : 0;
+        $this->set('uid', $uid);
+        $this->set('me', $me);
         $this->render('u_list');
     }
 
@@ -1822,6 +1824,13 @@ class WesharesController extends AppController {
         $data = $this->UserFans->get_subs($uid);
         $this->set('data', $data);
         $this->render('u_list');
+    }
+
+    public function get_u_list_data($uid, $page){
+        $this->autoRender = false;
+        $data = $this->UserFans->get_fans($uid, $page);
+        echo json_encode($data);
+        return;
     }
 
     /**
