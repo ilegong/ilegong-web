@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta charset="utf-8">
+    <title>我的粉丝</title>
+    <link rel="stylesheet" href="{{$STATIC_FILE_PATH}}/static/weshares/css/user-info.min.css" />
+</head>
+
+<body>
+<div class="big">
+    <!--标题-->
+    <ul class="clearfix tuijian-top-sousuo">
+        <li class="fanhui fl" onclick=""><img class="fanhui-size" src="{{$STATIC_FILE_PATH}}/static/weshares/images/back.png"></li>
+        <li class="test-fanhui fl" onclick="">返回</li>
+        <li class="fensi fl">我的粉丝</li>
+        <li class="home fr"><img class="home-size" src="{{$STATIC_FILE_PATH}}/static/weshares/images/home.png"></li>
+    </ul>
+    <div class="bg"></div>
+    {{loop $data['users'] $user_item}}
+        <div class="clearfix">
+            <!--个人信息关注TA-->
+            <ul class="biao border-bottom">
+                <li ><img class="tupian fl" src="{{get_user_avatar($user_item)}}"></li>
+                <li class="center fl">
+                    <br>
+                    <div class="nicheng biao-bin">{{$user_item['User']['nickname']}}</div>
+                    <br>
+                    {{if $data['level_map'][$user_item['User']['id']]}}
+                    <div class="jibie1 jibie b biao-bin">V{{$data['level_map'][$user_item['User']['id']]}}{{get_user_level_text($data['level_map'][$user_item['User']['id']])}}</div>
+                    {{else}}
+                    <div class="jibie2 jibie b2 biao-bin">TA是个吃货游客~~</div>
+                    {{/if}}
+                </li>
+                <li class="fr"><div class="bk-balck ta">关注TA</div></li>
+                <li class="fr"><div class="bk-balck ta1">已关注<img src="{{$STATIC_FILE_PATH}}/static/weshares/images/arrow-d.png"></div></li>
+            </ul>
+        </div>
+    {{/loop}}
+</div>
+</body>
+</html>

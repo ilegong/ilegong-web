@@ -1814,12 +1814,14 @@ class WesharesController extends AppController {
         $this->layout = null;
         $data = $this->UserFans->get_fans($uid);
         $this->set('data', $data);
+        $this->render('u_list');
     }
 
     public function sub_list($uid){
         $this->layout = null;
         $data = $this->UserFans->get_subs($uid);
         $this->set('data', $data);
+        $this->render('u_list');
     }
 
     /**
