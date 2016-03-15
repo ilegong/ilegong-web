@@ -7,7 +7,7 @@ class WesharesController extends AppController {
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
 
-    var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'OrderExpress', 'PintuanHelper', 'RedisQueue', 'DeliveryTemplate', 'Orders', 'Weshares');
+    var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'OrderExpress', 'PintuanHelper', 'RedisQueue', 'DeliveryTemplate', 'Orders', 'Weshares', 'UserFans');
 
     var $share_ship_type = array('self_ziti', 'kuaidi', 'pys_ziti');
 
@@ -1808,6 +1808,20 @@ class WesharesController extends AppController {
         } else {
             $this->set('no_order', true);
         }
+    }
+
+    public function fans_list($uid){
+        $this->layout = null;
+        $data = $this->UserFans->get_fans($uid);
+        $this->set('data', $data);
+        $this->render('u_list');
+    }
+
+    public function sub_list($uid){
+        $this->layout = null;
+        $data = $this->UserFans->get_subs($uid);
+        $this->set('data', $data);
+        $this->render('u_list');
     }
 
     /**
