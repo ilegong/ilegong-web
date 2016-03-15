@@ -17,20 +17,25 @@
         <li class="home fr"><img class="home-size" src="{{$STATIC_FILE_PATH}}/static/weshares/images/home.png"></li>
     </ul>
     <div class="bg"></div>
+    {{loop $data['users'] $user_item}}
     <div class="clearfix">
         <!--个人信息关注TA-->
         <ul class="biao border-bottom">
-            <li ><img class="tupian fl" src="images/img.png"></li>
+            <li ><img class="tupian fl" src="{{get_user_avatar($user_item)}}"></li>
             <li class="center fl">
                 <br>
-                <div class="nicheng biao-bin">小宝妈</div>
+                <div class="nicheng biao-bin">{{$user_item['User']['nickname']}}</div>
                 <br>
-                <div class="jibie1 jibie b biao-bin">V2正式团长</div>
-
+                {{if $data['level_map'][$user_item['User']['id']]}}
+                <div class="jibie1 jibie b biao-bin">V{{$data['level_map'][$user_item['User']['id']]}}{{get_user_level_text($data['level_map'][$user_item['User']['id']])}}</div>
+                {{else}}
+                <div class="jibie2 jibie b2 biao-bin">TA是个吃货游客~~</div>
+                {{/if}}
             </li>
             <li class="fr"><div class="bk-balck ta">关注TA</div></li>
         </ul>
     </div>
+    {{/loop}}
     <div class="clearfix">
         <!--个人信息关注TA-->
         <ul class="biao border-bottom">
@@ -52,7 +57,7 @@
                 <br>
                 <div class="nicheng biao-bin">小宝妈</div>
                 <br>
-                <div class="jibie2 jibie b2 biao-bin">TA是个吃货游客~~</div>
+
             </li>
             <li class="fr"><div class="bk-balck ta">关注TA</div></li>
         </ul>
