@@ -5,6 +5,13 @@
  */
 class OptLog extends AppModel {
 
+    public function __get($key)
+    {
+        if ($key == 'uid') {
+            return $_SESSION['Auth']['User']['id'];
+        }
+        return parent::__get($key);
+    }
 
     /**
      * @param $format_date
@@ -35,12 +42,32 @@ class OptLog extends AppModel {
      * @param $type
      * @return array
      */
-    public function new_fetch_by_time_limit_type($format_date, $limit, $type) {
+    public function new_fetch_by_time_limit_type($format_date, $limit, $type, $followed = false) {
+
+        $conditions = [
+            'created < ' => $format_date,
+            'deleted' => DELETED_NO
+        ];
+        if ($followed && $this->uid) {
+            // 当用户选定只看fllowed的团长的东西时, 我们需要做一些过滤.
+            $userRelationM = ClassRegistry::init('UserRelation');
+            $info = $userRelationM->find('all', [
+                'conditions' => [
+                    'follow_id' => $this->uid,
+                    'deleted' => DELETED_NO,
+                ],
+                'fields' => ['user_id'],
+            ]);
+            $info = Hash::extract($info, '{n}.UserRelation.user_id');
+            if (!$info) {
+                return false;
+            }
+            // 先找到自己关注的团长, 在进行查询.
+            $conditions['obj_creator'] = $info;
+        }
+
         $fetch_option = array(
-            'conditions' => array(
-                'created < ' => $format_date,
-                'deleted' => DELETED_NO
-            ),
+            'conditions' => $conditions,
             // 'fields' => ['id', 'obj_id', 'created'],
             'limit' => $limit,
             'order' => array('created DESC'),

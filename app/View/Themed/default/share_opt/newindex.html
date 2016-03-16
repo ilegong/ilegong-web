@@ -26,13 +26,19 @@
 <!--标题-->
 <ul class="clearfix tuijian-top-sousuo">
     <li class="sousuo fl">
-      <a href="#X"><img src="{{$STATIC_FILE_PATH}}/static/opt/images/sousuo.png"></a>
+      <a href="#X">
+        <img src="{{$STATIC_FILE_PATH}}/static/opt/images/sousuo.png" style="display: none;">
+      </a>
     </li>
     <li class="tuijian_center">
-        <div class="bk bk_green fl">推荐</div>
-        <div class="bk bk_white fl">关注</div>
+        <div class="bk bk_green fl activity" id='show-all'>推荐</div>
+        <div class="bk bk_white fl" id='show-only-followed'>关注</div>
     </li>
-    <li class="fenxiang fr">我要分享</li>
+    <li class="fenxiang fr">
+        <a href="http://dev.tongshijia.com/weshares/add">
+            我要分享
+        </a>
+    </li>
 </ul>
 <!--<div class="topheader topheader-patch">-->
     <!--<div class="controls controls-patch">-->

@@ -77,6 +77,8 @@ class ShareOptController extends AppController {
         $time = $_REQUEST['time'];
         $limit = $_REQUEST['limit'];
         $type = $_REQUEST['type'];
+        $fllowed = $_REQUEST['followed'];
+
         $this->autoRender = false;
         if ($time == 0) {
             $time = time();
@@ -87,8 +89,14 @@ class ShareOptController extends AppController {
             $opt_logs = [];
             $combine_data = [];
         } else {
-            $opt_log_data = $this->OptLogHelper->load_opt_log($time, $limit, $type, 1);
+            $opt_log_data = $this->OptLogHelper->load_opt_log($time, $limit, $type, 1, $fllowed);
             $opt_logs = $opt_log_data;
+            if (!$opt_logs) {
+                echo json_encode([
+                    'error' => 'get data failed.',
+                ]);
+                return ;
+            }
         }
         $data = [
             'oldest_timestamp' => $oldest_timestamp,
