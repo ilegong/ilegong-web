@@ -32,6 +32,7 @@ class ShareOptController extends AppController {
         if(!empty($uid)){
             $this->save_visit_log($uid);
         }
+        $this->set('uid', $uid);
         if($_REQUEST['from'] == 'app'){
             $this->set('hide_footer', true);
         }

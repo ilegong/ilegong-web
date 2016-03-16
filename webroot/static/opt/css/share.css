@@ -7,11 +7,7 @@
   margin: 0;
   font-family: Helvetica, STHeiti STXihei, Microsoft JhengHei, Microsoft YaHei, Arial;
 }
-body {
-  min-width: 320px;
-  max-width: 460px;
-  font-size: 13px;
-}
+
 ul li {
   list-style: none;
 }
@@ -21,6 +17,8 @@ ul li {
 .fr {
   float: right;
 }
+
+
 .clearfix {
   zoom: 1;
 }
@@ -36,7 +34,6 @@ ul li {
 }
 a {
   color: #000;
-  position: none;
 }
 .tuijian-top-sousuo {
   height: 3.167em;
@@ -149,7 +146,7 @@ a {
   height:0.5em;
   line-height:2.5em;
 }
-.bk-balck .unfollow {
+.bk-balck.unfollow {
   width:5em;
   height:2em;
   border:1px solid #bbb;
