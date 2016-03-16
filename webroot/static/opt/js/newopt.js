@@ -162,7 +162,7 @@ $(document).ready(function () {
       if (data['success']) {
         var $parent = $el.parent();
         $el.remove();
-        $parent.append('<div class="bk-balck ta follow" follow="<%this.check_relation%>">已关注</div><div class="bk-balck ta unfollow hidden un-sub-user-btn" follow="true" data-user-id="' + userId + '">取消关注</div>');
+        $parent.append('<div class="bk-balck ta follow" follow="true">已关注</div><div class="bk-balck ta unfollow hidden un-sub-user-btn" follow="true" data-user-id="' + userId + '">取消关注</div>');
         $parent.addClass('un-sub-group');
         //bind event
         $('div.follow', $parent).on('click', function (e) {
@@ -238,7 +238,7 @@ $(document).ready(function () {
     '<div class="time  biao-bin"><%this.readtime%></div>' +
     '<div class="urser biao-bin"><%this.customer%>报名了</div>' +
     '</li>' +
-    '<%if(this.check_relation){%>' +
+    '<%if(!this.check_relation){%>' +
     '<li class="fr">' +
     '<div class="bk-balck ta sub-user-btn" follow="<%this.check_relation%>" data-user-id="<%this.proxy_id%>">关注TA</div>' +
     '</li>' +
