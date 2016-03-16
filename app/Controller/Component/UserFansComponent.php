@@ -45,7 +45,7 @@ class UserFansComponent extends Component{
     private function get_user_subs($uid, $user_ids){
         $userRelationM = ClassRegistry::init('UserRelation');
         $relations = $userRelationM->find('all', [
-            'conditions' => ['follow_id' => $uid, 'user_id' => $user_ids]
+            'conditions' => ['follow_id' => $uid, 'user_id' => $user_ids, 'deleted' => DELETED_NO]
         ]);
         $sub_user_ids = Hash::extract($relations, '{n}.UserRelation.user_id');
         return $sub_user_ids == null ? [] : $sub_user_ids;

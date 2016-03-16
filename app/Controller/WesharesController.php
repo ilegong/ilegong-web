@@ -1817,6 +1817,7 @@ class WesharesController extends AppController {
         $this->set('uid', $uid);
         $this->set('me', $me);
         $this->set('type', 0);
+        $this->set('title', '我的粉丝');
         $this->render('u_list');
     }
 
@@ -1827,6 +1828,7 @@ class WesharesController extends AppController {
         $this->set('me', $me);
         $this->set('uid', $uid);
         $this->set('type', 1);
+        $this->set('title', '我关注的');
         $this->render('u_list');
     }
 
