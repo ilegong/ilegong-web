@@ -1816,19 +1816,27 @@ class WesharesController extends AppController {
         $me = $uid == $currentId ? 1 : 0;
         $this->set('uid', $uid);
         $this->set('me', $me);
+        $this->set('type', 0);
         $this->render('u_list');
     }
 
     public function sub_list($uid){
         $this->layout = null;
-        $data = $this->UserFans->get_subs($uid);
-        $this->set('data', $data);
+        $currentId = $this->currentUser['id'];
+        $me = $uid == $currentId ? 1 : 0;
+        $this->set('me', $me);
+        $this->set('uid', $uid);
+        $this->set('type', 1);
         $this->render('u_list');
     }
 
-    public function get_u_list_data($uid, $page){
+    public function get_u_list_data($type, $uid, $page){
         $this->autoRender = false;
-        $data = $this->UserFans->get_fans($uid, $page);
+        if($type==0){
+            $data = $this->UserFans->get_fans($uid, $page);
+        }else{
+            $data = $this->UserFans->get_subs($uid, $page);
+        }
         echo json_encode($data);
         return;
     }

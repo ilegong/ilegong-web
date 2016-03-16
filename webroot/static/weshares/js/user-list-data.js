@@ -24,6 +24,7 @@
     function active() {
       vm.userId = angular.element(document.getElementById('userListView')).attr('data-uid');
       vm.me = angular.element(document.getElementById('userListView')).attr('data-me');
+      vm.dataType = angular.element(document.getElementById('userListView')).attr('data-type');
     }
 
     function getUserLevelText(uid){
@@ -37,7 +38,7 @@
 
     function loadData() {
       vm.loadingData = true;
-      var url = "/weshares/get_u_list_data/" + vm.userId + "/" + vm.page + ".json";
+      var url = "/weshares/get_u_list_data/"+vm.dataType+"/"+ vm.userId + "/" + vm.page + ".json";
       $http({method: 'GET', url: url, cache: $templateCache}).
         success(function (data, status) {
           vm.loadingData = false;

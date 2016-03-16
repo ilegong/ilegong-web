@@ -6,18 +6,17 @@
     <title>我的粉丝</title>
     <link rel="stylesheet" href="{{$STATIC_FILE_PATH}}/static/weshares/css/user-info.min.css"/>
 </head>
-
 <body>
-<div class="big" ng-controller="UserListCtrl as vm" id="userListView" data-uid="{{$uid}}" data-me="{{$me}}">
+<div class="container" ng-controller="UserListCtrl as vm" id="userListView" data-uid="{{$uid}}" data-me="{{$me}}" data-type="{{$type}}">
     <!--标题-->
-    <ul class="clearfix tuijian-top-sousuo">
-        <li class="fanhui fl" onclick=""><img class="fanhui-size"
+    <ul class="clearfix top-nav-bar">
+        <li class="back fl" onclick=""><img class="back-icon"
                                               src="{{$STATIC_FILE_PATH}}/static/weshares/images/back.png"></li>
-        <li class="test-fanhui fl" onclick="">返回</li>
-        <li class="fensi fl">我的粉丝</li>
-        <li class="home fr"><img class="home-size" src="{{$STATIC_FILE_PATH}}/static/weshares/images/home.png"></li>
+        <li class="text-back fl" onclick="">返回</li>
+        <li class="title fl">我的粉丝</li>
+        <li class="home fr"><img class="home-icon" src="{{$STATIC_FILE_PATH}}/static/weshares/images/home.png"></li>
     </ul>
-    <div class="bg"></div>
+    <div class="user-list-placeholder"></div>
     <div ng-include="'{{$STATIC_FILE_PATH}}/static/weshares/templates/u-list-place.html?v0.0.1'"></div>
 </div>
 </body>
