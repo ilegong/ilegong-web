@@ -5,10 +5,6 @@ $(document).ready(function () {
   var $userInfoPlaceHolder = $('#user-info-placeholder');
   var $showCommentLi = $('#show-comment-modal-dialog');
   var $commentModalDialog = $('#commentListModal');
-  var $showFansLi = $('#show-fans-modal-dialog');
-  var $fansModalDialog = $('#fansListModal');
-  var $showFocusLi = $('#show-focus-modal-dialog');
-  var $focusModalDialog = $('#focusListModal');
   var $showUpdateUserInfoDialog = $('#open-update-user-info-dialog');
   var $showUpdatePasswordDialog = $('#open-update-user-password-dialog');
   var $updateUserPasswordDialog = $('#updateUserPassword');
@@ -43,12 +39,7 @@ $(document).ready(function () {
   $showCommentLi.on('click', function () {
     $commentModalDialog.modal({show: true, backdrop: 'static'});
   });
-  $showFansLi.on('click', function () {
-    $fansModalDialog.modal({show: true, backdrop: 'static'});
-  });
-  $showFocusLi.on('click', function () {
-    $focusModalDialog.modal({show: true, backdrop: 'static'});
-  });
+
   $showUpdatePasswordDialog.on('click', function () {
     $updateUserPasswordDialog.modal({show: true, backdrop: 'static'});
   });

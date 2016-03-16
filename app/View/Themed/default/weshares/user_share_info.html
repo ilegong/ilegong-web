@@ -68,57 +68,7 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-<!--focus data-->
-<div class="modal fade" id="focusListModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" style="float: left;" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" style="text-align: center;">{{if empty($focus_count)}}0{{else}}{{$focus_count}}{{/if}}关注</h4>
-            </div>
-            <div class="modal-body">
-                <div class="pageContentWrapper" style="height: 75vh;overflow: scroll;">
-                    <!-- team members start -->
-                    {{loop $focus_data $focus_key $focus_data_item}}
-                    <div class="columnWrapper oneFifth teamMember {{if ($focus_key+1)%5==0}}lastColumn{{/if}}">
-                        <a href="/weshares/user_share_info/{{$focus_data_item['id']}}" class="teamMemberImageLink"> <img style="height: 50px;width: 50px;border-radius: 50px;" data-original="{{get_user_avatar($focus_data_item)}}" class="teamMemberImage lazy" alt="" /> </a>
-                        <h3 class="teamMemberName" style="margin-top: 10px;word-wrap: break-word;font-size: 13px;">{{$focus_data_item['nickname']}}</h3>
-                    </div>
-                    {{/loop}}
-                </div>
-            </div>
-        </div><!-- /.modal-content -->
-    </div>
-</div>
-<!--fans data-->
-<div class="modal fade" id="fansListModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" style="float: left;" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" style="text-align: center;">{{$follower_count}}粉丝</h4>
-            </div>
-            <div class="modal-body">
-                <div class="pageContentWrapper" style="height: 75vh;overflow: scroll;">
-                    <!-- team members start -->
-                    <?php
-                        $fans_user_info = $fans_data['fans_data'];
-                        $fans_relations = $fans_data['relations'];
-                        $fan_key = 0;
-                     ?>
-                    {{loop $fans_relations $fan_id}}
-                    <?php $fan_data = $fans_user_info[$fan_id]; ?>
-                    <div class="columnWrapper oneFifth teamMember {{if ($fan_key+1)%5==0}}lastColumn{{/if}}">
-                        <a href="/weshares/user_share_info/{{$fan_data['id']}}" class="teamMemberImageLink"> <img style="height: 50px;width: 50px;border-radius: 50px;" data-original="{{get_user_avatar($fan_data)}}" class="teamMemberImage lazy" alt="" /> </a>
-                        <h3 class="teamMemberName" style="margin-top: 10px;word-wrap: break-word;font-size: 13px;">{{$fan_data['nickname']}}</h3>
-                    </div>
-                    <?php $fan_key = $fan_key + 1; ?>
-                    {{/loop}}
-                </div>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div>
+
 <div class="row" style="background: #EAEAEA;">
     <div class="col-md-12 user-details">
         <div class="user-image">
@@ -168,13 +118,13 @@
                             </a>
                         </li>
                         <li id="show-fans-modal-dialog" style="display:inline-block;width: 65px;text-align: center;border-right-width: 1px;border-right-style: solid;border-color: #d9d9d9;">
-                            <a style="display: block;color: #333;text-decoration: none;">
+                            <a style="display: block;color: #333;text-decoration: none;" href="/weshares/fans_list/{{$share_user['id']}}">
                                 <strong style="display: block;font-weight: bold;line-height: 18px;width: 65px;overflow: hidden;color: #449D44;">{{$follower_count}}</strong>
                                 <span style="display: block;font-size: 12px;color: #808080;text-decoration: none;">粉丝</span>
                             </a>
                         </li>
-                        <li id="show-focus-modal-dialog" style="display:inline-block;width: 65px;text-align: center;">
-                            <a style="display: block;color: #333;text-decoration: none;">
+                        <li style="display:inline-block;width: 65px;text-align: center;">
+                            <a style="display: block;color: #333;text-decoration: none;" href="/weshares/sub_list/{{$share_user['id']}}">
                                 <strong style="display: block;font-weight: bold;line-height: 18px;width: 65px;overflow: hidden;color: #449D44;">{{if empty($focus_count)}}0{{else}}{{$focus_count}}{{/if}}</strong>
                                 <span style="display: block;font-size: 12px;color: #808080;text-decoration: none;">关注</span>
                             </a>
