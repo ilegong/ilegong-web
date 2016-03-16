@@ -12,6 +12,7 @@ $(document).ready(function () {
   var last_timestamp = 0;
   var bottomTimeStamp = 0;
   var currentUserId = $logListDiv.data('uid');
+  var processingSubmit = false;
 
   var lazyLoadOptions = {
     event: "scrollstop",
@@ -19,7 +20,6 @@ $(document).ready(function () {
     no_fake_img_loader: true,
     container: $logListDiv
   };
-
 
   function lazyLoadImg() {
     var $optLogs = $('div.list_item', $logListDiv);
@@ -59,18 +59,19 @@ $(document).ready(function () {
     }
   }
 
-  function subUser(userId) {
-    $.getJSON('/weshares/subscribe_sharer/' + userId + "/" + currentUserId, function (data) {
-
-    });
+  function subUser(userId, callback) {
+    processingSubmit = true;
+    $.getJSON('/weshares/subscribe_sharer/' + userId + "/" + currentUserId, callback);
   }
 
-  function unSubUser(userId) {
-    $.getJSON('/weshares/unsubscribe_sharer/' + userId + "/" + currentUserId, function (data) {
-
-    });
+  function unSubUser(userId, callback) {
+    processingSubmit = true;
+    $.getJSON('/weshares/unsubscribe_sharer/' + userId + "/" + currentUserId, callback);
   }
 
+  function afterSubUser() {
+
+  }
 
   function loadOptLogData() {
     if (loadDataFlag == 1) {
@@ -110,6 +111,8 @@ $(document).ready(function () {
       loadDataFlag = 0;
       $loadingDiv.hide();
       bindToogleUnSubClick();
+      bindSubEvent();
+      bindUnSubEvent();
       loadDataTimes = loadDataTimes + 1;
     };
     $.getJSON(getOptLogUrl, reqParams, callbackFunc);
@@ -151,8 +154,72 @@ $(document).ready(function () {
     }
   });
 
+  function processSubEvent($el) {
+    var userId = $el.data('user-id');
+
+    function callback(data) {
+      //toggle dom
+      if (data['success']) {
+        var $parent = $el.parent();
+        $el.remove();
+        $parent.append('<div class="bk-balck ta follow" follow="<%this.check_relation%>">已关注</div><div class="bk-balck ta unfollow hidden un-sub-user-btn" follow="true" data-user-id="' + userId + '">取消关注</div>');
+        $parent.addClass('un-sub-group');
+        //bind event
+        $('div.follow', $parent).on('click', function (e) {
+          e.preventDefault();
+          $('div.unfollow', $parent).toggle();
+        });
+        $('div.un-sub-user-btn', $parent).on('click', function (e) {
+          e.preventDefault();
+          var $el = $(this);
+          processUnSubEvent($el)
+        });
+      }
+      processingSubmit = false;
+    }
+
+    subUser(userId, callback);
+  }
+
+  function bindSubEvent() {
+    $('div.sub-user-btn', $('div.list_item_' + loadDataTimes)).on('click', function (e) {
+      e.preventDefault();
+      var $el = $(this);
+      processSubEvent($el);
+    });
+  }
+
+  function processUnSubEvent($el) {
+    var userId = $el.data('user-id');
+    function callback(data) {
+      //toggle dom
+      if (data['success']) {
+        var $parent = $el.parent();
+        $parent.empty();
+        $parent.append('<div class="bk-balck ta sub-user-btn" follow="false" data-user-id="' + userId + '">关注TA</div>');
+        $parent.removeClass('un-sub-group');
+        $('div.sub-user-btn', $parent).on('click', function (e) {
+          e.preventDefault();
+          var $el = $(this);
+          processSubEvent($el);
+        })
+      }
+      processingSubmit = false;
+    }
+    unSubUser(userId, callback);
+  }
+
+  function bindUnSubEvent() {
+    $('li.un-sub-group .un-sub-user-btn', $('div.list_item_' + loadDataTimes)).on('click', function (e) {
+      e.preventDefault();
+      var $el = $(this);
+      processUnSubEvent($el);
+    });
+  }
+
   function bindToogleUnSubClick() {
-    $('li.un-sub-group .follow', $('div.list_item_'+loadDataTimes)).on('click', function () {
+    $('li.un-sub-group .follow', $('div.list_item_' + loadDataTimes)).on('click', function (e) {
+      e.preventDefault();
       $('div.unfollow', $(this).parent()).toggle();
     });
   }
@@ -173,12 +240,12 @@ $(document).ready(function () {
     '</li>' +
     '<%if(this.check_relation){%>' +
     '<li class="fr">' +
-    '<div class="bk-balck ta" follow="<%this.check_relation%>" data-user-id="<%this.proxy_id%>">关注TA</div>' +
+    '<div class="bk-balck ta sub-user-btn" follow="<%this.check_relation%>" data-user-id="<%this.proxy_id%>">关注TA</div>' +
     '</li>' +
     '<%}else{%>' +
     '<li class="fr un-sub-group">' +
     '<div class="bk-balck ta follow" follow="<%this.check_relation%>">已关注</div>' +
-    '<div class="bk-balck ta unfollow hidden" follow="<%this.check_relation%>" data-user-id="<%this.proxy_id%>">取消关注</div>' +
+    '<div class="bk-balck ta unfollow hidden un-sub-user-btn" follow="<%this.check_relation%>" data-user-id="<%this.proxy_id%>">取消关注</div>' +
     '</li>' +
     '<%}%>' +
     '</ul>' +
