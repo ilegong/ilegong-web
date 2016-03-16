@@ -7,7 +7,7 @@ class UserFansComponent extends Component{
     public function get_fans($uid, $page = 1){
         $queryCond = ['conditions' => ['user_id' => $uid, 'deleted' => DELETED_NO], 'limit' => self::$PAGE_LIMIT, 'page' => $page];
         $data = $this->process_query_data($queryCond, 'follow_id', $uid);
-        if($page == 1){
+        if ($page == 1) {
             $page_info = $this->get_page_info($queryCond, self::$PAGE_LIMIT);
             $data['page_info'] = $page_info;
         }
@@ -16,12 +16,12 @@ class UserFansComponent extends Component{
 
     public function get_subs($uid, $page = 1){
         $queryCond = ['conditions' => ['follow_id' => $uid, 'deleted' => DELETED_NO], 'limit' => self::$PAGE_LIMIT, 'page' => $page];
-        $users = $this->process_query_data($queryCond, 'user_id', $uid);
-        if($page == 1){
+        $data = $this->process_query_data($queryCond, 'user_id', $uid);
+        if ($page == 1) {
             $page_info = $this->get_page_info($queryCond, self::$PAGE_LIMIT);
             $data['page_info'] = $page_info;
         }
-        return $users;
+        return $data;
     }
 
     private function process_query_data($queryCond, $extract_field, $uid){
