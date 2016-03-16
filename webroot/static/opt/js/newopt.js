@@ -113,7 +113,31 @@ $(document).ready(function () {
       oldest_timestamp = data['oldest_timestamp'];
       loadDataFlag = 0;
       $loadingDiv.hide();
-
+      $('div.bk-balck').on('click', function (){
+        var user_a = $(this).attr('user-a');
+        var user_b = $(this).attr('user-b');
+        if ($(this).attr('follow') == 'true') {
+          // 取关
+          $.ajax({
+            url: '/weshares/unsubscribe_sharer/' + user_a + "/" + user_b,
+            dataType: 'json',
+            success: function(data) {
+              $(this).text('关注TA');
+              $(this).attr('follow', 'false');
+            }.bind(this),
+          });
+        } else {
+          // 关注
+          $.ajax({
+            url: '/weshares/subscribe_sharer/' + user_a + "/" + user_b,
+            dataType: 'json',
+            success: function(data) {
+              $(this).text('取消关注');
+              $(this).attr('follow', 'true');
+            }.bind(this),
+          });
+        }
+      });
     };
     $.getJSON(getOptLogUrl, reqParams, callbackFunc);
   }
@@ -191,8 +215,7 @@ $(document).ready(function () {
       '<div class="urser biao-bin"><%this.customer%>报名了</div>' +
      '</li>' +
     '<li class="fr">' + 
-      '<div class="bk-balck ta follow" follow="<%this.check_relation%>" user-a="<%this.proxy_id%>" user-b="<%this.current_user%>">关注TA</div>' + 
-      '<div class="bk-balck ta unfollow hidden" follow="<%this.check_relation%>" user-a="<%this.proxy_id%>" user-b="<%this.current_user%>">取消关注</div>' +
+      '<div class="bk-balck ta" follow="<%this.check_relation%>" user-a="<%this.proxy_id%>" user-b="<%this.current_user%>"><%if(this.check_relation){%>取消关注<%}else{%>关注TA<%}%></div>' + 
     '</li>' +
   '</ul>' +
   '<!--产品-->' +
