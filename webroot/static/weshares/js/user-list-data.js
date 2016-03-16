@@ -7,12 +7,15 @@
     vm.loadData = loadData;
     vm.getUserLevelText = getUserLevelText;
     vm.hasSub = hasSub;
+    vm.toggleHideShowUnSubBtn = toggleHideShowUnSubBtn;
+    vm.unSub = unSub;
     vm.noMoreData = false;
     vm.loadingData = false;
     vm.page = 1;
     vm.users = [];
     vm.level_map =  {};
     vm.sub_user_ids = [];
+    vm.flag_show_un_sub = {};
     vm.levelTextMap = ['分享达人',
       '实习团长',
       '正式团长',
@@ -25,6 +28,18 @@
       vm.userId = angular.element(document.getElementById('userListView')).attr('data-uid');
       vm.me = angular.element(document.getElementById('userListView')).attr('data-me');
       vm.dataType = angular.element(document.getElementById('userListView')).attr('data-type');
+    }
+
+    function toggleHideShowUnSubBtn(uid){
+      if(!vm.flag_show_un_sub[uid]){
+        vm.flag_show_un_sub[uid] = true;
+        return;
+      }
+      vm.flag_show_un_sub[uid] = !vm.flag_show_un_sub[uid];
+    }
+
+    function unSub(uid){
+
     }
 
     function getUserLevelText(uid){

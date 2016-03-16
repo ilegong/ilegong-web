@@ -12,10 +12,10 @@
                 <div ng-if="!vm.level_map[user['User']['id']]" class="no-level level no-level-holder nickname-patch">TA是个吃货游客~~</div>
             </li>
             <li class="fr" ng-if="!vm.hasSub(user['User']['id'])"><div class="dark-gray-black sub-user">关注TA</div></li>
-            <li class="fr" ng-if="vm.hasSub(user['User']['id'])"><div class="dark-gray-black un-sub-user">已关注<img lazy-src="http://static.tongshijia.com/static/weshares/images/arrow-d.png"></div></li>
+            <li class="fr" ng-if="vm.hasSub(user['User']['id'])" ng-click="vm.toggleHideShowUnSubBtn(user['User']['id'])"><div class="dark-gray-black un-sub-user">已关注<img lazy-src="http://static.tongshijia.com/static/weshares/images/arrow-d.png"></div></li>
+            <li class="fr" ng-if="vm.flag_show_un_sub[user['User']['id']]"><div class="dark-gray-black sub-user un-sub">取消关注</div></li>
         </ul>
     </div>
-
     <div style="text-align: center;color: #ffa200;margin-bottom: 10px;" ng-show='vm.loadingData'>加载中...</div>
     <div style="text-align: center;color: #ffa200;margin-bottom: 10px;" ng-show='vm.noMoreData'>没有更多数据</div>
 </div>
