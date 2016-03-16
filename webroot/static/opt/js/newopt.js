@@ -91,8 +91,10 @@ $(document).ready(function () {
       "limit": 10
     };
     var callbackFunc = function (data) {
+      $loadingDiv.find('div').text('数据加载中...');
       if (data.error) {
-        alert('没有获取到有效数据!!!');
+        loadDataFlag = 0;
+        $loadingDiv.find('div').text('没有获取到(更多)有效数据!!!');
         return;
       }
       var list = data['opt_logs'];
