@@ -113,6 +113,7 @@ $(document).ready(function () {
       oldest_timestamp = data['oldest_timestamp'];
       loadDataFlag = 0;
       $loadingDiv.hide();
+
     };
     $.getJSON(getOptLogUrl, reqParams, callbackFunc);
   }
@@ -189,7 +190,10 @@ $(document).ready(function () {
       '<div class="time  biao-bin"><%this.readtime%></div>' +
       '<div class="urser biao-bin"><%this.customer%>报名了</div>' +
      '</li>' +
-    '<li class="fr"><div class="bk-balck ta">关注TA</div></li>' +
+    '<li class="fr">' + 
+      '<div class="bk-balck ta follow" follow="<%this.check_relation%>" user-a="<%this.proxy_id%>" user-b="<%this.current_user%>">关注TA</div>' + 
+      '<div class="bk-balck ta unfollow hidden" follow="<%this.check_relation%>" user-a="<%this.proxy_id%>" user-b="<%this.current_user%>">取消关注</div>' +
+    '</li>' +
   '</ul>' +
   '<!--产品-->' +
     '<div>' +

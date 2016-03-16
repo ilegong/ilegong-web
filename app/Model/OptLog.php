@@ -50,15 +50,7 @@ class OptLog extends AppModel {
         ];
         if ($followed && $this->uid) {
             // 当用户选定只看fllowed的团长的东西时, 我们需要做一些过滤.
-            $userRelationM = ClassRegistry::init('UserRelation');
-            $info = $userRelationM->find('all', [
-                'conditions' => [
-                    'follow_id' => $this->uid,
-                    'deleted' => DELETED_NO,
-                ],
-                'fields' => ['user_id'],
-            ]);
-            $info = Hash::extract($info, '{n}.UserRelation.user_id');
+            $info = $this->get_my_proxys();
             if (!$info) {
                 return false;
             }
@@ -78,6 +70,23 @@ class OptLog extends AppModel {
         }
         $opt_logs = $this->find('all', $fetch_option);
         return $opt_logs;
+    }
+
+    /* 获取用户关注的团长ID */
+    public function get_my_proxys($uid = false)
+    {
+        $uid = $uid ? $uid: $this->uid;
+        $userRelationM = ClassRegistry::init('UserRelation');
+        $info = $userRelationM->find('all', [
+            'conditions' => [
+                'follow_id' => $uid,
+                'deleted' => DELETED_NO,
+            ],
+            'fields' => ['user_id'],
+        ]);
+        $info = Hash::extract($info, '{n}.UserRelation.user_id');
+
+        return $info;
     }
 
     /**
