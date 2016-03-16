@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <meta charset="utf-8">
-    <title>{{if $type==0}}我的粉丝{{else}}我关注的{{/if}}</title>
+    <title>{{$title}}</title>
     <link rel="stylesheet" href="{{$STATIC_FILE_PATH}}/static/weshares/css/user-info.min.css"/>
 </head>
 <body>
@@ -13,17 +13,12 @@
         <li class="back fl" onclick=""><img class="back-icon"
                                               src="{{$STATIC_FILE_PATH}}/static/weshares/images/back.png"></li>
         <li class="text-back fl" onclick="">返回</li>
-        <li class="title fl">我的粉丝</li>
+        <li class="title fl">{{$title}}</li>
         <li class="home fr"><img class="home-icon" src="{{$STATIC_FILE_PATH}}/static/weshares/images/home.png"></li>
     </ul>
     <div class="user-list-placeholder"></div>
     <div ng-include="'{{$STATIC_FILE_PATH}}/static/weshares/templates/u-list-place.html?v0.0.1'"></div>
 </div>
 </body>
-<script src="{{$STATIC_FILE_PATH}}/static/weshares/js/angular.min.js"></script>
-<script src="{{$STATIC_FILE_PATH}}/static/weshares/js/ng-infinite-scroll.min.js"></script>
-<script src="{{$STATIC_FILE_PATH}}/static/weshares/js/me-lazyload.js"></script>
-<script src="{{$STATIC_FILE_PATH}}/static/weshares/js/underscore-min.js"></script>
-<script src="{{$STATIC_FILE_PATH}}/static/weshares/js/user-info-app.js"></script>
-<script src="{{$STATIC_FILE_PATH}}/static/weshares/js/user-list-data.js"></script>
+<script src="{{$STATIC_FILE_PATH}}/static/weshares/js/user-info.min.js"></script>
 </html>
