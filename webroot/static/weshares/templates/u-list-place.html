@@ -3,7 +3,7 @@
     <div class="clearfix" ng-repeat="user in vm.users">
         <!--个人信息关注TA-->
         <ul class="u-item border-bottom clearfix">
-            <li class="fl"><img class="avatar" lazy-src="{{user['User']['image']}}" onerror="this.src='http://static.tongshijia.com/avatar/s/default.jpg'"></li>
+            <li class="fl" ng-click="vm.viewUser(user['User']['id'])"><img class="avatar" lazy-src="{{user['User']['image']}}" onerror="this.src='http://static.tongshijia.com/avatar/s/default.jpg'"></li>
             <li class="center fl">
                 <div class="nickname nickname-patch" ng-bind="user['User']['nickname']"></div>
                 <div ng-if="vm.level_map[user['User']['id']]" class="level level-holder" ng-bind="vm.getUserLevelText(user['User']['id'])"></div>

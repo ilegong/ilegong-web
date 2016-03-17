@@ -10,6 +10,7 @@
     vm.toggleHideShowUnSubBtn = toggleHideShowUnSubBtn;
     vm.unSub = unSub;
     vm.subUser = subUser;
+    vm.viewUser = viewUser;
     vm.noMoreData = false;
     vm.loadingData = false;
     vm.page = 1;
@@ -39,6 +40,10 @@
         return;
       }
       vm.flag_show_un_sub[uid] = !vm.flag_show_un_sub[uid];
+    }
+
+    function viewUser(uid){
+      window.location.href = '/weshares/user_share_info/'+uid;
     }
 
     function unSub(uid) {
