@@ -204,12 +204,12 @@ class OptLogHelperComponent extends Component {
             $tmp['proxy_id'] = $user['id'];
             $tmp['current_user'] = $this->uid;
             $tmp['check_relation'] = in_array($user['id'], $my_proxys);
-            $tmp['avatar'] = get_user_avatar($user);
+            $tmp['avatar'] = get_user_avatar($user) ? : "http://static.tongshijia.com/static/img/default_avatar.png";
             $tmp['level'] = "V{$level}{$level_pool[$level]}";
             $tmp['title'] = $share['title'];
             $tmp['description'] = mb_substr($share['description'], 0, 110);
             $image = explode('|', $share['images'])[0];
-            $tmp['image'] = $image ? : "http://static.tongshijia.com/static/img/default_user_icon.jpg";
+            $tmp['image'] = $image ? : "http://static.tongshijia.com/static/img/default_product_banner.png";
             // 1. 报名数
             $tmp['baoming'] = $this->WeshareBuy->get_share_and_all_refer_share_count($share['id'], $user['id']);
             // 2. 浏览数
