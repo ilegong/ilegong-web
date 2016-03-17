@@ -339,13 +339,6 @@ footer {
   color: #666;
   line-height: 2em; }
 
-::-webkit-scrollbar {
-  width: 3px;
-  height: 1px; }
-
-::-webkit-scrollbar-track-piece {
-  background: 0 0; }
-
 @-webkit-keyframes audio_con_circle_spinner {
   0% { }
   100% { } }
@@ -578,5 +571,12 @@ ul li {
 
 .chanpin > a > img {
   width: 100%; }
+
+::-webkit-scrollbar {
+  width: 3px;
+  height: 1px; }
+
+::-webkit-scrollbar-track-piece {
+  background: 0 0; }
 
 /*# sourceMappingURL=new-opt.min.css.map */
