@@ -2757,4 +2757,9 @@ class WeshareBuyComponent extends Component {
         //TODO calculate share ship fee
     }
 
+    public function update_share_view_count($id){
+        $weshareM = ClassRegistry::init('Weshare');
+        $weshareM->update(['view_count' => 'view_count + 1'], ['id' => $id]);
+    }
+
 }

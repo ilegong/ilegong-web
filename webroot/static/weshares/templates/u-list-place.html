@@ -2,20 +2,18 @@
      infinite-scroll-distance='1'>
     <div class="clearfix" ng-repeat="user in vm.users">
         <!--个人信息关注TA-->
-        <ul class="u-item border-bottom">
-            <li ><img class="avatar fl" lazy-src="{{user['User']['image']}}" onerror="this.src='http://static.tongshijia.com/avatar/s/default.jpg'"></li>
+        <ul class="u-item border-bottom clearfix">
+            <li class="fl"><img class="avatar" lazy-src="{{user['User']['image']}}" onerror="this.src='http://static.tongshijia.com/avatar/s/default.jpg'"></li>
             <li class="center fl">
-                <br>
                 <div class="nickname nickname-patch" ng-bind="user['User']['nickname']"></div>
-                <br>
-                <div ng-if="vm.level_map[user['User']['id']]" class="level-patch level level-holder nickname-patch" ng-bind="vm.getUserLevelText(user['User']['id'])"></div>
-                <div ng-if="!vm.level_map[user['User']['id']]" class="no-level level no-level-holder nickname-patch">TA是个吃货游客~~</div>
+                <div ng-if="vm.level_map[user['User']['id']]" class="level level-holder" ng-bind="vm.getUserLevelText(user['User']['id'])"></div>
+                <div ng-if="!vm.level_map[user['User']['id']]" class="level no-level">TA是个吃货游客~~</div>
             </li>
-            <div ng-if="vm.me==1">
-                <li class="fr" ng-if="!vm.hasSub(user['User']['id'])"><div class="dark-gray-black sub-user">关注TA</div></li>
-                <li class="fr" ng-if="vm.hasSub(user['User']['id'])" ng-click="vm.toggleHideShowUnSubBtn(user['User']['id'])"><div class="dark-gray-black un-sub-user">已关注<img lazy-src="http://static.tongshijia.com/static/weshares/images/arrow-d.png"></div></li>
-                <li class="fr" ng-if="vm.flag_show_un_sub[user['User']['id']]" ng-click="vm.unSub(user['User']['id'])"><div class="dark-gray-black sub-user un-sub">取消关注</div></li>
-            </div>
+            <li class="fr" ng-if="vm.me==1" style="position: relative;">
+                <div ng-if="!vm.hasSub(user['User']['id'])" ng-click="vm.subUser(user['User']['id'])" class="dark-gray-black sub-user">关注TA</div>
+                <div ng-if="vm.hasSub(user['User']['id'])" ng-click="vm.toggleHideShowUnSubBtn(user['User']['id'])" class="dark-gray-black un-sub-user">已关注<img lazy-src="http://static.tongshijia.com/static/weshares/images/arrow-d.png"></div>
+                <div ng-if="vm.flag_show_un_sub[user['User']['id']]" ng-click="vm.unSub(user['User']['id'])" class="dark-gray-black sub-user un-sub">取消关注</div>
+            </li>
         </ul>
     </div>
     <div style="text-align: center;color: #ffa200;margin-bottom: 10px;" ng-show='vm.loadingData'>加载中...</div>

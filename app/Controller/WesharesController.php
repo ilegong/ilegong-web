@@ -113,6 +113,7 @@ class WesharesController extends AppController {
         if (!empty($replay_comment_id)) {
             $this->set('reply_comment_id', $replay_comment_id);
         }
+        $this->WeshareBuy->update_share_view_count($weshare_id);
     }
 
     /**
