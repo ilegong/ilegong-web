@@ -441,7 +441,7 @@ class ShareUtilComponent extends Component
                 $now = date('Y-m-d H:i:s');
                 $shareImg = explode('|', $shareInfo['images']);
                 $title = '大家一起拼团' . $origin_sharer_nickname . '分享的' . $shareInfo['title'];
-                $optLogData = array('user_id' => $uid, 'obj_type' => OPT_LOG_START_GROUP_SHARE, 'obj_id' => $newShareId, 'created' => $now, 'memo' => $title, 'thumbnail' => $shareImg[0]);
+                $optLogData = array('obj_creator' => $shareInfo['creator'], 'user_id' => $uid, 'obj_type' => OPT_LOG_START_GROUP_SHARE, 'obj_id' => $newShareId, 'created' => $now, 'memo' => $title, 'thumbnail' => $shareImg[0]);
                 $this->saveOptLog($optLogData);
             }
             return array('shareId' => $newShareId, 'success' => true);
@@ -672,7 +672,7 @@ class ShareUtilComponent extends Component
         $title = $share_info['title'];
         $sharer_name = $this->WeshareBuy->get_user_nickname($share_info['creator']);
         $title = $sharer_name . '分享的' . $title;
-        $optLogData = array('user_id' => $userId, 'obj_type' => OPT_LOG_SHARE_RECOMMEND, 'obj_id' => $shareId, 'created' => $now, 'memo' => $title, 'reply_content' => $memo, 'thumbnail' => $shareImg[0]);
+        $optLogData = array('obj_creator' => $share_info['creator'], 'user_id' => $userId, 'obj_type' => OPT_LOG_SHARE_RECOMMEND, 'obj_id' => $shareId, 'created' => $now, 'memo' => $title, 'reply_content' => $memo, 'thumbnail' => $shareImg[0]);
         $this->saveOptLog($optLogData);
         $sendResult = $this->WeshareBuy->send_recommend_msg($userId, $shareId, $memo);
         $this->notify_sharer_recommend($userId, $shareId);
@@ -708,6 +708,7 @@ class ShareUtilComponent extends Component
     {
         $optData = array(
             'user_id' => $user_id,
+            'obj_creator' => $user_id,
             'obj_type' => OPT_LOG_CREATE_SHARE,
             'obj_id' => $share_id,
             'created' => date('Y-m-d H:i:s'),
@@ -842,7 +843,8 @@ class ShareUtilComponent extends Component
             'obj_id' => $tag_id,
             'created' => date('Y-m-d H:i:s'),
             'memo' => $memo,
-            'thumbnail' => $thumbnail
+            'thumbnail' => $thumbnail,
+            'obj_creator' => $user_id,
         );
         $this->saveOptLog($optData);
     }
@@ -870,7 +872,8 @@ class ShareUtilComponent extends Component
             'created' => date('Y-m-d H:i:s'),
             'memo' => $memo,
             'reply_content' => $order_info,
-            'thumbnail' => $thumbnail
+            'thumbnail' => $thumbnail,
+            'obj_creator' => $share_info['creator']
         );
         //me test account don't show
         if ($share_info['creator'] == 802852) {
@@ -900,7 +903,8 @@ class ShareUtilComponent extends Component
             'created' => date('Y-m-d H:i:s'),
             'memo' => $memo,
             'thumbnail' => $thumbnail,
-            'reply_content' => $replay_text
+            'reply_content' => $replay_text,
+            'obj_creator' => $share_info['creator']
         );
         $this->saveOptLog($optData);
     }
@@ -1119,7 +1123,7 @@ class ShareUtilComponent extends Component
                 $now = date('Y-m-d H:i:s');
                 $shareImg = explode('|', $group_share['images']);
                 $title = $group_share['title'];
-                $optLogData = array('user_id' => $order_creator, 'obj_type' => OPT_LOG_START_GROUP_SHARE, 'obj_id' => $group_share_id, 'created' => $now, 'memo' => $title, 'thumbnail' => $shareImg[0]);
+                $optLogData = array('obj_creator' => $group_share['creator'], 'user_id' => $order_creator, 'obj_type' => OPT_LOG_START_GROUP_SHARE, 'obj_id' => $group_share_id, 'created' => $now, 'memo' => $title, 'thumbnail' => $shareImg[0]);
                 $this->saveOptLog($optLogData);
                 //send msg
                 $this->trigger_send_new_share_msg($group_share_id, $order_creator);
