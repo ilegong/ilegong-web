@@ -194,7 +194,7 @@ class OptLogHelperComponent extends Component {
             // 1. 报名数
             $tmp['baoming'] = $this->WeshareBuy->get_share_and_all_refer_share_count($share['id'], $user['id']);
             // 2. 浏览数
-            $tmp['liulan'] = 100;
+            $tmp['liulan'] = $share['view_count'];
 
             $ret[$share['id']] = $tmp;
         }
