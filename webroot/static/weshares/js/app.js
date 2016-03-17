@@ -23,9 +23,19 @@
     };
   })
 })(window, window.angular);
-
 (function (window, angular) {
   angular.module('module.directives', [])
+      .directive('fallbackSrc', function () {
+    var fallbackSrc = {
+      link: function postLink(scope, iElement, iAttrs) {
+        iElement.bind('error', function() {
+          angular.element(this).attr("src", iAttrs.fallbackSrc);
+        });
+      }
+    }
+    return fallbackSrc;
+  });
+
 })(window, window.angular);
 
 (function (window, angular) {
