@@ -716,8 +716,6 @@ class WesharesController extends AppController {
         $userShareSummery = $this->getUserShareSummery($uid);
         $shareCommentData = $this->getSharerCommentData($my_create_share_ids, $uid);
         $userCommentData = $this->WeshareBuy->load_user_share_comments($uid);
-        $userFansData = $this->WeshareBuy->get_user_fans_data($uid, 100);
-        $userFocusData = $this->WeshareBuy->get_user_focus($uid, 100);
         if ($uid != $current_uid) {
             $sub_status = $this->WeshareBuy->check_user_subscribe($uid, $current_uid);
             $this->set('sub_status', $sub_status);
@@ -746,11 +744,7 @@ class WesharesController extends AppController {
         $this->set('sharer_comment_data', $shareCommentData);
         $this->set('user_comment_data', $userCommentData);
         $this->set('is_verify_user', $this->is_verify_sharer($uid));
-        $canSupportOfflineStore = $this->sharer_can_use_we_ship($uid);
-        $this->set('is_support_offline_store', $canSupportOfflineStore > 0);
         $this->set('join_share_order_status', $joinShareOrderStatus);
-        $this->set('fans_data', $userFansData);
-        $this->set('focus_data', $userFocusData);
         $pintuan_data = $this->PintuanHelper->get_user_pintuan_data($uid);
         $this->set('pintuan_data', $pintuan_data);
         if($uid == $current_uid && !empty($user_level)){

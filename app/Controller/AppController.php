@@ -65,7 +65,7 @@ class AppController extends Controller {
     	$site_info = Configure::read('Site');
     	$this->set('site', $site_info);
     	$GLOBALS['site_cate_id'] = Configure::read('Site.default_site_cate_id');
-        
+
 
     	// 无Session，且有Cookie登录信息时，解析cookie生成信息。否则忽略cookie，防止每次都要消耗性能解密cookie
     	// 其余时间使用session。
