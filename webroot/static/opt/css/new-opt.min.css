@@ -579,4 +579,12 @@ footer {
 ul li {
   list-style: none; }
 
+.img, .show, .text1, .text2 {
+  padding-top: 12px; }
+
+.text2 {
+  font-size: 1em;
+  color: #999;
+  padding-right: 12px; }
+
 /*# sourceMappingURL=new-opt.min.css.map */
