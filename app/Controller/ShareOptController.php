@@ -81,14 +81,15 @@ class ShareOptController extends AppController {
             $opt_logs = [];
             $combine_data = [];
         } else {
-            $opt_log_data = $this->OptLogHelper->load_opt_log($time, $limit, $type, 1, $follow);
             if ($new) {
+                $opt_log_data = $this->OptLogHelper->load_opt_log($time, $limit, $type, 1, $follow);
                 $opt_logs = $opt_log_data;
                 $combine_data = [];
                 if (!$opt_logs) {
                     return ['error' => 'get data failed.'];
                 }
             } else {
+                $opt_log_data = $this->OptLogHelper->load_opt_log($time, $limit, $type, 0, $follow);
                 $opt_logs = $opt_log_data['opt_logs'];
                 $combine_data = $opt_log_data['combine_data'];
             }
