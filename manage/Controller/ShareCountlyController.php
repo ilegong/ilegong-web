@@ -80,6 +80,8 @@ class ShareCountlyController extends AppController
         ]);
         $users = Hash::combine($users, '{n}.User.id', '{n}.User');
         $this->set('users', $users);
+        $this->set('startDate', $startDate);
+        $this->set('endDate', $endDate);
         $this->set('weshares', $weshares);
     }
 
