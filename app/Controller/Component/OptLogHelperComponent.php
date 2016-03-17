@@ -175,7 +175,12 @@ class OptLogHelperComponent extends Component {
             $level = $item['UserLevel']['data_value'];
             $tmp = [];
             $tmp['share_id'] = $share['id'];
-            $tmp['proxy'] = $user['nickname'];
+            $nickname = $user['nickname'];
+            if (mb_strlen($nickname) > 4) {
+                $tmp['proxy'] = mb_substr($nickname, 0, 4) . '...';
+            } else {
+                $tmp['proxy'] = $nickname;
+            }
             $tmp['proxy_id'] = $user['id'];
             $tmp['current_user'] = $this->uid;
             $tmp['check_relation'] = in_array($user['id'], $my_proxys);
