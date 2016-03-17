@@ -1304,6 +1304,20 @@ function thumb_link($imgUrl, $type = 'thumb_s') {
     return $imgUrl;
 }
 
+function share_small_thumb_link($imgUrl){
+    if (strpos($imgUrl, '/m/') !== false) {
+        $imgUrl = str_replace('/m/', '/s/', $imgUrl);
+        return $imgUrl;
+    }
+    if(strpos($imgUrl, 'avatar/') !== false){
+        $imgUrl = str_replace('avatar/', 'avatar/s/', $imgUrl);
+    }
+    if(strpos($imgUrl, 'images/') !== false){
+        $imgUrl = str_replace('images/', 'images/s/', $imgUrl);
+    }
+    return $imgUrl;
+}
+
 /**
  * @param $session SessionComponent
  * @param $error

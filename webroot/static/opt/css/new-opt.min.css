@@ -566,9 +566,6 @@ footer {
   ::-webkit-scrollbar-thumb:vertical:window-inactive {
     background-color: transparent; }
 
-ul li {
-  list-style: none; }
-
 .chanpin > a > img {
   width: 100%; }
 
@@ -578,5 +575,8 @@ ul li {
 
 ::-webkit-scrollbar-track-piece {
   background: 0 0; }
+
+ul li {
+  list-style: none; }
 
 /*# sourceMappingURL=new-opt.min.css.map */

@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta charset="utf-8">
+    <title>爱心评价</title>
+    <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{$STATIC_FILE_PATH}}/static/weshares/css/user-info.min.css"/>
+    <link rel="stylesheet" href="{{$STATIC_FILE_PATH}}/static/weshares/css/share-info.min.css">
+</head>
+<body>
+<div class="container">
+    <!--标题-->
+    <ul class="clearfix top-nav-bar">
+        <li class="back fl" onclick="window.location.href='/weshares/user_share_info/{{$uid}}'"><img class="back-icon"
+                                                                                                     src="{{$STATIC_FILE_PATH}}/static/weshares/images/back.png"></li>
+        <li class="text-back fl" onclick="window.location.href='/weshares/user_share_info/{{$uid}}'">返回</li>
+        <li class="title">爱心评价</li>
+        <li class="home fr" onclick="window.location.href='/'"><img class="home-icon" src="{{$STATIC_FILE_PATH}}/static/weshares/images/home.png"></li>
+    </ul>
+    <div class="user-list-placeholder"></div>
+    <div class="modal-header">
+        <h4 class="modal-title" style="text-align: center;">{{$sharer_comment_data['comment_count']}}爱心评价</h4>
+    </div>
+    <div style="padding: 5px;">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#receive-comments" role="tab" data-toggle="tab">收到的</a></li>
+            <li role="presentation"><a href="#send-comments" aria-controls="profile" role="tab" data-toggle="tab">评价的</a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="receive-comments">
+                <div class="">
+                    <div class="msg-wrap" style="padding: 0;">
+                        {{loop $sharer_comment_data['comments'] $comment}}
+                        <?php
+                            $comment_user_id = $comment["Comment"]["user_id"];
+                        ?>
+                        <div class="media msg" onclick="window.location.href='/weshares/user_share_info/{{$comment_user_id}}'">
+                            <a class="pull-left" href="/weshares/user_share_info/{{$comment['Comment']['user_id']}}">
+                                <img class="img-circle" alt="64x64" style="width: 32px; height: 32px;" src="{{get_user_avatar($sharer_comment_data['comment_users'][$comment['Comment']['user_id']])}}">
+                            </a>
+                            <div class="media-body">
+                                <small class="pull-right time"><i class="fa fa-clock-o"></i>{{friendlyDateFromStr($comment['Comment']['created'], FFDATE_CH_MD);}}</small>
+                                <h5 class="media-heading">{{$comment['Comment']['username']}}</h5>
+                                <small class="col-lg-10" style="padding: 0;">{{$comment['Comment']['body']}}</small>
+                            </div>
+                        </div>
+                        {{/loop}}
+                    </div>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="send-comments">
+                <div class="">
+                    <div class="msg-wrap" style="padding: 0;">
+                        {{loop $user_comment_data['comments'] $comment}}
+                        <?php
+                            $share_id = $comment['Comment']['data_id'];
+                            $share_creator = $user_comment_data['share_info'][$share_id]['creator'];
+                            $share_creator_nickname = $user_comment_data['share_creators'][$share_creator]['nickname'];
+                            $creator_image = get_user_avatar($user_comment_data['share_creators'][$share_creator]);
+                            $title = $share_creator_nickname.'分享的'.$user_comment_data['share_info'][$share_id]['title'];
+                        ?>
+                        <div class="media msg" onclick="window.location.href='/weshares/view/{{$share_id}}'">
+                            <a class="pull-left" href="/weshares/view/{{$share_id}}">
+                                <img class="img-circle" alt="64x64" style="width: 32px; height: 32px;" onerror="this.src='http://static.tongshijia.com/avatar/s/default.jpg'" src="{{$creator_image}}">
+                            </a>
+                            <div class="media-body">
+                                <small class="pull-right time">{{friendlyDateFromStr($comment['Comment']['created'], FFDATE_CH_MD);}}</small>
+                                <h5 class="media-heading">{{$title}}</h5>
+                                <small class="col-lg-10" style="padding: 0;">{{$comment['Comment']['body']}}</small>
+                            </div>
+                        </div>
+                        {{/loop}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</body>
+</html>
