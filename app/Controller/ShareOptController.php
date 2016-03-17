@@ -45,6 +45,32 @@ class ShareOptController extends AppController {
         $time = $_REQUEST['time'];
         $limit = $_REQUEST['limit'];
         $type = $_REQUEST['type'];
+
+        $data = $this->fetch_opt_list_data_comman($time, $limit, $type);
+
+        echo json_encode($data);
+        return;
+    }
+
+    /**
+     * newfetch_opt_list_data 新版本的listdata.
+     *
+     * @access public
+     * @return void
+     */
+    public function newfetch_opt_list_data() {
+        $time = $_REQUEST['time'];
+        $limit = $_REQUEST['limit'];
+        $type = $_REQUEST['type'];
+        $followed = $_REQUEST['followed'];
+
+        $data = $this->fetch_opt_list_data_comman($time, $limit, $type, $followed, 1);
+        echo json_encode($data);
+        return;
+    }
+
+    public function fetch_opt_list_data_comman($time, $limit, $type, $follow = false, $new = false)
+    {
         $this->autoRender = false;
         if ($time == 0) {
             $time = time();
@@ -55,9 +81,17 @@ class ShareOptController extends AppController {
             $opt_logs = [];
             $combine_data = [];
         } else {
-            $opt_log_data = $this->OptLogHelper->load_opt_log($time, $limit, $type);
-            $opt_logs = $opt_log_data['opt_logs'];
-            $combine_data = $opt_log_data['combine_data'];
+            $opt_log_data = $this->OptLogHelper->load_opt_log($time, $limit, $type, 1, $followed);
+            if ($new) {
+                $opt_logs = $opt_log_data;
+                $combine_data = [];
+                if (!$opt_logs) {
+                    return json_encode(['error' => 'get data failed.']);
+                }
+            } else {
+                $opt_logs = $opt_log_data['opt_logs'];
+                $combine_data = $opt_log_data['combine_data'];
+            }
         }
         $data = [
             'oldest_timestamp' => $oldest_timestamp,
@@ -65,47 +99,8 @@ class ShareOptController extends AppController {
             'opt_logs' => $opt_logs,
             'combine_data' => $combine_data
         ];
-        
-        echo json_encode($data);
-        return;
-    }
 
-
-    /**
-     * fetch opt log list
-     */
-    public function newfetch_opt_list_data() {
-        $time = $_REQUEST['time'];
-        $limit = $_REQUEST['limit'];
-        $type = $_REQUEST['type'];
-        $fllowed = $_REQUEST['followed'];
-
-        $this->autoRender = false;
-        if ($time == 0) {
-            $time = time();
-        }
-        $oldest_timestamp = $this->OptLog->get_oldest_update_time();
-        $last_timestamp = $this->OptLog->get_last_update_time();
-        if ($time <= $oldest_timestamp) {
-            $opt_logs = [];
-            $combine_data = [];
-        } else {
-            $opt_log_data = $this->OptLogHelper->load_opt_log($time, $limit, $type, 1, $fllowed);
-            $opt_logs = $opt_log_data;
-            if (!$opt_logs) {
-                echo json_encode([
-                    'error' => 'get data failed.',
-                ]);
-                return ;
-            }
-        }
-        $data = [
-            'oldest_timestamp' => $oldest_timestamp,
-            'last_timestamp' => $last_timestamp,
-            'opt_logs' => $opt_logs,
-        ];
-        echo json_encode($data);
-        return;
+        return $data;
     }
 
     /**
