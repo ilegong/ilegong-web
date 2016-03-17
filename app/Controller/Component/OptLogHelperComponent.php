@@ -182,7 +182,13 @@ class OptLogHelperComponent extends Component {
             $tmp['avatar'] = get_user_avatar($user) ? : "http://static.tongshijia.com/static/img/default_avatar.png";
             $tmp['level'] = "V{$level}{$level_pool[$level]}";
             $tmp['title'] = $share['title'];
-            $tmp['description'] = mb_substr($share['description'], 0, 110);
+            if (mb_strlen($share['description']) > 110) {
+                $tmp['description'] = mb_substr($share['description'], 0, 110) . "...";
+                $tmp['description_more'] = true;
+            } else {
+                $tmp['description'] = $share['description'];
+                $tmp['description_more'] = false;
+            }
             $image = explode('|', $share['images'])[0];
             $tmp['image'] = $image ? : "http://static.tongshijia.com/static/img/default_product_banner.png";
             // 1. 报名数
