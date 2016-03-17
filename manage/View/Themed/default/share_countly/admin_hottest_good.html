@@ -9,8 +9,20 @@
                 <a href="/manage/admin/share_countly/hottest_good" class="list-group-item active">10日最热商品</a>
             </div>
         </div><!--/.sidebar-offcanvas-->
-
         <div class="col-xs-12 col-sm-9">
+            <div class="row">
+                <form class="form-inline" method="post" action="/manage/admin/share_countly/hottest_good">
+                    <div class="form-group">
+                        <label>开始日期</label>
+                        <input type="text" class="form-control" name="startDate" placeholder="2016-03-15">
+                    </div>
+                    <div class="form-group">
+                        <label>结束日期</label>
+                        <input type="text" class="form-control" name="endDate" placeholder="2016-03-16">
+                    </div>
+                    <button type="submit" class="btn btn-default">查询</button>
+                </form>
+            </div>
             <div class="row">
                 <div class="col-xs-12 col-lg-8">
                     <table class="table table-hover">
