@@ -88,7 +88,7 @@ App::uses('CustomRouter', 'Lib');
 	CustomRouter::connect('/', array('controller' => 'pys', 'action' => 'index','/'));
 	CustomRouter::connect('/users/51daifan.sinaapp.com', array('controller' => 'categories', 'action' => 'view','/'));
 
-	CustomRouter::connect('/shichituan', array('controller' => 'articles', 'action' => 'shi_chi_tuan'));
+	//CustomRouter::connect('/shichituan', array('controller' => 'articles', 'action' => 'shi_chi_tuan'));
 	CustomRouter::connect('/jserror', array('controller' => 'articles', 'action' => 'log_js_error'));
 	CustomRouter::connect('/tk/log', array('controller' => 'articles', 'action' => 'log_trace'));
 

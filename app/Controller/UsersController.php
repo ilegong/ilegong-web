@@ -248,9 +248,6 @@ class UsersController extends AppController {
     }
 
     function my_profile() {
-        $this->loadModel('Shichituan');
-        $result = $this->Shichituan->findByUser_id($this->currentUser['id'], array('Shichituan.shichi_id', 'Shichituan.pictures', 'Shichituan.status', 'Shichituan.period'), 'Shichituan.shichi_id DESC');
-        $this->set('result', $result);
         $userinfo = $this->Auth->user();
         if ($userinfo['id']) {
             $datainfo = $this->{$this->modelClass}->find('first', array('recursive' => -1, 'conditions' => array('id' => $userinfo['id'])));
@@ -729,62 +726,11 @@ class UsersController extends AppController {
 
         $this->set('total_score', $this->User->get_score($uid));
 
-        $this->loadModel('Shichituan');
-        $result = $this->Shichituan->findByUser_id($uid, array('Shichituan.shichi_id', 'Shichituan.status', 'Shichituan.pictures', 'Shichituan.period'), 'Shichituan.shichi_id DESC');
-        $this->set('result', $result);
-
         $mOrder = ClassRegistry::init('Order');
         $received_cnt = $mOrder->count_received_order($this->currentUser['id']);
         $this->set('received_cnt', $received_cnt);
     }
 
-    /**
-     *
-     */
-    function sinalist() {
-        $username = '';
-        $user = $this->User->findByUsername($username);
-        if (!isset($user['User']['id'])) {
-            $this->redirect('/');
-        }
-
-        $this->pageTitle = $user['User']['name'];
-        $this->set('user', $user);
-    }
-
-    function myquestion($type = '', $page = 1, $count = 30) {
-        $this->loadModel('Question');
-        $questionlist = $this->Question->find('all',
-            array('conditions' => array(
-                'creator' => $this->currentUser['User']['sina_uid'],
-                'published' => 1,
-            )
-            ));
-        $this->set('questionlist', $questionlist);
-    }
-
-    function myweibo($type = '', $page = 1, $count = 30) {
-        $this->loadModel('Weibo');
-        $weibolist = $this->Weibo->find('all',
-            array(
-                'conditions' => array(
-                    'Weibo.creator' => $this->currentUser['User']['sina_uid'],
-                    'Weibo.published' => 1,
-                ),
-                'fields' => array('Weibo.*', 'Question.*'),
-                'limit' => 20,
-                'joins' => array(
-                    array(
-                        'table' => Inflector::tableize('Question'),
-                        'alias' => 'Question',
-                        'type' => 'left',
-                        'conditions' => array('Weibo.data_id=Question.id', 'Weibo.model' => 'Question'),
-                    ),
-                )
-            ));
-        $this->set('weibolist', $weibolist);
-        $this->set('action', 'myweibo');
-    }
 
     function wx_menu_point() {
         $redirect = '/';
@@ -1047,14 +993,8 @@ class UsersController extends AppController {
         $this->TrackLog->updateAll(array('from' => $new_serviceAccount_bind_uid), array('from' => $old_serviceAccount_bind_uid));
         $this->TrackLog->updateAll(array('to' => $new_serviceAccount_bind_uid), array('to' => $old_serviceAccount_bind_uid));
 
-//        $this->loadModel('AwardWeixinTimeLog');
-//        $this->AwardWeixinTimeLog->updateAll(array('uid' => $new_serviceAccount_bind_uid), array('uid' => $old_serviceAccount_bind_uid));
-
         $this->loadModel('AwardResult');
         $this->AwardResult->updateAll(array('uid' => $new_serviceAccount_bind_uid), array('uid' => $old_serviceAccount_bind_uid));
-
-//        $this->loadModel('AwardInfo');
-//        $this->AwardInfo->updateAll(array('uid' => $new_serviceAccount_bind_uid), array('uid' => $old_serviceAccount_bind_uid));
 
         $this->loadModel('SharedOffer');
         $this->SharedOffer->updateAll(array('uid' => $new_serviceAccount_bind_uid), array('uid' => $old_serviceAccount_bind_uid));
@@ -1070,9 +1010,6 @@ class UsersController extends AppController {
 
         $this->loadModel('Comment');
         $this->Comment->updateAll(array('user_id' => $new_serviceAccount_bind_uid), array('user_id' => $old_serviceAccount_bind_uid));
-
-        $this->loadModel('Shichituan');
-        $this->Shichituan->updateAll(array('user_id' => $new_serviceAccount_bind_uid), array('user_id' => $old_serviceAccount_bind_uid));
 
         $this->loadModel('OrderComment');
         $this->OrderComment->updateAll(array('user_id' => $new_serviceAccount_bind_uid), array('user_id' => $old_serviceAccount_bind_uid));

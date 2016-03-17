@@ -329,19 +329,11 @@ class CategoriesController extends AppController {
             $this->set('daily_special', $daily_special);
         }
 
-        $uid = $this->currentUser['id'];
-        if (!empty($uid)) {
-            $this->loadModel('Shichituan');
-            $shichituan = $this->Shichituan->find_in_period($uid, get_shichituan_period());
-            $is_shichi = (!empty($shichituan) || $shichituan);
-            $this->set('shichiTuan', $shichituan);
-        }
         $configBanners = $this->getBanner(array(0,2));
         if(!empty($configBanners)){
             $bannerItems = Hash::combine($configBanners,'{n}.Banner.id','{n}.Banner');
         }
         $this->set('bannerItems', $bannerItems);
-        $this->set('shichi_mem', $is_shichi);
         $this->set('tryings', $tryings);
         $this->set('max_show', $this->RequestHandler->isMobile()? 2 : 4);
         $this->set('_serialize', array('brands', 'tagsWithProducts', 'sub_title', 'bannerItems'));
@@ -352,102 +344,84 @@ class CategoriesController extends AppController {
             $this->redirect('/weshares/index.html');
         }
         return;
-//        if (!$disableAutoRedirect) {
-//            if ($this->RequestHandler->isMobile()) {
-////                $tagId = RECOMMEND_TAG_ID;
-////                if($_REQUEST['tagId']){
-////                    $tagId = $_REQUEST['tagId'];
-////                }
-////                $this->redirect('/categories/mobileIndex.html?tagId='.$tagId);
-//                $this->redirect('/weshares/index.html');
-//                return;
+
+//        $current_cateid = CATEGORY_ID_TECHAN;
+//        $page = 1;
+//        $pagesize = 60;
+//        $productTags = $this->findVisibleTags();
+//        if (empty($productTags)) {
+//            $this->view();
+//            return;
+//        }
+//
+//        $excludeProductIds = array(148,705,383,869,567,315,354,161,715,153);
+//
+//        $conditions = array('Product' .'.deleted'=>0, 'Product' .'.published'=>1);
+//        $conditions['Product' . '.recommend >='] = 0;
+//        $conditions['NOT']=array('Product'.'.id'=>$excludeProductIds);
+//
+//        $orderBy = /*'Tag.recommend desc,*/' Product.recommend desc';
+//        $brandIds = array();
+//        $this->loadModel('Product');
+//        $orderFiledValue = array("FIELD(Product.id,".join(',',$excludeProductIds).")");
+//        //recommend products
+//        $excludeProducts = $this->Product->find('all',array(
+//            'conditions'=>array(
+//                'id'=>$excludeProductIds
+//            ),
+//            'order'=>$orderFiledValue
+//        ));
+//        $this->set('recommendProducts',$excludeProducts);
+//        foreach($productTags as &$tag) {
+//
+//            //add class image
+//            $tag['ProductTag']['coverimg'] = '/img/class/classn'.$tag['ProductTag']['id'].'.png';
+//
+//            $join_conditions = array(
+//                array(
+//                    'table' => 'product_product_tags',
+//                    'alias' => 'Tag',
+//                    'conditions' => array(
+//                        'Tag.product_id = Product.id',
+//                        'Tag.tag_id' => $tag['ProductTag']['id']
+//                    ),
+//                    'type' => 'RIGHT',
+//                )
+//            );
+//            $tag['Products'] = array();
+//            $products = $this->Product->find('all', array(
+//                    'conditions' => $conditions,
+//                    'joins' => $join_conditions,
+//                    'order' => $orderBy,
+//                    'fields' => explode(',', Product::PRODUCT_PUBLIC_FIELDS),
+//                    'limit' => ($tag['ProductTag']['size_in_home']>=0?$tag['ProductTag']['size_in_home']:6),
+//                    'page' => $page)
+//            );
+//            foreach($products as $p){
+//                $brandIds[] = $p['Product']['brand_id'];
+//                $tag['Products'][] = $p['Product'];
 //            }
 //        }
-        $current_cateid = CATEGORY_ID_TECHAN;
-        $page = 1;
-        $pagesize = 60;
-        $productTags = $this->findVisibleTags();
-        if (empty($productTags)) {
-            $this->view();
-            return;
-        }
-
-        $excludeProductIds = array(148,705,383,869,567,315,354,161,715,153);
-
-        $conditions = array('Product' .'.deleted'=>0, 'Product' .'.published'=>1);
-        $conditions['Product' . '.recommend >='] = 0;
-        $conditions['NOT']=array('Product'.'.id'=>$excludeProductIds);
-
-        $orderBy = /*'Tag.recommend desc,*/' Product.recommend desc';
-        $brandIds = array();
-        $this->loadModel('Product');
-        $orderFiledValue = array("FIELD(Product.id,".join(',',$excludeProductIds).")");
-        //recommend products
-        $excludeProducts = $this->Product->find('all',array(
-            'conditions'=>array(
-                'id'=>$excludeProductIds
-            ),
-            'order'=>$orderFiledValue
-        ));
-        $this->set('recommendProducts',$excludeProducts);
-        foreach($productTags as &$tag) {
-
-            //add class image
-            $tag['ProductTag']['coverimg'] = '/img/class/classn'.$tag['ProductTag']['id'].'.png';
-
-            $join_conditions = array(
-                array(
-                    'table' => 'product_product_tags',
-                    'alias' => 'Tag',
-                    'conditions' => array(
-                        'Tag.product_id = Product.id',
-                        'Tag.tag_id' => $tag['ProductTag']['id']
-                    ),
-                    'type' => 'RIGHT',
-                )
-            );
-            $tag['Products'] = array();
-            $products = $this->Product->find('all', array(
-                    'conditions' => $conditions,
-                    'joins' => $join_conditions,
-                    'order' => $orderBy,
-                    'fields' => explode(',', Product::PRODUCT_PUBLIC_FIELDS),
-                    'limit' => ($tag['ProductTag']['size_in_home']>=0?$tag['ProductTag']['size_in_home']:6),
-                    'page' => $page)
-            );
-//            if ($page == 1 && count($list) < $pagesize) {
-//                $total = count($list);
-//            } else {
-//                $total = $this->{$data_model}->find('count', array(
-//                    'conditions' => $conditions,
-//                    'joins' => $join_conditions
-//                ));
-//            }
-            foreach($products as $p){
-                $brandIds[] = $p['Product']['brand_id'];
-                $tag['Products'][] = $p['Product'];
-            }
-        }
-
-        $this->setHasOfferBrandIds();
-        $configBanners = $this->getBanner(array(0,1));
-        if(!empty($configBanners)){
-            $bannerItems = Hash::combine($configBanners,'{n}.Banner.id','{n}.Banner');
-            $this->set('bannerItems',$bannerItems);
-        }
-        $this->pageTitle =  __('热卖');
-        $navigation = $this->readOrLoadAndCacheNavigations($current_cateid, $this->Category);
-        $mappedBrands = $this->findBrandsKeyedId($brandIds, $mappedBrands);
-        $this->set('sub_title', $productTags['ProductTag']['name']);
-        $this->set('brands', $mappedBrands);
-        $this->set('current_cateid', $current_cateid);
-        $this->set('top_category_id', $current_cateid);
-        $this->set('navigations', $navigation);
-        $this->set('tagsWithProducts', $productTags);
-        $this->set('withBrandInfo', true);
-        $this->set('category_control_name', 'products');
-        $this->set('op_cate', OP_CATE_HOME);
-        $this->set('is_index',true);
+//
+//        $this->setHasOfferBrandIds();
+//        $configBanners = $this->getBanner(array(0,1));
+//        if(!empty($configBanners)){
+//            $bannerItems = Hash::combine($configBanners,'{n}.Banner.id','{n}.Banner');
+//            $this->set('bannerItems',$bannerItems);
+//        }
+//        $this->pageTitle =  __('热卖');
+//        $navigation = $this->readOrLoadAndCacheNavigations($current_cateid, $this->Category);
+//        $mappedBrands = $this->findBrandsKeyedId($brandIds, $mappedBrands);
+//        $this->set('sub_title', $productTags['ProductTag']['name']);
+//        $this->set('brands', $mappedBrands);
+//        $this->set('current_cateid', $current_cateid);
+//        $this->set('top_category_id', $current_cateid);
+//        $this->set('navigations', $navigation);
+//        $this->set('tagsWithProducts', $productTags);
+//        $this->set('withBrandInfo', true);
+//        $this->set('category_control_name', 'products');
+//        $this->set('op_cate', OP_CATE_HOME);
+//        $this->set('is_index',true);
     }
 
     public function specCategoryList($tagSlug){

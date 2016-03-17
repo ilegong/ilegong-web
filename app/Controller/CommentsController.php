@@ -7,7 +7,7 @@ class CommentsController extends AppController {
     var $components = array(
         'Email',
     );
-    var $uses = array('Comment', 'User', 'Shichituan');
+    var $uses = array('Comment', 'User');
     function add() {
     	$this->autoRender = false;
     	$this->layout = 'ajax';
@@ -303,11 +303,6 @@ class CommentsController extends AppController {
 
                 if (!$can_comment)  {
                     return array('error' => 'cannot_comment');
-                }
-
-                $shichi_status = $this->Shichituan->findByUser_id($uid, array('Shichituan.status'));
-                if ($shichi_status['Shichituan']['status'] == 1) {
-                    $this->data['Comment']['is_shichi_tuan_comment'] = 1;
                 }
 
                 //comment_type: 评论，补充完善，扩展阅读等等

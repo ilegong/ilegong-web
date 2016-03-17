@@ -92,20 +92,6 @@ class BuyingComponent extends Component {
                         $success = false;
                         $reason = 'already_buy';
                     }
-                    if ($success&&($type==CART_ITEM_TYPE_TRY)) {
-                        $sctM = ClassRegistry::init('Shichituan');
-                        $shichituan = $sctM->find_in_period($uid, get_shichituan_period());
-                        $parallelCnt = (!empty($shichituan)) ? 2 : 1;
-                        $orderShichiM = ClassRegistry::init('OrderShichi');
-                        $notCommentedCnt = $orderShichiM->find('count', array('conditions' => array(
-                            'creator' => $uid,
-                            'is_comment' => 0
-                        )));
-                        if ($parallelCnt <= $notCommentedCnt) {
-                            $success = false;
-                            $reason = 'not_comment';
-                        }
-                    }
                 }
             }
 

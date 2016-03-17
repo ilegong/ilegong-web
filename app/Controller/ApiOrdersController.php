@@ -395,14 +395,14 @@ class ApiOrdersController extends AppController {
     }
 
     public function my_profile() {
-        $shichituanM = ClassRegistry::init('Shichituan');
-        $result = $shichituanM->findByUser_id($this->currentUser['id'],array('Shichituan.shichi_id','Shichituan.pictures','Shichituan.status','Shichituan.period'),'Shichituan.shichi_id DESC');
+        //$shichituanM = ClassRegistry::init('Shichituan');
+        //$result = $shichituanM->findByUser_id($this->currentUser['id'],array('Shichituan.shichi_id','Shichituan.pictures','Shichituan.status','Shichituan.period'),'Shichituan.shichi_id DESC');
         $userM = ClassRegistry::init('User');
         $user_id = $this->currentUser['id'];
         $datainfo = $userM->find('first', array('recursive' => -1,
             'conditions' => array('id' => $user_id),
             'fields'=>array('nickname', 'email', 'image', 'sex', 'companies', 'bio', 'mobilephone', 'email', 'username', 'id')));
-        $this->set('my_profile', array('Shichituan' => $result['Shichituan'], 'User' => $datainfo['User']));
+        $this->set('my_profile', array('Shichituan' => null, 'User' => $datainfo['User']));
         $this->set('_serialize', array('my_profile'));
 
     }
@@ -856,12 +856,6 @@ class ApiOrdersController extends AppController {
          $data['pictures'] = $inputData['pictures'];
          $data['created'] = date('Y-m-d H:i:s');
          $data['status'] = 1;
-
-         $shichituanC=ClassRegistry::init('Shichituan');
-         $shichituan_status = $shichituanC->findByUser_id($this->currentUser['id'],array('status'));
-         if($shichituan_status['Shichituan']['status'] == 1) {
-             $data['is_shichi_tuan_comment'] = 1;
-         }
 
          if($commentC->save($data)) {
              $type_model = $data['type'];
