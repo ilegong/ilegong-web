@@ -706,7 +706,6 @@ class WesharesController extends AppController {
         }
         $user_share_data = $this->WeshareBuy->prepare_user_share_info($uid);
         $creators = $user_share_data['creators'];
-        $my_create_share_ids = $user_share_data['my_create_share_ids'];
         $joinShareOrderStatus = $user_share_data['joinShareOrderStatus'];
         $myCreateShares = $user_share_data['myCreateShares'];
         $myJoinShares = $user_share_data['myJoinShares'];
@@ -714,8 +713,6 @@ class WesharesController extends AppController {
         $shareUser = $creators[$uid];
         $this->set_share_user_info_weixin_params($uid, $current_uid, $shareUser);
         $userShareSummery = $this->getUserShareSummery($uid);
-        $shareCommentData = $this->getSharerCommentData($my_create_share_ids, $uid);
-        $userCommentData = $this->WeshareBuy->load_user_share_comments($uid);
         if ($uid != $current_uid) {
             $sub_status = $this->WeshareBuy->check_user_subscribe($uid, $current_uid);
             $this->set('sub_status', $sub_status);
@@ -732,6 +729,8 @@ class WesharesController extends AppController {
             $this->set('rebate_money', $rebate_money);
             $this->set('show_rebate_money', $rebate_money > 0);
         }
+        $u_comment_count = $this->WeshareBuy->get_user_comment_count($user_share_data['my_create_share_ids'], $uid);
+        $this->set('u_comment_count', $u_comment_count);
         $this->set($userShareSummery);
         $this->set('is_me', $uid == $current_uid);
         $this->set('current_uid', $current_uid);
@@ -741,9 +740,6 @@ class WesharesController extends AppController {
         $this->set('my_create_shares', $myCreateShares);
         $this->set('my_join_shares', $myJoinShares);
         $this->set('authority_shares', $user_share_data['authority_shares']);
-        $this->set('sharer_comment_data', $shareCommentData);
-        $this->set('user_comment_data', $userCommentData);
-        $this->set('is_verify_user', $this->is_verify_sharer($uid));
         $this->set('join_share_order_status', $joinShareOrderStatus);
         $pintuan_data = $this->PintuanHelper->get_user_pintuan_data($uid);
         $this->set('pintuan_data', $pintuan_data);
@@ -1589,9 +1585,6 @@ class WesharesController extends AppController {
                 )
             ));
             $address = $tinyAddress['WeshareAddress']['address'];
-            if ($customAddress) {
-                $address = $address;
-            }
             if (!empty($patchAddress)) {
                 $address = $address . '【' . $patchAddress . '】';
             }
@@ -1600,9 +1593,6 @@ class WesharesController extends AppController {
         if ($shipType == SHARE_SHIP_PYS_ZITI) {
             $offline_store = $this->OfflineStore->findById($addressId);
             $address = $offline_store['OfflineStore']['name'];
-            if ($customAddress) {
-                $address = $address;
-            }
             return $address;
         }
         if ($shipType == SHARE_SHIP_GROUP) {
@@ -1732,15 +1722,6 @@ class WesharesController extends AppController {
         }
     }
 
-    /**
-     * @param $uid
-     * @return bool
-     * 是否是认证分享者 写死
-     */
-    private function is_verify_sharer($uid) {
-        $uids = array(633345, 802852, 544307, 811917, 801447, 141, 559795);
-        return in_array($uid, $uids);
-    }
 
     /**
      * @param $shareId
@@ -1803,6 +1784,17 @@ class WesharesController extends AppController {
         } else {
             $this->set('no_order', true);
         }
+    }
+
+    public function u_comment($uid){
+        $this->layout = null;
+        $user_share_data = $this->WeshareBuy->prepare_user_share_info($uid);
+        $my_create_share_ids = $user_share_data['my_create_share_ids'];
+        $shareCommentData = $this->getSharerCommentData($my_create_share_ids, $uid);
+        $userCommentData = $this->WeshareBuy->load_user_share_comments($uid);
+        $this->set('sharer_comment_data', $shareCommentData);
+        $this->set('user_comment_data', $userCommentData);
+        $this->set('uid', $uid);
     }
 
     public function fans_list($uid){

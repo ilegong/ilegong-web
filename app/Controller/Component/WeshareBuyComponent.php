@@ -86,6 +86,22 @@ class WeshareBuyComponent extends Component {
         return json_decode($sharer_comment_data, true);
     }
 
+    public function get_user_comment_count($weshare_ids,$sharer_id){
+        $commentM = ClassRegistry::init('Comment');
+        $count = $commentM->find('count', [
+            'conditions' => [
+                'type' => COMMENT_SHARE_TYPE,
+                'status' => COMMENT_SHOW_STATUS,
+                'parent_id' => 0,
+                'OR' => [
+                    ['data_id' => $weshare_ids],
+                    ['user_id' => $sharer_id]
+                ]
+            ]
+        ]);
+        return $count;
+    }
+
     /**
      * @param $uid
      * @return array|mixed
