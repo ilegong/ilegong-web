@@ -37,26 +37,14 @@ class OptLogHelperComponent extends Component {
      * @return mixed
      */
     private function load_last_opt_data($new = false, $followed = false) {
-        $key = LAST_OPT_LOG_DATA_CACHE_KEY . "_$followed";
-        if ($followed) {
-            $key .= $this->uid;
+        $optLogM = ClassRegistry::init('OptLog');
+        $datetime = date('Y-m-d H:i:s');
+        if ($new) {
+            $opt_logs = $optLogM->new_fetch_by_time_limit_type($datetime, 100, 0, $followed);
+        } else {
+            $opt_logs = $optLogM->fetch_by_time_limit_type($datetime, 100, 0);
         }
-        $data = false;// Cache::read($key);
-        $this->log('get cache from ' . $key, LOG_DEBUG);
-        if (empty($data)) {
-            $optLogM = ClassRegistry::init('OptLog');
-            $datetime = date('Y-m-d H:i:s');
-            if ($new) {
-                $opt_logs = $optLogM->new_fetch_by_time_limit_type($datetime, 100, 0, $followed);
-            } else {
-                $opt_logs = $optLogM->fetch_by_time_limit_type($datetime, 100, 0);
-            }
-            Cache::write($key, json_encode($opt_logs));
-            return $opt_logs;
-        }
-        $this->log('get opt log use cache', LOG_DEBUG);
-        $last_opt_logs = json_decode($data, true);
-        return $last_opt_logs;
+        return $opt_logs;
     }
 
     /**
@@ -97,59 +85,46 @@ class OptLogHelperComponent extends Component {
      * @return array
      */
     private function combine_opt_log_data($opt_logs, $share_info = false, $followed = false) {
-        $key = OPT_LOG_COMBINE_DATA_CACHE_KEY . "_$followed";
-        if ($followed) {
-            $key .= $this->uid;
+        $opt_user_ids = Hash::extract($opt_logs, '{n}.OptLog.user_id');
+        $opt_data_ids = Hash::extract($opt_logs, '{n}.OptLog.obj_id');
+        if ($share_info) {
+            $shares_info = $this->get_share_and_user_info($opt_data_ids);
+        } else {
+            $share_info = [];
         }
-        $start_id = $opt_logs[0]['OptLog']['id'];
-        $end_id = $opt_logs[count($opt_logs) - 1]['OptLog']['id'];
-        $key = $key . '_' . $start_id . '_' . $end_id;
-        $combine_opt_log_data = false;//Cache::read($key);
-        if (empty($combine_opt_log_data)) {
-            $opt_user_ids = Hash::extract($opt_logs, '{n}.OptLog.user_id');
-            $opt_data_ids = Hash::extract($opt_logs, '{n}.OptLog.obj_id');
-            if ($share_info) {
-                $shares_info = $this->get_share_and_user_info($opt_data_ids);
-            } else {
-                $share_info = [];
-            }
-            $share_buy_user_info = $this->WeshareBuy->get_has_buy_user_map($opt_data_ids);
-            $share_user_map = $share_buy_user_info['share_user_map'];
-            $buy_user_ids = $share_buy_user_info['all_user_ids'];
-            $opt_user_ids = array_merge($opt_user_ids, $buy_user_ids);
-            $opt_user_ids = array_unique($opt_user_ids);
-            $userM = ClassRegistry::init('User');
-            $opt_users = $userM->find('all', array(
-                'conditions' => array(
-                    'id' => $opt_user_ids
-                ),
-                'fields' => array('id', 'nickname', 'image', 'is_proxy', 'avatar')
-            ));
-            $userRelationM = ClassRegistry::init('UserRelation');
-            $opt_users_share_info = $userRelationM->find('all', array(
-                'conditions' => array(
-                    'user_id' => $opt_user_ids
-                ),
-                'group' => array('user_id'),
-                'fields' => array(
-                    'count(id) as fans_count', 'user_id'
-                )
-            ));
-            $users_level_data = $this->ShareUtil->get_users_level($opt_user_ids);
-            $opt_users_share_info = Hash::combine($opt_users_share_info, '{n}.UserRelation.user_id', '{n}.0.fans_count');
-            $opt_users = Hash::combine($opt_users, '{n}.User.id', '{n}.User');
-            $opt_users = array_map('map_user_avatar', $opt_users);
-            $combine_opt_log_data = array(
-                'users' => $opt_users,
-                'users_level' => $users_level_data,
-                'user_fans_extra' => $opt_users_share_info,
-                'share_user_buy_map' => $share_user_map,
-                'share_info' => $shares_info
-            );
-            Cache::write($key, json_encode($combine_opt_log_data));
-            return $combine_opt_log_data;
-        }
-        $combine_opt_log_data = json_decode($combine_opt_log_data, true);
+        $share_buy_user_info = $this->WeshareBuy->get_has_buy_user_map($opt_data_ids);
+        $share_user_map = $share_buy_user_info['share_user_map'];
+        $buy_user_ids = $share_buy_user_info['all_user_ids'];
+        $opt_user_ids = array_merge($opt_user_ids, $buy_user_ids);
+        $opt_user_ids = array_unique($opt_user_ids);
+        $userM = ClassRegistry::init('User');
+        $opt_users = $userM->find('all', array(
+            'conditions' => array(
+                'id' => $opt_user_ids
+            ),
+            'fields' => array('id', 'nickname', 'image', 'is_proxy', 'avatar')
+        ));
+        $userRelationM = ClassRegistry::init('UserRelation');
+        $opt_users_share_info = $userRelationM->find('all', array(
+            'conditions' => array(
+                'user_id' => $opt_user_ids
+            ),
+            'group' => array('user_id'),
+            'fields' => array(
+                'count(id) as fans_count', 'user_id'
+            )
+        ));
+        $users_level_data = $this->ShareUtil->get_users_level($opt_user_ids);
+        $opt_users_share_info = Hash::combine($opt_users_share_info, '{n}.UserRelation.user_id', '{n}.0.fans_count');
+        $opt_users = Hash::combine($opt_users, '{n}.User.id', '{n}.User');
+        $opt_users = array_map('map_user_avatar', $opt_users);
+        $combine_opt_log_data = array(
+            'users' => $opt_users,
+            'users_level' => $users_level_data,
+            'user_fans_extra' => $opt_users_share_info,
+            'share_user_buy_map' => $share_user_map,
+            'share_info' => $shares_info
+        );
         return $combine_opt_log_data;
     }
 
