@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class ShareFavourableConfig
+ * 分享打折处理
+ */
 class ShareFavourableConfig extends AppModel {
 
     public $useTable = false;

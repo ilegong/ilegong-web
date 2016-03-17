@@ -108,8 +108,6 @@ class CartsController extends AppController{
                         echo json_encode($returnInfo);
                         exit();
                     }
-                    $this->loadModel('UserPrice');
-                    $this->UserPrice->add($product_id, $customized_price, $uid, $cart_id);
                 }
             }
             echo json_encode($returnInfo);

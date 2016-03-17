@@ -519,18 +519,6 @@ function promo_code_new_user($pids) {
  */
 function calculate_price($pid, $price, $currUid, $num, $cart_id = 0, $pp = null, $tuan_param = array()) {
 
-    if (accept_user_price_pid($pid) && accept_user_price_pid_num($pid, $num) && !empty($cart_id)) {
-        $userPrice = ClassRegistry::init('UserPrice');
-        $up = $userPrice->find('first', array('conditions' => array(
-            'product_id' => $pid,
-            'uid' => $currUid,
-//            'cart_id' => $cart_id,
-        )));
-        if (!empty($up)) {
-            return array($up['UserPrice']['customized_price'],);
-        }
-
-    }
 
     $tuan_buy_id = $tuan_param['tuan_buy_id'];
     //优先级 first

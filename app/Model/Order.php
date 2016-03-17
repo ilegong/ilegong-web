@@ -185,41 +185,8 @@ class Order extends AppModel {
                 }
             }
 
-            if (!empty($pid_list)) {
-                //$this->set_cart_send_date($cartItems);
-                if ($isTry) {
-                    $shichiM = ClassRegistry::init('OrderShichi');
-                    foreach ($pid_list as $pid) {
-                        $shichiM->create();
-                        $shichiM->save(array('OrderShichi' => array(
-                            'data_id' => $pid,
-                            'creator' => $orderOwner,
-                            'order_id' => $orderId,
-                        )));
-                    }
-                    $tryM = ClassRegistry::init('ProductTry');
-                    $pTry = $tryM->findById($isTry);
-                    if (!empty($pTry)) {
-                        //FIXME: do retry if failed
-                        $buy_multiple = $pTry['ProductTry']['buy_multiple'];
-                        if($buy_multiple<=1){
-                            $add_num = 1;
-                        }else{
-                            $add_num = rand(1,$buy_multiple);
-                        }
-                        $tryM->updateAll(array('sold_num' => 'sold_num + '.$add_num), array('id' => $isTry, 'modified' => $pTry['ProductTry']['modified']));
-                    }
-                } else if ($type == ORDER_TYPE_GROUP || $type == ORDER_TYPE_GROUP_FILL) {
-                    $gmM = ClassRegistry::init('GrouponMember');
-                    $gmM->paid_done($memberId, $orderOwner, $type);
-                }elseif($type == ORDER_TYPE_TUAN){
-                    $gmM = ClassRegistry::init('TuanBuying');
-                    $gmM->paid_done($memberId,$orderId);
-                } else {
-                    foreach ($pid_list as $pid) {
-                        clean_total_sold($pid);
-                    }
-                }
+            foreach ($pid_list as $pid) {
+                clean_total_sold($pid);
             }
             //split_pys_order($orderId);
             $this->update_refer($orderOwner,$orderId);
@@ -384,16 +351,6 @@ class Order extends AppModel {
                         $userM = ClassRegistry::init('User');
                         $userM->add_score($creator, $rtn['Score']['score']);
                     }
-
-                    $urM = ClassRegistry::init('Refer');
-                    $this->log("debug: before update_referred_new_order");
-                    try {
-                        $urM->test();
-                        $urM->update_referred_new_order($creator);
-                    }catch (Exception $e){
-                        $this->log("error:".$e);
-                    }
-                    $this->log("debug: end update_referred_new_order");
                 }
             } else if ($origStatus == ORDER_STATUS_WAITING_PAY && $toStatus == ORDER_STATUS_CANCEL) {
                 $order = $this->findById($order_id);

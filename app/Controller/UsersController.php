@@ -1232,13 +1232,6 @@ class UsersController extends AppController {
                         $result_msg = $result_msg . ',并获得1000积分';
                     }
                     $res = array('success' => true, 'msg' => $result_msg);
-
-                    $urM = ClassRegistry::init('Refer');
-                    if ($urM->be_referred_and_new($this->currentUser['id'])) {
-                        $urM->update_referred_bind($this->currentUser['id'], $this->currentUser['nickname']);
-                        $res['referred'] = true;
-                    }
-
                 } else {
                     $res = array('success' => false, 'msg' => '绑定失败，数据库忙');
                 }

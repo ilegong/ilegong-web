@@ -469,68 +469,7 @@ class ProductsController extends AppController{
         ));
         return $productTags;
     }
-    function guess_product_price(){
 
-        global $order_after_paid_status;
-
-        if (empty($this->currentUser['id']) && $this->is_weixin()) {
-            $ref = Router::url($_SERVER['REQUEST_URI']);
-            $this->redirect('/users/login.html?force_login=1&auto_weixin=' . $this->is_weixin() . '&referer=' . urlencode($ref));
-        }
-
-        $cartM = ClassRegistry::init('Cart');
-        $total_sold = total_sold(PRODUCT_ID_JD_HS_NZT, array('start' => '2015-01-28 00:00:00', 'end' => '2014-01-29 00:00:00'), $cartM);
-
-        $this->pageTitle = '你说多少钱，就卖多少钱！';
-        $bannerItems = array(
-            array('img' => "/img/guess_price/banner01.jpg"),
-            array('img' => "/img/guess_price/banner02.jpg"),
-            array('img' => "/img/guess_price/banner03.jpg"),
-        );
-
-        $this->loadModel('Cart');
-        $this->loadModel('User');
-
-        $this->loadModel('Order');
-        $order_creators = $this->Order->find('all', array(
-            'conditions' => array('brand_id' => 143, 'status' => $order_after_paid_status, 'id > 11000'),
-            'fields' => 'creator'
-        ));
-
-        $this->log("order ids for guess_price:". json_encode($order_creators));
-
-        $ids = Hash::extract($order_creators, '{n}.Order.creator');
-
-//        $top_price_cart = $this->Cart->find('all', array(
-//            'conditions' => array('order_id' => $ids, 'product_id' => 484),
-//            'order' => 'price desc',
-//            'limit' => 1,
-//            )
-//        );
-
-        $this->loadModel('UserPrice');
-        $top_price = $this->UserPrice->find('first', array(
-                'conditions' => array('uid' => $ids, 'product_id' => 484),
-                'order' => 'customized_price desc',
-                'limit' => 1,
-            )
-        );
-
-//        $this->log("find top_price_cart ".json_encode($top_price_cart).", with order_ids:".$order_creators);
-
-        $user_info = $this->User->find('first',array('conditions' => array('id' => $top_price['UserPrice']['uid'])));
-        $this->set('user_info',$user_info);
-        $this->set('top_price', max($top_price['UserPrice']['customized_price'], 19.9)); //assume 20 at lease
-        $this->set('bannerItems',$bannerItems);
-        $this->set('hideNav',true);
-        $this->set('soldout', $total_sold > 100);
-        if($this->is_weixin()){
-            $this->loadModel('WxOauth');
-            $signPackage = $this->WxOauth->getSignPackage();
-            $this->set('signPackage', $signPackage);
-            $this->set('jWeixinOn', true);
-        }
-    }
 
     function guess_product_detail(){
         $this->pageTitle = '商品详情';
