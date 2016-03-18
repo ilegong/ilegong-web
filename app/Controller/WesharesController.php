@@ -3,7 +3,7 @@
 class WesharesController extends AppController {
 
     var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem',
-        'SharerShipOption', 'WeshareShipSetting', 'OfflineStore', 'UserRelation', 'Comment', 'RebateTrackLog', 'ProxyRebatePercent', 'ShareUserBind', 'UserSubReason', 'ShareFavourableConfig', 'ShareAuthority');
+        'SharerShipOption', 'WeshareShipSetting', 'OfflineStore', 'Comment', 'RebateTrackLog', 'ProxyRebatePercent', 'ShareUserBind', 'UserSubReason', 'ShareFavourableConfig', 'ShareAuthority');
 
     var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
 
@@ -1804,7 +1804,8 @@ class WesharesController extends AppController {
         $this->set('uid', $uid);
         $this->set('me', $me);
         $this->set('type', 0);
-        $this->set('title', '我的粉丝');
+        $title = $me == 1 ? '我的粉丝' : 'TA的粉丝';
+        $this->set('title', $title);
         $this->render('u_list');
     }
 
@@ -1815,7 +1816,8 @@ class WesharesController extends AppController {
         $this->set('me', $me);
         $this->set('uid', $uid);
         $this->set('type', 1);
-        $this->set('title', '我关注的');
+        $title = $me == 1 ? '我关注的' : 'TA关注的';
+        $this->set('title', $title);
         $this->render('u_list');
     }
 

@@ -1948,12 +1948,14 @@ class WeshareBuyComponent extends Component {
             ));
             $fans_count = $userRelationM->find('count', array(
                 'conditions' => array(
-                    'user_id' => $uid
+                    'user_id' => $uid,
+                    'deleted' => DELETED_NO
                 )
             ));
             $focus_count = $userRelationM->find('count', array(
                 'conditions' => array(
-                    'follow_id' => $uid
+                    'follow_id' => $uid,
+                    'deleted' => DELETED_NO
                 )
             ));
             $comments_count = $this->get_sharer_comments_count($uid);
@@ -2270,8 +2272,7 @@ class WeshareBuyComponent extends Component {
         if (!$this->ShareUtil->check_user_is_subscribe($sharer_id, $follow_id)) {
             $this->ShareUtil->save_relation($sharer_id, $follow_id, $type);
             Cache::write(SHARE_USER_SUMMERY_CACHE_KEY . '_' . $sharer_id, '');
-            Cache::write(SHARER_FOCUS_DATA_CACHE_KEY . '_' . $follow_id . '_100', '');
-            Cache::write(SHARER_FANS_DATA_CACHE_KEY . '_' . $sharer_id . '_100', '');
+            Cache::write(SHARE_USER_SUMMERY_CACHE_KEY . '_' . $follow_id, '');
             $this->send_sub_template_msg($sharer_id, $follow_id);
         }
         //$this->ShareUtil->usedUserSubSharerReason($follow_id);;
@@ -2295,10 +2296,9 @@ class WeshareBuyComponent extends Component {
      * 取消关注
      */
     public function unsubscribe_sharer($sharer_id, $follow_id) {
-        Cache::write(SHARE_USER_SUMMERY_CACHE_KEY . '_' . $sharer_id, '');
-        Cache::write(SHARER_FOCUS_DATA_CACHE_KEY . '_' . $follow_id . '_100', '');
-        Cache::write(SHARER_FANS_DATA_CACHE_KEY . '_' . $sharer_id . '_100', '');
         $this->ShareUtil->delete_relation($sharer_id, $follow_id);
+        Cache::write(SHARE_USER_SUMMERY_CACHE_KEY . '_' . $sharer_id, '');
+        Cache::write(SHARE_USER_SUMMERY_CACHE_KEY . '_' . $follow_id, '');
     }
 
     /**
