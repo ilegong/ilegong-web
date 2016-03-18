@@ -52,12 +52,25 @@ class OptLog extends AppModel {
         ];
         if ($followed && $this->uid) {
             // 当用户选定只看fllowed的团长的东西时, 我们需要做一些过滤.
+            // 我决定在这里给用户显示它关注的非团长信息, 都关注了,
+            // 不显示不够意思
             $info = $this->get_my_proxys();
             if (!$info) {
                 return false;
             }
             // 先找到自己关注的团长, 在进行查询.
             $conditions['obj_creator'] = $info;
+        } else {
+            // 获取团长的分享
+            // 这个排除策略太蠢了, 我想不出来好办法啦...
+            $all_proxy = ClassRegistry::init('UserLevel')->find('all', [
+                'conditions' => [
+                    'data_value > ' => 0,
+                ],
+                'fields' => 'data_id',
+            ]);
+
+            $conditions['obj_creator'] = Hash::extract($all_proxy, '{n}.UserLevel.data_id');
         }
 
         $fetch_option = array(
