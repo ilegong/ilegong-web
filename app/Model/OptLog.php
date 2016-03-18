@@ -44,8 +44,10 @@ class OptLog extends AppModel {
      */
     public function new_fetch_by_time_limit_type($format_date, $limit, $type, $followed = false) {
 
+        $exclude_obj_ids = $this->get_exclude_obj_ids($format_date);
         $conditions = [
             'created < ' => $format_date,
+            'obj_id <> ' => $exclude_obj_ids,
             'deleted' => DELETED_NO
         ];
         if ($followed && $this->uid) {
@@ -78,6 +80,19 @@ class OptLog extends AppModel {
         $opt_logs = $this->find('all', $fetch_option);
 
         return $this->filter_data($opt_logs);
+    }
+
+    private function get_exclude_obj_ids($time)
+    {
+        $data = $this->find('all', [
+            'conditions' => [
+                'created > ' => $time,
+            ],
+            'fields' => 'DISTINCT obj_id',
+        ]);
+        $data = Hash::extract($data, '{n}.OptLog.obj_id');
+
+        return $data;
     }
 
     private function filter_data($opt_logs)
@@ -187,6 +202,4 @@ class OptLog extends AppModel {
         }
         return $timeStamp;
     }
-
-
 }
