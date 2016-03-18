@@ -23,14 +23,8 @@
     vm.saveCacheData = saveCacheData;
     vm.validateShipFee = validateShipFee;
     vm.validateRebatePercent = validateRebatePercent;
-    vm.validateTagName = validateTagName;
-    vm.toggleTag = toggleTag;
-    vm.saveTag = saveTag;
     vm.dataCacheKey = 'cache_share_data';
     vm.pageLoaded = pageLoaded;
-    vm.hideEditTagView = hideEditTagView;
-    vm.editTagView = editTagView;
-    vm.checkUserCanSetTag = checkUserCanSetTag;
     vm.validateSendInfo = validateSendInfo;
     vm.validatePinTuan = validatePinTuan;
     vm.showChooseCityView = showChooseCityView;
@@ -50,9 +44,7 @@
     vm.validateDeliveryTemplateData = validateDeliveryTemplateData;
     vm.toggleBoxZitiChecked =toggleBoxZitiChecked;
     vm.toggleBoxKuidiChecked = toggleBoxKuidiChecked;
-    vm.canSetTagUser = [];
     vm.showEditShareView = true;
-    vm.showEditTagView = false;
     vm.currentDeliveryTemplate = null;
     function pageLoaded() {
       $rootScope.loadingPage = false;
@@ -165,8 +157,7 @@
           send_info: '',
           addresses: [
             {address: '', deleted: 0, name: '', phone: ''}
-          ],
-          tags: []
+          ]
         };
         //reset cache data
         var $cacheData = PYS.storage.load(vm.dataCacheKey);
@@ -177,22 +168,15 @@
           PYS.storage.save(vm.dataCacheKey, {}, 1);
         }
         setDefaultData();
-        //load tags
-        $http.get('/weshares/get_tags.json').success(function (data) {
-          vm.weshare.tags = data.tags;
-        }).error(function (data) {
-        });
+
       }
       vm.messages = [];
       function setDefaultData() {
         if (!vm.weshare.addresses || vm.weshare.addresses.length == 0) {
-          vm.weshare.addresses = [{address: '', deleted: 0, name: '', address: ''}];
+          vm.weshare.addresses = [{address: '', deleted: 0, name: '', phone: ''}];
         }
         if (!vm.weshare.send_info) {
           vm.weshare.send_info = '';
-        }
-        if (!vm.weshare.tags) {
-          vm.weshare.tags = [{name: '', deleted: 0}];
         }
       }
     }
@@ -273,18 +257,6 @@
       }
     }
 
-    function toggleTag(tag, isLast) {
-      if (isLast) {
-        vm.weshare.tags.push({name: '', deleted: 0});
-      } else {
-        if (tag.id && tag.id > 0) {
-          tag.deleted = 1;
-        } else {
-          vm.weshare.tags = _.without(vm.weshare.tags, tag);
-        }
-      }
-    }
-
     function backStep() {
       vm.showShippmentInfo = false;
       vm.showEditShareInfo = true;
@@ -353,7 +325,7 @@
         } else {
           window.location.href = '/weshares/user_share_info/';
         }
-      }).error(function (data, status, headers, config) {
+      }).error(function () {
         window.location.href = '/weshares/add';
       });
     }
@@ -368,63 +340,6 @@
     function hideChooseCityView() {
       vm.isShowChooseCity = false;
       vm.showShippmentInfo = true;
-    }
-
-    function hideEditTagView() {
-      vm.weshare.tags = _.filter(vm.weshare.tags, function (tag) {
-        return tag.id && tag.id > 0;
-      });
-      vm.showEditTagView = false;
-      vm.showEditShareView = true;
-    }
-
-    function editTagView() {
-      vm.showEditShareView = false;
-      vm.showEditTagView = true;
-      if (!vm.weshare.tags || vm.weshare.tags.length == 0) {
-        vm.weshare.tags = [{name: '', deleted: 0}];
-      }
-    }
-
-    function inArray(needle, haystack) {
-      var length = haystack.length;
-      for (var i = 0; i < length; i++) {
-        if (haystack[i] == needle) return true;
-      }
-      return false;
-    }
-
-    function checkUserCanSetTag() {
-      if (inArray(vm.currentUserId, vm.canSetTagUser)) {
-        return true;
-      }
-      return false;
-    }
-
-    function saveTag() {
-      if (vm.isSaveingTag) {
-        alert('正在保存....');
-        return;
-      }
-      var tagHasError = false;
-      _.each(vm.weshare.tags, function (tag) {
-        var tagNameHasError = vm.validateTagName(tag);
-        tagHasError = tagHasError || tagNameHasError;
-      });
-      if (tagHasError) {
-        return false;
-      }
-      vm.isSaveingTag = true;
-      $http.post('/weshares/save_tags', vm.weshare.tags).success(function (data) {
-        vm.isSaveingTag = false;
-        vm.showEditTagView = false;
-        vm.showEditShareView = true;
-        vm.weshare.tags = data.tags;
-        $log.log(data);
-      }).error(function (data) {
-        vm.isSaveingTag = false;
-        $log.log(data);
-      });
     }
 
     function validateShipFee() {
@@ -460,11 +375,6 @@
     function validateProductName(product) {
       product.nameHasError = _.isEmpty(product.name) || product.name.length > 40;
       return product.nameHasError;
-    }
-
-    function validateTagName(tag) {
-      tag.nameHasError = _.isEmpty(tag.name) || tag.name.length > 20;
-      return tag.nameHasError;
     }
 
     function validateProductPrice(product) {

@@ -15,41 +15,20 @@
                 <input class='form-control' placeholder="价格/元" ng-model="product.price" ng-change='vm.validateProductPrice(product)' ng-blur='vm.validateProductPrice(product)'/>
                 <p class='tips'>请输入数字</p>
             </div>
-            <!--<div class="form-group fl" style="margin-top: 2%;">-->
-                <!--<input type="checkbox" ng-model="product.tbd" ng-true-value="1" ng-false-value="0" ng-checked="product.tbd==1">-->
-                <!--&nbsp;&nbsp;价格待定-->
-                <!--&nbsp;&nbsp;-->
-            <!--</div>-->
-            <!--<img ng-src="{{::vm.staticFilePath}}/static/weshares/images/faq.png" width="20px" height="20px" style="margin-top: 3%;" ng-click="vm.showProductTipInfo=true;vm.showLayer=true;">-->
             <div class="form-group form-group-inline" ng-class="{'has-error': product.storeHasError}">
                 <input class='form-control' placeholder="库存,默认(0)不限制,(-1)为售罄" ng-model="product.store" ng-change='vm.validateProductStore(product)' ng-blur='vm.validateProductStore(product)'/>
                 <p class='tips'>请输入数字</p>
             </div>
-            <div class="form-group fl form-group-inline" ng-show="vm.weshare.tags.length>0" ng-if="vm.checkUserCanSetTag()">
-                <select class="form-control" ng-model="product.tag_id" ng-options="tag.id as tag.name for tag in vm.weshare.tags">
-                    <option value="">默认分组</option>
-                </select>
-            </div>
-            <div class="form-group fl set-product-tag-group" ng-if="vm.checkUserCanSetTag()">
-                <a class="set-product-tag" ng-click="vm.editTagView()">设置分组</a>
-            </div>
+
             <div ng-if="!$last">
                 <a class="fr btn delete-btn del-new-product-not-tag"
-                   ng-click="vm.toggleProduct(product, false)" ng-if="!vm.checkUserCanSetTag()"></a>
-                <a class="fr btn del-new-product-tag delete-btn"
-                   ng-click="vm.toggleProduct(product, false)" ng-if="vm.checkUserCanSetTag()"></a>
+                   ng-click="vm.toggleProduct(product, false)"></a>
             </div>
             <div ng-if="$last">
                 <a class="fr btn add-btn add-new-product-not-tag"
-                   ng-click="vm.toggleProduct(product, true)" ng-if="!vm.checkUserCanSetTag()"></a>
-                <a class="fr btn add-new-product-tag add-btn"
-                   ng-click="vm.toggleProduct(product, true)" ng-if="vm.checkUserCanSetTag()"></a>
-                <div ng-if="$index!=0">
-                    <a class="fr btn delete-btn del-new-product-not-tag"
-                       ng-click="vm.toggleProduct(product, false)" ng-if="!vm.checkUserCanSetTag()"></a>
-                    <a class="fr btn del-new-product-tag delete-btn"
-                       ng-click="vm.toggleProduct(product, false)" ng-if="vm.checkUserCanSetTag()"></a>
-                </div>
+                   ng-click="vm.toggleProduct(product, true)"></a>
+                <a ng-if="$index!=0" class="fr btn delete-btn del-new-product-not-tag"
+                   ng-click="vm.toggleProduct(product, false)"></a>
             </div>
         </div>
         <div class="form-group">
@@ -239,32 +218,6 @@
                 <li class="fl gray pl28" ng-bind="provinceName"></li>
                 <li class="fr"><input type="checkbox" ng-model="vm.provinceCheckStatus[provinceId]" ng-change="vm.setAreaCheckStatus(area.id)" ng-true-value="true" ng-false-value="false"/></li>
             </ul>
-        </div>
-    </div>
-</div>
-<div style="background-color:#f5f5f5;margin-bottom: 20px;" ng-if="vm.showEditTagView">
-    <div class="classlist">
-        <a ng-click="vm.hideEditTagView()" class="back"></a>
-        分组
-    </div>
-    <div class="weshare-add" style="margin-top: 50px;">
-        <div class="shippment-info">
-            <div class="clearfix">
-                通过分组可以方便的管理多个商品
-            </div>
-            <div class="form-group">
-                <div class="clearfix" ng-repeat="tag in vm.weshare.tags | filter:{deleted:0}">
-                    <div class="form-group fl" style="width: 80%; margin-right: 10px;" ng-class="{'has-error': tag.nameHasError}">
-                        <input class='form-control' placeholder="分组名称" ng-model="tag.name"
-                               ng-blur='vm.validateTagName(tag)' ng-change='vm.validateTagName(tag)'/>
-                    </div>
-                    <a class="fr btn" ng-class="{'delete-btn': !$last,'add-btn': $last}"
-                       ng-click="vm.toggleTag(tag, $last)"></a>
-                </div>
-                <p class='tips'>请输入分组名称</p>
-            </div>
-            <a class="btn next-btn" ng-click="vm.saveTag()">确定</a>
-            <a class="btn back-btn" ng-click="vm.showEditTagView=false;vm.showEditShareView=true">取消</a>
         </div>
     </div>
 </div>
