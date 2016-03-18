@@ -141,7 +141,6 @@ class OptLogHelperComponent extends Component {
             $share = $item['Weshare'];
             $user = $item['User'];
             $level = $item['UserLevel']['data_value'];
-            if ($level < 1) continue;
             $tmp = [];
             $tmp['share_id'] = $share['id'];
             $nickname = $user['nickname'];
