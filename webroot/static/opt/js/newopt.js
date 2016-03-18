@@ -164,7 +164,7 @@ $(document).ready(function () {
       if (data['success']) {
         var $parent = $el.parent();
         $el.remove();
-        $parent.append('<div class="bk-balck ta follow" follow="true">已关注<img src="http://dev.tongshijia.com/static/opt/images/sousuo.png" /></div><div class="bk-balck ta unfollow hidden un-sub-user-btn" follow="true" data-user-id="' + userId + '">取消关注</div>');
+        $parent.append('<div class="bk-balck ta follow" follow="true">已关注<i class="fa fa-angle-down></i></div><div class="bk-balck ta unfollow hidden un-sub-user-btn" follow="true" data-user-id="' + userId + '">取消关注</div>');
         $parent.addClass('un-sub-group');
         //bind event
         $('div.follow', $parent).on('click', function (e) {
@@ -224,9 +224,9 @@ $(document).ready(function () {
       e.preventDefault();
       $('div.unfollow', $(this).parent()).toggle();
       if ($('div.unfollow', $(this).parent()).css('display') == 'block') {
-        $(this).find('img').attr('src', 'http://dev.tongshijia.com/static/opt/images/arrow-up.png');
+        $(this).find('i').removeClass('fa-angle-down').addClass('fa-angle-up');
       } else {
-        $(this).find('img').attr('src', 'http://dev.tongshijia.com/static/opt/images/jiantou.png');
+        $(this).find('i').removeClass('fa-angle-up').addClass('fa-angle-down');
       }
     });
   }
@@ -256,7 +256,7 @@ $(document).ready(function () {
     '</li>' +
     '<%}else{%>' +
     '<li class="fr un-sub-group">' +
-      '<div class="bk-balck ta follow" follow="<%this.check_relation%>">已关注<img src="http://dev.tongshijia.com/static/opt/images/jiantou.png" /></div>' +
+      '<div class="bk-balck ta follow" follow="<%this.check_relation%>">已关注<i class="fa fa-angle-down"></i></div>' +
     '<div class="bk-balck ta unfollow hidden un-sub-user-btn" follow="<%this.check_relation%>" data-user-id="<%this.proxy_id%>">取消关注</div>' +
     '</li>' +
     '<%}%>' +
