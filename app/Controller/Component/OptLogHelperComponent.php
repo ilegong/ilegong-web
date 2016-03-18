@@ -186,7 +186,12 @@ class OptLogHelperComponent extends Component {
 
             // 接下来组合上愣愣的数据
             $customer = $item['user_id'];
-            $tmp['customer'] = $users[$customer]['nickname'];
+            $nickname = $users[$customer]['nickname'];
+            if (mb_strlen($nickname) > 4) {
+                $tmp['customer'] = mb_substr($nickname, 0, 4) . "...";
+            } else {
+                $tmp['customer'] = $nickname;
+            }
             $tmp['time'] = $item['timestamp'];
             $tmp['readtime'] = $this->get_read_time($item['timestamp']);
             $tmp['data_url'] = $item['data_url'];
