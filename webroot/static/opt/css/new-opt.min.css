@@ -34,15 +34,17 @@ body, html {
   margin-left: 5px;
   position: absolute; }
 
-.time {
-  color: #999;
-  padding-top: 11px;
-  font-size: 1em; }
-
 .bm, .fenxian, .pl {
   font-size: 1em;
   color: #666;
   line-height: 3.3em; }
+
+.clearfix:after, .biao:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden; }
 
 .t {
   overflow: hidden;
@@ -69,12 +71,10 @@ body, html {
 
 body {
   background-color: #f1f1f1;
-  overflow: hidden;
-  -webkit-overflow-scrolling: touch; }
+  overflow: hidden; }
 
 html {
-  overflow: hidden;
-  -webkit-overflow-scrolling: touch; }
+  overflow: hidden; }
 
 .audio_con_square {
   float: left;
@@ -175,6 +175,9 @@ html {
   border-radius: 5px; }
 
 .time {
+  color: #999;
+  padding-top: 11px;
+  font-size: 1em;
   padding-left: 10px; }
 
 .fenxian {
@@ -367,14 +370,14 @@ footer {
 .fr {
   float: right; }
 
-.clearfix, .biao {
+.clearfix {
   zoom: 1; }
-  .clearfix:after, .biao:after {
-    content: ".";
-    display: block;
-    height: 0;
-    clear: both;
-    visibility: hidden; }
+
+.biao {
+  zoom: 1;
+  background: #fff;
+  position: relative;
+  padding: 10px 0; }
 
 .biao-bin {
   display: inline-block; }
@@ -449,11 +452,6 @@ footer {
   height: 8px;
   background-color: #f1f1f1; }
 
-.biao {
-  background: #fff;
-  position: relative;
-  padding: 10px 0; }
-
 .qu {
   position: absolute;
   top: 2.2em;
@@ -483,23 +481,26 @@ footer {
   padding-left: 1.25em;
   padding-top: 10px;
   width: 1.5em;
-  height: 1.5em; }
+  height: 1.5em;
+  padding-top: 12px; }
 
 .text1 {
   padding-left: 12px;
   padding-right: 12px;
   padding-top: 10px;
   font-size: 1.15em;
-  color: #333; }
+  color: #333;
+  padding-top: 12px; }
 
 .text2 {
   padding-left: 1.25em;
   padding-top: 10px;
   font-size: 1em;
   color: #999;
-  padding-right: 12px; }
+  padding-right: 12px;
+  padding-top: 12px; }
   .text2 > a {
-    color: #999999; }
+    color: #999; }
 
 .g {
   margin-left: 15em; }
@@ -513,7 +514,8 @@ footer {
   padding-top: 2em; }
 
 .show {
-  padding-top: 10px; }
+  padding-top: 10px;
+  padding-top: 12px; }
 
 .anniu {
   font-size: 1.16em;
@@ -541,6 +543,16 @@ footer {
 .hidden {
   display: none; }
 
+::-webkit-scrollbar {
+  width: 3px;
+  height: 1px; }
+
+::-webkit-scrollbar-track-piece {
+  background: 0 0; }
+
+.list_item {
+  margin-bottom: 10px; }
+
 .fenxiang a {
   text-decoration: none;
   color: #0fc449;
@@ -563,24 +575,11 @@ footer {
 .chanpin > a > img {
   width: 100%; }
 
-::-webkit-scrollbar {
-  width: 3px;
-  height: 1px; }
-
-::-webkit-scrollbar-track-piece {
-  background: 0 0; }
-
 ul li {
   list-style: none; }
 
-.img, .show, .text1, .text2 {
-  padding-top: 12px; }
-
-.list_item {
-  margin-bottom: 10px; }
-
 .c.fr {
-  background-color: #ffffff;
+  background-color: #fff;
   text-align: right; }
 
 /*# sourceMappingURL=new-opt.min.css.map */
