@@ -30,23 +30,11 @@ class SharePoolProduct extends AppModel
 
     private function rearrange_data($data)
     {
-        return Hash::combine($data, '{n}', '{n}.PoolProduct');
-    }
-
-    /**
-     * @param $share_id
-     * @return array
-     */
-    public function get_product_by_share_id($share_id)
-    {
-        $find_product = null;
-        foreach ($this->products as $product) {
-            if ($product['share_id'] == $share_id) {
-                $find_product = $product;
-                break;
-            }
-        }
-        return $find_product;
+        $items = Hash::extract($data, '{n}.PoolProduct');
+        usort($items, function($one, $another){
+            return $one['sort'] > $another['sort'];
+        });
+        return $items;
     }
 
     /**
@@ -55,10 +43,7 @@ class SharePoolProduct extends AppModel
      */
     public function get_all_products()
     {
-        $share_products = array_filter($this->products, function ($item) {
-            return $item['published'] == PUBLISH_YES;
-        });
-        return $share_products;
+        return $this->products;
     }
 
     /**
