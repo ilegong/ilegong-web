@@ -73,6 +73,7 @@ class OptLog extends AppModel {
         $min_id = $this->get_min_distinct_id($fetch_option, $limit, $distinct_min_obj_id);
 
         $fetch_option['conditions']['id >'] = $min_id;
+        unset($fetch_option['limit']);
 
         $opt_logs = $this->find('all', $fetch_option);
 
