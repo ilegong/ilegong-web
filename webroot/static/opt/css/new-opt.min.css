@@ -577,7 +577,8 @@ footer {
 
 .chanpin {
   max-height: 420px;
-  overflow: hidden; }
+  overflow: hidden;
+  background-color: #fff; }
   .chanpin > a > img {
     width: 100%; }
 
