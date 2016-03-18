@@ -7,7 +7,6 @@
 body, html {
   width: 100%;
   height: 100%;
-  background: "" left top no-repeat #fff;
   font-family: STHei, Microsoft YaHei, \5FAE\8F6F\96C5\9ED1, \534E\6587\7EC6\9ED1, Helvetica Neue, Helvetica, Arial, sans-serif;
   background-size: 100% 100%; }
 
@@ -69,6 +68,7 @@ body, html {
   font-weight: 700; }
 
 body {
+  background-color: #f1f1f1;
   overflow: hidden; }
 
 html {
@@ -482,8 +482,8 @@ footer {
     width: 5em;
     height: 2em;
     border: 1px solid #bbb;
+    margin: -0.13em 1.25em 1em 0;
     border-radius: 0 0 5px 5px;
-    margin: -1.25em 1.25em 1em 0;
     background-color: #fff;
     position: absolute; }
 
@@ -578,5 +578,16 @@ footer {
 
 ul li {
   list-style: none; }
+
+.img, .show, .text1, .text2 {
+  padding-top: 12px; }
+
+.text2 {
+  font-size: 1em;
+  color: #999;
+  padding-right: 12px; }
+
+.list_item {
+  margin-bottom: 10px; }
 
 /*# sourceMappingURL=new-opt.min.css.map */

@@ -60,9 +60,9 @@ class OptLog extends AppModel {
 
         $fetch_option = array(
             'conditions' => $conditions,
-            // 'fields' => ['id', 'obj_id', 'created'],
+            'fields' => ['max(id)', '*'],
             'limit' => $limit,
-            'order' => array('created DESC'),
+            'order' => array('max(id) DESC'),
             'group' => array('obj_id'),
         );
         if ($type != 0) {
