@@ -153,13 +153,14 @@ class OptLogHelperComponent extends Component {
             $tmp['current_user'] = $this->uid;
             $tmp['check_relation'] = in_array($user['id'], $my_proxys);
             $tmp['avatar'] = get_user_avatar($user) ? : "http://static.tongshijia.com/static/img/default_avatar.png";
-            $tmp['level'] = "V{$level}{$level_pool[$level]}";
+            $tmp['level'] = "L{$level}{$level_pool[$level]}";
             $tmp['title'] = $share['title'];
-            if (mb_strlen($share['description']) > 110) {
-                $tmp['description'] = mb_substr($share['description'], 0, 110) . "...";
+            $description = str_replace('<br />', '', $share['description']);
+            if (mb_strlen($description) > 110) {
+                $tmp['description'] = mb_substr($description, 0, 110) . "...";
                 $tmp['description_more'] = true;
             } else {
-                $tmp['description'] = $share['description'];
+                $tmp['description'] = $description;
                 $tmp['description_more'] = false;
             }
             $image = explode('|', $share['images'])[0];

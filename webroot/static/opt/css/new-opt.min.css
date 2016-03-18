@@ -163,7 +163,7 @@ html {
 
 .b {
   top: 4em;
-  margin-top: -40px;
+  margin-top: -34px;
   border: 1px solid #f99d3a;
   border-radius: 5px; }
 
@@ -334,7 +334,7 @@ footer {
 
 .ta {
   text-align: center;
-  font-size: 1.083em;
+  font-size: 1em;
   color: #666;
   line-height: 2em; }
 
@@ -381,7 +381,7 @@ footer {
 
 .bin {
   display: inline-block;
-  padding: 0 1.25em 0 0; }
+  padding: 0 12px 0 0; }
 
 .big {
   width: 100%; }
@@ -422,7 +422,7 @@ footer {
   color: #333; }
 
 .tupian {
-  margin-left: 1.25em;
+  margin-left: 10px;
   border-radius: 3.333em;
   width: 3.333em;
   height: 3.333em; }
@@ -486,7 +486,8 @@ footer {
   height: 1.5em; }
 
 .text1 {
-  padding-left: 1.25em;
+  padding-left: 12px;
+  padding-right: 12px;
   padding-top: 10px;
   font-size: 1.15em;
   color: #333; }
@@ -496,7 +497,9 @@ footer {
   padding-top: 10px;
   font-size: 1em;
   color: #999;
-  padding-right: 1em; }
+  padding-right: 12px; }
+  .text2 > a {
+    color: #999999; }
 
 .g {
   margin-left: 15em; }
@@ -573,12 +576,11 @@ ul li {
 .img, .show, .text1, .text2 {
   padding-top: 12px; }
 
-.text2 {
-  font-size: 1em;
-  color: #999;
-  padding-right: 12px; }
-
 .list_item {
   margin-bottom: 10px; }
+
+.c.fr {
+  background-color: #ffffff;
+  text-align: right; }
 
 /*# sourceMappingURL=new-opt.min.css.map */

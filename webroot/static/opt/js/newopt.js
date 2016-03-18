@@ -256,8 +256,8 @@ $(document).ready(function () {
     '</div>' +
     '<ul>' +
     '<li class="text1"><a href="<%this.data_url%>"><%this.title%></a></li>' +
-      '<li class="text2"><%this.description%>' +
-        '<%if (this.description_more) {%><a href="<%this.data_url%>">更多&gt;&gt;</a><%}%>' +
+      '<li class="text2"><a href="<%this.data_url%>"><%this.description%>' +
+        '<%if (this.description_more) {%>更多&gt;&gt;<%}%></a>' +
       '</li>' +
     '</ul>' +
     //'<img src="http://static.tongshijia.com/static/opt/images/fenxiang.png" class="img fl">' +
