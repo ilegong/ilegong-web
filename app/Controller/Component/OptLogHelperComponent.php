@@ -141,6 +141,7 @@ class OptLogHelperComponent extends Component {
             $share = $item['Weshare'];
             $user = $item['User'];
             $level = $item['UserLevel']['data_value'];
+            if ($level < 1) continue;
             $tmp = [];
             $tmp['share_id'] = $share['id'];
             $nickname = $user['nickname'];
@@ -153,13 +154,14 @@ class OptLogHelperComponent extends Component {
             $tmp['current_user'] = $this->uid;
             $tmp['check_relation'] = in_array($user['id'], $my_proxys);
             $tmp['avatar'] = get_user_avatar($user) ? : "http://static.tongshijia.com/static/img/default_avatar.png";
-            $tmp['level'] = "V{$level}{$level_pool[$level]}";
+            $tmp['level'] = "L{$level}{$level_pool[$level]}";
             $tmp['title'] = $share['title'];
-            if (mb_strlen($share['description']) > 110) {
-                $tmp['description'] = mb_substr($share['description'], 0, 110) . "...";
+            $description = str_replace('<br />', '', $share['description']);
+            if (mb_strlen($description) > 110) {
+                $tmp['description'] = mb_substr($description, 0, 110) . "...";
                 $tmp['description_more'] = true;
             } else {
-                $tmp['description'] = $share['description'];
+                $tmp['description'] = $description;
                 $tmp['description_more'] = false;
             }
             $image = explode('|', $share['images'])[0];
@@ -185,7 +187,12 @@ class OptLogHelperComponent extends Component {
 
             // 接下来组合上愣愣的数据
             $customer = $item['user_id'];
-            $tmp['customer'] = $users[$customer]['nickname'];
+            $nickname = $users[$customer]['nickname'];
+            if (mb_strlen($nickname) > 4) {
+                $tmp['customer'] = mb_substr($nickname, 0, 4) . "...";
+            } else {
+                $tmp['customer'] = $nickname;
+            }
             $tmp['time'] = $item['timestamp'];
             $tmp['readtime'] = $this->get_read_time($item['timestamp']);
             $tmp['data_url'] = $item['data_url'];

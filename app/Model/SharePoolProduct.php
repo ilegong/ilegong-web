@@ -1,10 +1,12 @@
 <?php
 
-class SharePoolProduct extends AppModel {
+class SharePoolProduct extends AppModel
+{
 
     public $useTable = false;
 
-    public function __get($key) {
+    public function __get($key)
+    {
         if ($key == 'products') {
             return $this->get_all_pool_products();
         }
@@ -19,20 +21,6 @@ class SharePoolProduct extends AppModel {
             'conditions' => [
                 'PoolProduct.deleted' => DELETED_NO,
                 'PoolProduct.status' => 1,
-                'WeshareProducts.deleted' => DELETED_NO,
-            ],
-            'fields' => [
-                'PoolProduct.*',
-                'WeshareProducts.*'
-                ],
-            'joins' => [
-                [
-                    'table' => 'weshare_products',
-                    'alias' => 'WeshareProducts',
-                    'conditions' => [
-                        'PoolProduct.weshare_id = WeshareProducts.weshare_id',
-                    ],
-                ]
             ],
             'order' => ['PoolProduct.sort ASC'],
         ]);
@@ -42,51 +30,20 @@ class SharePoolProduct extends AppModel {
 
     private function rearrange_data($data)
     {
-        $products = [];
-        $oldid = -1;
-        $ak = -1;
-        foreach ($data as $v) {
-            $productid = $v['PoolProduct']['id'];
-
-            if ($oldid != $productid) {
-                $ak++;
-                $oldid = $productid;
-                $products[$ak] = $v['PoolProduct'];
-                $products[$ak]['share_id'] = $v['PoolProduct']['weshare_id'];
-                $products[$ak]['published'] = $v['PoolProduct']['status'];
-                $products[$ak]['products'][] = $v['WeshareProducts'];
-            } else {
-                $products[$ak]['products'][] = $v['WeshareProducts'];
-            }
-        }
-
-        return $products;
-    }
-
-    /**
-     * @param $share_id
-     * @return array
-     */
-    public function get_product_by_share_id($share_id) {
-        $find_product = null;
-        foreach ($this->products as $product) {
-            if ($product['share_id'] == $share_id) {
-                $find_product = $product;
-                break;
-            }
-        }
-        return $find_product;
+        $items = Hash::extract($data, '{n}.PoolProduct');
+        usort($items, function($one, $another){
+            return $one['sort'] > $another['sort'];
+        });
+        return $items;
     }
 
     /**
      * @return array
      * 获取产品池中所有产品
      */
-    public function get_all_products() {
-        $share_products = array_filter($this->products, function ($item) {
-            return $item['published'] == PUBLISH_YES;
-        });
-        return $share_products;
+    public function get_all_products()
+    {
+        return $this->products;
     }
 
     /**
@@ -94,7 +51,8 @@ class SharePoolProduct extends AppModel {
      * @return mixed
      * 获取产品池中产品的试吃id
      */
-    public function get_product_buy_config($share_id) {
+    public function get_product_buy_config($share_id)
+    {
         return $this->product_buy_map[$share_id];
     }
 
@@ -103,7 +61,8 @@ class SharePoolProduct extends AppModel {
      * @return mixed
      * 获取团长从产品池中分享出去所有的分享
      */
-    public function get_fork_share_ids($share_id) {
+    public function get_fork_share_ids($share_id)
+    {
         $weshareM = ClassRegistry::init('Weshare');
         $shares = $weshareM->find('all', array(
             'conditions' => array(
