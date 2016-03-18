@@ -86,9 +86,9 @@ class ShareProductPoolController extends AppController {
         $this->autoRender = false;
         $share_info = $this->get_share_product_info($share_id);
         $share_info['buy_config'] = $this->SharePoolProduct->get_product_buy_config($share_id);
-        $pool_product_config = $this->SharePoolProduct->get_product_by_share_id($share_id);
+        //$pool_product_config = $this->SharePoolProduct->get_product_by_share_id($share_id);
         //$share_info['channel_price'] = $pool_product_config['channel_price'];
-        $share_info['products_config'] = $pool_product_config['products'];
+        //$share_info['products_config'] = $pool_product_config['products'];
         echo json_encode($share_info);
         return;
     }
@@ -115,10 +115,10 @@ class ShareProductPoolController extends AppController {
             $weshare_info = $weshare_info['Weshare'];
             $weshare_info['description'] = str_replace(array("\r\n", "\n", "\r"), '<br />', $weshare_info['description']);
             $weshare_info['images'] = array_filter(explode('|', $weshare_info['images']));
-            $weshare_products = $this->ShareUtil->get_product_tag_map($share_id);
-            $sharer_tags = $this->ShareUtil->get_tags($weshare_info['creator'], $weshare_info['refer_share_id']);
+            $weshare_products = $this->ShareUtil->get_all_share_products($share_id);
+            //$sharer_tags = $this->ShareUtil->get_tags($weshare_info['creator'], $weshare_info['refer_share_id']);
             $weshare_info['products'] = $weshare_products;
-            $weshare_info['tags'] = $sharer_tags;
+            //$weshare_info['tags'] = $sharer_tags;
             $WeshareShipSettingM = ClassRegistry::init('WeshareShipSetting');
             $shipSettings = $WeshareShipSettingM->find('all', array('conditions' => array('weshare_id' => $share_id)));
             $ship_info = $this->get_pool_product_ship_info($shipSettings);
