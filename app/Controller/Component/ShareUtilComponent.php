@@ -438,15 +438,18 @@ class ShareUtilComponent extends Component
                 $this->cloneShareShipSettings($newShareId, $shareId, true);
                 $this->cloneShareRebateSet($newShareId, $shareId, true);
             }
-            Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
-            //when clone share status normal save opt log
-            if ($share_status == WESHARE_NORMAL_STATUS) {
-                $now = date('Y-m-d H:i:s');
-                $shareImg = explode('|', $shareInfo['images']);
-                $title = '大家一起拼团' . $origin_sharer_nickname . '分享的' . $shareInfo['title'];
-                $optLogData = array('obj_creator' => $shareInfo['creator'], 'user_id' => $uid, 'obj_type' => OPT_LOG_START_GROUP_SHARE, 'obj_id' => $newShareId, 'created' => $now, 'memo' => $title, 'thumbnail' => $shareImg[0]);
-                $this->saveOptLog($optLogData);
+            if(!empty($uid)){
+                $this->check_and_save_default_level($uid);
             }
+            Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
+//            //when clone share status normal save opt log
+//            if ($share_status == WESHARE_NORMAL_STATUS) {
+//                $now = date('Y-m-d H:i:s');
+//                $shareImg = explode('|', $shareInfo['images']);
+//                $title = '大家一起拼团' . $origin_sharer_nickname . '分享的' . $shareInfo['title'];
+//                $optLogData = array('obj_creator' => $shareInfo['creator'], 'user_id' => $uid, 'obj_type' => OPT_LOG_START_GROUP_SHARE, 'obj_id' => $newShareId, 'created' => $now, 'memo' => $title, 'thumbnail' => $shareImg[0]);
+//                $this->saveOptLog($optLogData);
+//            }
             return array('shareId' => $newShareId, 'success' => true);
         }
         return array('success' => false);

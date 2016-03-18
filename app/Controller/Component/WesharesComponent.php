@@ -83,7 +83,7 @@ class WesharesComponent extends Component
 
     /**
      * @param $uid
-     * @param $shareId
+     * @param $weshare_id
      * @return int
      * 删除分享
      */
