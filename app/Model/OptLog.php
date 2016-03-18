@@ -44,8 +44,10 @@ class OptLog extends AppModel {
      */
     public function new_fetch_by_time_limit_type($format_date, $limit, $type, $followed = false) {
 
+        $exclude_obj_ids = $this->get_exclude_obj_ids($format_date);
         $conditions = [
             'created < ' => $format_date,
+            'obj_id <> ' => $exclude_obj_ids,
             'deleted' => DELETED_NO
         ];
         if ($followed && $this->uid) {
@@ -60,16 +62,73 @@ class OptLog extends AppModel {
 
         $fetch_option = array(
             'conditions' => $conditions,
-            'fields' => ['max(id)', '*'],
             'limit' => $limit,
-            'order' => array('max(id) DESC'),
-            'group' => array('obj_id'),
+            'order' => array('created DESC'),
         );
         if ($type != 0) {
             $fetch_option['conditions']['obj_type'] = $type;
         }
+        // 先找出来符合条件的最小的distinct id
+        $distinct_min_obj_id = $this->get_min_distinct_obj_id($fetch_option, $limit);
+        // 再找到这个distinct obj_id对应的id, 下面取大于这个id的值,
+        // 排序去重即可
+        $min_id = $this->get_min_distinct_id($fetch_option, $limit, $distinct_min_obj_id);
+
+        $fetch_option['conditions']['id >'] = $min_id;
+        unset($fetch_option['limit']);
+
         $opt_logs = $this->find('all', $fetch_option);
-        return $opt_logs;
+
+        return $this->filter_data($opt_logs);
+    }
+
+    private function get_exclude_obj_ids($time)
+    {
+        $data = $this->find('all', [
+            'conditions' => [
+                'created > ' => $time,
+            ],
+            'fields' => 'DISTINCT obj_id',
+        ]);
+        $data = Hash::extract($data, '{n}.OptLog.obj_id');
+
+        return $data;
+    }
+
+    private function filter_data($opt_logs)
+    {
+        $data = [];
+        $aobj_id = [];
+        foreach($opt_logs as $key => $val) {
+            $item = $val['OptLog'];
+            $obj_id = $item['obj_id'];
+            if (!in_array($obj_id, $aobj_id)) {
+                $aobj_id[] = $obj_id;
+                $data[]['OptLog'] = $item;
+            }
+        }
+
+        return $data;
+    }
+
+    private function get_min_distinct_id($option, $limit, $obj_id)
+    {
+        $option['conditions']['obj_id'] = $obj_id;
+        $option['fields'] = 'max(id) as maxid';
+        $data = $this->find('first', $option);
+
+        return $data[0]['maxid'];
+    }
+
+    private function get_min_distinct_obj_id($option, $limit)
+    {
+        $option['fields'] = 'DISTINCT obj_id';
+        $from = $limit - 1;
+        $option['limit'] = 1;
+        $option['offset'] = $from;
+        $data = $this->find('first', $option);
+
+        return $data['OptLog']['obj_id'];
     }
 
     /* 获取用户关注的团长ID */
@@ -143,6 +202,4 @@ class OptLog extends AppModel {
         }
         return $timeStamp;
     }
-
-
 }

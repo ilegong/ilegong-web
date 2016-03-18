@@ -34,43 +34,11 @@ class OptLogHelperComponent extends Component {
     }
 
     /**
-     * @return mixed
-     */
-    private function load_last_opt_data($new = false, $followed = false) {
-        $optLogM = ClassRegistry::init('OptLog');
-        $datetime = date('Y-m-d H:i:s');
-        if ($new) {
-            $opt_logs = $optLogM->new_fetch_by_time_limit_type($datetime, 100, 0, $followed);
-        } else {
-            $opt_logs = $optLogM->fetch_by_time_limit_type($datetime, 100, 0);
-        }
-        return $opt_logs;
-    }
-
-    /**
      * @param $time
      * @return array
      * load opt_log
      */
     private function load_opt_log_by_time($time, $new = false, $followed = false) {
-        $last_opt_data = $this->load_last_opt_data($new, $followed);
-        if (!$last_opt_data) return false;
-        $first_log = $last_opt_data[0];
-        $first_log_date = $first_log['OptLog']['created'];
-        $first_log_time = strtotime($first_log_date);
-        //check logic
-        if ($time >= $first_log_time) {
-            $log_data = array_slice($last_opt_data, 0, 10);
-            return $log_data;
-        }
-        foreach ($last_opt_data as $index => $log_item) {
-            $log_item_date = $log_item['OptLog']['created'];
-            $log_item_time = strtotime($log_item_date);
-            if ($log_item_time < $time) {
-                $log_data = array_slice($last_opt_data, $index, 10);
-                return $log_data;
-            }
-        }
         $optLogM = ClassRegistry::init('OptLog');
         if ($new) {
             $opt_logs = $optLogM->new_fetch_by_time_limit_type(date('Y-m-d H:i:s', $time), 10, 0, $followed);
@@ -241,7 +209,8 @@ class OptLogHelperComponent extends Component {
         } elseif ($diff > $hour) {
             $str = number_format($diff / $hour, 0, '.', '') . "小时前";
         } else {
-            $str = number_format($diff / $minute, 0, '.', '') . "分钟前";
+            $min = number_format($diff / $minute, 0, '.', '');
+            $str = $min ? $min . "分钟前" : "刚刚";
         }
 
         return $str;
