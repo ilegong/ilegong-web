@@ -367,9 +367,9 @@ footer {
 .fr {
   float: right; }
 
-.clearfix {
+.clearfix, .biao {
   zoom: 1; }
-  .clearfix:after {
+  .clearfix:after, .biao:after {
     content: ".";
     display: block;
     height: 0;
@@ -450,7 +450,6 @@ footer {
   background-color: #f1f1f1; }
 
 .biao {
-  height: 5.666em;
   background: #fff;
   position: relative;
   padding: 10px 0; }
@@ -462,13 +461,11 @@ footer {
 
 .bk-balck {
   width: 5em;
-  margin: 1.25em 1.25em 1em 0;
   height: 2em;
   border: 1px solid #bbb;
   border-radius: 5px;
   margin: 7px 10px 0 0;
-  line-height: 2em;
-  padding: 0 10px; }
+  line-height: 2em; }
   .bk-balck > img {
     width: 1em;
     height: .5em;

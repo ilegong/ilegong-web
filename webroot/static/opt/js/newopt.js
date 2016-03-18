@@ -229,7 +229,7 @@ $(document).ready(function () {
   var _optLogTemplate =
     '<div class="clearfix list_item list_item_<%this.dataMark%>" id="info_<%this.share_id%>">' +
     '<ul class="biao ">' +
-    '<li>' +
+    '<li class="fl">' +
     '<img src="<%this.avatar%>" class="tupian fl" onerror="this.src=\'http://static.tongshijia.com/avatar/s/default.jpg\'">' +
     '</li>' +
     '<li class="center fl">' +
