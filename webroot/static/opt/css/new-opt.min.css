@@ -71,7 +71,8 @@ body, html {
 
 body {
   background-color: #f1f1f1;
-  overflow: hidden; }
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch; }
 
 html {
   overflow: hidden; }
