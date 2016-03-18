@@ -268,7 +268,7 @@ $(document).ready(function () {
     '</ul>' +
     //'<img src="http://static.tongshijia.com/static/opt/images/fenxiang.png" class="img fl">' +
     //'<div class="fenxian fl">分享</div>' +
-    '<div class="c fr">' +
+    '<div class="bottom-area">' +
     '<div class="bm bin">报名(<%this.baoming%>)</div>' +
     '<div class="pl bin">浏览(<%this.liulan%>)</div>' +
     '</div>' +

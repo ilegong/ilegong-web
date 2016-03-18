@@ -163,7 +163,7 @@ html {
 
 .b {
   top: 4em;
-  margin-top: -34px;
+  margin-top: -28px;
   border: 1px solid #f99d3a;
   border-radius: 5px; }
 
@@ -490,9 +490,11 @@ footer {
   padding-top: 10px;
   font-size: 1.15em;
   color: #333;
+  background-color: #fff;
   padding-top: 12px; }
 
 .text2 {
+  background-color: #fff;
   padding-left: 1.25em;
   padding-top: 10px;
   font-size: 1em;
@@ -572,13 +574,16 @@ footer {
   ::-webkit-scrollbar-thumb:vertical:window-inactive {
     background-color: transparent; }
 
-.chanpin > a > img {
-  width: 100%; }
+.chanpin {
+  max-height: 420px;
+  overflow: hidden; }
+  .chanpin > a > img {
+    width: 100%; }
 
 ul li {
   list-style: none; }
 
-.c.fr {
+.bottom-area {
   background-color: #fff;
   text-align: right; }
 
