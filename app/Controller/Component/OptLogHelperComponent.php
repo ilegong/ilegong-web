@@ -153,7 +153,7 @@ class OptLogHelperComponent extends Component {
             $tmp['current_user'] = $this->uid;
             $tmp['check_relation'] = in_array($user['id'], $my_proxys);
             $tmp['avatar'] = get_user_avatar($user) ? : "http://static.tongshijia.com/static/img/default_avatar.png";
-            $tmp['level'] = "L{$level}{$level_pool[$level]}";
+            $tmp['level'] = $level ? "L{$level}{$level_pool[$level]}" : "";
             $tmp['title'] = $share['title'];
             $description = str_replace('<br />', '', $share['description']);
             if (mb_strlen($description) > 110) {
