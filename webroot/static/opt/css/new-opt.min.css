@@ -34,9 +34,9 @@ body, html {
   margin-left: 5px;
   position: absolute; }
 
-.time, .urser {
+.time {
   color: #999;
-  padding-top: 8px;
+  padding-top: 11px;
   font-size: 1em; }
 
 .bm, .fenxian, .pl {
@@ -175,10 +175,7 @@ html {
   border-radius: 5px; }
 
 .time {
-  padding-left: 1.4em; }
-
-.urser {
-  margin-left: 4px; }
+  padding-left: 10px; }
 
 .fenxian {
   height: 1.5em;
@@ -420,13 +417,12 @@ footer {
   margin-left: -4.9em; }
 
 .nicheng {
-  margin-left: 1.25em;
+  margin-left: 10px;
   font-size: 1.15em;
   color: #333; }
 
 .tupian {
   margin-left: 1.25em;
-  margin-top: 15px;
   border-radius: 3.333em;
   width: 3.333em;
   height: 3.333em; }
@@ -436,10 +432,7 @@ footer {
   color: #fff; }
 
 .center {
-  left: 4.083em;
-  line-height: 10px;
-  position: absolute;
-  top: 1em; }
+  line-height: 10px; }
 
 .center1 {
   left: 4.083em;
@@ -550,7 +543,6 @@ footer {
 
 .fenxiang a {
   text-decoration: none;
-  padding-right: 5px;
   color: #0fc449;
   line-height: 3.167em; }
 

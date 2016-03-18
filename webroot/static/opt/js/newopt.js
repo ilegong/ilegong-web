@@ -237,8 +237,7 @@ $(document).ready(function () {
     '<div class="nicheng biao-bin"><%this.proxy%></div>' +
     '<div class="jibie b biao-bin"><%this.level%></div>' +
     '<br>' +
-    '<div class="time  biao-bin"><%this.readtime%></div>' +
-    '<div class="urser biao-bin"><%this.customer%>报名了</div>' +
+      '<div class="time  biao-bin"><%this.readtime%><span><%this.customer%>报名了</span></div>' +
     '</li>' +
     '<%if(!this.check_relation){%>' +
     '<li class="fr">' +
