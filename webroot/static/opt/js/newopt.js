@@ -230,11 +230,17 @@ $(document).ready(function () {
     '<div class="clearfix list_item list_item_<%this.dataMark%>" id="info_<%this.share_id%>">' +
     '<ul class="biao ">' +
     '<li class="fl">' +
-    '<img src="<%this.avatar%>" class="tupian fl" onerror="this.src=\'http://static.tongshijia.com/avatar/s/default.jpg\'">' +
+      '<a href="/weshares/user_share_info/<%this.proxy_id%>">' +
+        '<img src="<%this.avatar%>" class="tupian fl" onerror="this.src=\'http://static.tongshijia.com/avatar/s/default.jpg\'">' +
+      '</a>' +
     '</li>' +
     '<li class="center fl">' +
     '<br>' +
-    '<div class="nicheng biao-bin"><%this.proxy%></div>' +
+      '<div class="nicheng biao-bin">' +
+        '<a href="/weshares/user_share_info/<%this.proxy_id%>">' +
+          '<%this.proxy%>' +
+        '</a>' +
+      '</div>' +
     '<div class="jibie b biao-bin"><%this.level%></div>' +
     '<br>' +
       '<div class="time  biao-bin"><%this.readtime%><span><%this.customer%>报名了</span></div>' +
