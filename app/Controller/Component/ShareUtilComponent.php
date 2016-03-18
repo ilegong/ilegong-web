@@ -76,6 +76,9 @@ class ShareUtilComponent extends Component
 
     public function check_user_relation($user_id, $follow_id)
     {
+        if($user_id == $follow_id){
+            return false;
+        }
         $userRelationM = ClassRegistry::init('UserRelation');
         $relation = $userRelationM->find('all', array(
             'conditions' => array(
