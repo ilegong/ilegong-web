@@ -241,7 +241,8 @@ class OptLogHelperComponent extends Component {
         } elseif ($diff > $hour) {
             $str = number_format($diff / $hour, 0, '.', '') . "小时前";
         } else {
-            $str = number_format($diff / $minute, 0, '.', '') . "分钟前";
+            $min = number_format($diff / $minute, 0, '.', '');
+            $str = $min ? $min . "分钟前" : "刚刚";
         }
 
         return $str;
