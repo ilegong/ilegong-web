@@ -248,7 +248,12 @@ $(document).ready(function () {
       '</div>' +
     '<div class="jibie b biao-bin"><%this.level%></div>' +
     '<br>' +
-      '<div class="time  biao-bin"><%this.readtime%><span><%this.customer%>报名了</span></div>' +
+      '<div class="time  biao-bin">' +
+        '<%this.readtime%>' +
+        '<span><%this.customer%>' +
+          '<%this.data_type_tag%>' +
+        '</span>' +
+      '</div>' +
     '</li>' +
     '<%if(!this.check_relation){%>' +
     '<li class="fr">' +
