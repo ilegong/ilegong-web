@@ -531,6 +531,7 @@ class WesharesController extends AppController {
             $totalPrice = 0;
             $is_prepaid = 0;
             $cart_good_num = 0;
+            $cart_good_weight = 0;
             foreach ($weshareProducts as $p) {
                 $item = array();
                 //check product is tbd to set order prepaid
@@ -544,6 +545,7 @@ class WesharesController extends AppController {
                 $pid = $p['WeshareProduct']['id'];
                 $num = $productIdNumMap[$pid];
                 $cart_good_num = $cart_good_num + $num;
+                $cart_good_weight = $cart_good_weight + $p['WeshareProduct']['weight'];
                 $price = $p['WeshareProduct']['price'];
                 $item['name'] = $p['WeshareProduct']['name'];
                 $item['num'] = $num;
