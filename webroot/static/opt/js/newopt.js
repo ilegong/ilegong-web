@@ -164,7 +164,7 @@ $(document).ready(function () {
       if (data['success']) {
         var $parent = $el.parent();
         $el.remove();
-        $parent.append('<div class="bk-balck ta follow" follow="true">已关注</div><div class="bk-balck ta unfollow hidden un-sub-user-btn" follow="true" data-user-id="' + userId + '">取消关注</div>');
+        $parent.append('<div class="bk-balck ta follow" follow="true">已关注<i class="fa fa-angle-down"></i></div><div class="bk-balck ta unfollow hidden un-sub-user-btn" follow="true" data-user-id="' + userId + '">取消关注</div>');
         $parent.addClass('un-sub-group');
         //bind event
         $('div.follow', $parent).on('click', function (e) {
@@ -223,22 +223,32 @@ $(document).ready(function () {
     $('li.un-sub-group .follow', $('div.list_item_' + loadDataTimes)).on('click', function (e) {
       e.preventDefault();
       $('div.unfollow', $(this).parent()).toggle();
+      if ($('div.unfollow', $(this).parent()).css('display') == 'block') {
+        $(this).find('i').removeClass('fa-angle-down').addClass('fa-angle-up');
+      } else {
+        $(this).find('i').removeClass('fa-angle-up').addClass('fa-angle-down');
+      }
     });
   }
 
   var _optLogTemplate =
     '<div class="clearfix list_item list_item_<%this.dataMark%>" id="info_<%this.share_id%>">' +
     '<ul class="biao ">' +
-    '<li>' +
-    '<img src="<%this.avatar%>" class="tupian fl" onerror="this.src=\'http://static.tongshijia.com/avatar/s/default.jpg\'">' +
+    '<li class="fl">' +
+      '<a href="/weshares/user_share_info/<%this.proxy_id%>">' +
+        '<img src="<%this.avatar%>" class="tupian fl" onerror="this.src=\'http://static.tongshijia.com/avatar/s/default.jpg\'">' +
+      '</a>' +
     '</li>' +
     '<li class="center fl">' +
     '<br>' +
-    '<div class="nicheng biao-bin"><%this.proxy%></div>' +
+      '<div class="nicheng biao-bin">' +
+        '<a href="/weshares/user_share_info/<%this.proxy_id%>">' +
+          '<%this.proxy%>' +
+        '</a>' +
+      '</div>' +
     '<div class="jibie b biao-bin"><%this.level%></div>' +
     '<br>' +
-    '<div class="time  biao-bin"><%this.readtime%></div>' +
-    '<div class="urser biao-bin"><%this.customer%>报名了</div>' +
+      '<div class="time  biao-bin"><%this.readtime%><span><%this.customer%>报名了</span></div>' +
     '</li>' +
     '<%if(!this.check_relation){%>' +
     '<li class="fr">' +
@@ -246,7 +256,7 @@ $(document).ready(function () {
     '</li>' +
     '<%}else{%>' +
     '<li class="fr un-sub-group">' +
-    '<div class="bk-balck ta follow" follow="<%this.check_relation%>">已关注</div>' +
+      '<div class="bk-balck ta follow" follow="<%this.check_relation%>">已关注<i class="fa fa-angle-down"></i></div>' +
     '<div class="bk-balck ta unfollow hidden un-sub-user-btn" follow="<%this.check_relation%>" data-user-id="<%this.proxy_id%>">取消关注</div>' +
     '</li>' +
     '<%}%>' +
@@ -257,13 +267,13 @@ $(document).ready(function () {
     '</div>' +
     '<ul>' +
     '<li class="text1"><a href="<%this.data_url%>"><%this.title%></a></li>' +
-      '<li class="text2"><%this.description%>' +
-        '<%if (this.description_more) {%><a href="<%this.data_url%>">更多&gt;&gt;</a><%}%>' +
+      '<li class="text2"><a href="<%this.data_url%>"><%this.description%>' +
+        '<%if (this.description_more) {%>更多&gt;&gt;<%}%></a>' +
       '</li>' +
     '</ul>' +
     //'<img src="http://static.tongshijia.com/static/opt/images/fenxiang.png" class="img fl">' +
     //'<div class="fenxian fl">分享</div>' +
-    '<div class="c fr">' +
+    '<div class="bottom-area">' +
     '<div class="bm bin">报名(<%this.baoming%>)</div>' +
     '<div class="pl bin">浏览(<%this.liulan%>)</div>' +
     '</div>' +

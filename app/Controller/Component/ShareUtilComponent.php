@@ -423,7 +423,7 @@ class ShareUtilComponent extends Component
             //clone product
             $newShareId = $newShareInfo['Weshare']['id'];
             $this->cloneShareProduct($newShareId, $shareId, $share_limit);
-            if ($type == DEFAULT_SHARE_TYPE) {
+            if ($type == DEFAULT_SHARE_TYPE || $type == POOL_SHARE_TYPE) {
                 //clone address
                 $this->cloneShareAddresses($newShareId, $shareId);
                 //clone ship setting
@@ -1338,6 +1338,18 @@ class ShareUtilComponent extends Component
         $orderM->updateAll(array('process_prepaid_status' => ORDER_STATUS_PREPAID_DONE), array('id' => $parent_order_id));
     }
 
+    public function get_all_share_products($weshare_id){
+        $weshareProductM = ClassRegistry::init('WeshareProduct');
+        $weshareProducts = $weshareProductM->find('all', array(
+            'conditions' => array(
+                'weshare_id' => $weshare_id,
+                'deleted' => DELETED_NO
+            )
+        ));
+        $weshareProducts = Hash::extract($weshareProducts, '{n}.WeshareProduct');
+        return $weshareProducts;
+    }
+
     /**
      * @param $weshare_id
      * @return array
@@ -1847,13 +1859,12 @@ class ShareUtilComponent extends Component
         return json_decode($cache_data, true);
     }
 
-    private function query_share_detail($weshare_id, $with_tag){
+    private function query_share_detail($weshare_id){
         $weshareM = ClassRegistry::init('Weshare');
         $weshareAddressM = ClassRegistry::init('WeshareAddress');
         $weshareShipSettingM = ClassRegistry::init('WeshareShipSetting');
         $proxyRebatePercentM = ClassRegistry::init('ProxyRebatePercent');
         $userM = ClassRegistry::init('User');
-        $weshareProductM = ClassRegistry::init('WeshareProduct');
         $weshareInfo = $weshareM->find('first', array(
             'conditions' => array(
                 'id' => $weshare_id
@@ -1877,8 +1888,8 @@ class ShareUtilComponent extends Component
                 'status' => PUBLISH_YES
             )
         ));
-        $sharer_tags = $this->get_tags($weshareInfo['Weshare']['creator'], $weshareInfo['Weshare']['refer_share_id']);
-        $sharer_tags_list = $this->get_tags_list($weshareInfo['Weshare']['creator']);
+        //$sharer_tags = $this->get_tags($weshareInfo['Weshare']['creator'], $weshareInfo['Weshare']['refer_share_id']);
+        //$sharer_tags_list = $this->get_tags_list($weshareInfo['Weshare']['creator']);
         $weshareShipSettings = Hash::combine($weshareShipSettings, '{n}.WeshareShipSetting.tag', '{n}.WeshareShipSetting');
         $creatorInfo = $userM->find('first', array(
             'conditions' => array(
@@ -1892,22 +1903,29 @@ class ShareUtilComponent extends Component
         $creatorInfo['image'] = get_user_avatar($creatorInfo);
         $creatorLevel = $this->get_user_level($weshareInfo['Weshare']['creator']);
         $creatorInfo['level'] = $creatorLevel;
-        if ($with_tag) {
-            $weshareProducts = $this->get_product_tag_map($weshare_id);
-        } else {
-            $weshareProducts = $weshareProductM->find('all', array(
-                'conditions' => array(
-                    'weshare_id' => $weshare_id,
-                    'deleted' => DELETED_NO
-                )
-            ));
-            $weshareProducts = Hash::extract($weshareProducts, '{n}.WeshareProduct');
-        }
+//        if ($with_tag) {
+//            $weshareProducts = $this->get_product_tag_map($weshare_id);
+//        } else {
+//            $weshareProducts = $weshareProductM->find('all', array(
+//                'conditions' => array(
+//                    'weshare_id' => $weshare_id,
+//                    'deleted' => DELETED_NO
+//                )
+//            ));
+//            $weshareProducts = Hash::extract($weshareProducts, '{n}.WeshareProduct');
+//        }
+//        $weshareProducts = $weshareProductM->find('all', array(
+//            'conditions' => array(
+//                'weshare_id' => $weshare_id,
+//                'deleted' => DELETED_NO
+//            )
+//        ));
+        $weshareProducts = $this->get_all_share_products($weshare_id);
         //show break line
         $weshareInfo['Weshare']['description'] = str_replace(array("\r\n", "\n", "\r"), '<br />', $weshareInfo['Weshare']['description']);
         $weshareInfo = $weshareInfo['Weshare'];
-        $weshareInfo['tags'] = $sharer_tags;
-        $weshareInfo['tags_list'] = $sharer_tags_list;
+        //$weshareInfo['tags'] = $sharer_tags;
+        //$weshareInfo['tags_list'] = $sharer_tags_list;
         $weshareInfo['addresses'] = Hash::extract($weshareAddresses, '{n}.WeshareAddress');
         $weshareInfo['products'] = $weshareProducts;
         $weshareInfo['creator'] = $creatorInfo;
@@ -1922,7 +1940,7 @@ class ShareUtilComponent extends Component
         $key = SHARE_DETAIL_DATA_WITH_TAG_CACHE_KEY . '_' . $weshare_id;
         $share_detail = Cache::read($key);
         if (empty($share_detail)) {
-            $share_detail = $this->query_share_detail($weshare_id, true);
+            $share_detail = $this->query_share_detail($weshare_id);
             Cache::write($key, json_encode($share_detail));
             return $share_detail;
         }
@@ -1938,7 +1956,7 @@ class ShareUtilComponent extends Component
         $key = SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshare_id;
         $share_detail = Cache::read($key);
         if (empty($share_detail)) {
-            $share_detail = $this->query_share_detail($weshare_id, false);
+            $share_detail = $this->query_share_detail($weshare_id);
             Cache::write($key, json_encode($share_detail));
             return $share_detail;
         }
