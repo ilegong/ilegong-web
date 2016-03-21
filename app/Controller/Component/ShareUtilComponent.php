@@ -2127,6 +2127,14 @@ class ShareUtilComponent extends Component
         return $shareInfo;
     }
 
+    /**
+     * check_delivery
+     * 检测一个分享是不是有有效的物流信息.
+     *
+     * @param mixed $sid
+     * @access public
+     * @return boolean
+     */
     public function check_delivery($sid)
     {
         $shipSettingModel = ClassRegistry::init('WeshareShipSetting');
