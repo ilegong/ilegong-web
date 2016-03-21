@@ -164,7 +164,7 @@ $(document).ready(function () {
       if (data['success']) {
         var $parent = $el.parent();
         $el.remove();
-        $parent.append('<div class="bk-balck ta follow" follow="true">已关注<i class="fa fa-angle-down></i></div><div class="bk-balck ta unfollow hidden un-sub-user-btn" follow="true" data-user-id="' + userId + '">取消关注</div>');
+        $parent.append('<div class="bk-balck ta follow" follow="true">已关注<i class="fa fa-angle-down"></i></div><div class="bk-balck ta unfollow hidden un-sub-user-btn" follow="true" data-user-id="' + userId + '">取消关注</div>');
         $parent.addClass('un-sub-group');
         //bind event
         $('div.follow', $parent).on('click', function (e) {
