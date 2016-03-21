@@ -1339,7 +1339,7 @@ class ShareUtilComponent extends Component
     }
 
     public function get_all_share_products($weshare_id){
-        $weshareProductM = ClassRegistry::init('WeshareProductM');
+        $weshareProductM = ClassRegistry::init('WeshareProduct');
         $weshareProducts = $weshareProductM->find('all', array(
             'conditions' => array(
                 'weshare_id' => $weshare_id,
@@ -1865,7 +1865,6 @@ class ShareUtilComponent extends Component
         $weshareShipSettingM = ClassRegistry::init('WeshareShipSetting');
         $proxyRebatePercentM = ClassRegistry::init('ProxyRebatePercent');
         $userM = ClassRegistry::init('User');
-        $weshareProductM = ClassRegistry::init('WeshareProduct');
         $weshareInfo = $weshareM->find('first', array(
             'conditions' => array(
                 'id' => $weshare_id
