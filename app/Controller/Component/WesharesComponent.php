@@ -185,15 +185,10 @@ class WesharesComponent extends Component
      */
     private function saveWeshareShipType($weshareId, $userId, $weshareShipData)
     {
-        $ship_fee = 0;
         $WeshareSettingM = ClassRegistry::init('WeshareShipSetting');
         foreach ($weshareShipData as &$item) {
             $item['weshare_id'] = $weshareId;
-            if ($item['tag'] == SHARE_SHIP_KUAIDI_TAG) {
-                $ship_fee = $item['ship_fee'];
-            }
         }
-        $this->DeliveryTemplate->save_share_default_delivery_template($weshareId, $userId, $ship_fee);
         return $WeshareSettingM->saveAll($weshareShipData);
     }
 

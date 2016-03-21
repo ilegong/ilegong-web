@@ -324,8 +324,9 @@
       if (!vm.validateDeliveryTemplateData(deliveryTemplates)) {
         return false;
       }
-      deliveryTemplates = _.map(deliveryTemplates, function(item){
+      deliveryTemplates = _.map(deliveryTemplates, function (item) {
         item['unit_type'] = vm.deliveryTemplateType;
+        return item;
       });
       if (vm.isInProcess) {
         alert('正在保存....');
