@@ -1907,23 +1907,6 @@ class ShareUtilComponent extends Component
         $creatorInfo['image'] = get_user_avatar($creatorInfo);
         $creatorLevel = $this->get_user_level($weshareInfo['Weshare']['creator']);
         $creatorInfo['level'] = $creatorLevel;
-//        if ($with_tag) {
-//            $weshareProducts = $this->get_product_tag_map($weshare_id);
-//        } else {
-//            $weshareProducts = $weshareProductM->find('all', array(
-//                'conditions' => array(
-//                    'weshare_id' => $weshare_id,
-//                    'deleted' => DELETED_NO
-//                )
-//            ));
-//            $weshareProducts = Hash::extract($weshareProducts, '{n}.WeshareProduct');
-//        }
-//        $weshareProducts = $weshareProductM->find('all', array(
-//            'conditions' => array(
-//                'weshare_id' => $weshare_id,
-//                'deleted' => DELETED_NO
-//            )
-//        ));
         $weshareProducts = $this->get_all_share_products($weshare_id);
         //show break line
         $weshareInfo['Weshare']['description'] = str_replace(array("\r\n", "\n", "\r"), '<br />', $weshareInfo['Weshare']['description']);
@@ -2119,6 +2102,7 @@ class ShareUtilComponent extends Component
         $products = &$shareInfo['products'];
         foreach ($products as &$p) {
             $p['price'] = $p['price'] / 100;
+            $p['weight'] = $p['weight'] / 1000;
         }
         $defaultDeliveryTemplate = &$shareInfo['deliveryTemplate']['default_delivery_template'];
         $defaultDeliveryTemplate['add_fee'] = $defaultDeliveryTemplate['add_fee'] / 100;

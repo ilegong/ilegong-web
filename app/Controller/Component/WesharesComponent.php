@@ -172,6 +172,10 @@ class WesharesComponent extends Component
             if (empty($tag_id)) {
                 $product['tag_id'] = 0;
             }
+            if(empty($product['weight'])){
+                $product['weight'] = 0;
+            }
+            $product['weight'] = $product['weight'] * 1000;
         }
         return $WeshareProductM->saveAll($weshareProductData);
     }
