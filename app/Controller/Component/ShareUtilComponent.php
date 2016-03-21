@@ -386,6 +386,8 @@ class ShareUtilComponent extends Component
     public function cloneShare($shareId, $uid = null, $address = null, $address_remarks = null, $type = DEFAULT_SHARE_TYPE, $share_status = WESHARE_DELETE_STATUS, $share_limit = null)
     {
         $WeshareM = ClassRegistry::init('Weshare');
+        $dataSource = $WeshareM->getDataSource();
+        $dataSource->begin();
         $shareInfo = $WeshareM->find('first', array(
             'conditions' => array(
                 'id' => $shareId
@@ -450,8 +452,10 @@ class ShareUtilComponent extends Component
 //                $optLogData = array('obj_creator' => $shareInfo['creator'], 'user_id' => $uid, 'obj_type' => OPT_LOG_START_GROUP_SHARE, 'obj_id' => $newShareId, 'created' => $now, 'memo' => $title, 'thumbnail' => $shareImg[0]);
 //                $this->saveOptLog($optLogData);
 //            }
+            $dataSource->commit();
             return array('shareId' => $newShareId, 'success' => true);
         }
+        $dataSource->rollback();
         return array('success' => false);
     }
 

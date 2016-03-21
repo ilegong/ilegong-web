@@ -9,6 +9,8 @@ class WesharesComponent extends Component
     public function create_weshare($postDataArray, $uid)
     {
         $WeshareM = ClassRegistry::init('Weshare');
+        $dataSource = $WeshareM->getDataSource();
+        $dataSource->begin();
         $weshareData = array();
         if (empty($postDataArray['id'])) {
             $this->log('Create weshare for user '.$uid, LOG_INFO);
@@ -42,6 +44,7 @@ class WesharesComponent extends Component
             } else {
                 $this->log('Failed to update weshare '.$weshareData['id'].' for user '.$uid, LOG_WARNING);
             }
+            $dataSource->rollback();
             return array('success' => false, 'uid' => $uid);
         }
 
@@ -64,6 +67,7 @@ class WesharesComponent extends Component
         //todo update child share data and product data
         //update product
         //$this->ShareUtil->cascadeSaveShareData($weshareData);
+        $dataSource->commit();
         return array('success' => true, 'id' => $weshare['Weshare']['id']);
     }
 

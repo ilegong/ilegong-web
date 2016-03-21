@@ -42,7 +42,7 @@
     vm.showDeliveryTemplateProvinceNames = showDeliveryTemplateProvinceNames;
     vm.setAreaCheckStatus = setAreaCheckStatus;
     vm.validateDeliveryTemplateData = validateDeliveryTemplateData;
-    vm.toggleBoxZitiChecked =toggleBoxZitiChecked;
+    vm.toggleBoxZitiChecked = toggleBoxZitiChecked;
     vm.toggleBoxKuidiChecked = toggleBoxKuidiChecked;
     vm.showEditShareView = true;
     vm.currentDeliveryTemplate = null;
@@ -152,7 +152,7 @@
           description: '',
           images: [],
           products: [
-            {name: '', store: '', tbd: 0, tag_id: '0', deleted: 0}
+            {name: '', store: '', tbd: 0, tag_id: '0', deleted: 0, weight: ''}
           ],
           send_info: '',
           addresses: [
@@ -212,7 +212,7 @@
                 return;
               }
               vm.weshare.images.push(imageUrl);
-            }).error(function (data, status, headers, config) {
+            }).error(function (data) {
               vm.messages.push({name: 'download image failed', detail: data});
             });
             if (i < len) {
@@ -234,7 +234,7 @@
 
     function toggleProduct(product, add) {
       if (add) {
-        vm.weshare.products.push({name: '', store: '', deleted: 0});
+        vm.weshare.products.push({name: '', store: '', deleted: 0, weight: ''});
       }
       else {
         if (product.id && product.id > 0) {
@@ -283,7 +283,7 @@
       });
       vm.kuai_di_data.ship_fee = vm.kuai_di_data.ship_fee || 0;
       vm.weshare.ship_type = [vm.self_ziti_data, vm.kuai_di_data, vm.pys_ziti_data, vm.pin_tuan_data];
-      if(!validateShipSetting(vm.weshare.ship_type)){
+      if (!validateShipSetting(vm.weshare.ship_type)) {
         alert('至少选择一种物流方式');
         resetZitiAddressData();
         return false;
@@ -632,15 +632,17 @@
       return vm.rebatePercentHasError;
     }
 
-    function validateShipSetting($settings){
-      var hasOne = _.find($settings, function(item){ return item.status==1; });
-      if(hasOne){
+    function validateShipSetting($settings) {
+      var hasOne = _.find($settings, function (item) {
+        return item.status == 1;
+      });
+      if (hasOne) {
         return true;
       }
       return false;
     }
 
-    function resetZitiAddressData(){
+    function resetZitiAddressData() {
       if (_.isEmpty(vm.weshare.addresses)) {
         vm.weshare.addresses = [
           {address: '', deleted: 0, name: '', phone: ''}
@@ -648,7 +650,7 @@
       }
     }
 
-    function toggleBoxZitiChecked(){
+    function toggleBoxZitiChecked() {
       if (vm.self_ziti_data.status == 1) {
         vm.self_ziti_data.status = -1;
       } else {
@@ -656,7 +658,7 @@
       }
     }
 
-    function toggleBoxKuidiChecked(){
+    function toggleBoxKuidiChecked() {
       if (vm.kuai_di_data.status == 1) {
         vm.kuai_di_data.status = -1;
       } else {
