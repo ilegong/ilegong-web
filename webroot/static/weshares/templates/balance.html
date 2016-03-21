@@ -14,7 +14,7 @@
                             {{::product.name}}
                             <span ng-if="!vm.checkProductNum(product)">&nbsp;&nbsp;(<span style="color: red;">抢光了</span>)</span>
                         </dd>
-                        <dd class="fl" ng-if="vm.checkProductNum(product)&&product.store>0" style="width: 50%;">
+                        <dd class="fl" ng-if="vm.checkProductNum(product)&&product.store>0" style="">
                             {{::product.name}}
                             &nbsp;&nbsp;(仅剩<span style="color: red;" ng-bind="vm.getProductLeftNum(product)"></span>份)
                         </dd>
