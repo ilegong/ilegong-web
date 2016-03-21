@@ -4187,12 +4187,10 @@
 
     function calOrderTotalPrice() {
       var submit_products = [];
-      _.each(vm.weshare.products, function (products) {
-        _.each(products, function (product) {
-          if (product.num && (product.num > 0)) {
-            submit_products.push(product);
-          }
-        });
+      _.each(vm.weshare.products, function (product) {
+        if (product.num && (product.num > 0)) {
+          submit_products.push(product);
+        }
       });
       var totalPrice = 0;
       _.each(submit_products, function (product) {
@@ -4350,12 +4348,10 @@
       if (vm.selectShipType == 0) {
         //return vm.weshareSettings.kuai_di.ship_fee;
         var goodNum = 0;
-        _.each(vm.weshare.products, function (products) {
-          _.each(products, function (product) {
-            if (product.num && (product.num > 0)) {
-              goodNum = goodNum + product.num;
-            }
-          });
+        _.each(vm.weshare.products, function (product) {
+          if (product.num && (product.num > 0)) {
+            goodNum = goodNum + product.num;
+          }
         });
         return vm.calculateShipFee(vm.dliveryTemplate, vm.selectedProvince, goodNum);
       }
@@ -4411,10 +4407,8 @@
     }
 
     function validateProducts() {
-      vm.productsHasError = _.all(vm.weshare.products, function (products) {
-        return _.all(products, function (product) {
-          return !product.num || product.num <= 0;
-        });
+      return _.all(vm.weshare.products, function (product) {
+        return !product.num || product.num <= 0;
       });
       return vm.productsHasError;
     }
@@ -4485,12 +4479,10 @@
         return false;
       }
       var submit_products = [];
-      _.each(vm.weshare.products, function (products) {
-        _.each(products, function (product) {
-          if (product.num && (product.num > 0)) {
-            submit_products.push(product);
-          }
-        });
+      _.each(vm.weshare.products, function (product) {
+        if (product.num && (product.num > 0)) {
+          submit_products.push(product);
+        }
       });
       submit_products = _.map(submit_products, function (product) {
         return {id: product.id, num: product.num};

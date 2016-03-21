@@ -12,7 +12,7 @@ class ShareOptController extends AppController {
     /**
      * pys index view
      */
-    public function index() {
+    public function oldindex() {
         $this->layout = null;
         $uid = $this->currentUser['id'];
         if(!empty($uid)){
@@ -26,7 +26,7 @@ class ShareOptController extends AppController {
     /**
      * pys index view
      */
-    public function newindex() {
+    public function index() {
         $this->layout = null;
         $uid = $this->currentUser['id'];
         if(!empty($uid)){
