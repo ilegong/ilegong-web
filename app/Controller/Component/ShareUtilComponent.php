@@ -423,7 +423,7 @@ class ShareUtilComponent extends Component
             //clone product
             $newShareId = $newShareInfo['Weshare']['id'];
             $this->cloneShareProduct($newShareId, $shareId, $share_limit);
-            if ($type == DEFAULT_SHARE_TYPE) {
+            if ($type == DEFAULT_SHARE_TYPE || $type == POOL_SHARE_TYPE) {
                 //clone address
                 $this->cloneShareAddresses($newShareId, $shareId);
                 //clone ship setting
