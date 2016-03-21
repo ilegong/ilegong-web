@@ -914,7 +914,7 @@ ul li {
 .weshare-add div.shippment-info .sendouttime input,.sendoutsite input{ border: none; border-radius: 0; font-size: 1em; width: 100%;}
 .weshare-add div.shippment-info .sendoutsite{ border: 1px #dddddd solid; border-radius: 4px; padding: 5px; margin-bottom: 10px;}
 .weshare-add div.shippment-info .ziti ul li.fl{ width: 80%;}
-.weshare-add div.shippment-info .ziti ul li.fr a{ line-height: 35px; border: 1px #49bc6e solid; color: #49bc6e; padding: 0 10px; border-radius: 4px; display: block; text-decoration: none;}
+.weshare-add div.shippment-info .ziti ul li.fr a{ line-height: 35px; border: 1px #49bc6e solid; color: #49bc6e; padding: 0 10px; border-radius: 4px; display: block; text-decoration: none;margin-top: 3px;}
 .weshare-add div.shippment-info .ziti ul li.fr a.delete{ border-color: #cccccc; color: #333333;}
 
 .weshare-add div.shippment-info .expressage,.haolinju{ background-color: #ffffff; margin: 0 0 5px 0; border: 1px #eeeeee solid; padding: 0 10px;}

@@ -71,14 +71,14 @@
                         <li class="fl sendoutsite">
                             <input type="text" placeholder="联系人" ng-model="address.name" ng-blur='vm.validateAddress()'/>
                         </li>
+                        <li class="fr" ng-if="!$first">
+                            <a ng-click="vm.deleteAddress(address)" class="delete">删除</a>
+                        </li>
                         <li class="fl sendoutsite">
                             <input type="text" placeholder="联系电话" ng-model="address.phone" ng-blur='vm.validateAddress()'/>
                         </li>
-                        <li class="fr" ng-if="$last">
-                            <a ng-click="vm.toggleAddress(address, $last)">添加</a>
-                        </li>
-                        <li class="fr" ng-if="!$last">
-                            <a ng-click="vm.toggleAddress(address, $last)" class="delete">删除</a>
+                        <li class="fr">
+                            <a ng-click="vm.addAddress()">添加</a>
                         </li>
                     </ul>
                 </div>
@@ -89,6 +89,13 @@
                 <dd><input type="checkbox" ng-checked="vm.kuai_di_data.status==1" ng-click="vm.toggleBoxKuidiChecked()"/></dd>
                 <dd>快递</dd>
             </dl>
+            <dl class="clearfix" ng-show="vm.kuai_di_data.status==1" style="padding: 0px;">
+                <dd><input type="radio" ng-model="vm.deliveryTemplateType" name="deliveryTemplateType" ng-value="0"/></dd>
+                <dd>按件数计邮费</dd>
+                <dd>&nbsp;&nbsp;&nbsp;</dd>
+                <dd><input type="radio" ng-model="vm.deliveryTemplateType" name="deliveryTemplateType" ng-value="1"/></dd>
+                <dd>按重量计邮费</dd>
+            </dl>
             <div class="freightmore" ng-show="vm.kuai_di_data.status==1">
                 <div class="freight">
                     <h1>默认［除指定地区外］</h1>
@@ -96,14 +103,14 @@
                         <div class="pt10 clearfix">
                             <label>默认运费</label>
                             <s><input type="text" placeholder="1" ng-model="vm.defaultDeliveryTemplate.start_units"/></s>
-                            <label>件内，</label>
+                            <label>{{vm.getUnitTypeText()}}内，</label>
                             <s><input type="text" placeholder="0" ng-model="vm.defaultDeliveryTemplate.start_fee"/></s>
                             <label>元</label>
                         </div>
                         <div class="pt10 clearfix">
                             <label>每增加</label>
                             <s><input type="text" placeholder="1" ng-model="vm.defaultDeliveryTemplate.add_units"/></s>
-                            <label>件，增加运费</label>
+                            <label>{{vm.getUnitTypeText()}}，增加运费</label>
                             <s><input type="text" placeholder="0" ng-model="vm.defaultDeliveryTemplate.add_fee"/></s>
                             <label>元</label>
                         </div>
@@ -119,14 +126,14 @@
                             <div class="pt10 clearfix">
                                 <label>指定</label>
                                 <s><input type="text" ng-model="deliveryTemplateItem.start_units"/></s>
-                                <label>件内，</label>
+                                <label>{{vm.getUnitTypeText()}}内，</label>
                                 <s><input type="text" ng-model="deliveryTemplateItem.start_fee"/></s>
                                 <label>元</label>
                             </div>
                             <div class="pt10 clearfix">
                                 <label>每增加</label>
                                 <s><input type="text" ng-model="deliveryTemplateItem.add_units"/></s>
-                                <label>件，增加运费</label>
+                                <label>{{vm.getUnitTypeText()}}，增加运费</label>
                                 <s><input type="text" ng-model="deliveryTemplateItem.add_fee"/></s>
                                 <label>元</label>
                             </div>

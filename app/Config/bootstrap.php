@@ -330,6 +330,8 @@ const SHARE_FAQ_UNREAD = 0;
 //数据统计类型
 const COLLECT_DATA_PINTUAN_TYPE = 0;
 
+const DELIVERY_UNIT_COUNT_TYPE = 0; //按件数计算运费
+const DELIVERY_UNIT_WEIGHT_TYPE = 1; //按重量计算运费
 
 const HX_APP_NAME = 'pyjia';
 const HX_CLIENT_ID = 'YXA6zAZWMLnYEeWBR61HoGXdXA';

@@ -12,7 +12,7 @@
     vm.uploadImage = uploadImage;
     vm.deleteImage = deleteImage;
     vm.toggleProduct = toggleProduct;
-    vm.toggleAddress = toggleAddress;
+    vm.addAddress = addAddress;
     vm.nextStep = nextStep;
     vm.backStep = backStep;
     vm.saveWeshare = saveWeshare;
@@ -44,6 +44,8 @@
     vm.validateDeliveryTemplateData = validateDeliveryTemplateData;
     vm.toggleBoxZitiChecked = toggleBoxZitiChecked;
     vm.toggleBoxKuidiChecked = toggleBoxKuidiChecked;
+    vm.deleteAddress = deleteAddress;
+    vm.getUnitTypeText = getUnitTypeText;
     vm.showEditShareView = true;
     vm.currentDeliveryTemplate = null;
     function pageLoaded() {
@@ -95,6 +97,7 @@
       vm.resetProvinceAreaCheckStatus();
       vm.showEditShareInfo = true;
       vm.showShippmentInfo = false;
+      vm.deliveryTemplateType = 0;
       vm.setDefaultDeliveryTemplate();
       vm.setDeliveryTemplates();
       var weshareId = angular.element(document.getElementById('weshareEditView')).attr('data-id');
@@ -137,6 +140,7 @@
           }
           if (!_.isEmpty(data['deliveryTemplate']['default_delivery_template'])) {
             vm.defaultDeliveryTemplate = data['deliveryTemplate']['default_delivery_template'];
+            vm.deliveryTemplateType = vm.defaultDeliveryTemplate['unit_type'];
           }
         }).error(function (data) {
         });
@@ -178,6 +182,15 @@
         if (!vm.weshare.send_info) {
           vm.weshare.send_info = '';
         }
+      }
+    }
+
+    function getUnitTypeText(){
+      if(vm.deliveryTemplateType == 0){
+        return '件';
+      }
+      if(vm.deliveryTemplateType == 1){
+        return '千克';
       }
     }
 
@@ -245,16 +258,16 @@
       }
     }
 
-    function toggleAddress(address, isLast) {
-      if (isLast) {
-        vm.weshare.addresses.push({address: '', deleted: 0, name: '', phone: ''});
+    function deleteAddress(address){
+      if (address.id && address.id > 0) {
+        address.deleted = 1;
       } else {
-        if (address.id && address.id > 0) {
-          address.deleted = 1;
-        } else {
-          vm.weshare.addresses = _.without(vm.weshare.addresses, address);
-        }
+        vm.weshare.addresses = _.without(vm.weshare.addresses, address);
       }
+    }
+
+    function addAddress() {
+      vm.weshare.addresses.push({address: '', deleted: 0, name: '', phone: ''});
     }
 
     function backStep() {
@@ -311,6 +324,9 @@
       if (!vm.validateDeliveryTemplateData(deliveryTemplates)) {
         return false;
       }
+      deliveryTemplates = _.map(deliveryTemplates, function(item){
+        item['unit_type'] = vm.deliveryTemplateType;
+      });
       if (vm.isInProcess) {
         alert('正在保存....');
         return;
@@ -318,7 +334,7 @@
       vm.isInProcess = true;
       vm.weshare.proxy_rebate_percent = vm.proxy_rebate_percent;
       vm.weshare['delivery_templates'] = deliveryTemplates;
-      $http.post('/weshares/save', vm.weshare).success(function (data, status, headers, config) {
+      $http.post('/weshares/save', vm.weshare).success(function (data) {
         if (data.success) {
           PYS.storage.clear();
           window.location.href = '/weshares/view/' + data['id'];

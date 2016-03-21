@@ -229,6 +229,11 @@ class WesharesComponent extends Component
                 $itemTemplateData['user_id'] = $user_id;
                 $itemTemplateData['add_fee'] = $itemTemplateData['add_fee']*100;
                 $itemTemplateData['start_fee'] = $itemTemplateData['start_fee']*100;
+                if($itemTemplateData['unit_type'] == DELIVERY_UNIT_WEIGHT_TYPE){
+                    //按重量计算运费
+                    $itemTemplateData['start_units'] = $itemTemplateData['start_units'] * 1000;
+                    $itemTemplateData['add_units'] = $itemTemplateData['add_units'] * 1000;
+                }
             }
             $this->DeliveryTemplate->save_all_delivery_template($weshareDeliveryTemplateData);
         }
