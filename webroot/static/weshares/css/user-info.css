@@ -171,7 +171,10 @@ a {
     color: #999;
 }
 
-
+.fans_search{ margin:10px 15px 0 15px; border: 1px #dddddd solid; position: relative; background-color: #ffffff;}
+.fans_search input{ line-height: 20px; margin: 5px; width: 80%; border: 0; outline: none;}
+.fans_search a{ display: block; position: absolute; top:6px; right: 8px;}
+.fans_search a img{ width: 16px; height: 17px;}
 
 .img {
     width: 1.5em;

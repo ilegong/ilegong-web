@@ -1824,10 +1824,11 @@ class WesharesController extends AppController {
 
     public function get_u_list_data($type, $uid, $page){
         $this->autoRender = false;
-        if($type==0){
-            $data = $this->UserFans->get_fans($uid, $page);
-        }else{
-            $data = $this->UserFans->get_subs($uid, $page);
+        $query = $_REQUEST['query'];
+        if ($type == 0) {
+            $data = $this->UserFans->get_fans($uid, $page, $query);
+        } else {
+            $data = $this->UserFans->get_subs($uid, $page, $query);
         }
         echo json_encode($data);
         return;

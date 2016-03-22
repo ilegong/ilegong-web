@@ -11,6 +11,7 @@
     vm.unSub = unSub;
     vm.subUser = subUser;
     vm.viewUser = viewUser;
+    vm.search = search;
     vm.noMoreData = false;
     vm.loadingData = false;
     vm.page = 1;
@@ -19,6 +20,8 @@
     vm.sub_user_ids = [];
     vm.flag_show_un_sub = {};
     vm.processSubmit = false;
+    vm.queryWord = '';
+    vm.searchWord = '';
     vm.levelTextMap = [
       '分享达人',
       '实习团长',
@@ -95,9 +98,21 @@
       return _.indexOf(vm.sub_user_ids, uid) >= 0;
     }
 
+    function search(){
+      vm.queryWord = vm.searchWord;
+      vm.users = [];
+      vm.sub_user_ids = [];
+      vm.level_map = {};
+      vm.page = 1;
+      vm.pageInfo = {};
+      vm.noMoreData = false;
+      vm.loadingData = false;
+      loadData();
+    }
+
     function loadData() {
       vm.loadingData = true;
-      var url = "/weshares/get_u_list_data/" + vm.dataType + "/" + vm.userId + "/" + vm.page + ".json";
+      var url = "/weshares/get_u_list_data/" + vm.dataType + "/" + vm.userId + "/" + vm.page + ".json?query="+vm.queryWord;
       $http({method: 'GET', url: url, cache: $templateCache}).
         success(function (data) {
           vm.loadingData = false;

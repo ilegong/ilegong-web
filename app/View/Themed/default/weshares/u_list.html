@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <meta charset="utf-8">
     <title>{{$title}}</title>
-    <link rel="stylesheet" href="{{$STATIC_FILE_PATH}}/static/weshares/css/user-info.min.css?0.0.1"/>
+    <link rel="stylesheet" href="{{$STATIC_FILE_PATH}}/static/weshares/css/user-info.min.css?0.0.2"/>
 </head>
 <body>
 <div class="container" ng-controller="UserListCtrl as vm" id="userListView" data-uid="{{$uid}}" data-me="{{$me}}" data-type="{{$type}}">
@@ -17,8 +17,13 @@
         <li class="home fr" onclick="window.location.href='/'"><img class="home-icon" src="{{$STATIC_FILE_PATH}}/static/weshares/images/home.png"></li>
     </ul>
     <div class="user-list-placeholder"></div>
-    <div ng-include="'{{$STATIC_FILE_PATH}}/static/weshares/templates/u-list-place.html?v0.0.1'"></div>
+    <div class="fans_search">
+        <input type="text" placeholder="请输入昵称搜索" ng-model="vm.searchWord"/>
+        <a ng-click="vm.search()"><img src="{{$STATIC_FILE_PATH}}/static/weshares/images/searchicon.png" /></a>
+    </div>
+    <div class="user-list-placeholder" style="margin-top: 10px;"></div>
+    <div ng-include="'{{$STATIC_FILE_PATH}}/static/weshares/templates/u-list-place.html?v0.0.2'"></div>
 </div>
 </body>
-<script src="{{$STATIC_FILE_PATH}}/static/weshares/js/user-info.min.js?0.0.1"></script>
+<script src="{{$STATIC_FILE_PATH}}/static/weshares/js/user-info.min.js?0.0.2"></script>
 </html>
