@@ -753,14 +753,14 @@ class UsersController extends AppController {
         } else if (!empty($_GET['referer_key'])) {
             $ref = oauth_wx_goto($_GET['referer_key'], WX_HOST);
         }
-
-        if ($_GET['scope'] == 'userinfo') {
-            //$this->log('wx_oath redirect url '.redirect_to_wx_oauth($ref, WX_OAUTH_USERINFO));
-            $this->redirect(redirect_to_wx_oauth($ref, WX_OAUTH_USERINFO));
-        } else {
-            //$this->log('wx_oath redirect url '.redirect_to_wx_oauth($ref));
-            $this->redirect(redirect_to_wx_oauth($ref));
-        }
+        $this->redirect(redirect_to_wx_oauth($ref, WX_OAUTH_USERINFO));
+//        if ($_GET['scope'] == 'userinfo') {
+//            //$this->log('wx_oath redirect url '.redirect_to_wx_oauth($ref, WX_OAUTH_USERINFO));
+//            $this->redirect(redirect_to_wx_oauth($ref, WX_OAUTH_USERINFO));
+//        } else {
+//            //$this->log('wx_oath redirect url '.redirect_to_wx_oauth($ref));
+//            $this->redirect(redirect_to_wx_oauth($ref));
+//        }
     }
 
     function change_avatar() {
