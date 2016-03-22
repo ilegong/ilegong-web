@@ -4352,10 +4352,11 @@
         _.each(vm.weshare.products, function (product) {
           if (product.num && (product.num > 0)) {
             goodNum = goodNum + parseInt(product.num);
+            if(product.weight && (product.weight > 0)){
+              goodWeight = goodWeight + parseInt(product.weight)*parseInt(product.num);
+            }
           }
-          if(product.weight && (product.weight > 0)){
-            goodWeight = goodWeight + parseInt(product.weight);
-          }
+
         });
         return vm.calculateShipFee(vm.dliveryTemplate, vm.selectedProvince, goodNum, goodWeight);
       }
