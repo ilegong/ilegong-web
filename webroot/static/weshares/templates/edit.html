@@ -6,7 +6,7 @@
             <input class='form-control' placeholder="分享的的标题" ng-model='vm.weshare.title' ng-change='vm.validateTitle()' ng-blur='vm.validateTitle()'/>
             <p class='tips'>请输入标题, 不超过50个字</p>
         </div>
-        <div class="clearfix product-spec-group" ng-repeat="product in vm.weshare.products | filter:{deleted : 0}">
+        <div class="clearfix product-spec-group" ng-repeat="product in vm.weshare.products | filter:{deleted : 0}" style="margin-bottom:9pt;">
             <div class="form-group fl" style="width: 100%;margin-bottom: -1px;" ng-class="{'has-error': product.nameHasError}">
                 <input class='form-control' placeholder="产品名称/规格" ng-model="product.name" ng-change='vm.validateProductName(product)' ng-blur='vm.validateProductName(product)'/>
                 <p class='tips'>请输入描述, 不超过40个字</p>
