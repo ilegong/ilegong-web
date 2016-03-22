@@ -2108,8 +2108,8 @@ class ShareUtilComponent extends Component
         $defaultDeliveryTemplate['add_fee'] = $defaultDeliveryTemplate['add_fee'] / 100;
         $defaultDeliveryTemplate['start_fee'] = $defaultDeliveryTemplate['start_fee'] / 100;
         if ($defaultDeliveryTemplate['unit_type'] == DELIVERY_UNIT_WEIGHT_TYPE) {
-            $defaultDeliveryTemplate['start_units'] = $defaultDeliveryTemplate['start_units'] / 1000;
-            $defaultDeliveryTemplate['add_units'] = $defaultDeliveryTemplate['add_units'] / 1000;
+            $defaultDeliveryTemplate['start_units'] = strval($defaultDeliveryTemplate['start_units'] / 1000);
+            $defaultDeliveryTemplate['add_units'] = strval($defaultDeliveryTemplate['add_units'] / 1000);
         }
         $deliveryTemplates = &$shareInfo['deliveryTemplate']['delivery_templates'];
         foreach ($deliveryTemplates as &$deliveryTemplateItem) {
