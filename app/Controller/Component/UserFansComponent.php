@@ -29,13 +29,13 @@ class UserFansComponent extends Component{
         $userM = ClassRegistry::init('User');
         $relations = $userRelationM->find('all', $queryCond);
         $user_ids = Hash::extract($relations, '{n}.UserRelation.' . $extract_field);
-        $users_data = $userM->find('all', array(
-            'conditions' => array(
+        $users_data = $userM->find('all', [
+            'conditions' => [
                 'id' => $user_ids
-            ),
-            'fields' => array('id', 'nickname', 'image', 'avatar'),
-            'order' => array('id DESC')
-        ));
+            ],
+            'fields' => ['id', 'nickname', 'image', 'avatar'],
+            'order' => ['id DESC']
+        ]);
         $users_data = array_map('map_user_avatar2', $users_data);
         $levels_data = $this->get_user_level_map($user_ids);
         $sub_user_ids = $this->get_user_subs($uid, $user_ids);
