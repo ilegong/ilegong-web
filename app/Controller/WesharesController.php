@@ -1261,6 +1261,14 @@ class WesharesController extends AppController {
     }
 
 
+    public function shares_list(){
+        $this->layout = 'weshare_bootstrap';
+
+        $shares = $this->WeshareBuy->get_shares_list([3088, 3101, 3061 ,2194, 2617, 3040, 3055]);
+
+        $this->set('shares', $shares);
+    }
+
     /**
      * @param $weshareId
      * @param $is_me
@@ -1273,6 +1281,7 @@ class WesharesController extends AppController {
         return $this->WeshareBuy->get_share_order_for_show($weshareId, $is_me, $division, $export);
     }
 
+
     /**
      * @param $weshareId
      * @param $all
@@ -1281,7 +1290,6 @@ class WesharesController extends AppController {
         //todo load share detail view order data
 
     }
-
 
     /**
      * @param $buyerData
@@ -1375,6 +1383,8 @@ class WesharesController extends AppController {
         return $this->WeshareBuy->get_user_share_summary($uid);
     }
 
+
+
     /**
      * @param $weshareId
      * @return array
@@ -1395,8 +1405,6 @@ class WesharesController extends AppController {
         }
         return json_decode($ship_setting_data, true);
     }
-
-
 
     /**
      * @param $weshareId
@@ -1549,8 +1557,8 @@ class WesharesController extends AppController {
         }
         return $this->ShareUtil->is_proxy_user($sharer);
     }
-
     //check order ship type gen order address
+
     /**
      * @param $weshareId
      * @param $shipInfo
@@ -1621,6 +1629,7 @@ class WesharesController extends AppController {
         return $location_address;
     }
 
+
     /**
      * @param $id
      * @param $weshareId
@@ -1635,7 +1644,6 @@ class WesharesController extends AppController {
             )
         ));
     }
-
 
     /**
      * @param $weshareProducts
@@ -1700,6 +1708,7 @@ class WesharesController extends AppController {
         }
     }
 
+
     /**
      * @param $orderData
      * @param $shipInfo
@@ -1722,7 +1731,6 @@ class WesharesController extends AppController {
             $orderData['member_id'] = $shipInfoWeshareId;
         }
     }
-
 
     /**
      * @param $shareId
@@ -1824,6 +1832,7 @@ class WesharesController extends AppController {
 
     public function get_u_list_data($type, $uid, $page){
         $this->autoRender = false;
+        $this->autoRender = false;
         if($type==0){
             $data = $this->UserFans->get_fans($uid, $page);
         }else{
@@ -1832,6 +1841,7 @@ class WesharesController extends AppController {
         echo json_encode($data);
         return;
     }
+//    List shares
 
     /**
      * @param $uid

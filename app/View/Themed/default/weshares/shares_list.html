@@ -1,0 +1,7 @@
+<link href="http://static.tongshijia.com/static/weshares/css/share-info.min.css?v0.1.3" rel="stylesheet">
+
+{{loop $shares $share}}
+{{template weshares/user_share_item_template}}
+{{/loop}}
+
+<script src="{{$STATIC_FILE_PATH}}/static/weshares/js/user-share-info.min.js?v0.1.0" type="text/javascript"></script>
