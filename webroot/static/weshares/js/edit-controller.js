@@ -190,7 +190,7 @@
         return '件';
       }
       if(vm.deliveryTemplateType == 1){
-        return '千克';
+        return 'kg';
       }
     }
 
