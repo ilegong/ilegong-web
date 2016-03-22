@@ -31,7 +31,7 @@ class ShareManageComponent extends Component
                 'WeshareProducts.*',
                 'Weshares.*',
                 'User.*'
-                ],
+            ],
             'joins' => [
                 [
                     'table' => 'weshare_products',
@@ -45,19 +45,20 @@ class ShareManageComponent extends Component
                     'conditions' => [
                         'PoolProduct.weshare_id = Weshares.id',
                     ],
-                  ], [
+                ], [
                     'table' => 'users',
                     'alias' => 'User',
                     'conditions' => [
-                      'Weshares.creator = User.id',
+                        'Weshares.creator = User.id',
                     ],
-                  ],
                 ],
-                //'order' => array('weshare_id ASC')
-              ]);
+            ],
+            //'order' => array('weshare_id ASC')
+        ]);
 
         return $this->rearrange_pool_product($indexProducts)[0];
     }
+
     public function get_pool_products()
     {
         $indexProductM = ClassRegistry::init('PoolProduct');
@@ -68,7 +69,7 @@ class ShareManageComponent extends Component
             'fields' => [
                 'PoolProduct.*',
                 'WeshareProducts.*'
-                ],
+            ],
             'joins' => [
                 [
                     'table' => 'weshare_products',
@@ -78,7 +79,7 @@ class ShareManageComponent extends Component
                     ],
                 ]
             ],
-            'order' => ['PoolProduct.sort ASC'],
+            'order' => ['PoolProduct.sort ASC', 'PoolProduct.id DESC'],
         ]);
 
         return $this->rearrange_pool_product($indexProducts);

@@ -195,6 +195,7 @@ class OptLogHelperComponent extends Component {
             $tmp['time'] = $item['timestamp'];
             $tmp['readtime'] = $this->get_read_time($item['timestamp']);
             $tmp['data_url'] = $item['data_url'];
+            $tmp['data_type_tag'] = $item['data_type_tag'];
 
             $ret[] = $tmp;
         }

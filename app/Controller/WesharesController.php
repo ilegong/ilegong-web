@@ -124,7 +124,8 @@ class WesharesController extends AppController {
         $uid = $this->currentUser['id'];
         $weshareInfo = $this->ShareUtil->get_weshare_detail($weshareId);
         $can_edit_share = $this->ShareAuthority->user_can_edit_share_info($uid, $weshareId);
-        if ($uid != $weshareInfo['creator']['id'] && !$can_edit_share) {
+        // 忠立可以操作任何人的分享. 801447是他的UID
+        if ($uid != 801447 && $uid != $weshareInfo['creator']['id'] && !$can_edit_share) {
             $this->redirect('/weshares/view/' . $weshareId . '/0');
         }
         $share_ship_set = $this->sharer_can_use_we_ship($uid);
@@ -1397,7 +1398,7 @@ class WesharesController extends AppController {
         return json_decode($ship_setting_data, true);
     }
 
-    
+
 
     /**
      * @param $weshareId
