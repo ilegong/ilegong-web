@@ -6,16 +6,20 @@
             <input class='form-control' placeholder="分享的的标题" ng-model='vm.weshare.title' ng-change='vm.validateTitle()' ng-blur='vm.validateTitle()'/>
             <p class='tips'>请输入标题, 不超过50个字</p>
         </div>
-        <div class="clearfix product-spec-group" ng-repeat="product in vm.weshare.products | filter:{deleted : 0}">
-            <div class="form-group fl" style="width: 100%; margin-right: 10px;" ng-class="{'has-error': product.nameHasError}">
+        <div class="clearfix product-spec-group" ng-repeat="product in vm.weshare.products | filter:{deleted : 0}" style="margin-bottom:9pt;">
+            <div class="form-group fl" style="width: 100%;margin-bottom: -1px;" ng-class="{'has-error': product.nameHasError}">
                 <input class='form-control' placeholder="产品名称/规格" ng-model="product.name" ng-change='vm.validateProductName(product)' ng-blur='vm.validateProductName(product)'/>
                 <p class='tips'>请输入描述, 不超过40个字</p>
             </div>
-            <div class="form-group fl form-group-inline" ng-class="{'has-error': product.priceHasError}">
+            <div class="fl form-group form-group-inline" style="margin-bottom: -1px;" ng-class="{'has-error': product.priceHasError}">
                 <input class='form-control' placeholder="价格/元" ng-model="product.price" ng-change='vm.validateProductPrice(product)' ng-blur='vm.validateProductPrice(product)'/>
                 <p class='tips'>请输入数字</p>
             </div>
-            <div class="form-group form-group-inline" ng-class="{'has-error': product.storeHasError}">
+            <div class="fl form-group form-group-inline" style="margin-bottom: -1px;">
+                <input class='form-control' placeholder="重量/千克" ng-model="product.weight"/>
+                <p class='tips'>请输入数字</p>
+            </div>
+            <div class="form-group form-group-inline" ng-class="{'has-error': product.storeHasError}" style="margin-bottom: -1px;">
                 <input class='form-control' placeholder="库存,默认(0)不限制,(-1)为售罄" ng-model="product.store" ng-change='vm.validateProductStore(product)' ng-blur='vm.validateProductStore(product)'/>
                 <p class='tips'>请输入数字</p>
             </div>
@@ -32,7 +36,7 @@
             </div>
         </div>
         <div class="form-group">
-            <textarea class='form-control' rows="3" cols="" placeholder="描述下分享的详细内容，让大家更好的了解。" ng-model="vm.weshare.description" style="display: block;"></textarea>
+            <textarea class='form-control' rows="3" cols="" placeholder="请描述下您推荐该分享的原因！" ng-model="vm.weshare.description" style="display: block;"></textarea>
         </div>
         <ul class="clearfix images">
             <li class='image' ng-repeat="image in vm.weshare.images">
@@ -60,21 +64,21 @@
             <div class="freightmore">
                 <div class="sendouttime"><input type="text" placeholder="到货/发货时间" ng-model="vm.weshare.send_info" ng-change='vm.validateSendInfo()' ng-blur='vm.validateSendInfo()'/></div>
                 <div ng-show="vm.self_ziti_data.status==1">
-                    <ul class="clearfix" ng-repeat="address in vm.weshare.addresses | filter:{deleted : 0}" style="border: 1px solid #cccccc;padding: 5px;">
+                    <ul class="clearfix" ng-repeat="address in vm.weshare.addresses | filter:{deleted : 0}" style="margin-bottom: 15px;">
                         <li class="fl sendoutsite">
                             <input type="text" placeholder="取货地点" ng-model="address.address" ng-blur='vm.validateAddress()'/>
                         </li>
                         <li class="fl sendoutsite">
                             <input type="text" placeholder="联系人" ng-model="address.name" ng-blur='vm.validateAddress()'/>
                         </li>
+                        <li class="fr" ng-if="!$first">
+                            <a ng-click="vm.deleteAddress(address)" class="delete">删除</a>
+                        </li>
                         <li class="fl sendoutsite">
                             <input type="text" placeholder="联系电话" ng-model="address.phone" ng-blur='vm.validateAddress()'/>
                         </li>
-                        <li class="fr" ng-if="$last">
-                            <a ng-click="vm.toggleAddress(address, $last)">添加</a>
-                        </li>
-                        <li class="fr" ng-if="!$last">
-                            <a ng-click="vm.toggleAddress(address, $last)" class="delete">删除</a>
+                        <li class="fr">
+                            <a ng-click="vm.addAddress()">添加</a>
                         </li>
                     </ul>
                 </div>
@@ -85,6 +89,13 @@
                 <dd><input type="checkbox" ng-checked="vm.kuai_di_data.status==1" ng-click="vm.toggleBoxKuidiChecked()"/></dd>
                 <dd>快递</dd>
             </dl>
+            <dl class="clearfix" ng-show="vm.kuai_di_data.status==1" style="padding: 0px;">
+                <dd><input type="radio" ng-model="vm.deliveryTemplateType" name="deliveryTemplateType" ng-value="0"/></dd>
+                <dd>按件数计邮费</dd>
+                <dd>&nbsp;&nbsp;&nbsp;</dd>
+                <dd><input type="radio" ng-model="vm.deliveryTemplateType" name="deliveryTemplateType" ng-value="1"/></dd>
+                <dd>按重量计邮费</dd>
+            </dl>
             <div class="freightmore" ng-show="vm.kuai_di_data.status==1">
                 <div class="freight">
                     <h1>默认［除指定地区外］</h1>
@@ -92,14 +103,14 @@
                         <div class="pt10 clearfix">
                             <label>默认运费</label>
                             <s><input type="text" placeholder="1" ng-model="vm.defaultDeliveryTemplate.start_units"/></s>
-                            <label>件内，</label>
+                            <label>{{vm.getUnitTypeText()}}内，</label>
                             <s><input type="text" placeholder="0" ng-model="vm.defaultDeliveryTemplate.start_fee"/></s>
                             <label>元</label>
                         </div>
                         <div class="pt10 clearfix">
                             <label>每增加</label>
                             <s><input type="text" placeholder="1" ng-model="vm.defaultDeliveryTemplate.add_units"/></s>
-                            <label>件，增加运费</label>
+                            <label>{{vm.getUnitTypeText()}}，增加运费</label>
                             <s><input type="text" placeholder="0" ng-model="vm.defaultDeliveryTemplate.add_fee"/></s>
                             <label>元</label>
                         </div>
@@ -115,14 +126,14 @@
                             <div class="pt10 clearfix">
                                 <label>指定</label>
                                 <s><input type="text" ng-model="deliveryTemplateItem.start_units"/></s>
-                                <label>件内，</label>
+                                <label>{{vm.getUnitTypeText()}}内，</label>
                                 <s><input type="text" ng-model="deliveryTemplateItem.start_fee"/></s>
                                 <label>元</label>
                             </div>
                             <div class="pt10 clearfix">
                                 <label>每增加</label>
                                 <s><input type="text" ng-model="deliveryTemplateItem.add_units"/></s>
-                                <label>件，增加运费</label>
+                                <label>{{vm.getUnitTypeText()}}，增加运费</label>
                                 <s><input type="text" ng-model="deliveryTemplateItem.add_fee"/></s>
                                 <label>元</label>
                             </div>
@@ -136,7 +147,7 @@
         <dl class="clearfix haolinju">
             <dd class="fl"><input disabled type="checkbox" /></dd>
             <dd class="fl">好邻居</dd>
-            <dd class="fr">使用前请先联系微信<br/><span>[yangxiaoguang]</span>沟通物流</dd>
+            <dd class="fr" style="line-height: 20px;">使用前请先联系微信<br/><span>[yangxiaoguang]</span>沟通物流</dd>
         </dl>
         <div class="ziti" style="margin: 0;">
             <dl class="clearfix">

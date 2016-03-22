@@ -4,9 +4,20 @@ class UserFansComponent extends Component{
 
     static $PAGE_LIMIT = 50;
 
-    public function get_fans($uid, $page = 1){
-        $queryCond = ['conditions' => ['user_id' => $uid, 'deleted' => DELETED_NO], 'limit' => self::$PAGE_LIMIT, 'page' => $page];
-        $data = $this->process_query_data($queryCond, 'follow_id', $uid);
+    public function get_fans($uid, $page = 1, $query = null){
+        $queryCond = ['conditions' => ['UserRelation.user_id' => $uid, 'UserRelation.deleted' => DELETED_NO], 'fields' => ['UserRelation.*']];
+        if (!empty($query)) {
+            $queryCond['joins'] = [[
+                'table' => 'users',
+                'alias' => 'User',
+                'type' => 'INNER',
+                'conditions' => [
+                    'User.id = UserRelation.follow_id',
+                ]
+            ]];
+            $queryCond['conditions']['User.nickname like'] = '%' . $query . '%';
+        }
+        $data = $this->process_query_data($queryCond, 'follow_id', $uid, $page);
         if ($page == 1) {
             $page_info = $this->get_page_info($queryCond, self::$PAGE_LIMIT);
             $data['page_info'] = $page_info;
@@ -14,9 +25,20 @@ class UserFansComponent extends Component{
         return $data;
     }
 
-    public function get_subs($uid, $page = 1){
-        $queryCond = ['conditions' => ['follow_id' => $uid, 'deleted' => DELETED_NO], 'limit' => self::$PAGE_LIMIT, 'page' => $page];
-        $data = $this->process_query_data($queryCond, 'user_id', $uid);
+    public function get_subs($uid, $page = 1, $query = null){
+        $queryCond = ['conditions' => ['UserRelation.follow_id' => $uid, 'UserRelation.deleted' => DELETED_NO], 'fields' => ['UserRelation.*']];
+        if (!empty($query)) {
+            $queryCond['joins'] = [[
+                'table' => 'users',
+                'alias' => 'User',
+                'type' => 'INNER',
+                'conditions' => [
+                    'User.id = UserRelation.user_id',
+                ]
+            ]];
+            $queryCond['conditions']['User.nickname like'] = '%' . $query . '%';
+        }
+        $data = $this->process_query_data($queryCond, 'user_id', $uid, $page);
         if ($page == 1) {
             $page_info = $this->get_page_info($queryCond, self::$PAGE_LIMIT);
             $data['page_info'] = $page_info;
@@ -24,18 +46,20 @@ class UserFansComponent extends Component{
         return $data;
     }
 
-    private function process_query_data($queryCond, $extract_field, $uid){
+    private function process_query_data($queryCond, $extract_field, $uid, $page){
         $userRelationM = ClassRegistry::init('UserRelation');
         $userM = ClassRegistry::init('User');
+        $queryCond['limit'] = self::$PAGE_LIMIT;
+        $queryCond['page'] = $page;
         $relations = $userRelationM->find('all', $queryCond);
         $user_ids = Hash::extract($relations, '{n}.UserRelation.' . $extract_field);
-        $users_data = $userM->find('all', array(
-            'conditions' => array(
+        $users_data = $userM->find('all', [
+            'conditions' => [
                 'id' => $user_ids
-            ),
-            'fields' => array('id', 'nickname', 'image', 'avatar'),
-            'order' => array('id DESC')
-        ));
+            ],
+            'fields' => ['id', 'nickname', 'image', 'avatar'],
+            'order' => ['id DESC']
+        ]);
         $users_data = array_map('map_user_avatar2', $users_data);
         $levels_data = $this->get_user_level_map($user_ids);
         $sub_user_ids = $this->get_user_subs($uid, $user_ids);

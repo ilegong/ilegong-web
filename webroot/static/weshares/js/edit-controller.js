@@ -12,7 +12,7 @@
     vm.uploadImage = uploadImage;
     vm.deleteImage = deleteImage;
     vm.toggleProduct = toggleProduct;
-    vm.toggleAddress = toggleAddress;
+    vm.addAddress = addAddress;
     vm.nextStep = nextStep;
     vm.backStep = backStep;
     vm.saveWeshare = saveWeshare;
@@ -42,8 +42,10 @@
     vm.showDeliveryTemplateProvinceNames = showDeliveryTemplateProvinceNames;
     vm.setAreaCheckStatus = setAreaCheckStatus;
     vm.validateDeliveryTemplateData = validateDeliveryTemplateData;
-    vm.toggleBoxZitiChecked =toggleBoxZitiChecked;
+    vm.toggleBoxZitiChecked = toggleBoxZitiChecked;
     vm.toggleBoxKuidiChecked = toggleBoxKuidiChecked;
+    vm.deleteAddress = deleteAddress;
+    vm.getUnitTypeText = getUnitTypeText;
     vm.showEditShareView = true;
     vm.currentDeliveryTemplate = null;
     function pageLoaded() {
@@ -95,6 +97,7 @@
       vm.resetProvinceAreaCheckStatus();
       vm.showEditShareInfo = true;
       vm.showShippmentInfo = false;
+      vm.deliveryTemplateType = 0;
       vm.setDefaultDeliveryTemplate();
       vm.setDeliveryTemplates();
       var weshareId = angular.element(document.getElementById('weshareEditView')).attr('data-id');
@@ -137,6 +140,7 @@
           }
           if (!_.isEmpty(data['deliveryTemplate']['default_delivery_template'])) {
             vm.defaultDeliveryTemplate = data['deliveryTemplate']['default_delivery_template'];
+            vm.deliveryTemplateType = vm.defaultDeliveryTemplate['unit_type'];
           }
         }).error(function (data) {
         });
@@ -152,7 +156,7 @@
           description: '',
           images: [],
           products: [
-            {name: '', store: '', tbd: 0, tag_id: '0', deleted: 0}
+            {name: '', store: '', tbd: 0, tag_id: '0', deleted: 0, weight: ''}
           ],
           send_info: '',
           addresses: [
@@ -178,6 +182,15 @@
         if (!vm.weshare.send_info) {
           vm.weshare.send_info = '';
         }
+      }
+    }
+
+    function getUnitTypeText(){
+      if(vm.deliveryTemplateType == 0){
+        return '件';
+      }
+      if(vm.deliveryTemplateType == 1){
+        return 'kg';
       }
     }
 
@@ -212,7 +225,7 @@
                 return;
               }
               vm.weshare.images.push(imageUrl);
-            }).error(function (data, status, headers, config) {
+            }).error(function (data) {
               vm.messages.push({name: 'download image failed', detail: data});
             });
             if (i < len) {
@@ -234,7 +247,7 @@
 
     function toggleProduct(product, add) {
       if (add) {
-        vm.weshare.products.push({name: '', store: '', deleted: 0});
+        vm.weshare.products.push({name: '', store: '', deleted: 0, weight: ''});
       }
       else {
         if (product.id && product.id > 0) {
@@ -245,16 +258,16 @@
       }
     }
 
-    function toggleAddress(address, isLast) {
-      if (isLast) {
-        vm.weshare.addresses.push({address: '', deleted: 0, name: '', phone: ''});
+    function deleteAddress(address){
+      if (address.id && address.id > 0) {
+        address.deleted = 1;
       } else {
-        if (address.id && address.id > 0) {
-          address.deleted = 1;
-        } else {
-          vm.weshare.addresses = _.without(vm.weshare.addresses, address);
-        }
+        vm.weshare.addresses = _.without(vm.weshare.addresses, address);
       }
+    }
+
+    function addAddress() {
+      vm.weshare.addresses.push({address: '', deleted: 0, name: '', phone: ''});
     }
 
     function backStep() {
@@ -283,7 +296,7 @@
       });
       vm.kuai_di_data.ship_fee = vm.kuai_di_data.ship_fee || 0;
       vm.weshare.ship_type = [vm.self_ziti_data, vm.kuai_di_data, vm.pys_ziti_data, vm.pin_tuan_data];
-      if(!validateShipSetting(vm.weshare.ship_type)){
+      if (!validateShipSetting(vm.weshare.ship_type)) {
         alert('至少选择一种物流方式');
         resetZitiAddressData();
         return false;
@@ -311,6 +324,10 @@
       if (!vm.validateDeliveryTemplateData(deliveryTemplates)) {
         return false;
       }
+      deliveryTemplates = _.map(deliveryTemplates, function (item) {
+        item['unit_type'] = vm.deliveryTemplateType;
+        return item;
+      });
       if (vm.isInProcess) {
         alert('正在保存....');
         return;
@@ -318,7 +335,7 @@
       vm.isInProcess = true;
       vm.weshare.proxy_rebate_percent = vm.proxy_rebate_percent;
       vm.weshare['delivery_templates'] = deliveryTemplates;
-      $http.post('/weshares/save', vm.weshare).success(function (data, status, headers, config) {
+      $http.post('/weshares/save', vm.weshare).success(function (data) {
         if (data.success) {
           PYS.storage.clear();
           window.location.href = '/weshares/view/' + data['id'];
@@ -632,15 +649,17 @@
       return vm.rebatePercentHasError;
     }
 
-    function validateShipSetting($settings){
-      var hasOne = _.find($settings, function(item){ return item.status==1; });
-      if(hasOne){
+    function validateShipSetting($settings) {
+      var hasOne = _.find($settings, function (item) {
+        return item.status == 1;
+      });
+      if (hasOne) {
         return true;
       }
       return false;
     }
 
-    function resetZitiAddressData(){
+    function resetZitiAddressData() {
       if (_.isEmpty(vm.weshare.addresses)) {
         vm.weshare.addresses = [
           {address: '', deleted: 0, name: '', phone: ''}
@@ -648,7 +667,7 @@
       }
     }
 
-    function toggleBoxZitiChecked(){
+    function toggleBoxZitiChecked() {
       if (vm.self_ziti_data.status == 1) {
         vm.self_ziti_data.status = -1;
       } else {
@@ -656,7 +675,7 @@
       }
     }
 
-    function toggleBoxKuidiChecked(){
+    function toggleBoxKuidiChecked() {
       if (vm.kuai_di_data.status == 1) {
         vm.kuai_di_data.status = -1;
       } else {

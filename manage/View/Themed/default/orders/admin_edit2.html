@@ -1,8 +1,8 @@
-<ol class="breadcrumb">
-    <li><a href="/manage/admin/tuan/tuan_func_list">团购后台</a></li>
-    <li><a href="#" onclick="window.history.go(-1); return false;">团购订单</a></li>
-    <li class="active">编辑订单</li>
-</ol>
+<!--<ol class="breadcrumb">-->
+    <!--<li><a href="/manage/admin/tuan/tuan_func_list">团购后台</a></li>-->
+    <!--<li><a href="#" onclick="window.history.go(-1); return false;">团购订单</a></li>-->
+    <!--<li class="active">编辑订单</li>-->
+<!--</ol>-->
 
 <h1>编辑订单</h1>
 
@@ -54,11 +54,11 @@
             <select name="ship_mark" data-value="{{$order['Order']['ship_mark']}}" class="form-control ship-mark">
                 <option value=""
                         {{if $order['Order']['ship_mark']==''}}selected='selected'{{/if}}>请选择</option>
-                <option value="ziti"
+                <option value="{{SHARE_SHIP_PYS_ZITI_TAG}}"
                         {{if $order['Order']['ship_mark']==SHARE_SHIP_PYS_ZITI_TAG}}selected='selected'{{/if}}>好邻居自提</option>
-                <option value="kuaidi"
+                <option value="{{SHARE_SHIP_KUAIDI_TAG}}"
                         {{if $order['Order']['ship_mark']==SHARE_SHIP_KUAIDI_TAG}}selected='selected'{{/if}}>快递</option>
-                <option value="sfdf"
+                <option value="{{SHARE_SHIP_SELF_ZITI_TAG}}"
                         {{if $order['Order']['ship_mark']==SHARE_SHIP_SELF_ZITI_TAG}}selected='selected'{{/if}}>自己自提点</option>
             </select>
 

@@ -386,6 +386,8 @@ class ShareUtilComponent extends Component
     public function cloneShare($shareId, $uid = null, $address = null, $address_remarks = null, $type = DEFAULT_SHARE_TYPE, $share_status = WESHARE_DELETE_STATUS, $share_limit = null)
     {
         $WeshareM = ClassRegistry::init('Weshare');
+        $dataSource = $WeshareM->getDataSource();
+        $dataSource->begin();
         $shareInfo = $WeshareM->find('first', array(
             'conditions' => array(
                 'id' => $shareId
@@ -450,8 +452,10 @@ class ShareUtilComponent extends Component
 //                $optLogData = array('obj_creator' => $shareInfo['creator'], 'user_id' => $uid, 'obj_type' => OPT_LOG_START_GROUP_SHARE, 'obj_id' => $newShareId, 'created' => $now, 'memo' => $title, 'thumbnail' => $shareImg[0]);
 //                $this->saveOptLog($optLogData);
 //            }
+            $dataSource->commit();
             return array('shareId' => $newShareId, 'success' => true);
         }
+        $dataSource->rollback();
         return array('success' => false);
     }
 
@@ -1903,23 +1907,6 @@ class ShareUtilComponent extends Component
         $creatorInfo['image'] = get_user_avatar($creatorInfo);
         $creatorLevel = $this->get_user_level($weshareInfo['Weshare']['creator']);
         $creatorInfo['level'] = $creatorLevel;
-//        if ($with_tag) {
-//            $weshareProducts = $this->get_product_tag_map($weshare_id);
-//        } else {
-//            $weshareProducts = $weshareProductM->find('all', array(
-//                'conditions' => array(
-//                    'weshare_id' => $weshare_id,
-//                    'deleted' => DELETED_NO
-//                )
-//            ));
-//            $weshareProducts = Hash::extract($weshareProducts, '{n}.WeshareProduct');
-//        }
-//        $weshareProducts = $weshareProductM->find('all', array(
-//            'conditions' => array(
-//                'weshare_id' => $weshare_id,
-//                'deleted' => DELETED_NO
-//            )
-//        ));
         $weshareProducts = $this->get_all_share_products($weshare_id);
         //show break line
         $weshareInfo['Weshare']['description'] = str_replace(array("\r\n", "\n", "\r"), '<br />', $weshareInfo['Weshare']['description']);
@@ -2115,14 +2102,23 @@ class ShareUtilComponent extends Component
         $products = &$shareInfo['products'];
         foreach ($products as &$p) {
             $p['price'] = $p['price'] / 100;
+            $p['weight'] = $p['weight'] / 1000;
         }
         $defaultDeliveryTemplate = &$shareInfo['deliveryTemplate']['default_delivery_template'];
         $defaultDeliveryTemplate['add_fee'] = $defaultDeliveryTemplate['add_fee'] / 100;
         $defaultDeliveryTemplate['start_fee'] = $defaultDeliveryTemplate['start_fee'] / 100;
+        if ($defaultDeliveryTemplate['unit_type'] == DELIVERY_UNIT_WEIGHT_TYPE) {
+            $defaultDeliveryTemplate['start_units'] = strval($defaultDeliveryTemplate['start_units'] / 1000);
+            $defaultDeliveryTemplate['add_units'] = strval($defaultDeliveryTemplate['add_units'] / 1000);
+        }
         $deliveryTemplates = &$shareInfo['deliveryTemplate']['delivery_templates'];
         foreach ($deliveryTemplates as &$deliveryTemplateItem) {
             $deliveryTemplateItem['add_fee'] = $deliveryTemplateItem['add_fee'] / 100;
             $deliveryTemplateItem['start_fee'] = $deliveryTemplateItem['start_fee'] / 100;
+            if ($deliveryTemplateItem['unit_type'] == DELIVERY_UNIT_WEIGHT_TYPE) {
+                $deliveryTemplateItem['start_units'] = strval($deliveryTemplateItem['start_units'] / 1000);
+                $deliveryTemplateItem['add_units'] = strval($deliveryTemplateItem['add_units'] / 1000);
+            }
         }
         return $shareInfo;
     }

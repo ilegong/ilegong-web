@@ -4348,12 +4348,17 @@
       if (vm.selectShipType == 0) {
         //return vm.weshareSettings.kuai_di.ship_fee;
         var goodNum = 0;
+        var goodWeight = 0;
         _.each(vm.weshare.products, function (product) {
           if (product.num && (product.num > 0)) {
-            goodNum = goodNum + product.num;
+            goodNum = goodNum + parseInt(product.num);
+            if(product.weight && (product.weight > 0)){
+              goodWeight = goodWeight + parseInt(product.weight)*parseInt(product.num);
+            }
           }
+
         });
-        return vm.calculateShipFee(vm.dliveryTemplate, vm.selectedProvince, goodNum);
+        return vm.calculateShipFee(vm.dliveryTemplate, vm.selectedProvince, goodNum, goodWeight);
       }
       if (vm.selectShipType == 1) {
         return vm.weshareSettings.self_ziti.ship_fee;
@@ -5202,7 +5207,7 @@
       return;
     }
 
-    function calculateShipFee(deliveryTemplate, provinceId, goodNum) {
+    function calculateShipFee(deliveryTemplate, provinceId, goodNum, goodWeight) {
       var shipFee = 0;
       if (provinceId && goodNum > 0) {
         var template = null;
@@ -5231,11 +5236,16 @@
         var startFee = parseInt(template['start_fee']);
         var addUnits = parseInt(template['add_units']);
         var addFee = parseInt(template['add_fee']);
-        var gapNum = goodNum - startUnits;
-        if (gapNum <= 0) {
+        var unitType = parseInt(template['unit_type']);
+        var cal_val = goodNum;
+        if(unitType == 1){
+          cal_val = goodWeight;
+        }
+        var gapVal = goodWeight - startUnits;
+        if (gapVal <= 0) {
           shipFee = startFee;
         } else {
-          shipFee = (startFee + (Math.ceil(gapNum / addUnits) * addFee));
+          shipFee = (startFee + (Math.ceil(gapVal / addUnits) * addFee));
         }
       }
       return shipFee;

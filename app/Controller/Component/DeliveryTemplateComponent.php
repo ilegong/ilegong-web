@@ -58,7 +58,7 @@ class DeliveryTemplateComponent extends Component{
         return array('default_delivery_template' => $defaultDeliveryTemplate, 'delivery_templates' => $deliveryTemplates);
     }
 
-    public function calculate_ship_fee($good_num, $province_id, $weshare_id){
+    public function calculate_ship_fee($good_num, $good_weight, $province_id, $weshare_id){
         $WeshareDeliveryTemplateM = ClassRegistry::init('WeshareDeliveryTemplate');
         $WeshareTemplateRegionM = ClassRegistry::init('WeshareTemplateRegion');
         $region = $WeshareTemplateRegionM->find('first', array(
@@ -70,23 +70,30 @@ class DeliveryTemplateComponent extends Component{
         if (empty($region)) {
             //default
             $defaultDeliveryTemplate = $this->get_default_delivery_template($weshare_id, $WeshareDeliveryTemplateM);
-            return $this->get_ship_fee_by_template($good_num, $defaultDeliveryTemplate);
+            return $this->get_ship_fee_by_template($good_num, $good_weight, $defaultDeliveryTemplate);
         }
         $template_id = $region['WeshareTemplateRegion']['delivery_template_id'];
         $template = $this->get_delivery_template_by_region($weshare_id, $template_id, $WeshareDeliveryTemplateM);
-        return $this->get_ship_fee_by_template($good_num, $template);
+        return $this->get_ship_fee_by_template($good_num, $good_weight, $template);
     }
 
-    private function get_ship_fee_by_template($good_num, $delivery_template){
+    private function get_ship_fee_by_template($good_num, $good_weight, $delivery_template){
         $start_units = $delivery_template['WeshareDeliveryTemplate']['start_units'];
         $start_fee = $delivery_template['WeshareDeliveryTemplate']['start_fee'];
         $add_units = $delivery_template['WeshareDeliveryTemplate']['add_units'];
         $add_fee = $delivery_template['WeshareDeliveryTemplate']['add_fee'];
-        $gap_num = $good_num - $start_units;
-        if ($gap_num <= 0) {
+        $unit_type = $delivery_template['WeshareDeliveryTemplate']['unit_type'];
+        if ($unit_type == DELIVERY_UNIT_COUNT_TYPE) {
+            $good_cal = $good_num;
+        }
+        if ($unit_type == DELIVERY_UNIT_WEIGHT_TYPE) {
+            $good_cal = $good_weight;
+        }
+        $gap_val = $good_cal - $start_units;
+        if ($gap_val <= 0) {
             return $start_fee;
         }
-        return $start_fee + (ceil($gap_num / $add_units) * $add_fee);
+        return $start_fee + (ceil($gap_val / $add_units) * $add_fee);
     }
 
     private function get_delivery_template_by_region($weshare_id, $template_id, $deliveryTemplateM){

@@ -9,6 +9,8 @@ class WesharesComponent extends Component
     public function create_weshare($postDataArray, $uid)
     {
         $WeshareM = ClassRegistry::init('Weshare');
+        $dataSource = $WeshareM->getDataSource();
+        $dataSource->begin();
         $weshareData = array();
         if (empty($postDataArray['id'])) {
             $this->log('Create weshare for user '.$uid, LOG_INFO);
@@ -42,6 +44,7 @@ class WesharesComponent extends Component
             } else {
                 $this->log('Failed to update weshare '.$weshareData['id'].' for user '.$uid, LOG_WARNING);
             }
+            $dataSource->rollback();
             return array('success' => false, 'uid' => $uid);
         }
 
@@ -64,6 +67,7 @@ class WesharesComponent extends Component
         //todo update child share data and product data
         //update product
         //$this->ShareUtil->cascadeSaveShareData($weshareData);
+        $dataSource->commit();
         return array('success' => true, 'id' => $weshare['Weshare']['id']);
     }
 
@@ -168,6 +172,10 @@ class WesharesComponent extends Component
             if (empty($tag_id)) {
                 $product['tag_id'] = 0;
             }
+            if(empty($product['weight'])){
+                $product['weight'] = 0;
+            }
+            $product['weight'] = $product['weight'] * 1000;
         }
         return $WeshareProductM->saveAll($weshareProductData);
     }
@@ -181,15 +189,10 @@ class WesharesComponent extends Component
      */
     private function saveWeshareShipType($weshareId, $userId, $weshareShipData)
     {
-        $ship_fee = 0;
         $WeshareSettingM = ClassRegistry::init('WeshareShipSetting');
         foreach ($weshareShipData as &$item) {
             $item['weshare_id'] = $weshareId;
-            if ($item['tag'] == SHARE_SHIP_KUAIDI_TAG) {
-                $ship_fee = $item['ship_fee'];
-            }
         }
-        $this->DeliveryTemplate->save_share_default_delivery_template($weshareId, $userId, $ship_fee);
         return $WeshareSettingM->saveAll($weshareShipData);
     }
 
@@ -225,6 +228,11 @@ class WesharesComponent extends Component
                 $itemTemplateData['user_id'] = $user_id;
                 $itemTemplateData['add_fee'] = $itemTemplateData['add_fee']*100;
                 $itemTemplateData['start_fee'] = $itemTemplateData['start_fee']*100;
+                if($itemTemplateData['unit_type'] == DELIVERY_UNIT_WEIGHT_TYPE){
+                    //按重量计算运费
+                    $itemTemplateData['start_units'] = $itemTemplateData['start_units'] * 1000;
+                    $itemTemplateData['add_units'] = $itemTemplateData['add_units'] * 1000;
+                }
             }
             $this->DeliveryTemplate->save_all_delivery_template($weshareDeliveryTemplateData);
         }
