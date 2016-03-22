@@ -24,7 +24,4 @@ cat ./webroot/static/weshares/css/share-info.css | cleancss -o  ./webroot/static
 
 cat ./webroot/static/weshares/css/user-info.css | cleancss -o  ./webroot/static/weshares/css/user-info.min.css
 
-
-cat ./webroot/static/opt/css/opt.css ./webroot/static/opt/css/share.css | cleancss -o ./webroot/static/opt/css/new-opt.min.css
-
 uglifyjs ./webroot/static/weshares/js/angular.min.js  ./webroot/static/weshares/js/ng-infinite-scroll.min.js ./webroot/static/weshares/js/me-lazyload.js ./webroot/static/weshares/js/underscore-min.js  ./webroot/static/weshares/js/user-info-app.js ./webroot/static/weshares/js/user-list-data.js  -o ./webroot/static/weshares/js/user-info.min.js
