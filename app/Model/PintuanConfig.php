@@ -40,7 +40,7 @@ class PintuanConfig extends AppModel {
             'send_date' => '1月19日'
         ),
         5 => array(
-            'detail_img' => array('/static/pintuan/images/cg_img01.gif', '/static/pintuan/images/cg_img02.gif', '/static/pintuan/images/cg_img03.gif', '/static/pintuan/images/cg_img04.gif', '/static/pintuan/images/cg_img05.gif',)
+            'detail_img' => array('/static/pintuan/images/cg_img01.gif', '/static/pintuan/images/cg_img02.jpg', '/static/pintuan/images/cg_img03.jpg', '/static/pintuan/images/cg_img04.jpg', '/static/pintuan/images/cg_img05.gif',)
         )
     );
 
