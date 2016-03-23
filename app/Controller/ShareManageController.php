@@ -41,6 +41,14 @@ class ShareManageController extends AppController
      */
     public function find_content()
     {
+        $carousel = ClassRegistry::init('NewFind')->get_all_carousel();
+        $this->set('carousel_model', $carousel);
+    }
+
+    public function find_content_save_carousel()
+    {
+        ClassRegistry::init('NewFind')->save_all_carousel($_POST);
+        $this->redirect('/share_manage/find_content');
     }
 
     /**
