@@ -471,16 +471,17 @@ class WesharesController extends AppController
     /**
      * @param $ship_setting
      * @param $good_num
+     * @param $good_weight
      * @param $weshare_id
      * @return mixed
      * 计算订单费用
      */
-    private function calculate_ship_fee($ship_setting, $good_num, $weshare_id, $province_id)
+    private function calculate_ship_fee($ship_setting, $good_num, $good_weight, $weshare_id, $province_id)
     {
         if ($ship_setting['WeshareShipSetting']['tag'] != SHARE_SHIP_KUAIDI_TAG) {
             return $ship_setting['WeshareShipSetting']['ship_fee'];
         }
-        $shipFee = $this->DeliveryTemplate->calculate_ship_fee($good_num, 0, $weshare_id);
+        $shipFee = $this->DeliveryTemplate->calculate_ship_fee($good_num, $good_weight, $province_id, $weshare_id);
         return $shipFee;
     }
 
@@ -597,7 +598,7 @@ class WesharesController extends AppController
             }
             //产品价格的团长佣金
             $rebate_fee = $this->WeshareBuy->cal_proxy_rebate_fee($totalPrice - $discountPrice, $uid, $weshareId);
-            $shipFee = $this->calculate_ship_fee($shipSetting, $cart_good_num, $weshareId, $buyerData['provinceId']);
+            $shipFee = $this->calculate_ship_fee($shipSetting, $cart_good_num, $cart_good_weight, $weshareId, $buyerData['provinceId']);
             $totalPrice += $shipFee;
             //cal proxy user rebate fee
             $update_order_data = array('total_all_price' => ($totalPrice - $discountPrice) / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => $shipFee, 'is_prepaid' => $is_prepaid);
