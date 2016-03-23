@@ -39,9 +39,35 @@ class PintuanConfig extends AppModel {
             'send_info' => '2016年1月18日24点截止报名，1月19日统一发货',
             'send_date' => '1月19日'
         ),
+        5 => array(
+            'detail_img' => array('/static/pintuan/images/cg_img01.gif', '/static/pintuan/images/cg_img02.gif', '/static/pintuan/images/cg_img03.gif', '/static/pintuan/images/cg_img04.gif', '/static/pintuan/images/cg_img05.gif',)
+        )
     );
 
     var $conf_data = array(
+        //盛夏不上火
+        3147 => array(
+            'share_id' => '3147',
+            'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/cg_banner.jpg',
+            'small_banner_img' => 'http://static.tongshijia.com/static/pintuan/images/cg_banner_small.jpg',
+            'sharer_id' => '708029',
+            'sharer_nickname' => '盛夏',
+            'sharer_avatar' => 'http://static.tongshijia.com/avatar/s/2015/12/31/wx_head_e92e61d892c2ad72c0e01ec1ac136e71.jpg',
+            'share_title' => '丹棱 [不知火] 无农药现摘现发5斤装',
+            'wx_title' => '［一起省6元］丹棱无农药 [不知火] 5斤39.9元，盛夏邀你吃',
+            'wx_desc' => '现摘现发，绿色无污染不知火丑柑—［朋友说］',
+            'promotions_title' => '购买了“［一起省6元］丹棱 无农药[不知火] 5斤39.9元”',
+            'share_label' => '来自［盛夏］的分享',
+            'limit_time' => 24,
+            'pid' => 5,
+            'published' => 1,
+            'product' => array(
+                'id' => 7385,
+                'normal_price' => 45.9,
+                'pintuan_price' => 39.9,
+                'name' => '丹棱 [不知火] 无农药现摘现发5斤装'
+            )
+        ),
         //草莓
         2074 => array(
             'share_id' => '2074',
