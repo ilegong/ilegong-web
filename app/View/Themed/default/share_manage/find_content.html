@@ -11,7 +11,7 @@
     <h2 class="page-header">轮播条展示</h2>
 
     <form action="/share_manage/find_content_save_carousel" method='post'>
-      {{loop $carousel_model['Carousel'] $key $carousel}}
+      {{loop $carousel_model $key $carousel}}
       <div class="carousel-item row">
         <div class="form-group col-sm-4">
           <label>选择图片</label>
@@ -32,7 +32,7 @@
         </div>
         <div class="form-group col-sm-2">
           <label>操作</label>
-          <a href="javascript:void(0);" style='display: block;' class='btn btn-danger delete-carousel-item'>
+          <a href="javascript:void(0);" style='display: block;' class='btn btn-danger delete-carousel-item' data-target-id='{{$carousel['id']}}'>
             删除当前
           </a>
         </div>
@@ -52,9 +52,27 @@
 
 <script>
 function update_delete_carousel_item() {
+  // 先解绑所有click事件
+  $('.delete-carousel-item').unbind('click');
+
+  // 重新绑定
   $('.delete-carousel-item').on('click', function(){
     console.log('Delete item');
-    $(this).parents('.carousel-item').remove();
+    var del_id = $(this).attr('data-target-id');
+    if (del_id) {
+      $.ajax({
+        url: '/share_manage/find_content_delete_carousel/' + del_id,
+        type: 'get',
+        dataType: 'json',
+        success: function (data){
+          if (data.err == 0) {
+            $(this).parents('.carousel-item').remove();
+          }
+        }.bind(this),
+      });
+    } else {
+      $(this).parents('.carousel-item').remove();
+    }
   });
 }
 $(function (){
@@ -71,6 +89,8 @@ $(function (){
       $(this).attr('value', '');
       $(this).val('');
     });
+    newItem.find('.exist_ids').remove();
+    newItem.find('.delete-carousel-item').attr('data-target-id', '');
 
     $('#new-carousel-item').before(newItem);
     // 新建项目绑定事件
