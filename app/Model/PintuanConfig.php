@@ -43,10 +43,60 @@ class PintuanConfig extends AppModel {
             'detail_img' => array('/static/pintuan/images/cg_img01.gif', '/static/pintuan/images/cg_img02.jpg', '/static/pintuan/images/cg_img03.jpg', '/static/pintuan/images/cg_img04.jpg', '/static/pintuan/images/cg_img05.gif'),
             'send_info' => '3月31日20点停止拼团，支付后3天内发货',
             'send_date' => '支付后3天内发货'
+        ),
+        6 => array(
+            'detail_img' => array('/static/pintuan/images/mg_img01.gif','/static/pintuan/images/mg_img02.jpg','/static/pintuan/images/mg_img03.gif','/static/pintuan/images/mg_img04.jpg','/static/pintuan/images/mg_img05.gif','/static/pintuan/images/mg_img06.jpg'),
+            'send_info' => '3月29日（周二）截团, 3月30日（周三）发货',
+            'send_date' => '3月30日（周三）发货'
         )
     );
 
     var $conf_data = array(
+        //贵妃芒
+        3161 => array(
+            'share_id' => '3161',
+            'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/mg_banner.jpg',
+            'small_banner_img' => 'http://static.tongshijia.com/static/pintuan/images/mg_banner_small.jpg',
+            'sharer_id' => '884183',
+            'sharer_nickname' => '雪微',
+            'sharer_avatar' => 'http://static.tongshijia.com/avatar/s/2015/12/31/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg',
+            'share_title' => '海南树上熟贵妃芒 现摘现发 5斤',
+            'wx_title' => '［一起省4元］海南树上熟贵妃芒 5斤 84元，雪微邀你吃',
+            'wx_desc' => '7、8成熟产地直采刚刚好的贵妃芒—［朋友说］',
+            'promotions_title' => '购买了“［一起省6元］海南树上熟贵妃芒 5斤 84元”',
+            'share_label' => '来自［雪微］的分享',
+            'limit_time' => 24,
+            'pid' => 6,
+            'published' => 1,
+            'product' => array(
+                'id' => 7427,
+                'normal_price' => 88,
+                'pintuan_price' => 84,
+                'name' => '海南树上熟贵妃芒 现摘现发 5斤'
+            )
+        ),
+        3160 => array(
+            'share_id' => '3160',
+            'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/mg_banner.jpg',
+            'small_banner_img' => 'http://static.tongshijia.com/static/pintuan/images/mg_banner_small.jpg',
+            'sharer_id' => '810684',
+            'sharer_nickname' => '李樱花',
+            'sharer_avatar' => 'http://static.tongshijia.com/avatar/s/2015/12/31/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg',
+            'share_title' => '海南树上熟贵妃芒 现摘现发 5斤',
+            'wx_title' => '［一起省4元］海南树上熟贵妃芒 5斤 84元，李樱花邀你吃',
+            'wx_desc' => '7、8成熟产地直采刚刚好的贵妃芒—［朋友说］',
+            'promotions_title' => '购买了“［一起省6元］海南树上熟贵妃芒 5斤 84元”',
+            'share_label' => '来自［李樱花］的分享',
+            'limit_time' => 24,
+            'pid' => 6,
+            'published' => 1,
+            'product' => array(
+                'id' => 7426,
+                'normal_price' => 88,
+                'pintuan_price' => 84,
+                'name' => '海南树上熟贵妃芒 现摘现发 5斤'
+            )
+        ),
         //盛夏不上火
         3147 => array(
             'share_id' => '3147',
@@ -62,7 +112,7 @@ class PintuanConfig extends AppModel {
             'share_label' => '来自［盛夏］的分享',
             'limit_time' => 24,
             'pid' => 5,
-            'published' => 1,
+            'published' => 0,
             'product' => array(
                 'id' => 7385,
                 'normal_price' => 45.9,
