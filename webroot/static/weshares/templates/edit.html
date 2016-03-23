@@ -12,15 +12,24 @@
                 <p class='tips'>请输入描述, 不超过40个字</p>
             </div>
             <div class="fl form-group form-group-inline" style="margin-bottom: -1px;" ng-class="{'has-error': product.priceHasError}">
-                <input class='form-control' placeholder="价格/元" ng-model="product.price" ng-change='vm.validateProductPrice(product)' ng-blur='vm.validateProductPrice(product)'/>
+                <div class="clearfix">
+                    <input type="number" step="0.01" style="width: 90%;" class='form-control fl' placeholder="价格/元" ng-model="product.price" ng-change='vm.validateProductPrice(product)' ng-blur='vm.validateProductPrice(product)'/>
+                    <div class="fl" style="line-height: 44px;padding-left: 5px;">元</div>
+                </div>
                 <p class='tips'>请输入数字</p>
             </div>
             <div class="fl form-group form-group-inline" style="margin-bottom: -1px;">
-                <input class='form-control' placeholder="重量/千克" ng-model="product.weight"/>
+                <div class="clearfix">
+                    <input type="number" step="0.1" style="width: 90%;" class='form-control fl' placeholder="重量/kg" ng-model="product.weight"/>
+                    <div class="fl" style="line-height: 44px;padding-left: 5px;">kg</div>
+                </div>
                 <p class='tips'>请输入数字</p>
             </div>
             <div class="form-group form-group-inline" ng-class="{'has-error': product.storeHasError}" style="margin-bottom: -1px;">
-                <input class='form-control' placeholder="库存,默认(0)不限制,(-1)为售罄" ng-model="product.store" ng-change='vm.validateProductStore(product)' ng-blur='vm.validateProductStore(product)'/>
+                <div class="clearfix">
+                    <input type="number" style="width: 90%;" class='form-control fl' placeholder="库存,默认(0)不限制,(-1)为售罄" ng-model="product.store" ng-change='vm.validateProductStore(product)' ng-blur='vm.validateProductStore(product)'/>
+                    <div class="fl" style="line-height: 44px;padding-left: 5px;">件</div>
+                </div>
                 <p class='tips'>请输入数字</p>
             </div>
 
@@ -75,7 +84,7 @@
                             <a ng-click="vm.deleteAddress(address)" class="delete">删除</a>
                         </li>
                         <li class="fl sendoutsite">
-                            <input type="text" placeholder="联系电话" ng-model="address.phone" ng-blur='vm.validateAddress()'/>
+                            <input type="number" placeholder="联系电话" ng-model="address.phone" ng-blur='vm.validateAddress()'/>
                         </li>
                         <li class="fr">
                             <a ng-click="vm.addAddress()">添加</a>
