@@ -59,7 +59,7 @@ class PintuanConfig extends AppModel {
             'small_banner_img' => 'http://static.tongshijia.com/static/pintuan/images/mg_banner_small.jpg',
             'sharer_id' => '884183',
             'sharer_nickname' => '雪微',
-            'sharer_avatar' => 'http://static.tongshijia.com/avatar/s/2015/12/31/wx_head_79eeee6166bd5c2af6c61fce2d5889eb.jpg',
+            'sharer_avatar' => 'http://static.tongshijia.com/avatar/s/2015/12/31/wx_head_4220fe693ba5fd2ff5262053c29b3c01.jpg',
             'share_title' => '海南树上熟贵妃芒 现摘现发 5斤',
             'wx_title' => '［一起省4元］海南树上熟贵妃芒 5斤 84元，雪微邀你吃',
             'wx_desc' => '7、8成熟产地直采刚刚好的贵妃芒—［朋友说］',
