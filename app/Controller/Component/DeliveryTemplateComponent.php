@@ -58,6 +58,14 @@ class DeliveryTemplateComponent extends Component{
         return array('default_delivery_template' => $defaultDeliveryTemplate, 'delivery_templates' => $deliveryTemplates);
     }
 
+    /**
+     * 根据邮费模板计算运费
+     * @param $good_num
+     * @param $good_weight
+     * @param $province_id 快递省份ID
+     * @param $weshare_id 分享ID
+     * @return mixed
+     */
     public function calculate_ship_fee($good_num, $good_weight, $province_id, $weshare_id){
         $WeshareDeliveryTemplateM = ClassRegistry::init('WeshareDeliveryTemplate');
         $WeshareTemplateRegionM = ClassRegistry::init('WeshareTemplateRegion');
