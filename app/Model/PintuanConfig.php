@@ -42,6 +42,7 @@ class PintuanConfig extends AppModel {
     );
 
     var $conf_data = array(
+        //草莓
         2074 => array(
             'share_id' => '2074',
             'banner_img' => 'http://static.tongshijia.com/static/pintuan/images/cm_banner.jpg',
