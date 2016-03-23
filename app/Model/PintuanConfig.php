@@ -65,10 +65,8 @@ class PintuanConfig extends AppModel {
             'published' => 1,
             'product' => array(
                 'id' => 7385,
-//                'normal_price' => 45.9,
-//                'pintuan_price' => 39.9,
-                'normal_price' => 0.02,
-                'pintuan_price' => 0.01,
+                'normal_price' => 45.9,
+                'pintuan_price' => 39.9,
                 'name' => '丹棱 [不知火] 无农药现摘现发5斤装'
             )
         ),
