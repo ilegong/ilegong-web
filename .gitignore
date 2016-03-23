@@ -1,6 +1,7 @@
 data/cache
 data/logs
 data/settings.php
+data/*.jpg
 # data/*
 webroot/files/*
 .idea
