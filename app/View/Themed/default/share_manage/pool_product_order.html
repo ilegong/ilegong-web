@@ -28,7 +28,7 @@
         <select class="form-control" id="pool-share-id" name="share_id" data-init-val="{{$share_id}}" autocomplete='off'>
             <option value='-1'>选择产品</option>
             {{loop $all_pool_products $product}}
-            <option value="{{$product['share_id']}}" {{if $product["share_id"]==$share_id}}selected{{/if}}>{{$product['share_name']}}</option>
+            <option value="{{$product['weshare_id']}}" {{if $product["weshare_id"]==$share_id}}selected{{/if}}>{{$product['share_name']}}</option>
             {{/loop}}
         </select>
     </div>
@@ -50,38 +50,6 @@
                         </form>
                     </div>
 
-
-                    <script>
-$('#pool-share-id').on('change', function () {
-  var pid = $(this).val();
-  if (pid == -1) {
-    return false;
-  }
-  $.ajax({
-    url: '/share_manage/pool_product_fork_order',
-    type: 'post',
-    data: {share_id: pid},
-    dataType: 'json',
-    success: function (data) {
-        var innerHtml = "<option value='-1'>全部</option>";
-        innerHtml += data.map(function (item, key){
-            var str = "";
-            str = "<option value='" + item.id + "'>" + item.nickname;
-                if (item.type == 4) {
-                    str += "【渠道价购买链接】";
-                }
-            str += "【" + item.id + "】</option>";
-
-            return str;
-        });
-        $('#pool-share-users').html(innerHtml);
-    },
-    error: function (data) {
-        console.error(data);
-    }
-  });
-});
-                    </script>
 
 
                     {{if !empty($orders)}}
@@ -165,6 +133,35 @@ $('#pool-share-id').on('change', function () {
     $(document).ready(function () {
         $('#share-order-table').DataTable({
             responsive: true
+        });
+        $('#pool-share-id').on('change', function () {
+            var pid = $(this).val();
+            if (pid == -1) {
+                return false;
+            }
+            $.ajax({
+                url: '/share_manage/pool_product_fork_order',
+                type: 'post',
+                data: {share_id: pid},
+                dataType: 'json',
+                success: function (data) {
+                    var innerHtml = "<option value='-1'>全部</option>";
+                    innerHtml += data.map(function (item, key) {
+                        var str = "";
+                        str = "<option value='" + item.id + "'>" + item.nickname;
+                        if (item.type == 4) {
+                            str += "【渠道价购买链接】";
+                        }
+                        str += "【" + item.id + "】</option>";
+
+                        return str;
+                    });
+                    $('#pool-share-users').html(innerHtml);
+                },
+                error: function (data) {
+                    console.error(data);
+                }
+            });
         });
     });
 </script>
