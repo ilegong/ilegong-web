@@ -29,6 +29,21 @@ class ShareManageController extends AppController
     );
 
     /**
+     * 新版发现页面管理
+     * 两块内容
+     *
+     *  - 控制轮播
+     *  - 控制Top榜
+     *  - 分类是写死的, 不用管它
+     *
+     * @access public
+     * @return void
+     */
+    public function find_content()
+    {
+    }
+
+    /**
      * 查询用户
      */
     public function search_users()

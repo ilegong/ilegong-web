@@ -38,6 +38,11 @@ class ShareOptController extends AppController {
         }
     }
 
+    public function home()
+    {
+        $this->layout = null;
+    }
+
     /**
      * fetch opt log list
      */
