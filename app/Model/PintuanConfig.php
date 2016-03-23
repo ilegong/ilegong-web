@@ -41,8 +41,8 @@ class PintuanConfig extends AppModel {
         ),
         5 => array(
             'detail_img' => array('/static/pintuan/images/cg_img01.gif', '/static/pintuan/images/cg_img02.jpg', '/static/pintuan/images/cg_img03.jpg', '/static/pintuan/images/cg_img04.jpg', '/static/pintuan/images/cg_img05.gif'),
-            'send_info' => '2016年3月31日20点截止报名，支付后三天内发货',
-            'send_date' => '支付后三天内'
+            'send_info' => '3月31日20点停止拼团，支付后3天内发货',
+            'send_date' => '支付后3天内发货'
         )
     );
 
