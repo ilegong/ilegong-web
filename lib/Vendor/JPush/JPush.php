@@ -40,7 +40,9 @@ class JPush {
         } else {
             $this->retryTimes = 1;
         }
-        $this->logFile = $logFile;
+        //$this->logFile = $logFile;
+        //设置日志文件路径
+        $this->logFile = DATA_PATH.'logs/jpush.log';
     }
 
     public function push() {

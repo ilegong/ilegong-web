@@ -171,10 +171,16 @@ const SUB_SHARER_REASON_TYPE_FROM_SPREAD = 'Spread';
 if (getenv('TONGSHIJIA_ENV') == 'product') {
     //const SAE_STATIC_FILE_PATH = 'http://static.tongshijia.com';
     define('SAE_STATIC_FILE_PATH', 'http://static.tongshijia.com');
+    define('JPUSH_APP_KEY', '');
+    define('JPUSH_APP_SECRET', '');
 } elseif (getenv('TONGSHIJIA_ENV') == 'test') {
     define('SAE_STATIC_FILE_PATH', 'http://static-test.tongshijia.com');
+    define('JPUSH_APP_KEY', '');
+    define('JPUSH_APP_SECRET', '');
 } else {
     define('SAE_STATIC_FILE_PATH', 'http://dev.tongshijia.com');
+    define('JPUSH_APP_KEY', '');
+    define('JPUSH_APP_SECRET', '');
 }
 const SAE_IMAGES_FILE_PATH = 'http://images.tongshijia.com';
 const ALIYUN_AVATAR_DOMAIN = 'http://static.tongshijia.com/avatar/';
