@@ -1,0 +1,122 @@
+/* line 48, _common.scss */
+
+footer {
+  text-align: center;
+  box-sizing: border-box;
+  position: fixed;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  padding: 7px 0 0;
+  background: #f7f7f9;
+  color: #666;
+  border-top: 1px #b3b4b6 solid;
+
+  a {
+    &:active, &:link, &:visited {
+      text-decoration: none;
+    }
+  }
+}
+
+/* line 62, _common.scss */
+
+/* line 66, _common.scss */
+
+/* line 71, _common.scss */
+
+/* line 78, _common.scss */
+
+.channel_bottom {
+  height: 49px;
+
+  .btm_item {
+    float: left;
+
+    &:nth-child(1), &:nth-child(3) {
+      width: 19%;
+    }
+  }
+
+  .iconfont {
+    font-size: 20px;
+    line-height: 15px;
+    color: #888;
+    margin-bottom: 0;
+  }
+
+  .iconfont-active {
+    font-size: 20px;
+    line-height: 15px;
+    color: #49bc6e;
+    margin-bottom: 0;
+  }
+
+  b {
+    font-size: 12px;
+    color: #888;
+    font-family: Hiragino Sans GB, 华文细黑, STHeiti, 微软雅黑, Microsoft YaHei, SimHei, Helvetica Neue, Helvetica, Arial, sans-serif !important;
+    font-weight: 400;
+
+    &.active {
+      color: #49bc6e;
+    }
+  }
+
+  .new {
+    position: relative;
+    width: 56%;
+    margin: 0 2%;
+    line-height: 30px;
+    background-color: #ffa200;
+    border-radius: 2px;
+    overflow: hidden;
+    float: left;
+    color: #fff;
+  }
+}
+
+/* line 80, _common.scss */
+
+/* line 82, _common.scss */
+
+/* line 85, _common.scss */
+
+/* line 89, _common.scss */
+
+/* line 95, _common.scss */
+
+/* line 101, _common.scss */
+
+/* line 106, _common.scss */
+
+/* line 110, _common.scss */
+
+/* line 124, _common.scss */
+
+.row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* line 128, _common.scss */
+
+.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* line 140, _common.scss */
+
+img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* line 145, _common.scss */
+
+.container {
+  max-width: 645px !important;
+  padding-left: 0;
+  padding-right: 0;
+}
