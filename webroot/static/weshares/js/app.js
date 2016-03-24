@@ -25,16 +25,28 @@
 })(window, window.angular);
 (function (window, angular) {
   angular.module('module.directives', [])
-      .directive('fallbackSrc', function () {
-    var fallbackSrc = {
-      link: function postLink(scope, iElement, iAttrs) {
-        iElement.bind('error', function() {
-          angular.element(this).attr("src", iAttrs.fallbackSrc);
-        });
-      }
-    }
-    return fallbackSrc;
-  });
+    .directive('fallbackSrc', function () {
+      var fallbackSrc = {
+        link: function postLink(scope, iElement, iAttrs) {
+          iElement.bind('error', function () {
+            angular.element(this).attr("src", iAttrs.fallbackSrc);
+          });
+        }
+      };
+      return fallbackSrc;
+    }).directive('stringToNumber', function () {
+      return {
+        require: 'ngModel',
+        link: function (scope, element, attrs, ngModel) {
+          ngModel.$parsers.push(function (value) {
+            return '' + value;
+          });
+          ngModel.$formatters.push(function (value) {
+            return parseInt(value);
+          });
+        }
+      };
+    });
 
 })(window, window.angular);
 
