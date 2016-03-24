@@ -5241,7 +5241,7 @@
         if(unitType == 1){
           cal_val = goodWeight;
         }
-        var gapVal = goodWeight - startUnits;
+        var gapVal = cal_val - startUnits;
         if (gapVal <= 0) {
           shipFee = startFee;
         } else {
