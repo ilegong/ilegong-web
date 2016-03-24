@@ -7,7 +7,7 @@ class ShareOptController extends AppController {
 
     var $uses = array('OptLog', 'User', 'VisitLog', 'UserRelation');
 
-    var $components = array('WeshareBuy', 'OptLogHelper');
+    var $components = array('WeshareBuy', 'OptLogHelper', 'ShareUtil');
 
     /**
      * pys index view
@@ -41,6 +41,16 @@ class ShareOptController extends AppController {
     public function home()
     {
         $this->layout = null;
+        $carousel = ClassRegistry::init('NewFind')->get_all_carousel();
+        $this->set('carousel', $carousel);
+    }
+
+    public function category($category)
+    {
+        $this->layout = null;
+        $products = $this->ShareUtil->get_index_product($category);
+
+        $this->set('products', $products);
     }
 
     /**

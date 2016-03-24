@@ -25,6 +25,8 @@ class NewFind extends AppModel {
                     'id' => 1,
                     'banner' => '',
                     'link' => '',
+                    'title' => '',
+                    'description' => '',
                     'type' => CAROUSEL_TYPE,
                     'sort' => 0,
                     'deleted' => 0,

@@ -3,6 +3,8 @@ CREATE TABLE `cake_new_finds` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `banner` varchar(255) NOT NULL,
   `link` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL COMMENT '图片的描述',
+  `description` varchar(255) NOT NULL COMMENT '图片的描述',
   `type` smallint NOT NULL DEFAULT '0' COMMENT '0默认未定, 不会显示. 1表示轮播, 2表示TOP榜',
   `sort` int(11) NOT NULL DEFAULT '0',
   `deleted` smallint(6) NOT NULL DEFAULT '0',
