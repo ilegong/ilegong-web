@@ -3,7 +3,7 @@
 class UserApiController extends AppController
 {
     public $components = array('OAuth.OAuth', 'ChatUtil', 'WeshareBuy', 'ShareUtil');
-    public $uses = array('User', 'UserFriend', 'UserLevel', 'UserRelation');
+    public $uses = array('User', 'UserFriend', 'UserLevel', 'UserRelation', 'UserFans');
 
     public function beforeFilter()
     {
@@ -61,6 +61,11 @@ class UserApiController extends AppController
         return;
     }
 
+    /**
+     * @param $page
+     * @param $limit
+     * 接口要替换
+     */
     public function load_fans($page, $limit)
     {
         $user_id = $this->currentUser['id'];
@@ -79,6 +84,37 @@ class UserApiController extends AppController
         }
         $users = $this->ChatUtil->get_users_info($fans_id);
         echo json_encode($users);
+        return;
+    }
+
+    /**
+     * @param $type 0=>粉丝 1=>关注
+     * @param $uid
+     * @param $page
+     */
+    public function get_u_list_data($type, $uid, $page)
+    {
+        $query = $_REQUEST['query'];
+        if ($type == 0) {
+            $data = $this->UserFans->get_fans($uid, $page, $query);
+        } else {
+            $data = $this->UserFans->get_subs($uid, $page, $query);
+        }
+        echo json_encode($data);
+        return;
+    }
+
+    /**
+     * 获取评论的数据
+     */
+    public function get_comment_list()
+    {
+        $uid = $this->currentUser['id'];
+        $user_share_data = $this->WeshareBuy->prepare_user_share_info($uid);
+        $my_create_share_ids = $user_share_data['my_create_share_ids'];
+        $shareCommentData = $this->WeshareBuy->load_sharer_comment_data($my_create_share_ids, $uid);
+        $userCommentData = $this->WeshareBuy->load_user_share_comments($uid);
+        echo json_encode(array('sharer_comment_data' => $shareCommentData, 'user_comment_data' => $userCommentData));
         return;
     }
 
