@@ -2385,17 +2385,20 @@ function map_user_avatar($var){
 function get_index_tags(){
     return array(
         array(
-            'id' => 0,
-            'name' => '新品爆款'
-        ), array(
             'id' => 1,
-            'name' => '水果蔬菜'
+            'name' => '果蔬乐园'
         ), array(
             'id' => 2,
-            'name' => '肉蛋粮油'
+            'name' => '肉蛋海鲜'
         ), array(
             'id' => 3,
-            'name' => '零食其他'
+            'name' => '干果零食'
+        ), array(
+            'id' => 4,
+            'name' => '粮油副食'
+        ), array(
+            'id' => 5,
+            'name' => '其他'
         )
     );
 }
