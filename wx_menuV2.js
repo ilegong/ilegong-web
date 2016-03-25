@@ -41,26 +41,15 @@
         "name":"线上活动",
         "sub_button":[
             {
+              "type":"view",
+              "name":"浩子的朋友们",
+              "url":"https://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=412691161&idx=1&sn=bdb91d7ee103ac1fb98b2e12c8f560b5"
+            },
+            {
                 "type":"view",
                 "name":"关于我们",
                 "url":"http://www.pyshuo.com/subscripts/about_us.html"
-            },
-            {
-                "type":"view",
-                "name":"投稿有奖",
-                "url":"http://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=203733076&idx=1&sn=e9954ecd208dd60fb470ed6733aff026#rd"
-            },
-            {
-                "type":"view",
-                "name":"线上活动",
-                "url":"http://www.pyshuo.com/subscripts/xian_shang_huo_dong.html"
-            },
-            {
-                "type":"view",
-                "name":"微商城",
-                "url":"http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=204634769&idx=1&sn=f5af9cff6e55b6a2835327431e47f2ff#rd"
             }
-
         ]
     }
 ]
