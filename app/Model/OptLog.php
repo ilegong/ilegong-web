@@ -54,7 +54,7 @@ class OptLog extends AppModel {
             // 当用户选定只看fllowed的团长的东西时, 我们需要做一些过滤.
             // 我决定在这里给用户显示它关注的非团长信息, 都关注了,
             // 不显示不够意思
-            $info = ClassRegistry::init('User')->get_my_proxys();
+            $info = ClassRegistry::init('User')->get_my_proxys($this->uid);
             if (!$info) {
                 return false;
             }
