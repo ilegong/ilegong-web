@@ -135,7 +135,7 @@ main {
         right: 20px; }
         /* line 67, category.scss */
         main .product-item-header .follow-block-area .follow-block.unfollow {
-          display: block;
+          display: none;
           background-color: #fff;
           border: 1px solid #bbb;
           border-radius: 0 0 5px 5px;
