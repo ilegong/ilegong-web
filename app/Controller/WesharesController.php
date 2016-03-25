@@ -1322,7 +1322,7 @@ class WesharesController extends AppController
     {
         $this->layout = 'weshare_bootstrap';
 
-        $shares = $this->WeshareBuy->get_shares_list([3088, 3101, 3061, 2194, 2617, 3040, 3055]);
+        $shares = $this->WeshareBuy->get_shares_list([3088, 3101, 3061, 2194, 2617, 3040, 3055, 3169, 3170]);
 
         $this->set('shares', $shares);
     }

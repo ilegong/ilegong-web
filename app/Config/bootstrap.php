@@ -171,16 +171,16 @@ const SUB_SHARER_REASON_TYPE_FROM_SPREAD = 'Spread';
 if (getenv('TONGSHIJIA_ENV') == 'product') {
     //const SAE_STATIC_FILE_PATH = 'http://static.tongshijia.com';
     define('SAE_STATIC_FILE_PATH', 'http://static.tongshijia.com');
-    define('JPUSH_APP_KEY', '');
-    define('JPUSH_APP_SECRET', '');
+    define('JPUSH_APP_KEY', '32a7a17d552b6dd3d7736c72');
+    define('JPUSH_APP_SECRET', '08be41e830d5faf1d5f6b660');
 } elseif (getenv('TONGSHIJIA_ENV') == 'test') {
     define('SAE_STATIC_FILE_PATH', 'http://static-test.tongshijia.com');
-    define('JPUSH_APP_KEY', '');
-    define('JPUSH_APP_SECRET', '');
+    define('JPUSH_APP_KEY', 'dca84c4492a450f738918b65');
+    define('JPUSH_APP_SECRET', '376cf6f26a72c31ca769da44');
 } else {
     define('SAE_STATIC_FILE_PATH', 'http://dev.tongshijia.com');
-    define('JPUSH_APP_KEY', '');
-    define('JPUSH_APP_SECRET', '');
+    define('JPUSH_APP_KEY', 'dca84c4492a450f738918b65');
+    define('JPUSH_APP_SECRET', '376cf6f26a72c31ca769da44');
 }
 const SAE_IMAGES_FILE_PATH = 'http://images.tongshijia.com';
 const ALIYUN_AVATAR_DOMAIN = 'http://static.tongshijia.com/avatar/';
