@@ -29,108 +29,42 @@
       </header>
 
       <main>
+      {{loop $products $key $product}}
         <div class="row product-item">
           <div class="product-item-header">
             <div class="col-xs-6 proxy-info">
-              <img alt="60x60" data-src="holder.js/60x60?auto=yes&theme=sky&textmode=exact" data-holder-rendered="true">
+              <img src="{{$product['share_user_img']}}">
               <div class="name-level">
                 <h3 class="proxy-title">
-                  小宝妈
+                  {{$product['share_user_nickname']}}
                 </h3>
-                <span class="proxy-level">L2正式团长</span>
+                <span class="proxy-level">{{$product['share_user_level']}}</span>
               </div>
             </div>
             <div class="col-xs-2 col-xs-offset-4 follow-block-area">
               <div class="follow-block">
-                已关注
+                已关注({{$product['check_user_relation']}})
                 <i class="fa fa-angle-down"></i>
               </div>
               <div class="follow-block unfollow">
-                已关注
-                <i class="fa fa-angle-down"></i>
+                取消关注
               </div>
             </div>
           </div>
           <div class="product-item-body">
-            <img alt="650x350" data-src="holder.js/650x350?auto=yes&theme=vine&textmode=exact" data-holder-rendered="true">
-            <h2 class="product-title">芝麻加新衣基德草莓啊</h2>
+            <img src="{{$product['share_img']}}">
+            <h2 class="product-title">{{$product['share_name']}}</h2>
             <p class="description">
-              北纬43°，“寒地黑土”松花江北岸风光旖旎，光照充足土壤有机质含量远高于其他地区，收获季节昼夜温差大利于营养质积累是世界著名玉米黄金种植带在这条宝贵稀缺的黑土黄金种植带辟建2万亩自有有机生态种植基地农作物，如人之生长玉米...更多>>
+                {{$product['share_description']}}
+                {{if ($product['description_more'])}}...更多&gt;&gt;&gt;{{/if}}
             </p>
           </div>
           <div class="product-item-footer">
-            <p class="icon-item">报名(12)</p>
-            <p class="icon-item">浏览(81)</p>
+            <p class="icon-item">报名({{$product['baoming']}})</p>
+            <p class="icon-item">浏览({{$product['liulan']}})</p>
           </div>
         </div>
-        <div class="row product-item">
-          <div class="product-item-header">
-            <div class="col-xs-6 proxy-info">
-              <img alt="60x60" data-src="holder.js/60x60?auto=yes&theme=sky&textmode=exact" data-holder-rendered="true">
-              <div class="name-level">
-                <h3 class="proxy-title">
-                  小宝妈
-                </h3>
-                <span class="proxy-level">L2正式团长</span>
-              </div>
-            </div>
-            <div class="col-xs-2 col-xs-offset-4 follow-block-area">
-              <div class="follow-block">
-                已关注
-                <i class="fa fa-angle-down"></i>
-              </div>
-              <div class="follow-block unfollow">
-                已关注
-                <i class="fa fa-angle-down"></i>
-              </div>
-            </div>
-          </div>
-          <div class="product-item-body">
-            <img alt="650x350" data-src="holder.js/650x350?auto=yes&theme=vine&textmode=exact" data-holder-rendered="true">
-            <h2 class="product-title">芝麻加新衣基德草莓啊</h2>
-            <p class="description">
-              北纬43°，“寒地黑土”松花江北岸风光旖旎，光照充足土壤有机质含量远高于其他地区，收获季节昼夜温差大利于营养质积累是世界著名玉米黄金种植带在这条宝贵稀缺的黑土黄金种植带辟建2万亩自有有机生态种植基地农作物，如人之生长玉米...更多>>
-            </p>
-          </div>
-          <div class="product-item-footer">
-            <p class="icon-item">报名(12)</p>
-            <p class="icon-item">浏览(81)</p>
-          </div>
-        </div>
-        <div class="row product-item">
-          <div class="product-item-header">
-            <div class="col-xs-6 proxy-info">
-              <img alt="60x60" data-src="holder.js/60x60?auto=yes&theme=sky&textmode=exact" data-holder-rendered="true">
-              <div class="name-level">
-                <h3 class="proxy-title">
-                  小宝妈
-                </h3>
-                <span class="proxy-level">L2正式团长</span>
-              </div>
-            </div>
-            <div class="col-xs-2 col-xs-offset-4 follow-block-area">
-              <div class="follow-block">
-                已关注
-                <i class="fa fa-angle-down"></i>
-              </div>
-              <div class="follow-block unfollow">
-                已关注
-                <i class="fa fa-angle-down"></i>
-              </div>
-            </div>
-          </div>
-          <div class="product-item-body">
-            <img alt="650x350" data-src="holder.js/650x350?auto=yes&theme=vine&textmode=exact" data-holder-rendered="true">
-            <h2 class="product-title">芝麻加新衣基德草莓啊</h2>
-            <p class="description">
-              北纬43°，“寒地黑土”松花江北岸风光旖旎，光照充足土壤有机质含量远高于其他地区，收获季节昼夜温差大利于营养质积累是世界著名玉米黄金种植带在这条宝贵稀缺的黑土黄金种植带辟建2万亩自有有机生态种植基地农作物，如人之生长玉米...更多>>
-            </p>
-          </div>
-          <div class="product-item-footer">
-            <p class="icon-item">报名(12)</p>
-            <p class="icon-item">浏览(81)</p>
-          </div>
-        </div>
+        {{/loop}}
       </main>
 
       <footer class="channel_bottom" id="share-bottom-nav">

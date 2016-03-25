@@ -1881,12 +1881,32 @@ class ShareUtilComponent extends Component
         $uid = $_SESSION['Auth']['User']['id'];
         $my_proxy = $userModel->get_my_proxys($uid);
 
+        $level_pool = [
+            0 => '分享达人',
+            1 => '实习团长',
+            2 => '正式团长',
+            3 => '优秀团长',
+            4 => '高级团长',
+            5 => '资深团长',
+            6 => '首席团长'
+        ];
+
         $res = [];
         foreach($data as $v) {
+            $level = $v['UserLevel']['data_value'];
             $tmp = $v['IndexProduct'];
             $tmp['share_user_nickname'] = $v['User']['nickname'];
-            $tmp['share_user_level'] = $v['UserLevel']['data_value'];
-            $tmp['share_description'] = $v['Weshare']['description'];
+            $tmp['share_user_level'] = "L{$level}{$level_pool[$level]}";
+            
+            $description = str_replace('<br />', '', $v['Weshare']['description']);
+            if (mb_strlen($description) > 110) {
+                $tmp['share_description'] = mb_substr($description, 0, 110) . "...";
+                $tmp['description_more'] = true;
+            } else {
+                $tmp['share_description'] = $description;
+                $tmp['description_more'] = false;
+            }
+
             $tmp['check_user_relation'] = in_array($v['User']['id'], $my_proxy);
             // 缺少浏览量
             // 1. 报名数
@@ -1897,7 +1917,7 @@ class ShareUtilComponent extends Component
             $res[] = $tmp;
         }
 
-        print_r($res);die();
+        return $res;
     }
 
     public function get_index_product($tag_id){

@@ -61,6 +61,9 @@ class ShareOptController extends AppController {
     public function category($category)
     {
         $this->layout = null;
+        $products = $this->ShareUtil->get_product_by_category($category);
+
+        $this->set('products', $products);
     }
 
     /**
@@ -125,6 +128,7 @@ class ShareOptController extends AppController {
             'opt_logs' => $opt_logs,
             'combine_data' => $combine_data
         ];
+
 
         return $data;
     }

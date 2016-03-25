@@ -47,7 +47,7 @@
           <div class="col-xs-4 category-block left-side">
             <h3 class="category-title">果蔬乐园<span>只吃最新鲜的</span></h3>
             <a href="/share_opt/category/1">
-              <img alt="215x300" data-src="holder.js/215x300?auto=yes&theme=sky&textmode=exact" data-holder-rendered="true">
+              <img src="http://static.tongshijia.com/images/index/122a3d90-f253-11e5-8f0d-00163e1600b6.jpg" />
             </a>
           </div>
           <div class="col-xs-8 category-block">
@@ -55,25 +55,25 @@
               <div class="col-xs-6 category-block cate-a">
                 <h3 class="category-title">肉蛋海鲜</h3>
                 <a href="/share_opt/category/2">
-                  <img alt="215x150" data-src="holder.js/215x150?auto=yes&theme=vine&textmode=exact" data-holder-rendered="true">
+                  <img src="http://static.tongshijia.com/images/index/247139d6-f253-11e5-8f0d-00163e1600b6.jpg" />
                 </a>
               </div>
               <div class="col-xs-6 category-block cate-b">
                 <h3 class="category-title">干果零食</h3>
                 <a href="/share_opt/category/3">
-                  <img alt="215x150" data-src="holder.js/215x150?auto=yes&theme=sky&textmode=exact" data-holder-rendered="true">
+                  <img src="http://static.tongshijia.com/images/index/31001028-f253-11e5-8f0d-00163e1600b6.jpg" />
                 </a>
               </div>
               <div class="col-xs-6 category-block cate-c">
                 <h3 class="category-title">粮油副食</h3>
                 <a href="/share_opt/category/4">
-                  <img alt="215x150" data-src="holder.js/215x150?auto=yes&theme=lava&textmode=exact" data-holder-rendered="true">
+                  <img src="http://static.tongshijia.com/images/index/da991e28-f252-11e5-8f0d-00163e1600b6.jpg" />
                 </a>
               </div>
               <div class="col-xs-6 category-block cate-d">
                 <h3 class="category-title">好吃的辣么多<br />看看还有什么</h3>
                 <a href="/share_opt/category/5">
-                  <img alt="138x138" data-src="holder.js/138x138?auto=yes&theme=vine&textmode=exact" data-holder-rendered="true">
+                  <img src="http://static.tongshijia.com/images/index/0223220e-f253-11e5-8f0d-00163e1600b6.jpg" />
                 </a>
               </div>
             </div>
@@ -87,12 +87,16 @@
             <h3 class="range-title">
               {{$top_rank_first['title']}}
             </h3>
-            <img src="{{$top_rank_first['banner']}}" />
+            <a href="{{$top_rank_first['link']}}">
+              <img src="{{$top_rank_first['banner']}}" />
+            </a>
           </div>
           {{loop $top_rank $key $item}}
           <div class="col-xs-4 top-range-items">
             <h3 class="range-title">{{$item['title']}}</h3>
-            <img src="{{$item['banner']}}" />
+            <a href="{{$item['link']}}">
+              <img src="{{$item['banner']}}" />
+            </a>
           </div>
           {{/loop}}
         </div>

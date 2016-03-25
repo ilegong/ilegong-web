@@ -136,8 +136,7 @@ class OptLogHelperComponent extends Component {
         ];
 
         $ret = [];
-        $uid = $_SESSION['Auth']['User']['id'];
-        $my_proxys = ClassRegistry::init('OptLog')->get_my_proxys($uid);
+        $my_proxys = ClassRegistry::init('User')->get_my_proxys($this->uid);
         foreach($data as $item) {
             $share = $item['Weshare'];
             $user = $item['User'];

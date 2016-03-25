@@ -39,6 +39,7 @@
     margin-left: 20px;
     font-size: 18px;
     font-weight: bold;
+    display: none;
   }
 
   &.left-side h3 {
@@ -69,11 +70,13 @@
       text-align: center;
     }
 
-    img {
-      border-radius: 100%;
-      max-width: 70%;
-      max-height: 70%;
-    }
+    /*
+     *img {
+     *  border-radius: 100%;
+     *  max-width: 70%;
+     *  max-height: 70%;
+     *}
+     */
   }
 
   .category-title {
