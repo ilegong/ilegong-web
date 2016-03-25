@@ -1840,6 +1840,66 @@ class ShareUtilComponent extends Component
         return get_user_level_msg_count($user_val);
     }
 
+    public function get_product_by_category($category){
+        $indexProductM = ClassRegistry::init('IndexProduct');
+        $data = $indexProductM->find('all', [
+            'conditions' => [
+                'IndexProduct.tag_id' => $category,
+                'IndexProduct.deleted' => DELETED_NO,
+            ],
+            'fields' => [
+                'IndexProduct.*',
+                'User.*',
+                'UserLevel.*',
+                'Weshare.*',
+            ],
+            'joins' => [
+                [
+                    'table' => 'users',
+                    'alias' => 'User',
+                    'conditions' => [
+                        'User.id = IndexProduct.share_user_id',
+                    ],
+                ], [
+                    'table' => 'user_levels',
+                    'alias' => 'UserLevel',
+                    'conditions' => [
+                        'UserLevel.data_id = IndexProduct.share_user_id',
+                    ],
+                ], [
+                    'table' => 'weshares',
+                    'alias' => 'Weshare',
+                    'conditions' => [
+                        'Weshare.id = IndexProduct.share_id',
+                    ],
+                ],
+            ],
+            'order' => ['sort_val ASC']
+        ]);
+
+        $userModel = ClassRegistry::init('User');
+        $uid = $_SESSION['Auth']['User']['id'];
+        $my_proxy = $userModel->get_my_proxys($uid);
+
+        $res = [];
+        foreach($data as $v) {
+            $tmp = $v['IndexProduct'];
+            $tmp['share_user_nickname'] = $v['User']['nickname'];
+            $tmp['share_user_level'] = $v['UserLevel']['data_value'];
+            $tmp['share_description'] = $v['Weshare']['description'];
+            $tmp['check_user_relation'] = in_array($v['User']['id'], $my_proxy);
+            // 缺少浏览量
+            // 1. 报名数
+            $tmp['baoming'] = $this->WeshareBuy->get_share_and_all_refer_share_count($v['Weshare']['id'], $v['User']['id']);
+            // 2. 浏览数
+            $tmp['liulan'] = $v['Weshare']['view_count'];
+
+            $res[] = $tmp;
+        }
+
+        print_r($res);die();
+    }
+
     public function get_index_product($tag_id){
         $key = INDEX_VIEW_PRODUCT_CACHE_KEY.'_'.$tag_id;
         $cache_data = Cache::read($key);

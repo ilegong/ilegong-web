@@ -45,12 +45,18 @@ class ShareOptController extends AppController {
         $this->set('carousel', $carousel);
     }
 
+    public function category_ajax($category)
+    {
+        $this->layout = null;
+        $products = $this->ShareUtil->get_product_by_category($category);
+
+        echo json_encode($products);
+        exit();
+    }
+
     public function category($category)
     {
         $this->layout = null;
-        $products = $this->ShareUtil->get_index_product($category);
-
-        $this->set('products', $products);
     }
 
     /**
