@@ -54,7 +54,7 @@ class OptLog extends AppModel {
             // 当用户选定只看fllowed的团长的东西时, 我们需要做一些过滤.
             // 我决定在这里给用户显示它关注的非团长信息, 都关注了,
             // 不显示不够意思
-            $info = $this->get_my_proxys();
+            $info = ClassRegistry::init('User')->get_my_proxys();
             if (!$info) {
                 return false;
             }
@@ -142,23 +142,6 @@ class OptLog extends AppModel {
         $data = $this->find('first', $option);
 
         return $data['OptLog']['obj_id'];
-    }
-
-    /* 获取用户关注的团长ID */
-    public function get_my_proxys($uid = false)
-    {
-        $uid = $uid ? $uid: $this->uid;
-        $userRelationM = ClassRegistry::init('UserRelation');
-        $info = $userRelationM->find('all', [
-            'conditions' => [
-                'follow_id' => $uid,
-                'deleted' => DELETED_NO,
-            ],
-            'fields' => ['user_id'],
-        ]);
-        $info = Hash::extract($info, '{n}.UserRelation.user_id');
-
-        return $info;
     }
 
     /**

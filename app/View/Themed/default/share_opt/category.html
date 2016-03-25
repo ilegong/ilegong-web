@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>发现</title>
+    <link href="{{$STATIC_FILE_PATH}}/static/new_find/css/vendor/bootstrap.css?v=0.101" rel="stylesheet" type="text/css" />
+    <link href="{{$STATIC_FILE_PATH}}/static/new_find/css/vendor/font-awesome.css?v=0.101" rel="stylesheet" type="text/css" />
+    <link href="{{$STATIC_FILE_PATH}}/static/new_find/css/category.css?v=0.101" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body>
+    <div class='container'>
+      <header>
+        <div class="row">
+          <div class="col-xs-4">
+            <h3 class="back-btn">
+              <i class="fa fa-angle-left"></i>
+              返回
+            </h3>
+          </div>
+          <div class="col-xs-4">
+            <h3 class="text-center">
+              分类名称
+            </h3>
+          </div>
+        </div>
+      </header>
+
+      <main>
+      {{loop $products $key $product}}
+        <div class="row product-item">
+          <div class="product-item-header">
+            <div class="col-xs-6 proxy-info">
+              <img src="{{$product['share_user_img']}}">
+              <div class="name-level">
+                <h3 class="proxy-title">
+                  {{$product['share_user_nickname']}}
+                </h3>
+                <span class="proxy-level">{{$product['share_user_level']}}</span>
+              </div>
+            </div>
+            <div class="col-xs-2 col-xs-offset-4 follow-block-area">
+              <div class="follow-block">
+                已关注({{$product['check_user_relation']}})
+                <i class="fa fa-angle-down"></i>
+              </div>
+              <div class="follow-block unfollow">
+                取消关注
+              </div>
+            </div>
+          </div>
+          <div class="product-item-body">
+            <img src="{{$product['share_img']}}">
+            <h2 class="product-title">{{$product['share_name']}}</h2>
+            <p class="description">
+                {{$product['share_description']}}
+                {{if ($product['description_more'])}}...更多&gt;&gt;&gt;{{/if}}
+            </p>
+          </div>
+          <div class="product-item-footer">
+            <p class="icon-item">报名({{$product['baoming']}})</p>
+            <p class="icon-item">浏览({{$product['liulan']}})</p>
+          </div>
+        </div>
+        {{/loop}}
+      </main>
+
+      <footer class="channel_bottom" id="share-bottom-nav">
+        <a class="btm_item" href="/" style="width: 25%;">
+          <p class="iconfont"><i class="fa fa-home"></i></p>
+          <b>首页</b>
+        </a>
+        <a class="btm_item" href="/share_opt/index.html" style="width: 25%;">
+          <p class="iconfont-active"><i class="fa fa-search"></i></p>
+          <b class="active">发现</b>
+        </a>
+        <a class="btm_item" href="/weshares/add" style="width: 25%;">
+          <p class="iconfont"><i class="fa fa-share-square-o"></i></p>
+          <b>我要分享</b>
+        </a>
+        <a class="btm_item" href="/weshares/user_share_info/" style="width: 25%;">
+          <p class="iconfont"><i class="fa fa-user"></i></p>
+          <b>我的</b>
+        </a>
+      </footer>
+    </div>
+    <script type='text/javascript' src='{{$STATIC_FILE_PATH}}/static/new_find/js/vendor/jquery.js'></script>
+    <script type='text/javascript' src='{{$STATIC_FILE_PATH}}/static/new_find/js/vendor/holder.js'></script>
+    <script type='text/javascript' src='{{$STATIC_FILE_PATH}}/static/new_find/js/vendor/bootstrap.js'></script>
+    <script type='text/javascript' src='{{$STATIC_FILE_PATH}}/static/new_find/js/category.js'></script>
+  </body>
+</html>
+

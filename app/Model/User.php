@@ -20,7 +20,7 @@ class User extends AppModel {
      * @var string
      * @access public
      */
-    var $name = 'User';   
+    var $name = 'User';
 
     /**
      * Validation
@@ -109,6 +109,22 @@ class User extends AppModel {
             Cache::write($score_key, $score);
         }
         return $score;
+    }
+
+    /* 获取用户关注的团长ID */
+    public function get_my_proxys($uid)
+    {
+        $userRelationM = ClassRegistry::init('UserRelation');
+        $info = $userRelationM->find('all', [
+            'conditions' => [
+                'follow_id' => $uid,
+                'deleted' => DELETED_NO,
+            ],
+            'fields' => ['user_id'],
+        ]);
+        $info = Hash::extract($info, '{n}.UserRelation.user_id');
+
+        return $info;
     }
 
     /**
