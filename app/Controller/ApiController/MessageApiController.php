@@ -61,6 +61,10 @@ class MessageApiController extends AppController
         $uid = $this->currentUser['id'];
         $cond = ['obj_creator' => $uid, 'obj_type' => OPT_LOG_SHARE_COMMENT];
         $last_comment_log = $this->get_opt_log($cond);
+        $user_id = $last_comment_log['OptLog']['user_id'];
+        $u_cond = ['id' => $user_id];
+        $user_info = $this->get_user_info($u_cond);
+        echo json_encode(array('user_id' => $user_id, 'nickname' => $user_info['User']['nickname'], 'datetime' => $last_comment_log['OptLog']['created']));
 
     }
 
