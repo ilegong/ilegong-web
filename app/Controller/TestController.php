@@ -13,7 +13,7 @@ App::import('Vendor', 'LocationHelper', array('file' => 'LocationHelper/Distance
 class TestController extends AppController
 {
 
-    public $components = array('Weixin', 'WeshareBuy', 'OrderExpress', 'Logistics', 'PintuanHelper', 'ShareUtil', 'RedisQueue', 'DeliveryTemplate');
+    public $components = array('Weixin', 'WeshareBuy', 'OrderExpress', 'Logistics', 'PintuanHelper', 'ShareUtil', 'RedisQueue', 'DeliveryTemplate', 'JPush');
     public $uses = array('Order', 'Oauthbind');
 
 
@@ -56,6 +56,13 @@ class TestController extends AppController
 //        echo json_encode(array('testCase' => 7, 'ship_fee' => $ship_fee));
 //        return;
 //    }
+
+    public function test_push(){
+        $this->autoRender=false;
+        $result = $this->JPush->push('893376');
+        echo json_encode($result);
+        return;
+    }
 
 
     public function add_queue(){
