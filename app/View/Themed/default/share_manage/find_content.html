@@ -52,11 +52,55 @@
       <a href="javascript:void(0);" class='btn btn-default' id='new-carousel-item'>添加新条目</a>
       <button type="submit" class="btn btn-primary">保存</button>
     </form>
-
-
-
   </div>
   <!-- /.row -->
+
+  <div class="row">
+    <h2 class="page-header">Top榜管理</h2>
+
+    <form action="/share_manage/find_content_save_top_rank" method='post'>
+      {{loop $top_rank_model $key $top_rank}}
+      <div class="top_rank-item row">
+        <div class="form-group col-sm-3">
+          <label>选择图片</label>
+          <input type="text" class='form-control' value="{{$top_rank['banner']}}" name="data[Top_rank][{{$key}}][banner]" placeholder="Url地址, 如: http://www.example.com/file.png" autocomplete="off">
+          <p class="help-block">
+          先到<a href='http://images.tongshijia.com/upload' target="_blank" style='color: red;font-weight: bold;'>这个</a>
+          页面去上传图片, 然后把链接拷贝进来即可
+          </p>
+        </div>
+        <div class="form-group col-sm-3">
+          <label>跳转链接</label>
+          <input type="text" value="{{$top_rank['link']}}" name="data[Top_rank][{{$key}}][link]" class="form-control" placeholder="跳转链接" autocomplete="off">
+          <p class="help-block">当点击轮播图片时, 跳转到的链接</p>
+        </div>
+        <div class="form-group col-sm-2">
+          <label>标题</label>
+          <input type="text" value="{{$top_rank['title']}}" name="data[Top_rank][{{$key}}][title]" class="form-control" placeholder="标题" autocomplete="off">
+          <p class="help-block">SEO备用隐藏字段</p>
+        </div>
+        <div class="form-group col-sm-2">
+          <label>描述</label>
+          <input type="text" value="{{$top_rank['description']}}" name="data[Top_rank][{{$key}}][description]" class="form-control" placeholder="描述" autocomplete="off">
+          <p class="help-block">SEO备用隐藏字段</p>
+        </div>
+        <div class="form-group col-sm-1">
+          <label>排序</label>
+          <input type="number" value="{{$top_rank['sort']}}" name="data[Top_rank][{{$key}}][sort]" class='form-control' autocomplete="off">
+        </div>
+        <div class="form-group col-sm-1">
+          <label>操作</label>
+          <a href="javascript:void(0);" style='display: block;' class='btn btn-danger delete-top_rank-item' data-target-id='{{$top_rank['id']}}'>
+            删除
+          </a>
+        </div>
+        <input type="hidden" class='form-control exist_ids' value="{{$top_rank['id']}}" name="data[Top_rank][{{$key}}][id]">
+      </div>
+      {{/loop}}
+      <a href="javascript:void(0);" class='btn btn-default' id='new-top_rank-item'>添加新条目</a>
+      <button type="submit" class="btn btn-primary">保存</button>
+    </form>
+  </div>
 </div>
 <!-- /.container-fluid -->
 
@@ -109,5 +153,56 @@ $(function (){
 
   // 初始化删除按钮
   update_delete_carousel_item();
+});
+
+
+function update_delete_top_rank_item() {
+  // 先解绑所有click事件
+  $('.delete-top_rank-item').unbind('click');
+
+  // 重新绑定
+  $('.delete-top_rank-item').on('click', function(){
+    console.log('Delete item');
+    var del_id = $(this).attr('data-target-id');
+    if (del_id) {
+      $.ajax({
+        url: '/share_manage/find_content_delete_top_rank/' + del_id,
+        type: 'get',
+        dataType: 'json',
+        success: function (data){
+          if (data.err == 0) {
+            $(this).parents('.top_rank-item').remove();
+          }
+        }.bind(this),
+      });
+    } else {
+      $(this).parents('.top_rank-item').remove();
+    }
+  });
+}
+$(function (){
+  $('#new-top_rank-item').on('click', function (){
+    console.log('Hello new top_rank.');
+
+    // 有了删除以后, 使用长度作为id就不合适了. 改用随机数
+    // var len = $('.top_rank-item').length;
+    var len = Math.floor(Math.random() * 1000000000);
+    var newItem = $('.top_rank-item').eq(0).clone();
+    newItem.find('input[type!=hidden]').each(function (){
+      var tmp_name = $(this).attr('name');
+      $(this).attr('name', tmp_name.replace(/(data\[[a-zA-Z_-]+\]\[)\d+(\]\[[a-zA-Z_-]+\])/g, '$1' + len + '$2'));
+      $(this).attr('value', '');
+      $(this).val('');
+    });
+    newItem.find('.exist_ids').remove();
+    newItem.find('.delete-top_rank-item').attr('data-target-id', '');
+
+    $('#new-top_rank-item').before(newItem);
+    // 新建项目绑定事件
+    update_delete_top_rank_item();
+  });
+
+  // 初始化删除按钮
+  update_delete_top_rank_item();
 });
 </script>

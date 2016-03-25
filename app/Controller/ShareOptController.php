@@ -42,7 +42,11 @@ class ShareOptController extends AppController {
     {
         $this->layout = null;
         $carousel = ClassRegistry::init('NewFind')->get_all_carousel();
+        $top_rank = ClassRegistry::init('NewFind')->get_all_top_rank();
         $this->set('carousel', $carousel);
+        $this->set('top_rank_first', $top_rank[0]);
+        unset($top_rank[0]);
+        $this->set('top_rank', $top_rank);
     }
 
     public function category_ajax($category)

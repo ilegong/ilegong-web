@@ -4,13 +4,14 @@ define(TOP_RANK_TYPE, 2);
 /**
  * new find and its manage modal
  */
-class NewFind extends AppModel {
+class NewFind extends AppModel
+{
 
-    public function get_all_carousel()
+    public function get_all_item($type)
     {
         $data = $this->find('all', [
             'conditions' => [
-                'type' => CAROUSEL_TYPE,
+                'type' => $type,
                 'deleted' => DELETED_NO
             ],
             'order' => 'sort ASC'
@@ -27,7 +28,7 @@ class NewFind extends AppModel {
                     'link' => '',
                     'title' => '',
                     'description' => '',
-                    'type' => CAROUSEL_TYPE,
+                    'type' => $type,
                     'sort' => 0,
                     'deleted' => 0,
                 ],
@@ -37,14 +38,34 @@ class NewFind extends AppModel {
         return $data;
     }
 
-    public function save_all_carousel($data)
+    public function get_all_top_rank()
+    {
+        return $this->get_all_item(TOP_RANK_TYPE);
+    }
+
+    public function get_all_carousel()
+    {
+        return $this->get_all_item(CAROUSEL_TYPE);
+    }
+
+    public function save_all_item($data, $type)
     {
         foreach ($data as $item) {
             if ($this->validate($item)) {
-                $item['type'] = CAROUSEL_TYPE;
+                $item['type'] = $type;
                 $this->save_item($item);
             }
         }
+    }
+
+    public function save_all_top_rank($data)
+    {
+        $this->save_all_item($data, TOP_RANK_TYPE);
+    }
+
+    public function save_all_carousel($data)
+    {
+        $this->save_all_item($data, CAROUSEL_TYPE);
     }
 
     private function validate($item)

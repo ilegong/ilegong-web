@@ -85,48 +85,16 @@
         <div class="row">
           <div class="col-xs-12 top-range-items top-range-first">
             <h3 class="range-title">
-              进口海鲜狂欢趴
-              &nbsp;&nbsp;&nbsp;&nbsp;
-              本味赴宴
+              {{$top_rank_first['title']}}
             </h3>
-            <img alt="645x200" data-src="holder.js/645x200?auto=yes&theme=vine&textmode=exact" data-holder-rendered="true">
+            <img src="{{$top_rank_first['banner']}}" />
           </div>
+          {{loop $top_rank $key $item}}
           <div class="col-xs-4 top-range-items">
-            <h3 class="range-title">干果零食</h3>
-            <img alt="215x150" data-src="holder.js/215x150?auto=yes&theme=sky&textmode=exact" data-holder-rendered="true">
+            <h3 class="range-title">{{$item['title']}}</h3>
+            <img src="{{$item['banner']}}" />
           </div>
-          <div class="col-xs-4 top-range-items">
-            <h3 class="range-title">粮油副食</h3>
-            <img alt="215x150" data-src="holder.js/215x150?auto=yes&theme=lava&textmode=exact" data-holder-rendered="true">
-          </div>
-          <div class="col-xs-4 top-range-items">
-            <h3 class="range-title">哈哈哈</h3>
-            <img alt="215x150" data-src="holder.js/215x150?auto=yes&theme=sky&textmode=exact" data-holder-rendered="true">
-          </div>
-          <div class="col-xs-4 top-range-items">
-            <h3 class="range-title">粮油副食</h3>
-            <img alt="215x150" data-src="holder.js/215x150?auto=yes&theme=lava&textmode=exact" data-holder-rendered="true">
-          </div>
-          <div class="col-xs-4 top-range-items">
-            <h3 class="range-title">哈哈哈</h3>
-            <img alt="215x150" data-src="holder.js/215x150?auto=yes&theme=sky&textmode=exact" data-holder-rendered="true">
-          </div>
-          <div class="col-xs-4 top-range-items">
-            <h3 class="range-title">粮油副食</h3>
-            <img alt="215x150" data-src="holder.js/215x150?auto=yes&theme=lava&textmode=exact" data-holder-rendered="true">
-          </div>
-          <div class="col-xs-4 top-range-items">
-            <h3 class="range-title">哈哈哈</h3>
-            <img alt="215x150" data-src="holder.js/215x150?auto=yes&theme=sky&textmode=exact" data-holder-rendered="true">
-          </div>
-          <div class="col-xs-4 top-range-items">
-            <h3 class="range-title">粮油副食</h3>
-            <img alt="215x150" data-src="holder.js/215x150?auto=yes&theme=lava&textmode=exact" data-holder-rendered="true">
-          </div>
-          <div class="col-xs-4 top-range-items">
-            <h3 class="range-title">哈哈哈</h3>
-            <img alt="215x150" data-src="holder.js/215x150?auto=yes&theme=sky&textmode=exact" data-holder-rendered="true">
-          </div>
+          {{/loop}}
         </div>
       </div>
       <footer class="channel_bottom" id="share-bottom-nav">

@@ -42,13 +42,31 @@ class ShareManageController extends AppController
     public function find_content()
     {
         $carousel = ClassRegistry::init('NewFind')->get_all_carousel();
+        $top_rank = ClassRegistry::init('NewFind')->get_all_top_rank();
         $this->set('carousel_model', $carousel);
+        $this->set('top_rank_model', $top_rank);
+    }
+
+    public function find_content_save_top_rank()
+    {
+        ClassRegistry::init('NewFind')->save_all_top_rank($_POST['data']['Top_rank']);
+        $this->redirect('/share_manage/find_content');
     }
 
     public function find_content_save_carousel()
     {
         ClassRegistry::init('NewFind')->save_all_carousel($_POST['data']['Carousel']);
         $this->redirect('/share_manage/find_content');
+    }
+
+    public function find_content_delete_top_rank($cid)
+    {
+        ClassRegistry::init('NewFind')->delete($cid);
+        echo json_encode([
+            'err' => 0,
+            'msg' => 'OK',
+        ]);
+        exit();
     }
 
     public function find_content_delete_carousel($cid)
