@@ -5,7 +5,6 @@ class MessageApiController extends AppController
 
     public $components = array('OAuth.OAuth', 'Session');
 
-    public $uses = array('OptLog');
 
     public function beforeFilter()
     {
@@ -17,6 +16,26 @@ class MessageApiController extends AppController
         $this->autoRender = false;
     }
 
+    private function get_opt_log($cond)
+    {
+        $this->loadModel('OptLog');
+        $last_buy_log = $this->OptLog->find('first', [
+            'conditions' => $cond,
+            'fields' => ['id', 'created', 'user_id'],
+            'order' => ['id DESC']
+        ]);
+        return $last_buy_log;
+    }
+
+    private function get_user_info($cond){
+        $this->loadModel('User');
+        $user_info = $this->User->find('first', [
+            'conditions' => $cond,
+            'fields' => ['id', 'nickname']
+        ]);
+        return $user_info;
+    }
+
     /**
      * 获取最近购买的信息概要
      */
@@ -24,21 +43,25 @@ class MessageApiController extends AppController
     {
         //query from opt log
         $uid = $this->currentUser['id'];
-        $last_buy_log = $this->OptLog->find('first', [
-            'conditions' => [
-                'obj_creator' => $uid,
-                'obj_type' => OPT_LOG_SHARE_BUY
-            ],
-            'order' => ['id DESC']
-        ]);
-        
+        $cond = ['obj_creator' => $uid, 'obj_type' => OPT_LOG_SHARE_BUY];
+        $last_buy_log = $this->get_opt_log($cond);
+        $user_id = $last_buy_log['OptLog']['user_id'];
+        $u_cond = ['id' => $user_id];
+        $user_info = $this->get_user_info($u_cond);
+        echo json_encode(array('user_id' => $user_id, 'nickname' => $user_info['User']['nickname'], 'datetime' => $last_buy_log['OptLog']['created']));
+        return;
     }
+
 
     /**
      * 最近评论的信息概要
      */
     public function comment_resume(){
         //query from opt log
+        $uid = $this->currentUser['id'];
+        $cond = ['obj_creator' => $uid, 'obj_type' => OPT_LOG_SHARE_COMMENT];
+        $last_comment_log = $this->get_opt_log($cond);
+
     }
 
     /**
