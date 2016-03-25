@@ -3,14 +3,19 @@
 header {
   border-bottom: 1px solid #ccc;
 
-  .back-btn {
-    margin-top: 24px;
-    font-size: 18px;
+  a {
+      &:hover {
+          text-decoration: none;
+      }
+      .back-btn {
+          margin-top: 24px;
+          font-size: 18px;
+      }
   }
 }
 
 main {
-  margin-bottom: 49px;
+    margin-bottom: 49px;
 
   .product-item-header {
     margin: 10px 0;
@@ -65,7 +70,7 @@ main {
         right: 20px;
 
         &.unfollow {
-          display: block;
+          display: none;
           background-color: #fff;
           border: 1px solid #bbb;
           border-radius: 0 0 5px 5px;

@@ -1914,6 +1914,8 @@ class ShareUtilComponent extends Component
             // 2. 浏览数
             $tmp['liulan'] = $v['Weshare']['view_count'];
 
+            $tmp['my_id'] = $uid;
+
             $res[] = $tmp;
         }
 

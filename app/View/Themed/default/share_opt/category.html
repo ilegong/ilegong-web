@@ -15,10 +15,12 @@
       <header>
         <div class="row">
           <div class="col-xs-4">
-            <h3 class="back-btn">
-              <i class="fa fa-angle-left"></i>
-              返回
-            </h3>
+            <a href="/share_opt/home">
+              <h3 class="back-btn">
+                <i class="fa fa-angle-left"></i>
+                返回
+              </h3>
+            </a>
           </div>
           <div class="col-xs-4">
             <h3 class="text-center">
@@ -42,11 +44,16 @@
               </div>
             </div>
             <div class="col-xs-2 col-xs-offset-4 follow-block-area">
-              <div class="follow-block">
-                已关注({{$product['check_user_relation']}})
+              <div class="follow-block {{if ($product['check_user_relation'])}}followed{{else}}follow-ta{{/if}}"
+                data-me="{{$product['my_id']}}" data-ta="{{$product['share_user_id']}}">
+                {{if ($product['check_user_relation'])}}
+                已关注
                 <i class="fa fa-angle-down"></i>
+                {{else}}
+                关注TA
+                {{/if}}
               </div>
-              <div class="follow-block unfollow">
+              <div class="follow-block unfollow" data-me="{{$product['my_id']}}" data-ta="{{$product['share_user_id']}}">
                 取消关注
               </div>
             </div>
