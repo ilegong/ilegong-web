@@ -724,7 +724,7 @@ class WeshareBuyComponent extends Component
     {
         //add filter
         $uids = $this->check_msg_log_and_filter_user($weshare['Weshare']['id'], $uids, MSG_LOG_RECOMMEND_TYPE);
-        $uids = $this->check_msg_log_and_filter_user($weshare['Weshare']['refer_share_id'], $uids, MSG_LOG_RECOMMEND_TYPE);
+        //$uids = $this->check_msg_log_and_filter_user($weshare['Weshare']['refer_share_id'], $uids, MSG_LOG_RECOMMEND_TYPE);
         $userM = ClassRegistry::init('User');
         $OauthbindM = ClassRegistry::init('Oauthbind');
         $sharer_user_info = $userM->find('first', array(
