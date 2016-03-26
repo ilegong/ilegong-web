@@ -30,7 +30,7 @@
             {
               "type":"view",
               "name":"浩子的朋友们",
-              "url":"https://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=412691161&idx=1&sn=bdb91d7ee103ac1fb98b2e12c8f560b5"
+              "url":"https://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=412860730&idx=1&sn=0067ee08294ec3fe1dd38d64895c333f"
             },
             {
                 "type":"view",
