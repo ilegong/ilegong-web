@@ -79,12 +79,12 @@ if (Configure::read('debug') > 1) {
     $duration = 300;
 }
 $cache_prefix = '';
-if(class_exists('Memcached')){
+if (class_exists('Memcached')) {
     $cache_prefix = 'pys_app_';
     $engine = 'Memcached';
     Cache::config('default', array(
         'engine' => $engine,
-        'servers' => array('127.0.0.1:11211'),
+        'servers' => array(MEMCACHE_HOST . ':11211'),
         'duration' => $duration,
         'probability' => 100,
         'prefix' => $cache_prefix . 'miaocms_'
@@ -93,7 +93,7 @@ if(class_exists('Memcached')){
     Cache::config('_cake_core_', array(
         'engine' => $engine,
         'prefix' => $cache_prefix . 'core_app_',
-        'servers' => array('127.0.0.1:11211'),
+        'servers' => array(MEMCACHE_HOST . ':11211'),
         'duration' => $duration,
         'probability' => 100,
     ));
@@ -101,25 +101,23 @@ if(class_exists('Memcached')){
     Cache::config('_cake_model_', array(
         'engine' => $engine,
         'prefix' => $cache_prefix . 'model_app_',
-        'servers' => array('127.0.0.1:11211'),
+        'servers' => array(MEMCACHE_HOST . ':11211'),
         'duration' => $duration,
         'probability' => 100,
     ));
-}else{
+} else {
     if (defined('SAE_MYSQL_DB')) {
         $engine = 'Saemc';
-    }
-    elseif(isset($_SERVER['HTTP_HOST'])&&preg_match('/\.aliapp\.com$/',$_SERVER['HTTP_HOST'])){
+    } elseif (isset($_SERVER['HTTP_HOST']) && preg_match('/\.aliapp\.com$/', $_SERVER['HTTP_HOST'])) {
         $engine = 'Acemc';
-    }
-    else {
+    } else {
         $engine = 'File';
         if (extension_loaded('apc') && (php_sapi_name() !== 'cli' || ini_get('apc.enable_cli'))) {
             $engine = 'Apc';
         }
     }
 
-    if(defined('SAE_MYSQL_DB')){
+    if (defined('SAE_MYSQL_DB')) {
         // 区分各版本的缓存，不互相冲突
         $cache_prefix = $_SERVER['HTTP_APPVERSION'];
     }
@@ -134,48 +132,28 @@ if(class_exists('Memcached')){
      */
     Cache::config('_cake_core_', array(
         'engine' => $engine,
-        'prefix' => $cache_prefix.'core_app_',
+        'prefix' => $cache_prefix . 'core_app_',
         'path' => CACHE . 'persistent' . DS,
         'serialize' => ($engine === 'File'),
         'duration' => $duration,
-        'probability'=> 100,
+        'probability' => 100,
     ));
     Cache::config('_cake_model_', array(
         'engine' => $engine,
-        'prefix' => $cache_prefix.'model_app_',
+        'prefix' => $cache_prefix . 'model_app_',
         'path' => CACHE . 'models' . DS,
         'serialize' => ($engine === 'File'),
         'duration' => $duration,
-        'probability'=> 100,
+        'probability' => 100,
     ));
 
     Cache::config('default', array(
         'engine' => $engine,
         'duration' => $duration,
         'probability' => 100,
-        'prefix' => $cache_prefix.'miaocms_',
+        'prefix' => $cache_prefix . 'miaocms_',
         'lock' => false,
         'serialize' => true,
     ));
 }
 
-
-// UCenter config
-/*
-if(defined('SAE_MYSQL_DB')){ // in sae
-	define('UC_CONNECT', 'POST');
-// 	define('UC_DBHOST', 'w.rdc.sae.sina.com.cn:3307');
-// 	define('UC_DBUSER', '');
-// 	define('UC_DBPW', '');
-// 	define('UC_DBNAME', '');
-// 	define('UC_DBCHARSET', 'utf8');
-// 	define('UC_DBTABLEPRE', 'pre_ucenter_');
-// 	define('UC_DBCONNECT', '0');
-	define('UC_KEY', '1W72UJixUISdjknEUkqtR9t2KSY7QxAswfaH0UQsU23OQ');
-	define('UC_API', 'http://www.51daifan.com/uc_server');
-	define('UC_CHARSET', 'utf-8');
-	define('UC_IP', '');
-	define('UC_APPID', '2');
-	define('UC_PPP', '20');
-}
-*/

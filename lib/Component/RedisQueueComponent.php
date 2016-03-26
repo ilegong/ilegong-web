@@ -33,7 +33,7 @@ class RedisQueueComponent extends Component
     {
         App::import('Vendor', 'kue/Kue');
         // Connect "redis_server:6379" and select db to "1"
-        $kue = Kue::createQueue(array('host' => '127.0.0.1', 'port' => 6379));
+        $kue = Kue::createQueue(array('host' => REDIS_HOST, 'port' => 6379));
         return $kue;
     }
 
