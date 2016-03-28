@@ -7,7 +7,7 @@ class ShareOptController extends AppController {
 
     var $uses = array('OptLog', 'User', 'VisitLog', 'UserRelation');
 
-    var $components = array('WeshareBuy', 'OptLogHelper');
+    var $components = array('WeshareBuy', 'OptLogHelper', 'ShareUtil');
 
     /**
      * pys index view
@@ -36,6 +36,34 @@ class ShareOptController extends AppController {
         if($_REQUEST['from'] == 'app'){
             $this->set('hide_footer', true);
         }
+    }
+
+    public function home()
+    {
+        $this->layout = null;
+        $carousel = ClassRegistry::init('NewFind')->get_all_carousel();
+        $top_rank = ClassRegistry::init('NewFind')->get_all_top_rank();
+        $this->set('carousel', $carousel);
+        $this->set('top_rank_first', $top_rank[0]);
+        unset($top_rank[0]);
+        $this->set('top_rank', $top_rank);
+    }
+
+    public function category_ajax($category)
+    {
+        $this->layout = null;
+        $products = $this->ShareUtil->get_product_by_category($category);
+
+        echo json_encode($products);
+        exit();
+    }
+
+    public function category($category)
+    {
+        $this->layout = null;
+        $products = $this->ShareUtil->get_product_by_category($category);
+
+        $this->set('products', $products);
     }
 
     /**
@@ -100,6 +128,7 @@ class ShareOptController extends AppController {
             'opt_logs' => $opt_logs,
             'combine_data' => $combine_data
         ];
+
 
         return $data;
     }
