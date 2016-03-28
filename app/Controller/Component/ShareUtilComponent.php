@@ -22,7 +22,7 @@ class ShareUtilComponent extends Component
         $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($uid);
         $pageCount = $fansPageInfo['pageCount'];
         $pageSize = $fansPageInfo['pageSize'];
-        $this->RedisQueue->add_tasks('share',"/weshares/process_send_new_share_msg/" . $weshare_id . '/' . $pageCount . '/' . $pageSize);
+        $this->RedisQueue->add_tasks('share', "/weshares/process_send_new_share_msg/" . $weshare_id . '/' . $pageCount . '/' . $pageSize);
     }
 
     /**
@@ -76,7 +76,7 @@ class ShareUtilComponent extends Component
 
     public function check_user_relation($user_id, $follow_id)
     {
-        if($user_id == $follow_id){
+        if ($user_id == $follow_id) {
             return false;
         }
         $userRelationM = ClassRegistry::init('UserRelation');
@@ -440,7 +440,7 @@ class ShareUtilComponent extends Component
                 $this->cloneShareShipSettings($newShareId, $shareId, true);
                 $this->cloneShareRebateSet($newShareId, $shareId, true);
             }
-            if(!empty($uid)){
+            if (!empty($uid)) {
                 $this->check_and_save_default_level($uid);
             }
             Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
@@ -543,7 +543,8 @@ class ShareUtilComponent extends Component
      * @param $old_share_id
      * @param $uid
      */
-    private function cloneDeliveryTemplate($new_share_id, $old_share_id, $uid){
+    private function cloneDeliveryTemplate($new_share_id, $old_share_id, $uid)
+    {
         $WeshareDeliveryTemplateM = ClassRegistry::init('WeshareDeliveryTemplate');
         $WeshareTemplateRegionM = ClassRegistry::init('WeshareTemplateRegion');
         $deliveryTemplates = $WeshareDeliveryTemplateM->find('all', array(
@@ -551,9 +552,9 @@ class ShareUtilComponent extends Component
                 'weshare_id' => $old_share_id
             )
         ));
-        if(!empty($deliveryTemplates)){
+        if (!empty($deliveryTemplates)) {
             $newDeliveryTemplates = array();
-            foreach($deliveryTemplates as $deliveryTemplate){
+            foreach ($deliveryTemplates as $deliveryTemplate) {
                 $itemDeliveryTemplate = $deliveryTemplate['WeshareDeliveryTemplate'];
                 $itemDeliveryTemplate['id'] = null;
                 $itemDeliveryTemplate['weshare_id'] = $new_share_id;
@@ -567,7 +568,7 @@ class ShareUtilComponent extends Component
                 )
             ));
             $newTemplateRegions = array();
-            foreach($templateRegions as $templateRegion){
+            foreach ($templateRegions as $templateRegion) {
                 $itemTemplateRegion = $templateRegion['WeshareTemplateRegion'];
                 $itemTemplateRegion['id'] = null;
                 $itemTemplateRegion['weshare_id'] = $new_share_id;
@@ -926,7 +927,15 @@ class ShareUtilComponent extends Component
     public function saveOptLog($data)
     {
         $optLogM = ClassRegistry::init('OptLog');
+        $newOptLogM = ClassRegistry::init('NewOptLog');
         $optLogM->save($data);
+        if ($newOptLogM->hasAny(['share_id' => $data['obj_id']])) {
+            $newOptLogM->update(['customer_id' => $data['user_id'], 'data_type_tag' => $data['obj_type'], 'time' => "'" . $data['created'] . "'"], ['share_id' => $data['obj_id']]);
+        } else {
+            //create new opt log
+            $newOptLogData = ['share_id' => $data['obj_id'], 'proxy_id' => $data['obj_creator'], 'customer_id' => $data['user_id'], 'data_type_tag' => $data['obj_type'], 'time' => $data['created'], 'deleted' => 0];
+            $newOptLogM->save($newOptLogData);
+        }
         Cache::write(LAST_OPT_LOG_DATA_CACHE_KEY, '');
     }
 
@@ -1342,7 +1351,8 @@ class ShareUtilComponent extends Component
         $orderM->updateAll(array('process_prepaid_status' => ORDER_STATUS_PREPAID_DONE), array('id' => $parent_order_id));
     }
 
-    public function get_all_share_products($weshare_id){
+    public function get_all_share_products($weshare_id)
+    {
         $weshareProductM = ClassRegistry::init('WeshareProduct');
         $weshareProducts = $weshareProductM->find('all', array(
             'conditions' => array(
@@ -1797,7 +1807,7 @@ class ShareUtilComponent extends Component
      */
     public function checkCanSendMsg($uid)
     {
-        if($uid==633345||$uid==802852){
+        if ($uid == 633345 || $uid == 802852) {
             return array('success' => true, 'msg' => '还可以发送很多条消息');
         }
         $limit_count = $this->getSharerMsgLimit($uid);
@@ -1840,10 +1850,11 @@ class ShareUtilComponent extends Component
         return get_user_level_msg_count($user_val);
     }
 
-    public function get_index_product($tag_id){
-        $key = INDEX_VIEW_PRODUCT_CACHE_KEY.'_'.$tag_id;
+    public function get_index_product($tag_id)
+    {
+        $key = INDEX_VIEW_PRODUCT_CACHE_KEY . '_' . $tag_id;
         $cache_data = Cache::read($key);
-        if(empty($cache_data)){
+        if (empty($cache_data)) {
             $indexProductM = ClassRegistry::init('IndexProduct');
             $index_products = $indexProductM->find('all', array(
                 'conditions' => array(
@@ -1853,7 +1864,7 @@ class ShareUtilComponent extends Component
                 'order' => array('sort_val ASC')
             ));
             $result = array();
-            foreach($index_products as $product){
+            foreach ($index_products as $product) {
                 $result[] = $product['IndexProduct'];
             }
             Cache::write($key, json_encode($result));
@@ -1863,7 +1874,8 @@ class ShareUtilComponent extends Component
         return json_decode($cache_data, true);
     }
 
-    private function query_share_detail($weshare_id){
+    private function query_share_detail($weshare_id)
+    {
         $weshareM = ClassRegistry::init('Weshare');
         $weshareAddressM = ClassRegistry::init('WeshareAddress');
         $weshareShipSettingM = ClassRegistry::init('WeshareShipSetting');
@@ -1923,7 +1935,8 @@ class ShareUtilComponent extends Component
         return $weshareInfo;
     }
 
-    public function get_tag_weshare_detail($weshare_id){
+    public function get_tag_weshare_detail($weshare_id)
+    {
         $key = SHARE_DETAIL_DATA_WITH_TAG_CACHE_KEY . '_' . $weshare_id;
         $share_detail = Cache::read($key);
         if (empty($share_detail)) {
@@ -1939,7 +1952,8 @@ class ShareUtilComponent extends Component
      * @return mixed
      * 获取分享的详情
      */
-    public function get_weshare_detail($weshare_id){
+    public function get_weshare_detail($weshare_id)
+    {
         $key = SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshare_id;
         $share_detail = Cache::read($key);
         if (empty($share_detail)) {
@@ -1959,12 +1973,13 @@ class ShareUtilComponent extends Component
      * @return array
      * 发送团购进度提醒
      */
-    public function send_buy_percent_msg($type, $uid, $share_info, $content, $weshare_id){
+    public function send_buy_percent_msg($type, $uid, $share_info, $content, $weshare_id)
+    {
         if ($type == 0 || $type == '0') {
             //发送给分享的管理者
             //发送给没有购买的粉丝
             $checkSendMsgResult = $this->checkCanSendMsg($uid);
-            if(!$checkSendMsgResult['success']){
+            if (!$checkSendMsgResult['success']) {
                 return $checkSendMsgResult;
             }
             $send_msg_log_data = array('created' => date('Y-m-d H:i:s'), 'sharer_id' => $uid, 'data_id' => $weshare_id, 'type' => MSG_LOG_NOTIFY_TYPE, 'status' => 1);
@@ -1983,7 +1998,8 @@ class ShareUtilComponent extends Component
     }
 
 
-    public function set_order_ship_code($ship_company_id, $weshare_id, $ship_code, $order_id){
+    public function set_order_ship_code($ship_company_id, $weshare_id, $ship_code, $order_id)
+    {
         $ship_type_list = ShipAddress::ship_type_list();
         $ship_type_name = $ship_type_list[$ship_company_id];
         $orderM = ClassRegistry::init('Order');
@@ -1998,7 +2014,8 @@ class ShareUtilComponent extends Component
         $this->WeshareBuy->send_share_product_ship_msg($order_id, $weshare_id);
     }
 
-    public function update_order_ship_code($ship_code, $weshare_id, $order_id, $company_id, $ship_type_name){
+    public function update_order_ship_code($ship_code, $weshare_id, $order_id, $company_id, $ship_type_name)
+    {
         if (empty($company_id)) {
             $ship_name_id_map = ShipAddress::ship_type_name_id_map();
             $ship_company_id = $ship_name_id_map[$ship_type_name];
@@ -2014,7 +2031,8 @@ class ShareUtilComponent extends Component
         $this->WeshareBuy->clear_user_share_order_data_cache(array($order_id), $weshare_id);
     }
 
-    public function confirm_received_order($order_id, $uid){
+    public function confirm_received_order($order_id, $uid)
+    {
         $orderM = ClassRegistry::init('Order');
         $cartM = ClassRegistry::init('Cart');
         $weshareM = ClassRegistry::init('Weshare');
@@ -2051,7 +2069,8 @@ class ShareUtilComponent extends Component
         return array("success" => true);
     }
 
-    public function send_arrival_msg($order_ids, $share_id, $uid, $content){
+    public function send_arrival_msg($order_ids, $share_id, $uid, $content)
+    {
         $weshareM = ClassRegistry::init('Weshare');
         $orderM = ClassRegistry::init('Order');
         $cartM = ClassRegistry::init('Cart');
@@ -2079,7 +2098,8 @@ class ShareUtilComponent extends Component
         $this->WeshareBuy->send_share_product_arrive_msg($share_info, $content, $order_ids);
     }
 
-    public function order_refund($shareId, $uid, $orderId, $refundMoney, $refundMark){
+    public function order_refund($shareId, $uid, $orderId, $refundMoney, $refundMark)
+    {
         $share_info = $this->get_weshare_detail($shareId);
         //check user can manage share order
         $can_manage_order = $this->ShareAuthority->user_can_view_share_order_list($uid, $shareId);
@@ -2095,7 +2115,8 @@ class ShareUtilComponent extends Component
      * @return array
      * 获取编辑分享的内容
      */
-    public function get_edit_share_info($weshare_id){
+    public function get_edit_share_info($weshare_id)
+    {
         $shareInfo = $this->get_weshare_detail($weshare_id);
         //change product price
         //change ship fee
@@ -2142,7 +2163,7 @@ class ShareUtilComponent extends Component
         ]);
 
         if (!$shipSettings) {
-            $this->log('Failed to create pool product with weshare '.$sid.': ship setting is empty', LOG_WARNING);
+            $this->log('Failed to create pool product with weshare ' . $sid . ': ship setting is empty', LOG_WARNING);
             return false;
         }
 
@@ -2152,7 +2173,7 @@ class ShareUtilComponent extends Component
         $methods = [];
         foreach ($shipSettings as $item) {
             $ship = $item['WeshareShipSetting'];
-            switch($ship['tag']) {
+            switch ($ship['tag']) {
                 case 'self_ziti':
                     $self_ziti = $this->check_ziti($sid);
                     $methods[] = 'self_ziti';
