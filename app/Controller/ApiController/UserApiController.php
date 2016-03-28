@@ -57,6 +57,15 @@ class UserApiController extends AppController
         return;
     }
 
+    public function update_avatar()
+    {
+        $user_id = $this->currentUser['id'];
+        $avatar_url = $_REQUEST['url'];
+        $this->User->update(['image' => "'".$avatar_url."'", 'avatar' => "'" . $avatar_url . "'"], ['id' => $user_id]);
+        echo json_encode(['success' => true]);
+        return;
+    }
+
     private function get_user_info($user_id)
     {
         $datainfo = $this->User->find('first', array('recursive' => -1,
