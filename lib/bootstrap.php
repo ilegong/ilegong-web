@@ -130,7 +130,7 @@ if (getenv('TONGSHIJIA_ENV') == 'product') {
     define('SAE_STATIC_FILE_PATH', 'http://dev.tongshijia.com');
     define('JPUSH_APP_KEY', 'dca84c4492a450f738918b65');
     define('JPUSH_APP_SECRET', '376cf6f26a72c31ca769da44');
-    define('MYSQL_SERVER_HOST', 'localhost');
+    define('MYSQL_SERVER_HOST', '127.0.0.1');
     define('MEMCACHE_HOST', '127.0.0.1');
     define('REDIS_HOST', '127.0.0.1');
 }
