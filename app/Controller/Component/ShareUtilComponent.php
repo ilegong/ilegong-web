@@ -930,6 +930,7 @@ class ShareUtilComponent extends Component
         $newOptLogM = ClassRegistry::init('NewOptLog');
         $optLogM->save($data);
         if ($newOptLogM->hasAny(['share_id' => $data['obj_id']])) {
+            //update
             $newOptLogM->update(['customer_id' => $data['user_id'], 'data_type_tag' => $data['obj_type'], 'time' => "'" . $data['created'] . "'"], ['share_id' => $data['obj_id']]);
         } else {
             //create new opt log
