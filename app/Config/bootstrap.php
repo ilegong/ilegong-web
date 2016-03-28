@@ -2371,20 +2371,23 @@ function map_user_avatar($var){
 function get_index_tags(){
     return [
         [
+            'id' => 0,
+            'name' => '新品爆款(新版勿用)'
+        ], [
             'id' => 1,
-            'name' => '果蔬乐园'
+            'name' => '水果蔬菜(果蔬乐园)'
         ], [
             'id' => 2,
-            'name' => '肉蛋海鲜'
+            'name' => '肉蛋粮油(肉蛋海鲜)'
         ], [
             'id' => 3,
-            'name' => '干果零食'
+            'name' => '零食其他(干果零食)'
         ], [
             'id' => 4,
-            'name' => '粮油副食'
+            'name' => '粮油副食(新版勿用)'
         ], [
             'id' => 5,
-            'name' => '其他'
+            'name' => '其他(新版勿用)'
         ]
     ];
 }
