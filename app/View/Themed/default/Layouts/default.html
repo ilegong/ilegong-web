@@ -7,6 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="Keywords" content="{{if $seokeywords}}{{$seokeywords}}{{else}}{{$site[seokeywords]}}{{/if}}" />
 <meta name="Description" content="{{if $seodescription}}{{$seodescription}}{{else}}{{$site[seodescription]}}{{/if}}" />
+<link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
 <style>
   .voffset  { margin-top: 2px; }
   .voffset1 { margin-top: 5px; }
@@ -19,12 +20,13 @@
   .voffset8 { margin-top: 100px; }
   .voffset9 { margin-top: 150px; }
 </style>
+
 <!--[if lt IE 9]>
 	{{$this->Html->script(array('html5.js'))}}
 <![endif]-->
 {{$this->Html->meta('icon')}}
 
-{{$this->Html->css(array('/css/common-lib/bootstrap_2.css','/css/pc-lib/font-awesome.min.css',
+{{$this->Html->css(array('/css/common-lib/bootstrap_2.css',
 	'ui-customer.css?v2',))}}
 {{$this->Html->script(array(
             'http://libs.baidu.com/jquery/1.9.1/jquery.min.js',
