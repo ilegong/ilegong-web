@@ -8,7 +8,7 @@ class UserApiController extends AppController
     public function beforeFilter()
     {
         parent::beforeFilter();
-        $allow_action = array('test',    'check_mobile_available');
+        $allow_action = array('test', 'check_mobile_available');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action) == false) {
             $this->currentUser = $this->OAuth->user();
@@ -52,7 +52,7 @@ class UserApiController extends AppController
         $user_id = $this->currentUser['id'];
         $new_password = $_REQUEST['password'];
         $hash_password = Security::hash($new_password, null, true);
-        $this->User->update(['password' => $hash_password],['id' => $user_id]);
+        $this->User->update(['password' => $hash_password], ['id' => $user_id]);
         echo json_encode(['success' => true]);
         return;
     }
@@ -61,7 +61,7 @@ class UserApiController extends AppController
     {
         $user_id = $this->currentUser['id'];
         $avatar_url = $_REQUEST['url'];
-        $this->User->update(['image' => "'".$avatar_url."'", 'avatar' => "'" . $avatar_url . "'"], ['id' => $user_id]);
+        $this->User->update(['image' => "'" . $avatar_url . "'", 'avatar' => "'" . $avatar_url . "'"], ['id' => $user_id]);
         echo json_encode(['success' => true]);
         return;
     }
