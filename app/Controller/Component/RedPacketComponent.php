@@ -87,8 +87,6 @@ class RedPacketComponent extends Component {
                         $valid_end = $dt->format(FORMAT_DATETIME);
                         $updated = $this->SharedSlice->updateAll(array('accept_user' => $uid, 'accept_time' => '\'' . addslashes($now) . '\''),
                             array('id' => $slice['SharedSlice']['id'], 'accept_user' => 0));
-                        //TODO check getAffectedRows has error
-                        //if($updated && $this->SharedSlice->getAffectedRows() == 1) {
                         if ($updated) {
                             if ($sharedOffer['SharedOffer']['share_offer_id'] == 44) { //朋友说指定商品优惠券
                                 $couponId = $this->CouponItem->add_coupon_type($brandNames[$brandId], 0, $now, $valid_end, $slice['SharedSlice']['number'], PUBLISH_YES,
@@ -117,6 +115,7 @@ class RedPacketComponent extends Component {
                                     array('id' => $slice['SharedSlice']['id'], 'coupon_item_id' => 0));
                                 App::uses('CakeNumber', 'Utility');
                                 $couponNum = CakeNumber::precision($slice['SharedSlice']['number'] / 100, 2);
+                                //分享红包
                                 if ($brandId == -1) {
                                     if($send_msg){
                                         //share red packet

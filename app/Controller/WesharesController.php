@@ -84,6 +84,7 @@ class WesharesController extends AppController
                 $this->set('shared_offer_id', $shared_offers[0]['SharedOffer']['id']);
                 $this->set('from', $this->pay_type);
             }
+            //from paid done
             if ($from == 1) {
                 $paidMsg = $_REQUEST['msg'];
                 if ($paidMsg == 'ok') {
