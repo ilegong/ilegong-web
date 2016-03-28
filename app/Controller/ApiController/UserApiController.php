@@ -44,7 +44,17 @@ class UserApiController extends AppController
         $datainfo = $this->get_user_info($user_id);
         $userInfo = $datainfo['User'];
         echo json_encode($userInfo);
-        exit();
+        return;
+    }
+
+    public function change_password()
+    {
+        $user_id = $this->currentUser['id'];
+        $new_password = $_REQUEST['password'];
+        $hash_password = Security::hash($new_password, null, true);
+        $this->User->update(['password' => $hash_password],['id' => $user_id]);
+        echo json_encode(['success' => true]);
+        return;
     }
 
     private function get_user_info($user_id)

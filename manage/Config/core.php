@@ -63,12 +63,12 @@ $duration = 7200;
 if (Configure::read('debug') > 1) {
     $duration = 300;
 }
-if(class_exists('Memcached')){
+if (class_exists('Memcached')) {
     $engine = 'Memcached';
     $cache_prefix = 'pys_';
     Cache::config('default', array(
         'engine' => $engine,
-        'servers' => array('127.0.0.1:11211'),
+        'servers' => array(MEMCACHE_HOST . ':11211'),
         'duration' => $duration,
         'probability' => 100,
         'prefix' => $cache_prefix . 'miaocms_'
@@ -77,7 +77,7 @@ if(class_exists('Memcached')){
     Cache::config('_cake_core_', array(
         'engine' => $engine,
         'prefix' => $cache_prefix . 'core_app_',
-        'servers' => array('127.0.0.1:11211'),
+        'servers' => array(MEMCACHE_HOST . ':11211'),
         'duration' => $duration,
         'probability' => 100,
     ));
@@ -85,25 +85,25 @@ if(class_exists('Memcached')){
     Cache::config('_cake_model_', array(
         'engine' => $engine,
         'prefix' => $cache_prefix . 'model_app_',
-        'servers' => array('127.0.0.1:11211'),
+        'servers' => array(MEMCACHE_HOST . ':11211'),
         'duration' => $duration,
         'probability' => 100,
     ));
-}else{
+} else {
     if (defined('SAE_MYSQL_DB')) {
         $engine = 'Saemc';
     } else {
         $engine = 'File';
     }
     $cache_prefix = '';
-    if(defined('SAE_MYSQL_DB')){
+    if (defined('SAE_MYSQL_DB')) {
         // 区分各版本的缓存，不互相冲突
         $cache_prefix = $_SERVER['HTTP_APPVERSION'];
     }
 // 缓存的配置，前台的前缀包含后台的前缀（利用后台的prefix比较时能涵盖前台的文件）。后台删除缓存时，前后台就都能删除了
     Cache::config('_cake_core_', array(
         'engine' => $engine,
-        'prefix' => $cache_prefix.'core_',
+        'prefix' => $cache_prefix . 'core_',
         'path' => CACHE . 'persistent' . DS,
         'serialize' => ($engine === 'File'),
         'duration' => $duration,
@@ -116,7 +116,7 @@ if(class_exists('Memcached')){
      */
     Cache::config('_cake_model_', array(
         'engine' => $engine,
-        'prefix' => $cache_prefix.'model_',
+        'prefix' => $cache_prefix . 'model_',
         'path' => CACHE . 'models' . DS,
         'serialize' => ($engine === 'File'),
         'duration' => $duration,
@@ -127,7 +127,7 @@ if(class_exists('Memcached')){
         'engine' => $engine, //[required]
         'duration' => $duration, //[optional]
         'probability' => 100, //[optional]
-        'prefix' => $cache_prefix.'miaocms_', //[optional]  prefix every cache file with this string
+        'prefix' => $cache_prefix . 'miaocms_', //[optional]  prefix every cache file with this string
         'lock' => false,
         'serialize' => true, // [optional] compress data in Memcache (slower, but uses less memory)
     ));
