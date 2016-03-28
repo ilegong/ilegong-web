@@ -7,7 +7,7 @@ class ShareOptController extends AppController {
 
     var $uses = array('OptLog', 'User', 'VisitLog', 'UserRelation');
 
-    var $components = array('WeshareBuy', 'OptLogHelper', 'ShareUtil');
+    var $components = array('WeshareBuy', 'OptLogHelper', 'ShareUtil', 'NewOptLogList');
 
     /**
      * pys index view
@@ -94,7 +94,7 @@ class ShareOptController extends AppController {
 
         $data = $this->fetch_opt_list_data_comman($time, $limit, $type, $followed, 1);
         echo json_encode($data);
-        return;
+        exit();
     }
 
     public function fetch_opt_list_data_comman($time, $limit, $type, $follow = false, $new = false)
@@ -110,8 +110,7 @@ class ShareOptController extends AppController {
             $combine_data = [];
         } else {
             if ($new) {
-                $opt_log_data = $this->OptLogHelper->load_opt_log($time, $limit, $type, 1, $follow);
-                $opt_logs = $opt_log_data;
+                $opt_logs = $this->NewOptLogList->get_all_logs($time, $limit, $type, $followed);
                 $combine_data = [];
                 if (!$opt_logs) {
                     return ['error' => 'get data failed.'];
