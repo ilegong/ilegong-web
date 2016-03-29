@@ -70,7 +70,7 @@ class UserApiController extends AppController
      * 绑定支付方式
      */
     public function bind_payment(){
-        
+
     }
 
     /**
