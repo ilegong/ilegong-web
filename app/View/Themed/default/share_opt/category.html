@@ -63,13 +63,13 @@
             </div>
           </div>
           <div class="product-item-body">
-            <a href="/weshares/user_share_info/{{$product['share_user_id']}}">
+            <a href="/weshares/view/{{$product['share_id']}}">
               <img src="{{$product['share_img']}}">
             </a>
-            <a href="/weshares/user_share_info/{{$product['share_user_id']}}">
+            <a href="/weshares/view/{{$product['share_id']}}">
               <h2 class="product-title">{{$product['share_name']}}</h2>
             </a>
-            <a href="/weshares/user_share_info/{{$product['share_user_id']}}">
+            <a href="/weshares/view/{{$product['share_id']}}">
               <p class="description">
                   {{$product['share_description']}}
                   {{if ($product['description_more'])}}...更多&gt;&gt;{{/if}}
