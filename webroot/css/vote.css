@@ -58,8 +58,8 @@ ul li { list-style: none; }
 .baby_bottom ul li.cur label{ color: #ff7c6e;}
 
 /*报名*/
-.apply_bg{ background-color: #ff7b6e; padding: 30px 20px 20px 20px; color: #ffffff; line-height: 38px; margin-top: 20px; margin-bottom: 20px;}
-.apply_bg input{ padding: 10px 15px; line-height: 18px; color: #666666; font-size: 14px; border: 0; outline: none; width: 80%; border-radius: 0; font-size: 14px; color: #666666;}
+.apply_bg{ background-color: #fff; padding: 30px 20px 20px 20px; color: #777; line-height: 38px; margin-top: 20px; margin-bottom: 20px;}
+.apply_bg input{ padding: 10px 15px; line-height: 18px; color: #777; font-size: 14px; border: 0; outline: none; width: 80%; border-radius: 0; font-size: 14px; color: #666666;}
 .apply_bg ul{ margin-bottom: 20px;}
 .apply_bg textarea {
     border: 0;
