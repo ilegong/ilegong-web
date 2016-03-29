@@ -58,8 +58,8 @@ class NewOptLogListComponent extends Component {
         $tmp['customer'] = $v['Customer']['nickname'];
         $tmp['time'] = strtotime($v['NewOptLog']['time']);
         $tmp['readtime'] = map_readable_date($tmp['time']);
-
-        if ($data_type == OPT_LOG_PINTUAN_SUCCESS) {
+        //check is pintuan success type
+        if ($v['NewOptLog']['data_type_tag'] == OPT_LOG_PINTUAN_SUCCESS) {
             $tmp['data_url'] = get_pintuan_opt_log_url($v['Weshare']['id']);;
         } else {
             $tmp['data_url'] = '/weshares/view/' . $v['Weshare']['id'];
