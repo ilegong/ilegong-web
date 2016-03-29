@@ -32,7 +32,14 @@ class NewOptLogListComponent extends Component {
 
         $tmp['share_id'] = $v['Weshare']['id'];
         $tmp['proxy_id'] = $v['Proxy']['id'];
-        $tmp['proxy'] = $v['Proxy']['nickname'];
+
+        $nickname = $v['Proxy']['nickname'];
+        if (mb_strlen($nickname) > 4) {
+            $tmp['proxy'] = mb_substr($nickname, 0, 4) . '...';
+        } else {
+            $tmp['proxy'] = $nickname;
+        }
+
         $tmp['current_user'] = $uid;
         $tmp['check_relation'] = in_array($v['Proxy']['id'], $my_proxys);
         $tmp['avatar'] = get_user_avatar($v['Proxy']);

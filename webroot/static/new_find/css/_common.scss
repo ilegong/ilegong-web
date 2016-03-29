@@ -1,5 +1,6 @@
 body {
     background-color: #f1f1f1;
+    font-family: Helvetica,STHeiti STXihei,Microsoft JhengHei,Microsoft YaHei,Arial;
 }
 
 footer {
@@ -83,6 +84,14 @@ footer {
 img {
   max-width: 100%;
   max-height: 100%;
+}
+
+a {
+    color: #000;
+    &:hover{
+        color: #000;
+        text-decoration: none;
+    }
 }
 
 .container {
