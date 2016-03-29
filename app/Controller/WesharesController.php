@@ -1928,6 +1928,10 @@ class WesharesController extends AppController
         return;
     }
 
+    public function new_user_guide(){
+        $this->layout=null;
+    }
+
     /**
      * @param $uid
      * @param $current_uid
