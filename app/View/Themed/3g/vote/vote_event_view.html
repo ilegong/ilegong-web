@@ -1,5 +1,5 @@
 {{template vote/vote_css_template}}
-<div class="container" style="background-color:#c54134;margin-bottom: 50px;">
+<div class="container" style="background-color:#c54134;margin-bottom: 50px;padding:0;">
     <div class="baby_banner" style="margin-bottom: 8px;"><img src="{{$this->Html->assetUrl($voteConfig['common_params']['banner'])}}"></div>
     {{if $event_available}}
         {{if !$is_sign_up}}
@@ -13,6 +13,7 @@
     <div class="babyrule">
         <p>活动时间：<br>{{Date('m月d日 H时i分',strtotime($event_info['VoteEvent']['start_time']))}}～{{Date('m月d日 H时i分',strtotime($event_info['VoteEvent']['end_time']))}}</p>
     </div>
+    {{if !empty($candidators_info)}}
     <div class="babylist">
         <div class="clearfix">
             <ul class="fl">
@@ -96,6 +97,7 @@
         </div>
         {{/if}}
     </div>
+    {{/if}}
     {{template vote/vote_rule_template}}
     {{template vote/baby_bottom_template}}
 </div>
