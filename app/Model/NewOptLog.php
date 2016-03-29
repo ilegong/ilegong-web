@@ -36,9 +36,6 @@ class NewOptLog extends AppModel
 
         $conditions['NewOptLog.proxy_id'] = $proxys;
 
-$start_time = microtime(true);
-$this->log('[SongDebug] Start new_opt_logs join query at: ' . $start_time, LOG_WARNING);
-
         $data = $this->find('all', [
             'conditions' => array_merge($conditions, [
                 'NewOptLog.deleted' => DELETED_NO,
@@ -73,11 +70,6 @@ $this->log('[SongDebug] Start new_opt_logs join query at: ' . $start_time, LOG_W
             'order' => 'time desc',
             'limit' => $limit,
         ]);
-
-$end_time = microtime(true);
-$this->log('[SongDebug] End new_opt_logs join query at: ' . $end_time, LOG_WARNING);
-$cost = $end_time - $start_time;
-$this->log('[SongDebug] New_opt_logs join query total cost: ' . $cost, LOG_WARNING);
 
         return $data;
     }

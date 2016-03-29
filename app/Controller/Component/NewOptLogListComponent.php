@@ -15,18 +15,18 @@ class NewOptLogListComponent extends Component {
     {
         $ret = [];
 
+        $uid = $_SESSION['Auth']['User']['id'];
+        $my_proxys = ClassRegistry::init('User')->get_my_proxys($uid);
+
         foreach ($data as $v) {
-            $ret[] = $this->map_fields($v);
+            $ret[] = $this->map_fields($v, $uid, $my_proxys);
         }
 
         return $ret;
     }
 
-    private function map_fields($v)
+    private function map_fields($v, $uid, $my_proxys)
     {
-        $uid = $_SESSION['Auth']['User']['id'];
-        $my_proxys = ClassRegistry::init('User')->get_my_proxys($uid);
-
         $tmp = [];
         $level = $v['ProxyLevel']['data_value'];
 
@@ -49,8 +49,10 @@ class NewOptLogListComponent extends Component {
         }
 
         $image = explode('|', $v['Weshare']['images'])[0];
-        $tmp['image'] = $image ? : "http://static.tongshijia.com/static/img/default_product_banner.png";
-        $tmp['baoming'] = $this->WeshareBuy->get_share_and_all_refer_share_count($v['Weshare']['id'], $v['Proxy']['id']);
+        $tmp['image'] = $image ? $image : "http://static.tongshijia.com/static/img/default_product_banner.png";
+
+        // $tmp['baoming'] = $this->WeshareBuy->get_share_and_all_refer_share_count($v['Weshare']['id'], $v['Proxy']['id']);
+
         $tmp['liulan'] = $v['Weshare']['view_count'];
 
         $tmp['customer'] = $v['Customer']['nickname'];
