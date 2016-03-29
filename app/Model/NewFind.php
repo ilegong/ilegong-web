@@ -1,11 +1,11 @@
 <?php
-define(CAROUSEL_TYPE, 1);
-define(TOP_RANK_TYPE, 2);
 /**
  * new find and its manage modal
  */
 class NewFind extends AppModel
 {
+    const CAROUSEL_TYPE = 1;
+    const TOP_RANK_TYPE = 2;
 
     public function get_all_item($type)
     {
@@ -40,12 +40,12 @@ class NewFind extends AppModel
 
     public function get_all_top_rank()
     {
-        return $this->get_all_item(TOP_RANK_TYPE);
+        return $this->get_all_item(self::TOP_RANK_TYPE);
     }
 
     public function get_all_carousel()
     {
-        return $this->get_all_item(CAROUSEL_TYPE);
+        return $this->get_all_item(self::CAROUSEL_TYPE);
     }
 
     public function save_all_item($data, $type)
@@ -60,12 +60,12 @@ class NewFind extends AppModel
 
     public function save_all_top_rank($data)
     {
-        $this->save_all_item($data, TOP_RANK_TYPE);
+        $this->save_all_item($data, self::TOP_RANK_TYPE);
     }
 
     public function save_all_carousel($data)
     {
-        $this->save_all_item($data, CAROUSEL_TYPE);
+        $this->save_all_item($data, self::CAROUSEL_TYPE);
     }
 
     private function validate($item)

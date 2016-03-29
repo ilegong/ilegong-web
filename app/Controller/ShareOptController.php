@@ -110,9 +110,10 @@ class ShareOptController extends AppController {
             $combine_data = [];
         } else {
             if ($new) {
-                $opt_logs = $this->OptLogHelper->load_opt_log($time, $limit, $type, 1, $follow);
                 if ($_REQUES['ntest'] == 100) {
                     $opt_logs = $this->NewOptLogList->get_all_logs($time, $limit, $type, $followed);
+                } else {
+                    $opt_logs = $this->OptLogHelper->load_opt_log($time, $limit, $type, 1, $follow);
                 }
                 $combine_data = [];
                 if (!$opt_logs) {
