@@ -96,36 +96,37 @@ body {
   bottom: -10px; }
   /* line 30, home.scss */
   .carousel .carousel-indicators li {
-    margin: 1px 5px;
-    height: 12px;
-    width: 12px;
-    border-radius: 12px; }
+    margin: 1px 4px;
+    height: 8px;
+    width: 8px;
+    border-radius: 8px; }
     /* line 36, home.scss */
     .carousel .carousel-indicators li.active {
       margin: 1px 5px;
-      height: 12px;
-      width: 12px;
-      border-radius: 12px; }
+      height: 8px;
+      width: 8px;
+      border-radius: 8px; }
 
 /* line 46, home.scss */
 #quality-life h2,
 #top-range h2 {
   font-size: 1.2em;
-  margin-top: 15px; }
+  margin-top: 15px;
+  padding-left: 12px; }
 
-/* line 52, home.scss */
+/* line 53, home.scss */
 #quality-life .category-block {
   position: relative; }
-  /* line 55, home.scss */
+  /* line 56, home.scss */
   #quality-life .category-block h3 {
     margin-left: 20px;
     font-size: 18px;
     font-weight: bold;
     display: none; }
-  /* line 62, home.scss */
+  /* line 63, home.scss */
   #quality-life .category-block.left-side {
     border-right: 1px solid #eee; }
-    /* line 64, home.scss */
+    /* line 65, home.scss */
     #quality-life .category-block.left-side h3 {
       width: 100%;
       margin-top: 40px;
@@ -133,21 +134,21 @@ body {
       text-align: center;
       left: 0;
       right: 0; }
-      /* line 72, home.scss */
+      /* line 73, home.scss */
       #quality-life .category-block.left-side h3 span {
         display: block;
         font-size: 12px;
         font-weight: normal; }
-  /* line 80, home.scss */
+  /* line 81, home.scss */
   #quality-life .category-block.cate-a, #quality-life .category-block.cate-b {
     border-bottom: 1px solid #eee; }
-  /* line 89, home.scss */
+  /* line 90, home.scss */
   #quality-life .category-block.cate-a:nth-child(odd), #quality-life .category-block.cate-b:nth-child(odd), #quality-life .category-block.cate-c:nth-child(odd), #quality-life .category-block.cate-d:nth-child(odd) {
     border-right: 1px solid #eee; }
-  /* line 92, home.scss */
+  /* line 93, home.scss */
   #quality-life .category-block.cate-a:nth-child(even), #quality-life .category-block.cate-b:nth-child(even), #quality-life .category-block.cate-c:nth-child(even), #quality-life .category-block.cate-d:nth-child(even) {
     border-right: 1px solid #f1f1f1; }
-  /* line 97, home.scss */
+  /* line 98, home.scss */
   #quality-life .category-block.cate-d {
     text-align: center;
     /*
@@ -157,7 +158,7 @@ body {
      *  max-height: 70%;
      *}
      */ }
-    /* line 100, home.scss */
+    /* line 101, home.scss */
     #quality-life .category-block.cate-d h3 {
       width: 100%;
       margin-top: 50px;
@@ -165,31 +166,31 @@ body {
       left: 0;
       right: 0;
       text-align: center; }
-  /* line 118, home.scss */
+  /* line 119, home.scss */
   #quality-life .category-block .category-title {
     position: absolute; }
 
-/* line 123, home.scss */
+/* line 124, home.scss */
 #top-range {
   margin-bottom: 59px; }
-  /* line 126, home.scss */
+  /* line 127, home.scss */
   #top-range .top-range-items {
     position: relative;
     border-bottom: 1px solid #eee; }
-    /* line 130, home.scss */
+    /* line 131, home.scss */
     #top-range .top-range-items .range-title {
       position: absolute;
       display: none; }
-  /* line 137, home.scss */
+  /* line 138, home.scss */
   #top-range .small-items:nth-child(3n+0) {
     border-right: 1px solid #eee; }
-  /* line 140, home.scss */
+  /* line 141, home.scss */
   #top-range .small-items:nth-child(3n+1) {
     border-right: 1px solid #f1f1f1; }
-  /* line 143, home.scss */
+  /* line 144, home.scss */
   #top-range .small-items:nth-child(3n+2) {
     border-right: 1px solid #eee; }
-  /* line 148, home.scss */
+  /* line 149, home.scss */
   #top-range .top-range-first .range-title {
     left: 0;
     right: 0;

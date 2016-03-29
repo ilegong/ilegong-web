@@ -1,6 +1,6 @@
 @import "common";
 
-$indicators-size: 12px;
+$indicators-size: 8px;
 $image-border-color: #eee;
 
 body {
@@ -28,7 +28,7 @@ body {
     .carousel-indicators {
         bottom: -10px;
         li {
-            margin: 1px 5px;
+            margin: 1px 4px;
             height: $indicators-size;
             width: $indicators-size;
             border-radius: $indicators-size;
@@ -47,6 +47,7 @@ body {
 #top-range h2 {
     font-size: 1.2em;
     margin-top: 15px;
+    padding-left: 12px;
 }
 
 #quality-life .category-block {
