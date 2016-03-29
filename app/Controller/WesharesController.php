@@ -479,7 +479,6 @@ class WesharesController extends AppController
      */
     private function calculate_order_ship_fee($ship_setting, $good_num, $good_weight, $weshare_id, $province_id)
     {
-        $this->log('calculate ship fee log settings ' . json_encode($ship_setting) . ' good num ' . $good_num . ' good weight ' . $good_weight . ' weshare id ' . $weshare_id . ' province id ' . $province_id);
         if ($ship_setting['WeshareShipSetting']['tag'] != SHARE_SHIP_KUAIDI_TAG) {
             return $ship_setting['WeshareShipSetting']['ship_fee'];
         }
