@@ -113,87 +113,84 @@ header {
     color: #666;
     font-weight: normal; }
 
-/* line 28, category.scss */
-main {
-  margin-bottom: 49px; }
-  /* line 31, category.scss */
-  main .product-item-header {
-    padding: 10px 12px;
-    background-color: #ffffff; }
-    /* line 36, category.scss */
-    main .product-item-header .proxy-info a img {
-      max-width: 3.333em;
-      max-height: 3.333em;
-      border-radius: 3.333em;
-      float: left; }
-    /* line 43, category.scss */
-    main .product-item-header .proxy-info .name-level {
-      float: left;
-      margin-left: 10px; }
-      /* line 48, category.scss */
-      main .product-item-header .proxy-info .name-level > a h3.proxy-title {
-        margin: 4px 0;
-        font-size: 14px; }
-      /* line 53, category.scss */
-      main .product-item-header .proxy-info .name-level > span.proxy-level {
-        border: 1px solid #f99d3a;
-        border-radius: 5px;
-        width: 6em;
-        height: 1.2em;
-        line-height: 1.2em;
-        color: #f99d3a;
-        text-align: center;
-        padding: 1px 3px;
-        font-size: 0.8em; }
-    /* line 68, category.scss */
-    main .product-item-header .follow-block-area {
-      margin-top: 9px;
-      float: right;
-      position: relative; }
-      /* line 73, category.scss */
-      main .product-item-header .follow-block-area .follow-block {
+/* line 30, category.scss */
+main .product-item-header {
+  padding: 10px 12px;
+  background-color: #ffffff; }
+  /* line 35, category.scss */
+  main .product-item-header .proxy-info a img {
+    max-width: 3.333em;
+    max-height: 3.333em;
+    border-radius: 3.333em;
+    float: left; }
+  /* line 42, category.scss */
+  main .product-item-header .proxy-info .name-level {
+    float: left;
+    margin-left: 10px; }
+    /* line 47, category.scss */
+    main .product-item-header .proxy-info .name-level > a h3.proxy-title {
+      margin: 4px 0;
+      font-size: 14px; }
+    /* line 52, category.scss */
+    main .product-item-header .proxy-info .name-level > span.proxy-level {
+      border: 1px solid #f99d3a;
+      border-radius: 5px;
+      width: 6em;
+      height: 1.2em;
+      line-height: 1.2em;
+      color: #f99d3a;
+      text-align: center;
+      padding: 1px 3px;
+      font-size: 0.8em; }
+  /* line 67, category.scss */
+  main .product-item-header .follow-block-area {
+    margin-top: 9px;
+    float: right;
+    position: relative; }
+    /* line 72, category.scss */
+    main .product-item-header .follow-block-area .follow-block {
+      border: 1px solid #bbb;
+      border-radius: 5px;
+      font-size: 1em;
+      width: 5em;
+      line-height: 2em;
+      color: #666;
+      text-align: center;
+      float: right; }
+      /* line 82, category.scss */
+      main .product-item-header .follow-block-area .follow-block.unfollow {
+        display: none;
+        background-color: #fff;
         border: 1px solid #bbb;
         border-radius: 5px;
-        font-size: 1em;
-        width: 5em;
-        line-height: 2em;
-        color: #666;
-        text-align: center;
-        float: right; }
-        /* line 83, category.scss */
-        main .product-item-header .follow-block-area .follow-block.unfollow {
-          display: none;
-          background-color: #fff;
-          border: 1px solid #bbb;
-          border-radius: 5px;
-          position: absolute;
-          top: 29px;
-          right: 0; }
-  /* line 97, category.scss */
-  main .product-item-body h2.product-title {
-    font-size: 1.15em;
-    font-weight: normal;
-    background-color: #ffffff;
+        position: absolute;
+        top: 29px;
+        right: 0; }
+/* line 96, category.scss */
+main .product-item-body h2.product-title {
+  font-size: 1.15em;
+  font-weight: normal;
+  background-color: #ffffff;
+  margin: 0;
+  padding: 12px 12px 0 12px; }
+/* line 104, category.scss */
+main .product-item-body p.description {
+  font-size: 14px;
+  color: #999;
+  background-color: #ffffff;
+  padding: 12px 12px 0 12px;
+  margin: 0; }
+/* line 113, category.scss */
+main .product-item-footer {
+  background-color: #ffffff;
+  margin-bottom: 10px;
+  line-height: 3.3em;
+  font-size: 1em; }
+  /* line 119, category.scss */
+  main .product-item-footer .icon-item {
+    float: right;
+    display: inline-block;
     margin: 0;
-    padding: 12px 12px 0 12px; }
-  /* line 105, category.scss */
-  main .product-item-body p.description {
-    font-size: 14px;
-    color: #999;
-    background-color: #ffffff;
-    padding: 12px 12px 0 12px;
-    margin: 0; }
-  /* line 114, category.scss */
-  main .product-item-footer {
-    background-color: #ffffff;
-    margin-bottom: 10px;
-    line-height: 3.3em;
-    font-size: 1em; }
-    /* line 120, category.scss */
-    main .product-item-footer .icon-item {
-      float: right;
-      display: inline-block;
-      margin: 0;
-      padding-right: 12px; }
+    padding-right: 12px; }
 
 /*# sourceMappingURL=category.css.map */

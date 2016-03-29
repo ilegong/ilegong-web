@@ -1908,7 +1908,14 @@ class ShareUtilComponent extends Component
         foreach($data as $v) {
             $level = $v['UserLevel']['data_value'];
             $tmp = $v['IndexProduct'];
-            $tmp['share_user_nickname'] = $v['User']['nickname'];
+
+            $nickname = $v['User']['nickname'];
+            if (mb_strlen($nickname) > 4) {
+                $tmp['share_user_nickname'] = mb_substr($nickname, 0, 4) . '...';
+            } else {
+                $tmp['share_user_nickname'] = $nickname;
+            }
+
             $tmp['share_user_level'] = "L{$level}{$level_pool[$level]}";
 
             $description = str_replace('<br />', '', $v['Weshare']['description']);
