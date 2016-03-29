@@ -101,6 +101,9 @@ class DeliveryTemplateComponent extends Component{
         if ($gap_val <= 0) {
             return $start_fee;
         }
+        if($add_units <=0){
+            return $start_fee;
+        }
         return $start_fee + (ceil($gap_val / $add_units) * $add_fee);
     }
 
