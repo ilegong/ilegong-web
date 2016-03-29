@@ -24,7 +24,7 @@ ul li { list-style: none; }
 .babylist ul li{ position: relative; margin-bottom: 10px;}
 .babylist ul li a{ margin-right: 10px; display: block;}
 .babylist ul li a img{ width: 100%;}
-.babylist ul li dl{ overflow: hidden; margin-right: 10px; background-color: #ffffff;}
+.babylist ul li dl{ overflow: hidden; margin-right: 10px; background-color: #777;}
 .babylist ul li dl dd a{ margin-right: 0; display: block; text-decoration: none; color: #ffffff; background-color: #ff7c6e; padding: 0 10px; line-height: 46px;}
 .babylist ul li dl dd a.cur{ background-color: #999999;}
 .babylist ul li dl dd.fl{ padding: 5px 0 5px 10px;line-height: 18px;}
@@ -33,7 +33,7 @@ ul li { list-style: none; }
 .babylist_page a.cur{ background-color: #ffffff; color: #ff7c6e;}
 .babyrule{}
 .babyrule h1{ width: 100px; line-height: 35px; text-align: center; color: #ffffff; background-color: #ff7c6e; font-size: 14px;}
-.babyrule p{ color: #ffffff; padding-top: 10px; line-height: 20px;}
+.babyrule p{ color: #777; padding-top: 10px; line-height: 20px;}
 .baby_bottom{ height: 49px; background-color: #ffffff; position: fixed; left: 0; bottom: 0; width: 100%;}
 .baby_bottom ul li{ float: left; width: 33.33%; text-align: center; color: #666666;}
 .baby_bottom ul li a{ text-decoration: none; display: block;}
@@ -81,7 +81,7 @@ ul li { list-style: none; }
 .apply_bg p{ color: #ffffff; font-size: 14px; line-height: 20px; padding: 10px 0;}
 
 /*宝贝详情*/
-.babydetail{ padding: 15px; font-size: 16px; color: #ffffff;}
+.babydetail{ padding: 15px; font-size: 16px; color: #777;}
 .babydetail p{ padding-top: 5px; line-height: 18px; font-size: 14px; padding-bottom: 15px;}
 .babydetail img{ width: 100%;}
 .babydetail a{ display: block; background-color: #ff7c6e; color: #fff; line-height: 38px; font-weight: bold; margin-top: 20px; text-align: center; text-decoration: none;}
