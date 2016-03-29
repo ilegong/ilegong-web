@@ -481,7 +481,8 @@ class WeixinComponent extends Component {
             //$this->ShareUtil->add_money_for_offline_address($share_id, $order);
             //todo check group share is complete and send msg
             //clean cache share
-            $this->clear_share_cache($order['Order']['member_id'], $order['Order']['ship_mark'] == SHARE_SHIP_GROUP_TAG);
+            //$this->clear_share_cache($order['Order']['member_id'], $order['Order']['ship_mark'] == SHARE_SHIP_GROUP_TAG);
+            $this->clear_share_cache($order['Order']['member_id']);
             return;
         }
         $this->on_order_status_change($order);
@@ -503,18 +504,18 @@ class WeixinComponent extends Component {
         Cache::write(SHARE_OFFLINE_ADDRESS_BUY_DATA_CACHE_KEY . '_' . $share_id, '');
         Cache::write(SHARE_ORDER_COUNT_DATA_CACHE_KEY . '_' . $share_id, '');
         Cache::write(SHARE_BUY_SUMMERY_INFO_CACHE_KEY . '_' . $share_id, '');
-        //check should clear child share cache
-        if ($is_pin_tuan) {
-            $refer_share_id = $this->ShareUtil->get_share_refer_id($share_id);
-            if ($refer_share_id != $share_id) {
-                Cache::write(SHARE_OFFLINE_ADDRESS_SUMMERY_DATA_CACHE_KEY . '_' . $refer_share_id, '');
-                Cache::write(SHARE_OFFLINE_ADDRESS_BUY_DATA_CACHE_KEY . '_' . $refer_share_id, '');
-                Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $refer_share_id . '_1_1', '');
-                Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $refer_share_id . '_0_1', '');
-                Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $refer_share_id . '_1_0', '');
-                Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $refer_share_id . '_0_0', '');
-            }
-        }
+//        //check should clear child share cache
+//        if ($is_pin_tuan) {
+//            $refer_share_id = $this->ShareUtil->get_share_refer_id($share_id);
+//            if ($refer_share_id != $share_id) {
+//                Cache::write(SHARE_OFFLINE_ADDRESS_SUMMERY_DATA_CACHE_KEY . '_' . $refer_share_id, '');
+//                Cache::write(SHARE_OFFLINE_ADDRESS_BUY_DATA_CACHE_KEY . '_' . $refer_share_id, '');
+//                Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $refer_share_id . '_1_1', '');
+//                Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $refer_share_id . '_0_1', '');
+//                Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $refer_share_id . '_1_0', '');
+//                Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $refer_share_id . '_0_0', '');
+//            }
+//        }
     }
 
     /**
@@ -830,7 +831,7 @@ class WeixinComponent extends Component {
             $good = self::get_order_weshare_product_info($order, $carts);
             $user = $users[$order['Order']['creator']];
             $this->send_pintuan_buy_wx_msg($openid, $order, $good, $user);
-            //todo save pin tuan buy opt log
+            //save pin tuan buy opt log
             //$this->ShareUtil->save_buy_opt_log($order['Order']['creator'], $order['Order']['member_id'], $order['Order']['id']);
         }
     }

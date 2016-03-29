@@ -1921,21 +1921,28 @@ class WeshareBuyComponent extends Component
     /**
      * @param $shareId
      * @param $share_creator
+     * @return int
      */
     public function get_share_and_all_refer_share_count($shareId, $share_creator)
     {
-        $weshareM = ClassRegistry::init('Weshare');
-        $orderM = ClassRegistry::init('Order');
-        $refer_share_ids = $weshareM->get_relate_share($shareId, $share_creator);
-        $refer_share_ids[] = $shareId;
-        $order_count = $orderM->find('count', array(
-            'conditions' => array(
-                'member_id' => $refer_share_ids,
-                'type' => ORDER_TYPE_WESHARE_BUY,
-                'not' => array('status' => ORDER_STATUS_WAITING_PAY)
-            )
-        ));
-        return $order_count;
+        $key = SHARE_ORDER_COUNT_SUM_CACHE_KEY . '_' . $shareId . '_' . $share_creator;
+        $cacheData = Cache::read($key);
+        if(empty($cacheData)){
+            $weshareM = ClassRegistry::init('Weshare');
+            $orderM = ClassRegistry::init('Order');
+            $refer_share_ids = $weshareM->get_relate_share($shareId, $share_creator);
+            $refer_share_ids[] = $shareId;
+            $order_count = $orderM->find('count', array(
+                'conditions' => array(
+                    'member_id' => $refer_share_ids,
+                    'type' => ORDER_TYPE_WESHARE_BUY,
+                    'not' => array('status' => ORDER_STATUS_WAITING_PAY)
+                )
+            ));
+            Cache::write($key, $order_count);
+            return $order_count;
+        }
+        return intval($cacheData);
     }
 
     /**
