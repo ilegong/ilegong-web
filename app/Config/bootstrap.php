@@ -1744,6 +1744,7 @@ function get_user_avatar($user)
     return $user['image'];
 }
 
+
 function create_avatar_in_aliyun($url)
 {
     $ch = curl_init();
