@@ -87,6 +87,9 @@ class ShareOptController extends AppController {
      * @return void
      */
     public function newfetch_opt_list_data() {
+$start_time = microtime(true);
+$this->log('[SongDebug] Start newfetch_opt_list_data controller at: ' . $start_time, LOG_WARNING);
+
         $time = $_REQUEST['time'];
         $limit = $_REQUEST['limit'];
         $type = $_REQUEST['type'];
@@ -94,6 +97,12 @@ class ShareOptController extends AppController {
 
         $data = $this->fetch_opt_list_data_comman($time, $limit, $type, $followed, 1);
         echo json_encode($data);
+
+$end_time = microtime(true);
+$this->log('[SongDebug] End newfetch_opt_list_data controller at: ' . $end_time, LOG_WARNING);
+$cost = $end_time - $start_time;
+$this->log('[SongDebug] Newfetch_opt_list_data controller total cost: ' . $cost, LOG_WARNING);
+
         exit();
     }
 
@@ -110,10 +119,8 @@ class ShareOptController extends AppController {
             $combine_data = [];
         } else {
             if ($new) {
-                $opt_logs = $this->OptLogHelper->load_opt_log($time, $limit, $type, 1, $follow);
-                if ($_REQUES['ntest'] == 100) {
-                    $opt_logs = $this->NewOptLogList->get_all_logs($time, $limit, $type, $followed);
-                }
+                $opt_logs = $this->NewOptLogList->get_all_logs($time, $limit, $type, $followed);
+                // $opt_logs = $this->OptLogHelper->load_opt_log($time, $limit, $type, 1, $follow);
                 $combine_data = [];
                 if (!$opt_logs) {
                     return ['error' => 'get data failed.'];
