@@ -17,7 +17,7 @@ class NewOptLog extends AppModel
             // 当用户选定只看fllowed的团长的东西时, 我们需要做一些过滤.
             // 我决定在这里给用户显示它关注的非团长信息, 都关注了,
             // 不显示不够意思
-            $$proxys = ClassRegistry::init('User')->get_my_proxys($uid);
+            $proxys = ClassRegistry::init('User')->get_my_proxys($uid);
             if (!$$proxys) {
                 return false;
             }
@@ -33,6 +33,8 @@ class NewOptLog extends AppModel
 
             $proxys = Hash::extract($proxys, '{n}.UserLevel.data_id');
         }
+
+        $conditions['NewOptLog.proxy_id'] = $proxys;
 
         $data = $this->find('all', [
             'conditions' => array_merge($conditions, [
@@ -50,10 +52,7 @@ class NewOptLog extends AppModel
                 [
                     'table' => 'users',
                     'alias' => 'Proxy',
-                    'conditions' => [
-                        'NewOptLog.proxy_id = Proxy.id',
-                        'Proxy.id' => $proxys,
-                    ],
+                    'conditions' => 'NewOptLog.proxy_id = Proxy.id',
                 ], [
                     'table' => 'user_levels',
                     'alias' => 'ProxyLevel',
