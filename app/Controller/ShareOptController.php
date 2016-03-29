@@ -63,6 +63,15 @@ class ShareOptController extends AppController {
         $this->layout = null;
         $products = $this->ShareUtil->get_product_by_category($category);
 
+        $category_pool = [
+            1 => '果蔬乐园',
+            2 => '肉蛋海鲜',
+            3 => '干果零食',
+            4 => '粮油副食',
+            5 => '其他',
+        ];
+
+        $this->set('category_name', $category_pool[$category]);
         $this->set('products', $products);
     }
 
