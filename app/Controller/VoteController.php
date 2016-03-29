@@ -101,7 +101,7 @@ class VoteController extends AppController {
                 'id' => $candidateId
             )
         ));
-        $title = '我是第' . $candidateId . '号萌娃' . $candidate_info['Candidate']['title'];
+        $title = '我是第' . $candidateId . '号' . $candidate_info['Candidate']['title'];
         $type = $this->VoteSetting->getSubVoteType($eventId);
         $this->UserSubReason->save(array('type' => $type, 'url' => WX_HOST . '/vote/candidate_detail/' . $candidateId . '/' . $eventId, 'user_id' => $uid, 'title' => $title, 'data_id' => $eventId, 'created' => date('Y-m-d H:i:s')));
     }
@@ -289,9 +289,9 @@ class VoteController extends AppController {
         $this->set('images', $images);
         $this->set('candidate_info', $candidate_info);
         $this->set('share_baby_info', true);
-        $this->set('weixin_share_title', '我是第' . $candidateId . '号萌娃' . $candidate_info['Candidate']['title'] . '，叔叔阿姨快来支持我一票啦');
+        $this->set('weixin_share_title', '我是第' . $candidateId . '号' . $candidate_info['Candidate']['title'] . '，叔叔阿姨快来支持我一票啦');
         $this->set_wx_data($this->currentUser['id'], $eventId);
-        $this->pageTitle = '我是' . $candidateId . '号萌娃,' . $candidate_info['Candidate']['title'];
+        $this->pageTitle = '我是' . $candidateId . '号,' . $candidate_info['Candidate']['title'];
         $this->set('event_available', $this->check_event_is_available($event_info));
         $this->set('op_cate', 'detail');
     }
