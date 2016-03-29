@@ -59,7 +59,7 @@ ul li { list-style: none; }
 
 /*报名*/
 .apply_bg{ background-color: #fff; padding: 30px 20px 20px 20px; color: #777; line-height: 38px; margin-top: 20px; margin-bottom: 20px;}
-.apply_bg input{ padding: 10px 15px; line-height: 18px; color: #777; font-size: 14px; border: 0; outline: none; width: 80%; border-radius: 0; font-size: 14px; color: #666666;}
+.apply_bg input{ padding: 10px 15px; line-height: 18px; color: #777; background-color: lightgrey; font-size: 14px; border: 0; outline: none; width: 80%; border-radius: 0; font-size: 14px; color: #666666;}
 .apply_bg ul{ margin-bottom: 20px;}
 .apply_bg textarea {
     border: 0;
@@ -69,8 +69,9 @@ ul li { list-style: none; }
     width: 80%;
     padding: 10px 15px;
     font-size: 14px;
-    color: #666666;
+    color: #777;
     resize: none;
+    background-color: lightgrey;
 }
 .apply_bg a{ display: block; margin-right: 10px; float: left; width: 25%; position: relative;}
 .apply_bg a img{ width: 52.5px; height: 53px;}
