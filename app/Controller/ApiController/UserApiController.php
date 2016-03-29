@@ -66,6 +66,24 @@ class UserApiController extends AppController
         return;
     }
 
+    /**
+     * 绑定支付方式
+     */
+    public function bind_payment(){
+        
+    }
+
+    /**
+     * 绑定手机号码
+     */
+    public function bind_mobile(){
+        $mobile = $_REQUEST['mobile'];
+        $uid = $this->currentUser['id'];
+        $this->User->update(['mobilephone' => $mobile],['id' => $uid]);
+        echo json_encode(['success' => true]);
+        return;
+    }
+
     private function get_user_info($user_id)
     {
         $datainfo = $this->User->find('first', array('recursive' => -1,
@@ -73,6 +91,7 @@ class UserApiController extends AppController
             'fields' => array('nickname', 'image', 'sex', 'mobilephone', 'username', 'id', 'hx_password', 'description')));
         return $datainfo;
     }
+
 
     public function test()
     {

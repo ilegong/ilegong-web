@@ -296,8 +296,6 @@ class OAuthController extends OAuthAppController {
             exit();
         }
         $mobile = intval($inputData['mobile']);
-//        $this->loadModel('MobileRegisters');
-//        $app_register = $this->MobileRegisters->find('first', array('conditions' => array('device_uuid' => $inputData['device_uuid'])));
         $userM = ClassRegistry::init('User');
         $userM->create();
         $data = array();
@@ -305,10 +303,6 @@ class OAuthController extends OAuthAppController {
         $data['User']['activation_key'] = md5(uniqid());
         $data['User']['nickname'] = '朋友说';
         $data['User']['mobilephone'] = $mobile;
-//        if ($inputData['mobile'] != $app_register['MobileRegisters']['mobile']) {
-//            echo json_encode(array('error' => 5, 'error_description' => 'Mobile is not as same as previous'));
-//            exit();
-//        } else
         if ($userM->hasAny(array('User.mobilephone' => $data['User']['mobilephone']))) {
             echo json_encode(array('error' => 2, 'error_description' => 'Mobile is taken by others'));
             exit();
@@ -319,8 +313,6 @@ class OAuthController extends OAuthAppController {
             $data['User']['password'] = Security::hash($inputData['password'], null, true);
             $data['User']['uc_id'] = APP_REGISTER_MARK;
             if ($userM->save($data)) {
-                //$user_id = $userM->getLastInsertID();
-                //$token = $this->OAuth->createAccessToken($inputData['client_id'], $user_id);
                 $_GET = array('username' => $mobile, 'password' => $inputData['password'], 'client_id' => $inputData['client_id'], 'grant_type' => 'password');
                 header("HTTP/1.1 " . '200 OK');
                 $this->token();
@@ -329,12 +321,6 @@ class OAuthController extends OAuthAppController {
                 exit();
             }
         }
-//        if ($app_register['MobileRegisters']['message_code'] == $inputData['code']) {
-//
-//        } else {
-//            echo json_encode(array('error' => 4, 'error_description' => 'code wrong'));
-//            exit();
-//        }
     }
 
 }
