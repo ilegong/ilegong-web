@@ -64,7 +64,7 @@ class VoteSetting extends AppModel{
             ),
             'common_params' => array(
                 'banner' => 'http://static.tongshijia.com/images/index/4b66e466-f58a-11e5-8c9e-00163e1600b6.jpg',
-                'prize_pic' => 'http://51daifan-images.stor.sinaapp.com/files/201510/thumb_m/6bbd4e0c490_1030.jpg',
+                'prize_pic' => 'http://static.tongshijia.com/images/index/8920d130-f58b-11e5-8c9e-00163e1600b6.jpg',
                 'server_reply_title' => '新西兰梦幻之旅亲子摄影大赛开赛啦！',
                 'server_reply_img' => 'http://static.tongshijia.com/images/index/4b66e466-f58a-11e5-8c9e-00163e1600b6.jpg',
                 'server_reply_url' => 'http://www.tongshijia.com/vote/vote_event_view/9',
