@@ -890,6 +890,8 @@ class ShareUtilComponent extends Component
         if ($share_info['creator'] == 802852) {
             $optData['deleted'] = DELETED_YES;
         }
+        //clear order count cache
+        Cache::write(SHARE_ORDER_COUNT_SUM_CACHE_KEY . '_' . $share_id . '_' . $share_info['creator'], '');
         $this->saveOptLog($optData);
     }
 
