@@ -5,6 +5,7 @@
  * User: ldy
  * Date: 14/11/4
  * Time: 下午1:31
+ * $this->Location是代表Location Model, CakePHP是怎么处理的?
  */
 class LocationsController extends AppController
 {
@@ -30,6 +31,7 @@ class LocationsController extends AppController
             Cache::write(self::$PROVINCES_CACHE_KEY, $cacheData);
         }
         echo $cacheData;
+        exit();
     }
 
     public function get_provinces()
@@ -43,6 +45,7 @@ class LocationsController extends AppController
             Cache::write(self::$PROVINCES_CACHE_KEY, $cacheData);
         }
         echo $cacheData;
+        exit();
     }
 
     public function get_city()
@@ -60,6 +63,7 @@ class LocationsController extends AppController
             }
 
             echo $cacheData;
+            exit();
         }
     }
 
@@ -71,6 +75,7 @@ class LocationsController extends AppController
             $params = array('conditions' => array('parent_id' => $city_id), 'fields' => array('id', 'name'));
             $counties = $this->Location->find('list', $params);
             echo json_encode($counties);
+            exit();
         }
     }
 
@@ -82,6 +87,7 @@ class LocationsController extends AppController
             $params = array('conditions' => array('parent_id' => $county_id), 'fields' => array('id', 'name'));
             $counties = $this->Location->find('list', $params);
             echo json_encode($counties);
+            exit();
         }
     }
 
@@ -108,5 +114,6 @@ class LocationsController extends AppController
         $connection_address = $this->Location->find('list', array('conditions' => array('parent_id' => $connection_params), 'fields' => array('id', 'name', 'parent_id')));
         $successinfo = array('histories' => $histories, 'city_list' => $connection_address[$province_id], 'county_list' => $connection_address[$city_id], 'town_list' => $connection_address[$county_id]);
         echo json_encode($successinfo);
+        exit();
     }
 }
