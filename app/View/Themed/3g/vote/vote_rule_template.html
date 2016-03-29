@@ -1,9 +1,11 @@
+{{if !empty($voteConfig['product_params'])}}
 <div class="babyrule">
     <h1>{{$voteConfig['product_params']['recommend']}}推荐：</h1>
     {{loop $voteConfig['product_params']['products'] $recommendProduct}}
     <a href="{{$recommendProduct['url']}}"><img src="{{$recommendProduct['pic']}}" style="width: 100%;"/></a>
     {{/loop}}
 </div>
+{{/if}}
 <div class="babyrule">
     <h1>活动奖品：</h1>
     <p>本次活动不设评委，根据票数决出最终名次。</p>
