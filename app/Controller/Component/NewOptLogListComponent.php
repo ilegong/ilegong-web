@@ -34,7 +34,7 @@ class NewOptLogListComponent extends Component {
         $tmp['proxy_id'] = $v['Proxy']['id'];
         $tmp['proxy'] = $v['Proxy']['nickname'];
         $tmp['current_user'] = $uid;
-        $tmp['check_relation'] = in_array($uid, $my_proxys);
+        $tmp['check_relation'] = in_array($v['Proxy']['id'], $my_proxys);
         $tmp['avatar'] = get_user_avatar($v['Proxy']);
         $tmp['level'] = "L{$level}" . map_user_level($level);
         $tmp['title'] = $v['Weshare']['title'];
