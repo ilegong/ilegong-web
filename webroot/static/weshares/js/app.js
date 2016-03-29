@@ -42,7 +42,7 @@
             return '' + value;
           });
           ngModel.$formatters.push(function (value) {
-            return parseInt(value);
+            return parseFloat(value);
           });
         }
       };
