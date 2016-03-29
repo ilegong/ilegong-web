@@ -20,6 +20,14 @@
                         <label>结束日期</label>
                         <input type="text" class="form-control" name="endDate" placeholder="2016-03-16" value="{{$endDate}}">
                     </div>
+                    <div class="form-group">
+                        <label>状态</label>
+                        <select class="form-control" name="shareStatus">
+                            <option value="0,1">全部</option>
+                            <option value="0">进行中</option>
+                            <option value="1">截团</option>
+                        </select>
+                    </div>
                     <button type="submit" class="btn btn-default">查询</button>
                 </form>
             </div>
@@ -30,6 +38,7 @@
                             <tr>
                                 <th>分享ID</th>
                                 <th>分享名称</th>
+                                <th>分享状态</th>
                                 <th>分享人</th>
                                 <th>订单数</th>
                             </tr>
@@ -39,6 +48,7 @@
                               <tr>
                                   <td>{{$data_item['cake_orders']['weshare_id']}}</td>
                                   <td style="width: 30%;">{{$weshares[$data_item['cake_orders']['weshare_id']]['title']}}</td>
+                                  <td>{{if $weshares[$data_item['cake_orders']['weshare_id']]['status']==0}}进行中{{else}}截止{{/if}}</td>
                                   <td>{{$users[$weshares[$data_item['cake_orders']['weshare_id']]['creator']]['nickname']}}</td>
                                   <td>{{$data_item[0]['s_c']}}</td>
                               </tr>
