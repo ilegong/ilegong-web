@@ -59,12 +59,13 @@ class ShareCountlyController extends AppController
             $endDate = date('Y-m-d');
         }
         $status = $_REQUEST['shareStatus'];
+        $status = empty($status) ? '0,1' : $status;
         $orderM = ClassRegistry::init('Order');
         $weshareM = ClassRegistry::init('Weshare');
         $userM = ClassRegistry::init('User');
-        $data = $orderM->query("SELECT count(co.id) as s_c, co.member_id as weshare_id FROM cake_orders as co LEFT JOIN cake_weshares as cw on (cw.id = co.member_id and cw.status in (" . $status . ")) where date(created)>='" . $startDate . "' AND date(created)<='" . $endDate . "' AND status > 0 and type=9 group by member_id order by s_c desc");
+        $data = $orderM->query("SELECT count(co.id) as s_c, co.member_id as weshare_id FROM cake_orders as co LEFT JOIN cake_weshares as cw on (cw.id = co.member_id and cw.status in (" . $status . ")) where date(co.created)>='" . $startDate . "' AND date(co.created)<='" . $endDate . "' AND co.status > 0 and co.type=9 group by co.member_id order by s_c desc");
         $this->set('data', $data);
-        $weshare_ids = array_unique(Hash::extract($data, '{n}.cake_orders.weshare_id'));
+        $weshare_ids = array_unique(Hash::extract($data, '{n}.co.weshare_id'));
         $weshares = $weshareM->find('all', [
             'conditions' => [
                 'id' => $weshare_ids

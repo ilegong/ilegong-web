@@ -46,10 +46,10 @@
                         <tbody>
                             {{loop $data $data_item}}
                               <tr>
-                                  <td>{{$data_item['cake_orders']['weshare_id']}}</td>
-                                  <td style="width: 30%;">{{$weshares[$data_item['cake_orders']['weshare_id']]['title']}}</td>
-                                  <td>{{if $weshares[$data_item['cake_orders']['weshare_id']]['status']==0}}进行中{{else}}截止{{/if}}</td>
-                                  <td>{{$users[$weshares[$data_item['cake_orders']['weshare_id']]['creator']]['nickname']}}</td>
+                                  <td>{{$data_item['co']['weshare_id']}}</td>
+                                  <td style="width: 30%;">{{$weshares[$data_item['co']['weshare_id']]['title']}}</td>
+                                  <td>{{if $weshares[$data_item['co']['weshare_id']]['status']==0}}进行中{{else}}截止{{/if}}</td>
+                                  <td>{{$users[$weshares[$data_item['co']['weshare_id']]['creator']]['nickname']}}</td>
                                   <td>{{$data_item[0]['s_c']}}</td>
                               </tr>
                             {{/loop}}
