@@ -2,6 +2,7 @@
 
 header {
     border-bottom: 1px solid #ddd;
+    background-color: #fff;
 
     a {
         &:hover {
@@ -31,8 +32,8 @@ main {
         padding: 10px 12px;
         background-color: #ffffff;
 
-        .proxy-info > {
-            img {
+        .proxy-info {
+            a img {
                 max-width: 3.333em;
                 max-height: 3.333em;
                 border-radius: 3.333em;
@@ -44,7 +45,7 @@ main {
                 margin-left: 10px;
 
                 > {
-                    h3.proxy-title {
+                    a h3.proxy-title {
                         margin: 4px 0;
                         font-size: 14px;
                     }
@@ -92,7 +93,7 @@ main {
         }
     }
 
-    .product-item-body > {
+    .product-item-body {
         h2.product-title {
             font-size: 1.15em;
             font-weight: normal;

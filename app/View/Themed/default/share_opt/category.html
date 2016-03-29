@@ -35,11 +35,15 @@
         <div class="row product-item">
           <div class="product-item-header clearfix">
             <div class="col-xs-6 proxy-info">
-              <img src="{{$product['share_user_img']}}">
+              <a href="/weshares/user_share_info/{{$product['share_user_id']}}">
+                <img src="{{$product['share_user_img']}}">
+              </a>
               <div class="name-level">
-                <h3 class="proxy-title">
-                  {{$product['share_user_nickname']}}
-                </h3>
+                <a href="/weshares/user_share_info/{{$product['share_user_id']}}">
+                  <h3 class="proxy-title">
+                    {{$product['share_user_nickname']}}
+                  </h3>
+                </a>
                 <span class="proxy-level">{{$product['share_user_level']}}</span>
               </div>
             </div>
@@ -59,12 +63,18 @@
             </div>
           </div>
           <div class="product-item-body">
-            <img src="{{$product['share_img']}}">
-            <h2 class="product-title">{{$product['share_name']}}</h2>
-            <p class="description">
-                {{$product['share_description']}}
-                {{if ($product['description_more'])}}...更多&gt;&gt;&gt;{{/if}}
-            </p>
+            <a href="/weshares/user_share_info/{{$product['share_user_id']}}">
+              <img src="{{$product['share_img']}}">
+            </a>
+            <a href="/weshares/user_share_info/{{$product['share_user_id']}}">
+              <h2 class="product-title">{{$product['share_name']}}</h2>
+            </a>
+            <a href="/weshares/user_share_info/{{$product['share_user_id']}}">
+              <p class="description">
+                  {{$product['share_description']}}
+                  {{if ($product['description_more'])}}...更多&gt;&gt;{{/if}}
+              </p>
+            </a>
           </div>
           <div class="product-item-footer clearfix">
             <p class="icon-item">报名({{$product['baoming']}})</p>
