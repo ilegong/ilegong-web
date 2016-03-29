@@ -38,12 +38,15 @@ class WesharesController extends AppController
      */
     public function index($tag = 0)
     {
+        $this->redirect('/share_opt/home.html');
+        /*
         $this->layout = null;
         $products = $this->ShareUtil->get_index_product($tag);
         $uid = $this->currentUser['id'];
         $this->set('products', $products);
         $this->set('uid', $uid);
         $this->set('tag', $tag);
+        */
     }
 
     /**
