@@ -18,7 +18,7 @@ class NewOptLog extends AppModel
             // 我决定在这里给用户显示它关注的非团长信息, 都关注了,
             // 不显示不够意思
             $proxys = ClassRegistry::init('User')->get_my_proxys($uid);
-            if (!$$proxys) {
+            if (!$proxys) {
                 return false;
             }
         } else {
