@@ -27,37 +27,7 @@ class CombinatorHelper extends Helper {
 	function script($url) {
 			return $this->get_js($url);			
 	}
-	
-	function less($type='bootstrap'){
-		if(isset($_GET['styleid'])){
-			$styleid = intval($_GET['styleid']);
-		}
-		else{
-			$styleid = Configure::read('Site.style');
-		}
-		if(empty($styleid)){
-			$styleid=1;
-		}
-		$cachefile = $type.'_'.$styleid.'.css';
-		if(!file_exists ( WEB_VISIT_CACHE .$cachefile )){
-			$Stylevar = loadModelObject('Stylevar');
-			$styles = $Stylevar->find('all',array('conditions'=>array('styleid'=>$styleid)));
-			$variables = array();
-			foreach($styles as $style){
-				$variables[$style['Stylevar']['skey']] = $style['Stylevar']['sval'];
-			}
-			$less = new lessc;
-			$less->setFormatter("compressed");//lessjs compressed classic
-			$less->setImportDir(array(ROOT.'/data/bootstrap/less/'));
-			$less->setVariables($variables);
-			// 需要去掉bootstrap.less文件中包含的variable.less
-			$css = $less->compileFile(ROOT.'/data/bootstrap/less/'.$type.'.less');
-			//$css = preg_replace('/url\(["|\']?(.+?)["|\']?\)/ies',"'url('.\$this->fixurl('\\1').')'",$css);
-			file_put_contents(WEB_VISIT_CACHE.$cachefile, $css);
-		}
-		return '<link href="' .WEB_VISIT_CACHE_URL. $cachefile . '" rel="stylesheet" type="text/css" >';
-	}
-	
+
 	private function get_js($url) {
 		$cachefile = substr(md5(implode('_',$url)),0,10).'.js';
 		if (!Configure::read('debug') && file_exists ( WEB_VISIT_CACHE .$cachefile )) {

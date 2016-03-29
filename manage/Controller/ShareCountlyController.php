@@ -70,7 +70,7 @@ class ShareCountlyController extends AppController
             'conditions' => [
                 'id' => $weshare_ids
             ],
-            'fields' => ['id', 'title', 'creator']
+            'fields' => ['id', 'title', 'creator', 'status']
         ]);
         $share_creators = array_unique(Hash::extract($weshares, '{n}.Weshare.creator'));
         $weshares = Hash::combine($weshares, '{n}.Weshare.id', '{n}.Weshare');
