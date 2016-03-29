@@ -33,7 +33,7 @@
       <main>
       {{loop $products $key $product}}
         <div class="row product-item">
-          <div class="product-item-header">
+          <div class="product-item-header clearfix">
             <div class="col-xs-6 proxy-info">
               <img src="{{$product['share_user_img']}}">
               <div class="name-level">
@@ -43,7 +43,7 @@
                 <span class="proxy-level">{{$product['share_user_level']}}</span>
               </div>
             </div>
-            <div class="col-xs-2 col-xs-offset-4 follow-block-area">
+            <div class="col-xs-2 col-xs-offset-4 follow-block-area clearfix">
               <div class="follow-block {{if ($product['check_user_relation'])}}followed{{else}}follow-ta{{/if}}"
                 data-me="{{$product['my_id']}}" data-ta="{{$product['share_user_id']}}">
                 {{if ($product['check_user_relation'])}}

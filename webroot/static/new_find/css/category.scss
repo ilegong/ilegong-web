@@ -1,20 +1,26 @@
 @import "common";
 
 header {
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #ddd;
 
     a {
         &:hover {
             text-decoration: none;
         }
         .back-btn {
-            margin-top: 24px;
             color: #666;
             font-size: 1em;
+            margin: 0;
+            line-height: 38px;
+            margin-left: 12px;
         }
     }
     .text-center {
-        font-size: 1.33em;
+        font-size: 1.333em;
+        margin: 0;
+        line-height: 38px;
+        color: #666;
+        font-weight: normal;
     }
 }
 
@@ -59,7 +65,7 @@ main {
         }
 
         .follow-block-area {
-            margin-top: 10px;
+            margin-top: 9px;
             float: right;
             position: relative;
 
