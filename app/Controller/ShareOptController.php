@@ -7,7 +7,7 @@ class ShareOptController extends AppController {
 
     var $uses = array('OptLog', 'User', 'VisitLog', 'UserRelation');
 
-    var $components = array('WeshareBuy', 'OptLogHelper');
+    var $components = array('WeshareBuy', 'OptLogHelper', 'ShareUtil', 'NewOptLogList');
 
     /**
      * pys index view
@@ -38,6 +38,34 @@ class ShareOptController extends AppController {
         }
     }
 
+    public function home()
+    {
+        $this->layout = null;
+        $carousel = ClassRegistry::init('NewFind')->get_all_carousel();
+        $top_rank = ClassRegistry::init('NewFind')->get_all_top_rank();
+        $this->set('carousel', $carousel);
+        $this->set('top_rank_first', $top_rank[0]);
+        unset($top_rank[0]);
+        $this->set('top_rank', $top_rank);
+    }
+
+    public function category_ajax($category)
+    {
+        $this->layout = null;
+        $products = $this->ShareUtil->get_product_by_category($category);
+
+        echo json_encode($products);
+        exit();
+    }
+
+    public function category($category)
+    {
+        $this->layout = null;
+        $products = $this->ShareUtil->get_product_by_category($category);
+
+        $this->set('products', $products);
+    }
+
     /**
      * fetch opt log list
      */
@@ -66,7 +94,7 @@ class ShareOptController extends AppController {
 
         $data = $this->fetch_opt_list_data_comman($time, $limit, $type, $followed, 1);
         echo json_encode($data);
-        return;
+        exit();
     }
 
     public function fetch_opt_list_data_comman($time, $limit, $type, $follow = false, $new = false)
@@ -82,8 +110,10 @@ class ShareOptController extends AppController {
             $combine_data = [];
         } else {
             if ($new) {
-                $opt_log_data = $this->OptLogHelper->load_opt_log($time, $limit, $type, 1, $follow);
-                $opt_logs = $opt_log_data;
+                $opt_logs = $this->OptLogHelper->load_opt_log($time, $limit, $type, 1, $follow);
+                if ($_REQUES['ntest'] == 100) {
+                    $opt_logs = $this->NewOptLogList->get_all_logs($time, $limit, $type, $followed);
+                }
                 $combine_data = [];
                 if (!$opt_logs) {
                     return ['error' => 'get data failed.'];
@@ -100,6 +130,7 @@ class ShareOptController extends AppController {
             'opt_logs' => $opt_logs,
             'combine_data' => $combine_data
         ];
+
 
         return $data;
     }

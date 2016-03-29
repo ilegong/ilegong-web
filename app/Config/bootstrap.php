@@ -2369,21 +2369,87 @@ function map_user_avatar($var){
 }
 
 function get_index_tags(){
-    return array(
-        array(
+    return [
+        [
             'id' => 0,
-            'name' => '新品爆款'
-        ), array(
+            'name' => '新品爆款(新版勿用)'
+        ], [
             'id' => 1,
-            'name' => '水果蔬菜'
-        ), array(
+            'name' => '水果蔬菜(果蔬乐园)'
+        ], [
             'id' => 2,
-            'name' => '肉蛋粮油'
-        ), array(
+            'name' => '肉蛋粮油(肉蛋海鲜)'
+        ], [
             'id' => 3,
-            'name' => '零食其他'
-        )
-    );
+            'name' => '零食其他(干果零食)'
+        ], [
+            'id' => 4,
+            'name' => '粮油副食(新版勿用)'
+        ], [
+            'id' => 5,
+            'name' => '其他(新版勿用)'
+        ]
+    ];
+}
+
+function map_readable_date($time) {
+    $now = time();
+    $day = 24 * 60 * 60;
+    $hour = 60 * 60;
+    $minute = 60;
+    $diff = $now - $time;
+
+    if ($diff > $day) {
+        $str = number_format($diff / $day, 0, '.', '') . "天前";
+    } elseif ($diff > $hour) {
+        $str = number_format($diff / $hour, 0, '.', '') . "小时前";
+    } else {
+        $min = number_format($diff / $minute, 0, '.', '');
+        $str = $min ? $min . "分钟前" : "刚刚";
+    }
+
+    return $str;
+}
+
+function map_user_level($user_level) {
+    $level_pool = [
+        0 => '分享达人',
+        1 => '实习团长',
+        2 => '正式团长',
+        3 => '优秀团长',
+        4 => '高级团长',
+        5 => '资深团长',
+        6 => '首席团长'
+    ];
+
+    return $level_pool[$user_level];
+}
+
+function map_opt_log_data_type($type) {
+    $str = "";
+
+    switch ($type) {
+        case OPT_LOG_CREATE_SHARE:
+            $str = '分享了';
+            break;
+        case OPT_LOG_SHARE_BUY:
+            $str = '报名了';
+            break;
+        case OPT_LOG_SHARE_COMMENT:
+            $str = '评价了';
+            break;
+        case OPT_LOG_SHARE_RECOMMEND:
+            $str = '推荐了';
+            break;
+        case OPT_LOG_START_GROUP_SHARE:
+            $str = '发起拼团';
+            break;
+        case OPT_LOG_PINTUAN_SUCCESS:
+            $str = '拼团成功';
+            break;
+    }
+
+    return $str;
 }
 
 function map_opt_log_data($var) {
@@ -2391,23 +2457,8 @@ function map_opt_log_data($var) {
     $var['timestamp'] = $timeStamp;
     $data_type = $var['obj_type'];
     $detail_url = '/weshares/view/' . $var['obj_id'];;
-    if ($data_type == OPT_LOG_CREATE_SHARE) {
-        $var['data_type_tag'] = '分享了';
-    }
-    if ($data_type == OPT_LOG_SHARE_BUY) {
-        $var['data_type_tag'] = '报名了';
-    }
-    if ($data_type == OPT_LOG_SHARE_COMMENT) {
-        $var['data_type_tag'] = '评价了';
-    }
-    if ($data_type == OPT_LOG_SHARE_RECOMMEND) {
-        $var['data_type_tag'] = '推荐了';
-    }
-    if ($data_type == OPT_LOG_START_GROUP_SHARE) {
-        $var['data_type_tag'] = '发起拼团';
-    }
+    $var['data_type_tag'] = map_opt_log_data_type($data_type);
     if ($data_type == OPT_LOG_PINTUAN_SUCCESS) {
-        $var['data_type_tag'] = '拼团成功';
         $detail_url = get_pintuan_opt_log_url($var['obj_id']);
     }
     $var['data_url'] = $detail_url;
