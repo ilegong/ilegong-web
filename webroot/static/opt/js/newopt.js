@@ -88,7 +88,7 @@ $(document).ready(function () {
       'followed': followed,
       "type": filterVal,
       "time": bottomTimeStamp,
-      "limit": 10
+      "limit": 5
     };
     var callbackFunc = function (data) {
       $loadingDiv.find('div').text('数据加载中...');

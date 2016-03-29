@@ -51,7 +51,7 @@ class NewOptLogListComponent extends Component {
         $image = explode('|', $v['Weshare']['images'])[0];
         $tmp['image'] = $image ? $image : "http://static.tongshijia.com/static/img/default_product_banner.png";
 
-        // $tmp['baoming'] = $this->WeshareBuy->get_share_and_all_refer_share_count($v['Weshare']['id'], $v['Proxy']['id']);
+        $tmp['baoming'] = $this->WeshareBuy->get_share_and_all_refer_share_count($v['Weshare']['id'], $v['Proxy']['id']);
 
         $tmp['liulan'] = $v['Weshare']['view_count'];
 
