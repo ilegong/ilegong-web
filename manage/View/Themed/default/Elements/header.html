@@ -24,13 +24,13 @@
 .ui-tabs-nav li{width:100px;overflow:hidden;height:30px;}
 #leftmenucontent .nav-stacked li {width:200px;}
 </style>
+<link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
 <![endif]-->
 <?php
-		echo $this->Combinator->less();
 		echo $this->Html->css(array(
 			'ui.jqgrid','admin/jqGrid.bootstrap.css',
 			'redmond/jquery-ui-1.10.3.custom.min', /*jqgrid依赖jqueryui的图标*/
-			'chosen',		
+			'chosen',		``
 			'ui-customer',
             'admin',
             'swfupload',
