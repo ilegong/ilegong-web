@@ -2705,10 +2705,8 @@ class WeshareBuyComponent extends Component
      */
     public function cal_proxy_rebate_fee($total_price, $uid, $shareId)
     {
-        //check user is proxy
-        $userM = ClassRegistry::init('User');
-        $isProxy = $userM->userIsProxy($uid);
-        if ($isProxy == USER_IS_PROXY) {
+        $data_val = $this->ShareUtil->get_user_level($uid);
+        if($data_val == PROXY_USER_LEVEL_VALUE){
             $rebate_setting = $this->ShareUtil->get_share_rebate_data($shareId);
             if (!empty($rebate_setting)) {
                 $rebate_money = round((floatval($rebate_setting['ProxyRebatePercent']['percent']) * $total_price) / (100 * 100), 2);
