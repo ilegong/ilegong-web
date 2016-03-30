@@ -2,8 +2,8 @@
 
 class UserApiController extends AppController
 {
-    public $components = array('OAuth.OAuth', 'ChatUtil', 'WeshareBuy', 'ShareUtil');
-    public $uses = array('User', 'UserFriend', 'UserLevel', 'UserRelation', 'UserFans');
+    public $components = array('OAuth.OAuth', 'ChatUtil', 'WeshareBuy', 'ShareUtil', 'UserFans');
+    public $uses = array('User', 'UserFriend', 'UserLevel', 'UserRelation');
 
     public function beforeFilter()
     {
@@ -64,6 +64,10 @@ class UserApiController extends AppController
         $this->User->update(['image' => "'" . $avatar_url . "'", 'avatar' => "'" . $avatar_url . "'"], ['id' => $user_id]);
         echo json_encode(['success' => true]);
         return;
+    }
+
+    public function update_desc(){
+
     }
 
     /**
