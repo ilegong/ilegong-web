@@ -160,7 +160,7 @@ class ShareOptController extends AppController {
             $has_new_result['count'] = $unread_count;
         }
         echo json_encode($has_new_result);
-        return;
+        exit();
     }
 
 
