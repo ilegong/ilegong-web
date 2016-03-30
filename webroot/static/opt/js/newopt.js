@@ -42,6 +42,27 @@ $(document).ready(function () {
     loadOptLogData();
   }
 
+  function loadBaomingData() {
+    // <div class="bm bin hidden" data-baoming-status="false" data-baoming-id="<%this.share_id%>">报名(0)</div>
+
+    var share_ids = [];
+    $('div.bm.bin.hidden[data-baoming-status=false]').each(function (){
+      var share = $(this).attr('data-baoming-id');
+      var proxy = $(this).attr('data-baoming-proxy-id');
+
+      $.ajax({
+        url: '/share_opt/get_baoming_ajax',
+        data: {'share': share, 'proxy': proxy},
+        dataType: 'json',
+        success: function (data) {
+          var count = data.count;
+          $(this).text('报名(' + count + ")");
+          $(this).removeClass('hidden').attr('data-baoming-status', true);
+        }.bind(this),
+      });
+    });
+  }
+
   /**
    * loadMoreDataWithScrollY 显示或者隐藏回到顶部按钮
    * @access public
@@ -116,6 +137,7 @@ $(document).ready(function () {
       bindSubEvent();
       bindUnSubEvent();
       loadDataTimes = loadDataTimes + 1;
+      loadBaomingData();
     };
     $.getJSON(getOptLogUrl, reqParams, callbackFunc);
   }
@@ -279,7 +301,7 @@ $(document).ready(function () {
     //'<img src="http://static.tongshijia.com/static/opt/images/fenxiang.png" class="img fl">' +
     //'<div class="fenxian fl">分享</div>' +
     '<div class="bottom-area">' +
-    '<div class="bm bin">报名(<%this.baoming%>)</div>' +
+    '<div class="bm bin hidden" data-baoming-status="false" data-baoming-id="<%this.share_id%>" data-baoming-proxy-id="<%this.proxy_id%>">报名(0)</div>' +
     '<div class="pl bin">浏览(<%this.liulan%>)</div>' +
     '</div>' +
     '</div>' +

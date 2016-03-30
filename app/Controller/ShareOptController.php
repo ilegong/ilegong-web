@@ -89,6 +89,15 @@ class ShareOptController extends AppController {
         return;
     }
 
+    public function get_baoming_ajax() {
+        $share = $_REQUEST['share'];
+        $proxy = $_REQUEST['proxy'];
+        $data = $this->NewOptLogList->get_all_baoming_data($share, $proxy);
+
+        echo json_encode($data);
+        exit();
+    }
+
     /**
      * newfetch_opt_list_data 新版本的listdata.
      *

@@ -11,6 +11,20 @@ class NewOptLogListComponent extends Component {
         return $this->get_logs_fields($data);
     }
 
+    public function get_all_baoming_data($share, $proxy)
+    {
+        $ret = [];
+
+        if (!is_numeric($share) || !is_numeric($proxy)) {
+            return [];
+        }
+
+        $ret['share'] = $share;
+        $ret['count'] = $this->WeshareBuy->get_share_and_all_refer_share_count($share, $proxy);
+
+        return $ret;
+    }
+
     private function get_logs_fields($data)
     {
         $ret = [];
@@ -58,7 +72,7 @@ class NewOptLogListComponent extends Component {
         $image = explode('|', $v['Weshare']['images'])[0];
         $tmp['image'] = $image ? $image : "http://static.tongshijia.com/static/img/default_product_banner.png";
 
-        $tmp['baoming'] = $this->WeshareBuy->get_share_and_all_refer_share_count($v['Weshare']['id'], $v['Proxy']['id']);
+        $tmp['baoming'] = 0;
 
         $tmp['liulan'] = $v['Weshare']['view_count'];
 
