@@ -52,7 +52,7 @@ class UserApiController extends AppController
         $user_id = $this->currentUser['id'];
         $new_password = $_REQUEST['password'];
         $hash_password = Security::hash($new_password, null, true);
-        $this->User->update(['password' => $hash_password], ['id' => $user_id]);
+        $this->User->update(['password' => "'" . $hash_password . "'"], ['id' => $user_id]);
         echo json_encode(['success' => true]);
         exit();
     }
@@ -69,7 +69,7 @@ class UserApiController extends AppController
     public function update_desc(){
         $user_id = $this->currentUser['id'];
         $desc = $_REQUEST['desc'];
-        $this->User->update(['description' => $desc],['id' => $user_id]);
+        $this->User->update(['description' => "'" . $desc . "'"], ['id' => $user_id]);
         echo json_encode(['success' => true]);
         exit();
     }
@@ -87,7 +87,7 @@ class UserApiController extends AppController
     public function bind_mobile(){
         $mobile = $_REQUEST['mobile'];
         $uid = $this->currentUser['id'];
-        $this->User->update(['mobilephone' => $mobile],['id' => $uid]);
+        $this->User->update(['mobilephone' => "'" . $mobile . "'"], ['id' => $uid]);
         echo json_encode(['success' => true]);
         exit();
     }
