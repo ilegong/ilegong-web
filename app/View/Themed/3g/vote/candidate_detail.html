@@ -2,7 +2,8 @@
 <div class="container" style="background-color:#ffffff; margin-bottom: 50px;">
     <div class="babydetail">
         <dl class="clearfix">
-            <dd class="fl"><a style="background-color: #c54134;text-align: left;margin-top: 2px;padding-right: 12px;" href="/weshares/user_share_info/{{$candidate_info_user['User']['id']}}"><img style="height: 50px;width: 50px;border-radius: 50%;border-style: solid;border-color: #ECEAEA;border-width: 2px;" src="{{get_user_avatar($candidate_info_user)}}"/></a></dd>
+            <dd class="fl"><a style="background-color: #fff;text-align: left;margin-top: 2px;padding-right: 12px;" href="/weshares/user_share_info/{{$candidate_info_user['User']['id']}}">
+                <img style="height: 50px;width: 50px;border-radius: 50%;border-style: solid;border-color: #ECEAEA;border-width: 2px;" src="{{get_user_avatar($candidate_info_user)}}"/></a></dd>
             <dd style="width: 40%;margin-left: 50px;margin-top: 5px;">{{$candidate_info_user['User']['nickname']}}</dd>
             <dd style="width: 60%;margin-left: 50px;font-size: 14px;">{{$candidate_id}}号  {{$candidate_info['Candidate']['title']}}</dd>
             <dd class="fr" style="margin-top: -20px;font-size: 14px;">{{$all_count}}&nbsp;票&nbsp;&nbsp;排名&nbsp;{{$rank}}</dd>
