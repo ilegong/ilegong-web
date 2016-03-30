@@ -68,6 +68,33 @@ if (defined('SAE_MYSQL_DB')) {
 } else {
     define('TMP', ROOT . DS . 'data' . DS);
 }
+
+
+//const SAE_STATIC_FILE_PATH = 'http://51daifan-assets.stor.sinaapp.com';
+if (getenv('TONGSHIJIA_ENV') == 'product') {
+    //const SAE_STATIC_FILE_PATH = 'http://static.tongshijia.com';
+    define('SAE_STATIC_FILE_PATH', 'http://static.tongshijia.com');
+    define('JPUSH_APP_KEY', '32a7a17d552b6dd3d7736c72');
+    define('JPUSH_APP_SECRET', '08be41e830d5faf1d5f6b660');
+    define('MYSQL_SERVER_HOST', 'www.tongshijia.com');
+    define('MEMCACHE_HOST', 'www.tongshijia.com');
+    define('REDIS_HOST', 'www.tongshijia.com');
+} elseif (getenv('TONGSHIJIA_ENV') == 'test') {
+    define('SAE_STATIC_FILE_PATH', 'http://static-test.tongshijia.com');
+    define('JPUSH_APP_KEY', 'dca84c4492a450f738918b65');
+    define('JPUSH_APP_SECRET', '376cf6f26a72c31ca769da44');
+    define('MYSQL_SERVER_HOST', 'test.tongshijia.com');
+    define('MEMCACHE_HOST', 'test.tongshijia.com');
+    define('REDIS_HOST', 'test.tongshijia.com');
+} else {
+    define('SAE_STATIC_FILE_PATH', 'http://dev.tongshijia.com');
+    define('JPUSH_APP_KEY', 'dca84c4492a450f738918b65');
+    define('JPUSH_APP_SECRET', '376cf6f26a72c31ca769da44');
+    define('MYSQL_SERVER_HOST', '127.0.0.1');
+    define('MEMCACHE_HOST', '127.0.0.1');
+    define('REDIS_HOST', '127.0.0.1');
+}
+
 if (!include(CORE_PATH . 'Cake' . DS . 'bootstrap.php')) {
     trigger_error("CakePHP core could not be found.  Check the value of CAKE_CORE_INCLUDE_PATH in APP/webroot/index.php.  It should point to the directory containing your " . DS . "cake core directory and your " . DS . "vendors root directory.", E_USER_ERROR);
 }
@@ -93,6 +120,7 @@ else{
 	$request = new CakeRequest();
 }
 unset($request->query['url']);
+
 
 // print_r($request);exit;
 

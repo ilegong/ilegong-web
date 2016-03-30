@@ -110,31 +110,6 @@ const PIN_TUAN_RECORD_PAID_STATUS = 1;
 
 const PROXY_USER_LEVEL_VALUE = 2;
 
-//const SAE_STATIC_FILE_PATH = 'http://51daifan-assets.stor.sinaapp.com';
-if (getenv('TONGSHIJIA_ENV') == 'product') {
-    //const SAE_STATIC_FILE_PATH = 'http://static.tongshijia.com';
-    define('SAE_STATIC_FILE_PATH', 'http://static.tongshijia.com');
-    define('JPUSH_APP_KEY', '32a7a17d552b6dd3d7736c72');
-    define('JPUSH_APP_SECRET', '08be41e830d5faf1d5f6b660');
-    define('MYSQL_SERVER_HOST', 'www.tongshijia.com');
-    define('MEMCACHE_HOST', 'www.tongshijia.com');
-    define('REDIS_HOST', 'www.tongshijia.com');
-} elseif (getenv('TONGSHIJIA_ENV') == 'test') {
-    define('SAE_STATIC_FILE_PATH', 'http://static-test.tongshijia.com');
-    define('JPUSH_APP_KEY', 'dca84c4492a450f738918b65');
-    define('JPUSH_APP_SECRET', '376cf6f26a72c31ca769da44');
-    define('MYSQL_SERVER_HOST', 'test.tongshijia.com');
-    define('MEMCACHE_HOST', 'test.tongshijia.com');
-    define('REDIS_HOST', 'test.tongshijia.com');
-} else {
-    define('SAE_STATIC_FILE_PATH', 'http://dev.tongshijia.com');
-    define('JPUSH_APP_KEY', 'dca84c4492a450f738918b65');
-    define('JPUSH_APP_SECRET', '376cf6f26a72c31ca769da44');
-    define('MYSQL_SERVER_HOST', '127.0.0.1');
-    define('MEMCACHE_HOST', '127.0.0.1');
-    define('REDIS_HOST', '127.0.0.1');
-}
-
 function is_admin_uid($uid) {
 
     $_admin_uids = array(
