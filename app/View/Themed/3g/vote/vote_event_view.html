@@ -1,6 +1,6 @@
 {{template vote/vote_css_template}}
-<div class="container" style="background-color:#ffffff;margin-bottom: 50px;padding:0;">
-    <div class="baby_banner" style="margin-bottom: 8px;"><img src="{{$this->Html->assetUrl($voteConfig['common_params']['banner'])}}"></div>
+<div class="container" style="margin-bottom: 50px;padding:0;">
+    <div class="baby_banner"><img src="{{$this->Html->assetUrl($voteConfig['common_params']['banner'])}}"></div>
     {{if $event_available}}
         {{if !$is_sign_up}}
             <a href="/vote/sign_up/{{$event_id}}" class="apply_btn">我要报名</a>
@@ -16,7 +16,7 @@
     {{if !empty($candidators_info)}}
     <div class="babylist">
         <div class="clearfix">
-            <ul class="fl">
+            <ul class="fl" style="margin: 0;">
                 {{loop $candidators_info $fl $candidator}}
                     {{if !($fl&1)}}
                         <?php
@@ -38,13 +38,13 @@
                                 <dd class="fr"><a href="#X" class="cur">已结束</a></dd>
                                 {{/if}}
                             </dl>
-                            <dl class="clearfix" style="border-top: 1px dotted #ccc;">
-                                <dd class="fl" style="padding: 5px 0 5px 0; width: 50px;">
+                            <dl class="clearfix" style="border-top: 1px solid #ddd;">
+                                <dd class="fl" style="padding: 0; width: 50px;">
                                     <a href="/weshares/user_share_info/{{$candidators_users[$candidator['Candidate']['user_id']]['id']}}" style="background-color: #FFFFFF;">
-                                        <img src="{{get_user_avatar($candidators_users[$candidator['Candidate']['user_id']]['image'])}}" style="width: 40px;height: 40px;border-radius: 50%;">
+                                        <img src="{{get_user_avatar($candidators_users[$candidator['Candidate']['user_id']])}}" style="width: 40px;height: 40px;border-radius: 50%;">
                                     </a>
                                 </dd>
-                                <dd style="margin-left: 60px;margin-top: 15px;font-size: 16px;">
+                                <dd style="margin-top: 15px;font-size: 16px;">
                                     {{$candidators_users[$candidator['Candidate']['user_id']]['nickname']}}
                                 </dd>
                             </dl>
@@ -52,7 +52,7 @@
                     {{/if}}
                 {{/loop}}
             </ul>
-            <ul class="fr">
+            <ul class="fr" style="margin: 0;">
                 {{loop $candidators_info $fr $candidator}}
                     {{if $fr&1}}
                         <?php
@@ -74,13 +74,13 @@
                                 <dd class="fr"><a href="#X" class="cur">已结束</a></dd>
                                 {{/if}}
                             </dl>
-                            <dl class="clearfix" style="border-top: 1px dotted #ccc;">
-                                <dd class="fl" style="padding: 5px 0 5px 0; width: 50px;">
+                            <dl class="clearfix" style="border-top: 1px solid #ddd;">
+                                <dd class="fl" style="padding:0; width: 50px;">
                                     <a href="/weshares/user_share_info/{{$candidators_users[$candidator['Candidate']['user_id']]['id']}}" style="background-color: #FFFFFF;">
-                                        <img src="{{get_user_avatar($candidators_users[$candidator['Candidate']['user_id']]['image'])}}" style="width: 40px;height: 40px;border-radius: 50%;">
+                                        <img src="{{get_user_avatar($candidators_users[$candidator['Candidate']['user_id']])}}" style="width: 40px;height: 40px;border-radius: 50%;">
                                     </a>
                                 </dd>
-                                <dd style="margin-left: 60px;margin-top: 15px;font-size: 16px;">
+                                <dd style="margin-top: 15px;font-size: 16px;">
                                     {{$candidators_users[$candidator['Candidate']['user_id']]['nickname']}}
                                 </dd>
                             </dl>

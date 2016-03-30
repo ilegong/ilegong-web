@@ -59,14 +59,14 @@ class VoteSetting extends AppModel{
             'wx_params' => array(
                 'time_line_title' => '新西兰梦幻之旅亲子摄影大赛开赛啦！',
                 'chat_title' => '新西兰梦幻之旅亲子摄影大赛开赛啦！',
-                'share_pic' => 'http://static.tongshijia.com/images/index/4b66e466-f58a-11e5-8c9e-00163e1600b6.jpg',
+                'share_pic' => 'http://static.tongshijia.com/img/vote/vote_9_banner.jpg',
                 'desc' => '记录下最美的一瞬间...如梦如幻的世界，带上你的宝贝，你也可以当一回摄影大师!',
             ),
             'common_params' => array(
-                'banner' => 'http://static.tongshijia.com/images/index/4b66e466-f58a-11e5-8c9e-00163e1600b6.jpg',
+                'banner' => 'http://static.tongshijia.com/img/vote/vote_9_banner.jpg',
                 'prize_pic' => 'http://static.tongshijia.com/images/index/8920d130-f58b-11e5-8c9e-00163e1600b6.jpg',
                 'server_reply_title' => '新西兰梦幻之旅亲子摄影大赛开赛啦！',
-                'server_reply_img' => 'http://static.tongshijia.com/images/index/4b66e466-f58a-11e5-8c9e-00163e1600b6.jpg',
+                'server_reply_img' => 'http://static.tongshijia.com/img/vote/vote_9_banner.jpg',
                 'server_reply_url' => 'http://www.tongshijia.com/vote/vote_event_view/9',
                 'reply_tip_info' => '请先关注朋友说微信公众号“pyshuo2014”如您已关注，请进入公众号回复“8888”即可！'
             ),
