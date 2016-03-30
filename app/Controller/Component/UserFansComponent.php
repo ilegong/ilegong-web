@@ -4,7 +4,8 @@ class UserFansComponent extends Component{
 
     static $PAGE_LIMIT = 50;
 
-    public function get_fans($uid, $page = 1, $query = null){
+    public function get_fans($uid, $page = 1, $query = null, $limit = 0){
+        $limit = $limit == 0 ? self::$PAGE_LIMIT : $limit;
         $queryCond = ['conditions' => ['UserRelation.user_id' => $uid, 'UserRelation.deleted' => DELETED_NO], 'fields' => ['UserRelation.*']];
         if (!empty($query)) {
             $queryCond['joins'] = [[
@@ -19,13 +20,14 @@ class UserFansComponent extends Component{
         }
         $data = $this->process_query_data($queryCond, 'follow_id', $uid, $page);
         if ($page == 1) {
-            $page_info = $this->get_page_info($queryCond, self::$PAGE_LIMIT);
+            $page_info = $this->get_page_info($queryCond, $limit);
             $data['page_info'] = $page_info;
         }
         return $data;
     }
 
-    public function get_subs($uid, $page = 1, $query = null){
+    public function get_subs($uid, $page = 1, $query = null, $limit=0){
+        $limit = $limit == 0 ? self::$PAGE_LIMIT : $limit;
         $queryCond = ['conditions' => ['UserRelation.follow_id' => $uid, 'UserRelation.deleted' => DELETED_NO], 'fields' => ['UserRelation.*']];
         if (!empty($query)) {
             $queryCond['joins'] = [[
@@ -40,7 +42,7 @@ class UserFansComponent extends Component{
         }
         $data = $this->process_query_data($queryCond, 'user_id', $uid, $page);
         if ($page == 1) {
-            $page_info = $this->get_page_info($queryCond, self::$PAGE_LIMIT);
+            $page_info = $this->get_page_info($queryCond, $limit);
             $data['page_info'] = $page_info;
         }
         return $data;
@@ -87,7 +89,7 @@ class UserFansComponent extends Component{
     private function get_page_info($queryCond, $limit){
         $userRelationM = ClassRegistry::init('UserRelation');
         $count = $userRelationM->find('count', $queryCond);
-        $page_count = $count % $limit == 0 ? ($count / $limit) : ($count / $limit + 1);
+        $page_count = ceil($count / $limit);
         return ['page_count' => $page_count, 'limit' => $limit];
     }
 

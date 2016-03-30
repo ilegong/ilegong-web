@@ -133,15 +133,17 @@ class UserApiController extends AppController
      * @param $type 0=>粉丝 1=>关注
      * @param $uid
      * @param $page
+     * @param $limit
      */
-    public function get_u_list_data($type, $uid, $page)
+    public function get_u_list_data($type, $uid, $page, $limit)
     {
         $query = $_REQUEST['query'];
         if ($type == 0) {
-            $data = $this->UserFans->get_fans($uid, $page, $query);
+            $data = $this->UserFans->get_fans($uid, $page, $query, $limit);
         } else {
-            $data = $this->UserFans->get_subs($uid, $page, $query);
+            $data = $this->UserFans->get_subs($uid, $page, $query, $limit);
         }
+        $data['users'] = Hash::extract($data['users'], '{n}.User');
         echo json_encode($data);
         return;
     }
