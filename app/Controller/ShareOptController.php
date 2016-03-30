@@ -28,19 +28,6 @@ class ShareOptController extends AppController {
      */
     public function index() {
         $this->layout = null;
-        $uid = $this->currentUser['id'];
-        if(!empty($uid)){
-            $this->save_visit_log($uid);
-        }
-        $this->set('uid', $uid);
-        if($_REQUEST['from'] == 'app'){
-            $this->set('hide_footer', true);
-        }
-    }
-
-    public function home()
-    {
-        $this->layout = null;
         $carousel = ClassRegistry::init('NewFind')->get_all_carousel();
         $top_rank = ClassRegistry::init('NewFind')->get_all_top_rank();
         $this->set('carousel', $carousel);

@@ -1,77 +1,129 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="pragma" content="no-cache">
-    <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="viewport"
-          content="width=device-width,minimum-scale=1,initial-scale=1,maximum-scale=1, user-scalable=no">
-    <meta http-equiv="imagetoolbar" content="no">
-    <meta name="Keywords" content="朋友说">
-    <meta name="Description" content="朋友说">
-    <link rel="stylesheet" href="{{$STATIC_FILE_PATH}}/static/opt/css/new-opt.min.css?v=0.04">
-    <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>发现</title>
-</head>
-<body class="big">
-<ul class="clearfix tuijian-top-sousuo">
-    <li class="sousuo fl">
-      <a href="#X">
-        <img src="{{$STATIC_FILE_PATH}}/static/opt/images/sousuo.png" style="display: none;">
-      </a>
-    </li>
-    <li class="tuijian_center">
-        <div class="bk bk_green fl activity" id='show-all'>推荐</div>
-        <div class="bk bk_white fl" id='show-only-followed'>关注</div>
-    </li>
-    <li class="fenxiang fr">
-        <a href="http://dev.tongshijia.com/weshares/add">
-            我要分享
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="http://cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="{{$STATIC_FILE_PATH}}/static/new_find/css/home.css?v=0.101" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body>
+    <div class='container'>
+      <div data-ride="carousel" class="carousel slide" id="carousel-captions">
+        <ol class="carousel-indicators">
+          {{loop $carousel $key $item}}
+          <li class="<?php if ($key == 0) { echo "active";} ?>" data-slide-to="{{$key}}" data-target="#carousel-captions"></li>
+          {{/loop}}
+        </ol>
+        <div role="listbox" class="carousel-inner">
+          {{loop $carousel $key $item}}
+          <div class="item <?php if ($key == 0) { echo "active";} ?>">
+            <a href="{{$item['link']}}">
+              <img src="{{$item['banner']}}" />
+            </a>
+            <div class="carousel-caption">
+              <h3>{{$item['title']}}</h3>
+              <p>{{$item['description']}}</p>
+            </div>
+          </div>
+          {{/loop}}
+        </div>
+        <a data-slide="prev" role="button" href="#carousel-captions" class="left carousel-control">
+          <span aria-hidden="true" class="glyphicon glyphicon-chevron-left"></span>
+          <span class="sr-only">Previous</span>
         </a>
-    </li>
-</ul>
-<div id="maindiv" data-uid="{{$uid}}">
-    <div id="dataloadingdiv" align="center"
-         style="margin:0px 6px;background-color:#FFFFFF;height:40px;line-height:40px;display: none;color: #f99d3a;">
-        <div>加载中...</div>
+        <a data-slide="next" role="button" href="#carousel-captions" class="right carousel-control">
+          <span aria-hidden="true" class="glyphicon glyphicon-chevron-right"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+
+      <div id='quality-life'>
+        <h2>品质生活</h2>
+        <div class="row">
+          <div class="col-xs-4 category-block left-side">
+            <h3 class="category-title">果蔬乐园<span>只吃最新鲜的</span></h3>
+            <a href="/share_opt/category/1">
+              <img src="http://static.tongshijia.com/images/index/122a3d90-f253-11e5-8f0d-00163e1600b6.jpg" />
+            </a>
+          </div>
+          <div class="col-xs-8 category-block">
+            <div class="row">
+              <div class="col-xs-6 category-block cate-a">
+                <h3 class="category-title">肉蛋海鲜</h3>
+                <a href="/share_opt/category/2">
+                  <img src="http://static.tongshijia.com/images/index/247139d6-f253-11e5-8f0d-00163e1600b6.jpg" />
+                </a>
+              </div>
+              <div class="col-xs-6 category-block cate-b">
+                <h3 class="category-title">干果零食</h3>
+                <a href="/share_opt/category/3">
+                  <img src="http://static.tongshijia.com/images/index/31001028-f253-11e5-8f0d-00163e1600b6.jpg" />
+                </a>
+              </div>
+              <div class="col-xs-6 category-block cate-c">
+                <h3 class="category-title">粮油副食</h3>
+                <a href="/share_opt/category/4">
+                  <img src="http://static.tongshijia.com/images/index/da991e28-f252-11e5-8f0d-00163e1600b6.jpg" />
+                </a>
+              </div>
+              <div class="col-xs-6 category-block cate-d">
+                <h3 class="category-title">好吃的辣么多<br />看看还有什么</h3>
+                <a href="/share_opt/category/5">
+                  <img src="http://static.tongshijia.com/images/index/0223220e-f253-11e5-8f0d-00163e1600b6.jpg" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='top-range'>
+        <h2>TOP榜</h2>
+        <div class="row">
+          <div class="col-xs-12 top-range-items top-range-first">
+            <h3 class="range-title">
+              {{$top_rank_first['title']}}
+            </h3>
+            <a href="{{$top_rank_first['link']}}">
+              <img src="{{$top_rank_first['banner']}}" />
+            </a>
+          </div>
+          {{loop $top_rank $key $item}}
+          <div class="col-xs-4 top-range-items small-items">
+            <h3 class="range-title">{{$item['title']}}</h3>
+            <a href="{{$item['link']}}">
+              <img src="{{$item['banner']}}" />
+            </a>
+          </div>
+          {{/loop}}
+        </div>
+      </div>
+      <footer class="channel_bottom" id="share-bottom-nav">
+        <a class="btm_item" href="/" style="width: 25%;">
+          <p class="iconfont"><i class="fa fa-home"></i></p>
+          <b class="">首页</b>
+        </a>
+        <a class="btm_item" href="/share_opt/index.html" style="width: 25%;">
+          <p class="iconfont-active"><i class="fa fa-search"></i></p>
+          <b class="active">发现</b>
+        </a>
+        <a class="btm_item" href="/weshares/add" style="width: 25%;">
+          <p class="iconfont"><i class="fa fa-share-square-o"></i></p>
+          <b>我要分享</b>
+        </a>
+        <a class="btm_item" href="/weshares/user_share_info/" style="width: 25%;">
+          <p class="iconfont"><i class="fa fa-user"></i></p>
+          <b>我的</b>
+        </a>
+      </footer>
     </div>
-    <div style="height: 100px;"></div>
-</div>
-<img id="topiconbut" style="display:none;width:40px;height:40px;position: fixed;right:15px;bottom:65px;"
-     src="{{$STATIC_FILE_PATH}}/static/opt/images/topicon.png">
-{{if !$hide_footer}}
-<footer class="channel_bottom" id="share-bottom-nav">
-    <a class="btm_item" href="/" style="width: 25%;">
-        <p class="iconfont"><i class="fa fa-home"></i></p>
-        <b>首页</b>
-    </a>
-    <a class="btm_item" href="/share_opt/index.html" style="width: 25%;">
-        <p class="iconfont-active"><i class="fa fa-search"></i></p>
-        <b class="active">发现</b>
-    </a>
-    <a class="btm_item" href="/weshares/add" style="width: 25%;">
-        <p class="iconfont"><i class="fa fa-share-square-o"></i></p>
-        <b>我要分享</b>
-    </a>
-    <a class="btm_item" href="/weshares/user_share_info/" style="width: 25%;">
-        <p class="iconfont"><i class="fa fa-user"></i></p>
-        <b>我的</b>
-    </a>
-</footer>
-{{/if}}
-<script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
-<script src="{{$STATIC_FILE_PATH}}/static/opt/js/lazyload.min.js?v0.1.5"></script>
-<script src="{{$STATIC_FILE_PATH}}/static/opt/js/newopt.js?v0.1.6"></script>
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "//hm.baidu.com/hm.js?705777ddf53d0d7a074a79a26c8f50cf";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
-</script>
-</body>
+    <script type='text/javascript' src='http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js'></script>
+    <script type='text/javascript' src='http://cdn.bootcss.com/jquery.touchswipe/1.6.15/jquery.touchSwipe.min.js'></script>
+    <script type='text/javascript' src='http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js'></script>
+    <script type='text/javascript' src='{{$STATIC_FILE_PATH}}/static/new_find/js/home.js'></script>
+  </body>
 </html>
+
