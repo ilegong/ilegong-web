@@ -72,7 +72,7 @@ class VoteController extends AppController {
                 'id' => $candidators_info_user_ids
             ),
             'limit' => 200,
-            'fields' => array('User.id', 'User.nickname', 'User.image')
+            'fields' => array('User.id', 'User.nickname', 'User.image', 'User.avatar')
         ));
         $candidators_users = Hash::combine($candidators_users, '{n}.User.id', '{n}.User');
         if (!empty($candidators_info)) {
@@ -274,7 +274,7 @@ class VoteController extends AppController {
             'conditions' => array(
                 'id' => $candidate_info_user_id
             ),
-            'fields' => array('User.id', 'User.nickname', 'User.image')
+            'fields' => array('User.id', 'User.nickname', 'User.image', 'User.avatar')
         ));
         $this->set('candidate_info_user', $candidate_info_user);
         $rank_data = $this->get_candidate_rank($candidateId, $eventId);
