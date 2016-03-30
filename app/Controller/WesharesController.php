@@ -286,7 +286,7 @@ class WesharesController extends AppController
         }
         echo json_encode(array('ordersDetail' => $ordersDetail, 'childShareData' => $child_share_data, 'logisticsOrderData' => $logistics_order_data));
         //echo json_encode(array('ordersDetail' => $ordersDetail, 'childShareData' => $child_share_data));
-        return;
+        exit();
     }
 
     /**
@@ -391,7 +391,7 @@ class WesharesController extends AppController
         $this->autoRender = false;
         $comment_data = $this->WeshareBuy->load_comment_by_share_id($weshareId);
         echo json_encode(array('comment_data' => $comment_data));
-        return;
+        exit();
     }
 
     /**
