@@ -229,7 +229,7 @@
     </div>
     <div class="citylist" ng-repeat="area in vm.areaData">
         <ul class="clearfix">
-            <li class="fl"><a class="show_city" ng-click="area.showChild=!area.showChild"><img src="{{::vm.staticFilePath}}/static/weshares/images/show_city.png" /></a></li>
+            <li class="fl"><a class="show_city" ng-click="area.showChild=!area.showChild"><img ng-src="{{::vm.staticFilePath}}/static/weshares/images/show_city.png" /></a></li>
             <li class="fl" ng-bind="area.name" ng-click="area.showChild=!area.showChild"></li>
             <li class="fr"><input type="checkbox" ng-model="vm.areaCheckStatus[area.id]" ng-change="vm.toggleAreaProvinceCheckStatus(area.id)" ng-true-value="true" ng-false-value="false"/></li>
         </ul>
