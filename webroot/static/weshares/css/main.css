@@ -1378,11 +1378,11 @@ textarea,input{outline:none}
 .comment_list_box #con .bottomcover {
     position: absolute;
     bottom: 0;
-    background: url("http://51daifan-assets.stor.sinaapp.com/static/weshares/images/halftransp.png") no-repeat 0 -5px;
+    background: url("http://static.tongshijia.com/static/weshares/images/halftransp.png") no-repeat 0 -5px;
     height: 35px;
     width: 394px;
     _background: none;
-    _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://51daifan-assets.stor.sinaapp.com/static/weshares/images/halftransp.png', sizingMethod='crop');
+    _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://static.tongshijia.com/static/weshares/images/halftransp.png', sizingMethod='crop');
     pointer-events: none;
 }
 
