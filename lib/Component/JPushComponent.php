@@ -18,6 +18,9 @@ class JPushComponent extends Component
      */
     public function push($user_ids, $title, $content, $type, $extras = array())
     {
+        if (!is_array($user_ids)) {
+            $user_ids = [$user_ids];
+        }
         $client = $this->get_push_client();
         // 完整的推送示例,包含指定Platform,指定Alias,Tag,指定iOS,Android notification,指定Message等
         $result = $client->push()
