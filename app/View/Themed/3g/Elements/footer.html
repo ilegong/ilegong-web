@@ -8,7 +8,7 @@
 {{/if}}
 {{$this->Html->script(array(
 			'jquery/jquery.lazyload.min.js',
-            'bootstrap.min.js','bootbox/bootbox.min.js', 'common.js?v46','front.js?v8','front_orders.js?v19.3'
+            'bootstrap.min.js','bootbox/bootbox.min.js', 'common.js?v46','front.js?v8'
         ));
 }}
 {{$this->Html->scriptStart(array('block' => 'scriptBottom'));}}
@@ -21,65 +21,3 @@
 {{$this->Html->script(array('/js/thickbox.js?v1'));}}
 <!-- helper中追加的底部脚本 $this->_View->append('bottomscript',$script);-->
 {{$this->fetch('bottomscript')}}
-<script type="text/javascript">
-	$(document).ready(function(){
-		$("img.lazy").lazyload({
-			placeholder : "/Public/Index/img/grey.gif",
-			effect: "fadeIn",
-			threshold : 100
-		});
-        function set_ship_least_num(){
-            var shipLeastNum = $('#ship_least_num');
-            if(shipLeastNum.length==0){
-                return;
-            }
-            var leastNum = parseInt(shipLeastNum.val());
-            if(leastNum>1){
-                editAmount.min = leastNum;
-            }
-        }
-        function set_default_spec(){
-            var spec = $('.spec-item');
-            var sendDate = $('.send-date');
-            var pamount = $('#input_pamount').val();
-            var specString = $('.spec_item_selected.cur[item-label!="SD"]').map(function(){
-                     return '<strong>'+ $.trim($(this).text())+'</strong>'+'';
-            });
-            var sendDateString = $('.spec_item_selected.cur[item-label="SD"]').map(function(){
-               return '<strong>'+ $.trim($(this).text())+'送货</strong>'+'';
-            });
-            specString.push(' <strong>'+ pamount+'份</strong>');
-            spec.html(specString.toArray().join());
-            if(sendDateString.length){
-            sendDate.html(sendDateString.toArray().join());
-            }else{
-                sendDate.remove();
-            }
-        }
-
-        function prevent_event_trigger(){
-            var send_date = $('.spec_item[item-label="SD"]');
-            var spec_item = $('span.spec_item[item-label !="SD"]').parents('ul');
-            var way_label = $("[way-label]");
-            $.each(spec_item,function(index){
-               var spec_item_label = $(this).children('li').children('span').eq(1).children('.spec_item');
-               if(spec_item_label.length == 1){
-                   spec_item_label.off('click');
-               }
-            });
-            if(way_label.length == 1){
-                way_label.off('click');
-            }
-            if (send_date.length ==1){
-                send_date.off('click');
-            }
-        }
-        $('li.good-spec').each(function(index,item){
-            $('span.spec_item',$(item)).first().trigger('click');
-        });
-        set_default_spec();
-        prevent_event_trigger();
-
-        set_ship_least_num();
-	});
-</script>
