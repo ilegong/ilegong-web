@@ -21,7 +21,7 @@ class UserApiController extends AppController
         $user_id = $this->currentUser['id'];
         $result = $this->ChatUtil->reg_hx_user($user_id);
         echo json_encode($result);
-        return;
+        exit();
     }
 
     public function profile()
@@ -35,7 +35,7 @@ class UserApiController extends AppController
         $user_level = $this->ShareUtil->get_user_level($user_id);
         $userInfo['level'] = $user_level;
         echo json_encode(array('my_profile' => array('User' => $userInfo), 'user_summery' => $user_summery));
-        return;
+        exit();
     }
 
     public function my_profile()
@@ -44,7 +44,7 @@ class UserApiController extends AppController
         $datainfo = $this->get_user_info($user_id);
         $userInfo = $datainfo['User'];
         echo json_encode($userInfo);
-        return;
+        exit();
     }
 
     public function change_password()
@@ -54,7 +54,7 @@ class UserApiController extends AppController
         $hash_password = Security::hash($new_password, null, true);
         $this->User->update(['password' => $hash_password], ['id' => $user_id]);
         echo json_encode(['success' => true]);
-        return;
+        exit();
     }
 
     public function update_avatar()
@@ -63,11 +63,15 @@ class UserApiController extends AppController
         $avatar_url = $_REQUEST['url'];
         $this->User->update(['image' => "'" . $avatar_url . "'", 'avatar' => "'" . $avatar_url . "'"], ['id' => $user_id]);
         echo json_encode(['success' => true]);
-        return;
+        exit();
     }
 
     public function update_desc(){
-
+        $user_id = $this->currentUser['id'];
+        $desc = $_REQUEST['desc'];
+        $this->User->update(['description' => $desc],['id' => $user_id]);
+        echo json_encode(['success' => true]);
+        exit();
     }
 
     /**
@@ -85,7 +89,7 @@ class UserApiController extends AppController
         $uid = $this->currentUser['id'];
         $this->User->update(['mobilephone' => $mobile],['id' => $uid]);
         echo json_encode(['success' => true]);
-        return;
+        exit();
     }
 
     private function get_user_info($user_id)
@@ -100,7 +104,7 @@ class UserApiController extends AppController
     public function test()
     {
         echo 'hello world';
-        return;
+        exit();
     }
 
     /**
@@ -122,11 +126,11 @@ class UserApiController extends AppController
         $fans_id = Hash::extract($fans_data, '{n}.UserRelation.follow_id');
         if (empty($fans_id)) {
             echo json_encode(array());
-            return;
+            exit();
         }
         $users = $this->ChatUtil->get_users_info($fans_id);
         echo json_encode($users);
-        return;
+        exit();
     }
 
     /**
@@ -145,7 +149,7 @@ class UserApiController extends AppController
         }
         $data['users'] = Hash::extract($data['users'], '{n}.User');
         echo json_encode($data);
-        return;
+        exit();
     }
 
     /**
@@ -159,7 +163,7 @@ class UserApiController extends AppController
         $shareCommentData = $this->WeshareBuy->load_sharer_comment_data($my_create_share_ids, $uid);
         $userCommentData = $this->WeshareBuy->load_user_share_comments($uid);
         echo json_encode(array('sharer_comment_data' => $shareCommentData, 'user_comment_data' => $userCommentData));
-        return;
+        exit();
     }
 
     public function delete_friend($friend_id)
@@ -168,12 +172,12 @@ class UserApiController extends AppController
         if ($this->UserFriend->updateAll(array('deleted' => DELETED_YES), array('user_id' => $user_id, 'friend_id' => $friend_id))) {
             if ($this->ChatUtil->delete_friend($user_id, $friend_id)) {
                 echo json_encode(array('statusCode' => 1, 'statusMsg' => '删除成功'));
-                return;
+                exit();
             }
         }
 
         echo json_encode(array('statusCode' => -1, 'statusMsg' => '删除失败'));
-        return;
+        exit();
     }
 
     public function add_friend($friend_id)
@@ -193,14 +197,14 @@ class UserApiController extends AppController
                 }
                 $friend_info = $this->get_user_info($friend_id);
                 echo json_encode(array('statusCode' => 1, 'statusMsg' => '添加成功', 'data' => $friend_data, 'friend_info' => $friend_info['User']));
-                return;
+                exit();
             } else {
                 echo json_encode(array('statusCode' => -1, 'statusMsg' => '添加失败'));
-                return;
+                exit();
             }
         }
         echo json_encode(array('statusCode' => 2, 'statusMsg' => '已经是好友'));
-        return;
+        exit();
     }
 
     /**
@@ -220,7 +224,7 @@ class UserApiController extends AppController
         $friend_ids = Hash::extract($friends_data, '{n}.UserFriend.friend_id');
         $data = $this->ChatUtil->get_users_info($friend_ids);
         echo json_encode($data);
-        return;
+        exit();
     }
 
     public function check_mobile_available()
@@ -229,10 +233,10 @@ class UserApiController extends AppController
         $mobile = $_REQUEST['mobile'];
         if ($this->User->hasAny(array('User.mobilephone' => $mobile))) {
             echo json_encode(array('statusCode' => -1, 'statusMsg' => '手机号已经被注册'));
-            return;
+            exit();
         }
         echo json_encode(array('statusCode' => 1));
-        return;
+        exit();
     }
 
     public function bind_mobile_api()
@@ -246,14 +250,14 @@ class UserApiController extends AppController
         $user_info['User']['uc_id'] = 5;
         if ($this->User->hasAny(array('User.mobilephone' => $mobile_num))) {
             echo json_encode(array('statusCode' => -1, 'statusMsg' => '你的手机号已注册过，无法绑定，请用手机号登录'));
-            return;
+            exit();
         }
         //todo valid username is mobile
         if ($this->User->save($user_info)) {
             echo json_encode(array('statusCode' => 1, 'statusMsg' => '你的账号和手机号绑定成功'));
-            return;
+            exit();
         };
         echo json_encode(array('statusCode' => -1, 'statusMsg' => '绑定失败，亲联系客服'));
-        return;
+        exit();
     }
 }
