@@ -50,7 +50,7 @@ class MessageApiController extends AppController
         $u_cond = ['id' => $user_id];
         $user_info = $this->get_user_info($u_cond);
         echo json_encode(array('user_id' => $user_id, 'nickname' => $user_info['User']['nickname'], 'datetime' => $last_buy_log['OptLog']['created']));
-        return;
+        exit();
     }
 
 
@@ -67,7 +67,7 @@ class MessageApiController extends AppController
         $u_cond = ['id' => $user_id];
         $user_info = $this->get_user_info($u_cond);
         echo json_encode(array('user_id' => $user_id, 'nickname' => $user_info['User']['nickname'], 'datetime' => $last_comment_log['OptLog']['created']));
-
+        exit();
     }
 
     /**
@@ -99,7 +99,7 @@ class MessageApiController extends AppController
         $senders = array_map('map_user_avatar2', $senders);
         $senders = Hash::combine($senders, '{n}.User.id', '{n}.User');
         echo json_encode(array('senders' => $senders, 'msg' => $share_faqs));
-        return;
+        exit();
     }
 
     private function get_msg($type, $page, $limit)
@@ -132,7 +132,7 @@ class MessageApiController extends AppController
     public function get_buy_list($page, $limit)
     {
         echo json_encode($this->get_msg(OPT_LOG_SHARE_BUY, $page, $limit));
-        return;
+        exit();
     }
 
     /**
@@ -143,7 +143,7 @@ class MessageApiController extends AppController
     public function comment_list($page, $limit)
     {
         echo json_encode($this->get_msg(OPT_LOG_SHARE_COMMENT, $page, $limit));
-        return;
+        exit();
     }
 
     /**
@@ -204,7 +204,7 @@ class MessageApiController extends AppController
         $users = array_map('map_user_avatar2', $users);
         $users = Hash::combine($users, '{n}.User.id', '{n}.User');
         echo json_encode($users);
-        return;
+        exit();
     }
 
 }
