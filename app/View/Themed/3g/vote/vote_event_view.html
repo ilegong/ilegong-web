@@ -1,15 +1,16 @@
 {{template vote/vote_css_template}}
 <div class="container" style="margin-bottom: 50px;padding:0;">
-    <div class="baby_banner" style="position: relative;"><img src="{{$this->Html->assetUrl($voteConfig['common_params']['banner'])}}"></div>
-    {{if $event_available}}
+    <div class="baby_banner" style="position: relative;"><img src="{{$this->Html->assetUrl($voteConfig['common_params']['banner'])}}">
+        {{if $event_available}}
         {{if !$is_sign_up}}
-            <a href="/vote/sign_up/{{$event_id}}" style="position: absolute; left: 50%; margin-left: -37px; bottom: 60px; width: 75px; line-height: 27px; background-color: #fff; color: #ff7c6e; text-align: center;">我要报名</a>
+        <a href="/vote/sign_up/{{$event_id}}" style="position: absolute; left: 50%; margin-left: -37px; bottom: 60px; width: 75px; line-height: 27px; background-color: #fff; color: #ff7c6e; text-align: center;">我要报名</a>
         {{else}}
-            <a href="/vote/candidate_detail/{{$is_sign_up['CandidateEvent']['candidate_id']}}/{{$event_id}}?vote_num={{$candidator['vote_num']}}&is_vote={{$candidator['is_vote']}}" style="position: absolute; left: 50%; margin-left: -37px; bottom: 60px; width: 75px; line-height: 27px; background-color: #fff; color: #ff7c6e; text-align: center;">查看报名</a>
+        <a href="/vote/candidate_detail/{{$is_sign_up['CandidateEvent']['candidate_id']}}/{{$event_id}}?vote_num={{$candidator['vote_num']}}&is_vote={{$candidator['is_vote']}}" style="position: absolute; left: 50%; margin-left: -37px; bottom: 60px; width: 75px; line-height: 27px; background-color: #fff; color: #ff7c6e; text-align: center;">查看报名</a>
         {{/if}}
-    {{else}}
+        {{else}}
         <a href="#" style="position: absolute; left: 50%; margin-left: -37px; bottom: 60px; width: 75px; line-height: 27px; background-color: #fff; color: #ff7c6e; text-align: center;">活动已经结束</a>
-    {{/if}}
+        {{/if}}
+    </div>
     <!--<div class="babyrule">-->
         <!--<p>活动时间：<br>{{Date('m月d日 H时i分',strtotime($event_info['VoteEvent']['start_time']))}}～{{Date('m月d日 H时i分',strtotime($event_info['VoteEvent']['end_time']))}}</p>-->
     <!--</div>-->
@@ -41,10 +42,10 @@
                             <dl class="clearfix" style="border-top: 1px solid #ddd;">
                                 <dd class="fl" style="padding: 0; width: 50px;">
                                     <a href="/weshares/user_share_info/{{$candidators_users[$candidator['Candidate']['user_id']]['id']}}" style="background-color: #FFFFFF;">
-                                        <img src="{{get_user_avatar($candidators_users[$candidator['Candidate']['user_id']])}}" style="width: 40px;height: 40px;border-radius: 50%;">
+                                        <img src="{{get_user_avatar($candidators_users[$candidator['Candidate']['user_id']])}}" style="width: 30px;height: 30px;border-radius: 30px;">
                                     </a>
                                 </dd>
-                                <dd style="margin-top: 15px;font-size: 16px;">
+                                <dd style="margin-top: 15px;font-size: 12px;">
                                     {{$candidators_users[$candidator['Candidate']['user_id']]['nickname']}}
                                 </dd>
                             </dl>
@@ -77,10 +78,10 @@
                             <dl class="clearfix" style="border-top: 1px solid #ddd;">
                                 <dd class="fl" style="padding:0; width: 50px;">
                                     <a href="/weshares/user_share_info/{{$candidators_users[$candidator['Candidate']['user_id']]['id']}}" style="background-color: #FFFFFF;">
-                                        <img src="{{get_user_avatar($candidators_users[$candidator['Candidate']['user_id']])}}" style="width: 40px;height: 40px;border-radius: 50%;">
+                                        <img src="{{get_user_avatar($candidators_users[$candidator['Candidate']['user_id']])}}" style="width: 30px;height: 30px;border-radius: 30px;">
                                     </a>
                                 </dd>
-                                <dd style="margin-top: 15px;font-size: 16px;">
+                                <dd style="margin-top: 15px;font-size: 12px;">
                                     {{$candidators_users[$candidator['Candidate']['user_id']]['nickname']}}
                                 </dd>
                             </dl>
