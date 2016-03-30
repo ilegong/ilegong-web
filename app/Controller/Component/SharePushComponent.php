@@ -10,7 +10,7 @@ class SharePushComponent
     static $MSG_COMMENT_TYPE = 1;
 
     static $MSG_FAQ_TYPE = 2;
-    
+
     public function push_buy_msg($buyOptLog, $share)
     {
         $user_id = $buyOptLog['user_id'];

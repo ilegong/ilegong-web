@@ -1,9 +1,9 @@
 <?php
 
-class MessageApiController extends AppController
+class MessageApiController extends Controller
 {
 
-    public $components = array('OAuth.OAuth', 'Session');
+    public $components = array('OAuth.OAuth', 'Session', 'WeshareBuy', 'ShareFaqUtil');
 
 
     public function beforeFilter()
@@ -151,15 +151,54 @@ class MessageApiController extends AppController
      */
     public function comment()
     {
+        $postStr = file_get_contents('php://input');
+        $post_data = json_decode($postStr, true);
+        $result = $this->WeshareBuy->create_share_comment($post_data['order_id'], $post_data['comment_content'], $post_data['reply_comment_id'], $post_data['comment_uid'], $post_data['share_id']);
+        echo json_encode($result);
+        exit();
+    }
 
+    private function get_shares($share_ids)
+    {
+        $this->loadModel('Weshare');
+        $shares = $this->Weshare->find('all', ['conditions' => ['id' => $share_ids], 'fields' => ['id', 'title']]);
+        return Hash::combine($shares, '{n}.Weshare.id', '{n}.Weshare');
     }
 
     /**
+     * @param $sharer_id
+     * @param $user_id
      * 评论的详情
      */
-    public function comment_detail()
+    public function comment_detail($sharer_id, $user_id)
     {
+        $this->loadModel('OptLog');
+        $opt_logs = $this->OptLog->find('all', ['conditions' => ['user_id' => $user_id, 'obj_creator' => $sharer_id, 'obj_type' => OPT_LOG_SHARE_COMMENT], 'order' => ['id DESC'], 'limit' => 50]);
+        $result = [];
+        $result['comments'] = [];
+        $obj_ids = [];
+        foreach ($opt_logs as $log_item) {
+            $obj_ids[] = $log_item['OptLog']['obj_id'];
+            $result['comments'][] = $log_item['OptLog'];
+        }
+        $result['weshares'] = $this->get_shares($obj_ids);
+        echo json_encode($result);
+        exit();
+    }
 
+    /**
+     * @param $share_id
+     * @param $user_id
+     * 获取单条分享的详细数据
+     */
+    public function load_single_comment_detail($share_id, $user_id)
+    {
+        //根据评论的时间定位到具体的一条评论，[可能存在问题]
+        $comment_date = $_REQUEST['comment_date'];
+        $query_cond = ['type' => COMMENT_SHARE_TYPE, 'status' => COMMENT_SHOW_STATUS, 'user_id' => $user_id, 'data_id' => $share_id, 'date(created)' => $comment_date];
+        $result = $this->WeshareBuy->query_comment($query_cond);
+        echo json_encode($result);
+        exit();
     }
 
     /**
@@ -167,7 +206,19 @@ class MessageApiController extends AppController
      */
     public function faq_msg()
     {
-
+        $this->loadModel('ShareFaq');
+        $postStr = file_get_contents('php://input');
+        $post_data = json_decode($postStr, true);
+        $this->ShareFaq->save($post_data);
+        $share_id = $post_data['share_id'];
+        $msg = $post_data['msg'];
+        $sender = $post_data['sender'];
+        $receiver = $post_data['receiver'];
+        $weshareInfo = $this->WeshareBuy->get_weshare_info($share_id);
+        $share_title = $weshareInfo['title'];
+        $this->ShareFaqUtil->send_notify_template_msg($sender, $receiver, $msg, $share_id, $share_title);
+        echo json_encode(['success' => true]);
+        exit();
     }
 
     /**
