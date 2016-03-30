@@ -1967,4 +1967,23 @@ class WesharesController extends AppController
             $this->set('add_view', true);
         }
     }
+
+    /**
+     * @param $uid
+     * update user visit log
+     */
+    private function save_visit_log($uid) {
+        $visitLog = $this->VisitLog->find('first', array(
+            'conditions' => array(
+                'user_id' => $uid
+            )
+        ));
+        $now = date('Y-m-d H:i:s');
+        if (empty($visitLog)) {
+            $saveVisitLog = array('user_id' => $uid, 'last_visit_time' => $now);
+            $this->VisitLog->save($saveVisitLog);
+        } else {
+            $this->VisitLog->updateAll(array('last_visit_time' => '\'' . $now . '\''), array('id' => $visitLog['VisitLog']['id']));
+        }
+    }
 }

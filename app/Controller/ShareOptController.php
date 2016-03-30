@@ -12,16 +12,16 @@ class ShareOptController extends AppController {
     /**
      * pys index view
      */
-    public function oldindex() {
-        $this->layout = null;
-        $uid = $this->currentUser['id'];
-        if(!empty($uid)){
-            $this->save_visit_log($uid);
-        }
-        if($_REQUEST['from'] == 'app'){
-            $this->set('hide_footer', true);
-        }
-    }
+//    public function oldindex() {
+//        $this->layout = null;
+//        $uid = $this->currentUser['id'];
+//        if(!empty($uid)){
+//            $this->save_visit_log($uid);
+//        }
+//        if($_REQUEST['from'] == 'app'){
+//            $this->set('hide_footer', true);
+//        }
+//    }
 
     /**
      * pys index view
@@ -160,24 +160,6 @@ class ShareOptController extends AppController {
     }
 
 
-    /**
-     * @param $uid
-     * update user visit log
-     */
-    private function save_visit_log($uid) {
-        $visitLog = $this->VisitLog->find('first', array(
-            'conditions' => array(
-                'user_id' => $uid
-            )
-        ));
-        $now = date('Y-m-d H:i:s');
-        if (empty($visitLog)) {
-            $saveVisitLog = array('user_id' => $uid, 'last_visit_time' => $now);
-            $this->VisitLog->save($saveVisitLog);
-        } else {
-            $this->VisitLog->updateAll(array('last_visit_time' => '\'' . $now . '\''), array('id' => $visitLog['VisitLog']['id']));
-        }
-    }
 
     /**
      * @param $uid
