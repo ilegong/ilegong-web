@@ -1973,6 +1973,7 @@ class WesharesController extends AppController
      * update user visit log
      */
     private function save_visit_log($uid) {
+        $this->loadModel('VisitLog');
         $visitLog = $this->VisitLog->find('first', array(
             'conditions' => array(
                 'user_id' => $uid
