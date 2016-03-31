@@ -39,14 +39,11 @@ class WesharesController extends AppController
     public function index($tag = 0)
     {
         $this->layout = null;
+        $products = $this->ShareUtil->get_index_product($tag);
         $uid = $this->currentUser['id'];
-        if(!empty($uid)){
-            $this->save_visit_log($uid);
-        }
+        $this->set('products', $products);
         $this->set('uid', $uid);
-        if($_REQUEST['from'] == 'app'){
-            $this->set('hide_footer', true);
-        }
+        $this->set('tag', $tag);
     }
 
     /**
@@ -1965,26 +1962,6 @@ class WesharesController extends AppController
             $this->set('image', $image);
             $this->set('desc', $desc);
             $this->set('add_view', true);
-        }
-    }
-
-    /**
-     * @param $uid
-     * update user visit log
-     */
-    private function save_visit_log($uid) {
-        $this->loadModel('VisitLog');
-        $visitLog = $this->VisitLog->find('first', array(
-            'conditions' => array(
-                'user_id' => $uid
-            )
-        ));
-        $now = date('Y-m-d H:i:s');
-        if (empty($visitLog)) {
-            $saveVisitLog = array('user_id' => $uid, 'last_visit_time' => $now);
-            $this->VisitLog->save($saveVisitLog);
-        } else {
-            $this->VisitLog->updateAll(array('last_visit_time' => '\'' . $now . '\''), array('id' => $visitLog['VisitLog']['id']));
         }
     }
 }

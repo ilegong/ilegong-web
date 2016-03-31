@@ -8,3 +8,7 @@ webroot/files/*
 .svn
 *.iml
 ZendDebugger.so
+
+# 为了方便大家回滚, 添加不追踪补丁文件
+*.diff
+*.patch

@@ -12,21 +12,20 @@ class ShareOptController extends AppController {
     /**
      * pys index view
      */
-//    public function oldindex() {
-//        $this->layout = null;
-//        $uid = $this->currentUser['id'];
-//        if(!empty($uid)){
-//            $this->save_visit_log($uid);
-//        }
-//        if($_REQUEST['from'] == 'app'){
-//            $this->set('hide_footer', true);
-//        }
-//    }
-
-    /**
-     * pys index view
-     */
     public function index() {
+        $this->layout = null;
+        $uid = $this->currentUser['id'];
+        if(!empty($uid)){
+            $this->save_visit_log($uid);
+        }
+        $this->set('uid', $uid);
+        if($_REQUEST['from'] == 'app'){
+            $this->set('hide_footer', true);
+        }
+    }
+
+    public function home()
+    {
         $this->layout = null;
         $carousel = ClassRegistry::init('NewFind')->get_all_carousel();
         $top_rank = ClassRegistry::init('NewFind')->get_all_top_rank();
@@ -50,15 +49,6 @@ class ShareOptController extends AppController {
         $this->layout = null;
         $products = $this->ShareUtil->get_product_by_category($category);
 
-        $category_pool = [
-            1 => '果蔬乐园',
-            2 => '肉蛋海鲜',
-            3 => '干果零食',
-            4 => '粮油副食',
-            5 => '其他',
-        ];
-
-        $this->set('category_name', $category_pool[$category]);
         $this->set('products', $products);
     }
 
@@ -159,7 +149,25 @@ class ShareOptController extends AppController {
         exit();
     }
 
-
+    /**
+     * @param $uid
+     * update user visit log
+     */
+    private function save_visit_log($uid) {
+        $this->loadModel('VisitLog');
+        $visitLog = $this->VisitLog->find('first', array(
+            'conditions' => array(
+                'user_id' => $uid
+            )
+        ));
+        $now = date('Y-m-d H:i:s');
+        if (empty($visitLog)) {
+            $saveVisitLog = array('user_id' => $uid, 'last_visit_time' => $now);
+            $this->VisitLog->save($saveVisitLog);
+        } else {
+            $this->VisitLog->updateAll(array('last_visit_time' => '\'' . $now . '\''), array('id' => $visitLog['VisitLog']['id']));
+        }
+    }
 
     /**
      * @param $uid
