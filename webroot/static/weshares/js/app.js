@@ -13,10 +13,10 @@
       }
 
       if(input.indexOf('avatar/') >= 0){
-        return input.replace('avatar/', 'avatar/' + thumb_type + '/');
+        return input.replace('/avatar/', '/avatar/' + thumb_type + '/');
       }
-      if(input.indexOf('images/') >= 0){
-        return input.replace('images/', 'images/' + thumb_type + '/');
+      if(input.indexOf('/images/') >= 0){
+        return input.replace('/images/', '/images/' + thumb_type + '/');
       }
 
       return input;
