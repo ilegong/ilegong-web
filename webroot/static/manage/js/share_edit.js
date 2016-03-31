@@ -1,4 +1,51 @@
 $(document).ready(function () {
+  $('.preview-image').on("click", function (){
+    $('#image-preview').attr('src', $(this).attr('src-data'));
+    $('#image-preview-modal').modal('show');
+  });
+
+  $('.delete-image').on("click", function (){
+    var arr = $('#share-images').val().split('|');
+    var idx = arr.splice(arr.indexOf($(this).attr('src-data')), 1);
+    var nstring = arr.join('|');
+    $('#share-images').val(nstring);
+    $(this).parent('div').parent('div.image-area').remove();
+  });
+
+  $('#upload-image, #banner-upload-image').on("click", function (){
+    $('#uploader').click();
+  });
+
+  $('#upload-image-action').on("click", function (){
+    var formData = new FormData($('#file-uploader').get(0));
+    console.log(formData);
+
+    $.ajax({
+      url: 'http://images.tongshijia.com/upload' ,
+      type: 'post',
+      data: formData,
+      dataType: 'json',
+      async: false,
+      processData: false,
+      contentType: false,
+      success: function (data) {
+        console.log(data);
+        imgUrl = 'http://static.tongshijia.com/' + data.url[0];
+        var obj = $('.image-area').eq(0).clone();
+        obj.find('img').attr('src', imgUrl);
+        obj.find('a').attr('src-data', imgUrl);
+        $('.share-upload-btn').before(obj);
+        $('.preview-image').on("click", function (){
+          $('#image-preview').attr('src', $(this).attr('src-data'));
+          $('#image-preview-modal').modal('show');
+        });
+        $('#share-images').val($('#share-images').val() + "|" + imgUrl);
+      },
+      error: function (data) {
+      }
+    });
+
+  });
   //wizard form
   var navListItems = $('div.setup-panel div a'),
     allWells = $('.setup-content'),
@@ -50,7 +97,7 @@ $(document).ready(function () {
     var shareId = $shareIdEl.val();
     var shareTitle = $shareTitleEl.val();
     var shareSendInfo = $shareSendInfoEl.val();
-    var imagesStr = get_share_images();
+    var imagesStr = $('#share-images').val();
     var shareDescription = $shareDescriptionEl.val();
     var data = {
       "id": shareId,
@@ -66,15 +113,6 @@ $(document).ready(function () {
       }
     }, 'json');
   });
-
-  function get_share_images() {
-    var $imagesEl = $('div.ui-upload-filelist img', $shareBasicInfoPanel);
-    var images = [];
-    $imagesEl.each(function (index, item) {
-      images.push($(item).attr('src'));
-    });
-    return images.join('|');
-  }
 
   //end update share info
   //update share products
