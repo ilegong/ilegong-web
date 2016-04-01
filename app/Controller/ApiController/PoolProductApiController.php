@@ -32,7 +32,7 @@ class PoolProductApiController extends AppController
         exit();
     }
 
-    public function clone_sahre($share_id)
+    public function clone_share($share_id)
     {
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
