@@ -7,7 +7,8 @@ class PoolProductApiController extends AppController
         'Session',
         'WeshareBuy',
         'ShareUtil',
-        'Weshares'
+        'Weshares',
+        'ShareAuthority',
     ];
 
     public $uses = [
@@ -48,6 +49,7 @@ class PoolProductApiController extends AppController
                 'success' => false,
                 'reason' => 'not a proxy user.'
             ]);
+            return;
         }
         $result = $this->ShareUtil->cloneShare($share_id, $uid);
         if ($result['success']) {
