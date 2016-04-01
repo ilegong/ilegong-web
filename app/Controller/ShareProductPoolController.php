@@ -42,20 +42,6 @@ class ShareProductPoolController extends AppController {
     }
 
     /**
-     * API 吐出产品街的产品
-     *
-     * @access public
-     * @return void
-     */
-    public function api_share_pool_products()
-    {
-        $share_products = $this->SharePoolProduct->get_all_products();
-
-        echo json_encode($share_products);
-        exit();
-    }
-
-    /**
      * @param $share_id
      * 产品库详情页(朋友说用户分享的一个分享)
      */
