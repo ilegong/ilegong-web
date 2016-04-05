@@ -5,6 +5,8 @@ class MessageApiController extends Controller
 
     public $components = array('OAuth.OAuth', 'Session', 'WeshareBuy', 'ShareFaqUtil');
 
+    var $currentUser = null;
+
 
     public function beforeFilter()
     {
@@ -144,6 +146,18 @@ class MessageApiController extends Controller
     {
         echo json_encode($this->get_msg(OPT_LOG_SHARE_COMMENT, $page, $limit));
         exit();
+    }
+
+    /**
+     * @param $user_id
+     * 用户私信列表
+     */
+    public function faq_list($user_id)
+    {
+        $current_uid = $this->currentUser['id'];
+
+
+
     }
 
     /**
