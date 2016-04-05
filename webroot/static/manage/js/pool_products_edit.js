@@ -71,10 +71,9 @@ $(function (){
 
   $('#upload-image-action').on("click", function (){
     var formData = new FormData($('#file-uploader').get(0));
-    console.log(formData);
 
     $.ajax({
-      url: 'http://images.tongshijia.com/upload' ,
+      url: 'http://images.tongshijia.com/upload_images_with_attachments' ,
       type: 'post',
       data: formData,
       dataType: 'json',
