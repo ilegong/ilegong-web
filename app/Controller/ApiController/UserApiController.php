@@ -7,7 +7,6 @@ class UserApiController extends AppController
 
     public function beforeFilter()
     {
-        parent::beforeFilter();
         $allow_action = array('test', 'check_mobile_available');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action) == false) {
@@ -66,7 +65,8 @@ class UserApiController extends AppController
         exit();
     }
 
-    public function update_desc(){
+    public function update_desc()
+    {
         $user_id = $this->currentUser['id'];
         $desc = $_REQUEST['desc'];
         $this->User->update(['description' => "'" . $desc . "'"], ['id' => $user_id]);
@@ -77,14 +77,29 @@ class UserApiController extends AppController
     /**
      * 绑定支付方式
      */
-    public function bind_payment(){
-
+    public function bind_payment()
+    {
+        /*
+         * {
+         *   "type" : 0 =>[支付宝] , 1 => [银行卡]
+         *   "account" : 支付宝账号或者银行卡账号
+         *   "full_name" : 姓名,
+         *   "card_type" : 银行卡类型[选择银行卡的时候有效],
+         *   "card_name" : 银行卡名称[选择银行卡的时候有效]
+         * }
+         */
+        $post_str = file_get_contents('php://input');
+        $user_id = $this->currentUser['id'];
+        $this->User->update(['payment' => "'" . $post_str . "'"], ['id' => $user_id]);
+        echo json_encode(['success' => true]);
+        exit();
     }
 
     /**
      * 绑定手机号码
      */
-    public function bind_mobile(){
+    public function bind_mobile()
+    {
         $mobile = $_REQUEST['mobile'];
         $uid = $this->currentUser['id'];
         $this->User->update(['mobilephone' => "'" . $mobile . "'"], ['id' => $uid]);

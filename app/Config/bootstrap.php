@@ -2393,6 +2393,18 @@ function get_index_tags(){
     ];
 }
 
+function get_bank_types(){
+    return [
+        0 => '工商银行',
+        1 => '建设银行',
+        2 => '农业银行',
+        3 => '邮政储蓄',
+        4 => '招商银行',
+        5 => '北京银行',
+        6 => '交通银行'
+    ];
+}
+
 function map_readable_date($time) {
     $now = time();
     $day = 24 * 60 * 60;
@@ -2425,6 +2437,7 @@ function map_user_level($user_level) {
 
     return $level_pool[$user_level];
 }
+
 
 function map_opt_log_data_type($type) {
     $str = "";

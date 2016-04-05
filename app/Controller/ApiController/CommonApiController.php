@@ -1,19 +1,28 @@
 <?php
 
-class CommonApiController extends AppController{
+class CommonApiController extends Controller
+{
 
-    public function beforeFilter(){
-        parent::beforeFilter();
+    public function beforeFilter()
+    {
         $this->autoRender = false;
     }
 
-    public function get_ship_type_list(){
+    public function get_ship_type_list()
+    {
         $list = ShipAddress::ship_type_list();
         echo json_encode($list);
         return;
     }
 
-    public function upload_image(){
+    public function get_bank_types()
+    {
+        echo json_encode(get_bank_types());
+        exit();
+    }
+
+    public function upload_image()
+    {
         if (count($_FILES["user_files"]) > 0) {
             $folderName = "uploads/";
             $counter = 0;
@@ -31,5 +40,6 @@ class CommonApiController extends AppController{
             }
         }
     }
+
 
 }
