@@ -758,7 +758,9 @@ class ShareManageController extends AppController
     public function pool_product_edit($id)
     {
         $product = $this->ShareManage->get_pool_product($id);
+        $pool_product_categories = $this->ShareManage->get_pool_product_categories();
         $this->set('index_product', $product);
+        $this->set('pool_product_categories', $pool_product_categories);
     }
 
     public function pool_product_save()
@@ -767,6 +769,9 @@ class ShareManageController extends AppController
         $data = $this->data;
         if (!$data['Weshares']['images']) {
             $error = "分享链接BANNER图不能为空.";
+        }
+        if (!$data['PoolProduct']['category']) {
+            $error = "产品的类型不能为空";
         }
         foreach ($data['WeshareProduct'] as $key => $value) {
             if ($value['channel_price'] == "") {

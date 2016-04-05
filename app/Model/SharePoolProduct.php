@@ -14,14 +14,27 @@ class SharePoolProduct extends AppModel
         return parent::__get($key);
     }
 
-    public function get_all_pool_products()
+    /**
+     * get_all_pool_products 根据分类获取产品街的产品列表
+     *
+     * @param int $category
+     * @access public
+     * @return void
+     */
+    public function get_all_pool_products($category = 0)
     {
+        $conditions = [];
+
+        if ($category) {
+            $conditions['PoolProduct.category'] = $category;
+        }
+
         $model = ClassRegistry::init('PoolProduct');
         $data = $model->find('all', [
-            'conditions' => [
+            'conditions' => array_merge($conditions, [
                 'PoolProduct.deleted' => DELETED_NO,
                 'PoolProduct.status' => 1,
-            ],
+            ]),
             'order' => ['PoolProduct.sort ASC'],
         ]);
 
@@ -129,51 +142,4 @@ class SharePoolProduct extends AppModel
         }
         return $data;
     }
-
-    //产品和试吃的对应关系
-    var $product_buy_map = [];
-
-    /*array(
-        '1411' => array(
-            //'try' => 56,
-            'buy' => 1463
-        ),
-        '1432' => array(
-            'buy' => 1464
-        ),
-        '1433' => array(
-            'buy' => 1466
-        ),
-        '1430' => array(
-            'buy' => 1467
-        ),
-        '1438' => array(
-            'buy' => 1468
-        ),
-        '1445' => array(
-            'buy' => 1469
-        ),
-        '1447' => array(
-            'buy' => 1471
-        ),
-//        '1448' => array(
-//            'buy' => 1473
-//        ),
-        '1449' => array(
-            'buy' => 1474
-        ),
-        '1450' => array(
-            'buy' => 1475
-        ),
-//        '1703' => array(
-//            'buy' => 1704
-//        ),
-        '1492' => array(
-            'buy' => 1752
-        ),
-        '1783' => array(
-            'buy' => 2018
-        )
-    );
-    */
 }
