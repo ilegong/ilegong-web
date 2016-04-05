@@ -38,7 +38,6 @@ class ShareProductPoolController extends AppController {
         $this->set('uid', $uid);
         $share_products = $this->SharePoolProduct->get_all_products();
         $this->set('share_products', $share_products);
-        exit();
     }
 
     /**
