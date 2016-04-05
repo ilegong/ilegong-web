@@ -172,11 +172,6 @@ const SAE_IMAGES_FILE_PATH = 'http://images.tongshijia.com';
 const ALIYUN_AVATAR_DOMAIN = 'http://static.tongshijia.com/avatar/';
 const ALIYUN_AVATAR_PREFIX = 'http://static.tongshijia.com';
 
-//http://51daifan-assets.stor.sinaapp.com
-//http://www.tongshijia.com
-//http://dev.tongshijia.com
-const LOCAL_STATIC_FILE_PATH = 'http://dev.tongshijia.com';
-
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
 define('FORMAT_DATE_YUE_RI_HAN', 'n月j日');

@@ -1,13 +1,13 @@
-<link href="{{$STATIC_FILE_PATH}}/static/weshares/css/share-info.min.css?v0.1.3" rel="stylesheet">
+<link href="{{$STATIC_HOST}}/static/weshares/css/share-info.min.css?v0.1.3" rel="stylesheet">
 <div class="row" style="background: #EAEAEA;">
     <div class="col-md-12 user-details">
         <div class="user-image">
             {{if $is_me}}
-            <a href="/users/change_avatar?ref=/weshares/user_share_info"><img style="width: 80px;height: 80px;left: 5%;" onerror="this.src='http://static.tongshijia.com/avatar/s/default.jpg'"
+            <a href="/users/change_avatar?ref=/weshares/user_share_info"><img style="width: 80px;height: 80px;left: 5%;" onerror="this.src='{{$STATIC_HOST}}/avatar/s/default.jpg'"
                                                                               data-original="{{get_user_avatar($share_user)}}" alt="{{$share_user['nickname']}}" title="{{$share_user['nickname']}}"
                     class="img-circle lazy"><i style="position: relative;top: 35px;left: -15px;display: inline-block;" class="fa fa-camera fa-2x"></i></a>
             {{else}}
-            <img style="width: 80px;height: 80px;" onerror="this.src='http://static.tongshijia.com/avatar/s/default.jpg'"
+            <img style="width: 80px;height: 80px;" onerror="this.src='{{$STATIC_HOST}}/avatar/s/default.jpg'"
                  data-original="{{get_user_avatar($share_user)}}" alt="{{$share_user['nickname']}}" title="{{$share_user['nickname']}}"
                  class="img-circle lazy">
             {{/if}}
@@ -222,4 +222,4 @@
             </div>
         </div>
     </div>
-</div><script src="{{$STATIC_FILE_PATH}}/static/weshares/js/user-share-info.min.js?v0.1.0" type="text/javascript"></script>
+</div><script src="{{$STATIC_HOST}}/static/weshares/js/user-share-info.min.js?v0.1.0" type="text/javascript"></script>

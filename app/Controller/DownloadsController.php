@@ -15,7 +15,7 @@ class DownloadsController extends AppController{
         curl_close($ch);
         $result = json_decode($response, true);
         if ($result['result']) {
-            $image_url = SAE_STATIC_FILE_PATH . '/' . $result['url'];
+            $image_url = STATIC_HOST . '/' . $result['url'];
             //return $result['url'];
             return $image_url;
         }
