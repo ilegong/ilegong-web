@@ -111,6 +111,25 @@ class ShareManageComponent extends Component
         return $arr;
     }
 
+    public function delete_pool_product_category($id)
+    {
+        $data['id'] = $id;
+        $data['deleted'] = 1;
+
+        ClassRegistry::init('PoolProductCategory')->save($data);
+    }
+
+    public function pool_product_category_add($name)
+    {
+        $data['category_name'] = $name;
+        $data['deleted'] = 0;
+        $model = ClassRegistry::init('PoolProductCategory');
+
+        $model->save($data);
+
+        return true;
+    }
+
     public function get_pool_product_categories()
     {
         $model = ClassRegistry::init('PoolProductCategory');
@@ -119,7 +138,7 @@ class ShareManageComponent extends Component
                 'PoolProductCategory.deleted' => DELETED_NO,
             ],
         ]);
-        
+
         return $categories;
     }
 
