@@ -2302,4 +2302,58 @@ class ShareUtilComponent extends Component
 
         return $weshareDeliveryTemplates;
     }
+
+
+
+    public function get_pool_product_info($share_id) {
+        $key = 'pool_product_info_cache_key_' . $share_id;
+        $cacheData = Cache::read($key);
+        if (empty($cacheData)) {
+            $weshareM = ClassRegistry::init('Weshare');
+            //get share basic info
+            $weshare_info = $weshareM->find('first', array(
+                'conditions' => array('id' => $share_id)
+            ));
+            $weshare_info = $weshare_info['Weshare'];
+            $weshare_info['description'] = str_replace(array("\r\n", "\n", "\r"), '<br />', $weshare_info['description']);
+            $weshare_info['images'] = array_filter(explode('|', $weshare_info['images']));
+            $weshare_products = $this->get_product_tag_map($share_id);
+            //$sharer_tags = $this->ShareUtil->get_tags($weshare_info['creator'], $weshare_info['refer_share_id']);
+            $weshare_info['products'] = $weshare_products;
+            //$weshare_info['tags'] = $sharer_tags;
+            $WeshareShipSettingM = ClassRegistry::init('WeshareShipSetting');
+            $shipSettings = $WeshareShipSettingM->find('all', array('conditions' => array('weshare_id' => $share_id)));
+            $ship_info = $this->get_pool_product_ship_info($shipSettings);
+            $weshare_info['ship_info'] = $ship_info;
+            Cache::write($key, json_encode($weshare_info));
+            return $weshare_info;
+        }
+        return json_decode($cacheData, true);
+    }
+
+    /**
+     * @param $shipSettings
+     * @return string
+     * 获取快递信息
+     */
+    private function get_pool_product_ship_info($shipSettings) {
+        $ship_info = array();
+        foreach ($shipSettings as $shipSettingItem) {
+            if ($shipSettingItem['WeshareShipSetting']['tag'] == SHARE_SHIP_KUAIDI_TAG && $shipSettingItem['WeshareShipSetting']['status'] == 1) {
+                $ship_fee = $shipSettingItem['WeshareShipSetting']['ship_fee'];
+                if ($ship_fee == 0) {
+                    $ship_info_item = '快递包邮';
+                } else {
+                    $ship_fee = $ship_fee / 100;
+                    $ship_fee = number_format($ship_fee, 2);
+                    $ship_info_item = '快递费用' . $ship_fee . '元';
+                }
+                $ship_info[] = $ship_info_item;
+            }
+            if ($shipSettingItem['WeshareShipSetting']['tag'] == SHARE_SHIP_PYS_ZITI_TAG && $shipSettingItem['WeshareShipSetting']['status'] == 1) {
+                $ship_info[] = '好邻居自提';
+            }
+        }
+        return implode(',', $ship_info);
+    }
 }
