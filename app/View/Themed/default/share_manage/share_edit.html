@@ -258,6 +258,8 @@
 </div><!-- /.modal -->
 <form id="file-uploader">
   <input type="file" name='images' class="hidden" id="uploader"  />
+  <input type="hidden" name='token' value="PYS_IMAGES_001">
+  <input type="hidden" name='category' value="images/index">
 </form>
 <!-- /.container-fluid -->
 <script src="{{$STATIC_HOST}}/static/manage/js/share_edit.js"></script> {{$this->fetch('bottomscript')}}
