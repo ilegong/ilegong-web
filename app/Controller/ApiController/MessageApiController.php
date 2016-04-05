@@ -150,14 +150,38 @@ class MessageApiController extends Controller
 
     /**
      * @param $user_id
+     * @param $page
+     * @param $limit
      * 用户私信列表
      */
-    public function faq_list($user_id)
+    public function faq_list($user_id, $page, $limit)
     {
         $current_uid = $this->currentUser['id'];
-
-
-
+        $this->loadModel('ShareFaq');
+        $result = $this->ShareFaq->find('all', [
+            'conditions' => [
+                'receiver' => $current_uid,
+                'sender' => $user_id
+            ],
+            'group' => ['share_id'],
+            'order' => ['id DESC'],
+            'page' => $page,
+            'limit' => $limit
+        ]);
+        $faqs = [];
+        $share_ids = [];
+        foreach ($result as $item) {
+            $faqs[] = $item['ShareFaq'];
+            $share_ids[] = $item['ShareFaq']['share_id'];
+        }
+        $this->loadModel('Weshare');
+        $weshares = $this->Weshare->find('all', [
+            'conditions' => ['id' => $share_ids],
+            'fields' => ['title', 'id']
+        ]);
+        $weshares = Hash::combine($weshares, '{n}.Weshare.id', '{n}.Weshare');
+        echo(json_encode(['messages' => $faqs, 'weshares' => $weshares]));
+        exit();
     }
 
     /**
