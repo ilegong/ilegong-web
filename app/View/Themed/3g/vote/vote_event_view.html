@@ -2,11 +2,11 @@
 <div class="container" style="margin-bottom: 50px;padding:0;">
     <div class="baby_banner" style="position: relative;"><img src="{{$this->Html->assetUrl($voteConfig['common_params']['banner'])}}">
         {{if $event_available}}
-        {{if !$is_sign_up}}
-        <a href="/vote/sign_up/{{$event_id}}" style="position: absolute; line-height: 30px; left: 50%; margin-left: -37px; bottom: 60px; width: 75px; line-height: 27px; background-color: #fff; color: #ff7c6e; text-align: center;">我要报名</a>
-        {{else}}
-        <a href="/vote/candidate_detail/{{$is_sign_up['CandidateEvent']['candidate_id']}}/{{$event_id}}?vote_num={{$candidator['vote_num']}}&is_vote={{$candidator['is_vote']}}" style="position: absolute; line-height: 30px; left: 50%; margin-left: -37px; bottom: 60px; width: 75px; line-height: 27px; background-color: #fff; color: #ff7c6e; text-align: center;">查看报名</a>
-        {{/if}}
+            {{if !$is_sign_up}}
+            <a href="/vote/sign_up/{{$event_id}}" style="position: absolute; line-height: 30px; left: 50%; margin-left: -37px; bottom: 60px; width: 75px; line-height: 27px; background-color: #fff; color: #ff7c6e; text-align: center;">我要报名</a>
+            {{else}}
+            <a href="/vote/candidate_detail/{{$is_sign_up['CandidateEvent']['candidate_id']}}/{{$event_id}}?vote_num={{$candidator['vote_num']}}&is_vote={{$candidator['is_vote']}}" style="position: absolute; line-height: 30px; left: 50%; margin-left: -37px; bottom: 60px; width: 75px; line-height: 27px; background-color: #fff; color: #ff7c6e; text-align: center;">查看报名</a>
+            {{/if}}
         {{else}}
         <a href="#" style="position: absolute; line-height: 30px; left: 50%; margin-left: -37px; bottom: 60px; width: 75px; line-height: 27px; background-color: #fff; color: #ff7c6e; text-align: center;">活动已经结束</a>
         {{/if}}

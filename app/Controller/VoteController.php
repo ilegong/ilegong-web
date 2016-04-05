@@ -183,11 +183,11 @@ class VoteController extends AppController {
             $this->redirect('/users/login.html?force_login=1&auto_weixin=' . $this->is_weixin() . '&referer=' . urlencode($ref));
             return;
         }
-        $sign_up_info = $this->has_sign_up($eventId, $uid);
-        if (!empty($sign_up_info)) {
-            $this->redirect('/vote/candidate_detail/' . $sign_up_info['CandidateEvent']['candidate_id'] . '/' . $eventId);
-            return;
-        }
+//        $sign_up_info = $this->has_sign_up($eventId, $uid);
+//        if (!empty($sign_up_info)) {
+//            $this->redirect('/vote/candidate_detail/' . $sign_up_info['CandidateEvent']['candidate_id'] . '/' . $eventId);
+//            return;
+//        }
         $event_info = $this->get_event_info($eventId);
         $this->set('event_info', $event_info);
         $this->set('event_id', $eventId);
@@ -301,7 +301,8 @@ class VoteController extends AppController {
             'conditions' => array(
                 'user_id' => $userId,
                 'event_id' => $eventId
-            )
+            ),
+            'order' => array('id DESC')
         ));
         return $record;
     }

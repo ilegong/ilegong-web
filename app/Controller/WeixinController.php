@@ -406,7 +406,8 @@ class WeixinController extends AppController {
                     $reply_title = $voteConfig['title'];
                     if($uid){
                         $event_candidate = $this->CandidateEvent->find('first',array(
-                            'conditions' => array('user_id' => $uid, 'event_id' => 9)
+                            'conditions' => array('user_id' => $uid, 'event_id' => 9),
+                            'order' => array('id DESC')
                         ));
                         $this->log('event candidate '.json_encode($event_candidate));
                         if(!empty($event_candidate)){
