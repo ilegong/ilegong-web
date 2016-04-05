@@ -24,7 +24,7 @@
             var referUrl = $referUrl.val();
 
             function updateAvatar(url){
-                $.post("/update_avatar", {'url': url}, function (result) {
+                $.post("/users/update_avatar", {'url': url}, function (result) {
                     if (result['success']) {
                         window.location.href = referUrl;
                     } else {
