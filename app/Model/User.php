@@ -127,6 +127,15 @@ class User extends AppModel {
         return $info;
     }
 
+    public function get_users_simple_info($user_ids){
+        if (is_array($user_ids)) {
+            $user_ids = [$user_ids];
+        }
+        $users = $this->find('all', ['conditions' => ['id' => $user_ids], 'fields' => ['id', 'image', 'avatar', 'nickname']]);
+        $users = array_map('map_user_avatar2', $users);
+        return $users;
+    }
+
     /**
      * @param $uid
      * @return string

@@ -2426,6 +2426,7 @@ function map_user_level($user_level) {
     return $level_pool[$user_level];
 }
 
+
 function map_opt_log_data_type($type) {
     $str = "";
 

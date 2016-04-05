@@ -1,19 +1,38 @@
 <?php
 
-class CommonApiController extends AppController{
+class CommonApiController extends Controller
+{
 
-    public function beforeFilter(){
-        parent::beforeFilter();
+    static $BANK_TYPES = [
+        0 => '工商银行',
+        1 => '建设银行',
+        2 => '农业银行',
+        3 => '邮政储蓄',
+        4 => '招商银行',
+        5 => '北京银行',
+        6 => '交通银行'
+    ];
+
+    public function beforeFilter()
+    {
         $this->autoRender = false;
     }
 
-    public function get_ship_type_list(){
+    public function get_ship_type_list()
+    {
         $list = ShipAddress::ship_type_list();
         echo json_encode($list);
         return;
     }
 
-    public function upload_image(){
+    public function get_bank_types()
+    {
+        echo json_encode(self::$BANK_TYPES);
+        exit();
+    }
+
+    public function upload_image()
+    {
         if (count($_FILES["user_files"]) > 0) {
             $folderName = "uploads/";
             $counter = 0;
@@ -31,5 +50,6 @@ class CommonApiController extends AppController{
             }
         }
     }
+
 
 }
