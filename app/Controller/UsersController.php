@@ -772,7 +772,7 @@ class UsersController extends AppController {
     }
 
 
-    function upload_avatar()
+    function update_avatar()
     {
         $this->autoRender = false;
         $uid = $_POST['uid'];

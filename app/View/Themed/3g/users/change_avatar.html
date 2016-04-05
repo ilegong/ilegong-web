@@ -24,14 +24,14 @@
             var referUrl = $referUrl.val();
 
             function updateAvatar(url){
-//                $.post("/upload_images_with_base64", {'images': data, 'category': 'avatar', 'token': 'PYS_IMAGES_001'}, function (result) {
-//                    if (result['result']) {
-//                        window.location.href = referUrl;
-//                    } else {
-//                        alert('保存失败，请重试');
-//                    }
-//                    $('#loading').hide();
-//                }, 'json');
+                $.post("/update_avatar", {'url': url}, function (result) {
+                    if (result['success']) {
+                        window.location.href = referUrl;
+                    } else {
+                        alert('保存失败，请重试');
+                        $('#loading').hide();
+                    }
+                }, 'json');
             }
             function doUpload(data) {
                 $('#loading').show();
@@ -41,8 +41,8 @@
                         updateAvatar(result['url']);
                     } else {
                         alert('保存失败，请重试');
+                        $('#loading').hide();
                     }
-                    $('#loading').hide();
                 }, 'json');
             }
             $('.cutbox').crop({
