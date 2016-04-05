@@ -20,8 +20,22 @@
         </ul>
     </nav>
 </div>
+
+<div class="recommend-sharer">
+  <h1>朋友说的朋友们</h1>
+  <div style="position: relative; width: 100%;">
+	<ul class="clearfix">
+	  <li style="width: 7.08em; height: 7.69em;" class="fl"><img src="{{$STATIC_FILE_PATH}}/static/weshares/images/recommend-sharer.jpg"></li>
+	  <li style="overflow: hidden; padding-right: 12px;">
+		<h2>轩轩妈妈和她的云南之旅</h2>
+		<label>2004年，第一次到昆明。当地的朋友带着去吃各种云南美食，有一种黑黑的浸泡在油中的饭前碟开胃菜给...</label>
+	  </li>
+	</ul>
+  </div>
+</div>
+
 <div class="outer-listings-container row-space-3" style="margin-bottom: 50px;margin-top: 45px;background: #ffffff;">
-    <div class="listings-container">
+  <div class="listings-container">
         {{loop $products $product}}
         <?php
             if($product['type'] == 1){
@@ -145,5 +159,12 @@
         s.parentNode.insertBefore(hm, s);
     })();
 </script>
+<style>
+/*recommend sharer*/
+.recommend-sharer h1{ color:#0fc449; line-height: 38px; text-align: center; font-size: 1.15em; font-weight: normal; border-bottom: 1px #eeeeee solid;}
+.recommend-sharer ul li img{ width: 100%; height: 100%;}
+.recommend-sharer ul li h2{ font-weight: normal; font-size: 1.05em; color: #333333; padding: 12px 0 5px 10px;}
+.recommend-sharer ul li label{ color: #999999; line-height: 18px; padding-left: 10px; display: block; font-size: 0.8em;}
+</style>
 </body>
 </html>
