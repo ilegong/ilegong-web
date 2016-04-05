@@ -84,7 +84,8 @@ class UserApiController extends AppController
          *   "type" : 0 =>[支付宝] , 1 => [银行卡]
          *   "account" : 支付宝账号或者银行卡账号
          *   "full_name" : 姓名,
-         *   "card_type" : 选择银行卡的时候有效
+         *   "card_type" : 银行卡类型[选择银行卡的时候有效],
+         *   "card_name" : 银行卡名称[选择银行卡的时候有效]
          * }
          */
         $post_str = file_get_contents('php://input');
