@@ -755,6 +755,25 @@ class ShareManageController extends AppController
         $this->set('tags', $tags);
     }
 
+    public function pool_product_category_delete($id)
+    {
+        $this->ShareManage->delete_pool_product_category($id);
+        $this->redirect('/shareManage/pool_product_category_edit');
+    }
+
+    public function pool_product_category_add()
+    {
+        $categoryname = $_POST['categoryname'];
+        $this->ShareManage->pool_product_category_add($categoryname);
+        $this->redirect('/shareManage/pool_product_category_edit');
+    }
+
+    public function pool_product_category_edit()
+    {
+        $categories = $this->ShareManage->get_pool_product_categories();
+        $this->set('categories', $categories);
+    }
+
     public function pool_product_edit($id)
     {
         $product = $this->ShareManage->get_pool_product($id);
