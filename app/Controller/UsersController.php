@@ -778,7 +778,7 @@ class UsersController extends AppController {
         $uid = $_POST['uid'];
         $url = $_POST['url'];
         if (!empty($url)) {
-            $this->log('update avatar of user '. $uid .' to '.$url);
+            $this->log('update avatar of user '. $uid .' to '.$url, LOG_INFO);
             $this->User->id = $uid;
             $this->User->update(array('image' => "'" . $url . "'", 'avatar' => "'" . $url . "'"), array('id' => $uid));
             Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');

@@ -23,8 +23,8 @@
             var $referUrl = $('#refer-url');
             var referUrl = $referUrl.val();
 
-            function updateAvatar(url){
-                $.post("/users/update_avatar", {'url': url}, function (result) {
+            function updateAvatar(uid, url){
+                $.post("/users/update_avatar", {"uid": uid, 'url': url}, function (result) {
                     if (result['success']) {
                         window.location.href = referUrl;
                     } else {
@@ -38,7 +38,7 @@
                 $.post("{{$IMAGES_HOST}}/upload_images_with_base64", {'images': data, 'category': 'avatar', 'token': 'PYS_IMAGES_001'}, function (result) {
                     console.log(result);
                     if (result['result']) {
-                        updateAvatar(result['url']);
+                        updateAvatar(uid, result['url']);
                     } else {
                         alert('保存失败，请重试');
                         $('#loading').hide();
