@@ -25,9 +25,9 @@ class PoolProductApiController extends AppController
         }
     }
 
-    public function get_pool_product_list()
+    public function get_pool_product_list($category)
     {
-        $share_products = $this->SharePoolProduct->get_all_products();
+        $share_products = $this->SharePoolProduct->get_all_products($category);
 
         echo json_encode($share_products);
         exit();

@@ -111,6 +111,18 @@ class ShareManageComponent extends Component
         return $arr;
     }
 
+    public function get_pool_product_categories()
+    {
+        $model = ClassRegistry::init('PoolProductCategory');
+        $categories = $model->find('all', [
+            'conditions' => [
+                'PoolProductCategory.deleted' => DELETED_NO,
+            ],
+        ]);
+        
+        return $categories;
+    }
+
     public function save_pool_product($data)
     {
         // 更新cake_pool_products表
