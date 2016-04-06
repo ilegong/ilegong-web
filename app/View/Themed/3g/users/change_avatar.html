@@ -12,7 +12,7 @@
     <input type="hidden" id="current-user-id" value="{{$uid}}">
     <input type="hidden" id="refer-url" value="{{$refer_url}}">
     <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.js"></script>
-    <script src="{{$STATIC_FILE_PATH}}/static/user/avatar.min.js"></script>
+    <script src="{{$STATIC_HOST}}/static/user/avatar.min.js"></script>
     <script>
         $(function () {
             $('#loading').hide();
@@ -22,15 +22,27 @@
             var uid = $uidDom.val();
             var $referUrl = $('#refer-url');
             var referUrl = $referUrl.val();
-            function doUpload(data) {
-                $('#loading').show();
-                $.post('/users/upload_avatar', {"imgData": data, "uid": uid}, function (result) {
+
+            function updateAvatar(uid, url){
+                $.post("/users/update_avatar", {"uid": uid, 'url': url}, function (result) {
                     if (result['success']) {
                         window.location.href = referUrl;
                     } else {
                         alert('保存失败，请重试');
+                        $('#loading').hide();
                     }
-                    $('#loading').hide();
+                }, 'json');
+            }
+            function doUpload(data) {
+                $('#loading').show();
+                $.post("{{$IMAGES_HOST}}/upload_images_with_base64", {'images': data, 'category': 'avatar', 'token': 'PYS_IMAGES_001'}, function (result) {
+                    console.log(result);
+                    if (result['result']) {
+                        updateAvatar(uid, result['url']);
+                    } else {
+                        alert('保存失败，请重试');
+                        $('#loading').hide();
+                    }
                 }, 'json');
             }
             $('.cutbox').crop({
@@ -50,7 +62,7 @@
 
 <body>
 <div id="loading" style="position: fixed;top: 0;width: 100%;height: 100%;text-align: center;z-index: 10000;padding: 4px;border: 1px solid grey;background: black;color: white;opacity: 0.6;">
-    <img src="{{$STATIC_FILE_PATH}}/static/user/loading.gif" style="position: fixed;left: 34%;top: 35%;"/>
+    <img src="{{$STATIC_HOST}}/static/user/loading.gif" style="position: fixed;left: 34%;top: 35%;"/>
 </div>
 <div class="cutbox"></div>
 </body>

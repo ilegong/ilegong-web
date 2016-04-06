@@ -167,7 +167,8 @@ class AppController extends Controller {
             }
         }
         //set static file path
-        $this->set('STATIC_FILE_PATH', SAE_STATIC_FILE_PATH);
+        $this->set('STATIC_HOST', STATIC_HOST);
+        $this->set('IMAGES_HOST', IMAGES_HOST);
     }
 
     public function afterFilter() {

@@ -772,31 +772,19 @@ class UsersController extends AppController {
     }
 
 
-    function upload_avatar()
+    function update_avatar()
     {
         $this->autoRender = false;
         $uid = $_POST['uid'];
-        $imgData = $_POST['imgData'];
-        // 截取有用的部分
-        list($type, $imgData) = explode(';', $imgData);
-        list(, $imgData) = explode(',', $imgData);
-        list(, $type) = explode('/', $type);
-        // base64 编码中使用了加号，
-        // 如果通过url传递base64数据，+号会转换成空格
-        $imgData = str_replace(' ', '+', $imgData);
-        $file_name = $uid . time() . '.' . $type;
-        $result = $this->FileUpload->save_base64_data(base64_decode($imgData), $file_name);
-        $imgUrl = $result['download_url'];
-        if (!empty($imgUrl)) {
-            $ali_avatar = create_avatar_in_aliyun($imgUrl);
-            $this->log('ali_avatar '.$ali_avatar);
+        $url = $_POST['url'];
+        if (!empty($url)) {
+            $this->log('update avatar of user '. $uid .' to '.$url, LOG_INFO);
             $this->User->id = $uid;
-            $this->User->update(array('image' => "'" . $imgUrl . "'", 'avatar' => "'" . $ali_avatar . "'"), array('id' => $uid));
-            //$this->User->saveField('image', $imgUrl);
+            $this->User->update(array('image' => "'" . $url . "'", 'avatar' => "'" . $url . "'"), array('id' => $uid));
             Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
         }
-        echo json_encode($result);
-        return;
+        echo json_encode(array('success' => true));
+        exit();
     }
 
     function wx_auth() {
