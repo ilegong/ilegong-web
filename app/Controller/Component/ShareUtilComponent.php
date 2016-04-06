@@ -409,8 +409,11 @@ class ShareUtilComponent extends Component
         if (!empty($type)) {
             $shareInfo['type'] = $type;
         }
-        //set refer share id
-        $shareInfo['refer_share_id'] = $shareId;
+        //不是产品街的分享重新开团设置 refer_share_id
+        if ($shareInfo['type'] != FROM_POOL_SHARE_TYPE) {
+            //set refer share id
+            $shareInfo['refer_share_id'] = $shareId;
+        }
         if (!empty($uid)) {
             $shareInfo['creator'] = $uid;
         }
