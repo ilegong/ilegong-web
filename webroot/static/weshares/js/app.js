@@ -29,7 +29,10 @@
       var fallbackSrc = {
         link: function postLink(scope, iElement, iAttrs) {
           iElement.bind('error', function () {
-            angular.element(this).attr("src", iAttrs.fallbackSrc);
+            var oldSrc = angular.element(this).attr("src");
+            if(oldSrc!=iAttrs.fallbackSrc){
+              angular.element(this).attr("src", iAttrs.fallbackSrc);
+            }
           });
         }
       };
