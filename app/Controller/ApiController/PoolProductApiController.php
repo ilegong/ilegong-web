@@ -88,7 +88,16 @@ class PoolProductApiController extends AppController
             ],
         ]);
 
-        echo json_encode($data);
+        $res = [];
+        foreach($data as $item) {
+            $tmp = [];
+            $tmp['id'] = $item['PoolProductCategory']['id'];
+            $tmp['name'] = $item['PoolProductCategory']['category_name'];
+
+            $res[] = $tmp;
+        }
+
+        echo json_encode($res);
         exit();
     }
 
