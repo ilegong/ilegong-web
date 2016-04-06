@@ -82,7 +82,7 @@ class PoolProductApiController extends AppController
     {
         $model = ClassRegistry::init('PoolProductCategory');
 
-        $data = $model->getAll('all', [
+        $data = $model->find('all', [
             'conditions' => [
                 'deleted' => DELETED_NO,
             ],
