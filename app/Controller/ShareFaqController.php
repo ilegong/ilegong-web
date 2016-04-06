@@ -52,9 +52,10 @@ class ShareFaqController extends AppController {
             'conditions' => array(
                 'id' => array($userId, $current_user_id)
             ),
-            'fields' => array('id', 'nickname', 'image')
+            'fields' => array('id', 'nickname', 'image', 'avatar')
         ));
         $user_info = Hash::combine($user_info, '{n}.User.id', '{n}.User');
+        $user_info = array_map('map_user_avatar', $user_info);
         //查询交互的信息
         $share_faqs = $this->ShareFaq->find('all', array(
             'conditions' => array(
