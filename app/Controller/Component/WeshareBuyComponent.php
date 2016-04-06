@@ -269,6 +269,7 @@ class WeshareBuyComponent extends Component
                 'deleted' => DELETED_NO
             );
             $shareOperateSettingM = ClassRegistry::init('ShareOperateSetting');
+            //获取授权的分享ID
             $share_operate_settings = $shareOperateSettingM->find('all', array(
                 'conditions' => $q_authority_share_cond,
                 'order' => array('id' => 'desc'),
