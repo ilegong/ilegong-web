@@ -54,9 +54,9 @@ class SharePoolProduct extends AppModel
      * @return array
      * 获取产品池中所有产品
      */
-    public function get_all_products()
+    public function get_all_products($category = 0)
     {
-        return $this->products;
+        return $this->get_all_pool_products($category);
     }
 
     /**
