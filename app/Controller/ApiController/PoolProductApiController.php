@@ -41,7 +41,7 @@ class PoolProductApiController extends AppController
                 'success' => false,
                 'reason' => 'user login required.'
             ]);
-           exit();
+            exit();
         }
         $is_proxy = $this->ShareUtil->is_proxy_user($uid);
         if (!$is_proxy) {
@@ -49,23 +49,46 @@ class PoolProductApiController extends AppController
                 'success' => false,
                 'reason' => 'not a proxy user.'
             ]);
-           exit();
+            exit();
         }
         $result = $this->ShareUtil->cloneShare($share_id, $uid);
         if ($result['success']) {
             $this->init_share_authorize($result['shareId'], $share_id, $uid);
         }
         echo json_encode($result);
-       exit();
+        exit();
     }
 
     /**
-     * @param $share_id
      * 获取产品街产品详情
+     *
+     * @param mixed $share_id 分享ID
+     * @access public
+     * @return void
      */
     public function get_detail($share_id){
         $result = $this->ShareUtil->get_pool_product_info($share_id);
         echo json_encode($result);
+        exit();
+    }
+
+    /**
+     * get_all_product_categories 获取产品街所有的分类ID
+     *
+     * @access public
+     * @return void
+     */
+    public function get_all_product_categories()
+    {
+        $model = ClassRegistry::init('PoolProductCategory');
+
+        $data = $model->getAll('all', [
+            'conditions' => [
+                'deleted' => DELETED_NO,
+            ],
+        ]);
+
+        echo json_encode($data);
         exit();
     }
 
