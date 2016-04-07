@@ -440,24 +440,22 @@ class ShareUtilComponent extends Component
 //        }
         $newShareInfo = $WeshareM->save($shareInfo);
         if ($newShareInfo) {
-            //clone product
             $newShareId = $newShareInfo['Weshare']['id'];
+            //clone product
             $this->cloneShareProduct($newShareId, $shareId, $share_limit);
-            if ($type == DEFAULT_SHARE_TYPE || $type == POOL_SHARE_TYPE) {
-                //clone address
-                $this->cloneShareAddresses($newShareId, $shareId);
-                //clone ship setting
-                $this->cloneShareShipSettings($newShareId, $shareId);
-                //clone rebate set
-                $this->cloneShareRebateSet($newShareId, $shareId);
-                //clone share delivery template
-                $this->cloneDeliveryTemplate($newShareId, $shareId, $uid);
-            }
-            if ($type == GROUP_SHARE_TYPE) {
-                $this->saveGroupShareAddress($address, $newShareId);
-                $this->cloneShareShipSettings($newShareId, $shareId, true);
-                $this->cloneShareRebateSet($newShareId, $shareId, true);
-            }
+            //clone address
+            $this->cloneShareAddresses($newShareId, $shareId);
+            //clone ship setting
+            $this->cloneShareShipSettings($newShareId, $shareId);
+            //clone rebate set
+            $this->cloneShareRebateSet($newShareId, $shareId);
+            //clone share delivery template
+            $this->cloneDeliveryTemplate($newShareId, $shareId, $uid);
+//            if ($type == GROUP_SHARE_TYPE) {
+//                $this->saveGroupShareAddress($address, $newShareId);
+//                $this->cloneShareShipSettings($newShareId, $shareId, true);
+//                $this->cloneShareRebateSet($newShareId, $shareId, true);
+//            }
             if (!empty($uid)) {
                 $this->check_and_save_default_level($uid);
             }
