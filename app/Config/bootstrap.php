@@ -436,7 +436,12 @@ function redirect_to_wx_oauth($ref, $scope = WX_OAUTH_BASE, $not_require_info = 
     return 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' . WX_APPID . '&redirect_uri=' . $return_uri . "&response_type=code&scope=$scope&state=0#wechat_redirect";
 }
 
-
+/**
+ * @param $time1
+ * @param $time2
+ * @return bool
+ * 判断是否是同一天
+ */
 function same_day($time1, $time2) {
     $dt = new DateTime;
     $dt->setTimestamp($time1);
@@ -446,6 +451,12 @@ function same_day($time1, $time2) {
     return ($day1 == $day2);
 }
 
+/**
+ * @param $timeStr1
+ * @param null $timeStr2
+ * @return bool
+ * 时间是否早于某天
+ */
 function before_than($timeStr1, $timeStr2 = null) {
     if (!$timeStr1) {
         return false;
@@ -993,22 +1004,6 @@ class TuanShip {
 }
 
 class ShipAddress {
-//    public static $ship_type = array(
-//        101 => '申通',
-//        102 => '圆通',
-//        103 => '韵达',
-//        104 => '顺丰',
-//        105 => 'EMS',
-//        106 => '邮政包裹',
-//        107 => '天天',
-//        108 => '汇通',
-//        109 => '中通',
-//        110 => '全一',
-//        111 => '宅急送',
-//        112 => '全峰',
-//        113 => '快捷',
-//    );
-
     /**
      * @return array keyed with ship type id, value is array of fields for the ship type
      */
@@ -1987,8 +1982,6 @@ function prepare_wx_share_log($currUid, $date_type, $data_id) {
 }
 
 function getTuanProductsAsJson() {
-//    $tuanProducts = Cache::read('tuan_products');
-//    if(empty($tuanProducts)){
     $tuanProductM = ClassRegistry::init('TuanProduct');
     $tuanProducts = $tuanProductM->find('all', array(
         'conditions' => array(
@@ -1997,8 +1990,6 @@ function getTuanProductsAsJson() {
         'order' => 'priority desc'
     ));
     $tuanProducts = json_encode($tuanProducts);
-//        Cache::write('tuan_products',$tuanProducts);
-//    }
     return $tuanProducts;
 }
 
@@ -2011,30 +2002,6 @@ function getTuanProductPrice($pid) {
     return floatval($product_price_map[$pid]);
 }
 
-//同类商品评论共享
-function get_group_product_ids($pid) {
-    $egg_product = array(896, 818, 161);
-    $cake_product = array(877, 869, 862);
-    $comosus_product = array(925, 905, 851);
-    $rice_product = array(231, 1045, 229);
-    $cherry_product = array(897, 1020);
-    if (in_array($pid, $egg_product)) {
-        return $egg_product;
-    }
-    if (in_array($pid, $cake_product)) {
-        return $cake_product;
-    }
-    if (in_array($pid, $comosus_product)) {
-        return $comosus_product;
-    }
-    if (in_array($pid, $rice_product)) {
-        return $rice_product;
-    }
-    if (in_array($pid, $cherry_product)) {
-        return $cherry_product;
-    }
-    return $pid;
-}
 
 function search_spec($spec_ids) {
     if (count($spec_ids) != 1 || !empty($spec_ids[0])) {
@@ -2172,6 +2139,12 @@ function get_pure_product_consignment_date($pid) {
     return date_format($consignment_date, 'Y-m-d');
 }
 
+/**
+ * @param $text
+ * @param $len
+ * @return string
+ * 截取字符串多余 使用 ... 代替
+ */
 function get_limit_string($text, $len) {
     if (mb_strlen($text) > $len) {
         return mb_substr($text, 0, $len) . '...';
@@ -2486,14 +2459,32 @@ function get_pintuan_opt_log_url($tag_id) {
     return $detail_url;
 }
 
+/**
+ * @param $a
+ * @param $b
+ * @return int
+ * usort 函数
+ */
 function sort_data_by_id($a, $b) {
     return ($a['id'] < $b['id']) ? 1 : -1;
 }
 
+/**
+ * @param $a
+ * @param $b
+ * @return int
+ * usort 函数
+ */
 function sort_data_by_id_desc($a, $b) {
     return ($a['id'] > $b['id']) ? 1 : -1;
 }
 
+/**
+ * @param $a
+ * @param $b
+ * @return int
+ * usort 函数
+ */
 function sort_opt_log_data_by_id($a, $b) {
     return ($a['OptLog']['id'] < $b['OptLog']['id']) ? 1 : -1;
 }
@@ -2506,16 +2497,31 @@ function replace_urls($string) {
     return preg_replace("#((ht|f)tps?:\/\/{$host}{$port}{$path}{$query})#i", "", $string);
 }
 
+/**
+ * @param $uid
+ * @return bool
+ * 黑名单 乱发消息
+ */
 function is_blacklist_user($uid) {
     $blacklist = array(881026, 886291);
     return in_array($uid, $blacklist);
 }
 
+/**
+ * @param $uid
+ * @return bool
+ * 超级管理员
+ */
 function is_super_share_manager($uid) {
     $super_manager = array(902185, 633345, 701166, 544307, 141, 802852, 801447,895096,711503, 897195, 897247,5081, 559795, 902131, 884183);
     return in_array($uid, $super_manager);
 }
 
+/**
+ * @param $item
+ * @return string
+ * 组合分享的图片
+ */
 function map_share_img($item){
     if (!startsWith($item, 'http')) {
         return 'http://' . WX_HOST . $item;
@@ -2556,7 +2562,6 @@ function url_enc($ql){
     $str = urlencode($ql);
     return str_replace('%2A', '*', $str);
 }
-
 
 /**
  * auto load spl lib
