@@ -2712,6 +2712,7 @@ class WeshareBuyComponent extends Component
     public function cal_proxy_rebate_fee($total_price, $uid, $shareId)
     {
         $data_val = $this->ShareUtil->get_user_level($uid);
+        $data_val = $data_val['data_value'];
         if($data_val == PROXY_USER_LEVEL_VALUE){
             $rebate_setting = $this->ShareUtil->get_share_rebate_data($shareId);
             if (!empty($rebate_setting)) {

@@ -603,6 +603,7 @@ class WesharesController extends AppController
             //cal proxy user rebate fee
             $update_order_data = array('total_all_price' => ($totalPrice - $discountPrice) / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => $shipFee, 'is_prepaid' => $is_prepaid);
             if ($rebate_fee > 0) {
+                //记录返利的钱
                 $rebate_log_id = $this->WeshareBuy->log_proxy_rebate_log($weshareId, $uid, 0, 1, $orderId, $rebate_fee * 100);
                 if (!empty($rebate_log_id)) {
                     $update_order_data['cate_id'] = $rebate_log_id;
@@ -621,7 +622,6 @@ class WesharesController extends AppController
                     $this->order_use_score_and_coupon($orderId, $uid, 0, $totalPrice / 100);
                 }
                 $this->ShareUtil->update_rebate_log_order_id($rebateLogId, $orderId, $weshareId);
-
                 $this->log('Create order for ' . $uid . ' with weshare ' . $weshareId . ' successfully, order id ' . $orderId, LOG_INFO);
                 $this->Orders->on_order_created($uid, $weshareId, $orderId);
 
