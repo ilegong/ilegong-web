@@ -193,7 +193,7 @@ class WeshareBuyComponent extends Component
     public function get_my_create_shares($uid)
     {
         $weshareM = ClassRegistry::init('Weshare');
-        $query_share_type = array(GROUP_SHARE_TYPE, DEFAULT_SHARE_TYPE, POOL_SHARE_BUY_TYPE);
+        $query_share_type = array(GROUP_SHARE_TYPE, DEFAULT_SHARE_TYPE, POOL_SHARE_BUY_TYPE, FROM_POOL_SHARE_TYPE);
         $myCreateShares = $weshareM->find('all', array(
             'conditions' => array(
                 'creator' => $uid,
