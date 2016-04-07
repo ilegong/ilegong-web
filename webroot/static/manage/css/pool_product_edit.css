@@ -2,11 +2,13 @@
 .images-list {
   margin: 10px 0;
 }
+.m-banner-image-area img,
 .banner-image-area img,
 .image-area img {
   width: 160px;
   height: 160px;
 }
+.m-banner-image-area .operator,
 .banner-image-area .operator,
 .image-area .operator {
   margin: 5px 0;

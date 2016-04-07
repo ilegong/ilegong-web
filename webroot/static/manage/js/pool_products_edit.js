@@ -60,12 +60,17 @@ $(function (){
     $(this).parent('div').parent('div.image-area').remove();
   });
 
+  $('.delete-m-banner-image').on("click", function (){
+    $('#m-banner-images-string').val('');
+    $(this).parent('div').parent('div.m-banner-image-area').remove();
+  });
+
   $('.delete-banner-image').on("click", function (){
     $('#banner-images-string').val('');
     $(this).parent('div').parent('div.banner-image-area').remove();
   });
 
-  $('#upload-image, #banner-upload-image').on("click", function (){
+  $('#upload-image, #banner-upload-image, #m-banner-upload-image').on("click", function (){
     $('#uploader').click();
   });
 
@@ -73,7 +78,7 @@ $(function (){
     var formData = new FormData($('#file-uploader').get(0));
 
     $.ajax({
-      url: 'http://images.tongshijia.com/upload_images_with_attachments' ,
+      url: 'http://images.tongshijia.com/upload_images_to' ,
       type: 'post',
       data: formData,
       dataType: 'json',
@@ -103,7 +108,7 @@ $(function (){
     console.log(formData);
 
     $.ajax({
-      url: 'http://images.tongshijia.com/upload_images_with_attachments' ,
+      url: 'http://images.tongshijia.com/upload_images_to' ,
       type: 'post',
       data: formData,
       dataType: 'json',
@@ -124,6 +129,38 @@ $(function (){
           $('#image-preview-modal').modal('show');
         });
         $('#banner-images-string').val(imgUrl);
+      },
+      error: function (data) {
+      }
+    });
+
+  });
+  $('#m-banner-upload-image-action').on("click", function (){
+    var formData = new FormData($('#file-uploader').get(0));
+    console.log(formData);
+
+    $.ajax({
+      url: 'http://images.tongshijia.com/upload_images_to' ,
+      type: 'post',
+      data: formData,
+      dataType: 'json',
+      async: false,
+      processData: false,
+      contentType: false,
+      success: function (data) {
+        imgUrl = 'http://static.tongshijia.com/' + data.url[0];
+        var obj = $('.image-area').eq(0).clone();
+        obj.removeClass('col-sm-2').addClass('col-sm-12 m-banner-image-area');
+        obj.find('a.delete-image').removeClass('delete-image').addClass('delete-m-banner-image');
+        obj.find('img').attr('src', imgUrl);
+        obj.find('a').attr('src-data', imgUrl);
+        $('.m-banner-image-area').remove();
+        $('.m-banner-upload-btn').before(obj);
+        $('.preview-image').on("click", function (){
+          $('#image-preview').attr('src', $(this).attr('src-data'));
+          $('#image-preview-modal').modal('show');
+        });
+        $('#m-banner-images-string').val(imgUrl);
       },
       error: function (data) {
       }
