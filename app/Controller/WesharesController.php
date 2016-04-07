@@ -63,7 +63,6 @@ class WesharesController extends AppController
             $this->process_shared_offer($shared_offer_id);
         } else {
             //use cache
-            //$weshare = $this->Weshare->find('first', array('conditions' => array('id' => $weshare_id)));
             $weshare = $this->WeshareBuy->get_weshare_info($weshare_id);
             if ($weshare['type'] == POOL_SHARE_BUY_TYPE) {
                 //check share type
