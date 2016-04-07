@@ -403,6 +403,17 @@ class ShareManageController extends AppController
 
     public function authorize_shares()
     {
+        $this->process_authorize_share();
+    }
+
+    /**
+     * 产品街分享
+     */
+    public function my_pool_share(){
+        $this->process_authorize_share(FROM_POOL_SHARE_TYPE);
+    }
+
+    private function process_authorize_share($type = null){
         $uid = $this->currentUser['id'];
         $q_cond = array(
             'user' => $uid,
@@ -419,10 +430,15 @@ class ShareManageController extends AppController
         $share_ids = array_unique($share_ids);
         if (count($share_ids) > 0) {
             $weshareM = ClassRegistry::init('Weshare');
+            $q_s_cond = ['id' => $share_ids];
+            if (!empty($type)) {
+                $q_s_cond['type'] = $type;
+            }
+            if ($_REQUEST['key_word']) {
+                $q_s_cond['title LIKE'] = '%' . $_REQUEST['key_word'] . '%';
+            }
             $shares = $weshareM->find('all', array(
-                'conditions' => array(
-                    'id' => $share_ids
-                ),
+                'conditions' => $q_s_cond,
                 'order' => array('id' => 'desc')
             ));
             $this->set('shares', $shares);
@@ -432,14 +448,6 @@ class ShareManageController extends AppController
             }
             $this->set('share_operate_settings', $share_operate_settings_result);
         }
-    }
-
-    /**
-     * 产品街分享
-     */
-    public function my_pool_share(){
-        $uid = $this->currentUser['id'];
-
     }
 
     public function beforeFilter()
