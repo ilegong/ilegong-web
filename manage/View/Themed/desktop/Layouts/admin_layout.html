@@ -241,12 +241,15 @@ var ADMIN_BASEURL = "{{ADMIN_SUB_DIR}}";
 	  !window.jQuery.ui && document.write(unescape('%3Cscript src="{{$this->Html->url('/js/jquery/jquery-ui-1.8.23.custom.min.js')}}"%3E%3C/script%3E'));
 	</script>
 {{/if}}
+<script src="//cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/jquery-migrate/1.4.0/jquery-migrate.min.js"></script>
+<script src="//cdn.bootcss.com/jquery-contextmenu/2.1.1/jquery.contextMenu.min.js"></script>
+<script src="//cdn.bootcss.com/jquery-jgrowl/1.4.4/jquery.jgrowl.min.js"></script>
+<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
 {{$this->Combinator->script(array(
 			'jquery/validator.js',
-			'bootstrap.min.js',			
-			'jquery/jquery.contextMenu.min.js',
 			'jquery/jquery.desktop.js',
-			'jquery/jquery.jgrowl.min.js',
 			'drilldown_menu/fg.menu.js',
 			'jquery/jquery.cookie.js',
 			'i18n/language-zh-CN.js',

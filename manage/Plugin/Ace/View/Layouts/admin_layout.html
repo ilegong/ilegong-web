@@ -5,34 +5,31 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <title>{{$site[title]}}</title>
 
-{{$this->Html->css('bootstrap.min.css')}}
-{{$this->Combinator->css(array(
+	<link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//cdn.bootcss.com/jquery-jgrowl/1.4.4/jquery.jgrowl.min.css" rel="stylesheet">
+	{{$this->Combinator->css(array(
 			'reset.css',
 			'redmond/jquery-ui-1.10.0.custom.css',
 			'ui-customer.css',
 			'ui.jqgrid.css',
-			'jquery.jgrowl.css',
 			'swfupload.css',
 			'admin.css',
 			'desktop/contextmenu/jquery.contextMenu.css',
         ))}}
 
+	<script src="//cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>
+	<script src="//cdn.bootcss.com/jquery-migrate/1.4.0/jquery-migrate.min.js"></script>
+	<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<script src="//cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+	<script src="//cdn.bootcss.com/jquery-jgrowl/1.4.4/jquery.jgrowl.min.js"></script>
+	<script src="//cdn.bootcss.com/jquery-contextmenu/2.1.1/jquery.contextMenu.min.js"></script>
 	{{$this->Html->script(array(
-			'jquery/jquery.min.js',
-			'jquery/jquery-migrate-1.2.1.min.js',
-			'jquery/jquery-ui-1.10.3.custom.min.js',
-			'phpjs.js',
-        ))}}
-
+	'jquery/jquery-ui-1.10.3.custom.min.js',
+	'phpjs.js',
+	))}}
 {{$this->Combinator->script(array(
-			'bootstrap.min.js',			
-			'jquery/jquery.contextMenu.min.js',
-			'jquery/jquery.jgrowl.min.js',
-			'jquery/jquery.cookie.js',
-			
 			'ckeditor/ckeditor.js',
 			'editor.js',
-			
 			'i18n/language-zh-CN.js',
 			'common.js',
 			'admin.js',

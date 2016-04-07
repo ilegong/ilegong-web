@@ -75,10 +75,9 @@ echo $this->MForm->create($current_model,array(
         <input id="btnsubmit" type="submit" value="提交" class="btn btn-primary">
     </div>
 </div>
-{{$this->Html->script(array(
-'/js/bootstrap.min.js',
-'jquery.validate.min.js',
-))}}
+<script src="//cdn.bootcss.com/jquery-validate/1.15.0/jquery.validate.min.js"></script>
+<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
 <script>
 	$(document).ready(function(){
         var orderStatusBox = $('#OrderStatus');
