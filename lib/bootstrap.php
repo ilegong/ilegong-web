@@ -52,25 +52,18 @@ const USER_IS_PROXY = 1;
 const FFDATE_CH_MDW = 'chinese_m_d_w';
 const FFDATE_CH_MD = 'chinese_m_d';
 
-const SHARE_ORDER_OPERATE_TYPE = 'ShareOrder'; //用户看订单权限
-
-const SHARE_INFO_OPERATE_TYPE = 'ShareInfo'; //分享编辑权限
-
+const SHARE_ORDER_OPERATE_TYPE = 'ShareOrder'; //用户看订单权限[查看订单]
+const SHARE_INFO_OPERATE_TYPE = 'ShareInfo'; //分享编辑权限[编辑分享]
 const SHARE_TAG_ORDER_OPERATE_TYPE = 'ShareTagOrder';//查看分组订单权限
-
-const SHARE_OPERATE_SCOPE_TYPE = 'Share'; // 用户权限的配置范围
-
-const SHARE_MANAGE_OPERATE_TYPE = 'ShareManage';//分享管理权限
+const SHARE_MANAGE_OPERATE_TYPE = 'ShareManage';//分享管理权限[私信消息]
+const SHARE_OPERATE_SCOPE_TYPE = 'Share'; //用户权限的配置范围
 
 const SHARE_ORDER_OPERATE_CACHE_KEY = 'share_order_operate_data_cache_key'; // 分享订单管理
-
 const SHARE_INFO_OPERATE_CACHE_KEY = 'share_info_operate_data_cache_key'; //分享详情的管理
-
 const SHARE_MANAGE_OPERATE_CACHE_KEY = 'share_manage_operate_data_cache_key'; //分享管理
-
 const SHARE_ORDER_TAG_OPERATE_CACHE_KEY = 'share_order_tag_operate_data_cache_key'; // 分享订单--分类订单管理
 
-const GOOD_ORDER_PAY_TYPE = 0; //商品购买 支付
+const GOOD_ORDER_PAY_TYPE = 0; //商品购买支付
 
 const LOGISTICS_ORDER_PAY_TYPE = 1; //物流支付
 

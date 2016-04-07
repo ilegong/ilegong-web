@@ -275,7 +275,16 @@ class WeshareBuyComponent extends Component
                 'order' => array('id' => 'desc'),
                 'limit' => 300
             ));
-            $authority_share_ids = Hash::extract($share_operate_settings, '{n}.ShareOperateSetting.data_id');
+            $authority_share_ids = [];
+            $authority_share_map = [];
+            foreach($share_operate_settings as $operate_setting_item){
+                $operate_share_id = $operate_setting_item['ShareOperateSetting']['data_id'];
+                $authority_share_ids[] = $operate_share_id;
+                if(!isset($authority_share_map[$operate_share_id])){
+                    $authority_share_map[$operate_share_id] = [];
+                }
+                $authority_share_map[$operate_share_id][] = $operate_setting_item['ShareOperateSetting']['data_type'];
+            }
             $authority_share_ids = array_unique($authority_share_ids);
             if (count($authority_share_ids) > 0) {
                 $authority_shares = $weshareM->find('all', array(
@@ -288,10 +297,6 @@ class WeshareBuyComponent extends Component
                 ));
                 $authority_shares_creators = Hash::extract($authority_shares, '{n}.Weshare.creator');
                 $creatorIds = array_unique(array_merge($creatorIds, $authority_shares_creators));
-//                $share_operate_settings_result = array();
-//                foreach ($share_operate_settings as $share_operate_setting) {
-//                    $share_operate_settings_result[] = $share_operate_setting['ShareOperateSetting']['data_id'] . '-' . $share_operate_setting['ShareOperateSetting']['data_type'];
-//                }
             }
 
             $this->explode_share_imgs($authority_shares);
@@ -302,7 +307,7 @@ class WeshareBuyComponent extends Component
                 'fields' => $this->query_user_fields
             ));
             $creators = Hash::combine($creators, '{n}.User.id', '{n}.User');
-            $user_share_data = array('authority_shares' => $authority_shares, 'creators' => $creators, 'my_create_share_ids' => $my_create_share_ids, 'joinShareOrderStatus' => $joinShareOrderStatus, 'myJoinShares' => $myJoinShares, 'myCreateShares' => $myCreateShares);
+            $user_share_data = array('authority_shares' => $authority_shares, 'authority_share_map' => $authority_share_map, 'creators' => $creators, 'my_create_share_ids' => $my_create_share_ids, 'joinShareOrderStatus' => $joinShareOrderStatus, 'myJoinShares' => $myJoinShares, 'myCreateShares' => $myCreateShares);
             Cache::write($key, json_encode($user_share_data));
             return $user_share_data;
         }
