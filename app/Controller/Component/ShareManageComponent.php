@@ -163,6 +163,7 @@ class ShareManageComponent extends Component
 
         // 更新cake_weshares表
         $wesharesM = ClassRegistry::init('Weshare');
+        $data['Weshares']['title'] = $data['PoolProduct']['share_name'];
         $wesharesM->save($data['Weshares']);
 
         return true;
