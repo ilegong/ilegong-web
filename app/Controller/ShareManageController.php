@@ -434,6 +434,14 @@ class ShareManageController extends AppController
         }
     }
 
+    /**
+     * 产品街分享
+     */
+    public function my_pool_share(){
+        $uid = $this->currentUser['id'];
+
+    }
+
     public function beforeFilter()
     {
         $this->Auth->authenticate = array('WeinxinOAuth', 'Form', 'Pys', 'Mobile');
