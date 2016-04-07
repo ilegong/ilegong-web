@@ -2713,7 +2713,7 @@ class WeshareBuyComponent extends Component
     {
         $data_val = $this->ShareUtil->get_user_level($uid);
         $data_val = $data_val['data_value'];
-        if($data_val == PROXY_USER_LEVEL_VALUE){
+        if($data_val >= PROXY_USER_LEVEL_VALUE){
             $rebate_setting = $this->ShareUtil->get_share_rebate_data($shareId);
             if (!empty($rebate_setting)) {
                 $rebate_money = round((floatval($rebate_setting['ProxyRebatePercent']['percent']) * $total_price) / (100 * 100), 2);
