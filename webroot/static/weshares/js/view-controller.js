@@ -3731,6 +3731,10 @@
     vm.toUpdate = toUpdate;
     vm.stopShare = stopShare;
     vm.showShareDetail = showShareDetail;
+    vm.showKuaiDiTabPage = showKuaiDiTabPage;
+    vm.showSelfZitiTabPage = showSelfZitiTabPage;
+    vm.showPysZitiTabPage = showPysZitiTabPage;
+    vm.showPinTuanTabPage = showPinTuanTabPage;
     vm.calOrderTotalPrice = calOrderTotalPrice;
     vm.getStatusName = getStatusName;
     vm.getShipCode = getShipCode;
@@ -4006,6 +4010,7 @@
           vm.weshareSettings = data['weshare_ship_settings'];
           vm.supportPysZiti = data['support_pys_ziti'];
           vm.selectShipType = getSelectTypeDefaultVal();
+          vm.tabBarItemWidth = getTabBarItemWidth();
           vm.userSubStatus = data['sub_status'];
           vm.totalBuyCount = data['all_buy_count'];
           vm.favourableConfig = data['favourable_config'];
@@ -4079,6 +4084,24 @@
           }
         });
       }
+    }
+
+    function getTabBarItemWidth() {
+      var num = 0;
+      if (vm.weshareSettings.pin_tuan.status == 1) {
+        num++;
+      }
+      if (vm.weshareSettings.kuai_di.status == 1) {
+        num++;
+      }
+      if (vm.weshareSettings.self_ziti.status == 1) {
+        num++;
+      }
+      if (vm.weshareSettings.pys_ziti.status == 1) {
+        num++;
+      }
+
+      return num ? 100 / num : 100;
     }
 
     function getSelectTypeDefaultVal() {
@@ -4462,6 +4485,36 @@
       vm.showShareDetailView = false;
       vm.showBalanceView = true;
       vm.chooseShipType = false;
+      // 默认显示的是快递标签页.. 那么, 没有快递选项怎么处理?
+      showKuaiDiTabPage();
+    }
+
+    function showKuaiDiTabPage() {
+      vm.showKuaiDiTab = true;
+      vm.showSelfZitiTab = false;
+      vm.showPysZitiTab = false;
+      vm.showPinTuanTab = false;
+    }
+
+    function showSelfZitiTabPage() {
+      vm.showKuaiDiTab = false;
+      vm.showSelfZitiTab = true;
+      vm.showPysZitiTab = false;
+      vm.showPinTuanTab = false;
+    }
+
+    function showPysZitiTabPage() {
+      vm.showKuaiDiTab = false;
+      vm.showSelfZitiTab = false;
+      vm.showPysZitiTab = true;
+      vm.showPinTuanTab = false;
+    }
+
+    function showPinTuanTabPage() {
+      vm.showKuaiDiTab = false;
+      vm.showSelfZitiTab = false;
+      vm.showPysZitiTab = false;
+      vm.showPinTuanTab = true;
     }
 
     function startGroupShare() {

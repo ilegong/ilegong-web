@@ -1,25 +1,26 @@
 <div style="background-color: #f1f1f1;">
   <div class="nav-bg">
-    <a href="#X" class="nav-back fl back" ng-click="vm.showShareDetail()">
+    <a href="#" class="nav-back fl back" ng-click="vm.showShareDetail()">
       <img src="/static/weshares/images/back.png"/>
       <label>返回</label>
     </a>
     <h1 class="fl">设置配送信息</h1>
-    <a href="#X" class="nav-home fr back"  ng-click="vm.showShareDetail()">
+    <a href="#" class="nav-home fr back"  ng-click="vm.showShareDetail()">
       <img src="/static/weshares/images/home.png"/>
     </a>
   </div>
+
   <ul class="clearfix logistics-nav">
-    <li style="width: 50%;" class="cur">快递</li>
-    <li style="width: 50%; border-right:0;">自提</li>
+    <li ng-if="vm.weshareSettings.kuai_di.status==1" style="width: {{vm.tabBarItemWidth}}%;" ng-class="{'cur': vm.showKuaiDiTab}" ng-click="vm.showKuaiDiTabPage()">快递</li>
+    <li ng-if="vm.weshareSettings.self_ziti.status==1" style="width: {{vm.tabBarItemWidth}}%;" ng-class="{'cur': vm.showSelfZitiTab}" ng-click="vm.showSelfZitiTabPage()">自提</li>
+    <li ng-if="vm.weshareSettings.pys_ziti.status==1" style="width: {{vm.tabBarItemWidth}}%;" ng-class="{'cur': vm.showPysZitiTab}" ng-click="vm.showPysZitiTabPage()">好邻居自提</li>
+    <li ng-if="vm.weshareSettings.pin_tuan.status==1" style="width: {{vm.tabBarItemWidth}}%;" ng-class="{'cur': vm.showPinTuanTab}" ng-click="vm.showPinTuanTabPage()">拼团</li>
   </ul>
-  <ul class="clearfix logistics-nav">
-    <li style="width: 33.3%;" class="cur">快递</li>
-    <li style="width: 33.3%;">自提</li>
-    <li style="width: 33.3%; border-right:0;">好邻居自提</li>
-  </ul>
+
   <div class="expressage">
-    <ul class="clearfix">
+
+    <!-- 这个块只在快递标签页里面出现 -->
+    <ul class="clearfix" ng-if="vm.showKuaiDiTab">
       <li class="fl">
         <a href="#X" class="defaultText">填写收货信息</a>
         <a href="#X" class="address" style="display: none;">
@@ -34,15 +35,17 @@
         </a>
       </li>
     </ul>
-    <ul class="clearfix">
+
+    <!-- 这个块只在自提标签页里面出现 TODO: WTF ?? -->
+    <ul class="clearfix" ng-if="vm.showSelfZitiTab">
       <li class="fl comment">收货人</li>
       <li class="fl content"><input type="text" placeholder="请输入收货人姓名" /></li>
     </ul>
-    <ul class="clearfix">
+    <ul class="clearfix" ng-if="vm.showSelfZitiTab">
       <li class="fl comment">联系方式</li>
       <li class="fl content"><input type="text" placeholder="请输入收货人手机号" /></li>
     </ul>
-    <ul class="clearfix">
+    <ul class="clearfix" ng-if="vm.showSelfZitiTab">
       <li class="fl comment">详细地址</li>
       <li class="fl content"><input type="text" placeholder="小区-楼号-门牌(必要时送货上门)" /></li>
     </ul>
@@ -51,45 +54,72 @@
       <li class="fl content"><input type="text" placeholder="告诉团长你的特殊需求" /></li>
     </ul>
   </div>
+
+
+
+  <!-- 这个元素在各个tab里面都会出现 -->
   <div class="selection-product">
     <h1>选择的产品</h1>
-    <div class="product">
-      <div>1：盐冻厄瓜多尔白虾1kg</div>
+    <div class="product" ng-repeat="product in vm.weshare.products">
+      <div>{{::product.name}}</div>
       <div class="clearfix">
-        <div class="product-price fl">¥165</div>
-        <dl class="clearfix fr">
-          <dd class="fr add-subtract"></dd>
-          <dd class="fr amount">1</dd>
-          <dd class="fr add-subtract"></dd>
+        <div class="product-price fl" ng-bind="::product.price/100 | currency:'￥'"></div>
+        <dl class="clearfix fr" ng-if="vm.checkProductNum(product)">
+          <dd class="fr add-subtract" ng-click="vm.decreaseProductNum(product)"></dd>
+          <dd class="fr amount" ng-bind="product.num||0"></dd>
+          <dd class="fr add-subtract" ng-click="vm.increaseProductNum(product)"></dd>
         </dl>
       </div>
     </div>
-    <div class="product">
-      <div>1：盐冻厄瓜多尔白虾1kg</div>
-      <div class="clearfix">
-        <div class="product-price fl">¥165</div>
-        <dl class="clearfix fr">
-          <dd class="fr add-subtract"></dd>
-          <dd class="fr amount">1</dd>
-          <dd class="fr add-subtract"></dd>
-        </dl>
-      </div>
-    </div>
+
+    <!-- 非正常状态的产品数据 -->
+    <!--
+    <dd class="fl" ng-if="!vm.checkProductNum(product)||product.store==0" style="width: 50%;">
+    {{::product.name}}
+    <span ng-if="!vm.checkProductNum(product)">&nbsp;&nbsp;(<span style="color: red;">抢光了</span>)</span>
+    </dd>
+    <dd class="fl" ng-if="vm.checkProductNum(product)&&product.store>0" style="">
+    {{::product.name}}
+    &nbsp;&nbsp;(仅剩<span style="color: red;" ng-bind="vm.getProductLeftNum(product)"></span>份)
+    </dd>
+    -->
   </div>
+
+  <!-- 这个元素在各个tab里面都会出现 -->
   <div class="money-detail">
     <dl class="clearfix">
       <dt class="fl">应付总额：</dt>
-      <dt class="fr">￥325</dt>
+      <dt class="fr" ng-bind="vm.orderTotalPrice | currency:'￥'"></dt>
     </dl>
     <ul class="clearfix">
       <li class="fl">产品总额：</li>
-      <li class="fr">￥315</li>
+      <li class="fr" ng-bind="vm.orderTotalPrice | currency:'￥'"></li>
     </ul>
     <ul class="clearfix">
       <li class="fl">快递费：</li>
-      <li class="fr">￥10</li>
+      <li class="fr" ng-bind="vm.shipFee/100"></li>
     </ul>
+    <!-- 原始的付款数据(优惠等) -->
+    <!--
+    <div class='total-fee text-center'>
+      总金额：<span ></span>
+    </div>
+    <div style="text-align: center" ng-if="vm.favourableConfig&&vm.favourableConfig.discount>0">
+    (折扣【不加邮费】<span ng-bind="vm.favourableConfig.discount" style="color: #ffa200;"></span>)
+    </div>
+    <div style="text-align: center" ng-if="vm.myCoupons">
+    (已减去红包<span ng-bind="vm.userCouponReduce/100" style="color: #ffa200;"></span>元)
+    </div>
+    <div style="text-align: center" ng-if="vm.shipFee>0">
+    (快递费用<span  style="color: #ffa200;"></span>元)
+    </div>
+    <div style="text-align: center" ng-if="vm.rebateFee>0">
+    (团长优惠<span ng-bind="vm.rebateFee" style="color: #ffa200;"></span>元)
+    </div>
+    -->
   </div>
+
+  <!-- 这个元素在各个tab里面都会出现 -->
   <ul class="payment-bg clearfix">
     <li class="fl">应付￥325</li>
     <li class="fr"><a href="#X" class="zfbPay">支付宝支付</a></li>
@@ -100,40 +130,6 @@
 
 <!-- 下方是原始数据 -->
 <div style="background-color:#f5f5f5;margin-bottom: 20px;">
-  <div class="weshare-view" style="margin-top: 40px;padding: 10px 10px 0px">
-    <div class="introduction margin-bottom-12" style="padding: 15px 15px 10px 15px;">
-      <h1 class='title margin-bottom-12' ng-bind="::vm.weshare.title" style="padding-top: 0px;"></h1>
-      <div class="product-group" ng-class="{'has-error':vm.productsHasError}">
-        <div class="products form-group" ng-repeat="product in vm.weshare.products">
-          <dl class="clearfix product form-control">
-            <dd class="fl" ng-if="!vm.checkProductNum(product)||product.store==0" style="width: 50%;">
-            {{::product.name}}
-            <span ng-if="!vm.checkProductNum(product)">&nbsp;&nbsp;(<span style="color: red;">抢光了</span>)</span>
-            </dd>
-            <dd class="fl" ng-if="vm.checkProductNum(product)&&product.store>0" style="">
-            {{::product.name}}
-            &nbsp;&nbsp;(仅剩<span style="color: red;" ng-bind="vm.getProductLeftNum(product)"></span>份)
-            </dd>
-            <dd class="fr" ng-if="vm.checkProductNum(product)">
-            <a class='btn decrease-btn' ng-click="vm.decreaseProductNum(product)"></a>
-            <span class='num' ng-bind="product.num||0"></span>
-            <a class='btn increase-btn' ng-click="vm.increaseProductNum(product)"></a>
-            </dd>
-            <dd class="fr" ng-if="!vm.checkProductNum(product)">
-            <span class='num' style="margin-left: 60px;">&nbsp;</span>
-            </dd>
-            <dd class="fr" style="color: #29AC0E;" ng-bind="::product.price/100 | currency:'￥'"></dd>
-          </dl>
-        </div>
-        <p class='tips'>请输入商品数量</p>
-      </div>
-      <div class='total-fee text-center'>总金额：<span ng-bind="vm.orderTotalPrice | currency:'￥'"></span></div>
-      <div style="text-align: center" ng-if="vm.favourableConfig&&vm.favourableConfig.discount>0">(折扣【不加邮费】<span ng-bind="vm.favourableConfig.discount" style="color: #ffa200;"></span>)</div>
-      <div style="text-align: center" ng-if="vm.myCoupons">(已减去红包<span ng-bind="vm.userCouponReduce/100" style="color: #ffa200;"></span>元)</div>
-      <div style="text-align: center" ng-if="vm.shipFee>0">(快递费用<span ng-bind="vm.shipFee/100" style="color: #ffa200;"></span>元)</div>
-      <div style="text-align: center" ng-if="vm.rebateFee>0">(团长优惠<span ng-bind="vm.rebateFee" style="color: #ffa200;"></span>元)</div>
-    </div>
-  </div>
   <div style="background-color: #ffffff;padding-top: 1px;padding-bottom: 40px;">
     <div class="clearfix" style="padding: 0 10px;margin-top: 10px;">
       <div class="form-group" ng-class="{'has-error' : vm.chooseShipType}">
