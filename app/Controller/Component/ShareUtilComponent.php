@@ -10,7 +10,7 @@ class ShareUtilComponent extends Component
 
     public $components = array('Weixin', 'WeshareBuy', 'RedisQueue', 'DeliveryTemplate', 'ShareAuthority');
 
-    var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
+    var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
 
     /**
      * @param $weshare_id
@@ -2002,7 +2002,7 @@ class ShareUtilComponent extends Component
                 'id' => $weshareInfo['Weshare']['creator']
             ),
             'recursive' => 1, //int
-            'fields' => $this->query_user_fileds,
+            'fields' => $this->query_user_fields,
         ));
         $creatorInfo = $creatorInfo['User'];
         //reset user image

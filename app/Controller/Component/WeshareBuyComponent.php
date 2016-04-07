@@ -299,7 +299,7 @@ class WeshareBuyComponent extends Component
                 'conditions' => array(
                     'id' => $creatorIds
                 ),
-                'fields' => $this->query_user_fileds
+                'fields' => $this->query_user_fields
             ));
             $creators = Hash::combine($creators, '{n}.User.id', '{n}.User');
             $user_share_data = array('authority_shares' => $authority_shares, 'creators' => $creators, 'my_create_share_ids' => $my_create_share_ids, 'joinShareOrderStatus' => $joinShareOrderStatus, 'myJoinShares' => $myJoinShares, 'myCreateShares' => $myCreateShares);

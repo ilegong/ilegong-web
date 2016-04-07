@@ -5,7 +5,7 @@ class WesharesController extends AppController
         array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem',
         'SharerShipOption', 'WeshareShipSetting', 'OfflineStore', 'Comment', 'RebateTrackLog', 'ProxyRebatePercent', 'ShareUserBind', 'UserSubReason', 'ShareFavourableConfig', 'ShareAuthority');
 
-    var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
+    var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
 
     var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'OrderExpress', 'PintuanHelper', 'RedisQueue', 'DeliveryTemplate', 'Orders', 'Weshares', 'UserFans');
 
@@ -308,7 +308,7 @@ class WesharesController extends AppController
         $weshareInfo = $this->ShareUtil->get_tag_weshare_detail($weshareId);
         $is_me = $uid == $weshareInfo['creator']['id'];
         $weixinInfo = $this->set_weixin_share_data($uid, $weshareId);
-        $user_fields = $this->query_user_fileds;
+        $user_fields = $this->query_user_fields;
         $user_fields[] = 'mobilephone';
         $user_fields[] = 'payment';
         $current_user = $this->User->find('first', array(
