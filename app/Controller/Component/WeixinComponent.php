@@ -1015,6 +1015,20 @@ class WeixinComponent extends Component {
         }
     }
 
+    /**
+     * @param $seller_open_id
+     * @param $price
+     * @param $good_info
+     * @param $ship_info
+     * @param $order_no
+     * @param $weshare_info
+     * @param null $order_creator_name
+     * @param string $shipType
+     * @param $order_creator
+     * @param int $cate_id
+     * @return bool
+     * 报名通知 发送给分享的创建者
+     */
     public function send_weshare_buy_paid_msg_for_creator($seller_open_id, $price, $good_info, $ship_info, $order_no, $weshare_info, $order_creator_name = null, $shipType = '', $order_creator, $cate_id = 0) {
         $title = $weshare_info['Weshare']['title'];
         $detail_url = $this->get_user_share_info_url($order_creator);

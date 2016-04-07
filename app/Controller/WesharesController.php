@@ -101,7 +101,8 @@ class WesharesController extends AppController
         //获取推荐人
         $recommend = $_REQUEST['recommend'];
         //add rebate log
-        if ($this->ShareUtil->is_proxy_user($recommend)) {
+        //自己推荐人购买不能加入推荐
+        if ($this->ShareUtil->is_proxy_user($recommend) && $recommend != $uid) {
             if (!empty($recommend) && !empty($uid)) {
                 $rebateLogId = $this->ShareUtil->save_rebate_log($recommend, $uid, $weshare_id);
                 $this->set('recommend_id', $recommend);
