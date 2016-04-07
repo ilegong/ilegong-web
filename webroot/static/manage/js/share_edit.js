@@ -21,7 +21,7 @@ $(document).ready(function () {
     console.log(formData);
 
     $.ajax({
-      url: 'http://images.tongshijia.com/upload_images_with_attachments' ,
+      url: 'http://images.tongshijia.com/upload_images_to' ,
       type: 'post',
       data: formData,
       dataType: 'json',
