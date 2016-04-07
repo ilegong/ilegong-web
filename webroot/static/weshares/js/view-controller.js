@@ -3731,6 +3731,7 @@
     vm.toUpdate = toUpdate;
     vm.stopShare = stopShare;
     vm.showShareDetail = showShareDetail;
+    vm.showEditAddressPage = showEditAddressPage;
     vm.showKuaiDiTabPage = showKuaiDiTabPage;
     vm.showSelfZitiTabPage = showSelfZitiTabPage;
     vm.showPysZitiTabPage = showPysZitiTabPage;
@@ -4489,7 +4490,17 @@
       showKuaiDiTabPage();
     }
 
+    function showEditAddressPage()
+    {
+      vm.showEditAddress = true;
+      vm.showKuaiDiTab = false;
+      vm.showSelfZitiTab = false;
+      vm.showPysZitiTab = false;
+      vm.showPinTuanTab = false;
+    }
+
     function showKuaiDiTabPage() {
+      vm.showEditAddress = false;
       vm.showKuaiDiTab = true;
       vm.showSelfZitiTab = false;
       vm.showPysZitiTab = false;
@@ -4497,6 +4508,7 @@
     }
 
     function showSelfZitiTabPage() {
+      vm.showEditAddress = false;
       vm.showKuaiDiTab = false;
       vm.showSelfZitiTab = true;
       vm.showPysZitiTab = false;
@@ -4504,6 +4516,7 @@
     }
 
     function showPysZitiTabPage() {
+      vm.showEditAddress = false;
       vm.showKuaiDiTab = false;
       vm.showSelfZitiTab = false;
       vm.showPysZitiTab = true;
@@ -4511,6 +4524,7 @@
     }
 
     function showPinTuanTabPage() {
+      vm.showEditAddress = false;
       vm.showKuaiDiTab = false;
       vm.showSelfZitiTab = false;
       vm.showPysZitiTab = false;
