@@ -221,7 +221,7 @@ class WeshareBuyComponent extends Component
             $weshareM = ClassRegistry::init('Weshare');
             $orderM = ClassRegistry::init('Order');
             $userM = ClassRegistry::init('User');
-            $query_share_type = array(GROUP_SHARE_TYPE, DEFAULT_SHARE_TYPE, POOL_SHARE_BUY_TYPE);
+            $query_share_type = array(GROUP_SHARE_TYPE, DEFAULT_SHARE_TYPE, POOL_SHARE_BUY_TYPE, FROM_POOL_SHARE_TYPE);
             $myCreateShares = $this->get_my_create_shares($uid);
             $my_create_share_ids = Hash::extract($myCreateShares, '{n}.Weshare.id');
             $orderStatus = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE);
