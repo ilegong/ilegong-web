@@ -742,6 +742,7 @@ class WesharesController extends AppController
         $joinShareOrderStatus = $user_share_data['joinShareOrderStatus'];
         $myCreateShares = $user_share_data['myCreateShares'];
         $myJoinShares = $user_share_data['myJoinShares'];
+        $shareOperateMap = $user_share_data['authority_share_map'];
         //$joinShareComments = $user_share_data['joinShareComments'];
         $shareUser = $creators[$uid];
         $this->set_share_user_info_weixin_params($uid, $current_uid, $shareUser);
@@ -774,6 +775,7 @@ class WesharesController extends AppController
         $this->set('my_join_shares', $myJoinShares);
         $this->set('authority_shares', $user_share_data['authority_shares']);
         $this->set('join_share_order_status', $joinShareOrderStatus);
+        $this->set('authority_share_map', $shareOperateMap);
         $pintuan_data = $this->PintuanHelper->get_user_pintuan_data($uid);
         $this->set('pintuan_data', $pintuan_data);
         if ($uid == $current_uid && !empty($user_level)) {

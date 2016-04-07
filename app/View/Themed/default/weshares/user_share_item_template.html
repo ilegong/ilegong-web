@@ -49,10 +49,10 @@
         <img class="lazy" onerror="this.src='http://static.tongshijia.com/avatar/s/default.jpg'" data-original="{{share_small_thumb_link($show_img)}}" style="width: 40px;height: 40px;">
     </a>
 
-    <div class="media-body" data-id="{{$share['Weshare']['id']}}" name="share_item">
+    <div class="media-body" data-id="{{$share['Weshare']['id']}}" name="share_item" {{if $parsing_authority_shares}} data-type="{{in_array(SHARE_INFO_OPERATE_TYPE, $authority_share_map[$share['Weshare']['id']]) ? 'detail' : 'order'}}" {{/if}}>
         <h4 class="media-heading user_name">{{get_limit_string($share['Weshare']['title'], 10)}}</h4>
         <div style="white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden;color: #999;font-size: 13px;">
-            {{friendlyDateFromStr($share['Weshare']['created'], "ymd")}}{{if !$parsing_join_share&&$is_me}}，编号:<span style="color: #ff0000;">{{$share['Weshare']['id']}}</span>{{if $parsing_authority_shares}}，昵称:<span style="color: #ff0000;">{{$creators[$share['Weshare']['creator']]['nickname']}}</span>{{/if}}{{/if}}
+            {{friendlyDateFromStr($share['Weshare']['created'], "ymd")}}{{if !$parsing_join_share&&$is_me}}，编号:<span style="color: #ff0000;">{{$share['Weshare']['id']}}</span>{{/if}}
         </div>
     </div>
 </div>

@@ -120,6 +120,7 @@
                             {{loop $my_create_shares $share}}
                             {{template weshares/user_share_item_template}}
                             {{/loop}}
+                            <?php $process_my_create_share = false;  ?>
                         </div>
                     </div>
                     {{/if}}
@@ -127,10 +128,11 @@
                     {{if !empty($authority_shares) && $is_me}}
                     <div class="tab-pane" id="tab_default_2">
                         <div class="comments-list">
-                            <?php $process_my_create_share = false; $parsing_authority_shares = true; ?>
+                            <?php $parsing_authority_shares = true; ?>
                             {{loop $authority_shares $share}}
                             {{template weshares/user_share_item_template}}
                             {{/loop}}
+                            <?php $parsing_authority_shares = false; ?>
                         </div>
                     </div>
                     {{/if}}
@@ -138,11 +140,11 @@
                     {{if !empty($my_join_shares)}}
                     <div class="tab-pane" id="tab_default_3">
                         <div class="comments-list">
-                            <?php $process_my_create_share = false; ?>
                             <?php $parsing_join_share = true; ?>
                             {{loop $my_join_shares $share}}
                             {{template weshares/user_share_item_template}}
                             {{/loop}}
+                            <?php $parsing_join_share = false; ?>
                         </div>
                     </div>
                     {{/if}}
