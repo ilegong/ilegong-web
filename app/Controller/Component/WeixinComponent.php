@@ -996,13 +996,15 @@ class WeixinComponent extends Component {
         $cate_id = $order['Order']['cate_id'];
         if ($seller_weixin != false) {
             $this->log('weshare paid send for creator ' . $seller_weixin['oauth_openid'] . ' order id ' . $order_id . ' weshare id ' . $weshare_info['Weshare']['id'], LOG_INFO);
-            //$this->send_weshare_buy_paid_msg_for_creator($seller_weixin['oauth_openid'], $price, $good_info, $ship_info, $order_id, $weshare_info, $order_creator_name, $order_ship_mark, $order_user['User']['id'], $cate_id);
+            $this->send_weshare_buy_paid_msg_for_creator($seller_weixin['oauth_openid'], $price, $good_info, $ship_info, $order_id, $weshare_info, $order_creator_name, $order_ship_mark, $order_user['User']['id'], $cate_id);
             //send paid done msg to manage user
             $share_manage_user_open_ids = $this->ShareAuthority->get_share_manage_auth_user_open_ids($weshare_info['Weshare']['id']);
-            $share_manage_user_open_ids = array_merge($share_manage_user_open_ids, [$seller_weixin['oauth_openid']]);
+            //$share_manage_user_open_ids = array_merge($share_manage_user_open_ids, [$seller_weixin['oauth_openid']]);
             if (!empty($share_manage_user_open_ids)) {
                 foreach ($share_manage_user_open_ids as $open_id_item) {
-                    $this->send_weshare_buy_paid_msg_for_creator($open_id_item, $price, $good_info, $ship_info, $order_id, $weshare_info, $order_creator_name, $order_ship_mark, $order_user['User']['id'], $cate_id);
+                    if ($open_id_item != $seller_weixin['oauth_openid']) {
+                        $this->send_weshare_buy_paid_msg_for_creator($open_id_item, $price, $good_info, $ship_info, $order_id, $weshare_info, $order_creator_name, $order_ship_mark, $order_user['User']['id'], $cate_id);
+                    }
                 }
             }
 //            if ($order_ship_mark == SHARE_SHIP_GROUP_TAG) {
