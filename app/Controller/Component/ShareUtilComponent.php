@@ -10,7 +10,7 @@ class ShareUtilComponent extends Component
 
     public $components = array('Weixin', 'WeshareBuy', 'RedisQueue', 'DeliveryTemplate', 'ShareAuthority');
 
-    var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
+    var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
 
     /**
      * @param $weshare_id
@@ -376,14 +376,15 @@ class ShareUtilComponent extends Component
     /**
      * @param $shareId
      * @param $uid
-     * @param $address
+     * @param $address 拼团地址
      * @param $address_remarks
      * @param $type
      * @param $share_status
+     * @param $share_limit
      * @return array
      * clone一份， 指定用户ID， 指定的地址， 类型， 状态
      */
-    public function cloneShare($shareId, $uid = null, $address = null, $address_remarks = null, $type = DEFAULT_SHARE_TYPE, $share_status = WESHARE_DELETE_STATUS, $share_limit = null)
+    public function cloneShare($shareId, $uid = null, $address = null, $address_remarks = null, $type = null, $share_status = 0, $share_limit = null)
     {
         $WeshareM = ClassRegistry::init('Weshare');
         $dataSource = $WeshareM->getDataSource();
@@ -396,53 +397,66 @@ class ShareUtilComponent extends Component
         $shareInfo = $shareInfo['Weshare'];
         $shareInfo['id'] = null;
         $shareInfo['created'] = date('Y-m-d H:i:s');
-        $shareInfo['status'] = 0; //分享状态
+        $shareInfo['status'] = $share_status; //分享状态
         $shareInfo['settlement'] = 0; //打款状态为未打款
-        $shareInfo['type'] = 0; //默认分享类型
         //order status offline address id
-        if ($type == GROUP_SHARE_TYPE) {
-            $origin_sharer_nickname = $this->WeshareBuy->get_user_nickname($shareInfo['creator']);
-            $shareInfo['title'] = '大家一起拼团' . $origin_sharer_nickname . '分享的' . $shareInfo['title'];
-            //default share status is not available
-            $shareInfo['status'] = $share_status;
+        //remove group share
+//        if ($type == GROUP_SHARE_TYPE) {
+//            $origin_sharer_nickname = $this->WeshareBuy->get_user_nickname($shareInfo['creator']);
+//            $shareInfo['title'] = '大家一起拼团' . $origin_sharer_nickname . '分享的' . $shareInfo['title'];
+//            //default share status is not available
+//            $shareInfo['status'] = $share_status;
+//        }
+        //check share type
+        if ($shareInfo['type'] == FROM_POOL_SHARE_TYPE) {
+            //不是产品街的分享重新开团设置 refer_share_id
+            //先不实时更新分享的信息，有可能团长自己更新，只复制物流和商品信息
+            $shareId = $shareInfo['refer_share_id'];
+        } elseif ($shareInfo['type'] == POOL_SHARE_TYPE) {
+            //产品街分享
+            $shareInfo['refer_share_id'] = 0;
+        } elseif ($shareInfo['type'] == POOL_SHARE_BUY_TYPE) {
+            //产品街的分享和渠道价购买的分享refer share id 设置为0
+            $shareInfo['refer_share_id'] = 0;
+        } else {
+            //默认复制分享
+            //set refer share id
+            $shareInfo['refer_share_id'] = $shareId;
+            $shareInfo['type'] = 0; //默认分享类型
         }
+        //reset type 设置用户类型
         if (!empty($type)) {
             $shareInfo['type'] = $type;
         }
-        //set refer share id
-        $shareInfo['refer_share_id'] = $shareId;
         if (!empty($uid)) {
             $shareInfo['creator'] = $uid;
+            //检查并设置用户团长
+            $this->check_and_save_default_level($uid);
         }
         $uid = $shareInfo['creator'];
         $WeshareM->id = null;
-        if ($type == GROUP_SHARE_TYPE) {
-            $offlineAddress = $this->saveGroupShareOfflineAddress($address, $uid, $address_remarks);
-            $shareInfo['offline_address_id'] = $offlineAddress['WeshareOfflineAddress']['id'];
-        }
+//        if ($type == GROUP_SHARE_TYPE) {
+//            $offlineAddress = $this->saveGroupShareOfflineAddress($address, $uid, $address_remarks);
+//            $shareInfo['offline_address_id'] = $offlineAddress['WeshareOfflineAddress']['id'];
+//        }
         $newShareInfo = $WeshareM->save($shareInfo);
         if ($newShareInfo) {
-            //clone product
             $newShareId = $newShareInfo['Weshare']['id'];
+            //clone product
             $this->cloneShareProduct($newShareId, $shareId, $share_limit);
-            if ($type == DEFAULT_SHARE_TYPE || $type == POOL_SHARE_TYPE) {
-                //clone address
-                $this->cloneShareAddresses($newShareId, $shareId);
-                //clone ship setting
-                $this->cloneShareShipSettings($newShareId, $shareId);
-                //clone rebate set
-                $this->cloneShareRebateSet($newShareId, $shareId);
-                //clone share delivery template
-                $this->cloneDeliveryTemplate($newShareId, $shareId, $uid);
-            }
-            if ($type == GROUP_SHARE_TYPE) {
-                $this->saveGroupShareAddress($address, $newShareId);
-                $this->cloneShareShipSettings($newShareId, $shareId, true);
-                $this->cloneShareRebateSet($newShareId, $shareId, true);
-            }
-            if (!empty($uid)) {
-                $this->check_and_save_default_level($uid);
-            }
+            //clone address
+            $this->cloneShareAddresses($newShareId, $shareId);
+            //clone ship setting
+            $this->cloneShareShipSettings($newShareId, $shareId);
+            //clone rebate set
+            $this->cloneShareRebateSet($newShareId, $shareId);
+            //clone share delivery template
+            $this->cloneDeliveryTemplate($newShareId, $shareId, $uid);
+//            if ($type == GROUP_SHARE_TYPE) {
+//                $this->saveGroupShareAddress($address, $newShareId);
+//                $this->cloneShareShipSettings($newShareId, $shareId, true);
+//                $this->cloneShareRebateSet($newShareId, $shareId, true);
+//            }
             Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
             $dataSource->commit();
             return array('shareId' => $newShareId, 'success' => true);
@@ -480,6 +494,7 @@ class ShareUtilComponent extends Component
     /**
      * @param $new_share_id
      * @param $old_share_id
+     * @param $share_limit
      * clone share product
      */
     private function cloneShareProduct($new_share_id, $old_share_id, $share_limit)
@@ -1995,7 +2010,7 @@ class ShareUtilComponent extends Component
                 'id' => $weshareInfo['Weshare']['creator']
             ),
             'recursive' => 1, //int
-            'fields' => $this->query_user_fileds,
+            'fields' => $this->query_user_fields,
         ));
         $creatorInfo = $creatorInfo['User'];
         //reset user image

@@ -490,10 +490,9 @@ class WeixinComponent extends Component {
 
     /**
      * @param $share_id
-     * @param bool $is_pin_tuan
      * 清除分享相关的缓存
      */
-    private function clear_share_cache($share_id, $is_pin_tuan = false) {
+    private function clear_share_cache($share_id) {
         Cache::write(SHARE_BUY_SUMMERY_INFO_CACHE_KEY . '_' . $share_id, '');
         Cache::write(SHARE_ORDER_COUNT_DATA_CACHE_KEY . '_' . $share_id, '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_1_1', '');
@@ -505,6 +504,7 @@ class WeixinComponent extends Component {
         Cache::write(SHARE_ORDER_COUNT_DATA_CACHE_KEY . '_' . $share_id, '');
         Cache::write(SHARE_BUY_SUMMERY_INFO_CACHE_KEY . '_' . $share_id, '');
 //        //check should clear child share cache
+          //param  $is_pin_tuan = false
 //        if ($is_pin_tuan) {
 //            $refer_share_id = $this->ShareUtil->get_share_refer_id($share_id);
 //            if ($refer_share_id != $share_id) {
@@ -999,22 +999,39 @@ class WeixinComponent extends Component {
             $this->send_weshare_buy_paid_msg_for_creator($seller_weixin['oauth_openid'], $price, $good_info, $ship_info, $order_id, $weshare_info, $order_creator_name, $order_ship_mark, $order_user['User']['id'], $cate_id);
             //send paid done msg to manage user
             $share_manage_user_open_ids = $this->ShareAuthority->get_share_manage_auth_user_open_ids($weshare_info['Weshare']['id']);
+            //$share_manage_user_open_ids = array_merge($share_manage_user_open_ids, [$seller_weixin['oauth_openid']]);
             if (!empty($share_manage_user_open_ids)) {
                 foreach ($share_manage_user_open_ids as $open_id_item) {
-                    $this->send_weshare_buy_paid_msg_for_creator($open_id_item, $price, $good_info, $ship_info, $order_id, $weshare_info, $order_creator_name, $order_ship_mark, $order_user['User']['id'], $cate_id);
+                    if ($open_id_item != $seller_weixin['oauth_openid']) {
+                        $this->send_weshare_buy_paid_msg_for_creator($open_id_item, $price, $good_info, $ship_info, $order_id, $weshare_info, $order_creator_name, $order_ship_mark, $order_user['User']['id'], $cate_id);
+                    }
                 }
             }
-            if ($order_ship_mark == SHARE_SHIP_GROUP_TAG) {
-                //send parent share
-                $share_refer_share_id = $weshare_info['Weshare']['refer_share_id'];
-                $refer_share_info = $this->WeshareBuy->get_weshare_info($share_refer_share_id);
-                $refer_share_creator = $refer_share_info['creator'];
-                $refer_share_creator_weixin = $oauthBindModel->findWxServiceBindByUid($refer_share_creator);
-                $this->send_weshare_buy_paid_msg_for_creator($refer_share_creator_weixin['oauth_openid'], $price, $good_info, $ship_info, $order_id, array('Weshare' => $refer_share_info), $order_creator_name, $order_ship_mark, $order_user['User']['id'], $cate_id);
-            }
+//            if ($order_ship_mark == SHARE_SHIP_GROUP_TAG) {
+//                //send parent share
+//                $share_refer_share_id = $weshare_info['Weshare']['refer_share_id'];
+//                $refer_share_info = $this->WeshareBuy->get_weshare_info($share_refer_share_id);
+//                $refer_share_creator = $refer_share_info['creator'];
+//                $refer_share_creator_weixin = $oauthBindModel->findWxServiceBindByUid($refer_share_creator);
+//                $this->send_weshare_buy_paid_msg_for_creator($refer_share_creator_weixin['oauth_openid'], $price, $good_info, $ship_info, $order_id, array('Weshare' => $refer_share_info), $order_creator_name, $order_ship_mark, $order_user['User']['id'], $cate_id);
+//            }
         }
     }
 
+    /**
+     * @param $seller_open_id
+     * @param $price
+     * @param $good_info
+     * @param $ship_info
+     * @param $order_no
+     * @param $weshare_info
+     * @param null $order_creator_name
+     * @param string $shipType
+     * @param $order_creator
+     * @param int $cate_id
+     * @return bool
+     * 报名通知 发送给分享的创建者
+     */
     public function send_weshare_buy_paid_msg_for_creator($seller_open_id, $price, $good_info, $ship_info, $order_no, $weshare_info, $order_creator_name = null, $shipType = '', $order_creator, $cate_id = 0) {
         $title = $weshare_info['Weshare']['title'];
         $detail_url = $this->get_user_share_info_url($order_creator);

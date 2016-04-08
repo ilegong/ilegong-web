@@ -139,9 +139,8 @@ class CommentsController extends AppController {
     	$this->autoRender = false;
     	$model_name = Inflector::classify($model_name);
         //'rating'=>array('1','5','3')
-        $p_ids = get_group_product_ids($id);
     	$comments = $this->Comment->find('all',array(
-    		 'conditions' => array('Comment.type' => $model_name,'data_id'=>$p_ids,'status'=>1,'is_shichi_vote'=>0,),
+    		 'conditions' => array('Comment.type' => $model_name,'data_id'=>$id,'status'=>1,'is_shichi_vote'=>0,),
     		 'order' => array('Comment.publish_time DESC'), //定义顺序的字符串或者数组
 		    'limit' => $pagesize, //整型
 		    'page' => $page, //整型

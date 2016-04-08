@@ -193,7 +193,7 @@ class WeshareBuyComponent extends Component
     public function get_my_create_shares($uid)
     {
         $weshareM = ClassRegistry::init('Weshare');
-        $query_share_type = array(GROUP_SHARE_TYPE, DEFAULT_SHARE_TYPE, POOL_SHARE_BUY_TYPE);
+        $query_share_type = array(GROUP_SHARE_TYPE, DEFAULT_SHARE_TYPE, POOL_SHARE_BUY_TYPE, FROM_POOL_SHARE_TYPE);
         $myCreateShares = $weshareM->find('all', array(
             'conditions' => array(
                 'creator' => $uid,
@@ -221,7 +221,7 @@ class WeshareBuyComponent extends Component
             $weshareM = ClassRegistry::init('Weshare');
             $orderM = ClassRegistry::init('Order');
             $userM = ClassRegistry::init('User');
-            $query_share_type = array(GROUP_SHARE_TYPE, DEFAULT_SHARE_TYPE, POOL_SHARE_BUY_TYPE);
+            $query_share_type = array(GROUP_SHARE_TYPE, DEFAULT_SHARE_TYPE, POOL_SHARE_BUY_TYPE, FROM_POOL_SHARE_TYPE);
             $myCreateShares = $this->get_my_create_shares($uid);
             $my_create_share_ids = Hash::extract($myCreateShares, '{n}.Weshare.id');
             $orderStatus = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE);
@@ -269,12 +269,22 @@ class WeshareBuyComponent extends Component
                 'deleted' => DELETED_NO
             );
             $shareOperateSettingM = ClassRegistry::init('ShareOperateSetting');
+            //获取授权的分享ID
             $share_operate_settings = $shareOperateSettingM->find('all', array(
                 'conditions' => $q_authority_share_cond,
                 'order' => array('id' => 'desc'),
                 'limit' => 300
             ));
-            $authority_share_ids = Hash::extract($share_operate_settings, '{n}.ShareOperateSetting.data_id');
+            $authority_share_ids = [];
+            $authority_share_map = [];
+            foreach($share_operate_settings as $operate_setting_item){
+                $operate_share_id = $operate_setting_item['ShareOperateSetting']['data_id'];
+                $authority_share_ids[] = $operate_share_id;
+                if(!isset($authority_share_map[$operate_share_id])){
+                    $authority_share_map[$operate_share_id] = [];
+                }
+                $authority_share_map[$operate_share_id][] = $operate_setting_item['ShareOperateSetting']['data_type'];
+            }
             $authority_share_ids = array_unique($authority_share_ids);
             if (count($authority_share_ids) > 0) {
                 $authority_shares = $weshareM->find('all', array(
@@ -287,10 +297,6 @@ class WeshareBuyComponent extends Component
                 ));
                 $authority_shares_creators = Hash::extract($authority_shares, '{n}.Weshare.creator');
                 $creatorIds = array_unique(array_merge($creatorIds, $authority_shares_creators));
-//                $share_operate_settings_result = array();
-//                foreach ($share_operate_settings as $share_operate_setting) {
-//                    $share_operate_settings_result[] = $share_operate_setting['ShareOperateSetting']['data_id'] . '-' . $share_operate_setting['ShareOperateSetting']['data_type'];
-//                }
             }
 
             $this->explode_share_imgs($authority_shares);
@@ -298,10 +304,10 @@ class WeshareBuyComponent extends Component
                 'conditions' => array(
                     'id' => $creatorIds
                 ),
-                'fields' => $this->query_user_fileds
+                'fields' => $this->query_user_fields
             ));
             $creators = Hash::combine($creators, '{n}.User.id', '{n}.User');
-            $user_share_data = array('authority_shares' => $authority_shares, 'creators' => $creators, 'my_create_share_ids' => $my_create_share_ids, 'joinShareOrderStatus' => $joinShareOrderStatus, 'myJoinShares' => $myJoinShares, 'myCreateShares' => $myCreateShares);
+            $user_share_data = array('authority_shares' => $authority_shares, 'authority_share_map' => $authority_share_map, 'creators' => $creators, 'my_create_share_ids' => $my_create_share_ids, 'joinShareOrderStatus' => $joinShareOrderStatus, 'myJoinShares' => $myJoinShares, 'myCreateShares' => $myCreateShares);
             Cache::write($key, json_encode($user_share_data));
             return $user_share_data;
         }
@@ -2706,7 +2712,8 @@ class WeshareBuyComponent extends Component
     public function cal_proxy_rebate_fee($total_price, $uid, $shareId)
     {
         $data_val = $this->ShareUtil->get_user_level($uid);
-        if($data_val == PROXY_USER_LEVEL_VALUE){
+        $data_val = $data_val['data_value'];
+        if($data_val >= PROXY_USER_LEVEL_VALUE){
             $rebate_setting = $this->ShareUtil->get_share_rebate_data($shareId);
             if (!empty($rebate_setting)) {
                 $rebate_money = round((floatval($rebate_setting['ProxyRebatePercent']['percent']) * $total_price) / (100 * 100), 2);

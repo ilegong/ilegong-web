@@ -145,6 +145,8 @@ class WesharesComponent extends Component
     private function saveWeshareProxyPercent($weshareId, $weshareProxyPercent)
     {
         $ProxyRebatePercentM = ClassRegistry::init('ProxyRebatePercent');
+        $ProxyRebatePercentM->deleteAll(['share_id' => $weshareId]);
+        $weshareProxyPercent['id'] = null;
         $weshareProxyPercent['share_id'] = $weshareId;
         return $ProxyRebatePercentM->save($weshareProxyPercent);
     }

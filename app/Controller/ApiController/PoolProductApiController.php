@@ -51,7 +51,7 @@ class PoolProductApiController extends AppController
             ]);
             exit();
         }
-        $result = $this->ShareUtil->cloneShare($share_id, $uid);
+        $result = $this->ShareUtil->cloneShare($share_id, $uid, null, null, FROM_POOL_SHARE_TYPE);
         if ($result['success']) {
             $this->init_share_authorize($result['shareId'], $share_id, $uid);
         }

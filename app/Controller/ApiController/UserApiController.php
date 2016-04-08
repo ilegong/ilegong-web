@@ -74,6 +74,31 @@ class UserApiController extends AppController
         exit();
     }
 
+    public function update_nickname()
+    {
+        $user_id = $this->currentUser['id'];
+        $nickname = $_REQUEST['nickname'];
+        $this->User->update(['nickname' => "'" . $nickname . "'"], ['id' => $user_id]);
+        echo json_encode(['success' => true]);
+        exit();
+    }
+
+    public function subscribe($uid)
+    {
+        $user_id = $this->currentUser['id'];
+        $this->WeshareBuy->subscribe_sharer($uid, $user_id);
+        echo json_encode(['success' => true]);
+        exit();
+    }
+
+    public function  unsubscribe($uid)
+    {
+        $user_id = $this->currentUser['id'];
+        $this->WeshareBuy->unsubscribe_sharer($uid, $user_id);
+        echo json_encode(['success' => true]);
+        exit();
+    }
+
     /**
      * 绑定支付方式
      */

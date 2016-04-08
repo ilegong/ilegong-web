@@ -173,7 +173,12 @@ $(document).ready(function () {
   $('div[name="share_item"]').on('click', function () {
     var $me = $(this);
     var id = $me.data('id');
-    window.location.href = '/weshares/view/' + id;
+    var type = $me.data('type');
+    var href = '/weshares/view/' + id;
+    if(type=='order'){
+      href = '/weshares/share_order_list/'+id;
+    }
+    window.location.href = href;
   });
   $('div[name="pintuan_item"]').on('click', function () {
     var $me = $(this);

@@ -5,7 +5,7 @@ class WesharesController extends AppController
         array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem',
         'SharerShipOption', 'WeshareShipSetting', 'OfflineStore', 'Comment', 'RebateTrackLog', 'ProxyRebatePercent', 'ShareUserBind', 'UserSubReason', 'ShareFavourableConfig', 'ShareAuthority');
 
-    var $query_user_fileds = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
+    var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
 
     var $components = array('Weixin', 'WeshareBuy', 'Buying', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'OrderExpress', 'PintuanHelper', 'RedisQueue', 'DeliveryTemplate', 'Orders', 'Weshares', 'UserFans');
 
@@ -63,7 +63,6 @@ class WesharesController extends AppController
             $this->process_shared_offer($shared_offer_id);
         } else {
             //use cache
-            //$weshare = $this->Weshare->find('first', array('conditions' => array('id' => $weshare_id)));
             $weshare = $this->WeshareBuy->get_weshare_info($weshare_id);
             if ($weshare['type'] == POOL_SHARE_BUY_TYPE) {
                 //check share type
@@ -101,7 +100,8 @@ class WesharesController extends AppController
         //获取推荐人
         $recommend = $_REQUEST['recommend'];
         //add rebate log
-        if ($this->ShareUtil->is_proxy_user($recommend)) {
+        //自己推荐人购买不能加入推荐
+        if ($this->ShareUtil->is_proxy_user($recommend) && $recommend != $uid) {
             if (!empty($recommend) && !empty($uid)) {
                 $rebateLogId = $this->ShareUtil->save_rebate_log($recommend, $uid, $weshare_id);
                 $this->set('recommend_id', $recommend);
@@ -308,7 +308,7 @@ class WesharesController extends AppController
         $weshareInfo = $this->ShareUtil->get_tag_weshare_detail($weshareId);
         $is_me = $uid == $weshareInfo['creator']['id'];
         $weixinInfo = $this->set_weixin_share_data($uid, $weshareId);
-        $user_fields = $this->query_user_fileds;
+        $user_fields = $this->query_user_fields;
         $user_fields[] = 'mobilephone';
         $user_fields[] = 'payment';
         $current_user = $this->User->find('first', array(
@@ -603,6 +603,7 @@ class WesharesController extends AppController
             //cal proxy user rebate fee
             $update_order_data = array('total_all_price' => ($totalPrice - $discountPrice) / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => $shipFee, 'is_prepaid' => $is_prepaid);
             if ($rebate_fee > 0) {
+                //记录返利的钱
                 $rebate_log_id = $this->WeshareBuy->log_proxy_rebate_log($weshareId, $uid, 0, 1, $orderId, $rebate_fee * 100);
                 if (!empty($rebate_log_id)) {
                     $update_order_data['cate_id'] = $rebate_log_id;
@@ -621,7 +622,6 @@ class WesharesController extends AppController
                     $this->order_use_score_and_coupon($orderId, $uid, 0, $totalPrice / 100);
                 }
                 $this->ShareUtil->update_rebate_log_order_id($rebateLogId, $orderId, $weshareId);
-
                 $this->log('Create order for ' . $uid . ' with weshare ' . $weshareId . ' successfully, order id ' . $orderId, LOG_INFO);
                 $this->Orders->on_order_created($uid, $weshareId, $orderId);
 
@@ -742,6 +742,7 @@ class WesharesController extends AppController
         $joinShareOrderStatus = $user_share_data['joinShareOrderStatus'];
         $myCreateShares = $user_share_data['myCreateShares'];
         $myJoinShares = $user_share_data['myJoinShares'];
+        $shareOperateMap = $user_share_data['authority_share_map'];
         //$joinShareComments = $user_share_data['joinShareComments'];
         $shareUser = $creators[$uid];
         $this->set_share_user_info_weixin_params($uid, $current_uid, $shareUser);
@@ -774,6 +775,7 @@ class WesharesController extends AppController
         $this->set('my_join_shares', $myJoinShares);
         $this->set('authority_shares', $user_share_data['authority_shares']);
         $this->set('join_share_order_status', $joinShareOrderStatus);
+        $this->set('authority_share_map', $shareOperateMap);
         $pintuan_data = $this->PintuanHelper->get_user_pintuan_data($uid);
         $this->set('pintuan_data', $pintuan_data);
         if ($uid == $current_uid && !empty($user_level)) {

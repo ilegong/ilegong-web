@@ -232,17 +232,16 @@ class ProductsController extends AppController{
         }
         $this->loadModel('Comment');
         //load shichi comment count
-        $same_pids = get_group_product_ids($pid);
         $shi_chi_comment_count = $this->Comment->find('count',array(
             'conditions'=>array(
-                'data_id'=>$same_pids,
+                'data_id'=>$pid,
                 'status'=>1,
                 'is_shichi_vote'=>1
             )
         ));
         $comment_count = $this->Comment->find('count',array(
             'conditions'=>array(
-                'data_id'=>$same_pids,
+                'data_id'=>$pid,
                 'status'=>1
             )
         ));
