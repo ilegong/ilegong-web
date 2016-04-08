@@ -147,6 +147,9 @@ class MessageApiController extends Controller
         ]);
         $user_infos = array_map('map_user_avatar2', $user_infos);
         $user_infos = Hash::combine($user_infos, '{n}.User.id', '{n}.User');
+        $opt_logs = array_map(function($item){
+            return $item['OptLog'];
+        },$opt_logs);
         return ['user_infos' => $user_infos, 'msg' => $opt_logs];
     }
 
@@ -325,6 +328,9 @@ class MessageApiController extends Controller
             'page' => $page,
             'order' => ['id DESC']
         ]);
+        $share_faqs = array_map(function($item){
+            return $item['ShareFaq'];
+        },$share_faqs);
         echo json_encode($share_faqs);
     }
 

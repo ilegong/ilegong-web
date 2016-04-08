@@ -16,21 +16,25 @@ class JPushComponent extends Component
      * @return array|object
      * 推送消息
      */
-    public function push($user_ids, $title, $content, $type, $extras = array())
+    public function push($user_ids, $title, $content, $type, $extras = [])
     {
         if (!is_array($user_ids)) {
             $user_ids = [$user_ids];
         }
+        $user_ids = array_map(function($item){
+            return strval($item);
+        }, $user_ids);
+        $type = strval($type);
         $client = $this->get_push_client();
-        // 完整的推送示例,包含指定Platform,指定Alias,Tag,指定iOS,Android notification,指定Message等
-        $result = $client->push()
+        $result  = $client->push()
             ->setPlatform($this->all_platforms)
             ->addAlias($user_ids)
             ->setNotificationAlert($title)
             ->addIosNotification($title, 'iOS sound', '+1', true, 'iOS category', $extras)
             ->setMessage($content, $title, $type, $extras)
             ->setOptions(mt_rand(), $this->time_to_live, null, false)
-            ->send();
+            ->send();;
+
         return $result;
     }
 

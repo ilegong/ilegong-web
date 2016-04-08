@@ -13,7 +13,7 @@ App::import('Vendor', 'LocationHelper', array('file' => 'LocationHelper/Distance
 class TestController extends AppController
 {
 
-    public $components = array('Weixin', 'WeshareBuy', 'OrderExpress', 'Logistics', 'PintuanHelper', 'ShareUtil', 'RedisQueue', 'DeliveryTemplate', 'JPush');
+    public $components = array('Weixin', 'WeshareBuy', 'OrderExpress', 'Logistics', 'PintuanHelper', 'ShareUtil', 'RedisQueue', 'DeliveryTemplate', 'JPush', 'SharePush');
     public $uses = array('Order', 'Oauthbind');
 
 
@@ -287,6 +287,13 @@ class TestController extends AppController
         $this->autoRender = false;
         $this->PintuanHelper->send_pintuan_success_msg(1941, 2, 802852);
         echo json_encode(array('success' => true));
+    }
+
+    public function test_push_msg(){
+        $this->autoRender = false;
+        $this->SharePush->push_buy_msg(['user_id' => 633345, 'thumbnail' => 'www.baidu.com', 'reply_content' => 'hello world'], ['title' => 'test', 'creator' => 811917]);
+        echo 'true';
+        exit;
     }
 
 }
