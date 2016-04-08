@@ -3806,6 +3806,11 @@
     vm.currentUserOrderCount = 0;
     vm.totalBuyCount = 0;
     vm.rebateFee = 0;
+
+    // 默认一部分初始数据, 将来从接口的json修改
+    vm.hasDefaultKuaiDiDeliveryAddress = false;
+    vm.hasDefaultSelfZitiDeliveryAddress = false;
+
     function pageLoaded() {
       $rootScope.loadingPage = false;
     }

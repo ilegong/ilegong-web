@@ -22,8 +22,8 @@
     <!-- 这个块只在快递标签页里面出现 -->
     <ul class="clearfix" ng-if="vm.showKuaiDiTab" ng-click="vm.showEditKuaiDiAddressPage()">
       <li class="fl">
-        <a href="#" class="defaultText">填写收货信息</a>
-        <a href="#" class="address">
+        <a href="#" class="defaultText" ng-if="!vm.hasDefaultKuaiDiDeliveryAddress">填写收货信息</a>
+        <a href="#" class="address" ng-if="vm.hasDefaultKuaiDiDeliveryAddress">
           <span>Alice</span><span>13333333333</span>
           <br/><span>北京市通州区广通小区3-2-3002</span>
         </a>
@@ -39,8 +39,8 @@
     <!-- 这个块在自提标签页里面出现 -->
     <ul class="clearfix" ng-if="vm.showSelfZitiTab" ng-click="vm.showEditSelfZitiAddressPage()">
       <li class="fl">
-        <a href="#" class="defaultText">选择自提地址</a>
-        <a href="#" class="address">
+        <a href="#" class="defaultText" ng-if="!vm.hasDefaultSelfZitiDeliveryAddress">选择自提地址</a>
+        <a href="#" class="address" ng-if="vm.hasDefaultSelfZitiDeliveryAddress">
           <span>Alice</span><span>13333333333</span>
           <br/><span>北京市通州区广通小区3-2-3002</span>
         </a>
