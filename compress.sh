@@ -5,6 +5,7 @@ uglifyjs ./webroot/static/weshares/js/angular.min.js \
     ./webroot/static/weshares/js/me-lazyload.js \
     ./webroot/static/weshares/js/underscore-min.js \
     ./webroot/static/weshares/js/app.js \
+    ./webroot/static/weshares/js/offline-store.js \
     ./webroot/static/weshares/js/edit-controller.js \
     ./webroot/static/weshares/js/view-controller.js \
     ./webroot/static/weshares/js/pool-product-factory.js \
