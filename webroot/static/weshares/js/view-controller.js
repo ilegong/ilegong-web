@@ -3731,12 +3731,7 @@
     vm.toUpdate = toUpdate;
     vm.stopShare = stopShare;
     vm.showShareDetail = showShareDetail;
-    vm.showEditSelfZitiAddressPage = showEditSelfZitiAddressPage;
-    vm.showEditKuaiDiAddressPage = showEditKuaiDiAddressPage;
-    vm.showKuaiDiTabPage = showKuaiDiTabPage;
-    vm.showSelfZitiTabPage = showSelfZitiTabPage;
-    vm.showPysZitiTabPage = showPysZitiTabPage;
-    vm.showPinTuanTabPage = showPinTuanTabPage;
+
     vm.calOrderTotalPrice = calOrderTotalPrice;
     vm.getStatusName = getStatusName;
     vm.getShipCode = getShipCode;
@@ -3806,6 +3801,16 @@
     vm.currentUserOrderCount = 0;
     vm.totalBuyCount = 0;
     vm.rebateFee = 0;
+
+    // 函数
+    vm.showSelectSelfZitiAddressPageFunc = showSelectSelfZitiAddressPageFunc;
+    vm.showSelectKuaiDiAddressPageFunc = showSelectKuaiDiAddressPageFunc;
+    vm.showEditSelfZitiAddressPageFunc = showEditSelfZitiAddressPageFunc;
+    vm.showEditKuaiDiAddressPageFunc = showEditKuaiDiAddressPageFunc;
+    vm.showKuaiDiTabPageFunc = showKuaiDiTabPageFunc;
+    vm.showSelfZitiTabPageFunc = showSelfZitiTabPageFunc;
+    vm.showPysZitiTabPageFunc = showPysZitiTabPageFunc;
+    vm.showPinTuanTabPageFunc = showPinTuanTabPageFunc;
 
     // 默认一部分初始数据, 将来从接口的json修改
     vm.hasDefaultKuaiDiDeliveryAddress = false;
@@ -4493,30 +4498,52 @@
       vm.showBalanceView = true;
       vm.chooseShipType = false;
       // 默认显示的是快递标签页.. 那么, 没有快递选项怎么处理?
-      showKuaiDiTabPage();
+      showKuaiDiTabPageFunc();
+
+      vm.showTabPage = true;
+      vm.showSelectKuaiDiAddressPage = false;
+      vm.showEditKuaiDiAddressPage = false;
+      vm.showSelectSelfZitiAddressPage = false;
+      vm.showEditSelfZitiAddressPage = false;
     }
 
-    function showEditSelfZitiAddressPage()
+    function showSelectKuaiDiAddressPageFunc()
     {
-      vm.showSelfZitiAddress = true;
-      vm.showEditAddress = false;
-      vm.showKuaiDiTab = false;
-      vm.showSelfZitiTab = false;
-      vm.showPysZitiTab = false;
-      vm.showPinTuanTab = false;
+      vm.showTabPage = false;
+      vm.showSelectKuaiDiAddressPage = true;
+      vm.showEditKuaiDiAddressPage = false;
+      vm.showSelectSelfZitiAddressPage = false;
+      vm.showEditSelfZitiAddressPage = false;
     }
 
-    function showEditKuaiDiAddressPage()
+    function showEditKuaiDiAddressPageFunc()
     {
-      vm.showSelfZitiAddress = false;
-      vm.showEditAddress = true;
-      vm.showKuaiDiTab = false;
-      vm.showSelfZitiTab = false;
-      vm.showPysZitiTab = false;
-      vm.showPinTuanTab = false;
+      vm.showTabPage = false;
+      vm.showSelectKuaiDiAddressPage = false;
+      vm.showEditKuaiDiAddressPage = true;
+      vm.showSelectSelfZitiAddressPage = false;
+      vm.showEditSelfZitiAddressPage = false;
     }
 
-    function showKuaiDiTabPage() {
+    function showSelectSelfZitiAddressPageFunc()
+    {
+      vm.showTabPage = false;
+      vm.showSelectKuaiDiAddressPage = false;
+      vm.showEditKuaiDiAddressPage = false;
+      vm.showSelectSelfZitiAddressPage = true;
+      vm.showEditSelfZitiAddressPage = false;
+    }
+
+    function showEditSelfZitiAddressPageFunc()
+    {
+      vm.showTabPage = false;
+      vm.showSelectKuaiDiAddressPage = false;
+      vm.showEditKuaiDiAddressPage = false;
+      vm.showSelectSelfZitiAddressPage = false;
+      vm.showEditSelfZitiAddressPage = true;
+    }
+
+    function showKuaiDiTabPageFunc() {
       vm.showSelfZitiAddress = false;
       vm.showEditAddress = false;
       vm.showKuaiDiTab = true;
@@ -4525,7 +4552,7 @@
       vm.showPinTuanTab = false;
     }
 
-    function showSelfZitiTabPage() {
+    function showSelfZitiTabPageFunc() {
       vm.showSelfZitiAddress = false;
       vm.showEditAddress = false;
       vm.showKuaiDiTab = false;
@@ -4534,7 +4561,7 @@
       vm.showPinTuanTab = false;
     }
 
-    function showPysZitiTabPage() {
+    function showPysZitiTabPageFunc() {
       vm.showSelfZitiAddress = false;
       vm.showEditAddress = false;
       vm.showKuaiDiTab = false;
@@ -4543,7 +4570,7 @@
       vm.showPinTuanTab = false;
     }
 
-    function showPinTuanTabPage() {
+    function showPinTuanTabPageFunc() {
       vm.showSelfZitiAddress = false;
       vm.showEditAddress = false;
       vm.showKuaiDiTab = false;
