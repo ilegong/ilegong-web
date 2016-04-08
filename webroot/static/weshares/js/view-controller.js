@@ -170,6 +170,7 @@
     }
 
     activate();
+
     function activate() {
       vm.initWeshareData();
       vm.initProvince();
@@ -371,7 +372,6 @@
           vm.weshareSettings = data['weshare_ship_settings'];
           vm.supportPysZiti = data['support_pys_ziti'];
           vm.selectShipType = getSelectTypeDefaultVal();
-          vm.tabBarItemWidth = getTabBarItemWidth();
           vm.userSubStatus = data['sub_status'];
           vm.totalBuyCount = data['all_buy_count'];
           vm.favourableConfig = data['favourable_config'];
@@ -445,24 +445,6 @@
           }
         });
       }
-    }
-
-    function getTabBarItemWidth() {
-      var num = 0;
-      if (vm.weshareSettings.pin_tuan.status == 1) {
-        num++;
-      }
-      if (vm.weshareSettings.kuai_di.status == 1) {
-        num++;
-      }
-      if (vm.weshareSettings.self_ziti.status == 1) {
-        num++;
-      }
-      if (vm.weshareSettings.pys_ziti.status == 1) {
-        num++;
-      }
-
-      return num ? 100 / num : 100;
     }
 
     function getSelectTypeDefaultVal() {

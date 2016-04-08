@@ -8,6 +8,7 @@ uglifyjs ./webroot/static/weshares/js/angular.min.js \
     ./webroot/static/weshares/js/offline-store.js \
     ./webroot/static/weshares/js/edit-controller.js \
     ./webroot/static/weshares/js/view-controller.js \
+    ./webroot/static/weshares/js/view-consignee-controller.js \
     ./webroot/static/weshares/js/pool-product-factory.js \
     ./webroot/static/weshares/js/view-product-info.js \
     -o ./webroot/static/weshares/js/weshare.min.js
