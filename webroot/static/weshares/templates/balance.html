@@ -5,7 +5,7 @@
       <label>返回</label>
     </a>
     <h1 class="fl">设置配送信息</h1>
-    <a href="#" class="nav-home fr back"  ng-click="vm.showShareDetail()">
+    <a href="#" class="nav-home fr back" ng-click="vm.showShareDetail()">
       <img src="/static/weshares/images/home.png"/>
     </a>
   </div>
@@ -124,12 +124,12 @@
 
 <div style="background-color: #f1f1f1;" ng-if="vm.showSelectKuaiDiAddressPage">
     <div class="nav-bg">
-        <a href="#" class="nav-back fl">
+        <a href="#" class="nav-back fl" ng-click="vm.buyProducts()">
             <img src="/static/weshares/images/back.png"/>
             <label>返回</label>
         </a>
         <h1 class="fl">选择地址</h1>
-        <a href="#" class="nav-home fr">
+        <a href="#" class="nav-home fr" ng-click="vm.showShareDetail()">
             <img src="/static/weshares/images/home.png"/>
         </a>
     </div>
@@ -164,12 +164,12 @@
 
 <div style="background-color: #f1f1f1;" ng-if="vm.showEditKuaiDiAddressPage">
 <div class="nav-bg">
-    <a href="#" class="nav-back fl">
+    <a href="#" class="nav-back fl" ng-click="vm.showSelectKuaiDiAddressPageFunc()">
         <img src="/static/weshares/images/back.png"/>
         <label>返回</label>
     </a>
     <h1 class="fl">编辑地址</h1>
-    <a href="#" class="nav-home fr">
+    <a href="#" class="nav-home fr" ng-click="vm.showShareDetail()">
         <img src="/static/weshares/images/home.png"/>
     </a>
 </div>
