@@ -236,18 +236,6 @@ class MessageApiController extends Controller
         exit();
     }
 
-    /**
-     * 提交评论
-     */
-    public function comment()
-    {
-        $postStr = file_get_contents('php://input');
-        $post_data = json_decode($postStr, true);
-        $result = $this->WeshareBuy->create_share_comment($post_data['order_id'], $post_data['comment_content'], $post_data['reply_comment_id'], $post_data['comment_uid'], $post_data['share_id']);
-        echo json_encode($result);
-        exit();
-    }
-
     private function get_shares($share_ids)
     {
         $this->loadModel('Weshare');
@@ -291,25 +279,6 @@ class MessageApiController extends Controller
         exit();
     }
 
-    /**
-     * 提交私信
-     */
-    public function faq_msg()
-    {
-        $this->loadModel('ShareFaq');
-        $postStr = file_get_contents('php://input');
-        $post_data = json_decode($postStr, true);
-        $this->ShareFaq->save($post_data);
-        $share_id = $post_data['share_id'];
-        $msg = $post_data['msg'];
-        $sender = $post_data['sender'];
-        $receiver = $post_data['receiver'];
-        $weshareInfo = $this->WeshareBuy->get_weshare_info($share_id);
-        $share_title = $weshareInfo['title'];
-        $this->ShareFaqUtil->send_notify_template_msg($sender, $receiver, $msg, $share_id, $share_title);
-        echo json_encode(['success' => true]);
-        exit();
-    }
 
     /**
      * @param $page
@@ -348,6 +317,38 @@ class MessageApiController extends Controller
         $users = array_map('map_user_avatar2', $users);
         $users = Hash::combine($users, '{n}.User.id', '{n}.User');
         echo json_encode($users);
+        exit();
+    }
+
+    /**
+     * 提交评论
+     */
+    public function comment()
+    {
+        $postStr = file_get_contents('php://input');
+        $post_data = json_decode($postStr, true);
+        $result = $this->WeshareBuy->create_share_comment($post_data['order_id'], $post_data['comment_content'], $post_data['reply_comment_id'], $post_data['comment_uid'], $post_data['share_id']);
+        echo json_encode($result);
+        exit();
+    }
+
+    /**
+     * 提交私信
+     */
+    public function faq_msg()
+    {
+        $this->loadModel('ShareFaq');
+        $postStr = file_get_contents('php://input');
+        $post_data = json_decode($postStr, true);
+        $this->ShareFaq->save($post_data);
+        $share_id = $post_data['share_id'];
+        $msg = $post_data['msg'];
+        $sender = $post_data['sender'];
+        $receiver = $post_data['receiver'];
+        $weshareInfo = $this->WeshareBuy->get_weshare_info($share_id);
+        $share_title = $weshareInfo['title'];
+        $this->ShareFaqUtil->send_notify_template_msg($sender, $receiver, $msg, $share_id, $share_title);
+        echo json_encode(['success' => true]);
         exit();
     }
 
