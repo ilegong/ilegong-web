@@ -100,21 +100,45 @@ class MessageApiController extends Controller
         ]);
         $senders = array_map('map_user_avatar2', $senders);
         $senders = Hash::combine($senders, '{n}.User.id', '{n}.User');
-        echo json_encode(array('senders' => $senders, 'msg' => $share_faqs));
+        $result = [];
+        foreach ($share_faqs as $faq_item) {
+            $r_item = $faq_item['ShareFaq'];
+            $r_item['sender'] = $senders[$r_item['sender']];
+            $result[] = $r_item;
+        }
+        echo json_encode($result);
         exit();
     }
 
     private function get_msg($type, $page, $limit)
     {
         $uid = $this->currentUser['id'];
-        $this->loadModel('OptLog');
-        $opt_logs = $this->OptLog->find('all', [
+        $cond = [
             'conditions' => ['obj_creator' => $uid, 'obj_type' => $type],
             'group' => ['user_id'],
             'limit' => $limit,
             'page' => $page,
             'order' => ['id DESC']
-        ]);
+        ];
+        return $this->query_opt_msg($cond);
+    }
+
+    private function get_u_msg_list($type, $page, $limit, $user)
+    {
+        $uid = $this->currentUser['id'];
+        $cond = [
+            'conditions' => ['obj_creator' => $uid, 'obj_type' => $type, 'user_id' => $user],
+            'limit' => $limit,
+            'page' => $page,
+            'order' => ['id DESC']
+        ];
+        return $this->query_opt_msg($cond);
+    }
+
+    private function query_opt_msg($cond)
+    {
+        $this->loadModel('OptLog');
+        $opt_logs = $this->OptLog->find('all', $cond);
         $user_ids = Hash::extract($opt_logs, '{n}.OptLog.user_id');
         $this->loadModel('User');
         $user_infos = $this->User->find('all', [
@@ -127,11 +151,11 @@ class MessageApiController extends Controller
     }
 
     /**
-     * @param page
-     * @param limit
+     * @param $page
+     * @param $limit
      * 获取购买列表
      */
-    public function get_buy_list($page, $limit)
+    public function get_u_buy_list($page, $limit)
     {
         echo json_encode($this->get_msg(OPT_LOG_SHARE_BUY, $page, $limit));
         exit();
@@ -140,11 +164,35 @@ class MessageApiController extends Controller
     /**
      * @param $page
      * @param $limit
-     * 列表
+     * 获取评论列表
      */
-    public function comment_list($page, $limit)
+    public function get_u_comment_list($page, $limit)
     {
         echo json_encode($this->get_msg(OPT_LOG_SHARE_COMMENT, $page, $limit));
+        exit();
+    }
+
+    /**
+     * @param user
+     * @param page
+     * @param limit
+     * 获取购买列表
+     */
+    public function get_buy_list($user,$page, $limit)
+    {
+        echo json_encode($this->get_u_msg_list(OPT_LOG_SHARE_BUY, $page, $limit, $user));
+        exit();
+    }
+
+    /**
+     * @param user
+     * @param $page
+     * @param $limit
+     * 列表
+     */
+    public function comment_list($user, $page, $limit)
+    {
+        echo json_encode($this->get_u_msg_list(OPT_LOG_SHARE_COMMENT, $page, $limit, $user));
         exit();
     }
 
