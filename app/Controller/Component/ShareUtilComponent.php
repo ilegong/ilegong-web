@@ -376,7 +376,7 @@ class ShareUtilComponent extends Component
     /**
      * @param $shareId
      * @param $uid
-     * @param $address
+     * @param $address 拼团地址
      * @param $address_remarks
      * @param $type
      * @param $share_status
@@ -424,15 +424,17 @@ class ShareUtilComponent extends Component
             $shareInfo['refer_share_id'] = $shareId;
             $shareInfo['type'] = 0; //默认分享类型
         }
+        //reset type 设置用户类型
         if (!empty($type)) {
             $shareInfo['type'] = $type;
         }
         if (!empty($uid)) {
             $shareInfo['creator'] = $uid;
+            //检查并设置用户团长
+            $this->check_and_save_default_level($uid);
         }
         $uid = $shareInfo['creator'];
         $WeshareM->id = null;
-
 //        if ($type == GROUP_SHARE_TYPE) {
 //            $offlineAddress = $this->saveGroupShareOfflineAddress($address, $uid, $address_remarks);
 //            $shareInfo['offline_address_id'] = $offlineAddress['WeshareOfflineAddress']['id'];
@@ -455,9 +457,6 @@ class ShareUtilComponent extends Component
 //                $this->cloneShareShipSettings($newShareId, $shareId, true);
 //                $this->cloneShareRebateSet($newShareId, $shareId, true);
 //            }
-            if (!empty($uid)) {
-                $this->check_and_save_default_level($uid);
-            }
             Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
             $dataSource->commit();
             return array('shareId' => $newShareId, 'success' => true);
