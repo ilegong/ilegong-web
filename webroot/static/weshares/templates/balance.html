@@ -20,7 +20,7 @@
   <div class="expressage">
 
     <!-- 这个块只在快递标签页里面出现 -->
-    <ul class="clearfix" ng-if="vm.showKuaiDiTab" ng-click="vm.showEditAddressPage()">
+    <ul class="clearfix" ng-if="vm.showKuaiDiTab" ng-click="vm.showEditKuaiDiAddressPage()">
       <li class="fl">
         <a href="#" class="defaultText">填写收货信息</a>
         <a href="#" class="address">
@@ -36,7 +36,24 @@
       </li>
     </ul>
 
-    <!-- 这个块只在自提标签页里面出现 TODO: WTF ?? -->
+    <!-- 这个块在自提标签页里面出现 -->
+    <ul class="clearfix" ng-if="vm.showSelfZitiTab" ng-click="vm.showEditSelfZitiAddressPage()">
+      <li class="fl">
+        <a href="#" class="defaultText">选择自提地址</a>
+        <a href="#" class="address">
+          <span>Alice</span><span>13333333333</span>
+          <br/><span>北京市通州区广通小区3-2-3002</span>
+        </a>
+      </li>
+      <li class="fr">
+        <a href="#" class="next-icon clearfix">
+          <label style="display: none;">修改</label>
+          <img src="/static/weshares/images/next-icon.png" />
+        </a>
+      </li>
+    </ul>
+
+    <!-- 这个块只在地址设置/编辑地址里面出现 -->
     <ul class="clearfix" ng-if="vm.showSelfZitiTab">
       <li class="fl comment">收货人</li>
       <li class="fl content"><input type="text" placeholder="请输入收货人姓名" /></li>
@@ -55,22 +72,27 @@
     </ul>
   </div>
 
-
-
   <!-- 这个元素在各个tab里面都会出现 -->
   <div class="selection-product">
     <h1>选择的产品</h1>
     <div class="product" ng-repeat="product in vm.weshare.products">
-      <div>{{::product.name}}</div>
+      <div>
+        {{::product.name}}
+        <span ng-if="!vm.checkProductNum(product)">
+          (<span style="color: red;">抢光了</span>)
+        </span>
+      </div>
       <div class="clearfix">
         <div class="product-price fl" ng-bind="::product.price/100 | currency:'￥'"></div>
         <dl class="clearfix fr" ng-if="vm.checkProductNum(product)">
-          <dd class="fr add-subtract" ng-click="vm.decreaseProductNum(product)"></dd>
+          <dd class="fr add-subtract" ng-click="vm.increaseProductNum(product)"><i class="fa fa-plus"></i></dd>
           <dd class="fr amount" ng-bind="product.num||0"></dd>
-          <dd class="fr add-subtract" ng-click="vm.increaseProductNum(product)"></dd>
+          <dd class="fr add-subtract" ng-click="vm.decreaseProductNum(product)"><i class="fa fa-minus"></i></dd>
         </dl>
         <dl class="clearfix fr" ng-if="!vm.checkProductNum(product)">
-          <span style="color: red;">抢光了</span>
+          <dd class="fr add-subtract disable"><i class="fa fa-plus"></i></dd>
+          <dd class="fr amount" ng-bind="product.num||0"></dd>
+          <dd class="fr add-subtract disable"><i class="fa fa-minus"></i></dd>
         </dl>
       </div>
     </div>
@@ -90,30 +112,12 @@
       <li class="fl">快递费：</li>
       <li class="fr" ng-bind="vm.shipFee/100"></li>
     </ul>
-    <!-- 原始的付款数据(优惠等) -->
-    <!--
-    <div class='total-fee text-center'>
-      总金额：<span ></span>
-    </div>
-    <div style="text-align: center" ng-if="vm.favourableConfig&&vm.favourableConfig.discount>0">
-    (折扣【不加邮费】<span ng-bind="vm.favourableConfig.discount" style="color: #ffa200;"></span>)
-    </div>
-    <div style="text-align: center" ng-if="vm.myCoupons">
-    (已减去红包<span ng-bind="vm.userCouponReduce/100" style="color: #ffa200;"></span>元)
-    </div>
-    <div style="text-align: center" ng-if="vm.shipFee>0">
-    (快递费用<span  style="color: #ffa200;"></span>元)
-    </div>
-    <div style="text-align: center" ng-if="vm.rebateFee>0">
-    (团长优惠<span ng-bind="vm.rebateFee" style="color: #ffa200;"></span>元)
-    </div>
-    -->
   </div>
 
   <!-- 这个元素在各个tab里面都会出现 -->
   <ul class="payment-bg clearfix">
     <li class="fl">应付<span ng-bind="vm.orderTotalPrice | currency:'￥'"></span></li>
-    <li class="fr"><a href="#" class="zfbPay">支付宝支付</a></li>
-    <li class="fr"><a href="#" class="weixinPay">微信支付</a></li>
+    <li class="fr"><a href="#" class="zfbPay" ng-click='vm.submitOrder(1);'>支付宝支付</a></li>
+    <li class="fr"><a href="#" class="weixinPay" ng-click='vm.submitOrder(0);'>微信支付</a></li>
   </ul>
 </div>

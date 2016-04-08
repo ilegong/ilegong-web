@@ -3731,7 +3731,8 @@
     vm.toUpdate = toUpdate;
     vm.stopShare = stopShare;
     vm.showShareDetail = showShareDetail;
-    vm.showEditAddressPage = showEditAddressPage;
+    vm.showEditSelfZitiAddressPage = showEditSelfZitiAddressPage;
+    vm.showEditKuaiDiAddressPage = showEditKuaiDiAddressPage;
     vm.showKuaiDiTabPage = showKuaiDiTabPage;
     vm.showSelfZitiTabPage = showSelfZitiTabPage;
     vm.showPysZitiTabPage = showPysZitiTabPage;
@@ -4490,8 +4491,19 @@
       showKuaiDiTabPage();
     }
 
-    function showEditAddressPage()
+    function showEditSelfZitiAddressPage()
     {
+      vm.showSelfZitiAddress = true;
+      vm.showEditAddress = false;
+      vm.showKuaiDiTab = false;
+      vm.showSelfZitiTab = false;
+      vm.showPysZitiTab = false;
+      vm.showPinTuanTab = false;
+    }
+
+    function showEditKuaiDiAddressPage()
+    {
+      vm.showSelfZitiAddress = false;
       vm.showEditAddress = true;
       vm.showKuaiDiTab = false;
       vm.showSelfZitiTab = false;
@@ -4500,6 +4512,7 @@
     }
 
     function showKuaiDiTabPage() {
+      vm.showSelfZitiAddress = false;
       vm.showEditAddress = false;
       vm.showKuaiDiTab = true;
       vm.showSelfZitiTab = false;
@@ -4508,6 +4521,7 @@
     }
 
     function showSelfZitiTabPage() {
+      vm.showSelfZitiAddress = false;
       vm.showEditAddress = false;
       vm.showKuaiDiTab = false;
       vm.showSelfZitiTab = true;
@@ -4516,6 +4530,7 @@
     }
 
     function showPysZitiTabPage() {
+      vm.showSelfZitiAddress = false;
       vm.showEditAddress = false;
       vm.showKuaiDiTab = false;
       vm.showSelfZitiTab = false;
@@ -4524,6 +4539,7 @@
     }
 
     function showPinTuanTabPage() {
+      vm.showSelfZitiAddress = false;
       vm.showEditAddress = false;
       vm.showKuaiDiTab = false;
       vm.showSelfZitiTab = false;

@@ -90,3 +90,15 @@ ul li { list-style: none; }
 .logistics-nav li:last-child {
   border-right: none;
 }
+
+.add-subtract .fa {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    line-height: 28px; /* 100% ≈ 28px */
+    color: #F99E37;
+}
+
+.add-subtract.disable .fa {
+    color: #A6A6A6;
+}
