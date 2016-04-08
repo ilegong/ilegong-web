@@ -414,7 +414,7 @@ class ShareUtilComponent extends Component
         if ($shareInfo['type'] == FROM_POOL_SHARE_TYPE) {
             //不是产品街的分享重新开团设置 refer_share_id
             //先不实时更新分享的信息，有可能团长自己更新，只复制物流和商品信息
-            $shareId = $shareInfo['refer_share_id'];
+            //$shareId = $shareInfo['refer_share_id'];
         } elseif ($shareInfo['type'] == POOL_SHARE_TYPE) {
             //产品街分享
             $shareInfo['refer_share_id'] = 0;
