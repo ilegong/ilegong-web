@@ -128,7 +128,7 @@ class User extends AppModel {
     }
 
     public function get_users_simple_info($user_ids){
-        if (is_array($user_ids)) {
+        if (!is_array($user_ids)) {
             $user_ids = [$user_ids];
         }
         $users = $this->find('all', ['conditions' => ['id' => $user_ids], 'fields' => ['id', 'image', 'avatar', 'nickname']]);

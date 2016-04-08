@@ -1,6 +1,6 @@
 <?php
 
-class SharePushComponent
+class SharePushComponent extends Component
 {
 
     var $components = ['JPush', 'WeshareBuy'];
