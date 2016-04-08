@@ -2529,6 +2529,18 @@ function map_share_img($item){
     return $item;
 }
 
+/**
+ * @param $item
+ * @return mixed
+ * map分享的图片
+ */
+function map_share_images($item){
+    $item_images = explode('|', $item['Weshare']['images']);
+    $item_images = array_map('map_share_img',$item_images);
+    $item['Weshare']['images'] = $item_images;
+    return $item;
+}
+
 function startsWith($haystack, $needle) {
     // search backwards starting from haystack length characters from the end
     return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== false;

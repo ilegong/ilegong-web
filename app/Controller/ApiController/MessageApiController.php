@@ -200,7 +200,7 @@ class MessageApiController extends Controller
      * @param $user_id
      * @param $page
      * @param $limit
-     * 用户私信列表
+     * 用户私信列表[单个用户点击进入的列表]
      */
     public function faq_list($user_id, $page, $limit)
     {
@@ -225,8 +225,9 @@ class MessageApiController extends Controller
         $this->loadModel('Weshare');
         $weshares = $this->Weshare->find('all', [
             'conditions' => ['id' => $share_ids],
-            'fields' => ['title', 'id']
+            'fields' => ['title', 'id', 'images']
         ]);
+        $weshares = array_map('map_share_images', $weshares);
         $weshares = Hash::combine($weshares, '{n}.Weshare.id', '{n}.Weshare');
         echo(json_encode(['messages' => $faqs, 'weshares' => $weshares]));
         exit();
@@ -312,7 +313,7 @@ class MessageApiController extends Controller
      * @param $limit
      * @param $share_id
      * @param $user_id
-     * 用户私信列表
+     * 用户私信列表[针对特定分享的私信列表]
      */
     public function user_faq_msg_list($share_id, $user_id, $page, $limit)
     {
