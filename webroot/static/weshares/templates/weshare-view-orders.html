@@ -6,8 +6,6 @@
             <li class='buyer-image'>
                 <img ng-click="vm.toUserShareInfo(order.creator)" lazy-src="{{vm.childShareDetailUsers[order.creator]['image']|| vm.staticFilePath + '/avatar/s/default.jpg'}}"/>
                 <p ng-if="vm.childShareDetailUsersLevel[order.creator]" ng-bind="::vm.childShareDetailUsersLevel[order.creator]['level_name']" style="color: #49bc6e;font-size: 13px;"></p>
-                <p ng-click="vm.chatToUser(order.creator);" ng-if="vm.currentUser.id" class="faq-sharer-btn">
-                    私信</p>
             </li>
             <li class="detail" ng-click="vm.toShareDetailView(order.weshare_id);">
                 <b></b>
@@ -30,8 +28,6 @@
             <li class='buyer-image'>
                 <img ng-click="vm.toUserShareInfo(order.creator)" lazy-src="{{vm.ordersDetail.users[order.creator]['image']|| vm.staticFilePath + '/avatar/s/default.jpg'}}"/>
                 <p ng-if="vm.ordersDetail.level_data[order.creator]" ng-bind="::vm.ordersDetail.level_data[order.creator]['level_name']" style="color: #49bc6e;font-size: 11px;"></p>
-                <p ng-click="vm.chatToUser(order.creator);" ng-if="vm.currentUser.id" class="faq-sharer-btn">
-                    私信</p>
             </li>
             <li class="detail" ng-if='order.status!=9'>
                 <b></b>
@@ -120,8 +116,6 @@
             <li class='buyer-image'>
                 <img ng-click="vm.toUserShareInfo(order.creator)" lazy-src="{{vm.shareOrder.users[order.creator]['image']|| vm.staticFilePath + '/avatar/s/default.jpg'}}"/>
                 <p ng-if="vm.shareOrder.levelData[order.creator]" ng-bind="::vm.shareOrder.levelData[order.creator]['level_name']" style="color: #49bc6e;font-size: 11px;"></p>
-                <p ng-click="vm.chatToUser(order.creator);" ng-if="vm.currentUser.id" class="faq-sharer-btn">
-                    私信</p>
             </li>
             <li class="detail" ng-if='order.status!=9'>
                 <b></b>
