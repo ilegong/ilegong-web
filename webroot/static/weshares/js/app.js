@@ -104,11 +104,17 @@
     };
 
     var newMessage = function (event, data) {
-      onMessageCallbacks[event](data);
+      if (onMessageCallbacks[event]) {
+        onMessageCallbacks[event](data);
+      }
+    };
+    var cleanUp = function () {
+      onMessageCallbacks = {};
     };
     return {
       onMessage: onMessage,
-      newMessage: newMessage
+      newMessage: newMessage,
+      cleanUp: cleanUp
     };
   });
 
