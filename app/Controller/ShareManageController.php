@@ -120,39 +120,51 @@ class ShareManageController extends AppController
     public function search_shares()
     {
         $s_id = $_REQUEST['id'];
-        if (!empty($s_id)) {
-            $WeshareM = ClassRegistry::init('Weshare');
-            $cond = array('id' => $s_id);
-            $weshares = $WeshareM->find('all', array(
-                'conditions' => $cond,
-                'limit' => 300
-            ));
-            $this->set('weshares', $weshares);
-        }
         $s_title = $_REQUEST['title'];
-        if (!empty($s_title)) {
-            $WeshareM = ClassRegistry::init('Weshare');
-            $UserM = ClassRegistry::init('User');
-            $cond = array('title LIKE' => '%' . $s_title . '%');
-            $share_status = $_REQUEST['share_status'];
-            if ($share_status != "all") {
-                $cond['status'] = $share_status;
-            }
-            $weshares = $WeshareM->find('all', array(
-                'conditions' => $cond,
-                'limit' => 300
-            ));
-            $share_creators = Hash::extract($weshares, '{n}.Weshare.creator');
-            $users = $UserM->find('all', array(
-                'conditions' => array(
-                    'id' => $share_creators
-                ),
-                'fields' => array('id', 'nickname')
-            ));
-            $users = Hash::combine($users, '{n}.User.id', '{n}.User');
-            $this->set('users', $users);
-            $this->set('weshares', $weshares);
+        $creator_id = $_REQUEST['creator_id'];
+        $creator_name = $_REQUEST['creator_name'];
+        $share_status = $_REQUEST['share_status'];
+        $WeshareM = ClassRegistry::init('Weshare');
+        $cond = [];
+        $joins[] = [
+            'table' => 'users',
+            'alias' => 'User',
+            'conditions' => [
+                'User.id = Weshare.creator',
+            ],
+        ];
+
+        if ($s_id) {
+            $cond = ['Weshare.id' => $s_id];
         }
+
+        if ($creator_id) {
+            $cond = ['Weshare.creator' => $creator_id];
+        }
+
+        if ($s_title) {
+            $cond = ['Weshare.title LIKE' => '%' . $s_title . '%'];
+        }
+
+        if ($share_status != "all") {
+            $cond['Weshare.status'] = $share_status;
+        }
+
+        if ($creator_name) {
+            $cond['User.nickname'] = $creator_name;
+        }
+
+        $results = $WeshareM->find('all', array(
+            'conditions' => $cond,
+            'fields' => [
+                'User.*',
+                'Weshare.*',
+            ],
+            'limit' => 300,
+            'joins' => $joins,
+        ));
+
+        $this->set('results', $results);
     }
 
     /*
