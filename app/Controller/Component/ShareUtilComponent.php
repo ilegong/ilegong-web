@@ -411,16 +411,20 @@ class ShareUtilComponent extends Component
         if ($shareInfo['type'] == FROM_POOL_SHARE_TYPE) {
             //不是产品街的分享重新开团设置 refer_share_id
             //先不实时更新分享的信息，有可能团长自己更新，只复制物流和商品信息
+            //复制从产品街发出的分享
             $shareId = $shareInfo['refer_share_id'];
         } elseif ($shareInfo['type'] == POOL_SHARE_TYPE) {
             //产品街分享
-            $shareInfo['refer_share_id'] = 0;
+            //复制产品街分享
+            $shareInfo['refer_share_id'] = $shareId;
         } elseif ($shareInfo['type'] == POOL_SHARE_BUY_TYPE) {
             //产品街的分享和渠道价购买的分享refer share id 设置为0
+            //复制渠道价购买的分享
             $shareInfo['refer_share_id'] = 0;
         } else {
             //默认复制分享
             //set refer share id
+            //复制正常的分享
             $shareInfo['refer_share_id'] = $shareId;
             $shareInfo['type'] = 0; //默认分享类型
         }
