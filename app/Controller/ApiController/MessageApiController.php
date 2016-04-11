@@ -267,14 +267,15 @@ class MessageApiController extends Controller
     /**
      * @param $share_id
      * @param $user_id
-     * 获取单条分享的详细数据
+     * [获取分享的评论]
      */
     public function load_single_comment_detail($share_id, $user_id)
     {
+        $uid = $this->currentUser['id'];
         //根据评论的时间定位到具体的一条评论，[可能存在问题]
-        $query_cond = ['type' => COMMENT_SHARE_TYPE, 'status' => COMMENT_SHOW_STATUS, 'user_id' => $user_id, 'data_id' => $share_id];
+        $query_cond = ['type' => COMMENT_SHARE_TYPE, 'status' => COMMENT_SHOW_STATUS, 'OR' => ['user_id' => $user_id, 'user_id' => $uid], 'data_id' => $share_id];
         $comment_date = $_REQUEST['comment_date'];
-        if(!empty($comment_date)){
+        if (!empty($comment_date)) {
             $query_cond['date(created)'] = $comment_date;
         }
         $result = $this->WeshareBuy->query_comment($query_cond);

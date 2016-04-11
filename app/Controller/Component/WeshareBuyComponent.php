@@ -408,6 +408,10 @@ class WeshareBuyComponent extends Component
         return json_decode($sharer_comment_data, true);
     }
 
+    /**
+     * @param $conds
+     * @return array
+     */
     public function query_comment($conds)
     {
         $commentM = ClassRegistry::init('Comment');
@@ -449,6 +453,7 @@ class WeshareBuyComponent extends Component
         }
         return array('order_comments' => array(), 'comment_replies' => array());
     }
+    
 
     /**
      * @param $order_ids
