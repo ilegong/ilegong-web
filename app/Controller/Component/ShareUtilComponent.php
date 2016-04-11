@@ -446,6 +446,7 @@ class ShareUtilComponent extends Component
         $newShareInfo = $WeshareM->save($shareInfo);
         if ($newShareInfo) {
             $newShareId = $newShareInfo['Weshare']['id'];
+            $this->log('clone share original id ' . $shareId . ' result share id ' . $newShareId . ' type ' . $newShareInfo['type'], LOG_DEBUG);
             //clone product
             $this->cloneShareProduct($newShareId, $shareId, $share_limit);
             //clone address
