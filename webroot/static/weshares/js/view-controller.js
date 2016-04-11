@@ -1648,7 +1648,6 @@
         vm.faqTipText = '反馈消息';
       }
       //通知子控制器可以工作了
-      $scope.$broadcast('shareDataHasLoad');
       //vm.checkShareInfoHeight();
       //load all comments
       vm.loadOrderDetail(vm.weshare.id);

@@ -96,6 +96,22 @@
     .run(initApp);
 
 
+  //多个控制器共享数据
+  app.factory('NotifyingService', function () {
+    var onMessageCallbacks = {};
+    var onMessage = function (event, cb) {
+      onMessageCallbacks[event] = cb;
+    };
+
+    var newMessage = function (event, data) {
+      onMessageCallbacks[event](data);
+    };
+    return {
+      onMessage: onMessage,
+      newMessage: newMessage
+    };
+  });
+
   // share order constructor function to encapsulate HTTP and pagination logic
   app.factory('ShareOrder', function ($http, $templateCache) {
 

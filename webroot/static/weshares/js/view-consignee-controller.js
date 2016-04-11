@@ -7,21 +7,21 @@
     vmc.getTabBarItemWidth = getTabBarItemWidth;
     vmc.getTabBarStyle = getTabBarStyle;
     vmc.tabBarItemWidth = 33.3;
-    var vm = vmc.parent;
-    $scope.$on('shareDataHasLoad', function () {
-      //初始化选择哪种快递方式
-      vm.selectShipType = getSelectTypeDefaultVal();
-      vmc.tabBarItemWidth = getTabBarItemWidth();
-    });
+    var vm = $scope.$parent.vm;
+
 
     active();
-    function active() {
+
+    function active(){
+      vm.selectShipType = getSelectTypeDefaultVal();
+      vmc.tabBarItemWidth = getTabBarItemWidth();
     }
+
     function getTabBarItemWidth() {
       var shipTypes = ['pin_tuan', 'kuai_di', 'self_ziti', 'pys_ziti'];
       var num = 0;
       _.each(shipTypes, function (item) {
-        if (vmc.parent.weshareSettings[item] && vmc.parent.weshareSettings[item]['status'] == 1) {
+        if (vm.weshareSettings[item] && vm.weshareSettings[item]['status'] == 1) {
           num = num + 1;
         }
       });
@@ -53,11 +53,5 @@
       return -1;
     }
 
-    // To protected access as vmc.parent
-    Object.defineProperty(vmc, 'parent', {
-      get: function () {
-        return $scope.$parent.vm;
-      }
-    });
   }
 })(window, window.angular);
