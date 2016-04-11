@@ -1,12 +1,21 @@
+<!--Tab切换-->
 <ul class="clearfix logistics-nav">
-    <li ng-if="vm.weshareSettings.kuai_di.status==1" style="{{::wcc.getTabBarStyle()}}" ng-class="{'cur': vm.showKuaiDiTab}" ng-click="vm.showKuaiDiTabPageFunc()">快递</li>
-    <li ng-if="vm.weshareSettings.self_ziti.status==1" style="{{::wcc.getTabBarStyle()}}" ng-class="{'cur': vm.showSelfZitiTab}" ng-click="vm.showSelfZitiTabPageFunc()">自提</li>
-    <li ng-if="vm.weshareSettings.pys_ziti.status==1" style="{{::wcc.getTabBarStyle()}}" ng-class="{'cur': vm.showPysZitiTab}" ng-click="vm.showPysZitiTabPageFunc()">好邻居自提</li>
-    <li ng-if="vm.weshareSettings.pin_tuan.status==1" style="{{::wcc.getTabBarStyle()}}" ng-class="{'cur': vm.showPinTuanTab}" ng-click="vm.showPinTuanTabPageFunc()">拼团</li>
+    <li ng-if="vm.weshareSettings.kuai_di.status==1" style="{{::wcc.getTabBarStyle()}}"
+        ng-class="{'cur': vm.showKuaiDiTab}" ng-click="vm.showKuaiDiTabPageFunc()">快递
+    </li>
+    <li ng-if="vm.weshareSettings.self_ziti.status==1" style="{{::wcc.getTabBarStyle()}}"
+        ng-class="{'cur': vm.showSelfZitiTab}" ng-click="vm.showSelfZitiTabPageFunc()">自提
+    </li>
+    <li ng-if="vm.weshareSettings.pys_ziti.status==1" style="{{::wcc.getTabBarStyle()}}"
+        ng-class="{'cur': vm.showPysZitiTab}" ng-click="vm.showPysZitiTabPageFunc()">好邻居自提
+    </li>
+    <li ng-if="vm.weshareSettings.pin_tuan.status==1" style="{{::wcc.getTabBarStyle()}}"
+        ng-class="{'cur': vm.showPinTuanTab}" ng-click="vm.showPinTuanTabPageFunc()">拼团
+    </li>
 </ul>
-
+<!--主面板-->
 <div class="expressage">
-    <!-- 这个块只在快递标签页里面出现 -->
+    <!-- 使用快递的时候出现 -->
     <ul class="clearfix" ng-if="vm.showKuaiDiTab" ng-click="vm.showSelectKuaiDiAddressPageFunc()">
         <li class="fl">
             <a href="#" class="defaultText" ng-if="!vm.hasDefaultKuaiDiDeliveryAddress">填写收货信息</a>
@@ -18,12 +27,12 @@
         <li class="fr">
             <a href="#" class="next-icon clearfix">
                 <label style="display: none;">修改</label>
-                <img src="/static/weshares/images/next-icon.png" />
+                <img src="/static/weshares/images/next-icon.png"/>
             </a>
         </li>
     </ul>
-    <!-- 这个块在自提标签页里面出现 -->
-    <ul class="clearfix" ng-if="vm.showSelfZitiTab" ng-click="vm.showSelectSelfZitiAddressPageFunc()">
+    <!-- 使用好邻居自提的时候出现 -->
+    <ul class="clearfix" ng-if="vm.showPysZitiTab" ng-click="vm.showSelectSelfZitiAddressPageFunc()">
         <li class="fl">
             <a href="#" class="defaultText" ng-if="!vm.hasDefaultSelfZitiDeliveryAddress">选择自提地址</a>
             <a href="#" class="address" ng-if="vm.hasDefaultSelfZitiDeliveryAddress">
@@ -34,30 +43,32 @@
         <li class="fr">
             <a href="#" class="next-icon clearfix">
                 <label style="display: none;">修改</label>
-                <img src="/static/weshares/images/next-icon.png" />
+                <img src="/static/weshares/images/next-icon.png"/>
             </a>
         </li>
     </ul>
-    <!-- 这个块只在地址设置/编辑地址里面出现 -->
-    <ul class="clearfix" ng-if="vm.showPysZitiTab">
-        <li class="fl comment">收货人</li>
-        <li class="fl content"><input type="text" placeholder="请输入收货人姓名" /></li>
-    </ul>
-    <ul class="clearfix" ng-if="vm.showSelfZitiTab">
-        <li class="fl comment">联系方式</li>
-        <li class="fl content"><input type="text" placeholder="请输入收货人手机号" /></li>
-    </ul>
-    <ul class="clearfix" ng-if="vm.showSelfZitiTab">
-        <li class="fl comment">详细地址</li>
-        <li class="fl content"><input type="text" placeholder="小区-楼号-门牌(必要时送货上门)" /></li>
-    </ul>
+    <!-- 选择自提方式-->
+    <div ng-if="vm.showPysZitiTab||vm.showSelfZitiTab">
+        <ul class="clearfix">
+            <li class="fl comment">收货人</li>
+            <li class="fl content"><input type="text" placeholder="请输入收货人姓名"/></li>
+        </ul>
+        <ul class="clearfix">
+            <li class="fl comment">联系方式</li>
+            <li class="fl content"><input type="text" placeholder="请输入收货人手机号"/></li>
+        </ul>
+        <ul class="clearfix">
+            <li class="fl comment">详细地址</li>
+            <li class="fl content"><input type="text" placeholder="小区-楼号-门牌(必要时送货上门)"/></li>
+        </ul>
+    </div>
+    <!--都可选-->
     <ul class="clearfix">
         <li class="fl comment">备注</li>
-        <li class="fl content"><input type="text" placeholder="告诉团长你的特殊需求" /></li>
+        <li class="fl content"><input type="text" placeholder="告诉团长你的特殊需求"/></li>
     </ul>
 </div>
-
-
+<!--选择快递地址-->
 <div style="background-color: #f1f1f1;" ng-if="vm.showSelectKuaiDiAddressPage">
     <div class="nav-bg">
         <a href="#" class="nav-back fl" ng-click="vm.buyProducts()">
@@ -79,7 +90,7 @@
                     <br/>
                     <label>北京市通州区北苑街道办事处</label>
                 </li>
-                <li><img src="/static/weshares/images/copyreader.png" /></li>
+                <li><img src="/static/weshares/images/copyreader.png"/></li>
             </ul>
         </a>
         <a href="#" ng-click="vm.showEditKuaiDiAddressPageFunc()">
@@ -91,19 +102,20 @@
                     <br/>
                     <label>北京市通州区北苑街道办事处</label>
                 </li>
-                <li><img src="/static/weshares/images/copyreader.png" /></li>
+                <li><img src="/static/weshares/images/copyreader.png"/></li>
             </ul>
         </a>
     </div>
     <div class="add-address-bg"><a href="#" ng-click="vm.showEditKuaiDiAddressPageFunc()">新增地址</a></div>
 </div>
-
+<!--编辑快递地址-->
 <div style="background-color: #f1f1f1;" ng-if="vm.showEditKuaiDiAddressPage">
     <div class="nav-bg">
         <a href="#" class="nav-back fl" ng-click="vm.showSelectKuaiDiAddressPageFunc()">
             <img src="/static/weshares/images/back.png"/>
             <label>返回</label>
         </a>
+
         <h1 class="fl">编辑地址</h1>
         <a href="#" class="nav-home fr" ng-click="vm.showShareDetail()">
             <img src="/static/weshares/images/home.png"/>
@@ -112,22 +124,22 @@
     <div class="copyreader-address">
         <ul class="clearfix">
             <li class="fl comment">收货人</li>
-            <li class="fl content"><input type="text" placeholder="请输入收货人姓名" /></li>
+            <li class="fl content"><input type="text" placeholder="请输入收货人姓名"/></li>
         </ul>
         <ul class="clearfix">
             <li class="fl comment">联系方式</li>
-            <li class="fl content"><input type="text" placeholder="请输入收货人手机号" /></li>
+            <li class="fl content"><input type="text" placeholder="请输入收货人手机号"/></li>
         </ul>
         <a href="#">
             <ul class="clearfix">
                 <li class="fl comment">所在地区</li>
-                <li class="fl content"><input type="text" placeholder="请选择送货区域" disabled /></li>
-                <li><img src="/static/weshares/images/next-icon.png" /></li>
+                <li class="fl content"><input type="text" placeholder="请选择送货区域" disabled/></li>
+                <li><img src="/static/weshares/images/next-icon.png"/></li>
             </ul>
         </a>
         <ul class="clearfix">
             <li class="fl comment">详细地址</li>
-            <li class="fl content"><input type="text" placeholder="请输入详细地址" /></li>
+            <li class="fl content"><input type="text" placeholder="请输入详细地址"/></li>
         </ul>
     </div>
     <a href="#" class="saveBtn">保存</a>
