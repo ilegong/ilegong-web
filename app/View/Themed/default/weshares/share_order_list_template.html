@@ -115,10 +115,12 @@
                         <input type="text" class="form-control" name="ship_code" placeholder="快递单号">
                     </div>
                     <button class="btn btn-primary set-order-ship-code" data-order-id="{{$item_order['id']}}" data-weshare-id="{{$weshareId}}">确认发货</button>
+                      <a class="btn btn-primary" href="/share_faq/faq/{{$item_order['member_id']}}/{{$item_order['creator']}}">发私信</a>
                 </div>
                 {{else}}
                     <div class="form" style="display: inline;">
                         <button class="btn btn-primary set-order-shipped" data-order-id="{{$item_order['id']}}" data-weshare-id="{{$weshareId}}">确认发货</button>
+                      <a class="btn btn-primary" href="/share_faq/faq/{{$item_order['member_id']}}/{{$item_order['creator']}}">发私信</a>
                     </div>
                 {{/if}}
             {{/if}}
