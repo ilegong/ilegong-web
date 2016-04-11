@@ -300,6 +300,7 @@ class MessageApiController extends Controller
         $share_faqs = array_map(function($item){
             return $item['ShareFaq'];
         },$share_faqs);
+        $share_faqs = array_reverse($share_faqs);
         echo json_encode($share_faqs);
     }
 
