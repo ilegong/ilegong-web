@@ -1,25 +1,25 @@
 <!--Tab切换-->
 <ul class="clearfix logistics-nav">
     <li ng-if="vm.weshareSettings.kuai_di.status==1" style="{{::wcc.getTabBarStyle()}}"
-        ng-class="{'cur': vm.showKuaiDiTab}" ng-click="vm.showKuaiDiTabPageFunc()">快递
+        ng-class="{'cur': vm.selectShipType==0}" ng-click="vm.showKuaiDiTabPageFunc()">快递
     </li>
     <li ng-if="vm.weshareSettings.self_ziti.status==1" style="{{::wcc.getTabBarStyle()}}"
-        ng-class="{'cur': vm.showSelfZitiTab}" ng-click="vm.showSelfZitiTabPageFunc()">自提
+        ng-class="{'cur': vm.selectShipType==1}" ng-click="vm.showSelfZitiTabPageFunc()">自提
     </li>
     <li ng-if="vm.weshareSettings.pys_ziti.status==1" style="{{::wcc.getTabBarStyle()}}"
-        ng-class="{'cur': vm.showPysZitiTab}" ng-click="vm.showPysZitiTabPageFunc()">好邻居自提
+        ng-class="{'cur': vm.selectShipType==2}" ng-click="vm.showPysZitiTabPageFunc()">好邻居自提
     </li>
     <li ng-if="vm.weshareSettings.pin_tuan.status==1" style="{{::wcc.getTabBarStyle()}}"
-        ng-class="{'cur': vm.showPinTuanTab}" ng-click="vm.showPinTuanTabPageFunc()">拼团
+        ng-class="{'cur': vm.selectShipType==3}" ng-click="vm.showPinTuanTabPageFunc()">拼团
     </li>
 </ul>
 <!--主面板-->
 <div class="expressage">
     <!-- 使用快递的时候出现 -->
-    <ul class="clearfix" ng-if="vm.showKuaiDiTab" ng-click="vm.showSelectKuaiDiAddressPageFunc()">
+    <ul class="clearfix" ng-if="vm.selectShipType==0">
         <li class="fl">
-            <a href="#" class="defaultText" ng-if="!vm.hasDefaultKuaiDiDeliveryAddress">填写收货信息</a>
-            <a href="#" class="address" ng-if="vm.hasDefaultKuaiDiDeliveryAddress">
+            <a href="#" class="defaultText" style="display: none;">填写收货信息</a>
+            <a href="#" class="address">
                 <span>Alice</span><span>13333333333</span>
                 <br/><span>北京市通州区广通小区3-2-3002</span>
             </a>
@@ -32,10 +32,10 @@
         </li>
     </ul>
     <!-- 使用好邻居自提的时候出现 -->
-    <ul class="clearfix" ng-if="vm.showPysZitiTab" ng-click="vm.showSelectSelfZitiAddressPageFunc()">
+    <ul class="clearfix" ng-if="vm.selectShipType==2">
         <li class="fl">
-            <a href="#" class="defaultText" ng-if="!vm.hasDefaultSelfZitiDeliveryAddress">选择自提地址</a>
-            <a href="#" class="address" ng-if="vm.hasDefaultSelfZitiDeliveryAddress">
+            <a href="#" class="defaultText">选择自提地址</a>
+            <a href="#" class="address">
                 <span>Alice</span><span>13333333333</span>
                 <br/><span>北京市通州区广通小区3-2-3002</span>
             </a>
@@ -47,8 +47,22 @@
             </a>
         </li>
     </ul>
+    <!--自有自提-->
+    <ul class="clearfix" ng-if="vm.selectShipType==1">
+        <li class="fl comment">自提地址</li>
+        <li class="fl content">
+            <select></select>
+        </li>
+    </ul>
+    <!--拼团-->
+    <ul class="clearfix" ng-if="vm.selectShipType==3">
+        <li class="fl comment">拼团地址</li>
+        <li class="fl content">
+            <select></select>
+        </li>
+    </ul>
     <!-- 选择自提方式-->
-    <div ng-if="vm.showPysZitiTab||vm.showSelfZitiTab">
+    <div ng-if="vm.selectShipType!=0">
         <ul class="clearfix">
             <li class="fl comment">收货人</li>
             <li class="fl content"><input type="text" placeholder="请输入收货人姓名"/></li>
@@ -68,20 +82,21 @@
         <li class="fl content"><input type="text" placeholder="告诉团长你的特殊需求"/></li>
     </ul>
 </div>
+<!--操作视图-->
 <!--选择快递地址-->
-<div style="background-color: #f1f1f1;" ng-if="vm.showSelectKuaiDiAddressPage">
+<div style="background-color: #f1f1f1;display: none;">
     <div class="nav-bg">
-        <a href="#" class="nav-back fl" ng-click="vm.buyProducts()">
+        <a href="#" class="nav-back fl">
             <img src="/static/weshares/images/back.png"/>
             <label>返回</label>
         </a>
         <h1 class="fl">选择地址</h1>
-        <a href="#" class="nav-home fr" ng-click="vm.showShareDetail()">
+        <a href="#" class="nav-home fr">
             <img src="/static/weshares/images/home.png"/>
         </a>
     </div>
     <div class="select-address">
-        <a href="#" class="cur" ng-click="vm.showEditKuaiDiAddressPageFunc()">
+        <a href="#" class="cur">
             <ul class="clearfix">
                 <li class="fl">
                     <span>Alice</span>
@@ -93,7 +108,7 @@
                 <li><img src="/static/weshares/images/copyreader.png"/></li>
             </ul>
         </a>
-        <a href="#" ng-click="vm.showEditKuaiDiAddressPageFunc()">
+        <a href="#">
             <ul class="clearfix">
                 <li class="fl">
                     <span>Alice</span>
@@ -109,15 +124,15 @@
     <div class="add-address-bg"><a href="#" ng-click="vm.showEditKuaiDiAddressPageFunc()">新增地址</a></div>
 </div>
 <!--编辑快递地址-->
-<div style="background-color: #f1f1f1;" ng-if="vm.showEditKuaiDiAddressPage">
+<div style="background-color: #f1f1f1;display: none;">
     <div class="nav-bg">
-        <a href="#" class="nav-back fl" ng-click="vm.showSelectKuaiDiAddressPageFunc()">
+        <a href="#" class="nav-back fl">
             <img src="/static/weshares/images/back.png"/>
             <label>返回</label>
         </a>
 
         <h1 class="fl">编辑地址</h1>
-        <a href="#" class="nav-home fr" ng-click="vm.showShareDetail()">
+        <a href="#" class="nav-home fr">
             <img src="/static/weshares/images/home.png"/>
         </a>
     </div>

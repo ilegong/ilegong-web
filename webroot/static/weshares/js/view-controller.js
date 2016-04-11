@@ -123,7 +123,6 @@
     vm.totalBuyCount = 0;
     vm.rebateFee = 0;
 
-
     function pageLoaded() {
       $rootScope.loadingPage = false;
     }
@@ -303,75 +302,7 @@
         }, cache: $templateCache
       }).
         success(function (data, status) {
-          vm.weshare = data['weshare'];
-          if (vm.weshare.type == 1) {
-            vm.isGroupShareType = true;
-          }
-          vm.toggleState = {0: {open: true, statusText: '收起'}};
-          _.each(vm.weshare.tags, function (value, key) {
-            vm.toggleState[key] = {
-              open: true,
-              statusText: '收起'
-            };
-          });
-          if (vm.weshare.addresses && vm.weshare.addresses.length == 1) {
-            vm.weshare.selectedAddressId = vm.weshare.addresses[0].id;
-          } else if (vm.weshare.addresses && vm.weshare.addresses.length > 1) {
-            vm.weshare.addresses.unshift({id: -1, address: '请选择收货地址'});
-            vm.weshare.selectedAddressId = -1;
-          }
-          vm.isManage = data['is_manage'];
-          vm.canManageShare = data['can_manage_share'];
-          vm.canEditShare = data['can_edit_share'];
-          vm.recommendData = data['recommendData'];
-          vm.currentUser = data['current_user'] || {};
-          vm.weixinInfo = data['weixininfo'];
-          vm.consignee = data['consignee'];
-          vm.myCoupons = data['my_coupons'];
-          vm.weshareSettings = data['weshare_ship_settings'];
-          vm.supportPysZiti = data['support_pys_ziti'];
-          vm.selectShipType = getSelectTypeDefaultVal();
-          vm.userSubStatus = data['sub_status'];
-          vm.totalBuyCount = data['all_buy_count'];
-          vm.favourableConfig = data['favourable_config'];
-          vm.autoPopCommentData = data['prepare_comment_data'];
-          vm.dliveryTemplate = data['weshare']['deliveryTemplate'];
-          vm.submitRecommendData = {};
-          vm.submitRecommendData.recommend_content = vm.weshare.creator.nickname + '我认识，很靠谱！';
-          vm.submitRecommendData.recommend_user = vm.currentUser.id;
-          vm.submitRecommendData.recommend_share = vm.weshare.id;
-          if (vm.consignee) {
-            if(vm.consignee.offlineStore){
-              vm.checkedOfflineStore = vm.consignee.offlineStore;
-            }
-            vm.selectedProvince = vm.consignee.province_id;
-            vm.selectedCity = vm.consignee.city_id;
-            if(vm.consignee.city_id){
-              vm.loadCityData(vm.consignee.province_id);
-            }
-            vm.selectedCounty = vm.consignee.county_id;
-            if(vm.consignee.county_id){
-              vm.loadCountyData(vm.consignee.city_id);
-            }
-          }
-          if (vm.myCoupons) {
-            vm.useCouponId = vm.myCoupons.CouponItem.id;
-            vm.userCouponReduce = vm.myCoupons.Coupon.reduced_price;
-          }
-          vm.userShareSummery = data['user_share_summery'];
-          if (vm.consignee) {
-            vm.buyerName = vm.consignee.name;
-            vm.buyerMobilePhone = vm.consignee.mobilephone;
-            vm.buyerAddress = vm.consignee.address;
-            vm.buyerPatchAddress = vm.consignee.remark_address;
-          }
-          if (vm.isCreator() || vm.canManageShare) {
-            vm.faqTipText = '反馈消息';
-          }
-          //vm.checkShareInfoHeight();
-          //load all comments
-          vm.loadOrderDetail(weshareId);
-          vm.loadOrderCommentData(weshareId);
+          handleShareData(data);
         }).
         error(function (data, status) {
           $log.log(data);
@@ -404,26 +335,6 @@
           }
         });
       }
-    }
-
-    function getSelectTypeDefaultVal() {
-      if (vm.weshareSettings.pin_tuan && vm.weshareSettings.pin_tuan.status == 1) {
-        vm.shipFee = vm.weshareSettings.pin_tuan.ship_fee;
-        return 3;
-      }
-      if (vm.weshareSettings.kuai_di && vm.weshareSettings.kuai_di.status == 1) {
-        vm.shipFee = vm.weshareSettings.kuai_di.ship_fee;
-        return 0;
-      }
-      if (vm.weshareSettings.self_ziti && vm.weshareSettings.self_ziti.status == 1) {
-        vm.shipFee = vm.weshareSettings.self_ziti.ship_fee;
-        return 1;
-      }
-      if (vm.weshareSettings.pys_ziti && vm.weshareSettings.pys_ziti.status == 1) {
-        vm.shipFee = vm.weshareSettings.pys_ziti.ship_fee;
-        return 2;
-      }
-      return -1;
     }
 
     function isProxy() {
@@ -584,17 +495,18 @@
       }
       var selfAllReplies = vm.commentData['comment_replies'];
       if (selfAllReplies) {
-        if(selfAllReplies[comment_id]){
+        if (selfAllReplies[comment_id]) {
           return true
         }
       }
       var referAllReplies = vm.shareOrder['orderCommentReplies'];
       if (referAllReplies) {
-        if(referAllReplies[comment_id]){
+        if (referAllReplies[comment_id]) {
           return true;
         }
       }
-      return false;;
+      return false;
+      ;
     }
 
     function getRecommendInfo(order) {
@@ -655,18 +567,7 @@
     }
 
     function setShipFee() {
-      if (vm.selectShipType == 0) {
-        vm.shipFee = getShipFee();
-      }
-      if (vm.selectShipType == 1) {
-        vm.shipFee = vm.weshareSettings.self_ziti.ship_fee;
-      }
-      if (vm.selectShipType == 2) {
-        vm.shipFee = vm.weshareSettings.pys_ziti.ship_fee;
-      }
-      if (vm.selectShipType == 3) {
-        vm.shipFee = vm.weshareSettings.pin_tuan.ship_fee;
-      }
+      vm.shipFee = getShipFee();
     }
 
     function getShipFee() {
@@ -677,8 +578,8 @@
         _.each(vm.weshare.products, function (product) {
           if (product.num && (product.num > 0)) {
             goodNum = goodNum + parseInt(product.num);
-            if(product.weight && (product.weight > 0)){
-              goodWeight = goodWeight + parseInt(product.weight)*parseInt(product.num);
+            if (product.weight && (product.weight > 0)) {
+              goodWeight = goodWeight + parseInt(product.weight) * parseInt(product.num);
             }
           }
 
@@ -743,10 +644,10 @@
       return vm.productsHasError;
     }
 
-    function validateLocation(){
-      if(vm.selectShipType==0 && (!vm.selectedProvince || !vm.selectedCity)){
+    function validateLocation() {
+      if (vm.selectShipType == 0 && (!vm.selectedProvince || !vm.selectedCity)) {
         vm.locationHasError = true;
-      }else{
+      } else {
         vm.locationHasError = false;
       }
       return vm.locationHasError;
@@ -787,14 +688,6 @@
       vm.showShareDetailView = false;
       vm.showBalanceView = true;
       vm.chooseShipType = false;
-      // 默认显示的是快递标签页.. 那么, 没有快递选项怎么处理?
-      //showKuaiDiTabPageFunc();
-
-      //vm.showTabPage = true;
-      //vm.showSelectKuaiDiAddressPage = false;
-      //vm.showEditKuaiDiAddressPage = false;
-      //vm.showSelectSelfZitiAddressPage = false;
-      //vm.showEditSelfZitiAddressPage = false;
     }
 
 
@@ -1285,7 +1178,7 @@
           return false;
         }
       }
-      if(vm.validateLocation()){
+      if (vm.validateLocation()) {
         return false;
       }
       return true;
@@ -1572,7 +1465,7 @@
         var addFee = parseInt(template['add_fee']);
         var unitType = parseInt(template['unit_type']);
         var cal_val = goodNum;
-        if(unitType == 1){
+        if (unitType == 1) {
           cal_val = goodWeight;
         }
         var gapVal = cal_val - startUnits;
@@ -1599,7 +1492,75 @@
     }
 
     function initProvince() {
-      vm.provinceData = [{"id":"110100","name":"\u5317\u4eac","parent_id":"2"},{"id":"120100","name":"\u5929\u6d25","parent_id":"2"},{"id":"130000","name":"\u6cb3\u5317","parent_id":"2"},{"id":"140000","name":"\u5c71\u897f","parent_id":"2"},{"id":"150000","name":"\u5185\u8499\u53e4","parent_id":"2"},{"id":"210000","name":"\u8fbd\u5b81","parent_id":"5"},{"id":"220000","name":"\u5409\u6797","parent_id":"5"},{"id":"230000","name":"\u9ed1\u9f99\u6c5f","parent_id":"5"},{"id":"310100","name":"\u4e0a\u6d77","parent_id":"1"},{"id":"320000","name":"\u6c5f\u82cf","parent_id":"1"},{"id":"330000","name":"\u6d59\u6c5f","parent_id":"1"},{"id":"340000","name":"\u5b89\u5fbd","parent_id":"1"},{"id":"350000","name":"\u798f\u5efa","parent_id":"4"},{"id":"360000","name":"\u6c5f\u897f","parent_id":"1"},{"id":"370000","name":"\u5c71\u4e1c","parent_id":"2"},{"id":"410000","name":"\u6cb3\u5357","parent_id":"3"},{"id":"420000","name":"\u6e56\u5317","parent_id":"3"},{"id":"430000","name":"\u6e56\u5357","parent_id":"3"},{"id":"440000","name":"\u5e7f\u4e1c","parent_id":"4"},{"id":"450000","name":"\u5e7f\u897f","parent_id":"4"},{"id":"460000","name":"\u6d77\u5357","parent_id":"4"},{"id":"500100","name":"\u91cd\u5e86","parent_id":"7"},{"id":"510000","name":"\u56db\u5ddd","parent_id":"7"},{"id":"520000","name":"\u8d35\u5dde","parent_id":"7"},{"id":"530000","name":"\u4e91\u5357","parent_id":"7"},{"id":"540000","name":"\u897f\u85cf","parent_id":"7"},{"id":"610000","name":"\u9655\u897f","parent_id":"6"},{"id":"620000","name":"\u7518\u8083","parent_id":"6"},{"id":"630000","name":"\u9752\u6d77","parent_id":"6"},{"id":"640000","name":"\u5b81\u590f","parent_id":"6"},{"id":"650000","name":"\u65b0\u7586","parent_id":"6"},{"id":"710000","name":"\u53f0\u6e7e","parent_id":"8"},{"id":"810000","name":"\u9999\u6e2f","parent_id":"8"},{"id":"820000","name":"\u6fb3\u95e8","parent_id":"8"}];
+      vm.provinceData = [{"id": "110100", "name": "\u5317\u4eac", "parent_id": "2"}, {
+        "id": "120100",
+        "name": "\u5929\u6d25",
+        "parent_id": "2"
+      }, {"id": "130000", "name": "\u6cb3\u5317", "parent_id": "2"}, {
+        "id": "140000",
+        "name": "\u5c71\u897f",
+        "parent_id": "2"
+      }, {"id": "150000", "name": "\u5185\u8499\u53e4", "parent_id": "2"}, {
+        "id": "210000",
+        "name": "\u8fbd\u5b81",
+        "parent_id": "5"
+      }, {"id": "220000", "name": "\u5409\u6797", "parent_id": "5"}, {
+        "id": "230000",
+        "name": "\u9ed1\u9f99\u6c5f",
+        "parent_id": "5"
+      }, {"id": "310100", "name": "\u4e0a\u6d77", "parent_id": "1"}, {
+        "id": "320000",
+        "name": "\u6c5f\u82cf",
+        "parent_id": "1"
+      }, {"id": "330000", "name": "\u6d59\u6c5f", "parent_id": "1"}, {
+        "id": "340000",
+        "name": "\u5b89\u5fbd",
+        "parent_id": "1"
+      }, {"id": "350000", "name": "\u798f\u5efa", "parent_id": "4"}, {
+        "id": "360000",
+        "name": "\u6c5f\u897f",
+        "parent_id": "1"
+      }, {"id": "370000", "name": "\u5c71\u4e1c", "parent_id": "2"}, {
+        "id": "410000",
+        "name": "\u6cb3\u5357",
+        "parent_id": "3"
+      }, {"id": "420000", "name": "\u6e56\u5317", "parent_id": "3"}, {
+        "id": "430000",
+        "name": "\u6e56\u5357",
+        "parent_id": "3"
+      }, {"id": "440000", "name": "\u5e7f\u4e1c", "parent_id": "4"}, {
+        "id": "450000",
+        "name": "\u5e7f\u897f",
+        "parent_id": "4"
+      }, {"id": "460000", "name": "\u6d77\u5357", "parent_id": "4"}, {
+        "id": "500100",
+        "name": "\u91cd\u5e86",
+        "parent_id": "7"
+      }, {"id": "510000", "name": "\u56db\u5ddd", "parent_id": "7"}, {
+        "id": "520000",
+        "name": "\u8d35\u5dde",
+        "parent_id": "7"
+      }, {"id": "530000", "name": "\u4e91\u5357", "parent_id": "7"}, {
+        "id": "540000",
+        "name": "\u897f\u85cf",
+        "parent_id": "7"
+      }, {"id": "610000", "name": "\u9655\u897f", "parent_id": "6"}, {
+        "id": "620000",
+        "name": "\u7518\u8083",
+        "parent_id": "6"
+      }, {"id": "630000", "name": "\u9752\u6d77", "parent_id": "6"}, {
+        "id": "640000",
+        "name": "\u5b81\u590f",
+        "parent_id": "6"
+      }, {"id": "650000", "name": "\u65b0\u7586", "parent_id": "6"}, {
+        "id": "710000",
+        "name": "\u53f0\u6e7e",
+        "parent_id": "8"
+      }, {"id": "810000", "name": "\u9999\u6e2f", "parent_id": "8"}, {
+        "id": "820000",
+        "name": "\u6fb3\u95e8",
+        "parent_id": "8"
+      }];
     }
 
     function loadCityData(provinceId) {
@@ -1619,6 +1580,79 @@
         }).
         error(function (data, status) {
         });
+    }
+
+    function handleShareData(data) {
+      vm.weshare = data['weshare'];
+      if (vm.weshare.type == 1) {
+        vm.isGroupShareType = true;
+      }
+      vm.toggleState = {0: {open: true, statusText: '收起'}};
+      _.each(vm.weshare.tags, function (value, key) {
+        vm.toggleState[key] = {
+          open: true,
+          statusText: '收起'
+        };
+      });
+      if (vm.weshare.addresses && vm.weshare.addresses.length == 1) {
+        vm.weshare.selectedAddressId = vm.weshare.addresses[0].id;
+      } else if (vm.weshare.addresses && vm.weshare.addresses.length > 1) {
+        vm.weshare.addresses.unshift({id: -1, address: '请选择收货地址'});
+        vm.weshare.selectedAddressId = -1;
+      }
+      vm.isManage = data['is_manage'];
+      vm.canManageShare = data['can_manage_share'];
+      vm.canEditShare = data['can_edit_share'];
+      vm.recommendData = data['recommendData'];
+      vm.currentUser = data['current_user'] || {};
+      vm.weixinInfo = data['weixininfo'];
+      vm.consignee = data['consignee'];
+      vm.myCoupons = data['my_coupons'];
+      vm.weshareSettings = data['weshare_ship_settings'];
+      vm.supportPysZiti = data['support_pys_ziti'];
+      vm.userSubStatus = data['sub_status'];
+      vm.totalBuyCount = data['all_buy_count'];
+      vm.favourableConfig = data['favourable_config'];
+      vm.autoPopCommentData = data['prepare_comment_data'];
+      vm.dliveryTemplate = data['weshare']['deliveryTemplate'];
+      vm.submitRecommendData = {};
+      vm.submitRecommendData.recommend_content = vm.weshare.creator.nickname + '我认识，很靠谱！';
+      vm.submitRecommendData.recommend_user = vm.currentUser.id;
+      vm.submitRecommendData.recommend_share = vm.weshare.id;
+      if (vm.consignee) {
+        if (vm.consignee.offlineStore) {
+          vm.checkedOfflineStore = vm.consignee.offlineStore;
+        }
+        vm.selectedProvince = vm.consignee.province_id;
+        vm.selectedCity = vm.consignee.city_id;
+        if (vm.consignee.city_id) {
+          vm.loadCityData(vm.consignee.province_id);
+        }
+        vm.selectedCounty = vm.consignee.county_id;
+        if (vm.consignee.county_id) {
+          vm.loadCountyData(vm.consignee.city_id);
+        }
+      }
+      if (vm.myCoupons) {
+        vm.useCouponId = vm.myCoupons.CouponItem.id;
+        vm.userCouponReduce = vm.myCoupons.Coupon.reduced_price;
+      }
+      vm.userShareSummery = data['user_share_summery'];
+      if (vm.consignee) {
+        vm.buyerName = vm.consignee.name;
+        vm.buyerMobilePhone = vm.consignee.mobilephone;
+        vm.buyerAddress = vm.consignee.address;
+        vm.buyerPatchAddress = vm.consignee.remark_address;
+      }
+      if (vm.isCreator() || vm.canManageShare) {
+        vm.faqTipText = '反馈消息';
+      }
+      //通知子控制器可以工作了
+      $scope.$broadcast('shareDataHasLoad');
+      //vm.checkShareInfoHeight();
+      //load all comments
+      vm.loadOrderDetail(vm.weshare.id);
+      vm.loadOrderCommentData(vm.weshare.id);
     }
 
 

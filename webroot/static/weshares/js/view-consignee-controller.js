@@ -5,28 +5,18 @@
   function WesharesConsigneeCtrl($scope) {
     var vmc = this;
     vmc.getTabBarItemWidth = getTabBarItemWidth;
-
     vmc.getTabBarStyle = getTabBarStyle;
-
+    vmc.tabBarItemWidth = 33.3;
     var vm = vmc.parent;
-    // 函数
-    vm.showSelectSelfZitiAddressPageFunc = showSelectSelfZitiAddressPageFunc;
-    vm.showSelectKuaiDiAddressPageFunc = showSelectKuaiDiAddressPageFunc;
-    vm.showEditSelfZitiAddressPageFunc = showEditSelfZitiAddressPageFunc;
-    vm.showEditKuaiDiAddressPageFunc = showEditKuaiDiAddressPageFunc;
-    vm.showKuaiDiTabPageFunc = showKuaiDiTabPageFunc;
-    vm.showSelfZitiTabPageFunc = showSelfZitiTabPageFunc;
-    vm.showPysZitiTabPageFunc = showPysZitiTabPageFunc;
-    vm.showPinTuanTabPageFunc = showPinTuanTabPageFunc;
-
-    // 默认一部分初始数据, 将来从接口的json修改
-    vm.hasDefaultKuaiDiDeliveryAddress = false;
-    vm.hasDefaultSelfZitiDeliveryAddress = false;
+    $scope.$on('shareDataHasLoad', function () {
+      //初始化选择哪种快递方式
+      vm.selectShipType = getSelectTypeDefaultVal();
+      vmc.tabBarItemWidth = getTabBarItemWidth();
+    });
 
     active();
     function active() {
     }
-
     function getTabBarItemWidth() {
       var shipTypes = ['pin_tuan', 'kuai_di', 'self_ziti', 'pys_ziti'];
       var num = 0;
@@ -40,80 +30,27 @@
 
 
     function getTabBarStyle() {
-      vmc.tabBarItemWidth = getTabBarItemWidth();
       return 'width: ' + vmc.tabBarItemWidth + '%';
     }
 
-    function showSelectKuaiDiAddressPageFunc()
-    {
-      vm.showTabPage = false;
-      vm.showSelectKuaiDiAddressPage = true;
-      vm.showEditKuaiDiAddressPage = false;
-      vm.showSelectSelfZitiAddressPage = false;
-      vm.showEditSelfZitiAddressPage = false;
-    }
 
-    function showEditKuaiDiAddressPageFunc()
-    {
-      vm.showTabPage = false;
-      vm.showSelectKuaiDiAddressPage = false;
-      vm.showEditKuaiDiAddressPage = true;
-      vm.showSelectSelfZitiAddressPage = false;
-      vm.showEditSelfZitiAddressPage = false;
-    }
-
-    function showSelectSelfZitiAddressPageFunc()
-    {
-      vm.showTabPage = false;
-      vm.showSelectKuaiDiAddressPage = false;
-      vm.showEditKuaiDiAddressPage = false;
-      vm.showSelectSelfZitiAddressPage = true;
-      vm.showEditSelfZitiAddressPage = false;
-    }
-
-    function showEditSelfZitiAddressPageFunc()
-    {
-      vm.showTabPage = false;
-      vm.showSelectKuaiDiAddressPage = false;
-      vm.showEditKuaiDiAddressPage = false;
-      vm.showSelectSelfZitiAddressPage = false;
-      vm.showEditSelfZitiAddressPage = true;
-    }
-
-    function showKuaiDiTabPageFunc() {
-      vm.showSelfZitiAddress = false;
-      vm.showEditAddress = false;
-      vm.showKuaiDiTab = true;
-      vm.showSelfZitiTab = false;
-      vm.showPysZitiTab = false;
-      vm.showPinTuanTab = false;
-    }
-
-    function showSelfZitiTabPageFunc() {
-      vm.showSelfZitiAddress = false;
-      vm.showEditAddress = false;
-      vm.showKuaiDiTab = false;
-      vm.showSelfZitiTab = true;
-      vm.showPysZitiTab = false;
-      vm.showPinTuanTab = false;
-    }
-
-    function showPysZitiTabPageFunc() {
-      vm.showSelfZitiAddress = false;
-      vm.showEditAddress = false;
-      vm.showKuaiDiTab = false;
-      vm.showSelfZitiTab = false;
-      vm.showPysZitiTab = true;
-      vm.showPinTuanTab = false;
-    }
-
-    function showPinTuanTabPageFunc() {
-      vm.showSelfZitiAddress = false;
-      vm.showEditAddress = false;
-      vm.showKuaiDiTab = false;
-      vm.showSelfZitiTab = false;
-      vm.showPysZitiTab = false;
-      vm.showPinTuanTab = true;
+    function getSelectTypeDefaultVal() {
+      if (vm.weshareSettings.pin_tuan && vm.weshareSettings.pin_tuan.status == 1) {
+        vm.shipFee = vm.weshareSettings.pin_tuan.ship_fee;
+        return 3;
+      }
+      if (vm.weshareSettings.kuai_di && vm.weshareSettings.kuai_di.status == 1) {
+        return 0;
+      }
+      if (vm.weshareSettings.self_ziti && vm.weshareSettings.self_ziti.status == 1) {
+        vm.shipFee = vm.weshareSettings.self_ziti.ship_fee;
+        return 1;
+      }
+      if (vm.weshareSettings.pys_ziti && vm.weshareSettings.pys_ziti.status == 1) {
+        vm.shipFee = vm.weshareSettings.pys_ziti.ship_fee;
+        return 2;
+      }
+      return -1;
     }
 
     // To protected access as vmc.parent
