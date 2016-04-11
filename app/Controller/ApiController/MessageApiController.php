@@ -272,8 +272,11 @@ class MessageApiController extends Controller
     public function load_single_comment_detail($share_id, $user_id)
     {
         //根据评论的时间定位到具体的一条评论，[可能存在问题]
+        $query_cond = ['type' => COMMENT_SHARE_TYPE, 'status' => COMMENT_SHOW_STATUS, 'user_id' => $user_id, 'data_id' => $share_id];
         $comment_date = $_REQUEST['comment_date'];
-        $query_cond = ['type' => COMMENT_SHARE_TYPE, 'status' => COMMENT_SHOW_STATUS, 'user_id' => $user_id, 'data_id' => $share_id, 'date(created)' => $comment_date];
+        if(!empty($comment_date)){
+            $query_cond['date(created)'] = $comment_date;
+        }
         $result = $this->WeshareBuy->query_comment($query_cond);
         echo json_encode($result);
         exit();
@@ -300,6 +303,7 @@ class MessageApiController extends Controller
         $share_faqs = array_map(function($item){
             return $item['ShareFaq'];
         },$share_faqs);
+        $share_faqs = array_reverse($share_faqs);
         echo json_encode($share_faqs);
     }
 

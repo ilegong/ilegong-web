@@ -407,20 +407,26 @@ class ShareUtilComponent extends Component
 //            //default share status is not available
 //            $shareInfo['status'] = $share_status;
 //        }
+//    if ($shareInfo['type'] == POOL_SHARE_BUY_TYPE) {
+//        //产品街的分享和渠道价购买的分享refer share id 设置为0
+//        //复制渠道价购买的分享
+//        //报错 不让复制
+//        $shareInfo['refer_share_id'] = 0;
+//    }
         //check share type
-        if ($shareInfo['type'] == FROM_POOL_SHARE_TYPE) {
+        if ($shareInfo['type'] == POOL_SHARE_TYPE) {
+            //产品街分享
+            //复制产品街分享
+            $shareInfo['refer_share_id'] = $shareId;
+        } elseif ($shareInfo['type'] == FROM_POOL_SHARE_TYPE) {
             //不是产品街的分享重新开团设置 refer_share_id
             //先不实时更新分享的信息，有可能团长自己更新，只复制物流和商品信息
+            //复制从产品街发出的分享
             $shareId = $shareInfo['refer_share_id'];
-        } elseif ($shareInfo['type'] == POOL_SHARE_TYPE) {
-            //产品街分享
-            $shareInfo['refer_share_id'] = 0;
-        } elseif ($shareInfo['type'] == POOL_SHARE_BUY_TYPE) {
-            //产品街的分享和渠道价购买的分享refer share id 设置为0
-            $shareInfo['refer_share_id'] = 0;
         } else {
             //默认复制分享
             //set refer share id
+            //复制正常的分享
             $shareInfo['refer_share_id'] = $shareId;
             $shareInfo['type'] = 0; //默认分享类型
         }
@@ -442,6 +448,7 @@ class ShareUtilComponent extends Component
         $newShareInfo = $WeshareM->save($shareInfo);
         if ($newShareInfo) {
             $newShareId = $newShareInfo['Weshare']['id'];
+            $this->log('clone share original id ' . $shareId . ' result share id ' . $newShareId . ' type ' . $newShareInfo['type'], LOG_DEBUG);
             //clone product
             $this->cloneShareProduct($newShareId, $shareId, $share_limit);
             //clone address

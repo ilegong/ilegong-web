@@ -408,7 +408,7 @@ class WeshareBuyComponent extends Component
         return json_decode($sharer_comment_data, true);
     }
 
-    private function query_comment($conds)
+    public function query_comment($conds)
     {
         $commentM = ClassRegistry::init('Comment');
         $commentReplyM = ClassRegistry::init('CommentReply');
