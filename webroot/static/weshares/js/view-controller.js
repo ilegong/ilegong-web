@@ -13,9 +13,6 @@
     vm.readMoreBtnText = '全文';
     vm.hideMoreShareInfo = false;
     vm.shouldShowReadMoreBtn = false;
-    vm.startNewGroupShare = false;
-    vm.chooseOfflineAddress = null;
-    vm.isGroupShareType = false;
     OfflineStore.ChooseOfflineStore(vm);
     vm.statusMap = {
       0: '进行中',
@@ -37,7 +34,6 @@
     vm.validateProducts = validateProducts;
     vm.validateLocation = validateLocation;
     vm.buyProducts = buyProducts;
-    vm.startGroupShare = startGroupShare;
     vm.validateMobile = validateMobile;
     vm.validateUserName = validateUserName;
     vm.validateUserAddress = validateUserAddress;
@@ -68,7 +64,6 @@
     vm.getOrderCommentLength = getOrderCommentLength;
     vm.initWeshareData = initWeshareData;
     vm.sortOrders = sortOrders;
-    vm.combineShareBuyData = combineShareBuyData;
     vm.closeCommentDialog = closeCommentDialog;
     vm.notifyUserToComment = notifyUserToComment;
     vm.loadSharerAllComments = loadSharerAllComments;
@@ -91,34 +86,17 @@
     vm.submitRecommend = submitRecommend;
     vm.validRecommendContent = validRecommendContent;
     vm.checkHasUnRead = checkHasUnRead;
-    vm.getProcessPrepaidStatus = getProcessPrepaidStatus;
-    vm.toggleTag = toggleTag;
-    vm.supportGroupBuy = supportGroupBuy;
-    vm.offlineAddressData = null;
-    vm.loadOfflineAddressData = loadOfflineAddressData;
     vm.setShipFee = setShipFee;
-    vm.newGroupShare = newGroupShare;
     vm.redirectFaq = redirectFaq;
-    vm.checkUserHasStartGroupShare = checkUserHasStartGroupShare;
     vm.chatToUser = chatToUser;
     vm.calProxyRebateFee = calProxyRebateFee;
     vm.loadOrderCommentData = loadOrderCommentData;
     vm.isShareManager = isShareManager;
-    vm.isShowExpressInfoBtn = isShowExpressInfoBtn;
-    vm.isShowCallLogisticsBtn = isShowCallLogisticsBtn;
-    vm.isShowCancelLogisticsBtn = isShowCancelLogisticsBtn;
-    vm.handleCallLogistics = handleCallLogistics;
-    vm.handleCancelLogistics = handleCancelLogistics;
-    vm.showOrderExpressInfo = showOrderExpressInfo;
-    vm.getLogisticsBtnText = getLogisticsBtnText;
-    vm.showLogisticsStatusInfo = showLogisticsStatusInfo;
-    vm.getLogisticsStatusText = getLogisticsStatusText;
     vm.initProvince = initProvince;
     vm.loadCityData = loadCityData;
     vm.loadCountyData = loadCounty;
     vm.calculateShipFee = calculateShipFee;
     vm.unSubSharer = unSubSharer;
-    vm.childShareDetail = null;
     vm.currentUserOrderCount = 0;
     vm.totalBuyCount = 0;
     vm.rebateFee = 0;
@@ -170,33 +148,6 @@
         });
     }
 
-    /**
-     * 获取线下自提点和简单的购买数据购买数据
-     * @param share_id
-     */
-    function loadOfflineAddressData(share_id) {
-      $http({
-        method: 'GET',
-        url: '/weshares/get_offline_address_detail/' + share_id + '.json',
-        cache: $templateCache
-      }).
-        success(function (data, status) {
-          vm.offlineAddressData = data;
-        }).
-        error(function (data, status) {
-          $log.log(data);
-        });
-    }
-
-    function checkUserHasStartGroupShare(userId) {
-      for (key in vm.childShareDetail) {
-        var itemShare = vm.childShareDetail[key];
-        if (itemShare['creator'] == userId) {
-          return true;
-        }
-      }
-      return false;
-    }
 
     function chatToUser(userId) {
       if (userId == vm.currentUser.id) {
@@ -223,14 +174,7 @@
       }).
         success(function (data, status) {
           vm.ordersDetail = data['ordersDetail'];
-          vm.childShareDetail = data['childShareData']['child_share_data'];
-          vm.childShareDetailUsers = data['childShareData']['child_share_user_infos'];
-          vm.childShareDetailUsersLevel = data['childShareData']['child_share_level_data'];
-          //vm.shipTypes = data['ordersDetail']['ship_types'];
           vm.rebateLogs = data['ordersDetail']['rebate_logs'];
-          vm.logisticsOrderData = data['logisticsOrderData'];
-          //vm.sortOrders();
-          vm.combineShareBuyData();
           setWeiXinShareParams();
           //check user is auto comment
           if (vm.autoPopCommentData['comment_order_info']) {
@@ -310,17 +254,6 @@
       vm.checkHasUnRead();
     }
 
-    /**
-     * 订单数据和拼团数据组合
-     */
-    function combineShareBuyData() {
-      var insertIndex = vm.currentUserOrderCount;
-      for (childShareItem in vm.childShareDetail) {
-        vm.ordersDetail.orders.splice(insertIndex, 0, vm.childShareDetail[childShareItem]);
-        insertIndex++;
-      }
-    }
-
     function sortOrders() {
       if (!vm.isCreator()) {
         vm.ordersDetail.orders = _.sortBy(vm.ordersDetail.orders, function (order) {
@@ -382,9 +315,7 @@
       vm.showOfflineStoreDetailView = false;
       vm.chooseOfflineStoreView = false;
       vm.showBalanceView = false;
-      vm.showStartGroupShareView = false;
       vm.showShareDetailView = true;
-      vm.startNewGroupShare = false;
     }
 
     function toShareDetailView($share_id) {
@@ -685,21 +616,6 @@
     }
 
 
-    function startGroupShare() {
-      if (vm.checkUserHasStartGroupShare(vm.currentUser.id)) {
-        alert('您已经发起一次拼团了');
-        return false;
-      }
-      vm.selectShipType = 3;
-      vm.shipFee = vm.weshareSettings.pin_tuan.ship_fee;
-      vm.showGroupShareTipDialog = false;
-      vm.showLayer = false;
-      vm.showShareDetailView = false;
-      vm.showStartGroupShareView = true;
-      vm.chooseShipType = false;
-      vm.startNewGroupShare = true;
-    }
-
     function submitOrder(paymentType) {
       if (!vm.validateOrderData()) {
         return false;
@@ -727,23 +643,13 @@
       if (vm.selectShipType == 2) {
         ship_info['address_id'] = vm.checkedOfflineStore.id;
       }
-      //邻里拼团
-      if (vm.selectShipType == 3 && !vm.startNewGroupShare) {
-        if (!vm.chooseOfflineAddress) {
-          vm.offlineAddressHasError = true;
-          return;
-        }
-        vm.buyerAddress = vm.childShareDetail[vm.chooseOfflineAddress]['address'];
-        ship_info['weshare_id'] = vm.chooseOfflineAddress;
-      }
+
       var orderData = {
         weshare_id: vm.weshare.id,
         rebate_log_id: vm.rebateLogId,
         products: submit_products,
         ship_info: ship_info,
         remark: vm.buyerRemark,
-        is_group_share: vm.isGroupShareType,
-        start_new_group_share: vm.startNewGroupShare,
         buyer: {
           name: vm.buyerName,
           mobilephone: vm.buyerMobilePhone,
@@ -780,30 +686,6 @@
       });
     }
 
-    //发起拼团
-    function newGroupShare() {
-      if (vm.checkUserHasStartGroupShare(vm.currentUser.id)) {
-        alert('您已经发起一次拼团了');
-        return false;
-      }
-      //valid address
-      if (vm.validateUserAddress()) {
-        return false;
-      }
-      var cloneShareData = {
-        weshare_id: vm.weshare.id,
-        address: vm.buyerAddress,
-        business_remark: vm.buyerRemark
-      };
-      $http.post('/weshares/start_new_group_share', cloneShareData).success(function (data) {
-        if (data.success) {
-          window.location.href = '/weshares/view/' + data.shareId;
-        } else {
-          alert('提交失败.请联系客服..');
-        }
-      }).error(function () {
-      });
-    }
 
     //重新开团
     function cloneShare() {
@@ -1104,24 +986,6 @@
       vm.submitTempCommentData.share_id = order.member_id;
     }
 
-    function getProcessPrepaidStatus(status) {
-      if (status == 25) {
-        return '金额待定';
-      }
-      if (status == 26) {
-        return '待补款';
-      }
-      if (status == 27) {
-        return '已补款';
-      }
-      if (status == 28) {
-        return '待退差价';
-      }
-      if (status == 29) {
-        return '差价已退';
-      }
-    }
-
     function getStatusName(status, orderType) {
       if (status == 1) {
         return '待发货';
@@ -1288,145 +1152,6 @@
       return false;
     }
 
-    function isShowCancelLogisticsBtn(order) {
-      if (vm.isShowCallLogisticsBtn(order)) {
-        var orderId = order['id'];
-        var logisticsOrder = vm.logisticsOrderData[orderId];
-        if (logisticsOrder && logisticsOrder['status'] == 1) {
-          return true;
-        }
-      }
-      return false;
-    }
-
-    function isShowCallLogisticsBtn(order) {
-      //草莓可以呼叫闪送
-      if (vm.weshare.id == 1305 || vm.weshare.id == 1585) {
-        if (order['ship_mark'] == 'pys_ziti' && order['status'] == 2 && vm.isOwner(order)) {
-          return true;
-        }
-      }
-      return false;
-    }
-
-    function isShowExpressInfoBtn(order) {
-      if (order['ship_mark'] == 'kuai_di') {
-        if (order.status > 1 && vm.isOwner(order)) {
-          return true;
-        }
-      }
-      return false;
-    }
-
-    function handleCancelLogistics(order) {
-      var orderId = order['id'];
-      if (vm.logisticsOrderData[orderId]) {
-        var logisticsOrder = vm.logisticsOrderData[orderId];
-        if (logisticsOrder['status'] == 1 && logisticsOrder['business_order_id']) {
-          var logisticsOrderId = logisticsOrder['id'];
-          $http.get('/logistics/cancel_rr_logistics_order/' + logisticsOrderId).success(function (data) {
-            if (data['status'] == 1) {
-              vm.logisticsOrderData[orderId]['status'] = 4;
-              vm.logisticsOrderData[orderId]['business_order_id'] = data['orderNo'];
-            } else {
-              alert(data['msg']);
-            }
-          }).error(function () {
-            alert('呼叫失败，请联系客服。');
-          });
-        } else {
-          alert("快递已接单，不能取消。");
-        }
-        return;
-      }
-    }
-
-    function handleCallLogistics(order) {
-      var orderId = order['id'];
-      //订单已经叫过快递
-      if (vm.logisticsOrderData[orderId]) {
-        var logisticsOrder = vm.logisticsOrderData[orderId];
-        if (logisticsOrder['status'] == 5 || (logisticsOrder['status'] == 1 && !logisticsOrder['business_order_id'])) {
-          var logisticsOrderId = logisticsOrder['id'];
-          $http.get('/logistics/re_confirm_rr_logistics_order/' + logisticsOrderId).success(function (data) {
-            if (data['status'] == 1) {
-              vm.logisticsOrderData[orderId]['status'] = 1;
-              vm.logisticsOrderData[orderId]['business_order_id'] = data['orderNo'];
-            } else {
-              alert(data['msg']);
-            }
-          }).error(function () {
-            alert('呼叫失败，请联系客服。');
-          });
-        } else {
-          if (logisticsOrder['status'] == 1) {
-            alert('等待快递员接单');
-          }
-          if (logisticsOrder['status'] == 2) {
-            alert('快递已接单，请耐心等候');
-          }
-        }
-        return;
-      }
-      window.location.href = '/logistics/rr_logistics/' + orderId;
-    }
-
-    function getLogisticsStatusText(order) {
-      var orderId = order['id'];
-      if (vm.logisticsOrderData && vm.logisticsOrderData[orderId]) {
-        var logisticsOrder = vm.logisticsOrderData[orderId];
-        if (logisticsOrder['status'] == 5) {
-          return '快递已经取消(超时或者自己取消)';
-        }
-      }
-      return '';
-    }
-
-    function showLogisticsStatusInfo(order) {
-      //草莓可以呼叫闪送
-      if (vm.isShowCallLogisticsBtn(order)) {
-        var orderId = order['id'];
-        if (vm.logisticsOrderData && vm.logisticsOrderData[orderId]) {
-          var logisticsOrder = vm.logisticsOrderData[orderId];
-          if (logisticsOrder['status'] == 5) {
-            return true;
-          }
-        }
-      }
-      return false;
-    }
-
-    function getLogisticsBtnText(order) {
-      var orderId = order['id'];
-      //订单已经叫过快递
-      if (vm.logisticsOrderData && vm.logisticsOrderData[orderId]) {
-        var logisticsOrder = vm.logisticsOrderData[orderId];
-        if (logisticsOrder['status'] == 1) {
-          if (logisticsOrder['business_order_id']) {
-            return '待接单';
-          }
-          return '重新叫快递';
-        }
-        if (logisticsOrder['status'] == 2) {
-          return '已接单';
-        }
-        if (logisticsOrder['status'] == 3) {
-          return '已取货';
-        }
-        if (logisticsOrder['status'] == 4) {
-          return '已签收';
-        }
-        if (logisticsOrder['status'] == 5) {
-          return '重新叫快递';
-        }
-      }
-      return '叫快递';
-    }
-
-    function showOrderExpressInfo(order) {
-      window.location.href = '/weshares/express_info/' + order.id;
-      return;
-    }
 
     function calculateShipFee(deliveryTemplate, provinceId, goodNum, goodWeight) {
       var shipFee = 0;
@@ -1470,19 +1195,6 @@
         }
       }
       return shipFee;
-    }
-
-    function supportGroupBuy() {
-      if (vm.weshareSettings && vm.weshareSettings.pin_tuan && vm.weshareSettings.pin_tuan.status == 1) {
-        return true;
-      }
-      return false;
-    }
-
-    function toggleTag(tag) {
-      var currentToggleState = vm.toggleState[tag];
-      currentToggleState['open'] = !currentToggleState['open'];
-      currentToggleState['statusText'] = currentToggleState['open'] ? '收起' : '展开';
     }
 
     function initProvince() {
@@ -1578,16 +1290,6 @@
 
     function handleShareData(data) {
       vm.weshare = data['weshare'];
-      if (vm.weshare.type == 1) {
-        vm.isGroupShareType = true;
-      }
-      vm.toggleState = {0: {open: true, statusText: '收起'}};
-      _.each(vm.weshare.tags, function (value, key) {
-        vm.toggleState[key] = {
-          open: true,
-          statusText: '收起'
-        };
-      });
       if (vm.weshare.addresses && vm.weshare.addresses.length == 1) {
         vm.weshare.selectedAddressId = vm.weshare.addresses[0].id;
       } else if (vm.weshare.addresses && vm.weshare.addresses.length > 1) {

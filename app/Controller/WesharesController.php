@@ -249,19 +249,6 @@ class WesharesController extends AppController
         return;
     }
 
-    /**
-     * @param $shareId
-     * ajax 获取购买信息 拆分优化加载
-     * 暂时不使用了
-     */
-    public function get_share_order_detail($shareId)
-    {
-        $this->autoRender = false;
-        $child_share_data = $this->WeshareBuy->get_child_share_items($shareId);
-        $ordersDetail = $this->get_weshare_buy_info($shareId, true);
-        echo json_encode(array('ordersDetail' => $ordersDetail, 'childShareData' => $child_share_data));
-        return;
-    }
 
     /**
      * @param $shareId
@@ -271,17 +258,11 @@ class WesharesController extends AppController
     {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
-        $child_share_data = $this->WeshareBuy->get_child_share_items($shareId);
+        //$child_share_data = $this->WeshareBuy->get_child_share_items($shareId);
         $ordersDetail = $this->WeshareBuy->get_current_user_share_order_data($shareId, $uid);
         $share_summery = $this->WeshareBuy->get_share_buy_summery($shareId);
         $ordersDetail['summery'] = $share_summery;
-        $logistics_order_data = array();
-        //小芝麻草莓
-        if ($shareId == 1305 || $shareId == 1585) {
-            $logistics_order_data = $this->WeshareBuy->get_current_user_logistics_order_data($shareId, $uid);
-        }
-        echo json_encode(array('ordersDetail' => $ordersDetail, 'childShareData' => $child_share_data, 'logisticsOrderData' => $logistics_order_data));
-        //echo json_encode(array('ordersDetail' => $ordersDetail, 'childShareData' => $child_share_data));
+        echo json_encode(array('ordersDetail' => $ordersDetail));
         exit();
     }
 
@@ -475,8 +456,6 @@ class WesharesController extends AppController
         $business_remark = $postDataArray['remark'];
         $buyerData = $postDataArray['buyer'];
         $rebateLogId = $postDataArray['rebate_log_id'];
-        $is_start_new_group_share = $postDataArray['start_new_group_share'];
-        $is_group_share_type = $postDataArray['is_group_share'];
         //购物车
         $cart = array();
         try {
@@ -516,11 +495,7 @@ class WesharesController extends AppController
             //邮费是按分存取的
             $address = $this->get_order_address($weshareId, $shipInfo, $buyerData, $uid);
             $orderData = array('cate_id' => $rebateLogId, 'creator' => $uid, 'consignee_address' => $address, 'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $buyerData['name'], 'consignee_mobilephone' => $buyerData['mobilephone'], 'business_remark' => $business_remark);
-            $process_shi_mark_result = $this->process_order_ship_mark($shipType, $orderData, $is_group_share_type);
-            //拼团
-            if ($process_shi_mark_result == self::PROCESS_SHIP_MARK_UNFINISHED_RESULT) {
-                $this->process_ship_group($orderData, $shipInfo, $is_start_new_group_share, $weshareId, $uid, $address, $business_remark);
-            }
+            $this->process_order_ship_mark($shipType, $orderData);
             $order = $this->Order->save($orderData);
             $orderId = $order['Order']['id'];
             $totalPrice = 0;
@@ -850,16 +825,16 @@ class WesharesController extends AppController
     {
         $this->autoRender = false;
         $weshare_id = $_REQUEST['share_id'];
-        $refer_share_id = $_REQUEST['refer_share_id'];
-        $address = $_REQUEST['address'];
-        $msg = $_REQUEST['msg'];
+//        $refer_share_id = $_REQUEST['refer_share_id'];
+//        $address = $_REQUEST['address'];
+//        $msg = $_REQUEST['msg'];
         //update share status
         $this->Weshare->updateAll(array('order_status' => WESHARE_ORDER_STATUS_SHIPPED), array('id' => $weshare_id, 'order_status' => WESHARE_ORDER_STATUS_WAIT_SHIP));
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_1', '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_1', '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_0', '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
-        $this->WeshareBuy->send_group_share_product_arrival_msg($weshare_id, $refer_share_id, $msg, $address);
+        //$this->WeshareBuy->send_group_share_product_arrival_msg($weshare_id, $refer_share_id, $msg, $address);
         echo json_encode(array('success' => true));
         return;
     }
@@ -1315,16 +1290,6 @@ class WesharesController extends AppController
 
 
     /**
-     * @param $weshareId
-     * @param $all
-     */
-    private function get_weshare_view_order_info($weshareId, $all = 0)
-    {
-        //todo load share detail view order data
-
-    }
-
-    /**
      * @param $buyerData
      * @param $uid
      * @param $shipType
@@ -1725,36 +1690,22 @@ class WesharesController extends AppController
     /**
      * @param $shipType
      * @param $orderData
-     * @param $is_group_share_type
      * @return int
      * 用户下单根据选择的物流类型设置数据
      */
-    private function process_order_ship_mark($shipType, &$orderData, $is_group_share_type)
+    private function process_order_ship_mark($shipType, &$orderData)
     {
         if ($shipType == SHARE_SHIP_PYS_ZITI) {
             $orderData['ship_mark'] = SHARE_SHIP_PYS_ZITI_TAG;
             return self::PROCESS_SHIP_MARK_DEFAULT_RESULT;
         }
         if ($shipType == SHARE_SHIP_SELF_ZITI) {
-            //check is group share
-            //拼团标示另一种状态
-            if ($is_group_share_type) {
-                //mark group share
-                $orderData['ship_mark'] = SHARE_SHIP_GROUP_TAG;
-            } else {
-                $orderData['ship_mark'] = SHARE_SHIP_SELF_ZITI_TAG;
-            }
+            $orderData['ship_mark'] = SHARE_SHIP_SELF_ZITI_TAG;
             return self::PROCESS_SHIP_MARK_DEFAULT_RESULT;
         }
         if ($shipType == SHARE_SHIP_KUAIDI) {
             $orderData['ship_mark'] = SHARE_SHIP_KUAIDI_TAG;
             return self::PROCESS_SHIP_MARK_DEFAULT_RESULT;
-        }
-        //remark share ship group or create
-        if ($shipType == SHARE_SHIP_GROUP) {
-            //check is start share or order in offline address
-            $orderData['ship_mark'] = SHARE_SHIP_GROUP_TAG;
-            return self::PROCESS_SHIP_MARK_UNFINISHED_RESULT;
         }
     }
 
@@ -1773,10 +1724,6 @@ class WesharesController extends AppController
         return;
     }
 
-    public function shipped_share($shareId)
-    {
-
-    }
 
     /**
      * @param $orderId
