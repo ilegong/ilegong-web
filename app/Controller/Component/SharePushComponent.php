@@ -42,8 +42,8 @@ class SharePushComponent extends Component
         $this->JPush->push(strval($faqData['receiver']), $title, $msg, self::$MSG_FAQ_TYPE, ['$msg' => json_encode($msg), 'users' => json_encode($users)]);
     }
 
-
-    private function get_users($user_ids){
+    private function get_users($user_ids)
+    {
         $userM = ClassRegistry::init('User');
         $users = $userM->get_users_simple_info($user_ids);
         $users = Hash::combine($users, '{n}.User.id', '{n}.User');
