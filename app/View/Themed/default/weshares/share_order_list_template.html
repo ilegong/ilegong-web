@@ -115,12 +115,10 @@
                         <input type="text" class="form-control" name="ship_code" placeholder="快递单号">
                     </div>
                     <button class="btn btn-primary set-order-ship-code" data-order-id="{{$item_order['id']}}" data-weshare-id="{{$weshareId}}">确认发货</button>
-                      <a class="btn btn-primary" href="/share_faq/faq/{{$item_order['member_id']}}/{{$item_order['creator']}}">发私信</a>
                 </div>
                 {{else}}
                     <div class="form" style="display: inline;">
                         <button class="btn btn-primary set-order-shipped" data-order-id="{{$item_order['id']}}" data-weshare-id="{{$weshareId}}">确认发货</button>
-                      <a class="btn btn-primary" href="/share_faq/faq/{{$item_order['member_id']}}/{{$item_order['creator']}}">发私信</a>
                     </div>
                 {{/if}}
             {{/if}}
@@ -138,10 +136,8 @@
             </button>
             {{/if}}
             <!--remark order-->
-            <button id="remark-order-{{$item_order['id']}}" class="btn btn-info btn-xs pull-right remark-order" data-order-name="{{$item_order['consignee_name']}}" data-order-remark="{{$item_order['business_remark']}}"
-                    data-order-id="{{$item_order['id']}}"
-                    style="margin-bottom: 5px; margin-left: 5px;">标记订单
-            </button>
+            <button id="remark-order-{{$item_order['id']}}" class="btn btn-info btn-xs pull-right remark-order" data-order-name="{{$item_order['consignee_name']}}" data-order-remark="{{$item_order['business_remark']}}" data-order-id="{{$item_order['id']}}" style="margin-bottom: 5px; margin-left: 5px;">标记订单</button>
+            <a class="btn btn-info btn-xs pull-right" href="/share_faq/faq/{{$item_order['member_id']}}/{{$item_order['creator']}}">发私信</a>
         </div>
     </div>
 </div>
