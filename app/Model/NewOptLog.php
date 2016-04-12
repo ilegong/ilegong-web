@@ -40,7 +40,7 @@ class NewOptLog extends AppModel
             'conditions' => array_merge($conditions, [
                 'NewOptLog.deleted' => DELETED_NO,
                 'NewOptLog.time < ' => date('Y-m-d H:i:s', $time),
-                'Weshare.status' => WESHARE_NORMAL_STATUS,
+                'Weshare.status' => WESHARE_STATUS_NORMAL,
             ]),
             'fields' => [
                 'NewOptLog.*',

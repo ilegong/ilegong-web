@@ -362,7 +362,7 @@ class ShareManageController extends AppController
         }
 
         $this->log('Admin '.$uid.' tries to clone share '.$share_id.' to pool products', LOG_INFO);
-        $result = $this->ShareUtil->cloneShare($share_id, null,POOL_SHARE_TYPE, WESHARE_DELETE_STATUS, 0);
+        $result = $this->ShareUtil->cloneShare($share_id, null,POOL_SHARE_TYPE, WESHARE_STATUS_DELETED, 0);
         if(!$result['success']){
             throw new Exception("复制到产品街出错，请联系管理员");
         }
