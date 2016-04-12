@@ -70,14 +70,14 @@ class ShareProductPoolController extends AppController {
             exit();
         }
 
-        $this->log('Proxy '.$uid.' tries to clone share '.$share_id, LOG_INFO);
+        $this->log('Proxy '.$uid.' tries to clone share from pool products '.$share_id, LOG_INFO);
         $result = $this->ShareUtil->cloneShare($share_id, $uid, SHARE_TYPE_POOL);
         if ($result['success']) {
             $this->init_share_authorize($result['shareId'], $share_id, $uid);
-            $this->log('Proxy '.$uid.'  clones share '.$share_id + ' with id '.$result['shareId'].' successfully', LOG_INFO);
+            $this->log('Proxy '.$uid.'  clones share '.$result['shareId'].' from pool products '.$share_id.' successfully', LOG_INFO);
         }
         else{
-            $this->log('Proxy '.$uid.' failed to clone share '.$share_id, LOG_INFO);
+            $this->log('Proxy '.$uid.' failed to clone share from pool products '.$share_id, LOG_INFO);
         }
         echo json_encode($result);
         exit();
