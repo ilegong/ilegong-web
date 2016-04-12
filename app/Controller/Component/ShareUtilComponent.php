@@ -433,23 +433,29 @@ class ShareUtilComponent extends Component
             return array('success' => false);
         }
 
-        $newShareId = $newShareInfo['Weshare']['id'];
-        //clone product
-        $this->cloneShareProduct($newShareId, $newShareInfo['Weshare']['refer_share_id'], $share_limit);
-        //clone address
-        $this->cloneShareAddresses($newShareId, $newShareInfo['Weshare']['refer_share_id']);
-        //clone ship setting
-        $this->cloneShareShipSettings($newShareId, $newShareInfo['Weshare']['refer_share_id']);
-        //clone rebate set
-        $this->cloneShareRebateSet($newShareId, $newShareInfo['Weshare']['refer_share_id']);
-        //clone share delivery template
-        $this->cloneDeliveryTemplate($newShareId, $newShareInfo['Weshare']['refer_share_id'], $newShareInfo['Weshare']['creator']);
+        try {
+            $newShareId = $newShareInfo['Weshare']['id'];
+            //clone product
+            $this->cloneShareProduct($newShareId, $newShareInfo['Weshare']['refer_share_id'], $share_limit);
+            //clone address
+            $this->cloneShareAddresses($newShareId, $newShareInfo['Weshare']['refer_share_id']);
+            //clone ship setting
+            $this->cloneShareShipSettings($newShareId, $newShareInfo['Weshare']['refer_share_id']);
+            //clone rebate set
+            $this->cloneShareRebateSet($newShareId, $newShareInfo['Weshare']['refer_share_id']);
+            //clone share delivery template
+            $this->cloneDeliveryTemplate($newShareId, $newShareInfo['Weshare']['refer_share_id'], $newShareInfo['Weshare']['creator']);
 
-        $this->authorize_weshare_after_cloning($newShareInfo);
+            $this->authorize_weshare_after_cloning($newShareInfo);
 
-        Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $newShareInfo['Weshare']['creator'], '');
-        $dataSource->commit();
-        return array('shareId' => $newShareId, 'success' => true);
+            Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $newShareInfo['Weshare']['creator'], '');
+            $dataSource->commit();
+            return array('shareId' => $newShareId, 'success' => true);
+        }catch (Exception $e) {
+            $this->log($e, LOG_ERR);
+            $dataSource->rollback();
+            return array('success' => false);
+        }
     }
 
     /**
@@ -466,6 +472,10 @@ class ShareUtilComponent extends Component
                 'weshare_id' => $old_share_id
             )
         ));
+        if(empty($shareProducts)){
+            throw new Exception("No share products found for refer share id ".$old_share_id);
+        }
+
         $newProducts = array();
         foreach ($shareProducts as $itemShareProduct) {
             $itemShareProduct = $itemShareProduct['WeshareProduct'];
@@ -479,7 +489,7 @@ class ShareUtilComponent extends Component
         }
         $WeshareProductM->id = null;
         $WeshareProductM->saveAll($newProducts);
-        return;
+        return true;
     }
 
     /**
