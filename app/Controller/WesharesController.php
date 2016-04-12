@@ -1,9 +1,10 @@
 <?php
+
 class WesharesController extends AppController
 {
     var $uses =
         array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem',
-        'SharerShipOption', 'WeshareShipSetting', 'OfflineStore', 'Comment', 'RebateTrackLog', 'ProxyRebatePercent', 'ShareUserBind', 'UserSubReason', 'ShareFavourableConfig', 'ShareAuthority');
+            'SharerShipOption', 'WeshareShipSetting', 'OfflineStore', 'Comment', 'RebateTrackLog', 'ProxyRebatePercent', 'ShareUserBind', 'UserSubReason', 'ShareFavourableConfig', 'ShareAuthority');
 
     var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
 
@@ -503,14 +504,6 @@ class WesharesController extends AppController
             $cart_good_weight = 0;
             foreach ($weshareProducts as $p) {
                 $item = array();
-                //check product is tbd to set order prepaid
-                $tbd = $p['WeshareProduct']['tbd'];
-                //商品价格待定
-                if ($tbd == 1) {
-                    //预付
-                    $is_prepaid = 1;
-                    $item['confirm_price'] = 0;
-                }
                 $pid = $p['WeshareProduct']['id'];
                 $num = $productIdNumMap[$pid];
                 $cart_good_num = $cart_good_num + $num;
@@ -1104,7 +1097,6 @@ class WesharesController extends AppController
             $tasks[] = array('url' => "/weshares/send_new_share_msg_task/" . $shareId . "/" . $pageSize . "/" . $offset);
         }
         $ret = $this->RedisQueue->add_tasks('tasks', $tasks);
-        //$this->WeshareBuy->send_new_share_msg($shareId);
         echo json_encode(array('success' => true, 'ret' => $ret));
         return;
     }
@@ -1431,7 +1423,6 @@ class WesharesController extends AppController
             'conditions' => array('type' => ORDER_TYPE_WESHARE_BUY, 'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED), 'member_id' => $weshareId),
             'fields' => array('id')
         ));
-        //$total = $this->RequestedItem->find('all', array(array('fields' => array('sum(Model.cost * Model.quantity)   AS ctotal'), 'conditions'=>array('RequestedItem.purchase_request_id'=>$this->params['named']['po_id']));
         $order_ids = Hash::extract($orders, '{n}.Order.id');
         $product_id = $weshareProduct['WeshareProduct']['id'];
         if (!empty($order_ids)) {
@@ -1585,17 +1576,12 @@ class WesharesController extends AppController
         if ($patchAddress == null) {
             $patchAddress = '';
         }
-        if ($shipType == SHARE_SHIP_PYS_ZITI || $shipType == SHARE_SHIP_KUAIDI) {
-            //自提
-            if ($shipType == SHARE_SHIP_PYS_ZITI) {
-                $offline_store_id = $addressId;
-            }
-            $this->setShareConsignees($buyerData, $uid, $shipType, $offline_store_id);
-            if ($shipType == SHARE_SHIP_KUAIDI) {
-                $location_address = $this->get_address_location($buyerData);
-                return $location_address . $customAddress;
-            }
+        //快递
+        if ($shipType == SHARE_SHIP_KUAIDI) {
+            $location_address = $this->get_address_location($buyerData);
+            return $location_address . $customAddress;
         }
+        //自有自提
         if ($shipType == SHARE_SHIP_SELF_ZITI) {
             $tinyAddress = $this->WeshareAddress->find('first', array(
                 'conditions' => array(
@@ -1609,13 +1595,15 @@ class WesharesController extends AppController
             }
             return $address;
         }
+        //朋友说自提
         if ($shipType == SHARE_SHIP_PYS_ZITI) {
+            if ($shipType == SHARE_SHIP_PYS_ZITI) {
+                $offline_store_id = $addressId;
+            }
+            $this->setShareConsignees($buyerData, $uid, $shipType, $offline_store_id);
             $offline_store = $this->OfflineStore->findById($addressId);
             $address = $offline_store['OfflineStore']['name'];
             return $address;
-        }
-        if ($shipType == SHARE_SHIP_GROUP) {
-            return $customAddress;
         }
     }
 
@@ -1821,8 +1809,9 @@ class WesharesController extends AppController
         return;
     }
 
-    public function new_user_guide(){
-        $this->layout=null;
+    public function new_user_guide()
+    {
+        $this->layout = null;
     }
 
     /**
