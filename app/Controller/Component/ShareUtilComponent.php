@@ -395,61 +395,58 @@ class ShareUtilComponent extends Component
             )
         ));
         $shareInfo = $shareInfo['Weshare'];
+
+        if (!empty($uid)) {
+            $shareInfo['creator'] = $uid;
+            //检查并设置用户团长
+            $this->check_and_save_default_level($uid);
+        }
+        //reset type 设置用户类型
+        if (!empty($type)) {
+            $shareInfo['type'] = $type;
+        }
+
+        $WeshareM->id = null;
         $shareInfo['id'] = null;
         $shareInfo['created'] = date('Y-m-d H:i:s');
         $shareInfo['status'] = $share_status; //分享状态
         $shareInfo['settlement'] = 0; //打款状态为未打款
         //order status offline address id
 
-        // 从普通分享上产品街
         if ($shareInfo['type'] == SHARE_TYPE_POOL_SELF) {
-            //产品街分享
-            //复制产品街分享
-            $shareInfo['refer_share_id'] = $shareId;
+            // 从普通分享上产品街
+            $shareInfo['refer_share_id'] = 0;
         } elseif ($shareInfo['type'] == SHARE_TYPE_POOL) {
-            //不是产品街的分享重新开团设置 refer_share_id
-            //先不实时更新分享的信息，有可能团长自己更新，只复制物流和商品信息
-            //复制从产品街发出的分享
+            // 产品街的分享（重新开团；或者手工复制）
             $shareId = $shareInfo['refer_share_id'];
         } else {
-            //默认复制分享
-            //set refer share id
-            //复制正常的分享
+            // 默认的分享（重新开团；或者手工复制）
             $shareInfo['refer_share_id'] = $shareId;
-            $shareInfo['type'] = 0; //默认分享类型
         }
-        //reset type 设置用户类型
-        if (!empty($type)) {
-            $shareInfo['type'] = $type;
-        }
-        if (!empty($uid)) {
-            $shareInfo['creator'] = $uid;
-            //检查并设置用户团长
-            $this->check_and_save_default_level($uid);
-        }
-        $uid = $shareInfo['creator'];
-        $WeshareM->id = null;
 
         $newShareInfo = $WeshareM->save($shareInfo);
-        if ($newShareInfo) {
-            $newShareId = $newShareInfo['Weshare']['id'];
-            $this->log('clone share original id ' . $shareId . ' result share id ' . $newShareId . ' type ' . $newShareInfo['type'], LOG_DEBUG);
-            //clone product
-            $this->cloneShareProduct($newShareId, $shareId, $share_limit);
-            //clone address
-            $this->cloneShareAddresses($newShareId, $shareId);
-            //clone ship setting
-            $this->cloneShareShipSettings($newShareId, $shareId);
-            //clone rebate set
-            $this->cloneShareRebateSet($newShareId, $shareId);
-            //clone share delivery template
-            $this->cloneDeliveryTemplate($newShareId, $shareId, $uid);
-            Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
-            $dataSource->commit();
-            return array('shareId' => $newShareId, 'success' => true);
+        if (!$newShareInfo) {
+            $dataSource->rollback();
+            $this->log('', LOG_ERR);
+            return array('success' => false);
         }
-        $dataSource->rollback();
-        return array('success' => false);
+
+        $newShareId = $newShareInfo['Weshare']['id'];
+        $this->log('clone share original id ' . $shareId . ' result share id ' . $newShareId . ' type ' . $newShareInfo['type'], LOG_INFO);
+        //clone product
+        $this->cloneShareProduct($newShareId, $shareId, $share_limit);
+        //clone address
+        $this->cloneShareAddresses($newShareId, $shareId);
+        //clone ship setting
+        $this->cloneShareShipSettings($newShareId, $shareId);
+        //clone rebate set
+        $this->cloneShareRebateSet($newShareId, $shareId);
+        //clone share delivery template
+        $this->cloneDeliveryTemplate($newShareId, $shareId, $shareInfo['creator']);
+
+        Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $shareInfo['creator'], '');
+        $dataSource->commit();
+        return array('shareId' => $newShareId, 'success' => true);
     }
 
     /**
