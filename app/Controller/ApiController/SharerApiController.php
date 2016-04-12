@@ -102,23 +102,28 @@ class SharerApiController extends AppController{
      * 重新开团, app开团
      */
     public function open_new_share($shareId){
+        $uid = $this->currentUser['id'];
+        $this->log('Proxy '.$uid.' tries to reopen share '.$shareId, LOG_INFO);
         $result = $this->ShareUtil->cloneShare($shareId);
-        if($result['success']){
-            $shareId = $result['shareId'];
-            $weshareM = ClassRegistry::init('Weshare');
-            $shareInfo = $weshareM->find('first', array(
-                'conditions' => array(
-                    'id' => $shareId
-                ),
-                'fields' => array('id', 'title', 'images', 'status', 'created', 'description')
-            ));
-            $shareInfo = $shareInfo['Weshare'];
-            $shareInfo['images'] = explode('|', $shareInfo['images']);
-            echo json_encode(array('success' => true, 'shareInfo' => $shareInfo));
-            return;
+        if(!$result['success']){
+            $this->log('Proxy '.$uid.' failed to reopen share '.$shareId, LOG_ERR);
+            echo json_encode($result);
+            exit();
         }
-        echo json_encode(array('success' => false));
-        return;
+
+        $weshareM = ClassRegistry::init('Weshare');
+        $shareInfo = $weshareM->find('first', array(
+            'conditions' => array(
+                'id' => $result['shareId']
+            ),
+            'fields' => array('id', 'title', 'images', 'status', 'created', 'description')
+        ));
+        $shareInfo = $shareInfo['Weshare'];
+        $shareInfo['images'] = explode('|', $shareInfo['images']);
+
+        $this->log('Proxy '.$uid.' reopens share '.$shareId.' as id '.$result["shareId"].'successfully', LOG_INFO);
+        echo json_encode(array('success' => true, 'shareInfo' => $shareInfo));
+        exit();
     }
 
     /**
