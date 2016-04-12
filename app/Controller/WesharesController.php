@@ -673,10 +673,21 @@ class WesharesController extends AppController
      */
     public function cloneShare($shareId)
     {
+        // TODO: 权限控制
         $this->autoRender = false;
+
+        $uid = $this->currentUser['id'];
         $result = $this->ShareUtil->cloneShare($shareId);
+        $this->log('Proxy '.$uid.' tries to clone share from share '.$shareId, LOG_INFO);
+        if($result['success']){
+            $this->log('Proxy '.$uid.' clones share '.$result['shareId'].' from share '.$shareId. ' successfully', LOG_INFO);
+        }
+        else{
+            $this->log('Proxy '.$uid.' failed to clone share from share '.$shareId, LOG_ERR);
+        }
+
         echo json_encode($result);
-        return;
+        exit();
     }
 
     /**

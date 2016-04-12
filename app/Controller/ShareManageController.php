@@ -359,8 +359,13 @@ class ShareManageController extends AppController
         $uid = $this->currentUser['id'];
         $this->log('Admin '.$uid.' tries to clone share '.$share_id.' to pool products', LOG_INFO);
         // 先克隆初来一份Wesahres表行
-        $nshare = $this->ShareUtil->cloneShare($share_id, null,POOL_SHARE_TYPE, WESHARE_DELETE_STATUS, 0);
-        $nshare = $this->get_weshare_by_id($nshare['shareId']);
+        $result = $this->ShareUtil->cloneShare($share_id, null,POOL_SHARE_TYPE, WESHARE_DELETE_STATUS, 0);
+        if(!$result['success']){
+            $this->log('Admin '.$uid.' failed to clone share '.$share_id.' to pool products', LOG_ERR);
+            throw new Exception("复制到产品街出错，请联系管理员");
+        }
+
+        $nshare = $this->get_weshare_by_id($result['shareId']);
         // 手动填充cake_pool_products表.
         $data = [];
         $data['weshare_id'] = $nshare['id'];
@@ -375,7 +380,7 @@ class ShareManageController extends AppController
         $res = $model->save($data);
         $id = $model->getLastInsertId();
 
-        $this->log('Copy share to pool product successfully, share id '.$share_id.', pool product id '.$id, LOG_INFO);
+        $this->log('Admin '.$uid.' clones share '.$share_id.' to pool products successfully', LOG_INFO);
         $this->redirect("/shareManage/pool_product_edit/$id.html");
     }
 
