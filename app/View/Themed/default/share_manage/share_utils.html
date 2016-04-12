@@ -85,7 +85,12 @@
             var copyShareId = $('#copyShareId').val();
             var copyUserId = $('#copyUserId').val();
             $.getJSON('/share_manage/copy_share_to_user/' + copyShareId + '/' + copyUserId, function (data) {
-                alert(data['result']['shareId']);
+                if(data['success']){
+                    alert("复制分享成功：" + data['shareId']);
+                }
+                else{
+                    alert("复制分享失败");
+                }
             });
         });
     });

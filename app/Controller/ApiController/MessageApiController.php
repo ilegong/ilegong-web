@@ -3,7 +3,7 @@
 class MessageApiController extends Controller
 {
 
-    public $components = array('OAuth.OAuth', 'Session', 'WeshareBuy', 'ShareFaqUtil');
+    public $components = array('OAuth.OAuth', 'Session', 'WeshareBuy', 'ShareFaqUtil', 'WeshareFaq');
 
     var $currentUser = null;
 
@@ -82,15 +82,20 @@ class MessageApiController extends Controller
         $uid = $this->currentUser['id'];
         $this->loadModel('ShareFaq');
         $this->loadModel('User');
-        $share_faqs = $this->ShareFaq->find('all', [
+        //先查询最近数据
+        $cond = [
             'conditions' => [
                 'receiver' => $uid
             ],
             'group' => ['sender'],
+            'fields' => ['MAX(id) as id'],
             'order' => ['id DESC'],
             'limit' => $limit,
             'page' => $page
-        ]);
+        ];
+        //获取目标ID
+        $faq_ids = $this->get_faq_ids($cond);
+        $share_faqs = $this->ShareFaq->find('all', ['conditions' => ['id' => $faq_ids], 'order' => ['id DESC']]);
         $sender_ids = Hash::extract($share_faqs, '{n}.ShareFaq.sender');
         $senders = $this->User->find('all', [
             'conditions' => [
@@ -147,9 +152,9 @@ class MessageApiController extends Controller
         ]);
         $user_infos = array_map('map_user_avatar2', $user_infos);
         $user_infos = Hash::combine($user_infos, '{n}.User.id', '{n}.User');
-        $opt_logs = array_map(function($item){
+        $opt_logs = array_map(function ($item) {
             return $item['OptLog'];
-        },$opt_logs);
+        }, $opt_logs);
         return ['user_infos' => $user_infos, 'msg' => $opt_logs];
     }
 
@@ -181,7 +186,7 @@ class MessageApiController extends Controller
      * @param limit
      * 获取购买列表
      */
-    public function get_buy_list($user,$page, $limit)
+    public function get_buy_list($user, $page, $limit)
     {
         echo json_encode($this->get_u_msg_list(OPT_LOG_SHARE_BUY, $page, $limit, $user));
         exit();
@@ -209,16 +214,19 @@ class MessageApiController extends Controller
     {
         $current_uid = $this->currentUser['id'];
         $this->loadModel('ShareFaq');
-        $result = $this->ShareFaq->find('all', [
+        $cond = [
             'conditions' => [
                 'receiver' => $current_uid,
                 'sender' => $user_id
             ],
+            'fields' => ['MAX(id) as id'],
             'group' => ['share_id'],
             'order' => ['id DESC'],
             'page' => $page,
             'limit' => $limit
-        ]);
+        ];
+        $faq_ids = $this->get_faq_ids($cond);
+        $result = $this->ShareFaq->find('all', ['conditions' => ['id' => $faq_ids], 'order' => ['id DESC']]);
         $faqs = [];
         $share_ids = [];
         foreach ($result as $item) {
@@ -234,6 +242,13 @@ class MessageApiController extends Controller
         $weshares = Hash::combine($weshares, '{n}.Weshare.id', '{n}.Weshare');
         echo(json_encode(['messages' => $faqs, 'weshares' => $weshares]));
         exit();
+    }
+
+    private function get_faq_ids($cond){
+        $this->loadModel('ShareFaq');
+        $faq_ids = $this->ShareFaq->find('all',$cond);
+        $faq_ids = Hash::extract($faq_ids, '{n}.0.id');
+        return $faq_ids;
     }
 
     private function get_shares($share_ids)
@@ -267,14 +282,15 @@ class MessageApiController extends Controller
     /**
      * @param $share_id
      * @param $user_id
-     * 获取单条分享的详细数据
+     * [获取分享的评论]
      */
     public function load_single_comment_detail($share_id, $user_id)
     {
+        $uid = $this->currentUser['id'];
         //根据评论的时间定位到具体的一条评论，[可能存在问题]
-        $query_cond = ['type' => COMMENT_SHARE_TYPE, 'status' => COMMENT_SHOW_STATUS, 'user_id' => $user_id, 'data_id' => $share_id];
+        $query_cond = ['type' => COMMENT_SHARE_TYPE, 'status' => COMMENT_SHOW_STATUS, 'user_id' => [$user_id, $uid], 'data_id' => $share_id];
         $comment_date = $_REQUEST['comment_date'];
-        if(!empty($comment_date)){
+        if (!empty($comment_date)) {
             $query_cond['date(created)'] = $comment_date;
         }
         $result = $this->WeshareBuy->query_comment($query_cond);
@@ -300,11 +316,12 @@ class MessageApiController extends Controller
             'page' => $page,
             'order' => ['id DESC']
         ]);
-        $share_faqs = array_map(function($item){
+        $share_faqs = array_map(function ($item) {
             return $item['ShareFaq'];
-        },$share_faqs);
+        }, $share_faqs);
         $share_faqs = array_reverse($share_faqs);
         echo json_encode($share_faqs);
+        exit();
     }
 
     /**
@@ -344,14 +361,15 @@ class MessageApiController extends Controller
         $this->loadModel('ShareFaq');
         $postStr = file_get_contents('php://input');
         $post_data = json_decode($postStr, true);
-        $this->ShareFaq->save($post_data);
-        $share_id = $post_data['share_id'];
-        $msg = $post_data['msg'];
-        $sender = $post_data['sender'];
-        $receiver = $post_data['receiver'];
-        $weshareInfo = $this->WeshareBuy->get_weshare_info($share_id);
-        $share_title = $weshareInfo['title'];
-        $this->ShareFaqUtil->send_notify_template_msg($sender, $receiver, $msg, $share_id, $share_title);
+        $this->WeshareFaq->create_faq($post_data);
+//        $this->ShareFaq->save($post_data);
+//        $share_id = $post_data['share_id'];
+//        $msg = $post_data['msg'];
+//        $sender = $post_data['sender'];
+//        $receiver = $post_data['receiver'];
+//        $weshareInfo = $this->WeshareBuy->get_weshare_info($share_id);
+//        $share_title = $weshareInfo['title'];
+//        $this->ShareFaqUtil->send_notify_template_msg($sender, $receiver, $msg, $share_id, $share_title);
         echo json_encode(['success' => true]);
         exit();
     }

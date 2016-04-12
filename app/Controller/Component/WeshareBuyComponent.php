@@ -193,7 +193,7 @@ class WeshareBuyComponent extends Component
     public function get_my_create_shares($uid)
     {
         $weshareM = ClassRegistry::init('Weshare');
-        $query_share_type = array(GROUP_SHARE_TYPE, DEFAULT_SHARE_TYPE, POOL_SHARE_BUY_TYPE, FROM_POOL_SHARE_TYPE);
+        $query_share_type = array(SHARE_TYPE_GROUP, SHARE_TYPE_DEFAULT, SHARE_TYPE_POOL_FOR_PROXY, SHARE_TYPE_POOL);
         $myCreateShares = $weshareM->find('all', array(
             'conditions' => array(
                 'creator' => $uid,
@@ -221,7 +221,7 @@ class WeshareBuyComponent extends Component
             $weshareM = ClassRegistry::init('Weshare');
             $orderM = ClassRegistry::init('Order');
             $userM = ClassRegistry::init('User');
-            $query_share_type = array(GROUP_SHARE_TYPE, DEFAULT_SHARE_TYPE, POOL_SHARE_BUY_TYPE, FROM_POOL_SHARE_TYPE);
+            $query_share_type = array(SHARE_TYPE_GROUP, SHARE_TYPE_DEFAULT, SHARE_TYPE_POOL_FOR_PROXY, SHARE_TYPE_POOL);
             $myCreateShares = $this->get_my_create_shares($uid);
             $my_create_share_ids = Hash::extract($myCreateShares, '{n}.Weshare.id');
             $orderStatus = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE);
@@ -408,6 +408,10 @@ class WeshareBuyComponent extends Component
         return json_decode($sharer_comment_data, true);
     }
 
+    /**
+     * @param $conds
+     * @return array
+     */
     public function query_comment($conds)
     {
         $commentM = ClassRegistry::init('Comment');
@@ -449,6 +453,7 @@ class WeshareBuyComponent extends Component
         }
         return array('order_comments' => array(), 'comment_replies' => array());
     }
+    
 
     /**
      * @param $order_ids
@@ -1223,7 +1228,7 @@ class WeshareBuyComponent extends Component
     private function filter_refer_share_id($referShareId, $uid)
     {
         $refer_share_info = $this->get_weshare_info($referShareId);
-        if (!empty($refer_share_info) && $refer_share_info['type'] == DEFAULT_SHARE_TYPE && $refer_share_info['creator'] == $uid) {
+        if (!empty($refer_share_info) && $refer_share_info['type'] == SHARE_TYPE_DEFAULT && $refer_share_info['creator'] == $uid) {
             return $referShareId;
         }
         return 0;

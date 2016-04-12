@@ -55,7 +55,6 @@ class ShareProductPoolController extends AppController {
     }
 
     /**
-     * @param $share_id
      * 团长从产品库开启分享
      */
     public function clone_share($share_id) {
@@ -68,10 +67,17 @@ class ShareProductPoolController extends AppController {
         $is_proxy = $this->ShareUtil->is_proxy_user($uid);
         if (!$is_proxy) {
             echo json_encode(array('success' => false, 'reason' => '不是团长'));
+            exit();
         }
-        $result = $this->ShareUtil->cloneShare($share_id, $uid, null, null, FROM_POOL_SHARE_TYPE);
+
+        $this->log('Proxy '.$uid.' tries to clone share '.$share_id, LOG_INFO);
+        $result = $this->ShareUtil->cloneShare($share_id, $uid, SHARE_TYPE_POOL);
         if ($result['success']) {
             $this->init_share_authorize($result['shareId'], $share_id, $uid);
+            $this->log('Proxy '.$uid.'  clones share '.$share_id + ' with id '.$result['shareId'].' successfully', LOG_INFO);
+        }
+        else{
+            $this->log('Proxy '.$uid.' failed to clone share '.$share_id, LOG_INFO);
         }
         echo json_encode($result);
         exit();

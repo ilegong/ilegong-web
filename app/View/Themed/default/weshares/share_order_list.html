@@ -114,7 +114,7 @@
             {{/if}}
             {{if $summery_item['ship_fee'] > 0}}
             <tr>
-                <td colspan="3">{{if $weshare_info['Weshare']['type'] == GROUP_SHARE_TYPE}}拼团费用{{else}}快递费用{{/if}}:&nbsp;<font color="red">{{$summery_item['ship_fee']}}</font></td>
+                <td colspan="3">{{if $weshare_info['Weshare']['type'] == SHARE_TYPE_GROUP}}拼团费用{{else}}快递费用{{/if}}:&nbsp;<font color="red">{{$summery_item['ship_fee']}}</font></td>
             </tr>
             {{/if}}
             {{if count($rebate_logs) > 0}}

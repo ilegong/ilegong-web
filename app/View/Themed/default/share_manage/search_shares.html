@@ -14,13 +14,24 @@
             <!-- /.panel-heading -->
             <div class="panel-body">
                 <form class="form-inline" action="/share_manage/search_shares" method="post">
+                  <div class="row">
                     <div class="form-group">
                         <label>分享名称</label>
-                        <input type="text" class="form-control" name="title">
+                        <input type="text" value="{{$_REQUEST['title']}}" class="form-control" name="title">
                     </div>
                     <div class="form-group">
                         <label>分享ID</label>
-                        <input type="text" class="form-control" name="id">
+                        <input type="text" value="{{$_REQUEST['id']}}" class="form-control" name="id">
+                    </div>
+                  </div>
+                  <div class="row" style="margin-top: 20px;">
+                    <div class="form-group">
+                        <label>创建者ID</label>
+                        <input type="text" value="{{$_REQUEST['creator_id']}}" class="form-control" name="creator_id">
+                    </div>
+                    <div class="form-group">
+                        <label>创建者昵称</label>
+                        <input type="text" value="{{$_REQUEST['creator_name']}}" class="form-control" name="creator_name">
                     </div>
                     <div class="form-group">
                         <label>分享的状态</label>
@@ -32,6 +43,7 @@
                         </select>
                     </div>
                     <button type="submit" class="btn btn-default">查询</button>
+                  </div>
                 </form>
                 <br>
                 <div class="table-responsive">
@@ -47,18 +59,18 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {{loop $weshares $weshare}}
+                        {{loop $results $item}}
                         <tr>
-                            <td>{{$weshare['Weshare']['id']}}</td>
-                            <td>{{$weshare['Weshare']['title']}}</td>
-                            <td>{{$weshare['Weshare']['creator']}}</td>
-                            <td>{{$users[$weshare['Weshare']['creator']]['nickname']}}</td>
-                            <td>{{map_share_type_text($weshare['Weshare']['type'])}}</td>
+                            <td>{{$item['Weshare']['id']}}</td>
+                            <td>{{$item['Weshare']['title']}}</td>
+                            <td>{{$item['Weshare']['creator']}}</td>
+                            <td>{{$item['User']['nickname']}}</td>
+                            <td>{{map_share_type_text($item['Weshare']['type'])}}</td>
                             <td>
-                              <a href="/weshares/update/{{$weshare['Weshare']['id']}}" class="btn btn-link">到更新页编辑</a>
-                              <a href="/share_manage/share_edit/{{$weshare['Weshare']['id']}}?from=search" class="btn btn-link">编辑</a>
-                              <a href="/share_manage/pool_share_copy/{{$weshare['Weshare']['id']}}?from=search" class="btn btn-link">复制</a>
-                              <a href="/share_manage/delete_share/{{$weshare['Weshare']['id']}}?from=search" class="btn btn-link">删除</a></td>
+                              <a href="/weshares/update/{{$item['Weshare']['id']}}" class="btn btn-link">到更新页编辑</a>
+                              <a href="/share_manage/share_edit/{{$item['Weshare']['id']}}?from=search" class="btn btn-link">编辑</a>
+                              <a href="/share_manage/pool_share_copy/{{$item['Weshare']['id']}}?from=search" class="btn btn-link">复制</a>
+                              <a href="/share_manage/delete_share/{{$item['Weshare']['id']}}?from=search" class="btn btn-link">删除</a></td>
                         </tr>
                         {{/loop}}
                         </tbody>

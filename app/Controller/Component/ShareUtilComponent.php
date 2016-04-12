@@ -376,15 +376,15 @@ class ShareUtilComponent extends Component
     /**
      * @param $shareId
      * @param $uid
-     * @param $address 拼团地址
-     * @param $address_remarks
      * @param $type
-     * @param $share_status
+     * @param int $share_status
      * @param $share_limit
-     * @return array
+     * @return array clone一份， 指定用户ID， 指定的地址， 类型， 状态
      * clone一份， 指定用户ID， 指定的地址， 类型， 状态
+     * @internal param 拼团地址 $address
+     * @internal param $address_remarks
      */
-    public function cloneShare($shareId, $uid = null, $address = null, $address_remarks = null, $type = null, $share_status = 0, $share_limit = null)
+    public function cloneShare($shareId, $uid = null, $type = null, $share_status = 0, $share_limit = null)
     {
         $WeshareM = ClassRegistry::init('Weshare');
         $dataSource = $WeshareM->getDataSource();
@@ -400,25 +400,13 @@ class ShareUtilComponent extends Component
         $shareInfo['status'] = $share_status; //分享状态
         $shareInfo['settlement'] = 0; //打款状态为未打款
         //order status offline address id
-        //remove group share
-//        if ($type == GROUP_SHARE_TYPE) {
-//            $origin_sharer_nickname = $this->WeshareBuy->get_user_nickname($shareInfo['creator']);
-//            $shareInfo['title'] = '大家一起拼团' . $origin_sharer_nickname . '分享的' . $shareInfo['title'];
-//            //default share status is not available
-//            $shareInfo['status'] = $share_status;
-//        }
-//    if ($shareInfo['type'] == POOL_SHARE_BUY_TYPE) {
-//        //产品街的分享和渠道价购买的分享refer share id 设置为0
-//        //复制渠道价购买的分享
-//        //报错 不让复制
-//        $shareInfo['refer_share_id'] = 0;
-//    }
-        //check share type
-        if ($shareInfo['type'] == POOL_SHARE_TYPE) {
+
+        // 从普通分享上产品街
+        if ($shareInfo['type'] == SHARE_TYPE_POOL_SELF) {
             //产品街分享
             //复制产品街分享
             $shareInfo['refer_share_id'] = $shareId;
-        } elseif ($shareInfo['type'] == FROM_POOL_SHARE_TYPE) {
+        } elseif ($shareInfo['type'] == SHARE_TYPE_POOL) {
             //不是产品街的分享重新开团设置 refer_share_id
             //先不实时更新分享的信息，有可能团长自己更新，只复制物流和商品信息
             //复制从产品街发出的分享
@@ -441,10 +429,7 @@ class ShareUtilComponent extends Component
         }
         $uid = $shareInfo['creator'];
         $WeshareM->id = null;
-//        if ($type == GROUP_SHARE_TYPE) {
-//            $offlineAddress = $this->saveGroupShareOfflineAddress($address, $uid, $address_remarks);
-//            $shareInfo['offline_address_id'] = $offlineAddress['WeshareOfflineAddress']['id'];
-//        }
+
         $newShareInfo = $WeshareM->save($shareInfo);
         if ($newShareInfo) {
             $newShareId = $newShareInfo['Weshare']['id'];
@@ -459,43 +444,12 @@ class ShareUtilComponent extends Component
             $this->cloneShareRebateSet($newShareId, $shareId);
             //clone share delivery template
             $this->cloneDeliveryTemplate($newShareId, $shareId, $uid);
-//            if ($type == GROUP_SHARE_TYPE) {
-//                $this->saveGroupShareAddress($address, $newShareId);
-//                $this->cloneShareShipSettings($newShareId, $shareId, true);
-//                $this->cloneShareRebateSet($newShareId, $shareId, true);
-//            }
             Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
             $dataSource->commit();
             return array('shareId' => $newShareId, 'success' => true);
         }
         $dataSource->rollback();
         return array('success' => false);
-    }
-
-    private function saveGroupShareOfflineAddress($address, $uid, $remarks)
-    {
-        $WeshareOfflineAddressM = ClassRegistry::init('WeshareOfflineAddress');
-        $weshareOfflineAddress = array('creator' => $uid, 'address' => $address, 'created' => date('Y-m-d H:i:s'), 'remarks' => $remarks);
-        $offlineAddress = $WeshareOfflineAddressM->save($weshareOfflineAddress);
-        return $offlineAddress;
-    }
-
-    /**
-     * @param $address
-     * @param $share_id
-     * @return mixed
-     */
-    private function saveGroupShareAddress($address, $share_id)
-    {
-        $WeshareAddressM = ClassRegistry::init('WeshareAddress');
-        $shareAddressData = array('address' => $address, 'weshare_id' => $share_id);
-        $WeshareAddressM->save($shareAddressData);
-    }
-
-    //todo clone share product tag
-    private function cloneSharProductTag($new_share_id, $old_share_id)
-    {
-
     }
 
     /**
@@ -1198,7 +1152,7 @@ class ShareUtilComponent extends Component
         $WeshareM = ClassRegistry::init('Weshare');
         $weshare = $WeshareM->find('first', array(
             'conditions' => array(
-                'type' => GROUP_SHARE_TYPE,
+                'type' => SHARE_TYPE_GROUP,
                 'creator' => $uid,
                 'refer_share_id' => $refer_share_id
             )
@@ -1218,9 +1172,9 @@ class ShareUtilComponent extends Component
         if (empty($json_address_data)) {
             $WeshareM = ClassRegistry::init('Weshare');
             //todo should check share status
-            $query_address_sql = 'select * from cake_weshare_addresses where weshare_id in (select id from cake_weshares where refer_share_id=' . $share_id . ' and type=' . GROUP_SHARE_TYPE . ')';
+            $query_address_sql = 'select * from cake_weshare_addresses where weshare_id in (select id from cake_weshares where refer_share_id=' . $share_id . ' and type=' . SHARE_TYPE_GROUP . ')';
             $address_result = $WeshareM->query($query_address_sql);
-            $query_order_summery_sql = 'select count(id),member_id from cake_orders where type=' . ORDER_TYPE_WESHARE_BUY . ' and status !=' . ORDER_STATUS_WAITING_PAY . ' and member_id in (select id from cake_weshares where refer_share_id=' . $share_id . ' and type=' . GROUP_SHARE_TYPE . ') group by member_id';
+            $query_order_summery_sql = 'select count(id),member_id from cake_orders where type=' . ORDER_TYPE_WESHARE_BUY . ' and status !=' . ORDER_STATUS_WAITING_PAY . ' and member_id in (select id from cake_weshares where refer_share_id=' . $share_id . ' and type=' . SHARE_TYPE_GROUP . ') group by member_id';
             $order_summery_result = $WeshareM->query($query_order_summery_sql);
             $address_data = Hash::combine($address_result, '{n}.cake_weshare_addresses.weshare_id', '{n}.cake_weshare_addresses');
             $address_order_summery = Hash::combine($order_summery_result, '{n}.cake_orders.member_id', '{n}.0.count(id)');
@@ -1634,7 +1588,7 @@ class ShareUtilComponent extends Component
         $weshare = $WeshareM->find('first', array(
             'conditions' => array(
                 'id' => $share_id,
-                'type' => GROUP_SHARE_TYPE
+                'type' => SHARE_TYPE_GROUP
             )
         ));
         if (!empty($weshare)) {
@@ -1665,7 +1619,7 @@ class ShareUtilComponent extends Component
         $weshare = $WeshareM->find('first', array(
             'conditions' => array(
                 'id' => $share_id,
-                'type' => GROUP_SHARE_TYPE
+                'type' => SHARE_TYPE_GROUP
             )
         ));
         if (!empty($weshare)) {
@@ -1685,7 +1639,7 @@ class ShareUtilComponent extends Component
         $WeshareM = ClassRegistry::init('Weshare');
         $shares = $WeshareM->find('all', array(
             'conditions' => array(
-                'type' => GROUP_SHARE_TYPE,
+                'type' => SHARE_TYPE_GROUP,
                 'status' => WESHARE_NORMAL_STATUS
             ),
             'order' => array('id DESC'),
@@ -1787,7 +1741,7 @@ class ShareUtilComponent extends Component
             $childShares = $weshareM->find('all', array(
                 'conditions' => array(
                     'refer_share_id' => $shareId,
-                    'type' => GROUP_SHARE_TYPE
+                    'type' => SHARE_TYPE_GROUP
                 )
             ));
             $childShareIds = Hash::extract($childShares, '{n}.Weshare.id');

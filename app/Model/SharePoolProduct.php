@@ -80,7 +80,7 @@ class SharePoolProduct extends AppModel
         $shares = $weshareM->find('all', array(
             'conditions' => array(
                 'refer_share_id' => $share_id,
-                'not' => array('type' => POOL_SHARE_TYPE)
+                'not' => array('type' => SHARE_TYPE_POOL_SELF)
             ),
             'fields' => array('id', 'creator', 'status', 'type'),
             'limit' => 100
@@ -110,7 +110,7 @@ class SharePoolProduct extends AppModel
         $shares = $weshareM->find('all', [
             'conditions' => [
                 'Weshare.refer_share_id' => $share_id,
-                'not' => ['Weshare.type' => POOL_SHARE_TYPE]
+                'not' => ['Weshare.type' => SHARE_TYPE_POOL_SELF]
             ],
             'joins' => [
                 [
