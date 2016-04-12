@@ -35,14 +35,11 @@ class SharePushComponent extends Component
 
     public function push_faq_msg($faqData)
     {
+        $this->log('push faq');
         $msg = $faqData['msg'];
-        $share_id = $faqData['share_id'];
-        $share = $this->WeshareBuy->get_weshare_info($share_id);
-        $title = $share['title'];
-        $thumbnail = explode('|', $share['images']);
-        $thumbnail = $thumbnail[0];
-        $users = $this->get_users([$faqData['sender'], $faqData['receiver']]);
-        $this->JPush->push($faqData['receiver'], $title, $msg, self::$MSG_FAQ_TYPE, ['share_thumb' => $thumbnail, 'users' => json_encode($users)]);
+        $users = $this->get_users([$faqData['receiver'], $faqData['sender']]);
+        $title = $users[$faqData['sender']]['nickname'] . ' : ' . $msg;
+        $this->JPush->push(strval($faqData['receiver']), $title, $msg, self::$MSG_FAQ_TYPE, ['$msg' => json_encode($msg), 'users' => json_encode($users)]);
     }
 
 
