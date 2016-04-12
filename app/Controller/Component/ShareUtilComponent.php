@@ -376,15 +376,15 @@ class ShareUtilComponent extends Component
     /**
      * @param $shareId
      * @param $uid
-     * @param $address 拼团地址
-     * @param $address_remarks
      * @param $type
-     * @param $share_status
+     * @param int $share_status
      * @param $share_limit
-     * @return array
+     * @return array clone一份， 指定用户ID， 指定的地址， 类型， 状态
      * clone一份， 指定用户ID， 指定的地址， 类型， 状态
+     * @internal param 拼团地址 $address
+     * @internal param $address_remarks
      */
-    public function cloneShare($shareId, $uid = null, $address = null, $address_remarks = null, $type = null, $share_status = 0, $share_limit = null)
+    public function cloneShare($shareId, $uid = null, $type = null, $share_status = 0, $share_limit = null)
     {
         $WeshareM = ClassRegistry::init('Weshare');
         $dataSource = $WeshareM->getDataSource();
@@ -400,20 +400,8 @@ class ShareUtilComponent extends Component
         $shareInfo['status'] = $share_status; //分享状态
         $shareInfo['settlement'] = 0; //打款状态为未打款
         //order status offline address id
-        //remove group share
-//        if ($type == GROUP_SHARE_TYPE) {
-//            $origin_sharer_nickname = $this->WeshareBuy->get_user_nickname($shareInfo['creator']);
-//            $shareInfo['title'] = '大家一起拼团' . $origin_sharer_nickname . '分享的' . $shareInfo['title'];
-//            //default share status is not available
-//            $shareInfo['status'] = $share_status;
-//        }
-//    if ($shareInfo['type'] == POOL_SHARE_BUY_TYPE) {
-//        //产品街的分享和渠道价购买的分享refer share id 设置为0
-//        //复制渠道价购买的分享
-//        //报错 不让复制
-//        $shareInfo['refer_share_id'] = 0;
-//    }
-        //check share type
+
+        // 从普通分享上产品街
         if ($shareInfo['type'] == POOL_SHARE_TYPE) {
             //产品街分享
             //复制产品街分享
@@ -441,10 +429,7 @@ class ShareUtilComponent extends Component
         }
         $uid = $shareInfo['creator'];
         $WeshareM->id = null;
-//        if ($type == GROUP_SHARE_TYPE) {
-//            $offlineAddress = $this->saveGroupShareOfflineAddress($address, $uid, $address_remarks);
-//            $shareInfo['offline_address_id'] = $offlineAddress['WeshareOfflineAddress']['id'];
-//        }
+
         $newShareInfo = $WeshareM->save($shareInfo);
         if ($newShareInfo) {
             $newShareId = $newShareInfo['Weshare']['id'];
@@ -459,11 +444,6 @@ class ShareUtilComponent extends Component
             $this->cloneShareRebateSet($newShareId, $shareId);
             //clone share delivery template
             $this->cloneDeliveryTemplate($newShareId, $shareId, $uid);
-//            if ($type == GROUP_SHARE_TYPE) {
-//                $this->saveGroupShareAddress($address, $newShareId);
-//                $this->cloneShareShipSettings($newShareId, $shareId, true);
-//                $this->cloneShareRebateSet($newShareId, $shareId, true);
-//            }
             Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
             $dataSource->commit();
             return array('shareId' => $newShareId, 'success' => true);

@@ -99,7 +99,7 @@ class SharerApiController extends AppController{
 
     /**
      * @param $shareId
-     * 重新开团
+     * 重新开团, app开团
      */
     public function open_new_share($shareId){
         $result = $this->ShareUtil->cloneShare($shareId);
