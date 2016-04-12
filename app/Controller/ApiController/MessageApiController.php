@@ -82,15 +82,20 @@ class MessageApiController extends Controller
         $uid = $this->currentUser['id'];
         $this->loadModel('ShareFaq');
         $this->loadModel('User');
-        $share_faqs = $this->ShareFaq->find('all', [
+        //先查询最近数据
+        $cond = [
             'conditions' => [
                 'receiver' => $uid
             ],
             'group' => ['sender'],
+            'fields' => ['MAX(id) as id'],
             'order' => ['id DESC'],
             'limit' => $limit,
             'page' => $page
-        ]);
+        ];
+        //获取目标ID
+        $faq_ids = $this->get_faq_ids($cond);
+        $share_faqs = $this->ShareFaq->find('all', ['conditions' => ['id' => $faq_ids], 'order' => ['id DESC']]);
         $sender_ids = Hash::extract($share_faqs, '{n}.ShareFaq.sender');
         $senders = $this->User->find('all', [
             'conditions' => [
@@ -209,16 +214,19 @@ class MessageApiController extends Controller
     {
         $current_uid = $this->currentUser['id'];
         $this->loadModel('ShareFaq');
-        $result = $this->ShareFaq->find('all', [
+        $cond = [
             'conditions' => [
                 'receiver' => $current_uid,
                 'sender' => $user_id
             ],
+            'fields' => ['MAX(id) as id'],
             'group' => ['share_id'],
             'order' => ['id DESC'],
             'page' => $page,
             'limit' => $limit
-        ]);
+        ];
+        $faq_ids = $this->get_faq_ids($cond);
+        $result = $this->ShareFaq->find('all', ['conditions' => ['id' => $faq_ids], 'order' => ['id DESC']]);
         $faqs = [];
         $share_ids = [];
         foreach ($result as $item) {
@@ -234,6 +242,13 @@ class MessageApiController extends Controller
         $weshares = Hash::combine($weshares, '{n}.Weshare.id', '{n}.Weshare');
         echo(json_encode(['messages' => $faqs, 'weshares' => $weshares]));
         exit();
+    }
+
+    private function get_faq_ids($cond){
+        $this->loadModel('ShareFaq');
+        $faq_ids = $this->ShareFaq->find('all',$cond);
+        $faq_ids = Hash::extract($faq_ids, '{n}.0.id');
+        return $faq_ids;
     }
 
     private function get_shares($share_ids)
@@ -306,6 +321,7 @@ class MessageApiController extends Controller
         }, $share_faqs);
         $share_faqs = array_reverse($share_faqs);
         echo json_encode($share_faqs);
+        exit();
     }
 
     /**
