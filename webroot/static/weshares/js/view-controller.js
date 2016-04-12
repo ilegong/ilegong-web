@@ -7,7 +7,6 @@
     var vm = this;
     vm.staticFilePath = staticFilePath;
     vm.showShareDetailView = true;
-    //vm.subShareTipTxt = '+关注';
     vm.faqTipText = '私信';
     vm.showUnReadMark = false;
     vm.readMoreBtnText = '全文';

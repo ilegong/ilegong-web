@@ -316,7 +316,6 @@ class WesharesController extends AppController
         $share_ship_set = $this->sharer_can_use_we_ship($weshareInfo['creator']['id']);
         $my_coupon_items = $this->get_can_used_coupons($uid, $creatorId);
         $weshare_ship_settings = $this->getWeshareShipSettings($weshareId);
-        //$comment_data = $this->WeshareBuy->load_comment_by_share_id($weshareId);
         $recommend_data = $this->WeshareBuy->load_share_recommend_data($weshareId);
         $is_manage_user = $this->ShareAuthority->user_can_view_share_order_list($uid, $weshareId);
         $can_manage_share = $this->ShareAuthority->user_can_manage_share($uid, $weshareId);
