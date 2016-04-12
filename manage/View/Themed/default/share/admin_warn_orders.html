@@ -32,7 +32,7 @@
 <h3>发货预警订单</h3>
 <hr>
 <div class="row">
-    <div class="col-lg-6 pull-right" style="width: 70%">
+    <div class="col-sm-9">
         <form action="/manage/admin/share/warn_orders" method="get" class="form-inline">
             <div class="form-group">
                 <label>分享名</label>
@@ -52,15 +52,24 @@
         </form>
     </div>
     <!-- /.col-lg-6 -->
+    <div class="col-sm-3">
+        <form class="form-inline">
+            <div class="form-group">
+                <label>查询</label>
+                <input type="search" class="form-control light-table-filter" data-table="order-table" placeholder="关键词">
+            </div>
+        </form>
+    </div>
 </div><!-- /.row -->
+
 <div class="row">
-    <div class="col-lg-6 pull-right">
+    <div class="" style="margin: 20px;">
         <div class="form-group">
-            <label>查询</label>
-            <input type="search" class="form-control light-table-filter" data-table="order-table" placeholder="关键词">
+            <a href="javascript:void(0)" class="btn btn-info" id="deal-all-orders">批量发货</a>
         </div>
     </div>
 </div>
+
 <div class="row">
     <div class="panel panel-primary filterable">
         <div class="panel-heading">
@@ -71,9 +80,11 @@
                 </button>
             </div>
         </div>
+
         <table class="table order-table">
             <thead>
             <tr class="filters">
+                <th><input type="checkbox" id="select-all-checkoutbox" autocomplete="off">全选</th>
                 <th><input type="text" class="form-control" placeholder="订单ID" disabled></th>
                 <th><input type="text" class="form-control" placeholder="用户ID" disabled></th>
                 <th><input type="text" class="form-control" placeholder="用户昵称" disabled></th>
@@ -111,6 +122,7 @@
                     ?>
             {{loop $current_order_carts $cart}}
             <tr data-id="{{$current_order['id']}}">
+              <td><input type="checkbox" class="form-control order-ids-to-update" value="{{$current_order['id']}}" autocomplete="off" /></td>
                 <td>{{$current_order['id']}}</td>
                 <td>{{$current_order['creator']}}</td>
                 <td>{{$all_users[$current_order['creator']]['nickname']}}</td>
@@ -194,6 +206,7 @@
         </table>
     </div>
 </div>
+
 {{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js'))}}
 <script>
     (function(document) {
@@ -235,6 +248,42 @@
         });
 
     })(document);
+
+    function update_orders(orders) {
+        $.ajax({
+            url: '/manage/admin/share/batch_update_orders',
+            method: 'POST',
+            data: {orders: orders},
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (err) {
+                console.error('shit happend');
+            }
+        });
+    }
+
+    $(function (){
+        var to_update = [];
+        $('#select-all-checkoutbox').on('click', function (){
+            var me = $(this);
+            $('.order-ids-to-update').prop('checked', me.prop('checked'));
+        });
+        $('#deal-all-orders').on('click', function (){
+            if (confirm('真的要批量发货?')) {
+                console.log('是呀');
+                $('input.order-ids-to-update').each(function () {
+                    if ($(this).prop('checked') == true) {
+                        to_update.push($(this).val());
+                    }
+                });
+                update_orders(to_update);
+            } else {
+                console.log('按错啦');
+            }
+        })
+    });
 </script>
 <script>
     /*
@@ -253,8 +302,8 @@
         });
         $('.filterable .btn-filter').click(function () {
             var $panel = $(this).parents('.filterable'),
-                    $filters = $panel.find('.filters input'),
-                    $tbody = $panel.find('.table tbody');
+            $filters = $panel.find('.filters input[type=text]'),
+            $tbody = $panel.find('.table tbody');
             if ($filters.prop('disabled') == true) {
                 $filters.prop('disabled', false);
                 $filters.first().focus();
@@ -265,7 +314,7 @@
             }
         });
 
-        $('.filterable .filters input').keyup(function (e) {
+        $('.filterable .filters input[type=text]').keyup(function (e) {
             /* Ignore tab key */
             var code = e.keyCode || e.which;
             if (code == '9') return;

@@ -3,6 +3,7 @@
 class SharerApiController extends AppController{
 
     public $components = array('OAuth.OAuth', 'Session', 'WeshareBuy', 'ShareUtil', 'Weshares');
+    public $uses = array('Weshare');
 
     public function beforeFilter(){
         $allow_action = array('test');
@@ -102,23 +103,34 @@ class SharerApiController extends AppController{
      * 重新开团, app开团
      */
     public function open_new_share($shareId){
-        $result = $this->ShareUtil->cloneShare($shareId);
-        if($result['success']){
-            $shareId = $result['shareId'];
-            $weshareM = ClassRegistry::init('Weshare');
-            $shareInfo = $weshareM->find('first', array(
-                'conditions' => array(
-                    'id' => $shareId
-                ),
-                'fields' => array('id', 'title', 'images', 'status', 'created', 'description')
-            ));
-            $shareInfo = $shareInfo['Weshare'];
-            $shareInfo['images'] = explode('|', $shareInfo['images']);
-            echo json_encode(array('success' => true, 'shareInfo' => $shareInfo));
-            return;
+        $uid = $this->currentUser['id'];
+        $is_owner = $this->Weshare->hasAny(['id' => $shareId, 'creator' => $uid]);
+        if (!$is_owner) {
+            echo json_encode(array('success' => false,'reason' => 'not a proxy user.'));
+            exit();
         }
-        echo json_encode(array('success' => false));
-        return;
+
+        $this->log('Proxy '.$uid.' tries to clone share from share '.$shareId, LOG_INFO);
+        $result = $this->ShareUtil->cloneShare($shareId, null);
+        if(!$result['success']){
+            $this->log('Proxy '.$uid.' failed to clone share from share '.$shareId, LOG_ERR);
+            echo json_encode($result);
+            exit();
+        }
+
+        $weshareM = ClassRegistry::init('Weshare');
+        $shareInfo = $weshareM->find('first', array(
+            'conditions' => array(
+                'id' => $result['shareId']
+            ),
+            'fields' => array('id', 'title', 'images', 'status', 'created', 'description')
+        ));
+        $shareInfo = $shareInfo['Weshare'];
+        $shareInfo['images'] = explode('|', $shareInfo['images']);
+
+        $this->log('Proxy '.$uid.' clones share '.$result['shareId'].'  from share '.$shareId.' successfully', LOG_INFO);
+        echo json_encode(array('success' => true, 'shareInfo' => $shareInfo));
+        exit();
     }
 
     /**
@@ -252,13 +264,13 @@ class SharerApiController extends AppController{
         foreach ($createShares as $shareItem) {
             $settlement = $shareItem['settlement'];
             $status = $shareItem['status'];
-            if ($settlement == WESHARE_SETTLEMENT_STATUS) {
+            if ($settlement == WESHARE_SETTLEMENT_YES) {
                 $result['settlement'][] = $shareItem;
             } else {
-                if ($status == WESHARE_NORMAL_STATUS) {
+                if ($status == WESHARE_STATUS_NORMAL) {
                     $result['normal'][] = $shareItem;
                 }
-                if ($status == WESHARE_STOP_STATUS) {
+                if ($status == WESHARE_STATUS_STOP) {
                     $result['stop'][] = $shareItem;
                 }
             }

@@ -626,6 +626,21 @@ class ShareController extends AppController {
         }
     }
 
+    public function admin_batch_update_orders() {
+        $this->autoRender=false;
+        $orders = $_REQUEST['orders'];
+
+        foreach ($orders as $id) {
+            $order = [];
+            $order['id'] = $id;
+            $order['status'] = 2;
+            $this->Order->save($order);
+        }
+
+        echo json_encode([
+            'result' => true,
+        ]);
+    }
 
     public function admin_warn_orders() {
         $cond = array();
