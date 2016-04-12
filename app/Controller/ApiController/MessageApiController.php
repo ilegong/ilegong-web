@@ -147,9 +147,9 @@ class MessageApiController extends Controller
         ]);
         $user_infos = array_map('map_user_avatar2', $user_infos);
         $user_infos = Hash::combine($user_infos, '{n}.User.id', '{n}.User');
-        $opt_logs = array_map(function($item){
+        $opt_logs = array_map(function ($item) {
             return $item['OptLog'];
-        },$opt_logs);
+        }, $opt_logs);
         return ['user_infos' => $user_infos, 'msg' => $opt_logs];
     }
 
@@ -181,7 +181,7 @@ class MessageApiController extends Controller
      * @param limit
      * 获取购买列表
      */
-    public function get_buy_list($user,$page, $limit)
+    public function get_buy_list($user, $page, $limit)
     {
         echo json_encode($this->get_u_msg_list(OPT_LOG_SHARE_BUY, $page, $limit, $user));
         exit();
@@ -267,14 +267,15 @@ class MessageApiController extends Controller
     /**
      * @param $share_id
      * @param $user_id
-     * 获取单条分享的详细数据
+     * [获取分享的评论]
      */
     public function load_single_comment_detail($share_id, $user_id)
     {
+        $uid = $this->currentUser['id'];
         //根据评论的时间定位到具体的一条评论，[可能存在问题]
-        $query_cond = ['type' => COMMENT_SHARE_TYPE, 'status' => COMMENT_SHOW_STATUS, 'user_id' => $user_id, 'data_id' => $share_id];
+        $query_cond = ['type' => COMMENT_SHARE_TYPE, 'status' => COMMENT_SHOW_STATUS, 'user_id' => [$user_id, $uid], 'data_id' => $share_id];
         $comment_date = $_REQUEST['comment_date'];
-        if(!empty($comment_date)){
+        if (!empty($comment_date)) {
             $query_cond['date(created)'] = $comment_date;
         }
         $result = $this->WeshareBuy->query_comment($query_cond);
@@ -300,9 +301,9 @@ class MessageApiController extends Controller
             'page' => $page,
             'order' => ['id DESC']
         ]);
-        $share_faqs = array_map(function($item){
+        $share_faqs = array_map(function ($item) {
             return $item['ShareFaq'];
-        },$share_faqs);
+        }, $share_faqs);
         $share_faqs = array_reverse($share_faqs);
         echo json_encode($share_faqs);
     }
