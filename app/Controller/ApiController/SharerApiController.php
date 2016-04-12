@@ -3,6 +3,7 @@
 class SharerApiController extends AppController{
 
     public $components = array('OAuth.OAuth', 'Session', 'WeshareBuy', 'ShareUtil', 'Weshares');
+    public $uses = array('Weshare');
 
     public function beforeFilter(){
         $allow_action = array('test');
@@ -103,6 +104,12 @@ class SharerApiController extends AppController{
      */
     public function open_new_share($shareId){
         $uid = $this->currentUser['id'];
+        $is_owner = $this->Weshare->hasAny(['id' => $shareId, 'creator' => $uid]);
+        if (!$is_owner) {
+            echo json_encode(array('success' => false,'reason' => 'not a proxy user.'));
+            exit();
+        }
+
         $this->log('Proxy '.$uid.' tries to clone share from share '.$shareId, LOG_INFO);
         $result = $this->ShareUtil->cloneShare($shareId);
         if(!$result['success']){

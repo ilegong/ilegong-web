@@ -38,18 +38,12 @@ class PoolProductApiController extends AppController
     {
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
-            echo json_encode([
-                'success' => false,
-                'reason' => 'user login required.'
-            ]);
+            echo json_encode(array('success' => false,'reason' => 'user login required.'));
             exit();
         }
         $is_proxy = $this->ShareUtil->is_proxy_user($uid);
         if (!$is_proxy) {
-            echo json_encode([
-                'success' => false,
-                'reason' => 'not a proxy user.'
-            ]);
+            echo json_encode(array('success' => false,'reason' => 'not a proxy user.'));
             exit();
         }
 
