@@ -77,9 +77,9 @@ class WesharesComponent extends Component
 
         $this->log('User ' . $uid . ' stops weshare ' . $weshare_id, LOG_INFO);
 
-        $WeshareM->updateAll(array('status' => WESHARE_STOP_STATUS), array('id' => $weshare_id, 'creator' => $uid, 'status' => WESHARE_NORMAL_STATUS));
+        $WeshareM->updateAll(array('status' => WESHARE_STATUS_STOP), array('id' => $weshare_id, 'creator' => $uid, 'status' => WESHARE_STATUS_NORMAL));
         //stop child share
-        $WeshareM->updateAll(array('status' => WESHARE_STOP_STATUS), array('refer_share_id' => $weshare_id, 'status' => WESHARE_NORMAL_STATUS, 'type' => SHARE_TYPE_GROUP));
+        $WeshareM->updateAll(array('status' => WESHARE_STATUS_STOP), array('refer_share_id' => $weshare_id, 'status' => WESHARE_STATUS_NORMAL, 'type' => SHARE_TYPE_GROUP));
 
         $this->on_weshare_stopped($uid, $weshare_id);
     }
@@ -93,7 +93,7 @@ class WesharesComponent extends Component
      */
     public function delete_weshare($uid, $weshare_id) {
         $weshareM = ClassRegistry::init('Weshare');
-        $weshareM->update(array('status' => WESHARE_DELETE_STATUS), array('id' => $weshare_id, 'creator' => $uid));
+        $weshareM->update(array('status' => WESHARE_STATUS_DELETED), array('id' => $weshare_id, 'creator' => $uid));
 
         $this->log('Delete weshare '.$weshare_id.' of user '.$uid . ' successfully', LOG_INFO);
 

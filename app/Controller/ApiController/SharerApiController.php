@@ -264,13 +264,13 @@ class SharerApiController extends AppController{
         foreach ($createShares as $shareItem) {
             $settlement = $shareItem['settlement'];
             $status = $shareItem['status'];
-            if ($settlement == WESHARE_SETTLEMENT_STATUS) {
+            if ($settlement == WESHARE_SETTLEMENT_YES) {
                 $result['settlement'][] = $shareItem;
             } else {
-                if ($status == WESHARE_NORMAL_STATUS) {
+                if ($status == WESHARE_STATUS_NORMAL) {
                     $result['normal'][] = $shareItem;
                 }
-                if ($status == WESHARE_STOP_STATUS) {
+                if ($status == WESHARE_STATUS_STOP) {
                     $result['stop'][] = $shareItem;
                 }
             }

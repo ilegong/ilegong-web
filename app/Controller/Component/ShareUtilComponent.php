@@ -1195,7 +1195,7 @@ class ShareUtilComponent extends Component
     public function set_group_share_available($share_id)
     {
         $weshareM = ClassRegistry::init('Weshare');
-        $weshareM->updateAll(array('status' => WESHARE_NORMAL_STATUS), array('id' => $share_id));
+        $weshareM->updateAll(array('status' => WESHARE_STATUS_NORMAL), array('id' => $share_id));
     }
 
     /**
@@ -1640,7 +1640,7 @@ class ShareUtilComponent extends Component
         $shares = $WeshareM->find('all', array(
             'conditions' => array(
                 'type' => SHARE_TYPE_GROUP,
-                'status' => WESHARE_NORMAL_STATUS
+                'status' => WESHARE_STATUS_NORMAL
             ),
             'order' => array('id DESC'),
             'limit' => 500

@@ -197,7 +197,7 @@ class WeshareBuyComponent extends Component
         $myCreateShares = $weshareM->find('all', array(
             'conditions' => array(
                 'creator' => $uid,
-                'status' => array(WESHARE_STOP_STATUS, WESHARE_NORMAL_STATUS),
+                'status' => array(WESHARE_STATUS_STOP, WESHARE_STATUS_NORMAL),
                 'type' => $query_share_type
             ),
             'fields' => $this->query_share_fields,
@@ -2677,7 +2677,7 @@ class WeshareBuyComponent extends Component
         if (empty($weshare)) {
             return false;
         }
-        return $weshare['Weshare']['status'] == WESHARE_NORMAL_STATUS;
+        return $weshare['Weshare']['status'] == WESHARE_STATUS_NORMAL;
     }
 
     /**
@@ -2892,7 +2892,7 @@ class WeshareBuyComponent extends Component
         $shares = $weshareM->find('all', array(
             'conditions' => array(
                 'id' => $share_ids,
-                'status' => WESHARE_NORMAL_STATUS
+                'status' => WESHARE_STATUS_NORMAL
             ),
             'fields' => $this->query_share_fields,
             'order' => array('created DESC'),
