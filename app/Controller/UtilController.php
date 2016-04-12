@@ -377,18 +377,6 @@ class UtilController extends AppController {
 
     /**
      * @param $shareId
-     * @param $userId
-     * 复制一个分享出来
-     */
-    public function copy_share($shareId, $userId) {
-        $this->autoRender = false;
-        $result = $this->ShareUtil->cloneShare($shareId, $userId);
-        echo json_encode(array('success' => true, 'result' => $result));
-        return;
-    }
-
-    /**
-     * @param $shareId
      * 手动的开启常用自提点子分享
      */
     public function start_static_shares($shareId) {

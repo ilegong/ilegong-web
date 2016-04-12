@@ -64,7 +64,7 @@ class WesharesController extends AppController
         } else {
             //use cache
             $weshare = $this->WeshareBuy->get_weshare_info($weshare_id);
-            if ($weshare['type'] == POOL_SHARE_BUY_TYPE) {
+            if ($weshare['type'] == SHARE_TYPE_POOL_FOR_PROXY) {
                 //check share type
                 if (!$this->ShareUtil->is_proxy_user($uid)) {
                     $user_can_manage_share = $this->ShareAuthority->user_can_manage_share($uid, $weshare_id);
@@ -440,35 +440,6 @@ class WesharesController extends AppController
     }
 
     /**
-     * 不支付直接开启新的分享
-     */
-    public function start_new_group_share()
-    {
-        //不需要支付直接开团
-        //check user has
-        $this->autoRender = false;
-        $uid = $this->currentUser['id'];
-        if (empty($uid)) {
-            echo json_encode(array('success' => false, 'reason' => 'not_login'));
-            return;
-        }
-        $postStr = file_get_contents('php://input');
-        $postDataArray = json_decode($postStr, true);
-        $weshareId = $postDataArray['weshare_id'];
-        $address = $postDataArray['address'];
-        $business_remark = $postDataArray['business_remark'];
-        $result = $this->ShareUtil->cloneShare($weshareId, $uid, $address, $business_remark, GROUP_SHARE_TYPE, WESHARE_NORMAL_STATUS);
-        //send template msg and clear cache
-        if ($result['success']) {
-            Cache::write(SHARE_OFFLINE_ADDRESS_BUY_DATA_CACHE_KEY . '_' . $weshareId, '');
-            Cache::write(SHARE_OFFLINE_ADDRESS_SUMMERY_DATA_CACHE_KEY . '_' . $weshareId, '');
-            $this->ShareUtil->trigger_send_new_share_msg($result['shareId'], $uid);
-        }
-        echo json_encode($result);
-        return;
-    }
-
-    /**
      * @param $ship_setting
      * @param $good_num
      * @param $good_weight
@@ -698,7 +669,7 @@ class WesharesController extends AppController
     }
 
     /**
-     * @param $shareId
+     * 重新开团？如果是产品街，涉及到授权
      */
     public function cloneShare($shareId)
     {
@@ -1784,31 +1755,6 @@ class WesharesController extends AppController
             //check is start share or order in offline address
             $orderData['ship_mark'] = SHARE_SHIP_GROUP_TAG;
             return self::PROCESS_SHIP_MARK_UNFINISHED_RESULT;
-        }
-    }
-
-
-    /**
-     * @param $orderData
-     * @param $shipInfo
-     * @param $is_start_new_group_share
-     * @param $weshareId
-     * @param $uid
-     * @param $address
-     * @param $business_remark
-     * 处理用户邻里拼下单
-     */
-    private function process_ship_group(&$orderData, $shipInfo, $is_start_new_group_share, $weshareId, $uid, $address, $business_remark)
-    {
-        if ($is_start_new_group_share) {
-            //标示这是一个邻里拼 触发 clone 一个分享
-            $orderData['relate_type'] = ORDER_TRIGGER_GROUP_SHARE_TYPE;
-            //clone share
-            $this->ShareUtil->cloneShare($weshareId, $uid, $address, $business_remark, GROUP_SHARE_TYPE);
-        } else {
-            //reset share id
-            $shipInfoWeshareId = $shipInfo['weshare_id'];
-            $orderData['member_id'] = $shipInfoWeshareId;
         }
     }
 

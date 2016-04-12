@@ -33,6 +33,7 @@ class PoolProductApiController extends AppController
         exit();
     }
 
+    // App上从产品街开团
     public function clone_share($share_id)
     {
         $uid = $this->currentUser['id'];
@@ -51,7 +52,7 @@ class PoolProductApiController extends AppController
             ]);
             exit();
         }
-        $result = $this->ShareUtil->cloneShare($share_id, $uid, null, null, FROM_POOL_SHARE_TYPE);
+        $result = $this->ShareUtil->cloneShare($share_id, $uid, SHARE_TYPE_POOL);
         if ($result['success']) {
             $this->init_share_authorize($result['shareId'], $share_id, $uid);
         }

@@ -347,6 +347,7 @@ class ShareManageController extends AppController
         $this->redirect('/shareManage/pool_products');
     }
 
+    // 从分享到产品街：不需要授权
     public function pool_share_copy($share_id)
     {
         // 在开始克隆之前, 要加一点判断.
@@ -356,8 +357,9 @@ class ShareManageController extends AppController
         }
 
         $uid = $this->currentUser['id'];
+        $this->log('Admin '.$uid.' tries to clone share '.$share_id.' to pool products', LOG_INFO);
         // 先克隆初来一份Wesahres表行
-        $nshare = $this->ShareUtil->cloneShare($share_id, null, null, null, POOL_SHARE_TYPE, WESHARE_DELETE_STATUS, 0);
+        $nshare = $this->ShareUtil->cloneShare($share_id, null,POOL_SHARE_TYPE, WESHARE_DELETE_STATUS, 0);
         $nshare = $this->get_weshare_by_id($nshare['shareId']);
         // 手动填充cake_pool_products表.
         $data = [];
@@ -422,7 +424,7 @@ class ShareManageController extends AppController
      * 产品街分享
      */
     public function my_pool_share(){
-        $this->process_authorize_share(FROM_POOL_SHARE_TYPE);
+        $this->process_authorize_share(SHARE_TYPE_POOL);
     }
 
     private function process_authorize_share($type = null){
@@ -1147,12 +1149,23 @@ class ShareManageController extends AppController
 
     }
 
+    //  给某个用户手动复制分享，需要授权
     public function copy_share_to_user($shareId, $userId)
     {
         $this->autoRender = false;
+
+        $uid = $this->currentUser['id'];
+        $this->log('Admin '.$uid.' tries to clone share '.$shareId.' to user '.$userId, LOG_INFO);
         $result = $this->ShareUtil->cloneShare($shareId, $userId);
-        echo json_encode(array('success' => true, 'result' => $result));
-        return;
+        if($result['success']){
+            $this->log('Admin '.$uid.' clones share '.$shareId.' to user '.$userId.' with id '.$result['shareId'].' successfully', LOG_INFO);
+        }
+        else{
+            $this->log('Admin '.$uid.' failed to clone share '.$shareId.' to user '.$userId, LOG_ERR);
+        }
+        echo json_encode($result);
+
+        exit();
     }
 
 }
