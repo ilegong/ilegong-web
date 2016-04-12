@@ -357,6 +357,7 @@ class ShareManageController extends AppController
         }
 
         $uid = $this->currentUser['id'];
+        $this->log('Admin '.$uid.' tries to clone share '.$share_id.' to pool products', LOG_INFO);
         // 先克隆初来一份Wesahres表行
         $nshare = $this->ShareUtil->cloneShare($share_id, null,POOL_SHARE_TYPE, WESHARE_DELETE_STATUS, 0);
         $nshare = $this->get_weshare_by_id($nshare['shareId']);
@@ -1152,9 +1153,19 @@ class ShareManageController extends AppController
     public function copy_share_to_user($shareId, $userId)
     {
         $this->autoRender = false;
+
+        $uid = $this->currentUser['id'];
+        $this->log('Admin '.$uid.' tries to clone share '.$shareId.' to user '.$userId, LOG_INFO);
         $result = $this->ShareUtil->cloneShare($shareId, $userId);
-        echo json_encode(array('success' => true, 'result' => $result));
-        return;
+        if($result['success']){
+            $this->log('Admin '.$uid.' clones share '.$shareId.' to user '.$userId.' with id '.$result['shareId'].' successfully', LOG_INFO);
+        }
+        else{
+            $this->log('Admin '.$uid.' failed to clone share '.$shareId.' to user '.$userId, LOG_ERR);
+        }
+        echo json_encode($result);
+
+        exit();
     }
 
 }
