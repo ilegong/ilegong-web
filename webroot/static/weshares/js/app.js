@@ -97,24 +97,25 @@
 
 
   //多个控制器共享数据
-  app.factory('NotifyingService', function () {
-    var onMessageCallbacks = {};
-    var onMessage = function (event, cb) {
-      onMessageCallbacks[event] = cb;
+  app.factory('CoreReactorChannel', function ($rootScope) {
+    var elevatedCoreTemperature = function (event, data) {
+      $rootScope.$broadcast(event, data);
     };
 
-    var newMessage = function (event, data) {
-      if (onMessageCallbacks[event]) {
-        onMessageCallbacks[event](data);
-      }
+    // subscribe to elevatedCoreTemperature event.
+    // note that you should require $scope first
+    // so that when the subscriber is destroyed you
+    // don't create a closure over it, and te scope can clean up.
+    var onElevatedCoreTemperature = function ($scope, event, handler) {
+      $scope.$on(event, function (e, data) {
+        // note that the handler is passed the problem domain parameters
+        handler(data);
+      });
     };
-    var cleanUp = function () {
-      onMessageCallbacks = {};
-    };
+    // other CoreReactorChannel events would go here.
     return {
-      onMessage: onMessage,
-      newMessage: newMessage,
-      cleanUp: cleanUp
+      elevatedCoreTemperature: elevatedCoreTemperature,
+      onElevatedCoreTemperature: onElevatedCoreTemperature
     };
   });
 

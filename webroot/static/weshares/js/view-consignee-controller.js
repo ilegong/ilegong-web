@@ -6,6 +6,7 @@
     var vmc = this;
     vmc.getTabBarItemWidth = getTabBarItemWidth;
     vmc.getTabBarStyle = getTabBarStyle;
+    vmc.changeShipTab = changeShipTab;
     vmc.tabBarItemWidth = 33.3;
     var vm = $scope.$parent.vm;
 
@@ -28,11 +29,13 @@
       return num ? 100 / num : 100;
     }
 
-
     function getTabBarStyle() {
       return 'width: ' + vmc.tabBarItemWidth + '%';
     }
 
+    function changeShipTab(type){
+      vm.selectShipType = type;
+    }
 
     function getSelectTypeDefaultVal() {
       if (vm.weshareSettings.pin_tuan && vm.weshareSettings.pin_tuan.status == 1) {

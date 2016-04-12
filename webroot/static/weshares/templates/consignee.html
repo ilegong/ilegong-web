@@ -1,16 +1,16 @@
 <!--Tab切换-->
 <ul class="clearfix logistics-nav">
     <li ng-if="vm.weshareSettings.kuai_di.status==1" style="{{::wcc.getTabBarStyle()}}"
-        ng-class="{'cur': vm.selectShipType==0}">快递
+        ng-class="{'cur': vm.selectShipType==0}" ng-click="wcc.changeShipTab(0)">快递
     </li>
     <li ng-if="vm.weshareSettings.self_ziti.status==1" style="{{::wcc.getTabBarStyle()}}"
-        ng-class="{'cur': vm.selectShipType==1}">自提
+        ng-class="{'cur': vm.selectShipType==1}" ng-click="wcc.changeShipTab(1)">自提
     </li>
     <li ng-if="vm.weshareSettings.pys_ziti.status==1" style="{{::wcc.getTabBarStyle()}}"
-        ng-class="{'cur': vm.selectShipType==2}">好邻居自提
+        ng-class="{'cur': vm.selectShipType==2}" ng-click="wcc.changeShipTab(2)">好邻居自提
     </li>
     <li ng-if="vm.weshareSettings.pin_tuan.status==1" style="{{::wcc.getTabBarStyle()}}"
-        ng-class="{'cur': vm.selectShipType==3}">拼团
+        ng-class="{'cur': vm.selectShipType==3}" ng-click="wcc.changeShipTab(3)">拼团
     </li>
 </ul>
 <!--主面板-->
