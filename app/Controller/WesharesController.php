@@ -673,12 +673,16 @@ class WesharesController extends AppController
      */
     public function cloneShare($shareId)
     {
-        // TODO: 权限控制
-        $this->autoRender = false;
-
         $uid = $this->currentUser['id'];
-        $result = $this->ShareUtil->cloneShare($shareId);
+        $is_owner = $this->Weshare->hasAny(['id' => $shareId, 'creator' => $uid]);
+        if (!$is_owner) {
+            echo json_encode(array('success' => false,'reason' => 'not a proxy user.'));
+            exit();
+        }
+
+        $this->autoRender = false;
         $this->log('Proxy '.$uid.' tries to clone share from share '.$shareId, LOG_INFO);
+        $result = $this->ShareUtil->cloneShare($shareId);
         if($result['success']){
             $this->log('Proxy '.$uid.' clones share '.$result['shareId'].' from share '.$shareId. ' successfully', LOG_INFO);
         }

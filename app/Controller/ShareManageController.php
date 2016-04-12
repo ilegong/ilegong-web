@@ -355,13 +355,15 @@ class ShareManageController extends AppController
             $this->Session->setFlash("没有相应的物流模板数据或者物流模板数据错误, 请检查", null);
             $this->redirect('/share_manage/search_shares?id=' . $share_id);
         }
-
         $uid = $this->currentUser['id'];
+        if(!is_super_share_manager($uid)){
+            $this->Session->setFlash("您没有权限把分享上到产品街, 请联系管理员", null);
+            $this->redirect('/share_manage/search_shares?id=' . $share_id);
+        }
+
         $this->log('Admin '.$uid.' tries to clone share '.$share_id.' to pool products', LOG_INFO);
-        // 先克隆初来一份Wesahres表行
         $result = $this->ShareUtil->cloneShare($share_id, null,POOL_SHARE_TYPE, WESHARE_DELETE_STATUS, 0);
         if(!$result['success']){
-            $this->log('Admin '.$uid.' failed to clone share '.$share_id.' to pool products', LOG_ERR);
             throw new Exception("复制到产品街出错，请联系管理员");
         }
 
@@ -1157,9 +1159,13 @@ class ShareManageController extends AppController
     //  给某个用户手动复制分享，需要授权
     public function copy_share_to_user($shareId, $userId)
     {
-        $this->autoRender = false;
-
         $uid = $this->currentUser['id'];
+        if(!is_super_share_manager($uid)){
+            $this->Session->setFlash("您没有权限复制分享, 请联系管理员", null);
+            $this->redirect('/share_manage/search_shares?id=' . $shareId);
+        }
+
+        $this->autoRender = false;
         $this->log('Admin '.$uid.' tries to clone share '.$shareId.' to user '.$userId, LOG_INFO);
         $result = $this->ShareUtil->cloneShare($shareId, $userId);
         if($result['success']){
