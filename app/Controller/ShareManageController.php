@@ -423,7 +423,7 @@ class ShareManageController extends AppController
      * 产品街分享
      */
     public function my_pool_share(){
-        $this->process_authorize_share(FROM_POOL_SHARE_TYPE);
+        $this->process_authorize_share(SHARE_TYPE_POOL);
     }
 
     private function process_authorize_share($type = null){

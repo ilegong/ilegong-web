@@ -68,7 +68,7 @@ class ShareProductPoolController extends AppController {
         if (!$is_proxy) {
             echo json_encode(array('success' => false, 'reason' => '不是团长'));
         }
-        $result = $this->ShareUtil->cloneShare($share_id, $uid, FROM_POOL_SHARE_TYPE);
+        $result = $this->ShareUtil->cloneShare($share_id, $uid, SHARE_TYPE_POOL);
         if ($result['success']) {
             $this->init_share_authorize($result['shareId'], $share_id, $uid);
         }

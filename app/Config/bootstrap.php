@@ -292,12 +292,12 @@ const OPT_LOG_SHARE_COMMENT = 4;
 const OPT_LOG_START_GROUP_SHARE = 5;
 const OPT_LOG_PINTUAN_SUCCESS = 6;
 
-const DEFAULT_SHARE_TYPE = 0; //默认团购
-const GROUP_SHARE_TYPE = 1; //拼团团购
-const POOL_SHARE_TYPE = 3; //产品池类型的分享 不能进行购买
-const POOL_SHARE_BUY_TYPE = 4; //产品池中购买的分享的链接
-const PIN_TUAN_SHARE_TYPE = 5; //拼团的分享
-const FROM_POOL_SHARE_TYPE = 6; //来自产品街的分享
+const SHARE_TYPE_DEFAULT = 0; //默认团购
+const SHARE_TYPE_GROUP = 1; //拼团团购
+const SHARE_TYPE_POOL_SELF = 3; //产品池类型的分享 不能进行购买
+const SHARE_TYPE_POOL_FOR_PROXY = 4; //产品池中购买的分享的链接
+const SHARE_TYPE_PIN_TUAN = 5; //拼团的分享
+const SHARE_TYPE_POOL = 6; //来自产品街的分享
 
 const ORDER_TRIGGER_GROUP_SHARE_TYPE = 1;
 //同一个地址拼团
