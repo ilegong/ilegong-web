@@ -103,10 +103,10 @@ class SharerApiController extends AppController{
      */
     public function open_new_share($shareId){
         $uid = $this->currentUser['id'];
-        $this->log('Proxy '.$uid.' tries to reopen share '.$shareId, LOG_INFO);
+        $this->log('Proxy '.$uid.' tries to clone share from share '.$shareId, LOG_INFO);
         $result = $this->ShareUtil->cloneShare($shareId);
         if(!$result['success']){
-            $this->log('Proxy '.$uid.' failed to reopen share '.$shareId, LOG_ERR);
+            $this->log('Proxy '.$uid.' failed to clone share from share '.$shareId, LOG_ERR);
             echo json_encode($result);
             exit();
         }
@@ -121,7 +121,7 @@ class SharerApiController extends AppController{
         $shareInfo = $shareInfo['Weshare'];
         $shareInfo['images'] = explode('|', $shareInfo['images']);
 
-        $this->log('Proxy '.$uid.' reopens share '.$shareId.' as id '.$result["shareId"].'successfully', LOG_INFO);
+        $this->log('Proxy '.$uid.' clones share '.$result['shareId'].'  from share '.$shareId.' successfully', LOG_INFO);
         echo json_encode(array('success' => true, 'shareInfo' => $shareInfo));
         exit();
     }
