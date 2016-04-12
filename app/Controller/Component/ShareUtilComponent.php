@@ -422,7 +422,6 @@ class ShareUtilComponent extends Component
                 // 从产品街开团；
                 $shareInfo['refer_share_id'] = $shareId;
             }
-            $shareId = $shareInfo['refer_share_id'];
         } else {
             // 默认的分享（重新开团；或者手工复制）
             $shareInfo['refer_share_id'] = $shareId;
@@ -431,12 +430,10 @@ class ShareUtilComponent extends Component
         $newShareInfo = $WeshareM->save($shareInfo);
         if (!$newShareInfo) {
             $dataSource->rollback();
-            $this->log('', LOG_ERR);
             return array('success' => false);
         }
 
         $newShareId = $newShareInfo['Weshare']['id'];
-        $this->log('clone share original id ' . $shareId . ' result share id ' . $newShareId . ' type ' . $newShareInfo['type'], LOG_INFO);
         //clone product
         $this->cloneShareProduct($newShareId, $newShareInfo['Weshare']['refer_share_id'], $share_limit);
         //clone address
@@ -448,17 +445,9 @@ class ShareUtilComponent extends Component
         //clone share delivery template
         $this->cloneDeliveryTemplate($newShareId, $newShareInfo['Weshare']['refer_share_id'], $newShareInfo['Weshare']['creator']);
 
-        if ($shareInfo['type'] == SHARE_TYPE_POOL) {
-            $refer_weshare = $weshareM->find('first', array(
-                'conditions' => array(
-                    'id' => $newShareInfo['Weshare']['refer_share_id']
-                ),
-                'fields' => array('id', 'creator')
-            ));
-            $this->ShareAuthority->init_clone_share_from_pool_operate_config($newShareInfo['Weshare']['id'], $newShareInfo['Weshare']['creator'], $refer_weshare['Weshare']['creator']);
-        }
+        $this->authorize_weshare_after_cloning($newShareInfo);
 
-        Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $shareInfo['creator'], '');
+        Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $newShareInfo['Weshare']['creator'], '');
         $dataSource->commit();
         return array('shareId' => $newShareId, 'success' => true);
     }
@@ -2342,5 +2331,24 @@ class ShareUtilComponent extends Component
             }
         }
         return implode(',', $ship_info);
+    }
+
+    /**
+     * @param $newShareInfo
+     * @internal param $WeshareM
+     */
+    public function authorize_weshare_after_cloning($newShareInfo)
+    {
+        $WeshareM = ClassRegistry::init('Weshare');
+        $refer_weshare = $WeshareM->find('first', array(
+            'conditions' => array(
+                'id' => $newShareInfo['Weshare']['refer_share_id']
+            ),
+            'fields' => array('id', 'creator')
+        ));
+        if (!empty($refer_weshare) && $newShareInfo['Weshare']['creator'] != $refer_weshare['Weshare']['creator']) {
+            $this->log('authorize share ' . $newShareInfo['Weshare']['id'] . ' of user ' . $newShareInfo['Weshare']['creator'] . ' to referred share ' . $newShareInfo['Weshare']['refer_share_id'] . ' of user ' . $refer_weshare['Weshare']['creator'] . ' for pool product share', LOG_INFO);
+            $this->ShareAuthority->init_clone_share_from_pool_operate_config($newShareInfo['Weshare']['id'], $newShareInfo['Weshare']['creator'], $refer_weshare['Weshare']['creator']);
+        }
     }
 }
