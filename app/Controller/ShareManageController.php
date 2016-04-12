@@ -1156,7 +1156,7 @@ class ShareManageController extends AppController
 
     }
 
-    //  给某个用户手动复制分享，需要授权
+    //  给某个用户手动复制分享
     public function copy_share_to_user($shareId, $userId)
     {
         $uid = $this->currentUser['id'];

@@ -669,7 +669,7 @@ class WesharesController extends AppController
     }
 
     /**
-     * 重新开团？如果是产品街，涉及到授权
+     * 重新开团
      */
     public function cloneShare($shareId)
     {

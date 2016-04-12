@@ -417,7 +417,11 @@ class ShareUtilComponent extends Component
             // 从普通分享上产品街
             $shareInfo['refer_share_id'] = 0;
         } elseif ($shareInfo['type'] == SHARE_TYPE_POOL) {
-            // 产品街的分享（重新开团；或者手工复制）
+            // 产品街的分享（从产品街开团；重新开团；或者手工复制）
+            if($shareInfo['refer_share_id'] == 0){
+                // 从产品街开团；
+                $shareInfo['refer_share_id'] = $shareId;
+            }
             $shareId = $shareInfo['refer_share_id'];
         } else {
             // 默认的分享（重新开团；或者手工复制）
@@ -434,15 +438,25 @@ class ShareUtilComponent extends Component
         $newShareId = $newShareInfo['Weshare']['id'];
         $this->log('clone share original id ' . $shareId . ' result share id ' . $newShareId . ' type ' . $newShareInfo['type'], LOG_INFO);
         //clone product
-        $this->cloneShareProduct($newShareId, $shareId, $share_limit);
+        $this->cloneShareProduct($newShareId, $newShareInfo['Weshare']['refer_share_id'], $share_limit);
         //clone address
-        $this->cloneShareAddresses($newShareId, $shareId);
+        $this->cloneShareAddresses($newShareId, $newShareInfo['Weshare']['refer_share_id']);
         //clone ship setting
-        $this->cloneShareShipSettings($newShareId, $shareId);
+        $this->cloneShareShipSettings($newShareId, $newShareInfo['Weshare']['refer_share_id']);
         //clone rebate set
-        $this->cloneShareRebateSet($newShareId, $shareId);
+        $this->cloneShareRebateSet($newShareId, $newShareInfo['Weshare']['refer_share_id']);
         //clone share delivery template
-        $this->cloneDeliveryTemplate($newShareId, $shareId, $shareInfo['creator']);
+        $this->cloneDeliveryTemplate($newShareId, $newShareInfo['Weshare']['refer_share_id'], $newShareInfo['Weshare']['creator']);
+
+        if ($shareInfo['type'] == SHARE_TYPE_POOL) {
+            $refer_weshare = $weshareM->find('first', array(
+                'conditions' => array(
+                    'id' => $newShareInfo['Weshare']['refer_share_id']
+                ),
+                'fields' => array('id', 'creator')
+            ));
+            $this->ShareAuthority->init_clone_share_from_pool_operate_config($newShareInfo['Weshare']['id'], $newShareInfo['Weshare']['creator'], $refer_weshare['Weshare']['creator']);
+        }
 
         Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $shareInfo['creator'], '');
         $dataSource->commit();

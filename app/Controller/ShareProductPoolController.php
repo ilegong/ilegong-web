@@ -73,7 +73,6 @@ class ShareProductPoolController extends AppController {
         $this->log('Proxy '.$uid.' tries to clone share from pool products '.$share_id, LOG_INFO);
         $result = $this->ShareUtil->cloneShare($share_id, $uid, SHARE_TYPE_POOL);
         if ($result['success']) {
-            $this->init_share_authorize($result['shareId'], $share_id, $uid);
             $this->log('Proxy '.$uid.'  clones share '.$result['shareId'].' from pool products '.$share_id.' successfully', LOG_INFO);
         }
         else{
@@ -102,18 +101,5 @@ class ShareProductPoolController extends AppController {
      */
     public function get_product_orders_and_comments($share_id, $page = 1) {
 
-    }
-
-
-
-    private function init_share_authorize($share_id, $refer_share_id, $uid) {
-        $weshareM = ClassRegistry::init('Weshare');
-        $weshare_info = $weshareM->find('first', array(
-            'conditions' => array(
-                'id' => $refer_share_id
-            ),
-            'fields' => array('id', 'creator')
-        ));
-        $this->ShareAuthority->init_clone_share_from_pool_operate_config($share_id, $uid, $weshare_info['Weshare']['creator']);
     }
 }
