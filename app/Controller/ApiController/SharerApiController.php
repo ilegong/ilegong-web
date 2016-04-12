@@ -111,7 +111,7 @@ class SharerApiController extends AppController{
         }
 
         $this->log('Proxy '.$uid.' tries to clone share from share '.$shareId, LOG_INFO);
-        $result = $this->ShareUtil->cloneShare($shareId);
+        $result = $this->ShareUtil->cloneShare($shareId, null);
         if(!$result['success']){
             $this->log('Proxy '.$uid.' failed to clone share from share '.$shareId, LOG_ERR);
             echo json_encode($result);

@@ -682,7 +682,7 @@ class WesharesController extends AppController
 
         $this->autoRender = false;
         $this->log('Proxy '.$uid.' tries to clone share from share '.$shareId, LOG_INFO);
-        $result = $this->ShareUtil->cloneShare($shareId);
+        $result = $this->ShareUtil->cloneShare($shareId, null);
         if($result['success']){
             $this->log('Proxy '.$uid.' clones share '.$result['shareId'].' from share '.$shareId. ' successfully', LOG_INFO);
         }
