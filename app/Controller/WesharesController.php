@@ -64,7 +64,7 @@ class WesharesController extends AppController
         } else {
             //use cache
             $weshare = $this->WeshareBuy->get_weshare_info($weshare_id);
-            if ($weshare['type'] == POOL_SHARE_BUY_TYPE) {
+            if ($weshare['type'] == SHARE_TYPE_POOL_FOR_PROXY) {
                 //check share type
                 if (!$this->ShareUtil->is_proxy_user($uid)) {
                     $user_can_manage_share = $this->ShareAuthority->user_can_manage_share($uid, $weshare_id);

@@ -644,7 +644,7 @@ class OrdersController extends AppController {
         $weshare = $WeshareM->find('first', array(
             'conditions' => array(
                 'id' => $share_id,
-                'type' => GROUP_SHARE_TYPE
+                'type' => SHARE_TYPE_GROUP
             )
         ));
         if (!empty($weshare)) {
