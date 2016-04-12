@@ -6,7 +6,7 @@ class ShareFaqController extends AppController {
 
     var $uses = array('ShareFaq', 'Weshare', 'User');
 
-    var $components = array('Weixin', 'WeshareBuy', 'ShareUtil', 'ShareFaqUtil', 'ShareAuthority');
+    var $components = array('Weixin', 'WeshareBuy', 'ShareUtil', 'ShareFaqUtil', 'ShareAuthority', 'SharePush', 'WeshareFaq');
 
 
     public function beforeFilter() {
@@ -84,7 +84,6 @@ class ShareFaqController extends AppController {
      */
     public function create_faq() {
         $this->autoRender = false;
-        //todo check login
         $sender = $this->currentUser['id'];
         if (is_blacklist_user($sender)) {
             echo json_encode(array('success' => false, 'reason' => 'user_bad'));
@@ -104,20 +103,7 @@ class ShareFaqController extends AppController {
             'share_id' => $shareId,
             'msg' => $msg
         );
-        $faq_data = $this->ShareFaq->save($faq_data);
-        $faq_data['success'] = true;
-        $weshareInfo = $this->WeshareBuy->get_weshare_info($shareId);
-        $share_title = $weshareInfo['title'];
-        $this->ShareFaqUtil->send_notify_template_msg($sender, $receiver, $msg, $shareId, $share_title);
-        //check receive msg user is share creator
-        if ($this->check_msg_is_send_to_share_creator($shareId, $receiver)) {
-            $share_managers = $this->ShareAuthority->get_share_manage_auth_users($shareId);
-            if (!empty($share_managers)) {
-                foreach ($share_managers as $manager) {
-                    $this->ShareFaqUtil->send_notify_template_msg($sender, $manager, $msg, $shareId, $share_title);
-                }
-            }
-        }
+        $faq_data = $this->WeshareFaq->create_faq($faq_data);
         echo json_encode($faq_data);
         return;
     }
@@ -127,10 +113,6 @@ class ShareFaqController extends AppController {
         return in_array($user, $share_manage_users);
     }
 
-    private function check_msg_is_send_to_share_creator($weshareId, $receiver) {
-        $weshareInfo = $this->WeshareBuy->get_weshare_info($weshareId);
-        return $weshareInfo['creator'] == $receiver;
-    }
 
     private function get_weshare_creator($weshareId) {
         $weshareInfo = $this->WeshareBuy->get_weshare_info($weshareId);
