@@ -19,7 +19,7 @@
     }
 
     function getTabBarItemWidth() {
-      var shipTypes = ['pin_tuan', 'kuai_di', 'self_ziti', 'pys_ziti'];
+      var shipTypes = ['kuai_di', 'self_ziti', 'pys_ziti'];
       var num = 0;
       _.each(shipTypes, function (item) {
         if (vm.weshareSettings[item] && vm.weshareSettings[item]['status'] == 1) {
@@ -38,10 +38,6 @@
     }
 
     function getSelectTypeDefaultVal() {
-      if (vm.weshareSettings.pin_tuan && vm.weshareSettings.pin_tuan.status == 1) {
-        vm.shipFee = vm.weshareSettings.pin_tuan.ship_fee;
-        return 3;
-      }
       if (vm.weshareSettings.kuai_di && vm.weshareSettings.kuai_di.status == 1) {
         return 0;
       }

@@ -9,9 +9,6 @@
     <li ng-if="vm.weshareSettings.pys_ziti.status==1" style="{{::wcc.getTabBarStyle()}}"
         ng-class="{'cur': vm.selectShipType==2}" ng-click="wcc.changeShipTab(2)">好邻居自提
     </li>
-    <li ng-if="vm.weshareSettings.pin_tuan.status==1" style="{{::wcc.getTabBarStyle()}}"
-        ng-class="{'cur': vm.selectShipType==3}" ng-click="wcc.changeShipTab(3)">拼团
-    </li>
 </ul>
 <!--主面板-->
 <div class="expressage">
@@ -26,23 +23,24 @@
         </li>
         <li class="fr">
             <a href="#" class="next-icon clearfix">
-                <label style="display: none;">修改</label>
+                <label>修改</label>
                 <img src="/static/weshares/images/next-icon.png"/>
             </a>
         </li>
     </ul>
     <!-- 使用好邻居自提的时候出现 -->
-    <ul class="clearfix" ng-if="vm.selectShipType==2">
+    <ul class="clearfix" ng-if="vm.selectShipType==2" ng-click="vm.showChooseOfflineStore()">
         <li class="fl">
-            <a href="#" class="defaultText">选择自提地址</a>
-            <a href="#" class="address">
-                <span>Alice</span><span>13333333333</span>
-                <br/><span>北京市通州区广通小区3-2-3002</span>
+            <a href="#" class="defaultText" ng-if="!vm.checkedOfflineStore">选择自提地址</a>
+            <a href="#" class="address" ng-if="vm.checkedOfflineStore">
+                <span ng-bind="vm.checkedOfflineStore.owner_name"></span><span
+                    ng-bind="vm.checkedOfflineStore.owner_phone"></span>
+                <br/><span ng-bind="vm.checkedOfflineStore.alias"></span>
             </a>
         </li>
         <li class="fr">
             <a href="#" class="next-icon clearfix">
-                <label style="display: none;">修改</label>
+                <label>修改</label>
                 <img src="/static/weshares/images/next-icon.png"/>
             </a>
         </li>
@@ -51,29 +49,27 @@
     <ul class="clearfix" ng-if="vm.selectShipType==1">
         <li class="fl comment">自提地址</li>
         <li class="fl content">
-            <select></select>
-        </li>
-    </ul>
-    <!--拼团-->
-    <ul class="clearfix" ng-if="vm.selectShipType==3">
-        <li class="fl comment">拼团地址</li>
-        <li class="fl content">
-            <select></select>
+            <select ng-model='vm.weshare.selectedAddressId'
+                    ng-options="address.id as address.address for address in vm.weshare.addresses"
+                    ng-change='vm.validateAddress()'>
+                <option value="-1">请选择地址</option>
+            </select>
         </li>
     </ul>
     <!-- 选择自提方式-->
     <div ng-if="vm.selectShipType!=0">
         <ul class="clearfix">
             <li class="fl comment">收货人</li>
-            <li class="fl content"><input type="text" placeholder="请输入收货人姓名"/></li>
+            <li class="fl content"><input ng-model='vm.buyerName' type="text" placeholder="请输入收货人姓名"/></li>
         </ul>
         <ul class="clearfix">
             <li class="fl comment">联系方式</li>
-            <li class="fl content"><input type="text" placeholder="请输入收货人手机号"/></li>
+            <li class="fl content"><input ng-model='vm.buyerMobilePhone' type="text" placeholder="请输入收货人手机号"/></li>
         </ul>
         <ul class="clearfix">
             <li class="fl comment">详细地址</li>
-            <li class="fl content"><input type="text" placeholder="小区-楼号-门牌(必要时送货上门)"/></li>
+            <li class="fl content"><input ng-click="vm.showChooseOfflineStore()" type="text"
+                                          placeholder="小区-楼号-门牌(必要时送货上门)"/></li>
         </ul>
     </div>
     <!--都可选-->
@@ -90,6 +86,7 @@
             <img src="/static/weshares/images/back.png"/>
             <label>返回</label>
         </a>
+
         <h1 class="fl">选择地址</h1>
         <a href="#" class="nav-home fr">
             <img src="/static/weshares/images/home.png"/>

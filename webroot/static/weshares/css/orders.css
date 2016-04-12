@@ -38,7 +38,7 @@ ul li { list-style: none; }
 .expressage ul a.next-icon label{ float: left; color: #f99d3a;}
 .expressage ul li.comment,.copyreader-address ul li.comment{ color: #333333; position: absolute; left:12px; top:50%; margin-top: -9px;}
 .expressage ul li.content,.copyreader-address ul li.content{ padding: 12px 0 12px 70px; width: 79%;}
-.expressage ul li.content input,.copyreader-address ul li.content input{ border: 0; line-height: 18px; font-size: 1em; width: 100%; outline: none;}
+.expressage ul li.content input,.expressage ul li.content select,.copyreader-address ul li.content input{ border: 0; line-height: 18px; font-size: 1em; width: 100%; outline: none;}
 
 /*selection of products*/
 .selection-product h1{ padding: 10px 12px 5px 12px; font-size: 1em; font-weight: normal; color: #666666;}

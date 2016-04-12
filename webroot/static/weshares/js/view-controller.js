@@ -561,9 +561,6 @@
       if (vm.selectShipType == 2) {
         return vm.weshareSettings.pys_ziti.id;
       }
-      if (vm.selectShipType == 3) {
-        return vm.weshareSettings.pin_tuan.id;
-      }
     }
 
     function setShipFee() {
@@ -591,9 +588,6 @@
       }
       if (vm.selectShipType == 2) {
         return vm.weshareSettings.pys_ziti.ship_fee;
-      }
-      if (vm.selectShipType == 3) {
-        return vm.weshareSettings.pin_tuan.ship_fee;
       }
     }
 
