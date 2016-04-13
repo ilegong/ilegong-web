@@ -57,6 +57,23 @@ class TestController extends AppController
 //        return;
 //    }
 
+
+    public function test_push_buy_msg()
+    {
+        $this->autoRender = false;
+        
+        echo '1';
+        exit();
+    }
+
+    public function test_push_comment_msg()
+    {
+        $this->autoRender = false;
+
+        echo '1';
+        exit();
+    }
+
     public function test_push(){
         $this->autoRender=false;
         $result = $this->JPush->push('893376');

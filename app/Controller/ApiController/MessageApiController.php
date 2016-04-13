@@ -365,10 +365,10 @@ class MessageApiController extends Controller
         $this->loadModel('Comment');
         $comment = $this->Comment->find('first', [
             'conditions' => ['body' => $content, 'user_id' => $user_id, 'data_id' => $share_id, 'type' => 'Share', 'date(created)' => $date],
-            'fields' => ['id'],
+            'fields' => ['id', 'order_id'],
             'order' => ['id DESC']
         ]);
-        echo json_encode(['comment_id' => $comment['Comment']['id']]);
+        echo json_encode(['comment_id' => $comment['Comment']['id'], 'order_id' => $comment['Comment']['order_id']]);
         exit();
     }
 
