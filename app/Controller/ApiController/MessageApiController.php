@@ -358,8 +358,10 @@ class MessageApiController extends Controller
      */
     public function get_comment_by_relate_data($user_id, $share_id)
     {
-        $date = $_REQUEST['date'];
-        $content = $_REQUEST['content'];
+        $postStr = file_get_contents('php://input');
+        $postData = json_decode($postStr, true);
+        $date = $postData['date'];
+        $content = $postData['content'];
         $this->loadModel('Comment');
         $comment = $this->Comment->find('first', [
             'conditions' => ['body' => $content, 'user_id' => $user_id, 'data_id' => $share_id, 'type' => 'Share', 'date(created)' => $date],
