@@ -25,6 +25,7 @@ const ALI_CREATE_AVATAR_URL = 'http://images.tongshijia.com/download_avatar';
 
 const TRADE_ALI_TYPE = 'ZFB';
 const TRADE_WX_API_TYPE = 'JSAPI';
+const TRADE_WX_NATIVE_API_TYPE = 'Native';
 
 const WX_API_PREFIX = 'https://api.weixin.qq.com';
 
