@@ -354,6 +354,25 @@ class MessageApiController extends Controller
     }
 
     /**
+     * 获取评论ID根据
+     */
+    public function get_comment_by_relate_data($user_id, $share_id)
+    {
+        $postStr = file_get_contents('php://input');
+        $postData = json_decode($postStr, true);
+        $date = $postData['date'];
+        $content = $postData['content'];
+        $this->loadModel('Comment');
+        $comment = $this->Comment->find('first', [
+            'conditions' => ['body' => $content, 'user_id' => $user_id, 'data_id' => $share_id, 'type' => 'Share', 'date(created)' => $date],
+            'fields' => ['id', 'order_id'],
+            'order' => ['id DESC']
+        ]);
+        echo json_encode(['comment_id' => $comment['Comment']['id'], 'order_id' => $comment['Comment']['order_id']]);
+        exit();
+    }
+
+    /**
      * 提交私信
      *
      * 请求的数据格式:

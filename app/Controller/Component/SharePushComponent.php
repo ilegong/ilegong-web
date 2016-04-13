@@ -14,23 +14,21 @@ class SharePushComponent extends Component
     public function push_buy_msg($buyOptLog, $share)
     {
         $user_id = $buyOptLog['user_id'];
-        $share_thumb = $buyOptLog['thumbnail'];
-        $title = $share['title'];
         $sharer = $share['creator'];
         $content = $buyOptLog['reply_content'];
         $users = $this->get_users([$user_id, $sharer]);
-        $this->JPush->push($sharer, $title, $content, self::$MSG_BUY_TYPE, ['share_thumb' => $share_thumb, 'users' => json_encode($users)]);
+        $title = $users[$user_id]['nickname'] . '购买了 : ' . $content;
+        $this->JPush->push($sharer, $title, $content, self::$MSG_BUY_TYPE, ['users' => json_encode($users), 'share_title' => $share['title'], 'type' => self::$MSG_BUY_TYPE]);
     }
 
     public function push_comment_msg($commentOptLog, $share)
     {
         $user_id = $commentOptLog['user_id'];
-        $share_thumb = $commentOptLog['thumbnail'];
-        $title = $share['title'];
         $sharer = $share['creator'];
         $comment_content = $commentOptLog['reply_content'];
         $users = $this->get_users([$user_id, $sharer]);
-        $this->JPush->push($sharer, $title, $comment_content, self::$MSG_COMMENT_TYPE, ['share_thumb' => $share_thumb, 'users' => json_encode($users)]);
+        $title = $users[$user_id]['nickname'] . '评论 : ' . $comment_content;
+        $this->JPush->push($sharer, $title, $comment_content, self::$MSG_COMMENT_TYPE, ['users' => json_encode($users), 'share_title' => $share['title'], 'type' => self::$MSG_COMMENT_TYPE]);
     }
 
     public function push_faq_msg($faqData)
@@ -39,7 +37,7 @@ class SharePushComponent extends Component
         $msg = $faqData['msg'];
         $users = $this->get_users([$faqData['receiver'], $faqData['sender']]);
         $title = $users[$faqData['sender']]['nickname'] . ' : ' . $msg;
-        $this->JPush->push(strval($faqData['receiver']), $title, $msg, self::$MSG_FAQ_TYPE, ['msg' => json_encode($msg), 'users' => json_encode($users), 'type' => $faqData['type']]);
+        $this->JPush->push(strval($faqData['receiver']), $title, $msg, self::$MSG_FAQ_TYPE, ['msg' => json_encode($msg), 'users' => json_encode($users), 'type' => self::$MSG_FAQ_TYPE]);
     }
 
     private function get_users($user_ids)
