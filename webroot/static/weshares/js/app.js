@@ -98,7 +98,7 @@
 
   //多个控制器共享数据
   app.factory('CoreReactorChannel', function ($rootScope) {
-    var elevatedCoreTemperature = function (event, data) {
+    var elevatedEvent = function (event, data) {
       $rootScope.$broadcast(event, data);
     };
 
@@ -106,7 +106,7 @@
     // note that you should require $scope first
     // so that when the subscriber is destroyed you
     // don't create a closure over it, and te scope can clean up.
-    var onElevatedCoreTemperature = function ($scope, event, handler) {
+    var onElevatedEvent = function ($scope, event, handler) {
       $scope.$on(event, function (e, data) {
         // note that the handler is passed the problem domain parameters
         handler(data);
@@ -114,8 +114,8 @@
     };
     // other CoreReactorChannel events would go here.
     return {
-      elevatedCoreTemperature: elevatedCoreTemperature,
-      onElevatedCoreTemperature: onElevatedCoreTemperature
+      elevatedEvent: elevatedEvent,
+      onElevatedEvent: onElevatedEvent
     };
   });
 

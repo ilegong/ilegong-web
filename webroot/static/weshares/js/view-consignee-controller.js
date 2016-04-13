@@ -2,18 +2,16 @@
   angular.module('weshares')
     .controller('WesharesConsigneeCtrl', WesharesConsigneeCtrl);
 
-  function WesharesConsigneeCtrl($scope) {
+  function WesharesConsigneeCtrl($scope, CoreReactorChannel) {
     var vmc = this;
     vmc.getTabBarItemWidth = getTabBarItemWidth;
     vmc.getTabBarStyle = getTabBarStyle;
     vmc.changeShipTab = changeShipTab;
     vmc.tabBarItemWidth = 33.3;
+    vmc.showEditConsigneeView = showEditConsigneeView;
     var vm = $scope.$parent.vm;
-
-
     active();
-
-    function active(){
+    function active() {
       vm.selectShipType = getSelectTypeDefaultVal();
       vmc.tabBarItemWidth = getTabBarItemWidth();
     }
@@ -33,8 +31,12 @@
       return 'width: ' + vmc.tabBarItemWidth + '%';
     }
 
-    function changeShipTab(type){
+    function changeShipTab(type) {
       vm.selectShipType = type;
+    }
+
+    function showEditConsigneeView() {
+      CoreReactorChannel.elevatedEvent('EditConsignee', {});
     }
 
     function getSelectTypeDefaultVal() {

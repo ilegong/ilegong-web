@@ -1,12 +1,12 @@
 <div style="background-color: #f1f1f1;" ng-if="vm.showBalanceView">
     <div class="nav-bg">
         <a href="#" class="nav-back fl back" ng-click="vm.showShareDetail()">
-            <img src="/static/weshares/images/back.png"/>
+            <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/back.png"/>
             <label>返回</label>
         </a>
         <h1 class="fl">设置配送信息</h1>
         <a href="#" class="nav-home fr back" ng-click="vm.showShareDetail()">
-            <img src="/static/weshares/images/home.png"/>
+            <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/home.png"/>
         </a>
     </div>
     <!--收货信息-->
@@ -57,8 +57,8 @@
             <li class="fl">红包优惠：</li>
             <li class="fr" ng-bind="vm.userCouponReduce/100 | currency:'￥'"></li>
         </ul>
-        <ul class="clearfix">
-            <li class="fl" ng-if="vm.rebateFee>0">团长优惠：</li>
+        <ul class="clearfix" ng-if="vm.rebateFee>0">
+            <li class="fl">团长优惠：</li>
             <li class="fr" ng-bind="vm.rebateFee | currency:'￥'"></li>
         </ul>
     </div>
@@ -68,5 +68,10 @@
         <li class="fr"><a class="zfbPay" ng-click='vm.submitOrder(1);'>支付宝支付</a></li>
         <li class="fr"><a class="weixinPay" ng-click='vm.submitOrder(0);'>微信支付</a></li>
     </ul>
+</div>
+
+<!--编辑地址-->
+<div style="background-color: #f1f1f1;" ng-controller="WesharesEditConsigneeCtrl as wecc">
+    <ng-include src="vm.staticFilePath + '/static/weshares/templates/edit-consignee.html'"></ng-include>
 </div>
 
