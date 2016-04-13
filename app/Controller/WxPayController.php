@@ -126,31 +126,35 @@ class WxPayController extends AppController {
         $this->set('fee', $fee);
     }
 
+    //js 唤起支付
     public function jsApiPay($orderId) {
+        //以前团购订单支付
         if ($_GET['action'] == 'group_pay') {
             $this->group_pay($_GET['memberId']);
             $this->__viewFileName = 'group_pay';
             return;
         }
-
+        //第三方物流订单支付
         if ($_GET['action'] == 'logistics') {
             $this->logistics_order_pay($orderId);
             $this->__viewFileName = 'logistics_order_pay';
             return;
         }
-
+        //正常逻辑支付
         $uid = $this->currentUser['id'];
         $error_pay_redirect = '/orders/detail/' . $orderId . '/pay';
         $paid_done_url = '/orders/detail/' . $orderId . '/paid';
         $this->pageTitle = '微信支付';
         $order = $this->WxPayment->findOrderAndCheckStatus($orderId, $uid);
         $from = $_GET['from'];
+        //分享
         if ($from == 'share') {
             $shareId = $order['Order']['member_id'];
             $this->set('shareId', $shareId);
             $paid_done_url = '/weshares/view/' . $shareId . '/1';
             $error_pay_redirect = '/weshares/view/' . $shareId;
         }
+        //拼团
         if ($from == 'pintuan') {
             $shareId = $order['Order']['member_id'];
             $groupId = $order['Order']['group_id'];
@@ -171,8 +175,93 @@ class WxPayController extends AppController {
         $this->set('hideNav', true);
         $this->set('retry_link', '/wxPay/jsApiPay/'.$orderId.'.html?showwxpaytitle=1&trytimes='.(intval($_REQUEST['trytimes'])+1));
     }
+    //扫码支付
+    public function qrCodePay($orderId){
+        //正常逻辑支付
+        $uid = $this->currentUser['id'];
+        $error_pay_redirect = '/';
+        $this->pageTitle = '微信支付';
+        $order = $this->WxPayment->findOrderAndCheckStatus($orderId, $uid);
+        $from = $_GET['from'];
+        //分享
+        if ($from == 'share') {
+            $shareId = $order['Order']['member_id'];
+            $this->set('shareId', $shareId);
+            $error_pay_redirect = '/weshares/view/' . $shareId;
+        }
+        //拼团
+        if ($from == 'pintuan') {
+            $shareId = $order['Order']['member_id'];
+            $groupId = $order['Order']['group_id'];
+            $this->set('shareId', $shareId);
+            $error_pay_redirect = '/pintuan/detail/' . $shareId . '?tag_id=' . $groupId;
+        }
+        list($code_url, $out_trade_no, $productDesc) = $this->__prepareWxNativePay($error_pay_redirect, $orderId, $uid, $order);
+        $this->set('code_url', $code_url);
+        $this->set('totalFee', $order['Order']['total_all_price']);
+        $this->set('tradeNo', $out_trade_no);
+        $this->set('productDesc', $productDesc);
+        $this->set('orderId', $orderId);
 
+    }
 
+    //二维码支付
+    private function __prepareWxNativePay($error_pay_redirect, $orderId, $uid, $order){
+        if (!$this->is_weixin()) {
+            throw new CakeException("您只能在微信中使用微信支付。");
+        }
+
+        //使用jsapi接口
+        $jsApi = $this->WxPayment->createJsApi();
+
+        $oauth = ClassRegistry::init('Oauthbind')->findWxServiceBindByUid($uid);
+
+        if ($oauth && $oauth['oauth_openid']) {
+            $openid = $oauth['oauth_openid'];
+        }  else {
+            //通过code获得openid
+            if (!isset($_GET['code'])) {
+                //触发微信返回code码
+                $url = $jsApi->createOauthUrlForCode(WxPayConf_pub::JS_API_CALL_URL . '/' . $orderId . '?showwxpaytitle=1');
+                Header("Location: $url");
+                exit();   //cannot use return!!!
+            } else {
+                //获取code码，以获取openid
+                $code = $_GET['code'];
+                $jsApi->setCode($code);
+                $openid = $jsApi->getOpenId();
+            }
+        }
+
+        list($productDesc, $body) = $this->WxPayment->getProductDesc($orderId);
+        $trade_type = TRADE_WX_NATIVE_API_TYPE;
+        $totalFee = intval(intval($order['Order']['total_all_price'] * 1000)/10);
+        $out_trade_no = $this->WxPayment->out_trade_no(WX_APPID_SOURCE, $orderId);
+
+        //=========步骤2：使用统一支付接口，获取prepay_id============
+        $codeData = $this->getPrePayCodeUrlFromWx($openid, $body, $out_trade_no, $totalFee);
+        $prepay_id = $codeData['prepay_id'];
+        $code_url = $codeData['code_url'];
+        if (!$prepay_id) {
+            $this->log("prepareWXPay: regenerate prepay id of order ".$orderId." and user ".$openid." and fee " . $totalFee, LOG_INFO);
+            $out_trade_no = $this->WxPayment->out_trade_no(WX_APPID_SOURCE, $orderId);
+            $codeData = $this->getPrePayCodeUrlFromWx($openid, $body, $out_trade_no, $totalFee);
+            $prepay_id = $codeData['prepay_id'];
+            $code_url = $codeData['code_url'];
+        }
+        if ($code_url) {
+            $this->WxPayment->savePayLog($orderId, $out_trade_no, $body, $trade_type, $totalFee, $prepay_id, $openid);
+            //=========步骤3：使用Native生成code url============
+            //$jsApi->setPrepayId($prepay_id);
+            //$jsapi_param = $jsApi->getParameters();
+            $this->log("prepareWXPay: prepay of order ".$orderId." and user ".$openid." and fee ".$totalFee.": " . $code_url, LOG_INFO);
+            return array($code_url, $out_trade_no, $productDesc);
+        }  else {
+            $this->log("prepareWXPay: prepay of order ".$orderId." and user ".$openid." and fee ".$totalFee." failed: cannot get prepay id", LOG_ERR);
+            $this->__message('支付服务忙死了，请您稍后重试', $error_pay_redirect, 5);
+            exit();
+        }
+    }
 
     /**
      * @param $error_pay_redirect
@@ -371,7 +460,7 @@ class WxPayController extends AppController {
      */
     protected function getPrePayCodeUrlFromWx($openid, $body, $out_trade_no, $totalFee){
         //使用统一支付接口
-        $unifiedOrder = new NativeLink_pub();
+        $unifiedOrder = new UnifiedOrder_pub();
 
         //设置统一支付接口参数
         //设置必填参数
@@ -395,8 +484,8 @@ class WxPayController extends AppController {
         //$unifiedOrder->setParameter("goods_tag","XXXX");//商品标记
         //$unifiedOrder->setParameter("product_id","XXXX");//商品ID
 
-        $code_url = $unifiedOrder->getUrl();
-        return $code_url;
+        $code_data = $unifiedOrder->getCodeData();
+        return $code_data;
     }
 
 
