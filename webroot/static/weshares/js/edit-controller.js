@@ -19,6 +19,7 @@
     vm.validateTitle = validateTitle;
     vm.validateProductName = validateProductName;
     vm.validateProductPrice = validateProductPrice;
+    vm.alertProductWeight = alertProductWeight;
     vm.validateAddress = validateAddress;
     vm.saveCacheData = saveCacheData;
     vm.validateShipFee = validateShipFee;
@@ -390,6 +391,11 @@
     function validateProductName(product) {
       product.nameHasError = _.isEmpty(product.name) || product.name.length > 40;
       return product.nameHasError;
+    }
+
+    function alertProductWeight(product) {
+      product.weightHasWarning = Utils.isNumber(product.weight) && product.weight > 25;
+      return product.weightHasWarning;
     }
 
     function validateProductPrice(product) {
