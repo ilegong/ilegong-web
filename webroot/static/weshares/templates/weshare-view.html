@@ -10,11 +10,11 @@
         <a ng-if="vm.weshare.type==1" class="statistics-btn group-share-mark">邻里拼团</a>
         <div class="status" ng-bind="vm.statusMap[vm.weshare.status]"></div>
         <h1 class='title margin-bottom-12' ng-bind="vm.weshare.title"></h1>
-        <div ng-if="vm.weshare.id==3814">
+        <div ng-if="vm.weshare.refer_share_id==3814 || vm.weshare.id==3814">
             <iframe width=100% src="http://player.youku.com/embed/XMTI5MDk1MDMzMg==" frameborder=0 allowfullscreen></iframe>
         </div>
-        <div ng-if="vm.weshare.id==3822">
-            <iframe height=498 width=510 src="http://player.youku.com/embed/XNzI2MjE0OTI4" frameborder=0 allowfullscreen></iframe>
+        <div ng-if="vm.weshare.refer_share_id==3822 || vm.weshare.id==3822">
+            <iframe width=100% src="http://player.youku.com/embed/XNzI2MjE0OTI4" frameborder=0 allowfullscreen></iframe>
         </div>
         <p read-more more-text="展开..." less-text="收起" limit="100" class="margin-bottom-12"  ng-hide='_.isEmpty(vm.weshare.description)' content="{{vm.weshare.description | unsafe}}"></p>
         <dl class="clearfix images margin-bottom-12">
@@ -32,7 +32,7 @@
                         &nbsp;&nbsp;(仅剩<span style="color: red;" ng-bind="vm.getProductLeftNum(product)"></span>份)
                     </dd>
                     <dd class="fr" ng-if="vm.checkProductNum(product)">
-                        <a class='btn decrease-btn' ng-click="vm.decreaseProductNum(product)"></a>
+                        <a class='btn decrease-btn' ng-click="vm.decpreaseProductNum(product)"></a>
                         <span class='num' ng-bind="product.num||0"></span>
                         <a class='btn increase-btn' ng-click="vm.increaseProductNum(product)"></a>
                     </dd>
