@@ -179,6 +179,7 @@ class WxPayController extends AppController {
     //扫码支付
     public function qrCodePay($orderId){
         //正常逻辑支付
+        $this->layout=null;
         $uid = $this->currentUser['id'];
         $error_pay_redirect = '/';
         $this->pageTitle = '微信支付';
