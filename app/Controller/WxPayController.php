@@ -173,6 +173,7 @@ class WxPayController extends AppController {
         $this->set('productDesc', $productDesc);
         $this->set('orderId', $orderId);
         $this->set('hideNav', true);
+        $this->set('from', $from);
         $this->set('retry_link', '/wxPay/jsApiPay/'.$orderId.'.html?showwxpaytitle=1&trytimes='.(intval($_REQUEST['trytimes'])+1));
     }
     //扫码支付
