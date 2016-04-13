@@ -241,12 +241,16 @@
             document.getElementsByClassName('read-more')[0].style.display = 'none';
             document.getElementsByClassName('more-text')[0].style.display = 'block';
             document.getElementsByClassName('read-less')[0].style.display = 'block';
+            videoIFrame=document.getElementById('video');
+            if(videoIFrame){video.style.dislay='block';}
           });
           angular.element(document.getElementsByClassName('read-less')[0]).bind('click', function () {
             document.getElementsByClassName('less-text')[0].style.display = 'block';
             document.getElementsByClassName('read-more')[0].style.display = 'block';
             document.getElementsByClassName('more-text')[0].style.display = 'none';
             document.getElementsByClassName('read-less')[0].style.display = 'none';
+            videoIFrame=document.getElementById('video');
+            if(videoIFrame){video.style.dislay='none';}
           });
         }
       }
