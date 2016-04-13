@@ -6,7 +6,7 @@ class WeshareFaqComponent extends Component
 
     var $components = ['WeshareBuy', 'SharePush', 'ShareFaqUtil', 'ShareAuthority'];
 
-    public function create_faq($faq_data)
+    public function create_faq($faq_data, $faq_type = 1)
     {
         $shareFaqM = ClassRegistry::init('ShareFaq');
         $faq_data = $shareFaqM->save($faq_data);
@@ -21,6 +21,7 @@ class WeshareFaqComponent extends Component
         //check receive msg user is share creator
         //发送给团长需要发送给助理
         try {
+            $faq_data['type'] = $faq_type;
             $this->SharePush->push_faq_msg($faq_data['ShareFaq']);
         } catch (Exception $e) {
             $this->log('push faq msg error data ' . json_encode($faq_data['ShareFaq']) . 'msg ' . $e->getMessage());

@@ -39,7 +39,7 @@ class SharePushComponent extends Component
         $msg = $faqData['msg'];
         $users = $this->get_users([$faqData['receiver'], $faqData['sender']]);
         $title = $users[$faqData['sender']]['nickname'] . ' : ' . $msg;
-        $this->JPush->push(strval($faqData['receiver']), $title, $msg, self::$MSG_FAQ_TYPE, ['msg' => json_encode($msg), 'users' => json_encode($users), 'type' = "SOME_TYPE"]);
+        $this->JPush->push(strval($faqData['receiver']), $title, $msg, self::$MSG_FAQ_TYPE, ['msg' => json_encode($msg), 'users' => json_encode($users), 'type' = $faqData['type']]);
     }
 
     private function get_users($user_ids)
