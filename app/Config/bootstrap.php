@@ -251,6 +251,7 @@ const TYPE_MUL_NUMS = 4; //每件相乘
 
 const STATUS_GROUP_MEM_PAID = 1;
 const STATUS_GROUP_REACHED = 1;
+
 //团购地址地址
 const STATUS_CONSIGNEES_TUAN = 2;
 //自提地址
