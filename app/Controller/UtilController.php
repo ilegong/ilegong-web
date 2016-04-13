@@ -36,6 +36,15 @@ class UtilController extends AppController {
         return;
     }
 
+    public function gen_qr_code(){
+        App::import('Vendor', 'php_qrcode/phpqrcode');
+        $value = $_REQUEST['content']; //二维码内容
+        $errorCorrectionLevel = 'L';//容错级别
+        $matrixPointSize = 6;//生成图片大小
+        QRcode::png($value, false, $errorCorrectionLevel, $matrixPointSize);
+        exit();
+    }
+
     /**
      * @param $user_id
      * @return array

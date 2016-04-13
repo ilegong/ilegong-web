@@ -245,10 +245,12 @@
         }, cache: $templateCache
       }).
         success(function (data, status) {
+          $rootScope.loadingPage = false;
           handleShareData(data);
         }).
         error(function (data, status) {
           $log.log(data);
+          $rootScope.loadingPage = false;
         });
       vm.checkHasUnRead();
     }

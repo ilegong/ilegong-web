@@ -350,11 +350,6 @@ class ShareManageController extends AppController
     // 从分享到产品街：不需要授权
     public function pool_share_copy($share_id)
     {
-        // 在开始克隆之前, 要加一点判断.
-        if (!$this->ShareUtil->check_delivery($share_id)) {
-            $this->Session->setFlash("没有相应的物流模板数据或者物流模板数据错误, 请检查", null);
-            $this->redirect('/share_manage/search_shares?id=' . $share_id);
-        }
         $uid = $this->currentUser['id'];
         if(!is_super_share_manager($uid)){
             $this->Session->setFlash("您没有权限把分享上到产品街, 请联系管理员", null);
