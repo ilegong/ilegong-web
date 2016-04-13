@@ -385,6 +385,22 @@ class UnifiedOrder_pub extends Wxpay_client_pub
 		$prepay_id = $this->result["prepay_id"];
 		return $prepay_id;
 	}
+
+    /**
+     * 获取二维码支付 url
+     */
+    function getCodeData(){
+        $this->postXml();
+
+        if ($this->response === false) {
+            return false;
+        }
+
+        $this->result = $this->xmlToArray($this->response);
+        $code_url = $this->result["code_url"];
+        $prepay_id = $this->result["prepay_id"];
+        return ['code_url' => $code_url, 'prepay_id' => $prepay_id];
+    }
 	
 }
 

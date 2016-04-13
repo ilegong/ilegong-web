@@ -22,6 +22,11 @@ class WxPaymentComponent extends Component {
         return new JsApi_pub();
     }
 
+    public function createNativeApi(){
+        App::import('Vendor', 'WxPayPubHelper/WxPayPubHelper');
+        return new NativeLink_pub();
+    }
+
     public function out_trade_no($source, $orderId) {
         return $source."-$orderId-".mktime().'-'.rand(0, 100);
     }
