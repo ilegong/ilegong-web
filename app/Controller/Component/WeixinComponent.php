@@ -8,7 +8,7 @@ class WeixinComponent extends Component {
         CURLOPT_TIMEOUT => 30
     );
 
-    public $components = array('ShareUtil', 'WeshareBuy', 'ShareAuthority', 'PintuanHelper', 'WeshareFaq');
+    public $components = array('ShareUtil', 'WeshareBuy', 'ShareAuthority', 'PintuanHelper');
 
     public $wx_message_template_ids = array(
         "ORDER_PAID" => "UXmiPQNz46zZ2nZfDZVVd9xLIx28t66ZPNBoX1WhE8Q",
@@ -993,17 +993,6 @@ class WeixinComponent extends Component {
                 }
             }
         }
-
-        // make a jpush message after the user paid.
-        $message = [
-            'share_id' => $order['Order']['member_id'],
-            'msg' => "订单{$order['Order']['id']}已经支付",
-            'sender' => $order['Order']['creator'],
-            'receiver' => $weshare_info['Weshare']['creator'],
-        ];
-        $this->log('[INFO] JPush paid message: ' . serialize($message), LOG_INFO);
-        // 2 表示是购买成功之后推送的消息, 整个全局常量?.
-        $this->WeshareFaq->create_faq($message, 2);
     }
 
     /**

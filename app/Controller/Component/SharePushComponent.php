@@ -14,23 +14,21 @@ class SharePushComponent extends Component
     public function push_buy_msg($buyOptLog, $share)
     {
         $user_id = $buyOptLog['user_id'];
-        $share_thumb = $buyOptLog['thumbnail'];
-        $title = $share['title'];
         $sharer = $share['creator'];
         $content = $buyOptLog['reply_content'];
         $users = $this->get_users([$user_id, $sharer]);
-        $this->JPush->push($sharer, $title, $content, self::$MSG_BUY_TYPE, ['share_thumb' => $share_thumb, 'users' => json_encode($users)]);
+        $title = $users[$user_id]['nickname'] . '购买了 : ' . $content;
+        $this->JPush->push($sharer, $title, $content, self::$MSG_BUY_TYPE, ['users' => json_encode($users), 'share' => json_encode($share)]);
     }
 
     public function push_comment_msg($commentOptLog, $share)
     {
         $user_id = $commentOptLog['user_id'];
-        $share_thumb = $commentOptLog['thumbnail'];
-        $title = $share['title'];
         $sharer = $share['creator'];
         $comment_content = $commentOptLog['reply_content'];
         $users = $this->get_users([$user_id, $sharer]);
-        $this->JPush->push($sharer, $title, $comment_content, self::$MSG_COMMENT_TYPE, ['share_thumb' => $share_thumb, 'users' => json_encode($users)]);
+        $title = $users[$user_id]['nickname'] . '评论 : ' . $comment_content;
+        $this->JPush->push($sharer, $title, $comment_content, self::$MSG_COMMENT_TYPE, ['users' => json_encode($users), 'share' => json_encode($share)]);
     }
 
     public function push_faq_msg($faqData)
