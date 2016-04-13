@@ -355,21 +355,28 @@ class MessageApiController extends Controller
 
     /**
      * 提交私信
+     *
+     * 请求的数据格式:
+     *
+     * ```json
+     * {
+     *     "share_id": "", //分享ID
+     *      "msg": "", //消息
+     *      "sender": "", //发送者
+     *      "receiver": "", //接受者
+     * }
+     * ```
+     *
+     * @access public
+     * @return void
      */
     public function faq_msg()
     {
         $this->loadModel('ShareFaq');
         $postStr = file_get_contents('php://input');
-        $post_data = json_decode($postStr, true);
-        $this->WeshareFaq->create_faq($post_data);
-//        $this->ShareFaq->save($post_data);
-//        $share_id = $post_data['share_id'];
-//        $msg = $post_data['msg'];
-//        $sender = $post_data['sender'];
-//        $receiver = $post_data['receiver'];
-//        $weshareInfo = $this->WeshareBuy->get_weshare_info($share_id);
-//        $share_title = $weshareInfo['title'];
-//        $this->ShareFaqUtil->send_notify_template_msg($sender, $receiver, $msg, $share_id, $share_title);
+        $postData = json_decode($postStr, true);
+        $this->WeshareFaq->create_faq($postData);
+
         echo json_encode(['success' => true]);
         exit();
     }
