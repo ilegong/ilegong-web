@@ -49,16 +49,24 @@
             <li class="fl">产品总额：</li>
             <li class="fr" ng-bind="vm.orderTotalPrice | currency:'￥'"></li>
         </ul>
-        <ul class="clearfix">
+        <ul class="clearfix" ng-if="vm.shipFee>0">
             <li class="fl">快递费：</li>
-            <li class="fr" ng-bind="vm.shipFee/100"></li>
+            <li class="fr" ng-bind="vm.shipFee/100 | currency:'￥'"></li>
+        </ul>
+        <ul class="clearfix"  ng-if="vm.myCoupons">
+            <li class="fl">红包优惠：</li>
+            <li class="fr" ng-bind="vm.userCouponReduce/100 | currency:'￥'"></li>
+        </ul>
+        <ul class="clearfix">
+            <li class="fl" ng-if="vm.rebateFee>0">团长优惠：</li>
+            <li class="fr" ng-bind="vm.rebateFee | currency:'￥'"></li>
         </ul>
     </div>
     <!-- 这个元素在各个tab里面都会出现 -->
     <ul class="payment-bg clearfix">
         <li class="fl">应付<span ng-bind="vm.orderTotalPrice | currency:'￥'"></span></li>
-        <li class="fr"><a href="#" class="zfbPay" ng-click='vm.submitOrder(1);'>支付宝支付</a></li>
-        <li class="fr"><a href="#" class="weixinPay" ng-click='vm.submitOrder(0);'>微信支付</a></li>
+        <li class="fr"><a class="zfbPay" ng-click='vm.submitOrder(1);'>支付宝支付</a></li>
+        <li class="fr"><a class="weixinPay" ng-click='vm.submitOrder(0);'>微信支付</a></li>
     </ul>
 </div>
 
