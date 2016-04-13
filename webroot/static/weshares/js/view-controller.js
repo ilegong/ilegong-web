@@ -3758,7 +3758,6 @@
     vm.sendNotifyShareMsg = sendNotifyShareMsg;
     vm.validNotifyMsgContent = validNotifyMsgContent;
     vm.subSharer = subSharer;
-    vm.pageLoaded = pageLoaded;
     vm.getRecommendInfo = getRecommendInfo;
     vm.isCurrentUserRecommend = isCurrentUserRecommend;
     vm.toRecommendUserInfo = toRecommendUserInfo;
@@ -3800,9 +3799,6 @@
     vm.currentUserOrderCount = 0;
     vm.totalBuyCount = 0;
     vm.rebateFee = 0;
-    function pageLoaded() {
-      $rootScope.loadingPage = false;
-    }
 
     activate();
     function activate() {
@@ -4047,9 +4043,11 @@
           //load all comments
           vm.loadOrderDetail(weshareId);
           vm.loadOrderCommentData(weshareId);
+            $rootScope.loadingPage = false;
         }).
         error(function (data, status) {
           $log.log(data);
+            $rootScope.loadingPage = false;
         });
       vm.checkHasUnRead();
     }

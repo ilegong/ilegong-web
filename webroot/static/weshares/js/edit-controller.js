@@ -48,9 +48,6 @@
     vm.getUnitTypeText = getUnitTypeText;
     vm.showEditShareView = true;
     vm.currentDeliveryTemplate = null;
-    function pageLoaded() {
-      $rootScope.loadingPage = false;
-    }
 
     function setDefaultShipSettingData() {
       vm.self_ziti_data = {status: 1, ship_fee: 0, tag: 'self_ziti'};
@@ -142,7 +139,9 @@
             vm.defaultDeliveryTemplate = data['deliveryTemplate']['default_delivery_template'];
             vm.deliveryTemplateType = vm.defaultDeliveryTemplate['unit_type'];
           }
+          $rootScope.loadingPage = false;
         }).error(function (data) {
+          $rootScope.loadingPage = false;
         });
       } else {
         //保存的时候 记住数据
@@ -172,7 +171,7 @@
           PYS.storage.save(vm.dataCacheKey, {}, 1);
         }
         setDefaultData();
-
+        $rootScope.loadingPage = false;
       }
       vm.messages = [];
       function setDefaultData() {
