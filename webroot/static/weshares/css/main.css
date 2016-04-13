@@ -1855,13 +1855,13 @@ textarea,input{outline:none}
 }
 
 .form-group.has-warning .form-control {
-    border-color: #8a6d3b;
+    border-color: #f99d3a;
 }
 
 .product-group.has-warning .tips,
 .form-group.has-warning .tips {
     display: block;
-    color: #8a6d3b;
+    color: #f99d3a;
 }
 
 
