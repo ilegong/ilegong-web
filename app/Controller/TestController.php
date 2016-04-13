@@ -61,7 +61,12 @@ class TestController extends AppController
     public function test_push_buy_msg()
     {
         $this->autoRender = false;
-        
+        $order = $this->Order->find('first', array(
+            'conditions' => array(
+                'id' => 75394
+            )
+        ));
+        $this->Weixin->notifyPaidDone($order);
         echo '1';
         exit();
     }

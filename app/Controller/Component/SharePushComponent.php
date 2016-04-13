@@ -18,7 +18,7 @@ class SharePushComponent extends Component
         $content = $buyOptLog['reply_content'];
         $users = $this->get_users([$user_id, $sharer]);
         $title = $users[$user_id]['nickname'] . '购买了 : ' . $content;
-        $this->JPush->push($sharer, $title, $content, self::$MSG_BUY_TYPE, ['users' => json_encode($users), 'share' => json_encode($share)]);
+        $this->JPush->push($sharer, $title, $content, self::$MSG_BUY_TYPE, ['users' => json_encode($users), 'share_title' => $share['title']]);
     }
 
     public function push_comment_msg($commentOptLog, $share)
@@ -28,7 +28,7 @@ class SharePushComponent extends Component
         $comment_content = $commentOptLog['reply_content'];
         $users = $this->get_users([$user_id, $sharer]);
         $title = $users[$user_id]['nickname'] . '评论 : ' . $comment_content;
-        $this->JPush->push($sharer, $title, $comment_content, self::$MSG_COMMENT_TYPE, ['users' => json_encode($users), 'share' => json_encode($share)]);
+        $this->JPush->push($sharer, $title, $comment_content, self::$MSG_COMMENT_TYPE, ['users' => json_encode($users), 'share_title' => $share['title']]);
     }
 
     public function push_faq_msg($faqData)
@@ -37,7 +37,7 @@ class SharePushComponent extends Component
         $msg = $faqData['msg'];
         $users = $this->get_users([$faqData['receiver'], $faqData['sender']]);
         $title = $users[$faqData['sender']]['nickname'] . ' : ' . $msg;
-        $this->JPush->push(strval($faqData['receiver']), $title, $msg, self::$MSG_FAQ_TYPE, ['msg' => json_encode($msg), 'users' => json_encode($users), 'type' => $faqData['type']]);
+        $this->JPush->push(strval($faqData['receiver']), $title, $msg, self::$MSG_FAQ_TYPE, ['msg' => json_encode($msg), 'users' => json_encode($users)]);
     }
 
     private function get_users($user_ids)
