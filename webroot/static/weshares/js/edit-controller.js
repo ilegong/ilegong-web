@@ -24,7 +24,6 @@
     vm.validateShipFee = validateShipFee;
     vm.validateRebatePercent = validateRebatePercent;
     vm.dataCacheKey = 'cache_share_data';
-    vm.pageLoaded = pageLoaded;
     vm.validateSendInfo = validateSendInfo;
     vm.validatePinTuan = validatePinTuan;
     vm.showChooseCityView = showChooseCityView;
