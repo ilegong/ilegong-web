@@ -568,18 +568,6 @@ class WeshareBuyComponent extends Component
         $cartM = ClassRegistry::init('Cart');
         $weshare_info = $this->get_weshare_info($share_id);
 
-        // make a jpush message after the user paid.
-        $message = [
-            'share_id' => $share_id,
-            'msg' => "订单{$order_id}有新评论: $comment_content",
-            'sender' => $comment_uid, // $result['comment']['user_id'],
-            'receiver' => $weshare_info['Weshare']['creator'],
-        ];
-        $this->log('[INFO] JPush comment message: ' . serialize($message), LOG_INFO);
-        // 3 表示是评论成功之后推送的消息, 整个全局常量?.
-        $this->WeshareFaq->create_faq($message, 3);
-
-
         //分享者通知购买者 去评价
         if (($weshare_info['creator'] == $comment_uid) && $reply_comment_id == 0 && empty($comment_content)) {
             //seller send to buyer
@@ -1889,6 +1877,18 @@ class WeshareBuyComponent extends Component
                 $this->Weixin->send_comment_template_msg($manager_open_id_item, $detail_url, $title, $order_id, $order_date, $desc);
             }
         }
+
+        // make a jpush message after the user paid.
+        $message = [
+            'share_id' => $weshare_id,
+            'msg' => "订单{$order_id}有新评论: $comment_content",
+            'sender' => $order_creator,
+            'receiver' => $share_creator,
+        ];
+        $this->log('[INFO] JPush comment message: ' . serialize($message), LOG_INFO);
+        // var_dump($message);die();
+        // 3 表示是评论成功之后推送的消息, 整个全局常量?.
+        $this->WeshareFaq->create_faq($message, 3);
     }
 
     /**
