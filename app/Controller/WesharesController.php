@@ -306,6 +306,12 @@ class WesharesController extends AppController
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
         $weshareInfo = $this->ShareUtil->get_tag_weshare_detail($weshareId);
+
+        if(empty($weshareInfo['products'])){
+            echo json_encode(array());
+            exit();
+        }
+
         $is_me = $uid == $weshareInfo['creator']['id'];
         $weixinInfo = $this->set_weixin_share_data($uid, $weshareId);
         $user_fields = $this->query_user_fields;
@@ -341,7 +347,14 @@ class WesharesController extends AppController
         $can_manage_share = $this->ShareAuthority->user_can_manage_share($uid, $weshareId);
         $can_edit_share = $this->ShareAuthority->user_can_edit_share_info($uid, $weshareId);
         $share_order_count = $this->WeshareBuy->get_share_all_buy_count($weshareId);
-        $all_buy_count = $this->WeshareBuy->get_share_and_all_refer_share_count($weshareId, $weshareInfo['creator']['id']);
+        try{
+            $this->log("Failed to get share and all refer share count for share ".$weshareId.": ".$weshareInfo['creator']['id'], LOG_ERR);
+            $all_buy_count = $this->WeshareBuy->get_share_and_all_refer_share_count($weshareId, $weshareInfo['creator']['id']);
+        }
+        catch(Exception $e){
+            $this->log("Failed to get share and all refer share count for share ".$weshareId.": ".$e->getMessage(), LOG_ERR);
+            $all_buy_count = 0;
+        }
         $favourable_config = $this->ShareFavourableConfig->get_favourable_config($weshareId);
         $prepare_comment_data = $this->prepare_comment_data();
         echo json_encode(array('support_pys_ziti' => $share_ship_set,
@@ -362,7 +375,7 @@ class WesharesController extends AppController
             'favourable_config' => $favourable_config,
             'prepare_comment_data' => $prepare_comment_data
         ));
-        return;
+        exit();
     }
 
     /**

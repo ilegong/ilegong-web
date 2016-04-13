@@ -13,6 +13,7 @@
           callBackFunc(data);
         }).error(function () {
           $log.log('get share product info error');
+          $rootScope.loadingPage = false;
         });
       }
     };
