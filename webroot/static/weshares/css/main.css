@@ -1854,6 +1854,15 @@ textarea,input{outline:none}
     margin: 0;
 }
 
+.form-group.has-warning .form-control {
+    border-color: #f99d3a;
+}
+
+.product-group.has-warning .tips,
+.form-group.has-warning .tips {
+    display: block;
+    color: #f99d3a;
+}
 
 
 
