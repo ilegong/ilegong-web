@@ -3974,6 +3974,10 @@
         }, cache: $templateCache
       }).
         success(function (data, status) {
+            if(_.isEmpty(data)){
+              $rootScope.loadingPage = false;
+              return;
+            }
           vm.weshare = data['weshare'];
           if (vm.weshare.type == 1) {
             vm.isGroupShareType = true;
