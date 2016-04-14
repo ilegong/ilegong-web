@@ -17,14 +17,14 @@
         <li class="fl">
             <a class="defaultText" style="display: none;">填写收货信息</a>
             <a class="address">
-                <span ng-bind="wcc.expressShipInfo.name"></span><span ng-bind="wcc.expressShipInfo.mobilephone"></span>
-                <br/><span ng-bind="wcc.expressShipInfo.address"></span>
+                <span ng-bind="vm.expressShipInfo.name"></span><span ng-bind="vm.expressShipInfo.mobilephone"></span>
+                <br/><span ng-bind="vm.expressShipInfo.address"></span>
             </a>
         </li>
         <li class="fr" ng-click="wcc.toEditConsigneeView()">
             <a class="next-icon clearfix">
-                <label ng-if="!wcc.expressShipInfo">添加</label>
-                <label ng-if="wcc.expressShipInfo">修改</label>
+                <label ng-if="!vm.expressShipInfo">添加</label>
+                <label ng-if="vm.expressShipInfo">修改</label>
                 <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/next-icon.png"/>
             </a>
         </li>

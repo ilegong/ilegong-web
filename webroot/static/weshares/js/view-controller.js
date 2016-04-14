@@ -29,13 +29,11 @@
     vm.isOwner = isOwner;
     vm.isOrderReceived = isOrderReceived;
     vm.getConsigneeInfo = getConsigneeInfo;
-    vm.validateAddress = validateAddress;
     vm.validateProducts = validateProducts;
-    vm.validateLocation = validateLocation;
     vm.buyProducts = buyProducts;
     vm.validateMobile = validateMobile;
     vm.validateUserName = validateUserName;
-    vm.validateUserAddress = validateUserAddress;
+    vm.validateShipInfo = validateShipInfo;
     vm.validateOrderData = validateOrderData;
     vm.submitOrder = submitOrder;
     vm.confirmReceived = confirmReceived;
@@ -90,7 +88,6 @@
     vm.calProxyRebateFee = calProxyRebateFee;
     vm.loadOrderCommentData = loadOrderCommentData;
     vm.isShareManager = isShareManager;
-
     vm.calculateShipFee = calculateShipFee;
     vm.unSubSharer = unSubSharer;
     vm.currentUserOrderCount = 0;
@@ -551,33 +548,28 @@
       return vm.usernameHasError;
     }
 
-    function validateAddress() {
-      vm.addressHasError = vm.weshare.addresses.length > 0 && vm.selectedPickUpAddressId == -1;
-      return vm.addressHasError;
+    function validateShipInfo() {
+      if (vm.selectShipType == 1 && vm.selectedPickUpAddressId == -1) {
+        alert('请选择自提地址');
+        return false;
+      }
+      if (vm.selectShipType == 2 && !vm.checkedOfflineStore) {
+        alert('请选择好邻居线下店');
+        return false;
+      }
+      if (_.isEmpty(vm.buyerAddress) || _.isEmpty(vm.buyerPatchAddress)) {
+        alert('请填写地址信息');
+        return false;
+      }
+      return true;
     }
 
     function validateProducts() {
       return _.all(vm.weshare.products, function (product) {
         return !product.num || product.num <= 0;
       });
-      return vm.productsHasError;
     }
-
-    function validateLocation() {
-      if (vm.selectShipType == 0 && (!vm.selectedProvince || !vm.selectedCity)) {
-        vm.locationHasError = true;
-      } else {
-        vm.locationHasError = false;
-      }
-      return vm.locationHasError;
-    }
-
-
-    function validateUserAddress() {
-      vm.userAddressHasError = _.isEmpty(vm.buyerAddress);
-      return vm.userAddressHasError;
-    }
-
+    
     function getProductLeftNum(product) {
       if (vm.ordersDetail && vm.ordersDetail['summery'].details[product.id]) {
         var product_buy_num = parseInt(vm.ordersDetail['summery'].details[product.id]['num']);
@@ -1023,23 +1015,11 @@
       vm.validateUserName();
       vm.validateMobile();
       if (vm.buyerMobilePhoneHasError || vm.usernameHasError) {
+        alert('报名用户信息有误');
         return false;
       }
-      //kuai di
-      if (vm.selectShipType == 0) {
-        if (vm.validateUserAddress()) {
-          return false;
-        }
-      }
-      //self ziti
-      if (vm.selectShipType == 1) {
-        var addressHasError = vm.validateAddress();
-        if (addressHasError) {
-          return false;
-        }
-      }
-      if (vm.validateLocation()) {
-        return false;
+      if (!vm.validateShipInfo()) {
+
       }
       return true;
     }
@@ -1233,12 +1213,6 @@
         vm.userCouponReduce = vm.myCoupons.Coupon.reduced_price;
       }
       vm.userShareSummery = data['user_share_summery'];
-      if (vm.consignee) {
-        vm.buyerName = vm.consignee.name;
-        vm.buyerMobilePhone = vm.consignee.mobilephone;
-        vm.buyerAddress = vm.consignee.address;
-        vm.buyerPatchAddress = vm.consignee.remark_address;
-      }
       if (vm.isCreator() || vm.canManageShare) {
         vm.faqTipText = '反馈消息';
       }
