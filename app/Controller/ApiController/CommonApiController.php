@@ -40,6 +40,4 @@ class CommonApiController extends Controller
             }
         }
     }
-
-
 }

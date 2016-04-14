@@ -20,7 +20,7 @@ class WeshareBuyComponent extends Component
 
     var $query_comment_fields = array('id', 'username', 'user_id', 'data_id', 'type', 'body', 'order_id', 'parent_id');
 
-    var $components = array('Session', 'Weixin', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'RedisQueue', 'Orders');
+    var $components = array('Session', 'Weixin', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'RedisQueue', 'Orders', 'WeshareFaq');
 
     var $query_share_fields = array('id', 'title', 'images', 'status', 'creator', 'created', 'settlement', 'type', 'description');
 
@@ -567,6 +567,7 @@ class WeshareBuyComponent extends Component
         $orderM = ClassRegistry::init('Order');
         $cartM = ClassRegistry::init('Cart');
         $weshare_info = $this->get_weshare_info($share_id);
+
         //分享者通知购买者 去评价
         if (($weshare_info['creator'] == $comment_uid) && $reply_comment_id == 0 && empty($comment_content)) {
             //seller send to buyer

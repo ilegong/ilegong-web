@@ -8,7 +8,7 @@ class ShareUtilComponent extends Component
 
     var $normal_order_status = array(ORDER_STATUS_DONE, ORDER_STATUS_PAID, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY);
 
-    public $components = array('Weixin', 'WeshareBuy', 'RedisQueue', 'DeliveryTemplate', 'ShareAuthority');
+    public $components = array('Weixin', 'WeshareBuy', 'RedisQueue', 'DeliveryTemplate', 'ShareAuthority', 'SharePush');
 
     var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
 
@@ -405,7 +405,7 @@ class ShareUtilComponent extends Component
             // 从普通分享上产品街
         } elseif ($new_share_type == SHARE_TYPE_POOL) {
             // 产品街的分享（从产品街开团；重新开团；或者手工复制）
-            if($refer_share_type == SHARE_TYPE_POOL){
+            if ($refer_share_type == SHARE_TYPE_POOL) {
                 // 产品街的分享重新开团；
                 $refer_share_id = $shareInfo['refer_share_id'];
             }
@@ -415,7 +415,7 @@ class ShareUtilComponent extends Component
 
         try {
             if (!$this->check_delivery($shareId)) {
-                throw new Exception("Failed to clone weshare ".$shareId.": delivery data error");
+                throw new Exception("Failed to clone weshare " . $shareId . ": delivery data error");
             }
 
             $WeshareM->id = null;
@@ -434,7 +434,7 @@ class ShareUtilComponent extends Component
 
             $newShareInfo = $WeshareM->save($shareInfo);
             if (!$newShareInfo) {
-                throw new Exception("Failed to clone weshare ".$shareId.": db error");
+                throw new Exception("Failed to clone weshare " . $shareId . ": db error");
             }
 
             $newShareId = $newShareInfo['Weshare']['id'];
@@ -454,7 +454,7 @@ class ShareUtilComponent extends Component
             Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $newShareInfo['Weshare']['creator'], '');
             $dataSource->commit();
             return array('shareId' => $newShareId, 'success' => true);
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $this->log($e, LOG_ERR);
             $dataSource->rollback();
             return array('success' => false);
@@ -475,8 +475,8 @@ class ShareUtilComponent extends Component
                 'weshare_id' => $old_share_id
             )
         ));
-        if(empty($shareProducts)){
-            throw new Exception("No share products found for refer share id ".$old_share_id);
+        if (empty($shareProducts)) {
+            throw new Exception("No share products found for refer share id " . $old_share_id);
         }
 
         $newProducts = array();
@@ -874,6 +874,12 @@ class ShareUtilComponent extends Component
         //clear order count cache
         Cache::write(SHARE_ORDER_COUNT_SUM_CACHE_KEY . '_' . $share_id . '_' . $share_info['creator'], '');
         $this->saveOptLog($optData);
+        //推送支付消息
+        try {
+            $this->SharePush->push_buy_msg($optData, $share_info);
+        } catch (Exception $e) {
+            $this->log('push faq msg error data ' . json_encode($optData) . 'msg ' . $e->getMessage());
+        }
     }
 
     /**
@@ -901,6 +907,12 @@ class ShareUtilComponent extends Component
             'obj_creator' => $share_info['creator']
         );
         $this->saveOptLog($optData);
+        //推送支付消息
+        try {
+            $this->SharePush->push_comment_msg($optData, $share_info);
+        } catch (Exception $e) {
+            $this->log('push faq msg error data ' . json_encode($optData) . 'msg ' . $e->getMessage());
+        }
     }
 
     /**
@@ -1834,7 +1846,8 @@ class ShareUtilComponent extends Component
         return get_user_level_msg_count($user_val);
     }
 
-    public function get_product_by_category($category){
+    public function get_product_by_category($category)
+    {
         $indexProductM = ClassRegistry::init('IndexProduct');
         $data = $indexProductM->find('all', [
             'conditions' => [
@@ -1886,7 +1899,7 @@ class ShareUtilComponent extends Component
         ];
 
         $res = [];
-        foreach($data as $v) {
+        foreach ($data as $v) {
             $level = $v['UserLevel']['data_value'];
             $tmp = $v['IndexProduct'];
 
@@ -1923,8 +1936,9 @@ class ShareUtilComponent extends Component
         return $res;
     }
 
-    public function get_index_product($tag_id){
-        $key = INDEX_VIEW_PRODUCT_CACHE_KEY.'_'.$tag_id;
+    public function get_index_product($tag_id)
+    {
+        $key = INDEX_VIEW_PRODUCT_CACHE_KEY . '_' . $tag_id;
         $cache_data = Cache::read($key);
         if (empty($cache_data)) {
             $indexProductM = ClassRegistry::init('IndexProduct');
@@ -2293,8 +2307,8 @@ class ShareUtilComponent extends Component
     }
 
 
-
-    public function get_pool_product_info($share_id) {
+    public function get_pool_product_info($share_id)
+    {
         $key = 'pool_product_info_cache_key_' . $share_id;
         $cacheData = Cache::read($key);
         if (empty($cacheData)) {
@@ -2325,7 +2339,8 @@ class ShareUtilComponent extends Component
      * @return string
      * 获取快递信息
      */
-    private function get_pool_product_ship_info($shipSettings) {
+    private function get_pool_product_ship_info($shipSettings)
+    {
         $ship_info = array();
         foreach ($shipSettings as $shipSettingItem) {
             if ($shipSettingItem['WeshareShipSetting']['tag'] == SHARE_SHIP_KUAIDI_TAG && $shipSettingItem['WeshareShipSetting']['status'] == 1) {

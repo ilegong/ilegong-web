@@ -451,17 +451,14 @@ class WeixinComponent extends Component {
     }
 
     /**
-     * @param $order
      * 订单支付成功后处理
+     *
+     * @param mixed $order You should write a brief comment about $order here.
+     * @access public
+     * @return void
      */
-    public function notifyPaidDone($order) {
-        //支付尾款
-//        if ($order['Order']['type'] == ORDER_TYPE_WESHARE_BUY_ADD) {
-//            $this->ShareUtil->process_paid_order_add($order);
-//            //clean cache share
-//            $this->clear_share_cache($order['Order']['member_id']);
-//            return;
-//        }
+    public function notifyPaidDone($order)
+    {
         if ($order['Order']['type'] == ORDER_TYPE_PIN_TUAN) {
             $this->pintuan_buy_order_paid($order);
             $this->PintuanHelper->handle_order_paid($order);
@@ -471,17 +468,6 @@ class WeixinComponent extends Component {
             Cache::write(USER_SHARE_ORDER_INFO_CACHE_KEY . '_' . $order['Order']['member_id'] . '_' . $order['Order']['creator'], '');
             Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $order['Order']['creator'], '');
             $this->weshare_buy_order_paid($order);
-            //check is start new group share and return group share id
-            //$share_id = $this->ShareUtil->check_is_start_new_group_share($order);
-            //check cart tag id and split order
-            //$this->ShareUtil->split_order_by_tag($order);
-            //check order is prepaid
-            //$this->ShareUtil->check_order_is_prepaid_and_update_status($order);
-            //自提点费用
-            //$this->ShareUtil->add_money_for_offline_address($share_id, $order);
-            //todo check group share is complete and send msg
-            //clean cache share
-            //$this->clear_share_cache($order['Order']['member_id'], $order['Order']['ship_mark'] == SHARE_SHIP_GROUP_TAG);
             $this->clear_share_cache($order['Order']['member_id']);
             return;
         }
@@ -999,7 +985,6 @@ class WeixinComponent extends Component {
             $this->send_weshare_buy_paid_msg_for_creator($seller_weixin['oauth_openid'], $price, $good_info, $ship_info, $order_id, $weshare_info, $order_creator_name, $order_ship_mark, $order_user['User']['id'], $cate_id);
             //send paid done msg to manage user
             $share_manage_user_open_ids = $this->ShareAuthority->get_share_manage_auth_user_open_ids($weshare_info['Weshare']['id']);
-            //$share_manage_user_open_ids = array_merge($share_manage_user_open_ids, [$seller_weixin['oauth_openid']]);
             if (!empty($share_manage_user_open_ids)) {
                 foreach ($share_manage_user_open_ids as $open_id_item) {
                     if ($open_id_item != $seller_weixin['oauth_openid']) {
@@ -1007,14 +992,6 @@ class WeixinComponent extends Component {
                     }
                 }
             }
-//            if ($order_ship_mark == SHARE_SHIP_GROUP_TAG) {
-//                //send parent share
-//                $share_refer_share_id = $weshare_info['Weshare']['refer_share_id'];
-//                $refer_share_info = $this->WeshareBuy->get_weshare_info($share_refer_share_id);
-//                $refer_share_creator = $refer_share_info['creator'];
-//                $refer_share_creator_weixin = $oauthBindModel->findWxServiceBindByUid($refer_share_creator);
-//                $this->send_weshare_buy_paid_msg_for_creator($refer_share_creator_weixin['oauth_openid'], $price, $good_info, $ship_info, $order_id, array('Weshare' => $refer_share_info), $order_creator_name, $order_ship_mark, $order_user['User']['id'], $cate_id);
-//            }
         }
     }
 

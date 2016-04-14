@@ -268,7 +268,7 @@ class WesharesController extends AppController
     }
 
     /**
-     * @param $share_id
+     * @param $share_idtml
      * ajax 获取线下自提点 信息
      */
     public function get_offline_address_detail($share_id)
