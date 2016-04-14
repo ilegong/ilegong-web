@@ -1,4 +1,4 @@
-<div style="background-color: #f1f1f1;" ng-if="vm.showBalanceView">
+<div style="background-color: #f1f1f1;">
     <div class="nav-bg">
         <a href="#" class="nav-back fl back" ng-click="vm.showShareDetail()">
             <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/back.png"/>
@@ -70,8 +70,4 @@
     </ul>
 </div>
 
-<!--编辑地址-->
-<div style="background-color: #f1f1f1;" ng-controller="WesharesEditConsigneeCtrl as wecc">
-    <ng-include src="vm.staticFilePath + '/static/weshares/templates/edit-consignee.html'"></ng-include>
-</div>
 

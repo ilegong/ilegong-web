@@ -15,14 +15,14 @@
     <!-- 使用快递的时候出现 -->
     <ul class="clearfix" ng-if="vm.selectShipType==0">
         <li class="fl">
-            <a href="#" class="defaultText" style="display: none;">填写收货信息</a>
-            <a href="#" class="address">
+            <a class="defaultText" style="display: none;">填写收货信息</a>
+            <a class="address">
                 <span>Alice</span><span>13333333333</span>
                 <br/><span>北京市通州区广通小区3-2-3002</span>
             </a>
         </li>
-        <li class="fr" ng-click="wcc.showEditConsigneeView()">
-            <a href="#" class="next-icon clearfix">
+        <li class="fr" ng-click="wcc.toEditConsigneeView()">
+            <a class="next-icon clearfix">
                 <label>修改</label>
                 <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/next-icon.png"/>
             </a>

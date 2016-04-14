@@ -8,7 +8,7 @@
     vmc.getTabBarStyle = getTabBarStyle;
     vmc.changeShipTab = changeShipTab;
     vmc.tabBarItemWidth = 33.3;
-    vmc.showEditConsigneeView = showEditConsigneeView;
+    vmc.toEditConsigneeView = toEditConsigneeView;
     var vm = $scope.$parent.vm;
     active();
     function active() {
@@ -35,7 +35,9 @@
       vm.selectShipType = type;
     }
 
-    function showEditConsigneeView() {
+    function toEditConsigneeView() {
+      vm.showBalanceView = false;
+      vm.showEditConsigneeView = true;
       CoreReactorChannel.elevatedEvent('EditConsignee', {});
     }
 

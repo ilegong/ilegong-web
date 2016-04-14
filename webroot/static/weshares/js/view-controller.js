@@ -311,6 +311,7 @@
       vm.showOfflineStoreDetailView = false;
       vm.chooseOfflineStoreView = false;
       vm.showBalanceView = false;
+      vm.showEditConsigneeView = false;
       vm.showShareDetailView = true;
     }
 
@@ -608,6 +609,7 @@
     function buyProducts() {
       vm.showShareDetailView = false;
       vm.showBalanceView = true;
+      vm.showEditConsigneeView = true;
       vm.chooseShipType = false;
     }
 
