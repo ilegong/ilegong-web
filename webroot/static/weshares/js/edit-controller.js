@@ -137,6 +137,7 @@
           }
           if (!_.isEmpty(data['deliveryTemplate']['default_delivery_template'])) {
             vm.defaultDeliveryTemplate = data['deliveryTemplate']['default_delivery_template'];
+            vm.defaultDeliveryTemplate['is_default'] = 1;
             vm.deliveryTemplateType = vm.defaultDeliveryTemplate['unit_type'];
           }
           $rootScope.loadingPage = false;
