@@ -468,6 +468,7 @@ class WesharesController extends AppController
         $rebateLogId = $postDataArray['rebate_log_id'];
         //购物车
         $cart = array();
+        $dataSource = $this->Order->getDataSource();
         try {
             $weshare_available = $this->WeshareBuy->check_weshare_status($weshareId);
             if (!$weshare_available) {
@@ -496,26 +497,30 @@ class WesharesController extends AppController
             $shipType = $shipInfo['ship_type'];
             $shipSetId = $shipInfo['ship_set_id'];
             $shipSetting = $this->get_ship_set($shipSetId, $weshareId);
-
             if (empty($shipSetting)) {
                 $this->log('Failed to create order for ' . $uid . ' with weshare ' . $weshareId . ': ship setting is empty', LOG_WARNING);
                 echo json_encode(array('success' => false, 'reason' => '物流方式选择错误'));
                 exit();
             }
-
+            //开启事务
+            $dataSource->begin();
+            //获取下单地址
             $address = $this->get_order_address($weshareId, $shipInfo, $uid);
-            $orderData = array('cate_id' => $rebateLogId, 'creator' => $uid, 'consignee_address' => $address,
-                'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'),
+            $orderData = array('cate_id' => $rebateLogId, 'creator' => $uid,
+                'consignee_address' => $address,
+                'member_id' => $weshareId,
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'created' => date('Y-m-d H:i:s'),
+                'updated' => date('Y-m-d H:i:s'),
                 'consignee_id' => $addressId,
                 'consignee_name' => $shipInfo['name'],
                 'consignee_mobilephone' => $shipInfo['mobilephone'],
                 'business_remark' => $business_remark);
-
+            //设置订单物流方式
             $this->process_order_ship_mark($shipType, $orderData);
             $order = $this->Order->save($orderData);
             $orderId = $order['Order']['id'];
             $totalPrice = 0;
-            $is_prepaid = 0;
             $cart_good_num = 0;
             $cart_good_weight = 0;
             foreach ($weshareProducts as $p) {
@@ -541,21 +546,11 @@ class WesharesController extends AppController
                 $totalPrice += $num * $price;
             }
             $this->Cart->saveAll($cart);
-            //检查是否有优惠
-            $favourable_config = $this->ShareFavourableConfig->get_favourable_config($weshareId);
-            $discountPrice = 0;
-            if (!empty($favourable_config)) {
-                //优惠价格不计算邮费
-                if ($favourable_config['discount']) {
-                    $discountPrice = $totalPrice - round($totalPrice * $favourable_config['discount']);
-                }
-            }
             //产品价格的团长佣金
-            $rebate_fee = $this->WeshareBuy->cal_proxy_rebate_fee($totalPrice - $discountPrice, $uid, $weshareId);
+            $rebate_fee = $this->WeshareBuy->cal_proxy_rebate_fee($totalPrice, $uid, $weshareId);
             $shipFee = $this->calculate_order_ship_fee($shipSetting, $cart_good_num, $cart_good_weight, $weshareId, $shipInfo['provinceId']);
             $totalPrice += $shipFee;
-            //cal proxy user rebate fee
-            $update_order_data = array('total_all_price' => ($totalPrice - $discountPrice) / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => $shipFee, 'is_prepaid' => $is_prepaid);
+            $update_order_data = array('total_all_price' => $totalPrice / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => $shipFee);
             if ($rebate_fee > 0) {
                 //记录返利的钱
                 $rebate_log_id = $this->WeshareBuy->log_proxy_rebate_log($weshareId, $uid, 0, 1, $orderId, $rebate_fee * 100);
@@ -564,29 +559,23 @@ class WesharesController extends AppController
                     $update_order_data['total_all_price'] = $update_order_data['total_all_price'] - $rebate_fee;
                 }
             }
-            if ($is_prepaid) {
-                $update_order_data['process_prepaid_status'] = ORDER_STATUS_PREPAID;
-            }
             if ($this->Order->updateAll($update_order_data, array('id' => $orderId))) {
                 $coupon_id = $postDataArray['coupon_id'];
-                //check coupon
+                //红包
                 if (!empty($coupon_id)) {
-                    App::uses('OrdersController', 'Controller');
-                    $this->Session->write(OrdersController::key_balanced_conpons(), json_encode(array(0 => array($coupon_id))));
                     $this->order_use_score_and_coupon($orderId, $uid, 0, $totalPrice / 100);
                 }
+                //返利
                 $this->ShareUtil->update_rebate_log_order_id($rebateLogId, $orderId, $weshareId);
-                $this->log('Create order for ' . $uid . ' with weshare ' . $weshareId . ' successfully, order id ' . $orderId, LOG_INFO);
                 $this->Orders->on_order_created($uid, $weshareId, $orderId);
-
-                echo json_encode(array('success' => true, 'orderId' => $orderId));
-                exit();
             }
-
-            echo json_encode(array('success' => false, 'orderId' => $orderId));
+            $this->log('Create order for ' . $uid . ' with weshare ' . $weshareId . ' successfully, order id ' . $orderId, LOG_INFO);
+            $dataSource->commit();
+            echo json_encode(array('success' => true, 'orderId' => $orderId));
             exit();
         } catch (Exception $e) {
             $this->log($uid . 'buy share ' . $weshareId . $e);
+            $dataSource->rollback();
             echo json_encode(array('success' => false, 'reason' => $e->getMessage()));
             exit();
         }
@@ -1591,7 +1580,7 @@ class WesharesController extends AppController
 
         //记住或者更新自提地址
         $this->setShareConsignees($shipInfo, $uid);
-
+        //用户记住地址不能为空
         $patchAddress = $shipInfo['patchAddress'];
         if ($patchAddress == null) {
             $patchAddress = '';

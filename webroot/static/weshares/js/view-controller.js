@@ -623,6 +623,7 @@
       //快递
       if (vm.selectShipType == 0) {
         ship_info['consignee_id'] = vm.expressShipInfo['id'];
+        ship_info['provinceId'] = vm.selectedProvince;
       }
       //自提
       if (vm.selectShipType == 1 || vm.selectShipType == 2) {
