@@ -28,14 +28,13 @@ class NewOptLogListComponent extends Component {
     private function get_logs_fields($data)
     {
         $ret = [];
-
         $uid = $_SESSION['Auth']['User']['id'];
         $my_proxys = ClassRegistry::init('User')->get_my_proxys($uid);
-
-        foreach ($data as $v) {
-            $ret[] = $this->map_fields($v, $uid, $my_proxys);
+        if(!empty($data)){
+            foreach ($data as $v) {
+                $ret[] = $this->map_fields($v, $uid, $my_proxys);
+            }
         }
-
         return $ret;
     }
 
