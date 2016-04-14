@@ -268,7 +268,6 @@ class WesharesController extends AppController
     }
 
     /**
-     * @param $share_idtml
      * ajax 获取线下自提点 信息
      */
     public function get_offline_address_detail($share_id)
@@ -289,7 +288,7 @@ class WesharesController extends AppController
         $uid = $this->currentUser['id'];
         $weshareInfo = $this->ShareUtil->get_tag_weshare_detail($weshareId);
 
-        if(empty($weshareInfo['products'])){
+        if (empty($weshareInfo['products'])) {
             echo json_encode(array());
             exit();
         }
@@ -317,23 +316,22 @@ class WesharesController extends AppController
         } else {
             $sub_status = true;
         }
-        $consignee = $this->getShareConsignees($uid);
         $creatorId = $weshareInfo['creator']['id'];
         $user_share_summery = $this->getUserShareSummery($creatorId);
         $share_ship_set = $this->sharer_can_use_we_ship($weshareInfo['creator']['id']);
         $my_coupon_items = $this->get_can_used_coupons($uid, $creatorId);
         $weshare_ship_settings = $this->getWeshareShipSettings($weshareId);
+        $consignee = $this->getShareConsignees($uid);
         $recommend_data = $this->WeshareBuy->load_share_recommend_data($weshareId);
         $is_manage_user = $this->ShareAuthority->user_can_view_share_order_list($uid, $weshareId);
         $can_manage_share = $this->ShareAuthority->user_can_manage_share($uid, $weshareId);
         $can_edit_share = $this->ShareAuthority->user_can_edit_share_info($uid, $weshareId);
         $share_order_count = $this->WeshareBuy->get_share_all_buy_count($weshareId);
-        try{
-            $this->log("Failed to get share and all refer share count for share ".$weshareId.": ".$weshareInfo['creator']['id'], LOG_ERR);
+        try {
+            $this->log("Failed to get share and all refer share count for share " . $weshareId . ": " . $weshareInfo['creator']['id'], LOG_ERR);
             $all_buy_count = $this->WeshareBuy->get_share_and_all_refer_share_count($weshareId, $weshareInfo['creator']['id']);
-        }
-        catch(Exception $e){
-            $this->log("Failed to get share and all refer share count for share ".$weshareId.": ".$e->getMessage(), LOG_ERR);
+        } catch (Exception $e) {
+            $this->log("Failed to get share and all refer share count for share " . $weshareId . ": " . $e->getMessage(), LOG_ERR);
             $all_buy_count = 0;
         }
         $favourable_config = $this->ShareFavourableConfig->get_favourable_config($weshareId);
@@ -656,18 +654,17 @@ class WesharesController extends AppController
         $uid = $this->currentUser['id'];
         $is_owner = $this->Weshare->hasAny(['id' => $shareId, 'creator' => $uid]);
         if (!$is_owner) {
-            echo json_encode(array('success' => false,'reason' => 'not a proxy user.'));
+            echo json_encode(array('success' => false, 'reason' => 'not a proxy user.'));
             exit();
         }
 
         $this->autoRender = false;
-        $this->log('Proxy '.$uid.' tries to clone share from share '.$shareId, LOG_INFO);
+        $this->log('Proxy ' . $uid . ' tries to clone share from share ' . $shareId, LOG_INFO);
         $result = $this->ShareUtil->cloneShare($shareId, null);
-        if($result['success']){
-            $this->log('Proxy '.$uid.' clones share '.$result['shareId'].' from share '.$shareId. ' successfully', LOG_INFO);
-        }
-        else{
-            $this->log('Proxy '.$uid.' failed to clone share from share '.$shareId, LOG_ERR);
+        if ($result['success']) {
+            $this->log('Proxy ' . $uid . ' clones share ' . $result['shareId'] . ' from share ' . $shareId . ' successfully', LOG_INFO);
+        } else {
+            $this->log('Proxy ' . $uid . ' failed to clone share from share ' . $shareId, LOG_ERR);
         }
 
         echo json_encode($result);
@@ -1359,28 +1356,30 @@ class WesharesController extends AppController
     }
 
     /**
-     * @param $uid
-     * @return mixed
      * 获取用户记住的地址
      */
     private function getShareConsignees($uid)
     {
-        $consignee = $this->OrderConsignees->find('first', array(
+        $consignees = $this->OrderConsignees->find('all', array(
             'conditions' => array(
                 'creator' => $uid,
-                'type' => TYPE_CONSIGNEES_SHARE
+                'status' => PUBLISH_YES,
+                'type' => [TYPE_CONSIGNEES_SHARE, TYPE_CONSIGNEES_SHARE_ZITI, TYPE_CONSIGNEE_SHARE_OFFLINE_STORE]
             ),
-            'fields' => array('name', 'mobilephone', 'address', 'ziti_id', 'remark_address', 'province_id', 'city_id', 'county_id')
+            'fields' => array('id', 'name', 'mobilephone', 'address', 'ziti_id', 'remark_address', 'province_id', 'city_id', 'county_id', 'type')
         ));
         //load remember offline store id
-        $ziti_id = $consignee['OrderConsignees']['ziti_id'];
-        if ($ziti_id) {
-            $offlineStore = $this->OfflineStore->findById($ziti_id);
-            if (!empty($offlineStore)) {
-                $consignee['OrderConsignees']['offlineStore'] = $offlineStore['OfflineStore'];
+        foreach ($consignees as &$consignee) {
+            $ziti_id = $consignee['OrderConsignees']['ziti_id'];
+            $type = $consignee['OrderConsignees']['type'];
+            if (!empty($ziti_id) && $type == TYPE_CONSIGNEE_SHARE_OFFLINE_STORE) {
+                $offlineStore = $this->OfflineStore->findById($ziti_id);
+                if (!empty($offlineStore)) {
+                    $consignee['OrderConsignees']['offlineStore'] = $offlineStore['OfflineStore'];
+                }
             }
         }
-        return $consignee['OrderConsignees'];
+        return Hash::extract($consignees, '{n}.OrderConsignees');
     }
 
     /**

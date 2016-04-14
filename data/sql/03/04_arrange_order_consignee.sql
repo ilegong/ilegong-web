@@ -15,3 +15,5 @@ UPDATE 51daifan.cake_order_consignees set type=0 where type=4;
 --删除以前自提地址
 
 DELETE FROM 51daifan.cake_order_consignees where type!=0;
+
+UPDATE 51daifan.cake_order_consignees set status=1;

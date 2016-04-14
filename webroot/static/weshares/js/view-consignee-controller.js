@@ -9,11 +9,15 @@
     vmc.changeShipTab = changeShipTab;
     vmc.tabBarItemWidth = 33.3;
     vmc.toEditConsigneeView = toEditConsigneeView;
+    vmc.expressShipInfo = null;
+    vmc.pickUpShipInfo = null;
+    vmc.offlineStoreShipInfo = null;
     var vm = $scope.$parent.vm;
     active();
     function active() {
       vm.selectShipType = getSelectTypeDefaultVal();
       vmc.tabBarItemWidth = getTabBarItemWidth();
+      initUserConsigneeData();
     }
 
     function getTabBarItemWidth() {
@@ -33,12 +37,37 @@
 
     function changeShipTab(type) {
       vm.selectShipType = type;
+      if (type == 1 && vmc.pickUpShipInfo) {
+        vm.buyerName = vmc.pickUpShipInfo['name'];
+        vm.buyerMobilePhone = vmc.pickUpShipInfo['mobilephone'];
+        vm.buyerPatchAddress = vmc.pickUpShipInfo['remark_address'];
+      }
+      if (type == 2 && vmc.offlineStoreShipInfo) {
+        vm.buyerName = vmc.offlineStoreShipInfo['name'];
+        vm.buyerMobilePhone = vmc.offlineStoreShipInfo['mobilephone'];
+        vm.buyerPatchAddress = vmc.offlineStoreShipInfo['remark_address'];
+      }
     }
 
     function toEditConsigneeView() {
       vm.showBalanceView = false;
       vm.showEditConsigneeView = true;
       CoreReactorChannel.elevatedEvent('EditConsignee', {});
+    }
+
+    function initUserConsigneeData() {
+      _.each(vm.consignee, function (item) {
+        if (item['type'] == 0) {
+          vmc.expressShipInfo = item;
+        }
+        if (item['type'] == 1) {
+          vmc.pickUpShipInfo = item;
+        }
+        if (item['type'] == 2) {
+          vmc.offlineStoreShipInfo = item;
+          vm.checkedOfflineStore = vmc.offlineStoreShipInfo;
+        }
+      });
     }
 
     function getSelectTypeDefaultVal() {

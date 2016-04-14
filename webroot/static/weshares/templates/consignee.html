@@ -17,13 +17,14 @@
         <li class="fl">
             <a class="defaultText" style="display: none;">填写收货信息</a>
             <a class="address">
-                <span>Alice</span><span>13333333333</span>
-                <br/><span>北京市通州区广通小区3-2-3002</span>
+                <span ng-bind="wcc.expressShipInfo.name"></span><span ng-bind="wcc.expressShipInfo.mobilephone"></span>
+                <br/><span ng-bind="wcc.expressShipInfo.address"></span>
             </a>
         </li>
         <li class="fr" ng-click="wcc.toEditConsigneeView()">
             <a class="next-icon clearfix">
-                <label>修改</label>
+                <label ng-if="!wcc.expressShipInfo">添加</label>
+                <label ng-if="wcc.expressShipInfo">修改</label>
                 <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/next-icon.png"/>
             </a>
         </li>
@@ -75,6 +76,6 @@
     <!--都可选-->
     <ul class="clearfix">
         <li class="fl comment">备注</li>
-        <li class="fl content"><input type="text" placeholder="告诉团长你的特殊需求"/></li>
+        <li class="fl content"><input ng-model='vm.buyerRemark' type="text" placeholder="告诉团长你的特殊需求"/></li>
     </ul>
 </div>
