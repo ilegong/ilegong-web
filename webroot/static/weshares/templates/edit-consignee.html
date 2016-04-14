@@ -20,7 +20,7 @@
                             <br/>
                             <label>北京市通州区北苑街道办事处</label>
                         </li>
-                        <li><img ng-src="{{::vm.staticFilePath}}/static/weshares/images/copyreader.png"/></li>
+                        <li ng-click="wecc.showConsigneeFormView()"><img ng-src="{{::vm.staticFilePath}}/static/weshares/images/copyreader.png"/></li>
                     </ul>
                 </a>
                 <a href="#">
@@ -36,20 +36,18 @@
                     </ul>
                 </a>
             </div>
-            <div class="add-address-bg"><a href="#">新增地址</a></div>
+            <div class="add-address-bg"><a ng-click="wecc.showConsigneeFormView()">新增地址</a></div>
         </div>
         <!--编辑快递地址-->
         <div ng-if="wecc.editConsignee">
             <div class="nav-bg">
-                <a href="#" class="nav-back fl">
+                <a ng-click="wecc.showConsigneeListView();" class="nav-back fl">
                     <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/back.png"/>
                     <label>返回</label>
                 </a>
 
                 <h1 class="fl">编辑地址</h1>
-                <a href="#" class="nav-home fr">
-                    <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/home.png"/>
-                </a>
+
             </div>
             <div class="copyreader-address">
                 <ul class="clearfix">

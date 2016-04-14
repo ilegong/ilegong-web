@@ -7,7 +7,8 @@
 
     vmc.selectConsignees = false;
     vmc.editConsignee = false;
-    vmc.toConsigneeFormView = showConsigneeFormView;
+    vmc.showConsigneeFormView = showConsigneeFormView;
+    vmc.showConsigneeListView = showConsigneeListView;
     vmc.toBalanceView = toBalanceView;
 
     var vm = $scope.$parent.vm;
@@ -28,5 +29,11 @@
       vmc.selectConsignees = false;
       vmc.editConsignee = true;
     }
+
+    function showConsigneeListView(){
+      vmc.selectConsignees = true;
+      vmc.editConsignee = false;
+    }
+
   }
 })(window, window.angular);
