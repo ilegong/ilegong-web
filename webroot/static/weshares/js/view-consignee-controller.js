@@ -59,7 +59,8 @@
       updateBuyerData(vm.selectShipType);
     }
 
-    function updateBuyerData(type){
+    function updateBuyerData(type) {
+      cleanBuyerData();
       //快递
       if (type == 0 && vm.expressShipInfo) {
         setBuyerData(vm.expressShipInfo);
@@ -76,6 +77,13 @@
         vm.buyerName = data['name'];
         vm.buyerMobilePhone = data['mobilephone'];
         vm.buyerPatchAddress = data['remark_address'];
+        vm.buyerAddress = data['address'];
+      }
+      function cleanBuyerData() {
+        vm.buyerName = '';
+        vm.buyerMobilePhone = '';
+        vm.buyerPatchAddress = '';
+        vm.buyerAddress = '';
       }
     }
 

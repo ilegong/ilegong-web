@@ -549,6 +549,10 @@
     }
 
     function validateShipInfo() {
+      if (vm.selectShipType == 0 && !vm.expressShipInfo) {
+        alert('快递地址选择有误');
+        return false;
+      }
       if (vm.selectShipType == 1 && vm.selectedPickUpAddressId == -1) {
         alert('请选择自提地址');
         return false;
@@ -557,8 +561,12 @@
         alert('请选择好邻居线下店');
         return false;
       }
-      if (_.isEmpty(vm.buyerAddress) || _.isEmpty(vm.buyerPatchAddress)) {
+      if (_.isEmpty(vm.buyerAddress)) {
         alert('请填写地址信息');
+        return false;
+      }
+      if ((vm.selectShipType == 1 || vm.selectShipType == 2) && _.isEmpty(vm.buyerPatchAddress)) {
+        alert('请填写详细地址信息');
         return false;
       }
       return true;
@@ -569,7 +577,7 @@
         return !product.num || product.num <= 0;
       });
     }
-    
+
     function getProductLeftNum(product) {
       if (vm.ordersDetail && vm.ordersDetail['summery'].details[product.id]) {
         var product_buy_num = parseInt(vm.ordersDetail['summery'].details[product.id]['num']);
@@ -610,12 +618,14 @@
         ship_fee: vm.shipFee,
         ship_set_id: vm.shipSetId,
         name: vm.buyerName,
-        mobilephone: vm.buyerMobilePhone
+        mobilephone: vm.buyerMobilePhone,
+        address: vm.buyerAddress,
+        patchAddress: vm.buyerPatchAddress,
       };
       //快递
       if (vm.selectShipType == 0) {
         ship_info['consignee_id'] = vm.expressShipInfo['id'];
-        ship_info['provinceId'] = vm.selectedProvince;
+        ship_info['provinceId'] = vm.expressShipInfo['province_id'];
       }
       //自提
       if (vm.selectShipType == 1 || vm.selectShipType == 2) {
@@ -627,8 +637,6 @@
         if (vm.selectShipType == 2) {
           ship_info['consignee_id'] = vm.checkedOfflineStore.id;
         }
-        ship_info['address'] = vm.buyerAddress;
-        ship_info['patchAddress'] = vm.buyerPatchAddress;
       }
       return ship_info;
     }
@@ -1019,7 +1027,7 @@
         return false;
       }
       if (!vm.validateShipInfo()) {
-
+        return false;
       }
       return true;
     }

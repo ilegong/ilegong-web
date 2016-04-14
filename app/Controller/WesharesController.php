@@ -493,7 +493,7 @@ class WesharesController extends AppController
             }
 
             $shipInfo = $postDataArray['ship_info'];
-            $addressId = $shipInfo['address_id'];
+            $consigneeId = $shipInfo['consignee_id'];
             $shipType = $shipInfo['ship_type'];
             $shipSetId = $shipInfo['ship_set_id'];
             $shipSetting = $this->get_ship_set($shipSetId, $weshareId);
@@ -512,7 +512,7 @@ class WesharesController extends AppController
                 'type' => ORDER_TYPE_WESHARE_BUY,
                 'created' => date('Y-m-d H:i:s'),
                 'updated' => date('Y-m-d H:i:s'),
-                'consignee_id' => $addressId,
+                'consignee_id' => $consigneeId,
                 'consignee_name' => $shipInfo['name'],
                 'consignee_mobilephone' => $shipInfo['mobilephone'],
                 'business_remark' => $business_remark);
@@ -1572,7 +1572,7 @@ class WesharesController extends AppController
     private function get_order_address($weshareId, $shipInfo, $uid)
     {
         $shipType = $shipInfo['ship_type'];
-        $consigneeId = $shipInfo['address_id'];
+        $consigneeId = $shipInfo['consignee_id'];
         //快递
         if ($shipType == SHARE_SHIP_KUAIDI) {
             return $this->get_express_address($consigneeId);
