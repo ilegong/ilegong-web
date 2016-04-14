@@ -32,7 +32,7 @@
     <!-- 使用好邻居自提的时候出现 -->
     <ul class="clearfix" ng-if="vm.selectShipType==2" ng-click="vm.showChooseOfflineStore()">
         <li class="fl">
-            <a href="#" class="defaultText" ng-if="!vm.checkedOfflineStore">选择自提地址</a>
+            <a href="#" class="defaultText" ng-if="!vm.checkedOfflineStore">请选择好邻居线下店</a>
             <a href="#" class="address" ng-if="vm.checkedOfflineStore">
                 <span ng-bind="vm.checkedOfflineStore.owner_name"></span><span
                     ng-bind="vm.checkedOfflineStore.owner_phone"></span>
@@ -41,7 +41,8 @@
         </li>
         <li class="fr">
             <a href="#" class="next-icon clearfix">
-                <label>修改</label>
+                <label ng-if="!vm.checkedOfflineStore">选择</label>
+                <label ng-if="vm.checkedOfflineStore">重新选择</label>
                 <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/next-icon.png"/>
             </a>
         </li>
