@@ -43,6 +43,7 @@
       CoreReactorChannel.elevatedEvent('EditConsignee', {});
     }
 
+    //初始化用户的快递信息
     function initUserConsigneeData() {
       _.each(vm.consignee, function (item) {
         if (item['type'] == 0) {
@@ -59,6 +60,7 @@
       updateBuyerData(vm.selectShipType);
     }
 
+    //更新购买用户信息
     function updateBuyerData(type) {
       cleanBuyerData();
       //快递

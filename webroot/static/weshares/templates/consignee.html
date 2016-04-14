@@ -51,8 +51,7 @@
         <li class="fl comment">自提地址</li>
         <li class="fl content">
             <select ng-model='vm.selectedPickUpAddressId'
-                    ng-options="address.id as address.address for address in vm.weshare.addresses"
-                    ng-change='vm.validateAddress()'>
+                    ng-options="address.id as address.address for address in vm.weshare.addresses">
                 <option value="-1">请选择地址</option>
             </select>
         </li>

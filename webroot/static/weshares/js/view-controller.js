@@ -642,6 +642,7 @@
     }
 
     function submitOrder(paymentType) {
+
       if (!vm.validateOrderData()) {
         return false;
       }
@@ -1005,6 +1006,19 @@
     }
 
     function validateOrderData() {
+      //用户选择了好邻居或者自提的时候需要把地址写入
+      function setUserPickUpAddress(){
+        if (vm.selectShipType == 1 && vm.selectedPickUpAddressId != -1) {
+          var selectAddress = _.filter(vm.weshare.addresses, function (item) {
+            return item.id = vm.selectedPickUpAddressId;
+          });
+          vm.buyerAddress = selectAddress[0]['address'];
+        }
+        if (vm.selectShipType == 2 && !vm.checkedOfflineStore) {
+          vm.buyerAddress = vm.checkedOfflineStore['name'];
+        }
+      }
+      setUserPickUpAddress();
       var productsHasError = vm.validateProducts();
       if (productsHasError) {
         alert('请输入商品数量');
