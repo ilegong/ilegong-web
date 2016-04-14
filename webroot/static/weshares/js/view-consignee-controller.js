@@ -65,6 +65,7 @@
       cleanBuyerData();
       //快递
       if (type == 0 && vm.expressShipInfo) {
+        vm.selectedProvince = vm.expressShipInfo['province_id'];
         setBuyerData(vm.expressShipInfo);
       }
       //初始化自提信息

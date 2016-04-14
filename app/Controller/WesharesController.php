@@ -1314,11 +1314,12 @@ class WesharesController extends AppController
         $consignee = $this->OrderConsignees->find('first', array(
             'conditions' => array(
                 'creator' => $uid,
-                'type' => $type
+                'type' => $type,
+                'status' => PUBLISH_YES
             ),
             'fields' => array('id', 'name', 'mobilephone', 'remark_address')
         ));
-        $saveData = [];
+        $saveData = ['creator' => $uid, 'type' => $type, 'name' => $userInfo, 'mobilephone' => $mobileNum, 'remark_address' => $remarkAddress, 'status' => 1];
         if (!empty($consignee)) {
             //update
             $saveData['id'] = $consignee['OrderConsignees']['id'];
@@ -1326,9 +1327,8 @@ class WesharesController extends AppController
         if ($type == TYPE_CONSIGNEE_SHARE_OFFLINE_STORE) {
             $saveData['ziti_id'] = $consigneeId;
         }
-        $consigneeData = array('creator' => $uid, 'type' => $type, 'name' => $userInfo, 'mobilephone' => $mobileNum, 'remark_address' => $remarkAddress);
         //save
-        $this->OrderConsignees->save($consigneeData);
+        $this->OrderConsignees->save($saveData);
     }
 
     /**
