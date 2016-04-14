@@ -465,7 +465,6 @@ class WesharesController extends AppController
         $products = $postDataArray['products'];
         $weshareId = $postDataArray['weshare_id'];
         $business_remark = $postDataArray['remark'];
-        $buyerData = $postDataArray['buyer'];
         $rebateLogId = $postDataArray['rebate_log_id'];
         //购物车
         $cart = array();
@@ -474,7 +473,7 @@ class WesharesController extends AppController
             if (!$weshare_available) {
                 $this->log('Failed to create order for ' . $uid . ' with weshare ' . $weshareId . ': weshare is not available.', LOG_WARNING);
                 echo json_encode(array('success' => false, 'reason' => '分享已经截团'));
-                return;
+                exit();
             }
             $weshareProductIds = Hash::extract($products, '{n}.id');
             $productIdNumMap = Hash::combine($products, '{n}.id', '{n}.num');
@@ -489,7 +488,7 @@ class WesharesController extends AppController
             if (!empty($checkProductStoreResult)) {
                 $this->log('Failed to create order for ' . $uid . ' with weshare ' . $weshareId . ': product is sold out.', LOG_WARNING);
                 echo json_encode($checkProductStoreResult);
-                return;
+                exit();
             }
 
             $shipInfo = $postDataArray['ship_info'];
@@ -497,15 +496,21 @@ class WesharesController extends AppController
             $shipType = $shipInfo['ship_type'];
             $shipSetId = $shipInfo['ship_set_id'];
             $shipSetting = $this->get_ship_set($shipSetId, $weshareId);
+
             if (empty($shipSetting)) {
                 $this->log('Failed to create order for ' . $uid . ' with weshare ' . $weshareId . ': ship setting is empty', LOG_WARNING);
                 echo json_encode(array('success' => false, 'reason' => '物流方式选择错误'));
-                return;
+                exit();
             }
 
-            //邮费是按分存取的
-            $address = $this->get_order_address($weshareId, $shipInfo, $buyerData, $uid);
-            $orderData = array('cate_id' => $rebateLogId, 'creator' => $uid, 'consignee_address' => $address, 'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'), 'consignee_id' => $addressId, 'consignee_name' => $buyerData['name'], 'consignee_mobilephone' => $buyerData['mobilephone'], 'business_remark' => $business_remark);
+            $address = $this->get_order_address($weshareId, $shipInfo, $uid);
+            $orderData = array('cate_id' => $rebateLogId, 'creator' => $uid, 'consignee_address' => $address,
+                'member_id' => $weshareId, 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => date('Y-m-d H:i:s'), 'updated' => date('Y-m-d H:i:s'),
+                'consignee_id' => $addressId,
+                'consignee_name' => $shipInfo['name'],
+                'consignee_mobilephone' => $shipInfo['mobilephone'],
+                'business_remark' => $business_remark);
+
             $this->process_order_ship_mark($shipType, $orderData);
             $order = $this->Order->save($orderData);
             $orderId = $order['Order']['id'];
@@ -547,7 +552,7 @@ class WesharesController extends AppController
             }
             //产品价格的团长佣金
             $rebate_fee = $this->WeshareBuy->cal_proxy_rebate_fee($totalPrice - $discountPrice, $uid, $weshareId);
-            $shipFee = $this->calculate_order_ship_fee($shipSetting, $cart_good_num, $cart_good_weight, $weshareId, $buyerData['provinceId']);
+            $shipFee = $this->calculate_order_ship_fee($shipSetting, $cart_good_num, $cart_good_weight, $weshareId, $shipInfo['provinceId']);
             $totalPrice += $shipFee;
             //cal proxy user rebate fee
             $update_order_data = array('total_all_price' => ($totalPrice - $discountPrice) / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => $shipFee, 'is_prepaid' => $is_prepaid);
@@ -575,15 +580,15 @@ class WesharesController extends AppController
                 $this->Orders->on_order_created($uid, $weshareId, $orderId);
 
                 echo json_encode(array('success' => true, 'orderId' => $orderId));
-                return;
+                exit();
             }
 
             echo json_encode(array('success' => false, 'orderId' => $orderId));
-            return;
+            exit();
         } catch (Exception $e) {
             $this->log($uid . 'buy share ' . $weshareId . $e);
             echo json_encode(array('success' => false, 'reason' => $e->getMessage()));
-            return;
+            exit();
         }
     }
 
@@ -1306,51 +1311,33 @@ class WesharesController extends AppController
 
 
     /**
-     * @param $buyerData
+     * @param $shipInfo
      * @param $uid
-     * @param $shipType
-     * @param $offlineStoreId
      * 记住用户填写的地址
      */
-    private function setShareConsignees($buyerData, $uid, $shipType, $offlineStoreId = 0)
+    private function setShareConsignees($shipInfo, $uid)
     {
-        $userInfo = $buyerData['name'];
-        $mobileNum = $buyerData['mobilephone'];
-        $address = $buyerData['address'];
-        $remarkAddress = $buyerData['patchAddress'];
+        $userInfo = $shipInfo['name'];
+        $mobileNum = $shipInfo['mobilephone'];
+        $remarkAddress = $shipInfo['patchAddress'];
+        $consigneeId = $shipInfo['consignee_id'];
+        $type = $shipInfo['ship_type'];
         $consignee = $this->OrderConsignees->find('first', array(
             'conditions' => array(
                 'creator' => $uid,
-                'type' => TYPE_CONSIGNEES_SHARE
+                'type' => $type
             ),
             'fields' => array('id', 'name', 'mobilephone', 'remark_address')
         ));
+        $saveData = [];
         if (!empty($consignee)) {
             //update
-            $saveData = array('name' => "'" . $userInfo . "'", 'mobilephone' => "'" . $mobileNum . "'", 'address' => "'" . $address . "'", 'remark_address' => "'" . $remarkAddress . "'");
-            if ($offlineStoreId != 0) {
-                $saveData['ziti_id'] = $offlineStoreId;
-            }
-            if ($shipType == SHARE_SHIP_PYS_ZITI_TAG) {
-                $provinceId = $buyerData['provinceId'];
-                $cityId = $buyerData['cityId'];
-                $countyId = $buyerData['countyId'];
-                $saveData['province_id'] = $provinceId;
-                $saveData['city_id'] = $cityId;
-                $saveData['county_id'] = $countyId;
-            }
-            $this->OrderConsignees->updateAll($saveData, array('id' => $consignee['OrderConsignees']['id']));
-            return;
+            $saveData['id'] = $consignee['OrderConsignees']['id'];
         }
-        $consigneeData = array('creator' => $uid, 'type' => TYPE_CONSIGNEES_SHARE, 'name' => $userInfo, 'mobilephone' => $mobileNum, 'address' => $address, 'remark_address' => $remarkAddress, 'ziti_id' => $offlineStoreId);
-        if ($shipType == SHARE_SHIP_PYS_ZITI_TAG) {
-            $provinceId = $buyerData['provinceId'];
-            $cityId = $buyerData['cityId'];
-            $countyId = $buyerData['countyId'];
-            $saveData['province_id'] = $provinceId;
-            $saveData['city_id'] = $cityId;
-            $saveData['county_id'] = $countyId;
+        if ($type == TYPE_CONSIGNEE_SHARE_OFFLINE_STORE) {
+            $saveData['ziti_id'] = $consigneeId;
         }
+        $consigneeData = array('creator' => $uid, 'type' => $type, 'name' => $userInfo, 'mobilephone' => $mobileNum, 'remark_address' => $remarkAddress);
         //save
         $this->OrderConsignees->save($consigneeData);
     }
@@ -1589,30 +1576,31 @@ class WesharesController extends AppController
     /**
      * @param $weshareId
      * @param $shipInfo
-     * @param $buyerData
      * @param $uid
      * @return mixed
      * 单独处理订单的地址 根据 自有自提、快递、好邻居
      */
-    private function get_order_address($weshareId, $shipInfo, $buyerData, $uid)
+    private function get_order_address($weshareId, $shipInfo, $uid)
     {
         $shipType = $shipInfo['ship_type'];
-        $addressId = $shipInfo['address_id'];
-        $customAddress = $buyerData['address'];
-        $patchAddress = $buyerData['patchAddress'];
-        if ($patchAddress == null) {
-            $patchAddress = '';
-        }
+        $consigneeId = $shipInfo['address_id'];
         //快递
         if ($shipType == SHARE_SHIP_KUAIDI) {
-            $location_address = $this->get_address_location($buyerData);
-            return $location_address . $customAddress;
+            return $this->get_express_address($consigneeId);
+        }
+
+        //记住或者更新自提地址
+        $this->setShareConsignees($shipInfo, $uid);
+
+        $patchAddress = $shipInfo['patchAddress'];
+        if ($patchAddress == null) {
+            $patchAddress = '';
         }
         //自有自提
         if ($shipType == SHARE_SHIP_SELF_ZITI) {
             $tinyAddress = $this->WeshareAddress->find('first', array(
                 'conditions' => array(
-                    'id' => $addressId,
+                    'id' => $consigneeId,
                     'weshare_id' => $weshareId
                 )
             ));
@@ -1624,21 +1612,32 @@ class WesharesController extends AppController
         }
         //朋友说自提
         if ($shipType == SHARE_SHIP_PYS_ZITI) {
-            if ($shipType == SHARE_SHIP_PYS_ZITI) {
-                $offline_store_id = $addressId;
-            }
-            $this->setShareConsignees($buyerData, $uid, $shipType, $offline_store_id);
-            $offline_store = $this->OfflineStore->findById($addressId);
+            $offline_store = $this->OfflineStore->findById($consigneeId);
             $address = $offline_store['OfflineStore']['name'];
             return $address;
         }
     }
 
-    private function get_address_location($buyerData)
+    //获取快递地址
+    private function get_express_address($consignee_id)
     {
-        $provinceId = $buyerData['provinceId'];
-        $cityId = $buyerData['cityId'];
-        $countyId = $buyerData['countyId'];
+        $express_consignee = $this->OrderConsignees->find('first', [
+            'conditions' => ['id' => $consignee_id]
+        ]);
+        $area = $express_consignee['OrderConsignees']['area'];
+        if (empty($area)) {
+            $area = $this->get_address_location($express_consignee['OrderConsignees']);
+            $this->OrderConsignees->update(['area' => "'" . $area . "'"], ['id' => $consignee_id]);
+        }
+        return $area . $express_consignee['OrderConsignees']['address'];
+    }
+
+    //根据省市区获取地址
+    private function get_address_location($locationData)
+    {
+        $provinceId = $locationData['province_id'];
+        $cityId = $locationData['city_id'];
+        $countyId = $locationData['county_id'];
         $locationM = ClassRegistry::init('Location');
         $locationIds = array_filter(array($provinceId, $cityId, $countyId));
         $locations = $locationM->find('all', array(

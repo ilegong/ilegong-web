@@ -9,9 +9,6 @@
     vmc.changeShipTab = changeShipTab;
     vmc.tabBarItemWidth = 33.3;
     vmc.toEditConsigneeView = toEditConsigneeView;
-    vmc.expressShipInfo = null;
-    vmc.pickUpShipInfo = null;
-    vmc.offlineStoreShipInfo = null;
     var vm = $scope.$parent.vm;
     active();
     function active() {
@@ -37,15 +34,19 @@
 
     function changeShipTab(type) {
       vm.selectShipType = type;
-      if (type == 1 && vmc.pickUpShipInfo) {
-        vm.buyerName = vmc.pickUpShipInfo['name'];
-        vm.buyerMobilePhone = vmc.pickUpShipInfo['mobilephone'];
-        vm.buyerPatchAddress = vmc.pickUpShipInfo['remark_address'];
+      //初始化自提信息
+      if (type == 1 && vm.pickUpShipInfo) {
+        setBuyerData(vm.pickUpShipInfo);
       }
-      if (type == 2 && vmc.offlineStoreShipInfo) {
-        vm.buyerName = vmc.offlineStoreShipInfo['name'];
-        vm.buyerMobilePhone = vmc.offlineStoreShipInfo['mobilephone'];
-        vm.buyerPatchAddress = vmc.offlineStoreShipInfo['remark_address'];
+      //初始化好邻居信息
+      if (type == 2 && vm.offlineStoreShipInfo) {
+        setBuyerData(vm.offlineStoreShipInfo);
+      }
+
+      function setBuyerData(data) {
+        vm.buyerName = data['name'];
+        vm.buyerMobilePhone = data['mobilephone'];
+        vm.buyerPatchAddress = data['remark_address'];
       }
     }
 
@@ -58,14 +59,14 @@
     function initUserConsigneeData() {
       _.each(vm.consignee, function (item) {
         if (item['type'] == 0) {
-          vmc.expressShipInfo = item;
+          vm.expressShipInfo = item;
         }
         if (item['type'] == 1) {
-          vmc.pickUpShipInfo = item;
+          vm.pickUpShipInfo = item;
         }
         if (item['type'] == 2) {
-          vmc.offlineStoreShipInfo = item;
-          vm.checkedOfflineStore = vmc.offlineStoreShipInfo;
+          vm.checkedOfflineStore = item['offlineStore'];
+          vm.offlineStoreShipInfo = item;
         }
       });
     }

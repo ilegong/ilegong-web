@@ -552,7 +552,7 @@
     }
 
     function validateAddress() {
-      vm.addressHasError = vm.weshare.addresses.length > 0 && vm.weshare.selectedAddressId == -1;
+      vm.addressHasError = vm.weshare.addresses.length > 0 && vm.selectedPickUpAddressId == -1;
       return vm.addressHasError;
     }
 
@@ -610,6 +610,36 @@
       vm.chooseShipType = false;
     }
 
+    function getBuyShipInfo() {
+      vm.shipFee = vm.shipFee || 0;
+      //快递信息
+      var ship_info = {
+        ship_type: vm.selectShipType,
+        ship_fee: vm.shipFee,
+        ship_set_id: vm.shipSetId,
+        name: vm.buyerName,
+        mobilephone: vm.buyerMobilePhone
+      };
+      //快递
+      if (vm.selectShipType == 0) {
+        ship_info['consignee_id'] = vm.expressShipInfo['id'];
+      }
+      //自提
+      if (vm.selectShipType == 1 || vm.selectShipType == 2) {
+        //自有自提
+        if (vm.selectShipType == 1) {
+          ship_info['consignee_id'] = vm.selectedPickUpAddressId;
+        }
+        //好邻居
+        if (vm.selectShipType == 2) {
+          ship_info['consignee_id'] = vm.checkedOfflineStore.id;
+        }
+        ship_info['address'] = vm.buyerAddress;
+        ship_info['patchAddress'] = vm.buyerPatchAddress;
+      }
+      return ship_info;
+    }
+
     function submitOrder(paymentType) {
       if (!vm.validateOrderData()) {
         return false;
@@ -623,36 +653,13 @@
       submit_products = _.map(submit_products, function (product) {
         return {id: product.id, num: product.num};
       });
-      vm.shipFee = vm.shipFee || 0;
-      var ship_info = {
-        ship_type: vm.selectShipType,
-        ship_fee: vm.shipFee,
-        ship_set_id: vm.shipSetId
-      };
-      //self ziti
-      if (vm.selectShipType == 1) {
-        ship_info['address_id'] = vm.weshare.selectedAddressId;
-      }
-      //offline store
-      if (vm.selectShipType == 2) {
-        ship_info['address_id'] = vm.checkedOfflineStore.id;
-      }
-
+      var ship_info = getBuyShipInfo();
       var orderData = {
         weshare_id: vm.weshare.id,
         rebate_log_id: vm.rebateLogId,
         products: submit_products,
         ship_info: ship_info,
         remark: vm.buyerRemark,
-        buyer: {
-          name: vm.buyerName,
-          mobilephone: vm.buyerMobilePhone,
-          address: vm.buyerAddress,
-          patchAddress: vm.buyerPatchAddress,
-          provinceId: vm.selectedProvince,
-          cityId: vm.selectedCity,
-          countyId: vm.selectedCounty
-        }
       };
       if (vm.useCouponId) {
         orderData['coupon_id'] = vm.useCouponId;
@@ -1195,10 +1202,10 @@
     function handleShareData(data) {
       vm.weshare = data['weshare'];
       if (vm.weshare.addresses && vm.weshare.addresses.length == 1) {
-        vm.weshare.selectedAddressId = vm.weshare.addresses[0].id;
+        vm.selectedPickUpAddressId = vm.weshare.addresses[0].id;
       } else if (vm.weshare.addresses && vm.weshare.addresses.length > 1) {
         vm.weshare.addresses.unshift({id: -1, address: '请选择收货地址'});
-        vm.weshare.selectedAddressId = -1;
+        vm.selectedPickUpAddressId = -1;
       }
       vm.isManage = data['is_manage'];
       vm.canManageShare = data['can_manage_share'];
