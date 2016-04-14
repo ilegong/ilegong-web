@@ -1015,7 +1015,7 @@
           });
           vm.buyerAddress = selectAddress[0]['address'];
         }
-        if (vm.selectShipType == 2 && !vm.checkedOfflineStore) {
+        if (vm.selectShipType == 2 && vm.checkedOfflineStore) {
           vm.buyerAddress = vm.checkedOfflineStore['name'];
         }
       }

@@ -91,6 +91,9 @@
     }
 
     function getSelectTypeDefaultVal() {
+      if (vm.selectShipType) {
+        return vm.selectShipType;
+      }
       if (vm.weshareSettings.kuai_di && vm.weshareSettings.kuai_di.status == 1) {
         return 0;
       }
