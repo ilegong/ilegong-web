@@ -15,7 +15,6 @@
     vmc.loadCountyData = loadCounty;
     vmc.saveConsignee = saveConsignee;
     vmc.chooseConsignee = chooseConsignee;
-    vmc.toBalanceView = toBalanceView;
 
     vmc.initProvince();
     vmc.loadingConsignee = false;
@@ -29,21 +28,12 @@
       });
     }
 
-    function hideEditConsigneeView() {
-      vmc.selectConsignees = false;
-      vmc.editConsignee = false;
-    }
-
-    function toBalanceView(consignee) {
-      vm.expressShipInfo = consignee;
-      vm.updateBuyerData(vm.selectShipType);
-      hideEditConsigneeView();
-    }
 
     function saveConsignee() {
       $http.post('/users/save_consignee.json', vmc.editConsigneeData).success(function (data) {
         if (data['success']) {
-          vmc.toBalanceView(data['consignee']);
+          vm.expressShipInfo = data['consignee'];
+          vmc.toBalanceView();
         }
       }).error(function () {
         alert('保存失败，请联系客服！');
@@ -51,8 +41,8 @@
     }
 
     function chooseConsignee(consignee) {
-      if(consignee['status'] == 1){
-        vmc.toBalanceView(consignee);
+      if (consignee['status'] == 1) {
+        vmc.toBalanceView();
         return;
       }
       var consigneeId = consignee['id'];
@@ -70,7 +60,8 @@
             vmc.consignees = _.sortBy(consignees, function (item) {
               return item['status'] == 1 ? 0 : 1;
             });
-            vmc.toBalanceView(consignee);
+            vm.expressShipInfo = consignee;
+            vmc.toBalanceView();
           }
         }
       ).error(
@@ -98,6 +89,7 @@
     }
 
     function toBalanceView() {
+      vm.updateBuyerData(vm.selectShipType);
       vm.showBalanceView = true;
       vmc.selectConsignees = false;
       vmc.editConsignee = false;

@@ -14,7 +14,10 @@
     function active() {
       vm.selectShipType = getSelectTypeDefaultVal();
       vmc.tabBarItemWidth = getTabBarItemWidth();
-      initUserConsigneeData();
+      if (vm.shouldInitUserConsigneeData) {
+        initUserConsigneeData();
+        vm.shouldInitUserConsigneeData = false;
+      }
     }
 
     function getTabBarItemWidth() {

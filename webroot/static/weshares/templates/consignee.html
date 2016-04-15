@@ -17,8 +17,8 @@
         <li class="fl">
             <a class="defaultText" style="display: none;">填写收货信息</a>
             <a class="address">
-                <span ng-bind="::vm.expressShipInfo.name"></span><span ng-bind="::vm.expressShipInfo.mobilephone"></span>
-                <br/><span ng-bind="::(vm.expressShipInfo.area+vm.expressShipInfo.address)"></span>
+                <span ng-bind="vm.expressShipInfo.name"></span><span ng-bind="vm.expressShipInfo.mobilephone"></span>
+                <br/><span ng-bind="(vm.expressShipInfo.area+vm.expressShipInfo.address)"></span>
             </a>
         </li>
         <li class="fr" ng-click="wcc.toEditConsigneeView()">

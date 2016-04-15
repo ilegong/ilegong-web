@@ -608,6 +608,7 @@
     function buyProducts() {
       vm.showShareDetailView = false;
       vm.showBalanceView = true;
+      vm.shouldInitUserConsigneeData = true;
       vm.showEditConsigneeView = true;
       vm.chooseShipType = false;
     }
