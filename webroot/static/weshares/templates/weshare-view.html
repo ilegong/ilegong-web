@@ -31,6 +31,7 @@
                         {{::product.name}}
                         &nbsp;&nbsp;(仅剩<span style="color: red;" ng-bind="vm.getProductLeftNum(product)"></span>份)
                     </dd>
+
                     <dd class="fr" ng-if="vm.checkProductNum(product)">
                         <a class='btn decrease-btn' ng-click="vm.decpreaseProductNum(product)"></a>
                         <span class='num' ng-bind="product.num||0"></span>
@@ -39,6 +40,7 @@
                     <dd class="fr" ng-if="!vm.checkProductNum(product)">
                         <span class='num' style="margin-left: 60px;">&nbsp;</span>
                     </dd>
+
                     <dd class="fr" style="color: #29AC0E;" ng-bind="::product.price/100 | currency:'￥'"></dd>
                 </dl>
             </div>

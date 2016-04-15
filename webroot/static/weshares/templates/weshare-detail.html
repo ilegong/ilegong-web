@@ -50,37 +50,40 @@
     <li class="tz-recommend fl"><span ng-bind="vm.recommendData.length">0</span>位团长推荐</li>
 </ul>
 <ul class="clearfix introduce">
-    <li class="me-introduce fl"><span class="introduce">我要推荐</span></li>
-    <li class="introduce-money fl">推荐佣金5%</li>
+    <li class="me-introduce fl" ng-if="!vm.isCreator()&&vm.isProxy()&&vm.weshare.status == 0 && vm.weshare.type!=4">
+        <span class="introduce" ng-click="vm.showRecommendDialog=true;vm.showLayer=true;">我要推荐</span>
+    </li>
+    <li class="introduce-money fl" ng-if="(vm.currentUser.is_proxy==1||vm.isCreator())&&vm.weshare.proxy_rebate_percent.percent>0">
+        推荐佣金<span ng-bind="::vm.weshare.proxy_rebate_percent.percent+'%'" class="stress-span">0%</span>
+    </li>
 </ul>
 
 <p class="product-title">产品列表</p>
-<div class="product">
+<div class="product" ng-repeat="product in vm.weshare.products">
     <ul class="clearfix">
         <li class="fl">
-            <div class="product-name">1：盐冻厄瓜多尔白虾1kg</div>
-            <div class="product-price">¥165</div>
+            <div class="product-name"><span ng-bind="{{$index+1}}"></span>：<span ng-bind="{{::product.name}}"></span></div>
+
+            <div class="product-price" ng-if="!vm.checkProductNum(product)||product.store==0">
+                <span ng-if="!vm.checkProductNum(product)">&nbsp;&nbsp;(<span style="color: red;">抢光了</span>)</span>
+            </div>
+            <div class="product-price" ng-if="vm.checkProductNum(product)&&product.store>0">
+                &nbsp;&nbsp;(仅剩<span style="color: red;" ng-bind="vm.getProductLeftNum(product)"></span>份)
+            </div>
+
+            <dd class="fr" ng-if="!vm.checkProductNum(product)">
+                <span class='num' style="margin-left: 60px;">&nbsp;</span>
+            </dd>
+            <dd class="fr" style="color: #29AC0E;" ng-bind="::product.price/100 | currency:'￥'"></dd>
         </li>
     </ul>
-    <dl class="clearfix">
-        <dd class="fr add-subtract"></dd>
-        <dd class="fr amount">1</dd>
-        <dd class="fr add-subtract"></dd>
+    <dl class="clearfix" ng-if="vm.checkProductNum(product)">
+        <dd class="fr add-subtract" ng-click="vm.decpreaseProductNum(product)"></dd>
+        <dd class="fr amount" ng-bind="product.num||0">0</dd>
+        <dd class="fr add-subtract" ng-click="vm.increaseProductNum(product)"></dd>
     </dl>
 </div>
-<div class="product">
-    <ul class="clearfix">
-        <li class="fl">
-            <div class="product-name">2：盐冻厄瓜多尔白虾1kg</div>
-            <div class="product-price">¥165</div>
-        </li>
-    </ul>
-    <dl class="clearfix">
-        <dd class="fr add-subtract"></dd>
-        <dd class="fr amount">1</dd>
-        <dd class="fr add-subtract"></dd>
-    </dl>
-</div>
+
 <p class="product-title">报名列表</p>
 <ul class="clearfix apply">
     <li><a href="#X" class="focus-apply line-right">报名(10)</a></li>
