@@ -236,7 +236,6 @@
       restrict: 'A',
       transclude: true,
       replace: true,
-      template: '<p></p>',
       scope: {
         moreText: '@',
         lessText: '@',
