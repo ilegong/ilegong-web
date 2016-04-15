@@ -1,4 +1,3 @@
-{{vm.weshare.creator}}
 <a href="/weshares/add?from=share_view" class="share-banner"><img ng-src="{{::vm.staticFilePath}}/static/weshares/images/share-banner-new.gif" /></a>
 <ul class="sharer clearfix">
     <li class="fl detail-head">
@@ -313,3 +312,7 @@
 <div class="toast" style="display: none;">关注已取消，不再收到TA的消息</div>
 
 <div class="layer-bg" style="display: none;"></div>
+
+<div ng-if="vm.weshare.type==0||vm.weshare.type==4||vm.weshare.type==6">
+    <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-default-nav.html?v0.6.4'"></ng-include>
+</div>
