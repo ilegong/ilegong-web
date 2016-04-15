@@ -16,7 +16,8 @@ uglifyjs ./webroot/static/weshares/js/me-lazyload.js \
 
 cat ./webroot/static/weshares/css/main.css \
     ./webroot/static/weshares/css/site-common.css \
-    ./webroot/static/weshares/css/share-balance-view.css | \
+    ./webroot/static/weshares/css/share-balance-view.css \
+    ./webroot/static/weshares/css/share.css | \
     cleancss -o ./webroot/static/weshares/css/weshare.min.css
 
 cat ./webroot/static/weshares/css/common.css \
