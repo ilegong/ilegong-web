@@ -66,14 +66,16 @@
                 <span ng-bind="$index+1"></span>：<span ng-bind="product.name"></span>
             </div>
 
-            <div class="product-price" ng-if="!vm.checkProductNum(product)||product.store==0">
-                <span ng-bind="product.price/100 | currency:'￥'"></span>
-                <span ng-if="!vm.checkProductNum(product)||product.store==0">&nbsp;&nbsp;(<span style="color: red;">抢光了</span>)</span>
-                <span ng-if="vm.checkProductNum(product)&&product.store>0">&nbsp;&nbsp;(仅剩<span style="color: red;" ng-bind="vm.getProductLeftNum(product)"></span>份)</span>
+            <div class="product-price" ng-if="!vm.checkProductNum(product)||product.store==0" ng-bind="product.price/100 | currency:'￥'">
             </div>
         </li>
     </ul>
-    <dl class="clearfix" ng-if="vm.checkProductNum(product)">
+
+    <dl class="clearfix" ng-if="!vm.checkProductNum(product)||product.store==0">
+        <dd class="fr sold-out">已抢光</dd>
+    </dl>
+    <dl class="clearfix" ng-if="vm.checkProductNum(product) && product.store != 0">
+        <dd class="fr limit-score" ng-if="vm.checkProductNum(product)&&product.store>0">仅剩10份</dd>
         <dd class="fr add-subtract" ng-click="vm.decpreaseProductNum(product)"></dd>
         <dd class="fr amount" ng-bind="product.num||0">0</dd>
         <dd class="fr add-subtract" ng-click="vm.increaseProductNum(product)"></dd>
