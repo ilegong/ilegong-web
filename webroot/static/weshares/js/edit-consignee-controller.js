@@ -43,13 +43,30 @@
 
 
     function validConsignee() {
-      if (Utils.isMobileValid(vmc.editConsigneeData['mobilephone'])) {
-
+      if (!Utils.isMobileValid(vmc.editConsigneeData['mobilephone'])) {
+        alert('请输入手机号码');
+        return false;
       }
+      if (_.isEmpty(vmc.editConsigneeData['name'])) {
+        alert('请输入收货人');
+        return false;
+      }
+      if (_.isEmpty(vmc.editConsigneeData['address'])) {
+        alert('请输入收货地址');
+        return false;
+      }
+      if (_.isEmpty(vmc.editConsigneeData['province_id']) || _.isEmpty(vmc.editConsigneeData['city_id'])) {
+        alert('请选择省市区');
+        return false;
+      }
+      return true;
     }
 
 
     function saveConsignee() {
+      if (!validConsignee()) {
+        return false;
+      }
       vmc.submiting = true;
       showLoading();
       $http.post('/users/save_consignee.json', vmc.editConsigneeData).success(function (data) {
