@@ -2,7 +2,7 @@
   angular.module('weshares')
     .controller('WesharesEditConsigneeCtrl', WesharesEditConsigneeCtrl);
 
-  function WesharesEditConsigneeCtrl($scope, $http, CoreReactorChannel, $templateCache, $log) {
+  function WesharesEditConsigneeCtrl($scope, $http, CoreReactorChannel, $templateCache, Utils) {
     var vmc = this;
 
     vmc.selectConsignees = false;
@@ -15,9 +15,12 @@
     vmc.loadCountyData = loadCounty;
     vmc.saveConsignee = saveConsignee;
     vmc.chooseConsignee = chooseConsignee;
+    vmc.validConsignee = validConsignee;
 
     vmc.initProvince();
     vmc.loadingConsignee = false;
+    vmc.submiting = false;
+    vmc.showLayerBg = false;
 
     var vm = $scope.$parent.vm;
 
@@ -28,16 +31,39 @@
       });
     }
 
+    function showLoading() {
+      vmc.loadingConsignee = true;
+      vmc.showLayerBg = true;
+    }
+
+    function closeLoading() {
+      vmc.loadingConsignee = false;
+      vmc.showLayerBg = false;
+    }
+
+
+    function validConsignee() {
+      if (Utils.isMobileValid(vmc.editConsigneeData['mobilephone'])) {
+
+      }
+    }
+
 
     function saveConsignee() {
+      vmc.submiting = true;
+      showLoading();
       $http.post('/users/save_consignee.json', vmc.editConsigneeData).success(function (data) {
         if (data['success']) {
           //下次刷新需要重新加载
           vm.reloadConsigneeData = true;
           vm.expressShipInfo = data['consignee'];
           vmc.toBalanceView();
+          vmc.submiting = false;
+          closeLoading();
         }
       }).error(function () {
+        vmc.submiting = false;
+        closeLoading();
         alert('保存失败，请联系客服！');
       });
     }
@@ -48,8 +74,11 @@
         return;
       }
       var consigneeId = consignee['id'];
+      vmc.submiting = true;
+      showLoading();
       $http({method: 'GET', url: '/users/select_consignee/' + consigneeId + '.json'}).success(
         function (data) {
+          vmc.submiting = false;
           if (data['success']) {
             var consignees = _.map(vmc.consignees, function (item) {
               if (item['id'] == consigneeId) {
@@ -62,12 +91,15 @@
             vmc.consignees = _.sortBy(consignees, function (item) {
               return item['status'] == 1 ? 0 : 1;
             });
+            closeLoading();
             vm.expressShipInfo = consignee;
             vmc.toBalanceView();
           }
         }
       ).error(
         function () {
+          vmc.submiting = false;
+          closeLoading();
           alert('请重试！');
         }
       );
@@ -79,7 +111,7 @@
       }
       vm.reloadConsigneeData = true;
       vmc.consignees = null;
-      vmc.loadingConsignee = true;
+      showLoading();
       $http({
         method: 'GET',
         url: '/users/get_consignee_list.json'
@@ -91,8 +123,9 @@
         });
         vmc.consignees = consignees;
         vm.reloadConsigneeData = false;
+        closeLoading();
       }).error(function () {
-        vmc.loadingConsignee = false;
+        closeLoading();
         vm.reloadConsigneeData = true;
       });
     }
