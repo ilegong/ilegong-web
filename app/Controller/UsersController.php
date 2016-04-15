@@ -769,7 +769,7 @@ class UsersController extends AppController {
         $this->OrderConsignee->updateAll(['status' => PUBLISH_NO], ['creator' => $uid, 'type' => TYPE_CONSIGNEES_SHARE]);
         $consignee = $this->OrderConsignee->save($postDataArray);
         Cache::write(USER_CONSIGNEES_CACHE_KEY . '_' . $uid, '');
-        echo json_encode(['success' => true, 'consignee' => $consignee]);
+        echo json_encode(['success' => true, 'consignee' => $consignee['OrderConsignee']]);
         exit();
     }
 

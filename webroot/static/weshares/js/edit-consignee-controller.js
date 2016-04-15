@@ -32,6 +32,8 @@
     function saveConsignee() {
       $http.post('/users/save_consignee.json', vmc.editConsigneeData).success(function (data) {
         if (data['success']) {
+          //下次刷新需要重新加载
+          vm.reloadConsigneeData = true;
           vm.expressShipInfo = data['consignee'];
           vmc.toBalanceView();
         }
@@ -72,6 +74,11 @@
     }
 
     function loadConsignees() {
+      if (!vm.reloadConsigneeData && vmc.consignees) {
+        return;
+      }
+      vm.reloadConsigneeData = true;
+      vmc.consignees = null;
       vmc.loadingConsignee = true;
       $http({
         method: 'GET',
@@ -83,8 +90,10 @@
           return item['status'] == 1 ? 0 : 1;
         });
         vmc.consignees = consignees;
+        vm.reloadConsigneeData = false;
       }).error(function () {
         vmc.loadingConsignee = false;
+        vm.reloadConsigneeData = true;
       });
     }
 

@@ -607,10 +607,11 @@
 
     function buyProducts() {
       vm.showShareDetailView = false;
+      vm.chooseShipType = false;
       vm.showBalanceView = true;
       vm.shouldInitUserConsigneeData = true;
       vm.showEditConsigneeView = true;
-      vm.chooseShipType = false;
+      vm.reloadConsigneeData = true;
     }
 
     function getBuyShipInfo() {
