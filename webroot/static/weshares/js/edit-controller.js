@@ -137,6 +137,7 @@
           }
           if (!_.isEmpty(data['deliveryTemplate']['default_delivery_template'])) {
             vm.defaultDeliveryTemplate = data['deliveryTemplate']['default_delivery_template'];
+            vm.defaultDeliveryTemplate['is_default'] = 1;
             vm.deliveryTemplateType = vm.defaultDeliveryTemplate['unit_type'];
           }
           $rootScope.loadingPage = false;
@@ -626,6 +627,18 @@
     function validateDeliveryTemplateData(deliveryTemplates) {
       for (var i = 0; i < deliveryTemplates.length; i++) {
         var deliveryTemplateItem = deliveryTemplates[i];
+        if (Utils.isBlank(deliveryTemplateItem['start_units'])) {
+          deliveryTemplateItem['start_units'] = 1;
+        }
+        if (Utils.isBlank(deliveryTemplateItem['start_fee'])) {
+          deliveryTemplateItem['start_fee'] = 0;
+        }
+        if (Utils.isBlank(deliveryTemplateItem['add_units'])) {
+          deliveryTemplateItem['add_units'] = 1;
+        }
+        if (Utils.isBlank(deliveryTemplateItem['add_fee'])) {
+          deliveryTemplateItem['add_fee'] = 0;
+        }
         if (deliveryTemplateItem['is_default'] == 0) {
           if (_.isEmpty(deliveryTemplateItem['regions'])) {
             alert('非默认运费设置，需要指定地区');

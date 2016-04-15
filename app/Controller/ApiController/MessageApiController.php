@@ -302,25 +302,45 @@ class MessageApiController extends Controller
     /**
      * @param $page
      * @param $limit
-     * @param $share_id
      * @param $user_id
      * 用户私信列表[针对特定分享的私信列表]
      */
-    public function user_faq_msg_list($share_id, $user_id, $page, $limit)
+    public function user_faq_msg_list($user_id, $page, $limit)
     {
         $uid = $this->currentUser['id'];
         $this->loadModel('ShareFaq');
         $share_faqs = $this->ShareFaq->find('all', [
-            'conditions' => ['share_id' => $share_id, 'sender' => [$uid, $user_id], 'receiver' => [$uid, $user_id]],
+            'conditions' => [
+                'ShareFaq.sender' => [$uid, $user_id],
+                'ShareFaq.receiver' => [$uid, $user_id]
+            ],
             'limit' => $limit,
             'page' => $page,
-            'order' => ['id DESC']
+            'order' => ['ShareFaq.id DESC'],
+            'fields' => ['Weshare.*', 'ShareFaq.*'],
+            'joins' => [
+                [
+                    'table' => 'weshares',
+                    'alias' => 'Weshare',
+                    'conditions' => "ShareFaq.share_id = Weshare.id",
+                ],
+            ],
         ]);
-        $share_faqs = array_map(function ($item) {
-            return $item['ShareFaq'];
-        }, $share_faqs);
-        $share_faqs = array_reverse($share_faqs);
-        echo json_encode($share_faqs);
+
+        usort($share_faqs, function ($a, $b) {
+            return $a['ShareFaq']['id'] - $b['ShareFaq']['id'];
+        });
+        $data = [];
+	$shares = [];
+        foreach ($share_faqs as $key => $a) {
+            $tmp = [];
+            $share_faqs[$key]['Weshare']['images'] = explode('|', $a['Weshare']['images'])[0];
+            $tmp = $share_faqs[$key]['ShareFaq'];
+            $shares[$share_faqs[$key]['Weshare']['id']] = $share_faqs[$key]['Weshare'];
+            $data[] = $tmp;
+        }
+        header('Content-type: text/json');
+        echo json_encode(['share_faq' => $data, 'weshares' => $shares]);
         exit();
     }
 
