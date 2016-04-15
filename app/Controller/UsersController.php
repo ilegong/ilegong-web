@@ -741,7 +741,7 @@ class UsersController extends AppController {
             ]
         ]);
         $consignees = Hash::extract($consignees, '{n}.OrderConsignee');
-        echo json_encode($consignees);
+        echo json_encode(['consignees' => $consignees, 'success' => true]);
         exit();
     }
 

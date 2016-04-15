@@ -1342,7 +1342,7 @@ class WesharesController extends AppController
                 'status' => PUBLISH_YES,
                 'type' => [TYPE_CONSIGNEES_SHARE, TYPE_CONSIGNEES_SHARE_ZITI, TYPE_CONSIGNEE_SHARE_OFFLINE_STORE]
             ),
-            'fields' => array('id', 'name', 'mobilephone', 'address', 'ziti_id', 'remark_address', 'province_id', 'city_id', 'county_id', 'type')
+            'fields' => array('id', 'name', 'mobilephone', 'address', 'ziti_id', 'remark_address', 'province_id', 'city_id', 'county_id', 'type', 'area')
         ));
         //load remember offline store id
         foreach ($consignees as &$consignee) {
