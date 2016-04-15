@@ -19,11 +19,27 @@
                           ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
                 </li>
             </ul>
+
+            <ul class="clearfix massage" ng-if="order.status == 9 && !_.isEmpty(vm.getOrderComment(order.id).body)">
+                <li ng-bind="::vm.getOrderComment(order.id).body">
+                </li>
+                <li ng-repeat="reply in vm.getReplyComments(vm.getOrderComment(order.id).id)">
+                    <strong ng-bind="::reply.username" ng-click="vm.toUserShareInfo(reply.user_id)"></strong>
+                    <span>回复</span>
+                        <span ng-if="reply.is_reply==1">
+                            <strong ng-bind="::reply.reply_username" ng-click="vm.toUserShareInfo(reply.reply_user_id)"></strong>
+                        </span>
+                    <span>:&nbsp;</span>
+                    <span ng-bind="::reply.body" ng-click="vm.showCommentDialog(order,reply)"></span>
+                </li>
+            </ul>
+
             <ul class="clearfix self-massage product-much" ng-if="vm.isOwner(order)">
                 <li><span ng-bind="order.consignee_name"></span>&nbsp <span
                         ng-bind="order.consignee_mobilephone"></span></li>
                 <li ng-bind="order.consignee_address"></li>
             </ul>
+
             <ul class="clearfix">
                 <li class="product-much" ng-hide="_.isEmpty(vm.getOrderDisplayName(order.id))"
                     ng-bind="::vm.getOrderDisplayName(order.id)"></li>
@@ -76,6 +92,21 @@
                               ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
                     </li>
                 </ul>
+
+                <ul class="clearfix massage" ng-if="order.status == 9 && !_.isEmpty(vm.getOrderComment(order.id).body)">
+                    <li ng-bind="::vm.getOrderComment(order.id).body">
+                    </li>
+                    <li ng-repeat="reply in vm.getReplyComments(vm.getOrderComment(order.id).id)">
+                        <strong ng-bind="::reply.username" ng-click="vm.toUserShareInfo(reply.user_id)"></strong>
+                        <span>回复</span>
+                        <span ng-if="reply.is_reply==1">
+                            <strong ng-bind="::reply.reply_username" ng-click="vm.toUserShareInfo(reply.reply_user_id)"></strong>
+                        </span>
+                        <span>:&nbsp;</span>
+                        <span ng-bind="::reply.body" ng-click="vm.showCommentDialog(order,reply)"></span>
+                    </li>
+                </ul>
+
                 <ul class="clearfix">
                     <li class="product-much" ng-hide="_.isEmpty(vm.getOrderDisplayName(order.id))"
                         ng-bind="::vm.getOrderDisplayName(order.id)">
