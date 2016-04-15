@@ -1,30 +1,55 @@
-<div class="apply-list clearfix">
-    <div style=" position: relative;" ng-repeat="order in vm.ordersDetail.orders">
+<div class="apply-list clearfix" ng-class="{hide:vm.showCommentedOrders}">
+    <div style=" position: relative;" ng-repeat="order in vm.ordersDetail.orders" ng-show="!vm.showCommentedOrders || order.status==9">
         <div class="apply-details" ng-class="{'self-details': vm.isOwner(order)}">
             <ul class="clearfix">
-                <li class="self fl"
-                    ng-bind="vm.isOwner(order) ? '我':vm.ordersDetail.users[order.creator]['nickname']"></li>
+                <li class="self fl" ng-bind="vm.isOwner(order) ? '我':vm.ordersDetail.users[order.creator]['nickname']"></li>
                 <li class="description fl">已经报名</li>
-                <li class="status fr">待发货</li>
-                <span ng-if="order.status==9" class="done-status"><i class="fa fa-heart fa-lg"></i></span>
-                <strong ng-if="order.status==21" class="paid-status">待发货</strong>
-                <strong ng-if="order.status==14" class="refunding-status">退款中</strong>
-                <strong ng-if="order.status==4" class="refund-status">已退款</strong>
-                <strong ng-if="order.status==2" class="shipped-status"
-                        ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong>
-                <strong ng-if="order.status==3" class="received-status"
-                        ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong>
-                <strong ng-if="order.status==1" class="paid-status"
-                        ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong>
-
+                <li class="status fr">
+                    <span ng-if="order.status==9" class="done-status"><i class="fa fa-heart fa-lg"></i></span>
+                    <span ng-if="order.status==21" class="paid-status">待发货</span>
+                    <span ng-if="order.status==14" class="refunding-status">退款中</span>
+                    <span ng-if="order.status==4" class="refund-status">已退款</span>
+                    <span ng-if="order.status==2" class="shipped-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
+                    <span ng-if="order.status==3" class="received-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
+                    <span ng-if="order.status==1" class="paid-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
+                </li>
             </ul>
-            <ul class="clearfix self-massage">
+            <ul class="clearfix self-massage product-much">
                 <li><span ng-bind="order.consignee_name"></span>&nbsp <span ng-bind="order.consignee_mobilephone"></span></li>
                 <li ng-bind="order.consignee_address"></li>
             </ul>
             <ul class="clearfix">
                 <li class="product-much" ng-hide="_.isEmpty(vm.getOrderDisplayName(order.id))" ng-bind="::vm.getOrderDisplayName(order.id)"></li>
             </ul>
+            <ul class="clearfix operations">
+                <li class="pass fl" ng-if="!vm.isCurrentUserRecommend(order)||!(order.cate_id > 0&&((order.status!=3)||(order.status==3&&!vm.isOwner(order)&&!vm.isCreator())))">
+                    <a class="status-btn">小主说两句评价呗</a>
+                </li>
+
+                <li class="pass fl">
+                    <a class="status-btn" ng-click="vm.confirmReceived(order)" ng-show="order.status==2"><span ng-if="order.ship_mark=='pys_ziti' || order.ship_mark=='self_ziti' || order.ship_mark=='pin_tuan'">点此收货</span><span ng-if="order.ship_mark=='kuai_di'">点此签收</span></a>
+                </li>
+                <li class="pass fl">
+                    <a class="status-btn" ng-show="order.status==3"><span ng-if="order.ship_mark=='pys_ziti' || order.ship_mark=='self_ziti' || order.ship_mark=='pin_tuan'">已收货</span><span ng-if="order.ship_mark=='kuai_di'">已签收</span></a>
+                </li>
+
+            </ul>
+            <div style="display: inline-flex;width: 100%;" ng-if="!vm.isCurrentUserRecommend(order)||!(order.cate_id > 0&&((order.status!=3)||(order.status==3&&!vm.isOwner(order)&&!vm.isCreator())))">
+                <div style="width: 29%;"><span style="width: 100%;" class='created-at' ng-bind="::vm.getFormatDate(order.created)"></span></div>
+                <div style="float: right;margin-left: 49%; width: 30%;"
+                     ng-if="order.status==3&&vm.isOwner(order)" ng-click="vm.showCommentDialog(order)">
+                    <div class="commenting-o"><i class="fa fa-commenting-o fa-lg"></i></div>
+                </div>
+                <div style="float: right;margin-left: 37%; width: 30%;"
+                     ng-if="order.status==3&&vm.isCreator()&&!order.notify"
+                     ng-click="vm.notifyUserToComment(order)">
+                    <div class="commenting-o"><a
+                            style="margin-top: 0px;width: 65px;line-height: 0;margin-left: 10px;display: inline;"
+                            class="statistics-btn">求评价</a></div>
+                </div>
+            </div>
+
+
             <ul class="clearfix">
                 <li class="pay-time " ng-bind="::vm.getFormatDate(order.created)"></li>
             </ul>
@@ -36,19 +61,19 @@
 
     <div infinite-scroll='vm.shareOrder.nextPage()' infinite-scroll-disabled='vm.shareOrder.noMore||vm.shareOrder.busy'
          infinite-scroll-distance='1'>
-        <div style=" position: relative;" ng-repeat="order in vm.shareOrder.orders">
+        <div style=" position: relative;" ng-repeat="order in vm.shareOrder.orders" ng-show="!vm.showCommentedOrders || order.status==9">
             <div class="apply-details">
                 <ul class="clearfix">
                     <li class="self fl" ng-bind="vm.shareOrder.users[order.creator]['nickname']"></li>
                     <li class="description fl">已经报名</li>
                     <li class="status fr">
                         <span ng-if="order.status==9" class="done-status"><i class="fa fa-heart fa-lg"></i></span>
-                        <strong ng-if="order.status==21" class="paid-status">待发货</strong>
-                        <strong ng-if="order.status==14" class="refunding-status">退款中</strong>
-                        <strong ng-if="order.status==4" class="refund-status">已退款</strong>
-                        <strong ng-if="order.status==2" class="shipped-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong>
-                        <strong ng-if="order.status==3" class="received-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong>
-                        <strong ng-if="order.status==1" class="paid-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong>
+                        <span ng-if="order.status==21" class="paid-status">待发货</span>
+                        <span ng-if="order.status==14" class="refunding-status">退款中</span>
+                        <span ng-if="order.status==4" class="refund-status">已退款</span>
+                        <span ng-if="order.status==2" class="shipped-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
+                        <span ng-if="order.status==3" class="received-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
+                        <span ng-if="order.status==1" class="paid-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
                     </li>
                 </ul>
                 <ul class="clearfix">

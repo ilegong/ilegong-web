@@ -83,6 +83,6 @@
 
 <p class="product-title">报名列表</p>
 <ul class="clearfix apply">
-    <li><a href="#X" class="focus-apply line-right">报名(<span ng-bind="vm.totalBuyCount">0</span>)</a></li>
-    <li><a href="#X">评价(<span>写死了</span>)</a></li>
+    <li><span ng-click="vm.showCommentedOrders=false;" class="line-right" ng-class="{'focus-apply':!vm.showCommentedOrders}">报名(<span ng-bind="vm.totalBuyCount">0</span>)</span></li>
+    <li><span ng-click="vm.showCommentedOrders=true;" ng-class="{'focus-apply':vm.showCommentedOrders}">评价(<span ng-bind="vm.getOrderCommentLength()"></span>)</span></li>
 </ul>

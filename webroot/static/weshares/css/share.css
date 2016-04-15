@@ -26,6 +26,16 @@ ul li { list-style: none; }
 .ta{font-size:1em; color:#666; text-align:center; line-height:2em; width:60px; border:1px solid #bbb; border-radius:5px; margin-left: 6px; margin-top: 9px;}
 .sharer-label{width:18px; height:18px; border-radius:18px;  background:#f99d3a; font-size:0.7em; color:#ffffff; text-align:center; line-height:18px; position:absolute; bottom:10px; left:40px;}
 
+.ta span{ display: block; float: left; padding-left: 5px;}
+.ta label{ float: left; display: block; margin-top: 11px; position: relative;}
+.ta label.tangle-up{ margin-top: 10px;}
+.ta label i,.ta label em{ display:block; width: 0px; height: 0px; border-left: 6px solid transparent; border-right: 6px solid transparent; font-size: 0px; line-height: 0px;}
+.ta label i{ border-top: 6px solid #bbb;}
+.ta label em{ border-top: 5px solid #fff; position: absolute; z-index: 2; left: 0px; bottom: 3px;}
+.ta label.tangle-up i,.ta label.tangle-up em{ border-left: 6px solid transparent; border-right: 6px solid transparent; font-size: 0px; line-height: 0px;}
+.ta label.tangle-up i{ border-bottom: 6px solid #bbb; border-top: none;}
+.ta label.tangle-up em{ border-bottom: 5px solid #fff; border-top: none; position: absolute; z-index: 2; left: 0px; top: 3px;}
+.unfollow{ display: block; position: absolute; border: 1px #bbbbbb solid; background-color: #FFFFFF; width: 60px; text-align: center; line-height: 2em; top: 2em; left: -1px; z-index: 2; border-radius: 5px;}
 
 /*share picture*/
 .product-image{ position: relative; background-color: #ffffff; height:200px;}
@@ -72,7 +82,7 @@ ul li { list-style: none; }
 
 /*product*/
 .product-title{ font-size:1em;color:#666666; padding: 15px 15px 10px 12px;}
-.product{ position: relative; border-bottom: 1px #eeeeee solid;}
+.product{ position: relative; border-bottom: 1px #eeeeee solid;padding:0;}
 .product ul{ background-color: #ffffff; padding: 15px 12px 12px 12px;}
 .product-pic img{ width:4.625em;}
 .product-name{ line-height:14px; font-weight: bold;}
@@ -94,10 +104,9 @@ ul li { list-style: none; }
 
 /*apply tab*/
 .apply{ border-bottom: 1px solid #eeeeee; border-top: 1px solid #eeeeee; line-height: 44px; background-color: #fff;}
-.apply li{ float: left; width: 50%; font-size: 1.15em;}
-.apply li a{ color: #333333; text-decoration: none; text-align: center; display: block;}
-.apply li a.focus-apply{ color: #f99d3a;}
-.apply li a.line-right{ border-right:1px #eeeeee solid;}
+.apply li{ float: left; width: 50%; font-size: 1.15em; text-align: center;}
+.apply li span.focus-apply{ color: #f99d3a;}
+.apply li span.line-right{ border-right:1px #eeeeee solid;}
 
 
 /*apply list*/
