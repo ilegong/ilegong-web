@@ -75,9 +75,9 @@
     </dl>
     <dl class="clearfix" ng-if="vm.checkProductNum(product) && product.store != 0">
         <dd class="fr limit-score" ng-if="vm.checkProductNum(product)&&product.store>0">仅剩10份</dd>
-        <dd class="fr add-subtract" ng-click="vm.decpreaseProductNum(product)"><i class="fa fa-plus"></i></dd>
+        <dd class="fr add-subtract" ng-click="vm.decpreaseProductNum(product)"><i class="fa fa-minus"></i></dd>
         <dd class="fr amount" ng-bind="product.num||0">0</dd>
-        <dd class="fr add-subtract" ng-click="vm.increaseProductNum(product)"><i class="fa fa-minus"></i></dd>
+        <dd class="fr add-subtract" ng-click="vm.increaseProductNum(product)"><i class="fa fa-plus"></i></dd>
     </dl>
 </div>
 
