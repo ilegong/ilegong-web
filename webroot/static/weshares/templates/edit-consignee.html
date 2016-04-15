@@ -52,29 +52,29 @@
             <div class="copyreader-address">
                 <ul class="clearfix">
                     <li class="fl comment">收货人</li>
-                    <li class="fl content"><input ng-model="wecc.editConsignee.name" type="text" placeholder="请输入收货人姓名"/></li>
+                    <li class="fl content"><input ng-model="wecc.editConsigneeData.name" type="text" placeholder="请输入收货人姓名"/></li>
                 </ul>
                 <ul class="clearfix">
                     <li class="fl comment">联系方式</li>
-                    <li class="fl content"><input ng-model="wecc.editConsignee.mobilephone" type="text" placeholder="请输入收货人手机号"/></li>
+                    <li class="fl content"><input ng-model="wecc.editConsigneeData.mobilephone" type="text" placeholder="请输入收货人手机号"/></li>
                 </ul>
                 <ul class="clearfix">
                     <li class="fl comment">所在地区</li>
                     <li class="fl content">
-                        <select class="choose-address-area" ng-model="wecc.editConsignee.province_id" ng-change="wecc.loadCityData(wecc.selectedProvince)" ng-options="province.id as province.name for province in wecc.provinceData">
+                        <select class="choose-address-area" ng-model="wecc.editConsigneeData.province_id" ng-change="wecc.loadCityData(wecc.selectedProvince)" ng-options="province.id as province.name for province in wecc.provinceData">
                             <option value="">选择省(市)</option>
                         </select>
-                        <select class="choose-address-area" ng-model="wecc.editConsignee.city_id" ng-change="wecc.loadCountyData(wecc.selectedCity)" ng-options="id as city for (id, city) in wecc.cityData">
+                        <select class="choose-address-area" ng-model="wecc.editConsigneeData.city_id" ng-change="wecc.loadCountyData(wecc.selectedCity)" ng-options="id as city for (id, city) in wecc.cityData">
                             <option value="">选择市(区)</option>
                         </select>
-                        <select class="choose-address-area" ng-model="wecc.editConsignee.county_id" ng-options="id as county for (id, county) in wecc.countyData">
+                        <select class="choose-address-area" ng-model="wecc.editConsigneeData.county_id" ng-options="id as county for (id, county) in wecc.countyData">
                             <option value="">选择市县(街道)</option>
                         </select>
                     </li>
                 </ul>
                 <ul class="clearfix">
                     <li class="fl comment">详细地址</li>
-                    <li class="fl content"><input ng-model="wecc.editConsignee.address" type="text" placeholder="请输入详细地址"/></li>
+                    <li class="fl content"><input ng-model="wecc.editConsigneeData.address" type="text" placeholder="请输入详细地址"/></li>
                 </ul>
             </div>
             <a href="#" class="saveBtn">保存</a>
