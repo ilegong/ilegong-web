@@ -61,10 +61,10 @@
                 <ul class="clearfix">
                     <li class="fl comment">所在地区</li>
                     <li class="fl content">
-                        <select class="choose-address-area" ng-model="wecc.editConsigneeData.province_id" ng-change="wecc.loadCityData(wecc.selectedProvince)" ng-options="province.id as province.name for province in wecc.provinceData">
+                        <select class="choose-address-area" ng-model="wecc.editConsigneeData.province_id" ng-change="wecc.loadCityData(wecc.editConsigneeData.province_id)" ng-options="province.id as province.name for province in wecc.provinceData">
                             <option value="">选择省(市)</option>
                         </select>
-                        <select class="choose-address-area" ng-model="wecc.editConsigneeData.city_id" ng-change="wecc.loadCountyData(wecc.selectedCity)" ng-options="id as city for (id, city) in wecc.cityData">
+                        <select class="choose-address-area" ng-model="wecc.editConsigneeData.city_id" ng-change="wecc.loadCountyData(wecc.editConsigneeData.city_id)" ng-options="id as city for (id, city) in wecc.cityData">
                             <option value="">选择市(区)</option>
                         </select>
                         <select class="choose-address-area" ng-model="wecc.editConsigneeData.county_id" ng-options="id as county for (id, county) in wecc.countyData">
@@ -77,7 +77,7 @@
                     <li class="fl content"><input ng-model="wecc.editConsigneeData.address" type="text" placeholder="请输入详细地址"/></li>
                 </ul>
             </div>
-            <a href="#" class="saveBtn">保存</a>
+            <a ng-click="wecc.saveConsignee()" class="saveBtn">保存</a>
         </div>
     </div>
 </div>

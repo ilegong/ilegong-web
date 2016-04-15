@@ -1615,33 +1615,13 @@ class WesharesController extends AppController
         ]);
         $area = $express_consignee['OrderConsignees']['area'];
         if (empty($area)) {
-            $area = $this->get_address_location($express_consignee['OrderConsignees']);
+            $area = get_address_location($express_consignee['OrderConsignees']);
             $this->OrderConsignees->update(['area' => "'" . $area . "'"], ['id' => $consignee_id]);
         }
         return $area . $express_consignee['OrderConsignees']['address'];
     }
 
-    //根据省市区获取地址
-    private function get_address_location($locationData)
-    {
-        $provinceId = $locationData['province_id'];
-        $cityId = $locationData['city_id'];
-        $countyId = $locationData['county_id'];
-        $locationM = ClassRegistry::init('Location');
-        $locationIds = array_filter(array($provinceId, $cityId, $countyId));
-        $locations = $locationM->find('all', array(
-            'conditions' => array(
-                'id' => $locationIds
-            ),
-            'fields' => array('id', 'name')
-        ));
-        $locations = Hash::combine($locations, '{n}.Location.id', '{n}.Location.name');
-        $location_address = '';
-        foreach ($locationIds as $locationId) {
-            $location_address = $location_address . $locations[$locationId];
-        }
-        return $location_address;
-    }
+
 
 
     /**

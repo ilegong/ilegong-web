@@ -757,6 +757,7 @@ class UsersController extends AppController {
         $postDataArray = json_decode($postStr, true);
         $postDataArray['creator'] = $uid;
         $postDataArray['status'] = PUBLISH_YES;
+        $postDataArray['area'] = get_address_location($postDataArray);
         $this->OrderConsignee->updateAll(['status' => PUBLISH_NO], ['creator' => $uid, 'type' => TYPE_CONSIGNEES_SHARE]);
         $consignee = $this->OrderConsignee->save($postDataArray);
         echo json_encode(['success' => true, 'consignee' => $consignee]);

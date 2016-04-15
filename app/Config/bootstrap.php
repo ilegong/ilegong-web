@@ -2556,6 +2556,28 @@ function endsWith($haystack, $needle) {
     return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== false);
 }
 
+//根据省市区获取地址
+function get_address_location($locationData)
+{
+    $provinceId = $locationData['province_id'];
+    $cityId = $locationData['city_id'];
+    $countyId = $locationData['county_id'];
+    $locationM = ClassRegistry::init('Location');
+    $locationIds = array_filter(array($provinceId, $cityId, $countyId));
+    $locations = $locationM->find('all', array(
+        'conditions' => array(
+            'id' => $locationIds
+        ),
+        'fields' => array('id', 'name')
+    ));
+    $locations = Hash::combine($locations, '{n}.Location.id', '{n}.Location.name');
+    $location_address = '';
+    foreach ($locationIds as $locationId) {
+        $location_address = $location_address . $locations[$locationId];
+    }
+    return $location_address;
+}
+
 /**
  * 遍历对象转换为数组
  * @param object $obj

@@ -29,7 +29,7 @@
     }
 
     function saveConsignee() {
-      $http.post('/users/save_consignee.json', vmc.editConsignee).success(function (data) {
+      $http.post('/users/save_consignee.json', vmc.editConsigneeData).success(function (data) {
         if (data['success']) {
           $log.log(data['consignee']);
           vmc.showConsigneeListView();
@@ -76,9 +76,8 @@
     function initAreaData() {
       if (vmc.editConsigneeData) {
         if (vmc.editConsigneeData.city_id) {
-          vmc.editConsigneeData(vmc.editConsignee.province_id);
+          vmc.loadCityData(vmc.editConsigneeData.province_id);
         }
-        vmc.selectedCounty = vmc.editConsigneeData.county_id;
         if (vmc.editConsigneeData.county_id) {
           vmc.loadCountyData(vmc.editConsigneeData.city_id);
         }
