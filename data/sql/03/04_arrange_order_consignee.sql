@@ -17,3 +17,7 @@ UPDATE 51daifan.cake_order_consignees set type=0 where type=4;
 DELETE FROM 51daifan.cake_order_consignees where type!=0;
 
 UPDATE 51daifan.cake_order_consignees set status=1;
+
+
+ALTER TABLE `51daifan`.`cake_order_consignees`
+ADD INDEX `idx_order_consignee_creator_type_status` (`creator` ASC, `status` ASC, `type` ASC);

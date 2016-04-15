@@ -13,7 +13,7 @@
             <div class="select-address">
                 <a ng-class="{cur:consignee.status==1}" ng-repeat="consignee in wecc.consignees">
                     <ul class="clearfix">
-                        <li class="fl">
+                        <li class="fl" ng-click="wecc.selectConsignee(consignee)">
                             <span ng-bind="::consignee.name"></span>
                             &nbsp;&nbsp;
                             <span ng-bind="::consignee.mobilephone"></span>

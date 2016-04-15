@@ -14,6 +14,7 @@
     vmc.loadCityData = loadCityData;
     vmc.loadCountyData = loadCounty;
     vmc.saveConsignee = saveConsignee;
+    vmc.selectConsignee = selectConsignee;
 
     vmc.initProvince();
     vmc.loadingConsignee = false;
@@ -40,15 +41,27 @@
     }
 
     function selectConsignee(consignee) {
-      $http({method: 'GET', url: '/users/select_consignee/' + consignee['id'] + '.json'}).success(
+      var consigneeId = consignee['id'];
+      $http({method: 'GET', url: '/users/select_consignee/' + consigneeId + '.json'}).success(
         function (data) {
           if (data['success']) {
-
+            var consignees = _.map(vmc.consignees, function (item) {
+              if (item['id'] == consigneeId) {
+                item['status'] = 1;
+              } else {
+                item['status'] = 0;
+              }
+            });
+            vmc.consignees = _.sortBy(consignees, function (item) {
+              return item['status'] == 1 ? 1 : 0;
+            });
+            //update select info
+            //redirect to balance view
           }
         }
       ).error(
         function () {
-
+          alert('请重试！');
         }
       );
     }
