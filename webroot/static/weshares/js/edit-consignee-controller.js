@@ -116,7 +116,6 @@
         method: 'GET',
         url: '/users/get_consignee_list.json'
       }).success(function (data) {
-        vmc.loadingConsignee = false;
         var consignees = data['consignees'];
         consignees = _.sortBy(consignees, function (item) {
           return item['status'] == 1 ? 0 : 1;
