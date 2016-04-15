@@ -153,9 +153,57 @@ class MessageApiController extends Controller
         $user_infos = array_map('map_user_avatar2', $user_infos);
         $user_infos = Hash::combine($user_infos, '{n}.User.id', '{n}.User');
         $opt_logs = array_map(function ($item) {
+            // 找到, 是不是已经有评论了. 这里属于N+1循环查询, 有性能问题
+            // 将来优化
+            $item['OptLog']['has_comment'] = $this->check_has_comment($item['OptLog']['obj_id'], $item['OptLog']['user_id']);
             return $item['OptLog'];
         }, $opt_logs);
         return ['user_infos' => $user_infos, 'msg' => $opt_logs];
+    }
+
+    /**
+     * check_has_comment
+     *
+     * @param mixed $shareId 分享ID
+     * @param mixed $userId  用户ID? 不知道是个啥用户, 凑的.
+     * @access public
+     * @return bool 评论有回复返回true, 反之false
+     */
+    public function check_has_comment($shareId, $userId)
+    {
+        $res = $this->get_comment($shareId, $userId);
+        $cid = 0;
+        foreach ($res['order_comments'] as $v) {
+            if ($v['data_id'] == $shareId && $v['user_id'] == $userId) {
+                $cid = $v['id'];
+                break;
+            }
+        }
+
+        if ($cid) {
+            return !empty($res['comment_replies'][$cid]);
+        } else {
+            return false;
+        }
+    }
+
+    public function get_comment($share_id, $user_id)
+    {
+        $uid = $this->currentUser['id'];
+        //根据评论的时间定位到具体的一条评论，[可能存在问题]
+        $query_cond = [
+            'type' => COMMENT_SHARE_TYPE,
+            'status' => COMMENT_SHOW_STATUS,
+            'user_id' => [$user_id, $uid],
+            'data_id' => $share_id
+        ];
+        $comment_date = $_REQUEST['comment_date'];
+        if (!empty($comment_date)) {
+            $query_cond['date(created)'] = $comment_date;
+        }
+        $result = $this->WeshareBuy->query_comment($query_cond);
+
+        return $result;
     }
 
     /**
@@ -176,6 +224,7 @@ class MessageApiController extends Controller
      */
     public function get_u_comment_list($page, $limit)
     {
+        header("Content-Type: application/json");
         echo json_encode($this->get_msg(OPT_LOG_SHARE_COMMENT, $page, $limit));
         exit();
     }
@@ -286,14 +335,9 @@ class MessageApiController extends Controller
      */
     public function load_single_comment_detail($share_id, $user_id)
     {
-        $uid = $this->currentUser['id'];
-        //根据评论的时间定位到具体的一条评论，[可能存在问题]
-        $query_cond = ['type' => COMMENT_SHARE_TYPE, 'status' => COMMENT_SHOW_STATUS, 'user_id' => [$user_id, $uid], 'data_id' => $share_id];
-        $comment_date = $_REQUEST['comment_date'];
-        if (!empty($comment_date)) {
-            $query_cond['date(created)'] = $comment_date;
-        }
-        $result = $this->WeshareBuy->query_comment($query_cond);
+        header("Content-Type: application/json");
+        $result = $this->get_comment($share_id, $user_id);
+
         echo json_encode($result);
         exit();
     }
