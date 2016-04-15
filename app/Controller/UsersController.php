@@ -747,11 +747,19 @@ class UsersController extends AppController {
 
     function save_consignee(){
         $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        if (empty($uid)) {
+            echo json_encode(['success' => false, 'reason' => 'not_login']);
+            exit();
+        }
         $this->loadModel('OrderConsignee');
         $postStr = file_get_contents('php://input');
         $postDataArray = json_decode($postStr, true);
-        $this->OrderConsignee->save($postDataArray);
-        echo json_encode(['success' => true]);
+        $postDataArray['creator'] = $uid;
+        $postDataArray['status'] = PUBLISH_YES;
+        $this->OrderConsignee->updateAll(['status' => PUBLISH_NO], ['creator' => $uid, 'type' => TYPE_CONSIGNEES_SHARE]);
+        $consignee = $this->OrderConsignee->save($postDataArray);
+        echo json_encode(['success' => true, 'consignee' => $consignee]);
         exit();
     }
 

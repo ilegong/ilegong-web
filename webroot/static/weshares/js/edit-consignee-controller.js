@@ -2,7 +2,7 @@
   angular.module('weshares')
     .controller('WesharesEditConsigneeCtrl', WesharesEditConsigneeCtrl);
 
-  function WesharesEditConsigneeCtrl($scope, $http ,CoreReactorChannel,$templateCache) {
+  function WesharesEditConsigneeCtrl($scope, $http, CoreReactorChannel, $templateCache, $log) {
     var vmc = this;
 
     vmc.selectConsignees = false;
@@ -13,9 +13,13 @@
     vmc.initProvince = initProvince;
     vmc.loadCityData = loadCityData;
     vmc.loadCountyData = loadCounty;
+    vmc.saveConsignee = saveConsignee;
+
     vmc.initProvince();
     vmc.loadingConsignee = false;
+
     var vm = $scope.$parent.vm;
+    
     active();
     function active() {
       CoreReactorChannel.onElevatedEvent($scope, 'EditConsignee', function () {
@@ -25,25 +29,34 @@
       loadConsignees();
     }
 
+    function saveConsignee() {
+      $http.post('/users/save_consignee.json', vmc.editConsignee).success(function (data) {
+        if (data['success']) {
+          $log.log(data['consignee']);
+        }
+      }).error(function () {
+
+      });
+    }
+
     function loadConsignees() {
       $http({
         method: 'GET',
         url: '/users/get_consignee_list.json',
         cache: $templateCache
-      }).success(function (data, status) {
+      }).success(function (data) {
         vmc.loadingConsignee = false;
         var consignees = data['consignees'];
         consignees = _.sortBy(consignees, function (item) {
           return item['status'];
         });
         vmc.consignees = data['consignees'];
-      }).error(function (data, status) {
+      }).error(function () {
         vmc.loadingConsignee = false;
       });
     }
 
-
-    function toBalanceView(){
+    function toBalanceView() {
       vm.showBalanceView = true;
       vmc.selectConsignees = false;
       vmc.editConsignee = false;
@@ -53,13 +66,13 @@
       vmc.selectConsignees = false;
       vmc.editConsignee = true;
       vmc.editConsigneeData = null;
-      if(data){
+      if (data) {
         vmc.editConsigneeData = data;
       }
       initAreaData();
     }
 
-    function initAreaData(){
+    function initAreaData() {
       if (vmc.editConsigneeData) {
         if (vmc.editConsigneeData.city_id) {
           vmc.editConsigneeData(vmc.editConsignee.province_id);
@@ -71,7 +84,7 @@
       }
     }
 
-    function showConsigneeListView(){
+    function showConsigneeListView() {
       vmc.selectConsignees = true;
       vmc.editConsignee = false;
     }
