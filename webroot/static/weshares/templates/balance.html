@@ -22,16 +22,24 @@
             <div class="clearfix">
                 <div class="product-price fl" ng-bind="::product.price/100 | currency:'￥'"></div>
                 <dl class="clearfix fr" ng-if="vm.checkProductNum(product)">
-                    <dd class="fr add-subtract" ng-click="vm.increaseProductNum(product)"><i class="fa fa-plus"></i>
+                    <dd class="fr add-subtract" ng-click="vm.increaseProductNum(product)">
+                        <i class="fa fa-plus"></i>
                     </dd>
                     <dd class="fr amount" ng-bind="product.num||0"></dd>
-                    <dd class="fr add-subtract" ng-click="vm.decreaseProductNum(product)"><i class="fa fa-minus"></i>
+                    <dd class="fr add-subtract" ng-click="vm.decreaseProductNum(product)">
+                        <i class="fa fa-minus"></i>
+                    </dd>
+                    <dd class="fr limit-score" ng-if="vm.checkProductNum(product)&&product.store>0">仅剩
+                        <span ng-bind="vm.getProductLeftNum(product)"></span>份
                     </dd>
                 </dl>
                 <dl class="clearfix fr" ng-if="!vm.checkProductNum(product)">
                     <dd class="fr add-subtract disable"><i class="fa fa-plus"></i></dd>
                     <dd class="fr amount" ng-bind="product.num||0"></dd>
                     <dd class="fr add-subtract disable"><i class="fa fa-minus"></i></dd>
+                    <dd class="fr limit-score" ng-if="vm.checkProductNum(product)&&product.store>0">仅剩
+                        <span ng-bind="vm.getProductLeftNum(product)"></span>份
+                    </dd>
                 </dl>
             </div>
         </div>
