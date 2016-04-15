@@ -10,13 +10,10 @@
     vmc.showConsigneeFormView = showConsigneeFormView;
     vmc.showConsigneeListView = showConsigneeListView;
     vmc.toBalanceView = toBalanceView;
-    vmc.initProvince();
-
     vmc.initProvince = initProvince;
     vmc.loadCityData = loadCityData;
     vmc.loadCountyData = loadCounty;
-
-
+    vmc.initProvince();
     vmc.loadingConsignee = false;
     var vm = $scope.$parent.vm;
     active();
@@ -45,6 +42,7 @@
       });
     }
 
+
     function toBalanceView(){
       vm.showBalanceView = true;
       vmc.selectConsignees = false;
@@ -54,20 +52,21 @@
     function showConsigneeFormView(data) {
       vmc.selectConsignees = false;
       vmc.editConsignee = true;
+      vmc.editConsigneeData = null;
       if(data){
-        vmc.editConsignee = data;
+        vmc.editConsigneeData = data;
       }
       initAreaData();
     }
 
     function initAreaData(){
-      if (vmc.editConsignee) {
-        if (vmc.editConsignee.city_id) {
-          vmc.loadCityData(vmc.editConsignee.province_id);
+      if (vmc.editConsigneeData) {
+        if (vmc.editConsigneeData.city_id) {
+          vmc.editConsigneeData(vmc.editConsignee.province_id);
         }
-        vmc.selectedCounty = vmc.editConsignee.county_id;
-        if (vmc.editConsignee.county_id) {
-          vmc.loadCountyData(vmc.editConsignee.city_id);
+        vmc.selectedCounty = vmc.editConsigneeData.county_id;
+        if (vmc.editConsigneeData.county_id) {
+          vmc.loadCountyData(vmc.editConsigneeData.city_id);
         }
       }
     }
@@ -151,7 +150,6 @@
     }
 
     function loadCityData(provinceId) {
-      vmc.calOrderTotalPrice();
       $http({method: 'GET', url: '/locations/get_city.json?provinceId=' + provinceId, cache: $templateCache}).
         success(function (data) {
           vmc.cityData = data;
