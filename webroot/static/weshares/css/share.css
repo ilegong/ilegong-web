@@ -11,6 +11,7 @@ ul li { list-style: none; }
 .clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
 
 
+
 /*share banner*/
 .share-banner{ display: block;}
 .share-banner img{ width: 100%;}
@@ -34,12 +35,23 @@ ul li { list-style: none; }
 .sharedetail{ background-color: #ffffff; padding: 15px 12px 5px 12px;}
 .sharedetail h1{ font-size:1.15em; color:#333; padding-bottom: 5px;}
 .sharedetail p{ color: #999999; padding-bottom: 15px; font-size: 0.8em;}
+.sharedetail .images {margin-top: 10px;}
+.sharedetail .images dt {float: left;margin-right: 10px;position: relative;height: 65px;  }
+.sharedetail .images dt img {width: 60px;height: 60px;}
+.sharedetail .images dt a {width: 100%;}
+
 .recommend-head{ padding-bottom: 0px;}
 .recommend{ position: absolute;right:0; top:0;}
 .recommend a img{ width: 4.5em; height:2em; border: 1px #f99d3a solid; border-radius: 5px;}
 .tz-tj{ width:26px; height:26px; padding-right: 3px;}
 .tz-recommend{ font-size:1em; color:#666666; line-height: 30px;}
-.cp-name{ line-height:20px; padding-bottom: 10px;}
+.cp-name{ line-height:20px; margin-bottom: 10px;}
+.cp-name a.read-more, a.read-less {cursor: pointer;color: blue; }
+.cp-name div.less-text {display: block;}
+.cp-name div.less-text.show{display: inline !important  }
+.cp-name div.more-text {display: none;  }
+.cp-name div.more-text.show {display: inline !important  }
+
 .commission a{ padding-bottom: 10px; color: #f99d3a; display: block;}
 .text1{font-size:1.15em; color:#333; padding:10px 12px 0;}
 .yandong{font-size:1em;color:#666666;}
@@ -66,9 +78,18 @@ ul li { list-style: none; }
 .product-name{ line-height:14px; font-weight: bold;}
 .nicheng-name{font-size:1.083em;color:#333333;}
 .product-price{ padding-top: 10px; line-height: 2em; color: #f99d3a; font-weight: bold;}
-.product dl{ position: absolute; right: 12px; bottom: 15px;}
+
+
+/*Alice change css 74 line*/
+.product dl{ position: absolute; right: 12px; bottom: 12px;}
+
+
 .add-subtract{ width:2em; height:2em; border:1px solid #bbbbbb; border-radius:3px;}
 .amount{ color: #333333; line-height: 2em; width: 2em; text-align: center;}
+
+/*Alice add css 80-81 line*/
+.sold-out{ color:#ff6485; line-height: 2em;}
+.limit-score{ color:#ff6485; line-height: 2em; padding-right: 3px;}
 
 
 /*apply tab*/
@@ -127,12 +148,3 @@ ul li { list-style: none; }
 
 /*toast*/
 .toast{ background-color: #666666; line-height: 20px; padding: 12px 10px; text-align: center; color: #FFFFFF; border-radius: 5px; position: fixed; top: 50%; left: 50%; margin-left: -100px; z-index: 99; width: 200px; margin-top: -22px;}
-
-
-
-
-
-
-
-
-
