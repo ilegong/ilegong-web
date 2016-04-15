@@ -242,7 +242,7 @@ const SHARE_REFER_SHARE_IDS_CACHE_KEY = 'share_refer_share_ids_cache_key';
 const HX_TOKEN_CACHE_KEY = 'hx_token_cache_key';
 const INDEX_VIEW_PRODUCT_CACHE_KEY = 'index_products_cache_key';
 const SHARE_ORDER_COUNT_SUM_CACHE_KEY = 'share_order_count_sum_cache_key';
-
+const USER_CONSIGNEES_CACHE_KEY = 'user_consignees_cache_key';
 //Product 表里设置是这个产品，不论多少都是同一邮费
 const TYPE_ORDER_PRICE = 1; //订单总价满多少包邮
 const TYPE_REDUCE_BY_NUMS = 2; //同一商品满几件包邮

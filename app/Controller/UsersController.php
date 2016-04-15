@@ -732,8 +732,14 @@ class UsersController extends AppController {
 
     function get_consignee_list(){
         $this->autoRender = false;
-        $this->loadModel('OrderConsignee');
         $uid = $this->currentUser['id'];
+        $key = USER_CONSIGNEES_CACHE_KEY . '_' . $uid;
+        $cacheData = Cache::read($key);
+        if (!empty($cacheData)) {
+            echo $cacheData;
+            exit();
+        }
+        $this->loadModel('OrderConsignee');
         $consignees = $this->OrderConsignee->find('all', [
             'conditions' => [
                 'creator' => $uid,
@@ -741,7 +747,9 @@ class UsersController extends AppController {
             ]
         ]);
         $consignees = Hash::extract($consignees, '{n}.OrderConsignee');
-        echo json_encode(['consignees' => $consignees, 'success' => true]);
+        $result = json_encode(['consignees' => $consignees, 'success' => true]);
+        Cache::write($key, $result);
+        echo $result;
         exit();
     }
 
@@ -760,6 +768,7 @@ class UsersController extends AppController {
         $postDataArray['area'] = get_address_location($postDataArray);
         $this->OrderConsignee->updateAll(['status' => PUBLISH_NO], ['creator' => $uid, 'type' => TYPE_CONSIGNEES_SHARE]);
         $consignee = $this->OrderConsignee->save($postDataArray);
+        Cache::write(USER_CONSIGNEES_CACHE_KEY . '_' . $uid, '');
         echo json_encode(['success' => true, 'consignee' => $consignee]);
         exit();
     }
@@ -767,13 +776,14 @@ class UsersController extends AppController {
     function select_consignee($consignee_id){
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
-        if(empty($uid)){
+        if (empty($uid)) {
             echo json_encode(['success' => false, 'reason' => 'not_login']);
             exit();
         }
         $this->loadModel('OrderConsignee');
         $this->OrderConsignee->updateAll(['status' => PUBLISH_NO], ['creator' => $uid, 'type' => TYPE_CONSIGNEES_SHARE]);
         $this->OrderConsignee->update(['status' => PUBLISH_YES], ['id' => $consignee_id]);
+        Cache::write(USER_CONSIGNEES_CACHE_KEY . '_' . $uid, '');
         echo json_encode(['success' => true]);
         exit();
     }

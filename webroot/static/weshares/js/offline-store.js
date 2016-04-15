@@ -2795,23 +2795,6 @@
             "account": null,
             "account_name": null
           },
-          "274": {
-            "id": "274",
-            "shop_no": "847",
-            "area_id": "110108",
-            "alias": "上地西路宏达花园广场店",
-            "name": "北京市海淀区上地西路华联东北旺农场开发建设项目综合楼",
-            "type": "0",
-            "owner_name": "",
-            "owner_phone": "4000-508-528",
-            "location_long": "40.036138",
-            "location_lat": "116.316936",
-            "deleted": false,
-            "can_remark_address": false,
-            "child_area_id": null,
-            "account": null,
-            "account_name": null
-          },
           "276": {
             "id": "276",
             "shop_no": "834",
