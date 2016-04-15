@@ -764,6 +764,20 @@ class UsersController extends AppController {
         exit();
     }
 
+    function select_consignee($consignee_id){
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        if(empty($uid)){
+            echo json_encode(['success' => false, 'reason' => 'not_login']);
+            exit();
+        }
+        $this->loadModel('OrderConsignee');
+        $this->OrderConsignee->updateAll(['status' => PUBLISH_NO], ['creator' => $uid, 'type' => TYPE_CONSIGNEES_SHARE]);
+        $this->OrderConsignee->update(['status' => PUBLISH_YES], ['id' => $consignee_id]);
+        echo json_encode(['success' => true]);
+        exit();
+    }
+
     function change_avatar() {
         $this->layout = null;
         $refer_url = $_REQUEST['ref'];

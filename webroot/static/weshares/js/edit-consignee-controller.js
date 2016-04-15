@@ -39,19 +39,32 @@
       });
     }
 
+    function selectConsignee(consignee) {
+      $http({method: 'GET', url: '/users/select_consignee/' + consignee['id'] + '.json'}).success(
+        function (data) {
+          if (data['success']) {
+
+          }
+        }
+      ).error(
+        function () {
+
+        }
+      );
+    }
+
     function loadConsignees() {
       vmc.loadingConsignee = true;
       $http({
         method: 'GET',
-        url: '/users/get_consignee_list.json',
-        cache: $templateCache
+        url: '/users/get_consignee_list.json'
       }).success(function (data) {
         vmc.loadingConsignee = false;
         var consignees = data['consignees'];
         consignees = _.sortBy(consignees, function (item) {
-          return item['status'];
+          return item['status'] == 1 ? 0 : 1;
         });
-        vmc.consignees = data['consignees'];
+        vmc.consignees = consignees;
       }).error(function () {
         vmc.loadingConsignee = false;
       });

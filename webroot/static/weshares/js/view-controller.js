@@ -1007,8 +1007,10 @@
     }
 
     function validateOrderData() {
-      //用户选择了好邻居或者自提的时候需要把地址写入
-      function setUserPickUpAddress(){
+      function setUserAddress(){
+        if(vm.selectShipType == 0 && vm.expressShipInfo){
+
+        }
         if (vm.selectShipType == 1 && vm.selectedPickUpAddressId != -1) {
           var selectAddress = _.filter(vm.weshare.addresses, function (item) {
             return item.id = vm.selectedPickUpAddressId;
@@ -1019,7 +1021,7 @@
           vm.buyerAddress = vm.checkedOfflineStore['name'];
         }
       }
-      setUserPickUpAddress();
+      setUserAddress();
       var productsHasError = vm.validateProducts();
       if (productsHasError) {
         alert('请输入商品数量');
