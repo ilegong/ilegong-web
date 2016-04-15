@@ -10,7 +10,9 @@ ul li { list-style: none; }
 .clearfix { zoom: 1; }
 .clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
 
-
+.has-channel-bottom{
+    margin-bottom: 49px;
+}
 
 /*share banner*/
 .share-banner{ display: block;}

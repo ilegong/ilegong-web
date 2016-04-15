@@ -94,6 +94,7 @@
     vm.currentUserOrderCount = 0;
     vm.totalBuyCount = 0;
     vm.rebateFee = 0;
+    vm.toggleUnSubscribeStatus = toggleUnSubscribeStatus;
 
     activate();
 
@@ -1282,7 +1283,9 @@
       vm.loadOrderCommentData(vm.weshare.id);
     }
 
+    function toggleUnSubscribeStatus(){
 
+    }
     //设置微信分享的参数
     function setWeiXinShareParams() {
       var url = 'http://www.tongshijia.com/weshares/view/' + vm.weshare.id;

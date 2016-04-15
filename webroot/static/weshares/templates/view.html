@@ -1,6 +1,11 @@
 <div ng-if="vm.showShareDetailView">
-    <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-detail.html?v0.6.7'"></ng-include>
-    <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-orders.html?v0.6.4'"></ng-include>
+    <div ng-class="{'has-channel-bottom': vm.weshare.type==0||vm.weshare.type==4||vm.weshare.type==6}">
+        <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-detail.html?v0.6.7'"></ng-include>
+        <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-orders.html?v0.6.4'"></ng-include>
+    </div>
+    <div ng-if="vm.weshare.type==0||vm.weshare.type==4||vm.weshare.type==6">
+        <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-default-nav.html?v0.6.4'"></ng-include>
+    </div>
 
     <!--支付成功提示层-->
     <div style=" margin-left: -32.5%; margin-top: -85px; display: none;" class="pay-success">
@@ -23,12 +28,7 @@
     </div>
 
     <div class="toast" style="display: none;">关注已取消，不再收到TA的消息</div>
-
     <div class="layer-bg" style="display: none;"></div>
-
-    <div ng-if="vm.weshare.type==0||vm.weshare.type==4||vm.weshare.type==6">
-        <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-default-nav.html?v0.6.4'"></ng-include>
-    </div>
 </div>
 <div ng-if="vm.showBalanceView">
     <ng-include src="vm.staticFilePath + '/static/weshares/templates/balance.html?v0.6.7'"></ng-include>
