@@ -51,23 +51,6 @@ class UsersController extends AppController {
             //Kcaptcha
             $this->Kcaptcha->render();
         }
-//		else
-//		{
-//			//Securimage
-//			$this->autoRender = false;
-//	        //override variables set in the component - look in component for full list
-////	        $this->captcha->image_height = 75;
-////	        $this->captcha->image_width = 350;
-////	        $this->captcha->image_bg_color = '#ffffff';
-////	        $this->captcha->line_color = '#cccccc';
-////	        $this->captcha->arc_line_colors = '#999999,#cccccc';
-////	        $this->captcha->code_length = 5;
-////	        $this->captcha->font_size = 45;
-//	        $this->captcha->text_color = '#000000';
-//	        $this->captcha->show(); //dynamically creates an image
-//
-//
-//		}
     }
 
     public function account() {
@@ -479,22 +462,6 @@ class UsersController extends AppController {
                     }
                 }
             }
-//            $imgCode =$this->data['User']['imgCode'];
-//            if(empty($imgCode)){
-//                $this->Session->setFlash('图片验证码不能为空');
-//                return;
-//            }else{
-//                $captcha = $this->Session->read('captcha');
-//                if(!$captcha){
-//                    $this->Session->setFlash('图片验证码错误');
-//                    return;
-//                }else{
-//                    if($captcha!=$imgCode){
-//                        $this->Session->setFlash('图片验证码输入错误');
-//                        return;
-//                    }
-//                }
-//            }
             if (empty($this->data['User']['password'])) {
                 $this->Session->setFlash('密码不为空');
                 return;
@@ -761,6 +728,31 @@ class UsersController extends AppController {
 //            //$this->log('wx_oath redirect url '.redirect_to_wx_oauth($ref));
 //            $this->redirect(redirect_to_wx_oauth($ref));
 //        }
+    }
+
+    function get_consignee_list(){
+        $this->autoRender = false;
+        $this->loadModel('OrderConsignee');
+        $uid = $this->currentUser['id'];
+        $consignees = $this->OrderConsignee->find('all', [
+            'conditions' => [
+                'creator' => $uid,
+                'type' => TYPE_CONSIGNEES_SHARE
+            ]
+        ]);
+        $consignees = Hash::extract($consignees, '{n}.OrderConsignee');
+        echo json_encode($consignees);
+        exit();
+    }
+
+    function save_consignee(){
+        $this->autoRender = false;
+        $this->loadModel('OrderConsignee');
+        $postStr = file_get_contents('php://input');
+        $postDataArray = json_decode($postStr, true);
+        $this->OrderConsignee->save($postDataArray);
+        echo json_encode(['success' => true]);
+        exit();
     }
 
     function change_avatar() {

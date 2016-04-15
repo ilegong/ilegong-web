@@ -2,7 +2,7 @@
   angular.module('weshares')
     .controller('WesharesEditConsigneeCtrl', WesharesEditConsigneeCtrl);
 
-  function WesharesEditConsigneeCtrl($scope, CoreReactorChannel) {
+  function WesharesEditConsigneeCtrl($scope, $http ,CoreReactorChannel) {
     var vmc = this;
 
     vmc.selectConsignees = false;
@@ -17,6 +17,11 @@
       CoreReactorChannel.onElevatedEvent($scope, 'EditConsignee', function () {
         vmc.selectConsignees = true;
       });
+
+    }
+
+    function loadConsignees(){
+      $http({method: 'GET', url: '/users/get_consignee_list.json'})
     }
 
     function toBalanceView(){
