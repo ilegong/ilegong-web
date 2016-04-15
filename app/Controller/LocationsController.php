@@ -17,13 +17,16 @@ class LocationsController extends AppController
 
     public static $CITY_CACHE_KEY = 'location_city_cache';
 
+    public static $COUNTRY_CACHE_KEY = 'location_country_cache';
+
     //var $uses = array('Location');
 
-    public function get_province_list(){
+    public function get_province_list()
+    {
         $this->autoRender = false;
         $cacheData = Cache::read(self::$PROVINCES_CACHE_KEY);
-        if(empty($cacheData)){
-            $params = array('conditions' => array('parent_id between ? and ?'=>array(1, 10)), 'fields' => array('id', 'name', 'parent_id'));
+        if (empty($cacheData)) {
+            $params = array('conditions' => array('parent_id between ? and ?' => array(1, 10)), 'fields' => array('id', 'name', 'parent_id'));
             $provinces = $this->Location->find('all', $params);
             $provinces = Hash::extract($provinces, '{n}.Location');
             usort($provinces, 'sort_data_by_id_desc');
@@ -38,8 +41,8 @@ class LocationsController extends AppController
     {
         $this->autoRender = false;
         $cacheData = Cache::read(self::$PROVINCES_CACHE_KEY);
-        if(empty($cacheData)){
-            $params = array('conditions' => array('parent_id between ? and ?'=>array(1, 10)), 'fields' => array('id', 'name', 'parent_id'), 'order' => array('parent_id ASC'));
+        if (empty($cacheData)) {
+            $params = array('conditions' => array('parent_id between ? and ?' => array(1, 10)), 'fields' => array('id', 'name', 'parent_id'), 'order' => array('parent_id ASC'));
             $provinces = $this->Location->find('list', $params);
             $cacheData = json_encode($provinces);
             Cache::write(self::$PROVINCES_CACHE_KEY, $cacheData);
@@ -53,9 +56,9 @@ class LocationsController extends AppController
         $this->autoRender = false;
         if ($this->request->is('post') || $this->request->is('get')) {
             $province_id = intval($_REQUEST['provinceId']);
-            $cache_key = self::$CITY_CACHE_KEY.'_'.$province_id;
+            $cache_key = self::$CITY_CACHE_KEY . '_' . $province_id;
             $cacheData = Cache::read($cache_key);
-            if(empty($cacheData)){
+            if (empty($cacheData)) {
                 $params = array('conditions' => array('parent_id' => $province_id), 'fields' => array('id', 'name'));
                 $cities = $this->Location->find('list', $params);
                 $cacheData = json_encode($cities);
@@ -72,9 +75,17 @@ class LocationsController extends AppController
         $this->autoRender = false;
         if ($this->request->is('post') || $this->request->is('get')) {
             $city_id = intval($_REQUEST['cityId']);
+            $cache_key = self::$COUNTRY_CACHE_KEY . '_' . $city_id;
+            $cache_data = Cache::read($cache_key);
+            if (!empty($cache_data)) {
+                echo $cache_data;
+                exit();
+            }
             $params = array('conditions' => array('parent_id' => $city_id), 'fields' => array('id', 'name'));
             $counties = $this->Location->find('list', $params);
-            echo json_encode($counties);
+            $result = json_encode($counties);
+            Cache::write($cache_key, $result);
+            echo $result;
             exit();
         }
     }
