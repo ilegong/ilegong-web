@@ -73,6 +73,7 @@
             </div>
         </li>
     </ul>
+
     <!--page orders-->
     <div infinite-scroll='vm.shareOrder.nextPage()' infinite-scroll-disabled='vm.shareOrder.noMore||vm.shareOrder.busy' infinite-scroll-distance='1'>
         <ul class="order clearfix margin-bottom-12" ng-class="{'my-order': vm.isOwner(order)}" ng-repeat="order in vm.shareOrder.orders">

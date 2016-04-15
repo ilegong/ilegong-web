@@ -234,8 +234,8 @@
         }, cache: $templateCache
       }).
         success(function (data, status) {
-          $rootScope.loadingPage = false;
-          handleShareData(data);
+            handleShareData(data);
+            $rootScope.loadingPage = false;
         }).
         error(function (data, status) {
           $log.log(data);

@@ -1,0 +1,67 @@
+<div class="apply-list clearfix">
+    <div style=" position: relative;" ng-repeat="order in vm.ordersDetail.orders">
+        <div class="apply-details" ng-class="{'self-details': vm.isOwner(order)}">
+            <ul class="clearfix">
+                <li class="self fl"
+                    ng-bind="vm.isOwner(order) ? '我':vm.ordersDetail.users[order.creator]['nickname']"></li>
+                <li class="description fl">已经报名</li>
+                <li class="status fr">待发货</li>
+                <span ng-if="order.status==9" class="done-status"><i class="fa fa-heart fa-lg"></i></span>
+                <strong ng-if="order.status==21" class="paid-status">待发货</strong>
+                <strong ng-if="order.status==14" class="refunding-status">退款中</strong>
+                <strong ng-if="order.status==4" class="refund-status">已退款</strong>
+                <strong ng-if="order.status==2" class="shipped-status"
+                        ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong>
+                <strong ng-if="order.status==3" class="received-status"
+                        ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong>
+                <strong ng-if="order.status==1" class="paid-status"
+                        ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong>
+
+            </ul>
+            <ul class="clearfix self-massage">
+                <li><span ng-bind="order.consignee_name"></span>&nbsp <span ng-bind="order.consignee_mobilephone"></span></li>
+                <li ng-bind="order.consignee_address"></li>
+            </ul>
+            <ul class="clearfix">
+                <li class="product-much" ng-hide="_.isEmpty(vm.getOrderDisplayName(order.id))" ng-bind="::vm.getOrderDisplayName(order.id)"></li>
+            </ul>
+            <ul class="clearfix">
+                <li class="pay-time " ng-bind="::vm.getFormatDate(order.created)"></li>
+            </ul>
+            <div class="triangle-self triangle-white-self"></div>
+            <div class="triangle-self triangle-orange-self"></div>
+        </div>
+        <div class="apply-head self-head"><img ng-src="{{::vm.staticFilePath}}/static/weshares/images/img.png"></div>
+    </div>
+
+    <div infinite-scroll='vm.shareOrder.nextPage()' infinite-scroll-disabled='vm.shareOrder.noMore||vm.shareOrder.busy'
+         infinite-scroll-distance='1'>
+        <div style=" position: relative;" ng-repeat="order in vm.shareOrder.orders">
+            <div class="apply-details">
+                <ul class="clearfix">
+                    <li class="self fl" ng-bind="vm.shareOrder.users[order.creator]['nickname']"></li>
+                    <li class="description fl">已经报名</li>
+                    <li class="status fr">
+                        <span ng-if="order.status==9" class="done-status"><i class="fa fa-heart fa-lg"></i></span>
+                        <strong ng-if="order.status==21" class="paid-status">待发货</strong>
+                        <strong ng-if="order.status==14" class="refunding-status">退款中</strong>
+                        <strong ng-if="order.status==4" class="refund-status">已退款</strong>
+                        <strong ng-if="order.status==2" class="shipped-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong>
+                        <strong ng-if="order.status==3" class="received-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong>
+                        <strong ng-if="order.status==1" class="paid-status" ng-bind="vm.getStatusName(order.status, order.ship_mark)"></strong>
+                    </li>
+                </ul>
+                <ul class="clearfix">
+                    <li class="product-much" ng-hide="_.isEmpty(vm.getOrderDisplayName(order.id))" ng-bind="::vm.getOrderDisplayName(order.id)">盐冻厄瓜多尔白虾1kgX1</li>
+                </ul>
+                <ul class="clearfix">
+                    <li class="pay-time" ng-bind="::vm.getFormatDate(order.created)"></li>
+                </ul>
+                <div class="triangle triangle-white"></div>
+                <div class="triangle triangle-gray"></div>
+            </div>
+            <div class="apply-head"><img lazy-src="{{vm.shareOrder.users[order.creator]['image']}}" fallback-src="vm.staticFilePath + '/avatar/s/default.jpg'"></div>
+        </div>
+        <div style="text-align: center;color: #ffa200;margin-bottom: 10px;" ng-show='vm.shareOrder.busy'>加载中...</div>
+    </div>
+</div>

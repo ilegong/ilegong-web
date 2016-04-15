@@ -48,7 +48,9 @@
         </div>
         <div class='send-info text-center margin-bottom-12' ng-hide='_.isEmpty(vm.weshare.send_info)'>取货时间: <span ng-bind='vm.weshare.send_info'></span></div>
     </div>
+
     <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-orders.html?v0.6.4'"></ng-include>
+
     <div style="text-align: center;">
         <a href="/"><img ng-src="{{::vm.staticFilePath}}/static/img/logo_footer.jpg" border="0" style="width: 4.625em;height: 1.583em;"/></a><br/>朋友说—朋友间最真挚的分享
     </div>

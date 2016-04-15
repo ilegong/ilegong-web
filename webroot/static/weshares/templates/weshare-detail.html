@@ -1,7 +1,7 @@
 <a href="/weshares/add?from=share_view" class="share-banner"><img ng-src="{{::vm.staticFilePath}}/static/weshares/images/share-banner-new.gif" /></a>
 <ul class="sharer clearfix">
     <li class="fl detail-head">
-        <img lazy-src="{{vm.weshare.creator.image|| vm.staticFilePath + '/avatar/s/default.jpg'}}" fallback-src="{{::vm.staticFilePath}}/static/img/default_avatar.png" ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/>
+        <img lazy-src="{{vm.weshare.creator.image|| vm.staticFilePath + '/avatar/s/default.jpg'}}" fallback-src="vm.staticFilePath + '/avatar/s/default.jpg'" ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/>
     </li>
     <li class="sharer-label" ng-bind='"L"+vm.weshare.creator.level.data_value'>L0</li>
     <li class="fl">
@@ -23,7 +23,7 @@
 </div>
 <div class="sharedetail">
     <h1 class='title margin-bottom-12' ng-bind="vm.weshare.title"></h1>
-    <p><span>报名(<span ng-bind="::vm.totalBuyCount">0</span>)</span> &nbsp &nbsp <span>浏览(<span class="stress-span">写死</span>)</span></p>
+    <p><span>报名(<span ng-bind="::vm.totalBuyCount">0</span>)</span> &nbsp &nbsp <span>浏览(<span class="stress-span" ng-bind="vm.weshare.view_count">0</span>)</span></p>
     <div>
         <div ng-if="vm.weshare.refer_share_id==3814 || vm.weshare.id==3814">
             <iframe frameborder="0" width="100%" src="http://v.qq.com/iframe/player.html?vid=t01719wisq4&tiny=0&auto=0" allowfullscreen></iframe>
@@ -62,19 +62,15 @@
 <div class="product" ng-repeat="product in vm.weshare.products">
     <ul class="clearfix">
         <li class="fl">
-            <div class="product-name"><span ng-bind="{{$index+1}}"></span>：<span ng-bind="{{::product.name}}"></span></div>
+            <div class="product-name">
+                <span ng-bind="$index+1"></span>：<span ng-bind="product.name"></span>
+            </div>
 
             <div class="product-price" ng-if="!vm.checkProductNum(product)||product.store==0">
-                <span ng-if="!vm.checkProductNum(product)">&nbsp;&nbsp;(<span style="color: red;">抢光了</span>)</span>
+                <span ng-bind="product.price/100 | currency:'￥'"></span>
+                <span ng-if="!vm.checkProductNum(product)||product.store==0">&nbsp;&nbsp;(<span style="color: red;">抢光了</span>)</span>
+                <span ng-if="vm.checkProductNum(product)&&product.store>0">&nbsp;&nbsp;(仅剩<span style="color: red;" ng-bind="vm.getProductLeftNum(product)"></span>份)</span>
             </div>
-            <div class="product-price" ng-if="vm.checkProductNum(product)&&product.store>0">
-                &nbsp;&nbsp;(仅剩<span style="color: red;" ng-bind="vm.getProductLeftNum(product)"></span>份)
-            </div>
-
-            <dd class="fr" ng-if="!vm.checkProductNum(product)">
-                <span class='num' style="margin-left: 60px;">&nbsp;</span>
-            </dd>
-            <dd class="fr" style="color: #29AC0E;" ng-bind="::product.price/100 | currency:'￥'"></dd>
         </li>
     </ul>
     <dl class="clearfix" ng-if="vm.checkProductNum(product)">
@@ -86,236 +82,6 @@
 
 <p class="product-title">报名列表</p>
 <ul class="clearfix apply">
-    <li><a href="#X" class="focus-apply line-right">报名(10)</a></li>
-    <li><a href="#X">评价(5)</a></li>
+    <li><a href="#X" class="focus-apply line-right">报名(<span ng-bind="vm.totalBuyCount">0</span>)</a></li>
+    <li><a href="#X">评价(<span>写死了</span>)</a></li>
 </ul>
-
-<div class="apply-list clearfix">
-    <div style=" position: relative;">
-        <div class="apply-details self-details">
-            <ul class="clearfix">
-                <li class="self fl">我</li>
-                <li class="description fl">已经报名</li>
-                <li class="status fr">待发货</li>
-            </ul>
-            <ul class="clearfix self-massage">
-                <li>Alice&nbsp  13777777777</li>
-                <li>北京市朝阳区住邦2000&nbsp 3号楼2001</li>
-            </ul>
-            <ul class="clearfix">
-                <li class="product-much">盐冻厄瓜多尔白虾1kgX1</li>
-            </ul>
-            <ul class="clearfix">
-                <li class="pay-time ">01-21&nbsp  09:35</li>
-            </ul>
-            <div class="triangle-self triangle-white-self"></div>
-            <div class="triangle-self triangle-orange-self"></div>
-        </div>
-        <div class="apply-head self-head"><img ng-src="{{::vm.staticFilePath}}/static/weshares/images/img.png"></div>
-    </div>
-    <div style=" position: relative;">
-        <div class="apply-details self-details">
-            <ul class="clearfix">
-                <li class="self fl">我</li>
-                <li class="description fl">已经报名</li>
-                <li class="status fr">待收货</li>
-            </ul>
-            <ul class="clearfix self-massage">
-                <li>Alice&nbsp  13777777777</li>
-                <li>北京市朝阳区住邦2000&nbsp 3号楼2001</li>
-            </ul>
-            <ul class="clearfix">
-                <li class="product-much">盐冻厄瓜多尔白虾1kgX1</li>
-            </ul>
-            <ul class="clearfix">
-                <li class="pass fl"><a class="status-btn">确认收货啦</a></li>
-                <li class="pass fl"><a class="status-btn">看货到哪了</a></li>
-            </ul>
-            <ul class="clearfix">
-                <li class="pay-time ">01-21&nbsp  09:35</li>
-            </ul>
-            <div class="triangle-self triangle-white-self"></div>
-            <div class="triangle-self triangle-orange-self"></div>
-        </div>
-        <div class="apply-head self-head"><img ng-src="{{::vm.staticFilePath}}/static/weshares/images/img.png"></div>
-    </div>
-    <div style=" position: relative;">
-        <div class="apply-details self-details">
-            <ul class="clearfix">
-                <li class="self fl">我</li>
-                <li class="description fl">已经报名</li>
-                <li class="status fr">待评价</li>
-            </ul>
-            <ul class="clearfix self-massage">
-                <li>Alice&nbsp  13777777777</li>
-                <li>北京市朝阳区住邦2000&nbsp 3号楼2001</li>
-            </ul>
-            <ul class="clearfix">
-                <li class="product-much">盐冻厄瓜多尔白虾1kgX1</li>
-            </ul>
-            <ul class="clearfix">
-                <li class="pass fl"><a class="status-btn">小主说两句评价呗</a></li>
-            </ul>
-            <ul class="clearfix">
-                <li class="pay-time ">01-21&nbsp  09:35</li>
-            </ul>
-            <div class="triangle-self triangle-white-self"></div>
-            <div class="triangle-self triangle-orange-self"></div>
-        </div>
-        <div class="apply-head self-head"><img ng-src="{{::vm.staticFilePath}}/static/weshares/images/img.png"></div>
-    </div>
-    <div style=" position: relative;">
-        <div class="apply-details self-details">
-            <ul class="clearfix">
-                <li class="self fl">我</li>
-                <li class="description fl">已经报名</li>
-                <li class="status fr">已评价</li>
-            </ul>
-            <ul class="clearfix self-massage">
-                <li>Alice&nbsp  13777777777</li>
-                <li>北京市朝阳区住邦2000&nbsp 3号楼2001</li>
-            </ul>
-            <ul class="clearfix">
-                <li class="product-much">盐冻厄瓜多尔白虾1kgX1</li>
-            </ul>
-            <ul class="clearfix">
-                <li class="pass fl"><a class="status-btn">小主还可追评一次</a></li>
-            </ul>
-            <ul class="clearfix">
-                <li class="pay-time ">01-21&nbsp  09:35</li>
-            </ul>
-            <div class="triangle-self triangle-white-self"></div>
-            <div class="triangle-self triangle-orange-self"></div>
-        </div>
-        <div class="apply-head self-head"><img ng-src="{{::vm.staticFilePath}}/static/weshares/images/img.png"></div>
-    </div>
-    <div style=" position: relative;">
-        <div class="apply-details">
-            <ul class="clearfix">
-                <li class="self fl">航三续航死滴航死滴</li>
-                <li class="description fl">已经报名</li>
-                <li class="status fr">待发货</li>
-            </ul>
-            <ul class="clearfix massage">
-                <li>Alice&nbsp  13777777777</li>
-                <li>北京市朝阳区住邦2000&nbsp 3号楼2001</li>
-            </ul>
-            <ul class="clearfix">
-                <li class="product-much">盐冻厄瓜多尔白虾1kgX1</li>
-            </ul>
-            <ul class="clearfix">
-                <li class="pay-time ">01-21&nbsp  09:35</li>
-            </ul>
-            <div class="triangle triangle-white"></div>
-            <div class="triangle triangle-gray"></div>
-        </div>
-        <div class="apply-head"><img ng-src="{{::vm.staticFilePath}}/static/weshares/images/img.png"></div>
-    </div>
-    <div style=" position: relative;">
-        <div class="apply-details">
-            <ul class="clearfix">
-                <li class="self fl">航三续航死滴航死滴</li>
-                <li class="description fl">已经报名</li>
-                <li class="status fr">待收货</li>
-            </ul>
-            <ul class="clearfix massage">
-                <li>Alice&nbsp  13777777777</li>
-                <li>北京市朝阳区住邦2000&nbsp 3号楼2001</li>
-            </ul>
-            <ul class="clearfix">
-                <li class="product-much">盐冻厄瓜多尔白虾1kgX1</li>
-            </ul>
-            <ul class="clearfix">
-                <li class="pass fl"><a class="status-btn">确认收货啦</a></li>
-                <li class="pass fl"><a class="status-btn">看货到哪了</a></li>
-            </ul>
-            <ul class="clearfix">
-                <li class="pay-time ">01-21&nbsp  09:35</li>
-            </ul>
-            <div class="triangle triangle-white"></div>
-            <div class="triangle triangle-gray"></div>
-        </div>
-        <div class="apply-head"><img ng-src="{{::vm.staticFilePath}}/static/weshares/images/img.png"></div>
-    </div>
-
-    <div style=" position: relative;">
-        <div class="apply-details">
-            <ul class="clearfix">
-                <li class="self fl">航三续航死滴航死滴</li>
-                <li class="description fl">已经报名</li>
-                <li class="status fr">待评价</li>
-            </ul>
-            <ul class="clearfix massage">
-                <li>Alice&nbsp  13777777777</li>
-                <li>北京市朝阳区住邦2000&nbsp 3号楼2001</li>
-            </ul>
-            <ul class="clearfix">
-                <li class="product-much">盐冻厄瓜多尔白虾1kgX1</li>
-            </ul>
-            <ul class="clearfix">
-                <li class="pass fl"><a class="status-btn">小主说两句评价呗</a></li>
-            </ul>
-            <ul class="clearfix">
-                <li class="pay-time ">01-21&nbsp  09:35</li>
-            </ul>
-            <div class="triangle triangle-white"></div>
-            <div class="triangle triangle-gray"></div>
-        </div>
-        <div class="apply-head"><img ng-src="{{::vm.staticFilePath}}/static/weshares/images/img.png"></div>
-    </div>
-    <div style=" position: relative;">
-        <div class="apply-details">
-            <ul class="clearfix">
-                <li class="self fl">Alice</li>
-                <li class="description fl">已经报名</li>
-                <li class="status fr">已评价</li>
-            </ul>
-            <ul class="clearfix massage">
-                <li>Alice&nbsp  13777777777</li>
-                <li>北京市朝阳区住邦2000&nbsp 3号楼2001</li>
-            </ul>
-            <ul class="clearfix">
-                <li class="product-much">盐冻厄瓜多尔白虾1kgX1</li>
-            </ul>
-            <ul class="clearfix">
-                <li class="pass fl"><a class="status-btn">小主还可追评一次</a></li>
-            </ul>
-            <ul class="clearfix">
-                <li class="pay-time ">01-21&nbsp  09:35</li>
-            </ul>
-            <div class="triangle triangle-white"></div>
-            <div class="triangle triangle-gray"></div>
-        </div>
-        <div class="apply-head"><img ng-src="{{::vm.staticFilePath}}/static/weshares/images/img.png"></div>
-    </div>
-</div>
-
-<!--支付成功提示层-->
-<div style=" margin-left: -32.5%; margin-top: -85px; display: none;" class="pay-success">
-    <h1>报名成功</h1>
-    <ul class="clearfix">
-        <li class="fl"><img ng-src="{{::vm.staticFilePath}}/static/weshares/images/img.png" /></li>
-        <li class="sharer-name" style="overflow: hidden;">关注小宝妈<br/>即时知道TA的分享</li>
-    </ul>
-    <dl class="clearfix">
-        <dt><a href="#X">取消</a></dt>
-        <dt><a class="attention" href="#X">关注</a></dt>
-    </dl>
-</div>
-
-<!--分享管理层-->
-<div class="share-control" style="display: none;">
-    <a href="#X" class="control-order">订单管理</a>
-    <a href="#X" class="control-order">修改分享</a>
-    <a href="#X" class="control-detele">取消</a>
-</div>
-
-
-/*toast提醒*/
-<div class="toast" style="display: none;">关注已取消，不再收到TA的消息</div>
-
-<div class="layer-bg" style="display: none;"></div>
-
-<div ng-if="vm.weshare.type==0||vm.weshare.type==4||vm.weshare.type==6">
-    <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-default-nav.html?v0.6.4'"></ng-include>
-</div>
