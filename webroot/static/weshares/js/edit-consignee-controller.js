@@ -19,27 +19,28 @@
     vmc.loadingConsignee = false;
 
     var vm = $scope.$parent.vm;
-    
+
     active();
     function active() {
       CoreReactorChannel.onElevatedEvent($scope, 'EditConsignee', function () {
-        vmc.selectConsignees = true;
+        vmc.showConsigneeListView();
       });
-      vmc.loadingConsignee = true;
-      loadConsignees();
+
     }
 
     function saveConsignee() {
       $http.post('/users/save_consignee.json', vmc.editConsignee).success(function (data) {
         if (data['success']) {
           $log.log(data['consignee']);
+          vmc.showConsigneeListView();
         }
       }).error(function () {
-
+        alert('保存失败，请联系客服！');
       });
     }
 
     function loadConsignees() {
+      vmc.loadingConsignee = true;
       $http({
         method: 'GET',
         url: '/users/get_consignee_list.json',
@@ -85,6 +86,7 @@
     }
 
     function showConsigneeListView() {
+      loadConsignees();
       vmc.selectConsignees = true;
       vmc.editConsignee = false;
     }
