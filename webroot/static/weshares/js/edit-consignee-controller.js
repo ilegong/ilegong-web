@@ -26,14 +26,16 @@
       CoreReactorChannel.onElevatedEvent($scope, 'EditConsignee', function () {
         vmc.showConsigneeListView();
       });
+    }
+
+    function toBalanceView(){
 
     }
 
     function saveConsignee() {
       $http.post('/users/save_consignee.json', vmc.editConsigneeData).success(function (data) {
         if (data['success']) {
-          $log.log(data['consignee']);
-          vmc.showConsigneeListView();
+
         }
       }).error(function () {
         alert('保存失败，请联系客服！');
@@ -51,9 +53,10 @@
               } else {
                 item['status'] = 0;
               }
+              return item;
             });
             vmc.consignees = _.sortBy(consignees, function (item) {
-              return item['status'] == 1 ? 1 : 0;
+              return item['status'] == 1 ? 0 : 1;
             });
             //update select info
             //redirect to balance view

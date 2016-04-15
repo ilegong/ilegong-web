@@ -90,6 +90,7 @@
     vm.isShareManager = isShareManager;
     vm.calculateShipFee = calculateShipFee;
     vm.unSubSharer = unSubSharer;
+    vm.updateBuyerData = updateBuyerData;
     vm.currentUserOrderCount = 0;
     vm.totalBuyCount = 0;
     vm.rebateFee = 0;
@@ -234,8 +235,8 @@
         }, cache: $templateCache
       }).
         success(function (data, status) {
-            handleShareData(data);
-            $rootScope.loadingPage = false;
+          handleShareData(data);
+          $rootScope.loadingPage = false;
         }).
         error(function (data, status) {
           $log.log(data);
@@ -1006,10 +1007,41 @@
       return '已完成';
     }
 
-    function validateOrderData() {
-      function setUserAddress(){
-        if(vm.selectShipType == 0 && vm.expressShipInfo){
+    //更新购买用户信息
+    function updateBuyerData(type) {
+      cleanBuyerData();
+      //快递
+      if (type == 0 && vm.expressShipInfo) {
+        vm.selectedProvince = vm.expressShipInfo['province_id'];
+        setBuyerData(vm.expressShipInfo);
+      }
+      //初始化自提信息
+      if (type == 1 && vm.pickUpShipInfo) {
+        setBuyerData(vm.pickUpShipInfo);
+      }
+      //初始化好邻居信息
+      if (type == 2 && vm.offlineStoreShipInfo) {
+        setBuyerData(vm.offlineStoreShipInfo);
+      }
+      function setBuyerData(data) {
+        vm.buyerName = data['name'];
+        vm.buyerMobilePhone = data['mobilephone'];
+        vm.buyerPatchAddress = data['remark_address'];
+        vm.buyerAddress = data['address'];
+      }
 
+      function cleanBuyerData() {
+        vm.buyerName = '';
+        vm.buyerMobilePhone = '';
+        vm.buyerPatchAddress = '';
+        vm.buyerAddress = '';
+      }
+    }
+
+    function validateOrderData() {
+      function setUserAddress() {
+        if (vm.selectShipType == 0 && vm.expressShipInfo) {
+          vm.buyerAddress = vm.expressShipInfo['address'];
         }
         if (vm.selectShipType == 1 && vm.selectedPickUpAddressId != -1) {
           var selectAddress = _.filter(vm.weshare.addresses, function (item) {
@@ -1021,6 +1053,7 @@
           vm.buyerAddress = vm.checkedOfflineStore['name'];
         }
       }
+
       setUserAddress();
       var productsHasError = vm.validateProducts();
       if (productsHasError) {

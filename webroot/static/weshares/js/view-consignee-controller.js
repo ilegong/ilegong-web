@@ -34,7 +34,7 @@
 
     function changeShipTab(type) {
       vm.selectShipType = type;
-      updateBuyerData(type);
+      vm.updateBuyerData(type);
     }
 
     function toEditConsigneeView() {
@@ -57,37 +57,7 @@
           vm.offlineStoreShipInfo = item;
         }
       });
-      updateBuyerData(vm.selectShipType);
-    }
-
-    //更新购买用户信息
-    function updateBuyerData(type) {
-      cleanBuyerData();
-      //快递
-      if (type == 0 && vm.expressShipInfo) {
-        vm.selectedProvince = vm.expressShipInfo['province_id'];
-        setBuyerData(vm.expressShipInfo);
-      }
-      //初始化自提信息
-      if (type == 1 && vm.pickUpShipInfo) {
-        setBuyerData(vm.pickUpShipInfo);
-      }
-      //初始化好邻居信息
-      if (type == 2 && vm.offlineStoreShipInfo) {
-        setBuyerData(vm.offlineStoreShipInfo);
-      }
-      function setBuyerData(data) {
-        vm.buyerName = data['name'];
-        vm.buyerMobilePhone = data['mobilephone'];
-        vm.buyerPatchAddress = data['remark_address'];
-        vm.buyerAddress = data['address'];
-      }
-      function cleanBuyerData() {
-        vm.buyerName = '';
-        vm.buyerMobilePhone = '';
-        vm.buyerPatchAddress = '';
-        vm.buyerAddress = '';
-      }
+      vm.updateBuyerData(vm.selectShipType);
     }
 
     function getSelectTypeDefaultVal() {
