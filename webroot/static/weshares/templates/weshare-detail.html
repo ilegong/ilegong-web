@@ -16,11 +16,12 @@
                 <label class="sharer-fans">粉丝<span ng-bind="::vm.userShareSummery.follower_count">0</span></label>
             </div>
         </li>
-        <li class="fr ta"><a ng-if="vm.currentUser" class="faq-sharer-btn" ng-click="vm.redirectFaq()"
-                             ng-bind="::vm.faqTipText">私信TA</a></li>
-        <li class="fr ta" style="position: relative;">
+        <li class="fr ta">
+            <a ng-if="vm.currentUser" class="faq-sharer-btn" ng-click="vm.redirectFaq()" ng-bind="::vm.faqTipText">私信TA</a>
+        </li>
+        <li class="fr ta" style="position: relative;" ng-if="!vm.isCreator()">
             <a ng-if="!vm.userSubStatus" ng-click="vm.subSharer();">+关注</a>
-            <a class="clearfix" style="display: block;" ng-if="vm.userSubStatus" ng-click="vm.toggleUnSubscribeStatus()">
+            <a class="clearfix" style="display: block;" ng-if="vm.userSubStatus" ng-click="vm.showUnSubscribe=!vm.showUnSubscribe;$event.stopPropagation();">
                 <span>已关注</span>
                 <label ng-class="{'tangle-up': vm.showUnSubscribe, 'tangle-down': !vm.showUnSubscribe}">
                     <i></i>
@@ -62,26 +63,26 @@
             取货时间：<span ng-bind='vm.weshare.send_info'></span>
         </li>
     </ul>
-    <ul class="clearfix recommend-sharer" ng-if="vm.recommendData.length > 0">
-        <li class="fl" ng-repeat="recommend in vm.recommendData" data-uid="recommend.id">
+
+    <ul class="clearfix recommend-sharer" ng-if="vm.isProxy()">
+        <li class="fl proxy" ng-repeat="recommend in vm.recommendData" data-uid="recommend.id">
             <a ng-click="vm.toUserShareInfo(recommend.id)">
                 <img lazy-src="{{recommend.image}}" alt="{{recommend.nickname}}">
             </a>
         </li>
-        <li class="tz-recommend fl"><span ng-bind="vm.recommendData.length">0</span>位团长推荐</li>
-    </ul>
-    <ul class="clearfix introduce">
+        <li class="tz-recommend fl" ng-if="vm.recommendData.length > 0"><span ng-bind="vm.recommendData.length">0</span>位团长推荐</li>
+
         <li class="me-introduce fl" ng-if="!vm.isCreator()&&vm.isProxy()&&vm.weshare.status == 0 && vm.weshare.type!=4">
             <span class="introduce" ng-click="vm.showRecommendDialog=true;vm.showLayer=true;">我要推荐</span>
         </li>
         <li class="introduce-money fl"
-            ng-if="(vm.currentUser.is_proxy==1||vm.isCreator())&&vm.weshare.proxy_rebate_percent.percent>0">
+            ng-if="(vm.isProxy()||vm.isCreator())&&vm.weshare.proxy_rebate_percent.status==1&&vm.weshare.proxy_rebate_percent.percent>0">
             推荐佣金<span ng-bind="::vm.weshare.proxy_rebate_percent.percent+'%'" class="stress-span">0%</span>
         </li>
+        {{product.store}}
     </ul>
 
     <p class="product-title">产品列表</p>
-
     <div class="product" ng-repeat="product in vm.weshare.products">
         <ul class="clearfix">
             <li class="fl">
@@ -89,8 +90,7 @@
                     <span ng-bind="$index+1"></span>：<span ng-bind="product.name"></span>
                 </div>
 
-                <div class="product-price" ng-if="!vm.checkProductNum(product)||product.store==0"
-                     ng-bind="product.price/100 | currency:'￥'">
+                <div class="product-price" ng-bind="product.price/100 | currency:'￥'">
                 </div>
             </li>
         </ul>

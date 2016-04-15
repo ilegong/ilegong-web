@@ -94,7 +94,6 @@
     vm.currentUserOrderCount = 0;
     vm.totalBuyCount = 0;
     vm.rebateFee = 0;
-    vm.toggleUnSubscribeStatus = toggleUnSubscribeStatus;
 
     activate();
 
@@ -524,7 +523,7 @@
       if (product.limit > 0 && product.num == product.limit) {
         alert('亲，最多可购' + product.limit + '份.');
       } else {
-        product.num = product.num + 1;
+        product.num = Math.min(product.num + 1, vm.getProductLeftNum(product));
       }
       calOrderTotalPrice();
       vm.validateProducts();
@@ -1281,10 +1280,6 @@
       //load all comments
       vm.loadOrderDetail(vm.weshare.id);
       vm.loadOrderCommentData(vm.weshare.id);
-    }
-
-    function toggleUnSubscribeStatus(){
-
     }
     //设置微信分享的参数
     function setWeiXinShareParams() {
