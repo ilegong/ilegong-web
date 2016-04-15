@@ -26,9 +26,24 @@
         <a href="#X" class="control-order">修改分享</a>
         <a href="#X" class="control-detele">取消</a>
     </div>
-
+    <!--评价层-->
+    <div class="commenting-dialog" ng-show="vm.showCommentingDialog">
+        <div class="clearfix title">
+            <label>爱心评价</label>
+            <a ng-click="vm.closeCommentDialog();" class="closebtn fr"></a>
+        </div>
+        <div class="clearfix" style="padding: 0 10px;margin-bottom: 30px;">
+            <div class="form-group" ng-class="{'has-error': vm.usernameHasError}">
+                <textarea id="commentContentDom" class='form-control' placeholder="{{vm.commentTipInfo}}" ng-model='vm.submitTempCommentData.comment_content' ng-change=''></textarea>
+                <p class='tips'>请输入评价信息</p>
+            </div>
+        </div>
+        <div class="clearfix starttuan_btn">
+            <a ng-click='vm.submitComment()' style="background-color: #ffa200; width: 100%;">评价</a>
+        </div>
+    </div>
+    <div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showGroupShareTipDialog=false;vm.showRecommendDialog=false;vm.showLayer=false;vm.showNotifyView=false;vm.showCommentListDialog=false;vm.closeCommentDialog();vm.showBuyingDialog=false;vm.showShareDialog=false;vm.showNotifyShareDialog=false;vm.showNotifyShareOfferDialog=false;vm.showNotifyGetPacketDialog=false;"></div>
     <div class="toast" style="display: none;">关注已取消，不再收到TA的消息</div>
-    <div class="layer-bg" style="display: none;"></div>
 </div>
 <div ng-if="vm.showBalanceView">
     <ng-include src="vm.staticFilePath + '/static/weshares/templates/balance.html?v0.6.7'"></ng-include>
