@@ -279,6 +279,22 @@ class WesharesController extends AppController
     }
 
     /**
+     * @param $shareId
+     */
+    public function get_share_summery_data($shareId, $uid){
+        $this->autoRender = false;
+        try {
+            $this->log("Failed to get share and all refer share count for share " . $shareId, LOG_ERR);
+            $summery = $this->WeshareBuy->get_share_and_all_refer_share_summery($shareId, $uid);
+        } catch (Exception $e) {
+            $this->log("Failed to get share and all refer share count for share " . $shareId . ": " . $e->getMessage(), LOG_ERR);
+            $summery = ['order' => 0, 'comment' => 0];
+        }
+        echo json_encode($summery);
+        exit();
+    }
+
+    /**
      * @param $weshareId
      * ajax 获取分享的详细信息
      */
@@ -327,13 +343,7 @@ class WesharesController extends AppController
         $can_manage_share = $this->ShareAuthority->user_can_manage_share($uid, $weshareId);
         $can_edit_share = $this->ShareAuthority->user_can_edit_share_info($uid, $weshareId);
         $share_order_count = $this->WeshareBuy->get_share_all_buy_count($weshareId);
-        try {
-            $this->log("Failed to get share and all refer share count for share " . $weshareId . ": " . $weshareInfo['creator']['id'], LOG_ERR);
-            $all_buy_count = $this->WeshareBuy->get_share_and_all_refer_share_count($weshareId, $weshareInfo['creator']['id']);
-        } catch (Exception $e) {
-            $this->log("Failed to get share and all refer share count for share " . $weshareId . ": " . $e->getMessage(), LOG_ERR);
-            $all_buy_count = 0;
-        }
+
         $favourable_config = $this->ShareFavourableConfig->get_favourable_config($weshareId);
         $prepare_comment_data = $this->prepare_comment_data();
         echo json_encode(array('support_pys_ziti' => $share_ship_set,
@@ -350,7 +360,7 @@ class WesharesController extends AppController
             'can_manage_share' => $can_manage_share,
             'can_edit_share' => $can_edit_share,
             'share_order_count' => $share_order_count,
-            'all_buy_count' => $all_buy_count,
+            //'all_buy_count' => $all_buy_count,
             'favourable_config' => $favourable_config,
             'prepare_comment_data' => $prepare_comment_data
         ));
