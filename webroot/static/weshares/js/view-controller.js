@@ -93,7 +93,6 @@
     vm.updateBuyerData = updateBuyerData;
     vm.getShareSummeryData = getShareSummeryData;
     vm.filterProductByNum = filterProductByNum;
-    vm.clickPage = clickPage;
     vm.currentUserOrderCount = 0;
     vm.totalBuyCount = 0;
     vm.rebateFee = 0;
@@ -1308,22 +1307,6 @@
       vm.getShareSummeryData(vm.weshare.id, vm.weshare.creator.id);
       vm.loadOrderDetail(vm.weshare.id);
       vm.loadOrderCommentData(vm.weshare.id);
-    }
-
-    function clickPage(){
-      vm.showUnSubscribe = false;
-      vm.showUnSubscribeLayer = false;
-      vm.showGroupShareTipDialog = false;
-      vm.showRecommendDialog = false;
-      vm.showLayer = false;
-      vm.showNotifyView = false;
-      vm.showCommentListDialog = false;
-      vm.closeCommentDialog();
-      vm.showBuyingDialog = false;
-      vm.showShareDialog = false;
-      vm.showNotifyShareDialog = false;
-      vm.showNotifyShareOfferDialog = false;
-      vm.showNotifyGetPacketDialog = false;
     }
 
     //设置微信分享的参数

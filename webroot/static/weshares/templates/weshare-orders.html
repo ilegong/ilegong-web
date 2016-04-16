@@ -31,6 +31,9 @@
                         </span>
                     <span>:&nbsp;</span>
                     <span ng-bind="::reply.body" ng-click="vm.showCommentDialog(order,reply)"></span>
+                    <span style="float: right;" ng-if="vm.isCreator() && $last" ng-click="vm.showCommentDialog(order,vm.getOrderComment(order.id))">
+                        <div class="commenting-o"><i class="fa fa-commenting-o fa-lg"></i></div>
+                    </span>
                 </li>
             </ul>
 
@@ -43,7 +46,6 @@
             <ul class="clearfix">
                 <li class="product-much" ng-hide="_.isEmpty(vm.getOrderDisplayName(order.id))"
                     ng-bind="::vm.getOrderDisplayName(order.id)"></li>
-                <div style="float: right;" ng-if="order.status==9" ng-click="vm.showCommentDialog(order,vm.getOrderComment(order.id))"><div class="commenting-o"><i class="fa fa-commenting-o fa-lg"></i></div></div>
             </ul>
 
             <ul class="clearfix self-massage product-much" ng-if="vm.isOwner(order) && vm.isShowShipCode(order);">
