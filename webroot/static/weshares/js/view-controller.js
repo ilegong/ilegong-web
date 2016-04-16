@@ -93,6 +93,7 @@
     vm.updateBuyerData = updateBuyerData;
     vm.getShareSummeryData = getShareSummeryData;
     vm.filterProductByNum = filterProductByNum;
+    vm.clickPage = clickPage;
     vm.currentUserOrderCount = 0;
     vm.totalBuyCount = 0;
     vm.rebateFee = 0;
@@ -416,7 +417,7 @@
       if (vm.sharerAllComments) {
         orderCommentCount = orderCommentCount + Object.keys(vm.sharerAllComments).length;
       }
-      if (vm.shareOrder['orderComments']) {
+      if (vm.shareOrder && vm.shareOrder['orderComments']) {
         orderCommentCount = orderCommentCount + Object.keys(vm.shareOrder['orderComments']).length;
       }
       return orderCommentCount;
@@ -428,7 +429,7 @@
           return vm.commentData['comment_replies'][comment_id];
         }
       }
-      if (vm.shareOrder['orderCommentReplies']) {
+      if (vm.shareOrder && vm.shareOrder['orderCommentReplies']) {
         return vm.shareOrder['orderCommentReplies'][comment_id];
       }
     }
@@ -866,6 +867,7 @@
         vm.hasProcessSubSharer = false;
         if (data['success']) {
           vm.userSubStatus = !vm.userSubStatus;
+          vm.showUnSubscribeLayer=true;
         }
       }).error(function (data) {
         vm.hasProcessSubSharer = true;
@@ -1300,6 +1302,22 @@
       vm.getShareSummeryData(vm.weshare.id, vm.creator.id);
       vm.loadOrderDetail(vm.weshare.id);
       vm.loadOrderCommentData(vm.weshare.id);
+    }
+
+    function clickPage(){
+      vm.showUnSubscribe = false;
+      vm.showUnSubscribeLayer = false;
+      vm.showGroupShareTipDialog = false;
+      vm.showRecommendDialog = false;
+      vm.showLayer = false;
+      vm.showNotifyView = false;
+      vm.showCommentListDialog = false;
+      vm.closeCommentDialog();
+      vm.showBuyingDialog = false;
+      vm.showShareDialog = false;
+      vm.showNotifyShareDialog = false;
+      vm.showNotifyShareOfferDialog = false;
+      vm.showNotifyGetPacketDialog = false;
     }
 
     //设置微信分享的参数
