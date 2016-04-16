@@ -91,6 +91,8 @@
     vm.calculateShipFee = calculateShipFee;
     vm.unSubSharer = unSubSharer;
     vm.updateBuyerData = updateBuyerData;
+    vm.getShareSummeryData = getShareSummeryData;
+    vm.filterProductByNum = filterProductByNum;
     vm.currentUserOrderCount = 0;
     vm.totalBuyCount = 0;
     vm.rebateFee = 0;
@@ -99,6 +101,10 @@
 
     function activate() {
       vm.initWeshareData();
+    }
+
+    function filterProductByNum(product){
+      return product.num > 0;
     }
 
     function getDate(strDate) {
@@ -203,6 +209,19 @@
         }).
         error(function (data, status) {
           $log.log(data);
+        });
+    }
+
+    function getShareSummeryData(shareId, userId){
+      $http({
+        method: 'GET', url: '/weshares/get_share_summery_data/' + shareId + '/' + userId, cache: $templateCache
+      }).
+        success(function (data, status) {
+          vm.totalBuyCount = data['order'];
+          vm.totalCommentCount = data['comment'];
+        }).
+        error(function (data, status) {
+
         });
     }
 
@@ -1260,7 +1279,6 @@
       vm.weshareSettings = data['weshare_ship_settings'];
       vm.supportPysZiti = data['support_pys_ziti'];
       vm.userSubStatus = data['sub_status'];
-      vm.totalBuyCount = data['all_buy_count'];
       vm.favourableConfig = data['favourable_config'];
       vm.autoPopCommentData = data['prepare_comment_data'];
       vm.dliveryTemplate = data['weshare']['deliveryTemplate'];
@@ -1279,6 +1297,7 @@
       }
       //vm.checkShareInfoHeight();
       //load all comments
+      vm.getShareSummeryData(vm.weshare.id, vm.creator.id);
       vm.loadOrderDetail(vm.weshare.id);
       vm.loadOrderCommentData(vm.weshare.id);
     }

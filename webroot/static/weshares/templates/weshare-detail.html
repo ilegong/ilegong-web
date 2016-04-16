@@ -83,7 +83,7 @@
     </ul>
 
     <p class="product-title">产品列表</p>
-    <div class="product" ng-repeat="product in vm.weshare.products">
+    <div class="product" ng-repeat="product in vm.weshare.products"  ng-show='product.num > 1'>
         <ul class="clearfix">
             <li class="fl">
                 <div class="product-name">
@@ -115,6 +115,6 @@
                 ng-bind="vm.totalBuyCount">0</span>)</span>
         </li>
         <li><span ng-click="vm.showCommentedOrders=true;" ng-class="{'focus-apply':vm.showCommentedOrders}">评价(<span
-                ng-bind="vm.getOrderCommentLength()"></span>)</span></li>
+                ng-bind="vm.totalCommentCount"></span>)</span></li>
     </ul>
 </div>

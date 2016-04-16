@@ -13,35 +13,30 @@
     <!-- 这个元素在各个tab里面都会出现 -->
     <div class="selection-product">
         <h1>选择的产品</h1>
-        <div class="product" ng-repeat="product in vm.weshare.products">
-            <div>{{::product.name}}
-                <span ng-if="!vm.checkProductNum(product)">
-                  (<span style="color: red;">抢光了</span>)
-                </span>
-            </div>
-            <div class="clearfix">
-                <div class="product-price fl" ng-bind="::product.price/100 | currency:'￥'"></div>
-                <dl class="clearfix fr" ng-if="vm.checkProductNum(product)">
-                    <dd class="fr add-subtract" ng-click="vm.increaseProductNum(product)">
-                        <i class="fa fa-plus"></i>
-                    </dd>
-                    <dd class="fr amount" ng-bind="product.num||0"></dd>
-                    <dd class="fr add-subtract" ng-click="vm.decreaseProductNum(product)">
-                        <i class="fa fa-minus"></i>
-                    </dd>
-                    <dd class="fr limit-score" ng-if="vm.checkProductNum(product)&&product.store>0">仅剩
-                        <span ng-bind="vm.getProductLeftNum(product)"></span>份
-                    </dd>
-                </dl>
-                <dl class="clearfix fr" ng-if="!vm.checkProductNum(product)">
-                    <dd class="fr add-subtract disable"><i class="fa fa-plus"></i></dd>
-                    <dd class="fr amount" ng-bind="product.num||0"></dd>
-                    <dd class="fr add-subtract disable"><i class="fa fa-minus"></i></dd>
-                    <dd class="fr limit-score" ng-if="vm.checkProductNum(product)&&product.store>0">仅剩
-                        <span ng-bind="vm.getProductLeftNum(product)"></span>份
-                    </dd>
-                </dl>
-            </div>
+
+        <div class="product" ng-repeat="product in vm.weshare.products | filter : vm.filterProductByNum">
+            <ul class="clearfix">
+                <li class="fl">
+                    <div class="product-name">
+                        <span ng-bind="$index+1"></span>：<span ng-bind="product.name"></span>
+                    </div>
+
+                    <div class="product-price" ng-bind="product.price/100 | currency:'￥'">
+                    </div>
+                </li>
+            </ul>
+
+            <dl class="clearfix" ng-if="!vm.checkProductNum(product)||product.store==0">
+                <dd class="fr sold-out">已抢光</dd>
+            </dl>
+            <dl class="clearfix" ng-if="vm.checkProductNum(product) && product.store != 0">
+                <dd class="fr add-subtract" ng-click="vm.increaseProductNum(product)"><i class="fa fa-plus"></i></dd>
+                <dd class="fr amount" ng-bind="product.num||0">0</dd>
+                <dd class="fr add-subtract" ng-click="vm.decreaseProductNum(product)"><i class="fa fa-minus"></i></dd>
+                <dd class="fr limit-score" ng-if="vm.checkProductNum(product)&&product.store>0">仅剩<span
+                        ng-bind="vm.getProductLeftNum(product)"></span>份
+                </dd>
+            </dl>
         </div>
     </div>
     <!-- 这个元素在各个tab里面都会出现 -->
