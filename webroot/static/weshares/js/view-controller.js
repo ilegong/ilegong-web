@@ -214,7 +214,9 @@
 
     function getShareSummeryData(shareId, userId) {
       $http({
-        method: 'GET', url: '/weshares/get_share_summery_data/' + shareId + '/' + userId, cache: $templateCache
+        method: 'GET',
+        url: '/weshares/get_share_summery_data/' + shareId + '/' + userId + '.json',
+        cache: $templateCache
       }).
         success(function (data, status) {
           vm.totalBuyCount = data['order'];
@@ -255,7 +257,6 @@
       }).
         success(function (data, status) {
           handleShareData(data);
-          $rootScope.loadingPage = false;
         }).
         error(function (data, status) {
           $log.log(data);
@@ -1261,6 +1262,7 @@
 
 
     function handleShareData(data) {
+      $rootScope.loadingPage = false;
       vm.weshare = data['weshare'];
       if (vm.weshare.addresses && vm.weshare.addresses.length == 1) {
         vm.selectedPickUpAddressId = vm.weshare.addresses[0].id;
@@ -1297,7 +1299,7 @@
       }
       //vm.checkShareInfoHeight();
       //load all comments
-      vm.getShareSummeryData(vm.weshare.id, vm.creator.id);
+      vm.getShareSummeryData(vm.weshare.id, vm.weshare.creator.id);
       vm.loadOrderDetail(vm.weshare.id);
       vm.loadOrderCommentData(vm.weshare.id);
     }
