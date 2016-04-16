@@ -103,7 +103,7 @@
       vm.initWeshareData();
     }
 
-    function filterProductByNum(product){
+    function filterProductByNum(product) {
       return product.num > 0;
     }
 
@@ -212,7 +212,7 @@
         });
     }
 
-    function getShareSummeryData(shareId, userId){
+    function getShareSummeryData(shareId, userId) {
       $http({
         method: 'GET', url: '/weshares/get_share_summery_data/' + shareId + '/' + userId, cache: $templateCache
       }).
@@ -413,7 +413,7 @@
 
     function getOrderCommentLength() {
       var orderCommentCount = 0;
-      if(vm.sharerAllComments){
+      if (vm.sharerAllComments) {
         orderCommentCount = orderCommentCount + Object.keys(vm.sharerAllComments).length;
       }
       if (vm.shareOrder['orderComments']) {
@@ -1301,6 +1301,7 @@
       vm.loadOrderDetail(vm.weshare.id);
       vm.loadOrderCommentData(vm.weshare.id);
     }
+
     //设置微信分享的参数
     function setWeiXinShareParams() {
       var url = 'http://www.tongshijia.com/weshares/view/' + vm.weshare.id;
