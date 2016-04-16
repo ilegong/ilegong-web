@@ -628,6 +628,10 @@
     }
 
     function buyProducts() {
+      if(vm.validateProducts()){
+        alert('请选择商品');
+        return false;
+      }
       vm.showShareDetailView = false;
       vm.chooseShipType = false;
       vm.showBalanceView = true;
