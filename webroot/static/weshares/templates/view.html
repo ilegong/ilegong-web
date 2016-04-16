@@ -1,4 +1,4 @@
-<div ng-if="vm.showShareDetailView">
+<div ng-if="vm.showShareDetailView" ng-click="vm.clickPage();">
     <div ng-class="{'has-channel-bottom': vm.weshare.type==0||vm.weshare.type==4||vm.weshare.type==6}">
         <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-detail.html?v0.6.7'"></ng-include>
         <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-orders.html?v0.6.4'"></ng-include>
@@ -58,8 +58,10 @@
             <a ng-click='vm.submitComment()' style="background-color: #ffa200; width: 100%;">评价</a>
         </div>
     </div>
-    <div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showGroupShareTipDialog=false;vm.showRecommendDialog=false;vm.showLayer=false;vm.showNotifyView=false;vm.showCommentListDialog=false;vm.closeCommentDialog();vm.showBuyingDialog=false;vm.showShareDialog=false;vm.showNotifyShareDialog=false;vm.showNotifyShareOfferDialog=false;vm.showNotifyGetPacketDialog=false;"></div>
-    <div class="toast" style="display: none;">关注已取消，不再收到TA的消息</div>
+
+    <!--关注取消层-->
+    <div class="toast" ng-show="vm.showUnSubscribeLayer">关注已取消，不再收到TA的消息</div>
+    <div class="background-layer" ng-show="vm.showLayer"></div>
 </div>
 <div ng-if="vm.showBalanceView">
     <ng-include src="vm.staticFilePath + '/static/weshares/templates/balance.html?v0.6.7'"></ng-include>
