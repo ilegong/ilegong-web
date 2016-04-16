@@ -4,15 +4,15 @@
             ng-src="{{::vm.staticFilePath}}/static/weshares/images/share-banner-new.gif"/></a>
     <ul class="sharer clearfix">
         <li class="fl detail-head">
-            <img lazy-src="{{vm.weshare.creator.image|| vm.staticFilePath + '/avatar/s/default.jpg'}}"
-                 fallback-src="vm.staticFilePath + '/avatar/s/default.jpg'"
+            <img lazy-src="{{vm.weshare.creator.image}}"
+                 fallback-src="{{vm.staticFilePath + '/avatar/s/default.jpg'}}"
                  ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/>
         </li>
         <li class="sharer-label" ng-bind='"L"+vm.weshare.creator.level.data_value'>L0</li>
         <li class="fl">
             <div class="nickname" ng-bind="::vm.weshare.creator.nickname"></div>
             <div style=" margin-left:10px;">
-                <label class="sharer-level"></label>
+                <label class="sharer-level" style="display: none;"></label>
                 <label class="sharer-fans">粉丝<span ng-bind="::vm.userShareSummery.follower_count">0</span></label>
             </div>
         </li>
@@ -46,7 +46,7 @@
     <div class="sharedetail">
         <h1 class='title margin-bottom-12' ng-bind="vm.weshare.title"></h1>
 
-        <p><span>报名(<span ng-bind="::vm.totalBuyCount">0</span>)</span> &nbsp &nbsp <span>浏览(<span class="stress-span"
+        <p><span>报名(<span ng-bind="vm.totalBuyCount">0</span>)</span> &nbsp &nbsp <span>浏览(<span class="stress-span"
                                                                                                    ng-bind="vm.weshare.view_count">0</span>)</span>
         </p>
 

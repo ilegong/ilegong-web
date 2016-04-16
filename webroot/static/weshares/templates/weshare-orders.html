@@ -20,7 +20,7 @@
                 </li>
             </ul>
 
-            <ul class="clearfix massage" ng-if="order.status == 9 && !_.isEmpty(vm.getOrderComment(order.id).body)">
+            <ul class="clearfix self-massage" ng-if="order.status == 9 && !_.isEmpty(vm.getOrderComment(order.id).body)">
                 <li ng-bind="::vm.getOrderComment(order.id).body">
                 </li>
                 <li ng-repeat="reply in vm.getReplyComments(vm.getOrderComment(order.id).id)">
@@ -43,6 +43,7 @@
             <ul class="clearfix">
                 <li class="product-much" ng-hide="_.isEmpty(vm.getOrderDisplayName(order.id))"
                     ng-bind="::vm.getOrderDisplayName(order.id)"></li>
+                <div style="float: right;" ng-if="order.status==9" ng-click="vm.showCommentDialog(order,vm.getOrderComment(order.id))"><div class="commenting-o"><i class="fa fa-commenting-o fa-lg"></i></div></div>
             </ul>
             <ul class="clearfix operations" ng-if="vm.isOwner(order)">
                 <li class="pass fl" ng-show="order.status==2">

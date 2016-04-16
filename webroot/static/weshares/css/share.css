@@ -21,7 +21,7 @@ ul li { list-style: none; }
 
 /*sharer*/
 .sharer{background: #fff; position: relative; padding: 10px 12px; margin-top: 5px; background-color: #ffffff; border-bottom: 1px #eeeeee solid;}
-.detail-head,.detail-head img{width:43px; height:43px;}
+.detail-head,.detail-head img{width:43px; height:43px;border-radius: 50%;}
 .nickname{ margin-left:10px; font-size:1.15em; color:#333; line-height: 22px; max-width: 105px; white-space:nowrap; overflow:hidden; text-overflow : ellipsis;}
 .sharer-level{ font-size:0.8em; margin-right: 3px; color:#888888; background-color:#f1f1f1; padding: 2px; border-radius:3px; text-align:center;}
 .sharer-fans{ color: #f99d3a; font-size: 0.7em;}
