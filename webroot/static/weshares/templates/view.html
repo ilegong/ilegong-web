@@ -38,11 +38,12 @@
         <div style="width: 90%; margin: 0 auto; font-size: 1.3em;">亲，订单已成功，点击…  分享给您的朋友，感谢您将美味传递下去。</div>
     </div>
     <!--支付成功没有关注-->
-    <div style="margin-left: -32.5%; margin-top: -85px; display: none;" class="pay-success" ng-show="vm.showTipSubSharerDialog">
+    <div style="margin-left: -32.5%; margin-top: -85px;" class="pay-success">
         <h1>报名成功</h1>
         <ul class="clearfix">
-            <li class="fl"><img ng-src="{{::vm.staticFilePath}}/static/weshares/images/img.png" /></li>
-            <li class="sharer-name" style="overflow: hidden;">关注小宝妈<br/>即时知道TA的分享</li>
+            <li class="fl"><img ng-src="{{vm.weshare.creator.image}}"
+                                fallback-src="{{vm.staticFilePath + '/avatar/s/default.jpg'}}"/></li>
+            <li class="sharer-name" style="overflow: hidden;">关注<span ng-bind="vm.weshare.creator.nickname"></span><br/>即时知道TA的分享</li>
         </ul>
         <dl class="clearfix">
             <dt><a ng-click="vm.showTipSubSharerDialog=false;vm.showLayer=false;">取消</a></dt>
