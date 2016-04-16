@@ -393,13 +393,14 @@
     }
 
     function getOrderCommentLength() {
-      if (vm.sharerAllComments) {
-        if (vm.shareOrder['orderComments']) {
-          return (vm.shareOrder['orderComments'].length || 0) + vm.sharerAllComments.length;
-        }
-        return vm.sharerAllComments.length;
+      var orderCommentCount = 0;
+      if(vm.sharerAllComments){
+        orderCommentCount = orderCommentCount + Object.keys(vm.sharerAllComments).length;
       }
-      return 0;
+      if (vm.shareOrder['orderComments']) {
+        orderCommentCount = orderCommentCount + Object.keys(vm.shareOrder['orderComments']).length;
+      }
+      return orderCommentCount;
     }
 
     function getReplyComments(comment_id) {

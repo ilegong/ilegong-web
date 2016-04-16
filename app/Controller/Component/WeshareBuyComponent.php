@@ -1959,6 +1959,13 @@ class WeshareBuyComponent extends Component
 
     /**
      * @param $shareId
+     */
+    public function get_share_all_comment_count($shareId){
+        
+    }
+
+    /**
+     * @param $shareId
      * @param $exclude_uid
      * @return mixed | int
      * 获取分享的总购买份数
