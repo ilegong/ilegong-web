@@ -65,12 +65,12 @@
     </ul>
 
     <ul class="clearfix recommend-sharer" ng-if="vm.isProxy()">
-        <li class="fl proxy" ng-repeat="recommend in vm.recommendData" data-uid="recommend.id">
-            <a ng-click="vm.toUserShareInfo(recommend.id)">
-                <img lazy-src="{{recommend.image}}" alt="{{recommend.nickname}}">
-            </a>
+        <li class="clearfix">
+            <span class="fl proxy" ng-repeat="recommend in vm.recommendData" data-uid="recommend.id">
+                <img ng-click="vm.toUserShareInfo(recommend.id)" lazy-src="{{recommend.image}}" alt="{{recommend.nickname}}">
+            </span>
+            <span class="tz-recommend fl" ng-if="vm.recommendData.length > 0"><span ng-bind="vm.recommendData.length">0</span>位团长推荐</span>
         </li>
-        <li class="tz-recommend fl" ng-if="vm.recommendData.length > 0"><span ng-bind="vm.recommendData.length">0</span>位团长推荐</li>
 
         <li class="me-introduce fl" ng-if="!vm.isCreator()&&vm.isProxy()&&vm.weshare.status == 0 && vm.weshare.type!=4">
             <span class="introduce" ng-click="vm.showRecommendDialog=true;vm.showLayer=true;">我要推荐</span>

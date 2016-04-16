@@ -45,6 +45,11 @@
                     ng-bind="::vm.getOrderDisplayName(order.id)"></li>
                 <div style="float: right;" ng-if="order.status==9" ng-click="vm.showCommentDialog(order,vm.getOrderComment(order.id))"><div class="commenting-o"><i class="fa fa-commenting-o fa-lg"></i></div></div>
             </ul>
+
+            <ul class="clearfix self-massage product-much" ng-if="vm.isOwner(order) && vm.isShowShipCode(order);">
+                <li ng-bind="::vm.getShipCode(order);"></li>
+            </ul>
+
             <ul class="clearfix operations" ng-if="vm.isOwner(order)">
                 <li class="pass fl" ng-show="order.status==2">
                     <a class="status-btn" ng-click="vm.confirmReceived(order)">
@@ -58,7 +63,6 @@
                     </a>
                 </li>
             </ul>
-            <span ng-if='vm.isShowShipCode(order);' class="display-name" style="background: darkgray;" ng-bind="::vm.getShipCode(order);"></span>
 
             <ul class="clearfix">
                 <li class="pay-time " ng-bind="::vm.getFormatDate(order.created)"></li>
