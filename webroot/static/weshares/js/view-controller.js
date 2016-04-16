@@ -178,7 +178,11 @@
             //from paid done
             if (fromType == 1) {
               if (_.isEmpty(initSharedOfferId)) {
-                vm.showNotifyShareDialog = true;
+                if(!vm.userSubStatus){
+                  vm.showTipSubSharerDialog = true;
+                }else{
+                  vm.showNotifyShareDialog = true;
+                }
                 vm.showLayer = true;
               } else {
                 //check is new user buy it
