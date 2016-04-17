@@ -8,10 +8,10 @@
     </div>
 
     <!--分享管理层-->
-    <div class="share-control" style="display: none;">
-        <a href="#X" class="control-order">订单管理</a>
-        <a href="#X" class="control-order">修改分享</a>
-        <a href="#X" class="control-detele">取消</a>
+    <div class="share-control" ng-show="vm.showShareControl">
+        <a ng-if="vm.isCreator()||vm.isManage" ng-click="vm.toShareOrderList()" class="control-order">订单管理</a>
+        <a ng-if="vm.isCreator()||vm.canEditShare" ng-click="vm.toUpdate()" class="control-order">修改分享</a>
+        <a ng-click="vm.showShareControl=false;vm.showLayer=false;" class="control-detele">取消</a>
     </div>
 
     <div ng-show="vm.showNotifyShareOfferDialog" class="red-packet-dialog">
@@ -88,7 +88,7 @@
         </div>
     </div>
 
-    <div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showTipSubSharerDialog=false;vm.showRecommendDialog=false;vm.showLayer=false;vm.showNotifyView=false;vm.showCommentListDialog=false;vm.closeCommentDialog();vm.showBuyingDialog=false;vm.showShareDialog=false;vm.showNotifyShareDialog=false;vm.showNotifyShareOfferDialog=false;vm.showNotifyGetPacketDialog=false;"></div>
+    <div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showShareControl=false;vm.showTipSubSharerDialog=false;vm.showRecommendDialog=false;vm.showLayer=false;vm.showNotifyView=false;vm.showCommentListDialog=false;vm.closeCommentDialog();vm.showBuyingDialog=false;vm.showShareDialog=false;vm.showNotifyShareDialog=false;vm.showNotifyShareOfferDialog=false;vm.showNotifyGetPacketDialog=false;"></div>
 
 </div>
 <div ng-if="vm.showBalanceView">

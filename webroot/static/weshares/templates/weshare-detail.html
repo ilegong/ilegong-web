@@ -19,6 +19,9 @@
         <li class="fr ta">
             <a ng-if="vm.currentUser" class="faq-sharer-btn" ng-click="vm.redirectFaq()" ng-bind="::vm.faqTipText">私信TA</a>
         </li>
+        <li class="fr ta" ng-if="vm.isCreator()">
+            <a ng-click="vm.showShareControl=true;vm.showLayer=true;">管理</a>
+        </li>
         <li class="fr ta" style="position: relative;" ng-if="!vm.isCreator()">
             <a ng-if="!vm.userSubStatus" ng-click="vm.subSharer();">+关注</a>
             <a class="clearfix" style="display: block;" ng-if="vm.userSubStatus" ng-click="vm.showUnSubscribe=!vm.showUnSubscribe;$event.stopPropagation();">
