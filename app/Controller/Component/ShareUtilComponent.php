@@ -109,12 +109,7 @@ class ShareUtilComponent extends Component
     public function check_user_relations($followId)
     {
         $userRelationM = ClassRegistry::init('UserRelation');
-        $relation = $userRelationM->find('all', [
-            'conditions' => [
-                'follow_id' => $followId
-            ]
-        ]);
-        return empty($relation);
+        return $userRelationM->hasAny(['follow_id' => $followId]);
     }
 
     public function delete_relation($sharer_id, $user_id)
