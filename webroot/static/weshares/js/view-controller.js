@@ -650,7 +650,8 @@
     function buyProducts() {
       if(vm.validateProducts()){
         alert('请选择报名商品！');
-        window.location.href='#share-product-list';
+        var element = angular.element(document.getElementById('share-product-list'));
+        window.scrollTo(0, element[0].offsetTop - 100)
         return false;
       }
       vm.showShareDetailView = false;
