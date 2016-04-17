@@ -650,6 +650,7 @@
     function buyProducts() {
       if(vm.validateProducts()){
         alert('请选择报名商品！');
+        window.location.href='#share-product-list';
         return false;
       }
       vm.showShareDetailView = false;
