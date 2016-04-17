@@ -957,7 +957,10 @@ class WeixinComponent extends Component {
         $title = '亲，恭喜您获得' . $creatorNickName . '红包！';
         $detail_url = $this->get_weshare_packet_url($weshare_info['Weshare']['id']);
         //save relation
-        $this->ShareUtil->save_relation($creatorInfo['User']['id'], $order['Order']['creator']);
+        $res = $this->ShareUtil->save_relation_new($creatorInfo['User']['id'], $order['Order']['creator']);
+        if ($res['type'] == 2) {
+            // 这里应该有关注提醒消息, HOW ?
+        }
         return $this->send_weixin_message($post_data) && $this->send_share_offer_msg($open_id, $order['Order']['id'], $title, $detail_url);
     }
 

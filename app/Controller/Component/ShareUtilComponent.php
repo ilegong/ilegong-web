@@ -74,18 +74,46 @@ class ShareUtilComponent extends Component
         return (!empty($relation) && ($relation['UserRelation']['deleted'] == DELETED_NO));
     }
 
-    public function check_user_relation($user_id, $follow_id)
+    /**
+     * check_user_relation
+     * 检测用户之间的关系, 没有关注的时候, 返回的是true
+     *
+     * @param mixed $userId 被关注人ID
+     * @param mixed $followId 粉丝身份的用户ID
+     * @access public
+     * @return boolean 没关注返回真, 否则假
+     */
+    public function check_user_relation($userId, $followId)
     {
-        if ($user_id == $follow_id) {
+        if ($userId == $followId) {
             return false;
         }
         $userRelationM = ClassRegistry::init('UserRelation');
-        $relation = $userRelationM->find('all', array(
-            'conditions' => array(
-                'user_id' => $user_id,
-                'follow_id' => $follow_id
-            )
-        ));
+        $relation = $userRelationM->find('all', [
+            'conditions' => [
+                'user_id' => $userId,
+                'follow_id' => $followId
+            ]
+        ]);
+        return empty($relation);
+    }
+
+    /**
+     * check_user_relations
+     * 检测用户有没有关注人
+     *
+     * @param mixed $followId 粉丝身份的用户ID
+     * @access public
+     * @return boolean 没关注返回真, 否则假
+     */
+    public function check_user_relations($followId)
+    {
+        $userRelationM = ClassRegistry::init('UserRelation');
+        $relation = $userRelationM->find('all', [
+            'conditions' => [
+                'follow_id' => $followId
+            ]
+        ]);
         return empty($relation);
     }
 
@@ -93,6 +121,45 @@ class ShareUtilComponent extends Component
     {
         $userRelationM = ClassRegistry::init('UserRelation');
         $userRelationM->updateAll(array('deleted' => DELETED_YES), array('user_id' => $sharer_id, 'follow_id' => $user_id));
+    }
+
+    /**
+     * 新版本的购买之后关注逻辑
+     *
+     * 1. 新用户第一次购买后自动关注团长, 界面无提醒信息.
+     * 2. 非新用户购买后, 在未关注该团长的情况下, 提醒用户是否关注该团长, 点击
+     *    [关注]则关注团长, 点击[取消]则不关注
+     *
+     * @param mixed $saler 出售人ID
+     * @param mixed $consumer 消费者ID
+     * @param string $type 标识此种关注是购买之后自动进行的关注
+     * @access public
+     * @return array 返回数组, type字段表示上述两种情况, msg是辅助消息.
+     */
+    public function save_relation_new($saler, $consumer, $type = 'Buy')
+    {
+        $userRelationM = ClassRegistry::init('UserRelation');
+        if ($this->check_user_relations($consumer)) {
+            // 1. 没有关注, 默认关注
+            $userRelationM->saveAll([
+                'user_id' => $saler,
+                'follow_id' => $consumer,
+                'type' => $type,
+                'created' => date('Y-m-d H:i:s')
+            ]);
+            $ret = [
+                'type' => 1,
+                'msg' => 'Followed the saler by default.',
+            ];
+        } else {
+            // 2. 提醒用户是否关注该团长
+            $ret = [
+                'type' => 2,
+                'msg' => 'Do you want to follow this saler?',
+            ];
+        }
+
+        return $ret;
     }
 
     public function save_relation($sharer_id, $user_id, $type = 'Buy')
