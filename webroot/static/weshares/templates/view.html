@@ -88,6 +88,37 @@
         </div>
     </div>
 
+    <!--通知粉丝层-->
+    <div class="notify-dialog" ng-show="vm.showNotifyView">
+        <div class="clearfix title" style="padding: 0 10px 10px;">
+            <label style="font-size: 18px;">参团提醒</label>
+            <a ng-click="vm.showLayer=false;vm.showNotifyView=false;" class="closebtn fr"></a>
+        </div>
+        <div class="clearfix" style="padding: 0 10px;">
+            <div class="form-group">
+                <div class="form-control radio-group">
+                    <div>
+                        <input type="radio" class="radio" ng-model="vm.sendNotifyType" value="0" ng-change='vm.resetNotifyContent()'/>
+                        <label>通知未买粉丝</label>
+                    </div>
+                    <div>
+                        <input type="radio" class="radio" ng-model="vm.sendNotifyType" value="1" ng-change='vm.resetNotifyContent()'/>
+                        <label>通知已买粉丝</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix" style="padding: 0 10px;margin-bottom: 10px;">
+            <div class="form-group" ng-class="{'has-error': vm.notifyMsgHasError}">
+                <textarea id="msgContentDom" style="height: 100px;" class='form-control' ng-model='vm.notify.content' ng-change='vm.validNotifyMsgContent();'></textarea>
+                <p class='tips'>请输入信息内容</p>
+            </div>
+        </div>
+        <div class="clearfix notify_btn">
+            <a ng-click='vm.sendNotifyShareMsg();' style="background-color: #ffa200; width: 100%;">群发通知</a>
+        </div>
+    </div>
+
     <div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showShareControl=false;vm.showTipSubSharerDialog=false;vm.showRecommendDialog=false;vm.showLayer=false;vm.showNotifyView=false;vm.showCommentListDialog=false;vm.closeCommentDialog();vm.showBuyingDialog=false;vm.showShareDialog=false;vm.showNotifyShareDialog=false;vm.showNotifyShareOfferDialog=false;vm.showNotifyGetPacketDialog=false;"></div>
 
 </div>
