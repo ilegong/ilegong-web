@@ -1,10 +1,10 @@
 <div ng-if="vm.showShareDetailView" ng-click="vm.showUnSubscribe=false;vm.showUnSubscribeLayer=false;">
     <div ng-class="{'has-channel-bottom': vm.weshare.type==0||vm.weshare.type==4||vm.weshare.type==6}">
-        <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-detail.html?v0.6.7'"></ng-include>
-        <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-orders.html?v0.6.4'"></ng-include>
+        <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-detail.html?v0.6.8'"></ng-include>
+        <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-orders.html?v0.6.8'"></ng-include>
     </div>
     <div ng-if="vm.weshare.type==0||vm.weshare.type==4||vm.weshare.type==6">
-        <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-default-nav.html?v0.6.4'"></ng-include>
+        <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-default-nav.html?v0.6.8'"></ng-include>
     </div>
 
     <!--分享管理层-->
