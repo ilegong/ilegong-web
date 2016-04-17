@@ -553,7 +553,11 @@
       if (product.limit > 0 && product.num == product.limit) {
         alert('亲，最多可购' + product.limit + '份.');
       } else {
-        product.num = Math.min(product.num + 1, vm.getProductLeftNum(product));
+        if (product.store > 0) {
+          product.num = Math.min(product.num + 1, vm.getProductLeftNum(product));
+        } else {
+          product.num = product.num + 1;
+        }
       }
       if (vm.showBalanceView) {
         calOrderTotalPrice();
@@ -636,7 +640,7 @@
       if (store_num == 0) {
         return true;
       }
-      if (vm.ordersDetail && vm.ordersDetail['summery'].details[product.id]) {
+      if (vm.ordersDetail && vm.ordersDetail['summery'].details[product.id] && store_num > 0) {
         var product_buy_num = parseInt(vm.ordersDetail['summery'].details[product.id]['num']);
         return product_buy_num < store_num;
       }
