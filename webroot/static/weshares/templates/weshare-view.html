@@ -1,9 +1,9 @@
 <div class="weshare-view">
     <div ng-if="vm.weshare.type==0||vm.weshare.type==4||vm.weshare.type==6">
-        <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-default-header.html?v0.6.4'"></ng-include>
+        <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-default-header.html?v0.6.5'"></ng-include>
     </div>
     <div ng-if="vm.weshare.type==1">
-        <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-group-header.html?v0.6.4'"></ng-include>
+        <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-group-header.html?v0.6.5'"></ng-include>
     </div>
     <div class="introduction margin-bottom-12">
         <b></b>
@@ -49,7 +49,7 @@
         <div class='send-info text-center margin-bottom-12' ng-hide='_.isEmpty(vm.weshare.send_info)'>取货时间: <span ng-bind='vm.weshare.send_info'></span></div>
     </div>
 
-    <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-orders.html?v0.6.4'"></ng-include>
+    <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-orders.html?v0.6.5'"></ng-include>
 
     <div style="text-align: center;">
         <a href="/"><img ng-src="{{::vm.staticFilePath}}/static/img/logo_footer.jpg" border="0" style="width: 4.625em;height: 1.583em;"/></a><br/>朋友说—朋友间最真挚的分享
@@ -57,10 +57,10 @@
 </div>
 
 <div ng-if="vm.weshare.type==0||vm.weshare.type==4||vm.weshare.type==6">
-    <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-default-nav.html?v0.6.4'"></ng-include>
+    <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-default-nav.html?v0.6.5'"></ng-include>
 </div>
 <div ng-if="vm.weshare.type==1">
-    <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-group-nav.html?v0.6.4'"></ng-include>
+    <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-group-nav.html?v0.6.5'"></ng-include>
 </div>
 
 <div class="share-dialog" ng-show="vm.showShareDialog">
