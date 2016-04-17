@@ -3,7 +3,7 @@
   angular.module('weshares')
     .controller('WesharesViewCtrl', WesharesViewCtrl);
 
-  function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, $filter, $window, Utils, staticFilePath, shipTypes, ShareOrder, OfflineStore) {
+  function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, $filter, $window, Utils, staticFilePath, shipTypes, ShareOrder, OfflineStore, $timeout) {
     var vm = this;
     vm.staticFilePath = staticFilePath;
     vm.showShareDetailView = true;
@@ -895,6 +895,9 @@
         if (data['success']) {
           vm.userSubStatus = !vm.userSubStatus;
           vm.showUnSubscribeLayer = true;
+          $timeout(function () {
+            vm.showUnSubscribeLayer = false;
+          }, 3000);
         }
       }).error(function (data) {
         vm.hasProcessSubSharer = true;
