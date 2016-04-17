@@ -96,6 +96,8 @@
     vm.currentUserOrderCount = 0;
     vm.totalBuyCount = 0;
     vm.rebateFee = 0;
+    vm.orderPayTotalPrice = 0;
+    vm.productTotalPrice = 0;
 
     activate();
 
@@ -178,9 +180,9 @@
             //from paid done
             if (fromType == 1) {
               if (_.isEmpty(initSharedOfferId)) {
-                if(!vm.userSubStatus){
+                if (!vm.userSubStatus) {
                   vm.showTipSubSharerDialog = true;
-                }else{
+                } else {
                   vm.showNotifyShareDialog = true;
                 }
                 vm.showLayer = true;
@@ -241,7 +243,6 @@
       vm.recommendUserId = recommendUserId || 0;
       var weshareId = angular.element(document.getElementById('weshareView')).attr('data-weshare-id');
       vm.weshare = {};
-      vm.orderTotalPrice = 0;
       $scope.$watch('vm.selectShipType', function (val) {
         if (val != -1) {
           vm.chooseShipType = false;
@@ -380,12 +381,13 @@
         totalPrice += product.price * product.num;
       });
       if (totalPrice != 0) {
-        if (vm.favourableConfig) {
-          //折扣
-          if (vm.favourableConfig['discount']) {
-            totalPrice = totalPrice * vm.favourableConfig['discount'];
-          }
-        }
+        //if (vm.favourableConfig) {
+        //  //折扣
+        //  if (vm.favourableConfig['discount']) {
+        //    totalPrice = totalPrice * vm.favourableConfig['discount'];
+        //  }
+        //}
+        vm.productTotalPrice = totalPrice / 100;
         calProxyRebateFee(totalPrice / 100);
         if (vm.userCouponReduce) {
           totalPrice -= vm.userCouponReduce;
@@ -393,12 +395,13 @@
         vm.shipFee = parseInt(getShipFee());
         vm.shipSetId = getShipSetId();
         totalPrice += vm.shipFee;
-        vm.orderTotalPrice = totalPrice / 100;
+        vm.orderPayTotalPrice = totalPrice / 100;
         if (vm.rebateFee > 0) {
-          vm.orderTotalPrice -= vm.rebateFee;
+          vm.orderPayTotalPrice -= vm.rebateFee;
         }
       } else {
-        vm.orderTotalPrice = 0;
+        vm.productTotalPrice = 0;
+        vm.orderPayTotalPrice = 0;
         vm.rebateFee = 0;
         vm.shipFee = 0;
       }
@@ -528,9 +531,11 @@
               goodWeight = goodWeight + parseInt(product.weight) * parseInt(product.num);
             }
           }
-
         });
-        return vm.calculateShipFee(vm.dliveryTemplate, vm.selectedProvince, goodNum, goodWeight);
+        if (vm.expressShipInfo) {
+          return vm.calculateShipFee(vm.dliveryTemplate, vm.expressShipInfo['province_id'], goodNum, goodWeight);
+        }
+        return 0;
       }
       if (vm.selectShipType == 1) {
         return vm.weshareSettings.self_ziti.ship_fee;
@@ -550,8 +555,10 @@
       } else {
         product.num = Math.min(product.num + 1, vm.getProductLeftNum(product));
       }
-      calOrderTotalPrice();
-      vm.validateProducts();
+      if (vm.showBalanceView) {
+        calOrderTotalPrice();
+      }
+      //vm.validateProducts();
     }
 
     function decreaseProductNum(product) {
@@ -559,10 +566,16 @@
         product.num = 0;
       }
       if (product.num >= 1) {
-        product.num = product.num - 1;
+        if (vm.showBalanceView) {
+          product.num = Math.max(1, product.num - 1);
+        } else {
+          product.num = product.num - 1;
+        }
       }
-      calOrderTotalPrice();
-      vm.validateProducts();
+      if (vm.showBalanceView) {
+        calOrderTotalPrice();
+      }
+      //vm.validateProducts();
     }
 
     function validateMobile() {
@@ -632,6 +645,7 @@
 
     function buyProducts() {
       if(vm.validateProducts()){
+        alert('请选择报名商品！');
         return false;
       }
       vm.showShareDetailView = false;
@@ -874,7 +888,7 @@
         vm.hasProcessSubSharer = false;
         if (data['success']) {
           vm.userSubStatus = !vm.userSubStatus;
-          vm.showUnSubscribeLayer=true;
+          vm.showUnSubscribeLayer = true;
         }
       }).error(function (data) {
         vm.hasProcessSubSharer = true;
@@ -1043,7 +1057,6 @@
       cleanBuyerData();
       //快递
       if (type == 0 && vm.expressShipInfo) {
-        vm.selectedProvince = vm.expressShipInfo['province_id'];
         setBuyerData(vm.expressShipInfo);
       }
       //初始化自提信息

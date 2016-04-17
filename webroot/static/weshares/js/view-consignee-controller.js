@@ -16,6 +16,7 @@
       vmc.tabBarItemWidth = getTabBarItemWidth();
       if (vm.shouldInitUserConsigneeData) {
         initUserConsigneeData();
+        vm.calOrderTotalPrice();
         vm.shouldInitUserConsigneeData = false;
       }
     }
