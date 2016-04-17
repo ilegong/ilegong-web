@@ -31,6 +31,7 @@
                         {{::product.name}}
                         &nbsp;&nbsp;(仅剩<span style="color: red;" ng-bind="vm.getProductLeftNum(product)"></span>份)
                     </dd>
+
                     <dd class="fr" ng-if="vm.checkProductNum(product)">
                         <a class='btn decrease-btn' ng-click="vm.decpreaseProductNum(product)"></a>
                         <span class='num' ng-bind="product.num||0"></span>
@@ -39,6 +40,7 @@
                     <dd class="fr" ng-if="!vm.checkProductNum(product)">
                         <span class='num' style="margin-left: 60px;">&nbsp;</span>
                     </dd>
+
                     <dd class="fr" style="color: #29AC0E;" ng-bind="::product.price/100 | currency:'￥'"></dd>
                 </dl>
             </div>
@@ -46,7 +48,9 @@
         </div>
         <div class='send-info text-center margin-bottom-12' ng-hide='_.isEmpty(vm.weshare.send_info)'>取货时间: <span ng-bind='vm.weshare.send_info'></span></div>
     </div>
+
     <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-orders.html?v0.6.4'"></ng-include>
+
     <div style="text-align: center;">
         <a href="/"><img ng-src="{{::vm.staticFilePath}}/static/img/logo_footer.jpg" border="0" style="width: 4.625em;height: 1.583em;"/></a><br/>朋友说—朋友间最真挚的分享
     </div>

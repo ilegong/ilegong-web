@@ -242,7 +242,8 @@ const SHARE_REFER_SHARE_IDS_CACHE_KEY = 'share_refer_share_ids_cache_key';
 const HX_TOKEN_CACHE_KEY = 'hx_token_cache_key';
 const INDEX_VIEW_PRODUCT_CACHE_KEY = 'index_products_cache_key';
 const SHARE_ORDER_COUNT_SUM_CACHE_KEY = 'share_order_count_sum_cache_key';
-
+const SHARE_COMMENT_COUNT_SUM_CACHE_KEY = 'share_comment_count_sum_cache_key';
+const USER_CONSIGNEES_CACHE_KEY = 'user_consignees_cache_key';
 //Product 表里设置是这个产品，不论多少都是同一邮费
 const TYPE_ORDER_PRICE = 1; //订单总价满多少包邮
 const TYPE_REDUCE_BY_NUMS = 2; //同一商品满几件包邮
@@ -251,26 +252,21 @@ const TYPE_MUL_NUMS = 4; //每件相乘
 
 const STATUS_GROUP_MEM_PAID = 1;
 const STATUS_GROUP_REACHED = 1;
+
 //团购地址地址
 const STATUS_CONSIGNEES_TUAN = 2;
 //自提地址
 const STATUS_CONSIGNEES_TUAN_ZITI = 3;
-//分享地址
-const STATUS_CONSIGNEES_SHARE = 4;
 //拼团地址
 const STATUS_CONSIGNEES_PINTUAN = 5;
 
-//团购地址地址
-const TYPE_CONSIGNEES_TUAN = 2;
-//自提地址
-const TYPE_CONSIGNEES_TUAN_ZITI = 3;
 //分享地址
-const TYPE_CONSIGNEES_SHARE = 4;
-//拼团地址
-const TYPE_CONSIGNEES_PINTUAN = 5;
+const TYPE_CONSIGNEES_SHARE = 0;
 //分享自提
-const TYPE_CONSIGNEES_SHARE_ZITI = 6;
-const TYPE_CONSIGNEE_SHARE_OFFLINE_STORE = 7;
+const TYPE_CONSIGNEES_SHARE_ZITI = 1;
+//好邻居
+const TYPE_CONSIGNEE_SHARE_OFFLINE_STORE = 2;
+
 
 const SHARE_COUPON_OFFER_TYPE = -1;
 const SHARE_SHIP_KUAIDI = 0;
@@ -2559,6 +2555,28 @@ function startsWith($haystack, $needle) {
 function endsWith($haystack, $needle) {
     // search forward starting from end minus needle length characters
     return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== false);
+}
+
+//根据省市区获取地址
+function get_address_location($locationData)
+{
+    $provinceId = $locationData['province_id'];
+    $cityId = $locationData['city_id'];
+    $countyId = $locationData['county_id'];
+    $locationM = ClassRegistry::init('Location');
+    $locationIds = array_filter(array($provinceId, $cityId, $countyId));
+    $locations = $locationM->find('all', array(
+        'conditions' => array(
+            'id' => $locationIds
+        ),
+        'fields' => array('id', 'name')
+    ));
+    $locations = Hash::combine($locations, '{n}.Location.id', '{n}.Location.name');
+    $location_address = '';
+    foreach ($locationIds as $locationId) {
+        $location_address = $location_address . $locations[$locationId];
+    }
+    return $location_address;
 }
 
 /**

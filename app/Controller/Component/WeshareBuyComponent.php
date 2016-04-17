@@ -1935,6 +1935,42 @@ class WeshareBuyComponent extends Component
      * @param $share_creator
      * @return int
      */
+    public function get_share_and_all_refer_share_summery($shareId, $share_creator)
+    {
+        $key = SHARE_COMMENT_COUNT_SUM_CACHE_KEY . '_' . $shareId . '_' . $share_creator;
+        $cacheData = Cache::read($key);
+        if (empty($cacheData)) {
+            $weshareM = ClassRegistry::init('Weshare');
+            $commentM = ClassRegistry::init('Comment');
+            $orderM = ClassRegistry::init('Order');
+            $refer_share_ids = $weshareM->get_relate_share($shareId, $share_creator);
+            $refer_share_ids[] = $shareId;
+            $comment_count = $commentM->find('count', array(
+                'conditions' => array(
+                    'data_id' => $refer_share_ids,
+                    'parent_id' => 0,
+                    'not' => array('status' => ORDER_STATUS_WAITING_PAY, 'order_id' => 0)
+                )
+            ));
+            $order_count = $orderM->find('count', array(
+                'conditions' => array(
+                    'member_id' => $refer_share_ids,
+                    'type' => ORDER_TYPE_WESHARE_BUY,
+                    'not' => array('status' => ORDER_STATUS_WAITING_PAY)
+                )
+            ));
+            $result = ['order' => $order_count, 'comment' => $comment_count];
+            Cache::write($key, json_encode($result));
+            return $result;
+        }
+        return json_decode($cacheData);
+    }
+
+    /**
+     * @param $shareId
+     * @param $share_creator
+     * @return int
+     */
     public function get_share_and_all_refer_share_count($shareId, $share_creator)
     {
         $key = SHARE_ORDER_COUNT_SUM_CACHE_KEY . '_' . $shareId . '_' . $share_creator;

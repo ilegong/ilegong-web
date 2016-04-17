@@ -96,6 +96,29 @@
     .run(initApp);
 
 
+  //多个控制器共享数据
+  app.factory('CoreReactorChannel', function ($rootScope) {
+    var elevatedEvent = function (event, data) {
+      $rootScope.$broadcast(event, data);
+    };
+
+    // subscribe to elevatedCoreTemperature event.
+    // note that you should require $scope first
+    // so that when the subscriber is destroyed you
+    // don't create a closure over it, and te scope can clean up.
+    var onElevatedEvent = function ($scope, event, handler) {
+      $scope.$on(event, function (e, data) {
+        // note that the handler is passed the problem domain parameters
+        handler(data);
+      });
+    };
+    // other CoreReactorChannel events would go here.
+    return {
+      elevatedEvent: elevatedEvent,
+      onElevatedEvent: onElevatedEvent
+    };
+  });
+
   // share order constructor function to encapsulate HTTP and pagination logic
   app.factory('ShareOrder', function ($http, $templateCache) {
 
@@ -173,6 +196,35 @@
   //define static file path
   app.constant('staticFilePath', PYS.staticFilePath);
 
+  app.constant('shipTypes', {
+    "101": "申通",
+    "102": "圆通",
+    "103": "韵达",
+    "104": "顺丰",
+    "105": "EMS",
+    "106": "邮政包裹",
+    "107": "天天",
+    "108": "汇通",
+    "109": "中通",
+    "110": "全一",
+    "111": "宅急送",
+    "112": "全峰",
+    "113": "快捷",
+    "115": "城际快递",
+    "132": "优速",
+    "133": "增益快递",
+    "134": "万家康",
+    "135": "京东快递",
+    "136": "德邦快递",
+    "137": "自提",
+    "138": "百富达",
+    "139": "黑狗",
+    "140": "E快送",
+    "141": "国通快递",
+    "142": "人人快递",
+    "143": "百世汇通"
+  });
+
   app.filter('unsafe', function ($sce) {
     return function (val) {
       return $sce.trustAsHtml(val);
@@ -184,7 +236,6 @@
       restrict: 'A',
       transclude: true,
       replace: true,
-      template: '<p></p>',
       scope: {
         moreText: '@',
         lessText: '@',

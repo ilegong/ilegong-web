@@ -1,0 +1,160 @@
+
+@charset "utf-8";
+/* CSS Document */
+
+* { padding: 0; margin: 0; font-family: Helvetica, STHeiti STXihei, Microsoft JhengHei, Microsoft YaHei, Arial; }
+body { min-width: 320px; max-width: 640px; font-size: 13px;}
+ul li { list-style: none; }
+.fl { float: left; }
+.fr { float: right; }
+.clearfix { zoom: 1; }
+.clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+
+.has-channel-bottom{
+    margin-bottom: 49px;
+}
+
+/*share banner*/
+.share-banner{ display: block;}
+.share-banner img{ width: 100%;}
+
+
+/*sharer*/
+.sharer{background: #fff; position: relative; padding: 10px 12px; margin-top: 5px; background-color: #ffffff; border-bottom: 1px #eeeeee solid;}
+.detail-head,.detail-head img{width:43px; height:43px;border-radius: 50%;}
+.nickname{ margin-left:10px; font-size:1.15em; color:#333; line-height: 22px; max-width: 105px; white-space:nowrap; overflow:hidden; text-overflow : ellipsis;}
+.sharer-level{ font-size:0.8em; margin-right: 3px; color:#888888; background-color:#f1f1f1; padding: 2px; border-radius:3px; text-align:center;}
+.sharer-fans{ color: #f99d3a; font-size: 0.7em;}
+.ta{font-size:1em; color:#666; text-align:center; line-height:2em; width:60px; border:1px solid #bbb; border-radius:5px; margin-left: 6px; margin-top: 9px;}
+.sharer-label{width:18px; height:18px; border-radius:18px;  background:#f99d3a; font-size:0.7em; color:#ffffff; text-align:center; line-height:18px; position:absolute; bottom:10px; left:40px;}
+
+.ta span{ display: block; float: left; padding-left: 5px;}
+.ta label{ float: left; display: block; margin-top: 11px; position: relative;}
+.ta label.tangle-up{ margin-top: 10px;}
+.ta label i,.ta label em{ display:block; width: 0px; height: 0px; border-left: 6px solid transparent; border-right: 6px solid transparent; font-size: 0px; line-height: 0px;}
+.ta label i{ border-top: 6px solid #bbb;}
+.ta label em{ border-top: 5px solid #fff; position: absolute; z-index: 2; left: 0px; bottom: 3px;}
+.ta label.tangle-up i,.ta label.tangle-up em{ border-left: 6px solid transparent; border-right: 6px solid transparent; font-size: 0px; line-height: 0px;}
+.ta label.tangle-up i{ border-bottom: 6px solid #bbb; border-top: none;}
+.ta label.tangle-up em{ border-bottom: 5px solid #fff; border-top: none; position: absolute; z-index: 2; left: 0px; top: 3px;}
+.unfollow{ display: block; position: absolute; border: 1px #bbbbbb solid; background-color: #FFFFFF; width: 60px; text-align: center; line-height: 2em; top: 2em; left: -1px; z-index: 2; border-radius: 5px;}
+
+/*share picture*/
+.product-image{ position: relative; background-color: #ffffff; height:200px;}
+.product-image img{ height:200px; width:100%;}
+
+/*sharedetail*/
+.sharedetail{ background-color: #ffffff; padding: 15px 12px 5px 12px;}
+.sharedetail h1{ font-size:1.15em; color:#333; padding-bottom: 5px;}
+.sharedetail p{ color: #999999; padding-bottom: 15px; font-size: 0.8em;}
+.sharedetail .images {margin-top: 10px;}
+.sharedetail .images dt {float: left;margin-right: 10px;position: relative;height: 65px;  }
+.sharedetail .images dt img {width: 60px;height: 60px;}
+.sharedetail .images dt a {width: 100%;}
+
+.recommend-head{ padding-bottom: 0px;}
+.recommend{ position: absolute;right:0; top:0;}
+.recommend a img{ width: 4.5em; height:2em; border: 1px #f99d3a solid; border-radius: 5px;}
+.tz-tj{ width:26px; height:26px; padding-right: 3px;}
+.tz-recommend{ font-size:1em; color:#666666; line-height: 30px;}
+.cp-name{ line-height:20px; margin-bottom: 10px;}
+.cp-name a.read-more, a.read-less {cursor: pointer;color: blue; }
+.cp-name div.less-text {display: block;}
+.cp-name div.less-text.show{display: inline !important  }
+.cp-name div.more-text {display: none;  }
+.cp-name div.more-text.show {display: inline !important  }
+
+.commission a{ padding-bottom: 10px; color: #f99d3a; display: block;}
+.text1{font-size:1.15em; color:#333; padding:10px 12px 0;}
+.yandong{font-size:1em;color:#666666;}
+.take-time{ background-color: #FFFFFF; padding: 8px 12px; line-height: 24px; border-top: 1px #eeeeee solid; font-size:1em; color:#999999;}
+
+
+/*recommend sharer*/
+.recommend-sharer{ background-color: #FFFFFF; margin-top: 10px; padding: 12px 12px 7px 12px;}
+.recommend-sharer .proxy img{ width: 100%; height: 100%; border-radius: 50%;}
+.recommend-sharer .proxy{ width: 30px; height: 30px; margin-right: 5px; margin-bottom: 5px;}
+.recommend-sharer .tz-recommend{line-height: 30px;}
+.recommend-sharer .me-introduce{ border-radius:5px; border: 1px solid #f99d3a; width: 65px; text-align: center; line-height: 22px; height:22px;}
+.recommend-sharer .me-introduce .introduce{font-size:1em; color: #f99d3a; padding:2px;}
+.recommend-sharer .introduce-money{ font-size:1em; color:#ff6485; line-height: 24px; padding-left: 8px;}
+
+
+/*product*/
+.product-title{ font-size:1em;color:#666666; padding: 15px 15px 10px 12px;}
+.product{ position: relative; border-bottom: 1px #eeeeee solid;padding:0;}
+.product ul{ background-color: #ffffff; padding: 15px 12px 12px 12px;}
+.product-pic img{ width:4.625em;}
+.product-name{ line-height:14px; font-weight: bold;}
+.nicheng-name{font-size:1.083em;color:#333333;}
+.product-price{ padding-top: 10px; line-height: 2em; color: #f99d3a; font-weight: bold;}
+
+
+/*Alice change css 74 line*/
+.product dl{ position: absolute; right: 12px; bottom: 12px;}
+
+
+.add-subtract{ width:2em; height:2em; border:1px solid #bbbbbb; border-radius:3px;}
+.amount{ color: #333333; line-height: 2em; width: 2em; text-align: center;}
+
+/*Alice add css 80-81 line*/
+.sold-out{ color:#ff6485; line-height: 2em;}
+.limit-score{ color:#ff6485; line-height: 2em; padding-right: 3px;}
+
+
+/*apply tab*/
+.apply{ border-bottom: 1px solid #eeeeee; border-top: 1px solid #eeeeee; line-height: 44px; background-color: #fff;}
+.apply li{ float: left; width: 50%; font-size: 1.15em; text-align: center;}
+.apply li span.focus-apply{ color: #f99d3a;}
+.apply li span.line-right{ border-right:1px #eeeeee solid;}
+
+
+/*apply list*/
+.apply-list{background-color: #ffffff; padding-top: 10px;}
+.apply-details{ border:1px solid; border-right:none; margin-bottom: 10px; padding-top: 10px; position: relative; margin-left: 65px; border-color: #dddddd;}
+.self-details{ margin-right: 65px; border-right: 1px solid; border-left: none; border-color: #f99d3a; margin-left: inherit;}
+.apply-details ul{line-height:20px; padding:0 10px 8px 10px;}
+.selforder{padding-left: 15px; padding-top: 10px;}
+.self{color: #333333; font-weight: bold; max-width: 100px; white-space:nowrap; overflow:hidden; text-overflow : ellipsis;}
+.description{padding-left:10px;  font-size: 1em; color:#999999; }
+.status{ font-size: 1em; color: #f99d3a;}
+.apply-details ul.self-massage{ background-color: #fff6ed; padding: 10px; margin-bottom: 8px;}
+.apply-details ul.massage{ background-color: #eeeeee; padding: 10px; margin-bottom: 8px;}
+.self-massage{ color: #333333;}
+.apply-details ul li a.status-btn{ border: 1px solid #f99d3a; border-radius: 3px; font-size: 1em; color: #f99d3a; padding: 3px 5px; display: block; margin: 5px 7px 5px 0;}
+.apply-details ul li a.status-btn.confirmed-btn{color:#999;background-color:#eee;border-color:#eee}
+.product-much{ color: #666666;}
+.pay-time{ color: #cccccc;}
+.apply-head{ position: absolute; top: 0; left: 12px; width: 40px; height: 40px;}
+.self-head{ position: absolute; top: 0; right: 12px; left: inherit;}
+.apply-head img{ width: 100%; height: 100%; border-radius: 50%;}
+.triangle-self{ width:0px; height:0px; border-bottom:10px solid transparent; /* left arrow slant */ border-top:10px solid transparent; /* right arrow slant */ font-size:0px; line-height:0px; top: 10px;}
+.triangle-orange-self{ border-left:10px solid #f99d3a; /* bottom, add background color here */ position: absolute; right: -10px; z-index: 2;}
+.triangle-white-self{ border-left:10px solid #ffffff; /* bottom, add background color here */ position: absolute; right: -9px; z-index: 3;}
+.triangle{ width:0px; height:0px; border-bottom:10px solid transparent; /* left arrow slant */ border-top:10px solid transparent; /* right arrow slant */ font-size:0px; line-height:0px; top: 10px;}
+.triangle-gray{ border-right:10px solid #dddddd; /* bottom, add background color here */ position: absolute; left: -10px; z-index: 2;}
+.triangle-white{ border-right:10px solid #ffffff; /* bottom, add background color here */ position: absolute; left: -9px; z-index: 3;}
+
+
+/*pay success layer*/
+.layer-bg{ background-color: #000000; filter:alpha(opacity=40); -moz-opacity:0.4; opacity:0.4; width: 100%; height: 100%; z-index: 998; position: fixed; top:0; left: 0;}
+.pay-success{ width: 65%; position: fixed; left: 50%; top: 50%; background-color: #FFFFFF; z-index: 999; overflow: hidden;}
+.pay-success h1{ text-align: center; padding: 20px; font-size: 1.5em;}
+.pay-success ul{ width: 155px; margin: 0 auto; padding-bottom: 25px;}
+.pay-success ul li img{ width: 35px;}
+.pay-success ul li.sharer-name{ font-size: 1em; color: #666666; line-height: 18px; padding-left: 10px;}
+.pay-success dl{ border-top: 1px #dddddd solid;}
+.pay-success dl dt{ float: left; width: 50%;}
+.pay-success dl dt a.attention{ color: #f99d3a; border-left: 1px #dddddd solid;}
+.pay-success dl dt a{ color: #666666; text-decoration: none; display: block; line-height: 44px; text-align: center;}
+
+
+/*share control layer*/
+.share-control{ background-color: #cccccc; position: fixed; bottom: 0; left: 0; z-index: 999; width: 100%;}
+.share-control a{display: block; text-decoration: none; line-height: 44px; text-align: center; background-color: #FFFFFF;}
+.control-order{ color: #f99d3a; border-bottom: 1px solid #dddddd;}
+.control-detele{ color: #666666; margin-top: 5px;}
+
+
+/*toast*/
+.toast{ background-color: #666666; line-height: 20px; padding: 12px 10px; text-align: center; color: #FFFFFF; border-radius: 5px; position: fixed; top: 50%; left: 50%; margin-left: -100px; z-index: 99; width: 200px; margin-top: -22px;}

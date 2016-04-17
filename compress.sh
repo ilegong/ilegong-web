@@ -5,14 +5,19 @@
 #    ./webroot/static/weshares/js/underscore-min.js \
 uglifyjs ./webroot/static/weshares/js/me-lazyload.js \
     ./webroot/static/weshares/js/app.js \
+    ./webroot/static/weshares/js/offline-store.js \
     ./webroot/static/weshares/js/edit-controller.js \
+    ./webroot/static/weshares/js/view-consignee-controller.js \
+    ./webroot/static/weshares/js/edit-consignee-controller.js \
     ./webroot/static/weshares/js/view-controller.js \
     ./webroot/static/weshares/js/pool-product-factory.js \
     ./webroot/static/weshares/js/view-product-info.js \
     -o ./webroot/static/weshares/js/weshare.min.js
 
 cat ./webroot/static/weshares/css/main.css \
-    ./webroot/static/weshares/css/site-common.css | \
+    ./webroot/static/weshares/css/site-common.css \
+    ./webroot/static/weshares/css/share-balance-view.css \
+    ./webroot/static/weshares/css/share.css | \
     cleancss -o ./webroot/static/weshares/css/weshare.min.css
 
 cat ./webroot/static/weshares/css/common.css \

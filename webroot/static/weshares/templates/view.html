@@ -1,6 +1,77 @@
-<div ng-if="vm.showShareDetailView">
-    <a href="https://jinshuju.net/f/JPCJr4" target="_blank"><img src="http://static.tongshijia.com/static/img/banner-new.gif" width="100%"></a>
-    <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view.html?v0.6.7'"></ng-include>
+<div ng-if="vm.showShareDetailView" ng-click="vm.showUnSubscribe=false;">
+    <div ng-class="{'has-channel-bottom': vm.weshare.type==0||vm.weshare.type==4||vm.weshare.type==6}">
+        <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-detail.html?v0.6.7'"></ng-include>
+        <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-orders.html?v0.6.4'"></ng-include>
+    </div>
+    <div ng-if="vm.weshare.type==0||vm.weshare.type==4||vm.weshare.type==6">
+        <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-default-nav.html?v0.6.4'"></ng-include>
+    </div>
+
+    <!--分享管理层-->
+    <div class="share-control" style="display: none;">
+        <a href="#X" class="control-order">订单管理</a>
+        <a href="#X" class="control-order">修改分享</a>
+        <a href="#X" class="control-detele">取消</a>
+    </div>
+
+    <div ng-show="vm.showNotifyShareOfferDialog" class="red-packet-dialog">
+        <div class="content">
+            <div class="nav">
+                <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/close.png" class="close-btn" ng-click="vm.showNotifyShareOfferDialog=false;vm.showLayer=false;">
+            </div>
+            <div class="head">
+                <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/share_icon.jpg"/>
+            </div>
+            <div class="desc">
+                <h3>{{vm.weshare.creator.nickname}}送你爱心礼包</h3>
+                <p>亲，订单已成功，点击…  分享给您的朋友，感谢您将美味传递下去。</p>
+            </div>
+        </div>
+    </div>
+
+    <!--提示分享层-->
+    <div class="share-dialog" ng-show="vm.showShareDialog">
+        <div style="width: 90%; margin: 0 auto; font-size: 1.3em;">点击右上角“…”，分享给好友或朋友圈。</div>
+    </div>
+    <!--支付成功没有红包已经关注-->
+    <div class="share-dialog" ng-show="vm.showNotifyShareDialog">
+        <div style="width: 90%; margin: 0 auto; font-size: 1.3em;">亲，订单已成功，点击…  分享给您的朋友，感谢您将美味传递下去。</div>
+    </div>
+    <!--支付成功没有关注-->
+    <div style="margin-left: -32.5%; margin-top: -85px;" class="pay-success" ng-show="vm.showTipSubSharerDialog">
+        <h1>报名成功</h1>
+        <ul class="clearfix">
+            <li class="fl"><img ng-src="{{vm.weshare.creator.image}}"
+                                fallback-src="{{vm.staticFilePath + '/avatar/s/default.jpg'}}"/></li>
+            <li class="sharer-name" style="overflow: hidden;">关注<span ng-bind="vm.weshare.creator.nickname"></span><br/>即时知道TA的分享</li>
+        </ul>
+        <dl class="clearfix">
+            <dt><a ng-click="vm.showTipSubSharerDialog=false;vm.showLayer=false;">取消</a></dt>
+            <dt><a class="attention" ng-click="vm.showTipSubSharerDialog=false;vm.showLayer=false;vm.subSharer();">关注</a></dt>
+        </dl>
+    </div>
+
+    <!--评价层-->
+    <div class="commenting-dialog" ng-show="vm.showCommentingDialog">
+        <div class="clearfix title">
+            <label>爱心评价</label>
+            <a ng-click="vm.closeCommentDialog();" class="closebtn fr"></a>
+        </div>
+        <div class="clearfix" style="padding: 0 10px;margin-bottom: 30px;">
+            <div class="form-group" ng-class="{'has-error': vm.usernameHasError}">
+                <textarea id="commentContentDom" class='form-control' placeholder="{{vm.commentTipInfo}}" ng-model='vm.submitTempCommentData.comment_content' ng-change=''></textarea>
+                <p class='tips'>请输入评价信息</p>
+            </div>
+        </div>
+        <div class="clearfix starttuan_btn">
+            <a ng-click='vm.submitComment()' style="background-color: #ffa200; width: 100%;">评价</a>
+        </div>
+    </div>
+
+    <!--关注取消层-->
+    <div class="toast" ng-show="vm.showUnSubscribeLayer">关注已取消，不再收到TA的消息</div>
+    <div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showTipSubSharerDialog=false;vm.showRecommendDialog=false;vm.showLayer=false;vm.showNotifyView=false;vm.showCommentListDialog=false;vm.closeCommentDialog();vm.showBuyingDialog=false;vm.showShareDialog=false;vm.showNotifyShareDialog=false;vm.showNotifyShareOfferDialog=false;vm.showNotifyGetPacketDialog=false;"></div>
+
 </div>
 <div ng-if="vm.showBalanceView">
     <ng-include src="vm.staticFilePath + '/static/weshares/templates/balance.html?v0.6.7'"></ng-include>
@@ -11,6 +82,7 @@
 <div ng-if="vm.showOfflineStoreDetailView">
     <ng-include src="vm.staticFilePath + '/static/weshares/templates/offline-store-detail.html?v0.6.7'"></ng-include>
 </div>
-<div ng-if="vm.showStartGroupShareView">
-    <ng-include src="vm.staticFilePath + '/static/weshares/templates/share-group-buy.html?v0.6.7'"></ng-include>
+<div ng-if="vm.showEditConsigneeView">
+    <!--编辑地址-->
+    <ng-include src="vm.staticFilePath + '/static/weshares/templates/edit-consignee.html?v0.6.7'"></ng-include>
 </div>

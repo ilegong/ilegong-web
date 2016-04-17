@@ -15,7 +15,7 @@ if (!defined('ROOT')) {
 //     define('APP_DIR', 'app');
 // }
 if (!defined('APP_DIR')) {
-	define('APP_DIR', 'app');
+    define('APP_DIR', 'app');
 }
 /**
  * The absolute path to the "cake" directory, WITHOUT a trailing DS.
@@ -43,24 +43,24 @@ if (!defined('CORE_PATH')) {
 define('VIEWS', APP_PATH . 'View' . DS);
 $app_sub_dir = dirname($_SERVER['PHP_SELF']);
 if(basename($app_sub_dir)=='webroot'){
-	$app_sub_dir = dirname($app_sub_dir);
+    $app_sub_dir = dirname($app_sub_dir);
 }
 
 if(!empty($app_sub_dir) && strlen($app_sub_dir)>1){ // skip / in linux or \ in windows
-	/**
-	 * APP_SUB_DIR 应用所在的二级目录
-	 * @var APP_SUB_DIR
-	 */
-	define('APP_SUB_DIR', $app_sub_dir);
-	define('IMAGES_URL', $app_sub_dir.'/img/');
-	define('CSS_URL', $app_sub_dir.'/css/');
-	define('JS_URL', $app_sub_dir.'/js/');
+    /**
+     * APP_SUB_DIR 应用所在的二级目录
+     * @var APP_SUB_DIR
+     */
+    define('APP_SUB_DIR', $app_sub_dir);
+    define('IMAGES_URL', $app_sub_dir.'/img/');
+    define('CSS_URL', $app_sub_dir.'/css/');
+    define('JS_URL', $app_sub_dir.'/js/');
 }
 else{
-	define('APP_SUB_DIR', '');
-	define('IMAGES_URL', '/img/');
-	define('CSS_URL', '/css/');
-	define('JS_URL', '/js/');
+    define('APP_SUB_DIR', '');
+    define('IMAGES_URL', '/img/');
+    define('CSS_URL', '/css/');
+    define('JS_URL', '/js/');
 }
 
 if (defined('SAE_MYSQL_DB')) {
@@ -101,7 +101,7 @@ if (!include(CORE_PATH . 'Cake' . DS . 'bootstrap.php')) {
 }
 
 if (isset($_SERVER['PATH_INFO']) && $_SERVER['PATH_INFO'] == '/favicon.ico') {
-	return;
+    return;
 }
 
 App::uses('Dispatcher', 'Routing');
@@ -109,16 +109,16 @@ $Dispatcher = new Dispatcher();
 
 //replace '/Taobao' to '/taobao'.
 if(strpos($_SERVER['REQUEST_URI'],'/Taobao')!==false){
-	$_SERVER['REQUEST_URI'] = str_replace('/Taobao','/taobao',$_SERVER['REQUEST_URI'] );
-	header('location:'.$_SERVER['REQUEST_URI']);
-	exit;
+    $_SERVER['REQUEST_URI'] = str_replace('/Taobao','/taobao',$_SERVER['REQUEST_URI'] );
+    header('location:'.$_SERVER['REQUEST_URI']);
+    exit;
 }
 
 if(isset($_GET['url'])){
-	$request = new CakeRequest($_GET['url']);
+    $request = new CakeRequest($_GET['url']);
 }
 else{
-	$request = new CakeRequest();
+    $request = new CakeRequest();
 }
 unset($request->query['url']);
 

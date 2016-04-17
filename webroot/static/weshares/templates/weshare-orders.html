@@ -1,0 +1,135 @@
+<div class="apply-list clearfix" ng-class="{hide:vm.showCommentedOrders}">
+    <div style=" position: relative;" ng-repeat="order in vm.ordersDetail.orders"
+         ng-show="!vm.showCommentedOrders || order.status==9" data-id="{{order.id}}">
+        <div class="apply-details" ng-class="{'self-details': vm.isOwner(order)}">
+            <ul class="clearfix">
+                <li class="self fl"
+                    ng-bind="vm.isOwner(order) ? '我':vm.ordersDetail.users[order.creator]['nickname']"></li>
+                <li class="description fl">已经报名</li>
+                <li class="status fr">
+                    <span ng-if="order.status==9" class="done-status"><i class="fa fa-heart fa-lg"></i></span>
+                    <span ng-if="order.status==21" class="paid-status">待发货</span>
+                    <span ng-if="order.status==14" class="refunding-status">退款中</span>
+                    <span ng-if="order.status==4" class="refund-status">已退款</span>
+                    <span ng-if="order.status==2" class="shipped-status"
+                          ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
+                    <span ng-if="order.status==3" class="received-status"
+                          ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
+                    <span ng-if="order.status==1" class="paid-status"
+                          ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
+                </li>
+            </ul>
+
+            <ul class="clearfix self-massage" ng-if="order.status == 9 && !_.isEmpty(vm.getOrderComment(order.id).body)">
+                <li ng-bind="::vm.getOrderComment(order.id).body">
+                </li>
+                <li ng-repeat="reply in vm.getReplyComments(vm.getOrderComment(order.id).id)">
+                    <strong ng-bind="::reply.username" ng-click="vm.toUserShareInfo(reply.user_id)"></strong>
+                    <span>回复</span>
+                        <span ng-if="reply.is_reply==1">
+                            <strong ng-bind="::reply.reply_username" ng-click="vm.toUserShareInfo(reply.reply_user_id)"></strong>
+                        </span>
+                    <span>:&nbsp;</span>
+                    <span ng-bind="::reply.body" ng-click="vm.showCommentDialog(order,reply)"></span>
+                    <span style="float: right;" ng-if="vm.isCreator() && $last" ng-click="vm.showCommentDialog(order,vm.getOrderComment(order.id))">
+                        <div class="commenting-o"><i class="fa fa-commenting-o fa-lg"></i></div>
+                    </span>
+                </li>
+            </ul>
+
+            <ul class="clearfix self-massage product-much" ng-if="vm.isOwner(order)">
+                <li><span ng-bind="order.consignee_name"></span>&nbsp <span
+                        ng-bind="order.consignee_mobilephone"></span></li>
+                <li ng-bind="order.consignee_address"></li>
+            </ul>
+
+            <ul class="clearfix">
+                <li class="product-much" ng-hide="_.isEmpty(vm.getOrderDisplayName(order.id))"
+                    ng-bind="::vm.getOrderDisplayName(order.id)"></li>
+            </ul>
+
+            <ul class="clearfix self-massage product-much" ng-if="vm.isOwner(order) && vm.isShowShipCode(order);">
+                <li ng-bind="::vm.getShipCode(order);"></li>
+            </ul>
+
+            <ul class="clearfix operations" ng-if="vm.isOwner(order)">
+                <li class="pass fl" ng-show="order.status==2">
+                    <a class="status-btn" ng-click="vm.confirmReceived(order)">
+                        <span ng-if="order.ship_mark=='pys_ziti' || order.ship_mark=='self_ziti' || order.ship_mark=='pin_tuan'">点此收货</span>
+                        <span ng-if="order.ship_mark=='kuai_di'">点此签收</span>
+                    </a>
+                </li>
+                <li class="pass fl" ng-show="order.status==3">
+                    <a class="status-btn" ng-click="vm.showCommentDialog(order)">
+                        小主说两句评价呗
+                    </a>
+                </li>
+            </ul>
+
+            <ul class="clearfix">
+                <li class="pay-time " ng-bind="::vm.getFormatDate(order.created)"></li>
+            </ul>
+            <div class="triangle-self triangle-white-self"></div>
+            <div class="triangle-self triangle-orange-self"></div>
+        </div>
+        <div class="apply-head self-head" ng-click="vm.toUserShareInfo(order.creator)">
+            <img lazy-src="{{vm.ordersDetail.users[order.creator]['image'] | thumb: 's'}}"
+                 fallback-src="{{vm.staticFilePath + '/avatar/s/default.jpg'}}">
+        </div>
+    </div>
+
+    <div infinite-scroll='vm.shareOrder.nextPage()' infinite-scroll-disabled='vm.shareOrder.noMore||vm.shareOrder.busy'
+         infinite-scroll-distance='1'>
+        <div style=" position: relative;" ng-repeat="order in vm.shareOrder.orders"
+             ng-show="!vm.showCommentedOrders || order.status==9">
+            <div class="apply-details">
+                <ul class="clearfix">
+                    <li class="self fl" ng-bind="vm.shareOrder.users[order.creator]['nickname']"></li>
+                    <li class="description fl">已经报名</li>
+                    <li class="status fr">
+                        <span ng-if="order.status==9" class="done-status"><i class="fa fa-heart fa-lg"></i></span>
+                        <span ng-if="order.status==21" class="paid-status">待发货</span>
+                        <span ng-if="order.status==14" class="refunding-status">退款中</span>
+                        <span ng-if="order.status==4" class="refund-status">已退款</span>
+                        <span ng-if="order.status==2" class="shipped-status"
+                              ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
+                        <span ng-if="order.status==3" class="received-status"
+                              ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
+                        <span ng-if="order.status==1" class="paid-status"
+                              ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
+                    </li>
+                </ul>
+
+                <ul class="clearfix massage" ng-if="order.status == 9 && !_.isEmpty(vm.getOrderComment(order.id).body)">
+                    <li ng-bind="::vm.getOrderComment(order.id).body">
+                    </li>
+                    <li ng-repeat="reply in vm.getReplyComments(vm.getOrderComment(order.id).id)">
+                        <strong ng-bind="::reply.username" ng-click="vm.toUserShareInfo(reply.user_id)"></strong>
+                        <span>回复</span>
+                        <span ng-if="reply.is_reply==1">
+                            <strong ng-bind="::reply.reply_username" ng-click="vm.toUserShareInfo(reply.reply_user_id)"></strong>
+                        </span>
+                        <span>:&nbsp;</span>
+                        <span ng-bind="::reply.body" ng-click="vm.showCommentDialog(order,reply)"></span>
+                    </li>
+                </ul>
+
+                <ul class="clearfix">
+                    <li class="product-much" ng-hide="_.isEmpty(vm.getOrderDisplayName(order.id))"
+                        ng-bind="::vm.getOrderDisplayName(order.id)">
+                    </li>
+                </ul>
+                <ul class="clearfix">
+                    <li class="pay-time" ng-bind="::vm.getFormatDate(order.created)"></li>
+                </ul>
+                <div class="triangle triangle-white"></div>
+                <div class="triangle triangle-gray"></div>
+            </div>
+            <div class="apply-head" ng-click="vm.toUserShareInfo(order.creator)">
+                <img lazy-src="{{vm.shareOrder.users[order.creator]['image'] | thumb: 's'}}"
+                     fallback-src="{{vm.staticFilePath + '/avatar/s/default.jpg'}}">
+            </div>
+        </div>
+        <div style="text-align: center;color: #ffa200;margin-bottom: 10px;" ng-show='vm.shareOrder.busy'>加载中...</div>
+    </div>
+</div>

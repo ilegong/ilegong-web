@@ -1,0 +1,81 @@
+<!--Tab切换-->
+<ul class="clearfix logistics-nav">
+    <li ng-if="vm.weshareSettings.kuai_di.status==1" style="{{::wcc.getTabBarStyle()}}"
+        ng-class="{'cur': vm.selectShipType==0}" ng-click="wcc.changeShipTab(0)">快递
+    </li>
+    <li ng-if="vm.weshareSettings.self_ziti.status==1" style="{{::wcc.getTabBarStyle()}}"
+        ng-class="{'cur': vm.selectShipType==1}" ng-click="wcc.changeShipTab(1)">自提
+    </li>
+    <li ng-if="vm.weshareSettings.pys_ziti.status==1" style="{{::wcc.getTabBarStyle()}}"
+        ng-class="{'cur': vm.selectShipType==2}" ng-click="wcc.changeShipTab(2)">好邻居自提
+    </li>
+</ul>
+<!--主面板-->
+<div class="expressage">
+    <!-- 使用快递的时候出现 -->
+    <ul class="clearfix" ng-if="vm.selectShipType==0">
+        <li class="fl">
+            <a class="defaultText" style="display: none;">填写收货信息</a>
+            <a class="address">
+                <span ng-bind="vm.expressShipInfo.name"></span><span ng-bind="vm.expressShipInfo.mobilephone"></span>
+                <br/><span ng-bind="(vm.expressShipInfo.area+vm.expressShipInfo.address)"></span>
+            </a>
+        </li>
+        <li class="fr" ng-click="wcc.toEditConsigneeView()">
+            <a class="next-icon clearfix">
+                <label ng-if="!vm.expressShipInfo">添加</label>
+                <label ng-if="vm.expressShipInfo">修改</label>
+                <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/next-icon.png"/>
+            </a>
+        </li>
+    </ul>
+    <!-- 使用好邻居自提的时候出现 -->
+    <ul class="clearfix" ng-if="vm.selectShipType==2" ng-click="vm.showChooseOfflineStore()">
+        <li class="fl">
+            <a href="#" class="defaultText" ng-if="!vm.checkedOfflineStore">请选择好邻居线下店</a>
+            <a href="#" class="address" ng-if="vm.checkedOfflineStore">
+                <span ng-bind="vm.checkedOfflineStore.owner_name"></span><span
+                    ng-bind="vm.checkedOfflineStore.owner_phone"></span>
+                <br/><span ng-bind="vm.checkedOfflineStore.alias"></span>
+            </a>
+        </li>
+        <li class="fr">
+            <a href="#" class="next-icon clearfix">
+                <label ng-if="!vm.checkedOfflineStore">选择</label>
+                <label ng-if="vm.checkedOfflineStore">重新选择</label>
+                <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/next-icon.png"/>
+            </a>
+        </li>
+    </ul>
+    <!--自有自提-->
+    <ul class="clearfix" ng-if="vm.selectShipType==1">
+        <li class="fl comment">自提地址</li>
+        <li class="fl content">
+            <select ng-model='vm.selectedPickUpAddressId'
+                    ng-options="address.id as address.address for address in vm.weshare.addresses">
+                <option value="-1">请选择地址</option>
+            </select>
+        </li>
+    </ul>
+    <!-- 选择自提方式-->
+    <div ng-if="vm.selectShipType!=0">
+        <ul class="clearfix">
+            <li class="fl comment">收货人</li>
+            <li class="fl content"><input ng-model='vm.buyerName' type="text" placeholder="请输入收货人姓名"/></li>
+        </ul>
+        <ul class="clearfix">
+            <li class="fl comment">联系方式</li>
+            <li class="fl content"><input ng-model='vm.buyerMobilePhone' type="text" placeholder="请输入收货人手机号"/></li>
+        </ul>
+        <ul class="clearfix">
+            <li class="fl comment">详细地址</li>
+            <li class="fl content"><input ng-model='vm.buyerPatchAddress' type="text"
+                                          placeholder="小区-楼号-门牌(必要时送货上门)"/></li>
+        </ul>
+    </div>
+    <!--都可选-->
+    <ul class="clearfix">
+        <li class="fl comment">备注</li>
+        <li class="fl content"><input ng-model='vm.buyerRemark' type="text" placeholder="告诉团长你的特殊需求"/></li>
+    </ul>
+</div>
