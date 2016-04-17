@@ -68,6 +68,23 @@
         </div>
     </div>
 
+    <!--推荐弹出层-->
+    <div class="recommend-dialog" ng-show="vm.showRecommendDialog">
+        <div class="clearfix title">
+            <label>推荐给我的粉丝</label>
+            <a ng-click="vm.closeRecommendDialog();" class="closebtn fr"></a>
+        </div>
+        <div class="clearfix" style="padding: 0 10px;">
+            <div class="form-group" ng-class="{'has-error': vm.recommendContentHasError}">
+                <textarea id="recommendContentDom" class='form-control' ng-model='vm.submitRecommendData.recommend_content' ng-change='vm.validRecommendContent()'></textarea>
+                <p class='tips'>请输入推荐信息</p>
+            </div>
+        </div>
+        <div class="clearfix recommend-btn">
+            <a ng-click='vm.submitRecommend()' style="background-color: #ffa200; width: 100%;">推荐</a>
+        </div>
+    </div>
+
     <!--关注取消层-->
     <div class="toast" ng-show="vm.showUnSubscribeLayer">关注已取消，不再收到TA的消息</div>
     
