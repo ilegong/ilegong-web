@@ -134,6 +134,21 @@
         url: '/users/get_consignee_list.json'
       }).success(function (data) {
         var consignees = data['consignees'];
+
+        // 避免初始化时候, status 都是 1 的状态
+        var default_item = 0;
+        consignees.map(function (item) {
+          if (item['status'] == 1) {
+            default_item++;
+          }
+        });
+        if (default_item > 1) {        
+          consignees.map(function (item) {
+            item['status'] = 0;
+          });
+          consignees[0]['status'] = 1;
+        }
+        
         consignees = _.sortBy(consignees, function (item) {
           return item['status'] == 1 ? 0 : 1;
         });
