@@ -19,7 +19,7 @@
             <a class="defaultText" ng-show="_.isEmpty(vm.expressShipInfo)">填写收货信息</a>
             <a class="address" ng-show="!_.isEmpty(vm.expressShipInfo)">
                 <span ng-bind="vm.expressShipInfo.name"></span><span ng-bind="vm.expressShipInfo.mobilephone"></span>
-                <br/><span ng-bind="(vm.expressShipInfo.area+vm.expressShipInfo.address)"></span>
+                <br/>(<span ng-bind="vm.expressShipInfo.area"></span><span ng-bind="vm.expressShipInfo.address"></span>)
             </a>
         </li>
         <li class="fr" ng-click="wcc.toEditConsigneeView()">
