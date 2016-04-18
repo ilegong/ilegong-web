@@ -10,7 +10,7 @@
     active();
     function active() {
       vm.selectShipType = getSelectTypeDefaultVal();
-      wcc.avaiableShipTypes = Math.max(_.filter(['kuai_di', 'self_ziti', 'pys_ziti'], function (item) {
+      wcc.availableShipTypes = Math.max(_.filter(['kuai_di', 'self_ziti', 'pys_ziti'], function (item) {
         return vm.weshareSettings[item] && vm.weshareSettings[item]['status'] == 1;
       }).length, 1);
       if (vm.shouldInitUserConsigneeData) {

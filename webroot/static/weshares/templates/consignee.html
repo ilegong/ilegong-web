@@ -1,18 +1,17 @@
-<div style="margin-top: 54px;"></div>
 <!--Tab切换-->
-<ul class="clearfix logistics-nav">
-    <li ng-if="vm.weshareSettings.kuai_di.status==1" style="width:{{100/wcc.avaiableShipTypes}}%"
+<ul class="clearfix logistics-nav logistics-has-header" ng-if="wcc.availableShipTypes > 1">
+    <li ng-if="vm.weshareSettings.kuai_di.status==1" style="width:{{100/wcc.availableShipTypes}}%"
         ng-class="{'cur': vm.selectShipType==0}" ng-click="wcc.changeShipTab(0)">快递
     </li>
-    <li ng-if="vm.weshareSettings.self_ziti.status==1" style="width:{{100/wcc.avaiableShipTypes}}%"
+    <li ng-if="vm.weshareSettings.self_ziti.status==1" style="width:{{100/wcc.availableShipTypes}}%"
         ng-class="{'cur': vm.selectShipType==1}" ng-click="wcc.changeShipTab(1)">自提
     </li>
-    <li ng-if="vm.weshareSettings.pys_ziti.status==1" style="width:{{100/wcc.avaiableShipTypes}}%"
+    <li ng-if="vm.weshareSettings.pys_ziti.status==1" style="width:{{100/wcc.availableShipTypes}}%"
         ng-class="{'cur': vm.selectShipType==2}" ng-click="wcc.changeShipTab(2)">好邻居自提
     </li>
 </ul>
 <!--主面板-->
-<div class="expressage">
+<div class="expressage" ng-class="{'logistics-has-header': wcc.availableShipTypes <= 1}">
     <!-- 使用快递的时候出现 -->
     <ul class="clearfix" ng-if="vm.selectShipType==0">
         <li class="fl">
