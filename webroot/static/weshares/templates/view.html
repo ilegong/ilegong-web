@@ -1,4 +1,4 @@
-<div ng-if="vm.showShareDetailView" ng-click="vm.showUnSubscribe=false;vm.showUnSubscribeLayer=false;">
+<div ng-if="vm.showShareDetailView" ng-click="vm.showUnSubscribe=false;">
     <div ng-class="{'has-channel-bottom': vm.weshare.type==0||vm.weshare.type==4||vm.weshare.type==6}">
         <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-detail.html?v0.6.9'"></ng-include>
         <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-orders.html?v0.6.9'"></ng-include>

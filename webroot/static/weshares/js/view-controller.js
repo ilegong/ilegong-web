@@ -897,7 +897,7 @@
           vm.showUnSubscribeLayer = true;
           $timeout(function () {
             vm.showUnSubscribeLayer = false;
-          }, 3000);
+          }, 2000);
         }
       }).error(function (data) {
         vm.hasProcessSubSharer = true;
