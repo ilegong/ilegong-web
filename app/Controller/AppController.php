@@ -85,7 +85,9 @@ class AppController extends Controller {
     		}
     	}
 
-    	if(!Configure::read('Site.status')){
+        $this->set_current_user_by_token();
+
+        if(!Configure::read('Site.status')){
     		$this->layout = 'maintain';
     		$this->autoRender = false;
     		echo $this->render('message');
@@ -772,6 +774,13 @@ class AppController extends Controller {
         $postStr = file_get_contents('php://input');
         $postData = json_decode($postStr, true);
         return $postData;
+    }
+
+    protected function set_current_user_by_token(){
+        $access_token = $_REQUEST['access_token'];
+        if (!empty($access_token)) {
+            $this->currentUser = $this->OAuth->user();
+        }
     }
 
 }
