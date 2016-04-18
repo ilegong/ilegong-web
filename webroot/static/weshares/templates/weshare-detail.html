@@ -54,7 +54,7 @@
         </p>
 
         <div class="clearfix cp-name" class="margin-bottom-12"
-             ng-hide='_.isEmpty(vm.weshare.description)' ng-bind="{{vm.weshare.description | unsafe}}"></div>
+             ng-hide='_.isEmpty(vm.weshare.description)' ng-bind-html="vm.weshare.description | unsafe"></div>
         <dl class="clearfix images margin-bottom-12">
             <dt ng-repeat="image in vm.weshare.images"><a ng-click="vm.viewImage(image)"><img
                     lazy-src="{{image | thumb: 's'}}" alt="{{vm.weshare.title}}" fallback-src="{{image}}"/></a></dt>
