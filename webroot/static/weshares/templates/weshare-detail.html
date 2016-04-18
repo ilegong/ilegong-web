@@ -53,8 +53,8 @@
                                                                                                    ng-bind="vm.weshare.view_count">0</span>)</span>
         </p>
 
-        <div class="clearfix cp-name" read-more more-text="展开..." less-text="收起" limit="100" class="margin-bottom-12"
-             ng-hide='_.isEmpty(vm.weshare.description)' content="{{vm.weshare.description | unsafe}}"></div>
+        <div class="clearfix cp-name" class="margin-bottom-12"
+             ng-hide='_.isEmpty(vm.weshare.description)' ng-bind="{{vm.weshare.description | unsafe}}"></div>
         <dl class="clearfix images margin-bottom-12">
             <dt ng-repeat="image in vm.weshare.images"><a ng-click="vm.viewImage(image)"><img
                     lazy-src="{{image | thumb: 's'}}" alt="{{vm.weshare.title}}" fallback-src="{{image}}"/></a></dt>

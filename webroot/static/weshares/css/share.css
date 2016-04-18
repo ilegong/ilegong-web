@@ -41,7 +41,7 @@ ul li { list-style: none; }
 
 /*share picture*/
 .product-image{ position: relative; background-color: #ffffff; text-align: center;}
-.product-image img{ max-height:300px;}
+.product-image img{ max-height:280px; max-width: 100%;}
 
 /*sharedetail*/
 .sharedetail{ background-color: #ffffff; padding: 15px 12px 5px 12px;}
