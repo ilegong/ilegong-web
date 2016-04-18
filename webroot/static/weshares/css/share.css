@@ -111,6 +111,7 @@ ul li { list-style: none; }
 
 /*apply list*/
 .apply-list{background-color: #ffffff; padding-top: 10px;}
+.apply-list.empty-list p{text-align: center; padding: 10px 0 20px 0; color: #999999;}
 .apply-details{ border:1px solid; border-right:none; margin-bottom: 10px; padding-top: 10px; position: relative; margin-left: 65px; border-color: #dddddd;}
 .self-details{ margin-right: 65px; border-right: 1px solid; border-left: none; border-color: #f99d3a; margin-left: inherit;}
 .apply-details ul{line-height:20px; padding:0 10px 8px 10px;}
