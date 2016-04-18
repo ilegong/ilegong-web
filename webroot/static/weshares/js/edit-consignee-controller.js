@@ -134,8 +134,6 @@
         url: '/users/get_consignee_list.json'
       }).success(function (data) {
         var consignees = data['consignees'];
-
-        var consignees = response.data['consignees'];
         if(!_.isEmpty(consignees)){
           // 避免初始化时候, status 都是 1 的状态
           var default_item = 0;

@@ -13,7 +13,7 @@
 <!--主面板-->
 <div class="expressage" ng-class="{'logistics-has-header': wcc.availableShipTypes <= 1}">
     <!-- 使用快递的时候出现 -->
-    <ul class="clearfix" ng-if="vm.selectShipType==0">
+    <ul class="clearfix" ng-if="vm.selectShipType==0" ng-click="wcc.toEditConsigneeView()">
         <li class="fl">
             <a class="defaultText" ng-show="_.isEmpty(vm.expressShipInfo)">填写收货信息</a>
             <a class="address" ng-show="!_.isEmpty(vm.expressShipInfo)">
@@ -21,7 +21,7 @@
                 <br/>(<span ng-bind="vm.expressShipInfo.area"></span><span ng-bind="vm.expressShipInfo.address"></span>)
             </a>
         </li>
-        <li class="fr" ng-click="wcc.toEditConsigneeView()">
+        <li class="fr">
             <a class="next-icon clearfix">
                 <label ng-if="!vm.expressShipInfo">添加</label>
                 <label ng-if="vm.expressShipInfo">修改</label>
