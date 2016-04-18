@@ -1076,6 +1076,8 @@
       if (type == 2 && vm.offlineStoreShipInfo) {
         setBuyerData(vm.offlineStoreShipInfo);
       }
+      // 更新运费
+      calOrderTotalPrice();
       function setBuyerData(data) {
         vm.buyerName = data['name'];
         vm.buyerMobilePhone = data['mobilephone'];
