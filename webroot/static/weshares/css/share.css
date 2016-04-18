@@ -40,8 +40,8 @@ ul li { list-style: none; }
 .unfollow{ display: block; position: absolute; border: 1px #bbbbbb solid; background-color: #FFFFFF; width: 60px; text-align: center; line-height: 2em; top: 2em; left: -1px; z-index: 2; border-radius: 5px;}
 
 /*share picture*/
-.product-image{ position: relative; background-color: #ffffff; height:200px;}
-.product-image img{ height:200px; width:100%;}
+.product-image{ position: relative; background-color: #ffffff; text-align: center;}
+.product-image img{ max-height:300px;}
 
 /*sharedetail*/
 .sharedetail{ background-color: #ffffff; padding: 15px 12px 5px 12px;}
