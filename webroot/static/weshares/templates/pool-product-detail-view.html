@@ -13,6 +13,11 @@
         <div ng-if="vm.weshare.refer_share_id==3822 || vm.weshare.id==3822">
             <iframe frameborder="0" width="100%" src="http://v.qq.com/iframe/player.html?vid=f0194qcpnvt&tiny=0&auto=0" allowfullscreen></iframe>
         </div>
+        <div ng-if="vm.weshare.refer_share_id==4008 || vm.weshare.id==4008">
+            <iframe frameborder="0" width="100%" src="http://v.qq.com/iframe/player.html?vid=e0195mejuea&tiny=0&auto=0"
+                    allowfullscreen></iframe>
+        </div>
+
         <p read-more more-text="展开..." less-text="收起" limit="100" class="margin-bottom-12"  ng-hide='_.isEmpty(vm.weshare.description)' content="{{::vm.weshare.description | unsafe}}"></p>
         <dl class="clearfix images margin-bottom-12">
             <dt ng-repeat="image in vm.weshare.images"><a ng-click="vm.viewImage(image)"><img lazy-src="{{image | thumb: 's'}}" alt="{{vm.weshare.title}}" fallback-src="{{image}}"/></a></dt>
