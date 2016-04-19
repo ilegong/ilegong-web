@@ -128,13 +128,17 @@ for (var i = 0; i < all_js.length; i++) {
   var name = all_js[i].name;
   var sources = all_js[i].sources;
   var dist = all_js[i].dist;
-  gulp.task(name, function() {
-    gulp.src(sources)
-    .pipe(concat(name))
-    .pipe(uglify({mangle: false}))
-    .pipe(gulp.dest(dist));
-  });
-  js_tasks.push(name);
+  var task_name = function(name, sources, dist){
+    gulp.task(name, function() {
+      gulp.src(sources)
+          .pipe(concat(name))
+          .pipe(uglify({mangle: false}))
+          .pipe(gulp.dest(dist));
+    });
+    return name;
+  }(name, sources, dist);
+  console.log('add task ' + name);
+  js_tasks.push(task_name);
 }
 
 for (var i = 0; i < all_css.length; i++) {
