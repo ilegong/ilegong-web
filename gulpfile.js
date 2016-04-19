@@ -137,7 +137,7 @@ for (var i = 0; i < all_js.length; i++) {
     });
     return name;
   }(name, sources, dist);
-  console.log('add task ' + name);
+  console.log('add task ' + task_name);
   js_tasks.push(task_name);
 }
 
@@ -145,13 +145,17 @@ for (var i = 0; i < all_css.length; i++) {
   var name = all_css[i].name;
   var sources = all_css[i].sources;
   var dist = all_css[i].dist;
-  gulp.task(name, function() {
-    gulp.src(sources)
-    .pipe(concat(name))
-    .pipe(cleancss({keepBreaks: false}))
-    .pipe(gulp.dest(dist));
-  });
-  css_tasks.push(name);
+  var task_name = function(name, sources, dist){
+    gulp.task(name, function() {
+      gulp.src(sources)
+          .pipe(concat(name))
+          .pipe(cleancss({keepBreaks: false}))
+          .pipe(gulp.dest(dist));
+    });
+    return name;
+  }(name, sources, dist);
+  console.log('add task ' + task_name);
+  css_tasks.push(task_name);
 }
 
 gulp.task('js_task', js_tasks, function(){
