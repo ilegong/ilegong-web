@@ -1,4 +1,4 @@
-<div class="apply-list clearfix" ng-if="vm.totalBuyCount>0" ng-class="{hide:vm.showCommentedOrders}">
+<div class="apply-list clearfix" ng-if="vm.totalBuyCount>0">
     <div style=" position: relative;" ng-repeat="order in vm.ordersDetail.orders"
          ng-show="!vm.showCommentedOrders || order.status==9" data-id="{{order.id}}">
         <div class="apply-details" ng-class="{'self-details': vm.isOwner(order)}">
@@ -135,7 +135,7 @@
 </div>
 
 <div class="apply-list empty-list clearfix" ng-if="vm.totalBuyCount==0" ng-show="!vm.showCommentedOrders">
-    <p ng-class="{hide:vm.showCommentedOrders}">还没有人报名呢~</p>
+    <p>还没有人报名呢~</p>
 </div>
 <div class="apply-list empty-list  clearfix" ng-if="vm.totalCommentCount==0" ng-show="vm.showCommentedOrders">
     <p>还没有人评价呢~</p>

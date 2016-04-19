@@ -569,13 +569,16 @@
       if (!Utils.isNumber(product.num)) {
         product.num = 0;
       }
-      if (product.num >= 1) {
-        if (vm.showBalanceView) {
-          product.num = Math.max(1, product.num - 1);
-        } else {
-          product.num = product.num - 1;
+
+      var minNum = 0;
+      if(vm.showBalanceView){
+        var others = _.reject(vm.weshare.products, function(p){return p.id == product.id});
+        if(_.all(others, function(p){return p.num <= 0})){
+          minNum = 1;
         }
       }
+      product.num = Math.max(minNum, product.num - 1);
+
       if (vm.showBalanceView) {
         calOrderTotalPrice();
       }
