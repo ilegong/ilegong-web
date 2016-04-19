@@ -107,55 +107,47 @@ var all_css = [{
   dist: 'webroot/static/weshares/css/'
 }];
 
-gulp.task('default', ['js_task', 'css_task'], function() {
-});
+gulp.task('default', ['js_task', 'css_task'], function() {});
 
 gulp.task('dev', ['js_task', 'css_task'], function() {
-  var watchers = [];
   for (var i = 0; i < all_js.length; i++) {
-    watchers.push({
-      watcher: gulp.watch(all_js[i].sources),
-      type: 'js',
-      'ball': all_js[i]
-    });
+    gulp.watch(all_js[i].sources, [all_js[i].name]);
   }
 
   for (var i = 0; i < all_css.length; i++) {
-    watchers.push({
-      watcher: gulp.watch(all_css[i].sources),
-      type: 'css',
-      'ball': all_css[i]
-    });
+    gulp.watch(all_css[i].sources, [all_css[i].name]);
   }
-
-  watchers.map(function (item) {
-    item.watcher.on('change', function(event){
-      console.log("File changed: " + event.path);
-      var pipe = gulp.src(item.ball.sources).pipe(concat(item.ball.name));
-      if (item.type == 'js') {
-        pipe = pipe.pipe(uglify({mangle: false}));
-      } else {
-        pipe = pipe.pipe(cleancss({keepBreaks: false}));
-      }
-      pipe = pipe.pipe(gulp.dest(item.ball.dist));
-    });
-  });
 });
 
-gulp.task('js_task', function() {
-  for (var i = 0; i < all_js.length; i++) {
-    gulp.src(all_js[i].sources)
-    .pipe(concat(all_js[i].name))
+var js_tasks = [];
+var css_tasks = [];
+
+for (var i = 0; i < all_js.length; i++) {
+  var name = all_js[i].name;
+  var sources = all_js[i].sources;
+  var dist = all_js[i].dist;
+  gulp.task(name, function() {
+    gulp.src( sources)
+    .pipe(concat(name))
     .pipe(uglify({mangle: false}))
-    .pipe(gulp.dest(all_js[i].dist));
-  }
-});
+    .pipe(gulp.dest(dist));
+  });
+  js_tasks.push(name);
+}
 
-gulp.task('css_task', function() {
-  for (var i = 0; i < all_css.length; i++) {
-    gulp.src(all_css[i].sources)
-    .pipe(concat(all_css[i].name))
-    .pipe(cleancss({keepBreaks: false}))
-    .pipe(gulp.dest(all_css[i].dist));
-  }
-});
+for (var i = 0; i < all_js.length; i++) {
+  var name = all_js[i].name;
+  var sources = all_js[i].sources;
+  var dist = all_js[i].dist;
+  gulp.task(name, function() {
+    gulp.src( sources)
+    .pipe(concat(name))
+    .pipe(uglify({mangle: false}))
+    .pipe(gulp.dest(dist));
+  });
+  css_tasks.push(name);
+}
+
+gulp.task('js_task', js_tasks, function(){});
+
+gulp.task('css_task', css_tasks, function(){});
