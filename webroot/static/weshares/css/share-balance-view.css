@@ -22,7 +22,8 @@ ul li { list-style: none; }
 
 
 /*logistics nav*/
-.logistics-nav{ line-height: 40px; margin-top: 54px; background-color: #FFFFFF;}
+.logistics-has-header{margin-top: 54px; }
+.logistics-nav{ line-height: 40px; background-color: #FFFFFF;}
 .logistics-nav li{ float: left; text-align: center; border-right: 1px #dddddd solid; border-bottom: 1px #dddddd solid; margin-left: -1px;}
 .logistics-nav li.cur{ border-bottom-color: #f99d3a !important; color: #f99d3a;}
 

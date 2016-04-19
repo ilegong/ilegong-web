@@ -770,7 +770,7 @@ class ShareUtilComponent extends Component
             'thumbnail' => $thumbnail
         );
         //黑名单用户不显示 或者 粉丝小于50
-        if (is_blacklist_user($user_id) || $this->get_user_level_by_fans_count($user_id) == 0) {
+        if (is_blacklist_user($user_id) || $this->get_user_level_by_fans_count($user_id) == 0 || is_test_user($user_id)) {
             $optData['deleted'] = DELETED_YES;
         }
         $this->saveOptLog($optData);
@@ -930,7 +930,7 @@ class ShareUtilComponent extends Component
             'obj_creator' => $share_info['creator']
         );
         //me test account don't show
-        if ($share_info['creator'] == 802852) {
+        if (is_test_user($share_info['creator'])) {
             $optData['deleted'] = DELETED_YES;
         }
         //clear order count cache

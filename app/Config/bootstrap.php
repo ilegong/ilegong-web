@@ -2524,6 +2524,17 @@ function is_super_share_manager($uid) {
 }
 
 /**
+ * @param $uid
+ * @return bool
+ * 测试用户
+ */
+function is_test_user($uid) {
+    $test_users = [902185, 633345,802852,897195, 897247, 5081,559795, 902131];
+
+    return in_array($uid, $test_users);
+}
+
+/**
  * @param $item
  * @return string
  * 组合分享的图片
