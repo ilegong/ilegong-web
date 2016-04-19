@@ -42,7 +42,7 @@
     <?php
         $show_img = $share['Weshare']['images'][0];
         if(!$show_img){
-            $show_img = $creators[$share['Weshare']['creator']]['avatar'];
+            $show_img = $STATIC_HOST .'/'. $creators[$share['Weshare']['creator']]['avatar'];
         }
     ?>
     <a class="media-left" href="#">

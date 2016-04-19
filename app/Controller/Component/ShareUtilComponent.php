@@ -135,7 +135,8 @@ class ShareUtilComponent extends Component
     {
         $userRelationM = ClassRegistry::init('UserRelation');
         if ($this->check_user_relations($consumer)) {
-            // 1. 没有关注, 默认关注
+            // 1. 没有关注任何人, 默认关注
+            $this->log("User ".$consumer.' does not follow anyone, now follows '.$saler.' in default', LOG_INFO);
             $userRelationM->saveAll([
                 'user_id' => $saler,
                 'follow_id' => $consumer,
