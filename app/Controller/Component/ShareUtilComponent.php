@@ -930,7 +930,7 @@ class ShareUtilComponent extends Component
             'obj_creator' => $share_info['creator']
         );
         //me test account don't show
-        if ($share_info['creator'] == 802852) {
+        if (is_test_user($share_info['creator'])) {
             $optData['deleted'] = DELETED_YES;
         }
         //clear order count cache
