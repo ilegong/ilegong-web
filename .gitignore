@@ -12,3 +12,6 @@ ZendDebugger.so
 # 为了方便大家回滚, 添加不追踪补丁文件
 *.diff
 *.patch
+
+# 前端构建工程, HOW ?
+node_modules
