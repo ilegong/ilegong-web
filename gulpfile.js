@@ -107,7 +107,9 @@ var all_css = [{
   dist: 'webroot/static/weshares/css/'
 }];
 
-gulp.task('default', ['js_task', 'css_task'], function() {});
+gulp.task('default', ['js_task', 'css_task'], function() {
+  console.log("Default done.");
+});
 
 gulp.task('dev', ['js_task', 'css_task'], function() {
   for (var i = 0; i < all_js.length; i++) {
@@ -127,7 +129,7 @@ for (var i = 0; i < all_js.length; i++) {
   var sources = all_js[i].sources;
   var dist = all_js[i].dist;
   gulp.task(name, function() {
-    gulp.src( sources)
+    gulp.src(sources)
     .pipe(concat(name))
     .pipe(uglify({mangle: false}))
     .pipe(gulp.dest(dist));
@@ -135,19 +137,23 @@ for (var i = 0; i < all_js.length; i++) {
   js_tasks.push(name);
 }
 
-for (var i = 0; i < all_js.length; i++) {
-  var name = all_js[i].name;
-  var sources = all_js[i].sources;
-  var dist = all_js[i].dist;
+for (var i = 0; i < all_css.length; i++) {
+  var name = all_css[i].name;
+  var sources = all_css[i].sources;
+  var dist = all_css[i].dist;
   gulp.task(name, function() {
-    gulp.src( sources)
+    gulp.src(sources)
     .pipe(concat(name))
-    .pipe(uglify({mangle: false}))
+    .pipe(cleancss({keepBreaks: false}))
     .pipe(gulp.dest(dist));
   });
   css_tasks.push(name);
 }
 
-gulp.task('js_task', js_tasks, function(){});
+gulp.task('js_task', js_tasks, function(){
+  console.log("Js tasks done");
+});
 
-gulp.task('css_task', css_tasks, function(){});
+gulp.task('css_task', css_tasks, function(){
+  console.log("Css tasks done");
+});
