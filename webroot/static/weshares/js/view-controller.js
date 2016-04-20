@@ -320,7 +320,8 @@
     }
 
     function redirectFaq() {
-      if (vm.isCreator() || vm.canManageShare) {
+      //|| vm.canManageShare
+      if (vm.isCreator()) {
         window.location.href = '/share_faq/faq_list/' + vm.weshare.id + '/' + vm.weshare.creator.id;
       } else {
         window.location.href = '/share_faq/faq/' + vm.weshare.id + '/' + vm.weshare.creator.id;
@@ -1332,7 +1333,8 @@
         vm.userCouponReduce = vm.myCoupons.Coupon.reduced_price;
       }
       vm.userShareSummery = data['user_share_summery'];
-      if (vm.isCreator() || vm.canManageShare) {
+      //|| vm.canManageShare
+      if (vm.isCreator()) {
         vm.faqTipText = '反馈消息';
       }
       //vm.checkShareInfoHeight();
