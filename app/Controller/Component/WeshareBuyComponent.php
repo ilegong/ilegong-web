@@ -1403,7 +1403,6 @@ class WeshareBuyComponent extends Component
      */
     public function get_share_detail_view_orders($weshareId, $page, $uid, $combineComment = 0)
     {
-        //todo cache it 只缓存第一页的数据，实时更新第一页的缓存(分段缓存，细粒度缓存)
         $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
         $sort = array('id DESC');
         $query_order_cond = array(

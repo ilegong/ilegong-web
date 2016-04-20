@@ -259,7 +259,6 @@ class WesharesController extends AppController
     {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
-        //$child_share_data = $this->WeshareBuy->get_child_share_items($shareId);
         $ordersDetail = $this->WeshareBuy->get_current_user_share_order_data($shareId, $uid);
         $share_summery = $this->WeshareBuy->get_share_buy_summery($shareId);
         $ordersDetail['summery'] = $share_summery;

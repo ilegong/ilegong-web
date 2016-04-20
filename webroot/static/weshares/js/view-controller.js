@@ -1011,6 +1011,9 @@
 
     //open comment dialog
     function showCommentDialog(order, comment) {
+      if (vm.currentUser.id != order.creator && !vm.isCreator()) {
+        return false;
+      }
       vm.showCommentingDialog = true;
       vm.showLayer = true;
       var reply_comment_id = 0;

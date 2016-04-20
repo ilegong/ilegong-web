@@ -85,7 +85,7 @@ class AppController extends Controller {
     		}
     	}
 
-        $this->set_current_user_by_token();
+        //$this->set_current_user_by_token();
 
         if(!Configure::read('Site.status')){
     		$this->layout = 'maintain';
