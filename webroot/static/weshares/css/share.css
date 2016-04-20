@@ -159,3 +159,14 @@ ul li { list-style: none; }
 
 /*toast*/
 .toast{ background-color: #666666; line-height: 20px; padding: 12px 10px; text-align: center; color: #FFFFFF; border-radius: 5px; position: fixed; top: 50%; left: 50%; margin-left: -100px; z-index: 99; width: 200px; margin-top: -22px;}
+
+
+.user-said{ line-height: 24px; color: #666666;}
+.user-said strong{ color: #FF6485;}
+.detaildemo img{ display: block; margin-top: 20px; width: 100%;}
+.detaildemo ul{ border-top: 1px #eeeeee solid; margin-top: 20px;}
+.detaildemo ul li{ width: 100%; border-bottom: 1px #eeeeee solid; border-right: 1px #eeeeee solid;}
+.detaildemo ul li span{ display: block; float: left; padding: 8px 10px; color: #333333; border-left: 1px #eeeeee solid;}
+.detaildemo h1{ text-align: center; font-size: 20px; padding: 20px 10px 0 20px;}
+.detaildemo p{ padding-top: 20px; line-height: 22px; color: #333333;}
+.detaildemo label{ line-height: 24px; margin-top: 20px; display: block;}
