@@ -5,15 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>扫码支付</title>
 </head>
-<body style="background: #fff;">
+<body style="background: #fff; padding: 0; margin: 0;">
 <div style="text-align: center;width: 100%;margin-top: 5%;">
     <img src="/util/gen_qr_code.html?content={{$code_url}}">
 </div>
-<div style="text-align: center;width: 100%;margin-top: 20px;font-size: 18px;color: #FF6485;">
-    请长按二维码并识别<br/>进行微信支付
+<div style="text-align: center;width: 100%;font-size: 18px;color: #FF6485; margin-top: -5px;">
+    请长按上方二维码并识别<br/>进行微信支付
 </div>
-<a href="/" style="position: absolute;display: block;bottom: 0;left: 0;">
-    <img style="width: 100%;" src="{{$STATIC_HOST}}/static/weshares/images/share-banner.gif">
-</a>
+
+
+<div style="text-align: center;margin-top: 25%; background-color: #eeeeee; padding: 20px 10px;">
+    <div>长按下方二维码识别关注<br>跟踪自己的订单信息</div>
+    <div style="text-align: center; padding-top: 10px;">
+        <img style="width: 30%;" src="https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket={{urlencode('gQGN7zoAAAAAAAAAASxodHRwOi8vd2VpeGluLnFxLmNvbS9xLzczVnVuUXZsVUJvcC11a0E2VmxvAAIEbiMXVwMEAAAAAA==')}}">
+    </div>
+</div>
+<!--<a href="/" style="position: absolute;display: block;bottom: 0;left: 0;">-->
+    <!--<img style="width: 100%;" src="{{$STATIC_HOST}}/static/weshares/images/share-banner.gif">-->
+<!--</a>-->
 </body>
 </html>
