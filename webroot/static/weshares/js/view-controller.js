@@ -321,7 +321,7 @@
 
     function redirectFaq() {
       //|| vm.canManageShare
-      if (vm.isCreator()) {
+      if (vm.isCreator() || vm.canManageShare) {
         window.location.href = '/share_faq/faq_list/' + vm.weshare.id + '/' + vm.weshare.creator.id;
       } else {
         window.location.href = '/share_faq/faq/' + vm.weshare.id + '/' + vm.weshare.creator.id;
@@ -1334,7 +1334,7 @@
       }
       vm.userShareSummery = data['user_share_summery'];
       //|| vm.canManageShare
-      if (vm.isCreator()) {
+      if (vm.isCreator() || vm.canManageShare) {
         vm.faqTipText = '反馈消息';
       }
       //vm.checkShareInfoHeight();
