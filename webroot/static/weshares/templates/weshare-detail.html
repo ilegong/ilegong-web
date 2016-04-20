@@ -35,7 +35,7 @@
         </li>
     </ul>
     <div class="product-image"
-         ng-if="vm.weshare.images.length > 1 && vm.weshare.refer_share_id!=3814 && vm.weshare.id!=3814 && vm.weshare.refer_share_id!=3822 && vm.weshare.id!=3822 && vm.weshare.refer_share_id!=4008 && vm.weshare.id!=4008">
+         ng-if="vm.weshare.images.length > 0 && vm.weshare.refer_share_id!=3814 && vm.weshare.id!=3814 && vm.weshare.refer_share_id!=3822 && vm.weshare.id!=3822 && vm.weshare.refer_share_id!=4008 && vm.weshare.id!=4008">
         <img ng-src="{{vm.weshare.images[0]}}">
     </div>
     <div ng-if="vm.weshare.refer_share_id==3814 || vm.weshare.id==3814">
@@ -68,7 +68,7 @@
 
         <div class="clearfix cp-name" class="margin-bottom-12"
              ng-hide='_.isEmpty(vm.weshare.description)' ng-bind-html="vm.weshare.description | unsafe"></div>
-        <dl class="clearfix images margin-bottom-12">
+        <dl class="clearfix images margin-bottom-12" ng-if="vm.weshare.images.length > 1">
             <dt ng-repeat="image in vm.weshare.images"><a ng-click="vm.viewImage(image)"><img
                     lazy-src="{{image | thumb: 's'}}" alt="{{vm.weshare.title}}" fallback-src="{{image}}"/></a></dt>
         </dl>
