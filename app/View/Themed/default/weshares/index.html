@@ -80,7 +80,8 @@
 
                         {{if strlen($product['description'])>0}}
                             <p>
-                                <span>{{$user['nickname']}}说 " </span>$product['description']<span>"</span>
+                                <span>{{$user['nickname']}}说: </span>
+                                {{$product['description']}}
                             </p>
                         {{/if}}
                     </div>
