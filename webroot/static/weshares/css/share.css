@@ -45,7 +45,7 @@ ul li { list-style: none; }
 
 /*sharedetail*/
 .sharedetail{ background-color: #ffffff; padding: 15px 12px 5px 12px;}
-.sharedetail h1 { font-size: 1.2em; color: #333; margin-bottom: 10px;!important;}
+.sharedetail h1 { font-size: 1.2em; color: #333; margin-bottom: 10px !important;}
 .sharedetail p { color: #999; padding-bottom: 15px;}
 .sharedetail .images {margin-top: 10px;}
 .sharedetail .images dt {float: left;margin-right: 10px;position: relative;height: 65px;  }

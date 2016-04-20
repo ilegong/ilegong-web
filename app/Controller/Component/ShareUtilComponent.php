@@ -2039,19 +2039,37 @@ class ShareUtilComponent extends Component
         $cache_data = Cache::read($key);
         if (empty($cache_data)) {
             $indexProductM = ClassRegistry::init('IndexProduct');
-            $index_products = $indexProductM->find('all', array(
-                'conditions' => array(
-                    'tag_id' => $tag_id,
-                    'deleted' => DELETED_NO,
-                ),
+            $index_products = $indexProductM->find('all', [
+                'conditions' => [
+                    'IndexProduct.tag_id' => $tag_id,
+                    'IndexProduct.deleted' => DELETED_NO,
+                ],
+                'fields' => [
+                    'IndexProduct.*',
+                    'User.*',
+                    'UserLevel.*'
+                ],
+                'joins' => [
+                    [
+                        'table' => 'users',
+                        'alias' => 'User',
+                        'conditions' => [
+                            'User.id = IndexProduct.share_user_id',
+                        ],
+                    ], [
+                        'table' => 'user_levels',
+                        'alias' => 'UserLevel',
+                        'conditions' => [
+                            'User.id = UserLevel.data_id',
+                        ],
+                    ],
+                ],
                 'order' => array('sort_val ASC')
-            ));
-            $result = array();
-            foreach ($index_products as $product) {
-                $result[] = $product['IndexProduct'];
-            }
-            Cache::write($key, json_encode($result));
-            return $result;
+            ]);
+
+            $this->log(json_encode($index_products));
+            Cache::write($key, json_encode($index_products));
+            return $index_products;
         }
 
         return json_decode($cache_data, true);
