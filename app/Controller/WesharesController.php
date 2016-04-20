@@ -284,7 +284,7 @@ class WesharesController extends AppController
         $this->autoRender = false;
         try {
             $this->log("Failed to get share and all refer share count for share " . $shareId, LOG_ERR);
-            $summery = $this->WeshareBuy->get_share_and_all_refer_share_summery($shareId, $uid);
+            $summery = $this->WeshareBuy->get_share_and_all_refer_share_summary($shareId, $uid);
         } catch (Exception $e) {
             $this->log("Failed to get share and all refer share count for share " . $shareId . ": " . $e->getMessage(), LOG_ERR);
             $summery = ['order' => 0, 'comment' => 0];

@@ -935,7 +935,7 @@ class ShareUtilComponent extends Component
             $optData['deleted'] = DELETED_YES;
         }
         //clear order count cache
-        Cache::write(SHARE_ORDER_COUNT_SUM_CACHE_KEY . '_' . $share_id . '_' . $share_info['creator'], '');
+        $this->clear_share_cache($share_id, $share_info['creator']);
         $this->saveOptLog($optData);
         //推送支付消息
         try {
@@ -943,6 +943,40 @@ class ShareUtilComponent extends Component
         } catch (Exception $e) {
             $this->log('push faq msg error data ' . json_encode($optData) . 'msg ' . $e->getMessage());
         }
+    }
+
+
+    /**
+     * @param $share_id
+     * @param $share_creator
+     * 清除分享相关的缓存
+     */
+    private function clear_share_cache($share_id, $share_creator) {
+        Cache::write(SHARE_ORDER_COUNT_SUM_CACHE_KEY . '_' . $share_id . '_' . $share_creator, '');
+        Cache::write(SHARE_BUY_SUMMERY_INFO_CACHE_KEY . '_' . $share_id, '');
+        Cache::write(SHARE_ORDER_COUNT_DATA_CACHE_KEY . '_' . $share_id, '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_1_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_0_1', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_1_0', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_0_0', '');
+        Cache::write(SHARE_OFFLINE_ADDRESS_SUMMERY_DATA_CACHE_KEY . '_' . $share_id, '');
+        Cache::write(SHARE_OFFLINE_ADDRESS_BUY_DATA_CACHE_KEY . '_' . $share_id, '');
+        Cache::write(SHARE_ORDER_COUNT_DATA_CACHE_KEY . '_' . $share_id, '');
+        Cache::write(SHARE_BUY_SUMMERY_INFO_CACHE_KEY . '_' . $share_id, '');
+        Cache::write(SHARE_COMMENT_COUNT_SUM_CACHE_KEY . '_' . $share_id . '_' . $share_creator, '');
+//        //check should clear child share cache
+        //param  $is_pin_tuan = false
+//        if ($is_pin_tuan) {
+//            $refer_share_id = $this->ShareUtil->get_share_refer_id($share_id);
+//            if ($refer_share_id != $share_id) {
+//                Cache::write(SHARE_OFFLINE_ADDRESS_SUMMERY_DATA_CACHE_KEY . '_' . $refer_share_id, '');
+//                Cache::write(SHARE_OFFLINE_ADDRESS_BUY_DATA_CACHE_KEY . '_' . $refer_share_id, '');
+//                Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $refer_share_id . '_1_1', '');
+//                Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $refer_share_id . '_0_1', '');
+//                Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $refer_share_id . '_1_0', '');
+//                Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $refer_share_id . '_0_0', '');
+//            }
+//        }
     }
 
     /**

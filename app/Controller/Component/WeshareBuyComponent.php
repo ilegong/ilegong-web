@@ -1934,7 +1934,7 @@ class WeshareBuyComponent extends Component
      * @param $share_creator
      * @return int
      */
-    public function get_share_and_all_refer_share_summery($shareId, $share_creator)
+    public function get_share_and_all_refer_share_summary($shareId, $share_creator)
     {
         $key = SHARE_COMMENT_COUNT_SUM_CACHE_KEY . '_' . $shareId . '_' . $share_creator;
         $cacheData = Cache::read($key);
