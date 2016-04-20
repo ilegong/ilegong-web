@@ -1,5 +1,5 @@
 <div class="apply-list clearfix" ng-if="vm.totalBuyCount>0">
-    <div style=" position: relative;" ng-repeat="order in vm.ordersDetail.orders"
+    <div style="position: relative;" ng-repeat="order in vm.ordersDetail.orders"
          ng-show="!vm.showCommentedOrders || order.status==9" data-id="{{order.id}}">
         <div class="apply-details" ng-class="{'self-details': vm.isOwner(order)}">
             <ul class="clearfix">

@@ -25,7 +25,7 @@
             {{if $tip_info}}
                 <div class="alert alert-danger" role="alert">{{$tip_info}}</div>
             {{else}}
-                <img src="{{$this->Html->assetUrl('/img/zfb_wx.jpg')}}" width="100%">
+                <img src="{{$STATIC_HOST}}/static/img/zfb_wx.jpg" width="100%">
                 <script>
                     function check_pay_url_status(){
                         $.getJSON('/ali_pay/pay_short_url/{{$uuid}}.json?action=check&r=' + Math.random(), function (data) {
