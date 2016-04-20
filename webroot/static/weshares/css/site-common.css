@@ -1,6 +1,4 @@
-.channel_bottom {
-    height: 49px;
-}
+.channel_bottom { height: 49px; z-index: 10; }
 
 footer {
     box-sizing: border-box;

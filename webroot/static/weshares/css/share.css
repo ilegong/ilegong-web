@@ -22,10 +22,10 @@ ul li { list-style: none; }
 /*sharer*/
 .sharer{background: #fff; position: relative; padding: 10px 12px; margin-top: 5px; background-color: #ffffff; border-bottom: 1px #eeeeee solid;}
 .detail-head,.detail-head img{width:43px; height:43px;border-radius: 50%;}
-.nickname{ margin-left:10px; font-size:1.15em; color:#333; line-height: 22px; max-width: 105px; white-space:nowrap; overflow:hidden; text-overflow : ellipsis;}
+.nickname { margin-left: 10px; font-size: 1.2em; color: #333; line-height: 22px; max-width: 105px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;  }
 .sharer-level{ font-size:0.8em; margin-right: 3px; color:#888888; background-color:#f1f1f1; padding: 2px; border-radius:3px; text-align:center;}
-.sharer-fans{ color: #f99d3a; font-size: 0.7em;}
-.ta{font-size:1em; color:#666; text-align:center; line-height:2em; width:60px; border:1px solid #bbb; border-radius:5px; margin-left: 6px; margin-top: 9px;}
+.sharer-fans { color: #f99d3a; font-size: 1em; }
+.ta { font-size: 1em; color: #666; text-align: center; line-height: 2em; width: 60px; border: 1px solid #bbb; border-radius: 2px; margin-left: 6px; margin-top: 9px;  }
 .sharer-label{width:18px; height:18px; border-radius:18px;  background:#f99d3a; font-size:0.7em; color:#ffffff; text-align:center; line-height:18px; position:absolute; bottom:10px; left:40px;}
 
 .ta span{ display: block; float: left; padding-left: 5px;}
@@ -45,8 +45,8 @@ ul li { list-style: none; }
 
 /*sharedetail*/
 .sharedetail{ background-color: #ffffff; padding: 15px 12px 5px 12px;}
-.sharedetail h1{ font-size:1.15em; color:#333; padding-bottom: 5px;}
-.sharedetail p{ color: #999999; padding-bottom: 15px; font-size: 0.8em;}
+.sharedetail h1 { font-size: 1.2em; color: #333; margin-bottom: 10px;!important;}
+.sharedetail p { color: #999; padding-bottom: 15px;}
 .sharedetail .images {margin-top: 10px;}
 .sharedetail .images dt {float: left;margin-right: 10px;position: relative;height: 65px;  }
 .sharedetail .images dt img {width: 60px;height: 60px;}
@@ -56,8 +56,8 @@ ul li { list-style: none; }
 .recommend{ position: absolute;right:0; top:0;}
 .recommend a img{ width: 4.5em; height:2em; border: 1px #f99d3a solid; border-radius: 5px;}
 .tz-tj{ width:26px; height:26px; padding-right: 3px;}
-.tz-recommend{ font-size:1em; color:#666666; line-height: 30px;}
-.cp-name{ line-height:20px; margin-bottom: 10px;}
+.tz-recommend { color: #666; line-height: 30px;}
+.cp-name { line-height: 24px; margin-bottom: 15px; font-size: 1.1em; color: #333333;}
 .cp-name a.read-more, a.read-less {cursor: pointer;color: blue; }
 .cp-name div.less-text {display: block;}
 .cp-name div.less-text.show{display: inline !important  }
@@ -67,23 +67,23 @@ ul li { list-style: none; }
 .commission a{ padding-bottom: 10px; color: #f99d3a; display: block;}
 .text1{font-size:1.15em; color:#333; padding:10px 12px 0;}
 .yandong{font-size:1em;color:#666666;}
-.take-time{ background-color: #FFFFFF; padding: 8px 12px; line-height: 24px; border-top: 1px #eeeeee solid; font-size:1em; color:#999999;}
+.take-time { background-color: #FFF; padding: 8px 12px; line-height: 24px; border-top: 1px #eee solid; font-size: 1.1em; color: #999;}
 
 
 /*recommend sharer*/
-.recommend-sharer{ background-color: #FFFFFF; margin-top: 10px; padding: 12px 12px 7px 12px;}
+.recommend-sharer { background-color: #FFF; margin-top: 10px; padding: 12px; font-size: 1.1em;}
 .recommend-sharer .proxy img{ width: 100%; height: 100%; border-radius: 50%;}
 .recommend-sharer .proxy{ width: 30px; height: 30px; margin-right: 5px; margin-bottom: 5px;}
 .recommend-sharer .tz-recommend{line-height: 30px;}
-.recommend-sharer .me-introduce{ border-radius:5px; border: 1px solid #f99d3a; width: 65px; text-align: center; line-height: 22px; height:22px;}
+.recommend-sharer .me-introduce { border-radius: 2px; border: 1px solid #f99d3a; width: 70px; text-align: center; line-height: 24px;}
 .recommend-sharer .me-introduce .introduce{font-size:1em; color: #f99d3a; padding:2px;}
 .recommend-sharer .introduce-money{ font-size:1em; color:#ff6485; line-height: 24px; padding-left: 8px;}
 
 
 /*product*/
-.product-title{ font-size:1em;color:#666666; padding: 15px 15px 10px 12px;}
+.product-title { font-size: 1.1em; color: #666; padding: 15px 15px 10px 12px;}
 .product{ position: relative; border-bottom: 1px #eeeeee solid;padding:0;}
-.product ul{ background-color: #ffffff; padding: 15px 12px 12px 12px;}
+.product ul { background-color: #fff; padding: 15px 12px 12px; font-size: 1.1em;}
 .product-pic img{ width:4.625em;}
 .product-name{ line-height:14px; font-weight: bold;}
 .nicheng-name{font-size:1.083em;color:#333333;}
@@ -94,7 +94,7 @@ ul li { list-style: none; }
 .product dl{ position: absolute; right: 12px; bottom: 12px;}
 
 
-.add-subtract{ width:2em; height:2em; border:1px solid #bbbbbb; border-radius:3px;}
+.add-subtract { width: 2em; height: 2em; border: 1px solid #bbb; border-radius: 2px;}
 .amount{ color: #333333; line-height: 2em; width: 2em; text-align: center;}
 
 /*Alice add css 80-81 line*/
@@ -112,7 +112,7 @@ ul li { list-style: none; }
 /*apply list*/
 .apply-list{background-color: #ffffff; padding-top: 10px;}
 .apply-list.empty-list p{text-align: center; padding: 10px 0 20px 0; color: #999999;}
-.apply-details{ border:1px solid; border-right:none; margin-bottom: 10px; padding-top: 10px; position: relative; margin-left: 65px; border-color: #dddddd;}
+.apply-details { border: 1px solid; border-right: none; margin-bottom: 10px; padding-top: 10px; position: relative; margin-left: 65px; border-color: #ddd; font-size: 1.1em;}
 .self-details{ margin-right: 65px; border-right: 1px solid; border-left: none; border-color: #f99d3a; margin-left: inherit;}
 .apply-details ul{line-height:20px; padding:0 10px 8px 10px;}
 .selforder{padding-left: 15px; padding-top: 10px;}
@@ -170,3 +170,12 @@ ul li { list-style: none; }
 .detaildemo h1{ text-align: center; font-size: 20px; padding: 20px 10px 0 20px;}
 .detaildemo p{ padding-top: 20px; line-height: 22px; color: #333333;}
 .detaildemo label{ line-height: 24px; margin-top: 20px; display: block;}
+
+
+
+
+
+
+
+
+
