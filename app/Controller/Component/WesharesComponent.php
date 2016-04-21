@@ -109,16 +109,16 @@ class WesharesComponent extends Component
         ));
         //load remember offline store id
         foreach ($consignees as &$consignee) {
-            $ziti_id = $consignee['OrderConsignees']['ziti_id'];
-            $type = $consignee['OrderConsignees']['type'];
+            $ziti_id = $consignee['OrderConsignee']['ziti_id'];
+            $type = $consignee['OrderConsignee']['type'];
             if (!empty($ziti_id) && $type == TYPE_CONSIGNEE_SHARE_OFFLINE_STORE) {
                 $offlineStore = $offlineStoreM->findById($ziti_id);
                 if (!empty($offlineStore)) {
-                    $consignee['OrderConsignees']['offlineStore'] = $offlineStore['OfflineStore'];
+                    $consignee['OrderConsignee']['offlineStore'] = $offlineStore['OfflineStore'];
                 }
             }
         }
-        return Hash::extract($consignees, '{n}.OrderConsignees');
+        return Hash::extract($consignees, '{n}.OrderConsignee');
     }
 
     public function create_weshare($postDataArray, $uid)
