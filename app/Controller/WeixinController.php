@@ -93,6 +93,10 @@ class WeixinController extends AppController {
                     if($from == FROM_WX_SERVICE){
                         $key = key_cache_sub($uid,'kfinfo');
                         $subscribe_array = json_decode(Cache::read($key),true);
+                        $ticket = $req['Ticket'];
+                        if (!empty($ticket) && $ticket == SCAN_TICKET_QRCODE_PAY) {
+                            $this->log('扫码支付跳转关注-1', LOG_INFO);
+                        }
                         if(!empty($subscribe_array)){
                             $this->loadModel('WxOauth');
                             $body=array();
@@ -159,6 +163,9 @@ class WeixinController extends AppController {
                         if ($ticket == SCAN_TICKET_CAOMEI) {
                             echo $this->newTextMsg($user, $me, '点击<a href="http://'.$host3g.'/products/20150120/you_ji_hong_yan_cao_mei_tuan_gou.html">查看草莓详情</a>');
                             return;
+                        }
+                        if ($ticket == SCAN_TICKET_QRCODE_PAY) {
+                            $this->log('扫码支付跳转关注-2', LOG_INFO);
                         }
                     }
                 }

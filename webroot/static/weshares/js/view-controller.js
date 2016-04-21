@@ -1355,6 +1355,11 @@
       var share_string = 'we_share';
       //member
       var userInfo = vm.ordersDetail.users[vm.currentUser.id];
+
+      var regex = /(<([^>]+)>)/ig
+        , shareIntrBody = vm.weshare.description.substr(0, 30)
+        , shareIntryResult = shareIntrBody.replace(regex, "");
+
       if (vm.currentUser.id == vm.weshare.creator.id) {
         to_timeline_title = vm.weshare.creator.nickname + '分享:' + vm.weshare.title;
         to_friend_title = vm.weshare.creator.nickname + '分享:' + vm.weshare.title;
@@ -1362,7 +1367,7 @@
         if (vm.totalBuyCount >= 5) {
           desc += '已经有' + vm.totalBuyCount + '人报名，';
         }
-        desc += vm.weshare.description.substr(0, 20);
+        desc += shareIntryResult;
       } else if (userInfo) {
         if (vm.isProxy()) {
           url = url + '?recommend=' + vm.currentUser['id'];
@@ -1373,7 +1378,7 @@
         to_timeline_title = userInfo.nickname + '报名了' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
         to_friend_title = userInfo.nickname + '报名了' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
         imgUrl = vm.weshare.images[0] || userInfo.image;
-        desc = vm.weshare.creator.nickname + '我认识，很靠谱。' + vm.weshare.description.substr(0, 20);
+        desc = vm.weshare.creator.nickname + '我认识，很靠谱。' + shareIntryResult;
       } else if (vm.currentUser) {
         //default custom
         if (vm.weshare.type !== 4) {
@@ -1387,12 +1392,12 @@
         to_timeline_title = vm.currentUser.nickname + '推荐' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
         to_friend_title = vm.currentUser.nickname + '推荐' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
         imgUrl = vm.weshare.images[0] || vm.currentUser.image;
-        desc = vm.weshare.creator.nickname + '我认识，很靠谱。' + vm.weshare.description.substr(0, 20);
+        desc = vm.weshare.creator.nickname + '我认识，很靠谱。' + shareIntryResult;
       } else {
         to_timeline_title = vm.weshare.creator.nickname + '分享了' + vm.weshare.title;
         to_friend_title = vm.weshare.creator.nickname + '分享了' + vm.weshare.title;
         imgUrl = vm.weshare.images[0] || vm.weshare.creator.image;
-        desc = vm.weshare.creator.nickname + '我认识，很靠谱。' + vm.weshare.description.substr(0, 20);
+        desc = vm.weshare.creator.nickname + '我认识，很靠谱。' + shareIntryResult;
       }
       if (vm.weixinInfo) {
         share_string = vm.weixinInfo.share_string;

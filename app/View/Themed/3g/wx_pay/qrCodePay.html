@@ -20,15 +20,18 @@
         <img style="width: 70%;"
              src="https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket={{urlencode('gQGN7zoAAAAAAAAAASxodHRwOi8vd2VpeGluLnFxLmNvbS9xLzczVnVuUXZsVUJvcC11a0E2VmxvAAIEbiMXVwMEAAAAAA==')}}">
     </div>
-    <div>长按上方二维码识别关注<br>跟踪自己的订单信息</div>
+    <div style="text-align: center;width: 100%;font-size: 18px;color: #FF6485; margin-top: -5px;">长按上方二维码识别关注<br>跟踪自己的订单物流信息</div>
     <a style="display: block; width: 70%; text-decoration: none; font-size: 1.1em; line-height: 44px; margin: 0 auto; margin-top: 20%; border: 1px #bbbbbb solid; color: #333333;z-index: 999;">取消</a>
 </div>
 <div style="background-color: #ffffff; width: 100%; height: 100%; position: fixed; top:0; left: 0; z-index: 99;display: none;"
      id="layer-bg"></div>
 
-<a href="/" style="position: absolute;display: block;bottom: 0;left: 0;" id="pys-banner">
-    <img style="width: 100%;display: block;" src="{{$STATIC_HOST}}/static/weshares/images/share-banner.gif">
-</a>
+<div style="position: absolute;display: block;bottom: 0;left: 0;">
+    <a id="show-tip-info" style="display: block;color: #333;text-align: center;line-height: 50px;text-decoration: underline;font-size: 15px;">点击查看订单的物流信息</a>
+    <a style="display: block;" href="/" id="pys-banner">
+        <img style="width: 100%;display: block;" src="{{$STATIC_HOST}}/static/weshares/images/share-banner.gif">
+    </a>
+</div>
 </body>
 <script src="//cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>
 <script>
@@ -39,6 +42,10 @@
 
         var $pysBanner = $('#pys-banner');
         var $tipPayInfo = $('#tip-pay-info');
+
+        $('#show-tip-info').on('click', function(){
+            showPaidTipInfo();
+        });
 
         $tipInfo.on('click', function (e) {
             e.preventDefault();
@@ -52,14 +59,18 @@
 
         $payQrcode.on("touchstart", function () {
             setTimeout(function () {
-                $tipInfo.show();
-                $layerBg.show();
-
-                $pysBanner.hide();
-                $tipPayInfo.hide();
-                $payQrcode.hide();
+                showPaidTipInfo();
             }, 5000);
         });
+
+        function showPaidTipInfo(){
+            $tipInfo.show();
+            $layerBg.show();
+
+            $pysBanner.hide();
+            $tipPayInfo.hide();
+            $payQrcode.hide();
+        }
     });
 </script>
 </html>
