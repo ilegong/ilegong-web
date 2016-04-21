@@ -11,7 +11,8 @@
  * @author   Arlon <saecms@google.com>
  * @link     http://www.saecms.net
  */
-class UsersController extends AppController {
+class UsersController extends AppController
+{
     const WX_BIND_REDI_PREFIX = 'redirect_url_';
 
     /**
@@ -36,16 +37,18 @@ class UsersController extends AppController {
      */
     var $uses = array('User', 'Oauthbinds', 'WxOauth');
 
-    public function beforeFilter() {
+    public function beforeFilter()
+    {
         parent::beforeFilter();
 
         $this->Auth->authenticate = array('WeinxinOAuth', 'Form', 'Pys', 'Mobile');
 
-        $this->Auth->allowedActions = array('register', 'login', 'forgot', 'captcha', 'reset', 'wx_login', 'wx_auth', 'wx_menu_point', 'login_state', 'get_spring_coupon');
+        $this->Auth->allowedActions = array('register', 'login', 'forgot', 'captcha', 'reset', 'wx_login', 'wx_auth', 'wx_menu_point', 'login_state', 'get_spring_coupon', 'get_proxies', 'get_id_and_proxies');
         $this->set('op_cate', 'me');
     }
 
-    function captcha() {
+    function captcha()
+    {
         error_reporting(0);
         if (0) {
             //Kcaptcha
@@ -53,33 +56,39 @@ class UsersController extends AppController {
         }
     }
 
-    public function account() {
+    public function account()
+    {
         $this->pageTitle = __('Users', true);
     }
 
-    function index() {
+    function index()
+    {
         $this->pageTitle = __('Users', true);
         $this->layout = 'user_portlet';
     }
 
-    function goTage() {
+    function goTage()
+    {
         $code = authcode($this->currentUser['id'] . ',' . $this->currentUser['username'], 'ENCODE');
         $this->set('code', rawurlencode($code));
         $this->layout = false;
     }
 
-    function layout() {
+    function layout()
+    {
         $this->pageTitle = __('Users', true);
         $this->layout = 'user_portlet';
     }
 
-    function checkusername() {
+    function checkusername()
+    {
         print_r($this->data);
 //        $user = $this->User->findByUsername($username);
         exit;
     }
 
-    function register() {
+    function register()
+    {
         $this->pageTitle = lang('user_register');
         if (!empty($this->data)) {
             $readCode = $this->data['User']['code'];
@@ -164,7 +173,8 @@ class UsersController extends AppController {
         //$this->__loadFormValues('User');
     }
 
-    function activate($username = null, $key = null) {
+    function activate($username = null, $key = null)
+    {
 
         $this->pageTitle = __('激活');
 
@@ -201,7 +211,8 @@ class UsersController extends AppController {
         }
     }
 
-    function edit($id = null) {
+    function edit($id = null)
+    {
 
         $userinfo = $this->Auth->user();
         if ($userinfo['id']) {
@@ -230,7 +241,8 @@ class UsersController extends AppController {
         }
     }
 
-    function my_profile() {
+    function my_profile()
+    {
         $userinfo = $this->Auth->user();
         if ($userinfo['id']) {
             $datainfo = $this->{$this->modelClass}->find('first', array('recursive' => -1, 'conditions' => array('id' => $userinfo['id'])));
@@ -247,7 +259,8 @@ class UsersController extends AppController {
     }
 
 
-    function editusername() {
+    function editusername()
+    {
         $userinfo = $this->Auth->user();
         if (!$userinfo['id']) {
             $this->Session->setFlash(__('You are not authorized to access that location.', true));
@@ -277,7 +290,8 @@ class UsersController extends AppController {
         }
     }
 
-    function wxBindToAccount($defUsername = '') {
+    function wxBindToAccount($defUsername = '')
+    {
         $this->pageTitle = __('绑定帐号');
         $userinfo = $this->Auth->user();
         $uid = $userinfo['id'];
@@ -338,7 +352,8 @@ class UsersController extends AppController {
         }
     }
 
-    function edit_nick_name() {
+    function edit_nick_name()
+    {
         $userinfo = $this->Auth->user();
         if (!$userinfo['id']) {
             $err = __('You are not authorized to access that location.', true);
@@ -363,7 +378,8 @@ class UsersController extends AppController {
         return;
     }
 
-    function my_coupons() {
+    function my_coupons()
+    {
         $this->loadModel('CouponItem');
         $coupons = $this->CouponItem->find_my_all_coupons($this->currentUser['id']);
         $this->set(compact('coupons'));
@@ -371,7 +387,8 @@ class UsersController extends AppController {
         $this->set('hideNav', true);
     }
 
-    function my_offers() {
+    function my_offers()
+    {
         $this->loadModel('SharedOffer');
         $sharedOffers = $this->SharedOffer->find_my_all_offers($this->currentUser['id']);
         $expiredIds = array();
@@ -387,15 +404,16 @@ class UsersController extends AppController {
         $this->pageTitle = __('我的红包');
     }
 
-    function setpassword(){
-        $this->autoRender=false;
+    function setpassword()
+    {
+        $this->autoRender = false;
         $userinfo = $this->Auth->user();
-        if(empty($userinfo['id'])){
+        if (empty($userinfo['id'])) {
             echo json_encode(array('success' => false, 'reason' => 'not_login'));
             return;
         }
         $new_password = $_REQUEST['password'];
-        if(empty($new_password)){
+        if (empty($new_password)) {
             echo json_encode(array('success' => false, 'reason' => 'password_empty'));
             return;
         }
@@ -403,7 +421,7 @@ class UsersController extends AppController {
         $user['id'] = $userinfo['id'];
         $user['password'] = Security::hash($new_password, null, true);
         $user['activation_key'] = md5(uniqid());
-        if($this->User->save($user)){
+        if ($this->User->save($user)) {
             echo json_encode(array('success' => true));
             return;
         }
@@ -411,7 +429,8 @@ class UsersController extends AppController {
         return;
     }
 
-    function editpassword() {
+    function editpassword()
+    {
         $userinfo = $this->Auth->user();
         if (!$userinfo['id']) {
             $this->Session->setFlash(__('You are not authorized to access that location.', true));
@@ -442,7 +461,8 @@ class UsersController extends AppController {
         }
     }
 
-    function forgot() {
+    function forgot()
+    {
         $this->pageTitle = __('Forgot Password', true);
         if (!empty($this->data) && isset($this->data['User']['mobilephone'])) {
             $msgCode = $this->Session->read('messageCode');
@@ -485,7 +505,8 @@ class UsersController extends AppController {
         }
     }
 
-    function update_user_intro() {
+    function update_user_intro()
+    {
         $this->autoRender = false;
         $user_intro = $_REQUEST['user_intro'];
         $user_nickname = $_REQUEST['user_nickname'];
@@ -498,7 +519,8 @@ class UsersController extends AppController {
         return;
     }
 
-    function reset($username = null, $key = null) {
+    function reset($username = null, $key = null)
+    {
         $this->pageTitle = __('Reset Password', true);
 
         if ($username == null || $key == null) {
@@ -531,7 +553,8 @@ class UsersController extends AppController {
         $this->set(array('user' => $user, 'username' => $username, 'key' => $key));
     }
 
-    function login_state() {
+    function login_state()
+    {
         $login = true;
         if (!$this->currentUser['id']) {
             if (!$this->Auth->login()) {
@@ -542,7 +565,8 @@ class UsersController extends AppController {
         $this->autoRender = false;
     }
 
-    function login() {
+    function login()
+    {
         $this->pageTitle = __('登录');
         $redirect = $this->data['User']['referer'] ? $this->data['User']['referer'] : ($_REQUEST['referer'] ? $_REQUEST['referer'] : $this->Auth->redirect());
         $success = false;
@@ -649,7 +673,8 @@ class UsersController extends AppController {
         $this->set('login_by_account', $login_by_account);
     }
 
-    function logout() {
+    function logout()
+    {
 
         $this->logoutCurrUser();
         $this->Session->setFlash(__('Logout Success', true) . $synlogout);
@@ -658,7 +683,8 @@ class UsersController extends AppController {
         $this->redirect('/users/login.html');
     }
 
-    function view($username) {
+    function view($username)
+    {
         $user = $this->User->findByUsername($username);
         if (!isset($user['User']['id'])) {
             $this->redirect('/');
@@ -668,16 +694,19 @@ class UsersController extends AppController {
         $this->set('user', $user);
     }
 
-    function bindWxSub() {
+    function bindWxSub()
+    {
         $this->Session->delete('Message.flash');
     }
 
-    function after_bind_relogin() {
+    function after_bind_relogin()
+    {
         $this->logoutCurrUser();
         $this->redirect('/users/wx_login?referer=/users/bindWxSub');
     }
 
-    function me() {
+    function me()
+    {
         $this->pageTitle = __('个人中心');
 
         $this->loadModel('Order');
@@ -699,7 +728,8 @@ class UsersController extends AppController {
     }
 
 
-    function wx_menu_point() {
+    function wx_menu_point()
+    {
         $redirect = '/';
         if (!empty($_GET['referer_key'])) {
             $redirect = oauth_wx_goto($_GET['referer_key'], WX_HOST);
@@ -712,7 +742,8 @@ class UsersController extends AppController {
         }
     }
 
-    function wx_login() {
+    function wx_login()
+    {
 
         $ref = '';
         if (!empty($_GET['referer'])) {
@@ -730,7 +761,8 @@ class UsersController extends AppController {
 //        }
     }
 
-    function get_consignee_list(){
+    function get_consignee_list()
+    {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
         $key = USER_CONSIGNEES_CACHE_KEY . '_' . $uid;
@@ -753,7 +785,8 @@ class UsersController extends AppController {
         exit();
     }
 
-    function save_consignee(){
+    function save_consignee()
+    {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
@@ -773,7 +806,8 @@ class UsersController extends AppController {
         exit();
     }
 
-    function select_consignee($consignee_id){
+    function select_consignee($consignee_id)
+    {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
@@ -788,7 +822,8 @@ class UsersController extends AppController {
         exit();
     }
 
-    function change_avatar() {
+    function change_avatar()
+    {
         $this->layout = null;
         $refer_url = $_REQUEST['ref'];
         $uid = $this->currentUser['id'];
@@ -803,7 +838,7 @@ class UsersController extends AppController {
         $uid = $_POST['uid'];
         $url = $_POST['url'];
         if (!empty($url)) {
-            $this->log('update avatar of user '. $uid .' to '.$url, LOG_INFO);
+            $this->log('update avatar of user ' . $uid . ' to ' . $url, LOG_INFO);
             $this->User->id = $uid;
             $this->User->update(array('image' => "'" . $url . "'", 'avatar' => "'" . $url . "'"), array('id' => $uid));
             Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
@@ -812,7 +847,8 @@ class UsersController extends AppController {
         exit();
     }
 
-    function wx_auth() {
+    function wx_auth()
+    {
         $param_referer = $_GET['referer'];
         $oauth_wx_source = oauth_wx_source();
         if (!empty($_REQUEST['code'])) {
@@ -974,7 +1010,8 @@ class UsersController extends AppController {
         }
     }
 
-    private function after_create_user($uid) {
+    private function after_create_user($uid)
+    {
         $weixinC = $this->Components->load('Weixin');
         //add_coupon_for_new($uid, $weixinC);
     }
@@ -983,7 +1020,8 @@ class UsersController extends AppController {
      * @param $old_serviceAccount_bind_uid
      * @param $new_serviceAccount_bind_uid
      */
-    private function transferUserInfo($old_serviceAccount_bind_uid, $new_serviceAccount_bind_uid) {
+    private function transferUserInfo($old_serviceAccount_bind_uid, $new_serviceAccount_bind_uid)
+    {
         if ($old_serviceAccount_bind_uid == 0 || $new_serviceAccount_bind_uid == 0) {
             return;
         }
@@ -1047,7 +1085,8 @@ class UsersController extends AppController {
      * @param $new_serviceAccount_binded_uid
      * @param $userInfo
      */
-    public function updateUserProfileByWeixin($new_serviceAccount_binded_uid, $userInfo) {
+    public function updateUserProfileByWeixin($new_serviceAccount_binded_uid, $userInfo)
+    {
         if (empty($userInfo)) {
             return;
         }
@@ -1064,7 +1103,7 @@ class UsersController extends AppController {
                 $changed = true;
             }
             if (!$user['image']) {
-                if(!empty($userInfo['headimgurl'])){
+                if (!empty($userInfo['headimgurl'])) {
                     $download_url = download_photo_from_wx($userInfo['headimgurl']);
                     if (!empty($download_url)) {
                         $user['image'] = $download_url;
@@ -1104,7 +1143,8 @@ class UsersController extends AppController {
      * @param $userInfo
      * @return int new created user id
      */
-    public function createNewUserByWeixin($userInfo) {
+    public function createNewUserByWeixin($userInfo)
+    {
         $uid = createNewUserByWeixin($userInfo, $this->User);
         if (empty($uid)) {
             $this->log("error to save createNewUserByWeixin: with " . json_encode($userInfo));
@@ -1119,7 +1159,8 @@ class UsersController extends AppController {
      * @param $access_token
      * @return mixed
      */
-    public function getWxUserInfo($openid, $access_token) {
+    public function getWxUserInfo($openid, $access_token)
+    {
         $userInfo = $this->WxOauth->getUserInfo($openid, $access_token);
         if (!empty($userInfo)) {
             $userInfo = $userInfo['WxOauth'];
@@ -1128,7 +1169,8 @@ class UsersController extends AppController {
         return false;
     }
 
-    protected function wxFailAndGotoLogin($ref = '') {
+    protected function wxFailAndGotoLogin($ref = '')
+    {
         $loginError = __('获取微信授权信息失败，请您重试！');
         $redirect = array('action' => 'login');
         $params = array();
@@ -1143,8 +1185,8 @@ class UsersController extends AppController {
     }
 
 
-
-    public function mobile_bind() {
+    public function mobile_bind()
+    {
         $this->autoRender = false;
         $readCode = $_POST['code'];
         $mobile_num = $_POST['mobile'];
@@ -1196,12 +1238,14 @@ class UsersController extends AppController {
      * @param $text
      * @return mixed|string
      */
-    protected function convertWxName($text) {
+    protected function convertWxName($text)
+    {
         $nickname = remove_emoji($text);
         return ($nickname == '' ? '用户_' . mt_rand(10, 1000) : $nickname);
     }
 
-    function complete_user_info() {
+    function complete_user_info()
+    {
         $this->pageTitle = "完善用户信息";
         $from = $_REQUEST['from'];
         $this->set('from', $from);
@@ -1217,7 +1261,8 @@ class UsersController extends AppController {
         $this->set('user', $current_user);
     }
 
-    function complete() {
+    function complete()
+    {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
@@ -1232,7 +1277,8 @@ class UsersController extends AppController {
         return;
     }
 
-    function to_bind_mobile() {
+    function to_bind_mobile()
+    {
         $userId = $this->Session->read('Auth.User.id');
         $userNickName = $this->Session->read('Auth.User.nickname');
         $orderId = $_REQUEST['order_id'];
@@ -1251,7 +1297,8 @@ class UsersController extends AppController {
         $this->pageTitle = "绑定手机号";
     }
 
-    function merge_data() {
+    function merge_data()
+    {
         $this->autoRender = false;
         $userId = $this->Session->read('Auth.User.id');
         //no login user must to login
@@ -1297,14 +1344,16 @@ class UsersController extends AppController {
         echo json_encode($result);
     }
 
-    function getUserByMobile($mobile) {
+    function getUserByMobile($mobile)
+    {
         $user = $this->User->find('first',
             array('conditions' => array('mobilephone' => $mobile, 'published' => 1))
         );
         return $user;
     }
 
-    function getUserNamebyMobile($mobile) {
+    function getUserNamebyMobile($mobile)
+    {
         $username = $this->User->find('first', array(
             'conditions' => array('mobilephone' => $mobile, 'published' => 1),
             'fields' => array('username', 'nickname')
@@ -1312,7 +1361,8 @@ class UsersController extends AppController {
         return $username;
     }
 
-    function get_spring_coupon($pid) {
+    function get_spring_coupon($pid)
+    {
         $this->autoRender = false;
         $got = false;
         try {
@@ -1328,6 +1378,34 @@ class UsersController extends AppController {
             $reason = 'unknown';
         }
         echo json_encode(array('success' => $got, 'reason' => $reason));
+    }
+
+    public function get_proxies()
+    {
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+
+        $proxies = [];
+        if (!empty($uid)) {
+            $proxies = $this->User->get_my_proxys($uid);
+        }
+
+        echo json_encode($proxies);
+        exit();
+    }
+
+    public function get_id_and_proxies()
+    {
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+
+        $proxies = [];
+        if (!empty($uid)) {
+            $proxies = $this->User->get_my_proxys($uid);
+        }
+
+        echo json_encode(array('uid'=> $uid, 'proxies'=>$proxies));
+        exit();
     }
 }
 
