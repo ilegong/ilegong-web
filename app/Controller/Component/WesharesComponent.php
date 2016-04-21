@@ -27,7 +27,7 @@ class WesharesComponent extends Component
                     'id' => $uid
                 ),
                 'recursive' => 1,
-                'fields' => ['id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar', 'mobilephone', 'payment'],
+                'fields' => ['id', 'nickname', 'image', 'wx_subscribe_status', 'is_proxy', 'avatar', 'mobilephone', 'payment'],
             ));
             $current_user = $current_user['User'];
             //reset user image
@@ -49,6 +49,7 @@ class WesharesComponent extends Component
         $is_manage_user = $this->ShareAuthority->user_can_view_share_order_list($uid, $weshareId);
         $can_manage_share = $this->ShareAuthority->user_can_manage_share($uid, $weshareId);
         $can_edit_share = $this->ShareAuthority->user_can_edit_share_info($uid, $weshareId);
+        $share_summery = $this->WeshareBuy->get_share_buy_summery($weshareId);
         $weshare_ship_settings = $this->getWeshareShipSettings($weshareId);
         $consignee = $this->getShareConsignees($uid);
         return [
@@ -63,6 +64,7 @@ class WesharesComponent extends Component
             'is_manage' => $is_manage_user,
             'can_manage_share' => $can_manage_share,
             'can_edit_share' => $can_edit_share,
+            'share_summery' => $share_summery
         ];
     }
 

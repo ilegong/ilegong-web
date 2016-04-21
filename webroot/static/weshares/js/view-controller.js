@@ -143,7 +143,7 @@
       }
       $http({
         method: 'GET',
-        url: '/weshares/get_share_user_order_and_child_share/' + share_id + '.json',
+        url: '/weshares/get_share_user_order/' + share_id + '.json',
         cache: $templateCache
       }).
         success(function (data, status) {
@@ -606,8 +606,8 @@
     }
 
     function getProductLeftNum(product) {
-      if (vm.ordersDetail && vm.ordersDetail['summery'].details[product.id]) {
-        var product_buy_num = parseInt(vm.ordersDetail['summery'].details[product.id]['num']);
+      if (vm.ordersDetail && vm.productSummery.details[product.id]) {
+        var product_buy_num = parseInt(vm.productSummery.details[product.id]['num']);
         var store_num = product.store;
         return store_num - product_buy_num;
       }
@@ -623,8 +623,8 @@
       if (store_num == 0) {
         return true;
       }
-      if (vm.ordersDetail && vm.ordersDetail['summery'].details[product.id] && store_num > 0) {
-        var product_buy_num = parseInt(vm.ordersDetail['summery'].details[product.id]['num']);
+      if (vm.ordersDetail && vm.productSummery.details[product.id] && store_num > 0) {
+        var product_buy_num = parseInt(vm.productSummery.details[product.id]['num']);
         return product_buy_num < store_num;
       }
       return true;
@@ -1300,6 +1300,7 @@
       vm.userSubStatus = data['sub_status'];
       vm.autoPopCommentData = data['prepare_comment_data'];
       vm.dliveryTemplate = data['weshare']['deliveryTemplate'];
+      vm.productSummery = data['share_summery'];
       vm.submitRecommendData = {};
       vm.submitRecommendData.recommend_content = vm.weshare.creator.nickname + '我认识，很靠谱！';
       vm.submitRecommendData.recommend_user = vm.currentUser.id;
