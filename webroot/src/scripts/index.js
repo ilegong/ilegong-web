@@ -42,11 +42,18 @@
         return;
       }
 
+      if(vm.subscribeInProcess){
+        return;
+      }
+
+      vm.subscribeInProcess = true;
       $http.get('/weshares/subscribe_sharer/' + proxyId + "/" + vm.uid).success(function (data) {
         if (data.success) {
           vm.proxies.push({id: proxyId, showUnSubscribeBtn: false});
         }
+        vm.subscribeInProcess = false;
       }).error(function (data, e) {
+        vm.subscribeInProcess = false;
         $log.log('Failed to get proxies: ' + e);
       });
     }
@@ -57,14 +64,21 @@
         return;
       }
 
+      if(vm.unSubscribeInProcess){
+        return;
+      }
+
+      vm.unSubscribeInProcess = true;
       $http.get('/weshares/unsubscribe_sharer/' + proxyId + "/" + vm.uid).success(function (data) {
         if (data.success) {
           vm.proxies = _.reject(vm.proxies, function (proxy) {
             return proxy.id == proxyId
           });
         }
+        vm.unSubscribeInProcess = false;
       }).error(function (data, e) {
         $log.log('Failed to get proxies: ' + e);
+        vm.unSubscribeInProcess = false;
       });
     }
 

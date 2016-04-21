@@ -41,7 +41,7 @@
     }
   }
 
-  .outer-listings-container{
+  .outer-listings-container {
     margin-bottom: 50px;
     margin-top: 47px;
   }
@@ -54,11 +54,11 @@
   .share-good a {
     display: block;
     text-decoration: none;
-    .image-container{
+    .image-container {
       position: relative;
       overflow: hidden;
       padding-bottom: 67%;
-      .image-cover{
+      .image-cover {
         position: absolute;
         top: 0;
         bottom: 0;
@@ -71,7 +71,7 @@
         overflow: hidden;
         background-color: #cacccd;
         vertical-index: 0;
-        img{
+        img {
           z-index: 1;
         }
       }
@@ -118,6 +118,11 @@
     font-size: 1.2em;
     color: #333;
     line-height: 19px;
+    max-width: 160px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .ta {
     width: 64px;
@@ -207,7 +212,7 @@
   .product-price-bg {
     z-index: 2;
     background-color: #333333;
-    padding: 5px;
+    padding: 5px 12px 5px 5px;
     color: #FFFFFF;
     display: block;
     position: absolute;
