@@ -9,6 +9,14 @@ var vinylPaths = require('vinyl-paths');
 
 var all_js = [
   {
+    name: 'index.min.js',
+    sources: [
+      'webroot/static/weshares/js/me-lazyload.js',
+      'webroot/static/weshares/js/app.js',
+      'webroot/src/scripts/index.js',
+    ],
+    dist: 'webroot/static/weshares/js/'
+  }, {
     name: 'weshare.min.js',
     sources: [
       'webroot/static/weshares/js/me-lazyload.js',
