@@ -27,7 +27,7 @@
      id="layer-bg"></div>
 
 <div style="position: absolute;display: block;bottom: 0;left: 0;">
-    <a id="show-tip-info" style="display: block;color: #333;text-align: center;line-height: 50px;text-decoration: underline;font-size: 15px;">点击查看订单的物流信息</a>
+    <a id="show-tip-info" style="display: none;color: #333;text-align: center;line-height: 50px;text-decoration: underline;font-size: 15px;">点击查看订单的物流信息</a>
     <a style="display: block;" href="/" id="pys-banner">
         <img style="width: 100%;display: block;" src="{{$STATIC_HOST}}/static/weshares/images/share-banner.gif">
     </a>
@@ -43,7 +43,9 @@
         var $pysBanner = $('#pys-banner');
         var $tipPayInfo = $('#tip-pay-info');
 
-        $('#show-tip-info').on('click', function(){
+        var $showTipInfo = $('#show-tip-info');
+
+        $showTipInfo.on('click', function(){
             showPaidTipInfo();
         });
 
@@ -52,6 +54,7 @@
             $tipInfo.hide();
             $layerBg.hide();
 
+            $showTipInfo.show();
             $pysBanner.show();
             $tipPayInfo.show();
             $payQrcode.show();
