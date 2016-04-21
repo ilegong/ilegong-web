@@ -277,9 +277,7 @@ class WesharesController extends AppController
         return;
     }
 
-    /**
-     * @param $shareId
-     */
+    //获取分享的汇总数据
     public function get_share_summery_data($shareId, $uid){
         $this->autoRender = false;
         try {

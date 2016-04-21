@@ -63,7 +63,6 @@
     vm.sortOrders = sortOrders;
     vm.closeCommentDialog = closeCommentDialog;
     vm.notifyUserToComment = notifyUserToComment;
-    vm.loadSharerAllComments = loadSharerAllComments;
     vm.loadOrderDetail = loadOrderDetail;
     vm.getFormatDate = getFormatDate;
     vm.notifyFans = notifyFans;
@@ -86,7 +85,6 @@
     vm.redirectFaq = redirectFaq;
     vm.chatToUser = chatToUser;
     vm.calProxyRebateFee = calProxyRebateFee;
-    vm.loadOrderCommentData = loadOrderCommentData;
     vm.isShareManager = isShareManager;
     vm.calculateShipFee = calculateShipFee;
     vm.unSubSharer = unSubSharer;
@@ -99,6 +97,8 @@
     vm.orderPayTotalPrice = 0;
     vm.productTotalPrice = 0;
 
+    vm.commentData = [];
+    vm.orderComments = [];
     activate();
 
     function activate() {
@@ -122,29 +122,6 @@
       var formatedDate = $filter('date')(date, 'MM-dd HH:mm');
       return formatedDate;
     }
-
-    function loadOrderCommentData(share_id) {
-      $http({method: 'GET', url: '/weshares/get_share_comment_data/' + share_id + '.json'}).
-        success(function (data, status) {
-          vm.commentData = data['comment_data'];
-          vm.orderComments = vm.commentData['order_comments'];
-        }).
-        error(function (data, status) {
-          $log.log(data);
-        });
-    }
-
-    function loadSharerAllComments(sharer_id) {
-      $http({method: 'GET', url: '/weshares/load_share_comments/' + sharer_id + '.json', cache: $templateCache}).
-        success(function (data, status) {
-          vm.sharerAllComments = data['share_all_comments'];
-          vm.sharerAllCommntesUser = data['share_comment_all_users'];
-        }).
-        error(function (data, status) {
-          $log.log(data);
-        });
-    }
-
 
     function chatToUser(userId) {
       if (userId == vm.currentUser.id) {

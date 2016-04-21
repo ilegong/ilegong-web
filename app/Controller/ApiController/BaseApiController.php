@@ -2,6 +2,8 @@
 
 class BaseApiController extends Controller
 {
+    var $currentUser = [];
+
     public function beforeFilter()
     {
         $allow_action = array('test', 'check_mobile_available');
@@ -11,4 +13,5 @@ class BaseApiController extends Controller
         }
         $this->autoRender = false;
     }
+
 }

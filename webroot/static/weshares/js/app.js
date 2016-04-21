@@ -137,7 +137,7 @@
       this.loadedShareIds = [];
       this.orderComments = {};
       this.orderCommentReplies = {};
-      this.combineComment = 0;
+      this.combineComment = 1;
     };
 
     /**
@@ -163,7 +163,6 @@
           this.loadedShareIds.push(this.shareId);
           this.shareId = this.referShareId;
           this.page = 1;
-          this.combineComment = 1;
         }
       }
       this.busy = true;
