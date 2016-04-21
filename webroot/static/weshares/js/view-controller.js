@@ -56,7 +56,6 @@
     vm.getOrderComment = getOrderComment;
     vm.getReplyComments = getReplyComments;
     vm.showReplies = showReplies;
-    vm.reloadCommentData = reloadCommentData;
     vm.showCommentListDialog = showCommentListDialog;
     vm.getOrderCommentLength = getOrderCommentLength;
     vm.initWeshareData = initWeshareData;
@@ -698,10 +697,6 @@
       });
     }
 
-    function reloadCommentData() {
-      vm.loadOrderCommentData(vm.weshare.id);
-    }
-
     function notifyUserToComment(order) {
       vm.submitTempCommentData.order_id = order.id;
       vm.submitTempCommentData.reply_comment_id = 0;
@@ -1263,7 +1258,6 @@
       //load all comments
       vm.getShareSummeryData(vm.weshare.id, vm.weshare.creator.id);
       vm.loadOrderDetail(vm.weshare.id);
-      vm.loadOrderCommentData(vm.weshare.id);
     }
 
     //设置微信分享的参数
