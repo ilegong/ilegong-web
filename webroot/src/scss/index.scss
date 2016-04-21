@@ -20,6 +20,8 @@
     width: 100%;
     position: fixed;
     top: 0;
+    left: 0;
+    z-index: 10;
     li {
       float: left;
       text-align: center;
@@ -37,6 +39,11 @@
         color: #ff6485;
       }
     }
+  }
+
+  .outer-listings-container{
+    margin-bottom: 50px;
+    margin-top: 47px;
   }
 
   /*share good*/
