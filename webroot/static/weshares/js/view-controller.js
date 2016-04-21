@@ -71,9 +71,6 @@
     vm.sendNotifyShareMsg = sendNotifyShareMsg;
     vm.validNotifyMsgContent = validNotifyMsgContent;
     vm.subSharer = subSharer;
-    vm.getRecommendInfo = getRecommendInfo;
-    vm.isCurrentUserRecommend = isCurrentUserRecommend;
-    vm.toRecommendUserInfo = toRecommendUserInfo;
     vm.cloneShare = cloneShare;
     vm.resetNotifyContent = resetNotifyContent;
     vm.defaultNotifyHasBuyMsgContent = defaultNotifyHasBuyMsgContent;
@@ -148,7 +145,6 @@
       }).
         success(function (data, status) {
           vm.ordersDetail = data['ordersDetail'];
-          vm.rebateLogs = data['ordersDetail']['rebate_logs'];
           setWeiXinShareParams();
           //check user is auto comment
           if (vm.autoPopCommentData['comment_order_info']) {
@@ -165,7 +161,7 @@
                 }
               } else {
                 //check is new user buy it
-                var userInfo = vm.ordersDetail.users[vm.currentUser.id];
+                var userInfo = vm.currentUser;
                 if (!vm.userSubStatus) {
                   vm.showTipSubSharerDialog = true;
                 }
@@ -441,47 +437,6 @@
       ;
     }
 
-    function getRecommendInfo(order) {
-      var recommendId = 0;
-      var recommend = '';
-      if (vm.rebateLogs && vm.rebateLogs[order['cate_id']]) {
-        recommendId = vm.rebateLogs[order['cate_id']];
-        recommend = vm.ordersDetail['users'][recommendId]['nickname'];
-      } else {
-        recommendId = vm.shareOrder.rebate_logs[order['cate_id']];
-        recommend = vm.shareOrder['users'][recommendId]['nickname'];
-      }
-      return recommend + '推荐';
-    }
-
-    function isCurrentUserRecommend(order) {
-      if (vm.isCreator()) {
-        return true;
-      }
-      if (vm.currentUser && vm.currentUser['is_proxy'] == 0) {
-        return false;
-      }
-      var recommendId = 0;
-      if (vm.rebateLogs && vm.rebateLogs[order['cate_id']]) {
-        recommendId = vm.rebateLogs[order['cate_id']];
-      } else {
-        recommendId = vm.shareOrder.rebate_logs[order['cate_id']];
-      }
-      if (vm.currentUser && vm.currentUser['id'] == recommendId) {
-        return true;
-      }
-      return false;
-    }
-
-    function toRecommendUserInfo(order) {
-      var recommendId = 0;
-      if (vm.rebateLogs[order['cate_id']]) {
-        recommendId = vm.rebateLogs[order['cate_id']];
-      } else {
-        recommendId = vm.shareOrder.rebate_logs[order['cate_id']];
-      }
-      window.location.href = '/weshares/user_share_info/' + recommendId;
-    }
 
     function getShipSetId() {
       if (vm.selectShipType == 0) {
@@ -606,7 +561,7 @@
     }
 
     function getProductLeftNum(product) {
-      if (vm.ordersDetail && vm.productSummery.details[product.id]) {
+      if (vm.productSummery && vm.productSummery.details[product.id]) {
         var product_buy_num = parseInt(vm.productSummery.details[product.id]['num']);
         var store_num = product.store;
         return store_num - product_buy_num;
@@ -623,7 +578,7 @@
       if (store_num == 0) {
         return true;
       }
-      if (vm.ordersDetail && vm.productSummery.details[product.id] && store_num > 0) {
+      if (vm.productSummery && vm.productSummery.details[product.id] && store_num > 0) {
         var product_buy_num = parseInt(vm.productSummery.details[product.id]['num']);
         return product_buy_num < store_num;
       }
@@ -826,11 +781,6 @@
     }
 
     function notifyType() {
-      if (vm.ordersDetail) {
-        if (vm.ordersDetail.orders && vm.ordersDetail.orders.length > 0) {
-          return 1;
-        }
-      }
       if (vm.shareOrder) {
         if (vm.shareOrder.orders && vm.shareOrder.orders.length > 0) {
           return 1;
@@ -1332,7 +1282,7 @@
       var desc = '来 [朋友说] 分享好吃的、好玩的、有趣的';
       var share_string = 'we_share';
       //member
-      var userInfo = vm.ordersDetail.users[vm.currentUser.id];
+      var userInfo = vm.currentUser;
 
       var regex = /(<([^>]+)>)/ig
         , shareIntrBody = vm.weshare.description.substr(0, 30)

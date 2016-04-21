@@ -253,15 +253,13 @@ class WesharesController extends AppController
 
     /**
      * @param $shareId
-     * ajax 获取用户的订单和子分享数据
+     * ajax 获取用户的订单数据
      */
     public function get_share_user_order($shareId)
     {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
         $ordersDetail = $this->WeshareBuy->get_current_user_share_order_data($shareId, $uid);
-//        $share_summery = $this->WeshareBuy->get_share_buy_summery($shareId);
-//        $ordersDetail['summery'] = $share_summery;
         echo json_encode(array('ordersDetail' => $ordersDetail));
         exit();
     }
