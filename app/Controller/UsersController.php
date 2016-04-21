@@ -781,7 +781,7 @@ class UsersController extends AppController
         }
         $postStr = file_get_contents('php://input');
         $postDataArray = json_decode($postStr, true);
-        $consignee = $this->UserConsignee->save($postDataArray, $uid);
+        $consignee = $this->UserConsignee->save_consignee($postDataArray, $uid);
         echo json_encode(['success' => true, 'consignee' => $consignee['OrderConsignee']]);
         exit();
     }
