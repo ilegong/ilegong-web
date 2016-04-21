@@ -11,3 +11,5 @@ update cake_users set label = '辣妈团长' where id = 806889;
 update cake_users set label = '超级奶爸' where id = 859965;
 update cake_users set label = '超级辣妈' where id = 878825;
 update cake_users set label = '山药姐姐' where id = 12376;
+
+alter table cake_index_products change measurement specification varchar(255);
