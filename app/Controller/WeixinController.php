@@ -95,7 +95,7 @@ class WeixinController extends AppController {
                         $subscribe_array = json_decode(Cache::read($key),true);
                         $ticket = $req['Ticket'];
                         if (!empty($ticket) && $ticket == SCAN_TICKET_QRCODE_PAY) {
-                            $this->log('扫码支付跳转关注-1', LOG_INFO);
+                            $this->log('扫码支付跳转关注-1, uid'.$uid, LOG_INFO);
                         }
                         if(!empty($subscribe_array)){
                             $this->loadModel('WxOauth');
@@ -165,7 +165,7 @@ class WeixinController extends AppController {
                             return;
                         }
                         if ($ticket == SCAN_TICKET_QRCODE_PAY) {
-                            $this->log('扫码支付跳转关注-2', LOG_INFO);
+                            $this->log('扫码支付跳转关注-2, uid' . $uid, LOG_INFO);
                         }
                     }
                 }
