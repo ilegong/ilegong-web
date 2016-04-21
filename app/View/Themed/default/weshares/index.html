@@ -1,178 +1,181 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh" ng-app='weshares'>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
+    <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="{{$STATIC_HOST}}/static/weshares/css/site-common.css?0.0.4" media="all" rel="stylesheet"
+          type="text/css">
     <link href="{{$STATIC_HOST}}/static/weshares/css/index.min.css?v0.0.8" rel="stylesheet" type="text/css">
-    <link href="http://cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <title>分享圈</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body class="" cz-shortcut-listen="true">
-<div class="tabs tabs-style-bar">
-    <nav>
-        <ul>
-            <li><a href="/weshares/index.html" {{if $tag==0}}style="color:#FF5A5F;"{{/if}}><span>新品爆款</span></a></li>
-            <li><a href="/weshares/index/1.html" {{if $tag==1}}style="color:#FF5A5F;"{{/if}}><span>水果蔬菜</span></a></li>
-            <li><a href="/weshares/index/2.html" {{if $tag==2}}style="color:#FF5A5F;"{{/if}}><span>肉蛋粮油</span></a></li>
-            <li><a href="/weshares/index/3.html" {{if $tag==3}}style="color:#FF5A5F;"{{/if}}><span>零食其他</span></a></li>
-        </ul>
-    </nav>
-</div>
+<div class="index-page" ng-controller="IndexCtrl as vm" ng-click="vm.clickPage();">
 
-<div class="recommend-sharer">
-  <h1>朋友说的朋友们</h1>
-  <div style="position: relative; width: 100%;">
-    <a href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=404961329&idx=1&sn=6f3e1fc3e904fd0dd69c6400a95f35dd&scene=1&srcid=0401kYrCXzIYqexXc5qhtiXy#rd" onClick='_hmt.push(["_trackEvent", "wx_wenzhang", "click", "pys_friends_on_index"]);' target="_blank">
-      <ul class="clearfix">
-        <li style="width: 7.08em; height: 7.69em;" class="fl"><img src="{{$STATIC_HOST}}/static/weshares/images/recommend-sharer.jpg"></li>
-        <li style="overflow: hidden; padding-right: 12px;">
-          <h2>轩轩妈妈和她的云南之旅</h2>
-          <label>2004年，第一次到昆明。当地的朋友带着去吃各种云南美食，有一种黑黑的浸泡在油中的饭前碟开胃菜给...</label>
+    <ul class="clearfix class-tab">
+        <li {{if $tag==0}}class="focus"{{/if}}><a href="/weshares/index.html">新品爆款</a>
         </li>
-      </ul>
-    </a>
-  </div>
-</div>
+        <li {{if $tag==1}}class="focus"{{/if}}><a href="/weshares/index/1.html">水果蔬菜</a>
+        </li>
+        <li {{if $tag==2}}class="focus"{{/if}}><a href="/weshares/index/2.html">肉蛋粮油</a>
+        </li>
+        <li {{if $tag==3}}class="focus"{{/if}}><a href="/weshares/index/3.html">零食其他</a>
+        </li>
+    </ul>
 
-<div class="outer-listings-container row-space-3" style="margin-bottom: 50px;margin-top: 10px;background: #ffffff;">
-  <div class="listings-container">
-        {{loop $products $product}}
-        <?php
-            if($product['type'] == 1){
-                $product_detail_url = '/pintuan/detail/'.$product['share_id'].'?from=index_view';
-            }else{
-                $product_detail_url = '/weshares/view/'.$product['share_id'].'?from=index_view';
-            }
-        ?>
-        <div class="row">
-            <!--葡萄-->
-            <div class="col-sm-12 row-space-2 col-md-6">
-                <div class="listing">
-                    <div class="panel-image listing-img">
-                        <a href="{{$product_detail_url}}" target="_self"
-                           class="media-photo media-cover">
-                            <div class="listing-img-container media-cover text-center">
-                                <img itemprop="image" data-current="0"
-                                     data-original="{{$this->Html->assetUrl($product['share_img'])}}"
-                                     class="img-responsive-height lazy"
-                                     data-urls="[&quot;{{$this->Html->assetUrl($product['share_img'])}}&quot;]">
-                            </div>
+    <div class="outer-listings-container row-space-3" style="margin-bottom: 50px;">
+        <div class="listings-container">
+            {{loop $products $index_product}}
+            <?php
+                $product = $index_product['IndexProduct'];
+                $user = $index_product['User'];
+                $user_level = $index_product['UserLevel'];
+                if($product['type'] == 1){
+                    $product_detail_url = '/pintuan/detail/'.$product['share_id'].'?from=index_view';
+                }else{
+                    $product_detail_url = '/weshares/view/'.$product['share_id'].'?from=index_view';
+                }
+            ?>
+            <div class="share-good">
+                <ul class="sharer clearfix">
+                    <li class="fl">
+                        <a href="/weshares/user_share_info/{{$product['share_user_id']}}">
+                            <img itemprop="image" class="sharer-header lazy rounded-50"
+                                 lazy-src="{{$this->Html->assetUrl($product['share_user_img'])}}"
+                                 onerror="this.src='{{$STATIC_HOST}}/avatar/s/default.jpg'">
                         </a>
-                        <a href="{{$product_detail_url}}" target="_self"
-                           class="link-reset panel-overlay-bottom-left panel-overlay-label panel-overlay-listing-label" style="bottom: 20px;">
-                            <div>
-                                <sup class="h6 text-contrast">￥</sup>
-                                <span class="h3 text-contrast price-amount">{{$product['share_price']}}</span>
-                                <sup class="h6 text-contrast"></sup>
-                                    <span class="h3 icon-beach" data-behavior="tooltip" aria-label="即时预订">
-                                      <i class="icon icon-instant-book icon-flush-sides"></i>
-                                    </span>
-                            </div>
+                    </li>
+                    <li class="sharer-label">{{"L".$user_level['data_value']}}</li>
+                    <li class="fl">
+                        <label class="nickname">
+                            <a href="/weshares/user_share_info/{{$product['share_user_id']}}">
+                                {{$user['nickname']}}
+                            </a>
+                        </label>
+                        <dl class="clearfix sharer-tag">
+                            <dd class="fl">
+                                {{$user['label'] ? : "吃货向标"}}
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="fr ta" ng-class="{'un-subscribed': !vm.isSubscribed({{$product['share_user_id']}})}"
+                        ng-click="vm.subscribe({{$product['share_user_id']}})">关注TA
+                    </li>
+                    <li class="fr ta" style="position: relative;"
+                        ng-class="{'subscribed': vm.isSubscribed({{$product['share_user_id']}})}"
+                        ng-click="vm.clickSubscribedBtn({{$product['share_user_id']}}, $event)">
+                        <a href="#X" class="clearfix">
+                            <span>已关注</span>
+                            <label>
+                                <i></i>
+                                <em></em>
+                            </label>
                         </a>
-                    </div>
-                    <div class="panel-body panel-card-section">
-                        <div class="media">
-                            <a href="/weshares/user_share_info/{{$product['share_user_id']}}"
-                               class="media-photo-badge pull-right card-profile-picture card-profile-picture-offset">
-                                <div class="media-photo media-round" style="border: 1px solid #fff;">
-                                    <img data-original="{{$this->Html->assetUrl($product['share_user_img'])}}"
-                                         alt="" class="lazy">
-                                </div>
-                            </a>
-                            <a href="{{$product_detail_url}}" target="_self" class="text-normal">
-                                <h3 title="{{$product['share_name']}}" itemprop="name"
-                                    class="h5 listing-name text-truncate row-space-top-1">
-                                    {{$product['share_name']}}
-                                </h3>
-                            </a>
-
-                            <div itemprop="description" class="text-muted listing-location text-truncate">
-                                <a href="/weshares/user_share_info/{{$product['share_user_id']}}"
-                                   class="text-normal link-reset">
-                                    {{$product['share_user_name']}}
-                                    ·
-                                    <small>
-                                        <div class="star-rating">
-                                            <div class="foreground">
-                                                <i class="icon icon-beach icon-star"></i>
-                                                <i class="icon icon-beach icon-star"></i>
-                                                <i class="icon icon-beach icon-star"></i>
-                                                <i class="icon icon-beach icon-star"></i>
-                                                <i class="icon icon-beach icon-star-half"></i>
-
-                                            </div>
-                                            <div class="background">
-                                                <i class="icon icon-star icon-light-gray"></i>
-                                                <i class="icon icon-star icon-light-gray"></i>
-                                                <i class="icon icon-star icon-light-gray"></i>
-                                                <i class="icon icon-star icon-light-gray"></i>
-                                                <i class="icon icon-star icon-light-gray"></i>
-                                            </div>
-                                        </div>
-                                    </small>
-                                    ·{{$product['share_vote']}}条爱心评价
-                                </a>
-                            </div>
+                        <a class="unfollow" ng-show="vm.showUnSubscribeBtn({{$product['share_user_id']}})"
+                           ng-click="vm.unSubscribe({{$product['share_user_id']}})">取消关注</a>
+                    </li>
+                </ul>
+                <a href="{{$product_detail_url}}">
+                    <div class="image-container">
+                        <div class="image-cover">
+                            <img itemprop="image" data-current="0"
+                                 lazy-src="{{$this->Html->assetUrl($product['share_img'])}}"
+                                 class="product-image lazy">
                         </div>
+                        <span class="product-price-bg">
+                            <label>￥</label><em>{{$product['share_price']}}</em>
+                            {{if strlen($product['specification'])>0}}
+                            <label>/{{$product['specification']}}</label>
+                            {{/if}}
+                        </span>
                     </div>
-                </div>
+
+                    <div class="share-content">
+                        <h1 class="share-title">{{$product['share_name']}}</h1>
+
+                        {{if strlen($product['description'])>0}}
+                        <p>
+                            <span>{{$user['nickname']}}说: </span>
+                            {{$product['description']}}
+                        </p>
+                        {{/if}}
+                    </div>
+                </a>
+                <dl class="clearfix share-data" style="display: none;">
+                    <dd class="clearfix" style="padding-right: 60px;"><img src="images/img.png"/><img
+                            src="images/img.png"/><img src="images/img.png"/><img
+                            src="images/img.png"/><label>已<span>6</span>个人报名</label></dd>
+                    <dd class="browse">浏览2341</dd>
+                </dl>
             </div>
+            {{/loop}}
         </div>
-        {{/loop}}
     </div>
 </div>
+
 <footer class="channel_bottom" id="share-bottom-nav">
     <a class="btm_item" href="/" style="width: 25%;">
-        <p class="iconfont-active" style="height: 2px;"><i class="fa fa-home"></i></p>
+        <p class="iconfont-active"><i class="fa fa-home"></i></p>
         <b class="active">首页</b>
     </a>
     <a class="btm_item" href="/share_opt/index.html" style="width: 25%; position: relative;">
-        <i style="background:#f00;border-radius:50%;width:10px;height:10px;top:-5px;right:35%;position:absolute; display: none;" id="mark-has-unread"></i>
-        <p class="iconfont" style="height: 2px;"><i class="fa fa-search"></i></p>
+        <i style="background:#f00;border-radius:50%;width:10px;height:10px;top:-5px;right:35%;position:absolute; display: none;"
+           id="mark-has-unread"></i>
+
+        <p class="iconfont"><i class="fa fa-search"></i></p>
         <b>发现</b>
     </a>
     <a class="btm_item" href="/weshares/add" style="width: 25%;">
-        <p class="iconfont" style="height: 2px;"><i class="fa fa-share-square-o"></i></p>
+        <p class="iconfont"><i class="fa fa-share-square-o"></i></p>
         <b>我要分享</b>
     </a>
     <a class="btm_item" href="/weshares/user_share_info/{{$uid}}" style="width: 25%;">
-        <p class="iconfont" style="height: 2px;"><i class="fa fa-user"></i></p>
+        <p class="iconfont"><i class="fa fa-user"></i></p>
         <b>我的</b>
     </a>
 </footer>
-<script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
-<script src="{{$STATIC_HOST}}/static/opt/js/lazyload.min.js"></script>
-<script src="{{$STATIC_HOST}}/static/common/no-angular-common.js"></script>
+
 <script>
-    Pyshuo.share.utils.init();
-    Pyshuo.share.utils.checkHasUnreadInfo();
-    $("img.lazy").lazyload({
-        effect : "fadeIn"
-    });
+    //Pys common name space
+    PYS = {};
+    //define static file path
+    PYS.staticFilePath = '{{$STATIC_HOST}}';
+    //PYS.staticFilePath = 'http://51daifan-assets.stor.sinaapp.com';
+    PYS.storage = {
+        save: function (key, jsonData, expirationHour) {
+            //if (!Modernizr.localstorage){return false;}
+            var expirationMS = expirationHour * 60 * 60 * 1000;
+            var record = {value: JSON.stringify(jsonData), timestamp: new Date().getTime() + expirationMS}
+            localStorage.setItem(key, JSON.stringify(record));
+            return jsonData;
+        },
+        load: function (key) {
+            //if (!Modernizr.localstorage){return false;}
+            var record = JSON.parse(localStorage.getItem(key));
+            if (!record) {
+                return false;
+            }
+            return (new Date().getTime() < record.timestamp && JSON.parse(record.value));
+        },
+        clear: function () {
+            localStorage.clear();
+        }
+    }
 </script>
+<script type="text/javascript" src="//cdn.bootcss.com/angular.js/1.4.1/angular.min.js"></script>
+<script type="text/javascript" src="//cdn.bootcss.com/ngInfiniteScroll/1.2.0/ng-infinite-scroll.min.js"></script>
+<script type="text/javascript" src="//cdn.bootcss.com/underscore.js/1.8.3/underscore-min.js"></script>
+<script type="text/javascript" src="{{$STATIC_HOST}}/static/weshares/js/index.min.js?v2.0.0"></script>
 <script>
     var _hmt = _hmt || [];
-    (function() {
+    (function () {
         var hm = document.createElement("script");
         hm.src = "//hm.baidu.com/hm.js?705777ddf53d0d7a074a79a26c8f50cf";
         var s = document.getElementsByTagName("script")[0];
         s.parentNode.insertBefore(hm, s);
     })();
 </script>
-<style>
-/*alice add css*/
-.share-good,.recommend-sharer{ margin-top: 54px; background-color: #ffffff;}
-.fl {float:left;}
-
-/*recommend sharer*/
-.recommend-sharer a:hover{text-decoration: none;}
-.recommend-sharer h1{ color:#0fc449; line-height: 38px; text-align: center; font-size: 1.15em; font-weight: normal; border-bottom: 1px #eeeeee solid; margin-bottom:0;}
-.recommend-sharer ul {padding-left: 0;margin-bottom:0;}
-.recommend-sharer ul li img{ width: 100%; height: 100%;}
-.recommend-sharer ul li h2{margin-bottom:0 !important; font-weight: normal; font-size: 1.05em; color: #333333; padding: 12px 0 5px 10px;}
-.recommend-sharer ul li label{ color: #999999; line-height: 18px; padding-left: 10px; display: block; font-size: 0.9em;padding-top: 0;padding-bottom:0;}
-</style>
 </body>
 </html>
