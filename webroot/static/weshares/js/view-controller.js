@@ -1367,7 +1367,7 @@
         if (vm.totalBuyCount >= 5) {
           desc += '已经有' + vm.totalBuyCount + '人报名，';
         }
-        desc += vm.weshare.description.substr(0, 20);
+        desc += shareIntryResult;
       } else if (userInfo) {
         if (vm.isProxy()) {
           url = url + '?recommend=' + vm.currentUser['id'];
