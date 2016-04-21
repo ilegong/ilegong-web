@@ -179,20 +179,22 @@
           } else {
             //from paid done
             if (fromType == 1) {
+              vm.showLayer = true;
               if (_.isEmpty(initSharedOfferId)) {
                 if (!vm.userSubStatus) {
                   vm.showTipSubSharerDialog = true;
                 } else {
                   vm.showNotifyShareDialog = true;
                 }
-                vm.showLayer = true;
               } else {
                 //check is new user buy it
                 var userInfo = vm.ordersDetail.users[vm.currentUser.id];
+                if (!vm.userSubStatus) {
+                  vm.showTipSubSharerDialog = true;
+                }
                 if (userInfo) {
                   vm.showNotifyShareOfferDialog = true;
                   vm.sharedOfferMsg = '恭喜发财，大吉大利！';
-                  vm.showLayer = true;
                 }
               }
             }
