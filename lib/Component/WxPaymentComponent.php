@@ -370,16 +370,10 @@ class WxPaymentComponent extends Component {
         return $order;
     }
 
-    public function checkOrderStatus($orderId, $uid){
+    public function getOrder($orderId, $uid){
         $orderModel = ClassRegistry::init('Order');
         $order = $orderModel->find('first', ['conditions' => ['id' => $orderId, 'creator' => $uid]]);
-        if (empty($order)) {
-            return ['status' => false];
-        }
-        if ($order['Order']['status'] == ORDER_STATUS_WAITING_PAY) {
-            return ['status' => true, 'order' => $order];
-        }
-        return ['status' => false, 'share_id' => $order['Order']['member_id']];
+        return $order;
     }
 
     /**

@@ -145,8 +145,24 @@ class WxPayController extends AppController {
         $error_pay_redirect = '/orders/detail/' . $orderId . '/pay';
         $paid_done_url = '/orders/detail/' . $orderId . '/paid';
         $this->pageTitle = '微信支付';
-        $order = $this->WxPayment->findOrderAndCheckStatus($orderId, $uid);
         $from = $_GET['from'];
+        $order = $this->WxPayment->getOrder($orderId, $uid);
+        if (empty($order)) {
+            $this->redirect('/');
+            return;
+        }
+        if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
+            if ($from == 'share') {
+                $this->redirect('/weshares/view/' . $order['Order']['member_id'] . '/1');
+                return;
+            }
+            if ($from == 'pintuan') {
+                $this->redirect('/pintuan/detail/' . $order['Order']['member_id'] . '?tag_id=' . $order['Order']['group_id']);
+                return;
+            }
+            $this->redirect('/');
+            return;
+        }
         //分享
         if ($from == 'share') {
             $shareId = $order['Order']['member_id'];
@@ -183,8 +199,24 @@ class WxPayController extends AppController {
         $uid = $this->currentUser['id'];
         $error_pay_redirect = '/';
         $this->pageTitle = '微信支付';
-        $order = $this->WxPayment->findOrderAndCheckStatus($orderId, $uid);
         $from = $_GET['from'];
+        $order = $this->WxPayment->getOrder($orderId, $uid);
+        if (empty($order)) {
+            $this->redirect('/');
+            return;
+        }
+        if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
+            if ($from == 'share') {
+                $this->redirect('/weshares/view/' . $order['Order']['member_id'] . '/1');
+                return;
+            }
+            if ($from == 'pintuan') {
+                $this->redirect('/pintuan/detail/' . $order['Order']['member_id'] . '?tag_id=' . $order['Order']['group_id']);
+                return;
+            }
+            $this->redirect('/');
+            return;
+        }
         //分享
         if ($from == 'share') {
             $shareId = $order['Order']['member_id'];
