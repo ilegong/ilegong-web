@@ -357,12 +357,6 @@
         totalPrice += product.price * product.num;
       });
       if (totalPrice != 0) {
-        //if (vm.favourableConfig) {
-        //  //折扣
-        //  if (vm.favourableConfig['discount']) {
-        //    totalPrice = totalPrice * vm.favourableConfig['discount'];
-        //  }
-        //}
         vm.productTotalPrice = totalPrice / 100;
         calProxyRebateFee(totalPrice / 100);
         if (vm.userCouponReduce) {
