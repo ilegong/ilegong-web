@@ -2,7 +2,7 @@
 
 class WeshareApiController extends BaseApiController
 {
-    var $components = ['Weshares'];
+    var $components = ['Weshares', 'UserConsignee'];
 
     //获取分享的详情
     public function get_weshare_detail($weshare_id)
@@ -21,7 +21,7 @@ class WeshareApiController extends BaseApiController
         echo json_encode($summery);
         exit();
     }
-    
+
     //获取某个分享自己的订单
     public function get_current_user_order($weshare_id)
     {
@@ -40,4 +40,31 @@ class WeshareApiController extends BaseApiController
         exit();
     }
 
+    //获取用户的地址
+    public function get_user_consignees()
+    {
+        $uid = $this->currentUser['id'];
+        $result = $this->UserConsignee->get_consignee_list($uid);
+        echo $result;
+        exit();
+    }
+
+    //保存用户收货地址
+    public function save_user_consignee()
+    {
+        $uid = $this->currentUser['id'];
+        $post_data = $this->get_post_raw_data();
+        $consignee = $this->UserConsignee->save($post_data, $uid);
+        echo json_encode(['success' => true, 'consignee' => $consignee['OrderConsignee']]);
+        exit();
+    }
+
+    //用户选择某个地址
+    public function select_user_consignee($consignee_id)
+    {
+        $uid = $this->currentUser['id'];
+        $this->UserConsignee->select_consignee($consignee_id, $uid);
+        echo json_encode(['success' => true]);
+        exit();
+    }
 }

@@ -26,6 +26,7 @@ class UsersController extends AppController {
         'Email',
         'Kcaptcha',
         'FileUpload',
+        'UserConsignee',
         'Cookie' => array('name' => 'SAECMS', 'time' => '+2 weeks'),
     );
     /**
@@ -733,22 +734,7 @@ class UsersController extends AppController {
     function get_consignee_list(){
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
-        $key = USER_CONSIGNEES_CACHE_KEY . '_' . $uid;
-        $cacheData = Cache::read($key);
-        if (!empty($cacheData)) {
-            echo $cacheData;
-            exit();
-        }
-        $this->loadModel('OrderConsignee');
-        $consignees = $this->OrderConsignee->find('all', [
-            'conditions' => [
-                'creator' => $uid,
-                'type' => TYPE_CONSIGNEES_SHARE
-            ]
-        ]);
-        $consignees = Hash::extract($consignees, '{n}.OrderConsignee');
-        $result = json_encode(['consignees' => $consignees, 'success' => true]);
-        Cache::write($key, $result);
+        $result = $this->UserConsignee->get_consignee_list($uid);
         echo $result;
         exit();
     }
@@ -760,15 +746,9 @@ class UsersController extends AppController {
             echo json_encode(['success' => false, 'reason' => 'not_login']);
             exit();
         }
-        $this->loadModel('OrderConsignee');
         $postStr = file_get_contents('php://input');
         $postDataArray = json_decode($postStr, true);
-        $postDataArray['creator'] = $uid;
-        $postDataArray['status'] = PUBLISH_YES;
-        $postDataArray['area'] = get_address_location($postDataArray);
-        $this->OrderConsignee->updateAll(['status' => PUBLISH_NO], ['creator' => $uid, 'type' => TYPE_CONSIGNEES_SHARE]);
-        $consignee = $this->OrderConsignee->save($postDataArray);
-        Cache::write(USER_CONSIGNEES_CACHE_KEY . '_' . $uid, '');
+        $consignee = $this->UserConsignee->save($postDataArray, $uid);
         echo json_encode(['success' => true, 'consignee' => $consignee['OrderConsignee']]);
         exit();
     }
@@ -780,10 +760,7 @@ class UsersController extends AppController {
             echo json_encode(['success' => false, 'reason' => 'not_login']);
             exit();
         }
-        $this->loadModel('OrderConsignee');
-        $this->OrderConsignee->updateAll(['status' => PUBLISH_NO], ['creator' => $uid, 'type' => TYPE_CONSIGNEES_SHARE]);
-        $this->OrderConsignee->update(['status' => PUBLISH_YES], ['id' => $consignee_id]);
-        Cache::write(USER_CONSIGNEES_CACHE_KEY . '_' . $uid, '');
+        $this->UserConsignee->select_consignee($consignee_id, $uid);
         echo json_encode(['success' => true]);
         exit();
     }

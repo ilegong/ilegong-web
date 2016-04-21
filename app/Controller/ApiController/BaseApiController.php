@@ -14,4 +14,12 @@ class BaseApiController extends Controller
         $this->autoRender = false;
     }
 
+
+    protected function get_post_raw_data()
+    {
+        $postStr = file_get_contents('php://input');
+        $postDataArray = json_decode($postStr, true);
+        return $postDataArray;
+    }
+
 }
