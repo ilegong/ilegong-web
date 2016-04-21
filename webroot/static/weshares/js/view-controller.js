@@ -1320,9 +1320,7 @@
       vm.consignee = data['consignee'];
       vm.myCoupons = data['my_coupons'];
       vm.weshareSettings = data['weshare_ship_settings'];
-      vm.supportPysZiti = data['support_pys_ziti'];
       vm.userSubStatus = data['sub_status'];
-      vm.favourableConfig = data['favourable_config'];
       vm.autoPopCommentData = data['prepare_comment_data'];
       vm.dliveryTemplate = data['weshare']['deliveryTemplate'];
       vm.submitRecommendData = {};

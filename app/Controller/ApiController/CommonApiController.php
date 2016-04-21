@@ -12,7 +12,7 @@ class CommonApiController extends Controller
     {
         $list = ShipAddress::ship_type_list();
         echo json_encode($list);
-        return;
+        exit();
     }
 
     public function get_bank_types()

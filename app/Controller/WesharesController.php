@@ -301,68 +301,12 @@ class WesharesController extends AppController
     {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
-        $weshareInfo = $this->ShareUtil->get_tag_weshare_detail($weshareId);
-
-        if (empty($weshareInfo['products'])) {
-            echo json_encode(array());
-            exit();
+        $detail = $this->Weshares->get_weshare_detail($weshareId, $uid);
+        if (!empty($detail)) {
+            $detail['prepare_comment_data'] = $this->prepare_comment_data();
+            $detail['weixininfo'] = $this->set_weixin_share_data($uid, $weshareId);
         }
-
-        $is_me = $uid == $weshareInfo['creator']['id'];
-        $weixinInfo = $this->set_weixin_share_data($uid, $weshareId);
-        $user_fields = $this->query_user_fields;
-        $user_fields[] = 'mobilephone';
-        $user_fields[] = 'payment';
-        $current_user = $this->User->find('first', array(
-            'conditions' => array(
-                'id' => $uid
-            ),
-            'recursive' => 1, //int
-            'fields' => $user_fields,
-        ));
-        $current_user = $current_user['User'];
-        //reset user image
-        $current_user['image'] = get_user_avatar($current_user);
-        $current_user_level_data = $this->ShareUtil->get_user_level($uid);
-        $current_user['level'] = $current_user_level_data;
-        $current_user['is_proxy'] = $current_user_level_data['data_value'] >= PROXY_USER_LEVEL_VALUE ? 1 : 0;
-        if (!$is_me) {
-            $sub_status = $this->WeshareBuy->check_user_subscribe($weshareInfo['creator']['id'], $uid);
-        } else {
-            $sub_status = true;
-        }
-        $creatorId = $weshareInfo['creator']['id'];
-        $user_share_summery = $this->getUserShareSummery($creatorId);
-        $share_ship_set = $this->sharer_can_use_we_ship($weshareInfo['creator']['id']);
-        $my_coupon_items = $this->get_can_used_coupons($uid, $creatorId);
-        $weshare_ship_settings = $this->getWeshareShipSettings($weshareId);
-        $consignee = $this->getShareConsignees($uid);
-        $recommend_data = $this->WeshareBuy->load_share_recommend_data($weshareId);
-        $is_manage_user = $this->ShareAuthority->user_can_view_share_order_list($uid, $weshareId);
-        $can_manage_share = $this->ShareAuthority->user_can_manage_share($uid, $weshareId);
-        $can_edit_share = $this->ShareAuthority->user_can_edit_share_info($uid, $weshareId);
-        $share_order_count = $this->WeshareBuy->get_share_all_buy_count($weshareId);
-
-        $favourable_config = $this->ShareFavourableConfig->get_favourable_config($weshareId);
-        $prepare_comment_data = $this->prepare_comment_data();
-        echo json_encode(array('support_pys_ziti' => $share_ship_set,
-            'weshare' => $weshareInfo,
-            'recommendData' => $recommend_data,
-            'current_user' => $current_user,
-            'weixininfo' => $weixinInfo,
-            'weshare_ship_settings' => $weshare_ship_settings,
-            'consignee' => $consignee,
-            'user_share_summery' => $user_share_summery,
-            'my_coupons' => $my_coupon_items[0],
-            'sub_status' => $sub_status,
-            'is_manage' => $is_manage_user,
-            'can_manage_share' => $can_manage_share,
-            'can_edit_share' => $can_edit_share,
-            'share_order_count' => $share_order_count,
-            //'all_buy_count' => $all_buy_count,
-            'favourable_config' => $favourable_config,
-            'prepare_comment_data' => $prepare_comment_data
-        ));
+        echo json_encode($detail);
         exit();
     }
 
@@ -1340,32 +1284,6 @@ class WesharesController extends AppController
         $this->OrderConsignees->save($saveData);
     }
 
-    /**
-     * 获取用户记住的地址
-     */
-    private function getShareConsignees($uid)
-    {
-        $consignees = $this->OrderConsignees->find('all', array(
-            'conditions' => array(
-                'creator' => $uid,
-                'status' => PUBLISH_YES,
-                'type' => [TYPE_CONSIGNEES_SHARE, TYPE_CONSIGNEES_SHARE_ZITI, TYPE_CONSIGNEE_SHARE_OFFLINE_STORE]
-            ),
-            'fields' => array('id', 'name', 'mobilephone', 'address', 'ziti_id', 'remark_address', 'province_id', 'city_id', 'county_id', 'type', 'area')
-        ));
-        //load remember offline store id
-        foreach ($consignees as &$consignee) {
-            $ziti_id = $consignee['OrderConsignees']['ziti_id'];
-            $type = $consignee['OrderConsignees']['type'];
-            if (!empty($ziti_id) && $type == TYPE_CONSIGNEE_SHARE_OFFLINE_STORE) {
-                $offlineStore = $this->OfflineStore->findById($ziti_id);
-                if (!empty($offlineStore)) {
-                    $consignee['OrderConsignees']['offlineStore'] = $offlineStore['OfflineStore'];
-                }
-            }
-        }
-        return Hash::extract($consignees, '{n}.OrderConsignees');
-    }
 
     /**
      * @param $weshare_ids
@@ -1388,28 +1306,6 @@ class WesharesController extends AppController
         return $this->WeshareBuy->get_user_share_summary($uid);
     }
 
-
-    /**
-     * @param $weshareId
-     * @return array
-     * 获取分享的物流设置
-     */
-    private function getWeshareShipSettings($weshareId)
-    {
-        $key = SHARE_SHIP_SETTINGS_CACHE_KEY . '_' . $weshareId;
-        $ship_setting_data = Cache::read($key);
-        if (empty($ship_setting_data)) {
-            $shareShipSettings = $this->WeshareShipSetting->find('all', array(
-                'conditions' => array(
-                    'weshare_id' => $weshareId
-                )
-            ));
-            $shareShipSettings = Hash::combine($shareShipSettings, '{n}.WeshareShipSetting.tag', '{n}.WeshareShipSetting');
-            Cache::write($key, json_encode($shareShipSettings));
-            return $shareShipSettings;
-        }
-        return json_decode($ship_setting_data, true);
-    }
 
     /**
      * @param $weshareId
