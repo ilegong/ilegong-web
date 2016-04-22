@@ -2176,7 +2176,7 @@ class ShareUtilComponent extends Component
      */
     public function send_buy_percent_msg($type, $uid, $share_info, $content, $weshare_id)
     {
-        if ($type == 0 || $type == '0') {
+        if ($type == 0) {
             //发送给分享的管理者
             //发送给没有购买的粉丝
             $checkSendMsgResult = $this->checkCanSendMsg($uid);
@@ -2191,10 +2191,16 @@ class ShareUtilComponent extends Component
             $pageSize = $fansPageInfo['pageSize'];
             $this->RedisQueue->add_tasks('share', "/weshares/process_send_buy_percent_msg/" . $weshare_id . "/" . $pageCount . "/" . $pageSize, "content=" . $content, true);
             return array('success' => true, 'msg' => $checkSendMsgResult['msg']);
-        } else {
+        }
+        if ($type == 1) {
+            //发送给已购买的用户
             $this->WeshareBuy->send_notify_user_msg_to_share_manager($share_info, $content);
             $this->RedisQueue->add_tasks('share', "/weshares/process_notify_has_buy_fans/" . $weshare_id, "content=" . $content, true);
             return array('success' => true);
+        }
+        if ($type == 2) {
+            //发送给全部用户
+
         }
     }
 
