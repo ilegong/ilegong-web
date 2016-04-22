@@ -2,7 +2,22 @@
 
 class WeshareApiController extends BaseApiController
 {
-    var $components = ['Weshares', 'UserConsignee'];
+    var $components = ['Weshares', 'UserConsignee', 'ShareUtil'];
+
+    //获取首页的标签
+    public function get_index_product_tags()
+    {
+        $tags = ['0' => '新品爆款', '1' => '水果蔬菜', '2' => '肉蛋粮油', '3' => '零食其他'];
+        echo json_encode($tags);
+        exit();
+    }
+    //获取首页产品
+    public function get_index_products($tag)
+    {
+        $products = $this->ShareUtil->get_index_product($tag);
+        echo json_encode($products);
+        exit();
+    }
 
     //获取分享的详情
     public function get_weshare_detail($weshare_id)
