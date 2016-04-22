@@ -100,43 +100,6 @@ class WeixinController extends AppController {
                         if(!empty($subscribe_array)){
                             $this->loadModel('WxOauth');
                             $body=array();
-                            if(array_key_exists('groupId',$subscribe_array)){
-                                $body=array(
-                                    'touser'=>$user,
-                                    "msgtype"=>"text",
-                                    "text"=>array(
-                                        "content"=>'您在［朋友说］参加的［组团］活动成功<a href=\"'.$this->loginServiceIfNeed($from, $user, "http://".WX_HOST."/groupons/join/".$subscribe_array['groupId']).'\">查看详情<\/a>'
-                                    )
-                                );
-
-                            }elseif(array_key_exists('orderId',$subscribe_array)){
-                                $body=array(
-                                    'touser'=>$user,
-                                    "msgtype"=>"text",
-                                    "text"=>array(
-                                        "content"=>'您在［朋友说］购买的商品已支付成功，<a href=\"'.$this->loginServiceIfNeed($from, $user, "http://".WX_HOST."/orders/detail/".$subscribe_array['orderId']).'\">查看详情<\/a>'
-                                    )
-                                );
-                            }elseif(array_key_exists('follow',$subscribe_array)){
-                                $body=array(
-                                    'touser'=>$user,
-                                    "msgtype"=>"text",
-                                    "text"=>array(
-                                        "content"=>'关注成功！当您的订单状态有变化时系统将通过微信消息通知您。 <a href=\"'.$this->loginServiceIfNeed($from, $user, oauth_wx_goto('CLICK_URL_MINE', WX_HOST)).'\">查看您的订单<\/a>'
-                                    )
-                                );
-                            }else if(array_key_exists('pid',$subscribe_array)){
-                                $key = key_cache_sub($uid,'spring');
-                                $data = $subscribe_array['pid'];
-                                Cache::write($key, $data);
-                                $body=array(
-                                    'touser'=>$user,
-                                    "msgtype"=>"text",
-                                    "text"=>array(
-                                        "content"=>'关注成功！领取优惠券成功。 <a href=\"'.$this->loginServiceIfNeed($from, $user, "http://".WX_HOST."/categories/spring").'\">去年货专场<\/a>'
-                                    )
-                                );
-                            }
                             if(!empty($body)){
                                 foreach ( $body['text'] as $key => $value ) {
                                     $body['text'][$key] = urlencode($value);
@@ -199,12 +162,6 @@ class WeixinController extends AppController {
 			}
 
             $host3g = (WX_HOST);
-
-            $special = $this->getSpecialTitle($from, $input);
-            if (!empty($special)) {
-                echo $this->newArticleMsg($user, $me, array(array('url' => $special['url'], 'title' => $special['title'], 'picUrl' => $special['pic'], 'description' => '点击查看详情，获得你的前世吃货身份')));
-                return;
-            }
 
             if (!empty($uid) && is_admin_uid($uid)) {
                 $parameters = explode(' ', $input);
@@ -269,174 +226,10 @@ class WeixinController extends AppController {
                         }
                     }
                     break;
-                case "5151":
-                case "ordersadmin":
-                case "Ordersadmin":
-                    echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, "http://$host3g/brands/brands_admin?wx_openid=$user_code").'">商家订单管理</a>');
-                    break;
-                case '5152':
-                    echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, "http://$host3g/apple_201410/index.html").'">苹果游戏Demo</a>');
-                    break;
-                case "e100":
-                case "E100":
-                    if ($from == FROM_WX_SERVICE) {
-                        $openId =  trim($user);
-                        $uid = $this->Oauthbind->findUidByWx($openId);
-                        if ($uid) {
-                            $this->loadModel('User');
-                            $u = $this->User->findById($uid);
-                            $this->log('Found user: id='. $uid .', ' . json_encode($u));
-                            if (!empty($u)) {
-                                $dt2 = DateTime::createFromFormat(FORMAT_DATETIME, $u['User']['created']);
-                                $ts2 = $dt2->getTimestamp();
-                                if (time() - $ts2 > 3 * 24 * 3600) {
-                                    echo $this->newTextMsg($user, $me, '亲，只有从e袋洗过来的新用户才能领取此优惠哦');
-                                } else {
-                                    $weixinC = $this->Components->load('Weixin');
-                                    if (!add_coupon_for_new($uid, $weixinC,
-                                        array(18753, 18754, 18755, 18756, 18757),
-                                        "满50元减5元；满100元减10元；满150元减15元；满200元减20元；满400元减50元")
-                                    ) {
-                                        echo $this->newTextMsg($user, $me, '欢迎关注朋友说，您已经领过啦');
-                                    }
-                                }
-                            }
-                        } else {
-                            $this->log("notfound:".$openId);
-                        }
-                    }
-                    break;
                 case '19':
                 case 'uid':
                     echo $this->newTextMsg($user, $me,  "您的用户id为".$uid);
                     echo $this->newTextMsg($user, $me,  "您的用户id为(test2):".$uid);
-                    break;
-                case '樱花':
-                    $voteConfig = $this->VoteSetting->getVoteConfig(7);
-                    $detail_url = $voteConfig['common_params']['server_reply_url'];
-                    $pic_url = $voteConfig['common_params']['server_reply_img'];
-                    $reply_title = $voteConfig['title'];
-                    if ($uid) {
-                        $event_candidate = $this->CandidateEvent->find('first', array(
-                            'conditions' => array('user_id' => $uid, 'event_id' => 7)
-                        ));
-                        $this->log('event candidate ' . json_encode($event_candidate));
-                        if (!empty($event_candidate)) {
-                            $candidate_id = $event_candidate['CandidateEvent']['candidate_id'];
-                            $candidate = $this->Candidate->find('first', array(
-                                'conditions' => array(
-                                    'id' => $candidate_id
-                                )
-                            ));
-                            if (!empty($candidate)) {
-                                if ($candidate['Candidate']['deleted'] == DELETED_NO) {
-                                    $detail_url = 'http://www.tongshijia.com/vote/candidate_detail/' . $candidate_id . '/7';
-                                }
-                            }
-                        }
-                    }
-                    $content = array(
-                        array('title' => $reply_title, 'description' => '',
-                            'picUrl' => $pic_url,
-                            'url' => $detail_url),
-                    );
-                    echo $this->newArticleMsg($user, $me, $content);
-                    break;
-                case '万圣节':
-                    $voteConfig = $this->VoteSetting->getVoteConfig(8);
-                    $detail_url = $voteConfig['common_params']['server_reply_url'];
-                    $pic_url = $voteConfig['common_params']['server_reply_img'];
-                    $reply_title = $voteConfig['title'];
-                    if ($uid) {
-                        $event_candidate = $this->CandidateEvent->find('first', array(
-                            'conditions' => array('user_id' => $uid, 'event_id' => 8)
-                        ));
-                        $this->log('event candidate ' . json_encode($event_candidate));
-                        if (!empty($event_candidate)) {
-                            $candidate_id = $event_candidate['CandidateEvent']['candidate_id'];
-                            $candidate = $this->Candidate->find('first', array(
-                                'conditions' => array(
-                                    'id' => $candidate_id
-                                )
-                            ));
-                            if (!empty($candidate)) {
-                                if ($candidate['Candidate']['deleted'] == DELETED_NO) {
-                                    $detail_url = 'http://www.tongshijia.com/vote/candidate_detail/' . $candidate_id . '/8';
-                                }
-                            }
-                        }
-                    }
-                    $content = array(
-                        array('title' => $reply_title, 'description' => '这一天的装扮是多么的“可爱”！看看大家的装扮，我们快来比一比，谁的装扮最Cool! 最棒？',
-                            'picUrl' => $pic_url,
-                            'url' => $detail_url),
-                    );
-                    echo $this->newArticleMsg($user, $me, $content);
-                    break;
-                case '报名':
-                case '宝宝':
-                case '投票':
-                    $voteConfig = $this->VoteSetting->getVoteConfig(6);
-                    $detail_url = $voteConfig['common_params']['server_reply_url'];
-                    $pic_url = $voteConfig['common_params']['server_reply_img'];
-                    $reply_title = $voteConfig['title'];
-                    if($uid){
-                        $event_candidate = $this->CandidateEvent->find('first',array(
-                            'conditions' => array('user_id' => $uid, 'event_id' => 6)
-                        ));
-                        $this->log('event candidate '.json_encode($event_candidate));
-                        if(!empty($event_candidate)){
-                            $candidate_id = $event_candidate['CandidateEvent']['candidate_id'];
-                            $candidate = $this->Candidate->find('first',array(
-                                'conditions' => array(
-                                    'id' => $candidate_id
-                                )
-                            ));
-                            if(!empty($candidate)){
-                                if($candidate['Candidate']['deleted']==DELETED_NO){
-                                    $detail_url = 'http://www.tongshijia.com/vote/candidate_detail/'.$candidate_id.'/6';
-                                }
-                            }
-                        }
-                    }
-                    $content = array(
-                        array('title' => $reply_title, 'description' => '',
-                            'picUrl' => $pic_url,
-                            'url' => $detail_url),
-                    );
-                    echo $this->newArticleMsg($user, $me, $content);
-                    break;
-                case '8888':
-                    $voteConfig = $this->VoteSetting->getVoteConfig(9);
-                    $detail_url = $voteConfig['common_params']['server_reply_url'];
-                    $pic_url = $voteConfig['common_params']['server_reply_img'];
-                    $reply_title = $voteConfig['title'];
-                    if($uid){
-                        $event_candidate = $this->CandidateEvent->find('first',array(
-                            'conditions' => array('user_id' => $uid, 'event_id' => 9),
-                            'order' => array('id DESC')
-                        ));
-                        $this->log('event candidate '.json_encode($event_candidate));
-                        if(!empty($event_candidate)){
-                            $candidate_id = $event_candidate['CandidateEvent']['candidate_id'];
-                            $candidate = $this->Candidate->find('first',array(
-                                'conditions' => array(
-                                    'id' => $candidate_id
-                                )
-                            ));
-                            if(!empty($candidate)){
-                                if($candidate['Candidate']['deleted']==DELETED_NO){
-                                    $detail_url = 'http://www.tongshijia.com/vote/candidate_detail/'.$candidate_id.'/9';
-                                }
-                            }
-                        }
-                    }
-                    $content = array(
-                        array('title' => $reply_title, 'description' => '',
-                            'picUrl' => $pic_url,
-                            'url' => $detail_url),
-                    );
-                    echo $this->newArticleMsg($user, $me, $content);
                     break;
 				default:
                     $hour = date('G');
@@ -543,33 +336,6 @@ class WeixinController extends AppController {
     }
 
 
-    private function getSpecialTitle($type, $val) {
-        $elements = array(FROM_WX_SERVICE =>
-          array(
-                '打' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=204166400&idx=1&sn=6f250ac6c2e5c677af859317ac2842a5#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia357phWhKGa8jUUC94zLOEXE4ND3PDMx4sWe0yPY7jdltD6Riasa0SceWA/0', 'title'=>'【你前世的吃货身份：武大郎】'),
-                '死' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=204166086&idx=1&sn=fc8251ab2d5cda2af825895b9e0e228d#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia35xd3hZfWYK2kEmCRtqZiaUzATl1XVdpKZh9HfE113oJTuqqk0G0y6PVQ/0', 'title'=>'【你前世的吃货身份：武则天】'),
-                '都' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=204165678&idx=1&sn=b7ed9f3d1263675456d7431a912305f4#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia35bz312xCVICquYMn9UY5K5ibf8d540CQicImR9TxcAic9Kfk12Dj5dYN4Q/0', 'title'=>'【你前世的吃货身份：唐伯虎】'),
-                '不' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=204165330&idx=1&sn=c11bcc24f5083550082c30991f14233d#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia35kvYSljfzYjhuYicjOAfapMib3eCnDY19CVaIkY3qEpBbjJFvc5EANYicQ/0', 'title'=>'【你前世的吃货身份：如花】'),
-                '是' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=204165084&idx=1&sn=09fb2503326549242af067b269df40b4#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia357vzbHyBriamXdwsQq7SAXpc5p93cHSk9icEATWzxkyO6nYqSvLp1FdHg/0', 'title'=>'【你前世的吃货身份：包租婆】'),
-                '猪' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=204164747&idx=1&sn=9b9478886ec864dda9e71fe4fc8d1ede#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia350WwImJ0QEBk45RnjIqq8mqem4KdgicGVaSRWmOY8tJ1PHdGvgZIgFdg/0', 'title'=>'【你前世的吃货身份：猪八戒】'),
-                '八' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=204164184&idx=1&sn=16188fdda3594bdeee968fd84928cb96#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia35bgswj4J7wCt0amx6s6vpUZLgJX2Nq0NvWfV2xEggFqBEmIE8kBIvdQ/0', 'title'=>'【你前世的吃货身份：林黛玉】'),
-                '戒' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=204162688&idx=1&sn=959c8132480eabd4cdb6bb3a14be649b#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia35KENKL8pQcdolSp59YgeHfqyt7YWBMfvarXkmHsrz3eCicpI7xZX6qag/0', 'title'=>'【你前世的吃货身份：肥仔】')
-          )
-        , FROM_WX_SUB =>
-      array(
-            '打' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=202247008&idx=1&sn=62fc1d3cdc6fc03dc0455edae5e5ccbe#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia357phWhKGa8jUUC94zLOEXE4ND3PDMx4sWe0yPY7jdltD6Riasa0SceWA/0', 'title' => '【你前世的吃货身份：武大郎】'),
-            '死' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=202247055&idx=1&sn=891b24b7d1c57199096cc135290f34f3#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia35xd3hZfWYK2kEmCRtqZiaUzATl1XVdpKZh9HfE113oJTuqqk0G0y6PVQ/0', 'title' => '【你前世的吃货身份：武则天】'),
-            '都' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=202247108&idx=1&sn=538860cfe732e97e7f5472df1720e831#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia35bz312xCVICquYMn9UY5K5ibf8d540CQicImR9TxcAic9Kfk12Dj5dYN4Q/0', 'title' => '【你前世的吃货身份：唐伯虎】'),
-            '不' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=202247151&idx=1&sn=6591069bc0d7618c7840065012431dfe#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia35kvYSljfzYjhuYicjOAfapMib3eCnDY19CVaIkY3qEpBbjJFvc5EANYicQ/0', 'title' => '【你前世的吃货身份：如花】'),
-            '是' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=202247205&idx=1&sn=3a81fab29a02f03b8c06ccf5ca591bbc#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia357vzbHyBriamXdwsQq7SAXpc5p93cHSk9icEATWzxkyO6nYqSvLp1FdHg/0', 'title' => '【你前世的吃货身份：包租婆】'),
-            '猪' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=202247235&idx=1&sn=cb4024d719503c8ba7def775d7a789f4#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia350WwImJ0QEBk45RnjIqq8mqem4KdgicGVaSRWmOY8tJ1PHdGvgZIgFdg/0', 'title' => '【你前世的吃货身份：猪八戒】'),
-            '八' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=202247289&idx=1&sn=140e36756bf287074ec206d90b856921#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia35bgswj4J7wCt0amx6s6vpUZLgJX2Nq0NvWfV2xEggFqBEmIE8kBIvdQ/0', 'title' => '【你前世的吃货身份：林黛玉】'),
-            '戒' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=202247377&idx=1&sn=67296ad1022e3d9afeb61944e4fed480#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia35KENKL8pQcdolSp59YgeHfqyt7YWBMfvarXkmHsrz3eCicpI7xZX6qag/0', 'title' => '【你前世的吃货身份：肥仔】'),
-      )
-        );
-
-        return $elements[$type][$val];
-    }
     public function save_subscribe_info(){
         $uid = $this->currentUser['id'];
         if($uid){
