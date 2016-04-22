@@ -166,7 +166,7 @@ class WesharesComponent extends Component
         //merge for child share data
         $this->saveWeshareProducts($weshare['Weshare']['id'], $productsData);
         $this->saveWeshareAddresses($weshare['Weshare']['id'], $addressesData);
-        $this->saveWeshareShipType($weshare['Weshare']['id'], $weshare['Weshare']['creator'], $shipSetData);
+        $this->saveWeshareShipType($weshare['Weshare']['id'], $shipSetData);
         $this->saveWeshareProxyPercent($weshare['Weshare']['id'], $proxyRebatePercent);
         $this->saveWeshareDeliveryTemplate($weshare['Weshare']['id'], $weshare['Weshare']['creator'], $deliveryTemplates);
 
@@ -299,12 +299,11 @@ class WesharesComponent extends Component
 
     /**
      * @param $weshareId
-     * @param $userId
      * @param $weshareShipData
      * @return mixed
      * 保存分享的物流方式
      */
-    private function saveWeshareShipType($weshareId, $userId, $weshareShipData)
+    private function saveWeshareShipType($weshareId, $weshareShipData)
     {
         $WeshareSettingM = ClassRegistry::init('WeshareShipSetting');
         foreach ($weshareShipData as &$item) {
