@@ -92,6 +92,8 @@
     vm.rebateFee = 0;
     vm.orderPayTotalPrice = 0;
     vm.productTotalPrice = 0;
+    vm.isShowExpressInfoBtn = isShowExpressInfoBtn;
+    vm.showOrderExpressInfo = showOrderExpressInfo;
 
     vm.commentData = [];
     vm.orderComments = [];
@@ -1172,6 +1174,19 @@
       return false;
     }
 
+    function isShowExpressInfoBtn(order) {
+      if (order['ship_mark'] == 'kuai_di') {
+        if (order.status > 1 && vm.isOwner(order)) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    function showOrderExpressInfo(order) {
+      window.location.href = '/weshares/express_info/' + order.id;
+      return;
+    }
 
     function calculateShipFee(deliveryTemplate, provinceId, goodNum, goodWeight) {
       var shipFee = 0;
