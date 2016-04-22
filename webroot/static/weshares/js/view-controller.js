@@ -162,11 +162,7 @@
                 }
               } else {
                 //check is new user buy it
-                var userInfo = vm.currentUser;
-                if (!vm.userSubStatus) {
-                  vm.showTipSubSharerDialog = true;
-                }
-                if (userInfo) {
+                if (vm.currentUser) {
                   vm.showNotifyShareOfferDialog = true;
                   vm.sharedOfferMsg = '恭喜发财，大吉大利！';
                 }
