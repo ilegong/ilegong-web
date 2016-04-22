@@ -2509,7 +2509,7 @@ class WeshareBuyComponent extends Component
                 'status' => array(ORDER_STATUS_DONE, ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY),
                 'member_id' => $share_ids
             ),
-            'fields' => $this->query_order_fields,
+            'fields' => ['id', 'member_id', 'creator'],
             'limit' => 1000
         ));
         $share_user_map = array();

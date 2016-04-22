@@ -43,69 +43,11 @@
     </footer>
     {{/if}}
 </div>
-{{if $jWeixinOn}}
-<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="{{$STATIC_HOST}}/static/common/no-angular-common.js"></script>
 <script>
     Pyshuo.share.utils.init();
     Pyshuo.share.utils.checkHasUnreadInfo();
 </script>
-<script>
-    if(wx){
-        var wx_jssdk_appId = '{{$signPackage["appId"]}}';
-        var wx_jssdk_timestamp = '{{$signPackage["timestamp"]?$signPackage["timestamp"]:1}}';
-        var wx_jssdk_nonceStr = '{{$signPackage["nonceStr"]}}';
-        var wx_jssdk_signature = '{{$signPackage["signature"]}}';
-        var jsApiList = ['checkJsApi', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseImage', 'previewImage', 'uploadImage', 'downloadImage', 'openLocation', 'getLocation'];
-        wx.config({
-            debug: false,
-            appId: wx_jssdk_appId,
-            timestamp: wx_jssdk_timestamp,
-            nonceStr: wx_jssdk_nonceStr,
-            signature: wx_jssdk_signature,
-            jsApiList: jsApiList
-        });
-
-        wx.ready(function () {
-            var share_string = '{{$share_string ? $share_string :"0"}}';
-            var to_timeline_title = "{{$title}}";
-            var to_friend_title = "{{$title}}";
-            var detail_url = "{{$detail_url}}";
-            if(!detail_url){
-                detail_url =  document.URL.split('?')[0];
-            }
-            var to_friend_link = detail_url + '?trstr='+ share_string + '&share_type=appMsg';
-            var to_timeline_link = detail_url + '?trstr='+ share_string + '&share_type=timeline';
-            var imgUrl = "{{$this->Html->assetUrl($image)}}";
-            var desc = "{{$desc}}";
-            wx.onMenuShareAppMessage({
-                title: to_friend_title,
-                desc: desc,
-                link: to_friend_link,
-                imgUrl: imgUrl,
-                success: function () {
-                    // 用户确认分享后执行的回调函数
-                    if(share_string != '0'){
-                        setTimeout(function(){
-                            $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "appMsg" });
-                        }, 500);
-                    }
-                }
-            });
-            wx.onMenuShareTimeline({
-                title: to_timeline_title,
-                link: to_timeline_link,
-                imgUrl: imgUrl,
-                success: function () {
-                    if(share_string != '0'){
-                        setTimeout(function(){
-                            $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "timeline" });
-                        }, 500);
-                    }
-                }
-            });
-        });
-    }
-</script>
-{{/if}}
+{{template Elements/weshare_wx_share}}
 </body>
 </html>
