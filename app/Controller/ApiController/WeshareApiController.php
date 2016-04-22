@@ -69,7 +69,7 @@ class WeshareApiController extends BaseApiController
     {
         $uid = $this->currentUser['id'];
         $post_data = $this->get_post_raw_data();
-        $consignee = $this->UserConsignee->save($post_data, $uid);
+        $consignee = $this->UserConsignee->save_consignee($post_data, $uid);
         echo json_encode(['success' => true, 'consignee' => $consignee['OrderConsignee']]);
         exit();
     }
