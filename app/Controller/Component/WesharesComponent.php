@@ -50,7 +50,8 @@ class WesharesComponent extends Component
         $can_manage_share = $this->ShareAuthority->user_can_manage_share($uid, $weshareId);
         $can_edit_share = $this->ShareAuthority->user_can_edit_share_info($uid, $weshareId);
         $share_summery = $this->WeshareBuy->get_share_buy_summery($weshareId);
-        $weshare_ship_settings = $this->getWeshareShipSettings($weshareId);
+        $weshare_ship_settings = $weshareInfo['ship_type'];
+        unset($weshareInfo['ship_type']);
         $consignee = $this->getShareConsignees($uid);
         return [
             'weshare' => $weshareInfo,
@@ -67,30 +68,7 @@ class WesharesComponent extends Component
             'share_summery' => $share_summery
         ];
     }
-
-
-    /**
-     * @param $weshareId
-     * @return array
-     * 获取分享的物流设置
-     */
-    private function getWeshareShipSettings($weshareId)
-    {
-        $key = SHARE_SHIP_SETTINGS_CACHE_KEY . '_' . $weshareId;
-        $ship_setting_data = Cache::read($key);
-        if (empty($ship_setting_data)) {
-            $weshareShipSettingM = ClassRegistry::init('WeshareShipSetting');
-            $shareShipSettings = $weshareShipSettingM->find('all', array(
-                'conditions' => array(
-                    'weshare_id' => $weshareId
-                )
-            ));
-            $shareShipSettings = Hash::combine($shareShipSettings, '{n}.WeshareShipSetting.tag', '{n}.WeshareShipSetting');
-            Cache::write($key, json_encode($shareShipSettings));
-            return $shareShipSettings;
-        }
-        return json_decode($ship_setting_data, true);
-    }
+    
 
     /**
      * 获取用户记住的地址
