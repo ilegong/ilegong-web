@@ -124,3 +124,7 @@ footer a:link{
     float: left;
     color: #fff;
 }
+
+.show-ib{
+    display: inline-block !important;
+}
