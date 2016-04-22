@@ -68,7 +68,6 @@ class WesharesComponent extends Component
             'share_summery' => $share_summery
         ];
     }
-    
 
     /**
      * 获取用户记住的地址
