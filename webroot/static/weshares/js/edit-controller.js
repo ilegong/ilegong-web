@@ -701,15 +701,15 @@
       }
     }
 
-    function setWxParams(){
-      if(wx){
+    function setWxParams() {
+      if (wx) {
         wx.ready(function () {
           var to_timeline_title = '朋友说—基于信任关系的分享平台';
           var to_friend_title = '朋友说—基于信任关系的分享平台';
-          var to_friend_link =  document.URL.split('?')[0];
+          var to_friend_link = document.URL.split('?')[0];
           var to_timeline_link = document.URL.split('?')[0];
-          imgUrl = 'http://static.tongshijia.com/static/weshares/images/pys-logo.gif';
-          var desc ='来 [朋友说] 分享好吃的、好玩的、有趣的';
+          var imgUrl = 'http://static.tongshijia.com/static/weshares/images/pys-logo.gif';
+          var desc = '来 [朋友说] 分享好吃的、好玩的、有趣的';
           wx.onMenuShareAppMessage({
             title: to_friend_title,
             desc: desc,
@@ -724,7 +724,6 @@
             link: to_timeline_link,
             imgUrl: imgUrl,
             success: function () {
-
             }
           });
         });
