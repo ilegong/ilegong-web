@@ -63,47 +63,7 @@
     <script type="text/javascript" src="http://cdn.bootcss.com/angular.js/1.4.1/angular.min.js"></script>
     <script type="text/javascript" src="http://cdn.bootcss.com/ngInfiniteScroll/1.2.0/ng-infinite-scroll.min.js"></script>
     <script type="text/javascript" src="http://cdn.bootcss.com/underscore.js/1.8.3/underscore-min.js"></script>
-    <script type="text/javascript" src="{{$STATIC_HOST}}/static/weshares/js/weshare.min.js?v2.3.5"></script>
-    {{if $jWeixinOn&&$add_view}}
-    <script>
-        wx.ready(function () {
-            var share_string = '{{$share_string ? $share_string :"0"}}';
-            var to_timeline_title = "{{$title}}";
-            var to_friend_title = "{{$title}}";
-            var to_friend_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=appMsg';
-            var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
-            var imgUrl = "{{$this->Html->assetUrl($image)}}";
-            var desc = "{{$desc}}";
-            wx.onMenuShareAppMessage({
-                title: to_friend_title,
-                desc: desc,
-                link: to_friend_link,
-                imgUrl: imgUrl,
-                success: function () {
-                    // 用户确认分享后执行的回调函数
-                    if(share_string != '0'){
-                        setTimeout(function(){
-                            $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "appMsg" });
-                        }, 500);
-                    }
-                }
-            });
-            wx.onMenuShareTimeline({
-                title: to_timeline_title,
-                link: to_timeline_link,
-                imgUrl: imgUrl,
-                success: function () {
-                    if(share_string != '0'){
-                        setTimeout(function(){
-                            $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "timeline" });
-                        }, 500);
-                    }
-                }
-            });
-        });
-    </script>
-    {{/if}}
-
+    <script type="text/javascript" src="{{$STATIC_HOST}}/static/weshares/js/weshare.min.js?v2.3.4"></script>
     <script>
         var _hmt = _hmt || [];
         (function() {

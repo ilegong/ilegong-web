@@ -183,6 +183,7 @@
           vm.weshare.send_info = '';
         }
       }
+      setWxParams();
     }
 
     function getUnitTypeText(){
@@ -699,6 +700,37 @@
         vm.kuai_di_data.status = 1;
       }
     }
+
+    function setWxParams(){
+      if(wx){
+        wx.ready(function () {
+          var to_timeline_title = '朋友说—基于信任关系的分享平台';
+          var to_friend_title = '朋友说—基于信任关系的分享平台';
+          var to_friend_link =  document.URL.split('?')[0];
+          var to_timeline_link = document.URL.split('?')[0];
+          imgUrl = 'http://static.tongshijia.com/static/weshares/images/pys-logo.gif';
+          var desc ='来 [朋友说] 分享好吃的、好玩的、有趣的';
+          wx.onMenuShareAppMessage({
+            title: to_friend_title,
+            desc: desc,
+            link: to_friend_link,
+            imgUrl: imgUrl,
+            success: function () {
+              // 用户确认分享后执行的回调函数
+            }
+          });
+          wx.onMenuShareTimeline({
+            title: to_timeline_title,
+            link: to_timeline_link,
+            imgUrl: imgUrl,
+            success: function () {
+
+            }
+          });
+        });
+      }
+    }
+
   }
 
 })(window, window.angular, window.wx);
