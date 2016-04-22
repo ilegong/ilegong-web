@@ -1,8 +1,26 @@
 <?php
 
-class WeshareApiController extends BaseApiController
+class WeshareApiController extends Controller
 {
-    var $components = ['Weshares', 'UserConsignee', 'ShareUtil'];
+    var $components = ['Weshares', 'UserConsignee', 'ShareUtil', 'OAuth.OAuth', 'WeshareBuy'];
+
+    public function beforeFilter()
+    {
+        $allow_action = array();
+        $this->OAuth->allow($allow_action);
+        if (array_search($this->request->params['action'], $allow_action) == false) {
+            $this->currentUser = $this->OAuth->user();
+        }
+        $this->autoRender = false;
+    }
+
+
+    protected function get_post_raw_data()
+    {
+        $postStr = file_get_contents('php://input');
+        $postDataArray = json_decode($postStr, true);
+        return $postDataArray;
+    }
 
     //获取首页的标签
     public function get_index_product_tags()
@@ -11,6 +29,7 @@ class WeshareApiController extends BaseApiController
         echo json_encode($tags);
         exit();
     }
+
     //获取首页产品
     public function get_index_products($tag)
     {

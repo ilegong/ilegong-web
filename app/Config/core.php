@@ -18,7 +18,8 @@ Configure::write('Error', array(
 Configure::write('Exception', array(
             'handler' => 'ErrorHandler::handleException',
             'renderer' => 'CustomExceptionRender',
-            'log' => true
+            'log' => true,
+            'trace' => true
         ));
 Configure::write('App.encoding', 'UTF-8');
 
