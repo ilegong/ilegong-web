@@ -12,7 +12,7 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1.1, user-scalable=no, width=device-width">
 </head>
 <body class="" cz-shortcut-listen="true">
-<div class="index-page" ng-controller="IndexCtrl as vm" ng-click="vm.clickPage();">
+<div class="index-page" ng-controller="IndexCtrl as vm" ng-click="vm.clickPage();" data-tag="{{$tag}}">
 
     <ul class="clearfix class-tab">
         <li {{if $tag==0}}class="focus"{{/if}}><a href="/weshares/index.html">新品爆款</a>
@@ -27,18 +27,19 @@
 
     <div class="outer-listings-container row-space-3">
         <div class="listings-container">
-            {{loop $products $index_product}}
+            {{loop $index_products $index_product}}
             <?php
                 $product = $index_product['IndexProduct'];
                 $user = $index_product['User'];
                 $user_level = $index_product['UserLevel'];
+                $weshare = $index_product['Weshare'];
                 if($product['type'] == 1){
                     $product_detail_url = '/pintuan/detail/'.$product['share_id'].'?from=index_view';
                 }else{
                     $product_detail_url = '/weshares/view/'.$product['share_id'].'?from=index_view';
                 }
             ?>
-            <div class="share-good">
+            <div class="share-good" data-id="">
                 <ul class="sharer clearfix">
                     <li class="fl">
                         <a href="/weshares/user_share_info/{{$product['share_user_id']}}">
@@ -103,11 +104,11 @@
                         {{/if}}
                     </div>
                 </a>
-                <dl class="clearfix share-data" style="display: none;">
-                    <dd class="clearfix" style="padding-right: 60px;"><img src="images/img.png"/><img
-                            src="images/img.png"/><img src="images/img.png"/><img
-                            src="images/img.png"/><label>已<span>6</span>个人报名</label></dd>
-                    <dd class="browse">浏览2341</dd>
+                <dl class="clearfix share-data">
+                    <dd class="clearfix" style="padding-right: 66px;">
+                        <img ng-src="&#123;&#123;vm.staticFilePath + '/' + creator.avatar | thumb: 's'&#125;&#125;" fallback-src="&#123;&#123;vm.staticFilePath + '/avatar/s/default.jpg'&#125;&#125;" ng-repeat="creator in vm.getOrdersAndCreators({{$product['share_id']}}) | limitTo: 4"/>
+                        <label><span ng-if="vm.getOrdersAndCreators({{$product['share_id']}}).length > 4">...</span>已<span ng-bind="0">0</span>人报名</label></dd>
+                    <dd class="browse">浏览{{$weshare['view_count'] ? : 0}}</dd>
                 </dl>
             </div>
             {{/loop}}

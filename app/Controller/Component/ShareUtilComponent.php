@@ -136,7 +136,7 @@ class ShareUtilComponent extends Component
         $userRelationM = ClassRegistry::init('UserRelation');
         if ($this->check_user_relations($consumer)) {
             // 1. 没有关注任何人, 默认关注
-            $this->log("User ".$consumer.' does not follow anyone, now follows '.$saler.' in default', LOG_INFO);
+            $this->log("User " . $consumer . ' does not follow anyone, now follows ' . $saler . ' in default', LOG_INFO);
             $userRelationM->saveAll([
                 'user_id' => $saler,
                 'follow_id' => $consumer,
@@ -948,7 +948,8 @@ class ShareUtilComponent extends Component
      * @param $share_creator
      * 清除分享相关的缓存
      */
-    private function clear_share_cache($share_id, $share_creator) {
+    private function clear_share_cache($share_id, $share_creator)
+    {
         Cache::write(SHARE_ORDER_COUNT_SUM_CACHE_KEY . '_' . $share_id . '_' . $share_creator, '');
         Cache::write(SHARE_BUY_SUMMERY_INFO_CACHE_KEY . '_' . $share_id, '');
         Cache::write(SHARE_ORDER_COUNT_DATA_CACHE_KEY . '_' . $share_id, '');
@@ -2044,7 +2045,8 @@ class ShareUtilComponent extends Component
                 'fields' => [
                     'IndexProduct.*',
                     'User.*',
-                    'UserLevel.*'
+                    'UserLevel.*',
+                    'Weshare.id', 'Weshare.view_count'
                 ],
                 'joins' => [
                     [
@@ -2059,6 +2061,12 @@ class ShareUtilComponent extends Component
                         'conditions' => [
                             'User.id = UserLevel.data_id',
                         ],
+                    ], [
+                        'table' => 'weshares',
+                        'alias' => 'Weshare',
+                        'conditions' => [
+                            'Weshare.id = IndexProduct.share_id',
+                        ],
                     ],
                 ],
                 'order' => array('sort_val ASC')
@@ -2070,6 +2078,62 @@ class ShareUtilComponent extends Component
         }
 
         return json_decode($cache_data, true);
+    }
+
+    // api: return a list of index products(id, share_id...)
+    public function index_products($tag_id)
+    {
+        $key = INDEX_PRODUCTS_BY_TAG_CACHE_KEY . '_' . $tag_id;
+        $cache_data = Cache::read($key);
+        if (!empty($cache_data)) {
+            return json_decode($cache_data);
+        }
+
+        $indexProductM = ClassRegistry::init('IndexProduct');
+        $index_products = $indexProductM->find('all', [
+            'conditions' => [
+                'IndexProduct.tag_id' => $tag_id,
+                'IndexProduct.deleted' => DELETED_NO,
+            ],
+            'fields' => [
+                'IndexProduct.id', 'IndexProduct.share_id'
+            ]
+        ]);
+        Cache::write($key, json_encode($index_products));
+        return $index_products;
+    }
+
+    // api: return recent orders and creators
+    public function recent_orders_and_creators($share_id)
+    {
+        $key = INDEX_VIEW_PRODUCT_ORDERS_AND_CREATORS_CACHE_KEY . '_' . $share_id;
+        $cache_data = Cache::read($key);
+        if (!empty($cache_data)) {
+            return json_decode($cache_data);
+        }
+
+        $OrderM = ClassRegistry::init('Order');
+        $orders_and_creators = $OrderM->find('all', [
+            'conditions' => [
+                'Order.member_id' => $share_id,
+                'Order.status > 0',
+            ],
+            'fields' => array('Order.id', 'User.id', 'User.nickname', 'User.avatar'),
+            'joins' => [
+                [
+                    'table' => 'users',
+                    'alias' => 'User',
+                    'conditions' => [
+                        'User.id = Order.creator',
+                    ],
+                ]
+            ],
+            'order' => array('Order.id DESC'),
+            'limit' => 10
+        ]);
+        Cache::write($key, json_encode($orders_and_creators));
+
+        return $orders_and_creators;
     }
 
     private function query_share_detail($weshare_id)
