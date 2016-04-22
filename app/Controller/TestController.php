@@ -79,6 +79,36 @@ class TestController extends AppController
 //        exit();
 //    }
 
+
+    public function set_root_id($offset,$limit)
+    {
+        $this->autoRender = false;
+        $weshareM = ClassRegistry::init('Weshare');
+        $weshares = $weshareM->find('all', [
+            'conditions' => [
+                'type' => 0,
+                'not' => ['refer_share_id' => 0]
+            ],
+            'offset' => $offset,
+            'limit' => $limit,
+            'order' => ['id DESC']
+        ]);
+        $save_data = [];
+        foreach ($weshares as $share_item) {
+            $share_item_id = $share_item['Weshare']['id'];
+            $root_share_id = $weshareM->get_root_share_id($share_item_id);
+            if (empty($root_share_id)) {
+                $root_share_id = 0;
+            }
+            $save_data[] = ['id' => $share_item_id, 'root_share_id' => $root_share_id];
+        }
+        $weshareM->saveAll($save_data);
+        echo 'page' . $limit;
+        exit();
+    }
+
+
+
     public function test_push(){
         $this->autoRender=false;
         $result = $this->JPush->push('893376');
