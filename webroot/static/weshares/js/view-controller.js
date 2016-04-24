@@ -497,9 +497,13 @@
       }
 
       var minNum = 0;
-      if(vm.showBalanceView){
-        var others = _.reject(vm.weshare.products, function(p){return p.id == product.id});
-        if(_.all(others, function(p){return p.num <= 0})){
+      if (vm.showBalanceView) {
+        var others = _.reject(vm.weshare.products, function (p) {
+          return p.id == product.id
+        });
+        if (_.all(others, function (p) {
+            return p.num <= 0
+          })) {
           minNum = 1;
         }
       }
@@ -577,7 +581,7 @@
     }
 
     function buyProducts() {
-      if(vm.validateProducts()){
+      if (vm.validateProducts()) {
         alert('请选择报名商品！');
         var element = angular.element(document.getElementById('share-product-list'));
         window.scrollTo(0, element[0].offsetTop - 100)
@@ -1284,8 +1288,8 @@
       var userInfo = vm.currentUser;
 
       var regex = /(<([^>]+)>)/ig
-        , shareIntrBody = vm.weshare.description.substr(0, 30)
-        , shareIntryResult = shareIntrBody.replace(regex, "");
+        , descText = vm.weshare.description
+        , shareIntryResult = descText.replace(regex, "").substr(0, 30);
 
       if (vm.currentUser.id == vm.weshare.creator.id) {
         to_timeline_title = vm.weshare.creator.nickname + '分享:' + vm.weshare.title;
@@ -1295,7 +1299,7 @@
           desc += '已经有' + vm.totalBuyCount + '人报名，';
         }
         desc += shareIntryResult;
-      } else if (userInfo) {
+      } else if (userInfo && _.isEmpty(vm.ordersDetail['orders'])) {
         if (vm.isProxy()) {
           url = url + '?recommend=' + vm.currentUser['id'];
         }
