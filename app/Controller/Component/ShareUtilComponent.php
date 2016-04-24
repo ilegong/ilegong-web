@@ -488,6 +488,9 @@ class ShareUtilComponent extends Component
             $shareInfo['settlement'] = 0; //打款状态为未打款
             $shareInfo['refer_share_id'] = $refer_share_id;
             $shareInfo['type'] = $new_share_type;
+            if ($shareInfo['root_share_id'] == 0) {
+                $shareInfo['root_share_id'] = $refer_share_id;
+            }
             if (!empty($uid)) {
                 $shareInfo['creator'] = $uid;
                 //检查并设置用户团长
@@ -524,12 +527,6 @@ class ShareUtilComponent extends Component
         }
     }
 
-    /**
-     * @param $new_share_id
-     * @param $old_share_id
-     * @param $share_limit
-     * clone share product
-     */
     private function cloneShareProduct($new_share_id, $old_share_id, $share_limit)
     {
         $WeshareProductM = ClassRegistry::init('WeshareProduct');
