@@ -7,9 +7,43 @@ class WesharesComponent extends Component
     public $components = array('ShareUtil', 'DeliveryTemplate', 'WeshareBuy', 'ShareAuthority');
 
 
-    public function get_app_weshare_detail($weshareId, $uid){
-
+    public function get_app_weshare_detail($weshare_id)
+    {
+        $weshareM = ClassRegistry::init('Weshare');
+        $weshare_detail = $weshareM->find('first', [
+            'conditions' => [
+                'id' => $weshare_id
+            ]
+        ]);
+        $weshare_detail = $weshare_detail['Weshare'];
+        return $weshare_detail;
     }
+
+    public function get_weshare_products($weshare_id)
+    {
+        $weshareProductM = ClassRegistry::init('WeshareProduct');
+        $weshare_products = $weshareProductM->find('all', [
+            'conditions' => [
+                'weshare_id' => $weshare_id,
+                'deleted' => DELETED_NO
+            ]
+        ]);
+        $result = [];
+        //商品的统计
+        $share_summery = $this->WeshareBuy->get_share_buy_summery($weshare_id);
+        $share_summery = $share_summery['detail'];
+        foreach ($weshare_products as $product_item) {
+            $product = $product_item['WeshareProduct'];
+            $left = 0;
+            if ($product['store'] > 0) {
+                $left = $product['store'] - $share_summery[$product['id']];
+            }
+            $product['left'] = $left < 0 ? 0 : $left;
+            $result[] = $product;
+        }
+        return $result;
+    }
+
 
     /**
      * @param $weshareId

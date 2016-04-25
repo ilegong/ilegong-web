@@ -39,12 +39,35 @@ class WeshareApiController extends Controller
         exit();
     }
 
+    //获取评论，只做展示使用
+    public function get_share_comment($weshare_id, $limit, $page)
+    {
+        
+    }
+
+    //获取推荐，只做展示使用
+    public function get_share_recommend($weshare_id)
+    {
+        $result = $this->WeshareBuy->load_share_recommend_data($weshare_id);
+        echo json_encode($result);
+        exit();
+    }
+
     //获取分享的详情
     public function get_weshare_detail($weshare_id)
     {
         $uid = $this->currentUser['id'];
-        $detail = $this->Weshares->get_weshare_detail($weshare_id, $uid);
-        echo json_encode($detail);
+        $detail = $this->Weshares->get_app_weshare_detail($weshare_id);
+        $products = $this->Weshares->get_weshare_products($weshare_id);
+        $has_sub = true;
+        if ($uid != $detail['creator']) {
+            $has_sub = $this->WeshareBuy->check_user_subscribe($detail['creator'], $uid);
+        }
+        $userM = ClassRegistry::init('User');
+        $users = $userM->get_users_simple_info([$uid, $detail['creator']]);
+        $users = Hash::combine($users, '{n}.User.id', '{n}.User');
+        $sharer_level_data = $this->ShareUtil->get_user_level($detail['creator']);
+        echo json_encode(['detail' => $detail, 'products' => $products, 'has_sub' => $has_sub, 'current_user' => $users[$uid], 'sharer' => $users[$detail['creator']], 'sharer_level' => $sharer_level_data]);
         exit();
     }
 
