@@ -76,9 +76,9 @@ var all_js = [
 
 var all_css = [
   {
-    name: 'site_common.css',
+    name: 'site-common.css',
     sources: [
-      'webroot/src/scss/site_common.scss',
+      'webroot/src/scss/site-common.scss',
     ],
     dist: 'webroot/static/weshares/css/'
   }, {
