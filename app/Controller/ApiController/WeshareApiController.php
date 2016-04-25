@@ -6,7 +6,7 @@ class WeshareApiController extends Controller
 
     public function beforeFilter()
     {
-        $allow_action = array();
+        $allow_action = [''];
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action) == false) {
             $this->currentUser = $this->OAuth->user();
@@ -34,7 +34,8 @@ class WeshareApiController extends Controller
     public function get_index_products($tag)
     {
         $products = $this->ShareUtil->get_index_product($tag);
-        echo json_encode($products);
+        $result = $this->combine_index_data($products);
+        echo json_encode($result);
         exit();
     }
 
@@ -100,5 +101,27 @@ class WeshareApiController extends Controller
         $this->UserConsignee->select_consignee($consignee_id, $uid);
         echo json_encode(['success' => true]);
         exit();
+    }
+
+
+    private function combine_index_data($products)
+    {
+        $result = [];
+        $uid = $this->currentUser['id'];
+        $this->loadModel('User');
+        $my_subs = $this->User->get_my_proxys($uid);
+        foreach ($products as $product_item) {
+            $result[] = [
+                'share_id' => $product_item['IndexProduct']['share_id'],
+                'share_img' => $product_item['IndexProduct']['share_img'],
+                'share_price' => $product_item['IndexProduct']['share_price'],
+                'share_desc' => $product_item['IndexProduct']['description'],
+                'share_spec' => $product_item['IndexProduct']['specification'],
+                'user_id' => $product_item['User']['id'],
+                'user_label' => $product_item['User']['label'],
+                'user_level' => $product_item['UserLevel']['data_value'],
+                'is_sub' => in_array($product_item['User']['id'], $my_subs)
+            ];
+        }
     }
 }
