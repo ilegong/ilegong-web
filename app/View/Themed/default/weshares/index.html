@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="{{$STATIC_HOST}}/static/weshares/css/site-common.css?v2.3.4" media="all" rel="stylesheet"
+    <link href="{{$STATIC_HOST}}/static/weshares/css/site-common.css?v2.3.7" media="all" rel="stylesheet"
           type="text/css">
     <link href="{{$STATIC_HOST}}/static/weshares/css/index.min.css?v2.3.7" rel="stylesheet" type="text/css">
     <title>分享圈</title>
@@ -103,9 +103,9 @@
                         {{/if}}
                     </div>
                 </a>
-                <dl class="clearfix share-data" style="display: none;" ng-class="{'show-ib': vm.getSummary({{$product['share_id']}}).view_count > 0}">
+                <dl class="clearfix share-data" style="display: none;" ng-class="{'show-b': vm.getSummary({{$product['share_id']}}).view_count > 0}">
                     <dd class="clearfix" style="padding-right: 66px;">
-                        <img style="display: none;" ng-class="{'show-ib': true}" ng-src="&#123;&#123;vm.staticFilePath + '/' + creator.avatar | thumb: 's'&#125;&#125;" fallback-src="&#123;&#123;vm.staticFilePath + '/avatar/s/default.jpg'&#125;&#125;" ng-repeat="creator in vm.getSummary({{$product['share_id']}}).orders_and_creators | limitTo: 4"/>
+                        <img style="display: none;" class="rounded-50" ng-class="{'show-ib': true}" ng-src="&#123;&#123;vm.staticFilePath + '/' + creator.avatar | thumb: 's'&#125;&#125;" fallback-src="&#123;&#123;vm.staticFilePath + '/avatar/s/default.jpg'&#125;&#125;" ng-repeat="creator in vm.getSummary({{$product['share_id']}}).orders_and_creators | limitTo: 4"/>
                         <label>
                             <span style="display: none;" ng-class="{'show-ib':vm.getSummary({{$product['share_id']}}).orders_and_creators.length > 4}">...</span>已<span ng-bind="vm.getSummary({{$product['share_id']}}).order_count || 0">0</span>人报名
                         </label>

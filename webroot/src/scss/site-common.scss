@@ -1,17 +1,40 @@
-* { padding: 0; margin: 0; font-family: Helvetica, STHeiti STXihei, Microsoft JhengHei, Microsoft YaHei, Arial; }
-body { min-width: 320px; max-width: 640px; font-size: 13px;}
-ul li { list-style: none; }
-.fl { float: left; }
-.fr { float: right; }
-.clearfix { zoom: 1; }
-.clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
-
-
-.channel_bottom {
-  height: 49px;
+* {
+  padding: 0;
+  margin: 0;
+  font-family: Helvetica, STHeiti STXihei, Microsoft JhengHei, Microsoft YaHei, Arial;
 }
 
-.rounded-50{
+body {
+  min-width: 320px;
+  max-width: 640px;
+  font-size: 13px;
+}
+
+ul li {
+  list-style: none;
+}
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.clearfix {
+  zoom: 1;
+}
+
+.clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+.rounded-50 {
   border-radius: 50%;
 }
 
@@ -25,51 +48,44 @@ footer {
   text-align: center;
   background: #f7f7f9;
   color: #666666;
-  border-top:1px #b3b4b6 solid;
+  border-top: 1px #b3b4b6 solid;
   a:visited {
     text-decoration: none;
   }
   a:active {
     text-decoration: none;
   }
-
-  a:link{
+  a:link {
     text-decoration: none;
   }
-
 }
 
-
 .channel_bottom {
+  height: 49px;
+  z-index: 10;
+  .btm_item:nth-child(1), .btm_item:nth-child(3) {
+    width: 19%;
+  }
   .btm_item {
     float: left;
   }
-
-  .btm_item:nth-child(1), .channel_bottom .btm_item:nth-child(3) {
-    width: 19%;
-  }
-
   .iconfont {
     font-size: 20px;
     line-height: 15px;
     color: #7d7d7d;
   }
-  .iconfont-active{
+  .iconfont-active {
     font-size: 20px;
     line-height: 15px;
     color: #49bc6e;
   }
   b {
     font-size: 12px;
-    color: #888;
-    font-family: Hiragino Sans GB, 华文细黑, STHeiti, 微软雅黑, Microsoft YaHei, SimHei, Helvetica Neue, Helvetica, Arial, sans-serif !important;
-    font-weight: 400;
+    color: #888888;
   }
-
-  b.active{
+  b.active {
     color: #49bc6e;
   }
-
   .buy {
     position: relative;
     width: 56%;
@@ -96,7 +112,6 @@ footer {
   .stop.processing {
     background-color: #ccc;
   }
-
   .cut-off {
     position: relative;
     width: 56%;
@@ -108,7 +123,6 @@ footer {
     float: left;
     color: #fff;
   }
-
   .wx-pay {
     position: relative;
     width: 56%;
@@ -131,4 +145,12 @@ footer {
     float: left;
     color: #fff;
   }
+}
+
+.show-ib {
+  display: inline-block !important;
+}
+
+.show-b {
+  display: block !important;
 }
