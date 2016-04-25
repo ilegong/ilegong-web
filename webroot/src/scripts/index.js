@@ -13,7 +13,7 @@
     vm.showUnSubscribeBtn = showUnSubscribeBtn;
     vm.clickPage = clickPage;
     vm.checkHasUnRead = checkHasUnRead;
-    vm.showUnReadMark = false;
+    $rootScope.showUnReadMark = false;
 
     activate();
     function activate() {
@@ -102,7 +102,7 @@
     function checkHasUnRead() {
       $http.get('/share_opt/check_opt_has_new.json').success(function (data) {
         if (data['has_new']) {
-          vm.showUnReadMark = true;
+          $rootScope.showUnReadMark = true;
         }
       });
     }
