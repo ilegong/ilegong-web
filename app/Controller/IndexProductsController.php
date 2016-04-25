@@ -34,11 +34,11 @@ class IndexProductsController extends AppController
     /**
      * api
      */
-    public function recent_orders_and_creators($share_id)
+    public function summary($share_id)
     {
         $this->layout = null;
 
-        $orders_and_creators = $this->ShareUtil->recent_orders_and_creators($share_id);
+        $orders_and_creators = $this->ShareUtil->get_index_product_summary($share_id);
 
         echo json_encode($orders_and_creators);
         exit();

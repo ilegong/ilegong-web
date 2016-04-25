@@ -16,8 +16,8 @@
     vm.checkHasUnRead = checkHasUnRead;
     $rootScope.showUnReadMark = false;
 
-    vm.getRecentOrdersAndCreators = getRecentOrdersAndCreators;
-    vm.getOrdersAndCreators = getOrdersAndCreators;
+    vm.getIndexProductSummary = getIndexProductSummary;
+    vm.getSummary = getSummary;
 
     activate();
     function activate() {
@@ -46,31 +46,29 @@
         });
         $log.log(vm.indexProducts);
         _.each(vm.indexProducts, function (indexProduct) {
-          vm.getRecentOrdersAndCreators(indexProduct);
+          vm.getIndexProductSummary(indexProduct);
         });
       }).error(function (data, e) {
         $log.log('Failed to get index products: ' + e);
       });
     }
 
-    function getRecentOrdersAndCreators(indexProduct) {
-      $http.get('/index_products/recent_orders_and_creators/' + indexProduct.shareId).success(function (data) {
-        indexProduct.recentOrdersAndCreators = _.map(data, function (orderAndCreator) {
-          return orderAndCreator.User;
-        });
+    function getIndexProductSummary(indexProduct) {
+      $http.get('/index_products/summary/' + indexProduct.shareId).success(function (data) {
+        indexProduct.summary = data;
       }).error(function (data, e) {
-        $log.log('Failed to get recent orders and creators for share ' + shareId + ': ' + e);
+        $log.log('Failed to get summary share ' + indexProduct.shareId + ': ' + e);
       });
     }
 
-    function getOrdersAndCreators(shareId) {
+    function getSummary(shareId) {
       var indexProduct = _.find(vm.indexProducts, function (p) {
         return p.shareId == shareId;
       });
       if (_.isEmpty(indexProduct)) {
-        return [];
+        return {orders_count: 0, view_count: 0, orders_and_creators: []};
       }
-      return indexProduct.recentOrdersAndCreators;
+      return indexProduct.summary;
     }
 
     function isSubscribed(proxyId) {

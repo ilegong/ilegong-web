@@ -2045,8 +2045,7 @@ class ShareUtilComponent extends Component
                 'fields' => [
                     'IndexProduct.*',
                     'User.*',
-                    'UserLevel.*',
-                    'Weshare.id', 'Weshare.view_count'
+                    'UserLevel.*'
                 ],
                 'joins' => [
                     [
@@ -2061,13 +2060,7 @@ class ShareUtilComponent extends Component
                         'conditions' => [
                             'User.id = UserLevel.data_id',
                         ],
-                    ], [
-                        'table' => 'weshares',
-                        'alias' => 'Weshare',
-                        'conditions' => [
-                            'Weshare.id = IndexProduct.share_id',
-                        ],
-                    ],
+                    ]
                 ],
                 'order' => array('sort_val ASC')
             ]);
@@ -2103,10 +2096,10 @@ class ShareUtilComponent extends Component
         return $index_products;
     }
 
-    // api: return recent orders and creators
-    public function recent_orders_and_creators($share_id)
+    // api: summary(order count, view count, recent orders and creators)
+    public function get_index_product_summary($share_id)
     {
-        $key = INDEX_VIEW_PRODUCT_ORDERS_AND_CREATORS_CACHE_KEY . '_' . $share_id;
+        $key = INDEX_PRODUCT_SUMMARY_CACHE_KEY . '_' . $share_id;
         $cache_data = Cache::read($key);
         if (!empty($cache_data)) {
             return json_decode($cache_data);
@@ -2131,9 +2124,31 @@ class ShareUtilComponent extends Component
             'order' => array('Order.id DESC'),
             'limit' => 10
         ]);
-        Cache::write($key, json_encode($orders_and_creators));
 
-        return $orders_and_creators;
+        $WeshareM = ClassRegistry::init('Weshare');
+        $share_ids =$WeshareM->find('all', array(
+            'fields' => array('Weshare.id'),
+            'conditions' => [
+                'Weshare.root_share_id' => $share_id
+            ]
+        ));
+        $this->log($share_ids);
+        $share_ids = Hash::extract($share_ids, '{n}.Weshare.id');
+        $share_ids[] = $share_id;
+
+        $view_count = $WeshareM->find('first', array(
+            'fields' => array('Weshare.view_count'),
+            'conditions' => array('id'=>$share_id),
+        ));
+        $this->log(json_encode($view_count));
+        $order_count = $OrderM->find('count', array(
+            'conditions' => array('status > 0', 'member_id' => $share_ids),
+        ));
+
+        $summary = array('view_count'=>$view_count['Weshare']['view_count'], 'order_count'=>$order_count, 'orders_and_creators'=>Hash::extract($orders_and_creators, '{n}.User'));
+        Cache::write($key, json_encode($summary));
+
+        return $summary;
     }
 
     private function query_share_detail($weshare_id)
