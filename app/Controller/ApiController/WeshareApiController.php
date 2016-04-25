@@ -40,9 +40,15 @@ class WeshareApiController extends Controller
     }
 
     //获取评论，只做展示使用
-    public function get_share_comment($weshare_id, $limit, $page)
+    public function get_share_comment($root_share_id, $weshare_id, $limit, $page)
     {
-
+        $all_share_ids = $this->get_associate_share_ids($weshare_id, $root_share_id);
+        $query_cond = [
+            'conditions' => ['data_id' => $all_share_ids]
+        ];
+        $result = $this->WeshareBuy->query_comment2($query_cond);
+        echo json_encode($result);
+        exit();
     }
 
     //获取推荐，只做展示使用
@@ -150,5 +156,18 @@ class WeshareApiController extends Controller
             ];
         }
         return $result;
+    }
+
+    private function get_associate_share_ids($share_id, $root_share_id)
+    {
+        $weshareM = ClassRegistry::init('Weshare');
+        $root_share_id = $root_share_id > 0 ? $root_share_id : $share_id;
+        $weshares = $weshareM->find('all', [
+            'conditions' => [
+                'OR' => ['id' => $root_share_id, 'root_share_id' => $root_share_id]
+            ],
+            'fields' => ['id']
+        ]);
+        return Hash::extract($weshares, '{n}.Weshare.id');
     }
 }

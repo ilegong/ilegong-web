@@ -408,19 +408,9 @@ class WeshareBuyComponent extends Component
         return json_decode($sharer_comment_data, true);
     }
 
-    /**
-     * @param $conds
-     * @return array
-     */
-    public function query_comment($conds)
-    {
-        $commentM = ClassRegistry::init('Comment');
-        $commentReplyM = ClassRegistry::init('CommentReply');
-        $comments = $commentM->find('all', array(
-            'conditions' => $conds,
-            'fields' => $this->$query_comment_fields
-        ));
+    private function combine_comment($comments){
         if (count($comments) > 0) {
+            $commentReplyM = ClassRegistry::init('CommentReply');
             //$comments = Hash::combine($comments,'{n}.Comment.id', '{n}.Comment', '{n}.Comment.order_id');
             $comment_ids = Hash::extract($comments, '{n}.Comment.id');
             $order_comments = array_filter($comments, 'order_comment_filter');
@@ -452,6 +442,28 @@ class WeshareBuyComponent extends Component
             return $share_comment_data;
         }
         return array('order_comments' => array(), 'comment_replies' => array());
+    }
+
+    public function query_comment2($cond){
+        $commentM = ClassRegistry::init('Comment');
+        $comments = $commentM->find('all', $cond);
+        return $this->combine_comment($comments);
+    }
+
+
+    /**
+     * @param $conds
+     * @return array
+     */
+    public function query_comment($conds)
+    {
+        $commentM = ClassRegistry::init('Comment');
+
+        $comments = $commentM->find('all', array(
+            'conditions' => $conds,
+            'fields' => $this->$query_comment_fields
+        ));
+        return $this->combine_comment($comments);
     }
     
 
