@@ -105,7 +105,7 @@
                 </a>
                 <dl class="clearfix share-data" style="display: none;" ng-class="{'show-b': vm.getSummary({{$product['share_id']}}).view_count > 0}">
                     <dd class="clearfix" style="padding-right: 66px;">
-                        <img style="display: none;" class="rounded-50" ng-class="{'show-ib': true}" ng-src="&#123;&#123;vm.staticFilePath + '/' + creator.avatar | thumb: 's'&#125;&#125;" fallback-src="&#123;&#123;vm.staticFilePath + '/avatar/s/default.jpg'&#125;&#125;" ng-repeat="creator in vm.getSummary({{$product['share_id']}}).orders_and_creators | limitTo: 4"/>
+                        <img style="display: none;" class="rounded-50" ng-class="{'show-ib': true}" ng-src="&#123;&#123;creator.avatar&#125;&#125;" fallback-src="&#123;&#123;vm.staticFilePath + '/avatar/s/default.jpg'&#125;&#125;" ng-repeat="creator in vm.getSummary({{$product['share_id']}}).orders_and_creators | limitTo: 4"/>
                         <label>
                             <span style="display: none;" ng-class="{'show-ib':vm.getSummary({{$product['share_id']}}).orders_and_creators.length > 4}">...</span>已<span ng-bind="vm.getSummary({{$product['share_id']}}).order_count || 0">0</span>人报名
                         </label>

@@ -6,7 +6,7 @@ class WeshareApiController extends Controller
 
     public function beforeFilter()
     {
-        $allow_action = [];
+        $allow_action = ['test', 'get_index_products'];
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action) == false) {
             $this->currentUser = $this->OAuth->user();
@@ -140,8 +140,7 @@ class WeshareApiController extends Controller
         $this->loadModel('User');
         $my_subs = $this->User->get_my_proxys($uid);
         foreach ($products as $product_item) {
-            $summary = $this->ShareUtil->get_index_product_summary($product_item['IndexProduct']['share_id']);
-            $item = [
+            $result[] = [
                 'share_id' => $product_item['IndexProduct']['share_id'],
                 'share_img' => $product_item['IndexProduct']['share_img'],
                 'share_price' => $product_item['IndexProduct']['share_price'],
@@ -153,11 +152,8 @@ class WeshareApiController extends Controller
                 'user_level' => $product_item['UserLevel']['data_value'],
                 'user_nickname' => $product_item['User']['nickname'],
                 'is_sub' => in_array($product_item['User']['id'], $my_subs),
-                'view_count' => $summary['view_count'],
-                'order_count' => $summary['order_count'],
-                'orders_and_creators' => $summary['orders_and_creators']
+                'summery' => $this->ShareUtil->get_index_product_summary($product_item['IndexProduct']['share_id']),
             ];
-            $result[] = $item;
         }
         return $result;
     }

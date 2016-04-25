@@ -2135,10 +2135,11 @@ class ShareUtilComponent extends Component
                 ]
             ],
             'order' => array('Order.id DESC'),
-            'limit' => 10
+            'limit' => 5
         ]);
-
-        $summary = array('view_count'=>$view_count['Weshare']['view_count'], 'order_count'=>$order_count, 'orders_and_creators'=>Hash::extract($orders_and_creators, '{n}.User'));
+        $orders_and_creators = Hash::extract($orders_and_creators, '{n}.User');
+        $orders_and_creators = array_map('map_user_avatar3', $orders_and_creators);
+        $summary = array('view_count'=>$view_count['Weshare']['view_count'], 'order_count'=>$order_count, 'orders_and_creators'=>$orders_and_creators);
         Cache::write($key, json_encode($summary));
 
         return $summary;

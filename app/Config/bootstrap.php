@@ -2326,6 +2326,11 @@ function map_share_type_text($type) {
     return $type_text_map[$type];
 }
 
+function map_user_avatar3($var){
+    $var['avatar'] = get_user_avatar($var);
+    return $var;
+}
+
 function map_user_avatar2($var){
     $var['User']['image'] = get_user_avatar($var);
     return $var;
