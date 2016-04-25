@@ -42,7 +42,7 @@ class WeshareApiController extends Controller
     //获取评论，只做展示使用
     public function get_share_comment($weshare_id, $limit, $page)
     {
-        
+
     }
 
     //获取推荐，只做展示使用
@@ -144,7 +144,9 @@ class WeshareApiController extends Controller
                 'user_avatar' => get_user_avatar($product_item['User']),
                 'user_label' => $product_item['User']['label'],
                 'user_level' => $product_item['UserLevel']['data_value'],
-                'is_sub' => in_array($product_item['User']['id'], $my_subs)
+                'user_nickname' => $product_item['User']['nickname'],
+                'is_sub' => in_array($product_item['User']['id'], $my_subs),
+                'summary' => $this->ShareUtil->get_index_product_summary($product_item['IndexProduct']['share_id']);
             ];
         }
         return $result;
