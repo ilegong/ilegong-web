@@ -146,7 +146,7 @@ class WeshareApiController extends Controller
                 'user_level' => $product_item['UserLevel']['data_value'],
                 'user_nickname' => $product_item['User']['nickname'],
                 'is_sub' => in_array($product_item['User']['id'], $my_subs),
-                'summary' => $this->ShareUtil->get_index_product_summary($product_item['IndexProduct']['share_id']);
+                'summary' => $this->ShareUtil->get_index_product_summary($product_item['IndexProduct']['share_id'])
             ];
         }
         return $result;
