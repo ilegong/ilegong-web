@@ -4,8 +4,9 @@
     .controller('IndexCtrl', IndexCtrl);
 
 
-  function IndexCtrl($scope, $rootScope, $http, $log, $window) {
+  function IndexCtrl($scope, $rootScope, $http, $log, $window, $attrs, staticFilePath) {
     var vm = this;
+    vm.staticFilePath = staticFilePath;
     vm.isSubscribed = isSubscribed;
     vm.unSubscribe = unSubscribe;
     vm.subscribe = subscribe;
@@ -14,6 +15,9 @@
     vm.clickPage = clickPage;
     vm.checkHasUnRead = checkHasUnRead;
     $rootScope.showUnReadMark = false;
+
+    vm.getIndexProductSummary = getIndexProductSummary;
+    vm.getSummary = getSummary;
 
     activate();
     function activate() {
@@ -27,16 +31,50 @@
             return {id: parseInt(pid), showUnSubscribeBtn: false};
           })
         }
-        else{
+        else {
           $log.log('User not logged in');
         }
       }).error(function (data, e) {
         $log.log('Failed to get proxies: ' + e);
       });
+
+      var tag = $attrs.tag;
+      vm.indexProducts = [];
+      $http.get('/index_products/index_products/' + tag).success(function (data) {
+        vm.indexProducts = _.map(data, function (p) {
+          return {'id': p.IndexProduct.id, 'shareId': p.IndexProduct.share_id};
+        });
+        $log.log(vm.indexProducts);
+        _.each(vm.indexProducts, function (indexProduct) {
+          vm.getIndexProductSummary(indexProduct);
+        });
+      }).error(function (data, e) {
+        $log.log('Failed to get index products: ' + e);
+      });
+    }
+
+    function getIndexProductSummary(indexProduct) {
+      $http.get('/index_products/summary/' + indexProduct.shareId).success(function (data) {
+        indexProduct.summary = data;
+      }).error(function (data, e) {
+        $log.log('Failed to get summary share ' + indexProduct.shareId + ': ' + e);
+      });
+    }
+
+    function getSummary(shareId) {
+      var indexProduct = _.find(vm.indexProducts, function (p) {
+        return p.shareId == shareId;
+      });
+      if (_.isEmpty(indexProduct)) {
+        return {orders_count: 0, view_count: 0, orders_and_creators: []};
+      }
+      return indexProduct.summary;
     }
 
     function isSubscribed(proxyId) {
-      return _.any(vm.proxies, function(p){return p.id == proxyId});
+      return _.any(vm.proxies, function (p) {
+        return p.id == proxyId
+      });
     }
 
     function subscribe(proxyId) {
@@ -45,7 +83,7 @@
         return;
       }
 
-      if(vm.subscribeInProcess){
+      if (vm.subscribeInProcess) {
         return;
       }
 
@@ -67,7 +105,7 @@
         return;
       }
 
-      if(vm.unSubscribeInProcess){
+      if (vm.unSubscribeInProcess) {
         return;
       }
 
@@ -113,4 +151,5 @@
       });
     }
   }
-})(window, window.angular);
+})
+(window, window.angular);
