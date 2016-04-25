@@ -118,6 +118,7 @@ class WeshareApiController extends Controller
                 'share_desc' => $product_item['IndexProduct']['description'],
                 'share_spec' => $product_item['IndexProduct']['specification'],
                 'user_id' => $product_item['User']['id'],
+                'user_avatar' => get_user_avatar($product_item['User']),
                 'user_label' => $product_item['User']['label'],
                 'user_level' => $product_item['UserLevel']['data_value'],
                 'is_sub' => in_array($product_item['User']['id'], $my_subs)
