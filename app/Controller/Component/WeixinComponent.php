@@ -467,6 +467,7 @@ class WeixinComponent extends Component {
         if ($order['Order']['type'] == ORDER_TYPE_WESHARE_BUY) {
             Cache::write(USER_SHARE_ORDER_INFO_CACHE_KEY . '_' . $order['Order']['member_id'] . '_' . $order['Order']['creator'], '');
             Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $order['Order']['creator'], '');
+            Cache::write(INDEX_PRODUCT_SUMMARY_CACHE_KEY . '_' . $order['Order']['member_id'], '');
             $this->weshare_buy_order_paid($order);
             return;
         }

@@ -437,11 +437,7 @@ class ShareUtilComponent extends Component
 
 
     /**
-     * @param $shareId
-     * @param $uid
-     * @param $type
-     * @param int $share_status
-     * @param $share_limit
+     * 从普通分享上产品街; 从产品街开团；产品街的分享重新开团；手工复制；普通分享重新开团;
      * @return array clone一份， 指定用户ID， 指定的地址， 类型， 状态
      * clone一份， 指定用户ID， 指定的地址， 类型， 状态
      * @internal param 拼团地址 $address
@@ -464,16 +460,9 @@ class ShareUtilComponent extends Component
         }
         $refer_share_type = $shareInfo['type'];
         $refer_share_id = $shareId;
-        if ($new_share_type == SHARE_TYPE_POOL_SELF) {
-            // 从普通分享上产品街
-        } elseif ($new_share_type == SHARE_TYPE_POOL) {
-            // 产品街的分享（从产品街开团；重新开团；或者手工复制）
-            if ($refer_share_type == SHARE_TYPE_POOL) {
-                // 产品街的分享重新开团；
-                $refer_share_id = $shareInfo['refer_share_id'];
-            }
-        } else {
-            // 默认的分享（重新开团；或者手工复制）
+        if ($new_share_type == SHARE_TYPE_POOL && $refer_share_type == SHARE_TYPE_POOL) {
+            // 产品街的分享重新开团，要从产品街拷贝商品信息
+            $refer_share_id = $shareInfo['refer_share_id'];
         }
 
         try {
@@ -497,7 +486,6 @@ class ShareUtilComponent extends Component
                 $this->check_and_save_default_level($uid);
             }
             //order status offline address id
-
             $newShareInfo = $WeshareM->save($shareInfo);
             if (!$newShareInfo) {
                 throw new Exception("Failed to clone weshare " . $shareId . ": db error");
@@ -2106,9 +2094,34 @@ class ShareUtilComponent extends Component
         }
 
         $OrderM = ClassRegistry::init('Order');
+        $WeshareM = ClassRegistry::init('Weshare');
+        $share =$WeshareM->find('first', array(
+            'fields' => array('Weshare.*'),
+            'conditions' => [
+                'Weshare.id' => $share_id
+            ]
+        ));
+
+        $root_share_id = $share['Weshare']['root_share_id'] > 0 ? $share['Weshare']['root_share_id'] : $share['Weshare']['id'];
+        $share_ids =$WeshareM->find('all', array(
+            'fields' => array('Weshare.id'),
+            'conditions' => [
+                'OR'=>['Weshare.root_share_id' => $root_share_id, 'Weshare.id'=>$root_share_id],
+                'Weshare.creator' => $share['Weshare']['creator'],
+            ]
+        ));
+        $share_ids = Hash::extract($share_ids, '{n}.Weshare.id');
+
+        $order_count = $OrderM->find('count', array(
+            'conditions' => array('status > 0', 'member_id' => $share_ids),
+        ));
+        $view_count = $WeshareM->find('first', array(
+            'fields' => array('Weshare.view_count'),
+            'conditions' => array('id'=>$share_id),
+        ));
         $orders_and_creators = $OrderM->find('all', [
             'conditions' => [
-                'Order.member_id' => $share_id,
+                'Order.member_id' => $share_ids,
                 'Order.status > 0',
             ],
             'fields' => array('Order.id', 'User.id', 'User.nickname', 'User.avatar'),
@@ -2124,26 +2137,6 @@ class ShareUtilComponent extends Component
             'order' => array('Order.id DESC'),
             'limit' => 10
         ]);
-
-        $WeshareM = ClassRegistry::init('Weshare');
-        $share_ids =$WeshareM->find('all', array(
-            'fields' => array('Weshare.id'),
-            'conditions' => [
-                'Weshare.root_share_id' => $share_id
-            ]
-        ));
-        $this->log($share_ids);
-        $share_ids = Hash::extract($share_ids, '{n}.Weshare.id');
-        $share_ids[] = $share_id;
-
-        $view_count = $WeshareM->find('first', array(
-            'fields' => array('Weshare.view_count'),
-            'conditions' => array('id'=>$share_id),
-        ));
-        $this->log(json_encode($view_count));
-        $order_count = $OrderM->find('count', array(
-            'conditions' => array('status > 0', 'member_id' => $share_ids),
-        ));
 
         $summary = array('view_count'=>$view_count['Weshare']['view_count'], 'order_count'=>$order_count, 'orders_and_creators'=>Hash::extract($orders_and_creators, '{n}.User'));
         Cache::write($key, json_encode($summary));
