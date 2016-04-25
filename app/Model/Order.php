@@ -164,9 +164,8 @@ class Order extends AppModel {
         $cartM->updateAll(array('status'=>ORDER_STATUS_PAID), array('order_id'=>$orderId, 'status' => ORDER_STATUS_WAITING_PAY));
 
         //$sold = $rtn && $this->getAffectedRows() >= 1;
-        $sold = $rtn;
-        
-        return $sold;
+
+        return $rtn;
     }
 
     /**
