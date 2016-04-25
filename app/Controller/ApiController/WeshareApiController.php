@@ -140,6 +140,8 @@ class WeshareApiController extends Controller
         $this->loadModel('User');
         $my_subs = $this->User->get_my_proxys($uid);
         foreach ($products as $product_item) {
+            $summary = $this->ShareUtil->get_index_product_summary($product_item['IndexProduct']['share_id']);
+            $this->log('log share summary '.json_encode($summary));
             $item = [
                 'share_id' => $product_item['IndexProduct']['share_id'],
                 'share_img' => $product_item['IndexProduct']['share_img'],
@@ -154,10 +156,10 @@ class WeshareApiController extends Controller
                 'is_sub' => in_array($product_item['User']['id'], $my_subs),
             ];
 
-            $summary = $this->ShareUtil->get_index_product_summary($item['share_id']);
-            //$item['view_count'] = $summary['view_count'];
-            //$item['order_count'] = $summary['order_count'];
-            //$item['orders_and_creators'] = $summary['orders_and_creators'];
+//            $summary = $this->ShareUtil->get_index_product_summary($item['share_id']);
+//            $item['view_count'] = $summary['view_count'];
+//            $item['order_count'] = $summary['order_count'];
+//            $item['orders_and_creators'] = $summary['orders_and_creators'];
 //            $order_creators = $summary['orders_and_creators'];
 //            if(!empty($order_creators)){
 //                $order_creators = array_map('map_user_avatar', $order_creators);
