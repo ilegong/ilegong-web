@@ -1296,9 +1296,10 @@
         to_friend_title = vm.weshare.creator.nickname + '分享:' + vm.weshare.title;
         imgUrl = vm.weshare.images[0] || vm.weshare.creator.image;
         if (vm.totalBuyCount >= 5) {
-          desc += '已经有' + vm.totalBuyCount + '人报名，';
+          desc = '已经有' + vm.totalBuyCount + '人报名，' + shareIntryResult;
+        }else{
+          desc = shareIntryResult;
         }
-        desc += shareIntryResult;
       } else if (userInfo && _.isEmpty(vm.ordersDetail['orders'])) {
         if (vm.isProxy()) {
           url = url + '?recommend=' + vm.currentUser['id'];
