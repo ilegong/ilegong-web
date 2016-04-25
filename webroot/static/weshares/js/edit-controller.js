@@ -112,6 +112,7 @@
         //update
         $http.get('/weshares/get_share_info/' + weshareId).success(function (data) {
           vm.weshare = data;
+          vm.weshare.description = vm.weshare.description.replace(new RegExp('<br />', 'g'), '\r\n');
           vm.weshare.tags = vm.weshare['tags_list'];
           setDefaultData();
           setDefaultShipSettingData();
