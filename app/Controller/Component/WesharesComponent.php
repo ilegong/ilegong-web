@@ -6,6 +6,11 @@ class WesharesComponent extends Component
 {
     public $components = array('ShareUtil', 'DeliveryTemplate', 'WeshareBuy', 'ShareAuthority');
 
+
+    public function get_app_weshare_detail($weshareId, $uid){
+
+    }
+
     /**
      * @param $weshareId
      * @param $uid

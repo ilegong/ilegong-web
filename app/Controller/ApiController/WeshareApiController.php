@@ -103,7 +103,7 @@ class WeshareApiController extends Controller
         exit();
     }
 
-
+    //组合首页数据
     private function combine_index_data($products)
     {
         $result = [];
@@ -123,5 +123,6 @@ class WeshareApiController extends Controller
                 'is_sub' => in_array($product_item['User']['id'], $my_subs)
             ];
         }
+        return $result;
     }
 }
