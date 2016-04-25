@@ -157,7 +157,7 @@ class WeshareApiController extends Controller
             $item['view_count'] = $summary['view_count'];
             $item['order_count'] = $summary['order_count'];
             $order_creators = $summary['orders_and_creators'];
-            //$order_creators = array_map('map_user_avatar', $order_creators);
+            $order_creators = array_map('map_user_avatar', $order_creators);
             $item['orders_and_creators'] = $order_creators;
             $result[] = $item;
         }

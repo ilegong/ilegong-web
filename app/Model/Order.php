@@ -165,36 +165,7 @@ class Order extends AppModel {
 
         //$sold = $rtn && $this->getAffectedRows() >= 1;
         $sold = $rtn;
-        if ($sold) {
-            $this->update_group_buy_record($orderId);
-            $cartItems = $cartM->find_balanced_items($orderId);
-            if (!empty($cartItems)) {
-                $pid_list = Hash::extract($cartItems, '{n}.Cart.product_id');
-            }
-            $sgouldClearCache = false;
-            if($type != ORDER_TYPE_TUAN){
-                $TuanBuyingM = ClassRegistry::init('TuanBuying');
-                foreach($cartItems as $item){
-                    $tuan_buy_id = $item['Cart']['tuan_buy_id'];
-                    $cartNum = $item['Cart']['num'];
-                    if($tuan_buy_id){
-                        //update tuan buying sold num
-                        $TuanBuyingM->updateAll(array('sold_num' => 'sold_num + '.$cartNum),array('id' => $tuan_buy_id));
-                        $sgouldClearCache = true;
-                    }
-                }
-            }
-
-            foreach ($pid_list as $pid) {
-                clean_total_sold($pid);
-            }
-            //split_pys_order($orderId);
-            $this->update_refer($orderOwner,$orderId);
-            if($sgouldClearCache){
-                clear_tag_cache(23);
-            }
-        }
-
+        
         return $sold;
     }
 
