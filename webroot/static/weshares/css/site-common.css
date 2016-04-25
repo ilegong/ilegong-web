@@ -1,15 +1,47 @@
-* { padding: 0; margin: 0; font-family: Helvetica, STHeiti STXihei, Microsoft JhengHei, Microsoft YaHei, Arial; }
-body { min-width: 320px; max-width: 640px; font-size: 13px;}
-ul li { list-style: none; }
-.fl { float: left; }
-.fr { float: right; }
-.clearfix { zoom: 1; }
-.clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+* {
+    padding: 0;
+    margin: 0;
+    font-family: Helvetica, STHeiti STXihei, Microsoft JhengHei, Microsoft YaHei, Arial;
+}
 
-.rounded-50{
+body {
+    min-width: 320px;
+    max-width: 640px;
+    font-size: 13px;
+}
+
+ul li {
+    list-style: none;
+}
+
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
+
+.clearfix {
+    zoom: 1;
+}
+
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.rounded-50 {
     border-radius: 50%;
 }
-.channel_bottom { height: 49px; z-index: 10; }
+
+.channel_bottom {
+    height: 49px;
+    z-index: 10;
+}
 
 footer {
     box-sizing: border-box;
@@ -21,7 +53,7 @@ footer {
     text-align: center;
     background: #f7f7f9;
     color: #666666;
-    border-top:1px #b3b4b6 solid;
+    border-top: 1px #b3b4b6 solid;
 }
 
 footer a:visited {
@@ -32,7 +64,7 @@ footer a:active {
     text-decoration: none;
 }
 
-footer a:link{
+footer a:link {
     text-decoration: none;
 }
 
@@ -49,17 +81,19 @@ footer a:link{
     line-height: 15px;
     color: #7d7d7d;
 }
-.channel_bottom .iconfont-active{
+
+.channel_bottom .iconfont-active {
     font-size: 20px;
     line-height: 15px;
     color: #49bc6e;
 }
+
 .channel_bottom b {
     font-size: 12px;
     color: #888888;
 }
 
-.channel_bottom b.active{
+.channel_bottom b.active {
     color: #49bc6e;
 }
 
@@ -86,6 +120,7 @@ footer a:link{
     float: left;
     color: #fff;
 }
+
 .channel_bottom .stop.processing {
     background-color: #ccc;
 }
@@ -113,6 +148,7 @@ footer a:link{
     float: left;
     color: #fff;
 }
+
 .channel_bottom .ali-pay {
     position: relative;
     width: 56%;
@@ -125,6 +161,10 @@ footer a:link{
     color: #fff;
 }
 
-.show-ib{
+.show-ib {
     display: inline-block !important;
+}
+
+.show-b {
+    display: block !important;
 }
