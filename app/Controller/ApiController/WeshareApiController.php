@@ -6,7 +6,7 @@ class WeshareApiController extends Controller
 
     public function beforeFilter()
     {
-        $allow_action = ['test', 'get_index_products'];
+        $allow_action = [];
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action) == false) {
             $this->currentUser = $this->OAuth->user();
@@ -40,13 +40,36 @@ class WeshareApiController extends Controller
     }
 
     //获取评论，只做展示使用
-    public function get_share_comment($root_share_id, $weshare_id, $limit, $page)
+    public function get_share_comment($share_creator, $root_share_id, $weshare_id, $limit, $page)
     {
-        $all_share_ids = $this->get_associate_share_ids($weshare_id, $root_share_id);
+        $all_share_ids = $this->get_associate_share_ids($root_share_id, $weshare_id, $share_creator);
         $query_cond = [
-            'conditions' => ['data_id' => $all_share_ids]
+            'conditions' => ['data_id' => $all_share_ids, 'type' => COMMENT_SHARE_TYPE, 'status' => PUBLISH_YES],
+            'limit' => $limit,
+            'page' => $page
         ];
         $result = $this->WeshareBuy->query_comment2($query_cond);
+        echo json_encode($result);
+        exit();
+    }
+
+    //获取订单列表
+    public function get_share_order($share_creator, $root_share_id, $weshare_id, $limit, $page)
+    {
+        $all_share_ids = $this->get_associate_share_ids($root_share_id, $weshare_id, $share_creator);
+        $cond = [
+            'conditions' => [
+                'member_id' => $all_share_ids,
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'status' => [ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY],
+                'deleted' => DELETED_NO,
+            ],
+            'fields' => ['id', 'creator', 'created', 'updated', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type', 'member_id', 'ship_type_name', 'total_price', 'coupon_total', 'cate_id', 'business_remark'],
+            'limit' => $limit,
+            'page' => $page,
+            'order' => ['id DESC', 'member_id DESC']
+        ];
+        $result = $this->WeshareBuy->get_app_detail_orders($cond);
         echo json_encode($result);
         exit();
     }
@@ -65,6 +88,8 @@ class WeshareApiController extends Controller
         $uid = $this->currentUser['id'];
         $detail = $this->Weshares->get_app_weshare_detail($weshare_id);
         $products = $this->Weshares->get_weshare_products($weshare_id);
+        $user_summary = $this->WeshareBuy->get_user_share_summary($detail['creator']);
+        $share_summary = $this->WeshareBuy->get_share_and_all_refer_share_summary($weshare_id, $uid);
         $has_sub = true;
         if ($uid != $detail['creator']) {
             $has_sub = $this->WeshareBuy->check_user_subscribe($detail['creator'], $uid);
@@ -73,34 +98,7 @@ class WeshareApiController extends Controller
         $users = $userM->get_users_simple_info([$uid, $detail['creator']]);
         $users = Hash::combine($users, '{n}.User.id', '{n}.User');
         $sharer_level_data = $this->ShareUtil->get_user_level($detail['creator']);
-        echo json_encode(['detail' => $detail, 'products' => $products, 'has_sub' => $has_sub, 'current_user' => $users[$uid], 'sharer' => $users[$detail['creator']], 'sharer_level' => $sharer_level_data]);
-        exit();
-    }
-
-    //获取分享的汇总数据
-    public function get_share_summery_data($weshare_id)
-    {
-        $uid = $this->currentUser['id'];
-        $summery = $this->WeshareBuy->get_share_and_all_refer_share_summary($weshare_id, $uid);
-        echo json_encode($summery);
-        exit();
-    }
-
-    //获取某个分享自己的订单
-    public function get_current_user_order($weshare_id)
-    {
-        $uid = $this->currentUser['id'];
-        $ordersDetail = $this->WeshareBuy->get_current_user_share_order_data($weshare_id, $uid);
-        echo json_encode($ordersDetail);
-        exit();
-    }
-
-    //获取某个分享分页查询订单
-    public function get_share_order_data($weshare_id, $page)
-    {
-        $uid = $this->currentUser['id'];
-        $ordersDetail = $this->WeshareBuy->get_share_detail_view_orders($weshare_id, $page, $uid, 1);
-        echo json_encode($ordersDetail);
+        echo json_encode(['detail' => $detail, 'products' => $products, 'has_sub' => $has_sub, 'current_user' => $users[$uid], 'sharer' => $users[$detail['creator']], 'sharer_level' => $sharer_level_data, 'user_summary' => $user_summary, 'share_summary' => $share_summary]);
         exit();
     }
 
@@ -158,12 +156,13 @@ class WeshareApiController extends Controller
         return $result;
     }
 
-    private function get_associate_share_ids($share_id, $root_share_id)
+    private function get_associate_share_ids($root_share_id, $share_id, $uid)
     {
         $weshareM = ClassRegistry::init('Weshare');
         $root_share_id = $root_share_id > 0 ? $root_share_id : $share_id;
         $weshares = $weshareM->find('all', [
             'conditions' => [
+                'creator' => $uid,
                 'OR' => ['id' => $root_share_id, 'root_share_id' => $root_share_id]
             ],
             'fields' => ['id']

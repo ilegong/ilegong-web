@@ -3,6 +3,11 @@ class CategoriesController extends AppController {
 
     var $name = 'Categories';
 
+    public function beforeFilter(){
+        parent::beforeFilter();
+        $this->redirect('/');
+    }
+    
     public function api_seckills(){
         $this->autoRender=false;
 

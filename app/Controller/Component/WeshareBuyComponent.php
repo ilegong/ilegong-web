@@ -1406,6 +1406,14 @@ class WeshareBuyComponent extends Component
         Cache::write(USER_SHARE_ORDER_INFO_CACHE_KEY . '_' . $shareId . '_' . $uid, '');
     }
 
+
+    public function get_app_detail_orders($q_cond)
+    {
+        $result = $this->load_share_order_data($q_cond);
+        unset($result['order_ids']);
+        return $result;
+    }
+
     /**
      * @param $weshareId
      * @param $page

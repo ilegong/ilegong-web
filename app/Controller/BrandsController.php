@@ -4,6 +4,11 @@ class BrandsController extends AppController {
 
     var $name = 'Brands';
 
+    public function beforeFilter(){
+        parent::beforeFilter();
+        $this->redirect('/');
+    }
+
     public function index($slug='/') {
         $uid = $this->currentUser['id'];
         if ($uid) {
