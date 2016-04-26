@@ -1,4 +1,21 @@
 <?php
+define('DEFAULT_SITE_HOST','www.tongshijiia.com');
+define('SH_SITE_HOST','sh.tongshijiia.com');
+if($_SERVER['HTTP_HOST'] == SH_SITE_HOST){
+    define('WX_APPID', 'wx65d0c25ec24bb4c2');
+    define('WX_APPID_SOURCE', 'wx65d0');
+    define('WX_SECRET', '36dac48558049698efe1d2da8b1ee904');
+    define('WX_SERVICE_ID_NAME', '朋友说上海');
+    define('WX_SERVICE_ID_NO', 'pyshuo01');
+    define('CACHE_PREFIX' , 'sh');
+}else{
+    define('WX_APPID', 'wxca7838dcade4709c');
+    define('WX_APPID_SOURCE', 'wxca78');
+    define('WX_SECRET', '79b787ec8f463eeb769540464c9277b2');
+    define('WX_SERVICE_ID_NAME', '朋友说');
+    define('WX_SERVICE_ID_NO', 'pyshuo2014');
+    define('CACHE_PREFIX' , '');
+}
 
 if (!defined('DS')) {
     define('DS', DIRECTORY_SEPARATOR);

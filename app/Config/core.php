@@ -1,39 +1,39 @@
 <?php
-if(isset($_SERVER['SERVER_ADDR']) && $_SERVER['SERVER_ADDR'] == '127.0.0.1' || $_SERVER['SERVER_ADDR'] == '::1'){
-	Configure::write('debug',1);
-	Configure::write('Cache.disable', false);
-	define('IS_LOCALHOST', true);
-}
-else{
-	Configure::write('debug',0);
-	Configure::write('Cache.disable', false);
+if (isset($_SERVER['SERVER_ADDR']) && $_SERVER['SERVER_ADDR'] == '127.0.0.1' || $_SERVER['SERVER_ADDR'] == '::1') {
+    Configure::write('debug', 1);
+    Configure::write('Cache.disable', false);
+    define('IS_LOCALHOST', true);
+} else {
+    Configure::write('debug', 0);
+    Configure::write('Cache.disable', false);
 }
 
 Configure::write('Error', array(
-            'handler' => 'ErrorHandler::handleError',
-            'level' => E_ERROR | E_WARNING | E_PARSE,
-            'renderer' => 'CustomExceptionRender',
-            'trace' => true
-        ));
+    'handler' => 'ErrorHandler::handleError',
+    'level' => E_ERROR | E_WARNING | E_PARSE,
+    'renderer' => 'CustomExceptionRender',
+    'trace' => true
+));
 Configure::write('Exception', array(
-            'handler' => 'ErrorHandler::handleException',
-            'renderer' => 'CustomExceptionRender',
-            'log' => true,
-            'trace' => true
-        ));
+    'handler' => 'ErrorHandler::handleException',
+    'renderer' => 'CustomExceptionRender',
+    'log' => true,
+    'trace' => true
+));
 Configure::write('App.encoding', 'UTF-8');
 
 define('DEFAULT_LANGUAGE', 'zh-cn');
 Configure::write('Config.language', 'zh-cn');
 
-Configure::write('kuaidi100_key','1c9cbcbc54d0ecf5');
-
-define('WX_APPID', 'wxca7838dcade4709c');
-//ID for service account(DO NOT CHANGE)
-define('WX_APPID_SOURCE', 'wxca78');
-define('WX_SECRET', '79b787ec8f463eeb769540464c9277b2');
-define('WX_SERVICE_ID_NAME', '朋友说');
-define('WX_SERVICE_ID_NO', 'pyshuo2014');
+Configure::write('kuaidi100_key', '1c9cbcbc54d0ecf5');
+/**
+ * define('WX_APPID', 'wxca7838dcade4709c');
+ * //ID for service account(DO NOT CHANGE)
+ * define('WX_APPID_SOURCE', 'wxca78');
+ * define('WX_SECRET', '79b787ec8f463eeb769540464c9277b2');
+ * define('WX_SERVICE_ID_NAME', '朋友说');
+ * define('WX_SERVICE_ID_NO', 'pyshuo2014');
+ */
 
 // Configure::write('App.baseUrl', env('SCRIPT_NAME'));
 define('LOG_ERROR', 2);
@@ -47,9 +47,9 @@ define('LOG_ERROR', 2);
 //     )
 // ));
 Configure::write('Session', array(
-   'defaults' => 'php',
-   'timeout' => 900,
-   'name' => 'Miao'
+    'defaults' => 'php',
+    'timeout' => 900,
+    'name' => 'Miao'
 ));
 
 
@@ -81,7 +81,7 @@ if (Configure::read('debug') > 1) {
 }
 $cache_prefix = '';
 if (class_exists('Memcached')) {
-    $cache_prefix = 'pys_app_';
+    $cache_prefix = CACHE_PREFIX . 'pys_app_';
     $engine = 'Memcached';
     Cache::config('default', array(
         'engine' => $engine,
@@ -107,21 +107,11 @@ if (class_exists('Memcached')) {
         'probability' => 100,
     ));
 } else {
-    if (defined('SAE_MYSQL_DB')) {
-        $engine = 'Saemc';
-    } elseif (isset($_SERVER['HTTP_HOST']) && preg_match('/\.aliapp\.com$/', $_SERVER['HTTP_HOST'])) {
-        $engine = 'Acemc';
-    } else {
-        $engine = 'File';
-        if (extension_loaded('apc') && (php_sapi_name() !== 'cli' || ini_get('apc.enable_cli'))) {
-            $engine = 'Apc';
-        }
+    $engine = 'File';
+    if (extension_loaded('apc') && (php_sapi_name() !== 'cli' || ini_get('apc.enable_cli'))) {
+        $engine = 'Apc';
     }
 
-    if (defined('SAE_MYSQL_DB')) {
-        // 区分各版本的缓存，不互相冲突
-        $cache_prefix = $_SERVER['HTTP_APPVERSION'];
-    }
     /*
      *  前后台使用不同的缓存文件 _cake_core_,_cake_model_
      *  缓存的配置，前台的前缀包含后台的前缀（利用后台的prefix比较时能涵盖前台的文件）。后台删除缓存时，前后台就都能删除了.
