@@ -6,7 +6,7 @@ class WeshareApiController extends Controller
 
     public function beforeFilter()
     {
-        $allow_action = ['test', 'get_index_products'];
+        $allow_action = ['test', 'get_share_order'];
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action) == false) {
             $this->currentUser = $this->OAuth->user();
@@ -40,10 +40,9 @@ class WeshareApiController extends Controller
     }
 
     //获取评论，只做展示使用
-    public function get_share_comment($root_share_id, $weshare_id, $limit, $page)
+    public function get_share_comment($share_creator, $root_share_id, $weshare_id, $limit, $page)
     {
-        $uid = $this->currentUser['id'];
-        $all_share_ids = $this->get_associate_share_ids($weshare_id, $root_share_id, $uid);
+        $all_share_ids = $this->get_associate_share_ids($root_share_id, $weshare_id, $share_creator);
         $query_cond = [
             'conditions' => ['data_id' => $all_share_ids, 'type' => COMMENT_SHARE_TYPE, 'status' => PUBLISH_YES],
             'limit' => $limit,
@@ -55,10 +54,9 @@ class WeshareApiController extends Controller
     }
 
     //获取订单列表
-    public function get_share_order($root_share_id, $weshare_id, $limit, $page)
+    public function get_share_order($share_creator, $root_share_id, $weshare_id, $limit, $page)
     {
-        $uid = $this->currentUser['id'];
-        $all_share_ids = $this->get_associate_share_ids($weshare_id, $root_share_id, $uid);
+        $all_share_ids = $this->get_associate_share_ids($root_share_id, $weshare_id, $share_creator);
         $cond = [
             'conditions' => [
                 'member_id' => $all_share_ids,
@@ -182,7 +180,7 @@ class WeshareApiController extends Controller
         return $result;
     }
 
-    private function get_associate_share_ids($share_id, $root_share_id, $uid)
+    private function get_associate_share_ids($root_share_id, $share_id, $uid)
     {
         $weshareM = ClassRegistry::init('Weshare');
         $root_share_id = $root_share_id > 0 ? $root_share_id : $share_id;
