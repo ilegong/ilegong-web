@@ -4,10 +4,11 @@ class ProductsController extends AppController{
     var $name = 'Products';
     public $brand = null;
 
-    public $components = array('ProductSpecGroup');
+    //public $components = array('ProductSpecGroup');
 
     public function beforeFilter(){
         parent::beforeFilter();
+        $this->redirect('/');
     }
 
     private function checkAccess(){
