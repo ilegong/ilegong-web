@@ -1,0 +1,1 @@
+alter table cake_weshares add column default_image varchar(255) default null after images;
