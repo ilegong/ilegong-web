@@ -421,7 +421,7 @@ function oauth_wx_goto($refer_key, $host3g) {
  * @param bool $not_require_info
  * @return string url to Weixin oauth
  */
-function redirect_to_wx_oauth($ref, $scope = WX_OAUTH_BASE, $not_require_info = false) {
+function redirect_to_wx_oauth($ref, $scope = WX_OAUTH_USERINFO, $not_require_info = false) {
     $return_uri = 'http://' . WX_HOST . '/users/wx_auth?';
     if (!empty($ref)) {
         $return_uri .= '&referer=' . urlencode($ref);
