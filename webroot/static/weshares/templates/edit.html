@@ -1,7 +1,8 @@
 <div class="weshare-add" ng-if="vm.showEditShareView">
+    <!--
     <div class='share-info' ng-show="vm.showEditShareInfo">
         <h1 class='margin-bottom-12'>分享描述</h1>
-
+        <h1>分享名称<span>（好名字更容易吸引人）</span></h1>
         <div class="form-group" ng-class="{'has-error': vm.weshareTitleHasError}">
             <input class='form-control' placeholder="分享的的标题" ng-model='vm.weshare.title' ng-change='vm.validateTitle()' ng-blur='vm.validateTitle()'/>
             <p class='tips'>请输入标题, 不超过50个字</p>
@@ -56,7 +57,71 @@
         <a class="btn upload-btn" ng-click="vm.chooseAndUploadImage()">点击上传图片</a>
         <a class="btn next-btn" ng-click="vm.nextStep()">下一步，设置取货信息</a>
     </div>
+    -->
+    <div class="share-bg" ng-show="vm.showEditShareInfo">
+        <h1>分享名称<span>（好名字更容易吸引人）</span></h1>
+        <div class="share-name"><input type="text" ng-model='vm.weshare.title' ng-change='vm.validateTitle()' ng-blur='vm.validateTitle()' placeholder="请输入分享名称"></div>
+    </div>
+    <div class="share-bg" ng-show="vm.showEditShareInfo">
+        <h1>推荐原因</h1>
+        <div class="share-area">
+            <textarea placeholder="请描述推荐该分享的原因（例如：曾尝试过日本、韩国的各种海苔，都太油太咸，不适合宝宝吃，这个有机海苔入口即化、有机加工，健康又营养）"></textarea>
+        </div>
+    </div>
+    <div class="share-bg" ng-show="vm.showEditShareInfo">
+        <h1>产品信息</h1>
+        <div class="share-product" ng-repeat="product in vm.weshare.products | filter:{deleted : 0}">
+            <div class="share-product-name clearfix">
+                <label>名称</label>
+                <input type="text" placeholder="请输入产品名称/规格" ng-model="product.name" ng-change='vm.validateProductName(product)' ng-blur='vm.validateProductName(product)'>
+            </div>
+            <div class="share-product-masg clearfix">
+                <label>重量(kg)</label>
+                <input class="reminder" string-to-number type="number" placeholder="请输入每件重量(非必填)" value="请输入每件重量(非必填)" ng-change='vm.alertProductWeight(product)' ng-model="product.weight" >
+            </div>
+            <div class="share-product-masg clearfix">
+                <label>价格(元)</label>
+                <input string-to-number type="number" step="0.01" placeholder="请输入产品价格"  ng-model="product.price" ng-change='vm.validateProductPrice(product)' ng-blur='vm.validateProductPrice(product)'>
+            </div>
+            <div class="share-product-masg clearfix">
+                <label>库存(件)</label>
+                <input string-to-number type="number" placeholder="请输入库存" ng-model="product.store" ng-change='vm.validateProductStore(product)' ng-blur='vm.validateProductStore(product)'>
+            </div>
+            <a href="javascript:;" ng-show="vm.weshare.products.length > 1" ng-click="vm.toggleProduct(product, false)">删除</a>
+        </div>
+        <a href="javascript:;" class="share-product-addBtn clearfix" ng-click="vm.toggleProduct(product, true)">
+            <s><img src="{{vm.staticFilePath}}/static/weshares/images/share-addicon.png?v0.3.1"></s>
+            <label>添加产品</label>
+        </a>
+    </div>
+    <div class="share-pirture" ng-show="vm.showEditShareInfo">
+        <h1>产品图片</h1>
+        <ul class="clearfix">
+            <li ng-repeat="image in vm.weshare.images">
+                <div>
+                    <img ng-src="{{image}}"/>
+                    <a class="delete-img" ng-click='vm.deleteImage(image)'>—</a>
+                    <div ng-if="$first">
+                        <a href="javascript:;" class="first-img first-img-setting">
+                            <label>已为首图</label>
+                            <s></s>
+                        </a>
+                    </div>
+                    <div ng-if="!$first">
+                        <a href="javascript:;" class="first-img">
+                            <label>设为首图</label>
+                            <s></s>
+                        </a>
+                    </div>
+                </div>
+            </li>
 
+            <li>
+                <div class="add-pirture" ng-click="vm.chooseAndUploadImage()"><img src="{{vm.staticFilePath}}/static/weshares/images/add-pircture-btn.png" /></div>
+            </li>
+        </ul>
+    </div>
+    <a class="nextstepBtn" ng-show="vm.showEditShareInfo" ng-click="vm.nextStep()">下一步，设置配送信息</a>
     <div class="shippment-info" ng-show='vm.showShippmentInfo'>
         <div class="refer-back-bg">
             设置配送信息
