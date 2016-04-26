@@ -187,7 +187,7 @@ class WxPaymentComponent extends Component {
         if (empty($payLog)) {
             $status = PAYNOTIFY_ERR_TRADENO;
         } else {
-            $payLogModel->updateAll(array('status' => $suc ? PAYLOG_STATUS_FAIL : PAYLOG_STATUS_SUCCESS), array('out_trade_no' => $out_trade_no));
+            $payLogModel->updateAll(array('status' => $suc ? PAYLOG_STATUS_SUCCESS : PAYLOG_STATUS_FAIL), array('out_trade_no' => $out_trade_no));
             $status = PAYNOTIFY_STATUS_PAYLOG_UPDATED;
 
             $orderId = $payLog['PayLog']['order_id'];
@@ -262,7 +262,7 @@ class WxPaymentComponent extends Component {
         if (empty($payLog)) {
             $status = PAYNOTIFY_ERR_TRADENO;
         } else {
-            $payLogModel->updateAll(array('status' => $suc ? PAYLOG_STATUS_FAIL : PAYLOG_STATUS_SUCCESS), array('out_trade_no' => $out_trade_no));
+            $payLogModel->updateAll(array('status' => $suc ? PAYLOG_STATUS_SUCCESS : PAYLOG_STATUS_FAIL), array('out_trade_no' => $out_trade_no));
             $status = PAYNOTIFY_STATUS_PAYLOG_UPDATED;
 
             $orderId = $payLog['PayLog']['order_id'];
