@@ -6,7 +6,7 @@ class WeshareApiController extends Controller
 
     public function beforeFilter()
     {
-        $allow_action = ['test', 'get_share_order'];
+        $allow_action = [];
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action) == false) {
             $this->currentUser = $this->OAuth->user();
