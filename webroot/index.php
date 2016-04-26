@@ -1,6 +1,6 @@
 <?php
 define('DEFAULT_SITE_HOST','www.tongshijia.com');
-define('SH_SITE_HOST','sh.tongshijia.com');
+define('SH_SITE_HOST','secondary.tongshijia.com');
 if($_SERVER['HTTP_HOST'] == SH_SITE_HOST){
     define('WX_APPID', 'wx65d0c25ec24bb4c2');
     define('WX_APPID_SOURCE', 'wx65d0');
