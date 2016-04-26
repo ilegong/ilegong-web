@@ -11,7 +11,7 @@ App::build(array(
     'Controller' => array(APP_PATH . 'Controller/', APP_PATH . 'Controller/ApiController/'),
 ));
 
-const WX_HOST = 'www.tongshijia.com';
+//const WX_HOST = 'www.tongshijia.com';
 const WX_JS_API_CALL_URL = 'http://www.tongshijia.com/wxPay/jsApiPay';
 const WX_JS_LOGISTICS_API_CALL_URL = 'http://www.tongshijia.com/wxPay/logistics_order_pay';
 const WX_NOTIFY_URL = 'http://www.tongshijia.com/wxPay/notify.html';

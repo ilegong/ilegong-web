@@ -1,6 +1,6 @@
 <?php
-define('DEFAULT_SITE_HOST','www.tongshijiia.com');
-define('SH_SITE_HOST','sh.tongshijiia.com');
+define('DEFAULT_SITE_HOST','www.tongshijia.com');
+define('SH_SITE_HOST','sh.tongshijia.com');
 if($_SERVER['HTTP_HOST'] == SH_SITE_HOST){
     define('WX_APPID', 'wx65d0c25ec24bb4c2');
     define('WX_APPID_SOURCE', 'wx65d0');
@@ -8,6 +8,7 @@ if($_SERVER['HTTP_HOST'] == SH_SITE_HOST){
     define('WX_SERVICE_ID_NAME', '朋友说上海');
     define('WX_SERVICE_ID_NO', 'pyshuo01');
     define('CACHE_PREFIX' , 'sh');
+    define('WX_HOST',SH_SITE_HOST);
 }else{
     define('WX_APPID', 'wxca7838dcade4709c');
     define('WX_APPID_SOURCE', 'wxca78');
@@ -15,6 +16,7 @@ if($_SERVER['HTTP_HOST'] == SH_SITE_HOST){
     define('WX_SERVICE_ID_NAME', '朋友说');
     define('WX_SERVICE_ID_NO', 'pyshuo2014');
     define('CACHE_PREFIX' , '');
+    define('WX_HOST', DEFAULT_SITE_HOST);
 }
 
 if (!defined('DS')) {
