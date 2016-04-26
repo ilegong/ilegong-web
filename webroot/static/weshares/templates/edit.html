@@ -1,63 +1,4 @@
 <div class="weshare-add" ng-if="vm.showEditShareView">
-    <!--
-    <div class='share-info' ng-show="vm.showEditShareInfo">
-        <h1 class='margin-bottom-12'>分享描述</h1>
-        <h1>分享名称<span>（好名字更容易吸引人）</span></h1>
-        <div class="form-group" ng-class="{'has-error': vm.weshareTitleHasError}">
-            <input class='form-control' placeholder="分享的的标题" ng-model='vm.weshare.title' ng-change='vm.validateTitle()' ng-blur='vm.validateTitle()'/>
-            <p class='tips'>请输入标题, 不超过50个字</p>
-        </div>
-        <div class="clearfix product-spec-group" ng-repeat="product in vm.weshare.products | filter:{deleted : 0}" style="margin-bottom:9pt;">
-            <div class="form-group fl" style="width: 100%;margin-bottom: -1px;" ng-class="{'has-error': product.nameHasError}">
-                <input class='form-control' placeholder="产品名称/规格" ng-model="product.name" ng-change='vm.validateProductName(product)' ng-blur='vm.validateProductName(product)'/>
-                <p class='tips'>请输入描述, 不超过40个字</p>
-            </div>
-            <div class="fl form-group form-group-inline" style="margin-bottom: -1px;" ng-class="{'has-error': product.priceHasError}">
-                <div class="clearfix">
-                    <input string-to-number type="number" step="0.01" style="width: 90%;" class='form-control fl' placeholder="价格/元" ng-model="product.price" ng-change='vm.validateProductPrice(product)' ng-blur='vm.validateProductPrice(product)'/>
-                    <div class="fl" style="line-height: 44px;padding-left: 5px;">元</div>
-                </div>
-                <p class='tips'>请输入数字</p>
-            </div>
-            <div class="fl form-group form-group-inline" style="margin-bottom: -1px;" ng-class="{'has-warning': product.weightHasWarning}">
-                <div class="clearfix">
-                    <input type="text" style="width: 90%;" class='form-control fl' placeholder="重量/kg" ng-change='vm.alertProductWeight(product)' ng-model="product.weight"/>
-                    <div class="fl" style="line-height: 44px;padding-left: 5px;">kg</div>
-                </div>
-                <p class='tips'>确定这里输对了? 比如搞错单位(我们是KG)?</p>
-            </div>
-            <div class="form-group form-group-inline" ng-class="{'has-error': product.storeHasError}" style="margin-bottom: -1px;">
-                <div class="clearfix">
-                    <input string-to-number type="number" style="width: 90%;" class='form-control fl' placeholder="库存,默认(0)不限制,(-1)为售罄" ng-model="product.store" ng-change='vm.validateProductStore(product)' ng-blur='vm.validateProductStore(product)'/>
-                    <div class="fl" style="line-height: 44px;padding-left: 5px;">件</div>
-                </div>
-                <p class='tips'>请输入数字</p>
-            </div>
-
-            <div ng-if="!$last">
-                <a class="fr btn delete-btn del-new-product-not-tag"
-                   ng-click="vm.toggleProduct(product, false)"></a>
-            </div>
-            <div ng-if="$last">
-                <a class="fr btn add-btn add-new-product-not-tag"
-                   ng-click="vm.toggleProduct(product, true)"></a>
-                <a ng-if="$index!=0" class="fr btn delete-btn del-new-product-not-tag"
-                   ng-click="vm.toggleProduct(product, false)"></a>
-            </div>
-        </div>
-        <div class="form-group">
-            <textarea class='form-control' rows="3" cols="" placeholder="请描述下您推荐该分享的原因！" ng-model="vm.weshare.description" style="display: block;"></textarea>
-        </div>
-        <ul class="clearfix images">
-            <li class='image' ng-repeat="image in vm.weshare.images">
-                <a class='delete-badge' ng-click='vm.deleteImage(image)'></a>
-                <img ng-src="{{image}}"/>
-            </li>
-        </ul>
-        <a class="btn upload-btn" ng-click="vm.chooseAndUploadImage()">点击上传图片</a>
-        <a class="btn next-btn" ng-click="vm.nextStep()">下一步，设置取货信息</a>
-    </div>
-    -->
     <div class="share-bg" ng-show="vm.showEditShareInfo">
         <h1>分享名称<span>（好名字更容易吸引人）</span></h1>
         <div class="share-name"><input type="text" ng-model='vm.weshare.title' ng-change='vm.validateTitle()' ng-blur='vm.validateTitle()' placeholder="请输入分享名称"></div>
@@ -96,6 +37,7 @@
     </div>
     <div class="share-pirture" ng-show="vm.showEditShareInfo">
         <h1>产品图片</h1>
+
         <ul class="clearfix">
             <li ng-repeat="image in vm.weshare.images">
                 <div>
