@@ -925,6 +925,7 @@ class UsersController extends AppController
                     } else {
                         $this->User->create();
                         if (!empty($wxUserInfo)) {
+                            //todo check unionid
                             $oauth['Oauthbinds']['user_id'] = $this->createNewUserByWeixin($wxUserInfo);
                         } else {
                             $uu = array(
