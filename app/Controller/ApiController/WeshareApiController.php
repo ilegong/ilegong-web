@@ -64,6 +64,7 @@ class WeshareApiController extends Controller
                 'status' => [ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY],
                 'deleted' => DELETED_NO,
             ],
+            'fields' => ['id', 'creator', 'created', 'updated', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type', 'member_id', 'ship_type_name', 'total_price', 'coupon_total', 'cate_id', 'business_remark'],
             'limit' => $limit,
             'page' => $page,
             'order' => ['id DESC', 'member_id DESC']
