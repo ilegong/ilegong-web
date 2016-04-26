@@ -42,11 +42,35 @@ class WeshareApiController extends Controller
     //获取评论，只做展示使用
     public function get_share_comment($root_share_id, $weshare_id, $limit, $page)
     {
-        $all_share_ids = $this->get_associate_share_ids($weshare_id, $root_share_id);
+        $uid = $this->currentUser['id'];
+        $all_share_ids = $this->get_associate_share_ids($weshare_id, $root_share_id, $uid);
         $query_cond = [
-            'conditions' => ['data_id' => $all_share_ids]
+            'conditions' => ['data_id' => $all_share_ids, 'type' => COMMENT_SHARE_TYPE, 'status' => PUBLISH_YES],
+            'limit' => $limit,
+            'page' => $page
         ];
         $result = $this->WeshareBuy->query_comment2($query_cond);
+        echo json_encode($result);
+        exit();
+    }
+
+    //获取订单列表
+    public function get_share_order($root_share_id, $weshare_id, $limit, $page)
+    {
+        $uid = $this->currentUser['id'];
+        $all_share_ids = $this->get_associate_share_ids($weshare_id, $root_share_id, $uid);
+        $cond = [
+            'conditions' => [
+                'member_id' => $all_share_ids,
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'status' => [ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY],
+                'deleted' => DELETED_NO,
+            ],
+            'limit' => $limit,
+            'page' => $page,
+            'order' => ['id DESC', 'member_id DESC']
+        ];
+        $result = $this->WeshareBuy->get_app_detail_orders($cond);
         echo json_encode($result);
         exit();
     }
@@ -158,12 +182,13 @@ class WeshareApiController extends Controller
         return $result;
     }
 
-    private function get_associate_share_ids($share_id, $root_share_id)
+    private function get_associate_share_ids($share_id, $root_share_id, $uid)
     {
         $weshareM = ClassRegistry::init('Weshare');
         $root_share_id = $root_share_id > 0 ? $root_share_id : $share_id;
         $weshares = $weshareM->find('all', [
             'conditions' => [
+                'creator' => $uid,
                 'OR' => ['id' => $root_share_id, 'root_share_id' => $root_share_id]
             ],
             'fields' => ['id']
