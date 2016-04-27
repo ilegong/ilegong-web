@@ -74,6 +74,14 @@ class WeshareApiController extends Controller
         exit();
     }
 
+    //获取分享结算需要的数据
+    public function get_share_balance_data($share_id){
+        $uid = $this->currentUser['id'];
+        $share_balance_data = $this->Weshares->get_app_share_balance_data($share_id, $uid);
+        echo json_encode($share_balance_data);
+        exit();
+    }
+
     //获取推荐，只做展示使用
     public function get_share_recommend($weshare_id)
     {

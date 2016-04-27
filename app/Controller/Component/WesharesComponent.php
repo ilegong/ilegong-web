@@ -46,6 +46,22 @@ class WesharesComponent extends Component
         return $result;
     }
 
+    public function get_app_share_balance_data($weshare_id ,$uid)
+    {
+        $weshareInfo = $this->ShareUtil->get_tag_weshare_detail($weshare_id);
+        $couponItemM = ClassRegistry::init('CouponItem');
+        $share_creator = $weshareInfo['creator']['id'];
+        $my_coupon_items = $couponItemM->find_my_valid_share_coupons($uid, $share_creator);
+        return [
+            'coupons' => $my_coupon_items[0],
+            'ship_settings' => $weshareInfo['ship_type'],
+            'delivery_template' => $weshareInfo['deliveryTemplate'],
+            'proxy_rebate_percent' => $weshareInfo['proxy_rebate_percent'],
+            'offline_address' => $weshareInfo['addresses'],
+            'consignee' => $weshareInfo['consignee']
+        ];
+    }
+
 
     /**
      * @param $weshareId
