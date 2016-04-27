@@ -140,6 +140,7 @@ class WeshareApiController extends Controller
         foreach ($products as $product_item) {
             $result[] = [
                 'share_id' => $product_item['IndexProduct']['share_id'],
+                'share_title' => $product_item['IndexProduct']['share_name'],
                 'share_img' => $product_item['IndexProduct']['share_img'],
                 'share_price' => $product_item['IndexProduct']['share_price'],
                 'share_desc' => $product_item['IndexProduct']['description'],
