@@ -1,69 +1,85 @@
-<div class="weshare-add" ng-if="vm.showEditShareView">
-    <div class="share-bg" ng-show="vm.showEditShareInfo">
-        <h1>分享名称<span>（好名字更容易吸引人）</span></h1>
-        <div class="share-name"><input type="text" ng-model='vm.weshare.title' ng-change='vm.validateTitle()' ng-blur='vm.validateTitle()' placeholder="请输入分享名称"></div>
-    </div>
-    <div class="share-bg" ng-show="vm.showEditShareInfo">
-        <h1>推荐原因</h1>
-        <div class="share-area">
-            <textarea placeholder="请描述推荐该分享的原因（例如：曾尝试过日本、韩国的各种海苔，都太油太咸，不适合宝宝吃，这个有机海苔入口即化、有机加工，健康又营养）"></textarea>
-        </div>
-    </div>
-    <div class="share-bg" ng-show="vm.showEditShareInfo">
-        <h1>产品信息</h1>
-        <div class="share-product" ng-repeat="product in vm.weshare.products | filter:{deleted : 0}">
-            <div class="share-product-name clearfix">
-                <label>名称</label>
-                <input type="text" placeholder="请输入产品名称/规格" ng-model="product.name" ng-change='vm.validateProductName(product)' ng-blur='vm.validateProductName(product)'>
-            </div>
-            <div class="share-product-masg clearfix">
-                <label>重量(kg)</label>
-                <input class="reminder" string-to-number type="number" placeholder="请输入每件重量(非必填)" value="请输入每件重量(非必填)" ng-change='vm.alertProductWeight(product)' ng-model="product.weight" >
-            </div>
-            <div class="share-product-masg clearfix">
-                <label>价格(元)</label>
-                <input string-to-number type="number" step="0.01" placeholder="请输入产品价格"  ng-model="product.price" ng-change='vm.validateProductPrice(product)' ng-blur='vm.validateProductPrice(product)'>
-            </div>
-            <div class="share-product-masg clearfix">
-                <label>库存(件)</label>
-                <input string-to-number type="number" placeholder="请输入库存" ng-model="product.store" ng-change='vm.validateProductStore(product)' ng-blur='vm.validateProductStore(product)'>
-            </div>
-            <a href="javascript:;" ng-show="vm.weshare.products.length > 1" ng-click="vm.toggleProduct(product, false)">删除</a>
-        </div>
-        <a href="javascript:;" class="share-product-addBtn clearfix" ng-click="vm.toggleProduct(product, true)">
-            <s><img src="{{vm.staticFilePath}}/static/weshares/images/share-addicon.png?v0.3.1"></s>
-            <label>添加产品</label>
-        </a>
-    </div>
-    <div class="share-pirture" ng-show="vm.showEditShareInfo">
-        <h1>产品图片</h1>
+<div class="weshare-edit-page" ng-if="vm.showEditShareView">
+    <div ng-show="vm.showEditShareInfo">
+        <div class="share-bg">
+            <h1>分享名称<span>（好名字更容易吸引人）</span></h1>
 
-        <ul class="clearfix">
-            <li ng-repeat="image in vm.weshare.images">
-                <div>
-                    <img ng-src="{{image}}"/>
-                    <a class="delete-img" ng-click='vm.deleteImage(image)'>—</a>
-                    <div ng-if="$first">
-                        <a href="javascript:;" class="first-img first-img-setting">
-                            <label>已为首图</label>
-                            <s></s>
-                        </a>
-                    </div>
-                    <div ng-if="!$first">
-                        <a href="javascript:;" class="first-img">
-                            <label>设为首图</label>
-                            <s></s>
-                        </a>
-                    </div>
+            <div class="share-name form-group" ng-class="{'has-error': vm.weshareTitleHasError}">
+                <input class="form-control" type="text" ng-model='vm.weshare.title' ng-change='vm.validateTitle()'
+                       ng-blur='vm.validateTitleAndAlert()' placeholder="请输入分享名称">
+            </div>
+        </div>
+        <div class="share-bg">
+            <h1>推荐原因</h1>
+
+            <div class="share-area form-group">
+                <textarea class="form-control" ng-model="vm.weshare.description"
+                          placeholder="请描述推荐该分享的原因（例如：曾尝试过日本、韩国的各种海苔，都太油太咸，不适合宝宝吃，这个有机海苔入口即化、有机加工，健康又营养）"></textarea>
+            </div>
+        </div>
+        <div class="share-bg">
+            <h1>产品信息</h1>
+
+            <div class="share-product" ng-repeat="product in vm.weshare.products | filter:{deleted : 0}">
+                <div class="share-product-name clearfix form-group" ng-class="{'has-error': product.nameHasError}">
+                    <label>名称</label>
+                    <input class="form-control" type="text" placeholder="请输入产品名称/规格" ng-model="product.name"
+                           ng-change='vm.validateProductName(product)' ng-blur='vm.validateProductNameAndAlert(product)'>
                 </div>
-            </li>
+                <div class="share-product-masg clearfix form-group">
+                    <label>重量(公斤)</label>
+                    <input class="reminder form-control" string-to-number type="number" placeholder="请输入每件重量(非必填)"
+                           value="请输入每件重量(非必填)" ng-change='vm.validateProductWeight(product)' ng-blur='vm.validateProductWeightAndAlert(product)' ng-model="product.weight">
+                </div>
+                <div class="share-product-masg clearfix form-group" ng-class="{'has-error': product.priceHasError}">
+                    <label>价格(元)</label>
+                    <input class="form-control" string-to-number type="number" step="0.01" placeholder="请输入产品价格" ng-model="product.price"
+                           ng-change='vm.validateProductPrice(product)' ng-blur='vm.validateProductPriceAndAlert(product)'>
+                </div>
+                <div class="share-product-masg clearfix form-group">
+                    <label>库存(件)</label>
+                    <input class="form-control" string-to-number type="number" placeholder="请输入库存(非必填)" ng-model="product.store">
+                </div>
+                <a href="javascript:;" ng-show="vm.weshare.products.length > 1"
+                   ng-click="vm.toggleProduct(product, false)">删除</a>
+            </div>
+            <a href="javascript:;" class="share-product-addBtn clearfix" ng-click="vm.toggleProduct(product, true)">
+                <s><img src="{{vm.staticFilePath}}/static/weshares/images/share-addicon.png?v0.3.1"></s>
+                <label>添加产品</label>
+            </a>
+        </div>
+        <div class="share-pirture">
+            <h1>产品图片</h1>
+            <ul class="clearfix">
+                <li ng-repeat="image in vm.weshare.images">
+                    <div>
+                        <img ng-src="{{image}}"/>
+                        <a class="delete-img" ng-click='vm.deleteImage(image)'>—</a>
 
-            <li>
-                <div class="add-pirture" ng-click="vm.chooseAndUploadImage()"><img src="{{vm.staticFilePath}}/static/weshares/images/add-pircture-btn.png" /></div>
-            </li>
-        </ul>
+                        <div ng-if="$first">
+                            <a href="javascript:;" class="first-img first-img-setting">
+                                <label>已为首图</label>
+                                <s></s>
+                            </a>
+                        </div>
+                        <div ng-if="!$first">
+                            <a href="javascript:;" class="first-img">
+                                <label>设为首图</label>
+                                <s></s>
+                            </a>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="add-pirture" ng-click="vm.chooseAndUploadImage()">
+                        <img src="{{vm.staticFilePath}}/static/weshares/images/add-pircture-btn.png"/>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <a class="nextstepBtn" ng-click="vm.nextStep()">下一步，设置配送信息</a>
     </div>
-    <a class="nextstepBtn" ng-show="vm.showEditShareInfo" ng-click="vm.nextStep()">下一步，设置配送信息</a>
+
     <div class="shippment-info" ng-show='vm.showShippmentInfo'>
         <div class="refer-back-bg">
             设置配送信息
@@ -74,18 +90,24 @@
         </div>
         <div class="ziti">
             <dl class="clearfix">
-                <dd><input type="checkbox" ng-checked="vm.self_ziti_data.status==1" ng-click="vm.toggleBoxZitiChecked()"/></dd>
+                <dd><input type="checkbox" ng-checked="vm.self_ziti_data.status==1"
+                           ng-click="vm.toggleBoxZitiChecked()"/></dd>
                 <dd>自己的自提点</dd>
             </dl>
             <div class="freightmore">
-                <div class="sendouttime"><input type="text" placeholder="到货/发货时间" ng-model="vm.weshare.send_info" ng-change='vm.validateSendInfo()' ng-blur='vm.validateSendInfo()'/></div>
+                <div class="sendouttime"><input type="text" placeholder="到货/发货时间" ng-model="vm.weshare.send_info"
+                                                ng-change='vm.validateSendInfo()' ng-blur='vm.validateSendInfo()'/>
+                </div>
                 <div ng-show="vm.self_ziti_data.status==1">
-                    <ul class="clearfix" ng-repeat="address in vm.weshare.addresses | filter:{deleted : 0}" style="margin-bottom: 15px;">
+                    <ul class="clearfix" ng-repeat="address in vm.weshare.addresses | filter:{deleted : 0}"
+                        style="margin-bottom: 15px;">
                         <li class="fl sendoutsite">
-                            <input type="text" placeholder="取货地点" ng-model="address.address" ng-blur='vm.validateAddress()'/>
+                            <input type="text" placeholder="取货地点" ng-model="address.address"
+                                   ng-blur='vm.validateAddress()'/>
                         </li>
                         <li class="fl sendoutsite">
-                            <input type="text" placeholder="联系人" ng-model="address.name" ng-blur='vm.validateAddress()'/>
+                            <input type="text" placeholder="联系人" ng-model="address.name"
+                                   ng-blur='vm.validateAddress()'/>
                         </li>
                         <li class="fr" ng-if="!$first">
                             <a ng-click="vm.deleteAddress(address)" class="delete">删除</a>
@@ -102,23 +124,28 @@
         </div>
         <div class="expressage">
             <dl class="clearfix">
-                <dd><input type="checkbox" ng-checked="vm.kuai_di_data.status==1" ng-click="vm.toggleBoxKuidiChecked()"/></dd>
+                <dd><input type="checkbox" ng-checked="vm.kuai_di_data.status==1"
+                           ng-click="vm.toggleBoxKuidiChecked()"/></dd>
                 <dd>快递</dd>
             </dl>
             <dl class="clearfix" ng-show="vm.kuai_di_data.status==1" style="padding: 0px;">
-                <dd><input type="radio" ng-model="vm.deliveryTemplateType" name="deliveryTemplateType" ng-value="0"/></dd>
+                <dd><input type="radio" ng-model="vm.deliveryTemplateType" name="deliveryTemplateType" ng-value="0"/>
+                </dd>
                 <dd>按件数计邮费</dd>
                 <dd>&nbsp;&nbsp;&nbsp;</dd>
-                <dd><input type="radio" ng-model="vm.deliveryTemplateType" name="deliveryTemplateType" ng-value="1"/></dd>
+                <dd><input type="radio" ng-model="vm.deliveryTemplateType" name="deliveryTemplateType" ng-value="1"/>
+                </dd>
                 <dd>按重量计邮费</dd>
             </dl>
             <div class="freightmore" ng-show="vm.kuai_di_data.status==1">
                 <div class="freight">
                     <h1>默认［除指定地区外］</h1>
+
                     <div class="clearfix freightrate">
                         <div class="pt10 clearfix">
                             <label>默认运费</label>
-                            <s><input type="text" placeholder="1" ng-model="vm.defaultDeliveryTemplate.start_units"/></s>
+                            <s><input type="text" placeholder="1"
+                                      ng-model="vm.defaultDeliveryTemplate.start_units"/></s>
                             <label>{{vm.getUnitTypeText()}}内，</label>
                             <s><input type="text" placeholder="0" ng-model="vm.defaultDeliveryTemplate.start_fee"/></s>
                             <label>元</label>
@@ -136,7 +163,8 @@
                     <div class="freight fl">
                         <h1 class="clearfix" ng-click="vm.showChooseCityView(deliveryTemplateItem);">
                             <div class="fl" ng-bind="vm.showDeliveryTemplateProvinceNames(deliveryTemplateItem)"></div>
-                            <a class="more_city"><img ng-src="{{::vm.staticFilePath}}/static/weshares/images/more_city.png" /></a>
+                            <a class="more_city"><img
+                                    ng-src="{{::vm.staticFilePath}}/static/weshares/images/more_city.png"/></a>
                         </h1>
                         <div class="clearfix freightrate">
                             <div class="pt10 clearfix">
@@ -155,24 +183,28 @@
                             </div>
                         </div>
                     </div>
-                    <div class="fr"><a ng-click="vm.removeDeliveryTemplate(deliveryTemplateItem)" class="deletebtn">删除</a></div>
+                    <div class="fr"><a ng-click="vm.removeDeliveryTemplate(deliveryTemplateItem)"
+                                       class="deletebtn">删除</a></div>
                 </div>
                 <a ng-click="vm.addDeliveryTemplate()" class="add_freight">添加指定地区运费</a>
             </div>
         </div>
         <dl class="clearfix haolinju">
-            <dd class="fl"><input disabled type="checkbox" /></dd>
+            <dd class="fl"><input disabled type="checkbox"/></dd>
             <dd class="fl">好邻居</dd>
             <dd class="fr" style="line-height: 20px;">使用前请先联系微信<br/><span>[yangxiaoguang]</span>沟通物流</dd>
         </dl>
         <div class="ziti" style="margin: 0;">
             <dl class="clearfix">
-                <dd><input type="checkbox" ng-model="vm.proxy_rebate_percent.status" ng-true-value="1" ng-false-value="0" ng-checked="vm.proxy_rebate_percent.status==1"/></dd>
+                <dd><input type="checkbox" ng-model="vm.proxy_rebate_percent.status" ng-true-value="1"
+                           ng-false-value="0" ng-checked="vm.proxy_rebate_percent.status==1"/></dd>
                 <dd>设置团长的佣金比例(推广好办法)</dd>
             </dl>
             <div class="freightmore" ng-show="vm.proxy_rebate_percent.status==1">
                 <div style="width: 60%;">
-                    <input style="padding: 10px;" class="sendouttime" type="text" placeholder="团长佣金比例" ng-model="vm.proxy_rebate_percent.percent" ng-change='vm.validateRebatePercent()' ng-blur='vm.validateRebatePercent()'/>
+                    <input style="padding: 10px;" class="sendouttime" type="text" placeholder="团长佣金比例"
+                           ng-model="vm.proxy_rebate_percent.percent" ng-change='vm.validateRebatePercent()'
+                           ng-blur='vm.validateRebatePercent()'/>
                     <label style="font-size: 20px; color: #29AC0E;">%</label>
                 </div>
             </div>
@@ -181,7 +213,8 @@
     </div>
 
     <div class="dialog-delorder" ng-show="vm.showProductTipInfo">
-        <div class="dialog-bar">温馨提示<a ng-click="vm.showProductTipInfo=false;vm.showLayer=false;" class="dialog-close" title="关闭"></a></div>
+        <div class="dialog-bar">温馨提示<a ng-click="vm.showProductTipInfo=false;vm.showLayer=false;" class="dialog-close"
+                                       title="关闭"></a></div>
         <div class="dialog-content">
             <p>
                 如果产品需要称重，价格不能提前确定，那么勾选后可以让用户预付设置的价格，发货后再填入实际金额，系统自动退款或发消息给用户付尾款。
@@ -189,7 +222,8 @@
         </div>
     </div>
     <div class="dialog-delorder" ng-show="vm.showPinTuanTipInfo">
-        <div class="dialog-bar">温馨提示<a ng-click="vm.showPinTuanTipInfo=false;vm.showLayer=false;" class="dialog-close" title="关闭"></a></div>
+        <div class="dialog-bar">温馨提示<a ng-click="vm.showPinTuanTipInfo=false;vm.showLayer=false;" class="dialog-close"
+                                       title="关闭"></a></div>
         <div class="dialog-content">
             <p>
                 当其他小区有用户但是物流成本高时，可以选择让用户拼团，满一定人数再送货。
@@ -198,7 +232,8 @@
     </div>
     <!--用户发起分享的时候判断是否是团长或者是否是更新分享数据,不是上面的情况提示信息-->
     <div class="dialog-delorder" ng-if="vm.showCreateShareTipInfo">
-        <div class="dialog-bar">温馨提示<a ng-click="vm.showCreateShareTipInfo=false;vm.showLayer=false;" class="dialog-close" title="关闭"></a></div>
+        <div class="dialog-bar">温馨提示<a ng-click="vm.showCreateShareTipInfo=false;vm.showLayer=false;"
+                                       class="dialog-close" title="关闭"></a></div>
         <div class="dialog-content">
             <div style="padding: 10px">
                 <strong>欢迎来朋友说使用微分享分享您家的特产，您可以：</strong>
@@ -221,7 +256,8 @@
             </div>
         </div>
     </div>
-    <div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showCreateShareTipInfo=false;vm.showPinTuanTipInfo=false;vm.showProductTipInfo=false;vm.showLayer=false;;"></div>
+    <div class="background-layer" ng-show="vm.showLayer"
+         ng-click="vm.showCreateShareTipInfo=false;vm.showPinTuanTipInfo=false;vm.showProductTipInfo=false;vm.showLayer=false;;"></div>
 </div>
 <div style="background-color: #f9f9f9;margin-bottom: 50px;" ng-if="vm.isShowChooseCity">
     <div class="refer-back-bg">
@@ -236,14 +272,19 @@
     </div>
     <div class="citylist" ng-repeat="area in vm.areaData">
         <ul class="clearfix">
-            <li class="fl"><a class="show_city" ng-click="area.showChild=!area.showChild"><img ng-src="{{::vm.staticFilePath}}/static/weshares/images/show_city.png" /></a></li>
+            <li class="fl"><a class="show_city" ng-click="area.showChild=!area.showChild"><img
+                    ng-src="{{::vm.staticFilePath}}/static/weshares/images/show_city.png"/></a></li>
             <li class="fl" ng-bind="area.name" ng-click="area.showChild=!area.showChild"></li>
-            <li class="fr"><input type="checkbox" ng-model="vm.areaCheckStatus[area.id]" ng-change="vm.toggleAreaProvinceCheckStatus(area.id)" ng-true-value="true" ng-false-value="false"/></li>
+            <li class="fr"><input type="checkbox" ng-model="vm.areaCheckStatus[area.id]"
+                                  ng-change="vm.toggleAreaProvinceCheckStatus(area.id)" ng-true-value="true"
+                                  ng-false-value="false"/></li>
         </ul>
         <div ng-show="area.showChild">
             <ul class="clearfix" ng-repeat="(provinceId, provinceName) in vm.provinceData[area.id]">
                 <li class="fl gray pl28" ng-bind="provinceName"></li>
-                <li class="fr"><input type="checkbox" ng-model="vm.provinceCheckStatus[provinceId]" ng-change="vm.setAreaCheckStatus(area.id)" ng-true-value="true" ng-false-value="false"/></li>
+                <li class="fr"><input type="checkbox" ng-model="vm.provinceCheckStatus[provinceId]"
+                                      ng-change="vm.setAreaCheckStatus(area.id)" ng-true-value="true"
+                                      ng-false-value="false"/></li>
             </ul>
         </div>
     </div>
@@ -254,7 +295,9 @@
         <b>首页</b>
     </a>
     <a class="btm_item" href="/share_opt/index.html" style="width: 25%; position: relative;">
-        <i style="background:#f00;border-radius:50%;width:10px;height:10px;top:-5px;right:35%;position:absolute; display: none;" id="mark-has-unread"></i>
+        <i style="background:#f00;border-radius:50%;width:10px;height:10px;top:-5px;right:35%;position:absolute; display: none;"
+           id="mark-has-unread"></i>
+
         <p class="iconfont" style="height: 18px;"><i class="fa fa-search"></i></p>
         <b>发现</b>
     </a>

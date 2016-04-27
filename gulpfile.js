@@ -22,12 +22,19 @@ var all_js = [
       'webroot/static/weshares/js/me-lazyload.js',
       'webroot/static/weshares/js/app.js',
       'webroot/static/weshares/js/offline-store.js',
-      'webroot/static/weshares/js/edit-controller.js',
       'webroot/static/weshares/js/view-consignee-controller.js',
       'webroot/static/weshares/js/edit-consignee-controller.js',
       'webroot/static/weshares/js/view-controller.js',
       'webroot/static/weshares/js/pool-product-factory.js',
       'webroot/static/weshares/js/view-product-info.js',
+    ],
+    dist: 'webroot/static/weshares/js/'
+  }, {
+    name: 'weshare-edit.min.js',
+    sources: [
+      'webroot/static/weshares/js/me-lazyload.js',
+      'webroot/static/weshares/js/app.js',
+      'webroot/src/scripts/weshare-edit.js',
     ],
     dist: 'webroot/static/weshares/js/'
   }, {
@@ -87,6 +94,12 @@ var all_css = [
       'webroot/static/weshares/css/main.css',
       'webroot/static/weshares/css/share-balance-view.css',
       'webroot/static/weshares/css/share.css',
+    ],
+    dist: 'webroot/static/weshares/css/'
+  }, {
+    name: 'weshare-edit.min.css',
+    sources: [
+      'webroot/src/scss/weshare-edit.scss',
     ],
     dist: 'webroot/static/weshares/css/'
   }, {

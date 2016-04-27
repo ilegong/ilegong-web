@@ -1,0 +1,381 @@
+/*share masg*/
+.weshare-edit-page {
+  .share-bg {
+    background-color: #FFFFFF;
+    margin-bottom: 10px;
+    padding: 15px 12px;
+  }
+  .share-bg h1 {
+    font-size: 1.2em;
+    color: #333333;
+    padding-bottom: 10px;
+  }
+  .share-bg h1 span {
+    font-size: 0.8em;
+  }
+  .share-name {
+    border: 1px #dddddd solid;
+    border-radius: 2px;
+    padding: 12px;
+    color: #333333;
+  }
+  .share-name input {
+    border: 0;
+    line-height: 20px;
+    font-size: 1.1em;
+    outline: none;
+    width: 100%;
+  }
+  .share-area {
+    border: 1px #dddddd solid;
+    border-radius: 2px;
+    padding: 12px;
+    color: #333333;
+  }
+  .share-area textarea {
+    display: block;
+    height: 100px;
+    line-height: 20px;
+    font-size: 1.1em;
+    color: #333333;
+    border: 0;
+    width: 100%;
+    resize: none;
+    outline: none;
+  }
+  /*share product*/
+  .share-product {
+    margin-bottom: 15px;
+    position: relative;
+  }
+  .share-product a {
+    display: block;
+    border: 1px #dddddd solid;
+    line-height: 179px;
+    text-align: center;
+    width: 45px;
+    background-color: #FFFFFF;
+    color: #333333;
+    text-decoration: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+  .share-product-name, .share-product-masg {
+    border-radius: 2px 2px 0 0;
+    border: 1px #dddddd solid;
+    padding: 12px;
+  }
+  .share-product-masg {
+    margin-top: -1px;
+  }
+  .share-product-name input, .share-product-masg input {
+    float: left;
+    border: 0;
+    line-height: 20px;
+    font-size: 1.1em;
+    outline: none;
+    width: 65%;
+  }
+  .share-product-name label, .share-product-masg label {
+    display: block;
+    float: left;
+    width: 25%;
+    font-size: 1.1em;
+  }
+  .share-product-addBtn {
+    position: relative;
+    display: block;
+    border-radius: 4px;
+    line-height: 44px;
+    text-align: center;
+    border: 1px #dddddd solid;
+    background-color: #EEEEEE;
+    text-decoration: none;
+  }
+  .share-product-addBtn s {
+    display: block;
+    width: 21px;
+    height: 21px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -18px;
+    margin-left: -43px;
+  }
+  .share-product-addBtn s img {
+    width: 100%;
+  }
+  .share-product-addBtn label {
+    font-size: 1.1em;
+    color: #333333;
+    padding-left: 26px;
+  }
+  /*share picture*/
+  .share-pirture {
+    background-color: #FFFFFF;
+    margin-bottom: 10px;
+    padding: 15px 2px 5px 12px;
+  }
+  .share-pirture h1 {
+    font-size: 1.2em;
+    color: #333333;
+    padding-bottom: 10px;
+  }
+  .share-pirture ul {
+    width: 100%;
+  }
+  .share-pirture ul li {
+    float: left;
+    margin-bottom: 10px;
+    width: 25%;
+  }
+  .share-pirture ul li div {
+    margin-right: 10px;
+    position: relative;
+  }
+  .share-pirture ul li div img {
+    width: 100%;
+    display: block;
+  }
+  .share-pirture ul li .delete-img {
+    display: block;
+    width: 22px;
+    height: 22px;
+    border-radius: 22px;
+    line-height: 20px;
+    background-color: #ff0000;
+    color: #FFFFFF;
+    text-align: center;
+    text-decoration: none;
+    position: absolute;
+    top: -6px;
+    right: -6px;
+  }
+  .share-pirture ul li .first-img {
+    display: block;
+    text-decoration: none;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+  .share-pirture ul li .first-img label {
+    color: #FFFFFF;
+    text-align: center;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    line-height: 24px;
+    z-index: 3;
+  }
+  .share-pirture ul li .first-img s {
+    display: block;
+    filter: alpha(opacity=50);
+    -moz-opacity: 0.5;
+    opacity: 0.5;
+    background-color: #000000;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 24px;
+    z-index: 2;
+  }
+  .share-pirture ul li .first-img-setting label {
+    color: #BBBBBB;
+  }
+  .share-pirture ul li div.add-pirture {
+    border: 1px #dddddd solid;
+    font-size: 4em;
+    text-align: center;
+  }
+  /*next step btn*/
+  .nextstepBtn {
+    background-color: #ff6485;
+    line-height: 44px;
+    text-align: center;
+    margin: 30px 25px 65px;
+    color: #FFFFFF;
+    font-size: 1.2em;
+    display: block;
+    text-decoration: none;
+    border-radius: 4px;
+  }
+
+  div.shippment-info .ziti {
+    background-color: #ffffff;
+    margin: 48px 0 5px 0;
+    border: 1px #eeeeee solid;
+    padding: 0 10px;
+  }
+  div.shippment-info .ziti dl, .expressage dl {
+    padding: 12px 0 7px 0;
+  }
+  div.shippment-info .freightmore {
+    border-top: 1px #eeeeee solid;
+    padding-top: 12px;
+    margin-top: 5px;
+    margin-bottom: 2px;
+  }
+  div.shippment-info .ziti dl dd, .expressage dl dd {
+    float: left;
+  }
+  div.shippment-info .ziti dl dd, .expressage dl dd input, .haolinju dd input, .expressage ul.choice li input {
+    margin-right: 3px;
+  }
+  div.shippment-info .sendouttime {
+    border: 1px #dddddd solid;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    padding: 5px;
+  }
+  div.shippment-info .sendouttime input, .sendoutsite input {
+    border: none;
+    border-radius: 0;
+    font-size: 1em;
+    width: 100%;
+  }
+  div.shippment-info .sendoutsite {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    margin-top: -1px;
+  }
+  div.shippment-info .ziti ul li.fl {
+    width: 75%;
+  }
+  div.shippment-info .ziti ul li.fr a {
+    line-height: 35px;
+    border: 1px #49bc6e solid;
+    color: #49bc6e;
+    padding: 0 10px;
+    border-radius: 4px;
+    display: block;
+    text-decoration: none;
+    margin-top: 3px;
+  }
+  div.shippment-info .ziti ul li.fr a.delete {
+    border-color: #cccccc;
+    color: #333333;
+  }
+
+  div.shippment-info .expressage, .haolinju {
+    background-color: #ffffff;
+    margin: 0 0 5px 0;
+    border: 1px #eeeeee solid;
+    padding: 0 10px;
+  }
+  div.shippment-info .pl15 {
+    padding-left: 15px;
+  }
+  div.shippment-info .freight {
+    background-color: #f9f9f9;
+    margin-bottom: 10px;
+  }
+  div.shippment-info .freight h1 {
+    font-size: 1em;
+    font-weight: normal;
+    line-height: 38px;
+    border-bottom: 1px #eeeeee solid;
+    padding: 0 10px;
+    color: #666666;
+  }
+  div.shippment-info .freightrate {
+    padding: 0px 10px 10px 10px;
+  }
+  div.shippment-info .freightrate label {
+    display: block;
+    float: left;
+    line-height: 36px;
+    color: #666666;
+  }
+  div.shippment-info .freightrate s {
+    float: left;
+    margin: 0 8px;
+    border: 1px #dddddd solid;
+    border-radius: 4px;
+    padding: 0px 4px;
+    width: 30px;
+    background-color: #ffffff;
+  }
+  div.shippment-info .freightrate s input {
+    font-size: 1em;
+    border: 0;
+    width: 100%;
+    color: #666666;
+  }
+  div.shippment-info .pt10 {
+    padding-top: 10px;
+  }
+  div.shippment-info .deletebtn {
+    color: #666;
+    text-decoration: none;
+    padding: 0 10px 10px 10px;
+    display: block;
+    margin-top: -5px;
+  }
+  div.shippment-info .more_city {
+    display: block;
+    float: right;
+  }
+  div.shippment-info .more_city img {
+    width: 9px;
+    height: 16px;
+  }
+  div.shippment-info .add_freight {
+    text-decoration: underline;
+    color: #49bc6e;
+    padding-bottom: 10px;
+    display: block;
+    width: 50%;
+  }
+
+  div.shippment-info .haolinju {
+    padding: 5px 10px;
+  }
+  div.shippment-info .haolinju dd.fr {
+    font-size: 0.9em;
+    text-align: right;
+  }
+  div.shippment-info .haolinju dd.fr span {
+    color: #49bc6e;
+  }
+  div.shippment-info .haolinju dd.fl {
+    padding-top: 7px;
+  }
+
+  div.shippment-info .submitbtn {
+    display: block;
+    text-decoration: none;
+    margin: 40px 20px 20px 20px;
+    line-height: 40px;
+    text-align: center;
+    background-color: #49bc6e;
+    color: #ffffff;
+    border-radius: 4px;
+    font-size: 1.2em;
+  }
+
+  .has-error {
+    ::-webkit-input-placeholder {
+      /* WebKit, Blink, Edge */
+      color: red;
+    }
+    :-moz-placeholder {
+      /* Mozilla Firefox 4 to 18 */
+      color: red;
+      opacity: 1;
+    }
+    ::-moz-placeholder {
+      /* Mozilla Firefox 19+ */
+      color: red;
+      opacity: 1;
+    }
+    :-ms-input-placeholder {
+      /* Internet Explorer 10-11 */
+      color: red;
+    }
+  }
+}

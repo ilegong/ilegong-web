@@ -154,3 +154,29 @@ footer {
 .show-b {
   display: block !important;
 }
+
+.form-group.has-error {
+  .form-control {
+    color: red !important;
+  }
+  .tips {
+    display: block;
+  }
+}
+
+.toast {
+  background-color: #666666;
+  line-height: 20px;
+  padding: 12px 10px;
+  text-align: center;
+  color: #FFFFFF;
+  border-radius: 5px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-left: -100px;
+  z-index: 99;
+  width: 200px;
+  margin-top: -22px;
+  display: none;
+}

@@ -5,7 +5,7 @@
     .controller('WesharesEditCtrl', WesharesEditCtrl);
 
 
-  function WesharesEditCtrl($scope, $rootScope, $log, $http, wx, Utils, staticFilePath) {
+  function WesharesEditCtrl($scope, $rootScope, $log, $http, $timeout, wx, Utils, staticFilePath) {
     var vm = this;
     vm.staticFilePath = staticFilePath;
     vm.chooseAndUploadImage = chooseAndUploadImage;
@@ -17,9 +17,13 @@
     vm.backStep = backStep;
     vm.saveWeshare = saveWeshare;
     vm.validateTitle = validateTitle;
+    vm.validateTitleAndAlert = validateTitleAndAlert;
     vm.validateProductName = validateProductName;
+    vm.validateProductNameAndAlert = validateProductNameAndAlert;
     vm.validateProductPrice = validateProductPrice;
-    vm.alertProductWeight = alertProductWeight;
+    vm.validateProductPriceAndAlert = validateProductPriceAndAlert;
+    vm.validateProductWeight = validateProductWeight;
+    vm.validateProductWeightAndAlert = validateProductWeightAndAlert;
     vm.validateAddress = validateAddress;
     vm.saveCacheData = saveCacheData;
     vm.validateShipFee = validateShipFee;
@@ -48,6 +52,7 @@
     vm.getUnitTypeText = getUnitTypeText;
     vm.showEditShareView = true;
     vm.currentDeliveryTemplate = null;
+    vm.onError = onError;
 
     function setDefaultShipSettingData() {
       vm.self_ziti_data = {status: 1, ship_fee: 0, tag: 'self_ziti'};
@@ -286,6 +291,7 @@
         productHasError = productHasError || nameHasError || priceHasError;
       });
       if (titleHasError || productHasError) {
+        vm.onError('输入有误，请重新输入');
         return;
       }
       vm.showShippmentInfo = true;
@@ -377,6 +383,11 @@
       vm.weshareTitleHasError = _.isEmpty(vm.weshare.title) || vm.weshare.title.length > 128;
       return vm.weshareTitleHasError;
     }
+    function validateTitleAndAlert(){
+      if(vm.validateTitle() && vm.weshare.title.length > 128){
+        vm.onError('标题太长，请重新输入');
+      }
+    }
 
     function validateSendInfo() {
       vm.weshareSendInfoHasError = _.isEmpty(vm.weshare.send_info) || vm.weshare.send_info.length > 68;
@@ -396,14 +407,32 @@
       return product.nameHasError;
     }
 
-    function alertProductWeight(product) {
-      product.weightHasWarning = Utils.isNumber(product.weight) && product.weight > 25;
+    function validateProductNameAndAlert(product) {
+      if(vm.validateProductName(product) && product.name.length > 40){
+        vm.onError('名称太长，请重新输入');
+      }
+    }
+
+    function validateProductWeight(product) {
+      product.weightHasWarning = Utils.isNumber(product.weight) && product.weight > 20;
       return product.weightHasWarning;
     }
 
+    function validateProductWeightAndAlert(product) {
+      if(vm.validateProductWeight(product)){
+        alert('重量单位是公斤，您确定吗？');
+      }
+    }
+
     function validateProductPrice(product) {
-      product.priceHasError = !product.price || !Utils.isNumber(product.price);
+      product.priceHasError = !product.price || !Utils.isNumber(product.price) || product.price < 0.01;
       return product.priceHasError;
+    }
+
+    function validateProductPriceAndAlert(product) {
+      if(vm.validateProductPrice(product) && product.price && product.price < 0.01){
+        vm.onError('价格有误，请重新输入');
+      }
     }
 
     function validateAddress() {
@@ -731,6 +760,13 @@
       }
     }
 
+    function onError(message){
+      $rootScope.showErrorMessageLayer=true;
+      $rootScope.errorMessage=message;
+      $timeout(function () {
+        $rootScope.showErrorMessageLayer=false;
+      }, 2000);
+    }
   }
 
 })(window, window.angular, window.wx);
