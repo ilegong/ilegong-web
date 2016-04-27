@@ -14,7 +14,7 @@ class WeshareApiController extends Controller
         $this->autoRender = false;
     }
 
-
+    //获取提交的数据
     protected function get_post_raw_data()
     {
         $postStr = file_get_contents('php://input');
@@ -49,6 +49,10 @@ class WeshareApiController extends Controller
             'page' => $page
         ];
         $result = $this->WeshareBuy->query_comment2($query_cond);
+        $comment_uids = Hash::extract($result['order_comments'], '{n}.user_id');
+        $this->loadModel('User');
+        $users = $this->User->get_users_simple_info($comment_uids);
+        $result['users'] = $users;
         echo json_encode($result);
         exit();
     }
