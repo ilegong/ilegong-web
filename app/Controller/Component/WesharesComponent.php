@@ -39,6 +39,8 @@ class WesharesComponent extends Component
                 $left = $product['store'] - $share_summery[$product['id']];
             }
             $product['left'] = $left < 0 ? 0 : $left;
+            $product['price'] = $product['price'] / 100;
+            $product['weight'] = $product['weight'] / 1000;
             $result[] = $product;
         }
         return $result;
