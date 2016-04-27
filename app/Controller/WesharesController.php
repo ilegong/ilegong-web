@@ -128,7 +128,7 @@ class WesharesController extends AppController
      */
     public function update($weshareId)
     {
-        $this->layout = 'weshare-edit';
+        $this->layout = 'weshare_edit';
 
         $uid = $this->currentUser['id'];
         $weshareInfo = $this->ShareUtil->get_weshare_detail($weshareId);
@@ -164,7 +164,7 @@ class WesharesController extends AppController
      */
     public function add()
     {
-        $this->layout = 'weshare-edit';
+        $this->layout = 'weshare_edit';
 
         $currentUser = $this->currentUser;
         $uid = $currentUser['id'];
