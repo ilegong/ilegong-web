@@ -57,11 +57,11 @@
             <ul class="clearfix">
                 <li ng-repeat="image in vm.weshare.images">
                     <div>
-                        <img ng-src="{{image.url}}"/>
+                        <img ng-src="{{image}}" ng-click="vm.setDefaultImage(image)"/>
                         <a class="delete-img" ng-click='vm.deleteImage(image)'>—</a>
 
-                        <a class="first-img" ng-class="{'is-default': image.isDefault}" ng-click="vm.setDefaultImage(image)">
-                            <label ng-bind="image.isDefault ? '已为首图' : '设为首图'"></label>
+                        <a class="first-img" ng-class="{'is-default': $first}" ng-click="vm.setDefaultImage(image)">
+                            <label ng-bind="$first ? '首图' : '设为首图'"></label>
                             <s></s>
                         </a>
                     </div>

@@ -52,7 +52,6 @@
     vm.getUnitTypeText = getUnitTypeText;
     vm.showEditShareView = true;
     vm.currentDeliveryTemplate = null;
-    vm.updateDefaultImage = updateDefaultImage;
     vm.setDefaultImage = setDefaultImage;
     vm.onError = onError;
 
@@ -119,8 +118,6 @@
         //update
         $http.get('/weshares/get_share_info/' + weshareId).success(function (data) {
           vm.weshare = data;
-          vm.weshare.images = _.map(vm.weshare.images, function(image){return {url: image, isDefault: false}});
-          vm.updateDefaultImage();
           vm.weshare.description = vm.weshare.description.replace(new RegExp('<br />', 'g'), '\r\n');
           vm.weshare.tags = vm.weshare['tags_list'];
           setDefaultData();
@@ -183,6 +180,7 @@
         }
         setDefaultData();
         $rootScope.loadingPage = false;
+        vm.weshare.images = ['http://static.tongshijia.com/images/index/2016/04/25/da587372-0a9a-11e6-901d-00163e1600b6.jpg', 'http://static.tongshijia.com/images/2016/04/18/fcb0a44c-056a-11e6-ab0d-00163e1600b6.jpg'];
       }
       vm.messages = [];
       function setDefaultData() {
@@ -193,15 +191,15 @@
           vm.weshare.send_info = '';
         }
       }
-      vm.weshare.images = [{url: 'http://static.tongshijia.com/images/index/2016/04/25/da587372-0a9a-11e6-901d-00163e1600b6.jpg', isDefault: true}, {url: 'http://static.tongshijia.com/images/2016/04/18/fcb0a44c-056a-11e6-ab0d-00163e1600b6.jpg', isDefault: false}];
+
       setWxParams();
     }
 
-    function getUnitTypeText(){
-      if(vm.deliveryTemplateType == 0){
+    function getUnitTypeText() {
+      if (vm.deliveryTemplateType == 0) {
         return '件';
       }
-      if(vm.deliveryTemplateType == 1){
+      if (vm.deliveryTemplateType == 1) {
         return 'kg';
       }
     }
@@ -237,7 +235,6 @@
                 return;
               }
               vm.weshare.images.push(imageUrl);
-              vm.updateDefaultImage();
             }).error(function (data) {
               vm.messages.push({name: 'download image failed', detail: data});
             });
@@ -256,7 +253,6 @@
 
     function deleteImage(image) {
       vm.weshare.images = _.without(vm.weshare.images, image);
-      vm.updateDefaultImage();
     }
 
     function toggleProduct(product, add) {
@@ -272,7 +268,7 @@
       }
     }
 
-    function deleteAddress(address){
+    function deleteAddress(address) {
       if (address.id && address.id > 0) {
         address.deleted = 1;
       } else {
@@ -390,8 +386,9 @@
       vm.weshareTitleHasError = _.isEmpty(vm.weshare.title) || vm.weshare.title.length > 128;
       return vm.weshareTitleHasError;
     }
-    function validateTitleAndAlert(){
-      if(vm.validateTitle() && vm.weshare.title.length > 128){
+
+    function validateTitleAndAlert() {
+      if (vm.validateTitle() && vm.weshare.title.length > 128) {
         vm.onError('标题太长，请重新输入');
       }
     }
@@ -415,7 +412,7 @@
     }
 
     function validateProductNameAndAlert(product) {
-      if(vm.validateProductName(product) && product.name.length > 40){
+      if (vm.validateProductName(product) && product.name.length > 40) {
         vm.onError('名称太长，请重新输入');
       }
     }
@@ -426,7 +423,7 @@
     }
 
     function validateProductWeightAndAlert(product) {
-      if(vm.validateProductWeight(product)){
+      if (vm.validateProductWeight(product)) {
         alert('重量单位是公斤，您确定吗？');
       }
     }
@@ -437,7 +434,7 @@
     }
 
     function validateProductPriceAndAlert(product) {
-      if(vm.validateProductPrice(product) && product.price && product.price < 0.01){
+      if (vm.validateProductPrice(product) && product.price && product.price < 0.01) {
         vm.onError('价格有误，请重新输入');
       }
     }
@@ -767,22 +764,19 @@
       }
     }
 
-    function updateDefaultImage(){
-      var hasDefaultImage = _.any(vm.weshare.images, function(image){return image.isDefault});
-      if(!hasDefaultImage && vm.weshare.images.length > 0){
-        vm.weshare.images[0].isDefault = true;
+    function setDefaultImage(image) {
+      if (_.isEmpty(image)) {
+        return;
       }
+      vm.weshare.images = _.without(vm.weshare.images, image);
+      vm.weshare.images.unshift(image);
     }
-    function setDefaultImage(image){
-      _.each(vm.weshare.images, function(i){
-        i.isDefault =  image == i;
-      });
-    }
-    function onError(message){
-      $rootScope.showErrorMessageLayer=true;
-      $rootScope.errorMessage=message;
+
+    function onError(message) {
+      $rootScope.showErrorMessageLayer = true;
+      $rootScope.errorMessage = message;
       $timeout(function () {
-        $rootScope.showErrorMessageLayer=false;
+        $rootScope.showErrorMessageLayer = false;
       }, 2000);
     }
   }
