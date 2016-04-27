@@ -23,21 +23,26 @@
                 <div class="share-product-name clearfix form-group" ng-class="{'has-error': product.nameHasError}">
                     <label>名称</label>
                     <input class="form-control" type="text" placeholder="请输入产品名称/规格" ng-model="product.name"
-                           ng-change='vm.validateProductName(product)' ng-blur='vm.validateProductNameAndAlert(product)'>
+                           ng-change='vm.validateProductName(product)'
+                           ng-blur='vm.validateProductNameAndAlert(product)'>
                 </div>
                 <div class="share-product-masg clearfix form-group">
                     <label>重量(公斤)</label>
                     <input class="reminder form-control" string-to-number type="number" placeholder="请输入每件重量(非必填)"
-                           value="请输入每件重量(非必填)" ng-change='vm.validateProductWeight(product)' ng-blur='vm.validateProductWeightAndAlert(product)' ng-model="product.weight">
+                           value="请输入每件重量(非必填)" ng-change='vm.validateProductWeight(product)'
+                           ng-blur='vm.validateProductWeightAndAlert(product)' ng-model="product.weight">
                 </div>
                 <div class="share-product-masg clearfix form-group" ng-class="{'has-error': product.priceHasError}">
                     <label>价格(元)</label>
-                    <input class="form-control" string-to-number type="number" step="0.01" placeholder="请输入产品价格" ng-model="product.price"
-                           ng-change='vm.validateProductPrice(product)' ng-blur='vm.validateProductPriceAndAlert(product)'>
+                    <input class="form-control" string-to-number type="number" step="0.01" placeholder="请输入产品价格"
+                           ng-model="product.price"
+                           ng-change='vm.validateProductPrice(product)'
+                           ng-blur='vm.validateProductPriceAndAlert(product)'>
                 </div>
                 <div class="share-product-masg clearfix form-group">
                     <label>库存(件)</label>
-                    <input class="form-control" string-to-number type="number" placeholder="请输入库存(非必填)" ng-model="product.store">
+                    <input class="form-control" string-to-number type="number" placeholder="请输入库存(非必填)"
+                           ng-model="product.store">
                 </div>
                 <a href="javascript:;" ng-show="vm.weshare.products.length > 1"
                    ng-click="vm.toggleProduct(product, false)">删除</a>
@@ -52,24 +57,15 @@
             <ul class="clearfix">
                 <li ng-repeat="image in vm.weshare.images">
                     <div>
-                        <img ng-src="{{image}}"/>
+                        <img ng-src="{{image.url}}"/>
                         <a class="delete-img" ng-click='vm.deleteImage(image)'>—</a>
 
-                        <div ng-if="$first">
-                            <a href="javascript:;" class="first-img first-img-setting">
-                                <label>已为首图</label>
-                                <s></s>
-                            </a>
-                        </div>
-                        <div ng-if="!$first">
-                            <a href="javascript:;" class="first-img">
-                                <label>设为首图</label>
-                                <s></s>
-                            </a>
-                        </div>
+                        <a class="first-img" ng-class="{'is-default': image.isDefault}" ng-click="vm.setDefaultImage(image)">
+                            <label ng-bind="image.isDefault ? '已为首图' : '设为首图'"></label>
+                            <s></s>
+                        </a>
                     </div>
                 </li>
-
                 <li>
                     <div class="add-pirture" ng-click="vm.chooseAndUploadImage()">
                         <img src="{{vm.staticFilePath}}/static/weshares/images/add-pircture-btn.png"/>

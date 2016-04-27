@@ -116,80 +116,81 @@
     background-color: #FFFFFF;
     margin-bottom: 10px;
     padding: 15px 2px 5px 12px;
-  }
-  .share-pirture h1 {
-    font-size: 1.2em;
-    color: #333333;
-    padding-bottom: 10px;
-  }
-  .share-pirture ul {
-    width: 100%;
-  }
-  .share-pirture ul li {
-    float: left;
-    margin-bottom: 10px;
-    width: 25%;
-  }
-  .share-pirture ul li div {
-    margin-right: 10px;
-    position: relative;
-  }
-  .share-pirture ul li div img {
-    width: 100%;
-    display: block;
-  }
-  .share-pirture ul li .delete-img {
-    display: block;
-    width: 22px;
-    height: 22px;
-    border-radius: 22px;
-    line-height: 20px;
-    background-color: #ff0000;
-    color: #FFFFFF;
-    text-align: center;
-    text-decoration: none;
-    position: absolute;
-    top: -6px;
-    right: -6px;
-  }
-  .share-pirture ul li .first-img {
-    display: block;
-    text-decoration: none;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-  }
-  .share-pirture ul li .first-img label {
-    color: #FFFFFF;
-    text-align: center;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    line-height: 24px;
-    z-index: 3;
-  }
-  .share-pirture ul li .first-img s {
-    display: block;
-    filter: alpha(opacity=50);
-    -moz-opacity: 0.5;
-    opacity: 0.5;
-    background-color: #000000;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    height: 24px;
-    z-index: 2;
-  }
-  .share-pirture ul li .first-img-setting label {
-    color: #BBBBBB;
-  }
-  .share-pirture ul li div.add-pirture {
-    border: 1px #dddddd solid;
-    font-size: 4em;
-    text-align: center;
+    h1 {
+      font-size: 1.2em;
+      color: #333333;
+      padding-bottom: 10px;
+    }
+    ul {
+      width: 100%;
+      li {
+        float: left;
+        margin-bottom: 10px;
+        width: 25%;
+        div {
+          margin-right: 10px;
+          position: relative;
+          img {
+            width: 100%;
+            display: block;
+            height: 67px;
+          }
+          .first-img {
+            display: block;
+            text-decoration: none;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            label {
+              color: #FFFFFF;
+              text-align: center;
+              width: 100%;
+              position: absolute;
+              bottom: 0;
+              left: 0;
+              line-height: 24px;
+              z-index: 3;
+            }
+            s {
+              display: block;
+              filter: alpha(opacity=50);
+              -moz-opacity: 0.5;
+              opacity: 0.5;
+              background-color: #000000;
+              width: 100%;
+              position: absolute;
+              bottom: 0;
+              left: 0;
+              height: 24px;
+              z-index: 2;
+            }
+          }
+          .first-img.is-default label {
+            color: #BBBBBB;
+          }
+          .delete-img {
+            display: block;
+            width: 22px;
+            height: 22px;
+            border-radius: 22px;
+            line-height: 20px;
+            background-color: #ff0000;
+            color: #FFFFFF;
+            text-align: center;
+            text-decoration: none;
+            position: absolute;
+            top: -6px;
+            right: -6px;
+          }
+        }
+        div.add-pirture {
+          border: 1px #dddddd solid;
+          font-size: 4em;
+          text-align: center;
+        }
+      }
+    }
   }
   /*next step btn*/
   .nextstepBtn {

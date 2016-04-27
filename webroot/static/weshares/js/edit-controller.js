@@ -52,6 +52,8 @@
     vm.getUnitTypeText = getUnitTypeText;
     vm.showEditShareView = true;
     vm.currentDeliveryTemplate = null;
+    vm.updateDefaultImage = updateDefaultImage;
+    vm.setDefaultImage = setDefaultImage;
     vm.onError = onError;
 
     function setDefaultShipSettingData() {
@@ -117,6 +119,8 @@
         //update
         $http.get('/weshares/get_share_info/' + weshareId).success(function (data) {
           vm.weshare = data;
+          vm.weshare.images = _.map(vm.weshare.images, function(image){return {url: image, isDefault: false}});
+          vm.updateDefaultImage();
           vm.weshare.description = vm.weshare.description.replace(new RegExp('<br />', 'g'), '\r\n');
           vm.weshare.tags = vm.weshare['tags_list'];
           setDefaultData();
@@ -189,6 +193,7 @@
           vm.weshare.send_info = '';
         }
       }
+      vm.weshare.images = [{url: 'http://static.tongshijia.com/images/index/2016/04/25/da587372-0a9a-11e6-901d-00163e1600b6.jpg', isDefault: true}, {url: 'http://static.tongshijia.com/images/2016/04/18/fcb0a44c-056a-11e6-ab0d-00163e1600b6.jpg', isDefault: false}];
       setWxParams();
     }
 
@@ -232,6 +237,7 @@
                 return;
               }
               vm.weshare.images.push(imageUrl);
+              vm.updateDefaultImage();
             }).error(function (data) {
               vm.messages.push({name: 'download image failed', detail: data});
             });
@@ -250,6 +256,7 @@
 
     function deleteImage(image) {
       vm.weshare.images = _.without(vm.weshare.images, image);
+      vm.updateDefaultImage();
     }
 
     function toggleProduct(product, add) {
@@ -760,6 +767,17 @@
       }
     }
 
+    function updateDefaultImage(){
+      var hasDefaultImage = _.any(vm.weshare.images, function(image){return image.isDefault});
+      if(!hasDefaultImage && vm.weshare.images.length > 0){
+        vm.weshare.images[0].isDefault = true;
+      }
+    }
+    function setDefaultImage(image){
+      _.each(vm.weshare.images, function(i){
+        i.isDefault =  image == i;
+      });
+    }
     function onError(message){
       $rootScope.showErrorMessageLayer=true;
       $rootScope.errorMessage=message;
