@@ -14,7 +14,6 @@ class OrdersController extends AppController {
         $this->helpers[] = 'PhpExcel';
         parent::__construct($request, $response);
         $this->pageTitle = __('订单');
-
     }
 
     /**
