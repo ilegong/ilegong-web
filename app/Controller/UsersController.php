@@ -925,7 +925,6 @@ class UsersController extends AppController
                     } else {
                         $this->User->create();
                         if (!empty($wxUserInfo)) {
-                            //todo check unionid
                             $oauth['Oauthbinds']['user_id'] = $this->createNewUserByWeixin($wxUserInfo);
                         } else {
                             $uu = array(
@@ -1116,14 +1115,28 @@ class UsersController extends AppController
      */
     public function createNewUserByWeixin($userInfo)
     {
-        $union_id = $userInfo[''];
+        $union_id = $userInfo['unionid'];
+        if (!empty($union_id)) {
+            $uid = $this->get_user_id_by_unionid($union_id);
+            if (!$uid != 0) {
+                return $uid;
+            }
+        }
         $uid = createNewUserByWeixin($userInfo, $this->User);
         if (empty($uid)) {
-            $this->log("error to save createNewUserByWeixin: with " . json_encode($userInfo));
+            $this->log("error to save createNewUserByWeixin: with " . json_encode($userInfo), LOG_ERR);
+            return 0;
         } else {
             return $uid;
         }
-        return $this->User->getLastInsertID();
+        //return $this->User->getLastInsertID();
+    }
+
+    private function get_user_id_by_unionid($union_id)
+    {
+        $oauthbindM = ClassRegistry::init('Oauthbind');
+        $uid = $oauthbindM->findUidByUnionId($union_id);
+        return $uid;
     }
 
     /**

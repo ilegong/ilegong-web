@@ -19,6 +19,16 @@ class Oauthbind extends AppModel {
         return ($oauth_record && $oauth_record['Oauthbind']['user_id'] > 0) ? $oauth_record['Oauthbind']['user_id'] : 0;
     }
 
+    public function findUidByUnionId($union_id){
+        $oauth_record = $this->find('first', array(
+            'conditions' => array(
+                'unionId' => $union_id
+            ),
+            'fields' => array('user_id')
+        ));
+        return ($oauth_record && $oauth_record['Oauthbind']['user_id'] > 0) ? $oauth_record['Oauthbind']['user_id'] : 0;
+    }
+
 
     public function findWxServiceBindByUid($uid) {
         $r = $this->find('first', array('conditions' => array('user_id' => $uid, 'source' => oauth_wx_source(),)));
