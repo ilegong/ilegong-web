@@ -7,6 +7,7 @@
 define("WEIXIN_TOKEN", "sUrjPDH8xus2d4JT");
 define('FROM_WX_SERVICE', 1);
 define('FROM_WX_SUB', 2);
+define('FROM_WX_SERVICE_SH', 3);
 
 class WeixinController extends AppController {
 
@@ -40,6 +41,16 @@ class WeixinController extends AppController {
 		}
 		exit;
 	}
+
+    public function msg_service_sh(){
+        if(!empty($_GET["echostr"])){
+            $this->valid();
+        }
+        else{
+            $this->responseMsg(FROM_WX_SERVICE_SH);
+        }
+        exit;
+    }
 	
 	public function valid()
 	{
