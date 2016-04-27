@@ -1765,18 +1765,24 @@ class WeshareBuyComponent extends Component
                     'data_type' => RECOMMEND_SHARE,
                     'data_id' => $shareId
                 ),
-                'group' => array('user_id')
+                'group' => array('user_id'),
+                'order' => ['id DESC'],
+                'limit' => 20
             ));
             $user_ids = Hash::extract($shareRecommendData, '{n}.RecommendLog.user_id');
+            $recommends = Hash::combine($shareRecommendData, '{n}.RecommendLog.user_id', '{n}.RecommendLog');
             $recommend_users = $userM->find('all', array(
                 'conditions' => array(
                     'id' => $user_ids
                 ),
-                'fields' => array('id', 'nickname', 'image', 'avatar')
+                'fields' => array('id', 'nickname', 'image', 'avatar', 'created')
             ));
             $recommendData = Hash::extract($recommend_users, '{n}.User');
             //reset user image
             $recommendData = array_map('map_user_avatar', $recommendData);
+            foreach($recommendData as &$data_item){
+                $data_item['recommend_reason'] = $recommends[$data_item['id']]['memo'];
+            }
             Cache::write($key, json_encode($recommendData));
             return $recommendData;
         }
