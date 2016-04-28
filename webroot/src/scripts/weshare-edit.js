@@ -182,7 +182,6 @@
         }
         setDefaultData();
         $rootScope.loadingPage = false;
-        vm.weshare.images = ['http://static.tongshijia.com/images/index/2016/04/25/da587372-0a9a-11e6-901d-00163e1600b6.jpg', 'http://static.tongshijia.com/images/2016/04/18/fcb0a44c-056a-11e6-ab0d-00163e1600b6.jpg'];
       }
       vm.messages = [];
       function setDefaultData() {
