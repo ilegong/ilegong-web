@@ -418,6 +418,7 @@ class WesharesController extends AppController
         $postDataArray = json_decode($postStr, true);
         $products = $postDataArray['products'];
         $weshareId = $postDataArray['weshare_id'];
+        $weshareCreator = $postDataArray['weshare_creator'];
         $business_remark = $postDataArray['remark'];
         $rebateLogId = $postDataArray['rebate_log_id'];
         //购物车
@@ -463,6 +464,7 @@ class WesharesController extends AppController
             $orderData = array('cate_id' => $rebateLogId, 'creator' => $uid,
                 'consignee_address' => $address,
                 'member_id' => $weshareId,
+                'brand_id' => $weshareCreator,
                 'type' => ORDER_TYPE_WESHARE_BUY,
                 'created' => date('Y-m-d H:i:s'),
                 'updated' => date('Y-m-d H:i:s'),
