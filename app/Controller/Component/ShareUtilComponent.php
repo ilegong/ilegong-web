@@ -160,6 +160,9 @@ class ShareUtilComponent extends Component
 
     public function save_relation($sharer_id, $user_id, $type = 'Buy')
     {
+        if (empty($sharer_id) || empty($user_id)) {
+            return 0;
+        }
         $userRelationM = ClassRegistry::init('UserRelation');
         if ($this->check_user_relation($sharer_id, $user_id)) {
             $userRelationM->saveAll(array('user_id' => $sharer_id, 'follow_id' => $user_id, 'type' => $type, 'created' => date('Y-m-d H:i:s')));
