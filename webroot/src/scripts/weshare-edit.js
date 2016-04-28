@@ -50,10 +50,11 @@
     vm.toggleBoxKuidiChecked = toggleBoxKuidiChecked;
     vm.deleteAddress = deleteAddress;
     vm.getUnitTypeText = getUnitTypeText;
-    vm.showEditShareView = true;
     vm.currentDeliveryTemplate = null;
     vm.setDefaultImage = setDefaultImage;
     vm.onError = onError;
+    vm.getAvailableProducts = getAvailableProducts;
+    vm.getAvailableAddresses = getAvailableAddresses;
 
     function setDefaultShipSettingData() {
       vm.self_ziti_data = {status: 1, ship_fee: 0, tag: 'self_ziti'};
@@ -103,10 +104,11 @@
       vm.deliveryTemplateType = 0;
       vm.setDefaultDeliveryTemplate();
       vm.setDeliveryTemplates();
-      var weshareId = angular.element(document.getElementById('weshareEditView')).attr('data-id');
-      var sharerShipType = angular.element(document.getElementById('weshareEditView')).attr('data-ship-type');
-      var userId = angular.element(document.getElementById('weshareEditView')).attr('data-user-id');
-      var canUseOfflineAddress = angular.element(document.getElementById('weshareEditView')).attr('data-can-user-offline-address');
+      var weshareEditView = document.getElementById('weshareEditView');
+      var weshareId = angular.element(weshareEditView).attr('data-id');
+      var sharerShipType = angular.element(weshareEditView).attr('data-ship-type');
+      var userId = angular.element(weshareEditView).attr('data-user-id');
+      var canUseOfflineAddress = angular.element(weshareEditView).attr('data-can-user-offline-address');
       vm.currentUserId = userId;
       vm.sharerShipType = sharerShipType;
       vm.canUseOfflineAddress = canUseOfflineAddress;
@@ -778,6 +780,24 @@
       $timeout(function () {
         $rootScope.showErrorMessageLayer = false;
       }, 2000);
+    }
+
+    function getAvailableProducts() {
+      if(_.isEmpty(vm.weshare) || _.isEmpty(vm.weshare.products)){
+        return [];
+      }
+      return _.filter(vm.weshare.products, function (p) {
+        return p.deleted == 0;
+      });
+    }
+
+    function getAvailableAddresses() {
+      if(_.isEmpty(vm.weshare) || _.isEmpty(vm.weshare.addresses)){
+        return [];
+      }
+      return _.filter(vm.weshare.addresses, function (a) {
+        return a.deleted == 0;
+      });
     }
   }
 

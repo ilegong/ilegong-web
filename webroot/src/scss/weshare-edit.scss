@@ -2,6 +2,7 @@
 .weshare-edit-page {
   margin-bottom: 74px;
 
+  // 公用
   .shrink-container {
     position: relative;
     .shrink-right {
@@ -23,6 +24,161 @@
       display: block;
     }
   }
+  // 公用
+  .add-btn {
+    display: block;
+    border-radius: 4px;
+    line-height: 44px;
+    text-align: center;
+    border: 1px #dddddd solid;
+    background-color: #EEEEEE;
+    text-decoration: none;
+    span {
+      position: relative;
+      img {
+        width: 21px;
+        height: 21px;
+        display: inline-block;
+        position: absolute;
+        left: 0;
+        top: -4px;
+      }
+      label {
+        font-size: 1.1em;
+        color: #333333;
+        padding-left: 28px;
+      }
+    }
+  }
+  // 公用
+  .multi-line-form {
+    margin-bottom: 15px;
+    .line {
+      border-radius: 2px 2px 0 0;
+      border: 1px #dddddd solid;
+      padding: 12px;
+      position: relative;
+      label {
+        font-size: 1.1em;
+        position: absolute;
+        left: 12px;
+        top: 12px;
+      }
+      input {
+        padding-left: 74px;
+        border: 0;
+        line-height: 20px;
+        font-size: 1.1em;
+        outline: none;
+        width: 72%;
+      }
+    }
+    .line:not(:first-child) {
+      margin-top: -1px;
+    }
+  }
+  // 公用
+  .refer-back-bg {
+    background-color: #ffffff;
+    border-bottom: 1px #ddd solid;
+    color: #333;
+    font-size: 1.3em;
+    line-height: 44px;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    a {
+      position: absolute;
+      left: 15px;
+      text-decoration: none;
+      color: #333333;
+      width: 4em;
+      height: 44px;
+      label {
+        padding-left: 5px;
+        font-size: 0.8em;
+        float: left;
+      }
+      img {
+        width: 8px;
+        margin-top: 14px;
+        float: left;
+      }
+    }
+  }
+  //
+  .dialog-delorder {
+    box-shadow: 0 2px 11px #ccc;
+    position: absolute;
+    width: 80%;
+    z-index: 1001;
+    left: 10%;
+    top: 20%;
+    margin-left: auto;
+    margin-right: auto;
+    .dialog-bar {
+      background: #f3f3f3;
+      color: #666;
+      font-size: 12px;
+      font-family: simsun;
+      font-weight: 700;
+      height: 31px;
+      line-height: 31px;
+      overflow: hidden;
+      text-indent: 10px;
+    }
+    .dialog-close {
+      background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/allBtn.png) -357px -1875px no-repeat;
+      float: right;
+      height: 21px;
+      margin-right: 6px;
+      margin-top: 5px;
+      width: 21px;
+    }
+    .dialog-content {
+      background: #fff;
+      color: #666;
+      font-size: 14px;
+      line-height: 24px;
+      p {
+        font-size: 14px;
+        padding: 10px 0 16px;
+        text-align: left;
+      }
+    }
+    .dialog-console {
+      background: #fff;
+      overflow: hidden;
+      padding: 8px 0 10px;
+      text-align: center;
+      *zoom: 1;
+      a, a:link, a:hover {
+        background: #8ecd1c;
+        border: 1px #7ebb48 solid;
+        display: inline-block;
+        font-size: 16px;
+        height: 34px;
+        line-height: 34px;
+        margin-right: 12px;
+        text-align: center;
+        text-decoration: none;
+        width: 118px;
+      }
+      a.console-btn-confirm {
+        color: #fff;
+      }
+      a.console-btn-cancel, a.console-btn-cancel:link, a.console-btn-cancel:hover {
+        background: #fefefe;
+        border-color: #d9d9d9;
+        color: #999;
+        margin: 0;
+      }
+    }
+  }
+
   .basic-info {
     .share-bg {
       background-color: #FFFFFF;
@@ -37,9 +193,6 @@
         font-size: 1.2em;
         color: #333333;
         padding-bottom: 10px;
-      }
-      span {
-        font-size: 0.8em;
       }
       .share-name {
         border: 1px #dddddd solid;
@@ -70,58 +223,8 @@
           resize: none;
           outline: none;
         }
-      }
-      .share-product {
-        margin-bottom: 15px;
-        .share-product-masg {
-          border-radius: 2px 2px 0 0;
-          border: 1px #dddddd solid;
-          padding: 12px;
-          position: relative;
-          label {
-            font-size: 1.1em;
-            position: absolute;
-            left: 12px;
-            top: 12px;
-          }
-          input {
-            padding-left: 74px;
-            border: 0;
-            line-height: 20px;
-            font-size: 1.1em;
-            outline: none;
-          }
-        }
-        .share-product-masg:not(:first-child) {
-          margin-top: -1px;
-        }
-      }
-      .share-product-addBtn {
-        position: relative;
-        display: block;
-        border-radius: 4px;
-        line-height: 44px;
-        text-align: center;
-        border: 1px #dddddd solid;
-        background-color: #EEEEEE;
-        text-decoration: none;
-        s {
-          display: block;
-          width: 21px;
-          height: 21px;
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          margin-top: -18px;
-          margin-left: -43px;
-          img {
-            width: 100%;
-          }
-        }
-        label {
-          font-size: 1.1em;
-          color: #333333;
-          padding-left: 26px;
+        textarea:focus{
+          height: 300px;
         }
       }
     }
@@ -242,42 +345,17 @@
   }
 
   .shippment-info {
-    /*back*/
-    .refer-back-bg {
-      background-color: #ffffff;
-      border-bottom: 1px #ddd solid;
-      color: #333;
-      font-size: 1.3em;
-      line-height: 44px;
-      text-align: center;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      a {
-        position: absolute;
-        left: 15px;
-        text-decoration: none;
-        color: #333333;
-        width: 4em;
-        height: 44px;
-        label {
-          padding-left: 5px;
-          font-size: 0.8em;
-          float: left;
-        }
-        img {
-          width: 8px;
-          margin-top: 14px;
-          float: left;
-        }
-      }
-    }
-
-    .ziti {
-      background-color: #fff;
+    .send-time{
       margin: 54px 0 10px;
       padding: 0 12px;
+    }
+    .border-top-1{
+      border-top: 1px #eee solid;
+    }
+    .ziti {
+      background-color: #fff;
+      margin: 0 0 10px;
+      padding: 5px 12px;
       ul {
         margin-bottom: 0 !important;
         padding-bottom: 15px;
@@ -303,9 +381,13 @@
       dl {
         padding: 7px 0;
         font-size: 1.2em;
-        border-bottom: 1px #eee solid;
         dd {
           float: left;
+        }
+      }
+      .shrink-container {
+        .shrink-right {
+          line-height: 179px;
         }
       }
     }
@@ -313,97 +395,82 @@
       padding-top: 12px;
       padding-bottom: 15px;
     }
-    .ziti dl dd, .expressage dl dd input, .haolinju dd input, .expressage ul.choice li input {
+    .input-type1 {
       margin-right: 3px;
     }
-    .sendouttime {
+    .input-type2 {
       border: 1px solid #ddd;
       border-radius: 2px;
-      margin-bottom: 15px;
-      padding: 7px 5px;
-    }
-    .sendouttime input, .sendoutsite input {
-      border: none;
-      border-radius: 0;
+      padding: 15px 5px;
       font-size: 1.1em;
-      width: 100%;
-    }
-    .sendoutsite {
-      border: 1px solid #ddd;
-      border-radius: 2px;
-      padding: 5px;
-      margin-top: -1px;
+      box-sizing: border-box;
+      -webkit-box-sizing:border-box;
+      -moz-box-sizing: border-box;
     }
 
     .expressage {
       background-color: #fff;
       margin: 0 0 5px;
       margin-bottom: 10px;
-      padding: 0 12px;
+      padding: 5px 12px;
       dl {
         padding: 7px 0;
         font-size: 1.2em;
-        border-bottom: 1px #eee solid;
         dd {
           float: left;
         }
       }
+      .shrink-container {
+        .shrink-right {
+          line-height: 131px;
+        }
+      }
+      .freight {
+        background-color: #F1f1f1;
+        margin-bottom: 15px;
+        margin-top: -5px;
+        padding: 0 10px 10px;
+        position: relative;
+        h1 {
+          font-size: 1.1em;
+          font-weight: 400;
+          line-height: 38px;
+          border-bottom: 1px #ddd solid;
+          padding: 0 10px;
+          color: #666;
+        }
+        .freightrate {
+          padding-top: 10px;
+          line-height: 30px;
+          label {
+            display: block;
+            float: left;
+            color: #666;
+          }
+          s {
+            float: left;
+            margin: 0 5px;
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            padding: 0 4px;
+            width: 30px;
+            background-color: #fff;
+            input {
+              font-size: 1.1em;
+              border: 0;
+              width: 100%;
+              color: #666;
+              text-align: center;
+            }
+          }
+        }
+      }
+      .freight.is-default {
+        margin-right: 0;
+      }
     }
     .pl15 {
       padding-left: 15px;
-    }
-    .freight {
-      background-color: #F1f1f1;
-      margin-bottom: 15px;
-      margin-top: -5px;
-      padding-right: 40px;
-      position: relative;
-      h1 {
-        font-size: 1.1em;
-        font-weight: 400;
-        line-height: 38px;
-        border-bottom: 1px #ddd solid;
-        padding: 0 10px;
-        color: #666;
-      }
-    }
-    .freight.is-default {
-      margin-right: 0;
-    }
-    .freightrate {
-      padding: 0px 10px 10px 10px;
-      label {
-        display: block;
-        float: left;
-        line-height: 32px;
-        color: #666;
-      }
-      s {
-        float: left;
-        margin: 0 5px;
-        border: 1px solid #ddd;
-        border-radius: 2px;
-        padding: 0 4px;
-        width: 30px;
-        background-color: #fff;
-        input {
-          font-size: 1.1em;
-          border: 0;
-          width: 100%;
-          color: #666;
-          text-align: center;
-        }
-      }
-    }
-    .freightrate s input {
-      font-size: 1em;
-      border: 0;
-      width: 100%;
-      color: #666666;
-    }
-    .pt10 {
-      padding-top: 10px;
-      font-size: 1.1em;
     }
     .deletebtn {
       color: #666;
@@ -457,6 +524,49 @@
       color: #fff;
       border-radius: 4px;
       font-size: 1.2em;
+    }
+  }
+
+  /*城市选择*/
+  .areas-info {
+    background-color: #f9f9f9;
+    margin-bottom: 50px;
+    // 公用
+    .checkable-line {
+      background-color: #fff;
+      border-top: 1px #ddd solid;
+      line-height: 40px;
+      position: relative;
+      padding-left: 28px;
+      padding-right: 24px;
+      .icon-left {
+        width: 11px;
+        height: 7px;
+        position: absolute;
+        top: 17px;
+        left: 12px;
+      }
+      .checkable-btn{
+        position: absolute;
+        right: 12px;
+        top: 14px;
+      }
+    }
+
+    .areas {
+      margin-top: 54px;
+      .area {
+        border-bottom: 1px #dddddd solid;
+        margin-bottom: 10px;
+        .area-detail {
+          background-color: #ffffff;
+          border-top: 1px #dddddd solid;
+          line-height: 40px;
+          padding-right: 12px;
+        }
+        .provinces {
+        }
+      }
     }
   }
 }
