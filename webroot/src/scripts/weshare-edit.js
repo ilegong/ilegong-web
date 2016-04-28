@@ -108,14 +108,15 @@
       var weshareId = angular.element(weshareEditView).attr('data-id');
       var sharerShipType = angular.element(weshareEditView).attr('data-ship-type');
       var userId = angular.element(weshareEditView).attr('data-user-id');
-      var canUseOfflineAddress = angular.element(weshareEditView).attr('data-can-user-offline-address');
+      //var canUseOfflineAddress = angular.element(weshareEditView).attr('data-can-user-offline-address');
       vm.currentUserId = userId;
       vm.sharerShipType = sharerShipType;
-      vm.canUseOfflineAddress = canUseOfflineAddress;
-      if (!vm.canUseOfflineAddress) {
-        vm.showCreateShareTipInfo = true;
-        vm.showLayer = true;
-      }
+      //vm.canUseOfflineAddress = canUseOfflineAddress;
+      //if (!vm.canUseOfflineAddress) {
+      //
+      //  vm.showLayer = true;
+      //}
+      vm.showCreateShareTipInfo = false;
       if (weshareId) {
         //update
         $http.get('/weshares/get_share_info/' + weshareId).success(function (data) {
