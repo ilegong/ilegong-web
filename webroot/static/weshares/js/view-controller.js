@@ -1203,8 +1203,8 @@
                 var region = regions[j];
                 if (region['province_id'] == provinceId) {
                   template = deliveryTemplateItem;
+                  break;
                 }
-                break;
               }
               if (template) {
                 break;
