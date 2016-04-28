@@ -48,6 +48,42 @@
                 <input type="text" class="form-control" id="end_date" name="end_date" placeholder="2015-07-21"
                        value="{{$end_date}}">
             </div>
+            <div class="form-group">
+                <label>分享状态</label>
+                <select name="share_status" class="form-control">
+                    <?php if($share_status == 0):?>
+                    <option value="-1">全部</option>
+                    <option value="0" selected="selected">进行中</option>
+                    <option value="1">已截团</option>
+                    <?php elseif($share_status == 1):?>
+                    <option value="-1">全部</option>
+                    <option value="0">进行中</option>
+                    <option value="1" selected="selected">已截团</option>
+                    <?php else:?>
+                    <option value="-1">全部</option>
+                    <option value="0">进行中</option>
+                    <option value="1">已截团</option>
+                    <?php endif;?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>产品渠道</label>
+                <select name="share_type" class="form-control">
+                    <?php if($share_type == 0):?>
+                        <option value="-1">全部</option>
+                        <option value="6">商家</option>
+                        <option value="0" selected="selected">分享人</option>
+                    <?php elseif($share_type == 6):?>
+                        <option value="-1">全部</option>
+                        <option value="6" selected="selected">商家</option>
+                        <option value="0">分享人</option>
+                    <?php else:?>
+                        <option value="-1">全部</option>
+                        <option value="6">商家</option>
+                        <option value="0">分享人</option>
+                    <?php endif;?>
+                </select>
+            </div>
             <button type="submit" class="btn btn-default">查询</button>
         </form>
     </div>
@@ -111,12 +147,13 @@
             </tr>
             </thead>
             <tbody>
+
             {{loop $orders $order}}
             <?php
-                    $current_order_id = $order['Order']['id'];
+                    $current_order_id = $order['o']['id'];
                     $current_order_carts = $order_cart_map[$current_order_id];
-                    $current_order = $order['Order'];
-                    $current_share = $weshares[$current_order['member_id']];
+                    $current_order = $order['o'];
+                    $current_share = $order['s'];
                     $current_share_creator = $all_users[$current_share['creator']];
                     $loop_index=0;
                     ?>
@@ -204,6 +241,9 @@
             {{/loop}}
             </tbody>
         </table>
+        <div class="inline pull-right page">
+            <?php echo $pager;?>
+        </div>
     </div>
 </div>
 

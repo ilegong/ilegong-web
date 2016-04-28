@@ -626,6 +626,96 @@ class ShareController extends AppController {
         }
     }
 
+    private function handle_query_orders_by_sql($sql) {
+        $orders = $this->Order->query($sql);
+
+        $total_price = 0;
+        if (!empty($orders)) {
+            $order_ids = [];
+            $parent_order_ids = [];
+            $member_ids = [];
+            $cate_ids = [];
+            $allUserIds = [];
+            foreach ($orders as $order) {
+                $total_price += $order['Order']['total_all_price'];
+                $order_ids[] = $order['o']['id'];
+                $parent_order_ids[] = $order['o']['parent_order_id'];
+                $member_ids[] = $order['o']['member_id'];
+                $cate_ids[] = $order['o']['cate_id'];
+                if(! in_array($order['o']['creator'] , $allUserIds))
+                {
+                    $allUserIds[] = $order['o']['creator'];
+                }
+                if(! in_array($order['s']['creator'] , $allUserIds))
+                {
+                    $allUserIds[] = $order['s']['creator'];
+                }
+
+            }
+
+            $cateIds = array_unique($cate_ids);
+            $rebateLogs = $this->RebateTrackLog->find('all', array(
+                'conditions' => array(
+                    'id' => $cateIds
+                ),
+                'fields' => array('id', 'sharer', 'rebate_money')
+            ));
+            $refundLogs = $this->RefundLog->find('all',
+                array(
+                    'conditions' => array(
+                        'order_id' => $order_ids
+                    ),
+                    'fields' => array('order_id', 'id', 'refund_fee')
+                ));
+            $refundLogs = Hash::combine($refundLogs, '{n}.RefundLog.order_id', '{n}.RefundLog.refund_fee');
+
+            $rebateSharerIds = Hash::extract($rebateLogs, '{n}.RebateTrackLog.sharer');
+            $rebateLogs = Hash::combine($rebateLogs, '{n}.RebateTrackLog.id', '{n}.RebateTrackLog.sharer');
+            $pay_notify_order_ids = array_merge($order_ids, $parent_order_ids);
+            $pay_notify_order_ids = array_unique($pay_notify_order_ids);
+            $pay_notifies = $this->PayNotify->find('all', array(
+                'conditions' => array(
+                    'order_id' => $pay_notify_order_ids,
+                    'type' => GOOD_ORDER_PAY_TYPE
+                ),
+            ));
+
+            $pay_notifies = Hash::combine($pay_notifies, '{n}.PayNotify.order_id', '{n}.PayNotify.out_trade_no');
+
+            $all_users = $this->User->find('all', array(
+                'conditions' => array(
+                    'id' => $allUserIds
+                ),
+                'fields' => array('id', 'nickname')
+            ));
+
+            $all_users = Hash::combine($all_users, '{n}.User.id', '{n}.User');
+            $carts = $this->Cart->find('all', array(
+                'conditions' => array(
+                    'order_id' => $order_ids
+                )
+            ));
+
+            $order_cart_map = array();
+            foreach ($carts as $item) {
+                $order_id = $item['Cart']['order_id'];
+                if (!isset($order_cart_map[$order_id])) {
+                    $order_cart_map[$order_id] = array();
+                }
+                $order_cart_map[$order_id][] = $item['Cart'];
+            }
+            $summery_result = array('order_count' => count($orders), 'total_all_price' => $total_price);
+
+            $this->set('summery', $summery_result);
+            $this->set('refund_logs', $refundLogs);
+            $this->set('orders', $orders);
+            $this->set('pay_notifies', $pay_notifies);
+            $this->set('all_users', $all_users);
+            $this->set('order_cart_map', $order_cart_map);
+            $this->set('rebate_logs', $rebateLogs);
+        }
+    }
+
     public function admin_batch_update_orders() {
         $this->autoRender=false;
         $orders = $_REQUEST['orders'];
@@ -643,7 +733,6 @@ class ShareController extends AppController {
     }
 
     public function admin_warn_orders() {
-        $cond = array();
         if (!$_REQUEST['start_date']) {
             $start_date = date('Y-m-d', strtotime('-15 day'));
         } else {
@@ -654,27 +743,44 @@ class ShareController extends AppController {
         } else {
             $end_date = $_REQUEST['end_date'];
         }
+
+        $con1 = '';
         if ($_REQUEST['share_name']) {
-            $share_name = $_REQUEST['share_name'];
-            $share_data = $this->Weshare->find('all', array(
-                'conditions' => array(
-                    'title LIKE' => '%' . $share_name . '%'
-                )
-            ));
-            $share_ids = Hash::extract($share_data, '{n}.Weshare.id');
-            $cond['member_id'] = $share_ids;
+            $con1 .= " AND s.cake_weshares WHERE title LIKE '%{$_REQUEST['share_name']}%')";
+        }
+        
+        if ($_REQUEST['share_type'] > -1)
+        {
+            $con1 .= " AND s.type = {$_REQUEST['share_type']}";
         }
 
-        $cond['DATE(created) >'] = $start_date;
-        $cond['DATE(created) <'] = $end_date;
-        $cond['status'] = array(ORDER_STATUS_PAID);
-        $order_query_condition = array(
-            'conditions' => $cond,
-            'order' => array('created DESC'));
-        $this->handle_query_orders($order_query_condition);
+        if ($_REQUEST['share_status'] > -1)
+        {
+            $con1 .= " AND s.status = {$_REQUEST['share_status']}";
+        }
+
+        $page = intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
+        $flow = ($page-1) * 10;
+
+        $countSql = "SELECT count(1) FROM cake_orders o LEFT JOIN cake_weshares s ON o.member_id = s.id WHERE (o.created BETWEEN '{$start_date} 00:00:00' AND '{$end_date} 23:59:59') AND o.status = ".ORDER_STATUS_PAID.$con1;
+        $count = $this->Order->query($countSql);
+
+        $sql = "SELECT * FROM cake_orders o LEFT JOIN cake_weshares s ON o.member_id = s.id WHERE (o.created BETWEEN '{$start_date} 00:00:00' AND '{$end_date} 23:59:59') AND o.status = ".ORDER_STATUS_PAID."{$con1} ORDER BY o.created DESC LIMIT {$flow} , 10";
+
+        $this->handle_query_orders_by_sql($sql);
+
+        require_once (APPLIBS.'MyPaginator.php');
+
+        $url = "/manage/admin/share/warn_orders?share_name={$_REQUEST['share_name']}&start_date={$_REQUEST['start_date']}&end_date={$_REQUEST['end_date']}&share_status={$_REQUEST['share_status']}&share_type={$_REQUEST['share_type']}&page=(:num)";
+        $pager = new MyPaginator($count[0][0]['count(1)'] , 10 , $page , $url);;
+        
+        $this->set('pager' , $pager);
+        $this->set('count' , $count[0][0]['count']);
+        $this->set('share_type', $_REQUEST['share_type']);
+        $this->set('share_status', $_REQUEST['share_status']);
         $this->set('start_date', $start_date);
         $this->set('end_date', $end_date);
-        $this->set('share_name', $share_name);
+        $this->set('share_name', $_REQUEST['share_name']);
     }
 
     public function admin_share_orders_export() {
