@@ -1313,7 +1313,7 @@
         to_friend_title = userInfo.nickname + '报名了' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
         imgUrl = vm.weshare.images[0] || userInfo.image;
         desc = vm.weshare.creator.nickname + '我认识，很靠谱。' + shareIntryResult;
-      } else if (vm.currentUser) {
+      } else if (userInfo) {
         //default custom
         if (vm.weshare.type !== 4) {
           if (vm.isProxy()) {
