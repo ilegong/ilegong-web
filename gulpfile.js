@@ -83,7 +83,7 @@ var all_js = [
 
 var all_css = [
   {
-    name: 'site-common.css',
+    name: 'site-common.min.css',
     sources: [
       'webroot/src/scss/site-common.scss',
     ],
