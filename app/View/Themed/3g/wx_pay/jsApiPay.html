@@ -51,8 +51,6 @@
             } else if(res.err_msg == "system:access_denied" || res.err_msg == "access_control:not_allow" || res.err_msg == 'getBrandWCPayRequest:fail_invalid appid'){
                 $msg = 'denied';
                 alert('请添加我们客服微信号:pyshuo2015，客服小妹协助完成支付，谢谢您的支持。');
-                window.location.href = doneUrlPrefix +'?msg='+ encodeURIComponent($msg);
-                not_redirect = true;
             } else {
                 WeixinJSBridge.log(res.err_msg);
                 $msg = 'unknown ' + res.err_msg;

@@ -15,6 +15,11 @@ class UserApiController extends AppController
         $this->autoRender = false;
     }
 
+    public function user_center()
+    {
+
+    }
+
     public function reg_hx_user()
     {
         $user_id = $this->currentUser['id'];
