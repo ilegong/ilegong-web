@@ -7,7 +7,7 @@ class UserApiController extends AppController
 
     public function beforeFilter()
     {
-        $allow_action = array('test', 'check_mobile_available');
+        $allow_action = array('test', 'user_detail');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action) == false) {
             $this->currentUser = $this->OAuth->user();
@@ -17,7 +17,12 @@ class UserApiController extends AppController
 
     public function user_detail()
     {
-
+        $uid = $this->currentUser['id'];
+        $user_summary = $this->WeshareBuy->get_user_share_summary($uid);
+        $order_summary = $this->WeshareBuy->get_user_order_summary($uid);
+        $share_summary = $this->WeshareBuy->get_sharer_summary($uid);
+        echo json_encode(['user_summary' => $user_summary, 'order_summary' => $order_summary, 'share_summary' => $share_summary]);
+        exit();
     }
 
     public function reg_hx_user()

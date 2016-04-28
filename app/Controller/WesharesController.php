@@ -674,7 +674,7 @@ class WesharesController extends AppController
             $this->set('rebate_money', $rebate_money);
             $this->set('show_rebate_money', $rebate_money > 0);
         }
-        $u_comment_count = $this->WeshareBuy->get_user_comment_count($user_share_data['my_create_share_ids'], $uid);
+        $u_comment_count = $this->WeshareBuy->get_user_comment_count($uid);
         $this->set('u_comment_count', $u_comment_count);
         $this->set($userShareSummery);
         $this->set('is_me', $uid == $current_uid);

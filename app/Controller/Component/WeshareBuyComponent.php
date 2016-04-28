@@ -88,7 +88,7 @@ class WeshareBuyComponent extends Component
         return json_decode($sharer_comment_data, true);
     }
 
-    public function get_user_comment_count($weshare_ids, $sharer_id)
+    public function get_user_comment_count($sharer_id)
     {
         $commentM = ClassRegistry::init('Comment');
         $count = $commentM->find('count', [
@@ -96,10 +96,7 @@ class WeshareBuyComponent extends Component
                 'type' => COMMENT_SHARE_TYPE,
                 'status' => COMMENT_SHOW_STATUS,
                 'parent_id' => 0,
-                'OR' => [
-                    ['data_id' => $weshare_ids],
-                    ['user_id' => $sharer_id]
-                ]
+                'data_creator' => $sharer_id
             ]
         ]);
         return $count;
@@ -2057,6 +2054,40 @@ class WeshareBuyComponent extends Component
         return $shareOrderCount;
     }
 
+    public function get_sharer_summary($uid)
+    {
+        $orderM = ClassRegistry::init('Order');
+        $weshareM = ClassRegistry::init('Weshare');
+        $shareOperateSettingM = ClassRegistry::init('ShareOperateSetting');
+        $authorize_count = $shareOperateSettingM->query('SELECT count(distinct data_id) as a_count FROM cake_share_operate_settings where user=' . $uid);
+        $wait_ship_order_count = $orderM->find('count', [
+            'conditions' => [
+                'status' => ORDER_STATUS_PAID,
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'brand_id' => $uid
+            ]
+        ]);
+        $share_count = $weshareM->find('count', [
+            'conditions' => [
+                'creator' => $uid
+            ]
+        ]);
+        $this_month_order_count = $this->get_month_total_count($uid);
+        $this_month_trade_money = $orderM->query("SELECT sum(total_price) as trade_money  FROM cake_orders where status > 0 and creator = " . $uid . " and date(created) = " . date('Y-m-d') . " and type=9");
+        $this_month_trade_money = empty($this_month_trade_money[0][0]['trade_money']) ? 0 : $this_month_trade_money[0][0]['trade_money'];
+        $authorize_count = intval($authorize_count[0][0]['a_count']);
+        return ['wait_ship_order_count' => $wait_ship_order_count, 'month_order_count' => $this_month_order_count, 'month_trade_money' => $this_month_trade_money, 'share_count' => $share_count, 'authorize_count' => $authorize_count];
+    }
+
+    //获取用户的订单汇总
+    public function get_user_order_summary($uid)
+    {
+        $orderM = ClassRegistry::init('Order');
+        $result = $orderM->query('SELECT count(id) as s_count, status FROM cake_orders where creator = ' . $uid . ' and type=9 group by status;');
+        $result = Hash::combine($result, '{n}.cake_orders.status', '{n}.0.s_count');
+        return $result;
+    }
+
     /**
      * @param $uid
      * @return array|mixed
@@ -2797,21 +2828,12 @@ class WeshareBuyComponent extends Component
      */
     public function get_month_total_count($uid)
     {
-        $weshareM = ClassRegistry::init('Weshare');
         $orderM = ClassRegistry::init('Order');
-        $user_shares = $weshareM->find('all', array(
-            'conditions' => array(
-                'creator' => $uid
-            ),
-            'order' => array('id DESC'),
-            'limit' => 500
-        ));
-        $share_ids = Hash::extract($user_shares, '{n}.Weshare.id');
         $first_day = date('Y-m-01', strtotime(date('Y-m-d')));
         $last_day = date('Y-m-d', strtotime("$first_day +1 month -1 day"));
         $order_count = $orderM->find('count', array(
             'conditions' => array(
-                'member_id' => $share_ids,
+                'brand_id' => $uid,
                 'type' => ORDER_TYPE_WESHARE_BUY,
                 'not' => array('status' => ORDER_STATUS_WAITING_PAY),
                 'date(created) BETWEEN ? AND ?' => array($first_day, $last_day)
