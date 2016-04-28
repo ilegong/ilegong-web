@@ -2,12 +2,12 @@
 
 class UserApiController extends AppController
 {
-    public $components = array('OAuth.OAuth', 'ChatUtil', 'WeshareBuy', 'ShareUtil', 'UserFans');
+    public $components = array('OAuth.OAuth', 'Orders' ,'ChatUtil', 'WeshareBuy', 'ShareUtil', 'UserFans');
     public $uses = array('User', 'UserFriend', 'UserLevel', 'UserRelation');
 
     public function beforeFilter()
     {
-        $allow_action = array('test', 'check_mobile_available');
+        $allow_action = array('test', 'user_detail');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action) == false) {
             $this->currentUser = $this->OAuth->user();
@@ -15,9 +15,38 @@ class UserApiController extends AppController
         $this->autoRender = false;
     }
 
-    public function user_center()
+    public function user_detail()
     {
+        $uid = $this->currentUser['id'];
+        $user_summary = $this->WeshareBuy->get_user_share_summary($uid);
+        $order_summary = $this->WeshareBuy->get_user_order_summary($uid);
+        $share_summary = $this->WeshareBuy->get_sharer_summary($uid);
+        echo json_encode(['user_summary' => $user_summary, 'order_summary' => $order_summary, 'share_summary' => $share_summary]);
+        exit();
+    }
 
+    public function user_orders($status, $limit, $page)
+    {
+        $uid = $this->currentUser['id'];
+        $params = ['user_id' => $uid, 'status' => $status, 'limit' => $limit, 'page' => $page];
+        $orders = $this->Orders->get_user_order($params);
+        $result = [];
+        foreach($orders as $order_item){
+            $result_item = $order_item['Order'];
+            $result_item['share_info'] = $order_item['Weshare'];
+            $result[] = $result_item;
+        }
+        echo json_encode($result);
+        exit();
+    }
+
+    public function user_order_detail($order_id)
+    {
+        $order = $this->Orders->get_order_info_with_cart($order_id);
+        $result = $order['Order'];
+        $result['carts'] = Hash::extract($order, '{n}.Cart');
+        echo json_encode($result);
+        exit();
     }
 
     public function reg_hx_user()

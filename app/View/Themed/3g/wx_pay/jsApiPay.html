@@ -12,9 +12,7 @@
     <title>{{$pageTitle}}</title>
     {{$this->Html->css(array('http://'.WX_HOST.'/css/bootstrap_2.css?v1.2'));}}
     {{$this->Html->script(array('http://libs.baidu.com/jquery/1.9.1/jquery.min.js'));}}
-    {{if $jWeixinOn}}
     <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-    {{/if}}
 </head>
 <body style="background-color: #F5F5F5">
 {{if !noFlash }}
@@ -94,7 +92,8 @@
     });
     setTimeout(function(){
         $('#retry_div').show();
-    }, 20000);
+        $('#pay_div').hide();
+    }, 10000);
 </script>
 <script type="text/javascript">
     //<![CDATA[
@@ -139,14 +138,14 @@
             </ul>
         </div>
     </div>
-    <div align="center">
-        <button id="jump_btn" type="button" class="btn btn-warning">正在跳转微信支付...</button>
-    </div>
     {{if $retry_link}}
     <div id="retry_div" align="center" style="display: none; margin-top: 20px">
-        <a id="retry_btn" href="{{$retry_link}}" class="btn btn-default">没有响应？重新支付</a>
+        <a id="retry_btn" href="{{$retry_link}}" class="btn btn-warning">没有响应？重新支付</a>
     </div>
     {{/if}}
+    <div align="center" id="pay_div">
+        <button id="jump_btn" type="button" class="btn btn-default">正在跳转微信支付...</button>
+    </div>
 </div>
 </body>
 </html>

@@ -39,9 +39,53 @@ class OrdersComponent extends Component
         return $order_info;
     }
 
+    public function get_order_info_with_cart($order_id)
+    {
+        $orderM = ClassRegistry::init('Order');
+        $result = $orderM->find('first', [
+            'conditions' => [
+                'id' => $order_id
+            ],
+            'joins' => [
+                [
+                    'table' => 'carts',
+                    'alias' => 'Cart',
+                    'conditions' => ['Order.id = Cart.order_id']
+                ]
+            ],
+            'fields' => ['Order.id', 'Order.consignee_name', 'Order.consignee_address', 'Order.consignee_mobilephone', 'Order.total_all_price', 'Order.ship_type_name', 'Order.ship_type', 'Order.ship_fee', 'Order.ship_code', 'Order.pay_time', 'Order.coupon_total', 'Order.brand_id', 'Cart.name', 'Cart.num', 'Cart.price']
+        ]);
+
+        return $result;
+    }
+
     private function clearCacheForUser($uid)
     {
         $key = USER_SHARE_INFO_CACHE_KEY . '_' . $uid;
         Cache::write($key, '');
+    }
+
+
+    public function get_user_order($params)
+    {
+        $orderM = ClassRegistry::init('Order');
+        $result = $orderM->find('all', [
+            'conditions' => [
+                'creator' => $params['user_id'],
+                'status' => $params['status'],
+                'type' => ORDER_TYPE_WESHARE_BUY
+            ],
+            'joins' => [
+                [
+                    'table' => 'weshares',
+                    'alias' => 'Weshare',
+                    'conditions' => ['Order.member_id = Weshare.id']
+                ]
+            ],
+            'fields' => ['Order.id', 'Order.creator', 'Order.total_price', 'Order.brand_id', 'Order.ship_mark', 'Order.member_id', 'Weshare.title', 'Weshare.status', 'Weshare.default_image'],
+            'limit' => $params['limit'],
+            'page' => $params['page']
+        ]);
+        return $result;
     }
 }

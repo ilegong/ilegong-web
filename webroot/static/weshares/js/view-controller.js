@@ -643,6 +643,7 @@
       var ship_info = getBuyShipInfo();
       var orderData = {
         weshare_id: vm.weshare.id,
+        weshare_creator: vm.weshare.creator.id,
         rebate_log_id: vm.rebateLogId,
         products: submit_products,
         ship_info: ship_info,

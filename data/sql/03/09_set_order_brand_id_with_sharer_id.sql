@@ -1,0 +1,1 @@
+update cake_orders, cake_weshares set cake_orders.brand_id = cake_weshares.creator where cake_orders.type=9 and cake_orders.member_id = cake_weshares.id;
