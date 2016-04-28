@@ -17,9 +17,10 @@ class CustomExceptionRender extends ExceptionRenderer {
     }
 
     public function render() {
-        if ($this->method) {
-            if ($this->method == 'missingAction' || $this->method == 'missingController') {
-                $this->error400($this->error);
+        if ($this->template) {
+            if ($this->template == 'missingAction' || $this->template == 'missingController') {
+                $this->controller->redirect('/');
+                //$this->error400($this->error);
             } else {
                //call_user_func_array(array($this, $this->method), array($this->error));
                 $this->error500($this->error);
