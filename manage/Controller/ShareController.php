@@ -628,7 +628,6 @@ class ShareController extends AppController {
 
     private function handle_query_orders_by_sql($sql) {
         $orders = $this->Order->query($sql);
-
         $total_price = 0;
         if (!empty($orders)) {
             $order_ids = [];
@@ -649,6 +648,10 @@ class ShareController extends AppController {
                 if(! in_array($order['s']['creator'] , $allUserIds))
                 {
                     $allUserIds[] = $order['s']['creator'];
+                }
+                if(! in_array($order['s']['refer_share_id'] , $allUserIds))
+                {
+                    $allUserIds[] = $order['s']['refer_share_id'];
                 }
 
             }
@@ -686,7 +689,7 @@ class ShareController extends AppController {
                 'conditions' => array(
                     'id' => $allUserIds
                 ),
-                'fields' => array('id', 'nickname')
+                'fields' => array('id', 'nickname','mobilephone')
             ));
 
             $all_users = Hash::combine($all_users, '{n}.User.id', '{n}.User');

@@ -134,6 +134,7 @@
                 <th><input type="text" class="form-control" placeholder="商品份数" disabled></th>
                 <th><input type="text" class="form-control" placeholder="商品总价" disabled></th>
                 <th><input type="text" class="form-control" placeholder="订单总价" disabled></th>
+                <th><input type="text" class="form-control" placeholder="产品渠道" disabled></th>
                 <th><input type="text" class="form-control" placeholder="尾款差价" disabled></th>
                 <th><input type="text" class="form-control" placeholder="退款金额" disabled></th>
                 <th><input type="text" class="form-control" placeholder="创建时间" disabled></th>
@@ -147,7 +148,6 @@
             </tr>
             </thead>
             <tbody>
-
             {{loop $orders $order}}
             <?php
                     $current_order_id = $order['o']['id'];
@@ -173,6 +173,11 @@
                 <td>{{$cart['num']}}</td>
                 <td>{{$cart['price']*$cart['num']/100}}</td>
                 <td>{{$current_order['total_all_price']}}</td>
+                <?php if($current_share['type'] == 6):?>
+                <td>商家<br/>{{$all_users[$current_share['refer_share_id']]['nickname']}}<br/>{{$current_share_creator[$current_share['refer_share_id']]['mobilephone']}}</td>
+                <?php else:?>
+                <td>分享人<br/>{{$current_share_creator['nickname']}}<br/>{{$current_share_creator['mobilephone']}}</td>
+                <?php endif;?>
                 <td>{{if $current_order['price_difference'] > 0}}加尾款{{elseif
                     $current_order['price_difference']==0}}{{else}}退尾款{{/if}}&nbsp;&nbsp;<span style="color: red;">{{abs($current_order['price_difference'])/100}}</span>
                 </td>
