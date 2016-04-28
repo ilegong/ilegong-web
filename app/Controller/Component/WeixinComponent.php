@@ -459,19 +459,24 @@ class WeixinComponent extends Component {
      */
     public function notifyPaidDone($order)
     {
-        if ($order['Order']['type'] == ORDER_TYPE_PIN_TUAN) {
-            $this->pintuan_buy_order_paid($order);
-            $this->PintuanHelper->handle_order_paid($order);
+        try{
+            if ($order['Order']['type'] == ORDER_TYPE_PIN_TUAN) {
+                $this->pintuan_buy_order_paid($order);
+                $this->PintuanHelper->handle_order_paid($order);
+                return;
+            }
+            if ($order['Order']['type'] == ORDER_TYPE_WESHARE_BUY) {
+                Cache::write(USER_SHARE_ORDER_INFO_CACHE_KEY . '_' . $order['Order']['member_id'] . '_' . $order['Order']['creator'], '');
+                Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $order['Order']['creator'], '');
+                Cache::write(INDEX_PRODUCT_SUMMARY_CACHE_KEY . '_' . $order['Order']['member_id'], '');
+                $this->weshare_buy_order_paid($order);
+                return;
+            }
+            $this->on_order_status_change($order);
+        }catch (Exception $e){
+            $this->log('order notify paid done error exception msg '.$e->getMessage());
             return;
         }
-        if ($order['Order']['type'] == ORDER_TYPE_WESHARE_BUY) {
-            Cache::write(USER_SHARE_ORDER_INFO_CACHE_KEY . '_' . $order['Order']['member_id'] . '_' . $order['Order']['creator'], '');
-            Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $order['Order']['creator'], '');
-            Cache::write(INDEX_PRODUCT_SUMMARY_CACHE_KEY . '_' . $order['Order']['member_id'], '');
-            $this->weshare_buy_order_paid($order);
-            return;
-        }
-        $this->on_order_status_change($order);
     }
 
     /**
