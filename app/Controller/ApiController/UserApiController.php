@@ -15,7 +15,7 @@ class UserApiController extends AppController
         $this->autoRender = false;
     }
 
-    public function user_center()
+    public function user_detail()
     {
 
     }
