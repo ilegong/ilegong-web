@@ -27,5 +27,5 @@ class WeshareFaqComponent extends Component
         }
         return $faq_data;
     }
-    
+
 }
