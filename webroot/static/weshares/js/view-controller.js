@@ -1302,7 +1302,7 @@
         } else {
           desc = shareIntryResult;
         }
-      } else if (userInfo && _.isEmpty(vm.ordersDetail['orders'])) {
+      } else if (userInfo && !(_.isEmpty(vm.ordersDetail['orders']))) {
         if (vm.isProxy()) {
           url = url + '?recommend=' + vm.currentUser['id'];
         }
