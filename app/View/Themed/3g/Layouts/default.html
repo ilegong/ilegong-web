@@ -16,20 +16,9 @@
           content="{{if $seodescription}}{{$seodescription}}{{else}}{{$site[seodescription]}}{{/if}}"/>
     <link rel="apple-touch-icon" href="{{$this->Html->assetUrl('/img/logo_mini.png')}}" />
     <title>{{$pageTitle}}-{{$site['title']}}</title>
-
     <link href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
     {{$this->Html->css(array('layout_3g.css?ver58.3','thickbox.css?ver1'));}}
-    <!--<script type="text/javascript" name="baidu-tc-cerfication" data-appid="5181580" src="http://apps.bdimg.com/cloudaapi/lightapp.js"></script>-->
-
-    <style>
-        /*body.modal-open {*/
-            /*margin-right: 0;*/
-        /*}*/
-        /*.shopping_icon{ width:3em; height:1.9em; background:url('{{$this->Html->assetUrl("/img/mobilev1/pyshuo_icon.png?xx")}}') -5em -15em no-repeat; background-size:25em 25em; display:block; margin:0 auto; text-decoration:none;}*/
-        /*.shopping_count{ position:absolute; right:3px; top:2px; width:14px; text-align:center; color:#ffffff; font-size:1em;display: none;}*/
-    </style>
     {{$this->Html->css(array('mobile-view.css?v17.7'))}}
-
     {{$this->Html->script(array(
     'http://libs.baidu.com/jquery/1.9.1/jquery.min.js',
     'jquery/jquery.cookie.js',
