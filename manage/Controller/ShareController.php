@@ -752,12 +752,12 @@ class ShareController extends AppController {
             $con1 .= " AND s.cake_weshares WHERE title LIKE '%{$_REQUEST['share_name']}%')";
         }
 
-        if (($_REQUEST['share_type'] > -1 ) and isset($_REQUEST['share_type'] ))
+        if((!is_null($_REQUEST['share_type'] )) and ($_REQUEST['share_type'] > -1 ) and ($_REQUEST['share_type'] !== ''))
         {
             $con1 .= " AND s.type = {$_REQUEST['share_type']}";
         }
 
-        if (($_REQUEST['share_status'] > -1) and isset($_REQUEST['share_type'] ))
+        if (($_REQUEST['share_status'] > -1) and (! is_null($_REQUEST['share_status'] )) and ($_REQUEST['share_status'] !== ''))
         {
             $con1 .= " AND s.status = {$_REQUEST['share_status']}";
         }
@@ -769,7 +769,6 @@ class ShareController extends AppController {
         $count = $this->Order->query($countSql);
 
         $sql = "SELECT * FROM cake_orders o LEFT JOIN cake_weshares s ON o.member_id = s.id WHERE (o.created BETWEEN '{$start_date} 00:00:00' AND '{$end_date} 23:59:59') AND o.status = ".ORDER_STATUS_PAID."{$con1} ORDER BY o.created DESC LIMIT {$flow} , 10";
-
         $this->handle_query_orders_by_sql($sql);
 
         require_once (APPLIBS.'MyPaginator.php');
