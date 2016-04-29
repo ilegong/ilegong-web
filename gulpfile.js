@@ -11,17 +11,17 @@ var all_js = [
   {
     name: 'index.min.js',
     sources: [
-      'webroot/static/weshares/js/me-lazyload.js',
-      'webroot/static/weshares/js/app.js',
+      'webroot/src/scripts/me-lazyload.js',
+      'webroot/src/scripts/app.js',
       'webroot/src/scripts/index.js',
     ],
     dist: 'webroot/static/weshares/js/'
   }, {
     name: 'weshare.min.js',
     sources: [
-      'webroot/static/weshares/js/me-lazyload.js',
-      'webroot/static/weshares/js/app.js',
-      'webroot/static/weshares/js/offline-store.js',
+      'webroot/src/scripts/me-lazyload.js',
+      'webroot/src/scripts/app.js',
+      'webroot/src/scripts/offline-store.js',
       'webroot/static/weshares/js/view-consignee-controller.js',
       'webroot/static/weshares/js/edit-consignee-controller.js',
       'webroot/static/weshares/js/view-controller.js',
@@ -32,8 +32,8 @@ var all_js = [
   }, {
     name: 'weshare-edit.min.js',
     sources: [
-      'webroot/static/weshares/js/me-lazyload.js',
-      'webroot/static/weshares/js/app.js',
+      'webroot/src/scripts/me-lazyload.js',
+      'webroot/src/scripts/app.js',
       'webroot/src/scripts/weshare-edit.js',
     ],
     dist: 'webroot/static/weshares/js/'
@@ -61,7 +61,7 @@ var all_js = [
     name: 'user-share-info.min.js',
     sources: [
       'webroot/static/opt/js/lazyload.min.js',
-      'webroot/static/weshares/js/user-share-info.js'
+      'webroot/src/scripts/user-share-info.js'
     ],
     dist: 'webroot/static/weshares/js/'
   }, {
@@ -74,9 +74,9 @@ var all_js = [
   }, {
     name: 'user-info.min.js',
     sources: [
-      'webroot/static/weshares/js/me-lazyload.js',
-      'webroot/static/weshares/js/user-info-app.js',
-      'webroot/static/weshares/js/user-list-data.js'
+      'webroot/src/scripts/me-lazyload.js',
+      'webroot/src/scripts/user-info-app.js',
+      'webroot/src/scripts/user-list-data.js'
     ],
     dist: 'webroot/static/weshares/js/'
   }];
