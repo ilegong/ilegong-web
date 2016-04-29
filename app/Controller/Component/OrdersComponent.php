@@ -44,7 +44,7 @@ class OrdersComponent extends Component
         $orderM = ClassRegistry::init('Order');
         $result = $orderM->find('first', [
             'conditions' => [
-                'id' => $order_id
+                'Order.id' => $order_id
             ],
             'joins' => [
                 [
