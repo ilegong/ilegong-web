@@ -138,8 +138,8 @@ class WesharesController extends AppController
             $this->redirect('/weshares/view/' . $weshareId . '/0');
         }
         $share_ship_set = $this->sharer_can_use_we_ship($uid);
-        if ($this->sharer_can_use_offline_address($uid)) {
-            $this->set('can_use_offline_address', 1);
+        if ($this->is_new_sharer($uid)) {
+            $this->set('is_new_sharer', 1);
         }
         $this->set('ship_type', $share_ship_set);
         $this->set('weshare_id', $weshareId);
@@ -192,8 +192,8 @@ class WesharesController extends AppController
             return;
         }
         $share_ship_set = $this->sharer_can_use_we_ship($uid);
-        if ($this->sharer_can_use_offline_address($uid)) {
-            $this->set('can_use_offline_address', 1);
+        if ($this->is_new_sharer($uid)) {
+            $this->set('is_new_sharer', 1);
         }
         $this->set('ship_type', $share_ship_set);
         $this->set('user_id', $uid);
@@ -1445,27 +1445,19 @@ class WesharesController extends AppController
         return $this->ShareUtil->read_share_ship_option_setting($sharer, SHARE_SHIP_OPTION_OFFLINE_STORE);
     }
 
-    /**
-     * @param $sharer
-     * 数据库读取 能否使用拼团地址
-     * @return bool
-     */
-    private function sharer_can_user_offline_address($sharer)
-    {
-        $setting = $this->ShareUtil->read_share_ship_option_setting($sharer, SHARE_SHIP_OPTION_OFFLINE_ADDRESS);
-        return $setting == PUBLISH_YES;
-    }
+
 
     /**
      * @param $sharer
      * @return bool
      */
-    private function sharer_can_use_offline_address($sharer)
+    private function is_new_sharer($sharer)
     {
-        if ($this->sharer_can_user_offline_address($sharer)) {
+        $level = $this->ShareUtil->get_user_level($sharer);
+        if(empty($level)){
             return true;
         }
-        return $this->ShareUtil->is_proxy_user($sharer);
+        return false;
     }
     //check order ship type gen order address
 
