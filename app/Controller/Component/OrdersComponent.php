@@ -71,9 +71,9 @@ class OrdersComponent extends Component
         $orderM = ClassRegistry::init('Order');
         $result = $orderM->find('all', [
             'conditions' => [
-                'creator' => $params['user_id'],
-                'status' => $params['status'],
-                'type' => ORDER_TYPE_WESHARE_BUY
+                'Order.creator' => $params['user_id'],
+                'Order.status' => $params['status'],
+                'Order.type' => ORDER_TYPE_WESHARE_BUY
             ],
             'joins' => [
                 [
