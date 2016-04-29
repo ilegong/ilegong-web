@@ -51,7 +51,7 @@
             <div class="form-group">
                 <label>分享状态</label>
                 <select name="share_status" class="form-control">
-                    <?php if($share_status == 0):?>
+                    <?php if($share_status === 0):?>
                     <option value="-1">全部</option>
                     <option value="0" selected="selected">进行中</option>
                     <option value="1">已截团</option>
@@ -69,7 +69,7 @@
             <div class="form-group">
                 <label>产品渠道</label>
                 <select name="share_type" class="form-control">
-                    <?php if($share_type == 0):?>
+                    <?php if($share_type === 0):?>
                         <option value="-1">全部</option>
                         <option value="6">商家</option>
                         <option value="0" selected="selected">分享人</option>
