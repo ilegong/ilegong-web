@@ -25,7 +25,9 @@
         </li>
     </ul>
     <div class="banners">
-        <img src="{{$STATIC_HOST}}/static/img/banner001.jpg" alt="国家地理读物-千千妈妈"/>
+        <a href="https://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=506221314&idx=1&sn=2663e4f5bc62e4e7f74832b3becc541c&scene=1&srcid=0429UZm13HgWc3Sd92hkJoUy&key=b28b03434249256b8b7379a2c1622980b6cd4c51a8ccdc72f73aca602e9fce5f89b7ad49fe139f682cc567f789294923&ascene=0&uin=MjE0MzExNjMyMA%3D%3D&devicetype=iMac+MacBookPro12%2C1+OSX+OSX+10.11.1+build(15B42)&version=11020201&pass_ticket=JW%2FdYWDtxtPv8N9klBYu8sIjJyb61OgCXy09R9UiClFAJlBVsqqm%2FC7hG5t4jrrz">
+            <img src="{{$STATIC_HOST}}/static/img/banner001.jpg" alt="国家地理读物-千千妈妈"/>
+        </a>
     </div>
     <div class="outer-listings-container row-space-3">
         <div class="listings-container">
@@ -105,14 +107,21 @@
                         {{/if}}
                     </div>
                 </a>
-                <dl class="clearfix share-data" style="display: none;" ng-class="{'show-b': vm.getSummary({{$product['share_id']}}).view_count > 0}">
+                <dl class="clearfix share-data" style="display: none;"
+                    ng-class="{'show-b': vm.getSummary({{$product['share_id']}}).view_count > 0}">
                     <dd class="clearfix" style="padding-right: 66px;">
-                        <img style="display: none;" class="rounded-50" ng-class="{'show-ib': true}" ng-src="&#123;&#123;creator.avatar&#125;&#125;" fallback-src="&#123;&#123;vm.staticFilePath + '/avatar/s/default.jpg'&#125;&#125;" ng-repeat="creator in vm.getSummary({{$product['share_id']}}).orders_and_creators | limitTo: 4"/>
+                        <img style="display: none;" class="rounded-50" ng-class="{'show-ib': true}"
+                             ng-src="&#123;&#123;creator.avatar&#125;&#125;"
+                             fallback-src="&#123;&#123;vm.staticFilePath + '/avatar/s/default.jpg'&#125;&#125;"
+                             ng-repeat="creator in vm.getSummary({{$product['share_id']}}).orders_and_creators | limitTo: 4"/>
                         <label>
-                            <span style="display: none;" ng-class="{'show-ib':vm.getSummary({{$product['share_id']}}).orders_and_creators.length > 4}">...</span>已<span ng-bind="vm.getSummary({{$product['share_id']}}).order_count || 0">0</span>人报名
+                            <span style="display: none;"
+                                  ng-class="{'show-ib':vm.getSummary({{$product['share_id']}}).orders_and_creators.length > 4}">...</span>已<span
+                                ng-bind="vm.getSummary({{$product['share_id']}}).order_count || 0">0</span>人报名
                         </label>
                     </dd>
-                    <dd class="browse">浏览<span ng-bind="vm.getSummary({{$product['share_id']}}).view_count || 0">0</span></dd>
+                    <dd class="browse">浏览<span
+                            ng-bind="vm.getSummary({{$product['share_id']}}).view_count || 0">0</span></dd>
                 </dl>
             </div>
             {{/loop}}
@@ -126,7 +135,9 @@
         <b class="active">首页</b>
     </a>
     <a class="btm_item" href="/share_opt/index.html" style="width: 25%; position: relative;">
-        <i ng-if="showUnReadMark" style="background:#f00;border-radius:50%;width:10px;height:10px;top:-5px;right:35%;position:absolute;"></i>
+        <i ng-if="showUnReadMark"
+           style="background:#f00;border-radius:50%;width:10px;height:10px;top:-5px;right:35%;position:absolute;"></i>
+
         <p class="iconfont"><i class="fa fa-search"></i></p>
         <b>发现</b>
     </a>
