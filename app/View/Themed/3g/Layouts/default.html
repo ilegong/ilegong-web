@@ -117,19 +117,6 @@
                     WeixinJSBridge.call('hideToolbar');
                 }
             });
-
-            $(document).ready(function () {
-                if (typeof(updateCartItemCount) === 'function') {
-                    updateCartItemCount();
-                }
-            });
-            $(document).ready(function() {
-                $('#div_navbar').find('a').click(function(){
-                    var $a = $(this);
-                    $a.addClass('active');
-                    $a.find('span.op-icon').addClass('op-icon-active');
-                });
-            });
         </script>
 </body>
 </html>
