@@ -95,6 +95,30 @@
         $('#pay_div').hide();
     }, 10000);
 </script>
+<div class="row">
+    <div class="panel panel-primary">
+        <div class="panel-body">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <span>{{$productDesc}}</span>
+                </li>
+                <li class="list-group-item">
+                    <span>应付总额:</span>
+                    <span class="text-price fontsize14 pull-right">¥{{$this->Number->precision($totalFee, 2)}}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    {{if $retry_link}}
+    <div id="retry_div" align="center" style="display: none; margin-top: 20px">
+        <a id="retry_btn" href="{{$retry_link}}" class="btn btn-warning">没有响应？重新支付</a>
+    </div>
+    {{/if}}
+    <div align="center" id="pay_div">
+        <button id="jump_btn" type="button" class="btn btn-default">正在跳转微信支付...</button>
+    </div>
+</div>
+</body>
 <script type="text/javascript">
     //<![CDATA[
     // for debugging javascript!
@@ -124,30 +148,6 @@
     })(window);
     //]]>
 </script>
-<div class="row">
-    <div class="panel panel-primary">
-        <div class="panel-body">
-            <ul class="list-group">
-                <li class="list-group-item">
-                    <span>{{$productDesc}}</span>
-                </li>
-                <li class="list-group-item">
-                    <span>应付总额:</span>
-                    <span class="text-price fontsize14 pull-right">¥{{$this->Number->precision($totalFee, 2)}}</span>
-                </li>
-            </ul>
-        </div>
-    </div>
-    {{if $retry_link}}
-    <div id="retry_div" align="center" style="display: none; margin-top: 20px">
-        <a id="retry_btn" href="{{$retry_link}}" class="btn btn-warning">没有响应？重新支付</a>
-    </div>
-    {{/if}}
-    <div align="center" id="pay_div">
-        <button id="jump_btn" type="button" class="btn btn-default">正在跳转微信支付...</button>
-    </div>
-</div>
-</body>
 </html>
 
 
