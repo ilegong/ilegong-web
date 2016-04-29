@@ -708,24 +708,26 @@ class UsersController extends AppController
 
     function me()
     {
-        $this->pageTitle = __('个人中心');
-
-        $this->loadModel('Order');
         $uid = $this->currentUser['id'];
-        $count = $this->Order->count_by_status($uid);
-        if (!is_array($count)) {
-            $count = array();
-        }
-        $left_to_comment = $this->Order->count_to_comments($uid);
-        $count[ORDER_STATUS_COMMENT] = $left_to_comment;
-
-        $this->set('order_count', $count);
-
-        $this->set('total_score', $this->User->get_score($uid));
-
-        $mOrder = ClassRegistry::init('Order');
-        $received_cnt = $mOrder->count_received_order($this->currentUser['id']);
-        $this->set('received_cnt', $received_cnt);
+        $this->redirect('/weshares/user_share_info/'.$uid);
+//        $this->pageTitle = __('个人中心');
+//
+//        $this->loadModel('Order');
+//        $uid = $this->currentUser['id'];
+//        $count = $this->Order->count_by_status($uid);
+//        if (!is_array($count)) {
+//            $count = array();
+//        }
+//        $left_to_comment = $this->Order->count_to_comments($uid);
+//        $count[ORDER_STATUS_COMMENT] = $left_to_comment;
+//
+//        $this->set('order_count', $count);
+//
+//        $this->set('total_score', $this->User->get_score($uid));
+//
+//        $mOrder = ClassRegistry::init('Order');
+//        $received_cnt = $mOrder->count_received_order($this->currentUser['id']);
+//        $this->set('received_cnt', $received_cnt);
     }
 
 
