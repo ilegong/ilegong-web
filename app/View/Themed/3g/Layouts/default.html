@@ -17,8 +17,6 @@
     <link rel="apple-touch-icon" href="{{$this->Html->assetUrl('/img/logo_mini.png')}}" />
     <title>{{$pageTitle}}-{{$site['title']}}</title>
     <link href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
-    {{$this->Html->css(array('layout_3g.css?ver58.3','thickbox.css?ver1'));}}
-    {{$this->Html->css(array('mobile-view.css?v17.7'))}}
     {{$this->Html->script(array(
     'http://libs.baidu.com/jquery/1.9.1/jquery.min.js',
     'jquery/jquery.cookie.js',
@@ -63,32 +61,13 @@
         //]]>
     </script>
     {{if $jWeixinOn}}
-    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-    <script>
-        var wx_jssdk_appId = '{{$signPackage["appId"]}}';
-        var wx_jssdk_timestamp = {{$signPackage["timestamp"]?$signPackage["timestamp"]:1}};
-        var wx_jssdk_nonceStr = '{{$signPackage["nonceStr"]}}';
-        var wx_jssdk_signature = '{{$signPackage["signature"]}}';
-        var jsApiList = ['checkJsApi', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseImage', 'previewImage', 'uploadImage', 'downloadImage', 'openLocation', 'getLocation'];
-        wx.config({
-            debug: false,
-            appId: wx_jssdk_appId,
-            timestamp: wx_jssdk_timestamp,
-            nonceStr: wx_jssdk_nonceStr,
-            signature: wx_jssdk_signature,
-            jsApiList: jsApiList
-        });
-    </script>
+     <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     {{/if}}
     <noscript>
-        {{$this->Html->css(array('3g.css',));}}
         请开启您浏览器的JavaScript选项
     </noscript>
 </head>
 <body style="background-color: #F5F5F5">
-{{if !$hideNav }}
-
-{{/if}}
         {{if !noFlash }}
         <div class="container">
             {{$this->Session->flash()}}
@@ -97,13 +76,5 @@
         {{$content_for_layout}}
         {{template Elements/footer}}
 {{$this->fetch('scriptBottom')}}
-        <script>
-            //hide footer bar
-            document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
-                if (typeof WeixinJSBridge != 'undefined') {
-                    WeixinJSBridge.call('hideToolbar');
-                }
-            });
-        </script>
 </body>
 </html>
