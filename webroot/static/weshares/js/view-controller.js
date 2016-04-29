@@ -109,9 +109,9 @@
 
     function getDate(strDate) {
       var date = eval('new Date(' + strDate.replace(/\d+(?=-[^-]+$)/,
-        function (a) {
-          return parseInt(a, 10) - 1;
-        }).match(/\d+/g) + ')');
+          function (a) {
+            return parseInt(a, 10) - 1;
+          }).match(/\d+/g) + ')');
       return date;
     }
 
@@ -498,12 +498,13 @@
 
       var minNum = 0;
       if (vm.showBalanceView) {
-        var others = _.reject(vm.weshare.products, function (p) {
-          return p.id == product.id
-        });
-        if (_.all(others, function (p) {
-            return p.num <= 0
-          })) {
+        var totalNum = _.reduce(_.filter(vm.weshare.products, function (p) {
+          return vm.filterProductByNum(p);
+        }), function (memo, p) {
+          return memo + p.num
+        }, 0);
+
+        if (totalNum <= 1) {
           minNum = 1;
         }
       }
@@ -1202,8 +1203,8 @@
                 var region = regions[j];
                 if (region['province_id'] == provinceId) {
                   template = deliveryTemplateItem;
+                  break;
                 }
-                break;
               }
               if (template) {
                 break;
@@ -1298,7 +1299,7 @@
         imgUrl = vm.weshare.images[0] || vm.weshare.creator.image;
         if (vm.totalBuyCount >= 5) {
           desc = '已经有' + vm.totalBuyCount + '人报名，' + shareIntryResult;
-        }else{
+        } else {
           desc = shareIntryResult;
         }
       } else if (userInfo && _.isEmpty(vm.ordersDetail['orders'])) {
@@ -1312,7 +1313,7 @@
         to_friend_title = userInfo.nickname + '报名了' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
         imgUrl = vm.weshare.images[0] || userInfo.image;
         desc = vm.weshare.creator.nickname + '我认识，很靠谱。' + shareIntryResult;
-      } else if (vm.currentUser) {
+      } else if (userInfo) {
         //default custom
         if (vm.weshare.type !== 4) {
           if (vm.isProxy()) {

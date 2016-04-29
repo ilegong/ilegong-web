@@ -173,6 +173,9 @@ class CouponItem extends AppModel {
     }
 
     public function add_coupon_type($name, $brand_id, $valid_begin, $valid_end, $reduced_price, $published, $type, $operator, $status, $product_list=0) {
+        if(empty($operator)){
+            return 0;
+        }
         $couponM = ClassRegistry::init('Coupon');
         if($couponM->save(array(
             'name' => $name,

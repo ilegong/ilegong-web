@@ -1,90 +1,31 @@
 /*share masg*/
 .weshare-edit-page {
-  .share-bg {
-    background-color: #FFFFFF;
-    margin-bottom: 10px;
-    padding: 15px 12px;
-  }
-  .share-bg h1 {
-    font-size: 1.2em;
-    color: #333333;
-    padding-bottom: 10px;
-  }
-  .share-bg h1 span {
-    font-size: 0.8em;
-  }
-  .share-name {
-    border: 1px #dddddd solid;
-    border-radius: 2px;
-    padding: 12px;
-    color: #333333;
-  }
-  .share-name input {
-    border: 0;
-    line-height: 20px;
-    font-size: 1.1em;
-    outline: none;
-    width: 100%;
-  }
-  .share-area {
-    border: 1px #dddddd solid;
-    border-radius: 2px;
-    padding: 12px;
-    color: #333333;
-  }
-  .share-area textarea {
-    display: block;
-    height: 100px;
-    line-height: 20px;
-    font-size: 1.1em;
-    color: #333333;
-    border: 0;
-    width: 100%;
-    resize: none;
-    outline: none;
-  }
-  /*share product*/
-  .share-product {
-    margin-bottom: 15px;
+  margin-bottom: 74px;
+
+  // 公用
+  .shrink-container {
     position: relative;
+    .shrink-right {
+      display: none;
+      width: 40px;
+      border: 1px #dddddd solid;
+      text-align: center;
+      color: #333333;
+      background-color: #FFFFFF;
+      text-decoration: none;
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
   }
-  .share-product a {
-    display: block;
-    border: 1px #dddddd solid;
-    line-height: 179px;
-    text-align: center;
-    width: 45px;
-    background-color: #FFFFFF;
-    color: #333333;
-    text-decoration: none;
-    position: absolute;
-    top: 0;
-    right: 0;
+  .shrink-container.shrinking {
+    padding-right: 40px;
+    .shrink-right {
+      display: block;
+    }
   }
-  .share-product-name, .share-product-masg {
-    border-radius: 2px 2px 0 0;
-    border: 1px #dddddd solid;
-    padding: 12px;
-  }
-  .share-product-masg {
-    margin-top: -1px;
-  }
-  .share-product-name input, .share-product-masg input {
-    float: left;
-    border: 0;
-    line-height: 20px;
-    font-size: 1.1em;
-    outline: none;
-    width: 65%;
-  }
-  .share-product-name label, .share-product-masg label {
-    display: block;
-    float: left;
-    width: 25%;
-    font-size: 1.1em;
-  }
-  .share-product-addBtn {
-    position: relative;
+  // 公用
+  .add-btn {
     display: block;
     border-radius: 4px;
     line-height: 44px;
@@ -92,291 +33,540 @@
     border: 1px #dddddd solid;
     background-color: #EEEEEE;
     text-decoration: none;
-  }
-  .share-product-addBtn s {
-    display: block;
-    width: 21px;
-    height: 21px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-top: -18px;
-    margin-left: -43px;
-  }
-  .share-product-addBtn s img {
-    width: 100%;
-  }
-  .share-product-addBtn label {
-    font-size: 1.1em;
-    color: #333333;
-    padding-left: 26px;
-  }
-  /*share picture*/
-  .share-pirture {
-    background-color: #FFFFFF;
-    margin-bottom: 10px;
-    padding: 15px 2px 5px 12px;
-    h1 {
-      font-size: 1.2em;
-      color: #333333;
-      padding-bottom: 10px;
-    }
-    ul {
-      width: 100%;
-      li {
-        float: left;
-        margin-bottom: 10px;
-        width: 25%;
-        div {
-          margin-right: 10px;
-          position: relative;
-          img {
-            width: 100%;
-            display: block;
-            height: 67px;
-          }
-          .first-img {
-            display: block;
-            text-decoration: none;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            label {
-              color: #FFFFFF;
-              text-align: center;
-              width: 100%;
-              position: absolute;
-              bottom: 0;
-              left: 0;
-              line-height: 24px;
-              z-index: 3;
-            }
-            s {
-              display: block;
-              filter: alpha(opacity=50);
-              -moz-opacity: 0.5;
-              opacity: 0.5;
-              background-color: #000000;
-              width: 100%;
-              position: absolute;
-              bottom: 0;
-              left: 0;
-              height: 24px;
-              z-index: 2;
-            }
-          }
-          .first-img.is-default label {
-            color: #BBBBBB;
-          }
-          .delete-img {
-            display: block;
-            width: 22px;
-            height: 22px;
-            border-radius: 22px;
-            line-height: 20px;
-            background-color: #ff0000;
-            color: #FFFFFF;
-            text-align: center;
-            text-decoration: none;
-            position: absolute;
-            top: -6px;
-            right: -6px;
-          }
-        }
-        div.add-pirture {
-          border: 1px #dddddd solid;
-          font-size: 4em;
-          text-align: center;
-        }
+    span {
+      position: relative;
+      img {
+        width: 21px;
+        height: 21px;
+        display: inline-block;
+        position: absolute;
+        left: 0;
+        top: -4px;
+      }
+      label {
+        font-size: 1.1em;
+        color: #333333;
+        padding-left: 28px;
       }
     }
   }
-  /*next step btn*/
-  .nextstepBtn {
-    background-color: #ff6485;
+  // 公用
+  .multi-line-form {
+    margin-bottom: 15px;
+    .line {
+      border-radius: 2px 2px 0 0;
+      border: 1px #dddddd solid;
+      padding: 12px;
+      position: relative;
+      label {
+        font-size: 1.1em;
+        position: absolute;
+        left: 12px;
+        top: 12px;
+      }
+      input {
+        padding-left: 74px;
+        border: 0;
+        line-height: 20px;
+        font-size: 1.1em;
+        outline: none;
+        width: 72%;
+      }
+    }
+    .line:not(:first-child) {
+      margin-top: -1px;
+    }
+  }
+  // 公用
+  .refer-back-bg {
+    background-color: #ffffff;
+    border-bottom: 1px #ddd solid;
+    color: #333;
+    font-size: 1.3em;
     line-height: 44px;
     text-align: center;
-    margin: 30px 25px 65px;
-    color: #FFFFFF;
-    font-size: 1.2em;
-    display: block;
-    text-decoration: none;
-    border-radius: 4px;
-  }
-
-  div.shippment-info .ziti {
-    background-color: #ffffff;
-    margin: 48px 0 5px 0;
-    border: 1px #eeeeee solid;
-    padding: 0 10px;
-  }
-  div.shippment-info .ziti dl, .expressage dl {
-    padding: 12px 0 7px 0;
-  }
-  div.shippment-info .freightmore {
-    border-top: 1px #eeeeee solid;
-    padding-top: 12px;
-    margin-top: 5px;
-    margin-bottom: 2px;
-  }
-  div.shippment-info .ziti dl dd, .expressage dl dd {
-    float: left;
-  }
-  div.shippment-info .ziti dl dd, .expressage dl dd input, .haolinju dd input, .expressage ul.choice li input {
-    margin-right: 3px;
-  }
-  div.shippment-info .sendouttime {
-    border: 1px #dddddd solid;
-    border-radius: 4px;
-    margin-bottom: 10px;
-    padding: 5px;
-  }
-  div.shippment-info .sendouttime input, .sendoutsite input {
-    border: none;
-    border-radius: 0;
-    font-size: 1em;
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
+    z-index: 10;
+    a {
+      position: absolute;
+      left: 15px;
+      text-decoration: none;
+      color: #333333;
+      width: 4em;
+      height: 44px;
+      label {
+        padding-left: 5px;
+        font-size: 0.8em;
+        float: left;
+      }
+      img {
+        width: 8px;
+        margin-top: 14px;
+        float: left;
+      }
+    }
   }
-  div.shippment-info .sendoutsite {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 5px;
-    margin-top: -1px;
-  }
-  div.shippment-info .ziti ul li.fl {
-    width: 75%;
-  }
-  div.shippment-info .ziti ul li.fr a {
-    line-height: 35px;
-    border: 1px #49bc6e solid;
-    color: #49bc6e;
-    padding: 0 10px;
-    border-radius: 4px;
-    display: block;
-    text-decoration: none;
-    margin-top: 3px;
-  }
-  div.shippment-info .ziti ul li.fr a.delete {
-    border-color: #cccccc;
-    color: #333333;
+  //
+  .dialog-delorder {
+    box-shadow: 0 2px 11px #ccc;
+    position: absolute;
+    width: 80%;
+    z-index: 1001;
+    left: 10%;
+    top: 20%;
+    margin-left: auto;
+    margin-right: auto;
+    .dialog-bar {
+      background: #f3f3f3;
+      color: #666;
+      font-size: 12px;
+      font-family: simsun;
+      font-weight: 700;
+      height: 31px;
+      line-height: 31px;
+      overflow: hidden;
+      text-indent: 10px;
+    }
+    .dialog-close {
+      background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/allBtn.png) -357px -1875px no-repeat;
+      float: right;
+      height: 21px;
+      margin-right: 6px;
+      margin-top: 5px;
+      width: 21px;
+    }
+    .dialog-content {
+      background: #fff;
+      color: #666;
+      font-size: 14px;
+      line-height: 24px;
+      p {
+        font-size: 14px;
+        padding: 10px 0 16px;
+        text-align: left;
+      }
+    }
+    .dialog-console {
+      background: #fff;
+      overflow: hidden;
+      padding: 8px 0 10px;
+      text-align: center;
+      *zoom: 1;
+      a, a:link, a:hover {
+        background: #8ecd1c;
+        border: 1px #7ebb48 solid;
+        display: inline-block;
+        font-size: 16px;
+        height: 34px;
+        line-height: 34px;
+        margin-right: 12px;
+        text-align: center;
+        text-decoration: none;
+        width: 118px;
+      }
+      a.console-btn-confirm {
+        color: #fff;
+      }
+      a.console-btn-cancel, a.console-btn-cancel:link, a.console-btn-cancel:hover {
+        background: #fefefe;
+        border-color: #d9d9d9;
+        color: #999;
+        margin: 0;
+      }
+    }
   }
 
-  div.shippment-info .expressage, .haolinju {
-    background-color: #ffffff;
-    margin: 0 0 5px 0;
-    border: 1px #eeeeee solid;
-    padding: 0 10px;
+  .basic-info {
+    .share-bg {
+      background-color: #FFFFFF;
+      margin-bottom: 10px;
+      padding: 15px 12px;
+      .shrink-container {
+        .shrink-right {
+          line-height: 179px;
+        }
+      }
+      h1 {
+        font-size: 1.2em;
+        color: #333333;
+        padding-bottom: 10px;
+      }
+      .share-name {
+        border: 1px #dddddd solid;
+        border-radius: 2px;
+        padding: 12px;
+        color: #333333;
+        input {
+          border: 0;
+          line-height: 20px;
+          font-size: 1.1em;
+          outline: none;
+          width: 100%;
+        }
+      }
+      .share-area {
+        border: 1px #dddddd solid;
+        border-radius: 2px;
+        padding: 12px;
+        color: #333333;
+        textarea {
+          display: block;
+          height: 100px;
+          line-height: 20px;
+          font-size: 1.1em;
+          color: #333333;
+          border: 0;
+          width: 100%;
+          resize: none;
+          outline: none;
+        }
+        textarea:focus{
+          height: 300px;
+        }
+      }
+    }
+    /*share picture*/
+    .share-pirture {
+      background-color: #FFFFFF;
+      margin-bottom: 10px;
+      padding: 15px 2px 5px 12px;
+      h1 {
+        font-size: 1.2em;
+        color: #333333;
+        padding-bottom: 10px;
+      }
+      ul {
+        width: 100%;
+        li {
+          float: left;
+          margin-bottom: 10px;
+          width: 25%;
+          div {
+            margin-right: 10px;
+            position: relative;
+            img {
+              width: 100%;
+              display: block;
+              height: 67px;
+            }
+            .first-img {
+              display: block;
+              text-decoration: none;
+              position: absolute;
+              bottom: 0;
+              left: 0;
+              width: 100%;
+              label {
+                color: #FFFFFF;
+                text-align: center;
+                width: 100%;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                line-height: 24px;
+                z-index: 3;
+              }
+              s {
+                display: block;
+                filter: alpha(opacity=50);
+                -moz-opacity: 0.5;
+                opacity: 0.5;
+                background-color: #000000;
+                width: 100%;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                height: 24px;
+                z-index: 2;
+              }
+            }
+            .first-img.is-default label {
+              color: #BBBBBB;
+            }
+            .delete-img {
+              display: block;
+              width: 22px;
+              height: 22px;
+              border-radius: 22px;
+              line-height: 20px;
+              background-color: #ff0000;
+              color: #FFFFFF;
+              text-align: center;
+              text-decoration: none;
+              position: absolute;
+              top: -6px;
+              right: -6px;
+            }
+          }
+          div.add-pirture {
+            border: 1px #dddddd solid;
+            font-size: 4em;
+            text-align: center;
+          }
+        }
+      }
+    }
+    /*next step btn*/
+    .nextstepBtn {
+      background-color: #ff6485;
+      line-height: 44px;
+      text-align: center;
+      margin: 30px 25px 65px;
+      color: #FFFFFF;
+      font-size: 1.2em;
+      display: block;
+      text-decoration: none;
+      border-radius: 4px;
+    }
+
+    .has-error {
+      ::-webkit-input-placeholder {
+        /* WebKit, Blink, Edge */
+        color: red;
+      }
+      :-moz-placeholder {
+        /* Mozilla Firefox 4 to 18 */
+        color: red;
+        opacity: 1;
+      }
+      ::-moz-placeholder {
+        /* Mozilla Firefox 19+ */
+        color: red;
+        opacity: 1;
+      }
+      :-ms-input-placeholder {
+        /* Internet Explorer 10-11 */
+        color: red;
+      }
+    }
   }
-  div.shippment-info .pl15 {
-    padding-left: 15px;
+
+  .shippment-info {
+    .send-time{
+      margin: 54px 0 10px;
+      padding: 0 12px;
+    }
+    .border-top-1{
+      border-top: 1px #eee solid;
+    }
+    .ziti {
+      background-color: #fff;
+      margin: 0 0 10px;
+      padding: 5px 12px;
+      ul {
+        margin-bottom: 0 !important;
+        padding-bottom: 15px;
+        position: relative;
+        li.fl {
+          width: 75%;
+        }
+        li.fr {
+          a.delete {
+            border-color: #ccc;
+            color: #333;
+            position: absolute;
+            top: 0px;
+            right: 0;
+            line-height: 122px;
+            background-color: #fff;
+            width: 45px;
+            text-align: center;
+            border: 1px #ddd solid;
+          }
+        }
+      }
+      dl {
+        padding: 7px 0;
+        font-size: 1.2em;
+        dd {
+          float: left;
+        }
+      }
+      .shrink-container {
+        .shrink-right {
+          line-height: 179px;
+        }
+      }
+    }
+    .freightmore {
+      padding-top: 12px;
+      padding-bottom: 15px;
+    }
+    .input-type1 {
+      margin-right: 3px;
+    }
+    .input-type2 {
+      border: 1px solid #ddd;
+      border-radius: 2px;
+      padding: 15px 5px;
+      font-size: 1.1em;
+      box-sizing: border-box;
+      -webkit-box-sizing:border-box;
+      -moz-box-sizing: border-box;
+    }
+
+    .expressage {
+      background-color: #fff;
+      margin: 0 0 5px;
+      margin-bottom: 10px;
+      padding: 5px 12px;
+      dl {
+        padding: 7px 0;
+        font-size: 1.2em;
+        dd {
+          float: left;
+        }
+      }
+      .shrink-container {
+        .shrink-right {
+          line-height: 131px;
+        }
+      }
+      .freight {
+        background-color: #F1f1f1;
+        margin-bottom: 15px;
+        margin-top: -5px;
+        padding: 0 10px 10px;
+        position: relative;
+        h1 {
+          font-size: 1.1em;
+          font-weight: 400;
+          line-height: 38px;
+          border-bottom: 1px #ddd solid;
+          padding: 0 10px;
+          color: #666;
+        }
+        .freightrate {
+          padding-top: 10px;
+          line-height: 30px;
+          label {
+            display: block;
+            float: left;
+            color: #666;
+          }
+          s {
+            float: left;
+            margin: 0 5px;
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            padding: 0 4px;
+            width: 30px;
+            background-color: #fff;
+            input {
+              font-size: 1.1em;
+              border: 0;
+              width: 100%;
+              color: #666;
+              text-align: center;
+            }
+          }
+        }
+      }
+      .freight.is-default {
+        margin-right: 0;
+      }
+    }
+    .pl15 {
+      padding-left: 15px;
+    }
+    .deletebtn {
+      color: #666;
+      text-decoration: none;
+      display: block;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+    .more_city {
+      display: block;
+      float: right;
+    }
+    .more_city img {
+      width: 9px;
+      height: 16px;
+    }
+    .add_freight {
+      text-decoration: underline;
+      color: #ff6485;
+      display: block;
+      width: 50%;
+      line-height: 16px;
+    }
+
+    .haolinju {
+      padding: 5px 12px;
+      font-size: 1.2em;
+      background-color: #FFF;
+      margin-bottom: 10px;
+      dd.fl {
+        padding-top: 5px;
+      }
+      dd.fr {
+        font-size: .8em;
+        text-align: right;
+        line-height: 18px !important;
+        span {
+          color: #ff6485;
+        }
+      }
+    }
+
+    .submitbtn {
+      display: block;
+      text-decoration: none;
+      margin: 30px 25px 65px;
+      line-height: 44px;
+      text-align: center;
+      background-color: #ff6485;
+      color: #fff;
+      border-radius: 4px;
+      font-size: 1.2em;
+    }
   }
-  div.shippment-info .freight {
+
+  /*城市选择*/
+  .areas-info {
     background-color: #f9f9f9;
-    margin-bottom: 10px;
-  }
-  div.shippment-info .freight h1 {
-    font-size: 1em;
-    font-weight: normal;
-    line-height: 38px;
-    border-bottom: 1px #eeeeee solid;
-    padding: 0 10px;
-    color: #666666;
-  }
-  div.shippment-info .freightrate {
-    padding: 0px 10px 10px 10px;
-  }
-  div.shippment-info .freightrate label {
-    display: block;
-    float: left;
-    line-height: 36px;
-    color: #666666;
-  }
-  div.shippment-info .freightrate s {
-    float: left;
-    margin: 0 8px;
-    border: 1px #dddddd solid;
-    border-radius: 4px;
-    padding: 0px 4px;
-    width: 30px;
-    background-color: #ffffff;
-  }
-  div.shippment-info .freightrate s input {
-    font-size: 1em;
-    border: 0;
-    width: 100%;
-    color: #666666;
-  }
-  div.shippment-info .pt10 {
-    padding-top: 10px;
-  }
-  div.shippment-info .deletebtn {
-    color: #666;
-    text-decoration: none;
-    padding: 0 10px 10px 10px;
-    display: block;
-    margin-top: -5px;
-  }
-  div.shippment-info .more_city {
-    display: block;
-    float: right;
-  }
-  div.shippment-info .more_city img {
-    width: 9px;
-    height: 16px;
-  }
-  div.shippment-info .add_freight {
-    text-decoration: underline;
-    color: #49bc6e;
-    padding-bottom: 10px;
-    display: block;
-    width: 50%;
-  }
-
-  div.shippment-info .haolinju {
-    padding: 5px 10px;
-  }
-  div.shippment-info .haolinju dd.fr {
-    font-size: 0.9em;
-    text-align: right;
-  }
-  div.shippment-info .haolinju dd.fr span {
-    color: #49bc6e;
-  }
-  div.shippment-info .haolinju dd.fl {
-    padding-top: 7px;
-  }
-
-  div.shippment-info .submitbtn {
-    display: block;
-    text-decoration: none;
-    margin: 40px 20px 20px 20px;
-    line-height: 40px;
-    text-align: center;
-    background-color: #49bc6e;
-    color: #ffffff;
-    border-radius: 4px;
-    font-size: 1.2em;
-  }
-
-  .has-error {
-    ::-webkit-input-placeholder {
-      /* WebKit, Blink, Edge */
-      color: red;
+    margin-bottom: 50px;
+    // 公用
+    .checkable-line {
+      background-color: #fff;
+      border-top: 1px #ddd solid;
+      line-height: 40px;
+      position: relative;
+      padding-left: 28px;
+      padding-right: 24px;
+      .icon-left {
+        width: 11px;
+        height: 7px;
+        position: absolute;
+        top: 17px;
+        left: 12px;
+      }
+      .checkable-btn{
+        position: absolute;
+        right: 12px;
+        top: 14px;
+      }
     }
-    :-moz-placeholder {
-      /* Mozilla Firefox 4 to 18 */
-      color: red;
-      opacity: 1;
-    }
-    ::-moz-placeholder {
-      /* Mozilla Firefox 19+ */
-      color: red;
-      opacity: 1;
-    }
-    :-ms-input-placeholder {
-      /* Internet Explorer 10-11 */
-      color: red;
+
+    .areas {
+      margin-top: 54px;
+      .area {
+        border-bottom: 1px #dddddd solid;
+        margin-bottom: 10px;
+        .area-detail {
+          background-color: #ffffff;
+          border-top: 1px #dddddd solid;
+          line-height: 40px;
+          padding-right: 12px;
+        }
+        .provinces {
+        }
+      }
     }
   }
 }

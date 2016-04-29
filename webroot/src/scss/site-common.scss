@@ -147,6 +147,10 @@ footer {
   }
 }
 
+textarea, input {
+  outline: none
+}
+
 .show-ib {
   display: inline-block !important;
 }

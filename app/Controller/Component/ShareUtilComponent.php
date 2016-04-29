@@ -89,13 +89,11 @@ class ShareUtilComponent extends Component
             return false;
         }
         $userRelationM = ClassRegistry::init('UserRelation');
-        $relation = $userRelationM->find('all', [
-            'conditions' => [
-                'user_id' => $userId,
-                'follow_id' => $followId
-            ]
+        $relation = $userRelationM->hasAny([
+            'user_id' => $userId,
+            'follow_id' => $followId
         ]);
-        return empty($relation);
+        return !$relation;
     }
 
     /**
@@ -125,24 +123,17 @@ class ShareUtilComponent extends Component
      * 2. 非新用户购买后, 在未关注该团长的情况下, 提醒用户是否关注该团长, 点击
      *    [关注]则关注团长, 点击[取消]则不关注
      *
-     * @param mixed $saler 出售人ID
+     * @param mixed $sharer 出售人ID
      * @param mixed $consumer 消费者ID
-     * @param string $type 标识此种关注是购买之后自动进行的关注
      * @access public
      * @return array 返回数组, type字段表示上述两种情况, msg是辅助消息.
      */
-    public function save_relation_new($saler, $consumer, $type = 'Buy')
+    public function save_relation_new($sharer, $consumer)
     {
-        $userRelationM = ClassRegistry::init('UserRelation');
-        if ($this->check_user_relations($consumer)) {
+        if (!$this->check_user_relations($consumer)) {
             // 1. 没有关注任何人, 默认关注
-            $this->log("User " . $consumer . ' does not follow anyone, now follows ' . $saler . ' in default', LOG_INFO);
-            $userRelationM->saveAll([
-                'user_id' => $saler,
-                'follow_id' => $consumer,
-                'type' => $type,
-                'created' => date('Y-m-d H:i:s')
-            ]);
+            $this->log("User " . $consumer . ' does not follow anyone, now follows ' . $sharer . ' in default', LOG_INFO);
+            $this->save_relation($sharer, $consumer);
             $ret = [
                 'type' => 1,
                 'msg' => 'Followed the saler by default.',
@@ -160,6 +151,9 @@ class ShareUtilComponent extends Component
 
     public function save_relation($sharer_id, $user_id, $type = 'Buy')
     {
+        if (empty($sharer_id) || empty($user_id)) {
+            return 0;
+        }
         $userRelationM = ClassRegistry::init('UserRelation');
         if ($this->check_user_relation($sharer_id, $user_id)) {
             $userRelationM->saveAll(array('user_id' => $sharer_id, 'follow_id' => $user_id, 'type' => $type, 'created' => date('Y-m-d H:i:s')));

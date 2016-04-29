@@ -62,7 +62,9 @@ ul li {
     text-align: center;
 }
 
-textarea,input{outline:none}
+textarea, input {
+    outline: none
+}
 
 /*返回*/
 .classlist {
@@ -221,8 +223,6 @@ textarea,input{outline:none}
     line-height: 38px;
 }
 
-
-
 .weshare-add .upload-btn {
     border: 1px #29AC0E solid;
     display: block;
@@ -321,8 +321,6 @@ textarea,input{outline:none}
     margin-right: 3%;
 }
 
-
-
 /*分享参团*/
 .weshare-view {
     padding: 10px 10px 60px;
@@ -332,15 +330,19 @@ textarea,input{outline:none}
     cursor: pointer;
     color: blue;
 }
+
 .weshare-view div.less-text {
     display: block;
 }
-.weshare-view div.less-text.show{
+
+.weshare-view div.less-text.show {
     display: inline !important
 }
+
 .weshare-view div.more-text {
     display: none;
 }
+
 .weshare-view div.more-text.show {
     display: inline !important
 }
@@ -640,7 +642,8 @@ textarea,input{outline:none}
     position: absolute;
     z-index: 3;
     top: 0;
-    right: -5px;   background: url(http://static.tongshijia.com/static/weshares/images/weifxicon.png?v0.03) -62px 0 no-repeat;
+    right: -5px;
+    background: url(http://static.tongshijia.com/static/weshares/images/weifxicon.png?v0.03) -62px 0 no-repeat;
     background-size: 75pt 75pt;
     width: 40px;
     height: 23px;
@@ -889,75 +892,39 @@ textarea,input{outline:none}
     overflow-y: hidden
 }
 
-.weshare-view div.shippment-info{
-
-}
-
-
-/*back*/
-.refer-back-bg{ background-color: #f9f9f9; border-bottom: 1px #dddddd solid; color: #333333; font-size: 1.3em; line-height: 44px; text-align: center; position: fixed; top: 0; left: 0; width: 100%;}
-.refer-back-bg a{ position: absolute; left: 15px; text-decoration: none; color: #333333; width: 4em; height: 44px;}
-.refer-back-bg a img,.refer-back-bg a label{ float: left;}
-.refer-back-bg a label{ padding-left: 5px; font-size: 0.8em;}
-.refer-back-bg a img{ width: 8px;  margin-top: 14px;}
-
-.weshare-add div.shippment-info .ziti{ background-color: #ffffff; margin: 48px 0 5px 0; border: 1px #eeeeee solid; padding: 0 10px;}
-.weshare-add div.shippment-info .ziti dl,.expressage dl{ padding: 12px 0 7px 0;}
-.weshare-add div.shippment-info .freightmore{ border-top: 1px #eeeeee solid; padding-top: 12px; margin-top: 5px; margin-bottom: 2px;}
-.weshare-add div.shippment-info .ziti dl dd,.expressage dl dd{ float: left;}
-.weshare-add div.shippment-info .ziti dl dd,.expressage dl dd input,.haolinju dd input,.expressage ul.choice li input{ margin-right: 3px;}
-.weshare-add div.shippment-info .sendouttime{ border: 1px #dddddd solid; border-radius: 4px; margin-bottom: 10px; padding: 5px;}
-.weshare-add div.shippment-info .sendouttime input,.sendoutsite input{ border: none; border-radius: 0; font-size: 1em; width: 100%;}
-.weshare-add div.shippment-info .sendoutsite {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 5px;
-    margin-top: -1px;
-}
-.weshare-add div.shippment-info .ziti ul li.fl {
-    width: 75%;
-}
-.weshare-add div.shippment-info .ziti ul li.fr a{ line-height: 35px; border: 1px #49bc6e solid; color: #49bc6e; padding: 0 10px; border-radius: 4px; display: block; text-decoration: none;margin-top: 3px;}
-.weshare-add div.shippment-info .ziti ul li.fr a.delete{ border-color: #cccccc; color: #333333;}
-
-.weshare-add div.shippment-info .expressage,.haolinju{ background-color: #ffffff; margin: 0 0 5px 0; border: 1px #eeeeee solid; padding: 0 10px;}
-.weshare-add div.shippment-info .pl15{ padding-left: 15px;}
-.weshare-add div.shippment-info .freight{ background-color: #f9f9f9; margin-bottom: 10px;}
-.weshare-add div.shippment-info .freight h1{ font-size: 1em; font-weight: normal; line-height: 38px; border-bottom: 1px #eeeeee solid; padding: 0 10px; color: #666666;}
-.weshare-add div.shippment-info .freightrate{ padding: 0px 10px 10px 10px;}
-.weshare-add div.shippment-info .freightrate label{ display: block; float: left; line-height: 36px; color: #666666;}
-.weshare-add div.shippment-info .freightrate s{ float: left; margin: 0 8px; border: 1px #dddddd solid; border-radius: 4px; padding: 0px 4px; width: 30px; background-color: #ffffff;}
-.weshare-add div.shippment-info .freightrate s input{ font-size: 1em; border: 0; width: 100%; color: #666666;}
-.weshare-add div.shippment-info .pt10{ padding-top: 10px;}
-.weshare-add div.shippment-info .deletebtn{
-    color: #666;
-    text-decoration: none;
-    padding: 0 10px 10px 10px;
-    display: block;
-    margin-top: -5px;
-}
-.weshare-add div.shippment-info .more_city{ display: block; float: right;}
-.weshare-add div.shippment-info .more_city img{ width: 9px; height: 16px;}
-.weshare-add div.shippment-info .add_freight{ text-decoration: underline; color: #49bc6e; padding-bottom: 10px; display: block; width: 50%;}
-
-.weshare-add div.shippment-info .haolinju{ padding: 5px 10px;}
-.weshare-add div.shippment-info .haolinju dd.fr{ font-size: 0.9em; text-align: right;}
-.weshare-add div.shippment-info .haolinju dd.fr span{ color: #49bc6e;}
-.weshare-add div.shippment-info .haolinju dd.fl{ padding-top: 7px;}
-
-.weshare-add div.shippment-info .submitbtn{ display: block; text-decoration: none; margin: 40px 20px 20px 20px; line-height: 40px; text-align: center; background-color: #49bc6e; color: #ffffff; border-radius: 4px; font-size: 1.2em;}
-
-
-
 /*城市选择*/
-.citylist{ margin-bottom: 10px; border-bottom: 1px #dddddd solid;}
-.citylist ul{ background-color: #ffffff; border-top: 1px #dddddd solid; line-height: 40px; padding-right: 12px;}
-.citylist ul li a.show_city{ padding: 9px 5px 9px 12px;}
-.citylist ul li a.show_city img{ width: 11px; height:7px;}
-.gray{ color: #999999;}
-.pl28{ padding-left: 28px;}
-.pt44{ padding-top: 44px;}
+.citylist {
+    margin-bottom: 10px;
+    border-bottom: 1px #dddddd solid;
+}
 
+.citylist ul {
+    background-color: #ffffff;
+    border-top: 1px #dddddd solid;
+    line-height: 40px;
+    padding-right: 12px;
+}
+
+.citylist ul li a.show_city {
+    padding: 9px 5px 9px 12px;
+}
+
+.citylist ul li a.show_city img {
+    width: 11px;
+    height: 7px;
+}
+
+.gray {
+    color: #999999;
+}
+
+.pl28 {
+    padding-left: 28px;
+}
+
+.pt44 {
+    padding-top: 44px;
+}
 
 .offline-address-list {
 }
@@ -1140,8 +1107,6 @@ textarea,input{outline:none}
     font-size: 16px;
     display: block;
 }
-
-
 
 .buying-dialog {
     background-color: #ffffff;
