@@ -2089,25 +2089,10 @@ class ShareUtilComponent extends Component
 
         $OrderM = ClassRegistry::init('Order');
         $WeshareM = ClassRegistry::init('Weshare');
-        $share =$WeshareM->find('first', array(
-            'fields' => array('Weshare.*'),
-            'conditions' => [
-                'Weshare.id' => $share_id
-            ]
-        ));
-
-        $root_share_id = $share['Weshare']['root_share_id'] > 0 ? $share['Weshare']['root_share_id'] : $share['Weshare']['id'];
-        $share_ids =$WeshareM->find('all', array(
-            'fields' => array('Weshare.id'),
-            'conditions' => [
-                'OR'=>['Weshare.root_share_id' => $root_share_id, 'Weshare.id'=>$root_share_id],
-                'Weshare.creator' => $share['Weshare']['creator'],
-            ]
-        ));
-        $share_ids = Hash::extract($share_ids, '{n}.Weshare.id');
+        $related_share_ids = $WeshareM->get_relate_share($share_id);
 
         $order_count = $OrderM->find('count', array(
-            'conditions' => array('status > 0', 'member_id' => $share_ids),
+            'conditions' => array('status > 0', 'member_id' => $related_share_ids),
         ));
         $view_count = $WeshareM->find('first', array(
             'fields' => array('Weshare.view_count'),
@@ -2115,7 +2100,7 @@ class ShareUtilComponent extends Component
         ));
         $orders_and_creators = $OrderM->find('all', [
             'conditions' => [
-                'Order.member_id' => $share_ids,
+                'Order.member_id' => $related_share_ids,
                 'Order.status > 0',
             ],
             'fields' => array('Order.id', 'User.id', 'User.nickname', 'User.avatar'),

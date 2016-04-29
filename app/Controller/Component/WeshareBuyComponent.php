@@ -1965,18 +1965,17 @@ class WeshareBuyComponent extends Component
             $weshareM = ClassRegistry::init('Weshare');
             $commentM = ClassRegistry::init('Comment');
             $orderM = ClassRegistry::init('Order');
-            $refer_share_ids = $weshareM->get_relate_share($shareId, $share_creator);
-            $refer_share_ids[] = $shareId;
+            $related_share_ids = $weshareM->get_relate_share($shareId);
             $comment_count = $commentM->find('count', array(
                 'conditions' => array(
-                    'data_id' => $refer_share_ids,
+                    'data_id' => $related_share_ids,
                     'parent_id' => 0,
                     'not' => array('status' => ORDER_STATUS_WAITING_PAY, 'order_id' => 0)
                 )
             ));
             $order_count = $orderM->find('count', array(
                 'conditions' => array(
-                    'member_id' => $refer_share_ids,
+                    'member_id' => $related_share_ids,
                     'type' => ORDER_TYPE_WESHARE_BUY,
                     'not' => array('status' => ORDER_STATUS_WAITING_PAY)
                 )
@@ -2000,11 +1999,10 @@ class WeshareBuyComponent extends Component
         if(empty($cacheData)){
             $weshareM = ClassRegistry::init('Weshare');
             $orderM = ClassRegistry::init('Order');
-            $refer_share_ids = $weshareM->get_relate_share($shareId, $share_creator);
-            $refer_share_ids[] = $shareId;
+            $related_share_ids = $weshareM->get_relate_share($shareId);
             $order_count = $orderM->find('count', array(
                 'conditions' => array(
-                    'member_id' => $refer_share_ids,
+                    'member_id' => $related_share_ids,
                     'type' => ORDER_TYPE_WESHARE_BUY,
                     'not' => array('status' => ORDER_STATUS_WAITING_PAY)
                 )
