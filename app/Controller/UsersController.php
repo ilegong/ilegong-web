@@ -1115,13 +1115,6 @@ class UsersController extends AppController
      */
     public function createNewUserByWeixin($userInfo)
     {
-        $union_id = $userInfo['unionid'];
-        if (!empty($union_id)) {
-            $uid = $this->get_user_id_by_unionid($union_id);
-            if (!$uid != 0) {
-                return $uid;
-            }
-        }
         $uid = createNewUserByWeixin($userInfo, $this->User);
         if (empty($uid)) {
             $this->log("error to save createNewUserByWeixin: with " . json_encode($userInfo), LOG_ERR);
