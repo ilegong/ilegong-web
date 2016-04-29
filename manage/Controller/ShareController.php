@@ -749,7 +749,7 @@ class ShareController extends AppController {
 
         $con1 = '';
         if ($_REQUEST['share_name']) {
-            $con1 .= " AND s.cake_weshares WHERE title LIKE '%{$_REQUEST['share_name']}%')";
+            $con1 .= " AND s.title LIKE '%{$_REQUEST['share_name']}%'";
         }
 
         if(($_REQUEST['share_type'] === '0' ) or ($_REQUEST['share_type'] === '6'))
@@ -766,6 +766,7 @@ class ShareController extends AppController {
         $flow = ($page-1) * 10;
 
         $countSql = "SELECT count(1) FROM cake_orders o LEFT JOIN cake_weshares s ON o.member_id = s.id WHERE (o.created BETWEEN '{$start_date} 00:00:00' AND '{$end_date} 23:59:59') AND o.status = ".ORDER_STATUS_PAID.$con1;
+
         $count = $this->Order->query($countSql);
 
         $sql = "SELECT * FROM cake_orders o LEFT JOIN cake_weshares s ON o.member_id = s.id WHERE (o.created BETWEEN '{$start_date} 00:00:00' AND '{$end_date} 23:59:59') AND o.status = ".ORDER_STATUS_PAID."{$con1} ORDER BY o.created DESC LIMIT {$flow} , 10";
