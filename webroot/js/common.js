@@ -1097,31 +1097,31 @@ var utils = {
   },
 
   wx_to_friend : function(appid, imgUrl, lineLink, descContent, shareTitle) {
-    WeixinJSBridge.invoke('sendAppMessage',{
-      "appid": appid,
-      "img_url": imgUrl,
-      "img_width": "640",
-      "img_height": "640",
-      "link": lineLink,
-      "desc": descContent,
-      "title": shareTitle
-    }, function(res) {
-      //_report('send_msg', res.err_msg);
-    });
+    //WeixinJSBridge.invoke('sendAppMessage',{
+    //  "appid": appid,
+    //  "img_url": imgUrl,
+    //  "img_width": "640",
+    //  "img_height": "640",
+    //  "link": lineLink,
+    //  "desc": descContent,
+    //  "title": shareTitle
+    //}, function(res) {
+    //  //_report('send_msg', res.err_msg);
+    //});
   },
 
   wx_to_timeline : function(appid, imgUrl, lineLink, descContent, shareTitle){
-    WeixinJSBridge.invoke('shareTimeline',{
-      "appid": appid,
-      "img_url": imgUrl,
-      "img_width": "640",
-      "img_height": "640",
-      "link": lineLink,
-      "desc": descContent,
-      "title": shareTitle
-    }, function(res) {
-      //_report('timeline', res.err_msg);
-    });
+    //WeixinJSBridge.invoke('shareTimeline',{
+    //  "appid": appid,
+    //  "img_url": imgUrl,
+    //  "img_width": "640",
+    //  "img_height": "640",
+    //  "link": lineLink,
+    //  "desc": descContent,
+    //  "title": shareTitle
+    //}, function(res) {
+    //  //_report('timeline', res.err_msg);
+    //});
   },
 
   is_weixin: function(){
