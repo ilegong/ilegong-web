@@ -751,13 +751,13 @@ class ShareController extends AppController {
         if ($_REQUEST['share_name']) {
             $con1 .= " AND s.cake_weshares WHERE title LIKE '%{$_REQUEST['share_name']}%')";
         }
-        
-        if ($_REQUEST['share_type'] > -1)
+
+        if (($_REQUEST['share_type'] > -1 ) and isset($_REQUEST['share_type'] ))
         {
             $con1 .= " AND s.type = {$_REQUEST['share_type']}";
         }
 
-        if ($_REQUEST['share_status'] > -1)
+        if (($_REQUEST['share_status'] > -1) and isset($_REQUEST['share_type'] ))
         {
             $con1 .= " AND s.status = {$_REQUEST['share_status']}";
         }
