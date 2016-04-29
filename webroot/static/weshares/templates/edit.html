@@ -50,7 +50,7 @@
         </div>
         <a href="javascript:;" class="add-btn clearfix" ng-click="vm.toggleProduct(product, true)">
                 <span>
-                    <img src="{{vm.staticFilePath}}/static/weshares/images/share-addicon.png?v0.3.1">
+                    <img ng-src="{{vm.staticFilePath}}/static/weshares/images/share-addicon.png?v0.3.1">
                     <label>添加产品</label>
                 </span>
         </a>
@@ -71,7 +71,7 @@
             </li>
             <li>
                 <div class="add-pirture" ng-click="vm.chooseAndUploadImage()">
-                    <img src="{{vm.staticFilePath}}/static/weshares/images/add-pircture-btn.png"/>
+                    <img ng-src="{{vm.staticFilePath}}/static/weshares/images/add-pircture-btn.png"/>
                 </div>
             </li>
         </ul>
@@ -124,7 +124,7 @@
             <a href="javascript:;" class="add-btn clearfix" ng-show="vm.self_ziti_data.status==1"
                ng-click="vm.addAddress()">
                     <span>
-                        <img src="{{vm.staticFilePath}}/static/weshares/images/share-addicon.png?v0.3.1">
+                        <img ng-src="{{vm.staticFilePath}}/static/weshares/images/share-addicon.png?v0.3.1">
                         <label>添加自提点</label>
                     </span>
             </a>
@@ -194,7 +194,7 @@
             </div>
             <a href="javascript:;" class="add-btn clearfix" ng-click="vm.addDeliveryTemplate()">
                     <span>
-                        <img src="{{vm.staticFilePath}}/static/weshares/images/share-addicon.png?v0.3.1">
+                        <img ng-src="{{vm.staticFilePath}}/static/weshares/images/share-addicon.png?v0.3.1">
                         <label>添加指定地区运费</label>
                     </span>
             </a>
