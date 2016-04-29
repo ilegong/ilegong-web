@@ -12,7 +12,7 @@
     vm.readMoreBtnText = '全文';
     vm.hideMoreShareInfo = false;
     vm.shouldShowReadMoreBtn = false;
-    OfflineStore.ChooseOfflineStore(vm);
+    OfflineStore.ChooseOfflineStore(vm, $http, $templateCache);
     vm.statusMap = {
       0: '进行中',
       1: '已截止'

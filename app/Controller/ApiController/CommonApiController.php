@@ -3,6 +3,8 @@
 class CommonApiController extends Controller
 {
 
+    static  $OFFLINE_STORE_DATA_CACHE_KEY = 'offline_store_data_cache_key';
+
     public function beforeFilter()
     {
         $this->autoRender = false;
@@ -21,23 +23,23 @@ class CommonApiController extends Controller
         exit();
     }
 
-    public function upload_image()
+    public function get_offline_store($area_id)
     {
-        if (count($_FILES["user_files"]) > 0) {
-            $folderName = "uploads/";
-            $counter = 0;
-            $msg = '';
-            for ($i = 0; $i < count($_FILES["user_files"]["name"]); $i++) {
-                if ($_FILES["user_files"]["name"][$i] <> "") {
-                    $ext = strtolower(end(explode(".", $_FILES["user_files"]["name"][$i])));
-                    $filePath = $folderName . rand(10000, 990000) . '_' . time() . '.' . $ext;
-                    if (!move_uploaded_file($_FILES["user_files"]["tmp_name"][$i], $filePath)) {
-                        $msg .= "Failed to upload" . $_FILES["user_files"]["name"][$i] . ". <br>";
-                        $counter++;
-                    }
-                }
-                $msg = ($counter == 0) ? "Files uploaded Successfully" : "Erros : " . $msg;
-            }
+        $cache_data = Cache::read(self::$OFFLINE_STORE_DATA_CACHE_KEY . '_' . $area_id);
+        if (!empty($cache_data)) {
+            echo $cache_data;
+            exit;
         }
+        $this->loadModel('OfflineStore');
+        $stores = $this->OfflineStore->find('all', [
+            'conditions' => [
+                'area_id' => $area_id
+            ]
+        ]);
+        $stores = Hash::combine($stores, '{n}.OfflineStore.id', '{n}.OfflineStore');
+        $cache_data = json_encode($stores);
+        Cache::write(self::$OFFLINE_STORE_DATA_CACHE_KEY . '_' . $area_id, $cache_data);
+        echo $cache_data;
+        exit();
     }
 }

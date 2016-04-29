@@ -8,7 +8,7 @@
       'ChooseOfflineStore' : ChooseOfflineStore
     };
 
-    function ChooseOfflineStore($vm) {
+    function ChooseOfflineStore($vm, $http,$templateCache) {
       $vm.areas = {
         110101: {
           'name': "东城区"
@@ -39,6 +39,7 @@
         }
       };
       $vm.currentAreaCode = '110101';
+      changeOfflineStoreArea($vm.currentAreaCode);
       //$http({
       //  method: 'GET',
       //  url: '/tuan_buyings/get_offline_address.json?type=-1',
@@ -106,6 +107,14 @@
 
       function changeOfflineStoreArea(code) {
         $vm.currentAreaCode = code;
+        $http({
+          method: 'GET',
+          url: '/commonApi/get_offline_store/' + code + '.json',
+          cache: $templateCache
+        }).success(function (data) {
+          $vm.offlineStores[code] = data;
+        }).error(function () {
+        });
       }
     }
   }
