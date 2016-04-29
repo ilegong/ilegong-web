@@ -224,24 +224,7 @@
     <a class="submitbtn" ng-click="vm.saveWeshare()">Oh，搞定了！</a>
 </div>
 
-<div class="dialog-delorder" ng-show="vm.showProductTipInfo">
-    <div class="dialog-bar">温馨提示<a ng-click="vm.showProductTipInfo=false;vm.showLayer=false;" class="dialog-close"
-                                   title="关闭"></a></div>
-    <div class="dialog-content">
-        <p>
-            如果产品需要称重，价格不能提前确定，那么勾选后可以让用户预付设置的价格，发货后再填入实际金额，系统自动退款或发消息给用户付尾款。
-        </p>
-    </div>
-</div>
-<div class="dialog-delorder" ng-show="vm.showPinTuanTipInfo">
-    <div class="dialog-bar">温馨提示<a ng-click="vm.showPinTuanTipInfo=false;vm.showLayer=false;" class="dialog-close"
-                                   title="关闭"></a></div>
-    <div class="dialog-content">
-        <p>
-            当其他小区有用户但是物流成本高时，可以选择让用户拼团，满一定人数再送货。
-        </p>
-    </div>
-</div>
+
 <!--用户发起分享的时候判断是否是团长或者是否是更新分享数据,不是上面的情况提示信息-->
 <div class="dialog-delorder" ng-if="vm.showCreateShareTipInfo">
     <div class="dialog-bar">温馨提示<a ng-click="vm.showCreateShareTipInfo=false;vm.showLayer=false;"
