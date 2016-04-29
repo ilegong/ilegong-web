@@ -5,7 +5,7 @@ var jqgrid_scrollOffset = null; // 记录jqgrid的滚动条位置； // 触发�
 var form_submit_flag_for_swfupload = false;  // 表单提交标记，表单提交时，检测文件是否上传完。文件上传完时，自动提交表单
 var form_submit_obj_for_swfupload = null;
 
-// 进行Digg操作,单一选项投票提交
+
 function singleSubmitDigg(model,data_id,question_id,option_id,callback)
 {
   if(!sso.check_userlogin({"callback":singleSubmitDigg,"callback_args":arguments})){
@@ -14,7 +14,7 @@ function singleSubmitDigg(model,data_id,question_id,option_id,callback)
   var postdata = {model:model,data_id:data_id};
 
   postdata['options['+question_id+']['+option_id+']']=1; // question 2,option
-  // 4
+
 
   $.ajax({
     type:'post',
@@ -44,9 +44,6 @@ function setDiggNum(data,total)
     $(bar).attr("width", p );
   }
   else{
-    // 有bar且没有传入参数total的时候，更新bar的高度，用在singelsubmit提交之后。
-    // 有总数是加载时，会根据总数设置bar的高度
-    // 适用于多项的单选。如心情，好评差评等。多选时不适用此处理。
     var bar = '#Diggbar-'+data.model+'-'+data.data_id+'-'+data.question_id+'-'+data.option_id;
     if($(bar).size()>0)
     {
@@ -176,8 +173,6 @@ function ajaxAction(url,postdata,form,callback_func_name, moreags, notShowMsg){
     data: postdata,
     complete:function (XMLHttpRequest, textStatus) {
       if(form){
-        //var html = $(':submit',form).data('html');
-        //$(':submit',form).val(html).removeAttr('disabled'); // 将按钮置为可提交
         $(':submit',form).val('已成功提交');
       }
     },
@@ -197,13 +192,6 @@ function ajaxAction(url,postdata,form,callback_func_name, moreags, notShowMsg){
         }
         return;
       }
-      // tasks is a json object
-      // tasks[i] is a json object that convert from a php array .
-      // array('dotype','selector','content');
-
-      // callback.apply(callback,callback_args);
-      // //回调函数,callback_func_name为回调函数的函数名。如rs_callbacks.addtofavor()
-
       if(request.tasks){
         $(request.tasks).each(function(i){
           var task = request.tasks[i];
@@ -257,7 +245,6 @@ function ajaxAction(url,postdata,form,callback_func_name, moreags, notShowMsg){
   return false;
 }
 
-// ajax 操作,获取html
 function ajaxActionHtml(url,selector,callback){
   $.ajax({
     async:true,
@@ -275,17 +262,14 @@ function ajaxActionHtml(url,selector,callback){
     dataType:"html"
   });
 }
-// ajax 操作,提交Form
+
+
 function ajaxeSubmitForm(form,callback_func_name)
 {
   setCKEditorVal();
   ajaxAction(form.action,$(form).serialize(),form,callback_func_name, form);	// 发出请求
   return false;
 }
-
-
-/* ajax 操作表单交互,结束 */
-
 
 var sso = {
   usercookie:	$.cookie('SAECMS[Auth][User]'),
@@ -357,11 +341,7 @@ var publishController = {
       });
 
     }
-    //else{
     $('#'+$dialog.dialogid).modal('show');
-    //}
-    // modal的left，top距离都是50%，通过设置margin-left,margin-topd的值为modal宽高一半的负数，
-    // 左右居中
     return false;
   },
 
@@ -446,9 +426,6 @@ function showSuccessMessage(text, close_callback, timeout)
 function showErrorMessage(text)
 {
   alert(text);
-//	$.jGrowl(text, {
-//		theme: 'error' // danger
-//	});
   return true;
 }
 /* ================form validate====================== */
@@ -536,9 +513,6 @@ var utils = {
     var modal_dialog = $dlg.find('.modal-dialog');
     $dlg.css({
       'overflow-y': 'auto'//,
-//            'padding-top': function () {
-//                return ( ($(this).height() - modal_dialog.height()) / 2);
-//            }
     });
 
     utils.__auto_close(timeout, $dlg, close_callback);
@@ -606,110 +580,8 @@ var utils = {
 
   is_weixin: function(){
     return (typeof '_pys_in_weixin' != 'undefined' && _pys_in_weixin);
-  },
-
-  toFixed: function (value, precision) {
-    var precision = precision || 0,
-      power = Math.pow(10, precision),
-      absValue = Math.abs(Math.round(value * power)),
-      result = (value < 0 ? '-' : '') + String(Math.floor(absValue / power));
-
-    if (precision > 0) {
-      var fraction = String(absValue % power),
-        padding = new Array(Math.max(precision - fraction.length, 0) + 1).join('0');
-      result += '.' + padding + fraction;
-    }
-    return result;
-  },
-
-  genSlug: function(val, callback) {
-    var url = '/s/genSlug';
-    ajaxAction(url,{'word':obj.value},null, function(data){
-      callback(data);
-    });
-  },
-
-  countDown: function(toTimer, initCallback, timeArrivedCallback) {
-    if (toTimer.size() > 0) {
-
-      var dif = (parseInt(toTimer.attr('data-start')) *1000 - new Date().getTime())/1000;
-      if (dif <= 0) {
-        if (typeof(timeArrivedCallback) == 'function') {
-          timeArrivedCallback();
-        }
-        return;
-      }
-
-      var hour1 = $('<div class="countdown">0</div>');
-      var hour2 = $('<div class="countdown">0</div>');
-      var min1 = $('<div class="countdown">0</div>');
-      var min2 = $('<div class="countdown">0</div>');
-      var sec1 = $('<div class="countdown">0</div>');
-      var sec2 = $('<div class="countdown">0</div>');
-
-      toTimer.after(hour1, hour2, $('<div class="colon"><strong>:</strong></div>'),
-        min1,min2, $('<div class="colon"><strong>:</strong></div>'), sec1, sec2);
-      if (typeof(initCallback) == 'function') {
-        initCallback();
-      }
-
-      toTimer.remove();
-
-      var intvalId = setInterval(function(){
-        if (dif <= 0) {
-          clearInterval(intvalId);
-          if (typeof(timeArrivedCallback) == 'function') {
-            timeArrivedCallback();
-          }
-          return;
-        }
-        var h = Math.floor(dif/3600);
-        var left = dif % 3600;
-        var m = Math.floor(left / 60);
-        var s = Math.floor(left % 60);
-
-        hour1.text(Math.floor(h / 10));
-        hour2.text(h % 10);
-
-        min1.text(Math.floor(m / 10));
-        min2.text(m % 10);
-
-        sec1.text(Math.floor(s / 10));
-        sec2.text(s % 10);
-        dif--;
-      }, 1000);
-    }
   }
 };
-
-
-
-
-var TemplateEngine = function(html, options) {
-  var re = /<%(.+?)%>/g,
-    reExp = /(^( )?(var|if|for|else|switch|case|break|{|}|;))(.*)?/g,
-    code = 'with(obj) { var r=[];\n',
-    cursor = 0,
-    result;
-  var add = function(line, js) {
-    js? (code += line.match(reExp) ? line + '\n' : 'r.push(' + line + ');\n') :
-      (code += line != '' ? 'r.push("' + line.replace(/"/g, '\\"') + '");\n' : '');
-    return add;
-  }
-  while(match = re.exec(html)) {
-    add(html.slice(cursor, match.index))(match[1], true);
-    cursor = match.index + match[0].length;
-  }
-  add(html.substr(cursor, html.length - cursor));
-  code = (code + 'return r.join(""); }').replace(/[\r\t\n]/g, '');
-  try { result = new Function('obj', code).apply(options, [options]); }
-  catch(err) { console.error("'" + err.message + "'", " in \n\nCode:\n", code, "\n"); }
-  return result;
-};
-
-
-
-//var zitiAddressData = zitiAddress($('#hiddenModalContent').data('zitiType'));
 
 function isBlank(str) {
   return (!str || /^\s*$/.test(str));
