@@ -8,7 +8,7 @@
 {{/if}}
 {{$this->Html->script(array(
 			'jquery/jquery.lazyload.min.js',
-            'bootstrap.min.js','bootbox/bootbox.min.js', 'common.js?v47','front.js?v8'
+            'bootstrap.min.js','bootbox/bootbox.min.js', 'common.js?v47'
         ));
 }}
 {{$this->Html->scriptStart(array('block' => 'scriptBottom'));}}
@@ -18,6 +18,4 @@
     });
     }
 {{$this->Html->scriptEnd()}}
-{{$this->Html->script(array('/js/thickbox.js?v1'));}}
-<!-- helper中追加的底部脚本 $this->_View->append('bottomscript',$script);-->
 {{$this->fetch('bottomscript')}}

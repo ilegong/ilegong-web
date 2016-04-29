@@ -14,125 +14,13 @@ class WxPayController extends AppController {
 
     function beforeFilter(){
         parent::beforeFilter();
-        if(empty($this->currentUser['id']) && !$this->_is_action_by_wx_callback()){
-            $this->redirect('/users/login?referer='.Router::url('/orders/mine'));
-        }
-    }
-
-    public function group_pay($memberId) {
-
-        $uid = $this->currentUser['id'];
-        $type = $_GET['type'];
-
-        if (name_empty_or_weixin($this->currentUser['nickname'])) {
-            $ref = Router::url($_SERVER['REQUEST_URI']);
-            $this->redirect('/users/login.html?force_login=1&auto_weixin='.$this->is_weixin().'&referer=' . urlencode($ref));
-        }
-
-        $this->loadModel('GrouponMember');
-        $gm = $this->GrouponMember->findById($memberId);
-
-        if (empty($gm)) {
-            setFlashError($this->Session, '参数不正确');
-            $this->redirect('/');
-        }
-
-        $error_text = '';
-        if ($gm['GrouponMember']['user_id'] != $uid) {
-            $error_text = '不是您的参团记录，您不能支付';
-        } else if ($gm['GrouponMember']['status'] == STATUS_GROUP_MEM_PAID && $type != 'done') {
-            $error_text = '已经支付过了';
-        }
-        $team_id = $gm['GrouponMember']['team_id'];
-        $groupon_id = $gm['GrouponMember']['groupon_id'];
-        $group_url = '/groupons/join/' . $groupon_id;
-        if (!empty($error_text)) {
-            $this->__message($error_text, $group_url);
-            return;
-        }
-
-        $this->loadModel('Team');
-        $team = $this->Team->findById($team_id);
-        if (empty($team)) {
-            $this->__message('内部错误', '/');
-            return;
-        }
-        $begin = $team['Team']['begin_time'];
-        $end = $team['Team']['end_time'];
-        $fee = $team['Team']['unit_pay'];
-        $now = time();
-        if ($now < $begin || $now > $end) {
-            $this->__message('团购已过期', $group_url);
-            return;
-        }
-
-        $this->loadModel("Groupon");
-        $groupon = $this->Groupon->findById($groupon_id);
-        $balance = $this->Groupon->calculate_balance($groupon_id, $team, $groupon);
-        if ($type == 'done') {
-            if ($groupon['Groupon']['user_id'] == $uid) {
-                $fee = $balance > $team['Team']['unit_val'] ? $balance : $team['Team']['unit_pay'];
-                $area = $groupon['Groupon']['area'];
-                $address = $groupon['Groupon']['address'];
-                $mobile = $groupon['Groupon']['mobile'];
-                $name = $groupon['Groupon']['name'];
-            } else {
-                $this->__message('您不是团购的发起人，不能提前结束团购', $group_url);
-            }
-        }else{
-            if($balance <= $team['Team']['unit_val']){
-                $this->__message('该团已满', $group_url);
-                return;
-            }
-        }
-
-        $order_type = ($type == 'done' ? ORDER_TYPE_GROUP_FILL : ORDER_TYPE_GROUP);
-        $order = $this->Order->createOrFindGrouponOrder($memberId, $uid, $fee/100, $team['Team']['product_id'], $order_type, $area, $address, $mobile, $name);
-        if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
-            $this->__message('您已经支付过了', $group_url);
-            return;
-        }
-        $no_more_money = $balance <= 0 ;
-        if ($no_more_money && $order_type == ORDER_TYPE_GROUP_FILL) {
-            if ($order['Order']['status'] == ORDER_STATUS_WAITING_PAY) {
-                if ($this->Order->set_order_to_paid($order['Order']['id'], $order['Order']['try_id'], $uid, $order['Order']['type'], $order['Order']['member_id'])) {
-                    $this->Weixin->notifyPaidDone($order);
-                    $this->__message('支付成功', $group_url.'?msg=ok');
-                    return;
-                }
-            }
-        }
-        $orderId = $order['Order']['id'];
-
-        $error_pay_redirect = $group_url;
-        $this->pageTitle = '安全支付';
-        $order = $this->WxPayment->findOrderAndCheckStatus($orderId, $uid);
-
-        $isWeixin = $this->is_weixin();
-        if ($isWeixin) {
-            list($jsapi_param, $out_trade_no, $productDesc) = $this->__prepareWXPay($error_pay_redirect, $orderId, $uid, $order);
-            $this->set('jsApiParameters', $jsapi_param);
-            $this->set('totalFee', $order['Order']['total_all_price']);
-            $this->set('tradeNo', $out_trade_no);
-        }
-
-        $this->set('team', $team);
-        $this->set('weixin', $isWeixin);
-        $this->set('productDesc', $productDesc);
-        $this->set('orderId', $orderId);
-        $this->set('group_url', $group_url);
-        $this->set('isMobile', $this->RequestHandler->isMobile());
-        $this->set('hideNav', true);
-        $this->set('fee', $fee);
+        $this->layout=null;
     }
 
     //js 唤起支付
     public function jsApiPay($orderId) {
-        //以前团购订单支付
-        if ($_GET['action'] == 'group_pay') {
-            $this->group_pay($_GET['memberId']);
-            $this->__viewFileName = 'group_pay';
-            return;
+        if(empty($this->currentUser['id'])){
+            $this->redirect('/users/login?referer='.Router::url('/weshares/pay/' . $orderId . '/0'));
         }
         //第三方物流订单支付
         if ($_GET['action'] == 'logistics') {
@@ -197,6 +85,9 @@ class WxPayController extends AppController {
         //正常逻辑支付
         $this->layout=null;
         $uid = $this->currentUser['id'];
+        if(empty($this->currentUser['id'])){
+            $this->redirect('/users/login?referer='.Router::url('/wxPay/qrCodePay/' . $orderId . '?from=share'));
+        }
         $error_pay_redirect = '/';
         $this->pageTitle = '微信支付';
         $from = $_GET['from'];

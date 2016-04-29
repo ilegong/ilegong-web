@@ -179,6 +179,21 @@
     }
   }
 
+  //
+  .section {
+    background-color: #FFF;
+    margin: 0 0 10px;
+    padding: 5px 12px;
+    .section-title {
+      font-size: 1.2em;
+      padding: 7px 0;
+    }
+    .section-detail {
+      padding-top: 12px;
+      padding-bottom: 15px;
+      font-size: 1.1em;
+    }
+  }
   .basic-info {
     .share-bg {
       background-color: #FFFFFF;
@@ -223,8 +238,8 @@
           resize: none;
           outline: none;
         }
-        textarea:focus{
-          height: 300px;
+        textarea.after-clicked {
+          height: 250px;
         }
       }
     }
@@ -345,17 +360,19 @@
   }
 
   .shippment-info {
-    .send-time{
-      margin: 54px 0 10px;
-      padding: 0 12px;
+    .input-type1 {
+      margin-right: 3px;
     }
-    .border-top-1{
-      border-top: 1px #eee solid;
+    .section.send-time {
+      margin: 54px 12px 10px;
+      border-radius: 2px;
     }
-    .ziti {
-      background-color: #fff;
-      margin: 0 0 10px;
-      padding: 5px 12px;
+    .section.ziti {
+      .shrink-container {
+        .shrink-right {
+          line-height: 134px;
+        }
+      }
       ul {
         margin-bottom: 0 !important;
         padding-bottom: 15px;
@@ -378,129 +395,74 @@
           }
         }
       }
-      dl {
-        padding: 7px 0;
-        font-size: 1.2em;
-        dd {
-          float: left;
-        }
-      }
-      .shrink-container {
-        .shrink-right {
-          line-height: 179px;
-        }
-      }
     }
-    .freightmore {
-      padding-top: 12px;
-      padding-bottom: 15px;
-    }
-    .input-type1 {
-      margin-right: 3px;
-    }
-    .input-type2 {
-      border: 1px solid #ddd;
-      border-radius: 2px;
-      padding: 15px 5px;
-      font-size: 1.1em;
-      box-sizing: border-box;
-      -webkit-box-sizing:border-box;
-      -moz-box-sizing: border-box;
-    }
-
-    .expressage {
-      background-color: #fff;
-      margin: 0 0 5px;
-      margin-bottom: 10px;
-      padding: 5px 12px;
-      dl {
-        padding: 7px 0;
-        font-size: 1.2em;
-        dd {
-          float: left;
-        }
-      }
+    .section.expressage {
       .shrink-container {
         .shrink-right {
           line-height: 131px;
         }
       }
-      .freight {
-        background-color: #F1f1f1;
-        margin-bottom: 15px;
-        margin-top: -5px;
-        padding: 0 10px 10px;
-        position: relative;
-        h1 {
-          font-size: 1.1em;
-          font-weight: 400;
-          line-height: 38px;
-          border-bottom: 1px #ddd solid;
-          padding: 0 10px;
-          color: #666;
+      .section-detail {
+        padding-top: 0px;
+        .freight-type{
+          border-top: 1px #eee solid;
+          padding-bottom: 12px;
+          padding-top: 7px;
         }
-        .freightrate {
-          padding-top: 10px;
-          line-height: 30px;
-          label {
-            display: block;
-            float: left;
+        .freight {
+          background-color: #F1f1f1;
+          margin-bottom: 15px;
+          margin-top: -5px;
+          padding: 0 10px 10px;
+          position: relative;
+          h1 {
+            font-size: 1.1em;
+            font-weight: 400;
+            line-height: 38px;
+            border-bottom: 1px #ddd solid;
+            padding: 0 10px;
             color: #666;
           }
-          s {
-            float: left;
-            margin: 0 5px;
-            border: 1px solid #ddd;
-            border-radius: 2px;
-            padding: 0 4px;
-            width: 30px;
-            background-color: #fff;
-            input {
-              font-size: 1.1em;
-              border: 0;
-              width: 100%;
+          .freightrate {
+            padding-top: 10px;
+            line-height: 30px;
+            label {
+              display: block;
+              float: left;
               color: #666;
-              text-align: center;
+            }
+            s {
+              float: left;
+              margin: 0 5px;
+              border: 1px solid #ddd;
+              border-radius: 2px;
+              padding: 0 4px;
+              width: 42px;
+              background-color: #fff;
+              input {
+                font-size: 1.1em;
+                border: 0;
+                width: 100%;
+                color: #666;
+                text-align: center;
+              }
             }
           }
         }
+        .freight.is-default {
+          margin-right: 0;
+        }
       }
-      .freight.is-default {
-        margin-right: 0;
+      .more_city {
+        display: block;
+        float: right;
+        img {
+          width: 9px;
+          height: 16px;
+        }
       }
     }
-    .pl15 {
-      padding-left: 15px;
-    }
-    .deletebtn {
-      color: #666;
-      text-decoration: none;
-      display: block;
-      position: absolute;
-      right: 0;
-      top: 0;
-    }
-    .more_city {
-      display: block;
-      float: right;
-    }
-    .more_city img {
-      width: 9px;
-      height: 16px;
-    }
-    .add_freight {
-      text-decoration: underline;
-      color: #ff6485;
-      display: block;
-      width: 50%;
-      line-height: 16px;
-    }
-
-    .haolinju {
-      padding: 5px 12px;
-      font-size: 1.2em;
-      background-color: #FFF;
-      margin-bottom: 10px;
+    .section.haolinju {
       dd.fl {
         padding-top: 5px;
       }
@@ -513,7 +475,24 @@
         }
       }
     }
-
+    .section.commission {
+      .section-detail {
+        margin-bottom: 0;
+        .line {
+          position: relative;
+          padding-right: 48px;
+          span {
+            position: absolute;
+            font-size: 20px;
+            top: 12px;
+            right: 12px;
+            color: #666;
+          }
+        }
+      }
+    }
+  }
+  .submit-info {
     .submitbtn {
       display: block;
       text-decoration: none;
@@ -546,7 +525,7 @@
         top: 17px;
         left: 12px;
       }
-      .checkable-btn{
+      .checkable-btn {
         position: absolute;
         right: 12px;
         top: 14px;

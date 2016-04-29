@@ -178,6 +178,7 @@ class WesharesComponent extends Component
         $weshareData['created'] = date('Y-m-d H:i:s');
         $images = $postDataArray['images'];
         $weshareData['images'] = implode('|', $images);
+        $weshareData['default_image'] = count($images) > 0 ? $images[0] : '';
 
         $productsData = $postDataArray['products'];
         $addressesData = $postDataArray['addresses'];

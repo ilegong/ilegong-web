@@ -19,7 +19,8 @@ class UtilController extends AppController {
         $url = $_GET['url'];
         $ln = $_GET['ln'];
         $uid = $this->currentUser['id']?$this->currentUser['id'] : 0;
-        $this->log("$uid : $url : $ln msg=$msg");
+        $this->log("js error $uid : $url : $ln msg=$msg");
+        echo "logged";
         $this->autoRender = false;
     }
 

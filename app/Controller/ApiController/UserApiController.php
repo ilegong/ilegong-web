@@ -7,7 +7,7 @@ class UserApiController extends AppController
 
     public function beforeFilter()
     {
-        $allow_action = array('test', 'user_detail');
+        $allow_action = array('test', 'check_mobile_available');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action) == false) {
             $this->currentUser = $this->OAuth->user();
