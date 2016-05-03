@@ -58,7 +58,7 @@ class WesharesComponent extends Component
             'delivery_template' => $weshareInfo['deliveryTemplate'],
             'proxy_rebate_percent' => $weshareInfo['proxy_rebate_percent'],
             'offline_address' => $weshareInfo['addresses'],
-            'consignee' => $weshareInfo['consignee']
+            'consignee' => $consignee = $this->getShareConsignees($uid)
         ];
     }
 
