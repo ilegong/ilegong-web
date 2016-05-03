@@ -37,7 +37,7 @@ $xhprof_runs = new XHProfRuns_Default();
 
 // save the run under a namespace "xhprof_foo"
 $run_id = $xhprof_runs->save_run($xhprof_data, "xhprof_foo");
-
+echo $run_id;
 die;
 if(extension_loaded('xhprof')) {
     include_once __DIR__ . '/../lib/Xhprof_lib/utils/xhprof_lib.php';
