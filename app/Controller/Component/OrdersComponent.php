@@ -42,7 +42,7 @@ class OrdersComponent extends Component
     public function get_order_info_with_cart($order_id)
     {
         $orderM = ClassRegistry::init('Order');
-        $result = $orderM->find('first', [
+        $result = $orderM->find('all', [
             'conditions' => [
                 'Order.id' => $order_id
             ],
