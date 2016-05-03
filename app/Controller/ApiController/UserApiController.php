@@ -28,6 +28,9 @@ class UserApiController extends AppController
     public function user_orders($status, $limit, $page)
     {
         $uid = $this->currentUser['id'];
+        if ($status == -1) {
+            $status = [ORDER_STATUS_PAID, ORDER_STATUS_DONE, ORDER_STATUS_REFUND, ORDER_STATUS_REFUND_DONE, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED];
+        }
         $params = ['user_id' => $uid, 'status' => $status, 'limit' => $limit, 'page' => $page];
         $orders = $this->Orders->get_user_order($params);
         $result = [];
