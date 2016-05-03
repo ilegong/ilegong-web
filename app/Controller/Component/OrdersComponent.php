@@ -53,7 +53,7 @@ class OrdersComponent extends Component
                     'conditions' => ['Order.id = Cart.order_id']
                 ]
             ],
-            'fields' => ['Order.id', 'Order.consignee_name', 'Order.consignee_address', 'Order.consignee_mobilephone', 'Order.total_all_price', 'Order.ship_type_name', 'Order.ship_type', 'Order.ship_fee', 'Order.ship_code', 'Order.pay_time', 'Order.coupon_total', 'Order.brand_id', 'Cart.name', 'Cart.num', 'Cart.price']
+            'fields' => ['Order.id', 'Order.status', 'Order.created', 'Order.consignee_name', 'Order.consignee_address', 'Order.consignee_mobilephone', 'Order.total_all_price', 'Order.ship_type_name', 'Order.ship_type', 'Order.ship_fee', 'Order.ship_code', 'Order.pay_time', 'Order.coupon_total', 'Order.brand_id', 'Cart.name', 'Cart.num', 'Cart.price']
         ]);
 
         return $result;
@@ -82,7 +82,7 @@ class OrdersComponent extends Component
                     'conditions' => ['Order.member_id = Weshare.id']
                 ]
             ],
-            'fields' => ['Order.id', 'Order.creator', 'Order.total_price', 'Order.brand_id', 'Order.ship_mark', 'Order.member_id', 'Weshare.title', 'Weshare.status', 'Weshare.default_image'],
+            'fields' => ['Order.id', 'Order.status', 'Order.created', 'Order.creator', 'Order.total_price', 'Order.brand_id', 'Order.ship_mark', 'Order.member_id', 'Weshare.title', 'Weshare.status', 'Weshare.default_image'],
             'limit' => $params['limit'],
             'page' => $params['page']
         ]);
