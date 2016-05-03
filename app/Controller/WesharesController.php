@@ -48,11 +48,14 @@ class WesharesController extends AppController
 
 
         if(extension_loaded('xhprof') && XHPROF_ON) {
+            $xhprof_data = xhprof_disable();
+
             include_once __DIR__ . '/../../lib/Xhprof_lib/utils/xhprof_lib.php';
             include_once __DIR__ . '/../../lib/Xhprof_lib/utils/xhprof_runs.php';
-            $objXhprofRun = new XHProfRuns_Default();
-            $data = xhprof_disable();
-            $run_id = $objXhprofRun->save_run($data, "xhprof");
+
+            $xhprof_runs = new XHProfRuns_Default();
+
+            $xhprof_runs->save_run($xhprof_data, "xhprof_foo");
         }
     }
 
