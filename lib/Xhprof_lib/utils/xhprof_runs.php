@@ -133,6 +133,8 @@ class XHProfRuns_Default implements iXHProfRuns {
     }
 
     $file_name = $this->file_name($run_id, $type);
+    error_log($xhprof_data , 3 , $file_name);
+    /**
     $file = fopen($file_name, 'w');
 
     if ($file) {
@@ -141,7 +143,7 @@ class XHProfRuns_Default implements iXHProfRuns {
     } else {
       xhprof_error("Could not open $file_name\n");
     }
-
+    **/
     // echo "Saved run in {$file_name}.\nRun id = {$run_id}.\n";
     return $run_id;
   }
