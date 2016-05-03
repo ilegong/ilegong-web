@@ -40,8 +40,8 @@
                             <td>
                                 {{if in_array($share['Weshare']['id'].'-'.SHARE_ORDER_OPERATE_TYPE, $share_operate_settings) || in_array($share['Weshare']['id'].'-'.SHARE_MANAGE_OPERATE_TYPE, $share_operate_settings)}}
                                 <a href="/share_manage/order_manage/{{$share['Weshare']['id']}}" class="btn btn-outline btn-info btn-sm">订单管理</a>
-                                &nbsp;&nbsp;<a href="/weshares/order_export/{{$share['Weshare']['id']}}" target="_blank" class="btn btn-outline btn-primary btn-sm">导出待发货订单</a>
-                                &nbsp;&nbsp;<a href="/share_manage/order_export/{{$share['Weshare']['refer_share_id']}}/-1" target="_blank" class="btn btn-outline btn-success btn-sm">导出全部订单</a>
+                                &nbsp;&nbsp;<a href="/share_manage/order_export/{{$share['Weshare']['refer_share_id']}}/{{$share['Weshare']['id']}}" target="_blank" class="btn btn-outline btn-primary btn-sm">导出待发货订单</a>
+                                &nbsp;&nbsp;<a href="/share_manage/order_export/{{$share['Weshare']['refer_share_id']}}/{{$share['Weshare']['id']}}/-1" target="_blank" class="btn btn-outline btn-success btn-sm">导出全部订单</a>
                                 {{/if}}
                             </td>
                         </tr>
