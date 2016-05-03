@@ -45,7 +45,9 @@ class WesharesController extends AppController
         $this->set('weshare_ids', Hash::extract($index_products, '{n}.Weshare.id'));
         $this->set('uid', $uid);
         $this->set('tag', $tag);
-        
+
+        error_log(var_export(extension_loaded('xhprof') && XHPROF_ON).PHP_EOL , 3 , '/tmp/xhprof.log');
+
         if(extension_loaded('xhprof') && XHPROF_ON) {
             include_once __DIR__ . '/../../lib/Xhprof_lib/utils/xhprof_lib.php';
             include_once __DIR__ . '/../../lib/Xhprof_lib/utils/xhprof_runs.php';
