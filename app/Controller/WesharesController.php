@@ -55,7 +55,7 @@ class WesharesController extends AppController
 
             $xhprof_runs = new XHProfRuns_Default();
 
-            $xhprof_runs->save_run($xhprof_data, "xhprof_foo");
+            $xhprof_runs->save_run($xhprof_data, "xhprof_weshares");
         }
     }
 
