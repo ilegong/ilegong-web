@@ -38,6 +38,10 @@ class WesharesController extends AppController
      */
     public function index($tag = 0)
     {
+        if(extension_loaded('xhprof') && XHPROF_ON) {
+            xhprof_enable();
+        }
+
         $this->layout = null;
         $index_products = $this->ShareUtil->get_index_product($tag);
         $uid = $this->currentUser['id'];
@@ -46,13 +50,15 @@ class WesharesController extends AppController
         $this->set('uid', $uid);
         $this->set('tag', $tag);
 
-
         if(extension_loaded('xhprof') && XHPROF_ON) {
+            $xhprof_data = xhprof_disable();
+            
             include_once __DIR__ . '/../../lib/Xhprof_lib/utils/xhprof_lib.php';
             include_once __DIR__ . '/../../lib/Xhprof_lib/utils/xhprof_runs.php';
-            $objXhprofRun = new XHProfRuns_Default();
-            $data = xhprof_disable();
-            $run_id = $objXhprofRun->save_run($data, "xhprof");
+
+            $xhprof_runs = new XHProfRuns_Default();
+
+            $xhprof_runs->save_run($xhprof_data, "xhprof_weshares");
         }
     }
 
