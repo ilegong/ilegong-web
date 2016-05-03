@@ -15,12 +15,12 @@
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
-/**
+
 define('XHPROF_ON' , true);
 
 if(extension_loaded('xhprof') && XHPROF_ON)
 {
     xhprof_enable(XHPROF_FLAGS_CPU + XHPROF_FLAGS_MEMORY);
 }
-**/
+
 require  '../index.php';
