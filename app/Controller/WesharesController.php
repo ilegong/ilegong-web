@@ -49,6 +49,8 @@ class WesharesController extends AppController
 
         if(extension_loaded('xhprof') && XHPROF_ON) {
             $xhprof_data = xhprof_disable();
+            
+            $this->log($xhprof_data, LOG_ERROR);
 
             include_once __DIR__ . '/../../lib/Xhprof_lib/utils/xhprof_lib.php';
             include_once __DIR__ . '/../../lib/Xhprof_lib/utils/xhprof_runs.php';
