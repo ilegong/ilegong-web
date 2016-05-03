@@ -18,10 +18,10 @@
 
 define('XHPROF_ON' , true);
 
-//if(extension_loaded('xhprof') && XHPROF_ON)
-//{
+if(extension_loaded('xhprof') && XHPROF_ON)
+{
     xhprof_enable(XHPROF_FLAGS_CPU + XHPROF_FLAGS_MEMORY);
     xhprof_enable();
-//}
+}
 
 require  '../index.php';
