@@ -407,6 +407,7 @@ class WesharesController extends AppController
     public function makeOrder()
     {
         $this->autoRender = false;
+        parent::set_current_user_by_access_token();
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
             $this->log('Failed to create order: user not logged in', LOG_WARNING);
