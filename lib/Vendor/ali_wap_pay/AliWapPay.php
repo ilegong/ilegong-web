@@ -141,7 +141,8 @@ class AliWapPay extends Object {
         $req_id = date('Ymdhis').'-'.$out_trade_no;
         $seller_email = ALI_ACCOUNT;
 
-        $merchant_url = $this->alipay_config['transport'].'://'. ALI_HOST."/orders/detail/$order_id/pay.html?from=zhifubaopay";
+        //$merchant_url = $this->alipay_config['transport'].'://'. ALI_HOST."/orders/detail/$order_id/pay.html?from=zhifubaopay";
+        $merchant_url = $this->alipay_config['transport'].'://'. ALI_HOST."/weshares/pay/$order_id/1.html";
         //需http://格式的完整路径，不能加?id=123这类自定义参数
         $notify_url = 'http://'.ALI_HOST.'/ali_pay/wap_notify.html';
         $call_back_url = 'http://'.ALI_HOST.'/ali_pay/wap_return_back'.($type == ALI_PAY_TYPE_WAPAPP?'_app':'').'.html';
