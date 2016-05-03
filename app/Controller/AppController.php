@@ -189,7 +189,8 @@ class AppController extends Controller {
         	}
         	exit;
         }
-    	if (Configure::read('Site.openStatic') && $this->modelClass!='Category' && in_array($this->request->params['action'], array('view'))) {
+
+        if (Configure::read('Site.openStatic') && $this->modelClass!='Category' && in_array($this->request->params['action'], array('view'))) {
             $html = $this->response->body();
             if (substr($this->request->here, -5) == '.html' && empty($this->request->query)) {
                 // when action is view or index,write html cache file on the server.
@@ -198,6 +199,7 @@ class AppController extends Controller {
                 HtmlCache::writefile($this->request->here, $html);
             }
         }
+
     }
 
 	/**
