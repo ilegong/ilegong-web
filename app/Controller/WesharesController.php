@@ -38,7 +38,6 @@ class WesharesController extends AppController
      */
     public function index($tag = 0)
     {
-        error_log('222\r\n' , 3 ,'/tmp/t.log');
         $this->layout = null;
         $index_products = $this->ShareUtil->get_index_product($tag);
         $uid = $this->currentUser['id'];
@@ -47,8 +46,8 @@ class WesharesController extends AppController
         $this->set('uid', $uid);
         $this->set('tag', $tag);
 
-        error_log(var_export(extension_loaded('xhprof') && XHPROF_ON).PHP_EOL , 3 , '/tmp/xhprof.log');
-        
+        $this->log('xhprof test', LOG_ERR);
+
         if(extension_loaded('xhprof') && XHPROF_ON) {
             include_once __DIR__ . '/../../lib/Xhprof_lib/utils/xhprof_lib.php';
             include_once __DIR__ . '/../../lib/Xhprof_lib/utils/xhprof_runs.php';
