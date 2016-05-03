@@ -198,6 +198,16 @@ class AppController extends Controller {
                 HtmlCache::writefile($this->request->here, $html);
             }
         }
+
+        if(extension_loaded('xhprof') && XHPROF_ON) {
+            include_once __DIR__ . '/../lib/Xhprof_lib/utils/xhprof_lib.php';
+            include_once __DIR__ . '/../lib/Xhprof_lib/utils/xhprof_runs.php';
+            $objXhprofRun = new XHProfRuns_Default();
+            $data = xhprof_disable();
+            $run_id = $objXhprofRun->save_run($data, "xhprof");
+            error_log($run_id.PHP_EOL , 3 , '/tmp/xhprof.log');
+        }
+        
     }
 
 	/**
