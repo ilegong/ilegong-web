@@ -1223,9 +1223,7 @@ class WeshareBuyComponent extends Component
     {
         $order_count = $this->get_share_all_buy_count($weshareId, $uid);
         $page_count = ceil($order_count / $this->share_order_count);
-        $share_info = $this->get_weshare_info($weshareId);
-        $refer_share_id = $this->filter_refer_share_id($share_info['refer_share_id'], $share_info['creator']);
-        $page_info = array('order_count' => $order_count, 'page_count' => $page_count, "refer_share_id" => $refer_share_id);
+        $page_info = array('order_count' => $order_count, 'page_count' => $page_count);
         return $page_info;
     }
 
@@ -1420,11 +1418,13 @@ class WeshareBuyComponent extends Component
      */
     public function get_share_detail_view_orders($weshareId, $page, $uid, $combineComment = 0)
     {
+        $weshareM = ClassRegistry::init('Weshare');
+        $related_share_ids = $weshareM->get_relate_share($weshareId);
         $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
         $sort = array('id DESC');
         $query_order_cond = array(
             'conditions' => array(
-                'member_id' => $weshareId,
+                'member_id' => $related_share_ids,
                 'type' => ORDER_TYPE_WESHARE_BUY,
                 'status' => $order_status,
                 'deleted' => DELETED_NO,

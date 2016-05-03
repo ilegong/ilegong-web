@@ -133,8 +133,8 @@
       this.noMore = false;
       this.page = 1;
       this.pageInfo = {};
-      this.referShareId = 0;
-      this.loadedShareIds = [];
+      //this.referShareId = 0;
+      //this.loadedShareIds = [];
       this.orderComments = {};
       this.orderCommentReplies = {};
       this.combineComment = 1;
@@ -156,14 +156,7 @@
     ShareOrder.prototype.nextPage = function () {
       if (this.busy||this.noMore) return;
       if(this.page > this.pageInfo['page_count']){
-        if(!this.referShareId||this.referShareId==0) {
-          this.noMore = true;
-          return;
-        }else{
-          this.loadedShareIds.push(this.shareId);
-          this.shareId = this.referShareId;
-          this.page = 1;
-        }
+        this.noMore = true;
       }
       this.busy = true;
       var url = "/weshares/get_share_order_by_page/" + this.shareId + "/" + this.page + ".json?combineComment=" + this.combineComment;
@@ -177,7 +170,7 @@
           this.levelData = merge_options(this.levelData, data['level_data']);
           if(data['page_info']){
             this.pageInfo = data['page_info'];
-            this.referShareId = data['page_info']['refer_share_id'];
+            //this.referShareId = data['page_info']['refer_share_id'];
           }
           if(data['comment_data']){
             this.orderComments = merge_options(this.orderComments, data['comment_data']['order_comments']);
