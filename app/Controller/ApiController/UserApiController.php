@@ -2,7 +2,7 @@
 
 class UserApiController extends AppController
 {
-    public $components = array('OAuth.OAuth', 'Orders' ,'ChatUtil', 'WeshareBuy', 'ShareUtil', 'UserFans');
+    public $components = array('OAuth.OAuth', 'Orders', 'ChatUtil', 'WeshareBuy', 'ShareUtil', 'UserFans');
     public $uses = array('User', 'UserFriend', 'UserLevel', 'UserRelation');
 
     public function beforeFilter()
@@ -34,7 +34,7 @@ class UserApiController extends AppController
         $params = ['user_id' => $uid, 'status' => $status, 'limit' => $limit, 'page' => $page];
         $orders = $this->Orders->get_user_order($params);
         $result = [];
-        foreach($orders as $order_item){
+        foreach ($orders as $order_item) {
             $result_item = $order_item['Order'];
             $result_item['share_info'] = $order_item['Weshare'];
             $result[] = $result_item;
