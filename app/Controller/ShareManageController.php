@@ -27,7 +27,6 @@ class ShareManageController extends AppController
             'limit' => 100
         )
     );
-
     /**
      * 新版发现页面管理
      * 两块内容
@@ -41,6 +40,9 @@ class ShareManageController extends AppController
      */
     public function find_content()
     {
+        /**
+        $this->check_role();
+        */
         $carousel = ClassRegistry::init('NewFind')->get_all_carousel();
         $top_rank = ClassRegistry::init('NewFind')->get_all_top_rank();
         $this->set('carousel_model', $carousel);
@@ -1172,6 +1174,14 @@ class ShareManageController extends AppController
         echo json_encode($result);
 
         exit();
+    }
+
+    private function check_role()
+    {
+        if(! is_super_share_manager($this->currentUser['id']))
+        {
+            $this->redirect('/sharemanage/index');
+        }
     }
 
 }
