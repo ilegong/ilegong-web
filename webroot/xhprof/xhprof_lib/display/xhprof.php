@@ -30,7 +30,7 @@
 
 if (!isset($GLOBALS['XHPROF_LIB_ROOT'])) {
   // by default, the parent directory is XHPROF lib root
-  $GLOBALS['XHPROF_LIB_ROOT'] = dirname(__FILE__) . '/../../lib/Xhprof_lib';
+  $GLOBALS['XHPROF_LIB_ROOT'] = realpath(dirname(__FILE__) . '/..');
 }
 
 require_once $GLOBALS['XHPROF_LIB_ROOT'].'/utils/xhprof_lib.php';

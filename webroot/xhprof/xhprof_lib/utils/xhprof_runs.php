@@ -116,7 +116,7 @@ class XHProfRuns_Default implements iXHProfRuns {
       $run_desc = "Invalid Run Id = $run_id";
       return null;
     }
-    echo $file_name;die;
+
     $contents = file_get_contents($file_name);
     $run_desc = "XHProf Run (Namespace=$type)";
     return unserialize($contents);
@@ -133,7 +133,6 @@ class XHProfRuns_Default implements iXHProfRuns {
     }
 
     $file_name = $this->file_name($run_id, $type);
-
     $file = fopen($file_name, 'w');
 
     if ($file) {
