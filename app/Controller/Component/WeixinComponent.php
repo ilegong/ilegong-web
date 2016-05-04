@@ -21,7 +21,9 @@ class WeixinComponent extends Component {
         "TUAN_TIP" => "BYtgM4U84etw2qbOyyZzR4FO8a-ddvjy8sgBiAQy64U",
         "JOIN_TUAN" => "P4iCqkiG7_s0SVwCSKyEuJ0NnLDgVNVCm2VQgSGdl-U",
         "REFUND_ORDER" => "j3mRemwa3yq5fjJCiNx5enCMC8C0YEXLehb2HGIiGkw",
-        "REFUNDING_ORDER" => "0m3XwqqqiUSp0ls830LdL24GHTOVHwHd6hAYDx3xthk"
+        "REFUNDING_ORDER" => "0m3XwqqqiUSp0ls830LdL24GHTOVHwHd6hAYDx3xthk",
+        "PIN_TUAN_FAIL" => "0MAsqVfLFyvlZ3LFdhavuq2PXuMxgi1i7rJcmTP31HU",
+        "ORDER_LOGISTICS_INFO" => "3uA5ShDuM6amaaorl6899yMj9QvBmIiIAl7T9_JfR54"
     );
 
     public $kuaidi100_ship_type = array(
@@ -1138,7 +1140,7 @@ class WeixinComponent extends Component {
     public function send_share_product_arrival($user_open_id, $detail_url, $title, $order_id, $address, $user_info, $desc) {
         $post_data = array(
             "touser" => $user_open_id,
-            "template_id" => '3uA5ShDuM6amaaorl6899yMj9QvBmIiIAl7T9_JfR54',
+            "template_id" => $this->wx_message_template_ids['ORDER_LOGISTICS_INFO'],
             "url" => $detail_url,
             "topcolor" => "#FF0000",
             "data" => array(
@@ -1419,7 +1421,7 @@ class WeixinComponent extends Component {
     public function send_logistics_order_notify_msg($user_openid, $url, $title, $order_id, $start_address, $consignee_address, $remark) {
         $post_data = array(
             "touser" => $user_openid,
-            "template_id" => '3uA5ShDuM6amaaorl6899yMj9QvBmIiIAl7T9_JfR54',
+            "template_id" => $this->wx_message_template_ids['ORDER_LOGISTICS_INFO'],
             "url" => $url,
             "topcolor" => "#FF0000",
             "data" => array(
@@ -1446,7 +1448,7 @@ class WeixinComponent extends Component {
     public function send_pintuan_fail_msg($user_open_id, $title, $good_name, $fail_reason, $remark, $url) {
         $post_data = array(
             "touser" => $user_open_id,
-            "template_id" => '0MAsqVfLFyvlZ3LFdhavuq2PXuMxgi1i7rJcmTP31HU',
+            "template_id" => $this->wx_message_template_ids['PIN_TUAN_FAIL'],
             "url" => $url,
             "topcolor" => "#FF0000",
             "data" => array(
@@ -1472,7 +1474,7 @@ class WeixinComponent extends Component {
     public function send_pintuan_success_msg($user_open_id, $title, $good_name, $leader_name, $remark, $url) {
         $post_data = array(
             "touser" => $user_open_id,
-            "template_id" => 'BYtgM4U84etw2qbOyyZzR4FO8a-ddvjy8sgBiAQy64U',
+            "template_id" => $this->wx_message_template_ids['TUAN_TIP'],
             "url" => $url,
             "topcolor" => "#FF0000",
             "data" => array(
@@ -1499,7 +1501,7 @@ class WeixinComponent extends Component {
     {
         $post_data = array(
             "touser" => $user_open_id,
-            "template_id" => 'BYtgM4U84etw2qbOyyZzR4FO8a-ddvjy8sgBiAQy64U',
+            "template_id" => $this->wx_message_template_ids['TUAN_TIP'],
             "url" => $url,
             "topcolor" => "#FF0000",
             "data" => array(
