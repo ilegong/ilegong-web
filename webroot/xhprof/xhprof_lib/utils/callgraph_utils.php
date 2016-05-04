@@ -107,7 +107,7 @@ function xhprof_generate_image_by_dot($dot_script, $type) {
        2 => array("pipe", "w")
        );
 
-  $cmd = " dot -T".$type;
+  $cmd = " /usr/bin/dot -T".$type;
 
   $process = proc_open($cmd, $descriptorspec, $pipes, "/tmp", array());
   if (is_resource($process)) {
