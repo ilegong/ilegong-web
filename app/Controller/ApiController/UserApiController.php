@@ -15,6 +15,13 @@ class UserApiController extends AppController
         $this->autoRender = false;
     }
 
+    //查看别人的信息
+    public function show_user_info($uid)
+    {
+
+    }
+
+
     public function user_detail()
     {
         $uid = $this->currentUser['id'];
