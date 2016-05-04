@@ -1562,7 +1562,7 @@ class ShareUtilComponent extends Component
             if ($total_difference_price > 0) {
                 $title = $title . '，合计你还需要补余款' . $total_difference_price . '元，谢谢你的支持！';
                 //to pay
-                $detail_url = 'http://www.tongshijia.com/weshares/pay_order_add/' . $new_order['Order']['id'];
+                $detail_url = 'http://'.WX_HOST.'/weshares/pay_order_add/' . $new_order['Order']['id'];
             } else {
                 $title = $title . '我们将会在3-5个工作日给你退款' . abs($total_difference_price) . '元，谢谢你的支持！';
                 $detail_url = $this->WeshareBuy->get_weshares_detail_url($weshare_id);

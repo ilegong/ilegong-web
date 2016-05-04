@@ -1279,7 +1279,7 @@
 
     //设置微信分享的参数
     function setWeiXinShareParams() {
-      var url = 'http://www.tongshijia.com/weshares/view/' + vm.weshare.id;
+      var url = 'http://'+window.location.host+'/weshares/view/' + vm.weshare.id;
       //creator
       var to_timeline_title = '朋友说—基于信任关系的分享平台';
       var to_friend_title = '朋友说—基于信任关系的分享平台';
@@ -1338,7 +1338,7 @@
       }
       //share packet
       if (vm.isSharePacket && userInfo) {
-        url = 'http://www.tongshijia.com/weshares/view/' + vm.weshare.id;
+        url = l = 'http://'+window.location.host+'/weshares/view/' + vm.weshare.id;
         imgUrl = 'http://static.tongshijia.com/static/weshares/images/share_icon.jpg';
         var title = userInfo.nickname + '报名了' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
         to_timeline_title = title;
