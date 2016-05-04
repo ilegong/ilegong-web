@@ -23,7 +23,10 @@ class WeixinComponent extends Component {
         "REFUND_ORDER" => "j3mRemwa3yq5fjJCiNx5enCMC8C0YEXLehb2HGIiGkw",
         "REFUNDING_ORDER" => "0m3XwqqqiUSp0ls830LdL24GHTOVHwHd6hAYDx3xthk",
         "PIN_TUAN_FAIL" => "0MAsqVfLFyvlZ3LFdhavuq2PXuMxgi1i7rJcmTP31HU",
-        "ORDER_LOGISTICS_INFO" => "3uA5ShDuM6amaaorl6899yMj9QvBmIiIAl7T9_JfR54"
+        "ORDER_LOGISTICS_INFO" => "3uA5ShDuM6amaaorl6899yMj9QvBmIiIAl7T9_JfR54",
+        "RECOMMEND_TEMPLATE_MSG" => "XgB0hibK6F3RXkXrQxT5LilfjQOAYUhjiCQ-XPW2ccw",
+        "FAQ_NOTIFY" => "xJMoewdihfWaopdnP5oSa1qQahuKRMOSMSImyfjVQBE",
+        "REPAID_NOTIFY" => "CY69fWO3zw8S6dWiPQFs3W9LgVHRMDFXMl_8CeLLWmI"
     );
 
     public $kuaidi100_ship_type = array(
@@ -1189,7 +1192,7 @@ class WeixinComponent extends Component {
     public function send_rebate_template_msg($user_open_id, $detail_url, $order_id, $order_money, $pay_time, $rebate_money, $title) {
         $post_data = array(
             "touser" => $user_open_id,
-            "template_id" => 'DVuV9VC7qYa4H8oP1BaZosOViQ7RrU3v558VrjO7Cv0',
+            "template_id" => $this->wx_message_template_ids['ORDER_REBATE'],
             "url" => $detail_url,
             "topcolor" => "#FF0000",
             "data" => array(
@@ -1207,7 +1210,7 @@ class WeixinComponent extends Component {
     public function send_recommend_template_msg($user_open_id, $detail_url, $remark, $title, $product_name, $sharer) {
         $post_data = array(
             "touser" => $user_open_id,
-            "template_id" => 'P4iCqkiG7_s0SVwCSKyEuJ0NnLDgVNVCm2VQgSGdl-U',
+            "template_id" => $this->wx_message_template_ids['JOIN_TUAN'],
             "url" => $detail_url,
             "topcolor" => "#FF0000",
             "data" => array(
@@ -1234,7 +1237,7 @@ class WeixinComponent extends Component {
         //删除 [推荐报告通知]
         $post_data = array(
             "touser" => $user_open_id,
-            "template_id" => 'XgB0hibK6F3RXkXrQxT5LilfjQOAYUhjiCQ-XPW2ccw',
+            "template_id" => $this->wx_message_template_ids['RECOMMEND_TEMPLATE_MSG'],
             "url" => $detail_url,
             "topcolor" => "#FF0000",
             "data" => array(
@@ -1259,7 +1262,7 @@ class WeixinComponent extends Component {
     public function send_faq_notify_template_msg($user_open_id, $detail_url, $title, $msg, $share_title) {
         $post_data = array(
             "touser" => $user_open_id,
-            "template_id" => 'xJMoewdihfWaopdnP5oSa1qQahuKRMOSMSImyfjVQBE',
+            "template_id" => $this->wx_message_template_ids['FAQ_NOTIFY'],
             "url" => $detail_url,
             "topcolor" => "#FF0000",
             "data" => array(
@@ -1364,7 +1367,7 @@ class WeixinComponent extends Component {
         //微信公众号 已经删除 [尾款提醒通知]
         $post_data = array(
             "touser" => $user_openid,
-            "template_id" => 'CY69fWO3zw8S6dWiPQFs3W9LgVHRMDFXMl_8CeLLWmI',
+            "template_id" => $this->wx_message_template_ids['REPAID_NOTIFY'],
             "url" => $detail_url,
             "topcolor" => "#FF0000",
             "data" => array(
@@ -1392,7 +1395,7 @@ class WeixinComponent extends Component {
     public function send_logistics_order_paid_msg($user_openid, $title, $order_price, $product_name, $consignee_address, $order_id, $remark, $detail_url) {
         $post_data = array(
             "touser" => $user_openid,
-            "template_id" => 'UXmiPQNz46zZ2nZfDZVVd9xLIx28t66ZPNBoX1WhE8Q',
+            "template_id" => $this->wx_message_template_ids['ORDER_PAID'],
             "url" => $detail_url,
             "topcolor" => "#FF0000",
             "data" => array(
@@ -1513,5 +1516,7 @@ class WeixinComponent extends Component {
         );
         return $this->send_weixin_message($post_data);
     }
+
+
 
 }

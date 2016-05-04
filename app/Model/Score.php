@@ -105,8 +105,8 @@ class Score extends AppModel {
             'order_id' => empty($orderId) ? 0 : $orderId,
         ));
         if ($saved) {
-            $action = action_of_score_item($change, $reason);
-            $this->send_score_change_message($userId, $desc, $action, $change);
+            //$action = action_of_score_item($change, $reason);
+            //$this->send_score_change_message($userId, $desc, $action, $change);
         }
         return $saved;
     }
