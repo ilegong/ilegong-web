@@ -42,7 +42,8 @@ class OrdersComponent extends Component
     public function get_order_info_with_cart($order_id)
     {
         $orderM = ClassRegistry::init('Order');
-        $result = $orderM->find('all', [
+        $cartM  = ClassRegistry::init('Cart');
+        $result = $orderM->find('first', [
             'conditions' => [
                 'Order.id' => $order_id
             ],
@@ -50,12 +51,25 @@ class OrdersComponent extends Component
                 [
                     'table' => 'carts',
                     'alias' => 'Cart',
-                    'conditions' => ['Order.id = Cart.order_id']
+                    'conditions' => ['Order.id = Cart.order_id'],
+                    'type' => 'right'
+                ],
+                [
+                    'table' => 'pay_notifies',
+                    'alias' => 'Pay',
+                    'conditions' => [ 'Pay.order_id = Order.id'],
+                    'type' => 'left'
                 ]
             ],
-            'fields' => ['Order.id', 'Order.status', 'Order.created', 'Order.consignee_name', 'Order.consignee_address', 'Order.consignee_mobilephone', 'Order.total_all_price', 'Order.ship_type_name', 'Order.ship_type', 'Order.ship_fee', 'Order.ship_code', 'Order.pay_time', 'Order.coupon_total', 'Order.brand_id', 'Cart.name', 'Cart.num', 'Cart.price']
+            'fields' => ['Order.id', 'Order.status', 'Order.business_remark' ,'Order.created', 'Order.consignee_name', 'Order.consignee_address', 'Order.consignee_mobilephone', 'Order.total_all_price', 'Order.ship_type_name', 'Order.ship_type', 'Order.ship_fee', 'Order.ship_code', 'Order.pay_time', 'Order.coupon_total', 'Order.brand_id', 'Pay.trade_type']
         ]);
-
+        $carts = $cartM->find('all', [
+            'conditions' => [
+                'order_id' => $order_id
+            ],
+            'fields' => ['Cart.name', 'Cart.num', 'Cart.price']
+        ]);
+        $result['carts'] = Hash::extract($carts, '{n}.Cart');
         return $result;
     }
 
