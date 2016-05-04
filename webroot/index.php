@@ -9,13 +9,29 @@ if(extension_loaded('xhprof') && XHPROF_ON)
 
 define('DEFAULT_SITE_HOST','www.tongshijia.com');
 define('SH_SITE_HOST','sh.tongshijia.com');
-define('WX_APPID', 'wxca7838dcade4709c');
-define('WX_APPID_SOURCE', 'wxca78');
-define('WX_SECRET', '79b787ec8f463eeb769540464c9277b2');
-define('WX_SERVICE_ID_NAME', '朋友说');
-define('WX_SERVICE_ID_NO', 'pyshuo2014');
-define('CACHE_PREFIX' , '');
-define('WX_HOST', DEFAULT_SITE_HOST);
+
+if($_SERVER['HTTP_HOST'] == SH_SITE_HOST){
+    define('WX_APPID', 'wx65d0c25ec24bb4c2');
+    define('WX_APPID_SOURCE', 'wx65d0');
+    define('WX_SECRET', '36dac48558049698efe1d2da8b1ee904');
+    define('WX_SERVICE_ID_NAME', '朋友说上海');
+    define('WX_SERVICE_ID_NO', 'pyshuo01');
+    define('CACHE_PREFIX' , 'sh');
+    define('WX_HOST',SH_SITE_HOST);
+}else{
+    define('WX_APPID', 'wxca7838dcade4709c');
+    define('WX_APPID_SOURCE', 'wxca78');
+    define('WX_SECRET', '79b787ec8f463eeb769540464c9277b2');
+    define('WX_SERVICE_ID_NAME', '朋友说');
+    define('WX_SERVICE_ID_NO', 'pyshuo2014');
+    define('CACHE_PREFIX' , '');
+    define('WX_HOST', DEFAULT_SITE_HOST);
+    define('WX_SERVICE_ID_GOTO', 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200757804&idx=1&sn=90b121983525298a4ac26ee8d6c0bc1c#rd');
+}
+define('WX_JS_API_CALL_URL', 'http://'.WX_HOST.'/wxPay/jsApiPay');
+define('WX_JS_LOGISTICS_API_CALL_URL', 'http://'.WX_HOST.'/wxPay/logistics_order_pay');
+define('WX_NOTIFY_URL', 'http://'.WX_HOST.'/wxPay/notify.html');
+define('WX_LOGISTICS_NOTIFY_URL', 'http://'.WX_HOST.'/wxPay/logistics_notify.html');
 
 if (!defined('DS')) {
     define('DS', DIRECTORY_SEPARATOR);
