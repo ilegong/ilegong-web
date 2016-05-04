@@ -42,7 +42,7 @@ class WesharesController extends AppController
         $index_products = $this->ShareUtil->get_index_product($tag);
         $uid = $this->currentUser['id'];
         $this->set('index_products', $index_products);
-        $this->set('weshare_ids', Hash::extract($index_products, '{n}.Weshare.id'));
+        //$this->set('weshare_ids', Hash::extract($index_products, '{n}.Weshare.id'));
         $this->set('uid', $uid);
         $this->set('tag', $tag);
     }
