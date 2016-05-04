@@ -250,6 +250,56 @@ class WesharesComponent extends Component
         $this->on_weshare_deleted($uid, $weshare_id);
     }
 
+    public function get_u_create_share($uid, $limit, $page){
+        $weshareM = ClassRegistry::init('Weshare');
+        $weshares = $weshareM->find('all', [
+            'conditions' => [
+                'creator' => $uid,
+                'status' => WESHARE_STATUS_NORMAL
+            ],
+            'limit' => $limit,
+            'page' => $page,
+            'order' => ['id DESC']
+        ]);
+        $result = [];
+        foreach($weshares as $weshare_item){
+            $data_item =  $weshare_item['Weshare'];
+            $data_item['summary'] = $this->ShareUtil->get_index_product_summary($data_item['id']);
+            $result[][] = $data_item;
+        }
+        return $result;
+    }
+
+    public function get_u_buy_share($uid, $limit, $page)
+    {
+        $optLogM = ClassRegistry::init('OptLog');
+        $logs = $optLogM->find('all', [
+            'conditions' => [
+                'user_id' => $uid,
+                'obj_type' => OPT_LOG_SHARE_BUY
+            ],
+            'joins' => [
+                [
+                    'table' => 'weshares',
+                    'alias' => 'Weshare',
+                    'conditions' => ['Weshare.id = OptLog.obj_id'],
+                    'type' => 'left'
+                ]
+            ],
+            'fields' => ['Weshare.*'],
+            'limit' => $limit,
+            'page' => $page,
+            'order' => ['OptLog.id DESC']
+        ]);
+        $result = [];
+        foreach ($logs as $log_item) {
+            $data_item = $log_item['Weshare'];
+            $log_item['summary'] = $this->ShareUtil->get_index_product_summary($data_item['id']);
+            $result[][] = $data_item;
+        }
+        return $result;
+    }
+
 
     private function on_weshare_stopped($uid, $weshare_id)
     {

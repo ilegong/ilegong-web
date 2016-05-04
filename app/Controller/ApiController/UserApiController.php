@@ -7,7 +7,7 @@ class UserApiController extends AppController
 
     public function beforeFilter()
     {
-        $allow_action = array('test', 'check_mobile_available');
+        $allow_action = array('test', 'check_mobile_available', 'show_user_info');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action) == false) {
             $this->currentUser = $this->OAuth->user();
@@ -18,9 +18,29 @@ class UserApiController extends AppController
     //查看别人的信息
     public function show_user_info($uid)
     {
-
+        $curr_uid = $this->currentUser['id'];
+        $user_summary = $this->WeshareBuy->get_user_share_summary($uid);
+        $user_info = $this->get_user_info($uid);
+        $user_info['image'] = get_user_avatar($user_info);
+        $sub_status = $this->ShareUtil->check_user_relation($curr_uid, $uid);
+        echo json_encode(['sub_status' => $sub_status, 'user_summary' => $user_summary, 'user_info' => $user_info['User']]);
+        exit();
     }
 
+    //获取用户创建的分享
+    public function get_user_create_shares($uid, $limit, $page)
+    {
+        $result = $this->Weshares->get_u_create_share($uid, $limit, $page);
+        echo json_encode($result);
+        exit();
+    }
+    //获取用户购买的分享
+    public function get_user_buy_shares($uid, $limit, $page)
+    {
+        $result = $this->Weshares->get_u_buy_share($uid, $limit, $page);
+        echo json_encode($result);
+        exit();
+    }
 
     public function user_detail()
     {
@@ -181,7 +201,7 @@ class UserApiController extends AppController
     {
         $datainfo = $this->User->find('first', array('recursive' => -1,
             'conditions' => array('id' => $user_id),
-            'fields' => array('nickname', 'image', 'sex', 'mobilephone', 'username', 'id', 'hx_password', 'description', 'payment')));
+            'fields' => array('nickname', 'image', 'sex', 'mobilephone', 'username', 'id', 'hx_password', 'description', 'payment', 'avatar')));
         return $datainfo;
     }
 
