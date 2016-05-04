@@ -28,11 +28,6 @@ class WesharesController extends AppController
         $this->layout = 'weshare';
     }
 
-    public function tutorial()
-    {
-        $this->layout = 'tutorial_layout';
-    }
-
     /**
      * @param $tag
      * 首页
@@ -182,7 +177,7 @@ class WesharesController extends AppController
             'fields' => $user_fields,
         ));
         if (empty($current_user['User']['mobilephone'])) {
-            $ref_url = WX_HOST . '/weshares/tutorial';
+            $ref_url = WX_HOST . '/users/tutorial';
             if ($_REQUEST['has_read']) {
                 $ref_url = WX_HOST . '/weshares/add';
             }

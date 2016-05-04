@@ -1224,23 +1224,6 @@ class UsersController extends AppController
         return ($nickname == '' ? '用户_' . mt_rand(10, 1000) : $nickname);
     }
 
-    function complete_user_info()
-    {
-        $this->pageTitle = "完善用户信息";
-        $from = $_REQUEST['from'];
-        $this->set('from', $from);
-        $this->set('hideNav', true);
-        $uid = $this->currentUser['id'];
-        $current_user = $this->User->find('first', array(
-            'conditions' => array(
-                'id' => $uid
-            ),
-            'fields' => array('payment', 'description'),
-            'recursive' => 1, //int
-        ));
-        $this->set('user', $current_user);
-    }
-
     function complete()
     {
         $this->autoRender = false;
@@ -1257,8 +1240,15 @@ class UsersController extends AppController
         return;
     }
 
+    public function tutorial()
+    {
+        $this->layout = 'tutorial_layout';
+    }
+
     function to_bind_mobile()
     {
+        $this->layout = 'tutorial_layout';
+
         $userId = $this->Session->read('Auth.User.id');
         $userNickName = $this->Session->read('Auth.User.nickname');
         $orderId = $_REQUEST['order_id'];
@@ -1276,6 +1266,26 @@ class UsersController extends AppController
 
         $this->pageTitle = "绑定手机号";
     }
+
+    function complete_user_info()
+    {
+        $this->layout = 'tutorial_layout';
+
+        $this->pageTitle = "完善用户信息";
+        $from = $_REQUEST['from'];
+        $this->set('from', $from);
+        $this->set('hideNav', true);
+        $uid = $this->currentUser['id'];
+        $current_user = $this->User->find('first', array(
+            'conditions' => array(
+                'id' => $uid
+            ),
+            'fields' => array('payment', 'description'),
+            'recursive' => 1, //int
+        ));
+        $this->set('user', $current_user);
+    }
+
 
     function merge_data()
     {
