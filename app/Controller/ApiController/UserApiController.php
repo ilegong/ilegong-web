@@ -46,8 +46,9 @@ class UserApiController extends AppController
     public function user_order_detail($order_id)
     {
         $order = $this->Orders->get_order_info_with_cart($order_id);
-        $result = $order[0]['Order'];
-        $result['carts'] = Hash::extract($order, '{n}.Cart');
+        $result = $order['Order'];
+        $result['pay_type'] = $order['Pay']['trade_type'];
+        $result['carts'] = $order['carts'];
         echo json_encode($result);
         exit();
     }
