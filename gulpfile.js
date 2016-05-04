@@ -133,6 +133,12 @@ var all_css = [
       'webroot/static/weshares/css/user-info.css',
     ],
     dist: 'webroot/static/weshares/css/'
+  }, {
+    name: 'tutorial.min.css',
+    sources: [
+      'webroot/src/scss/tutorial.scss',
+    ],
+    dist: 'webroot/static/weshares/css/'
   }];
 
 var js_tasks = [];

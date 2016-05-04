@@ -30,7 +30,7 @@ class WesharesController extends AppController
 
     public function tutorial()
     {
-        $this->layout = null;
+        $this->layout = 'tutorial_layout';
     }
 
     /**
