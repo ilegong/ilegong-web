@@ -33,7 +33,7 @@ class JPushComponent extends Component
             ->setNotificationAlert($title)
             ->addIosNotification($title, 'iOS sound', '+1', true, 'iOS category', $extras)
             ->setMessage($content, $title, $type, $extras)
-            ->setOptions(mt_rand(), $this->time_to_live, null, null, null)
+            ->setOptions(mt_rand(), $this->time_to_live, null, null, 1000)
             ->send();;
 
         return $result;
