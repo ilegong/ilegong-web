@@ -249,7 +249,7 @@ class WeixinController extends AppController {
         if ($do_bind) {
             $return_uri = urlencode('http://'.WX_HOST.'/users/wx_auth');
             $state = base64_encode(authcode($subOpenId, 'ENCODE') . "redirect_url_" . $url);
-            return 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' . WX_APPID . '&redirect_uri=' . $return_uri . '&response_type=code&scope=snsapi_base&state=' . $state . '#wechat_redirect';
+            return 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' . WX_APPID . '&redirect_uri=' . $return_uri . '&response_type=code&scope='.WX_OAUTH_USERINFO.'&state=' . $state . '#wechat_redirect';
         }  else {
             return $url;
         }

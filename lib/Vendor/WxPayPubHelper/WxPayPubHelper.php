@@ -828,7 +828,7 @@ class JsApi_pub extends Common_util_pub
 		$urlObj["appid"] = WxPayConf_pub::APPID;
 		$urlObj["redirect_uri"] = "$redirectUrl";
 		$urlObj["response_type"] = "code";
-		$urlObj["scope"] = "snsapi_base";
+		$urlObj["scope"] = WX_OAUTH_USERINFO;
 		$urlObj["state"] = "STATE"."#wechat_redirect";
 		$bizString = $this->formatBizQueryParaMap($urlObj, false);
 		return "https://open.weixin.qq.com/connect/oauth2/authorize?".$bizString;

@@ -16,7 +16,7 @@ class WeixinPubController extends AppController {
         $ref = Router::url($_SERVER['REQUEST_URI']);
         if ($this->is_weixin()) {
             $return_uri = urlencode('http://'.WX_HOST.'/weixin_pub/auth?exid='.$exId.'&uid='.$currId);
-            $login_url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' . self::$appids[$exId] . '&redirect_uri=' . $return_uri . "&response_type=code&scope=".WX_OAUTH_BASE."&state=0#wechat_redirect";
+            $login_url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' . self::$appids[$exId] . '&redirect_uri=' . $return_uri . "&response_type=code&scope=".WX_OAUTH_USERINFO."&state=0#wechat_redirect";
             $this->redirect($login_url);
         }
     }
