@@ -848,7 +848,7 @@ class UsersController extends AppController
                     } else {
                         $old_serviceAccount_binded_uid = $oauth['Oauthbinds']['user_id'];
                     }
-                    $oauth['Oauthbinds']['unionId'] = $res['unionid'];
+                    //$oauth['Oauthbinds']['unionId'] = $res['unionid'];
                     $oauth['Oauthbinds']['oauth_token'] = $access_token;
                     $oauth['Oauthbinds']['oauth_token_secret'] = empty($refresh_token) ? '' : $refresh_token;
                     $oauth['Oauthbinds']['updated'] = date(FORMAT_DATETIME);
