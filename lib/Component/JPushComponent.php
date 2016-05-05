@@ -26,14 +26,17 @@ class JPushComponent extends Component
         }, $user_ids);
         $type = strval($type);
         $client = $this->get_push_client();
+        //$sendno=null, $time_to_live=null, $override_msg_id=null, $apns_production=null, $big_push_duration=null
         $result  = $client->push()
             ->setPlatform($this->all_platforms)
             ->addAlias($user_ids)
             ->setNotificationAlert($title)
             ->addIosNotification($title, 'iOS sound', '+1', true, 'iOS category', $extras)
             ->setMessage($content, $title, $type, $extras)
-            ->setOptions(mt_rand(), $this->time_to_live, null, false)
-            ->send();;
+            ->setOptions(mt_rand(), $this->time_to_live, null, null, 1000)
+            ->send();
+
+        $this->log('push msg result ' . json_encode($result), LOG_DEBUG);
 
         return $result;
     }

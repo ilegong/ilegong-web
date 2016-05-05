@@ -920,7 +920,7 @@ class ShareUtilComponent extends Component
         try {
             $this->SharePush->push_buy_msg($optData, $share_info);
         } catch (Exception $e) {
-            $this->log('push faq msg error data ' . json_encode($optData) . 'msg ' . $e->getMessage());
+            $this->log('push buy msg error data ' . json_encode($optData) . 'msg ' . $e->getMessage());
         }
     }
 
@@ -988,7 +988,7 @@ class ShareUtilComponent extends Component
         try {
             $this->SharePush->push_comment_msg($optData, $share_info);
         } catch (Exception $e) {
-            $this->log('push faq msg error data ' . json_encode($optData) . 'msg ' . $e->getMessage());
+            $this->log('push comment msg error data ' . json_encode($optData) . 'msg ' . $e->getMessage());
         }
     }
 
