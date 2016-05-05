@@ -33,7 +33,6 @@ class SharePushComponent extends Component
 
     public function push_faq_msg($faqData)
     {
-        $this->log('push faq');
         $msg = $faqData['msg'];
         $users = $this->get_users([$faqData['receiver'], $faqData['sender']]);
         $title = $users[$faqData['sender']]['nickname'] . ' : ' . $msg;
