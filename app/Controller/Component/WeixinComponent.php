@@ -48,6 +48,16 @@ class WeixinComponent extends Component {
         //"REPAID_NOTIFY" => "CY69fWO3zw8S6dWiPQFs3W9LgVHRMDFXMl_8CeLLWmI"
     );
 
+    private function get_template_msg_id($key){
+        $templates = [];
+        if(WX_HOST==SH_SITE_HOST){
+            $templates = $this->sh_wx_message_template_ids;
+        }else{
+            $templates = $this->wx_message_template_ids;
+        }
+        return $templates[$key];
+    }
+
     public $kuaidi100_ship_type = array(
         101 => 'shentong',
         102 => 'yuantong',
@@ -137,7 +147,7 @@ class WeixinComponent extends Component {
             $open_id = $user_weixin['oauth_openid'];
             $post_data = array(
                 "touser" => $open_id,
-                "template_id" => $this->wx_message_template_ids["COUPON_TIMEOUT"],
+                "template_id" => $this->get_template_msg_id("COUPON_TIMEOUT"),
                 "url" => $this->get_coupon_url(),
                 "topcolor" => "#FF0000",
                 "data" => array(
@@ -172,7 +182,7 @@ class WeixinComponent extends Component {
             }
             $post_data = array(
                 "touser" => $open_id,
-                "template_id" => $this->wx_message_template_ids["ORDER_SHIPPED"],
+                "template_id" => $this->get_template_msg_id("ORDER_SHIPPED"),
 //            "url" => $this->get_kuaidi_query_url($ship_type, $ship_code),
                 "url" => $url,
                 "topcolor" => "#FF0000",
@@ -197,7 +207,7 @@ class WeixinComponent extends Component {
             $open_id = $user_weixin['oauth_openid'];
             $post_data = array(
                 "touser" => $open_id,
-                "template_id" => $this->wx_message_template_ids["ORDER_SHIPPED"],
+                "template_id" => $this->get_template_msg_id("ORDER_SHIPPED"),
 //            "url" => $this->get_kuaidi_query_url($ship_type, $ship_code),
                 "url" => $this->get_order_query_url($order_id),
                 "topcolor" => "#FF0000",
@@ -229,7 +239,7 @@ class WeixinComponent extends Component {
         $org_msg = "亲，您的订单已完成付款，商家将即时为您发货。";
         $post_data = array(
             "touser" => $open_id,
-            "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
+            "template_id" => $this->get_template_msg_id("ORDER_PAID"),
             "url" => $this->get_order_query_url($order['Order']['id']),
             "topcolor" => "#FF0000",
             "data" => array(
@@ -256,7 +266,7 @@ class WeixinComponent extends Component {
         }
         $post_data = array(
             "touser" => $open_id,
-            "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
+            "template_id" => $this->get_template_msg_id("ORDER_PAID"),
             "url" => $url,
             "topcolor" => "#FF0000",
             "data" => array(
@@ -274,7 +284,7 @@ class WeixinComponent extends Component {
     public function send_order_paid_message_for_seller($seller_open_id, $price, $good_info, $ship_info, $order_no) {
         $post_data = array(
             "touser" => $seller_open_id,
-            "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
+            "template_id" => $this->get_template_msg_id("ORDER_PAID"),
             "url" => $this->get_seller_order_query_url(),
             "topcolor" => "#FF0000",
             "data" => array(
@@ -292,7 +302,7 @@ class WeixinComponent extends Component {
     public function send_rice_paid_message($open_id, $price, $good_info, $ship_info, $order_no) {
         $post_data = array(
             "touser" => $open_id,
-            "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
+            "template_id" => $this->get_template_msg_id("ORDER_PAID"),
             "url" => $this->get_rice_detail_url(),
             "topcolor" => "#FF0000",
             "data" => array(
@@ -311,7 +321,7 @@ class WeixinComponent extends Component {
         $friend_name = empty($buyer_name) ? "神秘人" : $buyer_name;
         $post_data = array(
             "touser" => $open_id,
-            "template_id" => $this->wx_message_template_ids["ORDER_REBATE"],
+            "template_id" => $this->get_template_msg_id("ORDER_REBATE"),
             "url" => $this->get_order_rebate_url(),
             "topcolor" => "#FF0000",
             "data" => array(
@@ -329,7 +339,7 @@ class WeixinComponent extends Component {
     public function send_order_shipped_message($open_id, $ship_type, $ship_company, $ship_code, $good_info, $good_number, $order_id) {
         $post_data = array(
             "touser" => $open_id,
-            "template_id" => $this->wx_message_template_ids["ORDER_SHIPPED"],
+            "template_id" => $this->get_template_msg_id("ORDER_SHIPPED"),
 //            "url" => $this->get_kuaidi_query_url($ship_type, $ship_code),
             "url" => $this->get_order_query_url($order_id),
             "topcolor" => "#FF0000",
@@ -373,7 +383,7 @@ class WeixinComponent extends Component {
         }
         $post_data = array(
             "touser" => $open_id,
-            "template_id" => $this->wx_message_template_ids["PACKET_RECEIVED"],
+            "template_id" => $this->get_template_msg_id("PACKET_RECEIVED"),
             "url" => $detail_url,
             "topcolor" => "#FF0000",
             "data" => array(
@@ -398,7 +408,7 @@ class WeixinComponent extends Component {
             $open_id = $user_weixin['oauth_openid'];
             $post_data = array(
                 "touser" => $open_id,
-                "template_id" => $this->wx_message_template_ids["PACKET_BE_GOT"],
+                "template_id" => $this->get_template_msg_id("PACKET_BE_GOT"),
                 "url" => $detail_url,
                 "topcolor" => "#FF0000",
                 "data" => array(
@@ -523,7 +533,7 @@ class WeixinComponent extends Component {
             $open_id = $user_weixin['oauth_openid'];
             $post_data = array(
                 "touser" => $open_id,
-                "template_id" => $this->wx_message_template_ids["PACKET_RECEIVED"],
+                "template_id" => $this->get_template_msg_id("PACKET_RECEIVED"),
                 "url" => $this->get_mihoutao_game_url(),
                 "topcolor" => "#FF0000",
                 "data" => array(
@@ -554,7 +564,7 @@ class WeixinComponent extends Component {
             $open_id = $user_weixin['oauth_openid'];
             $post_data = array(
                 "touser" => $open_id,
-                "template_id" => $this->wx_message_template_ids["COUPON_RECEIVED"],
+                "template_id" => $this->get_template_msg_id("COUPON_RECEIVED"),
                 "url" => $coupon_url,
                 "topcolor" => "#FF0000",
                 "data" => array(
@@ -707,7 +717,7 @@ class WeixinComponent extends Component {
             $open_id = $user_weixin['oauth_openid'];
             $post_data = array(
                 "touser" => $open_id,
-                "template_id" => $this->wx_message_template_ids["TUAN_TIP"],
+                "template_id" => $this->get_template_msg_id("TUAN_TIP"),
                 "url" => $deatil_url,
                 "topcolor" => "#FF0000",
                 "data" => array(
@@ -736,7 +746,7 @@ class WeixinComponent extends Component {
         if (!empty($open_id)) {
             $post_data = array(
                 "touser" => $open_id,
-                "template_id" => $this->wx_message_template_ids["TUAN_TIP"],
+                "template_id" => $this->get_template_msg_id("TUAN_TIP"),
                 "url" => $detail_url,
                 "topcolor" => "#FF0000",
                 "data" => array(
@@ -770,7 +780,7 @@ class WeixinComponent extends Component {
         }
         $post_data = array(
             "touser" => $open_id,
-            "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
+            "template_id" => $this->get_template_msg_id("ORDER_PAID"),
             "url" => $this->get_order_query_url($order_no),
             "topcolor" => "#FF0000",
             "data" => array(
@@ -909,7 +919,7 @@ class WeixinComponent extends Component {
         $org_msg = $org_msg . $creatorNickName;
         $post_data = array(
             "touser" => $open_id,
-            "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
+            "template_id" => $this->get_template_msg_id("ORDER_PAID"),
             "url" => $this->get_pintuan_detail($order['Order']['member_id'], $order['Order']['group_id']),
             "topcolor" => "#FF0000",
             "data" => array(
@@ -941,7 +951,7 @@ class WeixinComponent extends Component {
         $org_msg = $org_msg . $creatorNickName . '电话:' . $creatorInfo['User']['mobilephone'];
         $post_data = array(
             "touser" => $open_id,
-            "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
+            "template_id" => $this->get_template_msg_id("ORDER_PAID"),
             "url" => $this->get_weshare_buy_detail($order['Order']['member_id']),
             "topcolor" => "#FF0000",
             "data" => array(
@@ -1043,7 +1053,7 @@ class WeixinComponent extends Component {
         }
         $post_data = array(
             "touser" => $seller_open_id,
-            "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
+            "template_id" => $this->get_template_msg_id("ORDER_PAID"),
             "url" => $detail_url,
             "topcolor" => "#FF0000",
             "data" => array(
@@ -1162,7 +1172,7 @@ class WeixinComponent extends Component {
     public function send_share_product_arrival($user_open_id, $detail_url, $title, $order_id, $address, $user_info, $desc) {
         $post_data = array(
             "touser" => $user_open_id,
-            "template_id" => $this->wx_message_template_ids['ORDER_LOGISTICS_INFO'],
+            "template_id" => $this->get_template_msg_id('ORDER_LOGISTICS_INFO'),
             "url" => $detail_url,
             "topcolor" => "#FF0000",
             "data" => array(
@@ -1211,7 +1221,7 @@ class WeixinComponent extends Component {
     public function send_rebate_template_msg($user_open_id, $detail_url, $order_id, $order_money, $pay_time, $rebate_money, $title) {
         $post_data = array(
             "touser" => $user_open_id,
-            "template_id" => $this->wx_message_template_ids['ORDER_REBATE'],
+            "template_id" => $this->get_template_msg_id('ORDER_REBATE'),
             "url" => $detail_url,
             "topcolor" => "#FF0000",
             "data" => array(
@@ -1229,7 +1239,7 @@ class WeixinComponent extends Component {
     public function send_recommend_template_msg($user_open_id, $detail_url, $remark, $title, $product_name, $sharer) {
         $post_data = array(
             "touser" => $user_open_id,
-            "template_id" => $this->wx_message_template_ids['JOIN_TUAN'],
+            "template_id" => $this->get_template_msg_id('JOIN_TUAN'),
             "url" => $detail_url,
             "topcolor" => "#FF0000",
             "data" => array(
@@ -1256,7 +1266,7 @@ class WeixinComponent extends Component {
         //删除 [推荐报告通知]
         $post_data = array(
             "touser" => $user_open_id,
-            "template_id" => $this->wx_message_template_ids['RECOMMEND_TEMPLATE_MSG'],
+            "template_id" => $this->get_template_msg_id('RECOMMEND_TEMPLATE_MSG'),
             "url" => $detail_url,
             "topcolor" => "#FF0000",
             "data" => array(
@@ -1281,7 +1291,7 @@ class WeixinComponent extends Component {
     public function send_faq_notify_template_msg($user_open_id, $detail_url, $title, $msg, $share_title) {
         $post_data = array(
             "touser" => $user_open_id,
-            "template_id" => $this->wx_message_template_ids['FAQ_NOTIFY'],
+            "template_id" => $this->get_template_msg_id('FAQ_NOTIFY'),
             "url" => $detail_url,
             "topcolor" => "#FF0000",
             "data" => array(
@@ -1317,7 +1327,7 @@ class WeixinComponent extends Component {
             $open_id = $user_weixin['oauth_openid'];
             $post_data = array(
                 "touser" => $open_id,
-                "template_id" => $this->wx_message_template_ids["REFUND_ORDER"],
+                "template_id" => $this->get_template_msg_id("REFUND_ORDER"),
                 "url" => $detail_url,
                 "topcolor" => "#FF0000",
                 "data" => array(
@@ -1356,7 +1366,7 @@ class WeixinComponent extends Component {
             $open_id = $user_weixin['oauth_openid'];
             $post_data = array(
                 "touser" => $open_id,
-                "template_id" => $this->wx_message_template_ids["REFUNDING_ORDER"],
+                "template_id" => $this->get_template_msg_id("REFUNDING_ORDER"),
                 "url" => $detail_url,
                 "topcolor" => "#FF0000",
                 "data" => array(
@@ -1386,7 +1396,7 @@ class WeixinComponent extends Component {
         //微信公众号 已经删除 [尾款提醒通知]
         $post_data = array(
             "touser" => $user_openid,
-            "template_id" => $this->wx_message_template_ids['REPAID_NOTIFY'],
+            "template_id" => $this->get_template_msg_id('REPAID_NOTIFY'),
             "url" => $detail_url,
             "topcolor" => "#FF0000",
             "data" => array(
@@ -1414,7 +1424,7 @@ class WeixinComponent extends Component {
     public function send_logistics_order_paid_msg($user_openid, $title, $order_price, $product_name, $consignee_address, $order_id, $remark, $detail_url) {
         $post_data = array(
             "touser" => $user_openid,
-            "template_id" => $this->wx_message_template_ids['ORDER_PAID'],
+            "template_id" => $this->get_template_msg_id('ORDER_PAID'),
             "url" => $detail_url,
             "topcolor" => "#FF0000",
             "data" => array(
@@ -1443,7 +1453,7 @@ class WeixinComponent extends Component {
     public function send_logistics_order_notify_msg($user_openid, $url, $title, $order_id, $start_address, $consignee_address, $remark) {
         $post_data = array(
             "touser" => $user_openid,
-            "template_id" => $this->wx_message_template_ids['ORDER_LOGISTICS_INFO'],
+            "template_id" => $this->get_template_msg_id('ORDER_LOGISTICS_INFO'),
             "url" => $url,
             "topcolor" => "#FF0000",
             "data" => array(
@@ -1470,7 +1480,7 @@ class WeixinComponent extends Component {
     public function send_pintuan_fail_msg($user_open_id, $title, $good_name, $fail_reason, $remark, $url) {
         $post_data = array(
             "touser" => $user_open_id,
-            "template_id" => $this->wx_message_template_ids['PIN_TUAN_FAIL'],
+            "template_id" => $this->get_template_msg_id('PIN_TUAN_FAIL'),
             "url" => $url,
             "topcolor" => "#FF0000",
             "data" => array(
@@ -1496,7 +1506,7 @@ class WeixinComponent extends Component {
     public function send_pintuan_success_msg($user_open_id, $title, $good_name, $leader_name, $remark, $url) {
         $post_data = array(
             "touser" => $user_open_id,
-            "template_id" => $this->wx_message_template_ids['TUAN_TIP'],
+            "template_id" => $this->get_template_msg_id('TUAN_TIP'),
             "url" => $url,
             "topcolor" => "#FF0000",
             "data" => array(
@@ -1523,7 +1533,7 @@ class WeixinComponent extends Component {
     {
         $post_data = array(
             "touser" => $user_open_id,
-            "template_id" => $this->wx_message_template_ids['TUAN_TIP'],
+            "template_id" => $this->get_template_msg_id('TUAN_TIP'),
             "url" => $url,
             "topcolor" => "#FF0000",
             "data" => array(
