@@ -917,6 +917,7 @@ class UsersController extends AppController
 
                     //Update User profile with WX profile
                     $wxUserInfo = $res['scope'] == WX_OAUTH_USERINFO ? $this->getWxUserInfo($openid, $access_token) : array();
+                    $this->log('after wx oauth get user info is '.json_encode($wxUserInfo), LOG_DEBUG);
                     if (!empty($wxUserInfo['unionid'])) {
                         $oauth['Oauthbinds']['unionId'] = $wxUserInfo['unionid'];
                     }
