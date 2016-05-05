@@ -2023,6 +2023,8 @@ class WeshareBuyComponent extends Component
     {
         $orderM = ClassRegistry::init('Order');
         $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
+        $weshareM = ClassRegistry::init('Weshare');
+        $relate_share_ids = $weshareM->get_relate_share($shareId);
         if ($exclude_uid == 0) {
             $key = SHARE_ORDER_COUNT_DATA_CACHE_KEY . '_' . $shareId;
             $cacheData = Cache::read($key);
@@ -2031,7 +2033,7 @@ class WeshareBuyComponent extends Component
             }
             $shareOrderCount = $orderM->find('count', array(
                 'conditions' => array(
-                    'member_id' => $shareId,
+                    'member_id' => $relate_share_ids,
                     'type' => ORDER_TYPE_WESHARE_BUY,
                     'status' => $order_status,
                     'deleted' => DELETED_NO
@@ -2042,11 +2044,10 @@ class WeshareBuyComponent extends Component
         }
         $shareOrderCount = $orderM->find('count', array(
             'conditions' => array(
-                'member_id' => $shareId,
+                'member_id' => $relate_share_ids,
                 'type' => ORDER_TYPE_WESHARE_BUY,
                 'status' => $order_status,
                 'deleted' => DELETED_NO,
-                'not' => array('creator' => $exclude_uid)
             )
         ));
         return $shareOrderCount;
