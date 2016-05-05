@@ -1420,20 +1420,23 @@ class WeshareBuyComponent extends Component
     {
         $weshareM = ClassRegistry::init('Weshare');
         $related_share_ids = $weshareM->get_relate_share($weshareId);
-        $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
-        $sort = array('id DESC');
+        $order_status = array(ORDER_STATUS_DONE, ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
+        $sort = array('FIELD(status, '.join(',',$order_status).')', 'id DESC');
+        $current_user_order = $this->get_current_user_share_order_data($weshareId, $uid);
         $query_order_cond = array(
             'conditions' => array(
                 'member_id' => $related_share_ids,
                 'type' => ORDER_TYPE_WESHARE_BUY,
                 'status' => $order_status,
                 'deleted' => DELETED_NO,
-                'not' => array('creator' => $uid)
             ),
             'fields' => $this->query_share_info_order_fields,
             'limit' => $this->share_order_count,
             'offset' => ($page - 1) * $this->share_order_count,
             'order' => $sort);
+        if (!empty($current_user_order['order_ids'])) {
+            $query_order_cond['conditions']['not'] = ['id' => $current_user_order['order_ids']];
+        }
         $result = $this->load_share_order_data($query_order_cond);
         if ($page == 1) {
             //第一页的话保存分页信息
@@ -2025,31 +2028,20 @@ class WeshareBuyComponent extends Component
         $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
         $weshareM = ClassRegistry::init('Weshare');
         $relate_share_ids = $weshareM->get_relate_share($shareId);
-        if ($exclude_uid == 0) {
-            $key = SHARE_ORDER_COUNT_DATA_CACHE_KEY . '_' . $shareId;
-            $cacheData = Cache::read($key);
-            if (!empty($cacheData)) {
-                return $cacheData;
-            }
-            $shareOrderCount = $orderM->find('count', array(
-                'conditions' => array(
-                    'member_id' => $relate_share_ids,
-                    'type' => ORDER_TYPE_WESHARE_BUY,
-                    'status' => $order_status,
-                    'deleted' => DELETED_NO
-                )
-            ));
-            Cache::write($key, $shareOrderCount);
-            return $shareOrderCount;
+        $key = SHARE_ORDER_COUNT_DATA_CACHE_KEY . '_' . $shareId;
+        $cacheData = Cache::read($key);
+        if (!empty($cacheData)) {
+            return $cacheData;
         }
         $shareOrderCount = $orderM->find('count', array(
             'conditions' => array(
                 'member_id' => $relate_share_ids,
                 'type' => ORDER_TYPE_WESHARE_BUY,
                 'status' => $order_status,
-                'deleted' => DELETED_NO,
+                'deleted' => DELETED_NO
             )
         ));
+        Cache::write($key, $shareOrderCount);
         return $shareOrderCount;
     }
 
