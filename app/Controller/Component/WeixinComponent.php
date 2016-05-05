@@ -29,6 +29,25 @@ class WeixinComponent extends Component {
         "REPAID_NOTIFY" => "CY69fWO3zw8S6dWiPQFs3W9LgVHRMDFXMl_8CeLLWmI"
     );
 
+    public $sh_wx_message_template_ids = array(
+        "ORDER_PAID" => "Ee82jWoDhX3jIzf9_RW88P03TGHe2xisfMwtwTdI7bk",
+        "ORDER_SHIPPED" => "87uu4CmlZT-xlZGO45T_XTHiFYAWHQaLv94iGuH-Ke4",
+        "ORDER_REBATE" => "wlscn1lV4Ae59-4-dtBXwNDeO7JDznA5yipRDuBT-VM",
+        //"COUPON_RECEIVED" => "op8f7Ca1izIU1QVfrdrg7GBqa_KTXHlaGFjUO2EGG8I",
+        //"COUPON_TIMEOUT" => "KnpyIsYLe6W-8vKDFPVfd9_5WbvKBMn_wQiaIsc1-wE",
+        //"PACKET_BE_GOT" => "L2nw1khejEMFilcSGKxfm_2zK4cnrHhf4Gv5le0c204",
+        //"PACKET_RECEIVED" => "vffIekz48NrxDRNbiGP5_xTvCqBHusA_W5pidHhGaHs",
+        "TUAN_TIP" => "BvIavL3GeWaN7ZryPdmQ-95-H2VqO1aMw15x3Jmenjs",
+        "JOIN_TUAN" => "0BGy5Cqx0XBYEtSaVbR2ElyqYenejr_JxaWhgStcKXk",
+        "REFUND_ORDER" => "Led-IXo06CPgYhnhHmVzgsXYsx5MhA0GFpSDFlO9PAo",
+        "REFUNDING_ORDER" => "t7NWpMUucBg253o1apqfh5OndOL5jVpExAUGg4-qS0k",
+        "PIN_TUAN_FAIL" => "z5CI4Tm3Z1LFF4r0kDzB-NjZjTPJnJEdWmJ6Tq8bSzU",
+        "ORDER_LOGISTICS_INFO" => "_RCsqdUIJGTak2bGwkwdDYTbE_37QoBhIEH5cuWkIEI",
+        "RECOMMEND_TEMPLATE_MSG" => "1xeAWXRCBMAqh2ENGyM1eAUzKkfmduQHXoAB-C6HnMg",
+        "FAQ_NOTIFY" => "ujFns0Tiq5SAoI5ELiczt4JVdLnE-2Cw4ZNbFFMbyY0",
+        //"REPAID_NOTIFY" => "CY69fWO3zw8S6dWiPQFs3W9LgVHRMDFXMl_8CeLLWmI"
+    );
+
     public $kuaidi100_ship_type = array(
         101 => 'shentong',
         102 => 'yuantong',
