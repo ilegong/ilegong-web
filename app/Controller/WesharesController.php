@@ -1396,6 +1396,7 @@ class WesharesController extends AppController
     //菠萝优惠码使用
     private function order_use_coupon_code($coupon_id, $order_id)
     {
+        $this->log('order use coupon'.$coupon_id, LOG_DEBUG);
         $reduced = 20;
         $couponItem = $this->CouponItem->findById($coupon_id);
         $coupon_code = $couponItem['CouponItem']['code'];
