@@ -40,7 +40,7 @@
         </div>
     </div>
     <!-- 这个元素在各个tab里面都会出现 -->
-    <div class="promotion">
+    <div class="promotion" ng-if="vm.weshare.id==4377">
         <dl class="clearfix">
             <dd class="promotion-title">优惠码：</dd>
             <dd><div><input type="text" placeholder="请输入优惠码" ng-model="vm.useCouponCode" ng-disabled="vm.myCoupons" /></div></dd>
