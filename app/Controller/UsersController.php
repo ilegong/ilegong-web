@@ -1203,8 +1203,18 @@ class UsersController extends AppController
             echo json_encode($result);
             exit();
         }
-
-
+        $user_info = [];
+        $user_info['User']['mobilephone'] = $mobile_num;
+        $user_info['User']['id'] = $this->currentUser['id'];
+        $user_info['User']['uc_id'] = 5;
+        if($this->User->save($user_info)){
+            $result = ['success' => true];
+            echo json_encode($result);
+            exit();
+        }
+        $result = ['success' => false, 'system error'];
+        echo json_encode($result);
+        exit();
     }
 
 /**
