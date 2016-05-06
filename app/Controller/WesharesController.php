@@ -1366,7 +1366,7 @@ class WesharesController extends AppController
         $couponCode = $data['couponCode'];
         //写死
         $coupon_id = 36580;
-        $couponItem = $this->CouponItem->find('first', ['code' => $couponCode, 'coupon_id' => $coupon_id]);
+        $couponItem = $this->CouponItem->find('first', ['conditions' => ['code' => $couponCode, 'coupon_id' => $coupon_id]]);
         if (empty($couponItem)) {
             echo json_encode(['ok' => 1, 'msg' => '不存在该优惠码', 'num' => 0, 'id' => 0]);
             exit();
