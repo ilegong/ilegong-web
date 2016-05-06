@@ -55,6 +55,7 @@
     vm.onError = onError;
     vm.getAvailableProducts = getAvailableProducts;
     vm.getAvailableAddresses = getAvailableAddresses;
+    vm.hideOfflineStore = false;
 
     function setDefaultShipSettingData() {
       vm.self_ziti_data = {status: 1, ship_fee: 0, tag: 'self_ziti'};
@@ -114,6 +115,9 @@
       if(isNewSharer){
         vm.showCreateShareTipInfo = false;
         vm.showLayer = true;
+      }
+      if (window.location.host == 'sh.tongshijia.com') {
+        vm.hideOfflineStore = true;
       }
       if (weshareId) {
         //update
