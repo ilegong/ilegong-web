@@ -39,7 +39,7 @@ footer {
   .channel_bottom .iconfont-active {
     font-size: 20px;
     line-height: 15px;
-    color: #49bc6e;
+    color: #ff6485;
     margin-bottom: 0; }
   /* line 50, _common.scss */
   .channel_bottom b {
@@ -49,7 +49,7 @@ footer {
     font-weight: 400; }
     /* line 56, _common.scss */
     .channel_bottom b.active {
-      color: #49bc6e; }
+      color: #ff6485; }
   /* line 61, _common.scss */
   .channel_bottom .new {
     position: relative;

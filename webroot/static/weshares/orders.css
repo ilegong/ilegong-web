@@ -1,99 +1,449 @@
 @charset "utf-8";
 /* CSS Document */
 
-* { padding: 0; margin: 0; font-family: Helvetica, STHeiti STXihei, Microsoft JhengHei, Microsoft YaHei, Arial; }
-body { min-width: 320px; max-width: 640px; font-size: 14px;}
-ul li { list-style: none; }
-.fl { float: left; }
-.fr { float: right; }
-.clearfix { zoom: 1; }
-.clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+* {
+    padding: 0;
+    margin: 0;
+    font-family: Helvetica, STHeiti STXihei, Microsoft JhengHei, Microsoft YaHei, Arial;
+}
 
+body {
+    min-width: 320px;
+    max-width: 640px;
+    font-size: 14px;
+}
+
+ul li {
+    list-style: none;
+}
+
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
+
+.clearfix {
+    zoom: 1;
+}
+
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
 
 /*back*/
-.nav-bg{ background-color: #FFFFFF; border-bottom: 1px #dddddd solid; color: #333333; line-height: 43px; position: fixed; top: 0; left: 0; width: 100%; z-index: 2;}
-.nav-bg a.nav-back{ text-decoration: none; color: #333333; width: 4em; height: 43px; padding-left: 12px;}
-.nav-bg a.nav-back img,.nav-bg a.nav-back label{ float: left;}
-.nav-bg a.nav-back label{ padding-left: 5px;}
-.nav-bg a.nav-back img{ width: 8px; margin-top: 14px;}
-.nav-bg h1{ text-align: center; font-weight: normal; font-size: 1.15em; line-height: 43px; width: 100px; left: 50%; margin-left: -50px; position: absolute;}
-.nav-bg a.nav-home{ width: 4em; text-align: right; padding-right: 12px;}
-.nav-bg a.nav-home img{ width: 22px; margin-top: 13px;}
+.nav-bg {
+    background-color: #FFFFFF;
+    border-bottom: 1px #dddddd solid;
+    color: #333333;
+    line-height: 43px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2;
+}
 
+.nav-bg a.nav-back {
+    text-decoration: none;
+    color: #333;
+    width: 4em;
+    height: 43px;
+    padding-left: 12px;
+    font-size: 1.1em;
+}
+
+.nav-bg a.nav-back img, .nav-bg a.nav-back label {
+    float: left;
+}
+
+.nav-bg a.nav-back label {
+    padding-left: 5px;
+}
+
+.nav-bg a.nav-back img {
+    width: 8px;
+    margin-top: 14px;
+}
+
+.nav-bg h1 {
+    text-align: center;
+    font-weight: 400;
+    font-size: 1.3em;
+    line-height: 43px;
+    width: 102px;
+    left: 50%;
+    margin-left: -51px;
+    position: absolute;
+}
+
+.nav-bg a.nav-home {
+    width: 4em;
+    text-align: right;
+    padding-right: 12px;
+}
+
+.nav-bg a.nav-home img {
+    width: 22px;
+    margin-top: 13px;
+}
 
 /*logistics nav*/
-.logistics-nav{ line-height: 40px; margin-top: 54px; background-color: #FFFFFF;}
-.logistics-nav li{ float: left; text-align: center; border-right: 1px #dddddd solid; border-bottom: 1px #dddddd solid; margin-left: -1px;}
-.logistics-nav li.cur{ border-bottom-color: #f99d3a !important; color: #f99d3a;}
+.logistics-nav {
+    line-height: 40px;
+    margin-top: 54px;
+    background-color: #FFFFFF;
+}
+
+.logistics-nav li {
+    float: left;
+    text-align: center;
+    border-right: 1px #dddddd solid;
+    border-bottom: 1px #dddddd solid;
+    margin-left: -1px;
+}
+
+.logistics-nav li.cur {
+    border-bottom-color: #f99d3a !important;
+    color: #f99d3a;
+}
 
 /*expressage*/
-.expressage{ background-color: #ffffff;}
-.expressage a{ display: block;}
-.expressage ul,.copyreader-address ul{ border-bottom: 1px #eeeeee solid; padding: 0 12px; position: relative;}
-.expressage ul a{ display: block; text-decoration: none;}
-.expressage ul a.defaultText{ color: #f99d3a; line-height: 42px;}
-.expressage ul a.address{ color: #666666; line-height: 18px; padding: 12px 0;}
-.expressage ul a.next-icon{ position: absolute; right:12px; top:50%; margin-top: -10px;}
-.expressage ul a.next-icon img{ width: 7px; float:left; margin-top: 3px; margin-left: 5px;}
-.expressage ul a.next-icon label{ float: left; color: #f99d3a;}
-.expressage ul li.comment,.copyreader-address ul li.comment{ color: #333333; position: absolute; left:12px; top:50%; margin-top: -9px;}
-.expressage ul li.content,.copyreader-address ul li.content{ padding: 12px 0 12px 70px; width: 79%;}
-.expressage ul li.content input,.expressage ul li.content select,.copyreader-address ul li.content input{ border: 0; line-height: 18px; font-size: 1em; width: 100%; outline: none;}
+.expressage {
+    background-color: #ffffff;
+}
+
+.expressage a {
+    display: block;
+}
+
+.expressage ul, .copyreader-address ul {
+    border-bottom: 1px #eeeeee solid;
+    padding: 0 12px;
+    position: relative;
+    font-size: 1.1em;
+}
+
+.expressage ul a {
+    display: block;
+    text-decoration: none;
+}
+
+.expressage ul a.defaultText {
+    color: #f99d3a;
+    line-height: 42px;
+}
+
+.expressage ul a.address {
+    color: #666;
+    line-height: 20px;
+    padding: 12px 0;
+    padding-right: 40px;
+}
+
+.expressage ul a.next-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    margin-top: -10px;
+}
+
+.expressage ul a.next-icon img {
+    width: 7px;
+    float: left;
+    margin-top: 3px;
+    margin-left: 5px;
+}
+
+.expressage ul a.next-icon label {
+    float: left;
+    color: #f99d3a;
+}
+
+.expressage ul li.comment, .copyreader-address ul li.comment {
+    color: #333333;
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    margin-top: -10px;
+}
+
+.expressage ul li.content, .copyreader-address ul li.content {
+    padding: 12px 0 12px 70px;
+    width: 79%;
+    line-height: 21px;
+}
+
+.expressage ul li.content input, .expressage ul li.content select, .copyreader-address ul li.content input {
+    border: 0;
+    line-height: 18px;
+    font-size: 1em;
+    width: 100%;
+    outline: none;
+}
 
 /*selection of products*/
-.selection-product h1{ padding: 10px 12px 5px 12px; font-size: 1em; font-weight: normal; color: #666666;}
-.product-title{ font-size:1em;color:#666666; padding: 15px 15px 10px 12px;}
-.product{ position: relative; border-bottom: 1px #eeeeee solid; background-color: #FFFFFF; padding: 15px 12px 12px 12px;}
-.product-pic img{ width:4.625em;}
-.nicheng-name{font-size:1.083em;color:#333333;}
-.product-price{ padding-top: 5px; line-height: 30px; color: #f99d3a; font-weight: bold;}
-.product dl{ padding-top: 5px;}
-.add-subtract{ width:2em; height:2em; border:1px solid #bbbbbb; border-radius:3px;}
-.amount{ color: #333333; line-height: 2em; width: 2em; text-align: center;}
+.selection-product h1 {
+    color: #666666;
+    padding: 15px 12px 10px;
+    font-size: 1.1em;
+    font-weight: 400;
+}
+
+.product-title {
+    font-size: 1em;
+    color: #666666;
+    padding: 15px 15px 10px 12px;
+}
+
+.product {
+    position: relative;
+    border-bottom: 1px #eeeeee solid;
+    background-color: #FFFFFF;
+    padding: 15px 12px 12px 12px;
+}
+
+.product-pic img {
+    width: 4.625em;
+}
+
+.nicheng-name {
+    font-size: 1.083em;
+    color: #333333;
+}
+
+.product-price {
+    padding-top: 5px;
+    line-height: 30px;
+    color: #f99d3a;
+    font-weight: bold;
+}
+
+.product dl {
+    padding-top: 5px;
+}
+
+.add-subtract {
+    width: 2em;
+    height: 2em;
+    border: 1px solid #bbbbbb;
+    border-radius: 3px;
+}
+
+.amount {
+    color: #333;
+    line-height: 2em;
+    width: 2em;
+    text-align: center;
+    font-size: 1.1em;
+}
 
 /*money detail*/
-.money-detail{ background-color: #FFFFFF; margin: 10px 0 59px 0; padding: 0 12px 12px 12px;}
-.money-detail dl{ line-height: 42px; border-bottom: 1px #eeeeee solid;}
-.money-detail dl dt.fl,.money-detail ul li.fl{ color: #333333;}
-.money-detail dl dt.fr,.money-detail ul li.fr{ color: #f99d3a;}
-.money-detail ul{ padding-top:12px;}
+.money-detail {
+    background-color: #FFFFFF;
+    margin: 10px 0 59px;
+    padding: 0 12px 12px;
+    font-size: 1.1em;
+}
+
+.money-detail dl {
+    line-height: 43px;
+    border-bottom: 1px #eeeeee solid;
+}
+
+.money-detail dl dt.fl, .money-detail ul li.fl {
+    color: #333333;
+}
+
+.money-detail dl dt.fr, .money-detail ul li.fr {
+    color: #333333;
+}
+
+.money-detail ul {
+    padding-top: 12px;
+}
 
 /*payment*/
-.payment-bg{ background-color: #FFFFFF; border-top: 1px #dddddd solid; padding: 6px 0; width: 100%; line-height: 33px; position: fixed; bottom: 0; left: 0; z-index: 2;}
-.payment-bg a{ width: 90px; text-align: center; color: #FFFFFF; font-size: 1em; font-weight: bold; text-decoration: none; display: block; border-radius: 5px; margin-left: 8px;}
-.payment-bg .zfbPay{ background-color: #0fc449;}
-.payment-bg .weixinPay{ background-color:#f99d3a;}
-.payment-bg li.fl{ padding-left: 12px;}
-.payment-bg .zfbPay{ margin-right: 12px;}
+.payment-bg {
+    background-color: #FFFFFF;
+    border-top: 1px #dddddd solid;
+    padding: 6px 0;
+    width: 100%;
+    line-height: 33px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+    font-size: 1.1em;
+}
+
+.payment-bg a {
+    width: 90px;
+    text-align: center;
+    color: #FFF;
+    font-weight: 700;
+    text-decoration: none;
+    display: block;
+    border-radius: 2px;
+    margin-left: 8px;
+}
+
+.payment-bg .zfbPay {
+    background-color: #ff6485;
+}
+
+.payment-bg .weixinPay {
+    background-color: #0fc449;
+}
+.ng-binding{color: #ff6485;}
+.payment-bg li.fl {
+    padding-left: 12px;
+}
+
+.payment-bg .zfbPay {
+    margin-right: 12px;
+}
 
 /*select address*/
-.select-address,.copyreader-address{ margin-top: 54px; background-color: #FFFFFF;}
-.select-address ul{ border-bottom: 1px #eeeeee solid; padding: 10px 12px; position: relative; line-height: 20px;}
-.select-address ul span{color: #333333;}
-.select-address ul label{ color: #999999;}
-.select-address ul li img{ width: 16px; position: absolute; right: 12px; top: 50%; margin-top: -8px;}
-.select-address a{ display: block; border-left: 4px #FFFFFF solid;}
-.select-address a.cur{ border-color: #f99d3a;}
-.add-address-bg{ height: 44px; width: 100%; background-color: #FFFFFF; position: fixed; bottom: 0; left: 0; z-index: 2;}
-.add-address-bg a{ border-radius: 5px; margin: 5px; line-height: 34px; text-align: center; background-color: #f99d3a; color: #FFFFFF; font-weight: bold; text-decoration: none; display: block;}
+.select-address, .copyreader-address {
+    margin-top: 54px;
+    background-color: #FFFFFF;
+}
+
+.select-address ul {
+    border-bottom: 1px #eeeeee solid;
+    padding: 10px 12px;
+    position: relative;
+    line-height: 20px;
+}
+
+.select-address ul span {
+    color: #333333;
+}
+
+.select-address ul label {
+    color: #999999;
+}
+
+.select-address ul li img {
+    width: 16px;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    margin-top: -8px;
+}
+
+.select-address a {
+    display: block;
+    border-left: 4px #FFFFFF solid;
+}
+
+.select-address a.cur {
+    border-color: #f99d3a;
+}
+
+.add-address-bg {
+    height: 44px;
+    width: 100%;
+    background-color: #FFFFFF;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+}
+
+.add-address-bg a {
+    border-radius: 5px;
+    margin: 5px;
+    line-height: 34px;
+    text-align: center;
+    background-color: #f99d3a;
+    color: #FFFFFF;
+    font-weight: bold;
+    text-decoration: none;
+    display: block;
+}
 
 /*copyreader address*/
-.copyreader-address ul li img{ width: 7px; float: left; margin-left: 5px; position: absolute; right: 12px; top: 50%; margin-top: -7px;}
-.copyreader-address a{ display: block;}
-.saveBtn{ display: block; background-color: #f99d3a; text-align: center; font-size: 1em; font-weight: bold; margin: 30px 20px 0 20px; line-height: 42px; color: #FFFFFF; text-decoration: none; border-radius: 5px;}
+.copyreader-address ul li img {
+    width: 7px;
+    float: left;
+    margin-left: 5px;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    margin-top: -7px;
+}
+
+.copyreader-address a {
+    display: block;
+}
+
+.saveBtn {
+    display: block;
+    background-color: #ff6485;
+    text-align: center;
+    font-size: 1em;
+    font-weight: 700;
+    margin: 30px 25px 65px;
+    line-height: 44px;
+    color: #FFF;
+    text-decoration: none;
+    border-radius: 4px;
+}
 
 /*Alice add css 5.4*/
-.promotion{ background-color: #FFFFFF; position: relative; border-bottom: 1px #eeeeee solid; background-color: #FFFFFF; padding:12px; margin-top: 10px;}
-.promotion dl dd{ float: left; line-height: 40px;}
-.promotion dl dd div{ border: 1px #dddddd solid; padding: 0px 5px;}
-.promotion dl dd input{ line-height: 20px; border: 0; font-size: 1.1em; width: 110px;}
-.promotion-title{ font-size: 1.1em;}
-.promotion dl dd a{ border: 1px #ff6485 solid; padding: 0 15px; margin-left: 15px; color: #ff6485; font-size: 1.1em; text-decoration: none; line-height: 38px; border-radius: 2px; display: block;}
+.promotion {
+    background-color: #FFFFFF;
+    position: relative;
+    border-bottom: 1px #eeeeee solid;
+    background-color: #FFFFFF;
+    padding: 12px;
+    margin-top: 10px;
+}
 
+.promotion dl dd {
+    float: left;
+    line-height: 40px;
+}
+
+.promotion dl dd div {
+    border: 1px #dddddd solid;
+    padding: 0px 5px;
+}
+
+.promotion dl dd input {
+    line-height: 20px;
+    border: 0;
+    font-size: 1.1em;
+    width: 110px;
+}
+
+.promotion-title {
+    font-size: 1.1em;
+}
+
+.promotion dl dd a {
+    border: 1px #ff6485 solid;
+    padding: 0 15px;
+    margin-left: 15px;
+    color: #ff6485;
+    font-size: 1.1em;
+    text-decoration: none;
+    line-height: 38px;
+    border-radius: 2px;
+    display: block;
+}
 
 /* css by zhigang song*/
 .logistics-nav li:last-child {
-  border-right: none;
+    border-right: none;
 }
 
 .add-subtract .fa {
@@ -101,7 +451,7 @@ ul li { list-style: none; }
     height: 100%;
     text-align: center;
     line-height: 28px; /* 100% ≈ 28px */
-    color: #F99E37;
+    color: #ff6485;
 }
 
 .add-subtract.disable .fa {
