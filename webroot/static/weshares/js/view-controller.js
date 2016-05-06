@@ -681,7 +681,7 @@
                     vm.userCouponReduce = data.num;
                     vm.myCoupons = true;
                     vm.orderPayTotalPrice -= data.num/100;
-                    vm.useCouponId = data.id;
+                    vm.useCouponId = data.useCouponId;
                     return;
                     //pay
                 } else {
