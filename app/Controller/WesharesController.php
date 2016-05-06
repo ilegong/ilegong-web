@@ -520,6 +520,7 @@ class WesharesController extends AppController
             }
             if ($this->Order->updateAll($update_order_data, array('id' => $orderId))) {
                 $coupon_id = $postDataArray['coupon_id'];
+                $this->log('use coupon id '.$coupon_id, LOG_DEBUG);
                 //红包
                 if (!empty($coupon_id)) {
                     //菠萝
