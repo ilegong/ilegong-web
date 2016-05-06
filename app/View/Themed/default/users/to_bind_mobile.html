@@ -1,248 +1,28 @@
-{{$this->Html->css(array('mobile-view.css?v=1.5',))}}
-<div class="classlist_v2" style="z-index:100">
-    <ul class="clearfix">
-        <li><a href="{{empty($_GET['history']) ? 'javascript:history.back(-1);':$_GET['history']}}" class="back"></a></li>
-        <li class="line"></li>
-        <li><strong>绑定手机号码</strong></li>
-    </ul>
+<div class="binding-container" ng-controller="TutorialBindingMobileCtrl as vm">
+    <div class="nav-bg">
+        <a class="nav-back fl" href="/users/tutorial">
+            <img src="{{$STATIC_HOST}}/static/weshares/images/back.png"/>
+            <label>返回</label>
+        </a>
+
+        <h1 class="fl">绑定手机号</h1>
+    </div>
+    <div class="binding">
+        <div class="binding-phone clearfix form-group" ng-class="{'has-error': !vm.mobilePhone.valid}">
+            <label>手机号</label>
+            <input class="form-control" type="number" string-to-number placeholder="请输入手机号, 方便联系您结款"
+                   ng-model="vm.mobilePhone.value" ng-change="vm.validateMobilePhone()"
+                   ng-blur="vm.validateMobilePhoneAndAlert()">
+        </div>
+        <div class="binding-phone clearfix form-group" ng-class="{'has-error': !vm.code.valid}">
+            <label>验证码</label>
+            <input class="form-control" type="number" string-to-number ng-model="vm.code.value" ng-change="vm.onCodeChanged()" placeholder="请输入验证码">
+            <span class="getcode" ng-class="{'show-ib': !vm.code.sent, 'enabled': vm.canSendCode() && !vm.code.sending}"
+                  ng-click="vm.sendCode()" ng-bind="vm.getSendCodeText()">获取验证码</span>
+            <span class="getcode" ng-class="{'show-ib': vm.code.sent}" style="display: none;">已发送(<span
+                    ng-bind="vm.code.timeSpent"></span>s)</span>
+        </div>
+    </div>
+    <span class="nextstepBtn" ng-class="{'enabled': vm.canBindMobile() && !vm.binding}"
+          ng-click="vm.bindMobile()">下一步</span>
 </div>
-<br><br>
-<div class="mobile_custom" style="background-color: #f5f5f5;margin-top: 10px;">
-    <input type="hidden" id="order_id" value="{{$orderId}}"/>
-    <input type="hidden" id="bind_from" value="{{$from}}"/>
-    <div class="comment_yanzheng_tip">{{$short_intro}}</div>
-    <ul class="comment_check clearfix">
-        <li class="clearfix">
-            <span style="display:none; text-align:center;">Alice</span>
-            <span><input style="text-align:center; width:100%;" name="" type="text" placeholder="输入手机号码"
-                         value="" id="mobile_num"/></span>
-        </li>
-    </ul>
-    <ul class="comment_check clearfix mt24" style="display: none;" id="confirm_info_panel">
-        <li class="clearfix">
-            <span><input style="text-align:center; width:100%;" name="" type="text" placeholder="输入短信验证码"
-                         id="mobile_code"/></span>
-        </li>
-    </ul>
-    <br/>
-    <a class="comment_codebtn radius10" id="handle_btn" name="mobile-code">发送短信验证码</a>
-
-    <div class="comment_check_tel">没有收到短信验证码, 请拨打服务热线<br/>{{SERVICE_LINE}}</div>
-    <!--账号合并完毕提示框-->
-    <div class="comment_tip_layer radius10" style=" width:60%; left:50%; top:55%; margin-left:-30%; display:none;"
-         id="merge_result">账号合并完毕!
-    </div>
-    <!--合并中提示框-->
-    <div class="comment_tip_layer radius10" style=" width:60%; left:50%; top:55%; margin-left:-30%; display:none;"
-         id="process_merge">
-        <ul class="clearfix">
-            <li class="fl"><img src="/img/mobile/comment/loading.gif"/></li>
-            <li class="fl">订单合并中…</li>
-        </ul>
-    </div>
-    <!--是否合并提示框-->
-    <div class="comment_tanchubg_layer radius10" style="display: none" id="merge_info_panel">
-        <div>该手机号已被注册, <br/>用户昵称: <span id="bind_to_user">{{$nickname}}</span></div>
-        <ul class="clearfix">
-            <li class="fl"><a class="comment_bingbtn radius10" href="#X" id="no_merge">暂不合并</a></li>
-            <li class="fr"><a class="comment_nobingbtn radius10" href="#X" id="merge_info">合并账号</a></li>
-        </ul>
-    </div>
-    <!--提示框-->
-    <div class="comment_tip_layer radius10" style="width:60%; left:50%; top:30%; margin-left:-30%; display: none;"
-         id="tip_info_panel">请输入正确的手机号码
-    </div>
-</div>
-<script>
-    $(document).ready(function () {
-        var $handle = $('#handle_btn');
-        var $mergeInfo = $('#merge_info_panel');
-        var $tipInfo = $('#tip_info_panel');
-        var $confirmInfo = $('#confirm_info_panel');
-        var $mobileNum = $('#mobile_num');
-        var $imgCode = $('#img_code');
-        var $moileCode = $('#mobile_code');
-        var $noMerge = $('#no_merge');
-        var $mergeInfoBtn = $('#merge_info');
-        var $processMerge = $('#process_merge');
-        var $mergeResult = $('#merge_result');
-        var ref_url = '{{$ref_url}}';
-        var $orderId = $('#order_id');
-        var $from = $('#bind_from');
-        var from_value = $from.val();
-        if ($orderId.val()) {
-            ref_url = '/comments/add_comment/' + $orderId.val() + '?';
-        } else if (!ref_url) {
-            ref_url = document.referrer;
-        }
-        $handle.on('click', function (e) {
-            e.preventDefault();
-            var me = $(this);
-            var name = me.attr('name');
-            var mobile = $mobileNum.val();
-            var imgCode = $imgCode.val();
-            var mobileCode = $moileCode.val();
-            if (name === 'mobile-code') {
-                if (!isPhone(mobile)) {
-                    showTip('手机号码输入不正确');
-                    return;
-                }
-//                if (!imgCode && imgCode === '') {
-//                    showTip('图片验证码不能为空');
-//                    return;
-//                }
-                if(me.attr('disabled')){
-                    return;
-                }
-                getMobileCode(mobile, imgCode);
-            }
-            if (name === 'bind-mobile') {
-                if(!mobileCode&&mobileCode===''){
-                    showTip('短信验证码不能为空');
-                    return;
-                }
-                bindMobile(mobile, mobileCode);
-            }
-        });
-
-        $noMerge.on('click', function (e) {
-            e.preventDefault();
-            $mergeInfo.hide();
-            window.location.href = ref_url + (ref_url.indexOf('?') == -1 ? '?' : '&') +'force=true';
-        });
-
-        $mergeInfoBtn.on('click', function (e) {
-            e.preventDefault();
-            var mobile = $mobileNum.val();
-            var mobileCode = $moileCode.val();
-            mergeInfo(mobile, mobileCode);
-            $mergeInfo.hide();
-            $processMerge.fadeIn();
-        });
-
-        function mergeInfo(mobile, mobileCode) {
-            $.post('/users/merge_data', {'mobile': mobile, 'mobileCode': mobileCode}, function (data) {
-                var $result = JSON.parse(data);
-                if ($result['success'] === 'true') {
-                    $processMerge.fadeOut();
-                    $mergeResult.fadeIn(1000).fadeOut(2500,function(){
-                        window.location.href = ref_url;
-                    });
-                } else {
-                    $processMerge.fadeOut();
-                    showTip('合并失败,请联系管理员');
-                }
-            });
-        }
-
-        function bindMobile(mobile, code) {
-            $handle.attr("disabled","disabled");
-            $.post('/users/mobile_bind', {'mobile': mobile, 'code': code, 'from':from_value}, function (data) {
-                var result = JSON.parse(data);
-                if(!result['code']){
-                    if(from_value=='share'){
-                        ref_url = '/users/complete_user_info?from=share'
-                        window.location.href = ref_url;
-                        return;
-                    }
-                    showTip(result['msg'],function(){
-                        window.location.href = ref_url;
-                    });
-                }else{
-                    if (result['code'] === 2) {
-                        if(from_value&&from_value!='null'){
-                            if(from_value=='share'){
-                                showTip('该手机号已经被注册,请联系管理员');
-                                $bindUserName = result['username'];
-                                if($bindUserName&&$bindUserName!="null"){
-                                    $('#bind_to_user').text($bindUserName);
-                                }else{
-                                    $('#bind_to_user').text('匿名用户');
-                                }
-                                $mergeInfo.show();
-                            }else{
-                                showTip('该手机号已经被注册',function(){
-                                    window.location.href = ref_url;
-                                });
-                            }
-                        }else{
-                            $bindUserName = result['username'];
-                            if($bindUserName&&$bindUserName!="null"){
-                                $('#bind_to_user').text($bindUserName);
-                            }else{
-                                $('#bind_to_user').text('匿名用户');
-                            }
-                            $mergeInfo.show();
-                        }
-                    }
-
-                }
-                $handle.removeAttr("disabled");
-            });
-        }
-
-        function getMobileCode(mobile, code) {
-            $handle.attr("disabled","disabled");
-            $.ajax({
-                type: "POST",
-                dataType: "json",
-                url: '/check/message_code',
-                data: {mobile: mobile, keyString: code,force:true},
-                cache: !1,
-                success: function (a) {
-                    //$('#image_code').attr('src', '/check/captcha.html?' + Math.random() * 10000);
-                    $moileCode.val('');
-                    if (a.error == 0) {
-                        showTip('验证短信已发出，' + a.timelimit + '之前有效，未收到可再获取');
-                        $confirmInfo.show();
-                        changeBtnState('绑定手机号码', 'bind-mobile');
-                    } else if (a.error == 1) {
-                        showTip('验证码错误，验证短信发送失败，请重新输入');
-                    } else if (a.error == 2) {
-                        showTip('手机号码格式错误，验证短信发送失败，请重新输入');
-                    }else if(a.error == -42){
-                        showTip('短信验证码已经发出,'+ a['timelimit']+'后重试..');
-                        $confirmInfo.show();
-                        changeBtnState('绑定手机号码', 'bind-mobile');
-                    }else{
-                        showTip('验证短信发送失败，请重新输入');
-                    }
-                    $handle.removeAttr("disabled");
-                },
-                error: function () {
-                    //$('#image_code').attr('src', '/check/captcha.html?' + Math.random() * 10000);
-                    showTip('短信验证码获取失败，请重新获取');
-                    $handle.removeAttr("disabled");
-                }
-            });
-        }
-
-        function changeBtnState(text, name) {
-            $handle.text(text);
-            $handle.attr('name', name);
-        }
-
-        function showTip(msg,callback) {
-            callback = callback?callback:function(){};
-            //$tipInfo.text(msg).fadeIn(1000).fadeOut(2000,callback);
-            $tipInfo.text(msg).show();
-            setTimeout(function(){
-                callback();
-                $tipInfo.hide();
-            },3000);
-        }
-
-        function isPhone(aPhone) {
-            var bValidate = RegExp(/^(0|86|17951)?(13[0-9]|15[012356789]|18[0-9]|14[57])[0-9]{8}$/).test(aPhone);
-            if (bValidate) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        $('#image_code').click(function () {
-            document.getElementById('image_code').src = '/check/captcha.html?' + Math.random() * 10000;
-        });
-    });
-</script>

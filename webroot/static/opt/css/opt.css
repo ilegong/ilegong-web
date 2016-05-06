@@ -431,7 +431,7 @@ footer a:link{
 .channel_bottom .iconfont-active{
     font-size: 20px;
     line-height: 15px;
-    color: #49bc6e;
+    color: #ff6485;
 }
 
 .channel_bottom b {
@@ -442,7 +442,7 @@ footer a:link{
 }
 
 .channel_bottom b.active{
-    color: #49bc6e;
+    color: #ff6485;
 }
 
 .channel_bottom .new {

@@ -15,6 +15,7 @@ class WesharesController extends AppController
     const PROCESS_SHIP_MARK_DEFAULT_RESULT = 0;
     const PROCESS_SHIP_MARK_UNFINISHED_RESULT = 1;
 
+
     public function __construct($request = null, $response = null)
     {
         $this->helpers[] = 'PhpExcel';
@@ -25,11 +26,6 @@ class WesharesController extends AppController
     {
         parent::beforeFilter();
         $this->layout = 'weshare';
-    }
-
-    public function tutorial()
-    {
-        $this->layout = null;
     }
 
     /**
@@ -45,6 +41,7 @@ class WesharesController extends AppController
         //$this->set('weshare_ids', Hash::extract($index_products, '{n}.Weshare.id'));
         $this->set('uid', $uid);
         $this->set('tag', $tag);
+        //$this->render();
     }
 
     /**
@@ -169,28 +166,18 @@ class WesharesController extends AppController
         $currentUser = $this->currentUser;
         $uid = $currentUser['id'];
         //check user has bind mobile and payment
-        $user_fields = $this->query_user_fields;
-        $user_fields[] = 'mobilephone';
-        $user_fields[] = 'payment';
         $current_user = $this->User->find('first', array(
             'conditions' => array(
                 'id' => $uid
             ),
             'recursive' => 1, //int
-            'fields' => $user_fields,
+            'fields' => array('id', 'mobilephone', 'payment'),
         ));
-        if (empty($current_user['User']['mobilephone'])) {
-            $ref_url = WX_HOST . '/weshares/tutorial';
-            if ($_REQUEST['has_read']) {
-                $ref_url = WX_HOST . '/weshares/add';
-            }
-            $this->redirect('/users/to_bind_mobile?from=share&ref=' . $ref_url);
+        if (empty($current_user['User']['mobilephone']) || empty($current_user['User']['payment'])) {
+            $this->redirect('/users/tutorial');
             return;
         }
-        if (empty($current_user['User']['payment'])) {
-            $this->redirect('/users/complete_user_info?from=share');
-            return;
-        }
+        
         $share_ship_set = $this->sharer_can_use_we_ship($uid);
         if ($this->is_new_sharer($uid)) {
             $this->set('is_new_sharer', 1);
@@ -281,7 +268,8 @@ class WesharesController extends AppController
     }
 
     //获取分享的汇总数据
-    public function get_share_summery_data($shareId, $uid){
+    public function get_share_summery_data($shareId, $uid)
+    {
         $this->autoRender = false;
         try {
             $summery = $this->WeshareBuy->get_share_and_all_refer_share_summary($shareId, $uid);
@@ -305,6 +293,7 @@ class WesharesController extends AppController
         if (!empty($detail)) {
             $detail['prepare_comment_data'] = $this->prepare_comment_data();
             $detail['weixininfo'] = $this->set_weixin_share_data($uid, $weshareId);
+            //$detail['my_coupons'] = [];//CouponItem.id Coupon.reduced_price
         }
         echo json_encode($detail);
         exit();
@@ -517,9 +506,16 @@ class WesharesController extends AppController
             }
             if ($this->Order->updateAll($update_order_data, array('id' => $orderId))) {
                 $coupon_id = $postDataArray['coupon_id'];
+                $this->log('use coupon id '.$coupon_id, LOG_DEBUG);
                 //红包
                 if (!empty($coupon_id)) {
-                    $this->order_use_score_and_coupon($orderId, $uid, 0, $totalPrice / 100);
+                    //菠萝
+                    if($weshareId == 4507){
+                        //use code
+                        $this->order_use_coupon_code($coupon_id, $orderId, $uid);
+                    }else{
+                        $this->order_use_score_and_coupon($orderId, $uid, 0, $totalPrice / 100);
+                    }
                 }
                 //返利
                 $this->ShareUtil->update_rebate_log_order_id($rebateLogId, $orderId, $weshareId);
@@ -792,16 +788,11 @@ class WesharesController extends AppController
     {
         $this->autoRender = false;
         $weshare_id = $_REQUEST['share_id'];
-//        $refer_share_id = $_REQUEST['refer_share_id'];
-//        $address = $_REQUEST['address'];
-//        $msg = $_REQUEST['msg'];
-        //update share status
         $this->Weshare->updateAll(array('order_status' => WESHARE_ORDER_STATUS_SHIPPED), array('id' => $weshare_id, 'order_status' => WESHARE_ORDER_STATUS_WAIT_SHIP));
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_1', '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_1', '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_0', '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
-        //$this->WeshareBuy->send_group_share_product_arrival_msg($weshare_id, $refer_share_id, $msg, $address);
         echo json_encode(array('success' => true));
         return;
     }
@@ -1368,15 +1359,42 @@ class WesharesController extends AppController
         return $this->RedPacket->process_receive($share_offer_id, $uid, $this->is_weixin());
     }
 
-    /**
-     * @param $uid
-     * @param $sharer
-     * @return mixed
-     * 获取可用红包
-     */
-    private function get_can_used_coupons($uid, $sharer)
+    public function get_useful_coupons()
     {
-        return $this->CouponItem->find_my_valid_share_coupons($uid, $sharer);
+        $postStr = file_get_contents('php://input');
+        $data = json_decode($postStr, true);
+        $couponCode = $data['couponCode'];
+        //写死
+        $coupon_id = 36580;
+        $couponItem = $this->CouponItem->find('first', ['conditions' => ['code' => $couponCode, 'coupon_id' => $coupon_id]]);
+        if (empty($couponItem)) {
+            echo json_encode(['ok' => 1, 'msg' => '不存在该优惠码', 'num' => 0, 'id' => 0]);
+            exit();
+        }
+        $used_cnt = $this->Order->used_code_paid_cnt($couponCode);
+        if ($used_cnt > 0) {
+            echo json_encode(['ok' => 1, 'msg' => '该优惠码已被使用', 'num' => 0, 'id' => 0]);
+        } else {
+            echo json_encode(['ok' => 0, 'msg' => '使用成功', 'num' => 2000, 'useCouponId' => $couponItem['CouponItem']['id']]);
+        }
+        exit();
+    }
+
+
+    //菠萝优惠码使用
+    private function order_use_coupon_code($coupon_id, $order_id)
+    {
+        $this->log('order use coupon'.$coupon_id, LOG_DEBUG);
+        $reduced = 20;
+        $couponItem = $this->CouponItem->findById($coupon_id);
+        $coupon_code = $couponItem['CouponItem']['code'];
+        $used_cnt = $this->Order->used_code_paid_cnt($coupon_code);
+        if ($used_cnt == 0) {
+            $toUpdate = array('applied_code' => '\'' . $coupon_code . '\'',
+                'coupon_total' => 'coupon_total + 2000',
+                'total_all_price' => 'if(total_all_price - ' . $reduced . ' < 0, total_all_price, total_all_price - ' . $reduced . ')');
+            $this->Order->updateAll($toUpdate, array('id' => $order_id, 'status' => ORDER_STATUS_WAITING_PAY));
+        }
     }
 
     /**
@@ -1447,7 +1465,6 @@ class WesharesController extends AppController
     }
 
 
-
     /**
      * @param $sharer
      * @return bool
@@ -1455,7 +1472,7 @@ class WesharesController extends AppController
     private function is_new_sharer($sharer)
     {
         $level = $this->ShareUtil->get_user_level($sharer);
-        if(empty($level)){
+        if (empty($level)) {
             return true;
         }
         return false;
@@ -1520,8 +1537,6 @@ class WesharesController extends AppController
         }
         return $area . $express_consignee['OrderConsignees']['address'];
     }
-
-
 
 
     /**

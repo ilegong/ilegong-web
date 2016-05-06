@@ -709,7 +709,7 @@ class UsersController extends AppController
     function me()
     {
         $uid = $this->currentUser['id'];
-        $this->redirect('/weshares/user_share_info/'.$uid);
+        $this->redirect('/weshares/user_share_info/' . $uid);
 //        $this->pageTitle = __('个人中心');
 //
 //        $this->loadModel('Order');
@@ -1165,55 +1165,111 @@ class UsersController extends AppController
         $this->redirect($redirect);
     }
 
-
     public function mobile_bind()
     {
         $this->autoRender = false;
-        $readCode = $_POST['code'];
-        $mobile_num = $_POST['mobile'];
+        $postStr = file_get_contents('php://input');
+        $postDataArray = json_decode($postStr, true);
+        $readCode = $postDataArray['code'];
+        $mobile_num = $postDataArray['mobile'];
         $msgCode = $this->Session->read('messageCode');
         $current_post_num = $this->Session->read('current_register_phone');
-        $bind_from = $_POST['from'];
         $codeLog = json_decode($msgCode, true);
-        $user_info = array();
-        $res = array();
-        if ($codeLog && is_array($codeLog) && $codeLog['code'] == $readCode && (time() - $codeLog['time'] < 30 * 60)) {
-            $user_info['User']['mobilephone'] = $mobile_num;
-            $user_info['User']['id'] = $this->currentUser['id'];
-            $user_info['User']['uc_id'] = 5;
-            if (empty($this->currentUser['id'])) {
-                $res = array('success' => false, 'msg' => 'please login');
-            } else if ($mobile_num != $current_post_num) {
-                $res = array('success' => false, 'msg' => '请重新验证您的手机号码');
-            } else if ($this->User->hasAny(array('User.mobilephone' => $mobile_num))) {
-                $tempUser = $this->getUserNamebyMobile($mobile_num);
-                $res = array('success' => false, 'msg' => '你的手机号已注册过，无法绑定，请用手机号登录', 'code' => 2, 'username' => $tempUser['User']['nickname']);
-            } else if ($this->User->hasAny(array('User.username' => $mobile_num))) {
-                if ($this->currentUser['username'] == $mobile_num) {
-                    if ($this->User->save($user_info)) {
-                        $res = array('success' => true, 'msg' => '你的账号和手机号绑定成功');
-                    };
-                } else {
-                    $tempUser = $this->getUserNamebyMobile($mobile_num);
-                    $res = array('success' => false, 'msg' => '你的手机号已注册过，无法绑定，请用手机号登录', 'code' => 2, 'username' => $tempUser['User']['nickname']);
-                }
-            } else {
-                if ($this->User->save($user_info)) {
-                    $this->Session->write('Auth.User.mobilephone', $mobile_num);
-                    $result_msg = '你的账号和手机号绑定成功';
-                    if ($bind_from == 'refer') {
-                        $result_msg = $result_msg . ',并获得1000积分';
-                    }
-                    $res = array('success' => true, 'msg' => $result_msg);
-                } else {
-                    $res = array('success' => false, 'msg' => '绑定失败，数据库忙');
-                }
-            }
-        } else {
-            $res = array('success' => false, 'msg' => '短信验证码错误');
+        if (empty($codeLog)) {
+            $result = ['success' => false, 'msg' => 'code_invalid'];
+            echo json_encode($result);
+            exit();
         }
-        echo json_encode($res);
+        if ($codeLog['code'] != $readCode) {
+            $result = ['success' => false, 'msg' => 'code_invalid'];
+            echo json_encode($result);
+            exit();
+        }
+        if (time() - $codeLog['time'] > 30 * 60) {
+            $result = ['success' => false, 'msg' => 'code_invalid'];
+            echo json_encode($result);
+            exit();
+        }
+        if (empty($this->currentUser['id'])) {
+            $result = ['success' => false, 'msg' => 'user_not_login'];
+            echo json_encode($result);
+            exit();
+        }
+        if ($mobile_num != $current_post_num) {
+            $result = ['success' => false, 'msg' => 'mobile_phone_invalid'];
+            echo json_encode($result);
+            exit();
+        }
+        if ($this->User->hasAny(array('User.mobilephone' => $mobile_num))) {
+            $result = ['success' => false, 'msg' => 'mobile_phone_duplicate'];
+            echo json_encode($result);
+            exit();
+        }
+        $user_info = [];
+        $user_info['User']['mobilephone'] = $mobile_num;
+        $user_info['User']['id'] = $this->currentUser['id'];
+        $user_info['User']['uc_id'] = 5;
+        if ($this->User->save($user_info)) {
+            $result = ['success' => true];
+            echo json_encode($result);
+            exit();
+        }
+        $result = ['success' => false, 'msg' => 'system_error'];
+        echo json_encode($result);
+        exit();
     }
+
+    /**
+     * public function mobile_bind()
+     * {
+     * $this->autoRender = false;
+     * $readCode = $_POST['code'];
+     * $mobile_num = $_POST['mobile'];
+     * $msgCode = $this->Session->read('messageCode');
+     * $current_post_num = $this->Session->read('current_register_phone');
+     * $bind_from = $_POST['from'];
+     * $codeLog = json_decode($msgCode, true);
+     * $user_info = array();
+     * $res = array();
+     * if ($codeLog && is_array($codeLog) && $codeLog['code'] == $readCode && (time() - $codeLog['time'] < 30 * 60)) {
+     * $user_info['User']['mobilephone'] = $mobile_num;
+     * $user_info['User']['id'] = $this->currentUser['id'];
+     * $user_info['User']['uc_id'] = 5;
+     * if (empty($this->currentUser['id'])) {
+     * $res = array('success' => false, 'msg' => 'please login');
+     * } else if ($mobile_num != $current_post_num) {
+     * $res = array('success' => false, 'msg' => '请重新验证您的手机号码');
+     * } else if ($this->User->hasAny(array('User.mobilephone' => $mobile_num))) {
+     * $tempUser = $this->getUserNamebyMobile($mobile_num);
+     * $res = array('success' => false, 'msg' => '你的手机号已注册过，无法绑定，请用手机号登录', 'code' => 2, 'username' => $tempUser['User']['nickname']);
+     * } else if ($this->User->hasAny(array('User.username' => $mobile_num))) {
+     * if ($this->currentUser['username'] == $mobile_num) {
+     * if ($this->User->save($user_info)) {
+     * $res = array('success' => true, 'msg' => '你的账号和手机号绑定成功');
+     * };
+     * } else {
+     * $tempUser = $this->getUserNamebyMobile($mobile_num);
+     * $res = array('success' => false, 'msg' => '你的手机号已注册过，无法绑定，请用手机号登录', 'code' => 2, 'username' => $tempUser['User']['nickname']);
+     * }
+     * } else {
+     * if ($this->User->save($user_info)) {
+     * $this->Session->write('Auth.User.mobilephone', $mobile_num);
+     * $result_msg = '你的账号和手机号绑定成功';
+     * if ($bind_from == 'refer') {
+     * $result_msg = $result_msg . ',并获得1000积分';
+     * }
+     * $res = array('success' => true, 'msg' => $result_msg);
+     * } else {
+     * $res = array('success' => false, 'msg' => '绑定失败，数据库忙');
+     * }
+     * }
+     * } else {
+     * $res = array('success' => false, 'msg' => '短信验证码错误');
+     * }
+     * echo json_encode($res);
+     * }
+     *
+     * */
 
     /**
      * @param $text
@@ -1225,23 +1281,6 @@ class UsersController extends AppController
         return ($nickname == '' ? '用户_' . mt_rand(10, 1000) : $nickname);
     }
 
-    function complete_user_info()
-    {
-        $this->pageTitle = "完善用户信息";
-        $from = $_REQUEST['from'];
-        $this->set('from', $from);
-        $this->set('hideNav', true);
-        $uid = $this->currentUser['id'];
-        $current_user = $this->User->find('first', array(
-            'conditions' => array(
-                'id' => $uid
-            ),
-            'fields' => array('payment', 'description'),
-            'recursive' => 1, //int
-        ));
-        $this->set('user', $current_user);
-    }
-
     function complete()
     {
         $this->autoRender = false;
@@ -1250,16 +1289,40 @@ class UsersController extends AppController
             echo json_encode(array('success' => false, 'reason' => 'not_login'));
             return;
         }
-        $payment = $_REQUEST['payment'];
-        $description = $_REQUEST['description'];
-        $user_info = array('payment' => $payment, 'description' => $description, 'id' => $uid);
+
+        $payment = file_get_contents('php://input');
+        $user_info = array('payment' => $payment, 'id' => $uid);
         $this->User->saveAll($user_info);
         echo json_encode(array('success' => true));
         return;
     }
 
+    public function tutorial()
+    {
+        if (empty($this->currentUser['id'])) {
+            $this->redirect('/users/login');
+        }
+
+        $this->layout = 'tutorial_layout';
+
+        $currentUser = $this->currentUser;
+        $current_user = $this->User->find('first', array(
+            'conditions' => array(
+                'id' => $currentUser['id']
+            ),
+            'recursive' => 1, //int
+            'fields' => array('id', 'mobilephone', 'payment'),
+        ));
+
+        $this->log(json_encode($current_user));
+        $this->set('mobilephone', $current_user['User']['mobilephone']);
+        $this->set('payment', $current_user['User']['payment']);
+    }
+
     function to_bind_mobile()
     {
+        $this->layout = 'tutorial_layout';
+
         $userId = $this->Session->read('Auth.User.id');
         $userNickName = $this->Session->read('Auth.User.nickname');
         $orderId = $_REQUEST['order_id'];
@@ -1277,6 +1340,26 @@ class UsersController extends AppController
 
         $this->pageTitle = "绑定手机号";
     }
+
+    function complete_user_info()
+    {
+        $this->layout = 'tutorial_layout';
+
+        $this->pageTitle = "完善用户信息";
+        $from = $_REQUEST['from'];
+        $this->set('from', $from);
+        $this->set('hideNav', true);
+        $uid = $this->currentUser['id'];
+        $current_user = $this->User->find('first', array(
+            'conditions' => array(
+                'id' => $uid
+            ),
+            'fields' => array('payment', 'description'),
+            'recursive' => 1, //int
+        ));
+        $this->set('user', $current_user);
+    }
+
 
     function merge_data()
     {
@@ -1385,7 +1468,7 @@ class UsersController extends AppController
             $proxies = $this->User->get_my_proxys($uid);
         }
 
-        echo json_encode(array('uid'=> $uid, 'proxies'=>$proxies));
+        echo json_encode(array('uid' => $uid, 'proxies' => $proxies));
         exit();
     }
 }
