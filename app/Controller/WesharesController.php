@@ -15,6 +15,7 @@ class WesharesController extends AppController
     const PROCESS_SHIP_MARK_DEFAULT_RESULT = 0;
     const PROCESS_SHIP_MARK_UNFINISHED_RESULT = 1;
 
+    /**
     public function afterFilter()
     {
 
@@ -24,7 +25,7 @@ class WesharesController extends AppController
     {
 
     }
-
+    */
     public function __construct($request = null, $response = null)
     {
         $this->helpers[] = 'PhpExcel';
