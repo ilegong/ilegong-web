@@ -89,7 +89,7 @@ class CheckController extends AppController{
 
     public function get_mobile_code(){
         $this->autoRender = false;
-        if ($_REQUEST['uid'] != $this->currentUser['id']) {
+        if (empty($this->currentUser['id'])) {
             echo json_encode(['error' => true, 'msg' => 'not login']);
             return;
         }
