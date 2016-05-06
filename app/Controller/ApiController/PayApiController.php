@@ -197,23 +197,19 @@ class PayApiController extends Controller
     public function get_bank_info($cardNum)
     {
         $this->autoRender = false;
-
-//        $result = file_get_contents("https://ccdcapi.alipay.com/validateAndCacheCardInfo.json?_input_charset=utf-8&cardNo={$cardNum}&cardBinCheck=true");
-//        $result = json_decode($result);
-//        if (!$result->validated) {
-//            $bankInfo = array(
-//                'validated' => $result->validated
-//            );
-//        } else {
-//            $bankInfo = array(
-//                'validated' => $result->validated,              // 是否验证通过
-//                'bank' => $result->bank,                        // 银行代码
-//                'card_name' => $this->$bankInfo[$result->bank],   // 银行名称
-//            );
-//        }
-//
-//        return $bankInfo;
-        echo json_encode(array());
+        $result = file_get_contents("https://ccdcapi.alipay.com/validateAndCacheCardInfo.json?_input_charset=utf-8&cardNo={$cardNum}&cardBinCheck=true");
+        $result = json_decode($result);
+        if (!$result->validated) {
+            $bankInfo = array(
+                'validated' => $result->validated
+            );
+        } else {
+            $bankInfo = array(
+                'validated' => $result->validated,              // 是否验证通过
+                'card_name' => $this->bankInfo[$result->bank],   // 银行名称
+            );
+        }
+        echo json_encode($bankInfo);
         exit();
     }
 }
