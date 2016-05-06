@@ -91,6 +91,13 @@ ul li { list-style: none; }
 .copyreader-address a{ display: block;}
 .saveBtn{ display: block; background-color: #f99d3a; text-align: center; font-size: 1em; font-weight: bold; margin: 30px 20px 0 20px; line-height: 42px; color: #FFFFFF; text-decoration: none; border-radius: 5px;}
 
+/*Alice add css 5.4*/
+.promotion{ background-color: #FFFFFF; position: relative; border-bottom: 1px #eeeeee solid; background-color: #FFFFFF; padding:12px; margin-top: 10px;}
+.promotion dl dd{ float: left; line-height: 40px;}
+.promotion dl dd div{ border: 1px #dddddd solid; padding: 0px 5px;}
+.promotion dl dd input{ line-height: 20px; border: 0; font-size: 1.1em; width: 110px;}
+.promotion-title{ font-size: 1.1em;}
+.promotion dl dd a{ border: 1px #ff6485 solid; padding: 0 15px; margin-left: 15px; color: #ff6485; font-size: 1.1em; text-decoration: none; line-height: 38px; border-radius: 2px; display: block;}
 
 /* css by zhigang song*/
 .logistics-nav li:last-child {

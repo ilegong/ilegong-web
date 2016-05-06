@@ -40,6 +40,14 @@
         </div>
     </div>
     <!-- 这个元素在各个tab里面都会出现 -->
+    <div class="promotion">
+        <dl class="clearfix">
+            <dd class="promotion-title">优惠码：</dd>
+            <dd><div><input type="text" placeholder="请输入优惠码" ng-model="vm.useCouponCode" ng-disabled="vm.myCoupons" /></div></dd>
+            <dd><a href="javascript:;" ng-click='vm.useCoupons();'>确定</a></dd>
+        </dl>
+    </div>
+
     <div class="money-detail">
         <dl class="clearfix">
             <dt class="fl">应付总额：</dt>

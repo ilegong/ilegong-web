@@ -15,6 +15,16 @@ class WesharesController extends AppController
     const PROCESS_SHIP_MARK_DEFAULT_RESULT = 0;
     const PROCESS_SHIP_MARK_UNFINISHED_RESULT = 1;
 
+    public function afterFilter()
+    {
+
+    }
+
+    public function beforeRender()
+    {
+
+    }
+
     public function __construct($request = null, $response = null)
     {
         $this->helpers[] = 'PhpExcel';
@@ -45,6 +55,7 @@ class WesharesController extends AppController
         //$this->set('weshare_ids', Hash::extract($index_products, '{n}.Weshare.id'));
         $this->set('uid', $uid);
         $this->set('tag', $tag);
+        //$this->render();
     }
 
     /**
@@ -305,6 +316,7 @@ class WesharesController extends AppController
         if (!empty($detail)) {
             $detail['prepare_comment_data'] = $this->prepare_comment_data();
             $detail['weixininfo'] = $this->set_weixin_share_data($uid, $weshareId);
+            //$detail['my_coupons'] = [];//CouponItem.id Coupon.reduced_price
         }
         echo json_encode($detail);
         exit();
@@ -1377,6 +1389,27 @@ class WesharesController extends AppController
     private function get_can_used_coupons($uid, $sharer)
     {
         return $this->CouponItem->find_my_valid_share_coupons($uid, $sharer);
+    }
+
+    public function get_useful_coupons()
+    {
+        $data = $this->request->data;
+        $couponCode = $data['couponCode'];
+        $coupon_id = 36580;
+        
+        $sql = "SELECT * FROM cake_coupon_items WHERE code = '{$couponCode}' AND coupon_id = '{$coupon_id}'";
+
+        $res = @$this->CouponItem->query($sql);
+
+        if(!$res[0]['cake_coupon_items']['bind_user'])
+        {
+            echo json_encode(['ok'=>0 , 'msg'=>'使用成功' , 'num' => 2000 , 'useCouponId' => $res[0]['cake_coupon_items']['id']]);
+        }else if($res[0]['cake_coupon_items']['bind_user']){
+            echo json_encode(['ok'=>1 , 'msg'=>'该优惠吗已被使用', 'num' => 0,'id'=>0]);
+        }else{
+            echo json_encode(['ok'=>1 , 'msg'=>'不存在该优惠码', 'num' => 0,'id'=>0]);
+        }
+        die;
     }
 
     /**
