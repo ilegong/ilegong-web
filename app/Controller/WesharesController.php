@@ -15,6 +15,7 @@ class WesharesController extends AppController
     const PROCESS_SHIP_MARK_DEFAULT_RESULT = 0;
     const PROCESS_SHIP_MARK_UNFINISHED_RESULT = 1;
 
+    /**
     public function afterFilter()
     {
 
@@ -24,7 +25,7 @@ class WesharesController extends AppController
     {
 
     }
-
+    */
     public function __construct($request = null, $response = null)
     {
         $this->helpers[] = 'PhpExcel';
@@ -1401,11 +1402,11 @@ class WesharesController extends AppController
 
         $res = @$this->CouponItem->query($sql);
 
-        if(!$res[0]['cake_coupon_items']['bind_user'])
+        if($res[0]['cake_coupon_items']['bind_user'])
         {
-            echo json_encode(['ok'=>0 , 'msg'=>'使用成功' , 'num' => 2000 , 'useCouponId' => $res[0]['cake_coupon_items']['id']]);
-        }else if($res[0]['cake_coupon_items']['bind_user']){
             echo json_encode(['ok'=>1 , 'msg'=>'该优惠吗已被使用', 'num' => 0,'id'=>0]);
+        }else if($res[0]['cake_coupon_items']['id']){
+            echo json_encode(['ok'=>0 , 'msg'=>'使用成功' , 'num' => 2000 , 'useCouponId' => $res[0]['cake_coupon_items']['id']]);
         }else{
             echo json_encode(['ok'=>1 , 'msg'=>'不存在该优惠码', 'num' => 0,'id'=>0]);
         }
