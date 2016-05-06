@@ -1,9 +1,9 @@
 <div class="binding-container" ng-controller="TutorialBindingCardCtrl as vm">
     <div class="nav-bg">
-        <span class="nav-back fl" ng-click="vm.goBack();">
+        <a class="nav-back fl" href="/users/tutorial">
             <img src="{{$STATIC_HOST}}/static/weshares/images/back.png"/>
             <label>返回</label>
-        </span>
+        </a>
 
         <h1 class="fl">绑定收款账号</h1>
     </div>
@@ -31,9 +31,9 @@
         </div>
 
         <div class="binding-card-detail binding-card-bank" ng-class="{'show-b': vm.payment.type == 1}" style="display: none">
-            <div class="binding-card clearfix">
+            <div class="binding-card clearfix form-group" ng-class="{'has-error': !vm.bank.account_valid}">
                 <label>卡号</label>
-                <input type="number" string-to-number placeholder="请输入卡号" ng-model="vm.bank.account" ng-blur="vm.onAccountChanged()">
+                <input class="form-control" type="number" string-to-number placeholder="请输入卡号" ng-model="vm.bank.account" ng-change="vm.validateBankAccount()" ng-blur="vm.onAccountChanged()">
             </div>
                 <div class="binding-card clearfix">
                 <label>持卡人</label>

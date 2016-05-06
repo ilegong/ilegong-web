@@ -11,6 +11,11 @@
     vm.canBindCard = canBindCard;
     vm.bindCard = bindCard;
     vm.onAccountChanged = onAccountChanged;
+    vm.validateBankAccount = validateBankAccount;
+    vm.onError = onError;
+    vm.goBack = function () {
+      window.history.back();
+    }
 
     activate();
     function activate() {
@@ -27,8 +32,31 @@
       vm.bank = {
         "account": '',
         "full_name": '',
-        "card_name": ''
+        "card_name": '',
+        account_valid: true
       }
+    }
+
+    function validateBankAccount() {
+      var valid = /^\d{16,20}$/.test(vm.bank.account);
+      if (valid && !vm.bank.account_valid) {
+        vm.bank.account_valid = true;
+      }
+      return valid;
+    }
+
+    function onAccountChanged() {
+      vm.bank.account_valid = vm.validateBankAccount();
+      if (!vm.bank.account_valid) {
+
+      }
+
+      $http.get('/payapi/get_bank_info/' + vm.bank.account).success(function (data) {
+        if (data.validated) {
+          vm.bank.card_name = data.card_name;
+        }
+      }).error(function () {
+      });
     }
 
     function bindCard() {
@@ -47,8 +75,9 @@
         vm.payment.card_name = vm.bank.card_name;
       }
       $log.log('Bind payment: ').log(vm.payment);
-      $http.post().success(function () {
+      $http.post('/users/complete', {payment: vm.payment}).success(function () {
         vm.binding = false;
+        window.location.href="/weshares/add";
       }).error(function (data) {
         vm.binding = false;
       });
@@ -59,18 +88,16 @@
         return !_.isEmpty(vm.zhifubao.account) && !_.isEmpty(vm.zhifubao.full_name);
       }
       else {
-        return !_.isEmpty(vm.bank.account) && !_.isEmpty(vm.bank.full_name) && !_.isEmpty(vm.bank.card_name);
+        return !_.isEmpty(vm.bank.account) && !_.isEmpty(vm.bank.full_name) && !_.isEmpty(vm.bank.card_name) && vm.bank.account_valid;
       }
     }
 
-    function onAccountChanged() {
-      $http.get('/get_bank_info/' + vm.bank.account).success(function(data){
-        if(data.validated){
-          vm.bank.card_name = data.card_name;
-        }
-      }).error(function(){
-
-      });
+    function onError(message) {
+      $rootScope.showErrorMessageLayer = true;
+      $rootScope.errorMessage = message;
+      $timeout(function () {
+        $rootScope.showErrorMessageLayer = false;
+      }, 2000);
     }
   }
 

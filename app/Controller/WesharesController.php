@@ -166,28 +166,18 @@ class WesharesController extends AppController
         $currentUser = $this->currentUser;
         $uid = $currentUser['id'];
         //check user has bind mobile and payment
-        $user_fields = $this->query_user_fields;
-        $user_fields[] = 'mobilephone';
-        $user_fields[] = 'payment';
         $current_user = $this->User->find('first', array(
             'conditions' => array(
                 'id' => $uid
             ),
             'recursive' => 1, //int
-            'fields' => $user_fields,
+            'fields' => array('id', 'mobilephone', 'payment'),
         ));
-        if (empty($current_user['User']['mobilephone'])) {
-            $ref_url = WX_HOST . '/users/tutorial';
-            if ($_REQUEST['has_read']) {
-                $ref_url = WX_HOST . '/weshares/add';
-            }
-            $this->redirect('/users/to_bind_mobile?from=share&ref=' . $ref_url);
+        if (empty($current_user['User']['mobilephone']) || empty($current_user['User']['payment'])) {
+            $this->redirect('/users/tutorial');
             return;
         }
-        if (empty($current_user['User']['payment'])) {
-            $this->redirect('/users/complete_user_info?from=share');
-            return;
-        }
+        
         $share_ship_set = $this->sharer_can_use_we_ship($uid);
         if ($this->is_new_sharer($uid)) {
             $this->set('is_new_sharer', 1);
@@ -278,7 +268,8 @@ class WesharesController extends AppController
     }
 
     //获取分享的汇总数据
-    public function get_share_summery_data($shareId, $uid){
+    public function get_share_summery_data($shareId, $uid)
+    {
         $this->autoRender = false;
         try {
             $summery = $this->WeshareBuy->get_share_and_all_refer_share_summary($shareId, $uid);
@@ -1473,7 +1464,6 @@ class WesharesController extends AppController
     }
 
 
-
     /**
      * @param $sharer
      * @return bool
@@ -1481,7 +1471,7 @@ class WesharesController extends AppController
     private function is_new_sharer($sharer)
     {
         $level = $this->ShareUtil->get_user_level($sharer);
-        if(empty($level)){
+        if (empty($level)) {
             return true;
         }
         return false;
@@ -1546,8 +1536,6 @@ class WesharesController extends AppController
         }
         return $area . $express_consignee['OrderConsignees']['address'];
     }
-
-
 
 
     /**

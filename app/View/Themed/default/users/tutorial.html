@@ -9,7 +9,15 @@
             <strong>积累有50+报名人数、100+粉丝和95%的好评率，</strong>如果您达到了这个条件, 请联系<strong>微信：pyshuo2015</strong></em>
         <em>对于分享的产品我们<strong>收取5%的佣金，成为团长后收取3%，口碑非常好我们进行补贴，</strong>截团后3-5个工作日用户全部收到货后完成结款。</em>
         <em>如果您，热心分享、热爱美食、对生活品质有自己的追求、在小区朋友间有非常好的口碑，欢迎加入我们分享的大家庭。</em>
-        <a href="/users/to_bind_mobile" class="nextstepBtn">完善信息，开始我的分享</a>
+        {{if empty($mobilephone) || empty($payment)}}
+            {{if empty($mobilephone)}}
+                <a href="/users/to_bind_mobile" class="nextstepBtn enabled">完善信息，开始我的分享</a>
+            {{else}}
+                <a href="/users/complete_user_info" class="nextstepBtn enabled">完善信息，开始我的分享</a>
+            {{/if}}
+        {{else}}
+            <a href="/weshares/add" class="nextstepBtn enabled">开始我的分享</a>
+        {{/if}}
         <a href="https://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=400858287&idx=1&sn=5f0049e7a0d2f9387cbb1ef9188ee079&scene=1&srcid=04294yrCFSRXf1Gj87RT6RYo&key=b28b03434249256b953578b9b57d4ff5c078f30f215920a8642175d7bd4577ac814381ce85575afd38d933fc952e9e62&ascene=0&uin=OTQ4NjM0Mjgw&devicetype=iMac+MacBookAir6%2C2+OSX+OSX+10.11.2+build(15C50)&version=11020201&pass_ticket=eA6raqIN92glUtIW148OOJkJWM3M7VDqxRjj0%2FSYCYMcexZxcTVGilMAbS8GNb1W"
            class="link-a">点击 <span>"团长加入指南"</span> 了解更多团长特权</a>
     </font>

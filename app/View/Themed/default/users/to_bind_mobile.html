@@ -1,6 +1,6 @@
 <div class="binding-container" ng-controller="TutorialBindingMobileCtrl as vm">
     <div class="nav-bg">
-        <a href="#X" class="nav-back fl">
+        <a class="nav-back fl" href="/users/tutorial">
             <img src="{{$STATIC_HOST}}/static/weshares/images/back.png"/>
             <label>返回</label>
         </a>
@@ -14,9 +14,9 @@
                    ng-model="vm.mobilePhone.value" ng-change="vm.validateMobilePhone()"
                    ng-blur="vm.validateMobilePhoneAndAlert()">
         </div>
-        <div class="binding-phone clearfix">
+        <div class="binding-phone clearfix form-group" ng-class="{'has-error': !vm.code.valid}">
             <label>验证码</label>
-            <input type="number" string-to-number ng-model="vm.code.value" placeholder="请输入验证码">
+            <input class="form-control" type="number" string-to-number ng-model="vm.code.value" ng-change="vm.onCodeChanged()" placeholder="请输入验证码">
             <span class="getcode" ng-class="{'show-ib': !vm.code.sent, 'enabled': vm.canSendCode() && !vm.code.sending}"
                   ng-click="vm.sendCode()" ng-bind="vm.getSendCodeText()">获取验证码</span>
             <span class="getcode" ng-class="{'show-ib': vm.code.sent}" style="display: none;">已发送(<span
