@@ -259,13 +259,14 @@ class WesharesComponent extends Component
             ],
             'limit' => $limit,
             'page' => $page,
-            'order' => ['id DESC']
+            'order' => ['id DESC'],
+            'fields' => ['Weshare.id', 'Weshare.title', 'Weshare.description', 'Weshare.default_image', 'Weshare.creator']
         ]);
         $result = [];
         foreach($weshares as $weshare_item){
             $data_item =  $weshare_item['Weshare'];
-            //$data_item['summary'] = $this->ShareUtil->get_index_product_summary($data_item['id']);
-            $result[][] = $data_item;
+            $data_item['summary'] = $this->ShareUtil->get_index_product_summary($data_item['id']);
+            $result[] = $data_item;
         }
         return $result;
     }
@@ -286,7 +287,7 @@ class WesharesComponent extends Component
                     'type' => 'left'
                 ]
             ],
-            'fields' => ['Weshare.*'],
+            'fields' => ['Weshare.id', 'Weshare.title', 'Weshare.description', 'Weshare.default_image', 'Weshare.creator'],
             'limit' => $limit,
             'page' => $page,
             'order' => ['OptLog.id DESC']
@@ -294,8 +295,8 @@ class WesharesComponent extends Component
         $result = [];
         foreach ($logs as $log_item) {
             $data_item = $log_item['Weshare'];
-            //$log_item['summary'] = $this->ShareUtil->get_index_product_summary($data_item['id']);
-            $result[][] = $data_item;
+            $data_item['summary'] = $this->ShareUtil->get_index_product_summary($data_item['id']);
+            $result[] = $data_item;
         }
         return $result;
     }
