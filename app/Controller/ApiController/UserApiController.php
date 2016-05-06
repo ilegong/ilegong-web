@@ -80,6 +80,13 @@ class UserApiController extends AppController
         exit();
     }
 
+    public function confirm_order_received($order_id){
+        $uid = $this->currentUser['id'];
+        $result = $this->ShareUtil->confirm_received_order($order_id, $uid);
+        echo json_encode($result);
+        exit();
+    }
+
     public function reg_hx_user()
     {
         $user_id = $this->currentUser['id'];
