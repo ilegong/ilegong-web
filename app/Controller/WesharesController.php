@@ -1362,7 +1362,7 @@ class WesharesController extends AppController
     public function get_useful_coupons()
     {
         $postStr = file_get_contents('php://input');
-        $data = json_decode($postStr);
+        $data = json_decode($postStr, true);
         $couponCode = $data['couponCode'];
         //写死
         $coupon_id = 36580;
