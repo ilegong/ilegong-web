@@ -1,0 +1,155 @@
+@charset "utf-8";
+
+/*binding phone&card*/
+.tutorial-page {
+  .nextstepBtn {
+    background-color: #ff6485;
+    line-height: 44px;
+    text-align: center;
+    margin: 30px 25px 65px;
+    color: #FFFFFF;
+    font-size: 1.2em;
+    display: block;
+    text-decoration: none;
+    border-radius: 4px;
+  }
+
+  .binding-container {
+    background-color: #f1f1f1;
+    .binding {
+      padding-top: 55px;
+    }
+
+    .binding-phone, .binding-card {
+      border-radius: 2px 2px 0 0;
+      border-top: 1px #dddddd solid;
+      border-bottom: 1px #dddddd solid;
+      padding: 12px;
+      background-color: #FFFFFF;
+      margin-top: -1px;
+      position: relative;
+      color: #333333;
+    }
+
+    .binding-phone input, .binding-card input {
+      float: left;
+      border: 0;
+      line-height: 20px;
+      font-size: 1.1em;
+      outline: none;
+      width: 75%;
+    }
+
+    .binding-phone label {
+      display: block;
+      float: left;
+      width: 20%;
+      font-size: 1.1em;
+    }
+
+    .binding-card label {
+      display: block;
+      float: left;
+      width: 25%;
+      font-size: 1.1em;
+    }
+
+    .binding-phone .getcode {
+      background-color: #ff6485;
+      line-height: 34px;
+      padding: 0 8px;
+      color: #FFFFFF;
+      border-radius: 2px;
+      font-size: 1.1em;
+      display: block;
+      text-decoration: none;
+      position: absolute;
+      right: 12px;
+      top: 5px;
+      z-index: 2;
+    }
+
+    .binding-phone .waitting-code {
+      background-color: #BBBBBB !important;
+    }
+
+    .binding-card s {
+      display: block;
+      font-style: normal;
+      padding-right: 15px;
+      float: left;
+    }
+
+    .binding-card s input {
+      float: left;
+      border: 0;
+      width: inherit;
+      margin-top: 3px;
+    }
+
+    .binding-card s em {
+      float: left;
+      display: block;
+      font-style: normal;
+      font-size: 1.1em;
+      padding-left: 3px;
+    }
+
+    .binding-card select {
+      border: none;
+      line-height: 20px;
+      display: block;
+      font-size: 1.1em;
+      width: 75%;
+    }
+  }
+
+  /*first share*/
+  .tutorial-share-container {
+    background-color: #ffffff;
+    position: relative;
+    img {
+      width: 100%;
+    }
+    font {
+      position: absolute;
+      top: 62%;
+      width: 100%;
+    }
+    font h1 {
+      color: #ff6485;
+      text-align: center;
+      font-size: 1.8em;
+      padding-bottom: 20px;
+    }
+    font em {
+      display: block;
+      padding: 0 12px 20px;
+      line-height: 24px;
+      font-size: 1.1em;
+      color: #333333;
+      font-style: normal;
+    }
+    font h2 label {
+      display: block;
+      color: #ff6485;
+      font-size: 1em;
+    }
+    font em strong {
+      color: #ff6485;
+    }
+    font .link-a {
+      color: #333333;
+      text-decoration: none;
+      display: block;
+      text-align: center;
+      line-height: 30px;
+      margin-top: -55px;
+      margin-bottom: 30px;
+    }
+    font .link-a span {
+      color: #ff6485;
+      text-decoration: underline;
+    }
+  }
+}

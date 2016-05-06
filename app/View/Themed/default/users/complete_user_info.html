@@ -1,107 +1,54 @@
-<div class="classlist_v2" style="z-index:100">
-    <ul class="clearfix">
-        <li><a href="{{empty($_GET['history']) ? 'javascript:history.back(-1);':$_GET['history']}}" class="back"></a>
-        </li>
-        <li class="line"></li>
-        <li><strong>填写个人信息</strong></li>
-    </ul>
+<div class="binding-container" ng-controller="TutorialBindingCardCtrl as vm">
+    <div class="nav-bg">
+        <a class="nav-back fl" href="/users/tutorial">
+            <img src="{{$STATIC_HOST}}/static/weshares/images/back.png"/>
+            <label>返回</label>
+        </a>
+
+        <h1 class="fl">绑定收款账号</h1>
+    </div>
+    <div class="binding">
+        <div class="binding-card binding-card-type clearfix">
+            <label>账号类型</label>
+            <s class="clearfix">
+                <input name="cardType" ng-model="vm.payment.type" value="0" checked type="radio"/>
+                <em>支付宝</em>
+            </s>
+            <s class="clearfix">
+                <input name="cardType" ng-model="vm.payment.type" value="1" type="radio"/>
+                <em>银行卡</em>
+            </s>
+        </div>
+        <div class="binding-card-detail binding-card-zhifubao" ng-class="{'show-b': vm.payment.type == 0}" style="display: none">
+            <div class="binding-card clearfix">
+                <label>账号</label>
+                <input type="text" placeholder="请输入支付宝账号" ng-model="vm.zhifubao.account">
+            </div>
+            <div class="binding-card clearfix">
+                <label>姓名</label>
+                <input type="text" placeholder="请输入该账号关联的姓名" ng-model="vm.zhifubao.full_name">
+            </div>
+        </div>
+
+        <div class="binding-card-detail binding-card-bank" ng-class="{'show-b': vm.payment.type == 1}" style="display: none">
+            <div class="binding-card clearfix form-group" ng-class="{'has-error': !vm.bank.account_valid}">
+                <label>卡号</label>
+                <input class="form-control" type="number" string-to-number placeholder="请输入卡号" ng-model="vm.bank.account" ng-change="vm.validateBankAccount()" ng-blur="vm.onAccountChanged()">
+            </div>
+                <div class="binding-card clearfix">
+                <label>持卡人</label>
+                <input type="text" placeholder="请输入持卡人姓名" ng-model="vm.bank.full_name">
+            </div>
+            <div class="binding-card clearfix">
+                <label>卡类型</label>
+                <input type="text" placeholder="请输入卡类型" ng-model="vm.bank.card_name">
+            </div>
+            <div class="binding-card clearfix" style="display: none;">
+                <label>支行</label>
+                <input type="text" placeholder="请输入支行名称, 转账会更快(非必填)">
+            </div>
+        </div>
+    </div>
+    <span class="nextstepBtn" ng-class="{'enabled': vm.canBindCard() && !vm.binding}"
+          ng-click="vm.bindCard()">完成</span>
 </div>
-<div class="mobile_custom" style="background-color: #f5f5f5;margin-top: 40px;">
-    <input type="hidden" name="fromType" value="{{$from}}">
-    <dl class="clearfix raty" style="margin-bottom: 10px">
-        <dt class="comment_star fl">支付方式:</dt>
-    </dl>
-    <div class="comment comment_bg" style="padding: 0.5em;">
-        <div style="position:relative;" name="comment-place">
-            <input type="radio" value="1" name="paymentType" checked="checked">支付宝
-            &nbsp;&nbsp;&nbsp;
-            <input type="radio" value="2" name="paymentType">银行卡
-        </div>
-    </div>
-    <div class="comment comment_bg" style="padding: 0.5em;">
-        <div style="position:relative;" name="comment-place">
-            <textarea name="userPayment" cols="" rows="2" placeholder="您的支付宝或银行卡信息,方便系统给您转账,截团后三个工作日内打款" style="height: auto;">{{$user['User']['payment']}}</textarea>
-        </div>
-    </div>
-    <dl class="clearfix raty" style="margin-bottom: 10px">
-        <dt class="comment_star fl">个人简介:</dt>
-    </dl>
-    <div class="comment comment_bg" style="padding: 0.5em;">
-        <div style="position:relative;" name="comment-place">
-            <textarea name="userDescription" cols="" rows="" placeholder="个人介绍越真实，大家越信任您" style="height: 120px;">{{$user['User']['description']}}</textarea>
-        </div>
-    </div>
-    <div class="tipslayer" style="display: none;z-index: 300">
-        <div class="tipslayer_word"><strong>您还没有给自己描述!</strong><br/>有描述后别人会更好的知道你！</div>
-        <ul class="clearfix">
-            <li><a href="#X" name="saveUserInfoForce">保存</a></li>
-            <li><a href="#X" id="to_add_description" style="border-left: 1px #dddddd solid;">添加描述</a></li>
-        </ul>
-    </div>
-    <div class="tipslayer_bg" style="display: none;z-index: 200"></div>
-    <a href="javascript:;" name="saveUserInfo" class="comment_submit">保存</a>
-</div>
-<script>
-    $(document).ready(function(){
-        var $userPaymentEl = $('textarea[name="userPayment"]');
-        var $userDescriptionEl = $('textarea[name="userDescription"]');
-        var $addDescriptionEl = $('#to_add_description');
-        var $tipsLayerEl = $('div.tipslayer');
-        var $tipslayerBgEl = $('div.tipslayer_bg');
-        var $fromTypeEl = $('input[name="fromType"]');
-        var fromVal = $fromTypeEl.val();
-        $('a[name="saveUserInfo"]').on('click',function(){
-            var payment = $userPaymentEl.val();
-            var description = $userDescriptionEl.val();
-            if(!payment||!payment.trim()){
-                utils.alert('请输入支付方式');
-                return;
-            }
-            if(!description||!description.trim()){
-                $tipsLayerEl.show();
-                $tipslayerBgEl.show();
-                return;
-            }
-            handleSaveInfo(payment,description);
-        });
-
-        $('a[name="saveUserInfoForce"]').on('click',function(){
-            var payment = $userPaymentEl.val();
-            var description = $userDescriptionEl.val();
-            handleSaveInfo(payment,description);
-        });
-
-        $addDescriptionEl.on('click',function(){
-            hideLayer();
-        });
-
-        $tipslayerBgEl.on('click',function(){
-            hideLayer();
-        });
-
-        function hideLayer(){
-            $tipsLayerEl.hide();
-            $tipslayerBgEl.hide();
-        }
-
-        function handleSaveInfo(payment,description){
-            var paymentType = $('input[name=paymentType]:checked').val();
-            if(paymentType==1){
-                payment = '支付宝: '+payment;
-            }else{
-                payment = '银行卡: '+payment;
-            }
-            $.post('/users/complete',{payment:payment,description:description},function(data){
-                if(data['success']){
-                    if(!fromVal) {
-                        window.location.href = document.referrer;
-                    }else if(fromVal=='share'){
-                        window.location.href = '/weshares/add';
-                    }
-                }else{
-                    alert('保存失败');
-                }
-            },'json');
-        }
-    });
-</script>
