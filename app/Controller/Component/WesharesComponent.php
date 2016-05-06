@@ -259,7 +259,8 @@ class WesharesComponent extends Component
             ],
             'limit' => $limit,
             'page' => $page,
-            'order' => ['id DESC']
+            'order' => ['id DESC'],
+            'fields' => ['Weshare.id', 'Weshare.title', 'Weshare.description', 'Weshare.default_image', 'Weshare.creator', 'Weshare.view_count']
         ]);
         $result = [];
         foreach($weshares as $weshare_item){
@@ -286,7 +287,7 @@ class WesharesComponent extends Component
                     'type' => 'left'
                 ]
             ],
-            'fields' => ['Weshare.*'],
+            'fields' => ['Weshare.id', 'Weshare.title', 'Weshare.description', 'Weshare.default_image', 'Weshare.creator', 'Weshare.view_count'],
             'limit' => $limit,
             'page' => $page,
             'order' => ['OptLog.id DESC']
