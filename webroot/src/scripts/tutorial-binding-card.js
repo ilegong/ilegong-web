@@ -64,8 +64,10 @@
     }
 
     function onAccountChanged() {
-      $http.get('/ban').success(function(){
-
+      $http.get('/get_bank_info/' + vm.bank.account).success(function(data){
+        if(data.validated){
+          vm.bank.card_name = data.card_name;
+        }
       }).error(function(){
 
       });
