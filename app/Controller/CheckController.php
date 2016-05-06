@@ -87,6 +87,27 @@ class CheckController extends AppController{
         echo json_encode($res);
     }
 
+    public function get_mobile_code(){
+        $this->autoRender = false;
+        if ($_REQUEST['uid'] != $this->currentUser['id']) {
+            echo json_encode(['error' => true, 'msg' => 'not login']);
+            return;
+        }
+        if(empty($_REQUEST['mobile'])){
+            echo json_encode(['error' => true, 'msg' => 'param error']);
+            return;
+        }
+        $verifyCode = $this->gen_msg_verify_code();
+        $msg = '短信验证码：' . $verifyCode . '，有效期为30分钟，感谢您对朋友说的支持。';
+        $res = message_send($msg, $_REQUEST['mobile']);
+        $res = json_decode($res, true);
+        $res['timelimit'] = date('H:i', time() + 30 * 60);
+        $this->Session->write('messageCode', json_encode(array('code' => $verifyCode, 'time' => time())));
+        $this->Session->write('current_register_phone', $_REQUEST['mobile']);
+        echo json_encode($res);
+        exit();
+    }
+
     public function message_code(array $inputData = null){
         $this->autoRender = false;
         if (!isset($inputData)) {
