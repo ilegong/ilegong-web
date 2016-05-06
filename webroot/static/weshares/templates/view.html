@@ -1,10 +1,10 @@
 <div ng-if="vm.showShareDetailView" ng-click="vm.showUnSubscribe=false;">
     <div ng-class="{'has-channel-bottom': vm.weshare.type==0||vm.weshare.type==4||vm.weshare.type==6}">
-        <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-detail.html?v0.7.2'"></ng-include>
-        <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-orders.html?v0.7.2'"></ng-include>
+        <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-detail.html?v0.7.4'"></ng-include>
+        <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-orders.html?v0.7.4'"></ng-include>
     </div>
     <div ng-if="vm.weshare.type==0||vm.weshare.type==4||vm.weshare.type==6">
-        <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-default-nav.html?v0.7.2'"></ng-include>
+        <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-default-nav.html?v0.7.4'"></ng-include>
     </div>
 
     <!--分享管理层-->
@@ -126,12 +126,12 @@
     <ng-include src="vm.staticFilePath + '/static/weshares/templates/balance.html?v0.7.4'"></ng-include>
 </div>
 <div ng-if="vm.chooseOfflineStoreView">
-    <ng-include src="vm.staticFilePath + '/static/weshares/templates/offline-store.html?v0.7.3'"></ng-include>
+    <ng-include src="vm.staticFilePath + '/static/weshares/templates/offline-store.html?v0.7.4'"></ng-include>
 </div>
 <div ng-if="vm.showOfflineStoreDetailView">
-    <ng-include src="vm.staticFilePath + '/static/weshares/templates/offline-store-detail.html?v0.7.2'"></ng-include>
+    <ng-include src="vm.staticFilePath + '/static/weshares/templates/offline-store-detail.html?v0.7.4'"></ng-include>
 </div>
 <div ng-if="vm.showEditConsigneeView">
     <!--编辑地址-->
-    <ng-include src="vm.staticFilePath + '/static/weshares/templates/edit-consignee.html?v0.7.2'"></ng-include>
+    <ng-include src="vm.staticFilePath + '/static/weshares/templates/edit-consignee.html?v0.7.4'"></ng-include>
 </div>

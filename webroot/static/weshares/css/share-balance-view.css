@@ -77,7 +77,7 @@ ul li { list-style: none; }
 .select-address a.cur{ border-color: #f99d3a;}
 .add-address-bg{ height: 44px; width: 100%; background-color: #FFFFFF; position: fixed; bottom: 0; left: 0; z-index: 2;}
 .add-address-bg a{ border-radius: 5px; margin: 5px; line-height: 34px; text-align: center; background-color: #f99d3a; color: #FFFFFF; font-weight: bold; text-decoration: none; display: block;}
-
+.no-consignee-tip{font-size: 1.1em; color: #666; text-align: center; margin-top: 50%;}
 /*copyreader address*/
 .copyreader-address ul li img{ width: 7px; float: left; margin-left: 5px; position: absolute; right: 12px; top: 50%; margin-top: -7px;}
 
