@@ -1164,7 +1164,50 @@ class UsersController extends AppController
         $this->redirect($redirect);
     }
 
+    public function mobile_bind(){
+        $this->autoRender = false;
+        $postStr = file_get_contents('php://input');
+        $postDataArray = json_decode($postStr, true);
+        $readCode = $postDataArray['code'];
+        $mobile_num = $postDataArray['mobile'];
+        $msgCode = $this->Session->read('messageCode');
+        $current_post_num = $this->Session->read('current_register_phone');
+        $codeLog = json_decode($msgCode, true);
+        if(!empty($codeLog)){
+            $result = ['success' => false, 'code invalid'];
+            echo json_encode($result);
+            exit();
+        }
+        if($codeLog['code'] != $readCode){
+            $result = ['success' => false, 'code invalid'];
+            echo json_encode($result);
+            exit();
+        }
+        if(time() - $codeLog['time'] < 30 * 60){
+            $result = ['success' => false, 'code invalid'];
+            echo json_encode($result);
+            exit();
+        }
+        if(empty($this->currentUser['id'])){
+            $result = ['success' => false, 'user not login'];
+            echo json_encode($result);
+            exit();
+        }
+        if($mobile_num != $current_post_num){
+            $result = ['success' => false, 'mobile phone invalid'];
+            echo json_encode($result);
+            exit();
+        }
+        if($this->User->hasAny(array('User.mobilephone' => $mobile_num))){
+            $result = ['success' => false, 'mobile phone duplicate'];
+            echo json_encode($result);
+            exit();
+        }
 
+
+    }
+
+/**
     public function mobile_bind()
     {
         $this->autoRender = false;
@@ -1213,6 +1256,8 @@ class UsersController extends AppController
         }
         echo json_encode($res);
     }
+ *
+ * */
 
     /**
      * @param $text

@@ -2,8 +2,7 @@
 
 class PayApiController extends Controller
 {
-
-    public $components = array('OAuth.OAuth', 'WxPayment');
+    
     private $bankInfo = [
         "SRCB" => "深圳农村商业银行",
         "BGB" => "广西北部湾银行",
