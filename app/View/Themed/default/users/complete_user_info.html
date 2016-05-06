@@ -1,4 +1,4 @@
-<div class="binding-container">
+<div class="binding-container" ng-controller="TutorialBindingCardCtrl as vm">
     <div class="nav-bg">
         <a href="#X" class="nav-back fl">
             <img src="{{$STATIC_HOST}}/static/weshares/images/back.png"/>
@@ -8,110 +8,112 @@
         <h1 class="fl">绑定收款账号</h1>
     </div>
     <div class="binding">
-        <div class="binding-card clearfix">
+        <div class="binding-card binding-card-type clearfix">
             <label>账号类型</label>
             <s class="clearfix">
-                <input checked type="radio"/>
+                <input name="cardType" ng-model="vm.payment.type" value="0" checked type="radio"/>
                 <em>支付宝</em>
             </s>
             <s class="clearfix">
-                <input type="radio"/>
+                <input name="cardType" ng-model="vm.payment.type" value="1" type="radio"/>
                 <em>银行卡</em>
             </s>
         </div>
-        <div class="binding-card clearfix">
-            <label>账号</label>
-            <input type="text" placeholder="请输入支付宝账号">
+        <div class="binding-card-detail binding-card-zhifubao" ng-class="{'show-b': vm.payment.type == 0}" style="display: none">
+            <div class="binding-card clearfix">
+                <label>账号</label>
+                <input type="text" placeholder="请输入支付宝账号" ng-model="vm.zhifubao.account">
+            </div>
+            <div class="binding-card clearfix">
+                <label>姓名</label>
+                <input type="text" placeholder="请输入该账号关联的姓名" ng-model="vm.zhifubao.full_name">
+            </div>
         </div>
-        <div class="binding-card clearfix">
-            <label>姓名</label>
-            <input type="text" placeholder="请输入该账号关联的姓名">
-        </div>
-        <div class="binding-card clearfix" style="display: none;">
-            <label>持卡人</label>
-            <input type="text" placeholder="请输入持卡人姓名">
-        </div>
-        <div class="binding-card clearfix" style="display: none;">
-            <label>卡号</label>
-            <input type="text" placeholder="请输入卡号">
-        </div>
-        <div class="binding-card clearfix" style="display: none;">
-            <label>卡类型</label>
-            <select>
-                <option>请选择</option>
-                <option>招商银行</option>
-                <option>工商银行</option>
-            </select>
-        </div>
-        <div class="binding-card clearfix" style="display: none;">
-            <label>支行</label>
-            <input type="text" placeholder="请输入支行名称, 转账会更快(非必填)">
+
+        <div class="binding-card-detail binding-card-bank" ng-class="{'show-b': vm.payment.type == 1}" style="display: none">
+            <div class="binding-card clearfix">
+                <label>持卡人</label>
+                <input type="text" placeholder="请输入持卡人姓名" ng-model="vm.bank.full_name">
+            </div>
+            <div class="binding-card clearfix">
+                <label>卡号</label>
+                <input type="number" string-to-number placeholder="请输入卡号" ng-model="vm.bank.account" ng-blur="vm.onAccountChanged()">
+            </div>
+            <div class="binding-card clearfix">
+                <label>卡类型</label>
+                <input type="text" placeholder="请输入卡类型" ng-model="vm.bank.card_name">
+            </div>
+            <div class="binding-card clearfix" style="display: none;">
+                <label>支行</label>
+                <input type="text" placeholder="请输入支行名称, 转账会更快(非必填)">
+            </div>
         </div>
     </div>
-    <a href="#X" class="nextstepBtn">完成</a>
+    <span class="nextstepBtn" ng-class="{'enabled': vm.canBindCard() && !vm.binding}"
+          ng-click="vm.bindCard()">完成</span>
 </div>
 
-<script>
-    $(document).ready(function () {
-        var $userPaymentEl = $('textarea[name="userPayment"]');
-        var $userDescriptionEl = $('textarea[name="userDescription"]');
-        var $addDescriptionEl = $('#to_add_description');
-        var $tipsLayerEl = $('div.tipslayer');
-        var $tipslayerBgEl = $('div.tipslayer_bg');
-        var $fromTypeEl = $('input[name="fromType"]');
-        var fromVal = $fromTypeEl.val();
-        $('a[name="saveUserInfo"]').on('click', function () {
-            var payment = $userPaymentEl.val();
-            var description = $userDescriptionEl.val();
-            if (!payment || !payment.trim()) {
-                utils.alert('请输入支付方式');
-                return;
-            }
-            if (!description || !description.trim()) {
-                $tipsLayerEl.show();
-                $tipslayerBgEl.show();
-                return;
-            }
-            handleSaveInfo(payment, description);
-        });
+<!--<script>-->
+<!--$(document).ready(function () {-->
+<!--var $userPaymentEl = $('textarea[name="userPayment"]');-->
+<!--var $userDescriptionEl = $('textarea[name="userDescription"]');-->
+<!--var $addDescriptionEl = $('#to_add_description');-->
+<!--var $tipsLayerEl = $('div.tipslayer');-->
+<!--var $tipslayerBgEl = $('div.tipslayer_bg');-->
+<!--var $fromTypeEl = $('input[name="fromType"]');-->
+<!--var fromVal = $fromTypeEl.val();-->
+<!--$('a[name="saveUserInfo"]').on('click', function () {-->
+<!--var payment = $userPaymentEl.val();-->
+<!--var description = $userDescriptionEl.val();-->
+<!--if (!payment || !payment.trim()) {-->
+<!--utils.alert('请输入支付方式');-->
+<!--return;-->
+<!--}-->
+<!--if (!description || !description.trim()) {-->
+<!--$tipsLayerEl.show();-->
+<!--$tipslayerBgEl.show();-->
+<!--return;-->
+<!--}-->
+<!--handleSaveInfo(payment, description);-->
+<!--});-->
 
-        $('a[name="saveUserInfoForce"]').on('click', function () {
-            var payment = $userPaymentEl.val();
-            var description = $userDescriptionEl.val();
-            handleSaveInfo(payment, description);
-        });
+<!--$('a[name="saveUserInfoForce"]').on('click', function () {-->
+<!--var payment = $userPaymentEl.val();-->
+<!--var description = $userDescriptionEl.val();-->
+<!--handleSaveInfo(payment, description);-->
+<!--});-->
 
-        $addDescriptionEl.on('click', function () {
-            hideLayer();
-        });
+<!--$addDescriptionEl.on('click', function () {-->
+<!--hideLayer();-->
+<!--});-->
 
-        $tipslayerBgEl.on('click', function () {
-            hideLayer();
-        });
+<!--$tipslayerBgEl.on('click', function () {-->
+<!--hideLayer();-->
+<!--});-->
 
-        function hideLayer() {
-            $tipsLayerEl.hide();
-            $tipslayerBgEl.hide();
-        }
+<!--function hideLayer() {-->
+<!--$tipsLayerEl.hide();-->
+<!--$tipslayerBgEl.hide();-->
+<!--}-->
 
-        function handleSaveInfo(payment, description) {
-            var paymentType = $('input[name=paymentType]:checked').val();
-            if (paymentType == 1) {
-                payment = '支付宝: ' + payment;
-            } else {
-                payment = '银行卡: ' + payment;
-            }
-            $.post('/users/complete', {payment: payment, description: description}, function (data) {
-                if (data['success']) {
-                    if (!fromVal) {
-                        window.location.href = document.referrer;
-                    } else if (fromVal == 'share') {
-                        window.location.href = '/weshares/add';
-                    }
-                } else {
-                    alert('保存失败');
-                }
-            }, 'json');
-        }
-    });
-</script>
+<!--function handleSaveInfo(payment, description) {-->
+<!--var paymentType = $('input[name=paymentType]:checked').val();-->
+<!--if (paymentType == 1) {-->
+<!--payment = '支付宝: ' + payment;-->
+<!--} else {-->
+<!--payment = '银行卡: ' + payment;-->
+<!--}-->
+<!--$.post('/users/complete', {payment: payment, description: description}, function (data) {-->
+<!--if (data['success']) {-->
+<!--if (!fromVal) {-->
+<!--window.location.href = document.referrer;-->
+<!--} else if (fromVal == 'share') {-->
+<!--window.location.href = '/weshares/add';-->
+<!--}-->
+<!--} else {-->
+<!--alert('保存失败');-->
+<!--}-->
+<!--}, 'json');-->
+<!--}-->
+<!--});-->
+<!--</script>-->

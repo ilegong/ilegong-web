@@ -79,6 +79,15 @@ var all_js = [
       'webroot/src/scripts/user-list-data.js'
     ],
     dist: 'webroot/static/weshares/js/'
+  }, {
+    name: 'tutorial.min.js',
+    sources: [
+      'webroot/src/scripts/me-lazyload.js',
+      'webroot/src/scripts/app.js',
+      'webroot/src/scripts/tutorial-binding-card.js',
+      'webroot/src/scripts/tutorial-binding-mobile.js',
+    ],
+    dist: 'webroot/static/weshares/js/'
   }];
 
 var all_css = [
