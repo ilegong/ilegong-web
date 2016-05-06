@@ -3,6 +3,8 @@
 class PayApiController extends Controller
 {
 
+    public $components = array('OAuth.OAuth', 'Session', 'WxPayment');
+
     private $bankInfo = [
         "SRCB" => "深圳农村商业银行",
         "BGB" => "广西北部湾银行",
@@ -174,7 +176,7 @@ class PayApiController extends Controller
 
     public function beforeFilter()
     {
-        $allow_action = array('test');
+        $allow_action = array('test', 'get_bank_info');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action) == false) {
             $this->currentUser = $this->OAuth->user();
