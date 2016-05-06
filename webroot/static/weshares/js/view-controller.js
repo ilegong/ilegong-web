@@ -1300,7 +1300,7 @@
 
         //设置微信分享的参数
         function setWeiXinShareParams() {
-            var url = 'http://www.tongshijia.com/weshares/view/' + vm.weshare.id;
+            var url = 'http://'+window.location.host+'/weshares/view/' + vm.weshare.id;
             //creator
             var to_timeline_title = '朋友说—基于信任关系的分享平台';
             var to_friend_title = '朋友说—基于信任关系的分享平台';
