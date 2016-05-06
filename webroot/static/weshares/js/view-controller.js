@@ -672,7 +672,7 @@
         }
 
         function useCoupons() {
-            if(vm.useCouponCode == null || vm.myCoupons)
+            if(vm.useCouponCode == null || vm.myCoupons || (vm.weshare.id!=4507))
             {
                 return false;
             }
