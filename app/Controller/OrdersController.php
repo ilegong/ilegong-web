@@ -1705,7 +1705,7 @@ class OrdersController extends AppController {
         return null;
     }
 
-    private function _applied_couon_code() {
+    private function _applied_copuon_code() {
         return $this->Session->read('Balance.coupon_code');
     }
 
@@ -1843,7 +1843,7 @@ class OrdersController extends AppController {
      */
     private function _cal_total_reduced($uid) {
         $applied_coupons = $this->_applied_coupons();
-        $coupon_code = $this->_applied_couon_code();
+        $coupon_code = $this->_applied_coupon_code();
         $score_num = $this->Session->read(self::key_balanced_scores());
         $ziti = $this->Session->read(self::key_balanced_ship_type());
         $shipfee = $this->Session->read(self::key_balanced_ship_fee());

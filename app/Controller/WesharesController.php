@@ -15,17 +15,7 @@ class WesharesController extends AppController
     const PROCESS_SHIP_MARK_DEFAULT_RESULT = 0;
     const PROCESS_SHIP_MARK_UNFINISHED_RESULT = 1;
 
-    /**
-    public function afterFilter()
-    {
 
-    }
-
-    public function beforeRender()
-    {
-
-    }
-    */
     public function __construct($request = null, $response = null)
     {
         $this->helpers[] = 'PhpExcel';
@@ -532,7 +522,13 @@ class WesharesController extends AppController
                 $coupon_id = $postDataArray['coupon_id'];
                 //红包
                 if (!empty($coupon_id)) {
-                    $this->order_use_score_and_coupon($orderId, $uid, 0, $totalPrice / 100);
+                    //菠萝
+                    if($weshareId == 4507){
+                        //use code
+                        $this->order_use_coupon_code($coupon_id, $orderId, $uid);
+                    }else{
+                        $this->order_use_score_and_coupon($orderId, $uid, 0, $totalPrice / 100);
+                    }
                 }
                 //返利
                 $this->ShareUtil->update_rebate_log_order_id($rebateLogId, $orderId, $weshareId);
@@ -805,16 +801,11 @@ class WesharesController extends AppController
     {
         $this->autoRender = false;
         $weshare_id = $_REQUEST['share_id'];
-//        $refer_share_id = $_REQUEST['refer_share_id'];
-//        $address = $_REQUEST['address'];
-//        $msg = $_REQUEST['msg'];
-        //update share status
         $this->Weshare->updateAll(array('order_status' => WESHARE_ORDER_STATUS_SHIPPED), array('id' => $weshare_id, 'order_status' => WESHARE_ORDER_STATUS_WAIT_SHIP));
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_1', '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_1', '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_0', '');
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
-        //$this->WeshareBuy->send_group_share_product_arrival_msg($weshare_id, $refer_share_id, $msg, $address);
         echo json_encode(array('success' => true));
         return;
     }
@@ -1381,36 +1372,40 @@ class WesharesController extends AppController
         return $this->RedPacket->process_receive($share_offer_id, $uid, $this->is_weixin());
     }
 
-    /**
-     * @param $uid
-     * @param $sharer
-     * @return mixed
-     * 获取可用红包
-     */
-    private function get_can_used_coupons($uid, $sharer)
-    {
-        return $this->CouponItem->find_my_valid_share_coupons($uid, $sharer);
-    }
-
     public function get_useful_coupons()
     {
         $data = $this->request->data;
         $couponCode = $data['couponCode'];
+        //写死
         $coupon_id = 36580;
-        
-        $sql = "SELECT * FROM cake_coupon_items WHERE code = '{$couponCode}' AND coupon_id = '{$coupon_id}'";
-
-        $res = @$this->CouponItem->query($sql);
-
-        if($res[0]['cake_coupon_items']['bind_user'])
-        {
-            echo json_encode(['ok'=>1 , 'msg'=>'该优惠吗已被使用', 'num' => 0,'id'=>0]);
-        }else if($res[0]['cake_coupon_items']['id']){
-            echo json_encode(['ok'=>0 , 'msg'=>'使用成功' , 'num' => 2000 , 'useCouponId' => $res[0]['cake_coupon_items']['id']]);
-        }else{
-            echo json_encode(['ok'=>1 , 'msg'=>'不存在该优惠码', 'num' => 0,'id'=>0]);
+        $couponItem = $this->CouponItem->find('first', ['code' => $couponCode, 'coupon_id' => $coupon_id]);
+        if (empty($couponItem)) {
+            echo json_encode(['ok' => 1, 'msg' => '不存在该优惠码', 'num' => 0, 'id' => 0]);
+            exit();
         }
-        die;
+        $used_cnt = $this->Order->used_code_paid_cnt($couponCode);
+        if ($used_cnt > 0) {
+            echo json_encode(['ok' => 1, 'msg' => '该优惠码已被使用', 'num' => 0, 'id' => 0]);
+        } else {
+            echo json_encode(['ok' => 0, 'msg' => '使用成功', 'num' => 2000, 'useCouponId' => $couponItem['CouponItem']['id']]);
+        }
+        exit();
+    }
+
+
+    //菠萝优惠码使用
+    private function order_use_coupon_code($coupon_id, $order_id)
+    {
+        $reduced = 20;
+        $couponItem = $this->CouponItem->findById($coupon_id);
+        $coupon_code = $couponItem['CouponItem']['code'];
+        $used_cnt = $this->Order->used_code_paid_cnt($coupon_code);
+        if ($used_cnt == 0) {
+            $toUpdate = array('applied_code' => '\'' . $coupon_code . '\'',
+                'coupon_total' => 'coupon_total + 2000',
+                'total_all_price' => 'if(total_all_price - ' . $reduced . ' < 0, total_all_price, total_all_price - ' . $reduced . ')');
+            $this->Order->updateAll($toUpdate, array('id' => $order_id, 'status' => ORDER_STATUS_WAITING_PAY));
+        }
     }
 
     /**
