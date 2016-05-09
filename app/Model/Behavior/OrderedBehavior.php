@@ -585,7 +585,7 @@ class OrderedBehavior extends ModelBehavior {
 				'recursive' => -1));
 	}
 	
-	private function _highest(Model &$Model) {
+	private function _highest(&$Model) {
 		$options = array(
 				'order' => $this->settings[$Model->alias]['field'] . ' DESC', 
 				'fields' => array($Model->primaryKey, $this->settings[$Model->alias]['field']), 
@@ -605,7 +605,7 @@ class OrderedBehavior extends ModelBehavior {
 		return $last;
 	}
 	
-	private function _previous(Model &$Model) {
+	private function _previous(&$Model) {
 		$conditions = array(
 				$this->settings[$Model->alias]['field'] => $Model->data[$Model->alias][$this->settings[$Model->alias]['field']] - 1);
 		$fields = array($Model->primaryKey, $this->settings[$Model->alias]['field']);
@@ -635,7 +635,7 @@ class OrderedBehavior extends ModelBehavior {
 				'recursive' => -1));
 	}
 	
-	private function _all(Model &$Model) {
+	private function _all(&$Model) {
 		$options = array( 
 				'order' => $this->settings[$Model->alias]['field'] . ' DESC', 
 				'fields' => array($Model->primaryKey, $this->settings[$Model->alias]['field']), 
@@ -648,8 +648,7 @@ class OrderedBehavior extends ModelBehavior {
 		return $Model->find('all', $options);
 	}
 
-	
-	private function _read(Model &$Model, $id) {
+	private function _read(&$Model, $id) {
 		$Model->id = $id;
 		$fields = array($Model->primaryKey, $this->settings[$Model->alias]['field']);
 		if ($this->settings[$Model->alias]['foreign_key']) {
