@@ -24,8 +24,7 @@
  *
  * @package       Cake.Utility
  */
-class String {
-
+class String1 {
 /**
  * Generate a random UUID
  *
