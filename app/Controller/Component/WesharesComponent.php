@@ -277,14 +277,15 @@ class WesharesComponent extends Component
         $optLogM = ClassRegistry::init('OptLog');
         $logs = $optLogM->find('all', [
             'conditions' => [
-                'user_id' => $uid,
-                'obj_type' => OPT_LOG_SHARE_BUY
+                'OptLog.user_id' => $uid,
+                'OptLog.obj_type' => OPT_LOG_SHARE_BUY,
+                'Weshare.status' => WESHARE_STATUS_NORMAL
             ],
             'joins' => [
                 [
                     'table' => 'weshares',
                     'alias' => 'Weshare',
-                    'conditions' => ['Weshare.id = OptLog.obj_id', 'Weshare.status' => WESHARE_STATUS_NORMAL],
+                    'conditions' => ['Weshare.id = OptLog.obj_id'],
                     'type' => 'left'
                 ]
             ],

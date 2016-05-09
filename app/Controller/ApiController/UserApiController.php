@@ -24,7 +24,7 @@ class UserApiController extends AppController
         $user_info = $this->get_user_info($uid);
         $user_info['image'] = get_user_avatar($user_info);
         $sub_status = $this->ShareUtil->check_user_relation($curr_uid, $uid);
-        echo json_encode(['sub_status' => $sub_status, 'user_summary' => $user_summary, 'user_info' => $user_info['User']]);
+        echo json_encode(['sub_status' => !$sub_status, 'user_summary' => $user_summary, 'user_info' => $user_info['User']]);
         exit();
     }
 
