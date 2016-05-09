@@ -79,6 +79,15 @@ var all_js = [
       'webroot/src/scripts/user-list-data.js'
     ],
     dist: 'webroot/static/weshares/js/'
+  }, {
+    name: 'tutorial.min.js',
+    sources: [
+      'webroot/src/scripts/me-lazyload.js',
+      'webroot/src/scripts/app.js',
+      'webroot/src/scripts/tutorial-binding-card.js',
+      'webroot/src/scripts/tutorial-binding-mobile.js',
+    ],
+    dist: 'webroot/static/weshares/js/'
   }];
 
 var all_css = [
@@ -131,6 +140,12 @@ var all_css = [
     name: 'user-info.min.css',
     sources: [
       'webroot/static/weshares/css/user-info.css',
+    ],
+    dist: 'webroot/static/weshares/css/'
+  }, {
+    name: 'tutorial.min.css',
+    sources: [
+      'webroot/src/scss/tutorial.scss',
     ],
     dist: 'webroot/static/weshares/css/'
   }];

@@ -293,6 +293,14 @@ class Order extends AppModel {
         )));
     }
 
+    public function used_code_paid_cnt($code){
+        return $this->find('count', array('conditions' => array(
+            'applied_code' => $code,
+            'type' => ORDER_TYPE_WESHARE_BUY,
+            'not' => ['status' => ORDER_STATUS_WAITING_PAY]
+        )));
+    }
+
     /**
      * Update order status common method
      * @param $order_id

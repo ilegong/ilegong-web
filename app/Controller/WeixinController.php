@@ -232,7 +232,10 @@ class WeixinController extends AppController {
                     echo $this->newTextMsg($user, $me,  "您的用户id为(test2):".$uid);
                     break;
                 case '社区福利':
-                    echo $this->newArticleMsg($user, $me, [['title' => '社区活动（每人限购一份）', 'picUrl' => 'http://static.tongshijia.com/images/index/2016/05/04/5608327e-11a7-11e6-afd5-00163e1600b6.jpg', 'url' => 'http://www.tongshijia.com/weshares/view/4377?from=pineapple']]);
+                    echo $this->newArticleMsg($user, $me, [['title' => '社区活动（每人限购一份）', 'picUrl' => 'http://static.tongshijia.com/images/index/2016/05/06/fcdd548a-136e-11e6-afd5-00163e1600b6.jpg', 'url' => 'http://www.tongshijia.com/weshares/view/4377?from=pineapple']]);
+                    break;
+                case '兑换活动':
+                    echo $this->newArticleMsg($user, $me, [['title' => '兑换活动', 'picUrl' => 'http://static.tongshijia.com/images/index/2016/05/06/fcdd39dc-136e-11e6-afd5-00163e1600b6.jpg', 'url' => 'http://www.tongshijia.com/weshares/view/4507?from=pineapple']]);
                     break;
 				default:
                     $hour = date('G');
