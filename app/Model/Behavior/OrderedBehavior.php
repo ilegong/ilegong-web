@@ -647,6 +647,7 @@ class OrderedBehavior extends ModelBehavior {
 		}
 		return $Model->find('all', $options);
 	}
+
 	
 	private function _read(Model &$Model, $id) {
 		$Model->id = $id;
