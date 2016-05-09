@@ -76,7 +76,7 @@ class DB
 	function cleanSQL($param)
 	//Clean sql parameters
 	{
-		return mysql_real_escape_string($param,$this->dataserver);
+		return mysqli_real_escape_string($this->dataserver,$param);
 	}
 
 }
