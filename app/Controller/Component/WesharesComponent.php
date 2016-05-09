@@ -250,7 +250,8 @@ class WesharesComponent extends Component
         $this->on_weshare_deleted($uid, $weshare_id);
     }
 
-    public function get_u_create_share($uid, $limit, $page){
+    public function get_u_create_share($uid, $limit, $page)
+    {
         $weshareM = ClassRegistry::init('Weshare');
         $weshares = $weshareM->find('all', [
             'conditions' => [
@@ -263,8 +264,8 @@ class WesharesComponent extends Component
             'fields' => ['Weshare.id', 'Weshare.title', 'Weshare.description', 'Weshare.default_image', 'Weshare.creator']
         ]);
         $result = [];
-        foreach($weshares as $weshare_item){
-            $data_item =  $weshare_item['Weshare'];
+        foreach ($weshares as $weshare_item) {
+            $data_item = $weshare_item['Weshare'];
             $data_item['summary'] = $this->ShareUtil->get_index_product_summary($data_item['id']);
             $result[] = $data_item;
         }
@@ -283,7 +284,7 @@ class WesharesComponent extends Component
                 [
                     'table' => 'weshares',
                     'alias' => 'Weshare',
-                    'conditions' => ['Weshare.id = OptLog.obj_id'],
+                    'conditions' => ['Weshare.id = OptLog.obj_id', 'Weshare.status' => WESHARE_STATUS_NORMAL],
                     'type' => 'left'
                 ]
             ],

@@ -2,12 +2,13 @@
 
 class UserApiController extends AppController
 {
-    public $components = array('OAuth.OAuth', 'Orders', 'ChatUtil', 'WeshareBuy', 'ShareUtil', 'UserFans', 'Weshares');
     public $uses = array('User', 'UserFriend', 'UserLevel', 'UserRelation');
+
+    public $components = array('OAuth.OAuth', 'Orders', 'ChatUtil', 'WeshareBuy', 'ShareUtil', 'UserFans', 'Weshares');
 
     public function beforeFilter()
     {
-        $allow_action = array('test', 'check_mobile_available', 'get_user_create_shares');
+        $allow_action = array('test', 'check_mobile_available');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action) == false) {
             $this->currentUser = $this->OAuth->user();
