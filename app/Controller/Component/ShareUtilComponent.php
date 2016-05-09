@@ -91,7 +91,8 @@ class ShareUtilComponent extends Component
         $userRelationM = ClassRegistry::init('UserRelation');
         $relation = $userRelationM->hasAny([
             'user_id' => $userId,
-            'follow_id' => $followId
+            'follow_id' => $followId,
+            'deleted' => DELETED_NO
         ]);
         return !$relation;
     }
