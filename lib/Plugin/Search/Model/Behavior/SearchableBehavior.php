@@ -295,9 +295,9 @@ class SearchableBehavior extends ModelBehavior {
 
 	protected function _connectedLike($value, $field, $fieldName) {
 		$or = array();
-		$orValues  = String::tokenize($value, $field['connectorOr']);
+		$orValues  = String1::tokenize($value, $field['connectorOr']);
 		foreach ($orValues as $orValue) {
-			$andValues = String::tokenize($orValue, $field['connectorAnd']);
+			$andValues = String1::tokenize($orValue, $field['connectorAnd']);
 			$and = array();
 			foreach ($andValues as $andValue) {
 				$and[] = array($fieldName . " LIKE" => $field['before'] . $andValue . $field['after']);

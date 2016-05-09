@@ -19,7 +19,7 @@
  */
 
 App::uses('Component', 'Controller');
-App::uses('String', 'Utility');
+App::uses('String1', 'Utility');
 App::uses('Hash', 'Utility');
 App::uses('Security', 'Utility');
 

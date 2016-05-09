@@ -19,7 +19,7 @@
  */
 
 App::uses('DataSource', 'Model/Datasource');
-App::uses('String', 'Utility');
+App::uses('String1', 'Utility');
 App::uses('View', 'View');
 
 /**
@@ -2293,7 +2293,7 @@ class DboSource extends DataSource {
 		if ($allFields) {
 			$fields = array_keys($model->schema());
 		} elseif (!is_array($fields)) {
-			$fields = String::tokenize($fields);
+			$fields = String1::tokenize($fields);
 		}
 		$fields = array_values(array_filter($fields));
 		$allFields = $allFields || in_array('*', $fields) || in_array($model->alias . '.*', $fields);
@@ -2583,7 +2583,7 @@ class DboSource extends DataSource {
 		}
 
 		if ($bound) {
-			return String::insert($key . ' ' . trim($operator), $value);
+			return String1::insert($key . ' ' . trim($operator), $value);
 		}
 
 		if (!preg_match($operatorMatch, trim($operator))) {

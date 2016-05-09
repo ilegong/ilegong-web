@@ -24,7 +24,7 @@
  *
  * @package       Cake.Utility
  */
-class String1 {
+class String {
 
 /**
  * Generate a random UUID
@@ -204,7 +204,7 @@ class String1 {
 		$format = $options['format'];
 		$data = (array)$data;
 		if (empty($data)) {
-			return ($options['clean']) ? String::cleanInsert($str, $options) : $str;
+			return ($options['clean']) ? String1::cleanInsert($str, $options) : $str;
 		}
 
 		if (!isset($format)) {
@@ -223,7 +223,7 @@ class String1 {
 				$offset = $pos + strlen($val);
 				$str = substr_replace($str, $val, $pos, 1);
 			}
-			return ($options['clean']) ? String::cleanInsert($str, $options) : $str;
+			return ($options['clean']) ? String1::cleanInsert($str, $options) : $str;
 		}
 
 		asort($data);
@@ -246,7 +246,7 @@ class String1 {
 		if (!isset($options['format']) && isset($options['before'])) {
 			$str = str_replace($options['escape'] . $options['before'], $options['before'], $str);
 		}
-		return ($options['clean']) ? String::cleanInsert($str, $options) : $str;
+		return ($options['clean']) ? String1::cleanInsert($str, $options) : $str;
 	}
 
 /**
@@ -287,7 +287,7 @@ class String1 {
 				$str = preg_replace($kleenex, $clean['replacement'], $str);
 				if ($clean['andText']) {
 					$options['clean'] = array('method' => 'text');
-					$str = String::cleanInsert($str, $options);
+					$str = String1::cleanInsert($str, $options);
 				}
 				break;
 			case 'text':
