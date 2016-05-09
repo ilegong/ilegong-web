@@ -53,9 +53,9 @@ class InstallController extends InstallAppController {
         $this->pageTitle = __('Step 1: Config Database');
         if (!empty($this->data)) {
             // test database connection
-            if (@mysql_connect($this->data['Install']['host'], $this->data['Install']['login'], $this->data['Install']['password']) &&
-                @mysql_select_db($this->data['Install']['database'])) {
-
+            //if (@mysql_connect($this->data['Install']['host'], $this->data['Install']['login'], $this->data['Install']['password']) &&
+			//@mysql_select_db($this->data['Install']['database'])) {
+			if (@mysqli_connect($this->data['Install']['host'], $this->data['Install']['login'], $this->data['Install']['password'] ,$this->data['Install']['database'])){
                 // open database.php file
                 $content = file_get_contents(APP.'Config'.DS.'database.php.install');
                 // write database.php file
