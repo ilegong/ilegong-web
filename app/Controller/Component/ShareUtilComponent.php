@@ -91,7 +91,8 @@ class ShareUtilComponent extends Component
         $userRelationM = ClassRegistry::init('UserRelation');
         $relation = $userRelationM->hasAny([
             'user_id' => $userId,
-            'follow_id' => $followId
+            'follow_id' => $followId,
+            'deleted' => DELETED_NO
         ]);
         return !$relation;
     }
@@ -2103,7 +2104,7 @@ class ShareUtilComponent extends Component
                 'Order.member_id' => $related_share_ids,
                 'Order.status > 0',
             ],
-            'fields' => array('Order.id', 'User.id', 'User.nickname', 'User.avatar'),
+            'fields' => array('Order.id', 'User.id', 'User.nickname', 'User.avatar', 'User.image'),
             'joins' => [
                 [
                     'table' => 'users',
@@ -2113,6 +2114,7 @@ class ShareUtilComponent extends Component
                     ],
                 ]
             ],
+            'order' => ['id DESC'],
             'limit' => 5
         ]);
         $orders_and_creators = Hash::extract($orders_and_creators, '{n}.User');

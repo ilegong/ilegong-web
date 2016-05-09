@@ -1,291 +1,349 @@
 <div class="row">
-  <div class="col-lg-12">
-    <h1 class="page-header">
-      产品街产品编辑
-    </h1>
-  </div>
-  <!-- /.col-lg-12 -->
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            产品街产品编辑
+        </h1>
+    </div>
+    <!-- /.col-lg-12 -->
 </div>
 <!-- /.row -->
 <div class="row">
-  <div class="col-lg-12">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        添加
-      </div>
-      <div class="panel-body">
-        <div class="row">
-          <div class="col-lg-12">
-            <form role="form" action="/shareManage/pool_product_save.html" method="post" onSubmit='return checkUserInput(this);'>
-              <input type="hidden" id="share-id-hidden" name="data[PoolProduct][id]" value="{{$index_product['PoolProduct']['id']}}">
-              <div class='row'>
-                <div class="form-group col-sm-4">
-                  <label>
-                    分享人(ID)
-                  </label>
-                  <input type="text" class="form-control" name="data[Weshares][creator]" value="{{$index_product['Weshares']['creator']}}">
-                  <p class="help-block">
-                  分享人手机号
-                  </p>
-                </div>
-                <div class="form-group col-sm-4">
-                  <label>
-                    分享人
-                  </label>
-                  <input type="text" class="form-control" name="disable_data[PoolProduct][name]" value="{{$index_product['User']['nickname']}}" disabled>
-                  <p class="help-block">
-                  分享人
-                  </p>
-                </div>
-                <div class="form-group col-sm-4">
-                  <label>
-                    分享人手机号
-                  </label>
-                  <input type="text" class="form-control" name="disable_data[PoolProduct][mobilephone]" value="{{$index_product['User']['mobilephone']}}" disabled>
-                  <p class="help-block">
-                  分享人手机号
-                  </p>
-                </div>
-              </div>
-              <div class="form-group">
-                <label>
-                  显示名称
-                </label>
-                <input type="text" class="form-control" name="data[PoolProduct][share_name]" value="{{$index_product['PoolProduct']['share_name']}}">
-                <p class="help-block">
-                首页显示名称
-                </p>
-              </div>
-              <div class="form-group">
-                <label>
-                  分类
-                  <a href="/shareManage/pool_product_category_edit">
-                    添加分类
-                  </a>
-                </label>
-                <select class="form-control" name="data[PoolProduct][category]">
-                  {{loop $pool_product_categories $category}} 
-                  <option value="{{$category['PoolProductCategory']['id']}}" {{if ($category['PoolProductCategory']['id'] == $index_product['PoolProduct']['category'])}}selected{{/if}}>
-                  {{$category['PoolProductCategory']['category_name']}}
-                  </option>
-                  {{/loop}}
-                </select>
-                <p class="help-block">
-                所属分类
-                </p>
-              </div>
-              <div class="form-group">
-                <label>
-                  排序
-                </label>
-                <input type="number" class="form-control" name="data[PoolProduct][sort]" value="{{$index_product['PoolProduct']['sort']}}">
-                <p class="help-block">
-                首页显示排序
-                </p>
-              </div>
-              <div class="form-group">
-                <a class="btn btn-primary" id="hidden-show-ban-item" href="javascript:void(0)">
-                  显示/隐藏下架条目 </a>
-              </div>
-              {{loop $index_product['WeshareProducts'] $key $WeshareProduct}}
-              <div class='row pool-product-item' status="{{$WeshareProduct['deleted']}}">
-                <input type="hidden" class="form-control" name="data[WeshareProduct][{{$key}}][id]" value="{{$WeshareProduct['id']}}">
-                <div class="form-group col-sm-3">
-                  <label>
-                    规格
-                  </label>
-                  <input type="text" class="form-control" name="data[WeshareProduct][{{$key}}][name]" value="{{$WeshareProduct['name']}}">
-                  <p class="help-block">
-                  用于显示，不参与计算
-                  </p>
-                </div>
-                <div class="form-group col-sm-3">
-                  <label>
-                    显示价格
-                  </label>
-                  <input type="text" class="form-control" name="data[WeshareProduct][{{$key}}][price]" value="{{number_format($WeshareProduct['price'] / 100, 2, '.', '')}}">
-                  <p class="help-block">
-                  用于显示，不参与计算
-                  </p>
-                </div>
-                <div class="form-group col-sm-3">
-                  <label>
-                    渠道价格
-                  </label>
-                  <input type="text" class="form-control" name="data[WeshareProduct][{{$key}}][channel_price]" value="{{number_format($WeshareProduct['channel_price'] / 100, 2, '.', '')}}">
-                  <p class="help-block">
-                  渠道价格
-                  </p>
-                </div>
-                <div class="form-group col-sm-1">
-                  <label>
-                    状态
-                  </label>
-                  <div class=''>
-                    {{if $WeshareProduct['deleted']}} 已下架 {{else}} 正常 {{/if}}
-                  </div>
-                </div>
-                <div class="form-group col-sm-2">
-                  <label>
-                    操作
-                  </label>
-                  <div class=''>
-                    <a href='javascript:void(0)' class='product-ban btn btn-danger' data-upid="{{$WeshareProduct['id']}}">
-                      下架
-                    </a>
-                  </div>
-                </div>
-              </div>
-              {{/loop}}
-              <a href='javascript:void(0)' id='add-new-product' class='btn btn-primary'>
-                添加新规格
-              </a>
-              <input type="hidden" class="form-control" name="data[Weshares][id]" value="{{$index_product['Weshares']['id']}}">
-              <input type='hidden' class="form-control" id='store-images-string' name="data[Weshares][images]" value="{{$index_product['Weshares']['images']}}" autocomplete="off" />
-              <div class="row images-list">
-                <h3>
-                  展示图片链接
-                </h3>
-                {{loop $index_product['Weshares']['images_array'] $image}}
-                <div class="image-area col-sm-2">
-                  <img src="{{$image}}" />
-                  <div class="operator">
-                    <a class="btn btn-primary preview-image" src-data="{{$image}}" href="javascript:void(0)">
-                      预览
-                    </a>
-                    <a class="btn btn-danger delete-image" src-data="{{$image}}" href="javascript:void(0)">
-                      删除
-                    </a>
-                  </div>
-                </div>
-                {{/loop}}
-                <div class="col-sm-12 share-upload-btn">
-                  <a class='btn btn-default' href="javascript:void(0)" id='upload-image'>
-                    选择图片
-                  </a>
-                  <a class='btn btn-primary' href="javascript:void(0)" id='upload-image-action'>
-                    上传图片
-                  </a>
-                </div>
-              </div>
-              <div class="form-group">
-                <label>
-                  Banner图片链接
-                </label>
-                <input type='hidden' class="form-control" id='banner-images-string' name="data[PoolProduct][share_img]" value="{{$index_product['PoolProduct']['share_img']}}" autocomplete="off" />
-                <div class="banner-image-area col-sm-12">
-                  <img src="{{$index_product['PoolProduct']['share_img']}}" />
-                  <div class="operator">
-                    <a class="btn btn-primary preview-image" src-data="{{$index_product['PoolProduct']['share_img']}}" href="javascript:void(0)">
-                      预览
-                    </a>
-                    <a class="btn btn-danger delete-banner-image" src-data="{{$index_product['PoolProduct']['share_img']}}" href="javascript:void(0)">
-                      删除
-                    </a>
-                  </div>
-                </div>
-                <div class="col-sm-12 banner-upload-btn">
-                  <a class='btn btn-default' href="javascript:void(0)" id='banner-upload-image'>
-                    选择图片
-                  </a>
-                  <a class='btn btn-primary' href="javascript:void(0)" id='banner-upload-image-action'>
-                    上传图片
-                  </a>
-                </div>
-              </div>
-              <div class="form-group">
-                <label>
-                  APP 显示名称
-                </label>
-                <input type="text" class="form-control" name="data[PoolProduct][m_share_name]" value="{{$index_product['PoolProduct']['m_share_name']}}">
-                <p class="help-block">
-                  APP 首页显示名称
-                </p>
-              </div>
-              <div class="form-group">
-                <label>
-                  APP Banner图片链接
-                </label>
-                <input type='hidden' class="form-control" id='m-banner-images-string' name="data[PoolProduct][m_share_img]" value="{{$index_product['PoolProduct']['m_share_img']}}" autocomplete="off" />
-                <div class="m-banner-image-area col-sm-12">
-                  <img src="{{$index_product['PoolProduct']['m_share_img']}}" />
-                  <div class="operator">
-                    <a class="btn btn-primary preview-image" src-data="{{$index_product['PoolProduct']['m_share_img']}}" href="javascript:void(0)">
-                      预览
-                    </a>
-                    <a class="btn btn-danger delete-m-banner-image" src-data="{{$index_product['PoolProduct']['m_share_img']}}" href="javascript:void(0)">
-                      删除
-                    </a>
-                  </div>
-                </div>
-                <div class="col-sm-12 m-banner-upload-btn">
-                  <a class='btn btn-default' href="javascript:void(0)" id='m-banner-upload-image'>
-                    选择图片
-                  </a>
-                  <a class='btn btn-primary' href="javascript:void(0)" id='m-banner-upload-image-action'>
-                    上传图片
-                  </a>
-                </div>
-              </div>
-          </div>
-          <div class="form-group">
-            <label>
-              分享描述
-            </label>
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                添加
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <form role="form" action="/shareManage/pool_product_save.html" method="post"
+                              onSubmit='return checkUserInput(this);'>
+                            <input type="hidden" id="share-id-hidden" name="data[PoolProduct][id]"
+                                   value="{{$index_product['PoolProduct']['id']}}">
+
+                            <div class='row'>
+                                <div class="form-group col-sm-4">
+                                    <label>
+                                        分享人(ID)
+                                    </label>
+                                    <input type="text" class="form-control" name="data[Weshares][creator]"
+                                           value="{{$index_product['Weshares']['creator']}}">
+
+                                    <p class="help-block">
+                                        分享人手机号
+                                    </p>
+                                </div>
+                                <div class="form-group col-sm-4">
+                                    <label>
+                                        分享人
+                                    </label>
+                                    <input type="text" class="form-control" name="disable_data[PoolProduct][name]"
+                                           value="{{$index_product['User']['nickname']}}" disabled>
+
+                                    <p class="help-block">
+                                        分享人
+                                    </p>
+                                </div>
+                                <div class="form-group col-sm-4">
+                                    <label>
+                                        分享人手机号
+                                    </label>
+                                    <input type="text" class="form-control"
+                                           name="disable_data[PoolProduct][mobilephone]"
+                                           value="{{$index_product['User']['mobilephone']}}" disabled>
+
+                                    <p class="help-block">
+                                        分享人手机号
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    显示名称
+                                </label>
+                                <input type="text" class="form-control" name="data[PoolProduct][share_name]"
+                                       value="{{$index_product['PoolProduct']['share_name']}}">
+
+                                <p class="help-block">
+                                    首页显示名称
+                                </p>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    分类
+                                    <a href="/shareManage/pool_product_category_edit">
+                                        添加分类
+                                    </a>
+                                </label>
+                                <select class="form-control" name="data[PoolProduct][category]">
+                                    {{loop $pool_product_categories $category}}
+                                    <option value="{{$category['PoolProductCategory']['id']}}" {{if ($category[
+                                    'PoolProductCategory']['id'] ==
+                                    $index_product['PoolProduct']['category'])}}selected{{/if}}>
+                                    {{$category['PoolProductCategory']['category_name']}}
+                                    </option>
+                                    {{/loop}}
+                                </select>
+
+                                <p class="help-block">
+                                    所属分类
+                                </p>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    排序
+                                </label>
+                                <input type="number" class="form-control" name="data[PoolProduct][sort]"
+                                       value="{{$index_product['PoolProduct']['sort']}}">
+
+                                <p class="help-block">
+                                    首页显示排序
+                                </p>
+                            </div>
+                            <div class="form-group">
+                                <a class="btn btn-primary" id="hidden-show-ban-item" href="javascript:void(0)">
+                                    显示/隐藏下架条目 </a>
+                            </div>
+                            {{loop $index_product['WeshareProducts'] $key $WeshareProduct}}
+                            <div class='row pool-product-item' status="{{$WeshareProduct['deleted']}}">
+                                <input type="hidden" class="form-control" name="data[WeshareProduct][{{$key}}][id]"
+                                       value="{{$WeshareProduct['id']}}">
+
+                                <div class="form-group col-sm-3">
+                                    <label>
+                                        规格
+                                    </label>
+                                    <input type="text" class="form-control" name="data[WeshareProduct][{{$key}}][name]"
+                                           value="{{$WeshareProduct['name']}}">
+
+                                    <p class="help-block">
+                                        用于显示，不参与计算
+                                    </p>
+                                </div>
+                                <div class="form-group col-sm-3">
+                                    <label>
+                                        显示价格
+                                    </label>
+                                    <input type="text" class="form-control" name="data[WeshareProduct][{{$key}}][price]"
+                                           value="{{number_format($WeshareProduct['price'] / 100, 2, '.', '')}}">
+
+                                    <p class="help-block">
+                                        用于显示，不参与计算
+                                    </p>
+                                </div>
+                                <div class="form-group col-sm-3">
+                                    <label>
+                                        渠道价格
+                                    </label>
+                                    <input type="text" class="form-control"
+                                           name="data[WeshareProduct][{{$key}}][channel_price]"
+                                           value="{{number_format($WeshareProduct['channel_price'] / 100, 2, '.', '')}}">
+
+                                    <p class="help-block">
+                                        渠道价格
+                                    </p>
+                                </div>
+                                <div class="form-group col-sm-1">
+                                    <label>
+                                        状态
+                                    </label>
+
+                                    <div class=''>
+                                        {{if $WeshareProduct['deleted']}} 已下架 {{else}} 正常 {{/if}}
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-2">
+                                    <label>
+                                        操作
+                                    </label>
+
+                                    <div class=''>
+                                        <a href='javascript:void(0)' class='product-ban btn btn-danger'
+                                           data-upid="{{$WeshareProduct['id']}}">
+                                            下架
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {{/loop}}
+                            <a href='javascript:void(0)' id='add-new-product' class='btn btn-primary'>
+                                添加新规格
+                            </a>
+                            <input type="hidden" class="form-control" name="data[Weshares][id]"
+                                   value="{{$index_product['Weshares']['id']}}">
+                            <input type='hidden' class="form-control" id='store-images-string'
+                                   name="data[Weshares][images]" value="{{$index_product['Weshares']['images']}}"
+                                   autocomplete="off"/>
+
+                            <div class="row images-list">
+                                <h3>
+                                    展示图片链接
+                                </h3>
+                                {{loop $index_product['Weshares']['images_array'] $image}}
+                                <div class="image-area col-sm-2">
+                                    <img src="{{$image}}"/>
+
+                                    <div class="operator">
+                                        <a class="btn btn-primary preview-image" src-data="{{$image}}"
+                                           href="javascript:void(0)">
+                                            预览
+                                        </a>
+                                        <a class="btn btn-danger delete-image" src-data="{{$image}}"
+                                           href="javascript:void(0)">
+                                            删除
+                                        </a>
+                                    </div>
+                                </div>
+                                {{/loop}}
+                                <div class="col-sm-12 share-upload-btn">
+                                    <a class='btn btn-default' href="javascript:void(0)" id='upload-image'>
+                                        选择图片
+                                    </a>
+                                    <a class='btn btn-primary' href="javascript:void(0)" id='upload-image-action'>
+                                        上传图片
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    Banner图片链接
+                                </label>
+                                <input type='hidden' class="form-control" id='banner-images-string'
+                                       name="data[PoolProduct][share_img]"
+                                       value="{{$index_product['PoolProduct']['share_img']}}" autocomplete="off"/>
+
+                                <div class="banner-image-area col-sm-12">
+                                    <img src="{{$index_product['PoolProduct']['share_img']}}"/>
+
+                                    <div class="operator">
+                                        <a class="btn btn-primary preview-image"
+                                           src-data="{{$index_product['PoolProduct']['share_img']}}"
+                                           href="javascript:void(0)">
+                                            预览
+                                        </a>
+                                        <a class="btn btn-danger delete-banner-image"
+                                           src-data="{{$index_product['PoolProduct']['share_img']}}"
+                                           href="javascript:void(0)">
+                                            删除
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 banner-upload-btn">
+                                    <a class='btn btn-default' href="javascript:void(0)" id='banner-upload-image'>
+                                        选择图片
+                                    </a>
+                                    <a class='btn btn-primary' href="javascript:void(0)"
+                                       id='banner-upload-image-action'>
+                                        上传图片
+                                    </a>
+                                </div>
+                            </div>
+                            {{if WX_HOST!=SH_SITE_HOST}}
+                            <div class="form-group">
+                                <label>
+                                    APP 显示名称
+                                </label>
+                                <input type="text" class="form-control" name="data[PoolProduct][m_share_name]"
+                                       value="{{$index_product['PoolProduct']['m_share_name']}}">
+
+                                <p class="help-block">
+                                    APP 首页显示名称
+                                </p>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    APP Banner图片链接
+                                </label>
+                                <input type='hidden' class="form-control" id='m-banner-images-string'
+                                       name="data[PoolProduct][m_share_img]"
+                                       value="{{$index_product['PoolProduct']['m_share_img']}}" autocomplete="off"/>
+
+                                <div class="m-banner-image-area col-sm-12">
+                                    <img src="{{$index_product['PoolProduct']['m_share_img']}}"/>
+
+                                    <div class="operator">
+                                        <a class="btn btn-primary preview-image"
+                                           src-data="{{$index_product['PoolProduct']['m_share_img']}}"
+                                           href="javascript:void(0)">
+                                            预览
+                                        </a>
+                                        <a class="btn btn-danger delete-m-banner-image"
+                                           src-data="{{$index_product['PoolProduct']['m_share_img']}}"
+                                           href="javascript:void(0)">
+                                            删除
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 m-banner-upload-btn">
+                                    <a class='btn btn-default' href="javascript:void(0)" id='m-banner-upload-image'>
+                                        选择图片
+                                    </a>
+                                    <a class='btn btn-primary' href="javascript:void(0)"
+                                       id='m-banner-upload-image-action'>
+                                        上传图片
+                                    </a>
+                                </div>
+                            </div>
+                            {{/if}}
+                            <div class="form-group">
+                                <label>
+                                    分享描述
+                                </label>
             <textarea class="form-control" rows="5" name="data[Weshares][description]">
               {{$index_product['Weshares']['description']}}
             </textarea>
-          </div>
-          <a class='btn btn-primary' target='_blank' href="/weshares/update/{{$index_product['Weshares']['id']}}">
-            去编辑物流
-          </a>
-          <button type="submit" class="btn btn-default">
-            保存并上架
-          </button>
-            </form>
+                            </div>
+                            <a class='btn btn-primary' target='_blank'
+                               href="/weshares/update/{{$index_product['Weshares']['id']}}">
+                                去编辑物流
+                            </a>
+                            <button type="submit" class="btn btn-default">
+                                保存并上架
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <!-- /.row (nested) -->
+            </div>
+            <!-- /.panel-body -->
         </div>
-      </div>
-      <!-- /.row (nested) -->
+        <!-- /.panel -->
     </div>
-    <!-- /.panel-body -->
-  </div>
-  <!-- /.panel -->
-</div>
-<!-- /.col-lg-12 -->
+    <!-- /.col-lg-12 -->
 </div>
 <!-- /.row -->
 </div>
 <div class="modal fade" id="image-preview-modal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">
             &times;
           </span>
-        </button>
-        <h4 class="modal-title">
-          图片预览
-        </h4>
-      </div>
-      <div class="modal-body">
-        <img id="image-preview" />
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">
-          Close
-        </button>
-      </div>
+                </button>
+                <h4 class="modal-title">
+                    图片预览
+                </h4>
+            </div>
+            <div class="modal-body">
+                <img id="image-preview"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
     </div>
-    <!-- /.modal-content -->
-  </div>
-  <!-- /.modal-dialog -->
+    <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
 <form id="file-uploader">
-  <input type="file" name='images' class="hidden" id="uploader" />
-  <input type="hidden" name='token' value="PYS_IMAGES_001">
-  <input type="hidden" name='category' value="images/index">
+    <input type="file" name='images' class="hidden" id="uploader"/>
+    <input type="hidden" name='token' value="PYS_IMAGES_001">
+    <input type="hidden" name='category' value="images/index">
 </form>
 <script type="text/javascript" src="{{$STATIC_HOST}}/static/manage/js/pool_products_edit.js"></script>
-<link type="text/css" href="{{$STATIC_HOST}}/static/manage/css/pool_product_edit.css" rel="stylesheet" />
+<link type="text/css" href="{{$STATIC_HOST}}/static/manage/css/pool_product_edit.css" rel="stylesheet"/>

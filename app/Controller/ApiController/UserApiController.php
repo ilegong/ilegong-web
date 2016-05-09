@@ -2,12 +2,13 @@
 
 class UserApiController extends AppController
 {
-    public $components = array('OAuth.OAuth', 'Orders', 'ChatUtil', 'WeshareBuy', 'ShareUtil', 'UserFans', 'Weshares');
     public $uses = array('User', 'UserFriend', 'UserLevel', 'UserRelation');
+
+    public $components = array('OAuth.OAuth', 'Orders', 'ChatUtil', 'WeshareBuy', 'ShareUtil', 'UserFans', 'Weshares');
 
     public function beforeFilter()
     {
-        $allow_action = array('test', 'check_mobile_available', 'get_user_create_shares');
+        $allow_action = array('test', 'check_mobile_available');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action) == false) {
             $this->currentUser = $this->OAuth->user();
@@ -22,8 +23,8 @@ class UserApiController extends AppController
         $user_summary = $this->WeshareBuy->get_user_share_summary($uid);
         $user_info = $this->get_user_info($uid);
         $user_info['image'] = get_user_avatar($user_info);
-        $sub_status = $this->ShareUtil->check_user_relation($curr_uid, $uid);
-        echo json_encode(['sub_status' => $sub_status, 'user_summary' => $user_summary, 'user_info' => $user_info['User']]);
+        $sub_status = $this->ShareUtil->check_user_relation($uid, $curr_uid);
+        echo json_encode(['sub_status' => !$sub_status, 'user_summary' => $user_summary, 'user_info' => $user_info['User']]);
         exit();
     }
 

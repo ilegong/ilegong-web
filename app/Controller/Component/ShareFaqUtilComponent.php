@@ -144,6 +144,7 @@ class ShareFaqUtilComponent extends Component {
         $userOauthBinds = $this->WeshareBuy->get_open_ids(array($sender, $receiver));
         $title = $userNicknames[$receiver] . '你好' . '，' . $userNicknames[$sender] . '给你发送了一条消息。';
         $detail_url = WX_HOST . '/share_faq/faq/' . $shareId . '/' . $sender;
+        $this->log('send notify template msg oauth binds ' . json_encode($userOauthBinds) . ' sender ' . $sender . ' receiver ' . $receiver, LOG_DEBUG);
         $this->Weixin->send_faq_notify_template_msg($userOauthBinds[$receiver], $detail_url, $title, $msg, $share_title);
     }
 }

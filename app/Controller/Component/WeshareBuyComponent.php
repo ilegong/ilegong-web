@@ -959,7 +959,7 @@ class WeshareBuyComponent extends Component
      */
     public function process_send_share_msg($openId, $title, $productName, $detailUrl, $sharerName, $remark)
     {
-        send_join_tuan_buy_msg(null, $title, $productName, $sharerName, $remark, $detailUrl, $openId);
+        $this->Weixin->send_join_tuan_buy_msg(null, $title, $productName, $sharerName, $remark, $detailUrl, $openId);
     }
 
     /**
