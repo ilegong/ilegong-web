@@ -71,6 +71,66 @@ class SharerApiController extends AppController{
         echo json_encode($result);
     }
 
+    public function get_sharer_month_order_count()
+    {
+        $uid = $this->currentUser['id'];
+        $userMonthOrderCount = $this->WeshareBuy->get_month_total_count($uid);
+        echo json_encode(['count' => $userMonthOrderCount]);
+        exit();
+    }
+
+    public function get_share_list($status, $page, $limit)
+    {
+        $uid = $this->currentUser['id'];
+        $shares = $this->WeshareBuy->get_my_shares($uid, $status, $page, $limit);
+        $share_ids = Hash::extract($shares, '{n}.Weshare.id');
+        $result = [];
+        if (!empty($share_ids)) {
+            $query_order_sql = 'select count(id), member_id from cake_orders where member_id in (' . implode(',', $share_ids) . ') and status=1 and type=9 group by member_id';
+            $orderM = ClassRegistry::init('Order');
+            $result = $orderM->query($query_order_sql);
+            $result = Hash::combine($result, '{n}.cake_orders.member_id', '{n}.count(id)');
+            $share_balance_money = $this->get_share_balance_result($share_ids);
+            foreach ($shares as $shareItem) {
+                $shareItem = $shareItem['Weshare'];
+                $shareItem['order_count'] = empty($result[$shareItem['id']]) ? 0 : $result[$shareItem['id']];
+                $shareItem['balance_money'] = $share_balance_money[$shareItem['id']];
+                $result[] = $shareItem;
+            }
+        }
+        echo json_encode($result);
+        exit();
+    }
+
+    public function get_auth_share_list($page, $limit)
+    {
+        $uid = $this->currentUser['id'];
+        $auth_shares_result = $this->WeshareBuy->get_my_auth_shares($uid, $page, $limit);
+        $share_ids = Hash::extract($auth_shares_result, '{n}.Weshare.id');
+        $shares = [];
+        if (!empty($share_ids)) {
+            $query_order_sql = 'select count(id), member_id from cake_orders where member_id in (' . implode(',', $share_ids) . ') and status=1 and type=9 group by member_id';
+            $orderM = ClassRegistry::init('Order');
+            $result = $orderM->query($query_order_sql);
+            $result = Hash::combine($result, '{n}.cake_orders.member_id', '{n}.count(id)');
+            $share_balance_money = $this->get_share_balance_result($share_ids);
+            foreach ($auth_shares_result as $result_item) {
+                $share_item = $result_item['Weshare'];
+                $operate_item = $result_item['ShareOperateSetting'];
+                $share_item_id = $share_item['id'];
+                if (!isset($shares[$share_item_id])) {
+                    $shares[$share_item_id] = $share_item;
+                    $shares[$share_item_id]['order_count'] = empty($result[$share_item_id]) ? 0 : $result[$share_item_id];
+                    $shares[$share_item_id]['balance_money'] = $share_balance_money[$share_item_id];
+                    $shares[$share_item_id]['auth_types'] = [];
+                }
+                $shares[$share_item_id]['auth_types'][] = $operate_item['data_type'];
+            }
+        }
+        echo json_encode(array_values($shares));
+        exit();
+    }
+
     /**
      * 获取我的分享
      */
