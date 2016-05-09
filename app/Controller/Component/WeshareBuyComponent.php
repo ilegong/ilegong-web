@@ -207,7 +207,7 @@ class WeshareBuyComponent extends Component
         return $myCreateShares;
     }
 
-    public function get_my_shares($uid, $status, $page, $limit)
+    public function get_my_shares($uid, $status, $settlement, $page, $limit)
     {
         $weshareM = ClassRegistry::init('Weshare');
         $query_share_type = array(SHARE_TYPE_GROUP, SHARE_TYPE_DEFAULT, SHARE_TYPE_POOL_FOR_PROXY, SHARE_TYPE_POOL);
@@ -215,7 +215,8 @@ class WeshareBuyComponent extends Component
             'conditions' => [
                 'creator' => $uid,
                 'status' => $status,
-                'type' => $query_share_type
+                'type' => $query_share_type,
+                'settlement' => $settlement
             ],
             'fields' => $this->query_list_share_fields,
             'order' => array('created DESC'),

@@ -79,10 +79,10 @@ class SharerApiController extends AppController{
         exit();
     }
 
-    public function get_share_list($status, $page, $limit)
+    public function get_share_list($status, $settlement, $page, $limit)
     {
         $uid = $this->currentUser['id'];
-        $shares = $this->WeshareBuy->get_my_shares($uid, $status, $page, $limit);
+        $shares = $this->WeshareBuy->get_my_shares($uid, $status, $settlement, $page, $limit);
         $share_ids = Hash::extract($shares, '{n}.Weshare.id');
         $result = [];
         if (!empty($share_ids)) {
