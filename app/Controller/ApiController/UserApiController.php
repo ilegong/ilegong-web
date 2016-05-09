@@ -23,7 +23,7 @@ class UserApiController extends AppController
         $user_summary = $this->WeshareBuy->get_user_share_summary($uid);
         $user_info = $this->get_user_info($uid);
         $user_info['image'] = get_user_avatar($user_info);
-        $sub_status = $this->ShareUtil->check_user_relation($curr_uid, $uid);
+        $sub_status = $this->ShareUtil->check_user_relation($uid, $curr_uid);
         echo json_encode(['sub_status' => !$sub_status, 'user_summary' => $user_summary, 'user_info' => $user_info['User']]);
         exit();
     }
