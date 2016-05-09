@@ -210,6 +210,7 @@ class UserApiController extends AppController
         $datainfo = $this->User->find('first', array('recursive' => -1,
             'conditions' => array('id' => $user_id),
             'fields' => array('nickname', 'image', 'sex', 'mobilephone', 'username', 'id', 'hx_password', 'description', 'payment', 'avatar')));
+        $datainfo['User']['image'] = get_user_avatar($datainfo);
         return $datainfo;
     }
 
