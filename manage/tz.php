@@ -1388,8 +1388,10 @@ else
   <?php
   if ($_POST['act'] == 'MySQL检测') {
   	if(function_exists("mysql_close")==1) {
-  		$link = @mysql_connect($host.":".$port,$login,$password);
-  		if ($link){
+  		//$link = @mysql_connect($host.":".$port,$login,$password);
+		$link = @mysqli_connect($host,$login, $password);
+
+		if ($link){
   			echo "<script>alert('连接到MySql数据库正常')</script>";
   		} else {
   			echo "<script>alert('无法连接到MySql数据库！')</script>";
@@ -1456,4 +1458,4 @@ else
 
 </div>
 </body>
-</html>
+</html>

@@ -17,8 +17,10 @@ class DB
 	function DBDown()
 	//database down
 	{
-		$this->error_number = mysql_errno();
-		$this->error_name = mysql_error();
+		//$this->error_number = mysql_errno();
+		//$this->error_name = mysql_error();
+		$this->error_number = mysqli_errno($this->dataserver);
+		$this->error_number = mysqli_error($this->dataserver);
 		print "Database down";
 		if ($this->error_name != "")
 		{
@@ -31,24 +33,30 @@ class DB
 	//Open a connection to a MySQL Server
 	{
 		$this->database = $pdb;
-		if(!$this->dataserver = mysql_connect($plocation, $puser, $ppassword))
+		//if(!$this->dataserver = mysql_connect($plocation, $puser, $ppassword))
+		if(!$this->dataserver = mysqli_connect($plocation, $puser, $ppassword))
 		{
 			DB::DBDown();
 		}
 			
-		mysql_select_db($pdb,$this->dataserver);
+		//mysql_select_db($pdb,$this->dataserver);
+		mysqli_select_db($this->dataserver,$pdb);
+
 		if(function_exists('mysql_set_charset')){
-			mysql_set_charset('utf8',$this->dataserver);
+			//mysql_set_charset('utf8',$this->dataserver);
+			mysqli_set_charset($this->dataserver,'utf8');
 		}
 		else{
-			mysql_query("SET NAMES 'utf8'",$this->dataserver);
+			//mysql_query("SET NAMES 'utf8'",$this->dataserver);
+			mysqli_query($this->dataserver , "SET NAMES 'utf8'");
 		}
 	}
 
 	function executeSQL($sql)
 	//Query database
 	{
-		if (!$res=mysql_query($sql,$this->dataserver))
+		//if (!$res=mysql_query($sql,$this->dataserver))
+		if (!$res=mysqli_query($this->dataserver , $sql))
 		{
 			DB::DBDown();
 		}
@@ -57,7 +65,8 @@ class DB
 		//print "sql=".$sql."<br>";
 		if ((strpos("_".$sql,'SELECT'))||(strpos("_".$sql,'SHOW'))||(strpos("_".$sql,'DESCRIBE'))||(strpos("_".$sql,EXPLAIN)))
 		{
-			while ($this->result[]=mysql_fetch_array($res, MYSQL_NUM))
+			//while ($this->result[]=mysql_fetch_array($res, MYSQL_NUM))
+			while ($this->result[]=mysqli_fetch_array($res, MYSQLI_ASYNC))
 			{
 				$this->row_result++;
 			}
