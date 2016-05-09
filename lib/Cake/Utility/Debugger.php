@@ -784,7 +784,7 @@ class Debugger {
 
 		if (isset($tpl['links'])) {
 			foreach ($tpl['links'] as $key => $val) {
-				$links[$key] = String::insert($val, $data, $insertOpts);
+				$links[$key] = String1::insert($val, $data, $insertOpts);
 			}
 		}
 
@@ -800,14 +800,14 @@ class Debugger {
 			if (is_array($value)) {
 				$value = implode("\n", $value);
 			}
-			$info .= String::insert($tpl[$key], array($key => $value) + $data, $insertOpts);
+			$info .= String1::insert($tpl[$key], array($key => $value) + $data, $insertOpts);
 		}
 		$links = implode(' ', $links);
 
 		if (isset($tpl['callback']) && is_callable($tpl['callback'])) {
 			return call_user_func($tpl['callback'], $data, compact('links', 'info'));
 		}
-		echo String::insert($tpl['error'], compact('links', 'info') + $data, $insertOpts);
+		echo String1::insert($tpl['error'], compact('links', 'info') + $data, $insertOpts);
 	}
 
 /**
