@@ -99,18 +99,6 @@ class UtilController extends AppController {
         return $diff_user_ids;
     }
 
-    /**
-     * @param $openId
-     * @param $title
-     * @param $productName
-     * @param $detailUrl
-     * @param $sharerName
-     * @param $remark
-     * 处理发起分享通知
-     */
-    public function process_send_share_msg($openId, $title, $productName, $detailUrl, $sharerName, $remark) {
-        send_join_tuan_buy_msg(null, $title, $productName, $sharerName, $remark, $detailUrl, $openId);
-    }
     
     /**
      * 获取微信的token
