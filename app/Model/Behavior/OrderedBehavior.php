@@ -121,7 +121,7 @@ class OrderedBehavior extends ModelBehavior {
 		$Model->order = $Model->alias . '.' . $this->settings[$Model->alias]['field'] . ' ASC';
 	}
 	
-	public function beforedelete(&$Model) {
+	public function beforedelete($Model) {
 		$Model->read();
 		$highest = $this->_highest($Model);
 		if (!empty($Model->data) && ($Model->data[$Model->alias][$Model->primaryKey] == $highest[$Model->alias][$Model->primaryKey])) {
