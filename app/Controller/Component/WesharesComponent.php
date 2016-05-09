@@ -284,7 +284,7 @@ class WesharesComponent extends Component
                 [
                     'table' => 'weshares',
                     'alias' => 'Weshare',
-                    'conditions' => ['Weshare.id = OptLog.obj_id'],
+                    'conditions' => ['Weshare.id = OptLog.obj_id', 'Weshare.status' => WESHARE_STATUS_NORMAL],
                     'type' => 'left'
                 ]
             ],
