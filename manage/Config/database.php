@@ -36,7 +36,7 @@ class DATABASE_CONFIG {
             'port' => '3306',
             'login' => '51daifan',	// jieli
             'password' => 'PGdvFePBenE4TtBb',	//zFY8smWUKcaLrUs5
-            'database' => $_SERVER["dbname"]? $_SERVER["dbname"] : '51daifan',
+            'database' => $_SERVER["dbname"]? $_SERVER["dbname"] : '52daifan',
             'prefix' => 'cake_',
             'encoding'=>'utf8mb4',
         );
@@ -47,7 +47,7 @@ class DATABASE_CONFIG {
             'port' => '3306',
             'login' => '51daifan',
             'password' => 'PGdvFePBenE4TtBb',
-            'database' => '51daifan',
+            'database' => '52daifan',
             'prefix' => 'cake_',
             'encoding'=>'utf8mb4',
         );
