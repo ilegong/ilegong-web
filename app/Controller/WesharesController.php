@@ -125,8 +125,6 @@ class WesharesController extends AppController
      */
     public function update($weshareId)
     {
-        $this->layout = 'weshare_edit';
-
         $uid = $this->currentUser['id'];
         $weshareInfo = $this->ShareUtil->get_weshare_detail($weshareId);
         $can_edit_share = $this->ShareAuthority->user_can_edit_share_info($uid, $weshareId);
@@ -161,8 +159,6 @@ class WesharesController extends AppController
      */
     public function add()
     {
-        $this->layout = 'weshare_edit';
-
         $currentUser = $this->currentUser;
         $uid = $currentUser['id'];
         //check user has bind mobile and payment
