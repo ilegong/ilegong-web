@@ -311,6 +311,7 @@ class WeshareBuyComponent extends Component
         return json_decode($user_share_data, true);
     }
 
+
     /**
      * @param $shares
      * 获取数据后处理
