@@ -1,13 +1,13 @@
 <?php
 
-define('DEFAULT_SITE_HOST','www.tongshijia.com');
-define('SH_SITE_HOST','sh.tongshijia.com');
+define('DEFAULT_SITE_HOST', 'www.tongshijia.com');
+define('SH_SITE_HOST', 'sh.tongshijia.com');
 define('WX_APPID', 'wxca7838dcade4709c');
 define('WX_APPID_SOURCE', 'wxca78');
 define('WX_SECRET', '79b787ec8f463eeb769540464c9277b2');
 define('WX_SERVICE_ID_NAME', '朋友说');
 define('WX_SERVICE_ID_NO', 'pyshuo2014');
-define('CACHE_PREFIX' , '');
+define('CACHE_PREFIX', '');
 define('WX_HOST', DEFAULT_SITE_HOST);
 
 if (!defined('DS')) {
@@ -41,7 +41,7 @@ if (!defined('CAKE_CORE_INCLUDE_PATH')) {
  *
  */
 if (!defined('WEBROOT_DIR')) {
-    define('WEBROOT_DIR', 'webroot' );
+    define('WEBROOT_DIR', 'webroot');
 }
 if (!defined('WWW_ROOT')) {
     define('WWW_ROOT', ROOT . DS . 'webroot' . DS);
@@ -52,21 +52,20 @@ if (!defined('CORE_PATH')) {
 }
 define('VIEWS', APP_PATH . 'View' . DS);
 $app_sub_dir = dirname($_SERVER['PHP_SELF']);
-if(basename($app_sub_dir)=='webroot'){
+if (basename($app_sub_dir) == 'webroot') {
     $app_sub_dir = dirname($app_sub_dir);
 }
 
-if(!empty($app_sub_dir) && strlen($app_sub_dir)>1){ // skip / in linux or \ in windows
+if (!empty($app_sub_dir) && strlen($app_sub_dir) > 1) { // skip / in linux or \ in windows
     /**
      * APP_SUB_DIR 应用所在的二级目录
      * @var APP_SUB_DIR
      */
     define('APP_SUB_DIR', $app_sub_dir);
-    define('IMAGES_URL', $app_sub_dir.'/img/');
-    define('CSS_URL', $app_sub_dir.'/css/');
-    define('JS_URL', $app_sub_dir.'/js/');
-}
-else{
+    define('IMAGES_URL', $app_sub_dir . '/img/');
+    define('CSS_URL', $app_sub_dir . '/css/');
+    define('JS_URL', $app_sub_dir . '/js/');
+} else {
     define('APP_SUB_DIR', '');
     define('IMAGES_URL', '/img/');
     define('CSS_URL', '/css/');
@@ -74,7 +73,7 @@ else{
 }
 
 if (defined('SAE_MYSQL_DB')) {
-    define('TMP', 'saemc://'.$_SERVER['HTTP_APPVERSION'].'/tmp/');
+    define('TMP', 'saemc://' . $_SERVER['HTTP_APPVERSION'] . '/tmp/');
 } else {
     define('TMP', ROOT . DS . 'data' . DS);
 }
@@ -88,6 +87,15 @@ if (getenv('TONGSHIJIA_ENV') == 'product') {
     define('JPUSH_IS_PRODUCT', true);
     //define('JPUSH_APP_KEY', 'dca84c4492a450f738918b65');
     //define('JPUSH_APP_SECRET', '376cf6f26a72c31ca769da44');
+    define('MYSQL_SERVER_HOST', 'db.tongshijia.com');
+    define('MEMCACHE_HOST', 'mem.tongshijia.com');
+    define('REDIS_HOST', 'redis.tongshijia.com');
+} elseif (getenv('TONGSHIJIA_ENV') == 'preprod') {
+    define('STATIC_HOST', 'http://static-test.tongshijia.com');
+    define('IMAGES_HOST', 'http://images.tongshijia.com');
+    define('JPUSH_APP_KEY', 'dca84c4492a450f738918b65');
+    define('JPUSH_APP_SECRET', '376cf6f26a72c31ca769da44');
+    define('JPUSH_IS_PRODUCT', false);
     define('MYSQL_SERVER_HOST', 'db.tongshijia.com');
     define('MEMCACHE_HOST', 'mem.tongshijia.com');
     define('REDIS_HOST', 'redis.tongshijia.com');
@@ -123,16 +131,15 @@ App::uses('Dispatcher', 'Routing');
 $Dispatcher = new Dispatcher();
 
 //replace '/Taobao' to '/taobao'.
-if(strpos($_SERVER['REQUEST_URI'],'/Taobao')!==false){
-    $_SERVER['REQUEST_URI'] = str_replace('/Taobao','/taobao',$_SERVER['REQUEST_URI'] );
-    header('location:'.$_SERVER['REQUEST_URI']);
+if (strpos($_SERVER['REQUEST_URI'], '/Taobao') !== false) {
+    $_SERVER['REQUEST_URI'] = str_replace('/Taobao', '/taobao', $_SERVER['REQUEST_URI']);
+    header('location:' . $_SERVER['REQUEST_URI']);
     exit;
 }
 
-if(isset($_GET['url'])){
+if (isset($_GET['url'])) {
     $request = new CakeRequest($_GET['url']);
-}
-else{
+} else {
     $request = new CakeRequest();
 }
 unset($request->query['url']);
