@@ -26,7 +26,9 @@ class WeixinComponent extends Component {
         "ORDER_LOGISTICS_INFO" => "3uA5ShDuM6amaaorl6899yMj9QvBmIiIAl7T9_JfR54",
         "RECOMMEND_TEMPLATE_MSG" => "XgB0hibK6F3RXkXrQxT5LilfjQOAYUhjiCQ-XPW2ccw",
         "FAQ_NOTIFY" => "xJMoewdihfWaopdnP5oSa1qQahuKRMOSMSImyfjVQBE",
-        "REPAID_NOTIFY" => "CY69fWO3zw8S6dWiPQFs3W9LgVHRMDFXMl_8CeLLWmI"
+        "REPAID_NOTIFY" => "CY69fWO3zw8S6dWiPQFs3W9LgVHRMDFXMl_8CeLLWmI",
+        "USER_SUB_MSG" => "ee_aZdUrvl_G4F6qSUgZufwnt8oWs9LpG1K8hZ0l3Yg",
+        "COMMENT_MSG" => "4P1UuxeCmpU4xVZxBWlkUQDsIGbviUQG6zSakNzvUK4"
     );
 
     public $sh_wx_message_template_ids = array(
@@ -46,10 +48,11 @@ class WeixinComponent extends Component {
         "RECOMMEND_TEMPLATE_MSG" => "1xeAWXRCBMAqh2ENGyM1eAUzKkfmduQHXoAB-C6HnMg",
         "FAQ_NOTIFY" => "ujFns0Tiq5SAoI5ELiczt4JVdLnE-2Cw4ZNbFFMbyY0",
         //"REPAID_NOTIFY" => "CY69fWO3zw8S6dWiPQFs3W9LgVHRMDFXMl_8CeLLWmI"
+        "USER_SUB_MSG" => "7YtirDng-QJ0xCJeVAt-ZInvKd4OtiWRtS3pzmmWD7c",
+        "COMMENT_MSG" => "SB1u6e8lK7aBRWKvrjGD75Jh5WcAyj9C4OzxRSca7Gc"
     );
 
     private function get_template_msg_id($key){
-        $templates = [];
         if(WX_HOST==SH_SITE_HOST){
             $templates = $this->sh_wx_message_template_ids;
         }else{
@@ -915,7 +918,7 @@ class WeixinComponent extends Component {
         $creatorInfo = $userM->findById($weshare_info['Weshare']['creator']);
         $creatorNickName = $creatorInfo['User']['nickname'];
         $org_msg = "亲，您报名了" . $creatorNickName . "分享的" . $title;
-        $org_msg = $org_msg . '，1月5日截止报名，1月6日统一发货。';//todo custom it
+        //$org_msg = $org_msg . '，1月5日截止报名，1月6日统一发货。';//todo custom it
         $org_msg = $org_msg . $creatorNickName;
         $post_data = array(
             "touser" => $open_id,
@@ -1189,7 +1192,7 @@ class WeixinComponent extends Component {
     public function send_new_member_tip($open_id, $detail_url, $title, $member_name, $desc) {
         $post_data = array(
             "touser" => $open_id,
-            "template_id" => 'ee_aZdUrvl_G4F6qSUgZufwnt8oWs9LpG1K8hZ0l3Yg',
+            "template_id" => $this->get_template_msg_id("USER_SUB_MSG"),
             "url" => $detail_url,
             "topcolor" => "#FF0000",
             "data" => array(
@@ -1205,7 +1208,7 @@ class WeixinComponent extends Component {
     public function send_comment_template_msg($user_open_id, $detail_url, $title, $order_id, $order_date, $desc) {
         $post_data = array(
             "touser" => $user_open_id,
-            "template_id" => '4P1UuxeCmpU4xVZxBWlkUQDsIGbviUQG6zSakNzvUK4',
+            "template_id" => $this->get_template_msg_id("COMMENT_MSG"),
             "url" => $detail_url,
             "topcolor" => "#FF0000",
             "data" => array(
