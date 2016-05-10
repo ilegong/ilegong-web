@@ -1,3 +1,16 @@
 <div ng-controller="ShareProductViewCtrl as vm" id='shareProductView' data-weshare-id="{{$weshare_id}}">
     <div ng-include="'{{$STATIC_HOST}}/static/weshares/templates/pool-product-view.html?v0.0.9'"></div>
 </div>
+
+
+<?php
+    $this->Html->css(array(
+$STATIC_HOST.'/static/weshares/css/weshare-view.min.css?v2.4.8'
+), null, array('inline' => false))
+?>
+
+<?php
+$this->Html->script(array(
+$STATIC_HOST.'/static/weshares/js/weshare-view.min.js?v2.4.8'
+), array('block' => 'scripts'))
+?>
