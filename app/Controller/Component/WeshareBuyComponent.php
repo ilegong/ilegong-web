@@ -24,6 +24,8 @@ class WeshareBuyComponent extends Component
 
     var $query_share_fields = array('id', 'title', 'images', 'status', 'creator', 'created', 'settlement', 'type', 'description');
 
+    var $query_list_share_fields = array('id', 'title', 'default_image', 'status', 'creator', 'created', 'settlement', 'type');
+
     /**
      * @param $weshare_ids
      * @param $sharer_id
@@ -205,6 +207,48 @@ class WeshareBuyComponent extends Component
         return $myCreateShares;
     }
 
+    public function get_my_shares($uid, $status, $settlement, $page, $limit)
+    {
+        $weshareM = ClassRegistry::init('Weshare');
+        $query_share_type = array(SHARE_TYPE_GROUP, SHARE_TYPE_DEFAULT, SHARE_TYPE_POOL_FOR_PROXY, SHARE_TYPE_POOL);
+        $shares = $weshareM->find('all', [
+            'conditions' => [
+                'creator' => $uid,
+                'status' => $status,
+                'type' => $query_share_type,
+                'settlement' => $settlement
+            ],
+            'fields' => $this->query_list_share_fields,
+            'order' => array('created DESC'),
+            'limit' => $limit,
+            'page' => $page
+        ]);
+        return $shares;
+    }
+
+    public function get_my_auth_shares($uid, $page, $limit)
+    {
+        $shareOperateSettingM = ClassRegistry::init('ShareOperateSetting');
+        $result = $shareOperateSettingM->find('all', [
+            'conditions' => [
+                'user' => $uid
+            ],
+            'joins' => [
+                [
+                    'table' => 'weshares',
+                    'alias' => 'Weshare',
+                    'conditions' => [
+                        'Weshare.id = ShareOperateSetting.data_id',
+                    ],
+                ]
+            ],
+            'fields' => ['ShareOperateSetting.id','ShareOperateSetting.data_id', 'ShareOperateSetting.data_type' ,'Weshare.id', 'Weshare.title', 'Weshare.default_image', 'Weshare.status', 'Weshare.creator', 'Weshare.created', 'Weshare.settlement', 'Weshare.type'],
+            'limit' => $limit,
+            'page' => $page
+        ]);
+        return $result;
+    }
+
     /**
      * @param $uid
      * @return array|mixed
@@ -310,6 +354,7 @@ class WeshareBuyComponent extends Component
         }
         return json_decode($user_share_data, true);
     }
+
 
     /**
      * @param $shares

@@ -2114,7 +2114,7 @@ class ShareUtilComponent extends Component
                     ],
                 ]
             ],
-            'order' => ['id DESC'],
+            'order' => ['Order.id DESC'],
             'limit' => 5
         ]);
         $orders_and_creators = Hash::extract($orders_and_creators, '{n}.User');

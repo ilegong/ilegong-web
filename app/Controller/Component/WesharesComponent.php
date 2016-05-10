@@ -260,7 +260,7 @@ class WesharesComponent extends Component
             ],
             'limit' => $limit,
             'page' => $page,
-            'order' => ['id DESC'],
+            'order' => ['Weshare.id DESC'],
             'fields' => ['Weshare.id', 'Weshare.title', 'Weshare.description', 'Weshare.default_image', 'Weshare.creator']
         ]);
         $result = [];
