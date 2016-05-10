@@ -26,6 +26,7 @@ if ($_SERVER['HTTP_HOST'] == SH_SITE_HOST) {
     define('WX_SERVICE_ID_GOTO', 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200757804&idx=1&sn=90b121983525298a4ac26ee8d6c0bc1c#rd');
 }
 define('ALI_HOST', WX_HOST);
+
 define('WX_JS_API_CALL_URL', 'http://' . WX_HOST . '/wxPay/jsApiPay');
 define('WX_JS_LOGISTICS_API_CALL_URL', 'http://' . WX_HOST . '/wxPay/logistics_order_pay');
 define('WX_NOTIFY_URL', 'http://' . WX_HOST . '/wxPay/notify.html');
