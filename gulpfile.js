@@ -9,18 +9,23 @@ var vinylPaths = require('vinyl-paths');
 
 var all_js = [
   {
+    name: 'weshare.min.js',
+    sources: [
+      'webroot/src/scripts/module-filters.js',
+      'webroot/src/scripts/module-directives.js',
+      'webroot/src/scripts/module-services.js',
+      'webroot/src/scripts/app.js',
+    ],
+    dist: 'webroot/static/weshares/js/'
+  }, {
     name: 'index.min.js',
     sources: [
-      'webroot/src/scripts/me-lazyload.js',
-      'webroot/src/scripts/app.js',
       'webroot/src/scripts/index.js',
     ],
     dist: 'webroot/static/weshares/js/'
   }, {
-    name: 'weshare.min.js',
+    name: 'weshare-view.min.js',
     sources: [
-      'webroot/src/scripts/me-lazyload.js',
-      'webroot/src/scripts/app.js',
       'webroot/src/scripts/offline-store.js',
       'webroot/static/weshares/js/view-consignee-controller.js',
       'webroot/static/weshares/js/edit-consignee-controller.js',
@@ -32,8 +37,6 @@ var all_js = [
   }, {
     name: 'weshare-edit.min.js',
     sources: [
-      'webroot/src/scripts/me-lazyload.js',
-      'webroot/src/scripts/app.js',
       'webroot/src/scripts/weshare-edit.js',
     ],
     dist: 'webroot/static/weshares/js/'
@@ -82,8 +85,6 @@ var all_js = [
   }, {
     name: 'tutorial.min.js',
     sources: [
-      'webroot/src/scripts/me-lazyload.js',
-      'webroot/src/scripts/app.js',
       'webroot/src/scripts/tutorial-binding-card.js',
       'webroot/src/scripts/tutorial-binding-mobile.js',
     ],
@@ -98,7 +99,7 @@ var all_css = [
     ],
     dist: 'webroot/static/weshares/css/'
   }, {
-    name: 'weshare.min.css',
+    name: 'weshare-view.min.css',
     sources: [
       'webroot/static/weshares/css/main.css',
       'webroot/static/weshares/css/share-balance-view.css',

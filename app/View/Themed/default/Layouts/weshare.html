@@ -13,130 +13,131 @@
 </head>
 
 <body style="background-color:#f5f5f5;">
-    {{$content_for_layout}}
+{{$content_for_layout}}
 
-    <!-- loading layer-->
-    <div class="background-layer" ng-if="loadingPage">
-        <div style="position: absolute;top:40%;left: 40%;color: white;">
-            <i class="fa fa-spinner fa-pulse fa-5x"></i>
-        </div>
+<!-- loading layer-->
+<div class="background-layer" ng-if="loadingPage">
+    <div style="position: absolute;top:40%;left: 40%;color: white;">
+        <i class="fa fa-spinner fa-pulse fa-5x"></i>
     </div>
-    <!--输入错误层-->
-    <div class="layer-toast" ng-class="{'show-b': showErrorMessageLayer}" ng-show="showErrorMessageLayer" ng-bind="errorMessage"></div>
+</div>
+<!--输入错误层-->
+<div class="layer-toast" ng-class="{'show-b': showErrorMessageLayer}" ng-show="showErrorMessageLayer" ng-bind="errorMessage"></div>
 
-    {{if $show_footer}}
-    <footer class="channel_bottom" id="share-bottom-nav">
-        <a class="btm_item" href="/" style="width: 25%;">
-            <p class="iconfont-active"><i class="fa fa-home"></i></p>
-            <b class="active">首页</b>
-        </a>
-        <a class="btm_item" href="/share_opt/index.html" style="width: 25%; position: relative;">
-            <i ng-if="showUnReadMark"
-               style="background:#f00;border-radius:50%;width:10px;height:10px;top:-5px;right:35%;position:absolute;"></i>
+{{if $show_footer}}
+<footer class="channel_bottom" id="share-bottom-nav">
+    <a class="btm_item" href="/" style="width: 25%;">
+        <p class="iconfont-active"><i class="fa fa-home"></i></p>
+        <b class="active">首页</b>
+    </a>
+    <a class="btm_item" href="/share_opt/index.html" style="width: 25%; position: relative;">
+        <i ng-if="showUnReadMark"
+           style="background:#f00;border-radius:50%;width:10px;height:10px;top:-5px;right:35%;position:absolute;"></i>
 
-            <p class="iconfont"><i class="fa fa-search"></i></p>
-            <b>发现</b>
-        </a>
-        <a class="btm_item" href="/weshares/add" style="width: 25%;">
-            <p class="iconfont"><i class="fa fa-share-square-o"></i></p>
-            <b>我要分享</b>
-        </a>
-        <a class="btm_item" href="/weshares/user_share_info/{{$uid}}" style="width: 25%;">
-            <p class="iconfont"><i class="fa fa-user"></i></p>
-            <b>我的</b>
-        </a>
-    </footer>
-    {{/if}}
+        <p class="iconfont"><i class="fa fa-search"></i></p>
+        <b>发现</b>
+    </a>
+    <a class="btm_item" href="/weshares/add" style="width: 25%;">
+        <p class="iconfont"><i class="fa fa-share-square-o"></i></p>
+        <b>我要分享</b>
+    </a>
+    <a class="btm_item" href="/weshares/user_share_info/{{$uid}}" style="width: 25%;">
+        <p class="iconfont"><i class="fa fa-user"></i></p>
+        <b>我的</b>
+    </a>
+</footer>
+{{/if}}
 
-    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-    <script>
-        if(wx){
-            var wx_jssdk_appId = '{{$signPackage["appId"]}}';
-            var wx_jssdk_timestamp = '{{$signPackage["timestamp"]?$signPackage["timestamp"]:1}}';
-            var wx_jssdk_nonceStr = '{{$signPackage["nonceStr"]}}';
-            var wx_jssdk_signature = '{{$signPackage["signature"]}}';
-            var jsApiList = ['checkJsApi', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseImage', 'previewImage', 'uploadImage', 'downloadImage', 'openLocation', 'getLocation'];
-            wx.config({
-                debug: false,
-                appId: wx_jssdk_appId,
-                timestamp: wx_jssdk_timestamp,
-                nonceStr: wx_jssdk_nonceStr,
-                signature: wx_jssdk_signature,
-                jsApiList: jsApiList
-            });
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+    if(wx){
+        var wx_jssdk_appId = '{{$signPackage["appId"]}}';
+        var wx_jssdk_timestamp = '{{$signPackage["timestamp"]?$signPackage["timestamp"]:1}}';
+        var wx_jssdk_nonceStr = '{{$signPackage["nonceStr"]}}';
+        var wx_jssdk_signature = '{{$signPackage["signature"]}}';
+        var jsApiList = ['checkJsApi', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseImage', 'previewImage', 'uploadImage', 'downloadImage', 'openLocation', 'getLocation'];
+        wx.config({
+            debug: false,
+            appId: wx_jssdk_appId,
+            timestamp: wx_jssdk_timestamp,
+            nonceStr: wx_jssdk_nonceStr,
+            signature: wx_jssdk_signature,
+            jsApiList: jsApiList
+        });
 
-            wx.ready(function () {
-                var share_string = '{{$share_string ? $share_string :"0"}}';
-                var to_timeline_title = "{{empty($title) ? '朋友说—基于信任关系的分享平台' : $title}}";
-                var to_friend_title = "{{empty($title) ? '朋友说—基于信任关系的分享平台' : $title}}";
-                var detail_url = "{{$detail_url}}";
-                if(!detail_url){
-                    detail_url =  document.URL.split('?')[0];
-                }
-                var to_friend_link = detail_url + '?trstr='+ share_string + '&share_type=appMsg';
-                var to_timeline_link = detail_url + '?trstr='+ share_string + '&share_type=timeline';
-                var imgUrl = "{{empty($image) ? 'http://static.tongshijia.com/static/weshares/images/pys-logo.gif' : $this->Html->assetUrl($image)}}";
-                var desc = "{{empty($desc) ? '来 [朋友说] 分享好吃的、好玩的、有趣的' : $desc}}";
-                wx.onMenuShareAppMessage({
-                    title: to_friend_title,
-                    desc: desc,
-                    link: to_friend_link,
-                    imgUrl: imgUrl,
-                    success: function () {
-                        // 用户确认分享后执行的回调函数
-                        if(share_string != '0'){
-                            setTimeout(function(){
-                                $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "appMsg" });
-                            }, 500);
-                        }
-                    }
-                });
-                wx.onMenuShareTimeline({
-                    title: to_timeline_title,
-                    link: to_timeline_link,
-                    imgUrl: imgUrl,
-                    success: function () {
-                        if(share_string != '0'){
-                            setTimeout(function(){
-                                $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "timeline" });
-                            }, 500);
-                        }
-                    }
-                });
-            });
-        }
-    </script>
-    <script>
-        //Pys common name space
-        PYS={};
-        //define static file path
-        PYS.staticFilePath = '{{$STATIC_HOST}}';
-        //PYS.staticFilePath = 'http://51daifan-assets.stor.sinaapp.com';
-        PYS.storage = {
-            save : function(key, jsonData, expirationHour){
-                //if (!Modernizr.localstorage){return false;}
-                var expirationMS = expirationHour * 60 * 60 * 1000;
-                var record = {value: JSON.stringify(jsonData), timestamp: new Date().getTime() + expirationMS}
-                localStorage.setItem(key, JSON.stringify(record));
-                return jsonData;
-            },
-            load : function(key){
-                //if (!Modernizr.localstorage){return false;}
-                var record = JSON.parse(localStorage.getItem(key));
-                if (!record){return false;}
-                return (new Date().getTime() < record.timestamp && JSON.parse(record.value));
-            },
-            clear : function(){
-                localStorage.clear();
+        wx.ready(function () {
+            var share_string = '{{$share_string ? $share_string :"0"}}';
+            var to_timeline_title = "{{empty($title) ? '朋友说—基于信任关系的分享平台' : $title}}";
+            var to_friend_title = "{{empty($title) ? '朋友说—基于信任关系的分享平台' : $title}}";
+            var detail_url = "{{$detail_url}}";
+            if(!detail_url){
+                detail_url =  document.URL.split('?')[0];
             }
+            var to_friend_link = detail_url + '?trstr='+ share_string + '&share_type=appMsg';
+            var to_timeline_link = detail_url + '?trstr='+ share_string + '&share_type=timeline';
+            var imgUrl = "{{empty($image) ? 'http://static.tongshijia.com/static/weshares/images/pys-logo.gif' : $this->Html->assetUrl($image)}}";
+            var desc = "{{empty($desc) ? '来 [朋友说] 分享好吃的、好玩的、有趣的' : $desc}}";
+            wx.onMenuShareAppMessage({
+                title: to_friend_title,
+                desc: desc,
+                link: to_friend_link,
+                imgUrl: imgUrl,
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                    if(share_string != '0'){
+                        setTimeout(function(){
+                            $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "appMsg" });
+                        }, 500);
+                    }
+                }
+            });
+            wx.onMenuShareTimeline({
+                title: to_timeline_title,
+                link: to_timeline_link,
+                imgUrl: imgUrl,
+                success: function () {
+                    if(share_string != '0'){
+                        setTimeout(function(){
+                            $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "timeline" });
+                        }, 500);
+                    }
+                }
+            });
+        });
+    }
+</script>
+<script>
+    //Pys common name space
+    PYS={};
+    //define static file path
+    PYS.staticFilePath = '{{$STATIC_HOST}}';
+    //PYS.staticFilePath = 'http://51daifan-assets.stor.sinaapp.com';
+    PYS.storage = {
+        save : function(key, jsonData, expirationHour){
+            //if (!Modernizr.localstorage){return false;}
+            var expirationMS = expirationHour * 60 * 60 * 1000;
+            var record = {value: JSON.stringify(jsonData), timestamp: new Date().getTime() + expirationMS}
+            localStorage.setItem(key, JSON.stringify(record));
+            return jsonData;
+        },
+        load : function(key){
+            //if (!Modernizr.localstorage){return false;}
+            var record = JSON.parse(localStorage.getItem(key));
+            if (!record){return false;}
+            return (new Date().getTime() < record.timestamp && JSON.parse(record.value));
+        },
+        clear : function(){
+            localStorage.clear();
         }
-    </script>
-    <script type="text/javascript" src="http://cdn.bootcss.com/angular.js/1.4.1/angular.min.js"></script>
-    <script type="text/javascript" src="http://cdn.bootcss.com/ngInfiniteScroll/1.2.0/ng-infinite-scroll.min.js"></script>
-    <script type="text/javascript" src="http://cdn.bootcss.com/underscore.js/1.8.3/underscore-min.js"></script>
-    <?php
+    }
+</script>
+<script type="text/javascript" src="http://cdn.bootcss.com/angular.js/1.4.1/angular.min.js"></script>
+<script type="text/javascript" src="http://cdn.bootcss.com/ngInfiniteScroll/1.2.0/ng-infinite-scroll.min.js"></script>
+<script type="text/javascript" src="http://cdn.bootcss.com/underscore.js/1.8.3/underscore-min.js"></script>
+<script src="{{$STATIC_HOST}}/static/weshares/js/weshare.min.js?v2.1.0"></script>
+<?php
     echo $this->fetch('scripts');
-    ?>
-    <script type="text/javascript" src="http://hm.baidu.com/hm.js?705777ddf53d0d7a074a79a26c8f50cf"></script>
+?>
+<script type="text/javascript" src="http://hm.baidu.com/hm.js?705777ddf53d0d7a074a79a26c8f50cf"></script>
 </body>
 </html>
