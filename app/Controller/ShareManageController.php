@@ -27,6 +27,7 @@ class ShareManageController extends AppController
             'limit' => 100
         )
     );
+
     /**
      * 新版发现页面管理
      * 两块内容
@@ -41,8 +42,8 @@ class ShareManageController extends AppController
     public function find_content()
     {
         /**
-        $this->check_role();
-        */
+         * $this->check_role();
+         */
         $carousel = ClassRegistry::init('NewFind')->get_all_carousel();
         $top_rank = ClassRegistry::init('NewFind')->get_all_top_rank();
         $this->set('carousel_model', $carousel);
@@ -89,7 +90,7 @@ class ShareManageController extends AppController
         $u_mobile = $_REQUEST['mobile'];
         $u_nickname = $_REQUEST['nick_name'];
         $u_id = $_REQUEST['uid'];
-        if (!empty($u_mobile) || !empty($u_nickname)|| !empty($u_id)) {
+        if (!empty($u_mobile) || !empty($u_nickname) || !empty($u_id)) {
             $userM = ClassRegistry::init('User');
             $cond = array();
             if (!empty($u_nickname)) {
@@ -109,7 +110,8 @@ class ShareManageController extends AppController
             ));
             if ($this->request->is('ajax')) {
                 //print_r($users);
-                echo json_encode($users[0]['User']); exit();
+                echo json_encode($users[0]['User']);
+                exit();
             } else {
                 $this->set('users', $users);
             }
@@ -353,14 +355,14 @@ class ShareManageController extends AppController
     public function pool_share_copy($share_id)
     {
         $uid = $this->currentUser['id'];
-        if(!is_super_share_manager($uid)){
+        if (!is_super_share_manager($uid)) {
             $this->Session->setFlash("您没有权限把分享上到产品街, 请联系管理员", null);
             $this->redirect('/share_manage/search_shares?id=' . $share_id);
         }
 
-        $this->log('Admin '.$uid.' tries to clone share '.$share_id.' to pool products', LOG_INFO);
-        $result = $this->ShareUtil->cloneShare($share_id, null,SHARE_TYPE_POOL_SELF, WESHARE_STATUS_DELETED, 0);
-        if(!$result['success']){
+        $this->log('Admin ' . $uid . ' tries to clone share ' . $share_id . ' to pool products', LOG_INFO);
+        $result = $this->ShareUtil->cloneShare($share_id, null, SHARE_TYPE_POOL_SELF, WESHARE_STATUS_DELETED, 0);
+        if (!$result['success']) {
             throw new Exception("复制到产品街出错，请联系管理员");
         }
 
@@ -379,7 +381,7 @@ class ShareManageController extends AppController
         $res = $model->save($data);
         $id = $model->getLastInsertId();
 
-        $this->log('Admin '.$uid.' clones share '.$share_id.' to pool products successfully', LOG_INFO);
+        $this->log('Admin ' . $uid . ' clones share ' . $share_id . ' to pool products successfully', LOG_INFO);
         $this->redirect("/shareManage/pool_product_edit/$id.html");
     }
 
@@ -427,11 +429,13 @@ class ShareManageController extends AppController
     /**
      * 产品街分享
      */
-    public function my_pool_share(){
+    public function my_pool_share()
+    {
         $this->process_authorize_share(SHARE_TYPE_POOL);
     }
 
-    private function process_authorize_share($type = null){
+    private function process_authorize_share($type = null)
+    {
         $uid = $this->currentUser['id'];
         $q_cond = array(
             'user' => $uid,
@@ -657,7 +661,8 @@ class ShareManageController extends AppController
      * export order to excel
      * 是否只导出待发货的
      */
-    public function order_export($weshareId, $shareId, $only_paid = 1) {
+    public function order_export($weshareId, $shareId, $only_paid = 1)
+    {
         $this->layout = null;
         if ($shareId == -1) {
             // export all orders.
@@ -1153,28 +1158,22 @@ class ShareManageController extends AppController
 
     }
 
-    public function share_balance()
-    {
-
-    }
-
     //  给某个用户手动复制分享
     public function copy_share_to_user($shareId, $userId)
     {
         $uid = $this->currentUser['id'];
-        if(!is_super_share_manager($uid)){
+        if (!is_super_share_manager($uid)) {
             $this->Session->setFlash("您没有权限复制分享, 请联系管理员", null);
             $this->redirect('/share_manage/search_shares?id=' . $shareId);
         }
 
         $this->autoRender = false;
-        $this->log('Admin '.$uid.' tries to clone share '.$shareId.' to user '.$userId, LOG_INFO);
+        $this->log('Admin ' . $uid . ' tries to clone share ' . $shareId . ' to user ' . $userId, LOG_INFO);
         $result = $this->ShareUtil->cloneShare($shareId, $userId);
-        if($result['success']){
-            $this->log('Admin '.$uid.' clones share '.$shareId.' to user '.$userId.' with id '.$result['shareId'].' successfully', LOG_INFO);
-        }
-        else{
-            $this->log('Admin '.$uid.' failed to clone share '.$shareId.' to user '.$userId, LOG_ERR);
+        if ($result['success']) {
+            $this->log('Admin ' . $uid . ' clones share ' . $shareId . ' to user ' . $userId . ' with id ' . $result['shareId'] . ' successfully', LOG_INFO);
+        } else {
+            $this->log('Admin ' . $uid . ' failed to clone share ' . $shareId . ' to user ' . $userId, LOG_ERR);
         }
         echo json_encode($result);
 
@@ -1183,10 +1182,108 @@ class ShareManageController extends AppController
 
     private function check_role()
     {
-        if(! is_super_share_manager($this->currentUser['id']))
-        {
+        if (!is_super_share_manager($this->currentUser['id'])) {
             $this->redirect('/sharemanage/index');
         }
     }
+
+    public function share_balance()
+    {
+
+    }
+
+    private function process_share_data($cond)
+    {
+        $this->Paginator->settings = $cond;
+        $weshares = $this->Paginator->paginate('Weshare', $cond['Weshare']['conditions']);
+        $weshare_ids = Hash::extract($weshares, '{n}.Weshare.id');
+        $weshare_creator_ids = Hash::extract($weshares, '{n}.Weshare.creator');
+        $creators = $this->User->find('all', [
+            'conditions' => ['id' => $weshare_creator_ids],
+            'fields' => ['id', 'nickname', 'mobilephone', 'payment']
+        ]);
+        $creators = Hash::combine($creators, '{n}.User.id', '{n}.User');
+        $weshares = Hash::combine($weshares, '{n}.Weshare.id', '{n}.Weshare');
+        $orders = $this->Order->find('all', array(
+            'conditions' => array(
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'member_id' => $weshare_ids,
+                'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY)
+            )
+        ));
+        $refund_orders = array();
+        $refund_order_ids = array();
+        $summery_data = array();
+        foreach ($orders as $item) {
+            $member_id = $item['Order']['member_id'];
+            $order_total_price = $item['Order']['total_all_price'];
+            $order_ship_fee = $item['Order']['ship_fee'];
+            $order_coupon_total = $item['Order']['coupon_total'];
+            $order_product_price = $item['Order']['total_price'];
+            if ($item['Order']['status'] == ORDER_STATUS_RETURN_MONEY || $item['Order']['status'] == ORDER_STATUS_RETURNING_MONEY) {
+                $refund_order_ids[] = $item['Order']['id'];
+                if (!isset($refund_orders[$member_id])) {
+                    $refund_orders[$member_id] = array();
+                }
+                $refund_orders[$member_id][] = $item;
+            }
+            if (!isset($summery_data[$member_id])) {
+                $summery_data[$member_id] = array('total_price' => 0, 'ship_fee' => 0, 'coupon_total' => 0);
+            }
+            $summery_data[$member_id]['total_price'] = $summery_data[$member_id]['total_price'] + $order_total_price;
+            $summery_data[$member_id]['ship_fee'] = $summery_data[$member_id]['ship_fee'] + $order_ship_fee;
+            $summery_data[$member_id]['coupon_total'] = $summery_data[$member_id]['coupon_total'] + $order_coupon_total;
+            $summery_data[$member_id]['product_total_price'] = $summery_data[$member_id]['product_total_price'] + $order_product_price;
+        }
+        $refund_logs = $this->RefundLog->find('all', array(
+            'order_id' => $refund_order_ids
+        ));
+        $refund_logs = Hash::combine($refund_logs, '{n}.RefundLog.order_id', '{n}.RefundLog.refund_fee');
+        $weshare_refund_money_map = array();
+        foreach ($refund_orders as $item_share_id => $item_orders) {
+            $share_refund_money = 0;
+            $weshare_refund_money_map[$item_share_id] = 0;
+            foreach ($item_orders as $refund_order_item) {
+                $order_id = $refund_order_item['Order']['id'];
+                $share_refund_money = $share_refund_money + $refund_logs[$order_id];
+            }
+            $weshare_refund_money_map[$item_share_id] = $share_refund_money / 100;
+        }
+        $weshare_rebate_map = $this->get_share_rebate_money($weshare_ids);
+        $this->set('weshare_rebate_map', $weshare_rebate_map);
+        $this->set('weshare_refund_map', $weshare_refund_money_map);
+        $this->set('weshares', $weshares);
+        $this->set('weshare_summery', $summery_data);
+        $this->set('creators', $creators);
+    }
+
+    function get_share_refund_money(){
+
+    }
+
+    function get_share_rebate_money($share_ids)
+    {
+        $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
+        $rebateLogs = $rebateTrackLogM->find('all', array(
+            'conditions' => array(
+                'share_id' => $share_ids,
+                'not' => array('order_id' => 0, 'is_paid' => 0)
+            ),
+            'limit' => 500
+        ));
+        $share_rebate_map = array();
+        foreach ($rebateLogs as $log) {
+            $share_id = $log['RebateTrackLog']['share_id'];
+            if (!isset($share_rebate_map[$share_id])) {
+                $share_rebate_map[$share_id] = array('rebate_money' => 0);
+            }
+            $share_rebate_map[$share_id]['rebate_money'] = $log['RebateTrackLog']['rebate_money'];
+        }
+        foreach ($share_rebate_map as &$rebate_item) {
+            $rebate_item['rebate_money'] = number_format(round($rebate_item['rebate_money'] / 100, 2), 2);
+        }
+        return $share_rebate_map;
+    }
+
 
 }
