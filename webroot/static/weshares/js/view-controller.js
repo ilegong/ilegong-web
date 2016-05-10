@@ -18,7 +18,6 @@
             1: '已截止'
         };
         vm.shipTypes = shipTypes;
-        vm.commentData = {};
         vm.submitTempCommentData = {};
         vm.viewImage = viewImage;
         vm.increaseProductNum = increaseProductNum;
@@ -96,7 +95,7 @@
         vm.isShowExpressInfoBtn = isShowExpressInfoBtn;
         vm.showOrderExpressInfo = showOrderExpressInfo;
 
-        vm.commentData = [];
+        vm.commentData = {};
         vm.orderComments = [];
         activate();
 
@@ -146,6 +145,9 @@
                 cache: $templateCache
             }).success(function (data, status) {
                 vm.ordersDetail = data['ordersDetail'];
+                if(!_.isEmpty(data['ordersDetail']['order_ids'])){
+                  loadOrderCommentData(share_id);
+                }
                 setWeiXinShareParams();
                 //check user is auto comment
                 if (vm.autoPopCommentData['comment_order_info']) {
@@ -383,9 +385,6 @@
 
         function getOrderCommentLength() {
             var orderCommentCount = 0;
-            if (vm.sharerAllComments) {
-                orderCommentCount = orderCommentCount + Object.keys(vm.sharerAllComments).length;
-            }
             if (vm.shareOrder && vm.shareOrder['orderComments']) {
                 orderCommentCount = orderCommentCount + Object.keys(vm.shareOrder['orderComments']).length;
             }
@@ -420,7 +419,6 @@
                 }
             }
             return false;
-            ;
         }
 
 
@@ -738,10 +736,10 @@
                         return true;
                     }
                     var order_id = data['order_id'];
-                    vm.reloadCommentData();
                     if (vm.commentOrder.id == order_id && vm.commentOrder.status == 3) {
                         vm.commentOrder.status = 9;
                     }
+                  loadOrderCommentData(vm.weshare.id);
                 } else {
                     alert('提交失败');
                 }
@@ -750,6 +748,17 @@
             });
             vm.closeCommentDialog();
         }
+
+      function loadOrderCommentData(share_id) {
+        $http({method: 'GET', url: '/weshares/get_share_comment_data/' + share_id + '.json'}).
+          success(function (data, status) {
+            vm.commentData = data['comment_data'];
+            vm.orderComments = vm.commentData['order_comments'];
+          }).
+          error(function (data, status) {
+            $log.log(data);
+          });
+      }
 
         function resetNotifyContent() {
             if (vm.sendNotifyType == 0) {
@@ -908,7 +917,6 @@
         }
 
         function showCommentListDialog() {
-            vm.loadSharerAllComments(vm.weshare.creator.id);
             vm.showCommentListDialogView = true;
             vm.showLayer = true;
         }

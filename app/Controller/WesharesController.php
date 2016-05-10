@@ -314,7 +314,8 @@ class WesharesController extends AppController
     public function get_share_comment_data($weshareId)
     {
         $this->autoRender = false;
-        $comment_data = $this->WeshareBuy->load_comment_by_share_id($weshareId);
+        $uid = $this->currentUser['id'];
+        $comment_data = $this->WeshareBuy->load_comment_by_share_id($weshareId, $uid);
         echo json_encode(array('comment_data' => $comment_data));
         exit();
     }
@@ -952,7 +953,8 @@ class WesharesController extends AppController
     public function loadComment($weshareId)
     {
         $this->autoRender = false;
-        $comment_data = $this->WeshareBuy->load_comment_by_share_id($weshareId);
+        $uid = $this->currentUser['id'];
+        $comment_data = $this->WeshareBuy->load_comment_by_share_id($weshareId, $uid);
         echo json_encode($comment_data);
         return;
     }

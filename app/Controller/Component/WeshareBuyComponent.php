@@ -531,20 +531,15 @@ class WeshareBuyComponent extends Component
      * @return array
      * 加载本次分享的数据
      */
-    public function load_comment_by_share_id($weshare_id)
+    public function load_comment_by_share_id($weshare_id, $uid)
     {
-        $key = SHARE_COMMENT_DATA_CACHE_KEY . '_' . $weshare_id;
-        $share_comment_data = Cache::read($key);
-        if (empty($share_comment_data)) {
-            $conds = array(
-                'type' => COMMENT_SHARE_TYPE,
-                'data_id' => $weshare_id,
-                'status' => COMMENT_SHOW_STATUS
-            );
-            $share_comment_data = $this->query_comment($conds);
-            Cache::write($key, json_encode($share_comment_data));
-            return $share_comment_data;
-        }
+        $conds = array(
+            'type' => COMMENT_SHARE_TYPE,
+            'data_id' => $weshare_id,
+            'status' => COMMENT_SHOW_STATUS,
+            'user_id' => $uid
+        );
+        $share_comment_data = $this->query_comment($conds);
         return json_decode($share_comment_data, true);
     }
 
@@ -703,8 +698,6 @@ class WeshareBuyComponent extends Component
             Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_0_0', '');
             $this->clear_user_share_order_data_cache(array($order_id), $share_id);
         }
-        //$key = SHARE_COMMENT_DATA_CACHE_KEY . '_' . $weshare_id;
-        Cache::write(SHARE_COMMENT_DATA_CACHE_KEY . '_' . $share_id, '');
         return array('success' => true, 'comment' => $comment['Comment'], 'comment_reply' => $commentReply['CommentReply'], 'order_id' => $order_id);
     }
 
