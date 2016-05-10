@@ -3,7 +3,7 @@
     .filter('unsafe', unsafe)
     .filter('thumb', thumb)
 
-  function unsafse($sce) {
+  function unsafe($sce) {
     return function (val) {
       return $sce.trustAsHtml(val);
     };
