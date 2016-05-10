@@ -1211,8 +1211,6 @@ class ShareManageController extends AppController
                 'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY)
             )
         ));
-        $refund_orders = array();
-        $refund_order_ids = array();
         $summery_data = array();
         foreach ($orders as $item) {
             $member_id = $item['Order']['member_id'];
@@ -1220,13 +1218,6 @@ class ShareManageController extends AppController
             $order_ship_fee = $item['Order']['ship_fee'];
             $order_coupon_total = $item['Order']['coupon_total'];
             $order_product_price = $item['Order']['total_price'];
-            if ($item['Order']['status'] == ORDER_STATUS_RETURN_MONEY || $item['Order']['status'] == ORDER_STATUS_RETURNING_MONEY) {
-                $refund_order_ids[] = $item['Order']['id'];
-                if (!isset($refund_orders[$member_id])) {
-                    $refund_orders[$member_id] = array();
-                }
-                $refund_orders[$member_id][] = $item;
-            }
             if (!isset($summery_data[$member_id])) {
                 $summery_data[$member_id] = array('total_price' => 0, 'ship_fee' => 0, 'coupon_total' => 0);
             }
@@ -1235,20 +1226,7 @@ class ShareManageController extends AppController
             $summery_data[$member_id]['coupon_total'] = $summery_data[$member_id]['coupon_total'] + $order_coupon_total;
             $summery_data[$member_id]['product_total_price'] = $summery_data[$member_id]['product_total_price'] + $order_product_price;
         }
-        $refund_logs = $this->RefundLog->find('all', array(
-            'order_id' => $refund_order_ids
-        ));
-        $refund_logs = Hash::combine($refund_logs, '{n}.RefundLog.order_id', '{n}.RefundLog.refund_fee');
-        $weshare_refund_money_map = array();
-        foreach ($refund_orders as $item_share_id => $item_orders) {
-            $share_refund_money = 0;
-            $weshare_refund_money_map[$item_share_id] = 0;
-            foreach ($item_orders as $refund_order_item) {
-                $order_id = $refund_order_item['Order']['id'];
-                $share_refund_money = $share_refund_money + $refund_logs[$order_id];
-            }
-            $weshare_refund_money_map[$item_share_id] = $share_refund_money / 100;
-        }
+        $weshare_refund_money_map = $this->get_share_refund_money($weshare_ids);
         $weshare_rebate_map = $this->get_share_rebate_money($weshare_ids);
         $this->set('weshare_rebate_map', $weshare_rebate_map);
         $this->set('weshare_refund_map', $weshare_refund_money_map);
@@ -1257,8 +1235,21 @@ class ShareManageController extends AppController
         $this->set('creators', $creators);
     }
 
-    function get_share_refund_money(){
-
+    function get_share_refund_money($share_ids)
+    {
+        $refund_logs = $this->RefundLog->find('all', array(
+            'data_id' => $share_ids
+        ));
+        $share_refund_map = [];
+        foreach ($refund_logs as $refund_log_item) {
+            $data_id = $refund_log_item['RefundLog']['data_id'];
+            $refund_money = $refund_log_item['RefundLog']['refund_fee'];
+            if (!isset($share_refund_map[$data_id])) {
+                $share_refund_map[$data_id] = 0;
+            }
+            $share_refund_map[$data_id] = $share_refund_map[$data_id] + $refund_money / 100;
+        }
+        return $share_refund_map;
     }
 
     function get_share_rebate_money($share_ids)
