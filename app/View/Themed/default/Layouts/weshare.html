@@ -14,14 +14,15 @@
 
 <body style="background-color:#f5f5f5;">
     {{$content_for_layout}}
+
+    <!-- loading layer-->
     <div class="background-layer" ng-if="loadingPage">
         <div style="position: absolute;top:40%;left: 40%;color: white;">
             <i class="fa fa-spinner fa-pulse fa-5x"></i>
         </div>
     </div>
-
     <!--输入错误层-->
-    <div class="toast" ng-class="{'show-b': showErrorMessageLayer}" ng-show="showErrorMessageLayer" ng-bind="errorMessage"></div>
+    <div class="layer-toast" ng-class="{'show-b': showErrorMessageLayer}" ng-show="showErrorMessageLayer" ng-bind="errorMessage"></div>
 
     {{if $show_footer}}
     <footer class="channel_bottom" id="share-bottom-nav">
