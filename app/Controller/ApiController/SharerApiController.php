@@ -86,7 +86,7 @@ class SharerApiController extends AppController{
         $share_ids = Hash::extract($shares, '{n}.Weshare.id');
         $share_list = [];
         if (!empty($share_ids)) {
-            $query_order_sql = 'select count(id), member_id from cake_orders where member_id in (' . implode(',', $share_ids) . ') and status=1 and type=9 group by member_id';
+            $query_order_sql = 'select count(id), member_id from cake_orders where member_id in (' . implode(',', $share_ids) . ') and status>0 and type=9 group by member_id';
             $orderM = ClassRegistry::init('Order');
             $result = $orderM->query($query_order_sql);
             $result = Hash::combine($result, '{n}.cake_orders.member_id', '{n}.count(id)');
@@ -109,7 +109,7 @@ class SharerApiController extends AppController{
         $share_ids = Hash::extract($auth_shares_result, '{n}.Weshare.id');
         $shares = [];
         if (!empty($share_ids)) {
-            $query_order_sql = 'select count(id), member_id from cake_orders where member_id in (' . implode(',', $share_ids) . ') and status=1 and type=9 group by member_id';
+            $query_order_sql = 'select count(id), member_id from cake_orders where member_id in (' . implode(',', $share_ids) . ') and status>0 and type=9 group by member_id';
             $orderM = ClassRegistry::init('Order');
             $result = $orderM->query($query_order_sql);
             $result = Hash::combine($result, '{n}.cake_orders.member_id', '{n}.count(id)');
