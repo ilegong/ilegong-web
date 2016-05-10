@@ -540,7 +540,7 @@ class WeshareBuyComponent extends Component
             'user_id' => $uid
         );
         $share_comment_data = $this->query_comment($conds);
-        return json_decode($share_comment_data, true);
+        return $share_comment_data;
     }
 
     /**
