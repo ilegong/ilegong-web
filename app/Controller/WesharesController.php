@@ -311,11 +311,11 @@ class WesharesController extends AppController
      * @param $weshareId
      * 异步获取分享的评论数据
      */
-    public function get_share_comment_data($weshareId)
+    public function get_share_comment_data($weshareId, $sharer)
     {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
-        $comment_data = $this->WeshareBuy->load_comment_by_share_id($weshareId, $uid);
+        $comment_data = $this->WeshareBuy->load_comment_by_share_id($weshareId, $uid, $sharer);
         echo json_encode(array('comment_data' => $comment_data));
         exit();
     }
@@ -953,8 +953,7 @@ class WesharesController extends AppController
     public function loadComment($weshareId)
     {
         $this->autoRender = false;
-        $uid = $this->currentUser['id'];
-        $comment_data = $this->WeshareBuy->load_comment_by_share_id($weshareId, $uid);
+        $comment_data = $this->WeshareBuy->load_comment_by_share_id($weshareId);
         echo json_encode($comment_data);
         return;
     }

@@ -531,14 +531,23 @@ class WeshareBuyComponent extends Component
      * @return array
      * 加载本次分享的数据
      */
-    public function load_comment_by_share_id($weshare_id, $uid)
+    public function load_comment_by_share_id($weshare_id, $uid=null, $sharer=null)
     {
         $conds = array(
             'type' => COMMENT_SHARE_TYPE,
             'data_id' => $weshare_id,
-            'status' => COMMENT_SHOW_STATUS,
-            'user_id' => $uid
+            'status' => COMMENT_SHOW_STATUS
         );
+        $user_ids = [];
+        if(!empty($uid)){
+            $user_ids[] = $uid;
+        }
+        if(!empty($sharer)){
+            $user_ids[] = $sharer;
+        }
+        if(!empty($user_ids)){
+            $conds['user_id'] = $user_ids;
+        }
         $share_comment_data = $this->query_comment($conds);
         return $share_comment_data;
     }

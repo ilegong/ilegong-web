@@ -750,7 +750,7 @@
         }
 
       function loadOrderCommentData(share_id) {
-        $http({method: 'GET', url: '/weshares/get_share_comment_data/' + share_id + '.json'}).
+        $http({method: 'GET', url: '/weshares/get_share_comment_data/' + share_id + '/'+vm.weshare.creator.id+'.json'}).
           success(function (data, status) {
             vm.commentData = data['comment_data'];
             vm.orderComments = vm.commentData['order_comments'];
