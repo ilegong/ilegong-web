@@ -13,6 +13,9 @@ class SharePushComponent extends Component
 
     public function push_buy_msg($buyOptLog, $share)
     {
+        if (!$this->check_should_push()) {
+            return false;
+        }
         $user_id = $buyOptLog['user_id'];
         $sharer = $share['creator'];
         $content = $buyOptLog['reply_content'];
@@ -23,6 +26,9 @@ class SharePushComponent extends Component
 
     public function push_comment_msg($commentOptLog, $share)
     {
+        if (!$this->check_should_push()) {
+            return false;
+        }
         $user_id = $commentOptLog['user_id'];
         $sharer = $share['creator'];
         $comment_content = $commentOptLog['reply_content'];
@@ -33,6 +39,9 @@ class SharePushComponent extends Component
 
     public function push_faq_msg($faqData)
     {
+        if (!$this->check_should_push()) {
+            return false;
+        }
         $msg = $faqData['msg'];
         $users = $this->get_users([$faqData['receiver'], $faqData['sender']]);
         $title = $users[$faqData['sender']]['nickname'] . ' : ' . $msg;
@@ -47,4 +56,8 @@ class SharePushComponent extends Component
         return $users;
     }
 
+    private function check_should_push()
+    {
+        return WX_HOST == DEFAULT_SITE_HOST;
+    }
 }
