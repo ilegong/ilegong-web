@@ -1,31 +1,35 @@
 <?php
 
-define('DEFAULT_SITE_HOST','www.tongshijia.com');
-define('SH_SITE_HOST','sh.tongshijia.com');
+define('DEFAULT_SITE_HOST', 'www.tongshijia.com');
+define('SH_SITE_HOST', 'sh.tongshijia.com');
 
-if($_SERVER['HTTP_HOST'] == SH_SITE_HOST){
+if ($_SERVER['HTTP_HOST'] == SH_SITE_HOST) {
     define('WX_APPID', 'wx65d0c25ec24bb4c2');
     define('WX_APPID_SOURCE', 'wx65d0');
     define('WX_SECRET', '36dac48558049698efe1d2da8b1ee904');
     define('WX_SERVICE_ID_NAME', '朋友说上海');
     define('WX_SERVICE_ID_NO', 'pyshuo01');
-    define('CACHE_PREFIX' , 'sh');
-    define('WX_HOST',SH_SITE_HOST);
-}else{
+    define('CACHE_PREFIX', 'sh');
+    define('MCHID', '1338311401');
+    define('WX_PAY_KEY', 'e9d6de41a12124c7b793234bd667da0b');
+    define('WX_HOST', SH_SITE_HOST);
+} else {
     define('WX_APPID', 'wxca7838dcade4709c');
     define('WX_APPID_SOURCE', 'wxca78');
     define('WX_SECRET', '79b787ec8f463eeb769540464c9277b2');
     define('WX_SERVICE_ID_NAME', '朋友说');
     define('WX_SERVICE_ID_NO', 'pyshuo2014');
-    define('CACHE_PREFIX' , '');
+    define('CACHE_PREFIX', '');
+    define('MCHID', '10019327');
+    define('WX_PAY_KEY', 'xgUcXPiiuTpyZmp4KQ3HJYvdyWszxNoL');
     define('WX_HOST', DEFAULT_SITE_HOST);
     define('WX_SERVICE_ID_GOTO', 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200757804&idx=1&sn=90b121983525298a4ac26ee8d6c0bc1c#rd');
 }
 define('ALI_HOST', WX_HOST);
-define('WX_JS_API_CALL_URL', 'http://'.WX_HOST.'/wxPay/jsApiPay');
-define('WX_JS_LOGISTICS_API_CALL_URL', 'http://'.WX_HOST.'/wxPay/logistics_order_pay');
-define('WX_NOTIFY_URL', 'http://'.WX_HOST.'/wxPay/notify.html');
-define('WX_LOGISTICS_NOTIFY_URL', 'http://'.WX_HOST.'/wxPay/logistics_notify.html');
+define('WX_JS_API_CALL_URL', 'http://' . WX_HOST . '/wxPay/jsApiPay');
+define('WX_JS_LOGISTICS_API_CALL_URL', 'http://' . WX_HOST . '/wxPay/logistics_order_pay');
+define('WX_NOTIFY_URL', 'http://' . WX_HOST . '/wxPay/notify.html');
+define('WX_LOGISTICS_NOTIFY_URL', 'http://' . WX_HOST . '/wxPay/logistics_notify.html');
 
 if (!defined('DS')) {
     define('DS', DIRECTORY_SEPARATOR);
@@ -58,7 +62,7 @@ if (!defined('CAKE_CORE_INCLUDE_PATH')) {
  *
  */
 if (!defined('WEBROOT_DIR')) {
-    define('WEBROOT_DIR', 'webroot' );
+    define('WEBROOT_DIR', 'webroot');
 }
 if (!defined('WWW_ROOT')) {
     define('WWW_ROOT', ROOT . DS . 'webroot' . DS);
@@ -69,21 +73,20 @@ if (!defined('CORE_PATH')) {
 }
 define('VIEWS', APP_PATH . 'View' . DS);
 $app_sub_dir = dirname($_SERVER['PHP_SELF']);
-if(basename($app_sub_dir)=='webroot'){
+if (basename($app_sub_dir) == 'webroot') {
     $app_sub_dir = dirname($app_sub_dir);
 }
 
-if(!empty($app_sub_dir) && strlen($app_sub_dir)>1){ // skip / in linux or \ in windows
+if (!empty($app_sub_dir) && strlen($app_sub_dir) > 1) { // skip / in linux or \ in windows
     /**
      * APP_SUB_DIR 应用所在的二级目录
      * @var APP_SUB_DIR
      */
     define('APP_SUB_DIR', $app_sub_dir);
-    define('IMAGES_URL', $app_sub_dir.'/img/');
-    define('CSS_URL', $app_sub_dir.'/css/');
-    define('JS_URL', $app_sub_dir.'/js/');
-}
-else{
+    define('IMAGES_URL', $app_sub_dir . '/img/');
+    define('CSS_URL', $app_sub_dir . '/css/');
+    define('JS_URL', $app_sub_dir . '/js/');
+} else {
     define('APP_SUB_DIR', '');
     define('IMAGES_URL', '/img/');
     define('CSS_URL', '/css/');
@@ -91,7 +94,7 @@ else{
 }
 
 if (defined('SAE_MYSQL_DB')) {
-    define('TMP', 'saemc://'.$_SERVER['HTTP_APPVERSION'].'/tmp/');
+    define('TMP', 'saemc://' . $_SERVER['HTTP_APPVERSION'] . '/tmp/');
 } else {
     define('TMP', ROOT . DS . 'data' . DS);
 }
@@ -140,16 +143,15 @@ App::uses('Dispatcher', 'Routing');
 $Dispatcher = new Dispatcher();
 
 //replace '/Taobao' to '/taobao'.
-if(strpos($_SERVER['REQUEST_URI'],'/Taobao')!==false){
-    $_SERVER['REQUEST_URI'] = str_replace('/Taobao','/taobao',$_SERVER['REQUEST_URI'] );
-    header('location:'.$_SERVER['REQUEST_URI']);
+if (strpos($_SERVER['REQUEST_URI'], '/Taobao') !== false) {
+    $_SERVER['REQUEST_URI'] = str_replace('/Taobao', '/taobao', $_SERVER['REQUEST_URI']);
+    header('location:' . $_SERVER['REQUEST_URI']);
     exit;
 }
 
-if(isset($_GET['url'])){
+if (isset($_GET['url'])) {
     $request = new CakeRequest($_GET['url']);
-}
-else{
+} else {
     $request = new CakeRequest();
 }
 unset($request->query['url']);
