@@ -1678,27 +1678,21 @@ class WesharesController extends AppController
 
     public function fans_list($uid)
     {
-        $this->layout = null;
         $currentId = $this->currentUser['id'];
         $me = $uid == $currentId ? 1 : 0;
         $this->set('uid', $uid);
         $this->set('me', $me);
         $this->set('type', 0);
-        $title = $me == 1 ? '我的粉丝' : 'TA的粉丝';
-        $this->set('title', $title);
         $this->render('u_list');
     }
 
     public function sub_list($uid)
     {
-        $this->layout = null;
         $currentId = $this->currentUser['id'];
         $me = $uid == $currentId ? 1 : 0;
         $this->set('me', $me);
         $this->set('uid', $uid);
         $this->set('type', 1);
-        $title = $me == 1 ? '我关注的' : 'TA关注的';
-        $this->set('title', $title);
         $this->render('u_list');
     }
 

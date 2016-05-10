@@ -77,8 +77,6 @@ var all_js = [
   }, {
     name: 'user-info.min.js',
     sources: [
-      'webroot/src/scripts/me-lazyload.js',
-      'webroot/src/scripts/user-info-app.js',
       'webroot/src/scripts/user-list-data.js'
     ],
     dist: 'webroot/static/weshares/js/'

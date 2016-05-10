@@ -1,19 +1,10 @@
-<!doctype html>
-<html ng-app='UserInfo'>
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-    <meta charset="utf-8">
-    <title>{{$title}}</title>
-    <link rel="stylesheet" href="{{$STATIC_HOST}}/static/weshares/css/user-info.min.css?0.0.2"/>
-</head>
-<body>
 <div class="container" ng-controller="UserListCtrl as vm" id="userListView" data-uid="{{$uid}}" data-me="{{$me}}" data-type="{{$type}}">
     <!--标题-->
     <ul class="clearfix top-nav-bar">
         <li class="back fl" onclick="window.location.href='/weshares/user_share_info/{{$uid}}'"><img class="back-icon"
                                               src="{{$STATIC_HOST}}/static/weshares/images/back.png"></li>
         <li class="text-back fl" onclick="window.location.href='/weshares/user_share_info/{{$uid}}'">返回</li>
-        <li class="title">{{$title}}</li>
+        <li class="title">我的粉丝</li>
         <li class="home fr" onclick="window.location.href='/'"><img class="home-icon" src="{{$STATIC_HOST}}/static/weshares/images/home.png"></li>
     </ul>
     <div class="user-list-placeholder"></div>
@@ -24,9 +15,16 @@
     <div class="user-list-placeholder" style="margin-top: 10px;"></div>
     <div ng-include="'{{$STATIC_HOST}}/static/weshares/templates/u-list-place.html?v0.0.2'"></div>
 </div>
-</body>
-<script type="text/javascript" src="http://cdn.bootcss.com/angular.js/1.4.1/angular.min.js"></script>
-<script type="text/javascript" src="http://cdn.bootcss.com/ngInfiniteScroll/1.2.0/ng-infinite-scroll.min.js"></script>
-<script type="text/javascript" src="http://cdn.bootcss.com/underscore.js/1.8.3/underscore-min.js"></script>
-<script src="{{$STATIC_HOST}}/static/weshares/js/user-info.min.js?v2.1.0"></script>
-</html>
+
+<?php
+    $this->assign('title','新手指导');
+    $this->Html->css(array(
+$STATIC_HOST.'/static/weshares/css/user-info.min.css?v2.4.9'
+), null, array('inline' => false))
+?>
+
+<?php
+$this->Html->script(array(
+$STATIC_HOST.'/static/weshares/js/user-info.min.js?v2.4.9'
+), array('block' => 'scripts'))
+?>
