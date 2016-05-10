@@ -24,6 +24,7 @@
       vm.checkHasUnRead();
       vm.uid = -1;
       vm.proxies = [];
+      $rootScope.loadingPage=false;
       $http.get('/users/get_id_and_proxies').success(function (data) {
         if (data.uid != null) {
           vm.uid = data.uid;
