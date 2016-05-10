@@ -121,14 +121,14 @@ class OrderedBehavior extends ModelBehavior {
 		$Model->order = $Model->alias . '.' . $this->settings[$Model->alias]['field'] . ' ASC';
 	}
 	
-	public function beforedelete(&$Model) {
+	public function beforedelete(Model &$Model) {
 		$Model->read();
 		$highest = $this->_highest($Model);
 		if (!empty($Model->data) && ($Model->data[$Model->alias][$Model->primaryKey] == $highest[$Model->alias][$Model->primaryKey])) {
 			$Model->data = null;
 		}
 	}
-	public function afterdelete(&$Model) {
+	public function afterdelete(Model &$Model) {
 		if ($Model->data) {
 			// What was the weight of the deleted model?		
 			$old_weight = $Model->data[$Model->alias][$this->settings[$Model->alias]['field']];
@@ -152,7 +152,7 @@ class OrderedBehavior extends ModelBehavior {
 	 * @todo add new model with weight. clean up after
 	 * @param Model $Model
 	 */
-	public function beforesave(&$Model) {
+	public function beforesave(Model &$Model) {
 		//	Check if weight id is set. If not add to end, if set update all
 		// rows from ID and up
 		if (!isset($Model->data[$Model->alias][$Model->primaryKey])) {
@@ -172,7 +172,7 @@ class OrderedBehavior extends ModelBehavior {
 	 * @param int $new_weight the new weight of the node
 	 * @return boolean True of move successful
 	 */
-	public function moveto(&$Model, $id = null, $new_weight = null) {
+	public function moveto(Model &$Model, $id = null, $new_weight = null) {
 		if (!$id || !$new_weight || $new_weight < 1) {
 			return false;
 		}
@@ -233,7 +233,7 @@ class OrderedBehavior extends ModelBehavior {
 	 * @param mixed $foreign_key
 	 * $returns boolean true if successfull
 	 */
-	public function sortby(&$Model, $order, $foreign_key = null) {
+	public function sortby(Model &$Model, $order, $foreign_key = null) {
 		$fields = array($Model->primaryKey, $this->settings[$Model->alias]['field']);
 		$conditions = array(1 => 1);
 		if ($this->settings[$Model->alias]['foreign_key']) {
@@ -269,7 +269,7 @@ class OrderedBehavior extends ModelBehavior {
 	 * @return boolean true on success, false on failure
 	 * @access public
 	 */
-	public function moveup(&$Model, $id = null, $number = 1) {
+	public function moveup(Model &$Model, $id = null, $number = 1) {
 		if (!$id) {
 			if ($Model->id) {
 				$id = $Model->id;
@@ -351,7 +351,7 @@ class OrderedBehavior extends ModelBehavior {
 	 * @param Object $Model
 	 * @return boolean success
 	 */
-	public function resetweights(&$Model) {
+	public function resetweights(Model &$Model) {
 		if ($this->settings[$Model->alias]['foreign_key']) {
 			$temp = $Model->find('all', array(
 					'fields' => $this->settings[$Model->alias]['foreign_key'], 
@@ -405,7 +405,7 @@ class OrderedBehavior extends ModelBehavior {
 	 * @return boolean true on success, false on failure
 	 * @access public
 	 */
-	public function movedown(&$Model, $id = null, $number = 1) {
+	public function movedown(Model &$Model, $id = null, $number = 1) {
 		if (!$id) {
 			if ($Model->id) {
 				$id = $Model->id;
@@ -500,7 +500,7 @@ class OrderedBehavior extends ModelBehavior {
 	 * @param Int $id
 	 * @return Boolean, true if it is the first item, false if not
 	 */
-	public function isfirst(&$Model, $id = null) {
+	public function isfirst(Model &$Model, $id = null) {
 		if (!$id) {
 			if ($Model->id) {
 				$id = $Model->id;
@@ -529,7 +529,7 @@ class OrderedBehavior extends ModelBehavior {
 	 * @param Int $id
 	 * @return Boolean, true if it is the last item, false if not
 	 */
-	public function islast(&$Model, $id = null) {
+	public function islast(Model &$Model, $id = null) {
 		if (!$id) {
 			if ($Model->id) {
 				$id = $Model->id;
@@ -553,7 +553,7 @@ class OrderedBehavior extends ModelBehavior {
 	 * @param int $id
 	 * @return boolean 
 	 */
-	public function removefromlist(&$Model, $id) {
+	public function removefromlist(Model &$Model, $id) {
 		$this->_read($Model, $id);
 		$old_weight = $Model->data[$Model->alias][$this->settings[$Model->alias]['field']];
 		$action = array(
@@ -647,7 +647,7 @@ class OrderedBehavior extends ModelBehavior {
 		}
 		return $Model->find('all', $options);
 	}
-	
+
 	private function _read(&$Model, $id) {
 		$Model->id = $id;
 		$fields = array($Model->primaryKey, $this->settings[$Model->alias]['field']);

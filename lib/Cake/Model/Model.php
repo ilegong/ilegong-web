@@ -22,7 +22,7 @@
 
 App::uses('ClassRegistry', 'Utility');
 App::uses('Validation', 'Utility');
-App::uses('String', 'Utility');
+App::uses('String1', 'Utility');
 App::uses('Hash', 'Utility');
 App::uses('BehaviorCollection', 'Model');
 App::uses('ModelBehavior', 'Model');
@@ -1735,9 +1735,9 @@ class Model extends Object implements CakeEventListener {
 				if (empty($this->data[$this->alias][$this->primaryKey]) && $this->_isUUIDField($this->primaryKey)) {
 					if (array_key_exists($this->primaryKey, $this->data[$this->alias])) {
 						$j = array_search($this->primaryKey, $fields);
-						$values[$j] = String::uuid();
+						$values[$j] = String1::uuid();
 					} else {
-						list($fields[], $values[]) = array($this->primaryKey, String::uuid());
+						list($fields[], $values[]) = array($this->primaryKey, String1::uuid());
 					}
 				}
 
@@ -1836,7 +1836,7 @@ class Model extends Object implements CakeEventListener {
 						$newJoins[] = $row;
 						$values = array($id, $row);
 						if ($isUUID && $primaryAdded) {
-							$values[] = String::uuid();
+							$values[] = String1::uuid();
 						}
 						$newValues[$row] = $values;
 						unset($values);
@@ -2839,7 +2839,7 @@ class Model extends Object implements CakeEventListener {
 				$list = array("{n}.{$this->alias}.{$this->primaryKey}", "{n}.{$this->alias}.{$this->displayField}", null);
 			} else {
 				if (!is_array($query['fields'])) {
-					$query['fields'] = String::tokenize($query['fields']);
+					$query['fields'] = String1::tokenize($query['fields']);
 				}
 
 				if (count($query['fields']) === 1) {
