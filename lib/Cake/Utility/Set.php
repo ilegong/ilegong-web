@@ -18,7 +18,7 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-App::uses('String1', 'Utility');
+App::uses('String', 'Utility');
 App::uses('Hash', 'Utility');
 
 /**
@@ -550,7 +550,7 @@ class Set {
 			return null;
 		}
 		if (is_string($path) && strpos($path, '{') !== false) {
-			$path = String1::tokenize($path, '.', '{', '}');
+			$path = String::tokenize($path, '.', '{', '}');
 		} elseif (is_string($path)) {
 			$path = explode('.', $path);
 		}
