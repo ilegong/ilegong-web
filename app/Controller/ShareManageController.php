@@ -1153,6 +1153,11 @@ class ShareManageController extends AppController
 
     }
 
+    public function share_balance()
+    {
+
+    }
+
     //  给某个用户手动复制分享
     public function copy_share_to_user($shareId, $userId)
     {
