@@ -84,7 +84,7 @@ class SharerApiController extends AppController{
         $uid = $this->currentUser['id'];
         $shares = $this->WeshareBuy->get_my_shares($uid, $status, $settlement, $page, $limit);
         $share_ids = Hash::extract($shares, '{n}.Weshare.id');
-        $result = [];
+        $share_list = [];
         if (!empty($share_ids)) {
             $query_order_sql = 'select count(id), member_id from cake_orders where member_id in (' . implode(',', $share_ids) . ') and status=1 and type=9 group by member_id';
             $orderM = ClassRegistry::init('Order');
@@ -95,10 +95,10 @@ class SharerApiController extends AppController{
                 $shareItem = $shareItem['Weshare'];
                 $shareItem['order_count'] = empty($result[$shareItem['id']]) ? 0 : $result[$shareItem['id']];
                 $shareItem['balance_money'] = $share_balance_money[$shareItem['id']];
-                $result[] = $shareItem;
+                $share_list[] = $shareItem;
             }
         }
-        echo json_encode($result);
+        echo json_encode($share_list);
         exit();
     }
 
