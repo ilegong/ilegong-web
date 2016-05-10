@@ -1303,7 +1303,7 @@ class UsersController extends AppController
             $this->redirect('/users/login');
         }
 
-        $this->layout = 'tutorial_layout';
+        $this->layout = 'weshare';
 
         $currentUser = $this->currentUser;
         $current_user = $this->User->find('first', array(
@@ -1321,7 +1321,7 @@ class UsersController extends AppController
 
     function to_bind_mobile()
     {
-        $this->layout = 'tutorial_layout';
+        $this->layout = 'weshare';
 
         $userId = $this->Session->read('Auth.User.id');
         $userNickName = $this->Session->read('Auth.User.nickname');
@@ -1343,7 +1343,7 @@ class UsersController extends AppController
 
     function complete_user_info()
     {
-        $this->layout = 'tutorial_layout';
+        $this->layout = 'weshare';
 
         $this->pageTitle = "完善用户信息";
         $from = $_REQUEST['from'];

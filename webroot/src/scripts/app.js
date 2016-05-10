@@ -38,7 +38,8 @@
         ['self', PYS.staticFilePath + '/**']
       )
     }])
-    .run(initApp);
+    .run(initApp)
+    .controller('DefaultCtrl', DefaultCtrl);
 
   /* @ngInject */
   function configCompileProvider($compileProvider) {
@@ -66,5 +67,9 @@
   function initApp($rootScope) {
     $rootScope._ = _;
     $rootScope.loadingPage = true;
+  }
+
+  function DefaultCtrl($rootScope){
+    $rootScope.loadingPage = false;
   }
 })(window, window.angular);

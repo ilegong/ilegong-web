@@ -22,6 +22,7 @@
 
     activate();
     function activate() {
+      $rootScope.loadingPage = false;
       vm.mobilePhone = {value: '', valid: true};
       vm.code = {value: '', sent: false, timer: null, timeSpent: 60, valid: true};
     }

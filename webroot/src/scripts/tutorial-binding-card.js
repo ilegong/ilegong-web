@@ -19,6 +19,7 @@
 
     activate();
     function activate() {
+      $rootScope.loadingPage = false;
       vm.payment = {
         "type": 0,
         "account": '',
