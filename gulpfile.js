@@ -189,7 +189,7 @@ for (var i = 0; i < all_css.length; i++) {
 
 var tasks = _.union(_.map(all_css, function(file){return file.name;}),_.map(all_js, function(file){return file.name;}) );
 gulp.task('default', tasks, function () {
-  console.log("Default done.");
+  console.log("Default donef.");
 });
 
 gulp.task('dev', tasks, function () {
