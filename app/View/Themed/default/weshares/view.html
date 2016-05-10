@@ -5,13 +5,12 @@
 </div>
 
 <?php
+    $this->assign('title','微分享');
     $this->Html->css(array(
-$STATIC_HOST.'/static/weshares/css/weshare.min.css?v2.4.8'
-), null, array('inline' => false))
-?>
+    $STATIC_HOST.'/static/weshares/css/weshare.min.css?v2.4.8'
+    ), null, array('inline' => false));
 
-<?php
-$this->Html->script(array(
-$STATIC_HOST.'/static/weshares/js/weshare.min.js?v2.4.8'
-), array('block' => 'scripts'))
+    $this->Html->script(array(
+    $STATIC_HOST.'/static/weshares/js/weshare.min.js?v2.4.8'
+    ), array('block' => 'scripts'))
 ?>
