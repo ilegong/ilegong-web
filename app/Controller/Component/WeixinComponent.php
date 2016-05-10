@@ -33,7 +33,7 @@ class WeixinComponent extends Component {
 
     public $sh_wx_message_template_ids = array(
         "ORDER_PAID" => "Ee82jWoDhX3jIzf9_RW88P03TGHe2xisfMwtwTdI7bk",
-        "ORDER_SHIPPED" => "87uu4CmlZT-xlZGO45T_XTHiFYAWHQaLv94iGuH-Ke4",
+        "ORDER_SHIPPED" => "NCDgakoXPlPNHBJ1txoZKAt1S0_mYxxQb76qJ0kmN5s",
         "ORDER_REBATE" => "wlscn1lV4Ae59-4-dtBXwNDeO7JDznA5yipRDuBT-VM",
         //"COUPON_RECEIVED" => "op8f7Ca1izIU1QVfrdrg7GBqa_KTXHlaGFjUO2EGG8I",
         //"COUPON_TIMEOUT" => "KnpyIsYLe6W-8vKDFPVfd9_5WbvKBMn_wQiaIsc1-wE",
