@@ -1225,7 +1225,14 @@ class ShareManageController extends AppController
     {
         $this->Paginator->settings = $cond;
         $weshares = $this->Paginator->paginate('Weshare', $cond['Weshare']['conditions']);
-        $weshare_ids = Hash::extract($weshares, '{n}.Weshare.id');
+        $weshare_ids = [];
+        $pool_refer_share_ids = [];
+        foreach($weshares as $item){
+            $weshare_ids[] = $item['Weshare']['id'];
+            if($item['Weshare']['type']==SHARE_TYPE_POOL){
+                $pool_refer_share_ids[] = $item['Weshare']['refer_share_id'];
+            }
+        }
         $weshare_creator_ids = Hash::extract($weshares, '{n}.Weshare.creator');
         $creators = $this->User->find('all', [
             'conditions' => ['id' => $weshare_creator_ids],
@@ -1258,12 +1265,14 @@ class ShareManageController extends AppController
         $weshare_refund_money_map = $this->get_share_refund_money($weshare_ids);
         $weshare_rebate_map = $this->get_share_rebate_money($weshare_ids);
         $weshare_product_summary = $this->get_share_product_summary($weshares, $orders);
+        $pool_share_data = $this->get_pool_share_data($pool_refer_share_ids);
         $this->set('weshare_product_summary', $weshare_product_summary);
         $this->set('weshare_rebate_map', $weshare_rebate_map);
         $this->set('weshare_refund_map', $weshare_refund_money_map);
         $this->set('weshares', $weshares);
         $this->set('weshare_summery', $summery_data);
         $this->set('creators', $creators);
+        $this->set('pool_share_data', $pool_share_data);
     }
 
     function get_share_product_summary($weshares, $orders)
@@ -1298,12 +1307,12 @@ class ShareManageController extends AppController
             'data_id' => $share_ids
         ));
         $share_refund_map = [];
+        foreach($share_ids as $share_id){
+            $share_refund_map[$share_id] = 0;
+        }
         foreach ($refund_logs as $refund_log_item) {
             $data_id = $refund_log_item['RefundLog']['data_id'];
             $refund_money = $refund_log_item['RefundLog']['refund_fee'];
-            if (!isset($share_refund_map[$data_id])) {
-                $share_refund_map[$data_id] = 0;
-            }
             $share_refund_map[$data_id] = $share_refund_map[$data_id] + $refund_money / 100;
         }
         return $share_refund_map;
@@ -1316,22 +1325,40 @@ class ShareManageController extends AppController
             'conditions' => array(
                 'share_id' => $share_ids,
                 'not' => array('order_id' => 0, 'is_paid' => 0)
-            ),
-            'limit' => 500
+            )
         ));
         $share_rebate_map = array();
+        $result = [];
+        foreach($share_ids as $share_id){
+            $share_rebate_map[$share_id] = 0;
+        }
         foreach ($rebateLogs as $log) {
             $share_id = $log['RebateTrackLog']['share_id'];
-            if (!isset($share_rebate_map[$share_id])) {
-                $share_rebate_map[$share_id] = array('rebate_money' => 0);
-            }
-            $share_rebate_map[$share_id]['rebate_money'] = $log['RebateTrackLog']['rebate_money'];
+            $share_rebate_map[$share_id] = $log['RebateTrackLog']['rebate_money'];
         }
-        foreach ($share_rebate_map as &$rebate_item) {
-            $rebate_item['rebate_money'] = number_format(round($rebate_item['rebate_money'] / 100, 2), 2);
+        foreach ($share_rebate_map as $key => $rebate_item) {
+            $result[$key] = number_format(round($rebate_item / 100, 2), 2);
         }
         return $share_rebate_map;
     }
 
+    public function get_pool_share_data($pool_share_ids){
+        $weshares = $this->Weshare->find('all', [
+            'conditions' => [
+                'id' => $pool_share_ids
+            ],
+            'recursive' => 1,
+        ]);
+        $pool_shares = [];
+        $weshare_products = [];
+        foreach($weshares as $weshare_item){
+            $pool_shares[$weshare_item['Weshare']['id']] = $weshare_item['title'];
+            $products = $weshare_item['WeshareProduct'];
+            foreach($products as $product_item){
+                $weshare_products[$product_item['id']] = $product_item;
+            }
+        }
+        return ['share' => $pool_shares, 'pool_products' => $weshare_products];
+    }
 
 }

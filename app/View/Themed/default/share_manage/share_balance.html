@@ -46,7 +46,7 @@
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
-                <form class="form-inline" method="post">
+                <form class="form-inline" method="post" action="/share_manage/share_balance">
                     <div class="form-group">
                         <label>分享ID</label>
                         <input type="text" class="form-control" name="shareId">
@@ -100,12 +100,30 @@
                             <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{$weshare_item['Weshare']['id']}}</td>
                             <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{$creators[$weshare_item['Weshare']['creator']]['id']}}<br>{{$creators[$weshare_item['Weshare']['creator']]['nickname']}}</td>
                             <td width="10%" rowspan="{{count($weshare_item['WeshareProduct'])}}">{{$weshare_item['Weshare']['title']}}</td>
-                            <td width="10%" rowspan="{{count($weshare_item['WeshareProduct'])}}">暂时无</td>
+                            <td width="10%" rowspan="{{count($weshare_item['WeshareProduct'])}}">
+                                {{if $weshare_item['Weshare']['type'] == SHARE_TYPE_POOL}}
+                                    {{$pool_share_data['share'][$weshare_item['Weshare']['refer_share_id']]}}
+                                {{/if}}
+                            </td>
                             {{/if}}
                             <td width="5%">{{$product_item['name']}}</td>
-                            <td>团长</td>
-                            <td width="5%">无</td>
-                            <td>无</td>
+                            <td>
+                                {{if $weshare_item['Weshare']['type'] == SHARE_TYPE_POOL}}
+                                    <span style="color: red;">产品街</span>
+                                {{else}}
+                                    团长
+                                {{/if}}
+                            </td>
+                            <td width="5%">
+                                {{if $weshare_item['Weshare']['type'] == SHARE_TYPE_POOL}}
+                                    {{$pool_share_data['pool_products'][$product_item['origin_product_id']]['name']}}
+                                {{/if}}
+                            </td>
+                            <td>
+                                {{if $weshare_item['Weshare']['type'] == SHARE_TYPE_POOL}}
+                                {{$pool_share_data['pool_products'][$product_item['origin_product_id']]['price']/100}}
+                                {{/if}}
+                            </td>
                             <td>{{$product_item['price']/100}}</td>
                             <td>{{$weshare_product_summary[$product_item['id']]['num']}}</td>
                             <td>{{get_format_number($weshare_product_summary[$product_item['id']]['turnover']/100)}}</td>
@@ -129,8 +147,8 @@
                         <ul class="pagination">
                             <?php
                                 echo $this->Paginator->prev(__('<<'), array('tag' => 'li'), null, array('tag' => 'li', 'class' => 'disabled', 'disabledTag' => 'a'));
-                            echo $this->Paginator->numbers(array('separator' => '', 'currentTag' => 'a', 'currentClass' => 'active', 'tag' => 'li', 'first' => 1));
-                            echo $this->Paginator->next(__('>>'), array('tag' => 'li','currentClass' => 'disabled'), null, array('tag' => 'li', 'class' => 'disabled', 'disabledTag' => 'a'));
+                                echo $this->Paginator->numbers(array('separator' => '', 'currentTag' => 'a', 'currentClass' => 'active', 'tag' => 'li', 'first' => 1));
+                                echo $this->Paginator->next(__('>>'), array('tag' => 'li','currentClass' => 'disabled'), null, array('tag' => 'li', 'class' => 'disabled', 'disabledTag' => 'a'));
                             ?>
                         </ul>
                     </div>
