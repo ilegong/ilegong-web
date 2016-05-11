@@ -491,7 +491,11 @@ class WeshareBuyComponent extends Component
     public function query_comment2($cond){
         $commentM = ClassRegistry::init('Comment');
         $comments = $commentM->find('all', $cond);
-        return $this->combine_comment($comments);
+        $users = Hash::combine($comments, '{n}.User.id', '{n}.User');
+        $users = array_map('map_user_avatar',$users);
+        $result =  $this->combine_comment($comments);
+        $result['users'] = $users;
+        return $result;
     }
 
 

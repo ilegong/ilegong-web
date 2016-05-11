@@ -46,7 +46,17 @@ class WeshareApiController extends Controller
         $query_cond = [
             'conditions' => ['data_id' => $all_share_ids, 'type' => COMMENT_SHARE_TYPE, 'status' => PUBLISH_YES],
             'limit' => $limit,
-            'page' => $page
+            'page' => $page,
+            'joins' => [
+                [
+                    'table' => 'users',
+                    'alias' => 'User',
+                    'conditions' => [
+                        'User.id = Comment.user_id',
+                    ],
+                ]
+            ],
+            'fields' => ['Comment.*', 'User.id', 'User.nickname', 'User.avatar', 'User.image']
         ];
         $result = $this->WeshareBuy->query_comment2($query_cond);
         $comment_uids = Hash::extract($result['order_comments'], '{n}.user_id');

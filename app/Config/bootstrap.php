@@ -2336,7 +2336,11 @@ function map_user_avatar2($var){
 }
 
 function map_user_avatar($var){
-    $var['image'] = get_user_avatar($var);
+    $avatar = get_user_avatar($var);
+    if (empty($avatar)) {
+        $avatar = STATIC_HOST . '/avatar/s/default.jpg';
+    }
+    $var['image'] = $avatar;
     return $var;
 }
 
