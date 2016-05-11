@@ -1193,6 +1193,19 @@ class ShareManageController extends AppController
             'status' => array(1, 2),
             'settlement' => 0,
         ];
+        if($_REQUEST['shareId']){
+            $cond['id'] = $_REQUEST['shareId'];
+        }
+        if($_REQUEST['shareName']){
+            $cond['title like '] = '%'.$_REQUEST['shareName'].'%';
+        }
+        $filter_type = $_REQUEST['shareType'];
+        if($filter_type == 1){
+            $cond['type'] = [];
+        }
+        if($filter_type ==2){
+            $cond['type'] = [];
+        }
         $q_c = array(
             'Weshare' => array(
                 'conditions' => $cond,
