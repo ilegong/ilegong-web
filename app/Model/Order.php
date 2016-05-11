@@ -8,6 +8,14 @@
 
 class Order extends AppModel {
 
+
+    var $hasMany = array(
+        'Cart' => array(
+            'className'  => 'Cart',
+            'foreignKey' => 'order_id',
+        ),
+    );
+
     public function findOrderByConditionsAndFields($cond, $fields) {
         $order_info = $this->find('first', array(
             'conditions' => $cond,
