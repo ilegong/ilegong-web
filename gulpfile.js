@@ -27,11 +27,11 @@ var all_js = [
     name: 'weshare-view.min.js',
     sources: [
       'webroot/src/scripts/offline-store.js',
-      'webroot/static/weshares/js/view-consignee-controller.js',
-      'webroot/static/weshares/js/edit-consignee-controller.js',
-      'webroot/static/weshares/js/view-controller.js',
-      'webroot/static/weshares/js/pool-product-factory.js',
-      'webroot/static/weshares/js/view-product-info.js',
+      'webroot/src/scripts/view-consignee-controller.js',
+      'webroot/src/scripts/edit-consignee-controller.js',
+      'webroot/src/scripts/view-controller.js',
+      'webroot/src/scripts/pool-product-factory.js',
+      'webroot/src/scripts/view-product-info.js',
     ],
     dist: 'webroot/static/weshares/js/'
   }, {
