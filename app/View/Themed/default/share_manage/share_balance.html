@@ -121,7 +121,9 @@
                             </td>
                             <td>
                                 {{if $weshare_item['Weshare']['type'] == SHARE_TYPE_POOL}}
-                                {{$pool_share_data['pool_products'][$product_item['origin_product_id']]['price']/100}}
+                                 {{$pool_share_data['pool_products'][$product_item['origin_product_id']]['price']/100}}
+                                <br>
+                                <span style="color: #ff0000">渠道价： {{$pool_share_data['pool_products'][$product_item['origin_product_id']]['channel_price']/100}}</span>
                                 {{/if}}
                             </td>
                             <td>{{$product_item['price']/100}}</td>
