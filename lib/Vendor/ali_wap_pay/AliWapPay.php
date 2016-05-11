@@ -202,8 +202,7 @@ class AliWapPay extends Object {
             "total_fee" => $total_fee
         );
         $alipaySubmit = new AlipaySubmit($this->alipay_config);
-        $result = $alipaySubmit->buildRequestPara($para_token);
-        return $alipaySubmit->buildRequestParaToString($result);
+        return $alipaySubmit->buildRequestParaToString($para_token);
     }
 
 } 
