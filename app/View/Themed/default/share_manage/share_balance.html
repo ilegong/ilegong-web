@@ -1,8 +1,36 @@
-<style>
-    .td-align{
-        vertical-align:middle
-    }
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>分享用户管理系统</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="{{$STATIC_HOST}}/static/sharer/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- MetisMenu CSS -->
+    <link href="{{$STATIC_HOST}}/static/sharer/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+    <!-- DataTables CSS -->
+    <link href="{{$STATIC_HOST}}/static/sharer/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet">
+    <!-- DataTables Responsive CSS -->
+    <link href="{{$STATIC_HOST}}/static/sharer/bower_components/datatables-responsive/css/dataTables.responsive.css" rel="stylesheet">
+    <!-- Timeline CSS -->
+    <link href="{{$STATIC_HOST}}/static/sharer/dist/css/timeline.css" rel="stylesheet">
+    <!-- Morris Charts CSS -->
+    <link href="{{$STATIC_HOST}}/static/sharer/bower_components/morrisjs/morris.css" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{{$STATIC_HOST}}/static/sharer/dist/css/sb-admin-2.css" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
 <div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">分享结账</h1>
@@ -65,38 +93,47 @@
                         </thead>
                         <tbody>
                         {{loop $weshares $index $weshare_item}}
-                            <?php $loop_flag = 0; ?>
-                            {{loop $weshare_item['WeshareProduct'] $product_item}}
-                                <tr {{if $index%2==0}}class="warning"{{/if}}>
-                                    {{if $loop_flag==0}}
-                                        <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{$weshare_item['Weshare']['id']}}</td>
-                                        <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{$creators[$weshare_item['Weshare']['creator']]['id']}}<br>{{$creators[$weshare_item['Weshare']['creator']]['nickname']}}</td>
-                                        <td width="10%" rowspan="{{count($weshare_item['WeshareProduct'])}}">{{$weshare_item['Weshare']['title']}}</td>
-                                        <td width="10%" rowspan="{{count($weshare_item['WeshareProduct'])}}">暂时无</td>
-                                    {{/if}}
-                                    <td width="5%">{{$product_item['name']}}</td>
-                                    <td>团长</td>
-                                    <td width="5%">无</td>
-                                    <td>无</td>
-                                    <td>{{$product_item['price']/100}}</td>
-                                    <td>{{$weshare_product_summary[$product_item['id']]['num']}}</td>
-                                    <td>{{get_format_number($weshare_product_summary[$product_item['id']]['turnover']/100)}}</td>
-                                    {{if $loop_flag==0}}
-                                        <td {{if count($weshare_item["WeshareProduct"]) > 1}}style="vertical-align:middle"{{/if}} rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_summery[$weshare_item['Weshare']['id']]['ship_fee']/100)}}</td>
-                                        <td {{if count($weshare_item["WeshareProduct"]) > 1}}style="vertical-align:middle"{{/if}} rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_summery[$weshare_item['Weshare']['id']]['coupon_total']/100)}}</td>
-                                        <td {{if count($weshare_item["WeshareProduct"]) > 1}}style="vertical-align:middle"{{/if}} rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_refund_map[$weshare_item['Weshare']['id']])}}</td>
-                                        <td {{if count($weshare_item["WeshareProduct"]) > 1}}style="vertical-align:middle"{{/if}} rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_rebate_map[$weshare_item['Weshare']['id']])}}</td>
-                                        <td {{if count($weshare_item["WeshareProduct"]) > 1}}style="vertical-align:middle"{{/if}} rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_summery[$weshare_item['Weshare']['id']]['total_price'])}}</td>
-                                        <td {{if count($weshare_item["WeshareProduct"]) > 1}}style="vertical-align:middle"{{/if}} rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_summery[$weshare_item['Weshare']['id']]['total_price'] - $weshare_refund_map[$weshare_item['Weshare']['id']] - $weshare_rebate_map[$weshare_item['Weshare']['id']])}}</td>
-                                        <td width="5%" rowspan="{{count($weshare_item['WeshareProduct'])}}">{{$creators[$weshare_item['Weshare']['creator']]['payment']}}</td>
-                                        <td width="5%" rowspan="{{count($weshare_item['WeshareProduct'])}}">{{$creators[$weshare_item['Weshare']['creator']]['mobilephone']}}</td>
-                                    {{/if}}
-                                </tr>
-                                <?php $loop_flag = $loop_flag + 1; ?>
-                            {{/loop}}
+                        <?php $loop_flag = 0; ?>
+                        {{loop $weshare_item['WeshareProduct'] $product_item}}
+                        <tr {{if $index%2==0}}class="warning"{{/if}}>
+                            {{if $loop_flag==0}}
+                            <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{$weshare_item['Weshare']['id']}}</td>
+                            <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{$creators[$weshare_item['Weshare']['creator']]['id']}}<br>{{$creators[$weshare_item['Weshare']['creator']]['nickname']}}</td>
+                            <td width="10%" rowspan="{{count($weshare_item['WeshareProduct'])}}">{{$weshare_item['Weshare']['title']}}</td>
+                            <td width="10%" rowspan="{{count($weshare_item['WeshareProduct'])}}">暂时无</td>
+                            {{/if}}
+                            <td width="5%">{{$product_item['name']}}</td>
+                            <td>团长</td>
+                            <td width="5%">无</td>
+                            <td>无</td>
+                            <td>{{$product_item['price']/100}}</td>
+                            <td>{{$weshare_product_summary[$product_item['id']]['num']}}</td>
+                            <td>{{get_format_number($weshare_product_summary[$product_item['id']]['turnover']/100)}}</td>
+                            {{if $loop_flag==0}}
+                            <td {{if count($weshare_item["WeshareProduct"]) > 1}}style="vertical-align:middle"{{/if}} rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_summery[$weshare_item['Weshare']['id']]['ship_fee']/100)}}</td>
+                            <td {{if count($weshare_item["WeshareProduct"]) > 1}}style="vertical-align:middle"{{/if}} rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_summery[$weshare_item['Weshare']['id']]['coupon_total']/100)}}</td>
+                            <td {{if count($weshare_item["WeshareProduct"]) > 1}}style="vertical-align:middle"{{/if}} rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_refund_map[$weshare_item['Weshare']['id']])}}</td>
+                            <td {{if count($weshare_item["WeshareProduct"]) > 1}}style="vertical-align:middle"{{/if}} rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_rebate_map[$weshare_item['Weshare']['id']])}}</td>
+                            <td {{if count($weshare_item["WeshareProduct"]) > 1}}style="vertical-align:middle"{{/if}} rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_summery[$weshare_item['Weshare']['id']]['total_price'])}}</td>
+                            <td {{if count($weshare_item["WeshareProduct"]) > 1}}style="vertical-align:middle"{{/if}} rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_summery[$weshare_item['Weshare']['id']]['total_price'] - $weshare_refund_map[$weshare_item['Weshare']['id']] - $weshare_rebate_map[$weshare_item['Weshare']['id']])}}</td>
+                            <td width="5%" rowspan="{{count($weshare_item['WeshareProduct'])}}">{{$creators[$weshare_item['Weshare']['creator']]['payment']}}</td>
+                            <td width="5%" rowspan="{{count($weshare_item['WeshareProduct'])}}">{{$creators[$weshare_item['Weshare']['creator']]['mobilephone']}}</td>
+                            {{/if}}
+                        </tr>
+                        <?php $loop_flag = $loop_flag + 1; ?>
+                        {{/loop}}
                         {{/loop}}
                         </tbody>
                     </table>
+                    <div class="pagination pagination-large">
+                        <ul class="pagination">
+                            <?php
+                                echo $this->Paginator->prev(__('<<'), array('tag' => 'li'), null, array('tag' => 'li', 'class' => 'disabled', 'disabledTag' => 'a'));
+                            echo $this->Paginator->numbers(array('separator' => '', 'currentTag' => 'a', 'currentClass' => 'active', 'tag' => 'li', 'first' => 1));
+                            echo $this->Paginator->next(__('>>'), array('tag' => 'li','currentClass' => 'disabled'), null, array('tag' => 'li', 'class' => 'disabled', 'disabledTag' => 'a'));
+                            ?>
+                        </ul>
+                    </div>
                 </div>
                 <!-- /.table-responsive -->
             </div>
@@ -107,3 +144,6 @@
     <!-- /.col-lg-12 -->
 </div>
 <!-- /.row -->
+</body>
+</html>
+

@@ -1189,6 +1189,7 @@ class ShareManageController extends AppController
 
     public function share_balance()
     {
+        $this->layout = null;
         $cond = [
             'status' => array(1, 2),
             'settlement' => 0,
@@ -1200,11 +1201,14 @@ class ShareManageController extends AppController
             $cond['title like '] = '%'.$_REQUEST['shareName'].'%';
         }
         $filter_type = $_REQUEST['shareType'];
-        if($filter_type == 1){
-            $cond['type'] = [];
+        if ($filter_type == 1) {
+            $cond['type'] = SHARE_TYPE_DEFAULT;
         }
-        if($filter_type ==2){
-            $cond['type'] = [];
+        if ($filter_type == 2) {
+            $cond['type'] = SHARE_TYPE_POOL;
+        }
+        if ($filter_type == 0) {
+            $cond['type'] = [SHARE_TYPE_POOL, SHARE_TYPE_DEFAULT];
         }
         $q_c = array(
             'Weshare' => array(
