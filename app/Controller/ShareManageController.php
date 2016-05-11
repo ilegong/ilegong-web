@@ -1215,7 +1215,6 @@ class ShareManageController extends AppController
             'fields' => ['id', 'nickname', 'mobilephone', 'payment']
         ]);
         $creators = Hash::combine($creators, '{n}.User.id', '{n}.User');
-        $weshares = Hash::combine($weshares, '{n}.Weshare.id', '{n}.Weshare');
         $orders = $this->Order->find('all', [
             'conditions' => [
                 'type' => ORDER_TYPE_WESHARE_BUY,

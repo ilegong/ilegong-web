@@ -2821,6 +2821,11 @@ function wx_update_group_name($id , $name)
 }
 
 
+function get_format_number($val){
+    return round(floatval($val), 2);
+}
+
+
 
 /**
  * auto load spl lib
