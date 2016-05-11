@@ -202,7 +202,16 @@ class AliWapPay extends Object {
             "total_fee" => $total_fee
         );
         $alipaySubmit = new AlipaySubmit($this->alipay_config);
-        return $alipaySubmit->buildRequestParaToString($para_token);
+        $result =  $alipaySubmit->buildRequestPara($para_token);
+        $arg  = '';
+        while (list ($key, $val) = each ($result)) {
+            $arg.=$key.'="'.$val.'"&';
+        }
+        //去掉最后一个&字符
+        $arg = substr($arg,0,count($arg)-2);
+        //如果存在转义字符，那么去掉转义
+        if(get_magic_quotes_gpc()){$arg = stripslashes($arg);}
+        return $arg;
     }
 
 } 
