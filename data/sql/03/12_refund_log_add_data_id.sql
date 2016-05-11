@@ -7,3 +7,5 @@ left join cake_orders b on
     a.order_id = b.id
 set
     a.data_id = b.member_id;
+
+

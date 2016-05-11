@@ -1235,6 +1235,11 @@ class ShareManageController extends AppController
         $this->set('creators', $creators);
     }
 
+    function get_share_product_summary()
+    {
+        
+    }
+
     function get_share_refund_money($share_ids)
     {
         $refund_logs = $this->RefundLog->find('all', array(
