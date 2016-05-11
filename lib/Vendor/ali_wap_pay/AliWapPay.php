@@ -204,6 +204,8 @@ class AliWapPay extends Object {
         /************************************************************/
         $this->alipay_config['sign_type'] = strtoupper('RSA');
 
+        $this->log('rsa private key path '. $this->alipay_config['private_key_path']);
+
         $para_token = array(
             "service" => "alipay.wap.trade.create.direct",
             "partner" => trim($this->alipay_config['partner']),
