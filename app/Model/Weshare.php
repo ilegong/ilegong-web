@@ -4,6 +4,13 @@ class Weshare extends AppModel
 {
     var $name = 'Weshare';
 
+    var $hasMany = array(
+        'WeshareProduct' => array(
+            'className'  => 'WeshareProduct',
+            'foreignKey' => 'weshare_id',
+        ),
+    );
+
     /**
      * @param $share_id
      * @param $uid

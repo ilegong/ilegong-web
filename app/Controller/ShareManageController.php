@@ -1189,7 +1189,19 @@ class ShareManageController extends AppController
 
     public function share_balance()
     {
-
+        $cond = [
+            'status' => array(1, 2),
+            'settlement' => 0,
+        ];
+        $q_c = array(
+            'Weshare' => array(
+                'conditions' => $cond,
+                'recursive' => 1,
+                'limit' => 5,
+                'order' => 'Weshare.id DESC'
+            )
+        );
+        $this->get_share_balance_data($q_c);
     }
 
     private function get_share_balance_data($cond)
@@ -1210,11 +1222,7 @@ class ShareManageController extends AppController
                 'member_id' => $weshare_ids,
                 'status' => [ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY]
             ],
-            'joins' => [
-                [
-
-                ]
-            ]
+            'recursive' => 1,
         ]);
         $summery_data = array();
         foreach ($orders as $item) {
@@ -1233,6 +1241,8 @@ class ShareManageController extends AppController
         }
         $weshare_refund_money_map = $this->get_share_refund_money($weshare_ids);
         $weshare_rebate_map = $this->get_share_rebate_money($weshare_ids);
+        $weshare_product_summary = $this->get_share_product_summary($weshares, $orders);
+        $this->set('weshare_product_summary', $weshare_product_summary);
         $this->set('weshare_rebate_map', $weshare_rebate_map);
         $this->set('weshare_refund_map', $weshare_refund_money_map);
         $this->set('weshares', $weshares);
@@ -1240,13 +1250,34 @@ class ShareManageController extends AppController
         $this->set('creators', $creators);
     }
 
-    function get_share_product_summary()
+    function get_share_product_summary($weshares, $orders)
     {
-        
+        $result = [];
+        foreach ($weshares as $weshare_item) {
+            $products = $weshare_item['WeshareProduct'];
+            foreach ($products as $product_item) {
+                $product_id = $product_item['id'];
+                if (!isset($result[$product_id])) {
+                    $result[$product_id] = ['num' => 0, 'turnover' => 0];
+                }
+            }
+        }
+        foreach ($orders as $order_item) {
+            $carts = $order_item['Cart'];
+            foreach ($carts as $cart_item) {
+                $cart_pid = $cart_item['product_id'];
+                $cart_num = $cart_item['num'];
+                $cart_price = $cart_item['price'];
+                $result[$cart_pid]['num'] = $result[$cart_pid]['num'] + $cart_num;
+                $result[$cart_pid]['turnover'] = $result[$cart_pid]['turnover'] + $cart_num*$cart_price;
+            }
+        }
+        return $result;
     }
 
     function get_share_refund_money($share_ids)
     {
+        $this->loadModel('RefundLog');
         $refund_logs = $this->RefundLog->find('all', array(
             'data_id' => $share_ids
         ));
