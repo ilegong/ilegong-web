@@ -4,8 +4,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1.1, user-scalable=no, width=device-width">
     <title><?php echo $this->fetch('title') ?: '微分享'; ?></title>
-    <link href="http://cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.css" media="all" rel="stylesheet" type="text/css">
-    <link href="{{$STATIC_HOST}}/static/weshares/css/site-common.min.css?v2.4.9" media="all" rel="stylesheet" type="text/css">
+    <link href="http://cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.css" media="all" rel="stylesheet"
+          type="text/css">
+    <link href="{{$STATIC_HOST}}/static/weshares/css/site-common.min.css?v2.4.9" media="all" rel="stylesheet"
+          type="text/css">
     <?php
     echo $this->fetch('css');
     ?>
@@ -22,7 +24,8 @@
     </div>
 </div>
 <!--输入错误层-->
-<div class="layer-toast" ng-class="{'show-b': showErrorMessageLayer}" ng-show="showErrorMessageLayer" ng-bind="errorMessage"></div>
+<div class="layer-toast" ng-class="{'show-b': showErrorMessageLayer}" ng-show="showErrorMessageLayer"
+     ng-bind="errorMessage"></div>
 
 {{if $show_footer}}
 <footer class="channel_bottom" id="share-bottom-nav">
@@ -50,7 +53,7 @@
 
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
-    if(wx){
+    if (wx) {
         var wx_jssdk_appId = '{{$signPackage["appId"]}}';
         var wx_jssdk_timestamp = '{{$signPackage["timestamp"]?$signPackage["timestamp"]:1}}';
         var wx_jssdk_nonceStr = '{{$signPackage["nonceStr"]}}';
@@ -70,11 +73,11 @@
             var to_timeline_title = "{{empty($title) ? '朋友说—基于信任关系的分享平台' : $title}}";
             var to_friend_title = "{{empty($title) ? '朋友说—基于信任关系的分享平台' : $title}}";
             var detail_url = "{{$detail_url}}";
-            if(!detail_url){
-                detail_url =  document.URL.split('?')[0];
+            if (!detail_url) {
+                detail_url = document.URL.split('?')[0];
             }
-            var to_friend_link = detail_url + '?trstr='+ share_string + '&share_type=appMsg';
-            var to_timeline_link = detail_url + '?trstr='+ share_string + '&share_type=timeline';
+            var to_friend_link = detail_url + '?trstr=' + share_string + '&share_type=appMsg';
+            var to_timeline_link = detail_url + '?trstr=' + share_string + '&share_type=timeline';
             var imgUrl = "{{empty($image) ? 'http://static.tongshijia.com/static/weshares/images/pys-logo.gif' : $this->Html->assetUrl($image)}}";
             var desc = "{{empty($desc) ? '来 [朋友说] 分享好吃的、好玩的、有趣的' : $desc}}";
             wx.onMenuShareAppMessage({
@@ -84,9 +87,9 @@
                 imgUrl: imgUrl,
                 success: function () {
                     // 用户确认分享后执行的回调函数
-                    if(share_string != '0'){
-                        setTimeout(function(){
-                            $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "appMsg" });
+                    if (share_string != '0') {
+                        setTimeout(function () {
+                            $.post('/wx_shares/log_share', {trstr: share_string, share_type: "appMsg"});
                         }, 500);
                     }
                 }
@@ -96,9 +99,9 @@
                 link: to_timeline_link,
                 imgUrl: imgUrl,
                 success: function () {
-                    if(share_string != '0'){
-                        setTimeout(function(){
-                            $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "timeline" });
+                    if (share_string != '0') {
+                        setTimeout(function () {
+                            $.post('/wx_shares/log_share', {trstr: share_string, share_type: "timeline"});
                         }, 500);
                     }
                 }
@@ -108,25 +111,27 @@
 </script>
 <script>
     //Pys common name space
-    PYS={};
+    PYS = {};
     //define static file path
     PYS.staticFilePath = '{{$STATIC_HOST}}';
     //PYS.staticFilePath = 'http://51daifan-assets.stor.sinaapp.com';
     PYS.storage = {
-        save : function(key, jsonData, expirationHour){
+        save: function (key, jsonData, expirationHour) {
             //if (!Modernizr.localstorage){return false;}
             var expirationMS = expirationHour * 60 * 60 * 1000;
             var record = {value: JSON.stringify(jsonData), timestamp: new Date().getTime() + expirationMS}
             localStorage.setItem(key, JSON.stringify(record));
             return jsonData;
         },
-        load : function(key){
+        load: function (key) {
             //if (!Modernizr.localstorage){return false;}
             var record = JSON.parse(localStorage.getItem(key));
-            if (!record){return false;}
+            if (!record) {
+                return false;
+            }
             return (new Date().getTime() < record.timestamp && JSON.parse(record.value));
         },
-        clear : function(){
+        clear: function () {
             localStorage.clear();
         }
     }
@@ -134,7 +139,7 @@
 <script type="text/javascript" src="http://cdn.bootcss.com/angular.js/1.4.1/angular.min.js"></script>
 <script type="text/javascript" src="http://cdn.bootcss.com/ngInfiniteScroll/1.2.0/ng-infinite-scroll.min.js"></script>
 <script type="text/javascript" src="http://cdn.bootcss.com/underscore.js/1.8.3/underscore-min.js"></script>
-<script src="{{$STATIC_HOST}}/static/weshares/js/weshare.min.js?v2.4.9"></script>
+<script src="{{$STATIC_HOST}}/static/weshares/js/weshare.min.js?v2.5.2"></script>
 <?php
     echo $this->fetch('scripts');
 ?>

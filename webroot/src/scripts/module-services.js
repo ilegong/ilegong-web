@@ -3,6 +3,8 @@
     .service('Utils', Utils)
     .service('CoreReactorChannel', CoreReactorChannel)
     .service('Locations', Locations)
+    .service('PoolProductInfo', PoolProductInfo)
+    .service('OfflineStore', OfflineStore)
     .service('ShareOrder', ShareOrder);
 
   function Utils() {
@@ -217,5 +219,111 @@
       'loadCityData': loadCityData,
       'loadCountyData': loadCountyData
     };
+  }
+
+  function PoolProductInfo($http, $log, $templateCache) {
+    return {
+      prepareProductInfo: function (weshareId,callBackFunc) {
+        $http({
+          method: 'GET',
+          url: '/share_product_pool/get_share_product_detail/' + weshareId + '.json',
+          cache: $templateCache
+        }).success(function (data) {
+          callBackFunc(data);
+        }).error(function () {
+          $log.log('get share product info error');
+          $rootScope.loadingPage = false;
+        });
+      }
+    };
+  }
+
+  function OfflineStore(){
+    return {
+      'ChooseOfflineStore' : ChooseOfflineStore
+    };
+
+    function ChooseOfflineStore($vm, $http,$templateCache) {
+      $vm.areas = {
+        110101: {
+          'name': "东城区"
+        },
+        110108: {
+          'name': "海淀区"
+        },
+        110102: {
+          'name': "西城区"
+        },
+        110105: {
+          'name': "朝阳区"
+        },
+        110106: {
+          'name': "丰台区"
+        },
+        110114: {
+          'name': "昌平区"
+        },
+        110113: {
+          'name': "顺义区"
+        },
+        110115: {
+          'name': "大兴区"
+        },
+        110112: {
+          'name': "通州区"
+        }
+      };
+      $vm.currentAreaCode = '110101';
+      changeOfflineStoreArea($vm.currentAreaCode);
+      $vm.offlineStores = {};
+      $vm.changeOfflineStoreArea = changeOfflineStoreArea;
+      $vm.showOfflineStoreDetail = showOfflineStoreDetail;
+      $vm.chooseOfflineStore = chooseOfflineStore;
+      $vm.showChooseOfflineStore = showChooseOfflineStore;
+      //$vm.mapPanTo = mapPanTo;
+      function showChooseOfflineStore() {
+        $vm.showOfflineStoreDetailView = false;
+        $vm.chooseOfflineStoreView = true;
+        $vm.showShareDetailView = false;
+        $vm.showBalanceView = false;
+      }
+
+      function chooseOfflineStore(offlineStore) {
+        $vm.showOfflineStoreDetailView = false;
+        $vm.chooseOfflineStoreView = false;
+        $vm.showShareDetailView = false;
+        $vm.showBalanceView = true;
+        $vm.checkedOfflineStore = offlineStore;
+      }
+
+      function showOfflineStoreDetail(offlineStore) {
+        if (!offlineStore['mapImg']) {
+          var pointStr = offlineStore['location_long'] + ',' + offlineStore['location_lat'];
+          var reversePointStr = offlineStore['location_lat'] + ',' + offlineStore['location_long'];
+          var pointName = offlineStore['alias'];
+          offlineStore['mapImg'] = 'http://api.map.baidu.com/staticimage?width=400&height=200&center=' + pointStr + '&markers=' + pointName + '|' + pointStr + '&zoom=18&markerStyles=l,A,0xff0000';
+          offlineStore['mapDetailUrl'] = 'http://api.map.baidu.com/marker?location=' + reversePointStr + '&title=' + pointName + '&content=' + pointName + '&output=html';
+          //http://api.map.baidu.com/marker?location=39.916979519873,116.41004950566&title=我的位置&content=百度奎科大厦&output=html
+        }
+        $vm.currentOfflineStore = offlineStore;
+        $vm.showOfflineStoreDetailView = true;
+        $vm.chooseOfflineStoreView = false;
+        $vm.showShareDetailView = false;
+        $vm.showBalanceView = false;
+        //showMap($vm.currentOfflineStore);
+      }
+
+      function changeOfflineStoreArea(code) {
+        $vm.currentAreaCode = code;
+        $http({
+          method: 'GET',
+          url: '/commonApi/get_offline_store/' + code + '.json',
+          cache: $templateCache
+        }).success(function (data) {
+          $vm.offlineStores[code] = data;
+        }).error(function () {
+        });
+      }
+    }
   }
 })(window, window.angular);
