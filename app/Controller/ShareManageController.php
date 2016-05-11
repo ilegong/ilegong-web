@@ -1192,7 +1192,7 @@ class ShareManageController extends AppController
 
     }
 
-    private function process_share_data($cond)
+    private function get_share_balance_data($cond)
     {
         $this->Paginator->settings = $cond;
         $weshares = $this->Paginator->paginate('Weshare', $cond['Weshare']['conditions']);
@@ -1204,13 +1204,18 @@ class ShareManageController extends AppController
         ]);
         $creators = Hash::combine($creators, '{n}.User.id', '{n}.User');
         $weshares = Hash::combine($weshares, '{n}.Weshare.id', '{n}.Weshare');
-        $orders = $this->Order->find('all', array(
-            'conditions' => array(
+        $orders = $this->Order->find('all', [
+            'conditions' => [
                 'type' => ORDER_TYPE_WESHARE_BUY,
                 'member_id' => $weshare_ids,
-                'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY)
-            )
-        ));
+                'status' => [ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY]
+            ],
+            'joins' => [
+                [
+
+                ]
+            ]
+        ]);
         $summery_data = array();
         foreach ($orders as $item) {
             $member_id = $item['Order']['member_id'];
