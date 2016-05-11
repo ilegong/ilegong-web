@@ -205,7 +205,7 @@ class AliWapPay extends Object {
         $result =  $alipaySubmit->buildRequestPara($para_token);
         $arg  = '';
         while (list ($key, $val) = each ($result)) {
-            $arg.=$key.'="'.$val.'"&';
+            $arg.=$key.'="'.urlencode($val).'"&';
         }
         //去掉最后一个&字符
         $arg = substr($arg,0,count($arg)-2);
