@@ -493,7 +493,7 @@ class WeshareBuyComponent extends Component
         $comments = $commentM->find('all', $cond);
         $users = Hash::combine($comments, '{n}.User.id', '{n}.User');
         $users = array_map('map_user_avatar',$users);
-        $result =  $this->combine_comment($comments);
+        $result = $this->combine_comment($comments);
         $result['users'] = $users;
         return $result;
     }
