@@ -186,18 +186,15 @@ class PayApiController extends Controller
 
     public function save_ali_pay_log($order_id)
     {
-        try{
+        try {
             $uid = $this->currentUser['id'];
-            $pay_result = $this->WxPayment->app_goToAliPayForm($order_id, $uid, $type = ALI_PAY_TYPE_WAPAPP);
-            $pay_log = $pay_result['pay_log']['PayLog'];
-            $pay_params = $pay_result['pay_params'];
-            echo json_encode(['success' => true, 'out_trade_no' => $pay_log['out_trade_no'], 'subject' => $pay_log['body'], 'body' => $pay_log['body'], 'total_price' => $pay_log['total_fee'], 'sign' => $pay_params['sign']]);
+            $pay_result = $this->WxPayment->app_goToAliPayForm($order_id, $uid);
+            echo json_encode(['success' => true, 'params' => $pay_result]);
             exit();
-        }catch (Exception $e){
+        } catch (Exception $e) {
             echo json_encode(['success' => false]);
             exit();
         }
-
     }
 
     public function get_bank_info($cardNum)

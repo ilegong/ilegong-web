@@ -60,10 +60,10 @@ class WxPaymentComponent extends Component {
         return $this->api_form($order_id, $uid, $ali, $type);
     }
 
-    public function app_goToAliPayForm($order_id, $uid, $type = ALI_PAY_TYPE_WAP){
+    public function app_goToAliPayForm($order_id, $uid){
         App::import('Vendor', 'ali_wap_pay/AliWapPay');
         $ali = new AliWapPay();
-        return $this->app_pay_params($order_id, $uid, $ali, $type);
+        return $this->app_pay_params($order_id, $uid, $ali);
     }
 
     public function wap_logisticsGoToAliPayForm($order_id, $uid, $type = ALI_PAY_TYPE_WAP){
@@ -438,19 +438,15 @@ class WxPaymentComponent extends Component {
      * @param $order_id
      * @param $uid
      * @param $ali
-     * @param $type
      * @return mixed
      */
-    protected function app_pay_params($order_id, $uid, $ali, $type) {
+    protected function app_pay_params($order_id, $uid, $ali) {
         $order = $this->findOrderAndCheckStatus($order_id, $uid);
-
         $totalFee = $order['Order']['total_all_price'];
         list($subject, $body) = $this->getProductDesc($order_id);
-
         $out_trade_no = $this->out_trade_no(TRADE_ALI_TYPE, $order_id);
-        $pay_log = $this->savePayLog($order_id, $out_trade_no, $body, TRADE_ALI_TYPE, $totalFee * 100, '', '');
-        $pay_params = $ali->app_pay_params($out_trade_no, $order_id, $subject, $totalFee, $body, $type);
-        return ['pay_log' => $pay_log, 'pay_params' => $pay_params];
+        $pay_params = $ali->app_pay_params($out_trade_no, $subject, $totalFee);
+        return $pay_params;
     }
 
     /**
