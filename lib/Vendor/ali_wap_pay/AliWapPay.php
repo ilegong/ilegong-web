@@ -187,4 +187,37 @@ class AliWapPay extends Object {
         return $alipaySubmit->buildRequestForm($parameter, 'get', __('正在跳转到支付宝...'));
     }
 
+    public function & app_pay_params($out_trade_no, $order_id, $subject, $total_fee, $body, $type = ALI_PAY_TYPE_WAP){
+        $format = "xml";
+        $v = "2.0";
+        //请求号，需要保证每次都是唯一
+        $req_id = date('Ymdhis').'-'.$out_trade_no;
+        $seller_email = ALI_ACCOUNT;
+        $merchant_url = $this->alipay_config['transport'].'://'. ALI_HOST."/weshares/pay/$order_id/1.html";
+        //需http://格式的完整路径，不能加?id=123这类自定义参数
+        $notify_url = 'http://'.ALI_HOST.'/ali_pay/wap_notify.html';
+        $call_back_url = 'http://'.ALI_HOST.'/ali_pay/wap_return_back'.($type == ALI_PAY_TYPE_WAPAPP?'_app':'').'.html';
+
+        //请求业务参数详细
+        $req_data = '<direct_trade_create_req><notify_url>' . $notify_url . '</notify_url><call_back_url>' . $call_back_url . '</call_back_url><seller_account_name>' . $seller_email . '</seller_account_name><out_trade_no>' . $out_trade_no . '</out_trade_no><subject>' . $subject . '</subject><total_fee>' . $total_fee . '</total_fee><merchant_url>' . $merchant_url . '</merchant_url></direct_trade_create_req>';
+
+        /************************************************************/
+        $this->alipay_config['sign_type'] = strtoupper('RSA');
+        
+        $para_token = array(
+            "service" => "alipay.wap.trade.create.direct",
+            "partner" => trim($this->alipay_config['partner']),
+            "sec_id" => trim($this->alipay_config['sign_type']),
+            "format"	=> $format,
+            "v"	=> $v,
+            "req_id"	=> $req_id,
+            "req_data"	=> $req_data,
+            "_input_charset" => trim(strtolower($this->alipay_config['input_charset']))
+        );
+
+        $alipaySubmit = new AlipaySubmit($this->alipay_config);
+        $result = $alipaySubmit->buildRequestPara($para_token);
+        return $result;
+    }
+
 } 
