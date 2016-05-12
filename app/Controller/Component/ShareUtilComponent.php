@@ -1882,7 +1882,7 @@ class ShareUtilComponent extends Component
      */
     public function checkCanSendMsg($uid)
     {
-        if ($uid == 633345 || $uid == 802852) {
+        if (is_pys_signed_user($uid)) {
             return array('success' => true, 'msg' => '还可以发送很多条消息');
         }
         $limit_count = $this->getSharerMsgLimit($uid);

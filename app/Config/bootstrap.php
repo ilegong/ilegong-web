@@ -2513,6 +2513,13 @@ function is_blacklist_user($uid) {
     return in_array($uid, $blacklist);
 }
 
+function is_pys_signed_user($uid){
+    $pys_signed_user = [
+        633345, 802852, 810684, 806889, 878825, 811917, 859965, 141
+    ];
+    return in_array($uid, $pys_signed_user);
+}
+
 /**
  * @param $uid
  * @return bool
