@@ -452,6 +452,7 @@ class WxPaymentComponent extends Component {
         $totalFee = $order['Order']['total_all_price'];
         list($subject, $body) = $this->getProductDesc($order_id);
         $out_trade_no = $this->out_trade_no(TRADE_ALI_TYPE, $order_id);
+        $this->savePayLog($order_id, $out_trade_no, $body, TRADE_ALI_TYPE, $totalFee * 100, '', '');
         $pay_params = $ali->app_pay_params($out_trade_no, $subject, $body, $totalFee);
         return $pay_params;
     }
