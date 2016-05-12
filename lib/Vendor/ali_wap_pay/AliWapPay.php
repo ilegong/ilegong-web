@@ -27,7 +27,7 @@ class AliWapPay extends Object {
 
         //如果签名方式设置为“0001”时，请设置该参数
         $alipay_config['private_key_path'] = CAKE_CORE_INCLUDE_PATH . DS . 'Vendor' . DS . 'ali_wap_pay' . DS . 'key' . DS . 'rsa_private_key.pem';
-        $alipay_config['ali_public_key_path'] = CAKE_CORE_INCLUDE_PATH . DS . 'Vendor' . DS . 'ali_wap_pay' . DS . 'key' . DS . 'rsa_public_key.pem';
+        $alipay_config['ali_public_key_path'] = CAKE_CORE_INCLUDE_PATH . DS . 'Vendor' . DS . 'ali_wap_pay' . DS . 'key' . DS . 'ali_public_key.pem';
         //签名方式 不需修改
         //$alipay_config['sign_type']    = '0001';
 
@@ -197,8 +197,8 @@ class AliWapPay extends Object {
             "service" => "mobile.securitypay.pay",
             "partner" => trim($this->alipay_config['partner']),
             "_input_charset" => trim(strtolower($this->alipay_config['input_charset'])),
-            //"notify_url" => "http://" . ALI_HOST . "/aliPay/wap_return_back_app",
-            "notify_url" => "http://preprod.tongshijia.com/aliPay/wap_return_back_app",
+            "notify_url" => "http://" . ALI_HOST . "/aliPay/wap_return_back_app",
+            //"notify_url" => "http://preprod.tongshijia.com/aliPay/wap_return_back_app",
             "out_trade_no" => $out_trade_no,
             "subject" => $subject,
             "payment_type" => 1,
