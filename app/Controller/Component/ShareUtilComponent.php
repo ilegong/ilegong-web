@@ -2048,8 +2048,6 @@ class ShareUtilComponent extends Component
                 ],
                 'order' => array('sort_val ASC')
             ]);
-
-            $this->log(json_encode($index_products));
             Cache::write($key, json_encode($index_products));
             return $index_products;
         }
