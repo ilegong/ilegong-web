@@ -172,10 +172,11 @@ class AlipayNotify {
 		} else {
 			$para = $this->sortNotifyPara($para);
 		}
-		
+
 		//把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
 		$prestr = createLinkstring($para);
-		
+        error_log('---------' . $prestr . PHP_EOL, 3, '/tmp/error.log');
+        error_log('---------' . $sign . PHP_EOL, 3, '/tmp/error.log');
 		$isSgin = false;
 		switch (strtoupper(trim($this->alipay_config['sign_type']))) {
 			case "MD5" :
