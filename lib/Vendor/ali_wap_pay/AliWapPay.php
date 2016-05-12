@@ -200,7 +200,7 @@ class AliWapPay extends Object {
             "payment_type" => 1,
             "seller_id" => ALI_ACCOUNT,
             "total_fee" => $total_fee,
-            "app_pay_params" => "30m",
+            "it_b_pay" => "30m",
             "body" => $body
         );
         $alipaySubmit = new AlipaySubmit($this->alipay_config);
