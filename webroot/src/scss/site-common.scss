@@ -14,12 +14,24 @@ ul li {
   list-style: none;
 }
 
+textarea, input {
+  outline: none
+}
+
 .fl {
   float: left;
 }
 
 .fr {
   float: right;
+}
+
+.show-ib {
+  display: inline-block !important;
+}
+
+.show-b {
+  display: block !important;
 }
 
 .clearfix {
@@ -34,9 +46,24 @@ ul li {
   visibility: hidden;
 }
 
-.rounded-50 {
+.radius10 {
+  -moz-border-radius: 0.417em; /* Gecko browsers */
+  -webkit-border-radius: 0.417em; /* Webkit browsers */
+  border-radius: 0.417em; /* W3C syntax */
+}
+
+.radius5 {
+  border-radius: 5px;
+}
+
+.radius50 {
   border-radius: 50%;
 }
+
+.text-center {
+  text-align: center;
+}
+
 
 footer {
   box-sizing: border-box;
@@ -147,18 +174,6 @@ footer {
   }
 }
 
-textarea, input {
-  outline: none
-}
-
-.show-ib {
-  display: inline-block !important;
-}
-
-.show-b {
-  display: block !important;
-}
-
 .form-group.has-error {
   .form-control {
     color: red !important;
@@ -201,9 +216,42 @@ textarea, input {
 }
 
 /*back*/
-.nav-bg{ background-color: #FFFFFF; border-bottom: 1px #dddddd solid; color: #333333; line-height: 43px; position: fixed; top: 0; left: 0; width: 100%; z-index: 2;}
-.nav-bg a.nav-back{ text-decoration: none; color: #333333; width: 4em; height: 43px; padding-left: 12px;}
-.nav-bg a.nav-back img,.nav-bg a.nav-back label{ float: left; font-size: 1.1em;}
-.nav-bg a.nav-back label{ padding-left: 5px;}
-.nav-bg a.nav-back img{ width: 8px; margin-top: 14px;}
-.nav-bg h1{ text-align: center; font-weight: normal; font-size: 1.3em; line-height: 43px; width: 104px; left: 50%; margin-left: -52px; position: absolute;}
+.nav-bg {
+  background-color: #FFFFFF;
+  border-bottom: 1px #dddddd solid;
+  color: #333333;
+  line-height: 43px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+  a.nav-back {
+    text-decoration: none;
+    color: #333333;
+    width: 4em;
+    height: 43px;
+    padding-left: 12px;
+    img, label {
+      float: left;
+      font-size: 1.1em;
+    }
+    label {
+      padding-left: 5px;
+    }
+    img {
+      width: 8px;
+      margin-top: 14px;
+    }
+  }
+  h1 {
+    text-align: center;
+    font-weight: normal;
+    font-size: 1.3em;
+    line-height: 43px;
+    width: 104px;
+    left: 50%;
+    margin-left: -52px;
+    position: absolute;
+  }
+}
