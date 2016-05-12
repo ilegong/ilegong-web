@@ -212,7 +212,6 @@ class AliWapPay extends Object {
             }
             $arg.=$key.'="'.$val.'"&';
         }
-        $this->log('app pay params '. $arg, LOG_DEBUG);
         //去掉最后一个&字符
         $arg = substr($arg,0,count($arg)-2);
         return $arg;
