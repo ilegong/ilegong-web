@@ -1,0 +1,84 @@
+<div ng-controller="GetUserInfoCtr as vm">
+    <div class="mine-bg">
+        <div class="change-password">
+            <a class="attention" href="javascript:;">修改密码</a>
+        </div>
+        <div class="attention-btn">
+            <a class="attention" href="javascript:;">修改简介</a>
+        </div>
+        <img lazy-src="{{$STATIC_HOST}}/{{$share_user['avatar']}}" fallback-src="http://static.tongshijia.com/avatar/s/default.jpg" ng-click="vm.changeAvatar();"/>
+        <h1>{{$share_user['nickname']}}</h1>
+        <label class="level">{{$user_level['level_name']}}</label>
+        <ul class="clearfix">
+            <li onclick="window.location.href='/weshares/u_comment/{{$uid}}'"><strong>{{$user_summary['comment_count']}}</strong><br/>评论</li>
+            <li class="mine-line"></li>
+            <li onclick="window.location.href='/weshares/sub_list/{{$uid}}'"><strong>{{$user_summary['follower_count']}}</strong><br/>粉丝</li>
+            <li class="mine-line"></li>
+            <li onclick="window.location.href='/weshares/sub_list/{{$uid}}'"><strong>{{$user_summary['focus_count']}}</strong><br/>关注</li>
+        </ul>
+    </div>
+    <a href="javascript:;" class="mine-chanpinjie-banner"><img src="/static/weshares/images/mine-banner.gif" /></a>
+    <a class="mine-tab">
+        <dl class="clearfix mine-tab-bg">
+            <dd class="fl mine-order-icon"><img src="/static/weshares/images/mine-order-icon.gif" /></dd>
+            <dd class="fl">我的订单</dd>
+            <dd class="fr">
+                <label>
+                    <i></i>
+                    <em></em>
+                </label>
+            </dd>
+            <dd class="fr mine-num">({{$userMonthOrderCount}})</dd>
+        </dl>
+    </a>
+    <a class="mine-tab">
+        <dl class="clearfix mine-tab-bg">
+            <dd class="fl mine-order-icon"><img src="/static/weshares/images/mine-share-icon.gif" /></dd>
+            <dd class="fl">我的分享</dd>
+            <dd class="fr">
+                <label>
+                    <i></i>
+                    <em></em>
+                </label>
+            </dd>
+            <dd class="fr mine-num">({{$share_summary['share_count']}})</dd>
+        </dl>
+        <ul class="clearfix">
+            <li><span>{{$share_summary['wait_ship_order_count']}}</span><br/>待发货订单</li>
+            <li><span>{{$userMonthOrderCount}}</span><br/>本月订单</li>
+            <li><span>{{$share_summary['month_trade_money']}}</span><br/>本月交易额</li>
+        </ul>
+    </a>
+    <a class="mine-tab">
+        <dl class="clearfix mine-tab-bg">
+            <dd class="fl mine-order-icon"><img src="/static/weshares/images/mine-warranty-icon.gif" /></dd>
+            <dd class="fl">授权我的</dd>
+            <dd class="fr">
+                <label>
+                    <i></i>
+                    <em></em>
+                </label>
+            </dd>
+            <dd class="fr mine-num">({{$share_summary['authorize_count']}})</dd>
+        </dl>
+    </a>
+    <a class="mine-tab">
+        <dl class="clearfix mine-tab-bg">
+            <dd class="fl mine-order-icon"><img src="/static/weshares/images/mine-balance-icon.gif" /></dd>
+            <dd class="fl">我的余额</dd>
+            <dd class="fr mine-num">￥{{$rebate_money}}</dd>
+        </dl>
+    </a>
+</div>
+<?php
+$this->assign('title','分享圈');
+$this->set('show_footer', false);
+
+$this->Html->css(array(
+$STATIC_HOST.'/static/weshares/css/get-user-info.min.css?v2.4.8'
+), null, array('inline' => false));
+
+$this->Html->script(array(
+$STATIC_HOST.'/static/weshares/js/get-user-info.min.js?v2.4.8'
+), array('block' => 'scripts'))
+?>

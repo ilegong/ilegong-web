@@ -289,7 +289,7 @@ class WesharesComponent extends Component
                     'type' => 'left'
                 ]
             ],
-            'fields' => ['Weshare.id', 'Weshare.title', 'Weshare.description', 'Weshare.default_image', 'Weshare.creator'],
+            'fields' => ['Weshare.created','Weshare.id', 'Weshare.title', 'Weshare.description', 'Weshare.default_image', 'Weshare.creator'],
             'limit' => $limit,
             'page' => $page,
             'order' => ['OptLog.id DESC']

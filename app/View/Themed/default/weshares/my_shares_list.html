@@ -1,0 +1,100 @@
+<div ng-controller="GetUserInfoCtr as vm">
+    <div class="refer-back-bg">
+        我的分享
+        <a href="javascript:;">
+            <img src="/static/weshares/images/back.png"/>
+            <label>返回</label>
+        </a>
+    </div>
+    <ul class="mine-share-tab clearfix">
+        <li class="left-tab current">进行中</li>
+        <li class="middle-tab">已结束</li>
+        <li class="right-tab">已结算</li>
+    </ul>
+    <div class="mine_order">
+        <a class="clearfix share-goodlist">
+            <div class="fl"><img src="/static/weshares/images/goodpic-small.jpg" /></div>
+            <h1>自家果园现摘果子，新鲜可口自家果园现摘果子，新鲜可口自家果园现摘果子，新鲜可口</h1>
+            <em>进行中</em>
+            <label><span>编号：4320</span>，<span>2015-12-29</span>&nbsp<span>17:30:37</span></label>
+        </a>
+        <s>待发货订单<span>0，</span>交易金额<span>￥0</span></s>
+        <ul class="clearfix">
+            <li><a>删除</a></li>
+            <li><a>修改</a></li>
+            <li><a>订单管理</a></li>
+        </ul>
+    </div>
+    <div class="mine_order">
+        <a class="clearfix share-goodlist">
+            <div class="fl"><img src="/static/weshares/images/goodpic-small.jpg" /></div>
+            <h1>自家果园现摘果子，新鲜可口自家果园现摘果子，新鲜可口自家果园现摘果子，新鲜可口</h1>
+            <em>进行中</em>
+            <label><span>编号：4320</span>，<span>2015-12-29</span>&nbsp<span>17:30:37</span></label>
+        </a>
+        <s>待发货订单<span>200，</span>交易金额<span>￥29.87</span></s>
+        <ul class="clearfix">
+            <li><a>删除</a></li>
+            <li><a>修改</a></li>
+            <li><a>订单管理</a></li>
+        </ul>
+    </div>
+    <div class="mine_order">
+        <a class="clearfix share-goodlist">
+            <div class="fl"><img src="/static/weshares/images/goodpic-small.jpg" /></div>
+            <h1>自家果园现摘果子，新鲜可口自家果园现摘果子</h1>
+            <em>已结束</em>
+            <label><span>编号：4320</span>，<span>2015-12-29</span>&nbsp<span>17:30:37</span></label>
+        </a>
+        <s>待发货订单<span>200，</span>交易金额<span>￥29.87</span></s>
+        <ul class="clearfix">
+            <li><a>删除</a></li>
+            <li><a>修改</a></li>
+            <li><a>订单管理</a></li>
+            <li><a>重新开团</a></li>
+        </ul>
+    </div>
+    <div class="mine_order">
+        <a class="clearfix share-goodlist">
+            <div class="fl"><img src="/static/weshares/images/goodpic-small.jpg" /></div>
+            <h1>自家果园现摘果子，新鲜可口自家果园现摘果子</h1>
+            <em>已结束</em>
+            <label><span>编号：4320</span>，<span>2015-12-29</span>&nbsp<span>17:30:37</span></label>
+        </a>
+        <s>请耐心等待结算，交易金额<span>￥29.87</span></s>
+        <ul class="clearfix">
+            <li><a>删除</a></li>
+            <li><a>修改</a></li>
+            <li><a>订单管理</a></li>
+            <li><a>重新开团</a></li>
+        </ul>
+    </div>
+    <div class="mine_order">
+        <a class="clearfix share-goodlist">
+            <div class="fl"><img src="/static/weshares/images/goodpic-small.jpg" /></div>
+            <h1>自家果园现摘果子，新鲜可口自家果园现摘果子</h1>
+            <em>已结算</em>
+            <label><span>编号：4320</span>，<span>2015-12-29</span>&nbsp<span>17:30:37</span></label>
+        </a>
+        <s>交易金额<span>￥29.87</span></s>
+        <ul class="clearfix">
+            <li><a>删除</a></li>
+            <li><a>修改</a></li>
+            <li><a>订单管理</a></li>
+            <li><a>重新开团</a></li>
+        </ul>
+    </div>
+</div>
+
+<?php
+$this->assign('title','分享圈');
+$this->set('show_footer', false);
+
+$this->Html->css(array(
+$STATIC_HOST.'/static/weshares/css/get-user-info.min.css?v2.4.8'
+), null, array('inline' => false));
+
+$this->Html->script(array(
+$STATIC_HOST.'/static/weshares/js/get-user-info.min.js?v2.4.8'
+), array('block' => 'scripts'))
+?>
