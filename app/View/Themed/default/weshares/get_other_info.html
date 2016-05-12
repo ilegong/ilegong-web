@@ -1,0 +1,41 @@
+<div ng-controller="GetUserInfoCtr as vm" data-sub="{{$sub_status}}" ng-init="vm.initUid({{$uid}});vm.shareNextPage();vm.attendNextPage();">
+    <div class="mine-bg">
+        <div class="attention-btn">
+            <a class="attention" href="javascript:;" style="display: none" ng-class="{'show-b':vm.isSub == 0}"
+               ng-click="vm.sub();">关注TA</a>
+            <a href="javascript:;" class="clearfix attention-already" style="display: none"
+               ng-class="{'show-b':vm.isSub==1}">
+                <span ng-click="vm.showUnSubButton();">已关注</span>
+                <label>
+                    <i></i>
+                    <em></em>
+                </label>
+            </a>
+            <a class="unfollow" ng-class="{'show-b':vm.isShowUnSubButton}" style="display: none" ng-click="vm.unSub()">取消关注</a>
+        </div>
+        <img src="{{$user_info['image']}}"/>
+        <h1>{{$user_info['User']['nickname']}}</h1>
+        <p>{{$user_info['User']['description']}}</p>
+        <a href="javascript:;" class="more-information">完整故事</a>
+        <ul class="clearfix">
+            <li ng-click="vm.goToComment();"><strong>{{$user_summary['comment_count']}}</strong><br/>评论</li>
+            <li class="mine-line"></li>
+            <li><strong>{{$user_summary['follower_count']}}</strong><br/>粉丝</li>
+            <li class="mine-line"></li>
+            <li><strong>{{$user_summary['focus_count']}}</strong><br/>关注</li>
+        </ul>
+    </div>
+    <div ng-include="'{{$STATIC_HOST}}/static/weshares/templates/get-other-info.html?v1.8.8'"></div>
+</div>
+<?php
+$this->assign('title','分享圈');
+$this->set('show_footer', false);
+
+$this->Html->css(array(
+$STATIC_HOST.'/static/weshares/css/get-user-info.min.css?v2.4.8'
+), null, array('inline' => false));
+
+$this->Html->script(array(
+$STATIC_HOST.'/static/weshares/js/get-user-info.min.js?v2.4.8'
+), array('block' => 'scripts'))
+?>

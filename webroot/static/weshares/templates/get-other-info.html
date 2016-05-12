@@ -1,0 +1,42 @@
+<div class="other-share">
+    <ul class="clearfix">
+        <li ng-class="{'other-share_focus':vm.focus_share}" ng-click="vm.focunShare();">TA分享的</li>
+        <li ng-class="{'other-share_focus':vm.focus_attend}" ng-click="vm.focusAttend();">TA报名的</li>
+    </ul>
+    <div class="share-good" style="display: none" ng-class="{'show-b':vm.focus_share}" infinite-scroll='vm.shareNextPage()'
+         infinite-scroll-disabled='vm.sharesOver||vm.loading'
+         infinite-scroll-distance='0'>
+        <div ng-repeat="share in vm.shares">
+            <a href="javascript:;" ng-click="vm.goToShare(share.id)">
+                <div style="position: relative;">
+                    <img class="product-image" lazy-src="{{share.default_image}}"
+                         fallback-src="http://static.tongshijia.com/avatar/s/default.jpg">
+                </div>
+                <div class="share-content">
+                    <h1 class="share-title" ng-bind="share.title"></h1>
+                    <p ng-bind="share.description"></p>
+                </div>
+            </a>
+            <dl class="clearfix share-data">
+                <dd class="clearfix" style="padding-right: 60px;">
+                    <img ng-repeat="buyer in share.summary.orders_and_creators" lazy-src="{{buyer.avatar}}"
+                         fallback-src="this.src='http://static.tongshijia.com/avatar/s/default.jpg'"/>
+                    <label>已<span>{{share.summary.order_count}}</span>个人报名</label>
+                </dd>
+                <dd class="browse">浏览{{share.summary.view_count}}</dd>
+            </dl>
+        </div>
+    </div>
+    <div style="display: none;" ng-class="{'show-b':vm.focus_attend}" infinite-scroll='vm.attendNextPage()'
+         infinite-scroll-disabled='vm.attendOver||vm.loading'
+         infinite-scroll-distance='0'>
+        <div class="mine_order" ng-repeat="attend in vm.attend">
+            <a class="clearfix share-goodlist" ng-click="vm.goToShare(attend.id);">
+                <div class="fl"><img lazy-src="{{attend.default_image}}" fallback-src="this.src='http://static.tongshijia.com/avatar/s/default.jpg'"/></div>
+                <h1>{{attend.title}}</h1>
+                <em>进行中</em>
+                <label><span>{{attend.created}}</span></label>
+            </a>
+        </div>
+    </div>
+</div>
