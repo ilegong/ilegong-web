@@ -1224,6 +1224,7 @@ class ShareManageController extends AppController
     private function get_share_balance_data($cond)
     {
         $this->Paginator->settings = $cond;
+        $this->Paginator->settings['paramType'] = 'querystring';
         $weshares = $this->Paginator->paginate('Weshare', $cond['Weshare']['conditions']);
         $weshare_ids = [];
         $pool_refer_share_ids = [];
