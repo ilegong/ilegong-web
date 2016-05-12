@@ -295,7 +295,11 @@ class AliPayController extends AppController {
     }
 
     public function wap_return_back_app() {
-        $this->wap_return_back();
+        $verify = $this->WxPayment->app_verify_return();
+        $out_trade_no = $_GET['out_trade_no'];
+        $trade_no = $_GET['trade_no'];
+        $trade_status = $_GET['result'];
+        $this->handle_return_back($verify, $trade_status, $out_trade_no, $trade_no, $_GET['result'] == 'success', '');
     }
 
     public function wap_return_back() {
