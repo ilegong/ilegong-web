@@ -188,13 +188,11 @@ class AliWapPay extends Object {
     }
 
     public function & app_pay_params($out_trade_no, $subject, $body, $total_fee){
-        /************************************************************/
-        $this->alipay_config['sign_type'] = strtoupper('RSA');
         $para_token = array(
             "service" => "mobile.securitypay.pay",
             "partner" => trim($this->alipay_config['partner']),
             "_input_charset" => trim(strtolower($this->alipay_config['input_charset'])),
-            "notify_url" => "http://".ALI_HOST."/aliPay/wap_return_back_app",
+            "notify_url" => "http://" . ALI_HOST . "/aliPay/wap_return_back_app",
             "out_trade_no" => $out_trade_no,
             "subject" => $subject,
             "payment_type" => 1,
@@ -203,18 +201,14 @@ class AliWapPay extends Object {
             "it_b_pay" => "30m",
             "body" => $body
         );
-        $alipaySubmit = new AlipaySubmit($this->alipay_config);
-        $result =  $alipaySubmit->buildRequestPara($para_token);
-        $arg  = '';
-        while (list ($key, $val) = each ($result)) {
-            if($key == "sign"){
-                $val = urlencode($val);
-            }
-            $arg.=$key.'="'.$val.'"&';
+        $param = '';
+        while (list ($key, $val) = each($para_token)) {
+            $param .= $key . '="' . $val . '"&';
         }
-        //去掉最后一个&字符
-        $arg = substr($arg,0,count($arg)-2);
-        return $arg;
+        $param = substr($param, 0, count($param) - 2);
+        $mysign = rsaSign($param, $this->alipay_config['private_key_path']);
+        $param = $param . '&sign="' . urlencode($mysign) . '"&sign_type="RSA"';
+        return $param;
     }
 
 } 
