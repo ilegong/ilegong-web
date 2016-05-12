@@ -637,6 +637,7 @@ class WesharesController extends AppController
      */
     public function user_share_info($uid = null)
     {
+        $this->layout = 'weshare_bootstrap';
         $current_uid = $this->currentUser['id'];
         if (empty($uid)) {
             $uid = $current_uid;
