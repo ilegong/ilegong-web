@@ -1066,6 +1066,10 @@ class ShareUtilComponent extends Component
         $refundMoney = intval($refundMoney * 1000 / 10);
         App::uses('CakeNumber', 'Utility');
         $showRefundMoney = CakeNumber::precision($refundMoney / 100, 2);
+        $orderInfo = $orderM->find('first', array(
+            'conditions' => array('id' => $orderId)
+        ));
+        $weshareId = $orderInfo['Order']['member_id'];
         $refundLog = $refundLogM->find('first', array(
             'conditions' => array(
                 'order_id' => $orderId
@@ -1075,7 +1079,7 @@ class ShareUtilComponent extends Component
             $PayLogInfo = $payLogM->find('first', array(
                 'conditions' => array(
                     'order_id' => $orderId,
-                    'status' => 2,
+                    'status' => PAYLOG_STATUS_SUCCESS,
                     'type' => GOOD_ORDER_PAY_TYPE
                 )
             ));
@@ -1088,17 +1092,14 @@ class ShareUtilComponent extends Component
                 'refund_fee' => $refundMoney,
                 'created' => date('Y-m-d H:i:s'),
                 'trade_type' => $trade_type,
-                'remark' => $refundMark
+                'remark' => $refundMark,
+                'data_id' =>  $weshareId
             );
             $refundLogM->save($saveRefundLogData);
         } else {
             $refundLogId = $refundLog['RefundLog']['id'];
             $refundLogM->updateAll(array('refund_fee' => $refundMoney, 'remark' => "'" . $refundMark . "'"), array('id' => $refundLogId));
         }
-        $orderInfo = $orderM->find('first', array(
-            'conditions' => array('id' => $orderId)
-        ));
-        $weshareId = $orderInfo['Order']['member_id'];
         //refund processing
         $weshareInfo = $weshareM->find('first', array(
             'conditions' => array('id' => $weshareId)
@@ -2047,8 +2048,6 @@ class ShareUtilComponent extends Component
                 ],
                 'order' => array('sort_val ASC')
             ]);
-
-            $this->log(json_encode($index_products));
             Cache::write($key, json_encode($index_products));
             return $index_products;
         }

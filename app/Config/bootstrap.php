@@ -213,7 +213,6 @@ const SHARER_FANS_DATA_CACHE_KEY = 'sharer_fans_data_cache_key'; //分享用户�
 const SHARER_FOCUS_DATA_CACHE_KEY = 'sharer_focus_data_cache_key'; //用户关注信息的缓存
 const USER_SHARE_COMMENTS_DATA_CACHE_KEY = 'user_share_comments_data_cache_key';//用户评论的缓存数据
 const SHARER_ALL_COMMENT_DATA_CACHE_KEY = 'sharer_all_comment_data_cache_key';//分享者的所有评论
-const SHARE_COMMENT_DATA_CACHE_KEY = 'share_comment_data_cache_key'; //分享评论的缓存
 const SHARE_ORDER_DATA_CACHE_KEY = 'share_order_data_cache_key';
 const SHARE_ORDER_PAGE_INFO_DATA_CACHE_KEY = 'share_order_page_info_data_cache_key'; //分享订单分页信息
 const SHARE_DETAIL_VIEW_ORDER_DATA_CACHE_KEY = 'share_detail_view_order_data_cache_key';//分享详情页面订单管理
@@ -2337,7 +2336,11 @@ function map_user_avatar2($var){
 }
 
 function map_user_avatar($var){
-    $var['image'] = get_user_avatar($var);
+    $avatar = get_user_avatar($var);
+    if (empty($avatar)) {
+        $avatar = STATIC_HOST . '/avatar/s/default.jpg';
+    }
+    $var['image'] = $avatar;
     return $var;
 }
 
@@ -2819,6 +2822,11 @@ function wx_update_group_name($id , $name)
         }
         return false;
     }
+}
+
+
+function get_format_number($val){
+    return round(floatval($val), 2);
 }
 
 

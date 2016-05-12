@@ -99,6 +99,15 @@ if (getenv('TONGSHIJIA_ENV') == 'product') {
     define('MYSQL_SERVER_HOST', 'db.tongshijia.com');
     define('MEMCACHE_HOST', 'mem.tongshijia.com');
     define('REDIS_HOST', 'redis.tongshijia.com');
+}  elseif (getenv('TONGSHIJIA_ENV') == 'branch-sh') {
+    define('STATIC_HOST', 'http://static-sh.tongshijia.com');
+    define('IMAGES_HOST', 'http://images.tongshijia.com');
+    define('JPUSH_APP_KEY', 'dca84c4492a450f738918b65');
+    define('JPUSH_APP_SECRET', '376cf6f26a72c31ca769da44');
+    define('JPUSH_IS_PRODUCT', false);
+    define('MYSQL_SERVER_HOST', 'db.tongshijia.com');
+    define('MEMCACHE_HOST', 'mem.tongshijia.com');
+    define('REDIS_HOST', 'redis.tongshijia.com');
 } elseif (getenv('TONGSHIJIA_ENV') == 'test') {
     define('STATIC_HOST', 'http://static-test.tongshijia.com');
     define('IMAGES_HOST', 'http://images-test.tongshijia.com');

@@ -1,8 +1,8 @@
 (function (window, angular) {
-  angular.module('UserInfo')
+  angular.module('weshares')
     .controller('UserListCtrl', UserListCtrl);
 
-  function UserListCtrl($http, $templateCache) {
+  function UserListCtrl($http, $templateCache, $rootScope) {
     var vm = this;
     vm.loadData = loadData;
     vm.getUserLevelText = getUserLevelText;
@@ -35,6 +35,7 @@
       vm.userId = angular.element(document.getElementById('userListView')).attr('data-uid');
       vm.me = angular.element(document.getElementById('userListView')).attr('data-me');
       vm.dataType = angular.element(document.getElementById('userListView')).attr('data-type');
+      $rootScope.loadingPage = false;
     }
 
     function toggleHideShowUnSubBtn(uid) {

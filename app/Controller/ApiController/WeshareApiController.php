@@ -44,15 +44,21 @@ class WeshareApiController extends Controller
     {
         $all_share_ids = $this->get_associate_share_ids($root_share_id, $weshare_id, $share_creator);
         $query_cond = [
-            'conditions' => ['data_id' => $all_share_ids, 'type' => COMMENT_SHARE_TYPE, 'status' => PUBLISH_YES],
+            'conditions' => ['Comment.data_id' => $all_share_ids, 'Comment.type' => COMMENT_SHARE_TYPE, 'Comment.status' => PUBLISH_YES],
             'limit' => $limit,
-            'page' => $page
+            'page' => $page,
+            'joins' => [
+                [
+                    'table' => 'users',
+                    'alias' => 'User',
+                    'conditions' => [
+                        'User.id = Comment.user_id',
+                    ],
+                ]
+            ],
+            'fields' => ['Comment.*', 'User.id', 'User.nickname', 'User.avatar', 'User.image']
         ];
         $result = $this->WeshareBuy->query_comment2($query_cond);
-        $comment_uids = Hash::extract($result['order_comments'], '{n}.user_id');
-        $this->loadModel('User');
-        $users = $this->User->get_users_simple_info($comment_uids);
-        $result['users'] = $users;
         echo json_encode($result);
         exit();
     }

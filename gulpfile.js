@@ -20,24 +20,23 @@ var all_js = [
   }, {
     name: 'index.min.js',
     sources: [
-      'webroot/src/scripts/index.js',
+      'webroot/src/scripts/index-products-controller.js',
     ],
     dist: 'webroot/static/weshares/js/'
   }, {
     name: 'weshare-view.min.js',
     sources: [
-      'webroot/src/scripts/offline-store.js',
-      'webroot/static/weshares/js/view-consignee-controller.js',
-      'webroot/static/weshares/js/edit-consignee-controller.js',
-      'webroot/static/weshares/js/view-controller.js',
-      'webroot/static/weshares/js/pool-product-factory.js',
-      'webroot/static/weshares/js/view-product-info.js',
+      'webroot/src/scripts/consignee-view-controller.js',
+      'webroot/src/scripts/consignee-edit-controller.js',
+      'webroot/src/scripts/weshare-view-controller.js',
+      'webroot/src/scripts/pool-product-factory.js',
+      'webroot/src/scripts/share-product-view-controller.js',
     ],
     dist: 'webroot/static/weshares/js/'
   }, {
     name: 'weshare-edit.min.js',
     sources: [
-      'webroot/src/scripts/weshare-edit.js',
+      'webroot/src/scripts/weshare-edit-controller.js',
     ],
     dist: 'webroot/static/weshares/js/'
   }, {
@@ -77,16 +76,14 @@ var all_js = [
   }, {
     name: 'user-info.min.js',
     sources: [
-      'webroot/src/scripts/me-lazyload.js',
-      'webroot/src/scripts/user-info-app.js',
-      'webroot/src/scripts/user-list-data.js'
+      'webroot/src/scripts/user-list-controller.js'
     ],
     dist: 'webroot/static/weshares/js/'
   }, {
     name: 'tutorial.min.js',
     sources: [
-      'webroot/src/scripts/tutorial-binding-card.js',
-      'webroot/src/scripts/tutorial-binding-mobile.js',
+      'webroot/src/scripts/tutorial-binding-card-controller.js',
+      'webroot/src/scripts/tutorial-binding-mobile-controller.js',
     ],
     dist: 'webroot/static/weshares/js/'
   }];
@@ -140,7 +137,7 @@ var all_css = [
   }, {
     name: 'user-info.min.css',
     sources: [
-      'webroot/static/weshares/css/user-info.css',
+      'webroot/src/scss/user-info.css',
     ],
     dist: 'webroot/static/weshares/css/'
   }, {
@@ -188,7 +185,11 @@ for (var i = 0; i < all_css.length; i++) {
   css_tasks.push(task_name);
 }
 
-var tasks = _.union(_.map(all_css, function(file){return file.name;}),_.map(all_js, function(file){return file.name;}) );
+var tasks = _.union(_.map(all_css, function (file) {
+  return file.name;
+}), _.map(all_js, function (file) {
+  return file.name;
+}));
 gulp.task('default', tasks, function () {
   console.log("Default donef.");
 });
@@ -205,10 +206,10 @@ gulp.task('dev', tasks, function () {
 
 //clean 任务单独执行，一般用不到
 gulp.task('clean', function () {
-  gulp.src(_.map(all_css, function(file){
+  gulp.src(_.map(all_css, function (file) {
     return file.dist + file.name;
   })).pipe(vinylPaths(del));
-  gulp.src(_.map(all_js, function(file){
+  gulp.src(_.map(all_js, function (file) {
     return file.dist + file.name;
   })).pipe(vinylPaths(del));
 });

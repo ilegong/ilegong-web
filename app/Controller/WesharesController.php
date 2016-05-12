@@ -311,10 +311,11 @@ class WesharesController extends AppController
      * @param $weshareId
      * 异步获取分享的评论数据
      */
-    public function get_share_comment_data($weshareId)
+    public function get_share_comment_data($weshareId, $sharer)
     {
         $this->autoRender = false;
-        $comment_data = $this->WeshareBuy->load_comment_by_share_id($weshareId);
+        $uid = $this->currentUser['id'];
+        $comment_data = $this->WeshareBuy->load_comment_by_share_id($weshareId, $uid, $sharer);
         echo json_encode(array('comment_data' => $comment_data));
         exit();
     }
@@ -1677,27 +1678,21 @@ class WesharesController extends AppController
 
     public function fans_list($uid)
     {
-        $this->layout = null;
         $currentId = $this->currentUser['id'];
         $me = $uid == $currentId ? 1 : 0;
         $this->set('uid', $uid);
         $this->set('me', $me);
         $this->set('type', 0);
-        $title = $me == 1 ? '我的粉丝' : 'TA的粉丝';
-        $this->set('title', $title);
         $this->render('u_list');
     }
 
     public function sub_list($uid)
     {
-        $this->layout = null;
         $currentId = $this->currentUser['id'];
         $me = $uid == $currentId ? 1 : 0;
         $this->set('me', $me);
         $this->set('uid', $uid);
         $this->set('type', 1);
-        $title = $me == 1 ? '我关注的' : 'TA关注的';
-        $this->set('title', $title);
         $this->render('u_list');
     }
 
