@@ -77,6 +77,11 @@ class AliWapPay extends Object {
     }
 
 
+    public function verify_app_return(){
+        $alipayNotify = new AlipayNotify($this->alipay_config);
+        return $alipayNotify->verifyAppReturn();
+    }
+
     public function verify_return() {
         $alipayNotify = new AlipayNotify($this->alipay_config);
         return $alipayNotify->verifyReturn();

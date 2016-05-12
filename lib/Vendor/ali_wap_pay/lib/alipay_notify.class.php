@@ -83,6 +83,20 @@ class AlipayNotify {
 			}
 		}
 	}
+
+    function verifyAppReturn(){
+        if (empty($_POST)) {
+            return false;
+        } else {
+            //生成签名结果
+            $isSign = $this->getSignVeryfy($_POST, $_POST["sign"], true);
+            if ($isSign) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
 	
     /**
      * 针对return_url验证消息是否是支付宝发出的合法消息
@@ -139,7 +153,8 @@ class AlipayNotify {
 		$para_sort['notify_data'] = $para['notify_data'];
 		return $para_sort;
 	}
-	
+
+
     /**
      * 获取返回时的签名验证结果
      * @param $para_temp 通知返回来的参数数组

@@ -89,7 +89,7 @@ class WxPaymentComponent extends Component {
         App::import('Vendor', 'ali_wap_pay/AliWapPay');
         $ali = new AliWapPay();
         $ali->alipay_config['sign_type'] = 'RSA';
-        return $ali->verify_return();
+        return $ali->verify_app_return();
     }
 
     /**
