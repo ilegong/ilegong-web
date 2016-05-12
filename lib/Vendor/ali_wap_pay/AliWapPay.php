@@ -187,7 +187,7 @@ class AliWapPay extends Object {
         return $alipaySubmit->buildRequestForm($parameter, 'get', __('正在跳转到支付宝...'));
     }
 
-    public function & app_pay_params($out_trade_no, $subject, $total_fee){
+    public function & app_pay_params($out_trade_no, $subject, $body, $total_fee){
         /************************************************************/
         $this->alipay_config['sign_type'] = strtoupper('RSA');
         $para_token = array(
@@ -199,7 +199,9 @@ class AliWapPay extends Object {
             "subject" => $subject,
             "payment_type" => 1,
             "seller_id" => ALI_ACCOUNT,
-            "total_fee" => $total_fee
+            "total_fee" => $total_fee,
+            "app_pay_params" => "30m",
+            "body" => $body
         );
         $alipaySubmit = new AlipaySubmit($this->alipay_config);
         $result =  $alipaySubmit->buildRequestPara($para_token);
