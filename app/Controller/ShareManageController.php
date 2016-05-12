@@ -1352,7 +1352,7 @@ class ShareManageController extends AppController
         $pool_shares = [];
         $weshare_products = [];
         foreach($weshares as $weshare_item){
-            $pool_shares[$weshare_item['Weshare']['id']] = $weshare_item['title'];
+            $pool_shares[$weshare_item['Weshare']['id']] = $weshare_item['Weshare']['title'];
             $products = $weshare_item['WeshareProduct'];
             foreach($products as $product_item){
                 $weshare_products[$product_item['id']] = $product_item;
