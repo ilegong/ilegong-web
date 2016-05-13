@@ -674,6 +674,10 @@ class OrdersController extends AppController {
                 'order_id' => $orderId
             )
         ));
+        $orderInfo = $this->Order->find('first', array(
+            'conditions' => array('id' => $orderId)
+        ));
+        $weshareId = $orderInfo['Order']['member_id'];
         if (empty($refundLog)) {
             $PayLogInfo = $this->PayLog->find('first', array(
                 'conditions' => array(
@@ -691,17 +695,14 @@ class OrdersController extends AppController {
                 'refund_fee' => $refundMoney,
                 'created' => date('Y-m-d H:i:s'),
                 'trade_type' => $trade_type,
-                'remark' => $refundMark
+                'remark' => $refundMark,
+                'data_id' => $weshareId
             );
             $this->RefundLog->save($saveRefundLogData);
         } else {
             $refundLogId = $refundLog['RefundLog']['id'];
             $this->RefundLog->updateAll(array('refund_fee' => $refundMoney, 'remark' => "'" . $refundMark . "'"), array('id' => $refundLogId));
         }
-        $orderInfo = $this->Order->find('first', array(
-            'conditions' => array('id' => $orderId)
-        ));
-        $weshareId = $orderInfo['Order']['member_id'];
         //refund processing
         $weshareInfo = $this->Weshare->find('first', array(
             'conditions' => array('id' => $weshareId)

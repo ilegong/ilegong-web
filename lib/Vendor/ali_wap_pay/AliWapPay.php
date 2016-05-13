@@ -26,8 +26,8 @@ class AliWapPay extends Object {
         $alipay_config['transport']    = 'http';
 
         //如果签名方式设置为“0001”时，请设置该参数
-        $alipay_config['private_key_path']	= 'key/rsa_private_key.pem';
-        $alipay_config['ali_public_key_path']= 'key/alipay_public_key.pem';
+        $alipay_config['private_key_path'] = CAKE_CORE_INCLUDE_PATH . DS . 'Vendor' . DS . 'ali_wap_pay' . DS . 'key' . DS . 'rsa_private_key.pem';
+        $alipay_config['ali_public_key_path'] = CAKE_CORE_INCLUDE_PATH . DS . 'Vendor' . DS . 'ali_wap_pay' . DS . 'key' . DS . 'ali_public_key.pem';
         //签名方式 不需修改
         //$alipay_config['sign_type']    = '0001';
 
@@ -76,6 +76,11 @@ class AliWapPay extends Object {
         }
     }
 
+
+    public function verify_app_return(){
+        $alipayNotify = new AlipayNotify($this->alipay_config);
+        return $alipayNotify->verifyAppReturn();
+    }
 
     public function verify_return() {
         $alipayNotify = new AlipayNotify($this->alipay_config);
@@ -185,6 +190,31 @@ class AliWapPay extends Object {
 
         $alipaySubmit = new AlipaySubmit($this->alipay_config);
         return $alipaySubmit->buildRequestForm($parameter, 'get', __('正在跳转到支付宝...'));
+    }
+
+    public function & app_pay_params($out_trade_no, $subject, $body, $total_fee){
+        $para_token = array(
+            "service" => "mobile.securitypay.pay",
+            "partner" => trim($this->alipay_config['partner']),
+            "_input_charset" => trim(strtolower($this->alipay_config['input_charset'])),
+            "notify_url" => "http://" . ALI_HOST . "/aliPay/wap_return_back_app",
+            //"notify_url" => "http://preprod.tongshijia.com/aliPay/wap_return_back_app",
+            "out_trade_no" => $out_trade_no,
+            "subject" => $subject,
+            "payment_type" => 1,
+            "seller_id" => ALI_ACCOUNT,
+            "total_fee" => $total_fee,
+            "it_b_pay" => "30m",
+            "body" => $body
+        );
+        $param = '';
+        while (list ($key, $val) = each($para_token)) {
+            $param .= $key . '="' . $val . '"&';
+        }
+        $param = substr($param, 0, count($param) - 2);
+        $mysign = rsaSign($param, $this->alipay_config['private_key_path']);
+        $param = $param . '&sign="' . urlencode($mysign) . '"&sign_type="RSA"';
+        return $param;
     }
 
 } 

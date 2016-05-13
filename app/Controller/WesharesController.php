@@ -690,6 +690,104 @@ class WesharesController extends AppController
         //$this->set('joinShareComments', $joinShareComments);
     }
 
+    public function my_shares_list()
+    {
+        if(!$this->currentUser['id'])
+        {
+
+        }
+    }
+
+    public function subUser($uid)
+    {
+        if(!$this->currentUser['id'])
+        {
+            echo json_encode(array('success' => false));
+            die;
+        }
+        return $this->subscribe_sharer($uid , $this->currentUser['id']);
+    }
+
+    public function unSubUser($uid)
+    {
+        if(!$this->currentUser['id'])
+        {
+            echo json_encode(array('success' => false));
+            die;
+        }
+        return $this->unsubscribe_sharer($uid , $this->currentUser['id']);
+    }
+
+    private function get_user_info($user_id)
+    {
+        $datainfo = $this->User->find('first', array('recursive' => -1,
+            'conditions' => array('id' => $user_id),
+            'fields' => array('nickname', 'image', 'sex', 'mobilephone', 'username', 'id', 'hx_password', 'description', 'payment', 'avatar')));
+        $datainfo['User']['image'] = get_user_avatar($datainfo);
+        return $datainfo;
+    }
+
+    public function get_other_info($uid)
+    {
+        $curr_uid = $this->currentUser['id'];
+        $user_summary = $this->WeshareBuy->get_user_share_summary($uid);
+        $user_info = $this->get_user_info($uid);
+        $user_info['image'] = get_user_avatar($user_info);
+        if($curr_uid)
+        {
+            $sub_status = $this->ShareUtil->check_user_relation($uid, $curr_uid);
+        }else{
+            $sub_status = 0;
+        }
+        $this->set('user_summary',$user_summary);
+        $this->set('user_info',$user_info);
+        $this->set('sub_status' , $sub_status);
+        $this->set('uid' , $uid);
+    }
+
+    public function get_other_shares($uid, $page)
+    {
+        $page = intval($page) ? intval($page) : 1;
+        $limit = 5;
+        $result = $this->Weshares->get_u_create_share($uid, $limit, $page);
+        echo json_encode($result);
+        exit();
+    }
+
+    public function get_other_attends($uid, $page)
+    {
+        $page = intval($page) ? intval($page) : 1;
+        $limit = 5;
+        $result = $this->Weshares->get_u_buy_share($uid, $limit, $page);
+        echo json_encode($result);
+        exit();
+    }
+
+    public function get_user_create_shares($uid, $page)
+    {
+        $page = intval($page) > 2 ? intval($page) : 2;
+        $limit = 5;
+        $result = $this->Weshares->get_u_create_share($uid, $limit, $page);
+        echo json_encode($result);
+        exit();
+    }
+
+    public function get_self_info()
+    {
+        $uid = $this->currentUser['id'];
+        $userMonthOrderCount = $this->WeshareBuy->get_month_total_count($uid);
+        $user_summary = $this->WeshareBuy->get_user_share_summary($uid);
+        $share_summary = $this->WeshareBuy->get_sharer_summary($uid);
+        $user_level = $this->ShareUtil->get_user_level($uid);
+        $this->set('user_level', $user_level);
+        $this->set('user_summary' , $user_summary);
+        $this->set('userMonthOrderCount',$userMonthOrderCount);
+        $this->set('share_summary',$share_summary);
+        $rebate_money = $this->ShareUtil->get_rebate_money($uid);
+        $this->set('rebate_money',$rebate_money);
+        $this->set('uid' , $uid);
+    }
+
     /**
      * 分享订单 快递发货
      */

@@ -1,6 +1,0 @@
-.classlist { height: 44px; line-height: 44px; width: 100%; text-align: center; color: #ffffff; font-size: 20px;  background-color: #29ac0e; position: fixed; top: 0; z-index: 99; overflow: hidden;}
-.classlist a.back { display: block; position: absolute; top: 10px; left: 10px; width: 1.167em; height: 1.133em; background: url(http://51daifan-assets.stor.sinaapp.com/img/mobile/pyshuo_icon.png?v3) no-repeat -15.667em -5.333em; background-size: 20em 20em;}
-.classlist a.home{ display: block; position: absolute; top: 10px; right: 10px; width: 1.2em; height: 1.133em; background: url(http://51daifan-assets.stor.sinaapp.com/img/mobile/pyshuo_icon.png?v3) no-repeat -17.667em -5.333em; background-size: 20em 20em;}
-.classlist ul{ padding-left:1em; width:50%;}
-.classlist ul li{ float:left; font-size:1.25em; color:#29ac0e; }
-.classlist ul li.back{ width:0.5em; height:1em; background:url('http://51daifan-assets.stor.sinaapp.com/img/mobilev1/pyshuo_icon.png?xxz') no-repeat -1.25em -16.875em; background-size:25em 25em; margin-top:0.7em; margin-right:0.5em;}

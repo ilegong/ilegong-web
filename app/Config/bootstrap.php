@@ -2210,7 +2210,11 @@ function map_user_avatar2($var){
 }
 
 function map_user_avatar($var){
-    $var['image'] = get_user_avatar($var);
+    $avatar = get_user_avatar($var);
+    if (empty($avatar)) {
+        $avatar = STATIC_HOST . '/avatar/s/default.jpg';
+    }
+    $var['image'] = $avatar;
     return $var;
 }
 
@@ -2381,6 +2385,13 @@ function replace_urls($string) {
 function is_blacklist_user($uid) {
     $blacklist = array(881026, 886291);
     return in_array($uid, $blacklist);
+}
+
+function is_pys_signed_user($uid){
+    $pys_signed_user = [
+        633345, 802852, 810684, 806889, 878825, 811917, 859965, 141
+    ];
+    return in_array($uid, $pys_signed_user);
 }
 
 /**
@@ -2692,6 +2703,11 @@ function wx_update_group_name($id , $name)
         }
         return false;
     }
+}
+
+
+function get_format_number($val){
+    return round(floatval($val), 2);
 }
 
 

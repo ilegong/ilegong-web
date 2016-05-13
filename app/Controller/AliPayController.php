@@ -295,7 +295,19 @@ class AliPayController extends AppController {
     }
 
     public function wap_return_back_app() {
-        $this->wap_return_back();
+        $this->autoRender = false;
+        $verify = $this->WxPayment->app_verify_return();
+        $out_trade_no = $_REQUEST['out_trade_no'];
+        $trade_no = $_REQUEST['trade_no'];
+        $trade_status = $_REQUEST['trade_status'];
+        $trade_result = ($trade_status == 'TRADE_SUCCESS') || ($trade_status == 'TRADE_FINISHED');
+        $this->handle_return_back($verify, $trade_status, $out_trade_no, $trade_no, $trade_result, '');
+        if($verify&&$trade_result){
+            echo 'true';
+        }else{
+            echo 'false';
+        }
+        exit();
     }
 
     public function wap_return_back() {
@@ -452,7 +464,7 @@ class AliPayController extends AppController {
 
             if ($isSuccess) {
 
-                list($status, $order, $notifyRecord) = $this->saveNotifyIfNotSaved($out_trade_no, $trade_no, $_GET['total_fee'], $_GET['buyer_email'], $attach);
+                list($status, $order, $notifyRecord) = $this->saveNotifyIfNotSaved($out_trade_no, $trade_no, $_REQUEST['total_fee'], $_REQUEST['buyer_email'], $attach);
                 if ($status == PAYNOTIFY_STATUS_SKIPPED && !empty($notifyRecord)) {
                     $status = $notifyRecord['PayNotify']['status'];
                 }

@@ -33,7 +33,7 @@
                 <ul class="sharer clearfix">
                     <li class="fl">
                         <a href="/weshares/user_share_info/{{$product['share_user_id']}}">
-                            <img itemprop="image" class="sharer-header lazy rounded-50"
+                            <img itemprop="image" class="sharer-header lazy radius50"
                                  lazy-src="{{$this->Html->assetUrl($product['share_user_img'])}}"
                                  onerror="this.src='{{$STATIC_HOST}}/avatar/s/default.jpg'">
                         </a>
@@ -97,7 +97,7 @@
                 <dl class="clearfix share-data" style="display: none;"
                     ng-class="{'show-b': vm.getSummary({{$product['share_id']}}).view_count > 0}">
                     <dd class="clearfix" style="padding-right: 66px;">
-                        <img style="display: none;" class="rounded-50" ng-class="{'show-ib': true}"
+                        <img style="display: none;" class="radius50" ng-class="{'show-ib': true}"
                              lazy-src="&#123;&#123;creator.avatar&#125;&#125;"
                              fallback-src="&#123;&#123;vm.staticFilePath + '/avatar/s/default.jpg'&#125;&#125;"
                              ng-repeat="creator in vm.getSummary({{$product['share_id']}}).orders_and_creators | limitTo: 4"/>
