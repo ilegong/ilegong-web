@@ -5,6 +5,7 @@
     function GetUserInfoCtr($rootScope , $http , $attrs) {
         $rootScope.loadingPage = false;
         var vm = this;
+        vm.uid = 0;
         vm.shares = [];
         vm.attend = [];
         vm.sharesPage = 1;
@@ -28,21 +29,20 @@
         vm.shareNextPage = shareNextPage;
         vm.attendNextPage = attendNextPage;
         vm.viewUser = viewUser;
-        vm.showShares = showShares;
         vm.initUid = initUid;
         vm.focunShare = focunShare;
         vm.focusAttend = focusAttend;
         vm.changeAvatar = changeAvatar;
         vm.goToComment = goToComment;
         vm.goToShare = goToShare;
-        vm.getMyShares = getMyShares;
-
-        function getMyShares()
-        {
-            
+        vm.initd = initd;
+        
+        function initd(uid){
+            initUid(uid);
+            shareNextPage();
+            attendNextPage();
         }
-
-
+        
         function goToShare(id){
             window.location.href = '/weshares/view/' + id;
         }
@@ -68,10 +68,7 @@
         function initUid(uid){
             vm.uid = uid;
         }
-        function showShares()
-        {
-            console.log(vm.shares);
-        }
+        
         function attendNextPage(){
             if(vm.loading || vm.attendOver)
             {
@@ -88,7 +85,6 @@
                     vm.attend = vm.attend.concat(data);
                     vm.attendPage += 1;
                 }
-                console.log(vm.attend);
                 vm.loading = false;
             }).error(function (data, status) {
                 vm.loading = false;
@@ -111,7 +107,6 @@
                     vm.shares = vm.shares.concat(data);
                     vm.sharesPage += 1;
                 }
-                console.log(vm.shares);
                 vm.loading = false;
             }).error(function (data, status) {
                 vm.loading = false;

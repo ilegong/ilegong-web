@@ -40,6 +40,12 @@ var all_js = [
       'webroot/src/scripts/weshare-edit.js',
     ],
     dist: 'webroot/static/weshares/js/'
+  },{
+    name: 'get-user-info.min.js',
+    sources: [
+      'webroot/src/scripts/get-user-info-controller.js',
+    ],
+    dist: 'webroot/static/weshares/js/'
   }, {
     name: 'avatar.min.js',
     sources: [
@@ -141,6 +147,12 @@ var all_css = [
     name: 'user-info.min.css',
     sources: [
       'webroot/static/weshares/css/user-info.css',
+    ],
+    dist: 'webroot/static/weshares/css/'
+  },{
+    name: 'get-user-info.min.css',
+    sources: [
+      'webroot/static/weshares/css/get-user-info.css',
     ],
     dist: 'webroot/static/weshares/css/'
   }, {
