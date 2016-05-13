@@ -73,13 +73,22 @@ class UserApiController extends AppController
 
     public function user_order_detail($order_id)
     {
+        $uid = $this->currentUser['id'];
         $order = $this->Orders->get_order_info_with_cart($order_id);
+        $sharer_info = $this->WeshareBuy->get_sharer_info_with_sub_status($order['Order']['brand_id'], $uid);
+        $user_info = $sharer_info['User'];
+        $user_info['image'] = get_user_avatar($user_info);
+        $user_info['level'] = $user_info['UserLevel']['data_value'];
+        $user_info['level_name'] = get_user_level_text($user_info['UserLevel']['data_value']);
+        $user_info['sub_status'] = !(empty($user_info['UserRelation']['id']));
         $result = $order['Order'];
         $result['pay_type'] = $order['Pay']['trade_type'];
         $result['carts'] = $order['carts'];
+        $result['sharer_info'] = $user_info;
         echo json_encode($result);
         exit();
     }
+
 
     public function confirm_order_received($order_id){
         $uid = $this->currentUser['id'];
