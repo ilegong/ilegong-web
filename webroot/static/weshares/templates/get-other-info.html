@@ -10,7 +10,7 @@
             <a href="javascript:;" ng-click="vm.goToShare(share.id)">
                 <div style="position: relative;">
                     <img class="product-image" lazy-src="{{share.default_image}}"
-                         fallback-src="http://static.tongshijia.com/avatar/s/default.jpg">
+                         fallback-src="http://static.tongshijia.com/static/img/default_product_banner.png">
                 </div>
                 <div class="share-content">
                     <h1 class="share-title" ng-bind="share.title"></h1>
@@ -32,7 +32,7 @@
          infinite-scroll-distance='0'>
         <div class="mine_order" ng-repeat="attend in vm.attend">
             <a class="clearfix share-goodlist" ng-click="vm.goToShare(attend.id);">
-                <div class="fl"><img lazy-src="{{attend.default_image}}" fallback-src="this.src='http://static.tongshijia.com/avatar/s/default.jpg'"/></div>
+                <div class="fl"><img lazy-src="{{attend.default_image}}" fallback-src="this.src='http://static.tongshijia.com/http://static.tongshijia.com/static/img/default_product_banner.png'"/></div>
                 <h1>{{attend.title}}</h1>
                 <em>进行中</em>
                 <label><span>{{attend.created}}</span></label>
