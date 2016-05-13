@@ -1,93 +1,39 @@
-<div ng-controller="GetUserInfoCtr as vm">
+<div ng-controller="GetUserInfoCtr as vm" ng-init="vm.focus='left';vm.myShareNextPage();">
     <div class="refer-back-bg">
         我的分享
         <a href="javascript:;">
-            <img src="/static/weshares/images/back.png"/>
+            <img src="{{$STATIC_HOST}}/static/img/back.png"/>
             <label>返回</label>
         </a>
     </div>
     <ul class="mine-share-tab clearfix">
-        <li class="left-tab current">进行中</li>
-        <li class="middle-tab">已结束</li>
-        <li class="right-tab">已结算</li>
+        <li class="left-tab" ng-class="{'current':vm.focus == 'left'}" ng-click="vm.focus='left';vm.myShareNextPage();">进行中</li>
+        <li class="middle-tab" ng-class="{'current':vm.focus == 'middle'}" ng-click="vm.focus='middle';vm.myShareNextPage();">已结束</li>
+        <li class="right-tab" ng-class="{'current':vm.focus == 'right'}" ng-click="vm.focus='right';vm.myShareNextPage();">已结算</li>
     </ul>
-    <div class="mine_order">
+    <div class="mine_order" ng-repeat="share in vm.mine.tmpShares" nfinite-scroll='vm.myShareNextPage();'
+         infinite-scroll-disabled='vm.mine.tmpSharesOver||vm.loading'
+         infinite-scroll-distance='0'>
         <a class="clearfix share-goodlist">
-            <div class="fl"><img src="/static/weshares/images/goodpic-small.jpg" /></div>
-            <h1>自家果园现摘果子，新鲜可口自家果园现摘果子，新鲜可口自家果园现摘果子，新鲜可口</h1>
-            <em>进行中</em>
-            <label><span>编号：4320</span>，<span>2015-12-29</span>&nbsp<span>17:30:37</span></label>
+            <div class="fl"><img lazy-src="&#123;&#123;share.default_image&#125;&#125;" fallback-src="{{$STATIC_HOST}}/static/img/default_product_banner.png" /></div>
+            <h1>&#123;&#123;share.title&#125;&#125;</h1>
+            <em ng-if="share.status == 0 && share.settlement == 0" style="display: none" ng-class="{'show-b':share.status == 0 && share.settlement == 0}">进行中</em>
+            <em ng-if="share.status == 1 && share.settlement == 0" style="display: none" ng-class="{'show-b':share.status == 1 && share.settlement == 0}">已结束</em>
+            <em ng-if="share.status == 1 && share.settlement == 1" style="display: none" ng-class="{'show-b':share.status == 1 && share.settlement == 1}">已结算</em>
+            <label><span>编号：&#123;&#123;share.id&#125;&#125;</span>，<span>&#123;&#123;share.created&#125;&#125;</span></label>
         </a>
-        <s>待发货订单<span>0，</span>交易金额<span>￥0</span></s>
+        <s>订单数<span>&#123;&#123;share.order_count&#125;&#125;，</span>交易金额<span>￥&#123;&#123;share.balance_money&#125;&#125;</span></s>
         <ul class="clearfix">
-            <li><a>删除</a></li>
-            <li><a>修改</a></li>
-            <li><a>订单管理</a></li>
-        </ul>
-    </div>
-    <div class="mine_order">
-        <a class="clearfix share-goodlist">
-            <div class="fl"><img src="/static/weshares/images/goodpic-small.jpg" /></div>
-            <h1>自家果园现摘果子，新鲜可口自家果园现摘果子，新鲜可口自家果园现摘果子，新鲜可口</h1>
-            <em>进行中</em>
-            <label><span>编号：4320</span>，<span>2015-12-29</span>&nbsp<span>17:30:37</span></label>
-        </a>
-        <s>待发货订单<span>200，</span>交易金额<span>￥29.87</span></s>
-        <ul class="clearfix">
-            <li><a>删除</a></li>
-            <li><a>修改</a></li>
-            <li><a>订单管理</a></li>
-        </ul>
-    </div>
-    <div class="mine_order">
-        <a class="clearfix share-goodlist">
-            <div class="fl"><img src="/static/weshares/images/goodpic-small.jpg" /></div>
-            <h1>自家果园现摘果子，新鲜可口自家果园现摘果子</h1>
-            <em>已结束</em>
-            <label><span>编号：4320</span>，<span>2015-12-29</span>&nbsp<span>17:30:37</span></label>
-        </a>
-        <s>待发货订单<span>200，</span>交易金额<span>￥29.87</span></s>
-        <ul class="clearfix">
-            <li><a>删除</a></li>
-            <li><a>修改</a></li>
-            <li><a>订单管理</a></li>
-            <li><a>重新开团</a></li>
-        </ul>
-    </div>
-    <div class="mine_order">
-        <a class="clearfix share-goodlist">
-            <div class="fl"><img src="/static/weshares/images/goodpic-small.jpg" /></div>
-            <h1>自家果园现摘果子，新鲜可口自家果园现摘果子</h1>
-            <em>已结束</em>
-            <label><span>编号：4320</span>，<span>2015-12-29</span>&nbsp<span>17:30:37</span></label>
-        </a>
-        <s>请耐心等待结算，交易金额<span>￥29.87</span></s>
-        <ul class="clearfix">
-            <li><a>删除</a></li>
-            <li><a>修改</a></li>
-            <li><a>订单管理</a></li>
-            <li><a>重新开团</a></li>
-        </ul>
-    </div>
-    <div class="mine_order">
-        <a class="clearfix share-goodlist">
-            <div class="fl"><img src="/static/weshares/images/goodpic-small.jpg" /></div>
-            <h1>自家果园现摘果子，新鲜可口自家果园现摘果子</h1>
-            <em>已结算</em>
-            <label><span>编号：4320</span>，<span>2015-12-29</span>&nbsp<span>17:30:37</span></label>
-        </a>
-        <s>交易金额<span>￥29.87</span></s>
-        <ul class="clearfix">
-            <li><a>删除</a></li>
-            <li><a>修改</a></li>
-            <li><a>订单管理</a></li>
-            <li><a>重新开团</a></li>
+            <li><a ng-click="&#123;&#123;share.id&#125;&#125;">删除</a></li>
+            <li><a ng-click="&#123;&#123;share.id&#125;&#125;">修改</a></li>
+            <li><a ng-click="&#123;&#123;share.id&#125;&#125;">订单管理</a></li>
+            <li ng-if="vm.share.status == 1" style="display: none" ng-class="{'show-b':vm.share.status}"><a ng-click="&#123;&#123;share.id&#125;&#125;">重新开团</a></li>
         </ul>
     </div>
 </div>
 
 <?php
-$this->assign('title','分享圈');
+$this->assign('title','我的分享');
 $this->set('show_footer', false);
 
 $this->Html->css(array(

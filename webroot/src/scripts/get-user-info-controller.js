@@ -2,120 +2,191 @@
     angular.module('weshares')
         .controller('GetUserInfoCtr', GetUserInfoCtr);
 
-    function GetUserInfoCtr($rootScope , $http , $attrs) {
-        $rootScope.loadingPage = false;
+    function GetUserInfoCtr($rootScope , $http , $attrs ,staticFilePath) {
         var vm = this;
-        vm.uid = 0;
-        vm.shares = [];
-        vm.attend = [];
-        vm.sharesPage = 1;
-        vm.attendPage = 1;
-        vm.sharesOver = false;
-        vm.attendOver = false;
+        $rootScope.loadingPage = false;
+        vm.focus = 'share';
+        vm.staticFilePath = staticFilePath;
+        vm.uid = $attrs.uid;
         vm.loading = false;
-        vm.focus_share = true;
-        vm.focus_attend = false;
+        vm.shares = {
+            list : [],
+            page : 1,
+            over : false
+        };
+        vm.attends = {
+            list : [],
+            page : 1,
+            over : false
+        };
         vm.isShowUnSubButton = false;
         vm.isSub = $attrs.sub;
-        vm.mySharesIng = [];
-        vm.mySharesIngPage = 1;
-        vm.mySharesEnd = [];
-        vm.mySharesEndPage = 1;
-        vm.mySharesBalance = [];
-        vm.mySharesBalancePage = 1;
+        vm.mine = {
+            sharesIng : [],
+            sharesIngPage : 1,
+            sharesIngOver : false,
+            sharesEnd : [],
+            sharesEndPage : 1,
+            sharesEndOver : false,
+            sharesBalance : [],
+            sharesBalancePage : 1,
+            sharesBalanceOver : false,
+            order : [],
+            orderPage : 1,
+            orderOver : false,
+            tmpShares : [],
+            tmpSharesOver : false
+        };
         vm.sub = sub;
         vm.unSub = unSub;
         vm.showUnSubButton = showUnSubButton;
         vm.shareNextPage = shareNextPage;
         vm.attendNextPage = attendNextPage;
+        vm.myShareNextPage = myShareNextPage;
+        vm.myOrderNextPage = myOrderNextPage;
         vm.viewUser = viewUser;
-        vm.initUid = initUid;
-        vm.focunShare = focunShare;
-        vm.focusAttend = focusAttend;
         vm.changeAvatar = changeAvatar;
         vm.goToComment = goToComment;
         vm.goToShare = goToShare;
-        vm.initd = initd;
-        
-        function initd(uid){
-            initUid(uid);
-            shareNextPage();
-            attendNextPage();
+
+        function myShareNextPage()
+        {
+            if(vm.loading || vm.mine.tmpSharesOver)
+            {
+                return false;
+            }
+            vm.loading = true;
+            if(vm.focus == 'left')
+            {
+                var url = "/weshares/my_shares_list_api/1/" + vm.mine.sharesEndPage;
+                $http.get(url).success(function (data) {
+                    if(data.length == 0)
+                    {
+                        vm.mine.sharesIngOver = true;
+                        vm.mine.tmpSharesOver = true;
+                    }else{
+                        vm.mine.sharesIng = vm.mine.sharesIng.concat(data);
+                        vm.mine.sharesIngPage += 1;
+                        vm.mine.tmpSharesOver = false;
+                        vm.mine.tmpShares = vm.mine.sharesIng;
+                    }
+                    vm.loading = false;
+                }).error(function () {
+                    vm.loading = false;
+                });
+            }else if(vm.focus == 'middle'){
+                var url = "/weshares/my_shares_list_api/2/" + vm.mine.sharesEndPage;
+                $http.get(url).success(function (data) {
+                    if(data.length == 0)
+                    {
+                        vm.mine.sharesEndOver = true;
+                        vm.mine.tmpSharesOver = true;
+                    }else{
+                        vm.mine.sharesEnd = vm.mine.sharesEnd.concat(data);
+                        vm.mine.sharesEndPage += 1;
+                        vm.mine.tmpSharesOver = false;
+                        vm.mine.tmpShares = vm.mine.sharesEnd;
+                    }
+                    vm.loading = false;
+                }).error(function () {
+                    vm.loading = false;
+                });
+            }else if(vm.focus == 'right')
+            {
+                var url = "/weshares/my_shares_list_api/3/" + vm.mine.sharesEndPage;
+                $http.get(url).success(function (data) {
+                    if(data.length == 0)
+                    {
+                        vm.mine.sharesBalanceOver = true;
+                        vm.mine.tmpSharesOver = true;
+                    }else{
+                        vm.mine.sharesBalance = vm.mine.sharesBalance.concat(data);
+                        vm.mine.sharesBalancePage += 1;
+                        vm.mine.tmpSharesOver = false;
+                        vm.mine.tmpShares = vm.mine.sharesBalance;
+                    }
+                    vm.loading = false;
+                }).error(function () {
+                    vm.loading = false;
+                });
+            }
+            console.log(vm.mine.tmpShares);
         }
-        
+
+        function myOrderNextPage() {
+            if(vm.loading || vm.mine.orderOver)
+            {
+                return false;
+            }
+            vm.loading = true;
+            var url = "/weshares/my_order_list_api/" + vm.mine.orderPage;
+            $http.get(url).success(function (data) {
+                if(data.length == 0)
+                {
+                    vm.mine.orderOver = true;
+                }else{
+                    vm.mine.order = vm.mine.order.concat(data);
+                    vm.mine.orderPage += 1;
+                    console.log(vm.mine.order);
+                }
+                vm.loading = false;
+            }).error(function () {
+                vm.loading = false;
+            });
+        }
+
         function goToShare(id){
             window.location.href = '/weshares/view/' + id;
         }
-
         function goToComment(){
             window.location.href = '/weshares/u_comment/' + vm.uid;
         }
-
         function changeAvatar(){
             window.location.href = '/users/change_avatar?ref=/weshares/user_share_info';
         }
-
-        function focunShare() {
-            vm.focus_share = true;
-            vm.focus_attend = false;
-        }
-        function focusAttend()
-        {
-            vm.focus_share = false;
-            vm.focus_attend = true;
-        }
-        
-        function initUid(uid){
-            vm.uid = uid;
-        }
-        
         function attendNextPage(){
-            if(vm.loading || vm.attendOver)
+            if(vm.loading || vm.attends.over)
             {
                 return false;
             }
             vm.loading = true;
-            var url = "/weshares/get_other_attends/" + vm.uid + '/' + vm.attendPage;
-            $http({method: 'GET', url: url}).
-            success(function (data, status) {
+            var url = "/weshares/get_other_attends/" + vm.uid + '/' + vm.attends.page;
+            $http.get(url).success(function (data) {
                 if(data.length == 0)
                 {
-                    vm.attendOver = true;
+                    vm.attends.over = true;
                 }else{
-                    vm.attend = vm.attend.concat(data);
-                    vm.attendPage += 1;
+                    vm.attends.list = vm.attends.list.concat(data);
+                    vm.attends.page += 1;
                 }
                 vm.loading = false;
-            }).error(function (data, status) {
+            }).error(function () {
                 vm.loading = false;
             });
         }
-
         function shareNextPage(){
-            if(vm.loading || vm.sharesOver)
+            if(vm.loading || vm.shares.over)
             {
                 return false;
             }
             vm.loading = true;
-            var url = "/weshares/get_other_shares/" + vm.uid + '/' + vm.sharesPage;
-            $http({method: 'GET', url: url}).
-            success(function (data, status) {
+            var url = "/weshares/get_other_shares/" + vm.uid + '/' + vm.shares.page;
+            $http.get(url).success(function (data) {
                 if(data.length == 0)
                 {
-                    vm.sharesOver = true;
+                    vm.shares.over = true;
                 }else{
-                    vm.shares = vm.shares.concat(data);
-                    vm.sharesPage += 1;
+                    vm.shares.list = vm.shares.list.concat(data);
+                    vm.shares.page += 1;
                 }
                 vm.loading = false;
-            }).error(function (data, status) {
+            }).error(function () {
                 vm.loading = false;
             });
         }
-        
         function sub(){
             vm.loading = true;
-            $http({method: 'GET', 'url': '/weshares/subUser/' + vm.uid}).success(function (data) {
+            $http.get('/weshares/subUser/' + vm.uid).success(function (data) {
                 if (data['success']) {
                     vm.isSub = 1;
                 } else {
@@ -129,10 +200,9 @@
                 vm.loading = false;
             });
         }
-
         function unSub() {
             vm.loading = true;
-            $http({method: 'GET', url: '/weshares/unSubUser/' + vm.uid}).success(function (data) {
+            $http.get('/weshares/unSubUser/' + vm.uid).success(function (data) {
                 if (data['success']) {
                     vm.isSub = 0;
                 }else{
@@ -144,11 +214,9 @@
             });
             vm.isShowUnSubButton = false;
         }
-        
         function showUnSubButton(){
             vm.isShowUnSubButton = !vm.isShowUnSubButton;
         }
-
         function viewUser(uid){
             window.location.href = '/weshares/user_share_info/'+uid;
         }

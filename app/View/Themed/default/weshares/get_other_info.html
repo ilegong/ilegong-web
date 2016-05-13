@@ -1,4 +1,4 @@
-<div ng-controller="GetUserInfoCtr as vm" data-sub="{{$sub_status}}" ng-init="vm.initd({{$uid}});">
+<div ng-controller="GetUserInfoCtr as vm" data-sub="{{$sub_status}}" data-uid="{{$uid}}" ng-init="vm.shareNextPage();vm.attendNextPage();">
     <div class="mine-bg">
         <div class="attention-btn">
             <a class="attention" href="javascript:;" style="display: none" ng-class="{'show-b':vm.isSub == 0}"
@@ -13,7 +13,7 @@
             </a>
             <a class="unfollow" ng-class="{'show-b':vm.isShowUnSubButton}" style="display: none" ng-click="vm.unSub()">取消关注</a>
         </div>
-        <img src="{{$user_info['image']}}"/>
+        <img lazy-src="{{$user_info['User']['image']}}" fallback-src="{{$STATIC_HOST}}/static/img/default_product_banner.png"/>
         <h1>{{$user_info['User']['nickname']}}</h1>
         <p>{{$user_info['User']['description']}}</p>
         <a href="javascript:;" class="more-information">完整故事</a>
@@ -28,7 +28,7 @@
     <div ng-include="'{{$STATIC_HOST}}/static/weshares/templates/get-other-info.html?v1.8.8'"></div>
 </div>
 <?php
-$this->assign('title','分享圈');
+$this->assign('title','微分享');
 $this->set('show_footer', false);
 
 $this->Html->css(array(

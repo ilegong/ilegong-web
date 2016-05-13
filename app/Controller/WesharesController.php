@@ -690,12 +690,97 @@ class WesharesController extends AppController
         //$this->set('joinShareComments', $joinShareComments);
     }
 
+    public function my_shares_list_api($type,$page = 1)
+    {
+        $share_list = [];
+        $uid = $this->currentUser['id'];
+        $uid = 810684;
+        $limit = 5;
+        $page  = intval($page) ? intval($page) : 1;
+        $type = intval($type);
+        if($uid && in_array($type,[1,2,3]))
+        {
+            if ($type == 2)
+            {
+                $status = 1;
+                $settlement = 0;
+            }elseif ($type == 3)
+            {
+                $status = 1;
+                $settlement = 1;
+            }else{
+                $status = 0;
+                $settlement = 0;
+            }
+            $shares = $this->WeshareBuy->get_my_shares($uid, $status, $settlement,$page, $limit);
+            $share_ids = Hash::extract($shares, '{n}.Weshare.id');
+            $share_list = [];
+            if (!empty($share_ids)) {
+                $order_count_result = $this->get_order_count_share_map($share_ids);
+                $share_balance_money = $this->get_share_balance_result($share_ids);
+                foreach ($shares as $shareItem) {
+                    $shareItem = $shareItem['Weshare'];
+                    $shareItem['order_count'] = empty($order_count_result[$shareItem['id']]) ? 0 : intval($order_count_result[$shareItem['id']]);
+                    $shareItem['balance_money'] = $share_balance_money[$shareItem['id']];
+                    $share_list[] = $shareItem;
+                }
+            }
+        }
+        echo json_encode($share_list);
+        exit();
+    }
+
+    private function get_order_count_share_map($share_ids){
+        $query_order_sql = 'select count(id), member_id from cake_orders where member_id in (' . implode(',', $share_ids) . ') and status>0 and type=9 group by member_id';
+        $orderM = ClassRegistry::init('Order');
+        $result = $orderM->query($query_order_sql);
+        $result = Hash::combine($result, '{n}.cake_orders.member_id', '{n}.0.count(id)');
+        return $result;
+    }
+
+    private function  get_share_balance_result($share_ids){
+        $balance_result = $this->WeshareBuy->get_shares_balance_money($share_ids);
+        $summery_data = $balance_result['weshare_summery'];
+        $weshare_repaid_map = $balance_result['weshare_repaid_map'];
+        $weshare_rebate_map = $balance_result['weshare_rebate_map'];
+        $weshare_refund_map = $balance_result['weshare_refund_map'];
+        $result = array();
+        foreach ($share_ids as $share_id) {
+            $current_share_repaid_money = $weshare_repaid_map[$share_id];
+            if ($current_share_repaid_money == 0) {
+                $current_share_repaid_money = 0;
+            }
+            $result[$share_id] = floatval($summery_data[$share_id]['total_price']) - floatval($weshare_refund_map[$share_id]) - floatval($weshare_rebate_map[$share_id]) + $current_share_repaid_money;
+        }
+        return $result;
+    }
+
     public function my_shares_list()
     {
-        if(!$this->currentUser['id'])
-        {
 
+    }
+
+    public function my_order_list()
+    {
+
+    }
+
+    public function my_order_list_api($page = 1)
+    {
+        $limit = 5;
+        $page = intval($page) > 1 ? intval($page) : 1;
+        $uid = $this->currentUser['id'];
+        $status = [ORDER_STATUS_PAID, ORDER_STATUS_DONE, ORDER_STATUS_REFUND, ORDER_STATUS_REFUND_DONE, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED];
+        $params = ['user_id' => $uid, 'status' => $status, 'limit' => $limit, 'page' => $page];
+        $orders = $this->Orders->get_user_order($params);
+        $result = [];
+        foreach ($orders as $order_item) {
+            $result_item = $order_item['Order'];
+            $result_item['share_info'] = $order_item['Weshare'];
+            $result[] = $result_item;
         }
+        echo json_encode($result);
+        exit();
     }
 
     public function subUser($uid)
@@ -723,7 +808,6 @@ class WesharesController extends AppController
         $datainfo = $this->User->find('first', array('recursive' => -1,
             'conditions' => array('id' => $user_id),
             'fields' => array('nickname', 'image', 'sex', 'mobilephone', 'username', 'id', 'hx_password', 'description', 'payment', 'avatar')));
-        $datainfo['User']['image'] = get_user_avatar($datainfo);
         return $datainfo;
     }
 
@@ -732,12 +816,10 @@ class WesharesController extends AppController
         $curr_uid = $this->currentUser['id'];
         $user_summary = $this->WeshareBuy->get_user_share_summary($uid);
         $user_info = $this->get_user_info($uid);
-        $user_info['image'] = get_user_avatar($user_info);
+        $sub_status = 0;
         if($curr_uid)
         {
             $sub_status = $this->ShareUtil->check_user_relation($uid, $curr_uid);
-        }else{
-            $sub_status = 0;
         }
         $this->set('user_summary',$user_summary);
         $this->set('user_info',$user_info);
@@ -762,16 +844,6 @@ class WesharesController extends AppController
         echo json_encode($result);
         exit();
     }
-
-    public function get_user_create_shares($uid, $page)
-    {
-        $page = intval($page) > 2 ? intval($page) : 2;
-        $limit = 5;
-        $result = $this->Weshares->get_u_create_share($uid, $limit, $page);
-        echo json_encode($result);
-        exit();
-    }
-
     public function get_self_info()
     {
         $uid = $this->currentUser['id'];
