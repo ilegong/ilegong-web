@@ -80,7 +80,7 @@ class UserApiController extends AppController
         $user_info['image'] = get_user_avatar($user_info);
         $user_info['level'] = $sharer_info['UserLevel']['data_value'];
         $user_info['level_name'] = get_user_level_text($sharer_info['UserLevel']['data_value']);
-        $user_info['sub_status'] = !(empty($user_info['UserRelation']['id']));
+        $user_info['sub_status'] = !(empty($sharer_info['UserRelation']['id']));
         $result = $order['Order'];
         $result['pay_type'] = $order['Pay']['trade_type'];
         $result['carts'] = $order['carts'];
