@@ -1,13 +1,6 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: ldy
- * Date: 14/11/4
- * Time: 下午1:31
- * $this->Location是代表Location Model, CakePHP是怎么处理的?
- */
-class LocationsController extends AppController
+class LocationsController extends Controller
 {
     public $name = 'Locations';
 

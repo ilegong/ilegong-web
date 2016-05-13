@@ -312,3 +312,39 @@ function clear_tag_cache($tagId) {
 function check_sae(){
     return defined('SAE_MYSQL_DB');
 }
+
+/**
+ * @param $payment
+ * @return string
+ */
+function get_user_payment_info($payment){
+    if (isJson($payment)) {
+        $payment_data = json_decode($payment, true);
+        $str = '';
+        if (is_array($payment) && !empty($payment)) {
+            while (list ($key, $val) = each($payment_data)) {
+                if ($key == 'type') {
+                    if ($val == 0) {
+                        $str .= '支付宝 ';
+                    }
+                    if ($val == 1) {
+                        $str .= '银行卡 ';
+                    }
+                }
+                if ($key == 'account') {
+                    $str .= '账号 ' . $val;
+                }
+                if ($key == 'full_name') {
+                    $str .= '姓名 ' . $val;
+                }
+            }
+            return $str;
+        }
+    }
+    return $payment;
+}
+
+function isJson($string){
+    json_decode($string);
+    return (json_last_error() == JSON_ERROR_NONE);
+}

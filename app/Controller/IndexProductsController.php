@@ -1,6 +1,6 @@
 <?php
 
-class IndexProductsController extends AppController
+class IndexProductsController extends Controller
 {
     var $components = array('ShareUtil');
 
