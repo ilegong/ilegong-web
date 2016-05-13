@@ -3030,4 +3030,32 @@ class WeshareBuyComponent extends Component
 
         return $shares;
     }
+
+    public function get_sharer_info_with_sub_status($sharer_id, $uid){
+        $userM = ClassRegistry::init('User');
+        $sharer_info = $userM->find('first', [
+            'conditions' => ['User.id' => $sharer_id],
+            'joins' => [
+                [
+                    'table' => 'user_relations',
+                    'alias' => 'UserRelation',
+                    'type' => 'LEFT',
+                    'conditions' => [
+                        'UserRelation.user_id = User.id',
+                        'UserRelation.follow_id' => $uid,
+                        'UserRelation.deleted' => DELETED_NO,
+                    ],
+                ], [
+                    'table' => 'user_levels',
+                    'alias' => 'UserLevel',
+                    'type' => 'LEFT',
+                    'conditions' => [
+                        'UserLevel.data_id = User.id',
+                    ],
+                ],
+            ],
+            'fields' => ['User.id', 'User.nickname', 'User.avatar', 'User.image', 'UserLevel.data_value', 'UserRelation.id']
+        ]);
+        return $sharer_info;
+    }
 }
