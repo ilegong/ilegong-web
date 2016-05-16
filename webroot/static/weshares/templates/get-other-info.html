@@ -8,8 +8,8 @@
          infinite-scroll-distance='0'>
         <div ng-repeat="share in vm.shares.list">
             <a href="javascript:;" ng-click="vm.goToShare(share.id)">
-                <div style="position: relative;">
-                    <img style="max-height: 420px;" class="product-image" lazy-src="{{share.default_image}}"
+                <div style="position: relative;text-align: center;">
+                    <img class="product-image" lazy-src="{{share.default_image}}"
                          fallback-src="{{vm.staticFilePath}}/static/img/default_product_banner.png">
                 </div>
                 <div class="share-content">
