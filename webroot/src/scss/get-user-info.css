@@ -51,7 +51,7 @@ ul li { list-style: none; }
 .share-good,.recommend-sharer{ margin-bottom: 10px; background-color: #ffffff;}
 .share-good a{ display: block; text-decoration: none;}
 /*product picture*/
-.product-image{ width:100%; display: block;max-height: 280px;max-width: 100%;}
+.product-image{display: inline-block;max-height: 280px;max-width: 100%;}
 /*product price*/
 .product-price-bg{ z-index: 2; background-color: #333333; padding: 5px; color: #FFFFFF; display: block; position: absolute; bottom: 10px; left: 0;}
 .product-price-bg label{ font-size: 0.9em;}
