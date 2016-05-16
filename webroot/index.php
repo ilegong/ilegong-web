@@ -13,6 +13,7 @@ if ($_SERVER['HTTP_HOST'] == SH_SITE_HOST) {
     define('MCHID', '1338311401');
     define('WX_PAY_KEY', 'e9d6de41a12124c7b793234bd667da0b');
     define('WX_HOST', SH_SITE_HOST);
+    define('WX_SERVICE_ID_GOTO', 'https://mp.weixin.qq.com/s?__biz=MzIwNzMyNjk5NQ==&mid=100000013&idx=1&sn=dfb8a1fc3b03f2f9cd79ec592af3be86');
 } else {
     define('WX_APPID', 'wxca7838dcade4709c');
     define('WX_APPID_SOURCE', 'wxca78');

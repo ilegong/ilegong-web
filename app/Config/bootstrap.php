@@ -11,9 +11,6 @@ App::build(array(
     'Controller' => array(APP_PATH . 'Controller/', APP_PATH . 'Controller/ApiController/'),
 ));
 
-const WX_SERVICE_ID_GOTO = 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200757804&idx=1&sn=90b121983525298a4ac26ee8d6c0bc1c#rd';
-
-
 const ALI_ACCOUNT = 'yxg@ilegong.com';
 
 const ALI_CREATE_AVATAR_URL = 'http://images.tongshijia.com/download_avatar';
