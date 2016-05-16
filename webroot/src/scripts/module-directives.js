@@ -68,6 +68,9 @@
         viewHeight = Math.max(doc.documentElement.clientHeight, win.innerHeight || 0),
         xVisible,
         yVisible;
+      if(elem.style.display == "none"){
+        return false;
+      }
 
       if (elemOffsetY <= winOffsetY) {
         if (elemOffsetY + elemHeight >= winOffsetY) {
