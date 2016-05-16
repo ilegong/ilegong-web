@@ -1,4 +1,4 @@
-<div ng-controller="GetUserInfoCtr as vm" data-sub="{{$sub_status}}" data-uid="{{$uid}}" ng-init="vm.shareNextPage();vm.attendNextPage();">
+<div ng-controller="GetUserInfoCtr as vm" data-sub="{{$sub_status}}" data-uid="{{$uid}}" ng-init="vm.username='{{$user_info['User']['nickname']}}';vm.shareNextPage();vm.attendNextPage();">
     <div class="mine-bg">
         <div class="attention-btn">
             <a class="attention" href="javascript:;" style="display: none" ng-class="{'show-b':vm.isSub == 0}"

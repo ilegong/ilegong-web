@@ -48,6 +48,76 @@
         vm.changeAvatar = changeAvatar;
         vm.goToComment = goToComment;
         vm.goToShare = goToShare;
+        vm.delShare = delShare;
+        vm.stopShare = stopShare;
+
+        function delShare(id){
+            if(vm.loading)
+            {
+                return false;
+            }
+            vm.loading = true;
+            var url = "/weshares/delete_share/"+id;
+            $http.get(url).success(function(data){
+                if(data.success)
+                {
+                    var tmp = [];
+                    for(var i = 0 ; i < vm.mine.tmpShares.length ; i++)
+                    {
+                        if(parseInt(vm.mine.tmpShares[i].id) != id)
+                        {
+                            tmp.push(vm.mine.tmpShares[i]);
+                        }
+                    }
+                    vm.mine.tmpShares = tmp;
+                    if(vm.focus == 'left'){
+                        vm.mine.sharesIng = tmp;
+                    }else if(vm.focus == 'middle'){
+                        vm.mine.sharesEnd = tmp;
+                    }else if(vm.focus == 'right'){
+                        vm.mine.sharesBalance = tmp;
+                    }
+                }
+                vm.loading = false;
+            }).error(function(){
+                alert("截团失败,请联系管理员!");
+                vm.loading = false;
+            });
+        }
+
+        function stopShare(id){
+            if(vm.loading)
+            {
+                return false;
+            }
+            vm.loading = true;
+            var url = "/weshares/stopShare/"+id;
+            $http.get(url).success(function(data){
+                if(data.success)
+                {
+                    var tmp = [];
+                    for(var i = 0 ; i < vm.mine.tmpShares.length ; i++)
+                    {
+                        if(parseInt(vm.mine.tmpShares[i].id) != id)
+                        {
+                            tmp.push(vm.mine.tmpShares[i]);
+                        }
+                    }
+                    vm.mine.tmpShares = tmp;
+                    if(vm.focus == 'left'){
+                        vm.mine.sharesIng = tmp;
+                    }else if(vm.focus == 'middle'){
+                        vm.mine.sharesEnd = tmp;
+                    }else if(vm.focus == 'right'){
+                        vm.mine.sharesBalance = tmp;
+                    }
+                }
+                vm.loading = false;
+            }).error(function(){
+                alert("截团失败,请联系管理员!");
+                vm.loading = false;
+            });
+        }
 
         function myShareNextPage()
         {
@@ -58,7 +128,9 @@
             vm.loading = true;
             if(vm.focus == 'left')
             {
-                var url = "/weshares/my_shares_list_api/1/" + vm.mine.sharesEndPage;
+                vm.mine.sharesEndPage = 1;
+                vm.mine.sharesBalancePage = 1;
+                var url = "/weshares/my_shares_list_api/1/" + vm.mine.sharesIngPage;
                 $http.get(url).success(function (data) {
                     if(data.length == 0)
                     {
@@ -75,6 +147,8 @@
                     vm.loading = false;
                 });
             }else if(vm.focus == 'middle'){
+                vm.mine.sharesIngPage = 1;
+                vm.mine.sharesBalancePage = 1;
                 var url = "/weshares/my_shares_list_api/2/" + vm.mine.sharesEndPage;
                 $http.get(url).success(function (data) {
                     if(data.length == 0)
@@ -93,7 +167,9 @@
                 });
             }else if(vm.focus == 'right')
             {
-                var url = "/weshares/my_shares_list_api/3/" + vm.mine.sharesEndPage;
+                vm.mine.sharesIngPage = 1;
+                vm.mine.sharesEndPage = 1;
+                var url = "/weshares/my_shares_list_api/3/" + vm.mine.sharesBalancePage;
                 $http.get(url).success(function (data) {
                     if(data.length == 0)
                     {
@@ -110,7 +186,6 @@
                     vm.loading = false;
                 });
             }
-            console.log(vm.mine.tmpShares);
         }
 
         function myOrderNextPage() {
