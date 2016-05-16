@@ -17,10 +17,10 @@
             <li onclick="window.location.href='/weshares/sub_list/{{$uid}}'"><strong>{{$user_summary['focus_count']}}</strong><br/>关注</li>
         </ul>
     </div>
-    <a href="javascript:;" class="mine-chanpinjie-banner"><img src="/static/weshares/images/mine-banner.gif" /></a>
+    <a href="javascript:;" class="mine-chanpinjie-banner"><img src="{{$STATIC_HOST}}/static/weshares/images/mine-banner.gif" /></a>
     <a class="mine-tab" href="/weshares/my_order_list">
         <dl class="clearfix mine-tab-bg">
-            <dd class="fl mine-order-icon"><img src="/static/weshares/images/mine-order-icon.gif" /></dd>
+            <dd class="fl mine-order-icon"><img src="{{$STATIC_HOST}}/static/weshares/images/mine-order-icon.gif" /></dd>
             <dd class="fl">我的订单</dd>
             <dd class="fr">
                 <label>
@@ -33,7 +33,7 @@
     </a>
     <a class="mine-tab" href="/weshares/my_shares_list">
         <dl class="clearfix mine-tab-bg">
-            <dd class="fl mine-order-icon"><img src="/static/weshares/images/mine-share-icon.gif" /></dd>
+            <dd class="fl mine-order-icon"><img src="{{$STATIC_HOST}}/static/weshares/images/mine-share-icon.gif" /></dd>
             <dd class="fl">我的分享</dd>
             <dd class="fr">
                 <label>
@@ -51,7 +51,7 @@
     </a>
     <a class="mine-tab">
         <dl class="clearfix mine-tab-bg">
-            <dd class="fl mine-order-icon"><img src="/static/weshares/images/mine-warranty-icon.gif" /></dd>
+            <dd class="fl mine-order-icon"><img src="{{$STATIC_HOST}}/static/weshares/images/mine-warranty-icon.gif" /></dd>
             <dd class="fl">授权我的</dd>
             <dd class="fr">
                 <label>
@@ -64,7 +64,7 @@
     </a>
     <a class="mine-tab">
         <dl class="clearfix mine-tab-bg">
-            <dd class="fl mine-order-icon"><img src="/static/weshares/images/mine-balance-icon.gif" /></dd>
+            <dd class="fl mine-order-icon"><img src="{{$STATIC_HOST}}/static/weshares/images/mine-balance-icon.gif" /></dd>
             <dd class="fl">我的余额</dd>
             <dd class="fr mine-num">￥{{$rebate_money}}</dd>
         </dl>
