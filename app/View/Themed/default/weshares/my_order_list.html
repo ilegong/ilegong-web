@@ -1,0 +1,37 @@
+<div ng-controller="GetUserInfoCtr as vm" ng-init="vm.myOrderNextPage();">
+    <div class="refer-back-bg">
+        我的分享
+        <a href="/weshares/get_self_info">
+            <img src="&#123;&#123;vm.staticFilePath&#125;&#125;/static/img/back.png"/>
+            <label>返回</label>
+        </a>
+    </div>
+    <div style="margin-top: 54px;">
+        <div class="mine_order" ng-repeat="order in vm.mine.order">
+            <a class="clearfix share-goodlist" href="/weshares/view/&#123;&#123;order.member_id&#125;&#125;">
+                <div class="fl"><img lazy-src="&#123;&#123;order.share_info.default_image&#125;&#125;"
+                                     fallback-src="&#123;&#123;vm.staticFilePath&#125;&#125;/static/img/default_product_banner.png"/></div>
+                <h1 ng-bind="order.share_info.title"></h1>
+                <em ng-if="order.status == 1" style="display: none" ng-class="{'show-b':order.status>0}">待发货</em>
+                <em ng-if="order.status == 2" style="display: none" ng-class="{'show-b':order.status>0}">待收货</em>
+                <em ng-if="order.status == 3" style="display: none" ng-class="{'show-b':order.status>0}">待评价</em>
+                <em ng-if="order.status == 4" style="display: none" ng-class="{'show-b':order.status>0}">退款中</em>
+                <em ng-if="order.status == 14" style="display: none" ng-class="{'show-b':order.status>0}">退款完成</em>
+                <em ng-if="order.status == 9" style="display: none" ng-class="{'show-b':order.status>0}">已评价</em>
+                <label><span ng-bind="order.created"></span></label>
+            </a>
+        </div>
+    </div>
+</div>
+<?php
+$this->assign('title','我的订单');
+$this->set('show_footer', false);
+
+$this->Html->css(array(
+$STATIC_HOST.'/static/weshares/css/get-user-info.min.css?v2.4.8'
+), null, array('inline' => false));
+
+$this->Html->script(array(
+$STATIC_HOST.'/static/weshares/js/get-user-info.min.js?v2.4.8'
+), array('block' => 'scripts'))
+?>

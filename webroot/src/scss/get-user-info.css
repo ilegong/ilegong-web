@@ -9,17 +9,12 @@ ul li { list-style: none; }
 .clearfix { zoom: 1;}
 .clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
 
-
-
-
 /*back 采用现有公用的*/
 .refer-back-bg{ background-color: #f9f9f9; border-bottom: 1px #dddddd solid; color: #333333; font-size: 1.3em; line-height: 44px; text-align: center; position: fixed; top: 0; left: 0; width: 100%;}
 .refer-back-bg a{ position: absolute; left: 15px; text-decoration: none; color: #333333; width: 4em; height: 44px;}
 .refer-back-bg a img,.refer-back-bg a label{ float: left;}
 .refer-back-bg a label{ padding-left: 5px; font-size: 0.8em;}
 .refer-back-bg a img{ width: 8px;  margin-top: 14px;}
-
-
 
 /*mine-massage*/
 .mine-bg{ background-color: #FF6485; padding: 20px 15px 15px; text-align: center; position: relative;}
@@ -52,7 +47,6 @@ ul li { list-style: none; }
 
 
 
-
 /*首页已存在这部分css*/
 .share-good,.recommend-sharer{ margin-bottom: 10px; background-color: #ffffff;}
 .share-good a{ display: block; text-decoration: none;}
@@ -65,8 +59,8 @@ ul li { list-style: none; }
 /*share content*/
 .share-content{ padding: 15px 12px;}
 .share-content h1{ font-size: 1.2em; color: #333333; word-break: break-all; text-overflow: ellipsis; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden;}
-.share-content p{ color: #666666; line-height: 20px; font-size: 1.1em; padding-top: 8px;}
-.share-content p span{ color: #ff6485;}
+.share-content p{ color: #ff6485; line-height: 20px; font-size: 1.1em; padding-top: 8px;}
+.share-content p span{ color: #666666;}
 .share-data{ padding:10px 12px; border-top: 1px #eeeeee solid; color: #999999; line-height: 28px; position: relative;}
 .share-data img{ width: 28px; height: 28px; display: block; float: left; margin-right: 3px;}
 .share-data label{ float: left;}
@@ -87,8 +81,6 @@ ul li { list-style: none; }
 .mine-tab ul{ border-top: 1px #eeeeee solid; padding:0 12px 15px; background-color: #FFFFFF;}
 .mine-tab ul li{ width: 33.3%; padding-top: 15px; color: #666666; font-size: 1.1em; float: left; text-align: center;}
 .mine-tab ul li span{ color: #333333; font-size: 1.2em; font-weight: bold;}
-
-
 
 
 /*my share list*/
