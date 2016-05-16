@@ -13,7 +13,7 @@
             </a>
             <a class="unfollow" ng-class="{'show-b':vm.isShowUnSubButton}" style="display: none" ng-click="vm.unSub()">取消关注</a>
         </div>
-        <img lazy-src="{{$user_info['User']['image']}}" fallback-src="{{$STATIC_HOST}}/static/img/default_product_banner.png"/>
+        <img lazy-src="{{$user_info['User']['avatar']}}" fallback-src="{{$STATIC_HOST}}/static/img/default_product_banner.png"/>
         <h1>{{$user_info['User']['nickname']}}</h1>
         <p>{{$user_info['User']['description']}}</p>
         <a href="javascript:;" class="more-information">完整故事</a>

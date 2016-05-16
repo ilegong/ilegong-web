@@ -816,6 +816,7 @@ class WesharesController extends AppController
         $curr_uid = $this->currentUser['id'];
         $user_summary = $this->WeshareBuy->get_user_share_summary($uid);
         $user_info = $this->get_user_info($uid);
+        $user_info['User']['avatar'] = get_user_avatar($user_info['User']);
         $sub_status = 0;
         if($curr_uid)
         {
