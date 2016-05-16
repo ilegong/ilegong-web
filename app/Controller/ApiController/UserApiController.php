@@ -57,7 +57,7 @@ class UserApiController extends AppController
     {
         $uid = $this->currentUser['id'];
         if ($status == -1) {
-            $status = [ORDER_STATUS_PAID, ORDER_STATUS_DONE, ORDER_STATUS_REFUND, ORDER_STATUS_REFUND_DONE, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED];
+            $status = [ORDER_STATUS_PAID, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY,ORDER_STATUS_REFUND_DONE, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED];
         }
         $params = ['user_id' => $uid, 'status' => $status, 'limit' => $limit, 'page' => $page];
         $orders = $this->Orders->get_user_order($params);
@@ -73,13 +73,22 @@ class UserApiController extends AppController
 
     public function user_order_detail($order_id)
     {
+        $uid = $this->currentUser['id'];
         $order = $this->Orders->get_order_info_with_cart($order_id);
+        $sharer_info = $this->WeshareBuy->get_sharer_info_with_sub_status($order['Order']['brand_id'], $uid);
+        $user_info = $sharer_info['User'];
+        $user_info['image'] = get_user_avatar($user_info);
+        $user_info['level'] = $sharer_info['UserLevel']['data_value'];
+        $user_info['level_name'] = get_user_level_text($sharer_info['UserLevel']['data_value']);
+        $user_info['sub_status'] = !(empty($sharer_info['UserRelation']['id']));
         $result = $order['Order'];
         $result['pay_type'] = $order['Pay']['trade_type'];
         $result['carts'] = $order['carts'];
+        $result['sharer_info'] = $user_info;
         echo json_encode($result);
         exit();
     }
+
 
     public function confirm_order_received($order_id){
         $uid = $this->currentUser['id'];
