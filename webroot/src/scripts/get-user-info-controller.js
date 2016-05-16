@@ -273,7 +273,7 @@
                 } else {
                     if (data['reason'] == 'not_sub') {
                         alert('请先关注我们的服务号');
-                        window.location.href = "https://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=403992659&idx=1&sn=714a1a5f0bb4940f895e60f2f3995544";
+                        window.location.href = data['url'];
                     }
                 }
                 vm.loading = false;
