@@ -958,11 +958,7 @@ class UsersController extends AppController
                     if ($new_serviceAccount_binded_uid) {
                         $this->after_create_user($new_serviceAccount_binded_uid);
                     }
-                    if($oauth['Oauthbinds']){
-                        $oauth_result = $oauth['Oauthbinds'];
-                    }else{
-                        $oauth_result = $oauth[0];
-                    }
+                    $oauth_result = $oauth['Oauthbinds'];
                     //TODO: fix risk
                     $this->log('login ouath result ' . json_encode($oauth_result), true);
                     $redirectUrl = '/users/login?source=' . $oauth_result['source'] . '&openid=' . $oauth_result['oauth_openid'];
