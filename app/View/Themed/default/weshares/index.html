@@ -94,11 +94,10 @@
                         {{/if}}
                     </div>
                 </a>
-                <dl class="clearfix share-data" style="display: none;"
+                <dl class="clearfix share-data hide"
                     ng-class="{'show-b': vm.getSummary({{$product['share_id']}}).view_count > 0}">
                     <dd class="clearfix" style="padding-right: 66px;">
-                        <img style="display: none;" class="radius50" ng-class="{'show-ib': true}"
-                             lazy-src="&#123;&#123;creator.avatar&#125;&#125;"
+                        <img class="radius50" lazy-src="&#123;&#123;creator.avatar&#125;&#125;"
                              fallback-src="&#123;&#123;vm.staticFilePath + '/avatar/s/default.jpg'&#125;&#125;"
                              ng-repeat="creator in vm.getSummary({{$product['share_id']}}).orders_and_creators | limitTo: 4"/>
                         <label>
@@ -125,6 +124,6 @@ $STATIC_HOST.'/static/weshares/css/index.min.css?v2.4.9'
 ), null, array('inline' => false));
 
 $this->Html->script(array(
-$STATIC_HOST.'/static/weshares/js/index.min.js?v2.4.9'
+$STATIC_HOST.'/static/weshares/js/index.min.js?v2.5.3'
 ), array('block' => 'scripts'))
 ?>
