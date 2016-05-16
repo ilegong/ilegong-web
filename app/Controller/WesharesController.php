@@ -816,6 +816,7 @@ class WesharesController extends AppController
         $curr_uid = $this->currentUser['id'];
         $user_summary = $this->WeshareBuy->get_user_share_summary($uid);
         $user_info = $this->get_user_info($uid);
+        $user_info['User']['avatar'] = get_user_avatar($user_info['User']);
         $sub_status = 0;
         if($curr_uid)
         {
@@ -857,6 +858,9 @@ class WesharesController extends AppController
         $user_summary = $this->WeshareBuy->get_user_share_summary($uid);
         $share_summary = $this->WeshareBuy->get_sharer_summary($uid);
         $user_level = $this->ShareUtil->get_user_level($uid);
+        $user_info = $this->get_user_info($uid);
+        $user_info['User']['avatar'] = get_user_avatar($user_info['User']);
+        $this->set('share_user', $user_info['User']);
         $this->set('user_level', $user_level);
         $this->set('user_summary' , $user_summary);
         $this->set('userMonthOrderCount',$userMonthOrderCount);
@@ -988,7 +992,7 @@ class WesharesController extends AppController
             $nicknames = $this->WeshareBuy->get_users_nickname(array($sharer_id, $user_id));
             $title = $nicknames[$user_id] . '，你好，您已经关注' . $nicknames[$sharer_id];
             $this->UserSubReason->save(array('type' => $sub_type, 'url' => $url, 'user_id' => $user_id, 'title' => $title, 'data_id' => $data_id));
-            echo json_encode(array('success' => false, 'reason' => 'not_sub'));
+            echo json_encode(array('success' => false, 'reason' => 'not_sub', 'url' => WX_SERVICE_ID_GOTO));
             return;
         }
         $this->WeshareBuy->subscribe_sharer($sharer_id, $user_id);
