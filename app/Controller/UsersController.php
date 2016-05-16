@@ -958,10 +958,13 @@ class UsersController extends AppController
                     if ($new_serviceAccount_binded_uid) {
                         $this->after_create_user($new_serviceAccount_binded_uid);
                     }
-
+                    if($oauth['Oauthbinds']){
+                        $oauth_result = $oauth['Oauthbinds'];
+                    }else{
+                        $oauth_result = $oauth[0];
+                    }
                     //TODO: fix risk
-                    $this->log('login redirect '.json_encode($oauth), LOG_DEBUG);
-                    $redirectUrl = '/users/login?source=' . $oauth['Oauthbinds']['source'] . '&openid=' . $oauth['Oauthbinds']['oauth_openid'];
+                    $redirectUrl = '/users/login?source=' . $oauth_result['source'] . '&openid=' . $oauth_result['oauth_openid'];
                     $this->log('wx oauth after redirect login url ' . $redirectUrl, LOG_INFO);
                     if (!empty($refer_by_state)) {
                         $this->redirect($redirectUrl . '&referer=' . urlencode($refer_by_state));
