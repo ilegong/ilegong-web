@@ -694,7 +694,7 @@ class WesharesController extends AppController
     {
         $share_list = [];
         $uid = $this->currentUser['id'];
-        $uid = 810684;
+        //$uid = 810684;
         $limit = 5;
         $page  = intval($page) ? intval($page) : 1;
         $type = intval($type);
