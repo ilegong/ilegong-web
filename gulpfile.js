@@ -149,7 +149,7 @@ var all_css = [
   }, {
     name: 'get-user-info.min.css',
     sources: [
-      'webroot/src/scss/get-user-info.css',
+      'webroot/src/scss/get-user-info.scss',
     ],
     dist: 'webroot/static/weshares/css/'
   }, {
