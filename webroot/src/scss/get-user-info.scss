@@ -1,21 +1,6 @@
 @charset "utf-8";
 /* CSS Document */
-
-* { padding: 0; margin: 0; font-family: Helvetica, STHeiti STXihei, Microsoft JhengHei, Microsoft YaHei, Arial;}
-body { min-width: 320px; font-size: 13px;}
-ul li { list-style: none; }
-.fl { float: left;}
-.fr { float: right;}
-.clearfix { zoom: 1;}
-.clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
-
-/*back 采用现有公用的*/
-.refer-back-bg{ background-color: #f9f9f9; border-bottom: 1px #dddddd solid; color: #333333; font-size: 1.3em; line-height: 44px; text-align: center; position: fixed; top: 0; left: 0; width: 100%;}
-.refer-back-bg a{ position: absolute; left: 15px; text-decoration: none; color: #333333; width: 4em; height: 44px;}
-.refer-back-bg a img,.refer-back-bg a label{ float: left;}
-.refer-back-bg a label{ padding-left: 5px; font-size: 0.8em;}
-.refer-back-bg a img{ width: 8px;  margin-top: 14px;}
-
+.get-user-info{
 /*mine-massage*/
 .mine-bg{ background-color: #FF6485; padding: 20px 15px 15px; text-align: center; position: relative;}
 .mine-bg img{ width: 80px; height: 80px; border-radius: 80px;}
@@ -45,13 +30,8 @@ ul li { list-style: none; }
 .mine-chanpinjie-banner{ display: block; margin-top: 10px;}
 .mine-chanpinjie-banner img{ display: block; width: 100%;}
 
-
-
-/*首页已存在这部分css*/
-.share-good,.recommend-sharer{ margin-bottom: 10px; background-color: #ffffff;}
-.share-good a{ display: block; text-decoration: none;}
 /*product picture*/
-.product-image{ width:100%; display: block;max-height: 280px;max-width: 100%;}
+.product-image{display: inline-block;max-height: 280px;max-width: 100%;}
 /*product price*/
 .product-price-bg{ z-index: 2; background-color: #333333; padding: 5px; color: #FFFFFF; display: block; position: absolute; bottom: 10px; left: 0;}
 .product-price-bg label{ font-size: 0.9em;}
@@ -65,9 +45,6 @@ ul li { list-style: none; }
 .share-data img{ width: 28px; height: 28px; display: block; float: left; margin-right: 3px;}
 .share-data label{ float: left;}
 .share-data dd.browse{ width: 60px; text-align: right; position: absolute; right: 12px; top: 10px;}
-
-
-
 
 /*order and share massage*/
 .mine-tab{ margin-top: 10px; display: block; text-decoration: none;}
@@ -103,5 +80,5 @@ ul li { list-style: none; }
 .mine_order ul li{ float: right; margin-left: 9px;}
 .mine_order ul li a{ display: block; text-decoration: none; border: 1px #BBBBBB solid; border-radius: 2px; line-height: 30px; padding: 0 10px;}
 .mine_order s{ text-decoration: none; font-style: normal; padding: 12px; text-align: right; background-color: #FFFFFF; display: block; border-bottom: 1px #EEEEEE solid; color: #666666;}
-
+}
 

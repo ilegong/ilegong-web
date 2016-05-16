@@ -1,4 +1,4 @@
-<div ng-controller="GetUserInfoCtr as vm">
+<div class="get-user-info" ng-controller="GetUserInfoCtr as vm">
     <div class="mine-bg">
         <div class="change-password">
             <a class="attention" href="javascript:;">修改密码</a>
@@ -6,7 +6,7 @@
         <div class="attention-btn">
             <a class="attention" href="javascript:;">修改简介</a>
         </div>
-        <img lazy-src="{{$STATIC_HOST}}/{{$share_user['avatar']}}" fallback-src="http://static.tongshijia.com/avatar/s/default.jpg" ng-click="vm.changeAvatar();"/>
+        <img lazy-src="{{$share_user['avatar']}}" fallback-src="http://static.tongshijia.com/avatar/s/default.jpg" ng-click="vm.changeAvatar();"/>
         <h1>{{$share_user['nickname']}}</h1>
         <label class="level">{{$user_level['level_name']}}</label>
         <ul class="clearfix">
@@ -17,7 +17,7 @@
             <li onclick="window.location.href='/weshares/sub_list/{{$uid}}'"><strong>{{$user_summary['focus_count']}}</strong><br/>关注</li>
         </ul>
     </div>
-    <a href="/share_opt/index.html" class="mine-chanpinjie-banner"><img src="{{$STATIC_HOST}}/static/weshares/images/mine-banner.gif" /></a>
+    <a href="/share_product_pool/share_products_index.html" class="mine-chanpinjie-banner"><img src="{{$STATIC_HOST}}/static/weshares/images/mine-banner.gif" /></a>
     <a class="mine-tab" href="/weshares/my_order_list">
         <dl class="clearfix mine-tab-bg">
             <dd class="fl mine-order-icon"><img src="{{$STATIC_HOST}}/static/weshares/images/mine-order-icon.gif" /></dd>
