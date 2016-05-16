@@ -964,6 +964,7 @@ class UsersController extends AppController
                         $oauth_result = $oauth[0];
                     }
                     //TODO: fix risk
+                    $this->log('login ouath result ' . json_encode($oauth_result), true);
                     $redirectUrl = '/users/login?source=' . $oauth_result['source'] . '&openid=' . $oauth_result['oauth_openid'];
                     $this->log('wx oauth after redirect login url ' . $redirectUrl, LOG_INFO);
                     if (!empty($refer_by_state)) {
