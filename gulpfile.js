@@ -80,6 +80,12 @@ var all_js = [
     ],
     dist: 'webroot/static/weshares/js/'
   }, {
+    name: 'get-user-info.min.js',
+    sources: [
+      'webroot/src/scripts/get-user-info-controller.js'
+    ],
+    dist: 'webroot/static/weshares/js/'
+  }, {
     name: 'tutorial.min.js',
     sources: [
       'webroot/src/scripts/tutorial-binding-card-controller.js',
@@ -138,6 +144,12 @@ var all_css = [
     name: 'user-info.min.css',
     sources: [
       'webroot/src/scss/user-info.css',
+    ],
+    dist: 'webroot/static/weshares/css/'
+  }, {
+    name: 'get-user-info.min.css',
+    sources: [
+      'webroot/src/scss/get-user-info.css',
     ],
     dist: 'webroot/static/weshares/css/'
   }, {
