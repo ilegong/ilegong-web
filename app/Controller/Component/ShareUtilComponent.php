@@ -2061,7 +2061,7 @@ class ShareUtilComponent extends Component
         $key = INDEX_PRODUCTS_BY_TAG_CACHE_KEY . '_' . $tag_id;
         $cache_data = Cache::read($key);
         if (!empty($cache_data)) {
-            return json_decode($cache_data);
+            return json_decode($cache_data, true);
         }
 
         $indexProductM = ClassRegistry::init('IndexProduct');

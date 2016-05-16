@@ -23,6 +23,10 @@ class IndexProductsController extends Controller
         $this->layout = null;
         $index_products = $this->ShareUtil->index_products($tag);
 
+        foreach ($index_products as &$index_product) {
+            $index_product['IndexProduct']['summary'] = $this->ShareUtil->get_index_product_summary($index_product['IndexProduct']['share_id']);
+        }
+
         echo json_encode($index_products);
         exit();
     }

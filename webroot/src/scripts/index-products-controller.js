@@ -15,8 +15,6 @@
     vm.clickPage = clickPage;
     vm.checkHasUnRead = checkHasUnRead;
     $rootScope.showUnReadMark = false;
-
-    vm.getIndexProductSummary = getIndexProductSummary;
     vm.getSummary = getSummary;
 
     activate();
@@ -43,22 +41,10 @@
       vm.indexProducts = [];
       $http.get('/index_products/index_products/' + tag).success(function (data) {
         vm.indexProducts = _.map(data, function (p) {
-          return {'id': p.IndexProduct.id, 'shareId': p.IndexProduct.share_id};
-        });
-        $log.log(vm.indexProducts);
-        _.each(vm.indexProducts, function (indexProduct) {
-          vm.getIndexProductSummary(indexProduct);
+          return {'id': p.IndexProduct.id, 'shareId': p.IndexProduct.share_id, 'summary': p.IndexProduct.summary};
         });
       }).error(function (data, e) {
         $log.log('Failed to get index products: ' + e);
-      });
-    }
-
-    function getIndexProductSummary(indexProduct) {
-      $http.get('/index_products/summary/' + indexProduct.shareId).success(function (data) {
-        indexProduct.summary = data;
-      }).error(function (data, e) {
-        $log.log('Failed to get summary share ' + indexProduct.shareId + ': ' + e);
       });
     }
 
