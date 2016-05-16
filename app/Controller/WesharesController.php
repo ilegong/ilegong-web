@@ -857,6 +857,9 @@ class WesharesController extends AppController
         $user_summary = $this->WeshareBuy->get_user_share_summary($uid);
         $share_summary = $this->WeshareBuy->get_sharer_summary($uid);
         $user_level = $this->ShareUtil->get_user_level($uid);
+        $user_info = $this->get_user_info($uid);
+        $user_info['User']['avatar'] = get_user_avatar($user_info['User']);
+        $this->set('share_user', $user_info['User']);
         $this->set('user_level', $user_level);
         $this->set('user_summary' , $user_summary);
         $this->set('userMonthOrderCount',$userMonthOrderCount);
