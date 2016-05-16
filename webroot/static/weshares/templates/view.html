@@ -8,13 +8,13 @@
     </div>
 
     <!--分享管理层-->
-    <div class="share-control" ng-show="vm.showShareControl">
+    <div class="share-control" ng-if="vm.showShareControl">
         <a ng-if="vm.isCreator()||vm.isManage" ng-click="vm.toShareOrderList()" class="control-order">订单管理</a>
         <a ng-if="vm.isCreator()||vm.canEditShare" ng-click="vm.toUpdate()" class="control-order">修改分享</a>
         <a ng-click="vm.showShareControl=false;vm.showLayer=false;" class="control-detele">取消</a>
     </div>
 
-    <div ng-show="vm.showNotifyShareOfferDialog" class="red-packet-dialog">
+    <div ng-if="vm.showNotifyShareOfferDialog" class="red-packet-dialog">
         <div class="content">
             <div class="nav">
                 <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/close.png" class="close-btn" ng-click="vm.showNotifyShareOfferDialog=false;vm.showLayer=false;">
@@ -30,7 +30,7 @@
     </div>
 
     <!--提示分享层-->
-    <div class="share-dialog" ng-show="vm.showShareDialog">
+    <div class="share-dialog" ng-if="vm.showShareDialog">
         <div style="width: 90%; margin: 0 auto; font-size: 1.3em;">点击右上角“…”，分享给好友或朋友圈。</div>
     </div>
     <!--支付成功没有红包已经关注-->
@@ -52,7 +52,7 @@
     </div>
 
     <!--评价层-->
-    <div class="commenting-dialog" ng-show="vm.showCommentingDialog">
+    <div class="commenting-dialog" ng-if="vm.showCommentingDialog">
         <div class="clearfix title">
             <label>爱心评价</label>
             <a ng-click="vm.closeCommentDialog();" class="closebtn fr"></a>
@@ -69,10 +69,10 @@
     </div>
 
     <!--关注取消层-->
-    <div class="layer-toast" ng-show="vm.showUnSubscribeLayer">关注已取消，不再收到TA的消息</div>
+    <div class="layer-toast" ng-if="vm.showUnSubscribeLayer">关注已取消，不再收到TA的消息</div>
 
     <!--推荐弹出层-->
-    <div class="recommend-dialog" ng-show="vm.showRecommendDialog">
+    <div class="recommend-dialog" ng-if="vm.showRecommendDialog">
         <div class="clearfix title">
             <label>推荐给我的粉丝</label>
             <a ng-click="vm.closeRecommendDialog();" class="closebtn fr"></a>
@@ -89,7 +89,7 @@
     </div>
 
     <!--通知粉丝层-->
-    <div class="notify-dialog" ng-show="vm.showNotifyView">
+    <div class="notify-dialog" ng-if="vm.showNotifyView">
         <div class="clearfix title" style="padding: 0 10px 10px;">
             <label style="font-size: 18px;">参团提醒</label>
             <a ng-click="vm.showLayer=false;vm.showNotifyView=false;" class="closebtn fr"></a>
