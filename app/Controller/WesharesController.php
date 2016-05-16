@@ -832,6 +832,12 @@ class WesharesController extends AppController
         $page = intval($page) ? intval($page) : 1;
         $limit = 5;
         $result = $this->Weshares->get_u_create_share($uid, $limit, $page);
+
+        foreach ($result as $k => $res)
+        {
+            $result[$k]['description'] = mb_strlen($res['description'] , 'utf8') > 100 ? mb_substr($res['description'] , 0 , 99 ,'utf8')."..." : $res['description'];
+        }
+
         echo json_encode($result);
         exit();
     }
