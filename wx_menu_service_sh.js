@@ -21,12 +21,12 @@
           {
             "type":"view",
             "name":"团长加入指南",
-            "url":"https://mp.weixin.qq.com/s?__biz=MzIwNzMyNjk5NQ==&mid=100000004&idx=1&sn=9c517b41f173a37bcd0b62efa940bc4b&scene=1&srcid=0514zxancOZd9ZJHv5e7sNuU&key=b28b03434249256b807b8089d9509dff6b28edfea010d60e0b1829abfbaea6e25062c1ded57347db807d1e5645e50933&ascene=0&uin=MjE0MzExNjMyMA%3D%3D&devicetype=iMac+MacBookPro12%2C1+OSX+OSX+10.11.1+build(15B42)&version=11020201&pass_ticket=R%2FGB3kdYANXUu5qwxYCsRamNIsm%2FoyLH%2FsL30zCSFzQU8oP661c1gBzInJi12gHz"
+            "url":"https://mp.weixin.qq.com/s?__biz=MzIwNzMyNjk5NQ==&mid=100000004&idx=1&sn=9c517b41f173a37bcd0b62efa940bc4b"
           },
           {
             "type":"view",
             "name":"商家入驻指南",
-            "url":"http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=400854243&idx=1&sn=cce48490ef7ac0ee9f697eba6216aecf&scene=1"
+            "url":"https://mp.weixin.qq.com/s?__biz=MzIwNzMyNjk5NQ==&mid=100000017&idx=1&sn=87f2be4af5a5399cf1cbe68c0734b141"
           }
         ]
     },
