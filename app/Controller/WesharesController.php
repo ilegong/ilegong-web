@@ -992,7 +992,7 @@ class WesharesController extends AppController
             $nicknames = $this->WeshareBuy->get_users_nickname(array($sharer_id, $user_id));
             $title = $nicknames[$user_id] . '，你好，您已经关注' . $nicknames[$sharer_id];
             $this->UserSubReason->save(array('type' => $sub_type, 'url' => $url, 'user_id' => $user_id, 'title' => $title, 'data_id' => $data_id));
-            echo json_encode(array('success' => false, 'reason' => 'not_sub'));
+            echo json_encode(array('success' => false, 'reason' => 'not_sub', 'url' => WX_SERVICE_ID_GOTO));
             return;
         }
         $this->WeshareBuy->subscribe_sharer($sharer_id, $user_id);
