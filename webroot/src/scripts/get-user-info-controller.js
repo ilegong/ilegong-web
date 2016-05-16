@@ -121,15 +121,17 @@
 
         function myShareNextPage()
         {
-            if(vm.loading || vm.mine.tmpSharesOver)
+            if(vm.loading)
             {
                 return false;
             }
             vm.loading = true;
             if(vm.focus == 'left')
             {
-                vm.mine.sharesEndPage = 1;
-                vm.mine.sharesBalancePage = 1;
+                if(vm.mine.sharesIngOver){
+                    vm.mine.tmpShares = vm.mine.sharesIng;
+                    return false;
+                }
                 var url = "/weshares/my_shares_list_api/1/" + vm.mine.sharesIngPage;
                 $http.get(url).success(function (data) {
                     if(data.length == 0)
@@ -147,8 +149,10 @@
                     vm.loading = false;
                 });
             }else if(vm.focus == 'middle'){
-                vm.mine.sharesIngPage = 1;
-                vm.mine.sharesBalancePage = 1;
+                if(vm.mine.sharesEndOver){
+                    vm.mine.tmpShares = vm.mine.sharesEnd;
+                    return false;
+                }
                 var url = "/weshares/my_shares_list_api/2/" + vm.mine.sharesEndPage;
                 $http.get(url).success(function (data) {
                     if(data.length == 0)
@@ -167,8 +171,10 @@
                 });
             }else if(vm.focus == 'right')
             {
-                vm.mine.sharesIngPage = 1;
-                vm.mine.sharesEndPage = 1;
+                if(vm.mine.sharesBalanceOver){
+                    vm.mine.tmpShares = vm.mine.sharesBalance;
+                    return false;
+                }
                 var url = "/weshares/my_shares_list_api/3/" + vm.mine.sharesBalancePage;
                 $http.get(url).success(function (data) {
                     if(data.length == 0)
@@ -267,7 +273,7 @@
                 } else {
                     if (data['reason'] == 'not_sub') {
                         alert('请先关注我们的服务号');
-                        window.location.href = "https://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=403992659&idx=1&sn=714a1a5f0bb4940f895e60f2f3995544";
+                        window.location.href = data['url'];
                     }
                 }
                 vm.loading = false;
