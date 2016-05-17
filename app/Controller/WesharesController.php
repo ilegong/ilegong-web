@@ -637,57 +637,16 @@ class WesharesController extends AppController
      */
     public function user_share_info($uid = null)
     {
-        $this->layout = 'weshare_bootstrap';
         $current_uid = $this->currentUser['id'];
         if (empty($uid)) {
             $uid = $current_uid;
         }
-        $user_share_data = $this->WeshareBuy->prepare_user_share_info($uid);
-        $creators = $user_share_data['creators'];
-        $joinShareOrderStatus = $user_share_data['joinShareOrderStatus'];
-        $myCreateShares = $user_share_data['myCreateShares'];
-        $myJoinShares = $user_share_data['myJoinShares'];
-        $shareOperateMap = $user_share_data['authority_share_map'];
-        //$joinShareComments = $user_share_data['joinShareComments'];
-        $shareUser = $creators[$uid];
-        $this->set_share_user_info_weixin_params($uid, $current_uid, $shareUser);
-        $userShareSummery = $this->getUserShareSummery($uid);
-        if ($uid != $current_uid) {
-            $sub_status = $this->WeshareBuy->check_user_subscribe($uid, $current_uid);
-            $this->set('sub_status', $sub_status);
+        $is_me = $uid == $current_uid;
+        if($is_me){
+            $this->redirect('/weshares/get_self_info.html');
+        }else{
+            $this->redirect('/weshares/get_other_info/'.$uid.'.html');
         }
-        $user_is_proxy = $this->ShareUtil->is_proxy_user($uid);
-        if ($user_is_proxy) {
-            $this->set('is_proxy', true);
-        }
-        //get user level
-        $user_level = $this->ShareUtil->get_user_level($uid);
-        $this->set('user_level', $user_level);
-        if ($uid == $current_uid) {
-            $rebate_money = $this->ShareUtil->get_rebate_money($current_uid);
-            $this->set('rebate_money', $rebate_money);
-            $this->set('show_rebate_money', $rebate_money > 0);
-        }
-        $u_comment_count = $this->WeshareBuy->get_user_comment_count($uid);
-        $this->set('u_comment_count', $u_comment_count);
-        $this->set($userShareSummery);
-        $this->set('is_me', $uid == $current_uid);
-        $this->set('current_uid', $current_uid);
-        $this->set('visitor', $current_uid);
-        $this->set('share_user', $shareUser);
-        $this->set('creators', $creators);
-        $this->set('my_create_shares', $myCreateShares);
-        $this->set('my_join_shares', $myJoinShares);
-        $this->set('authority_shares', $user_share_data['authority_shares']);
-        $this->set('join_share_order_status', $joinShareOrderStatus);
-        $this->set('authority_share_map', $shareOperateMap);
-        $pintuan_data = $this->PintuanHelper->get_user_pintuan_data($uid);
-        $this->set('pintuan_data', $pintuan_data);
-        if ($uid == $current_uid && !empty($user_level)) {
-            $userMonthOrderCount = $this->WeshareBuy->get_month_total_count($uid);
-            $this->set('order_count', $userMonthOrderCount);
-        }
-        //$this->set('joinShareComments', $joinShareComments);
     }
 
     public function user_setting()
