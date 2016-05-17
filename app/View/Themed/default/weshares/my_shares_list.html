@@ -11,8 +11,8 @@
         <li class="middle-tab" ng-class="{'current':vm.focus == 'middle'}" ng-click="vm.myShareNextPage('middle');">已结束</li>
         <li class="right-tab" ng-class="{'current':vm.focus == 'right'}" ng-click="vm.myShareNextPage('right');">已结算</li>
     </ul>
-    <div class="mine_order" ng-repeat="share in vm.mine.tmpShares" nfinite-scroll='vm.myShareNextPage();'
-         infinite-scroll-disabled='vm.mine.tmpSharesOver'
+    <div class="mine_order" ng-repeat="share in vm.mine.tmpShares" infinite-scroll='vm.myShareNextPage();'
+         infinite-scroll-disabled='vm.mine.tmpSharesOver || vm.loading'
          infinite-scroll-distance='0'>
         <a class="clearfix share-goodlist" href="/weshares/view/&#123;&#123;share.id&#125;&#125;">
             <div class="fl"><img lazy-src="&#123;&#123;share.default_image&#125;&#125;" fallback-src="{{$STATIC_HOST}}/static/img/default_product_banner.png" /></div>
@@ -42,10 +42,10 @@
 $this->assign('title','朋友说-'.$title);
 $this->set('show_footer', false);
 $this->Html->css(array(
-$STATIC_HOST.'/static/weshares/css/get-user-info.min.css?v2.4.8'
+$STATIC_HOST.'/static/weshares/css/get-user-info.min.css?v2.4.9'
 ), null, array('inline' => false));
 
 $this->Html->script(array(
-$STATIC_HOST.'/static/weshares/js/get-user-info.min.js?v2.4.8'
+$STATIC_HOST.'/static/weshares/js/get-user-info.min.js?v2.4.9'
 ), array('block' => 'scripts'))
 ?>

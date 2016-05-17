@@ -71,7 +71,6 @@
         return true;
       }
       var authTypes = share['auth_types'];
-      var authTypes = share['auth_types'];
       if (_.indexOf(authTypes, 'ShareInfo') >= 0 || _.indexOf(authTypes, 'ShareManage') >= 0) {
         return true;
       }
