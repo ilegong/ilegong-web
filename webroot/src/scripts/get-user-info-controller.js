@@ -199,10 +199,11 @@
       return url;
     }
 
-    function loadShareData() {
-      if (vm.focus != vm.tmpFocus) {
-        vm.tmpFocus = vm.focus;
+    function loadShareData(tab) {
+      if (tab) {
+        vm.focus = tab;
         vm.mine.tmpSharesOver = false;
+        vm.loading = true;
         vm.handleShareDataMap[vm.focus]['resetData']();
       }
       var checkFunc = vm.handleShareDataMap[vm.focus]['checkFunc'];
@@ -220,12 +221,12 @@
       }
     }
 
-    function myShareNextPage() {
+    function myShareNextPage(tab) {
       if (vm.loading) {
         return false;
       }
       vm.loading = true;
-      loadShareData();
+      loadShareData(tab);
     }
 
     function myOrderNextPage() {
