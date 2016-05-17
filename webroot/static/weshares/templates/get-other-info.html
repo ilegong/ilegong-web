@@ -1,7 +1,7 @@
 <div class="other-share">
     <ul class="clearfix">
-        <li ng-class="{'other-share_focus':vm.focus_share}" ng-click="vm.focus = 'share';">TA分享的</li>
-        <li ng-class="{'other-share_focus':vm.focus_attend}" ng-click="vm.focus = 'attend';">TA报名的</li>
+        <li ng-class="{'other-share_focus':vm.focus == 'share'}" ng-click="vm.focus = 'share';">TA分享的</li>
+        <li ng-class="{'other-share_focus':vm.focus == 'attend'}" ng-click="vm.focus = 'attend';">TA报名的</li>
     </ul>
     <div class="share-good" style="display: none" ng-class="{'show-b':vm.focus == 'share'}" infinite-scroll='vm.shareNextPage()'
          infinite-scroll-disabled='vm.sharesOver||vm.loading'
