@@ -109,13 +109,8 @@
       var weshareId = angular.element(weshareEditView).attr('data-id');
       var sharerShipType = angular.element(weshareEditView).attr('data-ship-type');
       var userId = angular.element(weshareEditView).attr('data-user-id');
-      var isNewSharer = angular.element(weshareEditView).attr('data-is-new-sharer');
       vm.currentUserId = userId;
       vm.sharerShipType = sharerShipType;
-      if(isNewSharer){
-        vm.showCreateShareTipInfo = false;
-        vm.showLayer = true;
-      }
       if (window.location.host == 'sh.tongshijia.com') {
         vm.hideOfflineStore = true;
       }
