@@ -1,6 +1,6 @@
 <div class="get-user-info" ng-controller="GetUserInfoCtr as vm" ng-init="vm.myOrderNextPage();">
     <div class="refer-back-bg">
-        我的分享
+        我的订单
         <a href="/weshares/get_self_info">
             <img src="&#123;&#123;vm.staticFilePath&#125;&#125;/static/img/back.png"/>
             <label>返回</label>
@@ -24,8 +24,7 @@
     </div>
 </div>
 <?php
-$this->assign('title','我的订单');
-$this->set('show_footer', 'mine');
+$this->assign('title','朋友说-我的订单');
 
 $this->Html->css(array(
 $STATIC_HOST.'/static/weshares/css/get-user-info.min.css?v2.4.8'

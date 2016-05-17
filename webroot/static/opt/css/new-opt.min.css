@@ -323,7 +323,7 @@ footer {
   width: 4.9em;
   height: 2.15em;
   line-height: 2.15em;
-  border: 1px solid #0fc449; }
+  border: 1px solid #ff6485; }
 
 .jibie {
   text-align: center;
@@ -396,12 +396,12 @@ footer {
 
 .bk_green {
   background-color: #fff;
-  color: #0fc449;
+  color: #ff6485;
   border-radius: 5px 0 0 5px; }
 
 .bk_white {
   background-color: #fff;
-  color: #0fc449;
+  color: #ff6485;
   border-radius: 0 5px 5px 0; }
 
 .sousuo {
@@ -428,7 +428,7 @@ footer {
   height: 3.333em; }
 
 .activity {
-  background-color: #0fc449;
+  background-color: #ff6485;
   color: #fff; }
 
 .center {
@@ -554,7 +554,7 @@ footer {
 
 .fenxiang a {
   text-decoration: none;
-  color: #0fc449;
+  color: #ff6485;
   line-height: 3.167em; }
 
 .topheader .controls-patch {
