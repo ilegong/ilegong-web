@@ -914,7 +914,6 @@ class WesharesController extends AppController
         $this->set('share_summary',$share_summary);
         $rebate_money = $this->ShareUtil->get_rebate_money($uid);
         $this->set('rebate_money',$rebate_money);
-        //todo auth count
         $this->set('uid' , $uid);
     }
 
