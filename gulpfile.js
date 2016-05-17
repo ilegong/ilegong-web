@@ -59,14 +59,7 @@ var all_js = [
       'webroot/static/weshares/js/share-order-list.js',
     ],
     dist: 'webroot/static/weshares/js/'
-  }, {
-    name: 'user-share-info.min.js',
-    sources: [
-      'webroot/static/opt/js/lazyload.min.js',
-      'webroot/src/scripts/user-share-info.js'
-    ],
-    dist: 'webroot/static/weshares/js/'
-  }, {
+  },{
     name: 'faq.min.js',
     sources: [
       'webroot/static/share_faq/custom/word-limit.js',
