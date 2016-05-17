@@ -84,13 +84,6 @@ class AppController extends Controller {
             }
         }
 
-        if ($this->is_weixin() && !empty($this->currentUser['id'])) {
-            $this->set('jWeixinOn', true);
-            $this->loadModel('WxOauth');
-            $signPackage = $this->WxOauth->getSignPackage();
-            $this->set('signPackage', $signPackage);
-        }
-
         if ($_GET['share_type'] && $_GET['trstr']){
             $this->__log_wx_str();
         }
@@ -132,20 +125,28 @@ class AppController extends Controller {
     }
 
     public function beforeRender() {
-        $this->set('basedir', $this->request->base);
-        $this->set('site_cate_id', $GLOBALS['site_cate_id']);
-        $this->set('CurrentUser', $this->currentUser);
-        $this->set('is_admin', $this->is_admin($this->currentUser['id']));
-        $this->set('pageTitle', $this->pageTitle);
-        // view时，有current_data_id。
-        $this->set('current_url', Router::url() . '?' . http_build_query($this->request->query));
-        $this->set('current_controller', $this->request->params['controller']);
-        $this->set('current_action', $this->action);
-        $this->set('current_pass', $this->request->params['pass']);
-        $this->set('current_named', $this->request->params['named']);
-        $this->set('in_weixin', $this->is_weixin());
-        $this->set('wx_follow_url', WX_SERVICE_ID_GOTO);
-        $this->set('isMobile', $this->RequestHandler->isMobile());
+        if ($this->autoRender) {
+            if ($this->is_weixin() && !empty($this->currentUser['id'])) {
+                $this->set('jWeixinOn', true);
+                $this->loadModel('WxOauth');
+                $signPackage = $this->WxOauth->getSignPackage();
+                $this->set('signPackage', $signPackage);
+            }
+            $this->set('basedir', $this->request->base);
+            $this->set('site_cate_id', $GLOBALS['site_cate_id']);
+            $this->set('CurrentUser', $this->currentUser);
+            $this->set('is_admin', $this->is_admin($this->currentUser['id']));
+            $this->set('pageTitle', $this->pageTitle);
+            // view时，有current_data_id。
+            $this->set('current_url', Router::url() . '?' . http_build_query($this->request->query));
+            $this->set('current_controller', $this->request->params['controller']);
+            $this->set('current_action', $this->action);
+            $this->set('current_pass', $this->request->params['pass']);
+            $this->set('current_named', $this->request->params['named']);
+            $this->set('in_weixin', $this->is_weixin());
+            $this->set('wx_follow_url', WX_SERVICE_ID_GOTO);
+            $this->set('isMobile', $this->RequestHandler->isMobile());
+        }
     }
 
     protected function is_admin($uid) {
