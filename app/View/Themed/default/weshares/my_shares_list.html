@@ -12,7 +12,7 @@
         <li class="right-tab" ng-class="{'current':vm.focus == 'right'}" ng-click="vm.myShareNextPage('right');">已结算</li>
     </ul>
     <div class="mine_order" ng-repeat="share in vm.mine.tmpShares" nfinite-scroll='vm.myShareNextPage();'
-         infinite-scroll-disabled='vm.mine.tmpSharesOver||vm.loading'
+         infinite-scroll-disabled='vm.mine.tmpSharesOver'
          infinite-scroll-distance='0'>
         <a class="clearfix share-goodlist" href="/weshares/view/&#123;&#123;share.id&#125;&#125;">
             <div class="fl"><img lazy-src="&#123;&#123;share.default_image&#125;&#125;" fallback-src="{{$STATIC_HOST}}/static/img/default_product_banner.png" /></div>
