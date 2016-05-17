@@ -99,7 +99,7 @@
           if (data['success']) {
             vm.first_pwd = '';
             vm.second_pwd = '';
-            vm.user_info_show = false;
+            vm.user_pwd_show = false;
           } else {
             if (data['reason'] == 'not_login') {
               alert('当前用户不存在');
