@@ -1,6 +1,6 @@
-<div class="get-user-info" ng-controller="GetUserInfoCtr as vm" ng-init="vm.focus='left';vm.loadShareType='{{$type}}';vm.myShareNextPage();">
+<div class="get-user-info" ng-controller="GetUserInfoCtr as vm" ng-init="vm.focus='left';vm.tmpFocus='left';vm.loadShareType='{{$type}}';vm.myShareNextPage();">
     <div class="refer-back-bg">
-        我的分享
+        {{$title}}
         <a href="/weshares/get_self_info">
             <img src="{{$STATIC_HOST}}/static/img/back.png"/>
             <label>返回</label>
@@ -31,6 +31,10 @@
                 <a ng-click="vm.stopShare(share.id)">重新开团</a>
             </li>
         </ul>
+    </div>
+    <div align="center"
+         style="margin:0px 6px;background-color:#FFFFFF;height:40px;line-height:40px;color: #f99d3a;" ng-show="vm.loading">
+        <div>加载中...</div>
     </div>
 </div>
 <div style="margin-bottom: 60px;"></div>

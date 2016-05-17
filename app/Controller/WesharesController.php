@@ -803,6 +803,8 @@ class WesharesController extends AppController
     public function my_shares_list($type = 0)
     {
         $this->set('type', $type);
+        $title = $type == 0 ? '我的分享' : '授权我的';
+        $this->set('title', $title);
     }
 
     public function my_order_list()

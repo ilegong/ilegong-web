@@ -199,15 +199,24 @@
       return url;
     }
 
-    function loadShareData(checkFunc, callBack) {
+    function loadShareData() {
+      if (vm.focus != vm.tmpFocus) {
+        vm.tmpFocus = vm.focus;
+        vm.mine.tmpSharesOver = false;
+        vm.handleShareDataMap[vm.focus]['resetData']();
+      }
+      var checkFunc = vm.handleShareDataMap[vm.focus]['checkFunc'];
+      var callBack = vm.handleShareDataMap[vm.focus]['callBack'];
       if (checkFunc()) {
         var url = getLoadSharesUrl();
         $http.get(url).success(function (data) {
-          callBack(data);
           vm.loading = false;
+          callBack(data);
         }).error(function () {
           vm.loading = false;
         });
+      } else {
+        vm.loading = false;
       }
     }
 
@@ -216,7 +225,7 @@
         return false;
       }
       vm.loading = true;
-      loadShareData(vm.handleShareDataMap[vm.focus]['checkFunc'], vm.handleShareDataMap[vm.focus]['callBack']);
+      loadShareData();
     }
 
     function myOrderNextPage() {
@@ -331,6 +340,9 @@
 
     vm.handleShareDataMap = {
       'left': {
+        'resetData' : function(){
+          vm.mine.tmpShares = vm.mine.sharesIng;
+        },
         'checkFunc': function () {
           if (vm.mine.sharesIngOver) {
             vm.mine.tmpShares = vm.mine.sharesIng;
@@ -346,11 +358,14 @@
             vm.mine.sharesIng = vm.mine.sharesIng.concat(data);
             vm.mine.sharesIngPage += 1;
             vm.mine.tmpSharesOver = false;
-            vm.mine.tmpShares = vm.mine.sharesIng;
           }
+          vm.mine.tmpShares = vm.mine.sharesIng;
         }
       },
       'middle': {
+        'resetData' : function(){
+          vm.mine.tmpShares = vm.mine.sharesEnd;
+        },
         'checkFunc': function () {
           if (vm.mine.sharesEndOver) {
             vm.mine.tmpShares = vm.mine.sharesEnd;
@@ -366,11 +381,14 @@
             vm.mine.sharesEnd = vm.mine.sharesEnd.concat(data);
             vm.mine.sharesEndPage += 1;
             vm.mine.tmpSharesOver = false;
-            vm.mine.tmpShares = vm.mine.sharesEnd;
           }
+          vm.mine.tmpShares = vm.mine.sharesEnd;
         }
       },
       'right': {
+        'resetData' : function(){
+          vm.mine.tmpShares = vm.mine.sharesBalance;
+        },
         'checkFunc': function () {
           if (vm.mine.sharesBalanceOver) {
             vm.mine.tmpShares = vm.mine.sharesBalance;
@@ -386,8 +404,8 @@
             vm.mine.sharesBalance = vm.mine.sharesBalance.concat(data);
             vm.mine.sharesBalancePage += 1;
             vm.mine.tmpSharesOver = false;
-            vm.mine.tmpShares = vm.mine.sharesBalance;
           }
+          vm.mine.tmpShares = vm.mine.sharesBalance;
         }
       }
     };
