@@ -697,29 +697,52 @@ class WesharesController extends AppController
         $this->set('uid' , $this->currentUser['id']);
     }
 
-    public function my_shares_list_api($type,$page = 1)
+    /**
+     * 获取用户授权的列表
+     */
+    public function my_auth_shares_list_api($type, $page=1)
+    {
+        $limit = 5;
+        $uid = $this->currentUser['id'];
+        $shares = [];
+        if ($uid) {
+            list($status, $settlement) = $this->__get_query_share_settlement_status_by_type($type);
+            $auth_shares_result = $this->WeshareBuy->get_my_auth_shares($uid, $page, $limit, $status, $settlement);
+            $share_ids = Hash::extract($auth_shares_result, '{n}.Weshare.id');
+            if (!empty($share_ids)) {
+                $order_count_result = $this->get_order_count_share_map($share_ids);
+                $share_balance_money = $this->get_share_balance_result($share_ids);
+                foreach ($auth_shares_result as $result_item) {
+                    $share_item = $result_item['Weshare'];
+                    $operate_item = $result_item['ShareOperateSetting'];
+                    $share_item_id = $share_item['id'];
+                    if (!isset($shares[$share_item_id])) {
+                        $shares[$share_item_id] = $share_item;
+                        $shares[$share_item_id]['order_count'] = empty($order_count_result[$share_item_id]) ? 0 : $order_count_result[$share_item_id];
+                        $shares[$share_item_id]['balance_money'] = $share_balance_money[$share_item_id];
+                        $shares[$share_item_id]['auth_types'] = [];
+                    }
+                    $shares[$share_item_id]['auth_types'][] = $operate_item['data_type'];
+                }
+            }
+        }
+        echo json_encode(array_values($shares));
+        exit();
+    }
+
+    /**
+     * 获取用户的分享列表
+     */
+    public function my_shares_list_api($type, $page = 1)
     {
         $share_list = [];
         $uid = $this->currentUser['id'];
-        //$uid = 810684;
         $limit = 5;
-        $page  = intval($page) ? intval($page) : 1;
+        $page = intval($page) ? intval($page) : 1;
         $type = intval($type);
-        if($uid && in_array($type,[1,2,3]))
-        {
-            if ($type == 2)
-            {
-                $status = 1;
-                $settlement = 0;
-            }elseif ($type == 3)
-            {
-                $status = 1;
-                $settlement = 1;
-            }else{
-                $status = 0;
-                $settlement = 0;
-            }
-            $shares = $this->WeshareBuy->get_my_shares($uid, $status, $settlement,$page, $limit);
+        if ($uid && in_array($type, [1, 2, 3])) {
+            list($status, $settlement) = $this->__get_query_share_settlement_status_by_type($type);
+            $shares = $this->WeshareBuy->get_my_shares($uid, $status, $settlement, $page, $limit);
             $share_ids = Hash::extract($shares, '{n}.Weshare.id');
             $share_list = [];
             if (!empty($share_ids)) {
@@ -735,6 +758,21 @@ class WesharesController extends AppController
         }
         echo json_encode($share_list);
         exit();
+    }
+
+    private function  __get_query_share_settlement_status_by_type($type)
+    {
+        if ($type == 2) {
+            $status = 1;
+            $settlement = 0;
+        } elseif ($type == 3) {
+            $status = 1;
+            $settlement = 1;
+        } else {
+            $status = 0;
+            $settlement = 0;
+        }
+        return [$status, $settlement];
     }
 
     private function get_order_count_share_map($share_ids){
@@ -762,9 +800,9 @@ class WesharesController extends AppController
         return $result;
     }
 
-    public function my_shares_list()
+    public function my_shares_list($type = 0)
     {
-
+        $this->set('type', $type);
     }
 
     public function my_order_list()
@@ -825,14 +863,13 @@ class WesharesController extends AppController
         $user_info = $this->get_user_info($uid);
         $user_info['User']['avatar'] = get_user_avatar($user_info['User']);
         $sub_status = 0;
-        if($curr_uid)
-        {
+        if ($curr_uid) {
             $sub_status = $this->ShareUtil->check_user_relation($uid, $curr_uid);
         }
-        $this->set('user_summary',$user_summary);
-        $this->set('user_info',$user_info);
-        $this->set('sub_status' , $sub_status);
-        $this->set('uid' , $uid);
+        $this->set('user_summary', $user_summary);
+        $this->set('user_info', $user_info);
+        $this->set('sub_status', !$sub_status);
+        $this->set('uid', $uid);
     }
 
     public function get_other_shares($uid, $page)

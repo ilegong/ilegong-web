@@ -1,4 +1,4 @@
-<div class="get-user-info" ng-controller="GetUserInfoCtr as vm" ng-init="vm.focus='left';vm.myShareNextPage();">
+<div class="get-user-info" ng-controller="GetUserInfoCtr as vm" ng-init="vm.focus='left';vm.loadShareType='{{$type}}';vm.myShareNextPage();">
     <div class="refer-back-bg">
         我的分享
         <a href="/weshares/get_self_info">
@@ -33,6 +33,7 @@
         </ul>
     </div>
 </div>
+<div style="margin-bottom: 60px;"></div>
 
 <?php
 $this->assign('title','我的分享');
