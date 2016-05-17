@@ -265,23 +265,24 @@
     color: #999999;
     line-height: 28px;
     position: relative;
-  }
-  .share-data img {
-    width: 28px;
-    height: 28px;
-    display: block;
-    float: left;
-    margin-right: 3px;
-  }
-  .share-data label {
-    float: left;
-  }
-  .share-data dd.browse {
-    width: 66px;
-    text-align: right;
-    position: absolute;
-    right: 12px;
-    top: 10px;
+    img {
+      width: 28px;
+      height: 28px;
+      display: block;
+      float: left;
+      margin-right: 3px;
+      background-color: #cacccd;
+    }
+    label {
+      float: left;
+    }
+    dd.browse {
+      width: 66px;
+      text-align: right;
+      position: absolute;
+      right: 12px;
+      top: 10px;
+    }
   }
 
   /*无关注*/
