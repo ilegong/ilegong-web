@@ -1,15 +1,15 @@
-<div class="get-user-info" ng-controller="GetUserInfoCtr as vm" ng-init="vm.focus='left';vm.myShareNextPage();">
+<div class="get-user-info" ng-controller="GetUserInfoCtr as vm" ng-init="vm.focus='left';vm.loadShareType='{{$type}}';vm.myShareNextPage();">
     <div class="refer-back-bg">
-        我的分享
+        {{$title}}
         <a href="/weshares/get_self_info">
             <img src="{{$STATIC_HOST}}/static/img/back.png"/>
             <label>返回</label>
         </a>
     </div>
     <ul class="mine-share-tab clearfix">
-        <li class="left-tab" ng-class="{'current':vm.focus == 'left'}" ng-click="vm.focus='left';vm.myShareNextPage();">进行中</li>
-        <li class="middle-tab" ng-class="{'current':vm.focus == 'middle'}" ng-click="vm.focus='middle';vm.myShareNextPage();">已结束</li>
-        <li class="right-tab" ng-class="{'current':vm.focus == 'right'}" ng-click="vm.focus='right';vm.myShareNextPage();">已结算</li>
+        <li class="left-tab" ng-class="{'current':vm.focus == 'left'}" ng-click="vm.myShareNextPage('left');">进行中</li>
+        <li class="middle-tab" ng-class="{'current':vm.focus == 'middle'}" ng-click="vm.myShareNextPage('middle');">已结束</li>
+        <li class="right-tab" ng-class="{'current':vm.focus == 'right'}" ng-click="vm.myShareNextPage('right');">已结算</li>
     </ul>
     <div class="mine_order" ng-repeat="share in vm.mine.tmpShares" nfinite-scroll='vm.myShareNextPage();'
          infinite-scroll-disabled='vm.mine.tmpSharesOver||vm.loading'
@@ -32,7 +32,12 @@
             </li>
         </ul>
     </div>
+    <div align="center"
+         style="margin:0px 6px;background-color:#FFFFFF;height:40px;line-height:40px;color: #f99d3a;" ng-show="vm.loading">
+        <div>加载中...</div>
+    </div>
 </div>
+<div style="margin-bottom: 60px;"></div>
 
 <?php
 $this->assign('title','我的分享');
