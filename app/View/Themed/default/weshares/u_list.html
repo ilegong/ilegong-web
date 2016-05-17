@@ -4,7 +4,7 @@
         <li class="back fl" onclick="window.location.href='/weshares/user_share_info/{{$uid}}'"><img class="back-icon"
                                               src="{{$STATIC_HOST}}/static/weshares/images/back.png"></li>
         <li class="text-back fl" onclick="window.location.href='/weshares/user_share_info/{{$uid}}'">返回</li>
-        <li class="title">我的粉丝</li>
+        <li class="title">{{$title}}</li>
         <li class="home fr" onclick="window.location.href='/'"><img class="home-icon" src="{{$STATIC_HOST}}/static/weshares/images/home.png"></li>
     </ul>
     <div class="user-list-placeholder"></div>
@@ -17,7 +17,7 @@
 </div>
 
 <?php
-    $this->assign('title','我的粉丝');
+    $this->assign('title','朋友说-'.$title);
     $this->Html->css(array(
 $STATIC_HOST.'/static/weshares/css/user-info.min.css?v2.4.9'
 ), null, array('inline' => false))

@@ -24,10 +24,10 @@
         </a>
         <s>订单数<span>&#123;&#123;share.order_count&#125;&#125;，</span>交易金额<span>￥&#123;&#123;share.balance_money&#125;&#125;</span></s>
         <ul class="clearfix">
-            <li><a ng-click="vm.delShare(share.id)">删除</a></li>
-            <li><a href="/weshares/update/&#123;&#123;share.id&#125;&#125;">修改</a></li>
-            <li><a href="/weshares/share_order_list/&#123;&#123;share.id&#125;&#125;">订单管理</a></li>
-            <li ng-if="vm.share.status == 1" style="display: none" ng-class="{'show-b':vm.share.status == 1}">
+            <li ng-if="vm.canManageShareInfo(share)"><a ng-click="vm.delShare(share.id)">删除</a></li>
+            <li ng-if="vm.canManageShareInfo(share)"><a href="/weshares/update/&#123;&#123;share.id&#125;&#125;">修改</a></li>
+            <li ng-if="vm.canManageShareOrder(share)"><a href="/weshares/share_order_list/&#123;&#123;share.id&#125;&#125;">订单管理</a></li>
+            <li ng-if="vm.share.status == 1&&vm.canManageShareInfo(share)" style="display: none" ng-class="{'show-b':vm.share.status == 1}">
                 <a ng-click="vm.stopShare(share.id)">重新开团</a>
             </li>
         </ul>
@@ -37,12 +37,10 @@
         <div>加载中...</div>
     </div>
 </div>
-<div style="margin-bottom: 60px;"></div>
 
 <?php
-$this->assign('title','我的分享');
-$this->set('show_footer', true);
-
+$this->assign('title','朋友说-'.$title);
+$this->set('show_footer', false);
 $this->Html->css(array(
 $STATIC_HOST.'/static/weshares/css/get-user-info.min.css?v2.4.8'
 ), null, array('inline' => false));

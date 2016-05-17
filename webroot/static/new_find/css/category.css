@@ -36,11 +36,8 @@ footer {
     color: #888;
     margin-bottom: 0; }
   /* line 43, _common.scss */
-  .channel_bottom .iconfont-active {
-    font-size: 20px;
-    line-height: 15px;
-    color: #ff6485;
-    margin-bottom: 0; }
+  .channel_bottom .iconfont.active {
+    color: #ff6485;}
   /* line 50, _common.scss */
   .channel_bottom b {
     font-size: 12px;

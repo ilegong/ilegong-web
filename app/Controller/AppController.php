@@ -59,12 +59,13 @@ class AppController extends Controller {
     		}
     	}
 
-        if(!Configure::read('Site.status')){
-    		$this->layout = 'maintain';
-    		$this->autoRender = false;
-    		echo $this->render('message');
-    		exit;
-    	}
+//        if(!Configure::read('Site.status')){
+//    		$this->layout = 'maintain';
+//    		$this->autoRender = false;
+//    		echo $this->render('message');
+//    		exit;
+//    	}
+
     	$this->currentUser = $this->Session->read('Auth.User');
     	$this->theme = Configure::read('Site.theme');
     	if($this->RequestHandler->isMobile()){

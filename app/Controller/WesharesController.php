@@ -637,57 +637,16 @@ class WesharesController extends AppController
      */
     public function user_share_info($uid = null)
     {
-        $this->layout = 'weshare_bootstrap';
         $current_uid = $this->currentUser['id'];
         if (empty($uid)) {
             $uid = $current_uid;
         }
-        $user_share_data = $this->WeshareBuy->prepare_user_share_info($uid);
-        $creators = $user_share_data['creators'];
-        $joinShareOrderStatus = $user_share_data['joinShareOrderStatus'];
-        $myCreateShares = $user_share_data['myCreateShares'];
-        $myJoinShares = $user_share_data['myJoinShares'];
-        $shareOperateMap = $user_share_data['authority_share_map'];
-        //$joinShareComments = $user_share_data['joinShareComments'];
-        $shareUser = $creators[$uid];
-        $this->set_share_user_info_weixin_params($uid, $current_uid, $shareUser);
-        $userShareSummery = $this->getUserShareSummery($uid);
-        if ($uid != $current_uid) {
-            $sub_status = $this->WeshareBuy->check_user_subscribe($uid, $current_uid);
-            $this->set('sub_status', $sub_status);
+        $is_me = $uid == $current_uid;
+        if($is_me){
+            $this->redirect('/weshares/get_self_info.html');
+        }else{
+            $this->redirect('/weshares/get_other_info/'.$uid.'.html');
         }
-        $user_is_proxy = $this->ShareUtil->is_proxy_user($uid);
-        if ($user_is_proxy) {
-            $this->set('is_proxy', true);
-        }
-        //get user level
-        $user_level = $this->ShareUtil->get_user_level($uid);
-        $this->set('user_level', $user_level);
-        if ($uid == $current_uid) {
-            $rebate_money = $this->ShareUtil->get_rebate_money($current_uid);
-            $this->set('rebate_money', $rebate_money);
-            $this->set('show_rebate_money', $rebate_money > 0);
-        }
-        $u_comment_count = $this->WeshareBuy->get_user_comment_count($uid);
-        $this->set('u_comment_count', $u_comment_count);
-        $this->set($userShareSummery);
-        $this->set('is_me', $uid == $current_uid);
-        $this->set('current_uid', $current_uid);
-        $this->set('visitor', $current_uid);
-        $this->set('share_user', $shareUser);
-        $this->set('creators', $creators);
-        $this->set('my_create_shares', $myCreateShares);
-        $this->set('my_join_shares', $myJoinShares);
-        $this->set('authority_shares', $user_share_data['authority_shares']);
-        $this->set('join_share_order_status', $joinShareOrderStatus);
-        $this->set('authority_share_map', $shareOperateMap);
-        $pintuan_data = $this->PintuanHelper->get_user_pintuan_data($uid);
-        $this->set('pintuan_data', $pintuan_data);
-        if ($uid == $current_uid && !empty($user_level)) {
-            $userMonthOrderCount = $this->WeshareBuy->get_month_total_count($uid);
-            $this->set('order_count', $userMonthOrderCount);
-        }
-        //$this->set('joinShareComments', $joinShareComments);
     }
 
     public function user_setting()
@@ -882,7 +841,8 @@ class WesharesController extends AppController
 
         foreach ($result as $k => $res)
         {
-            $result[$k]['description'] = mb_strlen($res['description'] , 'utf8') > 100 ? mb_substr($res['description'] , 0 , 99 ,'utf8')."..." : $res['description'];
+            $item_desc = strip_tags($result[$k]['description']);
+            $result[$k]['description'] = mb_strlen($item_desc , 'utf8') > 100 ? mb_substr($item_desc , 0 , 99 ,'utf8')."..." : $item_desc;
         }
 
         echo json_encode($result);
@@ -914,7 +874,6 @@ class WesharesController extends AppController
         $this->set('share_summary',$share_summary);
         $rebate_money = $this->ShareUtil->get_rebate_money($uid);
         $this->set('rebate_money',$rebate_money);
-        //todo auth count
         $this->set('uid' , $uid);
     }
 
@@ -1911,6 +1870,7 @@ class WesharesController extends AppController
         $this->set('uid', $uid);
         $this->set('me', $me);
         $this->set('type', 0);
+        $this->set('title', '我的粉丝');
         $this->render('u_list');
     }
 
@@ -1921,6 +1881,7 @@ class WesharesController extends AppController
         $this->set('me', $me);
         $this->set('uid', $uid);
         $this->set('type', 1);
+        $this->set('title', '我关注的');
         $this->render('u_list');
     }
 
@@ -1955,7 +1916,7 @@ class WesharesController extends AppController
             $this->set($wexin_params);
             if ($uid == $current_uid) {
                 $title = '这是' . $shareUser['nickname'] . '的微分享，快来关注我吧';
-                $image = $shareUser['image'];
+                $image = get_user_avatar($shareUser);
                 $desc = '朋友说是一个有人情味的分享社区，这里你不但可以吃到各地的特产，还能认识有趣的人。';
             } else {
                 $current_user = $this->currentUser;
