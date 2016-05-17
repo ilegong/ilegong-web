@@ -2117,7 +2117,8 @@ class WeshareBuyComponent extends Component
             ]
         ]);
         $this_month_order_count = $this->get_month_total_count($uid);
-        $this_month_trade_money = $orderM->query("SELECT sum(total_price) as trade_money  FROM cake_orders where status > 0 and creator = " . $uid . " and date(created) = " . date('Y-m-d') . " and type=9");
+        $date = date('Y-m') . '-01 00:00:00';
+        $this_month_trade_money = $orderM->query("SELECT sum(total_price) as trade_money  FROM cake_orders where status > 0 and creator = " . $uid . " and created > '" . $date . "' and type=9");
         $this_month_trade_money = empty($this_month_trade_money[0][0]['trade_money']) ? 0 : $this_month_trade_money[0][0]['trade_money'];
         $authorize_count = intval($authorize_count[0][0]['a_count']);
         return ['wait_ship_order_count' => $wait_ship_order_count, 'month_order_count' => $this_month_order_count, 'month_trade_money' => $this_month_trade_money, 'share_count' => $share_count, 'authorize_count' => $authorize_count];
