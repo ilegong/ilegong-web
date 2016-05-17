@@ -2331,11 +2331,6 @@ class WeshareBuyComponent extends Component
      */
     public function do_send_buy_percent_msg($weshare_info, $uids, $msg_content)
     {
-        if ($weshare_info['id'] != 2078) {
-            //过滤模板消息
-            $uids = $this->check_msg_log_and_filter_user($weshare_info['id'], $uids, MSG_LOG_NOTIFY_TYPE);
-            $uids = $this->check_msg_log_and_filter_user($weshare_info['refer_share_id'], $uids, MSG_LOG_NOTIFY_TYPE);
-        }
         $fans_data_nickname = $this->get_users_nickname($uids);
         $fans_data_ids = $uids;
         $fans_open_ids = $this->get_open_ids($fans_data_ids);

@@ -8,7 +8,7 @@ define("WEIXIN_TOKEN", "sUrjPDH8xus2d4JT");
 define('FROM_WX_SERVICE', 1);
 define('FROM_WX_SUB', 2);
 
-class WeixinController extends AppController {
+class WeixinController extends Controller {
 
 	var $name = 'Weixin';
 
@@ -17,7 +17,6 @@ class WeixinController extends AppController {
     var $components = array('WeixinUtil');
 	
 	public function beforeFilter(){
-		parent::beforeFilter();
 		$this->layout = false;
 	}
 	
@@ -76,9 +75,9 @@ class WeixinController extends AppController {
             }
 
 			$input = "";
-			if(!empty($req['Event'])){
-				if($req['Event']=='subscribe'){ //订阅
-                    $this->log('On wechat event subscribe: '.$from.trim($req['FromUserName']), LOG_INFO);
+            if (!empty($req['Event'])) {
+                if ($req['Event'] == 'subscribe') { //订阅
+                    $this->log('On wechat event subscribe: ' . $from . trim($req['FromUserName']), LOG_INFO);
                     $process_result = $this->WeixinUtil->process_user_sub_weixin($from, $uid, $openId);
                     $replay_type = $process_result['replay_type'];
                     $content = $process_result['content'];
@@ -87,21 +86,21 @@ class WeixinController extends AppController {
                     }
                     if ($replay_type == 1) {
                         $url = $process_result['url'];
-                        echo $this->newTextMsg($user, $me, $content.'，<a href="'.$url.'">点击查看详情</a>');
+                        echo $this->newTextMsg($user, $me, $content . '，<a href="' . $url . '">点击查看详情</a>');
                         //echo $this->newTextMsg($user, $me, $content.'<a href=\"' + $url + '\" >点击查看详情<\/a>');
                     }
-                    if($from == FROM_WX_SERVICE){
-                        $key = key_cache_sub($uid,'kfinfo');
-                        $subscribe_array = json_decode(Cache::read($key),true);
+                    if ($from == FROM_WX_SERVICE) {
+                        $key = key_cache_sub($uid, 'kfinfo');
+                        $subscribe_array = json_decode(Cache::read($key), true);
                         $ticket = $req['Ticket'];
                         if (!empty($ticket) && $ticket == SCAN_TICKET_QRCODE_PAY) {
-                            $this->log('扫码支付跳转关注-1, uid'.$uid, LOG_INFO);
+                            $this->log('扫码支付跳转关注-1, uid' . $uid, LOG_INFO);
                         }
-                        if(!empty($subscribe_array)){
+                        if (!empty($subscribe_array)) {
                             $this->loadModel('WxOauth');
-                            $body=array();
-                            if(!empty($body)){
-                                foreach ( $body['text'] as $key => $value ) {
+                            $body = array();
+                            if (!empty($body)) {
+                                foreach ($body['text'] as $key => $value) {
                                     $body['text'][$key] = urlencode($value);
                                 }
                                 $body = urldecode(json_encode($body));
@@ -109,30 +108,37 @@ class WeixinController extends AppController {
                             }
                         }
                     }
-					exit;
-				} else if ($req['Event'] == 'CLICK') {
+                    exit;
+                } else if ($req['Event'] == 'CLICK') {
                     $input = $req['EventKey'];
                 } else if ($req['Event'] == 'unsubscribe') {
-                    $this->log('On wechat event unsubscribe: '.$from.trim($req['FromUserName']), LOG_INFO);
+                    $this->log('On wechat event unsubscribe: ' . $from . trim($req['FromUserName']), LOG_INFO);
                     if ($from == FROM_WX_SERVICE) {
                         $uid = $this->Oauthbind->findUidByWx(trim($req['FromUserName']));
                         if ($uid) {
                             Cache::write(key_cache_sub($uid), WX_STATUS_UNSUBSCRIBED);
                         }
                     }
-                } else if ( strtoupper($req['Event']) == 'SCAN') {
+                } else if (strtoupper($req['Event']) == 'SCAN') {
                     if ($from == FROM_WX_SERVICE) {
                         $ticket = $req['Ticket'];
                         if ($ticket == SCAN_TICKET_CAOMEI) {
-                            echo $this->newTextMsg($user, $me, '点击<a href="http://'.$host3g.'/products/20150120/you_ji_hong_yan_cao_mei_tuan_gou.html">查看草莓详情</a>');
-                            return;
+                            echo $this->newTextMsg($user, $me, '点击<a href="http://' . $host3g . '/products/20150120/you_ji_hong_yan_cao_mei_tuan_gou.html">查看草莓详情</a>');
+                            exit;
                         }
                         if ($ticket == SCAN_TICKET_QRCODE_PAY) {
                             $this->log('扫码支付跳转关注-2, uid' . $uid, LOG_INFO);
+                            exit;
                         }
                     }
+                } else if (strtoupper($req['Event']) == 'TEMPLATESENDJOBFINISH') {
+                    if (strpos($req['Status'], 'failed')) {
+                        $this->log('msg send template msg failed open id ' . $req['FromUserName'], LOG_DEBUG);
+                    }
                 }
-			}
+                echo 'success';
+                exit;
+            }
 
 
 			$msg = "";
