@@ -841,7 +841,8 @@ class WesharesController extends AppController
 
         foreach ($result as $k => $res)
         {
-            $result[$k]['description'] = mb_strlen($res['description'] , 'utf8') > 100 ? mb_substr($res['description'] , 0 , 99 ,'utf8')."..." : $res['description'];
+            $item_desc = strip_tags($result[$k]['description']);
+            $result[$k]['description'] = mb_strlen($item_desc , 'utf8') > 100 ? mb_substr($item_desc , 0 , 99 ,'utf8')."..." : $item_desc;
         }
 
         echo json_encode($result);
