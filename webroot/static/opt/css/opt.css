@@ -427,10 +427,7 @@ footer a:link{
     line-height: 15px;
     color: #888888;
 }
-
-.channel_bottom .iconfont-active{
-    font-size: 20px;
-    line-height: 15px;
+.channel_bottom .iconfont.active{
     color: #ff6485;
 }
 

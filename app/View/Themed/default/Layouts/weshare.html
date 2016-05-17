@@ -30,23 +30,23 @@
 {{if $show_footer}}
 <footer class="channel_bottom" id="share-bottom-nav">
     <a class="btm_item" href="/" style="width: 25%;">
-        <p class="iconfont-active"><i class="fa fa-home"></i></p>
-        <b class="active">首页</b>
+        <p class="iconfont {{if $show_footer=='index'}}active{{/if}}"><i class="fa fa-home"></i></p>
+        <b class="{{if $show_footer=='index'}}active{{/if}}">首页</b>
     </a>
     <a class="btm_item" href="/share_opt/index.html" style="width: 25%; position: relative;">
         <i ng-if="showUnReadMark"
            style="background:#f00;border-radius:50%;width:10px;height:10px;top:-5px;right:35%;position:absolute;"></i>
 
-        <p class="iconfont"><i class="fa fa-search"></i></p>
-        <b>发现</b>
+        <p class="iconfont {{if $show_footer=='opt'}}active{{/if}}"><i class="fa fa-search"></i></p>
+        <b class="{{if $show_footer=='opt'}}active{{/if}}">发现</b>
     </a>
     <a class="btm_item" href="/weshares/add" style="width: 25%;">
-        <p class="iconfont"><i class="fa fa-share-square-o"></i></p>
-        <b>我要分享</b>
+        <p class="iconfont {{if $show_footer=='share'}}active{{/if}}"><i class="fa fa-share-square-o"></i></p>
+        <b class="{{if $show_footer=='share'}}active{{/if}}">我要分享</b>
     </a>
     <a class="btm_item" href="/weshares/user_share_info/{{$uid}}" style="width: 25%;">
-        <p class="iconfont"><i class="fa fa-user"></i></p>
-        <b>我的</b>
+        <p class="iconfont {{if $show_footer=='mine'}}active{{/if}}"><i class="fa fa-user"></i></p>
+        <b class="{{if $show_footer=='mine'}}active{{/if}}">我的</b>
     </a>
 </footer>
 {{/if}}
