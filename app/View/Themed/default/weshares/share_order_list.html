@@ -1,0 +1,463 @@
+<link href="{{$STATIC_HOST}}/static/weshares/css/order-list.css?v0.1.4" rel="stylesheet">
+<div class="row">
+    <div class="classlist">
+        <a href="/weshares/view/{{$weshareId}}" class="back"></a>
+        订单统计
+        <a href="/weshares/user_share_info/{{$user_id}}" class="home"></a>
+    </div>
+</div>
+<div style="margin-top: 50px;">
+    {{if !empty($summery['details'])}}
+    <div class="row">
+        <div>
+            <div class="pull-left">
+                <h4>总计</h4>
+            </div>
+
+            <div class="pull-right">
+                <a href="/weshares/order_export/{{$weshareId}}" class="btn btn-danger btn-xs" style="margin-top: 5px;">导出订单</a>
+                <a href="/weshares/add" class="btn btn-warning btn-xs" style="margin-top: 5px;">去分享</a>
+            </div>
+        </div>
+        {{if count($tags) > 0 && count($show_tag_ids) > 0}}
+        <br>
+        <br>
+        <div>
+            <ol class="breadcrumb" id="order-tag-toggle">
+                {{if $show_tag_all}}
+                <li class="active" data-id="all"><a>全部</a></li>
+                {{/if}}
+                {{loop $tags $tag}}
+                <?php
+                if(!in_array($tag['WeshareProductTag']['id'], $show_tag_ids)){
+                    continue;
+                }
+            ?>
+                <li data-id="{{$tag['WeshareProductTag']['id']}}"><a>{{$tag['WeshareProductTag']['name']}}</a></li>
+                {{/loop}}
+            </ol>
+        </div>
+        {{/if}}
+        <table class="table">
+            <thead>
+            <tr>
+                <td>商品</td>
+                <td>数量</td>
+                <td>金额</td>
+            </tr>
+            </thead>
+            <tbody>
+            {{loop $summery['details'] $cart_product_id $item_summery}}
+            <?php
+            if(!$show_tag_all&&!in_array($product_tag_map[$cart_product_id], $show_tag_ids)){
+                continue;
+            }
+        ?>
+            <tr class="summery-product-item" name="summery-product-{{$product_tag_map[$cart_product_id]}}">
+                <td>{{$item_summery['name']}}</td>
+                <td>{{$item_summery['num']}}</td>
+                <td>{{$item_summery['total_price']/100}}</td>
+            </tr>
+            {{/loop}}
+            </tbody>
+            {{if count($tags) > 0}}
+            {{if $show_tag_all}}
+            <tr class="order-data-summery" name="order-data-summery-all">
+                <td colspan="3">总金额:&nbsp;<font color="red">{{round($summery['real_total_price']-$refund_money-$share_rebate_money+$repaid_order_money,2)}}</font>{{if
+                    $refund_money>0}}&nbsp;&nbsp;退款金额:&nbsp;<font color="red">{{$refund_money}}</font>{{/if}}{{if
+                    $summery['all_coupon_price'] > 0}}&nbsp;&nbsp;红包金额:&nbsp;<font color="red">{{$summery['all_coupon_price']}}</font>{{/if}}
+                    {{if $repaid_order_money!=0}}
+                    {{if $repaid_order_money>0}}
+                    &nbsp;&nbsp;补尾款:&nbsp;<font color="red">{{round($repaid_order_money,2)}}</font>
+                    {{else}}
+                    &nbsp;&nbsp;退尾款:&nbsp;<font color="red">{{round(abs($repaid_order_money),2)}}</font>
+                    {{/if}}
+                    {{/if}}
+                    &nbsp;&nbsp;&nbsp;总购买人数:&nbsp;<font
+                            color="red">{{$summery['all_buy_user_count']}}</font></td>
+            </tr>
+            {{/if}}
+            {{loop $tag_order_summery $tag_id $summery_item}}
+            <?php
+            if(in_array($product_tag_map[$cart_product_id], $show_tag_ids)){
+                continue;
+            }
+        ?>
+            <tr class="order-data-summery" name="order-data-summery-{{$tag_id}}" style="display: none">
+                <td colspan="3">总金额:&nbsp;<font color="red">{{round($summery_item['total_price']-$summery_item['repaid_money'],2)}}</font>
+                    {{if $summery_item['repaid_money']!=0}}
+                    {{if $summery_item['repaid_money']>0}}
+                    &nbsp;&nbsp;补尾款:&nbsp;<font color="red">{{round($summery_item['repaid_money'],2)}}</font>
+                    {{else}}
+                    &nbsp;&nbsp;退尾款:&nbsp;<font color="red">{{round(abs($summery_item['repaid_money']),2)}}</font>
+                    {{/if}}
+                    {{/if}}
+                    &nbsp;&nbsp;&nbsp;总购买人数:&nbsp;<font
+                            color="red">{{$summery_item['buy_count']}}</font></td>
+            </tr>
+            {{/loop}}
+            {{else}}
+            <tr class="order-data-summery" name="order-data-summery-all">
+                <td colspan="3">总金额:&nbsp;<font color="red">{{round($summery['real_total_price']-$refund_money-$share_rebate_money+$repaid_order_money,2)}}</font>{{if
+                    $refund_money>0}}&nbsp;&nbsp;退款金额:&nbsp;<font color="red">{{$refund_money}}</font>{{/if}}{{if
+                    $summery['all_coupon_price'] > 0}}&nbsp;&nbsp;红包金额:&nbsp;<font color="red">{{$summery['all_coupon_price']}}</font>{{/if}}
+                    {{if $repaid_order_money!=0}}
+                    {{if $repaid_order_money>0}}
+                    &nbsp;&nbsp;补尾款:&nbsp;<font color="red">{{round($repaid_order_money,2)}}</font>
+                    {{else}}
+                    &nbsp;&nbsp;退尾款:&nbsp;<font color="red">{{round(abs($repaid_order_money),2)}}</font>
+                    {{/if}}
+                    {{/if}}
+                    &nbsp;&nbsp;&nbsp;总购买人数:&nbsp;<font
+                            color="red">{{$summery['all_buy_user_count']}}</font></td>
+            </tr>
+            {{/if}}
+            {{if $summery_item['ship_fee'] > 0}}
+            <tr>
+                <td colspan="3">{{if $weshare_info['Weshare']['type'] == SHARE_TYPE_GROUP}}拼团费用{{else}}快递费用{{/if}}:&nbsp;<font color="red">{{$summery_item['ship_fee']}}</font></td>
+            </tr>
+            {{/if}}
+            {{if count($rebate_logs) > 0}}
+            <tr>
+                <td colspan="3">推荐订单数:&nbsp;<font color="red">{{count($rebate_logs)}}</font>{{if $share_rebate_money - ($child_share_order_count*SHARE_OFFLINE_ADDRESS_SHIP_FEE_SIMPLE) > 0}}&nbsp;&nbsp;团长佣金:&nbsp;<font color="red">{{$share_rebate_money - ($child_share_order_count*SHARE_OFFLINE_ADDRESS_SHIP_FEE_SIMPLE)}}</font>{{/if}}
+                </td>
+            </tr>
+            {{/if}}
+            {{if $child_share_order_count > 0}}
+            <tr>
+                <td colspan="3">拼团订单数:&nbsp;<font color="red">{{$child_share_order_count}}</font>&nbsp;&nbsp;自提点费用:&nbsp;<font color="red">{{$child_share_order_count*SHARE_OFFLINE_ADDRESS_SHIP_FEE_SIMPLE}}</font>
+                </td>
+            </tr>
+            {{/if}}
+        </table>
+    </div>
+    {{/if}}
+    <div class="row">
+        <h4>订单列表</h4>
+        <div class="row" style="padding: 5px;">
+            <div class="col-lg-12">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="filterOrderText" placeholder="收货人或微信昵称">
+              <span class="input-group-btn">
+                <button id="filter-order" class="btn btn-primary" type="button">查询</button>
+              </span>
+                </div><!-- /input-group -->
+            </div><!-- /.col-lg-6 -->
+        </div><!-- /.row -->
+        <ul class="nav nav-pills">
+            <li role="presentation" class="disabled" data-toggle-val="all"><a href="#">全部</a></li>
+            <li role="presentation" data-toggle-val="1"><a href="#">待发货</a></li>
+            <li role="presentation" data-toggle-val="2"><a href="#">已发货</a></li>
+            <li role="presentation" data-toggle-val="3"><a href="#">已签收</a></li>
+            <li role="presentation" data-toggle-val="9"><a href="#">已评价</a></li>
+            <li role="presentation" data-toggle-val="14"><a href="#">退款中</a></li>
+            <li role="presentation" data-toggle-val="4"><a href="#">已退款</a></li>
+        </ul>
+        <hr>
+        <div class="col-md-12">
+            <!-- Nav tabs category -->
+            <ul class="nav nav-tabs">
+                {{if count($orders[SHARE_SHIP_SELF_ZITI_TAG]) > 0}}
+                <li><a href="#self-ziti-orders" data-toggle="tab" data-order-type="self_ziti">自提{{if $show_tag_all}}&nbsp;&nbsp;<font
+                        color="red" name="self-ziti-orders-count">{{count($orders[SHARE_SHIP_SELF_ZITI_TAG])}}</font>{{/if}}</a></li>
+                {{/if}}
+                {{if count($orders[SHARE_SHIP_KUAIDI_TAG]) > 0}}
+                <li><a href="#kuaidi-orders" data-toggle="tab" data-order-type="kuaidi">快递{{if $show_tag_all}}&nbsp;&nbsp;<font color="red" name="kuaidi-orders-count">{{count($orders[SHARE_SHIP_KUAIDI_TAG])}}</font>{{/if}}</a>
+                </li>
+                {{/if}}
+                {{if count($orders[SHARE_SHIP_PYS_ZITI_TAG]) > 0}}
+                <li><a href="#pys-ziti-orders" data-toggle="tab" data-order-type="pys_ziti">好邻居{{if $show_tag_all}}&nbsp;&nbsp;<font
+                        color="red" name="pys-ziti-orders-count">{{count($orders[SHARE_SHIP_PYS_ZITI_TAG])}}</font>{{/if}}</a></li>
+                {{/if}}
+                {{if !empty($child_share_user_infos)}}
+                <li><a href="#group-share-orders" data-toggle="tab" data-order-type="pin_tuan">邻里拼团{{if $show_tag_all}}&nbsp;&nbsp;<font
+                        color="red">{{count($child_share_data)}}</font>{{/if}}</a></li>
+                {{/if}}
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                {{if count($orders[SHARE_SHIP_SELF_ZITI_TAG]) > 0}}
+                <div class="tab-pane fade" id="self-ziti-orders">
+                    <div class="panel-group" style="margin-bottom: 5px;">
+                        <?php $current_orders=$orders[SHARE_SHIP_SELF_ZITI_TAG]; $current_tag = SHARE_SHIP_SELF_ZITI_TAG; ?>
+                        {{template weshares/share_order_list_template}}
+                    </div>
+                </div>
+                {{/if}}
+                {{if count($orders[SHARE_SHIP_KUAIDI_TAG]) > 0}}
+                <div class="tab-pane fade" id="kuaidi-orders">
+                    <div class="panel-group" style="margin-bottom: 5px;">
+                        <?php $current_orders=$orders[SHARE_SHIP_KUAIDI_TAG]; $current_tag = SHARE_SHIP_KUAIDI_TAG; ?>
+                        {{template weshares/share_order_list_template}}
+                    </div>
+                </div>
+                {{/if}}
+                {{if count($orders[SHARE_SHIP_PYS_ZITI_TAG]) > 0}}
+                <div class="tab-pane fade" id="pys-ziti-orders">
+                    <div class="panel-group" style="margin-bottom: 5px;">
+                        <?php $current_orders=$orders[SHARE_SHIP_PYS_ZITI_TAG]; $current_tag = SHARE_SHIP_PYS_ZITI_TAG; ?>
+                        {{template weshares/share_order_list_template}}
+                    </div>
+                </div>
+                {{/if}}
+                {{if count($child_share_data) > 0}}
+                <div class="tab-pane fade" id="group-share-orders">
+                    <div class="panel-group" style="margin-bottom: 5px;">
+                        {{template weshares/share_order_list_share_template}}
+                    </div>
+                </div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 30px;">
+
+    </div>
+    <div class="row" style="position: fixed;height: 46px;bottom: 0;width: 100%;">
+        <div class="modal fade bs-example-modal-sm update-order-remark-dialog" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">标记订单</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label for="arrival_msg" class="col-sm-2 control-label">订单ID</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="order_id" placeholder="订单ID" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="arrival_msg" class="col-sm-2 control-label">标记内容</label>
+                                <div class="col-sm-10">
+                                    <textarea name="order_remark" class="form-control" placeholder="标记内容"></textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary btn-xs" data-id="{{$weshareId}}"
+                                name="handle-update-order-remark">标记
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade bs-example-modal-sm update-ship-info-dialog" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">更新快递单号</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label for="arrival_msg" class="col-sm-2 control-label">订单ID</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="order_id" placeholder="订单ID" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="arrival_msg" class="col-sm-2 control-label">快递公司</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="ship_type_name" placeholder="快递公司">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="arrival_msg" class="col-sm-2 control-label">快递单号</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="ship_code" placeholder="快递单号">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary btn-xs" data-id="{{$weshareId}}"
+                                name="handle-update-ship-code">修改
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade bs-example-modal-sm send-msg-dialog" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">发送到货提醒</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label for="arrival_msg" class="col-sm-2 control-label">到货提示</label>
+
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" rows="3" id="arrival_msg">我们团的产品已经到啦，速度来取哈。</textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary btn-xs" data-id="{{$weshareId}}"
+                                name="send_product_arrival_msg">发送
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="refund-money-dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">退款</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label for="refund-order-user" class="col-sm-2 control-label">用户名</label>
+
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" readonly id="refund-order-user">
+                                </div>
+                            </div>
+                            <input type="hidden" class="form-control" readonly id="refund-order-id">
+
+                            <div class="form-group">
+                                <label for="refund-money" class="col-sm-2 control-label">退款金额</label>
+
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" id="refund-money">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="refund-msg" class="col-sm-2 control-label">退款原因</label>
+
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" rows="3" id="refund-msg"></textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary btn-xs" data-id="{{$weshareId}}" name="handle-refund-money">
+                            退款
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="refund-share-dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">退款</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label for="refund-share-address" class="col-sm-2 control-label">自提点名称</label>
+
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" readonly id="refund-share-address">
+                                </div>
+                            </div>
+                            <input type="hidden" class="form-control" readonly id="refund-share-id">
+
+                            <div class="form-group">
+                                <label for="refund-share-msg" class="col-sm-2 control-label">退款原因</label>
+
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" rows="3" id="refund-share-msg"></textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary btn-xs" name="handle-refund-share-money">
+                            退款
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="confirm-money-dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">确认价格</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label for="refund-order-user" class="col-sm-2 control-label">用户名</label>
+
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" readonly id="confirm-order-user">
+                                </div>
+                            </div>
+                            <input type="hidden" class="form-control" readonly id="confirm-order-id">
+
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary btn-xs" data-id="{{$weshareId}}" name="handle-confirm-money">
+                            确认价格
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="set_share_shipped_dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">发送到货提醒</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal">
+                            <input type="hidden" id="set_shipped_share_id">
+                            <input type="hidden" id="set_shipped_refer_share_id">
+                            <input type="hidden" id="set_shipped_address">
+                            <div class="form-group">
+                                <label for="arrival_msg" class="col-sm-2 control-label">到货提示</label>
+
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" rows="3" id="share_arrival_msg">我们团的产品已经到啦，速度来取哈。</textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary btn-xs" name="set-share-shipped">发送
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button data-toggle="modal" data-target=".send-msg-dialog" type="button" class="btn btn-warning btn-lg btn-block"
+                id="send_product_arrive_msg" style="border-radius:0px; display: none;">取货提醒
+        </button>
+    </div>
+</div>
+<script src="{{$STATIC_HOST}}/static/weshares/js/share-order-list.min.js?v0.2.6"></script>

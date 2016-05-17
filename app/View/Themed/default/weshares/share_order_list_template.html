@@ -1,0 +1,144 @@
+<?php $order_index=0 ?>
+{{loop $current_orders $item_order}}
+<?php $order_index = $order_index+1; $current_tag_id = get_share_order_tag_id($order_cart_map[$item_order['id']]);?>
+<?php
+    if(!$show_tag_all&&!in_array($current_tag_id, $show_tag_ids)){
+        continue;
+    }
+?>
+<div class="col-xs-12 div-order-item" data-id="{{$item_order['id']}}" data-order-status="{{$item_order['status']}}" style="padding-right: 5px;padding-left: 5px;" name="order-item-tag-{{$current_tag_id}}" data-order-ship-type="{{$current_tag}}">
+    <div class="offer {{if $item_order['status']==ORDER_STATUS_PAID}}
+    offer-success
+    {{elseif $item_order['status']==ORDER_STATUS_SHIPPED}}
+    offer-warning
+    {{elseif $item_order['status']==ORDER_STATUS_RECEIVED}}
+    offer-info
+    {{elseif $item_order['status']==ORDER_STATUS_RETURNING_MONEY}}
+    offer-danger
+    {{else}}
+    offer-default{{/if}}">
+        <div class="shape">
+            <div class="shape-text">
+                {{if $item_order['status']==ORDER_STATUS_PAID}}
+                    待发货
+                {{elseif $item_order['status']==ORDER_STATUS_SHIPPED}}
+                    已发货
+                {{elseif $item_order['status']==ORDER_STATUS_RECEIVED}}
+                    {{if $current_tag == SHARE_SHIP_KUAIDI_TAG}}
+                        已签收
+                    {{else}}
+                        已取货
+                    {{/if}}
+                {{elseif $item_order['status']==ORDER_STATUS_RETURN_MONEY}}
+                已退款
+                {{elseif $item_order['status']==ORDER_STATUS_RETURNING_MONEY}}
+                退款中
+                {{else}}
+                    已评价
+                {{/if}}
+            </div>
+        </div>
+        <div class="offer-content">
+            {{if $item_order['process_prepaid_status']!=0}}
+            <div class="pull-right" id="process-prepaid-status">
+                {{if $item_order['process_prepaid_status']==ORDER_STATUS_PREPAID}}
+                <span class="label label-warning">金额待定</span>
+                {{/if}}
+                {{if $item_order['process_prepaid_status']==ORDER_STATUS_PREPAID_TODO}}
+                <span class="label label-info">待补款</span>
+                {{/if}}
+                {{if $item_order['process_prepaid_status']==ORDER_STATUS_PREPAID_DONE}}
+                <span class="label label-success">已补款</span>
+                {{/if}}
+                {{if $item_order['process_prepaid_status']==ORDER_STATUS_REFUND_TODO}}
+                <span class="label label-danger">待退差价</span>
+                {{/if}}
+                {{if $item_order['process_prepaid_status']==ORDER_STATUS_REFUND_DONE}}
+                <span class="label label-success">已退差价</span>
+                {{/if}}
+            </div>
+            {{/if}}
+            <p id="order-info-panel-{{$item_order['id']}}">
+                <strong>序号:</strong>&nbsp;&nbsp;<font color="red">{{$item_order['id']}}</font>&nbsp;&nbsp;{{$users[$item_order['creator']]['nickname']}}<br>
+                <strong>下单时间:</strong>&nbsp;&nbsp;{{$item_order['created']}}<br>
+                <strong>商品:</strong>&nbsp;&nbsp;{{get_share_order_cart_display_name($order_cart_map[$item_order['id']])}}&nbsp;&nbsp;<font color="red">￥{{$item_order['total_all_price']}}</font><br>
+                {{$item_order['consignee_name']}}&nbsp;&nbsp;{{$item_order['consignee_mobilephone']}}&nbsp;&nbsp;{{$item_order['consignee_address']}}<br>
+                {{if !empty($item_order['business_remark'])}}
+                    <strong>备注:</strong>&nbsp;&nbsp;<span name="order-remark">{{$item_order['business_remark']}}</span>
+                {{/if}}
+            </p>
+            {{if $item_order['status'] != ORDER_STATUS_SHIPPED && $item_order['status'] != ORDER_STATUS_PAID}}
+                {{if $current_tag == SHARE_SHIP_KUAIDI_TAG}}
+                        <p>
+                            <strong>{{if !empty($item_order['ship_type_name'])}}{{$item_order['ship_type_name']}}{{else}}{{$ship_type_list[$item_order['ship_type']]}}{{/if}}</strong>:<strong name="order_ship_code">{{$item_order['ship_code']}}</strong>
+                        </p>
+                {{/if}}
+                {{if $current_tag == SHARE_SHIP_PYS_ZITI_TAG}}
+                        <p>
+                            <strong>提货码:</strong><strong>{{$item_order['ship_code']}}</strong>
+                        </p>
+                {{/if}}
+            {{/if}}
+            {{if $item_order['status'] == ORDER_STATUS_SHIPPED}}
+                {{if $current_tag == SHARE_SHIP_KUAIDI_TAG}}
+                    <p name="order-ship-info" id="order-ship-info-{{$item_order['id']}}">
+                        <strong name="order_ship_type_name">{{if !empty($item_order['ship_type_name'])}}{{$item_order['ship_type_name']}}{{else}}{{$ship_type_list[$item_order['ship_type']]}}{{/if}}</strong>:<strong name="order_ship_code">{{$item_order['ship_code']}}</strong>
+                        <button class="btn btn-info btn-xs edit-ship-code"
+                                data-order-id="{{$item_order['id']}}"
+                                style="margin-bottom: 5px; margin-left: 5px;">修改快递单号
+                        </button>
+                    </p>
+                {{/if}}
+                {{if $current_tag == SHARE_SHIP_PYS_ZITI_TAG}}
+                    <p>
+                        <strong>提货码:</strong><strong>{{$item_order['ship_code']}}</strong>
+                    </p>
+                {{/if}}
+                <button class="btn btn-info btn-xs"
+                        data-order-id="{{$item_order['id']}}" name="set_order_received"
+                        style="margin-bottom: 5px; margin-left: 5px;">确认取货
+                </button>
+            {{/if}}
+            {{if $item_order['status'] == ORDER_STATUS_PAID}}
+                {{if $current_tag == SHARE_SHIP_KUAIDI_TAG}}
+                <div class="form" style="display: inline;">
+                    <div class="form-group" style="display: inline-block;width: 30%;">
+                        <select class="form-control" name="ship_company_code">
+                            {{loop $ship_type_list $company_id $company_name}}
+                                <option value="{{$company_id}}">
+                                    {{$company_name}}
+                                </option>
+                            {{/loop}}
+                        </select>
+                    </div>
+                    <div class="form-group" style="display: inline-block;width: 50%;">
+                        <input type="text" class="form-control" name="ship_code" placeholder="快递单号">
+                    </div>
+                    <button class="btn btn-primary set-order-ship-code" data-order-id="{{$item_order['id']}}" data-weshare-id="{{$weshareId}}">确认发货</button>
+                </div>
+                {{else}}
+                    <div class="form" style="display: inline;">
+                        <button class="btn btn-primary set-order-shipped" data-order-id="{{$item_order['id']}}" data-weshare-id="{{$weshareId}}">确认发货</button>
+                    </div>
+                {{/if}}
+            {{/if}}
+            {{if $item_order['status'] != ORDER_STATUS_RETURN_MONEY && $item_order['status'] != ORDER_STATUS_RETURNING_MONEY}}
+            <button class="btn btn-success btn-xs pull-right refund-money" data-order-name="{{$item_order['consignee_name']}}"
+                    data-order-id="{{$item_order['id']}}" id="refund-btn-{{$item_order['id']}}"
+                    style="margin-bottom: 5px; margin-left: 5px;">退款
+            </button>
+            <textarea style="display: none;" id="order-cart-info-{{$item_order['id']}}">{{json_encode($order_cart_map[$item_order['id']]);}}</textarea>
+            {{/if}}
+            {{if $item_order['process_prepaid_status']==ORDER_STATUS_PREPAID}}
+            <button class="btn btn-info btn-xs pull-right price-confirm" data-order-name="{{$item_order['consignee_name']}}"
+                    data-order-id="{{$item_order['id']}}" id="price-confirm-btn-{{$item_order['id']}}"
+                    style="margin-bottom: 5px; margin-left: 5px;">确定价格
+            </button>
+            {{/if}}
+            <!--remark order-->
+            <button id="remark-order-{{$item_order['id']}}" class="btn btn-info btn-xs pull-right remark-order" data-order-name="{{$item_order['consignee_name']}}" data-order-remark="{{$item_order['business_remark']}}" data-order-id="{{$item_order['id']}}" style="margin-bottom: 5px; margin-left: 5px;">标记订单</button>
+            <a class="btn btn-info btn-xs pull-right" href="/share_faq/faq/{{$item_order['member_id']}}/{{$item_order['creator']}}">发私信</a>
+        </div>
+    </div>
+</div>
+{{/loop}}
