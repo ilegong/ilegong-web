@@ -1,91 +1,531 @@
 @charset "utf-8";
 /* CSS Document */
-.get-user-info{
-  a:visited{color: #333333;text-decoration: none}
-  a:-webkit-any-link{text-decoration: none}
-.refer-back-bg{ background-color: #f9f9f9; border-bottom: 1px #dddddd solid; color: #333333; font-size: 1.3em; line-height: 44px; text-align: center; position: fixed; top: 0; left: 0; width: 100%;}
-.refer-back-bg a{ position: absolute; left: 15px; text-decoration: none; color: #333333; width: 4em; height: 44px;}
-.refer-back-bg a img,.refer-back-bg a label{ float: left;}
-.refer-back-bg a label{ padding-left: 5px; font-size: 0.8em;}
-.refer-back-bg a img{ width: 8px;  margin-top: 14px;}
-/*mine-massage*/
-.mine-bg{ background-color: #FF6485; padding: 20px 15px 15px; text-align: center; position: relative;}
-.mine-bg img{ width: 80px; height: 80px; border-radius: 80px;}
-.mine-bg h1{ font-size: 1.5em; text-align: center; padding: 10px 0 5px 0; color: #FFFFFF;}
-.mine-bg label.level{ background-color: #FFFFFF; line-height: 18px; border-radius: 10px; color: #ff6485; padding: 2px 5px; margin-top: -5px;}
-.mine-bg p{ color: #FFFFFF; line-height: 24px; overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-size: 1.1em; margin-top: 5px;}
-.mine-bg .more-information{ color: #FFFFFF; font-size: 1.1em;}
-.mine-bg ul{ margin-top: 15px; width: 100%;}
-.mine-bg ul li{ float: left; color: #FFFFFF;}
-.mine-bg ul li{ width: 33%; text-align: center; font-size: 1.1em;}
-.mine-bg ul li strong{ font-size: 1.5em;}
-.mine-bg ul li.mine-line{ width: 1px; height: 15px; background-color: #FFFFFF; margin-top: 17px;}
-.attention-btn{ position: absolute; right: 15px; top: 10px;}
-.change-password{ position: absolute; left: 15px; top: 10px;}
-.attention-btn a,.change-password a{ text-decoration: none; display: block; width: 66px; font-size: 1.1em; border:1px solid #ffffff; border-radius:2px; color: #ffffff; line-height: 2em; margin-top: -1px;}
-.attention{ width:64px; text-align: center; line-height: 2em;}
-.attention-already span { display: block; float: left; padding-left: 5px;}
-.attention-already label { float: left; display: block; position: relative; margin-top: 11px;}
-.attention-already label i,.attention-already label em{ display: block; width: 0px; height: 0px; border-left: 6px solid transparent; border-right: 6px solid transparent; font-size: 0px; line-height: 0px;}
-.attention-already label i { border-top: 6px solid #fff;}
-.attention-already label em { border-top: 5px solid #FF6485; position: absolute; z-index: 2; left: 0; bottom: 3px;}
-.unfollow { display: block; position: absolute; border: 1px #bbbbbb solid; width: 66px; text-align: center; line-height: 2em; top: 2em; left: 0; z-index: 2; border-radius: 2px;}
-/*mine-massage*/
-.other-share ul li{ width: 50%; line-height: 44px; font-size: 1.1em; color: #666666; text-align: center; float: left; background-color: #ffffff; border-bottom: 1px #eeeeee solid; border-top: 1px #eeeeee solid;}
-.other-share ul li.other-share_focus{ color: #FF6485; border-bottom-color: #FF6485;}
-/*mine-chanppinjie-banner*/
-.mine-chanpinjie-banner{ display: block; margin-top: 10px;}
-.mine-chanpinjie-banner img{ display: block; width: 100%;}
+.get-user-info {
+  a:visited {
+    color: #333333;
+    text-decoration: none
+  }
+  a:-webkit-any-link {
+    text-decoration: none
+  }
+  .refer-back-bg {
+    background-color: #f9f9f9;
+    border-bottom: 1px #dddddd solid;
+    color: #333333;
+    font-size: 1.3em;
+    line-height: 44px;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+  .refer-back-bg a {
+    position: absolute;
+    left: 15px;
+    text-decoration: none;
+    color: #333333;
+    width: 4em;
+    height: 44px;
+  }
+  .refer-back-bg a img, .refer-back-bg a label {
+    float: left;
+  }
+  .refer-back-bg a label {
+    padding-left: 5px;
+    font-size: 0.8em;
+  }
+  .refer-back-bg a img {
+    width: 8px;
+    margin-top: 14px;
+  }
+  /*mine-massage*/
+  .mine-bg {
+    background-color: #FF6485;
+    padding: 20px 15px 15px;
+    text-align: center;
+    position: relative;
+  }
+  .mine-bg img {
+    width: 80px;
+    height: 80px;
+    border-radius: 80px;
+  }
+  .mine-bg h1 {
+    font-size: 1.5em;
+    text-align: center;
+    padding: 10px 0 5px 0;
+    color: #FFFFFF;
+  }
+  .mine-bg label.level {
+    background-color: #FFFFFF;
+    line-height: 18px;
+    border-radius: 10px;
+    color: #ff6485;
+    padding: 2px 5px;
+    margin-top: -5px;
+  }
+  .mine-bg p {
+    color: #FFFFFF;
+    line-height: 24px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 1.1em;
+    margin-top: 5px;
+  }
+  .mine-bg .more-information {
+    color: #FFFFFF;
+    font-size: 1.1em;
+  }
+  .mine-story-bg {
+    background-color: #000000;
+    filter: alpha(opacity=80);
+    -moz-opacity: 0.8;
+    opacity: 0.8;
+    width: 100%;
+    height: 100%;
+    z-index: 997;
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+  .mine-story-more {
+    color: #FFFFFF;
+    font-size: 1.1em;
+    line-height: 22px;
+    padding: 10%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 70%;
+    overflow-y: scroll;
+    z-index: 998;
+  }
+  .mine-story-more p {
+    padding-bottom: 25px;
+  }
+  .mine-story-close {
+    border: 1px #FFFFFF solid;
+    color: #FFFFFF;
+    font-size: 1.2em;
+    margin: 0 10%;
+    border-radius: 2px;
+    line-height: 49px;
+    position: fixed;
+    bottom: 20px;
+    width: 80%;
+    text-align: center;
+    text-decoration: none;
+    z-index: 998;
+  }
+  .mine-bg ul {
+    margin-top: 15px;
+    width: 100%;
+  }
+  .mine-bg ul li {
+    float: left;
+    color: #FFFFFF;
+  }
+  .mine-bg ul li {
+    width: 33%;
+    text-align: center;
+    font-size: 1.1em;
+  }
+  .mine-bg ul li strong {
+    font-size: 1.5em;
+  }
+  .mine-bg ul li.mine-line {
+    width: 1px;
+    height: 15px;
+    background-color: #FFFFFF;
+    margin-top: 17px;
+  }
+  .attention-btn {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+  }
+  .change-password {
+    position: absolute;
+    left: 15px;
+    top: 10px;
+  }
+  .attention-btn a, .change-password a {
+    text-decoration: none;
+    display: block;
+    width: 66px;
+    font-size: 1.1em;
+    border: 1px solid #ffffff;
+    border-radius: 2px;
+    color: #ffffff;
+    line-height: 2em;
+    margin-top: -1px;
+  }
+  .attention {
+    width: 64px;
+    text-align: center;
+    line-height: 2em;
+  }
+  .attention-already span {
+    display: block;
+    float: left;
+    padding-left: 5px;
+  }
+  .attention-already label {
+    float: left;
+    display: block;
+    position: relative;
+    margin-top: 11px;
+  }
+  .attention-already label i, .attention-already label em {
+    display: block;
+    width: 0px;
+    height: 0px;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    font-size: 0px;
+    line-height: 0px;
+  }
+  .attention-already label i {
+    border-top: 6px solid #fff;
+  }
+  .attention-already label em {
+    border-top: 5px solid #FF6485;
+    position: absolute;
+    z-index: 2;
+    left: 0;
+    bottom: 3px;
+  }
+  .unfollow {
+    display: block;
+    position: absolute;
+    border: 1px #bbbbbb solid;
+    width: 66px;
+    text-align: center;
+    line-height: 2em;
+    top: 2em;
+    left: 0;
+    z-index: 2;
+    border-radius: 2px;
+  }
+  /*mine-massage*/
+  .other-share ul li {
+    width: 50%;
+    line-height: 44px;
+    font-size: 1.1em;
+    color: #666666;
+    text-align: center;
+    float: left;
+    background-color: #ffffff;
+    border-bottom: 1px #eeeeee solid;
+    border-top: 1px #eeeeee solid;
+  }
+  .other-share ul li.other-share_focus {
+    color: #FF6485;
+    border-bottom-color: #FF6485;
+  }
+  /*mine-chanppinjie-banner*/
+  .mine-chanpinjie-banner {
+    display: block;
+    margin-top: 10px;
+  }
+  .mine-chanpinjie-banner img {
+    display: block;
+    width: 100%;
+  }
+  .other-share ul li {
+    width: 50%;
+    line-height: 44px;
+    font-size: 1.1em;
+    color: #666666;
+    text-align: center;
+    float: left;
+    background-color: #ffffff;
+    border-bottom: 1px #eeeeee solid;
+    border-top: 1px #eeeeee solid;
+  }
+  .other-share ul li.other-share_focus {
+    color: #FF6485;
+    border-bottom-color: #FF6485;
+  }
+  /*mine-chanppinjie-banner*/
+  .mine-chanpinjie-banner {
+    display: block;
+    margin-top: 10px;
+  }
+  .mine-chanpinjie-banner img {
+    display: block;
+    width: 100%;
+  }
 
-/*product picture*/
-.product-image{display: inline-block;max-height: 280px;max-width: 100%;}
-/*product price*/
-.product-price-bg{ z-index: 2; background-color: #333333; padding: 5px; color: #FFFFFF; display: block; position: absolute; bottom: 10px; left: 0;}
-.product-price-bg label{ font-size: 0.9em;}
-.product-price-bg em{ font-style: normal; font-size: 1.6em;}
-/*share content*/
-.share-content{ padding: 15px 12px;}
-.share-content h1{ font-size: 1.2em; color: #333333; word-break: break-all; text-overflow: ellipsis; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden;}
-.share-content p{ color: #ff6485; line-height: 20px; font-size: 1.1em; padding-top: 8px;}
-.share-content p span{ color: #666666;}
-.share-data{ padding:10px 12px; border-top: 1px #eeeeee solid; color: #999999; line-height: 28px; position: relative;}
-.share-data img{ width: 28px; height: 28px; display: block; float: left; margin-right: 3px;}
-.share-data label{ float: left;}
-.share-data dd.browse{ width: 60px; text-align: right; position: absolute; right: 12px; top: 10px;}
+  /*product picture*/
+  .product-image {
+    display: inline-block;
+    max-height: 280px;
+    max-width: 100%;
+  }
+  /*product price*/
+  .product-price-bg {
+    z-index: 2;
+    background-color: #333333;
+    padding: 5px;
+    color: #FFFFFF;
+    display: block;
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+  }
+  .product-price-bg label {
+    font-size: 0.9em;
+  }
+  .product-price-bg em {
+    font-style: normal;
+    font-size: 1.6em;
+  }
+  /*share content*/
+  .share-content {
+    padding: 15px 12px;
+  }
+  .share-content h1 {
+    font-size: 1.2em;
+    color: #333333;
+    word-break: break-all;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+  }
+  .share-content p {
+    color: #ff6485;
+    line-height: 20px;
+    font-size: 1.1em;
+    padding-top: 8px;
+  }
+  .share-content p span {
+    color: #666666;
+  }
+  .share-data {
+    padding: 10px 12px;
+    border-top: 1px #eeeeee solid;
+    color: #999999;
+    line-height: 28px;
+    position: relative;
+  }
+  .share-data img {
+    width: 28px;
+    height: 28px;
+    display: block;
+    float: left;
+    margin-right: 3px;
+  }
+  .share-data label {
+    float: left;
+  }
+  .share-data dd.browse {
+    width: 60px;
+    text-align: right;
+    position: absolute;
+    right: 12px;
+    top: 10px;
+  }
 
-/*order and share massage*/
-.mine-tab{ margin-top: 10px; display: block; text-decoration: none;}
-.mine-tab-bg{ line-height: 49px; font-size: 1.2em; padding: 0 12px; background-color: #FFFFFF;}
-.mine-order-icon img{ width: 22px; height: 22px; display: block; margin-top: 14px; margin-right: 8px;}
-.mine-num{ color: #999999;}
-.mine-tab-bg dd label{ display: block; position: relative; margin-top: 16px; margin-left: 8px;}
-.mine-tab-bg dd label i,.mine-tab-bg dd label em{ display: block; width: 0px; height: 0px; border-top: 9px solid transparent; border-bottom: 9px solid transparent; font-size: 0px; line-height: 0px;}
-.mine-tab-bg dd label i{ border-left: 9px solid #999;}
-.mine-tab-bg dd label em{ border-left: 8px solid #ffffff; position: absolute; z-index: 2; left: -3px; bottom: 0;}
-.mine-tab ul{ border-top: 1px #eeeeee solid; padding:0 12px 15px; background-color: #FFFFFF;}
-.mine-tab ul li{ width: 33.3%; padding-top: 15px; color: #666666; font-size: 1.1em; float: left; text-align: center;}
-.mine-tab ul li span{ color: #333333; font-size: 1.2em; font-weight: bold;}
+  /*order and share massage*/
+  .mine-tab {
+    margin-top: 10px;
+    display: block;
+    text-decoration: none;
+  }
+  .mine-tab-bg {
+    line-height: 49px;
+    font-size: 1.2em;
+    padding: 0 12px;
+    background-color: #FFFFFF;
+  }
+  .mine-order-icon img {
+    width: 22px;
+    height: 22px;
+    display: block;
+    margin-top: 14px;
+    margin-right: 8px;
+  }
+  .mine-num {
+    color: #999999;
+  }
+  .mine-tab-bg dd label {
+    display: block;
+    position: relative;
+    margin-top: 16px;
+    margin-left: 8px;
+  }
+  .mine-tab-bg dd label i, .mine-tab-bg dd label em {
+    display: block;
+    width: 0px;
+    height: 0px;
+    border-top: 9px solid transparent;
+    border-bottom: 9px solid transparent;
+    font-size: 0px;
+    line-height: 0px;
+  }
+  .mine-tab-bg dd label i {
+    border-left: 9px solid #999;
+  }
+  .mine-tab-bg dd label em {
+    border-left: 8px solid #ffffff;
+    position: absolute;
+    z-index: 2;
+    left: -3px;
+    bottom: 0;
+  }
+  .mine-tab ul {
+    border-top: 1px #eeeeee solid;
+    padding: 0 12px 15px;
+    background-color: #FFFFFF;
+  }
+  .mine-tab ul li {
+    width: 33.3%;
+    padding-top: 15px;
+    color: #666666;
+    font-size: 1.1em;
+    float: left;
+    text-align: center;
+  }
+  .mine-tab ul li span {
+    color: #333333;
+    font-size: 1.2em;
+    font-weight: bold;
+  }
 
+  /*my share list*/
+  .mine-share-tab {
+    margin: 54px 12px 10px;
+    line-height: 40px;
+    border-radius: 2px;
+    font-size: 1.1em;
+    color: #ff6485;
+  }
+  .mine-share-tab li {
+    width: 32.8%;
+    text-align: center;
+  }
+  .mine-share-tab li.left-tab {
+    float: left;
+    border: 1px #ff6485 solid;
+    border-radius: 2px 0 0 2px;
+    background-color: #FFFFFF;
+  }
+  .mine-share-tab li.middle-tab {
+    float: left;
+    border: 1px #ff6485 solid;
+    border-left: 0;
+    background-color: #FFFFFF;
+  }
+  .mine-share-tab li.right-tab {
+    float: left;
+    border: 1px #ff6485 solid;
+    border-left: 0;
+    border-radius: 0 2px 2px 0;
+    background-color: #FFFFFF;
+  }
+  .mine-share-tab li.current {
+    background-color: #ff6485 !important;
+    color: #FFFFFF !important;
+  }
 
-/*my share list*/
-.mine-share-tab{ margin: 54px 12px 10px; line-height: 40px; border-radius: 2px; font-size: 1.1em; color: #ff6485;}
-.mine-share-tab li{ width: 32.8%; text-align: center;}
-.mine-share-tab li.left-tab{ float: left; border: 1px #ff6485 solid; border-radius: 2px 0 0 2px; background-color: #FFFFFF;}
-.mine-share-tab li.middle-tab{ float: left; border: 1px #ff6485 solid; border-left: 0; background-color: #FFFFFF;}
-.mine-share-tab li.right-tab{ float: left; border: 1px #ff6485 solid; border-left: 0; border-radius: 0 2px 2px 0; background-color: #FFFFFF;}
-.mine-share-tab li.current{ background-color: #ff6485!important; color: #FFFFFF!important;}
-
-
-/*order and share list public*/
-.mine_order{ font-size: 1.1em; margin-bottom: 10px;}
-.mine_order a.share-goodlist{ position: relative; background-color: #ffffff; padding: 12px; border-bottom: 1px #eeeeee solid; text-decoration: none; display: block;}
-.mine_order a.share-goodlist img{ width: 60px; height: 60px; display: block;}
-.mine_order a.share-goodlist em{ display: block; position: absolute; right: 12px; top: 12px; line-height: 18px; font-style: normal; color: #ff6485;}
-.mine_order a.share-goodlist h1{ display: block; overflow: hidden; padding-left: 10px; text-decoration: none; margin-right: 50px; line-height: 18px; font-weight: normal; font-size: 1em; display: -webkit-box; text-overflow: ellipsis; overflow : hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;}
-.mine_order a.share-goodlist label{ display: block; position: absolute; bottom: 12px; left: 82px; font-style: normal; color: #cccccc;}
-.mine_order ul{ background-color: #FFFFFF; padding: 10px 12px;}
-.mine_order ul li{ float: right; margin-left: 9px;}
-.mine_order ul li a{ display: block; text-decoration: none; border: 1px #BBBBBB solid; border-radius: 2px; line-height: 30px; padding: 0 10px;}
-.mine_order s{ text-decoration: none; font-style: normal; padding: 12px; text-align: right; background-color: #FFFFFF; display: block; border-bottom: 1px #EEEEEE solid; color: #666666;}
+  /*order and share list public*/
+  .mine_order {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+  }
+  .mine_order a.share-goodlist {
+    position: relative;
+    background-color: #ffffff;
+    padding: 12px;
+    border-bottom: 1px #eeeeee solid;
+    text-decoration: none;
+    display: block;
+  }
+  .mine_order a.share-goodlist img {
+    width: 60px;
+    height: 60px;
+    display: block;
+  }
+  .mine_order a.share-goodlist em {
+    display: block;
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    line-height: 18px;
+    font-style: normal;
+    color: #ff6485;
+  }
+  .mine_order a.share-goodlist h1 {
+    display: block;
+    overflow: hidden;
+    padding-left: 10px;
+    text-decoration: none;
+    margin-right: 50px;
+    line-height: 18px;
+    font-weight: normal;
+    font-size: 1em;
+    display: -webkit-box;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  .mine_order a.share-goodlist label {
+    display: block;
+    position: absolute;
+    bottom: 12px;
+    left: 82px;
+    font-style: normal;
+    color: #cccccc;
+  }
+  .mine_order ul {
+    background-color: #FFFFFF;
+    padding: 10px 12px;
+  }
+  .mine_order ul li {
+    float: right;
+    margin-left: 9px;
+  }
+  .mine_order ul li a {
+    display: block;
+    text-decoration: none;
+    border: 1px #BBBBBB solid;
+    border-radius: 2px;
+    line-height: 30px;
+    padding: 0 10px;
+  }
+  .mine_order s {
+    text-decoration: none;
+    font-style: normal;
+    padding: 12px;
+    text-align: right;
+    background-color: #FFFFFF;
+    display: block;
+    border-bottom: 1px #EEEEEE solid;
+    color: #666666;
+  }
 }
+/*public layer bg*/
+.layer-bg{ background-color: #000000; filter:alpha(opacity=40); -moz-opacity:0.4; opacity:0.4; width: 100%; height: 100%; z-index: 998; position: fixed; top:0; left: 0;}
+
+
+/*change massage*/
+.self-massage{ width: 85%; position: fixed; left: 50%; top: 50%; background-color: #FFFFFF; z-index: 999; overflow: hidden;}
+.self-massage h1{ text-align: center; padding: 15px; margin-bottom: 15px; font-size: 1.5em; border-bottom: 1px #EEEEEE solid;}
+.self-massage ul{ padding: 0 20px 15px; color: #333333; font-size: 1.1em; color: #333333;}
+.self-import-massage{ border: 1px #dddddd solid; border-radius: 2px; padding: 12px; margin-top: 5px;}
+.self-import-massage input{ border: 0; line-height: 20px; font-size: 1em; outline: 0; width: 100%; color: #333333;}
+.self-import-massage textarea{ display: block; height: 100px; line-height: 20px; font-size: 1em; color: #333; border: 0; width: 100%; resize: none; outline: 0;}
+.self-massage dl{ border-top: 1px #dddddd solid; margin-top: 20px; font-size: 1.2em; font-weight: bold;}
+.self-massage dl dt{ float: left; width: 50%;}
+.self-massage dl dt a.btn-cur{ color: #ff6485; border-right: 1px #dddddd solid;}
+.self-massage dl dt a{ color: #666666; text-decoration: none; display: block; line-height: 44px; text-align: center;}
+
 

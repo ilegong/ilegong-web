@@ -1,0 +1,80 @@
+<div class="get-user-info" ng-controller="GetUserInfoCtr as vm" ng-init="vm.user_pwd_show=false;vm.user_info_show=false;vm.user_nickname='{{$user_info['nickname']}}';vm.user_desc='{{$user_info['description']}}';vm.user_id={{$uid}};">
+    <div class="refer-back-bg">
+        设置
+        <a href="/weshares/get_self_info">
+            <img src="&#123;&#123;vm.staticFilePath&#125;&#125;/static/img/back.png"/>
+            <label>返回</label>
+        </a>
+    </div>
+    <div style="margin-top: 54px;">
+        <a class="mine-tab" ng-click="vm.user_info_show=true">
+            <dl class="clearfix mine-tab-bg">
+                <dd class="fl">修改个人资料</dd>
+                <dd class="fr">
+                    <label>
+                        <i></i>
+                        <em></em>
+                    </label>
+                </dd>
+            </dl>
+        </a>
+        <a class="mine-tab" ng-click="vm.user_pwd_show=true">
+            <dl class="clearfix mine-tab-bg">
+                <dd class="fl">修改密码</dd>
+                <dd class="fr">
+                    <label>
+                        <i></i>
+                        <em></em>
+                    </label>
+                </dd>
+            </dl>
+        </a>
+    </div>
+
+    <!--修改个人资料信息-->
+    <div style=" margin-left: -43%; margin-top: -60%; display: none;" class="self-massage" ng-class="{'show-b':vm.user_info_show}">
+        <h1>修改个人资料</h1>
+        <ul>
+            <li>昵称:</li>
+            <li class="self-import-massage"><input type="text" ng-trim="true" ng-model="vm.user_nickname"/></li>
+        </ul>
+        <ul>
+            <li>简介:</li>
+            <li class="self-import-massage"><textarea ng-model="vm.user_desc" ng-trim="true" placeholder="介绍下自己，让别人更好的认识你！"></textarea></li>
+            <li>你要超过500字吆</li>
+        </ul>
+        <dl class="clearfix">
+            <dt><a class="btn-cur" ng-click="vm.editInfo();">确定</a></dt>
+            <dt ng-click="vm.user_info_show=false;"><a ng-click="">取消</a></dt>
+        </dl>
+    </div>
+    <!--修改密码-->
+    <div style=" margin-left: -43%; margin-top: -50%;display: none" class="self-massage" ng-class="{'show-b':vm.user_pwd_show}">
+        <h1>修改密码</h1>
+        <ul>
+            <li>输入新密码:</li>
+            <li class="self-import-massage"><input ng-trim="true" type="password" ng-model="vm.first_pwd"/></li>
+        </ul>
+        <ul>
+            <li>再次输入新密码:</li>
+            <li class="self-import-massage"><input ng-trim="true" type="password" ng-model="vm.second_pwd"/></li>
+        </ul>
+        <dl class="clearfix">
+            <dt ng-click="vm.editPwd();"><a class="btn-cur" href="">确定</a></dt>
+            <dt ng-click="vm.user_pwd_show=false;"><a href="">取消</a></dt>
+        </dl>
+    </div>
+    <div class="layer-bg" style="display: none" ng-class="{'show-b':vm.user_pwd_show || vm.user_info_show}"></div>
+</div>
+<?php
+$this->assign('title','个人中心');
+$this->set('show_footer', true);
+
+$this->Html->css(array(
+$STATIC_HOST.'/static/weshares/css/get-user-info.min.css?v2.4.8'
+), null, array('inline' => false));
+
+$this->Html->script(array(
+$STATIC_HOST.'/static/weshares/js/get-user-info.min.js?v2.4.8'
+), array('block' => 'scripts'))
+?>

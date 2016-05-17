@@ -1,4 +1,4 @@
-<div class="get-user-info" ng-controller="GetUserInfoCtr as vm" data-sub="{{$sub_status}}" data-uid="{{$uid}}" ng-init="vm.username='{{$user_info['User']['nickname']}}';vm.shareNextPage();vm.attendNextPage();">
+<div class="get-user-info" ng-controller="GetUserInfoCtr as vm" data-sub="{{$sub_status}}" data-uid="{{$uid}}" ng-init="vm.username='{{$user_info['User']['nickname']}}';vm.show_desc=false;vm.shareNextPage();vm.attendNextPage();">
     <div class="mine-bg">
         <div class="attention-btn">
             <a class="attention" href="javascript:;" style="display: none" ng-class="{'show-b':vm.isSub == 0}"
@@ -16,7 +16,7 @@
         <img lazy-src="{{$user_info['User']['avatar']}}" fallback-src="{{$STATIC_HOST}}/static/img/default_product_banner.png"/>
         <h1>{{$user_info['User']['nickname']}}</h1>
         <p>{{$user_info['User']['description']}}</p>
-        <a href="javascript:;" class="more-information">完整故事</a>
+        <a ng-click="vm.show_desc=true;" class="more-information">完整故事</a>
         <ul class="clearfix">
             <li ng-click="vm.goToComment();"><strong>{{$user_summary['comment_count']}}</strong><br/>评论</li>
             <li class="mine-line"></li>
@@ -26,6 +26,11 @@
         </ul>
     </div>
     <div ng-include="'{{$STATIC_HOST}}/static/weshares/templates/get-other-info.html?v1.8.8'"></div>
+    <div class="mine-story-more" style="display: none" ng-class="{'show-b':vm.show_desc}">
+        <p>{{$user_info['User']['description']}}</p>
+    </div>
+    <a style="display: none" ng-class="{'show-b':vm.show_desc}" ng-click="vm.show_desc=false;" class="mine-story-close">取消</a>
+    <div ng-class="{'show-b':vm.show_desc}" class="mine-story-bg" style="display: none"></div>
 </div>
 <?php
 $this->assign('title','微分享');

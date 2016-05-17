@@ -50,6 +50,83 @@
         vm.goToShare = goToShare;
         vm.delShare = delShare;
         vm.stopShare = stopShare;
+        vm.editInfo = editInfo;
+        vm.editPwd = editPwd;
+
+        function editInfo()
+        {
+            if(vm.loading)
+            {
+                return false;
+            }
+            if(!vm.user_nickname)
+            {
+                alert("昵称不能为空");
+            }
+            if(!vm.user_desc)
+            {
+                alert("简介不能为空");
+            }
+            vm.loading = true;
+            
+            var url = "/users/update_user_intronew";
+            $http.post(url,
+                {'user_intro': vm.user_desc, 'user_id': vm.user_id, 'user_nickname': vm.user_nickname}
+            ).success(function(data){
+                if(data.success)
+                {
+                    vm.user_info_show = false;
+                }
+                vm.loading = false;
+            }).error(function(){
+                alert("修改失败");
+                vm.loading = false;
+            });
+            
+        }
+
+        function editPwd()
+        {
+            if(vm.loading)
+            {
+                return false;
+            }
+            if(!vm.first_pwd || !vm.second_pwd)
+            {
+                alert("密码不能为空");
+            }
+            if(vm.first_pwd != vm.second_pwd)
+            {
+                alert("密码不一致");
+            }
+            vm.loading = true;
+
+            var url = "/users/setpasswordnew.json";
+            $http.post(url,
+                {password: vm.first_pwd}
+            ).success(function(data){
+                if (data['success']) {
+                    vm.first_pwd = '';
+                    vm.second_pwd = '';
+                    vm.user_info_show = false;
+                } else {
+                    if (data['reason'] == 'not_login') {
+                        alert('当前用户不存在');
+                    }
+                    if (data['reason'] == 'password_empty') {
+                        alert('密码为空');
+                    }
+                    if (data['reason'] == 'server_error') {
+                        alert('系统出错，请联系客服。');
+                    }
+                }
+                vm.loading = false;
+            }).error(function(){
+                alert("修改失败");
+                vm.loading = false;
+            });
+
+        }
 
         function delShare(id){
             if(vm.loading)
