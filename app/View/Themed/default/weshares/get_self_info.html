@@ -1,10 +1,7 @@
 <div class="get-user-info" ng-controller="GetUserInfoCtr as vm">
     <div class="mine-bg">
-        <div class="change-password">
-            <a class="attention" href="javascript:;">修改密码</a>
-        </div>
-        <div class="attention-btn">
-            <a class="attention" href="javascript:;">修改简介</a>
+        <div class="attention-btn" onclick="window.location.href='/weshares/user_setting'">
+            <a class="attention"  href="javascript:;">设置</a>
         </div>
         <img lazy-src="{{$share_user['avatar']}}" fallback-src="http://static.tongshijia.com/avatar/s/default.jpg" ng-click="vm.changeAvatar();"/>
         <h1>{{$share_user['nickname']}}</h1>

@@ -690,6 +690,13 @@ class WesharesController extends AppController
         //$this->set('joinShareComments', $joinShareComments);
     }
 
+    public function user_setting()
+    {
+        $user_info = $this->get_user_info($this->currentUser['id']);
+        $this->set('user_info' , $user_info['User']);
+        $this->set('uid' , $this->currentUser['id']);
+    }
+
     public function my_shares_list_api($type,$page = 1)
     {
         $share_list = [];

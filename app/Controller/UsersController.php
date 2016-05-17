@@ -405,10 +405,18 @@ class UsersController extends AppController
         $this->pageTitle = __('我的红包');
     }
 
+    public function setpasswordnew()
+    {
+        $_REQUEST = file_get_contents('php://input', true);
+        $_REQUEST = json_decode($_REQUEST , true);
+        $this->setpassword();
+    }
+
     function setpassword()
     {
         $this->autoRender = false;
         $userinfo = $this->Auth->user();
+
         if (empty($userinfo['id'])) {
             echo json_encode(array('success' => false, 'reason' => 'not_login'));
             return;
@@ -506,6 +514,12 @@ class UsersController extends AppController
         }
     }
 
+    public function update_user_intronew()
+    {
+        $_REQUEST = file_get_contents('php://input', true);
+        $_REQUEST = json_decode($_REQUEST , true);
+        $this->update_user_intro();
+    }
     function update_user_intro()
     {
         $this->autoRender = false;

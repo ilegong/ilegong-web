@@ -241,34 +241,6 @@
     <a class="submitbtn" ng-click="vm.saveWeshare()">Oh，搞定了！</a>
 </div>
 
-
-<!--用户发起分享的时候判断是否是团长或者是否是更新分享数据,不是上面的情况提示信息-->
-<div class="dialog-delorder" ng-if="vm.showCreateShareTipInfo">
-    <div class="dialog-bar">温馨提示<a ng-click="vm.showCreateShareTipInfo=false;vm.showLayer=false;"
-                                   class="dialog-close" title="关闭"></a></div>
-    <div class="dialog-content">
-        <div style="padding: 10px">
-            <strong>欢迎来朋友说使用微分享分享您家的特产，您可以：</strong>
-            <ul>
-                <li>
-                    1、将微分享作为一个IT工具，就像微店那样，统计订单、收款和维护粉丝，是的，我们是收费的，佣金是交易金额的5%，
-                    如果您的产品得到很多用户的认可，我们会做全站推荐；
-                </li>
-                <li>
-                    2、加入我们的分享社区，这是最有趣的，我们有很多热心分享的妈妈团长，您可以加入我们，一起参加线下活动，一起
-                    互相发现推荐好吃的特产，但前提是您有一颗乐于分享的心，您的产品非常优秀，如果是这样，
-                    赶快联系我们微信：191837170。
-                </li>
-                <li>
-                    <a href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=400858287&idx=1&sn=5f0049e7a0d2f9387cbb1ef9188ee079&scene=1">朋友说团长加入指南</a>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=400854243&idx=1&sn=cce48490ef7ac0ee9f697eba6216aecf&scene=1">朋友说商家入驻指南</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
-
 <div class="areas-info" ng-if="vm.isShowChooseCity">
     <div class="refer-back-bg">
         选择地区
