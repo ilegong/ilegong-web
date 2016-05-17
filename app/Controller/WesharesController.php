@@ -722,14 +722,14 @@ class WesharesController extends AppController
     private function  __get_query_share_settlement_status_by_type($type)
     {
         if ($type == 2) {
-            $status = 1;
-            $settlement = 0;
+            $status = WESHARE_STATUS_STOP;
+            $settlement = WESHARE_SETTLEMENT_NO;
         } elseif ($type == 3) {
-            $status = 1;
-            $settlement = 1;
+            $status = WESHARE_STATUS_STOP;
+            $settlement = WESHARE_SETTLEMENT_YES;
         } else {
-            $status = 0;
-            $settlement = 0;
+            $status = WESHARE_STATUS_NORMAL;
+            $settlement = WESHARE_SETTLEMENT_NO;
         }
         return [$status, $settlement];
     }
