@@ -1,0 +1,29 @@
+<div ng-controller="ShareOptIndexController as vm">
+
+</div>
+<ul class="clearfix tuijian-top-sousuo">
+    <li class="sousuo fl">
+        <a href="#X">
+            <img src="{{$STATIC_HOST}}/static/opt/images/sousuo.png" style="display: none;">
+        </a>
+    </li>
+    <li class="tuijian_center">
+        <div class="bk bk_green fl activity" id='show-all'>推荐</div>
+        <div class="bk bk_white fl" id='show-only-followed'>关注</div>
+    </li>
+    <li class="fenxiang fr">
+        <a href="/weshares/add">
+            我要分享
+        </a>
+    </li>
+</ul>
+<div id="maindiv" data-uid="{{$uid}}" infinite-scroll='vm.shareNextPage()' infinite-scroll-disabled='vm.sharesOver||vm.loading' infinite-scroll-distance='0'>
+    <div id="dataloadingdiv" align="center"
+         style="margin:0px 6px;background-color:#FFFFFF;height:40px;line-height:40px;display: none;color: #f99d3a;">
+        <div>加载中...</div>
+    </div>
+    <div style="height: 100px;"></div>
+</div>
+<img id="topiconbut" style="display:none;width:40px;height:40px;position: fixed;right:15px;bottom:65px;"
+     src="{{$STATIC_HOST}}/static/opt/images/topicon.png">
+
