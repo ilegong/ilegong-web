@@ -80,23 +80,8 @@ class PoolProductApiController extends AppController
      */
     public function get_all_product_categories()
     {
-        $model = ClassRegistry::init('PoolProductCategory');
-
-        $data = $model->find('all', [
-            'conditions' => [
-                'deleted' => DELETED_NO,
-            ],
-        ]);
-
-        $res = [];
-        foreach($data as $item) {
-            $tmp = [];
-            $tmp['id'] = $item['PoolProductCategory']['id'];
-            $tmp['name'] = $item['PoolProductCategory']['category_name'];
-
-            $res[] = $tmp;
-        }
-
+        $this->loadModel('SharePoolProduct');
+        $res = $this->SharePoolProduct->get_pool_product_categories();
         echo json_encode($res);
         exit();
     }

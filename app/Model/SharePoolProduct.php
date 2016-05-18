@@ -5,6 +5,8 @@ class SharePoolProduct extends AppModel
 
     public $useTable = false;
 
+    public static $CATEGORY_DATA_CACHE_KEY = 'pool_category_data_cache_key';
+
     public function __get($key)
     {
         if ($key == 'products') {
@@ -164,5 +166,28 @@ class SharePoolProduct extends AppModel
             $data[] = $tmp;
         }
         return $data;
+    }
+
+    public function get_pool_product_categories()
+    {
+        $cache = Cache::read(self::$CATEGORY_DATA_CACHE_KEY);
+        if (empty($cache)) {
+            $categoryModel = ClassRegistry::init('PoolProductCategory');
+            $data = $categoryModel->find('all', [
+                'conditions' => [
+                    'deleted' => DELETED_NO,
+                ],
+            ]);
+            $res = [];
+            foreach ($data as $item) {
+                $tmp = [];
+                $tmp['id'] = $item['PoolProductCategory']['id'];
+                $tmp['name'] = $item['PoolProductCategory']['category_name'];
+                $res[] = $tmp;
+            }
+            Cache::write(self::$CATEGORY_DATA_CACHE_KEY, json_encode($res));
+            return $res;
+        }
+        return json_decode($cache, true);
     }
 }
