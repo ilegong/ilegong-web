@@ -665,8 +665,8 @@ class WesharesController extends AppController
         $uid = $this->currentUser['id'];
         $shares = [];
         if ($uid) {
-            list($status, $settlement) = $this->__get_query_share_settlement_status_by_type($type);
-            $auth_shares_result = $this->WeshareBuy->get_my_auth_shares($uid, $page, $limit, $status, $settlement);
+            $params = $this->__get_query_share_settlement_status_by_type($type);
+            $auth_shares_result = $this->WeshareBuy->get_my_auth_shares($uid, $page, $limit,  $params['status'], $params['settlement']);
             $share_ids = Hash::extract($auth_shares_result, '{n}.Weshare.id');
             if (!empty($share_ids)) {
                 $order_count_result = $this->get_order_count_share_map($share_ids);
