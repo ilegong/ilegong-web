@@ -2133,6 +2133,19 @@ class WeshareBuyComponent extends Component
         return $result;
     }
 
+    public function get_user_all_order_count($uid)
+    {
+        $orderM = ClassRegistry::init('Order');
+        $count = $orderM->find('count', [
+            'conditions' => [
+                'creator' => $uid,
+                'status > 0',
+                'type' => ORDER_TYPE_WESHARE_BUY,
+            ]
+        ]);
+        return $count;
+    }
+
     /**
      * @param $uid
      * @return array|mixed

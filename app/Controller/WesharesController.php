@@ -866,15 +866,17 @@ class WesharesController extends AppController
         $share_summary = $this->WeshareBuy->get_sharer_summary($uid);
         $user_level = $this->ShareUtil->get_user_level($uid);
         $user_info = $this->get_user_info($uid);
+        $my_order_count = $this->WeshareBuy->get_user_all_order_count($uid);
         $user_info['User']['avatar'] = get_user_avatar($user_info['User']);
         $this->set('share_user', $user_info['User']);
         $this->set('user_level', $user_level);
-        $this->set('user_summary' , $user_summary);
-        $this->set('userMonthOrderCount',$userMonthOrderCount);
-        $this->set('share_summary',$share_summary);
+        $this->set('user_summary', $user_summary);
+        $this->set('userMonthOrderCount', $userMonthOrderCount);
+        $this->set('share_summary', $share_summary);
+        $this->set('my_order_count', $my_order_count);
         $rebate_money = $this->ShareUtil->get_rebate_money($uid);
-        $this->set('rebate_money',$rebate_money);
-        $this->set('uid' , $uid);
+        $this->set('rebate_money', $rebate_money);
+        $this->set('uid', $uid);
     }
 
     /**

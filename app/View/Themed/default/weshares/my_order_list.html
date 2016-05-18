@@ -6,7 +6,8 @@
             <label>返回</label>
         </a>
     </div>
-    <div style="margin-top: 54px;">
+    <div style="margin-top: 54px;" infinite-scroll='vm.myOrderNextPage()' infinite-scroll-disabled='vm.mine.orderOver||vm.loading'
+         infinite-scroll-distance='1'>
         <div class="mine_order" ng-repeat="order in vm.mine.order">
             <a class="clearfix share-goodlist" href="/weshares/view/&#123;&#123;order.member_id&#125;&#125;">
                 <div class="fl"><img lazy-src="&#123;&#123;order.share_info.default_image&#125;&#125;"
