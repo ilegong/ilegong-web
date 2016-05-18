@@ -13,12 +13,12 @@
                 </div>
                 <div class="share-content">
                     <h1 class="share-title" ng-bind="share.title"></h1>
-                    <p>{{vm.username}}说" <span ng-bind="share.description">我基本上很少吃芒果，但是这个贵妃芒 是真的征服了我，并不因为她 娇羞的“容貌” </span>"</p>
+                    <p>{{vm.username}}说" <span ng-bind="share.description"></span>"</p>
                 </div>
             </a>
             <dl class="clearfix share-data">
                 <dd class="clearfix" style="padding-right: 60px;max-height: 420px;">
-                    <img ng-repeat="buyer in share.summary.orders_and_creators" lazy-src="{{buyer.avatar}}"
+                    <img class="radius50" ng-repeat="buyer in share.summary.orders_and_creators | limitTo: 4" lazy-src="{{buyer.avatar}}"
                          fallback-src="this.src='{{vm.staticFilePath}}/avatar/s/default.jpg'"/>
                     <label>已<span>{{share.summary.order_count}}</span>个人报名</label>
                 </dd>
