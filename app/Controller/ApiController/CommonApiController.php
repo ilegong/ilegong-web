@@ -62,7 +62,7 @@ class CommonApiController extends Controller
 
     public function get_app_has_new_version()
     {
-        echo json_encode(['version' => strval('1.4.1'), 'force' => true]);
+        echo json_encode(['version' => strval('1.4.1'), 'force' => true, 'msg' => '优化用户体验']);
         exit;
     }
 }
