@@ -5,7 +5,7 @@
         </div>
         <img lazy-src="{{$share_user['avatar']}}" fallback-src="http://static.tongshijia.com/avatar/s/default.jpg" ng-click="vm.changeAvatar();"/>
         <h1>{{$share_user['nickname']}}</h1>
-        <label ng-if="<?php if(is_null($user_level)){echo 'false';}else{echo 'true';}?>" class="level">{{$user_level['level_name']}}</label>
+        <label ng-if="<?php if(is_null($user_level['level_name'])){echo 'false';}else{echo 'true';}?>" class="level">{{$user_level['level_name']}}</label>
         <ul class="clearfix">
             <li onclick="window.location.href='/weshares/u_comment/{{$uid}}'"><strong>{{$user_summary['comment_count']}}</strong><br/>评论</li>
             <li class="mine-line"></li>
@@ -14,9 +14,11 @@
             <li onclick="window.location.href='/weshares/sub_list/{{$uid}}'"><strong>{{$user_summary['focus_count']}}</strong><br/>关注</li>
         </ul>
     </div>
-    <a ng-if="<?php if(is_null($user_level)){echo 'false';}else{echo 'true';}?>" href="/share_product_pool/share_products_index.html" class="mine-chanpinjie-banner">
+    <?php if($user_level['data_value'] > 1):?>
+    <a href="/share_product_pool/share_products_index.html" class="mine-chanpinjie-banner">
         <img src="{{$STATIC_HOST}}/static/weshares/images/mine-banner.gif" />
     </a>
+    <?php endif;?>
     <a class="mine-tab" href="/weshares/my_order_list">
         <dl class="clearfix mine-tab-bg">
             <dd class="fl mine-order-icon"><img src="{{$STATIC_HOST}}/static/weshares/images/mine-order-icon.gif"/></dd>
