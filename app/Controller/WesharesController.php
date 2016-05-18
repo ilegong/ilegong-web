@@ -761,6 +761,12 @@ class WesharesController extends AppController
 
     public function my_shares_list($type = 0)
     {
+        $uid = $this->currentUser['id'];
+        if(!($uid > 0))
+        {
+            $this->redirect('/users/login');
+        }
+
         $this->set('type', $type);
         $title = $type == 0 ? '我的分享' : '授权我的';
         $this->set('title', $title);
@@ -768,7 +774,11 @@ class WesharesController extends AppController
 
     public function my_order_list()
     {
-
+        $uid = $this->currentUser['id'];
+        if(!($uid > 0))
+        {
+            $this->redirect('/users/login');
+        }
     }
 
     public function my_order_list_api($page = 1)
@@ -861,6 +871,10 @@ class WesharesController extends AppController
     public function get_self_info()
     {
         $uid = $this->currentUser['id'];
+        if(!($uid > 0))
+        {
+            $this->redirect('/users/login');
+        }
         $userMonthOrderCount = $this->WeshareBuy->get_month_total_count($uid);
         $user_summary = $this->WeshareBuy->get_user_share_summary($uid);
         $share_summary = $this->WeshareBuy->get_sharer_summary($uid);
