@@ -700,8 +700,8 @@ class WesharesController extends AppController
         $page = intval($page) ? intval($page) : 1;
         $type = intval($type);
         if ($uid && in_array($type, [1, 2, 3])) {
-            list($status, $settlement) = $this->__get_query_share_settlement_status_by_type($type);
-            $shares = $this->WeshareBuy->get_my_shares($uid, $status, $settlement, $page, $limit);
+            $params = $this->__get_query_share_settlement_status_by_type($type);
+            $shares = $this->WeshareBuy->get_my_shares($uid, $params['status'], $params['settlement'], $page, $limit);
             $share_ids = Hash::extract($shares, '{n}.Weshare.id');
             $share_list = [];
             if (!empty($share_ids)) {
@@ -729,9 +729,9 @@ class WesharesController extends AppController
             $settlement = WESHARE_SETTLEMENT_YES;
         } else {
             $status = WESHARE_STATUS_NORMAL;
-            $settlement = WESHARE_SETTLEMENT_NO;
+            $settlement = [WESHARE_SETTLEMENT_NO, WESHARE_SETTLEMENT_YES];
         }
-        return [$status, $settlement];
+        return ['status' => $status, 'settlement' => $settlement];
     }
 
     private function get_order_count_share_map($share_ids){
