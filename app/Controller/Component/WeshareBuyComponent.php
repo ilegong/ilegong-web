@@ -2113,7 +2113,10 @@ class WeshareBuyComponent extends Component
         ]);
         $share_count = $weshareM->find('count', [
             'conditions' => [
-                'creator' => $uid
+                'creator' => $uid,
+                'status' => [WESHARE_STATUS_NORMAL, WESHARE_STATUS_STOP],
+                'settlement' => [WESHARE_SETTLEMENT_NO, WESHARE_SETTLEMENT_YES],
+                'type' => [SHARE_TYPE_GROUP, SHARE_TYPE_DEFAULT, SHARE_TYPE_POOL_FOR_PROXY, SHARE_TYPE_POOL]
             ]
         ]);
         $this_month_order_count = $this->get_month_total_count($uid);
