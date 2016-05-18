@@ -1344,7 +1344,7 @@ class ShareManageController extends AppController
         foreach ($share_rebate_map as $key => $rebate_item) {
             $result[$key] = number_format(round($rebate_item / 100, 2), 2);
         }
-        return $share_rebate_map;
+        return $result;
     }
 
     public function get_pool_share_data($pool_share_ids){
