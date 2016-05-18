@@ -14,7 +14,9 @@
             <li onclick="window.location.href='/weshares/sub_list/{{$uid}}'"><strong>{{$user_summary['focus_count']}}</strong><br/>关注</li>
         </ul>
     </div>
-    <a href="/share_product_pool/share_products_index.html" class="mine-chanpinjie-banner"><img src="{{$STATIC_HOST}}/static/weshares/images/mine-banner.gif" /></a>
+    <a ng-if="<?php if(is_null($user_level)){echo 'false';}else{echo 'true';}?>" href="/share_product_pool/share_products_index.html" class="mine-chanpinjie-banner">
+        <img src="{{$STATIC_HOST}}/static/weshares/images/mine-banner.gif" />
+    </a>
     <a class="mine-tab" href="/weshares/my_order_list">
         <dl class="clearfix mine-tab-bg">
             <dd class="fl mine-order-icon"><img src="{{$STATIC_HOST}}/static/weshares/images/mine-order-icon.gif" /></dd>
