@@ -151,12 +151,6 @@ var all_css = [
       'webroot/src/scss/tutorial.scss',
     ],
     dist: 'webroot/static/weshares/css/'
-  }, {
-    name: 'pool-product.min.css',
-    sources: [
-      'webroot/src/scss/pool-product.css',
-    ],
-    dist: 'webroot/static/weshares/css/'
   }
 ];
 

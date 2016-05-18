@@ -10,14 +10,23 @@
     <title>朋友说产品街</title>
 </head>
 <body style="background-color:#f1f1f1;">
-<div class="mb10 pro_banner">
-    <a href="/" class="pro_aindex">去首页看看</a>
-    <img src="http://static.tongshijia.com/static/img/banner_pool.gif" width="100%"/>
+
+<div id="fix-both">
+    <ul class="class-tab">
+        <?php
+            $nav_li_width = 1/count($categories) * 100;
+        ?>
+        {{loop $categories $cate}}
+        <li {{if $cate["id"]==$category}}class="focus"{{/if}} style="width : {{$nav_li_width}}%"><a href="/share_product_pool/share_products_index/{{$cate['id']}}.html">{{$cate['name']}}</a></li>
+        {{/loop}}
+    </ul>
 </div>
-<div style="margin-bottom: 45px;">
+
+<div style="margin-bottom: 45px;margin-top: 50px;">
     {{loop $share_products $product}}
     <div class="mb5">
-        <a href="/share_product_pool/share_product_detail/{{$product['weshare_id']}}"><img src="{{$product['share_img']}}" width="100%"/></a>
+        <a href="/share_product_pool/share_product_detail/{{$product['weshare_id']}}"><img
+                src="{{$product['share_img']}}" width="100%"/></a>
     </div>
     {{/loop}}
 </div>
@@ -27,7 +36,9 @@
         <b>首页</b>
     </a>
     <a class="btm_item" href="/share_opt/index.html" style="width: 25%; position: relative;">
-        <i style="background:#f00;border-radius:50%;width:10px;height:10px;top:-5px;right:35%;position:absolute; display: none;" id="mark-has-unread"></i>
+        <i style="background:#f00;border-radius:50%;width:10px;height:10px;top:-5px;right:35%;position:absolute; display: none;"
+           id="mark-has-unread"></i>
+
         <p class="iconfont" style="height: 20px;"><i class="fa fa-search"></i></p>
         <b>发现</b>
     </a>
@@ -40,66 +51,14 @@
         <b>我的</b>
     </a>
 </footer>
-<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
 <script src="{{$STATIC_HOST}}/static/common/no-angular-common.js"></script>
 <script>
     Pyshuo.share.utils.init();
     Pyshuo.share.utils.checkHasUnreadInfo();
+    (function () {
+
+    })();
 </script>
-{{if $jWeixinOn}}
-<script>
-    if(wx){
-        var wx_jssdk_appId = '{{$signPackage["appId"]}}';
-        var wx_jssdk_timestamp = '{{$signPackage["timestamp"]?$signPackage["timestamp"]:1}}';
-        var wx_jssdk_nonceStr = '{{$signPackage["nonceStr"]}}';
-        var wx_jssdk_signature = '{{$signPackage["signature"]}}';
-        var jsApiList = ['checkJsApi', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseImage', 'previewImage', 'uploadImage', 'downloadImage', 'openLocation', 'getLocation'];
-        wx.config({
-            debug: false,
-            appId: wx_jssdk_appId,
-            timestamp: wx_jssdk_timestamp,
-            nonceStr: wx_jssdk_nonceStr,
-            signature: wx_jssdk_signature,
-            jsApiList: jsApiList
-        });
-    }
-    wx.ready(function () {
-        var share_string = 'pool_product';
-        var to_timeline_title = "朋友说产品街";
-        var to_friend_title = "朋友说产品街";
-        var to_friend_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=appMsg';
-        var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
-        var imgUrl = 'http://static.tongshijia.com/static/img/banner_pool.gif';
-        var desc = "只有团长才可以逛的街，朋友说统一服务和售后";
-        wx.onMenuShareAppMessage({
-            title: to_friend_title,
-            desc: desc,
-            link: to_friend_link,
-            imgUrl: imgUrl,
-            success: function () {
-                // 用户确认分享后执行的回调函数
-                if(share_string != '0'){
-                    setTimeout(function(){
-                        $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "appMsg" });
-                    }, 500);
-                }
-            }
-        });
-        wx.onMenuShareTimeline({
-            title: to_timeline_title,
-            link: to_timeline_link,
-            imgUrl: imgUrl,
-            success: function () {
-                if(share_string != '0'){
-                    setTimeout(function(){
-                        $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "timeline" });
-                    }, 500);
-                }
-            }
-        });
-    });
-</script>
-{{/if}}
 </body>
 </html>

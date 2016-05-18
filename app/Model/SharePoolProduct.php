@@ -120,7 +120,6 @@ class SharePoolProduct extends AppModel
         foreach ($data as $v) {
             $ret[] = $v['id'];
         }
-
         return $ret;
     }
 
@@ -177,6 +176,7 @@ class SharePoolProduct extends AppModel
                 'conditions' => [
                     'deleted' => DELETED_NO,
                 ],
+                'order' => ['sort DESC']
             ]);
             $res = [];
             foreach ($data as $item) {
