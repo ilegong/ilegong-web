@@ -9,11 +9,11 @@
     color: #333333;
     text-decoration: none
   }
-  a:active{
+  a:active {
     color: #333333;
     text-decoration: none
   }
-  a:{
+  a: {
     color: #333333;
 
   }
@@ -524,20 +524,106 @@
     color: #666666;
   }
 }
-/*public layer bg*/
-.layer-bg{ background-color: #000000; filter:alpha(opacity=40); -moz-opacity:0.4; opacity:0.4; width: 100%; height: 100%; z-index: 998; position: fixed; top:0; left: 0;}
 
+/*public layer bg*/
+.layer-bg {
+  background-color: #000000;
+  filter: alpha(opacity=40);
+  -moz-opacity: 0.4;
+  opacity: 0.4;
+  width: 100%;
+  height: 100%;
+  z-index: 998;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
 
 /*change massage*/
-.self-massage{ width: 85%; position: fixed; left: 50%; top: 50%; background-color: #FFFFFF; z-index: 999; overflow: hidden;}
-.self-massage h1{ text-align: center; padding: 15px; margin-bottom: 15px; font-size: 1.5em; border-bottom: 1px #EEEEEE solid;}
-.self-massage ul{ padding: 0 20px 15px; color: #333333; font-size: 1.1em; color: #333333;}
-.self-import-massage{ border: 1px #dddddd solid; border-radius: 2px; padding: 12px; margin-top: 5px;}
-.self-import-massage input{ border: 0; line-height: 20px; font-size: 1em; outline: 0; width: 100%; color: #333333;}
-.self-import-massage textarea{ display: block; height: 100px; line-height: 20px; font-size: 1em; color: #333; border: 0; width: 100%; resize: none; outline: 0;}
-.self-massage dl{ border-top: 1px #dddddd solid; margin-top: 20px; font-size: 1.2em; font-weight: bold;}
-.self-massage dl dt{ float: left; width: 50%;}
-.self-massage dl dt a.btn-cur{ color: #ff6485; border-right: 1px #dddddd solid;}
-.self-massage dl dt a{ color: #666666; text-decoration: none; display: block; line-height: 44px; text-align: center;}
+.self-massage {
+  width: 85%;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  background-color: #FFFFFF;
+  z-index: 999;
+  overflow: hidden;
+}
 
+.self-massage h1 {
+  text-align: center;
+  padding: 15px;
+  margin-bottom: 15px;
+  font-size: 1.5em;
+  border-bottom: 1px #EEEEEE solid;
+}
 
+.self-massage ul {
+  padding: 0 20px 15px;
+  color: #333333;
+  font-size: 1.1em;
+  color: #333333;
+}
+
+.self-import-massage {
+  border: 1px #dddddd solid;
+  border-radius: 2px;
+  padding: 12px;
+  margin-top: 5px;
+}
+
+.self-import-massage input {
+  border: 0;
+  line-height: 20px;
+  font-size: 1em;
+  outline: 0;
+  width: 100%;
+  color: #333333;
+}
+
+.self-import-massage textarea {
+  display: block;
+  height: 100px;
+  line-height: 20px;
+  font-size: 1em;
+  color: #333;
+  border: 0;
+  width: 100%;
+  resize: none;
+  outline: 0;
+}
+
+.self-massage dl {
+  border-top: 1px #dddddd solid;
+  margin-top: 20px;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.self-massage dl dt {
+  float: left;
+  width: 50%;
+}
+
+.self-massage dl dt a.btn-cur {
+  color: #ff6485;
+  border-right: 1px #dddddd solid;
+}
+
+.self-massage dl dt a {
+  color: #666666;
+  text-decoration: none;
+  display: block;
+  line-height: 44px;
+  text-align: center;
+}
+
+.share-good, .recommend-sharer {
+  margin-bottom: 10px;
+  background-color: #ffffff;
+}
+
+.share-good a {
+  display: block;
+  text-decoration: none;
+}
