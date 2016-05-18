@@ -59,7 +59,7 @@ var all_js = [
       'webroot/static/weshares/js/share-order-list.js',
     ],
     dist: 'webroot/static/weshares/js/'
-  },{
+  }, {
     name: 'faq.min.js',
     sources: [
       'webroot/static/share_faq/custom/word-limit.js',
@@ -151,7 +151,8 @@ var all_css = [
       'webroot/src/scss/tutorial.scss',
     ],
     dist: 'webroot/static/weshares/css/'
-  }];
+  }
+];
 
 var js_tasks = [];
 var css_tasks = [];

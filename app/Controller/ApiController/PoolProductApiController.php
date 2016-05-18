@@ -38,22 +38,20 @@ class PoolProductApiController extends AppController
     {
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
-            echo json_encode(array('success' => false,'reason' => 'user login required.'));
+            echo json_encode(array('success' => false, 'reason' => 'user login required.'));
             exit();
         }
         $is_proxy = $this->ShareUtil->is_proxy_user($uid);
         if (!$is_proxy) {
-            echo json_encode(array('success' => false,'reason' => 'not a proxy user.'));
+            echo json_encode(array('success' => false, 'reason' => 'not a proxy user.'));
             exit();
         }
-
-        $this->log('Proxy '.$uid.' tries to clone share from pool products '.$share_id , LOG_INFO);
+        $this->log('Proxy ' . $uid . ' tries to clone share from pool products ' . $share_id, LOG_INFO);
         $result = $this->ShareUtil->cloneShare($share_id, $uid, SHARE_TYPE_POOL);
         if ($result['success']) {
-            $this->log('Proxy '.$uid.' clones share '.$result['shareId'] . ' from pool products '.$share_id.' successfully', LOG_INFO);
-        }
-        else{
-            $this->log('Proxy '.$uid.' failed to clone share '.$share_id . ' from pool products '.$share_id, LOG_ERR);
+            $this->log('Proxy ' . $uid . ' clones share ' . $result['shareId'] . ' from pool products ' . $share_id . ' successfully', LOG_INFO);
+        } else {
+            $this->log('Proxy ' . $uid . ' failed to clone share ' . $share_id . ' from pool products ' . $share_id, LOG_ERR);
         }
         echo json_encode($result);
         exit();
@@ -80,23 +78,8 @@ class PoolProductApiController extends AppController
      */
     public function get_all_product_categories()
     {
-        $model = ClassRegistry::init('PoolProductCategory');
-
-        $data = $model->find('all', [
-            'conditions' => [
-                'deleted' => DELETED_NO,
-            ],
-        ]);
-
-        $res = [];
-        foreach($data as $item) {
-            $tmp = [];
-            $tmp['id'] = $item['PoolProductCategory']['id'];
-            $tmp['name'] = $item['PoolProductCategory']['category_name'];
-
-            $res[] = $tmp;
-        }
-
+        $this->loadModel('SharePoolProduct');
+        $res = $this->SharePoolProduct->get_pool_product_categories();
         echo json_encode($res);
         exit();
     }

@@ -13,7 +13,7 @@ ul li { list-style: none; }
 .pro_aindex{ display: block; text-decoration: none; position: absolute; bottom: 15px; left: 50%; margin-left: -35px; width: 70px; font-size: 12px; color: #ffffff; text-align: center; line-height: 18px; border: 1px #ffffff solid;}
 /*add css 20160516*/
 .class-tab{ line-height: 44px; background-color: #FFF; border-bottom: 1px #ddd solid; width: 100%; position: fixed; top: 0; left: 0; z-index: 10;}
-.class-tab li{ float: left; text-align: center; font-size: 1.2em;}
+.class-tab li{ float: left; width: 16.6%; text-align: center; font-size: 1.2em;}
 .class-tab li.focus{ border-bottom: 2px #ff6485 solid; font-weight: 700;}
 .class-tab li a{ color: #333333; text-decoration: none;}
 .class-tab li.focus a{ color: #ff6485; text-decoration: none;}

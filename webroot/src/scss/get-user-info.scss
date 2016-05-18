@@ -314,6 +314,12 @@
     line-height: 20px;
     font-size: 1.1em;
     padding-top: 8px;
+    word-break: break-all;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
   }
   .share-content p span {
     color: #666666;
@@ -627,3 +633,5 @@
   display: block;
   text-decoration: none;
 }
+
+
