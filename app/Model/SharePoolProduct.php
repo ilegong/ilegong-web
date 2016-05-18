@@ -59,6 +59,32 @@ class SharePoolProduct extends AppModel
         return $this->get_all_pool_products($category);
     }
 
+    public function get_all_available_products()
+    {
+        $model = ClassRegistry::init('PoolProduct');
+        $data = $model->find('all', [
+            'conditions' => [
+                'PoolProduct.deleted' => DELETED_NO,
+                'PoolProduct.status' => 1,
+            ],
+            'order' => ['PoolProduct.sort ASC'],
+        ]);
+        $this->rearrange_data($data);
+    }
+
+    public function get_all_deleted_products()
+    {
+        $model = ClassRegistry::init('PoolProduct');
+        $data = $model->find('all', [
+            'conditions' => [
+                'PoolProduct.deleted' => DELETED_NO,
+                'PoolProduct.status' => 0,
+            ],
+            'order' => ['PoolProduct.sort ASC'],
+        ]);
+        return $this->rearrange_data($data);
+    }
+
     /**
      * @param $share_id
      * @return mixed

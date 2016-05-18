@@ -679,11 +679,15 @@ class ShareManageController extends AppController
     /**
      * 产品池中产品的订单
      */
-    public function pool_product_order()
+    public function pool_product_order($type = 0)
     {
         $share_id = $_REQUEST['share_id'];
         $sharePoolProductM = ClassRegistry::init('SharePoolProduct');
-        $all_pool_products = $sharePoolProductM->get_all_products();
+        if ($type == 0) {
+            $all_pool_products = $sharePoolProductM->get_all_available_products();
+        } else {
+            $all_pool_products = $sharePoolProductM->get_all_deleted_products();
+        }
         $this->set('all_pool_products', $all_pool_products);
         if (!empty($share_id)) {
             $sharePoolProductM = ClassRegistry::init('SharePoolProduct');
