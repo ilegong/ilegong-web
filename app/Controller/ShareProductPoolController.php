@@ -18,6 +18,11 @@ class ShareProductPoolController extends AppController {
         $this->layout = 'weshare';
     }
 
+
+    public function index($category){
+
+    }
+
     /**
      *
      * 产品库首页

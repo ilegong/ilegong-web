@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
+    <meta charset="UTF-8">
+    <title>朋友说产品街</title>
+    <link rel="stylesheet" href="{{$STATIC_HOST}}/static/product_pool/css/pool-product.min.css"/>
+</head>
+<body style="background-color: #f1f1f1;">
+<ul class="class-tab">
+    <li class="focus"><a href="#X">爆款</a></li>
+    <li><a href="#X">水果</a></li>
+    <li><a href="#X">肉蛋</a></li>
+    <li><a href="#X">零食</a></li>
+    <li><a href="#X">玩具</a></li>
+    <li><a href="#X">其它</a></li>
+</ul>
+<div style="margin-top: 54px;">
+    {{loop $share_products $product}}
+    <div class="mb5">
+        <a href="/share_product_pool/share_product_detail/{{$product['weshare_id']}}">
+            <img src="{{$product['share_img']}}" width="100%"/>
+        </a>
+    </div>
+    {{/loop}}
+</div>
+</body>
+</html>

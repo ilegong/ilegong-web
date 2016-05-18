@@ -24,30 +24,27 @@ class SharePoolProduct extends AppModel
     public function get_all_pool_products($category = 0)
     {
         $conditions = [];
-
         if ($category) {
             $conditions['PoolProduct.category'] = $category;
         }
-
         $model = ClassRegistry::init('PoolProduct');
         $data = $model->find('all', [
             'conditions' => array_merge($conditions, [
                 'PoolProduct.deleted' => DELETED_NO,
-                'PoolProduct.status' => 1,
+                'PoolProduct.status' => PUBLISH_YES,
             ]),
             'order' => ['PoolProduct.sort ASC'],
         ]);
-
         return $this->rearrange_data($data);
     }
 
     private function rearrange_data($data)
     {
-        $items = Hash::extract($data, '{n}.PoolProduct');
-        usort($items, function($one, $another){
-            return $one['sort'] > $another['sort'];
-        });
-        return $items;
+        $result = [];
+        foreach ($data as $product_item) {
+            $result[] = $product_item['PoolProduct'];
+        }
+        return $result;
     }
 
     /**
