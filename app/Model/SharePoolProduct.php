@@ -65,11 +65,11 @@ class SharePoolProduct extends AppModel
         $data = $model->find('all', [
             'conditions' => [
                 'PoolProduct.deleted' => DELETED_NO,
-                'PoolProduct.status' => 1,
+                'PoolProduct.status' => PUBLISH_YES,
             ],
             'order' => ['PoolProduct.sort ASC'],
         ]);
-        $this->rearrange_data($data);
+        return $this->rearrange_data($data);
     }
 
     public function get_all_deleted_products()
@@ -78,7 +78,7 @@ class SharePoolProduct extends AppModel
         $data = $model->find('all', [
             'conditions' => [
                 'PoolProduct.deleted' => DELETED_NO,
-                'PoolProduct.status' => 0,
+                'PoolProduct.status' => PUBLISH_NO,
             ],
             'order' => ['PoolProduct.sort ASC'],
         ]);
