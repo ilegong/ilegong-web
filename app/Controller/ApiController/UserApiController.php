@@ -49,6 +49,7 @@ class UserApiController extends AppController
         $user_summary = $this->WeshareBuy->get_user_share_summary($uid);
         $order_summary = $this->WeshareBuy->get_user_order_summary($uid);
         $share_summary = $this->WeshareBuy->get_sharer_summary($uid);
+        $share_summary['month_trade_money'] = intval($share_summary['month_trade_money']);
         echo json_encode(['user_summary' => $user_summary, 'order_summary' => $order_summary, 'share_summary' => $share_summary]);
         exit();
     }
