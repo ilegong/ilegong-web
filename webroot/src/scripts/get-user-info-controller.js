@@ -265,7 +265,6 @@
         } else {
           vm.mine.order = vm.mine.order.concat(data);
           vm.mine.orderPage += 1;
-          console.log(vm.mine.order);
         }
         vm.loading = false;
       }).error(function () {
