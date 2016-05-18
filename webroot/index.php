@@ -90,6 +90,7 @@ if (getenv('TONGSHIJIA_ENV') == 'product') {
     define('MYSQL_SERVER_HOST', 'db.tongshijia.com');
     define('MEMCACHE_HOST', 'mem.tongshijia.com');
     define('REDIS_HOST', 'redis.tongshijia.com');
+    define('SQL_DEBUG',false);
 } elseif (getenv('TONGSHIJIA_ENV') == 'preprod') {
     define('STATIC_HOST', 'http://static-test.tongshijia.com');
     define('IMAGES_HOST', 'http://images.tongshijia.com');
@@ -99,6 +100,7 @@ if (getenv('TONGSHIJIA_ENV') == 'product') {
     define('MYSQL_SERVER_HOST', 'db.tongshijia.com');
     define('MEMCACHE_HOST', 'mem.tongshijia.com');
     define('REDIS_HOST', 'redis.tongshijia.com');
+    define('SQL_DEBUG',false);
 }  elseif (getenv('TONGSHIJIA_ENV') == 'branch-sh') {
     define('STATIC_HOST', 'http://static-sh.tongshijia.com');
     define('IMAGES_HOST', 'http://images.tongshijia.com');
@@ -108,6 +110,7 @@ if (getenv('TONGSHIJIA_ENV') == 'product') {
     define('MYSQL_SERVER_HOST', 'db.tongshijia.com');
     define('MEMCACHE_HOST', 'mem.tongshijia.com');
     define('REDIS_HOST', 'redis.tongshijia.com');
+    define('SQL_DEBUG',false);
 } elseif (getenv('TONGSHIJIA_ENV') == 'test') {
     define('STATIC_HOST', 'http://static-test.tongshijia.com');
     define('IMAGES_HOST', 'http://images-test.tongshijia.com');
@@ -117,6 +120,7 @@ if (getenv('TONGSHIJIA_ENV') == 'product') {
     define('MYSQL_SERVER_HOST', 'test.tongshijia.com');
     define('MEMCACHE_HOST', 'test.tongshijia.com');
     define('REDIS_HOST', 'test.tongshijia.com');
+    define('SQL_DEBUG',false);
 } else {
     define('STATIC_HOST', 'http://dev.tongshijia.com');
     define('IMAGES_HOST', 'http://dev.tongshijia.com');
@@ -126,6 +130,7 @@ if (getenv('TONGSHIJIA_ENV') == 'product') {
     define('MYSQL_SERVER_HOST', '127.0.0.1');
     define('MEMCACHE_HOST', '127.0.0.1');
     define('REDIS_HOST', '127.0.0.1');
+    define('SQL_DEBUG',true);
 }
 
 if (!include(CORE_PATH . 'Cake' . DS . 'bootstrap.php')) {
