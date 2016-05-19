@@ -424,7 +424,10 @@ class DboSource extends DataSource {
 
 		$t = microtime(true);
 		$this->_result = $this->_execute($sql, $params);
-
+		if(SQL_DEBUG)
+		{
+			CakeLog::write( 7 , $sql);
+		}
 		if ($options['log']) {
 			$this->took = round((microtime(true) - $t) * 1000, 0);
 			$this->numRows = $this->affected = $this->lastAffected();

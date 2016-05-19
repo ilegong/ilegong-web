@@ -890,6 +890,7 @@ class WesharesController extends AppController
         $rebate_money = $this->ShareUtil->get_rebate_money($uid);
         $this->set('rebate_money', $rebate_money);
         $this->set('uid', $uid);
+        $this->set('detail_url',WX_HOST."/weshares/get_other_info/$uid.html");
     }
 
     /**

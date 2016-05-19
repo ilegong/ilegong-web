@@ -31,12 +31,12 @@ class WesharesComponent extends Component
         $result = [];
         //商品的统计
         $share_summery = $this->WeshareBuy->get_share_buy_summery($weshare_id);
-        $share_summery = $share_summery['detail'];
+        $share_summery = $share_summery['details'];
         foreach ($weshare_products as $product_item) {
             $product = $product_item['WeshareProduct'];
             $left = 0;
             if ($product['store'] > 0) {
-                $left = $product['store'] - $share_summery[$product['id']];
+                $left = $product['store'] - intval($share_summery[$product['id']]['num']);
             }
             $product['left'] = $left < 0 ? 0 : $left;
             $product['price'] = $product['price'] / 100;

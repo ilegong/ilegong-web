@@ -12,7 +12,8 @@
       isBlank: isBlank,
       isMobileValid: isMobileValid,
       isNumber: isNumber,
-      toPercent: toPercent
+      toPercent: toPercent,
+      removeEmoji : removeEmoji
     };
     function isMobileValid(mobile) {
       return /^1\d{10}$/.test(mobile);
@@ -29,6 +30,11 @@
     function toPercent(value) {
       return Math.min(Math.round(value * 10000) / 100, 100);
     }
+
+    function removeEmoji(str){
+      return str.replace(/([\uE000-\uF8FF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF])/g, '');
+    }
+
   }
 
   function CoreReactorChannel($rootScope) {
