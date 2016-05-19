@@ -21,12 +21,12 @@
           {
             "type":"view",
             "name":"团长加入指南",
-            "url":"http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=400858287&idx=1&sn=5f0049e7a0d2f9387cbb1ef9188ee079&scene=1"
+            "url":"https://mp.weixin.qq.com/s?__biz=MzIwNzMyNjk5NQ==&mid=100000004&idx=1&sn=9c517b41f173a37bcd0b62efa940bc4b"
           },
           {
             "type":"view",
             "name":"商家入驻指南",
-            "url":"http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=400854243&idx=1&sn=cce48490ef7ac0ee9f697eba6216aecf&scene=1"
+            "url":"https://mp.weixin.qq.com/s?__biz=MzIwNzMyNjk5NQ==&mid=100000017&idx=1&sn=87f2be4af5a5399cf1cbe68c0734b141"
           }
         ]
     },
