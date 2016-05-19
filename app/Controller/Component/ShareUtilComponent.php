@@ -2084,7 +2084,7 @@ class ShareUtilComponent extends Component
         $key = INDEX_PRODUCT_SUMMARY_CACHE_KEY . '_' . $share_id;
         $cache_data = Cache::read($key);
         if (!empty($cache_data)) {
-            return json_decode($cache_data);
+            return json_decode($cache_data, true);
         }
 
         $OrderM = ClassRegistry::init('Order');
