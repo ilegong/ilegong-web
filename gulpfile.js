@@ -47,13 +47,6 @@ var all_js = [
     ],
     dist: 'webroot/static/user/'
   }, {
-    name: 'opt.min.js',
-    sources: [
-      'webroot/static/opt/js/lazyload.min.js',
-      'webroot/static/opt/js/opt.js'
-    ],
-    dist: 'webroot/static/opt/js/'
-  }, {
     name: 'share-order-list.min.js',
     sources: [
       'webroot/static/weshares/js/share-order-list.js',
