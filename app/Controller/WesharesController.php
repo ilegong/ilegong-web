@@ -785,6 +785,7 @@ class WesharesController extends AppController
     {
         $limit = 5;
         $page = intval($page) > 1 ? intval($page) : 1;
+        $page = $page - 1;
         $uid = $this->currentUser['id'];
         $params = ['user_id' => $uid, 'status' => [ORDER_STATUS_DONE, ORDER_STATUS_PAID, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY], 'limit' => $limit, 'page' => $page];
         $orders = $this->Orders->get_user_order($params);
