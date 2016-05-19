@@ -52,20 +52,6 @@ class ShareOptController extends AppController {
         $this->set('products', $products);
     }
 
-    /**
-     * fetch opt log list
-     */
-    public function fetch_opt_list_data() {
-        $time = $_REQUEST['time'];
-        $limit = $_REQUEST['limit'];
-        $type = $_REQUEST['type'];
-
-        $data = $this->fetch_opt_list_data_comman($time, $limit, $type);
-
-        echo json_encode($data);
-        return;
-    }
-
     public function get_baoming_ajax() {
         $share = $_REQUEST['share'];
         $proxy = $_REQUEST['proxy'];
