@@ -41,6 +41,7 @@ class NewOptLog extends AppModel
                 'NewOptLog.deleted' => DELETED_NO,
                 'NewOptLog.time < ' => date('Y-m-d H:i:s', $time),
                 'Weshare.status' => WESHARE_STATUS_NORMAL,
+                'Weshare.title not like ' => '%测试%',
             ]),
             'fields' => [
                 'NewOptLog.*',
