@@ -258,6 +258,9 @@ class ShareManageController extends AppController
         $this->autoRender = false;
         $json_data = $_REQUEST['data'];
         $share_product_data = json_decode($json_data, true);
+        foreach($share_product_data as &$product_item){
+            $product_item['price'] = intval($product_item['price'] * 100);
+        }
         $this->WeshareProduct->saveAll($share_product_data);
         $this->clear_share_cache();
         echo json_encode(array('success' => true));
