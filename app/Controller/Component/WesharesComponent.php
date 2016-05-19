@@ -256,7 +256,8 @@ class WesharesComponent extends Component
         $weshares = $weshareM->find('all', [
             'conditions' => [
                 'creator' => $uid,
-                'status' => WESHARE_STATUS_NORMAL
+                'status' => WESHARE_STATUS_NORMAL,
+                'type' => [SHARE_TYPE_GROUP, SHARE_TYPE_DEFAULT, SHARE_TYPE_POOL_FOR_PROXY, SHARE_TYPE_POOL]
             ],
             'limit' => $limit,
             'page' => $page,
