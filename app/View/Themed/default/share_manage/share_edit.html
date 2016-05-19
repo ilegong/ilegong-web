@@ -80,7 +80,7 @@
                         <div class='form-row'>
                           <div class='col-xs-3 form-group required'>
                             <label class='control-label'>价格</label>
-                            <input class='form-control' type="number" value="0" name="product-price">
+                            <input class='form-control' value="0" name="product-price">
                           </div>
                           <div class='col-xs-3 form-group required'>
                             <label class='control-label'>库存</label>
@@ -125,7 +125,7 @@
                           <div class='form-row'>
                             <div class='col-xs-3 form-group required'>
                               <label class='control-label'>价格</label>
-                              <input class='form-control' type="number" value="{{$product['WeshareProduct']['price']}}" name="product-price">
+                              <input class='form-control' value="{{number_format($product['WeshareProduct']['price']/100, 2)}}" name="product-price">
                             </div>
                             <div class='col-xs-3 form-group required'>
                               <label class='control-label'>库存</label>
@@ -159,12 +159,12 @@
               </div>
             </div>
             <div class="panel panel-default">
-              <div id="headingThree" role="tab" class="panel-heading">
+              <div id="headingThree2" role="tab" class="panel-heading">
                 <h4 class="panel-title">
                   <a aria-controls="collapseThree" aria-expanded="false" href="#collapseThree" data-parent="#accordion" data-toggle="collapse" role="button" class="collapsed"> 3. 物流设置 </a>
                 </h4>
               </div>
-              <div aria-labelledby="headingThree" role="tabpanel" class="panel-collapse collapse" id="collapseThree" aria-expanded="false" style="height: 0px;">
+              <div aria-labelledby="headingThree2" role="tabpanel" class="panel-collapse collapse" id="collapseThree" aria-expanded="false" style="height: 0px;">
                 <div class="panel-body">
                   <div class="col-xs-12">
                     <div class="col-md-12" id="shareShipSettingsInfo">
@@ -196,12 +196,12 @@
               </div>
             </div>
             <div class="panel panel-default">
-              <div id="headingThree" role="tab" class="panel-heading">
+              <div id="headingThree3" role="tab" class="panel-heading">
                 <h4 class="panel-title">
                   <a aria-controls="collapseThree" aria-expanded="false" href="#collapseFour" data-parent="#accordion" data-toggle="collapse" role="button" class="collapsed"> 4. 佣金设置 </a>
                 </h4>
               </div>
-              <div aria-labelledby="headingThree" role="tabpanel" class="panel-collapse collapse" id="collapseFour" aria-expanded="false" style="height: 0px;">
+              <div aria-labelledby="headingThree3" role="tabpanel" class="panel-collapse collapse" id="collapseFour" aria-expanded="false" style="height: 0px;">
                 <div class="panel-body">
                   <div class="col-md-12" id="shareRebateSettingInfo">
                     <h3> 佣金设置</h3>
