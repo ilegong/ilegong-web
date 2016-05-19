@@ -794,6 +794,7 @@ class WesharesController extends AppController
             $result_item['share_info'] = $order_item['Weshare'];
             $result[] = $result_item;
         }
+        $this->log('user get self order data '.json_encode($result), LOG_DEBUG);
         echo json_encode($result);
         exit();
     }
