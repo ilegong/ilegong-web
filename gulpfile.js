@@ -40,6 +40,12 @@ var all_js = [
     ],
     dist: 'webroot/static/weshares/js/'
   }, {
+    name: 'share-opt-index.min.js',
+    sources: [
+      'webroot/src/scripts/share-opt-index-controller.js',
+    ],
+    dist: 'webroot/static/weshares/js/'
+  }, {
     name: 'avatar.min.js',
     sources: [
       'webroot/static/user/layer.m.js',
@@ -105,6 +111,12 @@ var all_css = [
     name: 'index.min.css',
     sources: [
       'webroot/src/scss/index.scss'
+    ],
+    dist: 'webroot/static/weshares/css/'
+  }, {
+    name: 'share-opt-index.min.css',
+    sources: [
+      'webroot/src/scss/share-opt-index.scss',
     ],
     dist: 'webroot/static/weshares/css/'
   }, {
