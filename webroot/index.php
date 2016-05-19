@@ -100,7 +100,7 @@ if (getenv('TONGSHIJIA_ENV') == 'product') {
     define('MYSQL_SERVER_HOST', 'db.tongshijia.com');
     define('MEMCACHE_HOST', 'mem.tongshijia.com');
     define('REDIS_HOST', 'redis.tongshijia.com');
-    define('SQL_DEBUG',true);
+    define('SQL_DEBUG',false);
 }  elseif (getenv('TONGSHIJIA_ENV') == 'branch-sh') {
     define('STATIC_HOST', 'http://static-sh.tongshijia.com');
     define('IMAGES_HOST', 'http://images.tongshijia.com');
