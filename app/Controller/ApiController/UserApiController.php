@@ -43,6 +43,7 @@ class UserApiController extends AppController
         exit();
     }
 
+    //个人详情
     public function user_detail()
     {
         $uid = $this->currentUser['id'];

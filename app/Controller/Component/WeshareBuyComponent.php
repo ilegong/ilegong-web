@@ -2161,11 +2161,13 @@ class WeshareBuyComponent extends Component
         if (empty($summery_data)) {
             $weshareM = ClassRegistry::init('Weshare');
             $userRelationM = ClassRegistry::init('UserRelation');
-            $weshares = $weshareM->find('all', array(
-                'conditions' => array(
-                    'creator' => $uid
-                ),
-                'fields' => array('id')
+            $weshare_count = $weshareM->find('count', array(
+                'conditions' => [
+                    'creator' => $uid,
+                    'status' => [WESHARE_STATUS_NORMAL, WESHARE_STATUS_STOP],
+                    'settlement' => [WESHARE_SETTLEMENT_NO, WESHARE_SETTLEMENT_YES],
+                    'type' => [SHARE_TYPE_GROUP, SHARE_TYPE_DEFAULT, SHARE_TYPE_POOL_FOR_PROXY, SHARE_TYPE_POOL]
+                ]
             ));
             $fans_count = $userRelationM->find('count', array(
                 'conditions' => array(
@@ -2180,7 +2182,7 @@ class WeshareBuyComponent extends Component
                 )
             ));
             $comments_count = $this->get_sharer_comments_count($uid);
-            $summery_data = array('share_count' => count($weshares), 'follower_count' => $fans_count, 'focus_count' => $focus_count, 'comment_count' => $comments_count);
+            $summery_data = array('share_count' => $weshare_count, 'follower_count' => $fans_count, 'focus_count' => $focus_count, 'comment_count' => $comments_count);
             Cache::write($key, json_encode($summery_data));
             return $summery_data;
         }
