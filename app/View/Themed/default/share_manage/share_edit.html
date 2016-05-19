@@ -35,14 +35,20 @@
                     <div class="form-group">
                       <input type="hidden" value="{{$this->data['Weshare']['images']}}" id="share-images" autocomplete="off">
                       <label class="control-label">分享图片</label>
-                      <?php $tmp_images = explode('|', $this->data['Weshare']['images']); ?>
-                      <div class="row"> {{loop $tmp_images $img}} <div class="image-area col-sm-2">
+                      <?php $tmp_images = explode('|', $this->data['Weshare']['images']);
+                        $tmp_images = array_filter($tmp_images);
+                        ?>
+                      <div class="row">
+                          {{loop $tmp_images $img}}
+                          <div class="image-area col-sm-2">
                           <img src="{{$img}}">
                           <div class="operator">
                             <a href="javascript:void(0)" src-data="{{$img}}" class="btn btn-primary preview-image">预览</a>
                             <a href="javascript:void(0)" src-data="{{$img}}" class="btn btn-danger delete-image">删除</a>
                           </div>
-                        </div> {{/loop}} <div class="col-sm-12 share-upload-btn">
+                        </div>
+                          {{/loop}}
+                          <div class="col-sm-12 share-upload-btn">
                           <a class='btn btn-default' href="javascript:void(0)" id='upload-image'> 选择图片 </a>
                           <a class='btn btn-primary' href="javascript:void(0)" id='upload-image-action'> 上传图片 </a>
                         </div>
