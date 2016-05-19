@@ -269,7 +269,6 @@ class WesharesComponent extends Component
                 $data_item = $weshare_item['Weshare'];
                 $data_item['summary'] = $this->ShareUtil->get_index_product_summary($data_item['id']);
                 $data_item['summary']['view_count'] = $data_item['view_count'];
-                unset($data_item['view_count']);
                 $result[] = $data_item;
             }
         }
