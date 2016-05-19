@@ -31,7 +31,7 @@ $(document).ready(function () {
             success: function (data) {
                 if(data.url[0]){
                     var imgUrl = 'http://static.tongshijia.com/' + data.url[0];
-                    var obj = $('.image-area').eq(0).clone();
+                    var obj = $('#image-area-template').eq(0).clone();
                     obj.find('img').attr('src', imgUrl);
                     obj.find('a').attr('src-data', imgUrl);
                     $('.share-upload-btn').before(obj);
