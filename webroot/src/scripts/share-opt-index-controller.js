@@ -8,12 +8,13 @@
     vm.loadData = loadData;
     vm.loadNextPage = loadNextPage;
     vm.onLoadedError = onLoadedError;
+    vm.getShareImage = getShareImage;
     vm.bottomTimeStamp = 0;
     vm.shares = [];
     activate();
 
     function activate() {
-      vm.loadData().then(function (data) {
+      vm.loadData(vm.bottomTimeStamp).then(function (data) {
         $rootScope.loadingPage = false;
       }, function (data) {
         $rootScope.loadingPage = false;
@@ -26,13 +27,7 @@
       }
 
       vm.loading = true;
-      var data = {
-        "type": 0,
-        "time": vm.bottomTimeStamp,
-        "limit": 5
-      };
-
-      vm.loadData(data).success(function (data) {
+      vm.loadData(vm.bottomTimeStamp).success(function (data) {
         vm.loading = false;
       }).error(function (data) {
         vm.onLoadedError();
@@ -40,11 +35,11 @@
       });
     }
 
-    function loadData(params) {
+    function loadData(time) {
       var deferred = $q.defer();
-      $http.get("/share_opt/newfetch_opt_list_data.json", params).success(function (data) {
+      $http.get("/share_opt/fetch_opt_list_data.json?limit=5&type=0&time="+time).success(function (data) {
         if (data.error) {
-          deferred.resolve('Hello, ' + name + '!');
+          deferred.reject(data.error);
         }
 
         var list = data['opt_logs'];
@@ -68,6 +63,13 @@
       //  $loadingDiv.find('div').text('没有获取到(更多)有效数据!!!');
       //  return;
       //}
+    }
+
+    function getShareImage(share) {
+      if (_.isEmpty(share) || _.isEmpty(share.images)) {
+        return vm.staticFilePath + '/static/img/default_product_banner.png';
+      }
+      return vm.staticFilePath + share.images[0];
     }
   }
 })(window, window.angular);
