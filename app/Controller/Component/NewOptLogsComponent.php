@@ -1,6 +1,6 @@
 <?php
 
-class NewOptLogListComponent extends Component {
+class NewOptLogsComponent extends Component {
 
     var $components = ['WeshareBuy'];
 
