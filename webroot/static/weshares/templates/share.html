@@ -1,0 +1,57 @@
+<ul class="share-header clearfix">
+    <li class="fl">
+        <a href="/weshares/user_share_info/{{share.proxy_id}}">
+            <img itemprop="image" class="avatar radius50"
+                 lazy-src="{{share.avatar}}"
+                 fallback-src="{{vm.staticFilePath + '/avatar/s/default.jpg'}}">
+        </a>
+    </li>
+    <li class="sharer-label"></li>
+    <li class="fl">
+        <label>
+            <a class="nickname" href="/weshares/user_share_info/" ng-bind="share.proxy">
+            </a>
+        </label>
+        <dl class="clearfix sharer-tag">
+            <dd class="fl">
+                "吃货向标"
+            </dd>
+        </dl>
+    </li>
+    <li class="fr ta" ng-class="{'un-subscribed': !vm.isSubscribed({{share.user}})}"
+        ng-click="vm.subscribe({{user.id}})">关注TA
+    </li>
+    <li class="fr ta" style="position: relative;"
+        ng-class="{'subscribed': vm.isSubscribed({{user.id}})}">
+        <a href="#X" class="clearfix">
+            <span>已关注</span>
+            <label>
+                <i></i>
+                <em></em>
+            </label>
+        </a>
+        <a class="unfollow" ng-show="vm.showUnSubscribeBtn({{user.id}})"
+           ng-click="vm.unSubscribe({{user.id}})">取消关注</a>
+    </li>
+</ul>
+
+<div classs="share-image" style="position: relative;text-align: center;"
+     ng-click="vm.goToShare(share.id)">
+    <img class="image" lazy-src="{{share.default_image}}"
+         fallback-src="{{vm.staticFilePath}}/static/img/default_product_banner.png">
+</div>
+<div class="share-content" ng-click="vm.goToShare(share.id)">
+    <h1 class="share-title" ng-bind="share.title"></h1>
+
+    <p><span ng-bind="share.description"></span></p>
+</div>
+
+<dl class="share-data clearfix ">
+    <dd class="clearfix" style="padding-right: 60px;max-height: 420px;">
+        <img class="radius50" ng-repeat="buyer in share.summary.orders_and_creators | limitTo: 4"
+             lazy-src="{{buyer.avatar}}"
+             fallback-src="this.src='{{vm.staticFilePath}}/avatar/s/default.jpg'"/>
+        <label>已<span>{{share.summary.order_count}}</span>个人报名</label>
+    </dd>
+    <dd class="browse">浏览{{share.summary.view_count}}</dd>
+</dl>

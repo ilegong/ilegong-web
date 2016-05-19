@@ -18,6 +18,25 @@ textarea, input {
   outline: none
 }
 
+a:visited {
+  color: #333333;
+  text-decoration: none;
+}
+
+a:link {
+  color: #333333;
+  text-decoration: none;
+}
+
+a:active {
+  color: #333333;
+  text-decoration: none;
+}
+
+a:-webkit-any-link {
+  text-decoration: none
+}
+
 .fl {
   float: left;
 }
@@ -63,7 +82,6 @@ textarea, input {
 .text-center {
   text-align: center;
 }
-
 
 footer {
   box-sizing: border-box;
@@ -251,5 +269,31 @@ footer {
     left: 50%;
     margin-left: -52px;
     position: absolute;
+  }
+}
+
+.shares-container {
+  .share {
+    display: block;
+    margin-bottom: 10px;
+    background-color: #fff;
+    .share-header {
+      background: #fff;
+      position: relative;
+      padding: 10px 12px;
+      .avatar {
+        width: 40px;
+        height: 40px;
+        display: block;
+      }
+    }
+    .share-image {
+      .image {
+
+      }
+    }
+    .share-content {
+
+    }
   }
 }

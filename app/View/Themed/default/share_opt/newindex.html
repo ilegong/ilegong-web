@@ -1,25 +1,11 @@
-<div class="share-opt-index-page" ng-class="ShareOptIndexController as vm">
-    <div class="share-good" style="display: none" ng-class="{'show-b':vm.focus == 'share'}" infinite-scroll='vm.shareNextPage()'
-         infinite-scroll-disabled='vm.sharesOver||vm.loading'
-         infinite-scroll-distance='0' ng-repeat="share in vm.shares.list">
-        <a href="javascript:;" ng-click="vm.goToShare(share.id)">
-            <div style="position: relative;text-align: center;">
-                <img class="product-image" lazy-src="{{share.default_image}}"
-                     fallback-src="{{vm.staticFilePath}}/static/img/default_product_banner.png">
-            </div>
-            <div class="share-content">
-                <h1 class="share-title" ng-bind="share.title"></h1>
-                <p>{{vm.username}}说" <span ng-bind="share.description"></span>"</p>
-            </div>
-        </a>
-        <dl class="clearfix share-data">
-            <dd class="clearfix" style="padding-right: 60px;max-height: 420px;">
-                <img class="radius50" ng-repeat="buyer in share.summary.orders_and_creators | limitTo: 4" lazy-src="{{buyer.avatar}}"
-                     fallback-src="this.src='{{vm.staticFilePath}}/avatar/s/default.jpg'"/>
-                <label>已<span>{{share.summary.order_count}}</span>个人报名</label>
-            </dd>
-            <dd class="browse">浏览{{share.summary.view_count}}</dd>
-        </dl>
+<div class="share-opt-index-page" style="display: none" ng-class="{'show-b': true}"
+     ng-controller="ShareOptIndexController as vm">
+    <div class="shares-container" infinite-scroll='vm.shareNextPage()'
+         infinite-scroll-disabled='false'
+         infinite-scroll-distance='0'>
+        <div class="share" ng-include="'{{$STATIC_HOST}}/static/weshares/templates/share.html?v1.8.8'" ng-repeat="share in vm.shares">
+
+        </div>
     </div>
 </div>
 

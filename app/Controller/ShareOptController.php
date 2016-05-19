@@ -3,23 +3,41 @@
 /**
  * 分享动态
  */
-class ShareOptController extends AppController {
+class ShareOptController extends AppController
+{
 
     var $uses = array('OptLog', 'User', 'VisitLog', 'UserRelation');
 
-    var $components = array('WeshareBuy', 'OptLogHelper', 'ShareUtil', 'NewOptLogList');
+    var $components = array('WeshareBuy', 'ShareUtil', 'NewOptLogs');
 
     /**
      * pys index view
      */
-    public function index() {
+    public function index()
+    {
         $this->layout = null;
         $uid = $this->currentUser['id'];
-        if(!empty($uid)){
+        if (!empty($uid)) {
             $this->save_visit_log($uid);
         }
         $this->set('uid', $uid);
-        if($_REQUEST['from'] == 'app'){
+        if ($_REQUEST['from'] == 'app') {
+            $this->set('hide_footer', true);
+        }
+    }
+
+    /**
+     * pys index view
+     */
+    public function newindex()
+    {
+        $this->layout = 'weshare';
+        $uid = $this->currentUser['id'];
+        if (!empty($uid)) {
+            $this->save_visit_log($uid);
+        }
+        $this->set('uid', $uid);
+        if ($_REQUEST['from'] == 'app') {
             $this->set('hide_footer', true);
         }
     }
@@ -52,10 +70,11 @@ class ShareOptController extends AppController {
         $this->set('products', $products);
     }
 
-    public function get_baoming_ajax() {
+    public function get_baoming_ajax()
+    {
         $share = $_REQUEST['share'];
         $proxy = $_REQUEST['proxy'];
-        $data = $this->NewOptLogList->get_all_baoming_data($share, $proxy);
+        $data = $this->NewOptLogs->get_all_baoming_data($share, $proxy);
 
         echo json_encode($data);
         exit();
@@ -67,19 +86,20 @@ class ShareOptController extends AppController {
      * @access public
      * @return void
      */
-    public function newfetch_opt_list_data() {
+    public function newfetch_opt_list_data()
+    {
         $time = $_REQUEST['time'];
         $limit = $_REQUEST['limit'];
         $type = $_REQUEST['type'];
         $followed = $_REQUEST['followed'];
 
-        $data = $this->fetch_opt_list_data_comman($time, $limit, $type, $followed, 1);
+        $data = $this->fetch_opt_list_data_comman($time, $limit, $type, $followed);
         echo json_encode($data);
 
         exit();
     }
 
-    public function fetch_opt_list_data_comman($time, $limit, $type, $follow = false, $new = false)
+    public function fetch_opt_list_data_comman($time, $limit, $type, $follow = false)
     {
         $this->autoRender = false;
         if ($time == 0) {
@@ -91,17 +111,10 @@ class ShareOptController extends AppController {
             $opt_logs = [];
             $combine_data = [];
         } else {
-            if ($new) {
-                $opt_logs = $this->NewOptLogList->get_all_logs($time, $limit, $type, $follow);
-                // $opt_logs = $this->OptLogHelper->load_opt_log($time, $limit, $type, 1, $follow);
-                $combine_data = [];
-                if (!$opt_logs) {
-                    return ['error' => 'get data failed.'];
-                }
-            } else {
-                $opt_log_data = $this->OptLogHelper->load_opt_log($time, $limit, $type, 0, $follow);
-                $opt_logs = $opt_log_data['opt_logs'];
-                $combine_data = $opt_log_data['combine_data'];
+            $opt_logs = $this->NewOptLogs->get_all_logs($time, $limit, $type, $follow);
+            $combine_data = [];
+            if (!$opt_logs) {
+                return ['error' => 'get data failed.'];
             }
         }
         $data = [
@@ -118,7 +131,8 @@ class ShareOptController extends AppController {
     /**
      * check user is has unread opt log
      */
-    public function check_opt_has_new() {
+    public function check_opt_has_new()
+    {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
         $visitLog = $this->get_user_visit_log($uid);
@@ -139,7 +153,8 @@ class ShareOptController extends AppController {
      * @param $uid
      * update user visit log
      */
-    private function save_visit_log($uid) {
+    private function save_visit_log($uid)
+    {
         $this->loadModel('VisitLog');
         $visitLog = $this->VisitLog->find('first', array(
             'conditions' => array(
@@ -160,7 +175,8 @@ class ShareOptController extends AppController {
      * @return mixed
      * get user visit log
      */
-    private function get_user_visit_log($uid) {
+    private function get_user_visit_log($uid)
+    {
         $visitLog = $this->VisitLog->find('first', array(
             'conditions' => array(
                 'user_id' => $uid
