@@ -104,6 +104,7 @@ class WeshareApiController extends Controller
     public function get_weshare_detail($weshare_id)
     {
         $uid = $this->currentUser['id'];
+        $this->WeshareBuy->update_share_view_count($weshare_id);
         $detail = $this->Weshares->get_app_weshare_detail($weshare_id);
         $products = $this->Weshares->get_weshare_products($weshare_id);
         $user_summary = $this->WeshareBuy->get_user_share_summary($detail['creator']);
