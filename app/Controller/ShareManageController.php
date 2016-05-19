@@ -215,6 +215,11 @@ class ShareManageController extends AppController
         $this->autoRender = false;
         $json_data = $_REQUEST['data'];
         $share_data = json_decode($json_data, true);
+        $images = array_filter(explode('|', $share_data['images']));
+        if(count($images) > 0){
+            $share_data['images'] = implode('|', $images);
+            $share_data['default_image'] = $images[0];
+        }
         $this->Weshare->save($share_data);
         $this->clear_share_cache();
         echo json_encode(array('success' => true));
