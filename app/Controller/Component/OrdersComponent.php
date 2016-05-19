@@ -93,7 +93,8 @@ class OrdersComponent extends Component
                 [
                     'table' => 'weshares',
                     'alias' => 'Weshare',
-                    'conditions' => ['Order.member_id = Weshare.id']
+                    'conditions' => ['Order.member_id = Weshare.id'],
+                    'type' => 'left'
                 ]
             ],
             'fields' => ['Order.id', 'Order.status', 'Order.created', 'Order.creator', 'Order.total_price', 'Order.brand_id', 'Order.ship_mark', 'Order.member_id', 'Weshare.title', 'Weshare.status', 'Weshare.default_image', 'Weshare.send_info'],
