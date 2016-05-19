@@ -1,29 +1,37 @@
-<div ng-controller="ShareOptIndexController as vm">
-
-</div>
-<ul class="clearfix tuijian-top-sousuo">
-    <li class="sousuo fl">
-        <a href="#X">
-            <img src="{{$STATIC_HOST}}/static/opt/images/sousuo.png" style="display: none;">
+<div class="share-opt-index-page" ng-class="ShareOptIndexController as vm">
+    <div class="share-good" style="display: none" ng-class="{'show-b':vm.focus == 'share'}" infinite-scroll='vm.shareNextPage()'
+         infinite-scroll-disabled='vm.sharesOver||vm.loading'
+         infinite-scroll-distance='0' ng-repeat="share in vm.shares.list">
+        <a href="javascript:;" ng-click="vm.goToShare(share.id)">
+            <div style="position: relative;text-align: center;">
+                <img class="product-image" lazy-src="{{share.default_image}}"
+                     fallback-src="{{vm.staticFilePath}}/static/img/default_product_banner.png">
+            </div>
+            <div class="share-content">
+                <h1 class="share-title" ng-bind="share.title"></h1>
+                <p>{{vm.username}}说" <span ng-bind="share.description"></span>"</p>
+            </div>
         </a>
-    </li>
-    <li class="tuijian_center">
-        <div class="bk bk_green fl activity" id='show-all'>推荐</div>
-        <div class="bk bk_white fl" id='show-only-followed'>关注</div>
-    </li>
-    <li class="fenxiang fr">
-        <a href="/weshares/add">
-            我要分享
-        </a>
-    </li>
-</ul>
-<div id="maindiv" data-uid="{{$uid}}" infinite-scroll='vm.shareNextPage()' infinite-scroll-disabled='vm.sharesOver||vm.loading' infinite-scroll-distance='0'>
-    <div id="dataloadingdiv" align="center"
-         style="margin:0px 6px;background-color:#FFFFFF;height:40px;line-height:40px;display: none;color: #f99d3a;">
-        <div>加载中...</div>
+        <dl class="clearfix share-data">
+            <dd class="clearfix" style="padding-right: 60px;max-height: 420px;">
+                <img class="radius50" ng-repeat="buyer in share.summary.orders_and_creators | limitTo: 4" lazy-src="{{buyer.avatar}}"
+                     fallback-src="this.src='{{vm.staticFilePath}}/avatar/s/default.jpg'"/>
+                <label>已<span>{{share.summary.order_count}}</span>个人报名</label>
+            </dd>
+            <dd class="browse">浏览{{share.summary.view_count}}</dd>
+        </dl>
     </div>
-    <div style="height: 100px;"></div>
 </div>
-<img id="topiconbut" style="display:none;width:40px;height:40px;position: fixed;right:15px;bottom:65px;"
-     src="{{$STATIC_HOST}}/static/opt/images/topicon.png">
 
+<?php
+$this->assign('title','发现-朋友说');
+$this->set('show_footer', 'opt');
+
+$this->Html->css(array(
+$STATIC_HOST.'/static/weshares/css/share-opt-index.min.css?v2.5.0'
+), null, array('inline' => false));
+
+$this->Html->script(array(
+$STATIC_HOST.'/static/weshares/js/share-opt-index.min.js?v2.5.0'
+), array('block' => 'scripts'))
+?>

@@ -256,7 +256,8 @@ class WesharesComponent extends Component
         $weshares = $weshareM->find('all', [
             'conditions' => [
                 'creator' => $uid,
-                'status' => WESHARE_STATUS_NORMAL
+                'status' => WESHARE_STATUS_NORMAL,
+                'type' => [SHARE_TYPE_GROUP, SHARE_TYPE_DEFAULT, SHARE_TYPE_POOL_FOR_PROXY, SHARE_TYPE_POOL]
             ],
             'limit' => $limit,
             'page' => $page,
@@ -264,12 +265,13 @@ class WesharesComponent extends Component
             'fields' => ['Weshare.id', 'Weshare.title', 'Weshare.description', 'Weshare.default_image', 'Weshare.creator', 'Weshare.view_count']
         ]);
         $result = [];
-        foreach ($weshares as $weshare_item) {
-            $data_item = $weshare_item['Weshare'];
-            $data_item['summary'] = $this->ShareUtil->get_index_product_summary($data_item['id']);
-            $data_item['summary']['view_count'] = $data_item['view_count'];
-            unset($data_item['view_count']);
-            $result[] = $data_item;
+        if(!empty($weshares)){
+            foreach ($weshares as $weshare_item) {
+                $data_item = $weshare_item['Weshare'];
+                $data_item['summary'] = $this->ShareUtil->get_index_product_summary($data_item['id']);
+                $data_item['summary']['view_count'] = $data_item['view_count'];
+                $result[] = $data_item;
+            }
         }
         return $result;
     }

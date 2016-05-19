@@ -1719,6 +1719,10 @@ function get_user_avatar($user)
         $user = $user['User'];
     }
     if ($user['avatar']) {
+        if(stripos($user['avatar'], ALIYUN_AVATAR_PREFIX) === 0)
+        {
+            return $user['avatar'];
+        }
         return ALIYUN_AVATAR_PREFIX . '/' . str_replace('avatar/', 'avatar/s/', $user['avatar']);
     }
     return $user['image'];
