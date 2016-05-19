@@ -1933,13 +1933,13 @@ class WesharesController extends AppController
             $this->set($wexin_params);
             if ($uid == $current_uid) {
                 $title = '这是' . $shareUser['nickname'] . '的微分享，快来关注我吧';
-                $image = get_user_avatar($shareUser);
+                $image = $shareUser['avatar'];
                 $desc = '朋友说是一个有人情味的分享社区，这里你不但可以吃到各地的特产，还能认识有趣的人。';
                 $detail_url = WX_HOST."/weshares/get_other_info/$uid.html";
             } else {
                 $current_user = $this->currentUser;
                 $title = $current_user['nickname'] . '推荐了' . $shareUser['nickname'] . '的微分享，快来关注ta吧！';
-                $image = $shareUser['image'];
+                $image = $shareUser['avatar'];
                 $desc = $shareUser['nickname'] . '是我的朋友，很靠谱。朋友说是一个有人情味的分享社区，这里你不但可以吃到各地的特产，还能认识有趣的人。';
                 $detail_url = WX_HOST."/weshares/get_other_info/$uid.html";
             }
