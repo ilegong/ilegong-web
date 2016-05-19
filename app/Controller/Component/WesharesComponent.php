@@ -261,12 +261,14 @@ class WesharesComponent extends Component
             'limit' => $limit,
             'page' => $page,
             'order' => ['Weshare.id DESC'],
-            'fields' => ['Weshare.id', 'Weshare.title', 'Weshare.description', 'Weshare.default_image', 'Weshare.creator']
+            'fields' => ['Weshare.id', 'Weshare.title', 'Weshare.description', 'Weshare.default_image', 'Weshare.creator', 'Weshare.view_count']
         ]);
         $result = [];
         foreach ($weshares as $weshare_item) {
             $data_item = $weshare_item['Weshare'];
             $data_item['summary'] = $this->ShareUtil->get_index_product_summary($data_item['id']);
+            $data_item['summary']['view_count'] = $data_item['view_count'];
+            unset($data_item['view_count']);
             $result[] = $data_item;
         }
         return $result;
