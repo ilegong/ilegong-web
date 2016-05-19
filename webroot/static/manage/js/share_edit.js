@@ -29,11 +29,13 @@ $(document).ready(function () {
             processData: false,
             contentType: false,
             success: function (data) {
-                if(data.url[0]){
+                if (data.url[0]) {
                     var imgUrl = 'http://static.tongshijia.com/' + data.url[0];
                     var obj = $('#image-area-template').eq(0).clone();
                     obj.find('img').attr('src', imgUrl);
                     obj.find('a').attr('src-data', imgUrl);
+                    obj.show();
+                    obj.attr('id', '');
                     $('.share-upload-btn').before(obj);
                     $('.preview-image').on("click", function () {
                         $('#image-preview').attr('src', $(this).attr('src-data'));
