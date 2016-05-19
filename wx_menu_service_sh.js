@@ -16,7 +16,7 @@
           {
             "type":"view",
             "name":"我的分享",
-            "url":"http://sh.tongshijia.com/users/wx_menu_point?referer_key=MY_SHARE_INFO&from=service&_sl=wx.sv.home"
+            "url":"http://sh.tongshijia.com/weshares/my_shares_list.html?from=weixin"
           },
           {
             "type":"view",

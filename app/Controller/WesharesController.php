@@ -840,6 +840,7 @@ class WesharesController extends AppController
         $this->set('user_info', $user_info);
         $this->set('sub_status', !$sub_status);
         $this->set('uid', $uid);
+        $this->set_share_user_info_weixin_params($uid , $curr_uid , $user_info['User']);
     }
 
     public function get_other_shares($uid, $page)
@@ -881,6 +882,7 @@ class WesharesController extends AppController
         $user_info = $this->get_user_info($uid);
         $my_order_count = $this->WeshareBuy->get_user_all_order_count($uid);
         $user_info['User']['avatar'] = get_user_avatar($user_info['User']);
+        $this->set_share_user_info_weixin_params($uid , $uid , $user_info['User']);
         $this->set('share_user', $user_info['User']);
         $this->set('user_level', $user_level);
         $this->set('user_summary', $user_summary);
@@ -890,7 +892,6 @@ class WesharesController extends AppController
         $rebate_money = $this->ShareUtil->get_rebate_money($uid);
         $this->set('rebate_money', $rebate_money);
         $this->set('uid', $uid);
-        $this->set('detail_url',WX_HOST."/weshares/get_other_info/$uid.html");
     }
 
     /**
@@ -1932,19 +1933,20 @@ class WesharesController extends AppController
             $this->set($wexin_params);
             if ($uid == $current_uid) {
                 $title = '这是' . $shareUser['nickname'] . '的微分享，快来关注我吧';
-                $image = get_user_avatar($shareUser);
+                $image = $shareUser['avatar'];
                 $desc = '朋友说是一个有人情味的分享社区，这里你不但可以吃到各地的特产，还能认识有趣的人。';
+                $detail_url = WX_HOST."/weshares/get_other_info/$uid.html";
             } else {
                 $current_user = $this->currentUser;
                 $title = $current_user['nickname'] . '推荐了' . $shareUser['nickname'] . '的微分享，快来关注ta吧！';
-                $image = $shareUser['image'];
+                $image = $shareUser['avatar'];
                 $desc = $shareUser['nickname'] . '是我的朋友，很靠谱。朋友说是一个有人情味的分享社区，这里你不但可以吃到各地的特产，还能认识有趣的人。';
+                $detail_url = WX_HOST."/weshares/get_other_info/$uid.html";
             }
             if (!$image) {
                 // 这里有问题吧? 为啥是dev?
                 $image = 'http://dev.tongshijia.com/img/logo_footer.jpg';
             }
-            $detail_url = WX_HOST . '/weshares/user_share_info/' . $uid;
             $this->set('detail_url', $detail_url);
             $this->set('title', $title);
             $this->set('image', $image);
