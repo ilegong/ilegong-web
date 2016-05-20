@@ -71,7 +71,7 @@ class NewOptLogsComponent extends Component {
         }
 
         $image = explode('|', $v['Weshare']['images'])[0];
-        $tmp['image'] = $image ? $image : "http://static.tongshijia.com/static/img/default_product_banner.png";
+        $tmp['image'] = $image ? $image : STATIC_HOST."/static/img/default_product_banner.png";
 
         $tmp['baoming'] = 0;
 
