@@ -19,6 +19,20 @@
       }, function (data) {
         $rootScope.loadingPage = false;
       });
+
+      $http.get('/users/get_id_and_proxies').success(function (data) {
+        if (data.uid != null) {
+          vm.uid = data.uid;
+          vm.proxies = _.map(data.proxies, function (pid) {
+            return {id: parseInt(pid), showUnSubscribeBtn: false};
+          })
+        }
+        else {
+          $log.log('User not logged in');
+        }
+      }).error(function (data, e) {
+        $log.log('Failed to get proxies: ' + e);
+      });
     }
 
     function loadNextPage() {
@@ -37,18 +51,34 @@
 
     function loadData(time) {
       var deferred = $q.defer();
-      $http.get("/share_opt/fetch_opt_list_data.json?limit=5&type=0&time="+time).success(function (data) {
+      $http.get("/share_opt/fetch_opt_list_data.json?limit=5&type=0&time=" + time).success(function (data) {
         if (data.error) {
           deferred.reject(data.error);
         }
 
-        var list = data['opt_logs'];
-        _.each(list, function (optLog) {
-          vm.bottomTimeStamp = optLog.time;
+        var shares = _.filter(data['opt_logs'], function (s) {
+          return !_.isEmpty(s) && !_.isEmpty(s.Weshare);
         });
-        $log.log(list);
-        vm.shares = vm.shares.concat(list);
+        $log.log(shares);
+        _.each(shares, function (optLog) {
+          vm.bottomTimeStamp = optLog.time;
+          $log.log(optLog.time);
+        });
 
+        var shareIds = _.map(shares, function (s) {
+          return s.Weshare.id;
+        });
+        $http.get('/weshares/summaries', {params: {shareIds: JSON.stringify(shareIds)}}).success(function (summaries) {
+          $log.log(summaries);
+          _.each(summaries, function(summary){
+            var share = _.find(shares, function(s){return s.Weshare.id == summary.share_id});
+            share.summary = summary;
+          });
+        }).error(function (data, e) {
+          $log.log('Failed to get index products: ' + e);
+        });
+
+        vm.shares = vm.shares.concat(shares);
         deferred.resolve(vm.shares);
       }).error(function () {
         deferred.reject('Greeting ' + name + ' is not allowed.');

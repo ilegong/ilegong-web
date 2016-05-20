@@ -286,8 +286,81 @@ footer {
         height: 40px;
         display: block;
       }
+      .level {
+        width: 18px;
+        height: 18px;
+        border-radius: 18px;
+        background: #f99d3a;
+        font-size: .7em;
+        color: #fff;
+        text-align: center;
+        line-height: 18px;
+        position: absolute;
+        bottom: 10px;
+        left: 40px;
+      }
+      .nickname {
+        margin-left: 10px;
+        font-size: 1.2em;
+        color: #333;
+        line-height: 19px;
+        max-width: 160px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .label-container {
+        padding-left: 10px;
+        padding-top: 1px;
+        .label {
+          border-radius: 2px;
+          background-color: #eee;
+          color: #888;
+          padding: 1px 3px;
+          margin-right: 5px;
+          font-size: .9em;
+        }
+      }
+      .subscribe {
+        width: 64px;
+        border: 1px solid #bbb;
+        border-radius: 2px;
+        color: #666;
+        text-align: center;
+        line-height: 2em;
+        margin-top: 7px;
+        .sub-no {
+
+        }
+        .sub-yes {
+          position: relative;
+          display: none;
+          span {
+            padding-left: 5px;
+            color: #666;
+            font-size: 1.1em;
+          }
+          label {
+            display: block;
+            position: relative;
+            margin-top: 11px;
+          }
+          .unfollow {
+            position: absolute;
+            border: 1px solid #bbb;
+            background-color: #FFF;
+            width: 64px;
+            text-align: center;
+            line-height: 2em;
+            top: 2em;
+            left: -1px;
+            z-index: 2;
+            border-radius: 2px;
+          }
+        }
+      }
     }
-    .share-image {
+    .image-container {
       display: block;
       text-align: center;
       .image {
@@ -295,10 +368,29 @@ footer {
         max-height: 280px;
         max-width: 100%;
       }
+      .product-price-bg {
+        z-index: 2;
+        background-color: #333;
+        padding: 5px 12px 5px 5px;
+        color: #FFF;
+        display: block;
+        position: absolute;
+        bottom: 10px;
+        left: 0;
+        label {
+          font-size: .9em;
+        }
+        em {
+          font-style: normal;
+          font-size: 1.6em;
+        }
+      }
     }
     .share-content {
       display: block;
-      .share-title{
+      padding: 15px 12px;
+      background-color: #FFF;
+      .share-title {
         font-size: 1.2em;
         color: #333;
         word-break: break-all;
@@ -308,7 +400,7 @@ footer {
         -webkit-line-clamp: 1;
         overflow: hidden;
       }
-      .share-description{
+      .share-description {
         color: #666;
         line-height: 20px;
         font-size: 1.1em;
@@ -321,5 +413,31 @@ footer {
         overflow: hidden;
       }
     }
+    .share-summary {
+      padding: 10px 12px;
+      border-top: 1px #eee solid;
+      color: #999;
+      line-height: 28px;
+      position: relative;
+      .order-count {
+        padding-right: 60px;
+        max-height: 420px;
+        .avatar{
+          width: 28px;
+          height: 28px;
+          display: block;
+          float: left;
+          margin-right: 3px;
+        }
+      }
+      .view-count {
+        width: 66px;
+        text-align: right;
+        position: absolute;
+        right: 12px;
+        top: 10px;
+      }
+    }
   }
+
 }
