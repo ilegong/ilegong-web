@@ -101,8 +101,6 @@ class ShareOptController extends AppController
             }
         }
 
-        $this->log(count($opt_logs), LOG_INFO);
-
         $data = [
             'oldest_timestamp' => $oldest_timestamp,
             'last_timestamp' => $last_timestamp,
