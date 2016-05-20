@@ -287,7 +287,9 @@ class UtilController extends AppController {
     public function manual_send_coupon($shareOfferId, $share_id){
         $this->autoRender=false;
         $uids = $this->WeshareBuy->get_has_buy_user($share_id);
-        //$this->RedPacket->process_receive($shareOfferId, $uid, $is_weixin = true, $send_msg = true);
+        foreach($uids as $uid){
+            $this->RedPacket->process_receive($shareOfferId, $uid, $is_weixin = true, $send_msg = true);
+        }
         echo json_encode($uids);
         exit;
     }
