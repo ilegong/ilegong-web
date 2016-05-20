@@ -2103,7 +2103,8 @@ class WeshareBuyComponent extends Component
         $orderM = ClassRegistry::init('Order');
         $weshareM = ClassRegistry::init('Weshare');
         $shareOperateSettingM = ClassRegistry::init('ShareOperateSetting');
-        $authorize_count = $shareOperateSettingM->query('SELECT count(distinct data_id) as a_count FROM cake_share_operate_settings where user=' . $uid);
+        //$authorize_count = $shareOperateSettingM->query('SELECT count(distinct data_id) as a_count FROM cake_share_operate_settings where user=' . $uid);
+        $authorize_count = $shareOperateSettingM->query('SELECT count(distinct cs.data_id) as a_count FROM cake_share_operate_settings cs join cake_weshares cw on cw.id=cs.data_id where cw.status!=-1 and cs.user=' . $uid);
         $wait_ship_order_count = $orderM->find('count', [
             'conditions' => [
                 'status' => ORDER_STATUS_PAID,
