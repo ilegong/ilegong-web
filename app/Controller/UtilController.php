@@ -12,7 +12,7 @@ class UtilController extends AppController {
 
     public $uses = array('UserRelation', 'Order', 'Cart', 'User', 'Oauthbind', 'Weshare', 'CandidateEvent', 'IndexProduct');
 
-    public $components = array('ShareUtil', 'Weixin', 'WeshareBuy', 'RedisQueue');
+    public $components = array('ShareUtil', 'Weixin', 'WeshareBuy', 'RedisQueue', 'RedPacket');
 
     public function log_js_error() {
         $msg = $_GET['msg'];
@@ -31,26 +31,6 @@ class UtilController extends AppController {
     }
 
 
-//    public function init_index_product(){
-//        $this->autoRender = false;
-//        $tags = get_index_tags();
-//        $save_data = array();
-//        foreach ($tags as $tag) {
-//            $tag_id = $tag['id'];
-//            $current_tag_products = $this->ShareUtil->get_share_index_product($tag_id);
-//            $sort_val = 0;
-//            foreach ($current_tag_products as $product) {
-//                $product['tag_id'] = $tag_id;
-//                $product['type'] = 0;
-//                $sort_val = $sort_val + 1;
-//                $product['sort_val'] = $sort_val;
-//                $save_data[] = $product;
-//            }
-//        }
-//        $this->IndexProduct->saveAll($save_data);
-//        echo(json_encode(array('success' => true)));
-//        return;
-//    }
 
     public function gen_qr_code(){
         App::import('Vendor', 'php_qrcode/phpqrcode');
@@ -302,6 +282,14 @@ class UtilController extends AppController {
         $genShareOfferResult = $shareOfferM->add_shared_slices($uid, $shareOfferId, $totalNum, true);
         echo json_encode($genShareOfferResult);
         return;
+    }
+
+    public function manual_send_coupon($shareOfferId, $share_id){
+        $this->autoRender=false;
+        $uids = $this->WeshareBuy->get_has_buy_user($share_id);
+        //$this->RedPacket->process_receive($shareOfferId, $uid, $is_weixin = true, $send_msg = true);
+        echo json_encode($uids);
+        exit;
     }
 
     /**
