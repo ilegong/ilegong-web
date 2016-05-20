@@ -32,7 +32,9 @@ class NewOptLogsComponent extends Component {
         $my_proxys = ClassRegistry::init('User')->get_my_proxys($uid);
         if(!empty($data)){
             foreach ($data as $v) {
-                $ret[] = $this->map_fields($v, $uid, $my_proxys);
+                if($v['Weshare']['id']){
+                    $ret[] = $this->map_fields($v, $uid, $my_proxys);
+                }
             }
         }
         return $ret;
