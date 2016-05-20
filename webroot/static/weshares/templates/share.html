@@ -30,7 +30,7 @@
 </ul>
 
 <a class="image-container" href="/weshares/view/{{share.Weshare.id}}">
-    <img class="image" lazy-src="vm.getShareImage(share)"
+    <img class="image" lazy-src="{{vm.getShareImage(share)}}"
          fallback-src="{{vm.staticFilePath}}/static/img/default_product_banner.png">
 </a>
 <a class="share-content" href="/weshares/view/{{share.Weshare.id}}">

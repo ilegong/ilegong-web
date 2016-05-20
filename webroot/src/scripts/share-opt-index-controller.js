@@ -96,10 +96,10 @@
     }
 
     function getShareImage(share) {
-      if (_.isEmpty(share) || _.isEmpty(share.images)) {
+      if (_.isEmpty(share) || _.isEmpty(share.Weshare.images)) {
         return vm.staticFilePath + '/static/img/default_product_banner.png';
       }
-      return vm.staticFilePath + share.images[0];
+      return share.Weshare.images[0];
     }
   }
 })(window, window.angular);
