@@ -2,49 +2,49 @@
     <li class="fl">
         <a href="/weshares/user_share_info/{{share.Proxy.id}}">
             <img itemprop="image" class="avatar radius50"
-                 lazy-src="{{share.Proxy.avatar}}"
+                 lazy-src="{{vm.staticFilePath + '/' + share.Proxy.avatar}}"
                  fallback-src="{{vm.staticFilePath + '/avatar/s/default.jpg'}}">
         </a>
     </li>
-    <li class="sharer-label"></li>
+    <li class="level" ng-bind="'L'+0"></li>
     <li class="fl">
-        <label>
-            <a class="nickname" href="/weshares/user_share_info/{{share.Proxy.id}}" ng-bind="share.Proxy.nickname">
-            </a>
-        </label>
-        <dl class="clearfix sharer-tag">
-            <dd class="fl" ng-bind="share.Proxy.label"></dd>
+        <a class="nickname" href="/weshares/user_share_info/{{share.Proxy.id}}" ng-bind="share.Proxy.nickname"></a>
+        <dl class="label-container clearfix">
+            <dd class="fl label" ng-bind="share.Proxy.label"></dd>
         </dl>
     </li>
-    <li class="fr ta">关注TA
-    </li>
-    <li class="fr ta" style="position: relative;">
-        <a href="#X" class="clearfix">
-            <span>已关注</span>
-            <label>
-                <i></i>
-                <em></em>
-            </label>
-        </a>
-        <a class="unfollow">取消关注</a>
+    <li class="fr subscribe">
+        <div class="sub-no" ng-show="true">关注TA
+        </div>
+        <div class="sub-yes" ng-show="false">
+            <a href="#X" class="clearfix">
+                <span class="fl">已关注</span>
+                <label class="fl">
+                    <i></i>
+                    <em></em>
+                </label>
+            </a>
+            <a class="unfollow">取消关注</a>
+        </div>
     </li>
 </ul>
 
-<a classs="share-image" style="position: relative;text-align: center;" href="/weshares/view/{{share.Weshare.id}}">
-    <img class="image" lazy-src="vm.getShareImage(share)"
+<a class="image-container" href="/weshares/view/{{share.Weshare.id}}">
+    <img class="image" lazy-src="{{vm.getShareImage(share)}}"
          fallback-src="{{vm.staticFilePath}}/static/img/default_product_banner.png">
 </a>
 <a class="share-content" href="/weshares/view/{{share.Weshare.id}}">
     <h1 class="share-title" ng-bind="share.Weshare.title"></h1>
+
     <p class="share-description"><span ng-bind-html="share.Weshare.description | unsafe"></span></p>
 </a>
 
-<dl class="share-data clearfix ">
-    <dd class="clearfix" style="padding-right: 60px;max-height: 420px;">
-        <img class="radius50" ng-repeat="buyer in share.summary.orders_and_creators | limitTo: 4"
+<dl class="share-summary clearfix ">
+    <dd class="order-count clearfix">
+        <img class="avatar radius50" ng-repeat="buyer in share.summary.orders_and_creators | limitTo: 4"
              lazy-src="{{buyer.avatar}}"
              fallback-src="this.src='{{vm.staticFilePath}}/avatar/s/default.jpg'"/>
-        <label>已<span>{{share.summary.order_count}}</span>个人报名</label>
+        <label class="fl">已<span>{{share.summary.order_count}}</span>个人报名</label>
     </dd>
-    <dd class="browse">浏览{{share.summary.view_count}}</dd>
+    <dd class="view-count">浏览{{share.summary.view_count}}</dd>
 </dl>

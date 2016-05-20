@@ -99,6 +99,11 @@ class ShareOptController extends AppController
             if (!$opt_logs) {
                 return ['error' => 'get data failed.'];
             }
+            foreach ($opt_logs as &$opt_log) {
+                if($opt_log['Weshare']['images']){
+                    $opt_log['Weshare']['images'] = explode('|', $opt_log['Weshare']['images']);
+                }
+            }
         }
 
         $data = [
