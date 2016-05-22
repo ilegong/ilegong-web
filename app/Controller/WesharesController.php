@@ -1226,7 +1226,7 @@ class WesharesController extends AppController
             echo json_encode(array('success' => false, 'reason' => 'not_creator'));
             return;
         }
-        $checkCanSendMsgResult = $this->ShareUtil->checkCanSendMsg($uid);
+        $checkCanSendMsgResult = $this->ShareUtil->checkCanSendMsg($uid, $weshare_id, MSG_LOG_NOTIFY_TYPE);
         if (!$checkCanSendMsgResult['success']) {
             echo json_encode($checkCanSendMsgResult);
             return;

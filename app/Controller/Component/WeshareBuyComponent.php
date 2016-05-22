@@ -2378,7 +2378,7 @@ class WeshareBuyComponent extends Component
      */
     public function send_recommend_msg($recommend_user, $share_id, $memo)
     {
-        $checkSendMsgResult = $this->ShareUtil->checkCanSendMsg($recommend_user);
+        $checkSendMsgResult = $this->ShareUtil->checkCanSendMsg($recommend_user, $share_id, MSG_LOG_RECOMMEND_TYPE);
         if (!$checkSendMsgResult['success']) {
             return $checkSendMsgResult;
         }

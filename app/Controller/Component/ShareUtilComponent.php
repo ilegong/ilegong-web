@@ -710,7 +710,9 @@ class ShareUtilComponent extends Component
         $optLogData = array('obj_creator' => $share_info['creator'], 'user_id' => $userId, 'obj_type' => OPT_LOG_SHARE_RECOMMEND, 'obj_id' => $shareId, 'created' => $now, 'memo' => $title, 'reply_content' => $memo, 'thumbnail' => $shareImg[0]);
         $this->saveOptLog($optLogData);
         $sendResult = $this->WeshareBuy->send_recommend_msg($userId, $shareId, $memo);
-        $this->notify_sharer_recommend($userId, $shareId);
+        if($sendResult['success']){
+            $this->notify_sharer_recommend($userId, $shareId);
+        }
         return $sendResult;
     }
 
@@ -1880,8 +1882,17 @@ class ShareUtilComponent extends Component
      * @return array
      * 检查团长是否可以发送消息
      */
-    public function checkCanSendMsg($uid)
+    public function checkCanSendMsg($uid, $share_id, $type)
     {
+        $sendMsgLogM = ClassRegistry::init('SendMsgLog');
+        if ($sendMsgLogM->hasAny(['sharer_id' => $uid,
+            'status' => 1,
+            'deleted' => DELETED_NO,
+            'data_id' => $share_id,
+            'type' => $type,
+            'created > ' => date('Y-m-d')])) {
+            return array('success' => false, 'msg' => '今天已经发送过该消息');
+        }
         if (is_pys_signed_user($uid)) {
             return array('success' => true, 'msg' => '还可以发送很多条消息');
         }
@@ -1890,13 +1901,12 @@ class ShareUtilComponent extends Component
         if ($limit_count == 0) {
             return array('success' => false, 'msg' => '团长才能发送模板消息');
         }
-        $sendMsgLogM = ClassRegistry::init('SendMsgLog');
         $sendMsgCount = $sendMsgLogM->find('count', array(
             'conditions' => array(
                 'sharer_id' => $uid,
                 'status' => 1,
                 'deleted' => DELETED_NO,
-                'DATE(created)' => date('Y-m-d')
+                'created > ' => date('Y-m-d')
             )
         ));
         if ($sendMsgCount >= $limit_count) {
@@ -2228,7 +2238,7 @@ class ShareUtilComponent extends Component
         if ($type == 0) {
             //发送给分享的管理者
             //发送给没有购买的粉丝
-            $checkSendMsgResult = $this->checkCanSendMsg($uid);
+            $checkSendMsgResult = $this->checkCanSendMsg($uid, $weshare_id, MSG_LOG_NOTIFY_TYPE);
             if (!$checkSendMsgResult['success']) {
                 return $checkSendMsgResult;
             }
