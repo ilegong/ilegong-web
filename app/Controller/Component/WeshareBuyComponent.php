@@ -2428,9 +2428,10 @@ class WeshareBuyComponent extends Component
         $followers = array_diff($followers, $hasBuyUsers);
         //过滤模板消息
         $followers = $this->check_msg_log_and_filter_user($weshareId, $followers, MSG_LOG_NOTIFY_TYPE);
-        $followers = $this->check_msg_log_and_filter_user($weshare['Weshare']['refer_share_id'], $followers, MSG_LOG_NOTIFY_TYPE);
         //check msg logs filter users
         $followers = $this->check_msg_log_and_filter_user($weshareId, $followers, MSG_LOG_RECOMMEND_TYPE);
+        $followers = $this->check_msg_log_and_filter_user($weshare['Weshare']['refer_share_id'], $followers, MSG_LOG_NOTIFY_TYPE);
+        $followers = $this->check_msg_log_and_filter_user($weshare['Weshare']['refer_share_id'], $followers, MSG_LOG_RECOMMEND_TYPE);
         $openIds = $this->Oauthbind->findWxServiceBindsByUids($followers);
         if (!empty($openIds)) {
             foreach ($openIds as $openId) {
@@ -2458,7 +2459,7 @@ class WeshareBuyComponent extends Component
             'conditions' => array(
                 'data_id' => $data_id,
                 'data_type' => $type,
-                'DATE(created)' => $q_date
+                'created > ' => $q_date
             ),
             'fields' => array('user_id'),
             'limit' => 3000,
