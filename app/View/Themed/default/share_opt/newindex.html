@@ -3,7 +3,8 @@
     <div class="shares-container" infinite-scroll='vm.loadNextPage()'
          infinite-scroll-disabled='vm.loadOver||vm.loading'
          infinite-scroll-distance='0'>
-        <div class="share" ng-include="'{{$STATIC_HOST}}/static/weshares/templates/share.html?v1.8.8'" ng-repeat="share in vm.shares">
+        <div class="share" ng-include="'{{$STATIC_HOST}}/static/weshares/templates/share.html?v1.8.8'"
+             ng-repeat="share in vm.shares">
 
         </div>
     </div>
