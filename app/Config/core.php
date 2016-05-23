@@ -85,7 +85,7 @@ if (class_exists('Redis')) {
     $engine = 'Redis';
     Cache::config('default', array(
         'engine' => $engine,
-        'servers' => REDIS_HOST,
+        'server' => REDIS_HOST,
         'port' => 6379,
         'prefix' => $cache_prefix . 'miaocms_'
     ));
@@ -93,14 +93,14 @@ if (class_exists('Redis')) {
     Cache::config('_cake_core_', array(
         'engine' => $engine,
         'prefix' => $cache_prefix . 'core_app_',
-        'servers' => REDIS_HOST,
+        'server' => REDIS_HOST,
         'port' => 6379,
     ));
 
     Cache::config('_cake_model_', array(
         'engine' => $engine,
         'prefix' => $cache_prefix . 'model_app_',
-        'servers' => REDIS_HOST,
+        'server' => REDIS_HOST,
         'port' => 6379,
     ));
 } else if (class_exists('Memcached')) {
