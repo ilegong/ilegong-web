@@ -18,7 +18,7 @@
         if (data.uid != null) {
           $rootScope.uid = data.uid;
           $rootScope.proxies = _.map(data.proxies, function (pid) {
-            return {id: parseInt(pid), showUnSubscribeBtn: false};
+            return {id: parseInt(pid)};
           })
         }
         else {
@@ -35,7 +35,6 @@
       }
 
       vm.loading = true;
-      $log.log('try to load data...');
       vm.loadData().then(function (shares) {
         vm.shares = vm.shares.concat(shares);
         vm.loading = false;
@@ -50,8 +49,9 @@
     function loadData() {
       var deferred = $q.defer();
       var time = _.min(_.map(vm.shares, function (s) {
-        return s.NewOptLog.time
+        return s.NewOptLog.time;
       }));
+      $log.log('try to load data before ' + time);
       $http.get("/share_opt/fetch_opt_list_data.json?limit=10&type=0&time=" + time).success(function (data) {
         if (data.error) {
           deferred.reject(data.error);
@@ -62,7 +62,7 @@
         var shares = _.map(_.reject(data['opt_logs'], function (s) {
           return _.isEmpty(s) || _.isEmpty(s.Weshare) || _.contains(existingShareIds, s.Weshare.id);
         }), function (s) {
-          s.NewOptLog.time = new Date(s.NewOptLog.time).getTime() / 1000;
+          s.NewOptLog.time = new Date(s.NewOptLog.time).getTime();
           return s;
         });
         if (_.isEmpty(shares)) {
