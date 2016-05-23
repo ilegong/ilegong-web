@@ -80,6 +80,13 @@ class TestController extends AppController
 //    }
 
 
+    public function test_load_fans_by_uid(){
+        $this->autoRender = false;
+        $result = $this->WeshareBuy->load_fans_buy_sharer(633345, $limit = 10, $offset = 0);
+        echo json_encode($result);
+        exit;
+    }
+
     public function set_root_id($offset,$limit)
     {
         $this->autoRender = false;

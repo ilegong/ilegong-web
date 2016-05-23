@@ -501,7 +501,7 @@ class WesharesController extends AppController
             }
             if ($this->Order->updateAll($update_order_data, array('id' => $orderId))) {
                 $coupon_id = $postDataArray['coupon_id'];
-                $this->log('use coupon id ' . $coupon_id, LOG_DEBUG);
+                $this->log('use coupon id ' . $coupon_id, LOG_INFO);
                 //红包
                 if (!empty($coupon_id)) {
                     //菠萝
@@ -1252,7 +1252,7 @@ class WesharesController extends AppController
     public function process_send_new_share_msg($shareId, $pageCount, $pageSize)
     {
         $this->autoRender = false;
-        $this->log('task send new share msg weshare id ' . $shareId . ' page count ' . $pageCount . ' page size ' . $pageSize, LOG_DEBUG);
+        $this->log('task send new share msg weshare id ' . $shareId . ' page count ' . $pageCount . ' page size ' . $pageSize, LOG_INFO);
         $tasks = array();
         foreach (range(0, $pageCount) as $page) {
             $offset = $page * $pageSize;
@@ -1271,7 +1271,7 @@ class WesharesController extends AppController
      */
     public function send_new_share_msg_task($shareId, $limit, $offset)
     {
-        $this->log('child buy percent task ' . $shareId . ' limit ' . $limit . ' offset ' . $offset, LOG_DEBUG);
+        $this->log('child buy percent task ' . $shareId . ' limit ' . $limit . ' offset ' . $offset, LOG_INFO);
         $this->autoRender = false;
         $this->WeshareBuy->send_new_share_msg($shareId, $limit, $offset);
         echo json_encode(array('success' => true));
@@ -1287,7 +1287,7 @@ class WesharesController extends AppController
     public function process_send_buy_percent_msg($weshare_id, $pageCount, $pageSize)
     {
         $this->autoRender = false;
-        $this->log('task send buy percent msg weshare id ' . $weshare_id . ' page count ' . $pageCount . ' page size ' . $pageSize, LOG_DEBUG);
+        $this->log('task send buy percent msg weshare id ' . $weshare_id . ' page count ' . $pageCount . ' page size ' . $pageSize, LOG_INFO);
         $tasks = array();
         $msg_content = $_REQUEST['content'];
         foreach (range(0, $pageCount) as $page) {
@@ -1320,7 +1320,7 @@ class WesharesController extends AppController
      */
     public function send_buy_percent_msg_task($weshare_id, $limit, $offset)
     {
-        $this->log('child buy percent task ' . $weshare_id . ' limit ' . $limit . ' offset ' . $offset, LOG_DEBUG);
+        $this->log('child buy percent task ' . $weshare_id . ' limit ' . $limit . ' offset ' . $offset, LOG_INFO);
         $this->autoRender = false;
         $share_info = $this->ShareUtil->get_weshare_detail($weshare_id);
         $msg_content = $_REQUEST['content'];
@@ -1592,7 +1592,7 @@ class WesharesController extends AppController
     //菠萝优惠码使用
     private function order_use_coupon_code($coupon_id, $order_id)
     {
-        $this->log('order use coupon' . $coupon_id, LOG_DEBUG);
+        $this->log('order use coupon' . $coupon_id, LOG_INFO);
         $reduced = 20;
         $couponItem = $this->CouponItem->findById($coupon_id);
         $coupon_code = $couponItem['CouponItem']['code'];
@@ -1637,7 +1637,7 @@ class WesharesController extends AppController
     {
         //to do check offer status
         $get_coupon_result = $this->get_coupon_with_shared_id($shared_offer_id);
-        $this->log('share user get red packet result: ' . json_encode($get_coupon_result), LOG_DEBUG);
+        $this->log('share user get red packet result: ' . json_encode($get_coupon_result), LOG_INFO);
         if (!$get_coupon_result['success']) {
             $this->log('share user get red packet result: failed.', LOG_INFO);
             $this->set('get_coupon_type', 'fail');
