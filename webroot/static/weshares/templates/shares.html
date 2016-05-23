@@ -1,0 +1,70 @@
+<div class="shares-container" infinite-scroll='vm.loadNextPage()'
+     infinite-scroll-disabled='vm.loadOver||vm.loading'
+     infinite-scroll-distance='0'>
+    <div class="share" ng-repeat="share in vm.shares">
+        <ul class="share-header clearfix">
+            <li class="fl">
+                <a href="/weshares/user_share_info/{{share.Proxy.id}}">
+                    <img itemprop="image" class="avatar radius50"
+                         lazy-src="{{vm.staticFilePath + '/' + share.Proxy.avatar}}"
+                         fallback-src="{{vm.staticFilePath + '/avatar/s/default.jpg'}}">
+                </a>
+            </li>
+            <li class="level" ng-bind="'L'+0"></li>
+            <li class="fl">
+                <a class="nickname" href="/weshares/user_share_info/{{share.Proxy.id}}"
+                   ng-bind="share.Proxy.nickname"></a>
+                <dl class="label-container clearfix" style="display: none;">
+                </dl>
+                <div class="log">
+                    <span ng-bind="share.NewOptLog.readtime"></span>
+                    <span ng-bind="share.Customer.nickname"></span>
+                    <span ng-bind="share.NewOptLog.data_type_tag"></span>
+                </div>
+            </li>
+            <li class="fr subscription" ng-controller="SubscriptionController as sub">
+                <div class="subscribed" ng-class="{'no': !sub.isSubscribed(share.Proxy.id)}"
+                     ng-click="sub.subscribe(share.Proxy.id)">关注TA
+                </div>
+                <div class="subscribed" ng-class="{'yes': sub.isSubscribed(share.Proxy.id)}"
+                     ng-click="sub.clickSubscribedBtn(share.Proxy.id, $event)">
+                    <a href="#X" class="clearfix">
+                <span class="fl">
+                    已关注
+                    <i class="fa fa-angle-down"></i>
+                </span>
+                        <label class="fl">
+                            <i></i>
+                            <em></em>
+                        </label>
+                    </a>
+                    <a class="unfollow" ng-show="sub.showUnSubscribeBtn"
+                       ng-click="sub.unSubscribe(share.Proxy.id)">取消关注</a>
+                </div>
+            </li>
+        </ul>
+
+        <a class="image-container" href="/weshares/view/{{share.Weshare.id}}">
+            <img class="image" lazy-src="{{vm.getShareImage(share)}}"
+                 fallback-src="{{vm.staticFilePath}}/static/img/default_product_banner.png">
+        </a>
+        <a class="share-content" href="/weshares/view/{{share.Weshare.id}}">
+            <h1 class="share-title" ng-bind="share.Weshare.title"></h1>
+
+            <p class="share-description"><span ng-bind-html="share.Weshare.description | unsafe"></span></p>
+        </a>
+
+        <dl class="share-summary clearfix ">
+            <dd class="order-count clearfix">
+                <img class="avatar radius50" ng-repeat="buyer in share.summary.orders_and_creators | limitTo: 4"
+                     lazy-src="{{buyer.avatar}}"
+                     fallback-src="this.src='{{vm.staticFilePath}}/avatar/s/default.jpg'"/>
+                <label class="fl">已<span>{{share.summary.order_count}}</span>个人报名</label>
+            </dd>
+            <dd class="view-count">浏览{{share.summary.view_count}}</dd>
+        </dl>
+    </div>
+</div>
+<div class="scroll-loading" ng-class="{'show-b': vm.loading || vm.lo}" align="center">
+    <div ng-show="">加载中...</div>
+</div>

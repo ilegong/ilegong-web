@@ -2,21 +2,20 @@
   angular.module('weshares')
     .controller('SubscriptionController', SubscriptionController);
 
-  function SubscriptionController($rootScope, $http, $log) {
+  function SubscriptionController($rootScope, $scope, $http, $log) {
     var sub = this;
     sub.isSubscribed = isSubscribed;
     sub.unSubscribe = unSubscribe;
     sub.subscribe = subscribe;
     sub.clickSubscribedBtn = clickSubscribedBtn;
-    sub.showUnSubscribeBtn = showUnSubscribeBtn;
 
     activate();
     function activate() {
-      $rootScope.clickPage = function() {
-        _.each($rootScope.proxies, function (p) {
-          p.showUnSubscribeBtn = false;
-        });
-      }
+      sub.showUnSubscribeBtn = false;
+
+      $scope.$on('page_clicked', function () {
+        sub.showUnSubscribeBtn = false;
+      });
     }
 
     function isSubscribed(proxyId) {
@@ -38,7 +37,7 @@
       sub.subscribeInProcess = true;
       $http.get('/weshares/subscribe_sharer/' + proxyId + "/" + $rootScope.uid).success(function (data) {
         if (data.success) {
-          $rootScope.proxies.push({id: proxyId, showUnSubscribeBtn: false});
+          $rootScope.proxies.push({id: proxyId});
         }
         sub.subscribeInProcess = false;
       }).error(function (data, e) {
@@ -72,9 +71,7 @@
     }
 
     function clickSubscribedBtn(proxyId, $event) {
-      _.each($rootScope.proxies, function (p) {
-        p.showUnSubscribeBtn = p.id == proxyId;
-      });
+      sub.showUnSubscribeBtn = true;
       $event.stopPropagation();
     }
 

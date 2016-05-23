@@ -53,7 +53,7 @@
             </ul>
 
             <ul class="clearfix operations" ng-if="vm.isOwner(order)">
-                <li class="pass fl" ng-if='vm.isShowExpressInfoBtn(order)'>
+                <li class="pass fl" ng-if='vm.isShowExpressInfoBtn(order)' ng-show="order.status==2">
                     <a class="status-btn" ng-click="vm.showOrderExpressInfo(order)">
                         来这看货到哪了
                     </a>
