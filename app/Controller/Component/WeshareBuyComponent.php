@@ -987,10 +987,21 @@ class WeshareBuyComponent extends Component
     {
         $userRelationM = ClassRegistry::init('UserRelation');
         $cond = array(
-            'conditions' => array(
-                'user_id' => $sharerId,
-                'deleted' => DELETED_NO
-            )
+            'conditions' => [
+                'UserRelation.user_id' => $sharerId,
+                'UserRelation.deleted' => DELETED_NO,
+                'User.wx_subscribe_status' => 1
+            ],
+            'joins' => [
+                [
+                    'table' => 'users',
+                    'alias' => 'User',
+                    'conditions' => [
+                        'User.id = UserRelation.follow_id',
+                    ],
+                ]
+            ],
+            'fields' => ['UserRelation.follow_id']
         );
         if ($limit != null && $offset != null) {
             $cond['limit'] = $limit;
