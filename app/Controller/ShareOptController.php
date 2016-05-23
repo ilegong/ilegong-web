@@ -94,16 +94,19 @@ class ShareOptController extends AppController
         $oldest_timestamp = $this->OptLog->get_oldest_update_time();
         $last_timestamp = $this->OptLog->get_last_update_time();
         $opt_logs = [];
-        $this->log('Old time stamp: '.$oldest_timestamp.', time: '.$time);
+        $this->log('Old time stamp: ' . $oldest_timestamp . ', time: ' . $time);
         if ($time > $oldest_timestamp) {
             $opt_logs = $this->NewOptLog->get_all_logs($time, $limit, $type, false);
             if (!$opt_logs) {
                 return ['error' => 'get data failed.'];
             }
             foreach ($opt_logs as &$opt_log) {
-                if($opt_log['Weshare']['images']){
+                if ($opt_log['Weshare']['images']) {
                     $opt_log['Weshare']['images'] = explode('|', $opt_log['Weshare']['images']);
                 }
+                $opt_log['NewOptLog']['time'] = strtotime($opt_log['NewOptLog']['time']);
+                $opt_log['NewOptLog']['readtime'] = map_readable_date($opt_log['NewOptLog']['time']);
+                $opt_log['NewOptLog']['data_type_tag'] = map_opt_log_data_type($opt_log['NewOptLog']['data_type_tag']);
             }
         }
 

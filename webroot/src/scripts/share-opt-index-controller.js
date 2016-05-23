@@ -18,7 +18,7 @@
         if (data.uid != null) {
           $rootScope.uid = data.uid;
           $rootScope.proxies = _.map(data.proxies, function (pid) {
-            return {id: parseInt(pid), showUnSubscribeBtn: false};
+            return {id: parseInt(pid)};
           })
         }
         else {

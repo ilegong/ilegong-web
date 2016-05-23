@@ -67,6 +67,10 @@
   function initApp($rootScope) {
     $rootScope._ = _;
     $rootScope.loadingPage = true;
+    $rootScope.clickPage = function(){
+      console.log('click page in root');
+      $rootScope.$broadcast('page_clicked', {});
+    }
   }
 
   function DefaultCtrl($rootScope){

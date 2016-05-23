@@ -9,9 +9,13 @@
     <li class="level" ng-bind="'L'+0"></li>
     <li class="fl">
         <a class="nickname" href="/weshares/user_share_info/{{share.Proxy.id}}" ng-bind="share.Proxy.nickname"></a>
-        <dl class="label-container clearfix">
-            <dd class="fl label" ng-bind="share.Proxy.label"></dd>
+        <dl class="label-container clearfix" style="display: none;">
         </dl>
+        <div class="log">
+            <span ng-bind="share.NewOptLog.readtime"></span>
+            <span ng-bind="share.Customer.nickname"></span>
+            <span ng-bind="share.NewOptLog.data_type_tag"></span>
+        </div>
     </li>
     <li class="fr subscription" ng-controller="SubscriptionController as sub">
         <div class="subscribed" ng-class="{'no': !sub.isSubscribed(share.Proxy.id)}"
@@ -29,7 +33,7 @@
                     <em></em>
                 </label>
             </a>
-            <a class="unfollow" ng-show="sub.showUnSubscribeBtn(share.Proxy.id)"
+            <a class="unfollow" ng-show="sub.showUnSubscribeBtn"
                ng-click="sub.unSubscribe(share.Proxy.id)">取消关注</a>
         </div>
     </li>
