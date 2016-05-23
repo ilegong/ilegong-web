@@ -35,6 +35,7 @@
                     <label>价格(元)</label>
                     <input class="form-control" string-to-number type="number" step="0.01" placeholder="请输入产品价格"
                            ng-model="product.price"
+                           ng-disabled="vm.weshare.type == 6"
                            ng-change='vm.validateProductPrice(product)'
                            ng-blur='vm.validateProductPriceAndAlert(product)'>
                 </div>
@@ -42,6 +43,7 @@
                     <label>重量(千克)</label>
                     <input class="reminder form-control" string-to-number type="number" placeholder="请输入每件重量(非必填)"
                            value="请输入每件重量(非必填)" ng-change='vm.validateProductWeight(product)'
+                           ng-disabled="vm.weshare.type == 6"
                            ng-blur='vm.validateProductWeightAndAlert(product)' ng-model="product.weight">
                 </div>
                 <div class="line clearfix form-group">
