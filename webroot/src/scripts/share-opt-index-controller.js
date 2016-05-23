@@ -2,17 +2,18 @@
   angular.module('weshares')
     .controller('ShareOptIndexController', ShareOptIndexController);
 
-  function ShareOptIndexController($rootScope, $http, $log, $q, staticFilePath) {
+  function ShareOptIndexController($rootScope, $http, $log, $q, $window, staticFilePath) {
     var vm = this;
     vm.staticFilePath = staticFilePath;
     vm.loadData = loadData;
     vm.loadNextPage = loadNextPage;
     vm.onLoadOver = onLoadOver;
     vm.getShareImage = getShareImage;
-    vm.shares = [];
+    vm.scrollToTop = scrollToTop;
     activate();
 
     function activate() {
+      vm.shares = [];
       $http.get('/users/get_id_and_proxies').success(function (data) {
         if (data.uid != null) {
           $rootScope.uid = data.uid;
@@ -51,7 +52,7 @@
       var time = _.min(_.map(vm.shares, function (s) {
         return s.NewOptLog.time
       }));
-      $http.get("/share_opt/fetch_opt_list_data.json?limit=5&type=0&time=" + time).success(function (data) {
+      $http.get("/share_opt/fetch_opt_list_data.json?limit=10&type=0&time=" + time).success(function (data) {
         if (data.error) {
           deferred.reject(data.error);
         }
@@ -105,6 +106,10 @@
         return vm.staticFilePath + '/static/img/default_product_banner.png';
       }
       return share.Weshare.images[0];
+    }
+
+    function scrollToTop() {
+      $window.scrollTo(0, 0);
     }
   }
 })(window, window.angular);
