@@ -80,7 +80,7 @@ if (Configure::read('debug') > 1) {
     $duration = 300;
 }
 $cache_prefix = '';
-if(class_exists('Redis')){
+if (class_exists('Redis')) {
     $cache_prefix = CACHE_PREFIX . 'pys_app_';
     $engine = 'Redis';
     Cache::config('default', array(
