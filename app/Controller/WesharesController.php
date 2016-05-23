@@ -1498,16 +1498,6 @@ class WesharesController extends AppController
         return $this->WeshareBuy->load_sharer_comment_data($weshare_ids, $sharer_id);
     }
 
-    /**
-     * @param $uid
-     * @return array
-     * 获取分享者的一些统计数据(粉丝、分享次数)
-     */
-    private function getUserShareSummery($uid)
-    {
-        return $this->WeshareBuy->get_user_share_summary($uid);
-    }
-
 
     /**
      * @param $weshareId

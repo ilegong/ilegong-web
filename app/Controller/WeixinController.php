@@ -71,6 +71,9 @@ class WeixinController extends Controller {
             if (!empty($openId)) {
                 if ($from == FROM_WX_SERVICE) {
                     $uid = $this->Oauthbind->findUidByWx($openId);
+                    if($uid){
+                        $this->User->update(['wx_subscribe_status' => 1], ['id' => $uid]);
+                    }
                 }
             }
 
@@ -78,16 +81,17 @@ class WeixinController extends Controller {
             if (!empty($req['Event'])) {
                 if ($req['Event'] == 'subscribe') { //订阅
                     $this->log('On wechat event subscribe: ' . $from . trim($req['FromUserName']), LOG_INFO);
-                    $process_result = $this->WeixinUtil->process_user_sub_weixin($from, $uid, $openId);
-                    $replay_type = $process_result['replay_type'];
-                    $content = $process_result['content'];
-                    if ($replay_type == 0) {
-                        echo $this->newArticleMsg($user, $me, $content);
-                    }
-                    if ($replay_type == 1) {
-                        $url = $process_result['url'];
-                        echo $this->newTextMsg($user, $me, $content . '，<a href="' . $url . '">点击查看详情</a>');
-                        //echo $this->newTextMsg($user, $me, $content.'<a href=\"' + $url + '\" >点击查看详情<\/a>');
+                    if ($uid) {
+                        $process_result = $this->WeixinUtil->process_user_sub_weixin($from, $uid, $openId);
+                        $replay_type = $process_result['replay_type'];
+                        $content = $process_result['content'];
+                        if ($replay_type == 0) {
+                            echo $this->newArticleMsg($user, $me, $content);
+                        }
+                        if ($replay_type == 1) {
+                            $url = $process_result['url'];
+                            echo $this->newTextMsg($user, $me, $content . '，<a href="' . $url . '">点击查看详情</a>');
+                        }
                     }
                     if ($from == FROM_WX_SERVICE) {
                         $key = key_cache_sub($uid, 'kfinfo');
@@ -116,6 +120,7 @@ class WeixinController extends Controller {
                     if ($from == FROM_WX_SERVICE) {
                         $uid = $this->Oauthbind->findUidByWx(trim($req['FromUserName']));
                         if ($uid) {
+                            $this->User->update(['wx_subscribe_status' => 0], ['id' => $uid]);
                             Cache::write(key_cache_sub($uid), WX_STATUS_UNSUBSCRIBED);
                         }
                     }
@@ -133,7 +138,7 @@ class WeixinController extends Controller {
                     }
                 } else if (strtoupper($req['Event']) == 'TEMPLATESENDJOBFINISH') {
                     if (strpos($req['Status'], 'failed')) {
-                        $this->log('msg send template msg failed open id ' . $req['FromUserName'], LOG_DEBUG);
+                        $this->log('msg send template msg failed open id ' . $req['FromUserName'], LOG_INFO);
                     }
                 }
                 echo 'success';
