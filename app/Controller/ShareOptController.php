@@ -6,7 +6,7 @@
 class ShareOptController extends AppController
 {
 
-    var $uses = array('OptLog', 'User', 'VisitLog', 'UserRelation');
+    var $uses = array('OptLog', 'NewOptLog', 'User', 'VisitLog', 'UserRelation');
 
     var $components = array('WeshareBuy', 'ShareUtil', 'NewOptLogs');
 
@@ -80,6 +80,44 @@ class ShareOptController extends AppController
         exit();
     }
 
+    public function fetch_opt_list_data()
+    {
+        $this->autoRender = false;
+
+        $time = $_REQUEST['time'];
+        $limit = $_REQUEST['limit'];
+        $type = $_REQUEST['type'];
+
+        if ($time == 0) {
+            $time = time();
+        }
+        $oldest_timestamp = $this->OptLog->get_oldest_update_time();
+        $last_timestamp = $this->OptLog->get_last_update_time();
+        $opt_logs = [];
+        $this->log('Old time stamp: '.$oldest_timestamp.', time: '.$time);
+        if ($time > $oldest_timestamp) {
+            $opt_logs = $this->NewOptLog->get_all_logs($time, $limit, $type, false);
+            if (!$opt_logs) {
+                return ['error' => 'get data failed.'];
+            }
+            foreach ($opt_logs as &$opt_log) {
+                if($opt_log['Weshare']['images']){
+                    $opt_log['Weshare']['images'] = explode('|', $opt_log['Weshare']['images']);
+                }
+            }
+        }
+
+        $data = [
+            'oldest_timestamp' => $oldest_timestamp,
+            'last_timestamp' => $last_timestamp,
+            'opt_logs' => array_values($opt_logs)
+        ];
+
+        echo json_encode($data);
+
+        exit();
+    }
+
     /**
      * newfetch_opt_list_data 新版本的listdata.
      *
@@ -88,6 +126,7 @@ class ShareOptController extends AppController
      */
     public function newfetch_opt_list_data()
     {
+        $this->autoRender = false;
         $time = $_REQUEST['time'];
         $limit = $_REQUEST['limit'];
         $type = $_REQUEST['type'];
@@ -99,9 +138,8 @@ class ShareOptController extends AppController
         exit();
     }
 
-    public function fetch_opt_list_data_comman($time, $limit, $type, $follow = false)
+    private function fetch_opt_list_data_comman($time, $limit, $type, $follow = false)
     {
-        $this->autoRender = false;
         if ($time == 0) {
             $time = time();
         }
@@ -109,10 +147,8 @@ class ShareOptController extends AppController
         $last_timestamp = $this->OptLog->get_last_update_time();
         if ($time <= $oldest_timestamp) {
             $opt_logs = [];
-            $combine_data = [];
         } else {
             $opt_logs = $this->NewOptLogs->get_all_logs($time, $limit, $type, $follow);
-            $combine_data = [];
             if (!$opt_logs) {
                 return ['error' => 'get data failed.'];
             }
@@ -120,10 +156,8 @@ class ShareOptController extends AppController
         $data = [
             'oldest_timestamp' => $oldest_timestamp,
             'last_timestamp' => $last_timestamp,
-            'opt_logs' => $opt_logs,
-            'combine_data' => $combine_data
+            'opt_logs' => $opt_logs
         ];
-
 
         return $data;
     }

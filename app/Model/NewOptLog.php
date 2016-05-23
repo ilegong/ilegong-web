@@ -1,4 +1,5 @@
 <?php
+
 class NewOptLog extends AppModel
 {
     public function get_all_logs($time, $limit = 10, $type = 0, $followed = false)
@@ -45,10 +46,10 @@ class NewOptLog extends AppModel
             ]),
             'fields' => [
                 'NewOptLog.*',
-                'Proxy.*',
-                'ProxyLevel.*',
-                'Customer.*',
-                'Weshare.*',
+                'Proxy.id', 'Proxy.avatar', 'Proxy.nickname', 'Proxy.label',
+                'ProxyLevel.data_value',
+                'Customer.avatar', 'Customer.nickname',
+                'Weshare.id', 'Weshare.title', 'Weshare.description', 'Weshare.view_count', 'Weshare.images'
             ],
             'joins' => [
                 [
@@ -72,6 +73,8 @@ class NewOptLog extends AppModel
             'order' => 'time desc',
             'limit' => $limit,
         ]);
+
+        $data['Weshare']['description'] = mb_substr($data['Weshare']['description'], 0, 120);
 
         return $data;
     }

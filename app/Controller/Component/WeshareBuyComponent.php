@@ -987,10 +987,22 @@ class WeshareBuyComponent extends Component
     {
         $userRelationM = ClassRegistry::init('UserRelation');
         $cond = array(
-            'conditions' => array(
-                'user_id' => $sharerId,
-                'deleted' => DELETED_NO
-            )
+            'conditions' => [
+                'UserRelation.user_id' => $sharerId,
+                'UserRelation.deleted' => DELETED_NO,
+                'User.wx_subscribe_status' => 1
+            ],
+            'joins' => [
+                [
+                    'table' => 'users',
+                    'alias' => 'User',
+                    'conditions' => [
+                        'User.id = UserRelation.follow_id',
+                    ],
+                ]
+            ],
+            'fields' => ['UserRelation.follow_id'],
+            'order' => ['UserRelation.id ASC']
         );
         if ($limit != null && $offset != null) {
             $cond['limit'] = $limit;
@@ -2103,7 +2115,8 @@ class WeshareBuyComponent extends Component
         $orderM = ClassRegistry::init('Order');
         $weshareM = ClassRegistry::init('Weshare');
         $shareOperateSettingM = ClassRegistry::init('ShareOperateSetting');
-        $authorize_count = $shareOperateSettingM->query('SELECT count(distinct data_id) as a_count FROM cake_share_operate_settings where user=' . $uid);
+        //$authorize_count = $shareOperateSettingM->query('SELECT count(distinct data_id) as a_count FROM cake_share_operate_settings where user=' . $uid);
+        $authorize_count = $shareOperateSettingM->query('SELECT count(distinct cs.data_id) as a_count FROM cake_share_operate_settings cs join cake_weshares cw on cw.id=cs.data_id where cw.status!=-1 and cs.user=' . $uid);
         $wait_ship_order_count = $orderM->find('count', [
             'conditions' => [
                 'status' => ORDER_STATUS_PAID,
@@ -2161,11 +2174,13 @@ class WeshareBuyComponent extends Component
         if (empty($summery_data)) {
             $weshareM = ClassRegistry::init('Weshare');
             $userRelationM = ClassRegistry::init('UserRelation');
-            $weshares = $weshareM->find('all', array(
-                'conditions' => array(
-                    'creator' => $uid
-                ),
-                'fields' => array('id')
+            $weshare_count = $weshareM->find('count', array(
+                'conditions' => [
+                    'creator' => $uid,
+                    'status' => [WESHARE_STATUS_NORMAL, WESHARE_STATUS_STOP],
+                    'settlement' => [WESHARE_SETTLEMENT_NO, WESHARE_SETTLEMENT_YES],
+                    'type' => [SHARE_TYPE_GROUP, SHARE_TYPE_DEFAULT, SHARE_TYPE_POOL_FOR_PROXY, SHARE_TYPE_POOL]
+                ]
             ));
             $fans_count = $userRelationM->find('count', array(
                 'conditions' => array(
@@ -2180,7 +2195,7 @@ class WeshareBuyComponent extends Component
                 )
             ));
             $comments_count = $this->get_sharer_comments_count($uid);
-            $summery_data = array('share_count' => count($weshares), 'follower_count' => $fans_count, 'focus_count' => $focus_count, 'comment_count' => $comments_count);
+            $summery_data = array('share_count' => $weshare_count, 'follower_count' => $fans_count, 'focus_count' => $focus_count, 'comment_count' => $comments_count);
             Cache::write($key, json_encode($summery_data));
             return $summery_data;
         }
@@ -2375,7 +2390,7 @@ class WeshareBuyComponent extends Component
      */
     public function send_recommend_msg($recommend_user, $share_id, $memo)
     {
-        $checkSendMsgResult = $this->ShareUtil->checkCanSendMsg($recommend_user);
+        $checkSendMsgResult = $this->ShareUtil-> checkCanSendMsg($recommend_user, $share_id, MSG_LOG_RECOMMEND_TYPE);
         if (!$checkSendMsgResult['success']) {
             return $checkSendMsgResult;
         }
@@ -2425,9 +2440,10 @@ class WeshareBuyComponent extends Component
         $followers = array_diff($followers, $hasBuyUsers);
         //过滤模板消息
         $followers = $this->check_msg_log_and_filter_user($weshareId, $followers, MSG_LOG_NOTIFY_TYPE);
-        $followers = $this->check_msg_log_and_filter_user($weshare['Weshare']['refer_share_id'], $followers, MSG_LOG_NOTIFY_TYPE);
         //check msg logs filter users
         $followers = $this->check_msg_log_and_filter_user($weshareId, $followers, MSG_LOG_RECOMMEND_TYPE);
+        $followers = $this->check_msg_log_and_filter_user($weshare['Weshare']['refer_share_id'], $followers, MSG_LOG_NOTIFY_TYPE);
+        $followers = $this->check_msg_log_and_filter_user($weshare['Weshare']['refer_share_id'], $followers, MSG_LOG_RECOMMEND_TYPE);
         $openIds = $this->Oauthbind->findWxServiceBindsByUids($followers);
         if (!empty($openIds)) {
             foreach ($openIds as $openId) {
@@ -2455,7 +2471,7 @@ class WeshareBuyComponent extends Component
             'conditions' => array(
                 'data_id' => $data_id,
                 'data_type' => $type,
-                'DATE(created)' => $q_date
+                'created > ' => $q_date
             ),
             'fields' => array('user_id'),
             'limit' => 3000,
@@ -2561,7 +2577,7 @@ class WeshareBuyComponent extends Component
                 'deleted' => DELETED_NO
             )
         ));
-        $pageSize = 300;
+        $pageSize = 50;
         $pageCount = ($totalRecords + $pageSize - 1) / $pageSize;
         $pageCount = intval($pageCount);
         return array('pageCount' => $pageCount, 'pageSize' => $pageSize);

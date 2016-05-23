@@ -172,7 +172,7 @@ class WesharesController extends AppController
             $this->redirect('/users/tutorial');
             return;
         }
-        
+
         $share_ship_set = $this->sharer_can_use_we_ship($uid);
         if ($this->is_new_sharer($uid)) {
             $this->set('is_new_sharer', 1);
@@ -288,7 +288,6 @@ class WesharesController extends AppController
         if (!empty($detail)) {
             $detail['prepare_comment_data'] = $this->prepare_comment_data();
             $detail['weixininfo'] = $this->set_weixin_share_data($uid, $weshareId);
-            //$detail['my_coupons'] = [];//CouponItem.id Coupon.reduced_price
         }
         echo json_encode($detail);
         exit();
@@ -502,14 +501,14 @@ class WesharesController extends AppController
             }
             if ($this->Order->updateAll($update_order_data, array('id' => $orderId))) {
                 $coupon_id = $postDataArray['coupon_id'];
-                $this->log('use coupon id '.$coupon_id, LOG_DEBUG);
+                $this->log('use coupon id ' . $coupon_id, LOG_INFO);
                 //红包
                 if (!empty($coupon_id)) {
                     //菠萝
-                    if($weshareId == 4507){
+                    if ($weshareId == 4507) {
                         //use code
                         $this->order_use_coupon_code($coupon_id, $orderId, $uid);
-                    }else{
+                    } else {
                         $this->order_use_score_and_coupon($orderId, $uid, 0, $totalPrice / 100);
                     }
                 }
@@ -642,31 +641,31 @@ class WesharesController extends AppController
             $uid = $current_uid;
         }
         $is_me = $uid == $current_uid;
-        if($is_me){
+        if ($is_me) {
             $this->redirect('/weshares/get_self_info.html');
-        }else{
-            $this->redirect('/weshares/get_other_info/'.$uid.'.html');
+        } else {
+            $this->redirect('/weshares/get_other_info/' . $uid . '.html');
         }
     }
 
     public function user_setting()
     {
         $user_info = $this->get_user_info($this->currentUser['id']);
-        $this->set('user_info' , $user_info['User']);
-        $this->set('uid' , $this->currentUser['id']);
+        $this->set('user_info', $user_info['User']);
+        $this->set('uid', $this->currentUser['id']);
     }
 
     /**
      * 获取用户授权的列表
      */
-    public function my_auth_shares_list_api($type, $page=1)
+    public function my_auth_shares_list_api($type, $page = 1)
     {
         $limit = 5;
         $uid = $this->currentUser['id'];
         $shares = [];
         if ($uid) {
             $params = $this->__get_query_share_settlement_status_by_type($type);
-            $auth_shares_result = $this->WeshareBuy->get_my_auth_shares($uid, $page, $limit,  $params['status'], $params['settlement']);
+            $auth_shares_result = $this->WeshareBuy->get_my_auth_shares($uid, $page, $limit, $params['status'], $params['settlement']);
             $share_ids = Hash::extract($auth_shares_result, '{n}.Weshare.id');
             if (!empty($share_ids)) {
                 $order_count_result = $this->get_order_count_share_map($share_ids);
@@ -734,7 +733,8 @@ class WesharesController extends AppController
         return ['status' => $status, 'settlement' => $settlement];
     }
 
-    private function get_order_count_share_map($share_ids){
+    private function get_order_count_share_map($share_ids)
+    {
         $query_order_sql = 'select count(id), member_id from cake_orders where member_id in (' . implode(',', $share_ids) . ') and status>0 and type=9 group by member_id';
         $orderM = ClassRegistry::init('Order');
         $result = $orderM->query($query_order_sql);
@@ -742,7 +742,8 @@ class WesharesController extends AppController
         return $result;
     }
 
-    private function  get_share_balance_result($share_ids){
+    private function  get_share_balance_result($share_ids)
+    {
         $balance_result = $this->WeshareBuy->get_shares_balance_money($share_ids);
         $summery_data = $balance_result['weshare_summery'];
         $weshare_repaid_map = $balance_result['weshare_repaid_map'];
@@ -762,8 +763,7 @@ class WesharesController extends AppController
     public function my_shares_list($type = 0)
     {
         $uid = $this->currentUser['id'];
-        if(!($uid > 0))
-        {
+        if (!($uid > 0)) {
             $this->redirect('/users/login');
         }
 
@@ -775,8 +775,7 @@ class WesharesController extends AppController
     public function my_order_list()
     {
         $uid = $this->currentUser['id'];
-        if(!($uid > 0))
-        {
+        if (!($uid > 0)) {
             $this->redirect('/users/login');
         }
     }
@@ -800,22 +799,20 @@ class WesharesController extends AppController
 
     public function subUser($uid)
     {
-        if(!$this->currentUser['id'])
-        {
+        if (!$this->currentUser['id']) {
             echo json_encode(array('success' => false));
             die;
         }
-        return $this->subscribe_sharer($uid , $this->currentUser['id']);
+        return $this->subscribe_sharer($uid, $this->currentUser['id']);
     }
 
     public function unSubUser($uid)
     {
-        if(!$this->currentUser['id'])
-        {
+        if (!$this->currentUser['id']) {
             echo json_encode(array('success' => false));
             die;
         }
-        return $this->unsubscribe_sharer($uid , $this->currentUser['id']);
+        return $this->unsubscribe_sharer($uid, $this->currentUser['id']);
     }
 
     private function get_user_info($user_id)
@@ -840,7 +837,7 @@ class WesharesController extends AppController
         $this->set('user_info', $user_info);
         $this->set('sub_status', !$sub_status);
         $this->set('uid', $uid);
-        $this->set_share_user_info_weixin_params($uid , $curr_uid , $user_info['User']);
+        $this->set_share_user_info_weixin_params($uid, $curr_uid, $user_info['User']);
     }
 
     public function get_other_shares($uid, $page)
@@ -849,10 +846,9 @@ class WesharesController extends AppController
         $limit = 5;
         $result = $this->Weshares->get_u_create_share($uid, $limit, $page);
 
-        foreach ($result as $k => $res)
-        {
+        foreach ($result as $k => $res) {
             $item_desc = strip_tags($result[$k]['description']);
-            $result[$k]['description'] = mb_strlen($item_desc , 'utf8') > 100 ? mb_substr($item_desc , 0 , 99 ,'utf8')."..." : $item_desc;
+            $result[$k]['description'] = mb_strlen($item_desc, 'utf8') > 100 ? mb_substr($item_desc, 0, 99, 'utf8') . "..." : $item_desc;
         }
 
         echo json_encode($result);
@@ -871,8 +867,7 @@ class WesharesController extends AppController
     public function get_self_info()
     {
         $uid = $this->currentUser['id'];
-        if(!($uid > 0))
-        {
+        if (!($uid > 0)) {
             $this->redirect('/users/login');
         }
         $userMonthOrderCount = $this->WeshareBuy->get_month_total_count($uid);
@@ -882,7 +877,7 @@ class WesharesController extends AppController
         $user_info = $this->get_user_info($uid);
         $my_order_count = $this->WeshareBuy->get_user_all_order_count($uid);
         $user_info['User']['avatar'] = get_user_avatar($user_info['User']);
-        $this->set_share_user_info_weixin_params($uid , $uid , $user_info['User']);
+        $this->set_share_user_info_weixin_params($uid, $uid, $user_info['User']);
         $this->set('share_user', $user_info['User']);
         $this->set('user_level', $user_level);
         $this->set('user_summary', $user_summary);
@@ -1231,7 +1226,7 @@ class WesharesController extends AppController
             echo json_encode(array('success' => false, 'reason' => 'not_creator'));
             return;
         }
-        $checkCanSendMsgResult = $this->ShareUtil->checkCanSendMsg($uid);
+        $checkCanSendMsgResult = $this->ShareUtil->checkCanSendMsg($uid, $weshare_id, MSG_LOG_NOTIFY_TYPE);
         if (!$checkCanSendMsgResult['success']) {
             echo json_encode($checkCanSendMsgResult);
             return;
@@ -1257,6 +1252,7 @@ class WesharesController extends AppController
     public function process_send_new_share_msg($shareId, $pageCount, $pageSize)
     {
         $this->autoRender = false;
+        $this->log('task send new share msg weshare id ' . $shareId . ' page count ' . $pageCount . ' page size ' . $pageSize, LOG_INFO);
         $tasks = array();
         foreach (range(0, $pageCount) as $page) {
             $offset = $page * $pageSize;
@@ -1275,6 +1271,7 @@ class WesharesController extends AppController
      */
     public function send_new_share_msg_task($shareId, $limit, $offset)
     {
+        $this->log('child buy percent task ' . $shareId . ' limit ' . $limit . ' offset ' . $offset, LOG_INFO);
         $this->autoRender = false;
         $this->WeshareBuy->send_new_share_msg($shareId, $limit, $offset);
         echo json_encode(array('success' => true));
@@ -1290,6 +1287,7 @@ class WesharesController extends AppController
     public function process_send_buy_percent_msg($weshare_id, $pageCount, $pageSize)
     {
         $this->autoRender = false;
+        $this->log('task send buy percent msg weshare id ' . $weshare_id . ' page count ' . $pageCount . ' page size ' . $pageSize, LOG_INFO);
         $tasks = array();
         $msg_content = $_REQUEST['content'];
         foreach (range(0, $pageCount) as $page) {
@@ -1322,6 +1320,7 @@ class WesharesController extends AppController
      */
     public function send_buy_percent_msg_task($weshare_id, $limit, $offset)
     {
+        $this->log('child buy percent task ' . $weshare_id . ' limit ' . $limit . ' offset ' . $offset, LOG_INFO);
         $this->autoRender = false;
         $share_info = $this->ShareUtil->get_weshare_detail($weshare_id);
         $msg_content = $_REQUEST['content'];
@@ -1345,11 +1344,7 @@ class WesharesController extends AppController
             $export_paid_order = false;
         }
         $statics_data = $this->get_weshare_buy_info($shareId, true, true, $export_paid_order);
-        //$refund_money = $this->WeshareBuy->get_refund_money_by_weshare($shareId);
-        //$rebate_money = $this->ShareUtil->get_share_rebate_money($shareId);
         $this->set($statics_data);
-        //$this->set('refund_money', $refund_money);
-        //$this->set('rebate_money', $rebate_money);
     }
 
     public function old_order_export($shareId, $only_paid = 1)
@@ -1361,11 +1356,7 @@ class WesharesController extends AppController
             $export_paid_order = false;
         }
         $statics_data = $this->get_weshare_buy_info($shareId, true, true, $export_paid_order);
-        //$refund_money = $this->WeshareBuy->get_refund_money_by_weshare($shareId);
-        //$rebate_money = $this->ShareUtil->get_share_rebate_money($shareId);
         $this->set($statics_data);
-        //$this->set('refund_money', $refund_money);
-        //$this->set('rebate_money', $rebate_money);
     }
 
     /**
@@ -1432,6 +1423,23 @@ class WesharesController extends AppController
         $this->set('shares', $shares);
     }
 
+    public function summaries()
+    {
+        $this->autoRender = false;
+
+        $shareIds = json_decode($_REQUEST['shareIds']);
+
+        $summaries = [];
+        foreach ($shareIds as $shareId) {
+            $summary = $this->ShareUtil->get_index_product_summary($shareId);
+            $summary['share_id'] = $shareId;
+            $summaries[] = $summary;
+        }
+
+        echo json_encode($summaries);
+        return;
+    }
+
     /**
      * @param $weshareId
      * @param $is_me
@@ -1488,16 +1496,6 @@ class WesharesController extends AppController
     private function getSharerCommentData($weshare_ids, $sharer_id)
     {
         return $this->WeshareBuy->load_sharer_comment_data($weshare_ids, $sharer_id);
-    }
-
-    /**
-     * @param $uid
-     * @return array
-     * 获取分享者的一些统计数据(粉丝、分享次数)
-     */
-    private function getUserShareSummery($uid)
-    {
-        return $this->WeshareBuy->get_user_share_summary($uid);
     }
 
 
@@ -1584,7 +1582,7 @@ class WesharesController extends AppController
     //菠萝优惠码使用
     private function order_use_coupon_code($coupon_id, $order_id)
     {
-        $this->log('order use coupon'.$coupon_id, LOG_DEBUG);
+        $this->log('order use coupon' . $coupon_id, LOG_INFO);
         $reduced = 20;
         $couponItem = $this->CouponItem->findById($coupon_id);
         $coupon_code = $couponItem['CouponItem']['code'];
@@ -1629,7 +1627,7 @@ class WesharesController extends AppController
     {
         //to do check offer status
         $get_coupon_result = $this->get_coupon_with_shared_id($shared_offer_id);
-        $this->log('share user get red packet result: ' . json_encode($get_coupon_result), LOG_DEBUG);
+        $this->log('share user get red packet result: ' . json_encode($get_coupon_result), LOG_INFO);
         if (!$get_coupon_result['success']) {
             $this->log('share user get red packet result: failed.', LOG_INFO);
             $this->set('get_coupon_type', 'fail');
@@ -1935,13 +1933,13 @@ class WesharesController extends AppController
                 $title = '这是' . $shareUser['nickname'] . '的微分享，快来关注我吧';
                 $image = $shareUser['avatar'];
                 $desc = '朋友说是一个有人情味的分享社区，这里你不但可以吃到各地的特产，还能认识有趣的人。';
-                $detail_url = WX_HOST."/weshares/get_other_info/$uid.html";
+                $detail_url = WX_HOST . "/weshares/get_other_info/$uid.html";
             } else {
                 $current_user = $this->currentUser;
                 $title = $current_user['nickname'] . '推荐了' . $shareUser['nickname'] . '的微分享，快来关注ta吧！';
                 $image = $shareUser['avatar'];
                 $desc = $shareUser['nickname'] . '是我的朋友，很靠谱。朋友说是一个有人情味的分享社区，这里你不但可以吃到各地的特产，还能认识有趣的人。';
-                $detail_url = WX_HOST."/weshares/get_other_info/$uid.html";
+                $detail_url = WX_HOST . "/weshares/get_other_info/$uid.html";
             }
             if (!$image) {
                 // 这里有问题吧? 为啥是dev?

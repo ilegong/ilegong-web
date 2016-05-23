@@ -80,7 +80,30 @@ if (Configure::read('debug') > 1) {
     $duration = 300;
 }
 $cache_prefix = '';
-if (class_exists('Memcached')) {
+if(class_exists('Redis')){
+    $cache_prefix = CACHE_PREFIX . 'pys_app_';
+    $engine = 'Redis';
+    Cache::config('default', array(
+        'engine' => $engine,
+        'servers' => REDIS_HOST,
+        'port' => 6379,
+        'prefix' => $cache_prefix . 'miaocms_'
+    ));
+
+    Cache::config('_cake_core_', array(
+        'engine' => $engine,
+        'prefix' => $cache_prefix . 'core_app_',
+        'servers' => REDIS_HOST,
+        'port' => 6379,
+    ));
+
+    Cache::config('_cake_model_', array(
+        'engine' => $engine,
+        'prefix' => $cache_prefix . 'model_app_',
+        'servers' => REDIS_HOST,
+        'port' => 6379,
+    ));
+} else if (class_exists('Memcached')) {
     $cache_prefix = CACHE_PREFIX . 'pys_app_';
     $engine = 'Memcached';
     Cache::config('default', array(

@@ -32,7 +32,9 @@ class NewOptLogsComponent extends Component {
         $my_proxys = ClassRegistry::init('User')->get_my_proxys($uid);
         if(!empty($data)){
             foreach ($data as $v) {
-                $ret[] = $this->map_fields($v, $uid, $my_proxys);
+                if($v['Weshare']['id']){
+                    $ret[] = $this->map_fields($v, $uid, $my_proxys);
+                }
             }
         }
         return $ret;
@@ -69,7 +71,7 @@ class NewOptLogsComponent extends Component {
         }
 
         $image = explode('|', $v['Weshare']['images'])[0];
-        $tmp['image'] = $image ? $image : "http://static.tongshijia.com/static/img/default_product_banner.png";
+        $tmp['image'] = $image ? $image : STATIC_HOST."/static/img/default_product_banner.png";
 
         $tmp['baoming'] = 0;
 

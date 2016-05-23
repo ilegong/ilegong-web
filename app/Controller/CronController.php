@@ -200,6 +200,23 @@ class CronController extends AppController
         exit();
     }
 
+    function process_update_oathbind_unionid($oathBinds){
+        $this->loadModel('Oauthbind');
+        $data = [];
+        if (!empty($oathBinds)) {
+            foreach ($oathBinds as $item) {
+                $open_id = $item['Oauthbind']['oauth_openid'];
+                $wx_user = get_user_info_from_wx($open_id);
+                $unionid = $wx_user['unionid'];
+                if(!empty($unionid)){
+                    $data[] = ['id' => $item['Oauthbind']['id'], 'unionId' => $unionid];
+                }
+            }
+            $this->Oauthbind->saveAll($data);
+        }
+        return count($data);
+    }
+
     public function download_photo_from_wx() {
         $this->autoRender=false;
         $this->loadModel('DownloadLog');
@@ -293,24 +310,6 @@ class CronController extends AppController
         echo 'success';
     }
 
-
-
-    function process_update_oathbind_unionid($oathBinds){
-        $this->loadModel('Oauthbind');
-        $data = [];
-        if (!empty($oathBinds)) {
-            foreach ($oathBinds as $item) {
-                $open_id = $item['Oauthbind']['oauth_openid'];
-                $wx_user = get_user_info_from_wx($open_id);
-                $unionid = $wx_user['unionid'];
-                if(!empty($unionid)){
-                    $data[] = ['id' => $item['Oauthbind']['id'], 'unionId' => $unionid];
-                }
-            }
-        }
-        $this->Oauthbind->saveAll($data);
-        return count($data);
-    }
 
 
     function process_download_wx_photo($oathBinds) {
