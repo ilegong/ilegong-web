@@ -1001,7 +1001,8 @@ class WeshareBuyComponent extends Component
                     ],
                 ]
             ],
-            'fields' => ['UserRelation.follow_id']
+            'fields' => ['UserRelation.follow_id'],
+            'order' => ['UserRelation.id ASC']
         );
         if ($limit != null && $offset != null) {
             $cond['limit'] = $limit;
@@ -2576,7 +2577,7 @@ class WeshareBuyComponent extends Component
                 'deleted' => DELETED_NO
             )
         ));
-        $pageSize = 300;
+        $pageSize = 50;
         $pageCount = ($totalRecords + $pageSize - 1) / $pageSize;
         $pageCount = intval($pageCount);
         return array('pageCount' => $pageCount, 'pageSize' => $pageSize);
