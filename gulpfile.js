@@ -43,6 +43,7 @@ var all_js = [
     name: 'share-opt-index.min.js',
     sources: [
       'webroot/src/scripts/share-opt-index-controller.js',
+      'webroot/src/scripts/subscription-controller.js',
     ],
     dist: 'webroot/static/weshares/js/'
   }, {

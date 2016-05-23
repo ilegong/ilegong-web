@@ -13,18 +13,24 @@
             <dd class="fl label" ng-bind="share.Proxy.label"></dd>
         </dl>
     </li>
-    <li class="fr subscribe">
-        <div class="sub-no" ng-show="true">关注TA
+    <li class="fr subscription" ng-controller="SubscriptionController as sub">
+        <div class="subscribed" ng-class="{'no': !sub.isSubscribed(share.Proxy.id)}"
+             ng-click="sub.subscribe(share.Proxy.id)">关注TA
         </div>
-        <div class="sub-yes" ng-show="false">
+        <div class="subscribed" ng-class="{'yes': sub.isSubscribed(share.Proxy.id)}"
+             ng-click="sub.clickSubscribedBtn(share.Proxy.id, $event)">
             <a href="#X" class="clearfix">
-                <span class="fl">已关注</span>
+                <span class="fl">
+                    已关注
+                    <i class="fa fa-angle-down"></i>
+                </span>
                 <label class="fl">
                     <i></i>
                     <em></em>
                 </label>
             </a>
-            <a class="unfollow">取消关注</a>
+            <a class="unfollow"  ng-show="sub.showUnSubscribeBtn(share.Proxy.id)"
+               ng-click="sub.unSubscribe(share.Proxy.id)">取消关注</a>
         </div>
     </li>
 </ul>

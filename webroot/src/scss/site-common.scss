@@ -321,7 +321,7 @@ footer {
           font-size: .9em;
         }
       }
-      .subscribe {
+      .subscription {
         width: 64px;
         border: 1px solid #bbb;
         border-radius: 2px;
@@ -329,12 +329,15 @@ footer {
         text-align: center;
         line-height: 2em;
         margin-top: 7px;
-        .sub-no {
-
-        }
-        .sub-yes {
-          position: relative;
+        .subscribed{
           display: none;
+        }
+        .subscribed.no {
+          display: block;
+        }
+        .subscribed.yes {
+          position: relative;
+          display: block;
           span {
             padding-left: 5px;
             color: #666;
@@ -422,7 +425,7 @@ footer {
       .order-count {
         padding-right: 60px;
         max-height: 420px;
-        .avatar{
+        .avatar {
           width: 28px;
           height: 28px;
           display: block;
@@ -439,5 +442,13 @@ footer {
       }
     }
   }
+}
 
+.scroll-loading {
+  margin: 0px 6px;
+  background-color: #FFFFFF;
+  height: 40px;
+  line-height: 40px;
+  display: none;
+  color: #f99d3a;
 }

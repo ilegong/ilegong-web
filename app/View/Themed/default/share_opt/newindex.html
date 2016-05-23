@@ -1,11 +1,14 @@
-<div class="share-opt-index-page" style="display: none" ng-class="{'show-b': true}"
+<div class="share-opt-index-page" style="display: none" ng-class="{'show-b': true}" ng-click="$rootScope.clickPage();"
      ng-controller="ShareOptIndexController as vm">
-    <div class="shares-container" infinite-scroll='vm.shareNextPage()'
-         infinite-scroll-disabled='false'
+    <div class="shares-container" infinite-scroll='vm.loadNextPage()'
+         infinite-scroll-disabled='vm.loadOver||vm.loading'
          infinite-scroll-distance='0'>
         <div class="share" ng-include="'{{$STATIC_HOST}}/static/weshares/templates/share.html?v1.8.8'" ng-repeat="share in vm.shares">
 
         </div>
+    </div>
+    <div class="scroll-loading" ng-class="{'show-b': vm.loading || vm.lo}" align="center">
+        <div ng-show="">加载中...</div>
     </div>
 </div>
 
