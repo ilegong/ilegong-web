@@ -2577,7 +2577,7 @@ class WeshareBuyComponent extends Component
                 'deleted' => DELETED_NO
             )
         ));
-        $pageSize = 50;
+        $pageSize = 10;
         $pageCount = ($totalRecords + $pageSize - 1) / $pageSize;
         $pageCount = intval($pageCount);
         return array('pageCount' => $pageCount, 'pageSize' => $pageSize);
@@ -3028,11 +3028,6 @@ class WeshareBuyComponent extends Component
             $repaid_money_result[$member_id] = $repaid_money_result[$member_id] + $item['Order']['total_all_price'];
         }
         return $repaid_money_result;
-    }
-
-    public function calculate_share_ship_fee($shareId, $carts)
-    {
-        //TODO calculate share ship fee
     }
 
     public function update_share_view_count($id)
