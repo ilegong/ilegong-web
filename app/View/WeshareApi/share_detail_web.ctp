@@ -39,7 +39,7 @@
     <?php if(count($detail['images']) > 0 ){?>
     <dl class="clearfix images margin-bottom-12">
         <?php foreach($detail['images'] as $key => $image) { ?>
-        <dt><a onclick="window.location.href='pys://imgClickIndex={{$key}}'"><img name="product-image" src="<?php echo $image ?>"/></a></dt>
+        <dt><a onclick="window.location.href='pys://imgClickIndex=<?php echo $key ?>}}'"><img name="product-image" src="<?php echo $image ?>"/></a></dt>
         <?php } ?>
     </dl>
     <?php } ?>
