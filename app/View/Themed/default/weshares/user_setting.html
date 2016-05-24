@@ -1,12 +1,12 @@
 <div class="get-user-info" ng-controller="GetUserInfoCtr as vm" ng-init="vm.user_pwd_show=false;vm.user_info_show=false;vm.user_nickname='{{$user_info['nickname']}}';vm.user_desc='{{$user_info['description']}}';vm.user_id={{$uid}};">
-    <div class="refer-back-bg">
+    <div class="refer-back-bg menu-top">
         设置
         <a href="/weshares/get_self_info">
             <img ng-src="&#123;&#123;vm.staticFilePath&#125;&#125;/static/img/back.png"/>
             <label>返回</label>
         </a>
     </div>
-    <div style="margin-top: 54px;">
+    <div class="has-menu-top extra-margin">
         <a class="mine-tab" ng-click="vm.user_info_show=true">
             <dl class="clearfix mine-tab-bg">
                 <dd class="fl">修改个人资料</dd>
@@ -70,7 +70,7 @@
 $this->assign('title','朋友说-设置');
 
 $this->Html->css(array(
-$STATIC_HOST.'/static/weshares/css/get-user-info.min.css?v2.4.8'
+$STATIC_HOST.'/static/weshares/css/get-user-info.min.css?v2.5.6'
 ), null, array('inline' => false));
 
 $this->Html->script(array(

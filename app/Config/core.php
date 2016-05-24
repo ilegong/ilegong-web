@@ -80,7 +80,7 @@ if (Configure::read('debug') > 1) {
     $duration = 300;
 }
 $cache_prefix = '';
-if (class_exists('Redis')) {
+if (extension_loaded('Redis')) {
     $cache_prefix = CACHE_PREFIX . 'pys_app_';
     $engine = 'Redis';
     Cache::config('default', array(
@@ -103,7 +103,7 @@ if (class_exists('Redis')) {
         'server' => REDIS_HOST,
         'port' => 6379,
     ));
-} else if (class_exists('Memcached')) {
+} else if (extension_loaded('Memcached')) {
     $cache_prefix = CACHE_PREFIX . 'pys_app_';
     $engine = 'Memcached';
     Cache::config('default', array(

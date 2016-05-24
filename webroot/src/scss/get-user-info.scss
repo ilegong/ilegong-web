@@ -1,56 +1,8 @@
 @charset "utf-8";
 /* CSS Document */
 .get-user-info {
-  a:visited {
-    color: #333333;
-    text-decoration: none
-  }
-  a:link {
-    color: #333333;
-    text-decoration: none
-  }
-  a:active {
-    color: #333333;
-    text-decoration: none
-  }
-  a: {
-    color: #333333;
-
-  }
-  a:-webkit-any-link {
-    text-decoration: none
-  }
-  .refer-back-bg {
-    background-color: #f9f9f9;
-    border-bottom: 1px #dddddd solid;
-    color: #333333;
-    font-size: 1.3em;
-    line-height: 44px;
-    text-align: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 100;
-  }
-  .refer-back-bg a {
-    position: absolute;
-    left: 15px;
-    text-decoration: none;
-    color: #333333;
-    width: 4em;
-    height: 44px;
-  }
-  .refer-back-bg a img, .refer-back-bg a label {
-    float: left;
-  }
-  .refer-back-bg a label {
-    padding-left: 5px;
-    font-size: 0.8em;
-  }
-  .refer-back-bg a img {
-    width: 8px;
-    margin-top: 14px;
+  .has-menu-top{
+    margin-top: 54px;
   }
   /*mine-massage*/
   .mine-bg {

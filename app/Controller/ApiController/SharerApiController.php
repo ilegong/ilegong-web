@@ -87,10 +87,25 @@ class SharerApiController extends AppController{
         return $result;
     }
 
+
     public function get_share_list($status, $settlement, $page, $limit)
     {
         $uid = $this->currentUser['id'];
         $shares = $this->WeshareBuy->get_my_shares($uid, $status, $settlement, $page, $limit);
+        echo json_encode($this->map_shares($shares));
+        exit();
+    }
+
+    public function search_share_list($page, $limit)
+    {
+        $uid = $this->currentUser['id'];
+        $keyword = $_REQUEST['keyword'];
+        $shares = $this->WeshareBuy->search_shares($uid, $keyword, $page, $limit);
+        echo json_encode($this->map_shares($shares));
+        exit();
+    }
+
+    private function map_shares($shares){
         $share_ids = Hash::extract($shares, '{n}.Weshare.id');
         $share_list = [];
         if (!empty($share_ids)) {
@@ -103,8 +118,7 @@ class SharerApiController extends AppController{
                 $share_list[] = $shareItem;
             }
         }
-        echo json_encode($share_list);
-        exit();
+        return $share_list;
     }
 
     public function get_auth_share_list($status, $settlement, $page, $limit)

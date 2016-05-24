@@ -14,7 +14,7 @@ class RedisQueueComponent extends Component
             'url' => $url,
             'form_data' => $postdata,
             'prior' => $prior
-        ))->delay(60)->save();
+        ))->delay(120)->save()->attempts(1);
         return true;
     }
 

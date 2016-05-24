@@ -1,64 +1,30 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="description" content="只有团长才可以逛的街，朋友说统一服务和售后" />
-    <link href="{{$STATIC_HOST}}/static/weshares/css/site-common.min.css?v2.5.5" media="all" rel="stylesheet" type="text/css">
-    <link href="{{$STATIC_HOST}}/static/product_pool/css/product_pool.min.css?v0.0.4" rel="stylesheet" type="text/css">
-    <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
-    <title>朋友说产品街</title>
-</head>
-<body style="background-color:#f1f1f1;">
-
-<div id="fix-both">
-    <ul class="class-tab">
+<div ng-controller="DefaultCtrl as vm">
+    <ul class="menu-top clearfix">
         <?php
-            $nav_li_width = 1/count($categories) * 100;
-        ?>
+        $nav_li_width = 1/count($categories) * 100;
+    ?>
         {{loop $categories $cate}}
-        <li {{if $cate["id"]==$category}}class="focus"{{/if}} style="width : {{$nav_li_width}}%"><a href="/share_product_pool/share_products_index/{{$cate['id']}}.html">{{$cate['name']}}</a></li>
+        <li {{if $cate["id"]==$category}}class="focus"{{/if}} style="width : {{$nav_li_width}}%"><a
+            href="/share_product_pool/share_products_index/{{$cate['id']}}.html">{{$cate['name']}}</a></li>
         {{/loop}}
     </ul>
-</div>
 
-<div style="margin-bottom: 45px;margin-top: 50px;">
-    {{loop $share_products $product}}
-    <div class="mb5">
-        <a href="/share_product_pool/share_product_detail/{{$product['weshare_id']}}"><img
-                src="{{$product['share_img']}}" width="100%"/></a>
+    <div class="has-menu-top has-channel-bottom">
+        {{loop $share_products $product}}
+        <div class="mb5">
+            <a href="/share_product_pool/share_product_detail/{{$product['weshare_id']}}"><img
+                    src="{{$product['share_img']}}" width="100%"/></a>
+        </div>
+        {{/loop}}
     </div>
-    {{/loop}}
 </div>
-<footer class="channel_bottom" id="share-bottom-nav">
-    <a class="btm_item" href="/" style="width: 25%;">
-        <p class="iconfont" style="height: 20px;"><i class="fa fa-home"></i></p>
-        <b>首页</b>
-    </a>
-    <a class="btm_item" href="/share_opt/index.html" style="width: 25%; position: relative;">
-        <i style="background:#f00;border-radius:50%;width:10px;height:10px;top:-5px;right:35%;position:absolute; display: none;"
-           id="mark-has-unread"></i>
 
-        <p class="iconfont" style="height: 20px;"><i class="fa fa-search"></i></p>
-        <b>发现</b>
-    </a>
-    <a class="btm_item" href="/weshares/add" style="width: 25%;">
-        <p class="iconfont" style="height: 20px;"><i class="fa fa-share-square-o"></i></p>
-        <b>我要分享</b>
-    </a>
-    <a class="btm_item" href="/weshares/user_share_info/{{$uid}}" style="width: 25%;">
-        <p class="iconfont" style="height: 20px;"><i class="fa fa-user"></i></p>
-        <b>我的</b>
-    </a>
-</footer>
-<script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
-<script src="{{$STATIC_HOST}}/static/common/no-angular-common.js"></script>
-<script>
-    Pyshuo.share.utils.init();
-    Pyshuo.share.utils.checkHasUnreadInfo();
-    (function () {
+<?php
+    $this->assign('title','朋友说产品街');
+$this->assign('description','只有团长才可以逛的街，朋友说统一服务和售后');
+$this->set('show_footer', 'none');
 
-    })();
-</script>
-</body>
-</html>
+$this->Html->script(array(
+$STATIC_HOST.'/static/weshares/js/index.min.js?v2.5.6'
+), array('block' => 'scripts'))
+?>

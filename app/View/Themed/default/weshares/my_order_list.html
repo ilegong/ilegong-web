@@ -1,12 +1,12 @@
 <div class="get-user-info" ng-controller="GetUserInfoCtr as vm" ng-init="vm.myOrderNextPage();">
-    <div class="refer-back-bg">
+    <div class="refer-back-bg menu-top">
         我的订单
         <a href="/weshares/get_self_info">
             <img ng-src="&#123;&#123;vm.staticFilePath&#125;&#125;/static/img/back.png"/>
             <label>返回</label>
         </a>
     </div>
-    <div style="margin-top: 54px;" infinite-scroll='vm.myOrderNextPage()' infinite-scroll-disabled='vm.mine.orderOver||vm.loading'
+    <div class="has-menu-top extra-margin" infinite-scroll='vm.myOrderNextPage()' infinite-scroll-disabled='vm.mine.orderOver||vm.loading'
          infinite-scroll-distance='1'>
         <div class="mine_order" ng-repeat="order in vm.mine.order">
             <a class="clearfix share-goodlist" href="/weshares/view/&#123;&#123;order.member_id&#125;&#125;">
@@ -28,7 +28,7 @@
 $this->assign('title','朋友说-我的订单');
 
 $this->Html->css(array(
-$STATIC_HOST.'/static/weshares/css/get-user-info.min.css?v2.5.0'
+$STATIC_HOST.'/static/weshares/css/get-user-info.min.css?v2.5.6'
 ), null, array('inline' => false));
 
 $this->Html->script(array(

@@ -29,6 +29,7 @@
                     <label>名称</label>
                     <input class="form-control" type="text" placeholder="请输入产品名称/规格" ng-model="product.name"
                            ng-change='vm.validateProductName(product)'
+                           ng-disabled="vm.weshare.type == 6"
                            ng-blur='vm.validateProductNameAndAlert(product)'>
                 </div>
                 <div class="line clearfix form-group" ng-class="{'has-error': product.priceHasError}">
@@ -86,7 +87,7 @@
 </div>
 
 <div class="shippment-info" ng-show='vm.showShippmentInfo'>
-    <div class="refer-back-bg">
+    <div class="refer-back-bg menu-top">
         设置配送信息
         <a ng-click="vm.backStep();">
             <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/back.png"/>
@@ -94,15 +95,18 @@
         </a>
     </div>
 
-    <div class="send-time section" style="padding: 0;">
+    <div class="send-time section has-menu-top extra-margin" style="padding: 0;">
         <div class="multi-line-form">
             <div class="line clearfix form-group" ng-class="{'has-error': product.priceHasError}">
-                <input class="form-control ng-pristine ng-untouched ng-valid" style="padding-left: 0;" type="text" placeholder="请输入到货/发货时间" ng-model="vm.weshare.send_info" ng-blur="vm.validateSendInfo()" ng-change='vm.validateSendInfo()'>
+                <input class="form-control ng-pristine ng-untouched ng-valid" style="padding-left: 0;" type="text"
+                       placeholder="请输入到货/发货时间" ng-model="vm.weshare.send_info"
+                       ng-disabled="vm.weshare.type == 6"
+                       ng-blur="vm.validateSendInfo()" ng-change='vm.validateSendInfo()'>
             </div>
         </div>
     </div>
 
-    <div class="ziti section">
+    <div class="ziti section" ng-hide="vm.weshare.type == 6">
         <dl class="clearfix section-title">
             <dd class="fl">
                 <input class="input-type1" type="checkbox" ng-checked="vm.self_ziti_data.status==1"
@@ -145,16 +149,21 @@
     <div class="expressage section">
         <dl class="clearfix section-title">
             <dd class="fl"><input class="input-type1" type="checkbox" ng-checked="vm.kuai_di_data.status==1"
-                       ng-click="vm.toggleBoxKuidiChecked()"/></dd>
+                                  ng-disabled="vm.weshare.type == 6"
+                                  ng-click="vm.toggleBoxKuidiChecked()"/></dd>
             <dd class="fl">快递</dd>
         </dl>
         <div class="section-detail" ng-show="vm.kuai_di_data.status==1">
             <dl class="clearfix freight-type" ng-show="vm.kuai_di_data.status==1">
-                <dd class="fl"><input type="radio" ng-model="vm.deliveryTemplateType" name="deliveryTemplateType" ng-value="0"/>
+                <dd class="fl"><input type="radio"
+                                      ng-disabled="vm.weshare.type == 6"
+                                      ng-model="vm.deliveryTemplateType" name="deliveryTemplateType" ng-value="0"/>
                 </dd>
                 <dd class="fl">按件数计邮费</dd>
                 <dd class="fl">&nbsp;&nbsp;&nbsp;</dd>
-                <dd class="fl"><input type="radio" ng-model="vm.deliveryTemplateType" name="deliveryTemplateType" ng-value="1"/></dd>
+                <dd class="fl"><input type="radio"
+                                      ng-disabled="vm.weshare.type == 6"
+                                      ng-model="vm.deliveryTemplateType" name="deliveryTemplateType" ng-value="1"/></dd>
                 <dd class="fl">按重量计邮费</dd>
             </dl>
             <div class="freight is-default">
@@ -166,15 +175,18 @@
                               ng-model="vm.defaultDeliveryTemplate.start_units"/></s>
                     <label>{{vm.getUnitTypeText()}}内，</label>
                     <s><input type="number" string-to-number step="1" placeholder="0"
+                              ng-disabled="vm.weshare.type == 6"
                               ng-model="vm.defaultDeliveryTemplate.start_fee"/></s>
                     <label>元</label>
                 </div>
                 <div class="freightrate clearfix">
                     <label>每增加</label>
                     <s><input type="number" string-to-number step="1" placeholder="1"
+                              ng-disabled="vm.weshare.type == 6"
                               ng-model="vm.defaultDeliveryTemplate.add_units"/></s>
                     <label>{{vm.getUnitTypeText()}}，增加</label>
                     <s><input type="number" string-to-number step="1" placeholder="0"
+                              ng-disabled="vm.weshare.type == 6"
                               ng-model="vm.defaultDeliveryTemplate.add_fee"/></s>
                     <label>元</label>
                 </div>
@@ -189,18 +201,24 @@
                     </h1>
                     <div class="freightrate clearfix">
                         <label>指定地区</label>
-                        <s><input type="number" string-to-number step="1" ng-model="deliveryTemplateItem.start_units"/></s>
+                        <s><input type="number" string-to-number step="1"
+                                  ng-disabled="vm.weshare.type == 6"
+                                  ng-model="deliveryTemplateItem.start_units"/></s>
                         <label>{{vm.getUnitTypeText()}}内，</label>
                         <s><input type="number" string-to-number step="1"
+                                  ng-disabled="vm.weshare.type == 6"
                                   ng-model="deliveryTemplateItem.start_fee"/></s>
                         <label>元</label>
                     </div>
                     <div class="freightrate clearfix">
                         <label>每增加</label>
                         <s><input type="number" string-to-number step="1"
+                                  ng-disabled="vm.weshare.type == 6"
                                   ng-model="deliveryTemplateItem.add_units"/></s>
                         <label>{{vm.getUnitTypeText()}}，增加</label>
-                        <s><input type="number" string-to-number step="1" ng-model="deliveryTemplateItem.add_fee"/></s>
+                        <s><input type="number" string-to-number step="1"
+                                  ng-disabled="vm.weshare.type == 6"
+                                  ng-model="deliveryTemplateItem.add_fee"/></s>
                         <label>元</label>
                     </div>
                 </div>
@@ -216,7 +234,7 @@
 
         </div>
     </div>
-    <dl class="clearfix haolinju section" ng-if="!vm.hideOfflineStore">
+    <dl class="clearfix haolinju section" ng-if="!vm.hideOfflineStore" ng-hide="vm.weshare.type == 6">
         <div class="section-title">
             <dd class="fl"><input class="input-type1" disabled type="checkbox"/></dd>
             <dd class="fl">好邻居</dd>
@@ -244,7 +262,7 @@
 </div>
 
 <div class="areas-info" ng-if="vm.isShowChooseCity">
-    <div class="refer-back-bg">
+    <div class="refer-back-bg menu-top">
         选择地区
         <a ng-click="vm.hideChooseCityView();">
             <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/back.png"/>
@@ -254,7 +272,7 @@
             <label>完成</label>
         </a>
     </div>
-    <ul class="areas">
+    <ul class="areas has-menu-top">
         <li class="area" ng-repeat="area in vm.areaData">
             <div class="checkable-line clearfix">
                 <img class="icon-left" ng-click="area.showChild=!area.showChild"

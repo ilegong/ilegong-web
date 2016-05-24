@@ -15,10 +15,11 @@
     function activate() {
       vm.shares = [];
       $http.get('/users/get_id_and_proxies').success(function (data) {
+        $log.log(data);
         if (data.uid != null) {
           $rootScope.uid = data.uid;
           $rootScope.proxies = _.map(data.proxies, function (pid) {
-            return {id: parseInt(pid)};
+            return parseInt(pid);
           })
         }
         else {

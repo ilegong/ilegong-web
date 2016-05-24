@@ -1,14 +1,14 @@
 <div ng-controller="WesharesEditConsigneeCtrl as wecc">
     <!--操作视图-->
-    <div style="background-color: #f1f1f1;">
+    <div>
         <!--选择快递地址-->
         <div ng-if="wecc.selectConsignees">
-            <div class="nav-bg">
-                <a ng-click="wecc.toBalanceView();" class="nav-back fl">
+            <div class="menu-top refer-back-bg">
+                选择地址
+                <a ng-click="wecc.toBalanceView();">
                     <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/back.png"/>
                     <label>返回</label>
                 </a>
-                <h1 class="fl">选择地址</h1>
             </div>
             <div class="select-address">
                 <a ng-class="{cur:consignee.status==1}" ng-repeat="consignee in wecc.consignees">
@@ -41,7 +41,7 @@
         </div>
         <!--编辑快递地址-->
         <div ng-if="wecc.editConsignee">
-            <div class="nav-bg">
+            <div class="menu-top refer-back-bg">
                 <a ng-click="wecc.showConsigneeListView();" class="nav-back fl">
                     <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/back.png"/>
                     <label>返回</label>
