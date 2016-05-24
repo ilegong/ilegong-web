@@ -1,69 +1,17 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="pragma" content="no-cache">
-    <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="viewport"
-          content="width=device-width,minimum-scale=1,initial-scale=1,maximum-scale=1, user-scalable=no">
-    <meta http-equiv="imagetoolbar" content="no">
-    <meta name="Keywords" content="朋友说">
-    <meta name="Description" content="朋友说">
-    <link rel="stylesheet" href="{{$STATIC_HOST}}/static/opt/css/new-opt.min.css?v2.5.3">
-    <link href="http://cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <title>发现</title>
-</head>
-<body class="big">
-<ul class="clearfix tuijian-top-sousuo">
-    <li class="sousuo fl">
-      <a href="#X">
-        <img src="{{$STATIC_HOST}}/static/opt/images/sousuo.png" style="display: none;">
-      </a>
-    </li>
-    <li class="tuijian_center">
-        <div class="bk bk_green fl activity" id='show-all'>推荐</div>
-        <div class="bk bk_white fl" id='show-only-followed'>关注</div>
-    </li>
-    <li class="fenxiang fr">
-        <a href="/weshares/add">
-            我要分享
-        </a>
-    </li>
-</ul>
-<div id="maindiv" data-uid="{{$uid}}">
-    <div id="dataloadingdiv" align="center"
-         style="margin:0px 6px;background-color:#FFFFFF;height:40px;line-height:40px;display: none;color: #f99d3a;">
-        <div>加载中...</div>
-    </div>
-    <div style="height: 100px;"></div>
+<div class="share-opt-index-page" style="display: none" ng-class="{'show-b': true}" ng-click="clickPage();"
+     ng-controller="ShareOptIndexController as vm" ng-include="'{{$STATIC_HOST}}/static/weshares/templates/shares.html?v1.8.8'">
+    
 </div>
-<img id="topiconbut" style="display:none;width:40px;height:40px;position: fixed;right:15px;bottom:65px;"
-     src="{{$STATIC_HOST}}/static/opt/images/topicon.png">
-{{if !$hide_footer}}
-<footer class="channel_bottom" id="share-bottom-nav">
-    <a class="btm_item" href="/" style="width: 25%;">
-        <p class="iconfont"><i class="fa fa-home"></i></p>
-        <b>首页</b>
-    </a>
-    <a class="btm_item" href="/share_opt/index.html" style="width: 25%;">
-        <p class="iconfont active"><i class="fa fa-search"></i></p>
-        <b class="active">发现</b>
-    </a>
-    <a class="btm_item" href="/weshares/add" style="width: 25%;">
-        <p class="iconfont"><i class="fa fa-share-square-o"></i></p>
-        <b>我要分享</b>
-    </a>
-    <a class="btm_item" href="/weshares/user_share_info/" style="width: 25%;">
-        <p class="iconfont"><i class="fa fa-user"></i></p>
-        <b>我的</b>
-    </a>
-</footer>
-{{/if}}
-<script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
-<script src="{{$STATIC_HOST}}/static/opt/js/lazyload.min.js?v0.1.5"></script>
-<script src="{{$STATIC_HOST}}/static/opt/js/newopt.js?v2.5.3"></script>
-{{template Elements/weshare_wx_share}}
-</body>
-</html>
+
+<?php
+$this->assign('title','发现-朋友说');
+$this->set('show_footer', 'opt');
+
+$this->Html->css(array(
+$STATIC_HOST.'/static/weshares/css/share-opt-index.min.css?v2.5.0'
+), null, array('inline' => false));
+
+$this->Html->script(array(
+$STATIC_HOST.'/static/weshares/js/share-opt-index.min.js?v2.5.0'
+), array('block' => 'scripts'))
+?>

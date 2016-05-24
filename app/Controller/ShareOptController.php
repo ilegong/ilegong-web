@@ -15,22 +15,6 @@ class ShareOptController extends AppController
      */
     public function index()
     {
-        $this->layout = null;
-        $uid = $this->currentUser['id'];
-        if (!empty($uid)) {
-            $this->save_visit_log($uid);
-        }
-        $this->set('uid', $uid);
-        if ($_REQUEST['from'] == 'app') {
-            $this->set('hide_footer', true);
-        }
-    }
-
-    /**
-     * pys index view
-     */
-    public function newindex()
-    {
         $this->layout = 'weshare';
         $uid = $this->currentUser['id'];
         if (!empty($uid)) {
