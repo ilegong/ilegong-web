@@ -26,7 +26,7 @@ class ShareProductPoolController extends AppController
      */
     public function share_products_index($category = 0)
     {
-        $this->layout = null;
+        $this->layout = 'weshare';
         $uid = $this->currentUser['id'];
         $is_proxy = $this->ShareUtil->is_proxy_user($uid);
         if (!$is_proxy) {

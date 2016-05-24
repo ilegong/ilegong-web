@@ -64,16 +64,24 @@
     });
   }
 
-  function initApp($rootScope) {
+  function initApp($rootScope, $http) {
     $rootScope._ = _;
     $rootScope.loadingPage = true;
     $rootScope.clickPage = function(){
-      console.log('click page in root');
       $rootScope.$broadcast('page_clicked', {});
     }
+    $rootScope.checkHasUnRead = function(){
+      $http.get('/share_opt/check_opt_has_new.json').success(function (data) {
+        if (data['has_new']) {
+          $rootScope.showUnReadMark = true;
+        }
+      });
+    }
+
   }
 
   function DefaultCtrl($rootScope){
     $rootScope.loadingPage = false;
+    $rootScope.checkHasUnRead();
   }
 })(window, window.angular);
