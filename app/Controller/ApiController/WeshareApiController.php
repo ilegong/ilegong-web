@@ -6,7 +6,7 @@ class WeshareApiController extends Controller
 
     public function beforeFilter()
     {
-        $allow_action = ['test', 'get_weshare_detail'];
+        $allow_action = ['test', 'get_weshare_detail', 'share_detail_web'];
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action) == false) {
             $this->currentUser = $this->OAuth->user();
@@ -147,6 +147,15 @@ class WeshareApiController extends Controller
         $this->UserConsignee->select_consignee($consignee_id, $uid);
         echo json_encode(['success' => true]);
         exit();
+    }
+
+    public function share_detail_web($id){
+        $this->autoRender = true;
+        $this->layout = null;
+        $detail = $this->Weshares->get_app_weshare_detail($id);
+        $detail['description'] = str_replace(array("\r\n", "\n", "\r"), '<br />', $detail['description']);
+        $detail['images'] = explode('|', $detail['images']);
+        $this->set('detail', $detail);
     }
 
     //组合首页数据
