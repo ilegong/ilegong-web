@@ -19,7 +19,7 @@
     }
 
     function isSubscribed(proxyId) {
-      return _.contains($rootScope.proxies, proxyId);
+      return _.contains($rootScope.proxies, parseInt(proxyId));
     }
 
     function subscribe(proxyId) {

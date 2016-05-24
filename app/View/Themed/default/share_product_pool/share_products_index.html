@@ -5,22 +5,19 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="description" content="只有团长才可以逛的街，朋友说统一服务和售后" />
     <link href="{{$STATIC_HOST}}/static/weshares/css/site-common.min.css?v2.5.6" media="all" rel="stylesheet" type="text/css">
-    <link href="{{$STATIC_HOST}}/static/product_pool/css/product_pool.min.css?v0.0.4" rel="stylesheet" type="text/css">
     <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
     <title>朋友说产品街</title>
 </head>
-<body style="background-color:#f1f1f1;">
+<body>
 
-<div id="fix-both">
-    <ul class="class-tab">
-        <?php
-            $nav_li_width = 1/count($categories) * 100;
-        ?>
-        {{loop $categories $cate}}
-        <li {{if $cate["id"]==$category}}class="focus"{{/if}} style="width : {{$nav_li_width}}%"><a href="/share_product_pool/share_products_index/{{$cate['id']}}.html">{{$cate['name']}}</a></li>
-        {{/loop}}
-    </ul>
-</div>
+<ul class="menu-top clearfix">
+    <?php
+        $nav_li_width = 1/count($categories) * 100;
+    ?>
+    {{loop $categories $cate}}
+    <li {{if $cate["id"]==$category}}class="focus"{{/if}} style="width : {{$nav_li_width}}%"><a href="/share_product_pool/share_products_index/{{$cate['id']}}.html">{{$cate['name']}}</a></li>
+    {{/loop}}
+</ul>
 
 <div style="margin-bottom: 45px;margin-top: 50px;">
     {{loop $share_products $product}}

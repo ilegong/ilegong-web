@@ -110,12 +110,6 @@ var all_css = [
     ],
     dist: 'webroot/static/weshares/css/'
   }, {
-    name: 'index.min.css',
-    sources: [
-      'webroot/src/scss/index.scss'
-    ],
-    dist: 'webroot/static/weshares/css/'
-  }, {
     name: 'share-opt-index.min.css',
     sources: [
       'webroot/src/scss/share-opt-index.scss',
@@ -128,12 +122,6 @@ var all_css = [
       'webroot/static/opt/css/opt.css',
     ],
     dist: 'webroot/static/opt/css/'
-  }, {
-    name: 'product_pool.min.css',
-    sources: [
-      'webroot/static/product_pool/css/product_pool.css',
-    ],
-    dist: 'webroot/static/product_pool/css/'
   }, {
     name: 'share-info.min.css',
     sources: [

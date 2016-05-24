@@ -14,8 +14,10 @@
 
 </head>
 
-<body style="background-color:#f1f1f1;">
-{{$content_for_layout}}
+<body>
+<div {{if $show_footer}}class="has-channel-bottom"{{/if}}>
+    {{$content_for_layout}}
+</div>
 
 <!-- loading layer-->
 <div class="background-layer" ng-show="loadingPage">

@@ -1,5 +1,5 @@
 <div class="index-page" ng-controller="IndexCtrl as vm" ng-click="clickPage();" data-tag="{{$tag}}">
-    <ul class="clearfix class-tab">
+    <ul class="clearfix menu-top">
         <li {{if $tag==0}}class="focus"{{/if}}><a href="/weshares/index.html">新品爆款</a>
         </li>
         <li {{if $tag==1}}class="focus"{{/if}}><a href="/weshares/index/1.html">水果蔬菜</a>
@@ -9,7 +9,7 @@
         <li {{if $tag==3}}class="focus"{{/if}}><a href="/weshares/index/3.html">零食其他</a>
         </li>
     </ul>
-    <div class="banners">
+    <div class="banners has-menu-top">
         <a href="https://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=506221361&idx=1&sn=f6f4e25d274fc1e05571d49480a82445"
            onclick="_hmt.push(['_trackEvent', 'weshares', 'click', 'banner002'])">
             <img src="{{$STATIC_HOST}}/static/img/banner003.jpg?v2.3.9" alt="六一特惠"/>
@@ -116,10 +116,6 @@
 <?php
     $this->assign('title','分享圈');
 $this->set('show_footer', 'index');
-
-$this->Html->css(array(
-$STATIC_HOST.'/static/weshares/css/index.min.css?v2.5.6'
-), null, array('inline' => false));
 
 $this->Html->script(array(
 $STATIC_HOST.'/static/weshares/js/index.min.js?v2.5.6'
