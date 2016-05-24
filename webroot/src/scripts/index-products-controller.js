@@ -4,9 +4,9 @@
     .controller('IndexCtrl', IndexCtrl);
 
 
-  function IndexCtrl($scope, $rootScope, $http, $log, $attrs, staticFilePath) {
+  function IndexCtrl($scope, $rootScope, $http, $log, $attrs, Utils) {
     var vm = this;
-    vm.staticFilePath = staticFilePath;
+    vm.staticFilePath = Utils.staticFilePath();
     vm.getSummary = getSummary;
 
     activate();

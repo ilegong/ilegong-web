@@ -2,7 +2,7 @@
   angular.module('weshares')
     .controller('ShareProductViewCtrl', ShareProductViewCtrl);
 
-  function ShareProductViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, $filter, $window, Utils, staticFilePath, PoolProductInfo) {
+  function ShareProductViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, $filter, $window, Utils, PoolProductInfo) {
     var vm = this;
     vm.showDetailView = true;
     vm.initProductInfo = initProductInfo;
@@ -12,7 +12,7 @@
     vm.viewImage = viewImage;
     vm.toBuyShare = toBuyShare;
     vm.initProductBuyBtn = initProductBuyBtn;
-    vm.staticFilePath = staticFilePath;
+    vm.staticFilePath = Utils.staticFilePath();
     activate();
     function activate() {
       vm.initProductInfo();

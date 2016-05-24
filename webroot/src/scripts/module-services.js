@@ -7,13 +7,37 @@
     .service('OfflineStore', OfflineStore)
     .service('ShareOrder', ShareOrder);
 
-  function Utils() {
+  function Utils($location, $log) {
+    var staticHost = '';
+    var Storage = {
+      save: function (key, jsonData, expirationHour) {
+        var expirationMS = expirationHour * 60 * 60 * 1000;
+        var record = {value: JSON.stringify(jsonData), timestamp: new Date().getTime() + expirationMS}
+        localStorage.setItem(key, JSON.stringify(record));
+        return jsonData;
+      },
+      load: function (key) {
+        //if (!Modernizr.localstorage){return false;}
+        var record = JSON.parse(localStorage.getItem(key));
+        if (!record) {
+          return false;
+        }
+        return (new Date().getTime() < record.timestamp && JSON.parse(record.value));
+      },
+      clear: function () {
+        localStorage.clear();
+      }
+    }
+
     return {
       isBlank: isBlank,
       isMobileValid: isMobileValid,
       isNumber: isNumber,
       toPercent: toPercent,
-      removeEmoji : removeEmoji
+      removeEmoji: removeEmoji,
+      staticFilePath: staticFilePath,
+      shipTypes: shipTypes,
+      Storage: Storage
     };
     function isMobileValid(mobile) {
       return /^1\d{10}$/.test(mobile);
@@ -31,10 +55,61 @@
       return Math.min(Math.round(value * 10000) / 100, 100);
     }
 
-    function removeEmoji(str){
+    function removeEmoji(str) {
       return str.replace(/([\uE000-\uF8FF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF])/g, '');
     }
 
+    function shipTypes() {
+      return {
+        "101": "申通",
+        "102": "圆通",
+        "103": "韵达",
+        "104": "顺丰",
+        "105": "EMS",
+        "106": "邮政包裹",
+        "107": "天天",
+        "108": "汇通",
+        "109": "中通",
+        "110": "全一",
+        "111": "宅急送",
+        "112": "全峰",
+        "113": "快捷",
+        "115": "城际快递",
+        "132": "优速",
+        "133": "增益快递",
+        "134": "万家康",
+        "135": "京东快递",
+        "136": "德邦快递",
+        "137": "自提",
+        "138": "百富达",
+        "139": "黑狗",
+        "140": "E快送",
+        "141": "国通快递",
+        "142": "人人快递",
+        "143": "百世汇通"
+      }
+    }
+
+    function staticFilePath() {
+      if (staticHost != '') {
+        return staticHost;
+      }
+
+      var host = $location.host();
+      $log.log(host);
+      if (host == 'www.tongshijia.com') {
+        staticHost = 'http://static.tongshijia.com';
+      } else if (host == 'preprod.tongshijia.com') {
+        staticHost = 'http://static-preprod.tongshijia.com';
+      } else if (host == 'sh.tongshijia.com') {
+        staticHost = 'http://static-sh.tongshijia.com';
+      } else if (host == 'test.tongshijia.com') {
+        staticHost = 'http://static-test.tongshijia.com';
+      } else {
+        staticHost = 'http://dev.tongshijia.com';
+      }
+      return staticHost;
+    }
   }
 
   function CoreReactorChannel($rootScope) {
@@ -229,7 +304,7 @@
 
   function PoolProductInfo($http, $log, $templateCache) {
     return {
-      prepareProductInfo: function (weshareId,callBackFunc) {
+      prepareProductInfo: function (weshareId, callBackFunc) {
         $http({
           method: 'GET',
           url: '/share_product_pool/get_share_product_detail/' + weshareId + '.json',
@@ -244,12 +319,12 @@
     };
   }
 
-  function OfflineStore(){
+  function OfflineStore() {
     return {
-      'ChooseOfflineStore' : ChooseOfflineStore
+      'ChooseOfflineStore': ChooseOfflineStore
     };
 
-    function ChooseOfflineStore($vm, $http,$templateCache) {
+    function ChooseOfflineStore($vm, $http, $templateCache) {
       $vm.areas = {
         110101: {
           'name': "东城区"

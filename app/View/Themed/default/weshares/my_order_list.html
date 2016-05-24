@@ -6,12 +6,14 @@
             <label>返回</label>
         </a>
     </div>
-    <div class="has-menu-top extra-margin" infinite-scroll='vm.myOrderNextPage()' infinite-scroll-disabled='vm.mine.orderOver||vm.loading'
+    <div class="has-menu-top extra-margin" infinite-scroll='vm.myOrderNextPage()'
+         infinite-scroll-disabled='vm.mine.orderOver||vm.loading'
          infinite-scroll-distance='1'>
         <div class="mine_order" ng-repeat="order in vm.mine.order">
             <a class="clearfix share-goodlist" href="/weshares/view/&#123;&#123;order.member_id&#125;&#125;">
                 <div class="fl"><img lazy-src="&#123;&#123;order.share_info.default_image&#125;&#125;"
-                                     fallback-src="&#123;&#123;vm.staticFilePath&#125;&#125;/static/img/default_product_banner.png"/></div>
+                                     fallback-src="&#123;&#123;vm.staticFilePath&#125;&#125;/static/img/default_product_banner.png"/>
+                </div>
                 <h1 ng-bind="order.share_info.title"></h1>
                 <em ng-if="order.status == 1" style="display: none" ng-class="{'show-b':order.status>0}">待发货</em>
                 <em ng-if="order.status == 2" style="display: none" ng-class="{'show-b':order.status>0}">待收货</em>
@@ -32,6 +34,6 @@ $STATIC_HOST.'/static/weshares/css/get-user-info.min.css?v2.5.6'
 ), null, array('inline' => false));
 
 $this->Html->script(array(
-$STATIC_HOST.'/static/weshares/js/get-user-info.min.js?v2.5.0'
+$STATIC_HOST.'/static/weshares/js/get-user-info.min.js?v2.5.7'
 ), array('block' => 'scripts'))
 ?>
