@@ -3,9 +3,9 @@
     angular.module('weshares')
         .controller('WesharesViewCtrl', WesharesViewCtrl);
 
-    function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, $filter, $window, Utils, staticFilePath, shipTypes, ShareOrder, OfflineStore, $timeout) {
+    function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, $filter, $window, Utils, ShareOrder, OfflineStore) {
         var vm = this;
-        vm.staticFilePath = staticFilePath;
+        vm.staticFilePath = Utils.staticFilePath();
         vm.showShareDetailView = true;
         vm.faqTipText = '私信';
         vm.showUnReadMark = false;
@@ -17,7 +17,7 @@
             0: '进行中',
             1: '已截止'
         };
-        vm.shipTypes = shipTypes;
+        vm.shipTypes = Utils.shipTypes();
         vm.submitTempCommentData = {};
         vm.viewImage = viewImage;
         vm.increaseProductNum = increaseProductNum;

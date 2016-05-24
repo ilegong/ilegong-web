@@ -2,11 +2,11 @@
   angular.module('weshares')
     .controller('GetUserInfoCtr', GetUserInfoCtr);
 
-  function GetUserInfoCtr($rootScope, $http, $attrs, staticFilePath) {
+  function GetUserInfoCtr($rootScope, $http, $attrs, Utils) {
     var vm = this;
     $rootScope.loadingPage = false;
     vm.focus = 'share';
-    vm.staticFilePath = staticFilePath;
+    vm.staticFilePath = Utils.staticFilePath();
     vm.uid = $attrs.uid;
     vm.loading = false;
     vm.shares = {

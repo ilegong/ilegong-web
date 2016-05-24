@@ -111,7 +111,7 @@ class WeshareApiController extends Controller
         $share_summary = $this->WeshareBuy->get_share_and_all_refer_share_summary($weshare_id, $uid);
         $has_sub = true;
         if ($uid != $detail['creator']) {
-            $has_sub = $this->WeshareBuy->check_user_subscribe($detail['creator'], $uid);
+            $has_sub = $this->ShareUtil->check_user_is_subscribe($detail['creator'], $uid);
         }
         $userM = ClassRegistry::init('User');
         $users = $userM->get_users_simple_info([$uid, $detail['creator']]);

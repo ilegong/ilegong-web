@@ -95,9 +95,11 @@
                 {{/if}}
             </a>
 
-            <dl class="share-summary clearfix" ng-class="{'show-b': vm.getSummary({{$product['share_id']}}).view_count > 0}">
+            <dl class="share-summary clearfix"
+                ng-class="{'show-b': vm.getSummary({{$product['share_id']}}).view_count > 0}">
                 <dd class="order-count clearfix">
-                    <img class="avatar radius50" ng-repeat="creator in vm.getSummary({{$product['share_id']}}).orders_and_creators | limitTo: 4"
+                    <img class="avatar radius50"
+                         ng-repeat="creator in vm.getSummary({{$product['share_id']}}).orders_and_creators | limitTo: 4"
                          lazy-src="&#123;&#123;creator.avatar&#125;&#125;"
                          fallback-src="&#123;&#123;vm.staticFilePath + '/avatar/s/default.jpg'&#125;&#125;"/>
                     <label class="fl">
@@ -120,6 +122,6 @@
 $this->set('show_footer', 'index');
 
 $this->Html->script(array(
-$STATIC_HOST.'/static/weshares/js/index.min.js?v2.5.6'
+$STATIC_HOST.'/static/weshares/js/index.min.js?v2.5.7'
 ), array('block' => 'scripts'))
 ?>
