@@ -1250,7 +1250,6 @@ class WesharesController extends AppController
     public function process_send_new_share_msg($shareId, $pageCount, $pageSize)
     {
         $this->autoRender = false;
-        $this->log('task send new share msg weshare id ' . $shareId . ' page count ' . $pageCount . ' page size ' . $pageSize, LOG_INFO);
         $tasks = array();
         foreach (range(0, $pageCount) as $page) {
             $offset = $page * $pageSize;
@@ -1297,7 +1296,6 @@ class WesharesController extends AppController
     public function process_send_buy_percent_msg($weshare_id, $pageCount, $pageSize)
     {
         $this->autoRender = false;
-        $this->log('task send buy percent msg weshare id ' . $weshare_id . ' page count ' . $pageCount . ' page size ' . $pageSize, LOG_INFO);
         $tasks = array();
         $msg_content = $_REQUEST['content'];
         foreach (range(0, $pageCount) as $page) {
@@ -1317,7 +1315,6 @@ class WesharesController extends AppController
      */
     public function send_buy_percent_msg_task($weshare_id, $limit, $offset)
     {
-        $this->log('child buy percent task ' . $weshare_id . ' limit ' . $limit . ' offset ' . $offset, LOG_INFO);
         $this->autoRender = false;
         $share_info = $this->ShareUtil->get_weshare_detail($weshare_id);
         $msg_content = $_REQUEST['content'];
