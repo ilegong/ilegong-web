@@ -96,7 +96,6 @@
       }
 
       var host = $location.host();
-      $log.log(host);
       if (host == 'www.tongshijia.com') {
         staticHost = 'http://static.tongshijia.com';
       } else if (host == 'preprod.tongshijia.com') {
