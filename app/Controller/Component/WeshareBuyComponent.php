@@ -2615,7 +2615,7 @@ class WeshareBuyComponent extends Component
                 'deleted' => DELETED_NO
             )
         ));
-        $pageSize = 10;
+        $pageSize = 5;
         $pageCount = ceil($totalRecords / $pageSize);
         return array('pageCount' => $pageCount, 'pageSize' => $pageSize);
     }
