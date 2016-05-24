@@ -171,9 +171,9 @@ class WesharesComponent extends Component
         }
 
         $weshareData['id'] = $postDataArray['id'];
-        $weshareData['title'] = $postDataArray['title'];
-        $weshareData['description'] = $postDataArray['description'];
-        $weshareData['send_info'] = $postDataArray['send_info'];
+        $weshareData['title'] = trim($postDataArray['title']);
+        $weshareData['description'] = trim($postDataArray['description']);
+        $weshareData['send_info'] = trim($postDataArray['send_info']);
 
         $weshareData['created'] = date('Y-m-d H:i:s');
         $images = $postDataArray['images'];
