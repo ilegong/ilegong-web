@@ -226,6 +226,24 @@ class WeshareBuyComponent extends Component
         return $shares;
     }
 
+    public function search_shares($uid, $keyword, $page, $limit)
+    {
+        $query_share_type = array(SHARE_TYPE_GROUP, SHARE_TYPE_DEFAULT, SHARE_TYPE_POOL_FOR_PROXY, SHARE_TYPE_POOL);
+        $weshareM = ClassRegistry::init('Weshare');
+        $shares = $weshareM->find('all', [
+            'conditions' => [
+                'creator' => $uid,
+                'type' => $query_share_type,
+                'title like' => '%' . $keyword . '%'
+            ],
+            'fields' => $this->query_list_share_fields,
+            'order' => array('created DESC'),
+            'limit' => $limit,
+            'page' => $page
+        ]);
+        return $shares;
+    }
+
     public function get_my_auth_shares($uid, $page, $limit, $status, $settlement)
     {
         $shareOperateSettingM = ClassRegistry::init('ShareOperateSetting');
