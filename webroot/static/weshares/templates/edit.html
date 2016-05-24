@@ -87,7 +87,7 @@
 </div>
 
 <div class="shippment-info" ng-show='vm.showShippmentInfo'>
-    <div class="refer-back-bg">
+    <div class="refer-back-bg menu-top">
         设置配送信息
         <a ng-click="vm.backStep();">
             <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/back.png"/>
@@ -95,7 +95,7 @@
         </a>
     </div>
 
-    <div class="send-time section" style="padding: 0;">
+    <div class="send-time section has-menu-top extra-margin" style="padding: 0;">
         <div class="multi-line-form">
             <div class="line clearfix form-group" ng-class="{'has-error': product.priceHasError}">
                 <input class="form-control ng-pristine ng-untouched ng-valid" style="padding-left: 0;" type="text"
@@ -262,7 +262,7 @@
 </div>
 
 <div class="areas-info" ng-if="vm.isShowChooseCity">
-    <div class="refer-back-bg">
+    <div class="refer-back-bg menu-top">
         选择地区
         <a ng-click="vm.hideChooseCityView();">
             <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/back.png"/>
@@ -272,7 +272,7 @@
             <label>完成</label>
         </a>
     </div>
-    <ul class="areas">
+    <ul class="areas has-menu-top">
         <li class="area" ng-repeat="area in vm.areaData">
             <div class="checkable-line clearfix">
                 <img class="icon-left" ng-click="area.showChild=!area.showChild"

@@ -19,6 +19,10 @@ textarea, input {
   outline: none
 }
 
+a {
+  color: #333333;
+  text-decoration: none;
+}
 a:visited {
   color: #333333;
   text-decoration: none;
@@ -85,7 +89,10 @@ a:-webkit-any-link {
 }
 
 .has-menu-top{
-  margin-top: 47px;
+  margin-top: 47px !important;
+}
+.has-menu-top.extra-margin{
+  margin-top: 54px !important;
 }
 .menu-top {
   line-height: 44px;
@@ -116,7 +123,7 @@ a:-webkit-any-link {
 }
 
 .has-channel-bottom{
-  margin-bottom: 50px;
+  margin-bottom: 50px !important;
 }
 .channel_bottom {
   box-sizing: border-box;
@@ -213,6 +220,31 @@ a:-webkit-any-link {
   }
 }
 
+.refer-back-bg {
+  background-color: #f9f9f9;
+  color: #333333;
+  font-size: 1.3em;
+  text-align: center;
+  a {
+    position: absolute;
+    left: 15px;
+    text-decoration: none;
+    color: #333333;
+    width: 4em;
+    height: 44px;
+    label {
+      float: left;
+      padding-left: 5px;
+      font-size: 0.8em;
+    }
+    img {
+      float: left;
+      width: 8px;
+      margin-top: 14px;
+    }
+  }
+}
+
 .form-group.has-error {
   .form-control {
     color: red !important;
@@ -252,47 +284,6 @@ a:-webkit-any-link {
   width: 200px;
   margin-top: -22px;
   display: none;
-}
-
-/*back*/
-.nav-bg {
-  background-color: #FFFFFF;
-  border-bottom: 1px #dddddd solid;
-  color: #333333;
-  line-height: 43px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 2;
-  a.nav-back {
-    text-decoration: none;
-    color: #333333;
-    width: 4em;
-    height: 43px;
-    padding-left: 12px;
-    img, label {
-      float: left;
-      font-size: 1.1em;
-    }
-    label {
-      padding-left: 5px;
-    }
-    img {
-      width: 8px;
-      margin-top: 14px;
-    }
-  }
-  h1 {
-    text-align: center;
-    font-weight: normal;
-    font-size: 1.3em;
-    line-height: 43px;
-    width: 104px;
-    left: 50%;
-    margin-left: -52px;
-    position: absolute;
-  }
 }
 
 .shares-container {

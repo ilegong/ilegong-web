@@ -110,19 +110,6 @@ var all_css = [
     ],
     dist: 'webroot/static/weshares/css/'
   }, {
-    name: 'share-opt-index.min.css',
-    sources: [
-      'webroot/src/scss/share-opt-index.scss',
-    ],
-    dist: 'webroot/static/weshares/css/'
-  }, {
-    name: 'opt.min.css',
-    sources: [
-      'webroot/static/opt/css/postinfo.css',
-      'webroot/static/opt/css/opt.css',
-    ],
-    dist: 'webroot/static/opt/css/'
-  }, {
     name: 'share-info.min.css',
     sources: [
       'webroot/static/weshares/css/share-info.css',

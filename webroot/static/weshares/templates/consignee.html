@@ -1,5 +1,5 @@
 <!--Tab切换-->
-<ul class="clearfix logistics-nav logistics-has-header" ng-if="wcc.availableShipTypes > 1">
+<ul class="clearfix logistics-nav" ng-if="wcc.availableShipTypes > 1">
     <li ng-if="vm.weshareSettings.kuai_di.status==1" style="width:{{100/wcc.availableShipTypes}}%"
         ng-class="{'cur': vm.selectShipType==0}" ng-click="wcc.changeShipTab(0)">快递
     </li>
@@ -11,7 +11,7 @@
     </li>
 </ul>
 <!--主面板-->
-<div class="expressage" ng-class="{'logistics-has-header': wcc.availableShipTypes <= 1}">
+<div class="expressage">
     <!-- 使用快递的时候出现 -->
     <ul class="clearfix" ng-if="vm.selectShipType==0" ng-click="wcc.toEditConsigneeView()">
         <li class="fl">

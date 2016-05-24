@@ -1,14 +1,13 @@
 <div class="tutorial-page">
     <div class="binding-container" ng-controller="TutorialBindingMobileCtrl as vm">
-        <div class="nav-bg">
-            <a class="nav-back fl" href="/users/tutorial">
+        <div class="menu-top refer-back-bg">
+            绑定手机号
+            <a href="/users/tutorial">
                 <img src="{{$STATIC_HOST}}/static/weshares/images/back.png"/>
                 <label>返回</label>
             </a>
-
-            <h1 class="fl">绑定手机号</h1>
         </div>
-        <div class="binding">
+        <div class="has-menu-top extra-margin">
             <div class="binding-phone clearfix form-group" ng-class="{'has-error': !vm.mobilePhone.valid}">
                 <label>手机号</label>
                 <input class="form-control" type="number" string-to-number placeholder="请输入手机号, 方便联系您结款"
