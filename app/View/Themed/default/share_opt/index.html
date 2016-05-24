@@ -1,6 +1,7 @@
 <div class="share-opt-index-page" style="display: none" ng-class="{'show-b': true}" ng-click="clickPage();"
-     ng-controller="ShareOptIndexController as vm" ng-include="'{{$STATIC_HOST}}/static/weshares/templates/shares.html?v1.8.8'">
-    
+     ng-controller="ShareOptIndexController as vm"
+     ng-include="'{{$STATIC_HOST}}/static/weshares/templates/shares.html?v1.8.8'">
+
 </div>
 
 <?php
@@ -12,6 +13,6 @@ $STATIC_HOST.'/static/weshares/css/share-opt-index.min.css?v2.5.0'
 ), null, array('inline' => false));
 
 $this->Html->script(array(
-$STATIC_HOST.'/static/weshares/js/share-opt-index.min.js?v2.5.0'
+$STATIC_HOST.'/static/weshares/js/share-opt-index.min.js?v2.5.6'
 ), array('block' => 'scripts'))
 ?>
