@@ -1133,9 +1133,7 @@ class WesharesController extends AppController
             $parent_summery_data['summery']['all_total_price'] = $child_share_data_item['summery']['all_total_price'] + $parent_summery_data['summery']['all_total_price'];
             $parent_summery_data['summery']['real_total_price'] = $child_share_data_item['summery']['real_total_price'] + $parent_summery_data['summery']['real_total_price'];
             $parent_summery_data['summery']['all_coupon_price'] = $child_share_data_item['summery']['all_coupon_price'] + $parent_summery_data['summery']['all_coupon_price'];
-
             $parent_summery_data['child_share_order_count'] = $parent_summery_data['child_share_order_count'] + $child_share_data_item['summery']['all_buy_user_count'];
-
             $rebate_logs = $child_share_data_item['rebate_logs'];
             $parent_summery_data['rebate_logs'] = array_merge($parent_summery_data['rebate_logs'], $rebate_logs);
             $share_rebate_money = $child_share_data_item['share_rebate_money'];
@@ -1271,11 +1269,23 @@ class WesharesController extends AppController
      */
     public function send_new_share_msg_task($shareId, $limit, $offset)
     {
-        $this->log('child buy percent task ' . $shareId . ' limit ' . $limit . ' offset ' . $offset, LOG_INFO);
         $this->autoRender = false;
         $this->WeshareBuy->send_new_share_msg($shareId, $limit, $offset);
         echo json_encode(array('success' => true));
         return;
+    }
+
+    /**
+     * @param $weshareId
+     * 发送团购通知
+     */
+    public function process_notify_has_buy_fans($weshareId)
+    {
+        $this->autoRender = false;
+        $msg_content = $_REQUEST['content'];
+        $share_info = $this->ShareUtil->get_weshare_detail($weshareId);
+        $this->WeshareBuy->send_notify_buy_user_msg($share_info, $msg_content);
+        echo json_encode(array('success' => true));
     }
 
     /**
@@ -1297,19 +1307,6 @@ class WesharesController extends AppController
         $ret = $this->RedisQueue->add_tasks('tasks', $tasks);
         echo json_encode(array('success' => true, 'ret' => $ret));
         return;
-    }
-
-    /**
-     * @param $weshareId
-     * 发送团购通知
-     */
-    public function process_notify_has_buy_fans($weshareId)
-    {
-        $this->autoRender = false;
-        $msg_content = $_REQUEST['content'];
-        $share_info = $this->ShareUtil->get_weshare_detail($weshareId);
-        $this->WeshareBuy->send_notify_buy_user_msg($share_info, $msg_content);
-        echo json_encode(array('success' => true));
     }
 
     /**

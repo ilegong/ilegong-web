@@ -795,6 +795,7 @@ class WeshareBuyComponent extends Component
     {
         //add filter
         $uids = $this->check_msg_log_and_filter_user($pintuan_data['pid'], $uids, MSG_LOG_PINTUAN_TYPE);
+        $this->save_msg_logs($pintuan_data['pid'], $uids, MSG_LOG_PINTUAN_TYPE);
         $OauthbindM = ClassRegistry::init('Oauthbind');
         $detail_url = WX_HOST . '/pintuan/detail/' . $pintuan_data['share_id'] . '?from=template_msg';
         if ($tag_id != 0) {
@@ -816,8 +817,11 @@ class WeshareBuyComponent extends Component
     private function do_send_new_share_msg($weshare, $uids)
     {
         //add filter
+        $uids = $this->check_msg_log_and_filter_user($weshare['Weshare']['id'], $uids, MSG_LOG_NOTIFY_TYPE);
+        $uids = $this->check_msg_log_and_filter_user($weshare['Weshare']['refer_share_id'], $uids, MSG_LOG_NOTIFY_TYPE);
         $uids = $this->check_msg_log_and_filter_user($weshare['Weshare']['id'], $uids, MSG_LOG_RECOMMEND_TYPE);
         $uids = $this->check_msg_log_and_filter_user($weshare['Weshare']['refer_share_id'], $uids, MSG_LOG_RECOMMEND_TYPE);
+        $this->save_msg_logs($weshare['Weshare']['id'], $uids, MSG_LOG_NOTIFY_TYPE);
         $userM = ClassRegistry::init('User');
         $OauthbindM = ClassRegistry::init('Oauthbind');
         $sharer_user_info = $userM->find('first', array(
@@ -2373,6 +2377,12 @@ class WeshareBuyComponent extends Component
     {
         $share_creator = $weshare_info['creator']['id'];
         $fans_ids = $this->load_fans_buy_sharer($share_creator, $limit, $offset);
+        //filter user
+        $fans_ids = $this->check_msg_log_and_filter_user($weshare_info['id'], $fans_ids, MSG_LOG_NOTIFY_TYPE);
+        $fans_ids = $this->check_msg_log_and_filter_user($weshare_info['refer_share_id'], $fans_ids, MSG_LOG_NOTIFY_TYPE);
+        $fans_ids = $this->check_msg_log_and_filter_user($weshare_info['id'], $fans_ids, MSG_LOG_RECOMMEND_TYPE);
+        $fans_ids = $this->check_msg_log_and_filter_user($weshare_info['refer_share_id'], $fans_ids, MSG_LOG_RECOMMEND_TYPE);
+        $this->save_msg_logs($weshare_info['id'], $fans_ids, MSG_LOG_NOTIFY_TYPE);
         $this->do_send_buy_percent_msg($weshare_info, $fans_ids, $msg_content);
     }
 
@@ -2463,8 +2473,10 @@ class WeshareBuyComponent extends Component
         $followers = $this->check_msg_log_and_filter_user($weshareId, $followers, MSG_LOG_NOTIFY_TYPE);
         //check msg logs filter users
         $followers = $this->check_msg_log_and_filter_user($weshareId, $followers, MSG_LOG_RECOMMEND_TYPE);
+        //filter refer share id
         $followers = $this->check_msg_log_and_filter_user($weshare['Weshare']['refer_share_id'], $followers, MSG_LOG_NOTIFY_TYPE);
         $followers = $this->check_msg_log_and_filter_user($weshare['Weshare']['refer_share_id'], $followers, MSG_LOG_RECOMMEND_TYPE);
+        $this->save_msg_logs($weshareId, $followers, MSG_LOG_RECOMMEND_TYPE);
         $openIds = $this->Oauthbind->findWxServiceBindsByUids($followers);
         if (!empty($openIds)) {
             foreach ($openIds as $openId) {
@@ -2480,27 +2492,32 @@ class WeshareBuyComponent extends Component
      * @return array
      * 查找用户消息记录，过滤用户
      */
-    public function check_msg_log_and_filter_user($data_id, $user_ids, $type)
+    private function check_msg_log_and_filter_user($data_id, $user_ids, $type)
     {
         if ($data_id == 0) {
-            return $user_ids;
+            return [];
         }
         $msgLogM = ClassRegistry::init('MsgLog');
-        //添加更多的过滤条件 (比如每天只收一次)
         $q_date = date('Y-m-d');
         $msgLogs = $msgLogM->find('all', array(
             'conditions' => array(
                 'data_id' => $data_id,
                 'data_type' => $type,
-                'created > ' => $q_date
+                'created > ' => $q_date,
+                'user_id' => $user_ids
             ),
             'fields' => array('user_id'),
-            'limit' => 3000,
+            'limit' => 500,
             'order' => array('id desc')
         ));
         $msgLogUserIds = Hash::extract($msgLogs, '{n}.MsgLog.user_id');
         $user_ids = array_diff($user_ids, $msgLogUserIds);
         $user_ids = array_filter($user_ids);
+        return $user_ids;
+    }
+
+    private function save_msg_logs($data_id, $user_ids, $type)
+    {
         $saveMsgLogData = array();
         foreach ($user_ids as $item_uid) {
             $saveMsgLogData[] = array(
@@ -2511,9 +2528,9 @@ class WeshareBuyComponent extends Component
             );
         }
         if (!empty($saveMsgLogData)) {
+            $msgLogM = ClassRegistry::init('MsgLog');
             $msgLogM->saveAll($saveMsgLogData);
         }
-        return $user_ids;
     }
 
     /**
