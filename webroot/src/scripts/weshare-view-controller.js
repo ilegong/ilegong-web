@@ -3,7 +3,7 @@
     angular.module('weshares')
         .controller('WesharesViewCtrl', WesharesViewCtrl);
 
-    function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, $filter, $window, Utils, ShareOrder, OfflineStore, $timeout) {
+    function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, $filter, $window, Utils, ShareOrder, OfflineStore) {
         var vm = this;
         vm.staticFilePath = Utils.staticFilePath();
         vm.showShareDetailView = true;
