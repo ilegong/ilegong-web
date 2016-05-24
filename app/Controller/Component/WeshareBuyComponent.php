@@ -806,6 +806,7 @@ class WeshareBuyComponent extends Component
         $remark = '点击详情，赶快加入' . $sharer_name . '的拼团！';
         $openIds = $OauthbindM->findWxServiceBindsByUids($uids);
         if ($openIds) {
+            $openIds = array_unique($openIds);
             foreach ($openIds as $openId) {
                 $this->process_send_share_msg($openId, $title, $product_name, $detail_url, $sharer_name, $remark);
             }
@@ -834,6 +835,7 @@ class WeshareBuyComponent extends Component
         $remark = '点击详情，赶快加入' . $sharer_name . '的分享！';
         $openIds = $OauthbindM->findWxServiceBindsByUids($uids);
         if ($openIds) {
+            $openIds = array_unique($openIds);
             foreach ($openIds as $openId) {
                 $this->process_send_share_msg($openId, $title, $product_name, $detail_url, $sharer_name, $remark);
             }
@@ -2314,6 +2316,7 @@ class WeshareBuyComponent extends Component
         $deatil_url = $this->get_weshares_detail_url($weshare_info['id']);
         $product_name = $weshare_info['title'];
         if (!empty($buy_open_ids)) {
+            $buy_open_ids = array_unique($buy_open_ids);
             foreach ($buy_open_ids as $open_id) {
                 $this->Weixin->send_share_buy_complete_msg($open_id, $msg_content, $product_name, $tuan_leader_name, $remark, $deatil_url);
             }
@@ -2391,13 +2394,13 @@ class WeshareBuyComponent extends Component
             $deatil_url = $this->get_weshares_detail_url($weshare_info['id']) . '?from=_template_msg';
             $already_buy_uids = $this->get_has_buy_user($weshare_info['id']);
             foreach ($fans_open_ids as $uid => $open_id) {
+                $fans_open_ids = array_unique($fans_open_ids);
                 if (!in_array($uid, $already_buy_uids)) {
                     $title = $fans_data_nickname[$uid] . '你好，' . $msg_content;
                     $this->Weixin->send_share_buy_complete_msg($open_id, $title, $product_name, $tuan_leader_name, $remark, $deatil_url);
                 }
             }
         }
-
     }
 
     /**
