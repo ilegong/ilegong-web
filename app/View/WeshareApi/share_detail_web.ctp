@@ -39,7 +39,7 @@
     <?php if(count($detail['images']) > 0 ){?>
     <dl class="clearfix images margin-bottom-12">
         <?php foreach($detail['images'] as $image) { ?>
-        <dt><a><img src="<?php echo $image ?>"/></a></dt>
+        <dt><a><img name="product-image" src="<?php echo $image ?>"/></a></dt>
         <?php } ?>
     </dl>
     <?php } ?>
