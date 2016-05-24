@@ -2599,8 +2599,7 @@ class WeshareBuyComponent extends Component
             )
         ));
         $pageSize = 10;
-        $pageCount = ($totalRecords + $pageSize - 1) / $pageSize;
-        $pageCount = intval($pageCount);
+        $pageCount = ceil($totalRecords / $pageSize);
         return array('pageCount' => $pageCount, 'pageSize' => $pageSize);
     }
 
