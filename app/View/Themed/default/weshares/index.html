@@ -1,4 +1,4 @@
-<div class="index-page" ng-controller="IndexCtrl as vm" ng-click="vm.clickPage();" data-tag="{{$tag}}">
+<div class="index-page" ng-controller="IndexCtrl as vm" ng-click="clickPage();" data-tag="{{$tag}}">
     <ul class="clearfix class-tab">
         <li {{if $tag==0}}class="focus"{{/if}}><a href="/weshares/index.html">新品爆款</a>
         </li>
@@ -10,14 +10,14 @@
         </li>
     </ul>
     <div class="banners">
-        <a href="https://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=506221361&idx=1&sn=f6f4e25d274fc1e05571d49480a82445" onclick="_hmt.push(['_trackEvent', 'weshares', 'click', 'banner002'])">
+        <a href="https://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=506221361&idx=1&sn=f6f4e25d274fc1e05571d49480a82445"
+           onclick="_hmt.push(['_trackEvent', 'weshares', 'click', 'banner002'])">
             <img src="{{$STATIC_HOST}}/static/img/banner003.jpg?v2.3.9" alt="六一特惠"/>
         </a>
     </div>
-    <div class="outer-listings-container row-space-3">
-        <div class="listings-container">
-            {{loop $index_products $index_product}}
-            <?php
+    <div class="shares-container">
+        {{loop $index_products $index_product}}
+        <?php
                 $product = $index_product['IndexProduct'];
                 $user = $index_product['User'];
                 $user_level = $index_product['UserLevel'];
@@ -27,95 +27,95 @@
                     $product_detail_url = '/weshares/view/'.$product['share_id'].'?from=index_view';
                 }
             ?>
-            <div class="share-good" data-id="">
-                <ul class="sharer clearfix">
-                    <li class="fl">
-                        <a href="/weshares/user_share_info/{{$product['share_user_id']}}">
-                            <img itemprop="image" class="sharer-header lazy radius50"
-                                 lazy-src="{{$this->Html->assetUrl($product['share_user_img'])}}"
-                                 onerror="this.src='{{$STATIC_HOST}}/avatar/s/default.jpg'">
-                        </a>
-                    </li>
-                    <li class="sharer-label">{{"L".$user_level['data_value']}}</li>
-                    <li class="fl">
-                        <label>
-                            <a class="nickname" href="/weshares/user_share_info/{{$product['share_user_id']}}">
-                                {{$user['nickname']}}
-                            </a>
-                        </label>
-                        <dl class="clearfix sharer-tag">
-                            <dd class="fl">
-                                {{$user['label'] ? : "吃货向标"}}
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="fr ta" ng-class="{'un-subscribed': !vm.isSubscribed({{$product['share_user_id']}})}"
-                        ng-click="vm.subscribe({{$product['share_user_id']}})">关注TA
-                    </li>
-                    <li class="fr ta" style="position: relative;"
-                        ng-class="{'subscribed': vm.isSubscribed({{$product['share_user_id']}})}"
-                        ng-click="vm.clickSubscribedBtn({{$product['share_user_id']}}, $event)">
+
+        <div class="share">
+            <ul class="share-header clearfix">
+                <li class="fl">
+                    <a href="/weshares/user_share_info/{{$product['share_user_id']}}">
+                        <img itemprop="image" class="avatar radius50"
+                             lazy-src="{{$this->Html->assetUrl($product['share_user_img'])}}"
+                             onerror="this.src='{{$STATIC_HOST}}/avatar/s/default.jpg'">
+                    </a>
+                </li>
+                <li class="level">{{"L".$user_level['data_value']}}</li>
+                <li class="fl">
+                    <a class="nickname" href="/weshares/user_share_info/{{$product['share_user_id']}}">{{$user['nickname']}}</a>
+                    <dl class="label-container clearfix">
+                        <dd class="fl label">
+                            {{$user['label'] ? : "吃货向标"}}
+                        </dd>
+                    </dl>
+                    <div class="log" style="display: none;">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </li>
+                <li class="fr subscription" ng-controller="SubscriptionController as sub">
+                    <div class="subscribed" ng-class="{'no': !sub.isSubscribed({{$product['share_user_id']}})}"
+                         ng-click="sub.subscribe({{$product['share_id']}})">关注TA
+                    </div>
+                    <div class="subscribed" ng-class="{'yes': sub.isSubscribed({{$product['share_user_id']}})}"
+                         ng-click="sub.clickSubscribedBtn({{$product['share_id']}}, $event)">
                         <a href="#X" class="clearfix">
-                            <span>已关注</span>
-                            <label>
+                            <span class="fl">
+                                已关注
+                                <i class="fa fa-angle-down"></i>
+                            </span>
+                            <label class="fl">
                                 <i></i>
                                 <em></em>
                             </label>
                         </a>
-                        <a class="unfollow" ng-show="vm.showUnSubscribeBtn({{$product['share_user_id']}})"
-                           ng-click="vm.unSubscribe({{$product['share_user_id']}})">取消关注</a>
-                    </li>
-                </ul>
-                <a href="{{$product_detail_url}}">
-                    <div class="image-container">
-                        <div class="image-cover">
-                            <img itemprop="image" data-current="0"
-                                 lazy-src="{{$this->Html->assetUrl($product['share_img'])}}"
-                                 class="product-image lazy">
-                        </div>
-                        <span class="product-price-bg">
-                            <label>￥</label><em>{{$product['share_price']}}</em>
-                            {{if strlen($product['specification'])>0}}
-                            <label>/{{$product['specification']}}</label>
-                            {{/if}}
-                        </span>
+                        <a class="unfollow" ng-show="sub.showUnSubscribeBtn"
+                           ng-click="sub.unSubscribe({{$product['share_id']}})">取消关注</a>
                     </div>
+                </li>
+            </ul>
 
-                    <div class="share-content">
-                        <h1 class="share-title">{{$product['share_name']}}</h1>
+            <a class="image-container" href="/weshares/view/{{$product['share_id']}}">
+                <img class="image" lazy-src="{{$this->Html->assetUrl($product['share_img'])}}">
+                <span class="product-price-bg">
+                    <label>￥</label><em>{{$product['share_price']}}</em>
+                    {{if strlen($product['specification'])>0}}
+                    <label>/{{$product['specification']}}</label>
+                    {{/if}}
+                </span>
+            </a>
+            <a class="share-content" href="/weshares/view/{{$product['share_id']}}">
+                <h1 class="share-title">{{$product['share_name']}}</h1>
 
-                        {{if strlen($product['description'])>0}}
-                        <p>
-                            <span>{{$user['nickname']}}说: </span>
-                            {{$product['description']}}
-                        </p>
-                        {{/if}}
-                    </div>
-                </a>
-                <dl class="clearfix share-data hide"
-                    ng-class="{'show-b': vm.getSummary({{$product['share_id']}}).view_count > 0}">
-                    <dd class="clearfix" style="padding-right: 66px;">
-                        <img class="radius50" lazy-src="&#123;&#123;creator.avatar&#125;&#125;"
-                             fallback-src="&#123;&#123;vm.staticFilePath + '/avatar/s/default.jpg'&#125;&#125;"
-                             ng-repeat="creator in vm.getSummary({{$product['share_id']}}).orders_and_creators | limitTo: 4"/>
-                        <label>
-                            <span style="display: none;"
-                                  ng-class="{'show-ib':vm.getSummary({{$product['share_id']}}).orders_and_creators.length > 4}">...</span>已<span
-                                ng-bind="vm.getSummary({{$product['share_id']}}).order_count || 0">0</span>人报名
-                        </label>
-                    </dd>
-                    <dd class="browse">浏览<span
-                            ng-bind="vm.getSummary({{$product['share_id']}}).view_count || 0">0</span></dd>
-                </dl>
-            </div>
-            {{/loop}}
+                {{if strlen($product['description'])>0}}
+                <p class="share-description">
+                    <span>{{$user['nickname']}}说: </span>
+                    {{$product['description']}}
+                </p>
+                {{/if}}
+            </a>
+
+            <dl class="share-summary clearfix" ng-class="{'show-b': vm.getSummary({{$product['share_id']}}).view_count > 0}">
+                <dd class="order-count clearfix">
+                    <img class="avatar radius50" ng-repeat="creator in vm.getSummary({{$product['share_id']}}).orders_and_creators | limitTo: 4"
+                         lazy-src="&#123;&#123;creator.avatar&#125;&#125;"
+                         fallback-src="&#123;&#123;vm.staticFilePath + '/avatar/s/default.jpg'&#125;&#125;"/>
+                    <label class="fl">
+                        <span style="display: none;"
+                              ng-class="{'show-ib':vm.getSummary({{$product['share_id']}}).orders_and_creators.length > 4}">...</span>已<span
+                            ng-bind="vm.getSummary({{$product['share_id']}}).order_count || 0">0</span>人报名
+                    </label>
+                </dd>
+                <dd class="view-count">
+                    浏览<span ng-bind="vm.getSummary({{$product['share_id']}}).view_count || 0">0</span>
+                </dd>
+            </dl>
         </div>
+        {{/loop}}
     </div>
 </div>
 
 <?php
     $this->assign('title','分享圈');
-   $this->set('show_footer', 'index');
+$this->set('show_footer', 'index');
 
 $this->Html->css(array(
 $STATIC_HOST.'/static/weshares/css/index.min.css?v2.5.3'
