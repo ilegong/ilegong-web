@@ -98,9 +98,9 @@ var all_css = [
   }, {
     name: 'weshare-view.min.css',
     sources: [
-      'webroot/static/weshares/css/main.css',
-      'webroot/static/weshares/css/share-balance-view.css',
-      'webroot/static/weshares/css/share.css',
+      'webroot/src/scss/main.css',
+      'webroot/src/scss/share-balance-view.css',
+      'webroot/src/scss/share.css',
     ],
     dist: 'webroot/static/weshares/css/'
   }, {
