@@ -20,6 +20,7 @@ var all_js = [
   }, {
     name: 'index.min.js',
     sources: [
+      'webroot/src/scripts/subscription-controller.js',
       'webroot/src/scripts/index-products-controller.js',
     ],
     dist: 'webroot/static/weshares/js/'

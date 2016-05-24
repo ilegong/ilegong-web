@@ -4,30 +4,25 @@
     .controller('IndexCtrl', IndexCtrl);
 
 
-  function IndexCtrl($scope, $rootScope, $http, $log, $window, $attrs, staticFilePath) {
+  function IndexCtrl($scope, $rootScope, $http, $log, $attrs, staticFilePath) {
     var vm = this;
     vm.staticFilePath = staticFilePath;
-    vm.isSubscribed = isSubscribed;
-    vm.unSubscribe = unSubscribe;
-    vm.subscribe = subscribe;
-    vm.clickSubscribedBtn = clickSubscribedBtn;
-    vm.showUnSubscribeBtn = showUnSubscribeBtn;
-    vm.clickPage = clickPage;
     vm.checkHasUnRead = checkHasUnRead;
-    $rootScope.showUnReadMark = false;
     vm.getSummary = getSummary;
 
     activate();
     function activate() {
-      vm.checkHasUnRead();
-      vm.uid = -1;
-      vm.proxies = [];
+      $rootScope.showUnReadMark = false;
+      $rootScope.proxies = [];
       $rootScope.loadingPage=false;
+      vm.uid = -1;
+      vm.checkHasUnRead();
       $http.get('/users/get_id_and_proxies').success(function (data) {
+        $log.log(data);
         if (data.uid != null) {
-          vm.uid = data.uid;
-          vm.proxies = _.map(data.proxies, function (pid) {
-            return {id: parseInt(pid), showUnSubscribeBtn: false};
+          $rootScope.uid = data.uid;
+          $rootScope.proxies = _.map(data.proxies, function (pid) {
+            return parseInt(pid);
           })
         }
         else {
@@ -40,6 +35,7 @@
       var tag = $attrs.tag;
       vm.indexProducts = [];
       $http.get('/index_products/index_products/' + tag).success(function (data) {
+        $log.log(data);
         vm.indexProducts = _.map(data, function (p) {
           return {'id': p.IndexProduct.id, 'shareId': p.IndexProduct.share_id, 'summary': p.IndexProduct.summary};
         });
@@ -58,83 +54,11 @@
       return indexProduct.summary;
     }
 
-    function isSubscribed(proxyId) {
-      return _.any(vm.proxies, function (p) {
-        return p.id == proxyId
-      });
-    }
-
-    function subscribe(proxyId) {
-      if (vm.uid < 0) {
-        $window.location.href = '/users/login';
-        return;
-      }
-
-      if (vm.subscribeInProcess) {
-        return;
-      }
-
-      vm.subscribeInProcess = true;
-      $http.get('/weshares/subscribe_sharer/' + proxyId + "/" + vm.uid).success(function (data) {
-        if (data.success) {
-          vm.proxies.push({id: proxyId, showUnSubscribeBtn: false});
-        }
-        vm.subscribeInProcess = false;
-      }).error(function (data, e) {
-        vm.subscribeInProcess = false;
-        $log.log('Failed to get proxies: ' + e);
-      });
-    }
-
-    function unSubscribe(proxyId) {
-      if (vm.uid < 0) {
-        $window.location.href = '/users/login';
-        return;
-      }
-
-      if (vm.unSubscribeInProcess) {
-        return;
-      }
-
-      vm.unSubscribeInProcess = true;
-      $http.get('/weshares/unsubscribe_sharer/' + proxyId + "/" + vm.uid).success(function (data) {
-        if (data.success) {
-          vm.proxies = _.reject(vm.proxies, function (proxy) {
-            return proxy.id == proxyId
-          });
-        }
-        vm.unSubscribeInProcess = false;
-      }).error(function (data, e) {
-        $log.log('Failed to get proxies: ' + e);
-        vm.unSubscribeInProcess = false;
-      });
-    }
-
-    function clickSubscribedBtn(proxyId, $event) {
-      _.each(vm.proxies, function (p) {
-        p.showUnSubscribeBtn = p.id == proxyId;
-      });
-      $event.stopPropagation();
-    }
-
-    function showUnSubscribeBtn(proxyId) {
-      var proxy = _.find(vm.proxies, function (p) {
-        return p.id == proxyId;
-      });
-      return !_.isEmpty(proxy) && proxy.showUnSubscribeBtn;
-    }
-
     function checkHasUnRead() {
       $http.get('/share_opt/check_opt_has_new.json').success(function (data) {
         if (data['has_new']) {
           $rootScope.showUnReadMark = true;
         }
-      });
-    }
-
-    function clickPage() {
-      _.each(vm.proxies, function (p) {
-        p.showUnSubscribeBtn = false;
       });
     }
   }
