@@ -6,7 +6,7 @@
     .config(extendLog)
     .config(['$sceDelegateProvider', function ($sceDelegateProvider) {
       $sceDelegateProvider.resourceUrlWhitelist(
-        ['self', '*.tongshijia.com/**']
+        ['self', 'http://*.tongshijia.com/**']
       )
     }])
     .run(initApp)
