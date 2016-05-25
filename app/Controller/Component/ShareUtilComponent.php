@@ -453,7 +453,7 @@ class ShareUtilComponent extends Component
         if (!empty($type)) {
             $new_share_type = $type;
         }
-        
+
         if ($new_share_type == SHARE_TYPE_POOL_SELF) {
             // 从普通分享(或者复制的一个分享)上产品街
             $root_share_id = 0;
