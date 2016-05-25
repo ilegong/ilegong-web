@@ -7,8 +7,8 @@
                 <div ng-init="vm.showUnSubscribe=false;">
                     <a href="/weshares/add?from=share_view" class="share-banner"><img
                             ng-src="{{::vm.staticFilePath}}/static/weshares/images/share-banner-new.gif"/></a>
-                    <ul class="sharer clearfix">
-                        <li class="fl detail-head">
+                    <ul class="sharer clearfix" style="display: none;" ng-class="{'show-b': true}">
+                        <li class="fl detail-head" style="display: none;">
                             <img lazy-src="{{vm.weshare.creator.image}}"
                                  fallback-src="{{vm.staticFilePath + '/avatar/s/default.jpg'}}"
                                  ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/>
@@ -302,29 +302,30 @@
                 <ng-include src="vm.staticFilePath + '/static/weshares/templates/edit-consignee.html?v0.7.4'"></ng-include>
             </div>
 
-            <!--分享管理层-->
-            <div style="display: none;" class="share-control" ng-if="vm.showShareControl">
-                <a ng-if="vm.isCreator()||vm.isManage" ng-click="vm.toShareOrderList()" class="control-order">订单管理</a>
-                <a ng-if="vm.isCreator()||vm.canEditShare" ng-click="vm.toUpdate()" class="control-order">修改分享</a>
-                <a ng-click="vm.showShareControl=false;vm.showLayer=false;" class="control-detele">取消</a>
-            </div>
+            <div style="display: none;" ng-class="{'show-b': true}">
 
-            <div style="display: none;" ng-if="vm.showNotifyShareOfferDialog" class="red-packet-dialog">
-                <div class="content">
-                    <div class="nav">
-                        <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/close.png" class="close-btn" ng-click="vm.showNotifyShareOfferDialog=false;vm.showLayer=false;">
-                    </div>
-                    <div class="head">
-                        <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/share_icon.jpg"/>
-                    </div>
-                    <div class="desc">
-                        <h3>{{vm.weshare.creator.nickname}}送你爱心礼包</h3>
-                        <p>亲，订单已成功，点击…  分享给您的朋友，感谢您将美味传递下去。</p>
+                <!--分享管理层-->
+                <div class="share-control" ng-if="vm.showShareControl">
+                    <a ng-if="vm.isCreator()||vm.isManage" ng-click="vm.toShareOrderList()" class="control-order">订单管理</a>
+                    <a ng-if="vm.isCreator()||vm.canEditShare" ng-click="vm.toUpdate()" class="control-order">修改分享</a>
+                    <a ng-click="vm.showShareControl=false;vm.showLayer=false;" class="control-detele">取消</a>
+                </div>
+
+                <div ng-if="vm.showNotifyShareOfferDialog" class="red-packet-dialog">
+                    <div class="content">
+                        <div class="nav">
+                            <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/close.png" class="close-btn" ng-click="vm.showNotifyShareOfferDialog=false;vm.showLayer=false;">
+                        </div>
+                        <div class="head">
+                            <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/share_icon.jpg"/>
+                        </div>
+                        <div class="desc">
+                            <h3>{{vm.weshare.creator.nickname}}送你爱心礼包</h3>
+                            <p>亲，订单已成功，点击…  分享给您的朋友，感谢您将美味传递下去。</p>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div style="display: none;" ng-class="{'show-b': true}">
                 <!--提示分享层-->
                 <div class="share-dialog" ng-if="vm.showShareDialog">
                     <div style="width: 90%; margin: 0 auto; font-size: 1.3em;">点击右上角“…”，分享给好友或朋友圈。</div>
