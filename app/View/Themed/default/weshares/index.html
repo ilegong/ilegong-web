@@ -21,11 +21,6 @@
                 $product = $index_product['IndexProduct'];
                 $user = $index_product['User'];
                 $user_level = $index_product['UserLevel'];
-                if($product['type'] == 1){
-                    $product_detail_url = '/pintuan/detail/'.$product['share_id'].'?from=index_view';
-                }else{
-                    $product_detail_url = '/weshares/view/'.$product['share_id'].'?from=index_view';
-                }
             ?>
 
         <div class="share">
@@ -53,10 +48,10 @@
                 </li>
                 <li class="fr subscription" ng-controller="SubscriptionController as sub">
                     <div class="subscribed" ng-class="{'no': !sub.isSubscribed({{$product['share_user_id']}})}"
-                         ng-click="sub.subscribe({{$product['share_id']}})">关注TA
+                         ng-click="sub.subscribe({{$product['share_user_id']}})">关注TA
                     </div>
                     <div class="subscribed" ng-class="{'yes': sub.isSubscribed({{$product['share_user_id']}})}"
-                         ng-click="sub.clickSubscribedBtn({{$product['share_id']}}, $event)">
+                         ng-click="sub.clickSubscribedBtn({{$product['share_user_id']}}, $event)">
                         <a href="#X" class="clearfix">
                             <span class="fl">
                                 已关注
@@ -68,7 +63,7 @@
                             </label>
                         </a>
                         <a class="unfollow" ng-show="sub.showUnSubscribeBtn"
-                           ng-click="sub.unSubscribe({{$product['share_id']}})">取消关注</a>
+                           ng-click="sub.unSubscribe({{$product['share_user_id']}})">取消关注</a>
                     </div>
                 </li>
             </ul>
