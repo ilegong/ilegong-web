@@ -23,6 +23,7 @@ a {
   color: #333333;
   text-decoration: none;
 }
+
 a:visited {
   color: #333333;
   text-decoration: none;
@@ -88,12 +89,14 @@ a:-webkit-any-link {
   text-align: center;
 }
 
-.has-menu-top{
+.has-menu-top {
   margin-top: 47px !important;
 }
-.has-menu-top.extra-margin{
+
+.has-menu-top.extra-margin {
   margin-top: 54px !important;
 }
+
 .menu-top {
   line-height: 44px;
   background-color: #FFFFFF;
@@ -122,9 +125,10 @@ a:-webkit-any-link {
   }
 }
 
-.has-channel-bottom{
+.has-channel-bottom {
   margin-bottom: 50px !important;
 }
+
 .channel_bottom {
   box-sizing: border-box;
   position: fixed;
@@ -335,7 +339,7 @@ a:-webkit-any-link {
           font-size: .9em;
         }
       }
-      .log{
+      .log {
         color: #999;
         padding-top: 1px;
         font-size: 1em;
@@ -354,7 +358,7 @@ a:-webkit-any-link {
         text-align: center;
         line-height: 2em;
         margin-top: 7px;
-        .subscribed{
+        .subscribed {
           display: none;
         }
         .subscribed.no {
@@ -392,11 +396,28 @@ a:-webkit-any-link {
       display: block;
       text-align: center;
       position: relative;
+      overflow: hidden;
+      .image-cover {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        display: inline-block;
+        vertical-align: bottom;
+        overflow: hidden;
+        background-color: #cacccd;
+        vertical-index: 0;
+      }
       .image {
         display: inline-block;
         max-height: 280px;
         max-width: 100%;
+        z-index: 1;
       }
+
       .product-price-bg {
         z-index: 2;
         background-color: #333;
@@ -479,7 +500,7 @@ a:-webkit-any-link {
   color: #f99d3a;
 }
 
-.scroll-to-top{
+.scroll-to-top {
   width: 40px;
   height: 40px;
   position: fixed;
@@ -493,5 +514,15 @@ a:-webkit-any-link {
     width: 100%;
     height: auto;
     display: block;
+  }
+}
+
+.index-page {
+  .shares-container {
+    .share {
+      .image-container {
+        padding-bottom: 67%;
+      }
+    }
   }
 }
