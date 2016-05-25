@@ -454,11 +454,28 @@ class ShareUtilComponent extends Component
             $new_share_type = $type;
         }
         $refer_share_type = $shareInfo['type'];
-        $refer_share_id = $shareId;
-        if ($new_share_type == SHARE_TYPE_POOL && $refer_share_type == SHARE_TYPE_POOL) {
-            // 产品街的分享重新开团，要从产品街拷贝商品信息
-            $refer_share_id = $shareInfo['refer_share_id'];
+
+        if ($new_share_type == SHARE_TYPE_POOL_SELF) {
+            // 从普通分享(或者复制的一个分享)上产品街
+            $refer_share_id = 0;
+            $root_share_id = 0;
+        } elseif ($new_share_type == SHARE_TYPE_POOL) {
+            // 产品街的分享（从产品街开团；重新开团；或者手工复制）
+            if ($refer_share_type == SHARE_TYPE_POOL) {
+                // 产品街的分享重新开团；
+                $refer_share_id = $shareId;
+                $root_share_id = $shareInfo['root_share_id'];
+            } else {
+                // 从产品街开团
+                $refer_share_id = $shareId;
+                $root_share_id = $shareId;
+            }
+        } else {
+            // 默认的分享（重新开团；或者手工复制）
+            $refer_share_id = $shareId;
+            $root_share_id = $shareInfo['root_share_id'];
         }
+
 
         try {
             if (!$this->check_delivery($shareId)) {
@@ -470,11 +487,11 @@ class ShareUtilComponent extends Component
             $shareInfo['created'] = date('Y-m-d H:i:s');
             $shareInfo['status'] = $share_status; //分享状态
             $shareInfo['settlement'] = 0; //打款状态为未打款
-            $shareInfo['refer_share_id'] = $refer_share_id;
             $shareInfo['type'] = $new_share_type;
-            if ($shareInfo['root_share_id'] == 0) {
-                $shareInfo['root_share_id'] = $refer_share_id;
-            }
+
+            $shareInfo['refer_share_id'] = $refer_share_id;
+            $shareInfo['root_share_id'] = $root_share_id;
+
             if (!empty($uid)) {
                 $shareInfo['creator'] = $uid;
                 //检查并设置用户团长
