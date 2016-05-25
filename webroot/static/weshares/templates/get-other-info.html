@@ -30,7 +30,7 @@
          infinite-scroll-distance='0'>
         <div class="mine_order" ng-repeat="attend in vm.attends.list">
             <a class="clearfix share-goodlist" ng-click="vm.goToShare(attend.id);">
-                <div class="fl"><img lazy-src="{{attend.default_image}}" fallback-src="this.src='{{vm.staticFilePath}}/static/img/default_product_banner.png'"/></div>
+                <div class="fl"><img lazy-src="{{attend.default_image}}" fallback-src="vm.staticFilePath+'/static/img/default_product_banner.png'"/></div>
                 <h1>{{attend.title}}</h1>
                 <em>进行中</em>
                 <label><span>{{attend.created}}</span></label>
