@@ -1174,6 +1174,10 @@ class ShareManageController extends AppController
     public function copy_share_to_user($shareId, $userId)
     {
         $uid = $this->currentUser['id'];
+        if(empty($shareId) || empty($userId)){
+            $this->Session->setFlash("数据有误", null);
+            $this->redirect('/share_manage/share_utils');
+        }
         if (!is_super_share_manager($uid)) {
             $this->Session->setFlash("您没有权限复制分享, 请联系管理员", null);
             $this->redirect('/share_manage/search_shares?id=' . $shareId);
