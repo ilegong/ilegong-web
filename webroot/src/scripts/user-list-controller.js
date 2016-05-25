@@ -2,10 +2,9 @@
   angular.module('weshares')
     .controller('UserListCtrl', UserListCtrl);
 
-  function UserListCtrl($http, $templateCache, $rootScope) {
+  function UserListCtrl($http, $log, $templateCache, $rootScope) {
     var vm = this;
     vm.loadData = loadData;
-    vm.getUserLevelText = getUserLevelText;
     vm.hasSub = hasSub;
     vm.toggleHideShowUnSubBtn = toggleHideShowUnSubBtn;
     vm.unSub = unSub;
@@ -16,7 +15,6 @@
     vm.loadingData = false;
     vm.page = 1;
     vm.users = [];
-    vm.level_map = {};
     vm.sub_user_ids = [];
     vm.flag_show_un_sub = {};
     vm.processSubmit = false;
@@ -36,6 +34,19 @@
       vm.me = angular.element(document.getElementById('userListView')).attr('data-me');
       vm.dataType = angular.element(document.getElementById('userListView')).attr('data-type');
       $rootScope.loadingPage = false;
+      $http.get('/users/get_id_and_proxies').success(function (data) {
+        if (data.uid != null) {
+          $rootScope.uid = data.uid;
+          $rootScope.proxies = _.map(data.proxies, function (pid) {
+            return parseInt(pid);
+          })
+        }
+        else {
+          $log.log('User not logged in');
+        }
+      }).error(function (data, e) {
+        $log.log('Failed to get proxies: ' + e);
+      });
     }
 
     function toggleHideShowUnSubBtn(uid) {
@@ -90,11 +101,6 @@
       }
     }
 
-    function getUserLevelText(uid) {
-      var level = vm.level_map[uid];
-      return 'V' + level + vm.levelTextMap[level];
-    }
-
     function hasSub(uid) {
       return _.indexOf(vm.sub_user_ids, uid) >= 0;
     }
@@ -103,7 +109,6 @@
       vm.queryWord = vm.searchWord;
       vm.users = [];
       vm.sub_user_ids = [];
-      vm.level_map = {};
       vm.page = 1;
       vm.pageInfo = {};
       vm.noMoreData = false;
@@ -120,9 +125,19 @@
           if (data['page_info']) {
             vm.pageInfo = data['page_info'];
           }
+          var users = _.map(data['users'], function(u){
+            var uid = u.User.id;
+            if(typeof(data['level_map'][uid])=='undefined'){
+              u.User.level = -1;
+            }else{
+              u.User.level = data['level_map'][uid];
+            }
+            return u;
+          });
+          $log.log(data['users']);
+
           vm.users = vm.users.concat(data['users']);
           vm.sub_user_ids = vm.sub_user_ids.concat(data['sub_user_ids']);
-          vm.level_map = merge_options(vm.level_map, data['level_map']);
           vm.page = vm.page + 1;
           if (vm.pageInfo['page_count'] < vm.page) {
             vm.noMoreData = true;

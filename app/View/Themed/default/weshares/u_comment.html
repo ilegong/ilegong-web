@@ -5,21 +5,20 @@
     <meta charset="utf-8">
     <title>爱心评价</title>
     <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{$STATIC_HOST}}/static/weshares/css/user-info.min.css"/>
+    <link href="{{$STATIC_HOST}}/static/weshares/css/site-common.min.css?v2.5.7" media="all" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="{{$STATIC_HOST}}/static/weshares/css/share-info.min.css">
 </head>
 <body>
-<div class="container">
-    <!--标题-->
-    <ul class="clearfix top-nav-bar">
-        <li class="back fl" onclick="window.location.href='/weshares/user_share_info/{{$uid}}'"><img class="back-icon"
-                                                                                                     src="{{$STATIC_HOST}}/static/weshares/images/back.png"></li>
-        <li class="text-back fl" onclick="window.location.href='/weshares/user_share_info/{{$uid}}'">返回</li>
-        <li class="title">爱心评价</li>
-        <li class="home fr" onclick="window.location.href='/'"><img class="home-icon" src="{{$STATIC_HOST}}/static/weshares/images/home.png"></li>
-    </ul>
-    <div class="user-list-placeholder"></div>
-    <div class="modal-header">
+<div class="comment-list-page">
+    <div class="menu-top refer-back-bg">
+        爱心评价
+        <a href="/users/tutorial">
+            <img src="{{$STATIC_HOST}}/static/weshares/images/back.png"/>
+            <label>返回</label>
+        </a>
+    </div>
+
+    <div class="modal-header has-menu-top">
         <h4 class="modal-title" style="text-align: center;">{{$sharer_comment_data['comment_count']}}爱心评价</h4>
     </div>
     <div style="padding: 5px;">

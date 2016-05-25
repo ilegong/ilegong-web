@@ -70,7 +70,8 @@ var all_js = [
   }, {
     name: 'user-info.min.js',
     sources: [
-      'webroot/src/scripts/user-list-controller.js'
+      'webroot/src/scripts/user-list-controller.js',
+      'webroot/src/scripts/subscription-controller.js',
     ],
     dist: 'webroot/static/weshares/js/'
   }, {
@@ -118,7 +119,7 @@ var all_css = [
   }, {
     name: 'user-info.min.css',
     sources: [
-      'webroot/src/scss/user-info.css',
+      'webroot/src/scss/user-info.scss',
     ],
     dist: 'webroot/static/weshares/css/'
   }, {

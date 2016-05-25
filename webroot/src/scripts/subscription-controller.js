@@ -35,12 +35,12 @@
       sub.subscribeInProcess = true;
       $http.get('/weshares/subscribe_sharer/' + proxyId + "/" + $rootScope.uid).success(function (data) {
         if (data.success) {
-          $rootScope.proxies.push({id: proxyId});
+          $rootScope.proxies.push(parseInt(proxyId));
         }
         sub.subscribeInProcess = false;
       }).error(function (data, e) {
         sub.subscribeInProcess = false;
-        $log.log('Failed to get proxies: ' + e);
+        $log.log('Failed to subscribe: ' + e);
       });
     }
 
@@ -58,7 +58,7 @@
       $http.get('/weshares/unsubscribe_sharer/' + proxyId + "/" + $rootScope.uid).success(function (data) {
         if (data.success) {
           $rootScope.proxies = _.reject($rootScope.proxies, function (proxy) {
-            return proxy.id == proxyId
+            return proxy == proxyId
           });
         }
         sub.unSubscribeInProcess = false;
