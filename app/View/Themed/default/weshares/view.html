@@ -8,7 +8,7 @@
                     <a href="/weshares/add?from=share_view" class="share-banner"><img
                             ng-src="{{::vm.staticFilePath}}/static/weshares/images/share-banner-new.gif"/></a>
                     <ul class="sharer clearfix" style="display: none;" ng-class="{'show-b': true}">
-                        <li class="fl detail-head" style="display: none;">
+                        <li class="fl detail-head">
                             <img lazy-src="{{vm.weshare.creator.image}}"
                                  fallback-src="{{vm.staticFilePath + '/avatar/s/default.jpg'}}"
                                  ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/>
