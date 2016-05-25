@@ -76,7 +76,11 @@
             </ul>
 
             <a class="image-container" href="/weshares/view/{{$product['share_id']}}">
-                <img class="image" lazy-src="{{$this->Html->assetUrl($product['share_img'])}}">
+                <div class="image-cover">
+                    <img class="image" data-current="0"
+                         lazy-src="{{$this->Html->assetUrl($product['share_img'])}}"
+                         class="product-image lazy">
+                </div>
                 <span class="product-price-bg">
                     <label>￥</label><em>{{$product['share_price']}}</em>
                     {{if strlen($product['specification'])>0}}

@@ -10,7 +10,7 @@
                          fallback-src="{{vm.staticFilePath + '/avatar/s/default.jpg'}}">
                 </a>
             </li>
-            <li class="level" ng-bind="'L'+0"></li>
+            <li class="level" ng-bind="'L'+share.ProxyLevel.data_value"></li>
             <li class="fl">
                 <a class="nickname" href="/weshares/user_share_info/{{share.Proxy.id}}"
                    ng-bind="share.Proxy.nickname"></a>
@@ -46,7 +46,7 @@
 
         <a class="image-container" href="/weshares/view/{{share.Weshare.id}}">
             <img class="image" lazy-src="{{vm.getShareImage(share)}}"
-                 fallback-src="{{vm.staticFilePath}}/static/img/default_product_banner.png">
+                 fallback-src="vm.staticFilePath+'/static/img/default_product_banner.png'">
         </a>
         <a class="share-content" href="/weshares/view/{{share.Weshare.id}}">
             <h1 class="share-title" ng-bind="share.Weshare.title"></h1>
