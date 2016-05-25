@@ -56,17 +56,14 @@
                     </div>
                     <div class="sharedetail">
                         <h1 class='title margin-bottom-12' ng-bind="vm.weshare.title"></h1>
-
                         <p><span>报名(<span ng-bind="vm.totalBuyCount">0</span>)</span> &nbsp &nbsp <span>浏览(<span class="stress-span"
                                                                                                                  ng-bind="vm.weshare.view_count">0</span>)</span>
                         </p>
-
                         <div ng-if="vm.weshare.refer_share_id==3335 || vm.weshare.id==3335">
                             <iframe height="36" width="100%" ng-src="http://www.ximalaya.com/swf/sound/orange.swf?id=14670988" frameborder=0 allowfullscreen></iframe>
                             <iframe height="36" width="100%" ng-src="http://www.ximalaya.com/swf/sound/orange.swf?id=14670911" frameborder=0 allowfullscreen></iframe>
                             <iframe height="36" width="100%" ng-src="http://www.ximalaya.com/swf/sound/orange.swf?id=14670822" frameborder=0 allowfullscreen></iframe>
                         </div>
-
                         <div class="clearfix cp-name" class="margin-bottom-12"
                              ng-hide='_.isEmpty(vm.weshare.description)' ng-bind-html="vm.weshare.description | unsafe"></div>
                         <dl class="clearfix images margin-bottom-12" ng-if="vm.weshare.images.length > 1">
@@ -74,13 +71,11 @@
                                     lazy-src="{{image | thumb: 's'}}" alt="{{vm.weshare.title}}" fallback-src="{{image}}"/></a></dt>
                         </dl>
                     </div>
-
                     <ul class="take-time clearfix ">
                         <li>
                             取货时间：<span ng-bind='vm.weshare.send_info'></span>
                         </li>
                     </ul>
-
                     <ul class="clearfix recommend-sharer" ng-if="vm.isProxy()">
                         <li class="clearfix">
                             <span class="fl proxy" ng-repeat="recommend in vm.recommendData" data-uid="recommend.id">
@@ -146,12 +141,12 @@
                                     <span ng-if="order.status==21" class="paid-status">待发货</span>
                                     <span ng-if="order.status==14" class="refunding-status">退款中</span>
                                     <span ng-if="order.status==4" class="refund-status">已退款</span>
-                    <span ng-if="order.status==2" class="shipped-status"
-                          ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
-                    <span ng-if="order.status==3" class="received-status"
-                          ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
-                    <span ng-if="order.status==1" class="paid-status"
-                          ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
+                                    <span ng-if="order.status==2" class="shipped-status"
+                                          ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
+                                    <span ng-if="order.status==3" class="received-status"
+                                          ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
+                                    <span ng-if="order.status==1" class="paid-status"
+                                          ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
                                 </li>
                             </ul>
 
@@ -161,14 +156,14 @@
                                 <li ng-repeat="reply in vm.getReplyComments(vm.getOrderComment(order.id).id)">
                                     <strong ng-bind="::reply.username" ng-click="vm.toUserShareInfo(reply.user_id)"></strong>
                                     <span>回复</span>
-                        <span ng-if="reply.is_reply==1">
-                            <strong ng-bind="::reply.reply_username" ng-click="vm.toUserShareInfo(reply.reply_user_id)"></strong>
-                        </span>
+                                    <span ng-if="reply.is_reply==1">
+                                        <strong ng-bind="::reply.reply_username" ng-click="vm.toUserShareInfo(reply.reply_user_id)"></strong>
+                                    </span>
                                     <span>:&nbsp;</span>
                                     <span ng-bind="::reply.body" ng-click="vm.showCommentDialog(order,reply)"></span>
-                    <span style="float: right;" ng-if="vm.isCreator() && $last" ng-click="vm.showCommentDialog(order,vm.getOrderComment(order.id))">
-                        <div class="commenting-o"><i class="fa fa-commenting-o fa-lg"></i></div>
-                    </span>
+                                    <span style="float: right;" ng-if="vm.isCreator() && $last" ng-click="vm.showCommentDialog(order,vm.getOrderComment(order.id))">
+                                        <div class="commenting-o"><i class="fa fa-commenting-o fa-lg"></i></div>
+                                    </span>
                                 </li>
                             </ul>
 
@@ -231,12 +226,12 @@
                                         <span ng-if="order.status==21" class="paid-status">待发货</span>
                                         <span ng-if="order.status==14" class="refunding-status">退款中</span>
                                         <span ng-if="order.status==4" class="refund-status">已退款</span>
-                        <span ng-if="order.status==2" class="shipped-status"
-                              ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
-                        <span ng-if="order.status==3" class="received-status"
-                              ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
-                        <span ng-if="order.status==1" class="paid-status"
-                              ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
+                                        <span ng-if="order.status==2" class="shipped-status"
+                                              ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
+                                        <span ng-if="order.status==3" class="received-status"
+                                              ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
+                                        <span ng-if="order.status==1" class="paid-status"
+                                              ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
                                     </li>
                                 </ul>
 
@@ -246,9 +241,9 @@
                                     <li ng-repeat="reply in vm.getReplyComments(vm.getOrderComment(order.id).id)">
                                         <strong ng-bind="::reply.username" ng-click="vm.toUserShareInfo(reply.user_id)"></strong>
                                         <span>回复</span>
-                        <span ng-if="reply.is_reply==1">
-                            <strong ng-bind="::reply.reply_username" ng-click="vm.toUserShareInfo(reply.reply_user_id)"></strong>
-                        </span>
+                                        <span ng-if="reply.is_reply==1">
+                                            <strong ng-bind="::reply.reply_username" ng-click="vm.toUserShareInfo(reply.reply_user_id)"></strong>
+                                        </span>
                                         <span>:&nbsp;</span>
                                         <span ng-bind="::reply.body" ng-click="vm.showCommentDialog(order,reply)"></span>
                                     </li>
