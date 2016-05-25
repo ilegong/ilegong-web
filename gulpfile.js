@@ -117,12 +117,6 @@ var all_css = [
     ],
     dist: 'webroot/static/weshares/css/'
   }, {
-    name: 'user-info.min.css',
-    sources: [
-      'webroot/src/scss/user-info.scss',
-    ],
-    dist: 'webroot/static/weshares/css/'
-  }, {
     name: 'get-user-info.min.css',
     sources: [
       'webroot/src/scss/get-user-info.scss',
