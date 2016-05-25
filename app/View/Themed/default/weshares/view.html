@@ -10,7 +10,6 @@
                     <ul class="sharer clearfix">
                         <li class="fl detail-head">
                             <img lazy-src="{{vm.weshare.creator.image}}"
-                                 fallback-src="{{vm.staticFilePath + '/avatar/s/default.jpg'}}"
                                  ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/>
                         </li>
                         <li class="sharer-label" ng-bind='"L"+vm.weshare.creator.level.data_value'>L0</li>
@@ -84,12 +83,11 @@
 
                     <ul class="clearfix recommend-sharer" ng-if="vm.isProxy()">
                         <li class="clearfix">
-            <span class="fl proxy" ng-repeat="recommend in vm.recommendData" data-uid="recommend.id">
-                <img ng-click="vm.toUserShareInfo(recommend.id)" lazy-src="{{recommend.image}}" alt="{{recommend.nickname}}">
-            </span>
+                            <span class="fl proxy" ng-repeat="recommend in vm.recommendData" data-uid="recommend.id">
+                                <img ng-click="vm.toUserShareInfo(recommend.id)" lazy-src="{{recommend.image}}" alt="{{recommend.nickname}}">
+                            </span>
                             <span class="tz-recommend fl" ng-if="vm.recommendData.length > 0"><span ng-bind="vm.recommendData.length">0</span>位团长推荐</span>
                         </li>
-
                         <li class="me-introduce fl" ng-if="!vm.isCreator()&&vm.isProxy()&&vm.weshare.status == 0 && vm.weshare.type!=4">
                             <span class="introduce" ng-click="vm.showRecommendDialog=true;vm.showLayer=true;">我要推荐</span>
                         </li>
