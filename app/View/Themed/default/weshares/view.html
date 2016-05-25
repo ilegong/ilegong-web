@@ -1,7 +1,423 @@
 
 <div ng-controller="WesharesViewCtrl as vm" id='weshareView' data-weshare-id="{{$weshare_id}}" data-from-type="{{$from}}" data-shared-offer="{{$shared_offer_id}}" data-rebate-log-id="{{$rebateLogId}}" data-recommend-id="{{$recommend_id}}" data-comment-order-id="{{$comment_order_id}}" data-replay-comment-id="{{$reply_comment_id}}">
     <div id="sharedOfferResult" style="display: none;" data-shared-offer="{{$follow_shared_offer_id}}" data-shared-type="{{$get_coupon_type}}" data-shared-coupon-num="{{$couponNum}}"></div>
-    <div ng-include="'{{$STATIC_HOST}}/static/weshares/templates/view.html?v1.8.8'"></div>
+    {{literal}}
+        <div ng-if="vm.showShareDetailView" ng-click="vm.showUnSubscribe=false;">
+            <div class="has-channel-bottom">
+                <div ng-init="vm.showUnSubscribe=false;">
+                    <a href="/weshares/add?from=share_view" class="share-banner"><img
+                            ng-src="{{::vm.staticFilePath}}/static/weshares/images/share-banner-new.gif"/></a>
+                    <ul class="sharer clearfix">
+                        <li class="fl detail-head">
+                            <img lazy-src="{{vm.weshare.creator.image}}"
+                                 fallback-src="{{vm.staticFilePath + '/avatar/s/default.jpg'}}"
+                                 ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/>
+                        </li>
+                        <li class="sharer-label" ng-bind='"L"+vm.weshare.creator.level.data_value'>L0</li>
+                        <li class="fl">
+                            <div class="nickname" ng-bind="::vm.weshare.creator.nickname"></div>
+                            <div style=" margin-left:10px;">
+                                <label class="sharer-level" style="display: none;"></label>
+                                <label class="sharer-fans">粉丝<span ng-bind="::vm.userShareSummery.follower_count">0</span></label>
+                            </div>
+                        </li>
+                        <li class="fr ta">
+                            <a ng-if="vm.currentUser" class="faq-sharer-btn" ng-click="vm.redirectFaq()" ng-bind="::vm.faqTipText">私信TA</a>
+                        </li>
+                        <li class="fr ta" ng-if="vm.isCreator()||vm.canEditShare||vm.isManage">
+                            <a ng-click="vm.showShareControl=true;vm.showLayer=true;">分享管理</a>
+                        </li>
+                        <li class="fr ta" style="position: relative;" ng-if="!vm.isCreator()">
+                            <a ng-if="!vm.userSubStatus" ng-click="vm.subSharer();">+关注</a>
+                            <a class="clearfix" style="display: block;" ng-if="vm.userSubStatus" ng-click="vm.showUnSubscribe=!vm.showUnSubscribe;$event.stopPropagation();">
+                                <span>已关注</span>
+                                <label ng-class="{'tangle-up': vm.showUnSubscribe, 'tangle-down': !vm.showUnSubscribe}">
+                                    <i></i>
+                                    <em></em>
+                                </label>
+                                <a class="unfollow" ng-show="vm.showUnSubscribe" ng-click="vm.unSubSharer();">取消关注</a>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="product-image"
+                         ng-if="vm.weshare.images.length > 0 && vm.weshare.refer_share_id!=3814 && vm.weshare.id!=3814 && vm.weshare.refer_share_id!=3822 && vm.weshare.id!=3822 && vm.weshare.refer_share_id!=4008 && vm.weshare.id!=4008">
+                        <img ng-src="{{vm.weshare.images[0]}}">
+                    </div>
+                    <div ng-if="vm.weshare.refer_share_id==3814 || vm.weshare.id==3814">
+                        <iframe frameborder="0" width="100%" ng-src="http://v.qq.com/iframe/player.html?vid=t01719wisq4&tiny=0&auto=0"
+                                allowfullscreen></iframe>
+                    </div>
+                    <div ng-if="vm.weshare.refer_share_id==3822 || vm.weshare.id==3822">
+                        <iframe frameborder="0" width="100%" ng-src="http://v.qq.com/iframe/player.html?vid=f0194qcpnvt&tiny=0&auto=0"
+                                allowfullscreen></iframe>
+                    </div>
+                    <div ng-if="vm.weshare.refer_share_id==4008 || vm.weshare.id==4008">
+                        <iframe frameborder="0" width="100%" ng-src="http://v.qq.com/iframe/player.html?vid=e0195mejuea&tiny=0&auto=0"
+                                allowfullscreen></iframe>
+                    </div>
+                    <div class="sharedetail">
+                        <h1 class='title margin-bottom-12' ng-bind="vm.weshare.title"></h1>
+
+                        <p><span>报名(<span ng-bind="vm.totalBuyCount">0</span>)</span> &nbsp &nbsp <span>浏览(<span class="stress-span"
+                                                                                                                 ng-bind="vm.weshare.view_count">0</span>)</span>
+                        </p>
+
+                        <div ng-if="vm.weshare.refer_share_id==3335 || vm.weshare.id==3335">
+                            <iframe height="36" width="100%" ng-src="http://www.ximalaya.com/swf/sound/orange.swf?id=14670988" frameborder=0 allowfullscreen></iframe>
+                            <iframe height="36" width="100%" ng-src="http://www.ximalaya.com/swf/sound/orange.swf?id=14670911" frameborder=0 allowfullscreen></iframe>
+                            <iframe height="36" width="100%" ng-src="http://www.ximalaya.com/swf/sound/orange.swf?id=14670822" frameborder=0 allowfullscreen></iframe>
+                        </div>
+
+                        <div class="clearfix cp-name" class="margin-bottom-12"
+                             ng-hide='_.isEmpty(vm.weshare.description)' ng-bind-html="vm.weshare.description | unsafe"></div>
+                        <dl class="clearfix images margin-bottom-12" ng-if="vm.weshare.images.length > 1">
+                            <dt ng-repeat="image in vm.weshare.images"><a ng-click="vm.viewImage(image)"><img
+                                    lazy-src="{{image | thumb: 's'}}" alt="{{vm.weshare.title}}" fallback-src="{{image}}"/></a></dt>
+                        </dl>
+                    </div>
+
+                    <ul class="take-time clearfix ">
+                        <li>
+                            取货时间：<span ng-bind='vm.weshare.send_info'></span>
+                        </li>
+                    </ul>
+
+                    <ul class="clearfix recommend-sharer" ng-if="vm.isProxy()">
+                        <li class="clearfix">
+            <span class="fl proxy" ng-repeat="recommend in vm.recommendData" data-uid="recommend.id">
+                <img ng-click="vm.toUserShareInfo(recommend.id)" lazy-src="{{recommend.image}}" alt="{{recommend.nickname}}">
+            </span>
+                            <span class="tz-recommend fl" ng-if="vm.recommendData.length > 0"><span ng-bind="vm.recommendData.length">0</span>位团长推荐</span>
+                        </li>
+
+                        <li class="me-introduce fl" ng-if="!vm.isCreator()&&vm.isProxy()&&vm.weshare.status == 0 && vm.weshare.type!=4">
+                            <span class="introduce" ng-click="vm.showRecommendDialog=true;vm.showLayer=true;">我要推荐</span>
+                        </li>
+                        <li class="introduce-money fl"
+                            ng-if="(vm.isProxy()||vm.isCreator())&&vm.weshare.proxy_rebate_percent.status==1&&vm.weshare.proxy_rebate_percent.percent>0">
+                            推荐佣金<span ng-bind="::vm.weshare.proxy_rebate_percent.percent+'%'" class="stress-span">0%</span>
+                        </li>
+                    </ul>
+
+                    <p class="product-title" id="share-product-list">产品列表</p>
+                    <div class="product" ng-repeat="product in vm.weshare.products">
+                        <ul class="clearfix">
+                            <li class="fl">
+                                <div class="product-name">
+                                    <span ng-bind="$index+1"></span>：<span ng-bind="product.name"></span>
+                                </div>
+
+                                <div class="product-price" ng-bind="product.price/100 | currency:'￥'">
+                                </div>
+                            </li>
+                        </ul>
+
+                        <dl class="clearfix" ng-if="!vm.checkProductNum(product)">
+                            <dd class="fr sold-out">已抢光</dd>
+                        </dl>
+                        <dl class="clearfix" ng-if="vm.checkProductNum(product)">
+                            <dd class="fr add-subtract" ng-click="vm.increaseProductNum(product)"><i class="fa fa-plus"></i></dd>
+                            <dd class="fr amount" ng-bind="product.num||0">0</dd>
+                            <dd class="fr add-subtract" ng-click="vm.decreaseProductNum(product)"><i class="fa fa-minus"></i></dd>
+                            <dd class="fr limit-score" ng-if="vm.checkProductNum(product)&&product.store>0">仅剩<span
+                                    ng-bind="vm.getProductLeftNum(product)"></span>份
+                            </dd>
+                        </dl>
+                    </div>
+
+                    <p class="product-title">报名列表</p>
+                    <ul class="clearfix apply">
+                        <li><span ng-click="vm.showCommentedOrders=false;" class="line-right"
+                                  ng-class="{'focus-apply':!vm.showCommentedOrders}">报名(<span
+                                ng-bind="vm.totalBuyCount">0</span>)</span>
+                        </li>
+                        <li><span ng-click="vm.showCommentedOrders=true;" ng-class="{'focus-apply':vm.showCommentedOrders}">评价(<span
+                                ng-bind="vm.totalCommentCount"></span>)</span></li>
+                    </ul>
+                </div>
+                <div class="apply-list clearfix" ng-if="vm.totalBuyCount>0">
+                    <div style="position: relative;" ng-repeat="order in vm.ordersDetail.orders"
+                         ng-show="!vm.showCommentedOrders || order.status==9" data-id="{{order.id}}">
+                        <div class="apply-details" ng-class="{'self-details': vm.isOwner(order)}">
+                            <ul class="clearfix">
+                                <li class="self fl"
+                                    ng-bind="vm.isOwner(order) ? '我':vm.ordersDetail.users[order.creator]['nickname']"></li>
+                                <li class="description fl">已经报名</li>
+                                <li class="status fr">
+                                    <span ng-if="order.status==9" class="done-status"><i class="fa fa-heart fa-lg"></i></span>
+                                    <span ng-if="order.status==21" class="paid-status">待发货</span>
+                                    <span ng-if="order.status==14" class="refunding-status">退款中</span>
+                                    <span ng-if="order.status==4" class="refund-status">已退款</span>
+                    <span ng-if="order.status==2" class="shipped-status"
+                          ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
+                    <span ng-if="order.status==3" class="received-status"
+                          ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
+                    <span ng-if="order.status==1" class="paid-status"
+                          ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
+                                </li>
+                            </ul>
+
+                            <ul class="clearfix self-massage" ng-if="order.status == 9 && !_.isEmpty(vm.getOrderComment(order.id).body)">
+                                <li ng-bind="::vm.getOrderComment(order.id).body">
+                                </li>
+                                <li ng-repeat="reply in vm.getReplyComments(vm.getOrderComment(order.id).id)">
+                                    <strong ng-bind="::reply.username" ng-click="vm.toUserShareInfo(reply.user_id)"></strong>
+                                    <span>回复</span>
+                        <span ng-if="reply.is_reply==1">
+                            <strong ng-bind="::reply.reply_username" ng-click="vm.toUserShareInfo(reply.reply_user_id)"></strong>
+                        </span>
+                                    <span>:&nbsp;</span>
+                                    <span ng-bind="::reply.body" ng-click="vm.showCommentDialog(order,reply)"></span>
+                    <span style="float: right;" ng-if="vm.isCreator() && $last" ng-click="vm.showCommentDialog(order,vm.getOrderComment(order.id))">
+                        <div class="commenting-o"><i class="fa fa-commenting-o fa-lg"></i></div>
+                    </span>
+                                </li>
+                            </ul>
+
+                            <ul class="clearfix self-massage product-much" ng-if="vm.isOwner(order)">
+                                <li><span ng-bind="order.consignee_name"></span>&nbsp <span
+                                        ng-bind="order.consignee_mobilephone"></span></li>
+                                <li ng-bind="order.consignee_address"></li>
+                            </ul>
+
+                            <ul class="clearfix">
+                                <li class="product-much" ng-hide="_.isEmpty(vm.getOrderDisplayName(order.id))"
+                                    ng-bind="::vm.getOrderDisplayName(order.id)"></li>
+                            </ul>
+
+                            <ul class="clearfix self-massage product-much" ng-if="vm.isOwner(order) && vm.isShowShipCode(order);">
+                                <li ng-bind="::vm.getShipCode(order);"></li>
+                            </ul>
+
+                            <ul class="clearfix operations" ng-if="vm.isOwner(order)">
+                                <li class="pass fl" ng-if='vm.isShowExpressInfoBtn(order)' ng-show="order.status==2">
+                                    <a class="status-btn" ng-click="vm.showOrderExpressInfo(order)">
+                                        来这看货到哪了
+                                    </a>
+                                </li>
+                                <li class="pass fl" ng-show="order.status==2">
+                                    <a class="status-btn" ng-click="vm.confirmReceived(order)">
+                                        <span ng-if="order.ship_mark=='pys_ziti' || order.ship_mark=='self_ziti' || order.ship_mark=='pin_tuan'">点此收货</span>
+                                        <span ng-if="order.ship_mark=='kuai_di'">点此签收</span>
+                                    </a>
+                                </li>
+                                <li class="pass fl" ng-show="order.status==3">
+                                    <a class="status-btn" ng-click="vm.showCommentDialog(order)">
+                                        小主说两句评价呗
+                                    </a>
+                                </li>
+                            </ul>
+
+                            <ul class="clearfix">
+                                <li class="pay-time " ng-bind="::vm.getFormatDate(order.created)"></li>
+                            </ul>
+                            <div class="triangle-self triangle-white-self"></div>
+                            <div class="triangle-self triangle-orange-self"></div>
+                        </div>
+                        <div class="apply-head self-head" ng-click="vm.toUserShareInfo(order.creator)">
+                            <img lazy-src="{{vm.ordersDetail.users[order.creator]['image'] | thumb: 's'}}"
+                                 fallback-src="{{vm.staticFilePath + '/avatar/s/default.jpg'}}">
+                        </div>
+                    </div>
+
+                    <div infinite-scroll='vm.shareOrder.nextPage()' infinite-scroll-disabled='vm.shareOrder.noMore||vm.shareOrder.busy'
+                         infinite-scroll-distance='1'>
+                        <div style=" position: relative;" ng-repeat="order in vm.shareOrder.orders"
+                             ng-show="!vm.showCommentedOrders || order.status==9">
+                            <div class="apply-details">
+                                <ul class="clearfix">
+                                    <li class="self fl" ng-bind="vm.shareOrder.users[order.creator]['nickname']"></li>
+                                    <li class="description fl">已经报名</li>
+                                    <li class="status fr">
+                                        <span ng-if="order.status==9" class="done-status"><i class="fa fa-heart fa-lg"></i></span>
+                                        <span ng-if="order.status==21" class="paid-status">待发货</span>
+                                        <span ng-if="order.status==14" class="refunding-status">退款中</span>
+                                        <span ng-if="order.status==4" class="refund-status">已退款</span>
+                        <span ng-if="order.status==2" class="shipped-status"
+                              ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
+                        <span ng-if="order.status==3" class="received-status"
+                              ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
+                        <span ng-if="order.status==1" class="paid-status"
+                              ng-bind="vm.getStatusName(order.status, order.ship_mark)"></span>
+                                    </li>
+                                </ul>
+
+                                <ul class="clearfix massage" ng-if="order.status == 9 && !_.isEmpty(vm.getOrderComment(order.id).body)">
+                                    <li ng-bind="::vm.getOrderComment(order.id).body">
+                                    </li>
+                                    <li ng-repeat="reply in vm.getReplyComments(vm.getOrderComment(order.id).id)">
+                                        <strong ng-bind="::reply.username" ng-click="vm.toUserShareInfo(reply.user_id)"></strong>
+                                        <span>回复</span>
+                        <span ng-if="reply.is_reply==1">
+                            <strong ng-bind="::reply.reply_username" ng-click="vm.toUserShareInfo(reply.reply_user_id)"></strong>
+                        </span>
+                                        <span>:&nbsp;</span>
+                                        <span ng-bind="::reply.body" ng-click="vm.showCommentDialog(order,reply)"></span>
+                                    </li>
+                                </ul>
+
+                                <ul class="clearfix">
+                                    <li class="product-much" ng-hide="_.isEmpty(vm.getOrderDisplayName(order.id))"
+                                        ng-bind="::vm.getOrderDisplayName(order.id)">
+                                    </li>
+                                </ul>
+                                <ul class="clearfix">
+                                    <li class="pay-time" ng-bind="::vm.getFormatDate(order.created)"></li>
+                                </ul>
+                                <div class="triangle triangle-white"></div>
+                                <div class="triangle triangle-gray"></div>
+                            </div>
+                            <div class="apply-head" ng-click="vm.toUserShareInfo(order.creator)">
+                                <img lazy-src="{{vm.shareOrder.users[order.creator]['image'] | thumb: 's'}}"
+                                     fallback-src="{{vm.staticFilePath + '/avatar/s/default.jpg'}}">
+                            </div>
+                        </div>
+                        <div style="text-align: center;color: #ffa200;margin-bottom: 10px;" ng-show='vm.shareOrder.busy'>加载中...</div>
+                    </div>
+                </div>
+
+                <div class="apply-list empty-list clearfix" ng-if="vm.totalBuyCount==0" ng-show="!vm.showCommentedOrders">
+                    <p>还没有人报名呢~</p>
+                </div>
+                <div class="apply-list empty-list  clearfix" ng-if="vm.totalCommentCount==0" ng-show="vm.showCommentedOrders">
+                    <p>还没有人评价呢~</p>
+                </div>
+            </div>
+
+            <div ng-if="vm.weshare.type==0||vm.weshare.type==4||vm.weshare.type==6">
+                <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-default-nav.html?v0.7.4'"></ng-include>
+            </div>
+
+            <div ng-if="vm.showBalanceView">
+                <ng-include src="vm.staticFilePath + '/static/weshares/templates/balance.html?v0.7.4'"></ng-include>
+            </div>
+            <div ng-if="vm.chooseOfflineStoreView">
+                <ng-include src="vm.staticFilePath + '/static/weshares/templates/offline-store.html?v0.7.4'"></ng-include>
+            </div>
+            <div ng-if="vm.showOfflineStoreDetailView">
+                <ng-include src="vm.staticFilePath + '/static/weshares/templates/offline-store-detail.html?v0.7.4'"></ng-include>
+            </div>
+            <div ng-if="vm.showEditConsigneeView">
+                <!--编辑地址-->
+                <ng-include src="vm.staticFilePath + '/static/weshares/templates/edit-consignee.html?v0.7.4'"></ng-include>
+            </div>
+
+            <!--分享管理层-->
+            <div style="display: none;" class="share-control" ng-if="vm.showShareControl">
+                <a ng-if="vm.isCreator()||vm.isManage" ng-click="vm.toShareOrderList()" class="control-order">订单管理</a>
+                <a ng-if="vm.isCreator()||vm.canEditShare" ng-click="vm.toUpdate()" class="control-order">修改分享</a>
+                <a ng-click="vm.showShareControl=false;vm.showLayer=false;" class="control-detele">取消</a>
+            </div>
+
+            <div style="display: none;" ng-if="vm.showNotifyShareOfferDialog" class="red-packet-dialog">
+                <div class="content">
+                    <div class="nav">
+                        <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/close.png" class="close-btn" ng-click="vm.showNotifyShareOfferDialog=false;vm.showLayer=false;">
+                    </div>
+                    <div class="head">
+                        <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/share_icon.jpg"/>
+                    </div>
+                    <div class="desc">
+                        <h3>{{vm.weshare.creator.nickname}}送你爱心礼包</h3>
+                        <p>亲，订单已成功，点击…  分享给您的朋友，感谢您将美味传递下去。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: none;" ng-class="{'show-b': true}">
+                <!--提示分享层-->
+                <div class="share-dialog" ng-if="vm.showShareDialog">
+                    <div style="width: 90%; margin: 0 auto; font-size: 1.3em;">点击右上角“…”，分享给好友或朋友圈。</div>
+                </div>
+                <!--支付成功没有红包已经关注-->
+                <div class="share-dialog" ng-show="vm.showNotifyShareDialog">
+                    <div style="width: 90%; margin: 0 auto; font-size: 1.3em;">亲，订单已成功，点击…  分享给您的朋友，感谢您将美味传递下去。</div>
+                </div>
+                <!--支付成功没有关注-->
+                <div style="margin-left: -32.5%; margin-top: -85px;" class="pay-success" ng-show="vm.showTipSubSharerDialog">
+                    <h1>报名成功</h1>
+                    <ul class="clearfix">
+                        <li class="fl"><img ng-src="{{vm.weshare.creator.image}}"
+                                            fallback-src="{{vm.staticFilePath + '/avatar/s/default.jpg'}}"/></li>
+                        <li class="sharer-name" style="overflow: hidden;">关注<span ng-bind="vm.weshare.creator.nickname"></span><br/>即时知道TA的分享</li>
+                    </ul>
+                    <dl class="clearfix">
+                        <dt><a ng-click="vm.showTipSubSharerDialog=false;vm.showLayer=false;">取消</a></dt>
+                        <dt><a class="attention" ng-click="vm.showTipSubSharerDialog=false;vm.showLayer=false;vm.subSharer();">关注</a></dt>
+                    </dl>
+                </div>
+
+                <!--评价层-->
+                <div class="commenting-dialog" ng-if="vm.showCommentingDialog">
+                    <div class="clearfix title">
+                        <label>爱心评价</label>
+                        <a ng-click="vm.closeCommentDialog();" class="closebtn fr"></a>
+                    </div>
+                    <div class="clearfix" style="padding: 0 10px;margin-bottom: 30px;">
+                        <div class="form-group" ng-class="{'has-error': vm.usernameHasError}">
+                            <textarea id="commentContentDom" class='form-control' placeholder="{{vm.commentTipInfo}}" ng-model='vm.submitTempCommentData.comment_content' ng-change=''></textarea>
+                            <p class='tips'>请输入评价信息</p>
+                        </div>
+                    </div>
+                    <div class="clearfix starttuan_btn">
+                        <a ng-click='vm.submitComment()' style="background-color: #ffa200; width: 100%;">评价</a>
+                    </div>
+                </div>
+
+                <!--关注取消层-->
+                <div class="layer-toast" ng-if="vm.showUnSubscribeLayer">关注已取消，不再收到TA的消息</div>
+
+                <!--推荐弹出层-->
+                <div class="recommend-dialog" ng-if="vm.showRecommendDialog">
+                    <div class="clearfix title">
+                        <label>推荐给我的粉丝</label>
+                        <a ng-click="vm.closeRecommendDialog();" class="closebtn fr"></a>
+                    </div>
+                    <div class="clearfix" style="padding: 0 10px;">
+                        <div class="form-group" ng-class="{'has-error': vm.recommendContentHasError}">
+                            <textarea id="recommendContentDom" class='form-control' ng-model='vm.submitRecommendData.recommend_content' ng-change='vm.validRecommendContent()'></textarea>
+                            <p class='tips'>请输入推荐信息</p>
+                        </div>
+                    </div>
+                    <div class="clearfix recommend-btn">
+                        <a ng-click='vm.submitRecommend()' style="background-color: #ffa200; width: 100%;">推荐</a>
+                    </div>
+                </div>
+
+                <!--通知粉丝层-->
+                <div class="notify-dialog" ng-if="vm.showNotifyView">
+                    <div class="clearfix title" style="padding: 0 10px 10px;">
+                        <label style="font-size: 18px;">参团提醒</label>
+                        <a ng-click="vm.showLayer=false;vm.showNotifyView=false;" class="closebtn fr"></a>
+                    </div>
+                    <div class="clearfix" style="padding: 0 10px;">
+                        <div class="form-group">
+                            <div class="form-control radio-group">
+                                <div>
+                                    <input type="radio" class="radio" ng-model="vm.sendNotifyType" value="0" ng-change='vm.resetNotifyContent()'/>
+                                    <label>通知未买粉丝</label>
+                                </div>
+                                <div>
+                                    <input type="radio" class="radio" ng-model="vm.sendNotifyType" value="1" ng-change='vm.resetNotifyContent()'/>
+                                    <label>通知已买粉丝</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix" style="padding: 0 10px;margin-bottom: 10px;">
+                        <div class="form-group" ng-class="{'has-error': vm.notifyMsgHasError}">
+                            <textarea id="msgContentDom" style="height: 100px;" class='form-control' ng-model='vm.notify.content' ng-change='vm.validNotifyMsgContent();'></textarea>
+                            <p class='tips'>请输入信息内容</p>
+                        </div>
+                    </div>
+                    <div class="clearfix notify_btn">
+                        <a ng-click='vm.sendNotifyShareMsg();' style="background-color: #ffa200; width: 100%;">群发通知</a>
+                    </div>
+                </div>
+                <div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showShareControl=false;vm.showTipSubSharerDialog=false;vm.showRecommendDialog=false;vm.showLayer=false;vm.showNotifyView=false;vm.showCommentListDialog=false;vm.closeCommentDialog();vm.showBuyingDialog=false;vm.showShareDialog=false;vm.showNotifyShareDialog=false;vm.showNotifyShareOfferDialog=false;vm.showNotifyGetPacketDialog=false;"></div>
+            </div>
+        </div>
+    {{/literal}}
 </div>
 
 <?php
