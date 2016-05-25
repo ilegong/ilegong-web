@@ -3,11 +3,11 @@
     <div id="sharedOfferResult" style="display: none;" data-shared-offer="{{$follow_shared_offer_id}}" data-shared-type="{{$get_coupon_type}}" data-shared-coupon-num="{{$couponNum}}"></div>
     {{literal}}
         <div ng-if="vm.showShareDetailView" ng-click="vm.showUnSubscribe=false;">
-            <div class="has-channel-bottom">
+            <div ng-class="{'has-channel-bottom': vm.weshare.type==0||vm.weshare.type==4||vm.weshare.type==6}">
                 <div ng-init="vm.showUnSubscribe=false;">
                     <a href="/weshares/add?from=share_view" class="share-banner"><img
                             ng-src="{{::vm.staticFilePath}}/static/weshares/images/share-banner-new.gif"/></a>
-                    <ul class="sharer clearfix" style="display: none;" ng-class="{'show-b': true}">
+                    <ul class="sharer clearfix">
                         <li class="fl detail-head">
                             <img lazy-src="{{vm.weshare.creator.image}}"
                                  fallback-src="{{vm.staticFilePath + '/avatar/s/default.jpg'}}"
