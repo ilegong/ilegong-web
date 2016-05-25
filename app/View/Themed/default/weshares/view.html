@@ -281,20 +281,6 @@
                 <ng-include src="vm.staticFilePath + '/static/weshares/templates/weshare-view-default-nav.html?v0.7.4'"></ng-include>
             </div>
 
-            <div ng-if="vm.showBalanceView">
-                <ng-include src="vm.staticFilePath + '/static/weshares/templates/balance.html?v0.7.4'"></ng-include>
-            </div>
-            <div ng-if="vm.chooseOfflineStoreView">
-                <ng-include src="vm.staticFilePath + '/static/weshares/templates/offline-store.html?v0.7.4'"></ng-include>
-            </div>
-            <div ng-if="vm.showOfflineStoreDetailView">
-                <ng-include src="vm.staticFilePath + '/static/weshares/templates/offline-store-detail.html?v0.7.4'"></ng-include>
-            </div>
-            <div ng-if="vm.showEditConsigneeView">
-                <!--编辑地址-->
-                <ng-include src="vm.staticFilePath + '/static/weshares/templates/edit-consignee.html?v0.7.4'"></ng-include>
-            </div>
-
             <div style="display: none;" ng-class="{'show-b': true}">
 
                 <!--分享管理层-->
@@ -410,6 +396,23 @@
                 </div>
                 <div class="background-layer" ng-show="vm.showLayer" ng-click="vm.showShareControl=false;vm.showTipSubSharerDialog=false;vm.showRecommendDialog=false;vm.showLayer=false;vm.showNotifyView=false;vm.showCommentListDialog=false;vm.closeCommentDialog();vm.showBuyingDialog=false;vm.showShareDialog=false;vm.showNotifyShareDialog=false;vm.showNotifyShareOfferDialog=false;vm.showNotifyGetPacketDialog=false;"></div>
             </div>
+        </div>
+
+        <div ng-if="vm.showBalanceView">
+            <ng-include src="vm.staticFilePath + '/static/weshares/templates/balance.html?v0.7.4'"></ng-include>
+        </div>
+
+        <div ng-if="vm.chooseOfflineStoreView">
+            <ng-include src="vm.staticFilePath + '/static/weshares/templates/offline-store.html?v0.7.4'"></ng-include>
+        </div>
+
+        <div ng-if="vm.showOfflineStoreDetailView">
+            <ng-include src="vm.staticFilePath + '/static/weshares/templates/offline-store-detail.html?v0.7.4'"></ng-include>
+        </div>
+
+        <div ng-if="vm.showEditConsigneeView">
+            <!--编辑地址-->
+            <ng-include src="vm.staticFilePath + '/static/weshares/templates/edit-consignee.html?v0.7.4'"></ng-include>
         </div>
     {{/literal}}
 </div>
