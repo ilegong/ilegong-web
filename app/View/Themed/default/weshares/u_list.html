@@ -1,26 +1,21 @@
-<div class="container" ng-controller="UserListCtrl as vm" id="userListView" data-uid="{{$uid}}" data-me="{{$me}}" data-type="{{$type}}">
-    <!--标题-->
-    <ul class="clearfix top-nav-bar">
-        <li class="back fl" onclick="window.location.href='/weshares/user_share_info/{{$uid}}'"><img class="back-icon"
-                                              src="{{$STATIC_HOST}}/static/weshares/images/back.png"></li>
-        <li class="text-back fl" onclick="window.location.href='/weshares/user_share_info/{{$uid}}'">返回</li>
-        <li class="title">{{$title}}</li>
-        <li class="home fr" onclick="window.location.href='/'"><img class="home-icon" src="{{$STATIC_HOST}}/static/weshares/images/home.png"></li>
-    </ul>
-    <div class="user-list-placeholder"></div>
-    <div class="fans_search">
+<div class="user-list-page" ng-controller="UserListCtrl as vm" id="userListView" data-uid="{{$uid}}" data-me="{{$me}}" data-type="{{$type}}" ng-click="clickPage();">
+    <div class="menu-top refer-back-bg">
+        {{$title}}
+        <a href="/users/tutorial">
+            <img src="{{$STATIC_HOST}}/static/weshares/images/back.png"/>
+            <label>返回</label>
+        </a>
+    </div>
+
+    <div class="fans_search has-menu-top">
         <input type="text" placeholder="请输入昵称搜索" ng-model="vm.searchWord"/>
         <a ng-click="vm.search()"><img src="{{$STATIC_HOST}}/static/weshares/images/searchicon.png" /></a>
     </div>
-    <div class="user-list-placeholder" style="margin-top: 10px;"></div>
     <div ng-include="'{{$STATIC_HOST}}/static/weshares/templates/u-list-place.html?v0.0.2'"></div>
 </div>
 
 <?php
     $this->assign('title','朋友说-'.$title);
-    $this->Html->css(array(
-$STATIC_HOST.'/static/weshares/css/user-info.min.css?v2.4.9'
-), null, array('inline' => false))
 ?>
 
 <?php

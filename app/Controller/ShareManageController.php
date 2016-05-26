@@ -274,7 +274,16 @@ class ShareManageController extends AppController
 
     public function delete_share($shareId)
     {
-        $this->Weshare->delete($shareId);
+        $this->Weshare->update(['status' => WESHARE_STATUS_DELETED], ['id' => $shareId]);
+        if ($_REQUEST['from'] == 'search') {
+            $this->redirect(array('action' => 'search_shares'));
+            return;
+        }
+        $this->redirect(array('action' => 'shares'));
+    }
+
+    public function stop_share($shareId){
+        $this->Weshare->update(['status' => WESHARE_STATUS_STOP], ['id' => $shareId]);
         if ($_REQUEST['from'] == 'search') {
             $this->redirect(array('action' => 'search_shares'));
             return;
