@@ -58,7 +58,7 @@
             <dd class="order-count clearfix">
                 <img class="avatar radius50" ng-repeat="buyer in share.summary.orders_and_creators | limitTo: 4"
                      lazy-src="{{buyer.avatar}}"
-                     fallback-src="this.src='{{vm.staticFilePath}}/avatar/s/default.jpg'"/>
+                     fallback-src="{{vm.staticFilePath}}/avatar/s/default.jpg"/>
                 <label class="fl">已<span>{{share.summary.order_count}}</span>个人报名</label>
             </dd>
             <dd class="view-count">浏览{{share.summary.view_count}}</dd>
