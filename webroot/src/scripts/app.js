@@ -1,41 +1,12 @@
 (function (window, angular) {
   var app = angular.module('weshares', ['infinite-scroll', 'module.services', 'module.filters', 'module.directives'])
     .constant('_', window._)
-    .constant('staticFilePath', PYS.staticFilePath)
-    .constant('shipTypes', {
-      "101": "申通",
-      "102": "圆通",
-      "103": "韵达",
-      "104": "顺丰",
-      "105": "EMS",
-      "106": "邮政包裹",
-      "107": "天天",
-      "108": "汇通",
-      "109": "中通",
-      "110": "全一",
-      "111": "宅急送",
-      "112": "全峰",
-      "113": "快捷",
-      "115": "城际快递",
-      "132": "优速",
-      "133": "增益快递",
-      "134": "万家康",
-      "135": "京东快递",
-      "136": "德邦快递",
-      "137": "自提",
-      "138": "百富达",
-      "139": "黑狗",
-      "140": "E快送",
-      "141": "国通快递",
-      "142": "人人快递",
-      "143": "百世汇通"
-    })
     .config(configCompileProvider)
     .config(configHttpProvider)
     .config(extendLog)
     .config(['$sceDelegateProvider', function ($sceDelegateProvider) {
       $sceDelegateProvider.resourceUrlWhitelist(
-        ['self', PYS.staticFilePath + '/**']
+        ['self', 'http://*.tongshijia.com/**']
       )
     }])
     .run(initApp)
@@ -64,16 +35,24 @@
     });
   }
 
-  function initApp($rootScope) {
+  function initApp($rootScope, $http) {
     $rootScope._ = _;
     $rootScope.loadingPage = true;
     $rootScope.clickPage = function(){
-      console.log('click page in root');
       $rootScope.$broadcast('page_clicked', {});
     }
+    $rootScope.checkHasUnRead = function(){
+      $http.get('/share_opt/check_opt_has_new.json').success(function (data) {
+        if (data['has_new']) {
+          $rootScope.showUnReadMark = true;
+        }
+      });
+    }
+
   }
 
   function DefaultCtrl($rootScope){
     $rootScope.loadingPage = false;
+    $rootScope.checkHasUnRead();
   }
 })(window, window.angular);

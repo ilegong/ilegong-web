@@ -1,13 +1,13 @@
-<div style="background-color: #f1f1f1;">
-    <div class="nav-bg">
-        <a href="#" class="nav-back fl back" ng-click="vm.showShareDetail()">
+<div>
+    <div class="menu-top refer-back-bg">
+        设置配送信息
+        <a href="#" ng-click="vm.showShareDetail()">
             <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/back.png"/>
             <label>返回</label>
         </a>
-        <h1 class="fl">设置配送信息</h1>
     </div>
     <!--收货信息-->
-    <div ng-controller="WesharesConsigneeCtrl as wcc">
+    <div class="has-menu-top extra-margin" ng-controller="WesharesConsigneeCtrl as wcc">
         <ng-include src="vm.staticFilePath + '/static/weshares/templates/consignee.html?v0.7.0'"></ng-include>
     </div>
     <!-- 这个元素在各个tab里面都会出现 -->

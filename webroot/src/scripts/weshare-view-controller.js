@@ -3,9 +3,9 @@
     angular.module('weshares')
         .controller('WesharesViewCtrl', WesharesViewCtrl);
 
-    function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, $filter, $window, Utils, staticFilePath, shipTypes, ShareOrder, OfflineStore, $timeout) {
+    function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, $filter, $window, Utils, ShareOrder, OfflineStore) {
         var vm = this;
-        vm.staticFilePath = staticFilePath;
+        vm.staticFilePath = Utils.staticFilePath();
         vm.showShareDetailView = true;
         vm.faqTipText = '私信';
         vm.showUnReadMark = false;
@@ -17,7 +17,7 @@
             0: '进行中',
             1: '已截止'
         };
-        vm.shipTypes = shipTypes;
+        vm.shipTypes = Utils.shipTypes();
         vm.submitTempCommentData = {};
         vm.viewImage = viewImage;
         vm.increaseProductNum = increaseProductNum;
@@ -1308,7 +1308,7 @@
 
         //设置微信分享的参数
       function setWeiXinShareParams() {
-        if (wx) {
+        if (typeof wx !== 'undefined') {
           var url = 'http://' + window.location.host + '/weshares/view/' + vm.weshare.id;
           //creator
           var to_timeline_title = '朋友说—基于信任关系的分享平台';

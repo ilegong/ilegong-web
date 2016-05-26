@@ -1,12 +1,12 @@
 <div class="get-user-info" ng-controller="GetUserInfoCtr as vm" ng-init="vm.focus='left';vm.loadShareType='{{$type}}';vm.myShareNextPage();">
-    <div class="refer-back-bg">
+    <div class="refer-back-bg menu-top">
         {{$title}}
         <a href="/weshares/get_self_info">
             <img src="{{$STATIC_HOST}}/static/img/back.png"/>
             <label>返回</label>
         </a>
     </div>
-    <ul class="mine-share-tab clearfix">
+    <ul class="mine-share-tab has-menu-top extra-margin clearfix">
         <li class="left-tab" ng-class="{'current':vm.focus == 'left'}" ng-click="vm.myShareNextPage('left');">进行中</li>
         <li class="middle-tab" ng-class="{'current':vm.focus == 'middle'}" ng-click="vm.myShareNextPage('middle');">已结束</li>
         <li class="right-tab" ng-class="{'current':vm.focus == 'right'}" ng-click="vm.myShareNextPage('right');">已结算</li>
@@ -42,10 +42,10 @@
 $this->assign('title','朋友说-'.$title);
 $this->set('show_footer', false);
 $this->Html->css(array(
-$STATIC_HOST.'/static/weshares/css/get-user-info.min.css?v2.5.0'
+$STATIC_HOST.'/static/weshares/css/get-user-info.min.css?v2.5.6'
 ), null, array('inline' => false));
 
 $this->Html->script(array(
-$STATIC_HOST.'/static/weshares/js/get-user-info.min.js?v2.5.0'
+$STATIC_HOST.'/static/weshares/js/get-user-info.min.js?v2.5.7'
 ), array('block' => 'scripts'))
 ?>

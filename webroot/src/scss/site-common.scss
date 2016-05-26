@@ -8,6 +8,7 @@ body {
   min-width: 320px;
   max-width: 640px;
   font-size: 13px;
+  background-color: #f1f1f1;
 }
 
 ul li {
@@ -16,6 +17,11 @@ ul li {
 
 textarea, input {
   outline: none
+}
+
+a {
+  color: #333333;
+  text-decoration: none;
 }
 
 a:visited {
@@ -83,7 +89,47 @@ a:-webkit-any-link {
   text-align: center;
 }
 
-footer {
+.has-menu-top {
+  margin-top: 47px !important;
+}
+
+.has-menu-top.extra-margin {
+  margin-top: 54px !important;
+}
+
+.menu-top {
+  line-height: 44px;
+  background-color: #FFFFFF;
+  border-bottom: 1px #dddddd solid;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  li {
+    float: left;
+    text-align: center;
+    font-size: 1.2em;
+    width: 25%;
+    a {
+      text-decoration: none;
+      color: #000;
+    }
+  }
+  li.focus {
+    border-bottom: 2px #ff6485 solid;
+    font-weight: bold;
+    a {
+      color: #ff6485;
+    }
+  }
+}
+
+.has-channel-bottom {
+  margin-bottom: 50px !important;
+}
+
+.channel_bottom {
   box-sizing: border-box;
   position: fixed;
   width: 100%;
@@ -94,18 +140,6 @@ footer {
   background: #f7f7f9;
   color: #666666;
   border-top: 1px #b3b4b6 solid;
-  a:visited {
-    text-decoration: none;
-  }
-  a:active {
-    text-decoration: none;
-  }
-  a:link {
-    text-decoration: none;
-  }
-}
-
-.channel_bottom {
   height: 49px;
   z-index: 10;
   .btm_item:nth-child(1), .btm_item:nth-child(3) {
@@ -190,6 +224,31 @@ footer {
   }
 }
 
+.refer-back-bg {
+  background-color: #f9f9f9;
+  color: #333333;
+  font-size: 1.3em;
+  text-align: center;
+  a {
+    position: absolute;
+    left: 15px;
+    text-decoration: none;
+    color: #333333;
+    width: 4em;
+    height: 44px;
+    label {
+      float: left;
+      padding-left: 5px;
+      font-size: 0.8em;
+    }
+    img {
+      float: left;
+      width: 8px;
+      margin-top: 14px;
+    }
+  }
+}
+
 .form-group.has-error {
   .form-control {
     color: red !important;
@@ -231,158 +290,37 @@ footer {
   display: none;
 }
 
-/*back*/
-.nav-bg {
-  background-color: #FFFFFF;
-  border-bottom: 1px #dddddd solid;
-  color: #333333;
-  line-height: 43px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 2;
-  a.nav-back {
-    text-decoration: none;
-    color: #333333;
-    width: 4em;
-    height: 43px;
-    padding-left: 12px;
-    img, label {
-      float: left;
-      font-size: 1.1em;
-    }
-    label {
-      padding-left: 5px;
-    }
-    img {
-      width: 8px;
-      margin-top: 14px;
-    }
-  }
-  h1 {
-    text-align: center;
-    font-weight: normal;
-    font-size: 1.3em;
-    line-height: 43px;
-    width: 104px;
-    left: 50%;
-    margin-left: -52px;
-    position: absolute;
-  }
-}
-
 .shares-container {
   .share {
     display: block;
     margin-bottom: 10px;
     background-color: #fff;
-    .share-header {
-      background: #fff;
-      position: relative;
-      padding: 10px 12px;
-      .avatar {
-        width: 40px;
-        height: 40px;
-        display: block;
-      }
-      .level {
-        width: 18px;
-        height: 18px;
-        border-radius: 18px;
-        background: #f99d3a;
-        font-size: .7em;
-        color: #fff;
-        text-align: center;
-        line-height: 18px;
-        position: absolute;
-        bottom: 10px;
-        left: 40px;
-      }
-      .nickname {
-        margin-left: 10px;
-        font-size: 1.2em;
-        color: #333;
-        line-height: 19px;
-        max-width: 160px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-      .label-container {
-        padding-left: 10px;
-        padding-top: 1px;
-        .label {
-          border-radius: 2px;
-          background-color: #eee;
-          color: #888;
-          padding: 1px 3px;
-          margin-right: 5px;
-          font-size: .9em;
-        }
-      }
-      .log{
-        color: #999;
-        padding-top: 1px;
-        font-size: 1em;
-        padding-left: 10px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        display: block;
-        max-width: 180px;
-      }
-      .subscription {
-        width: 64px;
-        border: 1px solid #bbb;
-        border-radius: 2px;
-        color: #666;
-        text-align: center;
-        line-height: 2em;
-        margin-top: 7px;
-        .subscribed{
-          display: none;
-        }
-        .subscribed.no {
-          display: block;
-        }
-        .subscribed.yes {
-          position: relative;
-          display: block;
-          span {
-            padding-left: 5px;
-            color: #666;
-            font-size: 1.1em;
-          }
-          label {
-            display: block;
-            position: relative;
-            margin-top: 11px;
-          }
-          .unfollow {
-            position: absolute;
-            border: 1px solid #bbb;
-            background-color: #FFF;
-            width: 64px;
-            text-align: center;
-            line-height: 2em;
-            top: 2em;
-            left: -1px;
-            z-index: 2;
-            border-radius: 2px;
-          }
-        }
-      }
-    }
     .image-container {
       display: block;
       text-align: center;
       position: relative;
+      overflow: hidden;
+      .image-cover {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        display: inline-block;
+        vertical-align: bottom;
+        overflow: hidden;
+        background-color: #cacccd;
+        vertical-index: 0;
+      }
       .image {
         display: inline-block;
         max-height: 280px;
         max-width: 100%;
+        z-index: 1;
       }
+
       .product-price-bg {
         z-index: 2;
         background-color: #333;
@@ -455,6 +393,103 @@ footer {
     }
   }
 }
+.proxy-level {
+  width: 18px;
+  height: 18px;
+  border-radius: 18px;
+  background: #f99d3a;
+  font-size: .7em;
+  color: #fff;
+  text-align: center;
+  line-height: 18px;
+  position: absolute;
+  bottom: 10px;
+  left: 40px;
+}
+.subscription {
+  width: 64px;
+  border: 1px solid #bbb;
+  border-radius: 2px;
+  color: #666;
+  text-align: center;
+  line-height: 2em;
+  margin-top: 7px;
+  .subscribed {
+    display: none;
+  }
+  .subscribed.no {
+    display: block;
+  }
+  .subscribed.yes {
+    position: relative;
+    display: block;
+    span {
+      padding-left: 5px;
+      color: #666;
+      font-size: 1.1em;
+    }
+    label {
+      display: block;
+      position: relative;
+      margin-top: 11px;
+    }
+    .unfollow {
+      position: absolute;
+      border: 1px solid #bbb;
+      background-color: #FFF;
+      width: 64px;
+      text-align: center;
+      line-height: 2em;
+      top: 2em;
+      left: -1px;
+      z-index: 2;
+      border-radius: 2px;
+    }
+  }
+}
+.share-header {
+  background: #fff;
+  position: relative;
+  padding: 10px 12px;
+  .avatar {
+    width: 40px;
+    height: 40px;
+    display: block;
+  }
+  .nickname {
+    margin-left: 10px;
+    font-size: 1.2em;
+    color: #333;
+    line-height: 19px;
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .label-container {
+    padding-left: 10px;
+    padding-top: 1px;
+    .label {
+      border-radius: 2px;
+      background-color: #eee;
+      color: #888;
+      padding: 1px 3px;
+      margin-right: 5px;
+      font-size: .9em;
+    }
+  }
+  .log {
+    color: #999;
+    padding-top: 1px;
+    font-size: 1em;
+    padding-left: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    max-width: 180px;
+  }
+}
 
 .scroll-loading {
   margin: 0px 6px;
@@ -465,11 +500,55 @@ footer {
   color: #f99d3a;
 }
 
-.scroll-to-top{
+.scroll-to-top {
   width: 40px;
   height: 40px;
   position: fixed;
   right: 15px;
   bottom: 65px;
   display: block;
+}
+
+.banners {
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+}
+
+.index-page {
+  .shares-container {
+    .share {
+      .image-container {
+        padding-bottom: 67%;
+      }
+    }
+  }
+}
+
+.user-list-page {
+  .fans_search {
+    margin: 0px 15px 10px 15px;
+    border: 1px #dddddd solid;
+    position: relative;
+    background-color: #ffffff;
+    input {
+      line-height: 20px;
+      margin: 5px;
+      width: 80%;
+      border: 0;
+      outline: none;
+    }
+    a {
+      display: block;
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      img {
+        width: 16px;
+        height: 17px;
+      }
+    }
+  }
 }

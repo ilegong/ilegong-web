@@ -1,14 +1,13 @@
 <div class="tutorial-page">
     <div class="binding-container" ng-controller="TutorialBindingCardCtrl as vm">
-        <div class="nav-bg">
-            <a class="nav-back fl" href="/users/tutorial">
+        <div class="menu-top refer-back-bg">
+            绑定收款账号
+            <a href="/users/tutorial">
                 <img src="{{$STATIC_HOST}}/static/weshares/images/back.png"/>
                 <label>返回</label>
             </a>
-
-            <h1 class="fl">绑定收款账号</h1>
         </div>
-        <div class="binding">
+        <div class="has-menu-top extra-margin">
             <div class="binding-card binding-card-type clearfix">
                 <label>账号类型</label>
                 <s class="clearfix">
@@ -62,12 +61,12 @@
     $this->assign('title','绑定收款账号');
 
 $this->Html->css(array(
-$STATIC_HOST.'/static/weshares/css/tutorial.min.css?v2.4.9'
+$STATIC_HOST.'/static/weshares/css/tutorial.min.css?v2.5.6'
 ), null, array('inline' => false))
 ?>
 
 <?php
 $this->Html->script(array(
-$STATIC_HOST.'/static/weshares/js/tutorial.min.js?v2.4.9'
+$STATIC_HOST.'/static/weshares/js/tutorial.min.js?v2.5.7'
 ), array('block' => 'scripts'))
 ?>

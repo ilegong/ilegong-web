@@ -2,9 +2,9 @@
   angular.module('weshares')
     .controller('ShareOptIndexController', ShareOptIndexController);
 
-  function ShareOptIndexController($rootScope, $http, $log, $q, $window, staticFilePath) {
+  function ShareOptIndexController($rootScope, $http, $log, $q, $window, Utils) {
     var vm = this;
-    vm.staticFilePath = staticFilePath;
+    vm.staticFilePath = Utils.staticFilePath();
     vm.loadData = loadData;
     vm.loadNextPage = loadNextPage;
     vm.onLoadOver = onLoadOver;

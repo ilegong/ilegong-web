@@ -5,9 +5,10 @@
     .controller('WesharesEditCtrl', WesharesEditCtrl);
 
 
-  function WesharesEditCtrl($scope, $rootScope, $log, $http, $timeout, wx, Utils, staticFilePath) {
+  function WesharesEditCtrl($scope, $rootScope, $log, $http, $timeout, wx, Utils) {
     var vm = this;
-    vm.staticFilePath = staticFilePath;
+    vm.staticFilePath = Utils.staticFilePath();
+    $log.log(vm.staticFilePath);
     vm.chooseAndUploadImage = chooseAndUploadImage;
     vm.uploadImage = uploadImage;
     vm.deleteImage = deleteImage;
@@ -171,12 +172,12 @@
           ]
         };
         //reset cache data
-        var $cacheData = PYS.storage.load(vm.dataCacheKey);
+        var $cacheData = Utils.Storage.load(vm.dataCacheKey);
         if ($cacheData) {
           if (!$cacheData['id'])
             vm.weshare = $cacheData;
         } else {
-          PYS.storage.save(vm.dataCacheKey, {}, 1);
+          Utils.Storage.save(vm.dataCacheKey, {}, 1);
         }
         setDefaultData();
         $rootScope.loadingPage = false;
@@ -215,7 +216,7 @@
     }
 
     function saveCacheData() {
-      PYS.storage.save(vm.dataCacheKey, vm.weshare, 1);
+      Utils.Storage.save(vm.dataCacheKey, vm.weshare, 1);
     }
 
     function uploadImage(localIds) {
@@ -347,7 +348,7 @@
       vm.weshare['delivery_templates'] = deliveryTemplates;
       $http.post('/weshares/save', vm.weshare).success(function (data) {
         if (data.success) {
-          PYS.storage.clear();
+          Utils.Storage.clear();
           window.location.href = '/weshares/view/' + data['id'];
         } else {
           window.location.href = '/weshares/user_share_info/';

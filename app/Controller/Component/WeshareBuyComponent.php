@@ -226,6 +226,24 @@ class WeshareBuyComponent extends Component
         return $shares;
     }
 
+    public function search_shares($uid, $keyword, $page, $limit)
+    {
+        $query_share_type = array(SHARE_TYPE_GROUP, SHARE_TYPE_DEFAULT, SHARE_TYPE_POOL_FOR_PROXY, SHARE_TYPE_POOL);
+        $weshareM = ClassRegistry::init('Weshare');
+        $shares = $weshareM->find('all', [
+            'conditions' => [
+                'creator' => $uid,
+                'type' => $query_share_type,
+                'title like' => '%' . $keyword . '%'
+            ],
+            'fields' => $this->query_list_share_fields,
+            'order' => array('created DESC'),
+            'limit' => $limit,
+            'page' => $page
+        ]);
+        return $shares;
+    }
+
     public function get_my_auth_shares($uid, $page, $limit, $status, $settlement)
     {
         $shareOperateSettingM = ClassRegistry::init('ShareOperateSetting');
@@ -777,6 +795,7 @@ class WeshareBuyComponent extends Component
     {
         //add filter
         $uids = $this->check_msg_log_and_filter_user($pintuan_data['pid'], $uids, MSG_LOG_PINTUAN_TYPE);
+        $this->save_msg_logs($pintuan_data['pid'], $uids, MSG_LOG_PINTUAN_TYPE);
         $OauthbindM = ClassRegistry::init('Oauthbind');
         $detail_url = WX_HOST . '/pintuan/detail/' . $pintuan_data['share_id'] . '?from=template_msg';
         if ($tag_id != 0) {
@@ -788,6 +807,7 @@ class WeshareBuyComponent extends Component
         $remark = '点击详情，赶快加入' . $sharer_name . '的拼团！';
         $openIds = $OauthbindM->findWxServiceBindsByUids($uids);
         if ($openIds) {
+            $openIds = array_unique($openIds);
             foreach ($openIds as $openId) {
                 $this->process_send_share_msg($openId, $title, $product_name, $detail_url, $sharer_name, $remark);
             }
@@ -797,8 +817,11 @@ class WeshareBuyComponent extends Component
     private function do_send_new_share_msg($weshare, $uids)
     {
         //add filter
+        $uids = $this->check_msg_log_and_filter_user($weshare['Weshare']['id'], $uids, MSG_LOG_NOTIFY_TYPE);
+        $uids = $this->check_msg_log_and_filter_user($weshare['Weshare']['refer_share_id'], $uids, MSG_LOG_NOTIFY_TYPE);
         $uids = $this->check_msg_log_and_filter_user($weshare['Weshare']['id'], $uids, MSG_LOG_RECOMMEND_TYPE);
         $uids = $this->check_msg_log_and_filter_user($weshare['Weshare']['refer_share_id'], $uids, MSG_LOG_RECOMMEND_TYPE);
+        $this->save_msg_logs($weshare['Weshare']['id'], $uids, MSG_LOG_NOTIFY_TYPE);
         $userM = ClassRegistry::init('User');
         $OauthbindM = ClassRegistry::init('Oauthbind');
         $sharer_user_info = $userM->find('first', array(
@@ -816,6 +839,7 @@ class WeshareBuyComponent extends Component
         $remark = '点击详情，赶快加入' . $sharer_name . '的分享！';
         $openIds = $OauthbindM->findWxServiceBindsByUids($uids);
         if ($openIds) {
+            $openIds = array_unique($openIds);
             foreach ($openIds as $openId) {
                 $this->process_send_share_msg($openId, $title, $product_name, $detail_url, $sharer_name, $remark);
             }
@@ -2296,6 +2320,7 @@ class WeshareBuyComponent extends Component
         $deatil_url = $this->get_weshares_detail_url($weshare_info['id']);
         $product_name = $weshare_info['title'];
         if (!empty($buy_open_ids)) {
+            $buy_open_ids = array_unique($buy_open_ids);
             foreach ($buy_open_ids as $open_id) {
                 $this->Weixin->send_share_buy_complete_msg($open_id, $msg_content, $product_name, $tuan_leader_name, $remark, $deatil_url);
             }
@@ -2352,6 +2377,12 @@ class WeshareBuyComponent extends Component
     {
         $share_creator = $weshare_info['creator']['id'];
         $fans_ids = $this->load_fans_buy_sharer($share_creator, $limit, $offset);
+        //filter user
+        $fans_ids = $this->check_msg_log_and_filter_user($weshare_info['id'], $fans_ids, MSG_LOG_NOTIFY_TYPE);
+        $fans_ids = $this->check_msg_log_and_filter_user($weshare_info['refer_share_id'], $fans_ids, MSG_LOG_NOTIFY_TYPE);
+        $fans_ids = $this->check_msg_log_and_filter_user($weshare_info['id'], $fans_ids, MSG_LOG_RECOMMEND_TYPE);
+        $fans_ids = $this->check_msg_log_and_filter_user($weshare_info['refer_share_id'], $fans_ids, MSG_LOG_RECOMMEND_TYPE);
+        $this->save_msg_logs($weshare_info['id'], $fans_ids, MSG_LOG_NOTIFY_TYPE);
         $this->do_send_buy_percent_msg($weshare_info, $fans_ids, $msg_content);
     }
 
@@ -2373,13 +2404,13 @@ class WeshareBuyComponent extends Component
             $deatil_url = $this->get_weshares_detail_url($weshare_info['id']) . '?from=_template_msg';
             $already_buy_uids = $this->get_has_buy_user($weshare_info['id']);
             foreach ($fans_open_ids as $uid => $open_id) {
+                $fans_open_ids = array_unique($fans_open_ids);
                 if (!in_array($uid, $already_buy_uids)) {
                     $title = $fans_data_nickname[$uid] . '你好，' . $msg_content;
                     $this->Weixin->send_share_buy_complete_msg($open_id, $title, $product_name, $tuan_leader_name, $remark, $deatil_url);
                 }
             }
         }
-
     }
 
     /**
@@ -2442,8 +2473,10 @@ class WeshareBuyComponent extends Component
         $followers = $this->check_msg_log_and_filter_user($weshareId, $followers, MSG_LOG_NOTIFY_TYPE);
         //check msg logs filter users
         $followers = $this->check_msg_log_and_filter_user($weshareId, $followers, MSG_LOG_RECOMMEND_TYPE);
+        //filter refer share id
         $followers = $this->check_msg_log_and_filter_user($weshare['Weshare']['refer_share_id'], $followers, MSG_LOG_NOTIFY_TYPE);
         $followers = $this->check_msg_log_and_filter_user($weshare['Weshare']['refer_share_id'], $followers, MSG_LOG_RECOMMEND_TYPE);
+        $this->save_msg_logs($weshareId, $followers, MSG_LOG_RECOMMEND_TYPE);
         $openIds = $this->Oauthbind->findWxServiceBindsByUids($followers);
         if (!empty($openIds)) {
             foreach ($openIds as $openId) {
@@ -2459,27 +2492,32 @@ class WeshareBuyComponent extends Component
      * @return array
      * 查找用户消息记录，过滤用户
      */
-    public function check_msg_log_and_filter_user($data_id, $user_ids, $type)
+    private function check_msg_log_and_filter_user($data_id, $user_ids, $type)
     {
         if ($data_id == 0) {
-            return $user_ids;
+            return [];
         }
         $msgLogM = ClassRegistry::init('MsgLog');
-        //添加更多的过滤条件 (比如每天只收一次)
         $q_date = date('Y-m-d');
         $msgLogs = $msgLogM->find('all', array(
             'conditions' => array(
                 'data_id' => $data_id,
                 'data_type' => $type,
-                'created > ' => $q_date
+                'created > ' => $q_date,
+                'user_id' => $user_ids
             ),
             'fields' => array('user_id'),
-            'limit' => 3000,
+            'limit' => 500,
             'order' => array('id desc')
         ));
         $msgLogUserIds = Hash::extract($msgLogs, '{n}.MsgLog.user_id');
         $user_ids = array_diff($user_ids, $msgLogUserIds);
         $user_ids = array_filter($user_ids);
+        return $user_ids;
+    }
+
+    private function save_msg_logs($data_id, $user_ids, $type)
+    {
         $saveMsgLogData = array();
         foreach ($user_ids as $item_uid) {
             $saveMsgLogData[] = array(
@@ -2490,9 +2528,9 @@ class WeshareBuyComponent extends Component
             );
         }
         if (!empty($saveMsgLogData)) {
+            $msgLogM = ClassRegistry::init('MsgLog');
             $msgLogM->saveAll($saveMsgLogData);
         }
-        return $user_ids;
     }
 
     /**
@@ -2577,9 +2615,8 @@ class WeshareBuyComponent extends Component
                 'deleted' => DELETED_NO
             )
         ));
-        $pageSize = 10;
-        $pageCount = ($totalRecords + $pageSize - 1) / $pageSize;
-        $pageCount = intval($pageCount);
+        $pageSize = 5;
+        $pageCount = ceil($totalRecords / $pageSize);
         return array('pageCount' => $pageCount, 'pageSize' => $pageSize);
     }
 

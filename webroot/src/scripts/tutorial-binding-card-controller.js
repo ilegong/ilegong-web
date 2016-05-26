@@ -5,9 +5,9 @@
     .controller('TutorialBindingCardCtrl', TutorialBindingCardCtrl);
 
 
-  function TutorialBindingCardCtrl($scope, $rootScope, $log, $http, $interval, Utils, staticFilePath) {
+  function TutorialBindingCardCtrl($scope, $rootScope, $log, $http, $interval, Utils) {
     var vm = this;
-    vm.staticFilePath = staticFilePath;
+    vm.staticFilePath = Utils.staticFilePath();
     vm.canBindCard = canBindCard;
     vm.bindCard = bindCard;
     vm.onAccountChanged = onAccountChanged;

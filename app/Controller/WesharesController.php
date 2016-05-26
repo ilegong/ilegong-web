@@ -1133,9 +1133,7 @@ class WesharesController extends AppController
             $parent_summery_data['summery']['all_total_price'] = $child_share_data_item['summery']['all_total_price'] + $parent_summery_data['summery']['all_total_price'];
             $parent_summery_data['summery']['real_total_price'] = $child_share_data_item['summery']['real_total_price'] + $parent_summery_data['summery']['real_total_price'];
             $parent_summery_data['summery']['all_coupon_price'] = $child_share_data_item['summery']['all_coupon_price'] + $parent_summery_data['summery']['all_coupon_price'];
-
             $parent_summery_data['child_share_order_count'] = $parent_summery_data['child_share_order_count'] + $child_share_data_item['summery']['all_buy_user_count'];
-
             $rebate_logs = $child_share_data_item['rebate_logs'];
             $parent_summery_data['rebate_logs'] = array_merge($parent_summery_data['rebate_logs'], $rebate_logs);
             $share_rebate_money = $child_share_data_item['share_rebate_money'];
@@ -1252,7 +1250,6 @@ class WesharesController extends AppController
     public function process_send_new_share_msg($shareId, $pageCount, $pageSize)
     {
         $this->autoRender = false;
-        $this->log('task send new share msg weshare id ' . $shareId . ' page count ' . $pageCount . ' page size ' . $pageSize, LOG_INFO);
         $tasks = array();
         foreach (range(0, $pageCount) as $page) {
             $offset = $page * $pageSize;
@@ -1271,31 +1268,9 @@ class WesharesController extends AppController
      */
     public function send_new_share_msg_task($shareId, $limit, $offset)
     {
-        $this->log('child buy percent task ' . $shareId . ' limit ' . $limit . ' offset ' . $offset, LOG_INFO);
         $this->autoRender = false;
         $this->WeshareBuy->send_new_share_msg($shareId, $limit, $offset);
         echo json_encode(array('success' => true));
-        return;
-    }
-
-    /**
-     * @param $weshare_id
-     * @param $pageCount
-     * @param $pageSize
-     * 发送团购进度消息任务
-     */
-    public function process_send_buy_percent_msg($weshare_id, $pageCount, $pageSize)
-    {
-        $this->autoRender = false;
-        $this->log('task send buy percent msg weshare id ' . $weshare_id . ' page count ' . $pageCount . ' page size ' . $pageSize, LOG_INFO);
-        $tasks = array();
-        $msg_content = $_REQUEST['content'];
-        foreach (range(0, $pageCount) as $page) {
-            $offset = $page * $pageSize;
-            $tasks[] = array('url' => "/weshares/send_buy_percent_msg_task/" . $weshare_id . "/" . $pageSize . "/" . $offset, "postdata" => "content=" . $msg_content);
-        }
-        $ret = $this->RedisQueue->add_tasks('tasks', $tasks);
-        echo json_encode(array('success' => true, 'ret' => $ret));
         return;
     }
 
@@ -1314,13 +1289,32 @@ class WesharesController extends AppController
 
     /**
      * @param $weshare_id
+     * @param $pageCount
+     * @param $pageSize
+     * 发送团购进度消息任务
+     */
+    public function process_send_buy_percent_msg($weshare_id, $pageCount, $pageSize)
+    {
+        $this->autoRender = false;
+        $tasks = array();
+        $msg_content = $_REQUEST['content'];
+        foreach (range(0, $pageCount) as $page) {
+            $offset = $page * $pageSize;
+            $tasks[] = array('url' => "/weshares/send_buy_percent_msg_task/" . $weshare_id . "/" . $pageSize . "/" . $offset, "postdata" => "content=" . $msg_content);
+        }
+        $ret = $this->RedisQueue->add_tasks('tasks', $tasks);
+        echo json_encode(array('success' => true, 'ret' => $ret));
+        return;
+    }
+
+    /**
+     * @param $weshare_id
      * @param $limit
      * @param $offset
      * 发送团购进度消息子任务
      */
     public function send_buy_percent_msg_task($weshare_id, $limit, $offset)
     {
-        $this->log('child buy percent task ' . $weshare_id . ' limit ' . $limit . ' offset ' . $offset, LOG_INFO);
         $this->autoRender = false;
         $share_info = $this->ShareUtil->get_weshare_detail($weshare_id);
         $msg_content = $_REQUEST['content'];

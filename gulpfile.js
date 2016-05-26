@@ -70,7 +70,8 @@ var all_js = [
   }, {
     name: 'user-info.min.js',
     sources: [
-      'webroot/src/scripts/user-list-controller.js'
+      'webroot/src/scripts/user-list-controller.js',
+      'webroot/src/scripts/subscription-controller.js',
     ],
     dist: 'webroot/static/weshares/js/'
   }, {
@@ -98,9 +99,9 @@ var all_css = [
   }, {
     name: 'weshare-view.min.css',
     sources: [
-      'webroot/static/weshares/css/main.css',
-      'webroot/static/weshares/css/share-balance-view.css',
-      'webroot/static/weshares/css/share.css',
+      'webroot/src/scss/main.css',
+      'webroot/src/scss/share-balance-view.css',
+      'webroot/src/scss/share.css',
     ],
     dist: 'webroot/static/weshares/css/'
   }, {
@@ -110,40 +111,9 @@ var all_css = [
     ],
     dist: 'webroot/static/weshares/css/'
   }, {
-    name: 'index.min.css',
-    sources: [
-      'webroot/src/scss/index.scss'
-    ],
-    dist: 'webroot/static/weshares/css/'
-  }, {
-    name: 'share-opt-index.min.css',
-    sources: [
-      'webroot/src/scss/share-opt-index.scss',
-    ],
-    dist: 'webroot/static/weshares/css/'
-  }, {
-    name: 'opt.min.css',
-    sources: [
-      'webroot/static/opt/css/postinfo.css',
-      'webroot/static/opt/css/opt.css',
-    ],
-    dist: 'webroot/static/opt/css/'
-  }, {
-    name: 'product_pool.min.css',
-    sources: [
-      'webroot/static/product_pool/css/product_pool.css',
-    ],
-    dist: 'webroot/static/product_pool/css/'
-  }, {
     name: 'share-info.min.css',
     sources: [
       'webroot/static/weshares/css/share-info.css',
-    ],
-    dist: 'webroot/static/weshares/css/'
-  }, {
-    name: 'user-info.min.css',
-    sources: [
-      'webroot/src/scss/user-info.css',
     ],
     dist: 'webroot/static/weshares/css/'
   }, {

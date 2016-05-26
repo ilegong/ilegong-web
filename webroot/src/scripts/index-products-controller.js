@@ -4,19 +4,18 @@
     .controller('IndexCtrl', IndexCtrl);
 
 
-  function IndexCtrl($scope, $rootScope, $http, $log, $attrs, staticFilePath) {
+  function IndexCtrl($scope, $rootScope, $http, $log, $attrs, Utils) {
     var vm = this;
-    vm.staticFilePath = staticFilePath;
-    vm.checkHasUnRead = checkHasUnRead;
+    vm.staticFilePath = Utils.staticFilePath();
     vm.getSummary = getSummary;
 
     activate();
     function activate() {
       $rootScope.showUnReadMark = false;
       $rootScope.proxies = [];
-      $rootScope.loadingPage=false;
+      $rootScope.loadingPage = false;
       vm.uid = -1;
-      vm.checkHasUnRead();
+      $rootScope.checkHasUnRead();
       $http.get('/users/get_id_and_proxies').success(function (data) {
         $log.log(data);
         if (data.uid != null) {
@@ -52,14 +51,6 @@
         return {orders_count: 0, view_count: 0, orders_and_creators: []};
       }
       return indexProduct.summary;
-    }
-
-    function checkHasUnRead() {
-      $http.get('/share_opt/check_opt_has_new.json').success(function (data) {
-        if (data['has_new']) {
-          $rootScope.showUnReadMark = true;
-        }
-      });
     }
   }
 })

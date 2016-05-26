@@ -4,9 +4,9 @@
     .constant('wx', wx)
     .controller('TutorialBindingMobileCtrl', TutorialBindingMobileCtrl);
 
-  function TutorialBindingMobileCtrl($scope, $rootScope, $log, $http, $interval, $timeout, Utils, staticFilePath) {
+  function TutorialBindingMobileCtrl($scope, $rootScope, $log, $http, $interval, $timeout, Utils) {
     var vm = this;
-    vm.staticFilePath = staticFilePath;
+    vm.staticFilePath = Utils.staticFilePath();
     vm.canSendCode = canSendCode;
     vm.sendCode = sendCode;
     vm.getSendCodeText = getSendCodeText;

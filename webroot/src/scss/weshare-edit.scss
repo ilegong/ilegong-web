@@ -77,38 +77,6 @@
       margin-top: -1px;
     }
   }
-  // 公用
-  .refer-back-bg {
-    background-color: #ffffff;
-    border-bottom: 1px #ddd solid;
-    color: #333;
-    font-size: 1.3em;
-    line-height: 44px;
-    text-align: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 10;
-    a {
-      position: absolute;
-      left: 15px;
-      text-decoration: none;
-      color: #333333;
-      width: 4em;
-      height: 44px;
-      label {
-        padding-left: 5px;
-        font-size: 0.8em;
-        float: left;
-      }
-      img {
-        width: 8px;
-        margin-top: 14px;
-        float: left;
-      }
-    }
-  }
   //
   .dialog-delorder {
     box-shadow: 0 2px 11px #ccc;
@@ -364,7 +332,9 @@
       margin-right: 3px;
     }
     .section.send-time {
-      margin: 54px 12px 10px;
+      margin-right: 12px;
+      margin-bottom: 10px;
+      margin-left: 12px;
       border-radius: 2px;
     }
     .section.ziti {
