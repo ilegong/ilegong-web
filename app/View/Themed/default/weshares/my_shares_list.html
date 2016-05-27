@@ -7,7 +7,7 @@
         </a>
     </div>
 
-    <ul class="clearfix share-search">
+    <ul class="clearfix share-search has-menu-top extra-margin">
         <li class="share-search-input"><input type="text" ng-model="vm.searchText" placeholder="输入分享名称搜索"></li>
         <li class="share-search-btn">
             <button type="button" ng-click="vm.doSearch()">查询</button>
@@ -62,7 +62,7 @@
 $this->assign('title','朋友说-'.$title);
 $this->set('show_footer', false);
 $this->Html->css(array(
-$STATIC_HOST.'/static/weshares/css/get-user-info.min.css?v2.5.7'
+$STATIC_HOST.'/static/weshares/css/get-user-info.min.css?v2.5.8'
 ), null, array('inline' => false));
 
 $this->Html->script(array(
