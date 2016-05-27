@@ -17,7 +17,6 @@
       vm.uid = -1;
       $rootScope.checkHasUnRead();
       $http.get('/users/get_id_and_proxies').success(function (data) {
-        $log.log(data);
         if (data.uid != null) {
           $rootScope.uid = data.uid;
           $rootScope.proxies = _.map(data.proxies, function (pid) {
@@ -25,7 +24,6 @@
           })
         }
         else {
-          $log.log('User not logged in');
         }
       }).error(function (data, e) {
         $log.log('Failed to get proxies: ' + e);
@@ -34,7 +32,6 @@
       var tag = $attrs.tag;
       vm.indexProducts = [];
       $http.get('/index_products/index_products/' + tag).success(function (data) {
-        $log.log(data);
         vm.indexProducts = _.map(data, function (p) {
           return {'id': p.IndexProduct.id, 'shareId': p.IndexProduct.share_id, 'summary': p.IndexProduct.summary};
         });
