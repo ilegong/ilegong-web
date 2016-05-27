@@ -1,9 +1,6 @@
 @charset "utf-8";
 /* CSS Document */
 .get-user-info {
-  .has-menu-top{
-    margin-top: 54px;
-  }
   /*mine-massage*/
   .mine-bg {
     background-color: #FF6485;
@@ -484,7 +481,7 @@
     color: #666666;
   }
 
-  .share-search{ padding:0 12px; margin-top: 54px; position: relative;}
+  .share-search{ padding:0 12px; position: relative;}
   .share-search-input{ border: 1px #ddd solid; background-color: #fff; padding: 8px 10px; border-radius: 4px;}
   .share-search input{ width: 85%; display: inline-block; border: 0; line-height: 18px; font-size: 1.1em;}
   .share-search-btn{ position: absolute; right: 12px; bottom: 0;}
