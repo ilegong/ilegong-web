@@ -23,8 +23,8 @@
                                 </dd>
                             </dl>
                         </li>
-                        <li class="fr simple-btn">
-                            <a ng-if="vm.currentUser" class="faq-sharer-btn" ng-click="vm.redirectFaq()" ng-bind="::vm.faqTipText">私信TA</a>
+                        <li class="fr simple-btn" ng-if="vm.currentUser">
+                            <a class="faq-sharer-btn" ng-click="vm.redirectFaq()" ng-bind="::vm.faqTipText">私信TA</a>
                         </li>
                         <li class="fr simple-btn" ng-if="vm.isCreator()||vm.canEditShare||vm.isManage">
                             <a ng-click="vm.showShareControl=true;vm.showLayer=true;">分享管理</a>
