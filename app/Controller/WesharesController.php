@@ -701,21 +701,36 @@ class WesharesController extends AppController
         if ($uid && in_array($type, [1, 2, 3])) {
             $params = $this->__get_query_share_settlement_status_by_type($type);
             $shares = $this->WeshareBuy->get_my_shares($uid, $params['status'], $params['settlement'], $page, $limit);
-            $share_ids = Hash::extract($shares, '{n}.Weshare.id');
-            $share_list = [];
-            if (!empty($share_ids)) {
-                $order_count_result = $this->get_order_count_share_map($share_ids);
-                $share_balance_money = $this->get_share_balance_result($share_ids);
-                foreach ($shares as $shareItem) {
-                    $shareItem = $shareItem['Weshare'];
-                    $shareItem['order_count'] = empty($order_count_result[$shareItem['id']]) ? 0 : intval($order_count_result[$shareItem['id']]);
-                    $shareItem['balance_money'] = $share_balance_money[$shareItem['id']];
-                    $share_list[] = $shareItem;
-                }
-            }
+            $share_list = $this->combine_share_list_data($shares);
         }
         echo json_encode($share_list);
         exit();
+    }
+
+    public function search_shares_api($page=1)
+    {
+        $keyword = $_REQUEST['keyword'];
+        $uid = $this->currentUser['id'];
+        $shares = $this->WeshareBuy->search_shares($uid, $keyword, $page, 5);
+        $share_list = $this->combine_share_list_data($shares);
+        echo json_encode($share_list);
+        exit();
+    }
+
+    private function combine_share_list_data($shares){
+        $share_ids = Hash::extract($shares, '{n}.Weshare.id');
+        $share_list = [];
+        if (!empty($share_ids)) {
+            $order_count_result = $this->get_order_count_share_map($share_ids);
+            $share_balance_money = $this->get_share_balance_result($share_ids);
+            foreach ($shares as $shareItem) {
+                $shareItem = $shareItem['Weshare'];
+                $shareItem['order_count'] = empty($order_count_result[$shareItem['id']]) ? 0 : intval($order_count_result[$shareItem['id']]);
+                $shareItem['balance_money'] = $share_balance_money[$shareItem['id']];
+                $share_list[] = $shareItem;
+            }
+        }
+        return $share_list;
     }
 
     private function  __get_query_share_settlement_status_by_type($type)

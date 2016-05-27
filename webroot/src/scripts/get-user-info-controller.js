@@ -7,6 +7,8 @@
         $rootScope.loadingPage = false;
         vm.inDeleteShare = false;
         vm.showLayer = false;
+        vm.inNormalShareView = true;
+        vm.inSearchShare = false;
         vm.focus = 'share';
         vm.staticFilePath = Utils.staticFilePath();
         vm.uid = $attrs.uid;
@@ -37,7 +39,10 @@
             orderPage: 1,
             orderOver: false,
             tmpShares: [],
-            tmpSharesOver: false
+            tmpSharesOver: false,
+            searchShares : [],
+            searchSharesOver : false,
+            searchSharesPage : 1
         };
         vm.sub = sub;
         vm.unSub = unSub;
@@ -58,6 +63,38 @@
         vm.canManageShareOrder = canManageShareOrder;
         vm.doDeleteShare = doDeleteShare;
         vm.reOpenShare = reOpenShare;
+        vm.doSearch = doSearch;
+        vm.mySearchShareNextPage = mySearchShareNextPage;
+        vm.historySearchText = '';
+        vm.doBack = doBack;
+
+        function doBack(){
+            if(vm.inNormalShareView){
+                window.location.href='/weshares/get_self_info.html';
+            }else{
+                vm.inNormalShareView = true;
+                vm.inSearchShare = false;
+            }
+        }
+
+        function doSearch() {
+            if (Utils.isBlank(vm.searchText)) {
+                alert('请输入查询内容!');
+                return false;
+            }
+            if (Utils.isBlank(vm.historySearchText)) {
+                vm.historySearchText = vm.searchText;
+            } else {
+                if (vm.historySearchText != vm.searchText) {
+                    vm.mine.searchShares = [];
+                    vm.mine.searchSharesOver = false;
+                    vm.mine.searchSharesPage = 1;
+                }
+            }
+            vm.inNormalShareView = false;
+            vm.inSearchShare = true;
+            vm.mySearchShareNextPage();
+        }
 
         function canManageShareInfo(share) {
             if (vm.loadShareType == 0) {
@@ -180,8 +217,8 @@
             vm.showLayer = false;
         }
 
-        function reOpenShare(id){
-            if(vm.loading){
+        function reOpenShare(id) {
+            if (vm.loading) {
                 return false;
             }
             vm.loading = true;
@@ -189,7 +226,10 @@
             $http.get(url).success(function (data) {
                 if (data.success) {
                     vm.mine.sharesIng = [];
+                    vm.mine.sharesIngPage = 1;
+                    vm.mine.sharesIngOver = false;
                 }
+                alert('已经重新开团,点击进行中查看!');
                 vm.loading = false;
             }).error(function () {
                 alert("重新开团失败,请联系客服!");
@@ -209,8 +249,10 @@
                         return item.id == id;
                     });
                     vm.mine.sharesEnd = [];
-                    vm.mine.sharesBalance = [];
+                    vm.mine.sharesEndPage = 1;
+                    vm.mine.sharesEndOver = false;
                 }
+                alert('已经截团,点击已结束查看!');
                 vm.loading = false;
             }).error(function () {
                 alert("截团失败,请联系管理员!");
@@ -258,6 +300,25 @@
             } else {
                 vm.loading = false;
             }
+        }
+
+        function mySearchShareNextPage() {
+            if (vm.loading) {
+                return false;
+            }
+            var url = '/weshares/search_shares_api/' + vm.mine.searchSharesPage + '?keyword=' + vm.searchText;
+            vm.loading = true;
+            $http.get(url).success(function (data) {
+                vm.loading = false;
+                if (data.length == 0) {
+                    vm.mine.searchSharesOver = true;
+                } else {
+                    vm.mine.searchShares = vm.mine.searchShares.concat(data);
+                    vm.mine.searchSharesPage += 1;
+                }
+            }).error(function () {
+                vm.loading = false;
+            });
         }
 
         function myShareNextPage(tab) {
