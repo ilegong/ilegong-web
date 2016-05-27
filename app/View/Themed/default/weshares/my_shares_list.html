@@ -11,32 +11,43 @@
         <li class="middle-tab" ng-class="{'current':vm.focus == 'middle'}" ng-click="vm.myShareNextPage('middle');">已结束</li>
         <li class="right-tab" ng-class="{'current':vm.focus == 'right'}" ng-click="vm.myShareNextPage('right');">已结算</li>
     </ul>
-    <div class="mine_order" ng-repeat="share in vm.mine.tmpShares" infinite-scroll='vm.myShareNextPage();'
-         infinite-scroll-disabled='vm.mine.tmpSharesOver || vm.loading'
-         infinite-scroll-distance='0'>
-        <a class="clearfix share-goodlist" href="/weshares/view/&#123;&#123;share.id&#125;&#125;">
-            <div class="fl"><img lazy-src="&#123;&#123;share.default_image&#125;&#125;" fallback-src="{{$STATIC_HOST}}/static/img/default_product_banner.png" /></div>
-            <h1>&#123;&#123;share.title&#125;&#125;</h1>
-            <em ng-if="share.status == 0 && share.settlement == 0" style="display: none" ng-class="{'show-b':share.status == 0 && share.settlement == 0}">进行中</em>
-            <em ng-if="share.status == 1 && share.settlement == 0" style="display: none" ng-class="{'show-b':share.status == 1 && share.settlement == 0}">已结束</em>
-            <em ng-if="share.status == 1 && share.settlement == 1" style="display: none" ng-class="{'show-b':share.status == 1 && share.settlement == 1}">已结算</em>
-            <label><span>编号：&#123;&#123;share.id&#125;&#125;</span>，<span>&#123;&#123;share.created&#125;&#125;</span></label>
-        </a>
-        <s>待发货订单<span>&#123;&#123;share.order_count&#125;&#125;，</span>交易金额<span>￥&#123;&#123;share.balance_money&#125;&#125;</span></s>
-        <ul class="clearfix">
-            <li ng-if="vm.canManageShareInfo(share)"><a ng-click="vm.delShare(share.id)">删除</a></li>
-            <li ng-if="vm.canManageShareInfo(share)"><a href="/weshares/update/&#123;&#123;share.id&#125;&#125;">修改</a></li>
-            <li ng-if="vm.canManageShareOrder(share)"><a href="/weshares/share_order_list/&#123;&#123;share.id&#125;&#125;">订单管理</a></li>
-            <li ng-if="vm.share.status == 1&&vm.canManageShareInfo(share)" style="display: none" ng-class="{'show-b':vm.share.status == 1}">
-                <a ng-click="vm.stopShare(share.id)">重新开团</a>
-            </li>
-        </ul>
+    <div style="padding-top: 10px;">
+        <div class="mine_order" ng-repeat="share in vm.mine.tmpShares" infinite-scroll='vm.myShareNextPage();'
+             infinite-scroll-disabled='vm.mine.tmpSharesOver || vm.loading'
+             infinite-scroll-distance='0'>
+            <a class="clearfix share-goodlist" href="/weshares/view/&#123;&#123;share.id&#125;&#125;">
+                <div class="fl"><img lazy-src="&#123;&#123;share.default_image&#125;&#125;" fallback-src="{{$STATIC_HOST}}/static/img/default_product_banner.png" /></div>
+                <h1>&#123;&#123;share.title&#125;&#125;</h1>
+                <em ng-if="share.status == 0 && share.settlement == 0" style="display: none" ng-class="{'show-b':share.status == 0 && share.settlement == 0}">进行中</em>
+                <em ng-if="share.status == 1 && share.settlement == 0" style="display: none" ng-class="{'show-b':share.status == 1 && share.settlement == 0}">已结束</em>
+                <em ng-if="share.status == 1 && share.settlement == 1" style="display: none" ng-class="{'show-b':share.status == 1 && share.settlement == 1}">已结算</em>
+                <label><span>编号：&#123;&#123;share.id&#125;&#125;</span>，<span>&#123;&#123;share.created&#125;&#125;</span></label>
+            </a>
+            <s>待发货订单<span>&#123;&#123;share.order_count&#125;&#125;，</span>交易金额<span>￥&#123;&#123;share.balance_money&#125;&#125;</span></s>
+            <ul class="clearfix">
+                <li ng-if="vm.canManageShareInfo(share)"><a ng-click="vm.delShare(share)">删除</a></li>
+                <li ng-if="vm.canManageShareInfo(share)"><a href="/weshares/update/&#123;&#123;share.id&#125;&#125;">修改</a></li>
+                <li ng-if="vm.canManageShareOrder(share)"><a href="/weshares/share_order_list/&#123;&#123;share.id&#125;&#125;">订单管理</a></li>
+                <li ng-if="vm.share.status == 1&&vm.canManageShareInfo(share)" style="display: none" ng-class="{'show-b':vm.share.status == 1}">
+                    <a ng-click="vm.stopShare(share.id)">重新开团</a>
+                </li>
+            </ul>
+        </div>
     </div>
     <div align="center"
          style="margin:0px 6px;background-color:#FFFFFF;height:40px;line-height:40px;color: #f99d3a;" ng-show="vm.loading">
         <div>加载中...</div>
     </div>
 </div>
+<!--提示是否删除-->
+<div class="delete-share-dialog delete-share" ng-show="vm.inDeleteShare">
+    <h1 ng-bind="vm.deleteShareTipInfo">该分享中有2个待发货订单，确定删除该分享吗？</h1>
+    <dl class="clearfix">
+        <dt><a class="btn-cur" ng-click="vm.doDeleteShare()">确定</a></dt>
+        <dt><a ng-click="">取消</a></dt>
+    </dl>
+</div>
+<div class="layer-bg" ng-show="vm.showLayer" ng-click="vm.showLayer=false;vm.inDeleteShare=false;"></div>
 
 <?php
 $this->assign('title','朋友说-'.$title);
