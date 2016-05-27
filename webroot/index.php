@@ -153,12 +153,6 @@ if (isset($_SERVER['PATH_INFO']) && $_SERVER['PATH_INFO'] == '/favicon.ico') {
 App::uses('Dispatcher', 'Routing');
 $Dispatcher = new Dispatcher();
 
-//replace '/Taobao' to '/taobao'.
-if (strpos($_SERVER['REQUEST_URI'], '/Taobao') !== false) {
-    $_SERVER['REQUEST_URI'] = str_replace('/Taobao', '/taobao', $_SERVER['REQUEST_URI']);
-    header('location:' . $_SERVER['REQUEST_URI']);
-    exit;
-}
 
 if (isset($_GET['url'])) {
     $request = new CakeRequest($_GET['url']);

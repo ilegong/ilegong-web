@@ -13,7 +13,9 @@
                 </div>
                 <div class="share-content">
                     <h1 class="share-title" ng-bind="share.title"></h1>
-                    <p>{{vm.username}}说" <span ng-bind="share.description"></span>"</p>
+                    <p><span class="text-danger" ng-bind="vm.username+'说：'"></span>
+                        <span ng-bind="share.description"></span>
+                    </p>
                 </div>
             </a>
             <dl class="clearfix share-data">

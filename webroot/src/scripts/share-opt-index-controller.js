@@ -15,7 +15,6 @@
     function activate() {
       vm.shares = [];
       $http.get('/users/get_id_and_proxies').success(function (data) {
-        $log.log(data);
         if (data.uid != null) {
           $rootScope.uid = data.uid;
           $rootScope.proxies = _.map(data.proxies, function (pid) {
@@ -23,10 +22,8 @@
           })
         }
         else {
-          $log.log('User not logged in');
         }
       }).error(function (data, e) {
-        $log.log('Failed to get proxies: ' + e);
       });
     }
 
@@ -52,7 +49,6 @@
       var time = _.min(_.map(vm.shares, function (s) {
         return s.NewOptLog.time;
       }));
-      $log.log('try to load data before ' + time);
       $http.get("/share_opt/fetch_opt_list_data.json?limit=10&type=0&time=" + time).success(function (data) {
         if (data.error) {
           deferred.reject(data.error);
@@ -70,7 +66,6 @@
           deferred.reject('no more data');
         }
 
-        $log.log(shares);
         var shareIds = _.map(shares, function (s) {
           return s.Weshare.id;
         });
@@ -93,7 +88,6 @@
 
     function onLoadOver(detail) {
       vm.loadOver = true;
-      $log.log('load over, detail: ' + detail);
       //$loadingDiv.find('div').text('数据加载中...');
       //if (data.error) {
       //  loadDataFlag = 0;

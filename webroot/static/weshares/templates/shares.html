@@ -22,23 +22,19 @@
                     <span ng-bind="share.NewOptLog.data_type_tag"></span>
                 </div>
             </li>
-            <li class="fr subscription" ng-controller="SubscriptionController as sub">
+            <li class="fr simple-btn subscription" ng-controller="SubscriptionController as sub">
                 <div class="subscribed" ng-class="{'no': !sub.isSubscribed(share.Proxy.id)}"
                      ng-click="sub.subscribe(share.Proxy.id)">关注TA
                 </div>
                 <div class="subscribed" ng-class="{'yes': sub.isSubscribed(share.Proxy.id)}"
                      ng-click="sub.clickSubscribedBtn(share.Proxy.id, $event)">
                     <a href="#X" class="clearfix">
-                <span class="fl">
-                    已关注
-                    <i class="fa fa-angle-down"></i>
-                </span>
-                        <label class="fl">
-                            <i></i>
-                            <em></em>
-                        </label>
+                        <span class="fl">
+                            已关注
+                            <i class="fa fa-angle-down"></i>
+                        </span>
                     </a>
-                    <a class="unfollow" ng-show="sub.showUnSubscribeBtn"
+                    <a class="simple-btn unfollow" ng-show="sub.showUnSubscribeBtn"
                        ng-click="sub.unSubscribe(share.Proxy.id)">取消关注</a>
                 </div>
             </li>
@@ -51,7 +47,7 @@
         <a class="share-content" href="/weshares/view/{{share.Weshare.id}}">
             <h1 class="share-title" ng-bind="share.Weshare.title"></h1>
 
-            <p class="share-description"><span ng-bind-html="share.Weshare.description | unsafe"></span></p>
+            <p class="share-description digest"><span ng-bind-html="share.Weshare.description | unsafe"></span></p>
         </a>
 
         <dl class="share-summary clearfix ">
