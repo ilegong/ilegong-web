@@ -5,6 +5,8 @@
     function GetUserInfoCtr($rootScope, $http, $attrs, Utils) {
         var vm = this;
         $rootScope.loadingPage = false;
+        vm.inDeleteShare = false;
+        vm.showLayer = false;
         vm.focus = 'share';
         vm.staticFilePath = Utils.staticFilePath();
         vm.uid = $attrs.uid;
@@ -55,6 +57,7 @@
         vm.canManageShareInfo = canManageShareInfo;
         vm.canManageShareOrder = canManageShareOrder;
         vm.doDeleteShare = doDeleteShare;
+        vm.reOpenShare = reOpenShare;
 
         function canManageShareInfo(share) {
             if (vm.loadShareType == 0) {
@@ -148,10 +151,14 @@
             vm.prepareDeleteShare = share;
             vm.inDeleteShare = true;
             vm.showLayer = true;
-            vm.deleteShareTipInfo = '该分享中有' + share['order_count'] + '个订单，确定删除该分享吗？';
+            if (share['order_count'] > 0) {
+                vm.deleteShareTipInfo = '该分享中有' + share['order_count'] + '个订单，确定删除该分享吗？';
+            } else {
+                vm.deleteShareTipInfo = '确定删除该分享吗？';
+            }
         }
 
-        function doDeleteShare(){
+        function doDeleteShare() {
             var id = vm.prepareDeleteShare.id;
             if (vm.loading) {
                 return false;
@@ -160,18 +167,32 @@
             var url = "/weshares/delete_share/" + id;
             $http.get(url).success(function (data) {
                 if (data.success) {
-                    vm.mine.tmpShares = _.reject(vm.mine.tmpShares, function(item){ return item.id == id; });;
-                    if (vm.focus == 'left') {
-                        vm.mine.sharesIng = tmp;
-                    } else if (vm.focus == 'middle') {
-                        vm.mine.sharesEnd = tmp;
-                    } else if (vm.focus == 'right') {
-                        vm.mine.sharesBalance = tmp;
-                    }
+                    vm.mine.tmpShares = _.reject(vm.mine.tmpShares, function (item) {
+                        return item.id == id;
+                    });
                 }
                 vm.loading = false;
             }).error(function () {
-                alert("截团失败,请联系管理员!");
+                alert("删除失败,请联系客服!");
+                vm.loading = false;
+            });
+            vm.inDeleteShare = false;
+            vm.showLayer = false;
+        }
+
+        function reOpenShare(id){
+            if(vm.loading){
+                return false;
+            }
+            vm.loading = true;
+            var url = "/weshares/cloneShare/" + id;
+            $http.get(url).success(function (data) {
+                if (data.success) {
+                    vm.mine.sharesIng = [];
+                }
+                vm.loading = false;
+            }).error(function () {
+                alert("重新开团失败,请联系客服!");
                 vm.loading = false;
             });
         }
@@ -184,20 +205,11 @@
             var url = "/weshares/stopShare/" + id;
             $http.get(url).success(function (data) {
                 if (data.success) {
-                    var tmp = [];
-                    for (var i = 0; i < vm.mine.tmpShares.length; i++) {
-                        if (parseInt(vm.mine.tmpShares[i].id) != id) {
-                            tmp.push(vm.mine.tmpShares[i]);
-                        }
-                    }
-                    vm.mine.tmpShares = tmp;
-                    if (vm.focus == 'left') {
-                        vm.mine.sharesIng = tmp;
-                    } else if (vm.focus == 'middle') {
-                        vm.mine.sharesEnd = tmp;
-                    } else if (vm.focus == 'right') {
-                        vm.mine.sharesBalance = tmp;
-                    }
+                    vm.mine.tmpShares = _.reject(vm.mine.tmpShares, function (item) {
+                        return item.id == id;
+                    });
+                    vm.mine.sharesEnd = [];
+                    vm.mine.sharesBalance = [];
                 }
                 vm.loading = false;
             }).error(function () {

@@ -6,7 +6,15 @@
             <label>返回</label>
         </a>
     </div>
-    <ul class="mine-share-tab has-menu-top extra-margin clearfix">
+
+    <ul class="clearfix share-search">
+        <li class="share-search-input"><input type="text" ng-model="vm.searchText" placeholder="输入分享名称搜索"></li>
+        <li class="share-search-btn">
+            <button type="button" ng-click="vm.doSearch()">查询</button>
+        </li>
+    </ul>
+
+    <ul class="mine-share-tab clearfix">
         <li class="left-tab" ng-class="{'current':vm.focus == 'left'}" ng-click="vm.myShareNextPage('left');">进行中</li>
         <li class="middle-tab" ng-class="{'current':vm.focus == 'middle'}" ng-click="vm.myShareNextPage('middle');">已结束</li>
         <li class="right-tab" ng-class="{'current':vm.focus == 'right'}" ng-click="vm.myShareNextPage('right');">已结算</li>
@@ -27,27 +35,26 @@
             <ul class="clearfix">
                 <li ng-if="vm.canManageShareInfo(share)"><a ng-click="vm.delShare(share)">删除</a></li>
                 <li ng-if="vm.canManageShareInfo(share)"><a href="/weshares/update/&#123;&#123;share.id&#125;&#125;">修改</a></li>
+                <li ng-if="share.status == 0 && vm.canManageShareInfo(share)"><a ng-click="vm.stopShare(share.id)">截止团购</a></li>
+                <li ng-if="share.status == 1 && vm.loadShareType == 0"><a ng-click="vm.reOpenShare(share.id)">重新开团</a></li>
                 <li ng-if="vm.canManageShareOrder(share)"><a href="/weshares/share_order_list/&#123;&#123;share.id&#125;&#125;">订单管理</a></li>
-                <li ng-if="vm.share.status == 1&&vm.canManageShareInfo(share)" style="display: none" ng-class="{'show-b':vm.share.status == 1}">
-                    <a ng-click="vm.stopShare(share.id)">重新开团</a>
-                </li>
             </ul>
         </div>
+        <div align="center"
+             style="margin:0px 6px;background-color:#FFFFFF;height:40px;line-height:40px;color: #f99d3a;" ng-show="vm.loading">
+            <div>加载中...</div>
+        </div>
     </div>
-    <div align="center"
-         style="margin:0px 6px;background-color:#FFFFFF;height:40px;line-height:40px;color: #f99d3a;" ng-show="vm.loading">
-        <div>加载中...</div>
+    <!--提示是否删除-->
+    <div style="display: none;" ng-class="{'show-b' : true}" class="delete-share-dialog delete-share" ng-show="vm.inDeleteShare">
+        <h1 ng-bind="vm.deleteShareTipInfo"></h1>
+        <dl class="clearfix">
+            <dt><a class="btn-cur" ng-click="vm.doDeleteShare()">确定</a></dt>
+            <dt><a ng-click="vm.inDeleteShare=false;vm.showLayer=false;vm.prepareDeleteShare=null;">取消</a></dt>
+        </dl>
     </div>
+    <div style="display: none;" ng-class="{'show-b' : true}" class="layer-bg" ng-show="vm.showLayer" ng-click="vm.showLayer=false;vm.inDeleteShare=false;"></div>
 </div>
-<!--提示是否删除-->
-<div class="delete-share-dialog delete-share" ng-show="vm.inDeleteShare">
-    <h1 ng-bind="vm.deleteShareTipInfo">该分享中有2个待发货订单，确定删除该分享吗？</h1>
-    <dl class="clearfix">
-        <dt><a class="btn-cur" ng-click="vm.doDeleteShare()">确定</a></dt>
-        <dt><a ng-click="">取消</a></dt>
-    </dl>
-</div>
-<div class="layer-bg" ng-show="vm.showLayer" ng-click="vm.showLayer=false;vm.inDeleteShare=false;"></div>
 
 <?php
 $this->assign('title','朋友说-'.$title);

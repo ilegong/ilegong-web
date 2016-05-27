@@ -772,6 +772,16 @@ class WesharesController extends AppController
         $this->set('title', $title);
     }
 
+    public function search_my_shares(){
+        $uid = $this->currentUser['id'];
+        if (empty($uid)) {
+            $this->redirect('/users/login');
+        }
+        $query = $_REQUEST['query'];
+        $this->set('title', '查询分享');
+        $this->set('query', $query);
+    }
+
     public function my_order_list()
     {
         $uid = $this->currentUser['id'];
