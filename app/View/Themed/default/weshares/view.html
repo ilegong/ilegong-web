@@ -25,7 +25,8 @@
                            ng-bind="::vm.weshare.creator.nickname"></a>
                         <dl class="label-container clearfix">
                             <dd class="fl label">
-                                {{vm.weshare.creator.label ? vm.weshare.creator.label : "吃货向标"}}
+                                <span ng-bind="vm.weshare.creator.label" ng-if="!_.isEmpty(vm.weshare.creator.label)"></span>
+                                <span ng-if="_.isEmpty(vm.weshare.creator.label)">吃货向标</span>
                             </dd>
                         </dl>
                     </li>
