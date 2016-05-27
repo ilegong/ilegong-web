@@ -88,7 +88,6 @@
         vm.getShareSummeryData = getShareSummeryData;
         vm.filterProductByNum = filterProductByNum;
         vm.currentUserOrderCount = 0;
-        vm.totalBuyCount = 0;
         vm.rebateFee = 0;
         vm.orderPayTotalPrice = 0;
         vm.productTotalPrice = 0;
@@ -192,15 +191,10 @@
         }
 
         function getShareSummeryData(shareId, userId) {
-            $http({
-                method: 'GET',
-                url: '/weshares/get_share_summery_data/' + shareId + '/' + userId + '.json',
-                cache: $templateCache
-            }).success(function (data, status) {
-                vm.totalBuyCount = data['order'];
-                vm.totalCommentCount = data['comment'];
-            }).error(function (data, status) {
-
+            $http.get('/weshares/summaries', {params: {shareIds: JSON.stringify([shareId])}}).success(function (summaries) {
+                vm.weshare.summary = summaries[0];
+            }).error(function (data, e) {
+                $log.log('Failed to get summaries: ' + e);
             });
         }
 
@@ -770,7 +764,7 @@
 
         function defaultNotifyHasBuyMsgContent() {
             var msgContent = '';
-            if (vm.totalBuyCount > 10) {
+            if (vm.weshare.summary.order_count > 10) {
                 var index = 0;
                 for (var userId in vm.shareOrder['users']) {
                     var user = vm.shareOrder['users'][userId];
@@ -784,7 +778,7 @@
                         msgContent = msgContent + user['nickname'] + '，';
                     }
                 }
-                msgContent = msgContent + '...等' + vm.totalBuyCount + '人都已经报名' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title + '啦，就差你啦。';
+                msgContent = msgContent + '...等' + vm.weshare.summary.order_count + '人都已经报名' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title + '啦，就差你啦。';
             } else {
                 msgContent = _.reduce(vm.shareOrder.users, function (memo, user) {
                     return memo + user['nickname'] + '，';
@@ -1327,8 +1321,8 @@
             to_timeline_title = vm.weshare.creator.nickname + '分享:' + vm.weshare.title;
             to_friend_title = vm.weshare.creator.nickname + '分享:' + vm.weshare.title;
             imgUrl = vm.weshare.images[0] || vm.weshare.creator.image;
-            if (vm.totalBuyCount >= 5) {
-              desc = '已经有' + vm.totalBuyCount + '人报名，' + shareIntryResult;
+            if (vm.weshare.summary.order_count >= 5) {
+              desc = '已经有' + vm.weshare.summary.order_count + '人报名，' + shareIntryResult;
             } else {
               desc = shareIntryResult;
             }
