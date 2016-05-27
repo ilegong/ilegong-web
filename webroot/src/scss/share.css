@@ -2,15 +2,6 @@
 .product-image{ position: relative; background-color: #ffffff; text-align: center;}
 .product-image img{ max-height:280px; max-width: 100%;}
 
-/*sharedetail*/
-.sharedetail{ background-color: #ffffff; padding: 15px 12px 5px 12px;}
-.sharedetail h1 { font-size: 1.2em; color: #333; margin-bottom: 10px !important;}
-.sharedetail p { color: #999; padding-bottom: 15px;}
-.sharedetail .images {margin-top: 10px;}
-.sharedetail .images dt {float: left;margin-right: 10px;position: relative;height: 65px;  }
-.sharedetail .images dt img {width: 60px;height: 60px;}
-.sharedetail .images dt a {width: 100%;}
-
 .recommend-head{ padding-bottom: 0px;}
 .recommend{ position: absolute;right:0; top:0;}
 .recommend a img{ width: 4.5em; height:2em; border: 1px #f99d3a solid; border-radius: 5px;}
@@ -25,19 +16,6 @@
 
 .commission a{ padding-bottom: 10px; color: #f99d3a; display: block;}
 .text1{font-size:1.15em; color:#333; padding:10px 12px 0;}
-.yandong{font-size:1em;color:#666666;}
-.take-time { background-color: #FFF; padding: 8px 12px; line-height: 24px; border-top: 1px #eee solid; font-size: 1.1em; color: #999;}
-
-
-/*recommend sharer*/
-.recommend-sharer { background-color: #FFF; margin-top: 10px; padding: 12px; font-size: 1.1em;}
-.recommend-sharer .proxy img{ width: 100%; height: 100%; border-radius: 50%;}
-.recommend-sharer .proxy{ width: 30px; height: 30px; margin-right: 5px; margin-bottom: 5px;}
-.recommend-sharer .tz-recommend{line-height: 30px;}
-.recommend-sharer .me-introduce { border-radius: 2px; border: 1px solid #f99d3a; width: 70px; text-align: center; line-height: 24px;}
-.recommend-sharer .me-introduce .introduce{font-size:1em; color: #f99d3a; padding:2px;}
-.recommend-sharer .introduce-money{ font-size:1em; color:#ff6485; line-height: 24px; padding-left: 8px;}
-
 
 /*product*/
 .product-title { font-size: 1.1em; color: #666; padding: 15px 15px 10px 12px;}

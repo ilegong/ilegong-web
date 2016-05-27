@@ -88,7 +88,9 @@ a:-webkit-any-link {
 .text-center {
   text-align: center;
 }
-
+.text-danger{
+  color: #ff6485 !important;
+}
 .has-menu-top {
   margin-top: 47px !important;
 }
@@ -510,6 +512,51 @@ a:-webkit-any-link {
       transition: opacity 1s;
       background-color: rgb(255, 255, 255);
     }
+  }
+}
+
+.share-take-time {
+  background-color: #FFF;
+  padding: 8px 12px;
+  line-height: 24px;
+  border-top: 1px #eee solid;
+  font-size: 1.1em;
+  color: #999;
+}
+
+/*recommend sharer*/
+.share-recommends {
+  background-color: #FFF;
+  margin-top: 10px;
+  padding: 12px;
+  font-size: 1.1em;
+  .proxy {
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+    }
+  }
+  .tz-recommend {
+    line-height: 30px;
+  }
+  .me-introduce {
+    border-radius: 2px;
+    border: 1px solid #f99d3a;
+    width: 70px;
+    text-align: center;
+    line-height: 24px;
+    .introduce{font-size:1em; color: #f99d3a; padding:2px;}
+  }
+  .introduce-money {
+    font-size: 1em;
+    color: #ff6485;
+    line-height: 24px;
+    padding-left: 8px;
   }
 }
 
