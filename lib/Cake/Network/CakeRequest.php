@@ -233,6 +233,11 @@ class CakeRequest implements ArrayAccess {
 			return $_SERVER['PATH_INFO'];
 		} elseif (isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], '://') === false) {
 			$uri = $_SERVER['REQUEST_URI'];
+			if(stripos($uri, "index.php"))
+			{
+				$uri = substr($uri, stripos($uri, "index.php")+9);
+			}
+
 		} elseif (isset($_SERVER['REQUEST_URI'])) {
 			$qPosition = strpos($_SERVER['REQUEST_URI'], '?');
 			if ($qPosition !== false && strpos($_SERVER['REQUEST_URI'], '://') > $qPosition) {

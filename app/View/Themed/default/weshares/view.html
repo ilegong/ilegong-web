@@ -5,37 +5,43 @@
         <div ng-if="vm.showShareDetailView" ng-click="vm.showUnSubscribe=false;">
             <div ng-class="{'has-channel-bottom': vm.weshare.type==0||vm.weshare.type==4||vm.weshare.type==6}">
                 <div ng-init="vm.showUnSubscribe=false;">
-                    <a href="/weshares/add?from=share_view" class="share-banner"><img
-                            ng-src="{{::vm.staticFilePath}}/static/weshares/images/share-banner-new.gif"/></a>
-                    <ul class="sharer clearfix" style="display: none;" ng-class="{'show-b': true}">
-                        <li class="fl detail-head">
-                            <img lazy-src="{{vm.weshare.creator.image}}"
-                                 ng-click="vm.toUserShareInfo(vm.weshare.creator.id)"/>
-                        </li>
-                        <li class="sharer-label" ng-bind='"L"+vm.weshare.creator.level.data_value'>L0</li>
+                    <a href="/weshares/add?from=share_view" class="banners">
+                        <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/share-banner-new.gif"/>
+                    </a>
+                    <ul class="share-header clearfix">
                         <li class="fl">
-                            <div class="nickname" ng-bind="::vm.weshare.creator.nickname"></div>
-                            <div style=" margin-left:10px;">
-                                <label class="sharer-level" style="display: none;"></label>
-                                <label class="sharer-fans">粉丝<span ng-bind="::vm.userShareSummery.follower_count">0</span></label>
-                            </div>
+                            <a href="/weshares/user_share_info/{{vm.weshare.creator.id}}">
+                                <img class="avatar radius50" lazy-src="{{vm.weshare.creator.image}}"/>
+                            </a>
                         </li>
-                        <li class="fr ta">
-                            <a ng-if="vm.currentUser" class="faq-sharer-btn" ng-click="vm.redirectFaq()" ng-bind="::vm.faqTipText">私信TA</a>
+                        <li class="proxy-level" ng-bind='"L"+vm.weshare.creator.level.data_value'>L0</li>
+                        <li class="fl">
+                            <a class="nickname" href="/weshares/user_share_info/{{vm.weshare.creator.id}}" ng-bind="::vm.weshare.creator.nickname"></a>
+                            <dl class="label-container clearfix">
+                                <dd class="fl label">
+                                    {{vm.weshare.creator.label ? vm.weshare.creator.label : "吃货向标"}}
+                                </dd>
+                            </dl>
                         </li>
-                        <li class="fr ta" ng-if="vm.isCreator()||vm.canEditShare||vm.isManage">
+                        <li class="fr simple-btn" ng-if="vm.currentUser">
+                            <a class="faq-sharer-btn" ng-click="vm.redirectFaq()" ng-bind="::vm.faqTipText">私信TA</a>
+                        </li>
+                        <li class="fr simple-btn" ng-if="vm.isCreator()||vm.canEditShare||vm.isManage">
                             <a ng-click="vm.showShareControl=true;vm.showLayer=true;">分享管理</a>
                         </li>
-                        <li class="fr ta" style="position: relative;" ng-if="!vm.isCreator()">
-                            <a ng-if="!vm.userSubStatus" ng-click="vm.subSharer();">+关注</a>
-                            <a class="clearfix" style="display: block;" ng-if="vm.userSubStatus" ng-click="vm.showUnSubscribe=!vm.showUnSubscribe;$event.stopPropagation();">
-                                <span>已关注</span>
-                                <label ng-class="{'tangle-up': vm.showUnSubscribe, 'tangle-down': !vm.showUnSubscribe}">
-                                    <i></i>
-                                    <em></em>
-                                </label>
-                                <a class="unfollow" ng-show="vm.showUnSubscribe" ng-click="vm.unSubSharer();">取消关注</a>
-                            </a>
+                        <li class="fr subscription" ng-if="!vm.isCreator()">
+                            <div class="simple-btn subscribed" ng-class="{'no':!vm.userSubStatus}" ng-click="vm.subSharer();">关注TA</div>
+
+                            <div class="simple-btn subscribed" ng-class="{'yes':vm.userSubStatus}" ng-click="vm.showUnSubscribe=!vm.showUnSubscribe;$event.stopPropagation();">
+                                <a href="#X" class="clearfix">
+                                    <span class="fl">
+                                        已关注
+                                        <i class="fa fa-angle-down"></i>
+                                    </span>
+                                </a>
+                                <a class="simple-btn unfollow" ng-show="vm.showUnSubscribe"
+                                   ng-click="vm.unSubSharer()">取消关注</a>
+                            </div>
                         </li>
                     </ul>
                     <div class="product-image"
@@ -420,7 +426,7 @@
 <?php
     $this->assign('title','微分享');
     $this->Html->css(array(
-    $STATIC_HOST.'/static/weshares/css/weshare-view.min.css?v2.5.6'
+    $STATIC_HOST.'/static/weshares/css/weshare-view.min.css?v2.5.8'
     ), null, array('inline' => false));
 
     $this->Html->script(array(
