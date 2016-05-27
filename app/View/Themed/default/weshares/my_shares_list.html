@@ -7,12 +7,14 @@
         </a>
     </div>
 
+    {{if $type==0}}
     <ul class="clearfix share-search has-menu-top extra-margin">
         <li class="share-search-input"><input type="text" ng-model="vm.searchText" placeholder="输入分享名称搜索"></li>
         <li class="share-search-btn">
             <button type="button" ng-click="vm.doSearch()">查询</button>
         </li>
     </ul>
+    {{/if}}
 
     <div ng-if="vm.inNormalShareView">
         <ul class="mine-share-tab clearfix">
