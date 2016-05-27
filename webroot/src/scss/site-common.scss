@@ -406,14 +406,18 @@ a:-webkit-any-link {
   bottom: 10px;
   left: 40px;
 }
-.subscription {
+.simple-btn{
   width: 64px;
   border: 1px solid #bbb;
+  background-color: #FFF;
   border-radius: 2px;
   color: #666;
   text-align: center;
   line-height: 2em;
   margin-top: 7px;
+  margin-left: 7px;
+}
+.subscription {
   .subscribed {
     display: none;
   }
@@ -435,15 +439,11 @@ a:-webkit-any-link {
     }
     .unfollow {
       position: absolute;
-      border: 1px solid #bbb;
-      background-color: #FFF;
-      width: 64px;
-      text-align: center;
-      line-height: 2em;
       top: 2em;
       left: -1px;
       z-index: 2;
-      border-radius: 2px;
+      margin-top: 0;
+      margin-left: 0;
     }
   }
 }

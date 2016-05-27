@@ -41,28 +41,21 @@
                         </dd>
                     </dl>
                     <div class="log" style="display: none;">
-                        <span></span>
-                        <span></span>
-                        <span></span>
                     </div>
                 </li>
                 <li class="fr subscription" ng-controller="SubscriptionController as sub">
-                    <div class="subscribed" ng-class="{'no': !sub.isSubscribed({{$product['share_user_id']}})}"
+                    <div class="simple-btn subscribed" ng-class="{'no': !sub.isSubscribed({{$product['share_user_id']}})}"
                          ng-click="sub.subscribe({{$product['share_user_id']}})">关注TA
                     </div>
-                    <div class="subscribed" ng-class="{'yes': sub.isSubscribed({{$product['share_user_id']}})}"
+                    <div class="simple-btn subscribed" ng-class="{'yes': sub.isSubscribed({{$product['share_user_id']}})}"
                          ng-click="sub.clickSubscribedBtn({{$product['share_user_id']}}, $event)">
                         <a href="#X" class="clearfix">
                             <span class="fl">
                                 已关注
                                 <i class="fa fa-angle-down"></i>
                             </span>
-                            <label class="fl">
-                                <i></i>
-                                <em></em>
-                            </label>
                         </a>
-                        <a class="unfollow" ng-show="sub.showUnSubscribeBtn"
+                        <a class="simple-btn unfollow" ng-show="sub.showUnSubscribeBtn"
                            ng-click="sub.unSubscribe({{$product['share_user_id']}})">取消关注</a>
                     </div>
                 </li>

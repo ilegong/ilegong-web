@@ -18,7 +18,7 @@
                     </dd>
                 </dl>
             </li>
-            <li class="fr subscription" ng-controller="SubscriptionController as sub">
+            <li class="fr simple-btn subscription" ng-controller="SubscriptionController as sub">
                 <div class="subscribed" ng-class="{'no': !sub.isSubscribed(user.User.id)}"
                      ng-click="sub.subscribe(user.User.id)">关注TA
                 </div>
