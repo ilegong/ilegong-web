@@ -838,6 +838,8 @@ class WeshareBuyComponent extends Component
         $title = '关注的' . $sharer_name . '发起了';
         $remark = '点击详情，赶快加入' . $sharer_name . '的分享！';
         $openIds = $OauthbindM->findWxServiceBindsByUids($uids);
+        $this->log('debug send share percent msg uids '.json_encode($uids) . ' weshare info '.json_encode($weshare));
+        $this->log('debug send share percent msg openids '.json_encode($openIds) . ' weshare info '.json_encode($weshare));
         if ($openIds) {
             $openIds = array_unique($openIds);
             foreach ($openIds as $openId) {
