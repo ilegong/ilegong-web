@@ -337,51 +337,42 @@
 
         <div ng-if="vm.weshare.type==0||vm.weshare.type==4||vm.weshare.type==6">
             <footer class="channel_bottom" ng-if="!vm.isShareManager()">
-                <a class="btm_item item-opt small-item" href="/share_opt/index.html">
+                <a class="btm_item" href="/share_opt/index.html">
                     <i ng-if="vm.showUnReadMark" style="background:#f00;border-radius:50%;width:10px;height:10px;top:2px;left:11%;position:absolute; display: block;"></i>
                     <p class="iconfont" style="height: 20px;"><i class="fa fa-search"></i></p>
                     <b>发现</b>
                 </a>
-                <a class="btm_item item-buy large-item" ng-if="!vm.supportGroupBuy()&&vm.weshare.status == 0" ng-click="vm.buyProducts()">我要报名</a>
-                <a class="btm_item item-buy middle-item" ng-if="vm.supportGroupBuy()&&vm.weshare.status == 0" ng-click="vm.buyProducts()">我要报名</a>
-                <a class="btm_item item-buy middle-item" ng-if="vm.supportGroupBuy()&&vm.weshare.status == 0" ng-click="vm.showGroupShareTipDialog=true;vm.showLayer=true;" style="margin-right: 7%;">我要拼团</a>
-                <a class="btm_item item-cut-off large-item" ng-if="(vm.weshare.status == 2||vm.weshare.status == 1 || vm.weshare.status == -1)">报名已截止</a>
-                <a class="btm_item small-item" href="/weshares/user_share_info">
+                <a class="buy" ng-if="!vm.supportGroupBuy()&&vm.weshare.status == 0" ng-click="vm.buyProducts()">我要报名</a>
+                <a class="buy" ng-if="vm.supportGroupBuy()&&vm.weshare.status == 0" ng-click="vm.buyProducts()" style="width: 28%;">我要报名</a>
+                <a class="buy" ng-if="vm.supportGroupBuy()&&vm.weshare.status == 0" ng-click="vm.showGroupShareTipDialog=true;vm.showLayer=true;" style="width: 28%;margin-right: 7%;">我要拼团</a>
+                <a class="cut-off" ng-if="(vm.weshare.status == 2||vm.weshare.status == 1 || vm.weshare.status == -1)"
+                   style="background-color:#9EB1BD;">报名已截止</a>
+                <a class="btm_item" href="/weshares/user_share_info">
                     <p class="iconfont" style="height: 20px;"><i class="fa fa-user"></i></p>
                     <b>我的</b>
                 </a>
             </footer>
             <footer class="channel_bottom" ng-if="vm.isShareManager()">
-                <a class="btm_item item-opt small-item" href="/share_opt/index.html">
+                <a class="btm_item" href="/share_opt/index.html">
                     <i ng-if="vm.showUnReadMark" style="background:#f00;border-radius:50%;width:10px;height:10px;top:2px;left:11%;position:absolute; display: block;"></i>
                     <p class="iconfont" style="height: 20px;"><i class="fa fa-search"></i></p>
                     <b>发现</b>
                 </a>
-                <a class="btm_item item-buy middle-item" ng-if="vm.weshare.status == 0" ng-click="vm.buyProducts()" style="margin-left: 0px;">我要报名</a>
-                <a class="btm_item item-stop middle-item" ng-if="vm.weshare.status == 0" ng-click='vm.stopShare();'>截止报名</a>
-                <a class="btm_item item-cut-off middle-item" ng-if="vm.isShareManager()&&(vm.weshare.status == 2||vm.weshare.status == 1 ||  vm.weshare.status == -1)"
-                   style="margin-left: 0px;">报名已截止</a>
-                <a class="btm_item item-stop middle-item" ng-if="vm.isShareManager()&&(vm.weshare.status == 2||vm.weshare.status == 1 ||  vm.weshare.status == -1)" ng-class="{'processing': vm.cloneShareProcessing}"
-                   ng-click="vm.cloneShare()">重新开团</a>
-                <a class="btm_item small-item" href="/weshares/user_share_info" ng-if="vm.weshare.status == 2||vm.weshare.status == 1 || vm.weshare.status == -1">
+                <a class="buy" ng-if="vm.weshare.status == 0" ng-click="vm.buyProducts()" style="width: 28%;margin-left: 0px;">我要报名</a>
+                <a class="stop" ng-if="vm.weshare.status == 0" ng-click='vm.stopShare();'
+                   style="width: 28%;">截止报名</a>
+                <a class="cut-off" ng-if="vm.isShareManager()&&(vm.weshare.status == 2||vm.weshare.status == 1 ||  vm.weshare.status == -1)"
+                   style="width: 28%;margin-left: 0px;">报名已截止</a>
+                <a class="stop" ng-if="vm.isShareManager()&&(vm.weshare.status == 2||vm.weshare.status == 1 ||  vm.weshare.status == -1)" ng-class="{'processing': vm.cloneShareProcessing}"
+                   style="width: 28%;" ng-click="vm.cloneShare()">重新开团</a>
+                <a class="btm_item" style="width: 19%;" href="/weshares/user_share_info" ng-if="vm.weshare.status == 2||vm.weshare.status == 1 || vm.weshare.status == -1">
                     <p class="iconfont" style="height: 20px;"><i class="fa fa-user"></i></p>
                     <b>我的</b>
                 </a>
-<<<<<<< HEAD
                 <a class="btm_item" style="width: 19%;" ng-if="vm.weshare.status == 0" ng-click='vm.notifyFans();'>
                     <p class="iconfont" style="height: 20px;"><i class="fa fa-bell"></i></p>
                     <b>团购提醒</b>
                 </a>
-=======
-                <a class="btm_item small-item" ng-if="vm.weshare.status == 0&&vm.notifyType() == 1" ng-click='vm.notifyFans();'>
-                    <p class="iconfont" style="height: 20px;"><i class="fa fa-bell"></i></p>
-                    <b>团购提醒</b>
-                </a>
-                <a class="btm_item small-item" ng-if="vm.weshare.status == 0&&vm.notifyType() == 0" ng-click='vm.sendNewShareMsg();'>
-                    <p class="iconfont" style="height: 20px;"><i class="fa fa-bell"></i></p>
-                    <b>建团提醒</b>
-                </a>
->>>>>>> e469d699cc5e35534c3e9371ff4d912fa1a55362
             </footer>
         </div>
 
@@ -540,10 +531,10 @@
 <?php
     $this->assign('title','微分享');
 $this->Html->css(array(
-$STATIC_HOST.'/static/weshares/css/weshare-view.min.css?v2.5.10'
+$STATIC_HOST.'/static/weshares/css/weshare-view.min.css?v2.5.9'
 ), null, array('inline' => false));
 
 $this->Html->script(array(
-$STATIC_HOST.'/static/weshares/js/weshare-view.min.js?v2.5.8'
+$STATIC_HOST.'/static/weshares/js/weshare-view.min.js?v2.5.9'
 ), array('block' => 'scripts'))
 ?>
