@@ -1,7 +1,7 @@
 <div class="shares-container" infinite-scroll='vm.loadNextPage()'
      infinite-scroll-disabled='vm.loadOver||vm.loading'
      infinite-scroll-distance='0'>
-    <div class="share" ng-repeat="share in vm.shares">
+    <div class="share show-summary" ng-repeat="share in vm.shares">
         <ul class="share-header clearfix">
             <li class="fl">
                 <a href="/weshares/user_share_info/{{share.Proxy.id}}">

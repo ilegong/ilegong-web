@@ -23,7 +23,7 @@
                 $user_level = $index_product['UserLevel'];
             ?>
 
-        <div class="share">
+        <div class="share show-summary">
             <ul class="share-header clearfix">
                 <li class="fl">
                     <a href="/weshares/user_share_info/{{$product['share_user_id']}}">
@@ -64,8 +64,7 @@
             <a class="image-container" href="/weshares/view/{{$product['share_id']}}">
                 <div class="image-cover">
                     <img class="image" data-current="0"
-                         lazy-src="{{$this->Html->assetUrl($product['share_img'])}}"
-                         class="product-image lazy">
+                         lazy-src="{{$this->Html->assetUrl($product['share_img'])}}">
                 </div>
                 <span class="product-price-bg">
                     <label>￥</label><em>{{$product['share_price']}}</em>
