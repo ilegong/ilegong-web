@@ -716,7 +716,9 @@ class ShareManageController extends AppController
                 // $q_share_id = $_REQUEST['q_share_id'] ? $_REQUEST['q_share_id'] : -1;
                 $q_share_id = ($_REQUEST['q_share_id'] == -1) ? array_keys($all_fork_shares) : $_REQUEST['q_share_id'];
                 $fork_share_creators = Hash::extract($all_fork_shares, '{n}.creator');
-                $this->set_share_order_data($q_share_id, $fork_share_creators);
+                $start_date = $_REQUEST['start_date'];
+                $end_date = $_REQUEST['end_date'];
+                $this->set_share_order_data($q_share_id, $fork_share_creators, $start_date, $end_date);
                 $this->set('child_shares', $all_fork_shares);
                 $this->set('q_share_id', $_REQUEST['q_share_id']);
                 $this->set('current_share', $all_fork_shares[$_REQUEST['q_share_id']]);
@@ -728,11 +730,13 @@ class ShareManageController extends AppController
     /**
      * @param $share_id
      * @param array $patch_uids
+     * @param $start_date
+     * @param $end_date
      * 公用的设置订单数据
      */
-    private function set_share_order_data($share_id, $patch_uids = array())
+    private function set_share_order_data($share_id, $patch_uids = array(), $start_date = null, $end_date = null)
     {
-        $orders = $this->ShareManage->get_share_orders($share_id);
+        $orders = $this->ShareManage->get_share_orders($share_id, $start_date, $end_date);
         $user_ids = Hash::extract($orders, '{n}.Order.creator');
         $user_ids = array_merge($user_ids, $patch_uids);
         $user_data = $this->ShareManage->get_users_data($user_ids);
