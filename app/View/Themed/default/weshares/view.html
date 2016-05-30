@@ -335,8 +335,8 @@
             </div>
         </div>
 
-        <div ng-if="vm.weshare.type==0||vm.weshare.type==4||vm.weshare.type==6">
-            <footer class="channel_bottom" ng-if="!vm.isShareManager()">
+        <div class="hide" ng-class="{'show-b': vm.weshare.type==0||vm.weshare.type==4||vm.weshare.type==6}" ng-if="vm.weshare.type==0||vm.weshare.type==4||vm.weshare.type==6">
+            <footer class="channel_bottom" ng-if="{'show-b':!vm.isShareManager()}">
                 <a class="btm_item item-opt small-item" href="/share_opt/index.html">
                     <i ng-if="vm.showUnReadMark" style="background:#f00;border-radius:50%;width:10px;height:10px;top:2px;left:11%;position:absolute; display: block;"></i>
                     <p class="iconfont" style="height: 20px;"><i class="fa fa-search"></i></p>
@@ -374,7 +374,7 @@
             </footer>
         </div>
 
-        <div style="display: none;" ng-class="{'show-b': true}">
+        <div class="hide" ng-class="{'show-b': true}">
             <!--分享管理层-->
             <div class="share-control" ng-if="vm.showShareControl">
                 <a ng-if="vm.isCreator()||vm.isManage" ng-click="vm.toShareOrderList()" class="control-order">订单管理</a>
