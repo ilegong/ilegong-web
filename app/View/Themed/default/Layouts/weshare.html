@@ -14,8 +14,8 @@
 
 </head>
 
-<body>
-<div {{if $show_footer}}class="has-channel-bottom"{{/if}}>
+<body class="{{if WX_HOST == SH_SITE_HOST}}site-sh{{else}}site-bj{{/if}}">
+<div class="{{if $show_footer}}has-channel-bottom{{/if}}">
     {{$content_for_layout}}
 </div>
 
