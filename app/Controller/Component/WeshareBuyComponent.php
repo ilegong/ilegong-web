@@ -1014,16 +1014,6 @@ class WeshareBuyComponent extends Component
             'conditions' => [
                 'UserRelation.user_id' => $sharerId,
                 'UserRelation.deleted' => DELETED_NO,
-                'User.wx_subscribe_status' => 1
-            ],
-            'joins' => [
-                [
-                    'table' => 'users',
-                    'alias' => 'User',
-                    'conditions' => [
-                        'User.id = UserRelation.follow_id',
-                    ],
-                ]
             ],
             'fields' => ['UserRelation.follow_id'],
             'order' => ['UserRelation.id ASC']
@@ -1034,6 +1024,17 @@ class WeshareBuyComponent extends Component
         }
         $relations = $userRelationM->find('all', $cond);
         $follower_ids = Hash::extract($relations, '{n}.UserRelation.follow_id');
+        if(!empty($follower_ids)){
+            $userM = ClassRegistry::init('User');
+            $users = $userM->find('all', [
+                'conditions' =>[
+                    'id' => $follower_ids,
+                    'wx_subscribe_status' => 1
+                ] ,
+                'fields' => ['id']
+            ]);
+            $follower_ids = Hash::extract($users, '{n}.User.id');
+        }
         return $follower_ids;
     }
 
@@ -2495,7 +2496,7 @@ class WeshareBuyComponent extends Component
     private function check_msg_log_and_filter_user($data_id, $user_ids, $type)
     {
         if ($data_id == 0) {
-            return [];
+            return $user_ids;
         }
         $msgLogM = ClassRegistry::init('MsgLog');
         $q_date = date('Y-m-d');
