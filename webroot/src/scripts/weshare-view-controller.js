@@ -66,7 +66,6 @@
         vm.getFormatDate = getFormatDate;
         vm.notifyFans = notifyFans;
         vm.notifyType = notifyType;
-        vm.sendNewShareMsg = sendNewShareMsg;
         vm.sendNotifyShareMsg = sendNotifyShareMsg;
         vm.validNotifyMsgContent = validNotifyMsgContent;
         vm.subSharer = subSharer;
@@ -764,28 +763,33 @@
 
         function defaultNotifyHasBuyMsgContent() {
             var msgContent = '';
-            if (vm.weshare.summary.order_count > 10) {
-                var index = 0;
-                for (var userId in vm.shareOrder['users']) {
-                    var user = vm.shareOrder['users'][userId];
-                    index++;
-                    if (index > 10) {
-                        break;
+            if(vm.notifyType() == 0){
+                msgContent = '我发起了一个分享，时间有限，抓紧报名啦！';
+                return msgContent;
+            }else{
+                if (vm.weshare.summary.order_count > 10) {
+                    var index = 0;
+                    for (var userId in vm.shareOrder['users']) {
+                        var user = vm.shareOrder['users'][userId];
+                        index++;
+                        if (index > 10) {
+                            break;
+                        }
+                        if (index == 10) {
+                            msgContent = msgContent + user['nickname'];
+                        } else {
+                            msgContent = msgContent + user['nickname'] + '，';
+                        }
                     }
-                    if (index == 10) {
-                        msgContent = msgContent + user['nickname'];
-                    } else {
-                        msgContent = msgContent + user['nickname'] + '，';
-                    }
+                    msgContent = msgContent + '...等' + vm.weshare.summary.order_count + '人都已经报名' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title + '啦，就差你啦。';
+                } else {
+                    msgContent = _.reduce(vm.shareOrder.users, function (memo, user) {
+                        return memo + user['nickname'] + '，';
+                    }, '');
+                    msgContent = msgContent + '都已经报名' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title + '啦，就差你啦。';
                 }
-                msgContent = msgContent + '...等' + vm.weshare.summary.order_count + '人都已经报名' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title + '啦，就差你啦。';
-            } else {
-                msgContent = _.reduce(vm.shareOrder.users, function (memo, user) {
-                    return memo + user['nickname'] + '，';
-                }, '');
-                msgContent = msgContent + '都已经报名' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title + '啦，就差你啦。';
+                return msgContent;
             }
-            return msgContent;
         }
 
         function notifyFans() {
@@ -804,33 +808,6 @@
                 }
             }
             return 0;
-        }
-
-        function sendNewShareMsg() {
-            if (confirm('是否要发送消息，发送次数过多会对用户形成骚扰?')) {
-                $http({
-                    method: 'GET',
-                    url: '/weshares/send_new_share_msg/' + vm.weshare.id
-                }).success(function (data) {
-                    // With the data succesfully returned, call our callback
-                    if (data['success']) {
-                        var msg = '发送成功';
-                        if (data['msg']) {
-                            msg = data['msg'];
-                        }
-                        alert(msg);
-                    } else {
-                        if (data['reason'] == 'user_bad') {
-                            alert('发送失败，你已经被封号，请联系管理员..');
-                        }
-                        if (data['msg']) {
-                            alert(data['msg']);
-                        }
-                    }
-                }).error(function () {
-                    alert("发送失败,请联系朋友说客服。。");
-                });
-            }
         }
 
         function unSubSharer() {

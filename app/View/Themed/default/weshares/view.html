@@ -369,13 +369,9 @@
                     <p class="iconfont" style="height: 20px;"><i class="fa fa-user"></i></p>
                     <b>我的</b>
                 </a>
-                <a class="btm_item" style="width: 19%;" ng-if="vm.weshare.status == 0&&vm.notifyType() == 1" ng-click='vm.notifyFans();'>
+                <a class="btm_item" style="width: 19%;" ng-if="vm.weshare.status == 0" ng-click='vm.notifyFans();'>
                     <p class="iconfont" style="height: 20px;"><i class="fa fa-bell"></i></p>
                     <b>团购提醒</b>
-                </a>
-                <a class="btm_item" style="width: 19%;" ng-if="vm.weshare.status == 0&&vm.notifyType() == 0" ng-click='vm.sendNewShareMsg();'>
-                    <p class="iconfont" style="height: 20px;"><i class="fa fa-bell"></i></p>
-                    <b>建团提醒</b>
                 </a>
             </footer>
         </div>
