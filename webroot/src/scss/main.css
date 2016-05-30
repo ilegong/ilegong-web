@@ -32,7 +32,7 @@
     left: 10px;
     width: 1.167em;
     height: 1.133em;
-    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/pyshuo_icon.png) no-repeat -15.667em -5.333em;
+    background: url(http://static.tongshijia.com/static/weshares/images/pyshuo_icon.png) no-repeat -15.667em -5.333em;
     background-size: 20em 20em;
 }
 
@@ -43,7 +43,7 @@
     right: 10px;
     width: 1.2em;
     height: 1.133em;
-    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/pyshuo_icon.png) no-repeat -17.667em -5.333em;
+    background: url(http://static.tongshijia.com/static/weshares/images/pyshuo_icon.png) no-repeat -17.667em -5.333em;
     background-size: 20em 20em;
 }
 
@@ -1562,7 +1562,7 @@
     display: block;
     width: 0.667em;
     height: 1.334em;
-    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/pyshuo_icon.png) 0 -16.875em no-repeat;
+    background: url(http://static.tongshijia.com/static/weshares/images/pyshuo_icon.png) 0 -16.875em no-repeat;
     background-size: 25em 25em;
 }
 
@@ -1696,7 +1696,7 @@
 }
 
 .dialog-delorder .dialog-close {
-    background: url(http://51daifan-assets.stor.sinaapp.com/static/weshares/images/allBtn.png) -357px -1875px no-repeat;
+    background: url(http://static.tongshijia.com/static/weshares/images/allBtn.png) -357px -1875px no-repeat;
     float: right;
     height: 21px;
     margin-right: 6px;
