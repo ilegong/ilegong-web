@@ -882,10 +882,10 @@ class Router {
 		}
 		$protocol = preg_match('#^[a-z][a-z0-9+-.]*\://#i', $output);
 		if ($protocol === 0) {
-			$output = str_replace('//', '/', $base . '/' . $output);
+			//$output = str_replace('//', '/', $base . '/' . $output);
 
 			if ($full && defined('FULL_BASE_URL')) {
-				$output = FULL_BASE_URL . $output;
+				$output = FULL_BASE_URL . '/' . $output;
 			}
 			if (!empty($extension)) {
 				$output = rtrim($output, '/');
