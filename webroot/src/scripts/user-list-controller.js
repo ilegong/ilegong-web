@@ -134,8 +134,6 @@
             }
             return u;
           });
-          $log.log(data['users']);
-
           vm.users = vm.users.concat(data['users']);
           vm.sub_user_ids = vm.sub_user_ids.concat(data['sub_user_ids']);
           vm.page = vm.page + 1;

@@ -281,19 +281,28 @@ class ShareManageComponent extends Component
     /**
      * @param $share_id
      * @param int $only_paid
+     * @param $start_date
+     * @param $end_date
      * @return mixed
      * 获取分享的订单
      */
-    public function get_share_orders($share_id, $only_paid = 0)
+    public function get_share_orders($share_id, $only_paid = 0, $start_date = null, $end_date = null)
     {
         $OrderM = ClassRegistry::init('Order');
         $q_order_status = $only_paid == 1 ? [ORDER_STATUS_PAID] : [ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_COMMENT, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_COMMENT, ORDER_STATUS_DONE];
+        $q_cond = [
+            'type' => ORDER_TYPE_WESHARE_BUY,
+            'member_id' => $share_id,
+            'status' => $q_order_status,
+        ];
+        if(!empty($start_date)){
+            $q_cond['created > '] = $start_date;
+        }
+        if(!empty($end_date)){
+            $q_cond['created < '] = $end_date;
+        }
         $orders = $OrderM->find('all', array(
-            'conditions' => array(
-                'type' => ORDER_TYPE_WESHARE_BUY,
-                'member_id' => $share_id,
-                'status' => $q_order_status,
-            ),
+            'conditions' => $q_cond,
             'limit' => 2000
         ));
         return $orders;
