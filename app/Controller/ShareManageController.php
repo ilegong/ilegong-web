@@ -686,7 +686,9 @@ class ShareManageController extends AppController
             $sharePoolProductM = ClassRegistry::init('SharePoolProduct');
             $shareId = $sharePoolProductM->get_all_fork_shares($weshareId);
         }
-        $orders = $this->ShareManage->get_share_orders($shareId, $only_paid);
+        $start_date = $_REQUEST['start_date'];
+        $end_date = $_REQUEST['end_date'];
+        $orders = $this->ShareManage->get_share_orders($shareId, $only_paid, $start_date, $end_date);
         $order_ids = Hash::extract($orders, '{n}.Order.id');
         $order_cart_map = $this->ShareManage->get_order_cart_map($order_ids);
         $this->set('orders', $orders);
