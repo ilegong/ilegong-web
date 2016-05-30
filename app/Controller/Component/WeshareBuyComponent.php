@@ -715,9 +715,9 @@ class WeshareBuyComponent extends Component
                 //发送给分享者
                 $this->send_comment_notify($order_id, $share_id, $comment_content, $comment['Comment']['id']);
             }
-            if (!empty($comment['Comment']['id'])) {
-                $this->send_shareed_offer_notify($order_id, $share_id, $comment['Comment']['id']);
-            }
+//            if (!empty($comment['Comment']['id'])) {
+//                $this->send_shareed_offer_notify($order_id, $share_id, $comment['Comment']['id']);
+//            }
             //clean cache
             //$cache_key = SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $sharer_id . '_0';
             //$cache_key = SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $sharer_id . '_1';
