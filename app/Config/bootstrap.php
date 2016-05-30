@@ -506,6 +506,12 @@ function promo_code_new_user($pids) {
     return ((is_array($pids) && count($pids) == 1 && $pids[0] == PRODUCT_ID_CAKE) || ($pids == PRODUCT_ID_CAKE));
 }
 
+function redirect($url)
+{
+    header("Location: $url");
+    exit;
+}
+
 /**
  * @param $pid
  * @param $price
