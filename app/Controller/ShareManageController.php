@@ -738,7 +738,7 @@ class ShareManageController extends AppController
      */
     private function set_share_order_data($share_id, $patch_uids = array(), $start_date = null, $end_date = null)
     {
-        $orders = $this->ShareManage->get_share_orders($share_id, $start_date, $end_date);
+        $orders = $this->ShareManage->get_share_orders($share_id, 0, $start_date, $end_date);
         $user_ids = Hash::extract($orders, '{n}.Order.creator');
         $user_ids = array_merge($user_ids, $patch_uids);
         $user_data = $this->ShareManage->get_users_data($user_ids);
