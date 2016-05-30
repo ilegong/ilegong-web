@@ -721,6 +721,8 @@ class ShareManageController extends AppController
                 $this->set_share_order_data($q_share_id, $fork_share_creators, $start_date, $end_date);
                 $this->set('child_shares', $all_fork_shares);
                 $this->set('q_share_id', $_REQUEST['q_share_id']);
+                $this->set('start_date', $start_date);
+                $this->set('end_date', $end_date);
                 $this->set('current_share', $all_fork_shares[$_REQUEST['q_share_id']]);
                 $this->set('share_id', $share_id);
             }
