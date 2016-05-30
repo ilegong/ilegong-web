@@ -1531,7 +1531,7 @@ class OrdersController extends AppController {
         //TODO：检查是否可以应用这些券的合法性
         $used_coupons_str = $this->Session->read(self::key_balanced_conpons());
         $total_reduced_cent = 0;
-        $total_reduce_coupons = array();
+        $total_reduce_coupons = [];
         $total_price = 0;
         foreach ($order_results as $val) {
             $total_price += $val[1];

@@ -509,7 +509,7 @@ class WesharesController extends AppController
                         //use code
                         $this->order_use_coupon_code($coupon_id, $orderId, $uid);
                     } else {
-                        $this->order_use_score_and_coupon($orderId, $uid, 0, $totalPrice / 100);
+                        $this->order_use_score_and_coupon($coupon_id, $orderId, $uid, $totalPrice / 100);
                     }
                 }
                 //返利
@@ -1615,18 +1615,20 @@ class WesharesController extends AppController
     }
 
     /**
+     * @param $coupon_id
      * @param $order_id
      * @param $uid
-     * @param $brand_id
      * @param $total_all_price
      * 使用 积分和红包逻辑
      * 积分（没有用）
      */
-    private function order_use_score_and_coupon($order_id, $uid, $brand_id, $total_all_price)
+    private function order_use_score_and_coupon($coupon_id, $order_id, $uid, $total_all_price)
     {
         //use coupon
         App::uses('OrdersController', 'Controller');
         $ordersController = new OrdersController();
+        $brand_id = -1;
+        $this->Session->write($ordersController::key_balanced_conpons(), json_encode([$brand_id => [$coupon_id]]));
         $ordersController->Session = $this->Session;
         $order_results = array();
         $order_results[$brand_id] = array($order_id, $total_all_price);

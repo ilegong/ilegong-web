@@ -752,6 +752,11 @@ class Controller extends Object implements CakeEventListener {
 	public function redirect($url, $status = null, $exit = true) {
 		$this->autoRender = false;
 
+		if(is_string($url)){
+			$this->response->header('Location', $url);
+			return;
+		}
+
 		if (is_array($status)) {
 			extract($status, EXTR_OVERWRITE);
 		}
