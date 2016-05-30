@@ -715,9 +715,9 @@ class WeshareBuyComponent extends Component
                 //发送给分享者
                 $this->send_comment_notify($order_id, $share_id, $comment_content, $comment['Comment']['id']);
             }
-            if (!empty($comment['Comment']['id'])) {
-                $this->send_shareed_offer_notify($order_id, $share_id, $comment['Comment']['id']);
-            }
+//            if (!empty($comment['Comment']['id'])) {
+//                $this->send_shareed_offer_notify($order_id, $share_id, $comment['Comment']['id']);
+//            }
             //clean cache
             //$cache_key = SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $sharer_id . '_0';
             //$cache_key = SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $sharer_id . '_1';
@@ -2050,6 +2050,7 @@ class WeshareBuyComponent extends Component
      * @param $share_creator
      * @return int
      */
+//    TODO: Remove this method and replace with ShareUtil.get_index_product_summary()
     public function get_share_and_all_refer_share_summary($shareId, $share_creator)
     {
         $key = SHARE_COMMENT_COUNT_SUM_CACHE_KEY . '_' . $shareId . '_' . $share_creator;

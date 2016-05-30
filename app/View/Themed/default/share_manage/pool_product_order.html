@@ -17,13 +17,14 @@
                     <!-- /.table-responsive -->
                     <div class="well">
                         <h4>操作说明</h4>
-                        <p>输入分享ID，先查询，查询到结果可以操作。{{if !empty($q_share_id)}}&nbsp;&nbsp;&nbsp;<a href="/share_manage/order_export/{{$share_id}}/{{$q_share_id}}" type="button" class="btn btn-outline btn-primary" >导出待发货订单</a>{{/if}}
+                        <p>输入分享ID，先查询，查询到结果可以操作。{{if !empty($q_share_id)}}&nbsp;&nbsp;&nbsp;<a href="/share_manage/order_export/{{$share_id}}/{{$q_share_id}}?start_date={{$start_date}}&end_date={{$end_date}}" type="button" class="btn btn-outline btn-primary" >导出待发货订单</a>{{/if}}
                         </p>
                     </div>
                     <div class="well">
                         <form method="post" action="/share_manage/pool_product_order">
                             <div class="row">
-                                <div class="col-sm-7">
+                                <div class="col-sm-2">
+                                    <label>产品名字</label>
                                     <select class="form-control" id="pool-share-id" name="share_id" data-init-val="{{$share_id}}" autocomplete='off'>
                                         <option value='-1'>选择产品</option>
                                         {{loop $all_pool_products $product}}
@@ -32,20 +33,32 @@
                                     </select>
                                 </div>
                                 <div class="col-sm-2">
+                                    <label>分享人</label>
                                     <select class="form-control" id="pool-share-users" name="q_share_id">
                                         <option value='-1'>全部</option>
                                         {{loop $child_shares $child_share_id $child_share}}
                                             <option value="{{$child_share_id}}" {{if $child_share_id==$q_share_id}}selected{{/if}}>
-                                            {{$user_data[$child_share['creator']]['nickname']}}
-                                            {{if $child_share['type'] == SHARE_TYPE_POOL_FOR_PROXY}}
-                                            【渠道价购买链接】
-                                            {{/if}}
+                                                {{$user_data[$child_share['creator']]['nickname']}}
+                                                {{if $child_share['type'] == SHARE_TYPE_POOL_FOR_PROXY}}
+                                                【渠道价购买链接】
+                                                {{/if}}
                                             <strong>【{{$child_share_id}}】</strong>
                                         {{/loop}}
                                     </select>
                                 </div>
+                                <div class="col-sm-2">
+                                    <label>创建时间</label>
+                                    <input class="form-control" type="date" name="start_date" value="{{$start_date}}">
+                                </div>
+                                <div class="col-sm-2">
+                                    <label>至</label>
+                                    <input class="form-control" type="date" name="end_date" value="{{$end_date}}">
+                                </div>
+                                <div class="col-sm-2">
+                                    <label>&nbsp;&nbsp;</label>
+                                    <button type="submit" class="form-control btn btn-primary">查询</button>
+                                </div>
                             </div>
-                            <button type="submit" class="btn btn-primary">查询</button>
                         </form>
                     </div>
                     {{if !empty($orders)}}
