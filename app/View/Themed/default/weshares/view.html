@@ -169,7 +169,7 @@
                             ng-bind="vm.weshare.summary.order_count">0</span>)</span>
                     </li>
                     <li><span ng-click="vm.showCommentedOrders=true;" ng-class="{'focus-apply':vm.showCommentedOrders}">评价(<span
-                            ng-bind="vm.weshare.summary.view_count"></span>)</span></li>
+                            ng-bind="vm.weshare.summary.comment_count"></span>)</span></li>
                 </ul>
                 <div class="apply-list clearfix" ng-if="vm.weshare.summary.order_count>0">
                     <div style="position: relative;" ng-repeat="order in vm.ordersDetail.orders"
@@ -328,7 +328,7 @@
                      ng-show="!vm.showCommentedOrders">
                     <p>还没有人报名呢~</p>
                 </div>
-                <div class="apply-list empty-list  clearfix" ng-if="vm.weshare.summary.view_count==0"
+                <div class="apply-list empty-list  clearfix" ng-if="vm.weshare.summary.comment_count==0"
                      ng-show="vm.showCommentedOrders">
                     <p>还没有人评价呢~</p>
                 </div>

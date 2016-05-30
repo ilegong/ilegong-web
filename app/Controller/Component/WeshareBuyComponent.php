@@ -2050,6 +2050,7 @@ class WeshareBuyComponent extends Component
      * @param $share_creator
      * @return int
      */
+//    TODO: Remove this method and replace with ShareUtil.get_index_product_summary()
     public function get_share_and_all_refer_share_summary($shareId, $share_creator)
     {
         $key = SHARE_COMMENT_COUNT_SUM_CACHE_KEY . '_' . $shareId . '_' . $share_creator;
