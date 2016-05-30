@@ -2106,6 +2106,7 @@ class ShareUtilComponent extends Component
 
         $OrderM = ClassRegistry::init('Order');
         $WeshareM = ClassRegistry::init('Weshare');
+        $commentM = ClassRegistry::init('Comment');
         $related_share_ids = $WeshareM->get_relate_share($share_id);
 
         $order_count = $OrderM->find('count', array(
@@ -2114,6 +2115,13 @@ class ShareUtilComponent extends Component
         $view_count = $WeshareM->find('first', array(
             'fields' => array('Weshare.view_count'),
             'conditions' => array('id'=>$share_id),
+        ));
+        $comment_count = $commentM->find('count', array(
+            'conditions' => array(
+                'data_id' => $related_share_ids,
+                'parent_id' => 0,
+                'not' => array('status' => ORDER_STATUS_WAITING_PAY, 'order_id' => 0)
+            )
         ));
         $orders_and_creators = $OrderM->find('all', [
             'conditions' => [
@@ -2135,7 +2143,7 @@ class ShareUtilComponent extends Component
         ]);
         $orders_and_creators = Hash::extract($orders_and_creators, '{n}.User');
         $orders_and_creators = array_map('map_user_avatar3', $orders_and_creators);
-        $summary = array('view_count'=>$view_count['Weshare']['view_count'], 'order_count'=>strval($order_count), 'orders_and_creators'=>$orders_and_creators);
+        $summary = array('view_count'=>$view_count['Weshare']['view_count'], 'order_count'=>strval($order_count), 'comment_count'=>$comment_count, 'orders_and_creators'=>$orders_and_creators);
         Cache::write($key, json_encode($summary));
 
         return $summary;

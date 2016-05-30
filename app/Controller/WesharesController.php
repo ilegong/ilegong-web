@@ -262,20 +262,6 @@ class WesharesController extends AppController
         return;
     }
 
-    //获取分享的汇总数据
-    public function get_share_summery_data($shareId, $uid)
-    {
-        $this->autoRender = false;
-        try {
-            $summery = $this->WeshareBuy->get_share_and_all_refer_share_summary($shareId, $uid);
-        } catch (Exception $e) {
-            $this->log("Failed to get share and all refer share count for share " . $shareId . ": " . $e->getMessage(), LOG_ERR);
-            $summery = ['order' => 0, 'comment' => 0];
-        }
-        echo json_encode($summery);
-        exit();
-    }
-
     /**
      * @param $weshareId
      * ajax 获取分享的详细信息
