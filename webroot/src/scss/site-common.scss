@@ -19,6 +19,9 @@ textarea, input {
   outline: none
 }
 
+p{
+  margin: 0;
+}
 a {
   color: #333333;
   text-decoration: none;
@@ -144,11 +147,12 @@ a:-webkit-any-link {
   border-top: 1px #b3b4b6 solid;
   height: 49px;
   z-index: 10;
-  .btm_item:nth-child(1), .btm_item:nth-child(3) {
-    width: 19%;
-  }
   .btm_item {
     float: left;
+    width: 25%;
+  }
+  .btm_item.item-opt{
+    position: relative;
   }
   .iconfont {
     font-size: 20px;
