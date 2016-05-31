@@ -46,7 +46,7 @@ class WesharesController extends AppController
     public function entrance(){
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
-            $this->redirect('/users/tutorial');
+            $this->redirect('/users/login.html?referer=/weshares/entrance');
         }
         $user_level = $this->ShareUtil->get_user_level($uid);
         $this->set('user_level', $user_level);
