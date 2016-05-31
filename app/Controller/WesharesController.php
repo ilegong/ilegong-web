@@ -628,9 +628,11 @@ class WesharesController extends AppController
         }
         $is_me = $uid == $current_uid;
         if ($is_me) {
-            $this->redirect('/weshares/get_self_info.html');
+            redirect('/weshares/get_self_info.html');
+            //$this->redirect('/weshares/get_self_info.html');
         } else {
-            $this->redirect('/weshares/get_other_info/' . $uid . '.html');
+            redirect('/weshares/get_other_info/' . $uid . '.html');
+            //$this->redirect('/weshares/get_other_info/' . $uid . '.html');
         }
     }
 

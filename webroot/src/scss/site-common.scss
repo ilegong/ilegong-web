@@ -363,26 +363,12 @@ a:-webkit-any-link {
     .share-title {
       font-size: 1.2em;
       color: #333;
-      word-break: break-all;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 1;
-      overflow: hidden;
     }
     .share-description {
       color: #666;
       line-height: 20px;
       font-size: 1.1em;
       padding-top: 8px;
-    }
-    .share-description.digest {
-      word-break: break-all;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-      overflow: hidden;
     }
   }
   .share-summary {
@@ -411,7 +397,32 @@ a:-webkit-any-link {
     }
   }
 }
-
+.share.show-detail{
+  .share-content{
+    .share-title{
+    }
+  }
+}
+.share.show-summary{
+  .share-content{
+    .share-title{
+      word-break: break-all;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      overflow: hidden;
+    }
+    .share-description{
+      word-break: break-all;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+  }
+}
 .proxy-level {
   width: 18px;
   height: 18px;
