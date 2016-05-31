@@ -6,7 +6,7 @@
  * Date: 8/23/15
  * Time: 20:16
  */
-class UtilController extends Controller {
+class UtilController extends AppController {
 
     public $name = 'util';
 
@@ -86,7 +86,7 @@ class UtilController extends Controller {
     public function get_base_token() {
         $this->autoRender = false;
         try {
-            if ($this->is_admin($this->currentUser['id'])) {
+            if (is_super_share_manager($this->currentUser['id'])) {
                 $this->loadModel('WxOauth');
                 $o = $this->WxOauth->get_base_access_token();
                 $log = "get_base_access_token:" . $o . ", in json:" . json_encode($o);
