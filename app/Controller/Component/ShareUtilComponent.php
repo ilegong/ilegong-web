@@ -714,7 +714,7 @@ class ShareUtilComponent extends Component
         $title = $share_info['title'];
         $sharer_name = $this->WeshareBuy->get_user_nickname($share_info['creator']);
         $title = $sharer_name . '分享的' . $title;
-        $optLogData = array('obj_creator' => $share_info['creator'], 'user_id' => $userId, 'obj_type' => OPT_LOG_SHARE_RECOMMEND, 'obj_id' => $shareId, 'created' => $now, 'memo' => $title, 'reply_content' => $memo, 'thumbnail' => $shareImg[0]);
+        $optLogData = array('obj_creator' => $share_info['creator'], 'user_id' => $userId, 'obj_type' => OPT_LOG_SHARE_RECOMMEND, 'obj_id' => $shareId, 'event_id' => $shareId ,'created' => $now, 'memo' => $title, 'reply_content' => $memo, 'thumbnail' => $shareImg[0]);
         $this->saveOptLog($optLogData);
         $sendResult = $this->WeshareBuy->send_recommend_msg($userId, $shareId, $memo);
         if($sendResult['success']){
@@ -755,6 +755,7 @@ class ShareUtilComponent extends Component
             'obj_creator' => $user_id,
             'obj_type' => OPT_LOG_CREATE_SHARE,
             'obj_id' => $share_id,
+            'event_id' => $share_id,
             'created' => date('Y-m-d H:i:s'),
             'memo' => $memo,
             'thumbnail' => $thumbnail
@@ -885,6 +886,7 @@ class ShareUtilComponent extends Component
             'user_id' => $user_id,
             'obj_type' => OPT_LOG_PINTUAN_SUCCESS,
             'obj_id' => $tag_id,
+            'event_id' => $tag_id,
             'created' => date('Y-m-d H:i:s'),
             'memo' => $memo,
             'thumbnail' => $thumbnail,
@@ -914,6 +916,7 @@ class ShareUtilComponent extends Component
             'obj_type' => OPT_LOG_SHARE_BUY,
             'obj_id' => $share_id,
             'created' => date('Y-m-d H:i:s'),
+            'event_id' => $order_id,
             'memo' => $memo,
             'reply_content' => $order_info,
             'thumbnail' => $thumbnail,
@@ -975,7 +978,7 @@ class ShareUtilComponent extends Component
      * @param $replay_text
      * save comment opt log
      */
-    public function save_comment_opt_log($user_id, $share_id, $replay_text)
+    public function save_comment_opt_log($user_id, $share_id, $comment_id ,$replay_text)
     {
         $share_info = $this->WeshareBuy->get_weshare_info($share_id);
         $memo = $share_info['title'];
@@ -987,6 +990,7 @@ class ShareUtilComponent extends Component
             'user_id' => $user_id,
             'obj_type' => OPT_LOG_SHARE_COMMENT,
             'obj_id' => $share_id,
+            'event_id' => $comment_id,
             'created' => date('Y-m-d H:i:s'),
             'memo' => $memo,
             'thumbnail' => $thumbnail,
