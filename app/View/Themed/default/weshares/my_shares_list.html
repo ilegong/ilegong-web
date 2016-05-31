@@ -1,12 +1,11 @@
 <div class="get-user-info" ng-controller="GetUserInfoCtr as vm" ng-init="vm.focus='left';vm.loadShareType='{{$type}}';vm.myShareNextPage();">
     <div class="refer-back-bg menu-top">
         {{$title}}
-        <a ng-click="vm.doBack()">
+        <a href="/weshares/entrance">
             <img src="{{$STATIC_HOST}}/static/img/back.png"/>
             <label>返回</label>
         </a>
     </div>
-
 
     <ul class="clearfix share-search has-menu-top extra-margin">
         {{if $type==0}}
@@ -66,7 +65,7 @@
 $this->assign('title','朋友说-'.$title);
 $this->set('show_footer', false);
 $this->Html->css(array(
-$STATIC_HOST.'/static/weshares/css/get-user-info.min.css?v2.5.8'
+$STATIC_HOST.'/static/weshares/css/get-user-info.min.css?v2.5.12'
 ), null, array('inline' => false));
 
 $this->Html->script(array(

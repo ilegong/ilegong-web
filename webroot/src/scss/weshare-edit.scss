@@ -1,7 +1,5 @@
 /*share masg*/
 .weshare-edit-page {
-  margin-bottom: 74px;
-
   // 公用
   .shrink-container {
     position: relative;
@@ -292,18 +290,6 @@
         }
       }
     }
-    /*next step btn*/
-    .nextstepBtn {
-      background-color: #ff6485;
-      line-height: 44px;
-      text-align: center;
-      margin: 30px 25px 65px;
-      color: #FFFFFF;
-      font-size: 1.2em;
-      display: block;
-      text-decoration: none;
-      border-radius: 4px;
-    }
 
     .has-error {
       ::-webkit-input-placeholder {
@@ -460,19 +446,6 @@
           }
         }
       }
-    }
-  }
-  .submit-info {
-    .submitbtn {
-      display: block;
-      text-decoration: none;
-      margin: 30px 25px 65px;
-      line-height: 44px;
-      text-align: center;
-      background-color: #ff6485;
-      color: #fff;
-      border-radius: 4px;
-      font-size: 1.2em;
     }
   }
 

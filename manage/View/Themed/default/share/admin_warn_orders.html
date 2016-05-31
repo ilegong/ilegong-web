@@ -174,7 +174,7 @@
                 <td>{{$cart['price']*$cart['num']/100}}</td>
                 <td>{{$current_order['total_all_price']}}</td>
                 <?php if($current_share['type'] == 6):?>
-                <td>商家<br/>{{$all_users[$current_share['refer_share_id']]['nickname']}}<br/>{{$current_share_creator[$current_share['refer_share_id']]['mobilephone']}}</td>
+                <td>商家<br/>{{$all_users[$pool_shares[$current_share['refer_share_id']]['creator']]['nickname']}}<br/>{{$all_users[$pool_shares[$current_share['refer_share_id']]['creator']]['mobilephone']}}</td>
                 <?php else:?>
                 <td>分享人<br/>{{$current_share_creator['nickname']}}<br/>{{$current_share_creator['mobilephone']}}</td>
                 <?php endif;?>

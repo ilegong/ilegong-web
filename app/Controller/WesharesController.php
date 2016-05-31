@@ -43,6 +43,14 @@ class WesharesController extends AppController
         //$this->render();
     }
 
+    public function entrance(){
+        $uid = $this->currentUser['id'];
+        if (empty($uid)) {
+            $this->redirect('/users/login.html?referer=/weshares/entrance');
+        }
+        $user_level = $this->ShareUtil->get_user_level($uid);
+        $this->set('user_level', $user_level);
+    }
     /**
      * @param string $weshare_id
      * @param int $from 标示从什么地方跳转的访问
@@ -628,9 +636,11 @@ class WesharesController extends AppController
         }
         $is_me = $uid == $current_uid;
         if ($is_me) {
-            $this->redirect('/weshares/get_self_info.html');
+            redirect('/weshares/get_self_info.html');
+            //$this->redirect('/weshares/get_self_info.html');
         } else {
-            $this->redirect('/weshares/get_other_info/' . $uid . '.html');
+            redirect('/weshares/get_other_info/' . $uid . '.html');
+            //$this->redirect('/weshares/get_other_info/' . $uid . '.html');
         }
     }
 
@@ -881,9 +891,7 @@ class WesharesController extends AppController
         if (!($uid > 0)) {
             $this->redirect('/users/login');
         }
-        $userMonthOrderCount = $this->WeshareBuy->get_month_total_count($uid);
         $user_summary = $this->WeshareBuy->get_user_share_summary($uid);
-        $share_summary = $this->WeshareBuy->get_sharer_summary($uid);
         $user_level = $this->ShareUtil->get_user_level($uid);
         $user_info = $this->get_user_info($uid);
         $my_order_count = $this->WeshareBuy->get_user_all_order_count($uid);
@@ -892,8 +900,6 @@ class WesharesController extends AppController
         $this->set('share_user', $user_info['User']);
         $this->set('user_level', $user_level);
         $this->set('user_summary', $user_summary);
-        $this->set('userMonthOrderCount', $userMonthOrderCount);
-        $this->set('share_summary', $share_summary);
         $this->set('my_order_count', $my_order_count);
         $rebate_money = $this->ShareUtil->get_rebate_money($uid);
         $this->set('rebate_money', $rebate_money);

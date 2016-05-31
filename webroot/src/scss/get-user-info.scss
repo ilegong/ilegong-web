@@ -187,15 +187,6 @@
     color: #FF6485;
     border-bottom-color: #FF6485;
   }
-  /*mine-chanppinjie-banner*/
-  .mine-chanpinjie-banner {
-    display: block;
-    margin-top: 10px;
-  }
-  .mine-chanpinjie-banner img {
-    display: block;
-    width: 100%;
-  }
   .other-share ul li {
     width: 50%;
     line-height: 44px;
@@ -221,12 +212,6 @@
     width: 100%;
   }
 
-  /*product picture*/
-  .product-image {
-    display: inline-block;
-    max-height: 280px;
-    max-width: 100%;
-  }
   /*product price*/
   .product-price-bg {
     z-index: 2;
@@ -244,59 +229,6 @@
   .product-price-bg em {
     font-style: normal;
     font-size: 1.6em;
-  }
-  /*share content*/
-  .share-content {
-    padding: 15px 12px;
-  }
-  .share-content h1 {
-    font-size: 1.2em;
-    color: #333333;
-    word-break: break-all;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
-    overflow: hidden;
-  }
-  .share-content p {
-    color: #ff6485;
-    line-height: 20px;
-    font-size: 1.1em;
-    padding-top: 8px;
-    word-break: break-all;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-  }
-  .share-content p span {
-    color: #666666;
-  }
-  .share-data {
-    padding: 10px 12px;
-    border-top: 1px #eeeeee solid;
-    color: #999999;
-    line-height: 28px;
-    position: relative;
-  }
-  .share-data img {
-    width: 28px;
-    height: 28px;
-    display: block;
-    float: left;
-    margin-right: 3px;
-  }
-  .share-data label {
-    float: left;
-  }
-  .share-data dd.browse {
-    width: 60px;
-    text-align: right;
-    position: absolute;
-    right: 12px;
-    top: 10px;
   }
 
   /*order and share massage*/
@@ -345,24 +277,6 @@
     z-index: 2;
     left: -3px;
     bottom: 0;
-  }
-  .mine-tab ul {
-    border-top: 1px #eeeeee solid;
-    padding: 0 12px 15px;
-    background-color: #FFFFFF;
-  }
-  .mine-tab ul li {
-    width: 33.3%;
-    padding-top: 15px;
-    color: #666666;
-    font-size: 1.1em;
-    float: left;
-    text-align: center;
-  }
-  .mine-tab ul li span {
-    color: #333333;
-    font-size: 1.2em;
-    font-weight: bold;
   }
 
   /*my share list*/
@@ -589,15 +503,3 @@
   line-height: 44px;
   text-align: center;
 }
-
-.share-good, .recommend-sharer {
-  margin-bottom: 10px;
-  background-color: #ffffff;
-}
-
-.share-good a {
-  display: block;
-  text-decoration: none;
-}
-
-
