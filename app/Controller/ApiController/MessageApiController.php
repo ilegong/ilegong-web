@@ -128,11 +128,15 @@ class MessageApiController extends Controller
         return $this->query_opt_msg($cond);
     }
 
-    private function get_u_msg_list($type, $page, $limit, $user)
+    private function get_u_msg_list($type, $page, $limit, $user = null)
     {
         $uid = $this->currentUser['id'];
+        $query_cond = ['obj_creator' => $uid, 'obj_type' => $type];
+        if (!empty($user)) {
+            $query_cond['user_id'] = $user;
+        }
         $cond = [
-            'conditions' => ['obj_creator' => $uid, 'obj_type' => $type, 'user_id' => $user],
+            'conditions' => $query_cond,
             'limit' => $limit,
             'page' => $page,
             'order' => ['id DESC']
@@ -153,9 +157,9 @@ class MessageApiController extends Controller
         $user_infos = array_map('map_user_avatar2', $user_infos);
         $user_infos = Hash::combine($user_infos, '{n}.User.id', '{n}.User');
         $opt_logs = array_map(function ($item) {
-            // 找到, 是不是已经有评论了. 这里属于N+1循环查询, 有性能问题
-            // 将来优化
-            $item['OptLog']['has_comment'] = $this->check_has_comment($item['OptLog']['obj_id'], $item['OptLog']['user_id']);
+            if($item['OptLog']['obj_type'] == OPT_LOG_SHARE_COMMENT){
+                $item['OptLog']['has_comment'] = $this->check_has_comment($item['OptLog']['obj_id'], $item['OptLog']['user_id']);
+            }
             return $item['OptLog'];
         }, $opt_logs);
         return ['user_infos' => $user_infos, 'msg' => $opt_logs];
@@ -179,7 +183,6 @@ class MessageApiController extends Controller
                 break;
             }
         }
-
         if ($cid) {
             return !empty($res['comment_replies'][$cid]);
         } else {
@@ -238,6 +241,18 @@ class MessageApiController extends Controller
     public function get_buy_list($user, $page, $limit)
     {
         echo json_encode($this->get_u_msg_list(OPT_LOG_SHARE_BUY, $page, $limit, $user));
+        exit();
+    }
+
+    public function get_all_buy_list($page, $limit)
+    {
+        echo json_encode($this->get_u_msg_list(OPT_LOG_SHARE_BUY, $page, $limit));
+        exit();
+    }
+
+    public function get_all_comment_list($page, $limit)
+    {
+        echo json_encode($this->get_u_msg_list(OPT_LOG_SHARE_COMMENT, $page, $limit));
         exit();
     }
 
