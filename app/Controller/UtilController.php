@@ -6,7 +6,7 @@
  * Date: 8/23/15
  * Time: 20:16
  */
-class UtilController extends Controller {
+class UtilController extends AppController {
 
     public $name = 'util';
 
