@@ -115,6 +115,10 @@ class WeixinController extends Controller {
                     exit;
                 } else if ($req['Event'] == 'CLICK') {
                     $input = $req['EventKey'];
+                    if($input==WX_CLICK_CUSTOM_SERVICE){
+                        echo $this->newTextMsg($user, $me, "如果出现售后问题，可以直接可团长沟通，也可以加朋友说小妹微信：pyshuo2015 \n工作时间9:00-20:00。\n紧急情况请电话联系\n".CSAD_PHONE);
+                    }
+                    exit;
                 } else if ($req['Event'] == 'unsubscribe') {
                     $this->log('On wechat event unsubscribe: ' . $from . trim($req['FromUserName']), LOG_INFO);
                     if ($from == FROM_WX_SERVICE) {

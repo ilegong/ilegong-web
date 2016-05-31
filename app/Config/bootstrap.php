@@ -322,6 +322,8 @@ const HX_APP_NAME = 'pyjia';
 const HX_CLIENT_ID = 'YXA6zAZWMLnYEeWBR61HoGXdXA';
 const HX_CLIENT_SECRET = 'YXA6rKa-1NpmgnMyAcfJBqaVtVJjCtg';
 
+const WX_CLICK_CUSTOM_SERVICE = 'V1001_C_S';
+
 define('CATEGORY_ID_TECHAN', 114);
 
 define('PAYLOG_STATUS_NEW', 0);
@@ -389,8 +391,6 @@ function oauth_wx_source() {
 function oauth_wx_goto($refer_key, $host3g) {
     switch ($refer_key) {
         case "CLICK_URL_TECHAN":
-//            return "http://$host3g/categories/mobileIndex.html?tagId=23&_sl=wx.menu.h_redirect";
-//            return "http://$host3g/techan.html";
             return "http://$host3g/weshares/index.html?_sl=wx.menu.h_redirect";
         case "CLICK_URL_ADD_SHARE":
             return "http://$host3g/weshares/add.html?_sl=wx.menu.h_redirect";

@@ -39,9 +39,9 @@
                 "url":"http://sh.tongshijia.com/users/wx_menu_point?referer_key=MY_SHARE_INFO&from=service&_sl=wx.sv.home"
             },
             {
-                "type":"view",
+                "type":"click",
                 "name":"售后服务",
-                "url":"http://sh.tongshijia.com/users/wx_menu_point?referer_key=CLICK_URL_SALE_AFTER_SAIL&from=service&_sl=wx.sv.sv"
+                "key":"V1001_C_S"
             }
         ]
     }
