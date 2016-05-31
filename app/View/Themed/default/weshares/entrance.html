@@ -1,0 +1,17 @@
+<div class="share-entrance-page" ng-controller="DefaultCtrl as vm">
+    <img class="entrance-banner" src="{{$STATIC_HOST}}/static/img/shareword.gif"/>
+    <ul class="operations clearfix">
+        <li class="operation"><a href="/weshares/add"><img src="{{$STATIC_HOST}}/static/img/fillshareicon.gif"/></a>
+        </li>
+        <li class="operation"><a href="/weshares/my_shares_list.html"><img src="{{$STATIC_HOST}}/static/img/shareordericon.gif"/></a></li>
+        <li class="operation"><a href="/weshares/my_shares_list/1.html"><img src="{{$STATIC_HOST}}/static/img/accrediticon.gif"/></a></li>
+        {{if $user_level['data_value'] > 1}}
+        <li class="operation"><a href="/share_product_pool/share_products_index.html"><img src="{{$STATIC_HOST}}/static/img/products-streeticon.gif"/></a></li>
+        {{/if}}
+    </ul>
+</div>
+
+<?php
+    $this->assign('title','分享');
+$this->set('show_footer', 'share');
+?>

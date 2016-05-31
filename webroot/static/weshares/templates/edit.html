@@ -62,7 +62,7 @@
                 </span>
         </a>
     </div>
-    <div class="share-pirture">
+    <div class="share-pirture has-channel-bottom extra-margin">
         <h1>产品图片</h1>
         <ul class="clearfix">
             <li ng-repeat="image in vm.weshare.images">
@@ -83,10 +83,10 @@
             </li>
         </ul>
     </div>
-    <a class="nextstepBtn" ng-click="vm.nextStep()">下一步，设置配送信息</a>
+    <a class="nextstepBtn channel_bottom" ng-click="vm.nextStep()">下一步，设置配送信息</a>
 </div>
 
-<div class="shippment-info" ng-show='vm.showShippmentInfo'>
+<div class="shippment-info has-channel-bottom extra-margin" ng-show='vm.showShippmentInfo'>
     <div class="refer-back-bg menu-top">
         设置配送信息
         <a ng-click="vm.backStep();">
@@ -257,9 +257,7 @@
         </div>
     </div>
 </div>
-<div class="submit-info" ng-show='vm.showShippmentInfo'>
-    <a class="submitbtn" ng-click="vm.saveWeshare()">Oh，搞定了！</a>
-</div>
+<a class="nextstepBtn channel_bottom" ng-click="vm.saveWeshare()" ng-show='vm.showShippmentInfo'>Oh，搞定了！</a>
 
 <div class="areas-info" ng-if="vm.isShowChooseCity">
     <div class="refer-back-bg menu-top">
