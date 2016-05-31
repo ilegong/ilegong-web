@@ -577,10 +577,26 @@ class ShareController extends AppController {
             $pay_notifies = Hash::combine($pay_notifies, '{n}.PayNotify.order_id', '{n}.PayNotify.out_trade_no');
             $weshares = $this->Weshare->find('all', array(
                 'conditions' => array(
-                    'id' => $member_ids
+                    'id' => $member_ids,
                 )
             ));
-            $creatorIds = Hash::extract($weshares, '{n}.Weshare.creator');
+            $creatorIds = [];
+            $poolShareIds = [];
+            foreach($weshares as $weshare_item){
+                $creatorIds[] = $weshare_item['Weshare']['creator'];
+                if($weshare_item['Weshare']['type'] == 6){
+                    $poolShareIds[] = $weshare_item['Weshare']['refer_share_id'];
+                }
+            }
+            if(!empty($poolShareIds)){
+                $poolShares = $this->Weshare->find('all', [
+                    'conditions' => ['id' => $poolShareIds],
+                ]);
+                foreach($poolShares as $poolShareItem){
+                    $creatorIds[] = $poolShareItem['Weshare']['creator'];
+                    $weshares[] = $poolShareItem;
+                }
+            }
             $allUserIds = array_merge($creatorIds, $rebateSharerIds);
             $order_user_ids = Hash::extract($orders, '{n}.Order.creator');
             $allUserIds = array_merge($allUserIds, $order_user_ids);
@@ -589,7 +605,7 @@ class ShareController extends AppController {
                 'conditions' => array(
                     'id' => $allUserIds
                 ),
-                'fields' => array('id', 'nickname')
+                'fields' => array('id', 'nickname', 'mobilephone')
             ));
             $all_users = Hash::combine($all_users, '{n}.User.id', '{n}.User');
             $weshares = Hash::combine($weshares, '{n}.Weshare.id', '{n}.Weshare');
@@ -635,25 +651,35 @@ class ShareController extends AppController {
             $member_ids = [];
             $cate_ids = [];
             $allUserIds = [];
+            $allPoolShareIds = [];
             foreach ($orders as $order) {
                 $total_price += $order['Order']['total_all_price'];
                 $order_ids[] = $order['o']['id'];
                 $parent_order_ids[] = $order['o']['parent_order_id'];
                 $member_ids[] = $order['o']['member_id'];
                 $cate_ids[] = $order['o']['cate_id'];
-                if(! in_array($order['o']['creator'] , $allUserIds))
-                {
+                if (!in_array($order['o']['creator'], $allUserIds)) {
                     $allUserIds[] = $order['o']['creator'];
                 }
-                if(! in_array($order['s']['creator'] , $allUserIds))
-                {
+                if (!in_array($order['s']['creator'], $allUserIds)) {
                     $allUserIds[] = $order['s']['creator'];
                 }
-                if(! in_array($order['s']['refer_share_id'] , $allUserIds))
-                {
-                    $allUserIds[] = $order['s']['refer_share_id'];
+                if ($order['s']['type'] == 6) {
+                    $allPoolShareIds[] = $order['s']['refer_share_id'];
                 }
+            }
 
+            if (!empty($allPoolShareIds)) {
+                $pool_shares = $this->Weshare->find('all', [
+                    'conditions' => ['id' => $allPoolShareIds],
+                    'fields' => ['id', 'creator', 'title']
+                ]);
+                $map_pool_shares = [];
+                foreach($pool_shares as $pool_share_item){
+                    $map_pool_shares[$pool_share_item['Weshare']['id']] = $pool_share_item['Weshare'];
+                    $allUserIds[] = $pool_share_item['Weshare']['creator'];
+                }
+                $this->set('pool_shares', $map_pool_shares);
             }
 
             $cateIds = array_unique($cate_ids);
@@ -671,8 +697,6 @@ class ShareController extends AppController {
                     'fields' => array('order_id', 'id', 'refund_fee')
                 ));
             $refundLogs = Hash::combine($refundLogs, '{n}.RefundLog.order_id', '{n}.RefundLog.refund_fee');
-
-            $rebateSharerIds = Hash::extract($rebateLogs, '{n}.RebateTrackLog.sharer');
             $rebateLogs = Hash::combine($rebateLogs, '{n}.RebateTrackLog.id', '{n}.RebateTrackLog.sharer');
             $pay_notify_order_ids = array_merge($order_ids, $parent_order_ids);
             $pay_notify_order_ids = array_unique($pay_notify_order_ids);
@@ -689,7 +713,7 @@ class ShareController extends AppController {
                 'conditions' => array(
                     'id' => $allUserIds
                 ),
-                'fields' => array('id', 'nickname','mobilephone')
+                'fields' => array('id', 'nickname', 'mobilephone')
             ));
 
             $all_users = Hash::combine($all_users, '{n}.User.id', '{n}.User');
