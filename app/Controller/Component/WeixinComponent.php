@@ -1023,7 +1023,7 @@ class WeixinComponent extends Component {
      */
     public function send_weshare_buy_paid_msg_for_creator($seller_open_id, $price, $good_info, $ship_info, $order_no, $weshare_info, $order_creator_name = null, $shipType = '', $order_creator, $cate_id = 0) {
         $title = $weshare_info['Weshare']['title'];
-        $detail_url = $this->get_user_share_info_url($order_creator);
+        $detail_url = $this->get_weshare_buy_detail($weshare_info['Weshare']['id']);
         $userM = ClassRegistry::init('User');
         $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
         $rebateTrackLog = $rebateTrackLogM->find('first', array(

@@ -624,6 +624,28 @@ a:-webkit-any-link {
 }
 
 .index-page {
+
+  .foretaste {
+    display: block;
+    border-bottom: 1px #dddddd solid;
+    background-color: #FFFFFF;
+    margin-bottom: 10px;
+    padding: 2px 0;
+    img {
+      float: left;
+      width: 110px;
+      border: 0;
+      display: block;
+    }
+    strong {
+      line-height: 41px;
+      display: block;
+      float: left;
+      color: #ff6485;
+      font-size: 1.1em;
+    }
+  }
+
   .shares-container {
     .share {
       .image-container {
@@ -633,6 +655,11 @@ a:-webkit-any-link {
   }
 }
 
+.weshare-view-page{
+  .share .share-summary {
+    border-top: 0;
+  }
+}
 .user-list-page {
   .fans_search {
     margin: 0px 15px 10px 15px;

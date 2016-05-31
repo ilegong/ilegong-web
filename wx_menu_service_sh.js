@@ -3,7 +3,7 @@
     {
         "type":"view",
         "name":"购买特产",
-        "url":"http://sh.tongshijia.com/users/wx_menu_point?referer_key=CLICK_URL_TECHAN&from=service&_sl=wx.sv.home"
+        "url":"http://sh.tongshijia.com/weshares/index?from=weixin"
     },
     {
         "name":"我要分享",
@@ -11,7 +11,7 @@
           {
             "type":"view",
             "name":"我要分享",
-            "url":"http://sh.tongshijia.com/users/wx_menu_point?referer_key=CLICK_URL_ADD_SHARE&from=service&_sl=wx.sv.home"
+            "url":"http://sh.tongshijia.com/weshares/add.html?from=weixin"
           },
           {
             "type":"view",
@@ -39,9 +39,9 @@
                 "url":"http://sh.tongshijia.com/users/wx_menu_point?referer_key=MY_SHARE_INFO&from=service&_sl=wx.sv.home"
             },
             {
-                "type":"view",
+                "type":"click",
                 "name":"售后服务",
-                "url":"http://sh.tongshijia.com/users/wx_menu_point?referer_key=CLICK_URL_SALE_AFTER_SAIL&from=service&_sl=wx.sv.sv"
+                "key":"V1001_C_S"
             }
         ]
     }
