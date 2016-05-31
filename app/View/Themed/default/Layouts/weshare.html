@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1.1, user-scalable=no, width=device-width">
     <title><?php echo $this->fetch('title') ?: '微分享'; ?></title>
-    <link href="{{$STATIC_HOST}}/static/weshares/css/site-common.min.css?v2.5.11" media="all" rel="stylesheet"
+    <link href="{{$STATIC_HOST}}/static/weshares/css/site-common.min.css?v2.5.12" media="all" rel="stylesheet"
           type="text/css">
     <?php
     echo $this->fetch('css');
@@ -42,9 +42,9 @@
         <p class="iconfont {{if $show_footer=='opt'}}active{{/if}}"><i class="fa fa-search"></i></p>
         <b class="{{if $show_footer=='opt'}}active{{/if}}">发现</b>
     </a>
-    <a class="btm_item item-share" href="/weshares/add.html">
+    <a class="btm_item item-share" href="/weshares/entrance.html">
         <p class="iconfont {{if $show_footer=='share'}}active{{/if}}"><i class="fa fa-share-square-o"></i></p>
-        <b class="{{if $show_footer=='share'}}active{{/if}}">我要分享</b>
+        <b class="{{if $show_footer=='share'}}active{{/if}}">分享</b>
     </a>
     <a class="btm_item item-mine" href="/weshares/user_share_info.html">
         <p class="iconfont {{if $show_footer=='mine'}}active{{/if}}"><i class="fa fa-user"></i></p>

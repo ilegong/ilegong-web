@@ -136,6 +136,9 @@ a:-webkit-any-link {
 .has-channel-bottom {
   margin-bottom: 50px !important;
 }
+.has-channel-bottom.extra-margin {
+  margin-bottom: 58px !important;
+}
 
 .channel_bottom {
   box-sizing: border-box;
@@ -237,6 +240,16 @@ a:-webkit-any-link {
     float: left;
     color: #fff;
   }
+}
+
+/*next step btn*/
+.nextstepBtn {
+  background-color: #ff6485;
+  color: #FFFFFF;
+  font-size: 1.2em;
+  display: block;
+  line-height: 49px;
+  padding: 0;
 }
 
 .refer-back-bg {
@@ -646,6 +659,32 @@ a:-webkit-any-link {
   }
 }
 
+.share-entrance-page{
+  padding: 3.33em 0 4.17em 0;
+  text-align: center;
+  .entrance-banner{
+    width: 100%;
+    display: block;
+  }
+  .operations{
+    margin: 0 20px;
+    position: absolute;
+    bottom: 7em;
+    left: 0;
+    .operation{
+      float: left;
+      width: 33.3%;
+      a{
+        display: block;
+        margin: 20px 20px 0;
+        img{
+          width: 100%;
+          display: block;
+        }
+      }
+    }
+  }
+}
 //site specific
 
 .site-sh{

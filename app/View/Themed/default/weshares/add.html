@@ -1,11 +1,18 @@
 <div class="weshare-edit-page" ng-controller="WesharesEditCtrl as vm" id="weshareEditView" data-ship-type="{{$ship_type}}" data-user-id="{{$user_id}}" data-is-new-sharer="{{$is_new_sharer}}">
-    <div ng-include="'{{$STATIC_HOST}}/static/weshares/templates/edit.html?v2.4.3'"></div>
+    <div class="refer-back-bg menu-top">
+        我要分享
+        <a href="/weshares/entrance">
+            <img src="{{$STATIC_HOST}}/static/img/back.png"/>
+            <label>返回</label>
+        </a>
+    </div>
+
+    <div class="has-menu-top" ng-include="'{{$STATIC_HOST}}/static/weshares/templates/edit.html?v2.4.3'"></div>
 </div>
 
 <?php
-   $this->set('show_footer', 'share');
     $this->Html->css(array(
-$STATIC_HOST.'/static/weshares/css/weshare-edit.min.css?v2.5.6'
+$STATIC_HOST.'/static/weshares/css/weshare-edit.min.css?v2.5.12'
 ), null, array('inline' => false))
 ?>
 
