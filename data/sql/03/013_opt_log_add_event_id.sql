@@ -4,6 +4,11 @@ ADD COLUMN `event_id` INT NULL AFTER `obj_id`;
 ALTER TABLE `cake_opt_logs`
 CHANGE COLUMN `event_id` `event_id` INT(11) NULL DEFAULT 0 ;
 
+
+ALTER TABLE `51daifan`.`cake_opt_logs`
+CHANGE COLUMN `id` `id` BIGINT(32) NOT NULL AUTO_INCREMENT ;
+
+
 --创建分享的event_id 设置为 分享 id
 update cake_opt_logs set event_id=obj_id where obj_type=1;
 --推荐分享的event_id 设置为 分享 id
@@ -19,7 +24,7 @@ update cake_opt_logs
 
    on cake_opt_logs.obj_id=cake_orders.member_id
 
-   and cake_opt_logs.obj_creator=cake_orders.creator
+   and cake_opt_logs.user_id=cake_orders.creator
 
    and cake_orders.type=9
 
@@ -36,7 +41,7 @@ update cake_opt_logs
 
    on cake_opt_logs.obj_id=cake_comments.data_id
 
-   and cake_opt_logs.obj_creator=cake_comments.user_id
+   and cake_opt_logs.user_id=cake_comments.user_id
 
    and cake_comments.type='Share'
 
