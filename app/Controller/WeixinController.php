@@ -116,7 +116,11 @@ class WeixinController extends Controller {
                 } else if ($req['Event'] == 'CLICK') {
                     $input = $req['EventKey'];
                     if($input==WX_CLICK_CUSTOM_SERVICE){
-                        echo $this->newTextMsg($user, $me, "如果出现售后问题，可以直接可团长沟通，也可以加朋友说小妹微信：pyshuo2015 \n工作时间9:00-19:00。\n紧急情况请电话联系\n".CSAD_PHONE);
+                        if(WX_HOST==SH_SITE_HOST){
+                            echo $this->newTextMsg($user, $me, "如果出现售后问题，可以直接可团长沟通，也可以加客服微信：L301509 \n工作时间9:00-19:00。\n紧急情况请电话联系\n18600995791");
+                        }else{
+                            echo $this->newTextMsg($user, $me, "如果出现售后问题，可以直接可团长沟通，也可以加朋友说小妹微信：pyshuo2015 \n工作时间9:00-19:00。\n紧急情况请电话联系\n".CSAD_PHONE);
+                        }
                     }
                     exit;
                 } else if ($req['Event'] == 'unsubscribe') {
