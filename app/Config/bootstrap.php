@@ -2407,12 +2407,21 @@ function is_pys_signed_user($uid){
  * 超级管理员
  */
 function is_super_share_manager($uid) {
-    $super_manager = [
-        902185, 633345, 701166, 544307,
-        141, 802852, 801447, 895096,
-        711503, 897195, 897247, 5081,
-        559795, 902131, 884183, 916301,12282,916319
-    ];
+
+    if(WX_HOST==SH_SITE_HOST){
+        $super_manager = [
+            5081,633345,916319,916326
+        ];
+    }else{
+        $super_manager = [
+            902185, 633345, 701166, 544307,
+            141, 802852, 801447, 895096,
+            711503, 897195, 897247, 5081,
+            559795, 902131, 884183, 916301,12282,916319,916326
+        ];
+    }
+
+
 
     // just for development perpose.
     if ($_SERVER['HTTP_HOST'] === 'dev.tongshijia.com') {
