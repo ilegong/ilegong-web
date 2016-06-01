@@ -74,7 +74,8 @@ if (!defined('CORE_PATH')) {
     define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
 }
 define('VIEWS', APP_PATH . 'View' . DS);
-$app_sub_dir = dirname($_SERVER['PHP_SELF']);
+$app_sub_dir = dirname($_SERVER['SCRIPT_NAME']);
+
 if (basename($app_sub_dir) == 'webroot') {
     $app_sub_dir = dirname($app_sub_dir);
 }
