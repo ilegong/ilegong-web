@@ -51,9 +51,9 @@ class CommonApiController extends Controller
                 'data' => 'https://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=506221350&idx=1&sn=96cb426c8a1eed785cd86e85f6d9c9e5&scene=1'
             ],
             [
-                'banner_img' => 'http://static.tongshijia.com/images/index/2016/05/18/7c0161c0-1ca2-11e6-88d7-00163e1600b6.jpg',
+                'banner_img' => 'http://static.tongshijia.com/images/index/2016/06/01/820af714-27d5-11e6-b8d8-00163e1600b6.jpg',
                 'type' => '1',
-                'data' => '4675'
+                'data' => '5370'
             ]
         ];
         echo json_encode($banner);
