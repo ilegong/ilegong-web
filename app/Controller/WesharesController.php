@@ -36,6 +36,7 @@ class WesharesController extends AppController
     {
         $index_products = $this->ShareUtil->get_index_product($tag);
         $banners = $this->ShareUtil->get_index_banners();
+        $this->log('banners', $banners);
         $uid = $this->currentUser['id'];
         $this->set('index_products', $index_products);
         $this->set('uid', $uid);
