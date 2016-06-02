@@ -10,19 +10,20 @@
         </li>
     </ul>
     <div class="banners has-menu-top">
-        {{if WX_HOST == DEFAULT_SITE_HOST}}
-        <a href="https://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=506221398&idx=1&sn=65ed9f702845825539c0c46d4b53a08f"
-           onclick="_hmt.push(['_trackEvent', 'weshares', 'click', 'banner002'])">
-            <img src="{{$STATIC_HOST}}/static/img/banner004.jpg?v2.3.9" alt="六一特惠"/>
-        </a>
+        {{if !empty($banners)}}
+        <ul rn-carousel class="image-container" rn-carousel-index="carouselIndex">
+            {{loop $banners $index $banner_item}}
+            <li class="image-cover">
+                <a  href="{{$banner_item['link']}}"
+                    onclick="_hmt.push(['_trackEvent', 'weshares', 'click', 'banner{{$index}}'])">
+                    <img class="image" src="{{$banner_item['banner']}}" alt="{{$banner_item['title']}}"/>
+                </a>
+            </li>
+            {{/loop}}
+        </ul>
+        <div rn-carousel-indicators slides="{{json_encode(range(0, count($banners)-1))}}" rn-carousel-index="carouselIndex"></div>
         {{/if}}
     </div>
-    {{if WX_HOST == DEFAULT_SITE_HOST}}
-    <a class="foretaste clearfix" href="/weshares/view/5370.html">
-        <img src="{{$STATIC_HOST}}/static/img/foretaste.gif">
-        <strong>【井冈山百花巢蜜】试吃开始喽!</strong>
-    </a>
-    {{/if}}
 
     <div class="shares-container">
         {{loop $index_products $index_product}}
