@@ -262,7 +262,7 @@ class WeshareBuyComponent extends Component
                     ],
                 ]
             ],
-            'fields' => ['ShareOperateSetting.id','ShareOperateSetting.data_id', 'ShareOperateSetting.data_type' ,'Weshare.id', 'Weshare.title', 'Weshare.default_image', 'Weshare.status', 'Weshare.creator', 'Weshare.created', 'Weshare.settlement', 'Weshare.type'],
+            'fields' => ['ShareOperateSetting.id', 'ShareOperateSetting.data_id', 'ShareOperateSetting.data_type', 'Weshare.id', 'Weshare.title', 'Weshare.default_image', 'Weshare.status', 'Weshare.creator', 'Weshare.created', 'Weshare.settlement', 'Weshare.type'],
             'limit' => $limit,
             'page' => $page
         ]);
@@ -338,10 +338,10 @@ class WeshareBuyComponent extends Component
             ));
             $authority_share_ids = [];
             $authority_share_map = [];
-            foreach($share_operate_settings as $operate_setting_item){
+            foreach ($share_operate_settings as $operate_setting_item) {
                 $operate_share_id = $operate_setting_item['ShareOperateSetting']['data_id'];
                 $authority_share_ids[] = $operate_share_id;
-                if(!isset($authority_share_map[$operate_share_id])){
+                if (!isset($authority_share_map[$operate_share_id])) {
                     $authority_share_map[$operate_share_id] = [];
                 }
                 $authority_share_map[$operate_share_id][] = $operate_setting_item['ShareOperateSetting']['data_type'];
@@ -470,7 +470,8 @@ class WeshareBuyComponent extends Component
         return json_decode($sharer_comment_data, true);
     }
 
-    private function combine_comment($comments){
+    private function combine_comment($comments)
+    {
         if (count($comments) > 0) {
             $commentReplyM = ClassRegistry::init('CommentReply');
             //$comments = Hash::combine($comments,'{n}.Comment.id', '{n}.Comment', '{n}.Comment.order_id');
@@ -506,13 +507,55 @@ class WeshareBuyComponent extends Component
         return array('order_comments' => array(), 'comment_replies' => array());
     }
 
-    public function query_comment2($cond){
+    public function query_comment2($cond)
+    {
         $commentM = ClassRegistry::init('Comment');
         $comments = $commentM->find('all', $cond);
-        $users = Hash::combine($comments, '{n}.User.id', '{n}.User');
-        $users = array_map('map_user_avatar',$users);
+        //$users = Hash::combine($comments, '{n}.User.id', '{n}.User');
+        $users = [];
+        $order_ids = [];
+        foreach ($comments as $comment_item) {
+            $user_id = $comment_item['User']['id'];
+            $users[$user_id] = $comment_item['User'];
+            $order_ids[] = $comment_item['Comment']['order_id'];
+        }
+        $order_data = $this->get_order_data($order_ids);
+        $users = array_map('map_user_avatar', $users);
         $result = $this->combine_comment($comments);
         $result['users'] = $users;
+        $result['order_data'] = $order_data;
+        return $result;
+    }
+
+    public function get_order_data($order_ids)
+    {
+        $order_ids = array_unique($order_ids);
+        $orderM = ClassRegistry::init('Order');
+        $orders = $orderM->find('all', [
+            'conditions' => [
+                'id' => $order_ids
+            ],
+            'joins' => [
+                [
+                    'table' => 'carts',
+                    'alias' => 'Cart',
+                    'type' => 'RIGHT',
+                    'conditions' => [
+                        'Cart.order_id = Order.id',
+                    ],
+                ],
+            ],
+            'fields' => ['Order.id', 'Cart.name', 'Cart.num']
+        ]);
+        $result = [];
+        foreach ($orders as $order_item) {
+            $order_id = $order_item['Order']['id'];
+            if (!isset($result[$order_id])) {
+                $result[$order_id] = $order_item['Cart']['name'] . 'X' . $order_item['Cart']['num'];
+            } else {
+                $result[$order_id] = $result[$order_id] . ', ' . $order_item['Cart']['name'] . 'X' . $order_item['Cart']['num'];
+            }
+        }
         return $result;
     }
 
@@ -531,7 +574,7 @@ class WeshareBuyComponent extends Component
         ));
         return $this->combine_comment($comments);
     }
-    
+
 
     /**
      * @param $order_ids
@@ -554,7 +597,7 @@ class WeshareBuyComponent extends Component
      * @return array
      * 加载本次分享的数据
      */
-    public function load_comment_by_share_id($weshare_id, $uid=null, $sharer=null)
+    public function load_comment_by_share_id($weshare_id, $uid = null, $sharer = null)
     {
         $conds = array(
             'type' => COMMENT_SHARE_TYPE,
@@ -562,13 +605,13 @@ class WeshareBuyComponent extends Component
             'status' => COMMENT_SHOW_STATUS
         );
         $user_ids = [];
-        if(!empty($uid)){
+        if (!empty($uid)) {
             $user_ids[] = $uid;
         }
-        if(!empty($sharer)){
+        if (!empty($sharer)) {
             $user_ids[] = $sharer;
         }
-        if(!empty($user_ids)){
+        if (!empty($user_ids)) {
             $conds['user_id'] = $user_ids;
         }
         $share_comment_data = $this->query_comment($conds);
@@ -1024,13 +1067,13 @@ class WeshareBuyComponent extends Component
         }
         $relations = $userRelationM->find('all', $cond);
         $follower_ids = Hash::extract($relations, '{n}.UserRelation.follow_id');
-        if(!empty($follower_ids)){
+        if (!empty($follower_ids)) {
             $userM = ClassRegistry::init('User');
             $users = $userM->find('all', [
-                'conditions' =>[
+                'conditions' => [
                     'id' => $follower_ids,
                     'wx_subscribe_status' => 1
-                ] ,
+                ],
                 'fields' => ['id']
             ]);
             $follower_ids = Hash::extract($users, '{n}.User.id');
@@ -1511,7 +1554,7 @@ class WeshareBuyComponent extends Component
         $weshareM = ClassRegistry::init('Weshare');
         $related_share_ids = $weshareM->get_relate_share($weshareId);
         $order_status = array(ORDER_STATUS_DONE, ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
-        $sort = array('FIELD(status, '.join(',',$order_status).')', 'id DESC');
+        $sort = array('FIELD(status, ' . join(',', $order_status) . ')', 'id DESC');
         $current_user_order = $this->get_current_user_share_order_data($weshareId, $uid);
         $query_order_cond = array(
             'conditions' => array(
@@ -1870,7 +1913,7 @@ class WeshareBuyComponent extends Component
             $recommendData = Hash::extract($recommend_users, '{n}.User');
             //reset user image
             $recommendData = array_map('map_user_avatar', $recommendData);
-            foreach($recommendData as &$data_item){
+            foreach ($recommendData as &$data_item) {
                 $data_item['recommend_reason'] = $recommends[$data_item['id']]['memo'];
             }
             Cache::write($key, json_encode($recommendData));
@@ -2090,7 +2133,7 @@ class WeshareBuyComponent extends Component
     {
         $key = SHARE_ORDER_COUNT_SUM_CACHE_KEY . '_' . $shareId . '_' . $share_creator;
         $cacheData = Cache::read($key);
-        if(empty($cacheData)){
+        if (empty($cacheData)) {
             $weshareM = ClassRegistry::init('Weshare');
             $orderM = ClassRegistry::init('Order');
             $related_share_ids = $weshareM->get_relate_share($shareId);
@@ -2423,7 +2466,7 @@ class WeshareBuyComponent extends Component
      */
     public function send_recommend_msg($recommend_user, $share_id, $memo)
     {
-        $checkSendMsgResult = $this->ShareUtil-> checkCanSendMsg($recommend_user, $share_id, MSG_LOG_RECOMMEND_TYPE);
+        $checkSendMsgResult = $this->ShareUtil->checkCanSendMsg($recommend_user, $share_id, MSG_LOG_RECOMMEND_TYPE);
         if (!$checkSendMsgResult['success']) {
             return $checkSendMsgResult;
         }
@@ -2922,7 +2965,7 @@ class WeshareBuyComponent extends Component
     {
         $data_val = $this->ShareUtil->get_user_level($uid);
         $data_val = $data_val['data_value'];
-        if($data_val >= PROXY_USER_LEVEL_VALUE){
+        if ($data_val >= PROXY_USER_LEVEL_VALUE) {
             $rebate_setting = $this->ShareUtil->get_share_rebate_data($shareId);
             if (!empty($rebate_setting)) {
                 $rebate_money = round((floatval($rebate_setting['ProxyRebatePercent']['percent']) * $total_price) / (100 * 100), 2);
@@ -3093,7 +3136,8 @@ class WeshareBuyComponent extends Component
         return $shares;
     }
 
-    public function get_sharer_info_with_sub_status($sharer_id, $uid){
+    public function get_sharer_info_with_sub_status($sharer_id, $uid)
+    {
         $userM = ClassRegistry::init('User');
         $sharer_info = $userM->find('first', [
             'conditions' => ['User.id' => $sharer_id],
