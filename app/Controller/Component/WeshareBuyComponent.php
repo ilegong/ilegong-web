@@ -533,7 +533,7 @@ class WeshareBuyComponent extends Component
         $orderM = ClassRegistry::init('Order');
         $orders = $orderM->find('all', [
             'conditions' => [
-                'id' => $order_ids
+                'Order.id' => $order_ids
             ],
             'joins' => [
                 [
