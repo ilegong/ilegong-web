@@ -1,5 +1,5 @@
 (function (window, angular) {
-  var app = angular.module('weshares', ['infinite-scroll', 'module.services', 'module.filters', 'module.directives'])
+  var app = angular.module('weshares', ['infinite-scroll','angular-carousel', 'module.services', 'module.filters', 'module.directives'])
     .constant('_', window._)
     .config(configCompileProvider)
     .config(configHttpProvider)

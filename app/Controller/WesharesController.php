@@ -35,12 +35,12 @@ class WesharesController extends AppController
     public function index($tag = 0)
     {
         $index_products = $this->ShareUtil->get_index_product($tag);
+        $banners = $this->ShareUtil->get_index_banners();
         $uid = $this->currentUser['id'];
         $this->set('index_products', $index_products);
-        //$this->set('weshare_ids', Hash::extract($index_products, '{n}.Weshare.id'));
         $this->set('uid', $uid);
         $this->set('tag', $tag);
-        //$this->render();
+        $this->set('banners', $banners);
     }
 
     public function entrance(){

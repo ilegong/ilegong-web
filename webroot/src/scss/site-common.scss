@@ -326,31 +326,6 @@ a:-webkit-any-link {
   margin-bottom: 10px;
   background-color: #fff;
   .image-container {
-    display: block;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    .image-cover {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-      display: inline-block;
-      vertical-align: bottom;
-      overflow: hidden;
-      background-color: #cacccd;
-      vertical-index: 0;
-    }
-    .image {
-      display: inline-block;
-      max-height: 280px;
-      max-width: 100%;
-      z-index: 1;
-    }
-
     .product-price-bg {
       z-index: 2;
       background-color: #333;
@@ -434,6 +409,32 @@ a:-webkit-any-link {
       -webkit-line-clamp: 2;
       overflow: hidden;
     }
+  }
+}
+.image-container {
+  display: block;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  .image-cover {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    display: inline-block;
+    vertical-align: bottom;
+    overflow: hidden;
+    background-color: #cacccd;
+    vertical-index: 0;
+  }
+  .image {
+    display: inline-block;
+    max-height: 280px;
+    max-width: 100%;
+    z-index: 1;
   }
 }
 .proxy-level {
@@ -616,36 +617,27 @@ a:-webkit-any-link {
 }
 
 .banners {
-  img {
+  position: relative;
+  .image-container{
+    padding-bottom: 43%;
+  }
+  .rn-carousel-indicator {
+    position: absolute;
+    bottom: 10px;
     width: 100%;
-    height: auto;
-    display: block;
+    text-align: center;
+    span{
+      cursor: pointer;
+      color: #666;
+      padding-right: 8px;
+    }
+    span.active{
+        color: white;
+    }
   }
 }
 
 .index-page {
-
-  .foretaste {
-    display: block;
-    border-bottom: 1px #dddddd solid;
-    background-color: #FFFFFF;
-    margin-bottom: 10px;
-    padding: 2px 0;
-    img {
-      float: left;
-      width: 110px;
-      border: 0;
-      display: block;
-    }
-    strong {
-      line-height: 41px;
-      display: block;
-      float: left;
-      color: #ff6485;
-      font-size: 1.1em;
-    }
-  }
-
   .shares-container {
     .share {
       .image-container {
