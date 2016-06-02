@@ -53,7 +53,11 @@ class WesharesController extends AppController
     }
 
     public function pay_result(){
-
+        $totalFee = $_REQUEST['totalFee'];
+        $weshareId = $_REQUEST['shareId'];
+        $this->set('totalFee', $totalFee);
+        $detail = $this->ShareUtil->get_tag_weshare_detail($weshareId);
+        $this->set('detail', $detail);
     }
 
     /**

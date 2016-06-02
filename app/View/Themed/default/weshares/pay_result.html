@@ -1,7 +1,7 @@
 <div class="pay-result" ng-controller="PayResultCtr as vm">
     <div class="menu-top refer-back-bg">
         支付成功
-        <a href="/weshares/get_self_info">
+        <a href="/weshares/view/{{$detail['id']}}">
             <img src="{{$STATIC_HOST}}/static/weshares/images/back.png"/>
             <label>返回</label>
         </a>
@@ -12,13 +12,13 @@
         <div>
             <ul class="clearfix">
                 <li class="fl">支付金额</li>
-                <li class="fr">￥100</li>
+                <li class="fr">￥{{$totalFee}}</li>
             </ul>
             <ul class="clearfix">
                 <li class="fl">
                     <a href="#X" class="clearfix">
-                        <img src="images/img.png"/>
-                        <label>分享人【鲲鲲】</label>
+                        <img src="{{$detail['creator']['image']}}"/>
+                        <label>分享人【{{$detail['creator']['nickname']}}】</label>
                     </a>
                 </li>
                 <li class="fr">
