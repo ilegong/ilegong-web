@@ -128,7 +128,13 @@ var all_css = [
       'webroot/src/scss/tutorial.scss',
     ],
     dist: 'webroot/static/weshares/css/'
-  }
+  },{
+        name: 'pay-result.min.css',
+        sources: [
+            'webroot/src/scss/pay-result.scss',
+        ],
+        dist: 'webroot/static/weshares/css/'
+    }
 ];
 
 var js_tasks = [];
