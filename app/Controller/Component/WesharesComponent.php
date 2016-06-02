@@ -252,6 +252,12 @@ class WesharesComponent extends Component
         $this->on_weshare_deleted($uid, $weshare_id);
     }
 
+    public function publish_weshare($uid, $weshare_id){
+        $weshareM = ClassRegistry::init('Weshare');
+        $weshareM->update(array('status' => WESHARE_STATUS_NORMAL), array('id' => $weshare_id, 'creator' => $uid));
+        $this->on_weshare_publish($uid, $weshare_id);
+    }
+
     public function get_u_create_share($uid, $limit, $page)
     {
         $weshareM = ClassRegistry::init('Weshare');
@@ -311,6 +317,13 @@ class WesharesComponent extends Component
 
 
     private function on_weshare_stopped($uid, $weshare_id)
+    {
+        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshare_id, '');
+        Cache::write(SHARE_DETAIL_DATA_WITH_TAG_CACHE_KEY . '_' . $weshare_id, '');
+        Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
+    }
+
+    private function on_weshare_publish($uid, $weshare_id)
     {
         Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshare_id, '');
         Cache::write(SHARE_DETAIL_DATA_WITH_TAG_CACHE_KEY . '_' . $weshare_id, '');
