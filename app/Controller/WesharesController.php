@@ -68,13 +68,13 @@ class WesharesController extends AppController
         //领取红包
         $shared_offer_id = $_REQUEST['shared_offer_id'];
         //has share offer id user open share
+        $weshare = $this->WeshareBuy->get_weshare_info($weshare_id);
         //用户抢红包
         if (!empty($shared_offer_id)) {
             //process
             $this->process_shared_offer($shared_offer_id);
         } else {
             //use cache
-            $weshare = $this->WeshareBuy->get_weshare_info($weshare_id);
             if ($weshare['type'] == SHARE_TYPE_POOL_FOR_PROXY) {
                 //check share type
                 if (!$this->ShareUtil->is_proxy_user($uid)) {
