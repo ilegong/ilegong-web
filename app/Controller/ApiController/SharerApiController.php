@@ -21,7 +21,7 @@ class SharerApiController extends AppController{
     public function update_share($shareId){
         $weshareInfo = $this->ShareUtil->get_edit_share_info($shareId);
         echo json_encode($weshareInfo);
-        return;
+        exit;
     }
 
     /**
@@ -32,7 +32,7 @@ class SharerApiController extends AppController{
         $postDataArray = $this->get_post_raw_data();
         $result = $this->Weshares->create_weshare($postDataArray, $uid);
         echo json_encode($result);
-        return;
+        exit;
     }
 
     /**
@@ -43,7 +43,7 @@ class SharerApiController extends AppController{
         $postDataArray = $this->get_post_raw_data();
         $result = $this->Weshares->create_weshare($postDataArray, $uid);
         echo json_encode($result);
-        return;
+        exit;
     }
 
     /**
@@ -54,7 +54,14 @@ class SharerApiController extends AppController{
         $uid = $this->currentUser['id'];
         $this->Weshares->delete_weshare($uid, $weshare_id);
         echo json_encode(array('success' => true));
-        return;
+        exit;
+    }
+
+    public function publish_share($weshare_id){
+        $uid = $this->currentUser['id'];
+        $this->Weshares->publish_weshare($uid, $weshare_id);
+        echo json_encode(array('success' => true));
+        exit;
     }
 
     /**
@@ -171,7 +178,7 @@ class SharerApiController extends AppController{
         $userMonthOrderCount = $this->WeshareBuy->get_month_total_count($uid);
         $shareResult['monthOrderCount'] = $userMonthOrderCount;
         echo json_encode($shareResult);
-        return;
+        exit;
     }
 
     /**
@@ -217,7 +224,7 @@ class SharerApiController extends AppController{
         $uid = $this->currentUser['id'];
         $this->Weshares->stop_weshare($uid, $shareId);
         echo json_encode(array('success' => true));
-        return;
+        exit;
     }
 
     /**
@@ -228,7 +235,7 @@ class SharerApiController extends AppController{
         $this->WeshareBuy->update_order_remark($postData['order_id'], $postData['order_remark'], $postData['share_id']);
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $postData['share_id'] . '_0_1', "");
         echo json_encode(array('success' => true));
-        return;
+        exit;
     }
 
     /**
@@ -240,7 +247,7 @@ class SharerApiController extends AppController{
         $share_info = $this->ShareUtil->get_weshare_detail($weshare_id);
         $result = $this->ShareUtil->send_buy_percent_msg($postData['type'], $postData['user_id'], $share_info, $postData['content'], $weshare_id);
         echo json_encode($result);
-        return;
+        exit;
     }
 
     /**
@@ -254,7 +261,7 @@ class SharerApiController extends AppController{
         $order_id = $postData['order_id'];
         $this->ShareUtil->set_order_ship_code($ship_company_id, $weshare_id, $ship_code, $order_id);
         echo json_encode(array('success' => true));
-        return;
+        exit;
     }
 
     /**
@@ -269,7 +276,7 @@ class SharerApiController extends AppController{
         $ship_type_name = $postData['ship_type_name'];
         $this->ShareUtil->update_order_ship_code($ship_code, $weshare_id, $order_id, $company_id, $ship_type_name);
         echo json_encode(array('success' => true));
-        return;
+        exit;
     }
 
     /**
@@ -283,7 +290,7 @@ class SharerApiController extends AppController{
         $content = $postData['content'];
         $this->ShareUtil->send_arrival_msg($order_ids, $weshare_id, $uid, $content);
         echo json_encode(array('success' => true));
-        return;
+        exit;
     }
 
     /**
@@ -298,7 +305,7 @@ class SharerApiController extends AppController{
         $refundMark = $postData['refundMark'];
         $result = $this->ShareUtil->order_refund($shareId, $uid, $orderId, $refundMoney, $refundMark);
         echo json_encode($result);
-        return;
+        exit;
     }
 
     /**
@@ -309,7 +316,7 @@ class SharerApiController extends AppController{
         $uid = $this->currentUser['id'];
         $result = $this->ShareUtil->confirm_received_order($order_id, $uid);
         echo json_encode($result);
-        return;
+        exit;
     }
 
     /**

@@ -48,4 +48,10 @@ class OpcacheController extends AppController
         }
         die;
     }
+
+    public function admin_reset()
+    {
+        opcache_reset();
+        echo "success";
+    }
 }
