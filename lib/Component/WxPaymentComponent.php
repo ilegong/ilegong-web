@@ -435,8 +435,11 @@ class WxPaymentComponent extends Component {
 
         $totalFee = $order['Order']['total_all_price'];
         list($subject, $body) = $this->getProductDesc($order_id);
-
-        $out_trade_no = $this->out_trade_no(TRADE_ALI_TYPE, $order_id);
+        $out_trade_no_source = TRADE_ALI_TYPE;
+        if (WX_HOST == SH_SITE_HOST) {
+            $out_trade_no_source = $out_trade_no_source . '-SH';
+        }
+        $out_trade_no = $this->out_trade_no($out_trade_no_source, $order_id);
         $this->savePayLog($order_id, $out_trade_no, $body, TRADE_ALI_TYPE, $totalFee * 100, '', '');
         return $ali->api_form($out_trade_no, $order_id, $subject, $totalFee, $body, $type);
     }
