@@ -35,7 +35,8 @@ Configure::write('kuaidi100_key', '1c9cbcbc54d0ecf5');
  * define('WX_SERVICE_ID_NO', 'pyshuo2014');
  */
 
-// Configure::write('App.baseUrl', env('SCRIPT_NAME'));
+Configure::write('App.baseUrl', dirname(env('SCRIPT_NAME')) == '/webroot' ? '/' : env('SCRIPT_NAME'));
+
 define('LOG_ERROR', 2);
 // Configure::write('Session', array(
 //     'defaults' => 'database',
