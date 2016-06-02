@@ -19,23 +19,23 @@ class NewFind extends AppModel
         $data = Hash::extract($data, '{n}.NewFind');
 
 
-        if (!$data) {
-            // 当后台没有数据的时候, 初始化一个, 方便前台显示
-            $data = [
-                [
-                    'id' => 1,
-                    'banner' => '',
-                    'link' => '',
-                    'title' => '',
-                    'description' => '',
-                    'type' => $type,
-                    'sort' => 0,
-                    'deleted' => 0,
-                ],
-            ];
-        }
+//        if (!$data) {
+//            // 当后台没有数据的时候, 初始化一个, 方便前台显示
+//            $data = [
+//                [
+//                    'id' => 1,
+//                    'banner' => '',
+//                    'link' => '',
+//                    'title' => '',
+//                    'description' => '',
+//                    'type' => $type,
+//                    'sort' => 0,
+//                    'deleted' => 0,
+//                ],
+//            ];
+//        }
 
-        return $data;
+        return array_filter($data);
     }
 
     public function get_all_top_rank()
