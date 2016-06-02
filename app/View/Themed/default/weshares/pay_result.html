@@ -1,6 +1,13 @@
-<div class="pay-result">
+<div class="pay-result" ng-controller="PayResultCtr as vm">
+    <div class="menu-top refer-back-bg">
+        支付成功
+        <a href="/weshares/get_self_info">
+            <img src="{{$STATIC_HOST}}/static/weshares/images/back.png"/>
+            <label>返回</label>
+        </a>
+    </div>
     <div class="pay-bg">
-        <p><img src="images/success.png"/></p>
+        <p><img src="{{$STATIC_HOST}}/static/img/pay-success.png"/></p>
         <b>支付成功</b>
         <div>
             <ul class="clearfix">
@@ -22,5 +29,17 @@
         </div>
     </div>
     <a href="http://www.tongshijia.com/weshares/view/4692?recommend=12282" class="pay-banner"><img
-            src="images/pay-banner.gif"/></a>
+            src="{{$STATIC_HOST}}/static/img/pay-banner.gif"/></a>
 </div>
+
+<?php
+$this->Html->css(array(
+$STATIC_HOST.'/static/weshares/css/pay-result.min.css'
+), null, array('inline' => false))
+?>
+
+<?php
+$this->Html->script(array(
+$STATIC_HOST.'/static/weshares/js/pay-result.min.js'
+), array('block' => 'scripts'))
+?>

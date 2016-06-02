@@ -51,6 +51,11 @@ class WesharesController extends AppController
         $user_level = $this->ShareUtil->get_user_level($uid);
         $this->set('user_level', $user_level);
     }
+
+    public function pay_result(){
+
+    }
+
     /**
      * @param string $weshare_id
      * @param int $from 标示从什么地方跳转的访问
