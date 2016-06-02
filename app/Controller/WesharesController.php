@@ -128,6 +128,9 @@ class WesharesController extends AppController
         if (!empty($replay_comment_id)) {
             $this->set('reply_comment_id', $replay_comment_id);
         }
+        $this->set('title', $weshare['title']);
+        $this->set('image', $weshare['default_image']);
+        $this->set('desc', mb_substr($weshare['description'], 0,59,"UTF8")."...");
         $this->WeshareBuy->update_share_view_count($weshare_id);
     }
 
