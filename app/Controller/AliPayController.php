@@ -504,7 +504,8 @@ class AliPayController extends AppController {
             if ($isSuccess) {
                 if ($order['Order']['type'] == ORDER_TYPE_WESHARE_BUY) {
                     $weshareId = $order['Order']['member_id'];
-                    $this->redirect('/weshares/view/' . $weshareId . '/1');
+                    //$this->redirect('/weshares/view/' . $weshareId . '/1');
+                    $this->redirect('/weshares/pay_result.html?totalFee=' . $order['Order']['total_all_price'] . '&shareId=' . $weshareId);
                     return;
                 } elseif ($order['Order']['type'] == ORDER_TYPE_PIN_TUAN) {
                     $weshareId = $order['Order']['member_id'];
@@ -536,7 +537,11 @@ class AliPayController extends AppController {
             } else {
                 if ($order['Order']['type'] == ORDER_TYPE_WESHARE_BUY) {
                     $weshareId = $order['Order']['member_id'];
-                    $this->redirect('/weshares/view/' . $weshareId . '/1');
+                    if($isSuccess){
+                        $this->redirect('/weshares/pay_result.html?totalFee=' . $order['Order']['total_all_price'] . '&shareId=' . $weshareId);
+                    }else{
+                        $this->redirect('/weshares/view/' . $weshareId . '/1');
+                    }
                     return;
                 }
                 if ($isSuccess) {
