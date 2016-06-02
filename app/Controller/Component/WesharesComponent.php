@@ -7,6 +7,18 @@ class WesharesComponent extends Component
     public $components = array('ShareUtil', 'DeliveryTemplate', 'WeshareBuy', 'ShareAuthority');
 
 
+    public function get_weshare_rebate_setting($weshare_id){
+        $proxyRebatePercentM = ClassRegistry::init('ProxyRebatePercent');
+        $proxy_share_percent = $proxyRebatePercentM->find('first', array(
+            'conditions' => array(
+                'share_id' => $weshare_id,
+                'deleted' => DELETED_NO,
+                'status' => PUBLISH_YES
+            )
+        ));
+        return $proxy_share_percent['ProxyRebatePercent'];
+    }
+
     public function get_app_weshare_detail($weshare_id)
     {
         $weshareM = ClassRegistry::init('Weshare');
