@@ -2042,7 +2042,6 @@ class ShareUtilComponent extends Component
         $cache_data = Cache::read($key);
         if (empty($cache_data)) {
             $carousel = ClassRegistry::init('NewFind')->get_all_carousel();
-            $carousel = Hash::extract($carousel, '{n}.NewFind');
             Cache::write($key, json_encode($carousel));
             return $carousel;
         }
