@@ -85,7 +85,8 @@ class WeshareApiController extends Controller
     }
 
     //获取分享结算需要的数据
-    public function get_share_balance_data($share_id){
+    public function get_share_balance_data($share_id)
+    {
         $uid = $this->currentUser['id'];
         $share_balance_data = $this->Weshares->get_app_share_balance_data($share_id, $uid);
         echo json_encode($share_balance_data);
@@ -107,8 +108,10 @@ class WeshareApiController extends Controller
         $this->WeshareBuy->update_share_view_count($weshare_id);
         $detail = $this->Weshares->get_app_weshare_detail($weshare_id);
         $products = $this->Weshares->get_weshare_products($weshare_id);
+        $rebate_set = $this->Weshares->get_weshare_rebate_setting($weshare_id);
         $user_summary = $this->WeshareBuy->get_user_share_summary($detail['creator']);
         $share_summary = $this->WeshareBuy->get_share_and_all_refer_share_summary($weshare_id, $uid);
+        $recommend_data = $this->WeshareBuy->load_share_recommend_data($weshare_id);
         $has_sub = true;
         if ($uid != $detail['creator']) {
             $has_sub = $this->ShareUtil->check_user_is_subscribe($detail['creator'], $uid);
@@ -117,7 +120,7 @@ class WeshareApiController extends Controller
         $users = $userM->get_users_simple_info([$uid, $detail['creator']]);
         $users = Hash::combine($users, '{n}.User.id', '{n}.User');
         $sharer_level_data = $this->ShareUtil->get_user_level($detail['creator']);
-        echo json_encode(['detail' => $detail, 'products' => $products, 'has_sub' => $has_sub, 'current_user' => $users[$uid], 'sharer' => $users[$detail['creator']], 'sharer_level' => $sharer_level_data, 'user_summary' => $user_summary, 'share_summary' => $share_summary]);
+        echo json_encode(['detail' => $detail, 'products' => $products, 'rebate_setting' => $rebate_set, 'recommend_data' => $recommend_data, 'has_sub' => $has_sub, 'current_user' => $users[$uid], 'sharer' => $users[$detail['creator']], 'sharer_level' => $sharer_level_data, 'user_summary' => $user_summary, 'share_summary' => $share_summary]);
         exit();
     }
 
@@ -149,7 +152,8 @@ class WeshareApiController extends Controller
         exit();
     }
 
-    public function share_detail_web($id){
+    public function share_detail_web($id)
+    {
         $this->autoRender = true;
         $this->layout = null;
         $detail = $this->Weshares->get_app_weshare_detail($id);
