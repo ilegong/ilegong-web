@@ -235,6 +235,7 @@ const SHARE_BUY_SUMMERY_INFO_CACHE_KEY = 'share_buy_summery_info_cache_key';//åˆ
 const SHARE_REFER_SHARE_IDS_CACHE_KEY = 'share_refer_share_ids_cache_key';
 const HX_TOKEN_CACHE_KEY = 'hx_token_cache_key';
 const INDEX_VIEW_PRODUCT_CACHE_KEY = 'index_products_cache_key';
+const INDEX_VIEW_BANNER_CACHE_KEY = 'index_view_banner_cache_key';
 const INDEX_PRODUCTS_BY_TAG_CACHE_KEY = 'index_products_by_tag_cache_key';
 const INDEX_PRODUCT_SUMMARY_CACHE_KEY = 'index_products_summary_cache_key';
 const SHARE_ORDER_COUNT_SUM_CACHE_KEY = 'share_order_count_sum_cache_key';

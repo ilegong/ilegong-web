@@ -2036,6 +2036,19 @@ class ShareUtilComponent extends Component
         return $res;
     }
 
+    public function get_index_banners()
+    {
+        $key = INDEX_VIEW_BANNER_CACHE_KEY;
+        $cache_data = Cache::read($key);
+        if (empty($cache_data)) {
+            $carousel = ClassRegistry::init('NewFind')->get_all_carousel();
+            $carousel = Hash::extract($carousel, '{n}.NewFind');
+            Cache::write($key, json_encode($carousel));
+            return $carousel;
+        }
+        return json_decode($cache_data, true);
+    }
+
     public function get_index_product($tag_id)
     {
         $key = INDEX_VIEW_PRODUCT_CACHE_KEY . '_' . $tag_id;
