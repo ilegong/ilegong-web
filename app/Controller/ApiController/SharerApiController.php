@@ -251,6 +251,19 @@ class SharerApiController extends AppController{
     }
 
     /**
+     * 发送推荐通知
+     */
+    public function send_recommend(){
+        $params = json_decode(file_get_contents('php://input'), true);
+        $memo = $params['recommend_content'];
+        $userId = $params['recommend_user'];
+        $shareId = $params['recommend_share'];
+        $result = $this->ShareUtil->saveShareRecommendLog($shareId, $userId, $memo);
+        echo json_encode($result);
+        return;
+    }
+
+    /**
      * 填写订单快递单号
      */
     public function set_order_ship_code(){

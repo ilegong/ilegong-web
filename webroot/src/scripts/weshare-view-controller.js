@@ -146,7 +146,6 @@
                 if(!_.isEmpty(data['ordersDetail']['order_ids'])){
                   loadOrderCommentData(share_id);
                 }
-                setWeiXinShareParams();
                 //check user is auto comment
                 if (vm.autoPopCommentData['comment_order_info']) {
                     vm.showAutoCommentDialog();
@@ -155,11 +154,7 @@
                     if (fromType == 1) {
                         vm.showLayer = true;
                         if (_.isEmpty(initSharedOfferId)) {
-                            if (!vm.userSubStatus) {
-                                vm.showTipSubSharerDialog = true;
-                            } else {
-                                vm.showNotifyShareDialog = true;
-                            }
+                            vm.showNotifyShareDialog = true;
                         } else {
                             //check is new user buy it
                             if (vm.currentUser) {
@@ -592,7 +587,7 @@
                 name: vm.buyerName,
                 mobilephone: vm.buyerMobilePhone,
                 address: vm.buyerAddress,
-                patchAddress: vm.buyerPatchAddress,
+                patchAddress: vm.buyerPatchAddress
             };
             //快递
             if (vm.selectShipType == 0) {
@@ -634,7 +629,7 @@
                 rebate_log_id: vm.rebateLogId,
                 products: submit_products,
                 ship_info: ship_info,
-                remark: vm.buyerRemark,
+                remark: vm.buyerRemark
             };
             if (vm.useCouponId) {
                 orderData['coupon_id'] = vm.useCouponId;
@@ -1249,7 +1244,6 @@
             vm.canEditShare = data['can_edit_share'];
             vm.recommendData = data['recommendData'];
             vm.currentUser = data['current_user'] || {};
-            vm.weixinInfo = data['weixininfo'];
             vm.consignee = data['consignee'];
             vm.myCoupons = data['my_coupons'];
             vm.weshareSettings = data['weshare_ship_settings'];
@@ -1276,136 +1270,5 @@
             vm.getShareSummeryData(vm.weshare.id, vm.weshare.creator.id);
             vm.loadOrderDetail(vm.weshare.id);
         }
-
-        //设置微信分享的参数
-      function setWeiXinShareParams() {
-        if (typeof wx !== 'undefined') {
-          var url = 'http://' + window.location.host + '/weshares/view/' + vm.weshare.id;
-          //creator
-          var to_timeline_title = '朋友说—基于信任关系的分享平台';
-          var to_friend_title = '朋友说—基于信任关系的分享平台';
-          var imgUrl = 'http://static.tongshijia.com/static/weshares/images/pys-logo.gif';
-          var desc = '来 [朋友说] 分享好吃的、好玩的、有趣的';
-          var share_string = 'we_share';
-          //member
-          var userInfo = vm.currentUser;
-
-          var regex = /(<([^>]+)>)/ig
-            , descText = vm.weshare.description
-            , shareIntryResult = descText.replace(regex, "").substr(0, 30);
-
-          if (vm.currentUser.id == vm.weshare.creator.id) {
-            to_timeline_title = vm.weshare.creator.nickname + '分享:' + vm.weshare.title;
-            to_friend_title = vm.weshare.creator.nickname + '分享:' + vm.weshare.title;
-            imgUrl = vm.weshare.images[0] || vm.weshare.creator.image;
-            if (vm.weshare.summary.order_count >= 5) {
-              desc = '已经有' + vm.weshare.summary.order_count + '人报名，' + shareIntryResult;
-            } else {
-              desc = shareIntryResult;
-            }
-          } else if (userInfo && !(_.isEmpty(vm.ordersDetail['orders']))) {
-            if (vm.isProxy()) {
-              url = url + '?recommend=' + vm.currentUser['id'];
-            }
-            if (!vm.isProxy() && vm.recommendUserId != 0) {
-              url = url + '?recommend=' + vm.recommendUserId;
-            }
-            to_timeline_title = userInfo.nickname + '报名了' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
-            to_friend_title = userInfo.nickname + '报名了' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
-            imgUrl = vm.weshare.images[0] || userInfo.image;
-            desc = vm.weshare.creator.nickname + '我认识，很靠谱。' + shareIntryResult;
-          } else if (userInfo) {
-            //default custom
-            if (vm.weshare.type !== 4) {
-              if (vm.isProxy()) {
-                url = url + '?recommend=' + vm.currentUser['id'];
-              }
-              if (!vm.isProxy() && vm.recommendUserId != 0) {
-                url = url + '?recommend=' + vm.recommendUserId;
-              }
-            }
-            to_timeline_title = vm.currentUser.nickname + '推荐' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
-            to_friend_title = vm.currentUser.nickname + '推荐' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
-            imgUrl = vm.weshare.images[0] || vm.currentUser.image;
-            desc = vm.weshare.creator.nickname + '我认识，很靠谱。' + shareIntryResult;
-          } else {
-            to_timeline_title = vm.weshare.creator.nickname + '分享了' + vm.weshare.title;
-            to_friend_title = vm.weshare.creator.nickname + '分享了' + vm.weshare.title;
-            imgUrl = vm.weshare.images[0] || vm.weshare.creator.image;
-            desc = vm.weshare.creator.nickname + '我认识，很靠谱。' + shareIntryResult;
-          }
-          if (vm.weixinInfo) {
-            share_string = vm.weixinInfo.share_string;
-          }
-          //share packet
-          if (vm.isSharePacket && userInfo) {
-            url = 'http://www.tongshijia.com/weshares/view/' + vm.weshare.id;
-            imgUrl = 'http://static.tongshijia.com/static/weshares/images/share_icon.jpg';
-            var title = userInfo.nickname + '报名了' + vm.weshare.creator.nickname + '分享的' + vm.weshare.title;
-            to_timeline_title = title;
-            to_friend_title = title;
-            url = url + '?shared_offer_id=' + vm.sharedOfferId;
-            if (vm.isProxy()) {
-              url = url + '&recommend=' + vm.currentUser['id'];
-            }
-            if (!vm.isProxy() && vm.recommendUserId != 0) {
-              url = url + '&recommend=' + vm.recommendUserId;
-            }
-            desc = vm.weshare.creator.nickname + '我认识，很靠谱！送你一个爱心礼包，一起来参加。';
-          }
-          var to_friend_link = url;
-          var to_timeline_link = url;
-          to_friend_title = Utils.removeEmoji(to_friend_title);
-          to_timeline_title = Utils.removeEmoji(to_timeline_title);
-          desc = Utils.removeEmoji(desc);
-          wx.ready(function () {
-            wx.onMenuShareAppMessage({
-              title: to_friend_title,
-              desc: desc,
-              link: to_friend_link,
-              imgUrl: imgUrl,
-              success: function () {
-                // 用户确认分享后执行的回调函数
-                if (share_string != '0') {
-                  setTimeout(function () {
-                    $http.post('/wx_shares/log_share', {
-                      trstr: share_string,
-                      share_type: "appMsg"
-                    }).success(function (data, status, headers, config) {
-                      // this callback will be called asynchronously
-                      // when the response is available
-                    }).error(function (data, status, headers, config) {
-                      // called asynchronously if an error occurs
-                      // or server returns response with an error status.
-                    });
-                  }, 500);
-                }
-              }
-            });
-            wx.onMenuShareTimeline({
-              title: to_timeline_title,
-              link: to_timeline_link,
-              imgUrl: imgUrl,
-              success: function () {
-                if (share_string != '0') {
-                  setTimeout(function () {
-                    $http.post('/wx_shares/log_share', {
-                      trstr: share_string,
-                      share_type: "timeline"
-                    }).success(function (data, status, headers, config) {
-                      // this callback will be called asynchronously
-                      // when the response is available
-                    }).error(function (data, status, headers, config) {
-                      // called asynchronously if an error occurs
-                      // or server returns response with an error status.
-                    });
-                  }, 500);
-                }
-              }
-            });
-          });
-        }
-        return;
-      }
     }
 })(window, window.angular);

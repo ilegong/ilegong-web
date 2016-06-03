@@ -90,6 +90,7 @@ var all_js = [
   },{
         name: 'pay-result.min.js',
         sources: [
+            'webroot/src/scripts/subscription-controller.js',
             'webroot/src/scripts/pay-result-controller.js'
         ],
         dist: 'webroot/static/weshares/js/'
@@ -134,13 +135,7 @@ var all_css = [
       'webroot/src/scss/tutorial.scss',
     ],
     dist: 'webroot/static/weshares/css/'
-  },{
-        name: 'pay-result.min.css',
-        sources: [
-            'webroot/src/scss/pay-result.scss',
-        ],
-        dist: 'webroot/static/weshares/css/'
-    }
+  }
 ];
 
 var js_tasks = [];

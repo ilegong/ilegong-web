@@ -32,6 +32,7 @@ class WxPayController extends AppController {
         $uid = $this->currentUser['id'];
         $error_pay_redirect = '/orders/detail/' . $orderId . '/pay';
         $paid_done_url = '/orders/detail/' . $orderId . '/paid';
+        $paid_success_url = '';
         $this->pageTitle = '微信支付';
         $from = $_GET['from'];
         $order = $this->WxPayment->getOrder($orderId, $uid);
@@ -57,6 +58,7 @@ class WxPayController extends AppController {
             $this->set('shareId', $shareId);
             $paid_done_url = '/weshares/view/' . $shareId . '/1';
             $error_pay_redirect = '/weshares/view/' . $shareId;
+            $paid_success_url = '/weshares/pay_result/' . $order['Order']['id'] . '.html';
         }
         //拼团
         if ($from == 'pintuan') {
@@ -78,6 +80,7 @@ class WxPayController extends AppController {
         $this->set('orderId', $orderId);
         $this->set('hideNav', true);
         $this->set('from', $from);
+        $this->set('pad_success_url', $paid_success_url);
         $this->set('retry_link', '/wxPay/jsApiPay/'.$orderId.'.html?showwxpaytitle=1&trytimes='.(intval($_REQUEST['trytimes'])+1));
     }
     //扫码支付
