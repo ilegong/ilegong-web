@@ -618,18 +618,21 @@ a:-webkit-any-link {
 
 .banners {
   position: relative;
+  margin-bottom: 10px;
   .image-container{
     padding-bottom: 43%;
   }
   .rn-carousel-indicator {
     position: absolute;
-    bottom: 10px;
+    bottom: 5px;
     width: 100%;
     text-align: center;
     span{
       cursor: pointer;
       color: #666;
       padding-right: 8px;
+      font-size: 1.5em;
+      opacity: 0.7;
     }
     span.active{
         color: white;
