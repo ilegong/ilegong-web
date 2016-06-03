@@ -118,7 +118,11 @@
 
 <?php
     $this->assign('title','分享圈');
+if($hide_nav){
+$this->set('show_footer', false);
+}else{
 $this->set('show_footer', 'index');
+}
 $this->Html->script(array(
 $STATIC_HOST.'/static/weshares/js/index.min.js?v2.5.14'
 ), array('block' => 'scripts'))
