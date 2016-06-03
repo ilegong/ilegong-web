@@ -56,8 +56,12 @@ class WesharesController extends AppController
         $totalFee = $_REQUEST['totalFee'];
         $weshareId = $_REQUEST['shareId'];
         $this->set('totalFee', $totalFee);
+        $uid = $this->currentUser['id'];
+        $this->set('uid', $uid);
         $detail = $this->ShareUtil->get_tag_weshare_detail($weshareId);
         $this->set('detail', $detail);
+        $isSub = $this->ShareUtil->check_user_is_subscribe($detail['creator']['id'], $uid);
+        $this->set('has_sub', $isSub);
     }
 
     /**
