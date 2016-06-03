@@ -3,7 +3,7 @@
     angular.module('weshares')
         .controller('WesharesViewCtrl', WesharesViewCtrl);
 
-    function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, $filter, $window, Utils, ShareOrder, OfflineStore) {
+    function WesharesViewCtrl($scope, $rootScope, $log, $http, $templateCache, $timeout, $filter, Utils, ShareOrder, OfflineStore) {
         var vm = this;
         vm.staticFilePath = Utils.staticFilePath();
         vm.showShareDetailView = true;
@@ -13,10 +13,6 @@
         vm.hideMoreShareInfo = false;
         vm.shouldShowReadMoreBtn = false;
         OfflineStore.ChooseOfflineStore(vm, $http, $templateCache);
-        vm.statusMap = {
-            0: '进行中',
-            1: '已截止'
-        };
         vm.shipTypes = Utils.shipTypes();
         vm.submitTempCommentData = {};
         vm.viewImage = viewImage;
@@ -68,7 +64,6 @@
         vm.notifyType = notifyType;
         vm.sendNotifyShareMsg = sendNotifyShareMsg;
         vm.validNotifyMsgContent = validNotifyMsgContent;
-        vm.subSharer = subSharer;
         vm.cloneShare = cloneShare;
         vm.resetNotifyContent = resetNotifyContent;
         vm.defaultNotifyHasBuyMsgContent = defaultNotifyHasBuyMsgContent;
@@ -82,22 +77,22 @@
         vm.calProxyRebateFee = calProxyRebateFee;
         vm.isShareManager = isShareManager;
         vm.calculateShipFee = calculateShipFee;
-        vm.unSubSharer = unSubSharer;
         vm.updateBuyerData = updateBuyerData;
         vm.getShareSummeryData = getShareSummeryData;
         vm.filterProductByNum = filterProductByNum;
-        vm.currentUserOrderCount = 0;
-        vm.rebateFee = 0;
-        vm.orderPayTotalPrice = 0;
-        vm.productTotalPrice = 0;
         vm.isShowExpressInfoBtn = isShowExpressInfoBtn;
         vm.showOrderExpressInfo = showOrderExpressInfo;
-
-        vm.commentData = {};
-        vm.orderComments = [];
         activate();
 
         function activate() {
+            vm.currentUserOrderCount = 0;
+            vm.rebateFee = 0;
+            vm.orderPayTotalPrice = 0;
+            vm.productTotalPrice = 0;
+            vm.commentData = {};
+            vm.orderComments = [];
+            $rootScope.uid=-1;
+            $rootScope.proxies = [];
             vm.initWeshareData();
         }
 
@@ -154,11 +149,7 @@
                     if (fromType == 1) {
                         vm.showLayer = true;
                         if (_.isEmpty(initSharedOfferId)) {
-                            if (!vm.userSubStatus) {
-                                vm.showTipSubSharerDialog = true;
-                            } else {
-                                vm.showNotifyShareDialog = true;
-                            }
+                            vm.showNotifyShareDialog = true;
                         } else {
                             //check is new user buy it
                             if (vm.currentUser) {
@@ -197,14 +188,16 @@
         }
 
         function initWeshareData() {
-            var rebateLogId = angular.element(document.getElementById('weshareView')).attr('data-rebate-log-id');
-            var recommendUserId = angular.element(document.getElementById('weshareView')).attr('data-recommend-id');
+          var element = angular.element(document.getElementById('weshareView'));
+            var rebateLogId = element.attr('data-rebate-log-id');
+            var recommendUserId = element.attr('data-recommend-id');
             //auto poup comment dialog
-            var commentOrderId = angular.element(document.getElementById('weshareView')).attr('data-comment-order-id');
-            var replayCommentId = angular.element(document.getElementById('weshareView')).attr('data-replay-comment-id');
+            var commentOrderId = element.attr('data-comment-order-id');
+            var replayCommentId = element.attr('data-replay-comment-id');
             vm.rebateLogId = rebateLogId || 0;
             vm.recommendUserId = recommendUserId || 0;
-            var weshareId = angular.element(document.getElementById('weshareView')).attr('data-weshare-id');
+            var weshareId = element.attr('data-weshare-id');
+            $rootScope.uid = element.attr('data-uid');
             vm.weshare = {};
             $scope.$watch('vm.selectShipType', function (val) {
                 if (val != -1) {
@@ -591,7 +584,7 @@
                 name: vm.buyerName,
                 mobilephone: vm.buyerMobilePhone,
                 address: vm.buyerAddress,
-                patchAddress: vm.buyerPatchAddress,
+                patchAddress: vm.buyerPatchAddress
             };
             //快递
             if (vm.selectShipType == 0) {
@@ -633,7 +626,7 @@
                 rebate_log_id: vm.rebateLogId,
                 products: submit_products,
                 ship_info: ship_info,
-                remark: vm.buyerRemark,
+                remark: vm.buyerRemark
             };
             if (vm.useCouponId) {
                 orderData['coupon_id'] = vm.useCouponId;
@@ -724,7 +717,7 @@
             $http.post('/weshares/comment', vm.submitTempCommentData).success(function (data) {
                 if (data.success) {
                     if (data.type == 'notify') {
-                        $window.alert('已经通知TA');
+                        window.alert('已经通知TA');
                         return true;
                     }
                     var order_id = data['order_id'];
@@ -807,49 +800,6 @@
                 }
             }
             return 0;
-        }
-
-        function unSubSharer() {
-            if (vm.hasProcessSubSharer) {
-                return;
-            }
-            $http({
-                method: 'GET',
-                url: '/weshares/unsubscribe_sharer/' + vm.weshare.creator.id + '/' + vm.currentUser.id
-            }).success(function (data) {
-                vm.hasProcessSubSharer = false;
-                if (data['success']) {
-                    vm.userSubStatus = !vm.userSubStatus;
-                    vm.showUnSubscribeLayer = true;
-                    $timeout(function () {
-                        vm.showUnSubscribeLayer = false;
-                    }, 2000);
-                }
-            }).error(function (data) {
-                vm.hasProcessSubSharer = true;
-            });
-        }
-
-        function subSharer() {
-            if (vm.hasProcessSubSharer) {
-                return;
-            }
-            $http({
-                method: 'GET',
-                url: '/weshares/subscribe_sharer/' + vm.weshare.creator.id + '/' + vm.currentUser.id + '/1/' + vm.weshare.id + '.json'
-            }).success(function (data) {
-                // With the data succesfully returned, call our callback
-                vm.hasProcessSubSharer = false;
-                if (data['success']) {
-                    //vm.subShareTipTxt = '已关注';
-                    vm.userSubStatus = !vm.userSubStatus;
-                } else {
-                    alert('请先关注朋友说微信公众号！');
-                    window.location.href = data['url'];
-                }
-            }).error(function () {
-                vm.hasProcessSubSharer = false;
-            });
         }
 
         function validNotifyMsgContent() {
@@ -1248,11 +1198,12 @@
             vm.canEditShare = data['can_edit_share'];
             vm.recommendData = data['recommendData'];
             vm.currentUser = data['current_user'] || {};
-            vm.weixinInfo = data['weixininfo'];
             vm.consignee = data['consignee'];
             vm.myCoupons = data['my_coupons'];
             vm.weshareSettings = data['weshare_ship_settings'];
-            vm.userSubStatus = data['sub_status'];
+            if(data['sub_status']){
+                $rootScope.proxies.push(parseInt(vm.weshare.creator.id));
+            };
             vm.autoPopCommentData = data['prepare_comment_data'];
             vm.dliveryTemplate = data['weshare']['deliveryTemplate'];
             vm.productSummery = data['share_summery'];
