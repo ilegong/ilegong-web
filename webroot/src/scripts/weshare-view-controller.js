@@ -154,11 +154,7 @@
                     if (fromType == 1) {
                         vm.showLayer = true;
                         if (_.isEmpty(initSharedOfferId)) {
-                            if (!vm.userSubStatus) {
-                                vm.showTipSubSharerDialog = true;
-                            } else {
-                                vm.showNotifyShareDialog = true;
-                            }
+                            vm.showNotifyShareDialog = true;
                         } else {
                             //check is new user buy it
                             if (vm.currentUser) {
