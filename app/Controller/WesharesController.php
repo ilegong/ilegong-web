@@ -52,13 +52,18 @@ class WesharesController extends AppController
         $this->set('user_level', $user_level);
     }
 
-    public function pay_result(){
-        $totalFee = $_REQUEST['totalFee'];
-        $weshareId = $_REQUEST['shareId'];
-        $this->set('totalFee', $totalFee);
+    public function pay_result($orderId){
+        $uid = $this->currentUser['id'];
+        $orderInfo = $this->Order->find('first', [
+            'conditions' => ['id' => $orderId, 'creator' => $uid, 'status' => ORDER_STATUS_PAID, 'type' => ORDER_TYPE_WESHARE_BUY]
+        ]);
+        if (empty($orderInfo)) {
+            $this->redirect('/');
+        }
+        $this->set('totalFee', $orderInfo['Order']['total_all_price']);
         $uid = $this->currentUser['id'];
         $this->set('uid', $uid);
-        $detail = $this->ShareUtil->get_tag_weshare_detail($weshareId);
+        $detail = $this->ShareUtil->get_tag_weshare_detail($orderInfo['Order']['member_id']);
         $this->set('detail', $detail);
         $isSub = $this->ShareUtil->check_user_is_subscribe($detail['creator']['id'], $uid);
         $this->set('has_sub', $isSub);

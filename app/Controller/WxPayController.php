@@ -58,7 +58,7 @@ class WxPayController extends AppController {
             $this->set('shareId', $shareId);
             $paid_done_url = '/weshares/view/' . $shareId . '/1';
             $error_pay_redirect = '/weshares/view/' . $shareId;
-            $paid_success_url = '/weshares/pay_result.html?totalFee='.$order['Order']['total_all_price'].'&shareId='.$shareId;
+            $paid_success_url = '/weshares/pay_result/' . $order['Order']['id'] . '.html';
         }
         //拼团
         if ($from == 'pintuan') {
