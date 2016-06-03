@@ -15,12 +15,12 @@ var all_js = [
       'webroot/src/scripts/module-directives.js',
       'webroot/src/scripts/module-services.js',
       'webroot/src/scripts/app.js',
+      'webroot/src/scripts/subscription-controller.js'
     ],
     dist: 'webroot/static/weshares/js/'
   }, {
     name: 'index.min.js',
     sources: [
-      'webroot/src/scripts/subscription-controller.js',
       'webroot/src/scripts/index-products-controller.js',
     ],
     dist: 'webroot/static/weshares/js/'
@@ -44,7 +44,6 @@ var all_js = [
     name: 'share-opt-index.min.js',
     sources: [
       'webroot/src/scripts/share-opt-index-controller.js',
-      'webroot/src/scripts/subscription-controller.js',
     ],
     dist: 'webroot/static/weshares/js/'
   }, {
@@ -71,7 +70,6 @@ var all_js = [
     name: 'user-info.min.js',
     sources: [
       'webroot/src/scripts/user-list-controller.js',
-      'webroot/src/scripts/subscription-controller.js',
     ],
     dist: 'webroot/static/weshares/js/'
   }, {
@@ -90,7 +88,6 @@ var all_js = [
   },{
         name: 'pay-result.min.js',
         sources: [
-            'webroot/src/scripts/subscription-controller.js',
             'webroot/src/scripts/pay-result-controller.js'
         ],
         dist: 'webroot/static/weshares/js/'

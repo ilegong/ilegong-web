@@ -2,7 +2,7 @@
   angular.module('weshares')
     .controller('SubscriptionController', SubscriptionController);
 
-  function SubscriptionController($rootScope, $scope, $http, $log) {
+  function SubscriptionController($rootScope, $scope, $http, $window, $log) {
     var sub = this;
     sub.isSubscribed = isSubscribed;
     sub.unSubscribe = unSubscribe;
@@ -36,6 +36,11 @@
       $http.get('/weshares/subscribe_sharer/' + proxyId + "/" + $rootScope.uid).success(function (data) {
         if (data.success) {
           $rootScope.proxies.push(parseInt(proxyId));
+        }
+        else{
+          if(data.reason == 'not_sub'){
+            window.location.href = data.url;
+          }
         }
         sub.subscribeInProcess = false;
       }).error(function (data, e) {

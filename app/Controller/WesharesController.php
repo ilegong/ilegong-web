@@ -124,6 +124,7 @@ class WesharesController extends AppController
                 }
             }
         }
+        $this->set('uid', $uid);
         $this->set('weshare_id', $weshare_id);
         //form paid done
         //$this->log('weshare view mark ' . $_REQUEST['mark']);
@@ -151,6 +152,7 @@ class WesharesController extends AppController
         $summary = $this->ShareUtil->get_index_product_summary($weshare['id']);
         $ordersDetail = $this->WeshareBuy->get_current_user_share_order_data($weshare['id'], $uid);
         $this->set_weixin_params_for_view($this->currentUser, $creator, $weshare, $recommend, $shared_offer_id, $summary, $ordersDetail);
+        $this->set('page_title', $weshare['title']);
         $this->WeshareBuy->update_share_view_count($weshare_id);
     }
 

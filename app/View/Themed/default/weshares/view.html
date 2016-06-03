@@ -1,7 +1,7 @@
-<div class="weshare-view-page" ng-controller="WesharesViewCtrl as vm" id='weshareView' data-weshare-id="{{$weshare_id}}"
+<div class="weshare-view-page" ng-controller="WesharesViewCtrl as vm" id='weshareView' data-uid="{{$uid}}"  data-weshare-id="{{$weshare_id}}"
      data-from-type="{{$from}}" data-shared-offer="{{$shared_offer_id}}" data-rebate-log-id="{{$rebateLogId}}"
      data-recommend-id="{{$recommend_id}}" data-comment-order-id="{{$comment_order_id}}"
-     data-replay-comment-id="{{$reply_comment_id}}">
+     data-replay-comment-id="{{$reply_comment_id}}" ng-click="clickPage();">
     <div id="sharedOfferResult" style="display: none;" data-shared-offer="{{$follow_shared_offer_id}}"
          data-shared-type="{{$get_coupon_type}}" data-shared-coupon-num="{{$couponNum}}"></div>
     {{literal}}
@@ -36,21 +36,21 @@
                     <li class="fr simple-btn" ng-if="vm.isCreator()||vm.canEditShare||vm.isManage">
                         <a ng-click="vm.showShareControl=true;vm.showLayer=true;">分享管理</a>
                     </li>
-                    <li class="fr subscription" ng-if="!vm.isCreator()">
-                        <div class="simple-btn subscribed" ng-class="{'no':!vm.userSubStatus}"
-                             ng-click="vm.subSharer();">关注TA
+                    <li class="fr subscription" ng-if="!vm.isCreator()" ng-controller="SubscriptionController as sub">
+                        <div class="simple-btn subscribed" ng-class="{'no': !sub.isSubscribed(vm.weshare.creator.id)}"
+                             ng-click="sub.subscribe(vm.weshare.creator.id)">关注TA
                         </div>
 
-                        <div class="simple-btn subscribed" ng-class="{'yes':vm.userSubStatus}"
-                             ng-click="vm.showUnSubscribe=!vm.showUnSubscribe;$event.stopPropagation();">
+                        <div class="simple-btn subscribed" ng-class="{'yes': sub.isSubscribed(vm.weshare.creator.id)}"
+                             ng-click="sub.clickSubscribedBtn(vm.weshare.creator.id, $event)">
                             <a href="#X" class="clearfix">
                                     <span class="fl">
                                         已关注
                                         <i class="fa fa-angle-down"></i>
                                     </span>
                             </a>
-                            <a class="simple-btn unfollow" ng-show="vm.showUnSubscribe"
-                               ng-click="vm.unSubSharer()">取消关注</a>
+                            <a class="simple-btn unfollow" ng-show="sub.showUnSubscribeBtn"
+                               ng-click="sub.unSubscribe(vm.weshare.creator.id)">取消关注</a>
                         </div>
                     </li>
                 </ul>
@@ -509,12 +509,12 @@
 </div>
 
 <?php
-    $this->assign('title',$title);
+    $this->assign('title',$page_title);
 $this->Html->css(array(
 $STATIC_HOST.'/static/weshares/css/weshare-view.min.css?v2.5.11'
 ), null, array('inline' => false));
 
 $this->Html->script(array(
-$STATIC_HOST.'/static/weshares/js/weshare-view.min.js?v2.5.8'
+$STATIC_HOST.'/static/weshares/js/weshare-view.min.js?v2.5.14'
 ), array('block' => 'scripts'))
 ?>
