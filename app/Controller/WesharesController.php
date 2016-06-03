@@ -2042,6 +2042,7 @@ class WesharesController extends AppController
 
         $weixin_share_data = $this->set_weixin_share_data($creator['id'], $weshare['id']);
         $this->set('share_string', $weixin_share_data['share_string']);
+        $this->set('signPackage',$weixin_share_data['signPackage']);
         $this->set('title', $title);
         $this->set('detail_url', $detail_url);
         $this->set('image', $image);
