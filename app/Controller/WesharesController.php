@@ -55,11 +55,15 @@ class WesharesController extends AppController
     public function pay_result($orderId){
         $uid = $this->currentUser['id'];
         $orderInfo = $this->Order->find('first', [
-            'conditions' => ['id' => $orderId, 'creator' => $uid, 'status' => ORDER_STATUS_PAID, 'type' => ORDER_TYPE_WESHARE_BUY]
+            'conditions' => ['id' => $orderId, 'creator' => $uid, 'type' => ORDER_TYPE_WESHARE_BUY]
         ]);
         if (empty($orderInfo)) {
             $this->redirect('/');
         }
+        if($orderInfo['Order']['status'] != ORDER_STATUS_PAID){
+            $this->redirect('/weshares/view/'.$orderInfo['Order']['member_id']);
+        }
+
         $this->set('totalFee', $orderInfo['Order']['total_all_price']);
         $uid = $this->currentUser['id'];
         $this->set('uid', $uid);
