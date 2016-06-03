@@ -350,13 +350,18 @@ class WesharesController extends AppController
      * @return array|null
      * 把微信分享的一些参数设置好
      */
-    public function set_weixin_share_data($uid, $weshareId)
+    private function set_weixin_share_data($uid, $weshareId)
     {
         if (parent::is_weixin()) {
             $weixinJs = prepare_wx_share_log($uid, 'wsid', $weshareId);
             return $weixinJs;
         }
         return null;
+    }
+
+    private function get_weixin_share_str($uid, $weshareId)
+    {
+        return prepare_wx_share_string($uid, 'wsid', $weshareId);
     }
 
     /**
@@ -1999,7 +2004,7 @@ class WesharesController extends AppController
     private function set_weixin_params_for_view($user, $creator, $weshare, $recommend, $shared_offer_id, $summary, $ordersDetail)
     {
         $title = $weshare['title'];
-        $image = empty($weshare['default_image']) ? $creator['image'] : $weshare['default_image'];
+        $image = empty($weshare['default_image']) ? get_user_avatar($creator) : $weshare['default_image'];
         $desc = remove_emoji(mb_substr(strip_tags($weshare['description']), 0, 30, "UTF8"));
         // 自己转发
         if ($user['id'] == $creator['id']) {
@@ -2041,9 +2046,8 @@ class WesharesController extends AppController
             $desc = $creator['nickname'] . '我认识，很靠谱！送你一个爱心礼包，一起来参加。';
         }
 
-        $weixin_share_data = $this->set_weixin_share_data($creator['id'], $weshare['id']);
-        $this->set('share_string', $weixin_share_data['share_string']);
-        $this->set('signPackage', $weixin_share_data['signPackage']);
+        $weixin_share_str = $this->get_weixin_share_str($creator['id'], $weshare['id']);
+        $this->set('share_string', $weixin_share_str);
         $this->set('title', $title);
         $this->set('detail_url', $detail_url);
         $this->set('image', $image);
