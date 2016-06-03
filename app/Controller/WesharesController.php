@@ -300,7 +300,6 @@ class WesharesController extends AppController
         $detail = $this->Weshares->get_weshare_detail($weshareId, $uid);
         if (!empty($detail)) {
             $detail['prepare_comment_data'] = $this->prepare_comment_data();
-            $detail['weixininfo'] = $this->set_weixin_share_data($uid, $weshareId);
         }
         echo json_encode($detail);
         exit();
@@ -1987,9 +1986,7 @@ class WesharesController extends AppController
     {
         $title = $weshare['title'];
         $image = empty($weshare['default_image']) ? $creator['image'] : $weshare['default_image'];
-        // TODO: 去除element字符串、表情符
-        $desc = mb_substr($weshare['description'], 0,30,"UTF8");
-
+        $desc = remove_emoji(mb_substr(strip_tags($weshare['description']), 0,30,"UTF8"));
         // 自己转发
         if ($user['id'] == $creator['id']) {
             $title = $creator['nickname']. '分享:'.$weshare['title'];
@@ -2021,7 +2018,7 @@ class WesharesController extends AppController
             $detail_url = $detail_url + '?recommend='.$recommend;
         }
 
-        if (!empty($shared_offer_id) && !empty(user)) {
+        if (!empty($shared_offer_id) && !empty($user)) {
             if (strpos($detail_url, '?') !== false) {
                 $detail_url = $detail_url. '&shared_offer_id='.$shared_offer_id;
             }
@@ -2032,8 +2029,8 @@ class WesharesController extends AppController
             $desc =  $creator['nickname']. '我认识，很靠谱！送你一个爱心礼包，一起来参加。';
         }
 
-        $this->log('--------');
-        $this->log($title);
+        $weixin_share_data = $this->set_weixin_share_data($creator['id'], $weshare['id']);
+        $this->set('share_string', $weixin_share_data['share_string']);
         $this->set('title', $title);
         $this->set('detail_url', $detail_url);
         $this->set('image', $image);
