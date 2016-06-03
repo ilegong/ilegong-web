@@ -1,0 +1,57 @@
+<div class="pay-result-page" ng-controller="PayResultCtr as vm">
+    <div class="menu-top refer-back-bg"
+         ng-init="vm.initUid({{$uid}});{{if $has_sub}}vm.initProxies({{$detail['creator']['id']}});{{/if}}">
+        支付成功
+        <a href="/weshares/view/{{$detail['id']}}">
+            <img src="{{$STATIC_HOST}}/static/weshares/images/back.png"/>
+            <label>返回</label>
+        </a>
+    </div>
+    <div class="pay-bg has-menu-top extra-margin">
+        <p><img class="width-100" src="{{$STATIC_HOST}}/static/img/pay-success.png"/></p>
+        <b>支付成功</b>
+        <ul class="clearfix">
+            <li class="fl">支付金额</li>
+            <li class="fr">￥{{$totalFee}}</li>
+        </ul>
+        {{if $uid!=$detail['creator']['id']}}
+        <ul class="share-header clearfix">
+            <li class="fl">
+                <a href="/weshares/user_share_info/{{$detail['creator']['id']}}.html" class="clearfix">
+                    <img class="fl avatar radius50" src="{{$detail['creator']['image']}}"/>
+                    <label>分享人【{{$detail['creator']['nickname']}}】</label>
+                </a>
+            </li>
+            <li class="fr subscription" ng-controller="SubscriptionController as sub">
+                <div class="simple-btn subscribed" ng-class="{'no': !sub.isSubscribed({{$detail['creator']['id']}})}"
+                     ng-click="sub.subscribe({{$detail['creator']['id']}})">关注TA
+                </div>
+                <div class="simple-btn subscribed" ng-class="{'yes': sub.isSubscribed({{$detail['creator']['id']}})}"
+                     ng-click="sub.clickSubscribedBtn({{$detail['creator']['id']}}, $event)">
+                    <a href="#X" class="clearfix">
+                                <span class="fl">
+                                    已关注
+                                    <i class="fa fa-angle-down"></i>
+                                </span>
+                    </a>
+                    <a class="simple-btn unfollow" ng-show="sub.showUnSubscribeBtn"
+                       ng-click="sub.unSubscribe({{$detail['creator']['id']}})">取消关注</a>
+                </div>
+            </li>
+        </ul>
+        {{/if}}
+    </div>
+    <a href="http://www.tongshijia.com/weshares/view/5437.html" class="pay-banner">
+        <img class="radius2 width-100" src="{{$STATIC_HOST}}/static/img/pay-banner.gif"/>
+    </a>
+</div>
+
+<?php
+ $this->assign('title','支付成功');
+$this->set('show_footer', 'none');
+?>
+<?php
+$this->Html->script(array(
+$STATIC_HOST.'/static/weshares/js/pay-result.min.js'
+), array('block' => 'scripts'))
+?>

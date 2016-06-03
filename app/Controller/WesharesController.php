@@ -51,6 +51,28 @@ class WesharesController extends AppController
         $user_level = $this->ShareUtil->get_user_level($uid);
         $this->set('user_level', $user_level);
     }
+
+    public function pay_result($orderId){
+        $uid = $this->currentUser['id'];
+        $orderInfo = $this->Order->find('first', [
+            'conditions' => ['id' => $orderId, 'creator' => $uid, 'type' => ORDER_TYPE_WESHARE_BUY]
+        ]);
+        if (empty($orderInfo)) {
+            $this->redirect('/');
+        }
+        if($orderInfo['Order']['status'] != ORDER_STATUS_PAID){
+            $this->redirect('/weshares/view/'.$orderInfo['Order']['member_id']);
+        }
+
+        $this->set('totalFee', $orderInfo['Order']['total_all_price']);
+        $uid = $this->currentUser['id'];
+        $this->set('uid', $uid);
+        $detail = $this->ShareUtil->get_tag_weshare_detail($orderInfo['Order']['member_id']);
+        $this->set('detail', $detail);
+        $isSub = $this->ShareUtil->check_user_is_subscribe($detail['creator']['id'], $uid);
+        $this->set('has_sub', $isSub);
+    }
+
     /**
      * @param string $weshare_id
      * @param int $from 标示从什么地方跳转的访问
@@ -63,13 +85,15 @@ class WesharesController extends AppController
         //领取红包
         $shared_offer_id = $_REQUEST['shared_offer_id'];
         //has share offer id user open share
+        $weshare = $this->WeshareBuy->get_weshare_info($weshare_id);
+        $creator = $this->User->find('first', array('conditions' => array('id' => $weshare['creator'])))['User'];
+
         //用户抢红包
         if (!empty($shared_offer_id)) {
             //process
             $this->process_shared_offer($shared_offer_id);
         } else {
             //use cache
-            $weshare = $this->WeshareBuy->get_weshare_info($weshare_id);
             if ($weshare['type'] == SHARE_TYPE_POOL_FOR_PROXY) {
                 //check share type
                 if (!$this->ShareUtil->is_proxy_user($uid)) {
@@ -123,6 +147,10 @@ class WesharesController extends AppController
         if (!empty($replay_comment_id)) {
             $this->set('reply_comment_id', $replay_comment_id);
         }
+
+        $summary = $this->ShareUtil->get_index_product_summary($weshare['id']);
+        $ordersDetail = $this->WeshareBuy->get_current_user_share_order_data($weshare['id'], $uid);
+        $this->set_weixin_params_for_view($this->currentUser, $creator, $weshare, $recommend, $shared_offer_id, $summary, $ordersDetail);
         $this->WeshareBuy->update_share_view_count($weshare_id);
     }
 
@@ -281,7 +309,6 @@ class WesharesController extends AppController
         $detail = $this->Weshares->get_weshare_detail($weshareId, $uid);
         if (!empty($detail)) {
             $detail['prepare_comment_data'] = $this->prepare_comment_data();
-            $detail['weixininfo'] = $this->set_weixin_share_data($uid, $weshareId);
         }
         echo json_encode($detail);
         exit();
@@ -1963,5 +1990,59 @@ class WesharesController extends AppController
             $this->set('image', $image);
             $this->set('desc', $desc);
         }
+    }
+    private function set_weixin_params_for_view($user, $creator, $weshare, $recommend, $shared_offer_id, $summary, $ordersDetail)
+    {
+        $title = $weshare['title'];
+        $image = empty($weshare['default_image']) ? $creator['image'] : $weshare['default_image'];
+        $desc = remove_emoji(mb_substr(strip_tags($weshare['description']), 0,30,"UTF8"));
+        // 自己转发
+        if ($user['id'] == $creator['id']) {
+            $title = $creator['nickname']. '分享:'.$weshare['title'];
+            $order_count = $summary['order_count'];
+            if ($order_count >= 5) {
+                $desc = '已经有'.$order_count . '人报名，' . $desc;
+            }
+        } else if (!empty($user) && !empty($ordersDetail)) {
+            // 用户已经报名
+            $title = $user['nickname'] . '报名了' . $creator['nickname'] . '分享的' . $title;
+            $desc = $creator['nickname'] . '我认识，很靠谱。' . $desc;
+        } else if (!empty($user)) {
+            // 用户未购买
+            $title = $user['nickname'] . '推荐' . $creator['nickname'] . '分享的' . $title;
+            $desc = $creator['nickname'] . '我认识，很靠谱。' . $desc;
+        }
+        else{
+            $title = $creator['nickname']. '分享了'.$title;
+            $desc =  $creator['nickname'] . '我认识，很靠谱。' . $desc;
+        }
+
+        $detail_url = '/weshares/view/'.$weshare['id'];
+        if ($user['is_proxy'] && $user['id'] != $creator['id']) {
+            // 团长
+            $detail_url = $detail_url + '?recommend='.$user['id'];
+        }
+        if (!$user['is_proxy'] && !empty($recommend)) {
+            // 继续转发上一个团长的
+            $detail_url = $detail_url + '?recommend='.$recommend;
+        }
+
+        if (!empty($shared_offer_id) && !empty($user)) {
+            if (strpos($detail_url, '?') !== false) {
+                $detail_url = $detail_url. '&shared_offer_id='.$shared_offer_id;
+            }
+            else{
+                $detail_url = $detail_url. '?shared_offer_id='.$shared_offer_id;
+            }
+            $image = 'http://static.tongshijia.com/static/weshares/images/share_icon.jpg';
+            $desc =  $creator['nickname']. '我认识，很靠谱！送你一个爱心礼包，一起来参加。';
+        }
+
+        $weixin_share_data = $this->set_weixin_share_data($creator['id'], $weshare['id']);
+        $this->set('share_string', $weixin_share_data['share_string']);
+        $this->set('title', $title);
+        $this->set('detail_url', $detail_url);
+        $this->set('image', $image);
+        $this->set('desc', $desc);
     }
 }

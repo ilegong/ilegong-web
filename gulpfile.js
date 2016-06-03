@@ -87,7 +87,14 @@ var all_js = [
       'webroot/src/scripts/tutorial-binding-mobile-controller.js',
     ],
     dist: 'webroot/static/weshares/js/'
-  }];
+  },{
+        name: 'pay-result.min.js',
+        sources: [
+            'webroot/src/scripts/subscription-controller.js',
+            'webroot/src/scripts/pay-result-controller.js'
+        ],
+        dist: 'webroot/static/weshares/js/'
+    }];
 
 var all_css = [
   {

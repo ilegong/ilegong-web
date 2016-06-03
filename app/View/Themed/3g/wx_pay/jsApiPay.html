@@ -32,6 +32,7 @@
     //调用微信JS api 支付
     function jsApiCall() {
         var doneUrlPrefix = '{{$paid_done_url}}';
+        var paidSuccessUrl = '{{$pad_success_url}}';
         WeixinJSBridge.invoke(
                 'getBrandWCPayRequest',
                 {{$jsApiParameters}},
@@ -39,6 +40,8 @@
             var $msg, not_redirect;
             if(res.err_msg == "get_brand_wcpay_request:ok" ) {
                 $msg = 'ok';
+                window.location.href=paidSuccessUrl;
+                return;
             } else if(res.err_msg == "get_brand_wcpay_request:cancel") {
                 $msg = 'cancel';
             } else if(res.err_msg == "get_brand_wcpay_request:fail") {
