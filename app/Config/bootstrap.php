@@ -1861,6 +1861,13 @@ function prepare_wx_share_log($currUid, $date_type, $data_id) {
     return array('signPackage' => $signPackage, 'share_string' => urlencode($share_code));
 }
 
+function prepare_wx_share_string($currUid, $date_type, $data_id){
+    $currUid = empty($currUid) ? 0 : $currUid;
+    $share_string = $currUid . '-' . time() . '-rebate-' . $date_type . '_' . $data_id;
+    $share_code = authcode($share_string, 'ENCODE', 'SHARE_TID');
+    return urldecode($share_code);
+}
+
 function getTuanProductsAsJson() {
     $tuanProductM = ClassRegistry::init('TuanProduct');
     $tuanProducts = $tuanProductM->find('all', array(
