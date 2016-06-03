@@ -587,7 +587,7 @@
                 name: vm.buyerName,
                 mobilephone: vm.buyerMobilePhone,
                 address: vm.buyerAddress,
-                patchAddress: vm.buyerPatchAddress,
+                patchAddress: vm.buyerPatchAddress
             };
             //快递
             if (vm.selectShipType == 0) {
@@ -629,7 +629,7 @@
                 rebate_log_id: vm.rebateLogId,
                 products: submit_products,
                 ship_info: ship_info,
-                remark: vm.buyerRemark,
+                remark: vm.buyerRemark
             };
             if (vm.useCouponId) {
                 orderData['coupon_id'] = vm.useCouponId;
@@ -1244,7 +1244,6 @@
             vm.canEditShare = data['can_edit_share'];
             vm.recommendData = data['recommendData'];
             vm.currentUser = data['current_user'] || {};
-            vm.weixinInfo = data['weixininfo'];
             vm.consignee = data['consignee'];
             vm.myCoupons = data['my_coupons'];
             vm.weshareSettings = data['weshare_ship_settings'];
