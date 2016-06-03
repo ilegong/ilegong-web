@@ -41,6 +41,8 @@ class WesharesController extends AppController
         $this->set('uid', $uid);
         $this->set('tag', $tag);
         $this->set('banners', $banners);
+        $hide_nav = $_REQUEST['hide_nav'];
+        $this->set('hide_nav', $hide_nav);
     }
 
     public function entrance(){
@@ -2019,7 +2021,7 @@ class WesharesController extends AppController
             $desc =  $creator['nickname'] . '我认识，很靠谱。' . $desc;
         }
 
-        $detail_url = '/weshares/view/'.$weshare['id'];
+        $detail_url = WX_HOST.'/weshares/view/'.$weshare['id'];
         if ($user['is_proxy'] && $user['id'] != $creator['id']) {
             // 团长
             $detail_url = $detail_url + '?recommend='.$user['id'];
@@ -2042,6 +2044,7 @@ class WesharesController extends AppController
 
         $weixin_share_data = $this->set_weixin_share_data($creator['id'], $weshare['id']);
         $this->set('share_string', $weixin_share_data['share_string']);
+        $this->set('signPackage',$weixin_share_data['signPackage']);
         $this->set('title', $title);
         $this->set('detail_url', $detail_url);
         $this->set('image', $image);
