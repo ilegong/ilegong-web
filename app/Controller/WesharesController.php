@@ -2005,7 +2005,7 @@ class WesharesController extends AppController
     {
         $title = remove_emoji(preg_replace('/\s+/', '', $weshare['title']));
         $image = empty($weshare['default_image']) ? get_user_avatar($creator) : $weshare['default_image'];
-        $desc = remove_emoji(mb_substr(strip_tags(preg_replace('/\s+/', '', $weshare['description'])), 0, 50, "UTF8"));
+        $desc = remove_emoji(mb_substr(strip_tags(preg_replace('/\s+/', '', $weshare['description'])), 0, 30, "UTF8"));
         // 自己转发
         if ($user['id'] == $creator['id']) {
             $title = $creator['nickname'] . '分享:' . $weshare['title'];
