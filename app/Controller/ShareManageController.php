@@ -217,6 +217,7 @@ class ShareManageController extends AppController
         $json_data = $_REQUEST['data'];
         $share_data = json_decode($json_data, true);
         $images = array_filter(explode('|', $share_data['images']));
+        $images = array_values($images);
         if(count($images) > 0){
             $share_data['images'] = implode('|', $images);
             $share_data['default_image'] = $images[0];
