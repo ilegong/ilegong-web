@@ -2003,9 +2003,9 @@ class WesharesController extends AppController
 
     private function set_weixin_params_for_view($user, $creator, $weshare, $recommend, $shared_offer_id, $summary, $ordersDetail)
     {
-        $title = $weshare['title'];
+        $title = remove_emoji(preg_replace('/\s+/', '', $weshare['title']));
         $image = empty($weshare['default_image']) ? get_user_avatar($creator) : $weshare['default_image'];
-        $desc = remove_emoji(mb_substr(strip_tags($weshare['description']), 0, 30, "UTF8"));
+        $desc = remove_emoji(mb_substr(strip_tags(preg_replace('/\s+/', '', $weshare['description'])), 0, 50, "UTF8"));
         // 自己转发
         if ($user['id'] == $creator['id']) {
             $title = $creator['nickname'] . '分享:' . $weshare['title'];
