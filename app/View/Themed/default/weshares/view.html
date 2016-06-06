@@ -46,7 +46,7 @@
                             <a href="#X" class="clearfix">
                                     <span class="fl">
                                         已关注
-                                        <i class="fa fa-angle-down"></i>
+                                        <i class="iconfont icon-angle-down"></i>
                                     </span>
                             </a>
                             <a class="simple-btn unfollow" ng-show="sub.showUnSubscribeBtn"
@@ -150,11 +150,11 @@
                         <dd class="fr sold-out">已抢光</dd>
                     </dl>
                     <dl class="clearfix" ng-if="vm.checkProductNum(product)">
-                        <dd class="fr add-subtract" ng-click="vm.increaseProductNum(product)"><i class="fa fa-plus"></i>
+                        <dd class="fr add-subtract" ng-click="vm.increaseProductNum(product)"><i class="iconfont icon-jiahao"></i>
                         </dd>
                         <dd class="fr amount" ng-bind="product.num||0">0</dd>
                         <dd class="fr add-subtract" ng-click="vm.decreaseProductNum(product)"><i
-                                class="fa fa-minus"></i></dd>
+                                class="iconfont icon-minus"></i></dd>
                         <dd class="fr limit-score" ng-if="vm.checkProductNum(product)&&product.store>0">仅剩<span
                                 ng-bind="vm.getProductLeftNum(product)"></span>份
                         </dd>
@@ -180,7 +180,7 @@
                                     ng-bind="vm.isOwner(order) ? '我':vm.ordersDetail.users[order.creator]['nickname']"></li>
                                 <li class="description fl">已经报名</li>
                                 <li class="status fr">
-                                    <span ng-if="order.status==9" class="done-status"><i class="fa fa-heart fa-lg"></i></span>
+                                    <span ng-if="order.status==9" class="done-status"><i class="iconfont icon-heart icon-lg"></i></span>
                                     <span ng-if="order.status==21" class="paid-status">待发货</span>
                                     <span ng-if="order.status==14" class="refunding-status">退款中</span>
                                     <span ng-if="order.status==4" class="refund-status">已退款</span>
@@ -209,7 +209,7 @@
                                     <span ng-bind="::reply.body" ng-click="vm.showCommentDialog(order,reply)"></span>
                                     <span style="float: right;" ng-if="vm.isCreator() && $last"
                                           ng-click="vm.showCommentDialog(order,vm.getOrderComment(order.id))">
-                                        <div class="commenting-o"><i class="fa fa-commenting-o fa-lg"></i></div>
+                                        <div class="commenting-o"><i class="iconfont icon-commentingo icon-lg"></i></div>
                                     </span>
                                 </li>
                             </ul>
@@ -272,7 +272,7 @@
                                     <li class="description fl">已经报名</li>
                                     <li class="status fr">
                                         <span ng-if="order.status==9" class="done-status"><i
-                                                class="fa fa-heart fa-lg"></i></span>
+                                                class="iconfont icon-heart icon-lg"></i></span>
                                         <span ng-if="order.status==21" class="paid-status">待发货</span>
                                         <span ng-if="order.status==14" class="refunding-status">退款中</span>
                                         <span ng-if="order.status==4" class="refund-status">已退款</span>
@@ -339,7 +339,7 @@
             <footer class="channel_bottom" ng-if="{'show-b':!vm.isShareManager()}">
                 <a class="btm_item item-opt small-item" href="/share_opt/index.html">
                     <i ng-if="vm.showUnReadMark" style="background:#f00;border-radius:50%;width:10px;height:10px;top:2px;left:11%;position:absolute; display: block;"></i>
-                    <p class="iconfont" style="height: 20px;"><i class="fa fa-search"></i></p>
+                    <p class="iconfont" style="height: 20px;"><i class="iconfont icon-search"></i></p>
                     <b>发现</b>
                 </a>
                 <a class="btm_item item-buy large-item" ng-if="!vm.supportGroupBuy()&&vm.weshare.status == 0" ng-click="vm.buyProducts()">我要报名</a>
@@ -347,14 +347,14 @@
                 <a class="btm_item item-buy middle-item" ng-if="vm.supportGroupBuy()&&vm.weshare.status == 0" ng-click="vm.showGroupShareTipDialog=true;vm.showLayer=true;" style="margin-right: 7%;">我要拼团</a>
                 <a class="btm_item item-cut-off large-item" ng-if="(vm.weshare.status == 2||vm.weshare.status == 1 || vm.weshare.status == -1)">报名已截止</a>
                 <a class="btm_item small-item" href="/weshares/user_share_info">
-                    <p class="iconfont" style="height: 20px;"><i class="fa fa-user"></i></p>
+                    <p class="iconfont" style="height: 20px;"><i class="iconfont icon-user"></i></p>
                     <b>我的</b>
                 </a>
             </footer>
             <footer class="channel_bottom" ng-if="vm.isShareManager()">
                 <a class="btm_item item-opt small-item" href="/share_opt/index.html">
                     <i ng-if="vm.showUnReadMark" style="background:#f00;border-radius:50%;width:10px;height:10px;top:2px;left:11%;position:absolute; display: block;"></i>
-                    <p class="iconfont" style="height: 20px;"><i class="fa fa-search"></i></p>
+                    <p class="iconfont" style="height: 20px;"><i class="iconfont icon-search"></i></p>
                     <b>发现</b>
                 </a>
                 <a class="btm_item item-buy middle-item" ng-if="vm.weshare.status == 0" ng-click="vm.buyProducts()" style="margin-left: 0px;">我要报名</a>
@@ -364,11 +364,11 @@
                 <a class="btm_item item-stop middle-item" ng-if="vm.isShareManager()&&(vm.weshare.status == 2||vm.weshare.status == 1 ||  vm.weshare.status == -1)" ng-class="{'processing': vm.cloneShareProcessing}"
                    ng-click="vm.cloneShare()">重新开团</a>
                 <a class="btm_item small-item" href="/weshares/user_share_info" ng-if="vm.weshare.status == 2||vm.weshare.status == 1 || vm.weshare.status == -1">
-                    <p class="iconfont" style="height: 20px;"><i class="fa fa-user"></i></p>
+                    <p class="iconfont" style="height: 20px;"><i class="iconfont icon-user"></i></p>
                     <b>我的</b>
                 </a>
                 <a class="btm_item small-item" ng-if="vm.weshare.status == 0" ng-click='vm.notifyFans();'>
-                    <p class="iconfont" style="height: 20px;"><i class="fa fa-bell"></i></p>
+                    <p class="iconfont" style="height: 20px;"><i class="iconfont icon-bell"></i></p>
                     <b>团购提醒</b>
                 </a>
             </footer>
