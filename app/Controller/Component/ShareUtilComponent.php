@@ -2212,7 +2212,9 @@ class ShareUtilComponent extends Component
         $creatorInfo['level'] = $creatorLevel;
         $weshareProducts = $this->get_all_share_products($weshare_id);
         //show break line
-        $weshareInfo['Weshare']['description'] = str_replace(array("\r\n", "\n", "\r"), '<br />', $weshareInfo['Weshare']['description']);
+        if(check_weshare_detail_is_not_html($weshareInfo['Weshare']['description'])){
+            $weshareInfo['Weshare']['description'] = str_replace(array("\r\n", "\n", "\r"), '<br />', $weshareInfo['Weshare']['description']);
+        }
         $weshareInfo = $weshareInfo['Weshare'];
         //$weshareInfo['tags'] = $sharer_tags;
         //$weshareInfo['tags_list'] = $sharer_tags_list;

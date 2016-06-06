@@ -2851,6 +2851,11 @@ function wx_update_group_name($id , $name)
 }
 
 
+function check_weshare_detail_is_not_html($detail)
+{
+    return strrpos($detail, '<bdo id="mark-view-html"></bdo>') === false;
+}
+
 function get_format_number($val){
     return round(floatval($val), 2);
 }

@@ -157,7 +157,9 @@ class WeshareApiController extends Controller
         $this->autoRender = true;
         $this->layout = null;
         $detail = $this->Weshares->get_app_weshare_detail($id);
-        $detail['description'] = str_replace(array("\r\n", "\n", "\r"), '<br />', $detail['description']);
+        if(check_weshare_detail_is_not_html($detail['description'])){
+            $detail['description'] = str_replace(array("\r\n", "\n", "\r"), '<br />', $detail['description']);
+        }
         $detail['images'] = explode('|', $detail['images']);
         $this->set('detail', $detail);
     }
