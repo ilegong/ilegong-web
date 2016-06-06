@@ -144,6 +144,7 @@
     height: 2em;
     border: 1px solid #bbbbbb;
     border-radius: 3px;
+    text-align: center;
 }
 
 .amount {
@@ -374,7 +375,7 @@
     border-right: none;
 }
 
-.add-subtract .fa {
+.add-subtract .iconfont {
     width: 100%;
     height: 100%;
     text-align: center;
@@ -382,7 +383,7 @@
     color: #ff6485;
 }
 
-.add-subtract.disable .fa {
+.add-subtract.disable .iconfont {
     color: #A6A6A6;
 }
 
