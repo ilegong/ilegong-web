@@ -368,4 +368,7 @@ function get_order_from_tag_by_flag($flag){
     if ($flag == 5) {
         return 'APP下单';
     }
+    if ($flag == 6) {
+        return '微信单聊';
+    }
 }

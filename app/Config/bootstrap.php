@@ -2893,6 +2893,9 @@ function get_order_from_flag($from)
     if($from == 'app'){
         return 5;
     }
+    if($from == 'singlemessage'){
+        return 6;
+    }
     return 0;
 }
 
