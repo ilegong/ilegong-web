@@ -26,7 +26,12 @@
     </div>
 
     <div class="shares-container">
-        {{loop $index_products $index_product}}
+        {{loop $index_products $key $index_product}}
+
+        {{if $key==1}}
+            <a href="/weshares/index/2.html" class="class-banner"><img src="{{$STATIC_HOST}}/static/img/container-banner-1.jpg"/></a>
+        {{/if}}
+
         <?php
                 $product = $index_product['IndexProduct'];
                 $user = $index_product['User'];

@@ -324,6 +324,15 @@ a:-webkit-any-link {
 }
 
 .shares-container {
+  .class-banner {
+    display: block;
+    text-decoration: none;
+    margin-bottom: 10px;
+    img {
+      display: block;
+      width: 100%;
+    }
+  }
 }
 
 .share {
