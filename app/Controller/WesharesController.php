@@ -436,6 +436,9 @@ class WesharesController extends AppController
         $weshareCreator = $postDataArray['weshare_creator'];
         $business_remark = $postDataArray['remark'];
         $rebateLogId = $postDataArray['rebate_log_id'];
+        if ($_REQUEST['access_token'] && empty($postDataArray['from'])) {
+            $postDataArray['from'] = 'app';
+        }
         $order_flag = get_order_from_flag($postDataArray['from']);
         //购物车
         $cart = array();

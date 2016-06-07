@@ -365,4 +365,7 @@ function get_order_from_tag_by_flag($flag){
     if ($flag == 4) {
         return '首页';
     }
+    if ($flag == 5) {
+        return 'APP下单';
+    }
 }
