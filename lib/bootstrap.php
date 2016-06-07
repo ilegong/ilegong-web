@@ -371,4 +371,7 @@ function get_order_from_tag_by_flag($flag){
     if ($flag == 6) {
         return '微信单聊';
     }
+    if($flag == 7){
+        return '发现页面';
+    }
 }

@@ -40,11 +40,11 @@
             </li>
         </ul>
 
-        <a class="image-container" href="/weshares/view/{{share.Weshare.id}}">
+        <a class="image-container" href="/weshares/view/{{share.Weshare.id}}.html?from=opt">
             <img class="image" lazy-src="{{vm.getShareImage(share)}}"
                  fallback-src="vm.staticFilePath+'/static/img/default_product_banner.png'">
         </a>
-        <a class="share-content" href="/weshares/view/{{share.Weshare.id}}">
+        <a class="share-content" href="/weshares/view/{{share.Weshare.id}}.html?from=opt">
             <h1 class="share-title" ng-bind="share.Weshare.title"></h1>
 
             <p class="share-description digest" ng-if="!_.isEmpty(share.Weshare.description)">

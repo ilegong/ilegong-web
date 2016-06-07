@@ -2884,6 +2884,9 @@ function get_order_from_flag($from)
     if($from == 'singlemessage'){
         return 6;
     }
+    if($from == 'opt'){
+        return 7;
+    }
     return 0;
 }
 
