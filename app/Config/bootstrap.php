@@ -2871,6 +2871,9 @@ function get_order_from_flag($from)
     if ($from == 'template_msg') {
         return 3;
     }
+    if ($from == 'index') {
+        return 4;
+    }
     return 0;
 }
 

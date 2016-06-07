@@ -71,7 +71,7 @@
                 </li>
             </ul>
 
-            <a class="image-container" href="/weshares/view/{{$product['share_id']}}">
+            <a class="image-container" href="/weshares/view/{{$product['share_id']}}.html?from=index">
                 <div class="image-cover">
                     <img class="image" data-current="0"
                          lazy-src="{{$this->Html->assetUrl($product['share_img'])}}">
@@ -83,7 +83,7 @@
                     {{/if}}
                 </span>
             </a>
-            <a class="share-content" href="/weshares/view/{{$product['share_id']}}">
+            <a class="share-content" href="/weshares/view/{{$product['share_id']}}.html?from=index">
                 <h1 class="share-title">{{$product['share_name']}}</h1>
 
                 {{if strlen($product['description'])>0}}
