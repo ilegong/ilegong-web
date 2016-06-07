@@ -1952,7 +1952,7 @@ class WeshareBuyComponent extends Component
             $order_date = $order_info['Order']['created'];
             $open_id = $uid_openid_map[$order_info['Order']['creator']];
             $order_id = $order_info['Order']['id'];
-            $detail_url = $this->get_weshares_detail_url($member_id) . '?comment_order_id=' . $order_id;
+            $detail_url = $this->get_weshares_detail_url($member_id) . '&comment_order_id=' . $order_id;
             $this->Weixin->send_comment_template_msg($open_id, $detail_url, $msg_title, $order_id, $order_date, $desc);
         }
     }
@@ -1971,7 +1971,7 @@ class WeshareBuyComponent extends Component
         $uid_name_map = $this->get_users_nickname(array($comment_uid, $reply_id));
         $title = $uid_name_map[$reply_id] . '你好，' . $uid_name_map[$comment_uid] . '对你说：' . $content;
         $desc = '分享，让生活更美。点击查看。';
-        $detail_url = $this->get_weshares_detail_url($share_id) . '?comment_order_id=' . $order_id . '&reply_comment_id=' . $comment_id;
+        $detail_url = $this->get_weshares_detail_url($share_id) . '&comment_order_id=' . $order_id . '&reply_comment_id=' . $comment_id;
         $order_info = $this->Orders->get_order_info($order_id);
         $order_id = $order_info['Order']['id'];
         $order_date = $order_info['Order']['created'];
@@ -2026,7 +2026,7 @@ class WeshareBuyComponent extends Component
         $order_id = $order_info['Order']['id'];
         $order_date = $order_info['Order']['created'];
         $desc = '分享，让生活更美。点击回复' . $uid_name_map[$order_creator] . '。';
-        $detail_url = $this->get_weshares_detail_url($weshare_id) . '?comment_order_id=' . $order_id . '&reply_comment_id=' . $comment_id;
+        $detail_url = $this->get_weshares_detail_url($weshare_id) . '&comment_order_id=' . $order_id . '&reply_comment_id=' . $comment_id;
         $this->Weixin->send_comment_template_msg($open_id, $detail_url, $title, $order_id, $order_date, $desc);
         //send comment notify msg to share manager
         $share_manager_open_ids = $this->ShareAuthority->get_share_manage_auth_user_open_ids($weshare_id);
@@ -2060,7 +2060,7 @@ class WeshareBuyComponent extends Component
         $order_id = $order_info['Order']['id'];
         $order_date = $order_info['Order']['created'];
         $desc = '分享，让生活更美。点击回复' . $uid_name_map[$share_creator] . '。';
-        $detail_url = $this->get_weshares_detail_url($weshare_id) . '?comment_order_id=' . $order_id;
+        $detail_url = $this->get_weshares_detail_url($weshare_id) . '&comment_order_id=' . $order_id;
         $this->Weixin->send_comment_template_msg($open_id, $detail_url, $title, $order_id, $order_date, $desc);
     }
 
@@ -2084,7 +2084,7 @@ class WeshareBuyComponent extends Component
         $order_id = $order_info['Order']['id'];
         $order_date = $order_info['Order']['created'];
         $desc = '分享，让生活更美。点击查看。';
-        $detail_url = $this->get_weshares_detail_url($weshare_id) . '?comment_order_id=' . $order_id . '&reply_comment_id=' . $comment_id;
+        $detail_url = $this->get_weshares_detail_url($weshare_id) . '&comment_order_id=' . $order_id . '&reply_comment_id=' . $comment_id;
         $this->Weixin->send_comment_template_msg($open_id, $detail_url, $title, $order_id, $order_date, $desc);
     }
 
@@ -2446,7 +2446,7 @@ class WeshareBuyComponent extends Component
             $product_name = $weshare_info['title'];
             $tuan_leader_name = $weshare_info['creator']['nickname'];
             $remark = '点击详情，赶快加入' . $tuan_leader_name . '的分享！';
-            $deatil_url = $this->get_weshares_detail_url($weshare_info['id']) . '?from=_template_msg';
+            $deatil_url = $this->get_weshares_detail_url($weshare_info['id']);
             $already_buy_uids = $this->get_has_buy_user($weshare_info['id']);
             foreach ($fans_open_ids as $uid => $open_id) {
                 $fans_open_ids = array_unique($fans_open_ids);
@@ -2756,7 +2756,7 @@ class WeshareBuyComponent extends Component
      */
     public function get_weshares_detail_url($weshareId)
     {
-        return WX_HOST . '/weshares/view/' . $weshareId;
+        return WX_HOST . '/weshares/view/' . $weshareId . '?from=template_msg';
     }
 
     public function get_open_id($uid)
