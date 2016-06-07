@@ -172,16 +172,16 @@
                 <td>{{$current_order['id']}} {{if $current_order['type'] == 12}}{{if $pintuan_tags[$current_order['group_id']]['status']==PIN_TUAN_TAG_EXPIRE_STATUS}}<br><font style="color: red;">拼团失败</font>{{/if}}{{if $pintuan_tags[$current_order['group_id']]['status']==PIN_TUAN_TAG_SUCCESS_STATUS}}<br><font style="color: green;">拼团成功</font>{{/if}}{{if $pintuan_tags[$current_order['group_id']]['status']==PIN_TUAN_TAG_PROGRESS_STATUS}}<br><font style="color: #0000ff;">拼团进行中</font>{{/if}}{{/if}}</td>
                 <td>{{$current_order['creator']}} <br/>{{$all_users[$current_order['creator']]['nickname']}}</td>
                 <td>{{$current_order['consignee_name']}}</td>
-                <td width="5%">{{$current_order['consignee_address']}}</td>
+                <td width="6%">{{$current_order['consignee_address']}}</td>
                 <td>{{$current_order['consignee_mobilephone']}}</td>
-                <td width="5%">{{$current_share['title']}}</td>
-                <td width="5%">{{$current_share_creator['nickname']}}<br/>
+                <td width="6%">{{$current_share['title']}}</td>
+                <td width="6%">{{$current_share_creator['nickname']}}<br/>
                     {{$current_share_creator['mobilephone']}}</td>
                 <td width="8%">{{$cart['name']}}X{{$cart['num']}}<br/>
                     {{$cart['price']*$cart['num']/100}}<br/>
                 </td>
                 <td>{{$current_order['total_all_price']}}</td>
-                <td>
+                <td class="danger">
                     {{get_order_from_tag_by_flag($current_order['flag']);}}
                 </td>
                 <td>{{if
