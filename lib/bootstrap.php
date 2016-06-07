@@ -348,3 +348,21 @@ function isJson($string){
     json_decode($string);
     return (json_last_error() == JSON_ERROR_NONE);
 }
+
+function get_order_from_tag_by_flag($flag){
+    if ($flag == 0) {
+        return '未知来源';
+    }
+    if ($flag == 1) {
+        return '朋友圈';
+    }
+    if ($flag == 2) {
+        return '微信群消息';
+    }
+    if ($flag == 3) {
+        return '模板消息';
+    }
+    if ($flag == 4) {
+        return '首页';
+    }
+}

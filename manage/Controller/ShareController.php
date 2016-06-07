@@ -1033,6 +1033,10 @@ class ShareController extends AppController {
         } else {
             $cond['status'] = array(ORDER_STATUS_PAID, ORDER_STATUS_RECEIVED, ORDER_STATUS_SHIPPED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_PREPAID, ORDER_STATUS_PREPAID_TODO, ORDER_STATUS_REFUND);
         }
+        $order_flag = $_REQUEST['order_from_flag'];
+        if($order_flag != -1){
+            $cond['flag'] = $order_flag;
+        }
         $order_repaid_status = $_REQUEST['order_prepaid_status'];
         if ($order_repaid_status != 0) {
             $cond['process_prepaid_status'] = array($order_repaid_status);
@@ -1053,6 +1057,7 @@ class ShareController extends AppController {
         $this->set('order_status', $order_status);
         $this->set('order_id', $request_order_id);
         $this->set('order_type', $_REQUEST['order_type']);
+        $this->set('order_from_flag', $order_flag);
     }
 
     private function get_random_item($items) {

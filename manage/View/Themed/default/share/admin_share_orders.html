@@ -32,7 +32,7 @@
 <h3>分享用户产生的订单</h3>
 <hr>
 <div class="row">
-    <div class="col-lg-6">
+    <div class="col-lg-4">
         <a href="#">订单数&nbsp;&nbsp;<span style="color: #ff0000">{{$summery['order_count']}}</span></a>
         &nbsp;&nbsp;&nbsp;&nbsp;
         <a href="#">总金额&nbsp;&nbsp;<span style="color: #ff0000">{{$summery['total_all_price']}}</span></a>
@@ -51,7 +51,7 @@
         &nbsp;&nbsp;
         <a href="/manage/admin/share/share_orders_export" target="_blank" style="color: orangered">团长自己打包分装的订单打印</a>
     </div>
-    <div class="col-lg-6 pull-right">
+    <div class="col-lg-8 pull-right">
         <form action="/manage/admin/share/share_orders" method="POST" class="form-inline">
             <div class="form-group">
                 <label for="order_id">订单编号</label>
@@ -98,6 +98,17 @@
                 </select>
             </div>
             <div class="form-group">
+                <label for="order_prepaid_status">订单来源</label>
+                <select class="form-control" id="order_from_flag" name="order_from_flag" value="{{$order_from_flag}}">
+                    <option value="-1">全部</option>
+                    <option value="0">未知来源</option>
+                    <option value="1">朋友圈</option>
+                    <option value="2">群消息</option>
+                    <option value="3">模板消息</option>
+                    <option value="4">首页</option>
+                </select>
+            </div>
+            <div class="form-group">
                 <label for="order_prepaid_status">尾款状态</label>
                 <select class="form-control" id="order_prepaid_status" name="order_prepaid_status" value="{{$order_prepaid_status}}">
                     <option value="0">全部</option>
@@ -127,19 +138,15 @@
             <thead>
             <tr class="filters">
                 <th><input type="text" class="form-control" placeholder="订单ID" disabled></th>
-                <th><input type="text" class="form-control" placeholder="用户ID" disabled></th>
-                <th><input type="text" class="form-control" placeholder="用户昵称" disabled></th>
+                <th><input type="text" class="form-control" placeholder="用户" disabled></th>
                 <th><input type="text" class="form-control" placeholder="收货人" disabled></th>
                 <th><input type="text" class="form-control" placeholder="地址" disabled></th>
                 <th><input type="text" class="form-control" placeholder="联系方式" disabled></th>
                 <th><input type="text" class="form-control" placeholder="分享名称" disabled></th>
                 <th><input type="text" class="form-control" placeholder="分享人" disabled></th>
-                <th><input type="text" class="form-control" placeholder="分享人联系方式" disabled></th>
                 <th><input type="text" class="form-control" placeholder="商品" disabled></th>
-                <th><input type="text" class="form-control" placeholder="商品份数" disabled></th>
-                <th><input type="text" class="form-control" placeholder="商品总价" disabled></th>
                 <th><input type="text" class="form-control" placeholder="订单总价" disabled></th>
-                <th><input type="text" class="form-control" placeholder="尾款差价" disabled></th>
+                <th><input type="text" class="form-control" placeholder="订单来源" disabled></th>
                 <th><input type="text" class="form-control" placeholder="退款金额" disabled></th>
                 <th><input type="text" class="form-control" placeholder="创建时间" disabled></th>
                 <th><input type="text" class="form-control" placeholder="状态" disabled></th>
@@ -163,20 +170,19 @@
             {{loop $current_order_carts $cart}}
             <tr data-id="{{$current_order['id']}}" {{if $current_order['type'] == 12}}class="danger"{{/if}}>
                 <td>{{$current_order['id']}} {{if $current_order['type'] == 12}}{{if $pintuan_tags[$current_order['group_id']]['status']==PIN_TUAN_TAG_EXPIRE_STATUS}}<br><font style="color: red;">拼团失败</font>{{/if}}{{if $pintuan_tags[$current_order['group_id']]['status']==PIN_TUAN_TAG_SUCCESS_STATUS}}<br><font style="color: green;">拼团成功</font>{{/if}}{{if $pintuan_tags[$current_order['group_id']]['status']==PIN_TUAN_TAG_PROGRESS_STATUS}}<br><font style="color: #0000ff;">拼团进行中</font>{{/if}}{{/if}}</td>
-                <td>{{$current_order['creator']}}</td>
-                <td>{{$all_users[$current_order['creator']]['nickname']}}</td>
+                <td>{{$current_order['creator']}} <br/>{{$all_users[$current_order['creator']]['nickname']}}</td>
                 <td>{{$current_order['consignee_name']}}</td>
-                <td>{{$current_order['consignee_address']}}</td>
+                <td width="5%">{{$current_order['consignee_address']}}</td>
                 <td>{{$current_order['consignee_mobilephone']}}</td>
-                <td>{{$current_share['title']}}</td>
-                <td>{{$current_share_creator['nickname']}}</td>
-                <td>{{$current_share_creator['mobilephone']}}</td>
-                <td>{{$cart['name']}}</td>
-                <td>{{$cart['num']}}</td>
-                <td>{{$cart['price']*$cart['num']/100}}</td>
+                <td width="5%">{{$current_share['title']}}</td>
+                <td width="5%">{{$current_share_creator['nickname']}}<br/>
+                    {{$current_share_creator['mobilephone']}}</td>
+                <td width="8%">{{$cart['name']}}X{{$cart['num']}}<br/>
+                    {{$cart['price']*$cart['num']/100}}<br/>
+                </td>
                 <td>{{$current_order['total_all_price']}}</td>
-                <td>{{if $current_order['price_difference'] > 0}}加尾款{{elseif
-                    $current_order['price_difference']==0}}{{else}}退尾款{{/if}}&nbsp;&nbsp;<span style="color: red;">{{abs($current_order['price_difference'])/100}}</span>
+                <td>
+                    {{get_order_from_tag_by_flag($current_order['flag']);}}
                 </td>
                 <td>{{if
                     !empty($refund_logs[$current_order['id']])}}{{$refund_logs[$current_order['id']]/100}}{{else}}0{{/if}}
@@ -345,6 +351,7 @@
         var order_status = '{{$order_status}}';
         var order_repaid_status = '{{$order_prepaid_status}}';
         var order_type = '{{$order_type}}';
+        var order_flag= '{{$order_from_flag}}';
         var $offlineStoreDialog = $('#offlineStoreModal');
         var $offlineCodeInput = $('#offline-store-code');
         var $refundDialog = $('#refundModal');
@@ -369,6 +376,8 @@
         setOption(document.getElementById('order_prepaid_status'),order_repaid_status);
 
         setOption(document.getElementById('order_type'), order_type);
+
+        setOption(document.getElementById('order_from_flag'),order_flag);
 
         $('button.refund-added-order').on('click',function(e){
             e.preventDefault();
