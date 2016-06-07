@@ -6,7 +6,7 @@
 class ShareOptController extends AppController
 {
 
-    var $uses = array('OptLog', 'NewOptLog', 'User', 'VisitLog', 'UserRelation');
+    var $uses = array('OptLog', 'NewOptLog', 'User', 'VisitLog');
 
     var $components = array('WeshareBuy', 'ShareUtil', 'NewOptLogs');
 

@@ -156,7 +156,8 @@ class ShareUtilComponent extends Component
             return 0;
         }
         $userRelationM = ClassRegistry::init('UserRelation');
-        if ($this->check_user_relation($sharer_id, $user_id)) {
+        $has_relation = $userRelationM->hasAny(['user_id' => $sharer_id, 'follow_id' => $user_id]);
+        if (!$has_relation) {
             $userRelationM->saveAll(array('user_id' => $sharer_id, 'follow_id' => $user_id, 'type' => $type, 'created' => date('Y-m-d H:i:s')));
         } else {
             $userRelationM->updateAll(array('deleted' => DELETED_NO), array('user_id' => $sharer_id, 'follow_id' => $user_id));

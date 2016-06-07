@@ -115,32 +115,32 @@ class UtilController extends AppController {
      * @param $user_id
      * 根据分享迁移数据
      */
-    public function transferFansByShareId($shareId, $user_id) {
-        $this->autoRender = false;
-        $orders = $this->Order->find('all', array(
-            'conditions' => array(
-                'member_id' => $shareId,
-                'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_DONE, ORDER_STATUS_SHIPPED, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RECEIVED),
-                'type' => ORDER_TYPE_WESHARE_BUY
-            ),
-            'group' => array('Order.creator'),
-            'limit' => 1000
-        ));
-        $save_data = array();
-        $temp_data = array();
-        foreach ($orders as $order) {
-            $order_creator = $order['Order']['creator'];
-            if ($this->ShareUtil->check_user_relation($user_id, $order_creator)) {
-                if (!in_array($order_creator, $temp_data)) {
-                    $temp_data[] = $order_creator;
-                    $save_data[] = array('user_id' => $user_id, 'follow_id' => $order_creator, 'type' => 'Transfer', 'created' => date('Y-m-d H:i:s'));
-                }
-            }
-        }
-        $this->UserRelation->saveAll($save_data);
-        echo json_encode(array('success' => true));
-        return;
-    }
+//    public function transferFansByShareId($shareId, $user_id) {
+//        $this->autoRender = false;
+//        $orders = $this->Order->find('all', array(
+//            'conditions' => array(
+//                'member_id' => $shareId,
+//                'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_DONE, ORDER_STATUS_SHIPPED, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RECEIVED),
+//                'type' => ORDER_TYPE_WESHARE_BUY
+//            ),
+//            'group' => array('Order.creator'),
+//            'limit' => 1000
+//        ));
+//        $save_data = array();
+//        $temp_data = array();
+//        foreach ($orders as $order) {
+//            $order_creator = $order['Order']['creator'];
+//            if ($this->ShareUtil->check_user_relation($user_id, $order_creator)) {
+//                if (!in_array($order_creator, $temp_data)) {
+//                    $temp_data[] = $order_creator;
+//                    $save_data[] = array('user_id' => $user_id, 'follow_id' => $order_creator, 'type' => 'Transfer', 'created' => date('Y-m-d H:i:s'));
+//                }
+//            }
+//        }
+//        $this->UserRelation->saveAll($save_data);
+//        echo json_encode(array('success' => true));
+//        return;
+//    }
 
     /**
      * @param $product_id
@@ -148,33 +148,33 @@ class UtilController extends AppController {
      * @param $offset
      * 迁移粉丝数据
      */
-    public function transferFansData($product_id, $user_id, $offset = 0) {
-        $this->autoRender = false;
-        $carts = $this->Cart->find('all', array(
-            'conditions' => array(
-                'product_id' => $product_id,
-                'not' => array('order_id' => null, 'order_id' => 0, 'type' => ORDER_TYPE_WESHARE_BUY, 'creator' => 0, 'creator' => null),
-            ),
-            'group' => array('creator'),
-            'limit' => 500,
-            'offset' => $offset,
-            'order' => array('created DESC')
-        ));
-        $save_data = array();
-        $temp_data = array();
-        foreach ($carts as $cart_item) {
-            $cart_creator = $cart_item['Cart']['creator'];
-            if ($this->ShareUtil->check_user_relation($user_id, $cart_creator)) {
-                if (!in_array($cart_creator, $temp_data)) {
-                    $temp_data[] = $cart_creator;
-                    $save_data[] = array('user_id' => $user_id, 'follow_id' => $cart_creator, 'type' => 'Transfer', 'created' => date('Y-m-d H:i:s'));
-                }
-            }
-        }
-        $this->UserRelation->saveAll($save_data);
-        echo json_encode(array('success' => true));
-        return;
-    }
+//    public function transferFansData($product_id, $user_id, $offset = 0) {
+//        $this->autoRender = false;
+//        $carts = $this->Cart->find('all', array(
+//            'conditions' => array(
+//                'product_id' => $product_id,
+//                'not' => array('order_id' => null, 'order_id' => 0, 'type' => ORDER_TYPE_WESHARE_BUY, 'creator' => 0, 'creator' => null),
+//            ),
+//            'group' => array('creator'),
+//            'limit' => 500,
+//            'offset' => $offset,
+//            'order' => array('created DESC')
+//        ));
+//        $save_data = array();
+//        $temp_data = array();
+//        foreach ($carts as $cart_item) {
+//            $cart_creator = $cart_item['Cart']['creator'];
+//            if ($this->ShareUtil->check_user_relation($user_id, $cart_creator)) {
+//                if (!in_array($cart_creator, $temp_data)) {
+//                    $temp_data[] = $cart_creator;
+//                    $save_data[] = array('user_id' => $user_id, 'follow_id' => $cart_creator, 'type' => 'Transfer', 'created' => date('Y-m-d H:i:s'));
+//                }
+//            }
+//        }
+//        $this->UserRelation->saveAll($save_data);
+//        echo json_encode(array('success' => true));
+//        return;
+//    }
 
     /**
      * @param $user_id
