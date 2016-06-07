@@ -2384,31 +2384,19 @@ function get_index_tags()
         ], [
             'id' => 5,
             'name' => '其他'
-        ],
-        [
+        ], [
             'id' => 6,
-            'name' => '试吃'
-        ],
-        [
+            'name' => '试吃',
+            'banner' => 'tag-try-banner.jpg'
+        ], [
             'id' => 7,
-            'name' => '尝鲜'
-        ],
-        [
+            'name' => '尝鲜',
+            'banner' => 'tag-taste-banner.jpg'
+        ], [
             'id' => 8,
-            'name' => '精选'
-        ],
-    ];
-}
-
-function get_bank_types(){
-    return [
-        0 => '工商银行',
-        1 => '建设银行',
-        2 => '农业银行',
-        3 => '邮政储蓄',
-        4 => '招商银行',
-        5 => '北京银行',
-        6 => '交通银行'
+            'name' => '精选',
+            'banner' => 'tag-chosen-banner.jpg'
+        ]
     ];
 }
 

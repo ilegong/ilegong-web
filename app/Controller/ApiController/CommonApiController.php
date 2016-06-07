@@ -19,7 +19,15 @@ class CommonApiController extends Controller
 
     public function get_bank_types()
     {
-        echo json_encode(get_bank_types());
+        echo json_encode([
+            0 => '工商银行',
+            1 => '建设银行',
+            2 => '农业银行',
+            3 => '邮政储蓄',
+            4 => '招商银行',
+            5 => '北京银行',
+            6 => '交通银行'
+        ]);
         exit();
     }
 
