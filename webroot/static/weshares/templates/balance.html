@@ -30,9 +30,9 @@
                 <dd class="fr sold-out">已抢光</dd>
             </dl>
             <dl class="clearfix" ng-if="vm.checkProductNum(product)">
-                <dd class="fr add-subtract" ng-click="vm.increaseProductNum(product)"><i class="fa fa-plus"></i></dd>
+                <dd class="fr add-subtract" ng-click="vm.increaseProductNum(product)"><i class="iconfont icon-jiahao"></i></dd>
                 <dd class="fr amount" ng-bind="product.num||0">0</dd>
-                <dd class="fr add-subtract" ng-click="vm.decreaseProductNum(product)"><i class="fa fa-minus"></i></dd>
+                <dd class="fr add-subtract" ng-click="vm.decreaseProductNum(product)"><i class="iconfont icon-minus"></i></dd>
                 <dd class="fr limit-score" ng-if="vm.checkProductNum(product)&&product.store>0">仅剩<span
                         ng-bind="vm.getProductLeftNum(product)"></span>份
                 </dd>
