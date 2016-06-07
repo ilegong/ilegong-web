@@ -124,6 +124,8 @@
 
         function loadOrderDetail(share_id) {
             var fromType = angular.element(document.getElementById('weshareView')).attr('data-from-type');
+            var viewFrom = angular.element(document.getElementById('weshareView')).attr('data-from');
+            vm.viewFrom = viewFrom;
             //first share
             var initSharedOfferId = angular.element(document.getElementById('weshareView')).attr('data-shared-offer');
             var followSharedType = angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-type');
@@ -622,6 +624,7 @@
             var ship_info = getBuyShipInfo();
             var orderData = {
                 weshare_id: vm.weshare.id,
+                from: vm.viewFrom,
                 weshare_creator: vm.weshare.creator.id,
                 rebate_log_id: vm.rebateLogId,
                 products: submit_products,

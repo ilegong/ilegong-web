@@ -155,6 +155,7 @@ class WesharesController extends AppController
         $ordersDetail = $this->WeshareBuy->get_current_user_share_order_data($weshare['id'], $uid);
         $this->set_weixin_params_for_view($this->currentUser, $creator, $weshare, $recommend, $shared_offer_id, $summary, $ordersDetail);
         $this->set('page_title', $weshare['title']);
+        $this->set('click_from', $_REQUEST['from']);
         $this->WeshareBuy->update_share_view_count($weshare_id);
     }
 
@@ -435,6 +436,7 @@ class WesharesController extends AppController
         $weshareCreator = $postDataArray['weshare_creator'];
         $business_remark = $postDataArray['remark'];
         $rebateLogId = $postDataArray['rebate_log_id'];
+        $order_flag = get_order_from_flag($postDataArray['from']);
         //购物车
         $cart = array();
         $dataSource = $this->Order->getDataSource();
@@ -485,7 +487,8 @@ class WesharesController extends AppController
                 'consignee_id' => $consigneeId,
                 'consignee_name' => $shipInfo['name'],
                 'consignee_mobilephone' => $shipInfo['mobilephone'],
-                'business_remark' => $business_remark);
+                'business_remark' => $business_remark,
+                'flag' => $order_flag);
             //设置订单物流方式
             $this->process_order_ship_mark($shipType, $orderData);
             $order = $this->Order->save($orderData);

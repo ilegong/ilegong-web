@@ -2860,7 +2860,19 @@ function get_format_number($val){
     return round(floatval($val), 2);
 }
 
-
+function get_order_from_flag($from)
+{
+    if ($from == 'timeline') {
+        return 1;
+    }
+    if ($from == 'groupmessage') {
+        return 2;
+    }
+    if ($from == 'template_msg') {
+        return 3;
+    }
+    return 0;
+}
 
 /**
  * auto load spl lib

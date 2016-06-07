@@ -875,7 +875,7 @@ class WeshareBuyComponent extends Component
                 'id', 'nickname'
             )
         ));
-        $detail_url = WX_HOST . '/weshares/view/' . $weshare['Weshare']['id'];
+        $detail_url = WX_HOST . '/weshares/view/' . $weshare['Weshare']['id'].'?from=template_msg';
         $sharer_name = $sharer_user_info['User']['nickname'];
         $product_name = $weshare['Weshare']['title'];
         $title = '关注的' . $sharer_name . '发起了';

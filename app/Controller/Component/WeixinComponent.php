@@ -46,7 +46,7 @@ class WeixinComponent extends Component {
     }
 
     public function get_weshare_buy_detail($weshare_id) {
-        return WX_HOST . '/weshares/view/' . $weshare_id;
+        return WX_HOST . '/weshares/view/' . $weshare_id.'?from=template_msg';
     }
 
     public function get_pintuan_detail($weshare_id, $group_id) {
@@ -84,7 +84,7 @@ class WeixinComponent extends Component {
     }
 
     public function get_weshare_packet_url($weshareId) {
-        return WX_HOST . '/weshares/view/' . $weshareId . '?mark=template_msg';
+        return WX_HOST . '/weshares/view/' . $weshareId . '?from=template_msg';
     }
 
 
