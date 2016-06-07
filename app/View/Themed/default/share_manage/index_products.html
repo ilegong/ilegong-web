@@ -14,8 +14,7 @@
                             <label for="tagId">分类</label>
                             <select class="form-control" name="tag_id" id="tagId">
                                 {{loop $tags $tag}}
-                                <option value="{{$tag['id']}}" {{if $tag[
-                                'id']==$tag_id}}selected{{/if}}>{{$tag['name']}}</option>
+                                <option value="{{$tag['id']}}" {{if $tag['id']==$tag_id}}selected{{/if}}>{{$tag['name']}}</option>
                                 {{/loop}}
                             </select>
                         </div>
