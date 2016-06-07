@@ -2363,27 +2363,40 @@ function map_user_avatar($var){
     return $var;
 }
 
-function get_index_tags(){
+function get_index_tags()
+{
     return [
         [
             'id' => 0,
-            'name' => '新品爆款(新版勿用)'
+            'name' => '新品爆款'
         ], [
             'id' => 1,
-            'name' => '水果蔬菜(果蔬乐园)'
+            'name' => '水果蔬菜'
         ], [
             'id' => 2,
-            'name' => '肉蛋粮油(肉蛋海鲜)'
+            'name' => '肉蛋粮油'
         ], [
             'id' => 3,
-            'name' => '零食其他(干果零食)'
+            'name' => '零食其他'
         ], [
             'id' => 4,
-            'name' => '粮油副食(新版勿用)'
+            'name' => '粮油副食'
         ], [
             'id' => 5,
-            'name' => '其他(新版勿用)'
-        ]
+            'name' => '其他'
+        ],
+        [
+            'id' => 6,
+            'name' => '试吃'
+        ],
+        [
+            'id' => 7,
+            'name' => '尝鲜'
+        ],
+        [
+            'id' => 8,
+            'name' => '精选'
+        ],
     ];
 }
 
