@@ -390,17 +390,18 @@ class ShareManageComponent extends Component
     }
 
     public function on_index_product_saved(){
-        $this->clear_cache_for_index_products_of_type();
+        $this->clear_cache_for_index_products();
     }
 
     public function on_index_product_deleted(){
-        $this->clear_cache_for_index_products_of_type();
+        $this->clear_cache_for_index_products();
     }
 
-    public function clear_cache_for_index_products_of_type(){
+    public function clear_cache_for_index_products(){
         $tags = get_index_tags();
         foreach($tags as $tag_item){
-            Cache::write(INDEX_VIEW_PRODUCT_CACHE_KEY.'_'.$tag_item['id'], '');
+            Cache::write(INDEX_PRODUCTS_BY_TAG_CACHE_KEY . '_' . $tag_item['id'], '');
+            Cache::write(INDEX_VIEW_PRODUCT_CACHE_KEY . '_' . $tag_item['id'], '');
         }
     }
 }

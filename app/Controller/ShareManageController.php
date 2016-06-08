@@ -762,7 +762,7 @@ class ShareManageController extends AppController
     public function clear_index_product_cache()
     {
         $this->autoRender = false;
-        $this->ShareManage->clear_cache_for_index_products_of_type();
+        $this->ShareManage->clear_cache_for_index_products();
         echo json_encode(array('success' => true));
         return;
     }
