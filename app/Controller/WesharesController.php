@@ -150,7 +150,7 @@ class WesharesController extends AppController
         if (!empty($replay_comment_id)) {
             $this->set('reply_comment_id', $replay_comment_id);
         }
-
+        $this->log('click weshare view from ' . $_REQUEST['from']);
         $summary = $this->ShareUtil->get_index_product_summary($weshare['id']);
         $ordersDetail = $this->WeshareBuy->get_current_user_share_order_data($weshare['id'], $uid);
         $this->set_weixin_params_for_view($this->currentUser, $creator, $weshare, $recommend, $shared_offer_id, $summary, $ordersDetail);
