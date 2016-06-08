@@ -5,6 +5,8 @@ class CommonApiController extends Controller
 
     static  $OFFLINE_STORE_DATA_CACHE_KEY = 'offline_store_data_cache_key';
 
+    var $components = ['ShareUtil'];
+
     public function beforeFilter()
     {
         $this->autoRender = false;
@@ -52,18 +54,16 @@ class CommonApiController extends Controller
     }
 
     public function get_banner(){
-        $banner = [
-            [
-                'banner_img' => 'http://static.tongshijia.com/images/index/2016/05/18/7c014ae6-1ca2-11e6-88d7-00163e1600b6.jpg',
-                'type' => '0',
-                'data' => 'https://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=506221350&idx=1&sn=96cb426c8a1eed785cd86e85f6d9c9e5&scene=1'
-            ],
-            [
-                'banner_img' => 'http://static.tongshijia.com/images/index/2016/06/01/820af714-27d5-11e6-b8d8-00163e1600b6.jpg',
-                'type' => '1',
-                'data' => '5370'
-            ]
-        ];
+        $banners = $this->ShareUtil->get_index_banners();
+        $banner = [];
+        foreach($banners as $banner_item){
+            $type = strpos($banner_item['link'], 'weshares/view') == false ? '0' : '1';
+            $b = ['banner_img' => $banner_item['banner'], 'type' => $type, 'data' => $banner_item['link']];
+            if ($b['type'] == '1') {
+                $b['data'] = preg_replace('/[^\-\d]*(\-?\d*).*/', '$1', $banner_item['link']);
+            }
+            $banner[] = $b;
+        }
         echo json_encode($banner);
         exit;
     }
