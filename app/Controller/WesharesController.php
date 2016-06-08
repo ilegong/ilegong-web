@@ -172,12 +172,20 @@ class WesharesController extends AppController
         if (!empty($replay_comment_id)) {
             $this->set('reply_comment_id', $replay_comment_id);
         }
-        $this->log('click weshare view from ' . $_REQUEST['from']);
+        //mark url from
+        $view_from = $_REQUEST['from'];
+        if (empty($view_from)) {
+            //iOS phone 微信不添加参数手工记录
+            $share_type = $_REQUEST['share_type'];
+            if ($share_type) {
+                $view_from = $share_type == 'appMsg' ? 'groupmessage' : 'timeline';
+            }
+        }
         $summary = $this->ShareUtil->get_index_product_summary($weshare['id']);
         $ordersDetail = $this->WeshareBuy->get_current_user_share_order_data($weshare['id'], $uid);
         $this->set_weixin_params_for_view($this->currentUser, $creator, $weshare, $recommend, $shared_offer_id, $summary, $ordersDetail);
         $this->set('page_title', $weshare['title']);
-        $this->set('click_from', $_REQUEST['from']);
+        $this->set('click_from', $view_from);
         $this->WeshareBuy->update_share_view_count($weshare_id);
     }
 
