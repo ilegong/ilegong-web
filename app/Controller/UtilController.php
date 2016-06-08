@@ -16,10 +16,11 @@ class UtilController extends AppController {
 
     public function log_js_error() {
         $msg = $_GET['msg'];
-        $url = $_GET['url'];
+        $url = $_GET['error_url'];
         $ln = $_GET['ln'];
-        $uid = $this->currentUser['id']?$this->currentUser['id'] : 0;
-        $this->log("js error $uid : $url : $ln msg=$msg");
+        $ip = $_SERVER['REMOTE_HOST'];
+        $uid = $this->currentUser['id'] ? $this->currentUser['id'] : 0;
+        $this->log("js error $uid : $url : $ln msg=$msg : ip=$ip");
         echo "logged";
         $this->autoRender = false;
     }

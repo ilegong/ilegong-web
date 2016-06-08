@@ -13,7 +13,7 @@ CakePlugin::routes();
 
 CustomRouter::connect('/', array('controller' => 'pys', 'action' => 'index', '/'));
 
-CustomRouter::connect('/jserror', array('controller' => 'util', 'action' => 'log_js_error'));
+CustomRouter::connect('/jserror', array('controller' => 'util', 'action' => 'log_js_error', '/jserror'));
 
 $prefixes = Router::prefixes();
 

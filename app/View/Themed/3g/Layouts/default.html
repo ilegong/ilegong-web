@@ -55,7 +55,7 @@
                 //report errors
                 window.onerror = function () {
                 };
-                (new Image()).src = "/jserror?msg=" + encodeURIComponent(msg) + "&url=" + encodeURIComponent(url || document.location.toString().replace(/#.*$/, "")) + "&ln=" + parseInt(ln || 0) + "&r=" + (+new Date());
+                (new Image()).src = "/jserror?msg=" + encodeURIComponent(msg) + "&error_url=" + encodeURIComponent(url || document.location.toString().replace(/#.*$/, "")) + "&ln=" + parseInt(ln || 0) + "&r=" + (+new Date());
             };
         })(window);
         //]]>
