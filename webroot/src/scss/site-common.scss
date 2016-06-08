@@ -398,6 +398,21 @@ a:-webkit-any-link {
       top: 10px;
     }
   }
+  .try-container{
+    padding-bottom: 15px;
+    .try-btn {
+      margin: 0 auto;
+      width: 120px;
+      line-height: 40px;
+      background-color: #ff6485;
+      border-radius: 2px;
+      font-size: 1.2em;
+      color: #ffffff;
+      text-align: center;
+      display: block;
+      text-decoration: none;
+    }
+  }
 }
 .share.show-detail{
   .share-content{

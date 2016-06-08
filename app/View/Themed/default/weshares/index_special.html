@@ -76,7 +76,11 @@
                 </p>
                 {{/if}}
             </a>
-
+            {{if $is_try}}
+                <div class="try-container">
+                    <a href="/weshares/view/{{$product['share_id']}}.html?from=index" class="try-btn">我要抢试吃</a>
+                </div>
+            {{else}}
             <dl class="share-summary clearfix"
                 ng-class="{'show-b': vm.getSummary({{$product['share_id']}}).view_count > 0}">
                 <dd class="order-count clearfix">
@@ -94,6 +98,7 @@
                     浏览<span ng-bind="vm.getSummary({{$product['share_id']}}).view_count || 0">0</span>
                 </dd>
             </dl>
+            {{/if}}
         </div>
         {{/loop}}
     </div>

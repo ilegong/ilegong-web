@@ -2387,7 +2387,8 @@ function get_index_tags()
         ], [
             'id' => 6,
             'name' => '试吃',
-            'banner' => 'tag-try-banner.jpg'
+            'banner' => 'tag-try-banner.jpg',
+            'try' => true
         ], [
             'id' => 7,
             'name' => '尝鲜',

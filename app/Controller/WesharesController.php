@@ -63,6 +63,7 @@ class WesharesController extends AppController
         $this->set('special_banner', $tag['banner']);
         $this->set('hide_nav', true);
         $this->set('name', $tag['name']);
+        $this->set('is_try', $tag['try']);
     }
 
 
