@@ -45,6 +45,27 @@ class WesharesController extends AppController
         $this->set('hide_nav', $hide_nav);
     }
 
+    public function index_special($tagId)
+    {
+        $index_products = $this->ShareUtil->get_index_product($tagId);
+        $tags = get_index_tags();
+        $tag = null;
+        foreach ($tags as $tag_item) {
+            if ($tag_item['id'] == $tagId) {
+                $tag = $tag_item;
+                break;
+            }
+        }
+        $uid = $this->currentUser['id'];
+        $this->set('index_products', $index_products);
+        $this->set('uid', $uid);
+        $this->set('tag', $tagId);
+        $this->set('special_banner', $tag['banner']);
+        $this->set('hide_nav', true);
+        $this->set('name', $tag['name']);
+    }
+
+
     public function entrance(){
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
