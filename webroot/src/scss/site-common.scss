@@ -647,7 +647,6 @@ a:-webkit-any-link {
 
 .banners {
   position: relative;
-  margin-bottom: 10px;
   .image-container{
     padding-bottom: 43%;
   }
@@ -683,6 +682,27 @@ a:-webkit-any-link {
   .special-banner{
     img{
       display: block; width: 100%;
+    }
+  }
+  .topic {
+    background-color: #FFFFFF;
+    padding: 12px;
+    padding-right: 0;
+    margin-bottom: 10px;
+    ul {
+      width: 100%;
+    }
+    ul li {
+      float: left;
+      width: 33.3%;
+    }
+    ul li a {
+      display: block;
+      margin-right: 12px;
+    }
+    ul li a img {
+      width: 100%;
+      display: block;
     }
   }
 }
