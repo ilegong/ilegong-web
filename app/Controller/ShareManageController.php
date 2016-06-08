@@ -762,10 +762,7 @@ class ShareManageController extends AppController
     public function clear_index_product_cache()
     {
         $this->autoRender = false;
-        $this->ShareManage->clear_cache_for_index_products_of_type(0);
-        $this->ShareManage->clear_cache_for_index_products_of_type(1);
-        $this->ShareManage->clear_cache_for_index_products_of_type(2);
-        $this->ShareManage->clear_cache_for_index_products_of_type(3);
+        $this->ShareManage->clear_cache_for_index_products_of_type();
         echo json_encode(array('success' => true));
         return;
     }
@@ -950,7 +947,6 @@ class ShareManageController extends AppController
         $user_id = $_REQUEST['user_id'];
         Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $user_id, '');
         Cache::write(SHARER_LEVEL_CACHE_KEY . '_' . $user_id . '_' . 0, '');
-        clearMemcacheCacheByKeyword($user_id);
         echo json_encode(array('success' => true));
         return;
     }
@@ -963,6 +959,7 @@ class ShareManageController extends AppController
         echo json_encode(array('success' => true));
         return;
     }
+
 
     //统计商品的份数
     /**

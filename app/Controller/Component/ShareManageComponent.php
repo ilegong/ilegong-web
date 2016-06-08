@@ -186,7 +186,7 @@ class ShareManageComponent extends Component
             $this->log('update index product '.$result['IndexProduct']['id'].': '.json_encode($result), LOG_INFO);
         }
 
-        $this->on_index_product_saved($result);
+        $this->on_index_product_saved();
         return $result;
     }
 
@@ -389,19 +389,18 @@ class ShareManageComponent extends Component
         return array('share_count' => $share_count, 'order_count' => $order_count, 'faq_count' => $faq_count, 'fans_count' => $fans_count);
     }
 
-    public function on_index_product_saved($index_product){
-        $this->clear_cache_for_index_products_of_type($index_product['IndexProduct']['type']);
+    public function on_index_product_saved(){
+        $this->clear_cache_for_index_products_of_type();
     }
 
-    public function on_index_product_deleted($index_product){
-        $this->clear_cache_for_index_products_of_type($index_product['IndexProduct']['type']);
+    public function on_index_product_deleted(){
+        $this->clear_cache_for_index_products_of_type();
     }
 
-    public function clear_cache_for_index_products_of_type($type){
-        // 普通情况下，只按type清除缓存即可；但有时候商品从一个type1修改为type2，需求同事清除type1和type2的缓存；
-        Cache::write(INDEX_VIEW_PRODUCT_CACHE_KEY.'_0', '');
-        Cache::write(INDEX_VIEW_PRODUCT_CACHE_KEY.'_1', '');
-        Cache::write(INDEX_VIEW_PRODUCT_CACHE_KEY.'_2', '');
-        Cache::write(INDEX_VIEW_PRODUCT_CACHE_KEY.'_3', '');
+    public function clear_cache_for_index_products_of_type(){
+        $tags = get_index_tags();
+        foreach($tags as $tag_item){
+            Cache::write(INDEX_VIEW_PRODUCT_CACHE_KEY.'_'.$tag_item['id'], '');
+        }
     }
 }

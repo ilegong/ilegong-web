@@ -1365,26 +1365,6 @@ function create_user_cond($uid, $sessionId = null) {
 }
 
 /**
- * @param $keyword
- * remove memcache by key like
- */
-function clearMemcacheCacheByKeyword($keyword){
-    if(class_exists('Memcached')){
-        $mem  = new Memcached();
-        $mem->addServer('127.0.0.1',11211);
-        $allKeys = $mem->getAllKeys();
-        if($allKeys){
-            foreach($allKeys as $key){
-                if(strpos($key, $keyword)){
-                    $mem->delete($key);
-                }
-            }
-        }
-
-    }
-}
-
-/**
  * @param $id
  * @param string $acc default pys
  * @return string
