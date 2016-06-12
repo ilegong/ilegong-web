@@ -47,6 +47,15 @@ class WesharesController extends AppController
         $this->set('hide_nav', $hide_nav);
     }
 
+    public function coupons(){
+        $uid = $this->currentUser['id'];
+        if (empty($uid)) {
+            $this->redirect('/');
+        }
+        $coupons = $this->CouponItem->find_my_all_valid_share_coupons($uid);
+        $this->set('coupons', $coupons);
+    }
+
     public function index_special($tagId)
     {
         $index_products = $this->ShareUtil->get_index_product($tagId);

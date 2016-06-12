@@ -825,6 +825,42 @@ a:-webkit-any-link {
   }
 }
 
+.coupon-list-page {
+  .coupon-item {
+    margin-bottom: 10px;
+    background-color: #ffffff;
+    .coupon {
+      background: #fff;
+      position: relative;
+      padding: 10px 12px;
+      .label {
+        font-size: 1.1em;
+        padding-top: 4px;
+        color: #999999;
+        close-both: none;
+      }
+      .much {
+        font-size: 1.8em;
+        color: #333333;
+      }
+      .available {
+        width: 50px;
+        border-radius: 2px;
+        height: 30px;
+        border: 1px solid #666666;
+        background-color: #d1d1d1;
+      }
+      .unavailable {
+        width: 50px;
+        border-radius: 2px;
+        height: 30px;
+        border: 1px solid #666666;
+      }
+    }
+    span{padding-left:5px; line-height:30px;}
+  }
+}
+
 //site specific
 .site-sh{
   .channel_bottom{

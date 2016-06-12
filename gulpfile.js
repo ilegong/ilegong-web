@@ -91,6 +91,12 @@ var all_js = [
             'webroot/src/scripts/pay-result-controller.js'
         ],
         dist: 'webroot/static/weshares/js/'
+    },{
+        name: 'user-coupons-list-controller.min.js',
+        sources: [
+            'webroot/src/scripts/user-coupons-list-controller.js'
+        ],
+        dist: 'webroot/static/weshares/js/'
     }];
 
 var all_css = [

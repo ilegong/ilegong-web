@@ -504,6 +504,11 @@ class CouponItem extends AppModel {
             ]
         ]);
         //$this->pid_list_to_array($items);
+        $shareOffers = Hash::combine($sharedOffers, '{n}.SharedOffer.id', '{n}.ShareOffer');
+        foreach($items as &$coupon_item){
+            $shared_source = str_replace('shared_offer', '', $coupon_item['CouponItem']['source']);
+            $coupon_item['ShareOffer'] = $shareOffers[$shared_source];
+        }
         return $items;
     }
 
