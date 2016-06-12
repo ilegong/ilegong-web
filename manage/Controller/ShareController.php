@@ -326,7 +326,7 @@ class ShareController extends AppController {
             'Weshare' => array(
                 'conditions' => $cond,
                 'limit' => 100,
-                'order' => 'Weshare.id DESC'
+                'order' => ['Weshare.close_date DESC','Weshare.id DESC']
             )
         );
         $this->process_share_data($q_c);

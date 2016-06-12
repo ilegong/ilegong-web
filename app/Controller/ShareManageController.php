@@ -1247,7 +1247,7 @@ class ShareManageController extends AppController
                 'conditions' => $cond,
                 'recursive' => 1,
                 'limit' => 5,
-                'order' => 'Weshare.id DESC'
+                'order' => ['Weshare.close_date DESC', 'Weshare.id DESC']
             )
         );
         $this->get_share_balance_data($q_c);
