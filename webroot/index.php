@@ -122,8 +122,8 @@ if (getenv('TONGSHIJIA_ENV') == 'product') {
     define('REDIS_HOST', 'test.tongshijia.com');
     define('SQL_DEBUG',false);
 } elseif (getenv('TONGSHIJIA_ENV') == 'virtual-env') {
-    define('STATIC_HOST', 'http://dev.tongshijia.com:8080');
-    define('IMAGES_HOST', 'http://dev.tongshijia.com:8080');
+    define('STATIC_HOST', 'http://dev.tongshijia.com');
+    define('IMAGES_HOST', 'http://dev.tongshijia.com');
     define('JPUSH_APP_KEY', 'dca84c4492a450f738918b65');
     define('JPUSH_APP_SECRET', '376cf6f26a72c31ca769da44');
     define('JPUSH_IS_PRODUCT', false);
