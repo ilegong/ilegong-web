@@ -31,6 +31,7 @@
             <li><a href="/weshares/index_special/8.html"><img src="{{$STATIC_HOST}}/static/img/topic-excellent.png" /></a></li>
         </ul>
     </div>
+    <a class="coupon" href="#X">{{if $coupon_count > 0}}温馨提示：您有{{$coupon_count}}张优惠券喔！{{/if}}</a>
     <div class="shares-container">
         {{loop $index_products $key $index_product}}
 

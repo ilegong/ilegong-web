@@ -688,7 +688,6 @@ a:-webkit-any-link {
     background-color: #FFFFFF;
     padding: 12px;
     padding-right: 0;
-    margin-bottom: 10px;
     ul {
       width: 100%;
     }
@@ -704,6 +703,18 @@ a:-webkit-any-link {
       width: 100%;
       display: block;
     }
+  }
+  .coupon {
+    margin-bottom: 10px;
+    background-color: #FFFFFF;
+    line-height: 44px;
+    padding: 0 12px;
+    font-size: 1.1em;
+    color: #FF6485;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+    border-top: 1px #eeeeee solid;
   }
 }
 

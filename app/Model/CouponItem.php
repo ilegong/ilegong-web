@@ -438,6 +438,75 @@ class CouponItem extends AppModel {
         ));
     }
 
+
+    public function find_my_share_coupons_count($user_id, $limit_non_used = true){
+        if (!$user_id) {
+            return 0;
+        }
+        $dt = new DateTime();
+        $cond = array('CouponItem.bind_user' => $user_id,
+            'CouponItem.status' => COUPONITEM_STATUS_TO_USE,
+            'CouponItem.deleted = 0',
+            'Coupon.published' => 1,
+            'Coupon.status' => COUPON_STATUS_VALID,
+            'Coupon.valid_begin <= ' => $dt->format(FORMAT_DATETIME),
+            'Coupon.valid_end >= ' => $dt->format(FORMAT_DATETIME),
+            'Coupon.brand_id' => SHARE_COUPON_OFFER_TYPE,
+        );
+        if ($limit_non_used) {
+            $cond[] = '(CouponItem.applied_order is null or CouponItem.applied_order = 0)';
+        }
+        //order by reduced default use first
+        $count = $this->find('count', array(
+            'conditions' => $cond,
+            'joins' => $this->joins_link,
+            'fields' => array('Coupon.*', 'CouponItem.*'),
+            'order' => 'Coupon.reduced_price desc',
+            'group' => array('CouponItem.coupon_id'),
+        ));
+        return $count;
+    }
+
+    public function find_my_all_valid_share_coupons($user_id, $limit_non_used = true){
+        if (!$user_id) {
+            return [];
+        }
+        $dt = new DateTime();
+        $cond = array('CouponItem.bind_user' => $user_id,
+            'CouponItem.status' => COUPONITEM_STATUS_TO_USE,
+            'CouponItem.deleted = 0',
+            'Coupon.published' => 1,
+            'Coupon.status' => COUPON_STATUS_VALID,
+            'Coupon.valid_begin <= ' => $dt->format(FORMAT_DATETIME),
+            'Coupon.valid_end >= ' => $dt->format(FORMAT_DATETIME),
+            'Coupon.brand_id' => SHARE_COUPON_OFFER_TYPE,
+        );
+        if ($limit_non_used) {
+            $cond[] = '(CouponItem.applied_order is null or CouponItem.applied_order = 0)';
+        }
+        //order by reduced default use first
+        $items = $this->find('all', array(
+            'conditions' => $cond,
+            'joins' => $this->joins_link,
+            'fields' => array('Coupon.*', 'CouponItem.*'),
+            'order' => 'Coupon.reduced_price desc',
+            'group' => array('CouponItem.coupon_id'),
+            'limit' => 100
+        ));
+        $sharerSource = Hash::extract($items, '{n}.CouponItem.source');
+        array_walk($sharerSource, function (&$item1) {
+            $item1 = str_replace('shared_offer', '', $item1);
+        });
+        $SharedOfferM = ClassRegistry::init('SharedOffer');
+        $sharedOffers = $SharedOfferM->find('all', [
+            'conditions' => [
+                'SharedOffer.id' => $sharerSource
+            ]
+        ]);
+        //$this->pid_list_to_array($items);
+        return $items;
+    }
+
     /**
      * @param $user_id
      * @param $sharer

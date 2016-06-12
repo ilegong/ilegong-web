@@ -41,6 +41,8 @@ class WesharesController extends AppController
         $this->set('uid', $uid);
         $this->set('tag', $tag);
         $this->set('banners', $banners);
+        $coupon_count = $this->CouponItem->find_my_share_coupons_count($uid);
+        $this->set('coupon_count', $coupon_count);
         $hide_nav = $_REQUEST['hide_nav'];
         $this->set('hide_nav', $hide_nav);
     }
