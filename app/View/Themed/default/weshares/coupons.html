@@ -1,5 +1,5 @@
 <div class="menu-top refer-back-bg">
-    {{$title}}
+    我的红包
     <a href="/">
         <img src="{{$STATIC_HOST}}/static/weshares/images/back.png"/>
         <label>返回</label>
@@ -11,8 +11,8 @@
         <ul class="coupon clearfix">
             <li class="fl label">￥</li>
             <li class="much">{{number_format($coupon_item['Coupon']['reduced_price']/100, 2);}}</li>
-            <li class="fr unavailable" style="position: relative;">
-                <a href="/weshares/user_share_info/{{$coupon_item['ShareOffer']['sharer_id']}}.html" class="clearfix">
+            <li class="fr available">
+                <a href="/weshares/user_share_info/{{$coupon_item['ShareOffer']['sharer_id']}}.html" class="clearfix use-btn">
                     <span>去使用</span>
                 </a>
             </li>

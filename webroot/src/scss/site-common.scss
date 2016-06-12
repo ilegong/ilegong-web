@@ -826,6 +826,7 @@ a:-webkit-any-link {
 }
 
 .coupon-list-page {
+  background-color: #f1f1f1;
   .coupon-item {
     margin-bottom: 10px;
     background-color: #ffffff;
@@ -843,21 +844,27 @@ a:-webkit-any-link {
         font-size: 1.8em;
         color: #333333;
       }
-      .available {
+      .unavailable{
         width: 50px;
         border-radius: 2px;
         height: 30px;
         border: 1px solid #666666;
         background-color: #d1d1d1;
       }
-      .unavailable {
-        width: 50px;
+      .available {
+        width: 60px;
         border-radius: 2px;
         height: 30px;
-        border: 1px solid #666666;
+        background-color: #ff6485;
+        position: relative;
+        text-align: center;
+        .use-btn{
+          text-align: center;
+          line-height:30px;
+          color: #fff;
+        }
       }
     }
-    span{padding-left:5px; line-height:30px;}
   }
 }
 
