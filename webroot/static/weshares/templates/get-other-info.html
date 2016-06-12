@@ -7,11 +7,11 @@
          infinite-scroll-disabled='vm.sharesOver||vm.loading'
          infinite-scroll-distance='0'>
         <div class="share show-summary" ng-repeat="share in vm.shares.list">
-            <a class="image-container" href="/weshares/view/{{share.id}}">
+            <a class="image-container" href="/weshares/view/{{share.id}}.html?from=userInfo">
                 <img class="image" lazy-src="{{share.default_image}}"
                      fallback-src="vm.staticFilePath+'/static/img/default_product_banner.png'">
             </a>
-            <a class="share-content" href="/weshares/view/{{share.id}}">
+            <a class="share-content" href="/weshares/view/{{share.id}}.html?from=userInfo">
                 <h1 class="share-title" ng-bind="share.title"></h1>
 
                 <p class="share-description" ng-if="!_.isEmpty(share.description)">

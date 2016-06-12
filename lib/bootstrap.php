@@ -374,4 +374,7 @@ function get_order_from_tag_by_flag($flag){
     if($flag == 7){
         return '发现页面';
     }
+    if($flag ==8){
+        return '个人中心';
+    }
 }

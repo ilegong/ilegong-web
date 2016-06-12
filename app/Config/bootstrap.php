@@ -2873,20 +2873,23 @@ function get_order_from_flag($from)
     if ($from == 'template_msg') {
         return 3;
     }
-    if($from == '_template_msg'){
+    if ($from == '_template_msg') {
         return 3;
     }
     if ($from == 'index') {
         return 4;
     }
-    if($from == 'app'){
+    if ($from == 'app') {
         return 5;
     }
-    if($from == 'singlemessage'){
+    if ($from == 'singlemessage') {
         return 6;
     }
-    if($from == 'opt'){
+    if ($from == 'opt') {
         return 7;
+    }
+    if ($from == 'userInfo') {
+        return 8;
     }
     return 0;
 }
