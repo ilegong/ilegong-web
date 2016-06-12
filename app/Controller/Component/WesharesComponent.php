@@ -238,13 +238,8 @@ class WesharesComponent extends Component
     public function stop_weshare($uid, $weshare_id)
     {
         $WeshareM = ClassRegistry::init('Weshare');
-
         $this->log('User ' . $uid . ' stops weshare ' . $weshare_id, LOG_INFO);
-
-        $WeshareM->updateAll(array('status' => WESHARE_STATUS_STOP), array('id' => $weshare_id, 'creator' => $uid, 'status' => WESHARE_STATUS_NORMAL));
-        //stop child share
-        $WeshareM->updateAll(array('status' => WESHARE_STATUS_STOP), array('refer_share_id' => $weshare_id, 'status' => WESHARE_STATUS_NORMAL, 'type' => SHARE_TYPE_GROUP));
-
+        $WeshareM->updateAll(array('status' => WESHARE_STATUS_STOP, 'close_date' => date('Y-m-d H:i:s')), array('id' => $weshare_id, 'creator' => $uid, 'status' => WESHARE_STATUS_NORMAL));
         $this->on_weshare_stopped($uid, $weshare_id);
     }
 
