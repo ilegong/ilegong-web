@@ -239,7 +239,7 @@ class WesharesComponent extends Component
     {
         $WeshareM = ClassRegistry::init('Weshare');
         $this->log('User ' . $uid . ' stops weshare ' . $weshare_id, LOG_INFO);
-        $WeshareM->updateAll(array('status' => WESHARE_STATUS_STOP, 'close_date' => date('Y-m-d H:i:s')), array('id' => $weshare_id, 'creator' => $uid, 'status' => WESHARE_STATUS_NORMAL));
+        $WeshareM->updateAll(array('status' => WESHARE_STATUS_STOP, 'close_date' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $weshare_id, 'creator' => $uid, 'status' => WESHARE_STATUS_NORMAL));
         $this->on_weshare_stopped($uid, $weshare_id);
     }
 

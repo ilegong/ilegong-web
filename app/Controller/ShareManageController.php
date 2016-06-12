@@ -285,7 +285,7 @@ class ShareManageController extends AppController
     }
 
     public function stop_share($shareId){
-        $this->Weshare->update(['status' => WESHARE_STATUS_STOP, 'close_date' => date('Y-m-d H:i:s')], ['id' => $shareId]);
+        $this->Weshare->update(['status' => WESHARE_STATUS_STOP, 'close_date' => "'" . date('Y-m-d H:i:s') . "'"], ['id' => $shareId]);
         if ($_REQUEST['from'] == 'search') {
             $this->redirect(array('action' => 'search_shares'));
             return;
