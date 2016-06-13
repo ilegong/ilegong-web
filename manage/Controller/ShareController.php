@@ -223,6 +223,7 @@ class ShareController extends AppController {
 
     private function process_share_data($cond) {
         $this->Paginator->settings = $cond;
+        $this->Paginator->settings['paramType'] = 'querystring';
         $weshares = $this->Paginator->paginate('Weshare', $cond['Weshare']['conditions']);
         //$weshares = $this->Weshare->find('all', $cond);
         $weshare_ids = Hash::extract($weshares, '{n}.Weshare.id');
@@ -303,14 +304,20 @@ class ShareController extends AppController {
         if (!empty($share_id)) {
             $cond['id'] = $share_id;
         }
+        $share_title = $_REQUEST['share_name'];
+        if (!empty($share_title)) {
+            $cond['title like '] = '%' . $share_title . '%';
+        }
         $q_c = array(
             'Weshare' => array(
                 'conditions' => $cond,
-                'limit' => 50,
+                'limit' => 20,
                 'order' => 'Weshare.id DESC'
             )
         );
         $this->process_share_data($q_c);
+        $this->set('share_id', $share_id);
+        $this->set('share_name', $share_title);
     }
 
     public function admin_share_for_pay() {
@@ -322,10 +329,14 @@ class ShareController extends AppController {
         if (!empty($share_id)) {
             $cond['id'] = $share_id;
         }
+        $share_title = $_REQUEST['share_name'];
+        if (!empty($share_title)) {
+            $cond['title like '] = '%' . $share_title . '%';
+        }
         $q_c = array(
             'Weshare' => array(
                 'conditions' => $cond,
-                'limit' => 10,
+                'limit' => 20,
                 'order' => ['Weshare.close_date DESC','Weshare.id DESC']
             )
         );
