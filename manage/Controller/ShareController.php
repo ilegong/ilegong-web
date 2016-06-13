@@ -284,7 +284,7 @@ class ShareController extends AppController {
         }
         $weshare_rebate_map = $this->get_share_rebate_money($weshare_ids);
         $repaid_money_result = $this->get_share_repaid_money($weshare_ids);
-        $weshares = $this->reduce_weshares($weshares);
+        //$weshares = $this->reduce_weshares($weshares);
         $this->reduce_share_summery($weshares, $summery_data, $repaid_money_result, $weshare_rebate_map, $weshare_refund_money_map);
         $this->set('repaid_money_result', $repaid_money_result);
         $this->set('weshare_rebate_map', $weshare_rebate_map);
@@ -325,7 +325,7 @@ class ShareController extends AppController {
         $q_c = array(
             'Weshare' => array(
                 'conditions' => $cond,
-                'limit' => 100,
+                'limit' => 10,
                 'order' => ['Weshare.close_date DESC','Weshare.id DESC']
             )
         );
