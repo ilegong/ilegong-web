@@ -10,7 +10,9 @@ class UserApiController extends AppController
     {
         $allow_action = array('test', 'check_mobile_available', 'show_user_info');
         $this->OAuth->allow($allow_action);
-        $this->currentUser = $this->OAuth->user();
+        if($_REQUEST['access_token']){
+            $this->currentUser = $this->OAuth->user();
+        }
         $this->autoRender = false;
     }
 

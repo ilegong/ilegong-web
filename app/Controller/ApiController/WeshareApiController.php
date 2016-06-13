@@ -8,7 +8,9 @@ class WeshareApiController extends Controller
     {
         $allow_action = ['test', 'share_detail_web', 'get_weshare_detail' ,'get_index_product_tags', 'get_index_products', 'get_share_comment', 'get_share_order'];
         $this->OAuth->allow($allow_action);
-        $this->currentUser = $this->OAuth->user();
+        if($_REQUEST['access_token']){
+            $this->currentUser = $this->OAuth->user();
+        }
         $this->autoRender = false;
     }
 
