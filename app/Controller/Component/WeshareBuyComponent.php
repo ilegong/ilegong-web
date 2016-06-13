@@ -24,7 +24,7 @@ class WeshareBuyComponent extends Component
 
     var $query_share_fields = array('id', 'title', 'images', 'status', 'creator', 'created', 'settlement', 'type', 'description');
 
-    var $query_list_share_fields = array('id', 'title', 'default_image', 'status', 'creator', 'created', 'settlement', 'type');
+    var $query_list_share_fields = array('id', 'title', 'default_image', 'status', 'creator', 'created', 'settlement', 'type', 'description');
 
     /**
      * @param $weshare_ids
