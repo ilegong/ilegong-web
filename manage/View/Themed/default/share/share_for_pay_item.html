@@ -1,5 +1,13 @@
 <tr>
-    <td>{{$current_share_item['id']}}</td>
+    <td>{{$current_share_item['id']}}<br/>
+        {{if $current_share_item['type'] == 6}}
+        <font style="color: red;">产品街分享</font>
+        {{elseif $current_share_item['type'] == 5}}
+        <font style="color: red;">拼团分享</font>
+        {{else}}
+        <font>正常分享</font>
+        {{/if}}
+    </td>
     <td width="20%">ID:&nbsp;&nbsp;{{$creators[$current_share_item['creator']]['id']}}<br/>昵称:&nbsp;&nbsp;{{$creators[$current_share_item['creator']]['nickname']}}<br/>电话:&nbsp;&nbsp;{{$creators[$current_share_item['creator']]['mobilephone']}}</td>
     <td>{{$current_share_item['title']}}</td>
     <?php
