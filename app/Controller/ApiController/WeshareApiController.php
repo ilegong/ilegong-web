@@ -6,11 +6,9 @@ class WeshareApiController extends Controller
 
     public function beforeFilter()
     {
-        $allow_action = ['test', 'share_detail_web', 'get_index_product_tags', 'get_index_products', 'get_share_comment', 'get_share_order'];
+        $allow_action = ['test', 'share_detail_web', 'get_weshare_detail' ,'get_index_product_tags', 'get_index_products', 'get_share_comment', 'get_share_order'];
         $this->OAuth->allow($allow_action);
-        if (array_search($this->request->params['action'], $allow_action) == false) {
-            $this->currentUser = $this->OAuth->user();
-        }
+        $this->currentUser = $this->OAuth->user();
         $this->autoRender = false;
     }
 
@@ -112,8 +110,8 @@ class WeshareApiController extends Controller
         $user_summary = $this->WeshareBuy->get_user_share_summary($detail['creator']);
         $share_summary = $this->WeshareBuy->get_share_and_all_refer_share_summary($weshare_id, $uid);
         $recommend_data = $this->WeshareBuy->load_share_recommend_data($weshare_id);
-        $has_sub = true;
-        if ($uid != $detail['creator']) {
+        $has_sub = false;
+        if (!empty($uid) && $uid != $detail['creator']) {
             $has_sub = $this->ShareUtil->check_user_is_subscribe($detail['creator'], $uid);
         }
         $userM = ClassRegistry::init('User');

@@ -8,11 +8,9 @@ class UserApiController extends AppController
 
     public function beforeFilter()
     {
-        $allow_action = array('test', 'check_mobile_available');
+        $allow_action = array('test', 'check_mobile_available', 'show_user_info');
         $this->OAuth->allow($allow_action);
-        if (array_search($this->request->params['action'], $allow_action) == false) {
-            $this->currentUser = $this->OAuth->user();
-        }
+        $this->currentUser = $this->OAuth->user();
         $this->autoRender = false;
     }
 
@@ -23,8 +21,11 @@ class UserApiController extends AppController
         $user_summary = $this->WeshareBuy->get_user_share_summary($uid);
         $user_info = $this->get_user_info($uid);
         $user_info['image'] = get_user_avatar($user_info);
-        $sub_status = $this->ShareUtil->check_user_relation($uid, $curr_uid);
-        echo json_encode(['sub_status' => !$sub_status, 'user_summary' => $user_summary, 'user_info' => $user_info['User']]);
+        $sub_status = false;
+        if (!empty($curr_uid)) {
+            $sub_status = $this->ShareUtil->check_user_is_subscribe($uid, $curr_uid);
+        }
+        echo json_encode(['sub_status' => $sub_status, 'user_summary' => $user_summary, 'user_info' => $user_info['User']]);
         exit();
     }
 
