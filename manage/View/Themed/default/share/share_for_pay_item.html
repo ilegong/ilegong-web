@@ -23,7 +23,7 @@
     <td>{{floatval($weshare_refund_map[$current_share_item['id']])}}</td>
     <td>{{$current_share_repaid_money}}</td>
     <td>{{round(floatval($weshare_summery[$current_share_item['id']]['child_ship_fee']/100),2)}}</td>
-    <td>{{$creators[$current_share_item['creator']]['payment']}}</td>
+    <td>{{get_user_payment_info($creators[$current_share_item['creator']]['payment'])}}</td>
     <td><!-- Indicates a successful or positive action -->
         <a data-name="{{$current_share_item['title']}}" data-id="{{$current_share_item['id']}}" type="button"
            class="btn btn-success set-share-paid">置为已付款</a>
