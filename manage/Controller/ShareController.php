@@ -323,7 +323,7 @@ class ShareController extends AppController {
         $q_c = array(
             'Weshare' => array(
                 'conditions' => $cond,
-                'limit' => 20,
+                'limit' => 50,
                 'order' => 'Weshare.id DESC'
             )
         );
@@ -339,7 +339,7 @@ class ShareController extends AppController {
         $q_c = array(
             'Weshare' => array(
                 'conditions' => $cond,
-                'limit' => 20,
+                'limit' => 50,
                 'order' => ['Weshare.close_date DESC', 'Weshare.id DESC']
             )
         );
