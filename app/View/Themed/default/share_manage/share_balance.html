@@ -130,12 +130,12 @@
                             <td>{{$weshare_product_summary[$product_item['id']]['num']}}</td>
                             <td>{{get_format_number($weshare_product_summary[$product_item['id']]['turnover']/100)}}</td>
                             {{if $loop_flag==0}}
-                            <td {{if count($weshare_item["WeshareProduct"]) > 1}}style="vertical-align:middle"{{/if}} rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_summery[$weshare_item['Weshare']['id']]['ship_fee']/100)}}</td>
-                            <td {{if count($weshare_item["WeshareProduct"]) > 1}}style="vertical-align:middle"{{/if}} rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_summery[$weshare_item['Weshare']['id']]['coupon_total']/100)}}</td>
-                            <td {{if count($weshare_item["WeshareProduct"]) > 1}}style="vertical-align:middle"{{/if}} rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_refund_map[$weshare_item['Weshare']['id']])}}</td>
-                            <td {{if count($weshare_item["WeshareProduct"]) > 1}}style="vertical-align:middle"{{/if}} rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_rebate_map[$weshare_item['Weshare']['id']])}}</td>
-                            <td {{if count($weshare_item["WeshareProduct"]) > 1}}style="vertical-align:middle"{{/if}} rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_summery[$weshare_item['Weshare']['id']]['total_price'])}}</td>
-                            <td {{if count($weshare_item["WeshareProduct"]) > 1}}style="vertical-align:middle"{{/if}} rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_summery[$weshare_item['Weshare']['id']]['total_price'] - $weshare_refund_map[$weshare_item['Weshare']['id']] - $weshare_rebate_map[$weshare_item['Weshare']['id']])}}</td>
+                            <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_summery[$weshare_item['Weshare']['id']]['ship_fee']/100)}}</td>
+                            <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_summery[$weshare_item['Weshare']['id']]['coupon_total']/100)}}</td>
+                            <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_refund_map[$weshare_item['Weshare']['id']])}}</td>
+                            <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_rebate_map[$weshare_item['Weshare']['id']])}}</td>
+                            <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_summery[$weshare_item['Weshare']['id']]['total_price'])}}</td>
+                            <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_summery[$weshare_item['Weshare']['id']]['total_price'] - $weshare_refund_map[$weshare_item['Weshare']['id']] - $weshare_rebate_map[$weshare_item['Weshare']['id']])}}</td>
                             <td width="5%" rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_user_payment_info($creators[$weshare_item['Weshare']['creator']]['payment'])}}</td>
                             <td width="5%" rowspan="{{count($weshare_item['WeshareProduct'])}}">{{$creators[$weshare_item['Weshare']['creator']]['mobilephone']}}</td>
                             {{/if}}
