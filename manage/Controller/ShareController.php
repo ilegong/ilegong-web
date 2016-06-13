@@ -295,11 +295,7 @@ class ShareController extends AppController {
         $this->set('creators', $creators);
     }
 
-    public function admin_share_paid() {
-        $cond = array(
-            'status' => array(1, 2),
-            'settlement' => 1,
-        );
+    private function set_query_share_cond($cond){
         $share_id = $_REQUEST['share_id'];
         if (!empty($share_id)) {
             $cond['id'] = $share_id;
@@ -308,6 +304,22 @@ class ShareController extends AppController {
         if (!empty($share_title)) {
             $cond['title like '] = '%' . $share_title . '%';
         }
+        $sharer_id=$_REQUEST['sharer_id'];
+        if(!empty($sharer_id)){
+            $cond['creator'] = $sharer_id;
+        }
+        $this->set('share_id', $share_id);
+        $this->set('share_name', $share_title);
+        $this->set('sharer_id', $sharer_id);
+        return $cond;
+    }
+
+    public function admin_share_paid() {
+        $cond = array(
+            'status' => array(1, 2),
+            'settlement' => 1,
+        );
+        $cond = $this->set_query_share_cond($cond);
         $q_c = array(
             'Weshare' => array(
                 'conditions' => $cond,
@@ -316,28 +328,19 @@ class ShareController extends AppController {
             )
         );
         $this->process_share_data($q_c);
-        $this->set('share_id', $share_id);
-        $this->set('share_name', $share_title);
     }
 
     public function admin_share_for_pay() {
         $cond = array(
-            'status' => array(1, 2),
+            'status' => array(1, 2, -1),
             'settlement' => 0,
         );
-        $share_id = $_REQUEST['share_id'];
-        if (!empty($share_id)) {
-            $cond['id'] = $share_id;
-        }
-        $share_title = $_REQUEST['share_name'];
-        if (!empty($share_title)) {
-            $cond['title like '] = '%' . $share_title . '%';
-        }
+        $cond = $this->set_query_share_cond($cond);
         $q_c = array(
             'Weshare' => array(
                 'conditions' => $cond,
                 'limit' => 20,
-                'order' => ['Weshare.close_date DESC','Weshare.id DESC']
+                'order' => ['Weshare.close_date DESC', 'Weshare.id DESC']
             )
         );
         $this->process_share_data($q_c);
