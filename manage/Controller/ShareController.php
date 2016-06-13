@@ -137,7 +137,7 @@ class ShareController extends AppController {
     }
 
     public function admin_set_share_paid($shareId) {
-        $this->Weshare->updateAll(array('settlement' => 1), array('id' => $shareId, 'status' => array(1, 2)));
+        $this->Weshare->updateAll(array('settlement' => 1), array('id' => $shareId));
         $this->send_share_paid_msg($shareId);
         $this->redirect(array('action' => 'admin_share_for_pay'));
     }
