@@ -321,7 +321,10 @@ function get_user_payment_info($payment){
     if (isJson($payment)) {
         $payment_data = json_decode($payment, true);
         $str = '';
-        if (!empty($payment)) {
+        if($payment_data['payment']){
+            $payment_data = $payment_data['payment'];
+        }
+        if (!empty($payment_data)) {
             while (list ($key, $val) = each($payment_data)) {
                 if ($key == 'type') {
                     if ($val == 0) {

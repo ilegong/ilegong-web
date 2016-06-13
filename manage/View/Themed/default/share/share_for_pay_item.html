@@ -1,8 +1,6 @@
 <tr>
     <td>{{$current_share_item['id']}}</td>
-    <td>{{$creators[$current_share_item['creator']]['id']}}</td>
-    <td>{{$creators[$current_share_item['creator']]['nickname']}}</td>
-    <td>{{$creators[$current_share_item['creator']]['mobilephone']}}</td>
+    <td width="20%">ID:&nbsp;&nbsp;{{$creators[$current_share_item['creator']]['id']}}<br/>昵称:&nbsp;&nbsp;{{$creators[$current_share_item['creator']]['nickname']}}<br/>电话:&nbsp;&nbsp;{{$creators[$current_share_item['creator']]['mobilephone']}}</td>
     <td>{{$current_share_item['title']}}</td>
     <?php
         $current_share_repaid_money = $repaid_money_result[$current_share_item['id']];
