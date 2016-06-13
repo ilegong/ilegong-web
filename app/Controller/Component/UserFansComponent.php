@@ -59,7 +59,7 @@ class UserFansComponent extends Component{
             'conditions' => [
                 'id' => $user_ids
             ],
-            'fields' => ['id', 'nickname', 'image', 'avatar', 'label'],
+            'fields' => ['id', 'nickname', 'image', 'avatar', 'label', 'description'],
             'order' => ['id DESC']
         ]);
         $users_data = array_map('map_user_avatar2', $users_data);
