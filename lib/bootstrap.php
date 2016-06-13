@@ -321,21 +321,21 @@ function get_user_payment_info($payment){
     if (isJson($payment)) {
         $payment_data = json_decode($payment, true);
         $str = '';
-        if (is_array($payment) && !empty($payment)) {
+        if (!empty($payment)) {
             while (list ($key, $val) = each($payment_data)) {
                 if ($key == 'type') {
                     if ($val == 0) {
-                        $str .= '支付宝 ';
+                        $str .= '【支付宝】';
                     }
                     if ($val == 1) {
-                        $str .= '银行卡 ';
+                        $str .= '【银行卡】';
                     }
                 }
                 if ($key == 'account') {
-                    $str .= '账号 ' . $val;
+                    $str .= ' 账号: ' . $val;
                 }
                 if ($key == 'full_name') {
-                    $str .= '姓名 ' . $val;
+                    $str .= ' 姓名: ' . $val;
                 }
             }
             return $str;

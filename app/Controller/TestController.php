@@ -80,6 +80,14 @@ class TestController extends AppController
 //    }
 
 
+    public function test_get_payment_info(){
+        $pay_info = '{"full_name":"peng","account":"6666666","card_name":"","type":"0"}';
+        $pay = get_user_payment_info($pay_info);
+        echo $pay;
+        exit;
+    }
+
+
     public function test_load_fans_by_uid(){
         $this->autoRender = false;
         $result = $this->WeshareBuy->load_fans_buy_sharer(633345, $limit = 10, $offset = 0);
