@@ -80,6 +80,13 @@ class TestController extends AppController
 //    }
 
 
+    public function test_get_view_count(){
+        $weshareM = ClassRegistry::init('Weshare');
+        $share_view_count = $weshareM->query("select sum(view_count) from cake_weshares where creator = 633345");
+        echo json_encode($share_view_count[0][0]['sum(view_count)']);
+        exit;
+    }
+
     public function test_get_payment_info(){
         $pay_info = '{"full_name":"peng","account":"6666666","card_name":"","type":"0"}';
         $pay = get_user_payment_info($pay_info);

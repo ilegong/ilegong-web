@@ -413,6 +413,8 @@ class ShareCountlyController extends AppController
                 'DATE(created)' => $date
             )
         ));
+        $share_view_count = $weshareM->query("select sum(view_count) from cake_weshares where creator = " . $user_id);
+        $total_view_count = $share_view_count[0][0]['sum(view_count)'];
         $runing_shares = $weshareM->find('all', array(
             'conditions' => array(
                 'creator' => $user_id,
@@ -422,14 +424,14 @@ class ShareCountlyController extends AppController
             'order' => array('id DESC')
         ));
         $runing_share_ids = Hash::extract($runing_shares, '{n}.Weshare.id');
-        if(!empty($runing_share_ids)){
-            $this->log("gen proxy data sql "."select count(id), sum(total_all_price) from cake_orders where type=9 and status!=0 and member_id in (".implode(',', $runing_share_ids).") and DATE(created)='".$date."'", LOG_DEBUG);
-            $order_summery = $orderM->query("select count(id), sum(total_all_price) from cake_orders where type=9 and status!=0 and member_id in (".implode(',', $runing_share_ids).") and DATE(created)='".$date."'");
+        if (!empty($runing_share_ids)) {
+            $this->log("gen proxy data sql " . "select count(id), sum(total_all_price) from cake_orders where type=9 and status!=0 and member_id in (" . implode(',', $runing_share_ids) . ") and DATE(created)='" . $date . "'", LOG_DEBUG);
+            $order_summery = $orderM->query("select count(id), sum(total_all_price) from cake_orders where type=9 and status!=0 and member_id in (" . implode(',', $runing_share_ids) . ") and DATE(created)='" . $date . "'");
             $order_count = empty($order_summery[0][0]['count(id)']) ? 0 : $order_summery[0][0]['count(id)'];
-            $trading_volume = empty($order_summery[0][0]['sum(total_all_price)'])? 0 : $order_summery[0][0]['sum(total_all_price)'];
-            $data = array('order_count' => $order_count, 'trading_volume' => $trading_volume, 'created' => date('Y-m-d H:i:s'), 'data_date' => $date, 'sharer_id' => $user_id, 'share_count' => $create_share_count, 'fans_count' => $fans_count);
-        }else{
-            $data = array('order_count' => 0, 'trading_volume' => 0, 'created' => date('Y-m-d H:i:s'), 'data_date' => $date, 'sharer_id' => $user_id, 'share_count' => $create_share_count, 'fans_count' => $fans_count);
+            $trading_volume = empty($order_summery[0][0]['sum(total_all_price)']) ? 0 : $order_summery[0][0]['sum(total_all_price)'];
+            $data = array('order_count' => $order_count, 'trading_volume' => $trading_volume, 'created' => date('Y-m-d H:i:s'), 'data_date' => $date, 'sharer_id' => $user_id, 'share_count' => $create_share_count, 'fans_count' => $fans_count, 'view_count' => $total_view_count);
+        } else {
+            $data = array('order_count' => 0, 'trading_volume' => 0, 'created' => date('Y-m-d H:i:s'), 'data_date' => $date, 'sharer_id' => $user_id, 'share_count' => $create_share_count, 'fans_count' => $fans_count, 'view_count' => $total_view_count);
         }
         return $data;
     }
