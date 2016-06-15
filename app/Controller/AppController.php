@@ -85,9 +85,9 @@ class AppController extends Controller {
             }
         }
 
-        if ($_GET['share_type'] && $_GET['trstr']){
-            $this->__log_wx_str();
-        }
+//        if ($_GET['share_type'] && $_GET['trstr']){
+//            $this->__log_wx_str();
+//        }
         //set static file path
         $this->set('STATIC_HOST', STATIC_HOST);
         $this->set('IMAGES_HOST', IMAGES_HOST);
