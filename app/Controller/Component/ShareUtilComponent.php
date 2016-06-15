@@ -115,6 +115,8 @@ class ShareUtilComponent extends Component
     {
         $userRelationM = ClassRegistry::init('UserRelation');
         $userRelationM->updateAll(array('deleted' => DELETED_YES), array('user_id' => $sharer_id, 'follow_id' => $user_id));
+        $userSubLog = ClassRegistry::init('UserSubLog');
+        $userSubLog->save(['user_id' => $sharer_id, 'follow_id' => $user_id, 'type' => USER_UN_SUB_LOG_TYPE, 'created' => date('Y-m-d H:i:s')]);
     }
 
     /**
@@ -152,16 +154,19 @@ class ShareUtilComponent extends Component
 
     public function save_relation($sharer_id, $user_id, $type = 'Buy')
     {
+
         if (empty($sharer_id) || empty($user_id)) {
             return 0;
         }
         $userRelationM = ClassRegistry::init('UserRelation');
+        $userSubLog = ClassRegistry::init('UserSubLog');
         $has_relation = $userRelationM->hasAny(['user_id' => $sharer_id, 'follow_id' => $user_id]);
         if (!$has_relation) {
             $userRelationM->saveAll(array('user_id' => $sharer_id, 'follow_id' => $user_id, 'type' => $type, 'created' => date('Y-m-d H:i:s')));
         } else {
             $userRelationM->updateAll(array('deleted' => DELETED_NO), array('user_id' => $sharer_id, 'follow_id' => $user_id));
         }
+        $userSubLog->save(['user_id' => $sharer_id, 'follow_id' => $user_id, 'type' => USER_SUB_LOG_TYPE, 'created' => date('Y-m-d H:i:s')]);
     }
 
     /**
