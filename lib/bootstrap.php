@@ -325,23 +325,25 @@ function get_user_payment_info($payment){
             $payment_data = $payment_data['payment'];
         }
         if (!empty($payment_data)) {
-            while (list ($key, $val) = each($payment_data)) {
-                if ($key == 'type') {
-                    if ($val == 0) {
-                        $str .= '【支付宝】';
+            if(is_array($payment_data) || is_object($payment_data)){
+                while (list ($key, $val) = each($payment_data)) {
+                    if ($key == 'type') {
+                        if ($val == 0) {
+                            $str .= '【支付宝】';
+                        }
+                        if ($val == 1) {
+                            $str .= '【银行卡】';
+                        }
                     }
-                    if ($val == 1) {
-                        $str .= '【银行卡】';
+                    if ($key == 'account') {
+                        $str .= ' 账号: ' . $val;
+                    }
+                    if ($key == 'full_name') {
+                        $str .= ' 姓名: ' . $val;
                     }
                 }
-                if ($key == 'account') {
-                    $str .= ' 账号: ' . $val;
-                }
-                if ($key == 'full_name') {
-                    $str .= ' 姓名: ' . $val;
-                }
+                return $str;
             }
-            return $str;
         }
     }
     return $payment;
