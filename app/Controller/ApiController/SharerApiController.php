@@ -32,11 +32,18 @@ class SharerApiController extends Controller{
         exit;
     }
 
-    public function get_fans_info_list()
+    /**
+     * @param $limit
+     * @param $page
+     * 获取粉丝列表
+     */
+    public function get_fans_info_list($limit, $page)
     {
         $uid = $this->currentUser['id'];
         $keyword = $_REQUEST['keyword'];
-
+        $users = $this->ShareUtil->get_fans_info_list($limit, $page, $keyword, $uid);
+        echo json_encode($users);
+        exit;
     }
 
     /**

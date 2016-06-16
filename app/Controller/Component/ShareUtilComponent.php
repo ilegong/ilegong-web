@@ -15,9 +15,54 @@ class ShareUtilComponent extends Component
 
     public function get_fans_info_list($limit, $page, $keyword, $sharer_id)
     {
-        $userM = ClassRegistry::init('User');
         $userRelationM = ClassRegistry::init('UserRelation');
-
+        $orderM = ClassRegistry::init('Order');
+        $cond = [
+            'UserRelation.user_id' => $sharer_id,
+            'UserRelation.deleted' => DELETED_NO
+        ];
+        if (!empty($keyword)) {
+            $cond['User.nickname like '] = '%' . $keyword . '%';
+        }
+        $users = $userRelationM->find('all', [
+            'conditions' => $cond,
+            'joins' => [
+                [
+                    'table' => 'users',
+                    'alias' => 'User',
+                    'type' => 'inner',
+                    'conditions' => [
+                        'User.id = UserRelation.follow_id',
+                    ],
+                ],
+            ],
+            'order' => ['UserRelation.id DESC'],
+            'limit' => $limit,
+            'page' => $page,
+            'fields' => ['User.id', 'User.nickname', 'User.image', 'User.avatar']
+        ]);
+        $user_list = [];
+        $user_ids = [];
+        foreach ($users as $user_item) {
+            $user_ids[] = $user_item['User']['id'];
+            $user_list[] = $user_item['User'];
+        }
+        $orderSummary = $orderM->find('all', [
+            'conditions' => [
+                'brand_id' => $sharer_id,
+                'creator' => $user_ids,
+                'status > ' => ORDER_STATUS_WAITING_PAY,
+                'type' => ORDER_TYPE_WESHARE_BUY
+            ],
+            'group' => 'creator',
+            'fields' => ['count(id) as order_count', 'format(sum(total_all_price),2) as total_fee', 'creator']
+        ]);
+        $orderSummary = Hash::combine($orderSummary, '{n}.Order.creator', '{n}.Order');
+        foreach ($user_list as &$item) {
+            $item['order_count'] = $orderSummary[$item['id']]['order_count'];
+            $item['total_fee'] = $orderSummary[$item['id']]['total_fee'];
+        }
+        return $user_list;
     }
 
     /**
