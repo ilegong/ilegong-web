@@ -162,6 +162,23 @@ class UserApiController extends AppController
         exit();
     }
 
+    public function get_remark()
+    {
+        $user_id = $this->currentUser['id'];
+        $id = $_REQUEST['id'];
+
+        $res = $this->UserRelation->find('all', array(
+            'conditions' => array(
+                'id' => $id,
+                'user_id' => $user_id,
+                'deleted' => 0
+            ),
+            'fields' => 'remark'
+        ));
+        echo json_encode($res[0]['UserRelation']);
+        exit();
+    }
+
     public function update_remark()
     {
         $user_id = $this->currentUser['id'];
