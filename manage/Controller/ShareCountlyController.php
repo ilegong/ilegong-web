@@ -414,7 +414,7 @@ class ShareCountlyController extends AppController
             )
         ));
         $share_view_count = $weshareM->query("select sum(view_count) from cake_weshares where creator = " . $user_id);
-        $total_view_count = $share_view_count[0][0]['sum(view_count)'];
+        $total_view_count = empty($share_view_count[0][0]['sum(view_count)']) ? 0 : $share_view_count[0][0]['sum(view_count)'];
         $runing_shares = $weshareM->find('all', array(
             'conditions' => array(
                 'creator' => $user_id,
