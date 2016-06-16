@@ -10,6 +10,8 @@
     </td>
     <td width="20%">ID:&nbsp;&nbsp;{{$creators[$current_share_item['creator']]['id']}}<br/>昵称:&nbsp;&nbsp;{{$creators[$current_share_item['creator']]['nickname']}}<br/>电话:&nbsp;&nbsp;{{$creators[$current_share_item['creator']]['mobilephone']}}</td>
     <td>{{$current_share_item['title']}}</td>
+    <td>{{$current_share_item['created']}}</td>
+    <td>{{$current_share_item['close_date']}}</td>
     <?php
         $current_share_repaid_money = $repaid_money_result[$current_share_item['id']];
         if($current_share_repaid_money == 0){
