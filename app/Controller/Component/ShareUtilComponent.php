@@ -111,8 +111,8 @@ class ShareUtilComponent extends Component
             $total_fee = empty($orderSummary[$item['id']]['total_fee']) ? 0 : $orderSummary[$item['id']]['total_fee'];
             $item['order_count'] = strval($order_count);
             $item['total_fee'] = strval($total_fee);
+            $item['image'] = get_user_avatar($item);
         }
-        $user_list = array_map('map_user_avatar', $user_list);
         return $user_list;
     }
 
