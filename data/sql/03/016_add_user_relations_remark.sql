@@ -1,0 +1,1 @@
+ALTER TABLE `cake_user_relations` ADD `remark` VARCHAR(80) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `is_update`;
