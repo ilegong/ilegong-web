@@ -2242,7 +2242,6 @@ class WeshareBuyComponent extends Component
         $summery_data = Cache::read($key);
         if (empty($summery_data)) {
             $weshareM = ClassRegistry::init('Weshare');
-            $userRelationM = ClassRegistry::init('UserRelation');
             $weshare_count = $weshareM->find('count', array(
                 'conditions' => [
                     'creator' => $uid,
@@ -2251,24 +2250,36 @@ class WeshareBuyComponent extends Component
                     'type' => [SHARE_TYPE_GROUP, SHARE_TYPE_DEFAULT, SHARE_TYPE_POOL_FOR_PROXY, SHARE_TYPE_POOL]
                 ]
             ));
-            $fans_count = $userRelationM->find('count', array(
-                'conditions' => array(
-                    'user_id' => $uid,
-                    'deleted' => DELETED_NO
-                )
-            ));
-            $focus_count = $userRelationM->find('count', array(
-                'conditions' => array(
-                    'follow_id' => $uid,
-                    'deleted' => DELETED_NO
-                )
-            ));
+            $fans_count = $this->get_sharer_fans_count($uid);
+            $focus_count = $this->get_sharer_focus_count($uid);
             $comments_count = $this->get_sharer_comments_count($uid);
             $summery_data = array('share_count' => $weshare_count, 'follower_count' => $fans_count, 'focus_count' => $focus_count, 'comment_count' => $comments_count);
             Cache::write($key, json_encode($summery_data));
             return $summery_data;
         }
         return json_decode($summery_data, true);
+    }
+
+    public function get_sharer_fans_count($uid){
+        $userRelationM = ClassRegistry::init('UserRelation');
+        $fans_count = $userRelationM->find('count', array(
+            'conditions' => array(
+                'user_id' => $uid,
+                'deleted' => DELETED_NO
+            )
+        ));
+        return $fans_count;
+    }
+
+    public function get_sharer_focus_count($uid){
+        $userRelationM = ClassRegistry::init('UserRelation');
+        $focus_count = $userRelationM->find('count', array(
+            'conditions' => array(
+                'follow_id' => $uid,
+                'deleted' => DELETED_NO
+            )
+        ));
+        return $focus_count;
     }
 
     /**

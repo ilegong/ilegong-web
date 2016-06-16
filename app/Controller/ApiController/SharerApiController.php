@@ -27,7 +27,8 @@ class SharerApiController extends Controller{
         $start_date = $month_ini->format('Y-m-d') . ' 00:00:00';
         $end_date = $month_end->format('Y-m-d') . ' 24:00:00';
         $orderData = $this->WeshareBuy->get_sharer_order_summary($uid, $start_date, $end_date);
-        echo json_encode(['view_count' => $viewData, 'sub_count' => $subData['sub_count'] - $subData['un_sub_count'], 'order_count' => $orderData['order_count'], 'total_fee' => $orderData['total_fee']]);
+        $fans_count = $this->WeshareBuy->get_sharer_fans_count($uid);
+        echo json_encode(['view_count' => strval($viewData), 'sub_count' => strval($subData['sub_count'] - $subData['un_sub_count']), 'order_count' => strval($orderData['order_count']), 'total_fee' => strval($orderData['total_fee']), 'fans_count' => strval($fans_count)]);
         exit;
     }
 
