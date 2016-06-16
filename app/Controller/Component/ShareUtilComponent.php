@@ -87,13 +87,15 @@ class ShareUtilComponent extends Component
             'order' => ['UserRelation.id DESC'],
             'limit' => $limit,
             'page' => $page,
-            'fields' => ['User.id', 'User.nickname', 'User.image', 'User.avatar']
+            'fields' => ['User.id', 'User.nickname', 'User.image', 'User.avatar', 'UserRelation.id']
         ]);
         $user_list = [];
         $user_ids = [];
         foreach ($users as $user_item) {
-            $user_ids[] = $user_item['User']['id'];
-            $user_list[] = $user_item['User'];
+            $tmp_item = $user_item['User'];
+            $user_ids[] = $tmp_item['id'];
+            $tmp_item['relation_id'] = $user_item['UserRelation']['id'];
+            $user_list[] = $tmp_item;
         }
         $orderSummary = $orderM->find('all', [
             'conditions' => [
