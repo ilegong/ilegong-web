@@ -162,6 +162,9 @@ class UserApiController extends AppController
         exit();
     }
 
+    /**
+     * 获取粉丝备注
+     */
     public function get_remark()
     {
         $user_id = $this->currentUser['id'];
@@ -171,7 +174,7 @@ class UserApiController extends AppController
             'conditions' => array(
                 'id' => $id,
                 'user_id' => $user_id,
-                'deleted' => 0
+                'deleted' => DELETED_NO
             ),
             'fields' => 'remark'
         ));
@@ -179,6 +182,9 @@ class UserApiController extends AppController
         exit();
     }
 
+    /**
+     * 更新粉丝备注
+     */
     public function update_remark()
     {
         $user_id = $this->currentUser['id'];
