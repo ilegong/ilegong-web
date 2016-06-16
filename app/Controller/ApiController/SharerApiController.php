@@ -1,6 +1,6 @@
 <?php
 
-class SharerApiController extends Controller{
+class SharerApiController extends AppController{
 
     public $components = array('OAuth.OAuth', 'Session', 'WeshareBuy', 'ShareUtil', 'Weshares');
     public $uses = array('Weshare');
