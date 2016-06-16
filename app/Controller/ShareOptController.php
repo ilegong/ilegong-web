@@ -78,7 +78,6 @@ class ShareOptController extends AppController
         $oldest_timestamp = $this->OptLog->get_oldest_update_time();
         $last_timestamp = $this->OptLog->get_last_update_time();
         $opt_logs = [];
-        $this->log('Old time stamp: ' . $oldest_timestamp . ', time: ' . $time);
         if ($time > $oldest_timestamp) {
             $opt_logs = $this->NewOptLog->get_all_logs($time, $limit, $type, false);
             if (!$opt_logs) {

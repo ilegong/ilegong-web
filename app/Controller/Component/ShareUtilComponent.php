@@ -1963,8 +1963,10 @@ class ShareUtilComponent extends Component
             $detail_url = $this->WeshareBuy->get_weshares_detail_url($share_id);
             $title = '你好，您报名的' . $share_title . '，现在已经成团。吼，吼！';
             $remark = '发货信息：' . $share_info['send_info'] . '请留意后续消息！';
-            foreach ($user_open_ids as $user_id => $user_open_id) {
-                $this->Weixin->send_share_buy_complete_msg($user_open_id, $title, $share_title, $tuan_leader_name, $remark, $detail_url);
+            if(!empty($user_open_ids)){
+                foreach ($user_open_ids as $user_id => $user_open_id) {
+                    $this->Weixin->send_share_buy_complete_msg($user_open_id, $title, $share_title, $tuan_leader_name, $remark, $detail_url);
+                }
             }
         }
     }

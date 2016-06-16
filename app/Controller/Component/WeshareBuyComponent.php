@@ -2453,8 +2453,10 @@ class WeshareBuyComponent extends Component
         $remark = '点击查看详情！';
         $deatil_url = $this->get_weshares_detail_url($weshare_info['id']);
         $product_name = $weshare_info['title'];
-        foreach ($open_ids as $open_id) {
-            $this->Weixin->send_share_buy_complete_msg($open_id, $msg_content, $product_name, $tuan_leader_name, $remark, $deatil_url);
+        if(!empty($open_ids)){
+            foreach ($open_ids as $open_id) {
+                $this->Weixin->send_share_buy_complete_msg($open_id, $msg_content, $product_name, $tuan_leader_name, $remark, $deatil_url);
+            }
         }
     }
 
@@ -2511,11 +2513,13 @@ class WeshareBuyComponent extends Component
             $remark = '点击详情，赶快加入' . $tuan_leader_name . '的分享！';
             $deatil_url = $this->get_weshares_detail_url($weshare_info['id']);
             $already_buy_uids = $this->get_has_buy_user($weshare_info['id']);
-            foreach ($fans_open_ids as $uid => $open_id) {
-                $fans_open_ids = array_unique($fans_open_ids);
-                if (!in_array($uid, $already_buy_uids)) {
-                    $title = $fans_data_nickname[$uid] . '你好，' . $msg_content;
-                    $this->Weixin->send_share_buy_complete_msg($open_id, $title, $product_name, $tuan_leader_name, $remark, $deatil_url);
+            if(!empty($fans_open_ids)){
+                foreach ($fans_open_ids as $uid => $open_id) {
+                    $fans_open_ids = array_unique($fans_open_ids);
+                    if (!in_array($uid, $already_buy_uids)) {
+                        $title = $fans_data_nickname[$uid] . '你好，' . $msg_content;
+                        $this->Weixin->send_share_buy_complete_msg($open_id, $title, $product_name, $tuan_leader_name, $remark, $deatil_url);
+                    }
                 }
             }
         }
