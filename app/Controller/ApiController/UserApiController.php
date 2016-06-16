@@ -1,6 +1,6 @@
 <?php
 
-class UserApiController extends AppController
+class UserApiController extends Controller
 {
     public $uses = array('User', 'UserFriend', 'UserLevel', 'UserRelation');
 
@@ -10,7 +10,7 @@ class UserApiController extends AppController
     {
         $allow_action = array('test', 'check_mobile_available', 'show_user_info');
         $this->OAuth->allow($allow_action);
-        if($_REQUEST['access_token']){
+        if ($_REQUEST['access_token']) {
             $this->currentUser = $this->OAuth->user();
         }
         $this->autoRender = false;
@@ -38,6 +38,7 @@ class UserApiController extends AppController
         echo json_encode($result);
         exit();
     }
+
     //获取用户购买的分享
     public function get_user_buy_shares($uid, $limit, $page)
     {
@@ -53,7 +54,7 @@ class UserApiController extends AppController
         $user_summary = $this->WeshareBuy->get_user_share_summary($uid);
         $order_summary = $this->WeshareBuy->get_user_order_summary($uid);
         $share_summary = $this->WeshareBuy->get_sharer_summary($uid);
-        $share_summary['new_month_trade_money'] = intval(floatval($share_summary['month_trade_money'])*100);
+        $share_summary['new_month_trade_money'] = intval(floatval($share_summary['month_trade_money']) * 100);
         $share_summary['month_trade_money'] = intval($share_summary['month_trade_money']);
         echo json_encode(['user_summary' => $user_summary, 'order_summary' => $order_summary, 'share_summary' => $share_summary]);
         exit();
@@ -63,7 +64,7 @@ class UserApiController extends AppController
     {
         $uid = $this->currentUser['id'];
         if ($status == -1) {
-            $status = [ORDER_STATUS_PAID, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY,ORDER_STATUS_REFUND_DONE, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED];
+            $status = [ORDER_STATUS_PAID, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_REFUND_DONE, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED];
         }
         $params = ['user_id' => $uid, 'status' => $status, 'limit' => $limit, 'page' => $page];
         $orders = $this->Orders->get_user_order($params);
@@ -96,7 +97,8 @@ class UserApiController extends AppController
     }
 
 
-    public function confirm_order_received($order_id){
+    public function confirm_order_received($order_id)
+    {
         $uid = $this->currentUser['id'];
         $result = $this->ShareUtil->confirm_received_order($order_id, $uid);
         echo json_encode($result);
@@ -190,7 +192,7 @@ class UserApiController extends AppController
         $user_id = $this->currentUser['id'];
         $id = $_REQUEST['id'];
         $remark = $_REQUEST['remark'];
-        $this->UserRelation->update(['remark' => "'" . $remark . "'"], ['id' => $id , 'user_id' => $user_id]);
+        $this->UserRelation->update(['remark' => "'" . $remark . "'"], ['id' => $id, 'user_id' => $user_id]);
         echo json_encode(['success' => true]);
         exit();
     }
@@ -421,5 +423,12 @@ class UserApiController extends AppController
         };
         echo json_encode(array('statusCode' => -1, 'statusMsg' => '绑定失败，亲联系客服'));
         exit();
+    }
+
+    protected function get_post_raw_data()
+    {
+        $postStr = file_get_contents('php://input');
+        $postData = json_decode($postStr, true);
+        return $postData;
     }
 }

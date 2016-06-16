@@ -1,6 +1,6 @@
 <?php
 
-class PoolProductApiController extends AppController
+class PoolProductApiController extends Controller
 {
     public $components = [
         'OAuth.OAuth',

@@ -1,6 +1,6 @@
 <?php
 
-class SharerApiController extends AppController{
+class SharerApiController extends Controller{
 
     public $components = array('OAuth.OAuth', 'Session', 'WeshareBuy', 'ShareUtil', 'Weshares');
     public $uses = array('Weshare');
@@ -467,5 +467,11 @@ class SharerApiController extends AppController{
             $result[$share_id] = floatval($summery_data[$share_id]['total_price']) - floatval($weshare_refund_map[$share_id]) - floatval($weshare_rebate_map[$share_id]) + $current_share_repaid_money;
         }
         return $result;
+    }
+
+    protected function get_post_raw_data(){
+        $postStr = file_get_contents('php://input');
+        $postData = json_decode($postStr, true);
+        return $postData;
     }
 }
