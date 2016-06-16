@@ -1,0 +1,1 @@
+ALTER TABLE `cake_users` ADD `remark` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `hx_password`;
