@@ -1,6 +1,6 @@
 <?php
 
-class SharerApiController extends AppController{
+class SharerApiController extends Controller{
 
     public $components = array('OAuth.OAuth', 'Session', 'WeshareBuy', 'ShareUtil', 'Weshares');
     public $uses = array('Weshare');
@@ -14,8 +14,21 @@ class SharerApiController extends AppController{
         $this->autoRender = false;
     }
 
-    public function dashboard(){
-        
+    /**
+     * 分享着统计汇总页面
+     */
+    public function dashboard()
+    {
+        $uid = $this->currentUser['id'];
+        $subData = $this->ShareUtil->get_yesterday_fans_incremental($uid);
+        $viewData = $this->ShareUtil->get_yesterday_view_count($uid);
+        $month_ini = new DateTime("first day of last month");
+        $month_end = new DateTime("last day of last month");
+        $start_date = $month_ini->format('Y-m-d') . ' 00:00:00';
+        $end_date = $month_end->format('Y-m-d') . ' 24:00:00';
+        $orderData = $this->WeshareBuy->get_sharer_order_summary($uid, $start_date, $end_date);
+        echo json_encode(['view_count' => $viewData, 'sub_count' => $subData['sub_count'] - $subData['un_sub_count'], 'order_count' => $orderData['order_count'], 'total_fee' => $orderData['total_fee']]);
+        exit;
     }
 
     /**

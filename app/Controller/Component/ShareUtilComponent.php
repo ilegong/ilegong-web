@@ -31,6 +31,39 @@ class ShareUtilComponent extends Component
     }
 
     /**
+     * @param $uid
+     * @return array
+     * 获取粉丝的增量
+     */
+    public function get_yesterday_fans_incremental($uid)
+    {
+        $userSubLogM = ClassRegistry::init('UserSubLog');
+        $today = date('Y-m-d') . ' 00:00:00';
+        $yesterday = date("Y-m-d H:i:s", strtotime($today . " -1 day"));
+        $queryResult = $userSubLogM->find('all', [
+            'conditions' => [
+                'user_id' => $uid,
+                'created >' => $today,
+                'created <' => $yesterday
+            ],
+            'group' => 'type',
+            'fields' => ['type', 'count(id) as `log_count`']
+        ]);
+        $sub_count = 0;
+        $un_sub_count = 0;
+        foreach ($queryResult as $item) {
+            $type = $item['UserSubLog']['type'];
+            if ($type == USER_SUB_LOG_TYPE) {
+                $sub_count = $item['UserSubLog']['log_count'];
+            }
+            if ($type == USER_UN_SUB_LOG_TYPE) {
+                $un_sub_count = $item['UserSubLog']['log_count'];
+            }
+        }
+        return ['sub_count' => $sub_count, 'un_sub_count' => $un_sub_count];
+    }
+
+    /**
      * @param $weshare_id
      * @param $uid
      * 触发建团消息

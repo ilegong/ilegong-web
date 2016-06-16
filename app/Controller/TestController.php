@@ -80,10 +80,19 @@ class TestController extends AppController
 //    }
 
 
-    public function test_get_view_count(){
-        $weshareM = ClassRegistry::init('Weshare');
-        $share_view_count = $weshareM->query("select sum(view_count) from cake_weshares where creator = 633345");
-        echo json_encode($share_view_count[0][0]['sum(view_count)']);
+//    public function test_get_view_count(){
+//        $weshareM = ClassRegistry::init('Weshare');
+//        $share_view_count = $weshareM->query("select sum(view_count) from cake_weshares where creator = 633345");
+//        echo json_encode($share_view_count[0][0]['sum(view_count)']);
+//        exit;
+//    }
+
+    public function test_get_sharer_order_summary(){
+        $uid = 633345;
+        $start_date = '2016-05-01 00:00:00';
+        $end_date = '2016-06-17 00:00:00';
+        $result = $this->WeshareBuy->get_sharer_order_summary($uid, $start_date, $end_date);
+        echo json_encode($result);
         exit;
     }
 

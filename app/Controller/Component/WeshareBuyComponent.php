@@ -2996,6 +2996,16 @@ class WeshareBuyComponent extends Component
         return $order_count;
     }
 
+    public function get_sharer_order_summary($uid, $start_date, $end_date)
+    {
+        $sql = "select count(id) as order_count, format(sum(total_all_price),2) as total_fee from cake_orders where brand_id=$uid and created > '$start_date' and created < '$end_date'";
+        $orderM = ClassRegistry::init('Order');
+        $result = $orderM->query($sql);
+        $order_count = $result[0][0]['order_count'];
+        $total_fee = empty($result[0][0]['total_fee']) ? 0 : $result[0][0]['total_fee'];
+        return ['order_count' => $order_count, 'total_fee' => $total_fee];
+    }
+
     /**
      * @param $share_ids
      * @return array
