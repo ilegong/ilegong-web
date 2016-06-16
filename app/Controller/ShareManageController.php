@@ -1223,7 +1223,7 @@ class ShareManageController extends AppController
     {
         $this->layout = null;
         $cond = [
-            'status' => array(1, 2),
+            'status' => array(1, 2, -1),
             'settlement' => 0,
         ];
         if($_REQUEST['shareId']){
