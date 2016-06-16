@@ -2231,6 +2231,58 @@ class WeshareBuyComponent extends Component
         return $count;
     }
 
+    public function get_days_order_summary($uid, $start_date, $end_date)
+    {
+        $orderM = ClassRegistry::init('Order');
+        $data = $orderM->find('all', [
+            'conditions' => [
+                'brand_id' => $uid,
+                'status >' => ORDER_STATUS_WAITING_PAY,
+                'created >' => $start_date,
+                'created <' => $end_date,
+                'type' => ORDER_TYPE_WESHARE_BUY
+            ],
+            'group' => 'date(created)',
+            'fields' => ['date(created) as day', 'count(id) as order_count', 'format(sum(total_all_price),2)']
+        ]);
+        $result = [];
+        foreach ($data as $data_item) {
+            $result[] = $data_item['Order'];
+        }
+        return $result;
+    }
+
+    public function get_days_order_detail($uid, $start_date, $end_date)
+    {
+        $orderM = ClassRegistry::init('Order');
+        $weshareM = ClassRegistry::init('Weshare');
+        $data = $orderM->find('all', [
+            'conditions' => [
+                'brand_id' => $uid,
+                'status >' => ORDER_STATUS_WAITING_PAY,
+                'created >' => $start_date,
+                'created <' => $end_date,
+                'type' => ORDER_TYPE_WESHARE_BUY
+            ],
+            'group' => 'member_id',
+            'fields' => ['member_id', 'count(id) as order_count', 'format(sum(total_all_price),2)']
+        ]);
+        $member_id = [];
+        $summary = [];
+        foreach ($data as $item) {
+            $member_id[] = $item['Order']['member_id'];
+            $summary[] = $item['Order'];
+        }
+        $weshares = $weshareM->find('all', [
+            'conditions' => [
+                'id' => $member_id
+            ],
+            'fields' => ['id', 'title', 'default_image']
+        ]);
+        $weshares = Hash::combine($weshares, '{n}.Weshare.id', '{n}.Weshare');
+        return ['summary' => $summary, 'weshares' => $weshares];
+    }
+
     /**
      * @param $uid
      * @return array|mixed

@@ -33,6 +33,33 @@ class SharerApiController extends Controller{
     }
 
     /**
+     * api 每天订单的汇总
+     */
+    public function get_days_order_summary(){
+        $uid = $this->currentUser['id'];
+        $month_ini = new DateTime("first day of last month");
+        $month_end = new DateTime("last day of last month");
+        $start_date = $month_ini->format('Y-m-d') . ' 00:00:00';
+        $end_date = $month_end->format('Y-m-d') . ' 24:00:00';
+        $result = $this->WeshareBuy->get_days_order_summary($uid, $start_date, $end_date);
+        echo json_encode($result);
+        exit;
+    }
+
+    /**
+     * @param $date
+     * 获取某一天订单数据
+     */
+    public function get_days_order_detail($date){
+        $uid = $this->currentUser['id'];
+        $start_date = $date . ' 00:00:00';
+        $end_date = $date . ' 24:00:00';
+        $result = $this->WeshareBuy->get_days_order_detail($uid, $start_date, $end_date);
+        echo json_encode($result);
+        exit;
+    }
+
+    /**
      * @param $shareId
      * 更新分享
      */
