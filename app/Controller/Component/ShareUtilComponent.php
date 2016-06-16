@@ -13,6 +13,54 @@ class ShareUtilComponent extends Component
     var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
 
 
+    public function get_fans_detail($limit, $page, $uid, $sharer_id)
+    {
+        $orderM = ClassRegistry::init('Order');
+        $orders = $orderM->find('all', [
+            'conditions' => [
+                'Order.creator' => $uid,
+                'Order.brand_id' => $sharer_id,
+                'Order.type' => ORDER_TYPE_WESHARE_BUY,
+                'Order.status >' => ORDER_STATUS_WAITING_PAY
+            ],
+            'joins' => [
+                [
+                    'table' => 'weshares',
+                    'alias' => 'Weshare',
+                    'type' => 'left',
+                    'conditions' => [
+                        'Weshare.id = Order.member_id',
+                    ],
+                ]
+            ],
+            'fields' => ['Order.id', 'Order.status', 'Order.total_all_price', 'Order.created', 'Weshare.id', 'Weshare.title', 'Weshare.default_image'],
+            'limit' => $limit,
+            'page' => $page,
+            'order' => 'Order.id DESC'
+        ]);
+        $result = [];
+        foreach ($orders as $order_item) {
+            $result[] = [
+                'order_id' => $order_item['Order']['id'],
+                'order_status' => $order_item['Order']['status'],
+                'order_total_all_price' => $order_item['Order']['total_all_price'],
+                'order_created' => $order_item['Order']['created'],
+                'weshare_id' => $order_item['Weshare']['id'],
+                'weshare_title' => $order_item['Weshare']['title'],
+                'weshare_default_image' => $order_item['Weshare']['default_image']
+            ];
+        }
+        return $result;
+    }
+
+    /**
+     * @param $limit
+     * @param $page
+     * @param $keyword
+     * @param $sharer_id
+     * @return array
+     * 团长获取粉丝数据
+     */
     public function get_fans_info_list($limit, $page, $keyword, $sharer_id)
     {
         $userRelationM = ClassRegistry::init('UserRelation');

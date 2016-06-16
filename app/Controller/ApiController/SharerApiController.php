@@ -47,6 +47,20 @@ class SharerApiController extends Controller{
     }
 
     /**
+     * @param $fan_id
+     * @param $limit
+     * @param $page
+     * 获取粉丝详情
+     */
+    public function get_fans_detail($fan_id, $limit, $page)
+    {
+        $uid = $this->currentUser['id'];
+        $user_detail = $this->ShareUtil->get_fans_detail($limit, $page, $fan_id, $uid);
+        echo json_encode($user_detail);
+        exit;
+    }
+
+    /**
      * api 每天订单的汇总
      */
     public function get_days_order_summary(){
