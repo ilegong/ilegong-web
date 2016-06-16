@@ -14,6 +14,10 @@ class SharerApiController extends AppController{
         $this->autoRender = false;
     }
 
+    public function dashboard(){
+        
+    }
+
     /**
      * @param $shareId
      * 更新分享

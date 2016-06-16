@@ -12,6 +12,24 @@ class ShareUtilComponent extends Component
 
     var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
 
+
+    /**
+     * @param $uid
+     * 获取用户昨日的浏览量
+     */
+    public function get_yesterday_view_count($uid)
+    {
+        $sharerStaticsDataM = ClassRegistry::init('SharerStaticsData');
+        $data = $sharerStaticsDataM->find('all', [
+            'conditions' => [
+                'sharer_id' => $uid
+            ],
+            'order' => ['id DESC'],
+            'limit' => 2
+        ]);
+        return $data[0]['SharerStaticsData']['view_count'] - $data[1]['SharerStaticsData']['view_count'];
+    }
+
     /**
      * @param $weshare_id
      * @param $uid
