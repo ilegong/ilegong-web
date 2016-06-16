@@ -105,11 +105,14 @@ class ShareUtilComponent extends Component
             'group' => 'creator',
             'fields' => ['count(id) as order_count', 'format(sum(total_all_price),2) as total_fee', 'creator']
         ]);
-        $orderSummary = Hash::combine($orderSummary, '{n}.Order.creator', '{n}.Order');
+        $orderSummary = Hash::combine($orderSummary, '{n}.Order.creator', '{n}.0');
         foreach ($user_list as &$item) {
-            $item['order_count'] = $orderSummary[$item['id']]['order_count'];
-            $item['total_fee'] = $orderSummary[$item['id']]['total_fee'];
+            $order_count = empty($orderSummary[$item['id']]['order_count']) ? 0 : $orderSummary[$item['id']]['order_count'];
+            $total_fee = empty($orderSummary[$item['id']]['total_fee']) ? 0 : $orderSummary[$item['id']]['total_fee'];
+            $item['order_count'] = strval($order_count);
+            $item['total_fee'] = strval($total_fee);
         }
+        $user_list = array_map('map_user_avatar', $user_list);
         return $user_list;
     }
 
