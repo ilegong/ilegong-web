@@ -32,6 +32,13 @@ class SharerApiController extends Controller{
         exit;
     }
 
+    public function get_fans_info_list()
+    {
+        $uid = $this->currentUser['id'];
+        $keyword = $_REQUEST['keyword'];
+
+    }
+
     /**
      * api 每天订单的汇总
      */

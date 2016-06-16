@@ -13,6 +13,13 @@ class ShareUtilComponent extends Component
     var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
 
 
+    public function get_fans_info_list($limit, $page, $keyword, $sharer_id)
+    {
+        $userM = ClassRegistry::init('User');
+        $userRelationM = ClassRegistry::init('UserRelation');
+
+    }
+
     /**
      * @param $uid
      * 获取用户昨日的浏览量
