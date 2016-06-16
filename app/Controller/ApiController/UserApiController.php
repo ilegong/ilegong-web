@@ -167,7 +167,7 @@ class UserApiController extends AppController
         $user_id = $this->currentUser['id'];
         $id = $_REQUEST['id'];
         $remark = $_REQUEST['remark'];
-        $this->User->update(['remark' => "'" . $remark . "'"], ['id' => $id , 'user_id' => $user_id]);
+        $this->UserRelation->update(['remark' => "'" . $remark . "'"], ['id' => $id , 'user_id' => $user_id]);
         echo json_encode(['success' => true]);
         exit();
     }
