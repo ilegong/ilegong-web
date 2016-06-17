@@ -10,7 +10,7 @@ class ShareUtilComponent extends Component
 
     public $components = array('Weixin', 'WeshareBuy', 'RedisQueue', 'DeliveryTemplate', 'ShareAuthority', 'SharePush');
 
-    var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
+    var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar', 'label');
 
 
     public function get_fans_detail($limit, $page, $uid, $sharer_id)
