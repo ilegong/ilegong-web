@@ -22,8 +22,8 @@ class SharerApiController extends Controller{
         $uid = $this->currentUser['id'];
         $subData = $this->ShareUtil->get_yesterday_fans_incremental($uid);
         $viewData = $this->ShareUtil->get_yesterday_view_count($uid);
-        $month_ini = new DateTime("first day of last month");
-        $month_end = new DateTime("last day of last month");
+        $month_ini = new DateTime("first day of this month");
+        $month_end = new DateTime("last day of this month");
         $start_date = $month_ini->format('Y-m-d') . ' 00:00:00';
         $end_date = $month_end->format('Y-m-d') . ' 24:00:00';
         $orderData = $this->WeshareBuy->get_sharer_order_summary($uid, $start_date, $end_date);
@@ -65,8 +65,8 @@ class SharerApiController extends Controller{
      */
     public function get_days_order_summary(){
         $uid = $this->currentUser['id'];
-        $month_ini = new DateTime("first day of last month");
-        $month_end = new DateTime("last day of last month");
+        $month_ini = new DateTime("first day of this month");
+        $month_end = new DateTime("last day of this month");
         $start_date = $month_ini->format('Y-m-d') . ' 00:00:00';
         $end_date = $month_end->format('Y-m-d') . ' 24:00:00';
         $result = $this->WeshareBuy->get_days_order_summary($uid, $start_date, $end_date);
