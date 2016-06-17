@@ -63,8 +63,6 @@ class WeixinController extends Controller {
 			$user = $req["FromUserName"];
 			//$type = $req["MsgType"];
 
-            $this->log($req, LOG_DEBUG);
-
             $host3g = (WX_HOST);
 
             $openId = trim($req['FromUserName']);

@@ -673,7 +673,7 @@ class ShareUtilComponent extends Component
             $dataSource->commit();
             return array('shareId' => $newShareId, 'success' => true);
         } catch (Exception $e) {
-            $this->log($e, LOG_ERR);
+            $this->log($e->getMessage(), LOG_ERR);
             $dataSource->rollback();
             return array('success' => false);
         }

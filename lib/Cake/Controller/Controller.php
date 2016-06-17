@@ -970,7 +970,6 @@ class Controller extends Object implements CakeEventListener {
 		}
 
 		$referer = $this->request->referer($local);
-        $this->log("request refer:".$referer);
 		if ($referer === '/' && $default) {
 			return Router::url($default, true);
 		}
