@@ -1327,7 +1327,6 @@ class UsersController extends AppController
             'fields' => array('id', 'mobilephone', 'payment'),
         ));
 
-        $this->log(json_encode($current_user));
         $this->set('mobilephone', $current_user['User']['mobilephone']);
         $this->set('payment', $current_user['User']['payment']);
     }
