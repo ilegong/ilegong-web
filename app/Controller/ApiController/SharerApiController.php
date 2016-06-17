@@ -25,7 +25,7 @@ class SharerApiController extends Controller{
         $month_ini = new DateTime("first day of this month");
         $month_end = new DateTime("last day of this month");
         $start_date = $month_ini->format('Y-m-d') . ' 00:00:00';
-        $end_date = $month_end->format('Y-m-d') . ' 24:00:00';
+        $end_date = $month_end->format('Y-m-d') . ' 23:59:59';
         $orderData = $this->WeshareBuy->get_sharer_order_summary($uid, $start_date, $end_date);
         $fans_count = $this->WeshareBuy->get_sharer_fans_count($uid);
         echo json_encode(['view_count' => strval($viewData), 'sub_count' => strval($subData['sub_count'] - $subData['un_sub_count']), 'order_count' => strval($orderData['order_count']), 'total_fee' => strval($orderData['total_fee']), 'fans_count' => strval($fans_count)]);
@@ -68,7 +68,7 @@ class SharerApiController extends Controller{
         $month_ini = new DateTime("first day of this month");
         $month_end = new DateTime("last day of this month");
         $start_date = $month_ini->format('Y-m-d') . ' 00:00:00';
-        $end_date = $month_end->format('Y-m-d') . ' 24:00:00';
+        $end_date = $month_end->format('Y-m-d') . ' 23:59:59';
         $result = $this->WeshareBuy->get_days_order_summary($uid, $start_date, $end_date);
         echo json_encode($result);
         exit;
@@ -81,7 +81,7 @@ class SharerApiController extends Controller{
     public function get_days_order_detail($date){
         $uid = $this->currentUser['id'];
         $start_date = $date . ' 00:00:00';
-        $end_date = $date . ' 24:00:00';
+        $end_date = $date . ' 23:59:59';
         $result = $this->WeshareBuy->get_days_order_detail($uid, $start_date, $end_date);
         echo json_encode($result);
         exit;
