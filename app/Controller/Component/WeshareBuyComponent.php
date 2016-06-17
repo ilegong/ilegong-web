@@ -2256,7 +2256,7 @@ class WeshareBuyComponent extends Component
                 'type' => ORDER_TYPE_WESHARE_BUY
             ],
             'group' => 'member_id',
-            'fields' => ['member_id', 'count(id) as order_count', 'format(sum(total_all_price),2)']
+            'fields' => ['Order.member_id', 'count(id) as Order.order_count', 'format(sum(total_all_price),2) as Order.total_fee']
         ]);
         $member_id = [];
         $summary = [];
