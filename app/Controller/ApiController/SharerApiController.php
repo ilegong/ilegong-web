@@ -6,7 +6,7 @@ class SharerApiController extends Controller{
     public $uses = array('Weshare');
 
     public function beforeFilter(){
-        $allow_action = array('test');
+        $allow_action = array('test', 'order_export');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action) == false) {
             $this->currentUser = $this->OAuth->user();
