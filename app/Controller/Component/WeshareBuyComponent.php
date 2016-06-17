@@ -2253,7 +2253,7 @@ class WeshareBuyComponent extends Component
         $summary = [];
         foreach ($data as $item) {
             $tmp = $item[0];
-            $share_id = $tmp['cake_orders']['member_id'];
+            $share_id = $item['cake_orders']['member_id'];
             $member_id[] = $share_id;
             $tmp['share_id'] = $share_id;
             $summary[] = $tmp;
