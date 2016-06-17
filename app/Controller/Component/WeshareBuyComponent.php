@@ -2247,22 +2247,13 @@ class WeshareBuyComponent extends Component
     {
         $orderM = ClassRegistry::init('Order');
         $weshareM = ClassRegistry::init('Weshare');
-        $data = $orderM->find('all', [
-            'conditions' => [
-                'brand_id' => $uid,
-                'status >' => ORDER_STATUS_WAITING_PAY,
-                'created >' => $start_date,
-                'created <' => $end_date,
-                'type' => ORDER_TYPE_WESHARE_BUY
-            ],
-            'group' => 'member_id',
-            'fields' => ['Order.member_id', 'count(id) as Order.order_count', 'format(sum(total_all_price),2) as Order.total_fee']
-        ]);
+        $sql = "select member_id as share_id, count(id) as order_count, format(sum(total_all_price),2) as total_fee from cake_orders where brand_id = $uid and type = 9 and status > 0 and created > '$start_date' and created < '$end_date' group by member_id order by member_id desc";
+        $data = $orderM->query($sql);
         $member_id = [];
         $summary = [];
         foreach ($data as $item) {
-            $member_id[] = $item['Order']['member_id'];
-            $summary[] = $item['Order'];
+            $member_id[] = $item[0]['share_id'];
+            $summary[] = $item[0];
         }
         $weshares = $weshareM->find('all', [
             'conditions' => [
