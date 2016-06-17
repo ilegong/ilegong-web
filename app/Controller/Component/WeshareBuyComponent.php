@@ -2251,10 +2251,12 @@ class WeshareBuyComponent extends Component
         $data = $orderM->query($sql);
         $member_id = [];
         $summary = [];
-        $this->log(json_encode($data));
         foreach ($data as $item) {
-            $member_id[] = $item[0]['member_id'];
-            $summary[] = $item[0];
+            $tmp = $item[0];
+            $share_id = $tmp['cake_orders']['member_id'];
+            $member_id[] = $share_id;
+            $tmp['share_id'] = $share_id;
+            $summary[] = $tmp;
         }
         $weshares = $weshareM->find('all', [
             'conditions' => [
