@@ -96,6 +96,16 @@ class TestController extends AppController
 //        exit;
 //    }
 
+    public function test_get_sharer_order_summary(){
+        $uid = 810684;
+        $start_date = '2016-05-01 00:00:00';
+        $end_date = '2016-06-17 00:00:00';
+        $result = $this->WeshareBuy->get_days_order_summary($uid, $start_date, $end_date);
+        echo json_encode($result);
+        exit;
+    }
+
+
     public function test_get_fans_info_list(){
         $result = $this->ShareUtil->get_fans_info_list(10, 1, null, 141);
         echo json_encode($result);

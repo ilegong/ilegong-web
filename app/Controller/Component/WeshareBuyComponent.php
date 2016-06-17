@@ -2234,7 +2234,7 @@ class WeshareBuyComponent extends Component
     public function get_days_order_summary($uid, $start_date, $end_date)
     {
         $orderM = ClassRegistry::init('Order');
-        $sql = "SELECT date(created) as day_date, count(id) as order_count, format(sum(total_all_price),2) as total_fee FROM cake_orders WHERE brand_id = $uid AND status > 0 AND created > '$start_date' AND created < '$end_date' AND type = 9 GROUP BY date(created)";
+        $sql = "SELECT date(created) as day_date, count(id) as order_count, format(sum(total_all_price),2) as total_fee FROM cake_orders WHERE brand_id = $uid AND status > 0 AND created > '$start_date' AND created < '$end_date' AND type = 9 GROUP BY date(created) order by day_date desc";
         $data = $orderM->query($sql);
         $result = [];
         foreach ($data as $data_item) {
@@ -3056,7 +3056,7 @@ class WeshareBuyComponent extends Component
 
     public function get_sharer_order_summary($uid, $start_date, $end_date)
     {
-        $sql = "select count(id) as order_count, format(sum(total_all_price),2) as total_fee from cake_orders where brand_id=$uid and created > '$start_date' and created < '$end_date'";
+        $sql = "select count(id) as order_count, format(sum(total_all_price),2) as total_fee from cake_orders where type=9 and status > 0 and brand_id=$uid and created > '$start_date' and created < '$end_date'";
         $orderM = ClassRegistry::init('Order');
         $result = $orderM->query($sql);
         $order_count = $result[0][0]['order_count'];
