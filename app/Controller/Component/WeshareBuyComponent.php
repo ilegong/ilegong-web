@@ -2234,20 +2234,11 @@ class WeshareBuyComponent extends Component
     public function get_days_order_summary($uid, $start_date, $end_date)
     {
         $orderM = ClassRegistry::init('Order');
-        $data = $orderM->find('all', [
-            'conditions' => [
-                'brand_id' => $uid,
-                'status >' => ORDER_STATUS_WAITING_PAY,
-                'created >' => $start_date,
-                'created <' => $end_date,
-                'type' => ORDER_TYPE_WESHARE_BUY
-            ],
-            'group' => 'date(created)',
-            'fields' => ['date(created) as day', 'count(id) as order_count', 'format(sum(total_all_price),2)']
-        ]);
+        $sql = "SELECT date(created) as day_date, count(id) as order_count, format(sum(total_all_price),2) as total_fee FROM cake_orders WHERE brand_id = $uid AND status > 0 AND created > '$start_date' AND created < '$end_date' AND type = 9 GROUP BY date(created)";
+        $data = $orderM->query($sql);
         $result = [];
         foreach ($data as $data_item) {
-            $result[] = $data_item['Order'];
+            $result[] = $data_item[0];
         }
         return $result;
     }
