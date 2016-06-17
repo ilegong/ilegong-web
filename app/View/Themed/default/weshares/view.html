@@ -59,7 +59,7 @@
                 <div class="image-container"
                      ng-if="vm.weshare.images.length > 0 && vm.weshare.refer_share_id!=3814 && vm.weshare.id!=3814 && vm.weshare.refer_share_id!=3822 && vm.weshare.id!=3822 && vm.weshare.refer_share_id!=4008 && vm.weshare.id!=4008">
                     <img class="image" lazy-src="{{vm.weshare.images[0]}}"
-                         fallback-src="vm.staticFilePath+'/static/img/default_product_banner.png'">
+                         fallback-src="&#123;&#123;vm.staticFilePath&#125;&#125;/static/img/default_product_banner.png">
                 </div>
                 <div ng-if="vm.weshare.refer_share_id==3814 || vm.weshare.id==3814">
                     <iframe frameborder="0" width="100%"
