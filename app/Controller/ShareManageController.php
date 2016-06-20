@@ -1435,6 +1435,16 @@ class ShareManageController extends AppController
         $this->set('share_name', $_REQUEST['share_name']);
     }
 
+    public function batch_set_order_shipped(){
+        $this->autoRender=false;
+        $orders = $_REQUEST['orders'];
+        $this->Order->updateAll(['status' => ORDER_STATUS_SHIPPED, ['id' => $orders]]);
+        echo json_encode([
+            'result' => true,
+        ]);
+        exit;
+    }
+
     private function handle_query_orders_by_sql($sql)
     {
         $orderM = ClassRegistry::init('Order');

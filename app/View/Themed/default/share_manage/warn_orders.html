@@ -273,13 +273,13 @@
 
     function update_orders(orders) {
         $.ajax({
-            url: '/manage/admin/share/batch_update_orders',
+            url: '/shareManage/batch_set_order_shipped',
             method: 'POST',
             data: {orders: orders},
             dataType: 'json',
             success: function (data) {
                 console.log(data);
-                window.location.href = "/manage/admin/share/warn_orders";
+                window.location.href = "/shareManage/warn_orders.html";
             },
             error: function (err) {
                 console.error('shit happend');
