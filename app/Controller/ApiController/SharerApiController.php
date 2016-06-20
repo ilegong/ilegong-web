@@ -4,7 +4,7 @@ class SharerApiController extends Controller
 {
 
     public $components = array('OAuth.OAuth', 'Session', 'WeshareBuy', 'ShareUtil', 'Weshares');
-    public $uses = array('Weshare');
+    public $uses = array('Weshare', 'UserRelation');
 
     public function beforeFilter()
     {
