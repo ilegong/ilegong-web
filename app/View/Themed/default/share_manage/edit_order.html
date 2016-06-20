@@ -9,41 +9,41 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                订单编号
+                订单编号&nbsp;&nbsp;{{$order['Order']['id']}}
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
                 <!-- /.table-responsive -->
                 <div class="well">
-                    <h4>订单：{{$order['Order']['id']}}</h4>
+                    <h5>商品详情</h5>
                     <p>{{loop $carts $index $cart}}
                     {{$cart['Cart']['name']}} * {{$cart['Cart']['num']}}&nbsp;&nbsp;&nbsp;
                     {{/loop}}</p>
                 </div>
-                <form role="form">
+                <form role="form" method="post" action="/shareManage/save_order.html">
                     <div class="form-group">
                         <label>ID</label>
-                        <input class="form-control" name="data[Order][id]">
+                        <input class="form-control" name="data[Order][id]" value="{{$order['Order']['id']}}" readonly>
                     </div>
                     <div class="form-group">
                         <label>收件人</label>
-                        <input class="form-control" name="data[Order][consignee_name]">
+                        <input class="form-control" name="data[Order][consignee_name]" value="{{$order['Order']['consignee_name']}}">
                     </div>
                     <div class="form-group">
                         <label>收件人地址</label>
-                        <input class="form-control" name="data[Order][consignee_address]">
+                        <input class="form-control" name="data[Order][consignee_address]" value="{{$order['Order']['consignee_address']}}">
                     </div>
                     <div class="form-group">
                         <label>收件人手机</label>
-                        <input class="form-control" name="data[Order][consignee_mobilephone]">
+                        <input class="form-control" name="data[Order][consignee_mobilephone]" value="{{$order['Order']['consignee_mobilephone']}}">
                     </div>
                     <div class="form-group">
                         <label>商品总价</label>
-                        <input class="form-control" name="data[Order][total_all_price]">
+                        <input class="form-control" name="data[Order][total_all_price]" value="{{$order['Order']['total_all_price']}}" readonly>
                     </div>
                     <div class="form-group">
                         <label>运单编号</label>
-                        <input class="form-control" name="data[Order][ship_code]">
+                        <input class="form-control" name="data[Order][ship_code]" value="{{$order['Order']['ship_code']}}">
                     </div>
                     <div class="form-group">
                         <label>物流方式</label>
@@ -57,16 +57,14 @@
                     <div class="form-group">
                         <label>快递公司</label>
                         <select class="form-control" name="data[Order][ship_type]">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
+                            {{loop $ship_types $id $type}}
+                                <option value="{{$id}}" {{if $order['Order']['ship_type']==$id}}selected='selected'{{/if}}>{{$type}}</option>
+                            {{/loop}}
                         </select>
                     </div>
                     <div class="form-group">
                         <label>备注</label>
-                        <input class="form-control" name="data[Order][business_remark]">
+                        <input class="form-control" name="data[Order][business_remark]" value="{{$order['Order']['business_remark']}}">
                     </div>
                     <button type="submit" class="btn btn-default">保存</button>
                 </form>

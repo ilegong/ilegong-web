@@ -124,7 +124,7 @@
         <table class="table order-table">
             <thead>
             <tr class="filters">
-                <th><input type="checkbox" id="select-all-checkoutbox" autocomplete="off">全选</th>
+                <th><input type="checkbox" id="select-all-checkoutbox" autocomplete="off"></th>
                 <th><input type="text" class="form-control" placeholder="订单ID" disabled></th>
                 <th><input type="text" class="form-control" placeholder="用户" disabled></th>
                 <th><input type="text" class="form-control" placeholder="收货人" disabled></th>
@@ -219,7 +219,7 @@
                     {{/if}}
                 </td>
                 <td>
-                    <a target="_blank" class="btn btn-info" href="/manage/admin/orders/edit/{{$current_order['id']}}" role="button">编辑订单</a>
+                    <a class="btn btn-info" href="/share_manage/edit_order/{{$current_order['id']}}">编辑订单</a>
                 </td>
             </tr>
             <?php

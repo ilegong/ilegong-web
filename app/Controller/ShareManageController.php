@@ -1460,7 +1460,9 @@ class ShareManageController extends AppController
     }
 
     public function save_order(){
-
+        $this->loadModel('Order');
+        $this->Order->save($this->request->data);
+        $this->redirect('/share_manage/warn_orders.html');
     }
 
     private function handle_query_orders_by_sql($sql)
