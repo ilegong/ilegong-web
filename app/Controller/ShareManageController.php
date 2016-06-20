@@ -1445,6 +1445,24 @@ class ShareManageController extends AppController
         exit;
     }
 
+    public function edit_order($id){
+        $this->loadModel('Order');
+        $this->loadModel('Cart');
+        $order = $this->Order->findById($id);
+        $carts = $this->Cart->find('all', array(
+            'conditions' => array(
+                'order_id' => $id
+            )
+        ));
+        $this->set('ship_types', Hash::combine(ShipAddress::ship_types(), '{n}.id', '{n}.name'));
+        $this->set('order', $order);
+        $this->set('carts', $carts);
+    }
+
+    public function save_order(){
+
+    }
+
     private function handle_query_orders_by_sql($sql)
     {
         $orderM = ClassRegistry::init('Order');

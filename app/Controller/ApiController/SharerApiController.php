@@ -32,7 +32,11 @@ class SharerApiController extends Controller
             ),
             'fields' => 'remark'
         ));
-        echo json_encode($res['UserRelation']);
+        if(!empty($res)){
+            echo json_encode($res['UserRelation']);
+        }else{
+            echo '{}';
+        }
         exit;
     }
 
