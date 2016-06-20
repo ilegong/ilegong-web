@@ -126,7 +126,7 @@
             <tr class="filters">
                 <th><input type="checkbox" id="select-all-checkoutbox" autocomplete="off">全选</th>
                 <th><input type="text" class="form-control" placeholder="订单ID" disabled></th>
-                <th><input type="text" class="form-control" placeholder="用户ID" disabled></th>
+                <th><input type="text" class="form-control" placeholder="用户" disabled></th>
                 <th><input type="text" class="form-control" placeholder="收货人" disabled></th>
                 <th><input type="text" class="form-control" placeholder="地址" disabled></th>
                 <th><input type="text" class="form-control" placeholder="联系方式" disabled></th>
@@ -138,11 +138,9 @@
                 <th><input type="text" class="form-control" placeholder="产品渠道" disabled></th>
                 <th><input type="text" class="form-control" placeholder="退款金额" disabled></th>
                 <th><input type="text" class="form-control" placeholder="创建时间" disabled></th>
-                <th><input type="text" class="form-control" placeholder="状态" disabled></th>
                 <th><input type="text" class="form-control" placeholder="物流方式" disabled></th>
                 <th><input type="text" class="form-control" placeholder="快递单号" disabled></th>
                 <th><input type="text" class="form-control" placeholder="交易号" disabled></th>
-                <th><input type="text" class="form-control" placeholder="分享状态" disabled></th>
                 <th><input type="text" class="form-control" placeholder="操作" disabled></th>
             </tr>
             </thead>
@@ -164,7 +162,12 @@
                 <td>{{$current_order['consignee_name']}}</td>
                 <td>{{$current_order['consignee_address']}}</td>
                 <td>{{$current_order['consignee_mobilephone']}}</td>
-                <td>{{$current_share['title']}}</td>
+                <td>{{$current_share['title']}} <br>
+                    {{if $current_share['status']==0}}
+                    <font color="#6495ed">进行中</font>
+                    {{else}}
+                    <font color="red">已截止</font>
+                    {{/if}}</td>
                 <td>{{$current_share_creator['nickname']}}<br>
                     {{$current_share_creator['mobilephone']}}</td>
                 <td>{{$cart['name']}}</td>
@@ -179,25 +182,6 @@
                     !empty($refund_logs[$current_order['id']])}}{{$refund_logs[$current_order['id']]/100}}{{else}}0{{/if}}
                 </td>
                 <td>{{$current_order['created']}}</td>
-                <td name="status">
-                    {{if $current_order['status']==ORDER_STATUS_PAID}}
-                    已付款
-                    {{elseif $current_order['status'] == ORDER_STATUS_SHIPPED}}
-                    已发货
-                    {{elseif $current_order['status'] == ORDER_STATUS_RECEIVED}}
-                    已收货
-                    {{elseif $current_order['status'] == 5}}
-                    价格待定
-                    {{elseif $current_order['status'] == 6}}
-                    尾款处理
-                    {{elseif $current_order['status'] == 14}}
-                    退款中
-                    {{elseif $current_order['status'] == 4}}
-                    已退款
-                    {{else}}
-                    已完成
-                    {{/if}}
-                </td>
                 <td>
                     {{if $current_order['ship_mark'] == 'pys_ziti'}}
                     朋友说自提
@@ -217,13 +201,6 @@
                     {{$pay_notifies[$current_order['id']]}}
                     {{else}}
                     {{$pay_notifies[$current_order['parent_order_id']]}}
-                    {{/if}}
-                </td>
-                <td>
-                    {{if $current_share['status']==0}}
-                    进行中
-                    {{else}}
-                    已截止
                     {{/if}}
                 </td>
                 <td>
