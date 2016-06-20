@@ -63,6 +63,7 @@ class ShareUtilComponent extends Component
      */
     public function get_fans_info_list($limit, $page, $keyword, $sharer_id)
     {
+        $sql = "select u.id, count(o.id) as oc from cake_user_relations ur left join cake_orders o on ur.follow_id = o.creator left join cake_users u on u.id=ur.follow_id where o.status > 0 and ur.deleted = 0 and ur.user_id=810684 and o.type=9 and o.brand_id=810684 group by o.creator order by oc desc limit 0, 10";
         $userRelationM = ClassRegistry::init('UserRelation');
         $orderM = ClassRegistry::init('Order');
         $cond = [

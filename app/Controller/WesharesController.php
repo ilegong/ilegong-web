@@ -1524,7 +1524,7 @@ class WesharesController extends AppController
         $shareIds = json_decode($_REQUEST['shareIds']);
 
         $summaries = [];
-        if(!empty($shareId)){
+        if(!empty($shareIds)){
             foreach ($shareIds as $shareId) {
                 $summary = $this->ShareUtil->get_index_product_summary($shareId);
                 $summary['share_id'] = $shareId;
