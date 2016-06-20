@@ -157,7 +157,22 @@
             {{loop $current_order_carts $cart}}
             <tr data-id="{{$current_order['id']}}">
                 <td><input type="checkbox" class="form-control order-ids-to-update" value="{{$current_order['id']}}" autocomplete="off" /></td>
-                <td>{{$current_order['id']}}</td>
+                <td>
+                    {{$current_order['id']}}<br>
+                    {{if $current_order['status']==ORDER_STATUS_PAID}}
+                    <font color="#a52a2a">已付款</font>
+                    {{elseif $current_order['status'] == ORDER_STATUS_SHIPPED}}
+                    <font color="aqua">已发货</font>
+                    {{elseif $current_order['status'] == ORDER_STATUS_RECEIVED}}
+                    <font color="#8a2be2">已收货</font>
+                    {{elseif $current_order['status'] == 14}}
+                    <font color="#ff7f50">退款中</font>
+                    {{elseif $current_order['status'] == 4}}
+                    <font color="#ee82ee">已退款</font>
+                    {{else}}
+                    已完成
+                    {{/if}}
+                </td>
                 <td>{{$current_order['creator']}}<br>{{$all_users[$current_order['creator']]['nickname']}}</td>
                 <td>{{$current_order['consignee_name']}}</td>
                 <td>{{$current_order['consignee_address']}}</td>
