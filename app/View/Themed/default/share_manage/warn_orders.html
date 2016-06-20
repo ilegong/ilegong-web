@@ -125,20 +125,20 @@
             <thead>
             <tr class="filters">
                 <th><input type="checkbox" id="select-all-checkoutbox" autocomplete="off"></th>
-                <th><input type="text" class="form-control" placeholder="订单ID" disabled></th>
+                <th><input type="text" class="form-control" placeholder="ID" disabled></th>
                 <th><input type="text" class="form-control" placeholder="用户" disabled></th>
                 <th><input type="text" class="form-control" placeholder="收货人" disabled></th>
                 <th><input type="text" class="form-control" placeholder="地址" disabled></th>
                 <th><input type="text" class="form-control" placeholder="联系方式" disabled></th>
-                <th><input type="text" class="form-control" placeholder="分享名称" disabled></th>
+                <th><input type="text" class="form-control" placeholder="名称" disabled></th>
                 <th><input type="text" class="form-control" placeholder="分享人" disabled></th>
                 <th><input type="text" class="form-control" placeholder="商品" disabled></th>
-                <th><input type="text" class="form-control" placeholder="商品份数" disabled></th>
-                <th><input type="text" class="form-control" placeholder="订单总价" disabled></th>
-                <th><input type="text" class="form-control" placeholder="产品渠道" disabled></th>
+                <th><input type="text" class="form-control" placeholder="数量" disabled></th>
+                <th><input type="text" class="form-control" placeholder="金额" disabled></th>
+                <th><input type="text" class="form-control" placeholder="渠道" disabled></th>
                 <th><input type="text" class="form-control" placeholder="退款金额" disabled></th>
                 <th><input type="text" class="form-control" placeholder="创建时间" disabled></th>
-                <th><input type="text" class="form-control" placeholder="物流方式" disabled></th>
+                <th><input type="text" class="form-control" placeholder="物流" disabled></th>
                 <th><input type="text" class="form-control" placeholder="快递单号" disabled></th>
                 <th><input type="text" class="form-control" placeholder="交易号" disabled></th>
                 <th><input type="text" class="form-control" placeholder="操作" disabled></th>
@@ -189,7 +189,7 @@
                 <td>{{$cart['num']}}</td>
                 <td>{{$current_order['total_all_price']}}</td>
                 <?php if($current_share['type'] == 6):?>
-                <td>商家<br/>{{$all_users[$pool_shares[$current_share['refer_share_id']]['creator']]['nickname']}}<br/>{{$all_users[$pool_shares[$current_share['refer_share_id']]['creator']]['mobilephone']}}</td>
+                <td style="color: red;">商家<br/>{{$all_users[$pool_shares[$current_share['refer_share_id']]['creator']]['nickname']}}<br/>{{$all_users[$pool_shares[$current_share['refer_share_id']]['creator']]['mobilephone']}}</td>
                 <?php else:?>
                 <td>分享人<br/>{{$current_share_creator['nickname']}}<br/>{{$current_share_creator['mobilephone']}}</td>
                 <?php endif;?>
@@ -219,7 +219,7 @@
                     {{/if}}
                 </td>
                 <td>
-                    <a class="btn btn-info" href="/share_manage/edit_order/{{$current_order['id']}}">编辑订单</a>
+                    <a class="btn btn-info" href="/share_manage/edit_order/{{$current_order['id']}}">编辑</a>
                 </td>
             </tr>
             <?php
