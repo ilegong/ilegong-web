@@ -1524,10 +1524,12 @@ class WesharesController extends AppController
         $shareIds = json_decode($_REQUEST['shareIds']);
 
         $summaries = [];
-        foreach ($shareIds as $shareId) {
-            $summary = $this->ShareUtil->get_index_product_summary($shareId);
-            $summary['share_id'] = $shareId;
-            $summaries[] = $summary;
+        if(!empty($shareId)){
+            foreach ($shareIds as $shareId) {
+                $summary = $this->ShareUtil->get_index_product_summary($shareId);
+                $summary['share_id'] = $shareId;
+                $summaries[] = $summary;
+            }
         }
 
         echo json_encode($summaries);
