@@ -164,38 +164,6 @@ class UserApiController extends Controller
         exit();
     }
 
-    /**
-     * 获取粉丝备注
-     */
-    public function get_remark()
-    {
-        $user_id = $this->currentUser['id'];
-        $id = $_REQUEST['id'];
-
-        $res = $this->UserRelation->find('all', array(
-            'conditions' => array(
-                'id' => $id,
-                'user_id' => $user_id,
-                'deleted' => DELETED_NO
-            ),
-            'fields' => 'remark'
-        ));
-        echo json_encode($res[0]['UserRelation']);
-        exit();
-    }
-
-    /**
-     * 更新粉丝备注
-     */
-    public function update_remark()
-    {
-        $user_id = $this->currentUser['id'];
-        $id = $_REQUEST['id'];
-        $remark = $_REQUEST['remark'];
-        $this->UserRelation->update(['remark' => "'" . $remark . "'"], ['id' => $id, 'user_id' => $user_id]);
-        echo json_encode(['success' => true]);
-        exit();
-    }
 
     public function update_nickname()
     {

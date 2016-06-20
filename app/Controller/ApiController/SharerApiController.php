@@ -1,17 +1,52 @@
 <?php
 
-class SharerApiController extends Controller{
+class SharerApiController extends Controller
+{
 
     public $components = array('OAuth.OAuth', 'Session', 'WeshareBuy', 'ShareUtil', 'Weshares');
     public $uses = array('Weshare');
 
-    public function beforeFilter(){
+    public function beforeFilter()
+    {
         $allow_action = array('test', 'order_export');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action) == false) {
             $this->currentUser = $this->OAuth->user();
         }
         $this->autoRender = false;
+    }
+
+
+    /**
+     * 获取粉丝备注
+     */
+    public function get_remark()
+    {
+        $user_id = $this->currentUser['id'];
+        $id = $_REQUEST['id'];
+        $res = $this->UserRelation->find('first', array(
+            'conditions' => array(
+                'follow_id' => $id,
+                'user_id' => $user_id,
+                'deleted' => DELETED_NO
+            ),
+            'fields' => 'remark'
+        ));
+        echo json_encode($res['UserRelation']);
+        exit;
+    }
+
+    /**
+     * 更新粉丝备注
+     */
+    public function update_remark()
+    {
+        $user_id = $this->currentUser['id'];
+        $id = $_REQUEST['id'];
+        $remark = $_REQUEST['remark'];
+        $this->UserRelation->update(['remark' => "'" . $remark . "'"], ['follow_id' => $id, 'user_id' => $user_id]);
+        echo json_encode(['success' => true]);
+        exit;
     }
 
     /**
@@ -63,7 +98,8 @@ class SharerApiController extends Controller{
     /**
      * api 每天订单的汇总
      */
-    public function get_days_order_summary(){
+    public function get_days_order_summary()
+    {
         $uid = $this->currentUser['id'];
         $month_ini = new DateTime("first day of this month");
         $month_end = new DateTime("last day of this month");
@@ -78,7 +114,8 @@ class SharerApiController extends Controller{
      * @param $date
      * 获取某一天订单数据
      */
-    public function get_days_order_detail($date){
+    public function get_days_order_detail($date)
+    {
         $uid = $this->currentUser['id'];
         $start_date = $date . ' 00:00:00';
         $end_date = $date . ' 23:59:59';
@@ -91,7 +128,8 @@ class SharerApiController extends Controller{
      * @param $shareId
      * 更新分享
      */
-    public function update_share($shareId){
+    public function update_share($shareId)
+    {
         $weshareInfo = $this->ShareUtil->get_edit_share_info($shareId);
         echo json_encode($weshareInfo);
         exit;
@@ -100,7 +138,8 @@ class SharerApiController extends Controller{
     /**
      * 保存分享
      */
-    public function save_share(){
+    public function save_share()
+    {
         $uid = $this->currentUser['id'];
         $postDataArray = $this->get_post_raw_data();
         $result = $this->Weshares->create_weshare($postDataArray, $uid);
@@ -111,7 +150,8 @@ class SharerApiController extends Controller{
     /**
      * 创建分享
      */
-    public function create_share(){
+    public function create_share()
+    {
         $uid = $this->currentUser['id'];
         $postDataArray = $this->get_post_raw_data();
         $result = $this->Weshares->create_weshare($postDataArray, $uid);
@@ -123,14 +163,16 @@ class SharerApiController extends Controller{
      * 删除分享
      * @param $weshare_id
      */
-    public function delete_share($weshare_id){
+    public function delete_share($weshare_id)
+    {
         $uid = $this->currentUser['id'];
         $this->Weshares->delete_weshare($uid, $weshare_id);
         echo json_encode(array('success' => true));
         exit;
     }
 
-    public function publish_share($weshare_id){
+    public function publish_share($weshare_id)
+    {
         $uid = $this->currentUser['id'];
         $this->Weshares->publish_weshare($uid, $weshare_id);
         echo json_encode(array('success' => true));
@@ -141,7 +183,8 @@ class SharerApiController extends Controller{
      * @param $shareId
      * 获取分享订单
      */
-    public function get_my_share_orders($shareId){
+    public function get_my_share_orders($shareId)
+    {
         $result = $this->WeshareBuy->get_share_order_for_show($shareId, true, $division = false, $export = false);
         usort($result['orders'], function ($a, $b) {
             return ($a['id'] < $b['id']) ? 1 : -1;
@@ -159,7 +202,8 @@ class SharerApiController extends Controller{
         exit();
     }
 
-    private function get_order_count_share_map($share_ids){
+    private function get_order_count_share_map($share_ids)
+    {
         $query_order_sql = 'select count(id), member_id from cake_orders where member_id in (' . implode(',', $share_ids) . ') and status=1 and type=9 group by member_id';
         $orderM = ClassRegistry::init('Order');
         $result = $orderM->query($query_order_sql);
@@ -185,7 +229,8 @@ class SharerApiController extends Controller{
         exit();
     }
 
-    private function map_shares($shares){
+    private function map_shares($shares)
+    {
         $share_ids = Hash::extract($shares, '{n}.Weshare.id');
         $share_list = [];
         if (!empty($share_ids)) {
@@ -230,11 +275,12 @@ class SharerApiController extends Controller{
     /**
      * 获取我的分享
      */
-    public function get_my_shares(){
+    public function get_my_shares()
+    {
         $uid = $this->currentUser['id'];
         $createShares = $this->WeshareBuy->get_my_create_shares($uid);
         $share_ids = Hash::extract($createShares, '{n}.Weshare.id');
-        if(!empty($share_ids)){
+        if (!empty($share_ids)) {
             $query_order_sql = 'select count(id), member_id from cake_orders where member_id in (' . implode(',', $share_ids) . ') and status=1 and type=9 group by member_id';
             $orderM = ClassRegistry::init('Order');
             $result = $orderM->query($query_order_sql);
@@ -258,18 +304,19 @@ class SharerApiController extends Controller{
      * @param $shareId
      * 重新开团, app开团
      */
-    public function open_new_share($shareId){
+    public function open_new_share($shareId)
+    {
         $uid = $this->currentUser['id'];
         $is_owner = $this->Weshare->hasAny(['id' => $shareId, 'creator' => $uid]);
         if (!$is_owner) {
-            echo json_encode(array('success' => false,'reason' => 'not a proxy user.'));
+            echo json_encode(array('success' => false, 'reason' => 'not a proxy user.'));
             exit();
         }
 
-        $this->log('Proxy '.$uid.' tries to clone share from share '.$shareId, LOG_INFO);
+        $this->log('Proxy ' . $uid . ' tries to clone share from share ' . $shareId, LOG_INFO);
         $result = $this->ShareUtil->cloneShare($shareId, null);
-        if(!$result['success']){
-            $this->log('Proxy '.$uid.' failed to clone share from share '.$shareId, LOG_ERR);
+        if (!$result['success']) {
+            $this->log('Proxy ' . $uid . ' failed to clone share from share ' . $shareId, LOG_ERR);
             echo json_encode($result);
             exit();
         }
@@ -284,7 +331,7 @@ class SharerApiController extends Controller{
         $shareInfo = $shareInfo['Weshare'];
         $shareInfo['images'] = explode('|', $shareInfo['images']);
 
-        $this->log('Proxy '.$uid.' clones share '.$result['shareId'].'  from share '.$shareId.' successfully', LOG_INFO);
+        $this->log('Proxy ' . $uid . ' clones share ' . $result['shareId'] . '  from share ' . $shareId . ' successfully', LOG_INFO);
         echo json_encode(array('success' => true, 'shareInfo' => $shareInfo));
         exit();
     }
@@ -293,7 +340,8 @@ class SharerApiController extends Controller{
      * @param $shareId
      * 截团
      */
-    public function stop_share($shareId){
+    public function stop_share($shareId)
+    {
         $uid = $this->currentUser['id'];
         $this->Weshares->stop_weshare($uid, $shareId);
         echo json_encode(array('success' => true));
@@ -303,7 +351,8 @@ class SharerApiController extends Controller{
     /**
      * remark order
      */
-    public function remark_order(){
+    public function remark_order()
+    {
         $postData = $this->get_post_raw_data();
         $this->WeshareBuy->update_order_remark($postData['order_id'], $postData['order_remark'], $postData['share_id']);
         Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $postData['share_id'] . '_0_1', "");
@@ -314,7 +363,8 @@ class SharerApiController extends Controller{
     /**
      * 发送团购通知
      */
-    public function send_notify_msg(){
+    public function send_notify_msg()
+    {
         $postData = $this->get_post_raw_data();
         $weshare_id = $postData['share_id'];
         $share_info = $this->ShareUtil->get_weshare_detail($weshare_id);
@@ -326,7 +376,8 @@ class SharerApiController extends Controller{
     /**
      * 发送推荐通知
      */
-    public function send_recommend(){
+    public function send_recommend()
+    {
         $params = json_decode(file_get_contents('php://input'), true);
         $memo = $params['recommend_content'];
         $userId = $params['recommend_user'];
@@ -339,7 +390,8 @@ class SharerApiController extends Controller{
     /**
      * 填写订单快递单号
      */
-    public function set_order_ship_code(){
+    public function set_order_ship_code()
+    {
         $postData = $this->get_post_raw_data();
         $ship_company_id = $postData['company_id'];
         $weshare_id = $postData['share_id'];
@@ -353,7 +405,8 @@ class SharerApiController extends Controller{
     /**
      * 更新快递单号
      */
-    public function update_order_ship_code(){
+    public function update_order_ship_code()
+    {
         $postData = $this->get_post_raw_data();
         $ship_code = $postData['ship_code'];
         $weshare_id = $postData['share_id'];
@@ -368,7 +421,8 @@ class SharerApiController extends Controller{
     /**
      * 发送到货提醒
      */
-    public function send_pickup_notify(){
+    public function send_pickup_notify()
+    {
         $uid = $this->currentUser['id'];
         $postData = $this->get_post_raw_data();
         $order_ids = $postData['order_ids'];
@@ -382,9 +436,10 @@ class SharerApiController extends Controller{
     /**
      * 订单退款
      */
-    public function order_refund(){
+    public function order_refund()
+    {
         $uid = $this->currentUser['id'];
-        $postData  = $this->get_post_raw_data();
+        $postData = $this->get_post_raw_data();
         $shareId = $postData['share_id'];
         $orderId = $postData['order_id'];
         $refundMoney = $postData['refundMoney'];
@@ -398,7 +453,8 @@ class SharerApiController extends Controller{
      * @param $order_id
      * 确认取货
      */
-    public function confirm_received($order_id){
+    public function confirm_received($order_id)
+    {
         $uid = $this->currentUser['id'];
         $result = $this->ShareUtil->confirm_received_order($order_id, $uid);
         echo json_encode($result);
@@ -410,7 +466,8 @@ class SharerApiController extends Controller{
      * @param int $only_paid
      * 订单导出
      */
-    public function order_export($shareId, $only_paid = 1){
+    public function order_export($shareId, $only_paid = 1)
+    {
         $this->autoRender = true;
         $this->layout = null;
         if ($only_paid == 1) {
@@ -427,7 +484,8 @@ class SharerApiController extends Controller{
      * @return array
      * 过滤分类订单
      */
-    private function classify_shares_by_status($createShares){
+    private function classify_shares_by_status($createShares)
+    {
         //normal => 进行中 stop => 截团 settlement => 已结款
         $result = array('normal' => array(), 'stop' => array(), 'settlement' => array());
         foreach ($createShares as $shareItem) {
@@ -452,7 +510,8 @@ class SharerApiController extends Controller{
      * @return array
      * 获取结算结果
      */
-    private function  get_share_balance_result($share_ids){
+    private function  get_share_balance_result($share_ids)
+    {
         $balance_result = $this->WeshareBuy->get_shares_balance_money($share_ids);
         $summery_data = $balance_result['weshare_summery'];
         $weshare_repaid_map = $balance_result['weshare_repaid_map'];
@@ -469,7 +528,8 @@ class SharerApiController extends Controller{
         return $result;
     }
 
-    protected function get_post_raw_data(){
+    protected function get_post_raw_data()
+    {
         $postStr = file_get_contents('php://input');
         $postData = json_decode($postStr, true);
         return $postData;
