@@ -1471,6 +1471,7 @@ class ShareManageController extends AppController
         $cond = [
             'Comment.type' => COMMENT_SHARE_TYPE,
             'Comment.parent_id' => 0,
+            'Comment.status' => PUBLISH_YES
         ];
         if ($_REQUEST['nick_name']) {
             $cond['User.nickname like '] = '%' . $_REQUEST['nick_name'] . '%';
@@ -1502,7 +1503,7 @@ class ShareManageController extends AppController
             ]
         ];
         $comment_count = $this->Comment->find('count', [
-            'conditions' => ['type' => COMMENT_SHARE_TYPE, 'parent_id' => 0],
+            'conditions' => $cond,
             'joins' => $joins
         ]);
         $data = $this->Comment->find('all', [
@@ -1510,8 +1511,21 @@ class ShareManageController extends AppController
             'joins' => $joins,
             'page' => $page,
             'limit' => 50,
-            'fields' => []
+            'order' => ['Comment.id desc'],
+            'fields' => ['Comment.id', 'Comment.user_id', 'Comment.data_id', 'Comment.body', 'User.id', 'User.nickname', 'Weshare.title']
         ]);
+        require_once(APPLIBS . 'MyPaginator.php');
+        $url = "/share_manage/share_comment?nick_name={$_REQUEST['nick_name']}&share_title={$_REQUEST['share_title']}&comment={$_REQUEST['comment']}&share_id={$_REQUEST['share_id']}&user_id={$_REQUEST['user_id']}&page=(:num)";
+        $pager = new MyPaginator($comment_count, 50, $page, $url);;
+        $this->set('pager', $pager);
+        $this->set('count', $comment_count);
+        $this->set('data', $data);
+    }
+
+    public function delete_comment($id){
+        $this->loadModel('Comment');
+        $this->Comment->updateAll(['status' => PUBLISH_NO], ['id' => $id]);
+        $this->redirect('/share_manage/share_comment');
     }
 
     private function handle_query_orders_by_sql($sql)
