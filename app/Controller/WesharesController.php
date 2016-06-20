@@ -1103,17 +1103,17 @@ class WesharesController extends AppController
     {
         $this->autoRender = false;
         //没有关注服务号
-        if (user_subscribed_pys($user_id) != WX_STATUS_SUBSCRIBED) {
-            //save sub reason
-            $sub_type = $from_type == 0 ? SUB_SHARER_REASON_TYPE_FROM_USER_CENTER : SUB_SHARER_REASON_TYPE_FROM_SHARE_INFO;
-            $data_id = $from_type == 0 ? $sharer_id : $share_id;
-            $url = $from_type == 0 ? WX_HOST . '/weshares/user_share_info/' . $sharer_id : WX_HOST . '/weshares/view/' . $share_id;
-            $nicknames = $this->WeshareBuy->get_users_nickname(array($sharer_id, $user_id));
-            $title = $nicknames[$user_id] . '，你好，您已经关注' . $nicknames[$sharer_id];
-            $this->UserSubReason->save(array('type' => $sub_type, 'url' => $url, 'user_id' => $user_id, 'title' => $title, 'data_id' => $data_id));
-            echo json_encode(array('success' => false, 'reason' => 'not_sub', 'url' => WX_SERVICE_ID_GOTO));
-            return;
-        }
+//        if (user_subscribed_pys($user_id) != WX_STATUS_SUBSCRIBED) {
+//            //save sub reason
+//            $sub_type = $from_type == 0 ? SUB_SHARER_REASON_TYPE_FROM_USER_CENTER : SUB_SHARER_REASON_TYPE_FROM_SHARE_INFO;
+//            $data_id = $from_type == 0 ? $sharer_id : $share_id;
+//            $url = $from_type == 0 ? WX_HOST . '/weshares/user_share_info/' . $sharer_id : WX_HOST . '/weshares/view/' . $share_id;
+//            $nicknames = $this->WeshareBuy->get_users_nickname(array($sharer_id, $user_id));
+//            $title = $nicknames[$user_id] . '，你好，您已经关注' . $nicknames[$sharer_id];
+//            $this->UserSubReason->save(array('type' => $sub_type, 'url' => $url, 'user_id' => $user_id, 'title' => $title, 'data_id' => $data_id));
+//            echo json_encode(array('success' => false, 'reason' => 'not_sub', 'url' => WX_SERVICE_ID_GOTO));
+//            return;
+//        }
         $this->WeshareBuy->subscribe_sharer($sharer_id, $user_id);
         echo json_encode(array('success' => true));
         return;

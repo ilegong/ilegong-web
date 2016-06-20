@@ -1465,6 +1465,55 @@ class ShareManageController extends AppController
         $this->redirect('/share_manage/warn_orders.html');
     }
 
+    public function share_comment(){
+        $this->loadModel('Comment');
+        $page = intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
+        $cond = [
+            'Comment.type' => COMMENT_SHARE_TYPE,
+            'Comment.parent_id' => 0,
+        ];
+        if ($_REQUEST['nick_name']) {
+            $cond['User.nickname like '] = '%' . $_REQUEST['nick_name'] . '%';
+        }
+        if ($_REQUEST['share_title']) {
+            $cond['Weshare.title like '] = '%' . $_REQUEST['share_title'] . '%';
+        }
+        if ($_REQUEST['comment']) {
+            $cond['Comment.body like '] = '%' . $_REQUEST['comment'] . '%';
+        }
+        if ($_REQUEST['share_id']) {
+            $cond['Weshare.id'] = $_REQUEST['share_id'];
+        }
+        if ($_REQUEST['user_id']) {
+            $cond['Comment.user_id'] = $_REQUEST['user_id'];
+        }
+        $joins = [
+            [
+                'type' => 'left',
+                'table' => 'cake_users',
+                'alias' => 'User',
+                'conditions' => ['User.id = Comment.user_id']
+            ],
+            [
+                'type' => 'left',
+                'table' => 'cake_weshares',
+                'alias' => 'Weshare',
+                'conditions' => ['Weshare.id = Comment.data_id']
+            ]
+        ];
+        $comment_count = $this->Comment->find('count', [
+            'conditions' => ['type' => COMMENT_SHARE_TYPE, 'parent_id' => 0],
+            'joins' => $joins
+        ]);
+        $data = $this->Comment->find('all', [
+            'conditions' => $cond,
+            'joins' => $joins,
+            'page' => $page,
+            'limit' => 50,
+            'fields' => []
+        ]);
+    }
+
     private function handle_query_orders_by_sql($sql)
     {
         $orderM = ClassRegistry::init('Order');
