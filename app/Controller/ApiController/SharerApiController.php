@@ -80,7 +80,7 @@ class SharerApiController extends Controller
     {
         $uid = $this->currentUser['id'];
         $keyword = $_REQUEST['keyword'];
-        $users = $this->ShareUtil->get_fans_info_list($limit, $page, $keyword, $uid);
+        $users = $this->ShareUtil->get_fans_info_list_by_sql($limit, $page, $keyword, $uid);
         echo json_encode($users);
         exit;
     }

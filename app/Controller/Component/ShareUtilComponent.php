@@ -56,8 +56,8 @@ class ShareUtilComponent extends Component
 
     public function get_fans_info_list_by_sql($limit, $page, $keyword, $sharer_id){
         $offset = ($page - 1) * $limit;
-        $sql = "select cu.id, cu.nickname, ifnull(order_summary.o_count,0) as order_count from cake_user_relations as cur ";
-        $sql .= "left join (select creator as o_creator, count(id) as o_count from cake_orders where brand_id=$sharer_id and type=9 and status > 0 group by creator) as order_summary on order_summary.o_creator = cur.follow_id ";
+        $sql = "select cu.id, cu.nickname, cu.image, cu.avatar, ifnull(order_summary.o_count,0) as order_count, format(ifnull(total_fee, 0),2) as order_total_fee from cake_user_relations as cur ";
+        $sql .= "left join (select creator as o_creator, count(id) as o_count, sum(total_all_price) as total_fee from cake_orders where brand_id=$sharer_id and type=9 and status > 0 group by creator) as order_summary on order_summary.o_creator = cur.follow_id ";
         $sql .= "left join cake_users as cu on cu.id=cur.follow_id ";
         $sql .= "where cur.user_id=$sharer_id and cur.deleted=0 ";
         if (!empty($keyword)) {
@@ -66,73 +66,83 @@ class ShareUtilComponent extends Component
         $sql .= "group by cur.follow_id order by order_summary.o_count desc limit $offset,$limit";
         $userRelationM = ClassRegistry::init('UserRelation');
         $data = $userRelationM->query($sql);
-        return $data;
+        $result = [];
+        foreach($data as $data_item){
+            $result[] = [
+                'id' => $data_item['cu']['id'],
+                'nickname' => $data_item['cu']['nickname'],
+                'image' => get_user_avatar($data_item['cu']),
+                'order_count' => $data_item[0]['order_count'],
+                'total_fee' => $data_item[0]['order_total_fee']
+            ];
+        }
+        return $result;
     }
 
-    /**
-     * @param $limit
-     * @param $page
-     * @param $keyword
-     * @param $sharer_id
-     * @return array
-     * 团长获取粉丝数据
-     */
-    public function get_fans_info_list($limit, $page, $keyword, $sharer_id)
-    {
-        $userRelationM = ClassRegistry::init('UserRelation');
-        $orderM = ClassRegistry::init('Order');
-        $cond = [
-            'UserRelation.user_id' => $sharer_id,
-            'UserRelation.deleted' => DELETED_NO
-        ];
-        if (!empty($keyword)) {
-            $cond['User.nickname like '] = '%' . $keyword . '%';
-        }
-        $users = $userRelationM->find('all', [
-            'conditions' => $cond,
-            'joins' => [
-                [
-                    'table' => 'users',
-                    'alias' => 'User',
-                    'type' => 'inner',
-                    'conditions' => [
-                        'User.id = UserRelation.follow_id',
-                    ],
-                ],
-            ],
-            'order' => ['UserRelation.id DESC'],
-            'limit' => $limit,
-            'page' => $page,
-            'fields' => ['User.id', 'User.nickname', 'User.image', 'User.avatar', 'UserRelation.id']
-        ]);
-        $user_list = [];
-        $user_ids = [];
-        foreach ($users as $user_item) {
-            $tmp_item = $user_item['User'];
-            $user_ids[] = $tmp_item['id'];
-            $tmp_item['relation_id'] = $user_item['UserRelation']['id'];
-            $user_list[] = $tmp_item;
-        }
-        $orderSummary = $orderM->find('all', [
-            'conditions' => [
-                'brand_id' => $sharer_id,
-                'creator' => $user_ids,
-                'status > ' => ORDER_STATUS_WAITING_PAY,
-                'type' => ORDER_TYPE_WESHARE_BUY
-            ],
-            'group' => 'creator',
-            'fields' => ['count(id) as order_count', 'format(sum(total_all_price),2) as total_fee', 'creator']
-        ]);
-        $orderSummary = Hash::combine($orderSummary, '{n}.Order.creator', '{n}.0');
-        foreach ($user_list as &$item) {
-            $order_count = empty($orderSummary[$item['id']]['order_count']) ? 0 : $orderSummary[$item['id']]['order_count'];
-            $total_fee = empty($orderSummary[$item['id']]['total_fee']) ? 0 : $orderSummary[$item['id']]['total_fee'];
-            $item['order_count'] = strval($order_count);
-            $item['total_fee'] = strval($total_fee);
-            $item['image'] = get_user_avatar($item);
-        }
-        return $user_list;
-    }
+//    /**
+//     * @param $limit
+//     * @param $page
+//     * @param $keyword
+//     * @param $sharer_id
+//     * @return array
+//     * 团长获取粉丝数据
+//     */
+//    public function get_fans_info_list($limit, $page, $keyword, $sharer_id)
+//    {
+//        $userRelationM = ClassRegistry::init('UserRelation');
+//        $orderM = ClassRegistry::init('Order');
+//        $cond = [
+//            'UserRelation.user_id' => $sharer_id,
+//            'UserRelation.deleted' => DELETED_NO
+//        ];
+//        if (!empty($keyword)) {
+//            $cond['User.nickname like '] = '%' . $keyword . '%';
+//        }
+//        $users = $userRelationM->find('all', [
+//            'conditions' => $cond,
+//            'joins' => [
+//                [
+//                    'table' => 'users',
+//                    'alias' => 'User',
+//                    'type' => 'inner',
+//                    'conditions' => [
+//                        'User.id = UserRelation.follow_id',
+//                    ],
+//                ],
+//            ],
+//            'order' => ['UserRelation.id DESC'],
+//            'limit' => $limit,
+//            'page' => $page,
+//            'fields' => ['User.id', 'User.nickname', 'User.image', 'User.avatar', 'UserRelation.id']
+//        ]);
+//        $user_list = [];
+//        $user_ids = [];
+//        foreach ($users as $user_item) {
+//            $tmp_item = $user_item['User'];
+//            $user_ids[] = $tmp_item['id'];
+//            $tmp_item['relation_id'] = $user_item['UserRelation']['id'];
+//            $user_list[] = $tmp_item;
+//        }
+//        $orderSummary = $orderM->find('all', [
+//            'conditions' => [
+//                'brand_id' => $sharer_id,
+//                'creator' => $user_ids,
+//                'status > ' => ORDER_STATUS_WAITING_PAY,
+//                'type' => ORDER_TYPE_WESHARE_BUY
+//            ],
+//            'group' => 'creator',
+//            'fields' => ['count(id) as order_count', 'format(sum(total_all_price),2) as total_fee', 'creator']
+//        ]);
+//        $orderSummary = Hash::combine($orderSummary, '{n}.Order.creator', '{n}.0');
+//        foreach ($user_list as &$item) {
+//            $order_count = empty($orderSummary[$item['id']]['order_count']) ? 0 : $orderSummary[$item['id']]['order_count'];
+//            $total_fee = empty($orderSummary[$item['id']]['total_fee']) ? 0 : $orderSummary[$item['id']]['total_fee'];
+//            $item['order_count'] = strval($order_count);
+//            $item['total_fee'] = strval($total_fee);
+//            $item['image'] = get_user_avatar($item);
+//        }
+//        return $user_list;
+//    }
 
     /**
      * @param $uid
