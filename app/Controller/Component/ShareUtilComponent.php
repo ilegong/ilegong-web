@@ -53,6 +53,22 @@ class ShareUtilComponent extends Component
         return $result;
     }
 
+
+    public function get_fans_info_list_by_sql($limit, $page, $keyword, $sharer_id){
+        $offset = ($page - 1) * $limit;
+        $sql = "select cu.id, cu.nickname, ifnull(order_summary.o_count,0) as order_count from cake_user_relations as cur ";
+        $sql .= "left join (select creator as o_creator, count(id) as o_count from cake_orders where brand_id=$sharer_id and type=9 and status > 0 group by creator) as order_summary on order_summary.o_creator = cur.follow_id ";
+        $sql .= "left join cake_users as cu on cu.id=cur.follow_id ";
+        $sql .= "where cur.user_id=$sharer_id and cur.deleted=0 ";
+        if (!empty($keyword)) {
+            $sql .= "and cu.nickname like '%$keyword%";
+        }
+        $sql .= "group by cur.follow_id order by order_summary.o_count desc limit $offset,$limit";
+        $userRelationM = ClassRegistry::init('UserRelation');
+        $data = $userRelationM->query($sql);
+        return $data;
+    }
+
     /**
      * @param $limit
      * @param $page
@@ -63,7 +79,6 @@ class ShareUtilComponent extends Component
      */
     public function get_fans_info_list($limit, $page, $keyword, $sharer_id)
     {
-        $sql = "select u.id, count(o.id) as oc from cake_user_relations ur left join cake_orders o on ur.follow_id = o.creator left join cake_users u on u.id=ur.follow_id where o.status > 0 and ur.deleted = 0 and ur.user_id=810684 and o.type=9 and o.brand_id=810684 group by o.creator order by oc desc limit 0, 10";
         $userRelationM = ClassRegistry::init('UserRelation');
         $orderM = ClassRegistry::init('Order');
         $cond = [

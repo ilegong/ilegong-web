@@ -105,6 +105,11 @@ class TestController extends AppController
 //        exit;
 //    }
 
+    public function test_get_fans_info(){
+        $data = $this->ShareUtil->get_fans_info_list_by_sql(10, 1, '', 141);
+        echo json_encode($data);
+        exit;
+    }
 
     public function test_get_fans_info_list(){
         $result = $this->ShareUtil->get_fans_info_list(10, 1, null, 141);
