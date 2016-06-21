@@ -1793,7 +1793,6 @@ class WeshareBuyComponent extends Component
             }
             //show order ship type name
             $shipTypes = ShipAddress::ship_type_list();
-            $users = Hash::combine($users, '{n}.User.id', '{n}.User');
             $user_list = [];
             foreach($users as $user_item){
                 $user_list[$user_item['User']['id']] = [
