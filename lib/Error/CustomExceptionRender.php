@@ -7,12 +7,12 @@ App::uses('ExceptionRenderer', 'Error');
 class CustomExceptionRender extends ExceptionRenderer {
 
     public function error500($error) {
-        $this->controller->render('/Errors/error500');
+        $this->controller->render('Errors/error500');
         $this->controller->response->send();
     }
 
     public function error400($error) {
-        $this->controller->render('/Errors/error400');
+        $this->controller->render('Errors/error400');
         $this->controller->response->send();
     }
 
