@@ -13,7 +13,7 @@ App::import('Vendor', 'LocationHelper', array('file' => 'LocationHelper/Distance
 class TestController extends AppController
 {
 
-    public $components = array('Weixin', 'WeshareBuy', 'OrderExpress', 'Logistics', 'PintuanHelper', 'ShareUtil', 'RedisQueue', 'DeliveryTemplate', 'JPush', 'SharePush');
+    public $components = array('Weixin', 'WeshareBuy', 'OrderExpress', 'Logistics', 'PintuanHelper', 'ShareUtil', 'RedisQueue', 'DeliveryTemplate', 'JPush', 'SharePush', 'Auth');
     public $uses = array('Order', 'Oauthbind');
 
 
@@ -105,22 +105,27 @@ class TestController extends AppController
 //        exit;
 //    }
 
-    public function test_get_fans_info(){
-        $data = $this->ShareUtil->get_fans_info_list_by_sql(10, 1, '', 141);
-        echo json_encode($data);
-        exit;
-    }
+//    public function test_get_fans_info(){
+//        $data = $this->ShareUtil->get_fans_info_list_by_sql(10, 1, '', 141);
+//        echo json_encode($data);
+//        exit;
+//    }
+//
+//    public function test_get_fans_info_list(){
+//        $result = $this->ShareUtil->get_fans_info_list(10, 1, null, 141);
+//        echo json_encode($result);
+//        exit;
+//    }
 
-    public function test_get_fans_info_list(){
-        $result = $this->ShareUtil->get_fans_info_list(10, 1, null, 141);
-        echo json_encode($result);
-        exit;
-    }
+//    public function test_get_payment_info(){
+//        $pay_info = '{"full_name":"peng","account":"6666666","card_name":"","type":"0"}';
+//        $pay = get_user_payment_info($pay_info);
+//        echo $pay;
+//        exit;
+//    }
 
-    public function test_get_payment_info(){
-        $pay_info = '{"full_name":"peng","account":"6666666","card_name":"","type":"0"}';
-        $pay = get_user_payment_info($pay_info);
-        echo $pay;
+    public function test_gen_password(){
+        echo $this->Auth->password($_REQUEST['password']);
         exit;
     }
 

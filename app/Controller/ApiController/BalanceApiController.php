@@ -15,6 +15,6 @@ class BalanceApiController extends Controller
         $this->autoRender = false;
     }
 
-    
+
 
 }
