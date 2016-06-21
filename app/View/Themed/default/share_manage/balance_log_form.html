@@ -9,44 +9,58 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                Basic Form Elements
+                保存结算记录数据
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <form role="form">
-                        <div class="form-group">
-                            <label>编号</label>
-                            <input class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label>分享ID</label>
-                            <input class="form-control" type="number" required>
-                        </div>
-                        <div class="form-group">
-                            <label>成交费用</label>
-                            <input class="form-control" type="number" step="0.01" required>
-                        </div>
-                        <div class="form-group">
-                            <label>平台佣金</label>
-                            <input class="form-control" type="number" step="0.01" required>
-                        </div>
-                        <div class="form-group">
-                            <label>结算金额</label>
-                            <input class="form-control" type="number" step="0.01" required>
-                        </div>
-                        <div class="form-group">
-                            <label>结算状态</label>
-                            <select class="form-control">
-                                <option>待结算</option>
-                                <option>已结算</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>备注</label>
-                            <textarea class="form-control" rows="3" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-default">保存</button>
-                    </form>
+                    <div class="col-lg-8">
+                        <form role="form">
+                            <div class="form-group">
+                                <label>编号</label>
+                                <input class="form-control" name="data[BalanceLog][id]" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>分享ID</label>
+                                <input class="form-control" name="data[BalanceLog][share_id]" type="number" required>
+                            </div>
+                            <div class="form-group">
+                                <label>收款人ID</label>
+                                <input class="form-control" name="data[BalanceLog][user_id]" type="number" required>
+                            </div>
+                            <div class="form-group">
+                                <label>成交费用</label>
+                                <input class="form-control" name="data[BalanceLog][total_fee]" type="number" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label>平台佣金</label>
+                                <input class="form-control" name="data[BalanceLog][brokerage]" type="number" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label>结算金额</label>
+                                <input class="form-control" name="data[BalanceLog][trade_fee]" type="number" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label>类型</label>
+                                <select class="form-control" name="data[BalanceLog][type]" required>
+                                    <option>分享者销售费用</option>
+                                    <option>产品街代销费用</option>
+                                    <option>产品街商家费用</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>结算状态</label>
+                                <select class="form-control" name="data[BalanceLog][status]" required>
+                                    <option>待结算</option>
+                                    <option>已结算</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>备注</label>
+                                <textarea class="form-control" name="data[BalanceLog][remark]" rows="3" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-default">保存</button>
+                        </form>
+                    </div>
                 </div>
                 <!-- /.row (nested) -->
             </div>

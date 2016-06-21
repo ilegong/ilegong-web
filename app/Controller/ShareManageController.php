@@ -1635,4 +1635,17 @@ class ShareManageController extends AppController
         }
     }
 
+    public function add_balance_log(){
+        $this->render('balance_log_form');
+    }
+
+    public function update_balance_log(){
+
+        $this->render('balance_log_form');
+    }
+
+    public function balance_logs(){
+
+    }
+
 }
