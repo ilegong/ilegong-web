@@ -10,7 +10,7 @@ class WeshareBuyComponent extends Component
 
     var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'mobilephone', 'is_proxy', 'avatar');
 
-    var $query_order_user_fields = array('id', 'nickname');
+    var $query_order_user_fields = array('id', 'nickname', 'image', 'avatar');
 
     var $query_user_simple_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'mobilephone', 'is_proxy', 'avatar');
 
@@ -1782,7 +1782,6 @@ class WeshareBuyComponent extends Component
             $product_buy_num['real_total_price'] = $realTotalPrice;
             $product_buy_num['all_coupon_price'] = $couponPrice / 100;
             $product_buy_num['all_ship_fee'] = $shipFee;
-            $users = Hash::combine($users, '{n}.User.id', '{n}.User');
             if ($division) {
                 usort($orders, function ($a, $b) {
                     return ($a['id'] < $b['id']) ? 1 : -1;
@@ -1794,7 +1793,16 @@ class WeshareBuyComponent extends Component
             }
             //show order ship type name
             $shipTypes = ShipAddress::ship_type_list();
-            $share_order_data = array('users' => $users, 'orders' => $orders, 'order_cart_map' => $order_cart_map, 'summery' => $product_buy_num, 'ship_types' => $shipTypes, 'rebate_logs' => $rebateLogs);
+            $users = Hash::combine($users, '{n}.User.id', '{n}.User');
+            $user_list = [];
+            foreach($users as $user_item){
+                $user_list[$user_item['User']['id']] = [
+                    'id' => $user_item['User']['id'],
+                    'nickname' => $user_item['User']['nickname'],
+                    'image' => get_user_avatar($user_item)
+                ];
+            }
+            $share_order_data = array('users' => $user_list, 'orders' => $orders, 'order_cart_map' => $order_cart_map, 'summery' => $product_buy_num, 'ship_types' => $shipTypes, 'rebate_logs' => $rebateLogs);
             if ($division) {
                 $share_rebate_money = $this->ShareUtil->get_share_rebate_money($weshareId);
                 $share_order_data['share_rebate_money'] = $share_rebate_money;
