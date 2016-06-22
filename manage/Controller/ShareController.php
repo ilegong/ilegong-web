@@ -142,6 +142,31 @@ class ShareController extends AppController {
         $this->redirect(array('action' => 'admin_share_for_pay'));
     }
 
+    public function set_share_paid($shareId, $fee){
+        $this->Weshare->updateAll(array('settlement' => 1), array('id' => $shareId));
+        if($fee > 0) {
+            $OauthbindM = ClassRegistry::init('Oauthbind');
+            $weshareM = ClassRegistry::init('Weshare');
+            $weshare = $weshareM->find('first', array(
+                'conditions' => array(
+                    'id' => $shareId
+                ),
+                'fields' => array('id', 'creator', 'title')
+            ));
+            $userOauthBinds = $OauthbindM->find('first', array(
+                'conditions' => array(
+                    'user_id' => $weshare['Weshare']['creator']
+                ),
+                'fields' => array('user_id', 'oauth_openid')
+            ));
+            $user_open_id = $userOauthBinds['Oauthbind']['oauth_openid'];
+            $detail_url = WX_HOST . '/weshares/view/' . $shareId;
+            $title = '您的编号为' . $shareId . '的分享已经结款';
+            $desc = '一共结款' . $fee . '元';
+            $this->Weixin->send_share_paid_msg($user_open_id, $detail_url, $title, $desc);
+        }
+    }
+
     private function send_share_paid_msg($shareId) {
         $fee = $_REQUEST['fee'];
         if($fee > 0) {
@@ -1255,6 +1280,40 @@ class ShareController extends AppController {
         }
         return $share_rebate_map;
     }
+
+
+    public function admin_balance_log_form($id){
+        $this->loadModel('BalanceLog');
+        if(!empty($id)){
+            $data = $this->BalanceLog->findById($id);
+            $this->set('data', $data);
+        }else{
+            $share_id = $_REQUEST['share_id'];
+            if(!empty($share_id)){
+                $data = $this->BalanceLog->find('first',[
+                    'conditions' => [
+                        'share_id' => $share_id
+                    ]
+                ]);
+            }
+            $user_id = $_REQUEST['user_id'];
+            $total_fee = $_REQUEST['total_fee'];
+            $data['BalanceLog']['share_id'] = $share_id;
+            $data['BalanceLog']['user_id'] = $user_id;
+            $data['BalanceLog']['total_fee'] = $total_fee;
+            $this->set('data', $data);
+        }
+    }
+
+    public function admin_save_balance_log(){
+        $this->loadModel('BalanceLog');
+        $log = $this->BalanceLog->save($this->request->data);
+        $share_id = $log['BalanceLog']['share_id'];
+        $fee = $log['BalanceLog']['trade_fee'];
+        $this->set_share_paid($share_id, $fee);
+        $this->redirect('/admin/share/balance_log_form/' . $log['BalanceLog']['id']);
+    }
+
 
     /**
      * @desc 生成n个随机手机号

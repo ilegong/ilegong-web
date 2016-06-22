@@ -58,14 +58,16 @@
             </tbody>
         </table>
     </div>
-    <div class="pagination pagination-large">
-        <ul class="pagination">
-            <?php
+    <div class="inline pull-right page">
+        <div class="pagination pagination-large">
+            <ul class="pagination">
+                <?php
             echo $this->Paginator->prev(__('<<'), array('tag' => 'li'), null, array('tag' => 'li', 'class' => 'disabled', 'disabledTag' => 'a'));
-            echo $this->Paginator->numbers(array('separator' => '', 'currentTag' => 'a', 'currentClass' => 'active', 'tag' => 'li', 'first' => 1));
-            echo $this->Paginator->next(__('>>'), array('tag' => 'li','currentClass' => 'disabled'), null, array('tag' => 'li', 'class' => 'disabled', 'disabledTag' => 'a'));
-            ?>
-        </ul>
+                echo $this->Paginator->numbers(array('separator' => '', 'currentTag' => 'a', 'currentClass' => 'active', 'tag' => 'li', 'first' => 1));
+                echo $this->Paginator->next(__('>>'), array('tag' => 'li','currentClass' => 'disabled'), null, array('tag' => 'li', 'class' => 'disabled', 'disabledTag' => 'a'));
+                ?>
+            </ul>
+        </div>
     </div>
 </div>
 <script>
@@ -114,16 +116,20 @@
 
     $(function () {
         // attach table filter plugin to inputs
-        $('a.set-share-paid').on('click', function () {
-            var $me = $(this);
-            var title = $me.data('name');
-            var shareId = $me.data('id');
-            var r = confirm("确认" + title + "为已付款");
-            if (r) {
-                var fee = prompt("输入结款金额！","");
-                window.location.href = '/manage/admin/share/set_share_paid/' + shareId+'?fee='+fee;
-            }
-        });
+//        $('a.set-share-paid').on('click', function () {
+//            var $me = $(this);
+//            var title = $me.data('name');
+//            var shareId = $me.data('id');
+//            var r = confirm("确认" + title + "为已付款");
+//            if (r) {
+//                var fee = prompt("输入结款金额！","");
+//                if(fee){
+//                    window.location.href = '/manage/admin/share/set_share_paid/' + shareId+'?fee='+fee;
+//                }else{
+//                    alert('请输入金额！');
+//                }
+//            }
+//        });
         $('[data-action="filter"]').filterTable();
         $('.container').on('click', '.panel-heading span.filter', function (e) {
             var $this = $(this),

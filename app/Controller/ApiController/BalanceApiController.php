@@ -15,6 +15,13 @@ class BalanceApiController extends Controller
         $this->autoRender = false;
     }
 
+    /**
+     * 获取单个分享的订单详情
+     */
+    public function get_share_fee_detail(){
+
+    }
+
 
 
 }

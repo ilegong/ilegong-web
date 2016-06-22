@@ -31,7 +31,8 @@
     <td>{{floatval($weshare_refund_map[$current_share_item['id']])}}</td>
     <td>{{get_user_payment_info($creators[$current_share_item['creator']]['payment'])}}</td>
     <td><!-- Indicates a successful or positive action -->
-        <a data-name="{{$current_share_item['title']}}" data-id="{{$current_share_item['id']}}" type="button"
-           class="btn btn-success set-share-paid">置为已付款</a>
-    </td>
-</tr>
+        <!--<a data-name="{{$current_share_item['title']}}" data-id="{{$current_share_item['id']}}" type="button"-->
+           <!--class="btn btn-success set-share-paid">置为已付款</a>-->
+        <a type="button" class="btn btn-success set-share-paid" target="_blank" href="/manage/admin/share/balance_log_form?share_id={{$current_share_item['id']}}&user_id={{$creators[$current_share_item['creator']]['id']}}&total_fee={{floatval($weshare_summery[$current_share_item['id']]['total_price']) - floatval($weshare_refund_map[$current_share_item['id']]) - floatval($weshare_rebate_map[$current_share_item['id']])+$current_share_repaid_money}}">置为已付款</a>
+     </td>
+ </tr>

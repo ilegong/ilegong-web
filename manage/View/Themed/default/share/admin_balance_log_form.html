@@ -1,0 +1,73 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">结算日志</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                保存结算记录数据
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <form role="form" action="/manage/admin/share/save_balance_log.html" method="post">
+                            <div class="form-group">
+                                <label>编号</label>
+                                <input class="form-control" name="data[BalanceLog][id]" readonly value="{{$data['BalanceLog']['id']}}">
+                            </div>
+                            <div class="form-group">
+                                <label>分享ID</label>
+                                <input class="form-control" name="data[BalanceLog][share_id]" type="number" required value="{{$data['BalanceLog']['share_id']}}">
+                            </div>
+                            <div class="form-group">
+                                <label>收款人ID</label>
+                                <input class="form-control" name="data[BalanceLog][user_id]" type="number" required value="{{$data['BalanceLog']['user_id']}}">
+                            </div>
+                            <div class="form-group">
+                                <label>成交费用</label>
+                                <input class="form-control" name="data[BalanceLog][total_fee]" type="number" step="0.01" required value="{{$data['BalanceLog']['total_fee']}}">
+                            </div>
+                            <div class="form-group">
+                                <label>平台佣金</label>
+                                <input class="form-control" name="data[BalanceLog][brokerage]" type="number" step="0.01" required value="{{$data['BalanceLog']['brokerage']}}">
+                            </div>
+                            <div class="form-group">
+                                <label>结算金额</label>
+                                <input class="form-control" name="data[BalanceLog][trade_fee]" type="number" step="0.01" required value="{{$data['BalanceLog']['trade_fee']}}">
+                            </div>
+                            <div class="form-group">
+                                <label>类型</label>
+                                <select class="form-control" name="data[BalanceLog][type]" required>
+                                    <option value="1" {{if $data['BalanceLog']['type']==1}}selected{{/if}}>分享者销售费用</option>
+                                    <option value="2" {{if $data['BalanceLog']['type']==2}}selected{{/if}}>产品街代销费用</option>
+                                    <option value="3" {{if $data['BalanceLog']['type']==3}}selected{{/if}}>产品街商家费用</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>结算状态</label>
+                                <select class="form-control" name="data[BalanceLog][status]" required>
+                                    <option value="0" {{if $data['BalanceLog']['status']==0}}selected{{/if}}>待结算</option>
+                                    <option value="1" {{if $data['BalanceLog']['status']==1}}selected{{/if}}>已结算</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>备注</label>
+                                <textarea class="form-control" name="data[BalanceLog][remark]" rows="3" required>{{$data['BalanceLog']['remark']}}</textarea>
+                            </div>
+                            <button type="submit" class="btn btn-default">保存</button>
+                        </form>
+                    </div>
+                </div>
+                <!-- /.row (nested) -->
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
