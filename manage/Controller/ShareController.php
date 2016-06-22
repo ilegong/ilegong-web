@@ -1307,11 +1307,52 @@ class ShareController extends AppController {
 
     public function admin_save_balance_log(){
         $this->loadModel('BalanceLog');
-        $log = $this->BalanceLog->save($this->request->data);
+        $balanceLog = $this->request->data;
+        $balanceLog['BalanceLog']['updated'] = date('Y-m-d H:i:s');
+        if (!$balanceLog['BalanceLog']['id']) {
+            $balanceLog['BalanceLog']['created'] = date('Y-m-d H:i:s');
+        }
+        $log = $this->BalanceLog->save($balanceLog);
         $share_id = $log['BalanceLog']['share_id'];
         $fee = $log['BalanceLog']['trade_fee'];
-        $this->set_share_paid($share_id, $fee);
-        $this->redirect('/admin/share/balance_log_form/' . $log['BalanceLog']['id']);
+        if($log['BalanceLog']['status']==1){
+            $this->set_share_paid($share_id, $fee);
+        }
+        $this->redirect('/admin/share/balance_logs.html');
+    }
+
+    public function admin_balance_logs(){
+        require_once(APPLIBS . 'MyPaginator.php');
+        $cond = [];
+        $this->loadModel('BalanceLog');
+        $count = $this->BalanceLog->find('count', [
+            'conditions' => $cond
+        ]);
+        $page = intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
+        $logs = $this->BalanceLog->find('all', [
+            'conditions' => $cond,
+            'page' => $page,
+            'limit' => 50,
+            'joins' => [
+//                [
+//                    'type' => 'left',
+//                    'table' => 'cake_weshares',
+//                    'alias' => 'Weshare',
+//                    'conditions' => ['Weshare.id = BalanceLog.share_id']
+//                ],
+                [
+                    'type' => 'left',
+                    'table' => 'cake_users',
+                    'alias' => 'User',
+                    'conditions' => ['User.id = BalanceLog.user_id']
+                ]
+            ],
+            'fields' => ['BalanceLog.*', 'User.nickname']
+        ]);
+        $url = "/share_manage/balance_logs?page=(:num)";
+        $pager = new MyPaginator($count, 50, $page, $url);
+        $this->set('pager', $pager);
+        $this->set('logs', $logs);
     }
 
 
