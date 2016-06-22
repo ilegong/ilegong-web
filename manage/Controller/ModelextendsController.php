@@ -145,8 +145,7 @@ class ModelextendsController extends AppController{
 				$id = $this->data[$this->modelClass]['id'];
 			}
 		}
-		$before_edit = $this->{$this->modelClass}->read(null, $id); 
-		
+		$before_edit = $this->{$this->modelClass}->read(null, $id);
 		parent::admin_edit($id,$copy);
 		
 		if (!empty($_POST)) {

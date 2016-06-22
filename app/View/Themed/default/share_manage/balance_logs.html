@@ -30,18 +30,66 @@
                         <thead>
                         <tr>
                             <th>#ID</th>
-                            <th>分享名称</th>
+                            <th>分享编号</th>
                             <th>结算费用</th>
                             <th>交易佣金</th>
                             <th>总交易额</th>
+                            <th>类型</th>
                             <th>状态</th>
+                            <th width="10%">备注</th>
                             <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>
-
+                            {{loop $logs $log}}
+                                <tr>
+                                    <td>
+                                        {{$log['BalanceLog']['id']}}
+                                    </td>
+                                    <td>
+                                        {{$log['BalanceLog']['share_id']}}<br/>
+                                    </td>
+                                    <td>
+                                       {{$log['BalanceLog']['trade_fee']}}
+                                    </td>
+                                    <td>
+                                        {{$log['BalanceLog']['brokerage']}}
+                                    </td>
+                                    <td>
+                                        {{$log['BalanceLog']['total_fee']}}
+                                    </td>
+                                    <td>
+                                        {{if $log['BalanceLog']['type']==1}}
+                                        分享者销售费用
+                                        {{/if}}
+                                        {{if $log['BalanceLog']['type']==2}}
+                                        产品街代销费用
+                                        {{/if}}
+                                        {{if $log['BalanceLog']['type']==3}}
+                                        产品街商家费用
+                                        {{/if}}
+                                    </td>
+                                    <td>
+                                        {{if $log['BalanceLog']['status']==0}}
+                                            待结算
+                                        {{/if}}
+                                        {{if $log['BalanceLog']['status']==1}}
+                                            已结算
+                                        {{/if}}
+                                    </td>
+                                    <td>
+                                        {{$log['BalanceLog']['remark']}}
+                                    </td>
+                                    <td>
+                                        <a href="/share_manage/update_balance_log/{{$log['BalanceLog']['id']}}" type="button" class="btn btn-outline btn-default">编辑</a>
+                                    </td>
+                                </tr>
+                            {{/loop}}
                         </tbody>
                     </table>
+                    <div class="inline pull-right page">
+                        <?php echo $pager;?>
+                    </div>
                 </div>
             </div>
             <!-- /.panel-body -->

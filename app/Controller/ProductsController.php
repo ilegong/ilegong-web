@@ -524,6 +524,7 @@ class ProductsController extends AppController{
             }
         }
 
+
         $this->log("view product:".$pid.", specialLists=".json_encode($specialLists), LOG_INFO);
 
         $use_special = false;

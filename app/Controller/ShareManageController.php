@@ -218,7 +218,7 @@ class ShareManageController extends AppController
         $share_data = json_decode($json_data, true);
         $images = array_filter(explode('|', $share_data['images']));
         $images = array_values($images);
-        if(count($images) > 0){
+        if (count($images) > 0) {
             $share_data['images'] = implode('|', $images);
             $share_data['default_image'] = $images[0];
         }
@@ -265,7 +265,7 @@ class ShareManageController extends AppController
         $this->autoRender = false;
         $json_data = $_REQUEST['data'];
         $share_product_data = json_decode($json_data, true);
-        foreach($share_product_data as &$product_item){
+        foreach ($share_product_data as &$product_item) {
             $product_item['price'] = intval($product_item['price'] * 100);
         }
         $this->WeshareProduct->saveAll($share_product_data);
@@ -284,7 +284,8 @@ class ShareManageController extends AppController
         $this->redirect(array('action' => 'shares'));
     }
 
-    public function stop_share($shareId){
+    public function stop_share($shareId)
+    {
         $this->Weshare->update(['status' => WESHARE_STATUS_STOP, 'close_date' => "'" . date('Y-m-d H:i:s') . "'"], ['id' => $shareId]);
         if ($_REQUEST['from'] == 'search') {
             $this->redirect(array('action' => 'search_shares'));
@@ -1190,7 +1191,7 @@ class ShareManageController extends AppController
     public function copy_share_to_user($shareId, $userId)
     {
         $uid = $this->currentUser['id'];
-        if(empty($shareId) || empty($userId)){
+        if (empty($shareId) || empty($userId)) {
             $this->Session->setFlash("数据有误", null);
             $this->redirect('/share_manage/share_utils');
         }
@@ -1226,11 +1227,11 @@ class ShareManageController extends AppController
             'status' => [1, 2, -1],
             'settlement' => [0, 1],
         ];
-        if($_REQUEST['shareId']){
+        if ($_REQUEST['shareId']) {
             $cond['id'] = $_REQUEST['shareId'];
         }
-        if($_REQUEST['shareName']){
-            $cond['title like '] = '%'.$_REQUEST['shareName'].'%';
+        if ($_REQUEST['shareName']) {
+            $cond['title like '] = '%' . $_REQUEST['shareName'] . '%';
         }
         $filter_type = $_REQUEST['shareType'];
         if ($filter_type == 1) {
@@ -1260,9 +1261,9 @@ class ShareManageController extends AppController
         $weshares = $this->Paginator->paginate('Weshare', $cond['Weshare']['conditions']);
         $weshare_ids = [];
         $pool_refer_share_ids = [];
-        foreach($weshares as $item){
+        foreach ($weshares as $item) {
             $weshare_ids[] = $item['Weshare']['id'];
-            if($item['Weshare']['type']==SHARE_TYPE_POOL){
+            if ($item['Weshare']['type'] == SHARE_TYPE_POOL) {
                 $pool_refer_share_ids[] = $item['Weshare']['refer_share_id'];
             }
         }
@@ -1327,7 +1328,7 @@ class ShareManageController extends AppController
                 $cart_num = $cart_item['num'];
                 $cart_price = $cart_item['price'];
                 $result[$cart_pid]['num'] = $result[$cart_pid]['num'] + $cart_num;
-                $result[$cart_pid]['turnover'] = $result[$cart_pid]['turnover'] + $cart_num*$cart_price;
+                $result[$cart_pid]['turnover'] = $result[$cart_pid]['turnover'] + $cart_num * $cart_price;
             }
         }
         return $result;
@@ -1340,7 +1341,7 @@ class ShareManageController extends AppController
             'data_id' => $share_ids
         ));
         $share_refund_map = [];
-        foreach($share_ids as $share_id){
+        foreach ($share_ids as $share_id) {
             $share_refund_map[$share_id] = 0;
         }
         foreach ($refund_logs as $refund_log_item) {
@@ -1362,7 +1363,7 @@ class ShareManageController extends AppController
         ));
         $share_rebate_map = array();
         $result = [];
-        foreach($share_ids as $share_id){
+        foreach ($share_ids as $share_id) {
             $share_rebate_map[$share_id] = 0;
         }
         foreach ($rebateLogs as $log) {
@@ -1375,7 +1376,8 @@ class ShareManageController extends AppController
         return $result;
     }
 
-    public function get_pool_share_data($pool_share_ids){
+    public function get_pool_share_data($pool_share_ids)
+    {
         $weshares = $this->Weshare->find('all', [
             'conditions' => [
                 'id' => $pool_share_ids
@@ -1384,10 +1386,10 @@ class ShareManageController extends AppController
         ]);
         $pool_shares = [];
         $weshare_products = [];
-        foreach($weshares as $weshare_item){
+        foreach ($weshares as $weshare_item) {
             $pool_shares[$weshare_item['Weshare']['id']] = $weshare_item['Weshare']['title'];
             $products = $weshare_item['WeshareProduct'];
-            foreach($products as $product_item){
+            foreach ($products as $product_item) {
                 $weshare_products[$product_item['id']] = $product_item;
             }
         }
@@ -1435,8 +1437,9 @@ class ShareManageController extends AppController
         $this->set('share_name', $_REQUEST['share_name']);
     }
 
-    public function batch_set_order_shipped(){
-        $this->autoRender=false;
+    public function batch_set_order_shipped()
+    {
+        $this->autoRender = false;
         $orders = $_REQUEST['orders'];
         $this->Order->updateAll(['status' => ORDER_STATUS_SHIPPED, ['id' => $orders]]);
         echo json_encode([
@@ -1445,7 +1448,8 @@ class ShareManageController extends AppController
         exit;
     }
 
-    public function edit_order($id){
+    public function edit_order($id)
+    {
         $this->loadModel('Order');
         $this->loadModel('Cart');
         $order = $this->Order->findById($id);
@@ -1459,13 +1463,15 @@ class ShareManageController extends AppController
         $this->set('carts', $carts);
     }
 
-    public function save_order(){
+    public function save_order()
+    {
         $this->loadModel('Order');
         $this->Order->save($this->request->data);
         $this->redirect('/share_manage/warn_orders.html');
     }
 
-    public function share_comment(){
+    public function share_comment()
+    {
         $this->loadModel('Comment');
         $page = intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
         $cond = [
@@ -1522,7 +1528,8 @@ class ShareManageController extends AppController
         $this->set('data', $data);
     }
 
-    public function delete_comment($id){
+    public function delete_comment($id)
+    {
         $this->loadModel('Comment');
         $this->Comment->updateAll(['status' => PUBLISH_NO], ['id' => $id]);
         $this->redirect('/share_manage/share_comment');
@@ -1635,17 +1642,64 @@ class ShareManageController extends AppController
         }
     }
 
-    public function add_balance_log(){
+    public function save_balance_log()
+    {
+        $this->loadModel('BalanceLog');
+        $balanceLog = $this->request->data;
+        $balanceLog['BalanceLog']['updated'] = date('Y-m-d H:i:s');
+        if (!$balanceLog['BalanceLog']['id']) {
+            $balanceLog['BalanceLog']['created'] = date('Y-m-d H:i:s');
+        }
+        $this->BalanceLog->save($balanceLog);
+        $this->redirect('/share_manage/balance_logs');
+    }
+
+    public function add_balance_log()
+    {
         $this->render('balance_log_form');
     }
 
-    public function update_balance_log(){
-
+    public function update_balance_log($id)
+    {
+        $this->loadModel('BalanceLog');
+        $data = $this->BalanceLog->findById($id);
+        $this->set('data', $data);
         $this->render('balance_log_form');
     }
 
-    public function balance_logs(){
-
+    public function balance_logs()
+    {
+        require_once(APPLIBS . 'MyPaginator.php');
+        $cond = [];
+        $this->loadModel('BalanceLog');
+        $count = $this->BalanceLog->find('count', [
+            'conditions' => $cond
+        ]);
+        $page = intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
+        $logs = $this->BalanceLog->find('all', [
+            'conditions' => $cond,
+            'page' => $page,
+            'limit' => 50,
+            'joins' => [
+//                [
+//                    'type' => 'left',
+//                    'table' => 'cake_weshares',
+//                    'alias' => 'Weshare',
+//                    'conditions' => ['Weshare.id = BalanceLog.share_id']
+//                ],
+                [
+                    'type' => 'left',
+                    'table' => 'cake_users',
+                    'alias' => 'User',
+                    'conditions' => ['User.id = BalanceLog.user_id']
+                ]
+            ],
+            'fields' => ['BalanceLog.*', 'User.nickname']
+        ]);
+        $url = "/share_manage/balance_logs?page=(:num)";
+        $pager = new MyPaginator($count, 50, $page, $url);
+        $this->set('pager', $pager);
+        $this->set('logs', $logs);
     }
 
 }
