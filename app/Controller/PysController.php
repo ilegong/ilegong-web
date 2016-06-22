@@ -13,4 +13,9 @@ class PysController extends AppController{
         $this->layout=null;
     }
 
+    public function download_app(){
+        $this->layout=null;
+
+    }
+
 }
