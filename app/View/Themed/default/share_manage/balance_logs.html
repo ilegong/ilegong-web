@@ -13,9 +13,9 @@
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
-                <div class="well">
-                    <a class="btn btn-default" href="/shareManage/add_balance_log">添加结款记录</a>
-                </div>
+                <!--<div class="well">-->
+                    <!--<a class="btn btn-default" href="/shareManage/add_balance_log">添加结款记录</a>-->
+                <!--</div>-->
                 <div class="well">
                     <form class="form-inline">
                         <div class="form-group">
@@ -37,7 +37,7 @@
                             <th>类型</th>
                             <th>状态</th>
                             <th width="10%">备注</th>
-                            <th>操作</th>
+                            <!--<th>操作</th>-->
                         </tr>
                         </thead>
                         <tbody>
@@ -47,7 +47,7 @@
                                         {{$log['BalanceLog']['id']}}
                                     </td>
                                     <td>
-                                        {{$log['BalanceLog']['share_id']}}<br/>
+                                        {{$log['BalanceLog']['share_id']}}
                                     </td>
                                     <td>
                                        {{$log['BalanceLog']['trade_fee']}}
@@ -80,9 +80,9 @@
                                     <td>
                                         {{$log['BalanceLog']['remark']}}
                                     </td>
-                                    <td>
-                                        <a href="/share_manage/update_balance_log/{{$log['BalanceLog']['id']}}" type="button" class="btn btn-outline btn-default">编辑</a>
-                                    </td>
+                                    <!--<td>-->
+                                        <!--<a href="/share_manage/update_balance_log/{{$log['BalanceLog']['id']}}" type="button" class="btn btn-outline btn-default">编辑</a>-->
+                                    <!--</td>-->
                                 </tr>
                             {{/loop}}
                         </tbody>
