@@ -312,13 +312,9 @@ class ShareController extends AppController {
         $repaid_money_result = $this->get_share_repaid_money($weshare_ids);
         //$weshares = $this->reduce_weshares($weshares);
         $this->reduce_share_summery($weshares, $summery_data, $repaid_money_result, $weshare_rebate_map, $weshare_refund_money_map);
-        $this->set('repaid_money_result', $repaid_money_result);
-        $this->set('weshare_rebate_map', $weshare_rebate_map);
-        $this->set('weshare_refund_map', $weshare_refund_money_map);
-        $this->set('weshares', $weshares);
-        $this->set('weshare_summery', $summery_data);
-        $this->set('creators', $creators);
+        return ['repaid_money_result' => $repaid_money_result, 'weshare_rebate_map' => $weshare_rebate_map, 'weshare_refund_map' => $weshare_refund_money_map, 'weshares' => $weshares, 'weshare_summery' => $summery_data, 'creators' => $creators];
     }
+
 
     private function set_query_share_cond($cond){
         $share_id = $_REQUEST['share_id'];
@@ -352,7 +348,13 @@ class ShareController extends AppController {
                 'order' => 'Weshare.id DESC'
             )
         );
-        $this->process_share_data($q_c);
+        $result = $this->process_share_data($q_c);
+        $this->set('repaid_money_result', $result['repaid_money_result']);
+        $this->set('weshare_rebate_map', $result['weshare_rebate_map']);
+        $this->set('weshare_refund_map', $result['weshare_refund_money_map']);
+        $this->set('weshares', $result['weshares']);
+        $this->set('weshare_summery', $result['summery_data']);
+        $this->set('creators', $result['creators']);
     }
 
     public function admin_share_for_pay() {
@@ -368,7 +370,80 @@ class ShareController extends AppController {
                 'order' => ['Weshare.close_date DESC', 'Weshare.id DESC']
             )
         );
-        $this->process_share_data($q_c);
+        $result = $this->process_share_data($q_c);
+        $this->set('repaid_money_result', $result['repaid_money_result']);
+        $this->set('weshare_rebate_map', $result['weshare_rebate_map']);
+        $this->set('weshare_refund_map', $result['weshare_refund_money_map']);
+        $this->set('weshares', $result['weshares']);
+        $this->set('weshare_summery', $result['summery_data']);
+        $this->set('creators', $result['creators']);
+    }
+
+    public function admin_gen_stop_share_balance_logs(){
+        $cond = array(
+            'Weshare.status' => array(1, 2, -1),
+            'BalanceLog.id' => null
+        );
+        $q_c = array(
+            'Weshare' => array(
+                'conditions' => $cond,
+                'limit' => 50,
+                'order' => ['Weshare.id DESC'],
+                'joins' => [
+                    [
+                        'type' => 'left',
+                        'table' => 'cake_balance_logs',
+                        'alias' => 'BalanceLog',
+                        'conditions' => 'BalanceLog.share_id = Weshare.id'
+
+                    ]
+                ],
+                'fields' => ['Weshare.*']
+            )
+        );
+        $result = $this->process_share_data($q_c);
+        $repaid_money_result = $result['repaid_money_result'];
+        $weshare_rebate_map = $result['weshare_rebate_map'];
+        $weshare_refund_map = $result['weshare_refund_money_map'];
+        $weshares = $result['weshares'];
+        $weshare_summery = $result['summery_data'];
+        $save_data = [];
+        foreach($weshares as $item){
+            $share_id = $item['id'];
+            $creator = $item['creator'];
+            $refund_fee = floatval($weshare_refund_map[$share_id]);
+            $coupon_fee = round(floatval($weshare_summery[$share_id]['coupon_total']/100),2);
+            $product_fee = floatval($weshare_summery[$share_id]['product_total_price']);
+            $rebate_fee = floatval($weshare_rebate_map[$share_id]) - floatval($weshare_summery[$share_id]['child_ship_fee'] / 100);
+            $total_fee = floatval($weshare_summery[$share_id]['total_price']);
+            $current_share_repaid_money = $repaid_money_result[$share_id];
+            if($current_share_repaid_money == 0){
+                $current_share_repaid_money = 0;
+            }
+            $status = $item['settlement'] == 1 ? 1 : 0;
+            $transaction_fee = floatval($weshare_summery[$share_id]['total_price']) - floatval($weshare_refund_map[$share_id]) - floatval($weshare_rebate_map[$share_id])+$current_share_repaid_money;
+            $save_data[] = [
+                'share_id' => $share_id,
+                'user_id' => $creator,
+                'refund_fee' => $refund_fee,
+                'coupon_fee' => $coupon_fee,
+                'product_fee' => $product_fee,
+                'rebate_fee' => $rebate_fee,
+                'total_fee' => $total_fee,
+                'transaction_fee' => $transaction_fee,
+                'brokerage' => 0,
+                'trade_fee' => $transaction_fee,
+                'status' => $status,
+                'type' => 1,
+                'created' => date('Y-m-d H:i:s'),
+                'updated' => date('Y-m-d H:i:s'),
+                'remark' => '系统自动生成'
+            ];
+        }
+        $this->loadModel('BalanceLog');
+        $this->BalanceLog->saveAll($save_data);
+        echo 'success';
+        exit;
     }
 
     public function admin_merge_ship_setting_data() {
