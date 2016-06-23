@@ -1399,6 +1399,9 @@ class ShareController extends AppController {
     public function admin_balance_logs(){
         require_once(APPLIBS . 'MyPaginator.php');
         $cond = [];
+        if($_REQUEST['shareId']){
+            $cond['BalanceLog.share_id'] = $_REQUEST['shareId'];
+        }
         $this->loadModel('BalanceLog');
         $count = $this->BalanceLog->find('count', [
             'conditions' => $cond
@@ -1424,7 +1427,7 @@ class ShareController extends AppController {
             ],
             'fields' => ['BalanceLog.*', 'User.nickname']
         ]);
-        $url = "/share_manage/balance_logs?page=(:num)";
+        $url = "/manage/admin/share/balance_logs?page=(:num)";
         $pager = new MyPaginator($count, 50, $page, $url);
         $this->set('pager', $pager);
         $this->set('logs', $logs);
