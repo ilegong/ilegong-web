@@ -351,9 +351,9 @@ class ShareController extends AppController {
         $result = $this->process_share_data($q_c);
         $this->set('repaid_money_result', $result['repaid_money_result']);
         $this->set('weshare_rebate_map', $result['weshare_rebate_map']);
-        $this->set('weshare_refund_map', $result['weshare_refund_money_map']);
+        $this->set('weshare_refund_map', $result['weshare_refund_map']);
         $this->set('weshares', $result['weshares']);
-        $this->set('weshare_summery', $result['summery_data']);
+        $this->set('weshare_summery', $result['weshare_summery']);
         $this->set('creators', $result['creators']);
     }
 
@@ -371,11 +371,20 @@ class ShareController extends AppController {
             )
         );
         $result = $this->process_share_data($q_c);
+        //['repaid_money_result' => $repaid_money_result, 'weshare_rebate_map' => $weshare_rebate_map, 'weshare_refund_map' => $weshare_refund_money_map, 'weshares' => $weshares, 'weshare_summery' => $summery_data, 'creators' => $creators]
+        /**
+        $this->set('repaid_money_result', $repaid_money_result);
+        $this->set('weshare_rebate_map', $weshare_rebate_map);
+        $this->set('weshare_refund_map', $weshare_refund_money_map);
+        $this->set('weshares', $weshares);
+        $this->set('weshare_summery', $summery_data);
+        $this->set('creators', $creators);
+         */
         $this->set('repaid_money_result', $result['repaid_money_result']);
         $this->set('weshare_rebate_map', $result['weshare_rebate_map']);
-        $this->set('weshare_refund_map', $result['weshare_refund_money_map']);
+        $this->set('weshare_refund_map', $result['weshare_refund_map']);
         $this->set('weshares', $result['weshares']);
-        $this->set('weshare_summery', $result['summery_data']);
+        $this->set('weshare_summery', $result['weshare_summery']);
         $this->set('creators', $result['creators']);
     }
 
@@ -404,12 +413,13 @@ class ShareController extends AppController {
                 'fields' => ['Weshare.*']
             )
         );
+
         $result = $this->process_share_data($q_c);
         $repaid_money_result = $result['repaid_money_result'];
         $weshare_rebate_map = $result['weshare_rebate_map'];
-        $weshare_refund_map = $result['weshare_refund_money_map'];
+        $weshare_refund_map = $result['weshare_refund_map'];
         $weshares = $result['weshares'];
-        $weshare_summery = $result['summery_data'];
+        $weshare_summery = $result['weshare_summery'];
         $save_data = [];
         foreach($weshares as $item){
             $share_id = $item['id'];
