@@ -384,6 +384,9 @@ class ShareController extends AppController {
             'Weshare.status' => array(1, 2, -1),
             'BalanceLog.id' => null
         );
+        if($_REQUEST['share_id']){
+            $cond['Weshare.id'] = $_REQUEST['share_id'];
+        }
         $q_c = array(
             'Weshare' => array(
                 'conditions' => $cond,
