@@ -34,6 +34,15 @@ class WesharesController extends AppController
      */
     public function index($tag = 0)
     {
+        //add logs
+        $log = [
+            "index" => "event_share_index",
+            "type" => "share_index",
+            "user_id" => $this->currentUser['id'],
+            "referer" => $_SERVER["HTTP_REFERER"],
+        ];
+        add_logs_to_es($log);
+
         $index_products = $this->ShareUtil->get_index_product($tag);
         $banners = $this->ShareUtil->get_index_banners();
         $uid = $this->currentUser['id'];
@@ -115,6 +124,16 @@ class WesharesController extends AppController
      */
     public function view($weshare_id, $from = 0)
     {
+        //add logs
+        $log = [
+            "index" => "event_share_view",
+            "type" => "share_view",
+            "user_id" => $this->currentUser['id'],
+            "referer" => $_SERVER["HTTP_REFERER"],
+            "weshare_id" => $weshare_id
+        ];
+        add_logs_to_es($log);
+
         $uid = $this->currentUser['id'];
         //check has sharer has red packet
         //领取红包
