@@ -2908,7 +2908,7 @@ if(!function_exists("add_logs_to_es"))
     function add_logs_to_es($log){
         $redis = new Redis();
         $redis->connect(REDIS_HOST);
-        $log["timestamp"] = date("Y-m-d H:i:s");
+        $log["@timestamp"] = date("Y-m-d H:i:s");
         $log["session_id"] = $_COOKIE["PHPSESSID"];
         $redis->rPush("logstash-list",json_encode($log));
     }
