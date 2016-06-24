@@ -390,6 +390,7 @@ class ShareManageController extends AppController
         // 手动填充cake_pool_products表.
         $data = [];
         $data['weshare_id'] = $nshare['id'];
+        $data['user_id'] = $nshare['creator'];
         $data['share_name'] = $nshare['title'];
         $data['created'] = date('Y-m-d H:i:s');
         // 0 下架

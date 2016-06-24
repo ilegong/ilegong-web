@@ -10,6 +10,9 @@ class BalanceComponent extends Component
     public static $POOL_SHARE_BALANCE_TYPE = 2; //产品街代销费用
     public static $POOL_BRAND_BALANCE_TYPE = 3; //产品街商家费用
 
+
+    var $components = ['Paginator'];
+
     /**
      * @param $uid
      * @return array
@@ -35,17 +38,35 @@ class BalanceComponent extends Component
 
     public function get_wait_balance_share_list($uid, $page, $limit)
     {
-        $data = $this->get_balance_list($uid, $page,$limit,self::$WAIT_BALANCE_STATUS);
+        $data = $this->get_balance_list($uid, $page, $limit, self::$WAIT_BALANCE_STATUS);
         return $data;
     }
 
-    public function get_already_balance_share_list($uid, $page,$limit)
+    public function get_already_balance_share_list($uid, $page, $limit)
     {
-        $data = $this->get_balance_list($uid, $page,$limit,self::$ALREADY_BALANCE_STATUS);
+        $data = $this->get_balance_list($uid, $page, $limit, self::$ALREADY_BALANCE_STATUS);
         return $data;
     }
 
-    private function get_balance_list($uid, $page, $limit, $status){
+    public function get_going_share_list($uid, $page, $limit)
+    {
+
+        $weshareM = ClassRegistry::init('Weshare');
+        
+
+        $cond = [
+            'conditions' => [
+
+            ],
+            'limit' => $limit,
+            'page' => $page
+        ];
+
+
+    }
+
+    private function get_balance_list($uid, $page, $limit, $status)
+    {
         $balanceLogM = ClassRegistry::init('BalanceLog');
         $logs = $balanceLogM->find('all', [
             'conditions' => [
@@ -80,5 +101,85 @@ class BalanceComponent extends Component
         return $data;
     }
 
+    private function process_share_data($cond)
+    {
+        $weshareM = ClassRegistry::init('Weshare');
+        $weshares = $weshareM->find('all', $cond);
+        $weshare_ids = Hash::extract($weshares, '{n}.Weshare.id');
+        $weshares = Hash::combine($weshares, '{n}.Weshare.id', '{n}.Weshare');
+        $orders = $this->Order->find('all', array(
+            'conditions' => array(
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'member_id' => $weshare_ids,
+                'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY)
+            )
+        ));
+        $refund_orders = array();
+        $refund_order_ids = array();
+        $summery_data = array();
+        foreach ($orders as $item) {
+            $member_id = $item['Order']['member_id'];
+            $order_total_price = $item['Order']['total_all_price'];
+            $order_ship_fee = $item['Order']['ship_fee'];
+            $order_coupon_total = $item['Order']['coupon_total'];
+            $order_product_price = $item['Order']['total_price'];
+            if ($item['Order']['status'] == ORDER_STATUS_RETURN_MONEY || $item['Order']['status'] == ORDER_STATUS_RETURNING_MONEY) {
+                $refund_order_ids[] = $item['Order']['id'];
+                if (!isset($refund_orders[$member_id])) {
+                    $refund_orders[$member_id] = array();
+                }
+                $refund_orders[$member_id][] = $item;
+            }
+            if (!isset($summery_data[$member_id])) {
+                $summery_data[$member_id] = array('total_price' => 0, 'ship_fee' => 0, 'coupon_total' => 0);
+            }
+            $summery_data[$member_id]['total_price'] = $summery_data[$member_id]['total_price'] + $order_total_price;
+            $summery_data[$member_id]['ship_fee'] = $summery_data[$member_id]['ship_fee'] + $order_ship_fee;
+            $summery_data[$member_id]['coupon_total'] = $summery_data[$member_id]['coupon_total'] + $order_coupon_total;
+            $summery_data[$member_id]['product_total_price'] = $summery_data[$member_id]['product_total_price'] + $order_product_price;
+        }
+        $refundLogM = ClassRegistry::init('RefundLog');
+        $refund_logs = $refundLogM->find('all', array(
+            'order_id' => $refund_order_ids
+        ));
+        $refund_logs = Hash::combine($refund_logs, '{n}.RefundLog.order_id', '{n}.RefundLog.refund_fee');
+        $weshare_refund_money_map = array();
+        foreach ($refund_orders as $item_share_id => $item_orders) {
+            $share_refund_money = 0;
+            $weshare_refund_money_map[$item_share_id] = 0;
+            foreach ($item_orders as $refund_order_item) {
+                $order_id = $refund_order_item['Order']['id'];
+                $share_refund_money = $share_refund_money + $refund_logs[$order_id];
+            }
+            $weshare_refund_money_map[$item_share_id] = $share_refund_money / 100;
+        }
+        $weshare_rebate_map = $this->get_share_rebate_money($weshare_ids);
+        return ['weshare_rebate_map' => $weshare_rebate_map, 'weshare_refund_map' => $weshare_refund_money_map, 'weshares' => $weshares, 'weshare_summery' => $summery_data];
+    }
+
+
+    private function get_share_rebate_money($share_ids)
+    {
+        $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
+        $rebateLogs = $rebateTrackLogM->find('all', array(
+            'conditions' => array(
+                'share_id' => $share_ids,
+                'not' => array('order_id' => 0, 'is_paid' => 0)
+            ),
+            'limit' => 500
+        ));
+        $share_rebate_map = array();
+        foreach ($rebateLogs as $log) {
+            $share_id = $log['RebateTrackLog']['share_id'];
+            if (!isset($share_rebate_map[$share_id])) {
+                $share_rebate_map[$share_id] = array('rebate_money' => 0);
+            }
+            $share_rebate_map[$share_id]['rebate_money'] = $log['RebateTrackLog']['rebate_money'];
+        }
+        foreach ($share_rebate_map as &$rebate_item) {
+            $rebate_item['rebate_money'] = number_format(round($rebate_item['rebate_money'] / 100, 2), 2);
+        }
+        return $share_rebate_map;
+    }
 
 }
