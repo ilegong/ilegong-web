@@ -13,7 +13,7 @@ App::import('Vendor', 'LocationHelper', array('file' => 'LocationHelper/Distance
 class TestController extends AppController
 {
 
-    public $components = array('Weixin', 'WeshareBuy', 'OrderExpress', 'Logistics', 'PintuanHelper', 'ShareUtil', 'RedisQueue', 'DeliveryTemplate', 'JPush', 'SharePush', 'Auth');
+    public $components = array('Weixin', 'WeshareBuy', 'OrderExpress', 'Logistics', 'PintuanHelper', 'ShareUtil', 'RedisQueue', 'DeliveryTemplate', 'JPush', 'SharePush', 'Auth', 'Balance');
     public $uses = array('Order', 'Oauthbind');
 
 
@@ -123,6 +123,13 @@ class TestController extends AppController
 //        echo $pay;
 //        exit;
 //    }
+
+
+    public function get_going_balance_list(){
+        $result = $this->Balance->get_going_share_list(633345, 1, 10);
+        echo json_encode($result);
+        exit;
+    }
 
     public function test_gen_password(){
         echo $this->Auth->password($_REQUEST['password']);

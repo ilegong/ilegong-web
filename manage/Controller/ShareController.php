@@ -1370,7 +1370,7 @@ class ShareController extends AppController {
     }
 
 
-    public function admin_balance_log_form($id){
+    public function admin_balance_log_form($id=null){
         $this->loadModel('BalanceLog');
         if(!empty($id)){
             $data = $this->BalanceLog->findById($id);

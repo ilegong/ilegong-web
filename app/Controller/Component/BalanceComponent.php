@@ -51,10 +51,11 @@ class BalanceComponent extends Component
     private function process_share_data($cond)
     {
         $weshareM = ClassRegistry::init('Weshare');
+        $orderM = ClassRegistry::init('Order');
         $weshares = $weshareM->find('all', $cond);
         $weshare_ids = Hash::extract($weshares, '{n}.Weshare.id');
         $weshares = Hash::combine($weshares, '{n}.Weshare.id', '{n}.Weshare');
-        $orders = $this->Order->find('all', array(
+        $orders = $orderM->find('all', array(
             'conditions' => array(
                 'type' => ORDER_TYPE_WESHARE_BUY,
                 'member_id' => $weshare_ids,

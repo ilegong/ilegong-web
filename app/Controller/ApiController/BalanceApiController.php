@@ -3,7 +3,7 @@
 class BalanceApiController extends Controller
 {
 
-    public $components = array('OAuth.OAuth');
+    public $components = array('OAuth.OAuth', 'Balance');
 
     public function beforeFilter()
     {
@@ -29,25 +29,34 @@ class BalanceApiController extends Controller
     /**
      * 待结算的list
      */
-    public function wait_balance_list()
+    public function wait_balance_list($page, $limit)
     {
-
+        $uid = $this->currentUser['id'];
+        $data = $this->Balance->get_wait_balance_share_list($uid, $page, $limit);
+        echo json_encode($data);
+        exit;
     }
 
     /**
      * 已经结算list
      */
-    public function already_balance_list()
+    public function already_balance_list($page, $limit)
     {
-
+        $uid = $this->currentUser['id'];
+        $data = $this->Balance->get_already_balance_share_list($uid, $page, $limit);
+        echo json_encode($data);
+        exit;
     }
 
     /**
      * 进行中的分享list
      */
-    public function going_balance_list()
+    public function going_balance_list($page, $limit)
     {
-
+        $uid = $this->currentUser['id'];
+        $data = $this->Balance->get_going_share_list($uid, $page, $limit);
+        echo json_encode($data);
+        exit;
     }
 
     /**
