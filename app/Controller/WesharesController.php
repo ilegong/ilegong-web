@@ -38,7 +38,7 @@ class WesharesController extends AppController
         $log = [
             "index" => "event_share_index",
             "type" => "share_index",
-            "user_id" => $this->currentUser['id'],
+            "user_id" => intval($this->currentUser['id']),
             "referer" => $_SERVER["HTTP_REFERER"],
         ];
         add_logs_to_es($log);
@@ -128,9 +128,9 @@ class WesharesController extends AppController
         $log = [
             "index" => "event_share_view",
             "type" => "share_view",
-            "user_id" => $this->currentUser['id'],
+            "user_id" => intval($this->currentUser['id']),
             "referer" => $_SERVER["HTTP_REFERER"],
-            "weshare_id" => $weshare_id
+            "weshare_id" => intval($weshare_id)
         ];
         add_logs_to_es($log);
 
