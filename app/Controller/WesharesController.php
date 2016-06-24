@@ -911,6 +911,7 @@ class WesharesController extends AppController
         $params = ['user_id' => $uid, 'status' => [ORDER_STATUS_DONE, ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY], 'limit' => $limit, 'page' => $page];
         $orders = $this->Orders->get_user_order($params);
         $result = [];
+        $this->log('get my order list data '.json_encode($orders));
         foreach ($orders as $order_item) {
             $result_item = $order_item['Order'];
             $result_item['share_info'] = $order_item['Weshare'];
