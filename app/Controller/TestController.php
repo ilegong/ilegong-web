@@ -125,11 +125,11 @@ class TestController extends AppController
 //    }
 
 
-    public function get_going_balance_list(){
-        $result = $this->Balance->get_going_share_list(633345, 1, 10);
-        echo json_encode($result);
-        exit;
-    }
+//    public function get_going_balance_list(){
+//        $result = $this->Balance->get_going_share_list(141, 1, 10);
+//        echo json_encode($result);
+//        exit;
+//    }
 
     public function test_gen_password(){
         echo $this->Auth->password($_REQUEST['password']);
