@@ -435,6 +435,11 @@ class ShareController extends AppController {
             }
             $status = $item['settlement'] == 1 ? 1 : 0;
             $transaction_fee = floatval($weshare_summery[$share_id]['total_price']) - floatval($weshare_refund_map[$share_id]) - floatval($weshare_rebate_map[$share_id])+$current_share_repaid_money;
+            $weshare_type = $item['type'];
+            $type = 1;
+            if ($weshare_type == 6) {
+                $type = 2;
+            }
             $save_data[] = [
                 'share_id' => $share_id,
                 'user_id' => $creator,
@@ -447,7 +452,7 @@ class ShareController extends AppController {
                 'brokerage' => 0,
                 'trade_fee' => $transaction_fee,
                 'status' => $status,
-                'type' => 1,
+                'type' => $type,
                 'created' => date('Y-m-d H:i:s'),
                 'updated' => date('Y-m-d H:i:s'),
                 'remark' => '系统自动生成'
