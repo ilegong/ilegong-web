@@ -421,6 +421,7 @@ class ShareController extends AppController {
         $weshares = $result['weshares'];
         $weshare_summery = $result['weshare_summery'];
         $save_data = [];
+        $pool_share_ids = [];
         foreach ($weshares as $item) {
             $share_id = $item['id'];
             $creator = $item['creator'];
@@ -438,6 +439,7 @@ class ShareController extends AppController {
             $weshare_type = $item['type'];
             $type = 1;
             if ($weshare_type == 6) {
+                $pool_share_ids[] = $share_id;
                 $type = 2;
             }
             $save_data[] = [
@@ -457,6 +459,26 @@ class ShareController extends AppController {
                 'updated' => date('Y-m-d H:i:s'),
                 'remark' => '系统自动生成'
             ];
+//            if ($type == 2) {
+//                //商家记录
+//                $save_data[] = [
+//                    'share_id' => $share_id,
+//                    'user_id' => $creator,
+//                    'refund_fee' => $refund_fee,
+//                    'coupon_fee' => $coupon_fee,
+//                    'product_fee' => $product_fee,
+//                    'rebate_fee' => $rebate_fee,
+//                    'total_fee' => $total_fee,
+//                    'transaction_fee' => $transaction_fee,
+//                    'brokerage' => 0,
+//                    'trade_fee' => $transaction_fee,
+//                    'status' => $status,
+//                    'type' => 3,
+//                    'created' => date('Y-m-d H:i:s'),
+//                    'updated' => date('Y-m-d H:i:s'),
+//                    'remark' => '系统自动生成'
+//                ];
+//            }
         }
         $this->loadModel('BalanceLog');
         $this->BalanceLog->saveAll($save_data);

@@ -91,7 +91,7 @@ class OrdersComponent extends Component
             ],
             'joins' => [
                 [
-                    'table' => 'weshares',
+                    'table' => 'cake_weshares',
                     'alias' => 'Weshare',
                     'conditions' => ['Order.member_id = Weshare.id'],
                     'type' => 'left'
