@@ -51,17 +51,31 @@ class BalanceComponent extends Component
     public function get_going_share_list($uid, $page, $limit)
     {
 
-        $weshareM = ClassRegistry::init('Weshare');
-        
+        $poolProductM = ClassRegistry::init('PoolProduct');
+
+        $myPoolProducts = $poolProductM->find('all', [
+            'conditions' => [
+                'user_id' => $uid
+            ],
+            'limit' => 100,
+            'order' => 'id DESC',
+            'fields' => ['weshare_id']
+        ]);
+
+        $myPoolShareIds = Hash::extract($myPoolProducts, '{n}.PoolProduct.weshare_id');
 
         $cond = [
             'conditions' => [
-
+                'Weshare.type' => [SHARE_TYPE_POOL, SHARE_TYPE_DEFAULT],
+                'Weshare.status' => WESHARE_STATUS_NORMAL,
+                'OR' => [
+                    ['Weshare.creator' => $uid],
+                    ['Weshare.refer_share_id' => $myPoolShareIds]
+                ]
             ],
             'limit' => $limit,
             'page' => $page
         ];
-
 
     }
 
