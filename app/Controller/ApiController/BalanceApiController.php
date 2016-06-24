@@ -7,7 +7,7 @@ class BalanceApiController extends Controller
 
     public function beforeFilter()
     {
-        $allow_action = array('test', 'order_export');
+        $allow_action = array('test', 'get_share_fee_detail');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action) == false) {
             $this->currentUser = $this->OAuth->user();
@@ -21,6 +21,9 @@ class BalanceApiController extends Controller
     public function get_share_fee_detail()
     {
         $uid = $this->currentUser['id'];
+        $data = $this->BalanceComponent->get_user_share_summary($uid);
+        echo json_encode($data);
+        exit;
     }
 
     /**
