@@ -393,7 +393,7 @@ class ShareController extends AppController {
             'Weshare.status' => array(1, 2, -1),
             'BalanceLog.id' => null
         );
-        if($_REQUEST['share_id']){
+        if ($_REQUEST['share_id']) {
             $cond['Weshare.id'] = $_REQUEST['share_id'];
         }
         $q_c = array(
@@ -421,20 +421,20 @@ class ShareController extends AppController {
         $weshares = $result['weshares'];
         $weshare_summery = $result['weshare_summery'];
         $save_data = [];
-        foreach($weshares as $item){
+        foreach ($weshares as $item) {
             $share_id = $item['id'];
             $creator = $item['creator'];
             $refund_fee = floatval($weshare_refund_map[$share_id]);
-            $coupon_fee = round(floatval($weshare_summery[$share_id]['coupon_total']/100),2);
+            $coupon_fee = round(floatval($weshare_summery[$share_id]['coupon_total'] / 100), 2);
             $product_fee = floatval($weshare_summery[$share_id]['product_total_price']);
             $rebate_fee = floatval($weshare_rebate_map[$share_id]) - floatval($weshare_summery[$share_id]['child_ship_fee'] / 100);
             $total_fee = floatval($weshare_summery[$share_id]['total_price']);
             $current_share_repaid_money = $repaid_money_result[$share_id];
-            if($current_share_repaid_money == 0){
+            if ($current_share_repaid_money == 0) {
                 $current_share_repaid_money = 0;
             }
             $status = $item['settlement'] == 1 ? 1 : 0;
-            $transaction_fee = floatval($weshare_summery[$share_id]['total_price']) - floatval($weshare_refund_map[$share_id]) - floatval($weshare_rebate_map[$share_id])+$current_share_repaid_money;
+            $transaction_fee = floatval($weshare_summery[$share_id]['total_price']) - floatval($weshare_refund_map[$share_id]) - floatval($weshare_rebate_map[$share_id]) + $current_share_repaid_money;
             $weshare_type = $item['type'];
             $type = 1;
             if ($weshare_type == 6) {
