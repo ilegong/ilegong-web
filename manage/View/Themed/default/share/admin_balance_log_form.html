@@ -41,18 +41,28 @@
                             </div>
                             <div class="form-group">
                                 <label>类型</label>
-                                <select class="form-control" name="data[BalanceLog][type]" required>
-                                    <option value="1" {{if $data['BalanceLog']['type']==1}}selected{{/if}}>分享者销售费用</option>
-                                    <option value="2" {{if $data['BalanceLog']['type']==2}}selected{{/if}}>产品街代销费用</option>
-                                    <option value="3" {{if $data['BalanceLog']['type']==3}}selected{{/if}}>产品街商家费用</option>
-                                </select>
+                                <div class="radio">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="data[BalanceLog][type]" value="1" {{if $data['BalanceLog']['type']==1}}checked{{/if}}>分享者销售费用
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="data[BalanceLog][type]" value="2" {{if $data['BalanceLog']['type']==2}}checked{{/if}}>产品街代销费用
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="data[BalanceLog][type]" value="3" {{if $data['BalanceLog']['type']==3}}checked{{/if}}>产品街商家费用
+                                    </label>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label>结算状态</label>
-                                <select class="form-control" name="data[BalanceLog][status]" required>
-                                    <option value="0" {{if $data['BalanceLog']['status']==0}}selected{{/if}}>待结算</option>
-                                    <option value="1" {{if $data['BalanceLog']['status']==1}}selected{{/if}}>已结算</option>
-                                </select>
+                                <div class="radio">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="data[BalanceLog][status]" value="0" {{if $data['BalanceLog']['status']==0}}checked{{/if}}>待结算
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="data[BalanceLog][status]" value="1" {{if $data['BalanceLog']['status']==1}}checked{{/if}}>已结算
+                                    </label>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label>备注</label>
