@@ -1411,8 +1411,17 @@ class ShareController extends AppController {
             if(!empty($share_id)){
                 $data = $this->BalanceLog->find('first',[
                     'conditions' => [
-                        'share_id' => $share_id
-                    ]
+                        'BalanceLog.share_id' => $share_id
+                    ],
+                    'joins' => [
+                        [
+                            'type' => 'left',
+                            'table' => 'cake_weshares',
+                            'alias' => 'Weshare',
+                            'conditions' => 'Weshare.id=BalanceLog.share_id'
+                        ]
+                    ],
+                    'fields' => ['BalanceLog.*', 'Weshare.title', 'Weshare.type']
                 ]);
             }
             $user_id = $_REQUEST['user_id'];
