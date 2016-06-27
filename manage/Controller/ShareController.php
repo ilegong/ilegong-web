@@ -421,11 +421,6 @@ class ShareController extends AppController {
         $weshare_refund_map = $result['weshare_refund_map'];
         $weshares = $result['weshares'];
         $weshare_summery = $result['weshare_summery'];
-        $weshare_refer_share_ids = array_unique(Hash::extract($weshares, '{n}.refer_share_id'));
-        $refer_shares = $this->Weshare->find('list', [
-            'conditions' => ['id' => $weshare_refer_share_ids],
-            'fields' => ['Weshare.id', 'Weshare.creator']
-        ]);
         $save_data = [];
         foreach ($weshares as $item) {
             $share_id = $item['id'];
@@ -463,26 +458,6 @@ class ShareController extends AppController {
                 'updated' => date('Y-m-d H:i:s'),
                 'remark' => '系统自动生成'
             ];
-            if ($type == 2) {
-                //商家记录
-                $save_data[] = [
-                    'share_id' => $share_id,
-                    'user_id' => $refer_shares[$item['refer_share_id']],
-                    'refund_fee' => $refund_fee,
-                    'coupon_fee' => $coupon_fee,
-                    'product_fee' => $product_fee,
-                    'rebate_fee' => $rebate_fee,
-                    'total_fee' => $total_fee,
-                    'transaction_fee' => $transaction_fee,
-                    'brokerage' => 0,
-                    'trade_fee' => $transaction_fee,
-                    'status' => $status,
-                    'type' => 3,
-                    'created' => date('Y-m-d H:i:s'),
-                    'updated' => date('Y-m-d H:i:s'),
-                    'remark' => '系统自动生成'
-                ];
-            }
         }
         $this->loadModel('BalanceLog');
         $this->BalanceLog->saveAll($save_data);
