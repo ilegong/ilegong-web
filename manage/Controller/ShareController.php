@@ -1478,7 +1478,7 @@ class ShareController extends AppController {
                     'conditions' => ['User.id = BalanceLog.user_id']
                 ]
             ],
-            'fields' => ['BalanceLog.*', 'User.nickname', 'Weshare.title'. 'Weshare.type']
+            'fields' => ['BalanceLog.*', 'User.nickname', 'Weshare.title', 'Weshare.type']
         ]);
         $url = "/manage/admin/share/balance_logs?page=(:num)";
         $pager = new MyPaginator($count, 50, $page, $url);
