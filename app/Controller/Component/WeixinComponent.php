@@ -470,6 +470,11 @@ class WeixinComponent extends Component {
                 Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $order['Order']['creator'], '');
                 Cache::write(INDEX_PRODUCT_SUMMARY_CACHE_KEY . '_' . $order['Order']['member_id'], '');
                 $this->weshare_buy_order_paid($order);
+                try {
+                    add_logs_to_es(["index" => "event_pay_success", "type" => "pay_success", "user_id" => $order['Order']['creator'], "order_id" => $order['Order']['id'], "total_price" => $order['Order']['total_all_price'], "weshare_id" => $order['Order']['member_id'], "brand_id" => $order['Order']['brand_id']]);
+                } catch (Exception $e) {
+                    $this->log('add pay failed msg error');
+                }
                 return;
             }
             $this->on_order_status_change($order);

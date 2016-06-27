@@ -117,6 +117,20 @@ class WesharesController extends AppController
         $this->set('has_sub', $isSub);
     }
 
+    private function add_paid_faild_msg_to_es($uid, $weshareId)
+    {
+        $order = $this->Order->find('first', [
+            'conditions' => ['creator' => $uid, 'member_id' => $weshareId, 'status' => ORDER_STATUS_WAITING_PAY]
+        ]);
+        if (!empty($order)) {
+            try {
+                add_logs_to_es(["index" => "event_pay_failed", "type" => "pay_failed", "user_id" => $order['Order']['creator'], "order_id" => $order['Order']['id'], "total_price" => $order['Order']['total_all_price'], "weshare_id" => $order['Order']['member_id'], "brand_id" => $order['Order']['brand_id']]);
+            } catch (Exception $e) {
+                $this->log('add pay failed msg error');
+            }
+        }
+    }
+
     /**
      * @param string $weshare_id
      * @param int $from 标示从什么地方跳转的访问
@@ -133,7 +147,6 @@ class WesharesController extends AppController
             "weshare_id" => intval($weshare_id)
         ];
         add_logs_to_es($log);
-
         $uid = $this->currentUser['id'];
         //check has sharer has red packet
         //领取红包
@@ -171,10 +184,13 @@ class WesharesController extends AppController
                 $paidMsg = $_REQUEST['msg'];
                 if ($paidMsg == 'ok') {
                     $this->set('from', $this->pay_type);
-                } else if ($paidMsg == 'cancel') {
-                    $this->log('Payment of user ' . $uid . ' to weshare ' . $weshare_id . ' failed: canceled', LOG_INFO);
                 } else {
-                    $this->log('Payment of user ' . $uid . ' to weshare ' . $weshare_id . ' failed: ' . $paidMsg, LOG_ERR);
+                    $this->add_paid_faild_msg_to_es($uid, $weshare_id);
+                    if ($paidMsg == 'cancel') {
+                        $this->log('Payment of user ' . $uid . ' to weshare ' . $weshare_id . ' failed: canceled', LOG_INFO);
+                    } else {
+                        $this->log('Payment of user ' . $uid . ' to weshare ' . $weshare_id . ' failed: ' . $paidMsg, LOG_ERR);
+                    }
                 }
             }
         }
@@ -614,13 +630,18 @@ class WesharesController extends AppController
             }
             $this->log('Create order for ' . $uid . ' with weshare ' . $weshareId . ' successfully, order id ' . $orderId, LOG_INFO);
             $dataSource->commit();
+            try {
+                add_logs_to_es(["index" => "event_pay_begin", "type" => "pay_begin", "user_id" => $uid, "order_id" => $orderId, "total_price" => $totalPrice, "weshare_id" => $weshareId, "brand_id" => $weshareCreator]);
+            } catch (Exception $e) {
+                $this->log('add es log error when make order');
+            }
             echo json_encode(array('success' => true, 'orderId' => $orderId));
-            exit();
+            exit;
         } catch (Exception $e) {
             $this->log($uid . 'buy share ' . $weshareId . $e);
             $dataSource->rollback();
             echo json_encode(array('success' => false, 'reason' => $e->getMessage()));
-            exit();
+            exit;
         }
     }
 
