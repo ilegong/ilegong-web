@@ -30,7 +30,8 @@
                         <thead>
                         <tr>
                             <th>#ID</th>
-                            <th>分享编号</th>
+                            <th>分享</th>
+                            <th>用户</th>
                             <th>结算费用</th>
                             <th>交易佣金</th>
                             <th>总交易额</th>
@@ -47,7 +48,12 @@
                                 {{$log['BalanceLog']['id']}}
                             </td>
                             <td>
-                                {{$log['BalanceLog']['share_id']}}
+                                {{$log['BalanceLog']['share_id']}}<br/>
+                                {{$log['Weshare']['title']}}
+                            </td>
+                            <td>
+                                {{$log['BalanceLog']['user_id']}}<br/>
+                                {{$log['User']['nickname']}}
                             </td>
                             <td>
                                 {{$log['BalanceLog']['trade_fee']}}

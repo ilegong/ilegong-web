@@ -1456,12 +1456,12 @@ class ShareController extends AppController {
             'page' => $page,
             'limit' => 50,
             'joins' => [
-//                [
-//                    'type' => 'left',
-//                    'table' => 'cake_weshares',
-//                    'alias' => 'Weshare',
-//                    'conditions' => ['Weshare.id = BalanceLog.share_id']
-//                ],
+                [
+                    'type' => 'left',
+                    'table' => 'cake_weshares',
+                    'alias' => 'Weshare',
+                    'conditions' => ['Weshare.id = BalanceLog.share_id']
+                ],
                 [
                     'type' => 'left',
                     'table' => 'cake_users',
@@ -1469,7 +1469,7 @@ class ShareController extends AppController {
                     'conditions' => ['User.id = BalanceLog.user_id']
                 ]
             ],
-            'fields' => ['BalanceLog.*', 'User.nickname']
+            'fields' => ['BalanceLog.*', 'User.nickname', 'Weshare.title']
         ]);
         $url = "/manage/admin/share/balance_logs?page=(:num)";
         $pager = new MyPaginator($count, 50, $page, $url);
