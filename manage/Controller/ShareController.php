@@ -1404,33 +1404,38 @@ class ShareController extends AppController {
     public function admin_balance_log_form($id=null){
         $this->loadModel('BalanceLog');
         if(!empty($id)){
-            $data = $this->BalanceLog->findById($id);
-            $this->set('data', $data);
+            $cond = [];
+            $cond['BalanceLog.id'] = $id;
         }else{
             $share_id = $_REQUEST['share_id'];
             if(!empty($share_id)){
-                $data = $this->BalanceLog->find('first',[
-                    'conditions' => [
-                        'BalanceLog.share_id' => $share_id
-                    ],
-                    'joins' => [
-                        [
-                            'type' => 'left',
-                            'table' => 'cake_weshares',
-                            'alias' => 'Weshare',
-                            'conditions' => 'Weshare.id=BalanceLog.share_id'
-                        ]
-                    ],
-                    'fields' => ['BalanceLog.*', 'Weshare.title', 'Weshare.type']
-                ]);
+                $cond['BalanceLog.share_id'] = $share_id;
             }
-            $user_id = $_REQUEST['user_id'];
-            $total_fee = $_REQUEST['total_fee'];
-            $data['BalanceLog']['share_id'] = $share_id;
-            $data['BalanceLog']['user_id'] = $user_id;
-            $data['BalanceLog']['total_fee'] = $total_fee;
-            $this->set('data', $data);
         }
+        $data = $this->BalanceLog->find('first',[
+            'conditions' => $cond,
+            'joins' => [
+                [
+                    'type' => 'left',
+                    'table' => 'cake_weshares',
+                    'alias' => 'Weshare',
+                    'conditions' => 'Weshare.id=BalanceLog.share_id'
+                ]
+            ],
+            'fields' => ['BalanceLog.*', 'Weshare.title', 'Weshare.type']
+        ]);
+        $user_id = $_REQUEST['user_id'];
+        $total_fee = $_REQUEST['total_fee'];
+        if($share_id){
+            $data['BalanceLog']['share_id'] = $share_id;
+        }
+        if($user_id){
+            $data['BalanceLog']['user_id'] = $user_id;
+        }
+        if($total_fee){
+            $data['BalanceLog']['total_fee'] = $total_fee;
+        }
+        $this->set('data', $data);
     }
 
     public function admin_save_balance_log(){
