@@ -1270,13 +1270,25 @@ class ShareManageController extends AppController
         $this->set('pager', $pager);
         $this->set('weshares', $weshares);
         $pool_refer_share_ids = [];
+        $weshare_ids = [];
         foreach ($weshares as $item) {
+            $weshare_ids[] = $item['Weshare']['id'];
             if ($item['Weshare']['type'] == SHARE_TYPE_POOL) {
                 $pool_refer_share_ids[] = $item['Weshare']['refer_share_id'];
             }
         }
         $pool_share_data = $this->get_pool_share_data($pool_refer_share_ids);
         $this->set('pool_share_data', $pool_share_data);
+        $orders = $this->Order->find('all', [
+            'conditions' => [
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'member_id' => $weshare_ids,
+                'status' => [ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY]
+            ],
+            'recursive' => 1,
+        ]);
+        $weshare_product_summary = $this->get_share_product_summary($weshares, $orders);
+        $this->set('weshare_product_summary', $weshare_product_summary);
     }
 
     private function get_share_balance_data($cond)
