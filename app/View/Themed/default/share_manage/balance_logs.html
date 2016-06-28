@@ -46,7 +46,7 @@
                             <th>团长售价</th>
                             <th>团长销量</th>
                             <th>产品金额</th>
-                            <th>产品总金额</th>
+                            <th>产品和快递金额</th>
                             <th>快递费用</th>
                             <th>红包优惠</th>
                             <th>退款金额</th>
@@ -91,7 +91,7 @@
                                         <td>{{$weshare_product_summary[$product_item['id']]['num']}}</td>
                                         <td>{{get_format_number($weshare_product_summary[$product_item['id']]['turnover']/100)}}</td>
                                     {{if $loop_flag==0}}
-                                        <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_item['BalanceLog']['product_fee'])}}</td>
+                                        <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_item['BalanceLog']['origin_total_fee'])}}</td>
                                         <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_item['BalanceLog']['ship_fee'])}}</td>
                                         <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_item['balanceLog']['coupon_fee'])}}</td>
                                         <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_item['BalanceLog']['refund_fee'])}}</td>
