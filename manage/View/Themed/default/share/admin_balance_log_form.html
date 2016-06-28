@@ -66,10 +66,13 @@
                                 <label>结算状态</label>
                                 <div class="radio">
                                     <label class="radio-inline">
-                                        <input type="radio" name="data[BalanceLog][status]" value="0" {{if $data['BalanceLog']['status']==0}}checked{{/if}}>待结算
+                                        <input type="radio" name="data[BalanceLog][status]" value="0" {{if $data['BalanceLog']['status']==0}}checked{{/if}}>待审核
                                     </label>
                                     <label class="radio-inline">
-                                        <input type="radio" name="data[BalanceLog][status]" value="1" {{if $data['BalanceLog']['status']==1}}checked{{/if}}>已结算
+                                        <input type="radio" name="data[BalanceLog][status]" value="2" {{if $data['BalanceLog']['status']==1}}checked{{/if}}>待结算
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="data[BalanceLog][status]" value="3" {{if $data['BalanceLog']['status']==1}}checked{{/if}}>已结算
                                     </label>
                                 </div>
                             </div>
