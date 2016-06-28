@@ -1221,38 +1221,62 @@ class ShareManageController extends AppController
         }
     }
 
-    public function share_balance()
+
+    public function balance_logs()
     {
-        $this->layout = null;
-        $cond = [
-            'status' => [1, 2, -1],
-            'settlement' => [0, 1],
-        ];
+        require_once(APPLIBS . 'MyPaginator.php');
+        $this->loadModel('Weshare');
+        $cond = [];
         if ($_REQUEST['shareId']) {
-            $cond['id'] = $_REQUEST['shareId'];
+            $cond['Wesahre.id'] = $_REQUEST['shareId'];
         }
         if ($_REQUEST['shareName']) {
-            $cond['title like '] = '%' . $_REQUEST['shareName'] . '%';
+            $cond['Weshare.title like '] = '%' . $_REQUEST['shareName'] . '%';
         }
         $filter_type = $_REQUEST['shareType'];
         if ($filter_type == 1) {
-            $cond['type'] = SHARE_TYPE_DEFAULT;
+            $cond['Weshare.type'] = SHARE_TYPE_DEFAULT;
         }
         if ($filter_type == 2) {
-            $cond['type'] = SHARE_TYPE_POOL;
+            $cond['Weshare.type'] = SHARE_TYPE_POOL;
         }
         if ($filter_type == 0) {
-            $cond['type'] = [SHARE_TYPE_POOL, SHARE_TYPE_DEFAULT];
+            $cond['Weshare.type'] = [SHARE_TYPE_POOL, SHARE_TYPE_DEFAULT];
         }
-        $q_c = array(
-            'Weshare' => array(
-                'conditions' => $cond,
-                'recursive' => 1,
-                'limit' => 5,
-                'order' => ['Weshare.close_date DESC', 'Weshare.id DESC']
-            )
-        );
-        $this->get_share_balance_data($q_c);
+        $joins = [
+            [
+                'type' => 'inner',
+                'table' => 'cake_balance_logs',
+                'alias' => 'BalanceLog',
+                'conditions' => ['Weshare.id = BalanceLog.share_id']
+            ]
+        ];
+        $count = $this->Weshare->find('count', [
+            'conditions' => $cond,
+            'joins' => $joins
+        ]);
+        $page = intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
+        $weshares = $this->Weshare->find('all', [
+            'conditions' => $cond,
+            'page' => $page,
+            'limit' => 50,
+            'joins' => $joins,
+            'recursive' => 1,
+            'order' => ['Weshare.close_date DESC', 'Weshare.id DESC'],
+            'fields' => ['BalanceLog.*', 'Weshare.*']
+        ]);
+        $url = "/share_manage/balance_logs?page=(:num)";
+        $pager = new MyPaginator($count, 50, $page, $url);
+        $this->set('pager', $pager);
+        $this->set('weshares', $weshares);
+        $pool_refer_share_ids = [];
+        foreach ($weshares as $item) {
+            if ($item['Weshare']['type'] == SHARE_TYPE_POOL) {
+                $pool_refer_share_ids[] = $item['Weshare']['refer_share_id'];
+            }
+        }
+        $pool_share_data = $this->get_pool_share_data($pool_refer_share_ids);
+        $this->set('pool_share_data', $pool_share_data);
     }
 
     private function get_share_balance_data($cond)
@@ -1308,6 +1332,40 @@ class ShareManageController extends AppController
         $this->set('weshare_summery', $summery_data);
         $this->set('creators', $creators);
         $this->set('pool_share_data', $pool_share_data);
+    }
+
+    public function share_balance()
+    {
+        $this->layout = null;
+        $cond = [
+            'status' => [1, 2, -1],
+            'settlement' => [0, 1],
+        ];
+        if ($_REQUEST['shareId']) {
+            $cond['id'] = $_REQUEST['shareId'];
+        }
+        if ($_REQUEST['shareName']) {
+            $cond['title like '] = '%' . $_REQUEST['shareName'] . '%';
+        }
+        $filter_type = $_REQUEST['shareType'];
+        if ($filter_type == 1) {
+            $cond['type'] = SHARE_TYPE_DEFAULT;
+        }
+        if ($filter_type == 2) {
+            $cond['type'] = SHARE_TYPE_POOL;
+        }
+        if ($filter_type == 0) {
+            $cond['type'] = [SHARE_TYPE_POOL, SHARE_TYPE_DEFAULT];
+        }
+        $q_c = array(
+            'Weshare' => array(
+                'conditions' => $cond,
+                'recursive' => 1,
+                'limit' => 10,
+                'order' => ['Weshare.close_date DESC', 'Weshare.id DESC']
+            )
+        );
+        $this->get_share_balance_data($q_c);
     }
 
     function get_share_product_summary($weshares, $orders)
@@ -1667,40 +1725,4 @@ class ShareManageController extends AppController
         $this->set('data', $data);
         $this->render('balance_log_form');
     }
-
-    public function balance_logs()
-    {
-        require_once(APPLIBS . 'MyPaginator.php');
-        $cond = [];
-        $this->loadModel('BalanceLog');
-        $count = $this->BalanceLog->find('count', [
-            'conditions' => $cond
-        ]);
-        $page = intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
-        $logs = $this->BalanceLog->find('all', [
-            'conditions' => $cond,
-            'page' => $page,
-            'limit' => 50,
-            'joins' => [
-//                [
-//                    'type' => 'left',
-//                    'table' => 'cake_weshares',
-//                    'alias' => 'Weshare',
-//                    'conditions' => ['Weshare.id = BalanceLog.share_id']
-//                ],
-                [
-                    'type' => 'left',
-                    'table' => 'cake_users',
-                    'alias' => 'User',
-                    'conditions' => ['User.id = BalanceLog.user_id']
-                ]
-            ],
-            'fields' => ['BalanceLog.*', 'User.nickname']
-        ]);
-        $url = "/share_manage/balance_logs?page=(:num)";
-        $pager = new MyPaginator($count, 50, $page, $url);
-        $this->set('pager', $pager);
-        $this->set('logs', $logs);
-    }
-
 }

@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">结算明细</h1>
+        <h1 class="page-header">分享结账</h1>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -9,88 +9,109 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                打款日志
+                待结账分享
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
-                <!--<div class="well">-->
-                    <!--<a class="btn btn-default" href="/shareManage/add_balance_log">添加结款记录</a>-->
-                <!--</div>-->
-                <div class="well">
-                    <form class="form-inline">
-                        <div class="form-group">
-                            <label>分享ID</label>
-                            <input type="text" class="form-control">
-                        </div>
-                        <button type="submit" class="btn btn-default">查询</button>
-                    </form>
-                </div>
-                <div class="dataTable_wrapper">
-                    <table class="table table-striped table-bordered table-hover">
+                <form class="form-inline" method="get" action="/share_manage/share_balance">
+                    <div class="form-group">
+                        <label>分享ID</label>
+                        <input type="text" class="form-control" name="shareId">
+                    </div>
+                    <div class="form-group">
+                        <label>分享名称</label>
+                        <input type="text" class="form-control" name="shareName">
+                    </div>
+                    <div class="form-group">
+                        <label>产品渠道</label>
+                        <select class="form-control" name="shareType">
+                            <option value="0">全部</option>
+                            <option value="1">团长</option>
+                            <option value="2">产品街</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-default">查询</button>
+                </form>
+                <br>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
                         <thead>
                         <tr>
                             <th>#ID</th>
-                            <th>分享编号</th>
-                            <th>结算费用</th>
-                            <th>交易佣金</th>
-                            <th>总交易额</th>
-                            <th>类型</th>
+                            <th>分享名称</th>
+                            <th>产品</th>
+                            <th>渠道</th>
+                            <th>产品街产品名称</th>
+                            <th>产品街产品价格</th>
+                            <th>团长零售价</th>
+                            <th>团长销量</th>
+                            <th>产品金额</th>
+                            <th>快递费用</th>
+                            <th>红包优惠</th>
+                            <th>退款金额</th>
+                            <th>团长佣金</th>
+                            <th>交易金额</th>
+                            <th>平台佣金</th>
+                            <th>结算金额</th>
                             <th>状态</th>
-                            <th width="10%">备注</th>
-                            <!--<th>操作</th>-->
+                            <th>备注</th>
                         </tr>
                         </thead>
                         <tbody>
-                            {{loop $logs $log}}
-                                <tr>
-                                    <td>
-                                        {{$log['BalanceLog']['id']}}
-                                    </td>
-                                    <td>
-                                        {{$log['BalanceLog']['share_id']}}
-                                    </td>
-                                    <td>
-                                       {{$log['BalanceLog']['trade_fee']}}
-                                    </td>
-                                    <td>
-                                        {{$log['BalanceLog']['brokerage']}}
-                                    </td>
-                                    <td>
-                                        {{$log['BalanceLog']['total_fee']}}
-                                    </td>
-                                    <td>
-                                        {{if $log['BalanceLog']['type']==1}}
-                                        分享者销售费用
-                                        {{/if}}
-                                        {{if $log['BalanceLog']['type']==2}}
-                                        产品街代销费用
-                                        {{/if}}
-                                        {{if $log['BalanceLog']['type']==3}}
-                                        产品街商家费用
-                                        {{/if}}
-                                    </td>
-                                    <td>
-                                        {{if $log['BalanceLog']['status']==0}}
-                                            待结算
-                                        {{/if}}
-                                        {{if $log['BalanceLog']['status']==1}}
-                                            已结算
-                                        {{/if}}
-                                    </td>
-                                    <td>
-                                        {{$log['BalanceLog']['remark']}}
-                                    </td>
-                                    <!--<td>-->
-                                        <!--<a href="/share_manage/update_balance_log/{{$log['BalanceLog']['id']}}" type="button" class="btn btn-outline btn-default">编辑</a>-->
-                                    <!--</td>-->
-                                </tr>
-                            {{/loop}}
+                        {{loop $weshares $index $weshare_item}}
+                        <?php $loop_flag = 0; ?>
+                        {{loop $weshare_item['WeshareProduct'] $product_item}}
+                        <tr {{if $index%2==0}}class="warning"{{/if}}>
+                            {{if $loop_flag==0}}
+                                <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{$weshare_item['Weshare']['id']}}</td>
+                                <td width="10%" rowspan="{{count($weshare_item['WeshareProduct'])}}">{{$weshare_item['Weshare']['title']}}</td>
+                            {{/if}}
+                                <td width="5%">{{$product_item['name']}}</td>
+                                <td>
+                                    {{if $weshare_item['Weshare']['type'] == SHARE_TYPE_POOL}}
+                                    <span style="color: red;">产品街</span>
+                                    {{else}}
+                                    团长
+                                    {{/if}}
+                                </td>
+                                <td width="5%">
+                                    {{if $weshare_item['Weshare']['type'] == SHARE_TYPE_POOL}}
+                                    {{$pool_share_data['pool_products'][$product_item['origin_product_id']]['name']}}
+                                    {{/if}}
+                                </td>
+                                <td>
+                                    {{if $weshare_item['Weshare']['type'] == SHARE_TYPE_POOL}}
+                                    {{$pool_share_data['pool_products'][$product_item['origin_product_id']]['price']/100}}
+                                    <br>
+                                    <span style="color: #ff0000">渠道价： {{$pool_share_data['pool_products'][$product_item['origin_product_id']]['channel_price']/100}}</span>
+                                    {{/if}}
+                                </td>
+                                <td>{{$product_item['price']/100}}</td>
+                                <td>{{$weshare_product_summary[$product_item['id']]['num']}}</td>
+                                <td>{{get_format_number($weshare_product_summary[$product_item['id']]['turnover']/100)}}</td>
+                            {{if $loop_flag==0}}
+                                <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_item['BalanceLog']['product_fee'])}}</td>
+                                <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_item['BalanceLog']['ship_fee'])}}</td>
+                                <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_item['balanceLog']['coupon_fee'])}}</td>
+                                <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_item['BalanceLog']['refund_fee'])}}</td>
+                                <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_item['BalanceLog']['rebate_fee'])}}</td>
+                                <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_item['BalanceLog']['transaction_fee'])}}</td>
+                                <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_item['BalanceLog']['brokerage'])}}</td>
+                                <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_item['BalanceLog']['trade_fee'])}}</td>
+                                <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{$weshare_item['BalanceLog']['status']}}</td>
+                                <td width="5%" rowspan="{{count($weshare_item['WeshareProduct'])}}">{{$weshare_item['BalanceLog']['remark']}}</td>
+                            {{/if}}
+                        </tr>
+                        <?php $loop_flag = $loop_flag + 1; ?>
+                        {{/loop}}
+                        {{/loop}}
                         </tbody>
                     </table>
                     <div class="inline pull-right page">
                         <?php echo $pager;?>
                     </div>
                 </div>
+                <!-- /.table-responsive -->
             </div>
             <!-- /.panel-body -->
         </div>
@@ -98,3 +119,4 @@
     </div>
     <!-- /.col-lg-12 -->
 </div>
+<!-- /.row -->
