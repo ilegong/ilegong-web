@@ -1228,7 +1228,7 @@ class ShareManageController extends AppController
         $this->loadModel('Weshare');
         $cond = [];
         if ($_REQUEST['shareId']) {
-            $cond['Wesahre.id'] = $_REQUEST['shareId'];
+            $cond['Weshare.id'] = $_REQUEST['shareId'];
         }
         if ($_REQUEST['shareName']) {
             $cond['Weshare.title like '] = '%' . $_REQUEST['shareName'] . '%';
