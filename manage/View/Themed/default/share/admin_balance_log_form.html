@@ -41,6 +41,14 @@
                                 <input class="form-control" name="data[BalanceLog][trade_fee]" type="number" step="0.01" required value="{{$data['BalanceLog']['trade_fee']}}">
                             </div>
                             <div class="form-group">
+                                <label>结账开始日期</label>
+                                <input class="form-control" name="data[BalanceLog][begin_datetime]" type="datetime" required value="{{$data['BalanceLog']['begin_datetime']}}" placeholder="2016-06-11 12:00:00">
+                            </div>
+                            <div class="form-group">
+                                <label>结账结束日期</label>
+                                <input class="form-control" name="data[BalanceLog][end_datetime]" type="datetime" required value="{{$data['BalanceLog']['end_datetime']}}" placeholder="2016-06-11 12:00:00">
+                            </div>
+                            <div class="form-group">
                                 <label>类型</label>
                                 <div class="radio">
                                     <label class="radio-inline">

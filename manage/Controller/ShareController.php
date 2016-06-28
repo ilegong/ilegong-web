@@ -1391,27 +1391,29 @@ class ShareController extends AppController {
                 $cond['BalanceLog.share_id'] = $share_id;
             }
         }
-        $data = $this->BalanceLog->find('first',[
-            'conditions' => $cond,
-            'joins' => [
-                [
-                    'type' => 'left',
-                    'table' => 'cake_weshares',
-                    'alias' => 'Weshare',
-                    'conditions' => 'Weshare.id=BalanceLog.share_id'
-                ]
-            ],
-            'fields' => ['BalanceLog.*', 'Weshare.title', 'Weshare.type']
-        ]);
+        if(!empty($cond)){
+            $data = $this->BalanceLog->find('first',[
+                'conditions' => $cond,
+                'joins' => [
+                    [
+                        'type' => 'left',
+                        'table' => 'cake_weshares',
+                        'alias' => 'Weshare',
+                        'conditions' => 'Weshare.id=BalanceLog.share_id'
+                    ]
+                ],
+                'fields' => ['BalanceLog.*', 'Weshare.title', 'Weshare.type']
+            ]);
+        }
         $user_id = $_REQUEST['user_id'];
         $total_fee = $_REQUEST['total_fee'];
-        if($share_id){
+        if($share_id&&$data){
             $data['BalanceLog']['share_id'] = $share_id;
         }
-        if($user_id){
+        if($user_id&&$data){
             $data['BalanceLog']['user_id'] = $user_id;
         }
-        if($total_fee){
+        if($total_fee&&$data){
             $data['BalanceLog']['total_fee'] = $total_fee;
         }
         $this->set('data', $data);
