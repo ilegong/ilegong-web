@@ -430,6 +430,7 @@ class ShareController extends AppController {
             $product_fee = floatval($weshare_summery[$share_id]['product_total_price']);
             $rebate_fee = floatval($weshare_rebate_map[$share_id]) - floatval($weshare_summery[$share_id]['child_ship_fee'] / 100);
             $total_fee = floatval($weshare_summery[$share_id]['total_price']);
+            $ship_fee = round($weshare_summery[$share_id]['ship_fee'] / 100, 2);
             $current_share_repaid_money = $repaid_money_result[$share_id];
             if ($current_share_repaid_money == 0) {
                 $current_share_repaid_money = 0;
@@ -446,6 +447,7 @@ class ShareController extends AppController {
             $save_data[] = [
                 'share_id' => $share_id,
                 'user_id' => $creator,
+                'ship_fee' => $ship_fee,
                 'refund_fee' => $refund_fee,//退款费用
                 'coupon_fee' => $coupon_fee,//优惠券费用
                 'product_fee' => $product_fee,//产品费用
