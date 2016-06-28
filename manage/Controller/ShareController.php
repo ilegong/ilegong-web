@@ -447,10 +447,10 @@ class ShareController extends AppController {
             $save_data[] = [
                 'share_id' => $share_id,
                 'user_id' => $creator,
-                'ship_fee' => $ship_fee,
+                'ship_fee' => $ship_fee,//快递费用
                 'refund_fee' => $refund_fee,//退款费用
                 'coupon_fee' => $coupon_fee,//优惠券费用
-                'product_fee' => $product_fee,//产品费用
+                'origin_total_fee' => $product_fee,//产品费用
                 'rebate_fee' => $rebate_fee,//返利费用
                 'total_fee' => $total_fee,//总费用
                 'transaction_fee' => $transaction_fee,//交易费用
