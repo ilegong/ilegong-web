@@ -82,9 +82,12 @@
                             </td>
                             <td>
                                 {{if $log['BalanceLog']['status']==0}}
-                                待结算
+                                待审核
                                 {{/if}}
                                 {{if $log['BalanceLog']['status']==1}}
+                                待结算
+                                {{/if}}
+                                {{if $log['BalanceLog']['status']==2}}
                                 已结算
                                 {{/if}}
                             </td>
