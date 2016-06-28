@@ -441,6 +441,8 @@ class ShareController extends AppController {
             if ($weshare_type == 6) {
                 $type = 2;
             }
+            $begin_datetime = $item['created'];
+            $end_datetime = empty($item['close_date']) ? date('Y-m-d H:i:s') : $item['close_date'];
             $save_data[] = [
                 'share_id' => $share_id,
                 'user_id' => $creator,
@@ -456,6 +458,8 @@ class ShareController extends AppController {
                 'type' => $type,
                 'created' => date('Y-m-d H:i:s'),
                 'updated' => date('Y-m-d H:i:s'),
+                'begin_datetime' => $begin_datetime,
+                'end_datetime' => $end_datetime,
                 'remark' => '系统自动生成'
             ];
         }
