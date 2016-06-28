@@ -1421,7 +1421,8 @@ class ShareController extends AppController {
         $this->set('data', $data);
     }
 
-    public function admin_save_balance_log(){
+    public function admin_save_balance_log()
+    {
         $this->loadModel('BalanceLog');
         $balanceLog = $this->request->data;
         $balanceLog['BalanceLog']['updated'] = date('Y-m-d H:i:s');
@@ -1431,7 +1432,7 @@ class ShareController extends AppController {
         $log = $this->BalanceLog->save($balanceLog);
         $share_id = $log['BalanceLog']['share_id'];
         $fee = $log['BalanceLog']['trade_fee'];
-        if($log['BalanceLog']['status']==1){
+        if ($log['BalanceLog']['status'] == 2) {
             $this->set_share_paid($share_id, $fee);
         }
         $this->redirect('/admin/share/balance_logs.html');

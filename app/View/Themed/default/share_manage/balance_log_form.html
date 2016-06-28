@@ -50,8 +50,9 @@
                             <div class="form-group">
                                 <label>结算状态</label>
                                 <select class="form-control" name="data[BalanceLog][status]" required>
-                                    <option value="0" {{if $data['BalanceLog']['status']==0}}selected{{/if}}>待结算</option>
-                                    <option value="1" {{if $data['BalanceLog']['status']==1}}selected{{/if}}>已结算</option>
+                                    <option value="0" {{if $data['BalanceLog']['status']==0}}selected{{/if}}>待审核</option>
+                                    <option value="0" {{if $data['BalanceLog']['status']==1}}selected{{/if}}>待结算</option>
+                                    <option value="1" {{if $data['BalanceLog']['status']==2}}selected{{/if}}>已结算</option>
                                 </select>
                             </div>
                             <div class="form-group">
