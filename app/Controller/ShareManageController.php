@@ -1243,6 +1243,12 @@ class ShareManageController extends AppController
         if ($filter_type == 0) {
             $cond['Weshare.type'] = [SHARE_TYPE_POOL, SHARE_TYPE_DEFAULT];
         }
+        if($_REQUEST['beginDate']){
+            $cond['Weshare.close_date > '] = $_REQUEST['beginDate'];
+        }
+        if($_REQUEST['endDate']){
+            $cond['Weshare.close_date < '] = $_REQUEST['endDate'];
+        }
         $joins = [
             [
                 'type' => 'inner',
@@ -1289,6 +1295,11 @@ class ShareManageController extends AppController
         ]);
         $weshare_product_summary = $this->get_share_product_summary($weshares, $orders);
         $this->set('weshare_product_summary', $weshare_product_summary);
+        $this->set('shareId', $_REQUEST['shareId']);
+        $this->set('shareType', $filter_type);
+        $this->set('shareName', $_REQUEST['shareName']);
+        $this->set('beginDate', $_REQUEST['beginDate']);
+        $this->set('endDate', $_REQUEST['endDate']);
     }
 
     private function get_share_balance_data($cond)
