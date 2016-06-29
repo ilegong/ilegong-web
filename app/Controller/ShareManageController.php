@@ -1243,11 +1243,15 @@ class ShareManageController extends AppController
         if ($filter_type == 0) {
             $cond['Weshare.type'] = [SHARE_TYPE_POOL, SHARE_TYPE_DEFAULT];
         }
-        if($_REQUEST['beginDate']){
+        if ($_REQUEST['beginDate']) {
             $cond['Weshare.close_date > '] = $_REQUEST['beginDate'];
         }
-        if($_REQUEST['endDate']){
+        if ($_REQUEST['endDate']) {
             $cond['Weshare.close_date < '] = $_REQUEST['endDate'];
+        }
+        $filter_status = $_REQUEST['balanceStatus'];
+        if ($filter_status != '-1') {
+            $cond['BalanceLog.status'] = $filter_status;
         }
         $joins = [
             [
@@ -1300,6 +1304,7 @@ class ShareManageController extends AppController
         $this->set('shareName', $_REQUEST['shareName']);
         $this->set('beginDate', $_REQUEST['beginDate']);
         $this->set('endDate', $_REQUEST['endDate']);
+        $this->set('balanceStatus', $filter_status);
     }
 
     private function get_share_balance_data($cond)
