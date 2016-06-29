@@ -1241,7 +1241,7 @@ class ShareManageController extends AppController
             $cond['Weshare.type'] = SHARE_TYPE_POOL;
         }
         if ($filter_type == 0) {
-            $cond['Weshare.type'] = [SHARE_TYPE_POOL, SHARE_TYPE_DEFAULT];
+            $cond['Weshare.type'] = [SHARE_TYPE_POOL, SHARE_TYPE_DEFAULT, SHARE_TYPE_POOL_SELF];
         }
         if ($_REQUEST['beginDate']) {
             $cond['Weshare.close_date > '] = $_REQUEST['beginDate'];
@@ -1252,6 +1252,10 @@ class ShareManageController extends AppController
         $filter_status = $_REQUEST['balanceStatus'];
         if ($filter_status != '-1') {
             $cond['BalanceLog.status'] = $filter_status;
+        }
+        $filter_balance_type = $_REQUEST['balanceType'];
+        if ($filter_type != '-1') {
+            $cond['BalanceLog.type'] = $filter_balance_type;
         }
         $joins = [
             [
@@ -1304,6 +1308,7 @@ class ShareManageController extends AppController
         $this->set('shareName', $_REQUEST['shareName']);
         $this->set('beginDate', $_REQUEST['beginDate']);
         $this->set('endDate', $_REQUEST['endDate']);
+        $this->set('balanceType', $filter_balance_type);
         $this->set('balanceStatus', $filter_status);
     }
 
@@ -1741,19 +1746,6 @@ class ShareManageController extends AppController
         $this->redirect('/share_manage/balance_logs');
     }
 
-    public function add_balance_log()
-    {
-        $this->render('balance_log_form');
-    }
-
-    public function update_balance_log($id)
-    {
-        $this->loadModel('BalanceLog');
-        $data = $this->BalanceLog->findById($id);
-        $this->set('data', $data);
-        $this->render('balance_log_form');
-    }
-
     public function balance_pool_share(){
         $cond = [];
         if ($_REQUEST['shareName']) {
@@ -1762,9 +1754,50 @@ class ShareManageController extends AppController
         if ($_REQUEST['status'] && $_REQUEST['status'] != '-1') {
             $cond['status'] = $_REQUEST['status'];
         }
+        $this->loadModel('BalanceLog');
         $pool_products = $this->ShareManage->get_pool_products($cond);
+        $share_ids = Hash::extract($pool_products, '{n}.PoolProduct.weshare_id');
+        $balance_logs = $this->BalanceLog->find('all', [
+            'conditions' => [
+                'share_id' => $share_ids,
+                'status' => [0, 1],
+                'type' => 3
+            ]
+        ]);
+        $going_logs = [];
+        foreach ($balance_logs as $log_item) {
+            $weshare_id = $log_item['BalanceLog']['share_id'];
+            if(!isset($going_logs[$weshare_id])){
+                $going_logs[$weshare_id] = [];
+            }
+            $going_logs[$weshare_id][] = $log_item['BalanceLog']['id'];
+        }
+        $this->set('going_logs', $going_logs);
         $this->set('pool_products', $pool_products);
         $this->set('status', $_REQUEST['status']);
         $this->set('shareName', $_REQUEST['shareName']);
+    }
+
+    public function add_balance_log()
+    {
+        $data = ['BalanceLog' => []];
+        $type = $_REQUEST['type'];
+        $data['BalanceLog']['type'] = $type;
+        $share_id = $_REQUEST['share_id'];
+        $data['BalanceLog']['share_id'] = $share_id;
+        $user_id = $_REQUEST['user_id'];
+        $data['BalanceLog']['user_id'] = $user_id;
+        $this->set('data', $data);
+        $this->set('title', '添加结算记录');
+        $this->render('balance_log_form');
+    }
+
+    public function update_balance_log($id)
+    {
+        $this->loadModel('BalanceLog');
+        $data = $this->BalanceLog->findById($id);
+        $this->set('data', $data);
+        $this->set('title', '更新结算记录');
+        $this->render('balance_log_form');
     }
 }

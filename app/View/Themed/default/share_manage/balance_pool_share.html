@@ -66,7 +66,13 @@
                                         发布未上架
                                         {{/if}}
                                     </td>
-                                    <td rowspan="{{count($product['WeshareProducts'])}}"><a class="btn btn-info" role="button">申请</a></td>
+                                    <td rowspan="{{count($product['WeshareProducts'])}}">
+                                        {{if empty($going_logs[$product['PoolProduct']['weshare_id']])}}
+                                        <a class="btn btn-warning" href="/share_manage/add_balance_log.html?share_id={{$product['PoolProduct']['weshare_id']}}&user_id={{$product['PoolProduct']['user_id']}}&type=3">申请</a>
+                                        {{else}}
+                                        <a class="btn btn-default">结算中</a>
+                                        {{/if}}
+                                    </td>
                                     {{/if}}
                                 </tr>
                             <?php $loop_flag = $loop_flag + 1; ?>

@@ -9,7 +9,7 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                待结账分享
+                结账记录
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
@@ -21,6 +21,15 @@
                     <div class="form-group">
                         <label>分享名称</label>
                         <input type="text" class="form-control" name="shareName" value="{{$shareName}}">
+                    </div>
+                    <div class="form-group">
+                        <label>结算类型</label>
+                        <select class="form-control" name="balanceType">
+                            <option value="-1" {{if $balanceType=='-1'}}selected{{/if}}>全部</option>
+                            <option value="1" {{if $balanceType=='1'}}selected{{/if}}>团长分享</option>
+                            <option value="2" {{if $balanceType=='2'}}selected{{/if}}>团长代售</option>
+                            <option value="3" {{if $balanceType=='3'}}selected{{/if}}>产品街</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label>产品渠道</label>
