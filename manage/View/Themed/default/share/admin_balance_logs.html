@@ -79,65 +79,64 @@
                         </thead>
                         <tbody>
                         {{loop $logs $log}}
-                        <tr>
-                            <td>
-                                {{$log['BalanceLog']['id']}}<br/>
-                                {{if $log['Weshare']['type']==6}}
-                                <font style="color: red">产品街</font>
-                                {{else}}
-                                <font>正常分享</font>
-                                {{/if}}
-                            </td>
-                            <td>
-                                {{$log['BalanceLog']['share_id']}}<br/>
-                                {{$log['Weshare']['title']}}
-                            </td>
-                            <td>
-                                {{$log['BalanceLog']['user_id']}}<br/>
-                                {{$log['User']['nickname']}}
-                            </td>
-                            <td>
-                                {{$log['BalanceLog']['trade_fee']}}
-                            </td>
-                            <td>
-                                {{$log['BalanceLog']['brokerage']}}
-                            </td>
-                            <td>
-                                {{$log['BalanceLog']['transaction_fee']}}
-                            </td>
-                            <td>
-                                {{if $log['BalanceLog']['type']==1}}
-                                分享者销售费用
-                                {{/if}}
-                                {{if $log['BalanceLog']['type']==2}}
-                                产品街代销费用
-                                {{/if}}
-                                {{if $log['BalanceLog']['type']==3}}
-                                产品街商家费用
-                                {{/if}}
-                            </td>
-                            <td>
-                                {{if $log['BalanceLog']['status']==0}}
-                                待审核
-                                {{/if}}
-                                {{if $log['BalanceLog']['status']==1}}
-                                待结算
-                                {{/if}}
-                                {{if $log['BalanceLog']['status']==2}}
-                                已结算
-                                {{/if}}
-                            </td>
-                            <td>
-                                {{$log['BalanceLog']['remark']}}
-                            </td>
-                            <td>
-                                {{get_user_payment_info($log['User']['payment'])}}
-                            </td>
-                            <td>
-                                <a href="/manage/admin/share/balance_log_form/{{$log['BalanceLog']['id']}}.html"
-                                   type="button" class="btn btn-outline btn-default">编辑</a>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td>
+                                    {{$log['BalanceLog']['share_id']}}<br/>
+                                    {{if $log['Weshare']['type']==6}}
+                                    <font style="color: red">产品街</font>
+                                    {{else}}
+                                    <font>正常分享</font>
+                                    {{/if}}
+                                </td>
+                                <td>
+                                    {{$log['Weshare']['title']}}
+                                </td>
+                                <td>
+                                    {{$log['BalanceLog']['user_id']}}<br/>
+                                    {{$log['User']['nickname']}}
+                                </td>
+                                <td>
+                                    {{$log['BalanceLog']['trade_fee']}}
+                                </td>
+                                <td>
+                                    {{$log['BalanceLog']['brokerage']}}
+                                </td>
+                                <td>
+                                    {{$log['BalanceLog']['transaction_fee']}}
+                                </td>
+                                <td>
+                                    {{if $log['BalanceLog']['type']==1}}
+                                    分享者销售费用
+                                    {{/if}}
+                                    {{if $log['BalanceLog']['type']==2}}
+                                    产品街代销费用
+                                    {{/if}}
+                                    {{if $log['BalanceLog']['type']==3}}
+                                    产品街商家费用
+                                    {{/if}}
+                                </td>
+                                <td>
+                                    {{if $log['BalanceLog']['status']==0}}
+                                    待审核
+                                    {{/if}}
+                                    {{if $log['BalanceLog']['status']==1}}
+                                    待结算
+                                    {{/if}}
+                                    {{if $log['BalanceLog']['status']==2}}
+                                    已结算
+                                    {{/if}}
+                                </td>
+                                <td>
+                                    {{$log['BalanceLog']['remark']}}
+                                </td>
+                                <td>
+                                    {{get_user_payment_info($log['User']['payment'])}}
+                                </td>
+                                <td>
+                                    <a href="/manage/admin/share/balance_log_form/{{$log['BalanceLog']['id']}}.html"
+                                       type="button" class="btn btn-outline btn-default">编辑</a>
+                                </td>
+                            </tr>
                         {{/loop}}
                         </tbody>
                     </table>
