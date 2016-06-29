@@ -33,10 +33,10 @@
                     <div class="form-group">
                         <label>结算状态</label>
                         <select class="form-control" name="balanceStatus">
-                            <option value="-1">全部</option>
-                            <option value="0">待审核</option>
-                            <option value="1">待结算</option>
-                            <option value="3">已结算</option>
+                            <option value="-1" {{if $balanceStatus=='-1'}}selected{{/if}}>全部</option>
+                            <option value="0" {{if $balanceStatus=='0'}}selected{{/if}}>待审核</option>
+                            <option value="1" {{if $balanceStatus=='1'}}selected{{/if}}>待结算</option>
+                            <option value="3" {{if $balanceStatus=='2'}}selected{{/if}}>已结算</option>
                         </select>
                     </div>
                     <div class="form-group">
