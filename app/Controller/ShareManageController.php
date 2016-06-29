@@ -1254,7 +1254,7 @@ class ShareManageController extends AppController
             $cond['BalanceLog.status'] = $filter_status;
         }
         $filter_balance_type = $_REQUEST['balanceType'];
-        if ($filter_type != '-1') {
+        if ($filter_balance_type != '-1') {
             $cond['BalanceLog.type'] = $filter_balance_type;
         }
         $joins = [

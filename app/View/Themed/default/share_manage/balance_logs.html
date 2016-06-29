@@ -45,7 +45,7 @@
                             <option value="-1" {{if $balanceStatus=='-1'}}selected{{/if}}>全部</option>
                             <option value="0" {{if $balanceStatus=='0'}}selected{{/if}}>待审核</option>
                             <option value="1" {{if $balanceStatus=='1'}}selected{{/if}}>待结算</option>
-                            <option value="3" {{if $balanceStatus=='2'}}selected{{/if}}>已结算</option>
+                            <option value="2" {{if $balanceStatus=='2'}}selected{{/if}}>已结算</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -59,6 +59,7 @@
                     <button type="submit" class="btn btn-default">查询</button>
                 </form>
                 <br>
+
                 <div class="table-responsive">
                     <table class="table table-bordered">
                         <thead>
@@ -86,69 +87,92 @@
                         </thead>
                         <tbody>
                         {{loop $weshares $index $weshare_item}}
-                            <?php $loop_flag = 0; ?>
-                            {{loop $weshare_item['WeshareProduct'] $product_item}}
-                                <tr {{if $index%2==0}}class="warning"{{/if}}>
-                                    {{if $loop_flag==0}}
-                                        <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{$weshare_item['Weshare']['id']}}</td>
-                                        <td width="10%" rowspan="{{count($weshare_item['WeshareProduct'])}}">{{$weshare_item['Weshare']['title']}}</td>
+                        <?php $loop_flag = 0; ?>
+                        {{loop $weshare_item['WeshareProduct'] $product_item}}
+                        <tr {{if $index%2==0}}class="warning"{{/if}}>
+                            {{if $loop_flag==0}}
+                            <td rowspan="{{count($weshare_item['WeshareProduct'])}}">
+                                {{$weshare_item['Weshare']['id']}}
+                            </td>
+                            <td width="10%" rowspan="{{count($weshare_item['WeshareProduct'])}}">
+                                {{$weshare_item['Weshare']['title']}}
+                            </td>
+                            {{/if}}
+                            <td width="5%">{{$product_item['name']}}</td>
+                            <td>
+                                {{if $weshare_item['Weshare']['type'] == SHARE_TYPE_POOL}}
+                                <span style="color: red;">产品街</span>
+                                {{else}}
+                                团长
+                                {{/if}}
+                            </td>
+                            <td width="5%">
+                                {{if $weshare_item['Weshare']['type'] == SHARE_TYPE_POOL}}
+                                {{$pool_share_data['pool_products'][$product_item['origin_product_id']]['name']}}
+                                {{/if}}
+                            </td>
+                            <td>
+                                {{if $weshare_item['Weshare']['type'] == SHARE_TYPE_POOL}}
+                                {{$pool_share_data['pool_products'][$product_item['origin_product_id']]['price']/100}}
+                                <br>
+                                <span style="color: #ff0000">渠道价： {{$pool_share_data['pool_products'][$product_item['origin_product_id']]['channel_price']/100}}</span>
+                                {{/if}}
+                            </td>
+                            <td>{{$product_item['price']/100}}</td>
+                            <td>{{$weshare_product_summary[$product_item['id']]['num']}}</td>
+                            <td>{{get_format_number($weshare_product_summary[$product_item['id']]['turnover']/100)}}
+                            </td>
+                            {{if $loop_flag==0}}
+                            <td rowspan="{{count($weshare_item['WeshareProduct'])}}">
+                                {{get_format_number($weshare_item['BalanceLog']['origin_total_fee'])}}
+                            </td>
+                            <td rowspan="{{count($weshare_item['WeshareProduct'])}}">
+                                {{get_format_number($weshare_item['BalanceLog']['ship_fee'])}}
+                            </td>
+                            <td rowspan="{{count($weshare_item['WeshareProduct'])}}">
+                                {{get_format_number($weshare_item['balanceLog']['coupon_fee'])}}
+                            </td>
+                            <td rowspan="{{count($weshare_item['WeshareProduct'])}}">
+                                {{get_format_number($weshare_item['BalanceLog']['refund_fee'])}}
+                            </td>
+                            <td rowspan="{{count($weshare_item['WeshareProduct'])}}">
+                                {{get_format_number($weshare_item['BalanceLog']['rebate_fee'])}}
+                            </td>
+                            <td rowspan="{{count($weshare_item['WeshareProduct'])}}">
+                                {{get_format_number($weshare_item['BalanceLog']['transaction_fee'])}}
+                            </td>
+                            <td rowspan="{{count($weshare_item['WeshareProduct'])}}">
+                                {{get_format_number($weshare_item['BalanceLog']['brokerage'])}}
+                            </td>
+                            <td rowspan="{{count($weshare_item['WeshareProduct'])}}">
+                                {{get_format_number($weshare_item['BalanceLog']['trade_fee'])}}
+                            </td>
+                            <!--<td rowspan="{{count($weshare_item['WeshareProduct'])}}">-->
+                            <!--{{if $weshare_item['BalanceLog']['status']==0}}-->
+                            <!--待审核-->
+                            <!--{{/if}}-->
+                            <!--{{if $weshare_item['BalanceLog']['status']==1}}-->
+                            <!--待结算-->
+                            <!--{{/if}}-->
+                            <!--{{if $weshare_item['BalanceLog']['status']==2}}-->
+                            <!--已结算-->
+                            <!--{{/if}}-->
+                            <!--</td>-->
+                            <td width="5%" rowspan="{{count($weshare_item['WeshareProduct'])}}">
+                                <a class="btn btn-link"
+                                   href="/share_manage/update_balance_log/{{$weshare_item['BalanceLog']['id']}}"
+                                   role="button">
+                                    {{if $weshare_item['BalanceLog']['status']==0}}
+                                    去审核
+                                    {{else}}
+                                    更新
                                     {{/if}}
-                                        <td width="5%">{{$product_item['name']}}</td>
-                                        <td>
-                                            {{if $weshare_item['Weshare']['type'] == SHARE_TYPE_POOL}}
-                                                <span style="color: red;">产品街</span>
-                                            {{else}}
-                                                团长
-                                            {{/if}}
-                                        </td>
-                                        <td width="5%">
-                                            {{if $weshare_item['Weshare']['type'] == SHARE_TYPE_POOL}}
-                                            {{$pool_share_data['pool_products'][$product_item['origin_product_id']]['name']}}
-                                            {{/if}}
-                                        </td>
-                                        <td>
-                                            {{if $weshare_item['Weshare']['type'] == SHARE_TYPE_POOL}}
-                                            {{$pool_share_data['pool_products'][$product_item['origin_product_id']]['price']/100}}
-                                            <br>
-                                            <span style="color: #ff0000">渠道价： {{$pool_share_data['pool_products'][$product_item['origin_product_id']]['channel_price']/100}}</span>
-                                            {{/if}}
-                                        </td>
-                                        <td>{{$product_item['price']/100}}</td>
-                                        <td>{{$weshare_product_summary[$product_item['id']]['num']}}</td>
-                                        <td>{{get_format_number($weshare_product_summary[$product_item['id']]['turnover']/100)}}</td>
-                                    {{if $loop_flag==0}}
-                                        <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_item['BalanceLog']['origin_total_fee'])}}</td>
-                                        <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_item['BalanceLog']['ship_fee'])}}</td>
-                                        <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_item['balanceLog']['coupon_fee'])}}</td>
-                                        <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_item['BalanceLog']['refund_fee'])}}</td>
-                                        <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_item['BalanceLog']['rebate_fee'])}}</td>
-                                        <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_item['BalanceLog']['transaction_fee'])}}</td>
-                                        <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_item['BalanceLog']['brokerage'])}}</td>
-                                        <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_item['BalanceLog']['trade_fee'])}}</td>
-                                        <!--<td rowspan="{{count($weshare_item['WeshareProduct'])}}">-->
-                                            <!--{{if $weshare_item['BalanceLog']['status']==0}}-->
-                                                <!--待审核-->
-                                            <!--{{/if}}-->
-                                            <!--{{if $weshare_item['BalanceLog']['status']==1}}-->
-                                                <!--待结算-->
-                                            <!--{{/if}}-->
-                                            <!--{{if $weshare_item['BalanceLog']['status']==2}}-->
-                                                <!--已结算-->
-                                            <!--{{/if}}-->
-                                        <!--</td>-->
-                                        <td width="5%" rowspan="{{count($weshare_item['WeshareProduct'])}}">
-                                            <a class="btn btn-link" href="/share_manage/update_balance_log/{{$weshare_item['BalanceLog']['id']}}" role="button">
-                                                {{if $weshare_item['BalanceLog']['status']==0}}
-                                                    去审核
-                                                {{else}}
-                                                    更新
-                                                {{/if}}
-                                            </a>
-                                        </td>
-                                    {{/if}}
-                                </tr>
-                                <?php $loop_flag = $loop_flag + 1; ?>
-                            {{/loop}}
+                                </a>
+                            </td>
+                            {{/if}}
+                        </tr>
+                        <?php $loop_flag = $loop_flag + 1; ?>
+                        {{/loop}}
                         {{/loop}}
                         </tbody>
                     </table>
