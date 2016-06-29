@@ -1,0 +1,86 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">产品街</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                申请产品街分享结账
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <form class="form-inline" method="get" action="/share_manage/balance_pool_share">
+                        <div class="form-group">
+                            <label>分享名称</label>
+                            <input type="text" class="form-control" name="shareName" value="{{$shareName}}">
+                        </div>
+                        <div class="form-group">
+                            <label>状态</label>
+                            <select class="form-control" name="status">
+                                <option value="-1"  {{if $status=='-1'}}selected{{/if}}>全部</option>
+                                <option value="0" {{if $status=='0'}}selected{{/if}}>未上架</option>
+                                <option value="1" {{if $status=='1'}}selected{{/if}}>已上架</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-default">查询</button>
+                    </form>
+                    <hr/>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>#ID</th>
+                                <th width="20%">名称</th>
+                                <th width="15%">产品</th>
+                                <th>零售价</th>
+                                <th>渠道价</th>
+                                <th>分享人ID</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {{loop $pool_products $index $product}}
+                            <?php $loop_flag = 0; ?>
+                            {{loop $product['WeshareProducts'] $WeshareProducts}}
+                                <tr {{if $index%2==0}}class="warning"{{/if}}>
+                                    {{if $loop_flag==0}}
+                                    <td rowspan="{{count($product['WeshareProducts'])}}">{{$product['PoolProduct']['weshare_id']}}</td>
+                                    <td rowspan="{{count($product['WeshareProducts'])}}">{{$product['PoolProduct']['share_name']}}</td>
+                                    {{/if}}
+                                    <td>{{$WeshareProducts['name']}}</td>
+                                    <td>{{number_format($WeshareProducts['price'] / 100, 2, '.', '')}}</td>
+                                    <td>{{number_format($WeshareProducts['channel_price'] / 100, 2, '.', '')}}</td>
+                                    {{if $loop_flag==0}}
+                                    <td rowspan="{{count($product['WeshareProducts'])}}">{{$product['PoolProduct']['user_id']}}</td>
+                                    <td rowspan="{{count($product['WeshareProducts'])}}">
+                                        {{if $product['PoolProduct']['status'] == 0}}
+                                        下架
+                                        {{elseif $product['PoolProduct']['status'] == 1}}
+                                        上架
+                                        {{elseif $product['PoolProduct']['status'] == 2}}
+                                        发布未上架
+                                        {{/if}}
+                                    </td>
+                                    <td rowspan="{{count($product['WeshareProducts'])}}"><a class="btn btn-info" role="button">申请</a></td>
+                                    {{/if}}
+                                </tr>
+                            <?php $loop_flag = $loop_flag + 1; ?>
+                            {{/loop}}
+                        {{/loop}}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-6 -->
+</div>
+<!-- /.row -->

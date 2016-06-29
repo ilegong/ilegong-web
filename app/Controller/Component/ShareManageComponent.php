@@ -59,13 +59,22 @@ class ShareManageComponent extends Component
         return $this->rearrange_pool_product($indexProducts)[0];
     }
 
-    public function get_pool_products()
+    public function get_pool_products($cond = [])
     {
         $indexProductM = ClassRegistry::init('PoolProduct');
+        $q_cond = [
+            'PoolProduct.deleted' => DELETED_NO,
+        ];
+        if (!empty($cond)) {
+            if (!empty($cond['status'])) {
+                $q_cond['PoolProduct.status'] = $cond['status'];
+            }
+            if (!empty($cond['name'])) {
+                $q_cond['PoolProduct.share_name like '] = '%' . $cond['name'] . '%';
+            }
+        }
         $indexProducts = $indexProductM->find('all', [
-            'conditions' => [
-                'PoolProduct.deleted' => DELETED_NO,
-            ],
+            'conditions' => $q_cond,
             'fields' => [
                 'PoolProduct.*',
                 'WeshareProducts.*'

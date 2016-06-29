@@ -1753,4 +1753,18 @@ class ShareManageController extends AppController
         $this->set('data', $data);
         $this->render('balance_log_form');
     }
+
+    public function balance_pool_share(){
+        $cond = [];
+        if ($_REQUEST['shareName']) {
+            $cond['name'] = $_REQUEST['shareName'];
+        }
+        if ($_REQUEST['status'] && $_REQUEST['status'] != '-1') {
+            $cond['status'] = $_REQUEST['status'];
+        }
+        $pool_products = $this->ShareManage->get_pool_products($cond);
+        $this->set('pool_products', $pool_products);
+        $this->set('status', $_REQUEST['status']);
+        $this->set('shareName', $_REQUEST['shareName']);
+    }
 }
