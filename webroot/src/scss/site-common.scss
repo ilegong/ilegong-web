@@ -437,6 +437,7 @@ a:-webkit-any-link {
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 2;
       overflow: hidden;
+      max-height: 40px;
     }
   }
 }
