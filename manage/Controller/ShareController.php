@@ -1499,12 +1499,12 @@ class ShareController extends AppController
         if ($_REQUEST['endDate']) {
             $cond['Weshare.close_date < '] = $_REQUEST['endDate'];
         }
-        $filter_status = empty($_REQUEST['balanceStatus']) ? 1 : $_REQUEST['balanceStatus'];
-        if($filter_status != '-1'){
+        $filter_status = $_REQUEST['balanceStatus'] == null ? '-1' : $_REQUEST['balanceStatus'];
+        if ($filter_status != '-1') {
             $cond['BalanceLog.status'] = $filter_status;
         }
         $filter_balance_type = $_REQUEST['balanceType'];
-        if ($filter_balance_type != '-1') {
+        if ($filter_balance_type != '-1' && !empty($filter_balance_type)) {
             $cond['BalanceLog.type'] = $filter_balance_type;
         }
         $joins = [
