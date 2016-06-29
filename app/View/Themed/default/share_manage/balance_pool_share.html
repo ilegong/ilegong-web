@@ -68,9 +68,9 @@
                                     </td>
                                     <td rowspan="{{count($product['WeshareProducts'])}}">
                                         {{if empty($going_logs[$product['PoolProduct']['weshare_id']])}}
-                                        <a class="btn btn-warning" href="/share_manage/add_balance_log.html?share_id={{$product['PoolProduct']['weshare_id']}}&user_id={{$product['PoolProduct']['user_id']}}&type=3">申请</a>
+                                            <a class="btn btn-warning" href="/share_manage/add_balance_log.html?share_id={{$product['PoolProduct']['weshare_id']}}&user_id={{$product['PoolProduct']['user_id']}}&type=3">申请</a>
                                         {{else}}
-                                        <a class="btn btn-default">结算中</a>
+                                            <a class="btn btn-default" href="/share_manage/update_balance_log/{{$going_logs[$product['PoolProduct']['weshare_id']][0]}}">结算中</a>
                                         {{/if}}
                                     </td>
                                     {{/if}}
