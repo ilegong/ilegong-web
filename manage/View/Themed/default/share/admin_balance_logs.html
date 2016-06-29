@@ -104,28 +104,27 @@
                                 <td>
                                     {{$log['BalanceLog']['transaction_fee']}}
                                 </td>
-                                <td>
+
                                     {{if $log['BalanceLog']['type']==1}}
-                                    分享者销售费用
+                                    <td class="success">分享者销售费用</td>
                                     {{/if}}
                                     {{if $log['BalanceLog']['type']==2}}
-                                    产品街代销费用
+                                    <td class="warning">产品街代销费用</td>
                                     {{/if}}
                                     {{if $log['BalanceLog']['type']==3}}
-                                    产品街商家费用
+                                    <td class="danger">产品街商家费用</td>
                                     {{/if}}
-                                </td>
-                                <td>
+
                                     {{if $log['BalanceLog']['status']==0}}
-                                    待审核
+                                        <td class="info">待审核</td>
                                     {{/if}}
                                     {{if $log['BalanceLog']['status']==1}}
-                                    待结算
+                                        <td class="danger">待结算</td>
                                     {{/if}}
                                     {{if $log['BalanceLog']['status']==2}}
-                                    已结算
+                                        <td class="info">已结算</td>
                                     {{/if}}
-                                </td>
+
                                 <td>
                                     {{$log['BalanceLog']['remark']}}
                                 </td>
