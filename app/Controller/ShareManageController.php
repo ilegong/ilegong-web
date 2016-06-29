@@ -1279,10 +1279,6 @@ class ShareManageController extends AppController
             'order' => ['Weshare.close_date DESC', 'Weshare.id DESC'],
             'fields' => ['BalanceLog.*', 'Weshare.*']
         ]);
-        $url = "/share_manage/balance_logs?page=(:num)";
-        $pager = new MyPaginator($count, 50, $page, $url);
-        $this->set('pager', $pager);
-        $this->set('weshares', $weshares);
         $pool_refer_share_ids = [];
         $weshare_ids = [];
         foreach ($weshares as $item) {
@@ -1301,6 +1297,10 @@ class ShareManageController extends AppController
             ],
             'recursive' => 1,
         ]);
+        $url = "/share_manage/balance_logs?page=(:num)&shareId={$_REQUEST['shareId']}&shareType={$filter_type}&shareName={$_REQUEST['shareName']}&beginDate={$_REQUEST['beginDate']}&endDate={$_REQUEST['endDate']}&balanceType={$filter_balance_type}&balanceStatus={$filter_status}";
+        $pager = new MyPaginator($count, 50, $page, $url);
+        $this->set('pager', $pager);
+        $this->set('weshares', $weshares);
         $weshare_product_summary = $this->get_share_product_summary($weshares, $orders);
         $this->set('weshare_product_summary', $weshare_product_summary);
         $this->set('shareId', $_REQUEST['shareId']);

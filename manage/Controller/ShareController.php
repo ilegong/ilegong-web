@@ -1534,7 +1534,7 @@ class ShareController extends AppController
             'joins' => $joins,
             'fields' => ['BalanceLog.*', 'User.nickname', 'User.payment', 'Weshare.title']
         ]);
-        $url = "/manage/admin/share/balance_logs?page=(:num)";
+        $url = "/manage/admin/share/balance_logs?page=(:num)&shareId={$_REQUEST['shareId']}&shareType={$filter_type}&shareName={$_REQUEST['shareName']}&beginDate={$_REQUEST['beginDate']}&endDate={$_REQUEST['endDate']}&balanceType={$filter_balance_type}&balanceStatus={$filter_status}";
         $pager = new MyPaginator($count, 50, $page, $url);
         $this->set('pager', $pager);
         $this->set('logs', $logs);
