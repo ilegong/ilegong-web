@@ -247,6 +247,9 @@ class WeshareBuyComponent extends Component
     public function get_my_auth_shares($uid, $page, $limit, $status, $settlement)
     {
         $shareOperateSettingM = ClassRegistry::init('ShareOperateSetting');
+        if ($status != WESHARE_STATUS_NORMAL) {
+            $status = [$status, WESHARE_STATUS_DELETED];
+        }
         $result = $shareOperateSettingM->find('all', [
             'conditions' => [
                 'ShareOperateSetting.user' => $uid,
