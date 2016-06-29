@@ -72,6 +72,15 @@ class ShareOptController extends AppController
         $limit = $_REQUEST['limit'];
         $type = $_REQUEST['type'];
 
+        //add logs
+        $log = [
+            "index" => "event_share_opt",
+            "type" => "event_share_opt",
+            "user_id" => intval($this->currentUser['id']),
+            "referer" => $_SERVER["HTTP_REFERER"],
+        ];
+        add_logs_to_es($log);
+        
         if ($time == 0) {
             $time = time();
         }
