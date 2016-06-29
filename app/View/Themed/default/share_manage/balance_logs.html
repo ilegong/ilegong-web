@@ -49,6 +49,13 @@
                         </select>
                     </div>
                     <div class="form-group">
+                        <label>交易金额</label>
+                        <select class="form-control" name="balanceFee">
+                            <option value="0" {{if $balanceFee=='0'}}selected{{/if}}>全部</option>
+                            <option value="1" {{if $balanceFee=='1'}}selected{{/if}}>大于0</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label>截团时间</label>
                         <input type="date" class="form-control" name="beginDate" value="{{$beginDate}}"/>
                     </div>

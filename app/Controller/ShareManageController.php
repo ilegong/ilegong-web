@@ -1257,6 +1257,10 @@ class ShareManageController extends AppController
         if ($filter_balance_type != '-1') {
             $cond['BalanceLog.type'] = $filter_balance_type;
         }
+        $balance_fee_filter = empty($_REQUEST['balanceFee']) ? 0 : 1;
+        if($balance_fee_filter == 1){
+            $cond['BalanceLog.transaction_fee > ']  = 0;
+        }
         $joins = [
             [
                 'type' => 'inner',
@@ -1297,7 +1301,7 @@ class ShareManageController extends AppController
             ],
             'recursive' => 1,
         ]);
-        $url = "/share_manage/balance_logs?page=(:num)&shareId={$_REQUEST['shareId']}&shareType={$filter_type}&shareName={$_REQUEST['shareName']}&beginDate={$_REQUEST['beginDate']}&endDate={$_REQUEST['endDate']}&balanceType={$filter_balance_type}&balanceStatus={$filter_status}";
+        $url = "/share_manage/balance_logs?page=(:num)&shareId={$_REQUEST['shareId']}&shareType={$filter_type}&shareName={$_REQUEST['shareName']}&beginDate={$_REQUEST['beginDate']}&endDate={$_REQUEST['endDate']}&balanceType={$filter_balance_type}&balanceStatus={$filter_status}&balanceFee={$balance_fee_filter}";
         $pager = new MyPaginator($count, 50, $page, $url);
         $this->set('pager', $pager);
         $this->set('weshares', $weshares);
@@ -1310,6 +1314,7 @@ class ShareManageController extends AppController
         $this->set('endDate', $_REQUEST['endDate']);
         $this->set('balanceType', $filter_balance_type);
         $this->set('balanceStatus', $filter_status);
+        $this->set('balanceFee', $balance_fee_filter);
     }
 
     private function get_share_balance_data($cond)
