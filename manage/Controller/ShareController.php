@@ -6,41 +6,47 @@
  * Date: 7/20/15
  * Time: 17:11
  */
-class ShareController extends AppController {
+class ShareController extends AppController
+{
 
     var $name = 'Share';
 
     var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User',
-         'WeshareShipSetting', 'OfflineStore', 'Oauthbind', 'Comment', 'RefundLog', 'PayNotify', 'RebateTrackLog', 'PayLog', 'PintuanTag');
+        'WeshareShipSetting', 'OfflineStore', 'Oauthbind', 'Comment', 'RefundLog', 'PayNotify', 'RebateTrackLog', 'PayLog', 'PintuanTag');
 
     var $components = array('Weixin', 'Paginator');
 
 
-    public function beforeFilter() {
+    public function beforeFilter()
+    {
         parent::beforeFilter();
         $this->layout = 'bootstrap_layout';
     }
 
-    public function admin_utils() {
+    public function admin_utils()
+    {
 
     }
 
 
-    public function admin_set_user_proxy($userId) {
+    public function admin_set_user_proxy($userId)
+    {
         $this->autoRender = false;
         $this->User->updateAll(array('User.is_proxy' => 1), array('User.id' => $userId));
         echo json_encode(array('success' => true));
         return;
     }
 
-    public function admin_clear_user_cache($userId) {
+    public function admin_clear_user_cache($userId)
+    {
         $this->autoRender = false;
         Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $userId, '');
         echo json_encode(array('success' => true));
         return;
     }
 
-    public function admin_clear_share_cache($shareId) {
+    public function admin_clear_share_cache($shareId)
+    {
         $this->autoRender = false;
         Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $shareId, '');
         Cache::write(SHARE_DETAIL_DATA_WITH_TAG_CACHE_KEY . '_' . $shareId, '');
@@ -53,7 +59,8 @@ class ShareController extends AppController {
         return;
     }
 
-    public function admin_delete($shareId) {
+    public function admin_delete($shareId)
+    {
         $this->autoRender = false;
         $shareInfo = $this->Weshare->find('first', array(
             'conditions' => array(
@@ -76,7 +83,8 @@ class ShareController extends AppController {
         return;
     }
 
-    public function admin_set_offline_store_code() {
+    public function admin_set_offline_store_code()
+    {
         $this->autoRender = false;
         $order_id = $_REQUEST['order_id'];
         $code = $_REQUEST['ship_code'];
@@ -136,15 +144,17 @@ class ShareController extends AppController {
         echo json_encode(array('success' => true));
     }
 
-    public function admin_set_share_paid($shareId) {
+    public function admin_set_share_paid($shareId)
+    {
         $this->Weshare->updateAll(array('settlement' => 1), array('id' => $shareId));
         $this->send_share_paid_msg($shareId);
         $this->redirect(array('action' => 'admin_share_for_pay'));
     }
 
-    public function set_share_paid($shareId, $fee){
+    public function set_share_paid($shareId, $fee)
+    {
         $this->Weshare->updateAll(array('settlement' => 1), array('id' => $shareId));
-        if($fee > 0) {
+        if ($fee > 0) {
             $OauthbindM = ClassRegistry::init('Oauthbind');
             $weshareM = ClassRegistry::init('Weshare');
             $weshare = $weshareM->find('first', array(
@@ -167,9 +177,10 @@ class ShareController extends AppController {
         }
     }
 
-    private function send_share_paid_msg($shareId) {
+    private function send_share_paid_msg($shareId)
+    {
         $fee = $_REQUEST['fee'];
-        if($fee > 0) {
+        if ($fee > 0) {
             $OauthbindM = ClassRegistry::init('Oauthbind');
             $weshareM = ClassRegistry::init('Weshare');
             $weshare = $weshareM->find('first', array(
@@ -196,7 +207,8 @@ class ShareController extends AppController {
      * @param $weshares
      * reduce weshares 把子分享和父分享关联起来
      */
-    private function reduce_weshares($weshares) {
+    private function reduce_weshares($weshares)
+    {
         $remove_keys = array();
         foreach ($weshares as $share_id => $share_item) {
             if ($share_item['type'] == 1) {
@@ -225,7 +237,8 @@ class ShareController extends AppController {
         return $weshares;
     }
 
-    public function reduce_share_summery($weshares, &$summery_data, &$repaid_money_result, &$weshare_rebate_map, &$weshare_refund_money_map) {
+    public function reduce_share_summery($weshares, &$summery_data, &$repaid_money_result, &$weshare_rebate_map, &$weshare_refund_money_map)
+    {
         foreach ($weshares as $share_item_key => $share_item) {
             $share_summery_data = $summery_data[$share_item_key];
             $child_shares = $share_item['child_share'];
@@ -246,7 +259,8 @@ class ShareController extends AppController {
         }
     }
 
-    private function process_share_data($cond) {
+    private function process_share_data($cond)
+    {
         $this->Paginator->settings = $cond;
         $this->Paginator->settings['paramType'] = 'querystring';
         $weshares = $this->Paginator->paginate('Weshare', $cond['Weshare']['conditions']);
@@ -316,7 +330,8 @@ class ShareController extends AppController {
     }
 
 
-    private function set_query_share_cond($cond){
+    private function set_query_share_cond($cond)
+    {
         $share_id = $_REQUEST['share_id'];
         if (!empty($share_id)) {
             $cond['id'] = $share_id;
@@ -325,8 +340,8 @@ class ShareController extends AppController {
         if (!empty($share_title)) {
             $cond['title like '] = '%' . $share_title . '%';
         }
-        $sharer_id=$_REQUEST['sharer_id'];
-        if(!empty($sharer_id)){
+        $sharer_id = $_REQUEST['sharer_id'];
+        if (!empty($sharer_id)) {
             $cond['creator'] = $sharer_id;
         }
         $this->set('share_id', $share_id);
@@ -335,7 +350,8 @@ class ShareController extends AppController {
         return $cond;
     }
 
-    public function admin_share_paid() {
+    public function admin_share_paid()
+    {
         $cond = array(
             'status' => array(1, 2),
             'settlement' => 1,
@@ -357,7 +373,8 @@ class ShareController extends AppController {
         $this->set('creators', $result['creators']);
     }
 
-    public function admin_share_for_pay() {
+    public function admin_share_for_pay()
+    {
         $cond = array(
             'status' => array(1, 2, -1),
             'settlement' => 0,
@@ -373,12 +390,12 @@ class ShareController extends AppController {
         $result = $this->process_share_data($q_c);
         //['repaid_money_result' => $repaid_money_result, 'weshare_rebate_map' => $weshare_rebate_map, 'weshare_refund_map' => $weshare_refund_money_map, 'weshares' => $weshares, 'weshare_summery' => $summery_data, 'creators' => $creators]
         /**
-        $this->set('repaid_money_result', $repaid_money_result);
-        $this->set('weshare_rebate_map', $weshare_rebate_map);
-        $this->set('weshare_refund_map', $weshare_refund_money_map);
-        $this->set('weshares', $weshares);
-        $this->set('weshare_summery', $summery_data);
-        $this->set('creators', $creators);
+         * $this->set('repaid_money_result', $repaid_money_result);
+         * $this->set('weshare_rebate_map', $weshare_rebate_map);
+         * $this->set('weshare_refund_map', $weshare_refund_money_map);
+         * $this->set('weshares', $weshares);
+         * $this->set('weshare_summery', $summery_data);
+         * $this->set('creators', $creators);
          */
         $this->set('repaid_money_result', $result['repaid_money_result']);
         $this->set('weshare_rebate_map', $result['weshare_rebate_map']);
@@ -471,7 +488,8 @@ class ShareController extends AppController {
         exit;
     }
 
-    public function admin_merge_ship_setting_data() {
+    public function admin_merge_ship_setting_data()
+    {
         $this->autoRender = false;
         $shares = $this->Weshare->find('all', array(
             'limit' => 200
@@ -495,7 +513,8 @@ class ShareController extends AppController {
         return;
     }
 
-    function rand_date($min_date, $max_date) {
+    function rand_date($min_date, $max_date)
+    {
         /* Gets 2 dates as string, earlier and later date.
            Returns date in between them.
         */
@@ -512,7 +531,8 @@ class ShareController extends AppController {
         return $gen_date;
     }
 
-    public function admin_make_comment($num, $product_id, $weshare_id) {
+    public function admin_make_comment($num, $product_id, $weshare_id)
+    {
         $this->autoRender = false;
         //$old_comment_distinct_comment = $this->Comment->query("select id , DISTINCT(user_id) from cake_comments where type='Product' and data_id=".$product_id." and order_id is not null limit 0,".$num);
         $old_comment_distinct_comment = $this->Comment->find('all', array(
@@ -560,7 +580,8 @@ class ShareController extends AppController {
         echo json_encode(array('success' => true));
     }
 
-    public function admin_make_order($num = 1, $weshare_id) {
+    public function admin_make_order($num = 1, $weshare_id)
+    {
         $this->autoRender = false;
         /**
          * SELECT name FROM random AS r1 JOIN (SELECT CEIL(RAND() * (SELECT MAX(id) FROM random)) AS id) AS r2 WHERE r1.id >= r2.id ORDER BY r1.id ASC LIMIT 1
@@ -594,7 +615,8 @@ class ShareController extends AppController {
         return;
     }
 
-    public function admin_index() {
+    public function admin_index()
+    {
         $current_date = date('Y-m-d H:i:s');
         $weshare_count = $this->Weshare->find('count', array(
             'limit' => 5000
@@ -649,7 +671,8 @@ class ShareController extends AppController {
         $this->set('share_paid_count', $share_paid_count);
     }
 
-    public function admin_all_shares() {
+    public function admin_all_shares()
+    {
         $shares = $this->Weshare->find('all', array(
             'order' => array('created DESC'),
             'limit' => 300
@@ -671,7 +694,8 @@ class ShareController extends AppController {
         $this->set('share_product_map', $share_product_map);
     }
 
-    private function handle_query_orders($order_query_condition) {
+    private function handle_query_orders($order_query_condition)
+    {
         $orders = $this->Order->find('all', $order_query_condition);
         $total_price = 0;
         if (!empty($orders)) {
@@ -721,17 +745,17 @@ class ShareController extends AppController {
             ));
             $creatorIds = [];
             $poolShareIds = [];
-            foreach($weshares as $weshare_item){
+            foreach ($weshares as $weshare_item) {
                 $creatorIds[] = $weshare_item['Weshare']['creator'];
-                if($weshare_item['Weshare']['type'] == 6){
+                if ($weshare_item['Weshare']['type'] == 6) {
                     $poolShareIds[] = $weshare_item['Weshare']['refer_share_id'];
                 }
             }
-            if(!empty($poolShareIds)){
+            if (!empty($poolShareIds)) {
                 $poolShares = $this->Weshare->find('all', [
                     'conditions' => ['id' => $poolShareIds],
                 ]);
-                foreach($poolShares as $poolShareItem){
+                foreach ($poolShares as $poolShareItem) {
                     $creatorIds[] = $poolShareItem['Weshare']['creator'];
                     $weshares[] = $poolShareItem;
                 }
@@ -781,7 +805,8 @@ class ShareController extends AppController {
         }
     }
 
-    private function handle_query_orders_by_sql($sql) {
+    private function handle_query_orders_by_sql($sql)
+    {
         $orders = $this->Order->query($sql);
         $total_price = 0;
         if (!empty($orders)) {
@@ -814,7 +839,7 @@ class ShareController extends AppController {
                     'fields' => ['id', 'creator', 'title']
                 ]);
                 $map_pool_shares = [];
-                foreach($pool_shares as $pool_share_item){
+                foreach ($pool_shares as $pool_share_item) {
                     $map_pool_shares[$pool_share_item['Weshare']['id']] = $pool_share_item['Weshare'];
                     $allUserIds[] = $pool_share_item['Weshare']['creator'];
                 }
@@ -882,8 +907,9 @@ class ShareController extends AppController {
         }
     }
 
-    public function admin_batch_update_orders() {
-        $this->autoRender=false;
+    public function admin_batch_update_orders()
+    {
+        $this->autoRender = false;
         $orders = $_REQUEST['orders'];
 
         foreach ($orders as $id) {
@@ -898,7 +924,8 @@ class ShareController extends AppController {
         ]);
     }
 
-    public function admin_warn_orders() {
+    public function admin_warn_orders()
+    {
         if (!$_REQUEST['start_date']) {
             $start_date = date('Y-m-d', strtotime('-15 day'));
         } else {
@@ -915,33 +942,31 @@ class ShareController extends AppController {
             $con1 .= " AND s.title LIKE '%{$_REQUEST['share_name']}%'";
         }
 
-        if(($_REQUEST['share_type'] === '0' ) or ($_REQUEST['share_type'] === '6'))
-        {
+        if (($_REQUEST['share_type'] === '0') or ($_REQUEST['share_type'] === '6')) {
             $con1 .= " AND s.type = {$_REQUEST['share_type']}";
         }
 
-        if (($_REQUEST['share_status'] === '0') or ($_REQUEST['share_status'] === '1'))
-        {
+        if (($_REQUEST['share_status'] === '0') or ($_REQUEST['share_status'] === '1')) {
             $con1 .= " AND s.status = {$_REQUEST['share_status']}";
         }
 
         $page = intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
-        $flow = ($page-1) * 10;
+        $flow = ($page - 1) * 10;
 
-        $countSql = "SELECT count(1) FROM cake_orders o LEFT JOIN cake_weshares s ON o.member_id = s.id WHERE (o.created BETWEEN '{$start_date} 00:00:00' AND '{$end_date} 23:59:59') AND o.status = ".ORDER_STATUS_PAID.$con1;
+        $countSql = "SELECT count(1) FROM cake_orders o LEFT JOIN cake_weshares s ON o.member_id = s.id WHERE (o.created BETWEEN '{$start_date} 00:00:00' AND '{$end_date} 23:59:59') AND o.status = " . ORDER_STATUS_PAID . $con1;
 
         $count = $this->Order->query($countSql);
 
-        $sql = "SELECT * FROM cake_orders o LEFT JOIN cake_weshares s ON o.member_id = s.id WHERE (o.created BETWEEN '{$start_date} 00:00:00' AND '{$end_date} 23:59:59') AND o.status = ".ORDER_STATUS_PAID."{$con1} ORDER BY o.created DESC LIMIT {$flow} , 10";
+        $sql = "SELECT * FROM cake_orders o LEFT JOIN cake_weshares s ON o.member_id = s.id WHERE (o.created BETWEEN '{$start_date} 00:00:00' AND '{$end_date} 23:59:59') AND o.status = " . ORDER_STATUS_PAID . "{$con1} ORDER BY o.created DESC LIMIT {$flow} , 10";
         $this->handle_query_orders_by_sql($sql);
 
-        require_once (APPLIBS.'MyPaginator.php');
+        require_once(APPLIBS . 'MyPaginator.php');
 
         $url = "/manage/admin/share/warn_orders?share_name={$_REQUEST['share_name']}&start_date={$_REQUEST['start_date']}&end_date={$_REQUEST['end_date']}&share_status={$_REQUEST['share_status']}&share_type={$_REQUEST['share_type']}&page=(:num)";
-        $pager = new MyPaginator($count[0][0]['count(1)'] , 10 , $page , $url);;
-        
-        $this->set('pager' , $pager);
-        $this->set('count' , $count[0][0]['count']);
+        $pager = new MyPaginator($count[0][0]['count(1)'], 10, $page, $url);;
+
+        $this->set('pager', $pager);
+        $this->set('count', $count[0][0]['count']);
         $this->set('share_type', $_REQUEST['share_type']);
         $this->set('share_status', $_REQUEST['share_status']);
         $this->set('start_date', $start_date);
@@ -949,7 +974,8 @@ class ShareController extends AppController {
         $this->set('share_name', $_REQUEST['share_name']);
     }
 
-    public function admin_share_orders_export() {
+    public function admin_share_orders_export()
+    {
         $share_id = $_REQUEST['share_id'];
         if (!empty($share_id)) {
             $conditions = array('Order.member_id' => $share_id, 'Order.type' => ORDER_TYPE_WESHARE_BUY, 'Order.status' => ORDER_STATUS_PAID);
@@ -958,7 +984,8 @@ class ShareController extends AppController {
         }
     }
 
-    public function _query_orders($conditions, $order_by, $limit = null) {
+    public function _query_orders($conditions, $order_by, $limit = null)
+    {
         $this->PayNotify->query("update cake_pay_notifies set order_id =  substring_index(substring_index(out_trade_no,'-',2),'-',-1) where status = 6 and order_id is NULL and type=0");
         $join_conditions = array(
             array(
@@ -1129,7 +1156,8 @@ class ShareController extends AppController {
     }
 
 
-    public function admin_share_orders() {
+    public function admin_share_orders()
+    {
         $query_date = date('Y-m-d');
         $start_date = $query_date;
         $end_date = $query_date;
@@ -1173,7 +1201,7 @@ class ShareController extends AppController {
             $cond['status'] = array(ORDER_STATUS_PAID, ORDER_STATUS_RECEIVED, ORDER_STATUS_SHIPPED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_PREPAID, ORDER_STATUS_PREPAID_TODO, ORDER_STATUS_REFUND);
         }
         $order_flag = $_REQUEST['order_from_flag'];
-        if($order_flag != -1){
+        if ($order_flag != -1) {
             $cond['flag'] = $order_flag;
         }
         $order_repaid_status = $_REQUEST['order_prepaid_status'];
@@ -1199,11 +1227,13 @@ class ShareController extends AppController {
         $this->set('order_from_flag', $order_flag);
     }
 
-    private function get_random_item($items) {
+    private function get_random_item($items)
+    {
         return $items[array_rand($items)];
     }
 
-    private function gen_order_has_comment($comment_info, $order_info, $weshare_products, $user_info, $weshare_id) {
+    private function gen_order_has_comment($comment_info, $order_info, $weshare_products, $user_info, $weshare_id)
+    {
         $this->Order->id = null;
         $order_info['id'] = null;
         $order_info['member_id'] = $weshare_id;
@@ -1250,7 +1280,8 @@ class ShareController extends AppController {
         }
     }
 
-    private function gen_order($weshare, $user, $weshare_products, $weshare_address, $order_date, $address = null) {
+    private function gen_order($weshare, $user, $weshare_products, $weshare_address, $order_date, $address = null)
+    {
         $weshareProducts = array();
         $weshareProducts[] = $this->get_random_item($weshare_products);
         $tinyAddress = $this->get_random_item($weshare_address);
@@ -1306,7 +1337,8 @@ class ShareController extends AppController {
         }
     }
 
-    private function findCarts($orderId) {
+    private function findCarts($orderId)
+    {
         $carts = $this->Cart->find('all', array(
             'conditions' => array(
                 'order_id' => $orderId
@@ -1316,7 +1348,8 @@ class ShareController extends AppController {
         return $carts;
     }
 
-    private function get_cart_name_and_num($orderId) {
+    private function get_cart_name_and_num($orderId)
+    {
         $carts = $this->findCarts($orderId);
         $num = 0;
         $cart_name = array();
@@ -1327,7 +1360,8 @@ class ShareController extends AppController {
         return array('num' => $num, 'cart_name' => implode(',', $cart_name));
     }
 
-    private function get_offline_store($offlineStoreId) {
+    private function get_offline_store($offlineStoreId)
+    {
         $offlineStore = $this->OfflineStore->find('first', array(
             'conditions' => array(
                 'id' => $offlineStoreId
@@ -1336,7 +1370,8 @@ class ShareController extends AppController {
         return $offlineStore;
     }
 
-    function get_share_repaid_money($share_ids) {
+    function get_share_repaid_money($share_ids)
+    {
         $orderM = ClassRegistry::init('Order');
         $addOrderResult = $orderM->find('all', array(
             'conditions' => array(
@@ -1358,7 +1393,8 @@ class ShareController extends AppController {
         return $repaid_money_result;
     }
 
-    function get_share_rebate_money($share_ids) {
+    function get_share_rebate_money($share_ids)
+    {
         $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
         $rebateLogs = $rebateTrackLogM->find('all', array(
             'conditions' => array(
@@ -1382,19 +1418,20 @@ class ShareController extends AppController {
     }
 
 
-    public function admin_balance_log_form($id=null){
+    public function admin_balance_log_form($id = null)
+    {
         $this->loadModel('BalanceLog');
-        if(!empty($id)){
+        if (!empty($id)) {
             $cond = [];
             $cond['BalanceLog.id'] = $id;
-        }else{
+        } else {
             $share_id = $_REQUEST['share_id'];
-            if(!empty($share_id)){
+            if (!empty($share_id)) {
                 $cond['BalanceLog.share_id'] = $share_id;
             }
         }
-        if(!empty($cond)){
-            $data = $this->BalanceLog->find('first',[
+        if (!empty($cond)) {
+            $data = $this->BalanceLog->find('first', [
                 'conditions' => $cond,
                 'joins' => [
                     [
@@ -1409,13 +1446,13 @@ class ShareController extends AppController {
         }
         $user_id = $_REQUEST['user_id'];
         $total_fee = $_REQUEST['total_fee'];
-        if($share_id&&$data){
+        if ($share_id && $data) {
             $data['BalanceLog']['share_id'] = $share_id;
         }
-        if($user_id&&$data){
+        if ($user_id && $data) {
             $data['BalanceLog']['user_id'] = $user_id;
         }
-        if($total_fee&&$data){
+        if ($total_fee && $data) {
             $data['BalanceLog']['total_fee'] = $total_fee;
         }
         $this->set('data', $data);
@@ -1438,41 +1475,76 @@ class ShareController extends AppController {
         $this->redirect('/admin/share/balance_logs.html');
     }
 
-    public function admin_balance_logs(){
+    public function admin_balance_logs()
+    {
         require_once(APPLIBS . 'MyPaginator.php');
         $cond = [];
-        if($_REQUEST['shareId']){
+        if ($_REQUEST['shareId']) {
             $cond['BalanceLog.share_id'] = $_REQUEST['shareId'];
         }
+        if ($_REQUEST['shareName']) {
+            $cond['Weshare.title like '] = '%' . $_REQUEST['shareName'] . '%';
+        }
+        $filter_type = $_REQUEST['shareType'];
+        if ($filter_type == 1) {
+            $cond['Weshare.type'] = SHARE_TYPE_DEFAULT;
+        } elseif ($filter_type == 2) {
+            $cond['Weshare.type'] = SHARE_TYPE_POOL;
+        } else {
+            $cond['Weshare.type'] = [SHARE_TYPE_POOL, SHARE_TYPE_DEFAULT, SHARE_TYPE_POOL_SELF];
+        }
+        if ($_REQUEST['beginDate']) {
+            $cond['Weshare.close_date > '] = $_REQUEST['beginDate'];
+        }
+        if ($_REQUEST['endDate']) {
+            $cond['Weshare.close_date < '] = $_REQUEST['endDate'];
+        }
+        $filter_status = empty($_REQUEST['balanceStatus']) ? 1 : $_REQUEST['balanceStatus'];
+        if($filter_status != '-1'){
+            $cond['BalanceLog.status'] = $filter_status;
+        }
+        $filter_balance_type = $_REQUEST['balanceType'];
+        if ($filter_balance_type != '-1') {
+            $cond['BalanceLog.type'] = $filter_balance_type;
+        }
+        $joins = [
+            [
+                'type' => 'left',
+                'table' => 'cake_weshares',
+                'alias' => 'Weshare',
+                'conditions' => ['Weshare.id = BalanceLog.share_id']
+            ],
+            [
+                'type' => 'left',
+                'table' => 'cake_users',
+                'alias' => 'User',
+                'conditions' => ['User.id = BalanceLog.user_id']
+            ]
+        ];
         $this->loadModel('BalanceLog');
         $count = $this->BalanceLog->find('count', [
-            'conditions' => $cond
+            'conditions' => $cond,
+            'joins' => $joins
         ]);
         $page = intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
         $logs = $this->BalanceLog->find('all', [
             'conditions' => $cond,
             'page' => $page,
             'limit' => 50,
-            'joins' => [
-                [
-                    'type' => 'left',
-                    'table' => 'cake_weshares',
-                    'alias' => 'Weshare',
-                    'conditions' => ['Weshare.id = BalanceLog.share_id']
-                ],
-                [
-                    'type' => 'left',
-                    'table' => 'cake_users',
-                    'alias' => 'User',
-                    'conditions' => ['User.id = BalanceLog.user_id']
-                ]
-            ],
-            'fields' => ['BalanceLog.*', 'User.nickname', 'Weshare.title', 'Weshare.type']
+            'joins' => $joins,
+            'fields' => ['BalanceLog.*', 'User.nickname', 'User.payment', 'Weshare.title']
         ]);
         $url = "/manage/admin/share/balance_logs?page=(:num)";
         $pager = new MyPaginator($count, 50, $page, $url);
         $this->set('pager', $pager);
         $this->set('logs', $logs);
+        $this->set('shareId', $_REQUEST['shareId']);
+        $this->set('shareType', $filter_type);
+        $this->set('shareName', $_REQUEST['shareName']);
+        $this->set('beginDate', $_REQUEST['beginDate']);
+        $this->set('endDate', $_REQUEST['endDate']);
+        $this->set('balanceType', $filter_balance_type);
+        $this->set('balanceStatus', $filter_status);
     }
 
 
@@ -1482,7 +1554,8 @@ class ShareController extends AppController {
      * @author niujiazhu
      * @return array
      */
-    function randMobile($num = 1) {
+    function randMobile($num = 1)
+    {
         //手机号2-3为数组
         $numberPlace = array(30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 50, 51, 58, 59, 89);
         for ($i = 0; $i < $num; $i++) {
@@ -1494,7 +1567,8 @@ class ShareController extends AppController {
         return $result;
     }
 
-    public function getName($type = 0) {
+    public function getName($type = 0)
+    {
         switch ($type) {
             case 1: //2字
                 $name = $this->getXing() . $this->getMing();
@@ -1516,17 +1590,20 @@ class ShareController extends AppController {
         return $name;
     }
 
-    private function getXing() {
+    private function getXing()
+    {
         $arrXing = $this->getXingList();
         return $arrXing[mt_rand(0, count($arrXing))];
     }
 
-    private function getMing() {
+    private function getMing()
+    {
         $arrMing = $this->getMingList();
         return $arrMing[mt_rand(0, count($arrMing))];
     }
 
-    private function getXingList() {
+    private function getXingList()
+    {
         $arrXing = array('赵', '钱', '孙', '李', '周', '吴', '郑', '王', '冯', '陈', '褚', '卫', '蒋', '沈', '韩', '杨', '朱', '秦', '尤', '许', '何', '吕', '施', '张', '孔', '曹', '严', '华', '金', '魏', '陶', '姜', '戚', '谢', '邹', '喻', '柏', '水', '窦', '章', '云', '苏', '潘', '葛', '奚', '范', '彭', '郎', '鲁', '韦', '昌', '马', '苗', '凤', '花', '方', '任', '袁', '柳', '鲍', '史', '唐', '费', '薛', '雷', '贺', '倪', '汤', '滕', '殷', '罗', '毕', '郝', '安', '常', '傅', '卞', '齐', '元', '顾', '孟', '平', '黄', '穆', '萧', '尹', '姚', '邵', '湛', '汪', '祁', '毛', '狄', '米', '伏', '成', '戴', '谈', '宋', '茅', '庞', '熊', '纪', '舒', '屈', '项', '祝', '董', '梁', '杜', '阮', '蓝', '闵', '季', '贾', '路', '娄', '江', '童', '颜', '郭', '梅', '盛', '林', '钟', '徐', '邱', '骆', '高', '夏', '蔡', '田', '樊', '胡', '凌', '霍', '虞', '万', '支', '柯', '管', '卢', '莫', '柯', '房', '裘', '缪', '解', '应', '宗', '丁', '宣', '邓', '单', '杭', '洪', '包', '诸', '左', '石', '崔', '吉', '龚', '程', '嵇', '邢', '裴', '陆', '荣', '翁', '荀', '于', '惠', '甄', '曲', '封', '储', '仲', '伊', '宁', '仇', '甘', '武', '符', '刘', '景', '詹', '龙', '叶', '幸', '司', '黎', '溥', '印', '怀', '蒲', '邰', '从', '索', '赖', '卓', '屠', '池', '乔', '胥', '闻', '莘', '党', '翟', '谭', '贡', '劳', '逄', '姬', '申', '扶', '堵', '冉', '宰', '雍', '桑', '寿', '通', '燕', '浦', '尚', '农', '温', '别', '庄', '晏', '柴', '瞿', '阎', '连', '习', '容', '向', '古', '易', '廖', '庾', '终', '步', '都', '耿', '满', '弘', '匡', '国', '文', '寇', '广', '禄', '阙', '东', '欧', '利', '师', '巩', '聂', '关', '荆', '司马', '上官', '欧阳', '夏侯', '诸葛', '闻人', '东方', '赫连', '皇甫', '尉迟', '公羊', '澹台', '公冶', '宗政', '濮阳', '淳于', '单于', '太叔', '申屠', '公孙', '仲孙', '轩辕', '令狐', '徐离', '宇文', '长孙', '慕容', '司徒', '司空');
         return $arrXing;
     }
@@ -1534,7 +1611,8 @@ class ShareController extends AppController {
     /*
       获取名列表
     */
-    private function getMingList() {
+    private function getMingList()
+    {
         $arrMing = array('伟', '刚', '勇', '毅', '俊', '峰', '强', '军', '平', '保', '东', '文', '辉', '力', '明', '永', '健', '世', '广', '志', '义', '兴', '良', '海', '山', '仁', '波', '宁', '贵', '福', '生', '龙', '元', '全', '国', '胜', '学', '祥', '才', '发', '武', '新', '利', '清', '飞', '彬', '富', '顺', '信', '子', '杰', '涛', '昌', '成', '康', '星', '光', '天', '达', '安', '岩', '中', '茂', '进', '林', '有', '坚', '和', '彪', '博', '诚', '先', '敬', '震', '振', '壮', '会', '思', '群', '豪', '心', '邦', '承', '乐', '绍', '功', '松', '善', '厚', '庆', '磊', '民', '友', '裕', '河', '哲', '江', '超', '浩', '亮', '政', '谦', '亨', '奇', '固', '之', '轮', '翰', '朗', '伯', '宏', '言', '若', '鸣', '朋', '斌', '梁', '栋', '维', '启', '克', '伦', '翔', '旭', '鹏', '泽', '晨', '辰', '士', '以', '建', '家', '致', '树', '炎', '德', '行', '时', '泰', '盛', '雄', '琛', '钧', '冠', '策', '腾', '楠', '榕', '风', '航', '弘', '秀', '娟', '英', '华', '慧', '巧', '美', '娜', '静', '淑', '惠', '珠', '翠', '雅', '芝', '玉', '萍', '红', '娥', '玲', '芬', '芳', '燕', '彩', '春', '菊', '兰', '凤', '洁', '梅', '琳', '素', '云', '莲', '真', '环', '雪', '荣', '爱', '妹', '霞', '香', '月', '莺', '媛', '艳', '瑞', '凡', '佳', '嘉', '琼', '勤', '珍', '贞', '莉', '桂', '娣', '叶', '璧', '璐', '娅', '琦', '晶', '妍', '茜', '秋', '珊', '莎', '锦', '黛', '青', '倩', '婷', '姣', '婉', '娴', '瑾', '颖', '露', '瑶', '怡', '婵', '雁', '蓓', '纨', '仪', '荷', '丹', '蓉', '眉', '君', '琴', '蕊', '薇', '菁', '梦', '岚', '苑', '婕', '馨', '瑗', '琰', '韵', '融', '园', '艺', '咏', '卿', '聪', '澜', '纯', '毓', '悦', '昭', '冰', '爽', '琬', '茗', '羽', '希', '欣', '飘', '育', '滢', '馥', '筠', '柔', '竹', '霭', '凝', '晓', '欢', '霄', '枫', '芸', '菲', '寒', '伊', '亚', '宜', '可', '姬', '舒', '影', '荔', '枝', '丽', '阳', '妮', '宝', '贝', '初', '程', '梵', '罡', '恒', '鸿', '桦', '骅', '剑', '娇', '纪', '宽', '苛', '灵', '玛', '媚', '琪', '晴', '容', '睿', '烁', '堂', '唯', '威', '韦', '雯', '苇', '萱', '阅', '彦', '宇', '雨', '洋', '忠', '宗', '曼', '紫', '逸', '贤', '蝶', '菡', '绿', '蓝', '儿', '翠', '烟');
         return $arrMing;
     }
