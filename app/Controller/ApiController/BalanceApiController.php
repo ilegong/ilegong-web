@@ -78,36 +78,35 @@ class BalanceApiController extends Controller
         exit;
     }
 
-    /**
-     * 获取结算明细
-     */
-    public function get_balance_detail($balance_id)
-    {
-
-    }
 
     /**
      * 自己分享的结算详情
      */
-    protected function self_share_balance_detail()
+    protected function self_share_balance_detail($balanceId)
     {
-
+        list($orders, $balanceLog) = $this->Balance->get_balance_detail_orders($balanceId);
+        echo json_encode(['orders' => $orders, 'balanceLog' => $balanceLog]);
+        exit;
     }
 
     /**
      * 产品街分享的结算详情
      */
-    protected function pool_share_balance_detail()
+    protected function pool_share_balance_detail($balanceId)
     {
-
+        list($orders, $balanceLog) = $this->Balance->get_balance_detail_orders($balanceId);
+        echo json_encode(['orders' => $orders, 'balanceLog' => $balanceLog]);
+        exit;
     }
 
     /**
      * 产品街商家结算详情
      */
-    protected function brand_share_balance_detail()
+    protected function brand_share_balance_detail($balanceId)
     {
-
+        list($orders, $balanceLog) = $this->Balance->get_balance_detail_orders($balanceId);
+        echo json_encode(['orders' => $orders, 'balanceLog' => $balanceLog]);
+        exit;
     }
 
 }
