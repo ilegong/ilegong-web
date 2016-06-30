@@ -71,6 +71,7 @@ class UserApiController extends Controller
         $result = [];
         foreach ($orders as $order_item) {
             $result_item = $order_item['Order'];
+            $result_item['cart_info'] = get_share_order_cart_display_name($order_item['Cart']);
             $result_item['share_info'] = $order_item['Weshare'];
             $result[] = $result_item;
         }

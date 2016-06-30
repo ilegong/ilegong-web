@@ -100,6 +100,7 @@ class OrdersComponent extends Component
             'fields' => ['Order.id', 'Order.status', 'Order.created', 'Order.creator', 'Order.total_price', 'Order.brand_id', 'Order.ship_mark', 'Order.member_id', 'Weshare.title', 'Weshare.status', 'Weshare.default_image', 'Weshare.send_info'],
             'limit' => $params['limit'],
             'page' => $params['page'],
+            'recursive' => 1,
             'order' => ['Order.id DESC']
         ]);
         return $result;
