@@ -39,6 +39,11 @@ class BalanceComponent extends Component
         return $data;
     }
 
+    public function get_wait_confirm_share_list($uid, $page, $limit){
+        $data = $this->get_balance_list($uid, $page, $limit, self::$PREPARE_BALANCE_STATUS);
+        return $data;
+    }
+
     public function get_wait_balance_share_list($uid, $page, $limit)
     {
         $data = $this->get_balance_list($uid, $page, $limit, self::$WAIT_BALANCE_STATUS);

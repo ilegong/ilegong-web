@@ -39,7 +39,10 @@ class BalanceApiController extends Controller
      */
     public function wait_confirm($page, $limit)
     {
-
+        $uid = $this->currentUser['id'];
+        $data = $this->Balance->get_wait_confirm_share_list($uid, $page, $limit);
+        echo json_encode($data);
+        exit;
     }
 
     /**
