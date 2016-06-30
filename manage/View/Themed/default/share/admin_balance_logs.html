@@ -79,7 +79,8 @@
                             <th width="7.5%">总交易额</th>
                             <th width="7.5%">类型</th>
                             <th width="7.5%">状态</th>
-                            <th width="20%">备注</th>
+                            <th width="5%">截团时间</th>
+                            <th width="15%">备注</th>
                             <th width="10%">支付方式</th>
                             <th width="7.5%">操作</th>
                         </tr>
@@ -135,6 +136,9 @@
                                         <td class="info">已结算</td>
                                     {{/if}}
 
+                                <td>
+                                    {{get_user_payment_info($log['BalanceLog']['end_datetime'])}}
+                                </td>
                                 <td>
                                     {{$log['BalanceLog']['remark']}}
                                 </td>

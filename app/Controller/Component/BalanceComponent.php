@@ -3,13 +3,13 @@
 class BalanceComponent extends Component
 {
 
-    public static $WAIT_BALANCE_STATUS = 0;
+    public static $PREPARE_BALANCE_STATUS = 0;
+    public static $WAIT_BALANCE_STATUS = 1;
     public static $ALREADY_BALANCE_STATUS = 1;
 
     public static $SELF_BALANCE_TYPE = 1; //自有分享费用
     public static $POOL_SHARE_BALANCE_TYPE = 2; //产品街代销费用
     public static $POOL_BRAND_BALANCE_TYPE = 3; //产品街商家费用
-
 
     var $components = ['Paginator'];
 
@@ -26,10 +26,13 @@ class BalanceComponent extends Component
         $data = [];
         foreach ($result as $result_item) {
             $status = $result_item['cake_balance_logs']['status'];
-            if ($status == 0) {
-                $data['wait_balance'] = ['count' => $result_item[0]['total_count'], 'total_fee' => $result_item[0]['total_trade_fee']];
+            if ($status == self::$PREPARE_BALANCE_STATUS) {
+                $data['wait_confirm'] = ['count' => $result_item[0]['total_count'], 'total_fee' => $result_item[0]['total_trade_fee']];
             }
-            if ($status == 1) {
+            if ($status == self::$WAIT_BALANCE_STATUS) {
+                $data['already_balance'] = ['count' => $result_item[0]['total_count'], 'total_fee' => $result_item[0]['total_trade_fee']];
+            }
+            if ($status == self::$ALREADY_BALANCE_STATUS) {
                 $data['already_balance'] = ['count' => $result_item[0]['total_count'], 'total_fee' => $result_item[0]['total_trade_fee']];
             }
         }

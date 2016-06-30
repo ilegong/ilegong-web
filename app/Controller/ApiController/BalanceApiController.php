@@ -15,6 +15,14 @@ class BalanceApiController extends Controller
         $this->autoRender = false;
     }
 
+    public function get_balance_dashboard()
+    {
+        $uid = $this->currentUser['id'];
+        $data = $this->Balance->get_user_share_summary($uid);
+        echo json_encode($data);
+        exit;
+    }
+
     /**
      * 获取单个分享的订单详情
      */
@@ -24,6 +32,14 @@ class BalanceApiController extends Controller
         $data = $this->BalanceComponent->get_user_share_summary($uid);
         echo json_encode($data);
         exit;
+    }
+
+    /**
+     * 待审核
+     */
+    public function wait_confirm($page, $limit)
+    {
+
     }
 
     /**
