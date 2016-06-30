@@ -5,7 +5,7 @@ class BalanceComponent extends Component
 
     public static $PREPARE_BALANCE_STATUS = 0;
     public static $WAIT_BALANCE_STATUS = 1;
-    public static $ALREADY_BALANCE_STATUS = 1;
+    public static $ALREADY_BALANCE_STATUS = 2;
 
     public static $SELF_BALANCE_TYPE = 1; //自有分享费用
     public static $POOL_SHARE_BALANCE_TYPE = 2; //产品街代销费用
