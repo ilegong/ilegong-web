@@ -34,24 +34,15 @@ class BalanceApiController extends Controller
         exit;
     }
 
-    /**
-     * 待审核
-     */
-    public function wait_confirm($page, $limit)
-    {
-        $uid = $this->currentUser['id'];
-        $data = $this->Balance->get_wait_confirm_share_list($uid, $page, $limit);
-        echo json_encode($data);
-        exit;
-    }
+
 
     public function get_balance_list($type, $page, $limit){
         $uid = $this->currentUser['id'];
         if($type==0){
-            $data = $this->Balance->get_wait_balance_share_list($uid, $page, $limit);
+            $data = $this->Balance->get_wait_confirm_share_list($uid, $page, $limit);
         }
         if($type==1){
-            $data = $this->Balance->get_already_balance_share_list($uid, $page, $limit);
+            $data = $this->Balance->get_wait_balance_share_list($uid, $page, $limit);
         }
         if($type==2){
             $data = $this->Balance->get_already_balance_share_list($uid, $page, $limit);
@@ -59,6 +50,17 @@ class BalanceApiController extends Controller
         echo json_encode($data);
         exit;
     }
+
+//    /**
+//     * 待审核
+//     */
+//    public function wait_confirm($page, $limit)
+//    {
+//        $uid = $this->currentUser['id'];
+//        $data = $this->Balance->get_wait_confirm_share_list($uid, $page, $limit);
+//        echo json_encode($data);
+//        exit;
+//    }
 
 //    /**
 //     * 待结算的list
