@@ -84,7 +84,8 @@ class BalanceApiController extends Controller
     public function self_share_balance_detail($balanceId)
     {
         list($orders, $balanceLog) = $this->Balance->get_balance_detail_orders($balanceId);
-        echo json_encode(['orders' => $orders, 'balanceLog' => $balanceLog]);
+        $order_list = $this->get_balance_order_list($orders);
+        echo json_encode(['orders' => $order_list, 'balanceLog' => $balanceLog]);
         exit;
     }
 
@@ -94,7 +95,8 @@ class BalanceApiController extends Controller
     public function pool_share_balance_detail($balanceId)
     {
         list($orders, $balanceLog) = $this->Balance->get_balance_detail_orders($balanceId);
-        echo json_encode(['orders' => $orders, 'balanceLog' => $balanceLog]);
+        $order_list = $this->get_balance_order_list($orders);
+        echo json_encode(['orders' => $order_list, 'balanceLog' => $balanceLog]);
         exit;
     }
 
@@ -104,8 +106,24 @@ class BalanceApiController extends Controller
     public function brand_share_balance_detail($balanceId)
     {
         list($orders, $balanceLog) = $this->Balance->get_balance_detail_orders($balanceId);
-        echo json_encode(['orders' => $orders, 'balanceLog' => $balanceLog]);
+        $order_list = $this->get_balance_order_list($orders);
+        echo json_encode(['orders' => $order_list, 'balanceLog' => $balanceLog]);
         exit;
+    }
+
+    private function get_balance_order_list($orders){
+        $order_list = [];
+        foreach ($orders as $item) {
+            $order = $item['Order'];
+            $user = $item['User'];
+            $order['nickname'] = $user['nickname'];
+            $rebateTrackLog = $item['RebateTrackLog'];
+            $order['rebate_fee'] = empty($rebateTrackLog['rebate_money']) ? 0 : $rebateTrackLog['rebate_money'];
+            $refundLog = $item['RefundLog'];
+            $order['refund_fee'] = empty($refundLog['RefundLog']['refund_fee']) ? 0 : $refundLog['RefundLog']['refund_fee'];
+            $order_list[] = $order;
+        }
+        return $order_list;
     }
 
 }
