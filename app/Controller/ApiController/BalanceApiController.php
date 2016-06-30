@@ -84,7 +84,7 @@ class BalanceApiController extends Controller
     public function self_share_balance_detail($balanceId)
     {
         list($orders, $balanceLog) = $this->Balance->get_balance_detail_orders($balanceId);
-        $order_list = $this->get_balance_order_list($orders);
+        list($order_list, $order_ids) = $this->get_balance_order_list($orders);
         echo json_encode(['orders' => $order_list, 'balanceLog' => $balanceLog]);
         exit;
     }
@@ -95,7 +95,8 @@ class BalanceApiController extends Controller
     public function pool_share_balance_detail($balanceId)
     {
         list($orders, $balanceLog) = $this->Balance->get_balance_detail_orders($balanceId);
-        $order_list = $this->get_balance_order_list($orders);
+        list($order_list, $order_ids) = $this->get_balance_order_list($orders);
+        $order_list = $this->combine_channel_price_to_order($order_list, $order_ids);
         echo json_encode(['orders' => $order_list, 'balanceLog' => $balanceLog]);
         exit;
     }
@@ -106,17 +107,29 @@ class BalanceApiController extends Controller
     public function brand_share_balance_detail($balanceId)
     {
         list($orders, $balanceLog) = $this->Balance->get_balance_detail_orders($balanceId);
-        $order_list = $this->get_balance_order_list($orders);
+        list($order_list, $order_ids) = $this->get_balance_order_list($orders);
+        $order_list = $this->combine_channel_price_to_order($order_list, $order_ids);
         echo json_encode(['orders' => $order_list, 'balanceLog' => $balanceLog]);
         exit;
+    }
+
+    private function combine_channel_price_to_order($order_list, $order_ids){
+        $order_channel_prices = $this->Balance->get_orders_channel_price($order_ids);
+        foreach ($order_list as &$item) {
+            $orderId = $item['id'];
+            $item['channel_price'] = $order_channel_prices[$orderId]['channel_product_fee'];
+        }
+        return $order_list;
     }
 
     private function get_balance_order_list($orders)
     {
         $order_list = [];
+        $order_ids = [];
         foreach ($orders as $item) {
             $order = $item['Order'];
             $user = $item['User'];
+            $order_ids[] = $order['id'];
             $order['product_fee'] = strval(get_format_number($order['total_price'] - $order['ship_fee'] / 100));
             $order['ship_fee'] = strval(get_format_number($order['ship_fee'] / 100));
             $order['nickname'] = $user['nickname'];
@@ -126,7 +139,7 @@ class BalanceApiController extends Controller
             $order['refund_fee'] = empty($refundLog['RefundLog']['refund_fee']) ? '0' : strval(get_format_number($refundLog['RefundLog']['refund_fee'] / 100));
             $order_list[] = $order;
         }
-        return $order_list;
+        return [$order_list, $order_ids];
     }
 
 }

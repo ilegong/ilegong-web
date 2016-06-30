@@ -287,4 +287,42 @@ class BalanceComponent extends Component
         return [$orders, $balanceLog['BalanceLog']];
     }
 
+    /**
+     * @param $orderIds
+     * @return array
+     * 获取订单的渠道价
+     */
+    public function get_orders_channel_price($orderIds)
+    {
+        $cartM = ClassRegistry::init('Cart');
+        $carts = $cartM->find('all', [
+            'conditions' => ['Cart.order_id' => $orderIds],
+            'joins' => [
+                [
+                    'type' => 'left',
+                    'table' => 'cake_weshare_products',
+                    'alias' => 'WeshareProduct',
+                    'conditions' => ['WeshareProduct.id = Cart.product_id']
+                ]
+            ],
+            'fields' => ['Cart.id', 'Cart.product_id', 'Cart.order_id', 'Cart.num', 'Cart.price', 'WeshareProduct.price', 'WeshareProduct.channel_price']
+        ]);
+        $result = [];
+        foreach ($carts as $cartItem) {
+            $cart = $cartItem['Cart'];
+            $product = $cartItem['Product'];
+            $orderId = $cartItem['order_id'];
+            if (!isset($orderId)) {
+                $result[$orderId] = ['product_fee' => 0, 'channel_product_fee' => 0];
+            }
+            $result[$orderId]['product_fee'] = ($cart['num'] * $cart['price']) + $result[$orderId]['product_fee'];
+            $result[$orderId]['channel_product_fee'] = ($cart['num'] * $product['channel_price']) + $result[$orderId]['channel_product_fee'];
+        }
+        foreach($result as &$resultItem){
+            $resultItem['product_fee'] = strval(get_format_number($resultItem['product_fee'] / 100));
+            $resultItem['channel_product_fee'] = strval(get_format_number($resultItem['channel_product_fee'] / 100));
+        }
+        return $result;
+    }
+
 }
