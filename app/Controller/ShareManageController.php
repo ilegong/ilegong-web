@@ -1236,11 +1236,9 @@ class ShareManageController extends AppController
         $filter_type = $_REQUEST['shareType'];
         if ($filter_type == 1) {
             $cond['Weshare.type'] = SHARE_TYPE_DEFAULT;
-        }
-        if ($filter_type == 2) {
+        } elseif ($filter_type == 2) {
             $cond['Weshare.type'] = SHARE_TYPE_POOL;
-        }
-        if ($filter_type == 0) {
+        } else {
             $cond['Weshare.type'] = [SHARE_TYPE_POOL, SHARE_TYPE_DEFAULT, SHARE_TYPE_POOL_SELF];
         }
         if ($_REQUEST['beginDate']) {
@@ -1249,17 +1247,17 @@ class ShareManageController extends AppController
         if ($_REQUEST['endDate']) {
             $cond['Weshare.close_date < '] = $_REQUEST['endDate'];
         }
-        $filter_status = $_REQUEST['balanceStatus'];
+        $filter_status = empty($_REQUEST['balanceStatus']) ? '-1' : $_REQUEST['balanceStatus'];
         if ($filter_status != '-1') {
             $cond['BalanceLog.status'] = $filter_status;
         }
-        $filter_balance_type = $_REQUEST['balanceType'];
+        $filter_balance_type = empty($_REQUEST['balanceType']) ? '-1' : $_REQUEST['balanceType'];
         if ($filter_balance_type != '-1') {
             $cond['BalanceLog.type'] = $filter_balance_type;
         }
         $balance_fee_filter = empty($_REQUEST['balanceFee']) ? 0 : 1;
-        if($balance_fee_filter == 1){
-            $cond['BalanceLog.transaction_fee > ']  = 0;
+        if ($balance_fee_filter == 1) {
+            $cond['BalanceLog.transaction_fee > '] = 0;
         }
         $joins = [
             [

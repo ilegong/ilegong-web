@@ -81,7 +81,7 @@
                                         <input type="radio" name="data[BalanceLog][status]" value="1" {{if $data['BalanceLog']['status']==1}}checked{{/if}}>待结算
                                     </label>
                                     <label class="radio-inline">
-                                        <input type="radio" name="data[BalanceLog][status]" value="2" {{if $data['BalanceLog']['status']==1}}checked{{/if}}>已结算
+                                        <input type="radio" name="data[BalanceLog][status]" value="2" {{if $data['BalanceLog']['status']==2}}checked{{/if}}>已结算
                                     </label>
                                 </div>
                             </div>
@@ -94,7 +94,16 @@
                         </form>
                     </div>
                     <div class="col-lg-6">
-
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                提示
+                            </div>
+                            <div class="panel-body">
+                                <div class="alert alert-danger">
+                                    审核的时候请核对并填写结算金额和平台佣金
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <!-- /.row (nested) -->

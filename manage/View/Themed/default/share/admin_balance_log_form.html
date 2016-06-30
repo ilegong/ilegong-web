@@ -13,43 +13,55 @@
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-lg-8">
+                    <div class="col-lg-6">
                         <form role="form" action="/manage/admin/share/save_balance_log.html" method="post">
                             <div class="form-group">
                                 <label>编号</label>
-                                <input class="form-control" name="data[BalanceLog][id]" readonly value="{{$data['BalanceLog']['id']}}">
+                                <input class="form-control" name="data[BalanceLog][id]" readonly
+                                       value="{{$data['BalanceLog']['id']}}">
                             </div>
                             <div class="form-group">
                                 <label>分享ID</label>
-                                <input class="form-control" name="data[BalanceLog][share_id]" type="number" required value="{{$data['BalanceLog']['share_id']}}">
+                                <input class="form-control" name="data[BalanceLog][share_id]" type="number" required
+                                       value="{{$data['BalanceLog']['share_id']}}">
+
                                 <p class="help-block">{{$data['Weshare']['title']}}</p>
                             </div>
                             <div class="form-group">
                                 <label>收款人ID</label>
-                                <input class="form-control" name="data[BalanceLog][user_id]" type="number" required value="{{$data['BalanceLog']['user_id']}}">
+                                <input class="form-control" name="data[BalanceLog][user_id]" type="number" required
+                                       value="{{$data['BalanceLog']['user_id']}}">
                             </div>
                             <div class="form-group">
                                 <label>成交费用</label>
-                                <input class="form-control" name="data[BalanceLog][total_fee]" type="number" readonly step="0.01" required value="{{$data['BalanceLog']['total_fee']}}">
+                                <input class="form-control" name="data[BalanceLog][total_fee]" type="number" readonly
+                                       step="0.01" required value="{{$data['BalanceLog']['total_fee']}}">
                             </div>
                             <div class="form-group">
                                 <label>平台佣金</label>
-                                <input class="form-control" name="data[BalanceLog][brokerage]" type="number" step="0.01" required value="{{$data['BalanceLog']['brokerage']}}">
+                                <input class="form-control" name="data[BalanceLog][brokerage]" type="number" step="0.01"
+                                       required value="{{$data['BalanceLog']['brokerage']}}">
                             </div>
                             <div class="form-group">
                                 <label>结算金额</label>
-                                <input class="form-control" name="data[BalanceLog][trade_fee]" type="number" step="0.01" required value="{{$data['BalanceLog']['trade_fee']}}">
+                                <input class="form-control" name="data[BalanceLog][trade_fee]" type="number" step="0.01"
+                                       required value="{{$data['BalanceLog']['trade_fee']}}">
                             </div>
                             <div class="form-group">
                                 <label>结账开始日期</label>
-                                <input class="form-control" name="data[BalanceLog][begin_datetime]" type="datetime" required value="{{$data['BalanceLog']['begin_datetime']}}" placeholder="2016-06-11 12:00:00">
+                                <input class="form-control" name="data[BalanceLog][begin_datetime]" type="datetime"
+                                       required value="{{$data['BalanceLog']['begin_datetime']}}"
+                                       placeholder="2016-06-11 12:00:00">
                             </div>
                             <div class="form-group">
                                 <label>结账结束日期</label>
-                                <input class="form-control" name="data[BalanceLog][end_datetime]" type="datetime" required value="{{$data['BalanceLog']['end_datetime']}}" placeholder="2016-06-11 12:00:00">
+                                <input class="form-control" name="data[BalanceLog][end_datetime]" type="datetime"
+                                       required value="{{$data['BalanceLog']['end_datetime']}}"
+                                       placeholder="2016-06-11 12:00:00">
                             </div>
                             <div class="form-group">
                                 <label>类型</label>
+
                                 <div class="radio">
                                     <label class="radio-inline">
                                         <input type="radio" name="data[BalanceLog][type]" value="1" {{if $data['BalanceLog']['type']==1}}checked{{/if}}>分享者销售费用
@@ -72,7 +84,7 @@
                                         <input type="radio" name="data[BalanceLog][status]" value="1" {{if $data['BalanceLog']['status']==1}}checked{{/if}}>待结算
                                     </label>
                                     <label class="radio-inline">
-                                        <input type="radio" name="data[BalanceLog][status]" value="2" {{if $data['BalanceLog']['status']==1}}checked{{/if}}>已结算
+                                        <input type="radio" name="data[BalanceLog][status]" value="2" {{if $data['BalanceLog']['status']==2}}checked{{/if}}>已结算
                                     </label>
                                 </div>
                             </div>
@@ -83,6 +95,18 @@
                             <button type="submit" class="btn btn-default">保存</button>
                             <a href="/manage/admin/share/balance_logs.html" class="btn btn-default">返回</a>
                         </form>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                提示
+                            </div>
+                            <div class="panel-body">
+                                <div class="alert alert-danger">
+                                    审核的时候请核对并填写结算金额和平台佣金
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <!-- /.row (nested) -->
