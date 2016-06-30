@@ -21,7 +21,7 @@ class BalanceComponent extends Component
     public function get_user_share_summary($uid)
     {
         $balanceLogM = ClassRegistry::init('BalanceLog');
-        $sql = "select status, sum(trade_fee) as total_trade_fee, count(id) as total_count from cake_balance_logs where user_id={$uid} group by status";
+        $sql = "select status, format(sum(trade_fee), 2) as total_trade_fee, count(id) as total_count from cake_balance_logs where user_id={$uid} group by status";
         $result = $balanceLogM->query($sql);
         $data = [];
         foreach ($result as $result_item) {
