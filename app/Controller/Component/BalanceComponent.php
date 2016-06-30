@@ -230,7 +230,12 @@ class BalanceComponent extends Component
         return $share_rebate_map;
     }
 
-    public function get_balance_detail($balanceId)
+    /**
+     * @param $balanceId
+     * @return mixed
+     * 获取结算订单明细
+     */
+    public function get_balance_detail_orders($balanceId)
     {
         $balanceLogM = ClassRegistry::init('BalanceLog');
         $orderM = ClassRegistry::init('Order');
@@ -258,13 +263,27 @@ class BalanceComponent extends Component
             'joins' => [
                 [
                     'type' => 'left',
-                    'table' => ''
+                    'table' => 'cake_rebate_track_logs',
+                    'alias' => 'RebateTrackLog',
+                    'conditions' => ['RebateTrackLog.order_id = Order.id', 'RebateTrackLog.clicker = Order.creator']
                 ],
                 [
-
+                    'type' => 'left',
+                    'table' => 'cake_refund_logs',
+                    'alias' => 'RefundLog',
+                    'conditions' => ['RefundLog.order_id = Order.id']
+                ],
+                [
+                    'type' => 'left',
+                    'table' => 'cake_users',
+                    'alias' => 'User',
+                    'conditions' => ['User.id = Order.creator']
                 ]
-            ]
+            ],
+            'fields' => ['User.nickname', 'Order.total_price', 'Order.ship_fee', 'Order.coupon_total', 'RebateTrackLog.rebate_money', 'RefundLog.refund_fee'],
+            'order' => ['Order.id desc']
         ]);
+        return [$orders, $balanceLog];
     }
 
 }
