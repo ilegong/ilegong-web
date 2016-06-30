@@ -604,12 +604,17 @@ class WesharesController extends AppController
             $totalPrice += $shipFee;
             $update_order_data = array('total_all_price' => $totalPrice / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => $shipFee);
             if ($rebate_fee > 0) {
+                //团长已经返利
                 //记录返利的钱
                 $rebate_log_id = $this->WeshareBuy->log_proxy_rebate_log($weshareId, $uid, 0, 1, $orderId, $rebate_fee * 100);
                 if (!empty($rebate_log_id)) {
                     $update_order_data['cate_id'] = $rebate_log_id;
                     $update_order_data['total_all_price'] = $update_order_data['total_all_price'] - $rebate_fee;
                 }
+            } else {
+                //团长没有返利直接设置返利订单号
+                //返利
+                $this->ShareUtil->update_rebate_log_order_id($rebateLogId, $orderId, $weshareId);
             }
             if ($this->Order->updateAll($update_order_data, array('id' => $orderId))) {
                 $coupon_id = $postDataArray['coupon_id'];
@@ -624,8 +629,6 @@ class WesharesController extends AppController
                         $this->order_use_score_and_coupon($coupon_id, $orderId, $uid, $totalPrice / 100);
                     }
                 }
-                //返利
-                $this->ShareUtil->update_rebate_log_order_id($rebateLogId, $orderId, $weshareId);
                 $this->Orders->on_order_created($uid, $weshareId, $orderId);
             }
             $this->log('Create order for ' . $uid . ' with weshare ' . $weshareId . ' successfully, order id ' . $orderId, LOG_INFO);

@@ -108,7 +108,7 @@ class SharePoolProduct extends AppModel
                 'not' => array('type' => SHARE_TYPE_POOL_SELF)
             ),
             'fields' => array('id', 'creator', 'status', 'type'),
-            'limit' => 100
+            'order' => ['id desc']
         ));
         return $shares;
     }

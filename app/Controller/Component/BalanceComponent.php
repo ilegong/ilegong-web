@@ -193,6 +193,7 @@ class BalanceComponent extends Component
         $data = [];
         foreach ($logs as $item) {
             $data[] = [
+                'balance_id' => $item['BalanceLog']['id'],
                 'trade_fee' => $item['BalanceLog']['trade_fee'],
                 'share_title' => $item['Weshare']['title'],
                 'default_image' => $item['Weshare']['default_image'],
@@ -227,6 +228,43 @@ class BalanceComponent extends Component
             $rebate_item['rebate_money'] = number_format(round($rebate_item['rebate_money'] / 100, 2), 2);
         }
         return $share_rebate_map;
+    }
+
+    public function get_balance_detail($balanceId)
+    {
+        $balanceLogM = ClassRegistry::init('BalanceLog');
+        $orderM = ClassRegistry::init('Order');
+        $sharePoolProductM = ClassRegistry::init('SharePoolProduct');
+        $balanceLog = $balanceLogM->findById($balanceId);
+        $balanceLogType = $balanceLog['BalanceLog']['type'];
+        $order_query_cond = [];
+        $order_query_cond['Order.status > '] = ORDER_STATUS_WAITING_PAY;
+        $balance_share_id = $balanceLog['BalanceLog']['share_id'];
+        $order_query_cond['Order.type'] = ORDER_TYPE_WESHARE_BUY;
+        if ($balanceLogType == self::$POOL_BRAND_BALANCE_TYPE) {
+            $query_start_date = $balanceLog['BalanceLog']['begin_datetime'];
+            $query_end_date = $balanceLog['BalanceLog']['end_datetime'];
+            $order_query_cond['Order.created >= '] = $query_start_date;
+            $order_query_cond['Order.created < '] = $query_end_date;
+            $child_shares = $sharePoolProductM->get_fork_share_ids($balance_share_id);
+            $child_share_ids = Hash::extract($child_shares, '{n}.Weshare.id');
+            $order_query_cond['Order.member_id'] = $child_share_ids;
+        } else {
+            $order_query_cond['Order.member_id'] = $balance_share_id;
+        }
+
+        $orders = $orderM->find('all', [
+            'conditions' => $order_query_cond,
+            'joins' => [
+                [
+                    'type' => 'left',
+                    'table' => ''
+                ],
+                [
+
+                ]
+            ]
+        ]);
     }
 
 }

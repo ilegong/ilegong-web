@@ -79,9 +79,17 @@ class BalanceApiController extends Controller
     }
 
     /**
+     * 获取结算明细
+     */
+    public function get_balance_detail($balance_id)
+    {
+
+    }
+
+    /**
      * 自己分享的结算详情
      */
-    public function self_share_balance_detail()
+    protected function self_share_balance_detail()
     {
 
     }
@@ -89,7 +97,7 @@ class BalanceApiController extends Controller
     /**
      * 产品街分享的结算详情
      */
-    public function pool_share_balance_detail()
+    protected function pool_share_balance_detail()
     {
 
     }
@@ -97,7 +105,7 @@ class BalanceApiController extends Controller
     /**
      * 产品街商家结算详情
      */
-    public function brand_share_balance_detail()
+    protected function brand_share_balance_detail()
     {
 
     }
