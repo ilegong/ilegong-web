@@ -30,7 +30,7 @@ class BalanceComponent extends Component
                 $data['wait_confirm'] = ['count' => $result_item[0]['total_count'], 'total_fee' => $result_item[0]['total_trade_fee']];
             }
             if ($status == self::$WAIT_BALANCE_STATUS) {
-                $data['already_balance'] = ['count' => $result_item[0]['total_count'], 'total_fee' => $result_item[0]['total_trade_fee']];
+                $data['wait_balance'] = ['count' => $result_item[0]['total_count'], 'total_fee' => $result_item[0]['total_trade_fee']];
             }
             if ($status == self::$ALREADY_BALANCE_STATUS) {
                 $data['already_balance'] = ['count' => $result_item[0]['total_count'], 'total_fee' => $result_item[0]['total_trade_fee']];
