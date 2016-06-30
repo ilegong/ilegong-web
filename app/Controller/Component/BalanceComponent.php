@@ -39,7 +39,8 @@ class BalanceComponent extends Component
         return $data;
     }
 
-    public function get_wait_confirm_share_list($uid, $page, $limit){
+    public function get_wait_confirm_share_list($uid, $page, $limit)
+    {
         $data = $this->get_balance_list($uid, $page, $limit, self::$PREPARE_BALANCE_STATUS);
         return $data;
     }
@@ -280,7 +281,7 @@ class BalanceComponent extends Component
                     'conditions' => ['User.id = Order.creator']
                 ]
             ],
-            'fields' => ['User.nickname', 'Order.total_price', 'Order.ship_fee', 'Order.coupon_total', 'RebateTrackLog.rebate_money', 'RefundLog.refund_fee'],
+            'fields' => ['User.nickname', 'Order.creator', 'Order.id', 'Order.total_price', 'Order.ship_fee', 'Order.coupon_total', 'RebateTrackLog.rebate_money', 'RefundLog.refund_fee'],
             'order' => ['Order.id desc']
         ]);
         return [$orders, $balanceLog];
