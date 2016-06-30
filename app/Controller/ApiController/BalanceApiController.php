@@ -111,17 +111,19 @@ class BalanceApiController extends Controller
         exit;
     }
 
-    private function get_balance_order_list($orders){
+    private function get_balance_order_list($orders)
+    {
         $order_list = [];
         foreach ($orders as $item) {
             $order = $item['Order'];
             $user = $item['User'];
-            $order['product_fee'] = strval($order['total_price'] - $order['ship_fee']);
+            $order['product_fee'] = strval(get_format_number($order['total_price'] - $order['ship_fee'] / 100));
+            $order['ship_fee'] = strval(get_format_number($order['ship_fee'] / 100));
             $order['nickname'] = $user['nickname'];
             $rebateTrackLog = $item['RebateTrackLog'];
-            $order['rebate_fee'] = empty($rebateTrackLog['rebate_money']) ? '0' : $rebateTrackLog['rebate_money'];
+            $order['rebate_fee'] = empty($rebateTrackLog['rebate_money']) ? '0' : strval(get_format_number($rebateTrackLog['rebate_money'] / 100));
             $refundLog = $item['RefundLog'];
-            $order['refund_fee'] = empty($refundLog['RefundLog']['refund_fee']) ? '0' : $refundLog['RefundLog']['refund_fee'];
+            $order['refund_fee'] = empty($refundLog['RefundLog']['refund_fee']) ? '0' : strval(get_format_number($refundLog['RefundLog']['refund_fee'] / 100));
             $order_list[] = $order;
         }
         return $order_list;
