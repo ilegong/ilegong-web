@@ -116,6 +116,7 @@ class BalanceApiController extends Controller
         foreach ($orders as $item) {
             $order = $item['Order'];
             $user = $item['User'];
+            $order['product_fee'] = strval($order['total_price'] - $order['ship_fee']);
             $order['nickname'] = $user['nickname'];
             $rebateTrackLog = $item['RebateTrackLog'];
             $order['rebate_fee'] = empty($rebateTrackLog['rebate_money']) ? '0' : $rebateTrackLog['rebate_money'];
