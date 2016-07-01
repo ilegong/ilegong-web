@@ -1224,7 +1224,7 @@ class ShareManageController extends AppController
 
     public function pool_balance_logs()
     {
-        
+
     }
 
     public function balance_logs()

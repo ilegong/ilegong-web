@@ -634,7 +634,7 @@ class WesharesController extends AppController
             $this->log('Create order for ' . $uid . ' with weshare ' . $weshareId . ' successfully, order id ' . $orderId, LOG_INFO);
             $dataSource->commit();
             try {
-                add_logs_to_es(["index" => "event_pay_begin", "type" => "pay_begin", "user_id" => $uid, "order_id" => $orderId, "total_price" => $totalPrice, "weshare_id" => $weshareId, "brand_id" => $weshareCreator]);
+                add_logs_to_es(["index" => "event_pay_begin", "type" => "pay_begin", "user_id" => $uid, "order_id" => $orderId, "total_price" => get_format_number($totalPrice/100), "weshare_id" => $weshareId, "brand_id" => $weshareCreator]);
             } catch (Exception $e) {
                 $this->log('add es log error when make order');
             }
