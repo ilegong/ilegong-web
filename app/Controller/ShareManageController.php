@@ -1241,7 +1241,7 @@ class ShareManageController extends AppController
         $this->set('title', '待结算分享');
         $this->set('show_time_filter', true);
         $this->balance_logs();
-        $_REQUEST['balanceType'] = '0,1';
+        $_REQUEST['balanceStatus'] = '0,1';
         $this->render('share_manage/balance_logs');
     }
 
@@ -1276,12 +1276,72 @@ class ShareManageController extends AppController
         $this->render('share_manage/brand_balance_logs');
     }
 
+    public function save_brand_balance_log()
+    {
+        $this->loadModel('BalanceLog');
+        $balanceLog = $this->request->data;
+        $balanceLog['BalanceLog']['updated'] = date('Y-m-d H:i:s');
+        if (!$balanceLog['BalanceLog']['id']) {
+            $balanceLog['BalanceLog']['created'] = date('Y-m-d H:i:s');
+        }
+        $balanceLog = $this->BalanceLog->save($balanceLog);
+        $this->Balance = $this->Components->load('Balance');
+
+    }
+
     /**
      * 商家结算列表
      */
     public function brand_balance_logs()
     {
-
+        require_once(APPLIBS . 'MyPaginator.php');
+        $this->loadModel('Weshare');
+        $cond = [];
+        $cond['Weshare.type'] = SHARE_TYPE_POOL_SELF;
+        if ($_REQUEST['shareId']) {
+            $cond['Weshare.id'] = $_REQUEST['shareId'];
+        }
+        if ($_REQUEST['shareName']) {
+            $cond['Weshare.title like '] = '%' . $_REQUEST['shareName'] . '%';
+        }
+        $filter_status = $_REQUEST['balanceStatus'] == null ? '-1' : $_REQUEST['balanceStatus'];
+        if ($filter_status != '-1') {
+            $cond['BalanceLog.status'] = $filter_status;
+        }
+        $joins = [
+            [
+                'type' => 'inner',
+                'table' => 'cake_balance_logs',
+                'alias' => 'BalanceLog',
+                'conditions' => ['Weshare.id = BalanceLog.share_id']
+            ],
+            [
+                'type' => 'left',
+                'table' => 'cake_users',
+                'alias' => 'User',
+                'conditions' => ['User.id = BalanceLog.user_id']
+            ],
+            [
+                'type' => 'left',
+                'table' => 'cake_user_levels',
+                'alias' => 'UserLevel',
+                'conditions' => ['UserLevel.data_id = BalanceLog.user_id']
+            ]
+        ];
+        $count = $this->Weshare->find('count', [
+            'conditions' => $cond,
+            'joins' => $joins
+        ]);
+        $page = intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
+        $weshares = $this->Weshare->find('all', [
+            'conditions' => $cond,
+            'page' => $page,
+            'limit' => 50,
+            'joins' => $joins,
+            'recursive' => 1,
+            'order' => ['Weshare.close_date ASC', 'Weshare.id DESC'],
+            'fields' => ['BalanceLog.*', 'Weshare.*', 'User.nickname', 'UserLevel.data_value']
+        ]);
     }
 
     /**
@@ -1314,7 +1374,7 @@ class ShareManageController extends AppController
         }
         $filter_status = $_REQUEST['balanceStatus'] == null ? '-1' : $_REQUEST['balanceStatus'];
         if ($filter_status != '-1') {
-            $cond['BalanceLog.status'] = $filter_status;
+            $cond['BalanceLog.status'] = explode(',', $filter_status);
         }
         $filter_balance_type = $_REQUEST['balanceType'] == null ? '-1' : $_REQUEST['balanceType'];
         if ($filter_balance_type != '-1') {
