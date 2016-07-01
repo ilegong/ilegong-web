@@ -2906,6 +2906,13 @@ function get_order_from_flag($from)
 if(!function_exists("add_logs_to_es"))
 {
     function add_logs_to_es($log){
+        foreach ($log as $index => $item) {
+            if(is_numeric($item))
+            {
+                $log[$index] = floatval($item);
+            }
+        }
+
         $redis = new Redis();
         $redis->connect(REDIS_HOST);
         //$log["timestamp"] = date("Y-m-d H:i:s");
