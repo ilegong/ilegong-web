@@ -161,6 +161,9 @@ a:-webkit-any-link {
   .btm_item {
     float: left;
     width: 25%;
+    p{
+      height: 22px;
+    }
   }
   .btm_item.small-item{
     width: 19%;
@@ -176,7 +179,6 @@ a:-webkit-any-link {
   }
   .iconfont {
     font-size: 20px;
-    line-height: 15px;
     color: #7d7d7d;
   }
   .iconfont.active {
