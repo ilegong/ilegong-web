@@ -1513,7 +1513,7 @@ class ShareController extends AppController
         if ($filter_balance_type != '-1' && !empty($filter_balance_type)) {
             $cond['BalanceLog.type'] = $filter_balance_type;
         }
-        $balance_fee_filter = empty($_REQUEST['balanceFee']) ? 1 : $_REQUEST['balanceFee'];
+        $balance_fee_filter = $_REQUEST['balanceFee'] == null ? 1 : $_REQUEST['balanceFee'];
         if ($balance_fee_filter == 1) {
             $cond['BalanceLog.transaction_fee > '] = 0;
         }
