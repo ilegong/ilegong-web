@@ -117,13 +117,13 @@
                                 </td>
 
                                     {{if $log['BalanceLog']['type']==1}}
-                                    <td class="success">分享者销售费用</td>
+                                        <td class="success">分享者销售费用</td>
                                     {{/if}}
                                     {{if $log['BalanceLog']['type']==2}}
-                                    <td class="warning">产品街代销费用</td>
+                                        <td class="warning">产品街代销费用</td>
                                     {{/if}}
                                     {{if $log['BalanceLog']['type']==3}}
-                                    <td class="danger">产品街商家费用</td>
+                                        <td class="danger">产品街商家费用</td>
                                     {{/if}}
 
                                     {{if $log['BalanceLog']['status']==0}}
@@ -146,7 +146,7 @@
                                     {{get_user_payment_info($log['User']['payment'])}}
                                 </td>
                                 <td>
-                                    <a href="/manage/admin/share/balance_log_form/{{$log['BalanceLog']['id']}}.html"
+                                    <a href="/manage/admin/share/balance_log_form/{{$log['BalanceLog']['id']}}.html?refer={{$refer_url}}"
                                        type="button" class="btn btn-outline btn-default">编辑</a>
                                 </td>
                             </tr>
