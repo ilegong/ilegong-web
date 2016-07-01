@@ -1222,6 +1222,11 @@ class ShareManageController extends AppController
     }
 
 
+    public function pool_balance_logs()
+    {
+        
+    }
+
     public function balance_logs()
     {
         require_once(APPLIBS . 'MyPaginator.php');
@@ -1255,7 +1260,7 @@ class ShareManageController extends AppController
         if ($filter_balance_type != '-1') {
             $cond['BalanceLog.type'] = $filter_balance_type;
         }
-        $balance_fee_filter = empty($_REQUEST['balanceFee']) ? 0 : 1;
+        $balance_fee_filter = $_REQUEST['balanceFee'] = null ? 1 : $_REQUEST['balanceFee'];
         if ($balance_fee_filter == 1) {
             $cond['BalanceLog.transaction_fee > '] = 0;
         }
@@ -1278,7 +1283,7 @@ class ShareManageController extends AppController
             'limit' => 50,
             'joins' => $joins,
             'recursive' => 1,
-            'order' => ['Weshare.close_date DESC', 'Weshare.id DESC'],
+            'order' => ['Weshare.close_date ASC', 'Weshare.id DESC'],
             'fields' => ['BalanceLog.*', 'Weshare.*']
         ]);
         $pool_refer_share_ids = [];
