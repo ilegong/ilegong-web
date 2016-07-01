@@ -1507,7 +1507,7 @@ class ShareController extends AppController
         if ($filter_balance_type != '-1' && !empty($filter_balance_type)) {
             $cond['BalanceLog.type'] = $filter_balance_type;
         }
-        $balance_fee_filter = empty($_REQUEST['balanceFee']) ? 0 : 1;
+        $balance_fee_filter = empty($_REQUEST['balanceFee']) ? 1 : $_REQUEST['balanceFee'];
         if ($balance_fee_filter == 1) {
             $cond['BalanceLog.transaction_fee > '] = 0;
         }
@@ -1536,6 +1536,7 @@ class ShareController extends AppController
             'page' => $page,
             'limit' => 50,
             'joins' => $joins,
+            'order' => 'BalanceLog.end_datetime ASC',
             'fields' => ['BalanceLog.*', 'User.nickname', 'User.payment', 'Weshare.title']
         ]);
         $url = "/manage/admin/share/balance_logs?page=(:num)&shareId={$_REQUEST['shareId']}&shareType={$filter_type}&shareName={$_REQUEST['shareName']}&beginDate={$_REQUEST['beginDate']}&endDate={$_REQUEST['endDate']}&balanceType={$filter_balance_type}&balanceStatus={$filter_status}&balanceFee={$balance_fee_filter}";
