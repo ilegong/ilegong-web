@@ -1455,7 +1455,7 @@ class ShareController extends AppController
         if ($total_fee && $data) {
             $data['BalanceLog']['total_fee'] = $total_fee;
         }
-        $this->set('refer_url', $_REQUEST['refer_url']);
+        $this->set('refer_url', $_REQUEST['refer']);
         $this->set('data', $data);
     }
 
@@ -1475,7 +1475,7 @@ class ShareController extends AppController
         }
         $back_url = $_REQUEST['back_url'];
         if ($back_url) {
-            $this->redirect($back_url);
+            $this->redirect(urldecode($back_url));
         } else {
             $this->redirect('/admin/share/balance_logs.html');
         }
@@ -1546,7 +1546,7 @@ class ShareController extends AppController
             'fields' => ['BalanceLog.*', 'User.nickname', 'User.payment', 'Weshare.title']
         ]);
         $url = "/manage/admin/share/balance_logs?page=(:num)&shareId={$_REQUEST['shareId']}&shareType={$filter_type}&shareName={$_REQUEST['shareName']}&beginDate={$_REQUEST['beginDate']}&endDate={$_REQUEST['endDate']}&balanceType={$filter_balance_type}&balanceStatus={$filter_status}&balanceFee={$balance_fee_filter}";
-        $refer_url = "/manage/admin/share/balance_logs?page=$page&shareId={$_REQUEST['shareId']}&shareType={$filter_type}&shareName={$_REQUEST['shareName']}&beginDate={$_REQUEST['beginDate']}&endDate={$_REQUEST['endDate']}&balanceType={$filter_balance_type}&balanceStatus={$filter_status}&balanceFee={$balance_fee_filter}";
+        $refer_url = "/admin/share/balance_logs?page=$page&shareId={$_REQUEST['shareId']}&shareType={$filter_type}&shareName={$_REQUEST['shareName']}&beginDate={$_REQUEST['beginDate']}&endDate={$_REQUEST['endDate']}&balanceType={$filter_balance_type}&balanceStatus={$filter_status}&balanceFee={$balance_fee_filter}";
         $pager = new MyPaginator($count, 50, $page, $url);
         $this->set('pager', $pager);
         $this->set('logs', $logs);
@@ -1558,7 +1558,7 @@ class ShareController extends AppController
         $this->set('balanceType', $filter_balance_type);
         $this->set('balanceStatus', $filter_status);
         $this->set('balanceFee', $balance_fee_filter);
-        $this->set('refer_url', $refer_url);
+        $this->set('refer_url', urlencode($refer_url));
     }
 
 
