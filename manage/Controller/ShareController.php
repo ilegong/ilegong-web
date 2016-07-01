@@ -1543,7 +1543,7 @@ class ShareController extends AppController
             'limit' => 50,
             'joins' => $joins,
             'order' => 'BalanceLog.end_datetime ASC',
-            'fields' => ['BalanceLog.*', 'User.nickname', 'User.payment', 'Weshare.title']
+            'fields' => ['BalanceLog.*', 'User.nickname', 'User.payment', 'Weshare.title', 'Weshare.type']
         ]);
         $url = "/manage/admin/share/balance_logs?page=(:num)&shareId={$_REQUEST['shareId']}&shareType={$filter_type}&shareName={$_REQUEST['shareName']}&beginDate={$_REQUEST['beginDate']}&endDate={$_REQUEST['endDate']}&balanceType={$filter_balance_type}&balanceStatus={$filter_status}&balanceFee={$balance_fee_filter}";
         $refer_url = "/admin/share/balance_logs?page=$page&shareId={$_REQUEST['shareId']}&shareType={$filter_type}&shareName={$_REQUEST['shareName']}&beginDate={$_REQUEST['beginDate']}&endDate={$_REQUEST['endDate']}&balanceType={$filter_balance_type}&balanceStatus={$filter_status}&balanceFee={$balance_fee_filter}";
