@@ -77,6 +77,14 @@ class WeixinController extends Controller {
 
 			$input = "";
             if (!empty($req['Event'])) {
+                //add log
+                $log = [
+                    "openId" => $openId,
+                    "index" => "wx_event_".$req['Event'],
+                    "type" => $req['Event']
+                ];
+                add_logs_to_es($log);
+
                 if ($req['Event'] == 'subscribe') { //订阅
                     $this->log('On wechat event subscribe: ' . $from . trim($req['FromUserName']), LOG_INFO);
                     if ($uid) {

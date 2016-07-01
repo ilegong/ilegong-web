@@ -1136,6 +1136,17 @@ class UsersController extends AppController
             $this->log("error to save createNewUserByWeixin: with " . json_encode($userInfo), LOG_ERR);
             return 0;
         } else {
+            //add log
+            $log = [
+                "country" => $userInfo['country'],
+                "uid" => $uid,
+                "city" => $userInfo['city'],
+                "sex" => $userInfo['sex'] == 1 ? 0 : ($userInfo['sex'] == 2 ? 1 : null),
+                "openid" => $userInfo['openid'],
+                "index" => "event_user_register",
+                "type" => "user_register"
+            ];
+            add_logs_to_es($log);
             return $uid;
         }
         //return $this->User->getLastInsertID();

@@ -327,6 +327,15 @@ class WesharesController extends AppController
         $postStr = file_get_contents('php://input');
         $postDataArray = json_decode($postStr, true);
         $result = $this->Weshares->create_weshare($postDataArray, $uid);
+        //add log
+        $log = [
+            "sharer_id" => intval($result["id"]),
+            "user_id" => intval($uid),
+            "index" => "event_save_sharer",
+            "type" => "save_sharer"
+        ];
+        add_logs_to_es($log);
+
         echo json_encode($result);
         return;
     }
@@ -1017,6 +1026,16 @@ class WesharesController extends AppController
         if (!($uid > 0)) {
             $this->redirect('/users/login');
         }
+
+        //add log
+        $log = [
+            "user_id" => intval($uid),
+            "index" => "event_get_self_info",
+            "type" => "get_self_info"
+        ];
+        
+        add_logs_to_es($log);
+
         $user_summary = $this->WeshareBuy->get_user_share_summary($uid);
         $user_level = $this->ShareUtil->get_user_level($uid);
         $user_info = $this->get_user_info($uid);
@@ -1157,6 +1176,16 @@ class WesharesController extends AppController
 //            echo json_encode(array('success' => false, 'reason' => 'not_sub', 'url' => WX_SERVICE_ID_GOTO));
 //            return;
 //        }
+
+        //add log
+        $log = [
+            "sharer_id" => intval($sharer_id),
+            "user_id" => intval($user_id),
+            "index" => "event_user_subscribe",
+            "type" => "user_subscribe"
+        ];
+        add_logs_to_es($log);
+
         $this->WeshareBuy->subscribe_sharer($sharer_id, $user_id);
         echo json_encode(array('success' => true));
         return;
@@ -1169,6 +1198,15 @@ class WesharesController extends AppController
      */
     public function unsubscribe_sharer($sharer_id, $user_id)
     {
+        //add log
+        $log = [
+            "sharer_id" => intval($sharer_id),
+            "user_id" => intval($user_id),
+            "index" => "event_user_unsubscribe",
+            "type" => "user_unsubscribe"
+        ];
+        add_logs_to_es($log);
+
         $this->autoRender = false;
         $this->WeshareBuy->unsubscribe_sharer($sharer_id, $user_id);
         echo json_encode(array('success' => true));
