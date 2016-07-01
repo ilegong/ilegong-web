@@ -1224,7 +1224,15 @@ class ShareManageController extends AppController
 
     public function pool_balance_logs()
     {
+        $this->set('title', '商家结算');
+        $this->balance_logs();
+        $this->render('share_manage/balance_logs');
+    }
 
+    public function sharer_balance_logs(){
+        $this->set('title', '分享人结算');
+        $this->balance_logs();
+        $this->render('share_manage/balance_logs');
     }
 
     public function balance_logs()
@@ -1240,11 +1248,11 @@ class ShareManageController extends AppController
         }
         $filter_type = $_REQUEST['shareType'];
         if ($filter_type == 1) {
-            $cond['Weshare.type'] = SHARE_TYPE_DEFAULT;
+            $cond['Weshare.type'] = 0;
         } elseif ($filter_type == 2) {
-            $cond['Weshare.type'] = SHARE_TYPE_POOL;
+            $cond['Weshare.type'] = 6;
         } else {
-            $cond['Weshare.type'] = [SHARE_TYPE_POOL, SHARE_TYPE_DEFAULT, SHARE_TYPE_POOL_SELF];
+            $cond['Weshare.type'] = [6, 0, 3];
         }
         if ($_REQUEST['beginDate']) {
             $cond['Weshare.close_date > '] = $_REQUEST['beginDate'];
@@ -1304,7 +1312,8 @@ class ShareManageController extends AppController
             ],
             'recursive' => 1,
         ]);
-        $url = "/share_manage/balance_logs?page=(:num)&shareId={$_REQUEST['shareId']}&shareType={$filter_type}&shareName={$_REQUEST['shareName']}&beginDate={$_REQUEST['beginDate']}&endDate={$_REQUEST['endDate']}&balanceType={$filter_balance_type}&balanceStatus={$filter_status}&balanceFee={$balance_fee_filter}";
+        $action = $this->request->params['action'];
+        $url = "/share_manage/$action?page=(:num)&shareId={$_REQUEST['shareId']}&shareType={$filter_type}&shareName={$_REQUEST['shareName']}&beginDate={$_REQUEST['beginDate']}&endDate={$_REQUEST['endDate']}&balanceType={$filter_balance_type}&balanceStatus={$filter_status}&balanceFee={$balance_fee_filter}";
         $pager = new MyPaginator($count, 50, $page, $url);
         $this->set('pager', $pager);
         $this->set('weshares', $weshares);
