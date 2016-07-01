@@ -1248,11 +1248,11 @@ class ShareManageController extends AppController
         }
         $filter_type = $_REQUEST['shareType'];
         if ($filter_type == 1) {
-            $cond['Weshare.type'] = 0;
+            $cond['Weshare.type'] = SHARE_TYPE_DEFAULT;
         } elseif ($filter_type == 2) {
-            $cond['Weshare.type'] = 6;
+            $cond['Weshare.type'] = SHARE_TYPE_POOL;
         } else {
-            $cond['Weshare.type'] = [6, 0, 3];
+            $cond['Weshare.type'] = [SHARE_TYPE_DEFAULT, SHARE_TYPE_POOL, SHARE_TYPE_POOL_SELF];
         }
         if ($_REQUEST['beginDate']) {
             $cond['Weshare.close_date > '] = $_REQUEST['beginDate'];

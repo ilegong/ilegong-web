@@ -89,15 +89,15 @@
                         {{loop $logs $log}}
                             <tr>
                                 {{if $log['Weshare']['type']==6}}
-                                <td class="danger">
-                                    {{$log['BalanceLog']['share_id']}}<br/>
-                                    产品街
-                                </td>
+                                    <td class="danger">
+                                        {{$log['BalanceLog']['share_id']}}<br/>
+                                        产品街
+                                    </td>
                                 {{else}}
-                                <td class="active">
-                                    {{$log['BalanceLog']['share_id']}}<br/>
-                                    正常分享
-                                </td>
+                                    <td class="active">
+                                        {{$log['BalanceLog']['share_id']}}<br/>
+                                        正常分享
+                                    </td>
                                 {{/if}}
                                 <td>
                                     {{$log['Weshare']['title']}}
