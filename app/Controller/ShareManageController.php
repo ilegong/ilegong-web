@@ -1229,12 +1229,64 @@ class ShareManageController extends AppController
         $this->render('share_manage/balance_logs');
     }
 
-    public function sharer_balance_logs(){
+    public function sharer_balance_logs()
+    {
         $this->set('title', '分享人结算');
         $this->balance_logs();
         $this->render('share_manage/balance_logs');
     }
 
+    public function wait_balanced_logs()
+    {
+        $this->set('title', '待结算分享');
+        $this->set('show_time_filter', true);
+        $this->balance_logs();
+        $_REQUEST['balanceType'] = '0,1';
+        $this->render('share_manage/balance_logs');
+    }
+
+    public function has_balanced_logs()
+    {
+        $this->set('title', '已经结算分享');
+        $_REQUEST['balanceType'] = '2';
+        $this->balance_logs();
+        $this->render('share_manage/balance_logs');
+    }
+
+    public function no_order_balance_logs()
+    {
+        $this->set('title', '零订单分享');
+        $_REQUEST['balanceFee'] = '0';
+        $this->balance_logs();
+        $this->render('share_manage/balance_logs');
+    }
+
+
+    public function brand_wait_balance_logs()
+    {
+        $this->set('title', '商家待结算');
+        $this->brand_balance_logs();
+        $this->render('share_manage/brand_balance_logs');
+    }
+
+    public function brand_has_balanced_logs()
+    {
+        $this->set('title', '商家已结算');
+        $this->brand_balance_logs();
+        $this->render('share_manage/brand_balance_logs');
+    }
+
+    /**
+     * 商家结算列表
+     */
+    public function brand_balance_logs()
+    {
+
+    }
+
+    /**
+     * 分享结算日志
+     */
     public function balance_logs()
     {
         require_once(APPLIBS . 'MyPaginator.php');
@@ -1264,9 +1316,9 @@ class ShareManageController extends AppController
         if ($filter_status != '-1') {
             $cond['BalanceLog.status'] = $filter_status;
         }
-        $filter_balance_type = empty($_REQUEST['balanceType']) ? '-1' : $_REQUEST['balanceType'];
+        $filter_balance_type = $_REQUEST['balanceType'] == null ? '-1' : $_REQUEST['balanceType'];
         if ($filter_balance_type != '-1') {
-            $cond['BalanceLog.type'] = $filter_balance_type;
+            $cond['BalanceLog.type'] = explode(',', $filter_balance_type);
         }
         $balance_fee_filter = $_REQUEST['balanceFee'] == null ? 1 : $_REQUEST['balanceFee'];
         if ($balance_fee_filter == 1) {
@@ -1278,6 +1330,18 @@ class ShareManageController extends AppController
                 'table' => 'cake_balance_logs',
                 'alias' => 'BalanceLog',
                 'conditions' => ['Weshare.id = BalanceLog.share_id']
+            ],
+            [
+                'type' => 'left',
+                'table' => 'cake_users',
+                'alias' => 'User',
+                'conditions' => ['User.id = BalanceLog.user_id']
+            ],
+            [
+                'type' => 'left',
+                'table' => 'cake_user_levels',
+                'alias' => 'UserLevel',
+                'conditions' => ['UserLevel.data_id = BalanceLog.user_id']
             ]
         ];
         $count = $this->Weshare->find('count', [
@@ -1292,7 +1356,7 @@ class ShareManageController extends AppController
             'joins' => $joins,
             'recursive' => 1,
             'order' => ['Weshare.close_date ASC', 'Weshare.id DESC'],
-            'fields' => ['BalanceLog.*', 'Weshare.*']
+            'fields' => ['BalanceLog.*', 'Weshare.*', 'User.nickname', 'UserLevel.data_value']
         ]);
         $pool_refer_share_ids = [];
         $weshare_ids = [];
@@ -1313,6 +1377,7 @@ class ShareManageController extends AppController
             'recursive' => 1,
         ]);
         $action = $this->request->params['action'];
+        $this->set('action', $action);
         $url = "/share_manage/$action?page=(:num)&shareId={$_REQUEST['shareId']}&shareType={$filter_type}&shareName={$_REQUEST['shareName']}&beginDate={$_REQUEST['beginDate']}&endDate={$_REQUEST['endDate']}&balanceType={$filter_balance_type}&balanceStatus={$filter_status}&balanceFee={$balance_fee_filter}";
         $pager = new MyPaginator($count, 50, $page, $url);
         $this->set('pager', $pager);
@@ -1763,7 +1828,8 @@ class ShareManageController extends AppController
         $this->redirect('/share_manage/balance_logs');
     }
 
-    public function balance_pool_share(){
+    public function balance_pool_share()
+    {
         $cond = [];
         if ($_REQUEST['shareName']) {
             $cond['name'] = $_REQUEST['shareName'];
@@ -1784,7 +1850,7 @@ class ShareManageController extends AppController
         $going_logs = [];
         foreach ($balance_logs as $log_item) {
             $weshare_id = $log_item['BalanceLog']['share_id'];
-            if(!isset($going_logs[$weshare_id])){
+            if (!isset($going_logs[$weshare_id])) {
                 $going_logs[$weshare_id] = [];
             }
             $going_logs[$weshare_id][] = $log_item['BalanceLog']['id'];

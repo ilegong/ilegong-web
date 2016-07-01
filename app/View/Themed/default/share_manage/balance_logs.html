@@ -13,64 +13,72 @@
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
-                <form class="form-inline" method="get" action="/share_manage/balance_logs">
-                    <div class="form-group">
-                        <label>分享ID</label>
-                        <input type="text" class="form-control" name="shareId" value="{{$shareId}}">
-                    </div>
-                    <div class="form-group">
-                        <label>分享名称</label>
-                        <input type="text" class="form-control" name="shareName" value="{{$shareName}}">
-                    </div>
-                    <!--<div class="form-group">-->
+                <div class="well">
+                    <a class="btn btn-danger" href="/share_manage/wait_balanced_logs.html">待结算分享</a>&nbsp;&nbsp;<a class="btn btn-warning" href="/share_manage/no_order_balance_logs.html">0订单分享</a>&nbsp;&nbsp;<a class="btn btn-success" href="/share_manage/has_balanced_logs.html">已结算分享</a>
+                </div>
+                <div class="well">
+                    <form class="form-inline" method="get" action="/share_manage/{{$action}}">
+                        <div class="form-group">
+                            <label>分享ID</label>
+                            <input type="text" class="form-control" name="shareId" value="{{$shareId}}">
+                        </div>
+                        <div class="form-group">
+                            <label>分享名称</label>
+                            <input type="text" class="form-control" name="shareName" value="{{$shareName}}">
+                        </div>
+                        <!--<div class="form-group">-->
                         <!--<label>结算类型</label>-->
                         <!--<select class="form-control" name="balanceType">-->
-                            <!--<option value="-1" {{if $balanceType=='-1'}}selected{{/if}}>全部</option>-->
-                            <!--<option value="1" {{if $balanceType=='1'}}selected{{/if}}>团长分享</option>-->
-                            <!--<option value="2" {{if $balanceType=='2'}}selected{{/if}}>团长代售</option>-->
-                            <!--<option value="3" {{if $balanceType=='3'}}selected{{/if}}>产品街</option>-->
+                        <!--<option value="-1" {{if $balanceType=='-1'}}selected{{/if}}>全部</option>-->
+                        <!--<option value="1" {{if $balanceType=='1'}}selected{{/if}}>团长分享</option>-->
+                        <!--<option value="2" {{if $balanceType=='2'}}selected{{/if}}>团长代售</option>-->
+                        <!--<option value="3" {{if $balanceType=='3'}}selected{{/if}}>产品街</option>-->
                         <!--</select>-->
-                    <!--</div>-->
-                    <div class="form-group">
-                        <label>产品渠道</label>
-                        <select class="form-control" name="shareType">
-                            <option value="0" {{if $shareType==0}}selected{{/if}}>全部</option>
-                            <option value="1" {{if $shareType==1}}selected{{/if}}>团长</option>
-                            <option value="2" {{if $shareType==2}}selected{{/if}}>产品街</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>结算状态</label>
-                        <select class="form-control" name="balanceStatus">
-                            <option value="-1" {{if $balanceStatus=='-1'}}selected{{/if}}>全部</option>
-                            <option value="0" {{if $balanceStatus=='0'}}selected{{/if}}>待审核</option>
-                            <option value="1" {{if $balanceStatus=='1'}}selected{{/if}}>待结算</option>
-                            <option value="2" {{if $balanceStatus=='2'}}selected{{/if}}>已结算</option>
-                        </select>
-                    </div>
-                    <!--<div class="form-group">-->
+                        <!--</div>-->
+                        <div class="form-group">
+                            <label>产品渠道</label>
+                            <select class="form-control" name="shareType">
+                                <option value="0" {{if $shareType==0}}selected{{/if}}>全部</option>
+                                <option value="1" {{if $shareType==1}}selected{{/if}}>团长</option>
+                                <option value="2" {{if $shareType==2}}selected{{/if}}>产品街</option>
+                            </select>
+                        </div>
+                        <!--<div class="form-group">-->
+                            <!--<label>结算状态</label>-->
+                            <!--<select class="form-control" name="balanceStatus">-->
+                                <!--<option value="-1" {{if $balanceStatus=='-1'}}selected{{/if}}>全部</option>-->
+                                <!--<option value="0" {{if $balanceStatus=='0'}}selected{{/if}}>待审核</option>-->
+                                <!--<option value="1" {{if $balanceStatus=='1'}}selected{{/if}}>待结算</option>-->
+                                <!--<option value="2" {{if $balanceStatus=='2'}}selected{{/if}}>已结算</option>-->
+                            <!--</select>-->
+                        <!--</div>-->
+                        <!--<div class="form-group">-->
                         <!--<label>交易金额</label>-->
                         <!--<select class="form-control" name="balanceFee">-->
-                            <!--<option value="0" {{if $balanceFee=='0'}}selected{{/if}}>全部</option>-->
-                            <!--<option value="1" {{if $balanceFee=='1'}}selected{{/if}}>大于0</option>-->
+                        <!--<option value="0" {{if $balanceFee=='0'}}selected{{/if}}>全部</option>-->
+                        <!--<option value="1" {{if $balanceFee=='1'}}selected{{/if}}>大于0</option>-->
                         <!--</select>-->
-                    <!--</div>-->
-                    <div class="form-group">
-                        <label>截团时间</label>
-                        <input type="date" class="form-control" name="beginDate" value="{{$beginDate}}"/>
-                    </div>
-                    <div class="form-group">
-                        <label>至</label>
-                        <input type="date" class="form-control" name="endDate" value="{{$endDate}}"/>
-                    </div>
-                    <button type="submit" class="btn btn-success">查询</button>
-                </form>
+                        <!--</div>-->
+                        {{if $show_time_filter}}
+                        <div class="form-group">
+                            <label>截团时间</label>
+                            <input type="date" class="form-control" name="beginDate" value="{{$beginDate}}"/>
+                        </div>
+                        <div class="form-group">
+                            <label>至</label>
+                            <input type="date" class="form-control" name="endDate" value="{{$endDate}}"/>
+                        </div>
+                        {{/if}}
+                        <button type="submit" class="btn btn-success">查询</button>
+                    </form>
+                </div>
                 <hr/>
                 <div class="table-responsive">
                     <table class="table table-bordered">
                         <thead>
                         <tr>
                             <th>分享ID</th>
+                            <th width="5%">分享者</th>
                             <th width="8%">名称</th>
                             <th width="7%">截团<br>时间</th>
                             <th width="8%">产品<br/>名称</th>
@@ -102,6 +110,10 @@
                                 {{else}}
                                 <span style="color: #0000ff;">团长</span>
                                 {{/if}}
+                            </td>
+                            <td rowspan="{{count($weshare_item['WeshareProduct'])}}">
+                                {{$weshare_item['User']['nickname']}}<br>
+                                <span style="color: yellowgreen;">{{get_user_level_text($weshare_item['UserLevel']['data_value'])}}</span>
                             </td>
                             <td rowspan="{{count($weshare_item['WeshareProduct'])}}">
                                 {{$weshare_item['Weshare']['title']}}
