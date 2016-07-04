@@ -1294,6 +1294,7 @@ class ShareManageController extends AppController
     public function brand_has_balanced_logs()
     {
         $this->set('title', '商家已结算');
+        $_REQUEST['balanceStatus'] = 2;
         $this->brand_balance_logs();
         $this->render('share_manage/brand_balance_logs');
     }
@@ -1342,7 +1343,6 @@ class ShareManageController extends AppController
             'page' => $page,
             'limit' => 30,
             'joins' => $joins,
-            'recursive' => 1,
             'order' => ['Weshare.close_date ASC', 'Weshare.id DESC'],
             'fields' => ['BalanceLog.*', 'Weshare.*', 'User.nickname']
         ]);
