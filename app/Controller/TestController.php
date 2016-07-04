@@ -131,6 +131,13 @@ class TestController extends AppController
 //        exit;
 //    }
 
+    public function add_oauth_client(){
+        $this->OAuth = $this->components->load('OAuth.OAuth');
+        $client = $this->OAuth->Client->add('http://www.cmlejia.com/');
+        echo json_encode($client);
+        exit;
+    }
+
     public function test_gen_password(){
         echo $this->Auth->password($_REQUEST['password']);
         exit;
