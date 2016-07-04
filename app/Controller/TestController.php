@@ -132,7 +132,7 @@ class TestController extends AppController
 //    }
 
     public function add_oauth_client(){
-        $this->OAuth = $this->components->load('OAuth.OAuth');
+        $this->OAuth = $this->Components->load('OAuth.OAuth');
         $client = $this->OAuth->Client->add('http://www.cmlejia.com/');
         echo json_encode($client);
         exit;
