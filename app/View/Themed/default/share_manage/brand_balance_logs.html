@@ -38,7 +38,7 @@
                         <thead>
                         <tr>
                             <th>分享ID</th>
-                            <th width="5%">商家ID</th>
+                            <th>商家ID</th>
                             <th width="8%">名称</th>
                             <th width="8%">产品<br/>名称</th>
                             <th>零售价</th>
@@ -48,19 +48,38 @@
                             <th>退款<br/>金额</th>
                             <th>交易<br/>金额</th>
                             <th>结算<br/>金额</th>
-                            <th>结算<br>时间段</th>
+                            <th width="10%">结算<br>时间段</th>
                             <th>申请<br>时间</th>
                             <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>
-                            {{loop $balanceLogs $logItem}}
-                                <tr>
-                                    <td>{{$logItem['Weshare']['id']}}</td>
-                                    <td>{{$logItem['Weshare']['creator']}}</td>
-                                    <td>{{$logItem['Weshare']['title']}}</td>
-                                    <td></td>
-                                </tr>
+                            {{loop $balanceLogs $index $logItem}}
+                                <?php $products = json_decode($logItem['BalanceLog']['extras'], true); ?>
+                                <?php $loop_flag = 0; ?>
+                                {{loop $products $product}}
+                                    <tr {{if $index%2==0}}class="warning"{{/if}}>
+                                        {{if $loop_flag==0}}
+                                            <td rowspan="{{count($products)}}">{{$logItem['Weshare']['id']}}</td>
+                                            <td rowspan="{{count($products)}}">{{$logItem['Weshare']['creator']}}</td>
+                                            <td rowspan="{{count($products)}}">{{$logItem['Weshare']['title']}}</td>
+                                        {{/if}}
+                                        <td>{{$product['name']}}</td>
+                                        <td>{{$product['price']}}</td>
+                                        <td>{{$product['channelPrice']}}</td>
+                                        <td>{{$product['count']}}</td>
+                                        {{if $loop_flag==0}}
+                                            <td rowspan="{{count($products)}}">{{$logItem['BalanceLog']['ship_fee']}}</td>
+                                            <td rowspan="{{count($products)}}" style="color: red;">{{$logItem['BalanceLog']['refund_fee']}}</td>
+                                            <td rowspan="{{count($products)}}" style="color: #000088;">{{$logItem['BalanceLog']['origin_total_fee']}}</td>
+                                            <td rowspan="{{count($products)}}" style="color: #000088;">{{$logItem['BalanceLog']['trade_fee']}}</td>
+                                            <td rowspan="{{count($products)}}">{{friendlyDateFromStr($logItem['BalanceLog']['begin_datetime'], 'ymd')}}<br/>{{friendlyDateFromStr($logItem['BalanceLog']['end_datetime'], 'ymd')}}</td>
+                                            <td rowspan="{{count($products)}}">{{friendlyDateFromStr($logItem['BalanceLog']['created'], 'ymd')}}</td>
+                                            <td rowspan="{{count($products)}}"><a class="btn btn-success" href="/share_manage/update_brand_balance_log/{{$logItem['BalanceLog']['id']}}.html">去审核</a></td>
+                                        {{/if}}
+                                    </tr>
+                                    <?php $loop_flag = $loop_flag + 1; ?>
+                                {{/loop}}
                             {{/loop}}
                         </tbody>
                     </table>

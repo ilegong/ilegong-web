@@ -1223,6 +1223,8 @@ class ShareManageController extends AppController
 
     /********************/
 
+    /********************/
+
     public function save_balance_log()
     {
         $this->loadModel('BalanceLog');
@@ -1296,42 +1298,6 @@ class ShareManageController extends AppController
         $this->render('share_manage/brand_balance_logs');
     }
 
-    public function save_brand_balance_log()
-    {
-        $this->loadModel('BalanceLog');
-        $balanceLog = $this->request->data;
-        $balanceLog['BalanceLog']['updated'] = date('Y-m-d H:i:s');
-        if (!$balanceLog['BalanceLog']['id']) {
-            $balanceLog['BalanceLog']['created'] = date('Y-m-d H:i:s');
-        }
-        $balanceLog = $this->BalanceLog->save($balanceLog);
-        $this->Balance = $this->Components->load('Balance');
-        list($orders, $child_share_products, $pool_product) = $this->Balance->query_brand_orders_by_time_range($balanceLog['BalanceLog']['begin_datetime'], $balanceLog['BalanceLog']['end_datetime'], $balanceLog['BalanceLog']['share_id']);
-        $order_pay_total_fee = 0;
-        $order_total_refund_fee = 0;
-        $order_ship_fee = 0;
-        $order_total_fee = 0;
-        $child_share_products = Hash::combine($child_share_products, '{n}.WeshareProduct.id', '{n}.WeshareProduct.origin_product_id');
-        $product_summary = [];
-        foreach ($pool_product as $item) {
-            $product_summary[$item['WeshareProduct']['id']] = ['name' => $item['WeshareProduct']['name'], 'count' => 0];
-        }
-        foreach ($orders as $orderItem) {
-            $order_pay_total_fee = $order_pay_total_fee + $orderItem['Order']['total_all_price'];
-            $order_ship_fee = $order_ship_fee + $orderItem['Order']['ship_fee'];
-            $order_total_fee = $order_total_fee + $orderItem['Order']['total_price'];
-            if (!empty($orderItem['RefundLog']['refund_fee'])) {
-                $order_total_refund_fee = $order_total_refund_fee + $orderItem['RefundLog']['refund_fee'];
-            }
-            $carts = $orderItem['Cart'];
-            foreach ($carts as $cartItem) {
-                $cpid = $cartItem['product_id'];
-                $cpnum = $cartItem['num'];
-                $origin_pid = $child_share_products[$cpid];
-                $product_summary[$origin_pid]['count'] = $product_summary[$origin_pid]['count'] + $cpnum;
-            }
-        }
-    }
 
     /**
      * 商家结算列表
@@ -2003,5 +1969,66 @@ class ShareManageController extends AppController
         $this->set('data', $data);
         $this->set('title', '更新结算记录');
         $this->render('balance_log_form');
+    }
+
+    public function add_brand_balance_log(){
+        $data = ['BalanceLog' => []];
+        $type = $_REQUEST['type'];
+        $data['BalanceLog']['type'] = $type;
+        $share_id = $_REQUEST['share_id'];
+        $data['BalanceLog']['share_id'] = $share_id;
+        $user_id = $_REQUEST['user_id'];
+        $data['BalanceLog']['user_id'] = $user_id;
+        $this->set('data', $data);
+        $this->set('title', '添加商家结算记录');
+        $this->render('share_manage/brand_balance_log_form');
+    }
+
+    public function update_brand_balance_log($id){
+        $this->loadModel('BalanceLog');
+        $data = $this->BalanceLog->findById($id);
+        $this->set('data', $data);
+        $this->set('title', '更新商家结算记录');
+        $this->render('share_manage/brand_balance_log_form');
+    }
+
+
+    public function save_brand_balance_log()
+    {
+        $this->loadModel('BalanceLog');
+        $balanceLog = $this->request->data;
+        $balanceLog['BalanceLog']['updated'] = date('Y-m-d H:i:s');
+        if (!$balanceLog['BalanceLog']['id']) {
+            $balanceLog['BalanceLog']['created'] = date('Y-m-d H:i:s');
+        }
+        $balanceLog = $this->BalanceLog->save($balanceLog);
+        $this->Balance = $this->Components->load('Balance');
+        list($orders, $child_share_products, $pool_product) = $this->Balance->query_brand_orders_by_time_range($balanceLog['BalanceLog']['begin_datetime'], $balanceLog['BalanceLog']['end_datetime'], $balanceLog['BalanceLog']['share_id']);
+        $order_pay_total_fee = 0;
+        $order_total_refund_fee = 0;
+        $order_ship_fee = 0;
+        $order_total_fee = 0;
+        $child_share_products = Hash::combine($child_share_products, '{n}.WeshareProduct.id', '{n}.WeshareProduct.origin_product_id');
+        $product_summary = [];
+        foreach ($pool_product as $item) {
+            $product_summary[$item['WeshareProduct']['id']] = ['name' => $item['WeshareProduct']['name'], 'price' => get_format_number($item['WeshareProduct']['name'] / 100), 'channelPrice' => get_format_number($item['WeshareProduct']['channel_price'] / 100), 'count' => 0];
+        }
+        foreach ($orders as $orderItem) {
+            $order_pay_total_fee = $order_pay_total_fee + $orderItem['Order']['total_all_price'];
+            $order_ship_fee = $order_ship_fee + $orderItem['Order']['ship_fee'];
+            $order_total_fee = $order_total_fee + $orderItem['Order']['total_price'];
+            if (!empty($orderItem['RefundLog']['refund_fee'])) {
+                $order_total_refund_fee = $order_total_refund_fee + $orderItem['RefundLog']['refund_fee'];
+            }
+            $carts = $orderItem['Cart'];
+            foreach ($carts as $cartItem) {
+                $cpid = $cartItem['product_id'];
+                $cpnum = $cartItem['num'];
+                $origin_pid = $child_share_products[$cpid];
+                $product_summary[$origin_pid]['count'] = $product_summary[$origin_pid]['count'] + $cpnum;
+            }
+        }
+        $this->BalanceLog->update(['origin_total_fee' => $order_total_fee, 'ship_fee' => $order_ship_fee, 'transaction_fee' => $order_pay_total_fee, 'refund_fee' => $order_total_refund_fee, 'extras' => "'" . json_encode($product_summary, JSON_UNESCAPED_UNICODE) . "'"], ['id' => $balanceLog['BalanceLog']['id']]);
+        $this->redirect('/share_manage/brand_wait_balance_logs.html');
     }
 }
