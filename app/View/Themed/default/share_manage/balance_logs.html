@@ -162,17 +162,13 @@
                                 {{get_format_number($weshare_item['BalanceLog']['trade_fee'])}}
                             </td>
                             <td rowspan="{{count($weshare_item['WeshareProduct'])}}">
-                                <a class="btn btn-link"
-                                   href="/share_manage/update_balance_log/{{$weshare_item['BalanceLog']['id']}}"
-                                   role="button">
-                                    {{if $weshare_item['BalanceLog']['status']==0}}
-                                    去审核
-                                    {{elseif $weshare_item['BalanceLog']['status']==1}}
-                                    去结算
-                                    {{else}}
-                                    更新
-                                    {{/if}}
-                                </a>
+                                {{if $weshare_item['BalanceLog']['status']==0}}
+                                    <a class="btn btn-link"
+                                       href="/share_manage/update_balance_log/{{$weshare_item['BalanceLog']['id']}}"
+                                       role="button">
+                                        去审核
+                                    </a>
+                                {{/if}}
                             </td>
                             {{/if}}
                         </tr>

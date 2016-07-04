@@ -1268,7 +1268,7 @@ class ShareManageController extends AppController
     public function has_balanced_logs()
     {
         $this->set('title', '已经结算分享');
-        $_REQUEST['balanceType'] = '2';
+        $_REQUEST['balanceStatus'] = '2';
         $this->balance_logs();
         $this->render('share_manage/balance_logs');
     }
@@ -1459,7 +1459,7 @@ class ShareManageController extends AppController
             'limit' => 50,
             'joins' => $joins,
             'recursive' => 1,
-            'order' => ['Weshare.close_date ASC', 'Weshare.id DESC'],
+            'order' => ['BalanceLog.end_datetime ASC'],
             'fields' => ['BalanceLog.*', 'Weshare.*', 'User.nickname', 'UserLevel.data_value']
         ]);
         $pool_refer_share_ids = [];
