@@ -1308,6 +1308,7 @@ class ShareManageController extends AppController
         require_once(APPLIBS . 'MyPaginator.php');
         $this->loadModel('BalanceLog');
         $cond = [];
+        $cond['BalanceLog.type'] = 3;
         $cond['Weshare.type'] = SHARE_TYPE_POOL_SELF;
         if ($_REQUEST['shareId']) {
             $cond['Weshare.id'] = $_REQUEST['shareId'];
@@ -1349,7 +1350,7 @@ class ShareManageController extends AppController
         $action = $this->request->params['action'];
         $this->set('action', $action);
         $url = "/share_manage/$action?page=(:num)&shareId={$_REQUEST['shareId']}&shareName={$_REQUEST['shareName']}&balanceStatus={$_REQUEST['balanceStatus']}";
-        $pager = new MyPaginator($count, 50, $page, $url);
+        $pager = new MyPaginator($count, 30, $page, $url);
         $this->set('pager', $pager);
         $this->set('balanceLogs', $balanceLogs);
     }
