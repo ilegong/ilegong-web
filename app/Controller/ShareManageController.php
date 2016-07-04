@@ -1340,7 +1340,7 @@ class ShareManageController extends AppController
         $balanceLogs = $this->BalanceLog->find('all', [
             'conditions' => $cond,
             'page' => $page,
-            'limit' => 50,
+            'limit' => 30,
             'joins' => $joins,
             'recursive' => 1,
             'order' => ['Weshare.close_date ASC', 'Weshare.id DESC'],
@@ -1348,7 +1348,7 @@ class ShareManageController extends AppController
         ]);
         $action = $this->request->params['action'];
         $this->set('action', $action);
-        $url = "/share_manage/$action?page=(:num)&shareId={$_REQUEST['shareId']}";
+        $url = "/share_manage/$action?page=(:num)&shareId={$_REQUEST['shareId']}&shareName={$_REQUEST['shareName']}&balanceStatus={$_REQUEST['balanceStatus']}";
         $pager = new MyPaginator($count, 50, $page, $url);
         $this->set('pager', $pager);
         $this->set('balanceLogs', $balanceLogs);
@@ -2011,7 +2011,7 @@ class ShareManageController extends AppController
         $child_share_products = Hash::combine($child_share_products, '{n}.WeshareProduct.id', '{n}.WeshareProduct.origin_product_id');
         $product_summary = [];
         foreach ($pool_product as $item) {
-            $product_summary[$item['WeshareProduct']['id']] = ['name' => $item['WeshareProduct']['name'], 'price' => get_format_number($item['WeshareProduct']['name'] / 100), 'channelPrice' => get_format_number($item['WeshareProduct']['channel_price'] / 100), 'count' => 0];
+            $product_summary[$item['WeshareProduct']['id']] = ['name' => $item['WeshareProduct']['name'], 'price' => get_format_number($item['WeshareProduct']['price'] / 100), 'channelPrice' => get_format_number($item['WeshareProduct']['channel_price'] / 100), 'count' => 0];
         }
         foreach ($orders as $orderItem) {
             $order_pay_total_fee = $order_pay_total_fee + $orderItem['Order']['total_all_price'];
