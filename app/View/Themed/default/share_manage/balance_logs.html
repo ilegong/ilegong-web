@@ -169,6 +169,13 @@
                                         去审核
                                     </a>
                                 {{/if}}
+                                {{if $weshare_item['BalanceLog']['status']==1}}
+                                    <a class="btn btn-link"
+                                       href="/share_manage/update_balance_log/{{$weshare_item['BalanceLog']['id']}}"
+                                       role="button">
+                                        修改
+                                    </a>
+                                {{/if}}
                             </td>
                             {{/if}}
                         </tr>
