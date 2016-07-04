@@ -1221,6 +1221,26 @@ class ShareManageController extends AppController
         }
     }
 
+    /********************/
+
+    public function save_balance_log()
+    {
+        $this->loadModel('BalanceLog');
+        $balanceLog = $this->request->data;
+        $balanceLog['BalanceLog']['updated'] = date('Y-m-d H:i:s');
+        if (!$balanceLog['BalanceLog']['id']) {
+            $balanceLog['BalanceLog']['created'] = date('Y-m-d H:i:s');
+        }
+        $log = $this->BalanceLog->save($balanceLog);
+        if ($log['BalanceLog']['status'] == 2) {
+            $this->set_share_paid($log['BalanceLog']['share_id'], $log['BalanceLog']['trade_fee']);
+        }
+        if ($log['BalanceLog']['status'] == 2) {
+            $this->redirect('/share_manage/has_balanced_logs');
+        } else {
+            $this->redirect('/share_manage/wait_balanced_logs');
+        }
+    }
 
     public function pool_balance_logs()
     {
@@ -1305,7 +1325,10 @@ class ShareManageController extends AppController
             }
             $carts = $orderItem['Cart'];
             foreach ($carts as $cartItem) {
-
+                $cpid = $cartItem['product_id'];
+                $cpnum = $cartItem['num'];
+                $origin_pid = $child_share_products[$cpid];
+                $product_summary[$origin_pid]['count'] = $product_summary[$origin_pid]['count'] + $cpnum;
             }
         }
     }
@@ -1895,21 +1918,6 @@ class ShareManageController extends AppController
             $this->set('order_cart_map', $order_cart_map);
             $this->set('rebate_logs', $rebateLogs);
         }
-    }
-
-    public function save_balance_log()
-    {
-        $this->loadModel('BalanceLog');
-        $balanceLog = $this->request->data;
-        $balanceLog['BalanceLog']['updated'] = date('Y-m-d H:i:s');
-        if (!$balanceLog['BalanceLog']['id']) {
-            $balanceLog['BalanceLog']['created'] = date('Y-m-d H:i:s');
-        }
-        $log = $this->BalanceLog->save($balanceLog);
-        if ($log['BalanceLog']['status'] == 2) {
-            $this->set_share_paid($log['BalanceLog']['share_id'], $log['BalanceLog']['trade_fee']);
-        }
-        $this->redirect('/share_manage/balance_logs');
     }
 
 

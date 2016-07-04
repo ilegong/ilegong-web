@@ -14,7 +14,7 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-lg-6">
-                        <form role="form" action="/shareManage/save_brand_balance_log.html" method="post">
+                        <form role="form" action="/shareManage/save_balance_log.html" method="post">
                             <input class="form-control" name="data[BalanceLog][id]" readonly
                                    value="{{$data['BalanceLog']['id']}}" type="hidden">
                             <div class="form-group">
@@ -89,7 +89,6 @@
                                 <textarea class="form-control" name="data[BalanceLog][remark]" rows="3">{{$data['BalanceLog']['remark']}}</textarea>
                             </div>
                             <button type="submit" class="btn btn-primary">保存</button>
-                            <a href="/share_manage/balance_logs" class="btn btn-default">返回</a>
                         </form>
                     </div>
                     <div class="col-lg-6">
