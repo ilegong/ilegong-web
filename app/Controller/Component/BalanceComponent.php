@@ -287,6 +287,45 @@ class BalanceComponent extends Component
         return [$orders, $balanceLog['BalanceLog']];
     }
 
+    public function query_brand_orders_by_time_range($begin, $end, $share_id)
+    {
+        $orderM = ClassRegistry::init('Order');
+        $sharePoolProductM = ClassRegistry::init('SharePoolProduct');
+        $weshareProductM = ClassRegistry::init('WeshareProduct');
+        $child_shares = $sharePoolProductM->get_fork_share_ids($share_id);
+        $child_share_ids = Hash::extract($child_shares, '{n}.Weshare.id');
+        $pool_product = $weshareProductM->find('all', [
+            'conditions' => [
+                'weshare_id' => $share_id
+            ]
+        ]);
+        $child_share_products = $weshareProductM->find('all', [
+            'conditions' => [
+                'weshare_id' => $child_share_ids
+            ]
+        ]);
+        $orders = $orderM->find('all', [
+            'conditions' => [
+                'Order.created >= ' => $begin,
+                'Order.created < ' => $end,
+                'Order.member_id' => $child_share_ids,
+                'Order.type' => ORDER_TYPE_WESHARE_BUY,
+                'Order.status > ' => ORDER_STATUS_WAITING_PAY
+            ],
+            'joins' => [
+                [
+                    'type' => 'left',
+                    'table' => 'cake_refund_logs',
+                    'alias' => 'RefundLog',
+                    'conditions' => ['RefundLog.order_id = Order.id']
+                ]
+            ],
+            'recursive' => 1,
+            'fields' => ['Order.creator', 'Order.id', 'Order.total_price', 'Order.ship_fee', 'Order.coupon_total', 'RefundLog.refund_fee'],
+        ]);
+        return [$orders, $child_share_products, $pool_product];
+    }
+
     /**
      * @param $orderIds
      * @return array

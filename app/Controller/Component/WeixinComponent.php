@@ -1517,4 +1517,21 @@ class WeixinComponent extends Component {
         return $this->send_weixin_message($post_data);
     }
 
+
+    public function send_share_paid_msg($user_open_id, $detail_url, $title, $desc) {
+        $post_data = array(
+            "touser" => $user_open_id,
+            "template_id" => 'xJMoewdihfWaopdnP5oSa1qQahuKRMOSMSImyfjVQBE',
+            "url" => $detail_url,
+            "topcolor" => "#FF0000",
+            "data" => array(
+                "first" => array("value" => '分享打款通知'),
+                "keyword1" => array("value" => $title),
+                "keyword2" => array("value" => $desc),
+                "remark" => array("value" => '点击查看详情', "color" => "#FF8800")
+            )
+        );
+        $this->send_weixin_message($post_data);
+    }
+
 }

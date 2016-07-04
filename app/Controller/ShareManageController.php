@@ -1286,7 +1286,28 @@ class ShareManageController extends AppController
         }
         $balanceLog = $this->BalanceLog->save($balanceLog);
         $this->Balance = $this->Components->load('Balance');
+        list($orders, $child_share_products, $pool_product) = $this->Balance->query_brand_orders_by_time_range($balanceLog['BalanceLog']['begin_datetime'], $balanceLog['BalanceLog']['end_datetime'], $balanceLog['BalanceLog']['share_id']);
+        $order_pay_total_fee = 0;
+        $order_total_refund_fee = 0;
+        $order_ship_fee = 0;
+        $order_total_fee = 0;
+        $child_share_products = Hash::combine($child_share_products, '{n}.WeshareProduct.id', '{n}.WeshareProduct.origin_product_id');
+        $product_summary = [];
+        foreach ($pool_product as $item) {
+            $product_summary[$item['WeshareProduct']['id']] = ['name' => $item['WeshareProduct']['name'], 'count' => 0];
+        }
+        foreach ($orders as $orderItem) {
+            $order_pay_total_fee = $order_pay_total_fee + $orderItem['Order']['total_all_price'];
+            $order_ship_fee = $order_ship_fee + $orderItem['Order']['ship_fee'];
+            $order_total_fee = $order_total_fee + $orderItem['Order']['total_price'];
+            if (!empty($orderItem['RefundLog']['refund_fee'])) {
+                $order_total_refund_fee = $order_total_refund_fee + $orderItem['RefundLog']['refund_fee'];
+            }
+            $carts = $orderItem['Cart'];
+            foreach ($carts as $cartItem) {
 
+            }
+        }
     }
 
     /**
@@ -1295,7 +1316,7 @@ class ShareManageController extends AppController
     public function brand_balance_logs()
     {
         require_once(APPLIBS . 'MyPaginator.php');
-        $this->loadModel('Weshare');
+        $this->loadModel('BalanceLog');
         $cond = [];
         $cond['Weshare.type'] = SHARE_TYPE_POOL_SELF;
         if ($_REQUEST['shareId']) {
@@ -1310,9 +1331,9 @@ class ShareManageController extends AppController
         }
         $joins = [
             [
-                'type' => 'inner',
-                'table' => 'cake_balance_logs',
-                'alias' => 'BalanceLog',
+                'type' => 'left',
+                'table' => 'cake_weshares',
+                'alias' => 'Weshare',
                 'conditions' => ['Weshare.id = BalanceLog.share_id']
             ],
             [
@@ -1320,28 +1341,28 @@ class ShareManageController extends AppController
                 'table' => 'cake_users',
                 'alias' => 'User',
                 'conditions' => ['User.id = BalanceLog.user_id']
-            ],
-            [
-                'type' => 'left',
-                'table' => 'cake_user_levels',
-                'alias' => 'UserLevel',
-                'conditions' => ['UserLevel.data_id = BalanceLog.user_id']
             ]
         ];
-        $count = $this->Weshare->find('count', [
+        $count = $this->BalanceLog->find('count', [
             'conditions' => $cond,
             'joins' => $joins
         ]);
         $page = intval($_REQUEST['page']) > 0 ? intval($_REQUEST['page']) : 1;
-        $weshares = $this->Weshare->find('all', [
+        $balanceLogs = $this->BalanceLog->find('all', [
             'conditions' => $cond,
             'page' => $page,
             'limit' => 50,
             'joins' => $joins,
             'recursive' => 1,
             'order' => ['Weshare.close_date ASC', 'Weshare.id DESC'],
-            'fields' => ['BalanceLog.*', 'Weshare.*', 'User.nickname', 'UserLevel.data_value']
+            'fields' => ['BalanceLog.*', 'Weshare.*', 'User.nickname']
         ]);
+        $action = $this->request->params['action'];
+        $this->set('action', $action);
+        $url = "/share_manage/$action?page=(:num)&shareId={$_REQUEST['shareId']}";
+        $pager = new MyPaginator($count, 50, $page, $url);
+        $this->set('pager', $pager);
+        $this->set('balanceLogs', $balanceLogs);
     }
 
     /**
@@ -1884,8 +1905,40 @@ class ShareManageController extends AppController
         if (!$balanceLog['BalanceLog']['id']) {
             $balanceLog['BalanceLog']['created'] = date('Y-m-d H:i:s');
         }
-        $this->BalanceLog->save($balanceLog);
+        $log = $this->BalanceLog->save($balanceLog);
+        if ($log['BalanceLog']['status'] == 2) {
+            $this->set_share_paid($log['BalanceLog']['share_id'], $log['BalanceLog']['trade_fee']);
+        }
         $this->redirect('/share_manage/balance_logs');
+    }
+
+
+    public function set_share_paid($shareId, $fee)
+    {
+        $this->loadModel('Weshare');
+        $this->Weixin = $this->Components->load('Weixin');
+        $this->Weshare->updateAll(array('settlement' => 1), array('id' => $shareId));
+        if ($fee > 0) {
+            $OauthbindM = ClassRegistry::init('Oauthbind');
+            $weshareM = ClassRegistry::init('Weshare');
+            $weshare = $weshareM->find('first', array(
+                'conditions' => array(
+                    'id' => $shareId
+                ),
+                'fields' => array('id', 'creator', 'title')
+            ));
+            $userOauthBinds = $OauthbindM->find('first', array(
+                'conditions' => array(
+                    'user_id' => $weshare['Weshare']['creator']
+                ),
+                'fields' => array('user_id', 'oauth_openid')
+            ));
+            $user_open_id = $userOauthBinds['Oauthbind']['oauth_openid'];
+            $detail_url = WX_HOST . '/weshares/view/' . $shareId;
+            $title = '您的编号为' . $shareId . '的分享已经结款';
+            $desc = '一共结款' . $fee . '元';
+            $this->Weixin->send_share_paid_msg($user_open_id, $detail_url, $title, $desc);
+        }
     }
 
     public function balance_pool_share()

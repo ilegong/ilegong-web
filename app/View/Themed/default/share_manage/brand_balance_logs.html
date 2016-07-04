@@ -14,7 +14,10 @@
             <!-- /.panel-heading -->
             <div class="panel-body">
                 <div class="well">
-                    <a class="btn btn-danger" href="/share_manage/brand_wait_balance_logs.html">商家待结算列表</a>&nbsp;&nbsp;<a class="btn btn-success" href="/share_manage/brand_has_balanced_logs.html">商家已结算列表</a>&nbsp;&nbsp;<a class="btn btn-warning" href="/share_manage/pool_balance_logs.html">申请结算</a>
+                    <a class="btn btn-danger"
+                       href="/share_manage/brand_wait_balance_logs.html">商家待结算列表</a>&nbsp;&nbsp;<a
+                        class="btn btn-success" href="/share_manage/brand_has_balanced_logs.html">商家已结算列表</a>&nbsp;&nbsp;<a
+                        class="btn btn-warning" href="/share_manage/balance_pool_share.html">申请结算</a>
                 </div>
                 <div class="well">
                     <form class="form-inline" method="get" action="/share_manage/balance_logs">
@@ -51,6 +54,14 @@
                         </tr>
                         </thead>
                         <tbody>
+                            {{loop $balanceLogs $logItem}}
+                                <tr>
+                                    <td>{{$logItem['Weshare']['id']}}</td>
+                                    <td>{{$logItem['Weshare']['creator']}}</td>
+                                    <td>{{$logItem['Weshare']['title']}}</td>
+                                    <td></td>
+                                </tr>
+                            {{/loop}}
                         </tbody>
                     </table>
                     <div class="inline pull-right page">
