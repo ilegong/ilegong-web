@@ -1240,8 +1240,8 @@ class ShareManageController extends AppController
     {
         $this->set('title', '待结算分享');
         $this->set('show_time_filter', true);
-        $this->balance_logs();
         $_REQUEST['balanceStatus'] = '0,1';
+        $this->balance_logs();
         $this->render('share_manage/balance_logs');
     }
 

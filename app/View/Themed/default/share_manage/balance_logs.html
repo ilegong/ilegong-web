@@ -167,6 +167,8 @@
                                    role="button">
                                     {{if $weshare_item['BalanceLog']['status']==0}}
                                     去审核
+                                    {{elseif $weshare_item['BalanceLog']['status']==1}}
+                                    去结算
                                     {{else}}
                                     更新
                                     {{/if}}
