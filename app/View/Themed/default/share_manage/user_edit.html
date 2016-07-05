@@ -11,7 +11,6 @@
         <div class="col-lg-12">
             <div aria-multiselectable="true" role="tablist" id="accordion" class="panel-group">
                 <div class="col-md-12" id="share-basic-info-panel">
-                    <h3> 基本信息</h3>
                     <div class="form-group">
                         <label class="control-label">用户ID</label>
                         <input maxlength="100" type="text" class="form-control" placeholder="用户ID" value="{{$this->user['User']['id']}}" readonly/>
@@ -23,42 +22,21 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">昵称</label>
-                        <input maxlength="100" type="text" class="form-control" placeholder="取货信息" value="{{$this->data['Weshare']['send_info']}}" id="share-send-info"/>
+                        <input maxlength="100" type="text" class="form-control" placeholder="昵称" value="{{$this->user['User']['nickname']}}"/>
                     </div>
                     <div class="form-group">
-                        <input type="hidden" value="{{$this->data['Weshare']['images']}}" id="share-images" autocomplete="off">
-                        <label class="control-label">分享图片</label>
-                        <?php $tmp_images = explode('|', $this->data['Weshare']['images']);
-                        $tmp_images = array_filter($tmp_images);
-                        ?>
-                        <div class="row">
-                            {{loop $tmp_images $img}}
-                            <div class="image-area col-sm-2">
-                                <img src="{{$img}}">
-                                <div class="operator">
-                                    <a href="javascript:void(0)" src-data="{{$img}}" class="btn btn-primary preview-image">预览</a>
-                                    <a href="javascript:void(0)" src-data="{{$img}}" class="btn btn-danger delete-image">删除</a>
-                                </div>
-                            </div>
-                            {{/loop}}
-                            <div class="image-area col-sm-2" style="display: none;" id="image-area-template">
-                                <img src="">
-                                <div class="operator">
-                                    <a href="javascript:void(0)" src-data="{{$img}}"
-                                       class="btn btn-primary preview-image">预览</a>
-                                    <a href="javascript:void(0)" src-data="" class="btn btn-danger delete-image">删除</a>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 share-upload-btn">
-                                <a class='btn btn-default' href="javascript:void(0)" id='upload-image'> 选择图片 </a>
-                                <a class='btn btn-primary' href="javascript:void(0)" id='upload-image-action'> 上传图片 </a>
-                            </div>
-                        </div>
+                        <label class="control-label">账户类型</label>
+                        <input maxlength="100" type="text" class="form-control" placeholder="昵称" value="{{$this->user['User']['nickname']}}"/>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">分享描述</label>
-                        <textarea class="form-control" rows="15" placeholder="分享描述" id="share-description">{{$this->data['Weshare']['description']}}</textarea>
+                        <label class="control-label">账号</label>
+                        <input maxlength="100" type="text" class="form-control" placeholder="昵称" value="{{$this->user['User']['payment']}}"/>
                     </div>
+                    <div class="form-group">
+                        <label class="control-label">备注</label>
+                        <input maxlength="100" type="text" class="form-control" placeholder="昵称" value="{{$this->user['User']['label']}}"/>
+                    </div>
+
                     <button class="btn btn-primary btn-lg pull-right" type="button" id="save-share-basic-info">保存 </button>
                 </div>
             </div>

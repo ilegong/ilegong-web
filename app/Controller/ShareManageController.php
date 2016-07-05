@@ -109,6 +109,12 @@ class ShareManageController extends AppController
                 'fields' => array('User.id', 'User.nickname', 'User.image', 'User.mobilephone', 'User.avatar', 'User.payment', 'User.description', 'User.label'),
                 'limit' => 100
             ));
+            foreach ($users as &$user) {
+                $user['User']['payment'] = $this->parse_payment($user['User']['payment']);
+                $this->log('account: '.json_encode($user));
+                $this->log('account: '.$user['User']['payment']['account']);
+            }
+
             if ($this->request->is('ajax')) {
                 //print_r($users);
                 echo json_encode($users[0]['User']);
@@ -445,16 +451,17 @@ class ShareManageController extends AppController
     public function user_edit($user_id)
     {
         $uid = $this->currentUser['id'];
+        if (!is_super_share_manager($uid)) {
+            $this->redirect(array('action' => 'search_users'));
+        }
+
         $userData = $this->User->find('first', array(
             'conditions' => array(
                 'id' => $user_id
             ),
             'fields' => array('User.id', 'User.nickname', 'User.image', 'User.mobilephone', 'User.avatar', 'User.payment', 'User.description', 'User.label'),
         ));
-        if (!is_super_share_manager($uid)) {
-            $this->redirect(array('action' => 'search_users'));
-        }
-
+        $userData['User']['payment'] = $this->parse_payment($userData['User']['payment']);
         $this->set('user', $userData);
     }
 
@@ -2048,5 +2055,30 @@ class ShareManageController extends AppController
         }
         $this->BalanceLog->update(['origin_total_fee' => $order_total_fee, 'ship_fee' => $order_ship_fee, 'transaction_fee' => $order_pay_total_fee, 'refund_fee' => $order_total_refund_fee, 'extras' => "'" . json_encode($product_summary, JSON_UNESCAPED_UNICODE) . "'"], ['id' => $balanceLog['BalanceLog']['id']]);
         $this->redirect('/share_manage/brand_wait_balance_logs.html');
+    }
+
+    private function parse_payment($string){
+        if(strpos($string, '{') !== false){
+            try{
+                $this->log('Payment is a json string: '.$string);
+                return json_decode($string, true)['payment'];
+            }
+            catch(Exception $e){
+                $this->log('Failed to parse json for payment: '.$string. ': '.$e);
+            }
+        }
+        if(strpos($string, '支付宝:') !== false){
+            $type = 0;
+            $account = explode( '支付宝:',$string)[1];
+        }
+        else if(strpos($string, '银行卡:') !== false){
+            $type = 1;
+            $account = explode( '银行卡:', $string)[1];
+        }
+        else{
+            $type = -1;
+            $account = $string;
+        }
+        return array("type"=>$type,"account"=>$account,"full_name"=>"","card_name"=>"");
     }
 }

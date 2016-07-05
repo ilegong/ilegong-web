@@ -46,7 +46,18 @@
                             <td valign="middle"><img src="{{get_user_avatar($user)}}" class="img-rounded" style="width: 50px;height: 50px;"></td>
                             <td valign="middle">{{$user['User']['nickname']}}</td>
                             <td valign="middle">{{$user['User']['mobilephone']}}</td>
-                            <td valign="middle">{{$user['User']['payment']}}</td>
+                            <td valign="middle">
+                                类型：{{if $user['User']['payment']['type'] == 0}}
+                                    支付宝
+                                {{elseif $user['User']['payment']['type'] == 1}}
+                                    银行卡: {{$user['User']['payment']['card_name']}}
+                                {{else}}
+                                    未知
+                                {{/if}}
+                                <br/>
+                                账号：{{$user['User']['payment']['account']}}<br/>
+                                姓名：{{$user['User']['payment']['full_name']}}<br/>
+                            </td>
                             <td valign="middle">{{$user['User']['description']}}</td>
                             <td valign="middle">{{$user['User']['label']}}</td>
                             <td valign="middle">
