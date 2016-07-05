@@ -2856,8 +2856,9 @@ function check_weshare_detail_is_not_html($detail)
     return strrpos($detail, '<bdo id="mark-view-html"></bdo>') === false;
 }
 
-function get_format_number($val){
-    return number_format(round(floatval($val), 2), 2);
+function get_format_number($val)
+{
+    return number_format($val, 2, '');
 }
 
 function get_order_from_flag($from)
