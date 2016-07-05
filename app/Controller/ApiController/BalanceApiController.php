@@ -60,9 +60,9 @@ class BalanceApiController extends Controller
         exit;
     }
 
-    private function combine_channel_price_to_order($order_list, $order_ids){
+    private function combine_channel_price_to_order($order_list, $order_ids)
+    {
         $order_channel_prices = $this->Balance->get_orders_channel_price($order_ids);
-        $this->log('order channel prices ' . json_encode($order_channel_prices));
         foreach ($order_list as &$item) {
             $orderId = $item['id'];
             $item['channel_price'] = $order_channel_prices[$orderId]['channel_product_fee'];
