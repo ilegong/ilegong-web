@@ -373,16 +373,18 @@ class OAuthComponent extends Component implements IOAuth2Storage, IOAuth2Refresh
  * @throws Exception
  */
 	public function __call($name, $arguments) {
-		if (method_exists($this->OAuth2, $name)) {
-			try {
-				return call_user_func_array(array($this->OAuth2, $name), $arguments);
-			} catch (Exception $e) {
-				if (method_exists($e, 'sendHttpResponse')) {
-					$e->sendHttpResponse();
-				}
-				throw $e;
-			}
-		}
+        if (method_exists($this->OAuth2, $name)) {
+            try {
+                return call_user_func_array(array($this->OAuth2, $name), $arguments);
+            } catch (Exception $e) {
+                if ($name != 'grantAccessToken') {
+                    if (method_exists($e, 'sendHttpResponse')) {
+                        $e->sendHttpResponse();
+                    }
+                }
+                throw $e;
+            }
+        }
 	}
 
 /**
