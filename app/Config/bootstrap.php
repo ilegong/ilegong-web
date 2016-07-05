@@ -2858,7 +2858,7 @@ function check_weshare_detail_is_not_html($detail)
 
 function get_format_number($val)
 {
-    return number_format($val, 2, '');
+    return number_format(floatval($val), 2);
 }
 
 function get_order_from_flag($from)
