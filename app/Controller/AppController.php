@@ -45,19 +45,28 @@ class AppController extends Controller {
     	$GLOBALS['site_cate_id'] = Configure::read('Site.default_site_cate_id');
     	// 无Session，且有Cookie登录信息时，解析cookie生成信息。否则忽略cookie，防止每次都要消耗性能解密cookie
     	// 其余时间使用session。
-    	if(!$this->Session->read('Auth.User.id') && isset($_COOKIE['SAECMS']) && $_COOKIE['SAECMS']['Auth']['User']){
-            $this->Cookie = $this->Components->load('Cookie',array('name' => 'SAECMS', 'time' => '+2 weeks'));
-            $user = $this->Cookie->read('Auth.User');
-    		if(is_array($user) && intval($user['id'])>0){
-    			$this->loadModel('User');
-    			$this->User->recursive = -1;
-    			$data = $this->User->find('first', array('conditions' => array('id' => $user['id'])));
-    			$this->Session->write('Auth.User',$data['User']);
-    		}
-    		else{
-    			$this->Cookie->delete('Auth.User');//删除解密错误的cookie信息
-    		}
-    	}
+        $access_token = $_REQUEST['access_token'];
+        if (!empty($access_token)) {
+            $this->OAuth = $this->Components->load('OAuth.OAuth');
+            $this->Cookie = $this->Components->load('Cookie', array('name' => 'SAECMS', 'time' => '+2 weeks'));
+            $this->OAuth->allow([]);
+            $this->currentUser = $this->OAuth->user();
+            $this->Session->write('Auth.User', $this->currentUser);
+            $this->Cookie->write('Auth.User', $this->currentUser, true, 3600 * 24 * 7);
+        } else {
+            if (!$this->Session->read('Auth.User.id') && isset($_COOKIE['SAECMS']) && $_COOKIE['SAECMS']['Auth']['User']) {
+                $this->Cookie = $this->Components->load('Cookie', array('name' => 'SAECMS', 'time' => '+2 weeks'));
+                $user = $this->Cookie->read('Auth.User');
+                if (is_array($user) && intval($user['id']) > 0) {
+                    $this->loadModel('User');
+                    $this->User->recursive = -1;
+                    $data = $this->User->find('first', array('conditions' => array('id' => $user['id'])));
+                    $this->Session->write('Auth.User', $data['User']);
+                } else {
+                    $this->Cookie->delete('Auth.User');//删除解密错误的cookie信息
+                }
+            }
+        }
 
 //        if(!Configure::read('Site.status')){
 //    		$this->layout = 'maintain';
