@@ -597,6 +597,18 @@ class UsersController extends AppController
                 'last_login' => "'" . date('Y-m-d H:i:s') . "'",
                 'last_ip' => "'" . $this->request->clientIp(false) . "'"
             ), array('id' => $id,));
+
+            //add log
+            $log = [
+                "last_login" => date('Y-m-d H:i:s'),
+                "last_ip" => $this->request->clientIp(false),
+                "user_id" => intval($id),
+                "index" => "event_user_login",
+                "type" => "user_login",
+                "source" => "wx"
+            ];
+            add_logs_to_es($log);
+
             $success = true;
         } else { // 通过表单登录
             $sid = $this->Session->id();
@@ -613,6 +625,17 @@ class UsersController extends AppController
                 //$this->Cart->merge_user_carts_after_login($this->User->id, $sid);
                 $this->Session->setFlash('登录成功' . $this->Session->read('Auth.User.session_flash'));
                 $success = true;
+
+                //add log
+                $log = [
+                    "last_login" => date('Y-m-d H:i:s'),
+                    "last_ip" => $this->request->clientIp(false),
+                    "user_id" => intval($this->User->id),
+                    "index" => "event_user_login",
+                    "type" => "user_login",
+                    "source" => "form"
+                ];
+                add_logs_to_es($log);
             }
         }
 
