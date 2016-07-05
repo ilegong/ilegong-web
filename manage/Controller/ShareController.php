@@ -1399,9 +1399,9 @@ class ShareController extends AppController
         $rebateLogs = $rebateTrackLogM->find('all', array(
             'conditions' => array(
                 'share_id' => $share_ids,
+                'type' => array(0, 1),
                 'not' => array('order_id' => 0, 'is_paid' => 0)
-            ),
-            'limit' => 500
+            )
         ));
         $share_rebate_map = array();
         foreach ($rebateLogs as $log) {
