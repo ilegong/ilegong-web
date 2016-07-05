@@ -347,10 +347,9 @@ class BalanceComponent extends Component
             'fields' => ['Cart.id', 'Cart.product_id', 'Cart.order_id', 'Cart.num', 'Cart.price', 'WeshareProduct.price', 'WeshareProduct.channel_price']
         ]);
         $result = [];
-        $this->log('debug get orders channel price ' . json_encode($carts));
         foreach ($carts as $cartItem) {
             $cart = $cartItem['Cart'];
-            $product = $cartItem['Product'];
+            $product = $cartItem['WeshareProduct'];
             $orderId = $cartItem['order_id'];
             if (!isset($orderId)) {
                 $result[$orderId] = ['product_fee' => 0, 'channel_product_fee' => 0];
