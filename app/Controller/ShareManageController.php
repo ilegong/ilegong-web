@@ -106,7 +106,7 @@ class ShareManageController extends AppController
             $users = $userM->find('all', array(
                 'conditions' => $cond,
                 'recursive' => 1,
-                'fields' => array('User.id', 'User.nickname', 'User.image', 'User.mobilephone', 'User.avatar'),
+                'fields' => array('User.id', 'User.nickname', 'User.image', 'User.mobilephone', 'User.avatar', 'User.payment', 'User.description', 'User.label'),
                 'limit' => 100
             ));
             if ($this->request->is('ajax')) {
@@ -440,6 +440,22 @@ class ShareManageController extends AppController
         $share_rebate_set = $this->ShareManage->get_weshare_rebate_setting($share_id);
         $this->set('share_rebate_set', $share_rebate_set);
         $this->data = $weshareData;
+    }
+
+    public function user_edit($user_id)
+    {
+        $uid = $this->currentUser['id'];
+        $userData = $this->User->find('first', array(
+            'conditions' => array(
+                'id' => $user_id
+            ),
+            'fields' => array('User.id', 'User.nickname', 'User.image', 'User.mobilephone', 'User.avatar', 'User.payment', 'User.description', 'User.label'),
+        ));
+        if (!is_super_share_manager($uid)) {
+            $this->redirect(array('action' => 'search_users'));
+        }
+
+        $this->set('user', $userData);
     }
 
     public function authorize_shares()

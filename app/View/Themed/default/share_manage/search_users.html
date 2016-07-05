@@ -33,6 +33,10 @@
                             <th>头像</th>
                             <th>昵称</th>
                             <th>手机号码</th>
+                            <th>收款账号</th>
+                            <th>个人简介</th>
+                            <th>标签</th>
+                            <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -42,6 +46,13 @@
                             <td valign="middle"><img src="{{get_user_avatar($user)}}" class="img-rounded" style="width: 50px;height: 50px;"></td>
                             <td valign="middle">{{$user['User']['nickname']}}</td>
                             <td valign="middle">{{$user['User']['mobilephone']}}</td>
+                            <td valign="middle">{{$user['User']['payment']}}</td>
+                            <td valign="middle">{{$user['User']['description']}}</td>
+                            <td valign="middle">{{$user['User']['label']}}</td>
+                            <td valign="middle">
+                                <a href="/share_manage/user_edit/{{$user['User']['id']}}" class="btn btn-default">修改</a>
+                                <a href="/share_manage/share_add?user={{$user['User']['id']}}" class="btn btn-default">创建分享</a>
+                            </td>
                         </tr>
                         {{/loop}}
                         </tbody>
