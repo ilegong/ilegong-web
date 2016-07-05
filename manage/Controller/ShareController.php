@@ -323,10 +323,11 @@ class ShareController extends AppController
             $weshare_refund_money_map[$item_share_id] = $share_refund_money / 100;
         }
         $weshare_rebate_map = $this->get_share_rebate_money($weshare_ids);
+        $weshare_proxy_rebate_map = $this->get_share_proxy_rebate_money($weshare_ids);
         $repaid_money_result = $this->get_share_repaid_money($weshare_ids);
         //$weshares = $this->reduce_weshares($weshares);
         $this->reduce_share_summery($weshares, $summery_data, $repaid_money_result, $weshare_rebate_map, $weshare_refund_money_map);
-        return ['repaid_money_result' => $repaid_money_result, 'weshare_rebate_map' => $weshare_rebate_map, 'weshare_refund_map' => $weshare_refund_money_map, 'weshares' => $weshares, 'weshare_summery' => $summery_data, 'creators' => $creators];
+        return ['repaid_money_result' => $repaid_money_result, 'weshare_rebate_map' => $weshare_rebate_map, 'weshare_proxy_rebate_map' => $weshare_proxy_rebate_map, 'weshare_refund_map' => $weshare_refund_money_map, 'weshares' => $weshares, 'weshare_summery' => $summery_data, 'creators' => $creators];
     }
 
 
@@ -435,6 +436,7 @@ class ShareController extends AppController
         $result = $this->process_share_data($q_c);
         $repaid_money_result = $result['repaid_money_result'];
         $weshare_rebate_map = $result['weshare_rebate_map'];
+        $weshare_proxy_rebate_map = $result['weshare_proxy_rebate_map'];
         $weshare_refund_map = $result['weshare_refund_map'];
         $weshares = $result['weshares'];
         $weshare_summery = $result['weshare_summery'];
@@ -448,6 +450,7 @@ class ShareController extends AppController
             $rebate_fee = floatval($weshare_rebate_map[$share_id]) - floatval($weshare_summery[$share_id]['child_ship_fee'] / 100);
             $total_fee = floatval($weshare_summery[$share_id]['total_price']);
             $ship_fee = round($weshare_summery[$share_id]['ship_fee'] / 100, 2);
+            $proxy_rebate_fee = round($weshare_proxy_rebate_map[$share_id] / 100, 2);
             $current_share_repaid_money = $repaid_money_result[$share_id];
             if ($current_share_repaid_money == 0) {
                 $current_share_repaid_money = 0;
@@ -473,6 +476,7 @@ class ShareController extends AppController
                 'transaction_fee' => $transaction_fee,//交易费用
                 'brokerage' => 0,//佣金
                 'trade_fee' => $transaction_fee,//打款费
+                'proxy_rebate' => $proxy_rebate_fee,//团长优惠
                 'status' => $status,
                 'type' => $type,
                 'created' => date('Y-m-d H:i:s'),
@@ -1417,6 +1421,32 @@ class ShareController extends AppController
         return $share_rebate_map;
     }
 
+
+    function get_share_proxy_rebate_money($share_ids)
+    {
+        $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
+        $rebateLogs = $rebateTrackLogM->find('all', array(
+            'conditions' => array(
+                'share_id' => $share_ids,
+                'type' => array(2),
+                'is_rebate' => 1,
+                'is_paid' => 1,
+                'not' => array('order_id' => 0)
+            )
+        ));
+        $share_rebate_map = array();
+        foreach ($rebateLogs as $log) {
+            $share_id = $log['RebateTrackLog']['share_id'];
+            if (!isset($share_rebate_map[$share_id])) {
+                $share_rebate_map[$share_id] = array('rebate_money' => 0);
+            }
+            $share_rebate_map[$share_id]['rebate_money'] = $log['RebateTrackLog']['rebate_money'];
+        }
+        foreach ($share_rebate_map as &$rebate_item) {
+            $rebate_item['rebate_money'] = number_format(round($rebate_item['rebate_money'] / 100, 2), 2);
+        }
+        return $share_rebate_map;
+    }
 
     public function admin_balance_log_form($id = null)
     {
