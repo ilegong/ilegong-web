@@ -1303,6 +1303,7 @@ class ShareManageController extends AppController
     public function brand_wait_balance_logs()
     {
         $this->set('title', '商家待结算');
+        $_REQUEST['balanceStatus'] = '0,1';
         $this->brand_balance_logs();
         $this->render('share_manage/brand_balance_logs');
     }
@@ -1334,7 +1335,7 @@ class ShareManageController extends AppController
         }
         $filter_status = $_REQUEST['balanceStatus'] == null ? '-1' : $_REQUEST['balanceStatus'];
         if ($filter_status != '-1') {
-            $cond['BalanceLog.status'] = $filter_status;
+            $cond['BalanceLog.status'] = explode(',', $filter_status);
         }
         $joins = [
             [

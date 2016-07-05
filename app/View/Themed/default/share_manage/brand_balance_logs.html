@@ -75,7 +75,7 @@
                                             <td rowspan="{{count($products)}}" style="color: #000088;">{{$logItem['BalanceLog']['trade_fee']}}</td>
                                             <td rowspan="{{count($products)}}">{{friendlyDateFromStr($logItem['BalanceLog']['begin_datetime'], 'ymd')}}<br/>{{friendlyDateFromStr($logItem['BalanceLog']['end_datetime'], 'ymd')}}</td>
                                             <td rowspan="{{count($products)}}">{{friendlyDateFromStr($logItem['BalanceLog']['created'], 'ymd')}}</td>
-                                            <td rowspan="{{count($products)}}"><a class="btn btn-success" href="/share_manage/update_brand_balance_log/{{$logItem['BalanceLog']['id']}}.html">去审核</a></td>
+                                            <td rowspan="{{count($products)}}">{{if $logItem['BalanceLog']['status']!=2}}<a class="btn btn-success" href="/share_manage/update_brand_balance_log/{{$logItem['BalanceLog']['id']}}.html">去审核</a>{{/if}}</td>
                                         {{/if}}
                                     </tr>
                                     <?php $loop_flag = $loop_flag + 1; ?>
