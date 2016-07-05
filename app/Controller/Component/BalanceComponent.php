@@ -350,7 +350,7 @@ class BalanceComponent extends Component
         foreach ($carts as $cartItem) {
             $cart = $cartItem['Cart'];
             $product = $cartItem['WeshareProduct'];
-            $orderId = $cartItem['order_id'];
+            $orderId = $cart['order_id'];
             if (!isset($orderId)) {
                 $result[$orderId] = ['product_fee' => 0, 'channel_product_fee' => 0];
             }
