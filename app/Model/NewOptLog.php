@@ -44,7 +44,7 @@ class NewOptLog extends AppModel
                 'Weshare.status' => WESHARE_STATUS_NORMAL,
                 'OR' => [
                     'Weshare.title not like ' => '%测试%',
-                    'Weshare.title not like ' => '%子园团购%',
+                    'Weshare.title not like ' => '%园园团购%',
                 ]
             ]),
             'fields' => [
