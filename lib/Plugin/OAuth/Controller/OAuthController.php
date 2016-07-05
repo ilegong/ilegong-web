@@ -26,6 +26,8 @@ class OAuthController extends OAuthAppController {
 
     private $blackHoled = false;
 
+    public static $LJH_CLIENT_ID = 'NTc3YTFhZmYzY2UxMzVl';
+
     /**
      * beforeFilter
      *
@@ -140,11 +142,25 @@ class OAuthController extends OAuthAppController {
      *    - client_secret
      *
      */
-    public function token() {
+    public function token()
+    {
         $this->autoRender = false;
         try {
             $this->OAuth->grantAccessToken();
         } catch (OAuth2ServerException $e) {
+            if ($_REQUEST['client_id'] == self::$LJH_CLIENT_ID) {
+                $mobile = $_REQUEST['username'];
+                if (!$this->isMobileUserExist($mobile)) {
+                    $password = $_REQUEST['password'];
+                    $uid = $this->addNewMobileUser($mobile, $password);
+                    if ($uid) {
+                        $_GET = array('username' => $mobile, 'password' => $password, 'client_id' => self::$LJH_CLIENT_ID, 'grant_type' => 'password');
+                        header("HTTP/1.1 " . '200 OK');
+                        $this->token();
+                        return;
+                    }
+                }
+            }
             $e->sendHttpResponse();
         }
     }
@@ -219,6 +235,37 @@ class OAuthController extends OAuthAppController {
             //Has been blackholed before - naughty
             throw new BadRequestException(__d('OAuth', 'The request has been black-holed'));
         }
+    }
+
+    public function isMobileUserExist($mobile)
+    {
+        $this->loadModel('User');
+        if ($this->User->hasAny(array('User.mobilephone' => $mobile))) {
+            return true;
+        }
+        if ($this->User->hasAny(array('User.username' => $mobile))) {
+            return true;
+        }
+        return false;
+    }
+
+    public function addNewMobileUser($mobile, $password)
+    {
+        $this->loadModel('User');
+        $nickname = preg_replace('/(1\d{1,2})\d\d(\d{0,3})/', '$1****$3', $mobile);
+        $password = Security::hash($password, null, true);
+        $result = $this->User->save([
+            'nickname' => $nickname,
+            'sex' => 0,
+            'username' => $mobile,
+            'password' => $password,
+            'uc_id' => 0,
+            'mobilephone' => $mobile
+        ]);
+        if (!$result) {
+            return false;
+        }
+        return $result['User']['id'];
     }
 
     /**
