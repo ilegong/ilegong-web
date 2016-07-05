@@ -281,7 +281,7 @@ class BalanceComponent extends Component
                     'conditions' => ['User.id = Order.creator']
                 ]
             ],
-            'fields' => ['User.nickname', 'Order.creator', 'Order.id', 'Order.total_price', 'Order.ship_fee', 'Order.coupon_total', 'RebateTrackLog.rebate_money', 'RefundLog.refund_fee'],
+            'fields' => ['User.nickname', 'Order.creator', 'Order.created', 'Order.id', 'Order.total_price', 'Order.ship_fee', 'Order.coupon_total', 'RebateTrackLog.rebate_money', 'RefundLog.refund_fee'],
             'order' => ['Order.id desc']
         ]);
         return [$orders, $balanceLog['BalanceLog']];
