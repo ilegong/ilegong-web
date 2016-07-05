@@ -141,25 +141,25 @@
                             </td>
                             {{if $loop_flag==0}}
                             <td rowspan="{{count($weshare_item['WeshareProduct'])}}" style="color:red;">
-                                {{get_format_number($weshare_item['BalanceLog']['ship_fee'])}}
+                                {{$weshare_item['BalanceLog']['ship_fee']}}
                             </td>
                             <td rowspan="{{count($weshare_item['WeshareProduct'])}}" style="color: red;">
-                                {{get_format_number($weshare_item['balanceLog']['coupon_fee'])}}
+                                {{$weshare_item['balanceLog']['coupon_fee']}}
                             </td>
                             <td rowspan="{{count($weshare_item['WeshareProduct'])}}" style="color:red;">
-                                {{get_format_number($weshare_item['BalanceLog']['refund_fee'])}}
+                                {{$weshare_item['BalanceLog']['refund_fee']}}
                             </td>
                             <td rowspan="{{count($weshare_item['WeshareProduct'])}}" style="color: red;">
-                                {{get_format_number($weshare_item['BalanceLog']['rebate_fee'])}}
+                                {{$weshare_item['BalanceLog']['rebate_fee']}}
                             </td>
                             <td rowspan="{{count($weshare_item['WeshareProduct'])}}" style="color: #000088;">
-                                {{get_format_number($weshare_item['BalanceLog']['transaction_fee'])}}
+                                {{$weshare_item['BalanceLog']['transaction_fee']}}
                             </td>
                             <td rowspan="{{count($weshare_item['WeshareProduct'])}}" style="color: red;">
-                                {{get_format_number($weshare_item['BalanceLog']['brokerage'])}}
+                                {{$weshare_item['BalanceLog']['brokerage']}}
                             </td>
                             <td rowspan="{{count($weshare_item['WeshareProduct'])}}" style="color: #0000ff;">
-                                {{get_format_number($weshare_item['BalanceLog']['trade_fee'])}}
+                                {{$weshare_item['BalanceLog']['trade_fee']}}
                             </td>
                             <td rowspan="{{count($weshare_item['WeshareProduct'])}}">
                                 {{if $weshare_item['BalanceLog']['status']==0}}
