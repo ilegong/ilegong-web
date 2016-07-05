@@ -357,7 +357,7 @@ class BalanceComponent extends Component
             $result[$orderId]['product_fee'] = ($cart['num'] * $cart['price']) + $result[$orderId]['product_fee'];
             $result[$orderId]['channel_product_fee'] = ($cart['num'] * $product['channel_price']) + $result[$orderId]['channel_product_fee'];
         }
-        foreach($result as &$resultItem){
+        foreach ($result as &$resultItem) {
             $resultItem['product_fee'] = strval(get_format_number($resultItem['product_fee'] / 100));
             $resultItem['channel_product_fee'] = strval(get_format_number($resultItem['channel_product_fee'] / 100));
         }
