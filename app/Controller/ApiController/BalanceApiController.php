@@ -54,8 +54,10 @@ class BalanceApiController extends Controller
         list($orders, $balanceLog) = $this->Balance->get_balance_detail_orders($balanceId);
         list($order_list, $order_ids) = $this->get_balance_order_list($orders);
         if ($type == 2 || $type == 3) {
-            $order_list = $this->combine_channel_price_to_order($order_list, $order_ids);
+            list($order_list, $channel_total_fee) = $this->combine_channel_price_to_order($order_list, $order_ids);
+            $balanceLog['channel_total_fee'] = $channel_total_fee;
         }
+        unset($balanceLog['extras']);
         echo json_encode(['orders' => $order_list, 'balanceLog' => $balanceLog]);
         exit;
     }
@@ -63,12 +65,14 @@ class BalanceApiController extends Controller
     private function combine_channel_price_to_order($order_list, $order_ids)
     {
         $order_channel_prices = $this->Balance->get_orders_channel_price($order_ids);
+        $total_channel_fee = 0;
         foreach ($order_list as &$item) {
             $orderId = $item['id'];
             $item['channel_price'] = $order_channel_prices[$orderId]['channel_product_fee'];
             $item['product_fee'] = $order_channel_prices[$orderId]['product_fee'];
+            $total_channel_fee = $total_channel_fee + $order_channel_prices[$orderId]['channel_product_fee'];
         }
-        return $order_list;
+        return [$order_list, $total_channel_fee];
     }
 
     private function get_balance_order_list($orders)
