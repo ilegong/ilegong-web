@@ -448,13 +448,32 @@ class ShareManageController extends AppController
         $this->data = $weshareData;
     }
 
+    public function save_user_edit()
+    {
+        $payment = [
+            "payment" => [
+                "type" => $_POST['payment_type'],
+                "account" => $_POST['payment_account'],
+                "full_name" => $_POST['payment_full_name'],
+                "card_name" => $_POST['payment_type'] == 0 ? "" : $_POST['payment_card_name'],
+            ]
+        ];
+        $data = [
+            'id' => $_POST['id'],
+            'description' => $_POST['description'],
+            'payment' => json_encode($payment),
+        ];
+        $res = $this->User->save($data,false);
+        header('Content-type: application/json');
+        echo json_encode(['ok' => 1]);
+        die;
+    }
     public function user_edit($user_id)
     {
         $uid = $this->currentUser['id'];
         if (!is_super_share_manager($uid)) {
             $this->redirect(array('action' => 'search_users'));
         }
-
         $userData = $this->User->find('first', array(
             'conditions' => array(
                 'id' => $user_id
@@ -462,8 +481,9 @@ class ShareManageController extends AppController
             'fields' => array('User.id', 'User.nickname', 'User.image', 'User.mobilephone', 'User.avatar', 'User.payment', 'User.description', 'User.label'),
         ));
         $userData['User']['payment'] = $this->parse_payment($userData['User']['payment']);
-        $this->set('user', $userData);
+        $this->set('user', $userData['User']);
     }
+
 
     public function authorize_shares()
     {
@@ -2061,27 +2081,22 @@ class ShareManageController extends AppController
     }
 
     private function parse_payment($string){
-        if(strpos($string, '{') !== false){
-            try{
-                $this->log('Payment is a json string: '.$string);
-                return json_decode($string, true)['payment'];
+        if(isJson($string)){
+            return json_decode($string, true)['payment'];
+        }else{
+            if(strpos($string, '支付宝:') !== false){
+                $type = 0;
+                $account = trim(explode( '支付宝:',$string)[1]);
             }
-            catch(Exception $e){
-                $this->log('Failed to parse json for payment: '.$string. ': '.$e);
+            else if(strpos($string, '银行卡:') !== false){
+                $type = 1;
+                $account = trim(explode( '银行卡:', $string)[1]);
             }
+            else{
+                $type = -1;
+                $account = $string;
+            }
+            return array("type"=>$type,"account"=>$account,"full_name"=>"","card_name"=>"");
         }
-        if(strpos($string, '支付宝:') !== false){
-            $type = 0;
-            $account = explode( '支付宝:',$string)[1];
-        }
-        else if(strpos($string, '银行卡:') !== false){
-            $type = 1;
-            $account = explode( '银行卡:', $string)[1];
-        }
-        else{
-            $type = -1;
-            $account = $string;
-        }
-        return array("type"=>$type,"account"=>$account,"full_name"=>"","card_name"=>"");
     }
 }

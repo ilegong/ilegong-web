@@ -345,4 +345,23 @@ $(document).ready(function () {
             $rebateStatusCheckBox.prop('checked', true);
         }
     }
+
+    $("#payment_type").change(function(){
+            if($(this).val() == 0)
+            {
+                $("#card_name").hide();
+            }else{
+                $("#card_name").show();
+            }
+        }
+    );
+
+    $("#save-user-info").click(function(){
+       $.post("/share_manage/save_user_edit",
+           $("#form").serializeArray(),
+           function(data,status){
+               history.go(-1);
+           }
+       )
+    });
 });
