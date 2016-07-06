@@ -326,7 +326,7 @@ class ShareController extends AppController
         $weshare_proxy_rebate_map = $this->get_share_proxy_rebate_money($weshare_ids);
         $repaid_money_result = $this->get_share_repaid_money($weshare_ids);
         //$weshares = $this->reduce_weshares($weshares);
-        $this->reduce_share_summery($weshares, $summery_data, $repaid_money_result, $weshare_rebate_map, $weshare_refund_money_map);
+        //$this->reduce_share_summery($weshares, $summery_data, $repaid_money_result, $weshare_rebate_map, $weshare_refund_money_map);
         return ['repaid_money_result' => $repaid_money_result, 'weshare_rebate_map' => $weshare_rebate_map, 'weshare_proxy_rebate_map' => $weshare_proxy_rebate_map, 'weshare_refund_map' => $weshare_refund_money_map, 'weshares' => $weshares, 'weshare_summery' => $summery_data, 'creators' => $creators];
     }
 
@@ -449,7 +449,7 @@ class ShareController extends AppController
             $refund_fee = floatval($weshare_refund_map[$share_id]);
             $coupon_fee = round(floatval($weshare_summery[$share_id]['coupon_total'] / 100), 2);
             $product_fee = floatval($weshare_summery[$share_id]['product_total_price']);
-            $rebate_fee = floatval($weshare_rebate_map[$share_id]) - floatval($weshare_summery[$share_id]['child_ship_fee'] / 100);
+            $rebate_fee = $weshare_rebate_map[$share_id];
             $total_fee = floatval($weshare_summery[$share_id]['total_price']);
             $ship_fee = round($weshare_summery[$share_id]['ship_fee'] / 100, 2);
             $proxy_rebate_fee = round($weshare_proxy_rebate_map[$share_id] / 100, 2);
