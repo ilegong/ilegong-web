@@ -174,7 +174,7 @@ function checkUserInput(form) {
     var error = false;
 
     data.forEach(function (item) {
-        if (item.value == '') {
+        if(item.name != "data[PoolProduct][valid_users]" && item.name != "data[WeshareProduct][0][wholesale_price]" && item.value == ''){
             error = true;
         }
     });

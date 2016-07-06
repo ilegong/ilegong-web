@@ -1,0 +1,2 @@
+ALTER TABLE `cake_weshare_products` ADD `wholesale_price` INT(11) UNSIGNED NULL DEFAULT NULL AFTER `channel_price`;
+ALTER TABLE `cake_pool_products` ADD `valid_users` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `deleted`;

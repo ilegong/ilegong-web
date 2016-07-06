@@ -889,6 +889,7 @@ class ShareManageController extends AppController
     public function pool_product_edit($id)
     {
         $product = $this->ShareManage->get_pool_product($id);
+        $product['PoolProduct']['valid_users'] = trim($product['PoolProduct']['valid_users'],"|");
         $pool_product_categories = $this->ShareManage->get_pool_product_categories();
         $this->set('index_product', $product);
         $this->set('pool_product_categories', $pool_product_categories);
@@ -918,6 +919,7 @@ class ShareManageController extends AppController
             $cacheData = Cache::delete($key);
 
             $data['PoolProduct']['status'] = 1;
+            $data['PoolProduct']['valid_users'] = "|".$data['PoolProduct']['valid_users']."|";
             $this->ShareManage->save_pool_product($data);
             $this->redirect(array('action' => 'pool_products'));
         }
