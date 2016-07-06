@@ -34,16 +34,16 @@ class BalanceApiController extends Controller
 
 
 
-    public function get_balance_list($type, $share_type, $page, $limit){
+    public function get_balance_list($type, $balance_type, $page, $limit){
         $uid = $this->currentUser['id'];
         if ($type == 0) {
-            $data = $this->Balance->get_wait_confirm_share_list($uid, $page, $limit, $share_type);
+            $data = $this->Balance->get_wait_confirm_share_list($uid, $page, $limit, $balance_type);
         }
         if ($type == 1) {
-            $data = $this->Balance->get_wait_balance_share_list($uid, $page, $limit, $share_type);
+            $data = $this->Balance->get_wait_balance_share_list($uid, $page, $limit, $balance_type);
         }
         if ($type == 2) {
-            $data = $this->Balance->get_already_balance_share_list($uid, $page, $limit, $share_type);
+            $data = $this->Balance->get_already_balance_share_list($uid, $page, $limit, $balance_type);
         }
         echo json_encode($data);
         exit;
