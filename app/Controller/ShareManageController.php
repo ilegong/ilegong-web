@@ -1532,11 +1532,13 @@ class ShareManageController extends AppController
             $summery_data[$member_id]['product_total_price'] = $summery_data[$member_id]['product_total_price'] + $order_product_price;
         }
         $weshare_refund_money_map = $this->get_share_refund_money($weshare_ids);
-        $weshare_rebate_map = $this->get_share_rebate_money($weshare_ids);
+        $weshare_rebate_map = $this->get_share_rebate_money($weshare_ids, '0,1');
+        $weshare_proxy_rebate_map = $this->get_share_rebate_money($weshare_ids, '2');
         $weshare_product_summary = $this->get_share_product_summary($weshares, $orders);
         $pool_share_data = $this->get_pool_share_data($pool_refer_share_ids);
         $this->set('weshare_product_summary', $weshare_product_summary);
         $this->set('weshare_rebate_map', $weshare_rebate_map);
+        $this->set('weshare_proxy_rebate_map', $weshare_proxy_rebate_map);
         $this->set('weshare_refund_map', $weshare_refund_money_map);
         $this->set('weshares', $weshares);
         $this->set('weshare_summery', $summery_data);
@@ -1621,12 +1623,13 @@ class ShareManageController extends AppController
         return $share_refund_map;
     }
 
-    function get_share_rebate_money($share_ids)
+    function get_share_rebate_money($share_ids, $type)
     {
         $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
         $rebateLogs = $rebateTrackLogM->find('all', array(
             'conditions' => array(
                 'share_id' => $share_ids,
+                'type' => explode(',', $type),
                 'not' => array('order_id' => 0, 'is_paid' => 0)
             )
         ));

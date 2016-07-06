@@ -83,6 +83,7 @@
                             <th>产品金额</th>
                             <th>快递费用</th>
                             <th>红包优惠</th>
+                            <th>团长优惠</th>
                             <th>退款金额</th>
                             <th>团长佣金</th>
                             <th>交易金额</th>
@@ -132,6 +133,7 @@
                             {{if $loop_flag==0}}
                             <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_summery[$weshare_item['Weshare']['id']]['ship_fee']/100)}}</td>
                             <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_summery[$weshare_item['Weshare']['id']]['coupon_total']/100)}}</td>
+                            <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_proxy_rebate_map[$weshare_item['Weshare']['id']])}}</td>
                             <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_refund_map[$weshare_item['Weshare']['id']])}}</td>
                             <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_rebate_map[$weshare_item['Weshare']['id']])}}</td>
                             <td rowspan="{{count($weshare_item['WeshareProduct'])}}">{{get_format_number($weshare_summery[$weshare_item['Weshare']['id']]['total_price'])}}</td>
