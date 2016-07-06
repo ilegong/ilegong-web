@@ -368,6 +368,7 @@ class ShareController extends AppController
         $result = $this->process_share_data($q_c);
         $this->set('repaid_money_result', $result['repaid_money_result']);
         $this->set('weshare_rebate_map', $result['weshare_rebate_map']);
+        $this->set('weshare_proxy_rebate_map', $result['weshare_proxy_rebate_map']);
         $this->set('weshare_refund_map', $result['weshare_refund_map']);
         $this->set('weshares', $result['weshares']);
         $this->set('weshare_summery', $result['weshare_summery']);
@@ -401,6 +402,7 @@ class ShareController extends AppController
         $this->set('repaid_money_result', $result['repaid_money_result']);
         $this->set('weshare_rebate_map', $result['weshare_rebate_map']);
         $this->set('weshare_refund_map', $result['weshare_refund_map']);
+        $this->set('weshare_proxy_rebate_map', $result['weshare_proxy_rebate_map']);
         $this->set('weshares', $result['weshares']);
         $this->set('weshare_summery', $result['weshare_summery']);
         $this->set('creators', $result['creators']);
