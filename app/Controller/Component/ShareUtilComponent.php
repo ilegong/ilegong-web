@@ -64,6 +64,7 @@ class ShareUtilComponent extends Component
             $sql .= "and cu.nickname like '%$keyword%";
         }
         $sql .= "group by cur.follow_id order by order_summary.o_count desc limit $offset,$limit";
+        $this->log('query fans data by sql '.$sql);
         $userRelationM = ClassRegistry::init('UserRelation');
         $data = $userRelationM->query($sql);
         $result = [];
