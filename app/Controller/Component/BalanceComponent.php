@@ -39,21 +39,21 @@ class BalanceComponent extends Component
         return $data;
     }
 
-    public function get_wait_confirm_share_list($uid, $page, $limit)
+    public function get_wait_confirm_share_list($uid, $page, $limit, $share_type)
     {
-        $data = $this->get_balance_list($uid, $page, $limit, self::$PREPARE_BALANCE_STATUS);
+        $data = $this->get_balance_list($uid, $page, $limit, self::$PREPARE_BALANCE_STATUS, $share_type);
         return $data;
     }
 
-    public function get_wait_balance_share_list($uid, $page, $limit)
+    public function get_wait_balance_share_list($uid, $page, $limit, $share_type)
     {
-        $data = $this->get_balance_list($uid, $page, $limit, self::$WAIT_BALANCE_STATUS);
+        $data = $this->get_balance_list($uid, $page, $limit, self::$WAIT_BALANCE_STATUS, $share_type);
         return $data;
     }
 
-    public function get_already_balance_share_list($uid, $page, $limit)
+    public function get_already_balance_share_list($uid, $page, $limit, $share_type)
     {
-        $data = $this->get_balance_list($uid, $page, $limit, self::$ALREADY_BALANCE_STATUS);
+        $data = $this->get_balance_list($uid, $page, $limit, self::$ALREADY_BALANCE_STATUS, $share_type);
         return $data;
     }
 
@@ -170,14 +170,16 @@ class BalanceComponent extends Component
         return self::$POOL_BRAND_BALANCE_TYPE;
     }
 
-    private function get_balance_list($uid, $page, $limit, $status)
+    private function get_balance_list($uid, $page, $limit, $status, $share_type)
     {
         $balanceLogM = ClassRegistry::init('BalanceLog');
+        $cond = [
+            'BalanceLog.user_id' => $uid,
+            'BalanceLog.status' => $status,
+            'Weshare.type' => $share_type
+        ];
         $logs = $balanceLogM->find('all', [
-            'conditions' => [
-                'BalanceLog.user_id' => $uid,
-                'BalanceLog.status' => $status
-            ],
+            'conditions' => $cond,
             'joins' => [
                 [
                     'type' => 'left',
