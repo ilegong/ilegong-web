@@ -61,7 +61,7 @@ class ShareUtilComponent extends Component
         $sql .= "left join cake_users as cu on cu.id=cur.follow_id ";
         $sql .= "where cur.user_id=$sharer_id and cur.deleted=0 ";
         if (!empty($keyword)) {
-            $sql .= "and cu.nickname like '%$keyword%";
+            $sql .= "and cu.nickname like '%$keyword%'";
         }
         $sql .= " group by cur.follow_id order by order_summary.o_count desc limit $offset,$limit";
         $userRelationM = ClassRegistry::init('UserRelation');
