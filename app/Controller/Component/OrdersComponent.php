@@ -49,10 +49,10 @@ class OrdersComponent extends Component
             ],
             'joins' => [
                 [
-                    'table' => 'carts',
-                    'alias' => 'Cart',
-                    'conditions' => ['Order.id = Cart.order_id'],
-                    'type' => 'right'
+                    'table' => 'cake_weshares',
+                    'alias' => 'Weshare',
+                    'conditions' => ['Weshare.id = Order.member_id'],
+                    'type' => 'left'
                 ],
                 [
                     'table' => 'pay_notifies',
@@ -61,7 +61,7 @@ class OrdersComponent extends Component
                     'type' => 'left'
                 ]
             ],
-            'fields' => ['Order.id', 'Order.status', 'Order.business_remark' ,'Order.created', 'Order.consignee_name', 'Order.consignee_address', 'Order.consignee_mobilephone', 'Order.total_all_price', 'Order.ship_type_name', 'Order.ship_type', 'Order.ship_fee', 'Order.ship_code', 'Order.pay_time', 'Order.coupon_total', 'Order.brand_id', 'Pay.trade_type']
+            'fields' => ['Weshare.status' ,'Order.id', 'Order.status', 'Order.business_remark' ,'Order.created', 'Order.consignee_name', 'Order.consignee_address', 'Order.consignee_mobilephone', 'Order.total_all_price', 'Order.ship_type_name', 'Order.ship_type', 'Order.ship_fee', 'Order.ship_code', 'Order.pay_time', 'Order.coupon_total', 'Order.brand_id', 'Pay.trade_type']
         ]);
         $carts = $cartM->find('all', [
             'conditions' => [

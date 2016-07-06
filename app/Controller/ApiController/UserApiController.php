@@ -90,6 +90,7 @@ class UserApiController extends Controller
         $user_info['level_name'] = get_user_level_text($sharer_info['UserLevel']['data_value']);
         $user_info['sub_status'] = !(empty($sharer_info['UserRelation']['id']));
         $result = $order['Order'];
+        $result['weshare_status'] = $order['Weshare']['status'];
         $result['pay_type'] = $order['Pay']['trade_type'];
         $result['carts'] = $order['carts'];
         $result['sharer_info'] = $user_info;
