@@ -390,19 +390,10 @@ class ShareController extends AppController
             )
         );
         $result = $this->process_share_data($q_c);
-        //['repaid_money_result' => $repaid_money_result, 'weshare_rebate_map' => $weshare_rebate_map, 'weshare_refund_map' => $weshare_refund_money_map, 'weshares' => $weshares, 'weshare_summery' => $summery_data, 'creators' => $creators]
-        /**
-         * $this->set('repaid_money_result', $repaid_money_result);
-         * $this->set('weshare_rebate_map', $weshare_rebate_map);
-         * $this->set('weshare_refund_map', $weshare_refund_money_map);
-         * $this->set('weshares', $weshares);
-         * $this->set('weshare_summery', $summery_data);
-         * $this->set('creators', $creators);
-         */
         $this->set('repaid_money_result', $result['repaid_money_result']);
         $this->set('weshare_rebate_map', $result['weshare_rebate_map']);
-        $this->set('weshare_refund_map', $result['weshare_refund_map']);
         $this->set('weshare_proxy_rebate_map', $result['weshare_proxy_rebate_map']);
+        $this->set('weshare_refund_map', $result['weshare_refund_map']);
         $this->set('weshares', $result['weshares']);
         $this->set('weshare_summery', $result['weshare_summery']);
         $this->set('creators', $result['creators']);
@@ -1406,7 +1397,8 @@ class ShareController extends AppController
             'conditions' => array(
                 'share_id' => $share_ids,
                 'type' => array(0, 1),
-                'not' => array('order_id' => 0, 'is_paid' => 0)
+                'order_id > ' => 0,
+                'is_paid' => 1
             )
         ));
         $share_rebate_map = array();
@@ -1430,10 +1422,10 @@ class ShareController extends AppController
         $rebateLogs = $rebateTrackLogM->find('all', array(
             'conditions' => array(
                 'share_id' => $share_ids,
-                'type' => array(2),
+                'type' => 2,
                 'is_rebate' => 1,
                 'is_paid' => 1,
-                'not' => array('order_id' => 0)
+                'order_id > ' => 0
             )
         ));
         $share_rebate_map = array();
