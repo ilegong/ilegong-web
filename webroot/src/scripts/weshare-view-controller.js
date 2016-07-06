@@ -12,7 +12,6 @@
         vm.readMoreBtnText = '全文';
         vm.hideMoreShareInfo = false;
         vm.shouldShowReadMoreBtn = false;
-        OfflineStore.ChooseOfflineStore(vm, $http, $templateCache);
         vm.shipTypes = Utils.shipTypes();
         vm.submitTempCommentData = {};
         vm.viewImage = viewImage;
@@ -82,7 +81,10 @@
         vm.filterProductByNum = filterProductByNum;
         vm.isShowExpressInfoBtn = isShowExpressInfoBtn;
         vm.showOrderExpressInfo = showOrderExpressInfo;
+
         activate();
+
+        OfflineStore.ChooseOfflineStore(vm, $http, $templateCache);
 
         function activate() {
             vm.currentUserOrderCount = 0;
@@ -91,6 +93,7 @@
             vm.productTotalPrice = 0;
             vm.commentData = {};
             vm.orderComments = [];
+            vm.inWeixin = Utils.isWeixin();
             $rootScope.uid=-1;
             $rootScope.proxies = [];
             vm.initWeshareData();

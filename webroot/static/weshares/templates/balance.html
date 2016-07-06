@@ -74,7 +74,7 @@
     <ul class="payment-bg clearfix">
         <li class="fl">应付<span ng-bind="vm.orderPayTotalPrice | currency:'￥'"></span></li>
         <li class="fr"><a class="zfbPay" ng-click='vm.submitOrder(1);'>支付宝支付</a></li>
-        <li class="fr"><a class="weixinPay" ng-click='vm.submitOrder(0);'>微信支付</a></li>
+        <li class="fr" ng-show="vm.inWeixin"><a class="weixinPay" ng-click='vm.submitOrder(0);'>微信支付</a></li>
     </ul>
 </div>
 
