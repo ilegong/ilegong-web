@@ -24,6 +24,7 @@
                 <div class="panel-body">
                   <div class="col-md-12" id="share-basic-info-panel">
                     <h3> 基本信息</h3>
+                    <input type="hidden" class="share-creator" value="{{$this->data['Weshare']['creator']}}"/>
                     <div class="form-group">
                       <label class="control-label">分享标题</label>
                       <input maxlength="100" type="text" class="form-control" placeholder="分享标题" value="{{$this->data['Weshare']['title']}}" id="share-title"/>
@@ -276,4 +277,4 @@
   <input type="hidden" name='category' value="images/index">
 </form>
 <!-- /.container-fluid -->
-<script src="{{$STATIC_HOST}}/static/manage/js/share_edit.js?v0.0.1"></script> {{$this->fetch('bottomscript')}}
+<script src="{{$STATIC_HOST}}/static/manage/js/share_edit.js?v0.0.2"></script> {{$this->fetch('bottomscript')}}

@@ -106,6 +106,7 @@ $(document).ready(function () {
     $saveShareBasicInfoBtn.on('click', function (e) {
         e.preventDefault();
         var shareId = $shareIdEl.val();
+        var shareCreator = $('.share-creator').val();
         var shareTitle = $shareTitleEl.val();
         var shareSendInfo = $shareSendInfoEl.val();
         var imagesStr = $('#share-images').val();
@@ -115,7 +116,8 @@ $(document).ready(function () {
             "images": imagesStr,
             "title": shareTitle,
             "send_info": shareSendInfo,
-            "description": shareDescription
+            "description": shareDescription,
+            "creator": shareCreator
         };
         //todo valid data
         $.post('/share_manage/update_share.json', {

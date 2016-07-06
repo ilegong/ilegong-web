@@ -111,8 +111,6 @@ class ShareManageController extends AppController
             ));
             foreach ($users as &$user) {
                 $user['User']['payment'] = $this->parse_payment($user['User']['payment']);
-                $this->log('account: '.json_encode($user));
-                $this->log('account: '.$user['User']['payment']['account']);
             }
 
             if ($this->request->is('ajax')) {
@@ -228,6 +226,9 @@ class ShareManageController extends AppController
             $share_data['images'] = implode('|', $images);
             $share_data['default_image'] = $images[0];
         }
+        // If share is not published, will publish it
+        $share_data['status'] = 0;
+
         $this->Weshare->save($share_data);
         $this->clear_share_cache();
         echo json_encode(array('success' => true));
@@ -448,6 +449,42 @@ class ShareManageController extends AppController
         $this->data = $weshareData;
     }
 
+    public function share_add($user_id)
+    {
+        $uid = $this->currentUser['id'];
+        if (!is_super_share_manager($uid)) {
+            $this->redirect(array('action' => 'shares'));
+            return;
+        }
+
+        $weshare = $this->Weshare->find('first', array(
+                'conditions' => array(
+                    'status' => 10,
+                    'creator' => $user_id
+                ),
+            )
+        );
+
+        if(!empty($weshare)){
+            $this->log('Use existing un-published weshare '. $weshare['Weshare']['id']);
+            $this->redirect("/share_manage/share_edit/".$weshare['Weshare']['id']);
+        }
+
+        $weshare = array('creator'=>$user_id, 'status'=>10);
+        $this->Weshare->save($weshare);
+        $shareId = $this->Weshare->getLastInsertID();
+        $this->log('Admin '.$uid.' tries to create weshare '.$shareId.' for user '.$user_id);
+
+        $shipSettings = [array("tag"=>"self_ziti","status"=>-1,"limit"=>0,"ship_fee"=>0,"weshare_id"=>$shareId ),array("tag"=>"kuai_di","status"=>1,"limit"=>0,"ship_fee"=>0,"weshare_id"=>$shareId )];
+        $weshareShipSettingM = ClassRegistry::init('WeshareShipSetting');
+        $weshareShipSettingM->saveAll($shipSettings);
+
+        $rebasePercent = array("share_id"=>$shareId ,"percent"=>"0","status"=>0);
+        $proxyRebatePercent = ClassRegistry::init('ProxyRebatePercent');
+        $proxyRebatePercent->save($rebasePercent);
+        $this->redirect("/share_manage/share_edit/".$shareId);
+    }
+
     public function save_user_edit()
     {
         $payment = [
@@ -483,7 +520,6 @@ class ShareManageController extends AppController
         $userData['User']['payment'] = $this->parse_payment($userData['User']['payment']);
         $this->set('user', $userData['User']);
     }
-
 
     public function authorize_shares()
     {
