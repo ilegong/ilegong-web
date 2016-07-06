@@ -23,8 +23,8 @@
     <td>{{floatval($weshare_summery[$current_share_item['id']]['product_total_price'])}}</td>
     <td>{{round(floatval($weshare_summery[$current_share_item['id']]['ship_fee']/100),2)}}</td>
     <td>{{round(floatval($weshare_summery[$current_share_item['id']]['coupon_total']/100),2)}}</td>
-    <td>{{round(floatval($weshare_proxy_rebate_map[$current_share_item['id']]),2)}}</td>
-    <td>{{$weshare_rebate_map[$current_share_item['id']]}}</td>
+    <td>{{$weshare_proxy_rebate_map[$current_share_item['id']]['rebate_money']}}</td>
+    <td>{{$weshare_rebate_map[$current_share_item['id']]['rebate_money']}}</td>
     <td>{{floatval($weshare_refund_map[$current_share_item['id']])}}</td>
     <td>{{get_user_payment_info($creators[$current_share_item['creator']]['payment'])}}</td>
     <td>

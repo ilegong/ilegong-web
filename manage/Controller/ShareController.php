@@ -449,10 +449,10 @@ class ShareController extends AppController
             $refund_fee = floatval($weshare_refund_map[$share_id]);
             $coupon_fee = round(floatval($weshare_summery[$share_id]['coupon_total'] / 100), 2);
             $product_fee = floatval($weshare_summery[$share_id]['product_total_price']);
-            $rebate_fee = $weshare_rebate_map[$share_id];
+            $rebate_fee = $weshare_rebate_map[$share_id]['rebate_money'];
+            $proxy_rebate_fee = $weshare_proxy_rebate_map[$share_id]['rebate_money'];
             $total_fee = floatval($weshare_summery[$share_id]['total_price']);
             $ship_fee = round($weshare_summery[$share_id]['ship_fee'] / 100, 2);
-            $proxy_rebate_fee = round($weshare_proxy_rebate_map[$share_id] / 100, 2);
             $current_share_repaid_money = $repaid_money_result[$share_id];
             if ($current_share_repaid_money == 0) {
                 $current_share_repaid_money = 0;
