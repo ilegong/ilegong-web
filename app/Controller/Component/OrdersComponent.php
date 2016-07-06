@@ -51,7 +51,8 @@ class OrdersComponent extends Component
                 [
                     'table' => 'cake_weshares',
                     'alias' => 'Weshare',
-                    'conditions' => ['Weshare.id = Order.member_id']
+                    'conditions' => ['Weshare.id = Order.member_id'],
+                    'type' => 'left'
                 ],
                 [
                     'table' => 'pay_notifies',
