@@ -1407,7 +1407,7 @@ class ShareController extends AppController
             if (!isset($share_rebate_map[$share_id])) {
                 $share_rebate_map[$share_id] = array('rebate_money' => 0);
             }
-            $share_rebate_map[$share_id]['rebate_money'] = $log['RebateTrackLog']['rebate_money'];
+            $share_rebate_map[$share_id]['rebate_money'] = $share_rebate_map[$share_id]['rebate_money'] + $log['RebateTrackLog']['rebate_money'];
         }
         foreach ($share_rebate_map as &$rebate_item) {
             $rebate_item['rebate_money'] = number_format(round($rebate_item['rebate_money'] / 100, 2), 2);
@@ -1434,7 +1434,7 @@ class ShareController extends AppController
             if (!isset($share_rebate_map[$share_id])) {
                 $share_rebate_map[$share_id] = array('rebate_money' => 0);
             }
-            $share_rebate_map[$share_id]['rebate_money'] = $log['RebateTrackLog']['rebate_money'];
+            $share_rebate_map[$share_id]['rebate_money'] = $share_rebate_map[$share_id]['rebate_money'] + $log['RebateTrackLog']['rebate_money'];
         }
         foreach ($share_rebate_map as &$rebate_item) {
             $rebate_item['rebate_money'] = number_format(round($rebate_item['rebate_money'] / 100, 2), 2);
