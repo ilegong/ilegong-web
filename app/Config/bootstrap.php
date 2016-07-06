@@ -2549,15 +2549,8 @@ function is_super_share_manager($uid) {
         902185, 633345, 701166, 544307,
         141, 802852, 801447, 895096,
         711503, 897195, 897247, 5081,
-        559795, 902131, 884183, 12282
+        559795, 902131, 12282, 926835
     ];
-
-    // just for development perpose.
-    if ($_SERVER['HTTP_HOST'] === 'dev.tongshijia.com') {
-        // 811917 == 小宝妈
-        $super_manager[] = 811917;
-    }
-
     return in_array($uid, $super_manager);
 }
 
