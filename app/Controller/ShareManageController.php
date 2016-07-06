@@ -1660,7 +1660,7 @@ class ShareManageController extends AppController
         }
         foreach ($rebateLogs as $log) {
             $share_id = $log['RebateTrackLog']['share_id'];
-            $share_rebate_map[$share_id] = $log['RebateTrackLog']['rebate_money'];
+            $share_rebate_map[$share_id] = $share_rebate_map[$share_id] + $log['RebateTrackLog']['rebate_money'];
         }
         foreach ($share_rebate_map as $key => $rebate_item) {
             $result[$key] = number_format(round($rebate_item / 100, 2), 2);
