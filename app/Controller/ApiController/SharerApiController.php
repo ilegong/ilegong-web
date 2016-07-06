@@ -254,6 +254,22 @@ class SharerApiController extends Controller
     {
         $uid = $this->currentUser['id'];
         $auth_shares_result = $this->WeshareBuy->get_my_auth_shares($uid, $page, $limit, $status, $settlement);
+        $shares = $this->map_auth_share_data($auth_shares_result);
+        echo json_encode(array_values($shares));
+        exit();
+    }
+
+    public function get_provide_share_list($status, $settlement, $page, $limit)
+    {
+        $uid = $this->currentUser['id'];
+        $auth_shares_result = $this->WeshareBuy->get_my_auth_shares($uid, $page, $limit, $status, $settlement, true);
+        $shares = $this->map_auth_share_data($auth_shares_result);
+        echo json_encode(array_values($shares));
+        exit();
+    }
+
+    private function map_auth_share_data($auth_shares_result)
+    {
         $share_ids = Hash::extract($auth_shares_result, '{n}.Weshare.id');
         $shares = [];
         if (!empty($share_ids)) {
@@ -272,8 +288,7 @@ class SharerApiController extends Controller
                 $shares[$share_item_id]['auth_types'][] = $operate_item['data_type'];
             }
         }
-        echo json_encode(array_values($shares));
-        exit();
+        return $shares;
     }
 
     /**
