@@ -28,6 +28,7 @@
             <thead>
               <tr>
                 <th>分享ID</th>
+                  <th>用户ID</th>
                 <th>图片</th>
                 <th>分享名称</th>
                 <th>
@@ -48,6 +49,7 @@
                 <td>
                   {{$product['PoolProduct']['weshare_id']}}
                 </td>
+                  <td>{{$product['PoolProduct']['user_id']}}</td>
                 <td class='share-images'>
                   <img src="{{$product['PoolProduct']['share_img']}}" style="width: 200px;height: 60px;" class="img-thumbnail" alt="{{$product['PoolProduct']['share_name']}}" />
                 </td>
