@@ -302,7 +302,7 @@ class SharerApiController extends Controller
                 ]
             ],
             'recursive' => 1,
-            'fields' => ['Order.id', 'Order.total_all_price', 'Order.consignee_name', 'Order.consignee_address', 'Order.status', 'Order.created', 'Order.pay_time', 'Order.creator']
+            'fields' => ['Order.id', 'Order.total_all_price', 'Order.consignee_name', 'Order.consignee_address', 'Order.consignee_mobilephone', 'Order.ship_type_name', 'Order.ship_type', 'Order.ship_code', 'Order.status', 'Order.created', 'Order.pay_time', 'Order.creator', 'Order.business_remark']
         ]);
         $result = [];
         foreach ($orders as $order_item) {
