@@ -104,6 +104,7 @@ var all_css = [
     name: 'site-common.min.css',
     sources: [
       'webroot/src/scss/site-common.scss',
+      'webroot/src/scss/iconfont.css'
     ],
     dist: 'webroot/static/weshares/css/'
   }, {

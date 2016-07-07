@@ -7,13 +7,11 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <title><?php echo $this->fetch('title') ?: '微分享'; ?></title>
-    <link href="{{$STATIC_HOST}}/static/weshares/css/site-common.min.css?v2.5.20" media="all" rel="stylesheet"
+    <link href="{{$STATIC_HOST}}/static/weshares/css/site-common.min.css?v2.5.21" media="all" rel="stylesheet"
           type="text/css">
     <?php
     echo $this->fetch('css');
     ?>
-    <link href="{{$STATIC_HOST}}/static/common/iconfont.css?v0.0.2" media="all" rel="stylesheet"
-          type="text/css">
     <link href="http://cdn.bootcss.com/angular-carousel/1.0.1/angular-carousel.min.css" rel="stylesheet">
 </head>
 
@@ -24,8 +22,17 @@
 
 <!-- loading layer-->
 <div class="background-layer" ng-show="loadingPage">
-    <div style="position: absolute;top:40%;left: 35%;color: white;">
-        <div class="spinner spinner--steps icon-spinner" aria-hidden="true"></div>
+    <div style="position: absolute;top:40%;left: 47.5%;color: white;display:flex;/*多轮布局*/ align-items:center;/*垂直*/ justify-content:center;/*水平*/">
+        <div class="pys-loading">
+            <i></i>
+            <i></i>
+            <i></i>
+            <i></i>
+            <i></i>
+            <i></i>
+            <i></i>
+            <i></i>
+        </div>
     </div>
 </div>
 <!--输入错误层-->
