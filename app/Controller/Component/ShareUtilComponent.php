@@ -2792,22 +2792,23 @@ class ShareUtilComponent extends Component
             ],
             'fields' => ['refer_share_id']
         ]);
-        $share_ids = array_values($fork_shares);
-        $orderWaitShip = $orderM->find('list', [
+        $share_ids = array_keys($fork_shares);
+        $orderWaitShip = $orderM->find('all', [
             'conditions' => [
-                'member_id' => $share_ids,
-                'type' => ORDER_TYPE_WESHARE_BUY,
-                'status' => ORDER_STATUS_PAID
+                'Order.member_id' => $share_ids,
+                'Order.type' => ORDER_TYPE_WESHARE_BUY,
+                'Order.status' => ORDER_STATUS_PAID
             ],
-            'group' => 'member_id',
-            'fields' => ['member_id', 'COUNT(id) as order_count']
+            'group' => 'Order.member_id',
+            'fields' => ['Order.member_id', 'COUNT(Order.id) as order_count']
         ]);
+        $orderWaitShip = Hash::combine($orderWaitShip, '{n}.Order.member_id', '{n}.0.order_count');
         $result = [];
         foreach ($fork_shares as $share_id => $pool_share_id) {
             if(!isset($result[$pool_share_id])){
                    $result[$pool_share_id] = 0;
             }
-            if($orderWaitShip[$share_id]){
+            if ($orderWaitShip[$share_id] > 0) {
                 $result[$pool_share_id] = $result[$pool_share_id] + $orderWaitShip[$share_id];
             }
         }

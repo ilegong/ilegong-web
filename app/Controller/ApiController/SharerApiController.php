@@ -271,8 +271,8 @@ class SharerApiController extends Controller
     public function get_provide_share_list($status)
     {
         $uid = $this->currentUser['id'];
+        //$uid = 810684;
         $this->loadModel('PoolProduct');
-        $this->loadModel('Order');
         $poolProducts = $this->PoolProduct->find('all', [
             'conditions' => [
                 'PoolProduct.user_id' => $uid,
