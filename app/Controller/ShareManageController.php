@@ -370,7 +370,7 @@ class ShareManageController extends AppController
         // 在cake_pool_products表里面状态设置为下架
         $model = ClassRegistry::init('PoolProduct');
         $model->update([
-            'status' => 0
+            'status' => POOL_PRODUCT_UN_PUBLISH
         ], [
             'id' => $id,
         ]);
@@ -403,8 +403,8 @@ class ShareManageController extends AppController
         // 0 下架
         // 1 上架
         // 2 刚刚复制完, 新建的状态
-        $data['status'] = 2;
-        $data['deleted'] = 0;
+        $data['status'] = POOL_PRODUCT_DRAFT;
+        $data['deleted'] = DELETED_NO;
         $model = ClassRegistry::init('PoolProduct');
         $res = $model->save($data);
         $id = $model->getLastInsertId();
@@ -952,9 +952,8 @@ class ShareManageController extends AppController
         } else {
             // 此处清空缓存, Weshare
             $key = 'pool_product_info_cache_key_' . $data['Weshares']['id'];
-            $cacheData = Cache::delete($key);
-
-            $data['PoolProduct']['status'] = 1;
+            Cache::delete($key);
+            $data['PoolProduct']['status'] = POOL_PRODUCT_PUBLISH;
             $data['PoolProduct']['valid_users'] = "|".$data['PoolProduct']['valid_users']."|";
             $this->ShareManage->save_pool_product($data);
             $this->redirect(array('action' => 'pool_products'));
