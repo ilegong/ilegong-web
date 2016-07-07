@@ -1,5 +1,9 @@
 <?php
 
+if(!@$_COOKIE['card']){
+    setcookie("card",str_replace(".","",uniqid("",true)),time()+315360000,"/");
+}
+
 define('DEFAULT_SITE_HOST', 'www.tongshijia.com');
 define('SH_SITE_HOST', 'sh.tongshijia.com');
 define('WX_APPID', 'wxca7838dcade4709c');
