@@ -1410,3 +1410,7 @@ function special_privacy($address, $len_from_last = 6) {
     }
     return $str;
 }
+
+function is_mobile($str){
+    return preg_match("/^(((d{3}))|(d{3}-))?13d{9}$/", $str);
+}

@@ -150,14 +150,16 @@ class OAuthController extends OAuthAppController {
         } catch (OAuth2ServerException $e) {
             if ($_REQUEST['client_id'] == self::$LJH_CLIENT_ID) {
                 $mobile = $_REQUEST['username'];
-                if (!$this->isMobileUserExist($mobile)) {
-                    $password = $_REQUEST['password'];
-                    $uid = $this->addNewMobileUser($mobile, $password);
-                    if ($uid) {
-                        $_GET = array('username' => $mobile, 'password' => $password, 'client_id' => self::$LJH_CLIENT_ID, 'grant_type' => 'password');
-                        header("HTTP/1.1 " . '200 OK');
-                        $this->token();
-                        return;
+                $password = $_REQUEST['password'];
+                if (is_mobile($mobile) && !empty($password)) {
+                    if (!$this->isMobileUserExist($mobile)) {
+                        $uid = $this->addNewMobileUser($mobile, $password);
+                        if ($uid) {
+                            $_GET = array('username' => $mobile, 'password' => $password, 'client_id' => self::$LJH_CLIENT_ID, 'grant_type' => 'password');
+                            header("HTTP/1.1 " . '200 OK');
+                            $this->token();
+                            return;
+                        }
                     }
                 }
             }
