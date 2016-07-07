@@ -1434,6 +1434,9 @@ class ShareManageController extends AppController
         $pager = new MyPaginator($count, 30, $page, $url);
         $this->set('pager', $pager);
         $this->set('balanceLogs', $balanceLogs);
+        $this->set('shareId', $_REQUEST['shareId']);
+        $this->set('shareName', $_REQUEST['shareName']);
+        $this->set('balanceStatus', $_REQUEST['balanceStatus']);
     }
 
     /**
@@ -1446,6 +1449,9 @@ class ShareManageController extends AppController
         $cond = [];
         if ($_REQUEST['shareId']) {
             $cond['Weshare.id'] = $_REQUEST['shareId'];
+        }
+        if ($_REQUEST['sharerId']) {
+            $cond['Weshare.creator'] = $_REQUEST['sharerId'];
         }
         if ($_REQUEST['shareName']) {
             $cond['Weshare.title like '] = '%' . $_REQUEST['shareName'] . '%';
@@ -1530,13 +1536,14 @@ class ShareManageController extends AppController
         ]);
         $action = $this->request->params['action'];
         $this->set('action', $action);
-        $url = "/share_manage/$action?page=(:num)&shareId={$_REQUEST['shareId']}&shareType={$filter_type}&shareName={$_REQUEST['shareName']}&beginDate={$_REQUEST['beginDate']}&endDate={$_REQUEST['endDate']}&balanceType={$filter_balance_type}&balanceStatus={$filter_status}&balanceFee={$balance_fee_filter}";
+        $url = "/share_manage/$action?page=(:num)&shareId={$_REQUEST['shareId']}&shareType={$filter_type}&shareName={$_REQUEST['shareName']}&beginDate={$_REQUEST['beginDate']}&endDate={$_REQUEST['endDate']}&balanceType={$filter_balance_type}&balanceStatus={$filter_status}&balanceFee={$balance_fee_filter}&sharerId={$_REQUEST['sharerId']}";
         $pager = new MyPaginator($count, 50, $page, $url);
         $this->set('pager', $pager);
         $this->set('weshares', $weshares);
         $weshare_product_summary = $this->get_share_product_summary($weshares, $orders);
         $this->set('weshare_product_summary', $weshare_product_summary);
         $this->set('shareId', $_REQUEST['shareId']);
+        $this->set('sharerId', $_REQUEST['sharerId']);
         $this->set('shareType', $filter_type);
         $this->set('shareName', $_REQUEST['shareName']);
         $this->set('beginDate', $_REQUEST['beginDate']);
