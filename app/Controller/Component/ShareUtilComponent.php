@@ -2814,4 +2814,5 @@ class ShareUtilComponent extends Component
         }
         return $result;
     }
+
 }

@@ -8,7 +8,7 @@ class SharerApiController extends Controller
 
     public function beforeFilter()
     {
-        $allow_action = array('test', 'order_export');
+        $allow_action = array('test', 'order_export', 'get_provide_share_order_list');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action) == false) {
             $this->currentUser = $this->OAuth->user();
@@ -268,7 +268,58 @@ class SharerApiController extends Controller
         exit;
     }
 
-    public function get_provide_share_list($status)
+    public function get_provide_share_order_list($share_id, $only_paid, $page, $limit)
+    {
+        $this->loadModel('Order');
+        $cond = [
+            'Order.type' => ORDER_TYPE_WESHARE_BUY
+        ];
+        $keyword = $_REQUEST['keyword'];
+        if (!empty($keyword)) {
+            $cond['OR'] = [
+                ['Order.consignee_name like ' => '%' . $keyword . '%'],
+                ['Order.consignee_address like ' => '%' . $keyword . '%'],
+                ['Order.consignee_mobilephone' => '%' . $keyword . '%']
+            ];
+        }
+        if ($only_paid == 1) {
+            $cond['Order.status'] = ORDER_STATUS_PAID;
+        } else {
+            $cond['Order.status > '] = ORDER_STATUS_WAITING_PAY;
+        }
+        $cond['Weshare.refer_share_id'] = $share_id;
+        $cond['Weshare.type'] = SHARE_TYPE_POOL;
+        $orders = $this->Order->find('all', [
+            'conditions' => $cond,
+            'limit' => $limit,
+            'page' => $page,
+            'joins' => [
+                [
+                    'type' => 'left',
+                    'table' => 'cake_weshares',
+                    'alias' => 'Weshare',
+                    'conditions' => 'Weshare.id = Order.member_id'
+                ]
+            ],
+            'recursive' => 1,
+            'fields' => ['Order.id', 'Order.total_all_price', 'Order.consignee_name', 'Order.consignee_address', 'Order.status', 'Order.created', 'Order.pay_time', 'Order.creator']
+        ]);
+        $result = [];
+        foreach ($orders as $order_item) {
+            $carts = $order_item['Cart'];
+            $cart_info = [];
+            foreach ($carts as $cart_item) {
+                $cart_info[] = $cart_item['name'] . 'X' . $cart_item['num'];
+            }
+            $order = $order_item['Order'];
+            $order['carts'] = $cart_info;
+            $result[] = $order;
+        }
+        echo json_encode($result);
+        exit;
+    }
+
+    public function get_provide_share_list()
     {
         $uid = $this->currentUser['id'];
         //$uid = 810684;
@@ -276,8 +327,9 @@ class SharerApiController extends Controller
         $poolProducts = $this->PoolProduct->find('all', [
             'conditions' => [
                 'PoolProduct.user_id' => $uid,
-                'PoolProduct.status' => $status
-            ]
+                'PoolProduct.status' => [POOL_PRODUCT_PUBLISH, POOL_PRODUCT_UN_PUBLISH],
+            ],
+            'order' => ['PoolProduct.status DESC', 'PoolProduct.created DESC']
         ]);
         $result = [];
         $shareIds = [];
