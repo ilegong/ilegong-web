@@ -268,26 +268,28 @@ class SharerApiController extends Controller
         exit;
     }
 
-    public function get_provide_share_list()
+    public function get_provide_share_list($status)
     {
         $uid = $this->currentUser['id'];
-        //$auth_shares_result = $this->WeshareBuy->get_my_auth_shares($uid, $page, $limit, $status, $settlement, true);
-        //$shares = $this->map_auth_share_data($auth_shares_result);
-        //echo json_encode(array_values($shares));
         $this->loadModel('PoolProduct');
+        $this->loadModel('Order');
         $poolProducts = $this->PoolProduct->find('all', [
             'conditions' => [
-                'PoolProduct.user_id' => $uid
-            ],
-            'joins' => [
-                [
-                    'type' => 'left',
-                    'table' => 'cake_weshares',
-                    'alias' => 'Weshare',
-                    'conditions' => ['Weshare.id = PoolProduct.weshare_id']
-                ]
+                'PoolProduct.user_id' => $uid,
+                'PoolProduct.status' => $status
             ]
         ]);
+        $result = [];
+        $shareIds = [];
+        foreach ($poolProducts as $productItem) {
+            $shareIds[] = $productItem['PoolProduct']['weshare_id'];
+            $result[] = $productItem['PoolProduct'];
+        }
+        $paid_order_count = $this->ShareUtil->get_pool_share_wait_ship_order_count($shareIds);
+        foreach ($result as &$item) {
+            $item['wait_ship_order_count'] = empty($paid_order_count[$item['weshare_id']]) ? 0 : $paid_order_count[$item['weshare_id']];
+        }
+        echo json_encode($result);
         exit;
     }
 

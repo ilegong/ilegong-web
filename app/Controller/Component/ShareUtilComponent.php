@@ -2782,4 +2782,35 @@ class ShareUtilComponent extends Component
             $this->ShareAuthority->init_clone_share_from_pool_operate_config($newShareInfo['Weshare']['id'], $newShareInfo['Weshare']['creator'], $refer_weshare['Weshare']['creator']);
         }
     }
+
+    public function get_pool_share_wait_ship_order_count($ids){
+        $weshareM = ClassRegistry::init('Weshare');
+        $orderM = ClassRegistry::init('Order');
+        $fork_shares = $weshareM->find('list', [
+            'conditions' => [
+                'refer_share_id' => $ids
+            ],
+            'fields' => ['refer_share_id']
+        ]);
+        $share_ids = array_values($fork_shares);
+        $orderWaitShip = $orderM->find('list', [
+            'conditions' => [
+                'member_id' => $share_ids,
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'status' => ORDER_STATUS_PAID
+            ],
+            'group' => 'member_id',
+            'fields' => ['member_id', 'COUNT(id) as order_count']
+        ]);
+        $result = [];
+        foreach ($fork_shares as $share_id => $pool_share_id) {
+            if(!isset($result[$pool_share_id])){
+                   $result[$pool_share_id] = 0;
+            }
+            if($orderWaitShip[$share_id]){
+                $result[$pool_share_id] = $result[$pool_share_id] + $orderWaitShip[$share_id];
+            }
+        }
+        return $result;
+    }
 }
