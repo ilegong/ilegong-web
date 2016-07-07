@@ -250,6 +250,15 @@ class SharerApiController extends Controller
         return $share_list;
     }
 
+    public function get_auth_share_list_with_out_pool($status, $settlement, $page, $limit)
+    {
+        $uid = $this->currentUser['id'];
+        $auth_shares_result = $this->WeshareBuy->get_my_auth_shares($uid, $page, $limit, $status, $settlement, true);
+        $shares = $this->map_auth_share_data($auth_shares_result);
+        echo json_encode(array_values($shares));
+        exit;
+    }
+
     public function get_auth_share_list($status, $settlement, $page, $limit)
     {
         $uid = $this->currentUser['id'];
@@ -259,12 +268,26 @@ class SharerApiController extends Controller
         exit;
     }
 
-    public function get_provide_share_list($status, $settlement, $page, $limit)
+    public function get_provide_share_list()
     {
         $uid = $this->currentUser['id'];
-        $auth_shares_result = $this->WeshareBuy->get_my_auth_shares($uid, $page, $limit, $status, $settlement, true);
-        $shares = $this->map_auth_share_data($auth_shares_result);
-        echo json_encode(array_values($shares));
+        //$auth_shares_result = $this->WeshareBuy->get_my_auth_shares($uid, $page, $limit, $status, $settlement, true);
+        //$shares = $this->map_auth_share_data($auth_shares_result);
+        //echo json_encode(array_values($shares));
+        $this->loadModel('PoolProduct');
+        $poolProducts = $this->PoolProduct->find('all', [
+            'conditions' => [
+                'PoolProduct.user_id' => $uid
+            ],
+            'joins' => [
+                [
+                    'type' => 'left',
+                    'table' => 'cake_weshares',
+                    'alias' => 'Weshare',
+                    'conditions' => ['Weshare.id = PoolProduct.weshare_id']
+                ]
+            ]
+        ]);
         exit;
     }
 

@@ -244,7 +244,7 @@ class WeshareBuyComponent extends Component
         return $shares;
     }
 
-    public function get_my_auth_shares($uid, $page, $limit, $status, $settlement, $only_pool_share = false)
+    public function get_my_auth_shares($uid, $page, $limit, $status, $settlement, $without_pool_share = false)
     {
         $shareOperateSettingM = ClassRegistry::init('ShareOperateSetting');
         if ($status != WESHARE_STATUS_NORMAL) {
@@ -255,8 +255,8 @@ class WeshareBuyComponent extends Component
             'Weshare.status' => $status,
             'Weshare.settlement' => $settlement
         ];
-        if ($only_pool_share) {
-            $cond['Weshare.type'] = SHARE_TYPE_POOL;
+        if ($without_pool_share) {
+            $cond['Weshare.type'] = SHARE_TYPE_DEFAULT;
         }
         $result = $shareOperateSettingM->find('all', [
             'conditions' => $cond,
