@@ -47,7 +47,7 @@ class JPushComponent extends Component
         $client = $this->get_push_client();
         foreach ($user_ids as $uid) {
             $u_device = $client->device()->getAliasDevices(strval($uid), ['ios']);
-            if (!empty($u_device['registration_ids'])) {
+            if (!empty($u_device->registration_ids)) {
                 $result[] = $uid;
             }
         }
