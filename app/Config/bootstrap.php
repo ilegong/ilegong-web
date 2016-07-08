@@ -1681,7 +1681,7 @@ function send_weixin_message($post_data, $logObj = null) {
     ];
     
     $log = [
-        "index" => "event_".$tmp_type[$post_data['template_id']],
+        "index" => "wx_msg_".$tmp_type[$post_data['template_id']],
         "type" => $tmp_type[$post_data['template_id']],
         "msg" => $post_data
     ];
