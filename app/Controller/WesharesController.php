@@ -191,7 +191,6 @@ class WesharesController extends AppController
         if (!empty($replay_comment_id)) {
             $this->set('reply_comment_id', $replay_comment_id);
         }
-
         //标记链接从什么地方点击来的
         $view_from = $_REQUEST['from'];
         if (empty($view_from)) {
@@ -201,7 +200,6 @@ class WesharesController extends AppController
                 $view_from = $share_type == 'appMsg' ? 'groupmessage' : 'timeline';
             }
         }
-
         $shared_offer_id = $this->handle_weshare_view_has_shared_offer($uid, $weshare['creator']);
         $summary = $this->ShareUtil->get_index_product_summary($weshare['id']);
         $ordersDetail = $this->WeshareBuy->get_current_user_share_order_data($weshare['id'], $uid);
