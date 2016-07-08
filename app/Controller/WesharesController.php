@@ -147,57 +147,30 @@ class WesharesController extends AppController
             "weshare_id" => intval($weshare_id)
         ];
         add_logs_to_es($log);
-        $uid = $this->currentUser['id'];
-        //check has sharer has red packet
-        //领取红包
-        $shared_offer_id = $_REQUEST['shared_offer_id'];
-        //has share offer id user open share
-        $weshare = $this->WeshareBuy->get_weshare_info($weshare_id);
-        $creator = $this->User->find('first', array('conditions' => array('id' => $weshare['creator'])))['User'];
 
-        //用户抢红包
-        if (!empty($shared_offer_id)) {
-            //process
-            $this->process_shared_offer($shared_offer_id);
-        } else {
-            //use cache
-            if ($weshare['type'] == SHARE_TYPE_POOL_FOR_PROXY) {
-                //check share type
-                if (!$this->ShareUtil->is_proxy_user($uid)) {
-                    $user_can_manage_share = $this->ShareAuthority->user_can_manage_share($uid, $weshare_id);
-                    if (!$user_can_manage_share) {
-                        //not proxy or manage redirect index
-                        $this->redirect('/weshares/index');
-                        return;
-                    }
-                }
-            }
-            $weshare_creator = $weshare['creator'];
-            $shared_offers = $this->SharedOffer->find_new_offers_by_weshare_creator($uid, $weshare_creator);
-            //get first offer
-            if (!empty($shared_offers)) {
-                $this->set('shared_offer_id', $shared_offers[0]['SharedOffer']['id']);
-                $this->set('from', $this->pay_type);
-            }
-            //from paid done
-            if ($from == 1) {
-                $paidMsg = $_REQUEST['msg'];
-                if ($paidMsg == 'ok') {
-                    $this->set('from', $this->pay_type);
-                } else {
-                    $this->add_paid_faild_msg_to_es($uid, $weshare_id);
-                    if ($paidMsg == 'cancel') {
-                        $this->log('Payment of user ' . $uid . ' to weshare ' . $weshare_id . ' failed: canceled', LOG_INFO);
-                    } else {
-                        $this->log('Payment of user ' . $uid . ' to weshare ' . $weshare_id . ' failed: ' . $paidMsg, LOG_ERR);
-                    }
+        $uid = $this->currentUser['id'];
+
+        $weshare = $this->WeshareBuy->get_weshare_info($weshare_id);
+
+        //use cache
+        //渠道价购买链接 判断是否是团长
+        if ($weshare['type'] == SHARE_TYPE_POOL_FOR_PROXY) {
+            //check share type
+            if (!$this->ShareUtil->is_proxy_user($uid)) {
+                $user_can_manage_share = $this->ShareAuthority->user_can_manage_share($uid, $weshare_id);
+                if (!$user_can_manage_share) {
+                    //not proxy or manage redirect index
+                    $this->redirect('/weshares/index');
+                    return;
                 }
             }
         }
+
+        $this->handle_weshare_view_paid($from, $uid, $weshare_id);
+        $creator = $this->User->find('first', array('conditions' => array('id' => $weshare['creator'])))['User'];
         $this->set('uid', $uid);
         $this->set('weshare_id', $weshare_id);
-        //form paid done
-        //$this->log('weshare view mark ' . $_REQUEST['mark']);
+
         //获取推荐人
         $recommend = $_REQUEST['recommend'];
         //add rebate log
@@ -209,7 +182,7 @@ class WesharesController extends AppController
                 $this->set('rebateLogId', $rebateLogId);
             }
         }
-        //mark this form comment template msg and auto pop comment dialog
+        //用户点击评论模板消息自动弹出评论对话框
         $comment_order_id = $_REQUEST['comment_order_id'];
         $replay_comment_id = $_REQUEST['reply_comment_id'];
         if (!empty($comment_order_id)) {
@@ -218,7 +191,8 @@ class WesharesController extends AppController
         if (!empty($replay_comment_id)) {
             $this->set('reply_comment_id', $replay_comment_id);
         }
-        //mark url from
+
+        //标记链接从什么地方点击来的
         $view_from = $_REQUEST['from'];
         if (empty($view_from)) {
             //iOS phone 微信不添加参数手工记录
@@ -227,12 +201,58 @@ class WesharesController extends AppController
                 $view_from = $share_type == 'appMsg' ? 'groupmessage' : 'timeline';
             }
         }
+
+        $shared_offer_id = $this->handle_weshare_view_has_shared_offer($uid, $weshare['creator']);
         $summary = $this->ShareUtil->get_index_product_summary($weshare['id']);
         $ordersDetail = $this->WeshareBuy->get_current_user_share_order_data($weshare['id'], $uid);
         $this->set_weixin_params_for_view($this->currentUser, $creator, $weshare, $recommend, $shared_offer_id, $summary, $ordersDetail);
         $this->set('page_title', $weshare['title']);
         $this->set('click_from', $view_from);
         $this->WeshareBuy->update_share_view_count($weshare_id);
+    }
+
+    private function handle_weshare_view_paid($from, $uid, $weshare_id)
+    {
+        //from paid done
+        if ($from == $this->pay_type) {
+            $paidMsg = $_REQUEST['msg'];
+            if ($paidMsg == 'ok') {
+                $this->set('from', $this->pay_type);
+            } else {
+                $this->add_paid_faild_msg_to_es($uid, $weshare_id);
+                if ($paidMsg == 'cancel') {
+                    $this->log('Payment of user ' . $uid . ' to weshare ' . $weshare_id . ' failed: canceled', LOG_INFO);
+                } else {
+                    $this->log('Payment of user ' . $uid . ' to weshare ' . $weshare_id . ' failed: ' . $paidMsg, LOG_ERR);
+                }
+            }
+        }
+
+    }
+
+    //处理分享链接的红包数据
+    private function handle_weshare_view_has_shared_offer($uid, $weshare_creator)
+    {
+        //check has sharer has red packet
+        //领取红包
+        $shared_offer_id = $_REQUEST['shared_offer_id'];
+        //用户抢红包
+        if (empty($shared_offer_id)) {
+            //process
+            $shared_offers = $this->SharedOffer->find_new_offers_by_weshare_creator($uid, $weshare_creator);
+            //get first offer
+            if (!empty($shared_offers)) {
+                $firstSharedOffer = $shared_offers[0]['SharedOffer'];
+                $shared_offer_id = $firstSharedOffer['id'];
+            }
+        }
+        if (!empty($shared_offer_id)) {
+            $this->set('shared_offer_id', $shared_offer_id);
+            $this->set('from', $this->pay_type);
+            $this->process_shared_offer($shared_offer_id);
+            return $shared_offer_id;
+        }
+        return null;
     }
 
     /**
