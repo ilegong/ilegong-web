@@ -56,7 +56,7 @@ class BalanceApiController extends Controller
         list($order_list, $order_ids) = $this->get_balance_order_list($orders);
         if ($type == 2 || $type == 3) {
             list($order_list, $channel_total_fee) = $this->combine_channel_price_to_order($order_list, $order_ids);
-            $balanceLog['channel_total_fee'] = strval(get_format_number($channel_total_fee));
+            $balanceLog['channel_total_fee'] = get_format_number($channel_total_fee);
         }
         unset($balanceLog['extras']);
         echo json_encode(['orders' => $order_list, 'balanceLog' => $balanceLog]);
