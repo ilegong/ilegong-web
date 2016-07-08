@@ -2534,7 +2534,9 @@ class WeshareBuyComponent extends Component
                 }
             }
             $jpush_title = "您好，{$tuan_leader_name}发起一个分享!";
-            $this->SharePush->push_share_offered_msg($no_buy_uids, $jpush_title, $remark, $weshare_info['id']);
+            foreach ($no_buy_uids as $item) {
+                $this->SharePush->push_share_offered_msg($item, $jpush_title, $remark, $weshare_info['id']);
+            }
         }
     }
 
