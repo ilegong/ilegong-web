@@ -21,9 +21,10 @@ class JPushComponent extends Component
         if (!is_array($user_ids)) {
             $user_ids = [$user_ids];
         }
-        $user_ids = array_map(function($item){
-            return strval($item);
-        }, $user_ids);
+        $user_ids = $this->filter_user($user_ids);
+        if (empty($user_ids)) {
+            return false;
+        }
         $type = strval($type);
         $client = $this->get_push_client();
         //$sendno=null, $time_to_live=null, $override_msg_id=null, $apns_production=null, $big_push_duration=null
@@ -38,6 +39,18 @@ class JPushComponent extends Component
 
         $this->log('push msg result ' . json_encode($result), LOG_DEBUG);
 
+        return $result;
+    }
+
+    public function filter_user($user_ids){
+        $result = [];
+        $client = $this->get_push_client();
+        foreach ($user_ids as $uid) {
+            $u_device = $client->device()->getAliasDevices(strval($uid), ['ios']);
+            if (!empty($u_device['registration_ids'])) {
+                $result[] = $uid;
+            }
+        }
         return $result;
     }
 

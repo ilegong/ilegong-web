@@ -20,7 +20,7 @@ class WeshareBuyComponent extends Component
 
     var $query_comment_fields = array('id', 'username', 'user_id', 'data_id', 'type', 'body', 'order_id', 'parent_id');
 
-    var $components = array('Session', 'Weixin', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'RedisQueue', 'Orders', 'WeshareFaq');
+    var $components = array('Session', 'Weixin', 'RedPacket', 'ShareUtil', 'ShareAuthority', 'RedisQueue', 'Orders', 'WeshareFaq', 'SharePush');
 
     var $query_share_fields = array('id', 'title', 'images', 'status', 'creator', 'created', 'settlement', 'type', 'description');
 
@@ -942,8 +942,11 @@ class WeshareBuyComponent extends Component
             $desc = '感谢您对' . $share_creator_nickname . '的支持，分享快乐！';
             $cart_info = $this->get_cart_name_and_num($order_id);
             $deatail_url = WX_HOST . '/weshares/view/' . $weshare_id;
-            $this->Weixin->send_order_ship_info_msg($order_user_id, null, $ship_code, $ship_company_name, $cart_info['cart_name'], null, $title, $cart_info['num'], $desc, $deatail_url);
             //send_order_ship_info_msg
+            $this->Weixin->send_order_ship_info_msg($order_user_id, null, $ship_code, $ship_company_name, $cart_info['cart_name'], null, $title, $cart_info['num'], $desc, $deatail_url);
+            //push msg to app
+            $jpush_title = "您好，你的订单已经发货，订单号:$order_id，快递公司:$ship_company_name，快递单号:$ship_code";
+            $this->SharePush->push_order_shipped_msg($order_user_id, $jpush_title, $ship_company_name . ' : ' . $ship_code, $order_id);
         }
     }
 
@@ -1047,6 +1050,13 @@ class WeshareBuyComponent extends Component
             $conginess_name = $order['Order']['consignee_name'];
             $conginess_address = $order['Order']['consignee_address'];
             $this->Weixin->send_share_product_arrival($open_id, $detail_url, $title, $order_id, $conginess_address, $conginess_name, $desc);
+        }
+        foreach ($orders as $order) {
+            $order_id = $order['Order']['id'];
+            $order_user_id = $order['Order']['creator'];
+            $conginess_address = $order['Order']['consignee_address'];
+            $jpush_title = "您好，你的订单商品已经到自提点，地址:$conginess_address";
+            $this->SharePush->push_pick_up_msg($order_user_id, $jpush_title, $msg, $order_id);
         }
     }
 
@@ -2512,15 +2522,19 @@ class WeshareBuyComponent extends Component
             $remark = '点击详情，赶快加入' . $tuan_leader_name . '的分享！';
             $deatil_url = $this->get_weshares_detail_url($weshare_info['id']);
             $already_buy_uids = $this->get_has_buy_user($weshare_info['id']);
+            $no_buy_uids = [];
             if(!empty($fans_open_ids)){
                 foreach ($fans_open_ids as $uid => $open_id) {
                     $fans_open_ids = array_unique($fans_open_ids);
                     if (!in_array($uid, $already_buy_uids)) {
+                        $no_buy_uids[] = $uid;
                         $title = $fans_data_nickname[$uid] . '你好，' . $msg_content;
                         $this->Weixin->send_share_buy_complete_msg($open_id, $title, $product_name, $tuan_leader_name, $remark, $deatil_url);
                     }
                 }
             }
+            $jpush_title = "您好，{$tuan_leader_name}发起一个分享!";
+            $this->SharePush->push_share_offered_msg($no_buy_uids, $jpush_title, $remark, $weshare_info['id']);
         }
     }
 
