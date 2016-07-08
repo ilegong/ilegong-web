@@ -135,7 +135,7 @@ class WeixinComponent extends Component {
         if ($user_weixin != false) {
             $open_id = $user_weixin['oauth_openid'];
             if (empty($title)) {
-                $title = "亲，您的订单号为" . $order_id . "的最新物流信息: " . $msg . "如果你已经收货,请点击详情确认收货,可以获取积分(积分可以抵现)。";
+                $title = "亲，您的订单号为" . $order_id . "的最新物流信息: " . $msg . "如果你已经收货,请点击详情确认收货";
             }
             if (empty($product_num)) {
                 $product_num = '总数' . $good_number;

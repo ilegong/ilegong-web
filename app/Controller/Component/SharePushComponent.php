@@ -11,6 +11,13 @@ class SharePushComponent extends Component
 
     static $MSG_FAQ_TYPE = 2;
 
+    static $MSG_NOTICE_ORDER_SHIPPED = 100;
+
+    static $MSG_NOTICE_PICK_UP = 101;
+
+    static $MSG_NOTICE_OFFERED =  102;
+
+
     public function push_buy_msg($buyOptLog, $share)
     {
         $user_id = $buyOptLog['user_id'];
@@ -31,6 +38,8 @@ class SharePushComponent extends Component
         $this->JPush->push($sharer, $title, $comment_content, self::$MSG_COMMENT_TYPE, ['users' => json_encode($users, JSON_UNESCAPED_UNICODE), 'share_title' => $share['title'], 'type' => self::$MSG_COMMENT_TYPE]);
     }
 
+
+
     public function push_faq_msg($faqData)
     {
         $msg = $faqData['msg'];
@@ -38,6 +47,34 @@ class SharePushComponent extends Component
         $title = $users[$faqData['sender']]['nickname'] . ' : ' . $msg;
         $this->JPush->push(strval($faqData['receiver']), $title, $msg, self::$MSG_FAQ_TYPE, ['msg' => $msg, 'users' => json_encode($users, JSON_UNESCAPED_UNICODE), 'type' => self::$MSG_FAQ_TYPE]);
     }
+
+    public function push_order_shipped_msg($user_id, $title, $msg, $order_id)
+    {
+        try {
+            $this->JPush->push(strval($user_id), $title, $msg, self::$MSG_NOTICE_ORDER_SHIPPED, ['order_id' => $order_id]);
+        } catch (Exception $e) {
+            $this->log('push_order_shipped_msg jpush error ' . $e->getMessage());
+        }
+    }
+
+    public function push_pick_up_msg($user_id, $title, $msg, $order_id)
+    {
+        try {
+            $this->JPush->push(strval($user_id), $title, $msg, self::$MSG_NOTICE_PICK_UP, ['order_id' => $order_id]);
+        } catch (Exception $e) {
+            $this->log('push_pick_up_msg jpush error ' . $e->getMessage());
+        }
+    }
+
+    public function push_share_offered_msg($user_id, $title, $msg, $weshare_id)
+    {
+        try {
+            $this->JPush->push(strval($user_id), $title, $msg, ['weshare_id' => $weshare_id]);
+        } catch (Exception $e) {
+            $this->log('push_share_offered_msg jpush error ' . $e->getMessage());
+        }
+    }
+
 
     private function get_users($user_ids)
     {
