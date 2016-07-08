@@ -83,13 +83,14 @@ class BalanceApiController extends Controller
             $order = $item['Order'];
             $user = $item['User'];
             $order_ids[] = $order['id'];
-            $order['product_fee'] = strval(get_format_number($order['total_price'] - $order['ship_fee'] / 100));
-            $order['ship_fee'] = strval(get_format_number($order['ship_fee'] / 100));
+            $order['product_fee'] = get_format_number($order['total_price'] - $order['ship_fee'] / 100);
+            $order['ship_fee'] = get_format_number($order['ship_fee'] / 100);
+            $order['coupon_total'] = get_format_number($order['coupon_total']/100);
             $order['nickname'] = $user['nickname'];
             $rebateTrackLog = $item['RebateTrackLog'];
-            $order['rebate_fee'] = empty($rebateTrackLog['rebate_money']) ? '0' : strval(get_format_number($rebateTrackLog['rebate_money'] / 100));
+            $order['rebate_fee'] = empty($rebateTrackLog['rebate_money']) ? '0' : get_format_number($rebateTrackLog['rebate_money'] / 100);
             $refundLog = $item['RefundLog'];
-            $order['refund_fee'] = empty($refundLog['RefundLog']['refund_fee']) ? '0' : strval(get_format_number($refundLog['RefundLog']['refund_fee'] / 100));
+            $order['refund_fee'] = empty($refundLog['RefundLog']['refund_fee']) ? '0' : get_format_number($refundLog['RefundLog']['refund_fee'] / 100);
             $order_list[] = $order;
         }
         return [$order_list, $order_ids];
