@@ -51,7 +51,7 @@ class SharePushComponent extends Component
     public function push_order_shipped_msg($user_id, $title, $msg, $order_id)
     {
         try {
-            $this->JPush->push(strval($user_id), $title, $msg, self::$MSG_NOTICE_ORDER_SHIPPED, ['order_id' => $order_id]);
+            $this->JPush->push(strval($user_id), $title, $msg, self::$MSG_NOTICE_ORDER_SHIPPED, ['order_id' => $order_id, 'type' => self::$MSG_NOTICE_ORDER_SHIPPED]);
         } catch (Exception $e) {
             $this->log('push_order_shipped_msg jpush error ' . $e->getMessage());
         }
@@ -60,7 +60,7 @@ class SharePushComponent extends Component
     public function push_pick_up_msg($user_id, $title, $msg, $order_id)
     {
         try {
-            $this->JPush->push(strval($user_id), $title, $msg, self::$MSG_NOTICE_PICK_UP, ['order_id' => $order_id]);
+            $this->JPush->push(strval($user_id), $title, $msg, self::$MSG_NOTICE_PICK_UP, ['order_id' => $order_id, 'type' => self::$MSG_NOTICE_PICK_UP]);
         } catch (Exception $e) {
             $this->log('push_pick_up_msg jpush error ' . $e->getMessage());
         }
@@ -69,7 +69,7 @@ class SharePushComponent extends Component
     public function push_share_offered_msg($user_id, $title, $msg, $weshare_id)
     {
         try {
-            $this->JPush->push(strval($user_id), $title, $msg, ['weshare_id' => $weshare_id]);
+            $this->JPush->push(strval($user_id), $title, $msg, self::$MSG_NOTICE_OFFERED, ['weshare_id' => $weshare_id, 'type' => self::$MSG_NOTICE_OFFERED]);
         } catch (Exception $e) {
             $this->log('push_share_offered_msg jpush error ' . $e->getMessage());
         }
