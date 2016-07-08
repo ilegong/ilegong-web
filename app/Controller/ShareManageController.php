@@ -488,19 +488,17 @@ class ShareManageController extends AppController
     public function save_user_edit()
     {
         $payment = [
-            "payment" => [
-                "type" => $_POST['payment_type'],
-                "account" => $_POST['payment_account'],
-                "full_name" => $_POST['payment_full_name'],
-                "card_name" => $_POST['payment_type'] == 0 ? "" : $_POST['payment_card_name'],
-            ]
+            "type" => $_POST['payment_type'],
+            "account" => $_POST['payment_account'],
+            "full_name" => $_POST['payment_full_name'],
+            "card_name" => $_POST['payment_type'] == 0 ? "" : $_POST['payment_card_name']
         ];
         $data = [
             'id' => $_POST['id'],
             'description' => $_POST['description'],
             'payment' => json_encode($payment),
         ];
-        $res = $this->User->save($data,false);
+        $this->User->save($data,false);
         header('Content-type: application/json');
         echo json_encode(['ok' => 1]);
         die;
@@ -2126,7 +2124,7 @@ class ShareManageController extends AppController
 
     private function parse_payment($string){
         if(isJson($string)){
-            return json_decode($string, true)['payment'];
+            return json_decode($string, true);
         }else{
             if(strpos($string, '支付宝:') !== false){
                 $type = 0;

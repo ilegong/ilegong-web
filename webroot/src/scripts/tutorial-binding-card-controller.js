@@ -76,7 +76,7 @@
         vm.payment.card_name = vm.bank.card_name;
       }
       $log.log('Bind payment: ').log(vm.payment);
-      $http.post('/users/complete', {payment: vm.payment}).success(function () {
+      $http.post('/users/complete', vm.payment).success(function () {
         vm.binding = false;
         window.location.href="/weshares/add";
       }).error(function (data) {
