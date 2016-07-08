@@ -33,8 +33,8 @@ class BalanceApiController extends Controller
     }
 
 
-
-    public function get_balance_list($type, $balance_type, $page, $limit){
+    public function get_balance_list($type, $balance_type, $page, $limit)
+    {
         $uid = $this->currentUser['id'];
         if ($type == 0) {
             $data = $this->Balance->get_wait_confirm_share_list($uid, $page, $limit, $balance_type);
@@ -50,7 +50,8 @@ class BalanceApiController extends Controller
     }
 
 
-    public function share_balance_detail($type, $balanceId) {
+    public function share_balance_detail($type, $balanceId)
+    {
         list($orders, $balanceLog) = $this->Balance->get_balance_detail_orders($balanceId);
         list($order_list, $order_ids) = $this->get_balance_order_list($orders);
         if ($type == 2 || $type == 3) {
@@ -85,7 +86,7 @@ class BalanceApiController extends Controller
             $order_ids[] = $order['id'];
             $order['product_fee'] = get_format_number($order['total_price'] - $order['ship_fee'] / 100);
             $order['ship_fee'] = get_format_number($order['ship_fee'] / 100);
-            $order['coupon_total'] = get_format_number($order['coupon_total']/100);
+            $order['coupon_total'] = get_format_number($order['coupon_total'] / 100);
             $order['nickname'] = $user['nickname'];
             $rebateTrackLog = $item['RebateTrackLog'];
             $order['rebate_fee'] = empty($rebateTrackLog['rebate_money']) ? '0' : get_format_number($rebateTrackLog['rebate_money'] / 100);
