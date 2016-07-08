@@ -152,17 +152,12 @@ class WesharesController extends AppController
 
         $weshare = $this->WeshareBuy->get_weshare_info($weshare_id);
 
-        //use cache
         //渠道价购买链接 判断是否是团长
         if ($weshare['type'] == SHARE_TYPE_POOL_FOR_PROXY) {
             //check share type
             if (!$this->ShareUtil->is_proxy_user($uid)) {
-                $user_can_manage_share = $this->ShareAuthority->user_can_manage_share($uid, $weshare_id);
-                if (!$user_can_manage_share) {
-                    //not proxy or manage redirect index
-                    $this->redirect('/weshares/index');
-                    return;
-                }
+                $this->redirect('/weshares/index');
+                return;
             }
         }
 
@@ -173,7 +168,7 @@ class WesharesController extends AppController
 
         //获取推荐人
         $recommend = $_REQUEST['recommend'];
-        //add rebate log
+        //添加推荐日志
         //自己推荐人购买不能加入推荐
         if ($this->ShareUtil->is_proxy_user($recommend) && $recommend != $uid) {
             if (!empty($recommend) && !empty($uid)) {
