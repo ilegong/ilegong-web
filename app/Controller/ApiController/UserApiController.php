@@ -231,6 +231,11 @@ class UserApiController extends Controller
             'conditions' => array('id' => $user_id),
             'fields' => array('nickname', 'image', 'sex', 'mobilephone', 'username', 'id', 'hx_password', 'description', 'payment', 'avatar')));
         $datainfo['User']['image'] = get_user_avatar($datainfo);
+
+        $payment = json_decode($datainfo['User']['payment'],true);
+        $payment['type'] = strval($payment["type"]);
+        $datainfo['User']['payment'] = json_encode($payment);
+        
         return $datainfo;
     }
 
