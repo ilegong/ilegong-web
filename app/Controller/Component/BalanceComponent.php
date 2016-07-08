@@ -176,7 +176,8 @@ class BalanceComponent extends Component
         $cond = [
             'BalanceLog.user_id' => $uid,
             'BalanceLog.status' => $status,
-            'BalanceLog.type' => explode(',', $balance_type)
+            'BalanceLog.type' => explode(',', $balance_type),
+            'BalanceLog.trade_fee > ' => 0
         ];
         $logs = $balanceLogM->find('all', [
             'conditions' => $cond,
@@ -197,7 +198,7 @@ class BalanceComponent extends Component
         foreach ($logs as $item) {
             $data[] = [
                 'balance_id' => $item['BalanceLog']['id'],
-                'trade_fee' => $item['BalanceLog']['trade_fee'],
+                'trade_fee' => get_format_number($item['BalanceLog']['trade_fee']),
                 'share_title' => $item['Weshare']['title'],
                 'default_image' => $item['Weshare']['default_image'],
                 'type' => $item['BalanceLog']['type'],
