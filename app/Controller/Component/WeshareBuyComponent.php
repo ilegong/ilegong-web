@@ -270,6 +270,7 @@ class WeshareBuyComponent extends Component
                 ]
             ],
             'fields' => ['ShareOperateSetting.id', 'ShareOperateSetting.data_id', 'ShareOperateSetting.data_type', 'Weshare.id', 'Weshare.title', 'Weshare.default_image', 'Weshare.status', 'Weshare.creator', 'Weshare.created', 'Weshare.settlement', 'Weshare.type'],
+            'order' => array('Weshare.created DESC'),
             'limit' => $limit,
             'page' => $page
         ]);
