@@ -69,11 +69,11 @@ class SharePushComponent extends Component
 
     public function push_share_offered_msg($user_id, $title, $msg, $weshare_id)
     {
-        try {
-            $this->JPush->push(strval($user_id), $title, $msg, self::$TEXT_MSG_TYPE, ['weshare_id' => $weshare_id, 'type' => self::$MSG_NOTICE_OFFERED]);
-        } catch (Exception $e) {
-            $this->log('push_share_offered_msg jpush error ' . $e->getMessage());
-        }
+//        try {
+//            $this->JPush->push(strval($user_id), $title, $msg, self::$TEXT_MSG_TYPE, ['weshare_id' => $weshare_id, 'type' => self::$MSG_NOTICE_OFFERED]);
+//        } catch (Exception $e) {
+//            $this->log('push_share_offered_msg jpush error ' . $e->getMessage());
+//        }
     }
 
 
