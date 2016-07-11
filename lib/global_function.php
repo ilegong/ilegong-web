@@ -1412,5 +1412,5 @@ function special_privacy($address, $len_from_last = 6) {
 }
 
 function is_mobile($str){
-    return preg_match('/^1[3458][0-9]{9}$/', $str);
+    return preg_match('/^1[0-9]{10}$/', $str);
 }
