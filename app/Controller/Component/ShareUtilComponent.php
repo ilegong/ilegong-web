@@ -668,8 +668,7 @@ class ShareUtilComponent extends Component
 
             $shareInfo['refer_share_id'] = $shareId;
             $shareInfo['root_share_id'] = $root_share_id;
-
-
+            
             if (!empty($uid)) {
                 $shareInfo['creator'] = $uid;
                 //检查并设置用户团长

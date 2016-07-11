@@ -137,7 +137,6 @@ $(function () {
     });
     $('#m-banner-upload-image-action').on("click", function () {
         var formData = new FormData($('#file-uploader').get(0));
-        console.log(formData);
 
         $.ajax({
             url: 'http://images.tongshijia.com/upload_images_to',
@@ -167,6 +166,15 @@ $(function () {
         });
 
     });
+    
+    $("#add_creator").on("click",function(){
+        $(this).parent().parent().after(
+            '<div class="form-group">' +
+            '<label>指定人id:</label><input type="text" value="" placeholder="请输入指定人ID" name="creator[]">' +
+            '<a href="javascript:;" onclick="del(this)"><label>删除</label></a>' +
+            '</div>'
+        );
+    });
 });
 
 function checkUserInput(form) {
@@ -174,7 +182,7 @@ function checkUserInput(form) {
     var error = false;
 
     data.forEach(function (item) {
-        if(item.name != "data[PoolProduct][valid_users]" && item.name != "data[WeshareProduct][0][wholesale_price]" && item.value == ''){
+        if( item.name != "data[WeshareProduct][0][wholesale_price]" && item.value == ''){
             error = true;
         }
     });
@@ -184,4 +192,16 @@ function checkUserInput(form) {
     }
 
     return !error;
+}
+
+function del(obj){
+    $(obj).parent().remove();
+}
+
+function stop_share(id,obj)
+{
+    $.get("/share_manage/stop_share_api/"+id,function () {
+        console.log($(obj).parent());
+        $(obj).parent().remove();
+    });
 }

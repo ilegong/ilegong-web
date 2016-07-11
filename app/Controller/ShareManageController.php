@@ -291,6 +291,14 @@ class ShareManageController extends AppController
         $this->redirect(array('action' => 'shares'));
     }
 
+    public function stop_share_api($shareId)
+    {
+        $this->Weshare->update(['status' => WESHARE_STATUS_STOP, 'close_date' => "'" . date('Y-m-d H:i:s') . "'"], ['id' => $shareId]);
+
+        echo json_encode(array('ok' => 0));
+        die;
+    }
+
     public function stop_share($shareId)
     {
         $this->Weshare->update(['status' => WESHARE_STATUS_STOP, 'close_date' => "'" . date('Y-m-d H:i:s') . "'"], ['id' => $shareId]);
@@ -923,10 +931,36 @@ class ShareManageController extends AppController
     public function pool_product_edit($id)
     {
         $product = $this->ShareManage->get_pool_product($id);
-        $product['PoolProduct']['valid_users'] = trim($product['PoolProduct']['valid_users'],"|");
         $pool_product_categories = $this->ShareManage->get_pool_product_categories();
         $this->set('index_product', $product);
         $this->set('pool_product_categories', $pool_product_categories);
+    }
+
+    public function save_share_from_pool()
+    {
+        $this->autoRender = false;
+        $share_id = $_POST['id'];
+        foreach ($_POST['creator'] as $uid) {
+            $this->ShareUtil->cloneShare($share_id, $uid, SHARE_TYPE_POOL);
+        }
+
+        $this->redirect('/shareManage/share_from_pool/'.$share_id);
+    }
+
+    public function share_from_pool($id)
+    {
+        $res = $this->Weshare->find('all', array(
+            'conditions' => [
+                'root_share_id' => $id,
+                'status' => 0
+            ],
+            'fields' => [
+                'id',
+                'creator'
+            ]
+        ));
+        $this->set("weshares",$res);
+        $this->set("id",$id);
     }
 
     public function pool_product_save()
@@ -952,7 +986,6 @@ class ShareManageController extends AppController
             $key = 'pool_product_info_cache_key_' . $data['Weshares']['id'];
             Cache::delete($key);
             $data['PoolProduct']['status'] = POOL_PRODUCT_PUBLISH;
-            $data['PoolProduct']['valid_users'] = "|".$data['PoolProduct']['valid_users']."|";
             $this->ShareManage->save_pool_product($data);
             $this->redirect(array('action' => 'pool_products'));
         }
