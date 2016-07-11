@@ -189,7 +189,7 @@ class BalanceComponent extends Component
                     'conditions' => ['Weshare.id = BalanceLog.share_id']
                 ]
             ],
-            'order' => 'BalanceLog.id ASC',
+            'order' => 'BalanceLog.created DESC',
             'page' => $page,
             'limit' => $limit,
             'fields' => ['BalanceLog.id', 'BalanceLog.trade_fee', 'Weshare.title', 'Weshare.default_image', 'BalanceLog.type', 'BalanceLog.created', 'BalanceLog.share_id']
@@ -361,8 +361,8 @@ class BalanceComponent extends Component
             $result[$orderId]['channel_product_fee'] = ($cart['num'] * $product['channel_price']) + $result[$orderId]['channel_product_fee'];
         }
         foreach ($result as &$resultItem) {
-            $resultItem['product_fee'] = strval(get_format_number($resultItem['product_fee'] / 100));
-            $resultItem['channel_product_fee'] = strval(get_format_number($resultItem['channel_product_fee'] / 100));
+            $resultItem['product_fee'] = get_format_number($resultItem['product_fee'] / 100);
+            $resultItem['channel_product_fee'] = get_format_number($resultItem['channel_product_fee'] / 100);
         }
         return $result;
     }

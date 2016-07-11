@@ -6,7 +6,8 @@
  * Date: 7/29/15
  * Time: 15:09
  */
-class RedPacketComponent extends Component {
+class RedPacketComponent extends Component
+{
     public $components = array('Weixin');
 
     /**
@@ -17,7 +18,8 @@ class RedPacketComponent extends Component {
      * @return array
      * 处理红包 逻辑
      */
-    public function process_receive($shared_offer_id, $uid, $is_weixin = true, $send_msg = true) {
+    public function process_receive($shared_offer_id, $uid, $is_weixin = true, $send_msg = true)
+    {
         //update sharing slices
         //add to coupon
         //display success (ajax)
@@ -117,7 +119,7 @@ class RedPacketComponent extends Component {
                                 $couponNum = CakeNumber::precision($slice['SharedSlice']['number'] / 100, 2);
                                 //分享红包
                                 if ($brandId == -1) {
-                                    if($send_msg){
+                                    if ($send_msg) {
                                         //share red packet
                                         //send for user get packet url
                                         $packet_provider_nickname = $nickNames[$packet_provider];
