@@ -1302,10 +1302,13 @@ class ShareController extends AppController
             $totalPrice = 0;
             $p_array = range(1, count($weshare_products));
             $p_index_array = array_rand($p_array, rand(1, count($weshare_products)));
+            if (!is_array($p_index_array)) {
+                $p_index_array = [$p_index_array];
+            }
             foreach ($p_index_array as $index) {
-                $p = $weshare_products[$p_array[$index]];
+                $p = $weshare_products[$p_array[$index]-1];
                 $item = array();
-                $num = 1;
+                $num = rand(1, 2);
                 $price = $p['WeshareProduct']['price'];
                 $item['name'] = $p['WeshareProduct']['name'];
                 $item['num'] = $num;
@@ -1322,7 +1325,8 @@ class ShareController extends AppController
             }
             $this->Cart->id = null;
             $this->Cart->saveAll($cart);
-            $this->Order->updateAll(array('total_all_price' => $totalPrice / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => 0, 'status' => ORDER_STATUS_PAID, 'flag' => -1, 'brand_id' => $weshare['Weshare']['creator'], 'pay_time' => $order_date), array('id' => $orderId));
+            $order_price = number_format($totalPrice / 100, 2, '.', '');
+            $this->Order->updateAll(array('total_all_price' => $order_price, 'total_price' => $order_price, 'ship_fee' => 0, 'status' => ORDER_STATUS_PAID, 'flag' => -1, 'brand_id' => $weshare['Weshare']['creator'], 'pay_time' => "'" . $order_date . "'"), array('id' => $orderId));
             return array('success' => true, 'orderId' => $orderId);
         }
     }
