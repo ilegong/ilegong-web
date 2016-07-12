@@ -35,6 +35,15 @@ class SharedOffer extends AppModel {
         return $this->find('all', array('conditions' => array('SharedOffer.uid' => $uid, 'ShareOffer.sharer_id' => $shareCreator, 'SharedOffer.status' => array(SHARED_OFFER_STATUS_NEW, SHARED_OFFER_STATUS_GOING)), 'order' => 'SharedOffer.created desc'));
     }
 
+    public function find_new_offers_by_order_id($uid, $orderId, $shareCreator){
+        $sharedOffer = $this->find('first', ['conditions' => ['SharedOffer.uid' => $uid, 'ShareOffer.sharer_id' => $shareCreator, 'SharedOffer.status' => [SHARED_OFFER_STATUS_NEW, SHARED_OFFER_STATUS_GOING], 'SharedOffer.order_id' => $orderId]]);
+        $sliceCount = 0;
+        if (!empty($sharedOffer)) {
+            $sliceCount = $this->find_shared_slices_count($sharedOffer['SharedOffer']['id']);
+        }
+        return [$sharedOffer, $sliceCount];
+    }
+
     public function find_offers_by_weshare_creator($shareCreator) {
         return $this->find('all', array('conditions' => array('ShareOffer.sharer_id' => $shareCreator), 'order' => 'SharedOffer.created desc'));
     }
@@ -49,6 +58,11 @@ class SharedOffer extends AppModel {
 
     public function find_user_comment_shared_offer($userId, $orderId, $offerId, $commentId){
         return $this->find('first', array('conditions' => array('uid' => $userId, 'order_id' => $orderId, 'share_offer_id' => $offerId, 'comment_id' => $commentId)));
+    }
+
+    public function find_shared_slices_count($shared_offer_id){
+        $sharedSlicesM = ClassRegistry::init('SharedSlice');
+        return $sharedSlicesM->find('count',['conditions' => ['shared_offer_id' => $shared_offer_id]]);
     }
 
     public function find_shared_slices($shared_offer_id) {

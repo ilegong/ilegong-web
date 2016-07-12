@@ -96,27 +96,6 @@ class WesharesController extends AppController
         $this->set('user_level', $user_level);
     }
 
-    public function pay_result($orderId){
-        $uid = $this->currentUser['id'];
-        $orderInfo = $this->Order->find('first', [
-            'conditions' => ['id' => $orderId, 'creator' => $uid, 'type' => ORDER_TYPE_WESHARE_BUY]
-        ]);
-        if (empty($orderInfo)) {
-            $this->redirect('/');
-        }
-        if($orderInfo['Order']['status'] != ORDER_STATUS_PAID){
-            $this->redirect('/weshares/view/'.$orderInfo['Order']['member_id']);
-        }
-
-        $this->set('totalFee', $orderInfo['Order']['total_all_price']);
-        $uid = $this->currentUser['id'];
-        $this->set('uid', $uid);
-        $detail = $this->ShareUtil->get_tag_weshare_detail($orderInfo['Order']['member_id']);
-        $this->set('detail', $detail);
-        $isSub = $this->ShareUtil->check_user_is_subscribe($detail['creator']['id'], $uid);
-        $this->set('has_sub', $isSub);
-    }
-
     private function add_paid_faild_msg_to_es($uid, $weshareId)
     {
         $order = $this->Order->find('first', [
@@ -246,6 +225,29 @@ class WesharesController extends AppController
             return $shared_offer_id;
         }
         return null;
+    }
+
+    public function pay_result($orderId){
+        $uid = $this->currentUser['id'];
+        $orderInfo = $this->Order->find('first', [
+            'conditions' => ['id' => $orderId, 'creator' => $uid, 'type' => ORDER_TYPE_WESHARE_BUY]
+        ]);
+        if (empty($orderInfo)) {
+            $this->redirect('/');
+        }
+        if ($orderInfo['Order']['status'] != ORDER_STATUS_PAID) {
+            $this->redirect('/weshares/view/' . $orderInfo['Order']['member_id']);
+        }
+        $detail = $this->ShareUtil->get_tag_weshare_detail($orderInfo['Order']['member_id']);
+        list($sharedOffer, $sliceCount) = $this->SharedOffer->find_new_offers_by_order_id($uid, $orderId, $detail['creator']['id']);
+        $this->set('totalFee', $orderInfo['Order']['total_all_price']);
+        $uid = $this->currentUser['id'];
+        $this->set('uid', $uid);
+        $this->set('detail', $detail);
+        $this->set('offer_count', $sliceCount);
+        $this->set('shared_offer', $sharedOffer);
+        $isSub = $this->ShareUtil->check_user_is_subscribe($detail['creator']['id'], $uid);
+        $this->set('has_sub', $isSub);
     }
 
     /**

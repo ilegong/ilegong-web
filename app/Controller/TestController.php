@@ -242,9 +242,13 @@ class TestController extends AppController
 
     public function test_send_tuan_buy_msg($orderId)
     {
+        $this->autoRender = false;
         $order = $this->Order->find('first', array(
             'conditions' => array('id' => $orderId)));
         $this->Weixin->notifyPaidDone($order);
+
+        echo 'success';
+        exit;
     }
 
     public function test_set_order_paid_done($orderId)

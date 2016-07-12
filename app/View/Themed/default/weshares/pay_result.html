@@ -41,10 +41,25 @@
         </ul>
         {{/if}}
     </div>
-    {{if WX_HOST==DEFAULT_SITE_HOST}}
-        <a href="http://www.tongshijia.com/weshares/index_special/6.html?from=payResult" class="pay-banner">
-            <img class="radius2 width-100" src="{{$STATIC_HOST}}/static/img/pay-banner.gif"/>
-        </a>
+    <a href="http://www.tongshijia.com/weshares/index_special/6.html?from=payResult" class="pay-banner">
+        <img class="radius2 width-100" src="{{$STATIC_HOST}}/static/img/pay-banner.gif"/>
+    </a>
+
+    {{if !empty($shared_offer)&&$offer_count > 0}}
+        <div class="common-layer-bg" ng-init="vm.showRedPacket=true" ng-click="vm.showRedPacket=false;vm.showShareDialog=false;" ng-show="vm.showRedPacket"></div>
+        <div class="share-dialog" ng-show="vm.showShareDialog">
+            <div style="width: 90%; margin: 0 auto; font-size: 1.3em;">点击右上角“…”，分享给好友或朋友圈。</div>
+        </div>
+        <!--提示用户分享可以抢到红包-->
+        <div class="red-packet-dialog" ng-show="vm.showRedPacket">
+            <img class="bg-color" src="{{$STATIC_HOST}}/static/weshares/images/r-close.jpg" ng-click="vm.showRedPacket=false;vm.showShareDialog=false;">
+            <ul class="text-money">
+                <li class="how-money">有{{$offer_count}}个红包</li>
+                <li class="src-money">分享赶紧抢喽</li>
+                <li class="how-take" ng-click="vm.showShareDialog=true">马上分享</li>
+            </ul>
+            <img class="red-packet-dialog-bg" src="{{$STATIC_HOST}}/static/weshares/images/hongbao.jpg">
+        </div>
     {{/if}}
 </div>
 
