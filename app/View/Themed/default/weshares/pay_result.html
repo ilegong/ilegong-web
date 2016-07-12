@@ -51,7 +51,7 @@
             <div style="width: 90%; margin: 0 auto; font-size: 1.3em;">点击右上角“…”，分享给好友或朋友圈。</div>
         </div>
         <!--提示用户分享可以抢到红包-->
-        <div class="red-packet-dialog" ng-show="vm.showRedPacket">
+        <div class="new-red-packet-dialog" ng-show="vm.showRedPacket">
             <img class="bg-color" src="{{$STATIC_HOST}}/static/weshares/images/r-close.jpg" ng-click="vm.showRedPacket=false;vm.showShareDialog=false;">
             <ul class="text-money">
                 <li class="how-money">有{{$offer_count}}个红包</li>
