@@ -27,6 +27,13 @@
                                 <input class="form-control" name="data[BalanceLog][user_id]" type="number" required
                                        value="{{$data['BalanceLog']['user_id']}}">
                             </div>
+                            {{if $data['BalanceLog']['type']==2 || $data['BalanceLog']['type']==3}}
+                            <div class="form-group">
+                                <label>渠道价费用</label>
+                                <input class="form-control" name="data[BalanceLog][channel_total_fee]" type="number" step="0.01"
+                                       required value="{{$data['BalanceLog']['channel_total_fee']}}">
+                            </div>
+                            {{/if}}
                             <div class="form-group">
                                 <label>成交费用</label>
                                 <input class="form-control" name="data[BalanceLog][total_fee]" type="number" step="0.01"
