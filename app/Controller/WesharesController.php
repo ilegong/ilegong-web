@@ -248,6 +248,7 @@ class WesharesController extends AppController
         $this->set('shared_offer', $sharedOffer);
         $isSub = $this->ShareUtil->check_user_is_subscribe($detail['creator']['id'], $uid);
         $this->set('has_sub', $isSub);
+        $this->set_weixin_params_for_pay_result($detail['creator'], $detail, $sharedOffer['SharedOffer']['id']);
     }
 
     /**
@@ -2146,6 +2147,19 @@ class WesharesController extends AppController
             $this->set('image', $image);
             $this->set('desc', $desc);
         }
+    }
+
+    private function set_weixin_params_for_pay_result($creator, $weshare, $shared_offer_id){
+        $detail_url = WX_HOST . '/weshares/view/' . $weshare['id'] . '?shared_offer_id=' . $shared_offer_id;
+        $weixin_share_str = $this->get_weixin_share_str($creator['id'], $weshare['id']);
+        $image = empty($weshare['default_image']) ? get_user_avatar($creator) : $weshare['default_image'];
+        $title = $creator['nickname'] . '分享:' . $weshare['title'];
+        $desc = $creator['nickname'] . '我认识，很靠谱！送你一个爱心礼包，一起来参加。';
+        $this->set('share_string', $weixin_share_str);
+        $this->set('title', $title);
+        $this->set('detail_url', $detail_url);
+        $this->set('image', $image);
+        $this->set('desc', $desc);
     }
 
     private function set_weixin_params_for_view($user, $creator, $weshare, $recommend, $shared_offer_id, $summary, $ordersDetail)
