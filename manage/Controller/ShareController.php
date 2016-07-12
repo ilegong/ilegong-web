@@ -577,7 +577,7 @@ class ShareController extends AppController
         echo json_encode(array('success' => true));
     }
 
-    public function admin_make_order($num = 1, $weshare_id)
+    public function admin_make_order($num = 1, $weshare_id, $sharer)
     {
         $this->autoRender = false;
         /**
@@ -585,7 +585,21 @@ class ShareController extends AppController
          *
          * select id, nickname, status, username from cake_users where status=9 limit 0,10
          */
-        $users = $this->User->query('SELECT user.id, user.nickname, user.username FROM cake_users  AS user JOIN (SELECT CEIL(RAND() * (SELECT MAX(id) FROM cake_users)) AS id) AS r2 WHERE user.id >= r2.id and user.nickname not like "微信用户%" ORDER BY user.id ASC LIMIT ' . $num);
+        $users = $this->User->find('all', [
+            'conditions' => [
+                'UserRelation.user_id' => $sharer,
+            ],
+            'joins' => [
+                [
+                    'table' => 'cake_user_relations',
+                    'alias' => 'UserRelation',
+                    'type' => 'inner',
+                    'conditions' => 'UserRelation.follow_id = User.id'
+                ]
+            ],
+            'fields' => ['User.*'],
+            'limit' => $num
+        ]);
         $weshare = $this->Weshare->find('first', array(
             'conditions' => array(
                 'id' => $weshare_id
@@ -596,17 +610,12 @@ class ShareController extends AppController
                 'weshare_id' => $weshare_id
             )
         ));
-        $weshare_addresses = $this->WeshareAddress->find('all', array(
-            'conditions' => array(
-                'weshare_id' => $weshare_id
-            )
-        ));
         $current_date = date('Y-m-d H:i:s');
-        $rand_start = strtotime($current_date . ' -3 day');
+        $rand_start = strtotime($current_date . ' -2 day');
         $rand_end = strtotime($current_date);
         foreach ($users as $user) {
             $order_date = $this->rand_date($rand_start, $rand_end);
-            $this->gen_order($weshare, $user, $weshare_products, $weshare_addresses, $order_date);
+            $this->gen_order($weshare, $user, $weshare_products, $order_date);
         }
         echo json_encode(array('success' => true));
         return;
@@ -1277,24 +1286,15 @@ class ShareController extends AppController
         }
     }
 
-    private function gen_order($weshare, $user, $weshare_products, $weshare_address, $order_date, $address = null)
+    private function gen_order($weshare, $user, $weshare_products, $order_date)
     {
         $weshareProducts = array();
         $weshareProducts[] = $this->get_random_item($weshare_products);
-        $tinyAddress = $this->get_random_item($weshare_address);
         $cart = array();
         try {
             $mobile_phone = $this->randMobile(1);
             $addressId = 0;
-            if ($address) {
-                $order_consignee_address = $address;
-            } else {
-                $order_consignee_address = '虚拟订单';
-            }
-            if (!empty($tinyAddress)) {
-                $addressId = $tinyAddress['WeshareAddress']['id'];
-                $order_consignee_address = $tinyAddress['WeshareAddress']['address'];
-            }
+            $order_consignee_address = '虚拟订单';
             $weshare_id = $weshare['Weshare']['id'];
             $user = $user['user'];
             $user_name = $user['nickname'];
@@ -1303,7 +1303,10 @@ class ShareController extends AppController
             $orderId = $order['Order']['id'];
             if (!empty($orderId)) {
                 $totalPrice = 0;
-                foreach ($weshareProducts as $p) {
+                $p_array = range(1, count($weshare_products));
+                $p_index_array = array_rand($p_array, rand(1, count($weshare_products)));
+                foreach ($p_index_array as $index) {
+                    $p = $weshare_products[$p_array[$index]];
                     $item = array();
                     $num = 1;
                     $price = $p['WeshareProduct']['price'];
@@ -1322,8 +1325,7 @@ class ShareController extends AppController
                 }
                 $this->Cart->id = null;
                 $this->Cart->saveAll($cart);
-                $this->Order->updateAll(array('total_all_price' => $totalPrice / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => 0, 'status' => ORDER_STATUS_VIRTUAL), array('id' => $orderId));
-                //echo json_encode(array('success' => true, 'orderId' => $orderId));
+                $this->Order->updateAll(array('total_all_price' => $totalPrice / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => 0, 'status' => ORDER_STATUS_PAID, 'flag' => -1), array('id' => $orderId));
                 return array('success' => true, 'orderId' => $orderId);
             }
             return array('success' => false, 'msg' => 'order empty');
