@@ -478,7 +478,7 @@ class ShareManageController extends AppController
             $this->redirect("/share_manage/share_edit/".$weshare['Weshare']['id']);
         }
 
-        $weshare = array('creator'=>$user_id, 'status'=>10);
+        $weshare = array('creator'=>$user_id, 'status'=>10,'title'=>'');
         $this->Weshare->save($weshare);
         $shareId = $this->Weshare->getLastInsertID();
         $this->log('Admin '.$uid.' tries to create weshare '.$shareId.' for user '.$user_id);
@@ -486,6 +486,22 @@ class ShareManageController extends AppController
         $shipSettings = [array("tag"=>"self_ziti","status"=>-1,"limit"=>0,"ship_fee"=>0,"weshare_id"=>$shareId ),array("tag"=>"kuai_di","status"=>1,"limit"=>0,"ship_fee"=>0,"weshare_id"=>$shareId )];
         $weshareShipSettingM = ClassRegistry::init('WeshareShipSetting');
         $weshareShipSettingM->saveAll($shipSettings);
+
+        $weshareDeliveryTemplate = [
+            [
+                'user_id' => $user_id,
+                'weshare_id' => $shareId,
+                'unit_type' => 0,
+                'start_units' => 1,
+                'start_fee' => 0,
+                'add_units' => 1,
+                'add_fee' => 0,
+                'is_default' => 1,
+                'created' => date('Y-m-d H:i:s')
+            ]
+        ];
+        $weshareDeliveryTemplateM = ClassRegistry::init('WeshareDeliveryTemplate');
+        $weshareDeliveryTemplateM->saveAll($weshareDeliveryTemplate);
 
         $rebasePercent = array("share_id"=>$shareId ,"percent"=>"0","status"=>0);
         $proxyRebatePercent = ClassRegistry::init('ProxyRebatePercent');
