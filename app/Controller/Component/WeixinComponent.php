@@ -1005,12 +1005,12 @@ class WeixinComponent extends Component {
             $recommend_user = $rebateTrackLog['RebateTrackLog']['sharer'];
         }
         $user_names = $userM->findNicknamesMap(array($share_creator, $recommend_user));
-        $show_tile = $user_names[$share_creator] . "，有人报名了您分享的" . $title . "。";
+        $show_tile = "有人报名了您分享的" . $title . "。";
         if (!empty($order_creator_name)) {
             if (empty($rebateTrackLog)) {
-                $show_tile = $user_names[$share_creator] . "，" . $order_creator_name . "报名了您分享的" . $title . "，";
+                $show_tile = $order_creator_name . "报名了您分享的" . $title . "，";
             } else {
-                $show_tile = $user_names[$share_creator] . "，" . $user_names[$recommend_user] . '推荐的' . $order_creator_name . '报名了您分享的' . $title . '，';
+                $show_tile = $user_names[$recommend_user] . '推荐的' . $order_creator_name . '报名了您分享的' . $title . '，';
             }
         }
         if ($shipType == SHARE_SHIP_KUAIDI_TAG) {
