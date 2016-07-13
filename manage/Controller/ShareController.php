@@ -588,6 +588,7 @@ class ShareController extends AppController
         $users = $this->User->find('all', [
             'conditions' => [
                 'UserRelation.user_id' => $sharer,
+                'User.uc_id' => $sharer
             ],
             'joins' => [
                 [
