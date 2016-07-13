@@ -515,17 +515,12 @@ class ShareController extends AppController
         /* Gets 2 dates as string, earlier and later date.
            Returns date in between them.
         */
-        $is_valid = true;
-        $gen_date = '';
-        while ($is_valid) {
-            $rand_epoch = mt_rand($min_date, $max_date);
-            $gen_date = date('Y-m-d H:i:s', $rand_epoch);
-            $yh = getdate($gen_date);
-            if ($yh['hours'] >= 6 && $yh['hours'] < 12) {
-                $is_valid = false;
-            }
-        }
-        return $gen_date;
+        $rand_epoch = mt_rand($min_date, $max_date);
+        $gen_date = date('Y-m-d', $rand_epoch);
+        $h = rand(9, 23);
+        $m = rand(0, 59);
+        $s = rand(0, 59);
+        return "$gen_date $h:$m:$s";
     }
 
     public function admin_make_comment($num, $product_id, $weshare_id)
@@ -612,9 +607,8 @@ class ShareController extends AppController
                 'weshare_id' => $weshare_id
             )
         ));
-        $current_date = date('Y-m-d H:i:s');
-        $rand_start = strtotime($current_date . ' -2 day');
-        $rand_end = strtotime($current_date);
+        $rand_start = strtotime('-3 day');
+        $rand_end = strtotime('now');
         foreach ($users as $user) {
             $order_date = $this->rand_date($rand_start, $rand_end);
             $this->gen_order($weshare, $user, $weshare_products, $order_date);
