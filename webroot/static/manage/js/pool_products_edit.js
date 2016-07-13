@@ -175,6 +175,11 @@ $(function () {
             '</div>'
         );
     });
+
+    $("#hehe").on("click",function(){
+        $("#xiajia").val(1);
+        $("#form").submit();
+    });
 });
 
 function checkUserInput(form) {

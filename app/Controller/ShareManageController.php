@@ -1001,9 +1001,15 @@ class ShareManageController extends AppController
             // 此处清空缓存, Weshare
             $key = 'pool_product_info_cache_key_' . $data['Weshares']['id'];
             Cache::delete($key);
-            $data['PoolProduct']['status'] = POOL_PRODUCT_PUBLISH;
+            $data['PoolProduct']['status'] = $data['xiajia'] ? POOL_PRODUCT_UN_PUBLISH : POOL_PRODUCT_PUBLISH;
             $this->ShareManage->save_pool_product($data);
-            $this->redirect(array('action' => 'pool_products'));
+
+            if($data['xiajia'])
+            {
+                $this->redirect("/shareManage/share_from_pool/".$data['Weshares']['id'].".html");
+            }else{
+                $this->redirect(array('action' => 'pool_products'));
+            }
         }
     }
 
