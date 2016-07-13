@@ -151,18 +151,18 @@
                     vm.showAutoCommentDialog();
                 } else {
                     //from paid done
-                    if (fromType == 1) {
-                        vm.showLayer = true;
-                        if (_.isEmpty(initSharedOfferId)) {
-                            vm.showNotifyShareDialog = true;
-                        } else {
-                            //check is new user buy it
-                            if (vm.currentUser) {
-                                vm.showNotifyShareOfferDialog = true;
-                                vm.sharedOfferMsg = '恭喜发财，大吉大利！';
-                            }
-                        }
-                    }
+                    //if (fromType == 1) {
+                    //    vm.showLayer = true;
+                    //    if (_.isEmpty(initSharedOfferId)) {
+                    //        vm.showNotifyShareDialog = true;
+                    //    } else {
+                    //        //check is new user buy it
+                    //        if (vm.currentUser) {
+                    //            vm.showNotifyShareOfferDialog = true;
+                    //            vm.sharedOfferMsg = '恭喜发财，大吉大利！';
+                    //        }
+                    //    }
+                    //}
                     //follow share
                     if (followSharedType) {
                         if (followSharedType == 'got') {
