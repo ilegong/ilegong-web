@@ -599,6 +599,7 @@ class ShareController extends AppController
                 ]
             ],
             'fields' => ['User.*'],
+            'order' => 'rand()',
             'limit' => $num
         ]);
         $weshare = $this->Weshare->find('first', array(
