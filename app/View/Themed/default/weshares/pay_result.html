@@ -53,13 +53,13 @@
             </div>
             <!--提示用户分享可以抢到红包-->
             <div class="new-red-packet-dialog" ng-show="vm.showRedPacket">
-                <img class="bg-color" src="{{$STATIC_HOST}}/static/weshares/images/r-close.jpg" ng-click="vm.showRedPacket=false;vm.showShareDialog=false;">
+                <img class="bg-color" src="{{$STATIC_HOST}}/static/weshares/images/r-close.png" ng-click="vm.showRedPacket=false;vm.showShareDialog=false;">
                 <ul class="text-money">
                     <li class="how-money">有{{$offer_count}}个红包</li>
                     <li class="src-money">分享赶紧抢喽</li>
                     <li class="how-take" ng-click="vm.showShareDialog=true">马上分享</li>
                 </ul>
-                <img class="red-packet-dialog-bg" src="{{$STATIC_HOST}}/static/weshares/images/hongbao.jpg">
+                <img class="red-packet-dialog-bg" src="{{$STATIC_HOST}}/static/weshares/images/hongbao.png">
             </div>
         </div>
     {{/if}}

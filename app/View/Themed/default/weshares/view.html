@@ -386,13 +386,13 @@
 
             <!--提示用户分享可以抢到红包-->
             <div class="new-red-packet-dialog" ng-if="vm.showNotifyGetPacketDialog">
-                <img class="bg-color" src="{{::vm.staticFilePath}}/static/weshares/images/r-close.jpg" ng-click="vm.showNotifyGetPacketDialog=false;vm.showLayer=false;">
+                <img class="bg-color" src="{{::vm.staticFilePath}}/static/weshares/images/r-close.png" ng-click="vm.showNotifyGetPacketDialog=false;vm.showLayer=false;">
                 <ul class="text-money">
                     <li class="how-money">抢到{{::vm.getPacketNum}}</li>
                     <li class="src-money">购买[{{::vm.weshare.creator.nickname}}]的分享时可使用</li>
                     <li class="how-take" ng-click="vm.showNotifyGetPacketDialog=false;vm.showLayer=false;">去使用</li>
                 </ul>
-                <img class="red-packet-dialog-bg" src="{{::vm.staticFilePath}}/static/weshares/images/hongbao.jpg">
+                <img class="red-packet-dialog-bg" src="{{::vm.staticFilePath}}/static/weshares/images/hongbao.png">
             </div>
 
             <!--提示分享层-->
