@@ -109,9 +109,15 @@ class ChatUtilComponent extends Component
     }
 
 
-    public function update_group()
+    public function update_group($data, $group_id)
     {
-
+        $hxGroup = $this->get_hx_group();
+        $result = $hxGroup->updateGroup($data, $group_id);
+        if ($result['error']) {
+            $this->log('update group error' . json_encode($result));
+            return false;
+        }
+        return $group_id;
     }
 
     public function delete_group_member($user_id, $group_id)

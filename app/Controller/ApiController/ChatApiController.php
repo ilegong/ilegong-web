@@ -8,6 +8,14 @@ class ChatApiController extends Controller
 
     public $uses = array('ChatGroup', 'UserGroup', 'UserFriend', 'User');
 
+
+    protected function get_post_raw_data()
+    {
+        $postStr = file_get_contents('php://input');
+        $postData = json_decode($postStr, true);
+        return $postData;
+    }
+
     public function beforeFilter()
     {
         $allow_action = array();
@@ -20,16 +28,41 @@ class ChatApiController extends Controller
 
     public function create_group()
     {
-        $postData = parent::get_post_raw_data();
+        $postData = $this->get_post_raw_data();
         $hx_group_id = $this->ChatUtil->create_group($postData);
         //save database
         $result = $this->save_group_data($postData, $hx_group_id);
         if ($result) {
             echo json_encode(array('statusCode' => 1, 'data' => $result, 'statusMsg' => '创建成功'));
-            return;
+            exit;
         }
         echo json_encode(array('statusCode' => -1, 'statusMsg' => '创建失败'));
-        return;
+        exit;
+    }
+
+    public function update_group($hx_group_id)
+    {
+        $postData = $this->get_post_raw_data();
+        $result = $this->update_group_data($postData, $hx_group_id);
+        if ($result) {
+            echo json_encode(array('statusCode' => 1, 'data' => $result, 'statusMsg' => '更新成功成功'));
+            exit;
+        }
+        echo json_encode(array('statusCode' => -1, 'statusMsg' => '更新失败'));
+        exit;
+    }
+
+    function update_group_data($data, $hx_group_id)
+    {
+        $this->loadModel('ChatGroup');
+        $groupname = $data['groupname'];
+        $desc = $data['description'];
+        $maxusers = $data['maxusers'];
+        $result = false;
+        if ($this->ChatGroup->updateAll(['maxusers' => $maxusers, 'description' => "'" . $desc . "'", 'group_name' => "'" . $groupname . "'"], ['hx_group_id' => $hx_group_id])) {
+            $result = $this->ChatUtil->update_group($data, $hx_group_id);
+        }
+        return $result;
     }
 
     function save_group_data($data, $hx_group_id)
@@ -38,8 +71,6 @@ class ChatApiController extends Controller
         $chatGroupM = ClassRegistry::init('ChatGroup');
         $userGroupM = ClassRegistry::init('UserGroup');
         $date_now = date('Y-m-d H:i:s');
-//        $approval = $data['approval'] ? 1 : 0;
-//        $public = $data['public'] ? 1 : 0;
         $approval = 0;
         $public = 0;
         $creator = $data['owner'];
@@ -61,11 +92,6 @@ class ChatApiController extends Controller
         return false;
     }
 
-    public function update_group()
-    {
-
-    }
-
     public function get_my_groups()
     {
         $uid = $this->currentUser['id'];
@@ -84,7 +110,7 @@ class ChatApiController extends Controller
         ));
         $groups = Hash::extract($groups, '{n}.ChatGroup');
         echo json_encode(array('groups' => $groups));
-        return;
+        exit;
     }
 
     public function get_group_info($hx_group_id)
@@ -106,7 +132,7 @@ class ChatApiController extends Controller
         $groupInfo = $chatGroup['ChatGroup'];
         $groupInfo['member_count'] = $member_count;
         echo json_encode($groupInfo);
-        return;
+        exit;
     }
 
     public function get_group_members($hx_group_id)
@@ -122,7 +148,7 @@ class ChatApiController extends Controller
         $member_ids = Hash::extract($members, '{n}.UserGroup.user_id');
         $data = $this->ChatUtil->get_users_info($member_ids);
         echo json_encode($data);
-        return;
+        exit;
     }
 
     public function add_group_members($hx_group_id)
@@ -144,7 +170,7 @@ class ChatApiController extends Controller
             return;
         }
         echo json_encode(array('statusCode' => -2, 'statusMsg' => '添加失败'));
-        return;
+        exit;
     }
 
     public function add_group_member($hx_group_id, $user_id)
@@ -160,10 +186,10 @@ class ChatApiController extends Controller
         if ($user_group) {
             $this->ChatUtil->add_group_member($user_id, $hx_group_id);
             echo json_encode(array('statusCode' => 1, 'statusMsg' => '添加成功', 'data' => $user_group));
-            return;
+            exit;
         }
         echo json_encode(array('statusCode' => -1, 'statusMsg' => '添加失败'));
-        return;
+        exit;
     }
 
     public function delete_group_member($hx_group_id, $user_id)
@@ -173,10 +199,10 @@ class ChatApiController extends Controller
         if ($update_result) {
             $this->ChatUtil->delete_group_member($user_id, $hx_group_id);
             echo json_encode(array('statusCode' => 1, 'statusMsg' => '删除成功'));
-            return;
+            exit;
         }
         echo json_encode(array('statusCode' => -1, 'statusMsg' => '删除失败'));
-        return;
+        exit;
     }
 
     public function delete_group_members($hx_group_id)
@@ -189,10 +215,10 @@ class ChatApiController extends Controller
             $hx_group_id = $this->get_hx_group_id($group_id);
             $this->ChatUtil->delete_group_members($user_ids, $hx_group_id);
             echo json_encode(array('statusCode' => 1, 'statusMsg' => '删除成功'));
-            return;
+            exit;
         }
         echo json_encode(array('statusCode' => -1, 'statusMsg' => '删除失败'));
-        return;
+        exit;
     }
 
 
