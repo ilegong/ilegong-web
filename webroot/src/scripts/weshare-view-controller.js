@@ -126,7 +126,6 @@
         }
 
         function loadOrderDetail(share_id) {
-            var fromType = angular.element(document.getElementById('weshareView')).attr('data-from-type');
             var viewFrom = angular.element(document.getElementById('weshareView')).attr('data-from');
             vm.viewFrom = viewFrom;
             //first share
@@ -134,8 +133,13 @@
             var followSharedType = angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-type');
             var followSharedNum = angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-coupon-num');
             vm.sharedOfferId = initSharedOfferId;
-            if (initSharedOfferId) {
-                vm.isSharePacket = true;
+            //show get packet num
+            if (followSharedType) {
+                if (followSharedType == 'got') {
+                    vm.showNotifyGetPacketDialog = true;
+                    vm.getPacketNum = followSharedNum + '元';
+                    vm.showLayer = true;
+                }
             }
             $http({
                 method: 'GET',
@@ -149,32 +153,6 @@
                 //check user is auto comment
                 if (vm.autoPopCommentData['comment_order_info']) {
                     vm.showAutoCommentDialog();
-                } else {
-                    //from paid done
-                    //if (fromType == 1) {
-                    //    vm.showLayer = true;
-                    //    if (_.isEmpty(initSharedOfferId)) {
-                    //        vm.showNotifyShareDialog = true;
-                    //    } else {
-                    //        //check is new user buy it
-                    //        if (vm.currentUser) {
-                    //            vm.showNotifyShareOfferDialog = true;
-                    //            vm.sharedOfferMsg = '恭喜发财，大吉大利！';
-                    //        }
-                    //    }
-                    //}
-                    //follow share
-                    if (followSharedType) {
-                        if (followSharedType == 'got') {
-                            vm.showNotifyGetPacketDialog = true;
-                            vm.getPacketNum = followSharedNum + '元';
-                            vm.showLayer = true;
-                            $timeout(function () {
-                                vm.showLayer = false;
-                                vm.showNotifyGetPacketDialog = false;
-                            }, 10000);
-                        }
-                    }
                 }
                 //process page order info
                 vm.shareOrder = new ShareOrder();

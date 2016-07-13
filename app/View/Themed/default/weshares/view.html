@@ -383,7 +383,7 @@
                 <a ng-if="vm.isCreator()||vm.canEditShare" ng-click="vm.toUpdate()" class="control-order">修改分享</a>
                 <a ng-click="vm.showShareControl=false;vm.showLayer=false;" class="control-detele">取消</a>
             </div>
-            
+
             <!--提示用户分享可以抢到红包-->
             <div class="new-red-packet-dialog" ng-if="vm.showNotifyGetPacketDialog">
                 <img class="bg-color" src="{{::vm.staticFilePath}}/static/weshares/images/r-close.jpg" ng-click="vm.showNotifyGetPacketDialog=false;vm.showLayer=false;">
@@ -511,6 +511,6 @@ $STATIC_HOST.'/static/weshares/css/weshare-view.min.css?v2.5.12'
 ), null, array('inline' => false));
 
 $this->Html->script(array(
-$STATIC_HOST.'/static/weshares/js/weshare-view.min.js?v2.5.16'
+$STATIC_HOST.'/static/weshares/js/weshare-view.min.js?v2.5.17'
 ), array('block' => 'scripts'))
 ?>
