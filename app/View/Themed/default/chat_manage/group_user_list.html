@@ -1,0 +1,103 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">{{$title}}</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                {{$title}}----群成员列表
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <div class="well">
+                        <a class="btn btn-success" data-toggle="modal" data-target="#addGroupUserModal">添加成员</a>
+                    </div>
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>用户ID</th>
+                            <th>用户昵称</th>
+                            <th>加入时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{loop $result $item}}
+                        <tr>
+                            <td>{{$item['UserGroup']['user_id']}}</td>
+                            <td>{{$item['User']['nickname']}}</td>
+                            <td>{{$item['UserGroup']['created']}}</td>
+                            <td>
+                                {{if $item['UserGroup']['user_id'] != $group['ChatGroup']['creator']}}
+                                <a data-id="{{$item['UserGroup']['id']}}" name="remove-user"
+                                   class="btn btn-outline btn-danger">移除用户</a>
+                                {{else}}
+                                群主
+                                {{/if}}
+                            </td>
+                        </tr>
+                        {{/loop}}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+</div>
+<!-- /.row -->
+<div class="modal fade" id="addGroupUserModal" tabindex="-1" role="dialog" aria-labelledby="addGroupUserModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="addGroupUserModalLabel">添加群成员</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="groupUserId" class="control-label">用户ID:</label>
+                    <input type="number" class="form-control" id="groupUserId">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="saveData">添加</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var gid = "{{$group_id}}";
+        var $userIdField = $('#groupUserId');
+        $('a[name="remove-user"]').on('click', function () {
+            var $me = $(this);
+            var id = $me.data('id');
+            $.getJSON('/chatManage/delete_group_user/' + id, function (data) {
+                if (data['success']) {
+                    window.location.reload();
+                } else {
+                    alert('操作失败');
+                }
+            });
+        });
+        $('#saveData').on('click', function () {
+            var uid = $userIdField.val();
+            $.getJSON('/chatManage/add_group_user/' + uid + '/' + gid, function (data) {
+                if (data['success']) {
+                    $('#addGroupUserModal').modal('hide');
+                    window.location.reload();
+                } else {
+                    alert('操作失败');
+                }
+            });
+        });
+    });
+</script>
