@@ -26,13 +26,23 @@
     <tr>
         <td valign="middle">{{$order['Order']['id']}}</td>
         <td valign="middle">{{$order['Order']['created']}}</td>
-        <td valign="middle">{{$order['Order']['total_all_price']}}</td>
+        <td valign="middle">￥{{$order['Order']['total_all_price']}}</td>
         <td valign="middle">{{$order['Order']['status'] == 0 ? '待支付' : '已支付'}}</td>
         <td valign="middle">{{$order['Order']['creator']}}</td>
         <td valign="middle">{{$order['Order']['consignee_name']}}</td>
         <td valign="middle">{{$order['Order']['consignee_mobilephone']}}</td>
         <td valign="middle">{{$order['Order']['consignee_address']}}</td>
-        <td valign="middle"><a target="_blank" href="/WxPay/qrCodePay/{{$order['Order']['id']}}">扫码支付</a></td>
+        <td valign="middle">
+            {{if $order['Order']['status'] == 0}}
+                {{if $order['Order']['total_all_price'] > 0}}
+                    <a target="_blank" href="/WxPay/qrCodePay/{{$order['Order']['id']}}">扫码支付</a>
+                {{else}}
+                    金额为0，不能支付
+                {{/if}}
+            {{else}}
+                已支付：{{$order['Order']['pay_time']}}
+            {{/if}}
+        </td>
     </tr>
     {{/loop}}
     </tbody>
