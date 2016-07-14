@@ -76,7 +76,8 @@ class ChatApiController extends Controller
         $creator = $data['owner'];
         $desc = $data['desc'];
         $groupname = $data['groupname'];
-        $group_data = array('hx_group_id' => $hx_group_id, 'created' => $date_now, 'creator' => $creator, 'approval' => $approval, 'maxusers' => 500, 'is_public' => $public, 'description' => $desc, 'group_name' => $groupname);
+        $groupcode = make_union_code();
+        $group_data = array('hx_group_id' => $hx_group_id, 'created' => $date_now, 'creator' => $creator, 'approval' => $approval, 'maxusers' => 500, 'is_public' => $public, 'description' => $desc, 'group_name' => $groupname, 'group_code' => $groupcode);
         $group_result = $chatGroupM->save($group_data);
         if ($group_result) {
             $group_id = $group_result['ChatGroup']['id'];
@@ -151,9 +152,27 @@ class ChatApiController extends Controller
         exit;
     }
 
+    public function join_group_by_group($user, $group_code)
+    {
+        list($group_id, $hx_group_id) = $this->get_group_by_code($group_code);
+        $date_now = date('Y-m-d H:i:s');
+        $save_result = true;
+        if (!$this->UserGroup->hasAny(array('user_id' => $user, 'group_id' => $group_id))) {
+            $save_data[] = array('user_id' => $user, 'group_id' => $group_id, 'created' => $date_now, 'updated' => $date_now);
+            $save_result = $this->UserGroup->saveAll($save_data);
+        }
+        if ($save_result) {
+            $this->ChatUtil->add_group_member($user, $hx_group_id);
+            echo json_encode(array('statusCode' => 1, 'statusMsg' => '添加成功'));
+            return;
+        }
+        echo json_encode(array('statusCode' => -2, 'statusMsg' => '添加失败'));
+        exit;
+    }
+
     public function add_group_members($hx_group_id)
     {
-        $postData = parent::get_post_raw_data();
+        $postData = $this->get_post_raw_data();
         $user_ids = $postData['usernames'];
         $save_data = array();
         $date_now = date('Y-m-d H:i:s');
@@ -230,6 +249,15 @@ class ChatApiController extends Controller
             )
         ));
         return $chatGroup['ChatGroup']['id'];
+    }
+
+    private function get_group_by_code($code){
+        $chatGroup = $this->ChatGroup->find('first', [
+            'conditions' => [
+                'group_code' => $code
+            ]
+        ]);
+        return [$chatGroup['ChatGroup']['id'], $chatGroup['ChatGroup']['hx_group_id']];
     }
 
     private function get_hx_group_id($group_id)

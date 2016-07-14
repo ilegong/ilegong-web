@@ -112,7 +112,7 @@ class UserApiController extends Controller
         $user_id = $this->currentUser['id'];
         $result = $this->ChatUtil->reg_hx_user($user_id);
         echo json_encode($result);
-        exit();
+        exit;
     }
 
     public function profile()
