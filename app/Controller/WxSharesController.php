@@ -80,7 +80,7 @@ class WxSharesController extends AppController{
                 $this->log("WxShare: PRODUCT_KEY WRONG");
                 exit();
             }
-            $data = array('sharer' => $uid, 'created' => $created, 'data_type' => $data_type, 'data_id' => $data_str[1], 'share_type' => $type);
+            $data = array('sharer' => $uid,'share_id' => $this->currentUser['id'] ? $this->currentUser['id'] : 0, 'created' => $created, 'data_type' => $data_type, 'data_id' => $data_str[1], 'share_type' => $type);
             $this->WxShare->save($data);
         }
     }

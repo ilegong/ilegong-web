@@ -1,0 +1,1 @@
+ALTER TABLE `cake_wx_shares` ADD `share_id` INT(11) UNSIGNED NOT NULL AFTER `share_type`;
