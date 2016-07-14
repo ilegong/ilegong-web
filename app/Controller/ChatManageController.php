@@ -9,6 +9,7 @@ class ChatManageController extends AppController
     {
         $this->Auth->allowedActions = [];
         $this->layout = 'sharer';
+        parent::beforeFilter();
     }
 
 
