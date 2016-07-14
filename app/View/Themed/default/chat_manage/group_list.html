@@ -23,9 +23,9 @@
                             <th width="5%">环信ID</th>
                             <th width="10%">创建者</th>
                             <th width="15%">群名称</th>
-                            <th width="35%">群描述</th>
                             <th width="5%">人数上限</th>
                             <th width="5%">群邀请码</th>
+                            <th width="35%">群描述</th>
                             <th width="20%">操作</th>
                         </tr>
                         </thead>
@@ -36,9 +36,9 @@
                                     <td>{{$group_item['ChatGroup']['hx_group_id']}}</td>
                                     <td>{{$group_item['ChatGroup']['creator']}}<br/>{{$group_item['User']['nickname']}}</td>
                                     <td>{{$group_item['ChatGroup']['group_name']}}</td>
-                                    <td>{{$group_item['ChatGroup']['description']}}</td>
                                     <td>{{$group_item['ChatGroup']['maxusers']}}</td>
                                     <td>{{$group_item['ChatGroup']['group_code']}}</td>
+                                    <td>{{$group_item['ChatGroup']['description']}}</td>
                                     <td>
                                         <a href="/chatManage/group_form.html?id={{$group_item['ChatGroup']['id']}}" class="btn btn-outline btn-success">更新信息</a>
                                         <a href="" class="btn btn-outline btn-info">成员管理</a>
