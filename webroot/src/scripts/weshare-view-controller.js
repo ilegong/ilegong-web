@@ -131,11 +131,11 @@
             //first share
             var initSharedOfferId = angular.element(document.getElementById('weshareView')).attr('data-shared-offer');
             var followSharedType = angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-type');
-            var followSharedNum = angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-coupon-num');
+            var followSharedNum = parseFloat(angular.element(document.getElementById('sharedOfferResult')).attr('data-shared-coupon-num'));
             vm.sharedOfferId = initSharedOfferId;
             //show get packet num
             if (followSharedType) {
-                if (followSharedType == 'got') {
+                if (followSharedType == 'got' && followSharedNum > 0) {
                     vm.showNotifyGetPacketDialog = true;
                     vm.getPacketNum = followSharedNum + '元';
                     vm.showLayer = true;
