@@ -68,7 +68,7 @@ class ChatManageController extends AppController
                 "desc" => $data['ChatGroup']['description'],
                 "public" => true,
                 "maxusers" => $data['ChatGroup']['maxusers'],
-                "approval" => boolval($data['CatGroup']['approval']),
+                "approval" => (bool)$data['CatGroup']['approval'],
                 "owner" => $data['ChatGroup']['creator'],
                 "members" => []
             ];
