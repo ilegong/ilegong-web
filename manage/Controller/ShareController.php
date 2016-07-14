@@ -609,12 +609,65 @@ class ShareController extends AppController
         ));
         $rand_start = strtotime('-3 day');
         $rand_end = strtotime('now');
+
+        $orders = [];
         foreach ($users as $user) {
             $order_date = $this->rand_date($rand_start, $rand_end);
-            $this->gen_order($weshare, $user, $weshare_products, $order_date);
+            $order = $this->gen_order($weshare, $user, $weshare_products, $order_date, ORDER_STATUS_PAID);
+            $orders[] = $order;
         }
-        echo json_encode(array('success' => true));
-        return;
+
+        $this->log('admin make orders: '.json_encode($orders));
+        echo json_encode($orders);
+    }
+
+    public function admin_make_unpaid_order($num = 1, $weshare_id, $sharer)
+    {
+        $users = $this->User->find('all', [
+            'conditions' => [
+                'UserRelation.user_id' => $sharer,
+                'User.uc_id' => $sharer
+            ],
+            'joins' => [
+                [
+                    'table' => 'cake_user_relations',
+                    'alias' => 'UserRelation',
+                    'type' => 'inner',
+                    'conditions' => 'UserRelation.follow_id = User.id'
+                ]
+            ],
+            'fields' => ['User.*'],
+            'order' => 'rand()',
+            'limit' => $num
+        ]);
+        $weshare = $this->Weshare->find('first', array(
+            'conditions' => array(
+                'id' => $weshare_id
+            )
+        ));
+        $weshare_products = $this->WeshareProduct->find('all', array(
+            'conditions' => array(
+                'weshare_id' => $weshare_id
+            )
+        ));
+        $rand_start = strtotime('-3 day');
+        $rand_end = strtotime('now');
+
+        $orders = [];
+        foreach ($users as $user) {
+            $order_date = $this->rand_date($rand_start, $rand_end);
+            $order = $this->gen_order($weshare, $user, $weshare_products, $order_date, ORDER_STATUS_WAITING_PAY);
+            $orders[] = $order;
+        }
+        usort($orders, function($a, $b){
+           if($a == $b){
+               return 0;
+           }
+            return strtotime($a->orderDate) > strtotime($b->orderDate) ? -1 : 1;
+        });
+        $this->log('admin make unpaid orders: '.json_encode($orders));
+        $this->set('weshare', $weshare);
+        $this->set('orders', $orders);
     }
 
     public function admin_index()
@@ -1282,7 +1335,7 @@ class ShareController extends AppController
         }
     }
 
-    private function gen_order($weshare, $user, $weshare_products, $order_date)
+    private function gen_order($weshare, $user, $weshare_products, $order_date, $order_status)
     {
         $cart = array();
         $mobile_phone = $this->randMobile(1);
@@ -1294,37 +1347,39 @@ class ShareController extends AppController
         $this->Order->id = null;
         $order = $this->Order->save(array('creator' => $user['id'], 'consignee_address' => $order_consignee_address, 'member_id' => $weshare['Weshare']['id'], 'type' => ORDER_TYPE_WESHARE_BUY, 'created' => $order_date, 'updated' => $order_date, 'consignee_id' => $addressId, 'consignee_name' => $user_name, 'consignee_mobilephone' => $mobile_phone[0]));
         $orderId = $order['Order']['id'];
-        if (!empty($orderId)) {
-            $totalPrice = 0;
-            $p_array = range(1, count($weshare_products));
-            $p_index_array = array_rand($p_array, rand(1, count($weshare_products)));
-            if (!is_array($p_index_array)) {
-                $p_index_array = [$p_index_array];
-            }
-            foreach ($p_index_array as $index) {
-                $p = $weshare_products[$p_array[$index]-1];
-                $item = array();
-                $num = rand(1, 2);
-                $price = $p['WeshareProduct']['price'];
-                $item['name'] = $p['WeshareProduct']['name'];
-                $item['num'] = $num;
-                $item['price'] = $price;
-                $item['type'] = ORDER_TYPE_WESHARE_BUY;
-                $item['product_id'] = $p['WeshareProduct']['id'];
-                $item['created'] = $order_date;
-                $item['updated'] = $order_date;
-                $item['creator'] = $user['id'];
-                $item['order_id'] = $orderId;
-                $item['tuan_buy_id'] = $weshare_id;
-                $cart[] = $item;
-                $totalPrice += $num * $price;
-            }
-            $this->Cart->id = null;
-            $this->Cart->saveAll($cart);
-            $order_price = number_format($totalPrice / 100, 2, '.', '');
-            $this->Order->updateAll(array('total_all_price' => $order_price, 'total_price' => $order_price, 'ship_fee' => 0, 'status' => ORDER_STATUS_PAID, 'flag' => -1, 'brand_id' => $weshare['Weshare']['creator'], 'pay_time' => "'" . $order_date . "'"), array('id' => $orderId));
-            return array('success' => true, 'orderId' => $orderId);
+        if (empty($orderId)) {
+            return array('success'=>false);
         }
+        $totalPrice = 0;
+        $p_array = range(1, count($weshare_products));
+        $p_index_array = array_rand($p_array, rand(1, count($weshare_products)));
+        if (!is_array($p_index_array)) {
+            $p_index_array = [$p_index_array];
+        }
+        foreach ($p_index_array as $index) {
+            $p = $weshare_products[$p_array[$index]-1];
+            $item = array();
+            $num = rand(1, 2);
+            $price = $p['WeshareProduct']['price'];
+            $item['name'] = $p['WeshareProduct']['name'];
+            $item['num'] = $num;
+            $item['price'] = $price;
+            $item['type'] = ORDER_TYPE_WESHARE_BUY;
+            $item['product_id'] = $p['WeshareProduct']['id'];
+            $item['created'] = $order_date;
+            $item['updated'] = $order_date;
+            $item['creator'] = $user['id'];
+            $item['order_id'] = $orderId;
+            $item['tuan_buy_id'] = $weshare_id;
+            $cart[] = $item;
+            $totalPrice += $num * $price;
+        }
+        $this->Cart->id = null;
+        $this->Cart->saveAll($cart);
+        $order_price = number_format($totalPrice / 100, 2, '.', '');
+        $this->Order->updateAll(array('total_all_price' => $order_price, 'total_price' => $order_price, 'ship_fee' => 0, 'status' => $order_status, 'flag' => -1, 'brand_id' => $weshare['Weshare']['creator'], 'pay_time' => "'" . $order_date . "'"), array('id' => $orderId));
+
+        return array('success' => true, 'id' => $orderId, 'orderDate'=>$order_date, 'orderPrice'=>$order_price, 'status'=>$order_status, 'creator' => $user['id'], 'consignee_name' => $user_name, 'consignee_mobilephone' => $mobile_phone[0], 'consignee_address' => $order_consignee_address);
     }
 
     private function findCarts($orderId)

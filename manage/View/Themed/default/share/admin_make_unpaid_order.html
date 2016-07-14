@@ -1,0 +1,41 @@
+<h1 class="page-header">待支付订单</h1>
+<ul>
+   <li>团长：{{$weshare['Weshare']['creator']}}</li>
+   <li>分享：{{$weshare['Weshare']['id']}}</li>
+   <li>标题：{{$weshare['Weshare']['title']}}</li>
+   <li>描述：{{$weshare['Weshare']['description']}}</li>
+</ul>
+
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+    <tr>
+        <th>结果</th>
+        <th>订单ID</th>
+        <th>下单时间</th>
+        <th>订单价格</th>
+        <th>状态</th>
+        <th>收货人ID</th>
+        <th>收货人名称</th>
+        <th>收货人手机</th>
+        <th>收货人地址</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    {{loop $orders $order}}
+    <tr>
+        <td>{{$order['success']}}</td>
+        <td valign="middle">{{$order['id']}}</td>
+        <td valign="middle">{{$order['orderDate']}}</td>
+        <td valign="middle">{{$order['orderPrice']}}</td>
+        <td valign="middle">{{$order['status']}}</td>
+        <td valign="middle">{{$order['creator']}}</td>
+        <td valign="middle">{{$order['consignee_name']}}</td>
+        <td valign="middle">{{$order['consignee_mobilephone']}}</td>
+        <td valign="middle">{{$order['consignee_address']}}</td>
+        <td valign="middle"><a target="_blank" href="/WxPay/qrCodePay/{{$order['id']}}">扫码支付</a></td>
+    </tr>
+    {{/loop}}
+    </tbody>
+</table>

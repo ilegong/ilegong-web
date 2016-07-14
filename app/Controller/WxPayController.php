@@ -94,7 +94,13 @@ class WxPayController extends AppController {
         $error_pay_redirect = '/';
         $this->pageTitle = '微信支付';
         $from = $_GET['from'];
-        $order = $this->WxPayment->getOrder($orderId, $uid);
+        if(is_super_share_manager($uid)){
+            $orderModel = ClassRegistry::init('Order');
+            $order = $orderModel->find('first', ['conditions' => ['id' => $orderId]]);
+        }
+        else{
+            $order = $this->WxPayment->getOrder($orderId, $uid);
+        }
         if (empty($order)) {
             $this->redirect('/');
             return;
@@ -135,10 +141,10 @@ class WxPayController extends AppController {
 
     //二维码支付
     private function __prepareWxNativePay($error_pay_redirect, $orderId, $uid, $order){
-        if (!$this->is_weixin()) {
-            throw new CakeException("您只能在微信中使用微信支付。");
-        }
-
+//        if (!$this->is_weixin()) {
+//            throw new CakeException("您只能在微信中使用微信支付。");
+//        }
+//
         //使用jsapi接口
         $jsApi = $this->WxPayment->createJsApi();
 
