@@ -16,31 +16,50 @@
                     <div class="col-lg-6">
                         <form role="form">
                             <input type="hidden" name="data[ChatGroup][id]" value="{{$data['ChatGroup']['id']}}">
-                            <input type="hidden" name="data[ChatGroup][hx_group_id]" value="{{$data['ChatGroup']['hx_group_id']}}">
-                            <input type="hidden" name="data[ChatGroup][group_code]" value="{{$data['ChatGroup']['group_code']}}">
+                            <input type="hidden" name="data[ChatGroup][hx_group_id]"
+                                   value="{{$data['ChatGroup']['hx_group_id']}}">
+                            <input type="hidden" name="data[ChatGroup][group_code]"
+                                   value="{{$data['ChatGroup']['group_code']}}">
+
                             <div class="form-group">
                                 <label>群名称</label>
-                                <input required="" class="form-control" name="data[ChatGroup][group_name]" value="{{$data['ChatGroup']['group_name']}}">
+                                <input required="" class="form-control" name="data[ChatGroup][group_name]"
+                                       value="{{$data['ChatGroup']['group_name']}}">
                             </div>
+                            {{if empty($data)}}
                             <div class="form-group">
                                 <label>创建者ID</label>
-                                <input type="number" class="form-control" required name="data[ChatGroup][creator]" value="{{$data['ChatGroup']['creator']}}">
+                                <input type="number" class="form-control" required name="data[ChatGroup][creator]"
+                                       value="{{$data['ChatGroup']['creator']}}">
+
+                                <p class="help-block">创建完之后不可以修改</p>
                             </div>
+                            {{/if}}
                             <div class="form-group">
                                 <label>人数上限</label>
-                                <input type="number" class="form-control" required name="data[ChatGroup][maxusers]" value="{{$data['ChatGroup']['maxusers']}}">
+                                <input type="number" class="form-control" required name="data[ChatGroup][maxusers]"
+                                       value="{{$data['ChatGroup']['maxusers']}}">
+
                                 <p class="help-block">最大500</p>
                             </div>
+                            {{if empty($data)}}
                             <div class="form-group">
                                 <label>入群是否需要批准</label>
                                 <label class="radio-inline">
                                     <input type="radio" name="data[ChatGroup][approval]"
-                                           value="0" {{if $data["ChatGroup"]['approval'] == 0}}checked{{/if}}>否
+                                           value="0" checked>否
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" name="data[ChatGroup][approval]"
-                                           value="1" {{if $data["ChatGroup"]['approval'] == 1}}checked{{/if}}>是
+                                           value="1" checked>是
                                 </label>
+
+                                <p class="help-block">创建完之后不可以修改</p>
+                            </div>
+                            {{/if}}
+                            <div class="form-group">
+                                <label>群描述</label>
+                                <textarea name="data[ChatGroup][description]" class="form-control" rows="3">{{$data["ChatGroup"]['description']}}</textarea>
                             </div>
                             <button type="submit" class="btn btn-default">保存</button>
                             <a href="" class="btn btn-default">返回</a>
