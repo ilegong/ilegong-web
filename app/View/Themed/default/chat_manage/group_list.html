@@ -42,7 +42,7 @@
                                     <td>
                                         <a href="/chatManage/group_form.html?id={{$group_item['ChatGroup']['id']}}" class="btn btn-outline btn-success">更新信息</a>
                                         <a href="/chatManage/group_user_list/{{$group_item['ChatGroup']['id']}}.html" class="btn btn-outline btn-info">成员管理</a>
-                                        <a href="" class="btn btn-outline btn-warning">发送消息</a>
+                                        <a href="" class="btn btn-outline btn-warning" data-toggle="modal" data-target="#sendMsgModal" data-creator="{{$group_item['ChatGroup']['creator']}}" data-gid="{{$group_item['ChatGroup']['id']}}">发送消息</a>
                                     </td>
                                 </tr>
                             {{/loop}}
@@ -58,29 +58,60 @@
 </div>
 <!-- /.row -->
 
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+<div class="modal fade" id="sendMsgModal" tabindex="-1" role="dialog" aria-labelledby="sendMsgModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">New message</h4>
+                <h4 class="modal-title" id="sendMsgModalLabel">发送消息</h4>
             </div>
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <label for="recipient-name" class="control-label">Recipient:</label>
-                        <input type="text" class="form-control" id="recipient-name">
+                        <label for="group-id" class="control-label">群ID:</label>
+                        <input type="text" class="form-control" id="group-id" readonly>
                     </div>
                     <div class="form-group">
-                        <label for="message-text" class="control-label">Message:</label>
+                        <label for="sender" class="control-label">发送者:</label>
+                        <input type="text" class="form-control" id="sender">
+                        <p class="help-block">一定群里面的用户</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="control-label">消息:</label>
                         <textarea class="form-control" id="message-text"></textarea>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Send message</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="sendMsg">发送</button>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function(){
+        $('#sendMsgModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var gid = button.data('gid');
+            var sender = button.data('creator');
+            var modal = $(this);
+            modal.find('.modal-body #group-id').val(gid);
+            modal.find('.modal-body #sender').val(sender);
+        });
+        $('#sendMsg').on('click', function (e) {
+            var gid = $('#group-id').val();
+            var msg = $('#message-text').val();
+            var sender = $('#sender').val();
+            $.post('/chatManage/send_group_msg.html', {'gid': gid, 'msg': msg, 'from': sender}, function (data) {
+                $('#sendMsgModal').modal('hide');
+                if (data['success']) {
+                    alert('发送成功');
+                } else {
+                    alert('发送失败');
+                }
+            }, 'json');
+        });
+    });
+</script>

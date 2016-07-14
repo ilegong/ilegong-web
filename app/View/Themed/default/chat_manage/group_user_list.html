@@ -33,10 +33,10 @@
                             <td>{{$item['UserGroup']['created']}}</td>
                             <td>
                                 {{if $item['UserGroup']['user_id'] != $group['ChatGroup']['creator']}}
-                                <a data-id="{{$item['UserGroup']['id']}}" name="remove-user"
-                                   class="btn btn-outline btn-danger">移除用户</a>
+                                    <a data-id="{{$item['UserGroup']['id']}}" name="remove-user"
+                                       class="btn btn-outline btn-danger">移除用户</a>
                                 {{else}}
-                                群主
+                                    <button type="button" class="btn btn-danger disabled">群主</button>
                                 {{/if}}
                             </td>
                         </tr>

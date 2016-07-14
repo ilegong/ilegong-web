@@ -21,9 +21,10 @@ class HxMessage extends HxEaseServer {
      * @param array $target "array('u1','u2') 用户或群组"
      * @param string $msg "消息内容"
      * @param string $from "示这个消息是谁发出来的, 可以没有这个属性, 那么就会显示是admin, 如果有的话, 则会显示是这个用户发出的"
+     * @param array $ext
      */
-    public function sendMessage($type, $target, $msg, $from){
-        $data = array('target_type'=>$type,'target'=>$target,'msg'=>array('type'=>'txt','msg'=>$msg),'from'=>$from);
+    public function sendMessage($type, $target, $msg, $from, $ext = array()){
+        $data = array('target_type'=>$type,'target'=>$target,'msg'=>array('type'=>'txt','msg'=>$msg),'from'=>$from, 'ext' => $ext);
         $header[] = 'Authorization: Bearer ' . $this->token;
         $this->ch->createHeader($header);
         $this->ch->createData($data);

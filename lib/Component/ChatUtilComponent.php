@@ -210,8 +210,8 @@ class ChatUtilComponent extends Component
         return $hxUser;
     }
 
-    function send_msg($type, $target, $msg, $from){
-        $result = $this->get_hx_message()->sendMessage($type, $target, $msg, $from);
+    function send_msg($type, $target, $msg, $from, $ext){
+        $result = $this->get_hx_message()->sendMessage($type, $target, $msg, $from, $ext);
         return $result;
     }
 
@@ -219,6 +219,12 @@ class ChatUtilComponent extends Component
         App::import('Vendor', 'hx/HxMessage');
         $hxMessage = new HxMessage(HX_APP_NAME, HX_CLIENT_ID, HX_CLIENT_SECRET);
         return $hxMessage;
+    }
+
+    function get_user_info($id){
+        $userM = ClassRegistry::init('User');
+        $u = $userM->findById($id);
+        return ['avatar' => get_user_avatar($u), 'userId' => $u['User']['id'], 'nickname' => $u['User']['nickname']];
     }
 
 }

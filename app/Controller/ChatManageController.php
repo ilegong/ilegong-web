@@ -109,7 +109,8 @@ class ChatManageController extends AppController
         $this->set('group', $group);
     }
 
-    public function add_group_user($uid, $gid){
+    public function add_group_user($uid, $gid)
+    {
         $this->autoRender = false;
         $this->loadModel('UserGroup');
         $this->loadModel('ChatGroup');
@@ -126,7 +127,8 @@ class ChatManageController extends AppController
         exit;
     }
 
-    public function delete_group_user($id){
+    public function delete_group_user($id)
+    {
         $this->autoRender = false;
         $this->loadModel('UserGroup');
         $this->loadModel('ChatGroup');
@@ -135,8 +137,8 @@ class ChatManageController extends AppController
         if ($g['ChatGroup']['creator'] != $ug['UserGroup']['user_id']) {
             $this->ChatUtil = $this->Components->load('ChatUtil');
             $result = $this->ChatUtil->delete_group_member($ug['UserGroup']['user_id'], $g['ChatGroup']['hx_group_id']);
-            if($result){
-                if($this->UserGroup->delete($id)){
+            if ($result) {
+                if ($this->UserGroup->delete($id)) {
                     echo json_encode(['success' => true]);
                     exit;
                 }
@@ -146,9 +148,28 @@ class ChatManageController extends AppController
         exit;
     }
 
-    public function send_msg()
+    public function send_group_msg()
     {
-
+        $this->autoRender = false;
+        $gid = $_REQUEST['gid'];
+        $msg = $_REQUEST['msg'];
+        $this->loadModel('ChatGroup');
+        $g = $this->ChatGroup->findById($gid);
+        $this->ChatUtil = $this->Components->load('ChatUtil');
+        $target_type = 'chatgroups';
+        $target = $g['ChatGroup']['hx_group_id'];
+        $from = $_REQUEST['from'];
+        $ext = [];
+        $from_info = $this->ChatUtil->get_user_info($from);
+        $ext = array_merge($ext, $from_info);
+        $result = $this->ChatUtil->send_msg($target_type, [$target], $msg, $from, $ext);
+        if ($result['error']) {
+            $this->log('send msg error ' . json_encode($result));
+            echo json_encode(['success' => false]);
+            exit;
+        }
+        echo json_encode(['success' => true]);
+        exit;
     }
 
 }
