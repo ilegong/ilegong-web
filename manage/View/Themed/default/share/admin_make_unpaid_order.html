@@ -9,7 +9,6 @@
 <table class="table table-striped table-bordered table-hover">
     <thead>
     <tr>
-        <th>结果</th>
         <th>订单ID</th>
         <th>下单时间</th>
         <th>订单价格</th>
@@ -25,11 +24,10 @@
 
     {{loop $orders $order}}
     <tr>
-        <td>{{$order['success']}}</td>
         <td valign="middle">{{$order['id']}}</td>
         <td valign="middle">{{$order['orderDate']}}</td>
         <td valign="middle">{{$order['orderPrice']}}</td>
-        <td valign="middle">{{$order['status']}}</td>
+        <td valign="middle">{{$order['status'] == 0 ? '待支付' : '已支付'}}</td>
         <td valign="middle">{{$order['creator']}}</td>
         <td valign="middle">{{$order['consignee_name']}}</td>
         <td valign="middle">{{$order['consignee_mobilephone']}}</td>
