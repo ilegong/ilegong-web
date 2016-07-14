@@ -666,6 +666,31 @@ class ShareController extends AppController
             return strtotime($a->orderDate) > strtotime($b->orderDate) ? -1 : 1;
         });
         $this->log('admin make unpaid orders: '.json_encode($orders));
+        $this->redirect('/admin/share/show_orders_of_share/'.$weshare_id);
+    }
+
+    public function admin_show_orders_of_share($weshare_id)
+    {
+        $weshare = $this->Weshare->find('first', array(
+            'conditions' => array(
+                'id' => $weshare_id
+            )
+        ));
+
+        $orders = $this->Order->find('all', array(
+            'fields' => ['Order.*'],
+            'conditions' => array(
+                'member_id' => $weshare_id,
+                'flag' => -1
+            )
+        ));
+        usort($orders, function($a, $b){
+            if($a == $b){
+                return 0;
+            }
+            return strtotime($a->orderDate) > strtotime($b->orderDate) ? -1 : 1;
+        });
+        $this->log('orders: '.json_encode($orders));
         $this->set('weshare', $weshare);
         $this->set('orders', $orders);
     }

@@ -24,15 +24,15 @@
 
     {{loop $orders $order}}
     <tr>
-        <td valign="middle">{{$order['id']}}</td>
-        <td valign="middle">{{$order['orderDate']}}</td>
-        <td valign="middle">{{$order['orderPrice']}}</td>
-        <td valign="middle">{{$order['status'] == 0 ? '待支付' : '已支付'}}</td>
-        <td valign="middle">{{$order['creator']}}</td>
-        <td valign="middle">{{$order['consignee_name']}}</td>
-        <td valign="middle">{{$order['consignee_mobilephone']}}</td>
-        <td valign="middle">{{$order['consignee_address']}}</td>
-        <td valign="middle"><a target="_blank" href="/WxPay/qrCodePay/{{$order['id']}}">扫码支付</a></td>
+        <td valign="middle">{{$order['Order']['id']}}</td>
+        <td valign="middle">{{$order['Order']['created']}}</td>
+        <td valign="middle">{{$order['Order']['total_all_price']}}</td>
+        <td valign="middle">{{$order['Order']['status'] == 0 ? '待支付' : '已支付'}}</td>
+        <td valign="middle">{{$order['Order']['creator']}}</td>
+        <td valign="middle">{{$order['Order']['consignee_name']}}</td>
+        <td valign="middle">{{$order['Order']['consignee_mobilephone']}}</td>
+        <td valign="middle">{{$order['Order']['consignee_address']}}</td>
+        <td valign="middle"><a target="_blank" href="/WxPay/qrCodePay/{{$order['Order']['id']}}">扫码支付</a></td>
     </tr>
     {{/loop}}
     </tbody>
