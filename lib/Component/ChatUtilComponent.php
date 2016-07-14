@@ -210,4 +210,15 @@ class ChatUtilComponent extends Component
         return $hxUser;
     }
 
+    function send_msg($type, $target, $msg, $from){
+        $result = $this->get_hx_message()->sendMessage($type, $target, $msg, $from);
+        return $result;
+    }
+
+    function get_hx_message(){
+        App::import('Vendor', 'hx/HxMessage');
+        $hxMessage = new HxMessage(HX_APP_NAME, HX_CLIENT_ID, HX_CLIENT_SECRET);
+        return $hxMessage;
+    }
+
 }

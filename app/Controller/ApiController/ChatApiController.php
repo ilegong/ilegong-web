@@ -26,6 +26,23 @@ class ChatApiController extends Controller
         $this->autoRender = false;
     }
 
+    public function send_single_msg()
+    {
+
+    }
+
+    public function send_group_msg()
+    {
+        $postData = $this->get_post_raw_data();
+        $from = $postData['from'];
+        $msg = $postData['msg'];
+        $target = $postData['target'];
+        $type = $postData['target_type'];
+        $result = $this->ChatUtil->send_msg($type, $target, $msg, $from);
+        echo json_encode($result);
+        exit;
+    }
+
     public function create_group()
     {
         $postData = $this->get_post_raw_data();
