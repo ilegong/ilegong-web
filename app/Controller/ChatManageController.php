@@ -36,7 +36,7 @@ class ChatManageController extends AppController
         if ($id) {
             $this->loadModel('ChatGroup');
             $group = $this->ChatGroup->findById($id);
-            $this->set('group', $group);
+            $this->set('data', $group);
             $title = '更新';
         }
         $this->set('title', $title);
@@ -44,8 +44,10 @@ class ChatManageController extends AppController
 
     public function save_group()
     {
-        $this->Components->load('ChatUtil');
+        $this->ChatUtil = $this->Components->load('ChatUtil');
         $this->loadModel('ChatGroup');
+        $this->loadModel('UserGroup');
+        $date_now = date('Y-m-d H:i:s');
         $data = $this->request->data;
         if ($data['ChatGroup']['id']) {
             //update
@@ -73,7 +75,10 @@ class ChatManageController extends AppController
             if ($result) {
                 $data['ChatGroup']['hx_group_id'] = $result;
                 $data['ChatGroup']['is_public'] = 1;
-                $this->ChatGroup->save($data);
+                $data['ChatGroup']['group_code'] = make_union_code();
+                $data['ChatGroup']['created'] = $date_now;
+                $group = $this->ChatGroup->save($data);
+                $this->UserGroup->save(['user_id' => $group['ChatGroup']['creator'], 'group_id' => $group['ChatGroup']['id'], 'created' => $date_now, 'updated' => $date_now]);
             }
         }
         $this->redirect('/chatManage/group_list.html');

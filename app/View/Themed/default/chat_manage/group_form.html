@@ -14,7 +14,7 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-lg-6">
-                        <form role="form">
+                        <form role="form" method="post" action="/chatManage/save_group.html">
                             <input type="hidden" name="data[ChatGroup][id]" value="{{$data['ChatGroup']['id']}}">
                             <input type="hidden" name="data[ChatGroup][hx_group_id]"
                                    value="{{$data['ChatGroup']['hx_group_id']}}">
@@ -51,7 +51,7 @@
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" name="data[ChatGroup][approval]"
-                                           value="1" checked>是
+                                           value="1">是
                                 </label>
 
                                 <p class="help-block">创建完之后不可以修改</p>
@@ -61,7 +61,7 @@
                                 <label>群描述</label>
                                 <textarea name="data[ChatGroup][description]" class="form-control" rows="3">{{$data["ChatGroup"]['description']}}</textarea>
                             </div>
-                            <button type="submit" class="btn btn-default">保存</button>
+                            <button type="submit" class="btn btn-primary">保存</button>
                             <a href="" class="btn btn-default">返回</a>
                         </form>
                     </div>
