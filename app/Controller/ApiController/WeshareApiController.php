@@ -101,6 +101,13 @@ class WeshareApiController extends Controller
         exit();
     }
 
+    public function get_weshare_products($weshare_id)
+    {
+        $products = $this->Weshares->get_weshare_products($weshare_id);
+        echo json_encode($products);
+        exit;
+    }
+
     //获取分享的详情
     public function get_weshare_detail($weshare_id)
     {
