@@ -305,7 +305,7 @@ class ChatApiController extends Controller
         $gids = Hash::extract($ugs, '{n}.UserGroup.group_id');
         $groups = $this->ChatGroup->find('all', [
             'conditions' => [
-                'ChatGroup.creator' => $uid
+                'ChatGroup.id' => $gids
             ],
             'joins' => [
                 [
