@@ -169,7 +169,7 @@ class ChatApiController extends Controller
         exit;
     }
 
-    public function join_group_by_group($user, $group_code)
+    public function join_group_by_code($user, $group_code)
     {
         list($group_id, $hx_group_id) = $this->get_group_by_code($group_code);
         $date_now = date('Y-m-d H:i:s');
