@@ -19,8 +19,8 @@
         <dl class="clearfix" ng-repeat="read in vm.read.list" infinite-scroll='vm.loadReadNextPage({{$weshare['Weshare']['id']}})'
         infinite-scroll-disabled='vm.read.over||vm.loading'
         infinite-scroll-distance='0'>
-        <dd class="fl dataname-width">&#123;&#123;sharer.nickname&#125;&#125;</dd>
-        <dd class="fr">&#123;&#123;sharer.created&#125;&#125;</dd>
+        <dd class="fl dataname-width">&#123;&#123;read.nickname&#125;&#125;</dd>
+        <dd class="fr">&#123;&#123;read.created&#125;&#125;</dd>
         </dl>
     </div>
 </div>

@@ -148,6 +148,7 @@ class WesharesController extends AppController
 
         $this->set('share_count',$share_count[0][0]['total']);
         $this->set('read_count',$read_count[0][0]['total']);
+        $this->set('title','朋友说-转发阅读统计');
     }
 
     public function share_count($id)
