@@ -268,7 +268,8 @@ class ChatApiController extends Controller
         return $chatGroup['ChatGroup']['id'];
     }
 
-    private function get_group_by_code($code){
+    private function get_group_by_code($code)
+    {
         $chatGroup = $this->ChatGroup->find('first', [
             'conditions' => [
                 'group_code' => $code
@@ -285,6 +286,87 @@ class ChatApiController extends Controller
             )
         ));
         return $chatGroup['ChatGroup']['hx_group_id'];
+    }
+
+    public function get_user_groups()
+    {
+        $uid = $this->currentUser['id'];
+        $this->loadModel('ChatGroup');
+        $this->loadModel('UserGroup');
+        $this->loadModel('Weshare');
+        $this->loadModel('Order');
+        $ugs = $this->UserGroup->find('all', [
+            'conditions' => [
+                'user_id' => $uid
+            ],
+            'fields' => ['UserGroup.group_id', 'UserGroup.id']
+        ]);
+
+        $gids = Hash::extract($ugs, '{n}.UserGroup.group_id');
+        $groups = $this->ChatGroup->find('all', [
+            'conditions' => [
+                'ChatGroup.creator' => $uid
+            ],
+            'joins' => [
+                [
+                    'alias' => 'User',
+                    'type' => 'INNER',
+                    'table' => 'cake_users',
+                    'conditions' => 'User.id = ChatGroup.creator'
+                ]
+            ],
+            'fields' => ['ChatGroup.id', 'ChatGroup.group_name', 'ChatGroup.hx_group_id', 'User.nickname', 'ChatGroup.creator'],
+            'limit' => 10
+        ]);
+
+        $result = [];
+        $proxys = [];
+        foreach ($groups as $g) {
+            $proxys[] = $g['ChatGroup']['creator'];
+            $result[] = ['id' => $g['ChatGroup']['id'], 'hx_group_id' => $g['ChatGroup']['hx_group_id'], 'group_name' => $g['ChatGroup']['group_name'], 'creator' => $g['ChatGroup']['creator'], 'creator_name' => $g['User']['nickname']];
+        }
+
+        $member_count = $this->UserGroup->find('all', [
+            'conditions' => [
+                'group_id' => $gids
+            ],
+            'group' => 'group_id',
+            'fields' => ['group_id', 'COUNT(`id`) as `member_count`']
+        ]);
+
+        $member_count = Hash::combine($member_count, '{n}.UserGroup.group_id', '{n}.0.member_count');
+
+        $order_summary = $this->Order->find('all', [
+            'conditions' => [
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'not' => ['status' => ORDER_STATUS_WAITING_PAY],
+                'brand_id' => $proxys
+            ],
+            'group' => 'brand_id',
+            'fields' => ['brand_id', 'COUNT(`id`) as `order_count`']
+        ]);
+
+        $order_summary = Hash::combine($order_summary, '{n}.Order.brand_id', '{n}.0.order_count');
+
+        $share_summary = $this->Weshare->find('all', [
+            'conditions' => [
+                'status' => WESHARE_STATUS_NORMAL,
+                'creator' => $proxys,
+            ],
+            'group' => 'creator',
+            'fields' => ['creator', 'COUNT(`id`) as `weshare_count`']
+        ]);
+
+        $share_summary = Hash::combine($share_summary, '{n}.Weshare.creator', '{n}.0.weshare_count');
+
+        foreach($result as &$item){
+            $item['member_count'] = $member_count[$item['id']];
+            $item['share_count'] = $share_summary[$item['creator']];
+            $item['order_count'] = $order_summary[$item['creator']];
+        }
+
+        echo json_encode($result);
+        exit;
     }
 
 }
