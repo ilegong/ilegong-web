@@ -33,7 +33,7 @@
         vm.doBack = doBack;
 
         function doBack(){
-            window.location.href='/weshares/get_self_info.html';
+            window.location.href='/weshares/entrance.html';
         }
 
         function goShareDetail(id) {
