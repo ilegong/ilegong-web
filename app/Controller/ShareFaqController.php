@@ -33,7 +33,7 @@ class ShareFaqController extends AppController {
     public function faq($shareId, $userId) {
         $share_info = $this->get_share_info($shareId);
         $current_user_id = $this->currentUser['id'];
-        
+
         $share_manage_users = $this->ShareAuthority->get_share_manage_auth_users($shareId);
         if (!empty($share_manage_users)) {
             //cuurent user is manage

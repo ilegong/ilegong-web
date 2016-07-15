@@ -46,7 +46,7 @@ $(function () {
   });
 
   function genChatItemDom(data) {
-    var domStr = '<li class="even"><a class="user" href="/weshares/user_share_info/' + senderId + '"><img class="img-responsive avatar_" src="' + senderImg + '" alt=""><span class="user-name">' + sendName + '</span></a> <div class="reply-content-box"> <span class="reply-time">' + data["ShareFaq"]["created"] + '</span> <div class="reply-content pr"> <span class="arrow">&nbsp;</span>' + data['ShareFaq']['msg'] + '</div></div></li>';
+    var domStr = '<li class="even"><a class="user" href="/weshares/user_share_info/' + senderId + '"><img class="img-responsive avatar_" src="' + senderImg + '" alt=""><span class="user-name">' + sendName + '</span></a> <div class="reply-content-box"> <span class="reply-time">' + data["created"] + '</span> <div class="reply-content pr"> <span class="arrow">&nbsp;</span>' + data['msg'] + '</div></div></li>';
     return domStr;
   }
 
