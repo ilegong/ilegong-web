@@ -2255,12 +2255,14 @@ class ShareUtilComponent extends Component
                 ],
                 'joins' => [
                     [
+                        'type' => 'left',
                         'table' => 'users',
                         'alias' => 'User',
                         'conditions' => [
                             'User.id = IndexProduct.share_user_id',
                         ],
                     ], [
+                        'type' => 'left',
                         'table' => 'user_levels',
                         'alias' => 'UserLevel',
                         'conditions' => [
