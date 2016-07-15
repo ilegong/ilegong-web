@@ -1,0 +1,49 @@
+<div ng-controller="ReadShareCountCtr as vm" ng-init="vm.loadNextPage()">
+    <div class="menu-top refer-back-bg">
+        转发阅读统计
+        <a href="javascript:;" ng-click="vm.doBack()">
+            <img ng-src="http://static.tongshijia.com/static/weshares/images/back.png" src="http://static.tongshijia.com/static/weshares/images/back.png">
+            <label>返回</label>
+        </a>
+    </div>
+
+    <div class="data">
+        <p class="clearfix">总阅读人数{{$read_count}}，总转发次数{{$share_count}}</p>
+        <div ng-repeat="share in vm.shares.list" infinite-scroll='vm.loadNextPage()'
+             infinite-scroll-disabled='vm.shares.over||vm.loading'
+             infinite-scroll-distance='0'>
+            <a class="clearfix share-goodlist">
+                <div class="fl">
+                    <img lazy-src="&#123;&#123;share.Weshare.default_image&#125;&#125;"
+                         fallback-src="&#123;&#123;vm.staticFilePath+'/static/img/default_product_banner.png'&#125;&#125;"/>
+                </div>
+                <h1 class="ng-binding" ng-bind="share.Weshare.title"></h1>
+                <em class="ng-scope show-b">进行中</em>
+                <label><span class="ng-binding" ng-bind='"编号：" + share.Weshare.id'></span>，
+                    <span class="ng-binding" ng-bind="share.Weshare.created"></span></label>
+            </a>
+            <ul class="clearfix">
+                <li class="ng-scope">
+                    <a href="javascript:;" ng-click="vm.goReadDetail(share.Weshare.id)">阅读人数<span ng-bind="'('+share.Weshare.read_num+')'"></span></a>
+                </li>
+                <li class="ng-scope">
+                    <a href="javascript:;" ng-click="vm.goShareDetail(share.Weshare.id)">转发次数<span ng-bind="'('+share.Weshare.share_num+')'"></span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<?php
+$this->assign('title','转发阅读统计');
+$this->set('show_footer', false);
+?>
+<?php
+$this->Html->css(array(
+$STATIC_HOST.'/static/weshares/css/read-share-count.min.css?v2.5.12'
+), null, array('inline' => false));
+
+$this->Html->script(array(
+$STATIC_HOST.'/static/weshares/js/read-share-count.min.js?v2.5.14'
+), array('block' => 'scripts'))
+?>

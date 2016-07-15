@@ -3,7 +3,7 @@
 class WesharesController extends AppController
 {
     var $uses =
-        array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem',
+        array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem','WxShare','ShareTrackLog',
             'SharerShipOption', 'WeshareShipSetting', 'OfflineStore', 'Comment', 'RebateTrackLog', 'ProxyRebatePercent', 'ShareUserBind', 'UserSubReason', 'ShareFavourableConfig', 'ShareAuthority');
 
     var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
@@ -54,6 +54,132 @@ class WesharesController extends AppController
         $this->set('coupon_count', $coupon_count);
         $hide_nav = $_REQUEST['hide_nav'];
         $this->set('hide_nav', $hide_nav);
+    }
+
+    public function read_share_count_api($page)
+    {
+        $uid = $this->currentUser['id'];
+        $limit = 5;
+        $weshares = $this->Weshare->find('all', [
+            'conditions' => [
+                'creator' => $uid,
+                'status' => WESHARE_STATUS_NORMAL,
+                'type' => [SHARE_TYPE_GROUP, SHARE_TYPE_DEFAULT, SHARE_TYPE_POOL_FOR_PROXY, SHARE_TYPE_POOL]
+            ],
+            'limit' => $limit,
+            'page' => $page,
+            'order' => ['Weshare.id DESC'],
+            'fields' => ['Weshare.id', 'Weshare.title', 'Weshare.default_image', 'Weshare.creator','Weshare.created']
+        ]);
+
+        if($weshares) {
+            $weshare_id = [];
+            foreach ($weshares as $weshare) {
+                $weshare_id[] = $weshare['Weshare']['id'];
+            }
+            $weshare_id = implode($weshare_id,',');
+
+            $share_total_list = $this->WxShare->query("SELECT data_id ,count(1) AS total FROM cake_wx_shares WHERE data_id IN ({$weshare_id}) GROUP BY data_id");
+            $read_total_list = $this->ShareTrackLog->query("SELECT data_id,count(1) AS total FROM cake_share_track_logs WHERE data_id IN ({$weshare_id}) GROUP BY data_id");
+        }
+
+        $read_tmp = [];
+        $share_tmp = [];
+        if($share_total_list) {
+            foreach ($share_total_list as $item) {
+                $share_tmp[$item['cake_wx_shares']['data_id']] = $item[0]['total'];
+            }
+        }
+        if($read_total_list) {
+            foreach ($read_total_list as $item) {
+                $read_tmp[$item['cake_share_track_logs']['data_id']] = $item[0]['total'];
+            }
+        }
+        foreach ($weshares as $index => $weshare) {
+            $weshares[$index]['Weshare']['read_num'] = intval($read_tmp[$weshare['Weshare']['id']]);
+            $weshares[$index]['Weshare']['share_num'] = intval($share_tmp[$weshare['Weshare']['id']]);
+        }
+        header('Content-type: application/json');
+        echo json_encode($weshares);
+        die;
+    }
+
+    public function read_count_api($id,$page=1)
+    {
+        $limit = 5;
+        $query = "SELECT u.nickname,s.click_time FROM cake_share_track_logs s LEFT JOIN cake_users u ON s.clicker = u.id WHERE s.data_id ={$id} ORDER BY s.id DESC LIMIT ".($page-1)*$limit.",{$limit}";
+        $share_list = $this->ShareTrackLog->query($query);
+        header('Content-type: application/json');
+        $res = [];
+        foreach ($share_list as $item) {
+            $res[] = [
+                'nickname' => $item['u']['nickname'] ? $item['u']['nickname'] : '--',
+                'created' => date('Y-m-d H:i:s' , $item['s']['click_time'])
+            ];
+        }
+        echo json_encode($res);
+        die;
+    }
+
+    public function share_count_api($id,$page=1)
+    {
+        $limit = 5;
+        $query = "SELECT u.nickname,s.created FROM cake_wx_shares s LEFT JOIN cake_users u ON s.share_id = u.id WHERE s.data_id = {$id} ORDER BY s.id DESC LIMIT ".($page-1)*$limit.",{$limit}";
+        $read_list = $this->WxShare->query($query);
+        header('Content-type: application/json');
+        $res = [];
+        foreach ($read_list as $item) {
+            $res[] = [
+                'nickname' => $item['u']['nickname'] ? $item['u']['nickname'] : '--',
+                'created' => date('Y-m-d H:i:s' , $item['s']['created'])
+            ];
+        }
+        echo json_encode($res);
+        die;
+    }
+
+    public function read_share_count()
+    {
+        $uid = $this->currentUser['id'];
+        
+        $share_count = $this->WxShare->query('SELECT count(1) AS total FROM cake_wx_shares WHERE sharer = '.$uid);
+
+        $read_count = $this->WxShare->query('SELECT count(1) AS total FROM cake_share_track_logs WHERE sharer = '.$uid);
+
+        $this->set('share_count',$share_count[0][0]['total']);
+        $this->set('read_count',$read_count[0][0]['total']);
+    }
+
+    public function share_count($id)
+    {
+        $weshare = $this->Weshare->find('first', [
+            'conditions' => [
+                'id' => $id
+            ],
+            'fields' => ['Weshare.id', 'Weshare.title'],
+        ]);
+
+        $this->set('weshare',$weshare);
+
+        $share_count = $this->WxShare->query('SELECT count(1) AS total FROM cake_wx_shares WHERE data_id = '.$id);
+        
+        $this->set('share_count',$share_count[0][0]['total']);
+    }
+
+    public function read_count($id)
+    {
+        $weshare = $this->Weshare->find('first', [
+            'conditions' => [
+                'id' => $id
+            ],
+            'fields' => ['Weshare.id', 'Weshare.title'],
+        ]);
+        
+        $this->set('weshare',$weshare);
+        
+        $read_count = $this->WxShare->query('SELECT count(1) AS total FROM cake_share_track_logs WHERE data_id = '.$id);
+
+        $this->set('read_count',$read_count[0][0]['total']);
     }
 
     public function coupons(){

@@ -97,7 +97,14 @@ var all_js = [
             'webroot/src/scripts/user-coupons-list-controller.js'
         ],
         dist: 'webroot/static/weshares/js/'
-    }];
+    },{
+        name: 'read-share-count.min.js',
+        sources: [
+            'webroot/src/scripts/read-share-count-controller.js'
+        ],
+        dist: 'webroot/static/weshares/js/'
+    }
+];
 
 var all_css = [
   {
@@ -137,6 +144,12 @@ var all_css = [
     name: 'tutorial.min.css',
     sources: [
       'webroot/src/scss/tutorial.scss',
+    ],
+    dist: 'webroot/static/weshares/css/'
+  }, {
+    name: 'read-share-count.min.css',
+    sources: [
+      'webroot/src/scss/read-share-count.css',
     ],
     dist: 'webroot/static/weshares/css/'
   }

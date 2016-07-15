@@ -1,0 +1,41 @@
+<div ng-controller="ReadShareCountCtr as vm" ng-init="vm.loadReadNextPage({{$weshare['Weshare']['id']}})">
+    <div class="menu-top refer-back-bg">
+        阅读明细
+        <a href="/weshares/read_share_count">
+            <img ng-src="http://static.tongshijia.com/static/weshares/images/back.png" src="http://static.tongshijia.com/static/weshares/images/back.png">
+            <label>返回</label>
+        </a>
+    </div>
+
+    <div class="data">
+        <p class="clearfix">
+            <label>分享名称：{{$weshare['Weshare']['title']}}</label>
+            <span>总阅读人数{{$read_count}}</span>
+        </p>
+        <dl class="clearfix">
+            <dd class="fl dataname-width">阅读人昵称</dd>
+            <dd class="fr">阅读时间</dd>
+        </dl>
+        <dl class="clearfix" ng-repeat="read in vm.read.list" infinite-scroll='vm.loadReadNextPage({{$weshare['Weshare']['id']}})'
+        infinite-scroll-disabled='vm.read.over||vm.loading'
+        infinite-scroll-distance='0'>
+        <dd class="fl dataname-width">&#123;&#123;sharer.nickname&#125;&#125;</dd>
+        <dd class="fr">&#123;&#123;sharer.created&#125;&#125;</dd>
+        </dl>
+    </div>
+</div>
+
+
+<?php
+$this->assign('title','阅读明细');
+$this->set('show_footer', false);
+?>
+<?php
+$this->Html->css(array(
+$STATIC_HOST.'/static/weshares/css/read-share-count.min.css?v2.5.12'
+), null, array('inline' => false));
+
+$this->Html->script(array(
+$STATIC_HOST.'/static/weshares/js/read-share-count.min.js?v2.5.14'
+), array('block' => 'scripts'))
+?>
