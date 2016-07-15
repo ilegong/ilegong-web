@@ -1161,6 +1161,8 @@ class ShareUtilComponent extends Component
             $weshare['title'] = remove_emoji(preg_replace('/\s+/', '', $weshare['title']));
             $sender = [];
             $list = '';
+            $i = 0;
+            $len = count($carts);
             foreach ($carts as $item) {
                 $orderCarts = $item['Cart'];
                 $user = $item['User'];
@@ -1171,8 +1173,13 @@ class ShareUtilComponent extends Component
                 foreach ($orderCarts as $ci) {
                     $ca[] = $ci['name'] . 'X' . $ci['num'];
                 }
-                $list = $list . implode(',', $ca) . '\n';
+                $list = $list . $user['nickname'] . implode(',', $ca);
+                if ($i != $len - 1) {
+                    $list = $list . '\n';
+                }
+                $i++;
             }
+
             $cg = $chatGroupM->findById($groupId);
             $hx_group_id = $cg['ChatGroup']['hx_group_id'];
             $ext = array_merge([], $sender);
