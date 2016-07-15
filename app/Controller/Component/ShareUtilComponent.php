@@ -1175,7 +1175,7 @@ class ShareUtilComponent extends Component
                 }
                 $list = $list . $user['nickname'] . ' ' . implode(',', $ca);
                 if ($i != $len - 1) {
-                    $list = $list . '\\n';
+                    $list = $list . '$$';
                 }
                 $i++;
             }
