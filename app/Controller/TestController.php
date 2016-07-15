@@ -252,9 +252,10 @@ class TestController extends AppController
     }
 
 
-    public function test_send_msg_to_hx(){
-        list($weshare, $carts, $sender) = $this->ShareUtil->send_buy_msg_to_hx(641, 1, 633345);
-        echo json_encode([$weshare, $carts, $sender]);
+    public function test_send_msg_to_hx($shareId, $gid, $creator)
+    {
+        $result = $this->ShareUtil->send_buy_msg_to_hx($shareId, $gid, $creator);
+        echo json_encode($result);
         exit;
     }
 
