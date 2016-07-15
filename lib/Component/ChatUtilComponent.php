@@ -10,7 +10,7 @@ class ChatUtilComponent extends Component
             'conditions' => array(
                 'id' => $uids,
             ),
-            'fields' => array('id', 'image', 'nickname', 'is_proxy')
+            'fields' => array('id', 'image', 'nickname', 'is_proxy', 'avatar')
         ));
         $user_levels = $userLevelM->find('all', array(
             'conditions' => array(
