@@ -315,7 +315,7 @@ class ChatApiController extends Controller
                     'conditions' => 'User.id = ChatGroup.creator'
                 ]
             ],
-            'fields' => ['ChatGroup.id', 'ChatGroup.group_name', 'ChatGroup.hx_group_id', 'User.nickname', 'ChatGroup.creator'],
+            'fields' => ['ChatGroup.id', 'ChatGroup.group_name', 'ChatGroup.hx_group_id', 'User.nickname', 'ChatGroup.creator', 'User.image', 'User.avatar'],
             'limit' => 10
         ]);
 
@@ -323,7 +323,7 @@ class ChatApiController extends Controller
         $proxys = [];
         foreach ($groups as $g) {
             $proxys[] = $g['ChatGroup']['creator'];
-            $result[] = ['id' => $g['ChatGroup']['id'], 'hx_group_id' => $g['ChatGroup']['hx_group_id'], 'group_name' => $g['ChatGroup']['group_name'], 'creator' => $g['ChatGroup']['creator'], 'creator_name' => $g['User']['nickname']];
+            $result[] = ['id' => $g['ChatGroup']['id'], 'hx_group_id' => $g['ChatGroup']['hx_group_id'], 'group_name' => $g['ChatGroup']['group_name'], 'creator' => $g['ChatGroup']['creator'], 'creator_name' => $g['User']['nickname'], 'creator_image' => get_user_avatar($g['User'])];
         }
 
         $member_count = $this->UserGroup->find('all', [
