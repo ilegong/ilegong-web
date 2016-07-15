@@ -171,7 +171,7 @@ class ChatApiController extends Controller
 
     public function join_group_by_code($group_code)
     {
-        $user = $this->currentUser['id'];
+        $user = $this->currentUser  ['id'];
         list($group_id, $hx_group_id) = $this->get_group_by_code($group_code);
         $date_now = date('Y-m-d H:i:s');
         $save_result = true;
@@ -181,7 +181,7 @@ class ChatApiController extends Controller
         }
         if ($save_result) {
             $this->ChatUtil->add_group_member($user, $hx_group_id);
-            echo json_encode(array('statusCode' => 1, 'statusMsg' => '添加成功'));
+            echo json_encode(array('statusCode' => 0, 'statusMsg' => '添加成功'));
             return;
         }
         echo json_encode(array('statusCode' => -2, 'statusMsg' => '添加失败'));
@@ -203,7 +203,7 @@ class ChatApiController extends Controller
         $save_result = $this->UserGroup->saveAll($save_data);
         if ($save_result) {
             $this->ChatUtil->add_group_members($user_ids, $hx_group_id);
-            echo json_encode(array('statusCode' => 1, 'statusMsg' => '添加成功'));
+            echo json_encode(array('statusCode' => 0, 'statusMsg' => '添加成功'));
             return;
         }
         echo json_encode(array('statusCode' => -2, 'statusMsg' => '添加失败'));
