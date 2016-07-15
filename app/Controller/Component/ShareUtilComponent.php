@@ -1176,7 +1176,7 @@ class ShareUtilComponent extends Component
             $cg = $chatGroupM->findById($groupId);
             $hx_group_id = $cg['ChatGroup']['hx_group_id'];
             $ext = array_merge([], $sender);
-            $ext['customType'] = 1;
+            $ext['customType'] = '1';
             $ext['shareId'] = $shareId;
             $ext['orderList'] = $list;
             $ext['shareTitle'] = $weshare['title'];
