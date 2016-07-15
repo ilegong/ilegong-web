@@ -32,6 +32,7 @@ class ChatUtilComponent extends Component
             $level_text = get_user_level_text($level);
             $user_item['level'] = $level_text;
             $user_item['image'] = get_user_avatar($user_item);
+            unset($user_item['avatar']);
         }
         return $user_infos;
     }
