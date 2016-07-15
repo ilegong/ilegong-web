@@ -668,7 +668,7 @@ class ShareUtilComponent extends Component
 
             $shareInfo['refer_share_id'] = $shareId;
             $shareInfo['root_share_id'] = $root_share_id;
-            
+
             if (!empty($uid)) {
                 $shareInfo['creator'] = $uid;
                 //检查并设置用户团长
@@ -1124,6 +1124,71 @@ class ShareUtilComponent extends Component
         }
     }
 
+
+    public function send_buy_msg_to_hx($shareId, $groupId, $order_creator){
+        //none group
+        if ($groupId == 0) {
+            return false;
+        }
+        try {
+            $weshareM = ClassRegistry::init('Weshare');
+            $orderM = ClassRegistry::init('Order');
+            $chatGroupM = ClassRegistry::init('ChatGroup');
+            $weshare = $weshareM->find('first', [
+                'conditions' => ['id' => $shareId],
+                'fields' => ['id', 'title', 'description', 'status']
+            ]);
+            $weshare = $weshare['Weshare'];
+            $carts = $orderM->find('all', [
+                'conditions' => [
+                    'Order.member_id' => $shareId,
+                    'Order.type' => ORDER_TYPE_WESHARE_BUY,
+                    'not' => ['Order.status' => ORDER_STATUS_WAITING_PAY]
+                ],
+                'recursive' => 1,
+                'joins' => [
+                    [
+                        'alias' => 'User',
+                        'table' => 'cake_users',
+                        'type' => 'left',
+                        'conditions' => 'User.id = Order.creator'
+                    ]
+                ],
+                'order' => 'Order.id ASC',
+                'fields' => ['Order.id', 'User.nickname', 'User.image', 'User.avatar', 'User.id']
+            ]);
+            $weshare['description'] = remove_emoji(mb_substr(strip_tags(preg_replace('/\s+/', '', $weshare['description'])), 0, 60, "UTF8")) . '...';
+            $weshare['title'] = remove_emoji(preg_replace('/\s+/', '', $weshare['title']));
+            $sender = [];
+            $list = '';
+            foreach ($carts as $item) {
+                $orderCarts = $item['Cart'];
+                $user = $item['User'];
+                if ($user['id'] == $order_creator) {
+                    $sender = ['avatar' => get_user_avatar($user), 'userId' => $user['id'], 'nickname' => $user['nickname']];
+                }
+                $ca = [];
+                foreach ($orderCarts as $ci) {
+                    $ca[] = $ci['name'] . 'X' . $ci['num'];
+                }
+                $list = $list . implode(',', $ca) . '\n';
+            }
+            $cg = $chatGroupM->findById($groupId);
+            $hx_group_id = $cg['ChatGroup']['hx_group_id'];
+            $ext = array_merge([], $sender);
+            $ext['customType'] = 1;
+            $ext['shareId'] = $shareId;
+            $ext['orderList'] = $list;
+            $ext['shareTitle'] = $weshare['title'];
+            $ext['shareDesc'] = $weshare['description'];
+            $result = $this->ChatUtil->send_msg(HX_CHAT_GROUP_TARGET_TYPE, [$hx_group_id], $weshare['title'], $order_creator, $ext);
+            $this->log('paid success send to hx msg result ' . json_encode($result));
+        } catch (Exception $e) {
+            $this->log('send pay success msg to hx error shareId ' . $shareId . ' groupId ' . $groupId . ' creator ' . $order_creator . ' error ' . $e->getMessage());
+            return false;
+        }
+        return true;
+    }
 
     /**
      * @param $share_id

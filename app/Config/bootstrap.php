@@ -328,6 +328,10 @@ const HX_CLIENT_SECRET = 'YXA6rKa-1NpmgnMyAcfJBqaVtVJjCtg';
 
 const WX_CLICK_CUSTOM_SERVICE = 'V1001_C_S';
 
+const HX_CHAT_GROUP_TARGET_TYPE = 'chatgroups';
+const HX_CHAT_SINGLE_TARGET_TYPE = 'users';
+const HX_CHAT_ROOM_TARGET_TYPE = 'chatrooms';
+
 define('CATEGORY_ID_TECHAN', 114);
 
 define('PAYLOG_STATUS_NEW', 0);

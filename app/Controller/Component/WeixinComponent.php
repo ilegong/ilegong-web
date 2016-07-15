@@ -842,6 +842,7 @@ class WeixinComponent extends Component {
             }
             //save buy opt log
             $this->ShareUtil->save_buy_opt_log($order['Order']['creator'], $order['Order']['member_id'], $order['Order']['id']);
+            $this->ShareUtil->send_buy_msg_to_hx($order['Order']['member_id'], $order['Order']['chat_group_id'], $order['Order']['creator']);
         }
     }
 
