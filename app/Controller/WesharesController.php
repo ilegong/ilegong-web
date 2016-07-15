@@ -124,14 +124,17 @@ class WesharesController extends AppController
     public function share_count_api($id,$page=1)
     {
         $limit = 5;
-        $query = "SELECT u.nickname,s.created FROM cake_wx_shares s LEFT JOIN cake_users u ON s.share_id = u.id WHERE s.data_id = {$id} ORDER BY s.id DESC LIMIT ".($page-1)*$limit.",{$limit}";
+        $query = "SELECT u.nickname,s.created,s.created FROM cake_wx_shares s LEFT JOIN cake_users u ON s.share_id = u.id WHERE s.data_id = {$id} ORDER BY s.id DESC LIMIT ".($page-1)*$limit.",{$limit}";
         $read_list = $this->WxShare->query($query);
         header('Content-type: application/json');
         $res = [];
         foreach ($read_list as $item) {
+            $read_count_tmp = $this->WxShare->query('SELECT count(1) AS total FROM cake_share_track_logs WHERE data_id = '.$id .' AND share_time = '.$item['s']['created']);
+
             $res[] = [
                 'nickname' => $item['u']['nickname'] ? $item['u']['nickname'] : '--',
-                'created' => date('Y-m-d H:i:s' , $item['s']['created'])
+                'created' => date('Y-m-d H:i:s' , $item['s']['created']),
+                'read_count' => $read_count_tmp[0][0]['total']
             ];
         }
         echo json_encode($res);
