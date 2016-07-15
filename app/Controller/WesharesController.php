@@ -540,6 +540,7 @@ class WesharesController extends AppController
         if ($_REQUEST['access_token'] && empty($postDataArray['from'])) {
             $postDataArray['from'] = 'app';
         }
+        $order_chat_group_id = empty($postDataArray['chat_group_id']) ? 0 : $postDataArray['chat_group_id'];
         $order_flag = get_order_from_flag($postDataArray['from']);
         //购物车
         $cart = array();
@@ -592,7 +593,8 @@ class WesharesController extends AppController
                 'consignee_name' => $shipInfo['name'],
                 'consignee_mobilephone' => $shipInfo['mobilephone'],
                 'business_remark' => $business_remark,
-                'flag' => $order_flag);
+                'flag' => $order_flag,
+                'chat_group_id' => $order_chat_group_id);
             //设置订单物流方式
             $this->process_order_ship_mark($shipType, $orderData);
             $order = $this->Order->save($orderData);
