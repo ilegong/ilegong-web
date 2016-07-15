@@ -258,7 +258,7 @@ class TestController extends AppController
         echo json_encode($result);
         exit;
     }
-    
+
     public function test_set_order_paid_done($orderId)
     {
         $this->Order->set_order_to_paid($orderId, 0, 633345, 1, $memberId = 0);

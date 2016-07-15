@@ -8,7 +8,7 @@ class ShareUtilComponent extends Component
 
     var $normal_order_status = array(ORDER_STATUS_DONE, ORDER_STATUS_PAID, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURN_MONEY, ORDER_STATUS_RETURNING_MONEY);
 
-    public $components = array('Weixin', 'WeshareBuy', 'RedisQueue', 'DeliveryTemplate', 'ShareAuthority', 'SharePush');
+    public $components = array('Weixin', 'WeshareBuy', 'RedisQueue', 'DeliveryTemplate', 'ShareAuthority', 'SharePush', 'ChatUtil');
 
     var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar', 'label');
 
