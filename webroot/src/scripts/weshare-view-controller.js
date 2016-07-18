@@ -81,7 +81,8 @@
         vm.filterProductByNum = filterProductByNum;
         vm.isShowExpressInfoBtn = isShowExpressInfoBtn;
         vm.showOrderExpressInfo = showOrderExpressInfo;
-
+        vm.getBannerImage = getBannerImage;
+        vm.getBannerLink = getBannerLink;
         activate();
 
         OfflineStore.ChooseOfflineStore(vm, $http, $templateCache);
@@ -1209,6 +1210,20 @@
             //load all comments
             vm.getShareSummeryData(vm.weshare.id, vm.weshare.creator.id);
             vm.loadOrderDetail(vm.weshare.id);
+        }
+
+        function getBannerImage(){
+            if(/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream){
+                return vm.staticFilePath + '/static/weshares/images/share-banner-ios-app.gif';
+            }
+            return vm.staticFilePath + '/static/weshares/images/share-banner-new.gif';
+        }
+
+        function getBannerLink(){
+            if(/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream){
+                return '/pys/download_app?from=share_view';
+            }
+            return '/weshares/add?from=share_view';
         }
     }
 })(window, window.angular);

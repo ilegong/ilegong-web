@@ -9,8 +9,8 @@
     {{literal}}
     <div ng-if="vm.showShareDetailView" ng-click="vm.showUnSubscribe=false;"
          ng-class="{'has-channel-bottom': vm.weshare.type==0||vm.weshare.type==4||vm.weshare.type==6}">
-        <a href="/weshares/add?from=share_view" class="banners">
-            <img ng-src="{{::vm.staticFilePath}}/static/weshares/images/share-banner-new.gif"/>
+        <a href="{{vm.getBannerLink()}}" class="banners">
+            <img ng-src="{{vm.getBannerImage()}}"/>
         </a>
 
         <div>
