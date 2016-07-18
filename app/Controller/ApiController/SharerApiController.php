@@ -244,6 +244,7 @@ class SharerApiController extends Controller
                 $shareItem = $shareItem['Weshare'];
                 $shareItem['order_count'] = empty($order_count_result[$shareItem['id']]) ? 0 : intval($order_count_result[$shareItem['id']]);
                 $shareItem['balance_money'] = $share_balance_money[$shareItem['id']];
+                $shareItem['share_string'] = prepare_wx_share_string($this->currentUser['id'], 'wsid', $shareItem['id']);
                 $share_list[] = $shareItem;
             }
         }
