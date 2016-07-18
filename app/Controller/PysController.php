@@ -15,7 +15,7 @@ class PysController extends AppController{
 
     public function download_app(){
         $this->layout=null;
-
+        add_logs_to_es(["index" => "event_view_banner", "type" => "ios_download"]);
     }
 
 }
