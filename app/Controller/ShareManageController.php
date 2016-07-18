@@ -813,6 +813,7 @@ class ShareManageController extends AppController
             $all_pool_products = $sharePoolProductM->get_all_deleted_products();
         }
         $this->set('all_pool_products', $all_pool_products);
+        $this->set('type',$type);
         if (!empty($share_id)) {
             $sharePoolProductM = ClassRegistry::init('SharePoolProduct');
             $all_fork_shares = $sharePoolProductM->get_fork_share_ids($share_id);
