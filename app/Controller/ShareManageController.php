@@ -1004,13 +1004,7 @@ class ShareManageController extends AppController
             Cache::delete($key);
             $data['PoolProduct']['status'] = $data['xiajia'] ? POOL_PRODUCT_UN_PUBLISH : POOL_PRODUCT_PUBLISH;
             $this->ShareManage->save_pool_product($data);
-
-            if($data['xiajia'])
-            {
-                $this->redirect("/shareManage/share_from_pool/".$data['Weshares']['id'].".html");
-            }else{
-                $this->redirect(array('action' => 'pool_products'));
-            }
+            $this->redirect("/shareManage/share_from_pool/".$data['Weshares']['id'].".html");
         }
     }
 
