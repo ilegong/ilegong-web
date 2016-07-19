@@ -105,7 +105,7 @@ class WeshareApiController extends Controller
     {
         $products = $this->Weshares->get_weshare_products($weshare_id);
         $detail = $this->Weshares->get_app_weshare_detail($weshare_id);
-        echo json_encode(['products' => $products, 'share_info' => ['send_info' => $detail['send_info'], 'default_image' => $detail['default_image'], 'title' => $detail['title']]]);
+        echo json_encode(['products' => $products, 'share_info' => ['status' => $detail['status'], 'send_info' => $detail['send_info'], 'default_image' => $detail['default_image'], 'title' => $detail['title']]]);
         exit;
     }
 
