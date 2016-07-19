@@ -1173,7 +1173,7 @@ class ShareUtilComponent extends Component
                 foreach ($orderCarts as $ci) {
                     $ca[] = $ci['name'] . 'X' . $ci['num'];
                 }
-                $list = $list . ($i + 1) . $user['nickname'] . ' ' . implode(',', $ca);
+                $list = $list . ($i + 1) . '、'. $user['nickname'] . ' ' . implode(',', $ca);
                 if ($i != $len - 1) {
                     $list = $list . '$$';
                 }
