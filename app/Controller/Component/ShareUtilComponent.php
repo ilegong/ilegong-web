@@ -1173,7 +1173,7 @@ class ShareUtilComponent extends Component
                 foreach ($orderCarts as $ci) {
                     $ca[] = $ci['name'] . 'X' . $ci['num'];
                 }
-                $list = $list . $user['nickname'] . ' ' . implode(',', $ca);
+                $list = $list . ($i + 1) . $user['nickname'] . ' ' . implode(',', $ca);
                 if ($i != $len - 1) {
                     $list = $list . '$$';
                 }
@@ -1183,6 +1183,7 @@ class ShareUtilComponent extends Component
             $cg = $chatGroupM->findById($groupId);
             $hx_group_id = $cg['ChatGroup']['hx_group_id'];
             $ext = array_merge([], $sender);
+            $ext['ownerId'] = $order_creator;
             $ext['customType'] = '1';
             $ext['shareId'] = $shareId;
             $ext['orderList'] = $list;

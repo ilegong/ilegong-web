@@ -226,7 +226,7 @@ class ChatUtilComponent extends Component
     function get_user_info($id){
         $userM = ClassRegistry::init('User');
         $u = $userM->findById($id);
-        return ['avatar' => get_user_avatar($u), 'userId' => $u['User']['id'], 'nickname' => $u['User']['nickname']];
+        return ['avatar' => get_user_avatar($u), 'userId' => $u['User']['id'], 'nickname' => $u['User']['nickname'], 'ownerId' => $u['User']['id']];
     }
 
 }
