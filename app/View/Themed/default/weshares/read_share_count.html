@@ -12,7 +12,7 @@
         <div ng-repeat="share in vm.shares.list" infinite-scroll='vm.loadNextPage()'
              infinite-scroll-disabled='vm.shares.over||vm.loading'
              infinite-scroll-distance='0'>
-            <a class="clearfix share-goodlist">
+            <a class="clearfix share-goodlist" ng-click="vm.goShareView(share.Weshare.id);">
                 <div class="fl">
                     <img lazy-src="&#123;&#123;share.Weshare.default_image&#125;&#125;"
                          fallback-src="&#123;&#123;vm.staticFilePath+'/static/img/default_product_banner.png'&#125;&#125;"/>
@@ -40,7 +40,7 @@ $this->set('show_footer', false);
 ?>
 <?php
 $this->Html->css(array(
-$STATIC_HOST.'/static/weshares/css/read-share-count.min.css?v2.5.12'
+$STATIC_HOST.'/static/weshares/css/read-share-count.min.css?v2.5.13'
 ), null, array('inline' => false));
 
 $this->Html->script(array(
