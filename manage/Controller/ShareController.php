@@ -607,7 +607,7 @@ class ShareController extends AppController
                 'weshare_id' => $weshare_id
             )
         ));
-        $rand_start = strtotime('-3 day');
+        $rand_start = strtotime('-1 day');
         $rand_end = strtotime('now');
 
         $orders = [];
@@ -653,7 +653,7 @@ class ShareController extends AppController
         $rand_start = strtotime('-1 day');
         $rand_end = strtotime('now');
 
-        $this->log('admin try to make '.count($users).' unpaid orders for weshare '.$weshare['Weshare']['id']);
+        $this->log('admin try to make '.$num.' unpaid orders for weshare '.$weshare['Weshare']['id'].', and found '.count($users).' followers');
         $orders = [];
         foreach ($users as $user) {
             $order_date = $this->rand_date($rand_start, $rand_end);
