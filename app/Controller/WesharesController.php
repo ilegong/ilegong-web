@@ -145,7 +145,7 @@ class WesharesController extends AppController
     {
         $uid = $this->currentUser['id'];
         
-        $share_count = $this->WxShare->query('SELECT count(1) AS total FROM cake_wx_shares WHERE data_type = "wsid" AND sharer = '.$uid);
+        $share_count = $this->WxShare->query('SELECT count(1) AS total FROM cake_wx_shares WHERE data_id > 0 AND data_type = "wsid" AND sharer = '.$uid);
 
         $read_count = $this->WxShare->query('SELECT count(1) AS total FROM cake_share_track_logs WHERE data_id > 0 AND data_type = "wsid" AND sharer = '.$uid);
 
