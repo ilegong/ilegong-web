@@ -12,7 +12,7 @@ class ShareController extends AppController
     var $name = 'Share';
 
     var $uses = array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User',
-        'WeshareShipSetting', 'OfflineStore', 'Oauthbind', 'Comment', 'RefundLog', 'PayNotify', 'RebateTrackLog', 'PayLog', 'PintuanTag');
+        'WeshareShipSetting', 'OfflineStore', 'Oauthbind', 'Comment', 'RefundLog', 'PayNotify', 'RebateTrackLog', 'PayLog', 'PintuanTag', 'OrderConsignee');
 
     var $components = array('Weixin', 'Paginator');
 
@@ -650,7 +650,7 @@ class ShareController extends AppController
                 'weshare_id' => $weshare_id
             )
         ));
-        $rand_start = strtotime('-3 day');
+        $rand_start = strtotime('-1 day');
         $rand_end = strtotime('now');
 
         $orders = [];
@@ -681,7 +681,7 @@ class ShareController extends AppController
             'fields' => ['Order.*'],
             'conditions' => array(
                 'member_id' => $weshare_id,
-                'flag' => -1
+                'flag' => 19
             )
         ));
         usort($orders, function($a, $b){
@@ -690,7 +690,7 @@ class ShareController extends AppController
             }
             return strtotime($a->orderDate) > strtotime($b->orderDate) ? -1 : 1;
         });
-        $this->log('orders: '.json_encode($orders));
+        $this->log('orders: '.count($orders));
         $this->set('weshare', $weshare);
         $this->set('orders', $orders);
     }
@@ -1363,9 +1363,21 @@ class ShareController extends AppController
     private function gen_order($weshare, $user, $weshare_products, $order_date, $order_status)
     {
         $cart = array();
+        $consignee = $this->OrderConsignee->find('first', array(
+            'conditions' => array(
+                'creator' => $user['User']['id']
+            )
+        ));
+        if(empty($consignee)){
+            $consignee = array(
+                'OrderConsignee'=>array(
+                    'address' => '北京海淀建材城西路上奥世纪B座430',
+                )
+            );
+        }
         $mobile_phone = $this->randMobile(1);
-        $addressId = 0;
-        $order_consignee_address = '虚拟订单';
+        $addressId = $consignee['OrderConsignee']['id'];
+        $order_consignee_address = $consignee['OrderConsignee']['address'];
         $weshare_id = $weshare['Weshare']['id'];
         $user = $user['User'];
         $user_name = $user['nickname'];
