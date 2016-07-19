@@ -1402,7 +1402,7 @@ class ShareController extends AppController
         $this->Cart->id = null;
         $this->Cart->saveAll($cart);
         $order_price = number_format($totalPrice / 100, 2, '.', '');
-        $this->Order->updateAll(array('total_all_price' => $order_price, 'total_price' => $order_price, 'ship_fee' => 0, 'status' => $order_status, 'flag' => -1, 'brand_id' => $weshare['Weshare']['creator'], 'pay_time' => "'" . $order_date . "'"), array('id' => $orderId));
+        $this->Order->updateAll(array('total_all_price' => $order_price, 'total_price' => $order_price, 'ship_fee' => 0, 'status' => $order_status, 'flag' => 19, 'brand_id' => $weshare['Weshare']['creator'], 'pay_time' => "'" . $order_date . "'"), array('id' => $orderId));
 
         return array('success' => true, 'id' => $orderId, 'orderDate'=>$order_date, 'orderPrice'=>$order_price, 'status'=>$order_status, 'creator' => $user['id'], 'consignee_name' => $user_name, 'consignee_mobilephone' => $mobile_phone[0], 'consignee_address' => $order_consignee_address);
     }
