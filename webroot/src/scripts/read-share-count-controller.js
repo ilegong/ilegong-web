@@ -31,6 +31,11 @@
         vm.goShareDetail = goShareDetail;
         vm.goReadDetail = goReadDetail;
         vm.doBack = doBack;
+        vm.goShareView = goShareView;
+
+        function goShareView(id){
+            window.location.href='/weshares/view/'+id+'.html?';
+        }
 
         function doBack(){
             window.location.href='/weshares/entrance.html';

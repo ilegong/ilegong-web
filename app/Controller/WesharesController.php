@@ -79,8 +79,8 @@ class WesharesController extends AppController
             }
             $weshare_id = implode($weshare_id,',');
 
-            $share_total_list = $this->WxShare->query("SELECT data_id ,count(1) AS total FROM cake_wx_shares WHERE data_id IN ({$weshare_id}) GROUP BY data_id");
-            $read_total_list = $this->ShareTrackLog->query("SELECT data_id,count(1) AS total FROM cake_share_track_logs WHERE data_id IN ({$weshare_id}) GROUP BY data_id");
+            $share_total_list = $this->WxShare->query("SELECT data_id ,count(1) AS total FROM cake_wx_shares WHERE data_type = 'wsid' AND data_id IN ({$weshare_id}) GROUP BY data_id");
+            $read_total_list = $this->ShareTrackLog->query("SELECT data_id,count(1) AS total FROM cake_share_track_logs WHERE data_type = 'wsid' AND data_id IN ({$weshare_id}) GROUP BY data_id");
         }
 
         $read_tmp = [];
@@ -145,9 +145,9 @@ class WesharesController extends AppController
     {
         $uid = $this->currentUser['id'];
         
-        $share_count = $this->WxShare->query('SELECT count(1) AS total FROM cake_wx_shares WHERE sharer = '.$uid);
+        $share_count = $this->WxShare->query('SELECT count(1) AS total FROM cake_wx_shares WHERE data_type = "wsid" AND sharer = '.$uid);
 
-        $read_count = $this->WxShare->query('SELECT count(1) AS total FROM cake_share_track_logs WHERE sharer = '.$uid);
+        $read_count = $this->WxShare->query('SELECT count(1) AS total FROM cake_share_track_logs WHERE data_id > 0 AND data_type = "wsid" AND sharer = '.$uid);
 
         $this->set('share_count',$share_count[0][0]['total']);
         $this->set('read_count',$read_count[0][0]['total']);
@@ -165,7 +165,7 @@ class WesharesController extends AppController
 
         $this->set('weshare',$weshare);
 
-        $share_count = $this->WxShare->query('SELECT count(1) AS total FROM cake_wx_shares WHERE data_id = '.$id);
+        $share_count = $this->WxShare->query('SELECT count(1) AS total FROM cake_wx_shares WHERE data_type = "wsid" AND data_id = '.$id);
         
         $this->set('share_count',$share_count[0][0]['total']);
     }
