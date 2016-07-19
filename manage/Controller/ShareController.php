@@ -653,6 +653,7 @@ class ShareController extends AppController
         $rand_start = strtotime('-1 day');
         $rand_end = strtotime('now');
 
+        $this->log('admin try to make '.count($users).' unpaid orders for weshare '.$weshare['Weshare']['id']);
         $orders = [];
         foreach ($users as $user) {
             $order_date = $this->rand_date($rand_start, $rand_end);
@@ -665,7 +666,7 @@ class ShareController extends AppController
            }
             return strtotime($a->orderDate) > strtotime($b->orderDate) ? -1 : 1;
         });
-        $this->log('admin make unpaid orders: '.json_encode($orders));
+        $this->log('admin made unpaid orders: '.json_encode($orders));
         $this->redirect('/admin/share/show_orders_of_share/'.$weshare_id);
     }
 
