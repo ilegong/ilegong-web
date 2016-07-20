@@ -1398,7 +1398,8 @@ class ShareController extends AppController
         foreach ($p_index_array as $index) {
             $p = $weshare_products[$p_array[$index]-1];
             $item = array();
-            $num = rand(1, 2);
+            $sed = rand(2, 20);
+            $num = $sed > 10 ? 2 : 1;
             $price = $p['WeshareProduct']['price'];
             $item['name'] = $p['WeshareProduct']['name'];
             $item['num'] = $num;
