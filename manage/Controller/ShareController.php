@@ -50,10 +50,10 @@ class ShareController extends AppController
         $this->autoRender = false;
         Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $shareId, '');
         Cache::write(SHARE_DETAIL_DATA_WITH_TAG_CACHE_KEY . '_' . $shareId, '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $shareId . '_1_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $shareId . '_0_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $shareId . '_1_0', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $shareId . '_0_0', '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $shareId, '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $shareId, '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $shareId, '');
+        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $shareId, '');
         Cache::write(SIMPLE_SHARE_INFO_CACHE_KEY . '_' . $shareId, '');
         echo json_encode(array('success' => true));
         return;
