@@ -2541,7 +2541,7 @@ class ShareUtilComponent extends Component
             }
             $send_msg_log_data = array('created' => date('Y-m-d H:i:s'), 'sharer_id' => $uid, 'data_id' => $weshare_id, 'type' => MSG_LOG_NOTIFY_TYPE, 'status' => 1);
             $this->saveSendMsgLog($send_msg_log_data);
-            $this->WeshareBuy->send_buy_percent_msg_to_share_manager($share_info, $content);
+            //$this->WeshareBuy->send_buy_percent_msg_to_share_manager($share_info, $content);
             $fansPageInfo = $this->WeshareBuy->get_user_relation_page_info($uid);
             $pageCount = $fansPageInfo['pageCount'];
             $pageSize = $fansPageInfo['pageSize'];
@@ -2550,7 +2550,7 @@ class ShareUtilComponent extends Component
         }
         if ($type == 1) {
             //发送给已购买的用户
-            $this->WeshareBuy->send_notify_user_msg_to_share_manager($share_info, $content);
+            //$this->WeshareBuy->send_notify_user_msg_to_share_manager($share_info, $content);
             $this->RedisQueue->add_tasks('share', "/weshares/process_notify_has_buy_fans/" . $weshare_id, "content=" . $content, true);
             return array('success' => true);
         }
