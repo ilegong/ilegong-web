@@ -1394,25 +1394,26 @@ class ShareController extends AppController
         if (!is_array($p_index_array)) {
             $p_index_array = [$p_index_array];
         }
-        foreach ($p_index_array as $index) {
-            $p = $weshare_products[$p_array[$index]-1];
-            $item = array();
-            $sed = rand(2, 20);
-            $num = $sed > 10 ? 2 : 1;
-            $price = $p['WeshareProduct']['price'];
-            $item['name'] = $p['WeshareProduct']['name'];
-            $item['num'] = $num;
-            $item['price'] = $price;
-            $item['type'] = ORDER_TYPE_WESHARE_BUY;
-            $item['product_id'] = $p['WeshareProduct']['id'];
-            $item['created'] = $order_date;
-            $item['updated'] = $order_date;
-            $item['creator'] = $user['id'];
-            $item['order_id'] = $orderId;
-            $item['tuan_buy_id'] = $weshare_id;
-            $cart[] = $item;
-            $totalPrice += $num * $price;
-        }
+        $k = array_rand($p_index_array);
+        $index = $p_index_array[$k];
+        $p = $weshare_products[$p_array[$index]-1];
+        $item = array();
+        $sed = rand(2, 20);
+        $num = $sed > 10 ? 2 : 1;
+        $price = $p['WeshareProduct']['price'];
+        $item['name'] = $p['WeshareProduct']['name'];
+        $item['num'] = $num;
+        $item['price'] = $price;
+        $item['type'] = ORDER_TYPE_WESHARE_BUY;
+        $item['product_id'] = $p['WeshareProduct']['id'];
+        $item['created'] = $order_date;
+        $item['updated'] = $order_date;
+        $item['creator'] = $user['id'];
+        $item['order_id'] = $orderId;
+        $item['tuan_buy_id'] = $weshare_id;
+        $cart[] = $item;
+        $totalPrice += $num * $price;
+
         $this->Cart->id = null;
         $this->Cart->saveAll($cart);
         $order_price = number_format($totalPrice / 100, 2, '.', '');
