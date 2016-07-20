@@ -604,7 +604,8 @@ class ShareController extends AppController
         ));
         $weshare_products = $this->WeshareProduct->find('all', array(
             'conditions' => array(
-                'weshare_id' => $weshare_id
+                'weshare_id' => $weshare_id,
+                'deleted' => 0
             )
         ));
         $rand_start = strtotime('-1 day');
