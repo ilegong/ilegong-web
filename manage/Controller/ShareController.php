@@ -574,7 +574,6 @@ class ShareController extends AppController
 
     public function admin_make_order($num = 1, $weshare_id, $sharer)
     {
-        $this->autoRender = false;
         /**
          * SELECT name FROM random AS r1 JOIN (SELECT CEIL(RAND() * (SELECT MAX(id) FROM random)) AS id) AS r2 WHERE r1.id >= r2.id ORDER BY r1.id ASC LIMIT 1
          *
@@ -619,7 +618,7 @@ class ShareController extends AppController
         }
 
         $this->log('admin make orders: '.json_encode($orders));
-        echo json_encode($orders);
+        $this->redirect('/admin/share/show_orders_of_share/'.$weshare_id);
     }
 
     public function admin_make_unpaid_order($num = 1, $weshare_id, $sharer)
