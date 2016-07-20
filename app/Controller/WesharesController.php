@@ -144,11 +144,40 @@ class WesharesController extends AppController
     public function read_share_count()
     {
         $uid = $this->currentUser['id'];
-        
-        $share_count = $this->WxShare->query('SELECT count(1) AS total FROM cake_wx_shares WHERE data_id > 0 AND data_type = "wsid" AND sharer = '.$uid);
 
-        $read_count = $this->WxShare->query('SELECT count(1) AS total FROM cake_share_track_logs WHERE data_id > 0 AND data_type = "wsid" AND sharer = '.$uid);
+        $weshares = $this->Weshare->find('all', [
+            'conditions' => [
+                'creator' => $uid,
+                'status' => WESHARE_STATUS_NORMAL,
+                'type' => [SHARE_TYPE_GROUP, SHARE_TYPE_DEFAULT, SHARE_TYPE_POOL_FOR_PROXY, SHARE_TYPE_POOL]
+            ],
+            'fields' => ['Weshare.id']
+        ]);
 
+        $weshare_ids = Hash::extract($weshares,'{n}.Weshare.id');
+
+        $share_count = [
+            [
+                [
+                    'total' => 0
+                ]
+            ]
+        ];
+        $read_count = [
+            [
+                [
+                    'total' => 0
+                ]
+            ]
+        ];
+        if($weshare_ids)
+        {
+            $weshare_ids = implode(',',$weshare_ids);
+
+            $share_count = $this->WxShare->query('SELECT count(1) AS total FROM cake_wx_shares WHERE data_id IN ('.$weshare_ids.') AND data_type = "wsid" AND sharer = '.$uid);
+
+            $read_count = $this->WxShare->query('SELECT count(1) AS total FROM cake_share_track_logs WHERE data_id IN ('.$weshare_ids.') AND data_type = "wsid" AND sharer = '.$uid);
+        }
         $this->set('share_count',$share_count[0][0]['total']);
         $this->set('read_count',$read_count[0][0]['total']);
         $this->set('title','朋友说-转发阅读统计');
