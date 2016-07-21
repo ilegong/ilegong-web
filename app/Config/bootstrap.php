@@ -333,6 +333,10 @@ const HX_CHAT_GROUP_TARGET_TYPE = 'chatgroups';
 const HX_CHAT_SINGLE_TARGET_TYPE = 'users';
 const HX_CHAT_ROOM_TARGET_TYPE = 'chatrooms';
 
+const USER_REBATE_MONEY_GOT = 1;
+
+const USER_REBATE_MONEY_USE = 2;
+
 define('CATEGORY_ID_TECHAN', 114);
 
 define('PAYLOG_STATUS_NEW', 0);

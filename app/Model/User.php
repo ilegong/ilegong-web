@@ -100,6 +100,15 @@ class User extends AppModel {
         return $updated;
     }
 
+    function add_rebate_money($uid, $changed){
+        $old_money = $this->get_rebate_money($uid, true);
+        $updated = $this->updateAll(['rebate_money' => 'rebate_money + (' . $changed . ')'], ['rebate_money' => $old_money, 'id' => $uid]);
+        if($updated){
+            Cache::delete($this->rebate_money_key($uid));
+        }
+        return $updated;
+    }
+
     function get_score($uid, $ignoreCache = false) {
         $score_key = $this->score_key($uid);
         $score = $ignoreCache ? false : Cache::read($score_key);
@@ -109,6 +118,18 @@ class User extends AppModel {
             Cache::write($score_key, $score);
         }
         return $score;
+    }
+
+    function get_rebate_money($uid, $ignoreCache = false){
+        $rebate_money_key = $this->rebate_money_key($uid);
+        $rebate_money = $ignoreCache ? false : Cache::read($rebate_money_key);
+        if ($rebate_money !== 0 && empty($rebate_money)) {
+            $u = $this->findById($uid);
+            $rebate_money = $u['User']['rebate_money'];
+            Cache::write($rebate_money_key, $rebate_money);
+
+        }
+        return $rebate_money;
     }
 
     /* 获取用户关注的团长ID */
@@ -142,6 +163,10 @@ class User extends AppModel {
      */
     private function score_key($uid) {
         return '_u_score_' . $uid;
+    }
+
+    private function rebate_money_key($uid){
+        return '_u_rebate_money_'.$uid;
     }
 
 }

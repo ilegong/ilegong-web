@@ -54,7 +54,8 @@ class ShareUtilComponent extends Component
     }
 
 
-    public function get_fans_info_list_by_sql($limit, $page, $keyword, $sharer_id){
+    public function get_fans_info_list_by_sql($limit, $page, $keyword, $sharer_id)
+    {
         $offset = ($page - 1) * $limit;
         $sql = "select cu.id, cu.nickname, cu.image, cu.avatar, ifnull(order_summary.o_count,0) as order_count, format(ifnull(total_fee, 0),2) as order_total_fee from cake_user_relations as cur ";
         $sql .= "left join (select creator as o_creator, count(id) as o_count, sum(total_all_price) as total_fee from cake_orders where brand_id=$sharer_id and type=9 and status > 0 group by creator) as order_summary on order_summary.o_creator = cur.follow_id ";
@@ -67,7 +68,7 @@ class ShareUtilComponent extends Component
         $userRelationM = ClassRegistry::init('UserRelation');
         $data = $userRelationM->query($sql);
         $result = [];
-        foreach($data as $data_item){
+        foreach ($data as $data_item) {
             $result[] = [
                 'id' => $data_item['cu']['id'],
                 'nickname' => $data_item['cu']['nickname'],
@@ -397,10 +398,12 @@ class ShareUtilComponent extends Component
                 )
             ));
             //proxy user buy
+            //todo remove it
             if ($rebateTrackLog['RebateTrackLog']['type'] == PROXY_USER_PAID_REBATE_TYPE) {
                 $rebateTrackLogM->updateAll(array('is_paid' => 1, 'updated' => '\'' . date('Y-m-d H:i:s') . '\''), array('id' => $id, 'order_id' => $order_id));
                 return array('rebate_money' => $rebateTrackLog['RebateTrackLog']['rebate_money'], 'order_price' => $order['Order']['total_all_price'], 'recommend' => $rebateTrackLog['RebateTrackLog']['sharer']);
             }
+
             $ship_fee = $order['Order']['ship_fee'];
             $total_price = $order['Order']['total_all_price'];
             $ship_fee = round($ship_fee / 100, 2);
@@ -410,9 +413,25 @@ class ShareUtilComponent extends Component
             $rebate_money = round($rebate_money, 2);
             $rebate_money = $rebate_money * 100;
             $rebateTrackLogM->updateAll(array('is_paid' => 1, 'updated' => '\'' . date('Y-m-d H:i:s') . '\'', 'rebate_money' => $rebate_money), array('id' => $id, 'order_id' => $order_id));
+            if ($this->add_rebate_log($rebateTrackLog['RebateTrackLog']['sharer'], $rebate_money, USER_REBATE_MONEY_GOT, $order_id)) {
+                $rebateTrackLogM->updateAll(['is_rebate' => 1], ['id' => $id, 'order_id' => $order_id]);
+            }
             return array('rebate_money' => $rebate_money, 'order_price' => $total_price, 'recommend' => $rebateTrackLog['RebateTrackLog']['sharer']);
         }
+    }
 
+    public function add_rebate_log($uid, $money, $reason, $order_id)
+    {
+        if ($money == 0) {
+            return true;
+        }
+        $rebateLogM = ClassRegistry::init('RebateLog');
+        $userM = ClassRegistry::init('User');
+        $result = $rebateLogM->save_rebate_log($uid, $money, $order_id, $reason);
+        if ($result) {
+            return $userM->add_rebate_money($uid, $money);
+        }
+        return false;
     }
 
     /**
@@ -578,8 +597,8 @@ class ShareUtilComponent extends Component
         $share_creator = $weshareInfo['creator'];
         $recommend = $rebateData['recommend'];
         $user_ids = array($order_creator, $share_creator, $recommend);
-        $this->WeshareBuy->subscribe_sharer($recommend, $order_creator, 'RECOMMEND');
-        $this->WeshareBuy->subscribe_sharer($share_creator, $order_creator, 'BUY');
+        //$this->WeshareBuy->subscribe_sharer($recommend, $order_creator, 'RECOMMEND');
+        //$this->WeshareBuy->subscribe_sharer($share_creator, $order_creator, 'BUY');
         $user_nicknames = $this->WeshareBuy->get_users_nickname($user_ids);
         $recommend_open_ids = $this->WeshareBuy->get_open_ids(array($recommend));
         $title = $user_nicknames[$recommend] . '，' . $user_nicknames[$order_creator] . '购买了你推荐的' . $user_nicknames[$share_creator] . $weshareInfo['title'] . '，获得返利回馈。';
@@ -901,10 +920,10 @@ class ShareUtilComponent extends Component
         $title = $share_info['title'];
         $sharer_name = $this->WeshareBuy->get_user_nickname($share_info['creator']);
         $title = $sharer_name . '分享的' . $title;
-        $optLogData = array('obj_creator' => $share_info['creator'], 'user_id' => $userId, 'obj_type' => OPT_LOG_SHARE_RECOMMEND, 'obj_id' => $shareId, 'event_id' => $shareId ,'created' => $now, 'memo' => $title, 'reply_content' => $memo, 'thumbnail' => $shareImg[0]);
+        $optLogData = array('obj_creator' => $share_info['creator'], 'user_id' => $userId, 'obj_type' => OPT_LOG_SHARE_RECOMMEND, 'obj_id' => $shareId, 'event_id' => $shareId, 'created' => $now, 'memo' => $title, 'reply_content' => $memo, 'thumbnail' => $shareImg[0]);
         $this->saveOptLog($optLogData);
         $sendResult = $this->WeshareBuy->send_recommend_msg($userId, $shareId, $memo);
-        if($sendResult['success']){
+        if ($sendResult['success']) {
             $this->notify_sharer_recommend($userId, $shareId);
         }
         return $sendResult;
@@ -1125,7 +1144,8 @@ class ShareUtilComponent extends Component
     }
 
 
-    public function send_buy_msg_to_hx($shareId, $groupId, $order_creator){
+    public function send_buy_msg_to_hx($shareId, $groupId, $order_creator)
+    {
         //none group
         if ($groupId == 0) {
             return false;
@@ -1173,7 +1193,7 @@ class ShareUtilComponent extends Component
                 foreach ($orderCarts as $ci) {
                     $ca[] = $ci['name'] . 'X' . $ci['num'];
                 }
-                $list = $list . ($i + 1) . '、'. $user['nickname'] . ' ' . implode(',', $ca);
+                $list = $list . ($i + 1) . '、' . $user['nickname'] . ' ' . implode(',', $ca);
                 if ($i != $len - 1) {
                     $list = $list . '$$';
                 }
@@ -1238,7 +1258,7 @@ class ShareUtilComponent extends Component
      * @param $replay_text
      * save comment opt log
      */
-    public function save_comment_opt_log($user_id, $share_id, $comment_id ,$replay_text)
+    public function save_comment_opt_log($user_id, $share_id, $comment_id, $replay_text)
     {
         $share_info = $this->WeshareBuy->get_weshare_info($share_id);
         $memo = $share_info['title'];
@@ -1366,7 +1386,7 @@ class ShareUtilComponent extends Component
                 'created' => date('Y-m-d H:i:s'),
                 'trade_type' => $trade_type,
                 'remark' => $refundMark,
-                'data_id' =>  $weshareId
+                'data_id' => $weshareId
             );
             $refundLogM->save($saveRefundLogData);
         } else {
@@ -2061,7 +2081,7 @@ class ShareUtilComponent extends Component
             $detail_url = $this->WeshareBuy->get_weshares_detail_url($share_id);
             $title = '你好，您报名的' . $share_title . '，现在已经成团。吼，吼！';
             $remark = '发货信息：' . $share_info['send_info'] . '请留意后续消息！';
-            if(!empty($user_open_ids)){
+            if (!empty($user_open_ids)) {
                 foreach ($user_open_ids as $user_id => $user_open_id) {
                     $this->Weixin->send_share_buy_complete_msg($user_open_id, $title, $share_title, $tuan_leader_name, $remark, $detail_url);
                 }
@@ -2163,7 +2183,8 @@ class ShareUtilComponent extends Component
             'deleted' => DELETED_NO,
             'data_id' => $share_id,
             'type' => $type,
-            'created > ' => date('Y-m-d')])) {
+            'created > ' => date('Y-m-d')])
+        ) {
             return array('success' => false, 'msg' => '今天已经发送过该消息');
         }
         if (is_pys_signed_user($uid)) {
@@ -2394,7 +2415,7 @@ class ShareUtilComponent extends Component
         ));
         $view_count = $WeshareM->find('first', array(
             'fields' => array('Weshare.view_count'),
-            'conditions' => array('id'=>$share_id),
+            'conditions' => array('id' => $share_id),
         ));
         $comment_count = $commentM->find('count', array(
             'conditions' => array(
@@ -2423,7 +2444,7 @@ class ShareUtilComponent extends Component
         ]);
         $orders_and_creators = Hash::extract($orders_and_creators, '{n}.User');
         $orders_and_creators = array_map('map_user_avatar3', $orders_and_creators);
-        $summary = array('view_count'=>$view_count['Weshare']['view_count'], 'order_count'=>strval($order_count), 'comment_count'=>$comment_count, 'orders_and_creators'=>$orders_and_creators);
+        $summary = array('view_count' => $view_count['Weshare']['view_count'], 'order_count' => strval($order_count), 'comment_count' => $comment_count, 'orders_and_creators' => $orders_and_creators);
         Cache::write($key, json_encode($summary));
 
         return $summary;
@@ -2476,7 +2497,7 @@ class ShareUtilComponent extends Component
         $creatorInfo['level'] = $creatorLevel;
         $weshareProducts = $this->get_all_share_products($weshare_id);
         //show break line
-        if(check_weshare_detail_is_not_html($weshareInfo['Weshare']['description'])){
+        if (check_weshare_detail_is_not_html($weshareInfo['Weshare']['description'])) {
             $weshareInfo['Weshare']['description'] = str_replace(array("\r\n", "\n", "\r"), '<br />', $weshareInfo['Weshare']['description']);
         }
         $weshareInfo = $weshareInfo['Weshare'];
@@ -2857,7 +2878,8 @@ class ShareUtilComponent extends Component
         }
     }
 
-    public function get_pool_share_wait_ship_order_count($ids){
+    public function get_pool_share_wait_ship_order_count($ids)
+    {
         $weshareM = ClassRegistry::init('Weshare');
         $orderM = ClassRegistry::init('Order');
         $fork_shares = $weshareM->find('list', [
@@ -2879,8 +2901,8 @@ class ShareUtilComponent extends Component
         $orderWaitShip = Hash::combine($orderWaitShip, '{n}.Order.member_id', '{n}.0.order_count');
         $result = [];
         foreach ($fork_shares as $share_id => $pool_share_id) {
-            if(!isset($result[$pool_share_id])){
-                   $result[$pool_share_id] = 0;
+            if (!isset($result[$pool_share_id])) {
+                $result[$pool_share_id] = 0;
             }
             if ($orderWaitShip[$share_id] > 0) {
                 $result[$pool_share_id] = $result[$pool_share_id] + $orderWaitShip[$share_id];
