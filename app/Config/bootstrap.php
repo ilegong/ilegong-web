@@ -2924,6 +2924,9 @@ function get_order_from_flag($from)
     if ($from == 'userInfo') {
         return 8;
     }
+    if ($from == 'recommend') {
+        return 9;
+    }
     return 0;
 }
 

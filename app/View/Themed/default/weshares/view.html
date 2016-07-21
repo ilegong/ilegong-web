@@ -168,8 +168,12 @@
                 <ul class="recommend-weshares clearfix">
                     <li class="recommend-weshare fl" ng-repeat="weshare in vm.recommendWeshares">
                         <ul class="recommend-weshare-details">
-                            <li class="product-img"><img ng-src="{{weshare.default_image}}"></li>
-                            <li class="product-name" ng-bind="weshare.title"></li>
+                            <li class="product-img">
+                                <a href="/weshares/view/{{weshare.id}}.html?from=recommend"><img ng-src="{{weshare.default_image}}"></a>
+                            </li>
+                            <li class="product-name">
+                                <a href="/weshares/view/{{weshare.id}}.html?from=recommend" ng-bind="weshare.title"></a>
+                            </li>
                             <li class="product-summary">报名(<span ng-bind="weshare.summary.order_count"></span>)&nbsp;&nbsp;浏览(<span ng-bind="weshare.summary.view_count"></span>)</li>
                         </ul>
                     </li>

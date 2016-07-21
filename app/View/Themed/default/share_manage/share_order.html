@@ -109,10 +109,12 @@
                                     发现页
                                     {{elseif $order['Order']['flag'] == 8}}
                                     团长个人中心
+                                    {{elseif $order['Order']['flag'] == 9}}
+                                    系统推荐
                                     {{elseif $order['Order']['flag'] == 19}}
                                     其他
                                     {{else}}
-                                     搜索引擎
+                                    直接购买
                                     {{/if}}
                                 </td>
                             </tr>
