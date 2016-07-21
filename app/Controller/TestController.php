@@ -132,18 +132,18 @@ class TestController extends AppController
 //    }
 
 
-    public function set_user_money(){
-        $sql = 'SELECT user_id, sum(money) FROM `cake_rebate_logs` group by user_id';
-        $this->loadModel('User');
-        $data = $this->User->query($sql);
-        foreach($data as $item){
-            $uid = $item['cake_rebate_logs']['user_id'];
-            $money = $item['0']['sum(money)'];
-            $this->User->updateAll(['rebate_money' => $money], ['id' => $uid]);
-        }
-        echo json_encode($data);
-        exit;
-    }
+//    public function set_user_money(){
+//        $sql = 'SELECT user_id, sum(money) FROM `cake_rebate_logs` group by user_id';
+//        $this->loadModel('User');
+//        $data = $this->User->query($sql);
+//        foreach($data as $item){
+//            $uid = $item['cake_rebate_logs']['user_id'];
+//            $money = $item['0']['sum(money)'];
+//            $this->User->updateAll(['rebate_money' => $money], ['id' => $uid]);
+//        }
+//        echo json_encode($data);
+//        exit;
+//    }
 
 
 //    public function migrate_user_rebate_money($limit){

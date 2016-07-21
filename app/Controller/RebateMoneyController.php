@@ -20,7 +20,7 @@ class RebateMoneyController extends AppController{
     public function detail(){
         $this->loadModel('User');
         $uid = $this->currentUser['id'];
-        $totalRebateMoney = $this->User->get_rebate_money($uid);
+        $totalRebateMoney = $this->User->get_rebate_money($uid, true);
         $this->set('totalRebateMoney', get_format_number($totalRebateMoney/100));
     }
 
