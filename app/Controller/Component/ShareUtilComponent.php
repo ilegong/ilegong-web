@@ -506,18 +506,8 @@ class ShareUtilComponent extends Component
      */
     public function get_rebate_money($user_id)
     {
-        $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
-        $allRebateMoney = 0;
-        $rebateLogs = $rebateTrackLogM->find('all', array(
-            'conditions' => array(
-                'sharer' => $user_id,
-                'is_rebate' => 0,
-                'not' => array('order_id' => 0, 'is_paid' => 0)
-            )
-        ));
-        foreach ($rebateLogs as $log) {
-            $allRebateMoney = $allRebateMoney + $log['RebateTrackLog']['rebate_money'];
-        }
+        $userM = ClassRegistry::init('User');
+        $allRebateMoney = $userM->get_rebate_money($user_id);
         $allRebateMoney = $allRebateMoney / 100;
         return $allRebateMoney;
     }
