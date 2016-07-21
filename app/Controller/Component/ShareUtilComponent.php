@@ -431,6 +431,7 @@ class ShareUtilComponent extends Component
         }
         $rebateLogM = ClassRegistry::init('RebateLog');
         $userM = ClassRegistry::init('User');
+        $rebateLogM->id = null;
         $result = $rebateLogM->save_rebate_log($uid, $money, $order_id, $reason);
         if ($result) {
             return $userM->add_rebate_money($uid, $money);

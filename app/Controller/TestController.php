@@ -131,6 +131,27 @@ class TestController extends AppController
 //        exit;
 //    }
 
+
+    public function migrate_user_rebate_money($limit){
+        $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
+        $trackLogs = $rebateTrackLogM->find('all', [
+            'conditions' => ['order_id >' => 0, 'is_paid' => 1, 'rebate_money >' => 0, 'is_rebate' => 0],
+            'limit' => $limit
+        ]);
+        $log_ids = [];
+        foreach ($trackLogs as $trackLogItem) {
+            $log_ids[] = $trackLogItem['RebateTrackLog']['id'];
+            $uid = $trackLogItem['RebateTrackLog']['sharer'];
+            $money = $trackLogItem['RebateTrackLog']['rebate_money'];
+            $reason = USER_REBATE_MONEY_GOT;
+            $order_id = $trackLogItem['RebateTrackLog']['order_id'];
+            $this->ShareUtil->add_rebate_log($uid, $money, $reason, $order_id);
+        }
+        $rebateTrackLogM->updateAll(['is_rebate' => 1], ['id' => $log_ids]);
+        echo json_encode(['success' => true, 'count' => count($trackLogs)]);
+        exit;
+    }
+
     public function add_oauth_client(){
         $this->OAuth = $this->Components->load('OAuth.OAuth');
         $client = $this->OAuth->Client->add('http://www.cmlejia.com/');
