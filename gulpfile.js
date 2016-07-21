@@ -103,6 +103,12 @@ var all_js = [
             'webroot/src/scripts/read-share-count-controller.js'
         ],
         dist: 'webroot/static/weshares/js/'
+    },{
+        name: 'user-rebate-list.min.js',
+        sources: [
+            'webroot/src/scripts/user-rebate-list-controller.js'
+        ],
+        dist: 'webroot/static/weshares/js/'
     }
 ];
 

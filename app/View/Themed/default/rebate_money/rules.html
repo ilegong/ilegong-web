@@ -1,0 +1,40 @@
+<div class="get-user-info" ng-controller="UserRebateListCtrl as vm">
+    <div class="refer-back-bg menu-top">
+        常见问题
+        <a href="/rebate_money/detail">
+            <img ng-src="{{STATIC_HOST}}/static/img/back.png"/>
+            <label>返回</label>
+        </a>
+    </div>
+    <div class="has-menu-top extra-margin">
+        <div class="faq-balance">
+            <ul>
+                <li class="question"><strong><span>Q：</span>什么是余额?</strong></li>
+                <li><span>A：</span>余额是您在购买报名时可以使用的资金;</li>
+            </ul>
+            <ul>
+                <li class="question"><strong><span>Q：</span>余额如何获取?</strong></li>
+                <li><span>A：</span>您将平台的链接转发给朋友, 或通过平台推荐给粉丝, 产生订单后, 给您的佣金放在余额当中; 余额不支持充值;</li>
+            </ul>
+            <ul>
+                <li class="question"><strong><span>Q：</span>余额如何使用?</strong></li>
+                <li><span>A：</span>您在购买报名支付时, 默认使用余额支付, 最高可使用金额是订单金额的50%;</li>
+            </ul>
+            <ul>
+                <li class="question"><strong><span>Q：</span>余额能否提现?</strong></li>
+                <li><span>A：</span>余额不支持提现;</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<?php
+$this->assign('title','余额常见问题');
+
+$this->Html->css(array(
+$STATIC_HOST.'/static/weshares/css/get-user-info.min.css?v2.5.12'
+), null, array('inline' => false));
+
+$this->Html->script(array(
+$STATIC_HOST.'/static/weshares/js/user-rebate-list.min.js?v0.0.1'
+), array('block' => 'scripts'));
+?>
