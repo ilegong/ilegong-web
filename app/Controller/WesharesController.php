@@ -1233,7 +1233,7 @@ class WesharesController extends AppController
     //    某个团长推荐的分享
     public function get_recommend_weshares($proxy_id)
     {
-        $limit = 4;
+        $limit = 5;
         $result = $this->Weshares->get_recommend_weshares($proxy_id, $limit);
 
         foreach ($result as $k => $res) {
@@ -1454,7 +1454,7 @@ class WesharesController extends AppController
             $all_tag_ids = $this->ShareAuthority->get_user_can_view_order_tags($user_id, $weshareId);
         }
         //获取订单统计数据
-        $statics_data = $this->get_weshare_buy_info($weshareId, true, true);
+        $statics_data = $this->get_weshare_buy_info($weshareId, true, true, false, false);
         if (count($share_tags['tags']) > 0) {
             $tag_order_summery = $this->ShareUtil->summery_order_data_by_tag($statics_data, $weshareId);
             $this->set('tag_order_summery', $tag_order_summery);
@@ -1708,24 +1708,14 @@ class WesharesController extends AppController
     public function order_export($shareId, $only_paid = 1)
     {
         $this->layout = null;
-        if ($only_paid == 1) {
-            $export_paid_order = true;
-        } else {
-            $export_paid_order = false;
-        }
-        $statics_data = $this->get_weshare_buy_info($shareId, true, true, $export_paid_order);
+        $statics_data = $this->get_weshare_buy_info($shareId, true, true, $only_paid == 1, true);
         $this->set($statics_data);
     }
 
     public function old_order_export($shareId, $only_paid = 1)
     {
         $this->layout = null;
-        if ($only_paid == 1) {
-            $export_paid_order = true;
-        } else {
-            $export_paid_order = false;
-        }
-        $statics_data = $this->get_weshare_buy_info($shareId, true, true, $export_paid_order);
+        $statics_data = $this->get_weshare_buy_info($shareId, true, true, $only_paid == 1, true);
         $this->set($statics_data);
     }
 
@@ -1820,9 +1810,9 @@ class WesharesController extends AppController
      * @return mixed
      * 获取分享的订单信息
      */
-    private function get_weshare_buy_info($weshareId, $is_me, $division = false, $export = false)
+    private function get_weshare_buy_info($weshareId, $is_me, $division = false, $only_paid = false, $export = false)
     {
-        return $this->WeshareBuy->get_share_order_for_show($weshareId, $is_me, $division, $export);
+        return $this->WeshareBuy->get_share_order_for_show($weshareId, $is_me, $division, $only_paid, $export);
     }
 
 

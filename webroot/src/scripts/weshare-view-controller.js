@@ -1212,7 +1212,7 @@
             //load all comments
             vm.getShareSummeryData(vm.weshare.id, vm.weshare.creator.id);
             vm.loadOrderDetail(vm.weshare.id);
-            vm.getRecommendWeshares(vm.weshare.creator.id);
+            vm.getRecommendWeshares(vm.weshare.id, vm.weshare.creator.id);
         }
 
         function getBannerImage(){
@@ -1229,10 +1229,12 @@
             return '/weshares/add?from=share_view';
         }
 
-        function getRecommendWeshares(proxyId){
+        function getRecommendWeshares(weshareId, proxyId){
             $http.get('/weshares/get_recommend_weshares/' +  proxyId).success(function (data) {
-                $log.log(data);
-                vm.recommendWeshares = data;
+                vm.recommendWeshares = _.filter(data, function(share){
+                    return share.id != weshareId;
+                });
+                vm.recommendWeshares = vm.recommendWeshares.slice(0, 4);
             });
         }
     }

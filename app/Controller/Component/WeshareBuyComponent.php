@@ -1687,7 +1687,7 @@ class WeshareBuyComponent extends Component
      *
      * 这个里面的逻辑和上面统计子分享数据逻辑有共同处，修改的时候注意
      */
-    public function get_share_order_for_show($weshareId, $is_me, $division = false, $export = false)
+    public function get_share_order_for_show($weshareId, $is_me, $division = false, $only_paid=false, $export = false)
     {
         if ($division) {
             $key = SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId . '_1';
@@ -1710,22 +1710,21 @@ class WeshareBuyComponent extends Component
             $this->RebateTrackLog = ClassRegistry::init('RebateTrackLog');
             $product_buy_num = array('details' => array());
             $order_cart_map = array();
+            $conditions = array(
+                'member_id' => $weshareId,
+                'type' => ORDER_TYPE_WESHARE_BUY,
+                'deleted' => DELETED_NO,
+            );
             if ($export) {
-                $conditions = array(
-                    'member_id' => $weshareId,
-                    'type' => ORDER_TYPE_WESHARE_BUY,
-                    'deleted' => DELETED_NO,
-                    'status' => array(ORDER_STATUS_PAID),
-                    'not' => array('flag'=>19)
-                );
-            } else {
-                $conditions = array(
-                    'member_id' => $weshareId,
-                    'type' => ORDER_TYPE_WESHARE_BUY,
-                    'deleted' => DELETED_NO,
-                    'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY)
-                );
+                $conditions['not'] = array('flag'=>19);
             }
+            if($only_paid){
+                $conditions['status'] = array(ORDER_STATUS_PAID);
+            }
+            else{
+                $conditions['status'] = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
+            }
+
             $sort = array('created DESC');
             $orders = $this->Order->find('all', array(
                 'conditions' => $conditions,

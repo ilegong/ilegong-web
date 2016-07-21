@@ -189,7 +189,7 @@ class SharerApiController extends Controller
      */
     public function get_my_share_orders($shareId)
     {
-        $result = $this->WeshareBuy->get_share_order_for_show($shareId, true, $division = false, $export = false);
+        $result = $this->WeshareBuy->get_share_order_for_show($shareId, true, $division = false, $only_paid=false, $export = false);
         usort($result['orders'], function ($a, $b) {
             return ($a['id'] < $b['id']) ? 1 : -1;
         });
@@ -567,12 +567,7 @@ class SharerApiController extends Controller
     {
         $this->autoRender = true;
         $this->layout = null;
-        if ($only_paid == 1) {
-            $export_paid_order = true;
-        } else {
-            $export_paid_order = false;
-        }
-        $statics_data = $this->WeshareBuy->get_share_order_for_show($shareId, true, true, $export_paid_order);
+        $statics_data = $this->WeshareBuy->get_share_order_for_show($shareId, true, true, $only_paid == 1, $export=true);
         $this->set($statics_data);
     }
 
