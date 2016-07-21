@@ -132,25 +132,39 @@ class TestController extends AppController
 //    }
 
 
-    public function migrate_user_rebate_money($limit){
-        $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
-        $trackLogs = $rebateTrackLogM->find('all', [
-            'conditions' => ['order_id >' => 0, 'is_paid' => 1, 'rebate_money >' => 0, 'is_rebate' => 0],
-            'limit' => $limit
-        ]);
-        $log_ids = [];
-        foreach ($trackLogs as $trackLogItem) {
-            $log_ids[] = $trackLogItem['RebateTrackLog']['id'];
-            $uid = $trackLogItem['RebateTrackLog']['sharer'];
-            $money = $trackLogItem['RebateTrackLog']['rebate_money'];
-            $reason = USER_REBATE_MONEY_GOT;
-            $order_id = $trackLogItem['RebateTrackLog']['order_id'];
-            $this->ShareUtil->add_rebate_log($uid, $money, $reason, $order_id);
+    public function set_user_money(){
+        $sql = 'SELECT user_id, sum(money) FROM `cake_rebate_logs` group by user_id';
+        $this->loadModel('User');
+        $data = $this->User->query($sql);
+        foreach($data as $item){
+            $uid = $item['cake_rebate_logs']['user_id'];
+            $money = $item['0']['sum(money)'];
+            $this->User->updateAll(['rebate_money' => $money], ['id' => $uid]);
         }
-        $rebateTrackLogM->updateAll(['is_rebate' => 1], ['id' => $log_ids]);
-        echo json_encode(['success' => true, 'count' => count($trackLogs), 'track_log_ids' => $log_ids]);
+        echo json_encode($data);
         exit;
     }
+
+
+//    public function migrate_user_rebate_money($limit){
+//        $rebateTrackLogM = ClassRegistry::init('RebateTrackLog');
+//        $trackLogs = $rebateTrackLogM->find('all', [
+//            'conditions' => ['order_id >' => 0, 'is_paid' => 1, 'rebate_money >' => 0, 'is_rebate' => 0],
+//            'limit' => $limit
+//        ]);
+//        $log_ids = [];
+//        foreach ($trackLogs as $trackLogItem) {
+//            $log_ids[] = $trackLogItem['RebateTrackLog']['id'];
+//            $uid = $trackLogItem['RebateTrackLog']['sharer'];
+//            $money = $trackLogItem['RebateTrackLog']['rebate_money'];
+//            $reason = USER_REBATE_MONEY_GOT;
+//            $order_id = $trackLogItem['RebateTrackLog']['order_id'];
+//            $this->ShareUtil->add_rebate_log($uid, $money, $reason, $order_id);
+//        }
+//        $rebateTrackLogM->updateAll(['is_rebate' => 1], ['id' => $log_ids]);
+//        echo json_encode(['success' => true, 'count' => count($trackLogs), 'track_log_ids' => $log_ids]);
+//        exit;
+//    }
 
     public function add_oauth_client(){
         $this->OAuth = $this->Components->load('OAuth.OAuth');
