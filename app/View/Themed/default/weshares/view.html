@@ -163,6 +163,18 @@
                     </dl>
                 </div>
             </div>
+            <div class="section recommend-section" ng-show="vm.recommendWeshares.length > 0">
+                <h1>大家都在买</h1>
+                <ul class="recommend-weshares clearfix">
+                    <li class="recommend-weshare fl" ng-repeat="weshare in vm.recommendWeshares">
+                        <ul class="recommend-weshare-details">
+                            <li class="product-img"><img ng-src="{{weshare.default_image}}"></li>
+                            <li class="product-name" ng-bind="weshare.title"></li>
+                            <li class="product-summary">报名(<span ng-bind="weshare.summary.order_count"></span>)&nbsp;&nbsp;浏览(<span ng-bind="weshare.summary.view_count"></span>)</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
             <div class="section">
                 <p class="product-title">报名列表</p>
                 <ul class="clearfix apply">
@@ -507,10 +519,10 @@
 <?php
     $this->assign('title',$page_title);
 $this->Html->css(array(
-$STATIC_HOST.'/static/weshares/css/weshare-view.min.css?v2.5.12'
+$STATIC_HOST.'/static/weshares/css/weshare-view.min.css?v2.5.13'
 ), null, array('inline' => false));
 
 $this->Html->script(array(
-$STATIC_HOST.'/static/weshares/js/weshare-view.min.js?v2.5.19'
+$STATIC_HOST.'/static/weshares/js/weshare-view.min.js?v2.5.20'
 ), array('block' => 'scripts'))
 ?>

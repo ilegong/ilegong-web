@@ -243,6 +243,7 @@ const SHARE_MANAGE_USER_OPEN_ID_DATA_CACHE_KEY = 'share_manage_user_open_id_data
 const USER_SHARE_PAGE_INFO_CACHE_KEY = 'user_share_page_info_cache_key'; //缓存对应用户对应分享的分页信息
 const USER_SHARE_ORDER_INFO_CACHE_KEY = 'user_share_order_info_cache_key';//缓存对应用户对应分享的订单信息
 const USER_SHARE_ORDER_INFO_FIRST_PAGE_CACHE_KEY = 'user_share_order_info_first_page_cache_key';//缓存对应用户对应分享的第一页订单信息
+const USER_RECOMMEND_WESHARES_CACHE_KEY = 'user_recommend_weshares_cache_key';//团长推荐的分享
 const SHARE_BUY_SUMMERY_INFO_CACHE_KEY = 'share_buy_summery_info_cache_key';//分享统计信息
 const SHARE_REFER_SHARE_IDS_CACHE_KEY = 'share_refer_share_ids_cache_key';
 const HX_TOKEN_CACHE_KEY = 'hx_token_cache_key';

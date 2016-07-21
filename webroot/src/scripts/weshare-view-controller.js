@@ -83,6 +83,7 @@
         vm.showOrderExpressInfo = showOrderExpressInfo;
         vm.getBannerImage = getBannerImage;
         vm.getBannerLink = getBannerLink;
+        vm.getRecommendWeshares = getRecommendWeshares;
         activate();
 
         OfflineStore.ChooseOfflineStore(vm, $http, $templateCache);
@@ -95,6 +96,7 @@
             vm.commentData = {};
             vm.orderComments = [];
             vm.inWeixin = Utils.isWeixin();
+            vm.recommendWeshares = [];
             $rootScope.uid=-1;
             $rootScope.proxies = [];
             vm.initWeshareData();
@@ -1210,6 +1212,7 @@
             //load all comments
             vm.getShareSummeryData(vm.weshare.id, vm.weshare.creator.id);
             vm.loadOrderDetail(vm.weshare.id);
+            vm.getRecommendWeshares(vm.weshare.creator.id);
         }
 
         function getBannerImage(){
@@ -1224,6 +1227,13 @@
                 return '/pys/download_app?from=share_view';
             }
             return '/weshares/add?from=share_view';
+        }
+
+        function getRecommendWeshares(proxyId){
+            $http.get('/weshares/get_recommend_weshares/' +  proxyId).success(function (data) {
+                $log.log(data);
+                vm.recommendWeshares = data;
+            });
         }
     }
 })(window, window.angular);

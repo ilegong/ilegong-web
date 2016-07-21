@@ -322,12 +322,57 @@ class WesharesComponent extends Component
         return $result;
     }
 
+    public function get_recommend_weshares($proxy_id, $limit)
+    {
+        $key = USER_RECOMMEND_WESHARES_CACHE_KEY . '_' . $proxy_id;
+        $cacheData = Cache::read($key);
+        if (!empty($cacheData)) {
+            return $cacheData;
+        }
+
+        $weshareM = ClassRegistry::init('Weshare');
+        $weshares = $weshareM->find('all', [
+            'conditions' => [
+                'creator' => $proxy_id,
+                'status' => WESHARE_STATUS_NORMAL,
+                'type' => [SHARE_TYPE_GROUP, SHARE_TYPE_DEFAULT, SHARE_TYPE_POOL_FOR_PROXY, SHARE_TYPE_POOL]
+            ],
+            'order' => ['Weshare.id DESC'],
+            'fields' => ['Weshare.id', 'Weshare.title', 'Weshare.description', 'Weshare.default_image', 'Weshare.creator', 'Weshare.view_count']
+        ]);
+        $result = [];
+        if(!empty($weshares)){
+            foreach ($weshares as $weshare_item) {
+                $data_item = $weshare_item['Weshare'];
+                $data_item['summary'] = $this->ShareUtil->get_index_product_summary($data_item['id']);
+                $data_item['summary']['view_count'] = $data_item['view_count'];
+                $result[] = $data_item;
+            }
+        }
+        usort($result, function($a, $b){
+            if($a == $b){
+                return 0;
+            }
+            if($b['summary']['view_count'] == 0){
+                return -1;
+            }
+            if($a['summary']['view_count'] == 0){
+                return 1;
+            }
+            return $a['summary']['order_count'] / $a['summary']['view_count'] > $b['summary']['order_count'] / $b['summary']['view_count'] ? -1 : 1;
+        });
+
+        $result = array_slice($result, 0, 4);
+        Cache::write($key, $result);
+        return $result;
+    }
 
     private function on_weshare_stopped($uid, $weshare_id)
     {
         Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshare_id, '');
         Cache::write(SHARE_DETAIL_DATA_WITH_TAG_CACHE_KEY . '_' . $weshare_id, '');
         Cache::write(USER_SHARE_INFO_CACHE_KEY . '_' . $uid, '');
+        Cache::write(USER_RECOMMEND_WESHARES_CACHE_KEY . '_' . $uid, '');
     }
 
     private function on_weshare_publish($uid, $weshare_id)
