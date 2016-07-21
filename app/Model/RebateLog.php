@@ -3,7 +3,7 @@
 class RebateLog extends Model
 {
 
-    protected function save_rebate_log($userId, $change, $orderId, $reason)
+    public function save_rebate_log($userId, $change, $orderId, $reason)
     {
         $desc = $this->get_reason($reason, $orderId, $change);
         $saved = $this->save(['user_id' => $userId, 'reason' => $reason, 'order_id' => $orderId, 'money' => $change, 'description' => $desc, 'created' => date('Y-m-d H:i:s')]);

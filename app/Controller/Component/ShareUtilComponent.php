@@ -413,8 +413,12 @@ class ShareUtilComponent extends Component
             $rebate_money = round($rebate_money, 2);
             $rebate_money = $rebate_money * 100;
             $rebateTrackLogM->updateAll(array('is_paid' => 1, 'updated' => '\'' . date('Y-m-d H:i:s') . '\'', 'rebate_money' => $rebate_money), array('id' => $id, 'order_id' => $order_id));
-            if ($this->add_rebate_log($rebateTrackLog['RebateTrackLog']['sharer'], $rebate_money, USER_REBATE_MONEY_GOT, $order_id)) {
-                $rebateTrackLogM->updateAll(['is_rebate' => 1], ['id' => $id, 'order_id' => $order_id]);
+            $rebate_track_log_has_rebate = $rebateTrackLog['RebateTrackLog']['is_rebate'] == 1;
+            if (!$rebate_track_log_has_rebate) {
+                $add_rebate_log_result = $this->add_rebate_log($rebateTrackLog['RebateTrackLog']['sharer'], $rebate_money, USER_REBATE_MONEY_GOT, $order_id);
+                if ($add_rebate_log_result) {
+                    $rebateTrackLogM->updateAll(['is_rebate' => 1], ['id' => $id, 'order_id' => $order_id]);
+                }
             }
             return array('rebate_money' => $rebate_money, 'order_price' => $total_price, 'recommend' => $rebateTrackLog['RebateTrackLog']['sharer']);
         }
