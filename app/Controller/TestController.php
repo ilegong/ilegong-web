@@ -148,7 +148,7 @@ class TestController extends AppController
             $this->ShareUtil->add_rebate_log($uid, $money, $reason, $order_id);
         }
         $rebateTrackLogM->updateAll(['is_rebate' => 1], ['id' => $log_ids]);
-        echo json_encode(['success' => true, 'count' => count($trackLogs)]);
+        echo json_encode(['success' => true, 'count' => count($trackLogs), 'track_log_ids' => $log_ids]);
         exit;
     }
 
