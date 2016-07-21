@@ -1,0 +1,44 @@
+<div class="get-user-info" ng-controller="UserRebateListCtrl as vm">
+    <div class="refer-back-bg menu-top">
+        我的余额
+        <a href="/weshares/get_self_info">
+            <img ng-src="{{STATIC_HOST}}/static/img/back.png"/>
+            <label>返回</label>
+        </a>
+    </div>
+    <div class="my-balance">
+        <p><span>￥</span>{{$totalRebateMoney}}</p>
+        <a href="/rebate_money/rules.html">&lt;常见问题&gt;</a>
+    </div>
+    <div infinite-scroll='vm.myRebateNextPage()'
+         infinite-scroll-disabled='vm.loading||vm.dataOver'
+         infinite-scroll-distance='1'>
+        <div class="balance-detail" ng-repeat="rebate in vm.rebates">
+            <ul class="clearfix">
+                <li class="fl" ng-bind="rebate.description"></li>
+                <li class="fr addbalance" ng-if="rebate.reason==1" ng-bind="'+￥' + rebate.money"></li>
+                <li class="fr decreasebalance" ng-if="rebate.reason==2" ng-bind="'-￥' + rebate.money"></li>
+            </ul>
+            <a class="clearfix">
+                <div class="fl"><img lazy-src="&#123;&#123;rebate.default_image&#125;&#125;"
+                                     fallback-src="&#123;&#123;vm.staticFilePath&#125;&#125;/static/img/default_product_banner.png"></div>
+                <h1 ng-bind="vm.getRebateDetail(rebate)"></h1>
+                <label ng-bind="rebate.created"></label>
+            </a>
+        </div>
+    </div>
+    <div style="text-align: center;color: #ffa200;margin-bottom: 10px;margin-top: 10px;"
+         ng-show='vm.loading'>加载中...
+    </div>
+</div>
+<?php
+$this->assign('title','我的余额');
+
+$this->Html->css(array(
+$STATIC_HOST.'/static/weshares/css/get-user-info.min.css?v2.5.12'
+), null, array('inline' => false));
+
+$this->Html->script(array(
+$STATIC_HOST.'/static/weshares/js/user-rebate-list.min.js?v0.0.1'
+), array('block' => 'scripts'));
+?>
