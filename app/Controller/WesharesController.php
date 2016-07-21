@@ -1226,7 +1226,7 @@ class WesharesController extends AppController
         $rebate_money = $this->User->get_rebate_money($uid);
         $coupon_count = $this->CouponItem->find_my_share_coupons_count($uid);
         $this->set('coupon_count', $coupon_count);
-        $this->set('rebate_money', $rebate_money);
+        $this->set('rebate_money', get_format_number($rebate_money / 100));
         $this->set('uid', $uid);
     }
 
