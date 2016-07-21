@@ -7,6 +7,7 @@
         vm.dataOver = false;
         vm.myRebateNextPage = myRebateNextPage;
         vm.getRebateDetail = getRebateDetail;
+        vm.toShareDetail = toShareDetail;
         vm.pageNum = 1;
         vm.rebates = [];
         active();
@@ -40,6 +41,10 @@
             }).error(function () {
                 vm.loading = false;
             });
+        }
+
+        function toShareDetail(data){
+            window.location.href='/weshares/view/'+data['member_id']+'.html';
         }
     }
 })(window, window.angular);

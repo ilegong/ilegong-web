@@ -51,7 +51,7 @@ class RebateMoneyController extends AppController{
                     'conditions' => 'Weshare.id = Order.member_id'
                 ]
             ],
-            'fields' => ['RebateLog.reason', 'RebateLog.money', 'RebateLog.description', 'Weshare.title', 'Weshare.default_image', 'User.nickname', 'Order.created', 'Weshare.id', 'Order.id'],
+            'fields' => ['RebateLog.reason', 'RebateLog.money', 'RebateLog.description', 'Weshare.title', 'Weshare.default_image', 'User.nickname', 'Order.created', 'Order.member_id', 'Order.id'],
             'limit' => $limit,
             'page' => $page,
             'order' => 'RebateLog.id ASC'

@@ -19,7 +19,7 @@
                 <li class="fr addbalance" ng-if="rebate.reason==1" ng-bind="'+￥' + rebate.money"></li>
                 <li class="fr decreasebalance" ng-if="rebate.reason==2" ng-bind="'-￥' + rebate.money"></li>
             </ul>
-            <a class="clearfix">
+            <a class="clearfix" ng-click="vm.toShareDetail(rebate)">
                 <div class="fl"><img lazy-src="&#123;&#123;rebate.default_image&#125;&#125;"
                                      fallback-src="&#123;&#123;vm.staticFilePath&#125;&#125;/static/img/default_product_banner.png"></div>
                 <h1 ng-bind="vm.getRebateDetail(rebate)"></h1>
@@ -39,6 +39,6 @@ $STATIC_HOST.'/static/weshares/css/get-user-info.min.css?v2.5.12'
 ), null, array('inline' => false));
 
 $this->Html->script(array(
-$STATIC_HOST.'/static/weshares/js/user-rebate-list.min.js?v0.0.1'
+$STATIC_HOST.'/static/weshares/js/user-rebate-list.min.js?v0.0.2'
 ), array('block' => 'scripts'));
 ?>
