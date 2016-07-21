@@ -124,7 +124,7 @@ class User extends AppModel {
         $rebate_money_key = $this->rebate_money_key($uid);
         $rebate_money = $ignoreCache ? false : Cache::read($rebate_money_key);
         if ($rebate_money !== 0 && empty($rebate_money)) {
-            $u = $this->findById($uid);
+            $u = $this->find('first',['conditions' => ['id' => $uid], 'fields' => ['id', 'rebate_money']]);
             $rebate_money = $u['User']['rebate_money'];
             Cache::write($rebate_money_key, $rebate_money);
 
