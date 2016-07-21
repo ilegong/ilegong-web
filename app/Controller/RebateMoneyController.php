@@ -58,7 +58,7 @@ class RebateMoneyController extends AppController{
         ]);
         $result = [];
         foreach ($logs as $logItem) {
-            $item = array_merge([], $logItem['RebateLog'], $logItem['Weshare'], $logItem['User']);
+            $item = array_merge([], $logItem['RebateLog'], $logItem['Weshare'], $logItem['User'], $logItem['Order']);
             $item['money'] = get_format_number($item['money']/100);
             $result[] = $item;
         }
