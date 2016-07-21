@@ -150,7 +150,7 @@ public function test_get_user_rebate_money(){
     $a = $this->User->get_rebate_money(141);
     $u = $this->User->findById(141);
     $c = $u['User']['rebate_money'];
-    echo json_encode(['a' => $a, 'c' => $c]);
+    echo json_encode(['a' => $a, 'c' => $c, 'u' => $u['User']]);
     exit;
 }
 
