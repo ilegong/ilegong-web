@@ -40,10 +40,16 @@
             <dd class="fr mine-num">{{$coupon_count ? $coupon_count : 0}}</dd>
         </dl>
     </a>
-    <a class="mine-tab">
+    <a class="mine-tab" href="/rebate_money/detail.html">
         <dl class="clearfix mine-tab-bg">
             <dd class="fl mine-order-icon"><img src="{{$STATIC_HOST}}/static/weshares/images/mine-balance-icon.gif" /></dd>
             <dd class="fl">我的余额</dd>
+            <dd class="fr">
+                <label>
+                    <i></i>
+                    <em></em>
+                </label>
+            </dd>
             <dd class="fr mine-num">￥{{$rebate_money}}</dd>
         </dl>
     </a>
