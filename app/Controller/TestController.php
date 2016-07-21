@@ -148,7 +148,7 @@ class TestController extends AppController
 public function test_get_user_rebate_money(){
     $this->loadModel('User');
     $a = $this->User->get_rebate_money(141);
-    $u = $this->User->findById(141);
+    $u = $this->User->find('first',['conditions' => ['id' => 141], 'fields' => ['id', 'rebate_money', 'nickname']]);
     $c = $u['User']['rebate_money'];
     echo json_encode(['a' => $a, 'c' => $c, 'u' => $u['User']]);
     exit;
