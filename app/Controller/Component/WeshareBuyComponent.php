@@ -14,7 +14,7 @@ class WeshareBuyComponent extends Component
 
     var $query_user_simple_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'mobilephone', 'is_proxy', 'avatar');
 
-    var $query_share_info_order_fields = array('id', 'creator', 'created', 'updated', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type', 'member_id', 'ship_type_name', 'total_price', 'coupon_total', 'cate_id', 'process_prepaid_status', 'price_difference', 'is_prepaid', 'business_remark');
+    var $query_share_info_order_fields = array('id', 'creator', 'created', 'updated', 'consignee_name', 'consignee_mobilephone', 'consignee_address', 'status', 'total_all_price', 'coupon_total', 'ship_mark', 'ship_code', 'ship_type', 'member_id', 'ship_type_name', 'total_price', 'coupon_total', 'cate_id', 'process_prepaid_status', 'price_difference', 'is_prepaid', 'business_remark', 'flag');
 
     var $query_cart_fields = array('id', 'order_id', 'name', 'product_id', 'num');
 
@@ -1711,18 +1711,24 @@ class WeshareBuyComponent extends Component
             $product_buy_num = array('details' => array());
             $order_cart_map = array();
             if ($export) {
-                $order_status = array(ORDER_STATUS_PAID);
+                $conditions = array(
+                    'member_id' => $weshareId,
+                    'type' => ORDER_TYPE_WESHARE_BUY,
+                    'deleted' => DELETED_NO,
+                    'status' => array(ORDER_STATUS_PAID),
+                    'not' => array('flag'=>19)
+                );
             } else {
-                $order_status = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
+                $conditions = array(
+                    'member_id' => $weshareId,
+                    'type' => ORDER_TYPE_WESHARE_BUY,
+                    'deleted' => DELETED_NO,
+                    'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY)
+                );
             }
             $sort = array('created DESC');
             $orders = $this->Order->find('all', array(
-                'conditions' => array(
-                    'member_id' => $weshareId,
-                    'type' => ORDER_TYPE_WESHARE_BUY,
-                    'status' => $order_status,
-                    'deleted' => DELETED_NO
-                ),
+                'conditions' => $conditions,
                 'fields' => $this->$query_share_info_order_fields,
                 'order' => $sort
             ));

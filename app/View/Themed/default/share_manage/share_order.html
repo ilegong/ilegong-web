@@ -48,6 +48,7 @@
                                 <th>快递单号</th>
                                 <th>订单状态</th>
                                 <th>备注</th>
+                                <th>来源</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -91,6 +92,29 @@
                                     {{/if}}
                                 </td>
                                 <td>{{$order['Order']['business_remark']}}</td>
+                                <td>
+                                    {{if $order['Order']['flag'] == 1}}
+                                    朋友圈
+                                    {{elseif $order['Order']['flag'] == 2}}
+                                    朋友群
+                                    {{elseif $order['Order']['flag'] == 3}}
+                                    模板消息
+                                    {{elseif $order['Order']['flag'] == 4}}
+                                    首页
+                                    {{elseif $order['Order']['flag'] == 5}}
+                                    App
+                                    {{elseif $order['Order']['flag'] == 6}}
+                                    朋友转发
+                                    {{elseif $order['Order']['flag'] == 7}}
+                                    发现页
+                                    {{elseif $order['Order']['flag'] == 8}}
+                                    团长个人中心
+                                    {{elseif $order['Order']['flag'] == 19}}
+                                    其他
+                                    {{else}}
+                                     搜索引擎
+                                    {{/if}}
+                                </td>
                             </tr>
                             {{/loop}}
                             </tbody>
