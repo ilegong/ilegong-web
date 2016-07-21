@@ -504,7 +504,21 @@
   text-align: center;
 }
 
+.my-balance{ background-color: #FFFFFF; padding: 15px 12px; text-align: center; margin-top: 45px; margin-bottom: 10px;}
+.my-balance p{ font-size: 2em; line-height: 30px;}
+.my-balance p span{ font-size: 13px;}
+.my-balance a{ color: #666666; display: block; width: 100px; margin: 0 auto; margin-top: 5px;}
+.balance-detail{ font-size: 1.1em;}
+.balance-detail a{ position: relative; background-color: #ffffff; color: #666666; padding: 12px; border-bottom: 1px #eeeeee solid; text-decoration: none; display: block;}
+.balance-detail a img{ width: 40px; height: 40px; display: block;}
+.balance-detail a h1{ display: block; overflow: hidden; padding-left: 10px; text-decoration: none; line-height: 18px; font-weight: normal; font-size: 1em; display: -webkit-box; text-overflow: ellipsis; overflow : hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical;}
+.balance-detail a label{ display: block; position: absolute; bottom: 12px; left: 62px; font-style: normal; color: #cccccc;}
+.balance-detail ul{ padding: 10px 12px 0; background-color: #FFFFFF;}
+.balance-detail ul li.addbalance{ color:#ff6485; font-weight: bold;}
+.balance-detail ul li.decreasebalance{ color:#333333; font-weight: bold;}
+
 .faq-balance{ background-color: #FFFFFF; margin-top: 45px; color: #333333;}
 .faq-balance ul{ border-bottom: 1px #EEEEEE solid; padding: 12px; line-height: 18px;}
 .faq-balance ul li.question{ padding-bottom: 10px;}
 .faq-balance span{ color:#ff6485;}
+
