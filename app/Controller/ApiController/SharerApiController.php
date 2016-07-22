@@ -224,6 +224,13 @@ class SharerApiController extends Controller
         exit();
     }
 
+    public function get_share_list_by_uid($uid, $page, $limit)
+    {
+        $shares = $this->WeshareBuy->get_my_shares($uid, WESHARE_STATUS_NORMAL, WESHARE_SETTLEMENT_NO, $page, $limit);
+        echo json_encode($this->map_shares($shares));
+        exit();
+    }
+
     public function search_share_list($page, $limit)
     {
         $uid = $this->currentUser['id'];
