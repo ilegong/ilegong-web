@@ -54,7 +54,7 @@ class RebateMoneyController extends AppController{
             'fields' => ['RebateLog.reason', 'RebateLog.money', 'RebateLog.description', 'Weshare.title', 'Weshare.default_image', 'User.nickname', 'Order.created', 'Order.member_id', 'Order.id'],
             'limit' => $limit,
             'page' => $page,
-            'order' => 'RebateLog.id ASC'
+            'order' => 'RebateLog.id DESC'
         ]);
         $result = [];
         foreach ($logs as $logItem) {
