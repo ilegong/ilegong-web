@@ -145,14 +145,14 @@ class TestController extends AppController
 //        exit;
 //    }
 
-public function test_get_user_rebate_money(){
-    $this->loadModel('User');
-    $a = $this->User->get_rebate_money(141);
-    $u = $this->User->find('first',['conditions' => ['id' => 141], 'fields' => ['id', 'rebate_money', 'nickname']]);
-    $c = $u['User']['rebate_money'];
-    echo json_encode(['a' => $a, 'c' => $c, 'u' => $u['User']]);
-    exit;
-}
+//public function test_get_user_rebate_money(){
+//    $this->loadModel('User');
+//    $a = $this->User->get_rebate_money(141);
+//    $u = $this->User->find('first',['conditions' => ['id' => 141], 'fields' => ['id', 'rebate_money', 'nickname']]);
+//    $c = $u['User']['rebate_money'];
+//    echo json_encode(['a' => $a, 'c' => $c, 'u' => $u['User']]);
+//    exit;
+//}
 
 
 //    public function migrate_user_rebate_money($limit){
@@ -174,6 +174,18 @@ public function test_get_user_rebate_money(){
 //        echo json_encode(['success' => true, 'count' => count($trackLogs), 'track_log_ids' => $log_ids]);
 //        exit;
 //    }
+
+
+    public function test_security()
+    {
+        $share_string = 633345 . '-' . time() . '-rebate-wsid_' . 2495;
+        $key = '1a8148f79c8fa5xyz';
+        $encode = aes_encrypt($share_string, $key);
+        echo 'encode : ' . $encode;
+        $decode = aes_decrypt($encode, $key);
+        echo 'decide : ' . $decode;
+        exit;
+    }
 
     public function add_oauth_client(){
         $this->OAuth = $this->Components->load('OAuth.OAuth');
