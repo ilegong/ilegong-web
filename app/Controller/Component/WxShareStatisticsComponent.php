@@ -27,7 +27,8 @@ class WxShareStatisticsComponent extends Component
             ],
             'limit' => $limit,
             'page' => $page,
-            'fields' => ['ShareTrackLog.click_time', 'ShareTrackLog.clicker', 'User.nickname']
+            'fields' => ['ShareTrackLog.click_time', 'ShareTrackLog.clicker', 'User.nickname'],
+            'order' => ['ShareTrackLog.click_time DESC']
         ]);
         $res = [];
         foreach ($list as $item) {
@@ -58,7 +59,8 @@ class WxShareStatisticsComponent extends Component
             ],
             'limit' => $limit,
             'page' => $page,
-            'fields' => ['WxShare.created', 'WxShare.sharer', 'User.nickname']
+            'fields' => ['WxShare.created', 'WxShare.sharer', 'User.nickname'],
+            'order' => ['WxShare.created DESC']
         ]);
         $res = [];
 
