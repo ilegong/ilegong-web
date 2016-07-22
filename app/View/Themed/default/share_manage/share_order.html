@@ -93,29 +93,7 @@
                                 </td>
                                 <td>{{$order['Order']['business_remark']}}</td>
                                 <td>
-                                    {{if $order['Order']['flag'] == 1}}
-                                    朋友圈
-                                    {{elseif $order['Order']['flag'] == 2}}
-                                    朋友群
-                                    {{elseif $order['Order']['flag'] == 3}}
-                                    模板消息
-                                    {{elseif $order['Order']['flag'] == 4}}
-                                    首页
-                                    {{elseif $order['Order']['flag'] == 5}}
-                                    App
-                                    {{elseif $order['Order']['flag'] == 6}}
-                                    朋友转发
-                                    {{elseif $order['Order']['flag'] == 7}}
-                                    发现页
-                                    {{elseif $order['Order']['flag'] == 8}}
-                                    团长个人中心
-                                    {{elseif $order['Order']['flag'] == 9}}
-                                    系统推荐
-                                    {{elseif $order['Order']['flag'] == 19}}
-                                    其他
-                                    {{else}}
-                                    直接购买
-                                    {{/if}}
+                                    {{get_order_from_tag_by_flag($order['Order']['flag']);}}
                                 </td>
                             </tr>
                             {{/loop}}
