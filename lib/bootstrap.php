@@ -362,14 +362,11 @@ function isJson($string){
 }
 
 function get_order_from_tag_by_flag($flag){
-    if ($flag == 0) {
-        return '未知来源';
-    }
     if ($flag == 1) {
         return '朋友圈';
     }
     if ($flag == 2) {
-        return '微信群消息';
+        return '微信群';
     }
     if ($flag == 3) {
         return '模板消息';
@@ -389,4 +386,11 @@ function get_order_from_tag_by_flag($flag){
     if($flag ==8){
         return '个人中心';
     }
+    if($flag ==9){
+        return '系统推荐';
+    }
+    if($flag ==19){
+        return '其他';
+    }
+    return '直接购买';
 }

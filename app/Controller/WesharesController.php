@@ -958,7 +958,7 @@ class WesharesController extends AppController
 
     private function get_order_count_share_map($share_ids)
     {
-        $query_order_sql = 'select count(id), member_id from cake_orders where member_id in (' . implode(',', $share_ids) . ') and status>0 and type=9 group by member_id';
+        $query_order_sql = 'select count(id), member_id from cake_orders where member_id in (' . implode(',', $share_ids) . ') and status>0 and type=9 and flag != 19 group by member_id';
         $orderM = ClassRegistry::init('Order');
         $result = $orderM->query($query_order_sql);
         $result = Hash::combine($result, '{n}.cake_orders.member_id', '{n}.0.count(id)');
