@@ -182,8 +182,9 @@ class TestController extends AppController
         $key = '1a8148f79c8fa5xyz';
         $encode = aes_encrypt($share_string, $key);
         echo 'encode : ' . $encode;
+        echo '<br/>';
         $decode = aes_decrypt($encode, $key);
-        echo 'decide : ' . $decode;
+        echo 'decode : ' . $decode;
         exit;
     }
 
