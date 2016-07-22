@@ -77,7 +77,7 @@ class WxShareStatisticsComponent extends Component
         $readCountMap = Hash::combine($readCountMap, '{n}.ShareTrackLog.sharer', '{n}.0.rc');
 
         foreach ($list as $item) {
-            $readCount = $readCountMap[$item['WxShare']['sharer']];
+            $readCount = $readCountMap[$item['WxShare']['sharer']] ? $readCountMap[$item['WxShare']['sharer']] : 0;
             $res[] = [
                 'nickname' => $item['User']['nickname'] ? $item['User']['nickname'] : '--',
                 'created' => date('Y-m-d H:i:s' , $item['WxShare']['created']),
