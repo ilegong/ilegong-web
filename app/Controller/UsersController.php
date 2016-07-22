@@ -1517,6 +1517,8 @@ class UsersController extends AppController
         echo json_encode(array('uid' => $uid, 'proxies' => $proxies));
         exit();
     }
+
+
 }
 
 ?>

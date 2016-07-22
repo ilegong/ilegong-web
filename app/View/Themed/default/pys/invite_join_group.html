@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
+    <meta charset="utf-8">
+    <title>{{$title}}</title>
+    <style>
+        * { padding: 0; margin: 0; font-family: Helvetica, STHeiti STXihei, Microsoft JhengHei, Microsoft YaHei, Arial; }
+        body { min-width: 320px; max-width: 640px; font-size: 14px;}
+        ul li { list-style: none; }
+        .plase-people{ background: url("{{STATIC_HOST}}/static/img/invite-group/invitation-bg.gif");background-repeat:repeat;}
+        .plase-people .top-up{ width:100%; display: block;}
+        .plase-people .number,.plase-people .photo{ border-radius:4px; background-color:#ffffff; filter:alpha(opacity=85); -moz-opacity:0.85; opacity:0.85; margin: 0 20px; -webkit-box-shadow:0 0 5px #ccc; -moz-box-shadow:0 0 5px #ccc; box-shadow:0 0 5px #ccc;  margin-bottom: 12px;}
+        .plase-people .number .many{ font-size: 1.2em; text-align: center; padding:15px 15px 0; font-weight: bold;}
+        .plase-people .number span{color:#fc5959; text-decoration:none;}
+        .plase-people .number .palse-many{ font-size: 1.2em; text-align: center; padding:10px 15px 0; font-weight: bold;}
+        .plase-people .number .every-who{font-size: 1em; text-align: center; padding:20px 15px 15px; color:#666666;}
+        .plase-people .photo img{ display: block; width: 100%; border-radius:4px;}
+        .plase-people a.download-btn{ display: block; text-decoration: none; font-size: 1.2em; font-weight: bold; color: #FFFFFF; border-radius:4px; margin: 20px 20px 0 20px; background-color: #fc5959; text-align: center; line-height: 44px; -webkit-box-shadow:0 0 5px #ccc; -moz-box-shadow:0 0 5px #ccc; box-shadow:0 0 5px #ccc;}
+        .plase-people .logo-bottom img{ display: block; width: 100%; margin-top: 10px;}
+    </style>
+</head>
+
+<body style="background: url('{{STATIC_HOST}}/static/img/invite-group/invitation-bg.jpg'); background-repeat:repeat;">
+<div class="plase-people">
+    <img class="top-up" src="{{STATIC_HOST}}/static/img/invite-group/invitation-banner.jpg">
+    <ul class="number">
+        <li class="many">[<span>{{$group['User']['nickname']}}</span>]邀您加入{{$group['ChatGroup']['group_name']}}</li>
+        <li class="palse-many">TA的邀请码<span>{{$group['ChatGroup']['group_code']}}</span></li>
+        <li class="every-who">快进去看看谁在社群里吧</li>
+    </ul>
+    <div class="photo"><img src="{{STATIC_HOST}}/static/img/invite-group/liucheng.jpg"></div>
+    <a href="#X" class="download-btn">下载APP，加入社群</a>
+    <div class="logo-bottom"><img src="{{STATIC_HOST}}/static/img/invite-group/logo-bottom.png"/></div>
+</div>
+</body>
+</html>
