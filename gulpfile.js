@@ -141,6 +141,18 @@ var all_css = [
     ],
     dist: 'webroot/static/weshares/css/'
   }, {
+    name: 'fans-list.min.css',
+    sources: [
+      'webroot/src/scss/fans-list.css',
+    ],
+    dist: 'webroot/static/weshares/css/'
+  }, {
+    name: 'fansrule.min.css',
+    sources: [
+      'webroot/src/scss/fansrule.css',
+    ],
+    dist: 'webroot/static/weshares/css/'
+  },{
     name: 'get-user-info.min.css',
     sources: [
       'webroot/src/scss/get-user-info.scss',

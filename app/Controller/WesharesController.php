@@ -3,7 +3,7 @@
 class WesharesController extends AppController
 {
     var $uses =
-        array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem', 'WxShare', 'ShareTrackLog',
+        array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem','WxShare','ShareTrackLog','UserRelation','UserLevel',
             'SharerShipOption', 'WeshareShipSetting', 'OfflineStore', 'Comment', 'RebateTrackLog', 'ProxyRebatePercent', 'ShareUserBind', 'UserSubReason', 'ShareFavourableConfig', 'ShareAuthority');
 
     var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
@@ -59,27 +59,84 @@ class WesharesController extends AppController
     public function read_share_count_api($page)
     {
         $uid = $this->currentUser['id'];
-        $this->WxShareStatistics = $this->Components->load('WxShareStatistics');
-        $weshares = $this->WxShareStatistics->getWeshareList($uid, $page);
+        $limit = 5;
+        $weshares = $this->Weshare->find('all', [
+            'conditions' => [
+                'creator' => $uid,
+                'status' => WESHARE_STATUS_NORMAL,
+                'type' => [SHARE_TYPE_GROUP, SHARE_TYPE_DEFAULT, SHARE_TYPE_POOL_FOR_PROXY, SHARE_TYPE_POOL]
+            ],
+            'limit' => $limit,
+            'page' => $page,
+            'order' => ['Weshare.id DESC'],
+            'fields' => ['Weshare.id', 'Weshare.title', 'Weshare.default_image', 'Weshare.creator','Weshare.created']
+        ]);
+
+        if($weshares) {
+            $weshare_id = [];
+            foreach ($weshares as $weshare) {
+                $weshare_id[] = $weshare['Weshare']['id'];
+            }
+            $weshare_id = implode($weshare_id,',');
+
+            $share_total_list = $this->WxShare->query("SELECT data_id ,count(1) AS total FROM cake_wx_shares WHERE data_type = 'wsid' AND data_id IN ({$weshare_id}) GROUP BY data_id");
+            $read_total_list = $this->ShareTrackLog->query("SELECT data_id,count(1) AS total FROM cake_share_track_logs WHERE data_type = 'wsid' AND data_id IN ({$weshare_id}) GROUP BY data_id");
+        }
+
+        $read_tmp = [];
+        $share_tmp = [];
+        if($share_total_list) {
+            foreach ($share_total_list as $item) {
+                $share_tmp[$item['cake_wx_shares']['data_id']] = $item[0]['total'];
+            }
+        }
+        if($read_total_list) {
+            foreach ($read_total_list as $item) {
+                $read_tmp[$item['cake_share_track_logs']['data_id']] = $item[0]['total'];
+            }
+        }
+        foreach ($weshares as $index => $weshare) {
+            $weshares[$index]['Weshare']['read_num'] = intval($read_tmp[$weshare['Weshare']['id']]);
+            $weshares[$index]['Weshare']['share_num'] = intval($share_tmp[$weshare['Weshare']['id']]);
+        }
         header('Content-type: application/json');
         echo json_encode($weshares);
         die;
     }
 
-    public function read_count_api($id, $page = 1)
+    public function read_count_api($id,$page=1)
     {
-        $this->WxShareStatistics = $this->Components->load('WxShareStatistics');
-        $res = $this->WxShareStatistics->getWeshareReadList($id, $page);
+        $limit = 5;
+        $query = "SELECT u.nickname,s.click_time FROM cake_share_track_logs s LEFT JOIN cake_users u ON s.clicker = u.id WHERE s.data_id ={$id} ORDER BY s.id DESC LIMIT ".($page-1)*$limit.",{$limit}";
+        $share_list = $this->ShareTrackLog->query($query);
         header('Content-type: application/json');
+        $res = [];
+        foreach ($share_list as $item) {
+            $res[] = [
+                'nickname' => $item['u']['nickname'] ? $item['u']['nickname'] : '--',
+                'created' => date('Y-m-d H:i:s' , $item['s']['click_time'])
+            ];
+        }
         echo json_encode($res);
         die;
     }
 
-    public function share_count_api($id, $page = 1)
+    public function share_count_api($id,$page=1)
     {
-        $this->WxShareStatistics = $this->Components->load('WxShareStatistics');
-        $res = $this->WxShareStatistics->getWeshareForwardList($id, $page);
+        $limit = 5;
+        $query = "SELECT u.nickname,s.created,s.created FROM cake_wx_shares s LEFT JOIN cake_users u ON s.share_id = u.id WHERE s.data_id = {$id} ORDER BY s.id DESC LIMIT ".($page-1)*$limit.",{$limit}";
+        $read_list = $this->WxShare->query($query);
         header('Content-type: application/json');
+        $res = [];
+        foreach ($read_list as $item) {
+            $read_count_tmp = $this->WxShare->query('SELECT count(1) AS total FROM cake_share_track_logs WHERE data_id = '.$id .' AND share_time = '.$item['s']['created']);
+
+            $res[] = [
+                'nickname' => $item['u']['nickname'] ? $item['u']['nickname'] : '--',
+                'created' => date('Y-m-d H:i:s' , $item['s']['created']),
+                'read_count' => $read_count_tmp[0][0]['total']
+            ];
+        }
         echo json_encode($res);
         die;
     }
@@ -87,31 +144,78 @@ class WesharesController extends AppController
     public function read_share_count()
     {
         $uid = $this->currentUser['id'];
-        $this->WxShareStatistics = $this->Components->load('WxShareStatistics');
-        list($share_count, $read_count) = $this->WxShareStatistics->getWeshareSummary($uid);
-        $this->set('share_count', $share_count);
-        $this->set('read_count', $read_count);
-        $this->set('title', '朋友说-转发阅读统计');
+
+        $weshares = $this->Weshare->find('all', [
+            'conditions' => [
+                'creator' => $uid,
+                'status' => WESHARE_STATUS_NORMAL,
+                'type' => [SHARE_TYPE_GROUP, SHARE_TYPE_DEFAULT, SHARE_TYPE_POOL_FOR_PROXY, SHARE_TYPE_POOL]
+            ],
+            'fields' => ['Weshare.id']
+        ]);
+
+        $weshare_ids = Hash::extract($weshares,'{n}.Weshare.id');
+
+        $share_count = [
+            [
+                [
+                    'total' => 0
+                ]
+            ]
+        ];
+        $read_count = [
+            [
+                [
+                    'total' => 0
+                ]
+            ]
+        ];
+        if($weshare_ids)
+        {
+            $weshare_ids = implode(',',$weshare_ids);
+
+            $share_count = $this->WxShare->query('SELECT count(1) AS total FROM cake_wx_shares WHERE data_id IN ('.$weshare_ids.') AND data_type = "wsid" AND sharer = '.$uid);
+
+            $read_count = $this->WxShare->query('SELECT count(1) AS total FROM cake_share_track_logs WHERE data_id IN ('.$weshare_ids.') AND data_type = "wsid" AND sharer = '.$uid);
+        }
+        $this->set('share_count',$share_count[0][0]['total']);
+        $this->set('read_count',$read_count[0][0]['total']);
+        $this->set('title','朋友说-转发阅读统计');
     }
 
     public function share_count($id)
     {
-        $this->WxShareStatistics = $this->Components->load('WxShareStatistics');
-        list($weshare, $share_count) = $this->WxShareStatistics->getWeshareForwardData($id);
-        $this->set('weshare', $weshare);
-        $this->set('share_count', $share_count);
+        $weshare = $this->Weshare->find('first', [
+            'conditions' => [
+                'id' => $id
+            ],
+            'fields' => ['Weshare.id', 'Weshare.title'],
+        ]);
+
+        $this->set('weshare',$weshare);
+
+        $share_count = $this->WxShare->query('SELECT count(1) AS total FROM cake_wx_shares WHERE data_type = "wsid" AND data_id = '.$id);
+        
+        $this->set('share_count',$share_count[0][0]['total']);
     }
 
     public function read_count($id)
     {
-        $this->WxShareStatistics = $this->Components->load('WxShareStatistics');
-        list($weshare, $read_count) = $this->WxShareStatistics->getWeshareReadData($id);
-        $this->set('weshare', $weshare);
-        $this->set('read_count', $read_count);
+        $weshare = $this->Weshare->find('first', [
+            'conditions' => [
+                'id' => $id
+            ],
+            'fields' => ['Weshare.id', 'Weshare.title'],
+        ]);
+        
+        $this->set('weshare',$weshare);
+        
+        $read_count = $this->WxShare->query('SELECT count(1) AS total FROM cake_share_track_logs WHERE data_id = '.$id);
+
+        $this->set('read_count',$read_count[0][0]['total']);
     }
 
-    public function coupons()
-    {
+    public function coupons(){
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
             $this->redirect('/');
@@ -142,8 +246,7 @@ class WesharesController extends AppController
     }
 
 
-    public function entrance()
-    {
+    public function entrance(){
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
             $this->redirect('/users/login.html?referer=/weshares/entrance');
@@ -283,8 +386,7 @@ class WesharesController extends AppController
         return null;
     }
 
-    public function pay_result($orderId)
-    {
+    public function pay_result($orderId){
         $uid = $this->currentUser['id'];
         $orderInfo = $this->Order->find('first', [
             'conditions' => ['id' => $orderId, 'creator' => $uid, 'type' => ORDER_TYPE_WESHARE_BUY]
@@ -518,9 +620,8 @@ class WesharesController extends AppController
         return null;
     }
 
-    private function get_weixin_share_str($weshareId)
+    private function get_weixin_share_str($uid, $weshareId)
     {
-        $uid = empty($this->currentUser['id']) ? 0 : $this->currentUser['id'];
         return prepare_wx_share_string($uid, 'wsid', $weshareId);
     }
 
@@ -719,7 +820,7 @@ class WesharesController extends AppController
             $this->log('Create order for ' . $uid . ' with weshare ' . $weshareId . ' successfully, order id ' . $orderId, LOG_INFO);
             $dataSource->commit();
             try {
-                add_logs_to_es(["index" => "event_pay_begin", "type" => "pay_begin", "user_id" => $uid, "order_id" => $orderId, "total_price" => get_format_number($totalPrice / 100), "weshare_id" => $weshareId, "brand_id" => $weshareCreator]);
+                add_logs_to_es(["index" => "event_pay_begin", "type" => "pay_begin", "user_id" => $uid, "order_id" => $orderId, "total_price" => get_format_number($totalPrice/100), "weshare_id" => $weshareId, "brand_id" => $weshareCreator]);
             } catch (Exception $e) {
                 $this->log('add es log error when make order');
             }
@@ -914,7 +1015,7 @@ class WesharesController extends AppController
         exit();
     }
 
-    public function search_shares_api($page = 1)
+    public function search_shares_api($page=1)
     {
         $keyword = $_REQUEST['keyword'];
         $uid = $this->currentUser['id'];
@@ -924,8 +1025,7 @@ class WesharesController extends AppController
         exit();
     }
 
-    private function combine_share_list_data($shares)
-    {
+    private function combine_share_list_data($shares){
         $share_ids = Hash::extract($shares, '{n}.Weshare.id');
         $share_list = [];
         if (!empty($share_ids)) {
@@ -958,7 +1058,7 @@ class WesharesController extends AppController
 
     private function get_order_count_share_map($share_ids)
     {
-        $query_order_sql = 'select count(id), member_id from cake_orders where member_id in (' . implode(',', $share_ids) . ') and status>0 and type=9 and flag != 19 group by member_id';
+        $query_order_sql = 'select count(id), member_id from cake_orders where member_id in (' . implode(',', $share_ids) . ') and status>0 and type=9 group by member_id';
         $orderM = ClassRegistry::init('Order');
         $result = $orderM->query($query_order_sql);
         $result = Hash::combine($result, '{n}.cake_orders.member_id', '{n}.0.count(id)');
@@ -995,8 +1095,7 @@ class WesharesController extends AppController
         $this->set('title', $title);
     }
 
-    public function search_my_shares()
-    {
+    public function search_my_shares(){
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
             $this->redirect('/users/login');
@@ -1111,7 +1210,7 @@ class WesharesController extends AppController
             "index" => "event_get_self_info",
             "type" => "get_self_info"
         ];
-
+        
         add_logs_to_es($log);
 
         $user_summary = $this->WeshareBuy->get_user_share_summary($uid);
@@ -1124,28 +1223,12 @@ class WesharesController extends AppController
         $this->set('user_level', $user_level);
         $this->set('user_summary', $user_summary);
         $this->set('my_order_count', $my_order_count);
-        $rebate_money = $this->User->get_rebate_money($uid);
+        $rebate_money = $this->ShareUtil->get_rebate_money($uid);
         $coupon_count = $this->CouponItem->find_my_share_coupons_count($uid);
         $this->set('coupon_count', $coupon_count);
-        $this->set('rebate_money', get_format_number($rebate_money / 100));
+        $this->set('rebate_money', $rebate_money);
         $this->set('uid', $uid);
     }
-
-    //    某个团长推荐的分享
-    public function get_recommend_weshares($proxy_id)
-    {
-        $limit = 5;
-        $result = $this->Weshares->get_recommend_weshares($proxy_id, $limit);
-
-        foreach ($result as $k => $res) {
-            $item_desc = strip_tags($result[$k]['description']);
-            $result[$k]['description'] = mb_strlen($item_desc, 'utf8') > 100 ? mb_substr($item_desc, 0, 99, 'utf8') . "..." : $item_desc;
-        }
-
-        echo json_encode($result);
-        exit();
-    }
-
 
     /**
      * 分享订单 快递发货
@@ -1325,7 +1408,7 @@ class WesharesController extends AppController
 
     /**
      * @param $weshareId
-     * 分享者订单管理页面
+     * 分享者订单统计页面
      */
     public function share_order_list($weshareId)
     {
@@ -1355,7 +1438,7 @@ class WesharesController extends AppController
             $all_tag_ids = $this->ShareAuthority->get_user_can_view_order_tags($user_id, $weshareId);
         }
         //获取订单统计数据
-        $statics_data = $this->get_weshare_buy_info($weshareId, true, true, false, true);
+        $statics_data = $this->get_weshare_buy_info($weshareId, true, true);
         if (count($share_tags['tags']) > 0) {
             $tag_order_summery = $this->ShareUtil->summery_order_data_by_tag($statics_data, $weshareId);
             $this->set('tag_order_summery', $tag_order_summery);
@@ -1366,7 +1449,7 @@ class WesharesController extends AppController
         }
 
         //$this->set('child_share_summery_datas', $child_share_summery_datas);
-        //$this->merge_child_share_summery_data($statics_data, $child_share_summery_datas);
+        $this->merge_child_share_summery_data($statics_data, $child_share_summery_datas);
         $share_ids = $child_share_data['child_share_ids'];
         $share_ids[] = $weshareId;
 
@@ -1609,14 +1692,24 @@ class WesharesController extends AppController
     public function order_export($shareId, $only_paid = 1)
     {
         $this->layout = null;
-        $statics_data = $this->get_weshare_buy_info($shareId, true, true, $only_paid == 1, true);
+        if ($only_paid == 1) {
+            $export_paid_order = true;
+        } else {
+            $export_paid_order = false;
+        }
+        $statics_data = $this->get_weshare_buy_info($shareId, true, true, $export_paid_order);
         $this->set($statics_data);
     }
 
     public function old_order_export($shareId, $only_paid = 1)
     {
         $this->layout = null;
-        $statics_data = $this->get_weshare_buy_info($shareId, true, true, $only_paid == 1, true);
+        if ($only_paid == 1) {
+            $export_paid_order = true;
+        } else {
+            $export_paid_order = false;
+        }
+        $statics_data = $this->get_weshare_buy_info($shareId, true, true, $export_paid_order);
         $this->set($statics_data);
     }
 
@@ -1691,7 +1784,7 @@ class WesharesController extends AppController
         $shareIds = json_decode($_REQUEST['shareIds']);
 
         $summaries = [];
-        if (!empty($shareIds)) {
+        if(!empty($shareIds)){
             foreach ($shareIds as $shareId) {
                 $summary = $this->ShareUtil->get_index_product_summary($shareId);
                 $summary['share_id'] = $shareId;
@@ -1711,9 +1804,9 @@ class WesharesController extends AppController
      * @return mixed
      * 获取分享的订单信息
      */
-    private function get_weshare_buy_info($weshareId, $is_me, $division = false, $only_paid = false, $only_real_orders = true)
+    private function get_weshare_buy_info($weshareId, $is_me, $division = false, $export = false)
     {
-        return $this->WeshareBuy->get_share_order_for_show($weshareId, $is_me, $division, $only_paid, $only_real_orders);
+        return $this->WeshareBuy->get_share_order_for_show($weshareId, $is_me, $division, $export);
     }
 
 
@@ -1820,7 +1913,6 @@ class WesharesController extends AppController
         return $this->RedPacket->process_receive($share_offer_id, $uid, $this->is_weixin());
     }
 
-    //优惠码使用[需要优化]
     public function get_useful_coupons()
     {
         $postStr = file_get_contents('php://input');
@@ -2144,14 +2236,16 @@ class WesharesController extends AppController
         $this->set('uid', $uid);
     }
 
-    public function fans_list($uid)
+    public function fans_list()
     {
-        $currentId = $this->currentUser['id'];
-        $me = $uid == $currentId ? 1 : 0;
-        $this->set('uid', $uid);
-        $this->set('me', $me);
-        $this->set('type', 0);
+        $uid = $this->currentUser['id'];
+        $res_self = $this->UserRelation->query("SELECT count(1) AS total FROM cake_user_relations WHERE is_own = 1 AND deleted = 0 AND user_id = ".$uid);
+        $res_comm = $this->UserRelation->query("SELECT count(1) AS total FROM cake_user_relations WHERE is_own = 0 AND deleted = 0 AND user_id = ".$uid);
+        $this->set('total_self',$res_self[0][0]['total']);
+        $this->set('total_comm',$res_comm[0][0]['total']);
+        $this->set('type', 1);
         $this->set('title', '我的粉丝');
+        $this->set('userId',$uid);
         $this->render('u_list');
     }
 
@@ -2164,6 +2258,46 @@ class WesharesController extends AppController
         $this->set('type', 1);
         $this->set('title', '我关注的');
         $this->render('u_list');
+    }
+
+    public function get_fans_data($type = 1,$page = 1)
+    {
+        $this->autoRender = false;
+
+        $uid = $this->currentUser['id'];
+        $page = intval($page) > 0 ? intval($page) : 1;
+        $type = intval($type) == 1 ? 1 : 0;
+        $nickname = $_REQUEST['query'];
+        $condition = "";
+        $limit = 30;
+        //$uid = 141;
+        if($nickname)
+        {
+            $condition = " AND u.nickname like '%{$nickname}%' ";
+        }
+
+        $sql = "SELECT u.nickname AS nickname ,u.id AS id,u.avatar as avatar, u.label as label FROM cake_user_relations r LEFT JOIN cake_users u ON r.follow_id = u.id WHERE r.deleted = 0 AND r.is_own = {$type} AND r.user_id = {$uid} {$condition} LIMIT ".($page-1)*$limit.",{$limit}";
+        $users = $this->UserRelation->query($sql);
+        $user_ids = [];
+
+        foreach ($users as $k => $user) {
+            $users[$k] = $user['u'];
+            $user_ids[] = $user['u']['id'];
+        }
+
+        foreach ($users as $index => $user) {
+            $users[$index]['avatar'] = get_user_avatar($user);
+            $users[$index]['label'] = $user['lable'] ? $user['lable'] : "吃货游客";
+        }
+
+        echo json_encode($users);
+        die;
+    }
+
+    public function mine_fansrule()
+    {
+        $this->layout = null;
+        $this->render('mine_fansrule');
     }
 
     public function get_u_list_data($type, $uid, $page)
@@ -2218,10 +2352,9 @@ class WesharesController extends AppController
         }
     }
 
-    private function set_weixin_params_for_pay_result($creator, $weshare, $shared_offer_id)
-    {
+    private function set_weixin_params_for_pay_result($creator, $weshare, $shared_offer_id){
         $detail_url = WX_HOST . '/weshares/view/' . $weshare['id'] . '?shared_offer_id=' . $shared_offer_id;
-        $weixin_share_str = $this->get_weixin_share_str($weshare['id']);
+        $weixin_share_str = $this->get_weixin_share_str($creator['id'], $weshare['id']);
         $image = empty($weshare['default_image']) ? get_user_avatar($creator) : $weshare['default_image'];
         $title = $creator['nickname'] . '分享:' . $weshare['title'];
         $desc = $creator['nickname'] . '我认识，很靠谱！送你一个爱心礼包，一起来参加。';
@@ -2277,7 +2410,7 @@ class WesharesController extends AppController
             $desc = $creator['nickname'] . '我认识，很靠谱！送你一个爱心礼包，一起来参加。';
         }
 
-        $weixin_share_str = $this->get_weixin_share_str($weshare['id']);
+        $weixin_share_str = $this->get_weixin_share_str($creator['id'], $weshare['id']);
         $this->set('share_string', $weixin_share_str);
         $this->set('title', $title);
         $this->set('detail_url', $detail_url);

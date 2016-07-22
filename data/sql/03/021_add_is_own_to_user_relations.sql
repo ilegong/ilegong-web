@@ -1,0 +1,1 @@
+ALTER TABLE `cake_user_relations` ADD `is_own` TINYINT(2) UNSIGNED NOT NULL DEFAULT '0' AFTER `remark`;
