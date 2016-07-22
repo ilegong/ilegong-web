@@ -8,9 +8,10 @@ class WxShareStatisticsComponent extends Component
     static $LIMIT = 5;
 
 
-    public function getWeshareReadList($weshareId, $page)
+    public function getWeshareReadList($weshareId, $page, $limit = null)
     {
         $this->injectModel();
+        $limit = $limit ? $limit : self::$LIMIT;
         $list = $this->ShareTrackLog->find('all', [
             'conditions' => [
                 'ShareTrackLog.data_id' => $weshareId,
@@ -24,7 +25,7 @@ class WxShareStatisticsComponent extends Component
                     'conditions' => 'User.id = ShareTrackLog.clicker'
                 ]
             ],
-            'limit' => self::$LIMIT,
+            'limit' => $limit,
             'page' => $page,
             'fields' => ['ShareTrackLog.click_time', 'ShareTrackLog.clicker', 'User.nickname']
         ]);
@@ -32,16 +33,16 @@ class WxShareStatisticsComponent extends Component
         foreach ($list as $item) {
             $res[] = [
                 'nickname' => $item['User']['nickname'] ? $item['User']['nickname'] : '--',
-                'created' => date('Y-m-d H:i:s' , $item['ShareTrackLog']['click_time'])
+                'created' => date('Y-m-d H:i:s', $item['ShareTrackLog']['click_time'])
             ];
         }
         return $res;
     }
 
-    public function getWeshareForwardList($weshareId, $page)
+    public function getWeshareForwardList($weshareId, $page, $limit = null)
     {
         $this->injectModel();
-
+        $limit = $limit ? $limit : self::$LIMIT;
         $list = $this->WxShare->find('all', [
             'conditions' => [
                 'WxShare.data_id' => $weshareId,
@@ -55,7 +56,7 @@ class WxShareStatisticsComponent extends Component
                     'conditions' => 'User.id = WxShare.sharer'
                 ]
             ],
-            'limit' => self::$LIMIT,
+            'limit' => $limit,
             'page' => $page,
             'fields' => ['WxShare.created', 'WxShare.sharer', 'User.nickname']
         ]);
@@ -80,7 +81,7 @@ class WxShareStatisticsComponent extends Component
             $readCount = $readCountMap[$item['WxShare']['sharer']] ? $readCountMap[$item['WxShare']['sharer']] : 0;
             $res[] = [
                 'nickname' => $item['User']['nickname'] ? $item['User']['nickname'] : '--',
-                'created' => date('Y-m-d H:i:s' , $item['WxShare']['created']),
+                'created' => date('Y-m-d H:i:s', $item['WxShare']['created']),
                 'read_count' => $readCount
             ];
         }
@@ -174,16 +175,16 @@ class WxShareStatisticsComponent extends Component
         return [$forwardCount, $readCount];
     }
 
-    public function getWeshareList($uid, $page)
+    public function getWeshareList($uid, $page, $limit = null)
     {
         $this->injectModel();
-
+        $limit = $limit ? $limit : self::$LIMIT;
         $weshares = $this->Weshare->find('all', [
             'conditions' => [
                 'creator' => $uid,
                 'status' => WESHARE_STATUS_NORMAL,
             ],
-            'limit' => self::$LIMIT,
+            'limit' => $limit,
             'page' => $page,
             'order' => ['Weshare.id DESC'],
             'fields' => ['Weshare.id', 'Weshare.title', 'Weshare.default_image', 'Weshare.creator', 'Weshare.created']

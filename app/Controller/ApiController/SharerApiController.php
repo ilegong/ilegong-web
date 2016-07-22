@@ -16,6 +16,43 @@ class SharerApiController extends Controller
         $this->autoRender = false;
     }
 
+    //获取转发汇总数据
+    public function get_forward_read_summary(){
+        $uid = $this->currentUser['id'];
+        $this->WxShareStatistics = $this->Components->load('WxShareStatistics');
+        list($share_count, $read_count) = $this->WxShareStatistics->getWeshareSummary($uid);
+        echo json_encode(['share_count' => $share_count, 'read_count' => $read_count]);
+        exit;
+    }
+
+    //获取转发数据列表
+    public function get_forward_read_list($page, $limit){
+        $uid = $this->currentUser['id'];
+        $this->WxShareStatistics = $this->Components->load('WxShareStatistics');
+        $weshares = $this->WxShareStatistics->getWeshareList($uid, $page, $limit);
+        $result = [];
+        foreach ($weshares as $item) {
+            $result[] = $item['Weshare'];
+        }
+        echo json_encode($result);
+        exit;
+    }
+
+    //某一个分享的阅读数据
+    public function get_share_read_detail($shareId, $page, $limit){
+        $this->WxShareStatistics = $this->Components->load('WxShareStatistics');
+        $res = $this->WxShareStatistics->getWeshareReadList($shareId, $page, $limit);
+        echo json_encode($res);
+        exit;
+    }
+
+    //某一个分享的转发详情
+    public function get_share_forward_detail($shareId, $page, $limit){
+        $this->WxShareStatistics = $this->Components->load('WxShareStatistics');
+        $res = $this->WxShareStatistics->getWeshareForwardList($shareId, $page, $limit);
+        echo json_encode($res);
+        exit;
+    }
 
     /**
      * 获取粉丝备注
