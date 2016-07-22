@@ -5,7 +5,7 @@
     angular.module('weshares')
         .controller('ReadShareCountCtr', ReadShareCountCtr);
 
-    function ReadShareCountCtr($rootScope, $http) {
+    function ReadShareCountCtr($rootScope, $http, Utils) {
         var vm = this;
         $rootScope.loadingPage = false;
         vm.loading = false;
@@ -32,6 +32,7 @@
         vm.goReadDetail = goReadDetail;
         vm.doBack = doBack;
         vm.goShareView = goShareView;
+        vm.staticFilePath = Utils.staticFilePath();
 
         function goShareView(id){
             window.location.href='/weshares/view/'+id+'.html?';
