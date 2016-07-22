@@ -1229,6 +1229,21 @@ class WesharesController extends AppController
         $this->set('rebate_money', $rebate_money);
         $this->set('uid', $uid);
     }
+    
+    //    某个团长推荐的分享
+    public function get_recommend_weshares($proxy_id)
+    {
+        $limit = 5;
+        $result = $this->Weshares->get_recommend_weshares($proxy_id, $limit);
+
+        foreach ($result as $k => $res) {
+            $item_desc = strip_tags($result[$k]['description']);
+            $result[$k]['description'] = mb_strlen($item_desc, 'utf8') > 100 ? mb_substr($item_desc, 0, 99, 'utf8') . "..." : $item_desc;
+        }
+
+        echo json_encode($result);
+        exit();
+    }
 
     /**
      * 分享订单 快递发货
