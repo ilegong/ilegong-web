@@ -78,9 +78,9 @@ class PoolProductApiController extends Controller
      */
     public function get_all_product_categories()
     {
-        $this->loadModel('SharePoolProduct');
-        $res = $this->SharePoolProduct->get_pool_product_categories();
-        echo json_encode($res);
+//        $this->loadModel('SharePoolProduct');
+//        $res = $this->SharePoolProduct->get_pool_product_categories();
+        echo json_encode([]);
         exit();
     }
 }
