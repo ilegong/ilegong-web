@@ -366,7 +366,7 @@ function get_order_from_tag_by_flag($flag){
         return '朋友圈';
     }
     if ($flag == 2) {
-        return '微信群消息';
+        return '微信群';
     }
     if ($flag == 3) {
         return '模板消息';
