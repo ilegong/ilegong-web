@@ -76,6 +76,10 @@ class AppController extends Controller {
 //    	}
 
     	$this->currentUser = $this->Session->read('Auth.User');
+        if(!empty($this->currentUser) && $this->currentUser['id'] == 891157){
+            throw new RuntimeException('System error');
+        }
+
     	$this->theme = Configure::read('Site.theme');
     	if($this->RequestHandler->isMobile()){
     		$this->theme = '3g';
