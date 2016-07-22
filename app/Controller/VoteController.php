@@ -149,7 +149,7 @@ class VoteController extends AppController {
         }
         //update vote num
         $this->update_candidate_vote_num($candidateId);
-        $this->save_user_relation($uid, $eventId);
+        //$this->save_user_relation($uid, $eventId);
         echo json_encode(array('success' => true));
     }
 
@@ -239,7 +239,7 @@ class VoteController extends AppController {
             $candidate_id = $this->Candidate->id;
             $eventCandidateData = array('event_id' => $eventId, 'candidate_id' => $candidate_id, 'user_id' => $uid);
             $this->CandidateEvent->save($eventCandidateData);
-            $this->save_user_relation($uid,$eventId);
+            //$this->save_user_relation($uid,$eventId);
             echo json_encode(array('success' => true));
             return;
         }
