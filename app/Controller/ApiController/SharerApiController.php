@@ -185,11 +185,11 @@ class SharerApiController extends Controller
 
     /**
      * @param $shareId
-     * 获取分享订单
+     * 获取分享订单，用于App上的订单管理
      */
     public function get_my_share_orders($shareId)
     {
-        $result = $this->WeshareBuy->get_share_order_for_show($shareId, true, $division = false, $only_paid=false, $export = false);
+        $result = $this->WeshareBuy->get_share_order_for_show($shareId, true, $division = false, $only_paid=false, $only_real_orders = true);
         usort($result['orders'], function ($a, $b) {
             return ($a['id'] < $b['id']) ? 1 : -1;
         });
@@ -574,7 +574,7 @@ class SharerApiController extends Controller
     {
         $this->autoRender = true;
         $this->layout = null;
-        $statics_data = $this->WeshareBuy->get_share_order_for_show($shareId, true, true, $only_paid == 1, $export=true);
+        $statics_data = $this->WeshareBuy->get_share_order_for_show($shareId, true, true, $only_paid == 1, $only_real_orders=true);
         $this->set($statics_data);
     }
 

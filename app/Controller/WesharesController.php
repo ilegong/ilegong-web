@@ -1393,7 +1393,7 @@ class WesharesController extends AppController
 
     /**
      * @param $weshareId
-     * 分享者订单统计页面
+     * 分享者订单管理页面
      */
     public function share_order_list($weshareId)
     {
@@ -1423,7 +1423,7 @@ class WesharesController extends AppController
             $all_tag_ids = $this->ShareAuthority->get_user_can_view_order_tags($user_id, $weshareId);
         }
         //获取订单统计数据
-        $statics_data = $this->get_weshare_buy_info($weshareId, true, true, false, false);
+        $statics_data = $this->get_weshare_buy_info($weshareId, true, true, false, true);
         if (count($share_tags['tags']) > 0) {
             $tag_order_summery = $this->ShareUtil->summery_order_data_by_tag($statics_data, $weshareId);
             $this->set('tag_order_summery', $tag_order_summery);
@@ -1779,9 +1779,9 @@ class WesharesController extends AppController
      * @return mixed
      * 获取分享的订单信息
      */
-    private function get_weshare_buy_info($weshareId, $is_me, $division = false, $only_paid = false, $export = false)
+    private function get_weshare_buy_info($weshareId, $is_me, $division = false, $only_paid = false, $only_real_orders = true)
     {
-        return $this->WeshareBuy->get_share_order_for_show($weshareId, $is_me, $division, $only_paid, $export);
+        return $this->WeshareBuy->get_share_order_for_show($weshareId, $is_me, $division, $only_paid, $only_real_orders);
     }
 
 

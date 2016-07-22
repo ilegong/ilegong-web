@@ -1687,17 +1687,22 @@ class WeshareBuyComponent extends Component
      *
      * 这个里面的逻辑和上面统计子分享数据逻辑有共同处，修改的时候注意
      */
-    public function get_share_order_for_show($weshareId, $is_me, $division = false, $only_paid=false, $export = false)
+    public function get_share_order_for_show($weshareId, $is_me, $division = false, $only_paid=false, $only_real_orders=false)
     {
         if ($division) {
             $key = SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId . '_1';
         } else {
             $key = SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId . '_0';
         }
-        if ($export) {
-            $key = $key . '_0';
-        } else {
+        if ($only_paid) {
             $key = $key . '_1';
+        } else {
+            $key = $key . '_0';
+        }
+        if ($only_real_orders) {
+            $key = $key . '_1';
+        } else {
+            $key = $key . '_0';
         }
         $share_order_data = Cache::read($key);
         if (empty($share_order_data)) {
@@ -1715,14 +1720,14 @@ class WeshareBuyComponent extends Component
                 'type' => ORDER_TYPE_WESHARE_BUY,
                 'deleted' => DELETED_NO,
             );
-            if ($export) {
-                $conditions['not'] = array('flag'=>19);
-            }
             if($only_paid){
                 $conditions['status'] = array(ORDER_STATUS_PAID);
             }
             else{
                 $conditions['status'] = array(ORDER_STATUS_PAID, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_DONE, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
+            }
+            if ($only_real_orders) {
+                $conditions['not'] = array('flag'=>19);
             }
 
             $sort = array('created DESC');
@@ -1829,9 +1834,10 @@ class WeshareBuyComponent extends Component
                 $share_rebate_money = $this->ShareUtil->get_share_rebate_money($weshareId);
                 $share_order_data['share_rebate_money'] = $share_rebate_money;
             }
-            Cache::write($key, json_encode($share_order_data));
-            return $share_order_data;
+            $share_order_data = json_encode($share_order_data);
+            Cache::write($key, $share_order_data);
         }
+
         return json_decode($share_order_data, true);
     }
 
