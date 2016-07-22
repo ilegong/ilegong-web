@@ -108,7 +108,7 @@ class AppController extends Controller {
         $share_type = $_GET['share_type'];
         $trstr = $_GET['trstr'];
         if ($share_type != 'timeline' && $share_type != 'appMsg') {
-            $this->log("WxShare: type wrong");
+            $this->log("WxShare: type wrong", LOG_WARNING);
             return;
         }
         $type = $share_type == 'timeline' ? 1 : 0;
