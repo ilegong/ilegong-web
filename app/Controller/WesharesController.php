@@ -3,7 +3,7 @@
 class WesharesController extends AppController
 {
     var $uses =
-        array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem','WxShare','ShareTrackLog',
+        array('WeshareProduct', 'Weshare', 'WeshareAddress', 'Order', 'Cart', 'User', 'OrderConsignees', 'Oauthbind', 'SharedOffer', 'CouponItem', 'WxShare', 'ShareTrackLog',
             'SharerShipOption', 'WeshareShipSetting', 'OfflineStore', 'Comment', 'RebateTrackLog', 'ProxyRebatePercent', 'ShareUserBind', 'UserSubReason', 'ShareFavourableConfig', 'ShareAuthority');
 
     var $query_user_fields = array('id', 'nickname', 'image', 'wx_subscribe_status', 'description', 'is_proxy', 'avatar');
@@ -66,39 +66,20 @@ class WesharesController extends AppController
         die;
     }
 
-    public function read_count_api($id,$page=1)
+    public function read_count_api($id, $page = 1)
     {
-        $limit = 5;
-        $query = "SELECT u.nickname,s.click_time FROM cake_share_track_logs s LEFT JOIN cake_users u ON s.clicker = u.id WHERE s.data_id ={$id} ORDER BY s.id DESC LIMIT ".($page-1)*$limit.",{$limit}";
-        $share_list = $this->ShareTrackLog->query($query);
+        $this->WxShareStatistics = $this->Components->load('WxShareStatistics');
+        $res = $this->WxShareStatistics->getWeshareReadList($id, $page);
         header('Content-type: application/json');
-        $res = [];
-        foreach ($share_list as $item) {
-            $res[] = [
-                'nickname' => $item['u']['nickname'] ? $item['u']['nickname'] : '--',
-                'created' => date('Y-m-d H:i:s' , $item['s']['click_time'])
-            ];
-        }
         echo json_encode($res);
         die;
     }
 
-    public function share_count_api($id,$page=1)
+    public function share_count_api($id, $page = 1)
     {
-        $limit = 5;
-        $query = "SELECT u.nickname,s.created,s.created FROM cake_wx_shares s LEFT JOIN cake_users u ON s.share_id = u.id WHERE s.data_id = {$id} ORDER BY s.id DESC LIMIT ".($page-1)*$limit.",{$limit}";
-        $read_list = $this->WxShare->query($query);
+        $this->WxShareStatistics = $this->Components->load('WxShareStatistics');
+        $res = $this->WxShareStatistics->getWeshareForwardList($id, $page);
         header('Content-type: application/json');
-        $res = [];
-        foreach ($read_list as $item) {
-            $read_count_tmp = $this->WxShare->query('SELECT count(1) AS total FROM cake_share_track_logs WHERE data_id = '.$id .' AND share_time = '.$item['s']['created']);
-
-            $res[] = [
-                'nickname' => $item['u']['nickname'] ? $item['u']['nickname'] : '--',
-                'created' => date('Y-m-d H:i:s' , $item['s']['created']),
-                'read_count' => $read_count_tmp[0][0]['total']
-            ];
-        }
         echo json_encode($res);
         die;
     }
@@ -117,19 +98,20 @@ class WesharesController extends AppController
     {
         $this->WxShareStatistics = $this->Components->load('WxShareStatistics');
         list($weshare, $share_count) = $this->WxShareStatistics->getWeshareForwardData($id);
-        $this->set('weshare',$weshare);
-        $this->set('share_count',$share_count);
+        $this->set('weshare', $weshare);
+        $this->set('share_count', $share_count);
     }
 
     public function read_count($id)
     {
         $this->WxShareStatistics = $this->Components->load('WxShareStatistics');
         list($weshare, $read_count) = $this->WxShareStatistics->getWeshareReadData($id);
-        $this->set('weshare',$weshare);
-        $this->set('read_count',$read_count);
+        $this->set('weshare', $weshare);
+        $this->set('read_count', $read_count);
     }
 
-    public function coupons(){
+    public function coupons()
+    {
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
             $this->redirect('/');
@@ -160,7 +142,8 @@ class WesharesController extends AppController
     }
 
 
-    public function entrance(){
+    public function entrance()
+    {
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
             $this->redirect('/users/login.html?referer=/weshares/entrance');
@@ -300,7 +283,8 @@ class WesharesController extends AppController
         return null;
     }
 
-    public function pay_result($orderId){
+    public function pay_result($orderId)
+    {
         $uid = $this->currentUser['id'];
         $orderInfo = $this->Order->find('first', [
             'conditions' => ['id' => $orderId, 'creator' => $uid, 'type' => ORDER_TYPE_WESHARE_BUY]
@@ -735,7 +719,7 @@ class WesharesController extends AppController
             $this->log('Create order for ' . $uid . ' with weshare ' . $weshareId . ' successfully, order id ' . $orderId, LOG_INFO);
             $dataSource->commit();
             try {
-                add_logs_to_es(["index" => "event_pay_begin", "type" => "pay_begin", "user_id" => $uid, "order_id" => $orderId, "total_price" => get_format_number($totalPrice/100), "weshare_id" => $weshareId, "brand_id" => $weshareCreator]);
+                add_logs_to_es(["index" => "event_pay_begin", "type" => "pay_begin", "user_id" => $uid, "order_id" => $orderId, "total_price" => get_format_number($totalPrice / 100), "weshare_id" => $weshareId, "brand_id" => $weshareCreator]);
             } catch (Exception $e) {
                 $this->log('add es log error when make order');
             }
@@ -930,7 +914,7 @@ class WesharesController extends AppController
         exit();
     }
 
-    public function search_shares_api($page=1)
+    public function search_shares_api($page = 1)
     {
         $keyword = $_REQUEST['keyword'];
         $uid = $this->currentUser['id'];
@@ -940,7 +924,8 @@ class WesharesController extends AppController
         exit();
     }
 
-    private function combine_share_list_data($shares){
+    private function combine_share_list_data($shares)
+    {
         $share_ids = Hash::extract($shares, '{n}.Weshare.id');
         $share_list = [];
         if (!empty($share_ids)) {
@@ -1010,7 +995,8 @@ class WesharesController extends AppController
         $this->set('title', $title);
     }
 
-    public function search_my_shares(){
+    public function search_my_shares()
+    {
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
             $this->redirect('/users/login');
@@ -1125,7 +1111,7 @@ class WesharesController extends AppController
             "index" => "event_get_self_info",
             "type" => "get_self_info"
         ];
-        
+
         add_logs_to_es($log);
 
         $user_summary = $this->WeshareBuy->get_user_share_summary($uid);
@@ -1705,7 +1691,7 @@ class WesharesController extends AppController
         $shareIds = json_decode($_REQUEST['shareIds']);
 
         $summaries = [];
-        if(!empty($shareIds)){
+        if (!empty($shareIds)) {
             foreach ($shareIds as $shareId) {
                 $summary = $this->ShareUtil->get_index_product_summary($shareId);
                 $summary['share_id'] = $shareId;
@@ -2232,7 +2218,8 @@ class WesharesController extends AppController
         }
     }
 
-    private function set_weixin_params_for_pay_result($creator, $weshare, $shared_offer_id){
+    private function set_weixin_params_for_pay_result($creator, $weshare, $shared_offer_id)
+    {
         $detail_url = WX_HOST . '/weshares/view/' . $weshare['id'] . '?shared_offer_id=' . $shared_offer_id;
         $weixin_share_str = $this->get_weixin_share_str($weshare['id']);
         $image = empty($weshare['default_image']) ? get_user_avatar($creator) : $weshare['default_image'];

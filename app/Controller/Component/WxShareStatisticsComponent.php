@@ -7,7 +7,88 @@ class WxShareStatisticsComponent extends Component
     static $SHARE_TYPE_WESHARE = 'wsid';
     static $LIMIT = 5;
 
-    private function getSimpleWeshareData($weshareId){
+
+    public function getWeshareReadList($weshareId, $page)
+    {
+        $this->injectModel();
+        $list = $this->ShareTrackLog->find('all', [
+            'conditions' => [
+                'ShareTrackLog.data_id' => $weshareId,
+                'ShareTrackLog.data_type' => self::$SHARE_TYPE_WESHARE
+            ],
+            'joins' => [
+                [
+                    'table' => 'cake_users',
+                    'alias' => 'User',
+                    'type' => 'left',
+                    'conditions' => 'User.id = ShareTrackLog.clicker'
+                ]
+            ],
+            'limit' => self::$LIMIT,
+            'page' => $page,
+            'fields' => ['ShareTrackLog.click_time', 'ShareTrackLog.clicker', 'User.nickname']
+        ]);
+        $res = [];
+        foreach ($list as $item) {
+            $res[] = [
+                'nickname' => $item['User']['nickname'] ? $item['User']['nickname'] : '--',
+                'created' => date('Y-m-d H:i:s' , $item['ShareTrackLog']['click_time'])
+            ];
+        }
+        return $res;
+    }
+
+    public function getWeshareForwardList($weshareId, $page)
+    {
+        $this->injectModel();
+
+        $list = $this->WxShare->find('all', [
+            'conditions' => [
+                'WxShare.data_id' => $weshareId,
+                'WxShare.data_type' => self::$SHARE_TYPE_WESHARE
+            ],
+            'joins' => [
+                [
+                    'table' => 'cake_users',
+                    'alias' => 'User',
+                    'type' => 'left',
+                    'conditions' => 'User.id = WxShare.sharer'
+                ]
+            ],
+            'limit' => self::$LIMIT,
+            'page' => $page,
+            'fields' => ['WxShare.created', 'WxShare.sharer', 'User.nickname']
+        ]);
+        $res = [];
+
+        $uids = Hash::extract($list, '{n}.WxShare.sharer');
+
+        $readCountMap = $this->ShareTrackLog->find('all', [
+            'conditions' => [
+                'data_id' => $weshareId,
+                'data_type' => self::$SHARE_TYPE_WESHARE,
+                'sharer' => $uids
+            ],
+
+            'group' => 'sharer',
+            'fields' => ['sharer', 'count(`id`) as `rc`']
+        ]);
+
+        $readCountMap = Hash::combine($readCountMap, '{n}.ShareTrackLog.sharer', '{n}.0.rc');
+
+        foreach ($list as $item) {
+            $readCount = $readCountMap[$item['WxShare']['sharer']];
+            $res[] = [
+                'nickname' => $item['User']['nickname'] ? $item['User']['nickname'] : '--',
+                'created' => date('Y-m-d H:i:s' , $item['WxShare']['created']),
+                'read_count' => $readCount
+            ];
+        }
+        return $res;
+    }
+
+    private function getSimpleWeshareData($weshareId)
+    {
         $weshare = $this->Weshare->find('first', [
             'conditions' => [
                 'id' => $weshareId
@@ -17,30 +98,43 @@ class WxShareStatisticsComponent extends Component
         return $weshare;
     }
 
-    public function getWeshareForwardData($weshareId){
-        $this->injectModel();
-        $weshare = $this->getSimpleWeshareData($weshareId);
+    private function getWeshareForwardCount($weshareId)
+    {
         $share_count = $this->WxShare->find('count', [
             'conditions' => [
                 'data_type' => self::$SHARE_TYPE_WESHARE,
                 'data_id' => $weshareId
             ]
         ]);
-
-        return [$weshare, $share_count];
-
+        return $share_count;
     }
 
-
-    public function getWeshareReadData($weshareId){
-        $this->injectModel();
-        $weshare = $this->getSimpleWeshareData($weshareId);
+    private function getWeshareReadCount($weshareId)
+    {
         $read_count = $this->ShareTrackLog->find('count', [
             'conditions' => [
                 'data_type' => self::$SHARE_TYPE_WESHARE,
                 'data_id' => $weshareId
             ]
         ]);
+        return $read_count;
+    }
+
+    public function getWeshareForwardData($weshareId)
+    {
+        $this->injectModel();
+        $weshare = $this->getSimpleWeshareData($weshareId);
+        $share_count = $this->getWeshareForwardCount($weshareId);
+        return [$weshare, $share_count];
+
+    }
+
+
+    public function getWeshareReadData($weshareId)
+    {
+        $this->injectModel();
+        $weshare = $this->getSimpleWeshareData($weshareId);
+        $read_count = $this->getWeshareReadCount($weshareId);
         return [$weshare, $read_count];
     }
 
@@ -92,7 +186,7 @@ class WxShareStatisticsComponent extends Component
             'limit' => self::$LIMIT,
             'page' => $page,
             'order' => ['Weshare.id DESC'],
-            'fields' => ['Weshare.id', 'Weshare.title', 'Weshare.default_image', 'Weshare.creator','Weshare.created']
+            'fields' => ['Weshare.id', 'Weshare.title', 'Weshare.default_image', 'Weshare.creator', 'Weshare.created']
         ]);
 
         if ($weshares) {
