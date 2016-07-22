@@ -4,6 +4,29 @@ class UserFansComponent extends Component{
 
     static $PAGE_LIMIT = 50;
 
+    public function get_fans_new($uid, $type = 0,$page = 1, $nickname = null, $limit = 0){
+        $limit = $limit == 0 ? self::$PAGE_LIMIT : $limit;
+        $queryCond = [
+            'conditions' => [
+                'UserRelation.user_id' => $uid,
+                'UserRelation.deleted' => DELETED_NO,
+                'UserRelation.is_own' => $type
+            ],
+            'fields' => ['UserRelation.*']];
+        if (!empty($query)) {
+            $queryCond['joins'] = [[
+                'table' => 'users',
+                'alias' => 'User',
+                'type' => 'INNER',
+                'conditions' => [
+                    'User.id = UserRelation.follow_id',
+                ]
+            ]];
+            $queryCond['conditions']['User.nickname like'] = '%' . $nickname . '%';
+        }
+        return $this->process_query_data($queryCond, 'follow_id', $uid, $page);
+    }
+
     public function get_fans($uid, $page = 1, $query = null, $limit = 0){
         $limit = $limit == 0 ? self::$PAGE_LIMIT : $limit;
         $queryCond = ['conditions' => ['UserRelation.user_id' => $uid, 'UserRelation.deleted' => DELETED_NO], 'fields' => ['UserRelation.*']];

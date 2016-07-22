@@ -1,61 +1,100 @@
-<div class="user-list-page" ng-controller="UserListCtrl as vm" id="userListView" data-uid="{{$uid}}" data-me="{{$me}}" data-type="{{$type}}" ng-click="clickPage();">
-    <div class="menu-top refer-back-bg">
-        {{$title}}
-        <a href="/weshares/get_self_info">
+<div class="user-list-page" ng-controller="UserListCtrl as vm" id="userListView" data-user_id="{{$userId}}" data-total_self="{{$total_self}}" data-total_comm="{{$total_comm}}" data-type="{{$type}}" ng-click="clickPage();">
+    <div class="fans-back-bg">
+        <ul class="clearfix">
+            <li ng-class="{'cur-fans':vm.type == 1}" ng-click="vm.tab(1)">自有粉丝</li>
+            <li ng-class="{'cur-fans':vm.type == 0}" ng-click="vm.tab(0)">平台粉丝</li>
+        </ul>
+        <a href="mine-fans.html" class="back">
             <img src="{{$STATIC_HOST}}/static/weshares/images/back.png"/>
             <label>返回</label>
         </a>
+        <a href="/weshares/mine_fansrule.html" class="rule">粉丝规则</a>
     </div>
-
     <div class="fans_search has-menu-top">
         <input type="text" placeholder="请输入昵称搜索" ng-model="vm.searchWord"/>
         <a ng-click="vm.search()"><img src="{{$STATIC_HOST}}/static/weshares/images/searchicon.png" /></a>
     </div>
+    <p ng-bind="'共有'+vm.total+'个粉丝'" ng-hide="vm.queryWord > ''"></p>
     {{literal}}
-    <div infinite-scroll='vm.loadData()' infinite-scroll-disabled='vm.noMoreData||vm.loadingData'
-         infinite-scroll-distance='1'>
-        <div class="user" ng-repeat="user in vm.users">
+    <div infinite-scroll='vm.loadData(0)' infinite-scroll-disabled='vm.self.over||vm.loadingData'
+         infinite-scroll-distance='0' ng-hide="vm.type == 0">
+        <div class="user" ng-repeat="user in vm.self.users">
             <!--个人信息关注TA-->
             <ul class="share-header clearfix">
                 <li class="fl">
-                    <a href="/weshares/get_other_info/{{user['User']['id']}}">
-                        <img class="avatar radius50" lazy-src="{{user['User']['image']}}" onerror="this.src='http://static.tongshijia.com/avatar/s/default.jpg'">
+                    <a href="/weshares/get_other_info/{{user['id']}}">
+                        <img class="avatar radius50" lazy-src="{{user['avatar']}}" onerror="this.src='http://static.tongshijia.com/avatar/s/default.jpg'">
                     </a>
                 </li>
-                <li class="proxy-level" ng-bind="'L'+user.User.level" ng-if="user.User.level>-1"></li>
+
                 <li class="fl">
-                    <a class="nickname" href="/weshares/user_share_info/{{user['User']['id']}}" ng-bind="user.User.nickname"></a>
+                    <a class="nickname" href="/weshares/user_share_info/{{user['id']}}" ng-bind="user.nickname"></a>
                     <dl class="label-container clearfix">
                         <dd class="fl label">
-                            <span ng-bind="user.User.label" ng-if="!_.isEmpty(user.User.label)"></span>
-                            <span ng-if="_.isEmpty(user.User.label)">TA是个吃货游客~~</span>
+                            <span ng-bind="'TA是个'+user.label"></span>
                         </dd>
                     </dl>
                 </li>
-                <li class="fr simple-btn subscription" ng-controller="SubscriptionController as sub">
-                    <div class="subscribed" ng-class="{'no': !sub.isSubscribed(user.User.id)}"
-                         ng-click="sub.subscribe(user.User.id)">关注TA
+                <li class="fr subscription" ng-controller="SubscriptionController as sub">
+                    <div class="simple-btn subscribed" ng-class="{'no': !sub.isSubscribed(user.id)}"
+                         ng-click="sub.subscribe(user.id)">关注TA
                     </div>
-                    <div class="subscribed" ng-class="{'yes': sub.isSubscribed(user.User.id)}" data-uid="{{user.User.id}}"
-                         ng-click="sub.clickSubscribedBtn(user.User.id, $event)">
+                    <div class="simple-btn subscribed" ng-class="{'yes': sub.isSubscribed(user.id)}"
+                         ng-click="sub.clickSubscribedBtn(user.id, $event)">
                         <a href="#X" class="clearfix">
                             <span class="fl">
                                 已关注
                                 <i class="iconfont icon-angledown" style="font-size: 12px;"></i>
                             </span>
-                            <label class="fl">
-                                <i></i>
-                                <em></em>
-                            </label>
                         </a>
-                        <a class="unfollow" ng-show="sub.showUnSubscribeBtn"
-                           ng-click="sub.unSubscribe(user.User.id)">取消关注</a>
+                        <a class="simple-btn unfollow" ng-show="sub.showUnSubscribeBtn"
+                           ng-click="sub.unSubscribe(user.id)">取消关注</a>
                     </div>
                 </li>
             </ul>
         </div>
         <div style="text-align: center;color: #ffa200;margin-bottom: 10px;" ng-show='vm.loadingData'>加载中...</div>
-        <div style="text-align: center;color: #999;margin-bottom: 10px;" ng-show='vm.noMoreData'>没有更多数据</div>
+        <div style="text-align: center;color: #999;margin-bottom: 10px;" ng-show='vm.self.over'>没有更多数据</div>
+    </div>
+    <div infinite-scroll='vm.loadData(1)' infinite-scroll-disabled='vm.comm.over||vm.loadingData'
+         infinite-scroll-distance='0'  ng-hide="vm.type == 1">
+        <div class="user" ng-repeat="user in vm.comm.users">
+            <!--个人信息关注TA-->
+            <ul class="share-header clearfix">
+                <li class="fl">
+                    <a href="/weshares/get_other_info/{{user['id']}}">
+                        <img class="avatar radius50" lazy-src="{{user['avatar']}}" onerror="this.src='http://static.tongshijia.com/avatar/s/default.jpg'">
+                    </a>
+                </li>
+
+                <li class="fl">
+                    <a class="nickname" href="/weshares/user_share_info/{{user['id']}}" ng-bind="user.nickname"></a>
+                    <dl class="label-container clearfix">
+                        <dd class="fl label">
+                            <span ng-bind="'TA是个'+user.label"></span>
+                        </dd>
+                    </dl>
+                </li>
+                <li class="fr subscription" ng-controller="SubscriptionController as sub">
+                    <div class="simple-btn subscribed" ng-class="{'no': !sub.isSubscribed(user.id)}"
+                         ng-click="sub.subscribe(user.id)">关注TA
+                    </div>
+                    <div class="simple-btn subscribed" ng-class="{'yes': sub.isSubscribed(user.id)}"
+                         ng-click="sub.clickSubscribedBtn(user.id, $event)">
+                        <a href="#X" class="clearfix">
+                            <span class="fl">
+                                已关注
+                                <i class="iconfont icon-angledown" style="font-size: 12px;"></i>
+                            </span>
+                        </a>
+                        <a class="simple-btn unfollow" ng-show="sub.showUnSubscribeBtn"
+                           ng-click="sub.unSubscribe(user.id)">取消关注</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div style="text-align: center;color: #ffa200;margin-bottom: 10px;" ng-show='vm.loadingData'>加载中...</div>
+        <div style="text-align: center;color: #999;margin-bottom: 10px;" ng-show='vm.comm.over'>没有更多数据</div>
     </div>
     {{/literal}}
 </div>
@@ -64,6 +103,11 @@
     $this->assign('title','朋友说-'.$title);
 ?>
 
+<?php
+$this->Html->css(array(
+$STATIC_HOST.'/static/weshares/css/fans-list.min.css?v2.5.14'
+), null, array('inline' => false));
+?>
 <?php
 $this->Html->script(array(
 $STATIC_HOST.'/static/weshares/js/user-info.min.js?v2.5.14'
