@@ -14,8 +14,7 @@
         <ul rn-carousel class="image-container" rn-carousel-index="carouselIndex">
             {{loop $banners $index $banner_item}}
                 <li class="image-cover">
-                    <a  href="{{$banner_item['link']}}"
-                       onclick="_hmt.push(['_trackEvent', 'weshares', 'click', 'banner{{$index}}'])">
+                    <a  href="{{$banner_item['link']}}">
                         <img class="image" src="{{$banner_item['banner']}}" alt="{{$banner_item['title']}}"/>
                     </a>
                 </li>
@@ -35,11 +34,11 @@
         {{loop $index_products $key $index_product}}
 
         {{if $tag==0&&$key==1}}
-            <a href="/weshares/index/2.html" class="class-banner" onclick="_hmt.push(['_trackEvent', 'weshares', 'click', 'banner-spec-1'])"><img src="{{$STATIC_HOST}}/static/img/container-banner-1.jpg"/></a>
+            <a href="/weshares/index/2.html" class="class-banner"><img src="{{$STATIC_HOST}}/static/img/container-banner-1.jpg"/></a>
         {{/if}}
 
         {{if $tag==0&&$key==3}}
-            <a href="/weshares/index/3.html" class="class-banner" onclick="_hmt.push(['_trackEvent', 'weshares', 'click', 'banner-spec-2'])"><img src="{{$STATIC_HOST}}/static/img/container-banner-2.jpg"/></a>
+            <a href="/weshares/index/3.html" class="class-banner"><img src="{{$STATIC_HOST}}/static/img/container-banner-2.jpg"/></a>
         {{/if}}
 
         <?php

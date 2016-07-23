@@ -24,7 +24,7 @@
             </li>
             <li class="fr subscription" ng-controller="SubscriptionController as sub">
                 <div class="simple-btn subscribed" ng-class="{'no': !sub.isSubscribed({{$detail['creator']['id']}})}"
-                     ng-click="sub.subscribe({{$detail['creator']['id']}})" onclick="_hmt.push(['_trackEvent', 'sub-pay', 'click', 'sub'])">关注TA
+                     ng-click="sub.subscribe({{$detail['creator']['id']}})">关注TA
                 </div>
                 <div class="simple-btn subscribed" ng-class="{'yes': sub.isSubscribed({{$detail['creator']['id']}})}"
                      ng-click="sub.clickSubscribedBtn({{$detail['creator']['id']}}, $event)">
@@ -35,7 +35,7 @@
                                 </span>
                     </a>
                     <a class="simple-btn unfollow" ng-show="sub.showUnSubscribeBtn"
-                       ng-click="sub.unSubscribe({{$detail['creator']['id']}})" onclick="_hmt.push(['_trackEvent', 'sub-pay', 'click', 'unsub'])">取消关注</a>
+                       ng-click="sub.unSubscribe({{$detail['creator']['id']}})">取消关注</a>
                 </div>
             </li>
         </ul>
