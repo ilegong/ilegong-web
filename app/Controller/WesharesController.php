@@ -759,7 +759,7 @@ class WesharesController extends AppController
             'total_all_price' => 'if(total_all_price - ' . $reduced . ' < 0, 0, total_all_price - ' . $reduced . ')');
         if ($this->Order->updateAll($toUpdate, array('id' => $order_id, 'status' => ORDER_STATUS_WAITING_PAY))) {
             $this->loadModel("RebateLog");
-            $this->RebateLog->save_rebate_log($uid, $rebate, $order_id, USER_REBATE_MONEY_USE);
+            $this->RebateLog->save_rebate_log($uid, -$rebate, $order_id, USER_REBATE_MONEY_USE);
             $this->User->add_rebate_money($uid, -$rebate);
         }
     }
