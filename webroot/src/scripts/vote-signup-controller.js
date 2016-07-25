@@ -13,16 +13,12 @@
       vm.candidate = {
         title: '',
         mobileNum: '',
-        images: [],
+        images: ['http://static.tongshijia.com/images/index/2016/07/19/8d65ff6e-4d87-11e6-b8d8-00163e1600b6.jpg'],
         description: ''
       };
     }
 
     function signup(eventId) {
-      if (vm.processing) {
-        return;
-      }
-
       if (Utils.isBlank(vm.candidate.title)) {
         alert('请输入作品名称');
         return false;
@@ -44,6 +40,9 @@
         return false;
       }
 
+      if (vm.processing) {
+        return;
+      }
 
       vm.processing = true;
       var data = {
@@ -77,9 +76,8 @@
           alert('已经报过名了', window.location.href = '/vote/candidate_detail/' + candidateId + '/' + eventId);
         }
       }).error(function () {
-        if (data['reason'] == 'server error') {
-          alert('上传失败请联系客服');
-        }
+        vm.processing = false;
+        alert('上传失败请联系客服');
       });
     }
 
