@@ -72,6 +72,12 @@ var all_js = [
       'webroot/src/scripts/user-list-controller.js',
     ],
     dist: 'webroot/static/weshares/js/'
+  },{
+    name: 'sub-list.min.js',
+    sources: [
+      'webroot/src/scripts/sub-list-controller.js',
+    ],
+    dist: 'webroot/static/weshares/js/'
   }, {
     name: 'get-user-info.min.js',
     sources: [

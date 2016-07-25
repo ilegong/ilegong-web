@@ -1121,7 +1121,7 @@ class WesharesController extends AppController
         $this->set('rebate_money', $rebate_money);
         $this->set('uid', $uid);
     }
-    
+
     //    某个团长推荐的分享
     public function get_recommend_weshares($proxy_id)
     {
@@ -2158,7 +2158,7 @@ class WesharesController extends AppController
         $this->set('uid', $uid);
         $this->set('type', 1);
         $this->set('title', '我关注的');
-        $this->render('u_list');
+        //$this->render('u_list');
     }
 
     public function get_fans_data($type = 1,$page = 1)
@@ -2171,7 +2171,7 @@ class WesharesController extends AppController
         $nickname = $_REQUEST['query'];
         $condition = "";
         $limit = 30;
-        //$uid = 141;
+        //$uid = 559795;
         if($nickname)
         {
             $condition = " AND u.nickname like '%{$nickname}%' ";
