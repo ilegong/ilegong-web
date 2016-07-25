@@ -13,7 +13,7 @@
       vm.candidate = {
         title: '',
         mobileNum: '',
-        images: ['http://static.tongshijia.com/images/2016/04/21/c0c73bb6-0787-11e6-ab0d-00163e1600b6.jpg'],
+        images: [],
         description: ''
       };
     }
