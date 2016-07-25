@@ -47,38 +47,38 @@ class UtilController extends AppController {
      * @return array
      * 获取用户粉丝
      */
-    public function load_user_fans($user_id) {
-        $this->autoRender = false;
-        $shares = $this->Weshare->find('all', array(
-            'conditions' => array(
-                'creator' => $user_id
-            ),
-            'limit' => 100
-        ));
-        $share_ids = Hash::extract($shares, '{n}.Weshare.id');
-
-        $orders_group_by_user = $this->Order->find('all', array(
-            'conditions' => array(
-                'member_id' => $share_ids,
-                'ship_mark' => 'self_ziti'
-            ),
-            'limit' => 1000,
-            'group' => array('Order.creator')
-        ));
-
-        $join_users = $this->CandidateEvent->find('all', array(
-            'conditions' => array(
-                'event_id' => 6,
-            ),
-            'limit' => 500
-        ));
-        $order_user_ids = Hash::extract($orders_group_by_user, '{n}.Order.creator');
-        $join_user_ids = Hash::extract($join_users, '{n}.CandidateEvent.user_id');
-        $diff_user_ids = array_diff($order_user_ids, $join_user_ids);
-        //echo json_encode(array('count' => count($diff_user_ids), 'user_ids' => $diff_user_ids));
-        $this->set('user_ids', $diff_user_ids);
-        return $diff_user_ids;
-    }
+//    public function load_user_fans($user_id) {
+//        $this->autoRender = false;
+//        $shares = $this->Weshare->find('all', array(
+//            'conditions' => array(
+//                'creator' => $user_id
+//            ),
+//            'limit' => 100
+//        ));
+//        $share_ids = Hash::extract($shares, '{n}.Weshare.id');
+//
+//        $orders_group_by_user = $this->Order->find('all', array(
+//            'conditions' => array(
+//                'member_id' => $share_ids,
+//                'ship_mark' => 'self_ziti'
+//            ),
+//            'limit' => 1000,
+//            'group' => array('Order.creator')
+//        ));
+//
+//        $join_users = $this->CandidateEvent->find('all', array(
+//            'conditions' => array(
+//                'event_id' => 6,
+//            ),
+//            'limit' => 500
+//        ));
+//        $order_user_ids = Hash::extract($orders_group_by_user, '{n}.Order.creator');
+//        $join_user_ids = Hash::extract($join_users, '{n}.CandidateEvent.user_id');
+//        $diff_user_ids = array_diff($order_user_ids, $join_user_ids);
+//        //echo json_encode(array('count' => count($diff_user_ids), 'user_ids' => $diff_user_ids));
+//        $this->set('user_ids', $diff_user_ids);
+//        return $diff_user_ids;
+//    }
 
     /**
      * @param $openId
