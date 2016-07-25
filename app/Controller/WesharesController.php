@@ -1121,7 +1121,7 @@ class WesharesController extends AppController
         $this->set('rebate_money', $rebate_money);
         $this->set('uid', $uid);
     }
-    
+
     //    某个团长推荐的分享
     public function get_recommend_weshares($proxy_id)
     {
