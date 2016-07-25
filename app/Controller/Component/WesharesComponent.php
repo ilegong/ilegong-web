@@ -89,6 +89,7 @@ class WesharesComponent extends Component
         }
         $is_me = $uid == $weshareInfo['creator']['id'];
         $current_user = [];
+        $user_rebate_total = 0;
         if (!empty($uid)) {
             $userM = ClassRegistry::init('User');
             $current_user = $userM->find('first', array(
@@ -96,7 +97,7 @@ class WesharesComponent extends Component
                     'id' => $uid
                 ),
                 'recursive' => 1,
-                'fields' => ['id', 'nickname', 'image', 'wx_subscribe_status', 'is_proxy', 'avatar', 'mobilephone', 'payment'],
+                'fields' => ['id', 'nickname', 'image', 'wx_subscribe_status', 'is_proxy', 'avatar', 'mobilephone', 'payment', 'rebate_money'],
             ));
             $current_user = $current_user['User'];
             //reset user image
@@ -104,6 +105,7 @@ class WesharesComponent extends Component
             $current_user_level_data = $this->ShareUtil->get_user_level($uid);
             $current_user['level'] = $current_user_level_data;
             $current_user['is_proxy'] = $current_user_level_data['data_value'] >= PROXY_USER_LEVEL_VALUE ? 1 : 0;
+            $user_rebate_total = $current_user['rebate_money'];
         }
         if (!$is_me) {
             $sub_status = $this->WeshareBuy->check_user_subscribe($weshareInfo['creator']['id'], $uid);
@@ -134,7 +136,8 @@ class WesharesComponent extends Component
             'is_manage' => $is_manage_user,
             'can_manage_share' => $can_manage_share,
             'can_edit_share' => $can_edit_share,
-            'share_summery' => $share_summery
+            'share_summery' => $share_summery,
+            'user_rebate_total' => $user_rebate_total
         ];
     }
 

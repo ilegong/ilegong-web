@@ -30,7 +30,7 @@
         vm.validateShipInfo = validateShipInfo;
         vm.validateOrderData = validateOrderData;
         vm.submitOrder = submitOrder;
-        vm.useCoupons = useCoupons;
+        //vm.useCoupons = useCoupons;
         vm.confirmReceived = confirmReceived;
         vm.toUserShareInfo = toUserShareInfo;
         vm.toShareDetailView = toShareDetailView;
@@ -283,10 +283,12 @@
         }
 
         function viewImage(url) {
-            wx.previewImage({
-                current: url,
-                urls: vm.weshare.images
-            });
+            if(wx){
+                wx.previewImage({
+                    current: url,
+                    urls: vm.weshare.images
+                });
+            }
         }
 
         function getConsigneeInfo(order) {
@@ -296,6 +298,19 @@
             return _.reject([order.consignee_name, order.consignee_mobilephone], function (e) {
                 return _.isEmpty(e)
             }).join(',');
+        }
+
+        function calCanUserRebate(totalPrice){
+            if (vm.rebateTotal == 0) {
+                vm.canUseRebateTotal = 0;
+            } else {
+                totalPrice = totalPrice / 100;
+                var rebateMoney = vm.rebateTotal / 100;
+                if (rebateMoney > totalPrice / 2) {
+                    rebateMoney = totalPrice / 2;
+                }
+                vm.canUseRebateTotal = parseInt((rebateMoney * 100) + '');
+            }
         }
 
         function calOrderTotalPrice() {
@@ -316,6 +331,10 @@
                 }
                 vm.shipFee = parseInt(getShipFee());
                 vm.shipSetId = getShipSetId();
+                calCanUserRebate(totalPrice);
+                if (vm.useRebate == '1') {
+                    totalPrice -= vm.canUseRebateTotal;
+                }
                 totalPrice += vm.shipFee;
                 vm.orderPayTotalPrice = totalPrice / 100;
             } else {
@@ -624,31 +643,31 @@
             });
         }
 
-        function useCoupons() {
-            if(vm.useCouponCode == null || vm.myCoupons || (vm.weshare.id!=4507))
-            {
-                return false;
-            }
-            $http.post('/weshares/get_useful_coupons', {'sharer':vm.weshare.creator.id,'couponCode': vm.useCouponCode}).success(function (data) {
-                if (data.ok == 0) {
-                    vm.userCouponReduce = data.num;
-                    vm.myCoupons = true;
-                    vm.orderPayTotalPrice -= data.num/100;
-                    vm.useCouponId = data.useCouponId;
-                    return;
-                    //pay
-                } else {
-                    if (data['msg']) {
-                        alert(data['msg']);
-                    } else {
-                        alert('提交失败.请联系客服..');
-                    }
-                }
-            }).error(function () {
-                vm.submitProcessing = false;
-            });
-            console.log(vm.coupon_code);
-        }
+        //function useCoupons() {
+        //    if(vm.useCouponCode == null || vm.myCoupons || (vm.weshare.id!=4507))
+        //    {
+        //        return false;
+        //    }
+        //    $http.post('/weshares/get_useful_coupons', {'sharer':vm.weshare.creator.id,'couponCode': vm.useCouponCode}).success(function (data) {
+        //        if (data.ok == 0) {
+        //            vm.userCouponReduce = data.num;
+        //            vm.myCoupons = true;
+        //            vm.orderPayTotalPrice -= data.num/100;
+        //            vm.useCouponId = data.useCouponId;
+        //            return;
+        //            //pay
+        //        } else {
+        //            if (data['msg']) {
+        //                alert(data['msg']);
+        //            } else {
+        //                alert('提交失败.请联系客服..');
+        //            }
+        //        }
+        //    }).error(function () {
+        //        vm.submitProcessing = false;
+        //    });
+        //    console.log(vm.coupon_code);
+        //}
 
 
         //重新开团
@@ -1170,6 +1189,7 @@
             vm.currentUser = data['current_user'] || {};
             vm.consignee = data['consignee'];
             vm.myCoupons = data['my_coupons'];
+            vm.rebateTotal = parseInt(data['user_rebate_total']);
             vm.weshareSettings = data['weshare_ship_settings'];
             if(data['sub_status']){
                 $rootScope.proxies.push(parseInt(vm.weshare.creator.id));

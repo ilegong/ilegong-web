@@ -70,9 +70,9 @@
         <ul class="rebate-balance clearfix">
             <li class="fl">
                 <label>使用我的余额</label>
-                <em>当前可使用余额<span>￥100.00</span></em>
+                <em>当前可使用余额<span ng-bind="vm.canUseRebateTotal/100 | currency:'￥'"></span></em>
             </li>
-            <li class="fr"><input type="checkbox" id="checkbox_rebate" class="chk_toggle" /><label for="checkbox_rebate"></label></li>
+            <li class="fr"><input type="checkbox" id="checkbox_rebate" class="chk_toggle" ng-model="vm.useRebate" ng-true-value="1" ng-false-value="0" ng-change="vm.calOrderTotalPrice()"/><label for="checkbox_rebate"></label></li>
         </ul>
     </div>
 
