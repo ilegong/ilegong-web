@@ -772,13 +772,9 @@ class WeshareBuyComponent extends Component
             //clean cache
             //$cache_key = SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $sharer_id . '_0';
             //$cache_key = SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $sharer_id . '_1';
-            Cache::write(SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $weshare_info['creator'] . '_0', '');
-            Cache::write(SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $weshare_info['creator'] . '_1', '');
+            delete_redis_data_by_key(SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $weshare_info['creator']);
+            delete_redis_data_by_key(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id);
             //SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId;
-            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_1_1', '');
-            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_0_1', '');
-            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_1_0', '');
-            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_0_0', '');
             $this->clear_user_share_order_data_cache(array($order_id), $share_id);
         }
         return array('success' => true, 'comment' => $comment['Comment'], 'comment_reply' => $commentReply['CommentReply'], 'order_id' => $order_id);
@@ -1671,10 +1667,7 @@ class WeshareBuyComponent extends Component
     {
         $orderM = ClassRegistry::init('Order');
         $orderM->update(array('business_remark' => "'" . $orderRemark . "'"), array('id' => $orderId));
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId . '_1_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId . '_0_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId . '_1_0', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId . '_0_0', '');
+        delete_redis_data_by_key(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId);
     }
 
     /**

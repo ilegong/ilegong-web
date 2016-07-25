@@ -2930,10 +2930,11 @@ function get_order_from_flag($from)
     return 0;
 }
 
-function delete_redis_data_by_key($key){
-
+function delete_redis_data_by_key($match){
     $redis = new Redis();
-
+    $redis->connect(REDIS_HOST);
+    $keys = $redis->keys('*'.$match.'*');
+    $redis->delete($keys);
 }
 
 //add logs

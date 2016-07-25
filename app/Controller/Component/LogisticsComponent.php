@@ -358,10 +358,7 @@ class LogisticsComponent extends Component {
         $orderM->updateAll(array('status' => ORDER_STATUS_RECEIVED, 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order_id));
         $cartM->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order_id));
         $weshare_id = $this->get_share_id_by_order_id($order_id);
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_0', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
+        delete_redis_data_by_key(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id);
         $this->WeshareBuy->clear_user_share_order_data_cache(array($order_id), $weshare_id);
     }
 

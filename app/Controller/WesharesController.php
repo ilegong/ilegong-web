@@ -1159,10 +1159,7 @@ class WesharesController extends AppController
         $weshare_id = $_REQUEST['weshare_id'];
         $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order_id, 'status' => ORDER_STATUS_PAID));
         $this->Cart->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order_id));
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_0', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
+        delete_redis_data_by_key(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id);
         $this->WeshareBuy->clear_user_share_order_data_cache(array($order_id), $weshare_id);
         echo json_encode(array('success' => true));
         return;
@@ -1232,10 +1229,7 @@ class WesharesController extends AppController
         $this->autoRender = false;
         $weshare_id = $_REQUEST['share_id'];
         $this->Weshare->updateAll(array('order_status' => WESHARE_ORDER_STATUS_SHIPPED), array('id' => $weshare_id, 'order_status' => WESHARE_ORDER_STATUS_WAIT_SHIP));
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_0', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
+        delete_redis_data_by_key(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id);
         echo json_encode(array('success' => true));
         return;
     }

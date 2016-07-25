@@ -1220,18 +1220,8 @@ class ShareUtilComponent extends Component
      */
     private function clear_share_cache($share_id, $share_creator)
     {
-        Cache::write(SHARE_ORDER_COUNT_SUM_CACHE_KEY . '_' . $share_id . '_' . $share_creator, '');
-        Cache::write(SHARE_BUY_SUMMERY_INFO_CACHE_KEY . '_' . $share_id, '');
-        Cache::write(SHARE_ORDER_COUNT_DATA_CACHE_KEY . '_' . $share_id, '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_1_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_0_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_1_0', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_0_0', '');
-        Cache::write(SHARE_OFFLINE_ADDRESS_SUMMERY_DATA_CACHE_KEY . '_' . $share_id, '');
-        Cache::write(SHARE_OFFLINE_ADDRESS_BUY_DATA_CACHE_KEY . '_' . $share_id, '');
-        Cache::write(SHARE_BUY_SUMMERY_INFO_CACHE_KEY . '_' . $share_id, '');
-        Cache::write(SHARE_COMMENT_COUNT_SUM_CACHE_KEY . '_' . $share_id . '_' . $share_creator, '');
-        Cache::write(USER_RECOMMEND_WESHARES_CACHE_KEY . '_' . $share_creator, '');
+        delete_redis_data_by_key('_' . $share_id);
+        delete_redis_data_by_key(USER_RECOMMEND_WESHARES_CACHE_KEY . '_' . $share_creator);
 //        //check should clear child share cache
         //param  $is_pin_tuan = false
 //        if ($is_pin_tuan) {
@@ -1861,10 +1851,7 @@ class ShareUtilComponent extends Component
             $remark = '分享快乐，信任无价，点击支付余款。';
             $this->Weixin->send_remedial_order_msg($order_creator_open_id, $title, $detail_url, abs($total_difference_price), $share_mobile, $remark);
             //clear cache
-            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $order['Order']['member_id'] . '_1_1', '');
-            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $order['Order']['member_id'] . '_0_1', '');
-            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $order['Order']['member_id'] . '_1_0', '');
-            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $order['Order']['member_id'] . '_0_0', '');
+            delete_redis_data_by_key(SHARE_ORDER_DATA_CACHE_KEY . '_' . $order['Order']['member_id']);
             return $total_difference_price;
         }
         return 0;
@@ -2585,10 +2572,7 @@ class ShareUtilComponent extends Component
         $cartM = ClassRegistry::init('Cart');
         $orderM->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'ship_type_name' => "'" . $ship_type_name . "'", 'ship_type' => $ship_company_id, 'ship_code' => "'" . $ship_code . "'", 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order_id, 'status' => ORDER_STATUS_PAID));
         $cartM->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order_id));
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_0', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
+        delete_redis_data_by_key(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id);
         $this->WeshareBuy->clear_user_share_order_data_cache(array($order_id), $weshare_id);
         $this->WeshareBuy->send_share_product_ship_msg($order_id, $weshare_id);
     }
@@ -2603,10 +2587,7 @@ class ShareUtilComponent extends Component
         }
         $orderM = ClassRegistry::init('Order');
         $orderM->updateAll(array('ship_type_name' => "'" . $ship_type_name . "'", 'ship_type' => $ship_company_id, 'ship_code' => "'" . $ship_code . "'"), array('id' => $order_id));
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_0', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
+        delete_redis_data_by_key(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id);
         $this->WeshareBuy->clear_user_share_order_data_cache(array($order_id), $weshare_id);
     }
 
@@ -2637,10 +2618,7 @@ class ShareUtilComponent extends Component
         }
         $result = $orderM->updateAll(array('status' => ORDER_STATUS_RECEIVED, 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order['Order']['id']));
         $cartM->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order['Order']['id']));
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_0', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
+        delete_redis_data_by_key(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id);
         $this->WeshareBuy->clear_user_share_order_data_cache(array($order_id), $weshare_id);
         if (!$result) {
             return array("success" => false, "reason" => "failed to update order status");
@@ -2669,10 +2647,7 @@ class ShareUtilComponent extends Component
         $prepare_update_order_ids = Hash::extract($prepare_update_orders, '{n}.Order.id');
         $orderM->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $prepare_update_order_ids));
         $cartM->updateAll(array('status' => ORDER_STATUS_SHIPPED), array('order_id' => $prepare_update_order_ids));
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_1_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_0_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_1_0', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_0_0', '');
+        delete_redis_data_by_key(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id);
         $this->WeshareBuy->clear_user_share_order_data_cache($prepare_update_order_ids, $share_id);
         $this->WeshareBuy->send_share_product_arrive_msg($share_info, $content, $order_ids);
     }
