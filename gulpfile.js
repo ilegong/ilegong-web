@@ -115,7 +115,13 @@ var all_js = [
             'webroot/src/scripts/user-rebate-list-controller.js'
         ],
         dist: 'webroot/static/weshares/js/'
-    }
+    }, {
+    name: 'vote.min.js',
+    sources: [
+      'webroot/src/scripts/vote-signup-controller.js'
+    ],
+    dist: 'webroot/static/weshares/js/'
+  },
 ];
 
 var all_css = [

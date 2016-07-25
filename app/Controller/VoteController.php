@@ -46,6 +46,7 @@ class VoteController extends AppController {
      * 根据投票的事件ID到特定的投票页面
      */
     public function vote_event_view($eventId, $sort = 0) {
+        $this->layout = 'vote';
         $this->eventId = $eventId;
         $this->pageTitle = $this->VoteSetting->getVoteTitle($eventId);
         $uid = $this->currentUser['id'];
@@ -174,6 +175,7 @@ class VoteController extends AppController {
     }
 
     public function sign_up($eventId) {
+        $this->layout = 'vote';
         $this->eventId = $eventId;
         $this->pageTitle = $this->VoteSetting->getVoteTitle($eventId);
         //check login
@@ -196,7 +198,7 @@ class VoteController extends AppController {
             $this->set('not_login', true);
         }
         if (!$this->is_weixin() || user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED) {
-            $this->set('not_weixin', true);
+//            $this->set('not_weixin', true);
         }
         $this->set_wx_data($uid, $eventId);
         $this->set('op_cate', 'sign_up');

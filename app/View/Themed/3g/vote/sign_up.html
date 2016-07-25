@@ -1,35 +1,21 @@
 <link rel="stylesheet" type="text/css" href="/css/vote.css?v2.6" />
-<div style="background-color:#fff; margin-bottom: 50px;" id="baby_sign_up">
+<div style="background-color:#fff; margin-bottom: 50px;" id="baby_sign_up" ng-controller="VoteSignupCtrl as vm">
     <div class="baby_banner"><img src="{{$this->Html->assetUrl($voteConfig['common_params']['banner'])}}"/></div>
     <div class="apply_bg">
         <ul class="clearfix">
-            <li class="fl" style="width: 25%;">参赛作品</li>
-            <li class="fl" style="width: 75%;"><input type="text" name="" id="candidate_title"/></li>
+            <li class="fl" style="width: 25%;">作品名称</li>
+            <li class="fl" style="width: 75%;"><input type="text" name="" id="candidate_title" ng-model="vm.candidate.title"/></li>
         </ul>
         <ul class="clearfix">
             <li class="fl" style="width: 25%;">联系电话&nbsp;&nbsp;&nbsp;</li>
-            <li class="fl" style="width: 75%;"><input type="text" name="" id="candidate_mobile_phone"/></li>
+            <li class="fl" style="width: 75%;"><input type="text" nsame="" id="candidate_mobile_phone" ng-model="vm.candidate.mobileNum"/></li>
         </ul>
         <ul class="clearfix">
             <li class="fl" style="width: 25%;">上传照片&nbsp;&nbsp;&nbsp;</li>
-            <li class="fl" style="width: 75%;"><a href="#X" name="upload_image"><img name="no_img"
-                                                                                     src="{{$this->Html->assetUrl('/img/vote/addpc.png')}}"/></a><a
-                    href="#X" name="upload_image"><img name="no_img"
-                                                       src="{{$this->Html->assetUrl('/img/vote/addpc.png')}}"/></a><a
-                    href="#X" name="upload_image"><img name="no_img"
-                                                       src="{{$this->Html->assetUrl('/img/vote/addpc.png')}}"/></a><a
-                    href="#X" name="upload_image"><img name="no_img"
-                                                       src="{{$this->Html->assetUrl('/img/vote/addpc.png')}}"/></a><a
-                    href="#X" name="upload_image"><img name="no_img"
-                                                       src="{{$this->Html->assetUrl('/img/vote/addpc.png')}}"/></a><a
-                    href="#X" name="upload_image"><img name="no_img"
-                                                       src="{{$this->Html->assetUrl('/img/vote/addpc.png')}}"/></a><a
-                    href="#X" name="upload_image"><img name="no_img"
-                                                       src="{{$this->Html->assetUrl('/img/vote/addpc.png')}}"/></a><a
-                    href="#X" name="upload_image"><img name="no_img"
-                                                       src="{{$this->Html->assetUrl('/img/vote/addpc.png')}}"/></a><a
-                    href="#X" name="upload_image"><img name="no_img"
-                                                       src="{{$this->Html->assetUrl('/img/vote/addpc.png')}}"/></a></li>
+            <li class="fl" style="width: 75%;">
+                <a href="#X" name="upload_image" ng-repeat="image in vm.candidate.images"><img name="no_img" src="{{$STATIC_HOST}}/images/"/></a>
+                <a name="upload_image" ng-show="vm.candidate.images.length < 10"><img name="no_img" src="{{$this->Html->assetUrl('/img/vote/addpc.png')}}"/></a>
+            </li>
         </ul>
         <ul class="clearfix">
             <li class="fl" style="width: 25%;">作品描述&nbsp;&nbsp;&nbsp;</li>
@@ -37,7 +23,7 @@
         </ul>
         <!--<a href="#X" class="apply_btn" id="preview_pic">预览图片</a>-->
         <!--<br/><br/>-->
-        <a href="#X" class="apply_btn" id="sign_up">确认报名</a>
+        <a href="#X" class="apply_btn" id="sign_up" ng-click="vm.signup({{$event_id}})">确认报名</a>
 
         <p>若在线报名失败，可以将报名信息：姓名+联系方式+描述+作品照片(2-3张)发给我们微信号：pyshuo2015</p>
     </div>
