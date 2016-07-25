@@ -224,10 +224,12 @@ class VoteController extends AppController {
             echo json_encode(array('success' => false, 'reason' => 'has sign', 'candidate_id' => $signUpRecord['CandidateEvent']['candidate_id']));
             return;
         }
-        $title = $_POST['title'];
-        $mobileNum = $_POST['mobileNum'];
-        $description = $_POST['description'];
-        $images = $_POST['images'];
+
+        $result = $this->get_post_raw_data();
+        $title = $result['title'];
+        $mobileNum = $result['mobileNum'];
+        $description = $result['description'];
+        $images = $result['images'];
         $saveData = array(
             'mobile_num' => $mobileNum,
             'description' => $description,
