@@ -54,16 +54,12 @@
       $http.post('/vote/upload_candidate/' + eventId + '.json', data).success(function (data) {
         vm.processing = false;
         if (data['success']) {
-          alert('报名成功', function () {
-            window.location.href = '/vote/vote_event_view/' + eventId
-          });
+          alert('报名成功', window.location.href = '/vote/vote_event_view/' + eventId);
           return;
         }
 
         if (data['reason'] == 'not login') {
-          alert('请登录', function () {
-            window.location.href = '/users/login.html?referer=' + encodeURIComponent("/vote/sign_up/" + eventId);
-          }, 1000);
+          alert('请登录', window.location.href = '/users/login.html?referer=' + encodeURIComponent("/vote/sign_up/" + eventId));
         }
         if (data['reason'] == 'server error') {
           alert('上传失败请联系客服');
