@@ -615,7 +615,8 @@
                 rebate_log_id: vm.rebateLogId,
                 products: submit_products,
                 ship_info: ship_info,
-                remark: vm.buyerRemark
+                remark: vm.buyerRemark,
+                useRebate: vm.useRebate
             };
             if (vm.useCouponId) {
                 orderData['coupon_id'] = vm.useCouponId;

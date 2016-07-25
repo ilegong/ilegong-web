@@ -687,6 +687,10 @@ class WesharesController extends AppController
                 if (!empty($coupon_id)) {
                     $this->order_use_coupon($coupon_id, $orderId, $uid);
                 }
+                $useRebate = $postDataArray['useRebate'];
+                if($useRebate == 1){
+                    $this->use_rebate_money($orderId, $uid);
+                }
                 $this->Orders->on_order_created($uid, $weshareId, $orderId);
             }
             $this->log('Create order for ' . $uid . ' with weshare ' . $weshareId . ' successfully, order id ' . $orderId, LOG_INFO);
