@@ -12,6 +12,12 @@ class SpreadSharerController extends AppController {
 
     public function scan_qrcode($sharer_id) {
         $uid = $this->currentUser['id'];
+
+        if(!$uid)
+        {
+            $this->redirect('/users/login.html?referer=/spread_sharer/scan_qrcode/'.$sharer_id);
+        }
+
         $this->WeshareBuy->subscribe_sharer($sharer_id, $uid, SUB_SHARER_REASON_TYPE_FROM_SPREAD);
         if (user_subscribed_pys($uid) != WX_STATUS_SUBSCRIBED) {
             //没有关注朋友说
