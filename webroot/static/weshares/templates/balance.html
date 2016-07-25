@@ -39,37 +39,44 @@
             </dl>
         </div>
     </div>
+
     <!-- 这个元素在各个tab里面都会出现 -->
-    <div class="promotion" ng-if="vm.weshare.id==4507">
-        <dl class="clearfix">
-            <dd class="promotion-title">优惠码：</dd>
-            <dd><div><input type="text" placeholder="请输入优惠码" ng-model="vm.useCouponCode" ng-disabled="vm.myCoupons" /></div></dd>
-            <dd><a href="javascript:;" ng-click='vm.useCoupons();'>确定</a></dd>
-        </dl>
+    <!--<div class="promotion" ng-if="vm.weshare.id==4507">-->
+        <!--<dl class="clearfix">-->
+            <!--<dd class="promotion-title">优惠码：</dd>-->
+            <!--<dd><div><input type="text" placeholder="请输入优惠码" ng-model="vm.useCouponCode" ng-disabled="vm.myCoupons" /></div></dd>-->
+            <!--<dd><a href="javascript:;" ng-click='vm.useCoupons();'>确定</a></dd>-->
+        <!--</dl>-->
+    <!--</div>-->
+    <div class="balance-detail-panel">
+        <div class="money-detail">
+            <dl class="clearfix">
+                <dt class="fl">应付总额：</dt>
+                <dt class="fr" ng-bind="vm.orderPayTotalPrice | currency:'￥'"></dt>
+            </dl>
+            <ul class="clearfix">
+                <li class="fl">产品总额：</li>
+                <li class="fr" ng-bind="vm.productTotalPrice | currency:'￥'"></li>
+            </ul>
+            <ul class="clearfix" ng-if="vm.shipFee>0">
+                <li class="fl">快递费：</li>
+                <li class="fr" ng-bind="vm.shipFee/100 | currency:'￥'"></li>
+            </ul>
+            <ul class="clearfix" ng-if="vm.myCoupons">
+                <li class="fl">红包优惠：</li>
+                <li class="fr" ng-bind="vm.userCouponReduce/100 | currency:'￥'"></li>
+            </ul>
+        </div>
+        <ul class="rebate-balance clearfix">
+            <li class="fl">
+                <label>使用我的余额</label>
+                <em>当前可使用余额<span>￥100.00</span></em>
+            </li>
+            <li class="fr"><input type="checkbox" id="checkbox_rebate" class="chk_toggle" /><label for="checkbox_rebate"></label></li>
+        </ul>
     </div>
 
-    <div class="money-detail">
-        <dl class="clearfix">
-            <dt class="fl">应付总额：</dt>
-            <dt class="fr" ng-bind="vm.orderPayTotalPrice | currency:'￥'"></dt>
-        </dl>
-        <ul class="clearfix">
-            <li class="fl">产品总额：</li>
-            <li class="fr" ng-bind="vm.productTotalPrice | currency:'￥'"></li>
-        </ul>
-        <ul class="clearfix" ng-if="vm.shipFee>0">
-            <li class="fl">快递费：</li>
-            <li class="fr" ng-bind="vm.shipFee/100 | currency:'￥'"></li>
-        </ul>
-        <ul class="clearfix" ng-if="vm.myCoupons">
-            <li class="fl">红包优惠：</li>
-            <li class="fr" ng-bind="vm.userCouponReduce/100 | currency:'￥'"></li>
-        </ul>
-        <ul class="clearfix" ng-if="vm.rebateFee>0">
-            <li class="fl">团长优惠：</li>
-            <li class="fr" ng-bind="vm.rebateFee | currency:'￥'"></li>
-        </ul>
-    </div>
+
     <!-- 这个元素在各个tab里面都会出现 -->
     <ul class="payment-bg clearfix">
         <li class="fl">应付<span ng-bind="vm.orderPayTotalPrice | currency:'￥'"></span></li>

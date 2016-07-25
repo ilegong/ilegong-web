@@ -73,7 +73,6 @@
         vm.setShipFee = setShipFee;
         vm.redirectFaq = redirectFaq;
         vm.chatToUser = chatToUser;
-        vm.calProxyRebateFee = calProxyRebateFee;
         vm.isShareManager = isShareManager;
         vm.calculateShipFee = calculateShipFee;
         vm.updateBuyerData = updateBuyerData;
@@ -90,7 +89,6 @@
 
         function activate() {
             vm.currentUserOrderCount = 0;
-            vm.rebateFee = 0;
             vm.orderPayTotalPrice = 0;
             vm.productTotalPrice = 0;
             vm.commentData = {};
@@ -300,16 +298,6 @@
             }).join(',');
         }
 
-        function calProxyRebateFee(totalPrice) {
-            if (!vm.currentUser || vm.currentUser['is_proxy'] == 0) {
-                return;
-            }
-            if (!vm.weshare.proxy_rebate_percent || vm.weshare.proxy_rebate_percent.percent <= 0) {
-                return;
-            }
-            vm.rebateFee = (totalPrice * vm.weshare.proxy_rebate_percent.percent / 100).toFixed(2);
-        }
-
         function calOrderTotalPrice() {
             var submit_products = [];
             _.each(vm.weshare.products, function (product) {
@@ -323,7 +311,6 @@
             });
             if (totalPrice != 0) {
                 vm.productTotalPrice = totalPrice / 100;
-                calProxyRebateFee(totalPrice / 100);
                 if (vm.userCouponReduce) {
                     totalPrice -= vm.userCouponReduce;
                 }
@@ -331,13 +318,9 @@
                 vm.shipSetId = getShipSetId();
                 totalPrice += vm.shipFee;
                 vm.orderPayTotalPrice = totalPrice / 100;
-                if (vm.rebateFee > 0) {
-                    vm.orderPayTotalPrice -= vm.rebateFee;
-                }
             } else {
                 vm.productTotalPrice = 0;
                 vm.orderPayTotalPrice = 0;
-                vm.rebateFee = 0;
                 vm.shipFee = 0;
             }
         }

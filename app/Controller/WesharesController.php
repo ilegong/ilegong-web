@@ -737,16 +737,6 @@ class WesharesController extends AppController
         return intval($reduced * 100);
     }
 
-    //计算可用余额
-    public function apply_rebate(){
-        $this->autoRender = false;
-        $uid = $this->currentUser['id'];
-        $total_price = $_REQUEST['total_all_price'];
-        $rebate = $this->get_can_use_rebate($uid, $total_price);
-        echo json_encode(['rebate' => $rebate]);
-        exit;
-    }
-
     /**
      * @param $order_id
      * @param $uid
