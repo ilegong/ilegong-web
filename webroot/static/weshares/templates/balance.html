@@ -67,7 +67,7 @@
                 <li class="fr" ng-bind="vm.userCouponReduce/100 | currency:'￥'"></li>
             </ul>
         </div>
-        <ul class="rebate-balance clearfix">
+        <ul class="rebate-balance clearfix" ng-show="vm.rebateTotal > 0">
             <li class="fl">
                 <label>使用我的余额</label>
                 <em>当前可使用余额<span ng-bind="vm.canUseRebateTotal/100 | currency:'￥'"></span></em>
