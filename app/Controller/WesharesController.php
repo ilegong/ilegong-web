@@ -1593,24 +1593,14 @@ class WesharesController extends AppController
     public function order_export($shareId, $only_paid = 1)
     {
         $this->layout = null;
-        if ($only_paid == 1) {
-            $export_paid_order = true;
-        } else {
-            $export_paid_order = false;
-        }
-        $statics_data = $this->get_weshare_buy_info($shareId, true, true, $export_paid_order);
+        $statics_data = $this->get_weshare_buy_info($shareId, true, true, $only_paid == 1, true);
         $this->set($statics_data);
     }
 
     public function old_order_export($shareId, $only_paid = 1)
     {
         $this->layout = null;
-        if ($only_paid == 1) {
-            $export_paid_order = true;
-        } else {
-            $export_paid_order = false;
-        }
-        $statics_data = $this->get_weshare_buy_info($shareId, true, true, $export_paid_order);
+        $statics_data = $this->get_weshare_buy_info($shareId, true, true, $only_paid == 1, true);
         $this->set($statics_data);
     }
 
@@ -1705,9 +1695,9 @@ class WesharesController extends AppController
      * @return mixed
      * 获取分享的订单信息
      */
-    private function get_weshare_buy_info($weshareId, $is_me, $division = false, $export = false)
+    private function get_weshare_buy_info($weshareId, $is_me, $division = false, $only_paid = false, $only_real_orders = true)
     {
-        return $this->WeshareBuy->get_share_order_for_show($weshareId, $is_me, $division, $export);
+        return $this->WeshareBuy->get_share_order_for_show($weshareId, $is_me, $division, $only_paid, $only_real_orders);
     }
 
 
