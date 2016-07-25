@@ -1,4 +1,3 @@
-<link rel="stylesheet" type="text/css" href="/css/vote.css?v2.6" />
 <div style="background-color:#fff; margin-bottom: 50px;" id="baby_sign_up" ng-controller="VoteSignupCtrl as vm">
     <div class="baby_banner"><img src="{{$this->Html->assetUrl($voteConfig['common_params']['banner'])}}"/></div>
     <div class="apply_bg">
@@ -12,14 +11,19 @@
         </ul>
         <ul class="clearfix">
             <li class="fl" style="width: 25%;">上传照片&nbsp;&nbsp;&nbsp;</li>
-            <li class="fl" style="width: 75%;">
-                <a href="#X" name="upload_image" ng-repeat="image in vm.candidate.images"><img name="no_img" src="{{$STATIC_HOST}}/images/"/></a>
-                <a name="upload_image" ng-click="vm.chooseAndUploadImage()" ng-show="vm.candidate.images.length < 10"><img name="no_img" src="{{$this->Html->assetUrl('/img/vote/addpc.png')}}"/></a>
+            <li class="images fl" style="width: 75%;">
+                <a href="#X" class="image" ng-repeat="image in vm.candidate.images">
+                    <img ng-src="&#123;&#123;image&#125;&#125;"/>
+                    <span class="delete-btn" ng-click='vm.deleteImage(image)'>—</span>
+                </a>
+                <a ng-click="vm.chooseAndUploadImage()" ng-show="vm.candidate.images.length < 10">
+                    <img name="no_img" src="{{$this->Html->assetUrl('/img/vote/addpc.png')}}"/>
+                </a>
             </li>
         </ul>
         <ul class="clearfix">
             <li class="fl" style="width: 25%;">作品描述&nbsp;&nbsp;&nbsp;</li>
-            <li class="fl" style="width: 75%; height: 90px; overflow:hidden;"><textarea id="candidate_description"></textarea></li>
+            <li class="fl" style="width: 75%; height: 90px; overflow:hidden;"><textarea id="candidate_description" ng-model="vm.candidate.description"></textarea></li>
         </ul>
         <!--<a href="#X" class="apply_btn" id="preview_pic">预览图片</a>-->
         <!--<br/><br/>-->

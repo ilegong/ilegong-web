@@ -7,9 +7,15 @@
     vm.signup = signup;
     vm.chooseAndUploadImage = chooseAndUploadImage;
     vm.uploadImage = uploadImage;
+    vm.deleteImage = deleteImage;
     active();
     function active() {
-      vm.candidate = {title: '', mobileNum: '', images: [], description: ''};
+      vm.candidate = {
+        title: '',
+        mobileNum: '',
+        images: ['http://static.tongshijia.com/images/2016/04/21/c0c73bb6-0787-11e6-ab0d-00163e1600b6.jpg'],
+        description: ''
+      };
     }
 
     function signup(eventId) {
@@ -40,12 +46,14 @@
 
 
       vm.processing = true;
-      $http.post('/vote/upload_candidate/' + eventId + '.json', {
+      var data = {
         "title": vm.candidate.title,
         "mobileNum": vm.candidate.mobileNum,
         "description": vm.candidate.description,
         'images': vm.candidate.images.join('|')
-      }, function (data) {
+      };
+      $http.post('/vote/upload_candidate/' + eventId + '.json', data).success(function (data) {
+        vm.processing = false;
         if (data['success']) {
           alert('报名成功', function () {
             window.location.href = '/vote/vote_event_view/' + eventId
@@ -55,7 +63,7 @@
 
         if (data['reason'] == 'not login') {
           alert('请登录', function () {
-            window.location.href = '/users/login.html?referer=' + encodeURIComponent("/vote/sign_up/"+ eventId);
+            window.location.href = '/users/login.html?referer=' + encodeURIComponent("/vote/sign_up/" + eventId);
           }, 1000);
         }
         if (data['reason'] == 'server error') {
@@ -68,7 +76,11 @@
           var candidateId = data['candidate_id'];
           alert('已经报过名了', window.location.href = '/vote/candidate_detail/' + candidateId + '/' + eventId);
         }
-      }, 'json');
+      }).error(function () {
+        if (data['reason'] == 'server error') {
+          alert('上传失败请联系客服');
+        }
+      });
     }
 
     function chooseAndUploadImage() {
@@ -112,5 +124,8 @@
       upload();
     }
 
+    function deleteImage(image) {
+      vm.candidate.images = _.without(vm.candidate.images, image);
+    }
   }
 })(window, window.angular, window.wx);

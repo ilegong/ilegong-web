@@ -76,14 +76,14 @@ ul li { list-style: none; }
 
 /*报名*/
 .apply_bg{ background-color: #fff; padding: 30px 20px 20px 20px; color: #777; line-height: 38px; margin-top: 20px; margin-bottom: 20px;}
-.apply_bg input{ padding: 10px 15px; width: 100%; line-height: 18px; color: #777; background-color: lightgrey; font-size: 14px; border: 0; outline: none; border-radius: 0; font-size: 14px; color: #666666;}
+.apply_bg input{ padding: 10px 15px; wiline-height: 18px; color: #777; background-color: lightgrey; font-size: 14px; border: 0; outline: none; width: 80%; border-radius: 0; font-size: 14px; color: #666666;}
 .apply_bg ul{ margin-bottom: 20px;}
 .apply_bg textarea {
-    width: 100%;
     border: 0;
     border-radius: 0;
     height: 60px;
     line-height: 16px;
+    width: 80%;
     padding: 10px 15px;
     font-size: 14px;
     color: #777;
@@ -97,7 +97,20 @@ ul li { list-style: none; }
 .apply_bg a.apply_btn:visited{color: #fff; background-color: #ff7c6e;text-decoration: none;}
 .apply_bg a.apply_btn:focus{color: #fff; background-color: #ff7c6e;text-decoration: none;}
 .apply_bg p{ color: #ffffff; font-size: 14px; line-height: 20px; padding: 10px 0;}
-
+.apply_bg .images .image{position: relative;}
+.apply_bg .images .image .delete-btn{display: block;
+    width: 22px;
+    height: 22px;
+    border-radius: 22px;
+    line-height: 20px;
+    background-color: red;
+    color: #FFF;
+    text-align: center;
+    text-decoration: none;
+    position: absolute;
+    top: -6px;
+    right: -6px;
+}
 /*宝贝详情*/
 .babydetail{ padding: 15px; font-size: 16px; color: #777;}
 .babydetail p{ padding-top: 5px; line-height: 18px; font-size: 14px; padding-bottom: 15px;}
