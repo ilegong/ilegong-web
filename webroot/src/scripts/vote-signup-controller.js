@@ -73,6 +73,7 @@
 
     function chooseAndUploadImage() {
       wx.chooseImage({
+        count: 10,
         success: function (res) {
           vm.uploadImage(res.localIds);
         },
