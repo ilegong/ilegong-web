@@ -676,36 +676,16 @@ class WesharesController extends AppController
                 $totalPrice += $num * $price;
             }
             $this->Cart->saveAll($cart);
-            //产品价格的团长佣金
-            $rebate_fee = $this->WeshareBuy->cal_proxy_rebate_fee($totalPrice, $uid, $weshareId);
             $shipFee = $this->calculate_order_ship_fee($shipSetting, $cart_good_num, $cart_good_weight, $weshareId, $shipInfo['provinceId']);
             $totalPrice += $shipFee;
             $update_order_data = array('total_all_price' => $totalPrice / 100, 'total_price' => $totalPrice / 100, 'ship_fee' => $shipFee);
-            if ($rebate_fee > 0) {
-                //团长已经返利
-                //记录返利的钱
-                $rebate_log_id = $this->WeshareBuy->log_proxy_rebate_log($weshareId, $uid, 0, 1, $orderId, $rebate_fee * 100);
-                if (!empty($rebate_log_id)) {
-                    $update_order_data['cate_id'] = $rebate_log_id;
-                    $update_order_data['total_all_price'] = $update_order_data['total_all_price'] - $rebate_fee;
-                }
-            } else {
-                //团长没有返利直接设置返利订单号
-                //返利
-                $this->ShareUtil->update_rebate_log_order_id($rebateLogId, $orderId, $weshareId);
-            }
+            $this->ShareUtil->update_rebate_log_order_id($rebateLogId, $orderId, $weshareId);
             if ($this->Order->updateAll($update_order_data, array('id' => $orderId))) {
                 $coupon_id = $postDataArray['coupon_id'];
                 $this->log('use coupon id ' . $coupon_id, LOG_INFO);
                 //红包
                 if (!empty($coupon_id)) {
-                    //菠萝
-                    if ($weshareId == 4507) {
-                        //use code
-                        $this->order_use_coupon_code($coupon_id, $orderId, $uid);
-                    } else {
-                        $this->order_use_score_and_coupon($coupon_id, $orderId, $uid, $totalPrice / 100);
-                    }
+                    $this->order_use_coupon($coupon_id, $orderId, $uid);
                 }
                 $this->Orders->on_order_created($uid, $weshareId, $orderId);
             }
@@ -723,6 +703,58 @@ class WesharesController extends AppController
             $dataSource->rollback();
             echo json_encode(array('success' => false, 'reason' => $e->getMessage()));
             exit;
+        }
+    }
+
+
+    /**
+     * @param $coupon_id
+     * @param $order_id
+     * @param $uid
+     * 使用优惠券
+     */
+    private function order_use_coupon($coupon_id, $order_id, $uid)
+    {
+        $this->loadModel('CouponItem');
+        if ($this->CouponItem->apply_coupons_to_order($uid, $order_id, [$coupon_id])) {
+            $computed = $this->CouponItem->compute_coupons_for_order($uid, $order_id);
+            $applied_coupons = $computed['applied'];
+            $coupon_total = $computed['reduced'];
+        }
+        if (!empty($applied_coupons) && !empty($coupon_total)) {
+            $reduced = $coupon_total / 100;
+            $toUpdate = array('applied_coupons' => '\'' . implode(',', $applied_coupons) . '\'',
+                'coupon_total' => $coupon_total,
+                'total_all_price' => 'if(total_all_price - ' . $reduced . ' < 0, 0, total_all_price - ' . $reduced . ')');
+            return $this->Order->updateAll($toUpdate, array('id' => $order_id, 'status' => ORDER_STATUS_WAITING_PAY));
+        }
+    }
+
+    /**
+     * @param $order_id
+     * @param $uid
+     * @param $rebate
+     * 使用余额
+     */
+    private function use_rebate_money($order_id, $uid, $rebate)
+    {
+        $u_rebate = $this->User->get_rebate_money($uid, true);
+        if ($rebate > $u_rebate) {
+            $rebate = $u_rebate;
+        }
+        $order = $this->Order->find('first', [
+            'conditions' => ['id' => $order_id],
+            'fields' => ['id', 'total_all_price']
+        ]);
+        $order_total_all_price = $order['Order']['total_all_price'];
+        $reduced = cal_rebate_money($rebate, $order_total_all_price);
+        $rebate = $rebate * 100;
+        $toUpdate = array('applied_rebate' => $rebate,
+            'total_all_price' => 'if(total_all_price - ' . $reduced . ' < 0, 0, total_all_price - ' . $reduced . ')');
+        if ($this->Order->updateAll($toUpdate, array('id' => $order_id, 'status' => ORDER_STATUS_WAITING_PAY))) {
+            $this->loadModel("RebateLog");
+            $this->RebateLog->save_rebate_log($uid, $rebate, $order_id, USER_REBATE_MONEY_USE);
+            $this->User->add_rebate_money($uid, -$rebate);
         }
     }
 
@@ -1827,6 +1859,7 @@ class WesharesController extends AppController
 
 
     //菠萝优惠码使用
+    //逻辑不可复用，
     private function order_use_coupon_code($coupon_id, $order_id)
     {
         $this->log('order use coupon' . $coupon_id, LOG_INFO);
@@ -1842,30 +1875,6 @@ class WesharesController extends AppController
         }
     }
 
-    /**
-     * @param $coupon_id
-     * @param $order_id
-     * @param $uid
-     * @param $total_all_price
-     * 使用 积分和红包逻辑
-     * 积分（没有用）
-     */
-    private function order_use_score_and_coupon($coupon_id, $order_id, $uid, $total_all_price)
-    {
-        //use coupon
-        App::uses('OrdersController', 'Controller');
-        $ordersController = new OrdersController();
-        $brand_id = -1;
-        $this->Session->write($ordersController::key_balanced_conpons(), json_encode([$brand_id => [$coupon_id]]));
-        $ordersController->Session = $this->Session;
-        $order_results = array();
-        $order_results[$brand_id] = array($order_id, $total_all_price);
-        foreach ($order_results as $brand_id => $order_val) {
-            $order_id = $order_val[0];
-            $ordersController->apply_coupons_to_order($brand_id, $uid, $order_id, $order_results);
-        }
-        $ordersController->clean_score_and_coupon();
-    }
 
     /**
      * @param $shared_offer_id
