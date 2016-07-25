@@ -118,7 +118,8 @@ var all_js = [
     }, {
     name: 'vote.min.js',
     sources: [
-      'webroot/src/scripts/vote-signup-controller.js'
+      'webroot/src/scripts/vote-signup-controller.js',
+      'webroot/src/scripts/vote-event-controller.js'
     ],
     dist: 'webroot/static/weshares/js/'
   },

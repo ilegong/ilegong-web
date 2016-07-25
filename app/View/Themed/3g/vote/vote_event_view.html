@@ -1,5 +1,4 @@
-<link rel="stylesheet" type="text/css" href="/css/vote.css?v2.6" />
-<div class="container" style="margin-bottom: 50px;padding:0;">
+<div class="container" style="margin-bottom: 50px;padding:0;" ng-controller="VoteEventCtrl as vm">
     <div class="baby_banner" style="position: relative;"><img src="{{$this->Html->assetUrl($voteConfig['common_params']['banner'])}}">
         {{if $event_available}}
             {{if !$is_sign_up}}
@@ -33,7 +32,7 @@
                                 {{if $candidator['is_vote']}}
                                 <dd class="fr"><a href="#X" class="cur">已投票</a></dd>
                                 {{else}}
-                                <dd class="fr"><a href="#X" class="vote_baby" data-candidate_id="{{$candidator['Candidate']['id']}}" data-event_id="{{$event_id}}">&nbsp;投票&nbsp;</a></dd>
+                                <dd class="fr"><a href="#X" class="vote_baby" ng-click="vm.vote({{$event_id}}, {{$candidator['Candidate']['id']}})" data-candidate_id="{{$candidator['Candidate']['id']}}" data-event_id="{{$event_id}}">&nbsp;投票&nbsp;</a></dd>
                                 {{/if}}
                                 {{else}}
                                 <dd class="fr"><a href="#X" class="cur">已结束</a></dd>
@@ -69,7 +68,7 @@
                                 {{if $candidator['is_vote']}}
                                 <dd class="fr"><a href="#X" class="cur">已投票</a></dd>
                                 {{else}}
-                                <dd class="fr"><a href="#X" class="vote_baby" data-candidate_id="{{$candidator['Candidate']['id']}}" data-event_id="{{$event_id}}">&nbsp;投票&nbsp;</a></dd>
+                                <dd class="fr"><a href="#X" ng-class="{'vote_baby': !vm.isVoted({{$candidator['Candidate']['id']}}), 'cur': vm.isVoted({{$candidator['Candidate']['id']}})}" ng-click="vm.vote({{$event_id}}, {{$candidator['Candidate']['id']}})" data-candidate_id="{{$candidator['Candidate']['id']}}" data-event_id="{{$event_id}}" ng-bind="vm.getVoteText({{$candidator['Candidate']['id']}})">&nbsp;投票&nbsp;</a></dd>
                                 {{/if}}
                                 {{else}}
                                 <dd class="fr"><a href="#X" class="cur">已结束</a></dd>
@@ -105,5 +104,4 @@
 <script>
     sub_pys_url = "{{$voteConfig['sub_url']}}";
 </script>
-{{$this->Html->script(array('/js/vote/vote.js?v3','/js/common.js'));}}
 {{template vote/wexin_share_template}}

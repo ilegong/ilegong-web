@@ -13,16 +13,12 @@
       vm.candidate = {
         title: '',
         mobileNum: '',
-        images: ['http://static.tongshijia.com/images/2016/04/21/c0c73bb6-0787-11e6-ab0d-00163e1600b6.jpg'],
+        images: ['http://static.tongshijia.com/images/index/2016/07/19/8d65ff6e-4d87-11e6-b8d8-00163e1600b6.jpg'],
         description: ''
       };
     }
 
     function signup(eventId) {
-      if (vm.processing) {
-        return;
-      }
-
       if (Utils.isBlank(vm.candidate.title)) {
         alert('请输入作品名称');
         return false;
@@ -44,6 +40,9 @@
         return false;
       }
 
+      if (vm.processing) {
+        return;
+      }
 
       vm.processing = true;
       var data = {
@@ -55,16 +54,12 @@
       $http.post('/vote/upload_candidate/' + eventId + '.json', data).success(function (data) {
         vm.processing = false;
         if (data['success']) {
-          alert('报名成功', function () {
-            window.location.href = '/vote/vote_event_view/' + eventId
-          });
+          alert('报名成功', window.location.href = '/vote/vote_event_view/' + eventId);
           return;
         }
 
         if (data['reason'] == 'not login') {
-          alert('请登录', function () {
-            window.location.href = '/users/login.html?referer=' + encodeURIComponent("/vote/sign_up/" + eventId);
-          }, 1000);
+          alert('请登录', window.location.href = '/users/login.html?referer=' + encodeURIComponent("/vote/sign_up/" + eventId));
         }
         if (data['reason'] == 'server error') {
           alert('上传失败请联系客服');
@@ -77,9 +72,8 @@
           alert('已经报过名了', window.location.href = '/vote/candidate_detail/' + candidateId + '/' + eventId);
         }
       }).error(function () {
-        if (data['reason'] == 'server error') {
-          alert('上传失败请联系客服');
-        }
+        vm.processing = false;
+        alert('上传失败请联系客服');
       });
     }
 
