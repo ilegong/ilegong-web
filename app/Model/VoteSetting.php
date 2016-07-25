@@ -54,18 +54,18 @@ class VoteSetting extends AppModel{
             'id' => 11,
             'initiator' => '701201',
             'sub_type' => 'Vote11',
-            'title' => '一起玩，更精彩!',
+            'title' => '亲子联盟新西兰之旅分享会',
             'sub_url' => 'https://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=404860412&idx=1&sn=c958e92faa424363d254a142ed4803c3',
             'wx_params' => array(
-                'time_line_title' => '亲子联盟新西兰之旅分享会',
-                'chat_title' => '亲子联盟新西兰之旅分享会',
+                'time_line_title' => '亲子联盟·新西兰之旅分享会',
+                'chat_title' => '亲子联盟·新西兰之旅分享会',
                 'share_pic' => 'http://static.tongshijia.com/static/img/vote/vote_11_banner.jpg?v1',
                 'desc' => '记录下最美的一瞬间...如梦如幻的世界，带上你的宝贝，你也可以当一回摄影大师!',
             ),
             'common_params' => array(
                 'banner' => 'http://static.tongshijia.com/static/img/vote/vote_11_banner.jpg?v1',
                 'prize_pic' => 'http://static.tongshijia.com/images/index/8920d130-f58b-11e5-8c9e-00163e1600b6.jpg?v1',
-                'server_reply_title' => '亲子联盟新西兰之旅分享会',
+                'server_reply_title' => '亲子联盟·新西兰之旅分享会',
                 'server_reply_img' => 'http://static.tongshijia.com/static/img/vote/vote_9_banner.jpg?v1',
                 'server_reply_url' => 'http://www.tongshijia.com/vote/vote_event_view/11',
                 'reply_tip_info' => '请先关注朋友说微信公众号“pyshuo2014”如您已关注，请进入公众号回复“8888”即可！'

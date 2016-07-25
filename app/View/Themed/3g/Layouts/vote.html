@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html ng-app='weshares'>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="chinaz-site-verification" content="081e7651-48c6-4c2f-a569-99321685eab1" />
+    <meta name="baidu-site-verification" content="mGej7ZzIc1" />
+    <meta name="360-site-verification" content="11513c90635fb70282692446172cae58" />
+    <meta name="Keywords" content="{{if $seokeywords}}{{$seokeywords}}{{else}}{{$site[seokeywords]}}{{/if}}"/>
+    <meta name="Description"
+          content="{{if $seodescription}}{{$seodescription}}{{else}}{{$site[seodescription]}}{{/if}}"/>
+    <link rel="apple-touch-icon" href="{{$this->Html->assetUrl('/img/logo_mini.png')}}" />
+    <title>{{$pageTitle}}-{{$site['title']}}</title>
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/css/vote.css?v0.0.2" />
+</head>
+<body style="background-color: #F5F5F5">
+{{if !noFlash }}
+<div class="container">
+    {{$this->Session->flash()}}
+</div>
+{{/if}}
+{{$content_for_layout}}
+
+{{if $jWeixinOn}}
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+    var wx_jssdk_appId = '{{$signPackage["appId"]}}';
+    var wx_jssdk_timestamp = '{{$signPackage["timestamp"]?$signPackage["timestamp"]:1}}';
+    var wx_jssdk_nonceStr = '{{$signPackage["nonceStr"]}}';
+    var wx_jssdk_signature = '{{$signPackage["signature"]}}';
+    var jsApiList = ['checkJsApi', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseImage', 'previewImage', 'uploadImage', 'downloadImage', 'openLocation', 'getLocation'];
+    wx.config({
+        debug: false,
+        appId: wx_jssdk_appId,
+        timestamp: wx_jssdk_timestamp,
+        nonceStr: wx_jssdk_nonceStr,
+        signature: wx_jssdk_signature,
+        jsApiList: jsApiList
+    });
+</script>
+{{/if}}
+<script type="text/javascript" src="http://cdn.bootcss.com/angular.js/1.4.1/angular.min.js"></script>
+<script type="text/javascript" src="http://cdn.bootcss.com/ngInfiniteScroll/1.2.0/ng-infinite-scroll.min.js"></script>
+<script type="text/javascript" src="http://cdn.bootcss.com/angular-carousel/1.0.1/angular-carousel.min.js"></script>
+<script type="text/javascript" src="http://cdn.bootcss.com/angular-touch/1.5.6/angular-touch.min.js"></script>
+<script type="text/javascript" src="http://cdn.bootcss.com/underscore.js/1.8.3/underscore-min.js"></script>
+<script src="{{$STATIC_HOST}}/static/weshares/js/weshare.min.js?v2.5.15"></script>
+<script src="{{$STATIC_HOST}}/static/weshares/js/vote.min.js?v0.0.2"></script>
+
+{{$this->fetch('scriptBottom')}}
+</body>
+</html>
