@@ -1645,9 +1645,9 @@ function cal_score_money($score, $total_price) {
 }
 
 function cal_rebate_money($rebate, $total_price){
-    $rebate_money = $rebate/100;
-    if($rebate_money > $total_price/100){
-        return $total_price/100;
+    $rebate_money = $rebate / 100;
+    if ($rebate_money > $total_price / 2) {
+        return $total_price / 2;
     }
     return $rebate_money;
 }

@@ -730,25 +730,37 @@ class WesharesController extends AppController
         }
     }
 
+    //获取可用余额
+    private function get_can_use_rebate($uid, $total_price){
+        $u_rebate = $this->User->get_rebate_money($uid, true);
+        $reduced = cal_rebate_money($u_rebate, $total_price);
+        return intval($reduced * 100);
+    }
+
+    //计算可用余额
+    public function apply_rebate(){
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        $total_price = $_REQUEST['total_all_price'];
+        $rebate = $this->get_can_use_rebate($uid, $total_price);
+        echo json_encode(['rebate' => $rebate]);
+        exit;
+    }
+
     /**
      * @param $order_id
      * @param $uid
-     * @param $rebate
      * 使用余额
      */
-    private function use_rebate_money($order_id, $uid, $rebate)
+    private function use_rebate_money($order_id, $uid)
     {
-        $u_rebate = $this->User->get_rebate_money($uid, true);
-        if ($rebate > $u_rebate) {
-            $rebate = $u_rebate;
-        }
         $order = $this->Order->find('first', [
             'conditions' => ['id' => $order_id],
             'fields' => ['id', 'total_all_price']
         ]);
         $order_total_all_price = $order['Order']['total_all_price'];
-        $reduced = cal_rebate_money($rebate, $order_total_all_price);
-        $rebate = $rebate * 100;
+        $rebate = $this->get_can_use_rebate($uid, $order_total_all_price);
+        $reduced = $rebate / 100;
         $toUpdate = array('applied_rebate' => $rebate,
             'total_all_price' => 'if(total_all_price - ' . $reduced . ' < 0, 0, total_all_price - ' . $reduced . ')');
         if ($this->Order->updateAll($toUpdate, array('id' => $order_id, 'status' => ORDER_STATUS_WAITING_PAY))) {
