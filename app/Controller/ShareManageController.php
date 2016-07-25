@@ -230,7 +230,7 @@ class ShareManageController extends AppController
         $share_data['status'] = 0;
 
         $this->Weshare->save($share_data);
-        $this->clear_share_cache($_REQUEST['shareId']);
+        delete_redis_data_by_key('_' . $_REQUEST['shareId']);
         echo json_encode(array('success' => true));
         return;
     }
@@ -245,7 +245,7 @@ class ShareManageController extends AppController
         $data = json_decode($json_data, true);
         $proxyRebatePercent = ClassRegistry::init('ProxyRebatePercent');
         $proxyRebatePercent->save($data);
-        $this->clear_share_cache($_REQUEST['shareId']);
+        delete_redis_data_by_key('_' . $_REQUEST['shareId']);
         echo json_encode(array('success' => true));
         return;
     }
@@ -262,7 +262,7 @@ class ShareManageController extends AppController
         $weshareAddressM = ClassRegistry::init('WeshareAddress');
         $weshareShipSettingM->saveAll($data['ship_setting']);
         $weshareAddressM->saveAll($data['weshare_address']);
-        $this->clear_share_cache($_REQUEST['shareId']);
+        delete_redis_data_by_key('_' . $_REQUEST['shareId']);
         echo json_encode(array('success' => true));
         return;
     }
@@ -276,7 +276,7 @@ class ShareManageController extends AppController
             $product_item['price'] = intval($product_item['price'] * 100);
         }
         $this->WeshareProduct->saveAll($share_product_data);
-        $this->clear_share_cache($_REQUEST['shareId']);
+        delete_redis_data_by_key('_' . $_REQUEST['shareId']);
         echo json_encode(array('success' => true));
         return;
     }
@@ -284,7 +284,7 @@ class ShareManageController extends AppController
     public function delete_share($shareId)
     {
         $this->Weshare->update(['status' => WESHARE_STATUS_DELETED], ['id' => $shareId]);
-        $this->clear_share_cache($shareId);
+        delete_redis_data_by_key('_' . $shareId);
         if ($_REQUEST['from'] == 'search') {
             $this->redirect(array('action' => 'search_shares'));
             return;
@@ -303,7 +303,7 @@ class ShareManageController extends AppController
     public function stop_share($shareId)
     {
         $this->Weshare->update(['status' => WESHARE_STATUS_STOP, 'close_date' => "'" . date('Y-m-d H:i:s') . "'"], ['id' => $shareId]);
-        $this->clear_share_cache($shareId);
+        delete_redis_data_by_key('_' . $shareId);
         if ($_REQUEST['from'] == 'search') {
             $this->redirect(array('action' => 'search_shares'));
             return;
@@ -1017,21 +1017,6 @@ class ShareManageController extends AppController
         $this->redirect(array('action' => 'index_products'));
     }
 
-    /**
-     * 清除分享的缓存
-     */
-    private function clear_share_cache($shareId)
-    {
-        //SHARE_DETAIL_DATA_CACHE_KEY . '_' . $weshareId
-        Cache::write(SHARE_DETAIL_DATA_CACHE_KEY . '_' . $shareId, '');
-        Cache::write(SHARE_DETAIL_DATA_WITH_TAG_CACHE_KEY . '_' . $shareId, '');
-        //SHARE_SHIP_SETTINGS_CACHE_KEY . '_' . $weshareId;
-        Cache::write(SHARE_SHIP_SETTINGS_CACHE_KEY . '_' . $shareId, '');
-        //SIMPLE_SHARE_INFO_CACHE_KEY . '_' . $share_id
-        Cache::write(SIMPLE_SHARE_INFO_CACHE_KEY . '_' . $shareId, '');
-    }
-
-
     public function cache_tool()
     {
     }
@@ -1040,7 +1025,7 @@ class ShareManageController extends AppController
     {
         $this->autoRender = false;
         $shareId = $_REQUEST['shareId'];
-        $this->clear_share_cache($shareId);
+        delete_redis_data_by_key('_' . $shareId);
         echo json_encode(array('success' => true));
         return;
     }
