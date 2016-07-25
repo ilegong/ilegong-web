@@ -406,13 +406,13 @@ class WesharesController extends AppController
         return;
     }
 
-    public function load_share_comments($sharer_id)
-    {
-        $this->autoRender = false;
-        $share_all_comments = $this->WeshareBuy->load_sharer_comments($sharer_id);
-        echo json_encode($share_all_comments);
-        return;
-    }
+//    public function load_share_comments($sharer_id)
+//    {
+//        $this->autoRender = false;
+//        $share_all_comments = $this->WeshareBuy->load_sharer_comments($sharer_id);
+//        echo json_encode($share_all_comments);
+//        return;
+//    }
 
     /**
      * @param $shareId
@@ -1159,10 +1159,7 @@ class WesharesController extends AppController
         $weshare_id = $_REQUEST['weshare_id'];
         $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED, 'updated' => "'" . date('Y-m-d H:i:s') . "'"), array('id' => $order_id, 'status' => ORDER_STATUS_PAID));
         $this->Cart->updateAll(array('status' => ORDER_STATUS_RECEIVED), array('order_id' => $order_id));
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_0', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
+        delete_redis_data_by_key(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id);
         $this->WeshareBuy->clear_user_share_order_data_cache(array($order_id), $weshare_id);
         echo json_encode(array('success' => true));
         return;
@@ -1232,10 +1229,7 @@ class WesharesController extends AppController
         $this->autoRender = false;
         $weshare_id = $_REQUEST['share_id'];
         $this->Weshare->updateAll(array('order_status' => WESHARE_ORDER_STATUS_SHIPPED), array('id' => $weshare_id, 'order_status' => WESHARE_ORDER_STATUS_WAIT_SHIP));
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_1_0', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id . '_0_0', '');
+        delete_redis_data_by_key(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshare_id);
         echo json_encode(array('success' => true));
         return;
     }
@@ -1674,7 +1668,7 @@ class WesharesController extends AppController
     }
 
 
-    //    小妹订阅号推荐后，用户点击“阅读原文”，显示本页面
+    //小妹订阅号推荐后，用户点击“阅读原文”，显示本页面
     public function special_list()
     {
         $this->layout = 'weshare_bootstrap';
@@ -2238,20 +2232,14 @@ class WesharesController extends AppController
             $this->set($wexin_params);
             if ($uid == $current_uid) {
                 $title = '这是' . $shareUser['nickname'] . '的微分享，快来关注我吧';
-                $image = $shareUser['avatar'];
                 $desc = '朋友说是一个有人情味的分享社区，这里你不但可以吃到各地的特产，还能认识有趣的人。';
-                $detail_url = WX_HOST . "/weshares/get_other_info/$uid.html";
             } else {
                 $current_user = $this->currentUser;
                 $title = $current_user['nickname'] . '推荐了' . $shareUser['nickname'] . '的微分享，快来关注ta吧！';
-                $image = $shareUser['avatar'];
                 $desc = $shareUser['nickname'] . '是我的朋友，很靠谱。朋友说是一个有人情味的分享社区，这里你不但可以吃到各地的特产，还能认识有趣的人。';
-                $detail_url = WX_HOST . "/weshares/get_other_info/$uid.html";
             }
-            if (!$image) {
-                // 这里有问题吧? 为啥是dev?
-                $image = 'http://dev.tongshijia.com/img/logo_footer.jpg';
-            }
+            $detail_url = WX_HOST . "/weshares/get_other_info/$uid.html";
+            $image = get_user_avatar($shareUser);
             $this->set('detail_url', $detail_url);
             $this->set('title', $title);
             $this->set('image', $image);
@@ -2259,6 +2247,12 @@ class WesharesController extends AppController
         }
     }
 
+    /**
+     * @param $creator
+     * @param $weshare
+     * @param $shared_offer_id
+     * 支付成功页面设置微信参数
+     */
     private function set_weixin_params_for_pay_result($creator, $weshare, $shared_offer_id){
         $detail_url = WX_HOST . '/weshares/view/' . $weshare['id'] . '?shared_offer_id=' . $shared_offer_id;
         $weixin_share_str = $this->get_weixin_share_str($weshare['id']);
@@ -2272,6 +2266,16 @@ class WesharesController extends AppController
         $this->set('desc', $desc);
     }
 
+    /**
+     * @param $user
+     * @param $creator
+     * @param $weshare
+     * @param $recommend
+     * @param $shared_offer_id
+     * @param $summary
+     * @param $ordersDetail
+     * 详情页面设置微信参数
+     */
     private function set_weixin_params_for_view($user, $creator, $weshare, $recommend, $shared_offer_id, $summary, $ordersDetail)
     {
         $title = remove_emoji(preg_replace('/\s+/', '', $weshare['title']));

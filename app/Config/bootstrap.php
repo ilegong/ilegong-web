@@ -2930,9 +2930,12 @@ function get_order_from_flag($from)
     return 0;
 }
 
-/**
- * auto load spl lib
- */
+function delete_redis_data_by_key($match){
+    $redis = new Redis();
+    $redis->connect(REDIS_HOST);
+    $keys = $redis->keys('*'.$match.'*');
+    $redis->delete($keys);
+}
 
 //add logs
 if(!function_exists("add_logs_to_es"))
@@ -2953,6 +2956,10 @@ if(!function_exists("add_logs_to_es"))
     }
 }
 
+
+/**
+ * auto load spl lib
+ */
 // PHP5.3 namespace loader for Cake2.x
 spl_autoload_register(function ($class) {
     foreach (App::path('Vendor') as $base) {

@@ -431,52 +431,52 @@ class WeshareBuyComponent extends Component
         return $sharer_comment_count;
     }
 
-    /**
-     * @param $sharer_id
-     * @return array
-     * 分享页面 获取分享者的所有评论数据
-     */
-    public function load_sharer_comments($sharer_id)
-    {
-        $cache_key = SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $sharer_id . '_0';
-        $sharer_comment_data = Cache::read($cache_key);
-        if (empty($sharer_comment_data)) {
-            $weshareM = ClassRegistry::init('Weshare');
-            $commentM = ClassRegistry::init('Comment');
-            $userM = ClassRegistry::init('User');
-            $allShares = $weshareM->find('all', array(
-                'conditions' => array(
-                    'creator' => $sharer_id,
-                    'status' => array(0, 1)
-                )
-            ));
-            $share_ids = Hash::extract($allShares, '{n}.Weshare.id');
-            $share_all_comments = $commentM->find('all', array(
-                'conditions' => array(
-                    'type' => COMMENT_SHARE_TYPE,
-                    'data_id' => $share_ids,
-                    'status' => COMMENT_SHOW_STATUS,
-                    'parent_id' => 0,
-                    'not' => array('order_id' => null)
-                ),
-                'limit' => 500,
-                'order' => array('id' => 'desc')
-            ));
-            $comment_user_ids = Hash::extract($share_all_comments, '{n}.Comment.user_id');
-            $share_all_comments = Hash::extract($share_all_comments, '{n}.Comment');
-            $all_users = $userM->find('all', array(
-                'conditions' => array(
-                    'id' => $comment_user_ids
-                ),
-                'fields' => $this->query_user_fields
-            ));
-            $all_users = Hash::combine($all_users, '{n}.User.id', '{n}.User');
-            $sharer_comment_data = array('share_all_comments' => $share_all_comments, 'share_comment_all_users' => $all_users);
-            Cache::write($cache_key, json_encode($sharer_comment_data));
-            return $sharer_comment_data;
-        }
-        return json_decode($sharer_comment_data, true);
-    }
+//    /**
+//     * @param $sharer_id
+//     * @return array
+//     * 分享页面 获取分享者的所有评论数据
+//     */
+//    public function load_sharer_comments($sharer_id)
+//    {
+//        $cache_key = SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $sharer_id . '_0';
+//        $sharer_comment_data = Cache::read($cache_key);
+//        if (empty($sharer_comment_data)) {
+//            $weshareM = ClassRegistry::init('Weshare');
+//            $commentM = ClassRegistry::init('Comment');
+//            $userM = ClassRegistry::init('User');
+//            $allShares = $weshareM->find('all', array(
+//                'conditions' => array(
+//                    'creator' => $sharer_id,
+//                    'status' => array(0, 1)
+//                )
+//            ));
+//            $share_ids = Hash::extract($allShares, '{n}.Weshare.id');
+//            $share_all_comments = $commentM->find('all', array(
+//                'conditions' => array(
+//                    'type' => COMMENT_SHARE_TYPE,
+//                    'data_id' => $share_ids,
+//                    'status' => COMMENT_SHOW_STATUS,
+//                    'parent_id' => 0,
+//                    'not' => array('order_id' => null)
+//                ),
+//                'limit' => 500,
+//                'order' => array('id' => 'desc')
+//            ));
+//            $comment_user_ids = Hash::extract($share_all_comments, '{n}.Comment.user_id');
+//            $share_all_comments = Hash::extract($share_all_comments, '{n}.Comment');
+//            $all_users = $userM->find('all', array(
+//                'conditions' => array(
+//                    'id' => $comment_user_ids
+//                ),
+//                'fields' => $this->query_user_fields
+//            ));
+//            $all_users = Hash::combine($all_users, '{n}.User.id', '{n}.User');
+//            $sharer_comment_data = array('share_all_comments' => $share_all_comments, 'share_comment_all_users' => $all_users);
+//            Cache::write($cache_key, json_encode($sharer_comment_data));
+//            return $sharer_comment_data;
+//        }
+//        return json_decode($sharer_comment_data, true);
+//    }
 
     private function combine_comment($comments)
     {
@@ -772,13 +772,9 @@ class WeshareBuyComponent extends Component
             //clean cache
             //$cache_key = SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $sharer_id . '_0';
             //$cache_key = SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $sharer_id . '_1';
-            Cache::write(SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $weshare_info['creator'] . '_0', '');
-            Cache::write(SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $weshare_info['creator'] . '_1', '');
+            delete_redis_data_by_key(SHARER_ALL_COMMENT_DATA_CACHE_KEY . '_' . $weshare_info['creator']);
+            delete_redis_data_by_key(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id);
             //SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId;
-            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_1_1', '');
-            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_0_1', '');
-            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_1_0', '');
-            Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $share_id . '_0_0', '');
             $this->clear_user_share_order_data_cache(array($order_id), $share_id);
         }
         return array('success' => true, 'comment' => $comment['Comment'], 'comment_reply' => $commentReply['CommentReply'], 'order_id' => $order_id);
@@ -1671,10 +1667,7 @@ class WeshareBuyComponent extends Component
     {
         $orderM = ClassRegistry::init('Order');
         $orderM->update(array('business_remark' => "'" . $orderRemark . "'"), array('id' => $orderId));
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId . '_1_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId . '_0_1', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId . '_1_0', '');
-        Cache::write(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId . '_0_0', '');
+        delete_redis_data_by_key(SHARE_ORDER_DATA_CACHE_KEY . '_' . $weshareId);
     }
 
     /**
