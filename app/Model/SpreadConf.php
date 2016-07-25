@@ -54,6 +54,11 @@ class SpreadConf extends AppModel {
         848454 => array(
             'wx_pic' => 'http://51daifan-images.stor.sinaapp.com/files/201512/thumb_m/389fa44ba2f_1223.jpg',
             'wx_introduce_url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=402114100&idx=1&sn=745eaf05b92a31034df5a75cea1438c5&scene=1'
+        ),
+        //后现代城
+        930646 => array(
+            'wx_pic' => '',
+            'wx_introduce_url' => ''
         )
     );
 
