@@ -604,6 +604,24 @@ class ShareUtilComponent extends Component
         }
     }
 
+    /**
+     * @param $order
+     * save user use rebate log
+     */
+    public function add_use_rebate_log($order)
+    {
+        if ($order['Order']['status'] == ORDER_STATUS_PAID) {
+            $rebate = $order['Order']['applied_rebate'];
+            if($rebate > 0){
+                $uid = $order['Order']['creator'];
+                $order_id = $order['Order']['id'];
+                $this->loadModel("RebateLog");
+                $this->RebateLog->save_rebate_log($uid, -$rebate, $order_id, USER_REBATE_MONEY_USE);
+                $this->User->add_rebate_money($uid, -$rebate);
+            }
+        }
+    }
+
     public function read_share_ship_option_setting($sharer, $type)
     {
         $SharerShipOptionM = ClassRegistry::init('SharerShipOption');
