@@ -17,7 +17,7 @@
     <link rel="apple-touch-icon" href="{{$this->Html->assetUrl('/img/logo_mini.png')}}" />
     <title>{{$pageTitle}}-{{$site['title']}}</title>
     <link href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/css/vote.css?v0.0.7" />
+    <link rel="stylesheet" type="text/css" href="/css/vote.css?v0.0.11" />
 </head>
 <body style="background-color: #F5F5F5">
 {{if !noFlash }}
@@ -28,6 +28,38 @@
 {{$content_for_layout}}
 
 {{if $jWeixinOn}}
+<script type="text/javascript">
+    //<![CDATA[
+    // for debugging javascript!
+    (function (window) {
+        window.onerror = function (msg, url, ln) {
+            //transform errors
+            if (typeof(msg) === 'object' && msg.srcElement && msg.target) {
+                if (msg.srcElement == '[object HTMLScriptElement]' && msg.target == '[object HTMLScriptElement]') {
+                    msg = 'Error loading script';
+                } else {
+                    msg = 'Event Error - target:' + msg.target + ' srcElement:' + msg.srcElement;
+                }
+            }
+
+            msg = msg.toString();
+
+            //ignore errors
+            if (msg.indexOf("Location.toString") > -1) {
+                return;
+            }
+            if (msg.indexOf("Error loading script") > -1) {
+                return;
+            }
+
+            //report errors
+            window.onerror = function () {
+            };
+            (new Image()).src = "/jserror?msg=" + encodeURIComponent(msg) + "&error_url=" + encodeURIComponent(url || document.location.toString().replace(/#.*$/, "")) + "&ln=" + parseInt(ln || 0) + "&r=" + (+new Date());
+        };
+    })(window);
+    //]]>
+</script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
     var wx_jssdk_appId = '{{$signPackage["appId"]}}';
@@ -51,7 +83,7 @@
 <script type="text/javascript" src="http://cdn.bootcss.com/angular-touch/1.5.6/angular-touch.min.js"></script>
 <script type="text/javascript" src="http://cdn.bootcss.com/underscore.js/1.8.3/underscore-min.js"></script>
 <script src="{{$STATIC_HOST}}/static/weshares/js/weshare.min.js?v2.5.15"></script>
-<script src="{{$STATIC_HOST}}/static/weshares/js/vote.min.js?v0.0.7"></script>
+<script src="{{$STATIC_HOST}}/static/weshares/js/vote.min.js?v0.0.11"></script>
 
 {{$this->fetch('scriptBottom')}}
 </body>

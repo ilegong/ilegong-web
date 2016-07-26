@@ -81,12 +81,11 @@
 
     function chooseAndUploadImage() {
       wx.chooseImage({
-        count: 10,
         success: function (res) {
           vm.uploadImage(res.localIds);
         },
         fail: function (res) {
-          vm.messages.push({name: 'choose image failed', detail: res});
+          alert('选择照片错误，请重试');
         }
       });
     }
