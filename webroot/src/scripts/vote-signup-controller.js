@@ -25,14 +25,6 @@
         alert('请输入作品名称');
         return false;
       }
-      if (Utils.isBlank(vm.candidate.mobileNum)) {
-        alert('请输入手机号码');
-        return false;
-      }
-      if (!Utils.isMobileValid(vm.candidate.mobileNum)) {
-        alert('手机号码无效');
-        return false;
-      }
       if (vm.candidate.images.length == 0) {
         alert('请上传图片');
         return false;
