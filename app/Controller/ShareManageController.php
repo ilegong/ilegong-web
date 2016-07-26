@@ -1612,13 +1612,15 @@ class ShareManageController extends AppController
             $order_total_price = $item['Order']['total_all_price'];
             $order_ship_fee = $item['Order']['ship_fee'];
             $order_coupon_total = $item['Order']['coupon_total'];
+            $order_rebate_total = $item['Order']['applied_rebate'];
             $order_product_price = $item['Order']['total_price'];
             if (!isset($summery_data[$member_id])) {
-                $summery_data[$member_id] = array('total_price' => 0, 'ship_fee' => 0, 'coupon_total' => 0);
+                $summery_data[$member_id] = array('total_price' => 0, 'ship_fee' => 0, 'coupon_total' => 0, 'use_rebate_total' => 0);
             }
             $summery_data[$member_id]['total_price'] = $summery_data[$member_id]['total_price'] + $order_total_price;
             $summery_data[$member_id]['ship_fee'] = $summery_data[$member_id]['ship_fee'] + $order_ship_fee;
             $summery_data[$member_id]['coupon_total'] = $summery_data[$member_id]['coupon_total'] + $order_coupon_total;
+            $summery_data[$member_id]['use_rebate_total'] = $summery_data[$member_id]['use_rebate_total'] + $order_rebate_total;
             $summery_data[$member_id]['product_total_price'] = $summery_data[$member_id]['product_total_price'] + $order_product_price;
         }
         $weshare_refund_money_map = $this->get_share_refund_money($weshare_ids);
