@@ -615,9 +615,10 @@ class ShareUtilComponent extends Component
             if($rebate > 0){
                 $uid = $order['Order']['creator'];
                 $order_id = $order['Order']['id'];
-                $this->loadModel("RebateLog");
-                $this->RebateLog->save_rebate_log($uid, -$rebate, $order_id, USER_REBATE_MONEY_USE);
-                $this->User->add_rebate_money($uid, -$rebate);
+                $userM = ClassRegistry::init('User');
+                $rebateLogM = ClassRegistry::init('RebateLog');
+                $rebateLogM->save_rebate_log($uid, -$rebate, $order_id, USER_REBATE_MONEY_USE);
+                $userM->add_rebate_money($uid, -$rebate);
             }
         }
     }
