@@ -356,7 +356,7 @@ class UtilController extends AppController {
             $product = $this->WeshareProduct->find('first', [
                 'conditions' => [
                     'weshare_id' => $shareId,
-                    'delete' => DELETED_NO
+                    'deleted' => DELETED_NO
                 ]
             ]);
             $address = $this->WeshareAddress->find('first', [
