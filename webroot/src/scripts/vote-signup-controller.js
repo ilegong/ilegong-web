@@ -101,10 +101,8 @@
               if (!imageUrl || imageUrl == 'false') {
                 return;
               }
-              alert(imageUrl);
               vm.candidate.images.push(imageUrl);
             }).error(function (data) {
-              alert('下载图片失败');
             });
             if (i < localIds.length) {
               upload(i+1);
